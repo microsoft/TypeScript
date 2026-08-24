@@ -417,6 +417,29 @@ describe("API", () => {
         }
     });
 
+    test("createProgram rejects an inactive or foreign old program", () => {
+        const options = { compilerOptions: { noLib: true } };
+        const api = spawnAPI({ "/src/index.ts": `export const local = 1;` });
+        const otherAPI = spawnAPI({ "/src/index.ts": `export const foreign = 1;` });
+        try {
+            const localProgram = api.createProgram(["/src/index.ts"], options);
+            const foreignProgram = otherAPI.createProgram(["/src/index.ts"], options);
+
+            const createFromForeignProgram = () => api.createProgram(["/src/index.ts"], options, foreignProgram);
+            assert.throws(createFromForeignProgram, /oldProgram must belong to this API instance and reference an active snapshot/);
+
+            localProgram.dispose();
+            const createFromDisposedProgram = () => api.createProgram(["/src/index.ts"], options, localProgram);
+            assert.throws(createFromDisposedProgram, /oldProgram must belong to this API instance and reference an active snapshot/);
+
+            foreignProgram.dispose();
+        }
+        finally {
+            api.close();
+            otherAPI.close();
+        }
+    });
+
     test("createProgram discovers imported non-root dependencies", () => {
         const api = spawnAPI({
             "/src/main.ts": `import { dependency } from "./dependency"; export const value = dependency;`,

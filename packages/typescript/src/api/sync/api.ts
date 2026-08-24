@@ -401,6 +401,16 @@ export class API<FromLSP extends boolean = false> {
         return this.client.resetTimingInfo();
     }
 
+    private isProgramActive(program: Program): boolean {
+        const project = program.getProject();
+        for (const snapshot of this.activeSnapshots) {
+            if (!snapshot.isDisposed() && snapshot.getProject(project.configFileName)?.program === program) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     /**
      * Creates a program from current filesystem state, or derives one from oldProgram after applying fileChanges.
      */
@@ -414,6 +424,9 @@ export class API<FromLSP extends boolean = false> {
 
         if (fileChanges && !oldProgram) {
             throw new Error("fileChanges requires an oldProgram");
+        }
+        if (oldProgram && !this.isProgramActive(oldProgram)) {
+            throw new Error("oldProgram must belong to this API instance and reference an active snapshot");
         }
 
         const data: CreateProgramResponse = this.client.apiRequest("createProgram", {

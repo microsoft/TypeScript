@@ -409,6 +409,29 @@ describe("API", () => {
         }
     });
 
+    test("createProgram rejects an inactive or foreign old program", async () => {
+        const options = { compilerOptions: { noLib: true } };
+        const api = spawnAPI({ "/src/index.ts": `export const local = 1;` });
+        const otherAPI = spawnAPI({ "/src/index.ts": `export const foreign = 1;` });
+        try {
+            const localProgram = await api.createProgram(["/src/index.ts"], options);
+            const foreignProgram = await otherAPI.createProgram(["/src/index.ts"], options);
+
+            const createFromForeignProgram = () => api.createProgram(["/src/index.ts"], options, foreignProgram);
+            await assert.rejects(createFromForeignProgram, /oldProgram must belong to this API instance and reference an active snapshot/); // @sync: assert.throws(createFromForeignProgram, /oldProgram must belong to this API instance and reference an active snapshot/);
+
+            await localProgram.dispose();
+            const createFromDisposedProgram = () => api.createProgram(["/src/index.ts"], options, localProgram);
+            await assert.rejects(createFromDisposedProgram, /oldProgram must belong to this API instance and reference an active snapshot/); // @sync: assert.throws(createFromDisposedProgram, /oldProgram must belong to this API instance and reference an active snapshot/);
+
+            await foreignProgram.dispose();
+        }
+        finally {
+            await api.close();
+            await otherAPI.close();
+        }
+    });
+
     test("createProgram discovers imported non-root dependencies", async () => {
         const api = spawnAPI({
             "/src/main.ts": `import { dependency } from "./dependency"; export const value = dependency;`,
