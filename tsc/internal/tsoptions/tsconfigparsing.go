@@ -29,6 +29,7 @@ type extendsResult struct {
 	exclude             []any
 	files               []any
 	contentMappers      []any
+	plugins             []any
 	compileOnSave       bool
 	extendedSourceFiles collections.Set[string]
 }
@@ -1174,6 +1175,18 @@ func parseConfig(
 					result.compileOnSave = compileOnSave
 				}
 			}
+			// compilerOptions.plugins has no field on core.CompilerOptions -- it is
+			// carried purely as raw JSON -- so mergeCompilerOptions below never
+			// brings it across `extends` the way it does typed options. Collect it
+			// here so a plugins array declared only in a base config stays visible
+			// to consumers reading ParsedCommandLine.Raw.
+			if extendedRawMap, ok := extendsRaw.(*collections.OrderedMap[string, any]); ok {
+				if extendedCompilerOptions, ok := extendedRawMap.GetOrZero("compilerOptions").(*collections.OrderedMap[string, any]); ok {
+					if plugins, ok := extendedCompilerOptions.GetOrZero("plugins").([]any); ok {
+						result.plugins = plugins
+					}
+				}
+			}
 			mergeCompilerOptions(result.options, extendedConfig.options, extendsRaw)
 		}
 	}
@@ -1202,6 +1215,17 @@ func parseConfig(
 		}
 		if result.contentMappers != nil && !ownConfig.raw.(*collections.OrderedMap[string, any]).Has("contentMappers") {
 			ownConfig.raw.(*collections.OrderedMap[string, any]).Set("contentMappers", result.contentMappers)
+		}
+		if result.plugins != nil {
+			ownRawMap := ownConfig.raw.(*collections.OrderedMap[string, any])
+			ownCompilerOptions, ok := ownRawMap.GetOrZero("compilerOptions").(*collections.OrderedMap[string, any])
+			if !ok {
+				ownCompilerOptions = collections.NewOrderedMapWithSizeHint[string, any](1)
+				ownRawMap.Set("compilerOptions", ownCompilerOptions)
+			}
+			if !ownCompilerOptions.Has("plugins") {
+				ownCompilerOptions.Set("plugins", result.plugins)
+			}
 		}
 		if result.compileOnSave && !ownConfig.raw.(*collections.OrderedMap[string, any]).Has("compileOnSave") {
 			ownConfig.raw.(*collections.OrderedMap[string, any]).Set("compileOnSave", result.compileOnSave)
