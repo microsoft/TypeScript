@@ -784,6 +784,12 @@ async function runTestExtension() {
     await $`npm test -w vscode-typescript`;
 }
 
+export const testTsc = task({
+    name: "test:tsc",
+    description: "Runs all tests in the tsc module.",
+    run: runTests,
+});
+
 export const test = task({
     name: "test",
     description: "Runs all tests. This is the most typical test task to need.",
