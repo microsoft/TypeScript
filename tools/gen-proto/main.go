@@ -35,12 +35,13 @@ func run() int {
 }
 
 type methodInfo struct {
-	name           string
-	params         types.Type
-	result         types.Type
-	paramsText     string
-	resultText     string
-	resultNullable bool
+	name                   string
+	params                 types.Type
+	result                 types.Type
+	paramsText             string
+	resultText             string
+	resultNullable         bool
+	resultNullableElements bool
 }
 
 func generate(inputPath string, outputPath string) error {
@@ -76,11 +77,11 @@ func generate(inputPath string, outputPath string) error {
 	if err != nil {
 		return err
 	}
-	resultTypeOverrides, nullableResults, err := discoverResultMetadata(pkg)
+	resultTypeOverrides, nullableResults, nullableResultElements, err := discoverResultMetadata(pkg)
 	if err != nil {
 		return err
 	}
-	discoverSessionMethods(pkg, methodObjects, methods, resultTypeOverrides, nullableResults)
+	discoverSessionMethods(pkg, methodObjects, methods, resultTypeOverrides, nullableResults, nullableResultElements)
 	discoverConnectionMethods(pkg, methodObjects, methods)
 
 	for _, method := range methods {
@@ -111,7 +112,7 @@ func generate(inputPath string, outputPath string) error {
 		}
 		result := method.resultText
 		if result == "" {
-			result = renderer.resultType(method.result, method.resultNullable)
+			result = renderer.resultType(method.result, method.resultNullable, method.resultNullableElements)
 		}
 		fmt.Fprintf(&methodsOut, "    %s: APIMethod<%s, %s>;\n", propertyName(method.name), params, result)
 	}
@@ -185,11 +186,13 @@ func declaredMethods(pkg *packages.Package, file *ast.File) ([]*methodInfo, map[
 	return methods, methodObjects, nil
 }
 
-func discoverResultMetadata(pkg *packages.Package) (map[types.Object]types.Type, map[types.Object]bool, error) {
+func discoverResultMetadata(pkg *packages.Package) (map[types.Object]types.Type, map[types.Object]bool, map[types.Object]bool, error) {
 	const resultDirective = "@gen-proto-result:"
 	const nullableDirective = "@gen-proto-nullable"
+	const nullableElementsDirective = "@gen-proto-nullable-element"
 	overrides := make(map[types.Object]types.Type)
 	nullableResults := make(map[types.Object]bool)
+	nullableResultElements := make(map[types.Object]bool)
 	for _, file := range pkg.Syntax {
 		for _, decl := range file.Decls {
 			fn, ok := decl.(*ast.FuncDecl)
@@ -203,6 +206,10 @@ func discoverResultMetadata(pkg *packages.Package) (map[types.Object]types.Type,
 					nullableResults[fnObject] = true
 					continue
 				}
+				if text == nullableElementsDirective {
+					nullableResultElements[fnObject] = true
+					continue
+				}
 				typeName, ok := strings.CutPrefix(text, resultDirective)
 				if !ok {
 					continue
@@ -210,16 +217,16 @@ func discoverResultMetadata(pkg *packages.Package) (map[types.Object]types.Type,
 				typeName = strings.TrimSpace(typeName)
 				typeObject, ok := pkg.Types.Scope().Lookup(typeName).(*types.TypeName)
 				if !ok {
-					return nil, nil, fmt.Errorf("result type override on %s refers to unknown type %q", fn.Name.Name, typeName)
+					return nil, nil, nil, fmt.Errorf("result type override on %s refers to unknown type %q", fn.Name.Name, typeName)
 				}
 				overrides[fnObject] = typeObject.Type()
 			}
 		}
 	}
-	return overrides, nullableResults, nil
+	return overrides, nullableResults, nullableResultElements, nil
 }
 
-func discoverSessionMethods(pkg *packages.Package, methodObjects map[types.Object]*methodInfo, methods []*methodInfo, resultTypeOverrides map[types.Object]types.Type, nullableResults map[types.Object]bool) {
+func discoverSessionMethods(pkg *packages.Package, methodObjects map[types.Object]*methodInfo, methods []*methodInfo, resultTypeOverrides map[types.Object]types.Type, nullableResults map[types.Object]bool, nullableResultElements map[types.Object]bool) {
 	for _, file := range pkg.Syntax {
 		for _, decl := range file.Decls {
 			fn, isFuncDecl := decl.(*ast.FuncDecl)
@@ -267,6 +274,7 @@ func discoverSessionMethods(pkg *packages.Package, methodObjects map[types.Objec
 						method.result = override
 					}
 					method.resultNullable = nullableResults[called]
+					method.resultNullableElements = nullableResultElements[called]
 				}
 				return false
 			})
@@ -418,21 +426,21 @@ func (r *typeRenderer) requestType(t types.Type) string {
 	if pointer, ok := types.Unalias(t).(*types.Pointer); ok {
 		t = pointer.Elem()
 	}
-	return r.typeString(t, false)
+	return r.typeString(t, false, false)
 }
 
-func (r *typeRenderer) resultType(t types.Type, nullable bool) string {
+func (r *typeRenderer) resultType(t types.Type, nullable bool, nullableElements bool) string {
 	if pointer, ok := types.Unalias(t).(*types.Pointer); ok {
 		t = pointer.Elem()
 	}
-	result := r.typeString(t, false)
+	result := r.typeString(t, false, nullableElements)
 	if nullable {
 		result += " | null"
 	}
 	return result
 }
 
-func (r *typeRenderer) typeString(t types.Type, allowNull bool) string {
+func (r *typeRenderer) typeString(t types.Type, allowNull bool, nullableElements bool) string {
 	if t == nil {
 		return "void"
 	}
@@ -442,13 +450,13 @@ func (r *typeRenderer) typeString(t types.Type, allowNull bool) string {
 	case *types.Basic:
 		result = basicType(t)
 	case *types.Pointer:
-		result = r.typeString(t.Elem(), false)
+		result = r.typeString(t.Elem(), false, false)
 	case *types.Slice:
-		result = arrayElement(r.typeString(t.Elem(), false)) + "[]"
+		result = arrayElement(r.typeString(t.Elem(), nullableElements, false)) + "[]"
 	case *types.Array:
-		result = arrayElement(r.typeString(t.Elem(), false)) + "[]"
+		result = arrayElement(r.typeString(t.Elem(), nullableElements, false)) + "[]"
 	case *types.Map:
-		result = fmt.Sprintf("Record<string, %s>", r.typeString(t.Elem(), true))
+		result = fmt.Sprintf("Record<string, %s>", r.typeString(t.Elem(), true, false))
 	case *types.Interface:
 		result = "unknown"
 	case *types.Struct:
@@ -509,13 +517,13 @@ func (r *typeRenderer) namedType(named *types.Named) string {
 		if named.TypeArgs().Len() != 2 {
 			return "Record<string, unknown>"
 		}
-		return fmt.Sprintf("Record<string, %s>", r.typeString(named.TypeArgs().At(1), false))
+		return fmt.Sprintf("Record<string, %s>", r.typeString(named.TypeArgs().At(1), false, false))
 	}
 	if _, ok := named.Underlying().(*types.Struct); !ok {
 		if literals := r.stringLiterals(named); len(literals) > 0 {
 			return strings.Join(literals, " | ")
 		}
-		return r.typeString(named.Underlying(), false)
+		return r.typeString(named.Underlying(), false, false)
 	}
 	tsName := exportedName(obj.Name())
 	if previous := r.names[tsName]; previous != nil && previous != obj {
@@ -560,7 +568,7 @@ func (r *typeRenderer) inlineStruct(structType *types.Struct) string {
 		if !include || deprecated || internal {
 			continue
 		}
-		fieldType := r.typeString(structType.Field(i).Type(), !optional && !nonnil)
+		fieldType := r.typeString(structType.Field(i).Type(), !optional && !nonnil, false)
 		doc := r.docs[structType.Field(i)]
 		multiline = multiline || doc != ""
 		fields = append(fields, fmt.Sprintf("%s%s%s: %s", inlineDoc(doc), propertyName(field), optionalMarker(optional), fieldType))
@@ -600,7 +608,7 @@ func (r *typeRenderer) declarations() (string, error) {
 			if !include || deprecated || internal {
 				continue
 			}
-			fieldType := r.typeString(structType.Field(i).Type(), !optional && !nonnil)
+			fieldType := r.typeString(structType.Field(i).Type(), !optional && !nonnil, false)
 			if isParams && isArrayType(structType.Field(i).Type()) {
 				fieldType = "readonly " + fieldType
 			}

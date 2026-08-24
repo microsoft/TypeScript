@@ -3305,6 +3305,7 @@ func (s *Session) handleGetAliasedSymbol(ctx context.Context, params *CheckerSym
 }
 
 // handleGetAliasedSymbols resolves multiple alias symbols to their targets.
+// @gen-proto-nullable-element
 func (s *Session) handleGetAliasedSymbols(ctx context.Context, params *CheckerSymbolsParams) ([]*SymbolResponse, error) {
 	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
 	if err != nil {
@@ -3370,7 +3371,7 @@ func (s *Session) handleGetImmediateAliasedSymbol(ctx context.Context, params *C
 }
 
 // handleGetImmediateAliasedSymbols resolves one level of alias indirection for multiple symbols.
-// @gen-proto-nullable
+// @gen-proto-nullable-element
 func (s *Session) handleGetImmediateAliasedSymbols(ctx context.Context, params *CheckerSymbolsParams) ([]*SymbolResponse, error) {
 	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
 	if err != nil {
@@ -3449,9 +3450,6 @@ func (s *Session) handleGetExportsOfModules(ctx context.Context, params *Checker
 		}
 
 		exports := setup.checker.GetExportsOfModule(symbol)
-		if len(exports) == 0 {
-			continue
-		}
 		slices.SortFunc(exports, setup.checker.CompareSymbols)
 
 		symbolResponses := make([]*SymbolResponse, len(exports))
@@ -3490,6 +3488,7 @@ func (s *Session) handleGetMemberInModuleExports(ctx context.Context, params *Ge
 }
 
 // handleGetMembersInModuleExports returns exports by name from module symbols.
+// @gen-proto-nullable-element
 func (s *Session) handleGetMembersInModuleExports(ctx context.Context, params *GetMembersInModuleExportsParams) ([]*SymbolResponse, error) {
 	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
 	if err != nil {

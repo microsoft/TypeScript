@@ -106,14 +106,14 @@ export interface APIMethodInfo {
     getSignatureFromDeclaration: APIMethod<CheckerNodeParams, SignatureResponse>;
     getExportSpecifierLocalTargetSymbol: APIMethod<CheckerNodeParams, SymbolResponse | null>;
     getAliasedSymbol: APIMethod<CheckerSymbolParams, SymbolResponse>;
-    getAliasedSymbols: APIMethod<CheckerSymbolsParams, SymbolResponse[]>;
+    getAliasedSymbols: APIMethod<CheckerSymbolsParams, (SymbolResponse | null)[]>;
     getImmediateAliasedSymbol: APIMethod<CheckerSymbolParams, SymbolResponse | null>;
-    getImmediateAliasedSymbols: APIMethod<CheckerSymbolsParams, SymbolResponse[] | null>;
+    getImmediateAliasedSymbols: APIMethod<CheckerSymbolsParams, (SymbolResponse | null)[]>;
     getFullyQualifiedName: APIMethod<CheckerSymbolParams, string>;
     getExportsOfModule: APIMethod<CheckerSymbolParams, SymbolResponse[] | null>;
     getExportsOfModules: APIMethod<CheckerSymbolsParams, SymbolResponse[][]>;
     getMemberInModuleExports: APIMethod<GetMemberInModuleExportsParams, SymbolResponse | null>;
-    getMembersInModuleExports: APIMethod<GetMembersInModuleExportsParams, SymbolResponse[]>;
+    getMembersInModuleExports: APIMethod<GetMembersInModuleExportsParams, (SymbolResponse | null)[]>;
     getJsDocTags: APIMethod<CheckerSymbolParams, JSDocTagInfo[] | null>;
     getDocumentationComment: APIMethod<CheckerSymbolParams, string>;
     isArrayType: APIMethod<CheckerTypeParams, boolean>;
