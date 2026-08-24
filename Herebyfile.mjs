@@ -287,7 +287,7 @@ export const generateExtension = task({
     name: "generate:extension",
     description: "Generates files in the extension",
     run: async () => {
-        await $`npm run -w vscode-typescript generateLocBundle`;
+        await $`npm run -w native-preview generateLocBundle`;
     },
 });
 
@@ -781,7 +781,7 @@ async function runTests() {
 }
 
 async function runTestExtension() {
-    await $`npm test -w vscode-typescript`;
+    await $`npm test -w native-preview`;
 }
 
 export const test = task({
