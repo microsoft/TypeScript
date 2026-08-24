@@ -1410,6 +1410,71 @@ func TestContentMappersValidation(t *testing.T) {
 	}
 }
 
+func TestContentMapperExtensionValidationUsesHostCaseSensitivity(t *testing.T) {
+	t.Parallel()
+
+	tests := []struct {
+		name                      string
+		useCaseSensitiveFileNames bool
+		contentMappers            string
+		expectedCode              int32
+	}{
+		{
+			name:                      "built-in extension on case-insensitive host",
+			useCaseSensitiveFileNames: false,
+			contentMappers:            `[{ "package": "mapper", "extensions": [".TS"] }]`,
+			expectedCode:              diagnostics.Content_mapper_file_extension_0_is_a_built_in_extension_and_cannot_be_registered_by_a_content_mapper.Code(),
+		},
+		{
+			name:                      "duplicate extension on case-insensitive host",
+			useCaseSensitiveFileNames: false,
+			contentMappers:            `[{ "package": "a", "extensions": [".vue"] }, { "package": "b", "extensions": [".VUE"] }]`,
+			expectedCode:              diagnostics.Content_mapper_file_extension_0_is_registered_by_more_than_one_content_mapper.Code(),
+		},
+		{
+			name:                      "built-in extension on case-sensitive host",
+			useCaseSensitiveFileNames: true,
+			contentMappers:            `[{ "package": "mapper", "extensions": [".TS"] }]`,
+			expectedCode:              diagnostics.Content_mapper_file_extension_0_is_a_built_in_extension_and_cannot_be_registered_by_a_content_mapper.Code(),
+		},
+		{
+			name:                      "mapper extension casing is distinct on case-sensitive host",
+			useCaseSensitiveFileNames: true,
+			contentMappers:            `[{ "package": "a", "extensions": [".vue"] }, { "package": "b", "extensions": [".VUE"] }]`,
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
+			files := map[string]string{
+				"/tsconfig.json":                    `{ "contentMappers": ` + test.contentMappers + ` }`,
+				"/app.ts":                           "export {};",
+				"/node_modules/mapper/package.json": `{ "name": "mapper", "version": "1.0.0", "typescript": { "contentMapper": { "exec": ["mapper"] } } }`,
+				"/node_modules/a/package.json":      `{ "name": "a", "version": "1.0.0", "typescript": { "contentMapper": { "exec": ["a"] } } }`,
+				"/node_modules/b/package.json":      `{ "name": "b", "version": "1.0.0", "typescript": { "contentMapper": { "exec": ["b"] } } }`,
+			}
+			host := tsoptionstest.NewVFSParseConfigHost(files, "/", test.useCaseSensitiveFileNames)
+			config := testConfig{
+				jsonText:        files["/tsconfig.json"],
+				configFileName:  "tsconfig.json",
+				basePath:        "/",
+				allFileList:     files,
+				existingOptions: &core.CompilerOptions{RunExternalCode: core.TSTrue},
+			}
+			parsed := getParsedWithJsonSourceFileApi(config, host, config.basePath)
+			if test.expectedCode == 0 {
+				assert.Equal(t, len(parsed.Errors), 0, "unexpected errors: %v", parsed.Errors)
+			} else {
+				found := slices.ContainsFunc(parsed.Errors, func(diagnostic *ast.Diagnostic) bool {
+					return diagnostic.Code() == test.expectedCode
+				})
+				assert.Assert(t, found, "expected diagnostic %d, got errors: %v", test.expectedCode, parsed.Errors)
+			}
+		})
+	}
+}
+
 func getParsedWithJsonSourceFileApi(config testConfig, host tsoptions.ParseConfigHost, basePath string) *tsoptions.ParsedCommandLine {
 	configFileName := tspath.GetNormalizedAbsolutePath(config.configFileName, basePath)
 	path := tspath.ToPath(config.configFileName, basePath, host.FS().UseCaseSensitiveFileNames())

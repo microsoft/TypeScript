@@ -22,6 +22,45 @@ func (duplicateHandler) HandleRequest(ctx context.Context, method string, params
 		if err := json.Unmarshal(params, &p); err != nil {
 			return nil, err
 		}
+		if strings.Contains(p.FileName, "hover-fallback") {
+			virtual := "// " + p.Content + "\nconst " + p.Content + " = 1;\n"
+			first := len("// ")
+			second := first + len(p.Content) + len("\nconst ")
+			mappings, err := spanmap.New([]spanmap.Segment{
+				{VirtualStart: core.TextPos(first), VirtualEnd: core.TextPos(first + len(p.Content)), OriginalStart: 0, OriginalEnd: core.TextPos(len(p.Content)), Kind: spanmap.KindVerbatim, Features: spanmap.FeatureHover},
+				{VirtualStart: core.TextPos(second), VirtualEnd: core.TextPos(second + len(p.Content)), OriginalStart: 0, OriginalEnd: core.TextPos(len(p.Content)), Kind: spanmap.KindVerbatim, Features: spanmap.FeatureHover},
+			}).Marshal()
+			if err != nil {
+				return nil, err
+			}
+			return contentmapper.TransformResult{MappedOutput: contentmapper.MappedOutput{Text: virtual, Extension: ".ts", Mappings: json.Value(mappings)}}, nil
+		}
+		if strings.Contains(p.FileName, "hover-concat") {
+			virtual := "namespace A { export const " + p.Content + " = 1; }\nnamespace B { export const " + p.Content + " = \"text\"; }\n"
+			first := strings.Index(virtual, p.Content)
+			second := strings.LastIndex(virtual, p.Content)
+			mappings, err := spanmap.New([]spanmap.Segment{
+				{VirtualStart: core.TextPos(first), VirtualEnd: core.TextPos(first + len(p.Content)), OriginalStart: 0, OriginalEnd: core.TextPos(len(p.Content)), Kind: spanmap.KindVerbatim, Features: spanmap.FeatureHover},
+				{VirtualStart: core.TextPos(second), VirtualEnd: core.TextPos(second + len(p.Content)), OriginalStart: 0, OriginalEnd: core.TextPos(len(p.Content)), Kind: spanmap.KindVerbatim, Features: spanmap.FeatureHover},
+			}).Marshal()
+			if err != nil {
+				return nil, err
+			}
+			return contentmapper.TransformResult{MappedOutput: contentmapper.MappedOutput{Text: virtual, Extension: ".ts", Mappings: json.Value(mappings)}}, nil
+		}
+		if strings.Contains(p.FileName, "signature-fallback") {
+			virtual := "// " + p.Content + "\nfunction use(value: number): void {}\n" + p.Content + ";\n"
+			first := len("// ")
+			second := strings.LastIndex(virtual, p.Content)
+			mappings, err := spanmap.New([]spanmap.Segment{
+				{VirtualStart: core.TextPos(first), VirtualEnd: core.TextPos(first + len(p.Content)), OriginalStart: 0, OriginalEnd: core.TextPos(len(p.Content)), Kind: spanmap.KindVerbatim, Features: spanmap.FeatureSignatureHelp},
+				{VirtualStart: core.TextPos(second), VirtualEnd: core.TextPos(second + len(p.Content)), OriginalStart: 0, OriginalEnd: core.TextPos(len(p.Content)), Kind: spanmap.KindVerbatim, Features: spanmap.FeatureSignatureHelp},
+			}).Marshal()
+			if err != nil {
+				return nil, err
+			}
+			return contentmapper.TransformResult{MappedOutput: contentmapper.MappedOutput{Text: virtual, Extension: ".ts", Mappings: json.Value(mappings)}}, nil
+		}
 		if strings.Contains(p.FileName, "rename-conflict") {
 			virtual := "export const " + p.Content + " = 1;\nconst object = { " + p.Content + " };\n" + p.Content + ";\n"
 			first := strings.Index(virtual, p.Content)

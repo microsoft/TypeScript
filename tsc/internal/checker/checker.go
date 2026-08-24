@@ -21734,7 +21734,9 @@ func (c *Checker) createUnionOrIntersectionProperty(containingType *Type, name s
 		} else if prop.ValueDeclaration != nil && prop.ValueDeclaration != firstValueDeclaration {
 			hasNonUniformValueDeclaration = true
 		}
-		declarations = append(declarations, prop.Declarations...)
+		for _, declaration := range prop.Declarations {
+			declarations = core.AppendIfUnique(declarations, declaration)
+		}
 		t := c.getTypeOfSymbol(prop)
 		if firstType == nil {
 			firstType = t
