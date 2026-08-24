@@ -1,7 +1,8 @@
-//// [tests/cases/compiler/optionalChainTaggedTemplateNoCrash.ts] ////
+//// [tests/cases/compiler/optionalChainTaggedTemplate.ts] ////
 
 //// [repro.ts]
 e?.``(
+
 //// [siblings.ts]
 declare var a: any;
 a?.b`c`;
