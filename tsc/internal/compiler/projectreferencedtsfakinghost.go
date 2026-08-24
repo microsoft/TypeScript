@@ -223,13 +223,8 @@ func (fs *projectReferenceDtsFakingVfs) fileExistsIfProjectReferenceDts(file str
 
 func (fs *projectReferenceDtsFakingVfs) directoryExistsIfProjectReferenceDeclDir(dir string) core.Tristate {
 	dirPath := fs.toPath(dir)
-	dirPathWithTrailingDirectorySeparator := dirPath + "/"
 	for declDirPath := range fs.dtsDirectories.Keys() {
-		if dirPath == declDirPath ||
-			// Any parent directory of declaration dir
-			strings.HasPrefix(string(declDirPath), string(dirPathWithTrailingDirectorySeparator)) ||
-			// Any directory inside declaration dir
-			strings.HasPrefix(string(dirPath), string(declDirPath)+"/") {
+		if dirPath.ContainsPath(declDirPath) || declDirPath.ContainsPath(dirPath) {
 			return core.TSTrue
 		}
 	}
