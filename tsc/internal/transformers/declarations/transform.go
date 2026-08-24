@@ -1245,8 +1245,16 @@ func (tx *DeclarationTransformer) transformExportAssignment(input *ast.Node, ass
 		if tx.needsDeclare {
 			mods = append(mods, tx.Factory().NewModifier(ast.KindDeclareKeyword))
 		}
+		tx.state.getSymbolAccessibilityDiagnostic = func(_ printer.SymbolAccessibilityResult) *SymbolAccessibilityDiagnostic {
+			return &SymbolAccessibilityDiagnostic{
+				diagnosticMessage: diagnostics.Default_export_of_the_module_has_or_is_using_private_name_0,
+				errorNode:         input,
+			}
+		}
+		tx.tracker.PushErrorFallbackNode(assignment)
 		fullSignatureType := assignment.Type()
 		funcDecl := tx.transformFunctionLikeToDeclaration(unwrapped, newId, tx.Factory().NewModifierList(mods), fullSignatureType)
+		tx.tracker.PopErrorFallbackNode()
 		tx.preserveJsDoc(funcDecl, input)
 		// Reuse the same name node for the export so unique names resolve consistently
 		exportAssignment := tx.Factory().NewExportAssignment(nil, isExportEquals, nil, newId)
