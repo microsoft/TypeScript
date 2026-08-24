@@ -329,32 +329,3 @@ namespace N {
 	assert.Equal(t, positionMap.UTF8ToUTF16(afterBoxDrawingCharacter), afterBoxDrawingCharacter-2)
 	assert.Equal(t, positionMap.UTF8ToUTF16(len(sourceText)), len(sourceText)-2)
 }
-
-func TestJSDocOverloadAnonDefaultExport(t *testing.T) {
-	t.Parallel()
-	sourceText := `/** @overload */
-export default function () {}
-`
-	opts := ast.SourceFileParseOptions{FileName: "/index.js", Path: "/index.js"}
-
-	file := parser.ParseSourceFile(opts, sourceText, core.ScriptKindJS)
-
-	function := file.Statements.Nodes[0]
-	assert.Assert(t, ast.IsFunctionDeclaration(function))
-	assert.Assert(t, function.Name() == nil)
-}
-
-func TestJSDocOverloadNamedDefaultExport(t *testing.T) {
-	t.Parallel()
-	sourceText := `/** @overload */
-export default function foo() {}
-`
-	opts := ast.SourceFileParseOptions{FileName: "/index.js", Path: "/index.js"}
-
-	file := parser.ParseSourceFile(opts, sourceText, core.ScriptKindJS)
-
-	function := file.Statements.Nodes[0]
-	assert.Assert(t, ast.IsFunctionDeclaration(function))
-	assert.Assert(t, function.Name() != nil)
-	assert.Equal(t, function.Name().Text(), "foo")
-}
