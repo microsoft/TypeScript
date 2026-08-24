@@ -63,7 +63,7 @@ jobs:
           subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
       - name: Create GitHub App token
         id: app-token
-        uses: microsoft/create-github-app-token-via-key-vault@5ba0d436e9c3cac52feff4d1f2f66f9698ce4a2d # v1
+        uses: microsoft/create-github-app-token-via-key-vault@9dee9fa4d9557db659576ba9109d74d762a0e666 # main
         with:
           client-id: ${{ vars.TYPESCRIPT_AUTOMATION_GITHUB_APP_CLIENT_ID }}
           key-id: ${{ vars.TYPESCRIPT_AUTOMATION_GITHUB_APP_KEY_ID }}
@@ -205,7 +205,7 @@ jobs:
 
             return commentBody;
 
-      - uses: microsoft/typescript-bot-test-triggerer/.github/actions/post-workflow-result@master
+      - uses: microsoft/typescript-bot-test-triggerer/.github/actions/post-workflow-result@08bcbbf253fd6bc533dd8b9ab47a58582be57fbe # master
         if: ${{ !cancelled() && inputs.distinct_id }}
         with:
           success_comment: ${{ steps.open-pr.outputs.result }}
