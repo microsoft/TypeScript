@@ -1,0 +1,300 @@
+//// [tests/cases/compiler/syntheticProtectedProperties.ts] ////
+
+=== syntheticProtectedProperties.ts ===
+// https://github.com/microsoft/TypeScript/issues/63749
+
+declare class Dummy {
+>Dummy : Symbol(Dummy, Decl(syntheticProtectedProperties.ts, 0, 0))
+
+    a: number;
+>a : Symbol(Dummy.a, Decl(syntheticProtectedProperties.ts, 2, 21))
+}
+
+type Public = Base | Dummy;
+>Public : Symbol(Public, Decl(syntheticProtectedProperties.ts, 4, 1))
+>Base : Symbol(Base, Decl(syntheticProtectedProperties.ts, 6, 27))
+>Dummy : Symbol(Dummy, Decl(syntheticProtectedProperties.ts, 0, 0))
+
+declare class Base {
+>Base : Symbol(Base, Decl(syntheticProtectedProperties.ts, 6, 27))
+
+    protected get content(): string;
+>content : Symbol(Base.content, Decl(syntheticProtectedProperties.ts, 8, 20), Decl(syntheticProtectedProperties.ts, 9, 36))
+
+    protected set content(value: string);
+>content : Symbol(Base.content, Decl(syntheticProtectedProperties.ts, 8, 20), Decl(syntheticProtectedProperties.ts, 9, 36))
+>value : Symbol(value, Decl(syntheticProtectedProperties.ts, 10, 26))
+}
+
+declare class Mock {
+>Mock : Symbol(Mock, Decl(syntheticProtectedProperties.ts, 11, 1))
+
+    get content(): string;
+>content : Symbol(Mock.content, Decl(syntheticProtectedProperties.ts, 13, 20), Decl(syntheticProtectedProperties.ts, 14, 26))
+
+    set content(value: string);
+>content : Symbol(Mock.content, Decl(syntheticProtectedProperties.ts, 13, 20), Decl(syntheticProtectedProperties.ts, 14, 26))
+>value : Symbol(value, Decl(syntheticProtectedProperties.ts, 15, 16))
+}
+
+declare const w: Public
+>w : Symbol(w, Decl(syntheticProtectedProperties.ts, 18, 13))
+>Public : Symbol(Public, Decl(syntheticProtectedProperties.ts, 4, 1))
+
+if (w instanceof Mock) {
+>w : Symbol(w, Decl(syntheticProtectedProperties.ts, 18, 13))
+>Mock : Symbol(Mock, Decl(syntheticProtectedProperties.ts, 11, 1))
+
+    w.content;
+>w.content : Symbol(Mock.content, Decl(syntheticProtectedProperties.ts, 8, 20), Decl(syntheticProtectedProperties.ts, 9, 36), Decl(syntheticProtectedProperties.ts, 13, 20), Decl(syntheticProtectedProperties.ts, 14, 26))
+>w : Symbol(w, Decl(syntheticProtectedProperties.ts, 18, 13))
+>content : Symbol(Mock.content, Decl(syntheticProtectedProperties.ts, 8, 20), Decl(syntheticProtectedProperties.ts, 9, 36), Decl(syntheticProtectedProperties.ts, 13, 20), Decl(syntheticProtectedProperties.ts, 14, 26))
+}
+declare const w2: Mock & Public
+>w2 : Symbol(w2, Decl(syntheticProtectedProperties.ts, 22, 13))
+>Mock : Symbol(Mock, Decl(syntheticProtectedProperties.ts, 11, 1))
+>Public : Symbol(Public, Decl(syntheticProtectedProperties.ts, 4, 1))
+
+w2.content;
+>w2.content : Symbol(Mock.content, Decl(syntheticProtectedProperties.ts, 13, 20), Decl(syntheticProtectedProperties.ts, 14, 26), Decl(syntheticProtectedProperties.ts, 8, 20), Decl(syntheticProtectedProperties.ts, 9, 36))
+>w2 : Symbol(w2, Decl(syntheticProtectedProperties.ts, 22, 13))
+>content : Symbol(Mock.content, Decl(syntheticProtectedProperties.ts, 13, 20), Decl(syntheticProtectedProperties.ts, 14, 26), Decl(syntheticProtectedProperties.ts, 8, 20), Decl(syntheticProtectedProperties.ts, 9, 36))
+
+declare const w3: Public & Mock
+>w3 : Symbol(w3, Decl(syntheticProtectedProperties.ts, 25, 13))
+>Public : Symbol(Public, Decl(syntheticProtectedProperties.ts, 4, 1))
+>Mock : Symbol(Mock, Decl(syntheticProtectedProperties.ts, 11, 1))
+
+w3.content;
+>w3.content : Symbol(Mock.content, Decl(syntheticProtectedProperties.ts, 8, 20), Decl(syntheticProtectedProperties.ts, 9, 36), Decl(syntheticProtectedProperties.ts, 13, 20), Decl(syntheticProtectedProperties.ts, 14, 26))
+>w3 : Symbol(w3, Decl(syntheticProtectedProperties.ts, 25, 13))
+>content : Symbol(Mock.content, Decl(syntheticProtectedProperties.ts, 8, 20), Decl(syntheticProtectedProperties.ts, 9, 36), Decl(syntheticProtectedProperties.ts, 13, 20), Decl(syntheticProtectedProperties.ts, 14, 26))
+
+// private/protected set accessors are tracked in unions and intersections
+
+declare class C1 {
+>C1 : Symbol(C1, Decl(syntheticProtectedProperties.ts, 26, 11))
+
+    get foo(): number;
+>foo : Symbol(C1.foo, Decl(syntheticProtectedProperties.ts, 30, 18), Decl(syntheticProtectedProperties.ts, 31, 22))
+
+    set foo(value: number);
+>foo : Symbol(C1.foo, Decl(syntheticProtectedProperties.ts, 30, 18), Decl(syntheticProtectedProperties.ts, 31, 22))
+>value : Symbol(value, Decl(syntheticProtectedProperties.ts, 32, 12))
+}
+
+declare class C2 {
+>C2 : Symbol(C2, Decl(syntheticProtectedProperties.ts, 33, 1))
+
+    get foo(): number;
+>foo : Symbol(C2.foo, Decl(syntheticProtectedProperties.ts, 35, 18), Decl(syntheticProtectedProperties.ts, 36, 22))
+
+    protected set foo(value: number);
+>foo : Symbol(C2.foo, Decl(syntheticProtectedProperties.ts, 35, 18), Decl(syntheticProtectedProperties.ts, 36, 22))
+>value : Symbol(value, Decl(syntheticProtectedProperties.ts, 37, 22))
+}
+
+declare class C3 {
+>C3 : Symbol(C3, Decl(syntheticProtectedProperties.ts, 38, 1))
+
+    protected get foo(): number;
+>foo : Symbol(C3.foo, Decl(syntheticProtectedProperties.ts, 40, 18), Decl(syntheticProtectedProperties.ts, 41, 32))
+
+    protected set foo(value: number);
+>foo : Symbol(C3.foo, Decl(syntheticProtectedProperties.ts, 40, 18), Decl(syntheticProtectedProperties.ts, 41, 32))
+>value : Symbol(value, Decl(syntheticProtectedProperties.ts, 42, 22))
+}
+
+declare class P1 {
+>P1 : Symbol(P1, Decl(syntheticProtectedProperties.ts, 43, 1))
+
+    get foo(): number;
+>foo : Symbol(P1.foo, Decl(syntheticProtectedProperties.ts, 45, 18), Decl(syntheticProtectedProperties.ts, 46, 22))
+
+    set foo(value: number);
+>foo : Symbol(P1.foo, Decl(syntheticProtectedProperties.ts, 45, 18), Decl(syntheticProtectedProperties.ts, 46, 22))
+>value : Symbol(value, Decl(syntheticProtectedProperties.ts, 47, 12))
+}
+
+declare class P2 {
+>P2 : Symbol(P2, Decl(syntheticProtectedProperties.ts, 48, 1))
+
+    get foo(): number;
+>foo : Symbol(P2.foo, Decl(syntheticProtectedProperties.ts, 50, 18), Decl(syntheticProtectedProperties.ts, 51, 22))
+
+    private set foo(value: number);
+>foo : Symbol(P2.foo, Decl(syntheticProtectedProperties.ts, 50, 18), Decl(syntheticProtectedProperties.ts, 51, 22))
+>value : Symbol(value, Decl(syntheticProtectedProperties.ts, 52, 20))
+}
+
+declare class P3 {
+>P3 : Symbol(P3, Decl(syntheticProtectedProperties.ts, 53, 1))
+
+    private get foo(): number;
+>foo : Symbol(P3.foo, Decl(syntheticProtectedProperties.ts, 55, 18), Decl(syntheticProtectedProperties.ts, 56, 30))
+
+    private set foo(value: number);
+>foo : Symbol(P3.foo, Decl(syntheticProtectedProperties.ts, 55, 18), Decl(syntheticProtectedProperties.ts, 56, 30))
+>value : Symbol(value, Decl(syntheticProtectedProperties.ts, 57, 20))
+}
+
+// Unions properties have most restricted accessibility
+
+declare const cu12: C1 | C2;
+>cu12 : Symbol(cu12, Decl(syntheticProtectedProperties.ts, 62, 13))
+>C1 : Symbol(C1, Decl(syntheticProtectedProperties.ts, 26, 11))
+>C2 : Symbol(C2, Decl(syntheticProtectedProperties.ts, 33, 1))
+
+cu12.foo;
+>cu12.foo : Symbol(foo, Decl(syntheticProtectedProperties.ts, 30, 18), Decl(syntheticProtectedProperties.ts, 31, 22), Decl(syntheticProtectedProperties.ts, 35, 18), Decl(syntheticProtectedProperties.ts, 36, 22))
+>cu12 : Symbol(cu12, Decl(syntheticProtectedProperties.ts, 62, 13))
+>foo : Symbol(foo, Decl(syntheticProtectedProperties.ts, 30, 18), Decl(syntheticProtectedProperties.ts, 31, 22), Decl(syntheticProtectedProperties.ts, 35, 18), Decl(syntheticProtectedProperties.ts, 36, 22))
+
+cu12.foo = 123;  // Error, protected
+>cu12.foo : Symbol(foo, Decl(syntheticProtectedProperties.ts, 30, 18), Decl(syntheticProtectedProperties.ts, 31, 22), Decl(syntheticProtectedProperties.ts, 35, 18), Decl(syntheticProtectedProperties.ts, 36, 22))
+>cu12 : Symbol(cu12, Decl(syntheticProtectedProperties.ts, 62, 13))
+>foo : Symbol(foo, Decl(syntheticProtectedProperties.ts, 30, 18), Decl(syntheticProtectedProperties.ts, 31, 22), Decl(syntheticProtectedProperties.ts, 35, 18), Decl(syntheticProtectedProperties.ts, 36, 22))
+
+declare const cu13: C1 | C3;
+>cu13 : Symbol(cu13, Decl(syntheticProtectedProperties.ts, 66, 13))
+>C1 : Symbol(C1, Decl(syntheticProtectedProperties.ts, 26, 11))
+>C3 : Symbol(C3, Decl(syntheticProtectedProperties.ts, 38, 1))
+
+cu13.foo;  // Error, no property
+>cu13 : Symbol(cu13, Decl(syntheticProtectedProperties.ts, 66, 13))
+
+cu13.foo = 123;  // Error, no property
+>cu13 : Symbol(cu13, Decl(syntheticProtectedProperties.ts, 66, 13))
+
+declare const cu23: C2 | C3;
+>cu23 : Symbol(cu23, Decl(syntheticProtectedProperties.ts, 70, 13))
+>C2 : Symbol(C2, Decl(syntheticProtectedProperties.ts, 33, 1))
+>C3 : Symbol(C3, Decl(syntheticProtectedProperties.ts, 38, 1))
+
+cu23.foo;  // Error, no property
+>cu23 : Symbol(cu23, Decl(syntheticProtectedProperties.ts, 70, 13))
+
+cu23.foo = 123;  // Error, no property
+>cu23 : Symbol(cu23, Decl(syntheticProtectedProperties.ts, 70, 13))
+
+declare const pu12: P1 | P2;
+>pu12 : Symbol(pu12, Decl(syntheticProtectedProperties.ts, 74, 13))
+>P1 : Symbol(P1, Decl(syntheticProtectedProperties.ts, 43, 1))
+>P2 : Symbol(P2, Decl(syntheticProtectedProperties.ts, 48, 1))
+
+pu12.foo;
+>pu12.foo : Symbol(foo, Decl(syntheticProtectedProperties.ts, 45, 18), Decl(syntheticProtectedProperties.ts, 46, 22), Decl(syntheticProtectedProperties.ts, 50, 18), Decl(syntheticProtectedProperties.ts, 51, 22))
+>pu12 : Symbol(pu12, Decl(syntheticProtectedProperties.ts, 74, 13))
+>foo : Symbol(foo, Decl(syntheticProtectedProperties.ts, 45, 18), Decl(syntheticProtectedProperties.ts, 46, 22), Decl(syntheticProtectedProperties.ts, 50, 18), Decl(syntheticProtectedProperties.ts, 51, 22))
+
+pu12.foo = 123;  // Error, private
+>pu12.foo : Symbol(foo, Decl(syntheticProtectedProperties.ts, 45, 18), Decl(syntheticProtectedProperties.ts, 46, 22), Decl(syntheticProtectedProperties.ts, 50, 18), Decl(syntheticProtectedProperties.ts, 51, 22))
+>pu12 : Symbol(pu12, Decl(syntheticProtectedProperties.ts, 74, 13))
+>foo : Symbol(foo, Decl(syntheticProtectedProperties.ts, 45, 18), Decl(syntheticProtectedProperties.ts, 46, 22), Decl(syntheticProtectedProperties.ts, 50, 18), Decl(syntheticProtectedProperties.ts, 51, 22))
+
+declare const pu13: P1 | P3;
+>pu13 : Symbol(pu13, Decl(syntheticProtectedProperties.ts, 78, 13))
+>P1 : Symbol(P1, Decl(syntheticProtectedProperties.ts, 43, 1))
+>P3 : Symbol(P3, Decl(syntheticProtectedProperties.ts, 53, 1))
+
+pu13.foo;  // Error, no property
+>pu13 : Symbol(pu13, Decl(syntheticProtectedProperties.ts, 78, 13))
+
+pu13.foo = 123;  // Error, no property
+>pu13 : Symbol(pu13, Decl(syntheticProtectedProperties.ts, 78, 13))
+
+declare const pu23: P2 | P3;
+>pu23 : Symbol(pu23, Decl(syntheticProtectedProperties.ts, 82, 13))
+>P2 : Symbol(P2, Decl(syntheticProtectedProperties.ts, 48, 1))
+>P3 : Symbol(P3, Decl(syntheticProtectedProperties.ts, 53, 1))
+
+pu23.foo;  // Error, no property
+>pu23 : Symbol(pu23, Decl(syntheticProtectedProperties.ts, 82, 13))
+
+pu23.foo = 123;  // Error, no property
+>pu23 : Symbol(pu23, Decl(syntheticProtectedProperties.ts, 82, 13))
+
+// Intersection properties have most permissive accessibility
+
+declare const ci12: C1 & C2;
+>ci12 : Symbol(ci12, Decl(syntheticProtectedProperties.ts, 88, 13))
+>C1 : Symbol(C1, Decl(syntheticProtectedProperties.ts, 26, 11))
+>C2 : Symbol(C2, Decl(syntheticProtectedProperties.ts, 33, 1))
+
+ci12.foo;
+>ci12.foo : Symbol(foo, Decl(syntheticProtectedProperties.ts, 30, 18), Decl(syntheticProtectedProperties.ts, 31, 22), Decl(syntheticProtectedProperties.ts, 35, 18), Decl(syntheticProtectedProperties.ts, 36, 22))
+>ci12 : Symbol(ci12, Decl(syntheticProtectedProperties.ts, 88, 13))
+>foo : Symbol(foo, Decl(syntheticProtectedProperties.ts, 30, 18), Decl(syntheticProtectedProperties.ts, 31, 22), Decl(syntheticProtectedProperties.ts, 35, 18), Decl(syntheticProtectedProperties.ts, 36, 22))
+
+ci12.foo = 123;
+>ci12.foo : Symbol(foo, Decl(syntheticProtectedProperties.ts, 30, 18), Decl(syntheticProtectedProperties.ts, 31, 22), Decl(syntheticProtectedProperties.ts, 35, 18), Decl(syntheticProtectedProperties.ts, 36, 22))
+>ci12 : Symbol(ci12, Decl(syntheticProtectedProperties.ts, 88, 13))
+>foo : Symbol(foo, Decl(syntheticProtectedProperties.ts, 30, 18), Decl(syntheticProtectedProperties.ts, 31, 22), Decl(syntheticProtectedProperties.ts, 35, 18), Decl(syntheticProtectedProperties.ts, 36, 22))
+
+declare const ci13: C1 & C3;
+>ci13 : Symbol(ci13, Decl(syntheticProtectedProperties.ts, 92, 13))
+>C1 : Symbol(C1, Decl(syntheticProtectedProperties.ts, 26, 11))
+>C3 : Symbol(C3, Decl(syntheticProtectedProperties.ts, 38, 1))
+
+ci13.foo;
+>ci13.foo : Symbol(foo, Decl(syntheticProtectedProperties.ts, 30, 18), Decl(syntheticProtectedProperties.ts, 31, 22), Decl(syntheticProtectedProperties.ts, 40, 18), Decl(syntheticProtectedProperties.ts, 41, 32))
+>ci13 : Symbol(ci13, Decl(syntheticProtectedProperties.ts, 92, 13))
+>foo : Symbol(foo, Decl(syntheticProtectedProperties.ts, 30, 18), Decl(syntheticProtectedProperties.ts, 31, 22), Decl(syntheticProtectedProperties.ts, 40, 18), Decl(syntheticProtectedProperties.ts, 41, 32))
+
+ci13.foo = 123;
+>ci13.foo : Symbol(foo, Decl(syntheticProtectedProperties.ts, 30, 18), Decl(syntheticProtectedProperties.ts, 31, 22), Decl(syntheticProtectedProperties.ts, 40, 18), Decl(syntheticProtectedProperties.ts, 41, 32))
+>ci13 : Symbol(ci13, Decl(syntheticProtectedProperties.ts, 92, 13))
+>foo : Symbol(foo, Decl(syntheticProtectedProperties.ts, 30, 18), Decl(syntheticProtectedProperties.ts, 31, 22), Decl(syntheticProtectedProperties.ts, 40, 18), Decl(syntheticProtectedProperties.ts, 41, 32))
+
+declare const ci23: C2 & C3;
+>ci23 : Symbol(ci23, Decl(syntheticProtectedProperties.ts, 96, 13))
+>C2 : Symbol(C2, Decl(syntheticProtectedProperties.ts, 33, 1))
+>C3 : Symbol(C3, Decl(syntheticProtectedProperties.ts, 38, 1))
+
+ci23.foo;
+>ci23.foo : Symbol(foo, Decl(syntheticProtectedProperties.ts, 35, 18), Decl(syntheticProtectedProperties.ts, 36, 22), Decl(syntheticProtectedProperties.ts, 40, 18), Decl(syntheticProtectedProperties.ts, 41, 32))
+>ci23 : Symbol(ci23, Decl(syntheticProtectedProperties.ts, 96, 13))
+>foo : Symbol(foo, Decl(syntheticProtectedProperties.ts, 35, 18), Decl(syntheticProtectedProperties.ts, 36, 22), Decl(syntheticProtectedProperties.ts, 40, 18), Decl(syntheticProtectedProperties.ts, 41, 32))
+
+ci23.foo = 123;  // Error, protected
+>ci23.foo : Symbol(foo, Decl(syntheticProtectedProperties.ts, 35, 18), Decl(syntheticProtectedProperties.ts, 36, 22), Decl(syntheticProtectedProperties.ts, 40, 18), Decl(syntheticProtectedProperties.ts, 41, 32))
+>ci23 : Symbol(ci23, Decl(syntheticProtectedProperties.ts, 96, 13))
+>foo : Symbol(foo, Decl(syntheticProtectedProperties.ts, 35, 18), Decl(syntheticProtectedProperties.ts, 36, 22), Decl(syntheticProtectedProperties.ts, 40, 18), Decl(syntheticProtectedProperties.ts, 41, 32))
+
+declare const pi12: P1 & P2;
+>pi12 : Symbol(pi12, Decl(syntheticProtectedProperties.ts, 100, 13))
+>P1 : Symbol(P1, Decl(syntheticProtectedProperties.ts, 43, 1))
+>P2 : Symbol(P2, Decl(syntheticProtectedProperties.ts, 48, 1))
+
+pi12.foo;
+>pi12.foo : Symbol(foo, Decl(syntheticProtectedProperties.ts, 45, 18), Decl(syntheticProtectedProperties.ts, 46, 22), Decl(syntheticProtectedProperties.ts, 50, 18), Decl(syntheticProtectedProperties.ts, 51, 22))
+>pi12 : Symbol(pi12, Decl(syntheticProtectedProperties.ts, 100, 13))
+>foo : Symbol(foo, Decl(syntheticProtectedProperties.ts, 45, 18), Decl(syntheticProtectedProperties.ts, 46, 22), Decl(syntheticProtectedProperties.ts, 50, 18), Decl(syntheticProtectedProperties.ts, 51, 22))
+
+pi12.foo = 123;
+>pi12.foo : Symbol(foo, Decl(syntheticProtectedProperties.ts, 45, 18), Decl(syntheticProtectedProperties.ts, 46, 22), Decl(syntheticProtectedProperties.ts, 50, 18), Decl(syntheticProtectedProperties.ts, 51, 22))
+>pi12 : Symbol(pi12, Decl(syntheticProtectedProperties.ts, 100, 13))
+>foo : Symbol(foo, Decl(syntheticProtectedProperties.ts, 45, 18), Decl(syntheticProtectedProperties.ts, 46, 22), Decl(syntheticProtectedProperties.ts, 50, 18), Decl(syntheticProtectedProperties.ts, 51, 22))
+
+declare const pi13: P1 & P3;
+>pi13 : Symbol(pi13, Decl(syntheticProtectedProperties.ts, 104, 13))
+>P1 : Symbol(P1, Decl(syntheticProtectedProperties.ts, 43, 1))
+>P3 : Symbol(P3, Decl(syntheticProtectedProperties.ts, 53, 1))
+
+pi13.foo;  // Error, reduced to never
+>pi13 : Symbol(pi13, Decl(syntheticProtectedProperties.ts, 104, 13))
+
+pi13.foo = 123;  // Error, reduced to never
+>pi13 : Symbol(pi13, Decl(syntheticProtectedProperties.ts, 104, 13))
+
+declare const pi23: P2 & P3;
+>pi23 : Symbol(pi23, Decl(syntheticProtectedProperties.ts, 108, 13))
+>P2 : Symbol(P2, Decl(syntheticProtectedProperties.ts, 48, 1))
+>P3 : Symbol(P3, Decl(syntheticProtectedProperties.ts, 53, 1))
+
+pi23.foo;  // Error, reduced to never
+>pi23 : Symbol(pi23, Decl(syntheticProtectedProperties.ts, 108, 13))
+
+pi23.foo = 123;  // Error, reduced to never
+>pi23 : Symbol(pi23, Decl(syntheticProtectedProperties.ts, 108, 13))
+
