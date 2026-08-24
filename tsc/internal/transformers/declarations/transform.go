@@ -1225,6 +1225,14 @@ func (tx *DeclarationTransformer) transformExportAssignment(input *ast.Node, ass
 		return exportAssignment
 	}
 
+	tx.state.getSymbolAccessibilityDiagnostic = func(_ printer.SymbolAccessibilityResult) *SymbolAccessibilityDiagnostic {
+		return &SymbolAccessibilityDiagnostic{
+			diagnosticMessage: diagnostics.Default_export_of_the_module_has_or_is_using_private_name_0,
+			errorNode:         input,
+		}
+	}
+	tx.tracker.PushErrorFallbackNode(assignment)
+
 	// Check if the expression is a class expression - emit as a class declaration + export assignment
 	unwrapped := ast.SkipOuterExpressions(expression, ast.OEKExpressionTypePassthrough)
 	newId := tx.getNameOfExportedAssignedExpression(unwrapped, isExportEquals)
@@ -1234,6 +1242,7 @@ func (tx *DeclarationTransformer) transformExportAssignment(input *ast.Node, ass
 			mods = append(mods, tx.Factory().NewModifier(ast.KindDeclareKeyword))
 		}
 		classDecl := tx.transformClassExpressionToDeclaration(unwrapped, newId, tx.Factory().NewModifierList(mods))
+		tx.tracker.PopErrorFallbackNode()
 		tx.preserveJsDoc(classDecl, input)
 		// Reuse the same name node for the export so unique names resolve consistently
 		exportAssignment := tx.Factory().NewExportAssignment(nil, isExportEquals, nil, newId)
@@ -1245,13 +1254,6 @@ func (tx *DeclarationTransformer) transformExportAssignment(input *ast.Node, ass
 		if tx.needsDeclare {
 			mods = append(mods, tx.Factory().NewModifier(ast.KindDeclareKeyword))
 		}
-		tx.state.getSymbolAccessibilityDiagnostic = func(_ printer.SymbolAccessibilityResult) *SymbolAccessibilityDiagnostic {
-			return &SymbolAccessibilityDiagnostic{
-				diagnosticMessage: diagnostics.Default_export_of_the_module_has_or_is_using_private_name_0,
-				errorNode:         input,
-			}
-		}
-		tx.tracker.PushErrorFallbackNode(assignment)
 		fullSignatureType := assignment.Type()
 		funcDecl := tx.transformFunctionLikeToDeclaration(unwrapped, newId, tx.Factory().NewModifierList(mods), fullSignatureType)
 		tx.tracker.PopErrorFallbackNode()
@@ -1263,14 +1265,7 @@ func (tx *DeclarationTransformer) transformExportAssignment(input *ast.Node, ass
 	}
 
 	// expression is non-identifier, create _default typed variable to reference
-	tx.state.getSymbolAccessibilityDiagnostic = func(_ printer.SymbolAccessibilityResult) *SymbolAccessibilityDiagnostic {
-		return &SymbolAccessibilityDiagnostic{
-			diagnosticMessage: diagnostics.Default_export_of_the_module_has_or_is_using_private_name_0,
-			errorNode:         input,
-		}
-	}
 	tx.cjsExportAssignmentName = newId
-	tx.tracker.PushErrorFallbackNode(assignment)
 	var type_, initializer *ast.Node
 	if ast.IsPrimitiveLiteralValue(unwrapParenthesizedExpression(expression), true) {
 		initializer = tx.resolver.CreateLiteralConstValue(tx.EmitContext(), tx.EmitContext().ParseNode(assignment), tx.tracker)
