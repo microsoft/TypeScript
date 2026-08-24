@@ -46,9 +46,9 @@ if (w instanceof Mock) {
 >Mock : Symbol(Mock, Decl(syntheticProtectedProperties.ts, 11, 1))
 
     w.content;
->w.content : Symbol(Mock.content, Decl(syntheticProtectedProperties.ts, 8, 20), Decl(syntheticProtectedProperties.ts, 9, 36), Decl(syntheticProtectedProperties.ts, 13, 20), Decl(syntheticProtectedProperties.ts, 14, 26), Decl(syntheticProtectedProperties.ts, 13, 20) ... and 1 more)
+>w.content : Symbol(Mock.content, Decl(syntheticProtectedProperties.ts, 8, 20), Decl(syntheticProtectedProperties.ts, 9, 36), Decl(syntheticProtectedProperties.ts, 13, 20), Decl(syntheticProtectedProperties.ts, 14, 26))
 >w : Symbol(w, Decl(syntheticProtectedProperties.ts, 18, 13))
->content : Symbol(Mock.content, Decl(syntheticProtectedProperties.ts, 8, 20), Decl(syntheticProtectedProperties.ts, 9, 36), Decl(syntheticProtectedProperties.ts, 13, 20), Decl(syntheticProtectedProperties.ts, 14, 26), Decl(syntheticProtectedProperties.ts, 13, 20) ... and 1 more)
+>content : Symbol(Mock.content, Decl(syntheticProtectedProperties.ts, 8, 20), Decl(syntheticProtectedProperties.ts, 9, 36), Decl(syntheticProtectedProperties.ts, 13, 20), Decl(syntheticProtectedProperties.ts, 14, 26))
 }
 declare const w2: Mock & Public
 >w2 : Symbol(w2, Decl(syntheticProtectedProperties.ts, 22, 13))
@@ -56,9 +56,9 @@ declare const w2: Mock & Public
 >Public : Symbol(Public, Decl(syntheticProtectedProperties.ts, 4, 1))
 
 w2.content;
->w2.content : Symbol(Mock.content, Decl(syntheticProtectedProperties.ts, 13, 20), Decl(syntheticProtectedProperties.ts, 14, 26), Decl(syntheticProtectedProperties.ts, 8, 20), Decl(syntheticProtectedProperties.ts, 9, 36), Decl(syntheticProtectedProperties.ts, 13, 20) ... and 1 more)
+>w2.content : Symbol(Mock.content, Decl(syntheticProtectedProperties.ts, 13, 20), Decl(syntheticProtectedProperties.ts, 14, 26), Decl(syntheticProtectedProperties.ts, 8, 20), Decl(syntheticProtectedProperties.ts, 9, 36))
 >w2 : Symbol(w2, Decl(syntheticProtectedProperties.ts, 22, 13))
->content : Symbol(Mock.content, Decl(syntheticProtectedProperties.ts, 13, 20), Decl(syntheticProtectedProperties.ts, 14, 26), Decl(syntheticProtectedProperties.ts, 8, 20), Decl(syntheticProtectedProperties.ts, 9, 36), Decl(syntheticProtectedProperties.ts, 13, 20) ... and 1 more)
+>content : Symbol(Mock.content, Decl(syntheticProtectedProperties.ts, 13, 20), Decl(syntheticProtectedProperties.ts, 14, 26), Decl(syntheticProtectedProperties.ts, 8, 20), Decl(syntheticProtectedProperties.ts, 9, 36))
 
 declare const w3: Public & Mock
 >w3 : Symbol(w3, Decl(syntheticProtectedProperties.ts, 25, 13))
@@ -66,9 +66,9 @@ declare const w3: Public & Mock
 >Mock : Symbol(Mock, Decl(syntheticProtectedProperties.ts, 11, 1))
 
 w3.content;
->w3.content : Symbol(Mock.content, Decl(syntheticProtectedProperties.ts, 8, 20), Decl(syntheticProtectedProperties.ts, 9, 36), Decl(syntheticProtectedProperties.ts, 13, 20), Decl(syntheticProtectedProperties.ts, 14, 26), Decl(syntheticProtectedProperties.ts, 13, 20) ... and 1 more)
+>w3.content : Symbol(Mock.content, Decl(syntheticProtectedProperties.ts, 8, 20), Decl(syntheticProtectedProperties.ts, 9, 36), Decl(syntheticProtectedProperties.ts, 13, 20), Decl(syntheticProtectedProperties.ts, 14, 26))
 >w3 : Symbol(w3, Decl(syntheticProtectedProperties.ts, 25, 13))
->content : Symbol(Mock.content, Decl(syntheticProtectedProperties.ts, 8, 20), Decl(syntheticProtectedProperties.ts, 9, 36), Decl(syntheticProtectedProperties.ts, 13, 20), Decl(syntheticProtectedProperties.ts, 14, 26), Decl(syntheticProtectedProperties.ts, 13, 20) ... and 1 more)
+>content : Symbol(Mock.content, Decl(syntheticProtectedProperties.ts, 8, 20), Decl(syntheticProtectedProperties.ts, 9, 36), Decl(syntheticProtectedProperties.ts, 13, 20), Decl(syntheticProtectedProperties.ts, 14, 26))
 
 // private/protected set accessors are tracked in unions and intersections
 
