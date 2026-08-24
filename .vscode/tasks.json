@@ -57,7 +57,7 @@
             "type": "npm",
             "script": "extension:build",
             "group": "build",
-            "problemMatcher": ["$tsc"]
+            "problemMatcher": ["$esbuild"]
         },
         {
             "label": "Watch extension",
@@ -65,7 +65,7 @@
             "script": "extension:watch",
             "group": "build",
             "isBackground": true,
-            "problemMatcher": []
+            "problemMatcher": ["$esbuild-watch"]
         },
         {
             "label": "Watch for extension run",
