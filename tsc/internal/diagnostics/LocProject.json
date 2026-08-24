@@ -1,0 +1,14 @@
+{
+    "Projects": [
+        {
+            "LocItems": [
+                {
+                    "SourceFile": "tsc\\internal\\diagnostics\\diagnosticMessages.generated.json",
+                    "Languages": "cs-CZ;de-DE;es-ES;fr-FR;it-IT;ja-JP;ko-KR;pl-PL;pt-BR;ru-RU;tr-TR;zh-CN;zh-TW",
+                    "CopyOption": "UsePlaceholders",
+                    "OutputPath": "tsc\\internal\\diagnostics\\loc\\{Lang}.generated.json"
+                }
+            ]
+        }
+    ]
+}

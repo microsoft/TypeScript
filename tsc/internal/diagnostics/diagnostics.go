@@ -6,16 +6,15 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
-	"sync"
 
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/locale"
 	"golang.org/x/text/language"
 )
 
-//go:generate go run generate.go -diagnostics ./diagnostics_generated.go -loc ./loc_generated.go -locdir ./loc
+//go:generate go run generate.go -diagnostics ./diagnostics_generated.go -locales ./localizations_generated.go -localedir ./loc -locproject ./LocProject.json -locsource ./diagnosticMessages.generated.json
 //go:generate go tool golang.org/x/tools/cmd/stringer -type=Category -output=stringer_generated.go
-//go:generate npx dprint fmt diagnostics_generated.go loc_generated.go stringer_generated.go
+//go:generate npx dprint fmt diagnostics_generated.go localizations_generated.go stringer_generated.go
 
 type Category int32
 
@@ -84,32 +83,18 @@ func Localize(locale locale.Locale, message *Message, key Key, args ...string) s
 	return Format(text, args)
 }
 
-var localizedMessagesCache sync.Map // map[language.Tag]map[Key]string
-
 func getLocalizedMessages(loc language.Tag) map[Key]string {
 	if loc == language.Und {
 		return nil
 	}
 
-	// Check cache first
-	if cached, ok := localizedMessagesCache.Load(loc); ok {
-		if cached == nil {
-			return nil
-		}
-		return cached.(map[Key]string)
-	}
-
-	var messages map[Key]string
-
 	_, index, confidence := matcher.Match(loc)
 	if confidence >= language.Low && index >= 0 && index < len(localeFuncs) {
 		if fn := localeFuncs[index]; fn != nil {
-			messages = fn()
+			return fn()
 		}
 	}
-
-	localizedMessagesCache.Store(loc, messages)
-	return messages
+	return nil
 }
 
 var placeholderRegexp = regexp.MustCompile(`{(\d+)}`)
