@@ -20,6 +20,7 @@ func (c *Checker) isAnySymbolAccessible(symbols []*ast.Symbol, enclosingDeclarat
 		accessibleSymbolChain := c.getAccessibleSymbolChain(symbol, enclosingDeclaration, meaning /*useOnlyExternalAliasing*/, false)
 		if len(accessibleSymbolChain) > 0 {
 			hadAccessibleChain = symbol
+			// TODO: going through emit resolver here is weird. Relayer these APIs.
 			hasAccessibleDeclarations := emitResolver.hasVisibleDeclarations(accessibleSymbolChain[0], shouldComputeAliasesToMakeVisible)
 			if hasAccessibleDeclarations != nil {
 				return hasAccessibleDeclarations
