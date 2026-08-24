@@ -98,6 +98,7 @@ var LibMap = collections.NewOrderedMapFromList([]collections.MapEntry[string, an
 	{Key: "es2025.iterator", Value: "lib.es2025.iterator.d.ts"},
 	{Key: "es2025.promise", Value: "lib.es2025.promise.d.ts"},
 	{Key: "es2025.regexp", Value: "lib.es2025.regexp.d.ts"},
+	{Key: "es2025.json", Value: "lib.es2025.json.d.ts"},
 	{Key: "es2026.array", Value: "lib.es2026.array.d.ts"},
 	{Key: "es2026.collection", Value: "lib.es2026.collection.d.ts"},
 	{Key: "es2026.error", Value: "lib.es2026.error.d.ts"},

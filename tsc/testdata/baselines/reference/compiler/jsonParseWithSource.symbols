@@ -1,0 +1,124 @@
+//// [tests/cases/compiler/jsonParseWithSource.ts] ////
+
+=== jsonParseWithSource.ts ===
+// JSON.rawJSON
+const raw = JSON.rawJSON("123");
+>raw : Symbol(raw, Decl(jsonParseWithSource.ts, 1, 5))
+>JSON.rawJSON : Symbol(JSON.rawJSON, Decl(lib.es2025.json.d.ts, --, --))
+>JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2025.json.d.ts, --, --))
+>rawJSON : Symbol(JSON.rawJSON, Decl(lib.es2025.json.d.ts, --, --))
+
+const rawStr: string = raw.rawJSON;
+>rawStr : Symbol(rawStr, Decl(jsonParseWithSource.ts, 2, 5))
+>raw.rawJSON : Symbol(RawJSON.rawJSON, Decl(lib.es2025.json.d.ts, --, --))
+>raw : Symbol(raw, Decl(jsonParseWithSource.ts, 1, 5))
+>rawJSON : Symbol(RawJSON.rawJSON, Decl(lib.es2025.json.d.ts, --, --))
+
+JSON.stringify({ value: raw });
+>JSON.stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2025.json.d.ts, --, --))
+>stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>value : Symbol(value, Decl(jsonParseWithSource.ts, 3, 16))
+>raw : Symbol(raw, Decl(jsonParseWithSource.ts, 1, 5))
+
+JSON.stringify({ n: JSON.rawJSON("12345678901234567890") });
+>JSON.stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2025.json.d.ts, --, --))
+>stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>n : Symbol(n, Decl(jsonParseWithSource.ts, 4, 16))
+>JSON.rawJSON : Symbol(JSON.rawJSON, Decl(lib.es2025.json.d.ts, --, --))
+>JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2025.json.d.ts, --, --))
+>rawJSON : Symbol(JSON.rawJSON, Decl(lib.es2025.json.d.ts, --, --))
+
+// JSON.isRawJSON
+const maybeRaw: unknown = {};
+>maybeRaw : Symbol(maybeRaw, Decl(jsonParseWithSource.ts, 7, 5))
+
+if (JSON.isRawJSON(maybeRaw)) {
+>JSON.isRawJSON : Symbol(JSON.isRawJSON, Decl(lib.es2025.json.d.ts, --, --))
+>JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2025.json.d.ts, --, --))
+>isRawJSON : Symbol(JSON.isRawJSON, Decl(lib.es2025.json.d.ts, --, --))
+>maybeRaw : Symbol(maybeRaw, Decl(jsonParseWithSource.ts, 7, 5))
+
+    const text: string = maybeRaw.rawJSON;
+>text : Symbol(text, Decl(jsonParseWithSource.ts, 9, 9))
+>maybeRaw.rawJSON : Symbol(RawJSON.rawJSON, Decl(lib.es2025.json.d.ts, --, --))
+>maybeRaw : Symbol(maybeRaw, Decl(jsonParseWithSource.ts, 7, 5))
+>rawJSON : Symbol(RawJSON.rawJSON, Decl(lib.es2025.json.d.ts, --, --))
+}
+
+// JSON.parse with reviver context
+// `source` is optional: only present for unmodified primitive values
+JSON.parse('{"key":123}', (key, value, context) => {
+>JSON.parse : Symbol(JSON.parse, Decl(lib.es5.d.ts, --, --), Decl(lib.es2025.json.d.ts, --, --))
+>JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2025.json.d.ts, --, --))
+>parse : Symbol(JSON.parse, Decl(lib.es5.d.ts, --, --), Decl(lib.es2025.json.d.ts, --, --))
+>key : Symbol(key, Decl(jsonParseWithSource.ts, 14, 27))
+>value : Symbol(value, Decl(jsonParseWithSource.ts, 14, 31))
+>context : Symbol(context, Decl(jsonParseWithSource.ts, 14, 38))
+
+    const src: string | undefined = context.source;
+>src : Symbol(src, Decl(jsonParseWithSource.ts, 15, 9))
+>context.source : Symbol(source, Decl(lib.es2025.json.d.ts, --, --))
+>context : Symbol(context, Decl(jsonParseWithSource.ts, 14, 38))
+>source : Symbol(source, Decl(lib.es2025.json.d.ts, --, --))
+
+    return value;
+>value : Symbol(value, Decl(jsonParseWithSource.ts, 14, 31))
+
+});
+
+// Test coverage for reviver context on array elements
+JSON.parse('[1, 2, 3]', (key, value, context) => {
+>JSON.parse : Symbol(JSON.parse, Decl(lib.es5.d.ts, --, --), Decl(lib.es2025.json.d.ts, --, --))
+>JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2025.json.d.ts, --, --))
+>parse : Symbol(JSON.parse, Decl(lib.es5.d.ts, --, --), Decl(lib.es2025.json.d.ts, --, --))
+>key : Symbol(key, Decl(jsonParseWithSource.ts, 20, 25))
+>value : Symbol(value, Decl(jsonParseWithSource.ts, 20, 29))
+>context : Symbol(context, Decl(jsonParseWithSource.ts, 20, 36))
+
+    const src: string | undefined = context.source;
+>src : Symbol(src, Decl(jsonParseWithSource.ts, 21, 9))
+>context.source : Symbol(source, Decl(lib.es2025.json.d.ts, --, --))
+>context : Symbol(context, Decl(jsonParseWithSource.ts, 20, 36))
+>source : Symbol(source, Decl(lib.es2025.json.d.ts, --, --))
+
+    return value;
+>value : Symbol(value, Decl(jsonParseWithSource.ts, 20, 29))
+
+});
+
+// Test coverage for reviver context on nested objects
+JSON.parse('{"a": {"b": 1}}', (key, value, context) => {
+>JSON.parse : Symbol(JSON.parse, Decl(lib.es5.d.ts, --, --), Decl(lib.es2025.json.d.ts, --, --))
+>JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2025.json.d.ts, --, --))
+>parse : Symbol(JSON.parse, Decl(lib.es5.d.ts, --, --), Decl(lib.es2025.json.d.ts, --, --))
+>key : Symbol(key, Decl(jsonParseWithSource.ts, 26, 31))
+>value : Symbol(value, Decl(jsonParseWithSource.ts, 26, 35))
+>context : Symbol(context, Decl(jsonParseWithSource.ts, 26, 42))
+
+    const src: string | undefined = context.source;
+>src : Symbol(src, Decl(jsonParseWithSource.ts, 27, 9))
+>context.source : Symbol(source, Decl(lib.es2025.json.d.ts, --, --))
+>context : Symbol(context, Decl(jsonParseWithSource.ts, 26, 42))
+>source : Symbol(source, Decl(lib.es2025.json.d.ts, --, --))
+
+    return value;
+>value : Symbol(value, Decl(jsonParseWithSource.ts, 26, 35))
+
+});
+
+// Existing JSON.parse overloads still work
+JSON.parse("{}");
+>JSON.parse : Symbol(JSON.parse, Decl(lib.es5.d.ts, --, --), Decl(lib.es2025.json.d.ts, --, --))
+>JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2025.json.d.ts, --, --))
+>parse : Symbol(JSON.parse, Decl(lib.es5.d.ts, --, --), Decl(lib.es2025.json.d.ts, --, --))
+
+JSON.parse('{"a":1}', (key, value) => value);
+>JSON.parse : Symbol(JSON.parse, Decl(lib.es5.d.ts, --, --), Decl(lib.es2025.json.d.ts, --, --))
+>JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2025.json.d.ts, --, --))
+>parse : Symbol(JSON.parse, Decl(lib.es5.d.ts, --, --), Decl(lib.es2025.json.d.ts, --, --))
+>key : Symbol(key, Decl(jsonParseWithSource.ts, 33, 23))
+>value : Symbol(value, Decl(jsonParseWithSource.ts, 33, 27))
+>value : Symbol(value, Decl(jsonParseWithSource.ts, 33, 27))
+

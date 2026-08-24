@@ -92,6 +92,7 @@ var LibNames = []string{
 	"lib.es2025.full.d.ts",
 	"lib.es2025.intl.d.ts",
 	"lib.es2025.iterator.d.ts",
+	"lib.es2025.json.d.ts",
 	"lib.es2025.promise.d.ts",
 	"lib.es2025.regexp.d.ts",
 	"lib.es2026.array.d.ts",
