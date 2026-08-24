@@ -8,15 +8,15 @@ const x = require("./x");
 
 const a = x.a;
 >a : Symbol(a, Decl(y.js, 1, 5))
->x.a : Symbol(a, Decl(x.js, 1, 22), Decl(x.js, 1, 22))
+>x.a : Symbol(a, Decl(x.js, 1, 22))
 >x : Symbol(x, Decl(y.js, 0, 5))
->a : Symbol(a, Decl(x.js, 1, 22), Decl(x.js, 1, 22))
+>a : Symbol(a, Decl(x.js, 1, 22))
 
 const b = x.b;
 >b : Symbol(b, Decl(y.js, 2, 5))
->x.b : Symbol(b, Decl(x.js, 4, 22), Decl(x.js, 4, 22))
+>x.b : Symbol(b, Decl(x.js, 4, 22))
 >x : Symbol(x, Decl(y.js, 0, 5))
->b : Symbol(b, Decl(x.js, 4, 22), Decl(x.js, 4, 22))
+>b : Symbol(b, Decl(x.js, 4, 22))
 
 === x.js ===
 if (!!true) {

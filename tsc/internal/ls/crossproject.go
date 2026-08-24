@@ -25,6 +25,7 @@ type projectAndTextDocumentPosition struct {
 	ls                  *LanguageService
 	Uri                 lsproto.DocumentUri
 	Position            lsproto.Position
+	symbolData          *SymbolAndEntriesData
 	forOriginalLocation bool
 }
 
@@ -52,13 +53,19 @@ func handleCrossProject[Req lsproto.HasTextDocumentPosition, Resp any](
 	isRename bool,
 	implementations bool,
 	options symbolEntryTransformOptions,
+	defaultProjectData *SymbolAndEntriesData,
 ) (Resp, error) {
 	var resp Resp
 	var err error
 
 	// Single project
 	if orchestrator == nil {
-		data, _ := defaultLs.provideSymbolsAndEntries(ctx, params.TextDocumentURI(), params.TextDocumentPosition(), isRename, implementations)
+		var data SymbolAndEntriesData
+		if defaultProjectData != nil {
+			data = *defaultProjectData
+		} else {
+			data, _ = defaultLs.provideSymbolsAndEntries(ctx, params.TextDocumentURI(), params.TextDocumentPosition(), isRename, implementations)
+		}
 		return symbolAndEntriesToResp(defaultLs, ctx, params, data, options)
 	}
 
@@ -102,7 +109,14 @@ func handleCrossProject[Req lsproto.HasTextDocumentPosition, Resp any](
 					return
 				}
 			}
-			data, ok := ls.provideSymbolsAndEntries(ctx, item.Uri, item.Position, isRename, implementations)
+			var data SymbolAndEntriesData
+			var ok bool
+			if item.symbolData != nil {
+				data = *item.symbolData
+				ok = true
+			} else {
+				data, ok = ls.provideSymbolsAndEntries(ctx, item.Uri, item.Position, isRename, implementations)
+			}
 			if ctx.Err() != nil {
 				return
 			}
@@ -149,12 +163,14 @@ func handleCrossProject[Req lsproto.HasTextDocumentPosition, Resp any](
 	}
 
 	// Initial set of projects and locations in the queue, starting with default project
-	enqueueItem(projectAndTextDocumentPosition{
+	initialItem := projectAndTextDocumentPosition{
 		project:  defaultProject,
 		ls:       defaultLs,
 		Uri:      params.TextDocumentURI(),
 		Position: params.TextDocumentPosition(),
-	})
+	}
+	initialItem.symbolData = defaultProjectData
+	enqueueItem(initialItem)
 	for _, project := range allProjects {
 		if project != defaultProject {
 			enqueueItem(projectAndTextDocumentPosition{

@@ -61,8 +61,8 @@ func (s *osSys) GetWidthOfTerminal() int {
 	return width
 }
 
-func (s *osSys) GetEnvironmentVariable(name string) string {
-	return os.Getenv(name)
+func (s *osSys) GetEnvironmentVariable(name string) (string, bool) {
+	return os.LookupEnv(name)
 }
 
 func (s *osSys) Spawn(command []string, dir string, stderr io.Writer) (io.ReadWriteCloser, error) {
