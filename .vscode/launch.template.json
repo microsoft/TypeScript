@@ -7,7 +7,9 @@
             "name": "Launch VS Code extension",
             "runtimeExecutable": "${execPath}",
             "args": [
-                "--extensionDevelopmentPath=${workspaceFolder}/packages/vscode-typescript"
+                "--extensionDevelopmentPath=${workspaceFolder}/packages/vscode-typescript",
+                "--new-window",
+                "--disable-extension=TypeScriptTeam.native-preview"
             ],
             "outFiles": [
                 "${workspaceFolder}/packages/vscode-typescript/dist/**/*.js"
