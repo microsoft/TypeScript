@@ -161,15 +161,15 @@ read({
 
   settings: { ...step.settings, input: { ...step.settings.input, k: ['5'] } },
 >settings : Symbol(settings, Decl(nestedSpreadsAndWidening.ts, 33, 10))
->step.settings : Symbol(settings, Decl(nestedSpreadsAndWidening.ts, 14, 27), Decl(nestedSpreadsAndWidening.ts, 17, 23), Decl(nestedSpreadsAndWidening.ts, 14, 27), Decl(nestedSpreadsAndWidening.ts, 18, 23), Decl(nestedSpreadsAndWidening.ts, 14, 27) ... and 17 more)
+>step.settings : Symbol(settings, Decl(nestedSpreadsAndWidening.ts, 14, 27), Decl(nestedSpreadsAndWidening.ts, 17, 23), Decl(nestedSpreadsAndWidening.ts, 18, 23), Decl(nestedSpreadsAndWidening.ts, 19, 23), Decl(nestedSpreadsAndWidening.ts, 20, 23) ... and 7 more)
 >step : Symbol(step, Decl(nestedSpreadsAndWidening.ts, 30, 13))
->settings : Symbol(settings, Decl(nestedSpreadsAndWidening.ts, 14, 27), Decl(nestedSpreadsAndWidening.ts, 17, 23), Decl(nestedSpreadsAndWidening.ts, 14, 27), Decl(nestedSpreadsAndWidening.ts, 18, 23), Decl(nestedSpreadsAndWidening.ts, 14, 27) ... and 17 more)
+>settings : Symbol(settings, Decl(nestedSpreadsAndWidening.ts, 14, 27), Decl(nestedSpreadsAndWidening.ts, 17, 23), Decl(nestedSpreadsAndWidening.ts, 18, 23), Decl(nestedSpreadsAndWidening.ts, 19, 23), Decl(nestedSpreadsAndWidening.ts, 20, 23) ... and 7 more)
 >input : Symbol(input, Decl(nestedSpreadsAndWidening.ts, 34, 31))
->step.settings.input : Symbol(input, Decl(nestedSpreadsAndWidening.ts, 2, 11), Decl(nestedSpreadsAndWidening.ts, 11, 12), Decl(nestedSpreadsAndWidening.ts, 12, 12), Decl(nestedSpreadsAndWidening.ts, 3, 11), Decl(nestedSpreadsAndWidening.ts, 4, 11) ... and 226 more)
->step.settings : Symbol(settings, Decl(nestedSpreadsAndWidening.ts, 14, 27), Decl(nestedSpreadsAndWidening.ts, 17, 23), Decl(nestedSpreadsAndWidening.ts, 14, 27), Decl(nestedSpreadsAndWidening.ts, 18, 23), Decl(nestedSpreadsAndWidening.ts, 14, 27) ... and 17 more)
+>step.settings.input : Symbol(input, Decl(nestedSpreadsAndWidening.ts, 2, 11), Decl(nestedSpreadsAndWidening.ts, 11, 12), Decl(nestedSpreadsAndWidening.ts, 12, 12), Decl(nestedSpreadsAndWidening.ts, 3, 11), Decl(nestedSpreadsAndWidening.ts, 4, 11) ... and 6 more)
+>step.settings : Symbol(settings, Decl(nestedSpreadsAndWidening.ts, 14, 27), Decl(nestedSpreadsAndWidening.ts, 17, 23), Decl(nestedSpreadsAndWidening.ts, 18, 23), Decl(nestedSpreadsAndWidening.ts, 19, 23), Decl(nestedSpreadsAndWidening.ts, 20, 23) ... and 7 more)
 >step : Symbol(step, Decl(nestedSpreadsAndWidening.ts, 30, 13))
->settings : Symbol(settings, Decl(nestedSpreadsAndWidening.ts, 14, 27), Decl(nestedSpreadsAndWidening.ts, 17, 23), Decl(nestedSpreadsAndWidening.ts, 14, 27), Decl(nestedSpreadsAndWidening.ts, 18, 23), Decl(nestedSpreadsAndWidening.ts, 14, 27) ... and 17 more)
->input : Symbol(input, Decl(nestedSpreadsAndWidening.ts, 2, 11), Decl(nestedSpreadsAndWidening.ts, 11, 12), Decl(nestedSpreadsAndWidening.ts, 12, 12), Decl(nestedSpreadsAndWidening.ts, 3, 11), Decl(nestedSpreadsAndWidening.ts, 4, 11) ... and 226 more)
+>settings : Symbol(settings, Decl(nestedSpreadsAndWidening.ts, 14, 27), Decl(nestedSpreadsAndWidening.ts, 17, 23), Decl(nestedSpreadsAndWidening.ts, 18, 23), Decl(nestedSpreadsAndWidening.ts, 19, 23), Decl(nestedSpreadsAndWidening.ts, 20, 23) ... and 7 more)
+>input : Symbol(input, Decl(nestedSpreadsAndWidening.ts, 2, 11), Decl(nestedSpreadsAndWidening.ts, 11, 12), Decl(nestedSpreadsAndWidening.ts, 12, 12), Decl(nestedSpreadsAndWidening.ts, 3, 11), Decl(nestedSpreadsAndWidening.ts, 4, 11) ... and 6 more)
 >k : Symbol(k, Decl(nestedSpreadsAndWidening.ts, 34, 64))
 
 });

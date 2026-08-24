@@ -56,6 +56,9 @@ type PrintHandlers struct {
 	// A hook used by the Printer when generating unique names to avoid collisions with
 	// globally defined names that exist outside of the current source file.
 	HasGlobalName func(name string) bool
+	// MapSourcePosition composes source-map positions before they reach the generator.
+	// Returning ok=false emits a generated-only mapping.
+	MapSourcePosition func(source sourcemap.Source, pos int) (mappedSource sourcemap.Source, mappedPos int, ok bool)
 
 	// !!!
 	////// A hook used by the Printer to provide notifications prior to emitting a node. A
@@ -5835,11 +5838,38 @@ func (p *Printer) emitPos(pos int) {
 		return
 	}
 
-	sourceLine, sourceCharacter := p.sourceMapLineCharCache.getLineAndCharacter(pos)
+	source := p.sourceMapSource
+	sourceIndex := p.sourceMapSourceIndex
+	lineCharCache := p.sourceMapLineCharCache
+	if p.MapSourcePosition != nil {
+		mappedSource, mappedPos, ok := p.MapSourcePosition(source, pos)
+		if !ok {
+			if err := p.sourceMapGenerator.AddGeneratedMapping(p.writer.GetLine(), p.writer.GetColumn()); err != nil {
+				panic(err)
+			}
+			return
+		}
+		pos = mappedPos
+		if mappedSource != source {
+			savedSource := p.sourceMapSource
+			savedSourceIndex := p.sourceMapSourceIndex
+			savedSourceIsJson := p.sourceMapSourceIsJson
+			savedLineCharCache := p.sourceMapLineCharCache
+			p.setSourceMapSource(mappedSource)
+			sourceIndex = p.sourceMapSourceIndex
+			lineCharCache = p.sourceMapLineCharCache
+			p.sourceMapSource = savedSource
+			p.sourceMapSourceIndex = savedSourceIndex
+			p.sourceMapSourceIsJson = savedSourceIsJson
+			p.sourceMapLineCharCache = savedLineCharCache
+		}
+	}
+
+	sourceLine, sourceCharacter := lineCharCache.getLineAndCharacter(pos)
 	if err := p.sourceMapGenerator.AddSourceMapping(
 		p.writer.GetLine(),
 		p.writer.GetColumn(),
-		p.sourceMapSourceIndex,
+		sourceIndex,
 		sourceLine,
 		sourceCharacter,
 	); err != nil {

@@ -68,6 +68,24 @@ func TestParseContentMapperContributionsRejectsConflictingInlineMappers(t *testi
 	assert.ErrorContains(t, err, `both claim extension ".vue"`)
 }
 
+func TestParseContentMapperContributionsUsesCaseInsensitiveExtensions(t *testing.T) {
+	t.Parallel()
+	inferredProjectContribution := func(name string) *lsproto.InferredProjectContentMapperContribution {
+		return &lsproto.InferredProjectContentMapperContribution{Manifest: &lsproto.ContentMapperManifest{Name: name, Exec: []string{name}}}
+	}
+	_, err := parseContentMapperContributions([]*lsproto.ContentMapperContribution{
+		{ContributorId: "first", Extensions: []string{".vue"}, InferredProjectContribution: inferredProjectContribution("first")},
+		{ContributorId: "second", Extensions: []string{".VUE"}, InferredProjectContribution: inferredProjectContribution("second")},
+	})
+	assert.ErrorContains(t, err, `both claim extension ".VUE"`)
+
+	_, err = parseContentMapperContributions([]*lsproto.ContentMapperContribution{{
+		ContributorId: "built-in",
+		Extensions:    []string{".TS"},
+	}})
+	assert.ErrorContains(t, err, `invalid extension ".TS"`)
+}
+
 func TestParseContentMapperContributionsDefaultsOptionsToObject(t *testing.T) {
 	t.Parallel()
 	contributions, err := parseContentMapperContributions([]*lsproto.ContentMapperContribution{{

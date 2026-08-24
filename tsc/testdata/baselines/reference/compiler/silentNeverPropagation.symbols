@@ -67,16 +67,16 @@ const breaks = convert(
 
 breaks.state.a
 >breaks.state.a : Symbol(a, Decl(silentNeverPropagation.ts, 19, 18))
->breaks.state : Symbol(state, Decl(silentNeverPropagation.ts, 2, 32), Decl(silentNeverPropagation.ts, 2, 32))
+>breaks.state : Symbol(state, Decl(silentNeverPropagation.ts, 2, 32))
 >breaks : Symbol(breaks, Decl(silentNeverPropagation.ts, 18, 5))
->state : Symbol(state, Decl(silentNeverPropagation.ts, 2, 32), Decl(silentNeverPropagation.ts, 2, 32))
+>state : Symbol(state, Decl(silentNeverPropagation.ts, 2, 32))
 >a : Symbol(a, Decl(silentNeverPropagation.ts, 19, 18))
 
 breaks.state.z
 >breaks.state.z : Symbol(z, Decl(silentNeverPropagation.ts, 10, 18))
->breaks.state : Symbol(state, Decl(silentNeverPropagation.ts, 2, 32), Decl(silentNeverPropagation.ts, 2, 32))
+>breaks.state : Symbol(state, Decl(silentNeverPropagation.ts, 2, 32))
 >breaks : Symbol(breaks, Decl(silentNeverPropagation.ts, 18, 5))
->state : Symbol(state, Decl(silentNeverPropagation.ts, 2, 32), Decl(silentNeverPropagation.ts, 2, 32))
+>state : Symbol(state, Decl(silentNeverPropagation.ts, 2, 32))
 >z : Symbol(z, Decl(silentNeverPropagation.ts, 10, 18))
 
 breaks.foo()

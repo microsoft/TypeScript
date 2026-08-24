@@ -8871,6 +8871,12 @@ type CodeLensData struct {
 
 	// The document in which the code lens and its range are located.
 	Uri DocumentUri `json:"uri" lsp:"required"`
+
+	// The position of the code lens declaration in its virtual source file.
+	Position int32 `json:"position" lsp:"required"`
+
+	// Zero-based index into the canonical file's supplemental source files. Absent for the canonical source file.
+	SupplementalFileIndex *int32 `json:"supplementalFileIndex,omitzero"`
 }
 
 var _ json.UnmarshalerFrom = (*CodeLensData)(nil)
