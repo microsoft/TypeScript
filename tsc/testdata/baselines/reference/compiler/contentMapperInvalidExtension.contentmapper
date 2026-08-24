@@ -6,7 +6,7 @@ export const value = 1;
 
 === Diagnostics ===
 
-/component.box:1:1 - error TS100025: The content mapper 'mapper' failed to transform this file.
+/component.box:1:1 - error TS18068: The content mapper 'mapper' failed to transform this file.
   The content mapper returned an output with unsupported virtual extension '.coffee'.
 
 1 

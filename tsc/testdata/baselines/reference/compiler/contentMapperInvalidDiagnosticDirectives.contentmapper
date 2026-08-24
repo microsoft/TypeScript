@@ -25,31 +25,31 @@
 
 === Diagnostics ===
 
-/expectWithoutUnusedDiagnostic.expectmissing:1:1 - error TS100025: The content mapper 'mapper' failed to transform this file.
+/expectWithoutUnusedDiagnostic.expectmissing:1:1 - error TS18068: The content mapper 'mapper' failed to transform this file.
   Diagnostic directive 0 returned by the content mapper must specify 'unusedExpectDirectiveIndex' when there is not exactly one 'unusedExpectDirectiveDiagnostics' entry.
 
 1 
   ~
 
-/invalidPolicy.invalidpolicy:1:1 - error TS100025: The content mapper 'mapper' failed to transform this file.
+/invalidPolicy.invalidpolicy:1:1 - error TS18068: The content mapper 'mapper' failed to transform this file.
   The content mapper returned a diagnostic directive with invalid policy '2'.
 
 1 
   ~
 
-/invalidRange.invalidrange:1:1 - error TS100025: The content mapper 'mapper' failed to transform this file.
+/invalidRange.invalidrange:1:1 - error TS18068: The content mapper 'mapper' failed to transform this file.
   Diagnostic directive 0 returned by the content mapper has an invalid range.
 
 1 
   ~
 
-/invalidUnusedDiagnosticIndex.invalidunusedindex:1:1 - error TS100025: The content mapper 'mapper' failed to transform this file.
+/invalidUnusedDiagnosticIndex.invalidunusedindex:1:1 - error TS18068: The content mapper 'mapper' failed to transform this file.
   Diagnostic directive 0 returned by the content mapper has an invalid 'unusedExpectDirectiveIndex'.
 
 1 
   ~
 
-/overlap.overlap:1:1 - error TS100025: The content mapper 'mapper' failed to transform this file.
+/overlap.overlap:1:1 - error TS18068: The content mapper 'mapper' failed to transform this file.
   The content mapper returned diagnostic directives with overlapping virtual ranges.
 
 1 

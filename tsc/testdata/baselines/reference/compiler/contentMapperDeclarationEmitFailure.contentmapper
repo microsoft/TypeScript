@@ -5,7 +5,7 @@ export const component = 1;
 
 === Diagnostics ===
 
-/component.vue:1:1 - error TS100025: The content mapper 'mapper' failed to transform this file.
+/component.vue:1:1 - error TS18068: The content mapper 'mapper' failed to transform this file.
   The content mapper process failed while handling the transform request.
 
 1 

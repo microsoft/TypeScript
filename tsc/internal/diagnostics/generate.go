@@ -14,7 +14,6 @@ import (
 	"os"
 	"path/filepath"
 	"regexp"
-	"runtime"
 	"slices"
 	"strconv"
 	"strings"
@@ -60,16 +59,6 @@ func main() {
 	}
 
 	rawDiagnosticMessages := readRawMessages("diagnosticMessages.json")
-
-	_, filename, _, ok := runtime.Caller(0)
-	if !ok {
-		panic("could not get current filename")
-	}
-	filename = filepath.FromSlash(filename) // runtime.Caller always returns forward slashes; https://go.dev/issues/3335, https://go.dev/cl/603275
-
-	rawExtraMessages := readRawMessages(filepath.Join(filepath.Dir(filename), "extraDiagnosticMessages.json"))
-
-	maps.Copy(rawDiagnosticMessages, rawExtraMessages)
 	diagnosticMessages := slices.Collect(maps.Values(rawDiagnosticMessages))
 
 	slices.SortFunc(diagnosticMessages, func(a *diagnosticMessage, b *diagnosticMessage) int {
@@ -272,6 +261,9 @@ func readRawMessages(p string) map[int]*diagnosticMessage {
 	codeToMessage := make(map[int]*diagnosticMessage, len(rawMessages))
 	for k, m := range rawMessages {
 		m.key = k
+		if existing, ok := codeToMessage[m.Code]; ok {
+			log.Fatalf("diagnostics %q and %q both use code %d", existing.key, k, m.Code)
+		}
 		codeToMessage[m.Code] = m
 	}
 

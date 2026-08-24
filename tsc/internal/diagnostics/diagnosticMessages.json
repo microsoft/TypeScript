@@ -4476,6 +4476,10 @@
         "category": "Error",
         "code": 5001
     },
+    "Option '{0}' requires value to be greater than '{1}'.": {
+        "category": "Error",
+        "code": 5002
+    },
     "Cannot find the common subdirectory path for the input files.": {
         "category": "Error",
         "code": 5009
@@ -4604,7 +4608,7 @@
         "category": "Error",
         "code": 5073
     },
-    "Option '--incremental' can only be specified using tsconfig, emitting to single file or when option '--tsBuildInfoFile' is specified.": {
+    "Option '--incremental' is only valid with a known configuration file (like 'tsconfig.json') or when '--tsBuildInfoFile' is explicitly provided.": {
         "category": "Error",
         "code": 5074
     },
@@ -4664,7 +4668,7 @@
         "category": "Error",
         "code": 5089
     },
-    "Non-relative paths are not allowed when 'baseUrl' is not set. Did you forget a leading './'?": {
+    "Non-relative paths are not allowed. Did you forget a leading './'?": {
         "category": "Error",
         "code": 5090
     },
@@ -4910,7 +4914,7 @@
         "category": "Error",
         "code": 6046
     },
-    "Locale must be of the form <language> or <language>-<territory>. For example '{0}' or '{1}'.": {
+    "Locale must be an IETF BCP 47 language tag. Examples: '{0}', '{1}'.": {
         "category": "Error",
         "code": 6048
     },
@@ -5822,7 +5826,7 @@
         "category": "Message",
         "code": 6352
     },
-    "Project '{0}' is out of date because its dependency '{1}' is out of date": {
+    "Failed to delete file '{0}'.": {
         "category": "Message",
         "code": 6353
     },
@@ -5984,7 +5988,7 @@
         "category": "Message",
         "code": 6400
     },
-    "Project '{0}' is out of date because there was error reading file '{1}'": {
+    "Project '{0}' is out of date because config file does not exist.": {
         "category": "Message",
         "code": 6401
     },
@@ -6060,13 +6064,25 @@
         "category": "Message",
         "code": 6419
     },
-    "Project '{0}' is out of date because {1}.": {
+    "Project '{0}' is out of date because input '{1}' does not exist.": {
         "category": "Message",
         "code": 6420
     },
     "Rewrite '.ts', '.tsx', '.mts', and '.cts' file extensions in relative import paths to their JavaScript equivalent in output files.": {
         "category": "Message",
         "code": 6421
+    },
+    "Project '{0}' is out of date because it has errors.": {
+        "category": "Message",
+        "code": 6423
+    },
+    "Multiple 'module.exports' assignments cannot be serialized for declaration emit.": {
+        "category": "Error",
+        "code": 6424
+    },
+    "Nested CommonJS export constructs cannot be serialized for declaration emit.": {
+        "category": "Error",
+        "code": 6425
     },
 
     "The expected type comes from property '{0}' which is declared here on type '{1}'": {
@@ -6727,6 +6743,38 @@
         "category": "Message",
         "code": 6932
     },
+    "Do not print diagnostics.": {
+        "category": "Message",
+        "code": 6933
+    },
+    "Run in single threaded mode.": {
+        "category": "Message",
+        "code": 6934
+    },
+    "Generate pprof CPU/memory profiles to the given directory.": {
+        "category": "Message",
+        "code": 6935
+    },
+    "Set the number of checkers per project.": {
+        "category": "Message",
+        "code": 6936
+    },
+    "4, unless --singleThreaded is passed.": {
+        "category": "Message",
+        "code": 6937
+    },
+    "Set the number of projects to build concurrently.": {
+        "category": "Message",
+        "code": 6938
+    },
+    "Deduplicate packages with the same name and version.": {
+        "category": "Message",
+        "code": 6939
+    },
+    "Allow loading external content mapper plugins that execute code during compilation.": {
+        "category": "Message",
+        "code": 6940
+    },
 
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
@@ -6950,6 +6998,10 @@
         "category": "Error",
         "code": 7061
     },
+    "Declaration emit elides private members, but '{0}' refers to a private member. Write an explicit type here.": {
+        "category": "Error",
+        "code": 7080
+    },
 
     "You cannot rename this element.": {
         "category": "Error",
@@ -7055,7 +7107,7 @@
         "category": "Error",
         "code": 8029
     },
-    "The type of a function declaration must match the function's signature.": {
+    "A JSDoc '@type' tag on a function must have a signature with the correct number of arguments.": {
         "category": "Error",
         "code": 8030
     },
@@ -7094,6 +7146,10 @@
     "A JSDoc '@template' tag may not follow a '@typedef', '@callback', or '@overload' tag": {
         "category": "Error",
         "code": 8039
+    },
+    "File rename is not supported by the editor": {
+        "category": "Error",
+        "code": 8040
     },
 
     "Declaration emit for this file requires using private name '{0}'. An explicit type annotation may unblock declaration emit.": {
@@ -7152,7 +7208,7 @@
         "category": "Error",
         "code": 9018
     },
-    "Binding elements can't be exported directly with --isolatedDeclarations.": {
+    "Binding elements with initializers can't be exported directly with --isolatedDeclarations.": {
         "category": "Error",
         "code": 9019
     },
@@ -8359,6 +8415,54 @@
         "category": "Message",
         "code": 95197
     },
+    "{0} references": {
+        "category": "Message",
+        "code": 95198
+    },
+    "1 reference": {
+        "category": "Message",
+        "code": 95199
+    },
+    "{0} implementations": {
+        "category": "Message",
+        "code": 95200
+    },
+    "1 implementation": {
+        "category": "Message",
+        "code": 95201
+    },
+    "Loading": {
+        "category": "Message",
+        "code": 95202
+    },
+    "Installing types for '{0}'": {
+        "category": "Message",
+        "code": 95203
+    },
+    "Project '{0}'": {
+        "category": "Message",
+        "code": 95204
+    },
+    "Fix All": {
+        "category": "Message",
+        "code": 95205
+    },
+    "Organize Imports": {
+        "category": "Message",
+        "code": 95206
+    },
+    "Remove Unused Imports": {
+        "category": "Message",
+        "code": 95207
+    },
+    "Sort Imports": {
+        "category": "Message",
+        "code": 95208
+    },
+    "JSDoc comment": {
+        "category": "Message",
+        "code": 95209
+    },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
         "category": "Error",
@@ -8555,5 +8659,197 @@
     "'{0}' is not a valid meta-property for keyword 'import'. Did you mean 'meta' or 'defer'?": {
         "category": "Error",
         "code": 18061
+    },
+    "Regular expression pattern modifiers are only available when targeting '{0}' or later.": {
+        "category": "Error",
+        "code": 18062
+    },
+    "Duplicate named capturing groups are only available when targeting '{0}' or later.": {
+        "category": "Error",
+        "code": 18063
+    },
+    "Content mapper file extension '{0}' must begin with a '.'.": {
+        "category": "Error",
+        "code": 18064
+    },
+    "Content mapper file extension '{0}' is a built-in extension and cannot be registered by a content mapper.": {
+        "category": "Error",
+        "code": 18065
+    },
+    "Content mapper file extension '{0}' is registered by more than one content mapper.": {
+        "category": "Error",
+        "code": 18066
+    },
+    "Content mappers require the '--runExternalCode' command line flag to be enabled.": {
+        "category": "Error",
+        "code": 18067
+    },
+    "The content mapper '{0}' failed to transform this file.": {
+        "category": "Error",
+        "code": 18068
+    },
+    "The content mapper '{0}' failed {1} times and will not be used.": {
+        "category": "Error",
+        "code": 18069
+    },
+    "The content mapper '{0}' did not provide the required position mappings.": {
+        "category": "Error",
+        "code": 18070
+    },
+    "The content mapper '{0}' produced a position mapping that points outside the original content (original offset {1}).": {
+        "category": "Error",
+        "code": 18071
+    },
+    "The content mapper '{0}' produced a verbatim mapping that does not match the original content (virtual offset {1}, original offset {2}).": {
+        "category": "Error",
+        "code": 18072
+    },
+    "This location is in virtual code produced by the content mapper '{0}' and has no corresponding location in the original file.": {
+        "category": "Message",
+        "code": 18073
+    },
+    "The content mapper package '{0}' could not be resolved.": {
+        "category": "Error",
+        "code": 18074
+    },
+    "The 'package.json' of the content mapper package '{0}' could not be parsed.": {
+        "category": "Error",
+        "code": 18075
+    },
+    "The 'package.json' of the content mapper package '{0}' does not specify a 'name'.": {
+        "category": "Error",
+        "code": 18076
+    },
+    "The 'package.json' of the content mapper package '{0}' does not declare a 'typescript.contentMapper' object.": {
+        "category": "Error",
+        "code": 18077
+    },
+    "The 'typescript.contentMapper.exec' of the content mapper package '{0}' must be a non-empty array of strings.": {
+        "category": "Error",
+        "code": 18078
+    },
+    "Virtual code produced by the content mapper '{0}' has problems with no corresponding location in this file.": {
+        "category": "Error",
+        "code": 18079
+    },
+    "The content mapper '{0}' produced overlapping or out-of-order position mappings (near virtual offset {1}).": {
+        "category": "Error",
+        "code": 18080
+    },
+    "The content mapper '{0}' produced invalid mapping features near original offset {1}.": {
+        "category": "Error",
+        "code": 18081
+    },
+    "The content mapper '{0}' produced a position mapping with an invalid kind (near virtual offset {1}).": {
+        "category": "Error",
+        "code": 18082
+    },
+    "The content mapper process could not be started or initialized.": {
+        "category": "Message",
+        "code": 18083
+    },
+    "The content mapper process failed while handling the transform request.": {
+        "category": "Message",
+        "code": 18084
+    },
+    "The content mapper returned an invalid transform response.": {
+        "category": "Message",
+        "code": 18085
+    },
+    "The content mapper selected unsupported position encoding '{0}'.": {
+        "category": "Message",
+        "code": 18086
+    },
+    "The content mapper diagnostic source must not be empty.": {
+        "category": "Message",
+        "code": 18087
+    },
+    "The content mapper diagnostic source '{0}' is reserved by TypeScript.": {
+        "category": "Message",
+        "code": 18088
+    },
+    "The content mapper returned a project response that could not be decoded.": {
+        "category": "Message",
+        "code": 18089
+    },
+    "The content mapper process failed while handling the project request.": {
+        "category": "Message",
+        "code": 18090
+    },
+    "The content mapper did not return 'configIdentity', which is required when the content mapper has '\"dynamicConfig\": true' in its package.json.": {
+        "category": "Message",
+        "code": 18091
+    },
+    "The content mapper returned a non-absolute path in 'watchedFiles'.": {
+        "category": "Message",
+        "code": 18092
+    },
+    "The content mapper returned 'configIdentity', which is only allowed when it declares '\"dynamicConfig\": true' in its package.json.": {
+        "category": "Message",
+        "code": 18093
+    },
+    "The content mapper returned 'watchedFiles', which is only allowed when it declares '\"dynamicConfig\": true' in its package.json.": {
+        "category": "Message",
+        "code": 18094
+    },
+    "Content mapper supplemental output file '{0}' conflicts with an existing file.": {
+        "category": "Message",
+        "code": 18095
+    },
+    "Supplemental virtual file produced by the content mapper for file '{0}'.": {
+        "category": "Message",
+        "code": 18096
+    },
+    "The content mapper returned an output with unsupported virtual extension '{0}'.": {
+        "category": "Message",
+        "code": 18097
+    },
+    "The content mapper '{0}' could not be initialized.": {
+        "category": "Error",
+        "code": 18098
+    },
+    "The content mapper command '{0}' could not be started: {1}": {
+        "category": "Message",
+        "code": 18099
+    },
+    "The content mapper process exited before responding to the 'initialize' request (exit code {0}).": {
+        "category": "Message",
+        "code": 18100
+    },
+    "The content mapper did not respond to the 'initialize' request within {0} seconds.": {
+        "category": "Message",
+        "code": 18101
+    },
+    "The content mapper returned an 'initialize' response that could not be decoded: {0}": {
+        "category": "Message",
+        "code": 18102
+    },
+    "The content mapper's 'initialize' request failed: {0}": {
+        "category": "Message",
+        "code": 18103
+    },
+    "Diagnostic directive {0} returned by the content mapper has an invalid range.": {
+        "category": "Message",
+        "code": 18104
+    },
+    "The content mapper returned a diagnostic directive with invalid policy '{0}'.": {
+        "category": "Message",
+        "code": 18105
+    },
+    "Diagnostic directive {0} returned by the content mapper must specify 'unusedExpectDirectiveIndex' when there is not exactly one 'unusedExpectDirectiveDiagnostics' entry.": {
+        "category": "Message",
+        "code": 18106
+    },
+    "The content mapper returned diagnostic directives with overlapping virtual ranges.": {
+        "category": "Message",
+        "code": 18107
+    },
+    "The invalid diagnostic directive is in supplemental output {0} returned by the content mapper.": {
+        "category": "Message",
+        "code": 18108
+    },
+    "Diagnostic directive {0} returned by the content mapper has an invalid 'unusedExpectDirectiveIndex'.": {
+        "category": "Message",
+        "code": 18109
     }
 }
