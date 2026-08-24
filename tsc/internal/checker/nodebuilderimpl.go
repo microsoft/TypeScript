@@ -3166,8 +3166,7 @@ func (b *NodeBuilderImpl) visitAndTransformType(t *Type, transform func(b *NodeB
 				b.ctx.truncating = true
 			}
 			b.ctx.approximateLength += cachedResult.addedLength
-			if b.ctx.internalFlags&nodebuilder.InternalFlagsStopBuildingAfterTruncation != 0 && b.checkTruncationLength() {
-				// Avoid cloning an oversized cached subtree when the caller allows elision.
+			if b.checkTruncationLength() {
 				return b.createElidedInformationPlaceholder()
 			}
 			return b.f.DeepCloneNode(cachedResult.node)

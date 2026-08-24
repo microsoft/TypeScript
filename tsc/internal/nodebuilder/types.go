@@ -70,10 +70,9 @@ const (
 type InternalFlags int32
 
 const (
-	InternalFlagsNone                        InternalFlags = 0
-	InternalFlagsWriteComputedProps          InternalFlags = 1 << 0
-	InternalFlagsNoSyntacticPrinter          InternalFlags = 1 << 1
-	InternalFlagsDoNotIncludeSymbolChain     InternalFlags = 1 << 2
-	InternalFlagsAllowUnresolvedNames        InternalFlags = 1 << 3
-	InternalFlagsStopBuildingAfterTruncation InternalFlags = 1 << 4
+	InternalFlagsNone                    InternalFlags = 0
+	InternalFlagsWriteComputedProps      InternalFlags = 1 << 0
+	InternalFlagsNoSyntacticPrinter      InternalFlags = 1 << 1
+	InternalFlagsDoNotIncludeSymbolChain InternalFlags = 1 << 2
+	InternalFlagsAllowUnresolvedNames    InternalFlags = 1 << 3
 )
