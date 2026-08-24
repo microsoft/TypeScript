@@ -49,11 +49,11 @@ const packagedExeBaseNames = ["tsc", "tsgo"];
 
 export async function getBuiltinExePath(context: vscode.ExtensionContext): Promise<ExeInfo> {
     if (context.extensionMode === vscode.ExtensionMode.Development) {
-        const exeName = `tsgo${process.platform === "win32" ? ".exe" : ""}`;
-        const exe = context.asAbsolutePath(path.join("../", "built", "local", exeName));
+        const exeName = `tsc${process.platform === "win32" ? ".exe" : ""}`;
+        const exe = context.asAbsolutePath(path.join("../../", "built", "local", exeName));
         try {
             await vscode.workspace.fs.stat(vscode.Uri.file(exe));
-            return { path: exe, version: "(local)", name: "tsgo", isLocal: true };
+            return { path: exe, version: "(local)", name: "tsc", isLocal: true };
         }
         catch {}
     }
