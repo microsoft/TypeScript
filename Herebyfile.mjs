@@ -1524,24 +1524,6 @@ ${entries}
 }
 
 /**
- * @param {string} filePath
- */
-async function verifyTypeScriptMacEntitlements(filePath) {
-    const { stdout } = await $pipe`go -C ./tools tool quill describe --quiet --output json ${filePath}`;
-    const details = JSON.parse(stdout);
-    const entitlements = details[0]?.superBlob?.entitlements?.entitlements;
-    if (typeof entitlements !== "string") {
-        throw new Error(`Signed file has no macOS entitlements: ${filePath}`);
-    }
-    for (const entitlement of typescriptMacEntitlements) {
-        const escapedEntitlement = entitlement.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-        if (!new RegExp(`<key>\\s*${escapedEntitlement}\\s*</key>\\s*<true\\s*/>`).test(entitlements)) {
-            throw new Error(`Signed file is missing macOS entitlement '${entitlement}': ${filePath}`);
-        }
-    }
-}
-
-/**
  * @typedef {"win32" | "linux" | "darwin" | "aix" | "android" | "freebsd" | "netbsd" | "openbsd" | "sunos"} OS
  * @typedef {"x64" | "arm" | "arm64" | "ia32" | "ppc64" | "loong64" | "mips64el" | "riscv64" | "s390x"} Arch
  * @typedef {"Microsoft400" | "LinuxSign" | "MacDeveloperHarden" | "8020" | "VSCodePublisher"} Cert
@@ -2096,7 +2078,7 @@ async function runSignNativePreviewPackages() {
                 // along with a notarization step.
                 for (const p of filelistPaths) {
                     // ESRP preserves entitlements from an existing ad-hoc signature.
-                    await $pipe`go -C ./tools tool quill sign --quiet --ad-hoc --identity ${path.basename(p.path)} --entitlements ${typescriptMacEntitlementsPath} ${p.path}`;
+                    await $pipe`go -C ./tools run ./cmd/machotool sign ${typescriptMacEntitlementsPath} ${p.path}`;
 
                     const unsignedZipPath = path.join(tmp, `${p.tmpName}.unsigned.zip`);
                     const signedZipPath = path.join(tmp, `${p.tmpName}.signed.zip`);
@@ -2157,7 +2139,7 @@ async function runSignNativePreviewPackages() {
 
         for (const p of macZips) {
             await fs.promises.chmod(p.path, 0o755);
-            await verifyTypeScriptMacEntitlements(p.path);
+            await $pipe`go -C ./tools run ./cmd/machotool verify ${typescriptMacEntitlementsPath} ${p.path}`;
         }
     }
 }
