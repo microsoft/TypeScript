@@ -19,12 +19,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be # v1.3.1
-        with:
-          large-packages: false
-          docker-images: false
-          swap-storage: false
-          dotnet: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
@@ -112,12 +106,6 @@ jobs:
       TSGO_HEREBY_CONCURRENT_TEST_PROGRAMS: ${{ (matrix.config.concurrent-test-programs && 'true') || 'false' }}
       TSGO_HEREBY_COVERAGE: ${{ (matrix.config.coverage && github.event_name != 'merge_group' && 'true') || 'false' }}
     steps:
-      - uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be # v1.3.1
-        with:
-          large-packages: false
-          docker-images: false
-          swap-storage: false
-          dotnet: false
       - run: git config --system core.longpaths true
         if: ${{ matrix.config.os == 'windows' }}
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -189,12 +177,6 @@ jobs:
     env:
       TSGO_HEREBY_COVERAGE: ${{ (matrix.config.coverage && github.event_name != 'merge_group' && 'true') || 'false' }}
     steps:
-      - uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be # v1.3.1
-        with:
-          large-packages: false
-          docker-images: false
-          swap-storage: false
-          dotnet: false
       - run: git config --system core.longpaths true
         if: ${{ matrix.config.os == 'windows' }}
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -248,12 +230,6 @@ jobs:
     env:
       TSGO_HEREBY_NOEMBED: ${{ (matrix.config.noembed && 'true') || 'false' }}
     steps:
-      - uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be # v1.3.1
-        with:
-          large-packages: false
-          docker-images: false
-          swap-storage: false
-          dotnet: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
@@ -283,12 +259,6 @@ jobs:
   generate:
     runs-on: ubuntu-latest
     steps:
-      - uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be # v1.3.1
-        with:
-          large-packages: false
-          docker-images: false
-          swap-storage: false
-          dotnet: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
@@ -319,12 +289,6 @@ jobs:
   smoke:
     runs-on: ubuntu-latest
     steps:
-      - uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be # v1.3.1
-        with:
-          large-packages: false
-          docker-images: false
-          swap-storage: false
-          dotnet: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
