@@ -5,8 +5,8 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 )
 
-// transpileFS embeds the unused operations so an unexpected filesystem access
-// panics. NoResolve limits transpilation to the synthesized files below.
+// transpileFS embeds unsupported operations so unexpected filesystem access
+// panics.
 type transpileFS struct {
 	vfs.FS
 	files map[string]string
@@ -30,9 +30,13 @@ func (fs *transpileFS) ReadFile(path string) (string, bool) {
 
 func (fs *transpileFS) DirectoryExists(path string) bool {
 	for file := range fs.files {
-		if tspath.ContainsPath(path, file, tspath.ComparePathsOptions{UseCaseSensitiveFileNames: true}) {
+		if tspath.ContainsPath(path, tspath.GetDirectoryPath(file), tspath.ComparePathsOptions{UseCaseSensitiveFileNames: true}) {
 			return true
 		}
 	}
 	return false
+}
+
+func (fs *transpileFS) Realpath(path string) string {
+	return path
 }
