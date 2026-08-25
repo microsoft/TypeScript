@@ -10,3 +10,9 @@ declare var dec: any;
 class {
 }
 
+@dec
+>dec : Symbol(dec, Decl(anonymousClassDeclarationWithClassDecorator.ts, 0, 11))
+
+default class {
+}
+

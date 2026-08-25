@@ -10,3 +10,9 @@ declare var dec: any;
 class {
 }
 
+@dec
+>dec : any
+
+default class {
+}
+
