@@ -91,6 +91,7 @@ jobs:
             name: 'concurrent test programs'
             concurrent-test-programs: true
             coverage: true
+            skip: ${{ github.event_name == 'merge_group' }}
         exclude:
           - config:
               skip: true
