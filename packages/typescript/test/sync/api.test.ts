@@ -289,6 +289,12 @@ describe("API", () => {
             });
             assert.match(moduleOutput.outputText, /exports\.x = 1/);
 
+            const isolatedDeclarationModuleOutput = api.transpileModule("export const x: number = 1;", {
+                compilerOptions: { declaration: true, isolatedDeclarations: true },
+                reportDiagnostics: true,
+            });
+            assert.equal(isolatedDeclarationModuleOutput.diagnostics?.length ?? 0, 0);
+
             const moduleFileOutput = api.transpileModuleFromFile("/input.ts", {
                 compilerOptions: { module: ModuleKind.CommonJS },
             });
@@ -296,6 +302,11 @@ describe("API", () => {
 
             const declarationOutput = api.transpileDeclaration("export const x: number = 1;");
             assert.equal(declarationOutput.outputText, "export declare const x: number;\n");
+
+            const windowsDeclarationOutput = api.transpileDeclaration("export const x: number = 1;", {
+                fileName: "C:/Users/me/project/input.ts",
+            });
+            assert.equal(windowsDeclarationOutput.outputText, "export declare const x: number;\n");
 
             const declarationFileOutput = api.transpileDeclarationFromFile("/input.ts");
             assert.equal(declarationFileOutput.outputText, "export declare const x: number;\n");
