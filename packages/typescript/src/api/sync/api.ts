@@ -1840,6 +1840,16 @@ export class Checker {
         return data ? this.objectRegistry.getOrCreateSymbol(data) : undefined;
     }
 
+    getTypeOfPropertyOfType(type: Type, name: string): Type | undefined {
+        const data = this.client.apiRequest("getTypeOfPropertyOfType", {
+            snapshot: this.snapshotId,
+            project: this.project.id,
+            type: type.id,
+            name,
+        });
+        return data ? this.objectRegistry.getOrCreateType(data) : undefined;
+    }
+
     getConstantValue(node: Node): string | number | undefined {
         const data = this.client.apiRequest("getConstantValue", {
             snapshot: this.snapshotId,
