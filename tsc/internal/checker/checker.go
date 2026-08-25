@@ -7608,6 +7608,10 @@ func (c *Checker) checkExpressionCachedEx(node *ast.Node, checkMode CheckMode) *
 	if checkMode != CheckModeNormal {
 		return c.checkExpressionEx(node, checkMode)
 	}
+	if len(c.flowLoopStack) != 0 {
+		// Don't cache expression types computed with incomplete loop flow types.
+		return c.checkExpressionEx(node, checkMode)
+	}
 	links := c.typeNodeLinks.Get(node)
 	if links.resolvedType == nil {
 		// When computing a type that we're going to cache, we need to ignore any ongoing control flow

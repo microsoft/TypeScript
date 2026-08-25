@@ -1,0 +1,37 @@
+//// [tests/cases/compiler/asConstObjectAssignedToLoopVariable.ts] ////
+
+=== asConstObjectAssignedToLoopVariable.ts ===
+type Candidate = { mode: "a"; output: unknown } | { mode: "b" };
+>Candidate : Symbol(Candidate, Decl(asConstObjectAssignedToLoopVariable.ts, 0, 0))
+>mode : Symbol(mode, Decl(asConstObjectAssignedToLoopVariable.ts, 0, 18))
+>output : Symbol(output, Decl(asConstObjectAssignedToLoopVariable.ts, 0, 29))
+>mode : Symbol(mode, Decl(asConstObjectAssignedToLoopVariable.ts, 0, 51))
+
+export function run(): never {
+>run : Symbol(run, Decl(asConstObjectAssignedToLoopVariable.ts, 0, 64))
+
+    let lastCandidate: Candidate | null = null;
+>lastCandidate : Symbol(lastCandidate, Decl(asConstObjectAssignedToLoopVariable.ts, 3, 7))
+>Candidate : Symbol(Candidate, Decl(asConstObjectAssignedToLoopVariable.ts, 0, 0))
+
+    while (true) {
+        const candidate: Candidate = {
+>candidate : Symbol(candidate, Decl(asConstObjectAssignedToLoopVariable.ts, 5, 13))
+>Candidate : Symbol(Candidate, Decl(asConstObjectAssignedToLoopVariable.ts, 0, 0))
+
+            mode: "a",
+>mode : Symbol(mode, Decl(asConstObjectAssignedToLoopVariable.ts, 5, 38))
+
+            output: lastCandidate,
+>output : Symbol(output, Decl(asConstObjectAssignedToLoopVariable.ts, 6, 22))
+>lastCandidate : Symbol(lastCandidate, Decl(asConstObjectAssignedToLoopVariable.ts, 3, 7))
+
+        } as const;
+>const : Symbol(const)
+
+        lastCandidate = candidate;
+>lastCandidate : Symbol(lastCandidate, Decl(asConstObjectAssignedToLoopVariable.ts, 3, 7))
+>candidate : Symbol(candidate, Decl(asConstObjectAssignedToLoopVariable.ts, 5, 13))
+    }
+}
+
