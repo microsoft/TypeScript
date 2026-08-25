@@ -11,7 +11,6 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/debug"
 	"github.com/microsoft/TypeScript/tsc/internal/tsoptions"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
-	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfstest"
 )
 
 // Options configures single-file transpilation.
@@ -195,8 +194,7 @@ func transpileWorker(ctx context.Context, input string, options Options, declara
 		files[tspath.CombinePaths(libDirectory, libFileName)] = barebonesLibContent
 	}
 
-	fs := vfstest.FromMap(files, true /*useCaseSensitiveFileNames*/)
-	host := compiler.NewCompilerHost(inputDirectory, fs, libDirectory, nil, nil, nil)
+	host := compiler.NewCompilerHost(inputDirectory, &transpileFS{files: files}, libDirectory, nil, nil, nil)
 
 	program := compiler.NewProgram(compiler.ProgramOptions{
 		Config: &tsoptions.ParsedCommandLine{
