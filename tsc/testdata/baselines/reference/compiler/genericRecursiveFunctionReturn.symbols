@@ -1,0 +1,107 @@
+//// [tests/cases/compiler/genericRecursiveFunctionReturn.ts] ////
+
+=== genericRecursiveFunctionReturn.ts ===
+// https://github.com/microsoft/TypeScript/issues/63990
+const f = <T>(a: T, p: number) => {
+>f : Symbol(f, Decl(genericRecursiveFunctionReturn.ts, 1, 5))
+>T : Symbol(T, Decl(genericRecursiveFunctionReturn.ts, 1, 11))
+>a : Symbol(a, Decl(genericRecursiveFunctionReturn.ts, 1, 14))
+>T : Symbol(T, Decl(genericRecursiveFunctionReturn.ts, 1, 11))
+>p : Symbol(p, Decl(genericRecursiveFunctionReturn.ts, 1, 19))
+
+    if (!p) return a;
+>p : Symbol(p, Decl(genericRecursiveFunctionReturn.ts, 1, 19))
+>a : Symbol(a, Decl(genericRecursiveFunctionReturn.ts, 1, 14))
+
+    // this recursive call can't be ignored as that would lead to inferring T when the number return type is possible here
+    return f(p, p - 1);
+>f : Symbol(f, Decl(genericRecursiveFunctionReturn.ts, 1, 5))
+>p : Symbol(p, Decl(genericRecursiveFunctionReturn.ts, 1, 19))
+>p : Symbol(p, Decl(genericRecursiveFunctionReturn.ts, 1, 19))
+
+};
+
+const x = f("foo", 5);
+>x : Symbol(x, Decl(genericRecursiveFunctionReturn.ts, 7, 5))
+>f : Symbol(f, Decl(genericRecursiveFunctionReturn.ts, 1, 5))
+
+declare const condition: boolean;
+>condition : Symbol(condition, Decl(genericRecursiveFunctionReturn.ts, 9, 13))
+
+function g<T extends number>(value: T) {
+>g : Symbol(g, Decl(genericRecursiveFunctionReturn.ts, 9, 33))
+>T : Symbol(T, Decl(genericRecursiveFunctionReturn.ts, 11, 11))
+>value : Symbol(value, Decl(genericRecursiveFunctionReturn.ts, 11, 29))
+>T : Symbol(T, Decl(genericRecursiveFunctionReturn.ts, 11, 11))
+
+    if (condition) return value;
+>condition : Symbol(condition, Decl(genericRecursiveFunctionReturn.ts, 9, 13))
+>value : Symbol(value, Decl(genericRecursiveFunctionReturn.ts, 11, 29))
+
+    // this recursive call can't be ignored as that would lead to inferring T when the number return type is possible here
+    return g<number>(value);
+>g : Symbol(g, Decl(genericRecursiveFunctionReturn.ts, 9, 33))
+>value : Symbol(value, Decl(genericRecursiveFunctionReturn.ts, 11, 29))
+}
+
+function h<T>(value: T, count: number) {
+>h : Symbol(h, Decl(genericRecursiveFunctionReturn.ts, 15, 1))
+>T : Symbol(T, Decl(genericRecursiveFunctionReturn.ts, 17, 11))
+>value : Symbol(value, Decl(genericRecursiveFunctionReturn.ts, 17, 14))
+>T : Symbol(T, Decl(genericRecursiveFunctionReturn.ts, 17, 11))
+>count : Symbol(count, Decl(genericRecursiveFunctionReturn.ts, 17, 23))
+
+    if (!count) return value;
+>count : Symbol(count, Decl(genericRecursiveFunctionReturn.ts, 17, 23))
+>value : Symbol(value, Decl(genericRecursiveFunctionReturn.ts, 17, 14))
+
+    // this recursive call can be ignored because its arguments are assignable to the current generic signature
+    return h(value, count - 1);
+>h : Symbol(h, Decl(genericRecursiveFunctionReturn.ts, 15, 1))
+>value : Symbol(value, Decl(genericRecursiveFunctionReturn.ts, 17, 14))
+>count : Symbol(count, Decl(genericRecursiveFunctionReturn.ts, 17, 23))
+}
+
+const y = h("foo", 1);
+>y : Symbol(y, Decl(genericRecursiveFunctionReturn.ts, 23, 5))
+>h : Symbol(h, Decl(genericRecursiveFunctionReturn.ts, 15, 1))
+
+function nested<T>(value: T) {
+>nested : Symbol(nested, Decl(genericRecursiveFunctionReturn.ts, 23, 22))
+>T : Symbol(T, Decl(genericRecursiveFunctionReturn.ts, 25, 16))
+>value : Symbol(value, Decl(genericRecursiveFunctionReturn.ts, 25, 19))
+>T : Symbol(T, Decl(genericRecursiveFunctionReturn.ts, 25, 16))
+
+    if (condition) return value;
+>condition : Symbol(condition, Decl(genericRecursiveFunctionReturn.ts, 9, 13))
+>value : Symbol(value, Decl(genericRecursiveFunctionReturn.ts, 25, 19))
+
+    // this recursive call can't be ignored as that would lead to inferring T when the T[] return type is possible here
+    return nested([value]);
+>nested : Symbol(nested, Decl(genericRecursiveFunctionReturn.ts, 23, 22))
+>value : Symbol(value, Decl(genericRecursiveFunctionReturn.ts, 25, 19))
+}
+
+function swap<T, U>(left: T, right: U, shouldSwap: boolean) {
+>swap : Symbol(swap, Decl(genericRecursiveFunctionReturn.ts, 29, 1))
+>T : Symbol(T, Decl(genericRecursiveFunctionReturn.ts, 31, 14))
+>U : Symbol(U, Decl(genericRecursiveFunctionReturn.ts, 31, 16))
+>left : Symbol(left, Decl(genericRecursiveFunctionReturn.ts, 31, 20))
+>T : Symbol(T, Decl(genericRecursiveFunctionReturn.ts, 31, 14))
+>right : Symbol(right, Decl(genericRecursiveFunctionReturn.ts, 31, 28))
+>U : Symbol(U, Decl(genericRecursiveFunctionReturn.ts, 31, 16))
+>shouldSwap : Symbol(shouldSwap, Decl(genericRecursiveFunctionReturn.ts, 31, 38))
+
+    if (!shouldSwap) return [left, right] as const;
+>shouldSwap : Symbol(shouldSwap, Decl(genericRecursiveFunctionReturn.ts, 31, 38))
+>left : Symbol(left, Decl(genericRecursiveFunctionReturn.ts, 31, 20))
+>right : Symbol(right, Decl(genericRecursiveFunctionReturn.ts, 31, 28))
+>const : Symbol(const)
+
+    // this recursive call can't be ignored as that would lead to inferring readonly [T, U] when the readonly [U, T] return type is possible here
+    return swap(right, left, false);
+>swap : Symbol(swap, Decl(genericRecursiveFunctionReturn.ts, 29, 1))
+>right : Symbol(right, Decl(genericRecursiveFunctionReturn.ts, 31, 28))
+>left : Symbol(left, Decl(genericRecursiveFunctionReturn.ts, 31, 20))
+}
+
