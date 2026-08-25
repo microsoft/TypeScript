@@ -5,7 +5,6 @@ package main
 import (
 	"bytes"
 	"cmp"
-	"compress/gzip"
 	"encoding/xml"
 	"flag"
 	"fmt"
@@ -20,8 +19,10 @@ import (
 	"slices"
 	"strconv"
 	"strings"
+	"time"
 	"unicode"
 
+	"github.com/klauspost/compress/gzip"
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/json"
 	"golang.org/x/text/language"
@@ -270,6 +271,7 @@ func generateLocalizations(knownKeys map[string]bool, locDir string) *bytes.Buff
 		if err != nil {
 			log.Fatalf("failed to create gzip writer for locale %s: %v", tgtCul, err)
 		}
+		gzipWriter.ModTime = time.Unix(0, 0)
 		if _, err := gzipWriter.Write(jsonData); err != nil {
 			log.Fatalf("failed to compress locale %s: %v", tgtCul, err)
 		}
