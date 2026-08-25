@@ -211,6 +211,10 @@ export interface TranspileOutput {
     sourceMapText?: string;
 }
 
+// @sync-only-start
+// import {batchGenerators, type ExecutedGeneratorsResults, type APIRequestGenerator} from "./generatorSupport.ts";
+// @sync-only-end
+
 export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHost {
     private client: Client;
     private sourceFileCache: SourceFileCache;
@@ -221,11 +225,13 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
     private activeSnapshots: Set<Snapshot> = new Set();
     private latestSnapshot: Snapshot | undefined;
     readonly internal: InternalAPI;
+    private options: APIOptions | LSPConnectionOptions = {};
 
     constructor(options: APIOptions | LSPConnectionOptions = {}) {
+        this.options = options;
         this.client = new Client(options);
         this.sourceFileCache = new SourceFileCache();
-        this.internal = new InternalAPI(this.client, () => this.ensureInitialized());
+        this.internal = new InternalAPI(this.client, () => this.ensureInitialized()); // @sync: this.internal = new InternalAPI(this.client, this.ensureInitialized);
     }
 
     /**
@@ -250,6 +256,11 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         return this.client.batchContext();
     }
     // @sync-skip-block-end
+    // @sync-only-start
+    // batch<T extends readonly APIRequestGenerator[]>(...requestGenerators: T): ExecutedGeneratorsResults<T> {
+    //     return batchGenerators(this, ...requestGenerators);
+    // }
+    // @sync-only-end
 
     private async ensureInitialized(): Promise<void> {
         if (!this.initialized) {
@@ -332,6 +343,10 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         const requestParams = toUpdateSnapshotRequest(params);
         const data = await this.client.apiRequest("updateSnapshot", requestParams);
 
+        return this.createSnapshot(data);
+    }
+
+    private createSnapshot(data: UpdateSnapshotResponse): Snapshot {
         // Retain cached source files from previous snapshot for unchanged files
         if (this.latestSnapshot) {
             this.sourceFileCache.retainForSnapshot(data.snapshot, this.latestSnapshot.id, data.changes);
@@ -432,12 +447,14 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
     }
 }
 
+type EnsureInitialized = () => Promise<void>; // @sync: type EnsureInitialized = (() => void) & { gen(): APIRequestGenerator; };
+
 export class InternalAPI {
     private client: Client;
-    private ensureInitialized: () => Promise<void>;
+    private ensureInitialized: EnsureInitialized;
 
     /** @internal */
-    constructor(client: Client, ensureInitialized: () => Promise<void>) {
+    constructor(client: Client, ensureInitialized: EnsureInitialized) {
         this.client = client;
         this.ensureInitialized = ensureInitialized;
     }

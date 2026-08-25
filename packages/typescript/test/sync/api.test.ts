@@ -96,12 +96,10 @@ import {
 import { fileURLToPath } from "node:url";
 import { isSignatureDeclaration } from "../../src/ast/is.ts";
 import { runBenchmarks } from "./api.bench.ts";
-
-const defaultFiles = {
-    "/tsconfig.json": "{}",
-    "/src/index.ts": `import { foo } from './foo';`,
-    "/src/foo.ts": `export const foo = 42;`,
-};
+import {
+    defaultFiles,
+    spawnAPI,
+} from "./api.testUtils.ts";
 
 describe("API", () => {
     test("parseCommandLine", () => {
@@ -6747,13 +6745,6 @@ describe("runWithTemporaryFileUpdate", () => {
         }
     });
 });
-
-function spawnAPI(files: Record<string, string> = { ...defaultFiles }) {
-    return new API({
-        cwd: fileURLToPath(new URL("../../../../", import.meta.url).toString()),
-        fs: createVirtualFileSystem(files),
-    });
-}
 
 function spawnAPIWithFS(files: Record<string, string> = { ...defaultFiles }): { api: API; fs: FileSystem; } {
     const fs = createVirtualFileSystem(files);
