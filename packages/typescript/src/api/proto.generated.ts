@@ -91,6 +91,7 @@ export interface APIMethodInfo {
     getPropertiesOfType: APIMethod<CheckerTypeParams, SymbolResponse[] | null>;
     getApparentPropertiesOfType: APIMethod<GetTypePropertyParams, SymbolResponse[]>;
     getApparentType: APIMethod<GetTypePropertyParams, TypeResponse>;
+    getAwaitedType: APIMethod<CheckerTypeParams, TypeResponse | null>;
     getReducedType: APIMethod<GetTypePropertyParams, TypeResponse>;
     getPropertyOfType: APIMethod<GetPropertyOfTypeParams, SymbolResponse | null>;
     getIndexInfosOfType: APIMethod<CheckerTypeParams, IndexInfoResponse[] | null>;

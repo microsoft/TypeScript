@@ -4120,6 +4120,91 @@ describe("Checker - getBaseConstraintOfType", () => {
     });
 });
 
+describe("Checker - getAwaitedType", () => {
+    test("unwraps Promise<string> to string", () => {
+        const src = `export const value: Promise<string> = Promise.resolve("x");`;
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/main.ts": src,
+        });
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const symbol = project.checker.getSymbolAtPosition("/src/main.ts", src.indexOf("value"));
+            assert.ok(symbol);
+            const type = project.checker.getTypeOfSymbol(symbol);
+            const awaited = project.checker.getAwaitedType(type);
+            assert.ok(awaited);
+            assert.ok(awaited.flags & TypeFlags.String, `Expected string, got flags ${awaited.flags}`);
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("unwraps nested Promise<Promise<number>>", () => {
+        const src = `export const value: Promise<Promise<number>> = Promise.resolve(Promise.resolve(1));`;
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/main.ts": src,
+        });
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const symbol = project.checker.getSymbolAtPosition("/src/main.ts", src.indexOf("value"));
+            assert.ok(symbol);
+            const type = project.checker.getTypeOfSymbol(symbol);
+            const awaited = project.checker.getAwaitedType(type);
+            assert.ok(awaited);
+            assert.ok(awaited.flags & TypeFlags.Number, `Expected number, got flags ${awaited.flags}`);
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("returns the type itself when it is not thenable", () => {
+        const src = `export const value: string = "x";`;
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/main.ts": src,
+        });
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const symbol = project.checker.getSymbolAtPosition("/src/main.ts", src.indexOf("value"));
+            assert.ok(symbol);
+            const type = project.checker.getTypeOfSymbol(symbol);
+            const awaited = project.checker.getAwaitedType(type);
+            assert.ok(awaited);
+            assert.strictEqual(awaited, type);
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("returns undefined for a recursive thenable", () => {
+        const src = `export type Loop = { then(resolve: (value: Loop) => void): void };`;
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/main.ts": src,
+        });
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const symbol = project.checker.getSymbolAtPosition("/src/main.ts", src.indexOf("Loop"));
+            assert.ok(symbol);
+            const type = project.checker.getDeclaredTypeOfSymbol(symbol);
+            const awaited = project.checker.getAwaitedType(type);
+            assert.equal(awaited, undefined);
+        }
+        finally {
+            api.close();
+        }
+    });
+});
+
 describe("Checker - getPropertyOfType", () => {
     test("returns a named property symbol of a type", () => {
         const api = spawnAPI({

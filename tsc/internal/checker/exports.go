@@ -294,6 +294,10 @@ func (c *Checker) GetApparentType(t *Type) *Type {
 	return c.getApparentType(t)
 }
 
+func (c *Checker) GetAwaitedType(t *Type) *Type {
+	return c.getAwaitedType(t)
+}
+
 func (c *Checker) GetReducedType(t *Type) *Type {
 	return c.getReducedType(t)
 }
