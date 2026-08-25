@@ -38,10 +38,13 @@ type diagnosticMessage struct {
 type localizationProject struct {
 	Projects []struct {
 		LocItems []struct {
-			Languages string `json:"Languages"`
+			SourceFile string `json:"SourceFile"`
+			Languages  string `json:"Languages"`
 		} `json:"LocItems"`
 	} `json:"Projects"`
 }
+
+const diagnosticsLocalizationSource = "tsc/internal/diagnostics/diagnosticMessages.generated.json"
 
 func main() {
 	log.SetFlags(log.LstdFlags | log.Lshortfile)
@@ -156,11 +159,26 @@ func readLocaleNames(projectPath string, localeDir string) []string {
 	if err := json.UnmarshalRead(file, &project); err != nil {
 		log.Fatalf("failed to decode localization project: %v", err)
 	}
-	if len(project.Projects) != 1 || len(project.Projects[0].LocItems) != 1 {
-		log.Fatalf("expected exactly one project with one localization item in %s", projectPath)
+
+	var languagesValue string
+	found := false
+	for _, project := range project.Projects {
+		for _, item := range project.LocItems {
+			if strings.ReplaceAll(item.SourceFile, "\\", "/") != diagnosticsLocalizationSource {
+				continue
+			}
+			if found {
+				log.Fatalf("duplicate localization item for %q in %s", diagnosticsLocalizationSource, projectPath)
+			}
+			found = true
+			languagesValue = item.Languages
+		}
+	}
+	if !found {
+		log.Fatalf("localization item for %q not found in %s", diagnosticsLocalizationSource, projectPath)
 	}
 
-	languages := strings.Split(project.Projects[0].LocItems[0].Languages, ";")
+	languages := strings.Split(languagesValue, ";")
 	declared := make(map[string]bool, len(languages))
 	for _, localeName := range languages {
 		tag, err := language.Parse(localeName)
