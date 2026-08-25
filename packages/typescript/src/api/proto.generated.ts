@@ -281,6 +281,7 @@ export interface GetDefaultProjectForFileParams {
 export interface ProjectResponse {
     id: string;
     configFileName: string;
+    currentDirectory: string;
     parsedCommandLine: ConfigFileResponse;
     /** @deprecated Use parsedCommandLine.fileNames. */
     rootFiles: string[];
@@ -763,10 +764,18 @@ export interface DiagnosticResponse {
     pos: number;
     /** End is the end position of the diagnostic in the source file. */
     end: number;
+    /** StartPosition is the zero-based line and UTF-16 character position of Pos. */
+    startPosition?: DiagnosticPositionResponse;
+    /** EndPosition is the zero-based line and UTF-16 character position of End. */
+    endPosition?: DiagnosticPositionResponse;
+    /** SourceLines contains the source lines needed to render this diagnostic with context. */
+    sourceLines?: DiagnosticSourceLineResponse[];
     /** Code is the diagnostic error code. */
     code: number;
     /** Category is the diagnostic category (error, warning, suggestion, message). */
     category: number;
+    /** Source is a custom diagnostic-code prefix. An empty value uses the default "TS". */
+    source?: string;
     /** Text is the localized diagnostic message text. */
     text: string;
     /** ReportsUnnecessary indicates this diagnostic highlights unnecessary code. */
@@ -1032,6 +1041,16 @@ export interface CompletionEntryResponse {
     detail?: string;
     labelDetails?: CompletionEntryLabelDetailsResponse;
     symbol?: SymbolResponse;
+}
+
+export interface DiagnosticPositionResponse {
+    line: number;
+    character: number;
+}
+
+export interface DiagnosticSourceLineResponse {
+    line: number;
+    text: string;
 }
 
 export interface EmitOutputFile {
