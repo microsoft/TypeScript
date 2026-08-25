@@ -846,6 +846,75 @@ func TestTscDeclarationEmit(t *testing.T) {
 			},
 		},
 		{
+			// The declaration signature computed for b.ts inlines `setField` structurally. Its type
+			// parameters cannot be reused, because rewriting `typeof state` hits an inaccessible
+			// `unique symbol`. The pseudo type node builder used to store the resulting nils in the
+			// type parameter list, which crashed the printer (NodeList.HasTrailingComma).
+			// Two type parameters, so the fallback is exercised past the first list slot.
+			subScenario: "dts signature update with type parameters that cannot be reused",
+			files: FileMap{
+				"/home/src/workspaces/project/tsconfig.json": stringtestutil.Dedent(`
+					{
+						"compilerOptions": {
+							"strict": true,
+							"incremental": true,
+							"skipLibCheck": true,
+							"skipDefaultLibCheck": true,
+						},
+					}`),
+				"/home/src/workspaces/project/a.ts": stringtestutil.Dedent(`
+					declare const brand: unique symbol;
+					const state = { name: "", count: 0, [brand]: true };
+					export const api = {
+						setField: <Tag extends string, K extends keyof typeof state>(key: K, value: (typeof state)[K], tag?: Tag): void => {
+							state[key] = value;
+							void tag;
+						},
+					};`),
+				"/home/src/workspaces/project/b.ts": stringtestutil.Dedent(`
+					import { api } from "./a";
+					export const merged = { ...api };`),
+			},
+			edits: []*tscEdit{
+				newTscEdit("modify b.ts", func(sys *TestSys) {
+					sys.appendFile("/home/src/workspaces/project/b.ts", "\nexport const touched = 1;")
+				}),
+			},
+		},
+		{
+			// Same defect through the object-literal *method* branch: a shorthand method's type
+			// parameter list is rebuilt with reuseNode too, and a failed reuse used to leave a nil
+			// in the list the printer dereferences.
+			subScenario: "dts signature update with a method type parameter that cannot be reused",
+			files: FileMap{
+				"/home/src/workspaces/project/tsconfig.json": stringtestutil.Dedent(`
+					{
+						"compilerOptions": {
+							"strict": true,
+							"incremental": true,
+							"skipLibCheck": true,
+							"skipDefaultLibCheck": true,
+						},
+					}`),
+				"/home/src/workspaces/project/a.ts": stringtestutil.Dedent(`
+					declare const brand: unique symbol;
+					const state = { name: "", count: 0, [brand]: true };
+					export const api = {
+						setField<K extends keyof typeof state>(key: K, value: (typeof state)[K]): void {
+							state[key] = value;
+						},
+					};`),
+				"/home/src/workspaces/project/b.ts": stringtestutil.Dedent(`
+					import { api } from "./a";
+					export const merged = { ...api };`),
+			},
+			edits: []*tscEdit{
+				newTscEdit("modify b.ts", func(sys *TestSys) {
+					sys.appendFile("/home/src/workspaces/project/b.ts", "\nexport const touched = 1;")
+				}),
+			},
+		},
+		{
 			subScenario: "when using Windows paths and uppercase letters",
 			files: FileMap{
 				"D:/Work/pkg1/package.json": stringtestutil.Dedent(`
