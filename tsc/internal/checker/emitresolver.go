@@ -131,7 +131,7 @@ func (r *EmitResolver) isDeclarationVisible(node *ast.Node) bool {
 func (r *EmitResolver) determineIfDeclarationIsVisible(node *ast.Node) bool {
 	switch node.Kind {
 	case ast.KindJSDocCallbackTag,
-		// ast.KindJSDocEnumTag, // !!! TODO: JSDoc @enum support?
+		ast.KindJSDocEnumTag,
 		ast.KindJSDocTypedefTag:
 		// Top-level jsdoc type aliases are considered exported
 		// First parent is comment node, second is hosting declaration or token; we only care about those tokens or declarations whose parent is a source file

@@ -97,6 +97,8 @@ func (p *Parser) reparseUnhosted(tag *ast.Node, parent *ast.Node, jsDoc *ast.Nod
 		typeAlias.Flags |= ast.NodeFlagsHasJSDoc
 		result := p.wrapInJSDocNamespace(fullName, typeAlias, false /*nested*/)
 		p.reparseList = append(p.reparseList, result)
+	case ast.KindJSDocEnumTag:
+		p.reparseJSDocEnumTag(tag, parent, jsDoc)
 	case ast.KindJSDocCallbackTag:
 		typeExpression := tag.TypeExpression()
 		if typeExpression == nil {
@@ -691,6 +693,74 @@ func getClassLikeData(parent *ast.Node) *ast.ClassLikeBase {
 		class = parent.AsClassExpression().ClassLikeData()
 	}
 	return class
+}
+
+func (p *Parser) reparseJSDocEnumTag(tag *ast.Node, parent *ast.Node, _ *ast.Node) {
+	typeExpression := tag.TypeExpression()
+	if typeExpression == nil {
+		return
+	}
+	name := p.nameForNamelessJSDocEnum(parent)
+	if name == nil {
+		return
+	}
+	var t *ast.Node
+	if typeExpression.Kind == ast.KindJSDocTypeExpression {
+		inner := typeExpression.Type()
+		if inner == nil {
+			return
+		}
+		t = p.addDeepCloneReparse(inner)
+	} else {
+		t = p.addDeepCloneReparse(typeExpression)
+	}
+	typeAlias := p.factory.NewJSTypeAliasDeclaration(nil, p.addDeepCloneReparse(p.checkNonIdentifierName(name)), nil, t)
+	p.finishReparsedNode(typeAlias, tag)
+	p.reparseList = append(p.reparseList, typeAlias)
+}
+
+// nameForNamelessJSDocEnum mirrors Strada nameForNamelessJSDocTypedef: @enum takes
+// its name from the host declaration (export const E / exports.E = ...).
+func (p *Parser) nameForNamelessJSDocEnum(host *ast.Node) *ast.Node {
+	if host == nil {
+		return nil
+	}
+	if ast.IsDeclaration(host) {
+		if name := ast.GetNameOfDeclaration(host); name != nil && ast.IsIdentifier(name) {
+			return name
+		}
+	}
+	switch host.Kind {
+	case ast.KindVariableStatement:
+		list := host.AsVariableStatement().DeclarationList
+		if list == nil {
+			return nil
+		}
+		decls := list.AsVariableDeclarationList().Declarations.Nodes
+		if len(decls) == 0 {
+			return nil
+		}
+		return p.nameForNamelessJSDocEnum(decls[0])
+	case ast.KindExpressionStatement:
+		expr := host.Expression()
+		if ast.IsBinaryExpression(expr) && expr.AsBinaryExpression().OperatorToken.Kind == ast.KindEqualsToken {
+			expr = expr.AsBinaryExpression().Left
+		}
+		switch expr.Kind {
+		case ast.KindPropertyAccessExpression:
+			return expr.AsPropertyAccessExpression().Name()
+		case ast.KindElementAccessExpression:
+			arg := expr.AsElementAccessExpression().ArgumentExpression
+			if ast.IsIdentifier(arg) {
+				return arg
+			}
+		case ast.KindIdentifier:
+			return expr
+		}
+	case ast.KindParenthesizedExpression:
+		return p.nameForNamelessJSDocEnum(host.Expression())
+	}
+	return nil
 }
 
 func (p *Parser) createExportModifier(locationNode *ast.Node) *ast.ModifierList {

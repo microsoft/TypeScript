@@ -19,7 +19,7 @@ function callIt(func, arg) {
 >arg : string
 
   return func(arg);
->func(arg) : any
+>func(arg) : boolean
 >func : Type1
 >arg : string
 }
@@ -79,7 +79,7 @@ function use1(func, bool, str, num) {
 >num : number
 
   return func(bool, str, num)
->func(bool, str, num) : any
+>func(bool, str, num) : string | number
 >func : StringOrNumber1
 >bool : boolean
 >str : string
@@ -111,7 +111,7 @@ function use2(func, bool, str, num) {
 >num : number
 
   return func(bool, str, num)
->func(bool, str, num) : any
+>func(bool, str, num) : string | number
 >func : StringOrNumber2
 >bool : boolean
 >str : string

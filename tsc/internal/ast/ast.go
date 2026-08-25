@@ -851,6 +851,8 @@ func (n *Node) TagName() *Node {
 		return n.AsJSDocThrowsTag().TagName
 	case KindJSDocImportTag:
 		return n.AsJSDocImportTag().TagName
+	case KindJSDocEnumTag:
+		return n.AsJSDocEnumTag().TagName
 	}
 	panic("Unhandled case in Node.TagName: " + n.Kind.String())
 }
@@ -938,6 +940,8 @@ func (n *Node) CommentList() *NodeList {
 		return n.AsJSDocThrowsTag().Comment
 	case KindJSDocImportTag:
 		return n.AsJSDocImportTag().Comment
+	case KindJSDocEnumTag:
+		return n.AsJSDocEnumTag().Comment
 	}
 	panic("Unhandled case in Node.CommentList: " + n.Kind.String())
 }
@@ -1136,6 +1140,8 @@ func (n *Node) TypeExpression() *Node {
 		return n.AsJSDocSatisfiesTag().TypeExpression
 	case KindJSDocThrowsTag:
 		return n.AsJSDocThrowsTag().TypeExpression
+	case KindJSDocEnumTag:
+		return n.AsJSDocEnumTag().TypeExpression
 	}
 	panic("Unhandled case in Node.TypeExpression: " + n.Kind.String())
 }
@@ -1345,6 +1351,7 @@ func declarationIsWriteAccess(decl *Node) bool {
 		KindInterfaceDeclaration,
 		KindJSDocCallbackTag,
 		KindJSDocTypedefTag,
+		KindJSDocEnumTag,
 		KindJsxAttribute,
 		KindModuleDeclaration,
 		KindNamespaceExportDeclaration,

@@ -105,6 +105,7 @@ function ff(s) {
 
 
 //// [index.d.ts]
+export type Target = string;
 /** @enum {string} */
 export declare const Target: {
     START: string;
@@ -113,12 +114,14 @@ export declare const Target: {
     /** @type {number} */
     OK_I_GUESS: number;
 };
+export type Second = number;
 /** @enum number */
 export declare const Second: {
     OK: number;
     /** @type {number} */
     FINE: number;
 };
+export type Fs = (p0: number) => number;
 /** @enum {function(number): number} */
 export declare const Fs: {
     ADD1: (n: any) => any;

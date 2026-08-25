@@ -430,6 +430,7 @@
             "JSDocThrowsTag",
             "JSDocSatisfiesTag",
             "JSDocImportTag",
+            "JSDocEnumTag",
             {
                 "comment": "Synthesized list"
             },
@@ -554,7 +555,7 @@
             },
             {
                 "name": "LastJSDocNode",
-                "value": "JSDocImportTag"
+                "value": "JSDocEnumTag"
             },
             {
                 "name": "FirstJSDocTagNode",
@@ -562,7 +563,7 @@
             },
             {
                 "name": "LastJSDocTagNode",
-                "value": "JSDocImportTag"
+                "value": "JSDocEnumTag"
             },
             {
                 "name": "FirstContextualKeyword",
@@ -4719,6 +4720,25 @@
                         "type": "JSDocFullName",
                         "private": true,
                         "optional": true
+                    },
+                    {
+                        "name": "Comment",
+                        "inherited": true
+                    }
+                ]
+            },
+            "JSDocEnumTag": {
+                "extends": [
+                    "JSDocTagBase"
+                ],
+                "members": [
+                    {
+                        "name": "TagName",
+                        "inherited": true
+                    },
+                    {
+                        "name": "TypeExpression",
+                        "type": "TypeNode"
                     },
                     {
                         "name": "Comment",

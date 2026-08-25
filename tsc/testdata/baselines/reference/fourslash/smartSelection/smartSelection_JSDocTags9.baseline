@@ -5,7 +5,7 @@ const Foo = {
     y: 1,
 };
 
-          {number}•  ↲
+           number    ↲
     @enum {number}•  ↲
 /** @enum {number} */↲
 

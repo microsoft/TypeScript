@@ -3825,7 +3825,7 @@ func hasComment(kind Kind) bool {
 		KindJSDocReadonlyTag, KindJSDocOverrideTag, KindJSDocCallbackTag, KindJSDocOverloadTag,
 		KindJSDocParameterTag, KindJSDocPropertyTag, KindJSDocReturnTag, KindJSDocThisTag,
 		KindJSDocTypeTag, KindJSDocTemplateTag, KindJSDocTypedefTag, KindJSDocSeeTag,
-		KindJSDocThrowsTag, KindJSDocSatisfiesTag, KindJSDocImportTag:
+		KindJSDocThrowsTag, KindJSDocSatisfiesTag, KindJSDocImportTag, KindJSDocEnumTag:
 		return true
 	default:
 		return false

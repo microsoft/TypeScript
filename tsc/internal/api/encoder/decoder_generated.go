@@ -1026,6 +1026,12 @@ func (d *astDecoder) createChildrenNode(kind ast.Kind, data uint32, childIndices
 		attributes := d.nodeAt(it.nextIf(mask, 3))
 		comment := d.nodeListAt(it.nextIf(mask, 4))
 		return d.factory.NewJSDocImportTag(tagName, importClause, moduleSpecifier, attributes, comment), nil
+	case ast.KindJSDocEnumTag:
+		it := newChildIter(childIndices)
+		tagName := d.nodeAt(it.nextIf(mask, 0))
+		typeExpression := d.nodeAt(it.nextIf(mask, 1))
+		comment := d.nodeListAt(it.nextIf(mask, 2))
+		return d.factory.NewJSDocEnumTag(tagName, typeExpression, comment), nil
 	case ast.KindJSDocCallbackTag:
 		it := newChildIter(childIndices)
 		tagName := d.nodeAt(it.nextIf(mask, 0))

@@ -1,0 +1,9 @@
+bug27142.js(2,7): error TS2456: Type alias 'E' circularly references itself.
+
+
+==== bug27142.js (1 errors) ====
+    /** @enum {E} */
+    const E = { x: 0 };
+          ~
+!!! error TS2456: Type alias 'E' circularly references itself.
+    

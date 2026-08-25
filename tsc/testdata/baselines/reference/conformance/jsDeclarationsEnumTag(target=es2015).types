@@ -72,19 +72,19 @@ export const Fs = {
  */
 export function consume(t,s,f) {
 >consume : (t: Target, s: Second, f: Fs) => void
->t : Target
->s : Second
+>t : string
+>s : number
 >f : Fs
 
     /** @type {string} */
     var str = t
 >str : string
->t : Target
+>t : string
 
     /** @type {number} */
     var num = s
 >num : number
->s : Second
+>s : number
 
     /** @type {(n: number) => number} */
     var fun = f
@@ -93,14 +93,14 @@ export function consume(t,s,f) {
 
     /** @type {Target} */
     var v = Target.START
->v : Target
+>v : string
 >Target.START : string
 >Target : { START: string; MIDDLE: string; END: string; OK_I_GUESS: number; }
 >START : string
 
     v = 'something else' // allowed, like Typescript's classic enums and unlike its string enums
 >v = 'something else' : "something else"
->v : Target
+>v : string
 >'something else' : "something else"
 }
 /** @param {string} s */

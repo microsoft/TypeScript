@@ -421,6 +421,7 @@ type (
 	JSDocThrowsTagNode                = Node
 	JSDocThisTagNode                  = Node
 	JSDocImportTagNode                = Node
+	JSDocEnumTagNode                  = Node
 	JSDocCallbackTagNode              = Node
 	JSDocOverloadTagNode              = Node
 	JSDocTypedefTagNode               = Node
@@ -7798,6 +7799,46 @@ func IsJSDocImportTag(node *Node) bool {
 }
 
 // ──────────────────────────────────────────────────────────────────────
+// JSDocEnumTag
+// ──────────────────────────────────────────────────────────────────────
+
+type JSDocEnumTag struct {
+	JSDocTagBase
+	TypeExpression *TypeNode
+}
+
+func (f *NodeFactory) NewJSDocEnumTag(tagName *IdentifierNode, typeExpression *TypeNode, comment *NodeList) *Node {
+	data := &JSDocEnumTag{}
+	data.TagName = tagName
+	data.TypeExpression = typeExpression
+	data.Comment = comment
+	return f.newNode(KindJSDocEnumTag, data)
+}
+
+func (f *NodeFactory) UpdateJSDocEnumTag(node *JSDocEnumTag, tagName *IdentifierNode, typeExpression *TypeNode, comment *NodeList) *Node {
+	if tagName != node.TagName || typeExpression != node.TypeExpression || comment != node.Comment {
+		return updateNode(f.NewJSDocEnumTag(tagName, typeExpression, comment), node.AsNode(), f.hooks)
+	}
+	return node.AsNode()
+}
+
+func (node *JSDocEnumTag) ForEachChild(v Visitor) bool {
+	return visit(v, node.TagName) || visit(v, node.TypeExpression) || visitNodeList(v, node.Comment)
+}
+
+func (node *JSDocEnumTag) VisitEachChild(v *NodeVisitor) *Node {
+	return v.Factory.UpdateJSDocEnumTag(node, v.visitNode(node.TagName), v.visitNode(node.TypeExpression), v.visitNodes(node.Comment))
+}
+
+func (node *JSDocEnumTag) Clone(f NodeFactoryCoercible) *Node {
+	return cloneNode(f.AsNodeFactory().NewJSDocEnumTag(node.TagName, node.TypeExpression, node.Comment), node.AsNode(), f.AsNodeFactory().hooks)
+}
+
+func IsJSDocEnumTag(node *Node) bool {
+	return node.Kind == KindJSDocEnumTag
+}
+
+// ──────────────────────────────────────────────────────────────────────
 // JSDocCallbackTag
 // ──────────────────────────────────────────────────────────────────────
 
@@ -8981,6 +9022,8 @@ func (n *Node) ForEachChild(v Visitor) bool {
 		return n.data.(*JSDocThisTag).ForEachChild(v)
 	case KindJSDocImportTag:
 		return n.data.(*JSDocImportTag).ForEachChild(v)
+	case KindJSDocEnumTag:
+		return n.data.(*JSDocEnumTag).ForEachChild(v)
 	case KindJSDocCallbackTag:
 		return n.data.(*JSDocCallbackTag).ForEachChild(v)
 	case KindJSDocOverloadTag:
@@ -9714,6 +9757,10 @@ func (n *Node) AsJSDocThisTag() *JSDocThisTag {
 
 func (n *Node) AsJSDocImportTag() *JSDocImportTag {
 	return n.data.(*JSDocImportTag)
+}
+
+func (n *Node) AsJSDocEnumTag() *JSDocEnumTag {
+	return n.data.(*JSDocEnumTag)
 }
 
 func (n *Node) AsJSDocCallbackTag() *JSDocCallbackTag {

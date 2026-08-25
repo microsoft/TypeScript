@@ -1,6 +1,7 @@
 package parser
 
 import (
+	"strconv"
 	"strings"
 	"unicode"
 
@@ -121,6 +122,53 @@ func (p *Parser) parseJSDocTypeExpression(mayOmitBraces bool) *ast.Node {
 	}
 
 	return p.finishNode(p.factory.NewJSDocTypeExpression(t), pos)
+}
+
+func (p *Parser) parseJSDocFunctionType() *ast.Node {
+	pos := p.nodePos()
+	if !p.lookAhead((*Parser).nextTokenIsOpenParen) {
+		return p.parseTypeReference()
+	}
+	p.nextToken() // consume `function`; current token is `(`
+	p.parseExpected(ast.KindOpenParenToken)
+	params := p.nodeSliceArena.NewSlice(0)
+	if p.token != ast.KindCloseParenToken && p.token != ast.KindEndOfFile {
+		for i := 0; ; i++ {
+			params = append(params, p.parseJSDocFunctionParameter(i))
+			if !p.parseOptional(ast.KindCommaToken) {
+				break
+			}
+			if p.token == ast.KindCloseParenToken {
+				break
+			}
+		}
+	}
+	closePos := p.nodePos()
+	p.parseExpected(ast.KindCloseParenToken)
+	returnType := p.parseReturnType(ast.KindColonToken, false /*isType*/)
+	if returnType == nil {
+		returnType = p.finishNode(p.factory.NewKeywordTypeNode(ast.KindAnyKeyword), closePos)
+	}
+	var loc core.TextRange
+	if len(params) > 0 {
+		loc = core.NewTextRange(params[0].Pos(), params[len(params)-1].End())
+	} else {
+		loc = core.NewTextRange(pos, closePos)
+	}
+	return p.finishNode(p.factory.NewFunctionTypeNode(nil, p.newNodeList(loc, params), returnType), pos)
+}
+
+func (p *Parser) parseJSDocFunctionParameter(index int) *ast.Node {
+	pos := p.nodePos()
+	var name *ast.Node
+	if p.token == ast.KindThisKeyword || p.token == ast.KindNewKeyword {
+		name = p.parseIdentifierName()
+		p.parseExpected(ast.KindColonToken)
+	} else {
+		name = p.factory.NewIdentifier("p" + strconv.Itoa(index))
+	}
+	typ := p.parseJSDocType()
+	return p.finishNode(p.factory.NewParameterDeclaration(nil, nil, name, nil, typ, nil), pos)
 }
 
 func (p *Parser) parseJSDocNameReference() *ast.Node {
@@ -522,6 +570,8 @@ func (p *Parser) parseTag(tags []*ast.Node, margin int) *ast.Node {
 		tag = p.parseThrowsTag(start, tagName, margin, indentText)
 	case "import":
 		tag = p.parseImportTag(start, tagName, margin, indentText)
+	case "enum":
+		tag = p.parseEnumTag(start, tagName, margin, indentText)
 	default:
 		tag = p.parseUnknownTag(start, tagName, margin, indentText)
 	}
@@ -987,6 +1037,12 @@ func (p *Parser) parseThisTag(start int, tagName *ast.IdentifierNode, margin int
 	p.skipWhitespace()
 	result := p.factory.NewJSDocThisTag(tagName, typeExpression, p.parseTrailingTagComments(start, p.nodePos(), margin, indentText))
 	return p.finishNode(result, start)
+}
+
+func (p *Parser) parseEnumTag(start int, tagName *ast.IdentifierNode, margin int, indentText string) *ast.Node {
+	typeExpression := p.parseJSDocTypeExpression(true)
+	p.skipWhitespace()
+	return p.finishNode(p.factory.NewJSDocEnumTag(tagName, typeExpression, p.parseTrailingTagComments(start, p.nodePos(), margin, indentText)), start)
 }
 
 func (p *Parser) parseJSDocTypeNameWithNamespace(nested bool) *ast.Node {

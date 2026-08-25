@@ -7050,7 +7050,7 @@ func (c *Checker) checkExportsOnMergedDeclarations(node *ast.Node) {
 
 func (c *Checker) getDeclarationSpaces(node *ast.Declaration) DeclarationSpaces {
 	switch node.Kind {
-	case ast.KindInterfaceDeclaration, ast.KindTypeAliasDeclaration, ast.KindJSTypeAliasDeclaration, ast.KindJSDocTypedefTag, ast.KindJSDocCallbackTag:
+	case ast.KindInterfaceDeclaration, ast.KindTypeAliasDeclaration, ast.KindJSTypeAliasDeclaration, ast.KindJSDocTypedefTag, ast.KindJSDocCallbackTag, ast.KindJSDocEnumTag:
 		return DeclarationSpacesExportType
 	case ast.KindModuleDeclaration:
 		if ast.IsAmbientModule(node) || ast.GetModuleInstanceState(node) != ast.ModuleInstanceStateNonInstantiated {

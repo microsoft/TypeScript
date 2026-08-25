@@ -2862,6 +2862,11 @@ func (p *Parser) parseNonArrayType() *ast.Node {
 		return p.parseTypeReference()
 	case ast.KindTemplateHead:
 		return p.parseTemplateType()
+	case ast.KindFunctionKeyword:
+		if p.contextFlags&ast.NodeFlagsJSDoc != 0 {
+			return p.parseJSDocFunctionType()
+		}
+		return p.parseTypeReference()
 	default:
 		return p.parseTypeReference()
 	}

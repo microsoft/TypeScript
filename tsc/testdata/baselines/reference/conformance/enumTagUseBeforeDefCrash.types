@@ -12,5 +12,5 @@ var foo = { };
  * @type {foo}
  */
 var s;
->s : foo
+>s : number
 
