@@ -21,6 +21,11 @@ type FlowType struct {
 	incomplete bool
 }
 
+type literalTypeKey struct {
+	flags TypeFlags
+	value any
+}
+
 func (ft *FlowType) isNil() bool {
 	return ft.t == nil
 }
@@ -880,6 +885,11 @@ func (c *Checker) getNarrowedTypeWorker(t *Type, candidate *Type, assumeTrue boo
 	if t == candidate {
 		return candidate
 	}
+	if !checkDerived {
+		if narrowedType := c.tryNarrowLiteralUnion(t, candidate); narrowedType != nil {
+			return narrowedType
+		}
+	}
 	// We first attempt to filter the current type, narrowing constituents as appropriate and removing
 	// constituents that are unrelated to the candidate.
 	var keyPropertyName string
@@ -913,6 +923,14 @@ func (c *Checker) getNarrowedTypeWorker(t *Type, candidate *Type, assumeTrue boo
 			}
 		} else {
 			mapType = func(t *Type) *Type {
+				tLiteralFlags := t.flags & TypeFlagsLiteral
+				nLiteralFlags := n.flags & TypeFlagsLiteral
+				if tLiteralFlags != 0 && tLiteralFlags == nLiteralFlags && !(t.flags&TypeFlagsEnumLiteral != 0 && n.flags&TypeFlagsEnumLiteral != 0) {
+					if t.AsLiteralType().value == n.AsLiteralType().value {
+						return t
+					}
+					return c.neverType
+				}
 				switch {
 				case c.isTypeStrictSubtypeOf(t, n):
 					return t
@@ -961,6 +979,23 @@ func (c *Checker) getNarrowedTypeWorker(t *Type, candidate *Type, assumeTrue boo
 		return candidate
 	}
 	return c.getIntersectionType([]*Type{t, candidate})
+}
+
+func (c *Checker) tryNarrowLiteralUnion(t *Type, candidate *Type) *Type {
+	isNonEnumLiteral := func(t *Type) bool {
+		return t.flags&TypeFlagsLiteral != 0 && t.flags&TypeFlagsEnumLiteral == 0
+	}
+	if !everyType(t, isNonEnumLiteral) || !everyType(candidate, isNonEnumLiteral) {
+		return nil
+	}
+	candidateTypes := make(map[literalTypeKey]struct{})
+	forEachType(candidate, func(t *Type) {
+		candidateTypes[literalTypeKey{flags: t.flags & TypeFlagsLiteral, value: t.AsLiteralType().value}] = struct{}{}
+	})
+	return c.filterType(t, func(t *Type) bool {
+		_, ok := candidateTypes[literalTypeKey{flags: t.flags & TypeFlagsLiteral, value: t.AsLiteralType().value}]
+		return ok
+	})
 }
 
 func (c *Checker) getInstanceType(constructorType *Type) *Type {
