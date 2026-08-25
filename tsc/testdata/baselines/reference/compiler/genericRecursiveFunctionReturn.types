@@ -76,6 +76,36 @@ const y = h("foo", 1);
 >"foo" : "foo"
 >1 : 1
 
+function tupleSpread<T>(value: T, count: number) {
+>tupleSpread : <T>(value: T, count: number) => T
+>value : T
+>count : number
+
+    if (!count) return value;
+>!count : boolean
+>count : number
+>value : T
+
+    // tuple spreads are expanded into effective arguments before checking assignability
+    return tupleSpread(...[value, count - 1] as const);
+>tupleSpread(...[value, count - 1] as const) : T
+>tupleSpread : <T>(value: T, count: number) => T
+>...[value, count - 1] as const : number | T
+>[value, count - 1] as const : readonly [T, number]
+>[value, count - 1] : readonly [T, number]
+>value : T
+>count - 1 : number
+>count : number
+>1 : 1
+}
+
+const z = tupleSpread("foo", 1);
+>z : "foo"
+>tupleSpread("foo", 1) : "foo"
+>tupleSpread : <T>(value: T, count: number) => T
+>"foo" : "foo"
+>1 : 1
+
 function nested<T>(value: T) {
 >nested : <T>(value: T) => any
 >value : T

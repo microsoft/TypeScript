@@ -26,6 +26,14 @@ function h<T>(value: T, count: number) {
 
 const y = h("foo", 1);
 
+function tupleSpread<T>(value: T, count: number) {
+    if (!count) return value;
+    // tuple spreads are expanded into effective arguments before checking assignability
+    return tupleSpread(...[value, count - 1] as const);
+}
+
+const z = tupleSpread("foo", 1);
+
 function nested<T>(value: T) {
     if (condition) return value;
     // this recursive call can't be ignored as that would lead to inferring T when the T[] return type is possible here
@@ -62,6 +70,13 @@ function h(value, count) {
     return h(value, count - 1);
 }
 const y = h("foo", 1);
+function tupleSpread(value, count) {
+    if (!count)
+        return value;
+    // tuple spreads are expanded into effective arguments before checking assignability
+    return tupleSpread(...[value, count - 1]);
+}
+const z = tupleSpread("foo", 1);
 function nested(value) {
     if (condition)
         return value;

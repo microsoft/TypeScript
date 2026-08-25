@@ -20390,7 +20390,7 @@ func (c *Checker) checkAndAggregateReturnExpressionTypes(fn *ast.Node, checkMode
 		if ast.IsCallExpression(expr) && ast.IsIdentifier(expr.Expression()) && c.checkExpressionCached(expr.Expression()).symbol == c.getMergedSymbol(fn.Symbol()) &&
 			(!ast.IsFunctionExpressionOrArrowFunction(fn.Symbol().ValueDeclaration) || c.isConstantReference(expr.Expression())) {
 			signature := c.getSignatureFromDeclaration(fn)
-			if len(signature.typeParameters) == 0 || len(expr.TypeArguments()) == 0 && c.isSignatureApplicable(expr, expr.Arguments(), signature, c.assignableRelation, checkMode, false /*reportErrors*/, nil /*diagnosticOutput*/) {
+			if len(signature.typeParameters) == 0 || len(expr.TypeArguments()) == 0 && c.isSignatureApplicable(expr, c.getEffectiveCallArguments(expr), signature, c.assignableRelation, checkMode, false /*reportErrors*/, nil /*diagnosticOutput*/) {
 				hasReturnOfTypeNever = true
 				return false
 			}

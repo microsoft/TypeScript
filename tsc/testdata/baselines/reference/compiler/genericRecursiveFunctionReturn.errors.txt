@@ -1,7 +1,7 @@
 genericRecursiveFunctionReturn.ts(2,7): error TS7023: 'f' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
 genericRecursiveFunctionReturn.ts(12,10): error TS7023: 'g' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
-genericRecursiveFunctionReturn.ts(26,10): error TS7023: 'nested' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
-genericRecursiveFunctionReturn.ts(32,10): error TS7023: 'swap' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+genericRecursiveFunctionReturn.ts(34,10): error TS7023: 'nested' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+genericRecursiveFunctionReturn.ts(40,10): error TS7023: 'swap' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
 
 
 ==== genericRecursiveFunctionReturn.ts (4 errors) ====
@@ -33,6 +33,14 @@ genericRecursiveFunctionReturn.ts(32,10): error TS7023: 'swap' implicitly has re
     }
     
     const y = h("foo", 1);
+    
+    function tupleSpread<T>(value: T, count: number) {
+        if (!count) return value;
+        // tuple spreads are expanded into effective arguments before checking assignability
+        return tupleSpread(...[value, count - 1] as const);
+    }
+    
+    const z = tupleSpread("foo", 1);
     
     function nested<T>(value: T) {
              ~~~~~~
