@@ -34,7 +34,7 @@ type responseMapper struct {
 func (m responseMapper) HandleRequest(ctx context.Context, method string, params json.Value) (any, error) {
 	switch method {
 	case contentmapper.MethodInitialize:
-		return contentmapper.InitializeResult{ProtocolVersion: contentmapper.ProtocolVersion, PositionEncoding: contentmapper.PositionEncodingUTF8, DiagnosticSource: "mapper"}, nil
+		return contentmapper.InitializeResult{PositionEncoding: contentmapper.PositionEncodingUTF8, DiagnosticSource: "mapper"}, nil
 	case contentmapper.MethodTransform:
 		var p contentmapper.TransformParams
 		if err := json.Unmarshal(params, &p); err != nil {
@@ -53,7 +53,7 @@ func (responseMapper) HandleNotification(ctx context.Context, method string, par
 func (fakeMapper) HandleRequest(ctx context.Context, method string, params json.Value) (any, error) {
 	switch method {
 	case contentmapper.MethodInitialize:
-		return contentmapper.InitializeResult{ProtocolVersion: contentmapper.ProtocolVersion, PositionEncoding: contentmapper.PositionEncodingUTF8, DiagnosticSource: "vue"}, nil
+		return contentmapper.InitializeResult{PositionEncoding: contentmapper.PositionEncodingUTF8, DiagnosticSource: "vue"}, nil
 	case contentmapper.MethodTransform:
 		var p contentmapper.TransformParams
 		if err := json.Unmarshal(params, &p); err != nil {
@@ -108,7 +108,7 @@ func (m unicodeMapper) HandleRequest(ctx context.Context, method string, params 
 		if m.source != nil {
 			source = *m.source
 		}
-		return contentmapper.InitializeResult{ProtocolVersion: contentmapper.ProtocolVersion, PositionEncoding: m.encoding, DiagnosticSource: source}, nil
+		return contentmapper.InitializeResult{PositionEncoding: m.encoding, DiagnosticSource: source}, nil
 	case contentmapper.MethodTransform:
 		var p contentmapper.TransformParams
 		if err := json.Unmarshal(params, &p); err != nil {
@@ -147,6 +147,7 @@ func (m unicodeMapper) HandleRequest(ctx context.Context, method string, params 
 				MessageText: "after non-ASCII character",
 				Start:       emojiLength,
 				Length:      textLength - emojiLength,
+				Code:        1001,
 			}},
 		}, nil
 	default:
@@ -165,13 +166,14 @@ type invalidDiagnosticMapper struct {
 func (m invalidDiagnosticMapper) HandleRequest(ctx context.Context, method string, params json.Value) (any, error) {
 	switch method {
 	case contentmapper.MethodInitialize:
-		return contentmapper.InitializeResult{ProtocolVersion: contentmapper.ProtocolVersion, PositionEncoding: m.encoding, DiagnosticSource: "mapper"}, nil
+		return contentmapper.InitializeResult{PositionEncoding: m.encoding, DiagnosticSource: "mapper"}, nil
 	case contentmapper.MethodTransform:
 		return contentmapper.TransformResult{
 			MappedOutput: contentmapper.MappedOutput{Extension: ".ts"},
 			Diagnostics: []contentmapper.Diagnostic{{
 				MessageText: "invalid boundary",
 				Start:       1,
+				Code:        1002,
 			}},
 		}, nil
 	default:
@@ -338,7 +340,6 @@ func TestHostClosesProcessWhenReadLoopFails(t *testing.T) {
 			assert.NilError(t, err)
 			assert.Equal(t, message.Method, contentmapper.MethodInitialize)
 			assert.NilError(t, protocol.WriteResponse(message.ID, contentmapper.InitializeResult{
-				ProtocolVersion:  contentmapper.ProtocolVersion,
 				PositionEncoding: contentmapper.PositionEncodingUTF8,
 				DiagnosticSource: "mapper",
 			}))
@@ -910,7 +911,7 @@ func (m *recordingMapper) HandleRequest(ctx context.Context, method string, para
 		m.mu.Lock()
 		m.receivedLocale = p.Locale
 		m.mu.Unlock()
-		return contentmapper.InitializeResult{ProtocolVersion: contentmapper.ProtocolVersion, PositionEncoding: contentmapper.PositionEncodingUTF8, DiagnosticSource: "mapper"}, nil
+		return contentmapper.InitializeResult{PositionEncoding: contentmapper.PositionEncodingUTF8, DiagnosticSource: "mapper"}, nil
 	case contentmapper.MethodOpenProject:
 		var p contentmapper.OpenProjectParams
 		if err := json.Unmarshal(params, &p); err != nil {
@@ -1196,6 +1197,7 @@ func TestProjectRejectsInvalidOptionDiagnosticPath(t *testing.T) {
 	mapperProcess := &recordingMapper{optionDiagnostics: []contentmapper.OptionDiagnosticResult{{
 		Path:        []json.Value{json.Value(`null`)},
 		MessageText: "Invalid option.",
+		Code:        123,
 	}}}
 	host := contentmapper.NewHost(t.Context(), &fakeSpawner{handler: mapperProcess}, locale.Default)
 	defer host.Close()

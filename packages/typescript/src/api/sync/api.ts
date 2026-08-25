@@ -18,6 +18,7 @@ import { SignatureFlags } from "#enums/signatureFlags";
 import { SignatureKind } from "#enums/signatureKind";
 import { SymbolFlags } from "#enums/symbolFlags";
 import { TypeFlags } from "#enums/typeFlags";
+import { TypeFormatFlags } from "#enums/typeFormatFlags";
 import { TypePredicateKind } from "#enums/typePredicateKind";
 import {
     type __String,
@@ -140,7 +141,7 @@ import type {
 } from "./types.ts";
 
 export { documentURIToFileName, fileNameToDocumentURI } from "../path.ts";
-export { CheckFlags, CompletionItemKind, DiagnosticCategory, ElementFlags, EmitOnly, ModifierFlags, ModuleKind, NodeBuilderFlags, ObjectFlags, SignatureFlags, SignatureKind, SymbolFlags, TypeFlags, TypePredicateKind };
+export { CheckFlags, CompletionItemKind, DiagnosticCategory, ElementFlags, EmitOnly, ModifierFlags, ModuleKind, NodeBuilderFlags, ObjectFlags, SignatureFlags, SignatureKind, SymbolFlags, TypeFlags, TypeFormatFlags, TypePredicateKind };
 export type {
     APIImportAdderAction as ImportAdderAction,
     APIOptions,
@@ -1713,7 +1714,7 @@ export class Checker {
         return decodeNode(binaryData) as Node;
     }
 
-    typeToString(type: Type, enclosingDeclaration?: Node, flags?: number): string {
+    typeToString(type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string {
         const result = this.client.apiRequest("typeToString", {
             snapshot: this.snapshotId,
             project: this.project.id,
@@ -1793,6 +1794,11 @@ export class Checker {
     /** Get the apparent type of a type. Always returns a type. */
     getApparentType(type: Type): Type {
         return type.getApparentType();
+    }
+
+    /** Get the reduced type of a type. Always returns a type. */
+    getReducedType(type: Type): Type {
+        return type.getReducedType();
     }
 
     getPropertiesOfType(type: Type): readonly Symbol[] {
@@ -2245,6 +2251,7 @@ class TypeObject implements Type {
     private default: number | false;
     private nonNullableType: number | false;
     private apparentType: number | false;
+    private reducedType: number | false;
     private properties: readonly Symbol[] | false;
     private apparentProperties: readonly Symbol[] | false;
     private callSignatures: readonly Signature[] | false;
@@ -2294,6 +2301,7 @@ class TypeObject implements Type {
         this.default = false;
         this.nonNullableType = false;
         this.apparentType = false;
+        this.reducedType = false;
         this.properties = false;
         this.apparentProperties = false;
         this.callSignatures = false;
@@ -2373,6 +2381,12 @@ class TypeObject implements Type {
     getApparentType(): Type {
         const result = this.objectRegistry.fetchType(this, "getApparentType", this.apparentType);
         this.apparentType = result.id;
+        return result;
+    }
+
+    getReducedType(): Type {
+        const result = this.objectRegistry.fetchType(this, "getReducedType", this.reducedType);
+        this.reducedType = result.id;
         return result;
     }
 

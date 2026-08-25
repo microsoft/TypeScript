@@ -294,6 +294,10 @@ func (c *Checker) GetApparentType(t *Type) *Type {
 	return c.getApparentType(t)
 }
 
+func (c *Checker) GetReducedType(t *Type) *Type {
+	return c.getReducedType(t)
+}
+
 // GetFullyQualifiedName returns the fully qualified name of a symbol, walking up
 // its parent chain (e.g. `"/path/to/module".Namespace.Name`).
 func (c *Checker) GetFullyQualifiedName(symbol *ast.Symbol) string {

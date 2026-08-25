@@ -62,7 +62,7 @@ func GetOutputPathsFor(sourceFile *ast.SourceFile, options *core.CompilerOptions
 	}
 	if force.Dts || options.GetEmitDeclarations() && !isJsonFile {
 		paths.declarationFilePath = GetDeclarationEmitOutputFilePath(sourceFile.FileName(), options, host)
-		if sourceFile.ContentMapper() == "" && (options.GetAreDeclarationMapsEnabled() || force.DeclarationMap && options.DeclarationMap.IsTrue()) {
+		if options.GetAreDeclarationMapsEnabled() || force.DeclarationMap && options.DeclarationMap.IsTrue() {
 			paths.declarationMapPath = paths.declarationFilePath + ".map"
 		}
 	}

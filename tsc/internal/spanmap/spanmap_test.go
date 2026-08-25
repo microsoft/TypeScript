@@ -160,6 +160,79 @@ func TestVirtualToOriginalPosition(t *testing.T) {
 	}
 }
 
+func TestVirtualToOriginalPositionExact(t *testing.T) {
+	t.Parallel()
+
+	m := spanmap.New([]spanmap.Segment{
+		{VirtualStart: 0, VirtualEnd: 10, OriginalStart: 100, OriginalEnd: 110, Kind: spanmap.KindVerbatim, Features: spanmap.FeatureAll},
+		{VirtualStart: 10, VirtualEnd: 20, OriginalStart: 110, OriginalEnd: 120, Kind: spanmap.KindAtom, Features: spanmap.FeatureAll},
+		{VirtualStart: 20, VirtualEnd: 30, OriginalStart: 120, OriginalEnd: 130, Kind: spanmap.KindVerbatim, Features: spanmap.FeatureAll},
+	})
+
+	for _, test := range []struct {
+		pos  core.TextPos
+		want core.TextPos
+		ok   bool
+	}{
+		{pos: 5, want: 105, ok: true},
+		{pos: 10, want: 110, ok: false},
+		{pos: 15, want: 110, ok: false},
+		{pos: 20, want: 120, ok: false},
+		{pos: 25, want: 125, ok: true},
+	} {
+		got, ok := m.VirtualToOriginalPositionExact(test.pos)
+		assert.Equal(t, got, test.want)
+		assert.Equal(t, ok, test.ok)
+	}
+}
+
+func TestVirtualToOriginalPositionExactRejectsDiscontinuousBoundary(t *testing.T) {
+	t.Parallel()
+
+	m := spanmap.New([]spanmap.Segment{
+		{VirtualStart: 0, VirtualEnd: 10, OriginalStart: 0, OriginalEnd: 10, Kind: spanmap.KindVerbatim},
+		{VirtualStart: 10, VirtualEnd: 20, OriginalStart: 100, OriginalEnd: 110, Kind: spanmap.KindVerbatim},
+	})
+
+	mapped, ok := m.VirtualToOriginalPositionExact(10)
+	assert.Equal(t, mapped, core.TextPos(100))
+	assert.Assert(t, !ok)
+}
+
+func TestZeroLengthSpansAtSegmentEnds(t *testing.T) {
+	t.Parallel()
+
+	m := spanmap.New([]spanmap.Segment{
+		{VirtualStart: 0, VirtualEnd: 10, OriginalStart: 100, OriginalEnd: 110, Kind: spanmap.KindVerbatim, Features: spanmap.FeatureHover},
+		{VirtualStart: 20, VirtualEnd: 30, OriginalStart: 200, OriginalEnd: 210, Kind: spanmap.KindVerbatim, Features: spanmap.FeatureHover},
+	})
+
+	position, fidelity := m.VirtualToOriginalPosition(30)
+	assert.Equal(t, position, core.TextPos(210))
+	assert.Equal(t, fidelity, spanmap.FidelityExact)
+	virtualSpan, fidelity := m.VirtualToOriginalSpan(core.NewTextRange(30, 30))
+	assert.Equal(t, virtualSpan, core.NewTextRange(210, 210))
+	assert.Equal(t, fidelity, spanmap.FidelityExact)
+
+	for _, test := range []struct {
+		name        string
+		originalEnd int
+	}{
+		{name: "before gap", originalEnd: 110},
+		{name: "final", originalEnd: 210},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
+			positions := m.OriginalToVirtualPositions(core.TextPos(test.originalEnd), spanmap.FeatureHover)
+			spans := m.OriginalToVirtualSpans(core.NewTextRange(test.originalEnd, test.originalEnd), spanmap.FeatureHover)
+			assert.Equal(t, len(positions), 1)
+			assert.Equal(t, len(spans), 1)
+			assert.Equal(t, spans[0].Span, core.NewTextRange(int(positions[0].Position), int(positions[0].Position)))
+			assert.Equal(t, spans[0].Fidelity, positions[0].Fidelity)
+		})
+	}
+}
+
 func TestMapPositionNilIdentity(t *testing.T) {
 	t.Parallel()
 
@@ -319,6 +392,96 @@ func TestOriginalToVirtualDuplicateGroup(t *testing.T) {
 	assert.Equal(t, spans[0].Span.End(), 3)
 	assert.Equal(t, spans[1].Span.Pos(), 20)
 	assert.Equal(t, spans[1].Span.End(), 25)
+}
+
+func TestOriginalToVirtualOverlappingSpans(t *testing.T) {
+	t.Parallel()
+
+	m := spanmap.New([]spanmap.Segment{
+		{VirtualStart: 0, VirtualEnd: 6, OriginalStart: 0, OriginalEnd: 6, Kind: spanmap.KindVerbatim, Features: spanmap.FeatureHover},
+		{VirtualStart: 10, VirtualEnd: 12, OriginalStart: 2, OriginalEnd: 4, Kind: spanmap.KindVerbatim, Features: spanmap.FeatureHover},
+		{VirtualStart: 20, VirtualEnd: 24, OriginalStart: 3, OriginalEnd: 7, Kind: spanmap.KindVerbatim, Features: spanmap.FeatureHover},
+	})
+
+	assert.DeepEqual(t, m.OriginalToVirtualPositions(3, spanmap.FeatureHover), []spanmap.MappedPosition{
+		{Position: 3, Fidelity: spanmap.FidelityExact},
+		{Position: 11, Fidelity: spanmap.FidelityExact},
+		{Position: 20, Fidelity: spanmap.FidelityExact},
+	})
+	spans := m.OriginalToVirtualSpans(core.NewTextRange(3, 4), spanmap.FeatureHover)
+	wantSpans := []spanmap.MappedSpan{
+		{Span: core.NewTextRange(3, 4), Fidelity: spanmap.FidelityExact},
+		{Span: core.NewTextRange(11, 12), Fidelity: spanmap.FidelityExact},
+		{Span: core.NewTextRange(20, 21), Fidelity: spanmap.FidelityExact},
+	}
+	assert.Equal(t, len(spans), len(wantSpans))
+	for i := range spans {
+		assert.Equal(t, spans[i], wantSpans[i])
+	}
+}
+
+func TestOriginalToVirtualPositionFindsEarlyCoveringSegment(t *testing.T) {
+	t.Parallel()
+
+	// Binary search lands near [90,95), which does not contain 97. The interval index must still find the
+	// earlier [0,100) segment without scanning every segment whose start precedes the query.
+	m := spanmap.New([]spanmap.Segment{
+		{VirtualStart: 0, VirtualEnd: 100, OriginalStart: 0, OriginalEnd: 100, Kind: spanmap.KindVerbatim, Features: spanmap.FeatureHover},
+		{VirtualStart: 100, VirtualEnd: 105, OriginalStart: 80, OriginalEnd: 85, Kind: spanmap.KindVerbatim, Features: spanmap.FeatureHover},
+		{VirtualStart: 105, VirtualEnd: 110, OriginalStart: 90, OriginalEnd: 95, Kind: spanmap.KindVerbatim, Features: spanmap.FeatureHover},
+		{VirtualStart: 110, VirtualEnd: 113, OriginalStart: 100, OriginalEnd: 103, Kind: spanmap.KindVerbatim, Features: spanmap.FeatureHover},
+	})
+
+	assert.DeepEqual(t, m.OriginalToVirtualPositions(97, spanmap.FeatureHover), []spanmap.MappedPosition{
+		{Position: 97, Fidelity: spanmap.FidelityExact},
+	})
+	spans := m.OriginalToVirtualSpans(core.NewTextRange(97, 98), spanmap.FeatureHover)
+	assert.Equal(t, len(spans), 1)
+	assert.Equal(t, spans[0], spanmap.MappedSpan{Span: core.NewTextRange(97, 98), Fidelity: spanmap.FidelityExact})
+
+	// Point lookup includes both sides of a shared endpoint, including an early interval found through the
+	// max-end tree. Nonempty span lookup treats segment ends as exclusive and uses only the right segment.
+	assert.DeepEqual(t, m.OriginalToVirtualPositions(100, spanmap.FeatureHover), []spanmap.MappedPosition{
+		{Position: 100, Fidelity: spanmap.FidelityExact},
+		{Position: 110, Fidelity: spanmap.FidelityExact},
+	})
+	spans = m.OriginalToVirtualSpans(core.NewTextRange(100, 101), spanmap.FeatureHover)
+	assert.Equal(t, len(spans), 1)
+	assert.Equal(t, spans[0], spanmap.MappedSpan{Span: core.NewTextRange(110, 111), Fidelity: spanmap.FidelityExact})
+}
+
+func BenchmarkOriginalToVirtualPositionNearEnd(b *testing.B) {
+	const segmentCount = 10_000
+	segments := make([]spanmap.Segment, segmentCount)
+	for i := range segments {
+		start := core.TextPos(2 * i)
+		segments[i] = spanmap.Segment{
+			VirtualStart: start, VirtualEnd: start + 1,
+			OriginalStart: start, OriginalEnd: start + 1,
+			Kind: spanmap.KindVerbatim, Features: spanmap.FeatureHover,
+		}
+	}
+	m := spanmap.New(segments)
+	position := core.TextPos(2 * (segmentCount - 1))
+	m.OriginalToVirtualPositions(position, spanmap.FeatureHover) // Build the lazy index outside the benchmark.
+	b.ResetTimer()
+	for b.Loop() {
+		m.OriginalToVirtualPositions(position, spanmap.FeatureHover)
+	}
+}
+
+func TestOriginalToVirtualOverlapFallsBackFromDisabledContainer(t *testing.T) {
+	t.Parallel()
+
+	m := spanmap.New([]spanmap.Segment{
+		{VirtualStart: 0, VirtualEnd: 6, OriginalStart: 0, OriginalEnd: 6, Kind: spanmap.KindVerbatim, Features: spanmap.FeatureDefinition},
+		{VirtualStart: 10, VirtualEnd: 13, OriginalStart: 0, OriginalEnd: 3, Kind: spanmap.KindVerbatim, Features: spanmap.FeatureHover},
+		{VirtualStart: 13, VirtualEnd: 16, OriginalStart: 3, OriginalEnd: 6, Kind: spanmap.KindVerbatim, Features: spanmap.FeatureHover},
+	})
+
+	spans := m.OriginalToVirtualSpans(core.NewTextRange(1, 5), spanmap.FeatureHover)
+	assert.Equal(t, len(spans), 1)
+	assert.Equal(t, spans[0], spanmap.MappedSpan{Span: core.NewTextRange(11, 15), Fidelity: spanmap.FidelityApproximate})
 }
 
 func TestOriginalToVirtualCrossGroupProjections(t *testing.T) {
@@ -513,20 +676,20 @@ func TestValidateOriginalOverlapAndFeatures(t *testing.T) {
 			valid: true,
 		},
 		{
-			name: "partial original overlap",
+			name: "partial original overlap is valid",
 			segments: []spanmap.Segment{
 				{VirtualStart: 0, VirtualEnd: 3, OriginalStart: 0, OriginalEnd: 3, Kind: spanmap.KindAtom},
 				{VirtualStart: 3, VirtualEnd: 6, OriginalStart: 2, OriginalEnd: 5, Kind: spanmap.KindAtom},
 			},
-			wantKind: spanmap.MappingErrorKindOriginalOverlap,
+			valid: true,
 		},
 		{
-			name: "nested original overlap",
+			name: "nested original overlap is valid",
 			segments: []spanmap.Segment{
 				{VirtualStart: 0, VirtualEnd: 5, OriginalStart: 0, OriginalEnd: 5, Kind: spanmap.KindAtom},
 				{VirtualStart: 5, VirtualEnd: 6, OriginalStart: 1, OriginalEnd: 4, Kind: spanmap.KindAtom},
 			},
-			wantKind: spanmap.MappingErrorKindOriginalOverlap,
+			valid: true,
 		},
 		{
 			name: "duplicate without explicit features is tolerant",

@@ -51,3 +51,25 @@ const val/*hover*/ue = target;
 
 	f.VerifyQuickInfoAt(t, "hover", "const value: 1", "See [target](file:///globals.astro#1,7-1,13).")
 }
+
+func TestContentMapperHoverTriesLaterProjection(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	f, done := newContentMapperFourslash(t, `// @Filename: /hover-fallback.dup
+val/*hover*/ue
+`, contentmappertest.DuplicateMapper, ".dup")
+	defer done()
+
+	f.VerifyQuickInfoAt(t, "hover", "const value: 1", "")
+}
+
+func TestContentMapperHoverConcatenatesProjections(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	f, done := newContentMapperFourslash(t, `// @Filename: /hover-concat.dup
+val/*hover*/ue
+`, contentmappertest.DuplicateMapper, ".dup")
+	defer done()
+
+	f.VerifyBaselineHover(t)
+}
