@@ -26,24 +26,24 @@ function IterateNodes(data: { node: Node }) {
 >node : Node | undefined
 
         const { children, index = -1 } = node;
->children : any
->index : any
+>children : readonly Node[] | undefined
+>index : number
 >-1 : -1
 >1 : 1
 >node : Node
 
         const activeNode: Node | undefined = index != -1 && children ? children[index] : undefined;
 >activeNode : Node | undefined
->index != -1 && children ? children[index] : undefined : any
->index != -1 && children : any
+>index != -1 && children ? children[index] : undefined : Node | undefined
+>index != -1 && children : false | readonly Node[] | undefined
 >index != -1 : boolean
->index : any
+>index : number
 >-1 : -1
 >1 : 1
->children : any
->children[index] : any
->children : any
->index : any
+>children : readonly Node[] | undefined
+>children[index] : Node
+>children : readonly Node[]
+>index : number
 >undefined : undefined
 
         node = activeNode;
@@ -71,20 +71,20 @@ function f(init: MyNode) {
 >init : MyNode
 
     while (node) {
->node : MyNode | undefined
+>node : MyNode
 
         const { children, index = 0 } = node;
->children : any
->index : any
+>children : MyNode[]
+>index : number
 >0 : 0
 >node : MyNode
 
         node = children[index];
->node = children[index] : any
+>node = children[index] : MyNode
 >node : MyNode | undefined
->children[index] : any
->children : any
->index : any
+>children[index] : MyNode
+>children : MyNode[]
+>index : number
     }
 }
 
