@@ -205,7 +205,8 @@ func transpileWorker(ctx context.Context, input string, options Options, declara
 				CompilerOptions: opts,
 			},
 		},
-		Host: host,
+		Host:                 host,
+		SkipModuleResolution: true,
 	})
 
 	var allDiagnostics []*ast.Diagnostic
