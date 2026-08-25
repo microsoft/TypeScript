@@ -12,7 +12,7 @@ import (
 	"golang.org/x/text/language"
 )
 
-//go:generate go run generate.go -diagnostics ./diagnostics_generated.go -locales ./localizations_generated.go -localedir ./loc -locproject ../../../tools/LocProject.json -locsource ./diagnosticMessages.generated.json
+//go:generate go run generate.go
 //go:generate go tool golang.org/x/tools/cmd/stringer -type=Category -output=stringer_generated.go
 //go:generate npx dprint fmt diagnostics_generated.go localizations_generated.go stringer_generated.go
 

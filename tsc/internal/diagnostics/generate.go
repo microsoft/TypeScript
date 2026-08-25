@@ -5,7 +5,6 @@ package main
 import (
 	"bytes"
 	"cmp"
-	"flag"
 	"fmt"
 	"go/format"
 	"go/token"
@@ -44,22 +43,16 @@ type localizationProject struct {
 	} `json:"Projects"`
 }
 
-const diagnosticsLocalizationSource = "tsc/internal/diagnostics/diagnosticMessages.generated.json"
+const (
+	diagnosticsOutput = "diagnostics_generated.go"
+	localesOutput     = "localizations_generated.go"
+	localeDir         = "loc"
+	locProject        = "../../../tools/LocProject.json"
+	locSourceOutput   = "diagnosticMessages.generated.json"
+)
 
 func main() {
 	log.SetFlags(log.LstdFlags | log.Lshortfile)
-
-	diagnosticsOutput := flag.String("diagnostics", "", "path to the output diagnostics_generated.go file")
-	localesOutput := flag.String("locales", "", "path to the output localizations_generated.go file")
-	localeDir := flag.String("localedir", "", "path to the localized diagnostic JSON files")
-	locProject := flag.String("locproject", "", "path to LocProject.json")
-	locSourceOutput := flag.String("locsource", "", "path to the English localization source file")
-	flag.Parse()
-
-	if *diagnosticsOutput == "" || *localesOutput == "" || *localeDir == "" || *locProject == "" || *locSourceOutput == "" {
-		flag.Usage()
-		return
-	}
 
 	rawDiagnosticMessages := readRawMessages("diagnosticMessages.json")
 	diagnosticMessages := slices.Collect(maps.Values(rawDiagnosticMessages))
@@ -76,19 +69,19 @@ func main() {
 		return
 	}
 
-	if err := os.WriteFile(*diagnosticsOutput, formatted, 0o666); err != nil {
+	if err := os.WriteFile(diagnosticsOutput, formatted, 0o666); err != nil {
 		log.Fatalf("failed to write diagnostics output: %v", err)
 		return
 	}
 
-	localeNames := readLocaleNames(*locProject, *localeDir)
+	localeNames := readLocaleNames(locProject, locSourceOutput, localeDir)
 	localesBuf := generateLocalizations(localeNames)
 	formatted, err = format.Source(localesBuf.Bytes())
 	if err != nil {
 		log.Fatalf("failed to format localizations output: %v", err)
 		return
 	}
-	if err := os.WriteFile(*localesOutput, formatted, 0o666); err != nil {
+	if err := os.WriteFile(localesOutput, formatted, 0o666); err != nil {
 		log.Fatalf("failed to write localizations output: %v", err)
 		return
 	}
@@ -99,11 +92,11 @@ func main() {
 		return
 	}
 
-	if err := os.MkdirAll(filepath.Dir(*locSourceOutput), 0o755); err != nil {
+	if err := os.MkdirAll(filepath.Dir(locSourceOutput), 0o755); err != nil {
 		log.Fatalf("failed to create localization source directory: %v", err)
 		return
 	}
-	if err := os.WriteFile(*locSourceOutput, locSource, 0o666); err != nil {
+	if err := os.WriteFile(locSourceOutput, locSource, 0o666); err != nil {
 		log.Fatalf("failed to write localization source: %v", err)
 		return
 	}
@@ -148,7 +141,7 @@ func generateDiagnostics(diagnosticMessages []*diagnosticMessage) *bytes.Buffer 
 	return &buf
 }
 
-func readLocaleNames(projectPath string, localeDir string) []string {
+func readLocaleNames(projectPath string, sourcePath string, localeDir string) []string {
 	file, err := os.Open(projectPath)
 	if err != nil {
 		log.Fatalf("failed to open localization project: %v", err)
@@ -160,22 +153,32 @@ func readLocaleNames(projectPath string, localeDir string) []string {
 		log.Fatalf("failed to decode localization project: %v", err)
 	}
 
+	projectRoot, err := filepath.Abs(filepath.Join(filepath.Dir(projectPath), ".."))
+	if err != nil {
+		log.Fatalf("failed to resolve localization project root: %v", err)
+	}
+	sourcePath, err = filepath.Abs(sourcePath)
+	if err != nil {
+		log.Fatalf("failed to resolve localization source path: %v", err)
+	}
+
 	var languagesValue string
 	found := false
 	for _, project := range project.Projects {
 		for _, item := range project.LocItems {
-			if strings.ReplaceAll(item.SourceFile, "\\", "/") != diagnosticsLocalizationSource {
+			itemSourceFile := filepath.FromSlash(strings.ReplaceAll(item.SourceFile, "\\", "/"))
+			if filepath.Join(projectRoot, itemSourceFile) != sourcePath {
 				continue
 			}
 			if found {
-				log.Fatalf("duplicate localization item for %q in %s", diagnosticsLocalizationSource, projectPath)
+				log.Fatalf("duplicate localization item for %q in %s", sourcePath, projectPath)
 			}
 			found = true
 			languagesValue = item.Languages
 		}
 	}
 	if !found {
-		log.Fatalf("localization item for %q not found in %s", diagnosticsLocalizationSource, projectPath)
+		log.Fatalf("localization item for %q not found in %s", sourcePath, projectPath)
 	}
 
 	languages := strings.Split(languagesValue, ";")
