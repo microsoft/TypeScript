@@ -7605,7 +7605,7 @@ func (c *Checker) checkExpressionCached(node *ast.Node) *Type {
 }
 
 func (c *Checker) checkExpressionCachedEx(node *ast.Node, checkMode CheckMode) *Type {
-	if checkMode != CheckModeNormal {
+	if checkMode != CheckModeNormal || len(c.flowLoopStack) != 0 {
 		return c.checkExpressionEx(node, checkMode)
 	}
 	links := c.typeNodeLinks.Get(node)
@@ -7613,13 +7613,7 @@ func (c *Checker) checkExpressionCachedEx(node *ast.Node, checkMode CheckMode) *
 		// When computing a type that we're going to cache, we need to ignore any ongoing control flow
 		// analysis because variables may have transient types in indeterminable states. Moving flowLoopStart
 		// to the top of the stack ensures all transient types are computed from a known point.
-		saveFlowLoopStack := c.flowLoopStack
-		saveFlowTypeCache := c.flowTypeCache
-		c.flowLoopStack = nil
-		c.flowTypeCache = nil
 		links.resolvedType = c.checkExpressionEx(node, checkMode)
-		c.flowTypeCache = saveFlowTypeCache
-		c.flowLoopStack = saveFlowLoopStack
 	}
 	return links.resolvedType
 }
@@ -30224,11 +30218,7 @@ func (c *Checker) getEffectiveCallArguments(node *ast.Node) []*ast.Node {
 				var spreadType *Type
 				// We can call checkExpressionCached because spread expressions never have a contextual type.
 				if ast.IsSpreadElement(arg) {
-					if len(c.flowLoopStack) != 0 {
-						spreadType = c.checkExpression(arg.Expression())
-					} else {
-						spreadType = c.checkExpressionCached(arg.Expression())
-					}
+					spreadType = c.checkExpressionCached(arg.Expression())
 				}
 				if spreadType != nil && isTupleType(spreadType) {
 					for i, t := range c.getElementTypes(spreadType) {
