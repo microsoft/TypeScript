@@ -4,6 +4,7 @@ import { DiagnosticCategory } from "#enums/diagnosticCategory";
 import { ElementFlags } from "#enums/elementFlags";
 import { EmitOnly } from "#enums/emitOnly";
 import { ModuleKind } from "#enums/moduleKind";
+import { NewLineKind } from "#enums/newLineKind";
 import { NodeBuilderFlags } from "#enums/nodeBuilderFlags";
 import { ObjectFlags } from "#enums/objectFlags";
 import { SignatureFlags } from "#enums/signatureFlags";
@@ -27,10 +28,6 @@ import {
     unescapeLeadingUnderscores,
 } from "../../ast/index.ts";
 import { assertNever } from "../../internal/utils.ts";
-import {
-    formatDiagnostics,
-    formatDiagnosticsWithColorAndContext,
-} from "../diagnosticFormatter.ts";
 import {
     encodeNode,
     uint8ArrayToBase64,
@@ -137,6 +134,7 @@ import type {
     UnionType,
 } from "./types.ts";
 
+export { formatDiagnostics, formatDiagnosticsWithColorAndContext } from "../diagnosticFormatter.ts";
 export { documentURIToFileName, fileNameToDocumentURI } from "../path.ts";
 export { CheckFlags, CompletionItemKind, DiagnosticCategory, ElementFlags, EmitOnly, ModifierFlags, ModuleKind, NodeBuilderFlags, ObjectFlags, SignatureFlags, SignatureKind, SymbolFlags, TypeFlags, TypeFormatFlags, TypePredicateKind };
 export type {
@@ -211,10 +209,12 @@ export interface TranspileOutput {
     sourceMapText?: string;
 }
 
-export class API<FromLSP extends boolean = false> {
+export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHost {
     private client: Client;
     private sourceFileCache: SourceFileCache;
     private toPath: ((fileName: string) => Path) | undefined;
+    private currentDirectory: string | undefined;
+    private getCanonicalFileNameWorker: ((fileName: string) => string) | undefined;
     private initialized: boolean = false;
     private activeSnapshots: Set<Snapshot> = new Set();
     private latestSnapshot: Snapshot | undefined;
@@ -241,9 +241,29 @@ export class API<FromLSP extends boolean = false> {
             const response = await this.client.apiRequest("initialize", null);
             const getCanonicalFileName = createGetCanonicalFileName(response.useCaseSensitiveFileNames);
             const currentDirectory = response.currentDirectory;
+            this.getCanonicalFileNameWorker = getCanonicalFileName;
+            this.currentDirectory = currentDirectory;
             this.toPath = (fileName: string) => toPath(fileName, currentDirectory, getCanonicalFileName) as Path;
             this.initialized = true;
         }
+    }
+
+    getCurrentDirectory(): string {
+        if (this.currentDirectory === undefined) {
+            throw new Error("API has not been initialized");
+        }
+        return this.currentDirectory;
+    }
+
+    getCanonicalFileName(fileName: string): string {
+        if (this.getCanonicalFileNameWorker === undefined) {
+            throw new Error("API has not been initialized");
+        }
+        return this.getCanonicalFileNameWorker(fileName);
+    }
+
+    getNewLine(): string {
+        return "\n";
     }
 
     async parseConfigFile(file: DocumentIdentifier): Promise<ParsedCommandLine> {
@@ -310,6 +330,7 @@ export class API<FromLSP extends boolean = false> {
             this.client,
             this.sourceFileCache,
             this.toPath!,
+            this,
             () => {
                 this.activeSnapshots.delete(snapshot);
                 if (snapshot !== this.latestSnapshot) {
@@ -359,6 +380,7 @@ export class API<FromLSP extends boolean = false> {
             this.client,
             this.sourceFileCache,
             this.toPath!,
+            this,
             () => {
                 this.activeSnapshots.delete(snapshot);
                 this.sourceFileCache.releaseSnapshot(snapshot.id);
@@ -438,6 +460,7 @@ export class Snapshot {
         client: Client,
         sourceFileCache: SourceFileCache,
         toPath: (fileName: string) => Path,
+        formatDiagnosticsHost: FormatDiagnosticsHost,
         onDispose: () => void,
     ) {
         this.id = data.snapshot;
@@ -448,7 +471,7 @@ export class Snapshot {
         this.snapshotRegistry = new SnapshotObjectRegistry(client, this.id, projectId => this.projectMap.get(projectId));
 
         for (const projData of data.projects) {
-            const project = new Project(projData, this.id, client, sourceFileCache, toPath, this.snapshotRegistry);
+            const project = new Project(projData, this.id, client, sourceFileCache, toPath, formatDiagnosticsHost, this.snapshotRegistry);
             this.projectMap.set(toPath(projData.configFileName), project);
         }
 
@@ -779,6 +802,7 @@ class ProjectObjectRegistry {
 export class Project {
     readonly id: Path;
     readonly configFileName: string;
+    readonly currentDirectory: string;
     readonly parsedCommandLine: ParsedCommandLine;
     /** @deprecated Use `parsedCommandLine.options`. */
     readonly compilerOptions: CompilerOptions;
@@ -798,10 +822,12 @@ export class Project {
         client: Client,
         sourceFileCache: SourceFileCache,
         toPath: (fileName: string) => Path,
+        formatDiagnosticsHost: FormatDiagnosticsHost,
         snapshotRegistry: SnapshotObjectRegistry,
     ) {
         this.id = data.id as Path;
         this.configFileName = data.configFileName;
+        this.currentDirectory = data.currentDirectory;
         if (!data.parsedCommandLine?.options) {
             throw new Error(`Project '${data.configFileName}' has no parsed command line`);
         }
@@ -816,6 +842,7 @@ export class Project {
             client,
             sourceFileCache,
             toPath,
+            formatDiagnosticsHost,
         );
         const objectRegistry = new ProjectObjectRegistry(client, snapshotId, this, snapshotRegistry);
         this.checker = new Checker(
@@ -952,12 +979,13 @@ export class LanguageService {
     }
 }
 
-export class Program {
+export class Program implements FormatDiagnosticsHost {
     private snapshotId: number;
     private project: Project;
     private client: Client;
     private sourceFileCache: SourceFileCache;
     private toPath: (fileName: string) => Path;
+    private formatDiagnosticsHost: FormatDiagnosticsHost;
     private decoder = new Wtf8Decoder();
     private sourceFileMetadataCache = new Map<Path, Promise<SourceFileMetadata | undefined>>();
 
@@ -967,12 +995,26 @@ export class Program {
         client: Client,
         sourceFileCache: SourceFileCache,
         toPath: (fileName: string) => Path,
+        formatDiagnosticsHost: FormatDiagnosticsHost,
     ) {
         this.snapshotId = snapshotId;
         this.project = project;
         this.client = client;
         this.sourceFileCache = sourceFileCache;
         this.toPath = toPath;
+        this.formatDiagnosticsHost = formatDiagnosticsHost;
+    }
+
+    getCurrentDirectory(): string {
+        return this.project.currentDirectory;
+    }
+
+    getCanonicalFileName(fileName: string): string {
+        return this.formatDiagnosticsHost.getCanonicalFileName(fileName);
+    }
+
+    getNewLine(): string {
+        return this.project.compilerOptions.newLine === NewLineKind.CRLF ? "\r\n" : "\n";
     }
 
     getCompilerOptions(): CompilerOptions {
@@ -1209,26 +1251,6 @@ export class Program {
             project: this.project.id,
         });
         return data ?? [];
-    }
-
-    /**
-     * Formats diagnostics produced by this program.
-     */
-    async formatDiagnostics(
-        diagnostics: readonly Diagnostic[],
-        host: FormatDiagnosticsHost,
-    ): Promise<string> {
-        return formatDiagnostics(diagnostics, host);
-    }
-
-    /**
-     * Formats diagnostics produced by this program with color and context.
-     */
-    async formatDiagnosticsWithColorAndContext(
-        diagnostics: readonly Diagnostic[],
-        host: FormatDiagnosticsHost,
-    ): Promise<string> {
-        return formatDiagnosticsWithColorAndContext(diagnostics, host);
     }
 
     /**

@@ -281,6 +281,7 @@ export interface GetDefaultProjectForFileParams {
 export interface ProjectResponse {
     id: string;
     configFileName: string;
+    currentDirectory: string;
     parsedCommandLine: ConfigFileResponse;
     /** @deprecated Use parsedCommandLine.fileNames. */
     rootFiles: string[];
