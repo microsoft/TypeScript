@@ -2,9 +2,11 @@
 
 import {
     getTokenPosOfNode,
+    type JSDoc,
     ModifierFlags,
     type Node,
     type NodeArray,
+    type NodeBase,
     type SourceFile,
     SyntaxKind,
 } from "../../ast/index.ts";
@@ -153,13 +155,13 @@ export class RemoteNodeList extends Array<RemoteNode> implements NodeArray<Remot
         }
     }
 
-    forEachNode<T>(visitNode: (node: RemoteNode) => T | undefined): T | undefined {
+    forEachNode<T>(visitNode: (node: Node) => T | undefined): T | undefined {
         if (!this.length) return;
         let next = this.index + 1;
         while (next) {
             const child = this.getOrCreateChildAtNodeIndex(next);
             next = child.next;
-            const result = visitNode(child as RemoteNode);
+            const result = visitNode(child as Node);
             if (result) return result;
         }
     }
@@ -222,7 +224,7 @@ export class RemoteNodeList extends Array<RemoteNode> implements NodeArray<Remot
     }
 }
 
-export class RemoteNode extends RemoteNodeBase implements Node {
+export class RemoteNode extends RemoteNodeBase implements NodeBase {
     protected static NODE_LEN: number = NODE_LEN;
     protected override get sourceFile(): SourceFileInfo {
         return this._sourceFile;
@@ -244,7 +246,7 @@ export class RemoteNode extends RemoteNodeBase implements Node {
                 const child = this.getOrCreateChildAtNodeIndex(next);
                 if (child instanceof RemoteNodeList) {
                     if (visitList) {
-                        const result = visitList(child);
+                        const result = visitList(child as NodeArray<Node>);
                         if (result) {
                             return result;
                         }
@@ -257,7 +259,7 @@ export class RemoteNode extends RemoteNodeBase implements Node {
                     }
                 }
                 else if (child.kind !== SyntaxKind.JSDoc) {
-                    const result = visitNode(child);
+                    const result = visitNode(child as Node);
                     if (result) {
                         return result;
                     }
@@ -268,16 +270,16 @@ export class RemoteNode extends RemoteNodeBase implements Node {
         }
     }
 
-    get jsDoc(): readonly Node[] | undefined {
+    get jsDoc(): readonly JSDoc[] | undefined {
         if (!this.hasChildren()) {
             return undefined;
         }
-        let result: Node[] | undefined;
+        let result: JSDoc[] | undefined;
         let next = this.index + 1;
         do {
             const child = this.getOrCreateChildAtNodeIndex(next);
             if (!(child instanceof RemoteNodeList) && child.kind === SyntaxKind.JSDoc) {
-                (result ??= []).push(child);
+                (result ??= []).push(child as unknown as JSDoc);
             }
             next = child.next;
         }
