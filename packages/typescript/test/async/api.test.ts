@@ -77,7 +77,6 @@ import {
 } from "@typescript/typescript/unstable/async"; // @sync: } from "@typescript/typescript/unstable/sync";
 import { createVirtualFileSystem } from "@typescript/typescript/unstable/fs";
 import type { FileSystem } from "@typescript/typescript/unstable/fs";
-import type { APIRequest } from "@typescript/typescript/unstable/proto";
 import assert from "node:assert";
 import { globSync } from "node:fs";
 import { resolve } from "node:path";
@@ -372,55 +371,6 @@ describe("API", () => {
             const config = await api.parseConfigFile("/tsconfig.json");
             assert.equal(config.typeAcquisition?.enable, true);
             assert.deepEqual(config.typeAcquisition?.include, ["jquery"]);
-        }
-        finally {
-            await api.close();
-        }
-    });
-});
-
-describe("API - batchRequests", () => {
-    test("returns results in request order", async () => {
-        const api = spawnAPI();
-        try {
-            const { responses } = await api.batchRequests([
-                { method: "parseCommandLine", params: { commandLine: ["--strict"] } },
-                { method: "readConfigFile", params: { file: "/tsconfig.json" } },
-            ]);
-
-            assert.strictEqual(responses.length, 2);
-            const commandLine = responses[0];
-            assert.strictEqual(commandLine.method, "parseCommandLine");
-            assert.strictEqual(commandLine.error, undefined);
-            assert.equal(commandLine.result.options.strict, true);
-
-            const config = responses[1];
-            assert.strictEqual(config.method, "readConfigFile");
-            assert.strictEqual(config.error, undefined);
-            assert.deepStrictEqual(config.result.config, {});
-        }
-        finally {
-            await api.close();
-        }
-    });
-
-    test("returns an item error without dropping a sibling result", async () => {
-        const api = spawnAPI();
-        try {
-            const { responses } = await api.batchRequests([
-                { method: "unknown", params: null } as unknown as APIRequest,
-                { method: "parseCommandLine", params: { commandLine: ["--strict"] } },
-            ]);
-
-            assert.equal(responses.length, 2);
-            assert.equal(responses[0].method, "unknown");
-            assert.match(responses[0].error!, /unknown API method/);
-            assert.equal(responses[0].result, null);
-
-            const commandLine = responses[1];
-            assert.strictEqual(commandLine.method, "parseCommandLine");
-            assert.strictEqual(commandLine.error, undefined);
-            assert.strictEqual(commandLine.result.options.strict, true);
         }
         finally {
             await api.close();

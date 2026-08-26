@@ -353,6 +353,20 @@ function runParityBatch(api: API, cases: readonly ParityCase[]): void {
     }
 }
 
+function* observeRequestBatches<Result>(
+    requestGenerator: Generator<APIRequest | readonly APIRequest[], Result, any>,
+    requestBatches: string[][],
+): Generator<APIRequest | readonly APIRequest[], Result, any> {
+    let state = requestGenerator.next();
+    while (!state.done) {
+        const request = state.value;
+        const requests = Array.isArray(request) ? request : [request as APIRequest];
+        requestBatches.push(requests.map(current => current.method));
+        state = requestGenerator.next(yield request);
+    }
+    return state.value;
+}
+
 function assertPublicGeneratorCoverage(owners: readonly { readonly name: string; readonly value: object; readonly own?: boolean; }[]): void {
     const missing: string[] = [];
     for (const { name, own, value } of owners) {
@@ -373,15 +387,7 @@ function assertPublicGeneratorCoverage(owners: readonly { readonly name: string;
 describe("API - generator batching", () => {
     test("composes request generators with all", () => {
         const api = spawnAPI(parityFiles);
-        const batchRequests = api.batchRequests;
         const requestBatches: string[][] = [];
-        Object.defineProperty(api, "batchRequests", {
-            configurable: true,
-            value(requests: readonly APIRequest[]) {
-                requestBatches.push(requests.map(request => request.method));
-                return batchRequests(requests);
-            },
-        });
         function* getStrictOption() {
             const commandLine = yield* api.parseCommandLine.gen(["--strict"]);
             const config = yield* api.readConfigFile.gen("/tsconfig.json");
@@ -396,7 +402,7 @@ describe("API - generator batching", () => {
         }
 
         try {
-            const [[config, outputText]] = api.batch(all(getStrictOption(), getTranspiledText()));
+            const [[config, outputText]] = api.batch(observeRequestBatches(all(getStrictOption(), getTranspiledText()), requestBatches));
             assert.equal(config.strict, true);
             assert.deepEqual([...config.fileNames].sort(), ["/src/bind.ts", "/src/index.ts", "/src/models.ts", "/src/suggestions.ts", "/src/syntax.ts"]);
             assert.match(outputText, /const value = ['"]ok['"]/);
@@ -473,26 +479,21 @@ describe("API - generator batching", () => {
         }
     });
 
-    test("deduplicates only initialize requests within a batch round", () => {
+    test("all deduplicates only initialize requests within a batch round", () => {
         const api = spawnAPI();
-        const batchRequests = api.batchRequests;
-        const requestBatches: (readonly APIRequest[])[] = [];
-        Object.defineProperty(api, "batchRequests", {
-            configurable: true,
-            value(requests: readonly APIRequest[]) {
-                requestBatches.push(requests);
-                return batchRequests(requests);
-            },
-        });
+        const requestBatches: string[][] = [];
 
         try {
-            const [firstCommandLine, secondCommandLine, config] = api.batch(
-                api.parseCommandLine.gen(["--strict"]),
-                api.parseCommandLine.gen(["--strict"]),
-                api.readConfigFile.gen("/tsconfig.json"),
-            );
+            const [[firstCommandLine, secondCommandLine, config]] = api.batch(observeRequestBatches(
+                all(
+                    api.parseCommandLine.gen(["--strict"]),
+                    api.parseCommandLine.gen(["--strict"]),
+                    api.readConfigFile.gen("/tsconfig.json"),
+                ),
+                requestBatches,
+            ));
 
-            assert.deepEqual(requestBatches.map(requests => requests.map(request => request.method)), [
+            assert.deepEqual(requestBatches, [
                 ["initialize"],
                 ["parseCommandLine", "parseCommandLine", "readConfigFile"],
             ]);
@@ -696,11 +697,6 @@ describe("API - generator batching", () => {
             timingGeneratorAPI.close();
             timingSyncAPI.close();
 
-            const batchedRequests = [
-                { method: "parseCommandLine", params: { commandLine: ["--strict", "--noEmit"] } },
-                { method: "readConfigFile", params: { file: "/tsconfig.json" } },
-            ] as const satisfies readonly APIRequest[];
-            assert.equal(api.batchRequests(batchedRequests).responses.length, 2);
             assert.ok(project.getImportAdderEdits("/src/index.ts", [{ kind: "importSymbol", symbol: unimportedSymbol }]).length > 0);
             assert.ok(program.getSyntacticDiagnostics("/src/syntax.ts").length > 0);
             assert.ok(program.getBindDiagnostics("/src/bind.ts").length > 0);
@@ -713,7 +709,6 @@ describe("API - generator batching", () => {
             assert.equal(checker.isUnknownSignature(unknownSignature), true);
 
             const cases: ParityCase[] = [
-                parityCase("API", "batchRequests", api.batchRequests, assertDeepEquivalent, batchedRequests),
                 parityCase("API", "parseConfigFile", api.parseConfigFile, assertDeepEquivalent, "/tsconfig.json"),
                 parityCase("API", "parseCommandLine", api.parseCommandLine, assertDeepEquivalent, ["--strict", "--noEmit"]),
                 parityCase("API", "readConfigFile", api.readConfigFile, assertDeepEquivalent, "/tsconfig.json"),
