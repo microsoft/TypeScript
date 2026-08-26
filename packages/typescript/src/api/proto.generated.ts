@@ -11,6 +11,7 @@ export type APIMethod<TParams, TResult> = { params: TParams; result: TResult; };
 
 export interface APIMethodInfo {
     release: APIMethod<ReleaseParams, void>;
+    batchRequests: APIMethod<BatchRequestsParams, BatchRequestsResponse>;
     initialize: APIMethod<null, InitializeResponse>;
     updateSnapshot: APIMethod<UpdateSnapshotParams, UpdateSnapshotResponse>;
     updateTemporarySnapshot: APIMethod<UpdateTemporarySnapshotParams, UpdateSnapshotResponse>;
@@ -106,6 +107,7 @@ export interface APIMethodInfo {
     getExportSpecifierLocalTargetSymbol: APIMethod<CheckerNodeParams, SymbolResponse | null>;
     getAliasedSymbol: APIMethod<CheckerSymbolParams, SymbolResponse>;
     getImmediateAliasedSymbol: APIMethod<CheckerSymbolParams, SymbolResponse | null>;
+    getTargetSymbol: APIMethod<CheckerSymbolParams, SymbolResponse>;
     getFullyQualifiedName: APIMethod<CheckerSymbolParams, string>;
     getExportsOfModule: APIMethod<CheckerSymbolParams, SymbolResponse[] | null>;
     getMemberInModuleExports: APIMethod<GetMemberInModuleExportsParams, SymbolResponse | null>;
@@ -155,6 +157,14 @@ export type DocumentIdentifier = string | { uri: string; };
 /** ReleaseParams are the parameters for the release method. */
 export interface ReleaseParams {
     snapshot: number;
+}
+
+export interface BatchRequestsParams {
+    requests: readonly BatchRequest[] | null;
+}
+
+export interface BatchRequestsResponse {
+    responses: BatchResponse[];
 }
 
 /** InitializeResponse is returned by the initialize method. */
@@ -281,6 +291,7 @@ export interface GetDefaultProjectForFileParams {
 export interface ProjectResponse {
     id: string;
     configFileName: string;
+    currentDirectory: string;
     parsedCommandLine: ConfigFileResponse;
     /** @deprecated Use parsedCommandLine.fileNames. */
     rootFiles: string[];
@@ -763,10 +774,18 @@ export interface DiagnosticResponse {
     pos: number;
     /** End is the end position of the diagnostic in the source file. */
     end: number;
+    /** StartPosition is the zero-based line and UTF-16 character position of Pos. */
+    startPosition?: DiagnosticPositionResponse;
+    /** EndPosition is the zero-based line and UTF-16 character position of End. */
+    endPosition?: DiagnosticPositionResponse;
+    /** SourceLines contains the source lines needed to render this diagnostic with context. */
+    sourceLines?: DiagnosticSourceLineResponse[];
     /** Code is the diagnostic error code. */
     code: number;
     /** Category is the diagnostic category (error, warning, suggestion, message). */
     category: number;
+    /** Source is a custom diagnostic-code prefix. An empty value uses the default "TS". */
+    source?: string;
     /** Text is the localized diagnostic message text. */
     text: string;
     /** ReportsUnnecessary indicates this diagnostic highlights unnecessary code. */
@@ -856,6 +875,297 @@ export interface ProfileParams {
 
 export interface ProfileResult {
     file: string;
+}
+
+export interface BatchRequest {
+    method:
+        | "batchRequests"
+        | "emit"
+        | "emitToString"
+        | "formatNodeForInsertion"
+        | "getAliasSymbolOfType"
+        | "getAliasTypeArgumentsOfType"
+        | "getAliasedSymbol"
+        | "getAnyType"
+        | "getApparentPropertiesOfType"
+        | "getApparentType"
+        | "getBaseConstraintOfType"
+        | "getBaseTypeOfLiteralType"
+        | "getBaseTypeOfType"
+        | "getBaseTypes"
+        | "getBigIntType"
+        | "getBindDiagnostics"
+        | "getBooleanType"
+        | "getCheckTypeOfType"
+        | "getCompletionsAtPosition"
+        | "getConfigFileNames"
+        | "getConfigFileParsingDiagnostics"
+        | "getConfigSourceFile"
+        | "getConstantValue"
+        | "getConstraintOfType"
+        | "getConstraintOfTypeParameter"
+        | "getContextualType"
+        | "getDeclarationDiagnostics"
+        | "getDeclarationEmit"
+        | "getDeclaredTypeOfSymbol"
+        | "getDefaultFromTypeParameter"
+        | "getDefaultProjectForFile"
+        | "getDocumentationComment"
+        | "getESSymbolType"
+        | "getExportSpecifierLocalTargetSymbol"
+        | "getExportSymbolOfSymbol"
+        | "getExportsOfModule"
+        | "getExportsOfSymbol"
+        | "getExtendsTypeOfType"
+        | "getFalseTypeOfConditionalType"
+        | "getFreshTypeOfType"
+        | "getFullyQualifiedName"
+        | "getGlobalDiagnostics"
+        | "getImmediateAliasedSymbol"
+        | "getImportAdderEdits"
+        | "getIndexInfosOfType"
+        | "getIndexTypeOfType"
+        | "getJavaScriptEmit"
+        | "getJsDocTags"
+        | "getLocalTypeParametersOfType"
+        | "getMemberInModuleExports"
+        | "getMembersOfSymbol"
+        | "getNeverType"
+        | "getNonNullableType"
+        | "getNonPrimitiveType"
+        | "getNullType"
+        | "getNumberType"
+        | "getObjectTypeOfType"
+        | "getOuterTypeParametersOfType"
+        | "getParameterType"
+        | "getParametersOfSignature"
+        | "getParentOfSymbol"
+        | "getProgramDiagnostics"
+        | "getPropertiesOfType"
+        | "getPropertyOfType"
+        | "getReducedType"
+        | "getReferencedSymbolsForNode"
+        | "getReferencesToSymbolInFile"
+        | "getRegularTypeOfType"
+        | "getResolvedSignature"
+        | "getRestTypeOfSignature"
+        | "getReturnTypeOfSignature"
+        | "getSemanticDiagnostics"
+        | "getShorthandAssignmentValueSymbol"
+        | "getSignatureFromDeclaration"
+        | "getSignatureUsages"
+        | "getSignaturesOfType"
+        | "getSourceFile"
+        | "getSourceFileMetadata"
+        | "getSourceFileNames"
+        | "getStringType"
+        | "getSuggestionDiagnostics"
+        | "getSymbolAtLocation"
+        | "getSymbolAtPosition"
+        | "getSymbolOfSourceFile"
+        | "getSymbolOfType"
+        | "getSymbolsAtLocations"
+        | "getSymbolsAtPositions"
+        | "getSymbolsInScope"
+        | "getSymbolsOfSourceFiles"
+        | "getSyntacticDiagnostics"
+        | "getTargetOfSignature"
+        | "getTargetOfType"
+        | "getTargetSymbol"
+        | "getThisParameterOfSignature"
+        | "getTrueTypeOfConditionalType"
+        | "getTypeArguments"
+        | "getTypeAtLocation"
+        | "getTypeAtLocations"
+        | "getTypeAtPosition"
+        | "getTypeFromTypeNode"
+        | "getTypeOfSymbol"
+        | "getTypeOfSymbolAtLocation"
+        | "getTypeParameterAtPosition"
+        | "getTypeParametersOfSignature"
+        | "getTypeParametersOfType"
+        | "getTypePredicateOfSignature"
+        | "getTypesAtPositions"
+        | "getTypesOfSymbols"
+        | "getTypesOfType"
+        | "getUndefinedType"
+        | "getUnknownType"
+        | "getVoidType"
+        | "getWellKnownSignatures"
+        | "getWellKnownSymbols"
+        | "getWidenedType"
+        | "initialize"
+        | "isArrayLikeType"
+        | "isArrayType"
+        | "isContextSensitive"
+        | "isTupleType"
+        | "isTypeAssignableTo"
+        | "parseCommandLine"
+        | "parseConfigFile"
+        | "parseJsonConfigFileContent"
+        | "printNode"
+        | "readConfigFile"
+        | "release"
+        | "resolveName"
+        | "saveHeapProfile"
+        | "signatureToSignatureDeclaration"
+        | "startCPUProfile"
+        | "stopCPUProfile"
+        | "transpileDeclaration"
+        | "transpileDeclarationFromFile"
+        | "transpileModule"
+        | "transpileModuleFromFile"
+        | "typeToString"
+        | "typeToTypeNode"
+        | "updateSnapshot"
+        | "updateTemporarySnapshot";
+    params?: unknown;
+}
+
+export interface BatchResponse {
+    method:
+        | "batchRequests"
+        | "emit"
+        | "emitToString"
+        | "formatNodeForInsertion"
+        | "getAliasSymbolOfType"
+        | "getAliasTypeArgumentsOfType"
+        | "getAliasedSymbol"
+        | "getAnyType"
+        | "getApparentPropertiesOfType"
+        | "getApparentType"
+        | "getBaseConstraintOfType"
+        | "getBaseTypeOfLiteralType"
+        | "getBaseTypeOfType"
+        | "getBaseTypes"
+        | "getBigIntType"
+        | "getBindDiagnostics"
+        | "getBooleanType"
+        | "getCheckTypeOfType"
+        | "getCompletionsAtPosition"
+        | "getConfigFileNames"
+        | "getConfigFileParsingDiagnostics"
+        | "getConfigSourceFile"
+        | "getConstantValue"
+        | "getConstraintOfType"
+        | "getConstraintOfTypeParameter"
+        | "getContextualType"
+        | "getDeclarationDiagnostics"
+        | "getDeclarationEmit"
+        | "getDeclaredTypeOfSymbol"
+        | "getDefaultFromTypeParameter"
+        | "getDefaultProjectForFile"
+        | "getDocumentationComment"
+        | "getESSymbolType"
+        | "getExportSpecifierLocalTargetSymbol"
+        | "getExportSymbolOfSymbol"
+        | "getExportsOfModule"
+        | "getExportsOfSymbol"
+        | "getExtendsTypeOfType"
+        | "getFalseTypeOfConditionalType"
+        | "getFreshTypeOfType"
+        | "getFullyQualifiedName"
+        | "getGlobalDiagnostics"
+        | "getImmediateAliasedSymbol"
+        | "getImportAdderEdits"
+        | "getIndexInfosOfType"
+        | "getIndexTypeOfType"
+        | "getJavaScriptEmit"
+        | "getJsDocTags"
+        | "getLocalTypeParametersOfType"
+        | "getMemberInModuleExports"
+        | "getMembersOfSymbol"
+        | "getNeverType"
+        | "getNonNullableType"
+        | "getNonPrimitiveType"
+        | "getNullType"
+        | "getNumberType"
+        | "getObjectTypeOfType"
+        | "getOuterTypeParametersOfType"
+        | "getParameterType"
+        | "getParametersOfSignature"
+        | "getParentOfSymbol"
+        | "getProgramDiagnostics"
+        | "getPropertiesOfType"
+        | "getPropertyOfType"
+        | "getReducedType"
+        | "getReferencedSymbolsForNode"
+        | "getReferencesToSymbolInFile"
+        | "getRegularTypeOfType"
+        | "getResolvedSignature"
+        | "getRestTypeOfSignature"
+        | "getReturnTypeOfSignature"
+        | "getSemanticDiagnostics"
+        | "getShorthandAssignmentValueSymbol"
+        | "getSignatureFromDeclaration"
+        | "getSignatureUsages"
+        | "getSignaturesOfType"
+        | "getSourceFile"
+        | "getSourceFileMetadata"
+        | "getSourceFileNames"
+        | "getStringType"
+        | "getSuggestionDiagnostics"
+        | "getSymbolAtLocation"
+        | "getSymbolAtPosition"
+        | "getSymbolOfSourceFile"
+        | "getSymbolOfType"
+        | "getSymbolsAtLocations"
+        | "getSymbolsAtPositions"
+        | "getSymbolsInScope"
+        | "getSymbolsOfSourceFiles"
+        | "getSyntacticDiagnostics"
+        | "getTargetOfSignature"
+        | "getTargetOfType"
+        | "getTargetSymbol"
+        | "getThisParameterOfSignature"
+        | "getTrueTypeOfConditionalType"
+        | "getTypeArguments"
+        | "getTypeAtLocation"
+        | "getTypeAtLocations"
+        | "getTypeAtPosition"
+        | "getTypeFromTypeNode"
+        | "getTypeOfSymbol"
+        | "getTypeOfSymbolAtLocation"
+        | "getTypeParameterAtPosition"
+        | "getTypeParametersOfSignature"
+        | "getTypeParametersOfType"
+        | "getTypePredicateOfSignature"
+        | "getTypesAtPositions"
+        | "getTypesOfSymbols"
+        | "getTypesOfType"
+        | "getUndefinedType"
+        | "getUnknownType"
+        | "getVoidType"
+        | "getWellKnownSignatures"
+        | "getWellKnownSymbols"
+        | "getWidenedType"
+        | "initialize"
+        | "isArrayLikeType"
+        | "isArrayType"
+        | "isContextSensitive"
+        | "isTupleType"
+        | "isTypeAssignableTo"
+        | "parseCommandLine"
+        | "parseConfigFile"
+        | "parseJsonConfigFileContent"
+        | "printNode"
+        | "readConfigFile"
+        | "release"
+        | "resolveName"
+        | "saveHeapProfile"
+        | "signatureToSignatureDeclaration"
+        | "startCPUProfile"
+        | "stopCPUProfile"
+        | "transpileDeclaration"
+        | "transpileDeclarationFromFile"
+        | "transpileModule"
+        | "transpileModuleFromFile"
+        | "typeToString"
+        | "typeToTypeNode"
+        | "updateSnapshot"
+        | "updateTemporarySnapshot";
+    result: unknown;
+    error?: string;
 }
 
 /**
@@ -1032,6 +1342,16 @@ export interface CompletionEntryResponse {
     detail?: string;
     labelDetails?: CompletionEntryLabelDetailsResponse;
     symbol?: SymbolResponse;
+}
+
+export interface DiagnosticPositionResponse {
+    line: number;
+    character: number;
+}
+
+export interface DiagnosticSourceLineResponse {
+    line: number;
+    text: string;
 }
 
 export interface EmitOutputFile {

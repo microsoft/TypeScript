@@ -5,6 +5,7 @@ import (
 	"encoding/base64"
 	"errors"
 	"fmt"
+	"runtime/debug"
 	"slices"
 	"strconv"
 	"strings"
@@ -599,6 +600,8 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 	}
 
 	switch method {
+	case string(MethodBatchRequests):
+		return s.handleBatchRequests(ctx, parsed.(*BatchRequestsParams))
 	case string(MethodRelease):
 		return s.handleRelease(ctx, parsed.(*ReleaseParams))
 	case string(MethodInitialize):
@@ -803,6 +806,8 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleGetAliasedSymbol(ctx, parsed.(*CheckerSymbolParams))
 	case string(MethodGetImmediateAliasedSymbol):
 		return s.handleGetImmediateAliasedSymbol(ctx, parsed.(*CheckerSymbolParams))
+	case string(MethodGetTargetSymbol):
+		return s.handleMethodGetTargetSymbol(ctx, parsed.(*CheckerSymbolParams))
 	case string(MethodGetFullyQualifiedName):
 		return s.handleGetFullyQualifiedName(ctx, parsed.(*CheckerSymbolParams))
 	case string(MethodGetExportsOfModule):
@@ -878,6 +883,30 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 	default:
 		return nil, fmt.Errorf("unknown method: %s", method)
 	}
+}
+
+func (s *Session) handleBatchRequests(ctx context.Context, params *BatchRequestsParams) (*BatchRequestsResponse, error) {
+	responses := make([]BatchResponse, len(params.Requests))
+	for i, request := range params.Requests {
+		responses[i] = s.handleBatchRequest(ctx, request)
+	}
+	return &BatchRequestsResponse{Responses: responses}, nil
+}
+
+func (s *Session) handleBatchRequest(ctx context.Context, request BatchRequest) (response BatchResponse) {
+	response.Method = request.Method
+	defer func() {
+		if recovered := recover(); recovered != nil {
+			response.Result = nil
+			response.Error = fmt.Sprintf("panic: %v\n%s", recovered, debug.Stack())
+		}
+	}()
+	var err error
+	response.Result, err = s.HandleRequest(ctx, string(request.Method), request.Params)
+	if err != nil {
+		response.Error = err.Error()
+	}
+	return response
 }
 
 func (s *Session) handleStartCPUProfile(_ context.Context, params *ProfileParams) (any, error) {
@@ -3317,6 +3346,23 @@ func (s *Session) handleGetImmediateAliasedSymbol(ctx context.Context, params *C
 	}
 
 	return setup.newSymbolResponse(aliased), nil
+}
+
+// handleGetTargetSymbol returns the target symbol if the symbol is instantiated,
+// otherwise returns the provided symbol.
+func (s *Session) handleMethodGetTargetSymbol(ctx context.Context, params *CheckerSymbolParams) (*SymbolResponse, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	symbol, err := setup.resolveSymbolHandle(params.Symbol)
+	if err != nil {
+		return nil, err
+	}
+
+	return setup.newSymbolResponse(setup.checker.GetTargetSymbol(symbol)), nil
 }
 
 // handleGetExportsOfModule returns the resolved exports of a module symbol,

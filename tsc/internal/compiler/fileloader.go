@@ -199,7 +199,7 @@ func processAllProgramFiles(
 		}
 	}
 
-	if len(rootFiles) > 0 {
+	if len(rootFiles) > 0 && !opts.SkipModuleResolution {
 		loader.addAutomaticTypeDirectiveTasks()
 	}
 
@@ -368,6 +368,12 @@ func (p *fileLoader) getDefaultLibFilePriority(a *ast.SourceFile) int {
 }
 
 func (p *fileLoader) loadSourceFileMetaData(fileName string) ast.SourceFileMetaData {
+	if p.opts.SkipModuleResolution {
+		return ast.SourceFileMetaData{
+			ImpliedNodeFormat: ast.GetImpliedNodeFormatForFile(fileName, ""),
+		}
+	}
+
 	packageJsonScope := p.resolver.GetPackageScopeForPath(tspath.GetDirectoryPath(fileName))
 	moduleResolutionKind := p.opts.Config.CompilerOptions().GetModuleResolutionKind()
 
@@ -851,6 +857,10 @@ func (p *fileLoader) resolveImportsAndModuleAugmentations(t *parseTask) {
 		// Do nothing if it's an Identifier; we don't need to do module resolution for `declare global`.
 	}
 
+	if p.opts.SkipModuleResolution {
+		return
+	}
+
 	if len(moduleNames) != 0 {
 		resolutionsInFile := make(module.ModeAwareCache[*module.ResolvedModule], len(moduleNames))
 		var resolutionsTrace []module.DiagAndArgs
@@ -934,7 +944,7 @@ func (p *fileLoader) pathForLibFile(name string) *LibFile {
 
 	path := tspath.CombinePaths(p.defaultLibraryPath, name)
 	replaced := false
-	if p.opts.Config.CompilerOptions().LibReplacement.IsTrue() && name != "lib.d.ts" {
+	if !p.opts.SkipModuleResolution && p.opts.Config.CompilerOptions().LibReplacement.IsTrue() && name != "lib.d.ts" {
 		libraryName := getLibraryNameFromLibFileName(name)
 		resolveFrom := getInferredLibraryNameResolveFrom(p.opts.Config.CompilerOptions(), p.opts.Host.GetCurrentDirectory(), name)
 		resolution, trace := p.resolveLibrary(libraryName, resolveFrom)
