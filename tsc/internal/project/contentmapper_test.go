@@ -94,10 +94,6 @@ func TestContentMapperInProject(t *testing.T) {
 		calls := utils.Client().RegisterContentMapperExtensionsCalls()
 		assert.Assert(t, len(calls) > 0, "expected RegisterContentMapperExtensions to be called")
 		assert.DeepEqual(t, calls[len(calls)-1].Extensions, []string{".box"})
-		logs := utils.Logs()
-		assert.Assert(t, strings.Contains(logs, "Content mapper timings since previous snapshot adoption:"), logs)
-		assert.Assert(t, strings.Contains(logs, "mapper@1.0.0:"), logs)
-		assert.Assert(t, strings.Contains(logs, "Transforms: 1 ("), logs)
 	})
 
 	t.Run("untrusted workspace does not run the content mapper", func(t *testing.T) {

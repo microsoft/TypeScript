@@ -715,6 +715,21 @@ func getDeclarationModifierFlagsFromSymbol(s *ast.Symbol) ast.ModifierFlags {
 }
 
 func getDeclarationModifierFlagsFromSymbolEx(s *ast.Symbol, isWrite bool) ast.ModifierFlags {
+	if s.CheckFlags&ast.CheckFlagsSynthetic != 0 {
+		var accessModifier ast.ModifierFlags
+		switch {
+		case !isWrite && s.CheckFlags&ast.CheckFlagsContainsPublic != 0 || isWrite && s.CheckFlags&ast.CheckFlagsContainsWritePublic != 0:
+			accessModifier = ast.ModifierFlagsPublic
+		case !isWrite && s.CheckFlags&ast.CheckFlagsContainsProtected != 0 || isWrite && s.CheckFlags&ast.CheckFlagsContainsWriteProtected != 0:
+			accessModifier = ast.ModifierFlagsProtected
+		case !isWrite && s.CheckFlags&ast.CheckFlagsContainsPrivate != 0 || isWrite && s.CheckFlags&ast.CheckFlagsContainsWritePrivate != 0:
+			accessModifier = ast.ModifierFlagsPrivate
+		}
+		if s.CheckFlags&ast.CheckFlagsContainsStatic != 0 {
+			return accessModifier | ast.ModifierFlagsStatic
+		}
+		return accessModifier
+	}
 	if s.ValueDeclaration != nil {
 		var declaration *ast.Node
 		if isWrite {
@@ -731,22 +746,6 @@ func getDeclarationModifierFlagsFromSymbolEx(s *ast.Symbol, isWrite bool) ast.Mo
 			return flags
 		}
 		return flags & ^ast.ModifierFlagsAccessibilityModifier
-	}
-	if s.CheckFlags&ast.CheckFlagsSynthetic != 0 {
-		var accessModifier ast.ModifierFlags
-		switch {
-		case s.CheckFlags&ast.CheckFlagsContainsPrivate != 0:
-			accessModifier = ast.ModifierFlagsPrivate
-		case s.CheckFlags&ast.CheckFlagsContainsPublic != 0:
-			accessModifier = ast.ModifierFlagsPublic
-		default:
-			accessModifier = ast.ModifierFlagsProtected
-		}
-		var staticModifier ast.ModifierFlags
-		if s.CheckFlags&ast.CheckFlagsContainsStatic != 0 {
-			staticModifier = ast.ModifierFlagsStatic
-		}
-		return accessModifier | staticModifier
 	}
 	if s.Flags&ast.SymbolFlagsPrototype != 0 {
 		return ast.ModifierFlagsPublic | ast.ModifierFlagsStatic

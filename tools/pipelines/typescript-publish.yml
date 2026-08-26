@@ -24,9 +24,9 @@ resources:
       name: 1ESPipelineTemplates/MicroBuildTemplate
       ref: refs/tags/release
   pipelines:
-    - pipeline: 'TypeScript_7_Signed_Build'
+    - pipeline: 'TypeScript_Release_Build'
       project: 'DevDiv'
-      source: 'TypeScript 7 Signed Build'
+      source: 'TypeScript Release Build'
       trigger:
         tags:
           - Build.Reason.Schedule
@@ -61,7 +61,7 @@ extends:
                   enabled: false
               inputs:
                 - input: pipelineArtifact
-                  pipeline: 'TypeScript_7_Signed_Build'
+                  pipeline: 'TypeScript_Release_Build'
                   artifactName: 'npm'
                   targetPath: '$(Pipeline.Workspace)/npm'
               outputs:
@@ -160,7 +160,7 @@ extends:
               isProduction: true
               inputs:
                 - input: pipelineArtifact
-                  pipeline: 'TypeScript_7_Signed_Build'
+                  pipeline: 'TypeScript_Release_Build'
                   artifactName: 'vsix'
                   targetPath: '$(Pipeline.Workspace)/vsix'
 
