@@ -1750,7 +1750,16 @@ export class Checker {
         });
     }
 
-    isReadonlySymbol(symbol: Symbol): boolean {
+    /**
+     * The following symbols are considered read-only:
+     * - Properties with a `readonly` modifier
+     * - Variables declared with `const`
+     * - Get accessors without matching set accessors
+     * - Enum members
+     * - `Object.defineProperty` assignments with `writable: false` or no setter
+     * - Unions and intersections of the above
+     */
+    isReadonlySymbol(symbol: Symbol): boolean {
         return this.client.apiRequest("isReadonlySymbol", {
             snapshot: this.snapshotId,
             project: this.project.id,
