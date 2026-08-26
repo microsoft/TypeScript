@@ -7442,6 +7442,7 @@ func (c *Checker) checkGrammarUseStrictDirective(node *ast.Node) {
 		if statement == node {
 			return
 		}
+		// Type-only declarations are absent from the emitted JavaScript and do not end its directive prologue.
 		if !ast.IsPrologueDirective(statement) && statement.Kind != ast.KindInterfaceDeclaration && statement.Kind != ast.KindTypeAliasDeclaration {
 			c.grammarErrorOnNode(node, diagnostics.A_use_strict_directive_must_be_at_the_top_of_a_function_body)
 			return
