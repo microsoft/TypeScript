@@ -2988,6 +2988,9 @@ func (c *Checker) checkAccessorDeclaration(node *ast.Node) {
 }
 
 func (c *Checker) checkTypeReferenceNode(node *ast.Node) {
+	if isConstTypeReference(node) && ast.IsAssertionExpression(node.Parent) {
+		return
+	}
 	c.checkGrammarTypeArguments(node, node.TypeArgumentList())
 	if ast.IsTypeReferenceNode(node) && node.Flags&ast.NodeFlagsJSDoc == 0 {
 		data := node.AsTypeReferenceNode()
