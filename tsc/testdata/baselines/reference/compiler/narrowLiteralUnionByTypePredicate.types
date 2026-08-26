@@ -23,3 +23,34 @@ if (isCandidate(source)) {
 >source : "b" | "d" | 1 | 3
 }
 
+enum E {
+>E : E
+
+    A = "a",
+>A : E.A
+>"a" : "a"
+
+    B = "b",
+>B : E.B
+>"b" : "b"
+}
+
+declare const enumSource: "a" | "b";
+>enumSource : "a" | "b"
+
+declare function isEnumA(value: "a" | "b"): value is E.A;
+>isEnumA : (value: "a" | "b") => value is E.A
+>value : "a" | "b"
+>E : any
+
+if (isEnumA(enumSource)) {
+>isEnumA(enumSource) : boolean
+>isEnumA : (value: "a" | "b") => value is E.A
+>enumSource : "a" | "b"
+
+    const enumA: E.A = enumSource;
+>enumA : E.A
+>E : any
+>enumSource : E.A
+}
+

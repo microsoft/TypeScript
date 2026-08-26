@@ -927,6 +927,9 @@ func (c *Checker) getNarrowedTypeWorker(t *Type, candidate *Type, assumeTrue boo
 				nLiteralFlags := n.flags & TypeFlagsLiteral
 				if tLiteralFlags != 0 && tLiteralFlags == nLiteralFlags && !(t.flags&TypeFlagsEnumLiteral != 0 && n.flags&TypeFlagsEnumLiteral != 0) {
 					if t.AsLiteralType().value == n.AsLiteralType().value {
+						if n.flags&TypeFlagsEnumLiteral != 0 {
+							return n
+						}
 						return t
 					}
 					return c.neverType

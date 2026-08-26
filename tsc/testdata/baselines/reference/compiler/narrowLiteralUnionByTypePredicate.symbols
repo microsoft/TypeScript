@@ -26,3 +26,34 @@ if (isCandidate(source)) {
 >source : Symbol(source, Decl(narrowLiteralUnionByTypePredicate.ts, 3, 13))
 }
 
+enum E {
+>E : Symbol(E, Decl(narrowLiteralUnionByTypePredicate.ts, 8, 1))
+
+    A = "a",
+>A : Symbol(E.A, Decl(narrowLiteralUnionByTypePredicate.ts, 10, 8))
+
+    B = "b",
+>B : Symbol(E.B, Decl(narrowLiteralUnionByTypePredicate.ts, 11, 12))
+}
+
+declare const enumSource: "a" | "b";
+>enumSource : Symbol(enumSource, Decl(narrowLiteralUnionByTypePredicate.ts, 15, 13))
+
+declare function isEnumA(value: "a" | "b"): value is E.A;
+>isEnumA : Symbol(isEnumA, Decl(narrowLiteralUnionByTypePredicate.ts, 15, 36))
+>value : Symbol(value, Decl(narrowLiteralUnionByTypePredicate.ts, 16, 25))
+>value : Symbol(value, Decl(narrowLiteralUnionByTypePredicate.ts, 16, 25))
+>E : Symbol(E, Decl(narrowLiteralUnionByTypePredicate.ts, 8, 1))
+>A : Symbol(E.A, Decl(narrowLiteralUnionByTypePredicate.ts, 10, 8))
+
+if (isEnumA(enumSource)) {
+>isEnumA : Symbol(isEnumA, Decl(narrowLiteralUnionByTypePredicate.ts, 15, 36))
+>enumSource : Symbol(enumSource, Decl(narrowLiteralUnionByTypePredicate.ts, 15, 13))
+
+    const enumA: E.A = enumSource;
+>enumA : Symbol(enumA, Decl(narrowLiteralUnionByTypePredicate.ts, 19, 9))
+>E : Symbol(E, Decl(narrowLiteralUnionByTypePredicate.ts, 8, 1))
+>A : Symbol(E.A, Decl(narrowLiteralUnionByTypePredicate.ts, 10, 8))
+>enumSource : Symbol(enumSource, Decl(narrowLiteralUnionByTypePredicate.ts, 15, 13))
+}
+
