@@ -2068,7 +2068,7 @@ export class Program implements FormatDiagnosticsHost {
             function* (path: Path): Generator<ProtocolRequest, SourceFileMetadata | undefined, ProtocolResponse["result"]> {
                 let metadata = owner.sourceFileMetadataCache.get(path);
                 if (metadata === undefined) {
-                    metadata = owner.fetchSourceFileMetadata(path);
+                    metadata = yield* owner.fetchSourceFileMetadata.gen(path);
                     owner.sourceFileMetadataCache.set(path, metadata);
                 }
                 return metadata;
@@ -3027,7 +3027,7 @@ export class Checker {
                 return kind === SignatureKind.Call ? type.getCallSignatures() : type.getConstructSignatures();
             },
             function* (type: Type, kind: SignatureKind): Generator<ProtocolRequest, readonly Signature[], ProtocolResponse["result"]> {
-                return kind === SignatureKind.Call ? type.getCallSignatures() : type.getConstructSignatures();
+                return kind === SignatureKind.Call ? (yield* type.getCallSignatures.gen()) : (yield* type.getConstructSignatures.gen());
             },
         );
     }
@@ -4882,7 +4882,7 @@ export class Symbol {
                 return owner.membersCache ??= owner.fetchSymbolTable("getMembersOfSymbol");
             },
             function* (): Generator<ProtocolRequest, ReadonlyMap<__String, Symbol>, ProtocolResponse["result"]> {
-                return owner.membersCache ??= owner.fetchSymbolTable("getMembersOfSymbol");
+                return owner.membersCache ??= yield* owner.fetchSymbolTable.gen("getMembersOfSymbol");
             },
         );
     }
@@ -4903,7 +4903,7 @@ export class Symbol {
                 return owner.exportsCache ??= owner.fetchSymbolTable("getExportsOfSymbol");
             },
             function* (): Generator<ProtocolRequest, ReadonlyMap<__String, Symbol>, ProtocolResponse["result"]> {
-                return owner.exportsCache ??= owner.fetchSymbolTable("getExportsOfSymbol");
+                return owner.exportsCache ??= yield* owner.fetchSymbolTable.gen("getExportsOfSymbol");
             },
         );
     }
@@ -5497,7 +5497,7 @@ class TypeObject implements Type {
                 return owner.objectRegistry.fetchTypes(owner, "getTypeParametersOfType", owner.typeParameters) as readonly TypeParameter[];
             },
             function* (): Generator<ProtocolRequest, readonly TypeParameter[], ProtocolResponse["result"]> {
-                return owner.objectRegistry.fetchTypes(owner, "getTypeParametersOfType", owner.typeParameters) as readonly TypeParameter[];
+                return (yield* owner.objectRegistry.fetchTypes.gen(owner, "getTypeParametersOfType", owner.typeParameters)) as readonly TypeParameter[];
             },
         );
     }
@@ -5514,7 +5514,7 @@ class TypeObject implements Type {
                 return owner.objectRegistry.fetchTypes(owner, "getOuterTypeParametersOfType", owner.outerTypeParameters) as readonly TypeParameter[];
             },
             function* (): Generator<ProtocolRequest, readonly TypeParameter[], ProtocolResponse["result"]> {
-                return owner.objectRegistry.fetchTypes(owner, "getOuterTypeParametersOfType", owner.outerTypeParameters) as readonly TypeParameter[];
+                return (yield* owner.objectRegistry.fetchTypes.gen(owner, "getOuterTypeParametersOfType", owner.outerTypeParameters)) as readonly TypeParameter[];
             },
         );
     }
@@ -5531,7 +5531,7 @@ class TypeObject implements Type {
                 return owner.objectRegistry.fetchTypes(owner, "getLocalTypeParametersOfType", owner.localTypeParameters) as readonly TypeParameter[];
             },
             function* (): Generator<ProtocolRequest, readonly TypeParameter[], ProtocolResponse["result"]> {
-                return owner.objectRegistry.fetchTypes(owner, "getLocalTypeParametersOfType", owner.localTypeParameters) as readonly TypeParameter[];
+                return (yield* owner.objectRegistry.fetchTypes.gen(owner, "getLocalTypeParametersOfType", owner.localTypeParameters)) as readonly TypeParameter[];
             },
         );
     }
@@ -5968,7 +5968,7 @@ export class Signature {
                 return owner.objectRegistry.fetchTypes(owner, "getTypeParametersOfSignature", owner.typeParameters) as readonly TypeParameter[];
             },
             function* (): Generator<ProtocolRequest, readonly TypeParameter[], ProtocolResponse["result"]> {
-                return owner.objectRegistry.fetchTypes(owner, "getTypeParametersOfSignature", owner.typeParameters) as readonly TypeParameter[];
+                return (yield* owner.objectRegistry.fetchTypes.gen(owner, "getTypeParametersOfSignature", owner.typeParameters)) as readonly TypeParameter[];
             },
         );
     }

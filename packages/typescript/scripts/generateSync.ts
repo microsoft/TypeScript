@@ -327,10 +327,10 @@ function transformAsyncSource(source: string, fileName: string, attachGenerators
         if (
             ts.isCallExpression(node) &&
             !ts.isAwaitExpression(node.parent) &&
-            isGeneratorCall(node) &&
-            ts.isReturnStatement(node.parent)
+            isGeneratorCall(node)
         ) {
-            editsForNode(node, `yield* ${getGeneratorCallText(node)}`, offset);
+            const generatorCall = `yield* ${getGeneratorCallText(node)}`;
+            editsForNode(node, ts.isReturnStatement(node.parent) ? generatorCall : `(${generatorCall})`, offset);
             return true;
         }
         if (ts.isTypeReferenceNode(node) && isPromiseType(node)) {

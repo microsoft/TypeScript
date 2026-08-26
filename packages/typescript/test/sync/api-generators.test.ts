@@ -463,6 +463,22 @@ describe("API - generator batching", () => {
         }
     });
 
+    test("yields source file metadata requests on cache misses", () => {
+        const api = spawnAPI();
+        try {
+            using snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const program = snapshot.getProject("/tsconfig.json")!.program;
+            const sourceFile = program.getSourceFile("/src/index.ts")!;
+            const state = program.getSourceFileMetadataByPath.gen(sourceFile.path).next();
+
+            if (state.done) assert.fail("Expected getSourceFileMetadataByPath.gen() to yield a request");
+            assert.equal(state.value.method, "getSourceFileMetadata");
+        }
+        finally {
+            api.close();
+        }
+    });
+
     test("uses generators attached to sync API methods", () => {
         const api = spawnAPI();
         try {
