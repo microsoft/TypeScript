@@ -17,9 +17,10 @@ functionWithUseStrictAndSimpleParameterList_es2016.ts(36,5): error TS1347: 'use 
 functionWithUseStrictAndSimpleParameterList_es2016.ts(39,23): error TS1346: This parameter is not allowed with 'use strict' directive.
 functionWithUseStrictAndSimpleParameterList_es2016.ts(39,31): error TS1346: This parameter is not allowed with 'use strict' directive.
 functionWithUseStrictAndSimpleParameterList_es2016.ts(41,5): error TS1347: 'use strict' directive cannot be used with non-simple parameter list.
+functionWithUseStrictAndSimpleParameterList_es2016.ts(47,5): error TS18064: A 'use strict' directive must be at the top of a function body.
 
 
-==== functionWithUseStrictAndSimpleParameterList_es2016.ts (19 errors) ====
+==== functionWithUseStrictAndSimpleParameterList_es2016.ts (20 errors) ====
     function a(a = 10) {
                ~~~~~~
 !!! error TS1346: This parameter is not allowed with 'use strict' directive.
@@ -127,5 +128,7 @@ functionWithUseStrictAndSimpleParameterList_es2016.ts(41,5): error TS1347: 'use 
         "foo";
         const c = 1;
         "use strict";
+        ~~~~~~~~~~~~~
+!!! error TS18064: A 'use strict' directive must be at the top of a function body.
     }
     

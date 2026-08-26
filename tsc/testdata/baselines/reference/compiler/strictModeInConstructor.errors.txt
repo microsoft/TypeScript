@@ -1,8 +1,12 @@
+strictModeInConstructor.ts(20,9): error TS18064: A 'use strict' directive must be at the top of a function body.
 strictModeInConstructor.ts(27,5): error TS2376: A 'super' call must be the first statement in the constructor to refer to 'super' or 'this' when a derived class contains initialized properties, parameter properties, or private identifiers.
 strictModeInConstructor.ts(29,17): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
+strictModeInConstructor.ts(31,9): error TS18064: A 'use strict' directive must be at the top of a function body.
+strictModeInConstructor.ts(49,9): error TS18064: A 'use strict' directive must be at the top of a function body.
+strictModeInConstructor.ts(59,9): error TS18064: A 'use strict' directive must be at the top of a function body.
 
 
-==== strictModeInConstructor.ts (2 errors) ====
+==== strictModeInConstructor.ts (6 errors) ====
     class A {
     }
     
@@ -23,6 +27,8 @@ strictModeInConstructor.ts(29,17): error TS17009: 'super' must be called before 
         constructor () {
             super();            // No error
             "use strict";
+            ~~~~~~~~~~~~~
+!!! error TS18064: A 'use strict' directive must be at the top of a function body.
         }
     }
     
@@ -38,6 +44,8 @@ strictModeInConstructor.ts(29,17): error TS17009: 'super' must be called before 
 !!! error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
             super();
             "use strict";
+            ~~~~~~~~~~~~~
+!!! error TS18064: A 'use strict' directive must be at the top of a function body.
         }
     }
     
@@ -56,6 +64,8 @@ strictModeInConstructor.ts(29,17): error TS17009: 'super' must be called before 
         constructor () {
             super();            // No error
             "use strict";
+            ~~~~~~~~~~~~~
+!!! error TS18064: A 'use strict' directive must be at the top of a function body.
         }
     }
     
@@ -66,5 +76,7 @@ strictModeInConstructor.ts(29,17): error TS17009: 'super' must be called before 
             var x = 1; // no Error
             super();
             "use strict";
+            ~~~~~~~~~~~~~
+!!! error TS18064: A 'use strict' directive must be at the top of a function body.
         }
     }
