@@ -113,6 +113,10 @@ func (c *Checker) GetImmediateAliasedSymbol(symbol *ast.Symbol) *ast.Symbol {
 	return c.getImmediateAliasedSymbol(symbol)
 }
 
+func (c *Checker) GetTargetSymbol(symbol *ast.Symbol) *ast.Symbol {
+	return c.getTargetSymbol(symbol)
+}
+
 func (c *Checker) GetTypeOnlyAliasDeclaration(symbol *ast.Symbol) *ast.Node {
 	return c.getTypeOnlyAliasDeclaration(symbol)
 }
