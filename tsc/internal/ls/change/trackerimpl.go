@@ -170,7 +170,6 @@ func leadingIndentation(text string) string {
 	return text[:end]
 }
 
-/** Note: this may mutate `nodeIn`. */
 func (t *Tracker) getFormattedTextOfNode(nodeIn *ast.Node, targetSourceFile *ast.SourceFile, sourceFile *ast.SourceFile, pos int, options NodeOptions) string {
 	text, sourceFileLike := t.getNonformattedText(nodeIn, targetSourceFile)
 	// !!! if (validate) validate(node, text);
