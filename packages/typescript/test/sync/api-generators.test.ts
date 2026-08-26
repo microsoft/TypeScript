@@ -431,6 +431,38 @@ describe("API - generator batching", () => {
         }
     });
 
+    test("deduplicates only initialize requests within a batch round", () => {
+        const api = spawnAPI();
+        const batchRequests = api.batchRequests;
+        const requestBatches: (readonly APIRequest[])[] = [];
+        Object.defineProperty(api, "batchRequests", {
+            configurable: true,
+            value(requests: readonly APIRequest[]) {
+                requestBatches.push(requests);
+                return batchRequests(requests);
+            },
+        });
+
+        try {
+            const [firstCommandLine, secondCommandLine, config] = api.batch(
+                api.parseCommandLine.gen(["--strict"]),
+                api.parseCommandLine.gen(["--strict"]),
+                api.readConfigFile.gen("/tsconfig.json"),
+            );
+
+            assert.deepEqual(requestBatches.map(requests => requests.map(request => request.method)), [
+                ["initialize"],
+                ["parseCommandLine", "parseCommandLine", "readConfigFile"],
+            ]);
+            assert.equal(firstCommandLine.options.strict, true);
+            assert.equal(secondCommandLine.options.strict, true);
+            assert.deepEqual(config.config, {});
+        }
+        finally {
+            api.close();
+        }
+    });
+
     test("uses generators attached to sync API methods", () => {
         const api = spawnAPI();
         try {

@@ -47,13 +47,29 @@ export function batchGenerators<T extends readonly APIRequestGenerator[]>(
         }
     }
     while (completedIndices.size < requestGenerators.length) {
-        const response = api.batchRequests(requestObjects.filter((r): r is APIRequest => r !== undefined));
-        let responseIndex = 0;
+        const requests: APIRequest[] = [];
+        const responseIndices: (number | undefined)[] = [];
+        const responseIndexByDeduplicationKey = new Map<string, number>();
+        for (let i = 0; i < requestGenerators.length; i++) {
+            if (completedIndices.has(i)) continue;
+
+            const request = requestObjects[i]!;
+            const deduplicationKey = getRequestDeduplicationKey(request);
+            let responseIndex = deduplicationKey === undefined ? undefined : responseIndexByDeduplicationKey.get(deduplicationKey);
+            if (responseIndex === undefined) {
+                responseIndex = requests.length;
+                requests.push(request);
+                if (deduplicationKey !== undefined) responseIndexByDeduplicationKey.set(deduplicationKey, responseIndex);
+            }
+            responseIndices[i] = responseIndex;
+        }
+
+        const response = api.batchRequests(requests);
         for (let i = 0; i < requestGenerators.length; i++) {
             if (completedIndices.has(i)) continue;
 
             const requestGenerator = requestGenerators[i];
-            const result = response.responses[responseIndex++];
+            const result = response.responses[responseIndices[i]!];
             const state = result.error
                 ? requestGenerator.throw(new Error(result.error))
                 : requestGenerator.next(result.result);
@@ -66,4 +82,13 @@ export function batchGenerators<T extends readonly APIRequestGenerator[]>(
         }
     }
     return results as any[] as ExecutedGeneratorsResults<T>;
+}
+
+function getRequestDeduplicationKey(request: APIRequest): string | undefined {
+    switch (request.method) {
+        case "initialize":
+            return request.method;
+        default:
+            return undefined;
+    }
 }
