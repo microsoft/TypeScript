@@ -2680,7 +2680,8 @@ func (b *NodeBuilderImpl) createTypeNodesFromResolvedType(resolvedType *Structur
 				continue
 			}
 			if getDeclarationModifierFlagsFromSymbol(propertySymbol)&(ast.ModifierFlagsPrivate|ast.ModifierFlagsProtected) != 0 {
-				b.ctx.tracker.ReportPrivateInBaseOfClassExpression(propertySymbol.Name)
+				// Unique-symbol names use the "\xFE" sentinel; diagnostics must show the escaped "__" form.
+				b.ctx.tracker.ReportPrivateInBaseOfClassExpression(ast.EscapeInternalSymbolName(propertySymbol.Name))
 			}
 			if IsPrivateIdentifierSymbol(propertySymbol) {
 				b.ctx.tracker.ReportPrivateInBaseOfClassExpression(ast.SymbolName(propertySymbol))
