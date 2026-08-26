@@ -1,0 +1,54 @@
+//// [tests/cases/compiler/dependentContextualInferenceCircular.ts] ////
+
+=== dependentContextualInferenceCircular.ts ===
+// GH #49618
+declare const f:
+>f : <T extends (v: ReturnType<T>) => unknown>(t: T) => ReturnType<T>
+
+  <T extends (v: ReturnType<T>) => unknown>(t: T) => ReturnType<T>
+>v : ReturnType<T>
+>t : T
+
+const x = f(x => ({ foo: 0 }))
+>x : { foo: number; }
+>f(x => ({ foo: 0 })) : { foo: number; }
+>f : <T extends (v: ReturnType<T>) => unknown>(t: T) => ReturnType<T>
+>x => ({ foo: 0 }) : (x: { foo: number; }) => { foo: number; }
+>x : { foo: number; }
+>({ foo: 0 }) : { foo: number; }
+>{ foo: 0 } : { foo: number; }
+>foo : number
+>0 : 0
+
+const lol = f(lol => ({ get lol() { return lol } }))
+>lol : { readonly lol: { readonly lol: any; }; }
+>f(lol => ({ get lol() { return lol } })) : { readonly lol: { readonly lol: any; }; }
+>f : <T extends (v: ReturnType<T>) => unknown>(t: T) => ReturnType<T>
+>lol => ({ get lol() { return lol } }) : (lol: { readonly lol: any; }) => { readonly lol: { readonly lol: any; }; }
+>lol : { readonly lol: any; }
+>({ get lol() { return lol } }) : { readonly lol: { readonly lol: any; }; }
+>{ get lol() { return lol } } : { readonly lol: { readonly lol: any; }; }
+>lol : { readonly lol: any; }
+>lol : { readonly lol: any; }
+
+lol.lol.lol.lol.lol.lol.lol.lol.lol.lol
+>lol.lol.lol.lol.lol.lol.lol.lol.lol.lol : { readonly lol: any; }
+>lol.lol.lol.lol.lol.lol.lol.lol.lol : { readonly lol: any; }
+>lol.lol.lol.lol.lol.lol.lol.lol : { readonly lol: any; }
+>lol.lol.lol.lol.lol.lol.lol : { readonly lol: any; }
+>lol.lol.lol.lol.lol.lol : { readonly lol: any; }
+>lol.lol.lol.lol.lol : { readonly lol: any; }
+>lol.lol.lol.lol : { readonly lol: any; }
+>lol.lol.lol : { readonly lol: any; }
+>lol.lol : { readonly lol: any; }
+>lol : { readonly lol: { readonly lol: any; }; }
+>lol : { readonly lol: any; }
+>lol : { readonly lol: any; }
+>lol : { readonly lol: any; }
+>lol : { readonly lol: any; }
+>lol : { readonly lol: any; }
+>lol : { readonly lol: any; }
+>lol : { readonly lol: any; }
+>lol : { readonly lol: any; }
+>lol : { readonly lol: any; }
+
