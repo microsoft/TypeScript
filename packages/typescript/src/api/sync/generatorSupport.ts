@@ -5,20 +5,13 @@ import type {
 } from "../proto.ts";
 import type { API } from "./api.ts";
 
-export function withGenerator<Sync extends (...args: any[]) => any, Gen extends (...args: any[]) => APIRequestGenerator>(
-    sync: Sync,
-    gen: Gen,
-): Sync & { readonly gen: Gen; } {
-    return Object.assign(sync, { gen });
-}
-
 export function cacheGeneratorMethod<Sync extends (...args: any[]) => any, Gen extends (...args: any[]) => APIRequestGenerator>(
     owner: object,
     name: PropertyKey,
     sync: Sync,
     gen: Gen,
 ): Sync & { readonly gen: Gen; } {
-    const method = withGenerator(sync, gen);
+    const method = Object.assign(sync, { gen });
     Object.defineProperty(owner, name, { configurable: true, value: method });
     return method;
 }

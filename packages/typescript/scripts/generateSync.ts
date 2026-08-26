@@ -13,9 +13,9 @@
  *   // @sync: <code>                  — replace this line with <code> (preserving indent)
  *
  * AST-based transforms (applied after directives using the TypeScript compiler API):
- *   - Remove `async` modifier from function/method declarations
- *   - Remove `await` from await expressions (replace with operand)
- *   - Unwrap `Promise<T>` → `T` in type references
+ *   - Generate synchronous implementations from async methods
+ *   - Attach generator implementations as each synchronous method's `.gen` property
+ *   - Unwrap `Promise<T>` → `T` in synchronous type references
  *
  * Usage:
  *   node --experimental-strip-types --no-warnings generateSync.ts
@@ -58,7 +58,6 @@ function generateSyncFile(
     srcPath: string,
     destPath: string,
     transform: SourceTransform,
-    includeSyncOnly: boolean = true,
 ): string {
     const source = readFileSync(srcPath, "utf-8");
 
@@ -66,7 +65,7 @@ function generateSyncFile(
     const normalized = source.replace(/\r/g, "");
 
     // Phase 1: Process sync directives (text-based, operates on comments/lines)
-    const afterDirectives = processDirectives(normalized.split("\n"), includeSyncOnly).join("\n");
+    const afterDirectives = processDirectives(normalized.split("\n")).join("\n");
 
     // Phase 2: AST-based async→sync transforms
     const fileName = destPath.split("/").pop()!;
@@ -86,7 +85,7 @@ function generateSyncFile(
 
 // ── Directive processing ─────────────────────────────────────────
 
-function processDirectives(lines: string[], includeSyncOnly: boolean): string[] {
+function processDirectives(lines: string[]): string[] {
     const output: string[] = [];
     let skipBlock = false;
     let syncOnlyBlock = false;
@@ -116,7 +115,6 @@ function processDirectives(lines: string[], includeSyncOnly: boolean): string[] 
         }
 
         if (syncOnlyBlock) {
-            if (!includeSyncOnly) continue;
             const indent = line.match(/^(\s*)/)![1];
             const rest = line.slice(indent.length);
             if (rest.startsWith("// ")) {

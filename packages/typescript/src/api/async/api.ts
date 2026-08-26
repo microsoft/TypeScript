@@ -225,10 +225,8 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
     private activeSnapshots: Set<Snapshot> = new Set();
     private latestSnapshot: Snapshot | undefined;
     readonly internal: InternalAPI;
-    private options: APIOptions | LSPConnectionOptions = {};
 
     constructor(options: APIOptions | LSPConnectionOptions = {}) {
-        this.options = options;
         this.client = new Client(options);
         this.sourceFileCache = new SourceFileCache();
         this.internal = new InternalAPI(this.client, () => this.ensureInitialized()); // @sync: this.internal = new InternalAPI(this.client, this.ensureInitialized);
@@ -343,10 +341,6 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         const requestParams = toUpdateSnapshotRequest(params);
         const data = await this.client.apiRequest("updateSnapshot", requestParams);
 
-        return this.createSnapshot(data);
-    }
-
-    private createSnapshot(data: UpdateSnapshotResponse): Snapshot {
         // Retain cached source files from previous snapshot for unchanged files
         if (this.latestSnapshot) {
             this.sourceFileCache.retainForSnapshot(data.snapshot, this.latestSnapshot.id, data.changes);
