@@ -19,8 +19,8 @@
         "check:format": "hereby check:format",
         "generate": "hereby generate",
         "tidy": "hereby tidy",
-        "extension:build": "npm run -w vscode-typescript build",
-        "extension:watch": "npm run -w vscode-typescript watch",
+        "extension:build": "npm run -w native-preview build",
+        "extension:watch": "npm run -w native-preview watch",
         "setup-hooks": "node tools/scripts/link-hooks.mjs"
     },
     "devDependencies": {

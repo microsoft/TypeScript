@@ -15,6 +15,7 @@ import {
     getSynthesizedDeepClone,
     InternalSymbolName,
     isCallExpression,
+    isExpressionStatement,
     isFunctionDeclaration,
     isIdentifier,
     isImportDeclaration,
@@ -54,6 +55,7 @@ import {
 import { visitEachChild } from "@typescript/typescript/unstable/ast/visitor";
 import { createVirtualFileSystem } from "@typescript/typescript/unstable/fs";
 import type { FileSystem } from "@typescript/typescript/unstable/fs";
+import type { APIRequest } from "@typescript/typescript/unstable/proto";
 import {
     API,
     type BigIntLiteralType,
@@ -289,6 +291,12 @@ describe("API", () => {
             });
             assert.match(moduleOutput.outputText, /exports\.x = 1/);
 
+            const isolatedDeclarationModuleOutput = api.transpileModule("export const x: number = 1;", {
+                compilerOptions: { declaration: true, isolatedDeclarations: true },
+                reportDiagnostics: true,
+            });
+            assert.equal(isolatedDeclarationModuleOutput.diagnostics?.length ?? 0, 0);
+
             const moduleFileOutput = api.transpileModuleFromFile("/input.ts", {
                 compilerOptions: { module: ModuleKind.CommonJS },
             });
@@ -296,6 +304,11 @@ describe("API", () => {
 
             const declarationOutput = api.transpileDeclaration("export const x: number = 1;");
             assert.equal(declarationOutput.outputText, "export declare const x: number;\n");
+
+            const windowsDeclarationOutput = api.transpileDeclaration("export const x: number = 1;", {
+                fileName: "C:/Users/me/project/input.ts",
+            });
+            assert.equal(windowsDeclarationOutput.outputText, "export declare const x: number;\n");
 
             const declarationFileOutput = api.transpileDeclarationFromFile("/input.ts");
             assert.equal(declarationFileOutput.outputText, "export declare const x: number;\n");
@@ -381,6 +394,55 @@ describe("API", () => {
             const config = api.parseConfigFile("/tsconfig.json");
             assert.equal(config.typeAcquisition?.enable, true);
             assert.deepEqual(config.typeAcquisition?.include, ["jquery"]);
+        }
+        finally {
+            api.close();
+        }
+    });
+});
+
+describe("API - batchRequests", () => {
+    test("returns results in request order", () => {
+        const api = spawnAPI();
+        try {
+            const { responses } = api.batchRequests([
+                { method: "parseCommandLine", params: { commandLine: ["--strict"] } },
+                { method: "readConfigFile", params: { file: "/tsconfig.json" } },
+            ]);
+
+            assert.strictEqual(responses.length, 2);
+            const commandLine = responses[0];
+            assert.strictEqual(commandLine.method, "parseCommandLine");
+            assert.strictEqual(commandLine.error, undefined);
+            assert.equal(commandLine.result.options.strict, true);
+
+            const config = responses[1];
+            assert.strictEqual(config.method, "readConfigFile");
+            assert.strictEqual(config.error, undefined);
+            assert.deepStrictEqual(config.result.config, {});
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("returns an item error without dropping a sibling result", () => {
+        const api = spawnAPI();
+        try {
+            const { responses } = api.batchRequests([
+                { method: "unknown", params: null } as unknown as APIRequest,
+                { method: "parseCommandLine", params: { commandLine: ["--strict"] } },
+            ]);
+
+            assert.equal(responses.length, 2);
+            assert.equal(responses[0].method, "unknown");
+            assert.match(responses[0].error!, /unknown API method/);
+            assert.equal(responses[0].result, null);
+
+            const commandLine = responses[1];
+            assert.strictEqual(commandLine.method, "parseCommandLine");
+            assert.strictEqual(commandLine.error, undefined);
+            assert.strictEqual(commandLine.result.options.strict, true);
         }
         finally {
             api.close();
@@ -1140,6 +1202,29 @@ describe("SourceFile", () => {
                 assert.ok(!seen.has(key), `Node ${key} was visited more than once`);
                 seen.add(key);
             }
+        }
+        finally {
+            api.close();
+        }
+    });
+});
+
+describe("NodeArray", () => {
+    test("hasTrailingComma", () => {
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/main.ts": `declare function foo(...args: any): void;\nfoo("a", "b",);\nfoo("a", "b");`,
+        });
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const sourceFile = project.program.getSourceFile("/src/main.ts");
+            assert.ok(sourceFile);
+            const statements = sourceFile.statements.filter(isExpressionStatement);
+            assert.ok(isCallExpression(statements[0].expression));
+            assert.equal(statements[0].expression.arguments.hasTrailingComma, true);
+            assert.ok(isCallExpression(statements[1].expression));
+            assert.equal(statements[1].expression.arguments.hasTrailingComma, false);
         }
         finally {
             api.close();
@@ -5748,7 +5833,10 @@ describe("Program - diagnostics", () => {
             const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
             const project = snapshot.getProject("/tsconfig.json")!;
             const diags = project.program.getSyntacticDiagnostics("/src/index.ts");
-            assert.deepEqual(diags, [{
+            assert.deepEqual(diags[0].startPosition, { line: 0, character: 9 });
+            assert.deepEqual(diags[0].endPosition, { line: 0, character: 10 });
+            assert.deepEqual(diags[0].sourceLines, [{ line: 0, text: source }]);
+            assert.deepEqual(withoutFormattingContext(diags), [{
                 fileName: "/src/index.ts",
                 ...rangeOf(source, "="),
                 code: 1110,
@@ -5773,7 +5861,7 @@ describe("Program - diagnostics", () => {
             const diags = project.program.getSemanticDiagnostics("/src/index.ts");
             const declRange = rangeOf(source, "callback", 0);
             const assignRange = rangeOf(source, "callback", 1);
-            assert.deepEqual(diags, [{
+            assert.deepEqual(withoutFormattingContext(diags), [{
                 fileName: "/src/index.ts",
                 ...assignRange,
                 code: 2322,
@@ -5817,7 +5905,7 @@ describe("Program - diagnostics", () => {
             const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
             const project = snapshot.getProject("/tsconfig.json")!;
             const diags = project.program.getSuggestionDiagnostics("/src/index.ts");
-            assert.deepEqual(diags, [{
+            assert.deepEqual(withoutFormattingContext(diags), [{
                 fileName: "/src/index.ts",
                 ...rangeOf(source, "_unused"),
                 code: 6133,
@@ -5841,7 +5929,7 @@ describe("Program - diagnostics", () => {
             const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
             const project = snapshot.getProject("/tsconfig.json")!;
             const diags = project.program.getConfigFileParsingDiagnostics();
-            assert.deepEqual(diags, [{
+            assert.deepEqual(withoutFormattingContext(diags), [{
                 fileName: "/tsconfig.json",
                 ...rangeOf(config, `"invalid"`),
                 code: 6046,
@@ -5912,7 +6000,7 @@ describe("Program - diagnostics", () => {
             const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
             const project = snapshot.getProject("/tsconfig.json")!;
             const diags = project.program.getBindDiagnostics("/src/index.ts");
-            assert.deepEqual(diags, [
+            assert.deepEqual(withoutFormattingContext(diags), [
                 {
                     fileName: "/src/index.ts",
                     ...rangeOf(source, "x", 0),
@@ -5944,7 +6032,7 @@ describe("Program - diagnostics", () => {
             const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
             const project = snapshot.getProject("/tsconfig.json")!;
             const diags = project.program.getProgramDiagnostics();
-            assert.deepEqual(diags, [
+            assert.deepEqual(withoutFormattingContext(diags), [
                 {
                     fileName: "/tsconfig.json",
                     ...rangeOf(config, `"bundler"`),
@@ -6022,7 +6110,7 @@ describe("Program - diagnostics", () => {
             const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
             const project = snapshot.getProject("/tsconfig.json")!;
             const diags = project.program.getSyntacticDiagnostics(["/src/a.ts", "/src/b.ts"]);
-            assert.deepEqual(diags, [
+            assert.deepEqual(withoutFormattingContext(diags), [
                 {
                     fileName: "/src/a.ts",
                     ...rangeOf(sourceA, "="),
@@ -6777,6 +6865,11 @@ function rangeOf(source: string, searchString: string, occurrence: number = 0): 
         }
     }
     return { pos: index, end: index + searchString.length };
+}
+
+function withoutFormattingContext<T>(value: T): T {
+    const formattingKeys = new Set(["startPosition", "endPosition", "sourceLines"]);
+    return JSON.parse(JSON.stringify(value, (key, item) => formattingKeys.has(key) ? undefined : item)) as T;
 }
 
 function applyTextEdits(source: string, edits: readonly TextEdit[]): string {
