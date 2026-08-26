@@ -73,10 +73,8 @@ func (c *Checker) getSymbolsInScope(location *ast.Node, meaning ast.SymbolFlags)
 				location = location.Parent
 				continue
 			}
-			isModuleAttributes := ast.IsModuleDeclaration(location) &&
-				location.AsModuleDeclaration().Attributes != nil &&
-				lastLocation == location.AsModuleDeclaration().Attributes
-			if !isModuleAttributes && canHaveLocals(location) && location.Locals() != nil && !ast.IsGlobalSourceFile(location) {
+
+			if canHaveLocals(location) && location.Locals() != nil && !ast.IsGlobalSourceFile(location) {
 				copySymbols(location.Locals(), meaning)
 			}
 
