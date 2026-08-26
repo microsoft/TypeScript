@@ -10,13 +10,11 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/astnav"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/format"
-	"github.com/microsoft/TypeScript/tsc/internal/ls/lsconv"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/lsutil"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/parser"
 	"github.com/microsoft/TypeScript/tsc/internal/printer"
 	"github.com/microsoft/TypeScript/tsc/internal/scanner"
-	"github.com/microsoft/TypeScript/tsc/internal/spanmap"
 	"github.com/microsoft/TypeScript/tsc/internal/stringutil"
 )
 
@@ -26,17 +24,9 @@ func (t *Tracker) getTextChangesFromChanges() map[string][]*lsproto.TextEdit {
 		if t.unmappableFiles.Has(sourceFile.OriginalFileName()) {
 			continue
 		}
-		// order changes by start position
-		// If the start position is the same, put the shorter range first, since an empty range (x, x) may precede (x, y) but not vice-versa.
-		slices.SortStableFunc(changesInFile, func(a, b *trackerEdit) int { return lsproto.CompareRanges(a.Range, b.Range) })
-		// verify that change intervals do not overlap, except possibly at end points.
-		for i := range len(changesInFile) - 1 {
-			if lsproto.ComparePositions(changesInFile[i].Range.End, changesInFile[i+1].Range.Start) > 0 {
-				// assert change[i].End <= change[i + 1].Start
-				panic(fmt.Sprintf("changes overlap: %v and %v", changesInFile[i].Range, changesInFile[i+1].Range))
-			}
-		}
-
+		// Edits are computed and stored in virtual coordinates but applied to the original document, and a
+		// mapper is free to reorder text, so virtual order does not imply original order. Convert first,
+		// then sort and check for overlap in the space the edits are actually applied in.
 		textChanges := core.MapNonNil(changesInFile, func(change *trackerEdit) *lsproto.TextEdit {
 			// !!! targetSourceFile
 
@@ -48,9 +38,20 @@ func (t *Tracker) getTextChangesFromChanges() map[string][]*lsproto.TextEdit {
 
 			return &lsproto.TextEdit{
 				NewText: newText,
-				Range:   change.Range,
+				Range:   t.toLSPEditRange(sourceFile, change.virtual),
 			}
 		})
+
+		// order changes by start position
+		// If the start position is the same, put the shorter range first, since an empty range (x, x) may precede (x, y) but not vice-versa.
+		slices.SortStableFunc(textChanges, func(a, b *lsproto.TextEdit) int { return lsproto.CompareRanges(a.Range, b.Range) })
+		// verify that change intervals do not overlap, except possibly at end points.
+		for i := range len(textChanges) - 1 {
+			if lsproto.ComparePositions(textChanges[i].Range.End, textChanges[i+1].Range.Start) > 0 {
+				// assert change[i].End <= change[i + 1].Start
+				panic(fmt.Sprintf("changes overlap: %v and %v", textChanges[i].Range, textChanges[i+1].Range))
+			}
+		}
 
 		if len(textChanges) > 0 {
 			fileName := sourceFile.OriginalFileName()
@@ -71,51 +72,30 @@ func (t *Tracker) computeNewText(change *trackerEdit, targetSourceFile *ast.Sour
 		return change.NewText
 	}
 
-	positions := lsconv.FromLSPPositionForSourceFile(t.converters, sourceFile, change.Range.Start, spanmap.FeatureAll)
-	var result string
-	found := false
-	// The original range may have multiple verbatim copies; it is safe to lose their identity only when
-	// formatting at every exact projection produces the same edit.
-	for _, mapped := range positions {
-		if !mapped.Fidelity.IsExact() {
-			continue
-		}
-		projection := mapped.Script
-		pos := int(mapped.Position)
-		formatNode := func(n *ast.Node) string {
-			return t.getFormattedTextOfNode(n, targetSourceFile, projection, pos, change.options)
-		}
+	pos := change.virtual.Pos()
+	formatNode := func(n *ast.Node) string {
+		return t.getFormattedTextOfNode(n, targetSourceFile, sourceFile, pos, change.options)
+	}
 
-		var text string
-		switch change.kind {
-		case trackerEditKindReplaceWithMultipleNodes:
-			joiner := change.options.joiner
-			if joiner == "" {
-				joiner = t.newLine
-			}
-			text = strings.Join(core.Map(change.nodes, func(n *ast.Node) string { return strings.TrimSuffix(formatNode(n), t.newLine) }), joiner)
-		case trackerEditKindReplaceWithSingleNode:
-			text = formatNode(change.Node)
-		default:
-			panic(fmt.Sprintf("change kind %d should have been handled earlier", change.kind))
+	var text string
+	switch change.kind {
+	case trackerEditKindReplaceWithMultipleNodes:
+		joiner := change.options.joiner
+		if joiner == "" {
+			joiner = t.newLine
 		}
-		// Strip initial indentation if text will be inserted in the middle of the line.
-		noIndent := text
-		if !(change.options.indentation != nil || format.GetLineStartPositionForPosition(pos, projection) == pos) {
-			noIndent = strings.TrimLeftFunc(text, unicode.IsSpace)
-		}
-		candidate := change.options.Prefix + noIndent + core.IfElse(strings.HasSuffix(noIndent, change.options.Suffix), "", change.options.Suffix)
-		if found && candidate != result {
-			t.unmappableFiles.Add(sourceFile.OriginalFileName())
-			return ""
-		}
-		result = candidate
-		found = true
+		text = strings.Join(core.Map(change.nodes, func(n *ast.Node) string { return strings.TrimSuffix(formatNode(n), t.newLine) }), joiner)
+	case trackerEditKindReplaceWithSingleNode:
+		text = formatNode(change.Node)
+	default:
+		panic(fmt.Sprintf("change kind %d should have been handled earlier", change.kind))
 	}
-	if !found {
-		t.unmappableFiles.Add(sourceFile.OriginalFileName())
-		return ""
+	// Strip initial indentation if text will be inserted in the middle of the line.
+	noIndent := text
+	if !(change.options.indentation != nil || format.GetLineStartPositionForPosition(pos, sourceFile) == pos) {
+		noIndent = strings.TrimLeftFunc(text, unicode.IsSpace)
 	}
+	result := change.options.Prefix + noIndent + core.IfElse(strings.HasSuffix(noIndent, change.options.Suffix), "", change.options.Suffix)
 	return t.reindentInsertedLines(sourceFile, change, result)
 }
 
@@ -129,18 +109,25 @@ func (t *Tracker) computeNewText(change *trackerEdit, targetSourceFile *ast.Sour
 //   - Inserting at the very start of a line leaves the existing text indented but puts the inserted text at
 //     column zero, so the indentation is emitted before the text.
 //
-// This works from the original text and the edit's original range, so it holds for a content-mapped file
-// whose virtual copy is indented differently from the document the edit is applied to, and it produces the
-// same result for every projection. Edits carrying an explicit indentation option are left alone.
+// The indentation is read from the original text at the edit's original position, so it holds for a
+// content-mapped file whose virtual copy is indented differently from the document the edit is applied to.
+// Edits carrying an explicit indentation option are left alone.
 func (t *Tracker) reindentInsertedLines(sourceFile *ast.SourceFile, change *trackerEdit, text string) string {
-	if text == "" || change.Range.Start != change.Range.End || change.options.indentation != nil {
+	if text == "" || change.virtual.Pos() != change.virtual.End() || change.options.indentation != nil {
 		return text
 	}
 	if !strings.HasSuffix(text, t.newLine) {
 		return text
 	}
 	original := sourceFile.OriginalText()
-	pos := lsconv.FromLSPRangeToOriginal(t.converters, sourceFile, change.Range).Pos()
+	pos := change.virtual.Pos()
+	if spans := sourceFile.SpanMap(); spans != nil {
+		mapped, fidelity := spans.VirtualToOriginalPosition(core.TextPos(pos))
+		if !fidelity.IsExact() {
+			return text
+		}
+		pos = int(mapped)
+	}
 	if pos < 0 || pos > len(original) {
 		return text
 	}
@@ -215,13 +202,10 @@ func (t *Tracker) getNonformattedText(node *ast.Node, sourceFile *ast.SourceFile
 
 // method on the changeTracker because use of converters
 // GetAdjustedRange computes the adjusted range for a node in a source file, accounting for trivia.
-func (t *Tracker) GetAdjustedRange(sourceFile *ast.SourceFile, startNode *ast.Node, endNode *ast.Node, leadingOption LeadingTriviaOption, trailingOption TrailingTriviaOption) lsproto.Range {
-	return t.toLSPEditRange(
-		sourceFile,
-		core.NewTextRange(
-			t.getAdjustedStartPosition(sourceFile, startNode, leadingOption, false),
-			t.getAdjustedEndPosition(sourceFile, endNode, trailingOption),
-		),
+func (t *Tracker) GetAdjustedRange(sourceFile *ast.SourceFile, startNode *ast.Node, endNode *ast.Node, leadingOption LeadingTriviaOption, trailingOption TrailingTriviaOption) core.TextRange {
+	return core.NewTextRange(
+		t.getAdjustedStartPosition(sourceFile, startNode, leadingOption, false),
+		t.getAdjustedEndPosition(sourceFile, endNode, trailingOption),
 	)
 }
 
