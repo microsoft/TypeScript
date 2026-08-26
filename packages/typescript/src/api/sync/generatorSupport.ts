@@ -3,7 +3,6 @@ import type {
     APIRequest,
     APIResponse,
 } from "../proto.ts";
-import type { API } from "./api.ts";
 
 export function cacheGeneratorMethod<Sync extends (...args: any[]) => any, Gen extends (...args: any[]) => APIRequestGenerator>(
     owner: object,
@@ -23,18 +22,25 @@ export function apiRequest<Method extends keyof APIMethodInfo>(
 export function* apiRequest(method: PropertyKey, params: unknown): Generator<{ method: PropertyKey; params: unknown; }, unknown, unknown> {
     return yield { method, params };
 }
-export type APIRequestGenerator = Generator<APIRequest, any, APIResponse["result"]>;
+export type APIRequestGenerator<Return = any> = Generator<APIRequest | readonly APIRequest[], Return, any>;
 type GeneratorReturn<T> = T extends Generator<any, infer R, any> ? R : never;
 export type ExecutedGeneratorsResults<T extends readonly APIRequestGenerator[]> = {
     [K in keyof T]: GeneratorReturn<T[K]>;
 };
 
-export function batchGenerators<T extends readonly APIRequestGenerator[]>(
-    api: API<any>,
+interface GeneratorResponse {
+    result: unknown;
+    error?: string | undefined;
+}
+
+export function all<const T extends readonly APIRequestGenerator[]>(
     ...requestGenerators: T
-): ExecutedGeneratorsResults<T> {
+): Generator<APIRequest[], ExecutedGeneratorsResults<T>, readonly GeneratorResponse[]>;
+export function* all<T extends readonly APIRequestGenerator[]>(
+    ...requestGenerators: T
+): Generator<APIRequest[], ExecutedGeneratorsResults<T>, readonly GeneratorResponse[]> {
     const results: any[] = [];
-    const requestObjects: (APIRequest | undefined)[] = [];
+    const requestObjects: (APIRequest | readonly APIRequest[] | undefined)[] = [];
     const completedIndices = new Set<number>();
     for (let i = 0; i < requestGenerators.length; i++) {
         const state = requestGenerators[i].next();
@@ -48,12 +54,9 @@ export function batchGenerators<T extends readonly APIRequestGenerator[]>(
     }
     while (completedIndices.size < requestGenerators.length) {
         const requests: APIRequest[] = [];
-        const responseIndices: (number | undefined)[] = [];
+        const responseIndices: (number | readonly number[] | undefined)[] = [];
         const responseIndexByDeduplicationKey = new Map<string, number>();
-        for (let i = 0; i < requestGenerators.length; i++) {
-            if (completedIndices.has(i)) continue;
-
-            const request = requestObjects[i]!;
+        const addRequest = (request: APIRequest): number => {
             const deduplicationKey = getRequestDeduplicationKey(request);
             let responseIndex = deduplicationKey === undefined ? undefined : responseIndexByDeduplicationKey.get(deduplicationKey);
             if (responseIndex === undefined) {
@@ -61,18 +64,31 @@ export function batchGenerators<T extends readonly APIRequestGenerator[]>(
                 requests.push(request);
                 if (deduplicationKey !== undefined) responseIndexByDeduplicationKey.set(deduplicationKey, responseIndex);
             }
-            responseIndices[i] = responseIndex;
+            return responseIndex;
+        };
+        for (let i = 0; i < requestGenerators.length; i++) {
+            if (completedIndices.has(i)) continue;
+
+            const request = requestObjects[i]!;
+            responseIndices[i] = isRequestGroup(request) ? request.map(addRequest) : addRequest(request);
         }
 
-        const response = api.batchRequests(requests);
+        const responses = yield requests;
         for (let i = 0; i < requestGenerators.length; i++) {
             if (completedIndices.has(i)) continue;
 
             const requestGenerator = requestGenerators[i];
-            const result = response.responses[responseIndices[i]!];
-            const state = result.error
-                ? requestGenerator.throw(new Error(result.error))
-                : requestGenerator.next(result.result);
+            const responseIndex = responseIndices[i]!;
+            let state: IteratorResult<APIRequest | readonly APIRequest[], any>;
+            if (typeof responseIndex === "number") {
+                const result = responses[responseIndex];
+                state = result.error
+                    ? requestGenerator.throw(new Error(result.error))
+                    : requestGenerator.next(result.result);
+            }
+            else {
+                state = requestGenerator.next(responseIndex.map(index => responses[index]));
+            }
             if (state.done) {
                 results[i] = state.value;
                 completedIndices.add(i);
@@ -82,6 +98,10 @@ export function batchGenerators<T extends readonly APIRequestGenerator[]>(
         }
     }
     return results as any[] as ExecutedGeneratorsResults<T>;
+}
+
+function isRequestGroup(request: APIRequest | readonly APIRequest[]): request is readonly APIRequest[] {
+    return Array.isArray(request);
 }
 
 function getRequestDeduplicationKey(request: APIRequest): string | undefined {

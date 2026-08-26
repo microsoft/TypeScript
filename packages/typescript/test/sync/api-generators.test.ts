@@ -25,6 +25,7 @@ import type {
     APIResponse,
 } from "@typescript/typescript/unstable/proto";
 import {
+    all,
     type API,
     type ConditionalType,
     type IndexedAccessType,
@@ -370,6 +371,47 @@ function assertPublicGeneratorCoverage(owners: readonly { readonly name: string;
 }
 
 describe("API - generator batching", () => {
+    test("composes request generators with all", () => {
+        const api = spawnAPI(parityFiles);
+        const batchRequests = api.batchRequests;
+        const requestBatches: string[][] = [];
+        Object.defineProperty(api, "batchRequests", {
+            configurable: true,
+            value(requests: readonly APIRequest[]) {
+                requestBatches.push(requests.map(request => request.method));
+                return batchRequests(requests);
+            },
+        });
+        function* getStrictOption() {
+            const commandLine = yield* api.parseCommandLine.gen(["--strict"]);
+            const config = yield* api.readConfigFile.gen("/tsconfig.json");
+            const parsed = yield* api.parseJsonConfigFileContent.gen(config.config, { configFileName: "/tsconfig.json" });
+            return { strict: commandLine.options.strict, fileNames: parsed.fileNames };
+        }
+        function* getTranspiledText() {
+            const config = yield* api.readConfigFile.gen("/tsconfig.json");
+            const parsed = yield* api.parseJsonConfigFileContent.gen(config.config, { configFileName: "/tsconfig.json" });
+            const output = yield* api.transpileModule.gen("const value: string = 'ok';", { compilerOptions: parsed.options });
+            return output.outputText;
+        }
+
+        try {
+            const [[config, outputText]] = api.batch(all(getStrictOption(), getTranspiledText()));
+            assert.equal(config.strict, true);
+            assert.deepEqual([...config.fileNames].sort(), ["/src/bind.ts", "/src/index.ts", "/src/models.ts", "/src/suggestions.ts", "/src/syntax.ts"]);
+            assert.match(outputText, /const value = ['"]ok['"]/);
+            assert.deepEqual(requestBatches, [
+                ["initialize"],
+                ["parseCommandLine", "readConfigFile"],
+                ["readConfigFile", "parseJsonConfigFileContent"],
+                ["parseJsonConfigFileContent", "transpileModule"],
+            ]);
+        }
+        finally {
+            api.close();
+        }
+    });
+
     test("throws request errors into generators", () => {
         const api = spawnAPI();
         const events: string[] = [];

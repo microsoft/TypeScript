@@ -212,7 +212,8 @@ export interface TranspileOutput {
 }
 
 // @sync-only-start
-// import {batchGenerators, type ExecutedGeneratorsResults, type APIRequestGenerator} from "./generatorSupport.ts";
+// export { all } from "./generatorSupport.ts";
+// import {all, type ExecutedGeneratorsResults, type APIRequestGenerator} from "./generatorSupport.ts";
 // @sync-only-end
 
 export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHost {
@@ -256,7 +257,12 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
     // @sync-skip-block-end
     // @sync-only-start
     // batch<T extends readonly APIRequestGenerator[]>(...requestGenerators: T): ExecutedGeneratorsResults<T> {
-    //     return batchGenerators(this, ...requestGenerators);
+    //     const batches = all(...requestGenerators);
+    //     let state = batches.next();
+    //     while (!state.done) {
+    //         state = batches.next(this.batchRequests(state.value).responses);
+    //     }
+    //     return state.value;
     // }
     // @sync-only-end
 
@@ -441,7 +447,7 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
     }
 }
 
-type EnsureInitialized = () => Promise<void>; // @sync: type EnsureInitialized = (() => void) & { gen(): APIRequestGenerator; };
+type EnsureInitialized = () => Promise<void>; // @sync: type EnsureInitialized = (() => void) & { gen(): Generator<ProtocolRequest, void, ProtocolResponse["result"]>; };
 
 export class InternalAPI {
     private client: Client;

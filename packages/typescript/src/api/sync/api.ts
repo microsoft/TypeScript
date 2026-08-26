@@ -228,9 +228,10 @@ export interface TranspileOutput {
     sourceMapText?: string;
 }
 
+export { all } from "./generatorSupport.ts";
 import {
+    all,
     type APIRequestGenerator,
-    batchGenerators,
     type ExecutedGeneratorsResults,
 } from "./generatorSupport.ts";
 
@@ -300,7 +301,12 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
     }
 
     batch<T extends readonly APIRequestGenerator[]>(...requestGenerators: T): ExecutedGeneratorsResults<T> {
-        return batchGenerators(this, ...requestGenerators);
+        const batches = all(...requestGenerators);
+        let state = batches.next();
+        while (!state.done) {
+            state = batches.next(this.batchRequests(state.value).responses);
+        }
+        return state.value;
     }
 
     private get ensureInitialized(): {
@@ -766,7 +772,7 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
     }
 }
 
-type EnsureInitialized = (() => void) & { gen(): APIRequestGenerator; };
+type EnsureInitialized = (() => void) & { gen(): Generator<ProtocolRequest, void, ProtocolResponse["result"]>; };
 
 export class InternalAPI {
     private client: Client;
