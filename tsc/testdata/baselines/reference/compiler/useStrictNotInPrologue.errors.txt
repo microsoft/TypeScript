@@ -1,0 +1,66 @@
+useStrictNotInPrologue.ts(3,5): error TS18064: A 'use strict' directive must be at the top of a function body.
+useStrictNotInPrologue.ts(9,5): error TS18064: A 'use strict' directive must be at the top of a function body.
+useStrictNotInPrologue.ts(20,5): error TS18064: A 'use strict' directive must be at the top of a function body.
+useStrictNotInPrologue.ts(25,5): error TS18064: A 'use strict' directive must be at the top of a function body.
+useStrictNotInPrologue.ts(31,9): error TS18064: A 'use strict' directive must be at the top of a function body.
+useStrictNotInPrologue.ts(37,9): error TS18064: A 'use strict' directive must be at the top of a function body.
+
+
+==== useStrictNotInPrologue.ts (6 errors) ====
+    function afterStatement() {
+        console.log("not strict");
+        "use strict";
+        ~~~~~~~~~~~~~
+!!! error TS18064: A 'use strict' directive must be at the top of a function body.
+    }
+    
+    function afterDirectiveAndStatement() {
+        "use client";
+        console.log("not strict");
+        "use strict";
+        ~~~~~~~~~~~~~
+!!! error TS18064: A 'use strict' directive must be at the top of a function body.
+    }
+    
+    function validDirective() {
+        "use client";
+        "use strict";
+        console.log("strict");
+    }
+    
+    const arrow = () => {
+        console.log("not strict");
+        "use strict";
+        ~~~~~~~~~~~~~
+!!! error TS18064: A 'use strict' directive must be at the top of a function body.
+    };
+    
+    function* generator() {
+        yield;
+        "use strict";
+        ~~~~~~~~~~~~~
+!!! error TS18064: A 'use strict' directive must be at the top of a function body.
+    }
+    
+    class C {
+        method() {
+            console.log("not strict");
+            "use strict";
+            ~~~~~~~~~~~~~
+!!! error TS18064: A 'use strict' directive must be at the top of a function body.
+        }
+    }
+    
+    function nestedBlock() {
+        if (true) {
+            "use strict";
+            ~~~~~~~~~~~~~
+!!! error TS18064: A 'use strict' directive must be at the top of a function body.
+        }
+    }
+    
+    function afterTypeOnlyStatement() {
+        interface I {}
+        "use strict";
+    }
+    

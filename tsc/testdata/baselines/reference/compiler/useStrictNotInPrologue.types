@@ -1,0 +1,114 @@
+//// [tests/cases/compiler/useStrictNotInPrologue.ts] ////
+
+=== useStrictNotInPrologue.ts ===
+function afterStatement() {
+>afterStatement : () => void
+
+    console.log("not strict");
+>console.log("not strict") : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>"not strict" : "not strict"
+
+    "use strict";
+>"use strict" : "use strict"
+}
+
+function afterDirectiveAndStatement() {
+>afterDirectiveAndStatement : () => void
+
+    "use client";
+>"use client" : "use client"
+
+    console.log("not strict");
+>console.log("not strict") : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>"not strict" : "not strict"
+
+    "use strict";
+>"use strict" : "use strict"
+}
+
+function validDirective() {
+>validDirective : () => void
+
+    "use client";
+>"use client" : "use client"
+
+    "use strict";
+>"use strict" : "use strict"
+
+    console.log("strict");
+>console.log("strict") : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>"strict" : "strict"
+}
+
+const arrow = () => {
+>arrow : () => void
+>() => {    console.log("not strict");    "use strict";} : () => void
+
+    console.log("not strict");
+>console.log("not strict") : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>"not strict" : "not strict"
+
+    "use strict";
+>"use strict" : "use strict"
+
+};
+
+function* generator() {
+>generator : () => Generator<undefined, void, unknown>
+
+    yield;
+>yield : any
+
+    "use strict";
+>"use strict" : "use strict"
+}
+
+class C {
+>C : C
+
+    method() {
+>method : () => void
+
+        console.log("not strict");
+>console.log("not strict") : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>"not strict" : "not strict"
+
+        "use strict";
+>"use strict" : "use strict"
+    }
+}
+
+function nestedBlock() {
+>nestedBlock : () => void
+
+    if (true) {
+>true : true
+
+        "use strict";
+>"use strict" : "use strict"
+    }
+}
+
+function afterTypeOnlyStatement() {
+>afterTypeOnlyStatement : () => void
+
+    interface I {}
+    "use strict";
+>"use strict" : "use strict"
+}
+

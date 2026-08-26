@@ -1,0 +1,87 @@
+//// [tests/cases/compiler/useStrictNotInPrologue.ts] ////
+
+=== useStrictNotInPrologue.ts ===
+function afterStatement() {
+>afterStatement : Symbol(afterStatement, Decl(useStrictNotInPrologue.ts, 0, 0))
+
+    console.log("not strict");
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+
+    "use strict";
+}
+
+function afterDirectiveAndStatement() {
+>afterDirectiveAndStatement : Symbol(afterDirectiveAndStatement, Decl(useStrictNotInPrologue.ts, 3, 1))
+
+    "use client";
+    console.log("not strict");
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+
+    "use strict";
+}
+
+function validDirective() {
+>validDirective : Symbol(validDirective, Decl(useStrictNotInPrologue.ts, 9, 1))
+
+    "use client";
+    "use strict";
+    console.log("strict");
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+}
+
+const arrow = () => {
+>arrow : Symbol(arrow, Decl(useStrictNotInPrologue.ts, 17, 5))
+
+    console.log("not strict");
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+
+    "use strict";
+};
+
+function* generator() {
+>generator : Symbol(generator, Decl(useStrictNotInPrologue.ts, 20, 2))
+
+    yield;
+    "use strict";
+}
+
+class C {
+>C : Symbol(C, Decl(useStrictNotInPrologue.ts, 25, 1))
+
+    method() {
+>method : Symbol(C.method, Decl(useStrictNotInPrologue.ts, 27, 9))
+
+        console.log("not strict");
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+
+        "use strict";
+    }
+}
+
+function nestedBlock() {
+>nestedBlock : Symbol(nestedBlock, Decl(useStrictNotInPrologue.ts, 32, 1))
+
+    if (true) {
+        "use strict";
+    }
+}
+
+function afterTypeOnlyStatement() {
+>afterTypeOnlyStatement : Symbol(afterTypeOnlyStatement, Decl(useStrictNotInPrologue.ts, 38, 1))
+
+    interface I {}
+>I : Symbol(I, Decl(useStrictNotInPrologue.ts, 40, 35))
+
+    "use strict";
+}
+
