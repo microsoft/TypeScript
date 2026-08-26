@@ -7,6 +7,7 @@ import {
     getSynthesizedDeepClone,
     InternalSymbolName,
     isCallExpression,
+    isExpressionStatement,
     isFunctionDeclaration,
     isIdentifier,
     isImportDeclaration,
@@ -282,6 +283,12 @@ describe("API", () => {
             });
             assert.match(moduleOutput.outputText, /exports\.x = 1/);
 
+            const isolatedDeclarationModuleOutput = await api.transpileModule("export const x: number = 1;", {
+                compilerOptions: { declaration: true, isolatedDeclarations: true },
+                reportDiagnostics: true,
+            });
+            assert.equal(isolatedDeclarationModuleOutput.diagnostics?.length ?? 0, 0);
+
             const moduleFileOutput = await api.transpileModuleFromFile("/input.ts", {
                 compilerOptions: { module: ModuleKind.CommonJS },
             });
@@ -289,6 +296,11 @@ describe("API", () => {
 
             const declarationOutput = await api.transpileDeclaration("export const x: number = 1;");
             assert.equal(declarationOutput.outputText, "export declare const x: number;\n");
+
+            const windowsDeclarationOutput = await api.transpileDeclaration("export const x: number = 1;", {
+                fileName: "C:/Users/me/project/input.ts",
+            });
+            assert.equal(windowsDeclarationOutput.outputText, "export declare const x: number;\n");
 
             const declarationFileOutput = await api.transpileDeclarationFromFile("/input.ts");
             assert.equal(declarationFileOutput.outputText, "export declare const x: number;\n");
@@ -538,6 +550,48 @@ describe("Checker - getImmediateAliasedSymbol", () => {
             const aliased = await project.checker.getImmediateAliasedSymbol(aliasSymbol);
             assert.ok(aliased, "Should resolve the immediate aliased symbol");
             assert.equal(aliased.name, "foo");
+        }
+        finally {
+            await api.close();
+        }
+    });
+});
+
+describe("Checker - getTargetSymbol", () => {
+    test("gets the target symbol of instantiated symbol", async () => {
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/main.ts": `
+class Base<T> {
+    private value!: T;
+}
+class Alpha extends Base<string> {}
+class Bravo extends Base<string> {}
+
+declare function test<T>(): void;
+test<Alpha>();
+test<Bravo>();
+`,
+        });
+        try {
+            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const sourceFile = await project.program.getSourceFile("/src/main.ts");
+            assert.ok(sourceFile);
+            const nodes: Array<Node> = [];
+            sourceFile.forEachChild(node => {
+                if (isExpressionStatement(node) && isCallExpression(node.expression) && node.expression.typeArguments) {
+                    nodes.push(node.expression.typeArguments[0]);
+                }
+            });
+            const aType = await project.checker.getTypeAtLocation(nodes[0]);
+            const bType = await project.checker.getTypeAtLocation(nodes[1]);
+            const aProperty = (await project.checker.getPropertiesOfType(aType))[0];
+            const bProperty = (await project.checker.getPropertiesOfType(bType))[0];
+            assert.ok(aProperty);
+            assert.ok(bProperty);
+            assert.equal(aProperty === bProperty, false);
+            assert.equal(await project.checker.getTargetSymbol(aProperty) === await project.checker.getTargetSymbol(bProperty), true);
         }
         finally {
             await api.close();
@@ -1218,6 +1272,29 @@ describe("SourceFile", () => {
                 assert.ok(!seen.has(key), `Node ${key} was visited more than once`);
                 seen.add(key);
             }
+        }
+        finally {
+            await api.close();
+        }
+    });
+});
+
+describe("NodeArray", () => {
+    test("hasTrailingComma", async () => {
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/main.ts": `declare function foo(...args: any): void;\nfoo("a", "b",);\nfoo("a", "b");`,
+        });
+        try {
+            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const sourceFile = await project.program.getSourceFile("/src/main.ts");
+            assert.ok(sourceFile);
+            const statements = sourceFile.statements.filter(isExpressionStatement);
+            assert.ok(isCallExpression(statements[0].expression));
+            assert.equal(statements[0].expression.arguments.hasTrailingComma, true);
+            assert.ok(isCallExpression(statements[1].expression));
+            assert.equal(statements[1].expression.arguments.hasTrailingComma, false);
         }
         finally {
             await api.close();

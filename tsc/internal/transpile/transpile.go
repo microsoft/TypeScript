@@ -89,6 +89,7 @@ interface Symbol {
 //   - NoLib = true
 //   - Declaration = false
 //   - DeclarationMap = false
+//   - IsolatedDeclarations = false
 func TranspileModule(ctx context.Context, input string, options Options) *Output {
 	return transpileWorker(ctx, input, options, false /*declaration*/)
 }
@@ -161,6 +162,7 @@ func transpileWorker(ctx context.Context, input string, options Options, declara
 	} else {
 		opts.Declaration = core.TSFalse
 		opts.DeclarationMap = core.TSFalse
+		opts.IsolatedDeclarations = core.TSFalse
 	}
 
 	// When transpiling declarations, we need a lib. GetDefaultLibFileName will
@@ -203,7 +205,8 @@ func transpileWorker(ctx context.Context, input string, options Options, declara
 				CompilerOptions: opts,
 			},
 		},
-		Host: host,
+		Host:                 host,
+		SkipModuleResolution: true,
 	})
 
 	var allDiagnostics []*ast.Diagnostic
