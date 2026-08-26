@@ -1,0 +1,42 @@
+definiteAssignmentOfClosedOverVariable.ts(32,9): error TS2454: Variable 'count3' is used before being assigned.
+
+
+==== definiteAssignmentOfClosedOverVariable.ts (1 errors) ====
+    // Repro for #63981
+    
+    export {};
+    
+    let count: number;
+    
+    function makeCallback(p: string) {
+        return () => {
+            count += 1;
+            return p;
+        };
+    }
+    
+    count = 0;
+    makeCallback('x')();
+    
+    let count2: number;
+    
+    function makeCallback2(p: string) {
+        const f = () => p;
+        return () => {
+            count2 += 1;
+        };
+    }
+    
+    count2 = 0;
+    
+    let count3: number;
+    
+    function makeCallback3(p: string) {
+        return () => {
+            count3 += 1;
+            ~~~~~~
+!!! error TS2454: Variable 'count3' is used before being assigned.
+            return p;
+        };
+    }
+    
