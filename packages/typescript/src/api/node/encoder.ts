@@ -207,7 +207,7 @@ export function encodeNode(node: Node): Uint8Array {
     const extendedDataValues: number[] = [];
     const structuredWriter = new MsgpackWriter();
 
-    // We'll build an array of uint32 values for the nodes section, NODE_FIELDS per node
+    // We'll build an array of uint32 values for the nodes section, 7 per node
     const nodeValues: number[] = [];
 
     // Nil node (index 0)
