@@ -36,7 +36,7 @@ export {
     PersonDefinitions
 } from './a';
 `,
-		lsproto.CodeActionKindSourceOrganizeImports,
+		lsproto.CodeActionKindSourceOrganizeImportsTs,
 		nil,
 	)
 }
