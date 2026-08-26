@@ -69,6 +69,25 @@ func TestContentMappedParseCacheKeyReconstruction(t *testing.T) {
 	assert.DeepEqual(t, contentMappedParseCacheKeyForDuplicate(duplicate), expected)
 }
 
+func TestParseCacheBindsBeforePublishing(t *testing.T) {
+	t.Parallel()
+
+	const fileName = "/index.js"
+	fileHandle := newOverlay(fileName, "module.exports = 0;", 1, core.ScriptKindJS)
+	parseOptions := ast.SourceFileParseOptions{
+		FileName: fileName,
+		Path:     tspath.Path(fileName),
+	}
+	key := NewParseCacheKey(parseOptions, fileHandle.Hash(), fileHandle.Kind())
+	cache := NewParseCache(RefCountCacheOptions{})
+
+	file := cache.Acquire(key, fileHandle)
+	defer cache.Deref(key)
+
+	assert.Assert(t, file.IsBound())
+	assert.Assert(t, file.CommonJSModuleIndicator != nil)
+}
+
 func TestRefCountingCaches(t *testing.T) {
 	t.Parallel()
 
