@@ -1,0 +1,104 @@
+//// [tests/cases/compiler/dependentContextualInferenceAiSdk.ts] ////
+
+=== dependentContextualInferenceAiSdk.ts ===
+declare const streamText:
+>streamText : <T extends { model: string; tools: { [K in keyof T["tools"]]: { inputSchema: { "~type": unknown; }; execute: (input: T["tools"][K]["inputSchema"]["~type"]) => unknown; }; }; messages: "STUB"[]; }>(t: T) => {}
+
+  <T extends {
+    model: string,
+>model : string
+
+    tools: {
+>tools : { [K in keyof T["tools"]]: { inputSchema: { "~type": unknown; }; execute: (input: T["tools"][K]["inputSchema"]["~type"]) => unknown; }; }
+
+      [K in keyof T["tools"]]: {
+        inputSchema: { "~type": unknown },
+>inputSchema : { "~type": unknown; }
+>"~type" : unknown
+
+        execute: (input: T["tools"][K]["inputSchema"]["~type"]) => unknown
+>execute : (input: T["tools"][K]["inputSchema"]["~type"]) => unknown
+>input : T["tools"][K]["inputSchema"]["~type"]
+      }
+    },
+    messages: "STUB"[]
+>messages : "STUB"[]
+
+  }> (t: T) => {}
+>t : T
+
+declare const z: 
+>z : { object: <T extends Record<string, { "~type": unknown; }>>(t: T) => { "~type": { [K in keyof T]: T[K]["~type"]; }; }; string: () => { "~type": string; }; }
+
+  { object:
+>object : <T extends Record<string, { "~type": unknown; }>>(t: T) => { "~type": { [K in keyof T]: T[K]["~type"]; }; }
+
+      <T extends Record<string, { "~type": unknown }>>(t: T) =>
+>"~type" : unknown
+>t : T
+
+        { "~type": { [K in keyof T]: T[K]["~type"] } }
+>"~type" : { [K in keyof T]: T[K]["~type"]; }
+
+  , string: () => { "~type": string }
+>string : () => { "~type": string; }
+>"~type" : string
+  }
+
+streamText({
+>streamText({  model: "moonshotai/kimi-k3",  tools: {    getWeather: {      inputSchema: z.object({ location: z.string() }),            execute: input => {        const _check: { location: string } = input        return "whatever"      }    }  },  messages: []}) : {}
+>streamText : <T extends { model: string; tools: { [K in keyof T["tools"]]: { inputSchema: { "~type": unknown; }; execute: (input: T["tools"][K]["inputSchema"]["~type"]) => unknown; }; }; messages: "STUB"[]; }>(t: T) => {}
+>{  model: "moonshotai/kimi-k3",  tools: {    getWeather: {      inputSchema: z.object({ location: z.string() }),            execute: input => {        const _check: { location: string } = input        return "whatever"      }    }  },  messages: []} : { model: string; tools: { getWeather: { inputSchema: { "~type": { location: string; }; }; execute: (input: { location: string; }) => string; }; }; messages: never[]; }
+
+  model: "moonshotai/kimi-k3",
+>model : string
+>"moonshotai/kimi-k3" : "moonshotai/kimi-k3"
+
+  tools: {
+>tools : { getWeather: { inputSchema: { "~type": { location: string; }; }; execute: (input: { location: string; }) => string; }; }
+>{    getWeather: {      inputSchema: z.object({ location: z.string() }),            execute: input => {        const _check: { location: string } = input        return "whatever"      }    }  } : { getWeather: { inputSchema: { "~type": { location: string; }; }; execute: (input: { location: string; }) => string; }; }
+
+    getWeather: {
+>getWeather : { inputSchema: { "~type": { location: string; }; }; execute: (input: { location: string; }) => string; }
+>{      inputSchema: z.object({ location: z.string() }),            execute: input => {        const _check: { location: string } = input        return "whatever"      }    } : { inputSchema: { "~type": { location: string; }; }; execute: (input: { location: string; }) => string; }
+
+      inputSchema: z.object({ location: z.string() }),      
+>inputSchema : { "~type": { location: string; }; }
+>z.object({ location: z.string() }) : { "~type": { location: string; }; }
+>z.object : <T extends Record<string, { "~type": unknown; }>>(t: T) => { "~type": { [K in keyof T]: T[K]["~type"]; }; }
+>z : { object: <T extends Record<string, { "~type": unknown; }>>(t: T) => { "~type": { [K in keyof T]: T[K]["~type"]; }; }; string: () => { "~type": string; }; }
+>object : <T extends Record<string, { "~type": unknown; }>>(t: T) => { "~type": { [K in keyof T]: T[K]["~type"]; }; }
+>{ location: z.string() } : { location: { "~type": string; }; }
+>location : { "~type": string; }
+>z.string() : { "~type": string; }
+>z.string : () => { "~type": string; }
+>z : { object: <T extends Record<string, { "~type": unknown; }>>(t: T) => { "~type": { [K in keyof T]: T[K]["~type"]; }; }; string: () => { "~type": string; }; }
+>string : () => { "~type": string; }
+
+      execute: input => {
+>execute : (input: { location: string; }) => string
+>input => {        const _check: { location: string } = input        return "whatever"      } : (input: { location: string; }) => string
+>input : { location: string; }
+
+        const _check: { location: string } = input
+>_check : { location: string; }
+>location : string
+>input : { location: string; }
+
+        return "whatever"
+>"whatever" : "whatever"
+      }
+    }
+  },
+  messages: []
+>messages : never[]
+>[] : never[]
+
+})
+
+
+
+
+
+
+  

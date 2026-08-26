@@ -8,10 +8,10 @@ declare function foo2<T extends { [P in keyof T & string as Capitalize<P>]: V },
 >a : T
 
 export const r2 = foo2({A: "a"});
->r2 : { A: string; }
->foo2({A: "a"}) : { A: string; }
+>r2 : { A: "a"; }
+>foo2({A: "a"}) : { A: "a"; }
 >foo2 : <T extends { [P in keyof T & string as Capitalize<P>]: V; }, V extends string>(a: T) => T
->{A: "a"} : { A: string; }
->A : string
+>{A: "a"} : { A: "a"; }
+>A : "a"
 >"a" : "a"
 

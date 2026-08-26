@@ -4278,6 +4278,8 @@ var Add_resolution_mode_import_attribute = &Message{code: 95196, category: Categ
 
 var Add_resolution_mode_import_attribute_to_all_type_only_imports_that_need_it = &Message{code: 95197, category: CategoryMessage, key: "Add_resolution_mode_import_attribute_to_all_type_only_imports_that_need_it_95197", text: "Add 'resolution-mode' import attribute to all type-only imports that need it"}
 
+var Dependent_contextual_inference_requires_too_many_passes_and_possibly_infinite = &Message{code: 95198, category: CategoryError, key: "Dependent_contextual_inference_requires_too_many_passes_and_possibly_infinite_95198", text: "Dependent contextual inference requires too many passes and possibly infinite"}
+
 var Do_not_print_diagnostics = &Message{code: 100000, category: CategoryMessage, key: "Do_not_print_diagnostics_100000", text: "Do not print diagnostics."}
 
 var Run_in_single_threaded_mode = &Message{code: 100001, category: CategoryMessage, key: "Run_in_single_threaded_mode_100001", text: "Run in single threaded mode."}
@@ -8688,6 +8690,8 @@ func keyToMessage(key Key) *Message {
 		return Add_resolution_mode_import_attribute
 	case "Add_resolution_mode_import_attribute_to_all_type_only_imports_that_need_it_95197":
 		return Add_resolution_mode_import_attribute_to_all_type_only_imports_that_need_it
+	case "Dependent_contextual_inference_requires_too_many_passes_and_possibly_infinite_95198":
+		return Dependent_contextual_inference_requires_too_many_passes_and_possibly_infinite
 	case "Do_not_print_diagnostics_100000":
 		return Do_not_print_diagnostics
 	case "Run_in_single_threaded_mode_100001":

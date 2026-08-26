@@ -1,0 +1,108 @@
+//// [tests/cases/compiler/dependentContextualInferenceAiSdk.ts] ////
+
+=== dependentContextualInferenceAiSdk.ts ===
+declare const streamText:
+>streamText : Symbol(streamText, Decl(dependentContextualInferenceAiSdk.ts, 0, 13))
+
+  <T extends {
+>T : Symbol(T, Decl(dependentContextualInferenceAiSdk.ts, 1, 3))
+
+    model: string,
+>model : Symbol(model, Decl(dependentContextualInferenceAiSdk.ts, 1, 14))
+
+    tools: {
+>tools : Symbol(tools, Decl(dependentContextualInferenceAiSdk.ts, 2, 18))
+
+      [K in keyof T["tools"]]: {
+>K : Symbol(K, Decl(dependentContextualInferenceAiSdk.ts, 4, 7))
+>T : Symbol(T, Decl(dependentContextualInferenceAiSdk.ts, 1, 3))
+
+        inputSchema: { "~type": unknown },
+>inputSchema : Symbol(inputSchema, Decl(dependentContextualInferenceAiSdk.ts, 4, 32))
+>"~type" : Symbol("~type", Decl(dependentContextualInferenceAiSdk.ts, 5, 22))
+
+        execute: (input: T["tools"][K]["inputSchema"]["~type"]) => unknown
+>execute : Symbol(execute, Decl(dependentContextualInferenceAiSdk.ts, 5, 42))
+>input : Symbol(input, Decl(dependentContextualInferenceAiSdk.ts, 6, 18))
+>T : Symbol(T, Decl(dependentContextualInferenceAiSdk.ts, 1, 3))
+>K : Symbol(K, Decl(dependentContextualInferenceAiSdk.ts, 4, 7))
+      }
+    },
+    messages: "STUB"[]
+>messages : Symbol(messages, Decl(dependentContextualInferenceAiSdk.ts, 8, 6))
+
+  }> (t: T) => {}
+>t : Symbol(t, Decl(dependentContextualInferenceAiSdk.ts, 10, 6))
+>T : Symbol(T, Decl(dependentContextualInferenceAiSdk.ts, 1, 3))
+
+declare const z: 
+>z : Symbol(z, Decl(dependentContextualInferenceAiSdk.ts, 12, 13))
+
+  { object:
+>object : Symbol(object, Decl(dependentContextualInferenceAiSdk.ts, 13, 3))
+
+      <T extends Record<string, { "~type": unknown }>>(t: T) =>
+>T : Symbol(T, Decl(dependentContextualInferenceAiSdk.ts, 14, 7))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>"~type" : Symbol("~type", Decl(dependentContextualInferenceAiSdk.ts, 14, 33))
+>t : Symbol(t, Decl(dependentContextualInferenceAiSdk.ts, 14, 55))
+>T : Symbol(T, Decl(dependentContextualInferenceAiSdk.ts, 14, 7))
+
+        { "~type": { [K in keyof T]: T[K]["~type"] } }
+>"~type" : Symbol("~type", Decl(dependentContextualInferenceAiSdk.ts, 15, 9))
+>K : Symbol(K, Decl(dependentContextualInferenceAiSdk.ts, 15, 22))
+>T : Symbol(T, Decl(dependentContextualInferenceAiSdk.ts, 14, 7))
+>T : Symbol(T, Decl(dependentContextualInferenceAiSdk.ts, 14, 7))
+>K : Symbol(K, Decl(dependentContextualInferenceAiSdk.ts, 15, 22))
+
+  , string: () => { "~type": string }
+>string : Symbol(string, Decl(dependentContextualInferenceAiSdk.ts, 16, 3))
+>"~type" : Symbol("~type", Decl(dependentContextualInferenceAiSdk.ts, 16, 19))
+  }
+
+streamText({
+>streamText : Symbol(streamText, Decl(dependentContextualInferenceAiSdk.ts, 0, 13))
+
+  model: "moonshotai/kimi-k3",
+>model : Symbol(model, Decl(dependentContextualInferenceAiSdk.ts, 19, 12))
+
+  tools: {
+>tools : Symbol(tools, Decl(dependentContextualInferenceAiSdk.ts, 20, 30))
+
+    getWeather: {
+>getWeather : Symbol(getWeather, Decl(dependentContextualInferenceAiSdk.ts, 21, 10))
+
+      inputSchema: z.object({ location: z.string() }),      
+>inputSchema : Symbol(inputSchema, Decl(dependentContextualInferenceAiSdk.ts, 22, 17))
+>z.object : Symbol(object, Decl(dependentContextualInferenceAiSdk.ts, 13, 3))
+>z : Symbol(z, Decl(dependentContextualInferenceAiSdk.ts, 12, 13))
+>object : Symbol(object, Decl(dependentContextualInferenceAiSdk.ts, 13, 3))
+>location : Symbol(location, Decl(dependentContextualInferenceAiSdk.ts, 23, 29))
+>z.string : Symbol(string, Decl(dependentContextualInferenceAiSdk.ts, 16, 3))
+>z : Symbol(z, Decl(dependentContextualInferenceAiSdk.ts, 12, 13))
+>string : Symbol(string, Decl(dependentContextualInferenceAiSdk.ts, 16, 3))
+
+      execute: input => {
+>execute : Symbol(execute, Decl(dependentContextualInferenceAiSdk.ts, 23, 54))
+>input : Symbol(input, Decl(dependentContextualInferenceAiSdk.ts, 24, 14))
+
+        const _check: { location: string } = input
+>_check : Symbol(_check, Decl(dependentContextualInferenceAiSdk.ts, 25, 13))
+>location : Symbol(location, Decl(dependentContextualInferenceAiSdk.ts, 25, 23))
+>input : Symbol(input, Decl(dependentContextualInferenceAiSdk.ts, 24, 14))
+
+        return "whatever"
+      }
+    }
+  },
+  messages: []
+>messages : Symbol(messages, Decl(dependentContextualInferenceAiSdk.ts, 29, 4))
+
+})
+
+
+
+
+
+
+  

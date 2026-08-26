@@ -813,6 +813,7 @@ type Checker struct {
 	flowNodePostSuper                           map[*ast.FlowNode]bool
 	renamedBindingElementsInTypes               []*ast.Node
 	contextualInfos                             []ContextualInfo
+	contextualTypeOverrides                     map[*ast.Node]*Type
 	inferenceContextInfos                       []InferenceContextInfo
 	awaitedTypeStack                            []*Type
 	reverseMappedSourceStack                    []*Type
@@ -13233,6 +13234,143 @@ func (c *Checker) checkReferenceExpression(expr *ast.Node, invalidReferenceMessa
 }
 
 func (c *Checker) checkObjectLiteral(node *ast.Node, checkMode CheckMode) *Type {
+	contextualType := c.getContextualType(node, ContextFlagsNone)
+	var resolvedBaseConstraint *Type
+	if contextualType != nil {
+		resolvedBaseConstraint = c.getResolvedBaseConstraint(contextualType, nil)
+	}
+	isContextualTypeDependent :=
+		node.Parent != nil &&
+			node.Parent.Kind == ast.KindCallExpression &&
+			contextualType != nil &&
+			contextualType.flags&TypeFlagsTypeParameter != 0 &&
+			resolvedBaseConstraint != nil &&
+			resolvedBaseConstraint != c.noConstraintType &&
+			resolvedBaseConstraint != c.circularConstraintType &&
+			c.constraintReferencesTypeParameter(contextualType)
+
+	if !isContextualTypeDependent {
+		return c.checkObjectLiteralNonDependently(node, checkMode)
+	}
+
+	c.diagnostics.SetIsStaging(true)
+	c.suggestionDiagnostics.SetIsStaging(true)
+	valueType := c.checkObjectLiteralNonDependently(node, checkMode)
+	var previousValueType *Type
+	passes := 0
+	for {
+		if previousValueType != nil && c.isTypeIdenticalTo(valueType, previousValueType) {
+			c.commitStagedDiagnostics()
+			return valueType
+		}
+		if passes >= 6 {
+			c.commitStagedDiagnostics()
+			c.error(node, diagnostics.Dependent_contextual_inference_requires_too_many_passes_and_possibly_infinite)
+			return valueType
+		}
+
+		newContextualType := c.cloneTypeParameter(contextualType)
+		newContextualType.AsConstrainedType().resolvedBaseConstraint = c.instantiateType(
+			resolvedBaseConstraint,
+			newSimpleTypeMapper(contextualType, valueType),
+		)
+		if newContextualType.AsConstrainedType().resolvedBaseConstraint.flags&TypeFlagsStructuredType != 0 {
+			c.resolveStructuredTypeMembers(newContextualType.AsConstrainedType().resolvedBaseConstraint)
+		}
+
+		c.resetObjectLiteralCheckState(node)
+		if c.contextualTypeOverrides == nil {
+			c.contextualTypeOverrides = make(map[*ast.Node]*Type)
+		}
+		c.contextualTypeOverrides[node] = newContextualType
+		c.revertStagedDiagnostics()
+		previousValueType = valueType
+		valueType = c.checkObjectLiteralNonDependently(node, CheckModeNormal)
+		delete(c.contextualTypeOverrides, node)
+		passes++
+	}
+}
+
+func (c *Checker) commitStagedDiagnostics() {
+	c.diagnostics.CommitStaged()
+	c.suggestionDiagnostics.CommitStaged()
+	c.diagnostics.SetIsStaging(false)
+	c.suggestionDiagnostics.SetIsStaging(false)
+}
+
+func (c *Checker) revertStagedDiagnostics() {
+	c.diagnostics.RevertStaged()
+	c.suggestionDiagnostics.RevertStaged()
+}
+
+func (c *Checker) constraintReferencesTypeParameter(t *Type) bool {
+	constraintNode := c.getConstraintDeclaration(t)
+	if constraintNode == nil {
+		return false
+	}
+	typeParameterName := t.symbol.Name
+	return forEachChildRecursively(constraintNode, func(child *ast.Node) bool {
+		if child.Kind == ast.KindTypeReference &&
+			child.AsTypeReferenceNode().TypeName.Kind == ast.KindIdentifier &&
+			child.AsTypeReferenceNode().TypeName.Text() == typeParameterName {
+			return true
+		}
+		return false
+	})
+}
+
+func forEachChildRecursively(root *ast.Node, visit func(*ast.Node) bool) bool {
+	type queueEntry struct {
+		node   *ast.Node
+		parent *ast.Node
+	}
+	queue := []queueEntry{{node: root, parent: nil}}
+	for len(queue) > 0 {
+		entry := queue[len(queue)-1]
+		queue = queue[:len(queue)-1]
+		if visit(entry.node) {
+			return true
+		}
+		entry.node.ForEachChild(func(child *ast.Node) bool {
+			queue = append(queue, queueEntry{node: child, parent: entry.node})
+			return false
+		})
+	}
+	return false
+}
+
+func (c *Checker) resetObjectLiteralCheckState(node *ast.Node) {
+	forEachChildRecursively(node, func(child *ast.Node) bool {
+		links := c.nodeLinks.TryGet(child)
+		if links != nil {
+			links.flags &^= NodeCheckFlagsTypeChecked | NodeCheckFlagsContextChecked
+		}
+		if typeLinks := c.typeNodeLinks.TryGet(child); typeLinks != nil {
+			typeLinks.resolvedType = nil
+		}
+		if signatureLinks := c.signatureLinks.TryGet(child); signatureLinks != nil {
+			signatureLinks.resolvedSignature = nil
+		}
+		if symbolLinks := c.symbolNodeLinks.TryGet(child); symbolLinks != nil {
+			symbolLinks.resolvedSymbol = nil
+		}
+		delete(c.contextFreeTypes, child)
+		if child.Symbol() != nil {
+			if declaredLinks := c.declaredTypeLinks.TryGet(child.Symbol()); declaredLinks != nil {
+				declaredLinks.declaredType = nil
+			}
+			if valueLinks := c.valueSymbolLinks.TryGet(child.Symbol()); valueLinks != nil {
+				valueLinks.resolvedType = nil
+			}
+			if typeAliasLinks := c.typeAliasLinks.TryGet(child.Symbol()); typeAliasLinks != nil {
+				typeAliasLinks.typeParameters = nil
+			}
+		}
+		return false
+	})
+}
+
+func (c *Checker) checkObjectLiteralNonDependently(node *ast.Node, checkMode CheckMode) *Type {
 	// Expando object literals have empty properties but filled exports
 	if len(node.Properties()) == 0 && node.Symbol() != nil && len(node.Symbol().Exports) != 0 {
 		result := c.newAnonymousType(node.Symbol(), node.Symbol().Exports, nil, nil, nil)
@@ -29469,6 +29607,9 @@ func (c *Checker) getContextualType(node *ast.Node, contextFlags ContextFlags) *
 	if node.Flags&ast.NodeFlagsInWithStatement != 0 {
 		// We cannot answer semantic questions within a with block, do not proceed any further
 		return nil
+	}
+	if override := c.contextualTypeOverrides[node]; override != nil {
+		return override
 	}
 	// Cached contextual types are obtained with no ContextFlags, so we can only consult them for
 	// requests with no ContextFlags.

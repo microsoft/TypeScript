@@ -1,0 +1,118 @@
+//// [tests/cases/compiler/dependentContextualInferenceTooManyPasses.ts] ////
+
+=== dependentContextualInferenceTooManyPasses.ts ===
+declare const f:
+>f : <T extends { a: unknown; b: (a: T["a"]) => unknown; c: (b: ReturnType<T["b"]>) => unknown; d: (c: ReturnType<T["c"]>) => unknown; e: (d: ReturnType<T["d"]>) => unknown; f: (d: ReturnType<T["e"]>) => unknown; g: (d: ReturnType<T["f"]>) => unknown; }>(t: T) => void
+
+  <T extends
+    { a: unknown
+>a : unknown
+
+    , b: (a: T["a"]) => unknown
+>b : (a: T["a"]) => unknown
+>a : T["a"]
+
+    , c: (b: ReturnType<T["b"]>) => unknown
+>c : (b: ReturnType<T["b"]>) => unknown
+>b : ReturnType<T["b"]>
+
+    , d: (c: ReturnType<T["c"]>) => unknown
+>d : (c: ReturnType<T["c"]>) => unknown
+>c : ReturnType<T["c"]>
+
+    , e: (d: ReturnType<T["d"]>) => unknown
+>e : (d: ReturnType<T["d"]>) => unknown
+>d : ReturnType<T["d"]>
+
+    , f: (d: ReturnType<T["e"]>) => unknown
+>f : (d: ReturnType<T["e"]>) => unknown
+>d : ReturnType<T["e"]>
+
+    , g: (d: ReturnType<T["f"]>) => unknown
+>g : (d: ReturnType<T["f"]>) => unknown
+>d : ReturnType<T["f"]>
+    }
+  >(t: T) => void
+>t : T
+
+f({
+>f({  a: ({ value: "a" as "a" }),  b: x => ({ value: x.value  }),  c: x => ({ value: x.value  }),  d: x => ({ value: x.value  }),  e: x => ({ value: x.value  }),  f: x => ({ value: x.value  }),  g: x => ({ value: x.value  }),}) : void
+>f : <T extends { a: unknown; b: (a: T["a"]) => unknown; c: (b: ReturnType<T["b"]>) => unknown; d: (c: ReturnType<T["c"]>) => unknown; e: (d: ReturnType<T["d"]>) => unknown; f: (d: ReturnType<T["e"]>) => unknown; g: (d: ReturnType<T["f"]>) => unknown; }>(t: T) => void
+>{  a: ({ value: "a" as "a" }),  b: x => ({ value: x.value  }),  c: x => ({ value: x.value  }),  d: x => ({ value: x.value  }),  e: x => ({ value: x.value  }),  f: x => ({ value: x.value  }),  g: x => ({ value: x.value  }),} : { a: { value: "a"; }; b: (x: { value: "a"; }) => { value: "a"; }; c: (x: { value: "a"; }) => { value: "a"; }; d: (x: { value: "a"; }) => { value: "a"; }; e: (x: { value: "a"; }) => { value: "a"; }; f: (x: { value: "a"; }) => { value: "a"; }; g: (x: { value: "a"; }) => { value: "a"; }; }
+
+  a: ({ value: "a" as "a" }),
+>a : { value: "a"; }
+>({ value: "a" as "a" }) : { value: "a"; }
+>{ value: "a" as "a" } : { value: "a"; }
+>value : "a"
+>"a" as "a" : "a"
+>"a" : "a"
+
+  b: x => ({ value: x.value  }),
+>b : (x: { value: "a"; }) => { value: "a"; }
+>x => ({ value: x.value  }) : (x: { value: "a"; }) => { value: "a"; }
+>x : { value: "a"; }
+>({ value: x.value  }) : { value: "a"; }
+>{ value: x.value  } : { value: "a"; }
+>value : "a"
+>x.value : "a"
+>x : { value: "a"; }
+>value : "a"
+
+  c: x => ({ value: x.value  }),
+>c : (x: { value: "a"; }) => { value: "a"; }
+>x => ({ value: x.value  }) : (x: { value: "a"; }) => { value: "a"; }
+>x : { value: "a"; }
+>({ value: x.value  }) : { value: "a"; }
+>{ value: x.value  } : { value: "a"; }
+>value : "a"
+>x.value : "a"
+>x : { value: "a"; }
+>value : "a"
+
+  d: x => ({ value: x.value  }),
+>d : (x: { value: "a"; }) => { value: "a"; }
+>x => ({ value: x.value  }) : (x: { value: "a"; }) => { value: "a"; }
+>x : { value: "a"; }
+>({ value: x.value  }) : { value: "a"; }
+>{ value: x.value  } : { value: "a"; }
+>value : "a"
+>x.value : "a"
+>x : { value: "a"; }
+>value : "a"
+
+  e: x => ({ value: x.value  }),
+>e : (x: { value: "a"; }) => { value: "a"; }
+>x => ({ value: x.value  }) : (x: { value: "a"; }) => { value: "a"; }
+>x : { value: "a"; }
+>({ value: x.value  }) : { value: "a"; }
+>{ value: x.value  } : { value: "a"; }
+>value : "a"
+>x.value : "a"
+>x : { value: "a"; }
+>value : "a"
+
+  f: x => ({ value: x.value  }),
+>f : (x: { value: "a"; }) => { value: "a"; }
+>x => ({ value: x.value  }) : (x: { value: "a"; }) => { value: "a"; }
+>x : { value: "a"; }
+>({ value: x.value  }) : { value: "a"; }
+>{ value: x.value  } : { value: "a"; }
+>value : "a"
+>x.value : "a"
+>x : { value: "a"; }
+>value : "a"
+
+  g: x => ({ value: x.value  }),
+>g : (x: { value: "a"; }) => { value: "a"; }
+>x => ({ value: x.value  }) : (x: { value: "a"; }) => { value: "a"; }
+>x : { value: "a"; }
+>({ value: x.value  }) : { value: "a"; }
+>{ value: x.value  } : { value: "a"; }
+>value : "a"
+>x.value : "a"
+>x : { value: "a"; }
+>value : "a"
+
+})
+

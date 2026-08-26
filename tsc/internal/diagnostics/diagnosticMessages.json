@@ -8359,6 +8359,10 @@
         "category": "Message",
         "code": 95197
     },
+    "Dependent contextual inference requires too many passes and possibly infinite": {
+        "category": "Error",
+        "code": 95198
+    },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
         "category": "Error",

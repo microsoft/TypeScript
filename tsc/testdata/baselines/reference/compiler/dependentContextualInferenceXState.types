@@ -1,0 +1,180 @@
+//// [tests/cases/compiler/dependentContextualInferenceXState.ts] ////
+
+=== dependentContextualInferenceXState.ts ===
+declare const createMachine:
+>createMachine : <T extends { initial: keyof T["states"]; context: unknown; states: { [S in keyof T["states"]]: { onNext: (machineInstant: { context: { [S1 in keyof T["states"]]: ReturnType<T["states"][S1]["onNext"]> extends infer N ? N extends unknown ? N extends { state: S; context: infer C; } ? C : never : never : never; }[keyof T["states"]] | (T["initial"] extends S ? T["context"] : never); }) => void | { state: keyof T["states"]; context: unknown; }; }; }; }>(machine: T) => T
+
+  <T extends
+    { initial: keyof T["states"]
+>initial : keyof T["states"]
+
+    , context: unknown
+>context : unknown
+
+    , states: 
+>states : { [S in keyof T["states"]]: { onNext: (machineInstant: { context: { [S1 in keyof T["states"]]: ReturnType<T["states"][S1]["onNext"]> extends infer N ? N extends unknown ? N extends { state: S; context: infer C; } ? C : never : never : never; }[keyof T["states"]] | (T["initial"] extends S ? T["context"] : never); }) => void | { state: keyof T["states"]; context: unknown; }; }; }
+
+        { [S in keyof T["states"]]:
+            { onNext:
+>onNext : (machineInstant: { context: { [S1 in keyof T["states"]]: ReturnType<T["states"][S1]["onNext"]> extends infer N ? N extends unknown ? N extends { state: S; context: infer C; } ? C : never : never : never; }[keyof T["states"]] | (T["initial"] extends S ? T["context"] : never); }) => void | { state: keyof T["states"]; context: unknown; }
+
+                ( machineInstant:
+>machineInstant : { context: { [S1 in keyof T["states"]]: ReturnType<T["states"][S1]["onNext"]> extends infer N ? N extends unknown ? N extends { state: S; context: infer C; } ? C : never : never : never; }[keyof T["states"]] | (T["initial"] extends S ? T["context"] : never); }
+
+                    { context:
+>context : { [S1 in keyof T["states"]]: ReturnType<T["states"][S1]["onNext"]> extends infer N ? N extends unknown ? N extends { state: S; context: infer C; } ? C : never : never : never; }[keyof T["states"]] | (T["initial"] extends S ? T["context"] : never)
+
+                      | { [S1 in keyof T["states"]]:
+                            ReturnType<T["states"][S1]["onNext"]> extends infer N
+                              ? N extends unknown
+                                  ? N extends { state: S, context: infer C }
+>state : S
+>context : C
+
+                                      ? C
+                                      : never
+                                  : never
+                              : never
+                        }[keyof T["states"]]
+                      | ( T["initial"] extends S
+                            ? T["context"]
+                            : never
+                        )
+                    }
+              ) =>
+                | void
+                | { state: keyof T["states"]
+>state : keyof T["states"]
+
+                  , context: unknown
+>context : unknown
+                  }
+            }
+        }
+    }
+  >
+    (machine: T) => T
+>machine : T
+
+createMachine({
+>createMachine({  initial: "loggedOut",  context: {},  states: {    loggedOut: {      onNext: ({ context }) => {        const _check: {} | { failed: boolean } = context;        return { state: "loggingIn", context: { username: "devanshj", password: "1234" } }      }    },    loggingIn: {      onNext: ({ context }) => {        const _check: { username: string, password: string } = context;        if (context.username === "devanshj" && context.password === "1234") {          return { state: "loggedIn", context: { ...context, accessToken: "whatever" } }        } else {          return { state: "loggedOut", context: { failed: true } }        }      }    },    loggedIn: {      onNext: ({ context }) => {        const _check: { username: string, password: string, accessToken: string } = context;        console.log(context.username)      }    }  }}) : { initial: "loggedOut"; context: {}; states: { loggedOut: { onNext: ({ context }: { context: {} | { failed: boolean; }; }) => { state: "loggingIn"; context: { username: string; password: string; }; }; }; loggingIn: { onNext: ({ context }: { context: { username: string; password: string; }; }) => { state: "loggedIn"; context: { username: string; password: string; accessToken: string; failed?: undefined; }; } | { state: "loggedOut"; context: { failed: boolean; }; }; }; loggedIn: { onNext: ({ context }: { context: { username: string; password: string; accessToken: string; failed?: undefined; }; }) => void; }; }; }
+>createMachine : <T extends { initial: keyof T["states"]; context: unknown; states: { [S in keyof T["states"]]: { onNext: (machineInstant: { context: { [S1 in keyof T["states"]]: ReturnType<T["states"][S1]["onNext"]> extends infer N ? N extends unknown ? N extends { state: S; context: infer C; } ? C : never : never : never; }[keyof T["states"]] | (T["initial"] extends S ? T["context"] : never); }) => void | { state: keyof T["states"]; context: unknown; }; }; }; }>(machine: T) => T
+>{  initial: "loggedOut",  context: {},  states: {    loggedOut: {      onNext: ({ context }) => {        const _check: {} | { failed: boolean } = context;        return { state: "loggingIn", context: { username: "devanshj", password: "1234" } }      }    },    loggingIn: {      onNext: ({ context }) => {        const _check: { username: string, password: string } = context;        if (context.username === "devanshj" && context.password === "1234") {          return { state: "loggedIn", context: { ...context, accessToken: "whatever" } }        } else {          return { state: "loggedOut", context: { failed: true } }        }      }    },    loggedIn: {      onNext: ({ context }) => {        const _check: { username: string, password: string, accessToken: string } = context;        console.log(context.username)      }    }  }} : { initial: "loggedOut"; context: {}; states: { loggedOut: { onNext: ({ context }: { context: {} | { failed: boolean; }; }) => { state: "loggingIn"; context: { username: string; password: string; }; }; }; loggingIn: { onNext: ({ context }: { context: { username: string; password: string; }; }) => { state: "loggedIn"; context: { username: string; password: string; accessToken: string; failed?: undefined; }; } | { state: "loggedOut"; context: { failed: boolean; }; }; }; loggedIn: { onNext: ({ context }: { context: { username: string; password: string; accessToken: string; failed?: undefined; }; }) => void; }; }; }
+
+  initial: "loggedOut",
+>initial : "loggedOut"
+>"loggedOut" : "loggedOut"
+
+  context: {},
+>context : {}
+>{} : {}
+
+  states: {
+>states : { loggedOut: { onNext: ({ context }: { context: {} | { failed: boolean; }; }) => { state: "loggingIn"; context: { username: string; password: string; }; }; }; loggingIn: { onNext: ({ context }: { context: { username: string; password: string; }; }) => { state: "loggedIn"; context: { username: string; password: string; accessToken: string; failed?: undefined; }; } | { state: "loggedOut"; context: { failed: boolean; }; }; }; loggedIn: { onNext: ({ context }: { context: { username: string; password: string; accessToken: string; failed?: undefined; }; }) => void; }; }
+>{    loggedOut: {      onNext: ({ context }) => {        const _check: {} | { failed: boolean } = context;        return { state: "loggingIn", context: { username: "devanshj", password: "1234" } }      }    },    loggingIn: {      onNext: ({ context }) => {        const _check: { username: string, password: string } = context;        if (context.username === "devanshj" && context.password === "1234") {          return { state: "loggedIn", context: { ...context, accessToken: "whatever" } }        } else {          return { state: "loggedOut", context: { failed: true } }        }      }    },    loggedIn: {      onNext: ({ context }) => {        const _check: { username: string, password: string, accessToken: string } = context;        console.log(context.username)      }    }  } : { loggedOut: { onNext: ({ context }: { context: {} | { failed: boolean; }; }) => { state: "loggingIn"; context: { username: string; password: string; }; }; }; loggingIn: { onNext: ({ context }: { context: { username: string; password: string; }; }) => { state: "loggedIn"; context: { username: string; password: string; accessToken: string; failed?: undefined; }; } | { state: "loggedOut"; context: { failed: boolean; }; }; }; loggedIn: { onNext: ({ context }: { context: { username: string; password: string; accessToken: string; failed?: undefined; }; }) => void; }; }
+
+    loggedOut: {
+>loggedOut : { onNext: ({ context }: { context: {} | { failed: boolean; }; }) => { state: "loggingIn"; context: { username: string; password: string; }; }; }
+>{      onNext: ({ context }) => {        const _check: {} | { failed: boolean } = context;        return { state: "loggingIn", context: { username: "devanshj", password: "1234" } }      }    } : { onNext: ({ context }: { context: {} | { failed: boolean; }; }) => { state: "loggingIn"; context: { username: string; password: string; }; }; }
+
+      onNext: ({ context }) => {
+>onNext : ({ context }: { context: {} | { failed: boolean; }; }) => { state: "loggingIn"; context: { username: string; password: string; }; }
+>({ context }) => {        const _check: {} | { failed: boolean } = context;        return { state: "loggingIn", context: { username: "devanshj", password: "1234" } }      } : ({ context }: { context: {} | { failed: boolean; }; }) => { state: "loggingIn"; context: { username: string; password: string; }; }
+>context : {} | { failed: boolean; }
+
+        const _check: {} | { failed: boolean } = context;
+>_check : { failed: boolean; } | {}
+>failed : boolean
+>context : {} | { failed: boolean; }
+
+        return { state: "loggingIn", context: { username: "devanshj", password: "1234" } }
+>{ state: "loggingIn", context: { username: "devanshj", password: "1234" } } : { state: "loggingIn"; context: { username: string; password: string; }; }
+>state : "loggingIn"
+>"loggingIn" : "loggingIn"
+>context : { username: string; password: string; }
+>{ username: "devanshj", password: "1234" } : { username: string; password: string; }
+>username : string
+>"devanshj" : "devanshj"
+>password : string
+>"1234" : "1234"
+      }
+    },
+    loggingIn: {
+>loggingIn : { onNext: ({ context }: { context: { username: string; password: string; }; }) => { state: "loggedIn"; context: { username: string; password: string; accessToken: string; failed?: undefined; }; } | { state: "loggedOut"; context: { failed: boolean; }; }; }
+>{      onNext: ({ context }) => {        const _check: { username: string, password: string } = context;        if (context.username === "devanshj" && context.password === "1234") {          return { state: "loggedIn", context: { ...context, accessToken: "whatever" } }        } else {          return { state: "loggedOut", context: { failed: true } }        }      }    } : { onNext: ({ context }: { context: { username: string; password: string; }; }) => { state: "loggedIn"; context: { username: string; password: string; accessToken: string; failed?: undefined; }; } | { state: "loggedOut"; context: { failed: boolean; }; }; }
+
+      onNext: ({ context }) => {
+>onNext : ({ context }: { context: { username: string; password: string; }; }) => { state: "loggedIn"; context: { username: string; password: string; accessToken: string; failed?: undefined; }; } | { state: "loggedOut"; context: { failed: boolean; }; }
+>({ context }) => {        const _check: { username: string, password: string } = context;        if (context.username === "devanshj" && context.password === "1234") {          return { state: "loggedIn", context: { ...context, accessToken: "whatever" } }        } else {          return { state: "loggedOut", context: { failed: true } }        }      } : ({ context }: { context: { username: string; password: string; }; }) => { state: "loggedIn"; context: { username: string; password: string; accessToken: string; failed?: undefined; }; } | { state: "loggedOut"; context: { failed: boolean; }; }
+>context : { username: string; password: string; }
+
+        const _check: { username: string, password: string } = context;
+>_check : { username: string; password: string; }
+>username : string
+>password : string
+>context : { username: string; password: string; }
+
+        if (context.username === "devanshj" && context.password === "1234") {
+>context.username === "devanshj" && context.password === "1234" : boolean
+>context.username === "devanshj" : boolean
+>context.username : string
+>context : { username: string; password: string; }
+>username : string
+>"devanshj" : "devanshj"
+>context.password === "1234" : boolean
+>context.password : string
+>context : { username: string; password: string; }
+>password : string
+>"1234" : "1234"
+
+          return { state: "loggedIn", context: { ...context, accessToken: "whatever" } }
+>{ state: "loggedIn", context: { ...context, accessToken: "whatever" } } : { state: "loggedIn"; context: { username: string; password: string; accessToken: string; }; }
+>state : "loggedIn"
+>"loggedIn" : "loggedIn"
+>context : { username: string; password: string; accessToken: string; }
+>{ ...context, accessToken: "whatever" } : { username: string; password: string; accessToken: string; }
+>context : { username: string; password: string; }
+>accessToken : string
+>"whatever" : "whatever"
+
+        } else {
+          return { state: "loggedOut", context: { failed: true } }
+>{ state: "loggedOut", context: { failed: true } } : { state: "loggedOut"; context: { failed: true; }; }
+>state : "loggedOut"
+>"loggedOut" : "loggedOut"
+>context : { failed: true; }
+>{ failed: true } : { failed: true; }
+>failed : true
+>true : true
+        }
+      }
+    },
+    loggedIn: {
+>loggedIn : { onNext: ({ context }: { context: { username: string; password: string; accessToken: string; failed?: undefined; }; }) => void; }
+>{      onNext: ({ context }) => {        const _check: { username: string, password: string, accessToken: string } = context;        console.log(context.username)      }    } : { onNext: ({ context }: { context: { username: string; password: string; accessToken: string; failed?: undefined; }; }) => void; }
+
+      onNext: ({ context }) => {
+>onNext : ({ context }: { context: { username: string; password: string; accessToken: string; failed?: undefined; }; }) => void
+>({ context }) => {        const _check: { username: string, password: string, accessToken: string } = context;        console.log(context.username)      } : ({ context }: { context: { username: string; password: string; accessToken: string; failed?: undefined; }; }) => void
+>context : { username: string; password: string; accessToken: string; failed?: undefined; }
+
+        const _check: { username: string, password: string, accessToken: string } = context;
+>_check : { username: string; password: string; accessToken: string; }
+>username : string
+>password : string
+>accessToken : string
+>context : { username: string; password: string; accessToken: string; failed?: undefined; }
+
+        console.log(context.username)
+>console.log(context.username) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>context.username : string
+>context : { username: string; password: string; accessToken: string; failed?: undefined; }
+>username : string
+      }
+    }
+  }
+})
+

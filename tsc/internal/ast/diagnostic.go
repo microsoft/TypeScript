@@ -240,12 +240,22 @@ type DiagnosticsCollection struct {
 	nonFileDiagnosticsSorted bool
 	diagnosticIndex          map[diagnosticLocationKey]*Diagnostic
 	diagnosticCollisions     map[diagnosticLocationKey][]*Diagnostic
+	isStaging                bool
+	stagingDiagnostics       []*Diagnostic
 }
 
 func (c *DiagnosticsCollection) Add(diagnostic *Diagnostic) *Diagnostic {
 	c.mu.Lock()
 	defer c.mu.Unlock()
 
+	if c.isStaging {
+		c.stagingDiagnostics = append(c.stagingDiagnostics, diagnostic)
+		return diagnostic
+	}
+	return c.addUnlocked(diagnostic)
+}
+
+func (c *DiagnosticsCollection) addUnlocked(diagnostic *Diagnostic) *Diagnostic {
 	key := getDiagnosticLocationKey(diagnostic)
 	if existing := c.diagnosticIndex[key]; existing != nil {
 		if EqualDiagnostics(existing, diagnostic) {
@@ -361,6 +371,36 @@ func (c *DiagnosticsCollection) GetDiagnostics() []*Diagnostic {
 	}
 	slices.SortFunc(diagnostics, CompareDiagnostics)
 	return diagnostics
+}
+
+func (c *DiagnosticsCollection) IsStaging() bool {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	return c.isStaging
+}
+
+func (c *DiagnosticsCollection) SetIsStaging(v bool) {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	c.isStaging = v
+}
+
+func (c *DiagnosticsCollection) CommitStaged() {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+
+	savedIsStaging := c.isStaging
+	c.isStaging = false
+	for _, diagnostic := range c.stagingDiagnostics {
+		c.addUnlocked(diagnostic)
+	}
+	c.isStaging = savedIsStaging
+}
+
+func (c *DiagnosticsCollection) RevertStaged() {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	c.stagingDiagnostics = nil
 }
 
 func getDiagnosticPath(d *Diagnostic) string {

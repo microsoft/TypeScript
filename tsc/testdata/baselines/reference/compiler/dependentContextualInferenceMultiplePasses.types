@@ -1,0 +1,59 @@
+//// [tests/cases/compiler/dependentContextualInferenceMultiplePasses.ts] ////
+
+=== dependentContextualInferenceMultiplePasses.ts ===
+declare const f:
+>f : <T extends { a: unknown; b: (a: T["a"]) => unknown; c: (b: ReturnType<T["b"]>) => unknown; }>(t: T) => void
+
+  <T extends
+    { a: unknown
+>a : unknown
+
+    , b: (a: T["a"]) => unknown
+>b : (a: T["a"]) => unknown
+>a : T["a"]
+
+    , c: (b: ReturnType<T["b"]>) => unknown
+>c : (b: ReturnType<T["b"]>) => unknown
+>b : ReturnType<T["b"]>
+    }
+  >
+    (t: T) => void
+>t : T
+
+f({
+>f({  a: ({ value: "a" as "a" }),  b: x => ({ value: x.value  }),  c: x => ({ value: x.value  })}) : void
+>f : <T extends { a: unknown; b: (a: T["a"]) => unknown; c: (b: ReturnType<T["b"]>) => unknown; }>(t: T) => void
+>{  a: ({ value: "a" as "a" }),  b: x => ({ value: x.value  }),  c: x => ({ value: x.value  })} : { a: { value: "a"; }; b: (x: { value: "a"; }) => { value: "a"; }; c: (x: { value: "a"; }) => { value: "a"; }; }
+
+  a: ({ value: "a" as "a" }),
+>a : { value: "a"; }
+>({ value: "a" as "a" }) : { value: "a"; }
+>{ value: "a" as "a" } : { value: "a"; }
+>value : "a"
+>"a" as "a" : "a"
+>"a" : "a"
+
+  b: x => ({ value: x.value  }),
+>b : (x: { value: "a"; }) => { value: "a"; }
+>x => ({ value: x.value  }) : (x: { value: "a"; }) => { value: "a"; }
+>x : { value: "a"; }
+>({ value: x.value  }) : { value: "a"; }
+>{ value: x.value  } : { value: "a"; }
+>value : "a"
+>x.value : "a"
+>x : { value: "a"; }
+>value : "a"
+
+  c: x => ({ value: x.value  })
+>c : (x: { value: "a"; }) => { value: "a"; }
+>x => ({ value: x.value  }) : (x: { value: "a"; }) => { value: "a"; }
+>x : { value: "a"; }
+>({ value: x.value  }) : { value: "a"; }
+>{ value: x.value  } : { value: "a"; }
+>value : "a"
+>x.value : "a"
+>x : { value: "a"; }
+>value : "a"
+
+})
+
