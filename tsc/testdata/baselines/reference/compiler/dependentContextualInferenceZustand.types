@@ -2,25 +2,21 @@
 
 === dependentContextualInferenceZustand.ts ===
 declare const create:
->create : <T extends { run: (set: Store<ReturnType<T["run"]>>["set"], get: Store<ReturnType<T["run"]>>["get"]) => unknown; }>(t: T) => Store<ReturnType<T["run"]>>
+>create : <T extends (set: Store<ReturnType<T>>["set"], get: Store<ReturnType<T>>["get"]) => unknown>(t: T) => Store<ReturnType<T>>
 
   <T extends
-    { run:
->run : (set: Store<ReturnType<T["run"]>>["set"], get: Store<ReturnType<T["run"]>>["get"]) => unknown
+    ( set: Store<ReturnType<T>>["set"]
+>set : (value: Partial<ReturnType<T>>) => void
 
-        ( set: Store<ReturnType<T["run"]>>["set"]
->set : (value: Partial<ReturnType<T["run"]>>) => void
+    , get: Store<ReturnType<T>>["get"]
+>get : () => ReturnType<T>
 
-        , get: Store<ReturnType<T["run"]>>["get"]
->get : () => ReturnType<T["run"]>
-
-        ) => unknown
-    }
+    ) => unknown
   >
     (t: T) =>
 >t : T
 
-      Store<ReturnType<T["run"]>>
+      Store<ReturnType<T>>
   
 interface Store<T>
   { get: () => T
@@ -31,25 +27,21 @@ interface Store<T>
 >value : Partial<T>
   }
 
-const store = create({
+const store = create((set, get) => ({
 >store : Store<{ count: number; increment: () => void; }>
->create({  run: (set, get) => ({    count: 0,    increment: () => set({ count: get().count + 1 })  })}) : Store<{ count: number; increment: () => void; }>
->create : <T extends { run: (set: Store<ReturnType<T["run"]>>["set"], get: Store<ReturnType<T["run"]>>["get"]) => unknown; }>(t: T) => Store<ReturnType<T["run"]>>
->{  run: (set, get) => ({    count: 0,    increment: () => set({ count: get().count + 1 })  })} : { run: (set: (value: Partial<{ count: number; increment: () => void; }>) => void, get: () => { count: number; increment: () => void; }) => { count: number; increment: () => void; }; }
-
-  run: (set, get) => ({
->run : (set: (value: Partial<{ count: number; increment: () => void; }>) => void, get: () => { count: number; increment: () => void; }) => { count: number; increment: () => void; }
->(set, get) => ({    count: 0,    increment: () => set({ count: get().count + 1 })  }) : (set: (value: Partial<{ count: number; increment: () => void; }>) => void, get: () => { count: number; increment: () => void; }) => { count: number; increment: () => void; }
+>create((set, get) => ({  count: 0,  increment: () => set({ count: get().count + 1 })})) : Store<{ count: number; increment: () => void; }>
+>create : <T extends (set: Store<ReturnType<T>>["set"], get: Store<ReturnType<T>>["get"]) => unknown>(t: T) => Store<ReturnType<T>>
+>(set, get) => ({  count: 0,  increment: () => set({ count: get().count + 1 })}) : (set: (value: Partial<{ count: number; increment: () => void; }>) => void, get: () => { count: number; increment: () => void; }) => { count: number; increment: () => void; }
 >set : (value: Partial<{ count: number; increment: () => void; }>) => void
 >get : () => { count: number; increment: () => void; }
->({    count: 0,    increment: () => set({ count: get().count + 1 })  }) : { count: number; increment: () => void; }
->{    count: 0,    increment: () => set({ count: get().count + 1 })  } : { count: number; increment: () => void; }
+>({  count: 0,  increment: () => set({ count: get().count + 1 })}) : { count: number; increment: () => void; }
+>{  count: 0,  increment: () => set({ count: get().count + 1 })} : { count: number; increment: () => void; }
 
-    count: 0,
+  count: 0,
 >count : number
 >0 : 0
 
-    increment: () => set({ count: get().count + 1 })
+  increment: () => set({ count: get().count + 1 })
 >increment : () => void
 >() => set({ count: get().count + 1 }) : () => void
 >set({ count: get().count + 1 }) : void
@@ -63,8 +55,7 @@ const store = create({
 >count : number
 >1 : 1
 
-  })
-})
+}))
 const _check: Store<{ count: number, increment: () => void }> = store
 >_check : Store<{ count: number; increment: () => void; }>
 >count : number

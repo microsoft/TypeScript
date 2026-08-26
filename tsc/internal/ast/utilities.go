@@ -3030,6 +3030,26 @@ func ForEachChildAndJSDoc(node *Node, sourceFile *SourceFile, v Visitor) bool {
 	return node.ForEachChild(v)
 }
 
+func ForEachChildRecursively(root *Node, visit func(*Node) bool) bool {
+	type queueEntry struct {
+		node   *Node
+		parent *Node
+	}
+	queue := []queueEntry{{node: root, parent: nil}}
+	for len(queue) > 0 {
+		entry := queue[len(queue)-1]
+		queue = queue[:len(queue)-1]
+		if visit(entry.node) {
+			return true
+		}
+		entry.node.ForEachChild(func(child *Node) bool {
+			queue = append(queue, queueEntry{node: child, parent: entry.node})
+			return false
+		})
+	}
+	return false
+}
+
 func HasTypeArguments(node *Node) bool {
 	switch node.Kind {
 	case KindCallExpression, KindNewExpression, KindTaggedTemplateExpression,

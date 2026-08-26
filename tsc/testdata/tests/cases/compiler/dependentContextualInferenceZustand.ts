@@ -1,23 +1,19 @@
 declare const create:
   <T extends
-    { run:
-        ( set: Store<ReturnType<T["run"]>>["set"]
-        , get: Store<ReturnType<T["run"]>>["get"]
-        ) => unknown
-    }
+    ( set: Store<ReturnType<T>>["set"]
+    , get: Store<ReturnType<T>>["get"]
+    ) => unknown
   >
     (t: T) =>
-      Store<ReturnType<T["run"]>>
+      Store<ReturnType<T>>
   
 interface Store<T>
   { get: () => T
   , set: (value: Partial<T>) => void
   }
 
-const store = create({
-  run: (set, get) => ({
-    count: 0,
-    increment: () => set({ count: get().count + 1 })
-  })
-})
+const store = create((set, get) => ({
+  count: 0,
+  increment: () => set({ count: get().count + 1 })
+}))
 const _check: Store<{ count: number, increment: () => void }> = store
