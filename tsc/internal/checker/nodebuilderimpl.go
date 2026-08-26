@@ -1357,12 +1357,13 @@ func (b *NodeBuilderImpl) moduleSpecifierResolvesToSymbol(specifier string, impo
 }
 
 func (b *NodeBuilderImpl) createImportAttributesForModuleSpecifier(result moduleSpecifierResult, importModeOverride core.ResolutionMode) *ast.Node {
-	if (result.importAttributesType == nil || result.importAttributesType == b.ch.emptyObjectType) && importModeOverride == core.ResolutionModeNone {
+	isEmptyAttributesType := result.importAttributesType == nil || b.ch.isEmptyObjectType(result.importAttributesType)
+	if isEmptyAttributesType && importModeOverride == core.ResolutionModeNone {
 		return nil
 	}
 
 	var properties []*ast.Symbol
-	if result.importAttributesType != nil && result.importAttributesType != b.ch.emptyObjectType {
+	if !isEmptyAttributesType {
 		properties = slices.Clone(b.ch.getPropertiesOfType(result.importAttributesType))
 	}
 	slices.SortFunc(properties, func(a, b *ast.Symbol) int { return strings.Compare(a.Name, b.Name) })

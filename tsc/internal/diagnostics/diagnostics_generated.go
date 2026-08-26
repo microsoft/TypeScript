@@ -4364,8 +4364,6 @@ var Virtual_code_produced_by_the_content_mapper_0_has_problems_with_no_correspon
 
 var The_content_mapper_0_produced_overlapping_or_out_of_order_position_mappings_near_virtual_offset_1 = &Message{code: 100037, category: CategoryError, key: "The_content_mapper_0_produced_overlapping_or_out_of_order_position_mappings_near_virtual_offset_1_100037", text: "The content mapper '{0}' produced overlapping or out-of-order position mappings (near virtual offset {1})."}
 
-var The_content_mapper_0_produced_overlapping_original_position_mappings_that_are_not_identical_near_original_offset_1 = &Message{code: 100038, category: CategoryError, key: "The_content_mapper_0_produced_overlapping_original_position_mappings_that_are_not_identical_near_ori_100038", text: "The content mapper '{0}' produced overlapping original position mappings that are not identical (near original offset {1})."}
-
 var The_content_mapper_0_produced_invalid_mapping_features_near_original_offset_1 = &Message{code: 100039, category: CategoryError, key: "The_content_mapper_0_produced_invalid_mapping_features_near_original_offset_1_100039", text: "The content mapper '{0}' produced invalid mapping features near original offset {1}."}
 
 var The_content_mapper_0_produced_a_position_mapping_with_an_invalid_kind_near_virtual_offset_1 = &Message{code: 100040, category: CategoryError, key: "The_content_mapper_0_produced_a_position_mapping_with_an_invalid_kind_near_virtual_offset_1_100040", text: "The content mapper '{0}' produced a position mapping with an invalid kind (near virtual offset {1})."}
@@ -4375,8 +4373,6 @@ var The_content_mapper_process_could_not_be_started_or_initialized = &Message{co
 var The_content_mapper_process_failed_while_handling_the_transform_request = &Message{code: 100042, category: CategoryMessage, key: "The_content_mapper_process_failed_while_handling_the_transform_request_100042", text: "The content mapper process failed while handling the transform request."}
 
 var The_content_mapper_returned_an_invalid_transform_response = &Message{code: 100043, category: CategoryMessage, key: "The_content_mapper_returned_an_invalid_transform_response_100043", text: "The content mapper returned an invalid transform response."}
-
-var The_content_mapper_uses_unsupported_protocol_version_0_expected_version_1 = &Message{code: 100044, category: CategoryMessage, key: "The_content_mapper_uses_unsupported_protocol_version_0_expected_version_1_100044", text: "The content mapper uses unsupported protocol version {0}; expected version {1}."}
 
 var The_content_mapper_selected_unsupported_position_encoding_0 = &Message{code: 100045, category: CategoryMessage, key: "The_content_mapper_selected_unsupported_position_encoding_0_100045", text: "The content mapper selected unsupported position encoding '{0}'."}
 
@@ -8790,8 +8786,6 @@ func keyToMessage(key Key) *Message {
 		return Virtual_code_produced_by_the_content_mapper_0_has_problems_with_no_corresponding_location_in_this_file
 	case "The_content_mapper_0_produced_overlapping_or_out_of_order_position_mappings_near_virtual_offset_1_100037":
 		return The_content_mapper_0_produced_overlapping_or_out_of_order_position_mappings_near_virtual_offset_1
-	case "The_content_mapper_0_produced_overlapping_original_position_mappings_that_are_not_identical_near_ori_100038":
-		return The_content_mapper_0_produced_overlapping_original_position_mappings_that_are_not_identical_near_original_offset_1
 	case "The_content_mapper_0_produced_invalid_mapping_features_near_original_offset_1_100039":
 		return The_content_mapper_0_produced_invalid_mapping_features_near_original_offset_1
 	case "The_content_mapper_0_produced_a_position_mapping_with_an_invalid_kind_near_virtual_offset_1_100040":
@@ -8802,8 +8796,6 @@ func keyToMessage(key Key) *Message {
 		return The_content_mapper_process_failed_while_handling_the_transform_request
 	case "The_content_mapper_returned_an_invalid_transform_response_100043":
 		return The_content_mapper_returned_an_invalid_transform_response
-	case "The_content_mapper_uses_unsupported_protocol_version_0_expected_version_1_100044":
-		return The_content_mapper_uses_unsupported_protocol_version_0_expected_version_1
 	case "The_content_mapper_selected_unsupported_position_encoding_0_100045":
 		return The_content_mapper_selected_unsupported_position_encoding_0
 	case "The_content_mapper_diagnostic_source_must_not_be_empty_100046":

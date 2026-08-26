@@ -138,6 +138,26 @@ func TestSourceMapGenerator_AddGeneratedMapping(t *testing.T) {
 	})
 }
 
+func TestSourceMapGenerator_AddGeneratedMapping_ReplacesPendingSourceMapping(t *testing.T) {
+	t.Parallel()
+	gen := NewGenerator("main.js", "/", "/", tspath.ComparePathsOptions{})
+	sourceIndex := gen.AddSource("/main.ts")
+	assert.NilError(t, gen.AddSourceMapping(0, 0, sourceIndex, 0, 0))
+	assert.NilError(t, gen.AddGeneratedMapping(0, 0))
+	sourceMap := gen.RawSourceMap()
+	assert.Equal(t, sourceMap.Mappings, "A")
+}
+
+func TestSourceMapGenerator_AddGeneratedMapping_IsNotReplacedBySourceMapping(t *testing.T) {
+	t.Parallel()
+	gen := NewGenerator("main.js", "/", "/", tspath.ComparePathsOptions{})
+	sourceIndex := gen.AddSource("/main.ts")
+	assert.NilError(t, gen.AddGeneratedMapping(0, 0))
+	assert.NilError(t, gen.AddSourceMapping(0, 0, sourceIndex, 0, 0))
+	sourceMap := gen.RawSourceMap()
+	assert.Equal(t, sourceMap.Mappings, "A")
+}
+
 func TestSourceMapGenerator_AddGeneratedMapping_OnSecondLineOnly(t *testing.T) {
 	t.Parallel()
 	gen := NewGenerator("main.js", "/", "/", tspath.ComparePathsOptions{})

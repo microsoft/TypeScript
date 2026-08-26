@@ -19,7 +19,6 @@ func (noNotifications) HandleNotification(ctx context.Context, method string, pa
 
 func initializeResult(source string) contentmapper.InitializeResult {
 	return contentmapper.InitializeResult{
-		ProtocolVersion:  contentmapper.ProtocolVersion,
 		PositionEncoding: contentmapper.PositionEncodingUTF8,
 		DiagnosticSource: source,
 	}

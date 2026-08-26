@@ -37,6 +37,23 @@ val/*query*/ue
 	f.VerifyBaselineFindAllReferences(t, "query")
 }
 
+func TestContentMapperDisabledNavigationTargets(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	f, done := newContentMapperFourslash(t, `// @Filename: /disabled.dup
+value
+
+// @Filename: /main.ts
+import { value } from "./disabled.dup";
+export const result = val/*query*/ue;
+`, contentmappertest.DuplicateMapper, ".dup")
+	defer done()
+
+	f.VerifyBaselineGoToDefinition(t, false, "query")
+	f.VerifyBaselineFindAllReferences(t, "query")
+	f.VerifyBaselineVSFindAllReferences(t, "query")
+}
+
 func TestContentMapperConflictingDuplicateRenameMappings(t *testing.T) {
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")

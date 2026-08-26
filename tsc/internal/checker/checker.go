@@ -11999,10 +11999,14 @@ func (c *Checker) checkPropertyAccessibilityAtLocation(location *ast.Node, isSup
 	// Property is known to be private or protected at this point
 	// Private property is accessible if the property is within the declaring class
 	if flags&ast.ModifierFlagsPrivate != 0 {
-		declaringClassDeclaration := ast.GetClassLikeDeclarationOfSymbol(c.getParentOfSymbol(prop))
-		if !c.isNodeWithinClass(location, declaringClassDeclaration) {
+		var declaringClassDeclaration *ast.Node
+		if parent := c.getParentOfSymbol(prop); parent != nil {
+			declaringClassDeclaration = ast.GetClassLikeDeclarationOfSymbol(parent)
+		}
+		if declaringClassDeclaration == nil || !c.isNodeWithinClass(location, declaringClassDeclaration) {
 			if errorNode != nil {
-				c.error(errorNode, diagnostics.Property_0_is_private_and_only_accessible_within_class_1, c.symbolToString(prop), c.TypeToString(c.getDeclaringClass(prop)))
+				class := core.OrElse(c.getDeclaringClass(prop), containingType)
+				c.error(errorNode, diagnostics.Property_0_is_private_and_only_accessible_within_class_1, c.symbolToString(prop), c.TypeToString(class))
 			}
 			return false
 		}
@@ -12035,10 +12039,7 @@ func (c *Checker) checkPropertyAccessibilityAtLocation(location *ast.Node, isSup
 		}
 		if flags&ast.ModifierFlagsStatic != 0 || enclosingClass == nil {
 			if errorNode != nil {
-				class := c.getDeclaringClass(prop)
-				if class == nil {
-					class = containingType
-				}
+				class := core.OrElse(c.getDeclaringClass(prop), containingType)
 				c.error(errorNode, diagnostics.Property_0_is_protected_and_only_accessible_within_class_1_and_its_subclasses, c.symbolToString(prop), c.TypeToString(class))
 			}
 			return false
@@ -15352,7 +15353,14 @@ func (c *Checker) getExternalModuleFileFromDeclaration(declaration *ast.Node) *a
 	return decl.AsSourceFile()
 }
 
-func (c *Checker) resolveExternalModule(location *ast.Node, moduleReference string, moduleNotFoundError *diagnostics.Message, errorNode *ast.Node, isForAugmentation bool, importAttributesType *Type) *ast.Symbol {
+func (c *Checker) resolveExternalModule(
+	location *ast.Node,
+	moduleReference string,
+	moduleNotFoundError *diagnostics.Message,
+	errorNode *ast.Node,
+	isForAugmentation bool,
+	importAttributesType *Type,
+) *ast.Symbol {
 	if errorNode != nil && strings.HasPrefix(moduleReference, "@types/") {
 		withoutAtTypePrefix := moduleReference[len("@types/"):]
 		c.error(errorNode, diagnostics.Cannot_import_type_declaration_files_Consider_importing_0_instead_of_1, withoutAtTypePrefix, moduleReference)
@@ -15360,6 +15368,7 @@ func (c *Checker) resolveExternalModule(location *ast.Node, moduleReference stri
 	if importAttributesType == nil {
 		importAttributesType = c.emptyObjectType
 	}
+	hasEmptyAttributesType := c.isEmptyObjectType(importAttributesType)
 
 	ambientModule := c.tryFindAmbientModule(moduleReference, true /*withAugmentations*/)
 	if ambientModule != nil {
@@ -15426,6 +15435,7 @@ func (c *Checker) resolveExternalModule(location *ast.Node, moduleReference stri
 		sourceFile = c.program.GetSourceFileForResolvedModule(resolvedModule.ResolvedFileName)
 	}
 
+	var resolved *ast.Symbol
 	if sourceFile != nil {
 		// If there's a resolutionDiagnostic we need to report it even if a sourceFile is found.
 		if resolutionDiagnostic != nil {
@@ -15563,7 +15573,9 @@ func (c *Checker) resolveExternalModule(location *ast.Node, moduleReference stri
 					}
 				}
 			}
-			return c.getMergedSymbol(sourceFile.Symbol)
+			resolved = c.getMergedSymbol(sourceFile.Symbol)
+			if !hasEmptyAttributesType
+			return resolved
 		}
 		if errorNode != nil && moduleNotFoundError != nil && !isSideEffectImport(errorNode) {
 			c.error(errorNode, diagnostics.File_0_is_not_a_module, resolvedModule.ResolvedFileName)
@@ -21745,6 +21757,7 @@ func (c *Checker) createUnionOrIntersectionProperty(containingType *Type, name s
 			var modifiers ast.ModifierFlags
 			if prop != nil {
 				modifiers = getDeclarationModifierFlagsFromSymbol(prop)
+				writeModifiers := getDeclarationModifierFlagsFromSymbolEx(prop, true /*isWrite*/)
 				if prop.Flags&ast.SymbolFlagsClassMember != 0 {
 					if isUnion {
 						optionalFlag |= prop.Flags & ast.SymbolFlagsOptional
@@ -21784,14 +21797,19 @@ func (c *Checker) createUnionOrIntersectionProperty(containingType *Type, name s
 				} else if !isUnion && !c.isReadonlySymbol(prop) {
 					checkFlags &^= ast.CheckFlagsReadonly
 				}
-				if modifiers&ast.ModifierFlagsNonPublicAccessibilityModifier == 0 {
+				if modifiers&ast.ModifierFlagsProtected != 0 && modifiers&ast.ModifierFlagsPublic == 0 {
+					checkFlags |= ast.CheckFlagsContainsProtected
+				} else if modifiers&ast.ModifierFlagsPrivate != 0 && modifiers&ast.ModifierFlagsPublic == 0 {
+					checkFlags |= ast.CheckFlagsContainsPrivate
+				} else {
 					checkFlags |= ast.CheckFlagsContainsPublic
 				}
-				if modifiers&ast.ModifierFlagsProtected != 0 {
-					checkFlags |= ast.CheckFlagsContainsProtected
-				}
-				if modifiers&ast.ModifierFlagsPrivate != 0 {
-					checkFlags |= ast.CheckFlagsContainsPrivate
+				if writeModifiers&ast.ModifierFlagsProtected != 0 && writeModifiers&ast.ModifierFlagsPublic == 0 {
+					checkFlags |= ast.CheckFlagsContainsWriteProtected
+				} else if writeModifiers&ast.ModifierFlagsPrivate != 0 && writeModifiers&ast.ModifierFlagsPublic == 0 {
+					checkFlags |= ast.CheckFlagsContainsWritePrivate
+				} else {
+					checkFlags |= ast.CheckFlagsContainsWritePublic
 				}
 				if modifiers&ast.ModifierFlagsStatic != 0 {
 					checkFlags |= ast.CheckFlagsContainsStatic
@@ -21825,13 +21843,27 @@ func (c *Checker) createUnionOrIntersectionProperty(containingType *Type, name s
 			}
 		}
 	}
-	if singleProp == nil || isUnion &&
-		(propSet.Size() != 0 || checkFlags&ast.CheckFlagsPartial != 0) &&
-		checkFlags&(ast.CheckFlagsContainsPrivate|ast.CheckFlagsContainsProtected) != 0 &&
-		!(propSet.Size() != 0 && c.hasCommonDeclaration(&propSet)) {
-		// No property was found, or, in a union, a property has a private or protected declaration in one
-		// constituent, but is missing or has a different declaration in another constituent.
+	if singleProp == nil {
+		// No property was found
 		return nil
+	}
+	if isUnion &&
+		(propSet.Size() != 0 || checkFlags&ast.CheckFlagsPartial != 0) &&
+		checkFlags&(ast.CheckFlagsContainsPrivate|ast.CheckFlagsContainsProtected|ast.CheckFlagsContainsWritePrivate|ast.CheckFlagsContainsWriteProtected) != 0 &&
+		!(propSet.Size() != 0 && c.hasCommonDeclaration(&propSet)) {
+		// A property in a union has a private or protected declaration in one constituent, but is missing
+		// or has a different declaration in another constituent. If the private or protected declaration is
+		// for reading, we don't create a property.
+		if checkFlags&(ast.CheckFlagsContainsPrivate|ast.CheckFlagsContainsProtected) != 0 {
+			return nil
+		}
+		// Otherwise, if the private or protected declaration is for writing, reduce accessibility to that of
+		// the most restricted constituent.
+		if checkFlags&ast.CheckFlagsContainsWritePrivate != 0 {
+			checkFlags &^= ast.CheckFlagsContainsWritePublic | ast.CheckFlagsContainsWriteProtected
+		} else if checkFlags&ast.CheckFlagsContainsWriteProtected != 0 {
+			checkFlags &^= ast.CheckFlagsContainsWritePublic
+		}
 	}
 	if propSet.Size() == 0 && checkFlags&ast.CheckFlagsReadPartial == 0 && len(indexTypes) == 0 {
 		if !mergedInstantiations {
@@ -21873,7 +21905,9 @@ func (c *Checker) createUnionOrIntersectionProperty(containingType *Type, name s
 		} else if prop.ValueDeclaration != nil && prop.ValueDeclaration != firstValueDeclaration {
 			hasNonUniformValueDeclaration = true
 		}
-		declarations = append(declarations, prop.Declarations...)
+		for _, declaration := range prop.Declarations {
+			declarations = core.AppendIfUnique(declarations, declaration)
+		}
 		t := c.getTypeOfSymbol(prop)
 		if firstType == nil {
 			firstType = t
