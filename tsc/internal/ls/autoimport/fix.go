@@ -1046,6 +1046,14 @@ func (v *View) compareModuleSpecifiersForRanking(a, b *Fix) int {
 	if comparison := tspath.CompareNumberOfDirectorySeparators(a.ModuleSpecifier, b.ModuleSpecifier); comparison != 0 {
 		return comparison
 	}
+	aIsIndexReExport := a.IsReExport && isIndexFileName(a.ModuleFileName)
+	bIsIndexReExport := b.IsReExport && isIndexFileName(b.ModuleFileName)
+	if aIsIndexReExport != bIsIndexReExport {
+		if aIsIndexReExport {
+			return -1
+		}
+		return 1
+	}
 	return 0
 }
 
