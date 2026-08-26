@@ -211,7 +211,7 @@ export function encodeNode(node: Node): Uint8Array {
     const nodeValues: number[] = [];
 
     // Nil node (index 0)
-    nodeValues.push(0, 0, 0, 0, 0, 0, 0, 0);
+    nodeValues.push(0, 0, 0, 0, 0, 0, 0);
 
     let nodeCount = 0;
     let parentIndex = 0;
@@ -235,7 +235,6 @@ export function encodeNode(node: Node): Uint8Array {
             parentIndex,
             data,
             node.flags,
-            0, // hasTrailingComma — not applicable to ordinary nodes
         );
 
         const saveParentIndex = parentIndex;
@@ -268,8 +267,7 @@ export function encodeNode(node: Node): Uint8Array {
             0, // next
             parentIndex,
             list.length, // data for NodeList is its length
-            0, // flags — not applicable to NodeLists
-            list.hasTrailingComma ? 1 : 0,
+            list.hasTrailingComma ? 1 : 0, // NodeLists have no AST flags; this slot is reused for hasTrailingComma
         );
 
         const saveParentIndex = parentIndex;
@@ -315,7 +313,6 @@ export function encodeNode(node: Node): Uint8Array {
         0,
         rootData,
         node.flags,
-        0, // hasTrailingComma — not applicable to ordinary nodes
     );
 
     const saveParent = parentIndex;

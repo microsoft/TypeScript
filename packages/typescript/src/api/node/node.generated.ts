@@ -29,7 +29,6 @@ import {
     NODE_OFFSET_DATA,
     NODE_OFFSET_END,
     NODE_OFFSET_FLAGS,
-    NODE_OFFSET_HAS_TRAILING_COMMA,
     NODE_OFFSET_KIND,
     NODE_OFFSET_NEXT,
     NODE_OFFSET_PARENT,
@@ -71,8 +70,10 @@ export class RemoteNodeList extends Array<RemoteNode> implements NodeArray<Remot
         return this.view.getUint32(this._byteIndex + NODE_OFFSET_DATA, true);
     }
 
+    // NodeLists have no AST node flags of their own; bit 0 of the flags field
+    // instead encodes whether the list has a trailing comma.
     get hasTrailingComma(): boolean {
-        return this.view.getUint32(this._byteIndex + NODE_OFFSET_HAS_TRAILING_COMMA, true) !== 0;
+        return (this.view.getUint32(this._byteIndex + NODE_OFFSET_FLAGS, true) & 1) !== 0;
     }
 
     private sourceFile: SourceFileInfo;

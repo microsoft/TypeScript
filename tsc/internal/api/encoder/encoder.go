@@ -27,7 +27,6 @@ const (
 	NodeOffsetParent
 	NodeOffsetData
 	NodeOffsetFlags
-	NodeOffsetHasTrailingComma
 	// NodeSize is the number of bytes that represents a single node in the encoded format.
 	NodeSize
 )
@@ -85,7 +84,7 @@ const (
 // | String data        | variable           | UTF-8 encoded string data.                                                                      |
 // | Extended node data | variable           | Extra data for some kinds of nodes.                                                             |
 // | Structured data    | variable           | Msgpack-encoded metadata blobs (e.g. file references).                                         |
-// | Nodes              | 32 bytes per node  | Defines the AST structure of the file, with references to strings and extended data.            |
+// | Nodes              | 28 bytes per node  | Defines the AST structure of the file, with references to strings and extended data.            |
 //
 // Header (44 bytes)
 // -----------------
@@ -180,7 +179,7 @@ const (
 //
 // An offset of 0xFFFFFFFF indicates no data (empty array).
 //
-// Nodes (32 bytes per node)
+// Nodes (28 bytes per node)
 // -------------------------
 //
 // The nodes section contains the AST structure of the file. Nodes are represented in a flat array in source order,
@@ -196,15 +195,15 @@ const (
 // | 16-20       | uint32 | Node index of parent       |
 // | 20-24       |        | Node data                  |
 // | 24-28       | uint32 | Node flags                 |
-// | 28-32       | uint32 | HasTrailingComma (NodeList only; reserved/0 otherwise) |
 //
-// The first 32 bytes of the nodes section are zeros representing a nil node, such that nodes without a parent or next
+// The first 28 bytes of the nodes section are zeros representing a nil node, such that nodes without a parent or next
 // sibling can unambiuously use `0` for those indices.
 //
 // NodeLists are represented as normal nodes with the special `kind` value `0xff_ff_ff_ff`. They are considered the parent
 // of their contents in the encoded format. A client reconstructing an AST similar to TypeScript's internal representation
 // should instead set the `parent` pointers of a NodeList's children to the NodeList's parent. A NodeList's `data` field
-// is the uint32 length of the list, and does not use one of the data types described below.
+// is the uint32 length of the list, and does not use one of the data types described below. A NodeList's `flags` field
+// is not used for AST node flags (NodeLists have none); bit 0 instead encodes `HasTrailingComma`.
 //
 // For node types other than NodeList, the node data field encodes one of the following, determined by the first 2 bits of
 // the field:
@@ -504,7 +503,7 @@ func encodeTree(rootNode *ast.Node, sourceFile *ast.SourceFile) ([]byte, *NodeIn
 					nodes[prevIndex*NodeSize+NodeOffsetNext+3] = b3
 				}
 
-				nodes = appendUint32s(nodes, SyntaxKindNodeList, utf16(nodeList.Pos()), utf16(nodeList.End()), 0, parentIndex, uint32(len(nodeList.Nodes)), 0, uint32(boolToByte(nodeList.HasTrailingComma())))
+				nodes = appendUint32s(nodes, SyntaxKindNodeList, utf16(nodeList.Pos()), utf16(nodeList.End()), 0, parentIndex, uint32(len(nodeList.Nodes)), uint32(boolToByte(nodeList.HasTrailingComma())))
 
 				saveParentIndex := parentIndex
 
@@ -537,7 +536,7 @@ func encodeTree(rootNode *ast.Node, sourceFile *ast.SourceFile) ([]byte, *NodeIn
 			nodes[prevIndex*NodeSize+NodeOffsetNext+3] = b3
 		}
 
-		nodes = appendUint32s(nodes, uint32(node.Kind), utf16(node.Pos()), utf16(node.End()), 0, parentIndex, getNodeData(node, strs, positionMap, &extendedData, &structuredData), uint32(node.Flags), 0)
+		nodes = appendUint32s(nodes, uint32(node.Kind), utf16(node.Pos()), utf16(node.End()), 0, parentIndex, getNodeData(node, strs, positionMap, &extendedData, &structuredData), uint32(node.Flags))
 
 		if nodeIndexMap != nil {
 			if _, ok := nodeIndexMap[node]; ok {
@@ -561,14 +560,14 @@ func encodeTree(rootNode *ast.Node, sourceFile *ast.SourceFile) ([]byte, *NodeIn
 		return node
 	}
 
-	nodes = appendUint32s(nodes, 0, 0, 0, 0, 0, 0, 0, 0)
+	nodes = appendUint32s(nodes, 0, 0, 0, 0, 0, 0, 0)
 
 	nodeCount++
 	parentIndex++
 	nodeTable = append(nodeTable, rootNode) // index 1 = root node
 
 	sfExtendedDataOffset = len(extendedData)
-	nodes = appendUint32s(nodes, uint32(rootNode.Kind), utf16(rootNode.Pos()), utf16(rootNode.End()), 0, 0, getNodeData(rootNode, strs, positionMap, &extendedData, &structuredData), uint32(rootNode.Flags), 0)
+	nodes = appendUint32s(nodes, uint32(rootNode.Kind), utf16(rootNode.Pos()), utf16(rootNode.End()), 0, 0, getNodeData(rootNode, strs, positionMap, &extendedData, &structuredData), uint32(rootNode.Flags))
 
 	visitor.VisitEachChild(rootNode)
 	if sourceFile != nil {

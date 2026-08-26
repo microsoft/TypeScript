@@ -1491,7 +1491,6 @@ function emitNodeGeneratedImports(w: CodeWriter) {
     w.write(`    NODE_OFFSET_DATA,`);
     w.write(`    NODE_OFFSET_END,`);
     w.write(`    NODE_OFFSET_FLAGS,`);
-    w.write(`    NODE_OFFSET_HAS_TRAILING_COMMA,`);
     w.write(`    NODE_OFFSET_KIND,`);
     w.write(`    NODE_OFFSET_NEXT,`);
     w.write(`    NODE_OFFSET_PARENT,`);
@@ -1546,8 +1545,10 @@ function emitRemoteNodeList(w: CodeWriter) {
     w.write(`        return this.view.getUint32(this._byteIndex + NODE_OFFSET_DATA, true);`);
     w.write(`    }`);
     w.write(``);
+    w.write(`    // NodeLists have no AST node flags of their own; bit 0 of the flags field`);
+    w.write(`    // instead encodes whether the list has a trailing comma.`);
     w.write(`    get hasTrailingComma(): boolean {`);
-    w.write(`        return this.view.getUint32(this._byteIndex + NODE_OFFSET_HAS_TRAILING_COMMA, true) !== 0;`);
+    w.write(`        return (this.view.getUint32(this._byteIndex + NODE_OFFSET_FLAGS, true) & 1) !== 0;`);
     w.write(`    }`);
     w.write(``);
     w.write(`    private sourceFile: SourceFileInfo;`);
