@@ -1342,7 +1342,7 @@ func (b *Binder) getStrictModeIdentifierMessage(node *ast.Node) *diagnostics.Mes
 }
 
 // Should be called only on prologue directives (ast.IsPrologueDirective(node) should be true)
-func isUseStrictPrologueDirective(sourceFile *ast.SourceFile, node *ast.Node) bool {
+func IsUseStrictPrologueDirective(sourceFile *ast.SourceFile, node *ast.Node) bool {
 	nodeText := scanner.GetSourceTextOfNodeFromSourceFile(sourceFile, node.Expression(), false /*includeTrivia*/)
 	// Note: the node text must be exactly "use strict" or 'use strict'.  It is not ok for the
 	// string to contain unicode escapes (as per ES5).
@@ -1352,7 +1352,7 @@ func isUseStrictPrologueDirective(sourceFile *ast.SourceFile, node *ast.Node) bo
 func FindUseStrictPrologue(sourceFile *ast.SourceFile, statements []*ast.Node) *ast.Node {
 	for _, statement := range statements {
 		if ast.IsPrologueDirective(statement) {
-			if isUseStrictPrologueDirective(sourceFile, statement) {
+			if IsUseStrictPrologueDirective(sourceFile, statement) {
 				return statement
 			}
 		} else {

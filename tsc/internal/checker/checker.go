@@ -7419,7 +7419,34 @@ func (c *Checker) checkUnusedRenamedBindingElements() {
 func (c *Checker) checkExpressionStatement(node *ast.Node) {
 	// Grammar checking
 	c.checkGrammarStatementInAmbientContext(node)
+	c.checkGrammarUseStrictDirective(node)
 	c.checkExpression(node.Expression())
+}
+
+func (c *Checker) checkGrammarUseStrictDirective(node *ast.Node) {
+	if !ast.IsPrologueDirective(node) || !binder.IsUseStrictPrologueDirective(ast.GetSourceFileOfNode(node), node) {
+		return
+	}
+
+	function := ast.GetContainingFunction(node)
+	if function == nil {
+		return
+	}
+	body := function.Body()
+	if body == nil || !ast.IsBlock(body) || node.Parent != body {
+		c.grammarErrorOnNode(node, diagnostics.A_use_strict_directive_must_be_at_the_top_of_a_function_body)
+		return
+	}
+
+	for _, statement := range body.Statements() {
+		if statement == node {
+			return
+		}
+		if !ast.IsPrologueDirective(statement) && statement.Kind != ast.KindInterfaceDeclaration && statement.Kind != ast.KindTypeAliasDeclaration {
+			c.grammarErrorOnNode(node, diagnostics.A_use_strict_directive_must_be_at_the_top_of_a_function_body)
+			return
+		}
+	}
 }
 
 // Returns the type of an expression. Unlike checkExpression, this function is simply concerned
