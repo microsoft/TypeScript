@@ -6,8 +6,8 @@ import { SyntaxKind } from "#enums/syntaxKind";
 import { TokenFlags } from "#enums/tokenFlags";
 import type {
     JsxTagNamePropertyAccess,
-    Node,
     NodeArray,
+    NodeBase,
     SourceFile,
 } from "./ast.ts";
 export type TriviaSyntaxKind = SyntaxKind.SingleLineCommentTrivia | SyntaxKind.MultiLineCommentTrivia | SyntaxKind.NewLineTrivia | SyntaxKind.WhitespaceTrivia | SyntaxKind.ConflictMarkerTrivia;
@@ -394,9 +394,6 @@ export type CompoundAssignmentOperator = SyntaxKind.PlusEqualsToken | SyntaxKind
 export type AssignmentOperatorOrHigher = SyntaxKind.QuestionQuestionToken | LogicalOperatorOrHigher | AssignmentOperator;
 export type LogicalOrCoalescingAssignmentOperator = SyntaxKind.AmpersandAmpersandEqualsToken | SyntaxKind.BarBarEqualsToken | SyntaxKind.QuestionQuestionEqualsToken;
 
-export interface NodeBase extends Node {
-    readonly flags: NodeFlags;
-}
 export interface StatementBase extends NodeBase {
     readonly _statementBrand: any;
 }
@@ -430,21 +427,21 @@ export interface NodeWithTypeArgumentsBase extends TypeNodeBase {
 export interface JSDocTypeBase extends TypeNodeBase {
     readonly _jsDocTypeBrand: any;
 }
-export interface DeclarationBase extends Node {
+export interface DeclarationBase extends NodeBase {
     readonly _declarationBrand: any;
 }
-export interface ModifiersBase extends Node {
+export interface ModifiersBase extends NodeBase {
     readonly modifiers?: NodeArray<ModifierLike>;
     readonly modifierFlags: ModifierFlags;
 }
-export interface FunctionLikeBase extends Node {
+export interface FunctionLikeBase extends NodeBase {
     readonly _declarationBrand: any;
     readonly typeParameters?: NodeArray<TypeParameterDeclaration>;
     readonly parameters: NodeArray<ParameterDeclaration>;
     readonly type?: TypeNode;
     readonly fullSignature?: TypeNode;
 }
-export interface BodyBase extends Node {
+export interface BodyBase extends NodeBase {
     readonly asteriskToken?: AsteriskToken;
     readonly body?: NodeBody;
 }
@@ -459,7 +456,7 @@ export interface ClassLikeBase extends ModifiersBase {
     readonly heritageClauses?: NodeArray<HeritageClause>;
     readonly members: NodeArray<ClassElement>;
 }
-export interface LiteralLikeNodeBase extends Node {
+export interface LiteralLikeNodeBase extends NodeBase {
     readonly text: string;
     readonly tokenFlags: TokenFlags;
 }
@@ -470,10 +467,10 @@ export interface TemplateLiteralLikeNodeBase extends LiteralLikeNodeBase {
     readonly rawText: string;
     readonly templateFlags: TokenFlags;
 }
-export interface TypeElementBase extends Node {
+export interface TypeElementBase extends NodeBase {
     readonly _typeElementBrand: any;
 }
-export interface ClassElementBase extends Node {
+export interface ClassElementBase extends NodeBase {
     readonly _classElementBrand: any;
 }
 export interface NamedMemberBase extends ModifiersBase {
@@ -481,7 +478,7 @@ export interface NamedMemberBase extends ModifiersBase {
     readonly name: PropertyName;
     readonly postfixToken?: QuestionToken | ExclamationToken;
 }
-export interface ObjectLiteralElementBase extends Node {
+export interface ObjectLiteralElementBase extends NodeBase {
     readonly _objectLiteralBrand: any;
 }
 export interface UnionOrIntersectionTypeNodeBase extends TypeNodeBase {
@@ -1513,6 +1510,199 @@ export type ArrayDestructuringAssignment = BinaryExpression;
 export type ObjectDestructuringAssignment = BinaryExpression;
 export type FunctionBody = Block;
 export type IncrementExpression = UpdateExpressionBase;
+export type Node =
+    | ArrayLiteralExpression
+    | ArrayTypeNode
+    | ArrowFunction
+    | AsExpression
+    | AwaitExpression
+    | BigIntLiteral
+    | BinaryExpression
+    | BindingElement
+    | BindingPattern
+    | Block
+    | BreakStatement
+    | CallExpression
+    | CallSignatureDeclaration
+    | CaseBlock
+    | CaseOrDefaultClause
+    | CatchClause
+    | ClassDeclaration
+    | ClassExpression
+    | ClassStaticBlockDeclaration
+    | ComputedPropertyName
+    | ConditionalExpression
+    | ConditionalTypeNode
+    | ConstructorDeclaration
+    | ConstructorTypeNode
+    | ConstructSignatureDeclaration
+    | ContinueStatement
+    | DebuggerStatement
+    | Decorator
+    | DeleteExpression
+    | DoStatement
+    | ElementAccessExpression
+    | EmptyStatement
+    | EnumDeclaration
+    | EnumMember
+    | ExportAssignment
+    | ExportDeclaration
+    | ExportSpecifier
+    | ExpressionStatement
+    | ExpressionWithTypeArguments
+    | ExternalModuleReference
+    | ForInOrOfStatement
+    | ForStatement
+    | FunctionDeclaration
+    | FunctionExpression
+    | FunctionTypeNode
+    | GetAccessorDeclaration
+    | HeritageClause
+    | Identifier
+    | IfStatement
+    | ImportAttribute
+    | ImportAttributes
+    | ImportClause
+    | ImportDeclaration
+    | ImportEqualsDeclaration
+    | ImportSpecifier
+    | ImportTypeNode
+    | IndexedAccessTypeNode
+    | IndexSignatureDeclaration
+    | InferTypeNode
+    | InterfaceDeclaration
+    | IntersectionTypeNode
+    | JSDoc
+    | JSDocAllType
+    | JSDocAugmentsTag
+    | JSDocCallbackTag
+    | JSDocDeprecatedTag
+    | JSDocImplementsTag
+    | JSDocImportTag
+    | JSDocLink
+    | JSDocLinkCode
+    | JSDocLinkPlain
+    | JSDocNameReference
+    | JSDocNonNullableType
+    | JSDocNullableType
+    | JSDocOptionalType
+    | JSDocOverloadTag
+    | JSDocOverrideTag
+    | JSDocParameterOrPropertyTag
+    | JSDocPrivateTag
+    | JSDocProtectedTag
+    | JSDocPublicTag
+    | JSDocReadonlyTag
+    | JSDocReturnTag
+    | JSDocSatisfiesTag
+    | JSDocSeeTag
+    | JSDocSignature
+    | JSDocTemplateTag
+    | JSDocText
+    | JSDocThisTag
+    | JSDocThrowsTag
+    | JSDocTypedefTag
+    | JSDocTypeExpression
+    | JSDocTypeLiteral
+    | JSDocTypeTag
+    | JSDocUnknownTag
+    | JSDocVariadicType
+    | JsxAttribute
+    | JsxAttributes
+    | JsxClosingElement
+    | JsxClosingFragment
+    | JsxElement
+    | JsxExpression
+    | JsxFragment
+    | JsxNamespacedName
+    | JsxOpeningElement
+    | JsxOpeningFragment
+    | JsxSelfClosingElement
+    | JsxSpreadAttribute
+    | JsxText
+    | KeywordExpression
+    | KeywordTypeNode
+    | LabeledStatement
+    | LiteralTypeNode
+    | MappedTypeNode
+    | MetaProperty
+    | MethodDeclaration
+    | MethodSignatureDeclaration
+    | MissingDeclaration
+    | ModuleBlock
+    | ModuleDeclaration
+    | NamedExports
+    | NamedImports
+    | NamedTupleMember
+    | NamespaceExport
+    | NamespaceExportDeclaration
+    | NamespaceImport
+    | NewExpression
+    | NonNullExpression
+    | NoSubstitutionTemplateLiteral
+    | NotEmittedStatement
+    | NotEmittedTypeElement
+    | NumericLiteral
+    | ObjectLiteralExpression
+    | OmittedExpression
+    | OptionalTypeNode
+    | ParameterDeclaration
+    | ParenthesizedExpression
+    | ParenthesizedTypeNode
+    | PartiallyEmittedExpression
+    | PostfixUnaryExpression
+    | PrefixUnaryExpression
+    | PrivateIdentifier
+    | PropertyAccessExpression
+    | PropertyAssignment
+    | PropertyDeclaration
+    | PropertySignatureDeclaration
+    | QualifiedName
+    | RegularExpressionLiteral
+    | RestTypeNode
+    | ReturnStatement
+    | SatisfiesExpression
+    | SemicolonClassElement
+    | SetAccessorDeclaration
+    | ShorthandPropertyAssignment
+    | SourceFile
+    | SpreadAssignment
+    | SpreadElement
+    | StringLiteral
+    | SwitchStatement
+    | SyntaxList
+    | SyntheticExpression
+    | SyntheticReferenceExpression
+    | TaggedTemplateExpression
+    | TemplateExpression
+    | TemplateHead
+    | TemplateLiteralTypeNode
+    | TemplateLiteralTypeSpan
+    | TemplateMiddle
+    | TemplateSpan
+    | TemplateTail
+    | ThisTypeNode
+    | ThrowStatement
+    | Token
+    | TryStatement
+    | TupleTypeNode
+    | TypeAliasDeclaration
+    | TypeAssertion
+    | TypeLiteralNode
+    | TypeOfExpression
+    | TypeOperatorNode
+    | TypeParameterDeclaration
+    | TypePredicateNode
+    | TypeQueryNode
+    | TypeReferenceNode
+    | UnionTypeNode
+    | VariableDeclaration
+    | VariableDeclarationList
+    | VariableStatement
+    | VoidExpression
+    | WhileStatement
+    | WithStatement
+    | YieldExpression;
 
 export interface ForInStatement extends StatementBase {
     readonly kind: SyntaxKind.ForInStatement;

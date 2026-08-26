@@ -30,6 +30,7 @@ import type {
     JsxSpreadAttribute,
     KeywordSyntaxKind,
     ModifierSyntaxKind,
+    Node,
     ParameterDeclaration,
     PropertyAccessExpression,
     PropertyAssignment,
@@ -80,12 +81,12 @@ export interface ReadonlyTextRange {
     readonly end: number;
 }
 
-export interface NodeArray<T extends Node> extends ReadonlyArray<T>, ReadonlyTextRange {
+export interface NodeArray<T extends NodeBase> extends ReadonlyArray<T>, ReadonlyTextRange {
     hasTrailingComma?: boolean;
     transformFlags: number;
 }
 
-export interface Node extends ReadonlyTextRange {
+export interface NodeBase extends ReadonlyTextRange {
     readonly kind: SyntaxKind;
     readonly flags: NodeFlags;
     readonly parent: Node;
@@ -122,7 +123,7 @@ export interface MappedDiagnosticDirective {
     readonly unusedCode: number;
 }
 
-export interface SourceFile extends Node {
+export interface SourceFile extends NodeBase {
     readonly kind: SyntaxKind.SourceFile;
     readonly statements: NodeArray<Statement>;
     readonly endOfFileToken: EndOfFile;
