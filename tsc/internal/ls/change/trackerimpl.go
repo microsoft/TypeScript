@@ -114,8 +114,60 @@ func (t *Tracker) computeNewText(change *trackerEdit, targetSourceFile *ast.Sour
 	}
 	if !found {
 		t.unmappableFiles.Add(sourceFile.OriginalFileName())
+		return ""
 	}
-	return result
+	return t.reindentInsertedLines(sourceFile, change, result)
+}
+
+// reindentInsertedLines fixes the indentation of a line an insertion introduces into the document the
+// edit is applied to. The inserted text forms its own line when it ends in a newline, and that line has to
+// pick up the indentation of the line it is being spliced into. Where the indentation goes depends on
+// which side of the insertion point it already sits on:
+//
+//   - Inserting after a line's indentation (`\t\tfoo` with the point before `foo`) leaves the inserted text
+//     indented but pushes the rest of the line down bare, so the indentation is repeated after the text.
+//   - Inserting at the very start of a line leaves the existing text indented but puts the inserted text at
+//     column zero, so the indentation is emitted before the text.
+//
+// This works from the original text and the edit's original range, so it holds for a content-mapped file
+// whose virtual copy is indented differently from the document the edit is applied to, and it produces the
+// same result for every projection. Edits carrying an explicit indentation option are left alone.
+func (t *Tracker) reindentInsertedLines(sourceFile *ast.SourceFile, change *trackerEdit, text string) string {
+	if text == "" || change.Range.Start != change.Range.End || change.options.indentation != nil {
+		return text
+	}
+	if !strings.HasSuffix(text, t.newLine) {
+		return text
+	}
+	original := sourceFile.OriginalText()
+	pos := lsconv.FromLSPRangeToOriginal(t.converters, sourceFile, change.Range).Pos()
+	if pos < 0 || pos > len(original) {
+		return text
+	}
+	lineStart := strings.LastIndexByte(original[:pos], '\n') + 1
+	beforePoint := original[lineStart:pos]
+	if beforePoint == "" {
+		// At the start of a line: the existing text keeps its indentation, and the inserted line needs it —
+		// but only when the formatter left the text at column zero. Where the formatter already indented it
+		// (inserting into a multi-line list, say), that indentation is the correct one.
+		if leadingIndentation(text) != "" {
+			return text
+		}
+		return leadingIndentation(original[lineStart:]) + text
+	}
+	if leadingIndentation(beforePoint) != beforePoint {
+		return text
+	}
+	// Just past the indentation: the inserted line already has it, the text pushed down needs it back.
+	return text + beforePoint
+}
+
+func leadingIndentation(text string) string {
+	end := 0
+	for end < len(text) && (text[end] == ' ' || text[end] == '\t') {
+		end++
+	}
+	return text[:end]
 }
 
 /** Note: this may mutate `nodeIn`. */
