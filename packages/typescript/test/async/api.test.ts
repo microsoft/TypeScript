@@ -7,6 +7,7 @@ import {
     getSynthesizedDeepClone,
     InternalSymbolName,
     isCallExpression,
+    isExpressionStatement,
     isFunctionDeclaration,
     isIdentifier,
     isImportDeclaration,
@@ -1229,6 +1230,29 @@ describe("SourceFile", () => {
                 assert.ok(!seen.has(key), `Node ${key} was visited more than once`);
                 seen.add(key);
             }
+        }
+        finally {
+            await api.close();
+        }
+    });
+});
+
+describe("NodeArray", () => {
+    test("hasTrailingComma", async () => {
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/main.ts": `declare function foo(...args: any): void;\nfoo("a", "b",);\nfoo("a", "b");`,
+        });
+        try {
+            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const sourceFile = await project.program.getSourceFile("/src/main.ts");
+            assert.ok(sourceFile);
+            const statements = sourceFile.statements.filter(isExpressionStatement);
+            assert.ok(isCallExpression(statements[0].expression));
+            assert.equal(statements[0].expression.arguments.hasTrailingComma, true);
+            assert.ok(isCallExpression(statements[1].expression));
+            assert.equal(statements[1].expression.arguments.hasTrailingComma, false);
         }
         finally {
             await api.close();
