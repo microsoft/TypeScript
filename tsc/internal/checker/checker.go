@@ -15368,11 +15368,10 @@ func (c *Checker) resolveExternalModule(
 	if importAttributesType == nil {
 		importAttributesType = c.emptyObjectType
 	}
-	hasEmptyAttributesType := c.isEmptyObjectType(importAttributesType)
 
 	ambientModule := c.tryFindAmbientModule(moduleReference, true /*withAugmentations*/)
 	if ambientModule != nil {
-		return ambientModule
+		return c.tryResolvePatternAmbientModule(ambientModule, moduleReference, importAttributesType)
 	}
 
 	importingSourceFile := ast.GetSourceFileOfNode(location)
@@ -15435,7 +15434,6 @@ func (c *Checker) resolveExternalModule(
 		sourceFile = c.program.GetSourceFileForResolvedModule(resolvedModule.ResolvedFileName)
 	}
 
-	var resolved *ast.Symbol
 	if sourceFile != nil {
 		// If there's a resolutionDiagnostic we need to report it even if a sourceFile is found.
 		if resolutionDiagnostic != nil {
@@ -15573,9 +15571,11 @@ func (c *Checker) resolveExternalModule(
 					}
 				}
 			}
-			resolved = c.getMergedSymbol(sourceFile.Symbol)
-			if !hasEmptyAttributesType
-			return resolved
+			return c.tryResolvePatternAmbientModule(c.getMergedSymbol(sourceFile.Symbol), moduleReference, importAttributesType)
+		}
+		patternAmbientModule := c.tryResolvePatternAmbientModule(nil /*resolvedSymbol*/, moduleReference, importAttributesType)
+		if patternAmbientModule != nil {
+			return patternAmbientModule
 		}
 		if errorNode != nil && moduleNotFoundError != nil && !isSideEffectImport(errorNode) {
 			c.error(errorNode, diagnostics.File_0_is_not_a_module, resolvedModule.ResolvedFileName)
@@ -15583,50 +15583,9 @@ func (c *Checker) resolveExternalModule(
 		return nil
 	}
 
-	if len(c.patternAmbientModules) != 0 {
-		candidates := core.Filter(c.patternAmbientModules, func(v *ast.PatternAmbientModule) bool {
-			moduleAttributesType := c.getTypeOfModuleImportAttributes(v.Symbol)
-			return v.Pattern.Matches(moduleReference) && c.isTypeAssignableTo(importAttributesType, moduleAttributesType)
-		})
-
-		if len(candidates) > 0 {
-			augmentation := c.patternAmbientModuleAugmentations[moduleReference]
-			augmentationTarget := c.patternAmbientModuleAugmentationTargets[moduleReference]
-
-			if len(candidates) == 1 {
-				mergedCandidate := c.getMergedSymbol(candidates[0].Symbol)
-				if augmentation != nil && augmentationTarget == mergedCandidate {
-					return c.getMergedSymbol(augmentation)
-				}
-				return mergedCandidate
-			}
-
-			var bestTypeCandidates []*ast.PatternAmbientModule
-		outer:
-			for i, candidate := range candidates {
-				candidateType := c.getTypeOfModuleImportAttributes(candidate.Symbol)
-				for j, other := range candidates {
-					otherType := c.getTypeOfModuleImportAttributes(other.Symbol)
-					if i != j && c.isTypeStrictSubtypeOf(otherType, candidateType) && !c.isTypeIdenticalTo(otherType, candidateType) {
-						continue outer
-					}
-				}
-				bestTypeCandidates = append(bestTypeCandidates, candidate)
-			}
-			if len(bestTypeCandidates) == 1 {
-				mergedCandidate := c.getMergedSymbol(bestTypeCandidates[0].Symbol)
-				if augmentation != nil && augmentationTarget == mergedCandidate {
-					return c.getMergedSymbol(augmentation)
-				}
-				return mergedCandidate
-			}
-			pattern := core.FindBestPatternMatch(bestTypeCandidates, func(v *ast.PatternAmbientModule) core.Pattern { return v.Pattern }, moduleReference)
-			mergedCandidate := c.getMergedSymbol(pattern.Symbol)
-			if augmentation != nil && augmentationTarget == mergedCandidate {
-				return c.getMergedSymbol(augmentation)
-			}
-			return mergedCandidate
-		}
+	patternAmbientModule := c.tryResolvePatternAmbientModule(nil /*resolvedSymbol*/, moduleReference, importAttributesType)
+	if patternAmbientModule != nil {
+		return patternAmbientModule
 	}
 
 	if errorNode == nil {
@@ -15686,6 +15645,61 @@ func (c *Checker) resolveExternalModule(
 	}
 
 	return nil
+}
+
+// Resolves the module reference to a pattern ambient module, if one exists.
+// If a resolved symbol from regular module resolution exists and we have an empty import attributes type,
+// we prefer the resolved symbol.
+func (c *Checker) tryResolvePatternAmbientModule(resolvedSymbol *ast.Symbol, moduleReference string, importAttributesType *Type) *ast.Symbol {
+	if c.isEmptyObjectType(importAttributesType) && resolvedSymbol != nil {
+		return resolvedSymbol
+	}
+	if len(c.patternAmbientModules) != 0 {
+		candidates := core.Filter(c.patternAmbientModules, func(v *ast.PatternAmbientModule) bool {
+			moduleAttributesType := c.getTypeOfModuleImportAttributes(v.Symbol)
+			return v.Pattern.Matches(moduleReference) && c.isTypeAssignableTo(importAttributesType, moduleAttributesType)
+		})
+
+		if len(candidates) > 0 {
+			augmentation := c.patternAmbientModuleAugmentations[moduleReference]
+			augmentationTarget := c.patternAmbientModuleAugmentationTargets[moduleReference]
+
+			if len(candidates) == 1 {
+				mergedCandidate := c.getMergedSymbol(candidates[0].Symbol)
+				if augmentation != nil && augmentationTarget == mergedCandidate {
+					return c.getMergedSymbol(augmentation)
+				}
+				return mergedCandidate
+			}
+
+			var bestTypeCandidates []*ast.PatternAmbientModule
+		outer:
+			for i, candidate := range candidates {
+				candidateType := c.getTypeOfModuleImportAttributes(candidate.Symbol)
+				for j, other := range candidates {
+					otherType := c.getTypeOfModuleImportAttributes(other.Symbol)
+					if i != j && c.isTypeStrictSubtypeOf(otherType, candidateType) && !c.isTypeIdenticalTo(otherType, candidateType) {
+						continue outer
+					}
+				}
+				bestTypeCandidates = append(bestTypeCandidates, candidate)
+			}
+			if len(bestTypeCandidates) == 1 {
+				mergedCandidate := c.getMergedSymbol(bestTypeCandidates[0].Symbol)
+				if augmentation != nil && augmentationTarget == mergedCandidate {
+					return c.getMergedSymbol(augmentation)
+				}
+				return mergedCandidate
+			}
+			pattern := core.FindBestPatternMatch(bestTypeCandidates, func(v *ast.PatternAmbientModule) core.Pattern { return v.Pattern }, moduleReference)
+			mergedCandidate := c.getMergedSymbol(pattern.Symbol)
+			if augmentation != nil && augmentationTarget == mergedCandidate {
+				return c.getMergedSymbol(augmentation)
+			}
+			return mergedCandidate
+		}
+	}
+	return resolvedSymbol
 }
 
 func resolutionExtensionIsTSOrJson(ext string) bool {

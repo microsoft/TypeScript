@@ -674,7 +674,7 @@ func (b *NodeBuilderImpl) symbolToTypeNode(symbol *ast.Symbol, mask ast.SymbolFl
 				importModeOverride = core.ModuleKindESNext
 			}
 		}
-		if len(specifierResult.specifier) == 0 { // !!! HERE: fix: if we modify `getSpecifierForModuleSymbol` to panic on empty, we'll need to signal this to the function here in a different way
+		if len(specifierResult.specifier) == 0 {
 			specifierResult = b.getSpecifierForModuleSymbol(chain[0], core.ResolutionModeNone)
 		}
 		if (b.ctx.flags&nodebuilder.FlagsAllowNodeModulesRelativePaths == 0) /* && b.ch.compilerOptions.GetModuleResolutionKind() != core.ModuleResolutionKindClassic */ && strings.Contains(specifierResult.specifier, "/node_modules/") {
@@ -1323,12 +1323,7 @@ func (b *NodeBuilderImpl) getSpecifierForModuleSymbol(symbol *ast.Symbol, overri
 		},
 		false, /*forAutoImports*/
 	)
-	if len(moduleSpecifiersResult.Specifiers) == 0 {
-		// !!! HERE: we should panic here; Strada used to throw here because it called `first(allSpecifiers)`.
-		result := moduleSpecifierResult{}
-		links.specifierCache[cacheKey] = result
-		return result
-	}
+	debug.Assert(len(moduleSpecifiersResult.Specifiers) > 0)
 	result = moduleSpecifierResult{specifier: moduleSpecifiersResult.Specifiers[0]}
 	if moduleSpecifiersResult.AmbientModuleSymbol != nil {
 		result.importAttributesType = b.ch.getTypeOfModuleImportAttributes(moduleSpecifiersResult.AmbientModuleSymbol)
