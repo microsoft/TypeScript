@@ -2,7 +2,7 @@
 
 === /a.d.ts ===
 declare module "*.asset" with { type: "css", format: "module" } {
->"*.asset" : typeof import("*.asset")
+>"*.asset" : typeof import("*.asset", { with: { format: "module", type: "css" } })
 >type : "css"
 >format : "module"
 
@@ -12,7 +12,7 @@ declare module "*.asset" with { type: "css", format: "module" } {
 
 === /b.d.ts ===
 declare module "*.asset" with { format: "module", type: "css" } {
->"*.asset" : typeof import("*.asset")
+>"*.asset" : typeof import("*.asset", { with: { format: "module", type: "css" } })
 >format : "module"
 >type : "css"
 
@@ -22,7 +22,7 @@ declare module "*.asset" with { format: "module", type: "css" } {
 
 === /variantsA.d.ts ===
 declare module "*.variant" with { type: "css" } {
->"*.variant" : typeof import("*.variant")
+>"*.variant" : typeof import("*.variant", { with: { type: "css" } })
 >type : "css"
 
     export const cssOnly: "css";
@@ -30,7 +30,7 @@ declare module "*.variant" with { type: "css" } {
 }
 
 declare module "*.variant" with { type: "text" } {
->"*.variant" : typeof import("*.variant")
+>"*.variant" : typeof import("*.variant", { with: { type: "text" } })
 >type : "text"
 
     export const textOnly: "text";
@@ -39,7 +39,7 @@ declare module "*.variant" with { type: "text" } {
 
 === /variantsB.d.ts ===
 declare module "*.variant" with { type: "css" } {
->"*.variant" : typeof import("*.variant")
+>"*.variant" : typeof import("*.variant", { with: { type: "css" } })
 >type : "css"
 
     export const cssAlso: "css-also";
@@ -47,7 +47,7 @@ declare module "*.variant" with { type: "css" } {
 }
 
 declare module "*.variant" with { type: "text" } {
->"*.variant" : typeof import("*.variant")
+>"*.variant" : typeof import("*.variant", { with: { type: "text" } })
 >type : "text"
 
     export const textAlso: "text-also";

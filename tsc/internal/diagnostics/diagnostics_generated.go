@@ -768,10 +768,6 @@ var File_is_CommonJS_module_because_0_does_not_have_field_type = &Message{code: 
 
 var File_is_CommonJS_module_because_package_json_was_not_found = &Message{code: 1461, category: CategoryMessage, key: "File_is_CommonJS_module_because_package_json_was_not_found_1461", text: "File is CommonJS module because 'package.json' was not found"}
 
-var X_resolution_mode_is_the_only_valid_key_for_type_import_attributes = &Message{code: 1463, category: CategoryError, key: "resolution_mode_is_the_only_valid_key_for_type_import_attributes_1463", text: "'resolution-mode' is the only valid key for type import attributes."}
-
-var Type_import_attributes_should_have_exactly_one_key_resolution_mode_with_value_import_or_require = &Message{code: 1464, category: CategoryError, key: "Type_import_attributes_should_have_exactly_one_key_resolution_mode_with_value_import_or_require_1464", text: "Type import attributes should have exactly one key - 'resolution-mode' - with value 'import' or 'require'."}
-
 var The_import_meta_meta_property_is_not_allowed_in_files_which_will_build_into_CommonJS_output = &Message{code: 1470, category: CategoryError, key: "The_import_meta_meta_property_is_not_allowed_in_files_which_will_build_into_CommonJS_output_1470", text: "The 'import.meta' meta-property is not allowed in files which will build into CommonJS output."}
 
 var Module_0_cannot_be_imported_using_this_construct_The_specifier_only_resolves_to_an_ES_module_which_cannot_be_imported_with_require_Use_an_ECMAScript_import_instead = &Message{code: 1471, category: CategoryError, key: "Module_0_cannot_be_imported_using_this_construct_The_specifier_only_resolves_to_an_ES_module_which_c_1471", text: "Module '{0}' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead."}
@@ -935,6 +931,18 @@ var Ignore_the_tsconfig_found_and_build_with_commandline_options_and_files = &Me
 var An_ambient_module_declaration_with_import_attributes_must_use_a_pattern_name_with_an_Asterisk_character = &Message{code: 1550, category: CategoryError, key: "An_ambient_module_declaration_with_import_attributes_must_use_a_pattern_name_with_an_Asterisk_charac_1550", text: "An ambient module declaration with import attributes must use a pattern name with an '*' character."}
 
 var Import_attributes_are_not_allowed_on_a_module_augmentation = &Message{code: 1551, category: CategoryError, key: "Import_attributes_are_not_allowed_on_a_module_augmentation_1551", text: "Import attributes are not allowed on a module augmentation."}
+
+var An_import_attributes_type_may_only_contain_property_signatures = &Message{code: 1552, category: CategoryError, key: "An_import_attributes_type_may_only_contain_property_signatures_1552", text: "An import attributes type may only contain property signatures."}
+
+var An_import_attributes_property_must_have_a_type_annotation = &Message{code: 1553, category: CategoryError, key: "An_import_attributes_property_must_have_a_type_annotation_1553", text: "An import attributes property must have a type annotation."}
+
+var An_import_attributes_property_must_have_a_string_literal_or_identifier_name = &Message{code: 1554, category: CategoryError, key: "An_import_attributes_property_must_have_a_string_literal_or_identifier_name_1554", text: "An import attributes property must have a string literal or identifier name."}
+
+var An_import_attributes_property_must_have_a_string_literal_type_annotation = &Message{code: 1555, category: CategoryError, key: "An_import_attributes_property_must_have_a_string_literal_type_annotation_1555", text: "An import attributes property must have a string literal type annotation."}
+
+var An_import_attributes_property_cannot_be_optional = &Message{code: 1556, category: CategoryError, key: "An_import_attributes_property_cannot_be_optional_1556", text: "An import attributes property cannot be optional."}
+
+var X_0_is_not_a_valid_key_for_an_import_attributes_type = &Message{code: 1557, category: CategoryError, key: "_0_is_not_a_valid_key_for_an_import_attributes_type_1557", text: "'{0}' is not a valid key for an import attributes type."}
 
 var The_types_of_0_are_incompatible_between_these_types = &Message{code: 2200, category: CategoryError, key: "The_types_of_0_are_incompatible_between_these_types_2200", text: "The types of '{0}' are incompatible between these types."}
 
@@ -5186,10 +5194,6 @@ func keyToMessage(key Key) *Message {
 		return File_is_CommonJS_module_because_0_does_not_have_field_type
 	case "File_is_CommonJS_module_because_package_json_was_not_found_1461":
 		return File_is_CommonJS_module_because_package_json_was_not_found
-	case "resolution_mode_is_the_only_valid_key_for_type_import_attributes_1463":
-		return X_resolution_mode_is_the_only_valid_key_for_type_import_attributes
-	case "Type_import_attributes_should_have_exactly_one_key_resolution_mode_with_value_import_or_require_1464":
-		return Type_import_attributes_should_have_exactly_one_key_resolution_mode_with_value_import_or_require
 	case "The_import_meta_meta_property_is_not_allowed_in_files_which_will_build_into_CommonJS_output_1470":
 		return The_import_meta_meta_property_is_not_allowed_in_files_which_will_build_into_CommonJS_output
 	case "Module_0_cannot_be_imported_using_this_construct_The_specifier_only_resolves_to_an_ES_module_which_c_1471":
@@ -5354,6 +5358,18 @@ func keyToMessage(key Key) *Message {
 		return An_ambient_module_declaration_with_import_attributes_must_use_a_pattern_name_with_an_Asterisk_character
 	case "Import_attributes_are_not_allowed_on_a_module_augmentation_1551":
 		return Import_attributes_are_not_allowed_on_a_module_augmentation
+	case "An_import_attributes_type_may_only_contain_property_signatures_1552":
+		return An_import_attributes_type_may_only_contain_property_signatures
+	case "An_import_attributes_property_must_have_a_type_annotation_1553":
+		return An_import_attributes_property_must_have_a_type_annotation
+	case "An_import_attributes_property_must_have_a_string_literal_or_identifier_name_1554":
+		return An_import_attributes_property_must_have_a_string_literal_or_identifier_name
+	case "An_import_attributes_property_must_have_a_string_literal_type_annotation_1555":
+		return An_import_attributes_property_must_have_a_string_literal_type_annotation
+	case "An_import_attributes_property_cannot_be_optional_1556":
+		return An_import_attributes_property_cannot_be_optional
+	case "_0_is_not_a_valid_key_for_an_import_attributes_type_1557":
+		return X_0_is_not_a_valid_key_for_an_import_attributes_type
 	case "The_types_of_0_are_incompatible_between_these_types_2200":
 		return The_types_of_0_are_incompatible_between_these_types
 	case "The_types_returned_by_0_are_incompatible_between_these_types_2201":

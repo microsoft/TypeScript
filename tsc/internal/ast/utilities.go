@@ -1660,7 +1660,26 @@ func IsAmbientModule(node *Node) bool {
 }
 
 func IsAmbientModuleSymbolName(s string) bool {
-	return strings.HasPrefix(s, "\"") && strings.HasSuffix(s, "\"")
+	_, ok := TryGetAmbientModuleNameFromSymbolName(s)
+	return ok
+}
+
+// Ambient module symbols are either of the form `"modulename"` or `"modulename" + InternalSymbolNamePrefix + "pattern@nodeId"`;
+// see `getDeclarationName`.
+func TryGetAmbientModuleNameFromSymbolName(s string) (string, bool) {
+	if !strings.HasPrefix(s, "\"") {
+		return "", false
+	}
+	if strings.HasSuffix(s, "\"") {
+		return s[1 : len(s)-1], true
+	}
+
+	patternMarker := "\"" + InternalSymbolNamePrefix + "pattern@"
+	markerIndex := strings.LastIndex(s, patternMarker)
+	if markerIndex < 1 {
+		return "", false
+	}
+	return s[1:markerIndex], true
 }
 
 func IsExternalModule(file *SourceFile) bool {
@@ -4603,4 +4622,9 @@ func IsNamedEvaluationSource(node *Node) bool {
 // computed property names.
 func IsProtoSetter(node *Node) bool {
 	return (IsIdentifier(node) || IsStringLiteral(node)) && node.Text() == "__proto__"
+}
+
+func IsStringLiteralLikeType(node *Node) bool {
+	return node.Kind == KindLiteralType &&
+		IsStringLiteralLike(node.AsLiteralTypeNode().Literal)
 }

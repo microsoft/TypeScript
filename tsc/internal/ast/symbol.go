@@ -21,7 +21,7 @@ type Symbol struct {
 }
 
 func (s *Symbol) IsExternalModule() bool {
-	return s.Flags&SymbolFlagsModule != 0 && len(s.Name) > 0 && s.Name[0] == '"'
+	return s.Flags&SymbolFlagsModule != 0 && IsAmbientModuleSymbolName(s.Name)
 }
 
 func (s *Symbol) IsStatic() bool {
@@ -89,12 +89,12 @@ func EscapeInternalSymbolName(name string) string {
 }
 
 // EscapeSymbolName converts a binder symbol name into its escaped "__String"
-// form. Internal names (prefixed with the "\xFE" sentinel) become "__"-prefixed,
-// and user names that already begin with "__" gain an extra leading underscore
-// so they can be distinguished from internal names.
+// form. Internal name markers become "__", and user names that already begin
+// with "__" gain an extra leading underscore so they can be distinguished from
+// internal names.
 func EscapeSymbolName(name string) string {
-	if rest, ok := strings.CutPrefix(name, InternalSymbolNamePrefix); ok {
-		return "__" + rest
+	if strings.Contains(name, InternalSymbolNamePrefix) {
+		return EscapeAllInternalSymbolNames(name)
 	}
 	if len(name) >= 2 && name[0] == '_' && name[1] == '_' {
 		return "_" + name

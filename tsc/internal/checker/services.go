@@ -63,8 +63,20 @@ func (c *Checker) getSymbolsInScope(location *ast.Node, meaning ast.SymbolFlags)
 	}
 
 	populateSymbols := func() {
+		var lastLocation *ast.Node
 		for location != nil {
-			if canHaveLocals(location) && location.Locals() != nil && !ast.IsGlobalSourceFile(location) {
+			if ast.IsModuleDeclaration(location) &&
+				location.AsModuleDeclaration().Attributes != nil &&
+				lastLocation == location.AsModuleDeclaration().Attributes {
+				// Module declaration is not in scope inside its attributes.
+				lastLocation = location
+				location = location.Parent
+				continue
+			}
+			isModuleAttributes := ast.IsModuleDeclaration(location) &&
+				location.AsModuleDeclaration().Attributes != nil &&
+				lastLocation == location.AsModuleDeclaration().Attributes
+			if !isModuleAttributes && canHaveLocals(location) && location.Locals() != nil && !ast.IsGlobalSourceFile(location) {
 				copySymbols(location.Locals(), meaning)
 			}
 
@@ -106,6 +118,7 @@ func (c *Checker) getSymbolsInScope(location *ast.Node, meaning ast.SymbolFlags)
 			}
 
 			isStaticSymbol = ast.IsStatic(location)
+			lastLocation = location
 			location = location.Parent
 		}
 

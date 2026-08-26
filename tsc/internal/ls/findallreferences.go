@@ -21,7 +21,6 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/printer"
 	"github.com/microsoft/TypeScript/tsc/internal/scanner"
 	"github.com/microsoft/TypeScript/tsc/internal/spanmap"
-	"github.com/microsoft/TypeScript/tsc/internal/stringutil"
 
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 )
@@ -1964,7 +1963,12 @@ func (state *refState) createSearch(location *ast.Node, symbol *ast.Symbol, comi
 				s = symbol
 			}
 		}
-		text = stringutil.StripQuotes(ast.SymbolName(s))
+		symbolName := ast.SymbolName(s)
+		if moduleName, ok := ast.TryGetAmbientModuleNameFromSymbolName(symbolName); ok {
+			text = moduleName
+		} else {
+			text = symbolName
+		}
 	}
 	if len(allSearchSymbols) == 0 {
 		allSearchSymbols = []*ast.Symbol{symbol}

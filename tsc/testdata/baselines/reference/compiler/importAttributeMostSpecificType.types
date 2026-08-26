@@ -2,7 +2,7 @@
 
 === /bun-sqlite.d.ts ===
 declare module "databases/*.sqlite" with { type: "sqlite" } {
->"databases/*.sqlite" : typeof import("databases/*.sqlite")
+>"databases/*.sqlite" : typeof import("databases/*.sqlite", { with: { type: "sqlite" } })
 >type : "sqlite"
 
     const database: {
@@ -20,7 +20,7 @@ declare module "databases/*.sqlite" with { type: "sqlite" } {
 }
 
 declare module "*.sqlite" with { type: "sqlite", embed: "true" } {
->"*.sqlite" : typeof import("*.sqlite")
+>"*.sqlite" : typeof import("*.sqlite", { with: { embed: "true", type: "sqlite" } })
 >type : "sqlite"
 >embed : "true"
 

@@ -5229,7 +5229,7 @@ func (c *Checker) checkModuleDeclaration(node *ast.Node) {
 	}
 	attributes := node.AsModuleDeclaration().Attributes
 	if attributes != nil {
-		c.checkSourceElement(attributes)
+		c.checkImportAttributesType(attributes)
 	}
 	isAmbientExternalModule := ast.IsAmbientModule(node)
 	contextErrorMessage := core.IfElse(isAmbientExternalModule,
@@ -5309,18 +5309,20 @@ func (c *Checker) checkModuleDeclaration(node *ast.Node) {
 				c.error(node.Name(), diagnostics.Ambient_modules_cannot_be_nested_in_other_modules_or_namespaces)
 			}
 		}
-		if attributes != nil {
-			importAttributesType := c.getGlobalImportAttributesTypeChecked()
-			moduleAttributesType := c.getTypeOfModuleDeclarationImportAttributes(node)
-			if importAttributesType != c.emptyObjectType {
-				c.checkTypeAssignableTo(moduleAttributesType, importAttributesType, attributes, nil)
-			}
-		}
 	}
 }
 
-func (c *Checker) getTypeOfModuleDeclarationImportAttributes(moduleDeclaration *ast.Node) *Type {
-	attributes := moduleDeclaration.AsModuleDeclaration().Attributes
+func (c *Checker) checkImportAttributesType(attributes *ast.TypeLiteralNodeNode) {
+	c.checkGrammarImportAttributesType(attributes.AsTypeLiteralNode())
+	c.checkSourceElement(attributes)
+	importAttributesType := c.getGlobalImportAttributesTypeChecked()
+	moduleAttributesType := c.getTypeOfModuleDeclarationImportAttributes(attributes)
+	if importAttributesType != c.emptyObjectType {
+		c.checkTypeAssignableTo(moduleAttributesType, importAttributesType, attributes, nil)
+	}
+}
+
+func (c *Checker) getTypeOfModuleDeclarationImportAttributes(attributes *ast.TypeLiteralNodeNode) *Type {
 	if attributes == nil {
 		return c.emptyObjectType
 	}
@@ -5336,7 +5338,7 @@ func (c *Checker) getTypeOfModuleImportAttributes(symbol *ast.Symbol) *Type {
 	if moduleDecl == nil {
 		result = c.emptyObjectType
 	} else {
-		result = c.getTypeOfModuleDeclarationImportAttributes(moduleDecl)
+		result = c.getTypeOfModuleDeclarationImportAttributes(moduleDecl.AsModuleDeclaration().Attributes)
 	}
 	c.moduleImportAttributesTypes[symbol] = result
 	return result
@@ -15789,7 +15791,7 @@ func (c *Checker) GetAmbientModules() []*ast.Symbol {
 	c.ambientModulesOnce.Do(func() {
 		seen := make(map[*ast.Symbol]struct{})
 		for sym, global := range c.globals {
-			if strings.HasPrefix(sym, "\"") && strings.HasSuffix(sym, "\"") {
+			if ast.IsAmbientModuleSymbolName(sym) {
 				c.ambientModules = append(c.ambientModules, global)
 				seen[global] = struct{}{}
 			}

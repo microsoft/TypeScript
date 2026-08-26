@@ -52,8 +52,14 @@ type NodeBuilderLinks struct {
 }
 
 type NodeBuilderSymbolLinks struct {
-	specifierCache module.ModeAwareCache[string]
+	specifierCache module.ModeAwareCache[moduleSpecifierResult]
 }
+
+type moduleSpecifierResult struct {
+	specifier            string
+	importAttributesType *Type
+}
+
 type NodeBuilderContext struct {
 	host                            Host
 	tracker                         nodebuilder.SymbolTracker
@@ -659,24 +665,20 @@ func (b *NodeBuilderImpl) symbolToTypeNode(symbol *ast.Symbol, mask ast.SymbolFl
 		}
 		contextFile := ast.GetSourceFileOfNode(b.e.MostOriginal(b.ctx.enclosingDeclaration)) // TODO: Just use b.ctx.enclosingFile ? Or is the delayed lookup important for context moves?
 		targetFile := ast.GetSourceFileOfModule(chain[0])
-		var specifier string
-		var attributes *ast.Node
+		var specifierResult moduleSpecifierResult
+		var importModeOverride core.ResolutionMode
 		if b.ch.compilerOptions.GetModuleResolutionKind() == core.ModuleResolutionKindNode16 || b.ch.compilerOptions.GetModuleResolutionKind() == core.ModuleResolutionKindNodeNext {
 			// An `import` type directed at an esm format file is only going to resolve in esm mode - set the esm mode assertion
 			if targetFile != nil && contextFile != nil && b.ch.program.GetEmitModuleFormatOfFile(targetFile) == core.ModuleKindESNext && b.ch.program.GetEmitModuleFormatOfFile(targetFile) != b.ch.program.GetEmitModuleFormatOfFile(contextFile) {
-				specifier = b.getSpecifierForModuleSymbol(chain[0], core.ModuleKindESNext)
-				attributes = b.f.NewImportAttributes(
-					ast.KindWithKeyword,
-					b.f.NewNodeList([]*ast.Node{b.f.NewImportAttribute(b.newStringLiteral("resolution-mode"), b.newStringLiteral("import"))}),
-					false,
-				)
+				specifierResult = b.getSpecifierForModuleSymbol(chain[0], core.ModuleKindESNext)
+				importModeOverride = core.ModuleKindESNext
 			}
 		}
-		if len(specifier) == 0 {
-			specifier = b.getSpecifierForModuleSymbol(chain[0], core.ResolutionModeNone)
+		if len(specifierResult.specifier) == 0 { // !!! HERE: fix: if we modify `getSpecifierForModuleSymbol` to panic on empty, we'll need to signal this to the function here in a different way
+			specifierResult = b.getSpecifierForModuleSymbol(chain[0], core.ResolutionModeNone)
 		}
-		if (b.ctx.flags&nodebuilder.FlagsAllowNodeModulesRelativePaths == 0) /* && b.ch.compilerOptions.GetModuleResolutionKind() != core.ModuleResolutionKindClassic */ && strings.Contains(specifier, "/node_modules/") {
-			oldSpecifier := specifier
+		if (b.ctx.flags&nodebuilder.FlagsAllowNodeModulesRelativePaths == 0) /* && b.ch.compilerOptions.GetModuleResolutionKind() != core.ModuleResolutionKindClassic */ && strings.Contains(specifierResult.specifier, "/node_modules/") {
+			oldSpecifierResult := specifierResult
 
 			if b.ch.compilerOptions.GetModuleResolutionKind() == core.ModuleResolutionKindNode16 || b.ch.compilerOptions.GetModuleResolutionKind() == core.ModuleResolutionKindNodeNext {
 				// We might be able to write a portable import type using a mode override; try specifier generation again, but with a different mode set
@@ -684,34 +686,27 @@ func (b *NodeBuilderImpl) symbolToTypeNode(symbol *ast.Symbol, mask ast.SymbolFl
 				if b.ch.program.GetEmitModuleFormatOfFile(contextFile) == core.ModuleKindESNext {
 					swappedMode = core.ModuleKindCommonJS
 				}
-				specifier = b.getSpecifierForModuleSymbol(chain[0], swappedMode)
+				specifierResult = b.getSpecifierForModuleSymbol(chain[0], swappedMode)
 
-				if strings.Contains(specifier, "/node_modules/") {
+				if strings.Contains(specifierResult.specifier, "/node_modules/") {
 					// Still unreachable :(
-					specifier = oldSpecifier
+					specifierResult = oldSpecifierResult
 				} else {
-					modeStr := "require"
-					if swappedMode == core.ModuleKindESNext {
-						modeStr = "import"
-					}
-					attributes = b.f.NewImportAttributes(
-						ast.KindWithKeyword,
-						b.f.NewNodeList([]*ast.Node{b.f.NewImportAttribute(b.newStringLiteral("resolution-mode"), b.newStringLiteral(modeStr))}),
-						false,
-					)
+					importModeOverride = swappedMode
 				}
 			}
 
-			if attributes == nil {
+			if importModeOverride == core.ResolutionModeNone {
 				// If ultimately we can only name the symbol with a reference that dives into a `node_modules` folder, we should error
 				// since declaration files with these kinds of references are liable to fail when published :(
 				b.ctx.encounteredError = true
-				b.ctx.tracker.ReportLikelyUnsafeImportRequiredError(oldSpecifier, symbol.Name)
+				b.ctx.tracker.ReportLikelyUnsafeImportRequiredError(oldSpecifierResult.specifier, symbol.Name)
 			}
 		}
 
-		lit := b.f.NewLiteralTypeNode(b.newStringLiteral(specifier))
-		b.ctx.approximateLength += len(specifier) + 10 // specifier + import("")
+		attributes := b.createImportAttributesForModuleSpecifier(specifierResult, importModeOverride)
+		lit := b.f.NewLiteralTypeNode(b.newStringLiteral(specifierResult.specifier))
+		b.ctx.approximateLength += len(specifierResult.specifier) + 10 // specifier + import("")
 		if nonRootParts == nil || ast.IsEntityName(nonRootParts) {
 			if nonRootParts != nil {
 				// !!! TODO: smuggle type arguments out
@@ -868,9 +863,9 @@ func (b *NodeBuilderImpl) createExpressionFromSymbolChain(chain []*ast.Symbol, i
 	}
 
 	if startsWithSingleOrDoubleQuote(symbolName) && core.Some(symbol.Declarations, hasNonGlobalAugmentationExternalModuleSymbol) {
-		specifier := b.getSpecifierForModuleSymbol(symbol, core.ResolutionModeNone)
-		b.ctx.approximateLength += 2 + len(specifier)
-		return b.newStringLiteral(specifier)
+		specifierResult := b.getSpecifierForModuleSymbol(symbol, core.ResolutionModeNone)
+		b.ctx.approximateLength += 2 + len(specifierResult.specifier)
+		return b.newStringLiteral(specifierResult.specifier)
 	}
 
 	if index == 0 || canUsePropertyAccess(symbolName) {
@@ -1101,7 +1096,7 @@ func (b *NodeBuilderImpl) getSymbolChain(symbol *ast.Symbol, meaning ast.SymbolF
 		if len(parents) > 0 {
 			parentSpecifiers := core.Map(parents, func(symbol *ast.Symbol) sortedSymbolNamePair {
 				if core.Some(symbol.Declarations, hasNonGlobalAugmentationExternalModuleSymbol) {
-					return sortedSymbolNamePair{symbol, b.getSpecifierForModuleSymbol(symbol, core.ResolutionModeNone)}
+					return sortedSymbolNamePair{symbol, b.getSpecifierForModuleSymbol(symbol, core.ResolutionModeNone).specifier}
 				}
 				return sortedSymbolNamePair{symbol, ""}
 			})
@@ -1201,13 +1196,13 @@ func TryGetModuleSpecifierFromDeclaration(node *ast.Node) *ast.Node {
 func tryGetModuleSpecifierFromDeclarationWorker(node *ast.Node) *ast.Node {
 	switch node.Kind {
 	case ast.KindVariableDeclaration, ast.KindBindingElement:
-		requireCall := ast.FindAncestor(node.Initializer(), func(node *ast.Node) bool {
-			return ast.IsRequireCall(node, true /*requireStringLiteralLikeArgument*/)
+		moduleCall := ast.FindAncestor(node.Initializer(), func(node *ast.Node) bool {
+			return ast.IsRequireCall(node, true /*requireStringLiteralLikeArgument*/) || ast.IsImportCall(node)
 		})
-		if requireCall == nil {
+		if moduleCall == nil {
 			return nil
 		}
-		return requireCall.Arguments()[0]
+		return moduleCall.Arguments()[0]
 	case ast.KindImportDeclaration, ast.KindExportDeclaration, ast.KindJSDocImportTag:
 		return node.ModuleSpecifier()
 	case ast.KindImportEqualsDeclaration:
@@ -1246,7 +1241,17 @@ func tryGetModuleSpecifierFromDeclarationWorker(node *ast.Node) *ast.Node {
 	}
 }
 
-func (b *NodeBuilderImpl) getSpecifierForModuleSymbol(symbol *ast.Symbol, overrideImportMode core.ResolutionMode) string {
+func (b *NodeBuilderImpl) getSpecifierForModuleSymbol(symbol *ast.Symbol, overrideImportMode core.ResolutionMode) moduleSpecifierResult {
+	enclosingDeclaration := b.e.MostOriginal(b.ctx.enclosingDeclaration)
+	var originalModuleSpecifier *ast.Node
+	if canHaveModuleSpecifier(enclosingDeclaration) {
+		originalModuleSpecifier = TryGetModuleSpecifierFromDeclaration(enclosingDeclaration)
+	}
+	var originalImportAttributesType *Type
+	if originalModuleSpecifier != nil {
+		originalImportAttributesType = b.ch.getImportAttributesTypeForModuleSpecifier(originalModuleSpecifier)
+	}
+
 	file := ast.GetDeclarationOfKind(symbol, ast.KindSourceFile)
 	if file == nil {
 		equivalentSymbol := core.FirstNonNil(symbol.Declarations, func(d *ast.Node) *ast.Symbol {
@@ -1259,24 +1264,23 @@ func (b *NodeBuilderImpl) getSpecifierForModuleSymbol(symbol *ast.Symbol, overri
 
 	if file == nil {
 		if declaration := core.Find(symbol.Declarations, ast.IsModuleWithStringLiteralName); declaration != nil {
-			return declaration.Name().Text()
+			specifier := declaration.Name().Text()
+			if originalImportAttributesType != nil && b.moduleSpecifierResolvesToSymbol(specifier, originalImportAttributesType, symbol) {
+				return moduleSpecifierResult{specifier: specifier, importAttributesType: originalImportAttributesType}
+			}
+			return moduleSpecifierResult{specifier: specifier, importAttributesType: b.ch.getTypeOfModuleImportAttributes(symbol)}
 		}
-		if ast.IsAmbientModuleSymbolName(symbol.Name) {
-			return stringutil.StripQuotes(symbol.Name)
+		if specifier, ok := ast.TryGetAmbientModuleNameFromSymbolName(symbol.Name); ok {
+			return moduleSpecifierResult{specifier: specifier}
 		}
 	}
 	if b.ctx.enclosingFile == nil {
-		if ast.IsAmbientModuleSymbolName(symbol.Name) {
-			return stringutil.StripQuotes(symbol.Name)
+		if specifier, ok := ast.TryGetAmbientModuleNameFromSymbolName(symbol.Name); ok {
+			return moduleSpecifierResult{specifier: specifier}
 		}
-		return ast.GetSourceFileOfModule(symbol).FileName()
+		return moduleSpecifierResult{specifier: ast.GetSourceFileOfModule(symbol).FileName()}
 	}
 
-	enclosingDeclaration := b.e.MostOriginal(b.ctx.enclosingDeclaration)
-	var originalModuleSpecifier *ast.Node
-	if canHaveModuleSpecifier(enclosingDeclaration) {
-		originalModuleSpecifier = TryGetModuleSpecifierFromDeclaration(enclosingDeclaration)
-	}
 	contextFile := b.ctx.enclosingFile
 	resolutionMode := overrideImportMode
 	if resolutionMode == core.ResolutionModeNone && originalModuleSpecifier != nil {
@@ -1287,11 +1291,11 @@ func (b *NodeBuilderImpl) getSpecifierForModuleSymbol(symbol *ast.Symbol, overri
 	cacheKey := module.ModeAwareCacheKey{Name: string(contextFile.Path()), Mode: resolutionMode}
 	links := b.symbolLinks.Get(symbol)
 	if links.specifierCache == nil {
-		links.specifierCache = make(module.ModeAwareCache[string])
+		links.specifierCache = make(module.ModeAwareCache[moduleSpecifierResult])
 	}
 	result, ok := links.specifierCache[cacheKey]
 	if ok {
-		return result
+		return b.moduleSpecifierResultForSymbol(result, originalImportAttributesType, symbol)
 	}
 	// For declaration bundles, we need to generate absolute paths relative to the common source dir for imports,
 	// just like how the declaration emitter does for the ambient module declarations - we can easily accomplish this
@@ -1304,8 +1308,7 @@ func (b *NodeBuilderImpl) getSpecifierForModuleSymbol(symbol *ast.Symbol, overri
 	if resolutionMode == core.ResolutionModeESM {
 		endingPref = modulespecifiers.ImportModuleSpecifierEndingPreferenceJs
 	}
-
-	allSpecifiers := modulespecifiers.GetModuleSpecifiers(
+	moduleSpecifiersResult := modulespecifiers.GetModuleSpecifiers(
 		symbol,
 		b.ch,
 		specifierCompilerOptions,
@@ -1320,13 +1323,78 @@ func (b *NodeBuilderImpl) getSpecifierForModuleSymbol(symbol *ast.Symbol, overri
 		},
 		false, /*forAutoImports*/
 	)
-	if len(allSpecifiers) == 0 {
-		links.specifierCache[cacheKey] = ""
-		return ""
+	if len(moduleSpecifiersResult.Specifiers) == 0 {
+		// !!! HERE: we should panic here; Strada used to throw here because it called `first(allSpecifiers)`.
+		result := moduleSpecifierResult{}
+		links.specifierCache[cacheKey] = result
+		return result
 	}
-	specifier := allSpecifiers[0]
-	links.specifierCache[cacheKey] = specifier
-	return specifier
+	result = moduleSpecifierResult{specifier: moduleSpecifiersResult.Specifiers[0]}
+	if moduleSpecifiersResult.AmbientModuleSymbol != nil {
+		result.importAttributesType = b.ch.getTypeOfModuleImportAttributes(moduleSpecifiersResult.AmbientModuleSymbol)
+	}
+	links.specifierCache[cacheKey] = result
+	return b.moduleSpecifierResultForSymbol(result, originalImportAttributesType, symbol)
+}
+
+func (b *NodeBuilderImpl) moduleSpecifierResultForSymbol(result moduleSpecifierResult, importAttributesType *Type, symbol *ast.Symbol) moduleSpecifierResult {
+	if importAttributesType != nil && b.moduleSpecifierResolvesToSymbol(result.specifier, importAttributesType, symbol) {
+		result.importAttributesType = importAttributesType
+	}
+	return result
+}
+
+func (b *NodeBuilderImpl) moduleSpecifierResolvesToSymbol(specifier string, importAttributesType *Type, symbol *ast.Symbol) bool {
+	location := b.ctx.enclosingDeclaration
+	if location == nil && b.ctx.enclosingFile != nil {
+		location = b.ctx.enclosingFile.AsNode()
+	}
+	if location == nil {
+		return false
+	}
+	resolved := b.ch.resolveExternalModule(location, specifier, nil, nil, false /*isForAugmentation*/, importAttributesType)
+	return resolved != nil && b.ch.getMergedSymbol(resolved) == b.ch.getMergedSymbol(symbol)
+}
+
+func (b *NodeBuilderImpl) createImportAttributesForModuleSpecifier(result moduleSpecifierResult, importModeOverride core.ResolutionMode) *ast.Node {
+	if (result.importAttributesType == nil || result.importAttributesType == b.ch.emptyObjectType) && importModeOverride == core.ResolutionModeNone {
+		return nil
+	}
+
+	var properties []*ast.Symbol
+	if result.importAttributesType != nil && result.importAttributesType != b.ch.emptyObjectType {
+		properties = slices.Clone(b.ch.getPropertiesOfType(result.importAttributesType))
+	}
+	slices.SortFunc(properties, func(a, b *ast.Symbol) int { return strings.Compare(a.Name, b.Name) })
+	attributes := make([]*ast.Node, 0, len(properties)+1)
+	resolutionMode := ""
+	if importModeOverride != core.ResolutionModeNone {
+		resolutionMode = core.IfElse(importModeOverride == core.ResolutionModeESM, "import", "require")
+		attributes = append(attributes, b.f.NewImportAttribute(b.newStringLiteral("resolution-mode"), b.newStringLiteral(resolutionMode)))
+		b.ctx.approximateLength += len("resolution-mode") + len(resolutionMode) + 6 // `"resolution-mode": "value"`
+	}
+	for _, property := range properties {
+		name := property.Name
+		propertyType := b.ch.getTypeOfSymbol(property)
+		if propertyType.flags&TypeFlagsStringLiteral == 0 {
+			continue
+		}
+		value := getStringLiteralValue(propertyType)
+		var nameNode *ast.Node
+		if scanner.IsIdentifierText(name, core.LanguageVariantStandard) {
+			nameNode = b.f.NewIdentifier(name)
+		} else {
+			nameNode = b.newStringLiteral(name)
+			b.ctx.approximateLength += 2
+		}
+		attributes = append(attributes, b.f.NewImportAttribute(nameNode, b.newStringLiteral(value)))
+		b.ctx.approximateLength += len(name) + len(value) + 4 // `name: "value"`
+	}
+	if len(attributes) == 0 {
+		return nil
+	}
+	b.ctx.approximateLength += 16 + 2*(len(attributes)-1) // `, { with: { , ... , } }`
+	return b.f.NewImportAttributes(ast.KindWithKeyword, b.f.NewNodeList(attributes), false)
 }
 
 func (b *NodeBuilderImpl) typeParameterToDeclarationWithConstraint(typeParameter *Type, constraintNode *ast.TypeNode) *ast.TypeParameterDeclarationNode {

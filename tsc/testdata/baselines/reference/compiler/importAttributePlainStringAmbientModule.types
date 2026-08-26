@@ -2,7 +2,7 @@
 
 === /types.d.ts ===
 declare module "plainstring" with { type: "css" } {
->"plainstring" : typeof import("plainstring")
+>"plainstring" : typeof import("plainstring", { with: { type: "css" } })
 >type : "css"
 
     export const value: "plain";

@@ -2,12 +2,16 @@
 /checkErrors.d.ts(1,37): error TS2322: Type '{ type: number; }' is not assignable to type 'ImportAttributes'.
   Property 'type' is incompatible with index signature.
     Type 'number' is not assignable to type 'string'.
+/checkErrors.d.ts(1,45): error TS1555: An import attributes property must have a string literal type annotation.
 /checkErrors.d.ts(2,37): error TS2322: Type '{ type: { name: string; }; }' is not assignable to type 'ImportAttributes'.
   Property 'type' is incompatible with index signature.
     Type '{ name: string; }' is not assignable to type 'string'.
+/checkErrors.d.ts(2,45): error TS1555: An import attributes property must have a string literal type annotation.
+/checkErrors.d.ts(3,33): error TS1555: An import attributes property must have a string literal type annotation.
+/valid.d.ts(11,38): error TS1555: An import attributes property must have a string literal type annotation.
 
 
-==== /valid.d.ts (0 errors) ====
+==== /valid.d.ts (1 errors) ====
     declare module "*.asset" with { type: "css" } {
       const stylesheet: CSSStyleSheet;
       export default stylesheet;
@@ -19,6 +23,8 @@
     }
     
     declare module "*.data" with { type: "json" | "json5" } {
+                                         ~~~~~~~~~~~~~~~~
+!!! error TS1555: An import attributes property must have a string literal type annotation.
       const data: { version: number };
       export default data;
     }
@@ -35,17 +41,24 @@
     text.toUpperCase();
     data.version.toFixed();
     
-==== /checkErrors.d.ts (2 errors) ====
+==== /checkErrors.d.ts (5 errors) ====
     declare module "*.numberValue" with { type: number } {}
                                         ~~~~~~~~~~~~~~~~
 !!! error TS2322: Type '{ type: number; }' is not assignable to type 'ImportAttributes'.
 !!! error TS2322:   Property 'type' is incompatible with index signature.
 !!! error TS2322:     Type 'number' is not assignable to type 'string'.
+                                                ~~~~~~
+!!! error TS1555: An import attributes property must have a string literal type annotation.
     declare module "*.objectValue" with { type: { name: string } } {}
                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2322: Type '{ type: { name: string; }; }' is not assignable to type 'ImportAttributes'.
 !!! error TS2322:   Property 'type' is incompatible with index signature.
 !!! error TS2322:     Type '{ name: string; }' is not assignable to type 'string'.
+                                                ~~~~~~~~~~~~~~~~
+!!! error TS1555: An import attributes property must have a string literal type annotation.
+    declare module "*" with { type: "md" | "markdown" } {}
+                                    ~~~~~~~~~~~~~~~~~
+!!! error TS1555: An import attributes property must have a string literal type annotation.
 ==== /augmentation.ts (1 errors) ====
     export {};
     declare module "file.augmentable" with { type: "css" } {

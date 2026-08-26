@@ -9,7 +9,7 @@ declare module "*.asset" {
 }
 
 declare module "attributed/*.asset" with { type: "css" } {
->"attributed/*.asset" : typeof import("attributed/*.asset")
+>"attributed/*.asset" : typeof import("attributed/*.asset", { with: { type: "css" } })
 >type : "css"
 
     export const attributed: "attributed";
@@ -17,7 +17,7 @@ declare module "attributed/*.asset" with { type: "css" } {
 }
 
 declare module "*.special" with { type: "special" } {
->"*.special" : typeof import("*.special")
+>"*.special" : typeof import("*.special", { with: { type: "special" } })
 >type : "special"
 
     export const attributed: "attributed";

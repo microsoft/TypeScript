@@ -2,7 +2,7 @@
 
 === /types.d.ts ===
 declare module "*.style" with { type: "css" } {
->"*.style" : typeof import("*.style")
+>"*.style" : typeof import("*.style", { with: { type: "css" } })
 >type : "css"
 
     export interface Style {
@@ -12,7 +12,7 @@ declare module "*.style" with { type: "css" } {
 }
 
 declare module "formatted/*.style" with { type: "css", format: "module" } {
->"formatted/*.style" : typeof import("formatted/*.style")
+>"formatted/*.style" : typeof import("formatted/*.style", { with: { format: "module", type: "css" } })
 >type : "css"
 >format : "module"
 

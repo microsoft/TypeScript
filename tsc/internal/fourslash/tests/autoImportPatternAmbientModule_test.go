@@ -8,7 +8,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/testutil"
 )
 
-// Auto-imports ignores
+// Auto-imports ignore merged pattern ambient modules.
 func TestAutoImportMergedPatternAmbientModule(t *testing.T) {
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")

@@ -249,11 +249,11 @@ func (b *NodeBuilderImpl) getModuleSpecifierOverride(parent *ast.Node, lit *ast.
 			parentSymbol = b.lookupSymbolChain(nodeSymbol, meaning, true)[0]
 		}
 		if parentSymbol != nil && IsExternalModuleSymbol(parentSymbol) {
-			name = b.getSpecifierForModuleSymbol(parentSymbol, mode)
+			name = b.getSpecifierForModuleSymbol(parentSymbol, mode).specifier
 		} else {
 			targetFile := b.ch.getExternalModuleFileFromDeclaration(parent)
 			if targetFile != nil {
-				name = b.getSpecifierForModuleSymbol(targetFile.Symbol, mode)
+				name = b.getSpecifierForModuleSymbol(targetFile.Symbol, mode).specifier
 			}
 		}
 		if len(name) > 0 && strings.Contains(name, "/node_modules/") {

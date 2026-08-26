@@ -1,5 +1,5 @@
 /augmentations.ts(11,16): error TS2664: Invalid module name in augmentation, module 'unattributed.special' cannot be found.
-/index.ts(7,12): error TS2339: Property 'augmented' does not exist on type 'typeof import("attributed/*.asset")'.
+/index.ts(7,12): error TS2339: Property 'augmented' does not exist on type 'typeof import("attributed/*.asset", { with: { type: "css" } })'.
 /index.ts(9,31): error TS2307: Cannot find module 'unattributed.special' or its corresponding type declarations.
 
 
@@ -42,7 +42,7 @@
     attributed.attributed;
     attributed.augmented;
                ~~~~~~~~~
-!!! error TS2339: Property 'augmented' does not exist on type 'typeof import("attributed/*.asset")'.
+!!! error TS2339: Property 'augmented' does not exist on type 'typeof import("attributed/*.asset", { with: { type: "css" } })'.
     
     import * as unattributed from "unattributed.special";
                                   ~~~~~~~~~~~~~~~~~~~~~~

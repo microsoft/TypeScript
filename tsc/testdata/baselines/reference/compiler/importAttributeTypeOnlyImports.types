@@ -2,7 +2,7 @@
 
 === /types.d.ts ===
 declare module "*.style" with { type: "css" } {
->"*.style" : typeof import("*.style")
+>"*.style" : typeof import("*.style", { with: { type: "css" } })
 >type : "css"
 
     export interface Style {
@@ -12,7 +12,7 @@ declare module "*.style" with { type: "css" } {
 }
 
 declare module "require/*.style" with { type: "css", "resolution-mode": "require" } {
->"require/*.style" : typeof import("require/*.style")
+>"require/*.style" : typeof import("require/*.style", { with: { "resolution-mode": "require", type: "css" } })
 >type : "css"
 >"resolution-mode" : "require"
 
@@ -25,11 +25,11 @@ declare module "require/*.style" with { type: "css", "resolution-mode": "require
 === /reexports.ts ===
 export type { Style } from "plain.style" with { type: "css" };
 >Style : Style
->type : error
+>type : any
 
 export type { RequireStyle } from "require/reexport.style" with { type: "css", "resolution-mode": "require" };
->RequireStyle : import("require/*.style").RequireStyle
->type : error
+>RequireStyle : import("require/*.style", { with: { "resolution-mode": "require", type: "css" } }).RequireStyle
+>type : any
 
 === /jsdoc.js ===
 /** @import { Style } from "jsdoc.style" with { type: "css" } */
@@ -50,19 +50,19 @@ const jsdocCssKind = jsdocStyle.kind;
 === /index.ts ===
 import type { Style } from "plain.style" with { type: "css" };
 >Style : Style
->type : error
+>type : any
 
 import type { RequireStyle } from "require/import.style" with { type: "css", "resolution-mode": "require" };
 >RequireStyle : RequireStyle
->type : error
+>type : any
 
 type ImportTypeStyle = import("inline.style", { with: { type: "css" } }).Style;
 >ImportTypeStyle : Style
->type : error
+>type : any
 
 type ImportTypeRequireStyle = import("require/inline.style", { with: { type: "css", "resolution-mode": "require" } }).RequireStyle;
 >ImportTypeRequireStyle : RequireStyle
->type : error
+>type : any
 
 declare const importedStyle: Style;
 >importedStyle : Style

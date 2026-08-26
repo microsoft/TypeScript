@@ -109,6 +109,10 @@ const marker = 0;`
 			continue
 		}
 		assert.Assert(t, strings.HasPrefix(symbol.Name, "\"*.variant\""+ast.InternalSymbolNamePrefix+"pattern@"))
+		assert.Assert(t, ast.IsAmbientModuleSymbolName(symbol.Name))
+		moduleName, ok := ast.TryGetAmbientModuleNameFromSymbolName(symbol.Name)
+		assert.Assert(t, ok)
+		assert.Equal(t, moduleName, "*.variant")
 		assert.Equal(t, len(symbol.Declarations), 2)
 		var exportNames []string
 		for _, exported := range c.GetExportsOfModule(symbol) {

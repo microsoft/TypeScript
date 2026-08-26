@@ -2,7 +2,7 @@
 
 === /types.d.ts ===
 declare module "*.ext" with { type: "custom" } {
->"*.ext" : typeof import("*.ext")
+>"*.ext" : typeof import("*.ext", { with: { type: "custom" } })
 >type : "custom"
 
     export const ambient: "ambient";
