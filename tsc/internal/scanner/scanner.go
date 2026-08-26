@@ -1499,33 +1499,32 @@ func (s *Scanner) scanIdentifier(prefixLength int, variant identifierVariant) bo
 		}
 		s.pos = identifierStart
 	}
-	identifier := s.scanIdentifierStart(variant)
-	if identifier != "" {
-		// Preserve the original source slice when decoding did not change the identifier;
-		// otherwise combine any prefix (such as "#") with the decoded identifier start.
-		if s.text[identifierStart:s.pos] == identifier {
-			s.tokenValue = s.text[start:s.pos]
-		} else {
-			s.tokenValue = s.text[start:identifierStart] + identifier
-		}
-		s.tokenValue += s.scanIdentifierParts(variant)
-		return true
-	}
-	return false
-}
-
-func (s *Scanner) scanIdentifierStart(variant identifierVariant) string {
 	ch, size := s.charAndSize()
 	if IsIdentifierStart(ch) {
-		s.pos += size
-		return string(ch)
+		languageVariant := core.LanguageVariantStandard
+		if variant == identifierVariantJSX {
+			languageVariant = core.LanguageVariantJSX
+		}
+		for {
+			s.pos += size
+			ch, size = s.charAndSize()
+			if !IsIdentifierPartEx(ch, languageVariant) {
+				break
+			}
+		}
+		s.tokenValue = s.text[start:s.pos]
+		if ch == '\\' {
+			s.tokenValue += s.scanIdentifierParts(variant)
+		}
+		return true
 	}
 	if ch == '\\' {
 		if escaped, ok := s.scanIdentifierEscape(IsIdentifierStart, variant == identifierVariantRegExpGroupName); ok {
-			return string(escaped)
+			s.tokenValue = s.text[start:identifierStart] + string(escaped) + s.scanIdentifierParts(variant)
+			return true
 		}
 	}
-	return ""
+	return false
 }
 
 func (s *Scanner) scanIdentifierParts(variant identifierVariant) string {
