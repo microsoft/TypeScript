@@ -1429,6 +1429,7 @@ func (c *Checker) mergePatternAmbientModules() {
 			c.globals[module.Symbol.Name] = c.getMergedSymbol(module.Symbol)
 		}
 	}
+	c.patternAmbientModules = grouped
 }
 
 func (c *Checker) mergeModuleAugmentation(moduleName *ast.Node) {
