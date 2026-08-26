@@ -1,0 +1,137 @@
+//// [tests/cases/compiler/objectBindingPatternDefaultMissingElements.ts] ////
+
+=== /unchecked.js ===
+export const uncheckedObject = ({
+>uncheckedObject : ({ required, optional, }?: { optional?: boolean | undefined; required?: any; }) => void
+>({    required,    optional = false,} = {}) => {} : ({ required, optional, }?: { optional?: boolean | undefined; required?: any; }) => void
+
+    required,
+>required : any
+
+    optional = false,
+>optional : boolean
+>false : false
+
+} = {}) => {};
+>{} : {}
+
+export const uncheckedArray = ([
+>uncheckedArray : ([required, optional,]?: [any?, (boolean | undefined)?]) => void
+>([    required,    optional = false,] = []) => {} : ([required, optional,]?: [any?, (boolean | undefined)?]) => void
+
+    required,
+>required : any
+
+    optional = false,
+>optional : boolean
+>false : false
+
+] = []) => {};
+>[] : []
+
+=== /checked.js ===
+// @ts-check
+export const checkedObject = ({
+>checkedObject : ({ required, optional, }?: { optional?: boolean | undefined; required?: any; }) => void
+>({    required,    optional = false,} = {}) => {} : ({ required, optional, }?: { optional?: boolean | undefined; required?: any; }) => void
+
+    required,
+>required : any
+
+    optional = false,
+>optional : boolean
+>false : false
+
+} = {}) => {};
+>{} : {}
+
+export const checkedArray = ([
+>checkedArray : ([required, optional,]?: [any?, (boolean | undefined)?]) => void
+>([    required,    optional = false,] = []) => {} : ([required, optional,]?: [any?, (boolean | undefined)?]) => void
+
+    required,
+>required : any
+
+    optional = false,
+>optional : boolean
+>false : false
+
+] = []) => {};
+>[] : []
+
+=== /main.ts ===
+import { checkedArray, checkedObject } from "./checked";
+>checkedArray : ([required, optional,]?: [any?, (boolean | undefined)?]) => void
+>checkedObject : ({ required, optional, }?: { optional?: boolean | undefined; required?: any; }) => void
+
+import { uncheckedArray, uncheckedObject } from "./unchecked";
+>uncheckedArray : ([required, optional,]?: [any?, (boolean | undefined)?]) => void
+>uncheckedObject : ({ required, optional, }?: { optional?: boolean | undefined; required?: any; }) => void
+
+export const typedObject = ({
+>typedObject : ({ required, optional, }?: { optional?: boolean | undefined; required?: any; }) => void
+>({    required,    optional = false,} = {}) => {} : ({ required, optional, }?: { optional?: boolean | undefined; required?: any; }) => void
+
+    required,
+>required : any
+
+    optional = false,
+>optional : boolean
+>false : false
+
+} = {}) => {};
+>{} : {}
+
+export const typedArray = ([
+>typedArray : ([required, optional,]?: [any?, (boolean | undefined)?]) => void
+>([    required,    optional = false,] = []) => {} : ([required, optional,]?: [any?, (boolean | undefined)?]) => void
+
+    required,
+>required : any
+
+    optional = false,
+>optional : boolean
+>false : false
+
+] = []) => {};
+>[] : []
+
+uncheckedObject({ required: "value" });
+>uncheckedObject({ required: "value" }) : void
+>uncheckedObject : ({ required, optional, }?: { optional?: boolean | undefined; required?: any; }) => void
+>{ required: "value" } : { required: string; }
+>required : string
+>"value" : "value"
+
+uncheckedArray(["value"]);
+>uncheckedArray(["value"]) : void
+>uncheckedArray : ([required, optional,]?: [any?, (boolean | undefined)?]) => void
+>["value"] : [string]
+>"value" : "value"
+
+checkedObject({ required: "value" });
+>checkedObject({ required: "value" }) : void
+>checkedObject : ({ required, optional, }?: { optional?: boolean | undefined; required?: any; }) => void
+>{ required: "value" } : { required: string; }
+>required : string
+>"value" : "value"
+
+checkedArray(["value"]);
+>checkedArray(["value"]) : void
+>checkedArray : ([required, optional,]?: [any?, (boolean | undefined)?]) => void
+>["value"] : [string]
+>"value" : "value"
+
+typedObject({ required: "value" });
+>typedObject({ required: "value" }) : void
+>typedObject : ({ required, optional, }?: { optional?: boolean | undefined; required?: any; }) => void
+>{ required: "value" } : { required: string; }
+>required : string
+>"value" : "value"
+
+typedArray(["value"]);
+>typedArray(["value"]) : void
+>typedArray : ([required, optional,]?: [any?, (boolean | undefined)?]) => void
+>["value"] : [string]
+>"value" : "value"
+

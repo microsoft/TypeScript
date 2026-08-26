@@ -1,0 +1,101 @@
+//// [tests/cases/compiler/objectBindingPatternDefaultMissingElements.ts] ////
+
+=== /unchecked.js ===
+export const uncheckedObject = ({
+>uncheckedObject : Symbol(uncheckedObject, Decl(unchecked.js, 0, 12))
+
+    required,
+>required : Symbol(required, Decl(unchecked.js, 0, 33))
+
+    optional = false,
+>optional : Symbol(optional, Decl(unchecked.js, 1, 13))
+
+} = {}) => {};
+
+export const uncheckedArray = ([
+>uncheckedArray : Symbol(uncheckedArray, Decl(unchecked.js, 5, 12))
+
+    required,
+>required : Symbol(required, Decl(unchecked.js, 5, 32))
+
+    optional = false,
+>optional : Symbol(optional, Decl(unchecked.js, 6, 13))
+
+] = []) => {};
+
+=== /checked.js ===
+// @ts-check
+export const checkedObject = ({
+>checkedObject : Symbol(checkedObject, Decl(checked.js, 1, 12))
+
+    required,
+>required : Symbol(required, Decl(checked.js, 1, 31))
+
+    optional = false,
+>optional : Symbol(optional, Decl(checked.js, 2, 13))
+
+} = {}) => {};
+
+export const checkedArray = ([
+>checkedArray : Symbol(checkedArray, Decl(checked.js, 6, 12))
+
+    required,
+>required : Symbol(required, Decl(checked.js, 6, 30))
+
+    optional = false,
+>optional : Symbol(optional, Decl(checked.js, 7, 13))
+
+] = []) => {};
+
+=== /main.ts ===
+import { checkedArray, checkedObject } from "./checked";
+>checkedArray : Symbol(checkedArray, Decl(main.ts, 0, 8))
+>checkedObject : Symbol(checkedObject, Decl(main.ts, 0, 22))
+
+import { uncheckedArray, uncheckedObject } from "./unchecked";
+>uncheckedArray : Symbol(uncheckedArray, Decl(main.ts, 1, 8))
+>uncheckedObject : Symbol(uncheckedObject, Decl(main.ts, 1, 24))
+
+export const typedObject = ({
+>typedObject : Symbol(typedObject, Decl(main.ts, 3, 12))
+
+    required,
+>required : Symbol(required, Decl(main.ts, 3, 29))
+
+    optional = false,
+>optional : Symbol(optional, Decl(main.ts, 4, 13))
+
+} = {}) => {};
+
+export const typedArray = ([
+>typedArray : Symbol(typedArray, Decl(main.ts, 8, 12))
+
+    required,
+>required : Symbol(required, Decl(main.ts, 8, 28))
+
+    optional = false,
+>optional : Symbol(optional, Decl(main.ts, 9, 13))
+
+] = []) => {};
+
+uncheckedObject({ required: "value" });
+>uncheckedObject : Symbol(uncheckedObject, Decl(main.ts, 1, 24))
+>required : Symbol(required, Decl(main.ts, 13, 17))
+
+uncheckedArray(["value"]);
+>uncheckedArray : Symbol(uncheckedArray, Decl(main.ts, 1, 8))
+
+checkedObject({ required: "value" });
+>checkedObject : Symbol(checkedObject, Decl(main.ts, 0, 22))
+>required : Symbol(required, Decl(main.ts, 15, 15))
+
+checkedArray(["value"]);
+>checkedArray : Symbol(checkedArray, Decl(main.ts, 0, 8))
+
+typedObject({ required: "value" });
+>typedObject : Symbol(typedObject, Decl(main.ts, 3, 12))
+>required : Symbol(required, Decl(main.ts, 17, 13))
+
+typedArray(["value"]);
+>typedArray : Symbol(typedArray, Decl(main.ts, 8, 12))
+
