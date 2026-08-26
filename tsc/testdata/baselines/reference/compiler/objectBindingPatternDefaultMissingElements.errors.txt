@@ -2,6 +2,7 @@
 /checked.js(8,5): error TS7031: Binding element 'required' implicitly has an 'any' type.
 /main.ts(5,5): error TS7031: Binding element 'required' implicitly has an 'any' type.
 /main.ts(10,5): error TS7031: Binding element 'required' implicitly has an 'any' type.
+/main.ts(15,5): error TS7031: Binding element 'required' implicitly has an 'any' type.
 
 
 ==== /unchecked.js (0 errors) ====
@@ -31,7 +32,7 @@
         optional = false,
     ] = []) => {};
     
-==== /main.ts (2 errors) ====
+==== /main.ts (3 errors) ====
     import { checkedArray, checkedObject } from "./checked";
     import { uncheckedArray, uncheckedObject } from "./unchecked";
     
@@ -48,6 +49,15 @@
 !!! error TS7031: Binding element 'required' implicitly has an 'any' type.
         optional = false,
     ] = []) => {};
+    
+    export const typedObjectRest = ({
+        required,
+        ~~~~~~~~
+!!! error TS7031: Binding element 'required' implicitly has an 'any' type.
+        ...rest
+    } = {}) => {
+        rest;
+    };
     
     uncheckedObject({ required: "value" });
     uncheckedArray(["value"]);

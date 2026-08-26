@@ -78,23 +78,38 @@ export const typedArray = ([
 
 ] = []) => {};
 
+export const typedObjectRest = ({
+>typedObjectRest : Symbol(typedObjectRest, Decl(main.ts, 13, 12))
+
+    required,
+>required : Symbol(required, Decl(main.ts, 13, 33))
+
+    ...rest
+>rest : Symbol(rest, Decl(main.ts, 14, 13))
+
+} = {}) => {
+    rest;
+>rest : Symbol(rest, Decl(main.ts, 14, 13))
+
+};
+
 uncheckedObject({ required: "value" });
 >uncheckedObject : Symbol(uncheckedObject, Decl(main.ts, 1, 24))
->required : Symbol(required, Decl(main.ts, 13, 17))
+>required : Symbol(required, Decl(main.ts, 20, 17))
 
 uncheckedArray(["value"]);
 >uncheckedArray : Symbol(uncheckedArray, Decl(main.ts, 1, 8))
 
 checkedObject({ required: "value" });
 >checkedObject : Symbol(checkedObject, Decl(main.ts, 0, 22))
->required : Symbol(required, Decl(main.ts, 15, 15))
+>required : Symbol(required, Decl(main.ts, 22, 15))
 
 checkedArray(["value"]);
 >checkedArray : Symbol(checkedArray, Decl(main.ts, 0, 8))
 
 typedObject({ required: "value" });
 >typedObject : Symbol(typedObject, Decl(main.ts, 3, 12))
->required : Symbol(required, Decl(main.ts, 17, 13))
+>required : Symbol(required, Decl(main.ts, 24, 13))
 
 typedArray(["value"]);
 >typedArray : Symbol(typedArray, Decl(main.ts, 8, 12))

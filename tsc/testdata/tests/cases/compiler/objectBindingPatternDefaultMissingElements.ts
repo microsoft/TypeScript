@@ -40,6 +40,13 @@ export const typedArray = ([
     optional = false,
 ] = []) => {};
 
+export const typedObjectRest = ({
+    required,
+    ...rest
+} = {}) => {
+    rest;
+};
+
 uncheckedObject({ required: "value" });
 uncheckedArray(["value"]);
 checkedObject({ required: "value" });

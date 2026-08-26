@@ -96,6 +96,24 @@ export const typedArray = ([
 ] = []) => {};
 >[] : []
 
+export const typedObjectRest = ({
+>typedObjectRest : ({ required, ...rest }?: { required?: any; }) => void
+>({    required,    ...rest} = {}) => {    rest;} : ({ required, ...rest }?: { required?: any; }) => void
+
+    required,
+>required : any
+
+    ...rest
+>rest : {}
+
+} = {}) => {
+>{} : {}
+
+    rest;
+>rest : {}
+
+};
+
 uncheckedObject({ required: "value" });
 >uncheckedObject({ required: "value" }) : void
 >uncheckedObject : ({ required, optional, }?: { optional?: boolean | undefined; required?: any; }) => void

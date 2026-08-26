@@ -16918,6 +16918,9 @@ func (c *Checker) checkDeclarationInitializer(declaration *ast.Node, checkMode C
 func (c *Checker) padObjectLiteralType(t *Type, pattern *ast.Node) *Type {
 	var missingElements []*ast.Node
 	for _, e := range pattern.Elements() {
+		if hasDotDotDotToken(e) {
+			continue
+		}
 		name := c.getPropertyNameFromBindingElement(e)
 		if name != ast.InternalSymbolNameMissing && c.getPropertyOfType(t, name) == nil {
 			missingElements = append(missingElements, e)
