@@ -10,9 +10,11 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import url from "node:url";
-import { parseArgs } from "node:util";
+import {
+    parseArgs,
+    styleText,
+} from "node:util";
 import pLimit from "p-limit";
-import pc from "picocolors";
 import * as tar from "tar";
 import which from "which";
 
@@ -770,12 +772,12 @@ async function runTests() {
         if (trackingDir) {
             const unusedBaselines = await checkUnusedBaselines(trackingDir);
             if (unusedBaselines.length > 0) {
-                console.error(pc.red(`\nFound ${unusedBaselines.length} unused baseline file(s):`));
+                console.error(styleText("red", `\nFound ${unusedBaselines.length} unused baseline file(s):`));
                 for (const baseline of unusedBaselines.slice(0, 20)) {
-                    console.error(pc.red(`  ${baseline}`));
+                    console.error(styleText("red", `  ${baseline}`));
                 }
                 if (unusedBaselines.length > 20) {
-                    console.error(pc.red(`  ... and ${unusedBaselines.length - 20} more`));
+                    console.error(styleText("red", `  ... and ${unusedBaselines.length - 20} more`));
                 }
 
                 // Create .delete files for each unused baseline so baseline-accept can remove them
@@ -784,7 +786,7 @@ async function runTests() {
                     await fs.promises.mkdir(path.dirname(deleteFilePath), { recursive: true });
                     await fs.promises.writeFile(deleteFilePath, "");
                 }
-                console.error(pc.red(`\nRun 'hereby baseline-accept' to delete them.`));
+                console.error(styleText("red", `\nRun 'hereby baseline-accept' to delete them.`));
 
                 throw new Error(`Found ${unusedBaselines.length} unused baseline file(s). Run 'hereby baseline-accept' to delete them.`);
             }
@@ -1121,7 +1123,7 @@ async function watchDebounced(name, run, options) {
             running = false;
         }
         if (watching) {
-            console.log(pc.yellowBright(`[${name}] run complete, waiting for changes...`));
+            console.log(styleText("yellowBright", `[${name}] run complete, waiting for changes...`));
             await promise;
         }
     }
@@ -1155,9 +1157,9 @@ async function watchDebounced(name, run, options) {
      */
     function beginRun(path) {
         if (debouncer.empty) {
-            console.log(pc.yellowBright(`[${name}] changed due to '${path}', restarting...`));
+            console.log(styleText("yellowBright", `[${name}] changed due to '${path}', restarting...`));
             if (running) {
-                console.log(pc.yellowBright(`[${name}] aborting in-progress run...`));
+                console.log(styleText("yellowBright", `[${name}] aborting in-progress run...`));
             }
             abortController.abort();
             abortController = new AbortController();
@@ -1177,7 +1179,7 @@ async function watchDebounced(name, run, options) {
     function endWatchMode() {
         if (watching) {
             watching = false;
-            console.log(pc.yellowBright(`[${name}] exiting watch mode...`));
+            console.log(styleText("yellowBright", `[${name}] exiting watch mode...`));
             abortController.abort();
             watcher.close();
         }
@@ -1328,7 +1330,7 @@ async function sign(filelist, unchangedOutputOkay = false) {
     console.log("filelist:", data);
 
     if (!process.env.MBSIGN_APPFOLDER) {
-        console.log(pc.yellow("Faking signing because MBSIGN_APPFOLDER is not set."));
+        console.log(styleText("yellow", "Faking signing because MBSIGN_APPFOLDER is not set."));
 
         // Fake signing for testing.
 
