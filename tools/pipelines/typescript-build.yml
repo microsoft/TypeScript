@@ -51,8 +51,51 @@ extends:
       - stage: Build
         displayName: Build and Sign
         jobs:
+          - job: SetupBuildMatrix
+            displayName: Set up platform build matrix
+
+            steps:
+              - checkout: self
+                clean: true
+                submodules: false
+                fetchDepth: 1
+                fetchTags: false
+              - template: /tools/pipelines/steps/setup-node-npm-ci.yml@self
+
+              - bash: npx hereby typescript:build-platform-matrix --forRelease --setPrerelease dev.$(Build.BuildNumber)
+                displayName: Set build matrix
+                name: buildMatrix
+
+          - job: BuildPackages
+            displayName: Build $(platform)
+            dependsOn: SetupBuildMatrix
+
+            strategy:
+              matrix: $[ dependencies.SetupBuildMatrix.outputs['buildMatrix.matrix'] ]
+
+            templateContext:
+              outputs:
+                - output: pipelineArtifact
+                  targetPath: $(Build.SourcesDirectory)/built/npm/typescript-$(platform)
+                  artifactName: typescript-$(platform)
+                  isProduction: false
+                  sbomEnabled: false
+
+            steps:
+              - checkout: self
+                clean: true
+                submodules: false
+                fetchDepth: 1
+                fetchTags: false
+              - template: /tools/pipelines/steps/setup-node-npm-ci.yml@self
+              - template: /tools/pipelines/steps/setup-go.yml@self
+
+              - bash: npx hereby typescript:build-platform --platform $(platform) --forRelease --setPrerelease dev.$(Build.BuildNumber)
+                displayName: Build $(platform)
+
           - job: Build
             displayName: Build and Sign
+            dependsOn: BuildPackages
             timeoutInMinutes: 180
             pool:
               name: AzurePipelines-EO
@@ -136,8 +179,28 @@ extends:
 
               - template: /tools/pipelines/steps/setup-go.yml@self
 
-              - bash: npx hereby typescript:build --forRelease --setPrerelease dev.$(initialBuildNumber)
-                displayName: 'Build packages'
+              - bash: npx hereby typescript:build-main --forRelease --setPrerelease dev.$(initialBuildNumber)
+                displayName: 'Build main package'
+
+              - task: DownloadPipelineArtifact@2
+                displayName: 'Download platform packages'
+                inputs:
+                  buildType: current
+                  targetPath: $(Pipeline.Workspace)/platform-packages
+                  patterns: 'typescript-*/**'
+
+              - bash: |
+                  set -euo pipefail
+                  shopt -s nullglob
+                  platformArtifacts=("$(Pipeline.Workspace)"/platform-packages/typescript-*)
+                  if (( ${#platformArtifacts[@]} == 0 )); then
+                    echo "No platform package artifacts were downloaded." >&2
+                    exit 1
+                  fi
+                  for artifact in "${platformArtifacts[@]}"; do
+                    cp -a "$artifact" "built/npm/$(basename "$artifact")"
+                  done
+                displayName: 'Assemble platform packages'
 
               - bash: npx hereby typescript:test-package --forRelease --setPrerelease dev.$(initialBuildNumber)
                 displayName: 'Test packages'
