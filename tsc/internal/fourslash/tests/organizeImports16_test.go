@@ -22,7 +22,7 @@ console.log(a, b);`
 		`import { a, A, b } from "foo";
 interface Use extends A {}
 console.log(a, b);`,
-		lsproto.CodeActionKindSourceOrganizeImports,
+		lsproto.CodeActionKindSourceOrganizeImportsTs,
 		nil,
 	)
 	f.ReplaceLine(t, 0, "import { a, A, b } from \"foo1\";")
@@ -30,7 +30,7 @@ console.log(a, b);`,
 		`import { a, A, b } from "foo1";
 interface Use extends A {}
 console.log(a, b);`,
-		lsproto.CodeActionKindSourceOrganizeImports,
+		lsproto.CodeActionKindSourceOrganizeImportsTs,
 		&lsutil.UserPreferences{
 			OrganizeImportsIgnoreCase: core.TSUnknown,
 		},
@@ -40,7 +40,7 @@ console.log(a, b);`,
 		`import { a, A, b } from "foo2";
 interface Use extends A {}
 console.log(a, b);`,
-		lsproto.CodeActionKindSourceOrganizeImports,
+		lsproto.CodeActionKindSourceOrganizeImportsTs,
 		&lsutil.UserPreferences{
 			OrganizeImportsIgnoreCase: core.TSTrue,
 		},
@@ -50,7 +50,7 @@ console.log(a, b);`,
 		`import { A, a, b } from "foo3";
 interface Use extends A {}
 console.log(a, b);`,
-		lsproto.CodeActionKindSourceOrganizeImports,
+		lsproto.CodeActionKindSourceOrganizeImportsTs,
 		&lsutil.UserPreferences{
 			OrganizeImportsIgnoreCase: core.TSFalse,
 		},

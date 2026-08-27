@@ -15,6 +15,7 @@ import {
     getSynthesizedDeepClone,
     InternalSymbolName,
     isCallExpression,
+    isExpressionStatement,
     isFunctionDeclaration,
     isIdentifier,
     isImportDeclaration,
@@ -465,6 +466,48 @@ describe("Checker - getImmediateAliasedSymbol", () => {
             const aliased = project.checker.getImmediateAliasedSymbol(aliasSymbol);
             assert.ok(aliased, "Should resolve the immediate aliased symbol");
             assert.equal(aliased.name, "foo");
+        }
+        finally {
+            api.close();
+        }
+    });
+});
+
+describe("Checker - getTargetSymbol", () => {
+    test("gets the target symbol of instantiated symbol", () => {
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/main.ts": `
+class Base<T> {
+    private value!: T;
+}
+class Alpha extends Base<string> {}
+class Bravo extends Base<string> {}
+
+declare function test<T>(): void;
+test<Alpha>();
+test<Bravo>();
+`,
+        });
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const sourceFile = project.program.getSourceFile("/src/main.ts");
+            assert.ok(sourceFile);
+            const nodes: Array<Node> = [];
+            sourceFile.forEachChild(node => {
+                if (isExpressionStatement(node) && isCallExpression(node.expression) && node.expression.typeArguments) {
+                    nodes.push(node.expression.typeArguments[0]);
+                }
+            });
+            const aType = project.checker.getTypeAtLocation(nodes[0]);
+            const bType = project.checker.getTypeAtLocation(nodes[1]);
+            const aProperty = (project.checker.getPropertiesOfType(aType))[0];
+            const bProperty = (project.checker.getPropertiesOfType(bType))[0];
+            assert.ok(aProperty);
+            assert.ok(bProperty);
+            assert.equal(aProperty === bProperty, false);
+            assert.equal(project.checker.getTargetSymbol(aProperty) === project.checker.getTargetSymbol(bProperty), true);
         }
         finally {
             api.close();
@@ -1145,6 +1188,29 @@ describe("SourceFile", () => {
                 assert.ok(!seen.has(key), `Node ${key} was visited more than once`);
                 seen.add(key);
             }
+        }
+        finally {
+            api.close();
+        }
+    });
+});
+
+describe("NodeArray", () => {
+    test("hasTrailingComma", () => {
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/main.ts": `declare function foo(...args: any): void;\nfoo("a", "b",);\nfoo("a", "b");`,
+        });
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const sourceFile = project.program.getSourceFile("/src/main.ts");
+            assert.ok(sourceFile);
+            const statements = sourceFile.statements.filter(isExpressionStatement);
+            assert.ok(isCallExpression(statements[0].expression));
+            assert.equal(statements[0].expression.arguments.hasTrailingComma, true);
+            assert.ok(isCallExpression(statements[1].expression));
+            assert.equal(statements[1].expression.arguments.hasTrailingComma, false);
         }
         finally {
             api.close();

@@ -107,6 +107,7 @@ export interface APIMethodInfo {
     getExportSpecifierLocalTargetSymbol: APIMethod<CheckerNodeParams, SymbolResponse | null>;
     getAliasedSymbol: APIMethod<CheckerSymbolParams, SymbolResponse>;
     getImmediateAliasedSymbol: APIMethod<CheckerSymbolParams, SymbolResponse | null>;
+    getTargetSymbol: APIMethod<CheckerSymbolParams, SymbolResponse>;
     getFullyQualifiedName: APIMethod<CheckerSymbolParams, string>;
     getExportsOfModule: APIMethod<CheckerSymbolParams, SymbolResponse[] | null>;
     getMemberInModuleExports: APIMethod<GetMemberInModuleExportsParams, SymbolResponse | null>;
@@ -970,6 +971,7 @@ export interface BatchRequest {
         | "getSyntacticDiagnostics"
         | "getTargetOfSignature"
         | "getTargetOfType"
+        | "getTargetSymbol"
         | "getThisParameterOfSignature"
         | "getTrueTypeOfConditionalType"
         | "getTypeArguments"
@@ -1114,6 +1116,7 @@ export interface BatchResponse {
         | "getSyntacticDiagnostics"
         | "getTargetOfSignature"
         | "getTargetOfType"
+        | "getTargetSymbol"
         | "getThisParameterOfSignature"
         | "getTrueTypeOfConditionalType"
         | "getTypeArguments"
