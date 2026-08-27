@@ -14,7 +14,6 @@ import {
     parseArgs,
     styleText,
 } from "node:util";
-import pLimit from "p-limit";
 import * as tar from "tar";
 import which from "which";
 
@@ -156,6 +155,33 @@ async function globFiles(pattern, exclude) {
         }
     }
     return files;
+}
+
+/**
+ * @param {(() => Promise<void>)[]} tasks
+ * @param {number} concurrency
+ */
+async function runWithConcurrencyLimit(tasks, concurrency) {
+    const queue = tasks.values();
+    /** @type {unknown[]} */
+    const errors = [];
+    const workers = Array.from({ length: Math.min(concurrency, tasks.length) }, async () => {
+        for (const task of queue) {
+            try {
+                await task();
+            }
+            catch (error) {
+                errors.push(error);
+            }
+        }
+    });
+    await Promise.all(workers);
+    if (errors.length === 1) {
+        throw errors[0];
+    }
+    if (errors.length > 1) {
+        throw new AggregateError(errors, `${errors.length} concurrent tasks failed`);
+    }
 }
 
 const tools = new Map([
@@ -2022,8 +2048,7 @@ async function runBuildNativePreviewPackages() {
         }
     }
     else {
-        const buildLimit = pLimit(os.availableParallelism());
-        await Promise.all(platformBuilders.map(f => buildLimit(f)));
+        await runWithConcurrencyLimit(platformBuilders, os.availableParallelism());
     }
 }
 
