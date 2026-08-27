@@ -1369,8 +1369,29 @@ export const checkFormat = task({
     description: "Checks that the repo is formatted.",
     run: async () => {
         await run("dprint", ["check"]);
+        await checkLineEndings();
     },
 });
+
+async function checkLineEndings() {
+    const exclusions = [
+        ":(exclude)tsc/testdata/**",
+        // TODO: Remove this exclusion when this directory is converted or removed.
+        ":(exclude)tsc/internal/locale/lcl/**",
+    ];
+    const result = await x(
+        "git",
+        ["grep", "--cached", "-Il", "\r", "--", ".", ...exclusions],
+        { throwOnError: false, nodeOptions: { stdio: "pipe" } },
+    );
+    if (result.exitCode === 1) {
+        return;
+    }
+    if (result.exitCode !== 0) {
+        throw new Error(`Failed to check line endings:\n${result.stderr}`);
+    }
+    throw new Error(`Files must use LF line endings:\n${result.stdout}`);
+}
 
 export const checkHerebyfile = task({
     name: "check:herebyfile",
