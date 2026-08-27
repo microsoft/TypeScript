@@ -14,8 +14,10 @@ import {
     styleText,
 } from "node:util";
 import * as tar from "tar";
-import { x } from "tinyexec";
-import which from "which";
+import {
+    x,
+    xSync,
+} from "tinyexec";
 
 if (process.platform === "win32") {
     process.chdir(fs.realpathSync.native(process.cwd()));
@@ -228,12 +230,16 @@ const tools = new Map([
     ["gotest.tools/gotestsum", "latest"],
 ]);
 
-/**
- * @param {string} tool
- */
-function isInstalled(tool) {
-    return !!which.sync(tool, { nothrow: true });
-}
+const hasGotestsum = memoize(() => {
+    try {
+        return xSync("gotestsum", ["--version"], {
+            nodeOptions: { stdio: "ignore" },
+        }).exitCode === 0;
+    }
+    catch {
+        return false;
+    }
+});
 
 const builtLocal = "./built/local";
 
@@ -799,7 +805,7 @@ async function checkUnusedBaselines(trackingDir) {
  * @param {string} taskName
  */
 function gotestsum(taskName) {
-    const args = isInstalled("gotestsum") ? ["gotestsum", ...goTestSumFlags, "--"] : ["go", "test"];
+    const args = hasGotestsum() ? ["gotestsum", ...goTestSumFlags, "--"] : ["go", "test"];
     return args.concat(goTestFlags(taskName));
 }
 
@@ -961,7 +967,7 @@ export const testAll = task({
     },
 });
 
-const customLinterPath = "./tools/custom-gcl";
+const customLinterPath = `./tools/custom-gcl${process.platform === "win32" ? ".exe" : ""}`;
 const customLinterHashPath = customLinterPath + ".hash";
 
 const golangciLintPackage = memoize(() => {
@@ -1001,7 +1007,7 @@ const customlintHash = memoize(() => {
 const buildCustomLinter = memoize(async () => {
     const hash = customlintHash();
     if (
-        isInstalled(customLinterPath)
+        fs.existsSync(customLinterPath)
         && fs.existsSync(customLinterHashPath)
         && fs.readFileSync(customLinterHashPath, "utf8") === hash
     ) {

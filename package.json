@@ -25,7 +25,6 @@
     },
     "devDependencies": {
         "@types/node": "latest",
-        "@types/which": "^3.0.4",
         "@unicode/unicode-15.1.0": "^1.6.17",
         "adm-zip": "^0.6.0",
         "chokidar": "^5.0.0",
@@ -33,8 +32,7 @@
         "hereby": "^1.15.1",
         "tar": "^7.5.19",
         "tinyexec": "^1.3.0",
-        "typescript": "^6.0.3",
-        "which": "^6.0.1"
+        "typescript": "^6.0.3"
     },
     "overrides": {
         "@microsoft/applicationinsights-web-basic": "3.3.11",
