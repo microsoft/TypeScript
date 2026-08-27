@@ -799,6 +799,7 @@ type Checker struct {
 	unresolvableMembers                         int
 	skippedMemberChecks                         []skippedMemberCheck
 	recheckingSkippedMembers                    bool
+	inheritanceInFlight                         map[*Type]*pendingInheritance
 	varianceStack                               []VarianceStackEntry
 	apparentArgumentCount                       *int
 	lastGetCombinedNodeFlagsNode                *ast.Node
@@ -19443,6 +19444,9 @@ func (c *Checker) getPropertyOfTypeEx(t *Type, name string, skipObjectFunctionPr
 	case t.flags&TypeFlagsObject != 0:
 		resolved := c.resolveStructuredTypeMembers(t)
 		symbol := resolved.members[name]
+		if symbol == nil && t.objectFlags&ObjectFlagsUnresolvedMembers != 0 {
+			symbol = c.getPendingInheritedProperty(t, name)
+		}
 		if symbol != nil {
 			if !includeTypeOnlyMembers && t.symbol != nil && t.symbol.Flags&ast.SymbolFlagsValueModule != 0 && c.moduleSymbolLinks.Get(t.symbol).typeOnlyExportStarMap[name] != nil {
 				// If this is the type of a module, `resolved.members.get(name)` might have effectively skipped over
@@ -19684,11 +19688,15 @@ func (c *Checker) resolveObjectTypeMembers(t *Type, source *Type, typeParameters
 		c.setStructuredTypeMembers(t, members, callSignatures, constructSignatures, indexInfos)
 		thisArgument := core.LastOrNil(typeArguments)
 		t.objectFlags |= ObjectFlagsUnresolvedMembers
+		// The table just published holds only what the type declares itself, so every inherited member
+		// reads as absent until the loop below adds it. Recording what is still to come lets a lookup in
+		// that window finish itself against the bases instead, so the window is never observable.
+		if c.inheritanceInFlight == nil {
+			c.inheritanceInFlight = make(map[*Type]*pendingInheritance)
+		}
+		c.inheritanceInFlight[t] = &pendingInheritance{mapper: mapper, thisArgument: thisArgument, baseTypes: baseTypes}
 		for _, baseType := range baseTypes {
-			instantiatedBaseType := baseType
-			if thisArgument != nil {
-				instantiatedBaseType = c.getTypeWithThisArgument(c.instantiateType(baseType, mapper), thisArgument, false /*needsApparentType*/)
-			}
+			instantiatedBaseType := c.instantiateBaseType(baseType, mapper, thisArgument)
 			members = c.addInheritedMembers(members, c.getPropertiesOfType(instantiatedBaseType))
 			callSignatures = core.Concatenate(callSignatures, c.getSignaturesOfType(instantiatedBaseType, SignatureKindCall))
 			constructSignatures = core.Concatenate(constructSignatures, c.getSignaturesOfType(instantiatedBaseType, SignatureKindConstruct))
@@ -19702,9 +19710,47 @@ func (c *Checker) resolveObjectTypeMembers(t *Type, source *Type, typeParameters
 				return findIndexInfo(indexInfos, info.keyType) == nil
 			}))
 		}
+		delete(c.inheritanceInFlight, t)
 		t.objectFlags &^= ObjectFlagsUnresolvedMembers
 	}
 	c.setStructuredTypeMembers(t, members, callSignatures, constructSignatures, indexInfos)
+}
+
+// What resolveObjectTypeMembers has left to inherit, for as long as ObjectFlagsUnresolvedMembers is set.
+type pendingInheritance struct {
+	mapper       *TypeMapper
+	thisArgument *Type
+	baseTypes    []*Type
+}
+
+func (c *Checker) instantiateBaseType(baseType *Type, mapper *TypeMapper, thisArgument *Type) *Type {
+	if thisArgument == nil {
+		return baseType
+	}
+	return c.getTypeWithThisArgument(c.instantiateType(baseType, mapper), thisArgument, false /*needsApparentType*/)
+}
+
+// Answers a property lookup that missed on a table whose inherited members have not been added yet, by
+// asking the base types the same question. The member it finds is the one the table is about to hold,
+// so this is the completed lookup rather than a guess about it -- a name no base carries is still
+// absent, and callers need no notion of a provisional answer.
+func (c *Checker) getPendingInheritedProperty(t *Type, name string) *ast.Symbol {
+	pending := c.inheritanceInFlight[t]
+	if pending == nil {
+		return nil
+	}
+	// A base that reaches back through t must find the window closed, or the two would ask each other
+	// forever; with the entry withdrawn t answers from its published table, which is what the loop's
+	// own re-entry sees.
+	delete(c.inheritanceInFlight, t)
+	defer func() { c.inheritanceInFlight[t] = pending }()
+	for _, baseType := range pending.baseTypes {
+		instantiated := c.instantiateBaseType(baseType, pending.mapper, pending.thisArgument)
+		if prop := c.getPropertyOfTypeEx(instantiated, name, true /*skipObjectFunctionPropertyAugment*/, false /*includeTypeOnlyMembers*/); prop != nil && !isStaticPrivateIdentifierProperty(prop) {
+			return prop
+		}
+	}
+	return nil
 }
 
 func findIndexInfo(indexInfos []*IndexInfo, keyType *Type) *IndexInfo {
@@ -21956,6 +22002,9 @@ func (c *Checker) getPropertyOfObjectType(t *Type, name string) *ast.Symbol {
 	if t.flags&TypeFlagsObject != 0 {
 		resolved := c.resolveStructuredTypeMembers(t)
 		symbol := resolved.members[name]
+		if symbol == nil && t.objectFlags&ObjectFlagsUnresolvedMembers != 0 {
+			symbol = c.getPendingInheritedProperty(t, name)
+		}
 		if symbol != nil && c.symbolIsValue(symbol) {
 			return symbol
 		}
