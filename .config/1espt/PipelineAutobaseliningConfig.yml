@@ -30,3 +30,19 @@ pipelines:
           lastModifiedDate: 2025-07-08
         armory:
           lastModifiedDate: 2025-07-08
+  28655:
+    retail:
+      source:
+        eslint:
+          lastModifiedDate: 2026-08-27
+        psscriptanalyzer:
+          lastModifiedDate: 2026-08-27
+        armory:
+          lastModifiedDate: 2026-08-27
+        accessibilityinsights:
+          lastModifiedDate: 2026-08-27
+      binary:
+        binskim:
+          lastModifiedDate: 2026-08-27
+        spotbugs:
+          lastModifiedDate: 2026-08-27
