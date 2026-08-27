@@ -3005,7 +3005,9 @@ func (c *Checker) checkTypeReferenceNode(node *ast.Node) {
 		}
 	}
 	c.checkSourceElements(node.TypeArguments())
-	c.checkTypeReferenceOrImport(node)
+	if !(isConstTypeReference(node) && ast.IsAssertionExpression(node.Parent)) {
+		c.checkTypeReferenceOrImport(node)
+	}
 }
 
 func (c *Checker) checkTypeReferenceOrImport(node *ast.Node) {

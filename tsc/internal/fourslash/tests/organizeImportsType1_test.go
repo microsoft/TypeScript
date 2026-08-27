@@ -29,14 +29,14 @@ console.log(A, B, C, D, E);`
 		`import { A, C, D, type B, type E } from "foo";
 
 console.log(A, B, C, D, E);`,
-		lsproto.CodeActionKindSourceOrganizeImports,
+		lsproto.CodeActionKindSourceOrganizeImportsTs,
 		nil,
 	)
 	f.VerifyOrganizeImports(t,
 		`import { A, type B, C, D, type E } from "foo";
 
 console.log(A, B, C, D, E);`,
-		lsproto.CodeActionKindSourceOrganizeImports,
+		lsproto.CodeActionKindSourceOrganizeImportsTs,
 		&lsutil.UserPreferences{
 			OrganizeImportsTypeOrder: lsutil.OrganizeImportsTypeOrderInline,
 		},
@@ -45,7 +45,7 @@ console.log(A, B, C, D, E);`,
 		`import { type B, type E, A, C, D } from "foo";
 
 console.log(A, B, C, D, E);`,
-		lsproto.CodeActionKindSourceOrganizeImports,
+		lsproto.CodeActionKindSourceOrganizeImportsTs,
 		&lsutil.UserPreferences{
 			OrganizeImportsTypeOrder: lsutil.OrganizeImportsTypeOrderFirst,
 		},
@@ -54,7 +54,7 @@ console.log(A, B, C, D, E);`,
 		`import { A, C, D, type B, type E } from "foo";
 
 console.log(A, B, C, D, E);`,
-		lsproto.CodeActionKindSourceOrganizeImports,
+		lsproto.CodeActionKindSourceOrganizeImportsTs,
 		&lsutil.UserPreferences{
 			OrganizeImportsTypeOrder: lsutil.OrganizeImportsTypeOrderLast,
 		},

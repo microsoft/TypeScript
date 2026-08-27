@@ -28,9 +28,9 @@ func (l *LanguageService) OrganizeImports(
 	kind lsproto.CodeActionKind,
 ) map[string][]*lsproto.TextEdit {
 	changeTracker := change.NewTracker(ctx, program.Options(), l.FormatOptions(), l.converters)
-	shouldSort := kind == lsproto.CodeActionKindSourceSortImports || kind == lsproto.CodeActionKindSourceOrganizeImports
+	shouldSort := kind == lsproto.CodeActionKindSourceSortImportsTs || kind == lsproto.CodeActionKindSourceOrganizeImportsTs
 	shouldCombine := shouldSort
-	shouldRemove := kind == lsproto.CodeActionKindSourceRemoveUnusedImports || kind == lsproto.CodeActionKindSourceOrganizeImports
+	shouldRemove := kind == lsproto.CodeActionKindSourceRemoveUnusedImportsTs || kind == lsproto.CodeActionKindSourceOrganizeImportsTs
 	topLevelImportDecls := lsutil.FilterImportDeclarations(sourceFile.Statements.Nodes)
 	topLevelImportGroupDecls := groupByNewlineContiguous(sourceFile, topLevelImportDecls)
 
@@ -74,7 +74,7 @@ func (l *LanguageService) OrganizeImports(
 		organizeImportsWorker(importGroupDecl, comparer, shouldSort, shouldCombine, shouldRemove, sourceFile, program, changeTracker, ctx)
 	}
 
-	if kind != lsproto.CodeActionKindSourceRemoveUnusedImports {
+	if kind != lsproto.CodeActionKindSourceRemoveUnusedImportsTs {
 		topLevelExportGroupDecls := getTopLevelExportGroups(sourceFile)
 		for _, exportGroupDecl := range topLevelExportGroupDecls {
 			organizeExportsWorker(exportGroupDecl, comparer, sourceFile, changeTracker)
@@ -100,7 +100,7 @@ func (l *LanguageService) OrganizeImports(
 			organizeImportsWorker(importGroupDecl, comparer, shouldSort, shouldCombine, shouldRemove, sourceFile, program, changeTracker, ctx)
 		}
 
-		if kind != lsproto.CodeActionKindSourceRemoveUnusedImports {
+		if kind != lsproto.CodeActionKindSourceRemoveUnusedImportsTs {
 			var ambientModuleExportDecls []*ast.Statement
 			for _, s := range moduleBody.Statements.Nodes {
 				if s.Kind == ast.KindExportDeclaration {
