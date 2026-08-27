@@ -1362,6 +1362,46 @@ export const format = task({
 
 async function runFormat() {
     await run("dprint", ["fmt"]);
+    await fixLineEndings();
+}
+
+const lineEndingExclusions = [
+    ":(exclude)tsc/testdata/**",
+    // TODO: Remove this exclusion when this directory is converted or removed.
+    ":(exclude)tsc/internal/locale/lcl/**",
+];
+
+export const fixLineEndingsTask = task({
+    name: "fix:line-endings",
+    description: "Converts tracked files that Git expects to use LF.",
+    run: fixLineEndings,
+});
+
+async function fixLineEndings() {
+    const result = await runOutput("git", ["ls-files", "--eol", "-z", "--", ".", ...lineEndingExclusions]);
+    const files = [];
+    for (const record of result.stdout.split("\0")) {
+        if (!record) {
+            continue;
+        }
+        const separator = record.indexOf("\t");
+        assert(separator !== -1);
+        const eolInfo = record.slice(0, separator);
+        if (!/\bw\/(?:crlf|mixed)\b/.test(eolInfo) || !eolInfo.includes("eol=lf")) {
+            continue;
+        }
+        files.push(record.slice(separator + 1));
+    }
+
+    await Promise.all(files.map(async file => {
+        const contents = await fs.promises.readFile(file);
+        const normalized = Buffer.from(contents.toString("latin1").replaceAll("\r\n", "\n"), "latin1");
+        await fs.promises.writeFile(file, normalized);
+    }));
+
+    if (files.length) {
+        console.log(`Converted ${files.length} file(s) to LF.`);
+    }
 }
 
 export const checkFormat = task({
@@ -1381,7 +1421,7 @@ async function checkLineEndings() {
     ];
     const result = await x(
         "git",
-        ["grep", "--cached", "-Il", "\r", "--", ".", ...exclusions],
+        ["grep", "--cached", "-Il", "\r", "--", ".", ...lineEndingExclusions],
         { throwOnError: false, nodeOptions: { stdio: "pipe" } },
     );
     if (result.exitCode === 1) {
