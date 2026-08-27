@@ -107,7 +107,7 @@
         "test": "npm run test:only"
     },
     "devDependencies": {
-        "@types/node": "^25.9.4",
+        "@types/node": "^22.18.0",
         "tinybench": "^6.0.2",
         "vscode-jsonrpc": "^9.0.0"
     }
