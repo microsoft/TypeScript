@@ -22,7 +22,7 @@ a; b;`
 		`import source a from "lib";
 import source b from "lib";
 a; b;`,
-		lsproto.CodeActionKindSourceSortImports,
+		lsproto.CodeActionKindSourceSortImportsTs,
 		&lsutil.UserPreferences{OrganizeImportsSort: lsutil.OrganizeImportsSortOrdinalIgnoreCase},
 	)
 }
@@ -41,7 +41,7 @@ a; b; c;`
 		`import source b from "lib";
 import { a, c } from "lib";
 a; b; c;`,
-		lsproto.CodeActionKindSourceSortImports,
+		lsproto.CodeActionKindSourceSortImportsTs,
 		&lsutil.UserPreferences{OrganizeImportsSort: lsutil.OrganizeImportsSortOrdinalIgnoreCase},
 	)
 }
