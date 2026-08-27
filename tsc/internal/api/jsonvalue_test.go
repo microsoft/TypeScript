@@ -32,4 +32,19 @@ func TestJSONValueToAny(t *testing.T) {
 	empty := root.GetOrZero("e").([]any)
 	assert.Assert(t, empty != nil)
 	assert.Equal(t, len(empty), 0)
+
+ 
+	var edgeValue packagejson.JSONValue
+	err = json.Unmarshal([]byte(`{"emptyObj":{},"boolVal":true,"floatVal":3.14}`), &edgeValue)
+	assert.NilError(t, err)
+
+	edgeRoot := jsonValueToAny(edgeValue).(*collections.OrderedMap[string, any])
+	
+ 
+	emptyObj := edgeRoot.GetOrZero("emptyObj").(*collections.OrderedMap[string, any])
+	assert.Equal(t, len(slices.Collect(emptyObj.Keys())), 0)
+
+ 
+	assert.Equal(t, edgeRoot.GetOrZero("boolVal"), true)
+	assert.Equal(t, edgeRoot.GetOrZero("floatVal"), float64(3.14))
 }
