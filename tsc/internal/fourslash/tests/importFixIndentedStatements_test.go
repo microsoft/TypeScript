@@ -73,3 +73,29 @@ export const helper = 1;
 `),
 	})
 }
+
+// The scanner treats a lone carriage return as a line terminator, so a file that uses CR endings has real
+// lines and real indentation, and an inserted import has to respect them.
+func TestImportFixBeforeIndentedImportWithCarriageReturns(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	f, done := fourslash.NewFourslashWithOptions(t, `// @Filename: /aaa.ts
+export const helper = 1;
+
+// @Filename: /dep.ts
+export const existing = 2;
+
+// @Filename: /main.ts
+`+"// header\r  import { existing } from \"./dep\";\r  const value = help/**/;\r",
+		&fourslash.FourslashOptions{})
+	defer done()
+
+	// The inserted line is separated with the tracker's newline rather than the file's, which is a
+	// pre-existing behavior unrelated to indentation; what matters here is that both imports stay indented.
+	f.VerifyApplyCodeActionFromCompletion(t, new(""), &fourslash.ApplyCodeActionFromCompletionOptions{
+		Name:           "helper",
+		Source:         "./aaa",
+		Description:    `Add import from "./aaa"`,
+		NewFileContent: new("// header\r  import { helper } from \"./aaa\";\n  import { existing } from \"./dep\";\r  const value = help;\r"),
+	})
+}

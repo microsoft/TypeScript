@@ -25,6 +25,7 @@ const (
 	PrefixedSupplementalMapper    = "prefixed-supplemental-mapper"
 	UnmappedFoldingMapper         = "unmapped-folding-mapper"
 	HoistingMapper                = "hoisting-mapper"
+	DuplicateProjectionMapper     = "duplicate-projection-mapper"
 )
 
 type handlerConstructor func(*ProjectLifecycle) ipc.Handler
@@ -47,6 +48,7 @@ var mapperHandlers = map[string]handlerConstructor{
 	PrefixedSupplementalMapper:    func(*ProjectLifecycle) ipc.Handler { return prefixedSupplementalHandler{} },
 	UnmappedFoldingMapper:         func(*ProjectLifecycle) ipc.Handler { return unmappedFoldingHandler{} },
 	HoistingMapper:                func(*ProjectLifecycle) ipc.Handler { return hoistingHandler{} },
+	DuplicateProjectionMapper:     func(*ProjectLifecycle) ipc.Handler { return duplicateProjectionHandler{} },
 }
 
 func handlerForMapper(command []string, lifecycle *ProjectLifecycle) (ipc.Handler, error) {
