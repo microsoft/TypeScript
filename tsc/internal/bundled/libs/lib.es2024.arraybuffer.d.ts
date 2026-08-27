@@ -13,7 +13,6 @@ See the Apache Version 2.0 License for specific language governing permissions
 and limitations under the License.
 ***************************************************************************** */
 
-
 interface ArrayBuffer {
     /**
      * If this ArrayBuffer is resizable, returns the maximum byte length given during construction; returns the byte length if not.

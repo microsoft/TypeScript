@@ -13,7 +13,6 @@ See the Apache Version 2.0 License for specific language governing permissions
 and limitations under the License.
 ***************************************************************************** */
 
-
 declare namespace Reflect {
     /**
      * Calls the function with the specified object as the this value
