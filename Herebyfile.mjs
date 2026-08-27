@@ -15,7 +15,6 @@ import { parseArgs } from "node:util";
 import pLimit from "p-limit";
 import pc from "picocolors";
 import * as tar from "tar";
-import tmp from "tmp";
 import which from "which";
 
 if (process.platform === "win32") {
@@ -739,9 +738,9 @@ async function runTests() {
     let cleanupTracking;
 
     if (baselineTrackingEnabled) {
-        const tmpDir = tmp.dirSync({ prefix: "tsgo-baseline-tracking-", unsafeCleanup: true });
-        trackingDir = tmpDir.name;
-        cleanupTracking = tmpDir.removeCallback;
+        const tempTrackingDir = fs.mkdtempSync(path.join(os.tmpdir(), "tsgo-baseline-tracking-"));
+        trackingDir = tempTrackingDir;
+        cleanupTracking = () => rimraf(tempTrackingDir);
     }
 
     try {
@@ -778,7 +777,7 @@ async function runTests() {
     }
     finally {
         if (cleanupTracking) {
-            cleanupTracking();
+            await cleanupTracking();
         }
     }
 }

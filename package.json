@@ -25,7 +25,6 @@
     },
     "devDependencies": {
         "@types/node": "latest",
-        "@types/tmp": "^0.2.6",
         "@types/which": "^3.0.4",
         "@unicode/unicode-15.1.0": "^1.6.17",
         "adm-zip": "^0.6.0",
@@ -37,7 +36,6 @@
         "p-limit": "^7.3.0",
         "picocolors": "^1.1.1",
         "tar": "^7.5.19",
-        "tmp": "^0.2.7",
         "typescript": "^6.0.3",
         "which": "^6.0.1"
     },
