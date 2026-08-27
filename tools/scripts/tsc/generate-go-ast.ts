@@ -14,10 +14,10 @@
  *   - Is*() type guard functions
  */
 
-import { execaSync } from "execa";
 import * as fs from "node:fs";
 import * as path from "node:path";
 import { fileURLToPath } from "node:url";
+import { xSync } from "tinyexec";
 import type {
     MemberInfo,
     NodeType,
@@ -1084,7 +1084,10 @@ function generateKind(): string {
 
 function writeAndFormat(filePath: string, content: string) {
     fs.writeFileSync(filePath, content);
-    execaSync("dprint", ["fmt", filePath], { stdio: "inherit", cwd: ROOT });
+    xSync("dprint", ["fmt", filePath], {
+        throwOnError: true,
+        nodeOptions: { stdio: "inherit", cwd: ROOT },
+    });
     console.log(`Wrote ${filePath}`);
 }
 

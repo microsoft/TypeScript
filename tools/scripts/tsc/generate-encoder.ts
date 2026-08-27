@@ -10,10 +10,10 @@
  *   - packages/typescript/src/api/node/protocol.generated.ts
  */
 
-import { execaSync } from "execa";
 import * as fs from "node:fs";
 import * as path from "node:path";
 import { fileURLToPath } from "node:url";
+import { xSync } from "tinyexec";
 import type {
     KindType,
     MemberInfo,
@@ -1989,7 +1989,10 @@ function writeAndFormat(filePath: string, content: string, formatter: string) {
     fs.writeFileSync(filePath, content);
     try {
         const [cmd, ...args] = formatter.split(" ");
-        execaSync(cmd, [...args, filePath], { stdio: "inherit", cwd: ROOT });
+        xSync(cmd, [...args, filePath], {
+            throwOnError: true,
+            nodeOptions: { stdio: "inherit", cwd: ROOT },
+        });
     }
     catch {
         console.warn(`Warning: formatter failed for ${filePath}`);

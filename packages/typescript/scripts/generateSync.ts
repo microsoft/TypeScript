@@ -21,7 +21,6 @@
  *   node generateSync.ts
  */
 
-import { execaSync } from "execa";
 import {
     mkdirSync,
     readFileSync,
@@ -32,6 +31,7 @@ import {
     join,
     relative,
 } from "node:path";
+import { xSync } from "tinyexec";
 import ts from "typescript";
 
 function generatedHeader(asyncSourceRelPath: string): string {
@@ -269,7 +269,7 @@ function removeAsyncAwaitAndPromise(source: string, fileName: string): string {
 // ── Formatting ───────────────────────────────────────────────────
 
 function formatFiles(paths: string[]): void {
-    execaSync("dprint", ["fmt", ...paths]);
+    xSync("dprint", ["fmt", ...paths], { throwOnError: true });
 }
 
 // ── Main ─────────────────────────────────────────────────────────

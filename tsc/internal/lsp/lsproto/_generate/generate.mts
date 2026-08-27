@@ -2,10 +2,10 @@
 
 // Usage: node generate.mts
 
-import { $ } from "execa";
 import fs from "node:fs";
 import path from "node:path";
 import url from "node:url";
+import { x } from "tinyexec";
 import type {
     Enumeration,
     MetaModel,
@@ -3608,7 +3608,10 @@ async function main() {
     const generatedCode = generateCode();
     fs.writeFileSync(out, generatedCode);
 
-    await $({ cwd: repoRoot })`dprint fmt ${out}`;
+    await x("dprint", ["fmt", out], {
+        throwOnError: true,
+        nodeOptions: { cwd: repoRoot, stdio: "inherit" },
+    });
 
     console.log(`Successfully generated ${out}`);
 }
