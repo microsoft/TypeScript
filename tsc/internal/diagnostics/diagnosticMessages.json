@@ -4465,11 +4465,11 @@
     },
     "Property '{0}' is 'readonly' in the source but not in the target.": {
         "category": "Error",
-        "code": 95198
+        "code": 4129
     },
     "'{0}' index signature is 'readonly' in the source but not in the target.": {
         "category": "Error",
-        "code": 95199
+        "code": 4130
     },
     "This member cannot have an 'override' modifier because its name is dynamic.": {
         "category": "Error",

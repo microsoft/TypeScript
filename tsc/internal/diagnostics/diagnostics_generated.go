@@ -2232,6 +2232,10 @@ var This_member_cannot_have_an_override_modifier_because_its_name_is_dynamic = &
 
 var This_member_cannot_have_a_JSDoc_comment_with_an_override_tag_because_its_name_is_dynamic = &Message{code: 4128, category: CategoryError, key: "This_member_cannot_have_a_JSDoc_comment_with_an_override_tag_because_its_name_is_dynamic_4128", text: "This member cannot have a JSDoc comment with an '@override' tag because its name is dynamic."}
 
+var Property_0_is_readonly_in_the_source_but_not_in_the_target = &Message{code: 4129, category: CategoryError, key: "Property_0_is_readonly_in_the_source_but_not_in_the_target_4129", text: "Property '{0}' is 'readonly' in the source but not in the target."}
+
+var X_0_index_signature_is_readonly_in_the_source_but_not_in_the_target = &Message{code: 4130, category: CategoryError, key: "_0_index_signature_is_readonly_in_the_source_but_not_in_the_target_4130", text: "'{0}' index signature is 'readonly' in the source but not in the target."}
+
 var The_current_host_does_not_support_the_0_option = &Message{code: 5001, category: CategoryError, key: "The_current_host_does_not_support_the_0_option_5001", text: "The current host does not support the '{0}' option."}
 
 var Option_0_requires_value_to_be_greater_than_1 = &Message{code: 5002, category: CategoryError, key: "Option_0_requires_value_to_be_greater_than_1_5002", text: "Option '{0}' requires value to be greater than '{1}'."}
@@ -4279,10 +4283,6 @@ var Wrap_all_invalid_decorator_expressions_in_parentheses = &Message{code: 95195
 var Add_resolution_mode_import_attribute = &Message{code: 95196, category: CategoryMessage, key: "Add_resolution_mode_import_attribute_95196", text: "Add 'resolution-mode' import attribute"}
 
 var Add_resolution_mode_import_attribute_to_all_type_only_imports_that_need_it = &Message{code: 95197, category: CategoryMessage, key: "Add_resolution_mode_import_attribute_to_all_type_only_imports_that_need_it_95197", text: "Add 'resolution-mode' import attribute to all type-only imports that need it"}
-
-var Property_0_is_readonly_in_the_source_but_not_in_the_target = &Message{code: 95198, category: CategoryError, key: "Property_0_is_readonly_in_the_source_but_not_in_the_target_95198", text: "Property '{0}' is 'readonly' in the source but not in the target."}
-
-var X_0_index_signature_is_readonly_in_the_source_but_not_in_the_target = &Message{code: 95199, category: CategoryError, key: "_0_index_signature_is_readonly_in_the_source_but_not_in_the_target_95199", text: "'{0}' index signature is 'readonly' in the source but not in the target."}
 
 var Do_not_print_diagnostics = &Message{code: 100000, category: CategoryMessage, key: "Do_not_print_diagnostics_100000", text: "Do not print diagnostics."}
 
@@ -6648,6 +6648,10 @@ func keyToMessage(key Key) *Message {
 		return This_member_cannot_have_an_override_modifier_because_its_name_is_dynamic
 	case "This_member_cannot_have_a_JSDoc_comment_with_an_override_tag_because_its_name_is_dynamic_4128":
 		return This_member_cannot_have_a_JSDoc_comment_with_an_override_tag_because_its_name_is_dynamic
+	case "Property_0_is_readonly_in_the_source_but_not_in_the_target_4129":
+		return Property_0_is_readonly_in_the_source_but_not_in_the_target
+	case "_0_index_signature_is_readonly_in_the_source_but_not_in_the_target_4130":
+		return X_0_index_signature_is_readonly_in_the_source_but_not_in_the_target
 	case "The_current_host_does_not_support_the_0_option_5001":
 		return The_current_host_does_not_support_the_0_option
 	case "Option_0_requires_value_to_be_greater_than_1_5002":
@@ -8696,10 +8700,6 @@ func keyToMessage(key Key) *Message {
 		return Add_resolution_mode_import_attribute
 	case "Add_resolution_mode_import_attribute_to_all_type_only_imports_that_need_it_95197":
 		return Add_resolution_mode_import_attribute_to_all_type_only_imports_that_need_it
-	case "Property_0_is_readonly_in_the_source_but_not_in_the_target_95198":
-		return Property_0_is_readonly_in_the_source_but_not_in_the_target
-	case "_0_index_signature_is_readonly_in_the_source_but_not_in_the_target_95199":
-		return X_0_index_signature_is_readonly_in_the_source_but_not_in_the_target
 	case "Do_not_print_diagnostics_100000":
 		return Do_not_print_diagnostics
 	case "Run_in_single_threaded_mode_100001":
