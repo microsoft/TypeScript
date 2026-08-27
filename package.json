@@ -45,8 +45,6 @@
         "npm": "11.17.0"
     },
     "allowScripts": {
-        "dprint@0.55.1": true,
-        "esbuild@0.28.1": true,
         "@vscode/vsce-sign@2.0.9": true,
         "keytar@7.9.0": true,
         "dprint@0.55.2": true,
