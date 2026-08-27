@@ -1806,6 +1806,7 @@ function emitRemoteNodeClassOpen(w: CodeWriter) {
     w.write(`    }`);
     w.write(``);
     w.write(`    private getChildAtOrder(order: number): RemoteNode | RemoteNodeList | undefined {`);
+    w.write(`        if (!this.hasChildren()) return undefined;`);
     w.write(`        const mask = this.childMask;`);
     w.write(`        if (!(mask & (1 << order))) {`);
     w.write(`            // Property is not present`);
