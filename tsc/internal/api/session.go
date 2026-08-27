@@ -656,6 +656,8 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleGetTypesOfSymbols(ctx, parsed.(*GetTypesOfSymbolsParams))
 	case string(MethodGetDeclaredTypeOfSymbol):
 		return s.handleGetDeclaredTypeOfSymbol(ctx, parsed.(*GetTypeOfSymbolParams))
+	case string(MethodGetNonMissingTypeOfSymbol):
+		return s.handleGetNonMissingTypeOfSymbol(ctx, parsed.(*GetTypeOfSymbolParams))
 	case string(MethodResolveName):
 		return s.handleResolveName(ctx, parsed.(*ResolveNameParams))
 	case string(MethodGetSymbolsInScope):
@@ -1671,6 +1673,22 @@ func (s *Session) handleGetDeclaredTypeOfSymbol(ctx context.Context, params *Get
 	}
 
 	return setup.newTypeResponse(setup.checker.GetDeclaredTypeOfSymbol(symbol)), nil
+}
+
+// handleGetNonMissingTypeOfSymbol returns the type of a symbol, excluding the missing type.
+func (s *Session) handleGetNonMissingTypeOfSymbol(ctx context.Context, params *GetTypeOfSymbolParams) (*TypeResponse, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	symbol, err := setup.resolveSymbolHandle(params.Symbol)
+	if err != nil {
+		return nil, err
+	}
+
+	return setup.newTypeResponse(setup.checker.GetNonMissingTypeOfSymbol(symbol)), nil
 }
 
 // handleResolveName resolves a name to a symbol at a given location.

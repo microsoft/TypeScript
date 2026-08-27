@@ -185,6 +185,10 @@ func (c *Checker) GetTypeOfSymbol(symbol *ast.Symbol) *Type {
 	return c.getTypeOfSymbol(symbol)
 }
 
+func (c *Checker) GetNonMissingTypeOfSymbol(symbol *ast.Symbol) *Type {
+	return c.getNonMissingTypeOfSymbol(symbol)
+}
+
 func (c *Checker) GetConstraintOfTypeParameter(typeParameter *Type) *Type {
 	return c.getConstraintOfTypeParameter(typeParameter)
 }

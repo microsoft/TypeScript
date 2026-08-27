@@ -649,6 +649,62 @@ describe("Snapshot", () => {
             api.close();
         }
     });
+
+    test("getNonMissingTypeOfSymbol", () => {
+        const api = spawnAPI({
+            "/tsconfig-one.json": JSON.stringify({
+                compilerOptions: {
+                    exactOptionalPropertyTypes: true,
+                    strict: true,
+                },
+            }),
+            "/tsconfig-two.json": JSON.stringify({
+                compilerOptions: {
+                    exactOptionalPropertyTypes: false,
+                    strict: true,
+                },
+            }),
+            "/src/index.ts": "const x: Partial<{ a: string }> = {};",
+        });
+
+        try {
+            // when `"exactOptionalPropertyTypes": true`
+            const snapshot1 = api.updateSnapshot({ openProject: "/tsconfig-one.json" });
+            const project1 = snapshot1.getProject("/tsconfig-one.json")!;
+            const type1 = project1.checker.getTypeAtPosition("/src/index.ts", 7);
+            assert.ok(type1);
+            const symbol1 = project1.checker.getPropertyOfType(type1, "a");
+            assert.ok(symbol1);
+            const propertyType1 = project1.checker.getTypeOfSymbol(symbol1);
+            assert.ok(propertyType1);
+            // getTypeOfSymbol returns 'string | undefined'
+            assert.ok(propertyType1.isUnionType());
+            const propertyType2 = project1.checker.getNonMissingTypeOfSymbol(symbol1);
+            assert.ok(propertyType2);
+            // getNonMissingTypeOfSymbol returns 'string'
+            assert.ok(!propertyType2.isUnionType());
+            assert.ok(propertyType2.flags & TypeFlags.String);
+
+            // when `"exactOptionalPropertyTypes": false`
+            const snapshot2 = api.updateSnapshot({ openProject: "/tsconfig-two.json" });
+            const project2 = snapshot2.getProject("/tsconfig-two.json")!;
+            const type2 = project2.checker.getTypeAtPosition("/src/index.ts", 7);
+            assert.ok(type2);
+            const symbol2 = project2.checker.getPropertyOfType(type2, "a");
+            assert.ok(symbol2);
+            const propertyType3 = project2.checker.getTypeOfSymbol(symbol2);
+            assert.ok(propertyType3);
+            // getTypeOfSymbol returns 'string | undefined'
+            assert.ok(propertyType3.isUnionType());
+            const propertyType4 = project2.checker.getNonMissingTypeOfSymbol(symbol2);
+            assert.ok(propertyType4);
+            // getNonMissingTypeOfSymbol returns 'string | undefined'
+            assert.ok(propertyType4.isUnionType());
+        }
+        finally {
+            api.close();
+        }
+    });
 });
 
 describe("LanguageService - imports", () => {

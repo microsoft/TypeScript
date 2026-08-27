@@ -33,6 +33,7 @@ export interface APIMethodInfo {
     getTypeOfSymbol: APIMethod<GetTypeOfSymbolParams, TypeResponse>;
     getTypesOfSymbols: APIMethod<GetTypesOfSymbolsParams, TypeResponse[]>;
     getDeclaredTypeOfSymbol: APIMethod<GetTypeOfSymbolParams, TypeResponse>;
+    getNonMissingTypeOfSymbol: APIMethod<GetTypeOfSymbolParams, TypeResponse>;
     getSourceFile: APIMethod<GetSourceFileParams, SourceFileResponse | null>;
     getSourceFileNames: APIMethod<GetSourceFileNamesParams, string[]>;
     getSourceFileMetadata: APIMethod<GetSourceFileParams, SourceFileMetadata | null>;
@@ -932,6 +933,7 @@ export interface BatchRequest {
         | "getMemberInModuleExports"
         | "getMembersOfSymbol"
         | "getNeverType"
+        | "getNonMissingTypeOfSymbol"
         | "getNonNullableType"
         | "getNonPrimitiveType"
         | "getNullType"
@@ -1078,6 +1080,7 @@ export interface BatchResponse {
         | "getMemberInModuleExports"
         | "getMembersOfSymbol"
         | "getNeverType"
+        | "getNonMissingTypeOfSymbol"
         | "getNonNullableType"
         | "getNonPrimitiveType"
         | "getNullType"

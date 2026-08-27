@@ -86,6 +86,7 @@ const (
 	MethodGetTypeOfSymbol              Method = "getTypeOfSymbol"
 	MethodGetTypesOfSymbols            Method = "getTypesOfSymbols"
 	MethodGetDeclaredTypeOfSymbol      Method = "getDeclaredTypeOfSymbol"
+	MethodGetNonMissingTypeOfSymbol    Method = "getNonMissingTypeOfSymbol"
 	MethodGetSourceFile                Method = "getSourceFile"
 	MethodGetSourceFileNames           Method = "getSourceFileNames"
 	MethodGetSourceFileMetadata        Method = "getSourceFileMetadata"
@@ -434,6 +435,7 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodGetTypeOfSymbol:              unmarshallerFor[GetTypeOfSymbolParams],
 	MethodGetTypesOfSymbols:            unmarshallerFor[GetTypesOfSymbolsParams],
 	MethodGetDeclaredTypeOfSymbol:      unmarshallerFor[GetTypeOfSymbolParams],
+	MethodGetNonMissingTypeOfSymbol:    unmarshallerFor[GetTypeOfSymbolParams],
 	MethodResolveName:                  unmarshallerFor[ResolveNameParams],
 	MethodGetSymbolsInScope:            unmarshallerFor[GetSymbolsInScopeParams],
 	MethodGetSignaturesOfType:          unmarshallerFor[GetSignaturesOfTypeParams],

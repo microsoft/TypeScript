@@ -1459,6 +1459,21 @@ export class Checker {
         return this.objectRegistry.getOrCreateType(data);
     }
 
+    /**
+     * Get the type of a symbol, excluding the missing type when
+     * `exactOptionalPropertyTypes: true` is set; for symbols whose
+     * type cannot be determined the checker yields the error type
+     * (use {@link Type.isErrorType} to detect it).
+     */
+    getNonMissingTypeOfSymbol(symbol: Symbol): Type {
+        const data = this.client.apiRequest("getNonMissingTypeOfSymbol", {
+            snapshot: this.snapshotId,
+            project: this.project.id,
+            symbol: symbol.id,
+        });
+        return this.objectRegistry.getOrCreateType(data);
+    }
+
     getReferencesToSymbolInFile(file: DocumentIdentifier, symbol: Symbol): NodeHandle[] {
         const data = this.client.apiRequest("getReferencesToSymbolInFile", {
             snapshot: this.snapshotId,
