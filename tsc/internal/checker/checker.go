@@ -799,7 +799,7 @@ type Checker struct {
 	unresolvableMembers                         int
 	skippedMemberChecks                         []skippedMemberCheck
 	recheckingSkippedMembers                    bool
-	inheritanceInFlight                         map[*Type]*pendingInheritance
+	inheritanceInFlight                         []pendingInheritance
 	varianceStack                               []VarianceStackEntry
 	apparentArgumentCount                       *int
 	lastGetCombinedNodeFlagsNode                *ast.Node
@@ -19691,10 +19691,7 @@ func (c *Checker) resolveObjectTypeMembers(t *Type, source *Type, typeParameters
 		// The table just published holds only what the type declares itself, so every inherited member
 		// reads as absent until the loop below adds it. Recording what is still to come lets a lookup in
 		// that window finish itself against the bases instead, so the window is never observable.
-		if c.inheritanceInFlight == nil {
-			c.inheritanceInFlight = make(map[*Type]*pendingInheritance)
-		}
-		c.inheritanceInFlight[t] = &pendingInheritance{mapper: mapper, thisArgument: thisArgument, baseTypes: baseTypes}
+		c.inheritanceInFlight = append(c.inheritanceInFlight, pendingInheritance{t: t, mapper: mapper, thisArgument: thisArgument, baseTypes: baseTypes})
 		for _, baseType := range baseTypes {
 			instantiatedBaseType := c.instantiateBaseType(baseType, mapper, thisArgument)
 			members = c.addInheritedMembers(members, c.getPropertiesOfType(instantiatedBaseType))
@@ -19710,17 +19707,21 @@ func (c *Checker) resolveObjectTypeMembers(t *Type, source *Type, typeParameters
 				return findIndexInfo(indexInfos, info.keyType) == nil
 			}))
 		}
-		delete(c.inheritanceInFlight, t)
+		c.inheritanceInFlight = c.inheritanceInFlight[:len(c.inheritanceInFlight)-1]
 		t.objectFlags &^= ObjectFlagsUnresolvedMembers
 	}
 	c.setStructuredTypeMembers(t, members, callSignatures, constructSignatures, indexInfos)
 }
 
 // What resolveObjectTypeMembers has left to inherit, for as long as ObjectFlagsUnresolvedMembers is set.
+// These nest strictly, so they are a stack rather than a map -- one that reaches its depth early and
+// allocates nothing thereafter.
 type pendingInheritance struct {
+	t            *Type
 	mapper       *TypeMapper
 	thisArgument *Type
 	baseTypes    []*Type
+	consulting   bool
 }
 
 func (c *Checker) instantiateBaseType(baseType *Type, mapper *TypeMapper, thisArgument *Type) *Type {
@@ -19735,17 +19736,22 @@ func (c *Checker) instantiateBaseType(baseType *Type, mapper *TypeMapper, thisAr
 // so this is the completed lookup rather than a guess about it -- a name no base carries is still
 // absent, and callers need no notion of a provisional answer.
 func (c *Checker) getPendingInheritedProperty(t *Type, name string) *ast.Symbol {
-	pending := c.inheritanceInFlight[t]
-	if pending == nil {
-		return nil
+	i := len(c.inheritanceInFlight) - 1
+	for i >= 0 && c.inheritanceInFlight[i].t != t {
+		i--
 	}
 	// A base that reaches back through t must find the window closed, or the two would ask each other
-	// forever; with the entry withdrawn t answers from its published table, which is what the loop's
-	// own re-entry sees.
-	delete(c.inheritanceInFlight, t)
-	defer func() { c.inheritanceInFlight[t] = pending }()
-	for _, baseType := range pending.baseTypes {
-		instantiated := c.instantiateBaseType(baseType, pending.mapper, pending.thisArgument)
+	// forever; marked as being consulted, t answers from its published table instead, which is what the
+	// loop's own re-entry sees. The index outlives a reallocation of the stack where a pointer into it
+	// would not, and stays valid because everything pushed above it is popped before this returns.
+	if i < 0 || c.inheritanceInFlight[i].consulting {
+		return nil
+	}
+	c.inheritanceInFlight[i].consulting = true
+	defer func() { c.inheritanceInFlight[i].consulting = false }()
+	mapper, thisArgument, baseTypes := c.inheritanceInFlight[i].mapper, c.inheritanceInFlight[i].thisArgument, c.inheritanceInFlight[i].baseTypes
+	for _, baseType := range baseTypes {
+		instantiated := c.instantiateBaseType(baseType, mapper, thisArgument)
 		if prop := c.getPropertyOfTypeEx(instantiated, name, true /*skipObjectFunctionPropertyAugment*/, false /*includeTypeOnlyMembers*/); prop != nil && !isStaticPrivateIdentifierProperty(prop) {
 			return prop
 		}
