@@ -2,10 +2,10 @@
     // If updating this, also update the config in dtsBundler.mjs.
     "indentWidth": 4,
     "lineWidth": 1000,
-    "newLineKind": "auto",
+    "newLineKind": "lf",
     "useTabs": false,
     "typescript": {
-        "newLineKind": "crlf",
+        "newLineKind": "lf",
         "semiColons": "always",
         "quoteStyle": "preferDouble",
         "quoteProps": "consistent",
@@ -52,7 +52,6 @@
         "tsc/internal/lsp/lsproto/_generate/metaModelSchema.mts",
         // Needs to be LF to have a working shebang.
         "packages/typescript/bin/tsc",
-        "tsc/internal/bundled/source/**",
         "tsc/internal/locale/lcl/**",
         "packages/typescript/dist/**",
         "packages/typescript/tsconfig.tsbuildinfo",
