@@ -1887,6 +1887,15 @@ export class Checker {
         return data ? this.objectRegistry.getOrCreateType(data) : undefined;
     }
 
+    getAwaitedType(type: Type): Type | undefined {
+        const data = this.client.apiRequest("getAwaitedType", {
+            snapshot: this.snapshotId,
+            project: this.project.id,
+            type: type.id,
+        });
+        return data ? this.objectRegistry.getOrCreateType(data) : undefined;
+    }
+
     getPropertyOfType(type: Type, name: string): Symbol | undefined {
         const data = this.client.apiRequest("getPropertyOfType", {
             snapshot: this.snapshotId,

@@ -780,6 +780,8 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleGetApparentPropertiesOfType(ctx, parsed.(*GetTypePropertyParams))
 	case string(MethodGetApparentType):
 		return s.handleGetApparentType(ctx, parsed.(*GetTypePropertyParams))
+	case string(MethodGetAwaitedType):
+		return s.handleGetAwaitedType(ctx, parsed.(*CheckerTypeParams))
 	case string(MethodGetReducedType):
 		return s.handleGetReducedType(ctx, parsed.(*GetTypePropertyParams))
 	case string(MethodGetPropertyOfType):
@@ -3091,6 +3093,28 @@ func (s *Session) handleGetApparentType(ctx context.Context, params *GetTypeProp
 	}
 
 	return setup.newTypeResponse(setup.checker.GetApparentType(t)), nil
+}
+
+// handleGetAwaitedType returns the type of `await expr` for a type.
+// @gen-proto-nullable
+func (s *Session) handleGetAwaitedType(ctx context.Context, params *CheckerTypeParams) (*TypeResponse, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	t, err := setup.resolveTypeHandle(params.Type)
+	if err != nil {
+		return nil, err
+	}
+
+	awaited := setup.checker.GetAwaitedType(t)
+	if awaited == nil {
+		return nil, nil
+	}
+
+	return setup.newTypeResponse(awaited), nil
 }
 
 // handleGetReducedType returns the reduced type of a type.
