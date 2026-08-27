@@ -13,7 +13,6 @@ See the Apache Version 2.0 License for specific language governing permissions
 and limitations under the License.
 ***************************************************************************** */
 
-
 interface ObjectConstructor {
     /**
      * Groups members of an iterable according to the return value of the passed callback.
