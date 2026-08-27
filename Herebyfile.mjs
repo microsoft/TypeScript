@@ -3,7 +3,6 @@
 import AdmZip from "adm-zip";
 import chokidar from "chokidar";
 import { $ as _$ } from "execa";
-import { glob } from "glob";
 import { task } from "hereby";
 import assert from "node:assert";
 import crypto from "node:crypto";
@@ -139,6 +138,22 @@ function memoize(fn) {
         }
         return value;
     };
+}
+
+/**
+ * @param {string} pattern
+ * @param {string[]} [exclude]
+ */
+async function globFiles(pattern, exclude) {
+    const files = [];
+    const absolute = path.isAbsolute(pattern);
+    for await (const entry of fs.promises.glob(pattern, { exclude, withFileTypes: true })) {
+        if (entry.isFile()) {
+            const file = path.join(entry.parentPath, entry.name);
+            files.push(absolute ? file : path.relative(process.cwd(), file));
+        }
+    }
+    return files;
 }
 
 const tools = new Map([
@@ -700,7 +715,7 @@ async function checkUnusedBaselines(trackingDir) {
         return [];
     }
 
-    const allBaselines = await glob(`${refBaseline}/**`, { nodir: true });
+    const allBaselines = await globFiles(`${refBaseline}/**`);
     const unusedBaselines = allBaselines
         .map(p => path.relative(refBaseline, p))
         .filter(p => !usedBaselines.has(p));
@@ -889,15 +904,13 @@ const golangciLintPackage = memoize(() => {
 });
 
 const customlintHash = memoize(() => {
-    const files = glob.sync([
+    const files = fs.globSync([
         "./tools/go.mod",
         "./tools/customlint/**/*",
         "./.custom-gcl.yml",
     ], {
-        ignore: "**/testdata/**",
-        nodir: true,
-        absolute: true,
-    });
+        exclude: ["**/testdata/**"],
+    }).filter(file => fs.statSync(file).isFile()).map(file => path.resolve(file));
     files.sort();
 
     const hash = crypto.createHash("sha256");
@@ -1008,13 +1021,13 @@ function baselineAcceptTask(localBaseline, refBaseline) {
     }
 
     return async () => {
-        const toCopy = await glob(`${localBaseline}/**`, { nodir: true, ignore: `${localBaseline}/**/*.delete` });
+        const toCopy = await globFiles(`${localBaseline}/**`, [`${localBaseline}/**/*.delete`]);
         for (const p of toCopy) {
             const out = localPathToRefPath(p);
             await fs.promises.mkdir(path.dirname(out), { recursive: true });
             await fs.promises.copyFile(p, out);
         }
-        const toDelete = await glob(`${localBaseline}/**/*.delete`, { nodir: true });
+        const toDelete = await globFiles(`${localBaseline}/**/*.delete`);
         for (const p of toDelete) {
             const out = localPathToRefPath(p).replace(/\.delete$/, "");
             await rimraf(out);
@@ -1934,7 +1947,7 @@ async function runBuildNativePreviewPackages() {
     await cpRecursive(path.join(inputDir, "dist"), path.join(mainPackageDir, "dist"));
 
     // Validate that .d.ts files contain no external imports (all imports must start with "." or "#").
-    const dtsFiles = await glob(`${mainPackageDir}/dist/**/*.d.ts`);
+    const dtsFiles = await globFiles(`${mainPackageDir}/dist/**/*.d.ts`);
     const importErrors = [];
     for (const dtsFile of dtsFiles) {
         const content = await fs.promises.readFile(dtsFile, "utf-8");
