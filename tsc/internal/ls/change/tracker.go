@@ -66,11 +66,7 @@ const (
 
 type trackerEdit struct {
 	kind trackerEditKind
-	// virtual is the edit's range in the transformed text the nodes and formatter work in. It is converted
-	// to the original text once, by GetChanges. Converting earlier would discard which projection the edit
-	// was computed against, and one original position can have several virtual counterparts, so that
-	// choice cannot be recovered afterwards.
-	virtual core.TextRange
+	core.TextRange
 
 	NewText string // kind == text
 
@@ -152,10 +148,9 @@ func (t *Tracker) GetChanges() (map[string][]*lsproto.TextEdit, []string) {
 	return changes, unmappable
 }
 
-// fromLSPEditRange converts an LSP range in the original document to transformed-text (virtual)
-// coordinates. Original-to-virtual is one-to-many when a mapper copies a span, but every exact projection
-// maps back to the range we started from, so any of them represents the same edit; a range with no exact
-// projection cannot be written back at all, and marks the file unmappable.
+// fromLSPEditRange converts an LSP range to a source file range. For a content-mapped file, an original
+// range may have several projections; this selects the one belonging to sourceFile. A range with no exact
+// projection cannot be written back and marks the file unmappable.
 func (t *Tracker) fromLSPEditRange(sourceFile *ast.SourceFile, lsprotoRange lsproto.Range) core.TextRange {
 	spans := lsconv.FromLSPRangeForSourceFile(t.converters, sourceFile, lsprotoRange, spanmap.FeatureAll)
 	for _, span := range spans {
@@ -170,10 +165,10 @@ func (t *Tracker) fromLSPEditRange(sourceFile *ast.SourceFile, lsprotoRange lspr
 	return core.NewTextRange(0, 0)
 }
 
-// toLSPEditRange converts a transformed-text range to an LSP range for an edit, mapping through the
-// content mapper's span map when the file is content-mapped. If the range does not fall entirely within a
-// single verbatim span the edit cannot be represented safely in the original text: the file is recorded so
-// GetChanges drops its edits, and a best-effort range is returned so the accumulated edits stay well-formed.
+// toLSPEditRange converts a source file range to an LSP range. For a content-mapped file, the range is
+// mapped back to the original document. If it does not fall entirely within a single verbatim span, the
+// edit cannot be represented safely: the file is recorded so GetChanges drops its edits, and a best-effort
+// range is returned so the accumulated edits stay well-formed.
 func (t *Tracker) toLSPEditRange(sourceFile *ast.SourceFile, textRange core.TextRange) lsproto.Range {
 	r, fidelity := t.converters.ToLSPRange(sourceFile, textRange)
 	if !fidelity.IsExact() {
@@ -206,40 +201,38 @@ func (t *Tracker) ReplaceNodeWithNodes(sourceFile *ast.SourceFile, oldNode *ast.
 	t.ReplaceRangeWithNodes(sourceFile, t.GetAdjustedRange(sourceFile, oldNode, oldNode, options.LeadingTriviaOption, options.TrailingTriviaOption), newNodes, *options)
 }
 
-// ReplaceRange replaces textRange, in transformed-text (virtual) coordinates, with newNode.
+// ReplaceRange replaces textRange in sourceFile with newNode.
 func (t *Tracker) ReplaceRange(sourceFile *ast.SourceFile, textRange core.TextRange, newNode *ast.Node, options NodeOptions) {
-	t.changes.Add(sourceFile, &trackerEdit{kind: trackerEditKindReplaceWithSingleNode, virtual: textRange, options: options, Node: newNode})
+	t.changes.Add(sourceFile, &trackerEdit{kind: trackerEditKindReplaceWithSingleNode, TextRange: textRange, options: options, Node: newNode})
 }
 
-// ReplaceRangeWithText replaces an LSP range given in the coordinates of the original document. Only text
-// edits may be expressed this way: an edit that has to be formatted needs the virtual context the nodes
-// live in, whereas text is inserted verbatim and so does not care which projection it is placed at.
+// ReplaceRangeWithText replaces an LSP range with text. For a content-mapped file, the LSP range is in the
+// original document; text may be placed at any exact projection because it does not need formatting context.
 func (t *Tracker) ReplaceRangeWithText(sourceFile *ast.SourceFile, lsprotoRange lsproto.Range, text string) {
 	t.ReplaceTextRangeWithText(sourceFile, t.fromLSPEditRange(sourceFile, lsprotoRange), text)
 }
 
-// ReplaceTextRangeWithText replaces textRange (in transformed-text coordinates) with text. The range is
-// mapped to the original text by GetChanges, and an edit that cannot be represented there marks the file
-// unmappable and is dropped.
+// ReplaceTextRangeWithText replaces textRange in sourceFile with text. For a content-mapped file, GetChanges
+// maps the range back to the original document and drops the file if the edit cannot be represented there.
 func (t *Tracker) ReplaceTextRangeWithText(sourceFile *ast.SourceFile, textRange core.TextRange, text string) {
-	t.changes.Add(sourceFile, &trackerEdit{kind: trackerEditKindText, virtual: textRange, NewText: text})
+	t.changes.Add(sourceFile, &trackerEdit{kind: trackerEditKindText, TextRange: textRange, NewText: text})
 }
 
-// ReplaceRangeWithNodes replaces textRange, in transformed-text (virtual) coordinates, with newNodes.
+// ReplaceRangeWithNodes replaces textRange in sourceFile with newNodes.
 func (t *Tracker) ReplaceRangeWithNodes(sourceFile *ast.SourceFile, textRange core.TextRange, newNodes []*ast.Node, options NodeOptions) {
 	if len(newNodes) == 1 {
 		t.ReplaceRange(sourceFile, textRange, newNodes[0], options)
 		return
 	}
-	t.changes.Add(sourceFile, &trackerEdit{kind: trackerEditKindReplaceWithMultipleNodes, virtual: textRange, nodes: newNodes, options: options})
+	t.changes.Add(sourceFile, &trackerEdit{kind: trackerEditKindReplaceWithMultipleNodes, TextRange: textRange, nodes: newNodes, options: options})
 }
 
-// insertTextAt inserts text at a transformed-text (virtual) offset.
+// insertTextAt inserts text at an offset in sourceFile.
 func (t *Tracker) insertTextAt(sourceFile *ast.SourceFile, pos core.TextPos, text string) {
 	t.ReplaceTextRangeWithText(sourceFile, core.NewTextRange(int(pos), int(pos)), text)
 }
 
-// InsertText inserts text at an LSP position given in the coordinates of the original document.
+// InsertText inserts text at an LSP position.
 func (t *Tracker) InsertText(sourceFile *ast.SourceFile, pos lsproto.Position, text string) {
 	t.ReplaceRangeWithText(sourceFile, lsproto.Range{Start: pos, End: pos}, text)
 }

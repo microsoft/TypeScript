@@ -20,7 +20,7 @@ import (
 
 func (t *Tracker) getTextChangesFromChanges() map[string][]*lsproto.TextEdit {
 	changes := map[string][]*lsproto.TextEdit{}
-	// A content-mapped file can have several virtual projections, each keyed separately in t.changes but
+	// A content-mapped file can have several projections, each keyed separately in t.changes but
 	// all sharing one original file. Their edits are collected together before being ordered and checked,
 	// so duplicate edits are emitted once and conflicting edits are rejected regardless of map iteration
 	// order.
@@ -30,9 +30,8 @@ func (t *Tracker) getTextChangesFromChanges() map[string][]*lsproto.TextEdit {
 		if t.unmappableFiles.Has(fileName) {
 			continue
 		}
-		// Edits are computed and stored in virtual coordinates but applied to the original document, and a
-		// mapper is free to reorder text, so virtual order does not imply original order. Convert first,
-		// then sort and check for overlap in the space the edits are actually applied in.
+		// For a content-mapped file, a mapper may reorder source text relative to the original document.
+		// Convert first, then sort and check for overlap in the space where edits are actually applied.
 		textChanges := core.MapNonNil(changesInFile, func(change *trackerEdit) *lsproto.TextEdit {
 			// !!! targetSourceFile
 
@@ -44,7 +43,7 @@ func (t *Tracker) getTextChangesFromChanges() map[string][]*lsproto.TextEdit {
 
 			return &lsproto.TextEdit{
 				NewText: newText,
-				Range:   t.toLSPEditRange(sourceFile, change.virtual),
+				Range:   t.toLSPEditRange(sourceFile, change.TextRange),
 			}
 		})
 
@@ -118,7 +117,7 @@ func (t *Tracker) computeNewText(change *trackerEdit, targetSourceFile *ast.Sour
 		return change.NewText
 	}
 
-	pos := change.virtual.Pos()
+	pos := change.TextRange.Pos()
 	formatNode := func(n *ast.Node) string {
 		return t.getFormattedTextOfNode(n, targetSourceFile, sourceFile, pos, change.options)
 	}
@@ -156,17 +155,17 @@ func (t *Tracker) computeNewText(change *trackerEdit, targetSourceFile *ast.Sour
 //     column zero, so the indentation is emitted before the text.
 //
 // The indentation is read from the original text at the edit's original position, so it holds for a
-// content-mapped file whose virtual copy is indented differently from the document the edit is applied to.
+// content-mapped file whose projection is indented differently from the document the edit is applied to.
 // Edits carrying an explicit indentation option are left alone.
 func (t *Tracker) reindentInsertedLines(sourceFile *ast.SourceFile, change *trackerEdit, text string) string {
-	if text == "" || change.virtual.Pos() != change.virtual.End() || change.options.indentation != nil {
+	if text == "" || change.TextRange.Pos() != change.TextRange.End() || change.options.indentation != nil {
 		return text
 	}
 	if !strings.HasSuffix(text, t.newLine) {
 		return text
 	}
 	original := sourceFile.OriginalText()
-	pos := change.virtual.Pos()
+	pos := change.TextRange.Pos()
 	if spans := sourceFile.SpanMap(); spans != nil {
 		mapped, fidelity := spans.VirtualToOriginalPosition(core.TextPos(pos))
 		if !fidelity.IsExact() {
