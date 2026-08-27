@@ -23,6 +23,7 @@ export type SymbolsPropertyMethod = APIMethodsReturning<SymbolResponse[]>;
 export type SignaturePropertyMethod = APIMethodsReturning<SignatureResponse>;
 export type TypePropertyMethod = Exclude<APIMethodsReturning<TypeResponse>, IntrinsicTypeMethod>;
 export type TypesPropertyMethod = APIMethodsReturning<TypeResponse[]>;
+export type TypeArraysPropertyMethod = APIMethodsReturning<TypeResponse[][]>;
 export type IntrinsicTypeMethod = "getAnyType" | "getBigIntType" | "getBooleanType" | "getESSymbolType" | "getNeverType" | "getNonPrimitiveType" | "getNullType" | "getNumberType" | "getStringType" | "getUndefinedType" | "getUnknownType" | "getVoidType";
 
 export type APIRequest = { [K in keyof APIMethodInfo]: { method: K; params: APIMethodInfo[K]["params"]; }; }[keyof APIMethodInfo];
