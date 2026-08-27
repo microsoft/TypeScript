@@ -486,6 +486,24 @@ describe("API - generator batching", () => {
         }
     });
 
+    test("transparently paginates batch responses", () => {
+        const api = spawnAPI(undefined, { maxResponseBytesPerPage: 1 });
+        try {
+            const [strict, config, noImplicitAny] = api.batch(
+                api.parseCommandLine.gen(["--strict"]),
+                api.readConfigFile.gen("/tsconfig.json"),
+                api.parseCommandLine.gen(["--noImplicitAny"]),
+            );
+
+            assert.equal(strict.options.strict, true);
+            assert.deepEqual(config.config, {});
+            assert.equal(noImplicitAny.options.noImplicitAny, true);
+        }
+        finally {
+            api.close();
+        }
+    });
+
     test("all deduplicates only initialize requests within a batch round", () => {
         const api = spawnAPI();
         const requestBatches: string[][] = [];

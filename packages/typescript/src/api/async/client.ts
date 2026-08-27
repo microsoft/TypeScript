@@ -214,10 +214,27 @@ export class Client {
 
             const requestType = new RequestType<unknown, BatchRequestsResponse, void>("batchRequests");
             const params: BatchRequestsParams = { requests: requests.map(request => ({ method: request.method, params: request.params })) };
+            if (this.options.maxResponseBytesPerPage !== undefined) {
+                params.maxResponseBytesPerPage = this.options.maxResponseBytesPerPage;
+            }
             const response = await this.sendRequestWithTiming(requestType, params);
+            let responses = response.responses;
+            let continuationToken = response.continuationToken;
+            while (continuationToken) {
+                const pageParams: BatchRequestsParams = {
+                    requests: [],
+                    continuationToken,
+                };
+                if (this.options.maxResponseBytesPerPage !== undefined) {
+                    pageParams.maxResponseBytesPerPage = this.options.maxResponseBytesPerPage;
+                }
+                const page = await this.sendRequestWithTiming(requestType, pageParams);
+                responses = responses.concat(page.responses);
+                continuationToken = page.continuationToken;
+            }
             for (let i = 0; i < requests.length; i++) {
                 const { resolve, reject } = requests[i];
-                const item = response.responses[i];
+                const item = responses[i];
                 if (item.error !== undefined) {
                     reject(new Error(item.error));
                 }
@@ -253,7 +270,7 @@ export class Client {
         };
     }
 
-    async apiRequest<K extends keyof APIMethodInfo>(method: K, params: APIMethodInfo[K]["params"]): Promise<APIMethodInfo[K]["result"]> {
+    async apiRequest<K extends APIRequest["method"]>(method: K, params: APIMethodInfo[K]["params"]): Promise<APIMethodInfo[K]["result"]> {
         if (!this.connected) {
             await this.connect();
         }

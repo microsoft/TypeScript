@@ -8,6 +8,8 @@ import type { FileSystem } from "./fs.ts";
 export interface ClientSocketOptions {
     /** Path to the Unix domain socket or Windows named pipe for API communication */
     pipe: string;
+    /** Maximum encoded byte size of each batch response page. Defaults to 300 million bytes. */
+    maxResponseBytesPerPage?: number;
 }
 
 export interface ClientSpawnOptions {
@@ -19,6 +21,8 @@ export interface ClientSpawnOptions {
     fs?: FileSystem;
     /** Allow trusted projects to execute configured external content mapper processes. */
     runExternalCode?: boolean;
+    /** Maximum encoded byte size of each batch response page. Defaults to 300 million bytes. */
+    maxResponseBytesPerPage?: number;
     /**
      * When true, collect timing information for each request. The client
      * measures round-trip latency and bytes sent/received, and the server

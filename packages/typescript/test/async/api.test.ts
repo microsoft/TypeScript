@@ -677,6 +677,28 @@ describe("API - automatic batching", () => {
 });
 
 describe("API - batchContext", () => {
+    test("transparently paginates batch responses", async () => {
+        const api = spawnAPI({ ...defaultFiles }, { maxResponseBytesPerPage: 1 });
+        try {
+            const requests = await (async () => {
+                using _ = api.batchContext();
+                return [
+                    api.parseCommandLine(["--strict"]),
+                    api.readConfigFile("/tsconfig.json"),
+                    api.parseCommandLine(["--noImplicitAny"]),
+                ] as const;
+            })();
+
+            const [strict, config, noImplicitAny] = await Promise.all(requests);
+            assert.equal(strict.options.strict, true);
+            assert.deepEqual(config.config, {});
+            assert.equal(noImplicitAny.options.noImplicitAny, true);
+        }
+        finally {
+            await api.close();
+        }
+    });
+
     test("holds requests until disposal", async () => {
         const api = spawnAPI();
         try {

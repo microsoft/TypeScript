@@ -383,7 +383,10 @@ type Session struct {
 	projectSession *project.Session
 
 	// This is set to true when using MessagePackProtocol.
-	useBinaryResponses bool
+	useBinaryResponses      bool
+	batchResponsePages      map[string]batchResponsePage
+	batchResponsePagesMu    sync.Mutex
+	nextBatchResponsePageID atomic.Uint64
 
 	// snapshots maps snapshot handles to their data. Each snapshot has its own
 	// symbol/type registries.
@@ -423,6 +426,10 @@ type Session struct {
 	cpuProfiler pprof.CPUProfiler
 }
 
+type batchResponsePage struct {
+	encodedResponses []json.Value
+}
+
 // Ensure Session implements Handler
 var _ ipc.Handler = (*Session)(nil)
 
@@ -432,13 +439,18 @@ type SessionOptions struct {
 	UseBinaryResponses bool
 }
 
+// DefaultMaxResponseBytesPerPage leaves room for base64 expansion beneath V8's
+// maximum string length while rounding down to an even decimal value.
+const DefaultMaxResponseBytesPerPage = 300_000_000
+
 // NewSession creates a new API session with the given project session.
 func NewSession(projectSession *project.Session, options *SessionOptions) *Session {
 	id := sessionIDCounter.Add(1)
 	s := &Session{
-		id:             formatSessionID(id),
-		projectSession: projectSession,
-		snapshots:      make(map[SnapshotID]*snapshotData),
+		id:                 formatSessionID(id),
+		projectSession:     projectSession,
+		batchResponsePages: make(map[string]batchResponsePage),
+		snapshots:          make(map[SnapshotID]*snapshotData),
 	}
 	if options != nil {
 		s.useBinaryResponses = options.UseBinaryResponses
@@ -902,15 +914,97 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 }
 
 func (s *Session) handleBatchRequests(ctx context.Context, params *BatchRequestsParams) (*BatchRequestsResponse, error) {
+	if params.ContinuationToken != "" {
+		s.batchResponsePagesMu.Lock()
+		page, ok := s.batchResponsePages[params.ContinuationToken]
+		delete(s.batchResponsePages, params.ContinuationToken)
+		s.batchResponsePagesMu.Unlock()
+		if !ok {
+			return nil, fmt.Errorf("%w: invalid batch continuation token", ErrClientError)
+		}
+		return s.paginateBatchResponses(page, nil, params.MaxResponseBytesPerPage)
+	}
+
 	responses := make([]BatchResponse, len(params.Requests))
 	for i, request := range params.Requests {
 		responses[i] = s.handleBatchRequest(ctx, request)
 	}
-	return &BatchRequestsResponse{Responses: responses}, nil
+	if s == nil {
+		return &BatchRequestsResponse{Responses: responses}, nil
+	}
+	page, err := newBatchResponsePage(responses)
+	if err != nil {
+		return nil, err
+	}
+	return s.paginateBatchResponses(page, responses, params.MaxResponseBytesPerPage)
+}
+
+func newBatchResponsePage(responses []BatchResponse) (batchResponsePage, error) {
+	encodedResponses := make([]json.Value, len(responses))
+	for i := range responses {
+		encoded, err := json.Marshal(&responses[i])
+		if err != nil {
+			return batchResponsePage{}, err
+		}
+		encodedResponses[i] = encoded
+	}
+	return batchResponsePage{encodedResponses: encodedResponses}, nil
+}
+
+func (s *Session) paginateBatchResponses(page batchResponsePage, responses []BatchResponse, maxResponseBytesPerPage int) (*BatchRequestsResponse, error) {
+	if maxResponseBytesPerPage <= 0 {
+		maxResponseBytesPerPage = DefaultMaxResponseBytesPerPage
+	}
+	encodedLength := len(`{"responses":[]}`)
+	pageLength := 0
+	for _, encoded := range page.encodedResponses {
+		additionalLength := len(encoded)
+		if pageLength > 0 {
+			additionalLength++
+		}
+		if pageLength > 0 && encodedLength+additionalLength > maxResponseBytesPerPage {
+			break
+		}
+		encodedLength += additionalLength
+		pageLength++
+	}
+
+	if pageLength == len(page.encodedResponses) {
+		return &BatchRequestsResponse{
+			Responses:        responses,
+			encodedResponses: page.encodedResponses,
+		}, nil
+	}
+	continuationToken := fmt.Sprintf("%s-%d", s.id, s.nextBatchResponsePageID.Add(1))
+	continuationLength := len(`,"continuationToken":""`) + len(continuationToken)
+	for pageLength > 1 && encodedLength+continuationLength > maxResponseBytesPerPage {
+		encodedLength -= len(page.encodedResponses[pageLength-1]) + 1
+		pageLength--
+	}
+	response := &BatchRequestsResponse{
+		ContinuationToken: continuationToken,
+		encodedResponses:  slices.Clone(page.encodedResponses[:pageLength]),
+	}
+	if responses != nil {
+		response.Responses = slices.Clone(responses[:pageLength])
+	}
+	s.batchResponsePagesMu.Lock()
+	if s.batchResponsePages == nil {
+		s.batchResponsePages = make(map[string]batchResponsePage)
+	}
+	s.batchResponsePages[continuationToken] = batchResponsePage{
+		encodedResponses: slices.Clone(page.encodedResponses[pageLength:]),
+	}
+	s.batchResponsePagesMu.Unlock()
+	return response, nil
 }
 
 func (s *Session) handleBatchRequest(ctx context.Context, request BatchRequest) (response BatchResponse) {
 	response.Method = request.Method
+	if request.Method == MethodBatchRequests {
+		response.Error = fmt.Sprintf("%s: batchRequests cannot be nested", ErrInvalidRequest)
+		return response
+	}
 	defer func() {
 		if recovered := recover(); recovered != nil {
 			response.Result = nil
@@ -3715,6 +3809,9 @@ func computeSnapshotChanges(prev *project.Snapshot, next *project.Snapshot) *Sna
 // regardless of their ref counts.
 func (s *Session) Close() {
 	s.releaseOpenRefs()
+	s.batchResponsePagesMu.Lock()
+	clear(s.batchResponsePages)
+	s.batchResponsePagesMu.Unlock()
 
 	s.snapshotsMu.Lock()
 	defer s.snapshotsMu.Unlock()
