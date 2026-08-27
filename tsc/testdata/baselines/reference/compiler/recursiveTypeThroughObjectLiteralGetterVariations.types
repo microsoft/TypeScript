@@ -1,0 +1,281 @@
+//// [tests/cases/compiler/recursiveTypeThroughObjectLiteralGetterVariations.ts] ////
+
+=== recursiveTypeThroughObjectLiteralGetterVariations.ts ===
+// The recursive getter written the several ways it comes up: as a class's static, nested inside
+// another object literal, through an intermediate call, spelled out with an annotation, and twice
+// over in one file. main reports TS7022/TS7023 on every one of these, and TS2502 on the annotated
+// one.
+
+interface Schema<O> {
+    readonly out: O;
+>out : O
+}
+type Shape = Record<string, Schema<any>>;
+>Shape : Shape
+
+declare function object<S extends Shape>(shape: S): Schema<{ [K in keyof S]: S[K]["out"] }> & { shape: S };
+>object : <S extends Shape>(shape: S) => Schema<{ [K in keyof S]: S[K]["out"]; }> & { shape: S; }
+>shape : S
+>shape : S
+
+declare function arr<T extends Schema<any>>(t: T): Schema<T["out"][]>;
+>arr : <T extends Schema<any>>(t: T) => Schema<T["out"][]>
+>t : T
+
+declare const leaf: Schema<string>;
+>leaf : Schema<string>
+
+class Holder {
+>Holder : Holder
+
+    static readonly schema = object({
+>schema : Schema<{ name: string; readonly self: any; }> & { shape: { name: Schema<string>; readonly self: Schema<{ name: string; readonly self: any; }> & any; }; }
+>object({        name: leaf,        get self() {            return Holder.schema;        },    }) : Schema<{ name: string; readonly self: any; }> & { shape: { name: Schema<string>; readonly self: Schema<{ name: string; readonly self: any; }> & any; }; }
+>object : <S extends Shape>(shape: S) => Schema<{ [K in keyof S]: S[K]["out"]; }> & { shape: S; }
+>{        name: leaf,        get self() {            return Holder.schema;        },    } : { name: Schema<string>; readonly self: Schema<{ name: string; readonly self: any; }> & { shape: { name: Schema<string>; readonly self: Schema<{ name: string; readonly self: any; }> & any; }; }; }
+
+        name: leaf,
+>name : Schema<string>
+>leaf : Schema<string>
+
+        get self() {
+>self : Schema<{ name: string; readonly self: any; }> & { shape: { name: Schema<string>; readonly self: Schema<{ name: string; readonly self: any; }> & any; }; }
+
+            return Holder.schema;
+>Holder.schema : Schema<{ name: string; readonly self: any; }> & { shape: { name: Schema<string>; readonly self: Schema<{ name: string; readonly self: any; }> & any; }; }
+>Holder : typeof Holder
+>schema : Schema<{ name: string; readonly self: any; }> & { shape: { name: Schema<string>; readonly self: Schema<{ name: string; readonly self: any; }> & any; }; }
+
+        },
+    });
+}
+declare const fromClass: typeof Holder.schema.out;
+>fromClass : { name: string; readonly self: any; }
+>Holder.schema.out : { name: string; readonly self: any; }
+>Holder.schema : Schema<{ name: string; readonly self: any; }> & { shape: { name: Schema<string>; readonly self: Schema<{ name: string; readonly self: any; }> & any; }; }
+>Holder : typeof Holder
+>schema : Schema<{ name: string; readonly self: any; }> & { shape: { name: Schema<string>; readonly self: Schema<{ name: string; readonly self: any; }> & any; }; }
+>out : { name: string; readonly self: any; }
+
+const className: string = fromClass.name;
+>className : string
+>fromClass.name : string
+>fromClass : { name: string; readonly self: any; }
+>name : string
+
+const nested = object({
+>nested : Schema<{ name: string; readonly inner: { deeper: any; }; }> & { shape: { name: Schema<string>; readonly inner: Schema<{ deeper: any; }> & { shape: { deeper: Schema<{ name: string; readonly inner: { deeper: any; }; }> & any; }; }; }; }
+>object({    name: leaf,    get inner() {        return object({ deeper: nested });    },}) : Schema<{ name: string; readonly inner: { deeper: any; }; }> & { shape: { name: Schema<string>; readonly inner: Schema<{ deeper: any; }> & { shape: { deeper: Schema<{ name: string; readonly inner: { deeper: any; }; }> & any; }; }; }; }
+>object : <S extends Shape>(shape: S) => Schema<{ [K in keyof S]: S[K]["out"]; }> & { shape: S; }
+>{    name: leaf,    get inner() {        return object({ deeper: nested });    },} : { name: Schema<string>; readonly inner: Schema<{ deeper: { name: string; readonly inner: any; }; }> & { shape: { deeper: Schema<{ name: string; readonly inner: any; }> & { shape: { name: Schema<string>; readonly inner: Schema<{ deeper: { name: string; readonly inner: any; }; }> & any; }; }; }; }; }
+
+    name: leaf,
+>name : Schema<string>
+>leaf : Schema<string>
+
+    get inner() {
+>inner : Schema<{ deeper: { name: string; readonly inner: any; }; }> & { shape: { deeper: Schema<{ name: string; readonly inner: any; }> & { shape: { name: Schema<string>; readonly inner: Schema<{ deeper: { name: string; readonly inner: any; }; }> & any; }; }; }; }
+
+        return object({ deeper: nested });
+>object({ deeper: nested }) : Schema<{ deeper: { name: string; readonly inner: any; }; }> & { shape: { deeper: Schema<{ name: string; readonly inner: any; }> & { shape: { name: Schema<string>; readonly inner: Schema<{ deeper: { name: string; readonly inner: any; }; }> & any; }; }; }; }
+>object : <S extends Shape>(shape: S) => Schema<{ [K in keyof S]: S[K]["out"]; }> & { shape: S; }
+>{ deeper: nested } : { deeper: Schema<{ name: string; readonly inner: { deeper: any; }; }> & { shape: { name: Schema<string>; readonly inner: Schema<{ deeper: any; }> & { shape: { deeper: Schema<{ name: string; readonly inner: { deeper: any; }; }> & any; }; }; }; }; }
+>deeper : Schema<{ name: string; readonly inner: { deeper: any; }; }> & { shape: { name: Schema<string>; readonly inner: Schema<{ deeper: any; }> & { shape: { deeper: Schema<{ name: string; readonly inner: { deeper: any; }; }> & any; }; }; }; }
+>nested : Schema<{ name: string; readonly inner: { deeper: any; }; }> & { shape: { name: Schema<string>; readonly inner: Schema<{ deeper: any; }> & { shape: { deeper: Schema<{ name: string; readonly inner: { deeper: any; }; }> & any; }; }; }; }
+
+    },
+});
+declare const fromNested: typeof nested.out;
+>fromNested : { name: string; readonly inner: { deeper: any; }; }
+>nested.out : { name: string; readonly inner: { deeper: any; }; }
+>nested : Schema<{ name: string; readonly inner: { deeper: any; }; }> & { shape: { name: Schema<string>; readonly inner: Schema<{ deeper: any; }> & { shape: { deeper: Schema<{ name: string; readonly inner: { deeper: any; }; }> & any; }; }; }; }
+>out : { name: string; readonly inner: { deeper: any; }; }
+
+const nestedName: string = fromNested.inner.deeper.name;
+>nestedName : string
+>fromNested.inner.deeper.name : string
+>fromNested.inner.deeper : { name: string; readonly inner: { deeper: any; }; }
+>fromNested.inner : { deeper: { name: string; readonly inner: any; }; }
+>fromNested : { name: string; readonly inner: { deeper: any; }; }
+>inner : { deeper: { name: string; readonly inner: any; }; }
+>deeper : { name: string; readonly inner: { deeper: any; }; }
+>name : string
+
+const viaCall = object({
+>viaCall : Schema<{ name: string; readonly items: any[]; }> & { shape: { name: Schema<string>; readonly items: Schema<{ name: string; readonly items: any[]; }[]>; }; }
+>object({    name: leaf,    get items() {        return arr(viaCall);    },}) : Schema<{ name: string; readonly items: any[]; }> & { shape: { name: Schema<string>; readonly items: Schema<{ name: string; readonly items: any[]; }[]>; }; }
+>object : <S extends Shape>(shape: S) => Schema<{ [K in keyof S]: S[K]["out"]; }> & { shape: S; }
+>{    name: leaf,    get items() {        return arr(viaCall);    },} : { name: Schema<string>; readonly items: Schema<{ name: string; readonly items: any[]; }[]>; }
+
+    name: leaf,
+>name : Schema<string>
+>leaf : Schema<string>
+
+    get items() {
+>items : Schema<{ name: string; readonly items: any[]; }[]>
+
+        return arr(viaCall);
+>arr(viaCall) : Schema<{ name: string; readonly items: any[]; }[]>
+>arr : <T extends Schema<any>>(t: T) => Schema<T["out"][]>
+>viaCall : Schema<{ name: string; readonly items: any[]; }> & { shape: { name: Schema<string>; readonly items: Schema<{ name: string; readonly items: any[]; }[]>; }; }
+
+    },
+});
+declare const fromCall: typeof viaCall.out;
+>fromCall : { name: string; readonly items: any[]; }
+>viaCall.out : { name: string; readonly items: any[]; }
+>viaCall : Schema<{ name: string; readonly items: any[]; }> & { shape: { name: Schema<string>; readonly items: Schema<{ name: string; readonly items: any[]; }[]>; }; }
+>out : { name: string; readonly items: any[]; }
+
+const callName: string = fromCall.items[0].items[0].name;
+>callName : string
+>fromCall.items[0].items[0].name : string
+>fromCall.items[0].items[0] : { name: string; readonly items: any[]; }
+>fromCall.items[0].items : { name: string; readonly items: any[]; }[]
+>fromCall.items[0] : { name: string; readonly items: any[]; }
+>fromCall.items : { name: string; readonly items: any[]; }[]
+>fromCall : { name: string; readonly items: any[]; }
+>items : { name: string; readonly items: any[]; }[]
+>0 : 0
+>items : { name: string; readonly items: any[]; }[]
+>0 : 0
+>name : string
+
+const annotated = object({
+>annotated : Schema<{ name: string; readonly self: any; }> & { shape: { name: Schema<string>; readonly self: typeof annotated; }; }
+>object({    name: leaf,    get self(): typeof annotated {        return annotated;    },}) : Schema<{ name: string; readonly self: any; }> & { shape: { name: Schema<string>; readonly self: typeof annotated; }; }
+>object : <S extends Shape>(shape: S) => Schema<{ [K in keyof S]: S[K]["out"]; }> & { shape: S; }
+>{    name: leaf,    get self(): typeof annotated {        return annotated;    },} : { name: Schema<string>; readonly self: typeof annotated; }
+
+    name: leaf,
+>name : Schema<string>
+>leaf : Schema<string>
+
+    get self(): typeof annotated {
+>self : Schema<{ name: string; readonly self: any; }> & { shape: { name: Schema<string>; readonly self: typeof annotated; }; }
+>annotated : Schema<{ name: string; readonly self: any; }> & { shape: { name: Schema<string>; readonly self: typeof annotated; }; }
+
+        return annotated;
+>annotated : Schema<{ name: string; readonly self: any; }> & { shape: { name: Schema<string>; readonly self: typeof annotated; }; }
+
+    },
+});
+declare const fromAnnotated: typeof annotated.out;
+>fromAnnotated : { name: string; readonly self: any; }
+>annotated.out : { name: string; readonly self: any; }
+>annotated : Schema<{ name: string; readonly self: any; }> & { shape: { name: Schema<string>; readonly self: typeof annotated; }; }
+>out : { name: string; readonly self: any; }
+
+const annotatedName: string = fromAnnotated.self.self.name;
+>annotatedName : string
+>fromAnnotated.self.self.name : string
+>fromAnnotated.self.self : { name: string; readonly self: any; }
+>fromAnnotated.self : { name: string; readonly self: any; }
+>fromAnnotated : { name: string; readonly self: any; }
+>self : { name: string; readonly self: any; }
+>self : { name: string; readonly self: any; }
+>name : string
+
+// Two independent recursive schemas must not contaminate each other.
+const first = object({ a: leaf, get me() { return first; } });
+>first : Schema<{ a: string; readonly me: any; }> & { shape: { a: Schema<string>; readonly me: Schema<{ a: string; readonly me: any; }> & any; }; }
+>object({ a: leaf, get me() { return first; } }) : Schema<{ a: string; readonly me: any; }> & { shape: { a: Schema<string>; readonly me: Schema<{ a: string; readonly me: any; }> & any; }; }
+>object : <S extends Shape>(shape: S) => Schema<{ [K in keyof S]: S[K]["out"]; }> & { shape: S; }
+>{ a: leaf, get me() { return first; } } : { a: Schema<string>; readonly me: Schema<{ a: string; readonly me: any; }> & { shape: { a: Schema<string>; readonly me: Schema<{ a: string; readonly me: any; }> & any; }; }; }
+>a : Schema<string>
+>leaf : Schema<string>
+>me : Schema<{ a: string; readonly me: any; }> & { shape: { a: Schema<string>; readonly me: Schema<{ a: string; readonly me: any; }> & any; }; }
+>first : Schema<{ a: string; readonly me: any; }> & { shape: { a: Schema<string>; readonly me: Schema<{ a: string; readonly me: any; }> & any; }; }
+
+const second = object({ b: leaf, get me() { return second; } });
+>second : Schema<{ b: string; readonly me: any; }> & { shape: { b: Schema<string>; readonly me: Schema<{ b: string; readonly me: any; }> & any; }; }
+>object({ b: leaf, get me() { return second; } }) : Schema<{ b: string; readonly me: any; }> & { shape: { b: Schema<string>; readonly me: Schema<{ b: string; readonly me: any; }> & any; }; }
+>object : <S extends Shape>(shape: S) => Schema<{ [K in keyof S]: S[K]["out"]; }> & { shape: S; }
+>{ b: leaf, get me() { return second; } } : { b: Schema<string>; readonly me: Schema<{ b: string; readonly me: any; }> & { shape: { b: Schema<string>; readonly me: Schema<{ b: string; readonly me: any; }> & any; }; }; }
+>b : Schema<string>
+>leaf : Schema<string>
+>me : Schema<{ b: string; readonly me: any; }> & { shape: { b: Schema<string>; readonly me: Schema<{ b: string; readonly me: any; }> & any; }; }
+>second : Schema<{ b: string; readonly me: any; }> & { shape: { b: Schema<string>; readonly me: Schema<{ b: string; readonly me: any; }> & any; }; }
+
+declare const fromFirst: typeof first.out;
+>fromFirst : { a: string; readonly me: any; }
+>first.out : { a: string; readonly me: any; }
+>first : Schema<{ a: string; readonly me: any; }> & { shape: { a: Schema<string>; readonly me: Schema<{ a: string; readonly me: any; }> & any; }; }
+>out : { a: string; readonly me: any; }
+
+declare const fromSecond: typeof second.out;
+>fromSecond : { b: string; readonly me: any; }
+>second.out : { b: string; readonly me: any; }
+>second : Schema<{ b: string; readonly me: any; }> & { shape: { b: Schema<string>; readonly me: Schema<{ b: string; readonly me: any; }> & any; }; }
+>out : { b: string; readonly me: any; }
+
+const firstA: string = fromFirst.me.a;
+>firstA : string
+>fromFirst.me.a : string
+>fromFirst.me : { a: string; readonly me: any; }
+>fromFirst : { a: string; readonly me: any; }
+>me : { a: string; readonly me: any; }
+>a : string
+
+const secondB: string = fromSecond.me.b;
+>secondB : string
+>fromSecond.me.b : string
+>fromSecond.me : { b: string; readonly me: any; }
+>fromSecond : { b: string; readonly me: any; }
+>me : { b: string; readonly me: any; }
+>b : string
+
+// Every assertion above still passes if the type degraded to `any`. These do not: each names a key
+// the schema does not have, so the expected error is what shows the member is a real object type.
+// @ts-expect-error
+fromClass.self.missing;
+>fromClass.self.missing : error
+>fromClass.self : { name: string; readonly self: any; }
+>fromClass : { name: string; readonly self: any; }
+>self : { name: string; readonly self: any; }
+>missing : any
+
+// @ts-expect-error
+fromNested.inner.deeper.missing;
+>fromNested.inner.deeper.missing : error
+>fromNested.inner.deeper : { name: string; readonly inner: { deeper: any; }; }
+>fromNested.inner : { deeper: { name: string; readonly inner: any; }; }
+>fromNested : { name: string; readonly inner: { deeper: any; }; }
+>inner : { deeper: { name: string; readonly inner: any; }; }
+>deeper : { name: string; readonly inner: { deeper: any; }; }
+>missing : any
+
+// @ts-expect-error
+fromCall.items[0].missing;
+>fromCall.items[0].missing : error
+>fromCall.items[0] : { name: string; readonly items: any[]; }
+>fromCall.items : { name: string; readonly items: any[]; }[]
+>fromCall : { name: string; readonly items: any[]; }
+>items : { name: string; readonly items: any[]; }[]
+>0 : 0
+>missing : any
+
+// @ts-expect-error
+fromAnnotated.self.missing;
+>fromAnnotated.self.missing : error
+>fromAnnotated.self : { name: string; readonly self: any; }
+>fromAnnotated : { name: string; readonly self: any; }
+>self : { name: string; readonly self: any; }
+>missing : any
+
+// @ts-expect-error
+fromFirst.me.missing;
+>fromFirst.me.missing : error
+>fromFirst.me : { a: string; readonly me: any; }
+>fromFirst : { a: string; readonly me: any; }
+>me : { a: string; readonly me: any; }
+>missing : any
+
+// @ts-expect-error
+fromSecond.me.missing;
+>fromSecond.me.missing : error
+>fromSecond.me : { b: string; readonly me: any; }
+>fromSecond : { b: string; readonly me: any; }
+>me : { b: string; readonly me: any; }
+>missing : any
+

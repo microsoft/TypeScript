@@ -1,0 +1,115 @@
+//// [tests/cases/compiler/recursiveTypeThroughObjectLiteralGetterUnionOptional.ts] ////
+
+=== recursiveTypeThroughObjectLiteralGetterUnionOptional.ts ===
+// Recursion through a union, with the recursive member optional. This is the companion to
+// recursiveTypeThroughObjectLiteralGetterUnion.ts, which is the same shape with the member left
+// required. main fails on both, with an implicit-any on every declaration involved.
+
+interface Internals<out O = unknown> {
+    readonly out: O;
+>out : O
+}
+interface Schema {
+    readonly internals: Internals;
+>internals : Internals<unknown>
+}
+type Out<T extends Schema> = T["internals"]["out"];
+>Out : Out<T>
+
+interface OptionalInternals<T extends Schema> extends Internals<Out<T> | undefined> {}
+interface OptionalSchema<T extends Schema = Schema> extends Schema {
+    readonly internals: OptionalInternals<T>;
+>internals : OptionalInternals<T>
+}
+interface StringInternals extends Internals<string> {}
+interface StringSchema extends Schema {
+    readonly internals: StringInternals;
+>internals : StringInternals
+}
+
+type Shape = Readonly<{ [k: string]: Schema }>;
+>Shape : Readonly<{ [k: string]: Schema; }>
+>k : string
+
+interface ObjectInternals<S extends Shape> extends Internals<{ [K in keyof S]: Out<S[K]> }> {}
+interface ObjectSchema<S extends Shape = Shape> extends Schema {
+    readonly internals: ObjectInternals<S>;
+>internals : ObjectInternals<S>
+}
+interface UnionInternals<T extends readonly Schema[]> extends Internals<Out<T[number]>> {}
+interface UnionSchema<T extends readonly Schema[] = Schema[]> extends Schema {
+    readonly internals: UnionInternals<T>;
+>internals : UnionInternals<T>
+}
+
+declare function object<S extends Shape>(shape: S): ObjectSchema<S>;
+>object : <S extends Shape>(shape: S) => ObjectSchema<S>
+>shape : S
+
+declare function union<T extends readonly Schema[]>(options: T): UnionSchema<T>;
+>union : <T extends readonly Schema[]>(options: T) => UnionSchema<T>
+>options : T
+
+declare function optional<T extends Schema>(t: T): OptionalSchema<T>;
+>optional : <T extends Schema>(t: T) => OptionalSchema<T>
+>t : T
+
+declare function text(): StringSchema;
+>text : () => StringSchema
+
+const variantA = object({
+>variantA : ObjectSchema<{ name: StringSchema; readonly child: OptionalSchema<UnionSchema<ObjectSchema<any>[]>>; }>
+>object({    name: text(),    get child() {        return optional(tree);    },}) : ObjectSchema<{ name: StringSchema; readonly child: OptionalSchema<UnionSchema<ObjectSchema<any>[]>>; }>
+>object : <S extends Shape>(shape: S) => ObjectSchema<S>
+>{    name: text(),    get child() {        return optional(tree);    },} : { name: StringSchema; readonly child: OptionalSchema<UnionSchema<ObjectSchema<{ name: StringSchema; readonly child: OptionalSchema<UnionSchema<ObjectSchema<any>[]>>; }>[]>>; }
+
+    name: text(),
+>name : StringSchema
+>text() : StringSchema
+>text : () => StringSchema
+
+    get child() {
+>child : OptionalSchema<UnionSchema<ObjectSchema<{ name: StringSchema; readonly child: OptionalSchema<UnionSchema<ObjectSchema<any>[]>>; }>[]>>
+
+        return optional(tree);
+>optional(tree) : OptionalSchema<UnionSchema<ObjectSchema<{ name: StringSchema; readonly child: OptionalSchema<UnionSchema<ObjectSchema<any>[]>>; }>[]>>
+>optional : <T extends Schema>(t: T) => OptionalSchema<T>
+>tree : UnionSchema<ObjectSchema<{ name: StringSchema; readonly child: OptionalSchema<UnionSchema<ObjectSchema<any>[]>>; }>[]>
+
+    },
+});
+const tree = union([variantA]);
+>tree : UnionSchema<ObjectSchema<{ name: StringSchema; readonly child: OptionalSchema<UnionSchema<ObjectSchema<any>[]>>; }>[]>
+>union([variantA]) : UnionSchema<ObjectSchema<{ name: StringSchema; readonly child: OptionalSchema<UnionSchema<ObjectSchema<any>[]>>; }>[]>
+>union : <T extends readonly Schema[]>(options: T) => UnionSchema<T>
+>[variantA] : ObjectSchema<{ name: StringSchema; readonly child: OptionalSchema<UnionSchema<ObjectSchema<any>[]>>; }>[]
+>variantA : ObjectSchema<{ name: StringSchema; readonly child: OptionalSchema<UnionSchema<ObjectSchema<any>[]>>; }>
+
+declare const sample: Out<typeof tree>;
+>sample : { name: string; readonly child: any | undefined; }
+>tree : UnionSchema<ObjectSchema<{ name: StringSchema; readonly child: OptionalSchema<UnionSchema<ObjectSchema<any>[]>>; }>[]>
+
+// The recursive member resolves: two levels in, `name` is still a string.
+const topName: string = sample.name;
+>topName : string
+>sample.name : string
+>sample : { name: string; readonly child: any | undefined; }
+>name : string
+
+const nestedName: string | undefined = sample.child?.name;
+>nestedName : string | undefined
+>sample.child?.name : string | undefined
+>sample.child : { name: string; readonly child: any | undefined; } | undefined
+>sample : { name: string; readonly child: any | undefined; }
+>child : { name: string; readonly child: any | undefined; } | undefined
+>name : string | undefined
+
+// An `any` here would swallow this, so the expected error is what proves the member is a real object.
+// @ts-expect-error
+sample.child?.missing;
+>sample.child?.missing : error
+>sample.child : { name: string; readonly child: any | undefined; } | undefined
+>sample : { name: string; readonly child: any | undefined; }
+>child : { name: string; readonly child: any | undefined; } | undefined
+>missing : any
+

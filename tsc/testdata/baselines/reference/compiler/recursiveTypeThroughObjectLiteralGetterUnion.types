@@ -1,0 +1,121 @@
+//// [tests/cases/compiler/recursiveTypeThroughObjectLiteralGetterUnion.ts] ////
+
+=== recursiveTypeThroughObjectLiteralGetterUnion.ts ===
+// Recursion that routes through a union, with the recursive member left required. main fails outright
+// here, with an implicit-any on every declaration involved. The companion file
+// recursiveTypeThroughObjectLiteralGetterUnionOptional.ts is the same shape with the member optional.
+//
+// The .types baseline prints the recursive member as `any` once it is a few levels deep. That is the
+// type printer truncating, not the type -- the member accesses at the bottom are what pin the real
+// shape, and the @ts-expect-error is what would catch an `any` standing in for it.
+
+interface Internals<out O = unknown> {
+    readonly out: O;
+>out : O
+}
+interface Schema {
+    readonly internals: Internals;
+>internals : Internals<unknown>
+}
+type Out<T extends Schema> = T["internals"]["out"];
+>Out : Out<T>
+
+interface StringInternals extends Internals<string> {}
+interface StringSchema extends Schema {
+    readonly internals: StringInternals;
+>internals : StringInternals
+}
+
+type Shape = Readonly<{ [k: string]: Schema }>;
+>Shape : Readonly<{ [k: string]: Schema; }>
+>k : string
+
+interface ObjectInternals<S extends Shape> extends Internals<{ [K in keyof S]: Out<S[K]> }> {}
+interface ObjectSchema<S extends Shape = Shape> extends Schema {
+    readonly internals: ObjectInternals<S>;
+>internals : ObjectInternals<S>
+}
+interface UnionInternals<T extends readonly Schema[]> extends Internals<Out<T[number]>> {}
+interface UnionSchema<T extends readonly Schema[] = Schema[]> extends Schema {
+    readonly internals: UnionInternals<T>;
+>internals : UnionInternals<T>
+}
+
+declare function object<S extends Shape>(shape: S): ObjectSchema<S>;
+>object : <S extends Shape>(shape: S) => ObjectSchema<S>
+>shape : S
+
+declare function union<T extends readonly Schema[]>(options: T): UnionSchema<T>;
+>union : <T extends readonly Schema[]>(options: T) => UnionSchema<T>
+>options : T
+
+declare function text(): StringSchema;
+>text : () => StringSchema
+
+const variantA = object({
+>variantA : ObjectSchema<{ name: StringSchema; readonly child: UnionSchema<ObjectSchema<any>[]>; }>
+>object({    name: text(),    get child() {        return tree;    },}) : ObjectSchema<{ name: StringSchema; readonly child: UnionSchema<ObjectSchema<any>[]>; }>
+>object : <S extends Shape>(shape: S) => ObjectSchema<S>
+>{    name: text(),    get child() {        return tree;    },} : { name: StringSchema; readonly child: UnionSchema<ObjectSchema<{ name: StringSchema; readonly child: UnionSchema<ObjectSchema<any>[]>; }>[]>; }
+
+    name: text(),
+>name : StringSchema
+>text() : StringSchema
+>text : () => StringSchema
+
+    get child() {
+>child : UnionSchema<ObjectSchema<{ name: StringSchema; readonly child: UnionSchema<ObjectSchema<any>[]>; }>[]>
+
+        return tree;
+>tree : UnionSchema<ObjectSchema<{ name: StringSchema; readonly child: UnionSchema<ObjectSchema<any>[]>; }>[]>
+
+    },
+});
+const tree = union([variantA]);
+>tree : UnionSchema<ObjectSchema<{ name: StringSchema; readonly child: UnionSchema<ObjectSchema<any>[]>; }>[]>
+>union([variantA]) : UnionSchema<ObjectSchema<{ name: StringSchema; readonly child: UnionSchema<ObjectSchema<any>[]>; }>[]>
+>union : <T extends readonly Schema[]>(options: T) => UnionSchema<T>
+>[variantA] : ObjectSchema<{ name: StringSchema; readonly child: UnionSchema<ObjectSchema<any>[]>; }>[]
+>variantA : ObjectSchema<{ name: StringSchema; readonly child: UnionSchema<ObjectSchema<any>[]>; }>
+
+export type TreeOut = Out<typeof tree>;
+>TreeOut : { name: string; readonly child: any; }
+>tree : UnionSchema<ObjectSchema<{ name: StringSchema; readonly child: UnionSchema<ObjectSchema<any>[]>; }>[]>
+
+declare const sample: TreeOut;
+>sample : { name: string; readonly child: any; }
+
+// The recursive member resolves: three levels in, `name` is still a string.
+const topName: string = sample.name;
+>topName : string
+>sample.name : string
+>sample : { name: string; readonly child: any; }
+>name : string
+
+const nestedName: string = sample.child.name;
+>nestedName : string
+>sample.child.name : string
+>sample.child : { name: string; readonly child: any; }
+>sample : { name: string; readonly child: any; }
+>child : { name: string; readonly child: any; }
+>name : string
+
+const deepName: string = sample.child.child.name;
+>deepName : string
+>sample.child.child.name : string
+>sample.child.child : { name: string; readonly child: any; }
+>sample.child : { name: string; readonly child: any; }
+>sample : { name: string; readonly child: any; }
+>child : { name: string; readonly child: any; }
+>child : { name: string; readonly child: any; }
+>name : string
+
+// An `any` here would swallow this, so the expected error is what proves the member is a real object.
+// @ts-expect-error
+sample.child.missing;
+>sample.child.missing : error
+>sample.child : { name: string; readonly child: any; }
+>sample : { name: string; readonly child: any; }
+>child : { name: string; readonly child: any; }
+>missing : any
+

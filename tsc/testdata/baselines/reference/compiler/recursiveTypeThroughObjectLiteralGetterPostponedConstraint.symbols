@@ -1,0 +1,52 @@
+//// [tests/cases/compiler/recursiveTypeThroughObjectLiteralGetterPostponedConstraint.ts] ////
+
+=== recursiveTypeThroughObjectLiteralGetterPostponedConstraint.ts ===
+// Skipping a member that genuinely cannot be worked out yet postpones the constraint check; it does
+// not waive it. The getter names the declaration being resolved, so the skip is right, but what it
+// returns still violates the constraint and that has to surface once the declaration has a type.
+
+interface Schema<O> {
+>Schema : Symbol(Schema, Decl(recursiveTypeThroughObjectLiteralGetterPostponedConstraint.ts, 0, 0))
+>O : Symbol(O, Decl(recursiveTypeThroughObjectLiteralGetterPostponedConstraint.ts, 4, 17))
+
+    readonly out: O;
+>out : Symbol(Schema.out, Decl(recursiveTypeThroughObjectLiteralGetterPostponedConstraint.ts, 4, 21))
+>O : Symbol(O, Decl(recursiveTypeThroughObjectLiteralGetterPostponedConstraint.ts, 4, 17))
+}
+type Shape = Record<string, Schema<any>>;
+>Shape : Symbol(Shape, Decl(recursiveTypeThroughObjectLiteralGetterPostponedConstraint.ts, 6, 1))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Schema : Symbol(Schema, Decl(recursiveTypeThroughObjectLiteralGetterPostponedConstraint.ts, 0, 0))
+
+declare function object<S extends Shape>(shape: S): Schema<{ [K in keyof S]: S[K]["out"] }> & { shape: S };
+>object : Symbol(object, Decl(recursiveTypeThroughObjectLiteralGetterPostponedConstraint.ts, 7, 41))
+>S : Symbol(S, Decl(recursiveTypeThroughObjectLiteralGetterPostponedConstraint.ts, 8, 24))
+>Shape : Symbol(Shape, Decl(recursiveTypeThroughObjectLiteralGetterPostponedConstraint.ts, 6, 1))
+>shape : Symbol(shape, Decl(recursiveTypeThroughObjectLiteralGetterPostponedConstraint.ts, 8, 41))
+>S : Symbol(S, Decl(recursiveTypeThroughObjectLiteralGetterPostponedConstraint.ts, 8, 24))
+>Schema : Symbol(Schema, Decl(recursiveTypeThroughObjectLiteralGetterPostponedConstraint.ts, 0, 0))
+>K : Symbol(K, Decl(recursiveTypeThroughObjectLiteralGetterPostponedConstraint.ts, 8, 62))
+>S : Symbol(S, Decl(recursiveTypeThroughObjectLiteralGetterPostponedConstraint.ts, 8, 24))
+>S : Symbol(S, Decl(recursiveTypeThroughObjectLiteralGetterPostponedConstraint.ts, 8, 24))
+>K : Symbol(K, Decl(recursiveTypeThroughObjectLiteralGetterPostponedConstraint.ts, 8, 62))
+>shape : Symbol(shape, Decl(recursiveTypeThroughObjectLiteralGetterPostponedConstraint.ts, 8, 95))
+>S : Symbol(S, Decl(recursiveTypeThroughObjectLiteralGetterPostponedConstraint.ts, 8, 24))
+
+const tree = object({
+>tree : Symbol(tree, Decl(recursiveTypeThroughObjectLiteralGetterPostponedConstraint.ts, 10, 5))
+>object : Symbol(object, Decl(recursiveTypeThroughObjectLiteralGetterPostponedConstraint.ts, 7, 41))
+
+    get bad() {
+>bad : Symbol(bad, Decl(recursiveTypeThroughObjectLiteralGetterPostponedConstraint.ts, 10, 21))
+
+        return [tree];
+>tree : Symbol(tree, Decl(recursiveTypeThroughObjectLiteralGetterPostponedConstraint.ts, 10, 5))
+
+    },
+});
+export const out = tree.out;
+>out : Symbol(out, Decl(recursiveTypeThroughObjectLiteralGetterPostponedConstraint.ts, 15, 12))
+>tree.out : Symbol(Schema.out, Decl(recursiveTypeThroughObjectLiteralGetterPostponedConstraint.ts, 4, 21))
+>tree : Symbol(tree, Decl(recursiveTypeThroughObjectLiteralGetterPostponedConstraint.ts, 10, 5))
+>out : Symbol(Schema.out, Decl(recursiveTypeThroughObjectLiteralGetterPostponedConstraint.ts, 4, 21))
+

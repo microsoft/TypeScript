@@ -1,0 +1,24 @@
+recursiveTypeThroughObjectLiteralGetterPostponedConstraint.ts(12,9): error TS2741: Property 'out' is missing in type '(Schema<{ readonly bad: unknown; }> & { shape: { readonly bad: (Schema<{ readonly bad: unknown; }> & any)[]; }; })[]' but required in type 'Schema<any>'.
+
+
+==== recursiveTypeThroughObjectLiteralGetterPostponedConstraint.ts (1 errors) ====
+    // Skipping a member that genuinely cannot be worked out yet postpones the constraint check; it does
+    // not waive it. The getter names the declaration being resolved, so the skip is right, but what it
+    // returns still violates the constraint and that has to surface once the declaration has a type.
+    
+    interface Schema<O> {
+        readonly out: O;
+    }
+    type Shape = Record<string, Schema<any>>;
+    declare function object<S extends Shape>(shape: S): Schema<{ [K in keyof S]: S[K]["out"] }> & { shape: S };
+    
+    const tree = object({
+        get bad() {
+            ~~~
+!!! error TS2741: Property 'out' is missing in type '(Schema<{ readonly bad: unknown; }> & { shape: { readonly bad: (Schema<{ readonly bad: unknown; }> & any)[]; }; })[]' but required in type 'Schema<any>'.
+!!! related TS2728 recursiveTypeThroughObjectLiteralGetterPostponedConstraint.ts:6:14: 'out' is declared here.
+            return [tree];
+        },
+    });
+    export const out = tree.out;
+    

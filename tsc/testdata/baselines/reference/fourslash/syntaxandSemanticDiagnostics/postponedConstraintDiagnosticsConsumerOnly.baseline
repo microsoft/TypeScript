@@ -1,0 +1,23 @@
+// === Syntax and Semantic Diagnostics ===
+/schema.ts(8,9): error TS2741: Property 'out' is missing in type '(Schema<{ readonly bad: unknown; }> & { shape: { readonly bad: (Schema<{ readonly bad: unknown; }> & ...)[]; }; })[]' but required in type 'Schema<any>'.
+
+
+==== /consumer.ts (0 errors) ====
+    import { tree } from "./schema.js";
+    
+    export const out = tree.out;
+==== /schema.ts (1 errors) ====
+    export interface Schema<O> {
+        readonly out: O;
+    }
+    export type Shape = Record<string, Schema<any>>;
+    export declare function object<S extends Shape>(shape: S): Schema<{ [K in keyof S]: S[K]["out"] }> & { shape: S };
+    
+    export const tree = object({
+        get bad() {
+            ~~~
+!!! error TS2741: Property 'out' is missing in type '(Schema<{ readonly bad: unknown; }> & { shape: { readonly bad: (Schema<{ readonly bad: unknown; }> & ...)[]; }; })[]' but required in type 'Schema<any>'.
+!!! related TS2741 /schema.ts:2:14: 'out' is declared here.
+            return [tree];
+        },
+    });
