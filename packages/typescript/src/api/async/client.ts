@@ -49,6 +49,7 @@ export class Client {
     private connection: MessageConnection | undefined;
     private options: ClientOptions;
     private connected = false;
+    private connecting: Promise<void> | undefined;
     private timing: TimingCollector | undefined;
     private batchedRequests: { method: APIRequest["method"]; params: APIRequest["params"]; resolve: (value: unknown) => void; reject: (reason?: any) => void; }[] = [];
     private nextBatch: NodeJS.Immediate | "manual" | undefined;
@@ -60,9 +61,14 @@ export class Client {
         }
     }
 
-    async connect(): Promise<void> {
-        if (this.connected) return;
+    connect(): Promise<void> {
+        if (this.connected) return Promise.resolve();
+        return this.connecting ??= this.connectWorker().finally(() => {
+            this.connecting = undefined;
+        });
+    }
 
+    private async connectWorker(): Promise<void> {
         if (isSpawnOptions(this.options)) {
             await this.connectViaSpawn(this.options);
         }

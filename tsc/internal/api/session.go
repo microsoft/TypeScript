@@ -384,8 +384,7 @@ type Session struct {
 
 	// This is set to true when using MessagePackProtocol.
 	useBinaryResponses      bool
-	batchResponsePages      map[string]batchResponsePage
-	batchResponsePagesMu    sync.Mutex
+	batchResponsePages      sync.Map
 	nextBatchResponsePageID atomic.Uint64
 
 	// snapshots maps snapshot handles to their data. Each snapshot has its own
@@ -447,10 +446,9 @@ const DefaultMaxResponseBytesPerPage = 300_000_000
 func NewSession(projectSession *project.Session, options *SessionOptions) *Session {
 	id := sessionIDCounter.Add(1)
 	s := &Session{
-		id:                 formatSessionID(id),
-		projectSession:     projectSession,
-		batchResponsePages: make(map[string]batchResponsePage),
-		snapshots:          make(map[SnapshotID]*snapshotData),
+		id:             formatSessionID(id),
+		projectSession: projectSession,
+		snapshots:      make(map[SnapshotID]*snapshotData),
 	}
 	if options != nil {
 		s.useBinaryResponses = options.UseBinaryResponses
@@ -915,13 +913,11 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 
 func (s *Session) handleBatchRequests(ctx context.Context, params *BatchRequestsParams) (*BatchRequestsResponse, error) {
 	if params.ContinuationToken != "" {
-		s.batchResponsePagesMu.Lock()
-		page, ok := s.batchResponsePages[params.ContinuationToken]
-		delete(s.batchResponsePages, params.ContinuationToken)
-		s.batchResponsePagesMu.Unlock()
+		value, ok := s.batchResponsePages.LoadAndDelete(params.ContinuationToken)
 		if !ok {
 			return nil, fmt.Errorf("%w: invalid batch continuation token", ErrClientError)
 		}
+		page := value.(batchResponsePage)
 		return s.paginateBatchResponses(page, nil, params.MaxResponseBytesPerPage)
 	}
 
@@ -988,14 +984,9 @@ func (s *Session) paginateBatchResponses(page batchResponsePage, responses []Bat
 	if responses != nil {
 		response.Responses = slices.Clone(responses[:pageLength])
 	}
-	s.batchResponsePagesMu.Lock()
-	if s.batchResponsePages == nil {
-		s.batchResponsePages = make(map[string]batchResponsePage)
-	}
-	s.batchResponsePages[continuationToken] = batchResponsePage{
+	s.batchResponsePages.Store(continuationToken, batchResponsePage{
 		encodedResponses: slices.Clone(page.encodedResponses[pageLength:]),
-	}
-	s.batchResponsePagesMu.Unlock()
+	})
 	return response, nil
 }
 
@@ -3809,9 +3800,7 @@ func computeSnapshotChanges(prev *project.Snapshot, next *project.Snapshot) *Sna
 // regardless of their ref counts.
 func (s *Session) Close() {
 	s.releaseOpenRefs()
-	s.batchResponsePagesMu.Lock()
-	clear(s.batchResponsePages)
-	s.batchResponsePagesMu.Unlock()
+	s.batchResponsePages.Clear()
 
 	s.snapshotsMu.Lock()
 	defer s.snapshotsMu.Unlock()
