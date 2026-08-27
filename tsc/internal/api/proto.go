@@ -177,6 +177,7 @@ const (
 	MethodGetDocumentationComment           Method = "getDocumentationComment"
 	MethodIsArrayType                       Method = "isArrayType"
 	MethodIsTupleType                       Method = "isTupleType"
+	MethodIsReadonlySymbol                  Method = "isReadonlySymbol"
 
 	// Reference methods
 	MethodGetReferencesToSymbolInFile Method = "getReferencesToSymbolInFile"
@@ -516,6 +517,7 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodGetDocumentationComment:           unmarshallerFor[CheckerSymbolParams],
 	MethodIsArrayType:                       unmarshallerFor[CheckerTypeParams],
 	MethodIsTupleType:                       unmarshallerFor[CheckerTypeParams],
+	MethodIsReadonlySymbol:                  unmarshallerFor[CheckerSymbolParams],
 	MethodGetReferencesToSymbolInFile:       unmarshallerFor[GetReferencesToSymbolInFileParams],
 	MethodGetReferencedSymbolsForNode:       unmarshallerFor[GetReferencedSymbolsForNodeParams],
 	MethodGetSignatureUsages:                unmarshallerFor[GetSignatureUsagesParams],

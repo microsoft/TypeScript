@@ -229,6 +229,10 @@ func (c *Checker) IsArrayType(t *Type) bool {
 	return c.isArrayType(t)
 }
 
+func (c *Checker) IsReadonlySymbol(symbol *ast.Symbol) bool {
+	return c.isReadonlySymbol(symbol)
+}
+
 func (c *Checker) GetReturnTypeOfSignature(sig *Signature) *Type {
 	return c.getReturnTypeOfSignature(sig)
 }
