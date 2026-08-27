@@ -34,6 +34,7 @@ export interface APIMethodInfo {
     getTypeOfSymbol: APIMethod<GetTypeOfSymbolParams, TypeResponse>;
     getTypesOfSymbols: APIMethod<GetTypesOfSymbolsParams, TypeResponse[]>;
     getDeclaredTypeOfSymbol: APIMethod<GetTypeOfSymbolParams, TypeResponse>;
+    getNonMissingTypeOfSymbol: APIMethod<GetTypeOfSymbolParams, TypeResponse>;
     getSourceFile: APIMethod<GetSourceFileParams, SourceFileResponse | null>;
     getSourceFileNames: APIMethod<GetSourceFileNamesParams, string[]>;
     getSourceFileMetadata: APIMethod<GetSourceFileParams, SourceFileMetadata | null>;
@@ -108,6 +109,7 @@ export interface APIMethodInfo {
     getExportSpecifierLocalTargetSymbol: APIMethod<CheckerNodeParams, SymbolResponse | null>;
     getAliasedSymbol: APIMethod<CheckerSymbolParams, SymbolResponse>;
     getImmediateAliasedSymbol: APIMethod<CheckerSymbolParams, SymbolResponse | null>;
+    getTargetSymbol: APIMethod<CheckerSymbolParams, SymbolResponse>;
     getFullyQualifiedName: APIMethod<CheckerSymbolParams, string>;
     getExportsOfModule: APIMethod<CheckerSymbolParams, SymbolResponse[] | null>;
     getMemberInModuleExports: APIMethod<GetMemberInModuleExportsParams, SymbolResponse | null>;
@@ -115,6 +117,7 @@ export interface APIMethodInfo {
     getDocumentationComment: APIMethod<CheckerSymbolParams, string>;
     isArrayType: APIMethod<CheckerTypeParams, boolean>;
     isTupleType: APIMethod<CheckerTypeParams, boolean>;
+    isReadonlySymbol: APIMethod<CheckerSymbolParams, boolean>;
     getReferencesToSymbolInFile: APIMethod<GetReferencesToSymbolInFileParams, string[]>;
     getReferencedSymbolsForNode: APIMethod<GetReferencedSymbolsForNodeParams, ReferencedSymbolEntry[] | null>;
     getSignatureUsages: APIMethod<GetSignatureUsagesParams, SignatureUsageResponse[] | null>;
@@ -944,6 +947,7 @@ export interface BatchRequest {
         | "getMemberInModuleExports"
         | "getMembersOfSymbol"
         | "getNeverType"
+        | "getNonMissingTypeOfSymbol"
         | "getNonNullableType"
         | "getNonPrimitiveType"
         | "getNullType"
@@ -984,6 +988,7 @@ export interface BatchRequest {
         | "getSyntacticDiagnostics"
         | "getTargetOfSignature"
         | "getTargetOfType"
+        | "getTargetSymbol"
         | "getThisParameterOfSignature"
         | "getTrueTypeOfConditionalType"
         | "getTypeArguments"
@@ -1010,6 +1015,7 @@ export interface BatchRequest {
         | "isArrayLikeType"
         | "isArrayType"
         | "isContextSensitive"
+        | "isReadonlySymbol"
         | "isTupleType"
         | "isTypeAssignableTo"
         | "parseCommandLine"
@@ -1089,6 +1095,7 @@ export interface BatchResponse {
         | "getMemberInModuleExports"
         | "getMembersOfSymbol"
         | "getNeverType"
+        | "getNonMissingTypeOfSymbol"
         | "getNonNullableType"
         | "getNonPrimitiveType"
         | "getNullType"
@@ -1129,6 +1136,7 @@ export interface BatchResponse {
         | "getSyntacticDiagnostics"
         | "getTargetOfSignature"
         | "getTargetOfType"
+        | "getTargetSymbol"
         | "getThisParameterOfSignature"
         | "getTrueTypeOfConditionalType"
         | "getTypeArguments"
@@ -1155,6 +1163,7 @@ export interface BatchResponse {
         | "isArrayLikeType"
         | "isArrayType"
         | "isContextSensitive"
+        | "isReadonlySymbol"
         | "isTupleType"
         | "isTypeAssignableTo"
         | "parseCommandLine"
