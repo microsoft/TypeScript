@@ -4364,6 +4364,63 @@ export declare const p: Person;
     });
 });
 
+describe("Checker - getTypeOfPropertyOfType", () => {
+    test("returns the type of a named property", async () => {
+        const src = `
+export interface Person {
+    name: string;
+    age: number;
+}
+export declare const p: Person;
+`;
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/main.ts": src,
+        });
+        try {
+            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", src.indexOf("p: Person"));
+            assert.ok(symbol);
+            const type = await project.checker.getTypeOfSymbol(symbol);
+            const nameType = await project.checker.getTypeOfPropertyOfType(type, "name");
+            assert.ok(nameType);
+            assert.ok(nameType.flags & TypeFlags.String, `Expected string, got flags ${nameType.flags}`);
+            const ageType = await project.checker.getTypeOfPropertyOfType(type, "age");
+            assert.ok(ageType);
+            assert.ok(ageType.flags & TypeFlags.Number, `Expected number, got flags ${ageType.flags}`);
+        }
+        finally {
+            await api.close();
+        }
+    });
+
+    test("returns undefined for a missing property", async () => {
+        const src = `
+export interface Person {
+    name: string;
+}
+export declare const p: Person;
+`;
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/main.ts": src,
+        });
+        try {
+            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", src.indexOf("p: Person"));
+            assert.ok(symbol);
+            const type = await project.checker.getTypeOfSymbol(symbol);
+            const missing = await project.checker.getTypeOfPropertyOfType(type, "doesNotExist");
+            assert.equal(missing, undefined);
+        }
+        finally {
+            await api.close();
+        }
+    });
+});
+
 describe("Checker - getConstantValue", () => {
     test("returns numeric value of an enum member", async () => {
         const api = spawnAPI({

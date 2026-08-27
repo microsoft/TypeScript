@@ -784,6 +784,8 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleGetReducedType(ctx, parsed.(*GetTypePropertyParams))
 	case string(MethodGetPropertyOfType):
 		return s.handleGetPropertyOfType(ctx, parsed.(*GetPropertyOfTypeParams))
+	case string(MethodGetTypeOfPropertyOfType):
+		return s.handleGetTypeOfPropertyOfType(ctx, parsed.(*GetPropertyOfTypeParams))
 	case string(MethodGetIndexInfosOfType):
 		return s.handleGetIndexInfosOfType(ctx, parsed.(*CheckerTypeParams))
 	case string(MethodGetConstraintOfTypeParameter):
@@ -3224,6 +3226,28 @@ func (s *Session) handleGetPropertyOfType(ctx context.Context, params *GetProper
 	}
 
 	return setup.newSymbolResponse(prop), nil
+}
+
+// handleGetTypeOfPropertyOfType returns the type of a named property, or nil if missing.
+// @gen-proto-nullable
+func (s *Session) handleGetTypeOfPropertyOfType(ctx context.Context, params *GetPropertyOfTypeParams) (*TypeResponse, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	t, err := setup.resolveTypeHandle(params.Type)
+	if err != nil {
+		return nil, err
+	}
+
+	propType := setup.checker.GetTypeOfPropertyOfType(t, params.Name)
+	if propType == nil {
+		return nil, nil
+	}
+
+	return setup.newTypeResponse(propType), nil
 }
 
 // handleGetConstantValue returns the constant value of an enum member or const enum access.

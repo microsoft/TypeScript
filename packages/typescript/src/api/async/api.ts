@@ -1895,6 +1895,16 @@ export class Checker {
         return data ? this.objectRegistry.getOrCreateSymbol(data) : undefined;
     }
 
+    async getTypeOfPropertyOfType(type: Type, name: string): Promise<Type | undefined> {
+        const data = await this.client.apiRequest("getTypeOfPropertyOfType", {
+            snapshot: this.snapshotId,
+            project: this.project.id,
+            type: type.id,
+            name,
+        });
+        return data ? this.objectRegistry.getOrCreateType(data) : undefined;
+    }
+
     async getConstantValue(node: Node): Promise<string | number | undefined> {
         const data = await this.client.apiRequest("getConstantValue", {
             snapshot: this.snapshotId,
