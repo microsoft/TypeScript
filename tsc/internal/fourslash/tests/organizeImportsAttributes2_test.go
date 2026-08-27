@@ -29,7 +29,7 @@ import { A as D } from "./a" with { type: "b" };
 import { Z } from "./z";
 
 export type G = A | B | C | D | E | F | Z;`,
-		lsproto.CodeActionKindSourceOrganizeImports,
+		lsproto.CodeActionKindSourceOrganizeImportsTs,
 		nil,
 	)
 }

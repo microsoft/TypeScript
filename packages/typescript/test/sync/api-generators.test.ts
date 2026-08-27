@@ -63,6 +63,7 @@ const parityFiles = {
             moduleResolution: "nodenext",
             strict: true,
             target: "esnext",
+            exactOptionalPropertyTypes: true,
         },
     }),
     "/tsconfig.json": JSON.stringify({
@@ -75,6 +76,7 @@ export interface Box<T extends Base = Derived> {
     tuple: readonly [T, ...T[]];
     [key: string]: unknown;
     [index: number]: T;
+    readonly opt?: true;
 }
 export class Base { base = true; }
 export class Derived extends Base { derived = 1; }
@@ -632,6 +634,8 @@ describe("API - generator batching", () => {
             const derivedType = checker.getDeclaredTypeOfSymbol(derivedClassSymbol) as InterfaceType;
             const derivedConstructorType = checker.getTypeOfSymbol(derivedClassSymbol);
             const boxedType = checker.getTypeFromTypeNode(boxedAlias.type) as TypeReference;
+            const boxedOptSymbol = checker.getPropertyOfType(boxedType, "opt");
+            assert.ok(boxedOptSymbol);
             const tupleType = checker.getTypeFromTypeNode(tupleAlias.type);
             const arrayType = checker.getTypeFromTypeNode(arrayAlias.type);
             const conditionalType = checker.getTypeFromTypeNode(conditionalAlias.type) as ConditionalType;
@@ -837,6 +841,9 @@ describe("API - generator batching", () => {
                 parityCase("Checker", "getJsDocTagsOfSymbol", checker.getJsDocTagsOfSymbol, assertDeepEquivalent, combineSymbol),
                 parityCase("Checker", "getDocumentationCommentOfSymbol", checker.getDocumentationCommentOfSymbol, assertDeepEquivalent, combineSymbol),
                 parityCase("Checker", "getTypeArguments", checker.getTypeArguments, assertTypeArraysEquivalent, boxedType),
+                parityCase("Checker", "getNonMissingTypeOfSymbol", checker.getNonMissingTypeOfSymbol, assertTypesEquivalent, boxedOptSymbol),
+                parityCase("Checker", "isReadonlySymbol", checker.isReadonlySymbol, assertDeepEquivalent, boxedOptSymbol),
+                parityCase("Checker", "getTargetSymbol", checker.getTargetSymbol, assertOptionalSymbolsEquivalent, boxedOptSymbol),
 
                 parityCase("Emitter", "printNode", emitter.printNode, assertDeepEquivalent, combineDeclaration, { preserveSourceNewlines: true }),
                 parityCase("SnapshotInternalAPI", "formatNodeForInsertion", snapshot.internal.formatNodeForInsertion, assertDeepEquivalent, combineDeclaration, "/src/index.ts", combineDeclaration.pos),

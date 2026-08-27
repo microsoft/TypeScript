@@ -1465,6 +1465,21 @@ export class Checker {
         return this.objectRegistry.getOrCreateType(data);
     }
 
+    /**
+     * Get the type of a symbol, excluding the missing type when
+     * `exactOptionalPropertyTypes: true` is set; for symbols whose
+     * type cannot be determined the checker yields the error type
+     * (use {@link Type.isErrorType} to detect it).
+     */
+    async getNonMissingTypeOfSymbol(symbol: Symbol): Promise<Type> {
+        const data = await this.client.apiRequest("getNonMissingTypeOfSymbol", {
+            snapshot: this.snapshotId,
+            project: this.project.id,
+            symbol: symbol.id,
+        });
+        return this.objectRegistry.getOrCreateType(data);
+    }
+
     async getReferencesToSymbolInFile(file: DocumentIdentifier, symbol: Symbol): Promise<NodeHandle[]> {
         const data = await this.client.apiRequest("getReferencesToSymbolInFile", {
             snapshot: this.snapshotId,
@@ -1813,6 +1828,23 @@ export class Checker {
         });
     }
 
+    /**
+     * The following symbols are considered read-only:
+     * - Properties with a `readonly` modifier
+     * - Variables declared with `const`
+     * - Get accessors without matching set accessors
+     * - Enum members
+     * - `Object.defineProperty` assignments with `writable: false` or no setter
+     * - Unions and intersections of the above
+     */
+    async isReadonlySymbol(symbol: Symbol): Promise<boolean> {
+        return this.client.apiRequest("isReadonlySymbol", {
+            snapshot: this.snapshotId,
+            project: this.project.id,
+            symbol: symbol.id,
+        });
+    }
+
     /** Get the return type of a signature. Always returns a type. */
     async getReturnTypeOfSignature(signature: Signature): Promise<Type> {
         return signature.getReturnType();
@@ -1964,6 +1996,21 @@ export class Checker {
             symbol: symbol.id,
         });
         return data ? this.objectRegistry.getOrCreateSymbol(data) : undefined;
+    }
+
+    /**
+     * Get the target symbol if instantiated, or the provided symbol otherwise.
+     */
+    async getTargetSymbol(symbol: Symbol): Promise<Symbol> {
+        if (symbol.checkFlags & CheckFlags.Instantiated) {
+            const data = await this.client.apiRequest("getTargetSymbol", {
+                snapshot: this.snapshotId,
+                project: this.project.id,
+                symbol: symbol.id,
+            });
+            return this.objectRegistry.getOrCreateSymbol(data);
+        }
+        return symbol;
     }
 
     /**

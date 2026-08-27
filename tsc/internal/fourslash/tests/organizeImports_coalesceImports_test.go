@@ -20,7 +20,7 @@ M; n; B; y; O;`
 		t,
 		`import { B, default as M, a as n, Z as O, y } from "lib";
 M; n; B; y; O;`,
-		lsproto.CodeActionKindSourceSortImports,
+		lsproto.CodeActionKindSourceSortImportsTs,
 		&lsutil.UserPreferences{OrganizeImportsSort: lsutil.OrganizeImportsSortOrdinalIgnoreCase},
 	)
 }
@@ -37,7 +37,7 @@ void 0;`
 		t,
 		`import "lib";
 void 0;`,
-		lsproto.CodeActionKindSourceSortImports,
+		lsproto.CodeActionKindSourceSortImportsTs,
 		&lsutil.UserPreferences{OrganizeImportsSort: lsutil.OrganizeImportsSortOrdinalIgnoreCase},
 	)
 }
@@ -58,7 +58,7 @@ x; y; z;`
 import * as x from "lib";
 import * as y from "lib";
 x; y; z;`,
-		lsproto.CodeActionKindSourceSortImports,
+		lsproto.CodeActionKindSourceSortImportsTs,
 		&lsutil.UserPreferences{OrganizeImportsSort: lsutil.OrganizeImportsSortOrdinalIgnoreCase},
 	)
 }
@@ -75,7 +75,7 @@ x; y;`
 		t,
 		`import { default as x, default as y } from "lib";
 x; y;`,
-		lsproto.CodeActionKindSourceSortImports,
+		lsproto.CodeActionKindSourceSortImportsTs,
 		&lsutil.UserPreferences{OrganizeImportsSort: lsutil.OrganizeImportsSortOrdinalIgnoreCase},
 	)
 }
@@ -92,7 +92,7 @@ x; z;`
 		t,
 		`import { x, y as z } from "lib";
 x; z;`,
-		lsproto.CodeActionKindSourceSortImports,
+		lsproto.CodeActionKindSourceSortImportsTs,
 		&lsutil.UserPreferences{OrganizeImportsSort: lsutil.OrganizeImportsSortOrdinalIgnoreCase},
 	)
 }
@@ -113,7 +113,7 @@ x; z;`
 import "lib";
 import * as x from "lib";
 x; z;`,
-		lsproto.CodeActionKindSourceSortImports,
+		lsproto.CodeActionKindSourceSortImportsTs,
 		&lsutil.UserPreferences{OrganizeImportsSort: lsutil.OrganizeImportsSortOrdinalIgnoreCase},
 	)
 }
@@ -134,7 +134,7 @@ x; z;`
 import "lib";
 import x from "lib";
 x; z;`,
-		lsproto.CodeActionKindSourceSortImports,
+		lsproto.CodeActionKindSourceSortImportsTs,
 		&lsutil.UserPreferences{OrganizeImportsSort: lsutil.OrganizeImportsSortOrdinalIgnoreCase},
 	)
 }
@@ -155,7 +155,7 @@ x; z;`
 import "lib";
 import { x } from "lib";
 x; z;`,
-		lsproto.CodeActionKindSourceSortImports,
+		lsproto.CodeActionKindSourceSortImportsTs,
 		&lsutil.UserPreferences{OrganizeImportsSort: lsutil.OrganizeImportsSortOrdinalIgnoreCase},
 	)
 }
@@ -173,7 +173,7 @@ x; y;`
 		t,
 		`import y, * as x from "lib";
 x; y;`,
-		lsproto.CodeActionKindSourceSortImports,
+		lsproto.CodeActionKindSourceSortImportsTs,
 		&lsutil.UserPreferences{OrganizeImportsSort: lsutil.OrganizeImportsSortOrdinalIgnoreCase},
 	)
 }
@@ -194,7 +194,7 @@ x; y; z;`
 import * as x from "lib";
 import { y } from "lib";
 x; y; z;`,
-		lsproto.CodeActionKindSourceSortImports,
+		lsproto.CodeActionKindSourceSortImportsTs,
 		&lsutil.UserPreferences{OrganizeImportsSort: lsutil.OrganizeImportsSortOrdinalIgnoreCase},
 	)
 }
@@ -212,7 +212,7 @@ x; y;`
 		t,
 		`import x, { y } from "lib";
 x; y;`,
-		lsproto.CodeActionKindSourceSortImports,
+		lsproto.CodeActionKindSourceSortImportsTs,
 		&lsutil.UserPreferences{OrganizeImportsSort: lsutil.OrganizeImportsSortOrdinalIgnoreCase},
 	)
 }
@@ -238,7 +238,7 @@ import * as x from "lib";
 import * as y from "lib";
 import { a, b, default as w, default as z } from "lib";
 w; x; y; z; a; b;`,
-		lsproto.CodeActionKindSourceSortImports,
+		lsproto.CodeActionKindSourceSortImportsTs,
 		&lsutil.UserPreferences{OrganizeImportsSort: lsutil.OrganizeImportsSortOrdinalIgnoreCase},
 	)
 }
@@ -261,7 +261,7 @@ import * as x from "lib";
 import * as y from "lib";
 import z from "lib";
 x; y; z; w;`,
-		lsproto.CodeActionKindSourceSortImports,
+		lsproto.CodeActionKindSourceSortImportsTs,
 		&lsutil.UserPreferences{OrganizeImportsSort: lsutil.OrganizeImportsSortOrdinalIgnoreCase},
 	)
 }
@@ -281,7 +281,7 @@ x; y; z;`
 		`import type { x, y } from "lib";
 import { z } from "lib";
 x; y; z;`,
-		lsproto.CodeActionKindSourceSortImports,
+		lsproto.CodeActionKindSourceSortImportsTs,
 		&lsutil.UserPreferences{OrganizeImportsSort: lsutil.OrganizeImportsSortOrdinalIgnoreCase},
 	)
 }
@@ -302,7 +302,7 @@ x; y; z;`
 import type z from "lib";
 import type { x } from "lib";
 x; y; z;`,
-		lsproto.CodeActionKindSourceSortImports,
+		lsproto.CodeActionKindSourceSortImportsTs,
 		&lsutil.UserPreferences{OrganizeImportsSort: lsutil.OrganizeImportsSortOrdinalIgnoreCase},
 	)
 }
@@ -318,7 +318,7 @@ z; y; x; c; b; a;`
 		t,
 		`import { a, type b, c, type x, y, type z } from "lib";
 z; y; x; c; b; a;`,
-		lsproto.CodeActionKindSourceSortImports,
+		lsproto.CodeActionKindSourceSortImportsTs,
 		&lsutil.UserPreferences{
 			OrganizeImportsSort:      lsutil.OrganizeImportsSortOrdinalIgnoreCase,
 			OrganizeImportsTypeOrder: lsutil.OrganizeImportsTypeOrderInline,

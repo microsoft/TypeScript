@@ -265,6 +265,53 @@ func TestProcessChanges(t *testing.T) {
 		assert.Assert(t, result.Changed.Has(testURI1))
 	})
 
+	t.Run("close and change without overlay should not panic", func(t *testing.T) {
+		t.Parallel()
+		fs := createOverlayFS()
+
+		fs.processChanges([]FileChange{
+			{
+				Kind:         FileChangeKindOpen,
+				URI:          testURI1,
+				Version:      1,
+				Content:      "const x = 1;",
+				LanguageKind: lsproto.LanguageKindTypeScript,
+			},
+		})
+		fs.processChanges([]FileChange{
+			{
+				Kind: FileChangeKindClose,
+				URI:  testURI1,
+			},
+		})
+
+		result, _ := fs.processChanges([]FileChange{
+			{
+				Kind: FileChangeKindClose,
+				URI:  testURI1,
+			},
+		})
+
+		assert.Assert(t, result.IsEmpty())
+
+		result, _ = fs.processChanges([]FileChange{
+			{
+				Kind:    FileChangeKindChange,
+				URI:     testURI1,
+				Version: 2,
+				Changes: []lsproto.TextDocumentContentChangePartialOrWholeDocument{
+					{
+						WholeDocument: &lsproto.TextDocumentContentChangeWholeDocument{
+							Text: "const x = 1;",
+						},
+					},
+				},
+			},
+		})
+
+		assert.Assert(t, result.IsEmpty())
+	})
+
 	t.Run("close then open in same batch marks as changed", func(t *testing.T) {
 		t.Parallel()
 		fs := createOverlayFS()

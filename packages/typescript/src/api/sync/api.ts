@@ -2862,6 +2862,39 @@ export class Checker {
         );
     }
 
+    /**
+     * Get the type of a symbol, excluding the missing type when
+     * `exactOptionalPropertyTypes: true` is set; for symbols whose
+     * type cannot be determined the checker yields the error type
+     * (use {@link Type.isErrorType} to detect it).
+     */
+    get getNonMissingTypeOfSymbol(): {
+        (symbol: Symbol): Type;
+        gen(symbol: Symbol): Generator<ProtocolRequest, Type, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getNonMissingTypeOfSymbol",
+            function (symbol: Symbol): Type {
+                const data = owner.client.apiRequest("getNonMissingTypeOfSymbol", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.id,
+                    symbol: symbol.id,
+                });
+                return owner.objectRegistry.getOrCreateType(data);
+            },
+            function* (symbol: Symbol): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
+                const data = yield* apiRequest("getNonMissingTypeOfSymbol", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.id,
+                    symbol: symbol.id,
+                });
+                return owner.objectRegistry.getOrCreateType(data);
+            },
+        );
+    }
+
     get getReferencesToSymbolInFile(): {
         (file: DocumentIdentifier, symbol: Symbol): NodeHandle[];
         gen(file: DocumentIdentifier, symbol: Symbol): Generator<ProtocolRequest, NodeHandle[], ProtocolResponse["result"]>;
@@ -3884,6 +3917,40 @@ export class Checker {
         );
     }
 
+    /**
+     * The following symbols are considered read-only:
+     * - Properties with a `readonly` modifier
+     * - Variables declared with `const`
+     * - Get accessors without matching set accessors
+     * - Enum members
+     * - `Object.defineProperty` assignments with `writable: false` or no setter
+     * - Unions and intersections of the above
+     */
+    get isReadonlySymbol(): {
+        (symbol: Symbol): boolean;
+        gen(symbol: Symbol): Generator<ProtocolRequest, boolean, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "isReadonlySymbol",
+            function (symbol: Symbol): boolean {
+                return owner.client.apiRequest("isReadonlySymbol", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.id,
+                    symbol: symbol.id,
+                });
+            },
+            function* (symbol: Symbol): Generator<ProtocolRequest, boolean, ProtocolResponse["result"]> {
+                return yield* apiRequest("isReadonlySymbol", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.id,
+                    symbol: symbol.id,
+                });
+            },
+        );
+    }
+
     /** Get the return type of a signature. Always returns a type. */
     get getReturnTypeOfSignature(): {
         (signature: Signature): Type;
@@ -4323,6 +4390,42 @@ export class Checker {
                     symbol: symbol.id,
                 });
                 return data ? owner.objectRegistry.getOrCreateSymbol(data) : undefined;
+            },
+        );
+    }
+
+    /**
+     * Get the target symbol if instantiated, or the provided symbol otherwise.
+     */
+    get getTargetSymbol(): {
+        (symbol: Symbol): Symbol;
+        gen(symbol: Symbol): Generator<ProtocolRequest, Symbol, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getTargetSymbol",
+            function (symbol: Symbol): Symbol {
+                if (symbol.checkFlags & CheckFlags.Instantiated) {
+                    const data = owner.client.apiRequest("getTargetSymbol", {
+                        snapshot: owner.snapshotId,
+                        project: owner.project.id,
+                        symbol: symbol.id,
+                    });
+                    return owner.objectRegistry.getOrCreateSymbol(data);
+                }
+                return symbol;
+            },
+            function* (symbol: Symbol): Generator<ProtocolRequest, Symbol, ProtocolResponse["result"]> {
+                if (symbol.checkFlags & CheckFlags.Instantiated) {
+                    const data = yield* apiRequest("getTargetSymbol", {
+                        snapshot: owner.snapshotId,
+                        project: owner.project.id,
+                        symbol: symbol.id,
+                    });
+                    return owner.objectRegistry.getOrCreateSymbol(data);
+                }
+                return symbol;
             },
         );
     }
