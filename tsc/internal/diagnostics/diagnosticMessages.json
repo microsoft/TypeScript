@@ -4463,6 +4463,14 @@
         "category": "Error",
         "code": 4126
     },
+    "Property '{0}' is 'readonly' in the source but not in the target.": {
+        "category": "Error",
+        "code": 95198
+    },
+    "'{0}' index signature is 'readonly' in the source but not in the target.": {
+        "category": "Error",
+        "code": 95199
+    },
     "This member cannot have an 'override' modifier because its name is dynamic.": {
         "category": "Error",
         "code": 4127
@@ -6564,6 +6572,10 @@
     "Built-in iterators are instantiated with a 'TReturn' type of 'undefined' instead of 'any'.": {
         "category": "Message",
         "code": 6720
+    },
+    "Ensure that 'readonly' properties remain read-only in type relationships.": {
+        "category": "Message",
+        "code": 6722
     },
     "Do not allow runtime constructs that are not part of ECMAScript.": {
         "category": "Message",

@@ -3282,6 +3282,8 @@ var Built_in_iterators_are_instantiated_with_a_TReturn_type_of_undefined_instead
 
 var Do_not_allow_runtime_constructs_that_are_not_part_of_ECMAScript = &Message{code: 6721, category: CategoryMessage, key: "Do_not_allow_runtime_constructs_that_are_not_part_of_ECMAScript_6721", text: "Do not allow runtime constructs that are not part of ECMAScript."}
 
+var Ensure_that_readonly_properties_remain_read_only_in_type_relationships = &Message{code: 6722, category: CategoryMessage, key: "Ensure_that_readonly_properties_remain_read_only_in_type_relationships_6722", text: "Ensure that 'readonly' properties remain read-only in type relationships."}
+
 var Default_catch_clause_variables_as_unknown_instead_of_any = &Message{code: 6803, category: CategoryMessage, key: "Default_catch_clause_variables_as_unknown_instead_of_any_6803", text: "Default catch clause variables as 'unknown' instead of 'any'."}
 
 var Do_not_transform_or_elide_any_imports_or_exports_not_marked_as_type_only_ensuring_they_are_written_in_the_output_file_s_format_based_on_the_module_setting = &Message{code: 6804, category: CategoryMessage, key: "Do_not_transform_or_elide_any_imports_or_exports_not_marked_as_type_only_ensuring_they_are_written_i_6804", text: "Do not transform or elide any imports or exports not marked as type-only, ensuring they are written in the output file's format based on the 'module' setting."}
@@ -4277,6 +4279,10 @@ var Wrap_all_invalid_decorator_expressions_in_parentheses = &Message{code: 95195
 var Add_resolution_mode_import_attribute = &Message{code: 95196, category: CategoryMessage, key: "Add_resolution_mode_import_attribute_95196", text: "Add 'resolution-mode' import attribute"}
 
 var Add_resolution_mode_import_attribute_to_all_type_only_imports_that_need_it = &Message{code: 95197, category: CategoryMessage, key: "Add_resolution_mode_import_attribute_to_all_type_only_imports_that_need_it_95197", text: "Add 'resolution-mode' import attribute to all type-only imports that need it"}
+
+var Property_0_is_readonly_in_the_source_but_not_in_the_target = &Message{code: 95198, category: CategoryError, key: "Property_0_is_readonly_in_the_source_but_not_in_the_target_95198", text: "Property '{0}' is 'readonly' in the source but not in the target."}
+
+var X_0_index_signature_is_readonly_in_the_source_but_not_in_the_target = &Message{code: 95199, category: CategoryError, key: "_0_index_signature_is_readonly_in_the_source_but_not_in_the_target_95199", text: "'{0}' index signature is 'readonly' in the source but not in the target."}
 
 var Do_not_print_diagnostics = &Message{code: 100000, category: CategoryMessage, key: "Do_not_print_diagnostics_100000", text: "Do not print diagnostics."}
 
@@ -7692,6 +7698,8 @@ func keyToMessage(key Key) *Message {
 		return Built_in_iterators_are_instantiated_with_a_TReturn_type_of_undefined_instead_of_any
 	case "Do_not_allow_runtime_constructs_that_are_not_part_of_ECMAScript_6721":
 		return Do_not_allow_runtime_constructs_that_are_not_part_of_ECMAScript
+	case "Ensure_that_readonly_properties_remain_read_only_in_type_relationships_6722":
+		return Ensure_that_readonly_properties_remain_read_only_in_type_relationships
 	case "Default_catch_clause_variables_as_unknown_instead_of_any_6803":
 		return Default_catch_clause_variables_as_unknown_instead_of_any
 	case "Do_not_transform_or_elide_any_imports_or_exports_not_marked_as_type_only_ensuring_they_are_written_i_6804":
@@ -8688,6 +8696,10 @@ func keyToMessage(key Key) *Message {
 		return Add_resolution_mode_import_attribute
 	case "Add_resolution_mode_import_attribute_to_all_type_only_imports_that_need_it_95197":
 		return Add_resolution_mode_import_attribute_to_all_type_only_imports_that_need_it
+	case "Property_0_is_readonly_in_the_source_but_not_in_the_target_95198":
+		return Property_0_is_readonly_in_the_source_but_not_in_the_target
+	case "_0_index_signature_is_readonly_in_the_source_but_not_in_the_target_95199":
+		return X_0_index_signature_is_readonly_in_the_source_but_not_in_the_target
 	case "Do_not_print_diagnostics_100000":
 		return Do_not_print_diagnostics
 	case "Run_in_single_threaded_mode_100001":

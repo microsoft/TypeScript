@@ -1229,6 +1229,7 @@ export interface CompilerOptions {
     disableSolutionSearching?: boolean;
     disableReferencedProjectLoad?: boolean;
     erasableSyntaxOnly?: boolean;
+    enforceReadonly?: boolean;
     exactOptionalPropertyTypes?: boolean;
     experimentalDecorators?: boolean;
     forceConsistentCasingInFileNames?: boolean;
