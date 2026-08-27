@@ -5,16 +5,8 @@ const surrogateSecondByteMin = 0xA0;
 const surrogateSecondByteMax = 0xBF;
 const continuationByteMin = 0x80;
 const continuationByteMax = 0xBF;
-type DecodeInput = ArrayBufferView | ArrayBufferLike | null;
-interface TextDecoder {
-    decode(input?: DecodeInput, options?: DecodeOptions): string;
-}
-interface DecodeOptions {
-    stream?: boolean;
-}
-declare const TextDecoder: {
-    new (): TextDecoder;
-};
+type DecodeInput = ArrayBufferView | ArrayBufferLike;
+type DecodeOptions = Parameters<TextDecoder["decode"]>[1];
 
 function isWtf8Surrogate(bytes: Uint8Array, index: number): boolean {
     return index + 2 < bytes.length
@@ -45,7 +37,7 @@ function toUint8Array(input: Exclude<DecodeInput, null | undefined>): Uint8Array
 
 export class Wtf8Decoder extends TextDecoder {
     override decode(input?: DecodeInput, options?: DecodeOptions): string {
-        if (input == null) {
+        if (input === undefined) {
             return super.decode(input, options);
         }
 
