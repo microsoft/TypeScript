@@ -13,6 +13,11 @@ func newPipeListener(path string) (net.Listener, error) {
 	return winio.ListenPipe(path, nil)
 }
 
+func newPrivatePipeListener(name string) (net.Listener, func() error, error) {
+	listener, err := newPipeListener(GeneratePipePath(name))
+	return listener, nil, err
+}
+
 // GeneratePipePath returns a platform-appropriate pipe path for the given name.
 func GeneratePipePath(name string) string {
 	return `\\.\pipe\` + name

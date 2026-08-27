@@ -1,6 +1,7 @@
 package ipc
 
 import (
+	"errors"
 	"io"
 	"net"
 )
@@ -16,6 +17,7 @@ type Transport interface {
 // PipeTransport accepts connections on a Unix domain socket or Windows named pipe.
 type PipeTransport struct {
 	listener net.Listener
+	cleanup  func() error
 }
 
 // NewPipeTransport creates a new transport listening on the given path.
@@ -28,6 +30,18 @@ func NewPipeTransport(path string) (*PipeTransport, error) {
 	return &PipeTransport{listener: listener}, nil
 }
 
+// NewPrivatePipeTransport creates a transport at a private, generated path.
+func NewPrivatePipeTransport(name string) (*PipeTransport, error) {
+	listener, cleanup, err := newPrivatePipeListener(name)
+	if err != nil {
+		return nil, err
+	}
+	return &PipeTransport{
+		listener: listener,
+		cleanup:  cleanup,
+	}, nil
+}
+
 // Accept implements Transport.
 func (t *PipeTransport) Accept() (io.ReadWriteCloser, error) {
 	return t.listener.Accept()
@@ -35,7 +49,11 @@ func (t *PipeTransport) Accept() (io.ReadWriteCloser, error) {
 
 // Close implements Transport.
 func (t *PipeTransport) Close() error {
-	return t.listener.Close()
+	closeErr := t.listener.Close()
+	if t.cleanup == nil {
+		return closeErr
+	}
+	return errors.Join(closeErr, t.cleanup())
 }
 
 // Path returns the path of the pipe/socket.
