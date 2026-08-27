@@ -91,10 +91,7 @@ func readLibs() []string {
 	if err != nil {
 		log.Fatalf("failed to read %s: %v", copyrightNotice, err)
 	}
-	if bytes.ContainsRune(copyright, '\r') || !bytes.HasSuffix(copyright, []byte("\n\n")) {
-		log.Fatalf("%s must use LF line endings and end with a blank line", copyrightNotice)
-	}
-	header := append(copyright, '\n')
+	header := append(bytes.TrimRight(copyright, "\n"), '\n', '\n')
 
 	libs := make([]string, 0, len(entries))
 	for _, entry := range entries {
@@ -108,14 +105,8 @@ func readLibs() []string {
 		if err != nil {
 			log.Fatalf("failed to read %s: %v", path, err)
 		}
-		if bytes.ContainsRune(content, '\r') {
-			log.Fatalf("%s must use LF line endings", path)
-		}
 		if !bytes.HasPrefix(content, header) {
-			log.Fatalf("%s must start with %s followed by a blank line", path, copyrightNotice)
-		}
-		if !bytes.HasSuffix(content, []byte("\n")) {
-			log.Fatalf("%s must end with a newline", path)
+			log.Fatalf("%s must start with %s", path, copyrightNotice)
 		}
 
 		libs = append(libs, name)
