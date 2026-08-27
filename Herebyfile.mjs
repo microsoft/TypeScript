@@ -1072,6 +1072,32 @@ export const checkFormat = task({
     },
 });
 
+export const checkHerebyfile = task({
+    name: "check:herebyfile",
+    description: "Type-checks Herebyfile.mjs.",
+    run: () =>
+        run("node", [
+            "./node_modules/typescript/bin/tsc",
+            "--noEmit",
+            "--allowJs",
+            "--checkJs",
+            "--target",
+            "es2022",
+            "--lib",
+            "es2024,esnext.array,esnext.collection,esnext.iterator",
+            "--module",
+            "nodenext",
+            "--moduleResolution",
+            "nodenext",
+            "--types",
+            "node",
+            "--strict",
+            "--esModuleInterop",
+            "--skipLibCheck",
+            "Herebyfile.mjs",
+        ]),
+});
+
 const scriptTsconfigs = [
     "./tools/scripts/tsc/tsconfig.json",
     "./tsc/internal/lsp/lsproto/_generate/tsconfig.json",
