@@ -24,7 +24,7 @@
         "setup-hooks": "node tools/scripts/link-hooks.mjs"
     },
     "devDependencies": {
-        "@types/node": "latest",
+        "@types/node": "^22.18.0",
         "@unicode/unicode-15.1.0": "^1.6.17",
         "adm-zip": "^0.6.0",
         "chokidar": "^5.0.0",
