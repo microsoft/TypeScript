@@ -96,9 +96,9 @@
         "#vscode-jsonrpc/node": "./vendor/vscode-jsonrpc/lib/node/main.js"
     },
     "scripts": {
-        "node": "node --experimental-strip-types --no-warnings --conditions @typescript/source",
+        "node": "node --conditions @typescript/source",
         "generate": "npm run generate:ast && npm run generate:encoder && npm run generate:sync",
-        "generate:ast": "node --experimental-strip-types --no-warnings ../../tools/scripts/tsc/generate-ts-ast.ts",
+        "generate:ast": "node ../../tools/scripts/tsc/generate-ts-ast.ts",
         "generate:encoder": "npm run node -- ../../tools/scripts/tsc/generate-encoder.ts",
         "generate:sync": "npm run node -- scripts/generateSync.ts",
         "build": "tsc -b",

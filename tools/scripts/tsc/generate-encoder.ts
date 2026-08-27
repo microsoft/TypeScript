@@ -2,7 +2,7 @@
  * Encoder/decoder code generator: reads tools/scripts/tsc/ast.json and produces binary
  * encoding/decoding code for Go and TypeScript.
  *
- * Usage: node --experimental-strip-types tools/scripts/tsc/generate-encoder.ts
+ * Usage: node tools/scripts/tsc/generate-encoder.ts
  *
  * Generates:
  *   - internal/api/encoder/encoder_generated.go

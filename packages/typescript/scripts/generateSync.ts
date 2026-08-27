@@ -1,4 +1,4 @@
-#!/usr/bin/env -S node --experimental-strip-types --no-warnings
+#!/usr/bin/env node
 
 /**
  * Generates sync API from async API source files.
@@ -18,7 +18,7 @@
  *   - Unwrap `Promise<T>` → `T` in type references
  *
  * Usage:
- *   node --experimental-strip-types --no-warnings generateSync.ts
+ *   node generateSync.ts
  */
 
 import { execaSync } from "execa";

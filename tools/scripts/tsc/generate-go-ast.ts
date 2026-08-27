@@ -1,7 +1,7 @@
 /**
  * Go AST code generator: reads tools/scripts/tsc/ast.json and produces internal/ast/ast_generated.go
  *
- * Usage: node --experimental-strip-types tools/scripts/tsc/generate-go-ast.ts
+ * Usage: node tools/scripts/tsc/generate-go-ast.ts
  *
  * Generates:
  *   - Struct definitions for each node kind

@@ -5,7 +5,7 @@
  *   - packages/typescript/src/ast/factory.generated.ts
  *   - packages/typescript/src/ast/is.generated.ts
  *
- * Usage: node --experimental-strip-types tools/scripts/tsc/generate-ts-ast.ts
+ * Usage: node tools/scripts/tsc/generate-ts-ast.ts
  */
 
 import { execaSync } from "execa";
