@@ -1,5 +1,4 @@
 import { Buffer } from "node:buffer";
-import { TextDecoder } from "node:util";
 
 const surrogateLeadByte = 0xED;
 const surrogateSecondByteMin = 0xA0;
@@ -7,7 +6,15 @@ const surrogateSecondByteMax = 0xBF;
 const continuationByteMin = 0x80;
 const continuationByteMax = 0xBF;
 type DecodeInput = ArrayBufferView | ArrayBufferLike | null;
-type DecodeOptions = Parameters<TextDecoder["decode"]>[1];
+interface TextDecoder {
+    decode(input?: DecodeInput, options?: DecodeOptions): string;
+}
+interface DecodeOptions {
+    stream?: boolean;
+}
+declare const TextDecoder: {
+    new (): TextDecoder;
+};
 
 function isWtf8Surrogate(bytes: Uint8Array, index: number): boolean {
     return index + 2 < bytes.length
