@@ -30,7 +30,7 @@ export { a, b, c };`
 } from "module";
 
 export { a, b, c };`,
-		lsproto.CodeActionKindSourceRemoveUnusedImports,
+		lsproto.CodeActionKindSourceRemoveUnusedImportsTs,
 		nil,
 	)
 }
@@ -55,7 +55,7 @@ export { a, c };`
 } from "module";
 
 export { a, c };`,
-		lsproto.CodeActionKindSourceRemoveUnusedImports,
+		lsproto.CodeActionKindSourceRemoveUnusedImportsTs,
 		nil,
 	)
 }
@@ -81,7 +81,7 @@ export { a, c };`
 	f.VerifyOrganizeImports(
 		t,
 		"import {\n\ta,\n\tc\n} from \"module\";\n\nexport { a, c };",
-		lsproto.CodeActionKindSourceRemoveUnusedImports,
+		lsproto.CodeActionKindSourceRemoveUnusedImportsTs,
 		&preferences,
 	)
 }

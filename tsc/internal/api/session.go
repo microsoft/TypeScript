@@ -806,6 +806,8 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleGetAliasedSymbol(ctx, parsed.(*CheckerSymbolParams))
 	case string(MethodGetImmediateAliasedSymbol):
 		return s.handleGetImmediateAliasedSymbol(ctx, parsed.(*CheckerSymbolParams))
+	case string(MethodGetTargetSymbol):
+		return s.handleMethodGetTargetSymbol(ctx, parsed.(*CheckerSymbolParams))
 	case string(MethodGetFullyQualifiedName):
 		return s.handleGetFullyQualifiedName(ctx, parsed.(*CheckerSymbolParams))
 	case string(MethodGetExportsOfModule):
@@ -3362,6 +3364,23 @@ func (s *Session) handleGetImmediateAliasedSymbol(ctx context.Context, params *C
 	}
 
 	return setup.newSymbolResponse(aliased), nil
+}
+
+// handleGetTargetSymbol returns the target symbol if the symbol is instantiated,
+// otherwise returns the provided symbol.
+func (s *Session) handleMethodGetTargetSymbol(ctx context.Context, params *CheckerSymbolParams) (*SymbolResponse, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	symbol, err := setup.resolveSymbolHandle(params.Symbol)
+	if err != nil {
+		return nil, err
+	}
+
+	return setup.newSymbolResponse(setup.checker.GetTargetSymbol(symbol)), nil
 }
 
 // handleGetExportsOfModule returns the resolved exports of a module symbol,

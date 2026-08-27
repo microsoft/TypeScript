@@ -30,7 +30,7 @@ console.log(a, B, b, c, C, d, D);
 console.log(e, f, F, g, G, H, h);`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
-	f.VerifyOrganizeImports(t,
+	f.VerifyOrganizeImportsWithRequestKind(t,
 		`import {
     a,
     b,
@@ -49,6 +49,7 @@ console.log(e, f, F, g, G, H, h);`
 console.log(a, B, b, c, C, d, D);
 console.log(e, f, F, g, G, H, h);`,
 		lsproto.CodeActionKindSourceOrganizeImports,
+		lsproto.CodeActionKindSourceOrganizeImportsTs,
 		&lsutil.UserPreferences{
 			OrganizeImportsIgnoreCase: core.TSTrue,
 		},
@@ -73,7 +74,7 @@ console.log(e, f, F, g, G, H, h);`,
 
 console.log(a, B, b, c, C, d, D);
 console.log(e, f, F, g, G, H, h);`,
-		lsproto.CodeActionKindSourceOrganizeImports,
+		lsproto.CodeActionKindSourceOrganizeImportsTs,
 		&lsutil.UserPreferences{
 			OrganizeImportsIgnoreCase: core.TSFalse,
 		},
