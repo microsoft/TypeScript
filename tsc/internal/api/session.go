@@ -822,6 +822,8 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleIsArrayType(ctx, parsed.(*CheckerTypeParams))
 	case string(MethodIsTupleType):
 		return s.handleIsTupleType(ctx, parsed.(*CheckerTypeParams))
+	case string(MethodIsReadonlySymbol):
+		return s.handleIsReadonlySymbol(ctx, parsed.(*CheckerSymbolParams))
 	case string(MethodGetAnyType):
 		return s.handleGetIntrinsicType(ctx, parsed.(*GetIntrinsicTypeParams), (*checker.Checker).GetAnyType)
 	case string(MethodGetStringType):
@@ -2999,6 +3001,22 @@ func (s *Session) handleIsTupleType(ctx context.Context, params *CheckerTypePara
 	}
 
 	return checker.IsTupleType(t), nil
+}
+
+// handleIsReadonlySymbol returns whether a symbol is a readonly symbol.
+func (s *Session) handleIsReadonlySymbol(ctx context.Context, params *CheckerSymbolParams) (bool, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return false, err
+	}
+	defer setup.done()
+
+	symbol, err := setup.resolveSymbolHandle(params.Symbol)
+	if err != nil {
+		return false, err
+	}
+
+	return setup.checker.IsReadonlySymbol(symbol), nil
 }
 
 // handleGetBaseTypes returns the base types of an interface/class type.
