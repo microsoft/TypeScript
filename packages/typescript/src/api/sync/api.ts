@@ -1976,6 +1976,21 @@ export class Checker {
     }
 
     /**
+     * Get the target symbol if instantiated, or the provided symbol otherwise.
+     */
+    getTargetSymbol(symbol: Symbol): Symbol {
+        if (symbol.checkFlags & CheckFlags.Instantiated) {
+            const data = this.client.apiRequest("getTargetSymbol", {
+                snapshot: this.snapshotId,
+                project: this.project.id,
+                symbol: symbol.id,
+            });
+            return this.objectRegistry.getOrCreateSymbol(data);
+        }
+        return symbol;
+    }
+
+    /**
      * Fetch (once, then cache) the handle ids of the per-checker singleton
      * symbols (unknown, undefined, arguments). These ids are stable for the life
      * of the project's checker, so identity checks against them are local after

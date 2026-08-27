@@ -26,7 +26,7 @@ console.log(Foo, Bar);`
 } from "foo";
 
 console.log(Foo, Bar);`,
-		lsproto.CodeActionKindSourceOrganizeImports,
+		lsproto.CodeActionKindSourceOrganizeImportsTs,
 		nil,
 	)
 }
