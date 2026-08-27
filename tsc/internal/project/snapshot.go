@@ -11,7 +11,6 @@ import (
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
-	"github.com/microsoft/TypeScript/tsc/internal/compiler"
 	"github.com/microsoft/TypeScript/tsc/internal/contentmapper"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/ls"
@@ -23,7 +22,6 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/project/dirty"
 	"github.com/microsoft/TypeScript/tsc/internal/project/logging"
 	"github.com/microsoft/TypeScript/tsc/internal/sourcemap"
-	"github.com/microsoft/TypeScript/tsc/internal/tsoptions"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfsmatch"
 )
@@ -139,35 +137,19 @@ func (s *Snapshot) cloneForProgram(
 	fs := newSnapshotFSBuilder(session.fs.fs, s.fs.overlays, s.fs.overlays, s.fs.diskFiles, s.fs.diskDirectories, s.fs.nodeModulesRealpathAliases, session.options.PositionEncoding, s.toPath)
 	fileChanges = s.processFileChanges(fs, fileChanges, logger, nil)
 
-	configFileRegistry := &ConfigFileRegistry{}
-	if oldProject != nil && oldProject.Program != nil {
-		configFileRegistry = configFileRegistryForProgram(oldProject.Program)
-	}
-	projectCollection := &ProjectCollection{
-		toPath:              s.toPath,
-		configFileRegistry:  configFileRegistry,
-		configuredProjects:  make(map[tspath.Path]*Project),
-		openFiles:           openFilePaths(s.fs.overlays),
-		fileDefaultProjects: make(map[tspath.Path]tspath.Path),
-		apiState: APIState{
-			openProjects: make(map[tspath.Path]int),
-			openFiles:    make(map[tspath.Path]apiOpenedFile),
-		},
-	}
-
 	newSnapshotID := session.snapshotID.Add(1)
 	projectCollectionBuilder := newProjectCollectionBuilder(
 		ctx,
 		newSnapshotID,
 		fs,
-		projectCollection,
-		configFileRegistry,
-		projectCollection.apiState,
+		s.ProjectCollection,
+		s.ConfigFileRegistry,
+		APIState{},
 		compilerOptions,
 		s.inferredProjectContentMappers,
 		s.inferredProjectContentMapperExtensions,
 		s.sessionOptions,
-		configFileRegistry.customConfigFileName,
+		s.ConfigFileRegistry.customConfigFileName,
 		session.parseCache,
 		session.contentMappedParseCache,
 		session.extendedConfigCache,
@@ -202,8 +184,7 @@ func (s *Snapshot) cloneForProgram(
 		}
 		projectCollectionBuilder.updateProgram(projectCollectionBuilder.inferredProject, createLogger)
 	}
-	projectCollectionBuilder.configFileRegistryBuilder.Cleanup()
-
+	projectCollectionBuilder.cleanupAllConfiguredProjects(logger.Fork("cleanupAllConfiguredProjects"))
 	newProjectCollection, newConfigFileRegistry := projectCollectionBuilder.Finalize(logger)
 
 	cleanFilesStart := time.Now()
@@ -262,30 +243,6 @@ func (s *Snapshot) cloneForProgram(
 		logger.Logf("Finished cloning snapshot %d into snapshot %d for program in %v", s.id, newSnapshot.id, time.Since(start))
 	}
 	return newSnapshot
-}
-
-// configFileRegistryForProgram retains only project-reference configs reachable from a selected program.
-func configFileRegistryForProgram(program *compiler.Program) *ConfigFileRegistry {
-	registry := &ConfigFileRegistry{}
-	program.RangeResolvedProjectReference(func(path tspath.Path, config *tsoptions.ParsedCommandLine, _ *tsoptions.ParsedCommandLine, _ int) bool {
-		if config == nil {
-			return true
-		}
-		if registry.configs == nil {
-			registry.configs = make(map[tspath.Path]*configFileEntry)
-		}
-		fileName := config.ConfigName()
-		if fileName == "" {
-			fileName = string(path)
-		}
-		registry.configs[path] = &configFileEntry{
-			fileName:          fileName,
-			commandLine:       config,
-			retainingProjects: map[tspath.Path]struct{}{inferredProjectName: {}},
-		}
-		return true
-	})
-	return registry
 }
 
 func (s *Snapshot) processFileChanges(
@@ -563,7 +520,6 @@ func (s *Snapshot) Clone(
 
 	compilerOptionsForInferredProjects := s.compilerOptionsForInferredProjects
 	if change.compilerOptionsForInferredProjects != nil {
-		// !!! mark inferred projects as dirty?
 		compilerOptionsForInferredProjects = change.compilerOptionsForInferredProjects
 	}
 

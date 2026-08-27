@@ -449,6 +449,17 @@ func (b *ProjectCollectionBuilder) cleanupConfiguredProjects(retain *collections
 	b.configFileRegistryBuilder.Cleanup()
 }
 
+// cleanupAllConfiguredProjects removes all configured projects unconditionally.
+func (b *ProjectCollectionBuilder) cleanupAllConfiguredProjects(logger *logging.LogTree) {
+	b.configuredProjects.Range(func(entry *dirty.SyncMapEntry[tspath.Path, *Project]) bool {
+		if p, ok := b.configuredProjects.Load(entry.Key()); ok {
+			b.deleteConfiguredProject(p, logger)
+		}
+		return true
+	})
+	b.configFileRegistryBuilder.Cleanup()
+}
+
 func logChangeFileResult(result changeFileResult, logger *logging.LogTree) {
 	if len(result.affectedProjects) > 0 {
 		logger.Logf("Config file change affected projects: %v", slices.Collect(maps.Keys(result.affectedProjects)))

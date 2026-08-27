@@ -50,9 +50,9 @@ import {
     toPath,
 } from "../path.ts";
 import type {
+    APIFileChanges,
     APIRequest,
     APIResponseTuple,
-    APIFileChanges,
     CompilerOptions,
     CreateProgramOptions,
     CreateProgramResponse,

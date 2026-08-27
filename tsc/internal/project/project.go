@@ -164,6 +164,7 @@ func newInferredProjectFromProject(
 	inferred.ProgramLastUpdate = project.ProgramLastUpdate
 	inferred.host = project.host
 	inferred.checkerPool = project.checkerPool
+	inferred.contentMapperWatchedFiles = project.contentMapperWatchedFiles
 	inferred.dirty = false
 	return inferred
 }
