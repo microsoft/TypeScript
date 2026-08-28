@@ -354,10 +354,6 @@ function isNodeFlagsMember(m: MemberInfo): boolean {
     return type.kind === "primitive" && type.name === "NodeFlags";
 }
 
-function concreteNodeMemberAccess(m: MemberInfo): string {
-    return isNodeFlagsMember(m) ? `node.AsNode().${m.name}` : `node.${m.name}`;
-}
-
 function canonicalNodesByKind(): Map<NodeType, string[]> {
     const nodeByKind = new Map<string, NodeType>();
     for (const node of api.nodes()) {
@@ -504,12 +500,11 @@ function generateUpdateFactory(w: CodeWriter, node: NodeType) {
     // Build comparison (all update members)
     const comparisons = updateMembers.map(m => {
         const type = m.type;
-        const access = concreteNodeMemberAccess(m);
         // Slices can't be compared with != in Go
         if (type.kind === "list" && type.listKind === "raw") {
-            return `!core.Same(${m.goParamName()}, ${access})`;
+            return `!core.Same(${m.goParamName()}, node.${m.name})`;
         }
-        return `${m.goParamName()} != ${access}`;
+        return `${m.goParamName()} != node.${m.name}`;
     });
 
     w.write(`if ${comparisons.join(" || ")} {`);
@@ -518,13 +513,13 @@ function generateUpdateFactory(w: CodeWriter, node: NodeType) {
     // Call New with all members (Kind from original, everything else from params)
     const newArgs = members.map(m => {
         if (m.isKindParam()) {
-            return "node.AsNode().Kind";
+            return "node.Kind";
         }
         return m.goParamName();
     }).join(", ");
 
     if (node.kindAliases.length > 0) {
-        w.write("switch node.AsNode().Kind {");
+        w.write("switch node.Kind {");
         w.push();
         w.write(`case ${api.kindType(`SyntaxKind.${node.syntaxKindName}`).formatGoConstant()}:`);
         w.push();
@@ -538,7 +533,7 @@ function generateUpdateFactory(w: CodeWriter, node: NodeType) {
         }
         w.write("default:");
         w.push();
-        w.write(`panic("unexpected kind in Update${node.name}: " + node.AsNode().Kind.String())`);
+        w.write(`panic("unexpected kind in Update${node.name}: " + node.Kind.String())`);
         w.pop();
         w.pop();
         w.write("}");
@@ -930,7 +925,7 @@ function generateVisitEachChild(w: CodeWriter, node: NodeType) {
 
     const args = updateMembers.map(m => {
         if (!m.isChild()) {
-            return concreteNodeMemberAccess(m);
+            return `node.${m.name}`;
         }
 
         // Raw list: use the local variable
@@ -975,19 +970,19 @@ function generateClone(w: CodeWriter, node: NodeType) {
     // Clone is a struct method, so it can access private fields directly
     const args = members.map(m => {
         if (m.isKindParam()) {
-            return "node.AsNode().Kind";
+            return "node.Kind";
         }
         const type = m.declaredType;
 
         if (m.inherited && type?.kind === "alias" && type.name === "ModifierLike") {
-            return "node.AsNode().Modifiers()";
+            return "node.Modifiers()";
         }
         // Use direct field access (Clone is a struct method, can access private fields)
-        return concreteNodeMemberAccess(m);
+        return `node.${m.name}`;
     }).join(", ");
 
     if (node.kindAliases.length > 0) {
-        w.write("switch node.AsNode().Kind {");
+        w.write("switch node.Kind {");
         w.push();
         w.write(`case ${api.kindType(`SyntaxKind.${node.syntaxKindName}`).formatGoConstant()}:`);
         w.push();
@@ -1001,7 +996,7 @@ function generateClone(w: CodeWriter, node: NodeType) {
         }
         w.write("default:");
         w.push();
-        w.write(`panic("unexpected kind in ${structName}.Clone: " + node.AsNode().Kind.String())`);
+        w.write(`panic("unexpected kind in ${structName}.Clone: " + node.Kind.String())`);
         w.pop();
         w.pop();
         w.write("}");

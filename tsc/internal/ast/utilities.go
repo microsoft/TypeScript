@@ -2951,11 +2951,11 @@ func IsExclusivelyTypeOnlyImportOrExport(node *Node) bool {
 		return node.IsTypeOnly()
 	case KindImportDeclaration, KindJSImportDeclaration:
 		if importClause := node.ImportClause(); importClause != nil {
-			return importClause.AsImportClause().AsNode().IsTypeOnly()
+			return importClause.AsImportClause().IsTypeOnly()
 		}
 	case KindJSDocImportTag:
 		if importClause := node.ImportClause(); importClause != nil {
-			return importClause.AsImportClause().AsNode().IsTypeOnly()
+			return importClause.AsImportClause().IsTypeOnly()
 		}
 	}
 	return false

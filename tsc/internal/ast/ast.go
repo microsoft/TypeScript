@@ -6,7 +6,6 @@ import (
 	"strings"
 	"sync"
 	"sync/atomic"
-	"unsafe"
 
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
@@ -176,17 +175,13 @@ func (list *ModifierList) Clone(f *NodeFactory) *ModifierList {
 // Interface values stored in AST nodes are never typed nil values. Construction code must ensure that
 // interface valued properties either store a true nil or a reference to a non-nil struct.
 
-type nodeFields struct {
+type Node struct {
 	Kind   Kind
 	Flags  NodeFlags
 	Loc    core.TextRange
 	id     atomic.Uint64
 	Parent *Node
 	data   any
-}
-
-type Node struct {
-	nodeFields
 }
 
 // Node accessors. Some accessors are implemented as methods on NodeData, others are implemented though
@@ -1162,12 +1157,10 @@ func (n *Node) AsFlowReduceLabelData() *FlowReduceLabelData {
 // NodeDefault
 
 type NodeDefault struct {
-	nodeFields
+	Node
 }
 
-func (node *NodeDefault) AsNode() *Node               { return (*Node)(unsafe.Pointer(&node.nodeFields)) }
-func (node *NodeDefault) Pos() int                    { return node.Loc.Pos() }
-func (node *NodeDefault) End() int                    { return node.Loc.End() }
+func (node *NodeDefault) AsNode() *Node               { return &node.Node }
 func (node *NodeDefault) ForEachChild(v Visitor) bool { return false }
 
 func (node *NodeDefault) VisitEachChild(v *NodeVisitor) *Node                   { return node.AsNode() }
@@ -1726,10 +1719,10 @@ func (node *BindingElement) computeSubtreeFacts() SubtreeFacts {
 }
 
 func (node *FunctionDeclaration) computeSubtreeFacts() SubtreeFacts {
-	if node.Body == nil || node.AsNode().ModifierFlags()&ModifierFlagsAmbient != 0 {
+	if node.Body == nil || node.ModifierFlags()&ModifierFlagsAmbient != 0 {
 		return SubtreeContainsTypeScript
 	} else {
-		isAsync := node.AsNode().ModifierFlags()&ModifierFlagsAsync != 0
+		isAsync := node.ModifierFlags()&ModifierFlagsAsync != 0
 		isGenerator := node.AsteriskToken != nil
 		return propagateModifierListSubtreeFacts(node.modifiers) |
 			propagateSubtreeFacts(node.AsteriskToken) |
@@ -1807,7 +1800,7 @@ func (node *EnumDeclaration) computeSubtreeFacts() SubtreeFacts {
 }
 
 func (node *ModuleDeclaration) computeSubtreeFacts() SubtreeFacts {
-	if node.AsNode().ModifierFlags()&ModifierFlagsAmbient != 0 {
+	if node.ModifierFlags()&ModifierFlagsAmbient != 0 {
 		return SubtreeContainsTypeScript
 	} else {
 		return propagateModifierListSubtreeFacts(node.modifiers) |
@@ -2024,7 +2017,7 @@ func (node *ArrowFunction) computeSubtreeFacts() SubtreeFacts {
 		propagateEraseableSyntaxSubtreeFacts(node.Type) |
 		propagateEraseableSyntaxSubtreeFacts(node.FullSignature) |
 		propagateSubtreeFacts(node.Body) |
-		core.IfElse(node.AsNode().ModifierFlags()&ModifierFlagsAsync != 0, SubtreeContainsAnyAwait, SubtreeFactsNone)
+		core.IfElse(node.ModifierFlags()&ModifierFlagsAsync != 0, SubtreeContainsAnyAwait, SubtreeFactsNone)
 }
 
 func (node *ArrowFunction) propagateSubtreeFacts() SubtreeFacts {

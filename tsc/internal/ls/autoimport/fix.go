@@ -217,7 +217,7 @@ func addToExistingImport(
 		importClause := importClauseOrBindingPattern.AsImportClause()
 
 		// promoteFromTypeOnly = true if we need to promote the entire original clause from type only
-		promoteFromTypeOnly := importClause.AsNode().IsTypeOnly() && core.Some(append(namedImports, defaultImport), func(i *newImportBinding) bool {
+		promoteFromTypeOnly := importClause.IsTypeOnly() && core.Some(append(namedImports, defaultImport), func(i *newImportBinding) bool {
 			if i == nil {
 				return false
 			}
@@ -242,7 +242,7 @@ func addToExistingImport(
 					identifier = ct.NodeFactory.NewIdentifier(namedImport.propertyName).AsIdentifier().AsNode()
 				}
 				return ct.NodeFactory.NewImportSpecifier(
-					(!importClause.AsNode().IsTypeOnly() || promoteFromTypeOnly) && shouldUseTypeOnly(namedImport.addAsTypeOnly, preferences),
+					(!importClause.IsTypeOnly() || promoteFromTypeOnly) && shouldUseTypeOnly(namedImport.addAsTypeOnly, preferences),
 					identifier,
 					ct.NodeFactory.NewIdentifier(namedImport.name),
 				)
@@ -319,7 +319,7 @@ func addToExistingImport(
 }
 
 func getTypeKeywordOfTypeOnlyImport(importClause *ast.ImportClause, sourceFile *ast.SourceFile) *ast.Node {
-	debug.Assert(importClause.AsNode().IsTypeOnly(), "import clause must be type-only")
+	debug.Assert(importClause.IsTypeOnly(), "import clause must be type-only")
 	// The first child of a type-only import clause is the 'type' keyword
 	// import type { foo } from './bar'
 	//        ^^^^
@@ -753,7 +753,7 @@ func (v *View) tryAddToExistingImport(
 		namedBindings := importClause.NamedBindings
 		// A type-only import may not have both a default and named imports, so the only way a name can
 		// be added to an existing type-only import is adding a named import to existing named bindings.
-		if importClause.AsNode().IsTypeOnly() && !(importKind == lsproto.ImportKindNamed && namedBindings != nil) {
+		if importClause.IsTypeOnly() && !(importKind == lsproto.ImportKindNamed && namedBindings != nil) {
 			continue
 		}
 
@@ -779,7 +779,7 @@ func (v *View) tryAddToExistingImport(
 			},
 		}
 
-		isTypeOnly := importClause.AsNode().IsTypeOnly()
+		isTypeOnly := importClause.IsTypeOnly()
 		// Give preference to putting types in existing type-only imports and avoiding conversions
 		// of import statements to/from type-only.
 		if (addAsTypeOnly != lsproto.AddAsTypeOnlyNotAllowed && isTypeOnly) ||

@@ -534,7 +534,7 @@ function generateGoRecordNodeStrings(w: CodeWriter) {
         const kinds = getGoKinds(node);
         const castName = goCastName(node);
         const textAccess = info.textMember.private
-            ? `node.${castName}().AsNode().${api.capitalize(info.textMember.name)}()`
+            ? `node.${castName}().${api.capitalize(info.textMember.name)}()`
             : `node.${castName}().${info.textMember.name}`;
 
         w.write(`case ${kinds.join(", ")}:`);

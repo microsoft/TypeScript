@@ -2933,7 +2933,7 @@ func (tx *DeclarationTransformer) createFullExpandoBlock(id ast.NodeId) *ast.Nod
 		var host []*ast.Node
 		if n != nil && n.Kind == ast.KindSyntaxList {
 			// find the first named syntax list element and use its' name & modifiers
-			for c := range n.AsSyntaxList().AsNode().IterChildren() {
+			for c := range n.AsSyntaxList().IterChildren() {
 				if c.Name() != nil {
 					name = c.Name().Clone(tx.Factory())
 					if c.Modifiers() != nil {

@@ -660,7 +660,7 @@ const noStructuredData = 0xFFFFFFFF
 
 func recordExtendedData_SourceFile(node *ast.Node, strs *stringTable, positionMap *ast.PositionMap, extendedData *[]byte, structuredData *[]byte) {
 	sf := node.AsSourceFile()
-	textIndex := strs.add(sf.Text(), sf.Kind, sf.AsNode().Pos(), sf.AsNode().End())
+	textIndex := strs.add(sf.Text(), sf.Kind, sf.Pos(), sf.End())
 	originalTextIndex := textIndex
 	if sf.OriginalText() != sf.Text() {
 		originalTextIndex = strs.add(sf.OriginalText(), 0, 0, 0)
