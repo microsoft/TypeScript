@@ -565,8 +565,8 @@ func (r *typeRenderer) inlineStruct(structType *types.Struct) string {
 	var fields []string
 	multiline := false
 	for i := range structType.NumFields() {
-		field, include, optional, nonnil, _, internal := jsonField(structType, i)
-		if !include || internal {
+		field, include, optional, nonnil, deprecated, internal := jsonField(structType, i)
+		if !include || deprecated || internal {
 			continue
 		}
 		fieldType := r.typeString(structType.Field(i).Type(), !optional && !nonnil)
@@ -605,8 +605,8 @@ func (r *typeRenderer) declarations() (string, error) {
 		writeDoc(&out, "", r.docs[named.Obj()])
 		fmt.Fprintf(&out, "export interface %s {\n", exportedName(named.Obj().Name()))
 		for i := range structType.NumFields() {
-			field, include, optional, nonnil, _, internal := jsonField(structType, i)
-			if !include || internal {
+			field, include, optional, nonnil, deprecated, internal := jsonField(structType, i)
+			if !include || deprecated || internal {
 				continue
 			}
 			fieldType := r.typeString(structType.Field(i).Type(), !optional && !nonnil)
@@ -655,7 +655,11 @@ func (r *typeRenderer) importDeclarations() string {
 	for _, path := range paths {
 		names := r.imports[path]
 		sort.Strings(names)
-		fmt.Fprintf(&out, "import type { %s } from %q;\n", strings.Join(names, ", "), path)
+		fmt.Fprintf(&out, "import { %s } from %q;\n", strings.Join(names, ", "), path)
+	}
+	out.WriteString("\n")
+	for _, path := range paths {
+		fmt.Fprintf(&out, "export { %s } from %q;\n", strings.Join(r.imports[path], ", "), path)
 	}
 	return out.String()
 }
@@ -686,11 +690,12 @@ func jsonField(structType *types.Struct, index int) (name string, include bool, 
 	tag := reflect.StructTag(structType.Tag(index)).Get("json")
 	noniltag := reflect.StructTag(structType.Tag(index)).Get("nonnil")
 	deprecatedtag := reflect.StructTag(structType.Tag(index)).Get("deprecated")
+	apitag := reflect.StructTag(structType.Tag(index)).Get("api")
 	internaltag := reflect.StructTag(structType.Tag(index)).Get("internal")
 	parts := strings.Split(tag, ",")
 	name = parts[0]
 	if name == "-" {
-		return "", false, false, noniltag == "true", deprecatedtag == "true", internaltag == "true"
+		return "", false, false, noniltag == "true", deprecatedtag == "true" && apitag != "true", internaltag == "true"
 	}
 	if name == "" {
 		name = field.Name()
@@ -700,7 +705,7 @@ func jsonField(structType *types.Struct, index int) (name string, include bool, 
 			optional = true
 		}
 	}
-	return name, true, optional, noniltag == "true", deprecatedtag == "true", internaltag == "true"
+	return name, true, optional, noniltag == "true", deprecatedtag == "true" && apitag != "true", internaltag == "true"
 }
 
 func exportedName(value string) string {

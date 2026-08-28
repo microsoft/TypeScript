@@ -119,7 +119,7 @@ type CompilerOptions struct {
 	MaxNodeModuleJsDepth                      *int                                      `json:"maxNodeModuleJsDepth,omitzero"`
 
 	// Deprecated: Do not use outside of options parsing and validation.
-	AllowSyntheticDefaultImports Tristate `json:"allowSyntheticDefaultImports,omitzero" deprecated:"true"`
+	AllowSyntheticDefaultImports Tristate `json:"allowSyntheticDefaultImports,omitzero" deprecated:"true" api:"true"`
 	// Deprecated: Do not use outside of options parsing and validation.
 	AlwaysStrict Tristate `json:"alwaysStrict,omitzero" deprecated:"true"`
 	// Deprecated: Do not use outside of options parsing and validation.
@@ -127,7 +127,7 @@ type CompilerOptions struct {
 	// Deprecated: Do not use outside of options parsing and validation.
 	DownlevelIteration Tristate `json:"downlevelIteration,omitzero" deprecated:"true"`
 	// Deprecated: Do not use outside of options parsing and validation.
-	ESModuleInterop Tristate `json:"esModuleInterop,omitzero" deprecated:"true"`
+	ESModuleInterop Tristate `json:"esModuleInterop,omitzero" deprecated:"true" api:"true"`
 	// Deprecated: Do not use outside of options parsing and validation.
 	OutFile string `json:"outFile,omitzero" deprecated:"true"`
 
