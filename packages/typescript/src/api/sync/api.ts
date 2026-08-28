@@ -5162,13 +5162,10 @@ class TypeObject implements Type {
         this.aliasTypeArguments = data.aliasTypeArguments ?? [];
         if (data.aliasSymbol !== undefined) this.aliasSymbol = data.aliasSymbol;
         if (data.fixedLength !== undefined) {
-            if (data.readonly === undefined) {
-                throw new Error("Tuple type response is missing readonly metadata");
-            }
             this.elementFlags = data.elementFlags ?? [];
             this.fixedLength = data.fixedLength;
-            this.readonly = data.readonly;
         }
+        if (data.readonly !== undefined) this.readonly = data.readonly;
         if (data.texts !== undefined) this.texts = data.texts;
         if (data.objectType !== undefined) this.objectType = data.objectType;
         if (data.indexType !== undefined) this.indexType = data.indexType;
