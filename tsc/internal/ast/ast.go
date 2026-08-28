@@ -72,7 +72,7 @@ func NewNodeFactory(hooks NodeFactoryHooks) *NodeFactory {
 	return &NodeFactory{hooks: hooks}
 }
 
-func newNode(kind Kind, n *Node, data nodeData, hooks NodeFactoryHooks) *Node {
+func newNode(kind Kind, n *Node, data any, hooks NodeFactoryHooks) *Node {
 	n.Loc = core.UndefinedTextRange()
 	n.Kind = kind
 	n.data = data
@@ -82,7 +82,7 @@ func newNode(kind Kind, n *Node, data nodeData, hooks NodeFactoryHooks) *Node {
 	return n
 }
 
-func (f *NodeFactory) newNode(kind Kind, n *Node, data nodeData) *Node {
+func (f *NodeFactory) newNode(kind Kind, n *Node, data any) *Node {
 	f.nodeCount++
 	return newNode(kind, n, data, f.hooks)
 }
@@ -182,7 +182,7 @@ type nodeFields struct {
 	Loc    core.TextRange
 	id     atomic.Uint64
 	Parent *Node
-	data   nodeData
+	data   any
 }
 
 type Node struct {
@@ -197,11 +197,8 @@ func (n *Node) AsNode() *Node { return n }
 func (n *Node) Pos() int      { return n.Loc.Pos() }
 func (n *Node) End() int      { return n.Loc.End() }
 func (n *Node) IterChildren() iter.Seq[*Node] {
-	// Implemented directly (rather than through the nodeData interface) so that the
-	// returned iterator and the visitor closure it passes to ForEachChild do not
-	// escape: an interface call is opaque to escape analysis. `true` stops a TS
-	// visitor early, whereas `false` stops a Go iterator yield, so the result is
-	// inverted.
+	// `true` stops a TS visitor early, whereas `false` stops a Go iterator yield,
+	// so the result is inverted.
 	return func(yield func(*Node) bool) {
 		n.ForEachChild(func(child *Node) bool {
 			return !yield(child)
@@ -210,8 +207,6 @@ func (n *Node) IterChildren() iter.Seq[*Node] {
 }
 func (n *Node) ParameterList() *ParameterList           { return n.FunctionLikeData().Parameters }
 func (n *Node) Parameters() []*ParameterDeclarationNode { return n.ParameterList().Nodes }
-func (n *Node) SubtreeFacts() SubtreeFacts              { return n.data.SubtreeFacts() }
-func (n *Node) propagateSubtreeFacts() SubtreeFacts     { return n.data.propagateSubtreeFacts() }
 func (n *Node) KindString() string                      { return n.Kind.String() }
 func (n *Node) KindValue() int16                        { return int16(n.Kind) }
 func (n *Node) Decorators() []*Node {
@@ -1164,15 +1159,6 @@ func (n *Node) AsFlowReduceLabelData() *FlowReduceLabelData {
 	return n.data.(*FlowReduceLabelData)
 }
 
-// NodeData
-
-type nodeData interface {
-	SubtreeFacts() SubtreeFacts
-	computeSubtreeFacts() SubtreeFacts
-	subtreeFactsWorker(self nodeData) SubtreeFacts
-	propagateSubtreeFacts() SubtreeFacts
-}
-
 // NodeDefault
 
 type NodeDefault struct {
@@ -1199,14 +1185,13 @@ func (node *NodeDefault) BodyData() *BodyBase                                   
 func (node *NodeDefault) LiteralLikeData() *LiteralLikeNodeBase                 { return nil }
 func (node *NodeDefault) TemplateLiteralLikeData() *TemplateLiteralLikeNodeBase { return nil }
 func (node *NodeDefault) SubtreeFacts() SubtreeFacts {
-	return node.data.subtreeFactsWorker(node.data)
+	return node.AsNode().SubtreeFacts()
 }
 
-func (node *NodeDefault) subtreeFactsWorker(self nodeData) SubtreeFacts {
+func (node *NodeDefault) subtreeFactsWorker(self *Node) SubtreeFacts {
 	// To avoid excessive conditional checks, the default implementation of subtreeFactsWorker directly invokes
 	// computeSubtreeFacts. More complex nodes should implement CompositeNodeBase, which overrides this
-	// method to cache the result. `self` is passed along to ensure we lookup `computeSubtreeFacts` on the
-	// correct type, as `CompositeNodeBase` does not, itself, inherit from `Node`.
+	// method to cache the result.
 	return self.computeSubtreeFacts()
 }
 
@@ -1215,7 +1200,7 @@ func (node *NodeDefault) computeSubtreeFacts() SubtreeFacts {
 }
 
 func (node *NodeDefault) propagateSubtreeFacts() SubtreeFacts {
-	return node.data.SubtreeFacts() & ^SubtreeExclusionsNode
+	return node.AsNode().SubtreeFacts() & ^SubtreeExclusionsNode
 }
 
 // NodeBase
@@ -1570,7 +1555,7 @@ func (node *Node) EagerJSDoc(file *SourceFile) []*Node {
 
 // CompositeBase
 
-func (node *CompositeBase) subtreeFactsWorker(self nodeData) SubtreeFacts {
+func (node *CompositeBase) subtreeFactsWorker(self *Node) SubtreeFacts {
 	// computeSubtreeFacts() is expected to be idempotent, so races will only impact time, not correctness.
 	facts := SubtreeFacts(node.facts.Load())
 	if facts&SubtreeFactsComputed == 0 {

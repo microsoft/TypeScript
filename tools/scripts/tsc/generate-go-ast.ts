@@ -358,6 +358,27 @@ function concreteNodeMemberAccess(m: MemberInfo): string {
     return isNodeFlagsMember(m) ? `node.AsNode().${m.name}` : `node.${m.name}`;
 }
 
+function canonicalNodesByKind(): Map<NodeType, string[]> {
+    const nodeByKind = new Map<string, NodeType>();
+    for (const node of api.nodes()) {
+        for (const kind of node.allKinds()) {
+            nodeByKind.set(kind.formatGoConstant(), node);
+        }
+    }
+
+    const kindsByNode = new Map<NodeType, string[]>();
+    for (const [kind, node] of nodeByKind) {
+        const kinds = kindsByNode.get(node);
+        if (kinds) {
+            kinds.push(kind);
+        }
+        else {
+            kindsByNode.set(node, [kind]);
+        }
+    }
+    return kindsByNode;
+}
+
 function emitNewFactory(
     w: CodeWriter,
     funcName: string,
@@ -420,7 +441,39 @@ function generateNewFactory(w: CodeWriter, node: NodeType) {
     const members = schemaMembers(node);
     const kindMember = members.find(m => m.isKindParam());
     const nodeFlagsMembers = members.filter(m => isNodeFlagsMember(m));
-    emitNewFactory(w, `New${node.name}`, node.syntaxKindName, structName, node, members, kindMember, nodeFlagsMembers);
+    if (node.name === "Token") {
+        const tokenKinds = new Set(node.allKinds().map(kind => kind.formatGoConstant()));
+        w.write("func (f *NodeFactory) NewToken(kind TokenSyntaxKind) *Node {");
+        w.push();
+        w.write("switch kind {");
+        for (const [canonicalNode, kinds] of canonicalNodesByKind()) {
+            if (canonicalNode === node) continue;
+            const overlappingKinds = kinds.filter(kind => tokenKinds.has(kind));
+            if (overlappingKinds.length === 0) continue;
+            w.write(`case ${overlappingKinds.join(", ")}:`);
+            w.push();
+            if (canonicalNode.arena) {
+                w.write(`data := f.${api.uncapitalize(canonicalNode.name)}Arena.New()`);
+            }
+            else {
+                w.write(`data := &${canonicalNode.name}{}`);
+            }
+            w.write("return f.newNode(kind, data.AsNode(), data)");
+            w.pop();
+        }
+        w.write("default:");
+        w.push();
+        w.write("data := f.tokenArena.New()");
+        w.write("return f.newNode(kind, data.AsNode(), data)");
+        w.pop();
+        w.write("}");
+        w.pop();
+        w.write("}");
+        w.write("");
+    }
+    else {
+        emitNewFactory(w, `New${node.name}`, node.syntaxKindName, structName, node, members, kindMember, nodeFlagsMembers);
+    }
     for (const alias of node.kindAliases) {
         emitNewFactory(w, `New${alias}`, alias, structName, node, members, kindMember, nodeFlagsMembers);
     }
@@ -574,14 +627,12 @@ function hasForEachChild(node: NodeType): boolean {
 // Generates a (*Node).ForEachChild method that dispatches on node.Kind to the
 // concrete node type's ForEachChild method.
 //
-// This deliberately avoids calling node.data.ForEachChild(v) through the
-// nodeData interface. An interface (or other indirect) call is opaque to escape
-// analysis, which must then assume the visitor `v` escapes; that forces caller
-// closures — and any locals they capture — onto the heap. Dispatching through a
-// Kind switch to a statically-resolved concrete method lets escape analysis
-// prove the visitor does not escape, keeping caller closures on the stack. The
-// integer switch over Kind also compiles to a jump table, making dispatch
-// cheaper than the interface call it replaces.
+// An indirect call is opaque to escape analysis, which must then assume the
+// visitor `v` escapes; that forces caller closures — and any locals they
+// capture — onto the heap. Dispatching through a Kind switch to a
+// statically-resolved concrete method lets escape analysis prove the visitor
+// does not escape, keeping caller closures on the stack. The integer switch
+// over Kind also compiles to a jump table.
 //
 // Kinds whose node has no children fall through to `default` and return false,
 // matching NodeDefault.ForEachChild.
@@ -651,7 +702,72 @@ function generateCloneDispatch(w: CodeWriter) {
     w.write("");
 }
 
-const NODE_DATA_ACCESSORS: { method: string; ret: string; base: string; }[] = [
+function generateSubtreeFactsDispatch(w: CodeWriter) {
+    w.write("func (n *Node) SubtreeFacts() SubtreeFacts {");
+    w.push();
+    w.write("switch n.Kind {");
+    for (const [node, kinds] of canonicalNodesByKind()) {
+        w.write(`case ${kinds.join(", ")}:`);
+        w.push();
+        if (transitiveBaseKeys(node).has("CompositeBase")) {
+            w.write(`return n.data.(*${node.name}).subtreeFactsWorker(n)`);
+        }
+        else {
+            w.write("return n.computeSubtreeFacts()");
+        }
+        w.pop();
+    }
+    w.write("default:");
+    w.push();
+    w.write("return SubtreeFactsNone");
+    w.pop();
+    w.write("}");
+    w.pop();
+    w.write("}");
+    w.write("");
+}
+
+function generateComputeSubtreeFactsDispatch(w: CodeWriter) {
+    w.write("func (n *Node) computeSubtreeFacts() SubtreeFacts {");
+    w.push();
+    w.write("switch n.Kind {");
+    for (const [node, kinds] of canonicalNodesByKind()) {
+        w.write(`case ${kinds.join(", ")}:`);
+        w.push();
+        w.write(`return n.data.(*${node.name}).computeSubtreeFacts()`);
+        w.pop();
+    }
+    w.write("default:");
+    w.push();
+    w.write("return SubtreeFactsNone");
+    w.pop();
+    w.write("}");
+    w.pop();
+    w.write("}");
+    w.write("");
+}
+
+function generatePropagateSubtreeFactsDispatch(w: CodeWriter) {
+    w.write("func (n *Node) propagateSubtreeFacts() SubtreeFacts {");
+    w.push();
+    w.write("switch n.Kind {");
+    for (const [node, kinds] of canonicalNodesByKind()) {
+        w.write(`case ${kinds.join(", ")}:`);
+        w.push();
+        w.write(`return n.data.(*${node.name}).propagateSubtreeFacts()`);
+        w.pop();
+    }
+    w.write("default:");
+    w.push();
+    w.write("return SubtreeFactsNone");
+    w.pop();
+    w.write("}");
+    w.pop();
+    w.write("}");
+    w.write("");
+}
+
+const NODE_ACCESSORS: { method: string; ret: string; base: string; }[] = [
     { method: "FlowNodeData", ret: "*FlowNodeBase", base: "FlowNodeBase" },
     { method: "DeclarationData", ret: "*DeclarationBase", base: "DeclarationBase" },
     { method: "ExportableData", ret: "*ExportableBase", base: "ExportableBase" },
@@ -677,8 +793,8 @@ function transitiveBaseKeys(node: NodeType): Set<string> {
     return seen;
 }
 
-function generateNodeDataAccessors(w: CodeWriter) {
-    for (const { method, ret, base } of NODE_DATA_ACCESSORS) {
+function generateNodeAccessors(w: CodeWriter) {
+    for (const { method, ret, base } of NODE_ACCESSORS) {
         w.write(`func (n *Node) ${method}() ${ret} {`);
         w.push();
         w.write("switch n.Kind {");
@@ -704,30 +820,6 @@ function generateNodeDataAccessors(w: CodeWriter) {
 
 function hasMember(node: NodeType, name: string): boolean {
     return schemaMembers(node).some(member => member.name === name);
-}
-
-function canonicalNodesByKind(): Map<NodeType, string[]> {
-    // Token's kind union overlaps the concrete identifier, literal, and keyword
-    // nodes. Later schema entries are the canonical representation for those
-    // kinds.
-    const nodeByKind = new Map<string, NodeType>();
-    for (const node of api.nodes()) {
-        for (const kind of node.allKinds()) {
-            nodeByKind.set(kind.formatGoConstant(), node);
-        }
-    }
-
-    const kindsByNode = new Map<NodeType, string[]>();
-    for (const [kind, node] of nodeByKind) {
-        const kinds = kindsByNode.get(node);
-        if (kinds) {
-            kinds.push(kind);
-        }
-        else {
-            kindsByNode.set(node, [kind]);
-        }
-    }
-    return kindsByNode;
 }
 
 function generateNameDispatch(w: CodeWriter) {
@@ -1157,12 +1249,21 @@ function generate(): string {
     w.write("");
     generateCloneDispatch(w);
 
-    // nodeData accessor dispatch
+    // Subtree facts dispatch
     w.write("// ──────────────────────────────────────────────────────────────────────");
-    w.write("// nodeData accessor dispatch");
+    w.write("// Subtree facts dispatch");
     w.write("// ──────────────────────────────────────────────────────────────────────");
     w.write("");
-    generateNodeDataAccessors(w);
+    generateSubtreeFactsDispatch(w);
+    generateComputeSubtreeFactsDispatch(w);
+    generatePropagateSubtreeFactsDispatch(w);
+
+    // Node accessor dispatch
+    w.write("// ──────────────────────────────────────────────────────────────────────");
+    w.write("// Node accessor dispatch");
+    w.write("// ──────────────────────────────────────────────────────────────────────");
+    w.write("");
+    generateNodeAccessors(w);
 
     // Common node accessor dispatch
     w.write("// ──────────────────────────────────────────────────────────────────────");
