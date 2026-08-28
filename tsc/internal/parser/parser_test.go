@@ -308,6 +308,66 @@ function foo(options) {}`
 	assert.Equal(t, scanner.GetTokenPosOfNode(typeNode, file, false /*includeJSDoc*/), strings.Index(sourceText, "{{")+1)
 }
 
+func TestJSDocAugmentsTypeArgumentsReparse(t *testing.T) {
+	t.Parallel()
+	sourceText := `/** @template T */
+class A {
+  static extend() {
+    return this;
+  }
+}
+
+/** @extends {A<string>} */
+class B extends A.extend() {}
+
+/** @extends {Other<string>} */
+class C extends A.extend() {}`
+	opts := ast.SourceFileParseOptions{
+		FileName: "/index.js",
+		Path:     "/index.js",
+	}
+
+	file := parser.ParseSourceFile(opts, sourceText, core.ScriptKindJS)
+	statements := file.Statements.Nodes
+	assert.Equal(t, len(statements), 3)
+
+	classB := statements[1]
+	assert.Assert(t, ast.IsClassDeclaration(classB))
+
+	baseType := ast.GetClassExtendsHeritageElement(classB)
+	assert.Assert(t, baseType != nil)
+	assert.Assert(t, ast.IsCallExpression(baseType.Expression()))
+
+	typeArguments := baseType.TypeArguments()
+	assert.Equal(t, len(typeArguments), 1)
+
+	typeArgument := typeArguments[0]
+	assert.Equal(t, typeArgument.Kind, ast.KindStringKeyword)
+	assert.Assert(t, typeArgument.Flags&ast.NodeFlagsReparsed != 0)
+
+	jsDocs := classB.JSDoc(file)
+	assert.Equal(t, len(jsDocs), 1)
+
+	tags := jsDocs[0].AsJSDoc().Tags
+	assert.Assert(t, tags != nil)
+	assert.Equal(t, len(tags.Nodes), 1)
+
+	tag := tags.Nodes[0]
+	assert.Assert(t, ast.IsJSDocAugmentsTag(tag))
+
+	sourceTypeArguments := tag.ClassName().TypeArguments()
+	assert.Equal(t, len(sourceTypeArguments), 1)
+	assert.Equal(t, ast.GetReparsedNodeForNode(sourceTypeArguments[0]), typeArgument)
+
+	classC := statements[2]
+	assert.Assert(t, ast.IsClassDeclaration(classC))
+
+	mismatchedBaseType := ast.GetClassExtendsHeritageElement(classC)
+	assert.Assert(t, mismatchedBaseType != nil)
+	assert.Assert(t, ast.IsCallExpression(mismatchedBaseType.Expression()))
+	assert.Equal(t, len(mismatchedBaseType.TypeArguments()), 0)
+}
+
 func TestSourceFilePositionMapWithNonASCIIStringLiteral(t *testing.T) {
 	t.Parallel()
 	sourceText := `const x = "─";
