@@ -208,10 +208,6 @@ func (n *Node) IterChildren() iter.Seq[*Node] {
 		})
 	}
 }
-func (n *Node) Clone(f NodeFactoryCoercible) *Node      { return n.data.Clone(f) }
-func (n *Node) VisitEachChild(v *NodeVisitor) *Node     { return n.data.VisitEachChild(v) }
-func (n *Node) Name() *DeclarationName                  { return n.data.Name() }
-func (n *Node) Modifiers() *ModifierList                { return n.data.Modifiers() }
 func (n *Node) ParameterList() *ParameterList           { return n.FunctionLikeData().Parameters }
 func (n *Node) Parameters() []*ParameterDeclarationNode { return n.ParameterList().Nodes }
 func (n *Node) SubtreeFacts() SubtreeFacts              { return n.data.SubtreeFacts() }
@@ -227,8 +223,7 @@ func (n *Node) Decorators() []*Node {
 
 type MutableNode Node
 
-func (n *Node) AsMutable() *MutableNode                     { return (*MutableNode)(n) }
-func (n *MutableNode) SetModifiers(modifiers *ModifierList) { n.data.setModifiers(modifiers) }
+func (n *Node) AsMutable() *MutableNode { return (*MutableNode)(n) }
 
 func (n *Node) Symbol() *Symbol {
 	data := n.DeclarationData()
@@ -1172,11 +1167,6 @@ func (n *Node) AsFlowReduceLabelData() *FlowReduceLabelData {
 // NodeData
 
 type nodeData interface {
-	VisitEachChild(v *NodeVisitor) *Node
-	Clone(v NodeFactoryCoercible) *Node
-	Name() *DeclarationName
-	Modifiers() *ModifierList
-	setModifiers(modifiers *ModifierList)
 	SubtreeFacts() SubtreeFacts
 	computeSubtreeFacts() SubtreeFacts
 	subtreeFactsWorker(self nodeData) SubtreeFacts

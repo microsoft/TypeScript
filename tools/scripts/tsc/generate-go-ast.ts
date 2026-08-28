@@ -608,6 +608,49 @@ function generateForEachChildDispatch(w: CodeWriter) {
     w.write("");
 }
 
+function generateVisitEachChildDispatch(w: CodeWriter) {
+    w.write("func (n *Node) VisitEachChild(v *NodeVisitor) *Node {");
+    w.push();
+    w.write("switch n.Kind {");
+    for (const node of api.nodes()) {
+        if (!hasForEachChild(node)) continue;
+        const kinds = node.allKinds().map(kind => kind.formatGoConstant());
+        if (kinds.length === 0) continue;
+        w.write(`case ${kinds.join(", ")}:`);
+        w.push();
+        w.write(`return n.data.(*${node.name}).VisitEachChild(v)`);
+        w.pop();
+    }
+    w.write("default:");
+    w.push();
+    w.write("return n");
+    w.pop();
+    w.write("}");
+    w.pop();
+    w.write("}");
+    w.write("");
+}
+
+function generateCloneDispatch(w: CodeWriter) {
+    w.write("func (n *Node) Clone(f NodeFactoryCoercible) *Node {");
+    w.push();
+    w.write("switch n.Kind {");
+    for (const [node, kinds] of canonicalNodesByKind()) {
+        w.write(`case ${kinds.join(", ")}:`);
+        w.push();
+        w.write(`return n.data.(*${node.name}).Clone(f)`);
+        w.pop();
+    }
+    w.write("default:");
+    w.push();
+    w.write("return nil");
+    w.pop();
+    w.write("}");
+    w.pop();
+    w.write("}");
+    w.write("");
+}
+
 const NODE_DATA_ACCESSORS: { method: string; ret: string; base: string; }[] = [
     { method: "FlowNodeData", ret: "*FlowNodeBase", base: "FlowNodeBase" },
     { method: "DeclarationData", ret: "*DeclarationBase", base: "DeclarationBase" },
@@ -657,6 +700,99 @@ function generateNodeDataAccessors(w: CodeWriter) {
         w.write("}");
         w.write("");
     }
+}
+
+function hasMember(node: NodeType, name: string): boolean {
+    return schemaMembers(node).some(member => member.name === name);
+}
+
+function canonicalNodesByKind(): Map<NodeType, string[]> {
+    // Token's kind union overlaps the concrete identifier, literal, and keyword
+    // nodes. Later schema entries are the canonical representation for those
+    // kinds.
+    const nodeByKind = new Map<string, NodeType>();
+    for (const node of api.nodes()) {
+        for (const kind of node.allKinds()) {
+            nodeByKind.set(kind.formatGoConstant(), node);
+        }
+    }
+
+    const kindsByNode = new Map<NodeType, string[]>();
+    for (const [kind, node] of nodeByKind) {
+        const kinds = kindsByNode.get(node);
+        if (kinds) {
+            kinds.push(kind);
+        }
+        else {
+            kindsByNode.set(node, [kind]);
+        }
+    }
+    return kindsByNode;
+}
+
+function generateNameDispatch(w: CodeWriter) {
+    w.write("func (n *Node) Name() *DeclarationName {");
+    w.push();
+    w.write("switch n.Kind {");
+    for (const node of api.nodes()) {
+        if (!hasMember(node, "name")) continue;
+        const kinds = node.allKinds().map(kind => kind.formatGoConstant());
+        if (kinds.length === 0) continue;
+        w.write(`case ${kinds.join(", ")}:`);
+        w.push();
+        w.write(`return n.data.(*${node.name}).Name()`);
+        w.pop();
+    }
+    w.write("default:");
+    w.push();
+    w.write("return nil");
+    w.pop();
+    w.write("}");
+    w.pop();
+    w.write("}");
+    w.write("");
+}
+
+function generateModifiersDispatch(w: CodeWriter) {
+    w.write("func (n *Node) Modifiers() *ModifierList {");
+    w.push();
+    w.write("switch n.Kind {");
+    for (const node of api.nodes()) {
+        if (!hasMember(node, "modifiers")) continue;
+        const kinds = node.allKinds().map(kind => kind.formatGoConstant());
+        if (kinds.length === 0) continue;
+        w.write(`case ${kinds.join(", ")}:`);
+        w.push();
+        w.write(`return n.data.(*${node.name}).Modifiers()`);
+        w.pop();
+    }
+    w.write("default:");
+    w.push();
+    w.write("return nil");
+    w.pop();
+    w.write("}");
+    w.pop();
+    w.write("}");
+    w.write("");
+}
+
+function generateSetModifiersDispatch(w: CodeWriter) {
+    w.write("func (n *MutableNode) SetModifiers(modifiers *ModifierList) {");
+    w.push();
+    w.write("switch n.Kind {");
+    for (const node of api.nodes()) {
+        if (!hasMember(node, "modifiers")) continue;
+        const kinds = node.allKinds().map(kind => kind.formatGoConstant());
+        if (kinds.length === 0) continue;
+        w.write(`case ${kinds.join(", ")}:`);
+        w.push();
+        w.write(`n.data.(*${node.name}).setModifiers(modifiers)`);
+        w.pop();
+    }
+    w.write("}");
+    w.pop();
+    w.write("}");
+    w.write("");
 }
 
 // ── Generate VisitEachChild() ──────────────────────────────────────────────
@@ -1007,12 +1143,35 @@ function generate(): string {
     w.write("");
     generateForEachChildDispatch(w);
 
+    // VisitEachChild dispatch
+    w.write("// ──────────────────────────────────────────────────────────────────────");
+    w.write("// VisitEachChild dispatch");
+    w.write("// ──────────────────────────────────────────────────────────────────────");
+    w.write("");
+    generateVisitEachChildDispatch(w);
+
+    // Clone dispatch
+    w.write("// ──────────────────────────────────────────────────────────────────────");
+    w.write("// Clone dispatch");
+    w.write("// ──────────────────────────────────────────────────────────────────────");
+    w.write("");
+    generateCloneDispatch(w);
+
     // nodeData accessor dispatch
     w.write("// ──────────────────────────────────────────────────────────────────────");
     w.write("// nodeData accessor dispatch");
     w.write("// ──────────────────────────────────────────────────────────────────────");
     w.write("");
     generateNodeDataAccessors(w);
+
+    // Common node accessor dispatch
+    w.write("// ──────────────────────────────────────────────────────────────────────");
+    w.write("// Common node accessor dispatch");
+    w.write("// ──────────────────────────────────────────────────────────────────────");
+    w.write("");
+    generateNameDispatch(w);
+    generateModifiersDispatch(w);
+    generateSetModifiersDispatch(w);
 
     // As*() casts
     w.write("// ──────────────────────────────────────────────────────────────────────");
