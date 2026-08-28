@@ -225,6 +225,17 @@ func IsTupleType(t *Type) bool {
 	return isTupleType(t)
 }
 
+// IsTupleTypeReference reports whether the provided type is a type reference
+// whose target is a tuple type.
+func IsTupleTypeReference(t *Type) bool {
+	return isTupleType(t)
+}
+
+// IsTupleTarget reports whether the provided type owns tuple metadata.
+func IsTupleTarget(t *Type) bool {
+	return t != nil && t.objectFlags&ObjectFlagsTuple != 0
+}
+
 func (c *Checker) IsArrayType(t *Type) bool {
 	return c.isArrayType(t)
 }

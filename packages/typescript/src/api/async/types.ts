@@ -107,7 +107,9 @@ export interface Type {
     isBooleanLiteralType(): this is BooleanLiteralType;
     /** Whether this type is a type reference */
     isTypeReference(): this is TypeReference;
-    /** Whether this type is a tuple type */
+    /** Whether this type is a reference to a tuple type */
+    isTupleTypeReference(): this is TupleTypeReference;
+    /** Whether this type owns tuple metadata */
     isTupleType(): this is TupleType;
     /** Whether this type is an index type (`keyof T`) */
     isIndexType(): this is IndexType;
@@ -175,6 +177,12 @@ export interface ObjectType extends Type {
 export interface TypeReference extends ObjectType {
     /** Get the generic target type (e.g. Array for Array<string>) */
     getTarget(): Promise<Type>;
+}
+
+/** References to tuple types */
+export interface TupleTypeReference extends TypeReference {
+    /** Get the tuple type that describes this reference's shape */
+    getTarget(): Promise<TupleType>;
 }
 
 /** Interface types — classes and interfaces (ObjectFlags.ClassOrInterface) */

@@ -125,6 +125,7 @@ import type {
     TemplateLiteralType,
     ThisTypePredicate,
     TupleType,
+    TupleTypeReference,
     Type,
     TypeParameter,
     TypePredicate,
@@ -187,6 +188,7 @@ export type {
     TimingAccumulators,
     TimingInfo,
     TupleType,
+    TupleTypeReference,
     Type,
     TypeAcquisition,
     TypeParameter,
@@ -1820,12 +1822,12 @@ export class Checker {
         });
     }
 
+    async isTupleTypeReference(type: Type): Promise<boolean> {
+        return type.isTupleTypeReference();
+    }
+
     async isTupleType(type: Type): Promise<boolean> {
-        return this.client.apiRequest("isTupleType", {
-            snapshot: this.snapshotId,
-            project: this.project.id,
-            type: type.id,
-        });
+        return type.isTupleType();
     }
 
     /**
@@ -2334,6 +2336,7 @@ class TypeObject implements Type {
     readonly freshType!: number;
     readonly regularType!: number;
     readonly target!: number;
+    private readonly tupleTypeReference: boolean;
     readonly typeParameters!: readonly number[];
     readonly outerTypeParameters!: readonly number[];
     readonly localTypeParameters!: readonly number[];
@@ -2389,14 +2392,20 @@ class TypeObject implements Type {
         if (data.freshType !== undefined) this.freshType = data.freshType;
         if (data.regularType !== undefined) this.regularType = data.regularType;
         if (data.target !== undefined) this.target = data.target;
+        this.tupleTypeReference = data.isTupleTypeReference ?? false;
         this.typeParameters = data.typeParameters ?? [];
         this.outerTypeParameters = data.outerTypeParameters ?? [];
         this.localTypeParameters = data.localTypeParameters ?? [];
         this.aliasTypeArguments = data.aliasTypeArguments ?? [];
         if (data.aliasSymbol !== undefined) this.aliasSymbol = data.aliasSymbol;
-        if (data.elementFlags !== undefined) this.elementFlags = data.elementFlags;
-        if (data.fixedLength !== undefined) this.fixedLength = data.fixedLength;
-        if (data.readonly !== undefined) this.readonly = data.readonly;
+        if (data.fixedLength !== undefined) {
+            if (data.readonly === undefined) {
+                throw new Error("Tuple type response is missing readonly metadata");
+            }
+            this.elementFlags = data.elementFlags ?? [];
+            this.fixedLength = data.fixedLength;
+            this.readonly = data.readonly;
+        }
         if (data.texts !== undefined) this.texts = data.texts;
         if (data.objectType !== undefined) this.objectType = data.objectType;
         if (data.indexType !== undefined) this.indexType = data.indexType;
@@ -2660,8 +2669,12 @@ class TypeObject implements Type {
         return isTypeReference(this);
     }
 
+    isTupleTypeReference(): this is TupleTypeReference {
+        return this.tupleTypeReference;
+    }
+
     isTupleType(): this is TupleType {
-        return isTupleType(this);
+        return this.fixedLength !== undefined;
     }
 
     isIndexType(): this is IndexType {
@@ -2747,8 +2760,12 @@ export function isTypeReference(type: Type): type is TypeReference {
     return isObjectType(type) && (type.objectFlags & ObjectFlags.Reference) !== 0;
 }
 
+export function isTupleTypeReference(type: Type): type is TupleTypeReference {
+    return type.isTupleTypeReference();
+}
+
 export function isTupleType(type: Type): type is TupleType {
-    return isObjectType(type) && (type.objectFlags & ObjectFlags.Tuple) !== 0;
+    return type.isTupleType();
 }
 
 export function isIndexType(type: Type): type is IndexType {
