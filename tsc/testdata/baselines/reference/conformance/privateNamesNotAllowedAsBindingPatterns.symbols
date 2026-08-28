@@ -1,0 +1,18 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNamesNotAllowedAsBindingPatterns.ts] ////
+
+=== privateNamesNotAllowedAsBindingPatterns.ts ===
+class A {
+>A : Symbol(A, Decl(privateNamesNotAllowedAsBindingPatterns.ts, 0, 0))
+
+    #foo = 1;
+>#foo : Symbol(A.#foo, Decl(privateNamesNotAllowedAsBindingPatterns.ts, 0, 9))
+
+    bar() {
+>bar : Symbol(A.bar, Decl(privateNamesNotAllowedAsBindingPatterns.ts, 1, 13))
+
+        const { #foo: foo } = this;
+>foo : Symbol(foo, Decl(privateNamesNotAllowedAsBindingPatterns.ts, 3, 15))
+>this : Symbol(A, Decl(privateNamesNotAllowedAsBindingPatterns.ts, 0, 0))
+    }
+}
+

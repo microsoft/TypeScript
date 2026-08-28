@@ -8555,5 +8555,9 @@
     "'{0}' is not a valid meta-property for keyword 'import'. Did you mean 'meta' or 'defer'?": {
         "category": "Error",
         "code": 18061
+    },
+    "Private identifiers cannot be used as binding patterns.": {
+        "category": "Error",
+        "code": 18064
     }
 }

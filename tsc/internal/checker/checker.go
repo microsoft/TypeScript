@@ -5902,6 +5902,11 @@ func (c *Checker) checkVariableLikeDeclaration(node *ast.Node) {
 	}
 	if ast.IsBindingElement(node) {
 		propName := node.PropertyName()
+
+		if propName != nil && ast.IsPrivateIdentifier(propName) {
+			c.grammarErrorOnNode(propName, diagnostics.Private_identifiers_cannot_be_used_as_binding_patterns)
+		}
+
 		if propName != nil && ast.IsIdentifier(node.Name()) && ast.IsPartOfParameterDeclaration(node) && ast.NodeIsMissing(ast.GetContainingFunction(node).Body()) {
 			// type F = ({a: string}) => void;
 			//               ^^^^^^

@@ -1,0 +1,13 @@
+privateNamesNotAllowedAsBindingPatterns.ts(4,17): error TS18064: Private identifiers cannot be used as binding patterns.
+
+
+==== privateNamesNotAllowedAsBindingPatterns.ts (1 errors) ====
+    class A {
+        #foo = 1;
+        bar() {
+            const { #foo: foo } = this;
+                    ~~~~
+!!! error TS18064: Private identifiers cannot be used as binding patterns.
+        }
+    }
+    
