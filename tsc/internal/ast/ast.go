@@ -1154,38 +1154,11 @@ func (n *Node) AsFlowReduceLabelData() *FlowReduceLabelData {
 	return n.data.(*FlowReduceLabelData)
 }
 
-// NodeDefault
-
+// NodeDefault keeps Node methods one promotion level below fields such as Text,
+// Body, TypeParameters, and Parameters supplied by bases embedded alongside
+// NodeBase. Embedding Node directly in NodeBase makes those selectors ambiguous.
 type NodeDefault struct {
 	Node
-}
-
-func (node *NodeDefault) AsNode() *Node               { return &node.Node }
-func (node *NodeDefault) ForEachChild(v Visitor) bool { return false }
-
-func (node *NodeDefault) VisitEachChild(v *NodeVisitor) *Node                   { return node.AsNode() }
-func (node *NodeDefault) Clone(v NodeFactoryCoercible) *Node                    { return nil }
-func (node *NodeDefault) Name() *DeclarationName                                { return nil }
-func (node *NodeDefault) Modifiers() *ModifierList                              { return nil }
-func (node *NodeDefault) setModifiers(modifiers *ModifierList)                  {}
-func (node *NodeDefault) FlowNodeData() *FlowNodeBase                           { return nil }
-func (node *NodeDefault) DeclarationData() *DeclarationBase                     { return nil }
-func (node *NodeDefault) ExportableData() *ExportableBase                       { return nil }
-func (node *NodeDefault) LocalsContainerData() *LocalsContainerBase             { return nil }
-func (node *NodeDefault) FunctionLikeData() *FunctionLikeBase                   { return nil }
-func (node *NodeDefault) ClassLikeData() *ClassLikeBase                         { return nil }
-func (node *NodeDefault) BodyData() *BodyBase                                   { return nil }
-func (node *NodeDefault) LiteralLikeData() *LiteralLikeNodeBase                 { return nil }
-func (node *NodeDefault) TemplateLiteralLikeData() *TemplateLiteralLikeNodeBase { return nil }
-func (node *NodeDefault) SubtreeFacts() SubtreeFacts {
-	return node.AsNode().SubtreeFacts()
-}
-
-func (node *NodeDefault) subtreeFactsWorker(self *Node) SubtreeFacts {
-	// To avoid excessive conditional checks, the default implementation of subtreeFactsWorker directly invokes
-	// computeSubtreeFacts. More complex nodes should implement CompositeNodeBase, which overrides this
-	// method to cache the result.
-	return self.computeSubtreeFacts()
 }
 
 func (node *NodeDefault) computeSubtreeFacts() SubtreeFacts {
@@ -1195,8 +1168,6 @@ func (node *NodeDefault) computeSubtreeFacts() SubtreeFacts {
 func (node *NodeDefault) propagateSubtreeFacts() SubtreeFacts {
 	return node.AsNode().SubtreeFacts() & ^SubtreeExclusionsNode
 }
-
-// NodeBase
 
 type NodeBase struct {
 	NodeDefault
