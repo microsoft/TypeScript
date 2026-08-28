@@ -1,0 +1,10 @@
+// === findAllReferences ===
+// === /main.ts ===
+// import { [|component|] } from "component";
+// /*FIND ALL REFS*/[|component|].label;
+// 
+
+// === /node_modules/component/component.vue ===
+// export interface ComponentProps { emoji: "😀"; label: string; }
+// export declare const [|component|]: ComponentProps;
+// 

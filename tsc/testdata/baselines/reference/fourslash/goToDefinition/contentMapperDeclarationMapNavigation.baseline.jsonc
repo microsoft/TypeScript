@@ -1,0 +1,10 @@
+// === goToDefinition ===
+// === /node_modules/component/component.vue ===
+// export interface ComponentProps { emoji: "😀"; label: string; }
+// export declare const [|component|]: ComponentProps;
+// 
+
+// === /main.ts ===
+// import { component } from "component";
+// /*GOTO DEF*/[|component|].label;
+// 

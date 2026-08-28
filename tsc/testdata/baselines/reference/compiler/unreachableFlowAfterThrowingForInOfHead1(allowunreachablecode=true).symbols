@@ -1,0 +1,16 @@
+//// [tests/cases/compiler/unreachableFlowAfterThrowingForInOfHead1.ts] ////
+
+=== unreachableFlowAfterThrowingForInOfHead1.ts ===
+try {
+    for (const x of (function () { throw "1"; })()) {
+>x : Symbol(x, Decl(unreachableFlowAfterThrowingForInOfHead1.ts, 1, 14))
+
+        console.log("1");
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+    }
+}
+catch (e) { }
+>e : Symbol(e, Decl(unreachableFlowAfterThrowingForInOfHead1.ts, 5, 7))
+

@@ -67,9 +67,9 @@ function reducer(action: ReducerAction): void {
 >ReducerAction : Symbol(ReducerAction, Decl(recursiveArrayNotCircular.ts, 7, 1))
 
     switch(action.type) {
->action.type : Symbol(type, Decl(recursiveArrayNotCircular.ts, 0, 53), Decl(recursiveArrayNotCircular.ts, 0, 53), Decl(recursiveArrayNotCircular.ts, 0, 53), Decl(recursiveArrayNotCircular.ts, 0, 53), Decl(recursiveArrayNotCircular.ts, 0, 53))
+>action.type : Symbol(type, Decl(recursiveArrayNotCircular.ts, 0, 53))
 >action : Symbol(action, Decl(recursiveArrayNotCircular.ts, 19, 17))
->type : Symbol(type, Decl(recursiveArrayNotCircular.ts, 0, 53), Decl(recursiveArrayNotCircular.ts, 0, 53), Decl(recursiveArrayNotCircular.ts, 0, 53), Decl(recursiveArrayNotCircular.ts, 0, 53), Decl(recursiveArrayNotCircular.ts, 0, 53))
+>type : Symbol(type, Decl(recursiveArrayNotCircular.ts, 0, 53))
 
         case ActionType.Bar:
 >ActionType.Bar : Symbol(ActionType.Bar, Decl(recursiveArrayNotCircular.ts, 3, 8))
@@ -90,9 +90,9 @@ function reducer(action: ReducerAction): void {
 
             const y: boolean = action.payload;
 >y : Symbol(y, Decl(recursiveArrayNotCircular.ts, 25, 17))
->action.payload : Symbol(payload, Decl(recursiveArrayNotCircular.ts, 0, 62), Decl(recursiveArrayNotCircular.ts, 0, 62))
+>action.payload : Symbol(payload, Decl(recursiveArrayNotCircular.ts, 0, 62))
 >action : Symbol(action, Decl(recursiveArrayNotCircular.ts, 19, 17))
->payload : Symbol(payload, Decl(recursiveArrayNotCircular.ts, 0, 62), Decl(recursiveArrayNotCircular.ts, 0, 62))
+>payload : Symbol(payload, Decl(recursiveArrayNotCircular.ts, 0, 62))
 
             break;
         case ActionType.Foo:

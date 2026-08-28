@@ -39,6 +39,10 @@ func (p *Parser) addTransformedReparse(newNode *ast.Node, old *ast.Node) *ast.No
 }
 
 func (p *Parser) checkNonIdentifierName(name *ast.Node) *ast.Node {
+	// Handles the case of anonymous functions
+	if name == nil {
+		return nil
+	}
 	if ast.IsIdentifier(name) && !scanner.IsValidIdentifier(name.AsIdentifier().Text) {
 		errLoc := name.Loc
 		if errLoc.Len() == 0 { // missing name, emit error on the character before the missing name node

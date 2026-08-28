@@ -1,0 +1,5 @@
+// === goToDefinition ===
+// === /main.ts ===
+// import { value } from "./disabled.dup";
+// export const result = val/*GOTO DEF*/ue;
+// 

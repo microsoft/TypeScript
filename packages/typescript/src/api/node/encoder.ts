@@ -267,7 +267,7 @@ export function encodeNode(node: Node): Uint8Array {
             0, // next
             parentIndex,
             list.length, // data for NodeList is its length
-            0, // flags
+            list.hasTrailingComma ? 1 : 0, // NodeLists have no AST flags; this slot is reused for hasTrailingComma
         );
 
         const saveParentIndex = parentIndex;

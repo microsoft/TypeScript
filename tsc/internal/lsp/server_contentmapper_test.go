@@ -165,6 +165,10 @@ export const title = "Profile";
 			assert.Assert(t, selector != nil && len(*selector) == 1)
 			assert.Equal(t, *(*selector)[0].Pattern.Pattern.Pattern, "**/*.vue")
 		}
+		if registration.Id == "content-mapper-code-action" {
+			assert.Assert(t, registration.RegisterOptions != nil && registration.RegisterOptions.TextDocumentCodeAction != nil)
+			assert.DeepEqual(t, *registration.RegisterOptions.TextDocumentCodeAction.CodeActionKinds, expectedCodeActionKinds())
+		}
 	}
 	for id, found := range expectedMapperRegistrations {
 		assert.Assert(t, found, "expected %s registration for .vue", id)

@@ -1,0 +1,60 @@
+// === vsFindAllReferences ===
+// === /main.ts ===
+// import { [|value|] } from "./disabled.dup";
+// export const result = [|val/*FIND ALL REFS*/ue|];
+// 
+
+[
+  {
+    "_vs_id": 0,
+    "_vs_kind": [
+      17
+    ],
+    "_vs_location": {
+      "uri": "file:///main.ts",
+      "range": {
+        "start": {
+          "line": 0,
+          "character": 9
+        },
+        "end": {
+          "line": 0,
+          "character": 14
+        }
+      }
+    },
+    "_vs_definitionText": {
+      "Runs": [
+        {
+          "ClassificationTypeName": "text",
+          "Text": "(alias) const value: 1",
+          "_vs_type": "ClassifiedTextRun"
+        }
+      ],
+      "_vs_type": "ClassifiedTextElement"
+    },
+    "_vs_projectName": "/tsconfig.json",
+    "_vs_containingType": ""
+  },
+  {
+    "_vs_id": 1,
+    "_vs_definitionId": 0,
+    "_vs_kind": [
+      3
+    ],
+    "_vs_location": {
+      "uri": "file:///main.ts",
+      "range": {
+        "start": {
+          "line": 1,
+          "character": 22
+        },
+        "end": {
+          "line": 1,
+          "character": 27
+        }
+      }
+    },
+    "_vs_projectName": "/tsconfig.json"
+  }
+]

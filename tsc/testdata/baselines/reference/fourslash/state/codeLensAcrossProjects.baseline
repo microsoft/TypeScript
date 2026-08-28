@@ -211,7 +211,8 @@ Config File Names::
     },
     "data": {
       "kind": "references",
-      "uri": "file:///projects/container/lib/index.ts"
+      "uri": "file:///projects/container/lib/index.ts",
+      "position": 18
     }
   }
 }
@@ -312,7 +313,8 @@ Config::
     },
     "data": {
       "kind": "implementations",
-      "uri": "file:///projects/container/lib/index.ts"
+      "uri": "file:///projects/container/lib/index.ts",
+      "position": 18
     }
   }
 }
@@ -367,7 +369,8 @@ Config::
     },
     "data": {
       "kind": "references",
-      "uri": "file:///projects/container/lib/index.ts"
+      "uri": "file:///projects/container/lib/index.ts",
+      "position": 32
     }
   }
 }
@@ -398,7 +401,8 @@ Config::
     },
     "data": {
       "kind": "implementations",
-      "uri": "file:///projects/container/lib/index.ts"
+      "uri": "file:///projects/container/lib/index.ts",
+      "position": 32
     }
   }
 }
@@ -456,7 +460,8 @@ Config::
     },
     "data": {
       "kind": "references",
-      "uri": "file:///projects/container/lib/index.ts"
+      "uri": "file:///projects/container/lib/index.ts",
+      "position": 50
     }
   }
 }
@@ -487,7 +492,8 @@ Config::
     },
     "data": {
       "kind": "implementations",
-      "uri": "file:///projects/container/lib/index.ts"
+      "uri": "file:///projects/container/lib/index.ts",
+      "position": 50
     }
   }
 }
@@ -551,7 +557,8 @@ Config::
     },
     "data": {
       "kind": "references",
-      "uri": "file:///projects/container/lib/index.ts"
+      "uri": "file:///projects/container/lib/index.ts",
+      "position": 81
     }
   }
 }
