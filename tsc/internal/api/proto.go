@@ -68,6 +68,7 @@ const (
 	MethodInitialize                   Method = "initialize"
 	MethodUpdateSnapshot               Method = "updateSnapshot"
 	MethodUpdateTemporarySnapshot      Method = "updateTemporarySnapshot"
+	MethodCreateProgram                Method = "createProgram"
 	MethodParseCommandLine             Method = "parseCommandLine"
 	MethodReadConfigFile               Method = "readConfigFile"
 	MethodParseJsonConfigFile          Method = "parseJsonConfigFileContent"
@@ -375,6 +376,29 @@ type UpdateTemporarySnapshotParams struct {
 	NewText string `json:"newText"`
 }
 
+type CreateProgramParams struct {
+	RootFiles            []DocumentIdentifier           `json:"rootFiles"`
+	CreateProgramOptions CreateProgramOptions           `json:"createProgramOptions"`
+	OldProgram           *CreateProgramOldProgramParams `json:"oldProgram,omitempty"`
+	FileChanges          *APIFileChanges                `json:"fileChanges,omitempty"`
+}
+
+type CreateProgramOptions struct {
+	CompilerOptions              core.CompilerOptions     `json:"compilerOptions"`
+	ProjectReferences            []*core.ProjectReference `json:"projectReferences,omitempty"`
+	ConfigFileParsingDiagnostics []*DiagnosticResponse    `json:"configFileParsingDiagnostics,omitempty"`
+}
+
+type CreateProgramOldProgramParams struct {
+	Snapshot SnapshotID `json:"snapshot,omitempty"`
+	Project  ProjectID  `json:"project,omitempty"`
+}
+
+type CreateProgramResponse struct {
+	Snapshot SnapshotID       `json:"snapshot"`
+	Project  *ProjectResponse `json:"project"`
+}
+
 // ProjectFileChanges describes what source files changed within a single project.
 type ProjectFileChanges struct {
 	// ChangedFiles lists source file paths whose content differs.
@@ -412,6 +436,7 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodInitialize:                   noParams,
 	MethodUpdateSnapshot:               unmarshallerFor[UpdateSnapshotParams],
 	MethodUpdateTemporarySnapshot:      unmarshallerFor[UpdateTemporarySnapshotParams],
+	MethodCreateProgram:                unmarshallerFor[CreateProgramParams],
 	MethodParseCommandLine:             unmarshallerFor[ParseCommandLineParams],
 	MethodReadConfigFile:               unmarshallerFor[ReadConfigFileParams],
 	MethodParseJsonConfigFile:          unmarshallerFor[ParseJsonConfigFileContentParams],
@@ -1567,6 +1592,20 @@ func newDiagnosticResponse(d *diagnosticwriter.ASTDiagnostic) *DiagnosticRespons
 	}
 
 	return resp
+}
+
+func (d *DiagnosticResponse) ToDiagnostic() *ast.Diagnostic {
+	return ast.NewDiagnosticFromText(
+		nil,
+		core.NewTextRange(d.Pos, d.End),
+		d.Code,
+		d.Category,
+		d.Text,
+		core.Map(d.MessageChain, func(d *DiagnosticResponse) *ast.Diagnostic { return d.ToDiagnostic() }),
+		core.Map(d.RelatedInformation, func(d *DiagnosticResponse) *ast.Diagnostic { return d.ToDiagnostic() }),
+		d.ReportsUnnecessary,
+		d.ReportsDeprecated,
+	)
 }
 
 // NewDiagnosticResponses converts a slice of ast.Diagnostics to DiagnosticResponses.

@@ -52,7 +52,10 @@ import {
     toPath,
 } from "../path.ts";
 import type {
+    APIFileChanges,
     CompilerOptions,
+    CreateProgramOptions,
+    CreateProgramResponse,
     Diagnostic,
     DocumentIdentifier,
     DocumentPosition,
@@ -140,6 +143,7 @@ export { formatDiagnostics, formatDiagnosticsWithColorAndContext } from "../diag
 export { documentURIToFileName, fileNameToDocumentURI } from "../path.ts";
 export { CheckFlags, CompletionItemKind, DiagnosticCategory, ElementFlags, EmitOnly, JsxEmit, ModifierFlags, ModuleKind, ModuleResolutionKind, NodeBuilderFlags, ObjectFlags, SignatureFlags, SignatureKind, SymbolFlags, TypeFlags, TypeFormatFlags, TypePredicateKind };
 export type {
+    APIFileChanges,
     APIImportAdderAction as ImportAdderAction,
     APIOptions,
     AssertsIdentifierTypePredicate,
@@ -153,6 +157,7 @@ export type {
     CompletionInfo,
     CompletionOptions,
     ConditionalType,
+    CreateProgramOptions,
     Diagnostic,
     DocumentIdentifier,
     DocumentPosition,
@@ -437,6 +442,60 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
     /** Clears all accumulated timing totals and recent-request history, on both the client and the server. */
     resetTimingInfo(): Promise<void> {
         return this.client.resetTimingInfo();
+    }
+
+    private isProgramActive(program: Program): boolean {
+        const project = program.getProject();
+        for (const snapshot of this.activeSnapshots) {
+            if (!snapshot.isDisposed() && snapshot.getProject(project.configFileName)?.program === program) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Creates a program from current filesystem state, or derives one from oldProgram after applying fileChanges.
+     */
+    async createProgram(
+        rootFiles: readonly DocumentIdentifier[],
+        createProgramOptions: CreateProgramOptions,
+        oldProgram?: Program,
+        fileChanges?: APIFileChanges,
+    ): Promise<Program> {
+        await this.ensureInitialized();
+
+        if (fileChanges && !oldProgram) {
+            throw new Error("fileChanges requires an oldProgram");
+        }
+        if (oldProgram && !this.isProgramActive(oldProgram)) {
+            throw new Error("oldProgram must belong to this API instance and reference an active snapshot");
+        }
+
+        const data: CreateProgramResponse = await this.client.apiRequest("createProgram", {
+            rootFiles,
+            createProgramOptions,
+            ...(oldProgram ? { oldProgram: { snapshot: oldProgram.snapshotId, project: oldProgram.getProject().id } } : {}),
+            ...(fileChanges ? { fileChanges } : {}),
+        });
+        if (!data.project) {
+            throw new Error("createProgram did not return a project");
+        }
+        const snapshot = new Snapshot(
+            { snapshot: data.snapshot, projects: [data.project] },
+            this.client,
+            this.sourceFileCache,
+            this.toPath!,
+            this,
+            () => {
+                this.activeSnapshots.delete(snapshot);
+                this.sourceFileCache.releaseSnapshot(snapshot.id);
+            },
+        );
+        const program = snapshot.getProjects()[0].program;
+        program.setOwnedSnapshot(snapshot);
+        this.activeSnapshots.add(snapshot);
+        return program;
     }
 }
 
@@ -1005,14 +1064,16 @@ export class LanguageService {
 }
 
 export class Program implements FormatDiagnosticsHost {
-    private snapshotId: number;
-    private project: Project;
-    private client: Client;
-    private sourceFileCache: SourceFileCache;
-    private toPath: (fileName: string) => Path;
-    private formatDiagnosticsHost: FormatDiagnosticsHost;
-    private decoder = new Wtf8Decoder();
-    private sourceFileMetadataCache = new Map<Path, Promise<SourceFileMetadata | undefined>>();
+    /** @internal */
+    readonly snapshotId: number;
+    private readonly project: Project;
+    private readonly client: Client;
+    private readonly sourceFileCache: SourceFileCache;
+    private readonly toPath: (fileName: string) => Path;
+    private readonly formatDiagnosticsHost: FormatDiagnosticsHost;
+    private readonly decoder = new Wtf8Decoder();
+    private readonly sourceFileMetadataCache = new Map<Path, Promise<SourceFileMetadata | undefined>>();
+    private ownedSnapshot: Snapshot | undefined;
 
     constructor(
         snapshotId: number,
@@ -1040,6 +1101,21 @@ export class Program implements FormatDiagnosticsHost {
 
     getNewLine(): string {
         return this.project.compilerOptions.newLine === NewLineKind.CRLF ? "\r\n" : "\n";
+    }
+
+    /** @internal */
+    setOwnedSnapshot(snapshot: Snapshot): void {
+        this.ownedSnapshot = snapshot;
+    }
+
+    [globalThis.Symbol.dispose](): void {
+        this.dispose();
+    }
+
+    async dispose(): Promise<void> {
+        const snapshot = this.ownedSnapshot;
+        this.ownedSnapshot = undefined;
+        if (snapshot) await snapshot.dispose();
     }
 
     getCompilerOptions(): CompilerOptions {
@@ -1331,6 +1407,10 @@ export class Program implements FormatDiagnosticsHost {
             files,
         });
         return toEmitOutput(response);
+    }
+
+    getProject(): Project {
+        return this.project;
     }
 }
 

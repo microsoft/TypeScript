@@ -33,6 +33,7 @@ import {
     type InterfaceType,
     type LiteralType,
     type NodeHandle,
+    type Program,
     type Project,
     type Signature,
     SignatureKind,
@@ -301,6 +302,10 @@ function assertProjectsEquivalent(actual: Project, expected: Project, message?: 
 
 function assertOptionalProjectsEquivalent(actual: Project | undefined, expected: Project | undefined, message?: string): void {
     assertOptionalEquivalent(actual, expected, assertProjectsEquivalent, message);
+}
+
+function assertProgramsEquivalent(actual: Program, expected: Program, message?: string): void {
+    assertProjectsEquivalent(actual.getProject(), expected.getProject(), message);
 }
 
 function assertSnapshotsEquivalent(actual: Snapshot, expected: Snapshot, message?: string): void {
@@ -723,6 +728,7 @@ describe("API - generator batching", () => {
                 parityCase("API", "transpileDeclaration", api.transpileDeclaration, assertDeepEquivalent, "export function declared(value: string): number { return value.length; }"),
                 parityCase("API", "transpileDeclarationFromFile", api.transpileDeclarationFromFile, assertDeepEquivalent, "/src/index.ts"),
                 parityCase("API", "updateSnapshot", api.updateSnapshot, assertSnapshotsEquivalent, { openProject: "/tsconfig.json" }),
+                parityCase("API", "createProgram", api.createProgram, assertProgramsEquivalent, ["/src/index.ts"], { compilerOptions: { noLib: true } }),
                 parityCase("API", "runWithTemporaryFileUpdate", api.runWithTemporaryFileUpdate, assertDeepEquivalent, snapshot, "/src/index.ts", parityFiles["/src/index.ts"].replace("123", '"fixed"'), (temporarySnapshot: Snapshot) => {
                     temporaryProjects.push(temporarySnapshot.getProjects()[0].configFileName);
                 }),
@@ -906,6 +912,11 @@ describe("API - generator batching", () => {
             assert.equal(disposableSnapshot.isDisposed(), true);
             assert.equal(disposableSnapshot.dispose(), undefined);
             exercisedMethods.add("Snapshot.dispose");
+            const disposableProgram = destructiveAPI.batch(destructiveAPI.createProgram.gen(["/src/index.ts"], { compilerOptions: { noLib: true } }))[0];
+            destructiveAPI.batch(disposableProgram.dispose.gen());
+            assert.throws(() => disposableProgram.getSourceFileNames(), /snapshot .* not found/);
+            assert.equal(disposableProgram.dispose(), undefined);
+            exercisedMethods.add("Program.dispose");
             destructiveAPI.batch(destructiveAPI.close.gen());
             assert.equal(destructiveAPI.close(), undefined);
             exercisedMethods.add("API.close");

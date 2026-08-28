@@ -25,6 +25,13 @@ type projectReferenceFileMapper struct {
 	realpathDtsToSource collections.SyncMap[tspath.Path, *tsoptions.SourceOutputAndProjectReference]
 }
 
+func (mapper *projectReferenceFileMapper) rootConfigPath() tspath.Path {
+	if mapper.opts.Config.ConfigFile == nil {
+		return ""
+	}
+	return mapper.opts.Config.ConfigFile.SourceFile.Path()
+}
+
 func (mapper *projectReferenceFileMapper) getParseFileRedirect(file ast.HasFileName) string {
 	if mapper.opts.canUseProjectReferenceSource() {
 		// Map to source file from project reference
@@ -46,10 +53,7 @@ func (mapper *projectReferenceFileMapper) getParseFileRedirect(file ast.HasFileN
 }
 
 func (mapper *projectReferenceFileMapper) getResolvedProjectReferences() []*tsoptions.ParsedCommandLine {
-	if mapper.opts.Config.ConfigFile == nil {
-		return nil
-	}
-	refs, ok := mapper.referencesInConfigFile[mapper.opts.Config.ConfigFile.SourceFile.Path()]
+	refs, ok := mapper.referencesInConfigFile[mapper.rootConfigPath()]
 	var result []*tsoptions.ParsedCommandLine
 	if ok {
 		result = make([]*tsoptions.ParsedCommandLine, 0, len(refs))
@@ -112,12 +116,13 @@ func (mapper *projectReferenceFileMapper) getResolvedReferenceFor(path tspath.Pa
 func (mapper *projectReferenceFileMapper) rangeResolvedProjectReference(
 	f func(path tspath.Path, config *tsoptions.ParsedCommandLine, parent *tsoptions.ParsedCommandLine, index int) bool,
 ) bool {
-	if mapper.opts.Config.ConfigFile == nil {
+	if len(mapper.opts.Config.ProjectReferences()) == 0 {
 		return false
 	}
 	seenRef := collections.NewSetWithSizeHint[tspath.Path](len(mapper.referencesInConfigFile))
-	seenRef.Add(mapper.opts.Config.ConfigFile.SourceFile.Path())
-	refs := mapper.referencesInConfigFile[mapper.opts.Config.ConfigFile.SourceFile.Path()]
+	rootConfigPath := mapper.rootConfigPath()
+	seenRef.Add(rootConfigPath)
+	refs := mapper.referencesInConfigFile[rootConfigPath]
 	return mapper.rangeResolvedReferenceWorker(refs, f, mapper.opts.Config, seenRef)
 }
 

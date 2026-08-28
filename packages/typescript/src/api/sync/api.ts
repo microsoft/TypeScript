@@ -69,7 +69,10 @@ import {
     toPath,
 } from "../path.ts";
 import type {
+    APIFileChanges,
     CompilerOptions,
+    CreateProgramOptions,
+    CreateProgramResponse,
     Diagnostic,
     DocumentIdentifier,
     DocumentPosition,
@@ -157,6 +160,7 @@ export { formatDiagnostics, formatDiagnosticsWithColorAndContext } from "../diag
 export { documentURIToFileName, fileNameToDocumentURI } from "../path.ts";
 export { CheckFlags, CompletionItemKind, DiagnosticCategory, ElementFlags, EmitOnly, JsxEmit, ModifierFlags, ModuleKind, ModuleResolutionKind, NodeBuilderFlags, ObjectFlags, SignatureFlags, SignatureKind, SymbolFlags, TypeFlags, TypeFormatFlags, TypePredicateKind };
 export type {
+    APIFileChanges,
     APIImportAdderAction as ImportAdderAction,
     APIOptions,
     AssertsIdentifierTypePredicate,
@@ -170,6 +174,7 @@ export type {
     CompletionInfo,
     CompletionOptions,
     ConditionalType,
+    CreateProgramOptions,
     Diagnostic,
     DocumentIdentifier,
     DocumentPosition,
@@ -744,6 +749,100 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
             },
             function* (): Generator<ProtocolRequest, void, ProtocolResponse["result"]> {
                 return owner.client.resetTimingInfo();
+            },
+        );
+    }
+
+    private isProgramActive(program: Program): boolean {
+        const project = program.getProject();
+        for (const snapshot of this.activeSnapshots) {
+            if (!snapshot.isDisposed() && snapshot.getProject(project.configFileName)?.program === program) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Creates a program from current filesystem state, or derives one from oldProgram after applying fileChanges.
+     */
+    get createProgram(): {
+        (rootFiles: readonly DocumentIdentifier[], createProgramOptions: CreateProgramOptions, oldProgram?: Program, fileChanges?: APIFileChanges): Program;
+        gen(rootFiles: readonly DocumentIdentifier[], createProgramOptions: CreateProgramOptions, oldProgram?: Program, fileChanges?: APIFileChanges): Generator<ProtocolRequest, Program, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "createProgram",
+            function (rootFiles: readonly DocumentIdentifier[], createProgramOptions: CreateProgramOptions, oldProgram?: Program, fileChanges?: APIFileChanges): Program {
+                owner.ensureInitialized();
+
+                if (fileChanges && !oldProgram) {
+                    throw new Error("fileChanges requires an oldProgram");
+                }
+                if (oldProgram && !owner.isProgramActive(oldProgram)) {
+                    throw new Error("oldProgram must belong to this API instance and reference an active snapshot");
+                }
+
+                const data: CreateProgramResponse = owner.client.apiRequest("createProgram", {
+                    rootFiles,
+                    createProgramOptions,
+                    ...(oldProgram ? { oldProgram: { snapshot: oldProgram.snapshotId, project: oldProgram.getProject().id } } : {}),
+                    ...(fileChanges ? { fileChanges } : {}),
+                });
+                if (!data.project) {
+                    throw new Error("createProgram did not return a project");
+                }
+                const snapshot = new Snapshot(
+                    { snapshot: data.snapshot, projects: [data.project] },
+                    owner.client,
+                    owner.sourceFileCache,
+                    owner.toPath!,
+                    owner,
+                    () => {
+                        owner.activeSnapshots.delete(snapshot);
+                        owner.sourceFileCache.releaseSnapshot(snapshot.id);
+                    },
+                );
+                const program = snapshot.getProjects()[0].program;
+                program.setOwnedSnapshot(snapshot);
+                owner.activeSnapshots.add(snapshot);
+                return program;
+            },
+            function* (rootFiles: readonly DocumentIdentifier[], createProgramOptions: CreateProgramOptions, oldProgram?: Program, fileChanges?: APIFileChanges): Generator<ProtocolRequest, Program, ProtocolResponse["result"]> {
+                yield* owner.ensureInitialized.gen();
+
+                if (fileChanges && !oldProgram) {
+                    throw new Error("fileChanges requires an oldProgram");
+                }
+                if (oldProgram && !owner.isProgramActive(oldProgram)) {
+                    throw new Error("oldProgram must belong to this API instance and reference an active snapshot");
+                }
+
+                const data: CreateProgramResponse = yield* apiRequest("createProgram", {
+                    rootFiles,
+                    createProgramOptions,
+                    ...(oldProgram ? { oldProgram: { snapshot: oldProgram.snapshotId, project: oldProgram.getProject().id } } : {}),
+                    ...(fileChanges ? { fileChanges } : {}),
+                });
+                if (!data.project) {
+                    throw new Error("createProgram did not return a project");
+                }
+                const snapshot = new Snapshot(
+                    { snapshot: data.snapshot, projects: [data.project] },
+                    owner.client,
+                    owner.sourceFileCache,
+                    owner.toPath!,
+                    owner,
+                    () => {
+                        owner.activeSnapshots.delete(snapshot);
+                        owner.sourceFileCache.releaseSnapshot(snapshot.id);
+                    },
+                );
+                const program = snapshot.getProjects()[0].program;
+                program.setOwnedSnapshot(snapshot);
+                owner.activeSnapshots.add(snapshot);
+                return program;
             },
         );
     }
@@ -1871,14 +1970,16 @@ export class LanguageService {
 }
 
 export class Program implements FormatDiagnosticsHost {
-    private snapshotId: number;
-    private project: Project;
-    private client: Client;
-    private sourceFileCache: SourceFileCache;
-    private toPath: (fileName: string) => Path;
-    private formatDiagnosticsHost: FormatDiagnosticsHost;
-    private decoder = new Wtf8Decoder();
-    private sourceFileMetadataCache = new Map<Path, SourceFileMetadata | undefined>();
+    /** @internal */
+    readonly snapshotId: number;
+    private readonly project: Project;
+    private readonly client: Client;
+    private readonly sourceFileCache: SourceFileCache;
+    private readonly toPath: (fileName: string) => Path;
+    private readonly formatDiagnosticsHost: FormatDiagnosticsHost;
+    private readonly decoder = new Wtf8Decoder();
+    private readonly sourceFileMetadataCache = new Map<Path, SourceFileMetadata | undefined>();
+    private ownedSnapshot: Snapshot | undefined;
 
     constructor(
         snapshotId: number,
@@ -1906,6 +2007,36 @@ export class Program implements FormatDiagnosticsHost {
 
     getNewLine(): string {
         return this.project.compilerOptions.newLine === NewLineKind.CRLF ? "\r\n" : "\n";
+    }
+
+    /** @internal */
+    setOwnedSnapshot(snapshot: Snapshot): void {
+        this.ownedSnapshot = snapshot;
+    }
+
+    [globalThis.Symbol.dispose](): void {
+        this.dispose();
+    }
+
+    get dispose(): {
+        (): void;
+        gen(): Generator<ProtocolRequest, void, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "dispose",
+            function (): void {
+                const snapshot = owner.ownedSnapshot;
+                owner.ownedSnapshot = undefined;
+                if (snapshot) snapshot.dispose();
+            },
+            function* (): Generator<ProtocolRequest, void, ProtocolResponse["result"]> {
+                const snapshot = owner.ownedSnapshot;
+                owner.ownedSnapshot = undefined;
+                if (snapshot) yield* snapshot.dispose.gen();
+            },
+        );
     }
 
     getCompilerOptions(): CompilerOptions {
@@ -2600,6 +2731,10 @@ export class Program implements FormatDiagnosticsHost {
                 return toEmitOutput(response);
             },
         );
+    }
+
+    getProject(): Project {
+        return this.project;
     }
 }
 
