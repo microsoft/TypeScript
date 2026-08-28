@@ -376,9 +376,12 @@ func (s *Snapshot) Clone(
 		change.fileChanges = fs.convertOpenAndCloseToChanges(change.fileChanges)
 	}
 
+	pnpApi := session.pnpApi
 	if session.pnpApi != nil && change.fileChanges.InvalidateAll {
-		if err := session.pnpApi.RefreshManifest(); err != nil {
+		if newPnpApi, err := session.pnpApi.RefreshManifest(); err != nil {
 			logger.Logf("Failed to refresh PnP manifest: %v", err)
+		} else {
+			pnpApi = newPnpApi
 		}
 	}
 
@@ -399,7 +402,7 @@ func (s *Snapshot) Clone(
 		ctx,
 		newSnapshotID,
 		fs,
-		session.pnpApi,
+		pnpApi,
 		s.ProjectCollection,
 		s.ConfigFileRegistry,
 		s.ProjectCollection.apiState,
@@ -499,7 +502,7 @@ func (s *Snapshot) Clone(
 		projectCollection,
 		session.parseCache,
 		fs,
-		session.pnpApi,
+		pnpApi,
 		s.sessionOptions.CurrentDirectory,
 		s.toPath,
 	)
@@ -540,7 +543,7 @@ func (s *Snapshot) Clone(
 		autoImports,
 		autoImportsWatch,
 		s.toPath,
-		session.pnpApi,
+		pnpApi,
 	)
 	newSnapshot.parentId = s.id
 	newSnapshot.ProjectCollection = projectCollection

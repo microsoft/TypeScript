@@ -53,7 +53,7 @@ func (p *PnpApi) GetManifestPath() string {
 	return tspath.CombinePaths(p.manifest.dirPath, ".pnp.cjs")
 }
 
-func (p *PnpApi) RefreshManifest() error {
+func (p *PnpApi) RefreshManifest() (*PnpApi, error) {
 	var newData *PnpManifestData
 	var err error
 
@@ -64,11 +64,11 @@ func (p *PnpApi) RefreshManifest() error {
 	}
 
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	p.manifest = newData
-	return nil
+	return &PnpApi{fs: p.fs, url: p.url, manifest: newData}, nil
 }
 
 type PnpError struct {
