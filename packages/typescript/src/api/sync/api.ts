@@ -451,20 +451,20 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
     }
 
     get transpileModuleFromFile(): {
-        (fileName: string, options?: TranspileOptions): TranspileOutput;
-        gen(fileName: string, options?: TranspileOptions): Generator<ProtocolRequest, TranspileOutput, ProtocolResponse["result"]>;
+        (file: DocumentIdentifier, options?: TranspileOptions): TranspileOutput;
+        gen(file: DocumentIdentifier, options?: TranspileOptions): Generator<ProtocolRequest, TranspileOutput, ProtocolResponse["result"]>;
     } {
         const owner = this;
         return cacheGeneratorMethod(
             owner,
             "transpileModuleFromFile",
-            function (fileName: string, options: TranspileOptions = {}): TranspileOutput {
+            function (file: DocumentIdentifier, options: TranspileOptions = {}): TranspileOutput {
                 owner.ensureInitialized();
-                return owner.client.apiRequest("transpileModuleFromFile", { fileName, options });
+                return owner.client.apiRequest("transpileModuleFromFile", { fileName: resolveFileName(file), options });
             },
-            function* (fileName: string, options: TranspileOptions = {}): Generator<ProtocolRequest, TranspileOutput, ProtocolResponse["result"]> {
+            function* (file: DocumentIdentifier, options: TranspileOptions = {}): Generator<ProtocolRequest, TranspileOutput, ProtocolResponse["result"]> {
                 yield* owner.ensureInitialized.gen();
-                return yield* apiRequest("transpileModuleFromFile", { fileName, options });
+                return yield* apiRequest("transpileModuleFromFile", { fileName: resolveFileName(file), options });
             },
         );
     }
@@ -489,20 +489,20 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
     }
 
     get transpileDeclarationFromFile(): {
-        (fileName: string, options?: TranspileOptions): TranspileOutput;
-        gen(fileName: string, options?: TranspileOptions): Generator<ProtocolRequest, TranspileOutput, ProtocolResponse["result"]>;
+        (file: DocumentIdentifier, options?: TranspileOptions): TranspileOutput;
+        gen(file: DocumentIdentifier, options?: TranspileOptions): Generator<ProtocolRequest, TranspileOutput, ProtocolResponse["result"]>;
     } {
         const owner = this;
         return cacheGeneratorMethod(
             owner,
             "transpileDeclarationFromFile",
-            function (fileName: string, options: TranspileOptions = {}): TranspileOutput {
+            function (file: DocumentIdentifier, options: TranspileOptions = {}): TranspileOutput {
                 owner.ensureInitialized();
-                return owner.client.apiRequest("transpileDeclarationFromFile", { fileName, options });
+                return owner.client.apiRequest("transpileDeclarationFromFile", { fileName: resolveFileName(file), options });
             },
-            function* (fileName: string, options: TranspileOptions = {}): Generator<ProtocolRequest, TranspileOutput, ProtocolResponse["result"]> {
+            function* (file: DocumentIdentifier, options: TranspileOptions = {}): Generator<ProtocolRequest, TranspileOutput, ProtocolResponse["result"]> {
                 yield* owner.ensureInitialized.gen();
-                return yield* apiRequest("transpileDeclarationFromFile", { fileName, options });
+                return yield* apiRequest("transpileDeclarationFromFile", { fileName: resolveFileName(file), options });
             },
         );
     }
@@ -2008,18 +2008,18 @@ export class Program implements FormatDiagnosticsHost {
      * `Program` instance.
      */
     get getSourceFileMetadata(): {
-        (fileName: string): SourceFileMetadata | undefined;
-        gen(fileName: string): Generator<ProtocolRequest, SourceFileMetadata | undefined, ProtocolResponse["result"]>;
+        (file: DocumentIdentifier): SourceFileMetadata | undefined;
+        gen(file: DocumentIdentifier): Generator<ProtocolRequest, SourceFileMetadata | undefined, ProtocolResponse["result"]>;
     } {
         const owner = this;
         return cacheGeneratorMethod(
             owner,
             "getSourceFileMetadata",
-            function (fileName: string): SourceFileMetadata | undefined {
-                return owner.getSourceFileMetadataByPath(owner.toPath(fileName));
+            function (file: DocumentIdentifier): SourceFileMetadata | undefined {
+                return owner.getSourceFileMetadataByPath(owner.toPath(resolveFileName(file)));
             },
-            function* (fileName: string): Generator<ProtocolRequest, SourceFileMetadata | undefined, ProtocolResponse["result"]> {
-                return yield* owner.getSourceFileMetadataByPath.gen(owner.toPath(fileName));
+            function* (file: DocumentIdentifier): Generator<ProtocolRequest, SourceFileMetadata | undefined, ProtocolResponse["result"]> {
+                return yield* owner.getSourceFileMetadataByPath.gen(owner.toPath(resolveFileName(file)));
             },
         );
     }

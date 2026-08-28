@@ -317,9 +317,9 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         return this.client.apiRequest("transpileModule", { input, options });
     }
 
-    async transpileModuleFromFile(fileName: string, options: TranspileOptions = {}): Promise<TranspileOutput> {
+    async transpileModuleFromFile(file: DocumentIdentifier, options: TranspileOptions = {}): Promise<TranspileOutput> {
         await this.ensureInitialized();
-        return this.client.apiRequest("transpileModuleFromFile", { fileName, options });
+        return this.client.apiRequest("transpileModuleFromFile", { fileName: resolveFileName(file), options });
     }
 
     async transpileDeclaration(input: string, options: TranspileOptions = {}): Promise<TranspileOutput> {
@@ -327,9 +327,9 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         return this.client.apiRequest("transpileDeclaration", { input, options });
     }
 
-    async transpileDeclarationFromFile(fileName: string, options: TranspileOptions = {}): Promise<TranspileOutput> {
+    async transpileDeclarationFromFile(file: DocumentIdentifier, options: TranspileOptions = {}): Promise<TranspileOutput> {
         await this.ensureInitialized();
-        return this.client.apiRequest("transpileDeclarationFromFile", { fileName, options });
+        return this.client.apiRequest("transpileDeclarationFromFile", { fileName: resolveFileName(file), options });
     }
 
     async updateSnapshot(params?: FromLSP extends true ? LSPUpdateSnapshotParams : UpdateSnapshotParams): Promise<Snapshot> {
@@ -1086,8 +1086,8 @@ export class Program implements FormatDiagnosticsHost {
      * is not part of the program. Metadata is fetched lazily per file and cached on this
      * `Program` instance.
      */
-    getSourceFileMetadata(fileName: string): Promise<SourceFileMetadata | undefined> {
-        return this.getSourceFileMetadataByPath(this.toPath(fileName));
+    getSourceFileMetadata(file: DocumentIdentifier): Promise<SourceFileMetadata | undefined> {
+        return this.getSourceFileMetadataByPath(this.toPath(resolveFileName(file)));
     }
 
     /**
