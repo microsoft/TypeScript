@@ -135,9 +135,12 @@ func (ct *ChangeTrackerWriter) assignPositionsToNodeWorker(
 		return node
 	}
 	visited := node.VisitEachChild(v)
-	// create proxy node for non synthesized nodes
+	// Assigning positions must not mutate the caller's node: it may be printed again (a change in a
+	// content-mapped file is formatted once per virtual projection of its insertion point), and a node
+	// that has acquired positions is printed by reading text back out of the source file. VisitEachChild
+	// returns a fresh node only when a child changed, so clone whenever it hands back the input.
 	newNode := visited
-	if !ast.NodeIsSynthesized(visited) {
+	if visited == node {
 		newNode = visited.Clone(v.Factory)
 	}
 	newNode.ForEachChild(func(child *ast.Node) bool {
