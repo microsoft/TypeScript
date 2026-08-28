@@ -10147,7 +10147,9 @@ func (c *Checker) getFirstTransformableStaticClassElement(node *ast.Node) *ast.N
 	willTransformStaticElementsOfDecoratedClass := !c.legacyDecorators &&
 		c.languageVersion < LanguageFeatureMinimumTarget.ClassAndClassElementDecorators &&
 		ast.ClassOrConstructorParameterIsDecorated(false, node)
-	willTransformPrivateElementsOrClassStaticBlocks := c.languageVersion < LanguageFeatureMinimumTarget.PrivateNamesAndClassStaticBlocks || c.languageVersion < LanguageFeatureMinimumTarget.ClassAndClassElementDecorators
+	// Private elements and class static blocks only need transformation before ES2022.
+	// Decorators (ClassAndClassElementDecorators) are a separate feature and should not gate private element transformation.
+	willTransformPrivateElementsOrClassStaticBlocks := c.languageVersion < LanguageFeatureMinimumTarget.PrivateNamesAndClassStaticBlocks
 	willTransformInitializers := !c.emitStandardClassFields
 	if willTransformStaticElementsOfDecoratedClass || willTransformPrivateElementsOrClassStaticBlocks {
 		for _, member := range node.Members() {
@@ -10618,8 +10620,11 @@ func (c *Checker) needCollisionCheckForIdentifier(node *ast.Node, identifier *as
 
 func (c *Checker) setNodeLinksForPrivateIdentifierScope(node *ast.Node) {
 	if name := node.Name(); ast.IsPrivateIdentifier(name) {
+		// Private field helper is only needed when:
+		// 1. Target is before ES2022 (when native private fields were introduced)
+		// 2. useDefineForClassFields is false (legacy class field semantics)
+		// Decorators (ClassAndClassElementDecorators) are a separate feature and should not gate private field helpers.
 		if c.languageVersion < LanguageFeatureMinimumTarget.PrivateNamesAndClassStaticBlocks ||
-			c.languageVersion < LanguageFeatureMinimumTarget.ClassAndClassElementDecorators ||
 			!c.compilerOptions.GetUseDefineForClassFields() {
 			for lexicalScope := ast.GetEnclosingBlockScopeContainer(node); lexicalScope != nil; lexicalScope = ast.GetEnclosingBlockScopeContainer(lexicalScope) {
 				c.nodeLinks.Get(lexicalScope).flags |= NodeCheckFlagsContainsClassWithPrivateIdentifiers
@@ -11358,8 +11363,11 @@ func (c *Checker) checkPropertyAccessExpressionOrQualifiedName(node *ast.Node, l
 	isAnyLike := IsTypeAny(apparentType) || apparentType == c.silentNeverType
 	var prop *ast.Symbol
 	if ast.IsPrivateIdentifier(right) {
+		// Private field helper is only needed when:
+		// 1. Target is before ES2022 (when native private fields were introduced)
+		// 2. useDefineForClassFields is false (legacy class field semantics)
+		// Decorators (ClassAndClassElementDecorators) are a separate feature and should not gate private field helpers.
 		if c.languageVersion < LanguageFeatureMinimumTarget.PrivateNamesAndClassStaticBlocks ||
-			c.languageVersion < LanguageFeatureMinimumTarget.ClassAndClassElementDecorators ||
 			!c.compilerOptions.GetUseDefineForClassFields() {
 			if assignmentKind != AssignmentKindNone {
 				c.checkExternalEmitHelpers(node, ExternalEmitHelpersClassPrivateFieldSet)
@@ -13173,8 +13181,11 @@ func (c *Checker) checkInExpression(left *ast.Expression, right *ast.Expression,
 		return c.silentNeverType
 	}
 	if ast.IsPrivateIdentifier(left) {
+		// Private field helper is only needed when:
+		// 1. Target is before ES2022 (when native private fields were introduced)
+		// 2. useDefineForClassFields is false (legacy class field semantics)
+		// Decorators (ClassAndClassElementDecorators) are a separate feature and should not gate private field helpers.
 		if c.languageVersion < LanguageFeatureMinimumTarget.PrivateNamesAndClassStaticBlocks ||
-			c.languageVersion < LanguageFeatureMinimumTarget.ClassAndClassElementDecorators ||
 			!c.compilerOptions.GetUseDefineForClassFields() {
 			c.checkExternalEmitHelpers(left, ExternalEmitHelpersClassPrivateFieldIn)
 		}
