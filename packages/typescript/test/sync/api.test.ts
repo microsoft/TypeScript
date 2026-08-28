@@ -80,6 +80,7 @@ import {
     SymbolFlags,
     type TemplateLiteralType,
     type TextEdit,
+    type TupleTypeReference,
     TypeFlags,
     TypeFormatFlags,
     type TypeParameter,
@@ -2646,11 +2647,13 @@ export const tuple: readonly [number, string?, ...boolean[]] = [1];
         const { type, api } = getTypeAtName(spawnAPI(typeFiles), "tuple:");
         try {
             assert.ok(type.flags & TypeFlags.Object);
-            const ref = type as TypeReference;
+            const ref = type as TupleTypeReference;
             assert.ok(ref.objectFlags & ObjectFlags.Reference);
             const target = ref.getTarget();
             assert.ok(target);
             assert.ok(target.flags & TypeFlags.Object);
+            assert.deepStrictEqual(target.elementFlags, [1, 2, 4]);
+            assert.equal(target.readonly, true);
         }
         finally {
             api.close();

@@ -75,6 +75,7 @@ import {
     type TypeParameter,
     TypePredicateKind,
     type TypeReference,
+    type TupleTypeReference,
     type UnionOrIntersectionType,
 } from "@typescript/typescript/unstable/async"; // @sync: } from "@typescript/typescript/unstable/sync";
 import { createVirtualFileSystem } from "@typescript/typescript/unstable/fs";
@@ -2730,11 +2731,13 @@ export const tuple: readonly [number, string?, ...boolean[]] = [1];
         const { type, api } = await getTypeAtName(spawnAPI(typeFiles), "tuple:");
         try {
             assert.ok(type.flags & TypeFlags.Object);
-            const ref = type as TypeReference;
+            const ref = type as TupleTypeReference;
             assert.ok(ref.objectFlags & ObjectFlags.Reference);
             const target = await ref.getTarget();
             assert.ok(target);
             assert.ok(target.flags & TypeFlags.Object);
+            assert.deepStrictEqual(target.elementFlags, [1, 2, 4]);
+            assert.equal(target.readonly, true);
         }
         finally {
             await api.close();
