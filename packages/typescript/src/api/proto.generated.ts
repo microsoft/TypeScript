@@ -1313,10 +1313,6 @@ export interface CompilerOptions {
     useUnknownInCatchVariables?: boolean;
     verbatimModuleSyntax?: boolean;
     maxNodeModuleJsDepth?: number;
-    /** @deprecated Do not use outside of options parsing and validation. */
-    allowSyntheticDefaultImports?: boolean;
-    /** @deprecated Do not use outside of options parsing and validation. */
-    esModuleInterop?: boolean;
     /** Internal fields */
     configFilePath?: string;
 }

@@ -690,12 +690,11 @@ func jsonField(structType *types.Struct, index int) (name string, include bool, 
 	tag := reflect.StructTag(structType.Tag(index)).Get("json")
 	noniltag := reflect.StructTag(structType.Tag(index)).Get("nonnil")
 	deprecatedtag := reflect.StructTag(structType.Tag(index)).Get("deprecated")
-	apitag := reflect.StructTag(structType.Tag(index)).Get("api")
 	internaltag := reflect.StructTag(structType.Tag(index)).Get("internal")
 	parts := strings.Split(tag, ",")
 	name = parts[0]
 	if name == "-" {
-		return "", false, false, noniltag == "true", deprecatedtag == "true" && apitag != "true", internaltag == "true"
+		return "", false, false, noniltag == "true", deprecatedtag == "true", internaltag == "true"
 	}
 	if name == "" {
 		name = field.Name()
@@ -705,7 +704,7 @@ func jsonField(structType *types.Struct, index int) (name string, include bool, 
 			optional = true
 		}
 	}
-	return name, true, optional, noniltag == "true", deprecatedtag == "true" && apitag != "true", internaltag == "true"
+	return name, true, optional, noniltag == "true", deprecatedtag == "true", internaltag == "true"
 }
 
 func exportedName(value string) string {
