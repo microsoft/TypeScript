@@ -782,12 +782,9 @@ func tryGetModuleNameAsPnpPackage(
 
 		for i := range fromInfo.PackageDependencies {
 			dep := fromInfo.PackageDependencies[i]
-			isAlias := dep.IsAlias()
-			if isAlias && dep.AliasName == toLocator.Name && dep.Reference == toLocator.Reference {
-				pnpPackageName = toLocator.Name
-				break
-			} else if dep.Ident == toLocator.Name && dep.Reference == toLocator.Reference {
-				pnpPackageName = toLocator.Name
+			depLocator := dep.Locator()
+			if depLocator.Name == toLocator.Name && depLocator.Reference == toLocator.Reference {
+				pnpPackageName = dep.Ident
 				break
 			}
 		}
