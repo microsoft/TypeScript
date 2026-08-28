@@ -177,6 +177,12 @@ export interface TypeReference extends ObjectType {
     getTarget(): Promise<Type>;
 }
 
+/** References to tuple types */
+export interface TupleTypeReference extends TypeReference {
+    /** Get the tuple type that describes this reference's shape */
+    getTarget(): Promise<TupleType>;
+}
+
 /** Interface types — classes and interfaces (ObjectFlags.ClassOrInterface) */
 export interface InterfaceType extends TypeReference {
     /** Get all type parameters (outer + local, excluding thisType) */
