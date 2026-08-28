@@ -394,7 +394,7 @@ function emitNewFactory(
     const kindArg = kindMember ? kindMember.goParamName() : `Kind${kindName}`;
 
     if (nodeFlagsMembers.length > 0) {
-        w.write(`node := f.newNode(${kindArg}, data)`);
+        w.write(`node := f.newNode(${kindArg}, data.AsNode(), data)`);
         for (const m of nodeFlagsMembers) {
             const param = m.goParamName();
             if (m.bitmask) {
@@ -407,7 +407,7 @@ function emitNewFactory(
         w.write("return node");
     }
     else {
-        w.write(`return f.newNode(${kindArg}, data)`);
+        w.write(`return f.newNode(${kindArg}, data.AsNode(), data)`);
     }
 
     w.pop();

@@ -72,8 +72,7 @@ func NewNodeFactory(hooks NodeFactoryHooks) *NodeFactory {
 	return &NodeFactory{hooks: hooks}
 }
 
-func newNode(kind Kind, data nodeData, hooks NodeFactoryHooks) *Node {
-	n := data.AsNode()
+func newNode(kind Kind, n *Node, data nodeData, hooks NodeFactoryHooks) *Node {
 	n.Loc = core.UndefinedTextRange()
 	n.Kind = kind
 	n.data = data
@@ -83,9 +82,9 @@ func newNode(kind Kind, data nodeData, hooks NodeFactoryHooks) *Node {
 	return n
 }
 
-func (f *NodeFactory) newNode(kind Kind, data nodeData) *Node {
+func (f *NodeFactory) newNode(kind Kind, n *Node, data nodeData) *Node {
 	f.nodeCount++
-	return newNode(kind, data, f.hooks)
+	return newNode(kind, n, data, f.hooks)
 }
 
 func (f *NodeFactory) NodeCount() int {
@@ -1173,7 +1172,6 @@ func (n *Node) AsFlowReduceLabelData() *FlowReduceLabelData {
 // NodeData
 
 type nodeData interface {
-	AsNode() *Node
 	VisitEachChild(v *NodeVisitor) *Node
 	Clone(v NodeFactoryCoercible) *Node
 	Name() *DeclarationName
@@ -2532,7 +2530,7 @@ func (f *NodeFactory) NewSourceFile(opts SourceFileParseOptions, text string, st
 	data.text = text
 	data.Statements = statements
 	data.EndOfFileToken = endOfFileToken
-	return f.newNode(KindSourceFile, data)
+	return f.newNode(KindSourceFile, data.AsNode(), data)
 }
 
 func (node *SourceFile) ParseOptions() SourceFileParseOptions {
