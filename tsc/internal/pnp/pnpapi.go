@@ -240,7 +240,7 @@ func (p *PnpApi) FindLocator(parentPath string) (*Locator, *PnpError) {
 			break
 		}
 
-		if currentTrie.packageData != nil && index >= bestLength {
+		if currentTrie.packageData != nil && !currentTrie.packageData.info.DiscardFromLookup && index >= bestLength {
 			bestLength = index
 			bestLocator = &Locator{Name: currentTrie.packageData.ident, Reference: currentTrie.packageData.reference}
 		}
