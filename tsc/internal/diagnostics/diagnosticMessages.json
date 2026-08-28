@@ -8556,7 +8556,7 @@
         "category": "Error",
         "code": 18061
     },
-    "Private identifiers cannot be used as binding patterns.": {
+    "Private identifiers cannot be used in destructuring patterns.": {
         "category": "Error",
         "code": 18064
     }

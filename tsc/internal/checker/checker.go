@@ -5904,7 +5904,7 @@ func (c *Checker) checkVariableLikeDeclaration(node *ast.Node) {
 		propName := node.PropertyName()
 
 		if propName != nil && ast.IsPrivateIdentifier(propName) {
-			c.grammarErrorOnNode(propName, diagnostics.Private_identifiers_cannot_be_used_as_binding_patterns)
+			c.grammarErrorOnNode(propName, diagnostics.Private_identifiers_cannot_be_used_in_destructuring_patterns)
 		}
 
 		if propName != nil && ast.IsIdentifier(node.Name()) && ast.IsPartOfParameterDeclaration(node) && ast.NodeIsMissing(ast.GetContainingFunction(node).Body()) {
@@ -12698,6 +12698,11 @@ func (c *Checker) checkObjectLiteralDestructuringPropertyAssignment(node *ast.No
 	property := properties[propertyIndex]
 	if ast.IsPropertyAssignment(property) || ast.IsShorthandPropertyAssignment(property) {
 		name := property.Name()
+
+		if name != nil && ast.IsPrivateIdentifier(name) {
+			c.grammarErrorOnNode(name, diagnostics.Private_identifiers_cannot_be_used_in_destructuring_patterns)
+		}
+
 		exprType := c.getLiteralTypeFromPropertyName(name)
 		if isTypeUsableAsPropertyName(exprType) {
 			text := getPropertyNameFromType(exprType)
