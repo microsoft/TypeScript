@@ -1166,7 +1166,7 @@ func (node *NodeDefault) computeSubtreeFacts() SubtreeFacts {
 }
 
 func (node *NodeDefault) propagateSubtreeFacts() SubtreeFacts {
-	return node.AsNode().SubtreeFacts() & ^SubtreeExclusionsNode
+	return node.SubtreeFacts() & ^SubtreeExclusionsNode
 }
 
 type NodeBase struct {
