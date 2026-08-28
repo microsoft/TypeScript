@@ -6,6 +6,11 @@
 // Source: src/api/async/types.ts
 // Regenerate: npm run generate (from packages/typescript)
 //
+import type {
+    APIRequest as ProtocolRequest,
+    APIResponse as ProtocolResponse,
+} from "../proto.ts";
+
 import type { CompletionItemKind } from "#enums/completionItemKind";
 import type { ElementFlags } from "#enums/elementFlags";
 import type { ObjectFlags } from "#enums/objectFlags";
@@ -41,52 +46,97 @@ export interface Type {
     readonly id: number;
 
     /** Get the symbol associated with this type, if any */
-    getSymbol(): Symbol | undefined;
+    getSymbol: {
+        (): Symbol | undefined;
+        gen(): Generator<ProtocolRequest, Symbol | undefined, ProtocolResponse["result"]>;
+    };
 
     /** Get the properties of this type. */
-    getProperties(): readonly Symbol[];
+    getProperties: {
+        (): readonly Symbol[];
+        gen(): Generator<ProtocolRequest, readonly Symbol[], ProtocolResponse["result"]>;
+    };
 
     /** Get a named property of this type, if present. */
-    getProperty(propertyName: string): Symbol | undefined;
+    getProperty: {
+        (propertyName: string): Symbol | undefined;
+        gen(propertyName: string): Generator<ProtocolRequest, Symbol | undefined, ProtocolResponse["result"]>;
+    };
 
     /** Get the properties of the apparent type of this type. */
-    getApparentProperties(): readonly Symbol[];
+    getApparentProperties: {
+        (): readonly Symbol[];
+        gen(): Generator<ProtocolRequest, readonly Symbol[], ProtocolResponse["result"]>;
+    };
 
     /** Get the apparent type of this type. */
-    getApparentType(): Type;
+    getApparentType: {
+        (): Type;
+        gen(): Generator<ProtocolRequest, Type, ProtocolResponse["result"]>;
+    };
 
     /** Get the reduced type of this type. */
-    getReducedType(): Type;
+    getReducedType: {
+        (): Type;
+        gen(): Generator<ProtocolRequest, Type, ProtocolResponse["result"]>;
+    };
 
     /** Get the call signatures of this type. */
-    getCallSignatures(): readonly Signature[];
+    getCallSignatures: {
+        (): readonly Signature[];
+        gen(): Generator<ProtocolRequest, readonly Signature[], ProtocolResponse["result"]>;
+    };
 
     /** Get the construct signatures of this type. */
-    getConstructSignatures(): readonly Signature[];
+    getConstructSignatures: {
+        (): readonly Signature[];
+        gen(): Generator<ProtocolRequest, readonly Signature[], ProtocolResponse["result"]>;
+    };
 
     /** Get this type with `null` and `undefined` removed. */
-    getNonNullableType(): Type;
+    getNonNullableType: {
+        (): Type;
+        gen(): Generator<ProtocolRequest, Type, ProtocolResponse["result"]>;
+    };
 
     /** Get this type's string index value type, if present. */
-    getStringIndexType(): Type | undefined;
+    getStringIndexType: {
+        (): Type | undefined;
+        gen(): Generator<ProtocolRequest, Type | undefined, ProtocolResponse["result"]>;
+    };
 
     /** Get this type's number index value type, if present. */
-    getNumberIndexType(): Type | undefined;
+    getNumberIndexType: {
+        (): Type | undefined;
+        gen(): Generator<ProtocolRequest, Type | undefined, ProtocolResponse["result"]>;
+    };
 
     /** Get all index information for this type. */
-    getIndexInfos(): readonly IndexInfo[];
+    getIndexInfos: {
+        (): readonly IndexInfo[];
+        gen(): Generator<ProtocolRequest, readonly IndexInfo[], ProtocolResponse["result"]>;
+    };
 
     /** Get the type arguments of the type alias this type was instantiated from, if any */
-    getAliasTypeArguments(): readonly Type[];
+    getAliasTypeArguments: {
+        (): readonly Type[];
+        gen(): Generator<ProtocolRequest, readonly Type[], ProtocolResponse["result"]>;
+    };
 
     /** Get the symbol of the type alias this type was instantiated from, if any */
-    getAliasSymbol(): Symbol | undefined;
+    getAliasSymbol: {
+        (): Symbol | undefined;
+        gen(): Generator<ProtocolRequest, Symbol | undefined, ProtocolResponse["result"]>;
+    };
 
     /**
      * Get the base types of this type, or `undefined` if it is not a class or
      * interface type.
      */
-    getBaseTypes(): readonly Type[] | undefined;
+    getBaseTypes: {
+        (): readonly Type[] | undefined;
+        gen(): Generator<ProtocolRequest, readonly Type[] | undefined, ProtocolResponse["result"]>;
+    };
 
     /** Whether this type is a class or interface type */
     isClassOrInterface(): this is InterfaceType;
@@ -138,9 +188,15 @@ export interface Type {
  */
 export interface FreshableType extends Type {
     /** Get the fresh version of this type, if any */
-    getFreshType(): FreshableType | undefined;
+    getFreshType: {
+        (): FreshableType | undefined;
+        gen(): Generator<ProtocolRequest, FreshableType | undefined, ProtocolResponse["result"]>;
+    };
     /** Get the regular (non-fresh) version of this type, if any */
-    getRegularType(): FreshableType | undefined;
+    getRegularType: {
+        (): FreshableType | undefined;
+        gen(): Generator<ProtocolRequest, FreshableType | undefined, ProtocolResponse["result"]>;
+    };
 }
 
 /** Literal types: StringLiteral, NumberLiteral, BigIntLiteral, BooleanLiteral */
@@ -182,17 +238,29 @@ export interface ObjectType extends Type {
 /** Type references (ObjectFlags.Reference) — e.g. Array<string>, Map<K, V> */
 export interface TypeReference extends ObjectType {
     /** Get the generic target type (e.g. Array for Array<string>) */
-    getTarget(): Type;
+    getTarget: {
+        (): Type;
+        gen(): Generator<ProtocolRequest, Type, ProtocolResponse["result"]>;
+    };
 }
 
 /** Interface types — classes and interfaces (ObjectFlags.ClassOrInterface) */
 export interface InterfaceType extends TypeReference {
     /** Get all type parameters (outer + local, excluding thisType) */
-    getTypeParameters(): readonly TypeParameter[];
+    getTypeParameters: {
+        (): readonly TypeParameter[];
+        gen(): Generator<ProtocolRequest, readonly TypeParameter[], ProtocolResponse["result"]>;
+    };
     /** Get outer type parameters from enclosing declarations */
-    getOuterTypeParameters(): readonly TypeParameter[];
+    getOuterTypeParameters: {
+        (): readonly TypeParameter[];
+        gen(): Generator<ProtocolRequest, readonly TypeParameter[], ProtocolResponse["result"]>;
+    };
     /** Get local type parameters declared on this interface/class */
-    getLocalTypeParameters(): readonly TypeParameter[];
+    getLocalTypeParameters: {
+        (): readonly TypeParameter[];
+        gen(): Generator<ProtocolRequest, readonly TypeParameter[], ProtocolResponse["result"]>;
+    };
 }
 
 /** Tuple types (ObjectFlags.Tuple) */
@@ -208,7 +276,10 @@ export interface TupleType extends InterfaceType {
 /** Union or intersection types (TypeFlags.Union | TypeFlags.Intersection) */
 export interface UnionOrIntersectionType extends Type {
     /** Get the constituent types */
-    getTypes(): readonly Type[];
+    getTypes: {
+        (): readonly Type[];
+        gen(): Generator<ProtocolRequest, readonly Type[], ProtocolResponse["result"]>;
+    };
 }
 
 /** Union types (TypeFlags.Union) */
@@ -227,41 +298,74 @@ export interface TypeParameter extends Type {
     /** True if this is the synthetic `this` type of an interface, class, or tuple */
     readonly isThisType?: boolean | undefined;
     /** Get the constraint (the `T` in `<U extends T>`), or undefined if it has none */
-    getConstraint(): Type | undefined;
+    getConstraint: {
+        (): Type | undefined;
+        gen(): Generator<ProtocolRequest, Type | undefined, ProtocolResponse["result"]>;
+    };
     /** Get the default type (the `T` in `<U = T>`), or undefined if it has none */
-    getDefault(): Type | undefined;
+    getDefault: {
+        (): Type | undefined;
+        gen(): Generator<ProtocolRequest, Type | undefined, ProtocolResponse["result"]>;
+    };
 }
 
 /** Index types — keyof T (TypeFlags.Index) */
 export interface IndexType extends Type {
     /** Get the target type T in `keyof T` */
-    getTarget(): Type;
+    getTarget: {
+        (): Type;
+        gen(): Generator<ProtocolRequest, Type, ProtocolResponse["result"]>;
+    };
 }
 
 /** Indexed access types — T[K] (TypeFlags.IndexedAccess) */
 export interface IndexedAccessType extends Type {
     /** Get the object type T in `T[K]` */
-    getObjectType(): Type;
+    getObjectType: {
+        (): Type;
+        gen(): Generator<ProtocolRequest, Type, ProtocolResponse["result"]>;
+    };
     /** Get the index type K in `T[K]` */
-    getIndexType(): Type;
+    getIndexType: {
+        (): Type;
+        gen(): Generator<ProtocolRequest, Type, ProtocolResponse["result"]>;
+    };
 }
 
 /** Conditional types — T extends U ? X : Y (TypeFlags.Conditional) */
 export interface ConditionalType extends Type {
     /** Get the check type T in `T extends U ? X : Y` */
-    getCheckType(): Type;
+    getCheckType: {
+        (): Type;
+        gen(): Generator<ProtocolRequest, Type, ProtocolResponse["result"]>;
+    };
     /** Get the extends type U in `T extends U ? X : Y` */
-    getExtendsType(): Type;
+    getExtendsType: {
+        (): Type;
+        gen(): Generator<ProtocolRequest, Type, ProtocolResponse["result"]>;
+    };
     /** Get the true type X in `T extends U ? X : Y` */
-    getTrueType(): Type;
+    getTrueType: {
+        (): Type;
+        gen(): Generator<ProtocolRequest, Type, ProtocolResponse["result"]>;
+    };
     /** Get the false type Y in `T extends U ? X : Y` */
-    getFalseType(): Type;
+    getFalseType: {
+        (): Type;
+        gen(): Generator<ProtocolRequest, Type, ProtocolResponse["result"]>;
+    };
 }
 
 /** Substitution types (TypeFlags.Substitution) */
 export interface SubstitutionType extends Type {
-    getBaseType(): Type;
-    getConstraint(): Type;
+    getBaseType: {
+        (): Type;
+        gen(): Generator<ProtocolRequest, Type, ProtocolResponse["result"]>;
+    };
+    getConstraint: {
+        (): Type;
+        gen(): Generator<ProtocolRequest, Type, ProtocolResponse["result"]>;
+    };
 }
 
 /** Template literal types (TypeFlags.TemplateLiteral) */
@@ -269,13 +373,19 @@ export interface TemplateLiteralType extends Type {
     /** Text segments (always one more than the number of type spans) */
     readonly texts: readonly string[];
     /** Get the types interspersed between text segments */
-    getTypes(): readonly Type[];
+    getTypes: {
+        (): readonly Type[];
+        gen(): Generator<ProtocolRequest, readonly Type[], ProtocolResponse["result"]>;
+    };
 }
 
 /** String mapping types — Uppercase<T>, Lowercase<T>, etc. (TypeFlags.StringMapping) */
 export interface StringMappingType extends Type {
     /** Get the mapped type */
-    getTarget(): Type;
+    getTarget: {
+        (): Type;
+        gen(): Generator<ProtocolRequest, Type, ProtocolResponse["result"]>;
+    };
 }
 
 /** Intrinsic types — any, unknown, string, number, bigint, symbol, void, undefined, null, never, object (TypeFlags.Intrinsic) */

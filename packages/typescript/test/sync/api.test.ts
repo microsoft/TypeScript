@@ -19,6 +19,7 @@ import {
     isFunctionDeclaration,
     isIdentifier,
     isImportDeclaration,
+    isInterfaceDeclaration,
     isJSDocParameterTag,
     isNamedImports,
     isReturnStatement,
@@ -55,7 +56,6 @@ import {
 import { visitEachChild } from "@typescript/typescript/unstable/ast/visitor";
 import { createVirtualFileSystem } from "@typescript/typescript/unstable/fs";
 import type { FileSystem } from "@typescript/typescript/unstable/fs";
-import type { APIRequest } from "@typescript/typescript/unstable/proto";
 import {
     API,
     type BigIntLiteralType,
@@ -97,12 +97,10 @@ import {
 import { fileURLToPath } from "node:url";
 import { isSignatureDeclaration } from "../../src/ast/is.ts";
 import { runBenchmarks } from "./api.bench.ts";
-
-const defaultFiles = {
-    "/tsconfig.json": "{}",
-    "/src/index.ts": `import { foo } from './foo';`,
-    "/src/foo.ts": `export const foo = 42;`,
-};
+import {
+    defaultFiles,
+    spawnAPI,
+} from "./api.testUtils.ts";
 
 describe("API", () => {
     test("parseCommandLine", () => {
@@ -401,55 +399,6 @@ describe("API", () => {
     });
 });
 
-describe("API - batchRequests", () => {
-    test("returns results in request order", () => {
-        const api = spawnAPI();
-        try {
-            const { responses } = api.batchRequests([
-                { method: "parseCommandLine", params: { commandLine: ["--strict"] } },
-                { method: "readConfigFile", params: { file: "/tsconfig.json" } },
-            ]);
-
-            assert.strictEqual(responses.length, 2);
-            const commandLine = responses[0];
-            assert.strictEqual(commandLine.method, "parseCommandLine");
-            assert.strictEqual(commandLine.error, undefined);
-            assert.equal(commandLine.result.options.strict, true);
-
-            const config = responses[1];
-            assert.strictEqual(config.method, "readConfigFile");
-            assert.strictEqual(config.error, undefined);
-            assert.deepStrictEqual(config.result.config, {});
-        }
-        finally {
-            api.close();
-        }
-    });
-
-    test("returns an item error without dropping a sibling result", () => {
-        const api = spawnAPI();
-        try {
-            const { responses } = api.batchRequests([
-                { method: "unknown", params: null } as unknown as APIRequest,
-                { method: "parseCommandLine", params: { commandLine: ["--strict"] } },
-            ]);
-
-            assert.equal(responses.length, 2);
-            assert.equal(responses[0].method, "unknown");
-            assert.match(responses[0].error!, /unknown API method/);
-            assert.equal(responses[0].result, null);
-
-            const commandLine = responses[1];
-            assert.strictEqual(commandLine.method, "parseCommandLine");
-            assert.strictEqual(commandLine.error, undefined);
-            assert.strictEqual(commandLine.result.options.strict, true);
-        }
-        finally {
-            api.close();
-        }
-    });
-});
-
 describe("Checker - getImmediateAliasedSymbol", () => {
     test("resolves one level of alias indirection", () => {
         const api = spawnAPI({
@@ -643,6 +592,62 @@ describe("Snapshot", () => {
             const type = project.checker.getTypeOfSymbol(symbol);
             assert.ok(type);
             assert.ok(type.flags & TypeFlags.NumberLiteral);
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("getNonMissingTypeOfSymbol", () => {
+        const api = spawnAPI({
+            "/tsconfig-one.json": JSON.stringify({
+                compilerOptions: {
+                    exactOptionalPropertyTypes: true,
+                    strict: true,
+                },
+            }),
+            "/tsconfig-two.json": JSON.stringify({
+                compilerOptions: {
+                    exactOptionalPropertyTypes: false,
+                    strict: true,
+                },
+            }),
+            "/src/index.ts": "const x: Partial<{ a: string }> = {};",
+        });
+
+        try {
+            // when `"exactOptionalPropertyTypes": true`
+            const snapshot1 = api.updateSnapshot({ openProject: "/tsconfig-one.json" });
+            const project1 = snapshot1.getProject("/tsconfig-one.json")!;
+            const type1 = project1.checker.getTypeAtPosition("/src/index.ts", 7);
+            assert.ok(type1);
+            const symbol1 = project1.checker.getPropertyOfType(type1, "a");
+            assert.ok(symbol1);
+            const propertyType1 = project1.checker.getTypeOfSymbol(symbol1);
+            assert.ok(propertyType1);
+            // getTypeOfSymbol returns 'string | undefined'
+            assert.ok(propertyType1.isUnionType());
+            const propertyType2 = project1.checker.getNonMissingTypeOfSymbol(symbol1);
+            assert.ok(propertyType2);
+            // getNonMissingTypeOfSymbol returns 'string'
+            assert.ok(!propertyType2.isUnionType());
+            assert.ok(propertyType2.flags & TypeFlags.String);
+
+            // when `"exactOptionalPropertyTypes": false`
+            const snapshot2 = api.updateSnapshot({ openProject: "/tsconfig-two.json" });
+            const project2 = snapshot2.getProject("/tsconfig-two.json")!;
+            const type2 = project2.checker.getTypeAtPosition("/src/index.ts", 7);
+            assert.ok(type2);
+            const symbol2 = project2.checker.getPropertyOfType(type2, "a");
+            assert.ok(symbol2);
+            const propertyType3 = project2.checker.getTypeOfSymbol(symbol2);
+            assert.ok(propertyType3);
+            // getTypeOfSymbol returns 'string | undefined'
+            assert.ok(propertyType3.isUnionType());
+            const propertyType4 = project2.checker.getNonMissingTypeOfSymbol(symbol2);
+            assert.ok(propertyType4);
+            // getNonMissingTypeOfSymbol returns 'string | undefined'
+            assert.ok(propertyType4.isUnionType());
         }
         finally {
             api.close();
@@ -3309,6 +3314,109 @@ describe("Checker - isArrayType / isTupleType", () => {
             assert.ok(type);
             assert.equal(project.checker.isArrayType(type), false);
             assert.equal(project.checker.isTupleType(type), false);
+        }
+        finally {
+            api.close();
+        }
+    });
+});
+
+describe("Checker - isReadonlySymbol", () => {
+    test("properties with a 'readonly' modifier", () => {
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/main.ts": `
+export interface User {
+    readonly name: string;
+    age: number;
+}
+
+export type ReadonlyUser = Readonly<User>;
+`,
+        });
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const sourceFile = project.program.getSourceFile("/src/main.ts");
+            assert.ok(sourceFile);
+            const user = sourceFile.statements.find(isInterfaceDeclaration);
+            assert.ok(user);
+            const userProperties = project.checker.getPropertiesOfType(
+                project.checker.getTypeAtLocation(user),
+            );
+            assert.equal(project.checker.isReadonlySymbol(userProperties[0]), true);
+            assert.equal(project.checker.isReadonlySymbol(userProperties[1]), false);
+            const readonlyUser = sourceFile.statements.find(isTypeAliasDeclaration);
+            assert.ok(readonlyUser);
+            const readonlyUserProperties = project.checker.getPropertiesOfType(
+                project.checker.getTypeAtLocation(readonlyUser),
+            );
+            assert.equal(project.checker.isReadonlySymbol(readonlyUserProperties[0]), true);
+            assert.equal(project.checker.isReadonlySymbol(readonlyUserProperties[1]), true);
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("variables declared with 'const'", () => {
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/main.ts": `export const a = 1; export let b = 2;`,
+        });
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const { checker } = snapshot.getProject("/tsconfig.json")!;
+            const a = checker.getSymbolAtPosition("/src/main.ts", "export const ".length);
+            const b = checker.getSymbolAtPosition("/src/main.ts", "export const a = 1; export let ".length);
+            assert.ok(a);
+            assert.ok(b);
+            assert.equal(checker.isReadonlySymbol(a), true);
+            assert.equal(checker.isReadonlySymbol(b), false);
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("get accessors without matching set accessors", () => {
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/main.ts": `
+class Alpha {
+    private _value!: number;
+    get value(): number {
+        return this._value;
+    }
+}
+class Bravo {
+    private _value!: number;
+    get value(): number {
+        return this._value;
+    }
+    set value(newValue: number) {
+        this._value = newValue;
+    }
+}
+export type A = InstanceType<typeof Alpha>;
+export type B = InstanceType<typeof Bravo>;
+`,
+        });
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const sourceFile = project.program.getSourceFile("/src/main.ts");
+            assert.ok(sourceFile);
+            const typeAliases = sourceFile.statements.filter(isTypeAliasDeclaration);
+            assert.equal(typeAliases.length, 2);
+            const aProperties = project.checker.getPropertiesOfType(
+                project.checker.getTypeAtLocation(typeAliases[0]),
+            );
+            assert.equal(project.checker.isReadonlySymbol(aProperties[1]), true);
+            const bProperties = project.checker.getPropertiesOfType(
+                project.checker.getTypeAtLocation(typeAliases[1]),
+            );
+            assert.equal(project.checker.isReadonlySymbol(bProperties[1]), false);
         }
         finally {
             api.close();
@@ -6824,13 +6932,6 @@ describe("runWithTemporaryFileUpdate", () => {
         }
     });
 });
-
-function spawnAPI(files: Record<string, string> = { ...defaultFiles }) {
-    return new API({
-        cwd: fileURLToPath(new URL("../../../../", import.meta.url).toString()),
-        fs: createVirtualFileSystem(files),
-    });
-}
 
 function spawnAPIWithFS(files: Record<string, string> = { ...defaultFiles }): { api: API; fs: FileSystem; } {
     const fs = createVirtualFileSystem(files);
