@@ -39,7 +39,7 @@ type FlowList struct {
 type FlowLabel = FlowNode
 
 const (
-	kindFlowSwitchClauseData Kind = KindCount + iota
+	kindFlowSwitchClauseData Kind = KindCount + 1 + iota
 	kindFlowReduceLabelData
 )
 

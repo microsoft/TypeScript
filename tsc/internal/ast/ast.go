@@ -184,9 +184,7 @@ type Node struct {
 	data   any
 }
 
-// Node accessors. Some accessors are implemented as methods on NodeData, others are implemented though
-// type switches. Either approach is fine. Interface methods are likely more performant, but have higher
-// code size costs because we have hundreds of implementations of the NodeData interface.
+// Shared node accessors dispatch on Kind to the concrete payload stored in data.
 
 func (n *Node) AsNode() *Node { return n }
 func (n *Node) Pos() int      { return n.Loc.Pos() }
