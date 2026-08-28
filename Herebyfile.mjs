@@ -371,18 +371,16 @@ function parseGoConstBlock(block, def) {
         if (def.stringEnum) {
             tsValue = parseGoStringValue(goValue, def.valueReplacements ?? {});
         }
-        else if (goValue.includes("iota")) {
-            iotaExpression = goValue;
-            tsValue = goValue.replace(/\biota\b/g, String(iotaCounter));
-        }
-        else if (iotaExpression !== undefined && goValue === "") {
-            tsValue = iotaExpression.replace(/\biota\b/g, String(iotaCounter));
-        }
         else {
-            // Replace Go bitwise NOT (^) with TypeScript (~)
-            tsValue = goValue.replace(/\^/g, "~");
-            // Strip enum prefix from member references
-            tsValue = tsValue.replace(new RegExp(`${prefix}(\\w+)`, "g"), "$1");
+            let numericValue = goValue;
+            if (goValue.includes("iota")) {
+                iotaExpression = goValue;
+                numericValue = goValue.replace(/\biota\b/g, String(iotaCounter));
+            }
+            else if (iotaExpression !== undefined && goValue === "") {
+                numericValue = iotaExpression.replace(/\biota\b/g, String(iotaCounter));
+            }
+            tsValue = translateGoNumericExpression(numericValue, prefix);
         }
 
         members.push({ name: memberName, value: tsValue });
@@ -390,6 +388,142 @@ function parseGoConstBlock(block, def) {
     }
 
     return members;
+}
+
+const goBinaryPrecedence = new Map([
+    ["||", 1],
+    ["&&", 2],
+    ["==", 3],
+    ["!=", 3],
+    ["<", 3],
+    ["<=", 3],
+    [">", 3],
+    [">=", 3],
+    ["+", 4],
+    ["-", 4],
+    ["|", 4],
+    ["^", 4],
+    ["*", 5],
+    ["/", 5],
+    ["%", 5],
+    ["<<", 5],
+    [">>", 5],
+    ["&", 5],
+    ["&^", 5],
+]);
+
+const tsBinaryPrecedence = new Map([
+    ["||", 4],
+    ["&&", 5],
+    ["|", 6],
+    ["^", 7],
+    ["&", 8],
+    ["==", 9],
+    ["!=", 9],
+    ["<", 10],
+    ["<=", 10],
+    [">", 10],
+    [">=", 10],
+    ["<<", 11],
+    [">>", 11],
+    ["+", 12],
+    ["-", 12],
+    ["*", 13],
+    ["/", 13],
+    ["%", 13],
+]);
+
+/**
+ * @typedef {{ kind: "token"; text: string }
+ *   | { kind: "unary"; operator: string; operand: GoExpression }
+ *   | { kind: "binary"; operator: string; left: GoExpression; right: GoExpression }
+ *   | { kind: "parenthesized"; expression: GoExpression }} GoExpression
+ */
+
+/**
+ * Parse with Go's precedence and print with TypeScript's precedence, adding parentheses where
+ * copying the expression verbatim would change its meaning.
+ * @param {string} expression
+ * @param {string} prefix
+ */
+function translateGoNumericExpression(expression, prefix) {
+    const tokens = expression.match(/<<|>>|&\^|\|\||&&|==|!=|<=|>=|[()+\-*/%&|^<>]|(?:0[xX][\dA-Fa-f_]+|0[bB][01_]+|0[oO][0-7_]+|\d[\d_]*)|[A-Za-z_]\w*/g) ?? [];
+    const withoutWhitespace = expression.replace(/\s/g, "");
+    if (tokens.join("") !== withoutWhitespace) {
+        throw new Error(`Cannot parse numeric enum value: ${expression}`);
+    }
+
+    let tokenIndex = 0;
+
+    /** @returns {GoExpression} */
+    function parseUnary() {
+        const token = tokens[tokenIndex];
+        if (token === "+" || token === "-" || token === "^") {
+            tokenIndex++;
+            return { kind: "unary", operator: token === "^" ? "~" : token, operand: parseUnary() };
+        }
+        if (token === "(") {
+            tokenIndex++;
+            const inner = parseBinary(1);
+            if (tokens[tokenIndex] !== ")") {
+                throw new Error(`Unmatched parenthesis in numeric enum value: ${expression}`);
+            }
+            tokenIndex++;
+            return { kind: "parenthesized", expression: inner };
+        }
+        if (token === undefined || goBinaryPrecedence.has(token) || token === ")") {
+            throw new Error(`Expected operand in numeric enum value: ${expression}`);
+        }
+        tokenIndex++;
+        return { kind: "token", text: token.replace(new RegExp(`^${prefix}`), "") };
+    }
+
+    /**
+     * @param {number} minimumPrecedence
+     * @returns {GoExpression}
+     */
+    function parseBinary(minimumPrecedence) {
+        let left = parseUnary();
+        while (true) {
+            const operator = tokens[tokenIndex];
+            const precedence = goBinaryPrecedence.get(operator);
+            if (precedence === undefined || precedence < minimumPrecedence) break;
+            tokenIndex++;
+            const right = parseBinary(precedence + 1);
+            left = { kind: "binary", operator, left, right };
+        }
+        return left;
+    }
+
+    const parsed = parseBinary(1);
+    if (tokenIndex !== tokens.length) {
+        throw new Error(`Unexpected token '${tokens[tokenIndex]}' in numeric enum value: ${expression}`);
+    }
+
+    /**
+     * @param {GoExpression} node
+     * @param {number} minimumPrecedence
+     * @returns {string}
+     */
+    function print(node, minimumPrecedence) {
+        if (node.kind === "token") return node.text;
+        if (node.kind === "parenthesized") return `(${print(node.expression, 0)})`;
+        if (node.kind === "unary") {
+            const text = `${node.operator}${print(node.operand, 14)}`;
+            return 14 < minimumPrecedence ? `(${text})` : text;
+        }
+
+        const operator = node.operator === "&^" ? "&" : node.operator;
+        const precedence = tsBinaryPrecedence.get(operator);
+        assert(precedence !== undefined);
+        const right = node.operator === "&^"
+            ? `~${print(node.right, 14)}`
+            : print(node.right, precedence + 1);
+        const text = `${print(node.left, precedence)} ${operator} ${right}`;
+        return precedence < minimumPrecedence ? `(${text})` : text;
+    }
+
+    return print(parsed, 0);
 }
 
 /**
