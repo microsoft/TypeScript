@@ -62,6 +62,7 @@ import {
     CheckFlags,
     type ConditionalType,
     DiagnosticCategory,
+    type DocumentIdentifier,
     EmitOnly,
     type FreshableType,
     type ImportAdderAction,
@@ -295,7 +296,7 @@ describe("API", () => {
             });
             assert.equal(isolatedDeclarationModuleOutput.diagnostics?.length ?? 0, 0);
 
-            const moduleFileOutput = api.transpileModuleFromFile("/input.ts", {
+            const moduleFileOutput = api.transpileModuleFromFile({ uri: "file:///input.ts" }, {
                 compilerOptions: { module: ModuleKind.CommonJS },
             });
             assert.match(moduleFileOutput.outputText, /exports\.x = 1/);
@@ -308,7 +309,7 @@ describe("API", () => {
             });
             assert.equal(windowsDeclarationOutput.outputText, "export declare const x: number;\n");
 
-            const declarationFileOutput = api.transpileDeclarationFromFile("/input.ts");
+            const declarationFileOutput = api.transpileDeclarationFromFile({ uri: "file:///input.ts" });
             assert.equal(declarationFileOutput.outputText, "export declare const x: number;\n");
         }
         finally {
@@ -1003,6 +1004,26 @@ describe("Checker - getMemberInModuleExports", () => {
 });
 
 describe("SourceFile", () => {
+    test("getSourceFile rejects invalid document identifiers", () => {
+        const api = spawnAPI();
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const program = snapshot.getProject("/tsconfig.json")!.program;
+            const document = { fileName: "/src/index.ts" } as unknown as DocumentIdentifier;
+
+            assert.throws(
+                () => program.getSourceFile(document),
+                {
+                    name: "TypeError",
+                    message: "Expected a string or { uri } for the document, received an object with keys: fileName",
+                },
+            );
+        }
+        finally {
+            api.close();
+        }
+    });
+
     test("getSourceFileNames returns all program files, not just root files", () => {
         const api = spawnAPI({
             "/tsconfig.json": JSON.stringify({
@@ -1089,7 +1110,7 @@ describe("SourceFile", () => {
 
             const mts = program.getSourceFile("/src/esm.mts");
             assert.ok(mts);
-            assert.equal((program.getSourceFileMetadata(mts.fileName))?.impliedNodeFormat, ModuleKind.ESNext);
+            assert.equal((program.getSourceFileMetadata({ uri: "file:///src/esm.mts" }))?.impliedNodeFormat, ModuleKind.ESNext);
             assert.equal((program.getSourceFileMetadataByPath(mts.path))?.impliedNodeFormat, ModuleKind.ESNext);
 
             const cts = program.getSourceFile("/src/cjs.cts");
