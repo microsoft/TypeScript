@@ -70,12 +70,12 @@ import {
     SymbolFlags,
     type TemplateLiteralType,
     type TextEdit,
+    type TupleTypeReference,
     TypeFlags,
     TypeFormatFlags,
     type TypeParameter,
     TypePredicateKind,
     type TypeReference,
-    type TupleTypeReference,
     type UnionOrIntersectionType,
 } from "@typescript/typescript/unstable/async"; // @sync: } from "@typescript/typescript/unstable/sync";
 import { createVirtualFileSystem } from "@typescript/typescript/unstable/fs";
