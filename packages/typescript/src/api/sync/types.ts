@@ -249,7 +249,10 @@ export interface TypeReference extends ObjectType {
 /** References to tuple types */
 export interface TupleTypeReference extends TypeReference {
     /** Get the tuple type that describes this reference's shape */
-    getTarget(): TupleType;
+    getTarget: {
+        (): TupleType;
+        gen(): Generator<ProtocolRequest, TupleType, ProtocolResponse["result"]>;
+    };
 }
 
 /** Interface types — classes and interfaces (ObjectFlags.ClassOrInterface) */

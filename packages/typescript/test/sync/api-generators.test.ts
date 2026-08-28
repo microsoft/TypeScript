@@ -813,6 +813,7 @@ describe("API - generator batching", () => {
                 parityCase("Checker", "typeToString", checker.typeToString, assertDeepEquivalent, interfaceType, interfaceDeclaration),
                 parityCase("Checker", "isContextSensitive", checker.isContextSensitive, assertDeepEquivalent, boxDeclaration.initializer!),
                 parityCase("Checker", "isArrayType", checker.isArrayType, assertDeepEquivalent, arrayType),
+                parityCase("Checker", "isTupleTypeReference", checker.isTupleTypeReference, assertDeepEquivalent, tupleType),
                 parityCase("Checker", "isTupleType", checker.isTupleType, assertDeepEquivalent, tupleType),
                 parityCase("Checker", "getReturnTypeOfSignature", checker.getReturnTypeOfSignature, assertTypesEquivalent, signature),
                 parityCase("Checker", "getRestTypeOfSignature", checker.getRestTypeOfSignature, assertOptionalTypesEquivalent, signature),
