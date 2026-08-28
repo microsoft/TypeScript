@@ -358,6 +358,7 @@ func (w *filesParser) getProcessedFiles(loader *fileLoader) processedFiles {
 	var importHelpersImportSpecifiers map[tspath.Path]*ast.StringLiteralNode
 	var sourceFilesFoundSearchingNodeModules collections.Set[tspath.Path]
 	libFilesMap := make(map[tspath.Path]*LibFile, libFileCount)
+	libFilesByName := make(map[string]tspath.Path, libFileCount)
 
 	var redirectTargetsMap map[tspath.Path][]string
 	var redirectFilesByPath map[tspath.Path]*redirectsFile
@@ -516,6 +517,7 @@ func (w *filesParser) getProcessedFiles(loader *fileLoader) processedFiles {
 			if task.libFile != nil {
 				libFiles = append(libFiles, file)
 				libFilesMap[path] = task.libFile
+				libFilesByName[task.libFile.Name] = path
 			} else {
 				files = append(files, file)
 			}
@@ -576,6 +578,7 @@ func (w *filesParser) getProcessedFiles(loader *fileLoader) processedFiles {
 		importHelpersImportSpecifiers:        importHelpersImportSpecifiers,
 		sourceFilesFoundSearchingNodeModules: sourceFilesFoundSearchingNodeModules,
 		libFiles:                             libFilesMap,
+		libFilesByName:                       libFilesByName,
 		missingFiles:                         missingFiles,
 		includeProcessor:                     includeProcessor,
 		outputFileToProjectReferenceSource:   outputFileToProjectReferenceSource,
