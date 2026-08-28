@@ -1,0 +1,16 @@
+b.ts(1,13): error TS1005: '(' expected.
+b.ts(2,13): error TS1005: '(' expected.
+
+
+==== x.ts (0 errors) ====
+    export const x = 1;
+    
+==== b.ts (2 errors) ====
+    import.defer?.("./x");
+                ~~
+!!! error TS1005: '(' expected.
+    import.defer?.<string>("./x");
+                ~~
+!!! error TS1005: '(' expected.
+    import.defer("./x");
+    
