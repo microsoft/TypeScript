@@ -28,7 +28,7 @@ type System interface {
 	GetCurrentDirectory() string
 	WriteOutputIsTTY() bool
 	GetWidthOfTerminal() int
-	GetEnvironmentVariable(name string) string
+	GetEnvironmentVariable(name string) (string, bool)
 	Spawn(command []string, dir string, stderr io.Writer) (io.ReadWriteCloser, error)
 
 	PnpApi() *pnp.PnpApi
@@ -38,7 +38,7 @@ type System interface {
 }
 
 func newContentMapperLogger(sys System) contentmapper.Logger {
-	if sys.GetEnvironmentVariable("TS_CONTENT_MAPPER_DEBUG") == "" {
+	if value, _ := sys.GetEnvironmentVariable("TS_CONTENT_MAPPER_DEBUG"); value == "" {
 		return nil
 	}
 	writer := sys.ErrorWriter()

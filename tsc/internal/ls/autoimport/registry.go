@@ -1123,7 +1123,7 @@ func hasNewNonNodeModulesFiles(program *compiler.Program, bucket *RegistryBucket
 		return false
 	}
 	for _, file := range program.GetSourceFiles() {
-		if strings.Contains(file.FileName(), "/node_modules/") || isIgnoredFile(program, file) {
+		if file.IsContentMapperSupplemental() || strings.Contains(file.FileName(), "/node_modules/") || isIgnoredFile(program, file) {
 			continue
 		}
 		if _, ok := bucket.Paths[file.Path()]; !ok {
@@ -1242,7 +1242,7 @@ func (b *registryBuilder) buildProjectBucket(
 	var combinedStats extractorStats
 
 	for _, file := range program.GetSourceFiles() {
-		if isIgnoredFile(program, file) {
+		if file.IsContentMapperSupplemental() || isIgnoredFile(program, file) {
 			continue
 		}
 		if fileExcludePatterns != nil && fileExcludePatterns.MatchString(file.FileName()) {

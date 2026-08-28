@@ -204,6 +204,10 @@ func (p *Project) Name() string {
 	return p.configFileName
 }
 
+func (p *Project) CurrentDirectory() string {
+	return p.currentDirectory
+}
+
 // DisplayName returns a short, human-readable name for the project,
 // relative to the given workspace root directory.
 // For configured projects, this is the config file path made relative.

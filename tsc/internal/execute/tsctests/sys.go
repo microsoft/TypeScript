@@ -105,9 +105,10 @@ func NewTscSystem(files FileMap, useCaseSensitiveFileNames bool, cwd string) *Te
 		fs: &testFs{
 			FS: fs,
 		},
-		cwd:    cwd,
-		clock:  clock,
-		pnpApi: pnpApi,
+		cwd:         cwd,
+		pnpApi:      pnpApi,
+		outputIsTTY: true,
+		clock:       clock,
 	}
 }
 
@@ -138,6 +139,9 @@ func newTestSys(tscInput *tscInput, forIncrementalCorrectness bool) *TestSys {
 	sys := NewTscSystem(tscInput.files, !tscInput.ignoreCase, cwd)
 	sys.defaultLibraryPath = libPath
 	sys.currentWrite = currentWrite
+	if tscInput.outputIsTTY != nil {
+		sys.outputIsTTY = *tscInput.outputIsTTY
+	}
 	sys.tracer = harnessutil.NewTracerForBaselining(tspath.ComparePathsOptions{
 		UseCaseSensitiveFileNames: !tscInput.ignoreCase,
 		CurrentDirectory:          cwd,
@@ -177,6 +181,7 @@ type TestSys struct {
 	defaultLibraryPath string
 	cwd                string
 	env                map[string]string
+	outputIsTTY        bool
 	clock              *TestClock
 
 	pnpApi *pnp.PnpApi
@@ -242,18 +247,19 @@ func (s *TestSys) ErrorWriter() io.Writer {
 }
 
 func (s *TestSys) WriteOutputIsTTY() bool {
-	return true
+	return s.outputIsTTY
 }
 
 func (s *TestSys) GetWidthOfTerminal() int {
-	if widthStr := s.GetEnvironmentVariable("TS_TEST_TERMINAL_WIDTH"); widthStr != "" {
+	if widthStr, _ := s.GetEnvironmentVariable("TS_TEST_TERMINAL_WIDTH"); widthStr != "" {
 		return core.Must(strconv.Atoi(widthStr))
 	}
 	return 0
 }
 
-func (s *TestSys) GetEnvironmentVariable(name string) string {
-	return s.env[name]
+func (s *TestSys) GetEnvironmentVariable(name string) (string, bool) {
+	value, ok := s.env[name]
+	return value, ok
 }
 
 // Spawn serves the fake content mappers in-process, selecting the implementation by the exec command the

@@ -19,14 +19,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be # v1.3.1
-        with:
-          large-packages: false
-          docker-images: false
-          swap-storage: false
-          dotnet: false
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
-      - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: 'lts/*'
       - uses: ./.github/actions/setup-go
@@ -36,16 +30,12 @@ jobs:
 
   release-build:
     if: ${{ github.repository == 'microsoft/TypeScript' && github.event_name != 'merge_group' }}
-    runs-on:
-      - self-hosted
-      - 1ES.Pool=TypeScript-1ES-GitHub-Large
-      - 1ES.ImageOverride=azure-linux-3
+    runs-on: TypeScript-1ES-GitHub-TypeScript-1
     steps:
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
-      - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: 'lts/*'
-      - uses: dtolnay/rust-toolchain@fcf085fcb4b4b8f63f96906cd713eb52181b5ea4 # stable
       - uses: ./.github/actions/setup-go
       - run: npm ci
       - run: npx hereby typescript:release --forRelease --setPrerelease dev.0.0
@@ -53,12 +43,22 @@ jobs:
   extension:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
-      - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: 'lts/*'
       - run: npm ci
       - run: npm run extension:build
+
+  package-feed-proxy:
+    runs-on: ubuntu-slim
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 'lts/*'
+          package-manager-cache: false
+      - run: npm ci --registry=https://packagefeedproxy.microsoft.io/npm/
 
   test:
     strategy:
@@ -77,10 +77,7 @@ jobs:
             os: macos
             coverage: true
             skip: ${{ github.event_name == 'merge_group' || github.event_name == 'pull_request' }}
-          - runner:
-              - self-hosted
-              - 1ES.Pool=TypeScript-1ES-GitHub-Large
-              - 1ES.ImageOverride=azure-linux-3
+          - runner: TypeScript-1ES-GitHub-TypeScript-1
             os: linux
             name: 'race mode'
             race: true
@@ -94,6 +91,7 @@ jobs:
             name: 'concurrent test programs'
             concurrent-test-programs: true
             coverage: true
+            skip: ${{ github.event_name == 'merge_group' }}
         exclude:
           - config:
               skip: true
@@ -107,18 +105,12 @@ jobs:
       TSGO_HEREBY_RACE: ${{ (matrix.config.race && 'true') || 'false' }}
       TSGO_HEREBY_NOEMBED: ${{ (matrix.config.noembed && 'true') || 'false' }}
       TSGO_HEREBY_CONCURRENT_TEST_PROGRAMS: ${{ (matrix.config.concurrent-test-programs && 'true') || 'false' }}
-      TSGO_HEREBY_COVERAGE: ${{ (matrix.config.coverage && 'true') || 'false' }}
+      TSGO_HEREBY_COVERAGE: ${{ (matrix.config.coverage && github.event_name != 'merge_group' && 'true') || 'false' }}
     steps:
-      - uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be # v1.3.1
-        with:
-          large-packages: false
-          docker-images: false
-          swap-storage: false
-          dotnet: false
       - run: git config --system core.longpaths true
         if: ${{ matrix.config.os == 'windows' }}
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
-      - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: 'lts/*'
       - uses: ./.github/actions/setup-go
@@ -134,13 +126,9 @@ jobs:
         if: ${{ matrix.config.os != 'windows' && !matrix.config.race }}
       - name: Tests
         id: test
-        run: npx hereby test
+        run: npx hereby test:tsc
       - name: Benchmarks
         run: npx hereby test:benchmarks
-      - name: Tools Tests
-        run: npx hereby test:tools
-      - name: API Tests
-        run: npx hereby test:api
       - run: git add .
       - uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
         if: ${{ always() && matrix.config.coverage && github.event_name != 'merge_group' }}
@@ -160,6 +148,64 @@ jobs:
         with:
           name: ${{ matrix.config.name || matrix.config.os }}-new-baselines
           path: tsc/testdata/baselines/local
+
+  test-extra:
+    strategy:
+      fail-fast: ${{ github.event_name == 'merge_group' }}
+      matrix:
+        config:
+          - runner: ubuntu-latest
+            os: linux
+            coverage: true
+            main: true
+          - runner: windows-latest
+            os: windows
+            coverage: true
+            skip: ${{ github.event_name == 'merge_group' }}
+          - runner: macos-latest
+            os: macos
+            coverage: true
+            skip: ${{ github.event_name == 'merge_group' || github.event_name == 'pull_request' }}
+        exclude:
+          - config:
+              skip: true
+
+    name: test extra (${{ matrix.config.runner }})
+    runs-on: ${{ matrix.config.runner }}
+    permissions:
+      id-token: write
+      contents: read
+    env:
+      TSGO_HEREBY_COVERAGE: ${{ (matrix.config.coverage && github.event_name != 'merge_group' && 'true') || 'false' }}
+    steps:
+      - run: git config --system core.longpaths true
+        if: ${{ matrix.config.os == 'windows' }}
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 'lts/*'
+      - uses: ./.github/actions/setup-go
+      - if: ${{ !matrix.config.main }}
+        name: Disable PR annotations
+        run: |
+          echo "::remove-matcher owner=eslint-compact::"
+          echo "::remove-matcher owner=eslint-stylish::"
+          echo "::remove-matcher owner=tsc::"
+          echo "::remove-matcher owner=go::"
+      - run: npm ci
+      - run: go install gotest.tools/gotestsum@latest
+        if: ${{ matrix.config.os != 'windows' }}
+      - run: npx hereby test:extension
+      - run: npx hereby test:tools
+      - run: npx hereby test:api
+      - run: git add .
+      - uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
+        if: ${{ always() && matrix.config.coverage && github.event_name != 'merge_group' }}
+        with:
+          use_oidc: ${{ !(github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork) }}
+          name: extra-${{ matrix.config.runner }}
+          directory: ./coverage
+      - run: git diff --staged --exit-code --stat
 
   lint:
     strategy:
@@ -185,14 +231,8 @@ jobs:
     env:
       TSGO_HEREBY_NOEMBED: ${{ (matrix.config.noembed && 'true') || 'false' }}
     steps:
-      - uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be # v1.3.1
-        with:
-          large-packages: false
-          docker-images: false
-          swap-storage: false
-          dotnet: false
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
-      - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: 'lts/*'
       - uses: ./.github/actions/setup-go
@@ -209,8 +249,8 @@ jobs:
   format:
     runs-on: ubuntu-slim
     steps:
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
-      - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: 'lts/*'
       - uses: ./.github/actions/setup-go
@@ -220,14 +260,8 @@ jobs:
   generate:
     runs-on: ubuntu-latest
     steps:
-      - uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be # v1.3.1
-        with:
-          large-packages: false
-          docker-images: false
-          swap-storage: false
-          dotnet: false
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
-      - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: '>=22.16.0'
       - uses: ./.github/actions/setup-go
@@ -246,7 +280,7 @@ jobs:
   tidy:
     runs-on: ubuntu-slim
     steps:
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: ./.github/actions/setup-go
       - run: go -C ./tsc mod tidy -diff
       - run: go -C ./tools mod tidy -diff
@@ -256,36 +290,21 @@ jobs:
   smoke:
     runs-on: ubuntu-latest
     steps:
-      - uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be # v1.3.1
-        with:
-          large-packages: false
-          docker-images: false
-          swap-storage: false
-          dotnet: false
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
-        with:
-          repository: microsoft/TypeScript
-          ref: v6.0.3
-          path: smoke/typescript-6.0
-      - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: 'lts/*'
       - uses: ./.github/actions/setup-go
       - run: npm ci
       - run: npx hereby build --race
-      - run: npm ci
-        working-directory: smoke/typescript-6.0
-      - run: npx hereby generate-diagnostics
-        working-directory: smoke/typescript-6.0
-      - run: ./built/local/tsc -p ./smoke/typescript-6.0/src/compiler --singleThreaded
-      - run: ./built/local/tsc -p ./smoke/typescript-6.0/src/compiler
+      - run: ./built/local/tsc -p ./tsc/testdata/fixtures/compiler --noEmit --singleThreaded
+      - run: ./built/local/tsc -p ./tsc/testdata/fixtures/compiler --noEmit
 
   misc:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
-      - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: 'lts/*'
       - uses: ./.github/actions/setup-go
@@ -305,8 +324,10 @@ jobs:
       - generate
       - lint
       - misc
+      - package-feed-proxy
       - smoke
       - test
+      - test-extra
       - tidy
     steps:
       - name: Check required jobs

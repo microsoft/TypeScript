@@ -336,10 +336,7 @@ func (fs *overlayFS) processChanges(changes []FileChange) (FileChangeSummary, ma
 			continue
 		}
 
-		if events.closeChange != nil {
-			if o == nil {
-				panic("overlay not found for closed file: " + uri)
-			}
+		if events.closeChange != nil && o != nil {
 			result.Closed.Add(uri)
 			delete(newOverlays, path)
 			o = nil
@@ -357,11 +354,8 @@ func (fs *overlayFS) processChanges(changes []FileChange) (FileChangeSummary, ma
 			}
 		}
 
-		if len(events.changes) > 0 {
+		if len(events.changes) > 0 && o != nil {
 			result.Changed.Add(uri)
-			if o == nil {
-				panic("overlay not found for changed file: " + uri)
-			}
 			for _, change := range events.changes {
 				converters := lsconv.NewConverters(fs.positionEncoding, func(fileName string) *lsconv.LSPLineMap {
 					return o.LSPLineMap()

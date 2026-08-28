@@ -222,6 +222,15 @@ func FromLSPPositionForSourceFile(c *Converters, file *ast.SourceFile, position 
 	return lspPositionToVirtual(c, files, position, feature)
 }
 
+// FromLSPRangeToOriginal converts an LSP range in a content-mapped document directly to original-text offsets.
+func FromLSPRangeToOriginal(c *Converters, script Script, textRange lsproto.Range) core.TextRange {
+	original := originalTextScript{fileName: script.OriginalFileName(), text: script.OriginalText()}
+	return core.NewTextRange(
+		int(c.lineAndCharacterToPosition(original, textRange.Start)),
+		int(c.lineAndCharacterToPosition(original, textRange.End)),
+	)
+}
+
 func sourceFileProjections(file *ast.SourceFile) []*ast.SourceFile {
 	supplemental := file.SupplementalSourceFiles()
 	files := make([]*ast.SourceFile, 1, 1+len(supplemental))

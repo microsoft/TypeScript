@@ -1,0 +1,41 @@
+//// [tests/cases/compiler/constAssertionInLoop.ts] ////
+
+=== constAssertionInLoop.ts ===
+// https://github.com/microsoft/TypeScript/issues/64012
+
+type Candidate = { mode: "a"; output: unknown } | { mode: "b" };
+>Candidate : Candidate
+>mode : "a"
+>output : unknown
+>mode : "b"
+
+export function run(): never {
+>run : () => never
+
+    let lastCandidate: Candidate | null = null;
+>lastCandidate : Candidate | null
+
+    while (true) {
+>true : true
+
+        const candidate: Candidate = {
+>candidate : Candidate
+>{            mode: "a",            output: lastCandidate,        } as const : { readonly mode: "a"; readonly output: { mode: "a"; output: unknown; } | null; }
+>{            mode: "a",            output: lastCandidate,        } : { readonly mode: "a"; readonly output: { mode: "a"; output: unknown; } | null; }
+
+            mode: "a",
+>mode : "a"
+>"a" : "a"
+
+            output: lastCandidate,
+>output : { mode: "a"; output: unknown; } | null
+>lastCandidate : { mode: "a"; output: unknown; } | null
+
+        } as const;
+        lastCandidate = candidate;
+>lastCandidate = candidate : { mode: "a"; output: unknown; }
+>lastCandidate : Candidate | null
+>candidate : { mode: "a"; output: unknown; }
+    }
+}
+

@@ -219,8 +219,6 @@ func (l *LanguageService) createDefinitionLocations(
 ) lsproto.DefinitionResponse {
 	locations := make([]*lsproto.LocationLink, 0)
 	locationRanges := collections.Set[fileRange]{}
-	concreteTargets := collections.Set[lsproto.DocumentUri]{}
-	var fileFallbacks []*lsproto.LocationLink
 
 	if reference != nil {
 		targetRange := lsproto.Range{
@@ -259,32 +257,18 @@ func (l *LanguageService) createDefinitionLocations(
 			}
 			targetSelectionLoc, selectionFidelity := l.sourceFileRangeToLSPLocationForFeature(file, nameRange, feature)
 			if !selectionFidelity.IsSingleSegment() {
-				zeroRange := lsproto.Range{}
-				fileFallbacks = append(fileFallbacks, &lsproto.LocationLink{
-					OriginSelectionRange: &originSelectionRange,
-					TargetSelectionRange: zeroRange,
-					TargetUri:            targetSelectionLoc.Uri,
-					TargetRange:          zeroRange,
-				})
 				continue
 			}
 			targetLoc, contextFidelity := l.sourceFileRangeToLSPLocation(file, *contextRange)
 			if contextFidelity.IsNone() || targetLoc.Uri != targetSelectionLoc.Uri || !lspRangeContains(targetLoc.Range, targetSelectionLoc.Range) {
 				targetLoc = targetSelectionLoc
 			}
-			concreteTargets.Add(targetSelectionLoc.Uri)
 			locations = append(locations, &lsproto.LocationLink{
 				OriginSelectionRange: &originSelectionRange,
 				TargetSelectionRange: targetSelectionLoc.Range,
 				TargetUri:            targetLoc.Uri,
 				TargetRange:          targetLoc.Range,
 			})
-		}
-	}
-	for _, fallback := range fileFallbacks {
-		if !concreteTargets.Has(fallback.TargetUri) {
-			concreteTargets.Add(fallback.TargetUri)
-			locations = append(locations, fallback)
 		}
 	}
 

@@ -287,7 +287,7 @@ export const generateExtension = task({
     name: "generate:extension",
     description: "Generates files in the extension",
     run: async () => {
-        await $`npm run -w vscode-typescript generateLocBundle`;
+        await $`npm run -w native-preview generateLocBundle`;
     },
 });
 
@@ -315,6 +315,7 @@ const enumDefs = [
     { name: "SignatureKind", goPrefix: "SignatureKind", goFile: "tsc/internal/checker/types.go", outDir: "packages/typescript/src/enums" },
     { name: "ElementFlags", goPrefix: "ElementFlags", goFile: "tsc/internal/checker/types.go", outDir: "packages/typescript/src/enums" },
     { name: "TypePredicateKind", goPrefix: "TypePredicateKind", goFile: "tsc/internal/checker/types.go", outDir: "packages/typescript/src/enums" },
+    { name: "TypeFormatFlags", goPrefix: "TypeFormatFlags", goFile: "tsc/internal/checker/types.go", outDir: "packages/typescript/src/enums" },
     { name: "DiagnosticCategory", goPrefix: "Category", goFile: "tsc/internal/diagnostics/diagnostics.go", outDir: "packages/typescript/src/enums" },
     { name: "SyntaxKind", goPrefix: "Kind", goFile: "tsc/internal/ast/kind_generated.go", outDir: "packages/typescript/src/enums" },
     { name: "NodeFlags", goPrefix: "NodeFlags", goFile: "tsc/internal/ast/nodeflags.go", outDir: "packages/typescript/src/enums" },
@@ -350,9 +351,17 @@ function parseGoConstBlock(block, def) {
     let iotaCounter = 0;
     let iotaExpression;
 
-    for (const rawLine of block.split("\n")) {
+    const lines = block.split("\n");
+    let i = 0;
+
+    while (i < lines.length) {
+        const rawLine = lines[i];
         const line = rawLine.replace(/\/\/.*$/, "").trim();
-        if (!line) continue;
+
+        if (!line) {
+            i++;
+            continue;
+        }
 
         // Match: PrefixName Type = value  or  PrefixName = value
         const fullMatch = line.match(new RegExp(`^(${prefix}\\w+)\\s+(?:\\S+\\s*)?=\\s*(.+)$`));
@@ -361,11 +370,27 @@ function parseGoConstBlock(block, def) {
             ? line.match(new RegExp(`^(${prefix}\\w+)$`))
             : null;
 
-        if (!fullMatch && !bareMatch) continue;
+        if (!fullMatch && !bareMatch) {
+            i++;
+            continue;
+        }
 
         const goName = fullMatch ? fullMatch[1] : /** @type {RegExpMatchArray} */ (bareMatch)[1];
-        const goValue = fullMatch ? fullMatch[2].trim() : "";
+        let goValue = fullMatch ? fullMatch[2].trim() : "";
         const memberName = goName.slice(prefix.length);
+
+        // Accumulate continuation lines ending with |
+        i++;
+        while (i < lines.length && goValue.endsWith("|")) {
+            const nextRaw = lines[i];
+            const nextLine = nextRaw.replace(/\/\/.*$/, "").trim();
+            if (!nextLine) {
+                i++;
+                continue;
+            }
+            goValue += " " + nextLine;
+            i++;
+        }
 
         let tsValue;
         if (def.stringEnum) {
@@ -553,7 +578,10 @@ export const generateAST = task({
 export const generateAPI = task({
     name: "generate:api",
     description: "Generates API files from internal/api/proto.go and internal/api/session.go.",
-    run: () => $`go -C ./tools run ./gen-proto ../tsc/internal/api/proto.go ../packages/typescript/src/api/proto.generated.ts`,
+    run: async () => {
+        await $`go -C ./tools run ./gen-proto ../tsc/internal/api/proto.go ../packages/typescript/src/api/proto.generated.ts`;
+        await $`npx dprint fmt packages/typescript/src/api/proto.generated.ts`;
+    },
 });
 
 // ── Vendored npm dependencies ───────────────────────────────────
@@ -756,8 +784,14 @@ async function runTests() {
 }
 
 async function runTestExtension() {
-    await $`npm test -w vscode-typescript`;
+    await $`npm test -w native-preview`;
 }
+
+export const testTsc = task({
+    name: "test:tsc",
+    description: "Runs all tests in the tsc module.",
+    run: runTests,
+});
 
 export const test = task({
     name: "test",
@@ -1499,24 +1533,6 @@ ${entries}
 }
 
 /**
- * @param {string} filePath
- */
-async function verifyTypeScriptMacEntitlements(filePath) {
-    const { stdout } = await $pipe`go -C ./tools tool quill describe --quiet --output json ${filePath}`;
-    const details = JSON.parse(stdout);
-    const entitlements = details[0]?.superBlob?.entitlements?.entitlements;
-    if (typeof entitlements !== "string") {
-        throw new Error(`Signed file has no macOS entitlements: ${filePath}`);
-    }
-    for (const entitlement of typescriptMacEntitlements) {
-        const escapedEntitlement = entitlement.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-        if (!new RegExp(`<key>\\s*${escapedEntitlement}\\s*</key>\\s*<true\\s*/>`).test(entitlements)) {
-            throw new Error(`Signed file is missing macOS entitlement '${entitlement}': ${filePath}`);
-        }
-    }
-}
-
-/**
  * @typedef {"win32" | "linux" | "darwin" | "aix" | "android" | "freebsd" | "netbsd" | "openbsd" | "sunos"} OS
  * @typedef {"x64" | "arm" | "arm64" | "ia32" | "ppc64" | "loong64" | "mips64el" | "riscv64" | "s390x"} Arch
  * @typedef {"Microsoft400" | "LinuxSign" | "MacDeveloperHarden" | "8020" | "VSCodePublisher"} Cert
@@ -2071,7 +2087,7 @@ async function runSignNativePreviewPackages() {
                 // along with a notarization step.
                 for (const p of filelistPaths) {
                     // ESRP preserves entitlements from an existing ad-hoc signature.
-                    await $pipe`go -C ./tools tool quill sign --quiet --ad-hoc --identity ${path.basename(p.path)} --entitlements ${typescriptMacEntitlementsPath} ${p.path}`;
+                    await $pipe`go -C ./tools run ./cmd/machotool sign ${typescriptMacEntitlementsPath} ${p.path}`;
 
                     const unsignedZipPath = path.join(tmp, `${p.tmpName}.unsigned.zip`);
                     const signedZipPath = path.join(tmp, `${p.tmpName}.signed.zip`);
@@ -2132,7 +2148,7 @@ async function runSignNativePreviewPackages() {
 
         for (const p of macZips) {
             await fs.promises.chmod(p.path, 0o755);
-            await verifyTypeScriptMacEntitlements(p.path);
+            await $pipe`go -C ./tools run ./cmd/machotool verify ${typescriptMacEntitlementsPath} ${p.path}`;
         }
     }
 }

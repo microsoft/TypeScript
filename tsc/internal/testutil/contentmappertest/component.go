@@ -52,6 +52,18 @@ func transformComponent(content string) (string, json.Value, error) {
 			Features:      spanmap.FeatureAll,
 		})
 	}
+	writeAnchored := func(text string, originalPosition int, features spanmap.Feature) {
+		virtualStart := core.TextPos(virtual.Len())
+		virtual.WriteString(text)
+		segments = append(segments, spanmap.Segment{
+			VirtualStart:  virtualStart,
+			VirtualEnd:    core.TextPos(virtual.Len()),
+			OriginalStart: core.TextPos(originalPosition),
+			OriginalEnd:   core.TextPos(originalPosition),
+			Kind:          spanmap.KindAtom,
+			Features:      features,
+		})
+	}
 
 	scriptOpen := strings.Index(content, "<script")
 	if scriptOpen >= 0 {
@@ -103,7 +115,7 @@ func transformComponent(content string) (string, json.Value, error) {
 		writeMapped(content[nameStart:nameEnd], nameStart, nameEnd, spanmap.KindAtom)
 		writeSynthesized(" {}\n")
 	}
-	writeSynthesized("export default {};\n")
+	writeAnchored("export default {};\n", 0, spanmap.FeatureDefinition|spanmap.FeatureReferences)
 
 	mappings, err := spanmap.New(segments).Marshal()
 	if err != nil {

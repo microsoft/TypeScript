@@ -37,6 +37,7 @@ type tscInput struct {
 	cwd              string
 	edits            []*tscEdit
 	env              map[string]string
+	outputIsTTY      *bool
 	ignoreCase       bool
 	windowsStyleRoot string
 }

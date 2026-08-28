@@ -4,11 +4,55 @@ import (
 	"context"
 	"testing"
 
+	"github.com/google/go-cmp/cmp/cmpopts"
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/lsutil"
 	"github.com/microsoft/TypeScript/tsc/internal/parser"
+	"gotest.tools/v3/assert"
 )
+
+func TestNonOverlappingFormattingRanges(t *testing.T) {
+	t.Parallel()
+	tests := []struct {
+		name       string
+		candidates []core.TextRange
+		want       []core.TextRange
+	}{
+		{
+			name:       "sorts disjoint ranges",
+			candidates: []core.TextRange{core.NewTextRange(10, 15), core.NewTextRange(0, 5)},
+			want:       []core.TextRange{core.NewTextRange(0, 5), core.NewTextRange(10, 15)},
+		},
+		{
+			name:       "prefers longest range with same start",
+			candidates: []core.TextRange{core.NewTextRange(0, 10), core.NewTextRange(0, 20)},
+			want:       []core.TextRange{core.NewTextRange(0, 20)},
+		},
+		{
+			name:       "discards fully covered range",
+			candidates: []core.TextRange{core.NewTextRange(5, 15), core.NewTextRange(0, 20)},
+			want:       []core.TextRange{core.NewTextRange(0, 20)},
+		},
+		{
+			name:       "trims overlapping prefix",
+			candidates: []core.TextRange{core.NewTextRange(5, 15), core.NewTextRange(0, 10)},
+			want:       []core.TextRange{core.NewTextRange(0, 10), core.NewTextRange(10, 15)},
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
+			candidates := core.Map(test.candidates, func(r core.TextRange) mappedFormattingRange {
+				return mappedFormattingRange{originalRange: r}
+			})
+			result := core.Map(nonOverlappingFormattingRanges(candidates), func(r mappedFormattingRange) core.TextRange {
+				return r.originalRange
+			})
+			assert.DeepEqual(t, result, test.want, cmpopts.EquateComparable(core.TextRange{}))
+		})
+	}
+}
 
 // Test for issue: Panic Handling textDocument/onTypeFormatting
 // This reproduces the panic when pressing enter in an empty file

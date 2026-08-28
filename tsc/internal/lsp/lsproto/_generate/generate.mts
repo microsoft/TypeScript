@@ -193,6 +193,17 @@ const customStructures: Structure[] = [
                 type: { kind: "base", name: "DocumentUri" },
                 documentation: `The document in which the code lens and its range are located.`,
             },
+            {
+                name: "position",
+                type: { kind: "base", name: "integer" },
+                documentation: `The position of the code lens declaration in its virtual source file.`,
+            },
+            {
+                name: "supplementalFileIndex",
+                type: { kind: "base", name: "integer" },
+                optional: true,
+                documentation: `Zero-based index into the canonical file's supplemental source files. Absent for the canonical source file.`,
+            },
         ],
     },
     {

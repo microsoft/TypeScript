@@ -5,6 +5,7 @@ import (
 	"encoding/base64"
 	"errors"
 	"fmt"
+	"runtime/debug"
 	"slices"
 	"strconv"
 	"strings"
@@ -599,6 +600,8 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 	}
 
 	switch method {
+	case string(MethodBatchRequests):
+		return s.handleBatchRequests(ctx, parsed.(*BatchRequestsParams))
 	case string(MethodRelease):
 		return s.handleRelease(ctx, parsed.(*ReleaseParams))
 	case string(MethodInitialize):
@@ -653,6 +656,8 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleGetTypesOfSymbols(ctx, parsed.(*GetTypesOfSymbolsParams))
 	case string(MethodGetDeclaredTypeOfSymbol):
 		return s.handleGetDeclaredTypeOfSymbol(ctx, parsed.(*GetTypeOfSymbolParams))
+	case string(MethodGetNonMissingTypeOfSymbol):
+		return s.handleGetNonMissingTypeOfSymbol(ctx, parsed.(*GetTypeOfSymbolParams))
 	case string(MethodResolveName):
 		return s.handleResolveName(ctx, parsed.(*ResolveNameParams))
 	case string(MethodGetSymbolsInScope):
@@ -777,6 +782,8 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleGetApparentPropertiesOfType(ctx, parsed.(*GetTypePropertyParams))
 	case string(MethodGetApparentType):
 		return s.handleGetApparentType(ctx, parsed.(*GetTypePropertyParams))
+	case string(MethodGetReducedType):
+		return s.handleGetReducedType(ctx, parsed.(*GetTypePropertyParams))
 	case string(MethodGetPropertyOfType):
 		return s.handleGetPropertyOfType(ctx, parsed.(*GetPropertyOfTypeParams))
 	case string(MethodGetIndexInfosOfType):
@@ -801,6 +808,8 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleGetAliasedSymbol(ctx, parsed.(*CheckerSymbolParams))
 	case string(MethodGetImmediateAliasedSymbol):
 		return s.handleGetImmediateAliasedSymbol(ctx, parsed.(*CheckerSymbolParams))
+	case string(MethodGetTargetSymbol):
+		return s.handleMethodGetTargetSymbol(ctx, parsed.(*CheckerSymbolParams))
 	case string(MethodGetFullyQualifiedName):
 		return s.handleGetFullyQualifiedName(ctx, parsed.(*CheckerSymbolParams))
 	case string(MethodGetExportsOfModule):
@@ -815,6 +824,8 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleIsArrayType(ctx, parsed.(*CheckerTypeParams))
 	case string(MethodIsTupleType):
 		return s.handleIsTupleType(ctx, parsed.(*CheckerTypeParams))
+	case string(MethodIsReadonlySymbol):
+		return s.handleIsReadonlySymbol(ctx, parsed.(*CheckerSymbolParams))
 	case string(MethodGetAnyType):
 		return s.handleGetIntrinsicType(ctx, parsed.(*GetIntrinsicTypeParams), (*checker.Checker).GetAnyType)
 	case string(MethodGetStringType):
@@ -876,6 +887,30 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 	default:
 		return nil, fmt.Errorf("unknown method: %s", method)
 	}
+}
+
+func (s *Session) handleBatchRequests(ctx context.Context, params *BatchRequestsParams) (*BatchRequestsResponse, error) {
+	responses := make([]BatchResponse, len(params.Requests))
+	for i, request := range params.Requests {
+		responses[i] = s.handleBatchRequest(ctx, request)
+	}
+	return &BatchRequestsResponse{Responses: responses}, nil
+}
+
+func (s *Session) handleBatchRequest(ctx context.Context, request BatchRequest) (response BatchResponse) {
+	response.Method = request.Method
+	defer func() {
+		if recovered := recover(); recovered != nil {
+			response.Result = nil
+			response.Error = fmt.Sprintf("panic: %v\n%s", recovered, debug.Stack())
+		}
+	}()
+	var err error
+	response.Result, err = s.HandleRequest(ctx, string(request.Method), request.Params)
+	if err != nil {
+		response.Error = err.Error()
+	}
+	return response
 }
 
 func (s *Session) handleStartCPUProfile(_ context.Context, params *ProfileParams) (any, error) {
@@ -1638,6 +1673,22 @@ func (s *Session) handleGetDeclaredTypeOfSymbol(ctx context.Context, params *Get
 	}
 
 	return setup.newTypeResponse(setup.checker.GetDeclaredTypeOfSymbol(symbol)), nil
+}
+
+// handleGetNonMissingTypeOfSymbol returns the type of a symbol, excluding the missing type.
+func (s *Session) handleGetNonMissingTypeOfSymbol(ctx context.Context, params *GetTypeOfSymbolParams) (*TypeResponse, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	symbol, err := setup.resolveSymbolHandle(params.Symbol)
+	if err != nil {
+		return nil, err
+	}
+
+	return setup.newTypeResponse(setup.checker.GetNonMissingTypeOfSymbol(symbol)), nil
 }
 
 // handleResolveName resolves a name to a symbol at a given location.
@@ -2970,6 +3021,22 @@ func (s *Session) handleIsTupleType(ctx context.Context, params *CheckerTypePara
 	return checker.IsTupleType(t), nil
 }
 
+// handleIsReadonlySymbol returns whether a symbol is a readonly symbol.
+func (s *Session) handleIsReadonlySymbol(ctx context.Context, params *CheckerSymbolParams) (bool, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return false, err
+	}
+	defer setup.done()
+
+	symbol, err := setup.resolveSymbolHandle(params.Symbol)
+	if err != nil {
+		return false, err
+	}
+
+	return setup.checker.IsReadonlySymbol(symbol), nil
+}
+
 // handleGetBaseTypes returns the base types of an interface/class type.
 // @gen-proto-nullable
 func (s *Session) handleGetBaseTypes(ctx context.Context, params *CheckerTypeParams) ([]*TypeResponse, error) {
@@ -3060,6 +3127,22 @@ func (s *Session) handleGetApparentType(ctx context.Context, params *GetTypeProp
 	}
 
 	return setup.newTypeResponse(setup.checker.GetApparentType(t)), nil
+}
+
+// handleGetReducedType returns the reduced type of a type.
+func (s *Session) handleGetReducedType(ctx context.Context, params *GetTypePropertyParams) (*TypeResponse, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	t, err := setup.resolveTypeHandle(params.Type)
+	if err != nil {
+		return nil, err
+	}
+
+	return setup.newTypeResponse(setup.checker.GetReducedType(t)), nil
 }
 
 // handleGetIndexInfosOfType returns the index infos of a type.
@@ -3299,6 +3382,23 @@ func (s *Session) handleGetImmediateAliasedSymbol(ctx context.Context, params *C
 	}
 
 	return setup.newSymbolResponse(aliased), nil
+}
+
+// handleGetTargetSymbol returns the target symbol if the symbol is instantiated,
+// otherwise returns the provided symbol.
+func (s *Session) handleMethodGetTargetSymbol(ctx context.Context, params *CheckerSymbolParams) (*SymbolResponse, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	symbol, err := setup.resolveSymbolHandle(params.Symbol)
+	if err != nil {
+		return nil, err
+	}
+
+	return setup.newSymbolResponse(setup.checker.GetTargetSymbol(symbol)), nil
 }
 
 // handleGetExportsOfModule returns the resolved exports of a module symbol,

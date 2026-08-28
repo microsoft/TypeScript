@@ -4,12 +4,14 @@ import { DiagnosticCategory } from "#enums/diagnosticCategory";
 import { ElementFlags } from "#enums/elementFlags";
 import { EmitOnly } from "#enums/emitOnly";
 import { ModuleKind } from "#enums/moduleKind";
+import { NewLineKind } from "#enums/newLineKind";
 import { NodeBuilderFlags } from "#enums/nodeBuilderFlags";
 import { ObjectFlags } from "#enums/objectFlags";
 import { SignatureFlags } from "#enums/signatureFlags";
 import { SignatureKind } from "#enums/signatureKind";
 import { SymbolFlags } from "#enums/symbolFlags";
 import { TypeFlags } from "#enums/typeFlags";
+import { TypeFormatFlags } from "#enums/typeFormatFlags";
 import { TypePredicateKind } from "#enums/typePredicateKind";
 import {
     type __String,
@@ -101,6 +103,7 @@ import type {
     EmitOutput,
     EmitOutputFile,
     EmitResult,
+    FormatDiagnosticsHost,
     FreshableType,
     GetImportEditsForSymbolsOptions,
     IdentifierTypePredicate,
@@ -131,8 +134,9 @@ import type {
     UnionType,
 } from "./types.ts";
 
+export { formatDiagnostics, formatDiagnosticsWithColorAndContext } from "../diagnosticFormatter.ts";
 export { documentURIToFileName, fileNameToDocumentURI } from "../path.ts";
-export { CheckFlags, CompletionItemKind, DiagnosticCategory, ElementFlags, EmitOnly, ModifierFlags, ModuleKind, NodeBuilderFlags, ObjectFlags, SignatureFlags, SignatureKind, SymbolFlags, TypeFlags, TypePredicateKind };
+export { CheckFlags, CompletionItemKind, DiagnosticCategory, ElementFlags, EmitOnly, ModifierFlags, ModuleKind, NodeBuilderFlags, ObjectFlags, SignatureFlags, SignatureKind, SymbolFlags, TypeFlags, TypeFormatFlags, TypePredicateKind };
 export type {
     APIImportAdderAction as ImportAdderAction,
     APIOptions,
@@ -153,6 +157,7 @@ export type {
     EmitOutput,
     EmitOutputFile,
     EmitResult,
+    FormatDiagnosticsHost,
     FreshableType,
     GetImportEditsForSymbolsOptions,
     IdentifierTypePredicate,
@@ -204,10 +209,17 @@ export interface TranspileOutput {
     sourceMapText?: string;
 }
 
-export class API<FromLSP extends boolean = false> {
+// @sync-only-start
+// export { all } from "./generatorSupport.ts";
+// import {all, type ExecutedGeneratorsResults, type APIRequestGenerator} from "./generatorSupport.ts";
+// @sync-only-end
+
+export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHost {
     private client: Client;
     private sourceFileCache: SourceFileCache;
     private toPath: ((fileName: string) => Path) | undefined;
+    private currentDirectory: string | undefined;
+    private getCanonicalFileNameWorker: ((fileName: string) => string) | undefined;
     private initialized: boolean = false;
     private activeSnapshots: Set<Snapshot> = new Set();
     private latestSnapshot: Snapshot | undefined;
@@ -216,7 +228,7 @@ export class API<FromLSP extends boolean = false> {
     constructor(options: APIOptions | LSPConnectionOptions = {}) {
         this.client = new Client(options);
         this.sourceFileCache = new SourceFileCache();
-        this.internal = new InternalAPI(this.client, () => this.ensureInitialized());
+        this.internal = new InternalAPI(this.client, () => this.ensureInitialized()); // @sync: this.internal = new InternalAPI(this.client, this.ensureInitialized);
     }
 
     /**
@@ -229,14 +241,50 @@ export class API<FromLSP extends boolean = false> {
         return api;
     }
 
+    // @sync-skip-block-start
+    batchContext(): { [globalThis.Symbol.dispose](): void; } {
+        return this.client.batchContext();
+    }
+    // @sync-skip-block-end
+    // @sync-only-start
+    // batch<T extends readonly APIRequestGenerator[]>(...requestGenerators: T): ExecutedGeneratorsResults<T> {
+    //     const batches = all(...requestGenerators);
+    //     let state = batches.next();
+    //     while (!state.done) {
+    //         state = batches.next(this.client.batchRequests(state.value).responses);
+    //     }
+    //     return state.value;
+    // }
+    // @sync-only-end
+
     private async ensureInitialized(): Promise<void> {
         if (!this.initialized) {
             const response = await this.client.apiRequest("initialize", null);
             const getCanonicalFileName = createGetCanonicalFileName(response.useCaseSensitiveFileNames);
             const currentDirectory = response.currentDirectory;
+            this.getCanonicalFileNameWorker = getCanonicalFileName;
+            this.currentDirectory = currentDirectory;
             this.toPath = (fileName: string) => toPath(fileName, currentDirectory, getCanonicalFileName) as Path;
             this.initialized = true;
         }
+    }
+
+    getCurrentDirectory(): string {
+        if (this.currentDirectory === undefined) {
+            throw new Error("API has not been initialized");
+        }
+        return this.currentDirectory;
+    }
+
+    getCanonicalFileName(fileName: string): string {
+        if (this.getCanonicalFileNameWorker === undefined) {
+            throw new Error("API has not been initialized");
+        }
+        return this.getCanonicalFileNameWorker(fileName);
+    }
+
+    getNewLine(): string {
+        return "\n";
     }
 
     async parseConfigFile(file: DocumentIdentifier): Promise<ParsedCommandLine> {
@@ -303,6 +351,7 @@ export class API<FromLSP extends boolean = false> {
             this.client,
             this.sourceFileCache,
             this.toPath!,
+            this,
             () => {
                 this.activeSnapshots.delete(snapshot);
                 if (snapshot !== this.latestSnapshot) {
@@ -352,6 +401,7 @@ export class API<FromLSP extends boolean = false> {
             this.client,
             this.sourceFileCache,
             this.toPath!,
+            this,
             () => {
                 this.activeSnapshots.delete(snapshot);
                 this.sourceFileCache.releaseSnapshot(snapshot.id);
@@ -388,12 +438,14 @@ export class API<FromLSP extends boolean = false> {
     }
 }
 
+type EnsureInitialized = () => Promise<void>; // @sync: type EnsureInitialized = (() => void) & { gen(): Generator<ProtocolRequest, void, ProtocolResponse["result"]>; };
+
 export class InternalAPI {
     private client: Client;
-    private ensureInitialized: () => Promise<void>;
+    private ensureInitialized: EnsureInitialized;
 
     /** @internal */
-    constructor(client: Client, ensureInitialized: () => Promise<void>) {
+    constructor(client: Client, ensureInitialized: EnsureInitialized) {
         this.client = client;
         this.ensureInitialized = ensureInitialized;
     }
@@ -431,6 +483,7 @@ export class Snapshot {
         client: Client,
         sourceFileCache: SourceFileCache,
         toPath: (fileName: string) => Path,
+        formatDiagnosticsHost: FormatDiagnosticsHost,
         onDispose: () => void,
     ) {
         this.id = data.snapshot;
@@ -441,7 +494,7 @@ export class Snapshot {
         this.snapshotRegistry = new SnapshotObjectRegistry(client, this.id, projectId => this.projectMap.get(projectId));
 
         for (const projData of data.projects) {
-            const project = new Project(projData, this.id, client, sourceFileCache, toPath, this.snapshotRegistry);
+            const project = new Project(projData, this.id, client, sourceFileCache, toPath, formatDiagnosticsHost, this.snapshotRegistry);
             this.projectMap.set(toPath(projData.configFileName), project);
         }
 
@@ -772,6 +825,7 @@ class ProjectObjectRegistry {
 export class Project {
     readonly id: Path;
     readonly configFileName: string;
+    readonly currentDirectory: string;
     readonly parsedCommandLine: ParsedCommandLine;
     /** @deprecated Use `parsedCommandLine.options`. */
     readonly compilerOptions: CompilerOptions;
@@ -791,10 +845,12 @@ export class Project {
         client: Client,
         sourceFileCache: SourceFileCache,
         toPath: (fileName: string) => Path,
+        formatDiagnosticsHost: FormatDiagnosticsHost,
         snapshotRegistry: SnapshotObjectRegistry,
     ) {
         this.id = data.id as Path;
         this.configFileName = data.configFileName;
+        this.currentDirectory = data.currentDirectory;
         if (!data.parsedCommandLine?.options) {
             throw new Error(`Project '${data.configFileName}' has no parsed command line`);
         }
@@ -809,6 +865,7 @@ export class Project {
             client,
             sourceFileCache,
             toPath,
+            formatDiagnosticsHost,
         );
         const objectRegistry = new ProjectObjectRegistry(client, snapshotId, this, snapshotRegistry);
         this.checker = new Checker(
@@ -945,12 +1002,13 @@ export class LanguageService {
     }
 }
 
-export class Program {
+export class Program implements FormatDiagnosticsHost {
     private snapshotId: number;
     private project: Project;
     private client: Client;
     private sourceFileCache: SourceFileCache;
     private toPath: (fileName: string) => Path;
+    private formatDiagnosticsHost: FormatDiagnosticsHost;
     private decoder = new Wtf8Decoder();
     private sourceFileMetadataCache = new Map<Path, Promise<SourceFileMetadata | undefined>>();
 
@@ -960,12 +1018,26 @@ export class Program {
         client: Client,
         sourceFileCache: SourceFileCache,
         toPath: (fileName: string) => Path,
+        formatDiagnosticsHost: FormatDiagnosticsHost,
     ) {
         this.snapshotId = snapshotId;
         this.project = project;
         this.client = client;
         this.sourceFileCache = sourceFileCache;
         this.toPath = toPath;
+        this.formatDiagnosticsHost = formatDiagnosticsHost;
+    }
+
+    getCurrentDirectory(): string {
+        return this.project.currentDirectory;
+    }
+
+    getCanonicalFileName(fileName: string): string {
+        return this.formatDiagnosticsHost.getCanonicalFileName(fileName);
+    }
+
+    getNewLine(): string {
+        return this.project.compilerOptions.newLine === NewLineKind.CRLF ? "\r\n" : "\n";
     }
 
     getCompilerOptions(): CompilerOptions {
@@ -1393,6 +1465,21 @@ export class Checker {
         return this.objectRegistry.getOrCreateType(data);
     }
 
+    /**
+     * Get the type of a symbol, excluding the missing type when
+     * `exactOptionalPropertyTypes: true` is set; for symbols whose
+     * type cannot be determined the checker yields the error type
+     * (use {@link Type.isErrorType} to detect it).
+     */
+    async getNonMissingTypeOfSymbol(symbol: Symbol): Promise<Type> {
+        const data = await this.client.apiRequest("getNonMissingTypeOfSymbol", {
+            snapshot: this.snapshotId,
+            project: this.project.id,
+            symbol: symbol.id,
+        });
+        return this.objectRegistry.getOrCreateType(data);
+    }
+
     async getReferencesToSymbolInFile(file: DocumentIdentifier, symbol: Symbol): Promise<NodeHandle[]> {
         const data = await this.client.apiRequest("getReferencesToSymbolInFile", {
             snapshot: this.snapshotId,
@@ -1705,7 +1792,7 @@ export class Checker {
         return decodeNode(binaryData) as Node;
     }
 
-    async typeToString(type: Type, enclosingDeclaration?: Node, flags?: number): Promise<string> {
+    async typeToString(type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): Promise<string> {
         const result = await this.client.apiRequest("typeToString", {
             snapshot: this.snapshotId,
             project: this.project.id,
@@ -1738,6 +1825,23 @@ export class Checker {
             snapshot: this.snapshotId,
             project: this.project.id,
             type: type.id,
+        });
+    }
+
+    /**
+     * The following symbols are considered read-only:
+     * - Properties with a `readonly` modifier
+     * - Variables declared with `const`
+     * - Get accessors without matching set accessors
+     * - Enum members
+     * - `Object.defineProperty` assignments with `writable: false` or no setter
+     * - Unions and intersections of the above
+     */
+    async isReadonlySymbol(symbol: Symbol): Promise<boolean> {
+        return this.client.apiRequest("isReadonlySymbol", {
+            snapshot: this.snapshotId,
+            project: this.project.id,
+            symbol: symbol.id,
         });
     }
 
@@ -1785,6 +1889,11 @@ export class Checker {
     /** Get the apparent type of a type. Always returns a type. */
     async getApparentType(type: Type): Promise<Type> {
         return type.getApparentType();
+    }
+
+    /** Get the reduced type of a type. Always returns a type. */
+    async getReducedType(type: Type): Promise<Type> {
+        return type.getReducedType();
     }
 
     async getPropertiesOfType(type: Type): Promise<readonly Symbol[]> {
@@ -1887,6 +1996,21 @@ export class Checker {
             symbol: symbol.id,
         });
         return data ? this.objectRegistry.getOrCreateSymbol(data) : undefined;
+    }
+
+    /**
+     * Get the target symbol if instantiated, or the provided symbol otherwise.
+     */
+    async getTargetSymbol(symbol: Symbol): Promise<Symbol> {
+        if (symbol.checkFlags & CheckFlags.Instantiated) {
+            const data = await this.client.apiRequest("getTargetSymbol", {
+                snapshot: this.snapshotId,
+                project: this.project.id,
+                symbol: symbol.id,
+            });
+            return this.objectRegistry.getOrCreateSymbol(data);
+        }
+        return symbol;
     }
 
     /**
@@ -2237,6 +2361,7 @@ class TypeObject implements Type {
     private default: number | false;
     private nonNullableType: number | false;
     private apparentType: number | false;
+    private reducedType: number | false;
     private properties: readonly Symbol[] | false;
     private apparentProperties: readonly Symbol[] | false;
     private callSignatures: readonly Signature[] | false;
@@ -2286,6 +2411,7 @@ class TypeObject implements Type {
         this.default = false;
         this.nonNullableType = false;
         this.apparentType = false;
+        this.reducedType = false;
         this.properties = false;
         this.apparentProperties = false;
         this.callSignatures = false;
@@ -2365,6 +2491,12 @@ class TypeObject implements Type {
     async getApparentType(): Promise<Type> {
         const result = await this.objectRegistry.fetchType(this, "getApparentType", this.apparentType);
         this.apparentType = result.id;
+        return result;
+    }
+
+    async getReducedType(): Promise<Type> {
+        const result = await this.objectRegistry.fetchType(this, "getReducedType", this.reducedType);
+        this.reducedType = result.id;
         return result;
     }
 

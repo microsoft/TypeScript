@@ -44,6 +44,9 @@ type ProgramOptions struct {
 	TypingsLocation             string
 	ProjectName                 string
 	Tracing                     *tracing.Tracing
+	// SkipModuleResolution avoids all module and type reference resolution while
+	// still collecting import metadata needed for emit.
+	SkipModuleResolution bool
 }
 
 func (p *ProgramOptions) canUseProjectReferenceSource() bool {

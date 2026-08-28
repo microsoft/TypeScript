@@ -494,7 +494,8 @@ func (t *BuildTask) getUpToDateStatus(orchestrator *Orchestrator, configPath tsp
 			if seenRoots.Has(inputPath) || resolvedRoots.Has(inputPath) {
 				continue
 			}
-			if isContentMapperSupplementalBuildInfoPath(inputPath, getBuildInfoRootInfoReader().Roots()) {
+			if isContentMapperSupplementalBuildInfoPath(inputPath, getBuildInfoRootInfoReader().Roots()) &&
+				!orchestrator.host.FS().FileExists(inputFile) {
 				continue
 			}
 			inputTime := orchestrator.host.GetMTime(inputFile)
