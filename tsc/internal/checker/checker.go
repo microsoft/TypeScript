@@ -4417,11 +4417,20 @@ func (c *Checker) checkJSDocAugmentsTagMatchesExtends(node *ast.Node, baseTypeNo
 				continue
 			}
 			sourceTypeNode := tag.ClassName()
-			if c.isTypeIdenticalTo(c.getTypeFromTypeNode(sourceTypeNode), baseType) {
+			sourceType := c.getTypeFromTypeNode(sourceTypeNode)
+			sourceName := getIdentifierFromEntityNameExpression(sourceTypeNode.Expression())
+			if sourceName != nil && ast.IsCallExpression(ast.SkipParentheses(baseTypeNode.Expression())) {
+				sourceSymbol := c.getMergedSymbol(getTargetType(sourceType).symbol)
+				targetSymbol := c.getMergedSymbol(getTargetType(baseType).symbol)
+				if sourceSymbol != nil && targetSymbol != nil && sourceSymbol != targetSymbol {
+					c.error(sourceName, diagnostics.JSDoc_0_1_does_not_match_the_extends_2_clause, tag.TagName().Text(), sourceName.Text(), targetSymbol.Name)
+					continue
+				}
+			}
+			if c.isTypeIdenticalTo(sourceType, baseType) {
 				continue
 			}
 			targetName := getIdentifierFromEntityNameExpression(baseTypeNode.Expression())
-			sourceName := getIdentifierFromEntityNameExpression(sourceTypeNode.Expression())
 			if targetName != nil && sourceName != nil {
 				c.error(sourceName, diagnostics.JSDoc_0_1_does_not_match_the_extends_2_clause, tag.TagName().Text(), sourceName.Text(), targetName.Text())
 			}

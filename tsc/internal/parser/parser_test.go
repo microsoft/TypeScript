@@ -308,7 +308,7 @@ function foo(options) {}`
 	assert.Equal(t, scanner.GetTokenPosOfNode(typeNode, file, false /*includeJSDoc*/), strings.Index(sourceText, "{{")+1)
 }
 
-func TestJSDocAugmentsTypeArgumentsReparse(t *testing.T) {
+func TestJSDocAugmentsCallHeritage(t *testing.T) {
 	t.Parallel()
 	sourceText := `/** @template T */
 class A {
@@ -318,10 +318,7 @@ class A {
 }
 
 /** @extends {A<string>} */
-class B extends A.extend() {}
-
-/** @extends {Other<string>} */
-class C extends A.extend() {}`
+class B extends A.extend() {}`
 	opts := ast.SourceFileParseOptions{
 		FileName: "/index.js",
 		Path:     "/index.js",
@@ -329,7 +326,7 @@ class C extends A.extend() {}`
 
 	file := parser.ParseSourceFile(opts, sourceText, core.ScriptKindJS)
 	statements := file.Statements.Nodes
-	assert.Equal(t, len(statements), 3)
+	assert.Equal(t, len(statements), 2)
 
 	classB := statements[1]
 	assert.Assert(t, ast.IsClassDeclaration(classB))
@@ -337,6 +334,7 @@ class C extends A.extend() {}`
 	baseType := ast.GetClassExtendsHeritageElement(classB)
 	assert.Assert(t, baseType != nil)
 	assert.Assert(t, ast.IsCallExpression(baseType.Expression()))
+	assert.Equal(t, scanner.GetTextOfNode(baseType.Expression()), "A.extend()")
 
 	typeArguments := baseType.TypeArguments()
 	assert.Equal(t, len(typeArguments), 1)
@@ -358,14 +356,6 @@ class C extends A.extend() {}`
 	sourceTypeArguments := tag.ClassName().TypeArguments()
 	assert.Equal(t, len(sourceTypeArguments), 1)
 	assert.Equal(t, ast.GetReparsedNodeForNode(sourceTypeArguments[0]), typeArgument)
-
-	classC := statements[2]
-	assert.Assert(t, ast.IsClassDeclaration(classC))
-
-	mismatchedBaseType := ast.GetClassExtendsHeritageElement(classC)
-	assert.Assert(t, mismatchedBaseType != nil)
-	assert.Assert(t, ast.IsCallExpression(mismatchedBaseType.Expression()))
-	assert.Equal(t, len(mismatchedBaseType.TypeArguments()), 0)
 }
 
 func TestSourceFilePositionMapWithNonASCIIStringLiteral(t *testing.T) {

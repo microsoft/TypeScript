@@ -1645,24 +1645,12 @@ func IsDottedName(node *Node) bool {
 	return false
 }
 
-func HasSamePropertyAccessName(target, source *Node) bool {
-	target = SkipParentheses(target)
-	source = SkipParentheses(source)
-	if IsCallExpression(target) {
-		target = SkipParentheses(target.Expression())
-		if IsPropertyAccessExpression(target) {
-			if HasSamePropertyAccessName(target, source) {
-				return true
-			}
-			target = SkipParentheses(target.Expression())
-		}
-	}
-	if target.Kind == KindIdentifier && source.Kind == KindIdentifier {
-		return target.Text() == source.Text()
-	}
-	if target.Kind == KindPropertyAccessExpression && source.Kind == KindPropertyAccessExpression {
-		return target.AsPropertyAccessExpression().Name().Text() == source.AsPropertyAccessExpression().Name().Text() &&
-			HasSamePropertyAccessName(target.Expression(), source.Expression())
+func HasSamePropertyAccessName(node1, node2 *Node) bool {
+	if node1.Kind == KindIdentifier && node2.Kind == KindIdentifier {
+		return node1.Text() == node2.Text()
+	} else if node1.Kind == KindPropertyAccessExpression && node2.Kind == KindPropertyAccessExpression {
+		return node1.AsPropertyAccessExpression().Name().Text() == node2.AsPropertyAccessExpression().Name().Text() &&
+			HasSamePropertyAccessName(node1.Expression(), node2.Expression())
 	}
 	return false
 }

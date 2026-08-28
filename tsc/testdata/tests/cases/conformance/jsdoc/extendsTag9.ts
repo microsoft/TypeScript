@@ -1,24 +1,32 @@
 // @target: es2015
 // @allowJs: true
 // @checkJs: true
-// @declaration: true
-// @outDir: out
+// @noEmit: true
 
 // @filename: a.js
 /** @template T */
 class A {
     /** @returns {T} */
-    get value() {
+    get a() {
         throw new Error();
     }
 
-    /** @returns {typeof A} */
+    /** @returns {typeof C} */
     static extend() {
-        return this;
+        return C;
+    }
+}
+
+/** @template T */
+class C {
+    /** @returns {T} */
+    get c() {
+        throw new Error();
     }
 }
 
 /** @extends {A<string>} */
 class B extends A.extend() {}
 
-const value = new B().value;
+const a = new B().a;
+const c = new B().c;

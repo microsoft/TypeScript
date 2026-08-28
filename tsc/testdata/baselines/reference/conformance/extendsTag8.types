@@ -21,7 +21,7 @@ class C {}
 /** @extends {C<string>} */
 class B extends A.extend() {}
 >B : B
->A.extend() : A<any>
+>A.extend() : A<string>
 >A.extend : () => typeof A
 >A : typeof A
 >extend : () => typeof A
