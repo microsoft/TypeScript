@@ -3000,15 +3000,59 @@ export const tuple: readonly [number, string?, ...boolean[]] = [1];
         }
     });
 
-    test("TupleType properties", async () => {
-        const { type, api } = await getTypeAtName(spawnAPI(typeFiles), "tuple:");
+    test("tuple metadata is owned by tuple targets", async () => {
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/main.ts": `
+declare function empty(value: readonly []): void;
+declare function nonempty(value: readonly [number]): void;
+declare function array(value: readonly number[]): void;
+empty([]);
+nonempty([1]);
+array([]);
+`,
+        });
         try {
-            assert.ok(type.flags & TypeFlags.Object);
-            const ref = type as TypeReference;
-            assert.ok(ref.objectFlags & ObjectFlags.Reference);
-            const target = await ref.getTarget();
-            assert.ok(target);
-            assert.ok(target.flags & TypeFlags.Object);
+            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const sourceFile = await project.program.getSourceFile("/src/main.ts");
+            assert.ok(sourceFile);
+
+            const arrayLiterals: Node[] = [];
+            sourceFile.forEachChild(function visit(node) {
+                if (node.kind === SyntaxKind.ArrayLiteralExpression) {
+                    arrayLiterals.push(node);
+                }
+                node.forEachChild(visit);
+            });
+            assert.equal(arrayLiterals.length, 3);
+
+            for (const [index, expectedFixedLength] of [0, 1].entries()) {
+                const type = await project.checker.getTypeAtLocation(arrayLiterals[index]);
+                assert.equal(await project.checker.isTupleType(type), true);
+                assert.equal(await project.checker.isTupleTypeTarget(type), false);
+                assert.equal(type.isTupleType(), true);
+                assert.equal(type.isTupleTypeTarget(), false);
+                assert.ok(type.isTupleType());
+                assert.equal(Reflect.get(type, "fixedLength"), undefined);
+
+                const target = await type.getTarget();
+                assert.ok(target.objectFlags & ObjectFlags.Tuple);
+                assert.equal(await project.checker.isTupleType(target), true);
+                assert.equal(await project.checker.isTupleTypeTarget(target), true);
+                assert.equal(target.isTupleType(), true);
+                assert.equal(target.isTupleTypeTarget(), true);
+                assert.ok(target.isTupleTypeTarget());
+                assert.equal(target.fixedLength, expectedFixedLength);
+                assert.equal(target.elementFlags.length, expectedFixedLength);
+                assert.equal(target.readonly, false);
+            }
+
+            const arrayType = await project.checker.getTypeAtLocation(arrayLiterals[2]);
+            assert.equal(await project.checker.isTupleType(arrayType), false);
+            assert.equal(await project.checker.isTupleTypeTarget(arrayType), false);
+            assert.equal(arrayType.isTupleType(), false);
+            assert.equal(arrayType.isTupleTypeTarget(), false);
         }
         finally {
             await api.close();

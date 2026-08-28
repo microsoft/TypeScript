@@ -123,7 +123,6 @@ export interface APIMethodInfo {
     getJsDocTags: APIMethod<CheckerSymbolParams, JSDocTagInfo[] | null>;
     getDocumentationComment: APIMethod<CheckerSymbolParams, string>;
     isArrayType: APIMethod<CheckerTypeParams, boolean>;
-    isTupleType: APIMethod<CheckerTypeParams, boolean>;
     isReadonlySymbol: APIMethod<CheckerSymbolParams, boolean>;
     getReferencesToSymbolInFile: APIMethod<GetReferencesToSymbolInFileParams, string[]>;
     getReferencedSymbolsForNode: APIMethod<GetReferencedSymbolsForNodeParams, ReferencedSymbolEntry[] | null>;
@@ -385,6 +384,7 @@ export interface TypeResponse {
     id: number;
     flags: number;
     objectFlags?: number;
+    isTupleType?: boolean;
     /**
      * Value is literal type data. BigInt literals are encoded as signed decimal
      * strings because JSON cannot represent bigint; absent values are null.
@@ -1023,7 +1023,6 @@ export interface BatchRequest {
         | "isArrayType"
         | "isContextSensitive"
         | "isReadonlySymbol"
-        | "isTupleType"
         | "isTypeAssignableTo"
         | "parseCommandLine"
         | "parseConfigFile"
@@ -1171,7 +1170,6 @@ export interface BatchResponse {
         | "isArrayType"
         | "isContextSensitive"
         | "isReadonlySymbol"
-        | "isTupleType"
         | "isTypeAssignableTo"
         | "parseCommandLine"
         | "parseConfigFile"
