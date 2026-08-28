@@ -1174,7 +1174,6 @@ func (n *Node) AsFlowReduceLabelData() *FlowReduceLabelData {
 
 type nodeData interface {
 	AsNode() *Node
-	ForEachChild(v Visitor) bool
 	VisitEachChild(v *NodeVisitor) *Node
 	Clone(v NodeFactoryCoercible) *Node
 	Name() *DeclarationName
