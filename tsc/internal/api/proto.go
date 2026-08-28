@@ -824,10 +824,10 @@ type GetTypesOfSymbolsParams struct {
 }
 
 type TypeResponse struct {
-	Id                   TypeID `json:"id"`
-	Flags                uint32 `json:"flags"`
-	ObjectFlags          uint32 `json:"objectFlags,omitempty"`
-	IsTupleTypeReference bool   `json:"isTupleTypeReference,omitempty"`
+	Id          TypeID `json:"id"`
+	Flags       uint32 `json:"flags"`
+	ObjectFlags uint32 `json:"objectFlags,omitempty"`
+	IsTupleType bool   `json:"isTupleType,omitempty"`
 
 	// Value is literal type data. BigInt literals are encoded as signed decimal
 	// strings because JSON cannot represent bigint; absent values are null.
@@ -910,11 +910,11 @@ func newTypeResponse(t *checker.Type, id TypeID) *TypeResponse {
 		}
 	case flags&checker.TypeFlagsObject != 0:
 		resp.ObjectFlags = uint32(t.ObjectFlags())
-		resp.IsTupleTypeReference = checker.IsTupleTypeReference(t)
+		resp.IsTupleType = checker.IsTupleType(t)
 		objectFlags := t.ObjectFlags()
 		if objectFlags&checker.ObjectFlagsReference != 0 {
 			ref := t.AsTypeReference()
-			if checker.IsTupleTarget(t) && ref.Target() == t {
+			if checker.IsTupleTypeTarget(t) {
 				tuple := t.AsTupleType()
 				resp.ElementFlags = tuple.ElementFlags()
 				fixedLen := tuple.FixedLength()

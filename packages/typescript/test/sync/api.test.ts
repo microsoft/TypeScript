@@ -2671,30 +2671,30 @@ array([]);
 
             for (const [index, expectedFixedLength] of [0, 1].entries()) {
                 const type = project.checker.getTypeAtLocation(arrayLiterals[index]);
-                assert.equal(project.checker.isTupleTypeReference(type), true);
-                assert.equal(project.checker.isTupleType(type), false);
-                assert.equal(type.isTupleTypeReference(), true);
-                assert.equal(type.isTupleType(), false);
-                assert.ok(type.isTupleTypeReference());
+                assert.equal(project.checker.isTupleType(type), true);
+                assert.equal(project.checker.isTupleTypeTarget(type), false);
+                assert.equal(type.isTupleType(), true);
+                assert.equal(type.isTupleTypeTarget(), false);
+                assert.ok(type.isTupleType());
                 assert.equal(Reflect.get(type, "fixedLength"), undefined);
 
                 const target = type.getTarget();
                 assert.ok(target.objectFlags & ObjectFlags.Tuple);
-                assert.equal(project.checker.isTupleTypeReference(target), true);
                 assert.equal(project.checker.isTupleType(target), true);
-                assert.equal(target.isTupleTypeReference(), true);
+                assert.equal(project.checker.isTupleTypeTarget(target), true);
                 assert.equal(target.isTupleType(), true);
-                assert.ok(target.isTupleType());
+                assert.equal(target.isTupleTypeTarget(), true);
+                assert.ok(target.isTupleTypeTarget());
                 assert.equal(target.fixedLength, expectedFixedLength);
                 assert.equal(target.elementFlags.length, expectedFixedLength);
                 assert.equal(target.readonly, false);
             }
 
             const arrayType = project.checker.getTypeAtLocation(arrayLiterals[2]);
-            assert.equal(project.checker.isTupleTypeReference(arrayType), false);
             assert.equal(project.checker.isTupleType(arrayType), false);
-            assert.equal(arrayType.isTupleTypeReference(), false);
+            assert.equal(project.checker.isTupleTypeTarget(arrayType), false);
             assert.equal(arrayType.isTupleType(), false);
+            assert.equal(arrayType.isTupleTypeTarget(), false);
         }
         finally {
             api.close();
@@ -3231,7 +3231,7 @@ describe("readFile callback semantics", () => {
     });
 });
 
-describe("Checker - isArrayType / isTupleTypeReference", () => {
+describe("Checker - isArrayType / isTupleType", () => {
     test("number[] is array, not tuple", () => {
         const api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
@@ -3247,7 +3247,7 @@ describe("Checker - isArrayType / isTupleTypeReference", () => {
             const type = project.checker.getTypeOfSymbol(symbol);
             assert.ok(type);
             assert.equal(project.checker.isArrayType(type), true);
-            assert.equal(project.checker.isTupleTypeReference(type), false);
+            assert.equal(project.checker.isTupleType(type), false);
         }
         finally {
             api.close();
@@ -3269,7 +3269,7 @@ describe("Checker - isArrayType / isTupleTypeReference", () => {
             const type = project.checker.getTypeOfSymbol(symbol);
             assert.ok(type);
             assert.equal(project.checker.isArrayType(type), true);
-            assert.equal(project.checker.isTupleTypeReference(type), false);
+            assert.equal(project.checker.isTupleType(type), false);
         }
         finally {
             api.close();
@@ -3291,7 +3291,7 @@ describe("Checker - isArrayType / isTupleTypeReference", () => {
             const type = project.checker.getTypeOfSymbol(symbol);
             assert.ok(type);
             assert.equal(project.checker.isArrayType(type), true);
-            assert.equal(project.checker.isTupleTypeReference(type), false);
+            assert.equal(project.checker.isTupleType(type), false);
         }
         finally {
             api.close();
@@ -3313,7 +3313,7 @@ describe("Checker - isArrayType / isTupleTypeReference", () => {
             const type = project.checker.getTypeOfSymbol(symbol);
             assert.ok(type);
             assert.equal(project.checker.isArrayType(type), false);
-            assert.equal(project.checker.isTupleTypeReference(type), true);
+            assert.equal(project.checker.isTupleType(type), true);
         }
         finally {
             api.close();
@@ -3335,7 +3335,7 @@ describe("Checker - isArrayType / isTupleTypeReference", () => {
             const type = project.checker.getTypeOfSymbol(symbol);
             assert.ok(type);
             assert.equal(project.checker.isArrayType(type), false);
-            assert.equal(project.checker.isTupleTypeReference(type), true);
+            assert.equal(project.checker.isTupleType(type), true);
         }
         finally {
             api.close();
@@ -3357,7 +3357,7 @@ describe("Checker - isArrayType / isTupleTypeReference", () => {
             const type = project.checker.getTypeOfSymbol(symbol);
             assert.ok(type);
             assert.equal(project.checker.isArrayType(type), false);
-            assert.equal(project.checker.isTupleTypeReference(type), false);
+            assert.equal(project.checker.isTupleType(type), false);
         }
         finally {
             api.close();

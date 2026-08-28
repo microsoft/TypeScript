@@ -364,7 +364,7 @@ export interface TypeResponse {
     id: number;
     flags: number;
     objectFlags?: number;
-    isTupleTypeReference?: boolean;
+    isTupleType?: boolean;
     /**
      * Value is literal type data. BigInt literals are encoded as signed decimal
      * strings because JSON cannot represent bigint; absent values are null.

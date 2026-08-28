@@ -3894,23 +3894,6 @@ export class Checker {
         );
     }
 
-    get isTupleTypeReference(): {
-        (type: Type): boolean;
-        gen(type: Type): Generator<ProtocolRequest, boolean, ProtocolResponse["result"]>;
-    } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "isTupleTypeReference",
-            function (type: Type): boolean {
-                return type.isTupleTypeReference();
-            },
-            function* (type: Type): Generator<ProtocolRequest, boolean, ProtocolResponse["result"]> {
-                return type.isTupleTypeReference();
-            },
-        );
-    }
-
     get isTupleType(): {
         (type: Type): boolean;
         gen(type: Type): Generator<ProtocolRequest, boolean, ProtocolResponse["result"]>;
@@ -3924,6 +3907,23 @@ export class Checker {
             },
             function* (type: Type): Generator<ProtocolRequest, boolean, ProtocolResponse["result"]> {
                 return type.isTupleType();
+            },
+        );
+    }
+
+    get isTupleTypeTarget(): {
+        (type: Type): boolean;
+        gen(type: Type): Generator<ProtocolRequest, boolean, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "isTupleTypeTarget",
+            function (type: Type): boolean {
+                return type.isTupleTypeTarget();
+            },
+            function* (type: Type): Generator<ProtocolRequest, boolean, ProtocolResponse["result"]> {
+                return type.isTupleTypeTarget();
             },
         );
     }
@@ -5099,7 +5099,7 @@ class TypeObject implements Type {
     readonly freshType!: number;
     readonly regularType!: number;
     readonly target!: number;
-    private readonly tupleTypeReference: boolean;
+    private readonly tupleType: boolean;
     readonly typeParameters!: readonly number[];
     readonly outerTypeParameters!: readonly number[];
     readonly localTypeParameters!: readonly number[];
@@ -5155,7 +5155,7 @@ class TypeObject implements Type {
         if (data.freshType !== undefined) this.freshType = data.freshType;
         if (data.regularType !== undefined) this.regularType = data.regularType;
         if (data.target !== undefined) this.target = data.target;
-        this.tupleTypeReference = data.isTupleTypeReference ?? false;
+        this.tupleType = data.isTupleType ?? false;
         this.typeParameters = data.typeParameters ?? [];
         this.outerTypeParameters = data.outerTypeParameters ?? [];
         this.localTypeParameters = data.localTypeParameters ?? [];
@@ -5915,11 +5915,11 @@ class TypeObject implements Type {
         return isTypeReference(this);
     }
 
-    isTupleTypeReference(): this is TupleTypeReference {
-        return this.tupleTypeReference;
+    isTupleType(): this is TupleTypeReference {
+        return this.tupleType;
     }
 
-    isTupleType(): this is TupleType {
+    isTupleTypeTarget(): this is TupleType {
         return this.fixedLength !== undefined;
     }
 
@@ -6006,12 +6006,12 @@ export function isTypeReference(type: Type): type is TypeReference {
     return isObjectType(type) && (type.objectFlags & ObjectFlags.Reference) !== 0;
 }
 
-export function isTupleTypeReference(type: Type): type is TupleTypeReference {
-    return type.isTupleTypeReference();
+export function isTupleType(type: Type): type is TupleTypeReference {
+    return type.isTupleType();
 }
 
-export function isTupleType(type: Type): type is TupleType {
-    return type.isTupleType();
+export function isTupleTypeTarget(type: Type): type is TupleType {
+    return type.isTupleTypeTarget();
 }
 
 export function isIndexType(type: Type): type is IndexType {

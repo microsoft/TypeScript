@@ -107,10 +107,10 @@ export interface Type {
     isBooleanLiteralType(): this is BooleanLiteralType;
     /** Whether this type is a type reference */
     isTypeReference(): this is TypeReference;
-    /** Whether this type is a reference to a tuple type */
-    isTupleTypeReference(): this is TupleTypeReference;
+    /** Whether this type is a tuple type reference */
+    isTupleType(): this is TupleTypeReference;
     /** Whether this type owns tuple metadata */
-    isTupleType(): this is TupleType;
+    isTupleTypeTarget(): this is TupleType;
     /** Whether this type is an index type (`keyof T`) */
     isIndexType(): this is IndexType;
     /** Whether this type is an indexed access type (`T[K]`) */
@@ -195,8 +195,10 @@ export interface InterfaceType extends TypeReference {
     getLocalTypeParameters(): Promise<readonly TypeParameter[]>;
 }
 
-/** Tuple types (ObjectFlags.Tuple) */
+/** Tuple type targets (ObjectFlags.Tuple) */
 export interface TupleType extends InterfaceType {
+    /** Get this tuple target */
+    getTarget(): Promise<TupleType>;
     /** Per-element flags (Required, Optional, Rest, Variadic) */
     readonly elementFlags: readonly ElementFlags[];
     /** Number of initial required or optional elements */
