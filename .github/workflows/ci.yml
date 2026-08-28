@@ -72,18 +72,20 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: ./.github/actions/setup-go
-      - name: Prepare Node.js-free PATH
+      - name: Prepare standalone tsc module
         run: |
           mkdir "$RUNNER_TEMP/go-test-bin"
           ln -s "$(go env GOROOT)/bin/go" "$RUNNER_TEMP/go-test-bin/go"
+          cp -R tsc "$RUNNER_TEMP/tsc"
       - name: Tests without Node.js
         run: |
           export PATH="$RUNNER_TEMP/go-test-bin"
           export GOEXPERIMENT=ms_nocgo_opensslcrypto
           export CGO_ENABLED=0
           ! command -v node
-          go test ./tsc/... ./tools/...
-          go test -run=- -bench=. -benchtime=1x ./tsc/... ./tools/...
+          cd "$RUNNER_TEMP/tsc"
+          go test ./...
+          go test -run=- -bench=. -benchtime=1x ./...
 
   test:
     strategy:
