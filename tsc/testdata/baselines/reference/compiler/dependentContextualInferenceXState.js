@@ -1,65 +1,77 @@
 //// [tests/cases/compiler/dependentContextualInferenceXState.ts] ////
 
 //// [dependentContextualInferenceXState.ts]
-declare const createMachine:
+declare const runMachine:
   <T extends
-    { initial: keyof T["states"]
-    , context: unknown
-    , states: 
-        { [S in keyof T["states"]]:
-            { onNext:
-                ( machineInstant:
-                    { context:
-                      | { [S1 in keyof T["states"]]:
-                            ReturnType<T["states"][S1]["onNext"]> extends infer N
-                              ? N extends unknown
-                                  ? N extends { state: S, context: infer C }
-                                      ? C
-                                      : never
-                                  : never
-                              : never
-                        }[keyof T["states"]]
-                      | ( T["initial"] extends S
-                            ? T["context"]
+    { initial:
+        { state: keyof T["transitions"]
+        , context: object
+        }
+    , transitions: 
+        { [S in keyof T["transitions"]]:
+            ( current:
+                  { context:
+                    | { [S1 in keyof T["transitions"]]:
+                          ReturnType<T["transitions"][S1]> extends infer N
+                            ? N extends unknown
+                                ? N extends { state: S, context: infer C }
+                                    ? C
+                                    : never
+                                : never
                             : never
-                        )
-                    }
-              ) =>
-                | void
-                | { state: keyof T["states"]
-                  , context: unknown
+                      }[keyof T["transitions"]]
+                    | ( T["initial"]["state"] extends S
+                          ? T["initial"]["context"]
+                          : never
+                      )
                   }
-            }
+            ) =>
+              | void
+              | { state: keyof T["transitions"]
+                , context: object
+                }
         }
-    }
+    },
+    S = keyof T["transitions"]
   >
-    (machine: T) => T
+    (machine: T) =>
+      S extends unknown
+        ? { state: S
+          , context: 
+            | { [S1 in keyof T["transitions"]]:
+                  ReturnType<T["transitions"][S1]> extends infer N
+                    ? N extends unknown
+                        ? N extends { state: S, context: infer C }
+                            ? C
+                            : never
+                        : never
+                    : never
+              }[keyof T["transitions"]]
+            | ( T["initial"]["state"] extends S
+                  ? T["initial"]["context"]
+                  : never
+              )
+          }
+        : never
 
-createMachine({
-  initial: "loggedOut",
-  context: {},
-  states: {
-    loggedOut: {
-      onNext: ({ context }) => {
-        const _check: {} | { failed: boolean } = context;
-        return { state: "loggingIn", context: { username: "devanshj", password: "1234" } }
+const result = runMachine({
+  initial: {
+    state: "loggedOut",
+    context: {}
+  },
+  transitions: {
+    loggedOut: ({ context }) => {
+      return { state: "loggingIn", context: { username: "devanshj", password: "1234" } }
+    },
+    loggingIn: ({ context }) => {
+      if (context.username === "devanshj" && context.password === "1234") {
+        return { state: "loggedIn", context: { ...context, accessToken: "whatever" } }
+      } else {
+        return { state: "loggedOut", context: { failedOnce: true } }
       }
     },
-    loggingIn: {
-      onNext: ({ context }) => {
-        const _check: { username: string, password: string } = context;
-        if (context.username === "devanshj" && context.password === "1234") {
-          return { state: "loggedIn", context: { ...context, accessToken: "whatever" } }
-        } else {
-          return { state: "loggedOut", context: { failed: true } }
-        }
-      }
-    },
-    loggedIn: {
-      onNext: ({ context }) => {
-        const _check: { username: string, password: string, accessToken: string } = context;
-        console.log(context.username)
-      }
+    loggedIn: ({ context }) => {
+      console.log(context.accessToken)
     }
   }
 })
@@ -67,32 +79,25 @@ createMachine({
 
 //// [dependentContextualInferenceXState.js]
 "use strict";
-createMachine({
-    initial: "loggedOut",
-    context: {},
-    states: {
-        loggedOut: {
-            onNext: ({ context }) => {
-                const _check = context;
-                return { state: "loggingIn", context: { username: "devanshj", password: "1234" } };
+const result = runMachine({
+    initial: {
+        state: "loggedOut",
+        context: {}
+    },
+    transitions: {
+        loggedOut: ({ context }) => {
+            return { state: "loggingIn", context: { username: "devanshj", password: "1234" } };
+        },
+        loggingIn: ({ context }) => {
+            if (context.username === "devanshj" && context.password === "1234") {
+                return { state: "loggedIn", context: { ...context, accessToken: "whatever" } };
+            }
+            else {
+                return { state: "loggedOut", context: { failedOnce: true } };
             }
         },
-        loggingIn: {
-            onNext: ({ context }) => {
-                const _check = context;
-                if (context.username === "devanshj" && context.password === "1234") {
-                    return { state: "loggedIn", context: { ...context, accessToken: "whatever" } };
-                }
-                else {
-                    return { state: "loggedOut", context: { failed: true } };
-                }
-            }
-        },
-        loggedIn: {
-            onNext: ({ context }) => {
-                const _check = context;
-                console.log(context.username);
-            }
+        loggedIn: ({ context }) => {
+            console.log(context.accessToken);
         }
     }
 });
