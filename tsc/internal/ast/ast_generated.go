@@ -9025,6 +9025,425 @@ func (n *Node) ForEachChild(v Visitor) bool {
 }
 
 // ──────────────────────────────────────────────────────────────────────
+// nodeData accessor dispatch
+// ──────────────────────────────────────────────────────────────────────
+
+func (n *Node) FlowNodeData() *FlowNodeBase {
+	switch n.Kind {
+	case KindIdentifier:
+		return n.data.(*Identifier).FlowNodeData()
+	case KindQualifiedName:
+		return n.data.(*QualifiedName).FlowNodeData()
+	case KindEmptyStatement:
+		return n.data.(*EmptyStatement).FlowNodeData()
+	case KindIfStatement:
+		return n.data.(*IfStatement).FlowNodeData()
+	case KindDoStatement:
+		return n.data.(*DoStatement).FlowNodeData()
+	case KindWhileStatement:
+		return n.data.(*WhileStatement).FlowNodeData()
+	case KindForStatement:
+		return n.data.(*ForStatement).FlowNodeData()
+	case KindForInStatement, KindForOfStatement:
+		return n.data.(*ForInOrOfStatement).FlowNodeData()
+	case KindBreakStatement:
+		return n.data.(*BreakStatement).FlowNodeData()
+	case KindContinueStatement:
+		return n.data.(*ContinueStatement).FlowNodeData()
+	case KindReturnStatement:
+		return n.data.(*ReturnStatement).FlowNodeData()
+	case KindWithStatement:
+		return n.data.(*WithStatement).FlowNodeData()
+	case KindSwitchStatement:
+		return n.data.(*SwitchStatement).FlowNodeData()
+	case KindThrowStatement:
+		return n.data.(*ThrowStatement).FlowNodeData()
+	case KindTryStatement:
+		return n.data.(*TryStatement).FlowNodeData()
+	case KindDebuggerStatement:
+		return n.data.(*DebuggerStatement).FlowNodeData()
+	case KindLabeledStatement:
+		return n.data.(*LabeledStatement).FlowNodeData()
+	case KindExpressionStatement:
+		return n.data.(*ExpressionStatement).FlowNodeData()
+	case KindBlock:
+		return n.data.(*Block).FlowNodeData()
+	case KindVariableStatement:
+		return n.data.(*VariableStatement).FlowNodeData()
+	case KindBindingElement:
+		return n.data.(*BindingElement).FlowNodeData()
+	case KindMissingDeclaration:
+		return n.data.(*MissingDeclaration).FlowNodeData()
+	case KindFunctionDeclaration:
+		return n.data.(*FunctionDeclaration).FlowNodeData()
+	case KindClassDeclaration:
+		return n.data.(*ClassDeclaration).FlowNodeData()
+	case KindInterfaceDeclaration:
+		return n.data.(*InterfaceDeclaration).FlowNodeData()
+	case KindTypeAliasDeclaration, KindJSTypeAliasDeclaration:
+		return n.data.(*TypeAliasDeclaration).FlowNodeData()
+	case KindEnumDeclaration:
+		return n.data.(*EnumDeclaration).FlowNodeData()
+	case KindModuleBlock:
+		return n.data.(*ModuleBlock).FlowNodeData()
+	case KindNotEmittedStatement:
+		return n.data.(*NotEmittedStatement).FlowNodeData()
+	case KindImportDeclaration, KindJSImportDeclaration:
+		return n.data.(*ImportDeclaration).FlowNodeData()
+	case KindExportAssignment:
+		return n.data.(*ExportAssignment).FlowNodeData()
+	case KindNamespaceExportDeclaration:
+		return n.data.(*NamespaceExportDeclaration).FlowNodeData()
+	case KindGetAccessor:
+		return n.data.(*GetAccessorDeclaration).FlowNodeData()
+	case KindSetAccessor:
+		return n.data.(*SetAccessorDeclaration).FlowNodeData()
+	case KindMethodDeclaration:
+		return n.data.(*MethodDeclaration).FlowNodeData()
+	case KindNullKeyword, KindTrueKeyword, KindFalseKeyword, KindThisKeyword, KindSuperKeyword, KindImportKeyword:
+		return n.data.(*KeywordExpression).FlowNodeData()
+	case KindArrowFunction:
+		return n.data.(*ArrowFunction).FlowNodeData()
+	case KindFunctionExpression:
+		return n.data.(*FunctionExpression).FlowNodeData()
+	case KindPropertyAccessExpression:
+		return n.data.(*PropertyAccessExpression).FlowNodeData()
+	case KindElementAccessExpression:
+		return n.data.(*ElementAccessExpression).FlowNodeData()
+	case KindMetaProperty:
+		return n.data.(*MetaProperty).FlowNodeData()
+	case KindModuleDeclaration:
+		return n.data.(*ModuleDeclaration).FlowNodeData()
+	case KindImportEqualsDeclaration:
+		return n.data.(*ImportEqualsDeclaration).FlowNodeData()
+	case KindExportDeclaration:
+		return n.data.(*ExportDeclaration).FlowNodeData()
+	default:
+		return nil
+	}
+}
+
+func (n *Node) DeclarationData() *DeclarationBase {
+	switch n.Kind {
+	case KindVariableDeclaration:
+		return n.data.(*VariableDeclaration).DeclarationData()
+	case KindParameter:
+		return n.data.(*ParameterDeclaration).DeclarationData()
+	case KindBindingElement:
+		return n.data.(*BindingElement).DeclarationData()
+	case KindMissingDeclaration:
+		return n.data.(*MissingDeclaration).DeclarationData()
+	case KindFunctionDeclaration:
+		return n.data.(*FunctionDeclaration).DeclarationData()
+	case KindClassDeclaration:
+		return n.data.(*ClassDeclaration).DeclarationData()
+	case KindClassExpression:
+		return n.data.(*ClassExpression).DeclarationData()
+	case KindInterfaceDeclaration:
+		return n.data.(*InterfaceDeclaration).DeclarationData()
+	case KindTypeAliasDeclaration, KindJSTypeAliasDeclaration:
+		return n.data.(*TypeAliasDeclaration).DeclarationData()
+	case KindEnumMember:
+		return n.data.(*EnumMember).DeclarationData()
+	case KindEnumDeclaration:
+		return n.data.(*EnumDeclaration).DeclarationData()
+	case KindImportDeclaration, KindJSImportDeclaration:
+		return n.data.(*ImportDeclaration).DeclarationData()
+	case KindNamespaceImport:
+		return n.data.(*NamespaceImport).DeclarationData()
+	case KindExportAssignment:
+		return n.data.(*ExportAssignment).DeclarationData()
+	case KindNamespaceExportDeclaration:
+		return n.data.(*NamespaceExportDeclaration).DeclarationData()
+	case KindNamespaceExport:
+		return n.data.(*NamespaceExport).DeclarationData()
+	case KindExportSpecifier:
+		return n.data.(*ExportSpecifier).DeclarationData()
+	case KindCallSignature:
+		return n.data.(*CallSignatureDeclaration).DeclarationData()
+	case KindConstructSignature:
+		return n.data.(*ConstructSignatureDeclaration).DeclarationData()
+	case KindConstructor:
+		return n.data.(*ConstructorDeclaration).DeclarationData()
+	case KindGetAccessor:
+		return n.data.(*GetAccessorDeclaration).DeclarationData()
+	case KindSetAccessor:
+		return n.data.(*SetAccessorDeclaration).DeclarationData()
+	case KindIndexSignature:
+		return n.data.(*IndexSignatureDeclaration).DeclarationData()
+	case KindMethodSignature:
+		return n.data.(*MethodSignatureDeclaration).DeclarationData()
+	case KindMethodDeclaration:
+		return n.data.(*MethodDeclaration).DeclarationData()
+	case KindPropertySignature:
+		return n.data.(*PropertySignatureDeclaration).DeclarationData()
+	case KindPropertyDeclaration:
+		return n.data.(*PropertyDeclaration).DeclarationData()
+	case KindSemicolonClassElement:
+		return n.data.(*SemicolonClassElement).DeclarationData()
+	case KindClassStaticBlockDeclaration:
+		return n.data.(*ClassStaticBlockDeclaration).DeclarationData()
+	case KindNoSubstitutionTemplateLiteral:
+		return n.data.(*NoSubstitutionTemplateLiteral).DeclarationData()
+	case KindBinaryExpression:
+		return n.data.(*BinaryExpression).DeclarationData()
+	case KindArrowFunction:
+		return n.data.(*ArrowFunction).DeclarationData()
+	case KindFunctionExpression:
+		return n.data.(*FunctionExpression).DeclarationData()
+	case KindCallExpression:
+		return n.data.(*CallExpression).DeclarationData()
+	case KindObjectLiteralExpression:
+		return n.data.(*ObjectLiteralExpression).DeclarationData()
+	case KindSpreadAssignment:
+		return n.data.(*SpreadAssignment).DeclarationData()
+	case KindPropertyAssignment:
+		return n.data.(*PropertyAssignment).DeclarationData()
+	case KindShorthandPropertyAssignment:
+		return n.data.(*ShorthandPropertyAssignment).DeclarationData()
+	case KindMappedType:
+		return n.data.(*MappedTypeNode).DeclarationData()
+	case KindTypeLiteral:
+		return n.data.(*TypeLiteralNode).DeclarationData()
+	case KindNamedTupleMember:
+		return n.data.(*NamedTupleMember).DeclarationData()
+	case KindFunctionType:
+		return n.data.(*FunctionTypeNode).DeclarationData()
+	case KindConstructorType:
+		return n.data.(*ConstructorTypeNode).DeclarationData()
+	case KindJsxAttributes:
+		return n.data.(*JsxAttributes).DeclarationData()
+	case KindJsxAttribute:
+		return n.data.(*JsxAttribute).DeclarationData()
+	case KindJSDocSignature:
+		return n.data.(*JSDocSignature).DeclarationData()
+	case KindSourceFile:
+		return n.data.(*SourceFile).DeclarationData()
+	case KindModuleDeclaration:
+		return n.data.(*ModuleDeclaration).DeclarationData()
+	case KindImportEqualsDeclaration:
+		return n.data.(*ImportEqualsDeclaration).DeclarationData()
+	case KindExportDeclaration:
+		return n.data.(*ExportDeclaration).DeclarationData()
+	case KindImportClause:
+		return n.data.(*ImportClause).DeclarationData()
+	case KindImportSpecifier:
+		return n.data.(*ImportSpecifier).DeclarationData()
+	case KindTypeParameter:
+		return n.data.(*TypeParameterDeclaration).DeclarationData()
+	case KindJSDocTypeLiteral:
+		return n.data.(*JSDocTypeLiteral).DeclarationData()
+	default:
+		return nil
+	}
+}
+
+func (n *Node) ExportableData() *ExportableBase {
+	switch n.Kind {
+	case KindVariableDeclaration:
+		return n.data.(*VariableDeclaration).ExportableData()
+	case KindBindingElement:
+		return n.data.(*BindingElement).ExportableData()
+	case KindFunctionDeclaration:
+		return n.data.(*FunctionDeclaration).ExportableData()
+	case KindClassDeclaration:
+		return n.data.(*ClassDeclaration).ExportableData()
+	case KindClassExpression:
+		return n.data.(*ClassExpression).ExportableData()
+	case KindInterfaceDeclaration:
+		return n.data.(*InterfaceDeclaration).ExportableData()
+	case KindTypeAliasDeclaration, KindJSTypeAliasDeclaration:
+		return n.data.(*TypeAliasDeclaration).ExportableData()
+	case KindEnumDeclaration:
+		return n.data.(*EnumDeclaration).ExportableData()
+	case KindNamespaceImport:
+		return n.data.(*NamespaceImport).ExportableData()
+	case KindExportSpecifier:
+		return n.data.(*ExportSpecifier).ExportableData()
+	case KindModuleDeclaration:
+		return n.data.(*ModuleDeclaration).ExportableData()
+	case KindImportEqualsDeclaration:
+		return n.data.(*ImportEqualsDeclaration).ExportableData()
+	case KindImportClause:
+		return n.data.(*ImportClause).ExportableData()
+	case KindImportSpecifier:
+		return n.data.(*ImportSpecifier).ExportableData()
+	default:
+		return nil
+	}
+}
+
+func (n *Node) LocalsContainerData() *LocalsContainerBase {
+	switch n.Kind {
+	case KindForStatement:
+		return n.data.(*ForStatement).LocalsContainerData()
+	case KindForInStatement, KindForOfStatement:
+		return n.data.(*ForInOrOfStatement).LocalsContainerData()
+	case KindCaseBlock:
+		return n.data.(*CaseBlock).LocalsContainerData()
+	case KindCatchClause:
+		return n.data.(*CatchClause).LocalsContainerData()
+	case KindBlock:
+		return n.data.(*Block).LocalsContainerData()
+	case KindFunctionDeclaration:
+		return n.data.(*FunctionDeclaration).LocalsContainerData()
+	case KindClassDeclaration:
+		return n.data.(*ClassDeclaration).LocalsContainerData()
+	case KindClassExpression:
+		return n.data.(*ClassExpression).LocalsContainerData()
+	case KindTypeAliasDeclaration, KindJSTypeAliasDeclaration:
+		return n.data.(*TypeAliasDeclaration).LocalsContainerData()
+	case KindCallSignature:
+		return n.data.(*CallSignatureDeclaration).LocalsContainerData()
+	case KindConstructSignature:
+		return n.data.(*ConstructSignatureDeclaration).LocalsContainerData()
+	case KindConstructor:
+		return n.data.(*ConstructorDeclaration).LocalsContainerData()
+	case KindGetAccessor:
+		return n.data.(*GetAccessorDeclaration).LocalsContainerData()
+	case KindSetAccessor:
+		return n.data.(*SetAccessorDeclaration).LocalsContainerData()
+	case KindIndexSignature:
+		return n.data.(*IndexSignatureDeclaration).LocalsContainerData()
+	case KindMethodSignature:
+		return n.data.(*MethodSignatureDeclaration).LocalsContainerData()
+	case KindMethodDeclaration:
+		return n.data.(*MethodDeclaration).LocalsContainerData()
+	case KindClassStaticBlockDeclaration:
+		return n.data.(*ClassStaticBlockDeclaration).LocalsContainerData()
+	case KindArrowFunction:
+		return n.data.(*ArrowFunction).LocalsContainerData()
+	case KindFunctionExpression:
+		return n.data.(*FunctionExpression).LocalsContainerData()
+	case KindConditionalType:
+		return n.data.(*ConditionalTypeNode).LocalsContainerData()
+	case KindMappedType:
+		return n.data.(*MappedTypeNode).LocalsContainerData()
+	case KindFunctionType:
+		return n.data.(*FunctionTypeNode).LocalsContainerData()
+	case KindConstructorType:
+		return n.data.(*ConstructorTypeNode).LocalsContainerData()
+	case KindJSDocSignature:
+		return n.data.(*JSDocSignature).LocalsContainerData()
+	case KindSourceFile:
+		return n.data.(*SourceFile).LocalsContainerData()
+	case KindModuleDeclaration:
+		return n.data.(*ModuleDeclaration).LocalsContainerData()
+	default:
+		return nil
+	}
+}
+
+func (n *Node) FunctionLikeData() *FunctionLikeBase {
+	switch n.Kind {
+	case KindFunctionDeclaration:
+		return n.data.(*FunctionDeclaration).FunctionLikeData()
+	case KindCallSignature:
+		return n.data.(*CallSignatureDeclaration).FunctionLikeData()
+	case KindConstructSignature:
+		return n.data.(*ConstructSignatureDeclaration).FunctionLikeData()
+	case KindConstructor:
+		return n.data.(*ConstructorDeclaration).FunctionLikeData()
+	case KindGetAccessor:
+		return n.data.(*GetAccessorDeclaration).FunctionLikeData()
+	case KindSetAccessor:
+		return n.data.(*SetAccessorDeclaration).FunctionLikeData()
+	case KindIndexSignature:
+		return n.data.(*IndexSignatureDeclaration).FunctionLikeData()
+	case KindMethodSignature:
+		return n.data.(*MethodSignatureDeclaration).FunctionLikeData()
+	case KindMethodDeclaration:
+		return n.data.(*MethodDeclaration).FunctionLikeData()
+	case KindArrowFunction:
+		return n.data.(*ArrowFunction).FunctionLikeData()
+	case KindFunctionExpression:
+		return n.data.(*FunctionExpression).FunctionLikeData()
+	case KindFunctionType:
+		return n.data.(*FunctionTypeNode).FunctionLikeData()
+	case KindConstructorType:
+		return n.data.(*ConstructorTypeNode).FunctionLikeData()
+	case KindJSDocSignature:
+		return n.data.(*JSDocSignature).FunctionLikeData()
+	default:
+		return nil
+	}
+}
+
+func (n *Node) ClassLikeData() *ClassLikeBase {
+	switch n.Kind {
+	case KindClassDeclaration:
+		return n.data.(*ClassDeclaration).ClassLikeData()
+	case KindClassExpression:
+		return n.data.(*ClassExpression).ClassLikeData()
+	default:
+		return nil
+	}
+}
+
+func (n *Node) BodyData() *BodyBase {
+	switch n.Kind {
+	case KindFunctionDeclaration:
+		return n.data.(*FunctionDeclaration).BodyData()
+	case KindConstructor:
+		return n.data.(*ConstructorDeclaration).BodyData()
+	case KindGetAccessor:
+		return n.data.(*GetAccessorDeclaration).BodyData()
+	case KindSetAccessor:
+		return n.data.(*SetAccessorDeclaration).BodyData()
+	case KindMethodDeclaration:
+		return n.data.(*MethodDeclaration).BodyData()
+	case KindArrowFunction:
+		return n.data.(*ArrowFunction).BodyData()
+	case KindFunctionExpression:
+		return n.data.(*FunctionExpression).BodyData()
+	case KindModuleDeclaration:
+		return n.data.(*ModuleDeclaration).BodyData()
+	default:
+		return nil
+	}
+}
+
+func (n *Node) LiteralLikeData() *LiteralLikeNodeBase {
+	switch n.Kind {
+	case KindStringLiteral:
+		return n.data.(*StringLiteral).LiteralLikeData()
+	case KindNumericLiteral:
+		return n.data.(*NumericLiteral).LiteralLikeData()
+	case KindBigIntLiteral:
+		return n.data.(*BigIntLiteral).LiteralLikeData()
+	case KindRegularExpressionLiteral:
+		return n.data.(*RegularExpressionLiteral).LiteralLikeData()
+	case KindNoSubstitutionTemplateLiteral:
+		return n.data.(*NoSubstitutionTemplateLiteral).LiteralLikeData()
+	case KindTemplateHead:
+		return n.data.(*TemplateHead).LiteralLikeData()
+	case KindTemplateMiddle:
+		return n.data.(*TemplateMiddle).LiteralLikeData()
+	case KindTemplateTail:
+		return n.data.(*TemplateTail).LiteralLikeData()
+	case KindJsxText:
+		return n.data.(*JsxText).LiteralLikeData()
+	default:
+		return nil
+	}
+}
+
+func (n *Node) TemplateLiteralLikeData() *TemplateLiteralLikeNodeBase {
+	switch n.Kind {
+	case KindNoSubstitutionTemplateLiteral:
+		return n.data.(*NoSubstitutionTemplateLiteral).TemplateLiteralLikeData()
+	case KindTemplateHead:
+		return n.data.(*TemplateHead).TemplateLiteralLikeData()
+	case KindTemplateMiddle:
+		return n.data.(*TemplateMiddle).TemplateLiteralLikeData()
+	case KindTemplateTail:
+		return n.data.(*TemplateTail).TemplateLiteralLikeData()
+	default:
+		return nil
+	}
+}
+
+// ──────────────────────────────────────────────────────────────────────
 // As*() cast methods
 // ──────────────────────────────────────────────────────────────────────
 

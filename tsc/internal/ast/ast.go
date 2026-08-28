@@ -209,27 +209,16 @@ func (n *Node) IterChildren() iter.Seq[*Node] {
 		})
 	}
 }
-func (n *Node) Clone(f NodeFactoryCoercible) *Node        { return n.data.Clone(f) }
-func (n *Node) VisitEachChild(v *NodeVisitor) *Node       { return n.data.VisitEachChild(v) }
-func (n *Node) Name() *DeclarationName                    { return n.data.Name() }
-func (n *Node) Modifiers() *ModifierList                  { return n.data.Modifiers() }
-func (n *Node) FlowNodeData() *FlowNodeBase               { return n.data.FlowNodeData() }
-func (n *Node) DeclarationData() *DeclarationBase         { return n.data.DeclarationData() }
-func (n *Node) ExportableData() *ExportableBase           { return n.data.ExportableData() }
-func (n *Node) LocalsContainerData() *LocalsContainerBase { return n.data.LocalsContainerData() }
-func (n *Node) FunctionLikeData() *FunctionLikeBase       { return n.data.FunctionLikeData() }
-func (n *Node) ParameterList() *ParameterList             { return n.data.FunctionLikeData().Parameters }
-func (n *Node) Parameters() []*ParameterDeclarationNode   { return n.ParameterList().Nodes }
-func (n *Node) ClassLikeData() *ClassLikeBase             { return n.data.ClassLikeData() }
-func (n *Node) BodyData() *BodyBase                       { return n.data.BodyData() }
-func (n *Node) SubtreeFacts() SubtreeFacts                { return n.data.SubtreeFacts() }
-func (n *Node) propagateSubtreeFacts() SubtreeFacts       { return n.data.propagateSubtreeFacts() }
-func (n *Node) LiteralLikeData() *LiteralLikeNodeBase     { return n.data.LiteralLikeData() }
-func (n *Node) TemplateLiteralLikeData() *TemplateLiteralLikeNodeBase {
-	return n.data.TemplateLiteralLikeData()
-}
-func (n *Node) KindString() string { return n.Kind.String() }
-func (n *Node) KindValue() int16   { return int16(n.Kind) }
+func (n *Node) Clone(f NodeFactoryCoercible) *Node      { return n.data.Clone(f) }
+func (n *Node) VisitEachChild(v *NodeVisitor) *Node     { return n.data.VisitEachChild(v) }
+func (n *Node) Name() *DeclarationName                  { return n.data.Name() }
+func (n *Node) Modifiers() *ModifierList                { return n.data.Modifiers() }
+func (n *Node) ParameterList() *ParameterList           { return n.FunctionLikeData().Parameters }
+func (n *Node) Parameters() []*ParameterDeclarationNode { return n.ParameterList().Nodes }
+func (n *Node) SubtreeFacts() SubtreeFacts              { return n.data.SubtreeFacts() }
+func (n *Node) propagateSubtreeFacts() SubtreeFacts     { return n.data.propagateSubtreeFacts() }
+func (n *Node) KindString() string                      { return n.Kind.String() }
+func (n *Node) KindValue() int16                        { return int16(n.Kind) }
 func (n *Node) Decorators() []*Node {
 	if n.Modifiers() == nil {
 		return nil
@@ -1191,15 +1180,6 @@ type nodeData interface {
 	Name() *DeclarationName
 	Modifiers() *ModifierList
 	setModifiers(modifiers *ModifierList)
-	FlowNodeData() *FlowNodeBase
-	DeclarationData() *DeclarationBase
-	ExportableData() *ExportableBase
-	LocalsContainerData() *LocalsContainerBase
-	FunctionLikeData() *FunctionLikeBase
-	ClassLikeData() *ClassLikeBase
-	BodyData() *BodyBase
-	LiteralLikeData() *LiteralLikeNodeBase
-	TemplateLiteralLikeData() *TemplateLiteralLikeNodeBase
 	SubtreeFacts() SubtreeFacts
 	computeSubtreeFacts() SubtreeFacts
 	subtreeFactsWorker(self nodeData) SubtreeFacts

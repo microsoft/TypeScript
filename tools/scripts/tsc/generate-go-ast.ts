@@ -608,6 +608,57 @@ function generateForEachChildDispatch(w: CodeWriter) {
     w.write("");
 }
 
+const NODE_DATA_ACCESSORS: { method: string; ret: string; base: string; }[] = [
+    { method: "FlowNodeData", ret: "*FlowNodeBase", base: "FlowNodeBase" },
+    { method: "DeclarationData", ret: "*DeclarationBase", base: "DeclarationBase" },
+    { method: "ExportableData", ret: "*ExportableBase", base: "ExportableBase" },
+    { method: "LocalsContainerData", ret: "*LocalsContainerBase", base: "LocalsContainerBase" },
+    { method: "FunctionLikeData", ret: "*FunctionLikeBase", base: "FunctionLikeBase" },
+    { method: "ClassLikeData", ret: "*ClassLikeBase", base: "ClassLikeBase" },
+    { method: "BodyData", ret: "*BodyBase", base: "BodyBase" },
+    { method: "LiteralLikeData", ret: "*LiteralLikeNodeBase", base: "LiteralLikeNodeBase" },
+    { method: "TemplateLiteralLikeData", ret: "*TemplateLiteralLikeNodeBase", base: "TemplateLiteralLikeNodeBase" },
+];
+
+function transitiveBaseKeys(node: NodeType): Set<string> {
+    const seen = new Set<string>();
+    const visit = (n: NodeType) => {
+        for (const base of n.extends) {
+            if (!seen.has(base.key)) {
+                seen.add(base.key);
+                visit(base);
+            }
+        }
+    };
+    visit(node);
+    return seen;
+}
+
+function generateNodeDataAccessors(w: CodeWriter) {
+    for (const { method, ret, base } of NODE_DATA_ACCESSORS) {
+        w.write(`func (n *Node) ${method}() ${ret} {`);
+        w.push();
+        w.write("switch n.Kind {");
+        for (const node of api.nodes()) {
+            if (!transitiveBaseKeys(node).has(base)) continue;
+            const kinds = node.allKinds().map(k => k.formatGoConstant());
+            if (kinds.length === 0) continue;
+            w.write(`case ${kinds.join(", ")}:`);
+            w.push();
+            w.write(`return n.data.(*${node.name}).${method}()`);
+            w.pop();
+        }
+        w.write("default:");
+        w.push();
+        w.write("return nil");
+        w.pop();
+        w.write("}");
+        w.pop();
+        w.write("}");
+        w.write("");
+    }
+}
+
 // ── Generate VisitEachChild() ──────────────────────────────────────────────
 
 function generateVisitEachChild(w: CodeWriter, node: NodeType) {
@@ -955,6 +1006,13 @@ function generate(): string {
     w.write("// ──────────────────────────────────────────────────────────────────────");
     w.write("");
     generateForEachChildDispatch(w);
+
+    // nodeData accessor dispatch
+    w.write("// ──────────────────────────────────────────────────────────────────────");
+    w.write("// nodeData accessor dispatch");
+    w.write("// ──────────────────────────────────────────────────────────────────────");
+    w.write("");
+    generateNodeDataAccessors(w);
 
     // As*() casts
     w.write("// ──────────────────────────────────────────────────────────────────────");
