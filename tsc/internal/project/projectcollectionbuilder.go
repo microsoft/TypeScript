@@ -763,8 +763,13 @@ func (b *ProjectCollectionBuilder) markProjectsAffectedByConfigChanges(
 	logger *logging.LogTree,
 ) bool {
 	for projectPath := range configChangeResult.affectedProjects {
-		project, ok := b.configuredProjects.Load(projectPath)
-		if !ok {
+		var project dirty.Value[*Project]
+		if projectPath == inferredProjectName {
+			project = b.inferredProject
+		} else {
+			project, _ = b.configuredProjects.Load(projectPath)
+		}
+		if project == nil || project.Value() == nil {
 			panic(fmt.Sprintf("project %s affected by config change not found", projectPath))
 		}
 		project.ChangeIf(
@@ -1126,12 +1131,17 @@ func (b *ProjectCollectionBuilder) updateInferredProjectRoots(rootFileNames []st
 	return b.updateInferredProject(rootFileNames, b.compilerOptionsForInferredProjects, projectReferences, configFileParsingDiagnostics, b.inferredContentMappers, logger)
 }
 
-// seedInferredProjectForProgram adapts one selected project into the isolated synthetic-project slot used by createProgram.
+// seedInferredProjectForProgram copies the specified project into the synthetic inferred project used by createProgram.
 func (b *ProjectCollectionBuilder) seedInferredProjectForProgram(project *Project, logger *logging.LogTree) {
 	if project == nil || project.Program == nil {
 		return
 	}
-	b.inferredProject.Set(newInferredProjectFromProject(project, b, logger))
+	inferredProject := newInferredProjectFromProject(project, b, logger)
+	project.Program.RangeResolvedProjectReference(func(referencePath tspath.Path, _ *tsoptions.ParsedCommandLine, _ *tsoptions.ParsedCommandLine, _ int) bool {
+		b.configFileRegistryBuilder.retainConfigForProject(referencePath, inferredProject.configFilePath)
+		return true
+	})
+	b.inferredProject.Set(inferredProject)
 }
 
 // updateInferredProject preserves the current command line when roots/options are unchanged.
