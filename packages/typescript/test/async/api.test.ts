@@ -51,6 +51,7 @@ import {
     type BigIntLiteralType,
     CheckFlags,
     type ConditionalType,
+    type CompilerOptions,
     DiagnosticCategory,
     EmitOnly,
     type FreshableType,
@@ -60,9 +61,11 @@ import {
     type InterfaceType,
     type IntrinsicType,
     isErrorType,
+    JsxEmit,
     type LiteralType,
     ModifierFlags,
     ModuleKind,
+    ModuleResolutionKind,
     ObjectFlags,
     type Signature,
     SignatureKind,
@@ -95,6 +98,22 @@ import {
 } from "./api.testUtils.ts";
 
 describe("API", () => {
+    test("CompilerOptions supports public enums and compatibility options", () => {
+        const options: CompilerOptions = {
+            allowSyntheticDefaultImports: true,
+            esModuleInterop: true,
+            jsx: JsxEmit.Preserve,
+            moduleResolution: ModuleResolutionKind.Bundler,
+        };
+
+        assert.deepEqual(options, {
+            allowSyntheticDefaultImports: true,
+            esModuleInterop: true,
+            jsx: 1,
+            moduleResolution: 100,
+        });
+    });
+
     test("parseCommandLine", async () => {
         const api = spawnAPI();
         try {

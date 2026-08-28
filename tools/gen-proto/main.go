@@ -565,8 +565,8 @@ func (r *typeRenderer) inlineStruct(structType *types.Struct) string {
 	var fields []string
 	multiline := false
 	for i := range structType.NumFields() {
-		field, include, optional, nonnil, deprecated, internal := jsonField(structType, i)
-		if !include || deprecated || internal {
+		field, include, optional, nonnil, _, internal := jsonField(structType, i)
+		if !include || internal {
 			continue
 		}
 		fieldType := r.typeString(structType.Field(i).Type(), !optional && !nonnil)
@@ -605,8 +605,8 @@ func (r *typeRenderer) declarations() (string, error) {
 		writeDoc(&out, "", r.docs[named.Obj()])
 		fmt.Fprintf(&out, "export interface %s {\n", exportedName(named.Obj().Name()))
 		for i := range structType.NumFields() {
-			field, include, optional, nonnil, deprecated, internal := jsonField(structType, i)
-			if !include || deprecated || internal {
+			field, include, optional, nonnil, _, internal := jsonField(structType, i)
+			if !include || internal {
 				continue
 			}
 			fieldType := r.typeString(structType.Field(i).Type(), !optional && !nonnil)
