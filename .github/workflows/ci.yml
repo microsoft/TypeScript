@@ -79,13 +79,11 @@ jobs:
       - name: Tests without Node.js
         run: |
           export PATH="$RUNNER_TEMP/go-test-bin"
+          export GOEXPERIMENT=ms_nocgo_opensslcrypto
+          export CGO_ENABLED=0
           ! command -v node
-          CGO_ENABLED=0 go test ./tsc/... ./tools/...
-      - name: Benchmarks without Node.js
-        run: |
-          export PATH="$RUNNER_TEMP/go-test-bin"
-          ! command -v node
-          CGO_ENABLED=0 go test -run=- -bench=. -benchtime=1x ./tsc/... ./tools/...
+          go test ./tsc/... ./tools/...
+          go test -run=- -bench=. -benchtime=1x ./tsc/... ./tools/...
 
   test:
     strategy:
