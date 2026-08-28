@@ -22,3 +22,15 @@ export const cb = useCallback((data: { v: number }) => {
 }, []);
 
 export const check: Promise<string> = cb({ v: 1 });
+
+// https://github.com/microsoft/TypeScript/issues/63949#issuecomment-5400383233
+
+declare function request<T = { input: { value: number }; output: string }>(
+    body?: T extends { input: unknown } ? T["input"] : never,
+): T extends { output: unknown } ? T["output"] : T;
+
+declare function identity<T>(callback: T): T;
+
+identity((data: { value: number }) =>
+    request(data),
+);

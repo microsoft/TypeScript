@@ -73,3 +73,42 @@ export const check: Promise<string> = cb({ v: 1 });
 >cb : Symbol(cb, Decl(genericDefaultInReentrantCallResolution.ts, 15, 12))
 >v : Symbol(v, Decl(genericDefaultInReentrantCallResolution.ts, 19, 42))
 
+// https://github.com/microsoft/TypeScript/issues/63949#issuecomment-5400383233
+
+declare function request<T = { input: { value: number }; output: string }>(
+>request : Symbol(request, Decl(genericDefaultInReentrantCallResolution.ts, 19, 51))
+>T : Symbol(T, Decl(genericDefaultInReentrantCallResolution.ts, 23, 25))
+>input : Symbol(input, Decl(genericDefaultInReentrantCallResolution.ts, 23, 30))
+>value : Symbol(value, Decl(genericDefaultInReentrantCallResolution.ts, 23, 39))
+>output : Symbol(output, Decl(genericDefaultInReentrantCallResolution.ts, 23, 56))
+
+    body?: T extends { input: unknown } ? T["input"] : never,
+>body : Symbol(body, Decl(genericDefaultInReentrantCallResolution.ts, 23, 75))
+>T : Symbol(T, Decl(genericDefaultInReentrantCallResolution.ts, 23, 25))
+>input : Symbol(input, Decl(genericDefaultInReentrantCallResolution.ts, 24, 22))
+>T : Symbol(T, Decl(genericDefaultInReentrantCallResolution.ts, 23, 25))
+
+): T extends { output: unknown } ? T["output"] : T;
+>T : Symbol(T, Decl(genericDefaultInReentrantCallResolution.ts, 23, 25))
+>output : Symbol(output, Decl(genericDefaultInReentrantCallResolution.ts, 25, 14))
+>T : Symbol(T, Decl(genericDefaultInReentrantCallResolution.ts, 23, 25))
+>T : Symbol(T, Decl(genericDefaultInReentrantCallResolution.ts, 23, 25))
+
+declare function identity<T>(callback: T): T;
+>identity : Symbol(identity, Decl(genericDefaultInReentrantCallResolution.ts, 25, 51))
+>T : Symbol(T, Decl(genericDefaultInReentrantCallResolution.ts, 27, 26))
+>callback : Symbol(callback, Decl(genericDefaultInReentrantCallResolution.ts, 27, 29))
+>T : Symbol(T, Decl(genericDefaultInReentrantCallResolution.ts, 27, 26))
+>T : Symbol(T, Decl(genericDefaultInReentrantCallResolution.ts, 27, 26))
+
+identity((data: { value: number }) =>
+>identity : Symbol(identity, Decl(genericDefaultInReentrantCallResolution.ts, 25, 51))
+>data : Symbol(data, Decl(genericDefaultInReentrantCallResolution.ts, 29, 10))
+>value : Symbol(value, Decl(genericDefaultInReentrantCallResolution.ts, 29, 17))
+
+    request(data),
+>request : Symbol(request, Decl(genericDefaultInReentrantCallResolution.ts, 19, 51))
+>data : Symbol(data, Decl(genericDefaultInReentrantCallResolution.ts, 29, 10))
+
+);
+
