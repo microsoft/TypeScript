@@ -686,6 +686,10 @@ function generateCloneDispatch(w: CodeWriter) {
     w.write("func (n *Node) Clone(f NodeFactoryCoercible) *Node {");
     w.push();
     w.write("switch n.Kind {");
+    w.write("case kindFlowSwitchClauseData, kindFlowReduceLabelData:");
+    w.push();
+    w.write("return nil");
+    w.pop();
     for (const [node, kinds] of canonicalNodesByKind()) {
         w.write(`case ${kinds.join(", ")}:`);
         w.push();
@@ -706,6 +710,10 @@ function generateSubtreeFactsDispatch(w: CodeWriter) {
     w.write("func (n *Node) SubtreeFacts() SubtreeFacts {");
     w.push();
     w.write("switch n.Kind {");
+    w.write("case kindFlowSwitchClauseData, kindFlowReduceLabelData:");
+    w.push();
+    w.write("return SubtreeFactsNone");
+    w.pop();
     for (const [node, kinds] of canonicalNodesByKind()) {
         w.write(`case ${kinds.join(", ")}:`);
         w.push();

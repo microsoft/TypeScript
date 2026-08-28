@@ -38,6 +38,11 @@ type FlowList struct {
 
 type FlowLabel = FlowNode
 
+const (
+	kindFlowSwitchClauseData Kind = KindCount + iota
+	kindFlowReduceLabelData
+)
+
 // FlowSwitchClauseData (synthetic AST node for FlowFlagsSwitchClause)
 
 type FlowSwitchClauseData struct {
@@ -52,7 +57,7 @@ func NewFlowSwitchClauseData(switchStatement *Node, clauseStart int, clauseEnd i
 	node.SwitchStatement = switchStatement
 	node.ClauseStart = int32(clauseStart)
 	node.ClauseEnd = int32(clauseEnd)
-	return newNode(KindUnknown, node.AsNode(), node, NodeFactoryHooks{})
+	return newNode(kindFlowSwitchClauseData, node.AsNode(), node, NodeFactoryHooks{})
 }
 
 func (node *FlowSwitchClauseData) IsEmpty() bool {
@@ -71,5 +76,5 @@ func NewFlowReduceLabelData(target *FlowLabel, antecedents *FlowList) *Node {
 	node := &FlowReduceLabelData{}
 	node.Target = target
 	node.Antecedents = antecedents
-	return newNode(KindUnknown, node.AsNode(), node, NodeFactoryHooks{})
+	return newNode(kindFlowReduceLabelData, node.AsNode(), node, NodeFactoryHooks{})
 }
