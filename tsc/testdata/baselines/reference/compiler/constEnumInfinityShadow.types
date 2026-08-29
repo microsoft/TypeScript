@@ -10,7 +10,7 @@ const enum E {
 
     value = 1e999,
 >value : E.value
->1e999 : Infinity
+>1e999 : 1e999
 }
 
 export const value = E.value;

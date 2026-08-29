@@ -101,6 +101,12 @@ func (b *NodeBuilderImpl) enumMemberInitializer(p *ast.Symbol) *ast.Node {
 	case string:
 		return b.f.NewStringLiteral(v, 0)
 	case jsnum.Number:
+		if v.IsInf() {
+			if v < 0 {
+				return b.f.NewPrefixUnaryExpression(ast.KindMinusToken, b.f.NewNumericLiteral(jsnum.InfinityLiteralText, 0))
+			}
+			return b.f.NewNumericLiteral(jsnum.InfinityLiteralText, 0)
+		}
 		return b.f.NewNumericLiteral(v.String(), 0)
 	}
 	return nil

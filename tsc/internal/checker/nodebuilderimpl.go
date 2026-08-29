@@ -3311,11 +3311,17 @@ func (b *NodeBuilderImpl) typeToTypeNode(t *Type) *ast.TypeNode {
 	}
 	if t.flags&TypeFlagsNumberLiteral != 0 {
 		value := t.AsLiteralType().value.(jsnum.Number)
-		b.ctx.approximateLength += len(value.String())
-		if value < 0 {
-			return b.f.NewLiteralTypeNode(b.f.NewPrefixUnaryExpression(ast.KindMinusToken, b.f.NewNumericLiteral(value.String()[1:], ast.TokenFlagsNone)))
+		negative := value < 0
+		text := value.Abs().String()
+		if value.IsInf() {
+			text = jsnum.InfinityLiteralText
+		}
+		b.ctx.approximateLength += len(text)
+		if negative {
+			b.ctx.approximateLength++
+			return b.f.NewLiteralTypeNode(b.f.NewPrefixUnaryExpression(ast.KindMinusToken, b.f.NewNumericLiteral(text, ast.TokenFlagsNone)))
 		} else {
-			return b.f.NewLiteralTypeNode(b.f.NewNumericLiteral(value.String(), ast.TokenFlagsNone))
+			return b.f.NewLiteralTypeNode(b.f.NewNumericLiteral(text, ast.TokenFlagsNone))
 		}
 	}
 	if t.flags&TypeFlagsBigIntLiteral != 0 {

@@ -5,8 +5,10 @@ import (
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/jsnum"
 	"github.com/microsoft/TypeScript/tsc/internal/nodebuilder"
 	"github.com/microsoft/TypeScript/tsc/internal/printer"
+	"github.com/microsoft/TypeScript/tsc/internal/scanner"
 )
 
 func (b *NodeBuilderImpl) reuseNode(node *ast.Node) *ast.Node {
@@ -25,6 +27,14 @@ func (b *NodeBuilderImpl) reuseName(node *ast.Node, isMethod bool) *ast.Node {
 	res := b.reuseNode(node)
 	if res == nil {
 		return res
+	}
+	if ast.IsComputedPropertyName(node) && ast.IsComputedPropertyName(res) {
+		sourceLiteral := numericLiteralOperand(node.AsComputedPropertyName().Expression)
+		reusedLiteral := numericLiteralOperand(res.AsComputedPropertyName().Expression)
+		if sourceLiteral != nil && reusedLiteral != nil && jsnum.FromString(sourceLiteral.Text()).IsInf() {
+			sourceFile := ast.GetSourceFileOfNode(sourceLiteral)
+			reusedLiteral.LiteralLikeData().Text = scanner.GetSourceTextOfNodeFromSourceFile(sourceFile, sourceLiteral, false)
+		}
 	}
 
 	text, ok := ast.TryGetTextOfPropertyName(res)
@@ -51,6 +61,17 @@ func (b *NodeBuilderImpl) reuseName(node *ast.Node, isMethod bool) *ast.Node {
 	}
 	b.e.SetOriginal(renamed, res)
 	return b.setTextRange(renamed, res)
+}
+
+func numericLiteralOperand(node *ast.Node) *ast.Node {
+	node = ast.SkipParentheses(node)
+	if ast.IsPrefixUnaryExpression(node) {
+		node = ast.SkipParentheses(node.AsPrefixUnaryExpression().Operand)
+	}
+	if ast.IsNumericLiteral(node) {
+		return node
+	}
+	return nil
 }
 
 func (b *NodeBuilderImpl) reuseTypeNode(node *ast.Node) *ast.Node {
