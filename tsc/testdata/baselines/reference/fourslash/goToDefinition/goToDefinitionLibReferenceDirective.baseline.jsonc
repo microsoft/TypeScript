@@ -22,7 +22,7 @@
 // 
 
 // === /src/app.ts ===
-// /// <reference lib="e/*GOTO DEF*/s2025" />[||]
+// /// <reference lib="es/*GOTO DEF*/2025" />[||]
 
 
 
@@ -36,4 +36,4 @@
 // 
 
 // === /src/app.ts ===
-// /// <reference lib="es202/*GOTO DEF*/5" />[||]
+// /// <reference lib="es2025/*GOTO DEF*/" />[||]

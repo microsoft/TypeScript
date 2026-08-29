@@ -2091,8 +2091,10 @@ func (p *Program) GetLibFileFromReference(ref *ast.FileReference) *ast.SourceFil
 	if !ok {
 		return nil
 	}
-	if path, ok := p.libFilesByName[name]; ok {
-		return p.filesByPath[path]
+	for path, libFile := range p.libFiles {
+		if libFile.Name == name {
+			return p.filesByPath[path]
+		}
 	}
 	return nil
 }

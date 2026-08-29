@@ -25,7 +25,7 @@ func TestGoToDefinitionLibReferenceDirective(t *testing.T) {
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @Filename: /src/app.ts
-/// <reference lib="/*start*/e/*middle*/s202/*end*/5" />`
+/// <reference lib="/*start*/es/*middle*/2025/*end*/" />`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
 	f.VerifyBaselineGoToDefinition(t, true, "start", "middle", "end")
