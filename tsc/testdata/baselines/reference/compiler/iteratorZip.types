@@ -1,0 +1,279 @@
+//// [tests/cases/compiler/iteratorZip.ts] ////
+
+=== iteratorZip.ts ===
+declare const key: unique symbol;
+>key : unique symbol
+
+const tuples: [number, string][] = Iterator.zip([
+>tuples : [number, string][]
+>Iterator.zip([    [1, 2],    new Set(["a", "b"]),] as const).toArray() : [1 | 2, string][]
+>Iterator.zip([    [1, 2],    new Set(["a", "b"]),] as const).toArray : () => [1 | 2, string][]
+>Iterator.zip([    [1, 2],    new Set(["a", "b"]),] as const) : IteratorObject<[1 | 2, string], undefined, unknown>
+>Iterator.zip : { (iterables: readonly [], options?: IteratorZipLongestOptions<Iterable<unknown>> | IteratorZipShortestOptions | IteratorZipStrictOptions): IteratorObject<never, undefined, unknown>; <T extends readonly (Iterable<unknown> | Iterator<unknown, any, any>)[] | []>(iterables: T, options?: (IteratorZipLongestOptions<NoInfer<Partial<{ -readonly [K in keyof T]: T[K] extends infer T_1 ? T_1 extends T[K] ? T_1 extends Iterable<infer U> ? U : T_1 extends Iterator<infer U_1, any, any> ? U_1 : never : never : never; }>>> | IteratorZipShortestOptions | IteratorZipStrictOptions) | undefined): IteratorObject<{ -readonly [K in keyof T]: T[K] extends infer T_1 ? T_1 extends T[K] ? T_1 extends Iterable<infer U> ? U : T_1 extends Iterator<infer U_1, any, any> ? U_1 : never : never : never; }, undefined, unknown>; <T extends Iterable<unknown> | Iterator<unknown, any, any>>(iterables: Iterable<T>, options?: (IteratorZipLongestOptions<NoInfer<Iterable<T extends Iterable<infer U> ? U : T extends Iterator<infer U_1, any, any> ? U_1 : never>>> | IteratorZipShortestOptions | IteratorZipStrictOptions) | undefined): IteratorObject<(T extends Iterable<infer U> ? U : T extends Iterator<infer U_1, any, any> ? U_1 : never)[], undefined, unknown>; }
+>Iterator : IteratorConstructor
+>zip : { (iterables: readonly [], options?: IteratorZipLongestOptions<Iterable<unknown>> | IteratorZipShortestOptions | IteratorZipStrictOptions): IteratorObject<never, undefined, unknown>; <T extends readonly (Iterable<unknown> | Iterator<unknown, any, any>)[] | []>(iterables: T, options?: (IteratorZipLongestOptions<NoInfer<Partial<{ -readonly [K in keyof T]: T[K] extends infer T_1 ? T_1 extends T[K] ? T_1 extends Iterable<infer U> ? U : T_1 extends Iterator<infer U_1, any, any> ? U_1 : never : never : never; }>>> | IteratorZipShortestOptions | IteratorZipStrictOptions) | undefined): IteratorObject<{ -readonly [K in keyof T]: T[K] extends infer T_1 ? T_1 extends T[K] ? T_1 extends Iterable<infer U> ? U : T_1 extends Iterator<infer U_1, any, any> ? U_1 : never : never : never; }, undefined, unknown>; <T extends Iterable<unknown> | Iterator<unknown, any, any>>(iterables: Iterable<T>, options?: (IteratorZipLongestOptions<NoInfer<Iterable<T extends Iterable<infer U> ? U : T extends Iterator<infer U_1, any, any> ? U_1 : never>>> | IteratorZipShortestOptions | IteratorZipStrictOptions) | undefined): IteratorObject<(T extends Iterable<infer U> ? U : T extends Iterator<infer U_1, any, any> ? U_1 : never)[], undefined, unknown>; }
+>[    [1, 2],    new Set(["a", "b"]),] as const : [readonly [1, 2], Set<string>]
+>[    [1, 2],    new Set(["a", "b"]),] : [readonly [1, 2], Set<string>]
+
+    [1, 2],
+>[1, 2] : readonly [1, 2]
+>1 : 1
+>2 : 2
+
+    new Set(["a", "b"]),
+>new Set(["a", "b"]) : Set<string>
+>Set : SetConstructor
+>["a", "b"] : string[]
+>"a" : "a"
+>"b" : "b"
+
+] as const).toArray();
+>toArray : () => [1 | 2, string][]
+
+tuples[0][0] = 2;
+>tuples[0][0] = 2 : 2
+>tuples[0][0] : number
+>tuples[0] : [number, string]
+>tuples : [number, string][]
+>0 : 0
+>0 : 0
+>2 : 2
+
+Iterator.zip([[1], ["a"]] as const, { mode: "shortest" });
+>Iterator.zip([[1], ["a"]] as const, { mode: "shortest" }) : IteratorObject<[1, "a"], undefined, unknown>
+>Iterator.zip : { (iterables: readonly [], options?: IteratorZipLongestOptions<Iterable<unknown>> | IteratorZipShortestOptions | IteratorZipStrictOptions): IteratorObject<never, undefined, unknown>; <T extends readonly (Iterable<unknown> | Iterator<unknown, any, any>)[] | []>(iterables: T, options?: (IteratorZipLongestOptions<NoInfer<Partial<{ -readonly [K in keyof T]: T[K] extends infer T_1 ? T_1 extends T[K] ? T_1 extends Iterable<infer U> ? U : T_1 extends Iterator<infer U_1, any, any> ? U_1 : never : never : never; }>>> | IteratorZipShortestOptions | IteratorZipStrictOptions) | undefined): IteratorObject<{ -readonly [K in keyof T]: T[K] extends infer T_1 ? T_1 extends T[K] ? T_1 extends Iterable<infer U> ? U : T_1 extends Iterator<infer U_1, any, any> ? U_1 : never : never : never; }, undefined, unknown>; <T extends Iterable<unknown> | Iterator<unknown, any, any>>(iterables: Iterable<T>, options?: (IteratorZipLongestOptions<NoInfer<Iterable<T extends Iterable<infer U> ? U : T extends Iterator<infer U_1, any, any> ? U_1 : never>>> | IteratorZipShortestOptions | IteratorZipStrictOptions) | undefined): IteratorObject<(T extends Iterable<infer U> ? U : T extends Iterator<infer U_1, any, any> ? U_1 : never)[], undefined, unknown>; }
+>Iterator : IteratorConstructor
+>zip : { (iterables: readonly [], options?: IteratorZipLongestOptions<Iterable<unknown>> | IteratorZipShortestOptions | IteratorZipStrictOptions): IteratorObject<never, undefined, unknown>; <T extends readonly (Iterable<unknown> | Iterator<unknown, any, any>)[] | []>(iterables: T, options?: (IteratorZipLongestOptions<NoInfer<Partial<{ -readonly [K in keyof T]: T[K] extends infer T_1 ? T_1 extends T[K] ? T_1 extends Iterable<infer U> ? U : T_1 extends Iterator<infer U_1, any, any> ? U_1 : never : never : never; }>>> | IteratorZipShortestOptions | IteratorZipStrictOptions) | undefined): IteratorObject<{ -readonly [K in keyof T]: T[K] extends infer T_1 ? T_1 extends T[K] ? T_1 extends Iterable<infer U> ? U : T_1 extends Iterator<infer U_1, any, any> ? U_1 : never : never : never; }, undefined, unknown>; <T extends Iterable<unknown> | Iterator<unknown, any, any>>(iterables: Iterable<T>, options?: (IteratorZipLongestOptions<NoInfer<Iterable<T extends Iterable<infer U> ? U : T extends Iterator<infer U_1, any, any> ? U_1 : never>>> | IteratorZipShortestOptions | IteratorZipStrictOptions) | undefined): IteratorObject<(T extends Iterable<infer U> ? U : T extends Iterator<infer U_1, any, any> ? U_1 : never)[], undefined, unknown>; }
+>[[1], ["a"]] as const : [readonly [1], readonly ["a"]]
+>[[1], ["a"]] : [readonly [1], readonly ["a"]]
+>[1] : readonly [1]
+>1 : 1
+>["a"] : readonly ["a"]
+>"a" : "a"
+>{ mode: "shortest" } : { mode: "shortest"; }
+>mode : "shortest"
+>"shortest" : "shortest"
+
+Iterator.zip([[1], ["a"]] as const, { mode: "longest", padding: [1] });
+>Iterator.zip([[1], ["a"]] as const, { mode: "longest", padding: [1] }) : IteratorObject<[1, "a"], undefined, unknown>
+>Iterator.zip : { (iterables: readonly [], options?: IteratorZipLongestOptions<Iterable<unknown>> | IteratorZipShortestOptions | IteratorZipStrictOptions): IteratorObject<never, undefined, unknown>; <T extends readonly (Iterable<unknown> | Iterator<unknown, any, any>)[] | []>(iterables: T, options?: (IteratorZipLongestOptions<NoInfer<Partial<{ -readonly [K in keyof T]: T[K] extends infer T_1 ? T_1 extends T[K] ? T_1 extends Iterable<infer U> ? U : T_1 extends Iterator<infer U_1, any, any> ? U_1 : never : never : never; }>>> | IteratorZipShortestOptions | IteratorZipStrictOptions) | undefined): IteratorObject<{ -readonly [K in keyof T]: T[K] extends infer T_1 ? T_1 extends T[K] ? T_1 extends Iterable<infer U> ? U : T_1 extends Iterator<infer U_1, any, any> ? U_1 : never : never : never; }, undefined, unknown>; <T extends Iterable<unknown> | Iterator<unknown, any, any>>(iterables: Iterable<T>, options?: (IteratorZipLongestOptions<NoInfer<Iterable<T extends Iterable<infer U> ? U : T extends Iterator<infer U_1, any, any> ? U_1 : never>>> | IteratorZipShortestOptions | IteratorZipStrictOptions) | undefined): IteratorObject<(T extends Iterable<infer U> ? U : T extends Iterator<infer U_1, any, any> ? U_1 : never)[], undefined, unknown>; }
+>Iterator : IteratorConstructor
+>zip : { (iterables: readonly [], options?: IteratorZipLongestOptions<Iterable<unknown>> | IteratorZipShortestOptions | IteratorZipStrictOptions): IteratorObject<never, undefined, unknown>; <T extends readonly (Iterable<unknown> | Iterator<unknown, any, any>)[] | []>(iterables: T, options?: (IteratorZipLongestOptions<NoInfer<Partial<{ -readonly [K in keyof T]: T[K] extends infer T_1 ? T_1 extends T[K] ? T_1 extends Iterable<infer U> ? U : T_1 extends Iterator<infer U_1, any, any> ? U_1 : never : never : never; }>>> | IteratorZipShortestOptions | IteratorZipStrictOptions) | undefined): IteratorObject<{ -readonly [K in keyof T]: T[K] extends infer T_1 ? T_1 extends T[K] ? T_1 extends Iterable<infer U> ? U : T_1 extends Iterator<infer U_1, any, any> ? U_1 : never : never : never; }, undefined, unknown>; <T extends Iterable<unknown> | Iterator<unknown, any, any>>(iterables: Iterable<T>, options?: (IteratorZipLongestOptions<NoInfer<Iterable<T extends Iterable<infer U> ? U : T extends Iterator<infer U_1, any, any> ? U_1 : never>>> | IteratorZipShortestOptions | IteratorZipStrictOptions) | undefined): IteratorObject<(T extends Iterable<infer U> ? U : T extends Iterator<infer U_1, any, any> ? U_1 : never)[], undefined, unknown>; }
+>[[1], ["a"]] as const : [readonly [1], readonly ["a"]]
+>[[1], ["a"]] : [readonly [1], readonly ["a"]]
+>[1] : readonly [1]
+>1 : 1
+>["a"] : readonly ["a"]
+>"a" : "a"
+>{ mode: "longest", padding: [1] } : { mode: "longest"; padding: [1]; }
+>mode : "longest"
+>"longest" : "longest"
+>padding : [1]
+>[1] : [1]
+>1 : 1
+
+Iterator.zip([[1], ["a"]] as const, { mode: "strict" });
+>Iterator.zip([[1], ["a"]] as const, { mode: "strict" }) : IteratorObject<[1, "a"], undefined, unknown>
+>Iterator.zip : { (iterables: readonly [], options?: IteratorZipLongestOptions<Iterable<unknown>> | IteratorZipShortestOptions | IteratorZipStrictOptions): IteratorObject<never, undefined, unknown>; <T extends readonly (Iterable<unknown> | Iterator<unknown, any, any>)[] | []>(iterables: T, options?: (IteratorZipLongestOptions<NoInfer<Partial<{ -readonly [K in keyof T]: T[K] extends infer T_1 ? T_1 extends T[K] ? T_1 extends Iterable<infer U> ? U : T_1 extends Iterator<infer U_1, any, any> ? U_1 : never : never : never; }>>> | IteratorZipShortestOptions | IteratorZipStrictOptions) | undefined): IteratorObject<{ -readonly [K in keyof T]: T[K] extends infer T_1 ? T_1 extends T[K] ? T_1 extends Iterable<infer U> ? U : T_1 extends Iterator<infer U_1, any, any> ? U_1 : never : never : never; }, undefined, unknown>; <T extends Iterable<unknown> | Iterator<unknown, any, any>>(iterables: Iterable<T>, options?: (IteratorZipLongestOptions<NoInfer<Iterable<T extends Iterable<infer U> ? U : T extends Iterator<infer U_1, any, any> ? U_1 : never>>> | IteratorZipShortestOptions | IteratorZipStrictOptions) | undefined): IteratorObject<(T extends Iterable<infer U> ? U : T extends Iterator<infer U_1, any, any> ? U_1 : never)[], undefined, unknown>; }
+>Iterator : IteratorConstructor
+>zip : { (iterables: readonly [], options?: IteratorZipLongestOptions<Iterable<unknown>> | IteratorZipShortestOptions | IteratorZipStrictOptions): IteratorObject<never, undefined, unknown>; <T extends readonly (Iterable<unknown> | Iterator<unknown, any, any>)[] | []>(iterables: T, options?: (IteratorZipLongestOptions<NoInfer<Partial<{ -readonly [K in keyof T]: T[K] extends infer T_1 ? T_1 extends T[K] ? T_1 extends Iterable<infer U> ? U : T_1 extends Iterator<infer U_1, any, any> ? U_1 : never : never : never; }>>> | IteratorZipShortestOptions | IteratorZipStrictOptions) | undefined): IteratorObject<{ -readonly [K in keyof T]: T[K] extends infer T_1 ? T_1 extends T[K] ? T_1 extends Iterable<infer U> ? U : T_1 extends Iterator<infer U_1, any, any> ? U_1 : never : never : never; }, undefined, unknown>; <T extends Iterable<unknown> | Iterator<unknown, any, any>>(iterables: Iterable<T>, options?: (IteratorZipLongestOptions<NoInfer<Iterable<T extends Iterable<infer U> ? U : T extends Iterator<infer U_1, any, any> ? U_1 : never>>> | IteratorZipShortestOptions | IteratorZipStrictOptions) | undefined): IteratorObject<(T extends Iterable<infer U> ? U : T extends Iterator<infer U_1, any, any> ? U_1 : never)[], undefined, unknown>; }
+>[[1], ["a"]] as const : [readonly [1], readonly ["a"]]
+>[[1], ["a"]] : [readonly [1], readonly ["a"]]
+>[1] : readonly [1]
+>1 : 1
+>["a"] : readonly ["a"]
+>"a" : "a"
+>{ mode: "strict" } : { mode: "strict"; }
+>mode : "strict"
+>"strict" : "strict"
+
+const empty: never[] = Iterator.zip([]).toArray();
+>empty : never[]
+>Iterator.zip([]).toArray() : never[]
+>Iterator.zip([]).toArray : () => never[]
+>Iterator.zip([]) : IteratorObject<never, undefined, unknown>
+>Iterator.zip : { (iterables: readonly [], options?: IteratorZipLongestOptions<Iterable<unknown>> | IteratorZipShortestOptions | IteratorZipStrictOptions): IteratorObject<never, undefined, unknown>; <T extends readonly (Iterable<unknown> | Iterator<unknown, any, any>)[] | []>(iterables: T, options?: (IteratorZipLongestOptions<NoInfer<Partial<{ -readonly [K in keyof T]: T[K] extends infer T_1 ? T_1 extends T[K] ? T_1 extends Iterable<infer U> ? U : T_1 extends Iterator<infer U_1, any, any> ? U_1 : never : never : never; }>>> | IteratorZipShortestOptions | IteratorZipStrictOptions) | undefined): IteratorObject<{ -readonly [K in keyof T]: T[K] extends infer T_1 ? T_1 extends T[K] ? T_1 extends Iterable<infer U> ? U : T_1 extends Iterator<infer U_1, any, any> ? U_1 : never : never : never; }, undefined, unknown>; <T extends Iterable<unknown> | Iterator<unknown, any, any>>(iterables: Iterable<T>, options?: (IteratorZipLongestOptions<NoInfer<Iterable<T extends Iterable<infer U> ? U : T extends Iterator<infer U_1, any, any> ? U_1 : never>>> | IteratorZipShortestOptions | IteratorZipStrictOptions) | undefined): IteratorObject<(T extends Iterable<infer U> ? U : T extends Iterator<infer U_1, any, any> ? U_1 : never)[], undefined, unknown>; }
+>Iterator : IteratorConstructor
+>zip : { (iterables: readonly [], options?: IteratorZipLongestOptions<Iterable<unknown>> | IteratorZipShortestOptions | IteratorZipStrictOptions): IteratorObject<never, undefined, unknown>; <T extends readonly (Iterable<unknown> | Iterator<unknown, any, any>)[] | []>(iterables: T, options?: (IteratorZipLongestOptions<NoInfer<Partial<{ -readonly [K in keyof T]: T[K] extends infer T_1 ? T_1 extends T[K] ? T_1 extends Iterable<infer U> ? U : T_1 extends Iterator<infer U_1, any, any> ? U_1 : never : never : never; }>>> | IteratorZipShortestOptions | IteratorZipStrictOptions) | undefined): IteratorObject<{ -readonly [K in keyof T]: T[K] extends infer T_1 ? T_1 extends T[K] ? T_1 extends Iterable<infer U> ? U : T_1 extends Iterator<infer U_1, any, any> ? U_1 : never : never : never; }, undefined, unknown>; <T extends Iterable<unknown> | Iterator<unknown, any, any>>(iterables: Iterable<T>, options?: (IteratorZipLongestOptions<NoInfer<Iterable<T extends Iterable<infer U> ? U : T extends Iterator<infer U_1, any, any> ? U_1 : never>>> | IteratorZipShortestOptions | IteratorZipStrictOptions) | undefined): IteratorObject<(T extends Iterable<infer U> ? U : T extends Iterator<infer U_1, any, any> ? U_1 : never)[], undefined, unknown>; }
+>[] : []
+>toArray : () => never[]
+
+declare const iterables: Iterable<Iterable<number>>;
+>iterables : Iterable<Iterable<number>>
+
+const arrays: number[][] = Iterator.zip(iterables).toArray();
+>arrays : number[][]
+>Iterator.zip(iterables).toArray() : number[][]
+>Iterator.zip(iterables).toArray : () => number[][]
+>Iterator.zip(iterables) : IteratorObject<number[], undefined, unknown>
+>Iterator.zip : { (iterables: readonly [], options?: IteratorZipLongestOptions<Iterable<unknown>> | IteratorZipShortestOptions | IteratorZipStrictOptions): IteratorObject<never, undefined, unknown>; <T extends readonly (Iterable<unknown> | Iterator<unknown, any, any>)[] | []>(iterables: T, options?: (IteratorZipLongestOptions<NoInfer<Partial<{ -readonly [K in keyof T]: T[K] extends infer T_1 ? T_1 extends T[K] ? T_1 extends Iterable<infer U> ? U : T_1 extends Iterator<infer U_1, any, any> ? U_1 : never : never : never; }>>> | IteratorZipShortestOptions | IteratorZipStrictOptions) | undefined): IteratorObject<{ -readonly [K in keyof T]: T[K] extends infer T_1 ? T_1 extends T[K] ? T_1 extends Iterable<infer U> ? U : T_1 extends Iterator<infer U_1, any, any> ? U_1 : never : never : never; }, undefined, unknown>; <T extends Iterable<unknown> | Iterator<unknown, any, any>>(iterables: Iterable<T>, options?: (IteratorZipLongestOptions<NoInfer<Iterable<T extends Iterable<infer U> ? U : T extends Iterator<infer U_1, any, any> ? U_1 : never>>> | IteratorZipShortestOptions | IteratorZipStrictOptions) | undefined): IteratorObject<(T extends Iterable<infer U> ? U : T extends Iterator<infer U_1, any, any> ? U_1 : never)[], undefined, unknown>; }
+>Iterator : IteratorConstructor
+>zip : { (iterables: readonly [], options?: IteratorZipLongestOptions<Iterable<unknown>> | IteratorZipShortestOptions | IteratorZipStrictOptions): IteratorObject<never, undefined, unknown>; <T extends readonly (Iterable<unknown> | Iterator<unknown, any, any>)[] | []>(iterables: T, options?: (IteratorZipLongestOptions<NoInfer<Partial<{ -readonly [K in keyof T]: T[K] extends infer T_1 ? T_1 extends T[K] ? T_1 extends Iterable<infer U> ? U : T_1 extends Iterator<infer U_1, any, any> ? U_1 : never : never : never; }>>> | IteratorZipShortestOptions | IteratorZipStrictOptions) | undefined): IteratorObject<{ -readonly [K in keyof T]: T[K] extends infer T_1 ? T_1 extends T[K] ? T_1 extends Iterable<infer U> ? U : T_1 extends Iterator<infer U_1, any, any> ? U_1 : never : never : never; }, undefined, unknown>; <T extends Iterable<unknown> | Iterator<unknown, any, any>>(iterables: Iterable<T>, options?: (IteratorZipLongestOptions<NoInfer<Iterable<T extends Iterable<infer U> ? U : T extends Iterator<infer U_1, any, any> ? U_1 : never>>> | IteratorZipShortestOptions | IteratorZipStrictOptions) | undefined): IteratorObject<(T extends Iterable<infer U> ? U : T extends Iterator<infer U_1, any, any> ? U_1 : never)[], undefined, unknown>; }
+>iterables : Iterable<Iterable<number>>
+>toArray : () => number[][]
+
+const objects: { a: number; b: string; [key]: boolean; }[] = Iterator.zipKeyed({
+>objects : { a: number; b: string; [key]: boolean; }[]
+>a : number
+>b : string
+>[key] : boolean
+>key : unique symbol
+>Iterator.zipKeyed({    a: [1, 2],    b: new Set(["a", "b"]),    [key]: [true, false],} as const).toArray() : { a: 1 | 2; b: string; [key]: boolean; }[]
+>Iterator.zipKeyed({    a: [1, 2],    b: new Set(["a", "b"]),    [key]: [true, false],} as const).toArray : () => { a: 1 | 2; b: string; [key]: boolean; }[]
+>Iterator.zipKeyed({    a: [1, 2],    b: new Set(["a", "b"]),    [key]: [true, false],} as const) : IteratorObject<{ a: 1 | 2; b: string; [key]: boolean; }, undefined, unknown>
+>Iterator.zipKeyed : <T extends { readonly [K in keyof T]: Iterable<unknown> | Iterator<unknown, any, any>; }>(iterables: T, options?: (IteratorZipLongestOptions<NoInfer<Partial<{ -readonly [K in keyof T]: T[K] extends infer T_1 ? T_1 extends T[K] ? T_1 extends Iterable<infer U> ? U : T_1 extends Iterator<infer U_1, any, any> ? U_1 : never : never : never; }>>> | IteratorZipShortestOptions | IteratorZipStrictOptions) | undefined) => IteratorObject<{ -readonly [K in keyof T]: T[K] extends infer T_1 ? T_1 extends T[K] ? T_1 extends Iterable<infer U> ? U : T_1 extends Iterator<infer U_1, any, any> ? U_1 : never : never : never; }, undefined, unknown>
+>Iterator : IteratorConstructor
+>zipKeyed : <T extends { readonly [K in keyof T]: Iterable<unknown> | Iterator<unknown, any, any>; }>(iterables: T, options?: (IteratorZipLongestOptions<NoInfer<Partial<{ -readonly [K in keyof T]: T[K] extends infer T_1 ? T_1 extends T[K] ? T_1 extends Iterable<infer U> ? U : T_1 extends Iterator<infer U_1, any, any> ? U_1 : never : never : never; }>>> | IteratorZipShortestOptions | IteratorZipStrictOptions) | undefined) => IteratorObject<{ -readonly [K in keyof T]: T[K] extends infer T_1 ? T_1 extends T[K] ? T_1 extends Iterable<infer U> ? U : T_1 extends Iterator<infer U_1, any, any> ? U_1 : never : never : never; }, undefined, unknown>
+>{    a: [1, 2],    b: new Set(["a", "b"]),    [key]: [true, false],} as const : { readonly a: readonly [1, 2]; readonly b: Set<string>; readonly [key]: readonly [true, false]; }
+>{    a: [1, 2],    b: new Set(["a", "b"]),    [key]: [true, false],} : { readonly a: readonly [1, 2]; readonly b: Set<string>; readonly [key]: readonly [true, false]; }
+
+    a: [1, 2],
+>a : readonly [1, 2]
+>[1, 2] : readonly [1, 2]
+>1 : 1
+>2 : 2
+
+    b: new Set(["a", "b"]),
+>b : Set<string>
+>new Set(["a", "b"]) : Set<string>
+>Set : SetConstructor
+>["a", "b"] : string[]
+>"a" : "a"
+>"b" : "b"
+
+    [key]: [true, false],
+>[key] : readonly [true, false]
+>key : unique symbol
+>[true, false] : readonly [true, false]
+>true : true
+>false : false
+
+} as const).toArray();
+>toArray : () => { a: 1 | 2; b: string; [key]: boolean; }[]
+
+objects[0].a = 2;
+>objects[0].a = 2 : 2
+>objects[0].a : number
+>objects[0] : { a: number; b: string; [key]: boolean; }
+>objects : { a: number; b: string; [key]: boolean; }[]
+>0 : 0
+>a : number
+>2 : 2
+
+Iterator.zipKeyed({ a: [1], b: ["a"] } as const, {
+>Iterator.zipKeyed({ a: [1], b: ["a"] } as const, {    mode: "longest",    padding: { b: "a" },}) : IteratorObject<{ a: 1; b: "a"; }, undefined, unknown>
+>Iterator.zipKeyed : <T extends { readonly [K in keyof T]: Iterable<unknown> | Iterator<unknown, any, any>; }>(iterables: T, options?: (IteratorZipLongestOptions<NoInfer<Partial<{ -readonly [K in keyof T]: T[K] extends infer T_1 ? T_1 extends T[K] ? T_1 extends Iterable<infer U> ? U : T_1 extends Iterator<infer U_1, any, any> ? U_1 : never : never : never; }>>> | IteratorZipShortestOptions | IteratorZipStrictOptions) | undefined) => IteratorObject<{ -readonly [K in keyof T]: T[K] extends infer T_1 ? T_1 extends T[K] ? T_1 extends Iterable<infer U> ? U : T_1 extends Iterator<infer U_1, any, any> ? U_1 : never : never : never; }, undefined, unknown>
+>Iterator : IteratorConstructor
+>zipKeyed : <T extends { readonly [K in keyof T]: Iterable<unknown> | Iterator<unknown, any, any>; }>(iterables: T, options?: (IteratorZipLongestOptions<NoInfer<Partial<{ -readonly [K in keyof T]: T[K] extends infer T_1 ? T_1 extends T[K] ? T_1 extends Iterable<infer U> ? U : T_1 extends Iterator<infer U_1, any, any> ? U_1 : never : never : never; }>>> | IteratorZipShortestOptions | IteratorZipStrictOptions) | undefined) => IteratorObject<{ -readonly [K in keyof T]: T[K] extends infer T_1 ? T_1 extends T[K] ? T_1 extends Iterable<infer U> ? U : T_1 extends Iterator<infer U_1, any, any> ? U_1 : never : never : never; }, undefined, unknown>
+>{ a: [1], b: ["a"] } as const : { readonly a: readonly [1]; readonly b: readonly ["a"]; }
+>{ a: [1], b: ["a"] } : { readonly a: readonly [1]; readonly b: readonly ["a"]; }
+>a : readonly [1]
+>[1] : readonly [1]
+>1 : 1
+>b : readonly ["a"]
+>["a"] : readonly ["a"]
+>"a" : "a"
+>{    mode: "longest",    padding: { b: "a" },} : { mode: "longest"; padding: { b: "a"; }; }
+
+    mode: "longest",
+>mode : "longest"
+>"longest" : "longest"
+
+    padding: { b: "a" },
+>padding : { b: "a"; }
+>{ b: "a" } : { b: "a"; }
+>b : "a"
+>"a" : "a"
+
+});
+
+interface Inputs {
+    a: Iterable<number>;
+>a : Iterable<number>
+
+    b: Iterator<string>;
+>b : Iterator<string, any, any>
+}
+
+declare const inputs: Inputs;
+>inputs : Inputs
+
+const rows: { a: number; b: string; }[] = Iterator.zipKeyed(inputs).toArray();
+>rows : { a: number; b: string; }[]
+>a : number
+>b : string
+>Iterator.zipKeyed(inputs).toArray() : { a: number; b: string; }[]
+>Iterator.zipKeyed(inputs).toArray : () => { a: number; b: string; }[]
+>Iterator.zipKeyed(inputs) : IteratorObject<{ a: number; b: string; }, undefined, unknown>
+>Iterator.zipKeyed : <T extends { readonly [K in keyof T]: Iterable<unknown> | Iterator<unknown, any, any>; }>(iterables: T, options?: (IteratorZipLongestOptions<NoInfer<Partial<{ -readonly [K in keyof T]: T[K] extends infer T_1 ? T_1 extends T[K] ? T_1 extends Iterable<infer U> ? U : T_1 extends Iterator<infer U_1, any, any> ? U_1 : never : never : never; }>>> | IteratorZipShortestOptions | IteratorZipStrictOptions) | undefined) => IteratorObject<{ -readonly [K in keyof T]: T[K] extends infer T_1 ? T_1 extends T[K] ? T_1 extends Iterable<infer U> ? U : T_1 extends Iterator<infer U_1, any, any> ? U_1 : never : never : never; }, undefined, unknown>
+>Iterator : IteratorConstructor
+>zipKeyed : <T extends { readonly [K in keyof T]: Iterable<unknown> | Iterator<unknown, any, any>; }>(iterables: T, options?: (IteratorZipLongestOptions<NoInfer<Partial<{ -readonly [K in keyof T]: T[K] extends infer T_1 ? T_1 extends T[K] ? T_1 extends Iterable<infer U> ? U : T_1 extends Iterator<infer U_1, any, any> ? U_1 : never : never : never; }>>> | IteratorZipShortestOptions | IteratorZipStrictOptions) | undefined) => IteratorObject<{ -readonly [K in keyof T]: T[K] extends infer T_1 ? T_1 extends T[K] ? T_1 extends Iterable<infer U> ? U : T_1 extends Iterator<infer U_1, any, any> ? U_1 : never : never : never; }, undefined, unknown>
+>inputs : Inputs
+>toArray : () => { a: number; b: string; }[]
+
+// @ts-expect-error invalid mode
+Iterator.zip([[1]], { mode: "invalid" });
+>Iterator.zip([[1]], { mode: "invalid" }) : IteratorObject<never, undefined, unknown>
+>Iterator.zip : { (iterables: readonly [], options?: IteratorZipLongestOptions<Iterable<unknown>> | IteratorZipShortestOptions | IteratorZipStrictOptions): IteratorObject<never, undefined, unknown>; <T extends readonly (Iterable<unknown> | Iterator<unknown, any, any>)[] | []>(iterables: T, options?: (IteratorZipLongestOptions<NoInfer<Partial<{ -readonly [K in keyof T]: T[K] extends infer T_1 ? T_1 extends T[K] ? T_1 extends Iterable<infer U> ? U : T_1 extends Iterator<infer U_1, any, any> ? U_1 : never : never : never; }>>> | IteratorZipShortestOptions | IteratorZipStrictOptions) | undefined): IteratorObject<{ -readonly [K in keyof T]: T[K] extends infer T_1 ? T_1 extends T[K] ? T_1 extends Iterable<infer U> ? U : T_1 extends Iterator<infer U_1, any, any> ? U_1 : never : never : never; }, undefined, unknown>; <T extends Iterable<unknown> | Iterator<unknown, any, any>>(iterables: Iterable<T>, options?: (IteratorZipLongestOptions<NoInfer<Iterable<T extends Iterable<infer U> ? U : T extends Iterator<infer U_1, any, any> ? U_1 : never>>> | IteratorZipShortestOptions | IteratorZipStrictOptions) | undefined): IteratorObject<(T extends Iterable<infer U> ? U : T extends Iterator<infer U_1, any, any> ? U_1 : never)[], undefined, unknown>; }
+>Iterator : IteratorConstructor
+>zip : { (iterables: readonly [], options?: IteratorZipLongestOptions<Iterable<unknown>> | IteratorZipShortestOptions | IteratorZipStrictOptions): IteratorObject<never, undefined, unknown>; <T extends readonly (Iterable<unknown> | Iterator<unknown, any, any>)[] | []>(iterables: T, options?: (IteratorZipLongestOptions<NoInfer<Partial<{ -readonly [K in keyof T]: T[K] extends infer T_1 ? T_1 extends T[K] ? T_1 extends Iterable<infer U> ? U : T_1 extends Iterator<infer U_1, any, any> ? U_1 : never : never : never; }>>> | IteratorZipShortestOptions | IteratorZipStrictOptions) | undefined): IteratorObject<{ -readonly [K in keyof T]: T[K] extends infer T_1 ? T_1 extends T[K] ? T_1 extends Iterable<infer U> ? U : T_1 extends Iterator<infer U_1, any, any> ? U_1 : never : never : never; }, undefined, unknown>; <T extends Iterable<unknown> | Iterator<unknown, any, any>>(iterables: Iterable<T>, options?: (IteratorZipLongestOptions<NoInfer<Iterable<T extends Iterable<infer U> ? U : T extends Iterator<infer U_1, any, any> ? U_1 : never>>> | IteratorZipShortestOptions | IteratorZipStrictOptions) | undefined): IteratorObject<(T extends Iterable<infer U> ? U : T extends Iterator<infer U_1, any, any> ? U_1 : never)[], undefined, unknown>; }
+>[[1]] : [number[]]
+>[1] : number[]
+>1 : 1
+>{ mode: "invalid" } : { mode: "invalid"; }
+>mode : "invalid"
+>"invalid" : "invalid"
+
+// @ts-expect-error padding values must match the input element types
+Iterator.zip([[1], ["a"]] as const, { mode: "longest", padding: [true] });
+>Iterator.zip([[1], ["a"]] as const, { mode: "longest", padding: [true] }) : IteratorObject<never, undefined, unknown>
+>Iterator.zip : { (iterables: readonly [], options?: IteratorZipLongestOptions<Iterable<unknown>> | IteratorZipShortestOptions | IteratorZipStrictOptions): IteratorObject<never, undefined, unknown>; <T extends readonly (Iterable<unknown> | Iterator<unknown, any, any>)[] | []>(iterables: T, options?: (IteratorZipLongestOptions<NoInfer<Partial<{ -readonly [K in keyof T]: T[K] extends infer T_1 ? T_1 extends T[K] ? T_1 extends Iterable<infer U> ? U : T_1 extends Iterator<infer U_1, any, any> ? U_1 : never : never : never; }>>> | IteratorZipShortestOptions | IteratorZipStrictOptions) | undefined): IteratorObject<{ -readonly [K in keyof T]: T[K] extends infer T_1 ? T_1 extends T[K] ? T_1 extends Iterable<infer U> ? U : T_1 extends Iterator<infer U_1, any, any> ? U_1 : never : never : never; }, undefined, unknown>; <T extends Iterable<unknown> | Iterator<unknown, any, any>>(iterables: Iterable<T>, options?: (IteratorZipLongestOptions<NoInfer<Iterable<T extends Iterable<infer U> ? U : T extends Iterator<infer U_1, any, any> ? U_1 : never>>> | IteratorZipShortestOptions | IteratorZipStrictOptions) | undefined): IteratorObject<(T extends Iterable<infer U> ? U : T extends Iterator<infer U_1, any, any> ? U_1 : never)[], undefined, unknown>; }
+>Iterator : IteratorConstructor
+>zip : { (iterables: readonly [], options?: IteratorZipLongestOptions<Iterable<unknown>> | IteratorZipShortestOptions | IteratorZipStrictOptions): IteratorObject<never, undefined, unknown>; <T extends readonly (Iterable<unknown> | Iterator<unknown, any, any>)[] | []>(iterables: T, options?: (IteratorZipLongestOptions<NoInfer<Partial<{ -readonly [K in keyof T]: T[K] extends infer T_1 ? T_1 extends T[K] ? T_1 extends Iterable<infer U> ? U : T_1 extends Iterator<infer U_1, any, any> ? U_1 : never : never : never; }>>> | IteratorZipShortestOptions | IteratorZipStrictOptions) | undefined): IteratorObject<{ -readonly [K in keyof T]: T[K] extends infer T_1 ? T_1 extends T[K] ? T_1 extends Iterable<infer U> ? U : T_1 extends Iterator<infer U_1, any, any> ? U_1 : never : never : never; }, undefined, unknown>; <T extends Iterable<unknown> | Iterator<unknown, any, any>>(iterables: Iterable<T>, options?: (IteratorZipLongestOptions<NoInfer<Iterable<T extends Iterable<infer U> ? U : T extends Iterator<infer U_1, any, any> ? U_1 : never>>> | IteratorZipShortestOptions | IteratorZipStrictOptions) | undefined): IteratorObject<(T extends Iterable<infer U> ? U : T extends Iterator<infer U_1, any, any> ? U_1 : never)[], undefined, unknown>; }
+>[[1], ["a"]] as const : readonly [readonly [1], readonly ["a"]]
+>[[1], ["a"]] : readonly [readonly [1], readonly ["a"]]
+>[1] : readonly [1]
+>1 : 1
+>["a"] : readonly ["a"]
+>"a" : "a"
+>{ mode: "longest", padding: [true] } : { mode: "longest"; padding: boolean[]; }
+>mode : "longest"
+>"longest" : "longest"
+>padding : boolean[]
+>[true] : boolean[]
+>true : true
+
+// @ts-expect-error padding is only used in longest mode
+Iterator.zip([[1]], { mode: "shortest", padding: [1] });
+>Iterator.zip([[1]], { mode: "shortest", padding: [1] }) : IteratorObject<never, undefined, unknown>
+>Iterator.zip : { (iterables: readonly [], options?: IteratorZipLongestOptions<Iterable<unknown>> | IteratorZipShortestOptions | IteratorZipStrictOptions): IteratorObject<never, undefined, unknown>; <T extends readonly (Iterable<unknown> | Iterator<unknown, any, any>)[] | []>(iterables: T, options?: (IteratorZipLongestOptions<NoInfer<Partial<{ -readonly [K in keyof T]: T[K] extends infer T_1 ? T_1 extends T[K] ? T_1 extends Iterable<infer U> ? U : T_1 extends Iterator<infer U_1, any, any> ? U_1 : never : never : never; }>>> | IteratorZipShortestOptions | IteratorZipStrictOptions) | undefined): IteratorObject<{ -readonly [K in keyof T]: T[K] extends infer T_1 ? T_1 extends T[K] ? T_1 extends Iterable<infer U> ? U : T_1 extends Iterator<infer U_1, any, any> ? U_1 : never : never : never; }, undefined, unknown>; <T extends Iterable<unknown> | Iterator<unknown, any, any>>(iterables: Iterable<T>, options?: (IteratorZipLongestOptions<NoInfer<Iterable<T extends Iterable<infer U> ? U : T extends Iterator<infer U_1, any, any> ? U_1 : never>>> | IteratorZipShortestOptions | IteratorZipStrictOptions) | undefined): IteratorObject<(T extends Iterable<infer U> ? U : T extends Iterator<infer U_1, any, any> ? U_1 : never)[], undefined, unknown>; }
+>Iterator : IteratorConstructor
+>zip : { (iterables: readonly [], options?: IteratorZipLongestOptions<Iterable<unknown>> | IteratorZipShortestOptions | IteratorZipStrictOptions): IteratorObject<never, undefined, unknown>; <T extends readonly (Iterable<unknown> | Iterator<unknown, any, any>)[] | []>(iterables: T, options?: (IteratorZipLongestOptions<NoInfer<Partial<{ -readonly [K in keyof T]: T[K] extends infer T_1 ? T_1 extends T[K] ? T_1 extends Iterable<infer U> ? U : T_1 extends Iterator<infer U_1, any, any> ? U_1 : never : never : never; }>>> | IteratorZipShortestOptions | IteratorZipStrictOptions) | undefined): IteratorObject<{ -readonly [K in keyof T]: T[K] extends infer T_1 ? T_1 extends T[K] ? T_1 extends Iterable<infer U> ? U : T_1 extends Iterator<infer U_1, any, any> ? U_1 : never : never : never; }, undefined, unknown>; <T extends Iterable<unknown> | Iterator<unknown, any, any>>(iterables: Iterable<T>, options?: (IteratorZipLongestOptions<NoInfer<Iterable<T extends Iterable<infer U> ? U : T extends Iterator<infer U_1, any, any> ? U_1 : never>>> | IteratorZipShortestOptions | IteratorZipStrictOptions) | undefined): IteratorObject<(T extends Iterable<infer U> ? U : T extends Iterator<infer U_1, any, any> ? U_1 : never)[], undefined, unknown>; }
+>[[1]] : [number[]]
+>[1] : number[]
+>1 : 1
+>{ mode: "shortest", padding: [1] } : { mode: "shortest"; padding: number[]; }
+>mode : "shortest"
+>"shortest" : "shortest"
+>padding : number[]
+>[1] : number[]
+>1 : 1
+
+// @ts-expect-error the input must be iterable
+Iterator.zip(0);
+>Iterator.zip(0) : IteratorObject<never, undefined, unknown>
+>Iterator.zip : { (iterables: readonly [], options?: IteratorZipLongestOptions<Iterable<unknown>> | IteratorZipShortestOptions | IteratorZipStrictOptions): IteratorObject<never, undefined, unknown>; <T extends readonly (Iterable<unknown> | Iterator<unknown, any, any>)[] | []>(iterables: T, options?: (IteratorZipLongestOptions<NoInfer<Partial<{ -readonly [K in keyof T]: T[K] extends infer T_1 ? T_1 extends T[K] ? T_1 extends Iterable<infer U> ? U : T_1 extends Iterator<infer U_1, any, any> ? U_1 : never : never : never; }>>> | IteratorZipShortestOptions | IteratorZipStrictOptions) | undefined): IteratorObject<{ -readonly [K in keyof T]: T[K] extends infer T_1 ? T_1 extends T[K] ? T_1 extends Iterable<infer U> ? U : T_1 extends Iterator<infer U_1, any, any> ? U_1 : never : never : never; }, undefined, unknown>; <T extends Iterable<unknown> | Iterator<unknown, any, any>>(iterables: Iterable<T>, options?: (IteratorZipLongestOptions<NoInfer<Iterable<T extends Iterable<infer U> ? U : T extends Iterator<infer U_1, any, any> ? U_1 : never>>> | IteratorZipShortestOptions | IteratorZipStrictOptions) | undefined): IteratorObject<(T extends Iterable<infer U> ? U : T extends Iterator<infer U_1, any, any> ? U_1 : never)[], undefined, unknown>; }
+>Iterator : IteratorConstructor
+>zip : { (iterables: readonly [], options?: IteratorZipLongestOptions<Iterable<unknown>> | IteratorZipShortestOptions | IteratorZipStrictOptions): IteratorObject<never, undefined, unknown>; <T extends readonly (Iterable<unknown> | Iterator<unknown, any, any>)[] | []>(iterables: T, options?: (IteratorZipLongestOptions<NoInfer<Partial<{ -readonly [K in keyof T]: T[K] extends infer T_1 ? T_1 extends T[K] ? T_1 extends Iterable<infer U> ? U : T_1 extends Iterator<infer U_1, any, any> ? U_1 : never : never : never; }>>> | IteratorZipShortestOptions | IteratorZipStrictOptions) | undefined): IteratorObject<{ -readonly [K in keyof T]: T[K] extends infer T_1 ? T_1 extends T[K] ? T_1 extends Iterable<infer U> ? U : T_1 extends Iterator<infer U_1, any, any> ? U_1 : never : never : never; }, undefined, unknown>; <T extends Iterable<unknown> | Iterator<unknown, any, any>>(iterables: Iterable<T>, options?: (IteratorZipLongestOptions<NoInfer<Iterable<T extends Iterable<infer U> ? U : T extends Iterator<infer U_1, any, any> ? U_1 : never>>> | IteratorZipShortestOptions | IteratorZipStrictOptions) | undefined): IteratorObject<(T extends Iterable<infer U> ? U : T extends Iterator<infer U_1, any, any> ? U_1 : never)[], undefined, unknown>; }
+>0 : 0
+
+// @ts-expect-error each keyed value must be iterable
+Iterator.zipKeyed({ a: 0 });
+>Iterator.zipKeyed({ a: 0 }) : IteratorObject<{ a: unknown; }, undefined, unknown>
+>Iterator.zipKeyed : <T extends { readonly [K in keyof T]: Iterable<unknown> | Iterator<unknown, any, any>; }>(iterables: T, options?: (IteratorZipLongestOptions<NoInfer<Partial<{ -readonly [K in keyof T]: T[K] extends infer T_1 ? T_1 extends T[K] ? T_1 extends Iterable<infer U> ? U : T_1 extends Iterator<infer U_1, any, any> ? U_1 : never : never : never; }>>> | IteratorZipShortestOptions | IteratorZipStrictOptions) | undefined) => IteratorObject<{ -readonly [K in keyof T]: T[K] extends infer T_1 ? T_1 extends T[K] ? T_1 extends Iterable<infer U> ? U : T_1 extends Iterator<infer U_1, any, any> ? U_1 : never : never : never; }, undefined, unknown>
+>Iterator : IteratorConstructor
+>zipKeyed : <T extends { readonly [K in keyof T]: Iterable<unknown> | Iterator<unknown, any, any>; }>(iterables: T, options?: (IteratorZipLongestOptions<NoInfer<Partial<{ -readonly [K in keyof T]: T[K] extends infer T_1 ? T_1 extends T[K] ? T_1 extends Iterable<infer U> ? U : T_1 extends Iterator<infer U_1, any, any> ? U_1 : never : never : never; }>>> | IteratorZipShortestOptions | IteratorZipStrictOptions) | undefined) => IteratorObject<{ -readonly [K in keyof T]: T[K] extends infer T_1 ? T_1 extends T[K] ? T_1 extends Iterable<infer U> ? U : T_1 extends Iterator<infer U_1, any, any> ? U_1 : never : never : never; }, undefined, unknown>
+>{ a: 0 } : { a: number; }
+>a : number
+>0 : 0
+
