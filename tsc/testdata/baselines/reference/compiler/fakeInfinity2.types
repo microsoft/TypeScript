@@ -39,3 +39,15 @@ export const m = X.f();
 >X : typeof X
 >f : () => Infinity
 
+const Infinity = 0;
+>Infinity : 0
+>0 : 0
+
+export enum Bar {
+>Bar : Bar
+
+    A = 1e999,
+>A : Bar.A
+>1e999 : Infinity
+}
+
