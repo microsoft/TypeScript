@@ -1,0 +1,68 @@
+//// [tests/cases/compiler/dependentContextualInferenceTanstackQuery.ts] ////
+
+=== dependentContextualInferenceTanstackQuery.ts ===
+declare const useQueries:
+>useQueries : Symbol(useQueries, Decl(dependentContextualInferenceTanstackQuery.ts, 0, 13))
+
+  <T extends { [I in keyof T]: { key: unknown, fetch: (key: T[I]["key"]) => unknown, select: (data: ReturnType<T[I]["fetch"]>) => unknown } }>
+>T : Symbol(T, Decl(dependentContextualInferenceTanstackQuery.ts, 1, 3))
+>I : Symbol(I, Decl(dependentContextualInferenceTanstackQuery.ts, 1, 16))
+>T : Symbol(T, Decl(dependentContextualInferenceTanstackQuery.ts, 1, 3))
+>key : Symbol(key, Decl(dependentContextualInferenceTanstackQuery.ts, 1, 32))
+>fetch : Symbol(fetch, Decl(dependentContextualInferenceTanstackQuery.ts, 1, 46))
+>key : Symbol(key, Decl(dependentContextualInferenceTanstackQuery.ts, 1, 55))
+>T : Symbol(T, Decl(dependentContextualInferenceTanstackQuery.ts, 1, 3))
+>I : Symbol(I, Decl(dependentContextualInferenceTanstackQuery.ts, 1, 16))
+>select : Symbol(select, Decl(dependentContextualInferenceTanstackQuery.ts, 1, 84))
+>data : Symbol(data, Decl(dependentContextualInferenceTanstackQuery.ts, 1, 94))
+>ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(dependentContextualInferenceTanstackQuery.ts, 1, 3))
+>I : Symbol(I, Decl(dependentContextualInferenceTanstackQuery.ts, 1, 16))
+
+    (queries: T) =>
+>queries : Symbol(queries, Decl(dependentContextualInferenceTanstackQuery.ts, 2, 5))
+>T : Symbol(T, Decl(dependentContextualInferenceTanstackQuery.ts, 1, 3))
+
+      { [I in keyof T]: ReturnType<T[I]["select"]> }
+>I : Symbol(I, Decl(dependentContextualInferenceTanstackQuery.ts, 3, 9))
+>T : Symbol(T, Decl(dependentContextualInferenceTanstackQuery.ts, 1, 3))
+>ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(dependentContextualInferenceTanstackQuery.ts, 1, 3))
+>I : Symbol(I, Decl(dependentContextualInferenceTanstackQuery.ts, 3, 9))
+
+const results = useQueries([
+>results : Symbol(results, Decl(dependentContextualInferenceTanstackQuery.ts, 5, 5))
+>useQueries : Symbol(useQueries, Decl(dependentContextualInferenceTanstackQuery.ts, 0, 13))
+  {
+    key: "0",
+>key : Symbol(key, Decl(dependentContextualInferenceTanstackQuery.ts, 6, 3))
+
+    fetch: key => +key,
+>fetch : Symbol(fetch, Decl(dependentContextualInferenceTanstackQuery.ts, 7, 13))
+>key : Symbol(key, Decl(dependentContextualInferenceTanstackQuery.ts, 8, 10))
+>key : Symbol(key, Decl(dependentContextualInferenceTanstackQuery.ts, 8, 10))
+
+    select: data => [data] 
+>select : Symbol(select, Decl(dependentContextualInferenceTanstackQuery.ts, 8, 23))
+>data : Symbol(data, Decl(dependentContextualInferenceTanstackQuery.ts, 9, 11))
+>data : Symbol(data, Decl(dependentContextualInferenceTanstackQuery.ts, 9, 11))
+
+  },
+  {
+    key: 1,
+>key : Symbol(key, Decl(dependentContextualInferenceTanstackQuery.ts, 11, 3))
+
+    fetch: key => key.toString(),
+>fetch : Symbol(fetch, Decl(dependentContextualInferenceTanstackQuery.ts, 12, 11))
+>key : Symbol(key, Decl(dependentContextualInferenceTanstackQuery.ts, 13, 10))
+>key.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>key : Symbol(key, Decl(dependentContextualInferenceTanstackQuery.ts, 13, 10))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+    select: data => ({ data })
+>select : Symbol(select, Decl(dependentContextualInferenceTanstackQuery.ts, 13, 33))
+>data : Symbol(data, Decl(dependentContextualInferenceTanstackQuery.ts, 14, 11))
+>data : Symbol(data, Decl(dependentContextualInferenceTanstackQuery.ts, 14, 22))
+  }
+])
+

@@ -1,55 +1,37 @@
 declare const runMachine:
-  <T extends
-    { initial:
-        { state: keyof T["transitions"]
-        , context: object
-        }
-    , transitions: 
-        { [S in keyof T["transitions"]]:
-            ( current:
-                  { context:
-                    | { [S1 in keyof T["transitions"]]:
-                          ReturnType<T["transitions"][S1]> extends infer N
-                            ? N extends unknown
-                                ? N extends { state: S, context: infer C }
-                                    ? C
-                                    : never
-                                : never
-                            : never
-                      }[keyof T["transitions"]]
-                    | ( T["initial"]["state"] extends S
-                          ? T["initial"]["context"]
-                          : never
-                      )
-                  }
-            ) =>
-              | void
-              | { state: keyof T["transitions"]
-                , context: object
-                }
-        }
+  <TDefinition extends {
+    initial: {
+      state: keyof TDefinition["transitions"],
+      context: object
     },
-    S = keyof T["transitions"]
-  >
-    (machine: T) =>
-      S extends unknown
-        ? { state: S
-          , context: 
-            | { [S1 in keyof T["transitions"]]:
-                  ReturnType<T["transitions"][S1]> extends infer N
-                    ? N extends unknown
-                        ? N extends { state: S, context: infer C }
-                            ? C
-                            : never
-                        : never
-                    : never
-              }[keyof T["transitions"]]
-            | ( T["initial"]["state"] extends S
-                  ? T["initial"]["context"]
+    transitions: {
+      [TState in keyof TDefinition["transitions"]]:
+        (current: { context: Context<TDefinition, TState> }) =>
+          | void
+          | { state: keyof TDefinition["transitions"], context: object }
+    }
+  }>
+    (definition: TDefinition) =>
+      { [S in keyof TDefinition["transitions"]]: { state: S, context: Context<TDefinition, S> } }[keyof TDefinition["transitions"]]
+
+// iterative over all transitions and collect the context for the given state
+type Context<TDefinition extends Definition, TState> =
+  | { [S in keyof TDefinition["transitions"]]:
+        ReturnType<TDefinition["transitions"][S]> extends infer R
+          ? R extends unknown
+              ? R extends { state: TState, context: infer C }
+                  ? C
                   : never
-              )
-          }
-        : never
+              : never
+          : never
+    }[keyof TDefinition["transitions"]]
+  | (TDefinition["initial"]["state"] extends TState
+        ? TDefinition["initial"]["context"]
+        : never)
+
+// just to satisfy the type checker
+type Definition =
+  { initial: { state: keyof any, context: object }, transitions: Record<keyof any, (...a: never) => unknown> }
 
 const result = runMachine({
   initial: {

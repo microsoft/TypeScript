@@ -1,0 +1,71 @@
+//// [tests/cases/compiler/dependentContextualInferenceTanstackQuery.ts] ////
+
+=== dependentContextualInferenceTanstackQuery.ts ===
+declare const useQueries:
+>useQueries : <T extends { [I in keyof T]: { key: unknown; fetch: (key: T[I]["key"]) => unknown; select: (data: ReturnType<T[I]["fetch"]>) => unknown; }; }>(queries: T) => { [I in keyof T]: ReturnType<T[I]["select"]>; }
+
+  <T extends { [I in keyof T]: { key: unknown, fetch: (key: T[I]["key"]) => unknown, select: (data: ReturnType<T[I]["fetch"]>) => unknown } }>
+>key : unknown
+>fetch : (key: T[I]["key"]) => unknown
+>key : T[I]["key"]
+>select : (data: ReturnType<T[I]["fetch"]>) => unknown
+>data : ReturnType<T[I]["fetch"]>
+
+    (queries: T) =>
+>queries : T
+
+      { [I in keyof T]: ReturnType<T[I]["select"]> }
+
+const results = useQueries([
+>results : [number[], { data: string; }]
+>useQueries([  {    key: "0",    fetch: key => +key,    select: data => [data]   },  {    key: 1,    fetch: key => key.toString(),    select: data => ({ data })  }]) : [number[], { data: string; }]
+>useQueries : <T extends { [I in keyof T]: { key: unknown; fetch: (key: T[I]["key"]) => unknown; select: (data: ReturnType<T[I]["fetch"]>) => unknown; }; }>(queries: T) => { [I in keyof T]: ReturnType<T[I]["select"]>; }
+>[  {    key: "0",    fetch: key => +key,    select: data => [data]   },  {    key: 1,    fetch: key => key.toString(),    select: data => ({ data })  }] : [{ key: string; fetch: (key: string) => number; select: (data: number) => number[]; }, { key: number; fetch: (key: number) => string; select: (data: string) => { data: string; }; }]
+  {
+>{    key: "0",    fetch: key => +key,    select: data => [data]   } : { key: string; fetch: (key: string) => number; select: (data: number) => number[]; }
+
+    key: "0",
+>key : string
+>"0" : "0"
+
+    fetch: key => +key,
+>fetch : (key: string) => number
+>key => +key : (key: string) => number
+>key : string
+>+key : number
+>key : string
+
+    select: data => [data] 
+>select : (data: number) => number[]
+>data => [data] : (data: number) => number[]
+>data : number
+>[data] : number[]
+>data : number
+
+  },
+  {
+>{    key: 1,    fetch: key => key.toString(),    select: data => ({ data })  } : { key: number; fetch: (key: number) => string; select: (data: string) => { data: string; }; }
+
+    key: 1,
+>key : number
+>1 : 1
+
+    fetch: key => key.toString(),
+>fetch : (key: number) => string
+>key => key.toString() : (key: number) => string
+>key : number
+>key.toString() : string
+>key.toString : (radix?: number) => string
+>key : number
+>toString : (radix?: number) => string
+
+    select: data => ({ data })
+>select : (data: string) => { data: string; }
+>data => ({ data }) : (data: string) => { data: string; }
+>data : string
+>({ data }) : { data: string; }
+>{ data } : { data: string; }
+>data : string
+  }
+])
+

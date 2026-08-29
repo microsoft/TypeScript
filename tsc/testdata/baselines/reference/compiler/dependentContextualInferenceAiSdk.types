@@ -2,12 +2,9 @@
 
 === dependentContextualInferenceAiSdk.ts ===
 declare const streamText:
->streamText : <T extends { model: string; tools: { [K in keyof T["tools"]]: { inputSchema: { "~type": unknown; }; execute: (input: T["tools"][K]["inputSchema"]["~type"]) => unknown; }; }; messages: "STUB"[]; }>(t: T) => {}
+>streamText : <T extends { tools: { [K in keyof T["tools"]]: { inputSchema: { "~type": unknown; }; execute: (input: T["tools"][K]["inputSchema"]["~type"]) => unknown; }; }; }>(t: T) => {}
 
   <T extends {
-    model: string,
->model : string
-
     tools: {
 >tools : { [K in keyof T["tools"]]: { inputSchema: { "~type": unknown; }; execute: (input: T["tools"][K]["inputSchema"]["~type"]) => unknown; }; }
 
@@ -21,9 +18,6 @@ declare const streamText:
 >input : T["tools"][K]["inputSchema"]["~type"]
       }
     },
-    messages: "STUB"[]
->messages : "STUB"[]
-
   }> (t: T) => {}
 >t : T
 
@@ -46,13 +40,9 @@ declare const z:
   }
 
 streamText({
->streamText({  model: "moonshotai/kimi-k3",  tools: {    getWeather: {      inputSchema: z.object({ location: z.string() }),            execute: input => {        const _check: { location: string } = input        return "whatever"      }    }  },  messages: []}) : {}
->streamText : <T extends { model: string; tools: { [K in keyof T["tools"]]: { inputSchema: { "~type": unknown; }; execute: (input: T["tools"][K]["inputSchema"]["~type"]) => unknown; }; }; messages: "STUB"[]; }>(t: T) => {}
->{  model: "moonshotai/kimi-k3",  tools: {    getWeather: {      inputSchema: z.object({ location: z.string() }),            execute: input => {        const _check: { location: string } = input        return "whatever"      }    }  },  messages: []} : { model: string; tools: { getWeather: { inputSchema: { "~type": { location: string; }; }; execute: (input: { location: string; }) => string; }; }; messages: never[]; }
-
-  model: "moonshotai/kimi-k3",
->model : string
->"moonshotai/kimi-k3" : "moonshotai/kimi-k3"
+>streamText({  tools: {    getWeather: {      inputSchema: z.object({ location: z.string() }),            execute: input => {        const _check: { location: string } = input        return "whatever"      }    }  },}) : {}
+>streamText : <T extends { tools: { [K in keyof T["tools"]]: { inputSchema: { "~type": unknown; }; execute: (input: T["tools"][K]["inputSchema"]["~type"]) => unknown; }; }; }>(t: T) => {}
+>{  tools: {    getWeather: {      inputSchema: z.object({ location: z.string() }),            execute: input => {        const _check: { location: string } = input        return "whatever"      }    }  },} : { tools: { getWeather: { inputSchema: { "~type": { location: string; }; }; execute: (input: { location: string; }) => string; }; }; }
 
   tools: {
 >tools : { getWeather: { inputSchema: { "~type": { location: string; }; }; execute: (input: { location: string; }) => string; }; }
@@ -90,15 +80,5 @@ streamText({
       }
     }
   },
-  messages: []
->messages : never[]
->[] : never[]
-
 })
-
-
-
-
-
-
   

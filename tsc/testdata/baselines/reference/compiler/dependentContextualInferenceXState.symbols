@@ -4,206 +4,177 @@
 declare const runMachine:
 >runMachine : Symbol(runMachine, Decl(dependentContextualInferenceXState.ts, 0, 13))
 
-  <T extends
->T : Symbol(T, Decl(dependentContextualInferenceXState.ts, 1, 3))
+  <TDefinition extends {
+>TDefinition : Symbol(TDefinition, Decl(dependentContextualInferenceXState.ts, 1, 3))
 
-    { initial:
->initial : Symbol(initial, Decl(dependentContextualInferenceXState.ts, 2, 5))
+    initial: {
+>initial : Symbol(initial, Decl(dependentContextualInferenceXState.ts, 1, 24))
 
-        { state: keyof T["transitions"]
->state : Symbol(state, Decl(dependentContextualInferenceXState.ts, 3, 9))
->T : Symbol(T, Decl(dependentContextualInferenceXState.ts, 1, 3))
+      state: keyof TDefinition["transitions"],
+>state : Symbol(state, Decl(dependentContextualInferenceXState.ts, 2, 14))
+>TDefinition : Symbol(TDefinition, Decl(dependentContextualInferenceXState.ts, 1, 3))
 
-        , context: object
->context : Symbol(context, Decl(dependentContextualInferenceXState.ts, 4, 9))
-        }
-    , transitions: 
->transitions : Symbol(transitions, Decl(dependentContextualInferenceXState.ts, 6, 5))
+      context: object
+>context : Symbol(context, Decl(dependentContextualInferenceXState.ts, 3, 46))
 
-        { [S in keyof T["transitions"]]:
->S : Symbol(S, Decl(dependentContextualInferenceXState.ts, 7, 11))
->T : Symbol(T, Decl(dependentContextualInferenceXState.ts, 1, 3))
-
-            ( current:
->current : Symbol(current, Decl(dependentContextualInferenceXState.ts, 8, 13))
-
-                  { context:
->context : Symbol(context, Decl(dependentContextualInferenceXState.ts, 9, 19))
-
-                    | { [S1 in keyof T["transitions"]]:
->S1 : Symbol(S1, Decl(dependentContextualInferenceXState.ts, 10, 25))
->T : Symbol(T, Decl(dependentContextualInferenceXState.ts, 1, 3))
-
-                          ReturnType<T["transitions"][S1]> extends infer N
->ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
->T : Symbol(T, Decl(dependentContextualInferenceXState.ts, 1, 3))
->S1 : Symbol(S1, Decl(dependentContextualInferenceXState.ts, 10, 25))
->N : Symbol(N, Decl(dependentContextualInferenceXState.ts, 11, 72))
-
-                            ? N extends unknown
->N : Symbol(N, Decl(dependentContextualInferenceXState.ts, 11, 72))
-
-                                ? N extends { state: S, context: infer C }
->N : Symbol(N, Decl(dependentContextualInferenceXState.ts, 11, 72))
->state : Symbol(state, Decl(dependentContextualInferenceXState.ts, 13, 45))
->S : Symbol(S, Decl(dependentContextualInferenceXState.ts, 7, 11))
->context : Symbol(context, Decl(dependentContextualInferenceXState.ts, 13, 55))
->C : Symbol(C, Decl(dependentContextualInferenceXState.ts, 13, 70))
-
-                                    ? C
->C : Symbol(C, Decl(dependentContextualInferenceXState.ts, 13, 70))
-
-                                    : never
-                                : never
-                            : never
-                      }[keyof T["transitions"]]
->T : Symbol(T, Decl(dependentContextualInferenceXState.ts, 1, 3))
-
-                    | ( T["initial"]["state"] extends S
->T : Symbol(T, Decl(dependentContextualInferenceXState.ts, 1, 3))
->S : Symbol(S, Decl(dependentContextualInferenceXState.ts, 7, 11))
-
-                          ? T["initial"]["context"]
->T : Symbol(T, Decl(dependentContextualInferenceXState.ts, 1, 3))
-
-                          : never
-                      )
-                  }
-            ) =>
-              | void
-              | { state: keyof T["transitions"]
->state : Symbol(state, Decl(dependentContextualInferenceXState.ts, 26, 17))
->T : Symbol(T, Decl(dependentContextualInferenceXState.ts, 1, 3))
-
-                , context: object
->context : Symbol(context, Decl(dependentContextualInferenceXState.ts, 27, 17))
-                }
-        }
     },
-    S = keyof T["transitions"]
->S : Symbol(S, Decl(dependentContextualInferenceXState.ts, 30, 6))
->T : Symbol(T, Decl(dependentContextualInferenceXState.ts, 1, 3))
+    transitions: {
+>transitions : Symbol(transitions, Decl(dependentContextualInferenceXState.ts, 5, 6))
 
-  >
-    (machine: T) =>
->machine : Symbol(machine, Decl(dependentContextualInferenceXState.ts, 33, 5))
->T : Symbol(T, Decl(dependentContextualInferenceXState.ts, 1, 3))
+      [TState in keyof TDefinition["transitions"]]:
+>TState : Symbol(TState, Decl(dependentContextualInferenceXState.ts, 7, 7))
+>TDefinition : Symbol(TDefinition, Decl(dependentContextualInferenceXState.ts, 1, 3))
 
-      S extends unknown
->S : Symbol(S, Decl(dependentContextualInferenceXState.ts, 30, 6))
+        (current: { context: Context<TDefinition, TState> }) =>
+>current : Symbol(current, Decl(dependentContextualInferenceXState.ts, 8, 9))
+>context : Symbol(context, Decl(dependentContextualInferenceXState.ts, 8, 19))
+>Context : Symbol(Context, Decl(dependentContextualInferenceXState.ts, 14, 131))
+>TDefinition : Symbol(TDefinition, Decl(dependentContextualInferenceXState.ts, 1, 3))
+>TState : Symbol(TState, Decl(dependentContextualInferenceXState.ts, 7, 7))
 
-        ? { state: S
->state : Symbol(state, Decl(dependentContextualInferenceXState.ts, 35, 11))
->S : Symbol(S, Decl(dependentContextualInferenceXState.ts, 30, 6))
+          | void
+          | { state: keyof TDefinition["transitions"], context: object }
+>state : Symbol(state, Decl(dependentContextualInferenceXState.ts, 10, 13))
+>TDefinition : Symbol(TDefinition, Decl(dependentContextualInferenceXState.ts, 1, 3))
+>context : Symbol(context, Decl(dependentContextualInferenceXState.ts, 10, 54))
+    }
+  }>
+    (definition: TDefinition) =>
+>definition : Symbol(definition, Decl(dependentContextualInferenceXState.ts, 13, 5))
+>TDefinition : Symbol(TDefinition, Decl(dependentContextualInferenceXState.ts, 1, 3))
 
-          , context: 
->context : Symbol(context, Decl(dependentContextualInferenceXState.ts, 36, 11))
+      { [S in keyof TDefinition["transitions"]]: { state: S, context: Context<TDefinition, S> } }[keyof TDefinition["transitions"]]
+>S : Symbol(S, Decl(dependentContextualInferenceXState.ts, 14, 9))
+>TDefinition : Symbol(TDefinition, Decl(dependentContextualInferenceXState.ts, 1, 3))
+>state : Symbol(state, Decl(dependentContextualInferenceXState.ts, 14, 50))
+>S : Symbol(S, Decl(dependentContextualInferenceXState.ts, 14, 9))
+>context : Symbol(context, Decl(dependentContextualInferenceXState.ts, 14, 60))
+>Context : Symbol(Context, Decl(dependentContextualInferenceXState.ts, 14, 131))
+>TDefinition : Symbol(TDefinition, Decl(dependentContextualInferenceXState.ts, 1, 3))
+>S : Symbol(S, Decl(dependentContextualInferenceXState.ts, 14, 9))
+>TDefinition : Symbol(TDefinition, Decl(dependentContextualInferenceXState.ts, 1, 3))
 
-            | { [S1 in keyof T["transitions"]]:
->S1 : Symbol(S1, Decl(dependentContextualInferenceXState.ts, 37, 17))
->T : Symbol(T, Decl(dependentContextualInferenceXState.ts, 1, 3))
+// iterative over all transitions and collect the context for the given state
+type Context<TDefinition extends Definition, TState> =
+>Context : Symbol(Context, Decl(dependentContextualInferenceXState.ts, 14, 131))
+>TDefinition : Symbol(TDefinition, Decl(dependentContextualInferenceXState.ts, 17, 13))
+>Definition : Symbol(Definition, Decl(dependentContextualInferenceXState.ts, 29, 16))
+>TState : Symbol(TState, Decl(dependentContextualInferenceXState.ts, 17, 44))
 
-                  ReturnType<T["transitions"][S1]> extends infer N
+  | { [S in keyof TDefinition["transitions"]]:
+>S : Symbol(S, Decl(dependentContextualInferenceXState.ts, 18, 7))
+>TDefinition : Symbol(TDefinition, Decl(dependentContextualInferenceXState.ts, 17, 13))
+
+        ReturnType<TDefinition["transitions"][S]> extends infer R
 >ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
->T : Symbol(T, Decl(dependentContextualInferenceXState.ts, 1, 3))
->S1 : Symbol(S1, Decl(dependentContextualInferenceXState.ts, 37, 17))
->N : Symbol(N, Decl(dependentContextualInferenceXState.ts, 38, 64))
+>TDefinition : Symbol(TDefinition, Decl(dependentContextualInferenceXState.ts, 17, 13))
+>S : Symbol(S, Decl(dependentContextualInferenceXState.ts, 18, 7))
+>R : Symbol(R, Decl(dependentContextualInferenceXState.ts, 19, 63))
 
-                    ? N extends unknown
->N : Symbol(N, Decl(dependentContextualInferenceXState.ts, 38, 64))
+          ? R extends unknown
+>R : Symbol(R, Decl(dependentContextualInferenceXState.ts, 19, 63))
 
-                        ? N extends { state: S, context: infer C }
->N : Symbol(N, Decl(dependentContextualInferenceXState.ts, 38, 64))
->state : Symbol(state, Decl(dependentContextualInferenceXState.ts, 40, 37))
->S : Symbol(S, Decl(dependentContextualInferenceXState.ts, 30, 6))
->context : Symbol(context, Decl(dependentContextualInferenceXState.ts, 40, 47))
->C : Symbol(C, Decl(dependentContextualInferenceXState.ts, 40, 62))
+              ? R extends { state: TState, context: infer C }
+>R : Symbol(R, Decl(dependentContextualInferenceXState.ts, 19, 63))
+>state : Symbol(state, Decl(dependentContextualInferenceXState.ts, 21, 27))
+>TState : Symbol(TState, Decl(dependentContextualInferenceXState.ts, 17, 44))
+>context : Symbol(context, Decl(dependentContextualInferenceXState.ts, 21, 42))
+>C : Symbol(C, Decl(dependentContextualInferenceXState.ts, 21, 57))
 
-                            ? C
->C : Symbol(C, Decl(dependentContextualInferenceXState.ts, 40, 62))
-
-                            : never
-                        : never
-                    : never
-              }[keyof T["transitions"]]
->T : Symbol(T, Decl(dependentContextualInferenceXState.ts, 1, 3))
-
-            | ( T["initial"]["state"] extends S
->T : Symbol(T, Decl(dependentContextualInferenceXState.ts, 1, 3))
->S : Symbol(S, Decl(dependentContextualInferenceXState.ts, 30, 6))
-
-                  ? T["initial"]["context"]
->T : Symbol(T, Decl(dependentContextualInferenceXState.ts, 1, 3))
+                  ? C
+>C : Symbol(C, Decl(dependentContextualInferenceXState.ts, 21, 57))
 
                   : never
-              )
-          }
-        : never
+              : never
+          : never
+    }[keyof TDefinition["transitions"]]
+>TDefinition : Symbol(TDefinition, Decl(dependentContextualInferenceXState.ts, 17, 13))
+
+  | (TDefinition["initial"]["state"] extends TState
+>TDefinition : Symbol(TDefinition, Decl(dependentContextualInferenceXState.ts, 17, 13))
+>TState : Symbol(TState, Decl(dependentContextualInferenceXState.ts, 17, 44))
+
+        ? TDefinition["initial"]["context"]
+>TDefinition : Symbol(TDefinition, Decl(dependentContextualInferenceXState.ts, 17, 13))
+
+        : never)
+
+// just to satisfy the type checker
+type Definition =
+>Definition : Symbol(Definition, Decl(dependentContextualInferenceXState.ts, 29, 16))
+
+  { initial: { state: keyof any, context: object }, transitions: Record<keyof any, (...a: never) => unknown> }
+>initial : Symbol(initial, Decl(dependentContextualInferenceXState.ts, 33, 3))
+>state : Symbol(state, Decl(dependentContextualInferenceXState.ts, 33, 14))
+>context : Symbol(context, Decl(dependentContextualInferenceXState.ts, 33, 32))
+>transitions : Symbol(transitions, Decl(dependentContextualInferenceXState.ts, 33, 51))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(dependentContextualInferenceXState.ts, 33, 84))
 
 const result = runMachine({
->result : Symbol(result, Decl(dependentContextualInferenceXState.ts, 53, 5))
+>result : Symbol(result, Decl(dependentContextualInferenceXState.ts, 35, 5))
 >runMachine : Symbol(runMachine, Decl(dependentContextualInferenceXState.ts, 0, 13))
 
   initial: {
->initial : Symbol(initial, Decl(dependentContextualInferenceXState.ts, 53, 27))
+>initial : Symbol(initial, Decl(dependentContextualInferenceXState.ts, 35, 27))
 
     state: "loggedOut",
->state : Symbol(state, Decl(dependentContextualInferenceXState.ts, 54, 12))
+>state : Symbol(state, Decl(dependentContextualInferenceXState.ts, 36, 12))
 
     context: {}
->context : Symbol(context, Decl(dependentContextualInferenceXState.ts, 55, 23))
+>context : Symbol(context, Decl(dependentContextualInferenceXState.ts, 37, 23))
 
   },
   transitions: {
->transitions : Symbol(transitions, Decl(dependentContextualInferenceXState.ts, 57, 4))
+>transitions : Symbol(transitions, Decl(dependentContextualInferenceXState.ts, 39, 4))
 
     loggedOut: ({ context }) => {
->loggedOut : Symbol(loggedOut, Decl(dependentContextualInferenceXState.ts, 58, 16))
->context : Symbol(context, Decl(dependentContextualInferenceXState.ts, 59, 17))
+>loggedOut : Symbol(loggedOut, Decl(dependentContextualInferenceXState.ts, 40, 16))
+>context : Symbol(context, Decl(dependentContextualInferenceXState.ts, 41, 17))
 
       return { state: "loggingIn", context: { username: "devanshj", password: "1234" } }
->state : Symbol(state, Decl(dependentContextualInferenceXState.ts, 60, 14))
->context : Symbol(context, Decl(dependentContextualInferenceXState.ts, 60, 34))
->username : Symbol(username, Decl(dependentContextualInferenceXState.ts, 60, 45))
->password : Symbol(password, Decl(dependentContextualInferenceXState.ts, 60, 67))
+>state : Symbol(state, Decl(dependentContextualInferenceXState.ts, 42, 14))
+>context : Symbol(context, Decl(dependentContextualInferenceXState.ts, 42, 34))
+>username : Symbol(username, Decl(dependentContextualInferenceXState.ts, 42, 45))
+>password : Symbol(password, Decl(dependentContextualInferenceXState.ts, 42, 67))
 
     },
     loggingIn: ({ context }) => {
->loggingIn : Symbol(loggingIn, Decl(dependentContextualInferenceXState.ts, 61, 6))
->context : Symbol(context, Decl(dependentContextualInferenceXState.ts, 62, 17))
+>loggingIn : Symbol(loggingIn, Decl(dependentContextualInferenceXState.ts, 43, 6))
+>context : Symbol(context, Decl(dependentContextualInferenceXState.ts, 44, 17))
 
       if (context.username === "devanshj" && context.password === "1234") {
->context.username : Symbol(username, Decl(dependentContextualInferenceXState.ts, 60, 45))
->context : Symbol(context, Decl(dependentContextualInferenceXState.ts, 62, 17))
->username : Symbol(username, Decl(dependentContextualInferenceXState.ts, 60, 45))
->context.password : Symbol(password, Decl(dependentContextualInferenceXState.ts, 60, 67))
->context : Symbol(context, Decl(dependentContextualInferenceXState.ts, 62, 17))
->password : Symbol(password, Decl(dependentContextualInferenceXState.ts, 60, 67))
+>context.username : Symbol(username, Decl(dependentContextualInferenceXState.ts, 42, 45))
+>context : Symbol(context, Decl(dependentContextualInferenceXState.ts, 44, 17))
+>username : Symbol(username, Decl(dependentContextualInferenceXState.ts, 42, 45))
+>context.password : Symbol(password, Decl(dependentContextualInferenceXState.ts, 42, 67))
+>context : Symbol(context, Decl(dependentContextualInferenceXState.ts, 44, 17))
+>password : Symbol(password, Decl(dependentContextualInferenceXState.ts, 42, 67))
 
         return { state: "loggedIn", context: { ...context, accessToken: "whatever" } }
->state : Symbol(state, Decl(dependentContextualInferenceXState.ts, 64, 16))
->context : Symbol(context, Decl(dependentContextualInferenceXState.ts, 64, 35))
->context : Symbol(context, Decl(dependentContextualInferenceXState.ts, 62, 17))
->accessToken : Symbol(accessToken, Decl(dependentContextualInferenceXState.ts, 64, 58))
+>state : Symbol(state, Decl(dependentContextualInferenceXState.ts, 46, 16))
+>context : Symbol(context, Decl(dependentContextualInferenceXState.ts, 46, 35))
+>context : Symbol(context, Decl(dependentContextualInferenceXState.ts, 44, 17))
+>accessToken : Symbol(accessToken, Decl(dependentContextualInferenceXState.ts, 46, 58))
 
       } else {
         return { state: "loggedOut", context: { failedOnce: true } }
->state : Symbol(state, Decl(dependentContextualInferenceXState.ts, 66, 16))
->context : Symbol(context, Decl(dependentContextualInferenceXState.ts, 66, 36))
->failedOnce : Symbol(failedOnce, Decl(dependentContextualInferenceXState.ts, 66, 47))
+>state : Symbol(state, Decl(dependentContextualInferenceXState.ts, 48, 16))
+>context : Symbol(context, Decl(dependentContextualInferenceXState.ts, 48, 36))
+>failedOnce : Symbol(failedOnce, Decl(dependentContextualInferenceXState.ts, 48, 47))
       }
     },
     loggedIn: ({ context }) => {
->loggedIn : Symbol(loggedIn, Decl(dependentContextualInferenceXState.ts, 68, 6))
->context : Symbol(context, Decl(dependentContextualInferenceXState.ts, 69, 16))
+>loggedIn : Symbol(loggedIn, Decl(dependentContextualInferenceXState.ts, 50, 6))
+>context : Symbol(context, Decl(dependentContextualInferenceXState.ts, 51, 16))
 
       console.log(context.accessToken)
 >console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
 >log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
->context.accessToken : Symbol(accessToken, Decl(dependentContextualInferenceXState.ts, 64, 58))
->context : Symbol(context, Decl(dependentContextualInferenceXState.ts, 69, 16))
->accessToken : Symbol(accessToken, Decl(dependentContextualInferenceXState.ts, 64, 58))
+>context.accessToken : Symbol(accessToken, Decl(dependentContextualInferenceXState.ts, 46, 58))
+>context : Symbol(context, Decl(dependentContextualInferenceXState.ts, 51, 16))
+>accessToken : Symbol(accessToken, Decl(dependentContextualInferenceXState.ts, 46, 58))
     }
   }
 })
