@@ -7572,7 +7572,7 @@ func (c *Checker) reportObjectPossiblyNullOrUndefinedError(node *ast.Node, facts
 }
 
 func (c *Checker) checkExpressionWithContextualType(node *ast.Node, contextualType *Type, inferenceContext *InferenceContext, checkMode CheckMode) *Type {
-	if contextualType.flags&TypeFlagsTypeParameter == 0 || !c.isTypeParameterDependent(contextualType.AsTypeParameter()) {
+	if contextualType.flags&TypeFlagsTypeParameter == 0 || !c.isTypeParameterDependent(contextualType.AsTypeParameter()) || checkMode&CheckModeContextual != 0 {
 		return c.checkExpressionWithContextualTypeWorker(node, contextualType, inferenceContext, checkMode)
 	}
 	typeParameter := contextualType
