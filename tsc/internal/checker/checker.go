@@ -7602,7 +7602,7 @@ func (c *Checker) checkExpressionWithContextualType(node *ast.Node, contextualTy
 		c.resetNodeCheck(node)
 		c.revertStagedDiagnostics()
 		previousValueType = valueType
-		valueType = c.checkExpressionWithContextualTypeWorker(node, contextualType, inferenceContext, CheckModeNormal)
+		valueType = c.checkExpressionWithContextualTypeWorker(node, contextualType, inferenceContext, checkMode & ^CheckModeSkipContextSensitive)
 		passes++
 	}
 }
