@@ -111,6 +111,7 @@ var esnextLibs = []string{
 	"lib.es2025.iterator.d.ts",
 	"lib.es2025.promise.d.ts",
 	"lib.es2025.regexp.d.ts",
+	"lib.esnext.promise.d.ts",
 	"lib.esnext.array.d.ts",
 	"lib.esnext.collection.d.ts",
 	"lib.esnext.date.d.ts",
