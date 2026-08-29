@@ -15,6 +15,8 @@ import (
 	"syscall"
 	"testing"
 	"time"
+
+	"github.com/microsoft/TypeScript/tsc/internal/osutil"
 )
 
 func TestProfileSessionFlushesOnInterrupt(t *testing.T) {
@@ -34,7 +36,11 @@ func TestProfileSessionFlushesOnInterrupt(t *testing.T) {
 	}
 	defer output.Close()
 
-	cmd := exec.Command(os.Args[0], "-test.run=^TestProfileSessionFlushesOnInterrupt$")
+	executable, executableErr := osutil.Executable()
+	if executableErr != nil {
+		t.Fatal(executableErr)
+	}
+	cmd := exec.Command(executable, "-test.run=^TestProfileSessionFlushesOnInterrupt$")
 	cmd.Env = append(os.Environ(), "TSGO_PPROF_SIGNAL_HELPER="+profileDir)
 	cmd.Stdout = output
 	cmd.Stderr = output
@@ -54,7 +60,19 @@ func TestProfileSessionFlushesOnInterrupt(t *testing.T) {
 		t.Fatal(signalErr)
 	}
 
-	waitErr := cmd.Wait()
+	waitDone := make(chan error, 1)
+	go func() {
+		waitDone <- cmd.Wait()
+	}()
+	var waitErr error
+	select {
+	case result := <-waitDone:
+		waitErr = result
+	case <-time.After(10 * time.Second):
+		_ = cmd.Process.Kill()
+		<-waitDone
+		t.Fatal("timed out waiting for profile process to terminate")
+	}
 	var exitErr *exec.ExitError
 	if !errors.As(waitErr, &exitErr) {
 		t.Fatalf("profile process returned %v instead of terminating from SIGINT", waitErr)
