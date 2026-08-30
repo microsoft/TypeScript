@@ -11,11 +11,13 @@ import.defer?.("./x");
 >defer : any
 >"./x" : "./x"
 
+=== c.ts ===
 import.defer?.<string>("./x");
 >import.defer?.<string>("./x") : Promise<typeof import("./x")>
 >defer : any
 >"./x" : "./x"
 
+=== d.ts ===
 import.defer("./x");
 >import.defer("./x") : Promise<typeof import("./x")>
 >defer : any

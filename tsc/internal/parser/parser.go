@@ -5242,6 +5242,7 @@ func (p *Parser) parseLeftHandSideExpressionOrHigher() *ast.Expression {
 			expression = p.finishNode(p.factory.NewMetaProperty(ast.KindImportKeyword, p.parseIdentifierName()), pos)
 			if expression.Text() == "defer" {
 				if p.token == ast.KindQuestionDotToken && p.lookAhead((*Parser).nextTokenIsOpenParenOrLessThan) {
+					p.sourceFlags |= ast.NodeFlagsPossiblyContainsDynamicImport
 					p.parseErrorAtCurrentToken(diagnostics.X_0_expected, scanner.TokenToString(ast.KindOpenParenToken))
 				}
 				if p.token == ast.KindOpenParenToken || p.token == ast.KindLessThanToken {
