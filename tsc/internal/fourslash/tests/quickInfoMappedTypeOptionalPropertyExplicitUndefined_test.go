@@ -41,3 +41,28 @@ type /*Y*/Y = { [K in keyof X]-?: X[K] };`
 	defer done()
 	f.VerifyQuickInfoAt(t, "Y", "type Y = {\n    x: number | undefined;\n}", "")
 }
+
+func TestQuickInfoMappedTypeOptionalInferredPropertyExplicitUndefined(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @strict: true
+class C { x? = 1 as number }
+type M<T> = { [K in keyof T]: T[K] | undefined };
+type /*Y*/Y = M<C>;`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.VerifyQuickInfoAt(t, "Y", "type Y = {\n    x?: number | undefined;\n}", "")
+}
+
+func TestQuickInfoMappedTypeOptionalInferredPropertyExplicitUndefinedExactOptionalPropertyTypes(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @strict: true
+// @exactOptionalPropertyTypes: true
+class C { x? = 1 as number }
+type M<T> = { [K in keyof T]: T[K] | undefined };
+type /*Y*/Y = M<C>;`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.VerifyQuickInfoAt(t, "Y", "type Y = {\n    x?: number | undefined;\n}", "")
+}

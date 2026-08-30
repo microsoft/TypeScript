@@ -612,7 +612,7 @@ func (r *EmitResolver) requiresAddingImplicitUndefined(declaration *ast.Node, sy
 			return false
 		}
 		declaredType := declaration.Type()
-		return declaredType != nil && !r.checker.containsUndefinedType(r.checker.getTypeFromTypeNode(declaredType))
+		return declaredType == nil || !r.checker.containsUndefinedType(r.checker.getTypeFromTypeNode(declaredType))
 	case ast.KindParameter, ast.KindJSDocParameterTag:
 		return r.requiresAddingImplicitUndefinedWorker(declaration, enclosingDeclaration)
 	default:
