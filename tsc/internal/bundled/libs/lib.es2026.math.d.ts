@@ -14,9 +14,14 @@ and limitations under the License.
 ***************************************************************************** */
 
 
-interface ErrorConstructor {
+/// <reference lib="es2015.iterable" />
+
+interface Math {
     /**
-     * Indicates whether the argument provided is a built-in Error instance or not.
+     * Sums the values in an iterable while minimizing loss of precision.
+     * @param items An iterable of numbers to sum.
+     * @throws {TypeError} If `items` is not iterable or contains a value that is not a number.
+     * @throws {RangeError} If `items` contains 2^53 or more values.
      */
-    isError(error: unknown): error is Error;
+    sumPrecise(items: Iterable<number>): number;
 }

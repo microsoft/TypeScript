@@ -31,7 +31,7 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
-//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2026.full.d.ts] *Lib*
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -69,7 +69,7 @@ export class myClass {
 }
 
 //// [/user/username/projects/solution/app/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":[[2,3]],"fileNames":["lib.es2025.full.d.ts","./fileWithError.ts","./fileWithoutError.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},"02dc54a766c51fbc368b69a386e90b57-export var myClassWithError = class {\n    tags() { }\n    private p = 12\n};",{"version":"181818468a51a2348d25d30b10b6b1bb-export class myClass { }","signature":"00d3ac9a4cccbf94649ca3c19d44376a-export declare class myClass {\n}\n","impliedNodeFormat":1}],"options":{"composite":true},"emitDiagnosticsPerFile":[[2,[{"pos":11,"end":27,"code":4094,"category":1,"messageKey":"Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094","messageArgs":["p"],"relatedInformation":[{"pos":11,"end":27,"code":9027,"category":1,"messageKey":"Add_a_type_annotation_to_the_variable_0_9027","messageArgs":["myClassWithError"]}]}]]],"latestChangedDtsFile":"./fileWithoutError.d.ts","emitSignatures":[2]}
+{"version":"FakeTSVersion","root":[[2,3]],"fileNames":["lib.es2026.full.d.ts","./fileWithError.ts","./fileWithoutError.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},"02dc54a766c51fbc368b69a386e90b57-export var myClassWithError = class {\n    tags() { }\n    private p = 12\n};",{"version":"181818468a51a2348d25d30b10b6b1bb-export class myClass { }","signature":"00d3ac9a4cccbf94649ca3c19d44376a-export declare class myClass {\n}\n","impliedNodeFormat":1}],"options":{"composite":true},"emitDiagnosticsPerFile":[[2,[{"pos":11,"end":27,"code":4094,"category":1,"messageKey":"Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094","messageArgs":["p"],"relatedInformation":[{"pos":11,"end":27,"code":9027,"category":1,"messageKey":"Add_a_type_annotation_to_the_variable_0_9027","messageArgs":["myClassWithError"]}]}]]],"latestChangedDtsFile":"./fileWithoutError.d.ts","emitSignatures":[2]}
 //// [/user/username/projects/solution/app/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -86,13 +86,13 @@ export class myClass {
     }
   ],
   "fileNames": [
-    "lib.es2025.full.d.ts",
+    "lib.es2026.full.d.ts",
     "./fileWithError.ts",
     "./fileWithoutError.ts"
   ],
   "fileInfos": [
     {
-      "fileName": "lib.es2025.full.d.ts",
+      "fileName": "lib.es2026.full.d.ts",
       "version": "8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };",
       "signature": "8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };",
       "affectsGlobalScope": true,
@@ -170,7 +170,7 @@ Directory watches::
   /user/username/projects/solution/app (recursive)
 app/tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts
 *refresh*    /user/username/projects/solution/app/fileWithError.ts
 *refresh*    /user/username/projects/solution/app/fileWithoutError.ts
 Signatures::
@@ -203,7 +203,7 @@ export var myClassWithError = class {
 };
 
 //// [/user/username/projects/solution/app/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":[[2,3]],"fileNames":["lib.es2025.full.d.ts","./fileWithError.ts","./fileWithoutError.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"4f90afddb8044264e464dd4c18c7b59a-export var myClassWithError = class {\n    tags() { }\n    \n};","signature":"767d370715ef9e7e7e190b09dbf6cb11-export declare var myClassWithError: {\n    new (): {\n        tags(): void;\n    };\n};\n","impliedNodeFormat":1},{"version":"181818468a51a2348d25d30b10b6b1bb-export class myClass { }","signature":"00d3ac9a4cccbf94649ca3c19d44376a-export declare class myClass {\n}\n","impliedNodeFormat":1}],"options":{"composite":true},"latestChangedDtsFile":"./fileWithError.d.ts"}
+{"version":"FakeTSVersion","root":[[2,3]],"fileNames":["lib.es2026.full.d.ts","./fileWithError.ts","./fileWithoutError.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"4f90afddb8044264e464dd4c18c7b59a-export var myClassWithError = class {\n    tags() { }\n    \n};","signature":"767d370715ef9e7e7e190b09dbf6cb11-export declare var myClassWithError: {\n    new (): {\n        tags(): void;\n    };\n};\n","impliedNodeFormat":1},{"version":"181818468a51a2348d25d30b10b6b1bb-export class myClass { }","signature":"00d3ac9a4cccbf94649ca3c19d44376a-export declare class myClass {\n}\n","impliedNodeFormat":1}],"options":{"composite":true},"latestChangedDtsFile":"./fileWithError.d.ts"}
 //// [/user/username/projects/solution/app/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -220,13 +220,13 @@ export var myClassWithError = class {
     }
   ],
   "fileNames": [
-    "lib.es2025.full.d.ts",
+    "lib.es2026.full.d.ts",
     "./fileWithError.ts",
     "./fileWithoutError.ts"
   ],
   "fileInfos": [
     {
-      "fileName": "lib.es2025.full.d.ts",
+      "fileName": "lib.es2026.full.d.ts",
       "version": "8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };",
       "signature": "8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };",
       "affectsGlobalScope": true,

@@ -520,10 +520,11 @@ const (
 	ScriptTargetES2023         ScriptTarget = 10
 	ScriptTargetES2024         ScriptTarget = 11
 	ScriptTargetES2025         ScriptTarget = 12
+	ScriptTargetES2026         ScriptTarget = 13
 	ScriptTargetESNext         ScriptTarget = 99
 	ScriptTargetJSON           ScriptTarget = 100
 	ScriptTargetLatest         ScriptTarget = ScriptTargetESNext
-	ScriptTargetLatestStandard ScriptTarget = ScriptTargetES2025
+	ScriptTargetLatestStandard ScriptTarget = ScriptTargetES2026
 )
 
 type JsxEmit int32
