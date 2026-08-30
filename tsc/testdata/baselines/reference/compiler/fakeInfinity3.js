@@ -26,8 +26,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Infinity = exports.m = exports.Foo = void 0;
 var Foo;
 (function (Foo) {
-    Foo[Foo["A"] = Infinity] = "A";
-    Foo[Foo["B"] = -Infinity] = "B";
+    Foo[Foo["A"] = 1 / 0] = "A";
+    Foo[Foo["B"] = -(1 / 0)] = "B";
 })(Foo || (exports.Foo = Foo = {}));
 var X;
 (function (X) {

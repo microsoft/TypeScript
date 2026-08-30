@@ -1,0 +1,70 @@
+//// [tests/cases/compiler/enumInfinityShadowed.ts] ////
+
+=== enumInfinityShadowed.ts ===
+// Fixes https://github.com/microsoft/TypeScript/issues/55091
+// Enum values that evaluate to Infinity, -Infinity, or NaN must not emit
+// bare Infinity/NaN identifiers, because those can be shadowed by local
+// variables. Instead, emit 1/0, -(1/0), and 0/0 respectively.
+
+enum A {
+>A : Symbol(A, Decl(enumInfinityShadowed.ts, 0, 0))
+
+    X = 1 / 0,
+>X : Symbol(A.X, Decl(enumInfinityShadowed.ts, 5, 8))
+
+    Y = -1 / 0,
+>Y : Symbol(A.Y, Decl(enumInfinityShadowed.ts, 6, 14))
+
+    Z = 0 / 0,
+>Z : Symbol(A.Z, Decl(enumInfinityShadowed.ts, 7, 15))
+}
+
+const enum B {
+>B : Symbol(B, Decl(enumInfinityShadowed.ts, 9, 1))
+
+    X = 1 / 0,
+>X : Symbol(B.X, Decl(enumInfinityShadowed.ts, 11, 14))
+
+    Y = -1 / 0,
+>Y : Symbol(B.Y, Decl(enumInfinityShadowed.ts, 12, 14))
+
+    Z = 0 / 0,
+>Z : Symbol(B.Z, Decl(enumInfinityShadowed.ts, 13, 15))
+}
+
+{
+    let Infinity = 3;
+>Infinity : Symbol(Infinity, Decl(enumInfinityShadowed.ts, 18, 7))
+
+    let NaN = 42;
+>NaN : Symbol(NaN, Decl(enumInfinityShadowed.ts, 19, 7))
+
+    console.log(A.X, A.Y, A.Z);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>A.X : Symbol(A.X, Decl(enumInfinityShadowed.ts, 5, 8))
+>A : Symbol(A, Decl(enumInfinityShadowed.ts, 0, 0))
+>X : Symbol(A.X, Decl(enumInfinityShadowed.ts, 5, 8))
+>A.Y : Symbol(A.Y, Decl(enumInfinityShadowed.ts, 6, 14))
+>A : Symbol(A, Decl(enumInfinityShadowed.ts, 0, 0))
+>Y : Symbol(A.Y, Decl(enumInfinityShadowed.ts, 6, 14))
+>A.Z : Symbol(A.Z, Decl(enumInfinityShadowed.ts, 7, 15))
+>A : Symbol(A, Decl(enumInfinityShadowed.ts, 0, 0))
+>Z : Symbol(A.Z, Decl(enumInfinityShadowed.ts, 7, 15))
+
+    console.log(B.X, B.Y, B.Z);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>B.X : Symbol(B.X, Decl(enumInfinityShadowed.ts, 11, 14))
+>B : Symbol(B, Decl(enumInfinityShadowed.ts, 9, 1))
+>X : Symbol(B.X, Decl(enumInfinityShadowed.ts, 11, 14))
+>B.Y : Symbol(B.Y, Decl(enumInfinityShadowed.ts, 12, 14))
+>B : Symbol(B, Decl(enumInfinityShadowed.ts, 9, 1))
+>Y : Symbol(B.Y, Decl(enumInfinityShadowed.ts, 12, 14))
+>B.Z : Symbol(B.Z, Decl(enumInfinityShadowed.ts, 13, 15))
+>B : Symbol(B, Decl(enumInfinityShadowed.ts, 9, 1))
+>Z : Symbol(B.Z, Decl(enumInfinityShadowed.ts, 13, 15))
+}
+

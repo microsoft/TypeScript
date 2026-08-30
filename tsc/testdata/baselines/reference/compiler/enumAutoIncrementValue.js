@@ -11,6 +11,6 @@ enum E {
 "use strict";
 var E;
 (function (E) {
-    E[E["A"] = NaN] = "A";
-    E[E["B"] = NaN] = "B";
+    E[E["A"] = 0 / 0] = "A";
+    E[E["B"] = 0 / 0] = "B";
 })(E || (E = {}));

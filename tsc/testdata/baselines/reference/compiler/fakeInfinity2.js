@@ -21,8 +21,8 @@ export const m = X.f();
 //// [fakeInfinity2.js]
 export var Foo;
 (function (Foo) {
-    Foo[Foo["A"] = Infinity] = "A";
-    Foo[Foo["B"] = -Infinity] = "B";
+    Foo[Foo["A"] = 1 / 0] = "A";
+    Foo[Foo["B"] = -(1 / 0)] = "B";
 })(Foo || (Foo = {}));
 var X;
 (function (X) {

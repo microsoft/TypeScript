@@ -1,0 +1,94 @@
+//// [tests/cases/compiler/enumInfinityShadowed.ts] ////
+
+=== enumInfinityShadowed.ts ===
+// Fixes https://github.com/microsoft/TypeScript/issues/55091
+// Enum values that evaluate to Infinity, -Infinity, or NaN must not emit
+// bare Infinity/NaN identifiers, because those can be shadowed by local
+// variables. Instead, emit 1/0, -(1/0), and 0/0 respectively.
+
+enum A {
+>A : A
+
+    X = 1 / 0,
+>X : A.X
+>1 / 0 : number
+>1 : 1
+>0 : 0
+
+    Y = -1 / 0,
+>Y : A.Y
+>-1 / 0 : number
+>-1 : -1
+>1 : 1
+>0 : 0
+
+    Z = 0 / 0,
+>Z : A.Z
+>0 / 0 : number
+>0 : 0
+>0 : 0
+}
+
+const enum B {
+>B : B
+
+    X = 1 / 0,
+>X : B.X
+>1 / 0 : number
+>1 : 1
+>0 : 0
+
+    Y = -1 / 0,
+>Y : B.Y
+>-1 / 0 : number
+>-1 : -1
+>1 : 1
+>0 : 0
+
+    Z = 0 / 0,
+>Z : B.Z
+>0 / 0 : number
+>0 : 0
+>0 : 0
+}
+
+{
+    let Infinity = 3;
+>Infinity : number
+>3 : 3
+
+    let NaN = 42;
+>NaN : number
+>42 : 42
+
+    console.log(A.X, A.Y, A.Z);
+>console.log(A.X, A.Y, A.Z) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>A.X : A.X
+>A : typeof A
+>X : A.X
+>A.Y : A.Y
+>A : typeof A
+>Y : A.Y
+>A.Z : A.Z
+>A : typeof A
+>Z : A.Z
+
+    console.log(B.X, B.Y, B.Z);
+>console.log(B.X, B.Y, B.Z) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>B.X : B.X
+>B : typeof B
+>X : B.X
+>B.Y : B.Y
+>B : typeof B
+>Y : B.Y
+>B.Z : B.Z
+>B : typeof B
+>Z : B.Z
+}
+

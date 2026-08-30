@@ -43,13 +43,14 @@ func (tx *ConstEnumInliningTransformer) visit(node *ast.Node) *ast.Node {
 				switch v := value.(type) {
 				case jsnum.Number:
 					if v.IsInf() {
+						inf := tx.Factory().NewBinaryExpression(nil, tx.Factory().NewNumericLiteral("1", ast.TokenFlagsNone), nil, tx.Factory().NewToken(ast.KindSlashToken), tx.Factory().NewNumericLiteral("0", ast.TokenFlagsNone))
 						if v.Abs() == v {
-							replacement = tx.Factory().NewIdentifier("Infinity")
+							replacement = inf
 						} else {
-							replacement = tx.Factory().NewPrefixUnaryExpression(ast.KindMinusToken, tx.Factory().NewIdentifier("Infinity"))
+							replacement = tx.Factory().NewPrefixUnaryExpression(ast.KindMinusToken, inf)
 						}
 					} else if v.IsNaN() {
-						replacement = tx.Factory().NewIdentifier("NaN")
+						replacement = tx.Factory().NewBinaryExpression(nil, tx.Factory().NewNumericLiteral("0", ast.TokenFlagsNone), nil, tx.Factory().NewToken(ast.KindSlashToken), tx.Factory().NewNumericLiteral("0", ast.TokenFlagsNone))
 					} else if v.Abs() == v {
 						replacement = tx.Factory().NewNumericLiteral(v.String(), ast.TokenFlagsNone)
 					} else {
