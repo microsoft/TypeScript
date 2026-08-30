@@ -225,6 +225,10 @@ func IsTupleType(t *Type) bool {
 	return isTupleType(t)
 }
 
+func IsTupleTypeTarget(t *Type) bool {
+	return isTupleType(t) && t.Target() == t
+}
+
 func (c *Checker) IsArrayType(t *Type) bool {
 	return c.isArrayType(t)
 }

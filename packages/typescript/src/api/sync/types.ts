@@ -165,8 +165,10 @@ export interface Type {
     isBooleanLiteralType(): this is BooleanLiteralType;
     /** Whether this type is a type reference */
     isTypeReference(): this is TypeReference;
-    /** Whether this type is a tuple type */
-    isTupleType(): this is TupleType;
+    /** Whether this type is a tuple type reference */
+    isTupleType(): this is TupleTypeReference;
+    /** Whether this type owns tuple metadata */
+    isTupleTypeTarget(): this is TupleType;
     /** Whether this type is an index type (`keyof T`) */
     isIndexType(): this is IndexType;
     /** Whether this type is an indexed access type (`T[K]`) */
@@ -244,6 +246,15 @@ export interface TypeReference extends ObjectType {
     };
 }
 
+/** References to tuple types */
+export interface TupleTypeReference extends TypeReference {
+    /** Get the tuple type that describes this reference's shape */
+    getTarget: {
+        (): TupleType;
+        gen(): Generator<ProtocolRequest, TupleType, ProtocolResponse["result"]>;
+    };
+}
+
 /** Interface types — classes and interfaces (ObjectFlags.ClassOrInterface) */
 export interface InterfaceType extends TypeReference {
     /** Get all type parameters (outer + local, excluding thisType) */
@@ -263,8 +274,13 @@ export interface InterfaceType extends TypeReference {
     };
 }
 
-/** Tuple types (ObjectFlags.Tuple) */
+/** Tuple type targets (ObjectFlags.Tuple) */
 export interface TupleType extends InterfaceType {
+    /** Get this tuple target */
+    getTarget: {
+        (): TupleType;
+        gen(): Generator<ProtocolRequest, TupleType, ProtocolResponse["result"]>;
+    };
     /** Per-element flags (Required, Optional, Rest, Variadic) */
     readonly elementFlags: readonly ElementFlags[];
     /** Number of initial required or optional elements */

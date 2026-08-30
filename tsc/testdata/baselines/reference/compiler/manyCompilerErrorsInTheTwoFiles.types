@@ -5,18 +5,14 @@ const a =!@#!@$
 >a : boolean
 >!@ : boolean
 > : any
->!@$ : boolean
 >$ : any
 
 const b = !@#!@#!@#!
 >b : boolean
 >!@ : boolean
 > : any
->!@ : boolean
 > : any
->!@ : boolean
 > : any
->!OK! : boolean
 
 OK!
 >OK! : any
