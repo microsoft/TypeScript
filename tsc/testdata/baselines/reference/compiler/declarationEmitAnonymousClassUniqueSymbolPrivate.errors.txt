@@ -1,0 +1,25 @@
+index.ts(3,14): error TS4023: Exported variable 'f' has or is using name 'brand' from external module "helper" but cannot be named.
+index.ts(3,14): error TS4094: Property '__@brand' of exported anonymous class type may not be private or protected.
+
+
+==== helper.ts (0 errors) ====
+    declare const brand: unique symbol;
+    
+    class Foo {
+        private [brand]: number = 1;
+    }
+    
+    export function makeFoo() {
+        return new Foo();
+    }
+    
+==== index.ts (2 errors) ====
+    import { makeFoo } from "./helper";
+    
+    export const f = () => makeFoo();
+                 ~
+!!! error TS4023: Exported variable 'f' has or is using name 'brand' from external module "helper" but cannot be named.
+                 ~
+!!! error TS4094: Property '__@brand' of exported anonymous class type may not be private or protected.
+!!! related TS9027 index.ts:3:14: Add a type annotation to the variable f.
+    

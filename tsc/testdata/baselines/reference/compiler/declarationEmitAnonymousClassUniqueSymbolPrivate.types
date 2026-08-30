@@ -1,0 +1,33 @@
+//// [tests/cases/compiler/declarationEmitAnonymousClassUniqueSymbolPrivate.ts] ////
+
+=== helper.ts ===
+declare const brand: unique symbol;
+>brand : unique symbol
+
+class Foo {
+>Foo : Foo
+
+    private [brand]: number = 1;
+>[brand] : number
+>brand : unique symbol
+>1 : 1
+}
+
+export function makeFoo() {
+>makeFoo : () => Foo
+
+    return new Foo();
+>new Foo() : Foo
+>Foo : typeof Foo
+}
+
+=== index.ts ===
+import { makeFoo } from "./helper";
+>makeFoo : () => Foo
+
+export const f = () => makeFoo();
+>f : () => Foo
+>() => makeFoo() : () => Foo
+>makeFoo() : Foo
+>makeFoo : () => Foo
+

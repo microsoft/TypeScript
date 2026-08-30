@@ -2680,8 +2680,7 @@ func (b *NodeBuilderImpl) createTypeNodesFromResolvedType(resolvedType *Structur
 				continue
 			}
 			if getDeclarationModifierFlagsFromSymbol(propertySymbol)&(ast.ModifierFlagsPrivate|ast.ModifierFlagsProtected) != 0 {
-				// Unique-symbol names use the "\xFE" sentinel; diagnostics must show the escaped "__" form.
-				b.ctx.tracker.ReportPrivateInBaseOfClassExpression(ast.EscapeInternalSymbolName(propertySymbol.Name))
+				b.ctx.tracker.ReportPrivateInBaseOfClassExpression(escapeInternalNameForTS4094(propertySymbol.Name))
 			}
 			if IsPrivateIdentifierSymbol(propertySymbol) {
 				b.ctx.tracker.ReportPrivateInBaseOfClassExpression(ast.SymbolName(propertySymbol))
@@ -3635,4 +3634,20 @@ func (b *NodeBuilderImpl) lookupExpressionChainTypeArgumentNodes(chain []*ast.Sy
 
 func (b *NodeBuilderImpl) shouldWriteTypeParametersInQualifiedName(chain []*ast.Symbol, index int) bool {
 	return b.ctx.flags&nodebuilder.FlagsWriteTypeParametersInQualifiedName != 0 && index < len(chain)-1
+}
+
+// escapeInternalNameForTS4094 prints unique-symbol names as "__@brand", not the "\xFE" sentinel
+// and not the process-global "@<symbolId>" suffix (ast.nextSymbolId), which would flake baselines.
+func escapeInternalNameForTS4094(name string) string {
+	escaped := ast.EscapeInternalSymbolName(name)
+	at := strings.LastIndexByte(escaped, '@')
+	if at <= 0 || at+1 >= len(escaped) {
+		return escaped
+	}
+	for i := at + 1; i < len(escaped); i++ {
+		if escaped[i] < '0' || escaped[i] > '9' {
+			return escaped
+		}
+	}
+	return escaped[:at]
 }
