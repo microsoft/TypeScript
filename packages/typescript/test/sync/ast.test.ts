@@ -16,6 +16,7 @@ import {
     isJSDocLink,
     isNamedImports,
     isValidTypeOnlyAliasUseSite,
+    NodeFlags,
     SyntaxKind,
     TokenFlags,
 } from "@typescript/typescript/unstable/ast";
@@ -1201,6 +1202,12 @@ describe("RemoteNode + child/token getters", () => {
         const visit = (node: Node): void => {
             const children = node.getChildren(sf);
 
+            // Reparsed subtrees (JSDoc types materialized into the AST) must never surface:
+            // their positions point inside the comment, not into the parent's token range.
+            for (const child of children) {
+                assert.ok(!(child.flags & NodeFlags.Reparsed), `reparsed child leaked (kind ${child.kind} in kind ${node.kind})`);
+            }
+
             assert.strictEqual(node.getChildCount(sf), children.length);
             for (let i = 0; i < children.length; i++) {
                 assert.strictEqual(node.getChildAt(i, sf), children[i]);
@@ -1294,9 +1301,22 @@ describe("RemoteNode + child/token getters", () => {
         { name: "empty constructs", source: "function f() {} class C {} interface I {} enum E {} { } ; namespace N {}" },
         { name: "JSX element with attributes and children", source: 'const e = <div id="a" className={cls} {...rest}>hello {name}<Child /></div>;', jsx: true },
         // Reparsed JSDoc types in .js files must not surface as children: their positions
-        // point inside the comment, not into the parent's token range.
+        // point inside the comment, not into the parent's token range. Each entry stresses a
+        // different reparse shape (single nodes, whole NodeArrays, mixed arrays, statements).
         { name: "JS with reparsed @param/@returns types", source: "/**\n * @param {number} a the a\n * @returns {string} something\n */\nfunction f(a) { return String(a); }\n", js: true },
         { name: "JS with @type, @template and reparsed type parameters", source: "/** @type {number} */\nconst n = 1;\n/**\n * @template T\n * @param {T} x\n */\nfunction id(x) { return x; }\n", js: true },
+        { name: "JS with optional, default and rest @param variants", source: "/**\n * @param {number} [a]\n * @param {string} [b=\"x\"]\n * @param {...number} rest\n */\nfunction f(a, b, ...rest) {}\n", js: true },
+        { name: "JS with a @type cast on a parenthesized expression", source: "function g() { return 1; }\nconst x = /** @type {number} */ (g());\n", js: true },
+        { name: "JS with @typedef and @property hoisted into statements", source: "/**\n * @typedef {Object} Pt\n * @property {number} x\n * @property {number} y\n */\nconst p = { x: 1, y: 2 };\n", js: true },
+        { name: "JS with @callback", source: "/**\n * @callback Cb\n * @param {number} n\n * @returns {void}\n */\nlet cb;\n", js: true },
+        { name: "JS with constrained and multiple @template tags", source: "/**\n * @template {object} T\n * @template U\n * @param {T} a\n * @param {U} b\n */\nfunction pair(a, b) { return [a, b]; }\n", js: true },
+        { name: "JS with @this inserted into the parameter list", source: "/**\n * @this {object}\n * @param {number} n\n */\nfunction handler(n) { return this; }\n", js: true },
+        { name: "JS class with @extends type arguments and member tags", source: "class Base {}\n/** @extends {Base} */\nclass C extends Base {\n    /** @param {number} v */\n    constructor(v) { super(); this.v = v; }\n    /** @returns {number} */\n    get value() { return this.v; }\n}\n", js: true },
+        { name: "JS with @enum", source: "/** @enum {number} */\nconst E = { A: 1, B: 2 };\n", js: true },
+        { name: "JS with trailing orphan @typedef attached to EndOfFile", source: "let x = 1;\n/** @typedef {number} N */", js: true },
+        { name: "JS with @satisfies", source: "/** @satisfies {{ a: number }} */\nconst o = { a: 1 };\n", js: true },
+        { name: "JS with @import declaration", source: "/** @import { T } from \"./t\" */\n/** @type {number} */\nlet v = 1;\n", js: true },
+        { name: "JS with reparsed types on exported and nested functions", source: "/** @param {number} a */\nexport function outer(a) {\n    /** @returns {number} */\n    function inner() { return a; }\n    return inner();\n}\n", js: true },
     ];
 
     for (const entry of corpus) {
