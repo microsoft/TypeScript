@@ -183,7 +183,9 @@ func (f *missingMemberFixer) createModifiers(symbol *ast.Symbol, declaration *as
 	if declaration != nil {
 		effective := checker.GetDeclarationModifierFlagsFromSymbol(symbol)
 		modifierFlags = effective & ast.ModifierFlagsStatic
-		if effective&ast.ModifierFlagsPublic != 0 {
+		if effective&ast.ModifierFlagsPrivate != 0 {
+			modifierFlags |= ast.ModifierFlagsPrivate
+		} else if effective&ast.ModifierFlagsPublic != 0 {
 			modifierFlags |= ast.ModifierFlagsPublic
 		} else if effective&ast.ModifierFlagsProtected != 0 {
 			modifierFlags |= ast.ModifierFlagsProtected
