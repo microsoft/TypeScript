@@ -603,7 +603,7 @@ func (r *EmitResolver) requiresAddingImplicitUndefined(declaration *ast.Node, sy
 		if isMapped && symbol.Flags&ast.SymbolFlagsOptional != 0 {
 			mappedType := r.checker.valueSymbolLinks.Get(symbol).containingType
 			mappedType = core.OrElse(mappedType.AsMappedType().target, mappedType)
-			if getMappedTypeModifiers(mappedType)&MappedTypeModifiersIncludeOptional != 0 || !typeNodeContainsUndefined(mappedType.AsMappedType().declaration.Type) {
+			if getMappedTypeModifiers(mappedType)&MappedTypeModifiersIncludeOptional != 0 || !mappedTypeTemplateContainsNonMissingUndefined(r.checker, mappedType) {
 				return false
 			}
 		}
@@ -618,16 +618,6 @@ func (r *EmitResolver) requiresAddingImplicitUndefined(declaration *ast.Node, sy
 	default:
 		panic("Node cannot possibly require adding undefined")
 	}
-}
-
-func typeNodeContainsUndefined(node *ast.Node) bool {
-	if node == nil {
-		return false
-	}
-	if node.Kind == ast.KindUndefinedKeyword {
-		return true
-	}
-	return node.ForEachChild(typeNodeContainsUndefined)
 }
 
 func (r *EmitResolver) requiresAddingImplicitUndefinedWorker(parameter *ast.Node, enclosingDeclaration *ast.Node) bool {
