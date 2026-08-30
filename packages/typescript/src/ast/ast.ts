@@ -165,7 +165,7 @@ export interface SourceFile extends Node {
     /** @internal */
     tokenCache?: Map<string, Node>;
     /** @internal */
-    childrenCache?: WeakMap<Node, readonly Node[]>;
+    childrenCache?: Map<Node, readonly Node[]>;
 }
 
 // ── Token hierarchy ──

@@ -17,6 +17,7 @@ import {
     isPropertyNameLiteral,
     isTokenKind,
 } from "./is.ts";
+import type { Scanner } from "./scanner.ts";
 import {
     createScanner,
     skipTrivia,
@@ -644,7 +645,7 @@ export function getChildren(node: Node, sourceFile: SourceFile = node.getSourceF
         assertHasRealPosition(node);
     }
 
-    const cache = (sourceFile.childrenCache ??= new WeakMap<Node, readonly Node[]>());
+    const cache = (sourceFile.childrenCache ??= new Map<Node, readonly Node[]>());
     const cached = cache.get(node);
 
     if (cached !== undefined) {
@@ -667,15 +668,17 @@ function createChildren(node: Node, sourceFile: SourceFile): readonly Node[] {
         return children;
     }
 
+    // One scanner serves every run of synthetic tokens materialized for this node.
+    const scanner = createScanner(/*skipTrivia*/ true, sourceFile.languageVariant, sourceFile.text);
     let pos = node.pos;
     const processNode = (child: Node): undefined => {
-        addSyntheticNodes(children, pos, child.pos, node, sourceFile);
+        addSyntheticNodes(children, pos, child.pos, node, sourceFile, scanner);
         children.push(child);
         pos = child.end;
     };
     const processNodes = (nodes: NodeArray<Node>): undefined => {
-        addSyntheticNodes(children, pos, nodes.pos, node, sourceFile);
-        children.push(createSyntaxListNode(nodes, node, sourceFile));
+        addSyntheticNodes(children, pos, nodes.pos, node, sourceFile, scanner);
+        children.push(createSyntaxListNode(nodes, node, sourceFile, scanner));
         pos = nodes.end;
     };
 
@@ -687,15 +690,16 @@ function createChildren(node: Node, sourceFile: SourceFile): readonly Node[] {
     }
     pos = node.pos;
     node.forEachChild(processNode, processNodes);
-    addSyntheticNodes(children, pos, node.end, node, sourceFile);
+    addSyntheticNodes(children, pos, node.end, node, sourceFile, scanner);
     return children;
 }
 
-function addSyntheticNodes(children: Node[], pos: number, end: number, parent: Node, sourceFile: SourceFile): void {
+function addSyntheticNodes(children: Node[], pos: number, end: number, parent: Node, sourceFile: SourceFile, scanner: Scanner): void {
     if (pos >= end) {
         return;
     }
-    const scanner = getScannerForSourceFile(sourceFile, pos);
+    scanner.resetTokenState(pos);
+    scanner.scan();
     while (pos < end) {
         const token = scanner.getToken();
         const tokenEnd = scanner.getTokenEnd();
@@ -713,15 +717,15 @@ function addSyntheticNodes(children: Node[], pos: number, end: number, parent: N
     }
 }
 
-function createSyntaxListNode(nodes: NodeArray<Node>, parent: Node, sourceFile: SourceFile): Node {
+function createSyntaxListNode(nodes: NodeArray<Node>, parent: Node, sourceFile: SourceFile, scanner: Scanner): Node {
     const listChildren: Node[] = [];
     let pos = nodes.pos;
     for (const child of nodes) {
-        addSyntheticNodes(listChildren, pos, child.pos, parent, sourceFile);
+        addSyntheticNodes(listChildren, pos, child.pos, parent, sourceFile, scanner);
         listChildren.push(child);
         pos = child.end;
     }
-    addSyntheticNodes(listChildren, pos, nodes.end, parent, sourceFile);
+    addSyntheticNodes(listChildren, pos, nodes.end, parent, sourceFile, scanner);
     const list = createSyntaxList(listChildren) as Mutable<Node>;
     list.pos = nodes.pos;
     list.end = nodes.end;
