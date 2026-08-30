@@ -1248,9 +1248,9 @@ describe("RemoteNode + child/token getters", () => {
     }
 
     function checkSource(source: string, opts?: { jsx?: boolean; js?: boolean; }): void {
-        const ext = opts?.jsx ? "tsx" : opts?.js ? "js" : "ts";
-        const tsconfig = opts?.jsx ? `{ "compilerOptions": { "jsx": "react-jsx" } }`
-            : opts?.js ? `{ "compilerOptions": { "allowJs": true, "checkJs": true } }`
+        const ext = opts?.js ? (opts?.jsx ? "jsx" : "js") : opts?.jsx ? "tsx" : "ts";
+        const tsconfig = opts?.js ? `{ "compilerOptions": { "allowJs": true, "checkJs": true, "jsx": "react-jsx" } }`
+            : opts?.jsx ? `{ "compilerOptions": { "jsx": "react-jsx" } }`
             : "{}";
         const api = spawnAPI({ "/tsconfig.json": tsconfig, [`/src/c.${ext}`]: source });
         try {
@@ -1317,6 +1317,8 @@ describe("RemoteNode + child/token getters", () => {
         { name: "JS with @satisfies", source: "/** @satisfies {{ a: number }} */\nconst o = { a: 1 };\n", js: true },
         { name: "JS with @import declaration", source: "/** @import { T } from \"./t\" */\n/** @type {number} */\nlet v = 1;\n", js: true },
         { name: "JS with reparsed types on exported and nested functions", source: "/** @param {number} a */\nexport function outer(a) {\n    /** @returns {number} */\n    function inner() { return a; }\n    return inner();\n}\n", js: true },
+        { name: "JSX component with reparsed @param props type", source: "/**\n * @param {{ name: string }} props\n * @returns {object}\n */\nexport function Greeting(props) {\n    return <div className=\"greeting\">hello {props.name}<br /></div>;\n}\n", js: true, jsx: true },
+        { name: "JSX with @type cast and @typedef around elements", source: "/**\n * @typedef {Object} Item\n * @property {string} label\n */\nconst item = /** @type {Item} */ ({ label: \"x\" });\nconst el = <span title={item.label}>{item.label}</span>;\n", js: true, jsx: true },
     ];
 
     for (const entry of corpus) {
