@@ -668,11 +668,7 @@ function createChildren(node: Node, sourceFile: SourceFile): readonly Node[] {
     }
 
     let pos = node.pos;
-    const consumed = new Set<Node>();
     const processNode = (child: Node): undefined => {
-        if (consumed.has(child)) {
-            return;
-        }
         addSyntheticNodes(children, pos, child.pos, node, sourceFile);
         children.push(child);
         pos = child.end;
@@ -681,9 +677,6 @@ function createChildren(node: Node, sourceFile: SourceFile): readonly Node[] {
         addSyntheticNodes(children, pos, nodes.pos, node, sourceFile);
         children.push(createSyntaxListNode(nodes, node, sourceFile));
         pos = nodes.end;
-        for (const element of nodes) {
-            consumed.add(element);
-        }
     };
 
     // JSDoc attached to the node is leading content, processed first.
