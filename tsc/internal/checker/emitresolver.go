@@ -595,8 +595,17 @@ func (r *EmitResolver) requiresAddingImplicitUndefined(declaration *ast.Node, sy
 		if symbol == nil {
 			symbol = r.checker.getSymbolOfDeclaration(declaration)
 		}
-		if symbol.Flags&ast.SymbolFlagsProperty == 0 || symbol.CheckFlags&ast.CheckFlagsMapped == 0 {
+		isReverseMapped := r.checker.ReverseMappedSymbolLinks.Has(symbol) && r.checker.ReverseMappedSymbolLinks.Get(symbol).mappedType != nil
+		isMapped := symbol.CheckFlags&ast.CheckFlagsMapped != 0
+		if symbol.Flags&ast.SymbolFlagsProperty == 0 || !isReverseMapped && !isMapped {
 			return false
+		}
+		if isMapped && symbol.Flags&ast.SymbolFlagsOptional != 0 {
+			mappedType := r.checker.valueSymbolLinks.Get(symbol).containingType
+			mappedType = core.OrElse(mappedType.AsMappedType().target, mappedType)
+			if getMappedTypeModifiers(mappedType)&MappedTypeModifiersIncludeOptional != 0 || !typeNodeContainsUndefined(mappedType.AsMappedType().declaration.Type) {
+				return false
+			}
 		}
 		t := r.checker.getTypeOfSymbol(symbol)
 		if !containsNonMissingUndefinedType(r.checker, t) {
@@ -609,6 +618,16 @@ func (r *EmitResolver) requiresAddingImplicitUndefined(declaration *ast.Node, sy
 	default:
 		panic("Node cannot possibly require adding undefined")
 	}
+}
+
+func typeNodeContainsUndefined(node *ast.Node) bool {
+	if node == nil {
+		return false
+	}
+	if node.Kind == ast.KindUndefinedKeyword {
+		return true
+	}
+	return node.ForEachChild(typeNodeContainsUndefined)
 }
 
 func (r *EmitResolver) requiresAddingImplicitUndefinedWorker(parameter *ast.Node, enclosingDeclaration *ast.Node) bool {
