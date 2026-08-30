@@ -1,0 +1,192 @@
+//// [tests/cases/compiler/unicodeEscapesInNames03.ts] ////
+
+=== propertyNameWithEscape1.ts ===
+export const foo = {\u0078: 10};
+>foo : Symbol(foo, Decl(propertyNameWithEscape1.ts, 0, 12))
+>\u0078 : Symbol(\u0078, Decl(propertyNameWithEscape1.ts, 0, 20))
+
+foo.x++;
+>foo.x : Symbol(\u0078, Decl(propertyNameWithEscape1.ts, 0, 20))
+>foo : Symbol(foo, Decl(propertyNameWithEscape1.ts, 0, 12))
+>x : Symbol(\u0078, Decl(propertyNameWithEscape1.ts, 0, 20))
+
+=== propertyNameWithEscape2.ts ===
+export const foo = {x\u0078: 10};
+>foo : Symbol(foo, Decl(propertyNameWithEscape2.ts, 0, 12))
+>x\u0078 : Symbol(x\u0078, Decl(propertyNameWithEscape2.ts, 0, 20))
+
+foo.xx++;
+>foo.xx : Symbol(x\u0078, Decl(propertyNameWithEscape2.ts, 0, 20))
+>foo : Symbol(foo, Decl(propertyNameWithEscape2.ts, 0, 12))
+>xx : Symbol(x\u0078, Decl(propertyNameWithEscape2.ts, 0, 20))
+
+=== propertyNameWithEscape3.ts ===
+export const foo = {a\u0062c\u0064e: 10};
+>foo : Symbol(foo, Decl(propertyNameWithEscape3.ts, 0, 12))
+>a\u0062c\u0064e : Symbol(a\u0062c\u0064e, Decl(propertyNameWithEscape3.ts, 0, 20))
+
+foo.abcde++;
+>foo.abcde : Symbol(a\u0062c\u0064e, Decl(propertyNameWithEscape3.ts, 0, 20))
+>foo : Symbol(foo, Decl(propertyNameWithEscape3.ts, 0, 12))
+>abcde : Symbol(a\u0062c\u0064e, Decl(propertyNameWithEscape3.ts, 0, 20))
+
+=== propertyNameWithExtendedEscape1.ts ===
+export const foo = {\u{78}: 10};
+>foo : Symbol(foo, Decl(propertyNameWithExtendedEscape1.ts, 0, 12))
+>\u{78} : Symbol(\u{78}, Decl(propertyNameWithExtendedEscape1.ts, 0, 20))
+
+foo.x++;
+>foo.x : Symbol(\u{78}, Decl(propertyNameWithExtendedEscape1.ts, 0, 20))
+>foo : Symbol(foo, Decl(propertyNameWithExtendedEscape1.ts, 0, 12))
+>x : Symbol(\u{78}, Decl(propertyNameWithExtendedEscape1.ts, 0, 20))
+
+=== propertyNameWithExtendedEscape2.ts ===
+export const foo = {x\u{78}: 10};
+>foo : Symbol(foo, Decl(propertyNameWithExtendedEscape2.ts, 0, 12))
+>x\u{78} : Symbol(x\u{78}, Decl(propertyNameWithExtendedEscape2.ts, 0, 20))
+
+foo.xx++;
+>foo.xx : Symbol(x\u{78}, Decl(propertyNameWithExtendedEscape2.ts, 0, 20))
+>foo : Symbol(foo, Decl(propertyNameWithExtendedEscape2.ts, 0, 12))
+>xx : Symbol(x\u{78}, Decl(propertyNameWithExtendedEscape2.ts, 0, 20))
+
+=== propertyNameWithExtendedEscape3.ts ===
+export const foo = {a\u{62}c\u{64}e: 10};
+>foo : Symbol(foo, Decl(propertyNameWithExtendedEscape3.ts, 0, 12))
+>a\u{62}c\u{64}e : Symbol(a\u{62}c\u{64}e, Decl(propertyNameWithExtendedEscape3.ts, 0, 20))
+
+foo.abcde++;
+>foo.abcde : Symbol(a\u{62}c\u{64}e, Decl(propertyNameWithExtendedEscape3.ts, 0, 20))
+>foo : Symbol(foo, Decl(propertyNameWithExtendedEscape3.ts, 0, 12))
+>abcde : Symbol(a\u{62}c\u{64}e, Decl(propertyNameWithExtendedEscape3.ts, 0, 20))
+
+// Shorthand property names
+
+=== shorthandPropertyNameWithEscape1.ts ===
+export let \u0078 = 10;
+>\u0078 : Symbol(\u0078, Decl(shorthandPropertyNameWithEscape1.ts, 0, 10))
+
+export const foo = {\u0078};
+>foo : Symbol(foo, Decl(shorthandPropertyNameWithEscape1.ts, 1, 12))
+>\u0078 : Symbol(\u0078, Decl(shorthandPropertyNameWithEscape1.ts, 1, 20))
+
+foo.x++;
+>foo.x : Symbol(\u0078, Decl(shorthandPropertyNameWithEscape1.ts, 1, 20))
+>foo : Symbol(foo, Decl(shorthandPropertyNameWithEscape1.ts, 1, 12))
+>x : Symbol(\u0078, Decl(shorthandPropertyNameWithEscape1.ts, 1, 20))
+
+=== shorthandPropertyNameWithEscape2.ts ===
+export let x\u0078 = 10;
+>x\u0078 : Symbol(x\u0078, Decl(shorthandPropertyNameWithEscape2.ts, 0, 10))
+
+export const foo = {x\u0078};
+>foo : Symbol(foo, Decl(shorthandPropertyNameWithEscape2.ts, 1, 12))
+>x\u0078 : Symbol(x\u0078, Decl(shorthandPropertyNameWithEscape2.ts, 1, 20))
+
+foo.xx++;
+>foo.xx : Symbol(x\u0078, Decl(shorthandPropertyNameWithEscape2.ts, 1, 20))
+>foo : Symbol(foo, Decl(shorthandPropertyNameWithEscape2.ts, 1, 12))
+>xx : Symbol(x\u0078, Decl(shorthandPropertyNameWithEscape2.ts, 1, 20))
+
+=== shorthandPropertyNameWithEscape3.ts ===
+export let a\u0062c\u0064e = 10;
+>a\u0062c\u0064e : Symbol(a\u0062c\u0064e, Decl(shorthandPropertyNameWithEscape3.ts, 0, 10))
+
+export const foo = {a\u0062c\u0064e};
+>foo : Symbol(foo, Decl(shorthandPropertyNameWithEscape3.ts, 1, 12))
+>a\u0062c\u0064e : Symbol(a\u0062c\u0064e, Decl(shorthandPropertyNameWithEscape3.ts, 1, 20))
+
+foo.abcde++;
+>foo.abcde : Symbol(a\u0062c\u0064e, Decl(shorthandPropertyNameWithEscape3.ts, 1, 20))
+>foo : Symbol(foo, Decl(shorthandPropertyNameWithEscape3.ts, 1, 12))
+>abcde : Symbol(a\u0062c\u0064e, Decl(shorthandPropertyNameWithEscape3.ts, 1, 20))
+
+=== shorthandPropertyNameWithExtendedEscape1.ts ===
+export let \u{78} = 10;
+>\u{78} : Symbol(\u{78}, Decl(shorthandPropertyNameWithExtendedEscape1.ts, 0, 10))
+
+export const foo = {\u{78}};
+>foo : Symbol(foo, Decl(shorthandPropertyNameWithExtendedEscape1.ts, 1, 12))
+>\u{78} : Symbol(\u{78}, Decl(shorthandPropertyNameWithExtendedEscape1.ts, 1, 20))
+
+foo.x++;
+>foo.x : Symbol(\u{78}, Decl(shorthandPropertyNameWithExtendedEscape1.ts, 1, 20))
+>foo : Symbol(foo, Decl(shorthandPropertyNameWithExtendedEscape1.ts, 1, 12))
+>x : Symbol(\u{78}, Decl(shorthandPropertyNameWithExtendedEscape1.ts, 1, 20))
+
+=== shorthandPropertyNameWithExtendedEscape2.ts ===
+export let x\u{78} = 10;
+>x\u{78} : Symbol(x\u{78}, Decl(shorthandPropertyNameWithExtendedEscape2.ts, 0, 10))
+
+export const foo = {x\u{78}};
+>foo : Symbol(foo, Decl(shorthandPropertyNameWithExtendedEscape2.ts, 1, 12))
+>x\u{78} : Symbol(x\u{78}, Decl(shorthandPropertyNameWithExtendedEscape2.ts, 1, 20))
+
+foo.xx++;
+>foo.xx : Symbol(x\u{78}, Decl(shorthandPropertyNameWithExtendedEscape2.ts, 1, 20))
+>foo : Symbol(foo, Decl(shorthandPropertyNameWithExtendedEscape2.ts, 1, 12))
+>xx : Symbol(x\u{78}, Decl(shorthandPropertyNameWithExtendedEscape2.ts, 1, 20))
+
+=== shorthandPropertyNameWithExtendedEscape3.ts ===
+export let a\u{62}c\u{64}e = 10;
+>a\u{62}c\u{64}e : Symbol(a\u{62}c\u{64}e, Decl(shorthandPropertyNameWithExtendedEscape3.ts, 0, 10))
+
+export const foo = {a\u{62}c\u{64}e};
+>foo : Symbol(foo, Decl(shorthandPropertyNameWithExtendedEscape3.ts, 1, 12))
+>a\u{62}c\u{64}e : Symbol(a\u{62}c\u{64}e, Decl(shorthandPropertyNameWithExtendedEscape3.ts, 1, 20))
+
+foo.abcde++;
+>foo.abcde : Symbol(a\u{62}c\u{64}e, Decl(shorthandPropertyNameWithExtendedEscape3.ts, 1, 20))
+>foo : Symbol(foo, Decl(shorthandPropertyNameWithExtendedEscape3.ts, 1, 12))
+>abcde : Symbol(a\u{62}c\u{64}e, Decl(shorthandPropertyNameWithExtendedEscape3.ts, 1, 20))
+
+// Type variables
+
+=== typeVariableWithEscape1.ts ===
+export type \u0078 = 10;
+>\u0078 : Symbol(\u0078, Decl(typeVariableWithEscape1.ts, 0, 0))
+
+declare const foo: x;
+>foo : Symbol(foo, Decl(typeVariableWithEscape1.ts, 1, 13))
+>x : Symbol(\u0078, Decl(typeVariableWithEscape1.ts, 0, 0))
+
+=== typeVariableWithEscape2.ts ===
+export type x\u0078 = 10;
+>x\u0078 : Symbol(x\u0078, Decl(typeVariableWithEscape2.ts, 0, 0))
+
+declare const foo: xx;
+>foo : Symbol(foo, Decl(typeVariableWithEscape2.ts, 1, 13))
+>xx : Symbol(x\u0078, Decl(typeVariableWithEscape2.ts, 0, 0))
+
+=== typeVariableWithEscape3.ts ===
+export type a\u0062c\u0064e = 10;
+>a\u0062c\u0064e : Symbol(a\u0062c\u0064e, Decl(typeVariableWithEscape3.ts, 0, 0))
+
+declare const foo: abcde;
+>foo : Symbol(foo, Decl(typeVariableWithEscape3.ts, 1, 13))
+>abcde : Symbol(a\u0062c\u0064e, Decl(typeVariableWithEscape3.ts, 0, 0))
+
+=== typeVariableWithExtendedEscape1.ts ===
+export type \u{78} = 10;
+>\u{78} : Symbol(\u{78}, Decl(typeVariableWithExtendedEscape1.ts, 0, 0))
+
+declare const foo: x;
+>foo : Symbol(foo, Decl(typeVariableWithExtendedEscape1.ts, 1, 13))
+>x : Symbol(\u{78}, Decl(typeVariableWithExtendedEscape1.ts, 0, 0))
+
+=== typeVariableWithExtendedEscape2.ts ===
+export type x\u{78} = 10;
+>x\u{78} : Symbol(x\u{78}, Decl(typeVariableWithExtendedEscape2.ts, 0, 0))
+
+declare const foo: xx;
+>foo : Symbol(foo, Decl(typeVariableWithExtendedEscape2.ts, 1, 13))
+>xx : Symbol(x\u{78}, Decl(typeVariableWithExtendedEscape2.ts, 0, 0))
+
+=== typeVariableWithExtendedEscape3.ts ===
+export type a\u{62}c\u{64}e = 10;
+>a\u{62}c\u{64}e : Symbol(a\u{62}c\u{64}e, Decl(typeVariableWithExtendedEscape3.ts, 0, 0))
+
+declare const foo: abcde;
+>foo : Symbol(foo, Decl(typeVariableWithExtendedEscape3.ts, 1, 13))
+>abcde : Symbol(a\u{62}c\u{64}e, Decl(typeVariableWithExtendedEscape3.ts, 0, 0))
+

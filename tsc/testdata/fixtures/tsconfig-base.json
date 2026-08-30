@@ -1,0 +1,32 @@
+{
+    "compilerOptions": {
+        "rootDir": ".",
+        "outDir": "../built/local",
+
+        "pretty": true,
+        "lib": ["es2020"],
+        "target": "es2020",
+        "module": "NodeNext",
+        "moduleResolution": "NodeNext",
+
+        "declaration": true,
+        "declarationMap": true,
+        "sourceMap": true,
+        "composite": true,
+        "emitDeclarationOnly": true,
+        "isolatedDeclarations": true,
+
+        "strict": true,
+        "strictBindCallApply": false,
+        "useUnknownInCatchVariables": false,
+        "noImplicitOverride": true,
+
+        "skipLibCheck": true,
+
+        "alwaysStrict": true,
+        "preserveConstEnums": true,
+        "newLine": "lf",
+
+        "types": []
+    }
+}

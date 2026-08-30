@@ -484,12 +484,21 @@ func basicType(t *types.Basic) string {
 
 func (r *typeRenderer) namedType(named *types.Named) string {
 	obj := named.Obj()
+	if obj.Name() == "error" && obj.Pkg() == nil {
+		return "string"
+	}
 	qualifiedName := obj.Pkg().Path() + "." + obj.Name()
 	switch qualifiedName {
 	case r.apiPackagePath + ".DocumentIdentifier":
 		r.documentIdentifier = obj
 		return "DocumentIdentifier"
 	case "github.com/microsoft/TypeScript/tsc/internal/packagejson.JSONValue":
+		return "unknown"
+	case "github.com/microsoft/TypeScript/tsc/internal/json.Value":
+		return "unknown"
+	case "github.com/go-json-experiment/json/jsontext.Value": // multiple ways to refer to this type depending on `go` version
+		return "unknown"
+	case "encoding/json/jsontext.Value":
 		return "unknown"
 	case "github.com/microsoft/TypeScript/tsc/internal/core.Tristate":
 		return "boolean"
@@ -646,7 +655,11 @@ func (r *typeRenderer) importDeclarations() string {
 	for _, path := range paths {
 		names := r.imports[path]
 		sort.Strings(names)
-		fmt.Fprintf(&out, "import type { %s } from %q;\n", strings.Join(names, ", "), path)
+		fmt.Fprintf(&out, "import { %s } from %q;\n", strings.Join(names, ", "), path)
+	}
+	out.WriteString("\n")
+	for _, path := range paths {
+		fmt.Fprintf(&out, "export { %s } from %q;\n", strings.Join(r.imports[path], ", "), path)
 	}
 	return out.String()
 }

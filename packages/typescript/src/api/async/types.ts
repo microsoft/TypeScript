@@ -47,6 +47,9 @@ export interface Type {
     /** Get the apparent type of this type. */
     getApparentType(): Promise<Type>;
 
+    /** Get the reduced type of this type. */
+    getReducedType(): Promise<Type>;
+
     /** Get the call signatures of this type. */
     getCallSignatures(): Promise<readonly Signature[]>;
 
@@ -104,8 +107,10 @@ export interface Type {
     isBooleanLiteralType(): this is BooleanLiteralType;
     /** Whether this type is a type reference */
     isTypeReference(): this is TypeReference;
-    /** Whether this type is a tuple type */
-    isTupleType(): this is TupleType;
+    /** Whether this type is a tuple type reference */
+    isTupleType(): this is TupleTypeReference;
+    /** Whether this type owns tuple metadata */
+    isTupleTypeTarget(): this is TupleType;
     /** Whether this type is an index type (`keyof T`) */
     isIndexType(): this is IndexType;
     /** Whether this type is an indexed access type (`T[K]`) */
@@ -174,6 +179,12 @@ export interface TypeReference extends ObjectType {
     getTarget(): Promise<Type>;
 }
 
+/** References to tuple types */
+export interface TupleTypeReference extends TypeReference {
+    /** Get the tuple type that describes this reference's shape */
+    getTarget(): Promise<TupleType>;
+}
+
 /** Interface types — classes and interfaces (ObjectFlags.ClassOrInterface) */
 export interface InterfaceType extends TypeReference {
     /** Get all type parameters (outer + local, excluding thisType) */
@@ -184,8 +195,10 @@ export interface InterfaceType extends TypeReference {
     getLocalTypeParameters(): Promise<readonly TypeParameter[]>;
 }
 
-/** Tuple types (ObjectFlags.Tuple) */
+/** Tuple type targets (ObjectFlags.Tuple) */
 export interface TupleType extends InterfaceType {
+    /** Get this tuple target */
+    getTarget(): Promise<TupleType>;
     /** Per-element flags (Required, Optional, Rest, Variadic) */
     readonly elementFlags: readonly ElementFlags[];
     /** Number of initial required or optional elements */
@@ -365,6 +378,12 @@ export interface CompletionEntry {
 export interface CompletionInfo {
     readonly isIncomplete: boolean;
     readonly entries: readonly CompletionEntry[];
+}
+
+export interface FormatDiagnosticsHost {
+    getCurrentDirectory(): string;
+    getCanonicalFileName(fileName: string): string;
+    getNewLine(): string;
 }
 
 export interface EmitOutputFile {

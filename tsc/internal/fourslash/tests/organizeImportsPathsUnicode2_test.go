@@ -26,7 +26,7 @@ import * as a100 from "./a100";
 import * as a2 from "./a2";
 
 console.log(a1, a2, a100);`,
-		lsproto.CodeActionKindSourceOrganizeImports,
+		lsproto.CodeActionKindSourceOrganizeImportsTs,
 		&lsutil.UserPreferences{
 			OrganizeImportsIgnoreCase:       core.TSFalse,
 			OrganizeImportsCollation:        lsutil.OrganizeImportsCollationUnicode,
@@ -39,7 +39,7 @@ import * as a2 from "./a2";
 import * as a100 from "./a100";
 
 console.log(a1, a2, a100);`,
-		lsproto.CodeActionKindSourceOrganizeImports,
+		lsproto.CodeActionKindSourceOrganizeImportsTs,
 		&lsutil.UserPreferences{
 			OrganizeImportsIgnoreCase:       core.TSFalse,
 			OrganizeImportsCollation:        lsutil.OrganizeImportsCollationUnicode,

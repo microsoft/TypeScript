@@ -48,7 +48,8 @@ type Manifest struct {
 // the package's package.json, plus the package directory used as the mapper's working directory.
 type Mapper struct {
 	Definition
-	Manifest         `json:"-"`
+	Manifest `json:"-"`
+	// PackageDirectory is the real path directory returned by package resolution for package-based mappers.
 	PackageDirectory string `json:"-"`
 	// ContributionID is provided by an LSP client extension for inferred project content mappers.
 	ContributionID string `json:"-"`

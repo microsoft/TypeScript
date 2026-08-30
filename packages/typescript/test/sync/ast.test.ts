@@ -1,6 +1,7 @@
 import type {
     ExpressionStatement,
     Identifier,
+    JSDoc,
     Node,
     NodeArray,
     SourceFile,
@@ -12,6 +13,7 @@ import {
     isClassDeclaration,
     isImportDeclaration,
     isInterfaceDeclaration,
+    isJSDocLink,
     isNamedImports,
     isValidTypeOnlyAliasUseSite,
     SyntaxKind,
@@ -579,6 +581,29 @@ function getRemoteSourceFile(api: API, configPath: string, filePath: string) {
 }
 
 describe("RemoteNode + cloneNode", () => {
+    test("does not read a sibling as an invalid JSDoc link name", () => {
+        const api = spawnAPI({
+            "/tsconfig.json": "{}",
+            "/src/index.ts": `/**
+ * {@link #toggled} property
+ */
+export const x = 1;`,
+        });
+        try {
+            const sf = getRemoteSourceFile(api, "/tsconfig.json", "/src/index.ts");
+            const jsDoc = sf.statements[0].jsDoc?.[0] as JSDoc | undefined;
+            assert.ok(jsDoc?.kind === SyntaxKind.JSDoc);
+            const comment = jsDoc.comment;
+            assert.ok(typeof comment !== "string");
+            const link = comment?.[1];
+            assert.ok(link && isJSDocLink(link));
+            assert.strictEqual(link.name, undefined);
+        }
+        finally {
+            api.close();
+        }
+    });
+
     test("uses distinct nodes for expression and type heritage", () => {
         const api = spawnAPI({
             "/tsconfig.json": "{}",

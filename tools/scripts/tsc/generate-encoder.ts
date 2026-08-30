@@ -1521,7 +1521,6 @@ function emitRemoteNodeList(w: CodeWriter) {
     w.write(`    }`);
     w.write(``);
     w.write(`    parent: RemoteNode;`);
-    w.write(`    hasTrailingComma?: boolean;`);
     w.write(`    transformFlags: number = 0;`);
     w.write(`    protected view: DataView;`);
     w.write(`    protected index: number;`);
@@ -1547,6 +1546,10 @@ function emitRemoteNodeList(w: CodeWriter) {
     w.write(``);
     w.write(`    private get data(): number {`);
     w.write(`        return this.view.getUint32(this._byteIndex + NODE_OFFSET_DATA, true);`);
+    w.write(`    }`);
+    w.write(``);
+    w.write(`    get hasTrailingComma(): boolean {`);
+    w.write(`        return (this.view.getUint32(this._byteIndex + NODE_OFFSET_FLAGS, true) & 1) !== 0;`);
     w.write(`    }`);
     w.write(``);
     w.write(`    private sourceFile: SourceFileInfo;`);
@@ -1826,6 +1829,7 @@ function emitRemoteNodeClassOpen(w: CodeWriter) {
     w.write(`    }`);
     w.write(``);
     w.write(`    private getChildAtOrder(order: number): RemoteNode | RemoteNodeList | undefined {`);
+    w.write(`        if (!this.hasChildren()) return undefined;`);
     w.write(`        const mask = this.childMask;`);
     w.write(`        if (!(mask & (1 << order))) {`);
     w.write(`            // Property is not present`);

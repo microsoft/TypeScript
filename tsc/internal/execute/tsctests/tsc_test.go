@@ -14,6 +14,17 @@ import (
 
 func TestTscCommandline(t *testing.T) {
 	t.Parallel()
+	colorTest := func(subScenario string, env map[string]string, outputIsTTY bool) *tscInput {
+		return &tscInput{
+			subScenario: subScenario,
+			files: FileMap{
+				"/home/src/workspaces/project/index.ts": "const x: string = 1;",
+			},
+			commandLineArgs: []string{"index.ts", "--noEmit"},
+			env:             env,
+			outputIsTTY:     new(outputIsTTY),
+		}
+	}
 	testCases := []*tscInput{
 		{
 			subScenario: "show help with ExitStatus.DiagnosticsPresent_OutputsSkipped",
@@ -26,28 +37,20 @@ func TestTscCommandline(t *testing.T) {
 			subScenario:     "show help with ExitStatus.DiagnosticsPresent_OutputsSkipped when host cannot provide terminal width",
 			commandLineArgs: nil,
 		},
-		{
-			subScenario: "does not add color when NO_COLOR is set",
-			env: map[string]string{
-				"NO_COLOR": "true",
-			},
-			commandLineArgs: nil,
-		},
-		{
-			subScenario: "adds color when FORCE_COLOR is set",
-			env: map[string]string{
-				"FORCE_COLOR": "true",
-			},
-			commandLineArgs: nil,
-		},
-		{
-			subScenario: "does not add color when NO_COLOR is set even if FORCE_COLOR is set",
-			env: map[string]string{
-				"NO_COLOR":    "true",
-				"FORCE_COLOR": "true",
-			},
-			commandLineArgs: nil,
-		},
+		colorTest("does not add color when NO_COLOR is set", map[string]string{"NO_COLOR": "true"}, true),
+		colorTest("adds color when NO_COLOR is empty", map[string]string{"NO_COLOR": ""}, true),
+		colorTest("adds color when FORCE_COLOR is empty and output is not a TTY", map[string]string{"FORCE_COLOR": ""}, false),
+		colorTest("does not add color when FORCE_COLOR is zero", map[string]string{"FORCE_COLOR": "0"}, true),
+		colorTest("adds color when FORCE_COLOR is one and output is not a TTY", map[string]string{"FORCE_COLOR": "1"}, false),
+		colorTest("adds color when FORCE_COLOR is two and output is not a TTY", map[string]string{"FORCE_COLOR": "2"}, false),
+		colorTest("adds color when FORCE_COLOR is three and output is not a TTY", map[string]string{"FORCE_COLOR": "3"}, false),
+		colorTest("does not add color when FORCE_COLOR is four", map[string]string{"FORCE_COLOR": "4"}, true),
+		colorTest("adds color when FORCE_COLOR is true and output is not a TTY", map[string]string{"FORCE_COLOR": "true"}, false),
+		colorTest("does not add color when FORCE_COLOR is false", map[string]string{"FORCE_COLOR": "false"}, true),
+		colorTest("does not add color when FORCE_COLOR is invalid", map[string]string{"FORCE_COLOR": "invalid"}, true),
+		colorTest("FORCE_COLOR overrides NO_COLOR", map[string]string{"NO_COLOR": "true", "FORCE_COLOR": "true"}, false),
+		colorTest("does not add color when TERM is dumb", map[string]string{"TERM": "dumb"}, true),
+		colorTest("FORCE_COLOR overrides dumb TERM", map[string]string{"TERM": "dumb", "FORCE_COLOR": "true"}, false),
 		{
 			subScenario:     "when build not first argument",
 			commandLineArgs: []string{"--verbose", "--build"},
