@@ -1,0 +1,46 @@
+importAttributes12.ts(10,12): error TS2858: Import attribute values must be string literal expressions.
+importAttributes12.ts(16,28): error TS2858: Import attribute values must be string literal expressions.
+importAttributes12.ts(22,28): error TS2858: Import attribute values must be string literal expressions.
+importAttributes12.ts(28,28): error TS2858: Import attribute values must be string literal expressions.
+
+
+==== importAttributes12.ts (4 errors) ====
+    declare module "dependency" {
+        export interface Type {}
+    }
+    
+    type T1 = typeof import("dependency", { with: { "resolution-mode": "import" } });
+    type T2 = import("dependency", { with: { "resolution-mode": "require" } }).Type;
+    
+    type T3 = typeof import("dependency", {
+        with: {
+            a: (() => "value")(),
+               ~~~~~~~~~~~~~~~~~
+!!! error TS2858: Import attribute values must be string literal expressions.
+        },
+    });
+    
+    type T4 = import("dependency", {
+        with: {
+            "resolution-mode": (() => "import")(),
+                               ~~~~~~~~~~~~~~~~~~
+!!! error TS2858: Import attribute values must be string literal expressions.
+        },
+    }).Type;
+    
+    type T5 = import("dependency", {
+        with: {
+            "resolution-mode": 0,
+                               ~
+!!! error TS2858: Import attribute values must be string literal expressions.
+        },
+    }).Type;
+    
+    type T6 = import("dependency", {
+        with: {
+            "resolution-mode": `import`,
+                               ~~~~~~~~
+!!! error TS2858: Import attribute values must be string literal expressions.
+        },
+    }).Type;
+    

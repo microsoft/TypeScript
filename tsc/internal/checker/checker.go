@@ -3334,7 +3334,9 @@ func (c *Checker) checkTemplateLiteralType(node *ast.Node) {
 func (c *Checker) checkImportType(node *ast.Node) {
 	c.checkSourceElement(node.AsImportTypeNode().Argument)
 	if attributes := node.AsImportTypeNode().Attributes; attributes != nil {
-		c.getResolutionModeOverride(attributes.AsImportAttributes(), true /*reportErrors*/)
+		importAttributes := attributes.AsImportAttributes()
+		c.checkGrammarImportAttributeValues(importAttributes)
+		c.getResolutionModeOverride(importAttributes, true /*reportErrors*/)
 	}
 	c.checkTypeReferenceOrImport(node)
 }
@@ -5441,14 +5443,9 @@ func (c *Checker) checkExternalImportOrExportDeclaration(node *ast.Node) bool {
 	if !ast.IsImportEqualsDeclaration(node) {
 		attributes := ast.GetImportAttributes(node)
 		if attributes != nil {
-			hasError := false
-			for _, attr := range attributes.AsImportAttributes().Attributes.Nodes {
-				if !ast.IsStringLiteral(attr.AsImportAttribute().Value) {
-					hasError = true
-					c.error(attr.AsImportAttribute().Value, diagnostics.Import_attribute_values_must_be_string_literal_expressions)
-				}
+			if c.checkGrammarImportAttributeValues(attributes.AsImportAttributes()) {
+				return false
 			}
-			return !hasError
 		}
 	}
 	return true
