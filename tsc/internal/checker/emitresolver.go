@@ -589,12 +589,21 @@ func (r *EmitResolver) requiresAddingImplicitUndefined(declaration *ast.Node, sy
 	}
 	switch declaration.Kind {
 	case ast.KindPropertyDeclaration, ast.KindPropertySignature, ast.KindJSDocPropertyTag:
+		if !isOptionalDeclaration(declaration) {
+			return false
+		}
 		if symbol == nil {
 			symbol = r.checker.getSymbolOfDeclaration(declaration)
 		}
+		if symbol.Flags&ast.SymbolFlagsProperty == 0 || symbol.CheckFlags&ast.CheckFlagsMapped == 0 {
+			return false
+		}
 		t := r.checker.getTypeOfSymbol(symbol)
-		r.checker.mappedSymbolLinks.Has(symbol)
-		return (symbol.Flags&ast.SymbolFlagsProperty != 0) && (symbol.Flags&ast.SymbolFlagsOptional != 0) && isOptionalDeclaration(declaration) && r.checker.ReverseMappedSymbolLinks.Has(symbol) && r.checker.ReverseMappedSymbolLinks.Get(symbol).mappedType != nil && containsNonMissingUndefinedType(r.checker, t)
+		if !containsNonMissingUndefinedType(r.checker, t) {
+			return false
+		}
+		declaredType := declaration.Type()
+		return declaredType != nil && !r.checker.containsUndefinedType(r.checker.getTypeFromTypeNode(declaredType))
 	case ast.KindParameter, ast.KindJSDocParameterTag:
 		return r.requiresAddingImplicitUndefinedWorker(declaration, enclosingDeclaration)
 	default:
