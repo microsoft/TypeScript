@@ -1240,9 +1240,11 @@ describe("RemoteNode + child/token getters", () => {
         visit(root);
     }
 
-    function checkSource(source: string, opts?: { jsx?: boolean; }): void {
-        const ext = opts?.jsx ? "tsx" : "ts";
-        const tsconfig = opts?.jsx ? `{ "compilerOptions": { "jsx": "react-jsx" } }` : "{}";
+    function checkSource(source: string, opts?: { jsx?: boolean; js?: boolean; }): void {
+        const ext = opts?.jsx ? "tsx" : opts?.js ? "js" : "ts";
+        const tsconfig = opts?.jsx ? `{ "compilerOptions": { "jsx": "react-jsx" } }`
+            : opts?.js ? `{ "compilerOptions": { "allowJs": true, "checkJs": true } }`
+            : "{}";
         const api = spawnAPI({ "/tsconfig.json": tsconfig, [`/src/c.${ext}`]: source });
         try {
             const sf = getRemoteSourceFile(api, "/tsconfig.json", `/src/c.${ext}`);
@@ -1274,7 +1276,7 @@ describe("RemoteNode + child/token getters", () => {
 
     // Representative constructs, each exercising a distinct structural path of getChildren
     // (token synthesis, SyntaxList wrapping, empty lists, decorator lists, JSDoc, JSX, nesting).
-    const corpus: Array<{ name: string; source: string; jsx?: boolean; }> = [
+    const corpus: Array<{ name: string; source: string; jsx?: boolean; js?: boolean; }> = [
         { name: "variable declarations", source: "const a = 1; let b: number = 2; var c, d = 3;" },
         { name: "function with optional, default and rest params", source: "function f(a: number, b?: string, c = 1, ...d: any[]): void {}" },
         { name: "class with members", source: "class C { x = 1; #y = 2; static s = 3; readonly r: string; constructor(public p: number) {} m() {} get g() { return 1; } set v(x) {} static {} }" },
@@ -1291,11 +1293,15 @@ describe("RemoteNode + child/token getters", () => {
         { name: "comments and jsdoc with tags", source: "// line\n/* block */\n/**\n * @param a the a\n * @returns nothing\n */\nfunction f(a: number) {} // trailing" },
         { name: "empty constructs", source: "function f() {} class C {} interface I {} enum E {} { } ; namespace N {}" },
         { name: "JSX element with attributes and children", source: 'const e = <div id="a" className={cls} {...rest}>hello {name}<Child /></div>;', jsx: true },
+        // Reparsed JSDoc types in .js files must not surface as children: their positions
+        // point inside the comment, not into the parent's token range.
+        { name: "JS with reparsed @param/@returns types", source: "/**\n * @param {number} a the a\n * @returns {string} something\n */\nfunction f(a) { return String(a); }\n", js: true },
+        { name: "JS with @type, @template and reparsed type parameters", source: "/** @type {number} */\nconst n = 1;\n/**\n * @template T\n * @param {T} x\n */\nfunction id(x) { return x; }\n", js: true },
     ];
 
     for (const entry of corpus) {
         test(`invariants: ${entry.name}`, () => {
-            checkSource(entry.source, { jsx: entry.jsx ?? false });
+            checkSource(entry.source, { jsx: entry.jsx ?? false, js: entry.js ?? false });
         });
     }
 });

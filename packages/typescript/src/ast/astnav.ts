@@ -672,11 +672,19 @@ function createChildren(node: Node, sourceFile: SourceFile): readonly Node[] {
     const scanner = createScanner(/*skipTrivia*/ true, sourceFile.languageVariant, sourceFile.text);
     let pos = node.pos;
     const processNode = (child: Node): undefined => {
+        // Reparsed subtrees (JSDoc types materialized into the AST) have positions inside
+        // the comment, not in this node's token range.
+        if (child.flags & NodeFlags.Reparsed) {
+            return;
+        }
         addSyntheticNodes(children, pos, child.pos, node, sourceFile, scanner);
         children.push(child);
         pos = child.end;
     };
     const processNodes = (nodes: NodeArray<Node>): undefined => {
+        if (nodes.length > 0 && !nodes.some(child => !(child.flags & NodeFlags.Reparsed))) {
+            return;
+        }
         addSyntheticNodes(children, pos, nodes.pos, node, sourceFile, scanner);
         children.push(createSyntaxListNode(nodes, node, sourceFile, scanner));
         pos = nodes.end;
@@ -721,6 +729,9 @@ function createSyntaxListNode(nodes: NodeArray<Node>, parent: Node, sourceFile: 
     const listChildren: Node[] = [];
     let pos = nodes.pos;
     for (const child of nodes) {
+        if (child.flags & NodeFlags.Reparsed) {
+            continue;
+        }
         addSyntheticNodes(listChildren, pos, child.pos, parent, sourceFile, scanner);
         listChildren.push(child);
         pos = child.end;
