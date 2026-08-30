@@ -39,11 +39,11 @@ func initProjectInfoClient(t *testing.T, files map[string]string) *lsptestutil.L
 	}, onServerRequest)
 	t.Cleanup(func() { _ = closeClient() })
 
-	initMsg, _, ok := lsptestutil.SendRequest(t, client, lsproto.InitializeInfo, &lsproto.InitializeParams{
+	initMsg, _, ok := client.SendRequest(t, lsproto.InitializeInfo, &lsproto.InitializeParams{
 		Capabilities: &lsproto.ClientCapabilities{},
 	})
 	assert.Assert(t, ok && initMsg.AsResponse().Error == nil, "Initialize failed")
-	lsptestutil.SendNotification(t, client, lsproto.InitializedInfo, &lsproto.InitializedParams{})
+	client.SendNotification(t, lsproto.InitializedInfo, &lsproto.InitializedParams{})
 	<-client.Server.InitComplete()
 
 	return client
@@ -62,11 +62,11 @@ func TestProjectInfoConfiguredProject(t *testing.T) {
 	})
 
 	uri := lsproto.DocumentUri("file:///home/projects/index.ts")
-	lsptestutil.SendNotification(t, client, lsproto.TextDocumentDidOpenInfo, &lsproto.DidOpenTextDocumentParams{
+	client.SendNotification(t, lsproto.TextDocumentDidOpenInfo, &lsproto.DidOpenTextDocumentParams{
 		TextDocument: &lsproto.TextDocumentItem{Uri: uri, LanguageId: "typescript", Text: "export const x = 1;"},
 	})
 
-	msg, resp, ok := lsptestutil.SendRequest(t, client, lsproto.CustomProjectInfoInfo, &lsproto.ProjectInfoParams{
+	msg, resp, ok := client.SendRequest(t, lsproto.CustomProjectInfoInfo, &lsproto.ProjectInfoParams{
 		TextDocument: lsproto.TextDocumentIdentifier{Uri: uri},
 	})
 	assert.Assert(t, ok, "expected a response")
@@ -86,11 +86,11 @@ func TestProjectInfoInferredProject(t *testing.T) {
 	})
 
 	uri := lsproto.DocumentUri("file:///home/projects/index.ts")
-	lsptestutil.SendNotification(t, client, lsproto.TextDocumentDidOpenInfo, &lsproto.DidOpenTextDocumentParams{
+	client.SendNotification(t, lsproto.TextDocumentDidOpenInfo, &lsproto.DidOpenTextDocumentParams{
 		TextDocument: &lsproto.TextDocumentItem{Uri: uri, LanguageId: "typescript", Text: "export const x = 1;"},
 	})
 
-	msg, resp, ok := lsptestutil.SendRequest(t, client, lsproto.CustomProjectInfoInfo, &lsproto.ProjectInfoParams{
+	msg, resp, ok := client.SendRequest(t, lsproto.CustomProjectInfoInfo, &lsproto.ProjectInfoParams{
 		TextDocument: lsproto.TextDocumentIdentifier{Uri: uri},
 	})
 	assert.Assert(t, ok, "expected a response")

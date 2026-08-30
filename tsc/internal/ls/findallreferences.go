@@ -651,7 +651,7 @@ func (l *LanguageService) provideSymbolsAndEntries(ctx context.Context, uri lspr
 	} else if isRename {
 		feature = spanmap.FeatureRename
 	}
-	positions := lsconv.FromLSPPositionForSourceFile(l.converters, sourceFile, documentPosition, feature)
+	positions := l.converters.FromLSPPositionForSourceFile(sourceFile, documentPosition, feature)
 	if len(positions) == 0 {
 		return SymbolAndEntriesData{}, false
 	}
@@ -746,8 +746,7 @@ func (l *LanguageService) getSymbolAndEntries(
 }
 
 func (l *LanguageService) ProvideReferences(ctx context.Context, params *lsproto.ReferenceParams, orchestrator CrossProjectOrchestrator) (lsproto.ReferencesResponse, error) {
-	return handleCrossProject(
-		l,
+	return l.handleCrossProject(
 		ctx,
 		params,
 		orchestrator,
@@ -761,8 +760,7 @@ func (l *LanguageService) ProvideReferences(ctx context.Context, params *lsproto
 }
 
 func (l *LanguageService) provideReferencesFromData(ctx context.Context, params *lsproto.ReferenceParams, orchestrator CrossProjectOrchestrator, data SymbolAndEntriesData) (lsproto.ReferencesResponse, error) {
-	return handleCrossProject(
-		l,
+	return l.handleCrossProject(
 		ctx,
 		params,
 		orchestrator,
@@ -776,8 +774,7 @@ func (l *LanguageService) provideReferencesFromData(ctx context.Context, params 
 }
 
 func (l *LanguageService) ProvideVSReferences(ctx context.Context, params *lsproto.ReferenceParams, orchestrator CrossProjectOrchestrator) (lsproto.VSReferencesResponse, error) {
-	return handleCrossProject(
-		l,
+	return l.handleCrossProject(
 		ctx,
 		params,
 		orchestrator,
@@ -1022,8 +1019,7 @@ func (l *LanguageService) ProvideImplementations(ctx context.Context, params *ls
 }
 
 func (l *LanguageService) provideImplementationsEx(ctx context.Context, params *lsproto.ImplementationParams, options symbolEntryTransformOptions, orchestrator CrossProjectOrchestrator) (lsproto.ImplementationResponse, error) {
-	return handleCrossProject(
-		l,
+	return l.handleCrossProject(
 		ctx,
 		params,
 		orchestrator,
@@ -1037,8 +1033,7 @@ func (l *LanguageService) provideImplementationsEx(ctx context.Context, params *
 }
 
 func (l *LanguageService) provideImplementationsFromData(ctx context.Context, params *lsproto.ImplementationParams, options symbolEntryTransformOptions, orchestrator CrossProjectOrchestrator, data SymbolAndEntriesData) (lsproto.ImplementationResponse, error) {
-	return handleCrossProject(
-		l,
+	return l.handleCrossProject(
 		ctx,
 		params,
 		orchestrator,

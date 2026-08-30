@@ -405,7 +405,7 @@ func BuildNodeIndexTable(sourceFile *ast.SourceFile) *NodeIndexTable {
 }
 
 func GetNodeIndexTable(sourceFile *ast.SourceFile) *NodeIndexTable {
-	return ast.GetOrComputeSourceFileData(sourceFile, nodeIndexTableKey, BuildNodeIndexTable)
+	return sourceFile.GetOrComputeData(nodeIndexTableKey, BuildNodeIndexTable)
 }
 
 // EncodeSourceFile encodes an entire source file AST into the binary format.
@@ -415,7 +415,7 @@ func EncodeSourceFile(sourceFile *ast.SourceFile) ([]byte, *NodeIndexTable, erro
 	if err != nil {
 		return nil, nil, err
 	}
-	nodeTable = ast.GetOrComputeSourceFileData(sourceFile, nodeIndexTableKey, func(*ast.SourceFile) *NodeIndexTable {
+	nodeTable = sourceFile.GetOrComputeData(nodeIndexTableKey, func(*ast.SourceFile) *NodeIndexTable {
 		return nodeTable
 	})
 	return data, nodeTable, nil

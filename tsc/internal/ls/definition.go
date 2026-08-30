@@ -36,7 +36,7 @@ func (l *LanguageService) provideDefinitionWorker(
 	clientSupportsLink := caps.TextDocument.Definition.LinkSupport
 
 	program, file := l.getProgramAndFile(documentURI)
-	positions := lsconv.FromLSPPositionForSourceFile(l.converters, file, position, spanmap.FeatureDefinition)
+	positions := l.converters.FromLSPPositionForSourceFile(file, position, spanmap.FeatureDefinition)
 	results := make([]lsproto.DefinitionResponse, 0, len(positions))
 	for _, mapped := range positions {
 		if mapped.Fidelity.IsSingleSegment() {
@@ -119,7 +119,7 @@ func (l *LanguageService) ProvideTypeDefinition(
 	clientSupportsLink := caps.TextDocument.TypeDefinition.LinkSupport
 
 	program, file := l.getProgramAndFile(documentURI)
-	positions := lsconv.FromLSPPositionForSourceFile(l.converters, file, position, spanmap.FeatureTypeDefinition)
+	positions := l.converters.FromLSPPositionForSourceFile(file, position, spanmap.FeatureTypeDefinition)
 	results := make([]lsproto.TypeDefinitionResponse, 0, len(positions))
 	for _, mapped := range positions {
 		if mapped.Fidelity.IsSingleSegment() {

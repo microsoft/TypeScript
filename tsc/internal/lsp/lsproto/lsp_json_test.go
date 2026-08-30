@@ -998,7 +998,7 @@ func TestUnmarshalParamsRequiresParams(t *testing.T) {
 	for _, tt := range noParamsTests {
 		t.Run("NoParams/"+tt.name, func(t *testing.T) {
 			t.Parallel()
-			_, err := UnmarshalParams[NoParams](&RequestMessage{Params: tt.params})
+			_, err := (&RequestMessage{Params: tt.params}).UnmarshalParams[NoParams]()
 			if tt.wantErr {
 				assert.ErrorIs(t, err, ErrorCodeInvalidParams)
 			} else {
@@ -1024,7 +1024,7 @@ func TestUnmarshalParamsRequiresParams(t *testing.T) {
 	for _, tt := range typedTests {
 		t.Run("typed/"+tt.name, func(t *testing.T) {
 			t.Parallel()
-			got, err := UnmarshalParams[*DidChangeConfigurationParams](&RequestMessage{Params: tt.params})
+			got, err := (&RequestMessage{Params: tt.params}).UnmarshalParams[*DidChangeConfigurationParams]()
 			if tt.wantErr {
 				assert.ErrorIs(t, err, ErrorCodeInvalidParams)
 			} else {

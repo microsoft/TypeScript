@@ -45,14 +45,14 @@ export const title = "Profile";
 		case lsproto.MethodWorkspaceConfiguration:
 			return &lsproto.ResponseMessage{ID: req.ID, JSONRPC: req.JSONRPC, Result: []any{nil, nil, nil, nil}}
 		case lsproto.MethodClientRegisterCapability:
-			params, err := lsproto.UnmarshalParams[*lsproto.RegistrationParams](req)
+			params, err := req.UnmarshalParams[*lsproto.RegistrationParams]()
 			assert.NilError(t, err)
 			mu.Lock()
 			registrations = append(registrations, params.Registrations...)
 			mu.Unlock()
 			return &lsproto.ResponseMessage{ID: req.ID, JSONRPC: req.JSONRPC, Result: lsproto.Null{}}
 		case lsproto.MethodClientUnregisterCapability:
-			params, err := lsproto.UnmarshalParams[*lsproto.UnregistrationParams](req)
+			params, err := req.UnmarshalParams[*lsproto.UnregistrationParams]()
 			assert.NilError(t, err)
 			mu.Lock()
 			unregistrations = append(unregistrations, params.Unregisterations...)
@@ -105,18 +105,18 @@ export const title = "Profile";
 			},
 		},
 	}
-	initMsg, _, ok := lsptestutil.SendRequest(t, client, lsproto.InitializeInfo, &lsproto.InitializeParams{
+	initMsg, _, ok := client.SendRequest(t, lsproto.InitializeInfo, &lsproto.InitializeParams{
 		Capabilities: caps,
 		InitializationOptions: &lsproto.InitializationOptionsOrNull{InitializationOptions: &lsproto.InitializationOptions{
 			RunExternalCode: new(true),
 		}},
 	})
 	assert.Assert(t, ok && initMsg.AsResponse().Error == nil, "initialize failed")
-	lsptestutil.SendNotification(t, client, lsproto.InitializedInfo, &lsproto.InitializedParams{})
+	client.SendNotification(t, lsproto.InitializedInfo, &lsproto.InitializedParams{})
 	<-client.Server.InitComplete()
 
 	uri := lsproto.DocumentUri("file:///home/project/ProfileCard.vue")
-	msg, _, ok := lsptestutil.SendRequest(t, client, lsproto.CustomSetContentMapperContributionsInfo, &lsproto.SetContentMapperContributionsParams{
+	msg, _, ok := client.SendRequest(t, lsproto.CustomSetContentMapperContributionsInfo, &lsproto.SetContentMapperContributionsParams{
 		OpenDocuments: []lsproto.TextDocumentIdentifier{{Uri: uri}},
 		Contributions: []*lsproto.ContentMapperContribution{{
 			ContributorId: "test",
@@ -170,10 +170,10 @@ export const title = "Profile";
 		assert.Assert(t, found, "expected %s registration for .vue", id)
 	}
 
-	lsptestutil.SendNotification(t, client, lsproto.TextDocumentDidOpenInfo, &lsproto.DidOpenTextDocumentParams{
+	client.SendNotification(t, lsproto.TextDocumentDidOpenInfo, &lsproto.DidOpenTextDocumentParams{
 		TextDocument: &lsproto.TextDocumentItem{Uri: uri, LanguageId: "vue", Version: 1, Text: component},
 	})
-	hoverMsg, hover, ok := lsptestutil.SendRequest(t, client, lsproto.TextDocumentHoverInfo, &lsproto.HoverParams{
+	hoverMsg, hover, ok := client.SendRequest(t, lsproto.TextDocumentHoverInfo, &lsproto.HoverParams{
 		TextDocument: lsproto.TextDocumentIdentifier{Uri: uri},
 		Position:     lsproto.Position{Line: 3, Character: 15},
 	})
@@ -183,35 +183,35 @@ export const title = "Profile";
 	assert.NilError(t, fs.WriteFile("/home/project/tsconfig.json", `{
 		"compilerOptions": { "target": "es2020", "module": "esnext", "moduleResolution": "bundler", "strict": true }
 	}`))
-	lsptestutil.SendNotification(t, client, lsproto.WorkspaceDidChangeWatchedFilesInfo, &lsproto.DidChangeWatchedFilesParams{
+	client.SendNotification(t, lsproto.WorkspaceDidChangeWatchedFilesInfo, &lsproto.DidChangeWatchedFilesParams{
 		Changes: []*lsproto.FileEvent{{Uri: "file:///home/project/tsconfig.json", Type: lsproto.FileChangeTypeChanged}},
 	})
-	hoverMsg, hover, _ = lsptestutil.SendRequest(t, client, lsproto.TextDocumentHoverInfo, &lsproto.HoverParams{
+	hoverMsg, hover, _ = client.SendRequest(t, lsproto.TextDocumentHoverInfo, &lsproto.HoverParams{
 		TextDocument: lsproto.TextDocumentIdentifier{Uri: uri},
 		Position:     lsproto.Position{Line: 3, Character: 15},
 	})
 	assert.Assert(t, hoverMsg != nil && hoverMsg.AsResponse().Error == nil, "request before didClose should return a null result")
 	assert.Assert(t, hover.Hover == nil)
-	diagnosticMsg, diagnostics, ok := lsptestutil.SendRequest(t, client, lsproto.TextDocumentDiagnosticInfo, &lsproto.DocumentDiagnosticParams{
+	diagnosticMsg, diagnostics, ok := client.SendRequest(t, lsproto.TextDocumentDiagnosticInfo, &lsproto.DocumentDiagnosticParams{
 		TextDocument: lsproto.TextDocumentIdentifier{Uri: uri},
 	})
 	assert.Assert(t, ok && diagnosticMsg.AsResponse().Error == nil, "diagnostics before didClose should return an empty report")
 	assert.Assert(t, diagnostics.FullDocumentDiagnosticReport != nil)
 	assert.Equal(t, len(diagnostics.FullDocumentDiagnosticReport.Items), 0)
-	completionMsg, completion, ok := lsptestutil.SendRequest(t, client, lsproto.TextDocumentCompletionInfo, &lsproto.CompletionParams{
+	completionMsg, completion, ok := client.SendRequest(t, lsproto.TextDocumentCompletionInfo, &lsproto.CompletionParams{
 		TextDocument: lsproto.TextDocumentIdentifier{Uri: uri},
 		Position:     lsproto.Position{Line: 3, Character: 15},
 	})
 	assert.Assert(t, ok && completionMsg.AsResponse().Error == nil)
 	assert.Assert(t, completion.Items == nil && completion.List == nil)
-	referencesMsg, references, ok := lsptestutil.SendRequest(t, client, lsproto.TextDocumentReferencesInfo, &lsproto.ReferenceParams{
+	referencesMsg, references, ok := client.SendRequest(t, lsproto.TextDocumentReferencesInfo, &lsproto.ReferenceParams{
 		TextDocument: lsproto.TextDocumentIdentifier{Uri: uri},
 		Position:     lsproto.Position{Line: 3, Character: 15},
 		Context:      &lsproto.ReferenceContext{IncludeDeclaration: true},
 	})
 	assert.Assert(t, ok && referencesMsg.AsResponse().Error == nil)
 	assert.Assert(t, references.Locations == nil)
-	renameMsg, rename, ok := lsptestutil.SendRequest(t, client, lsproto.TextDocumentRenameInfo, &lsproto.RenameParams{
+	renameMsg, rename, ok := client.SendRequest(t, lsproto.TextDocumentRenameInfo, &lsproto.RenameParams{
 		TextDocument: lsproto.TextDocumentIdentifier{Uri: uri},
 		Position:     lsproto.Position{Line: 3, Character: 15},
 		NewName:      "renamed",
@@ -238,7 +238,7 @@ export const title = "Profile";
 		assert.Assert(t, found, "expected %s unregistration", id)
 	}
 
-	lsptestutil.SendNotification(t, client, lsproto.TextDocumentDidCloseInfo, &lsproto.DidCloseTextDocumentParams{
+	client.SendNotification(t, lsproto.TextDocumentDidCloseInfo, &lsproto.DidCloseTextDocumentParams{
 		TextDocument: lsproto.TextDocumentIdentifier{Uri: uri},
 	})
 }

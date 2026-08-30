@@ -665,9 +665,8 @@ type markerAndItem[T any] struct {
 	Item   T       `json:"item"`
 }
 
-func annotateContentWithTooltips[T comparable](
+func (f *FourslashTest) annotateContentWithTooltips[T comparable](
 	t *testing.T,
-	f *FourslashTest,
 	markersAndItems []markerAndItem[T],
 	opName string,
 	getRange func(item T) *lsproto.Range,

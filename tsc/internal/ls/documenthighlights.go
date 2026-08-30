@@ -40,7 +40,7 @@ func (l *LanguageService) ProvideMultiDocumentHighlights(ctx context.Context, do
 
 func (l *LanguageService) provideDocumentHighlightsWorker(ctx context.Context, documentUri lsproto.DocumentUri, documentPosition lsproto.Position, filesToSearch []lsproto.DocumentUri) (lsproto.MultiDocumentHighlightsOrNull, error) {
 	program, sourceFile := l.getProgramAndFile(documentUri)
-	positions := lsconv.FromLSPPositionForSourceFile(l.converters, sourceFile, documentPosition, spanmap.FeatureDocumentHighlights)
+	positions := l.converters.FromLSPPositionForSourceFile(sourceFile, documentPosition, spanmap.FeatureDocumentHighlights)
 	results := make([]lsproto.MultiDocumentHighlightsOrNull, 0, len(positions))
 	for _, mapped := range positions {
 		if mapped.Fidelity.IsSingleSegment() {

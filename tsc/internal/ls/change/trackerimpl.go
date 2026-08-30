@@ -10,7 +10,6 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/astnav"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/format"
-	"github.com/microsoft/TypeScript/tsc/internal/ls/lsconv"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/lsutil"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/parser"
@@ -71,7 +70,7 @@ func (t *Tracker) computeNewText(change *trackerEdit, targetSourceFile *ast.Sour
 		return change.NewText
 	}
 
-	positions := lsconv.FromLSPPositionForSourceFile(t.converters, sourceFile, change.Range.Start, spanmap.FeatureAll)
+	positions := t.converters.FromLSPPositionForSourceFile(sourceFile, change.Range.Start, spanmap.FeatureAll)
 	var result string
 	found := false
 	// The original range may have multiple verbatim copies; it is safe to lose their identity only when
