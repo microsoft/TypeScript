@@ -3,5 +3,5 @@
 // [||]declare let $: {x: number};
 
 // === /src/app.ts ===
-// /// <reference types="lib/*GOTO DEF*/"/>
-// [|$.x;|]
+// /// <reference types="[|lib|]/*GOTO DEF*/"/>
+// $.x;

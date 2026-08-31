@@ -18,11 +18,8 @@
 // //MyFile Comments
 // //more comments
 // /// <reference path="somePath.ts" />
-// /// <reference path="b/*GOTO DEF*/.ts" />
+// /// <reference path="[|b/*GOTO DEF*/.ts|]" />
 // 
-// [|class clsInOverload {
+// class clsInOverload {
 //     static fnOverload();
-//     static fnOverload(foo: string);
-//     static fnOverload(foo: any) { }
-// }
-// |]
+// --- (line: 8) skipped ---
