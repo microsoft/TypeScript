@@ -1097,7 +1097,7 @@ func (v *View) compareNodeCoreModuleSpecifiers(a, b string, importingFile *ast.S
 func isFixPossiblyReExportingImportingFile(fix *Fix, importingFileName string) bool {
 	if fix.IsReExport && isIndexFileName(fix.ModuleFileName) {
 		reExportDir := tspath.GetDirectoryPath(fix.ModuleFileName)
-		return strings.HasPrefix(importingFileName, reExportDir)
+		return strings.HasPrefix(importingFileName, tspath.EnsureTrailingDirectorySeparator(reExportDir))
 	}
 	return false
 }

@@ -31,7 +31,7 @@ export { b };
 const c = 1;
 export { c };
 `,
-		lsproto.CodeActionKindSourceOrganizeImports,
+		lsproto.CodeActionKindSourceOrganizeImportsTs,
 		nil,
 	)
 }

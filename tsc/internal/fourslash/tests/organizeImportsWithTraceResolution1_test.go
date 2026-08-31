@@ -30,7 +30,7 @@ import "./dep.js";
 		t,
 		`import "./dep.js";
 `,
-		lsproto.CodeActionKindSourceOrganizeImports,
+		lsproto.CodeActionKindSourceOrganizeImportsTs,
 		nil,
 	)
 }
