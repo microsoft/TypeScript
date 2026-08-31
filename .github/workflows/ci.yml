@@ -73,7 +73,6 @@ jobs:
       - name: Tests without Node.js
         run: |
           export PATH="$RUNNER_TEMP/go-test-bin"
-          export GOEXPERIMENT=ms_nocgo_opensslcrypto
           export CGO_ENABLED=0
           ! command -v node
           cd "$RUNNER_TEMP/tsc"
