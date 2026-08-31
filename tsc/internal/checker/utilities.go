@@ -1599,39 +1599,6 @@ func containsNonMissingUndefinedType(c *Checker, t *Type) bool {
 	return candidate.flags&TypeFlagsUndefined != 0 && candidate != c.missingType
 }
 
-func mappedTypeTemplateContainsNonMissingUndefined(c *Checker, mappedType *Type) bool {
-	seen := make(map[*Type]struct{})
-	var visit func(t *Type) bool
-	visit = func(t *Type) bool {
-		if t == nil {
-			return false
-		}
-		if containsNonMissingUndefinedType(c, t) {
-			return true
-		}
-		if _, ok := seen[t]; ok {
-			return false
-		}
-		seen[t] = struct{}{}
-		switch {
-		case t.flags&TypeFlagsConditional != 0:
-			return visit(c.getTrueTypeFromConditionalType(t)) || visit(c.getFalseTypeFromConditionalType(t))
-		case t.flags&TypeFlagsIndexedAccess != 0:
-			objectType := t.AsIndexedAccessType().ObjectType()
-			if objectType.flags&TypeFlagsObject != 0 && objectType.ObjectFlags()&ObjectFlagsMapped != 0 {
-				objectType = core.OrElse(objectType.AsMappedType().target, objectType)
-				return visit(c.getTemplateTypeFromMappedType(objectType))
-			}
-		case t.flags&TypeFlagsObject != 0 && t.ObjectFlags()&ObjectFlagsMapped != 0:
-			t = core.OrElse(t.AsMappedType().target, t)
-			return visit(c.getTemplateTypeFromMappedType(t))
-		}
-		return false
-	}
-	mappedType = core.OrElse(mappedType.AsMappedType().target, mappedType)
-	return visit(c.getTemplateTypeFromMappedType(mappedType))
-}
-
 func getAnyImportSyntax(node *ast.Node) *ast.Node {
 	var importNode *ast.Node
 	switch node.Kind {
