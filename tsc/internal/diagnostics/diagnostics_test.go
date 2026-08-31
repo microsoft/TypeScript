@@ -143,3 +143,38 @@ func TestLocalize_ByKey(t *testing.T) {
 		})
 	}
 }
+
+func TestLocaleFiles(t *testing.T) {
+	t.Parallel()
+
+	assert.Equal(t, len(localeNames), len(localeFuncs))
+	for i := 1; i < len(localeNames); i++ {
+		localeName := localeNames[i]
+		t.Run(localeName, func(t *testing.T) {
+			t.Parallel()
+			for key, localizedText := range localeFuncs[i]() {
+				message := keyToMessage(key)
+				assert.Assert(t, message != nil, "unknown diagnostic key %q", key)
+				localizedPlaceholders := placeholderSet(localizedText)
+				englishPlaceholders := placeholderSet(message.text)
+				assert.Equal(t, len(localizedPlaceholders), len(englishPlaceholders), "placeholder mismatch for %q", key)
+				for placeholder := range englishPlaceholders {
+					assert.Assert(t, localizedPlaceholders[placeholder], "localized diagnostic %q is missing placeholder %s", key, placeholder)
+				}
+			}
+		})
+	}
+}
+
+func TestLocaleFailureFallsBackOutsideTests(t *testing.T) {
+	t.Parallel()
+	assert.DeepEqual(t, loadLocaleDataWorker("missing", false), map[Key]string(nil))
+}
+
+func placeholderSet(text string) map[string]bool {
+	result := map[string]bool{}
+	for _, placeholder := range placeholderRegexp.FindAllString(text, -1) {
+		result[placeholder] = true
+	}
+	return result
+}

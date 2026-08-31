@@ -131,7 +131,7 @@ func TestContentMapperBuildDetectsNewPhysicalSupplementalFile(t *testing.T) {
 	testSys.writeFileNoError(supplementalFileName, "export {};\n")
 	result = execute.CommandLine(t.Context(), sys, args, testSys)
 	assert.Equal(t, result.Status, tsc.ExitStatusDiagnosticsPresent_OutputsGenerated)
-	assert.Assert(t, strings.Contains(testSys.currentWrite.String(), "TS100025"), testSys.currentWrite.String())
+	assert.Assert(t, strings.Contains(testSys.currentWrite.String(), "TS18068"), testSys.currentWrite.String())
 	assert.Assert(t, strings.Contains(testSys.currentWrite.String(), "conflicts with an existing file"), testSys.currentWrite.String())
 }
 

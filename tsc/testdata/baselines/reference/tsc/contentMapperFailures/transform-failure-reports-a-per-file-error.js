@@ -21,7 +21,7 @@ import "./app.vue";
 tsgo --runExternalCode
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
-[96mapp.vue[0m:[93m1[0m:[93m1[0m - [91merror[0m[90m TS100025: [0mThe content mapper 'fail' failed to transform this file.
+[96mapp.vue[0m:[93m1[0m:[93m1[0m - [91merror[0m[90m TS18068: [0mThe content mapper 'fail' failed to transform this file.
   The content mapper process failed while handling the transform request.
 
 [7m1[0m 

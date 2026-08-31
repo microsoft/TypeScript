@@ -39,32 +39,32 @@ import "./g.vue";
 tsgo --runExternalCode --singleThreaded
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
-[91merror[0m[90m TS100026: [0mThe content mapper 'fail' failed 5 times and will not be used.
-[96mc.vue[0m:[93m1[0m:[93m1[0m - [91merror[0m[90m TS100025: [0mThe content mapper 'fail' failed to transform this file.
+[91merror[0m[90m TS18069: [0mThe content mapper 'fail' failed 5 times and will not be used.
+[96mc.vue[0m:[93m1[0m:[93m1[0m - [91merror[0m[90m TS18068: [0mThe content mapper 'fail' failed to transform this file.
   The content mapper process failed while handling the transform request.
 
 [7m1[0m 
 [7m [0m [91m~[0m
 
-[96md.vue[0m:[93m1[0m:[93m1[0m - [91merror[0m[90m TS100025: [0mThe content mapper 'fail' failed to transform this file.
+[96md.vue[0m:[93m1[0m:[93m1[0m - [91merror[0m[90m TS18068: [0mThe content mapper 'fail' failed to transform this file.
   The content mapper process failed while handling the transform request.
 
 [7m1[0m 
 [7m [0m [91m~[0m
 
-[96me.vue[0m:[93m1[0m:[93m1[0m - [91merror[0m[90m TS100025: [0mThe content mapper 'fail' failed to transform this file.
+[96me.vue[0m:[93m1[0m:[93m1[0m - [91merror[0m[90m TS18068: [0mThe content mapper 'fail' failed to transform this file.
   The content mapper process failed while handling the transform request.
 
 [7m1[0m 
 [7m [0m [91m~[0m
 
-[96mf.vue[0m:[93m1[0m:[93m1[0m - [91merror[0m[90m TS100025: [0mThe content mapper 'fail' failed to transform this file.
+[96mf.vue[0m:[93m1[0m:[93m1[0m - [91merror[0m[90m TS18068: [0mThe content mapper 'fail' failed to transform this file.
   The content mapper process failed while handling the transform request.
 
 [7m1[0m 
 [7m [0m [91m~[0m
 
-[96mg.vue[0m:[93m1[0m:[93m1[0m - [91merror[0m[90m TS100025: [0mThe content mapper 'fail' failed to transform this file.
+[96mg.vue[0m:[93m1[0m:[93m1[0m - [91merror[0m[90m TS18068: [0mThe content mapper 'fail' failed to transform this file.
   The content mapper process failed while handling the transform request.
 
 [7m1[0m 

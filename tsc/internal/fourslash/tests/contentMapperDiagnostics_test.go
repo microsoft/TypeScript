@@ -51,7 +51,7 @@ func TestContentMapperTransformFailureDiagnostics(t *testing.T) {
 
 	f.VerifyNonSuggestionDiagnostics(t, []*lsproto.Diagnostic{
 		{
-			Code: &lsproto.IntegerOrString{Integer: new(int32(100025))},
+			Code: &lsproto.IntegerOrString{Integer: new(int32(18068))},
 			Message: lsproto.StringOrMarkupContent{String: new(
 				"The content mapper 'mapper' failed to transform this file.\n  The content mapper process failed while handling the transform request.",
 			)},

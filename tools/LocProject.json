@@ -1,0 +1,26 @@
+{
+    "Projects": [
+        {
+            "LocItems": [
+                {
+                    "SourceFile": "tsc\\internal\\diagnostics\\diagnosticMessages.generated.json",
+                    "Languages": "cs-CZ;de-DE;es-ES;fr-FR;it-IT;ja-JP;ko-KR;pl-PL;pt-BR;ru-RU;tr-TR;zh-CN;zh-TW",
+                    "CopyOption": "UsePlaceholders",
+                    "OutputPath": "tsc\\internal\\diagnostics\\loc\\{Lang}.generated.json"
+                },
+                {
+                    "SourceFile": "packages\\vscode-typescript\\package.nls.json",
+                    "Languages": "cs;de;es;fr;it;ja;ko;pl;pt-br;ru;tr;zh-cn;zh-tw",
+                    "CopyOption": "LangIDOnName",
+                    "OutputPath": "packages\\vscode-typescript"
+                },
+                {
+                    "SourceFile": "packages\\vscode-typescript\\l10n\\bundle.l10n.json",
+                    "Languages": "cs;de;es;fr;it;ja;ko;pl;pt-br;ru;tr;zh-cn;zh-tw",
+                    "CopyOption": "LangIDOnName",
+                    "OutputPath": "packages\\vscode-typescript\\l10n"
+                }
+            ]
+        }
+    ]
+}
