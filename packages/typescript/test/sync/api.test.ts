@@ -62,6 +62,7 @@ import {
     CheckFlags,
     type ConditionalType,
     DiagnosticCategory,
+    type DocumentIdentifier,
     EmitOnly,
     type FreshableType,
     type ImportAdderAction,
@@ -295,7 +296,7 @@ describe("API", () => {
             });
             assert.equal(isolatedDeclarationModuleOutput.diagnostics?.length ?? 0, 0);
 
-            const moduleFileOutput = api.transpileModuleFromFile("/input.ts", {
+            const moduleFileOutput = api.transpileModuleFromFile({ uri: "file:///input.ts" }, {
                 compilerOptions: { module: ModuleKind.CommonJS },
             });
             assert.match(moduleFileOutput.outputText, /exports\.x = 1/);
@@ -308,8 +309,261 @@ describe("API", () => {
             });
             assert.equal(windowsDeclarationOutput.outputText, "export declare const x: number;\n");
 
-            const declarationFileOutput = api.transpileDeclarationFromFile("/input.ts");
+            const declarationFileOutput = api.transpileDeclarationFromFile({ uri: "file:///input.ts" });
             assert.equal(declarationFileOutput.outputText, "export declare const x: number;\n");
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("createProgram", () => {
+        const api = spawnAPI({
+            "/src/index.ts": `export const value: string = 1;`,
+        });
+        try {
+            const program = api.createProgram(["/src/index.ts"], { compilerOptions: { noLib: true, strict: true } });
+
+            assert.deepEqual(program.getCompilerOptions(), { noLib: true, strict: true });
+            assert.deepEqual(program.getSourceFileNames(), ["/src/index.ts"]);
+            assert.equal((program.getSemanticDiagnostics("/src/index.ts")).length, 1);
+
+            program.dispose();
+            assert.throws(() => program.getSourceFileNames(), /snapshot .* not found/);
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("createProgram ignores an on-disk tsconfig", () => {
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({
+                compilerOptions: { noLib: false, strict: false },
+                files: ["src/from-config.ts"],
+            }),
+            "/src/index.ts": `export const explicitRoot = 1;`,
+            "/src/from-config.ts": `export const configRoot = 1;`,
+        });
+        try {
+            const program = api.createProgram(
+                ["/src/index.ts"],
+                { compilerOptions: { noLib: true, strict: true } },
+            );
+
+            assert.deepEqual(program.getCompilerOptions(), { noLib: true, strict: true });
+            assert.deepEqual(program.getSourceFileNames(), ["/src/index.ts"]);
+            assert.deepEqual(program.getConfigFileNames(), []);
+            assert.equal(program.getSourceFile("/src/from-config.ts"), undefined);
+            program.dispose();
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("createProgram includes project references", () => {
+        const reference = { path: "/lib/tsconfig.json", originalPath: "/lib/tsconfig.json", circular: false };
+        const api = spawnAPI({
+            "/src/index.ts": `export const value = 1;`,
+            "/lib/tsconfig.json": JSON.stringify({ compilerOptions: { composite: true, noLib: true }, files: ["index.ts"] }),
+            "/lib/index.ts": `export const lib = 1;`,
+        });
+        try {
+            const program = api.createProgram(
+                ["/src/index.ts"],
+                { compilerOptions: { noLib: true }, projectReferences: [reference] },
+            );
+            assert.deepEqual(program.getProject().parsedCommandLine.projectReferences, [reference]);
+            program.dispose();
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("createProgram includes config file parsing diagnostics", () => {
+        const diagnostic = {
+            pos: 0,
+            end: 0,
+            code: 9001,
+            category: DiagnosticCategory.Error,
+            text: "Synthetic config parsing error.",
+        };
+        const api = spawnAPI({ "/src/index.ts": `export const value = 1;` });
+        try {
+            const program = api.createProgram(
+                ["/src/index.ts"],
+                {
+                    compilerOptions: { noLib: true },
+                    configFileParsingDiagnostics: [diagnostic],
+                },
+            );
+
+            assert.deepEqual(program.getConfigFileParsingDiagnostics(), [diagnostic]);
+            program.dispose();
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("createProgram updates roots when given an old program", () => {
+        const options = { compilerOptions: { noLib: true } };
+        const api = spawnAPI({
+            "/src/a.ts": `export const a = 1;`,
+            "/src/b.ts": `export const b = 1;`,
+            "/src/c.ts": `export const c = 1;`,
+        });
+        try {
+            const oldProgram = api.createProgram(["/src/a.ts", "/src/b.ts"], options);
+            const newProgram = api.createProgram(["/src/a.ts", "/src/c.ts"], options, oldProgram);
+            assert.deepEqual(newProgram.getSourceFileNames(), ["/src/a.ts", "/src/c.ts"]);
+            assert.deepEqual(oldProgram.getSourceFileNames(), ["/src/a.ts", "/src/b.ts"]);
+
+            newProgram.dispose();
+            oldProgram.dispose();
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("createProgram rejects an inactive or foreign old program", () => {
+        const options = { compilerOptions: { noLib: true } };
+        const api = spawnAPI({ "/src/index.ts": `export const local = 1;` });
+        const otherAPI = spawnAPI({ "/src/index.ts": `export const foreign = 1;` });
+        try {
+            const localProgram = api.createProgram(["/src/index.ts"], options);
+            const foreignProgram = otherAPI.createProgram(["/src/index.ts"], options);
+
+            const createFromForeignProgram = () => api.createProgram(["/src/index.ts"], options, foreignProgram);
+            assert.throws(createFromForeignProgram, /oldProgram must belong to this API instance and reference an active snapshot/);
+
+            localProgram.dispose();
+            const createFromDisposedProgram = () => api.createProgram(["/src/index.ts"], options, localProgram);
+            assert.throws(createFromDisposedProgram, /oldProgram must belong to this API instance and reference an active snapshot/);
+
+            foreignProgram.dispose();
+        }
+        finally {
+            api.close();
+            otherAPI.close();
+        }
+    });
+
+    test("createProgram discovers imported non-root dependencies", () => {
+        const api = spawnAPI({
+            "/src/main.ts": `import { dependency } from "./dependency"; export const value = dependency;`,
+            "/src/dependency.ts": `export const dependency = 1;`,
+        });
+        try {
+            const program = api.createProgram(["/src/main.ts"], { compilerOptions: { noLib: true } });
+            assert.deepEqual([...program.getSourceFileNames()].sort(), ["/src/dependency.ts", "/src/main.ts"]);
+
+            program.dispose();
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("createProgram updates an old program with file changes", () => {
+        const fileName = "/src/index.ts";
+        const options = { compilerOptions: { noLib: true, strict: true } };
+        const { api, fs } = spawnAPIWithFS({
+            [fileName]: `export const value: string = 1;`,
+        });
+        try {
+            const oldProgram = api.createProgram([fileName], options);
+            assert.equal((oldProgram.getSemanticDiagnostics(fileName)).length, 1);
+
+            fs.writeFile!(fileName, `export const value: string = "valid";`);
+            const newProgram = api.createProgram(
+                [fileName],
+                options,
+                oldProgram,
+                { changed: [fileName] },
+            );
+
+            assert.equal((newProgram.getSemanticDiagnostics(fileName)).length, 0);
+            assert.equal((oldProgram.getSemanticDiagnostics(fileName)).length, 1);
+
+            newProgram.dispose();
+            oldProgram.dispose();
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("createProgram updates an old program with invalidateAll", () => {
+        const fileName = "/src/index.ts";
+        const options = { compilerOptions: { noLib: true, strict: true } };
+        const { api, fs } = spawnAPIWithFS({
+            [fileName]: `export const value: string = 1;`,
+        });
+        try {
+            const oldProgram = api.createProgram([fileName], options);
+            assert.equal((oldProgram.getSemanticDiagnostics(fileName)).length, 1);
+
+            fs.writeFile!(fileName, `export const value: string = "valid";`);
+            const newProgram = api.createProgram(
+                [fileName],
+                options,
+                oldProgram,
+                { invalidateAll: true },
+            );
+
+            assert.equal((newProgram.getSemanticDiagnostics(fileName)).length, 0);
+            assert.equal((oldProgram.getSemanticDiagnostics(fileName)).length, 1);
+
+            newProgram.dispose();
+            oldProgram.dispose();
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("createProgram accepts a regular project program as the old program", () => {
+        const fileName = "/src/index.ts";
+        const { api, fs } = spawnAPIWithFS({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { noLib: true, strict: true } }),
+            [fileName]: `export const value: string = 1;`,
+        });
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            assert.equal((project.program.getSemanticDiagnostics(fileName)).length, 1);
+
+            fs.writeFile!(fileName, `export const value: string = "valid";`);
+            const newProgram = api.createProgram(
+                project.parsedCommandLine.fileNames,
+                {
+                    compilerOptions: project.parsedCommandLine.options,
+                    ...(project.parsedCommandLine.projectReferences
+                        ? { projectReferences: project.parsedCommandLine.projectReferences }
+                        : {}),
+                },
+                project.program,
+                { changed: [fileName] },
+            );
+
+            assert.equal((newProgram.getSemanticDiagnostics(fileName)).length, 0);
+            assert.equal((project.program.getSemanticDiagnostics(fileName)).length, 1);
+            newProgram.dispose();
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("createProgram rejects file changes without an old program", () => {
+        const api = spawnAPI({ "/src/index.ts": `export const value = 1;` });
+        try {
+            const createWithChanges = () => api.createProgram(["/src/index.ts"], { compilerOptions: { noLib: true } }, undefined, { changed: ["/src/index.ts"] });
+            assert.throws(createWithChanges, /fileChanges requires an oldProgram/);
         }
         finally {
             api.close();
@@ -1003,6 +1257,26 @@ describe("Checker - getMemberInModuleExports", () => {
 });
 
 describe("SourceFile", () => {
+    test("getSourceFile rejects invalid document identifiers", () => {
+        const api = spawnAPI();
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const program = snapshot.getProject("/tsconfig.json")!.program;
+            const document = { fileName: "/src/index.ts" } as unknown as DocumentIdentifier;
+
+            assert.throws(
+                () => program.getSourceFile(document),
+                {
+                    name: "TypeError",
+                    message: "Expected a string or { uri } for the document, received an object with keys: fileName",
+                },
+            );
+        }
+        finally {
+            api.close();
+        }
+    });
+
     test("getSourceFileNames returns all program files, not just root files", () => {
         const api = spawnAPI({
             "/tsconfig.json": JSON.stringify({
@@ -1089,7 +1363,7 @@ describe("SourceFile", () => {
 
             const mts = program.getSourceFile("/src/esm.mts");
             assert.ok(mts);
-            assert.equal((program.getSourceFileMetadata(mts.fileName))?.impliedNodeFormat, ModuleKind.ESNext);
+            assert.equal((program.getSourceFileMetadata({ uri: "file:///src/esm.mts" }))?.impliedNodeFormat, ModuleKind.ESNext);
             assert.equal((program.getSourceFileMetadataByPath(mts.path))?.impliedNodeFormat, ModuleKind.ESNext);
 
             const cts = program.getSourceFile("/src/cjs.cts");
@@ -2642,15 +2916,59 @@ export const tuple: readonly [number, string?, ...boolean[]] = [1];
         }
     });
 
-    test("TupleType properties", () => {
-        const { type, api } = getTypeAtName(spawnAPI(typeFiles), "tuple:");
+    test("tuple metadata is owned by tuple targets", () => {
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/main.ts": `
+declare function empty(value: readonly []): void;
+declare function nonempty(value: readonly [number]): void;
+declare function array(value: readonly number[]): void;
+empty([]);
+nonempty([1]);
+array([]);
+`,
+        });
         try {
-            assert.ok(type.flags & TypeFlags.Object);
-            const ref = type as TypeReference;
-            assert.ok(ref.objectFlags & ObjectFlags.Reference);
-            const target = ref.getTarget();
-            assert.ok(target);
-            assert.ok(target.flags & TypeFlags.Object);
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const sourceFile = project.program.getSourceFile("/src/main.ts");
+            assert.ok(sourceFile);
+
+            const arrayLiterals: Node[] = [];
+            sourceFile.forEachChild(function visit(node) {
+                if (node.kind === SyntaxKind.ArrayLiteralExpression) {
+                    arrayLiterals.push(node);
+                }
+                node.forEachChild(visit);
+            });
+            assert.equal(arrayLiterals.length, 3);
+
+            for (const [index, expectedFixedLength] of [0, 1].entries()) {
+                const type = project.checker.getTypeAtLocation(arrayLiterals[index]);
+                assert.equal(project.checker.isTupleType(type), true);
+                assert.equal(project.checker.isTupleTypeTarget(type), false);
+                assert.equal(type.isTupleType(), true);
+                assert.equal(type.isTupleTypeTarget(), false);
+                assert.ok(type.isTupleType());
+                assert.equal(Reflect.get(type, "fixedLength"), undefined);
+
+                const target = type.getTarget();
+                assert.ok(target.objectFlags & ObjectFlags.Tuple);
+                assert.equal(project.checker.isTupleType(target), true);
+                assert.equal(project.checker.isTupleTypeTarget(target), true);
+                assert.equal(target.isTupleType(), true);
+                assert.equal(target.isTupleTypeTarget(), true);
+                assert.ok(target.isTupleTypeTarget());
+                assert.equal(target.fixedLength, expectedFixedLength);
+                assert.equal(target.elementFlags.length, expectedFixedLength);
+                assert.equal(target.readonly, false);
+            }
+
+            const arrayType = project.checker.getTypeAtLocation(arrayLiterals[2]);
+            assert.equal(project.checker.isTupleType(arrayType), false);
+            assert.equal(project.checker.isTupleTypeTarget(arrayType), false);
+            assert.equal(arrayType.isTupleType(), false);
+            assert.equal(arrayType.isTupleTypeTarget(), false);
         }
         finally {
             api.close();
@@ -4633,6 +4951,27 @@ function f() {
             const names = symbols.map(s => s.name);
             assert.ok(names.includes("OuterType"), "should include interface declared in file");
             assert.ok(names.includes("Array"), "should include global type symbols");
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    // Regression test: `<<` binds tighter than `-` in Go but looser in JS, so SymbolFlagsAll's
+    // `(1<<30) - 1` needs those parens or the generated enum silently becomes `1 << 29`.
+    test("SymbolFlags.All includes both value and type meanings", () => {
+        const api = spawnAPI(scopeFiles);
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const pos = scopeFiles["/src/main.ts"].indexOf("return innerValue");
+            const symbols = project.checker.getSymbolsInScope(
+                { document: "/src/main.ts", position: pos },
+                SymbolFlags.All,
+            );
+            const names = symbols.map(s => s.name);
+            assert.ok(names.includes("innerValue"), "should include local value symbol");
+            assert.ok(names.includes("OuterType"), "should include type symbol declared in file");
         }
         finally {
             api.close();

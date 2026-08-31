@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"maps"
 
+	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 )
@@ -66,4 +67,44 @@ func (s *Session) APIUpdateTemporary(ctx context.Context, baseSnapshot *Snapshot
 		},
 	}, overlays, s)
 	return newSnapshot, nil
+}
+
+// APICreateProgram creates an isolated snapshot containing one synthetic project.
+// Without an old snapshot it starts from the underlying filesystem; otherwise it
+// derives from oldSnapshot and applies fileChanges.
+func (s *Session) APICreateProgram(
+	ctx context.Context,
+	rootFileNames []string,
+	options *core.CompilerOptions,
+	projectReferences []*core.ProjectReference,
+	configFileParsingDiagnostics []*ast.Diagnostic,
+	oldSnapshot *Snapshot,
+	oldProject *Project,
+	fileChanges FileChangeSummary,
+) *Snapshot {
+	if oldSnapshot != nil {
+		return oldSnapshot.cloneForProgram(
+			ctx,
+			rootFileNames,
+			options,
+			projectReferences,
+			configFileParsingDiagnostics,
+			oldProject,
+			fileChanges,
+			s,
+		)
+	}
+
+	snapshot, _ := s.APIUpdate(ctx, fileChanges, nil)
+	defer snapshot.Deref(s)
+	return snapshot.cloneForProgram(
+		ctx,
+		rootFileNames,
+		options,
+		projectReferences,
+		configFileParsingDiagnostics,
+		nil,
+		fileChanges,
+		s,
+	)
 }

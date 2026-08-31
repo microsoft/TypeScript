@@ -15,6 +15,12 @@ declare global {
 
             "a-c": any;
 >"a-c" : any
+
+            "abcde:abcde": any;
+>"abcde:abcde" : any
+
+            "namespace-name:tagname-tag": any;
+>"namespace-name:tagname-tag" : any
         }
     }
 }
@@ -86,6 +92,24 @@ const x = { video: () => null }
 >x : number
 >12 : 12
 
+; <a\u0062c\u0064e:a\u{62}c\u{64}e x={12}></abcde:abcde>
+><a\u0062c\u0064e:a\u{62}c\u{64}e x={12}></abcde:abcde> : JSX.Element
+>a\u0062c\u0064e : any
+>a\u{62}c\u{64}e : any
+>x : number
+>12 : 12
+>abcde : any
+>abcde : any
+
+; <n\u0061me\u{73}pa\u0063e-\u{6e}a\u006de:\u{74}a\u0067n\u{61}me-\u0074\u{61}\u0067 x={12}></namespace-name:tagname-tag>
+><n\u0061me\u{73}pa\u0063e-\u{6e}a\u006de:\u{74}a\u0067n\u{61}me-\u0074\u{61}\u0067 x={12}></namespace-name:tagname-tag> : JSX.Element
+>n\u0061me\u{73}pa\u0063e-\u{6e}a\u006de : any
+>\u{74}a\u0067n\u{61}me-\u0074\u{61}\u0067 : any
+>x : number
+>12 : 12
+>namespace-name : any
+>tagname-tag : any
+
 // attribute name
 ;<video data-\u0076ideo />
 ><video data-\u0076ideo /> : JSX.Element
@@ -96,4 +120,14 @@ const x = { video: () => null }
 ><video \u0073rc="" /> : JSX.Element
 >video : any
 >\u0073rc : string
+
+;<video m\u0075t\u0065d />
+><video m\u0075t\u0065d /> : JSX.Element
+>video : any
+>m\u0075t\u0065d : true
+
+;<video m\u{75}t\u{65}d />
+><video m\u{75}t\u{65}d /> : JSX.Element
+>video : any
+>m\u{75}t\u{65}d : true
 
