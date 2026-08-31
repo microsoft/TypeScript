@@ -23,9 +23,54 @@ type workspaceDiagnosticReport = lsproto.WorkspaceFullDocumentDiagnosticReportOr
 // progressRecorder collects the $/progress notifications the server sends for a request, so tests
 // can assert on streamed partial results and work done progress.
 type progressRecorder struct {
-	mu      sync.Mutex
-	partial []workspaceDiagnosticReport
-	kinds   []string
+	mu             sync.Mutex
+	partial        []workspaceDiagnosticReport
+	kinds          []string
+	registered     []string
+	unregistered   []string
+	workspaceRegos int
+}
+
+func (p *progressRecorder) recordRegistration(req *lsproto.RequestMessage) {
+	raw, ok := req.Params.(json.Value)
+	if !ok {
+		return
+	}
+	p.mu.Lock()
+	defer p.mu.Unlock()
+	switch req.Method {
+	case lsproto.MethodClientRegisterCapability:
+		var params lsproto.RegistrationParams
+		if json.Unmarshal(raw, &params) != nil {
+			return
+		}
+		for _, registration := range params.Registrations {
+			p.registered = append(p.registered, registration.Id)
+			if opts := registration.RegisterOptions; opts != nil && opts.TextDocumentDiagnostic != nil && opts.TextDocumentDiagnostic.WorkspaceDiagnostics {
+				p.workspaceRegos++
+			}
+		}
+	case lsproto.MethodClientUnregisterCapability:
+		var params lsproto.UnregistrationParams
+		if json.Unmarshal(raw, &params) != nil {
+			return
+		}
+		for _, unregistration := range params.Unregisterations {
+			p.unregistered = append(p.unregistered, unregistration.Id)
+		}
+	}
+}
+
+func (p *progressRecorder) registrationIDs() []string {
+	p.mu.Lock()
+	defer p.mu.Unlock()
+	return append([]string(nil), p.registered...)
+}
+
+func (p *progressRecorder) unregistrationIDs() []string {
+	p.mu.Lock()
+	defer p.mu.Unlock()
+	return append([]string(nil), p.unregistered...)
 }
 
 func (p *progressRecorder) record(req *lsproto.RequestMessage) {
@@ -96,8 +141,10 @@ func startWorkspaceDiagnosticsClient(t *testing.T, files map[string]string) (*ls
 
 	onServerRequest := func(_ context.Context, req *lsproto.RequestMessage) *lsproto.ResponseMessage {
 		switch req.Method {
-		case lsproto.MethodClientRegisterCapability, lsproto.MethodClientUnregisterCapability,
-			lsproto.MethodWindowWorkDoneProgressCreate:
+		case lsproto.MethodClientRegisterCapability, lsproto.MethodClientUnregisterCapability:
+			progress.recordRegistration(req)
+			return &lsproto.ResponseMessage{ID: req.ID, JSONRPC: req.JSONRPC, Result: lsproto.Null{}}
+		case lsproto.MethodWindowWorkDoneProgressCreate:
 			return &lsproto.ResponseMessage{ID: req.ID, JSONRPC: req.JSONRPC, Result: lsproto.Null{}}
 		default:
 			return nil

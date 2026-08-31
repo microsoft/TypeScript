@@ -255,6 +255,9 @@ type Server struct {
 	// workspaceDiagnostics remembers, across `workspace/diagnostic` pulls, which program version
 	// produced the result id a client holds for each file.
 	workspaceDiagnostics *workspaceDiagnosticsCache
+
+	workspaceDiagnosticsRegistrationMu sync.Mutex
+	workspaceDiagnosticsRegistered     bool
 }
 
 func (s *Server) Session() *project.Session { return s.session }
@@ -520,6 +523,10 @@ func (s *Server) RegisterContentMapperExtensions(ctx context.Context, extensions
 		{
 			Id: contentMapperDiagnosticRegistrationID,
 			RegisterOptions: &lsproto.RegisterOptions{
+				// Must not set WorkspaceDiagnostics: the client runs one workspace pull per provider
+				// that asks for it, into that provider's own collection, so a second one would report
+				// every problem twice. workspaceDiagnosticsRegistrationID is the only provider that
+				// carries it, and it covers content-mapped files too.
 				TextDocumentDiagnostic: &lsproto.DiagnosticRegistrationOptions{
 					DocumentSelector:      selector,
 					Identifier:            new("typescript"),
@@ -1761,6 +1768,7 @@ func (s *Server) handleInitialized(ctx context.Context, params *lsproto.Initiali
 		return err
 	}
 	s.session.InitializeWithUserConfig(userPreferences)
+	s.syncWorkspaceDiagnosticsRegistration(ctx, userPreferences)
 
 	_, err = sendClientRequest(ctx, s, lsproto.ClientRegisterCapabilityInfo, &lsproto.RegistrationParams{
 		Registrations: []*lsproto.Registration{
@@ -1809,7 +1817,9 @@ func (s *Server) handleDidChangeWorkspaceConfiguration(ctx context.Context, para
 	if params.Settings == nil {
 		return nil
 	} else if settings, ok := params.Settings.(map[string]any); ok {
-		s.session.Configure(lsutil.ParseUserPreferences(settings))
+		preferences := lsutil.ParseUserPreferences(settings)
+		s.session.Configure(preferences)
+		s.syncWorkspaceDiagnosticsRegistration(ctx, preferences)
 	}
 	return nil
 }
