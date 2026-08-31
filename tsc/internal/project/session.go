@@ -1493,7 +1493,7 @@ func (s *Session) takeContentMapperTimingDelta() contentmapper.Timings {
 }
 
 func (s *Session) logContentMapperTimings(timings contentmapper.Timings) {
-	if timings.RequestWait == 0 {
+	if timings.RequestWait == 0 && !hasContentMapperOperationTimings(timings.Mappers) {
 		return
 	}
 	s.logger.Log("Content mapper timings since previous snapshot adoption:")
@@ -1502,7 +1502,7 @@ func (s *Session) logContentMapperTimings(timings contentmapper.Timings) {
 	}
 	for _, identity := range slices.Sorted(maps.Keys(timings.Mappers)) {
 		mapper := timings.Mappers[identity]
-		if mapper.Spawn.Count == 0 && mapper.OpenProject.Count == 0 && mapper.CloseProject.Count == 0 && mapper.Transform.Count == 0 {
+		if !hasContentMapperOperationTiming(mapper) {
 			continue
 		}
 		s.logger.Logf("  %s:", identity)
@@ -1519,6 +1519,19 @@ func (s *Session) logContentMapperTimings(timings contentmapper.Timings) {
 			s.logger.Logf("    Transforms: %d (%v)", mapper.Transform.Count, mapper.Transform.Duration)
 		}
 	}
+}
+
+func hasContentMapperOperationTimings(timings map[string]contentmapper.MapperTimings) bool {
+	for _, timing := range timings {
+		if hasContentMapperOperationTiming(timing) {
+			return true
+		}
+	}
+	return false
+}
+
+func hasContentMapperOperationTiming(timing contentmapper.MapperTimings) bool {
+	return timing.Spawn.Count != 0 || timing.OpenProject.Count != 0 || timing.CloseProject.Count != 0 || timing.Transform.Count != 0
 }
 
 // WaitForBackgroundTasks waits for all background tasks to complete.

@@ -13,6 +13,16 @@ import (
 	"gotest.tools/v3/assert"
 )
 
+func expectedCodeActionKinds() []lsproto.CodeActionKind {
+	return []lsproto.CodeActionKind{
+		lsproto.CodeActionKindQuickFix,
+		"source.organizeImports.ts",
+		"source.removeUnusedImports.ts",
+		"source.sortImports.ts",
+		"source.fixAll.ts",
+	}
+}
+
 func initProjectInfoClient(t *testing.T, files map[string]string) *lsptestutil.LSPClient {
 	t.Helper()
 
@@ -47,6 +57,24 @@ func initProjectInfoClient(t *testing.T, files map[string]string) *lsptestutil.L
 	<-client.Server.InitComplete()
 
 	return client
+}
+
+func TestInitializeCodeActionKinds(t *testing.T) {
+	t.Parallel()
+
+	client, closeClient := lsptestutil.NewLSPClient(t, lsp.ServerOptions{
+		Err:                io.Discard,
+		Cwd:                "/home/projects",
+		FS:                 bundled.WrapFS(vfstest.FromMap(map[string]string{}, false)),
+		DefaultLibraryPath: bundled.LibPath(),
+	}, nil)
+	t.Cleanup(func() { _ = closeClient() })
+
+	message, result, ok := client.SendRequest(t, lsproto.InitializeInfo, &lsproto.InitializeParams{
+		Capabilities: &lsproto.ClientCapabilities{},
+	})
+	assert.Assert(t, ok && message.AsResponse().Error == nil, "Initialize failed")
+	assert.DeepEqual(t, *result.Capabilities.CodeActionProvider.CodeActionOptions.CodeActionKinds, expectedCodeActionKinds())
 }
 
 func TestProjectInfoConfiguredProject(t *testing.T) {

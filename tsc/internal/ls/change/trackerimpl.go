@@ -21,21 +21,18 @@ import (
 
 func (t *Tracker) getTextChangesFromChanges() map[string][]*lsproto.TextEdit {
 	changes := map[string][]*lsproto.TextEdit{}
+	// A content-mapped file can have several projections, each keyed separately in t.changes but
+	// all sharing one original file. Their edits are collected together before being ordered and checked,
+	// so duplicate edits are emitted once and conflicting edits are rejected regardless of map iteration
+	// order.
+	projections := map[string]int{}
 	for sourceFile, changesInFile := range t.changes.M {
-		if t.unmappableFiles.Has(sourceFile.OriginalFileName()) {
+		fileName := sourceFile.OriginalFileName()
+		if t.unmappableFiles.Has(fileName) {
 			continue
 		}
-		// order changes by start position
-		// If the start position is the same, put the shorter range first, since an empty range (x, x) may precede (x, y) but not vice-versa.
-		slices.SortStableFunc(changesInFile, func(a, b *trackerEdit) int { return lsproto.CompareRanges(a.Range, b.Range) })
-		// verify that change intervals do not overlap, except possibly at end points.
-		for i := range len(changesInFile) - 1 {
-			if lsproto.ComparePositions(changesInFile[i].Range.End, changesInFile[i+1].Range.Start) > 0 {
-				// assert change[i].End <= change[i + 1].Start
-				panic(fmt.Sprintf("changes overlap: %v and %v", changesInFile[i].Range, changesInFile[i+1].Range))
-			}
-		}
-
+		// For a content-mapped file, a mapper may reorder source text relative to the original document.
+		// Convert first, then sort and check for overlap in the space where edits are actually applied.
 		textChanges := core.MapNonNil(changesInFile, func(change *trackerEdit) *lsproto.TextEdit {
 			// !!! targetSourceFile
 
@@ -47,19 +44,70 @@ func (t *Tracker) getTextChangesFromChanges() map[string][]*lsproto.TextEdit {
 
 			return &lsproto.TextEdit{
 				NewText: newText,
-				Range:   change.Range,
+				Range:   t.toLSPEditRange(sourceFile, change.TextRange),
 			}
 		})
 
 		if len(textChanges) > 0 {
-			fileName := sourceFile.OriginalFileName()
-			if t.unmappableFiles.Has(fileName) {
-				continue
-			}
 			changes[fileName] = append(changes[fileName], textChanges...)
+			projections[fileName]++
+		}
+	}
+
+	for fileName, textChanges := range changes {
+		// Converting the edits above may have found that this file cannot be represented in its original
+		// text. GetChanges drops it, so its order does not matter, and the best-effort ranges left behind
+		// may overlap in ways the check below would refuse.
+		if t.unmappableFiles.Has(fileName) {
+			continue
+		}
+		// order changes by start position
+		// If the start position is the same, put the shorter range first, since an empty range (x, x) may precede (x, y) but not vice-versa.
+		slices.SortStableFunc(textChanges, func(a, b *lsproto.TextEdit) int { return lsproto.CompareRanges(a.Range, b.Range) })
+		if projections[fileName] > 1 {
+			textChanges = dedupeIdenticalEdits(textChanges)
+			changes[fileName] = textChanges
+		}
+		// verify that change intervals do not overlap, except possibly at end points.
+		for i := range len(textChanges) - 1 {
+			if textEditsConflict(textChanges[i], textChanges[i+1], projections[fileName] > 1) {
+				if projections[fileName] > 1 {
+					// Projections of one original range disagree about how to edit it. That is a property of
+					// the mapper's output rather than a bug here, so drop the file instead of failing.
+					t.unmappableFiles.Add(fileName)
+					break
+				}
+				// assert change[i].End <= change[i + 1].Start
+				panic(fmt.Sprintf("changes overlap: %v and %v", textChanges[i].Range, textChanges[i+1].Range))
+			}
 		}
 	}
 	return changes
+}
+
+// dedupeIdenticalEdits drops exact duplicates from a sorted slice of edits. When a mapper copies one span
+// of the original into more than one projection, an edit computed against each projection describes the
+// same change to the same original range; emitting it once per projection would apply it repeatedly.
+func dedupeIdenticalEdits(edits []*lsproto.TextEdit) []*lsproto.TextEdit {
+	deduped := edits[:0]
+	for _, edit := range edits {
+		if n := len(deduped); n > 0 && deduped[n-1].Range == edit.Range && deduped[n-1].NewText == edit.NewText {
+			continue
+		}
+		deduped = append(deduped, edit)
+	}
+	return deduped
+}
+
+func textEditsConflict(a, b *lsproto.TextEdit, multipleProjections bool) bool {
+	if lsproto.ComparePositions(a.Range.End, b.Range.Start) > 0 {
+		return true
+	}
+	// Different insertions at the same position are ambiguous when they may come from different projections.
+	return multipleProjections &&
+		a.Range.Start == a.Range.End &&
+		a.Range == b.Range &&
+		a.NewText != b.NewText
 }
 
 func (t *Tracker) computeNewText(change *trackerEdit, targetSourceFile *ast.SourceFile, sourceFile *ast.SourceFile) string {
@@ -70,7 +118,11 @@ func (t *Tracker) computeNewText(change *trackerEdit, targetSourceFile *ast.Sour
 		return change.NewText
 	}
 
-	positions := t.converters.FromLSPPositionForSourceFile(sourceFile, change.Range.Start, spanmap.FeatureAll)
+	positions := t.converters.FromLSPPositionForSourceFile(
+		sourceFile,
+		t.toLSPEditRange(sourceFile, change.TextRange).Start,
+		spanmap.FeatureAll,
+	)
 	var result string
 	found := false
 	// The original range may have multiple verbatim copies; it is safe to lose their identity only when
@@ -114,10 +166,67 @@ func (t *Tracker) computeNewText(change *trackerEdit, targetSourceFile *ast.Sour
 	if !found {
 		t.unmappableFiles.Add(sourceFile.OriginalFileName())
 	}
-	return result
+	return t.reindentInsertedLines(sourceFile, change, result)
 }
 
-/** Note: this may mutate `nodeIn`. */
+// reindentInsertedLines fixes the indentation of a line an insertion introduces into the document the
+// edit is applied to. The inserted text forms its own line when it ends in a newline, and that line has to
+// pick up the indentation of the line it is being spliced into. Where the indentation goes depends on
+// which side of the insertion point it already sits on:
+//
+//   - Inserting after a line's indentation (`\t\tfoo` with the point before `foo`) leaves the inserted text
+//     indented but pushes the rest of the line down bare, so the indentation is repeated after the text.
+//   - Inserting at the very start of a line leaves the existing text indented but puts the inserted text at
+//     column zero, so the indentation is emitted before the text.
+//
+// The indentation is read from the original text at the edit's original position, so it holds for a
+// content-mapped file whose projection is indented differently from the document the edit is applied to.
+// Edits carrying an explicit indentation option are left alone.
+func (t *Tracker) reindentInsertedLines(sourceFile *ast.SourceFile, change *trackerEdit, text string) string {
+	if text == "" || change.TextRange.Pos() != change.TextRange.End() || change.options.indentation != nil {
+		return text
+	}
+	if !strings.HasSuffix(text, t.newLine) {
+		return text
+	}
+	original := sourceFile.OriginalText()
+	pos := change.TextRange.Pos()
+	if spans := sourceFile.SpanMap(); spans != nil {
+		mapped, fidelity := spans.VirtualToOriginalPosition(core.TextPos(pos))
+		if !fidelity.IsExact() {
+			return text
+		}
+		pos = int(mapped)
+	}
+	if pos < 0 || pos > len(original) {
+		return text
+	}
+	lineStart := strings.LastIndexAny(original[:pos], "\r\n") + 1
+	beforePoint := original[lineStart:pos]
+	if beforePoint == "" {
+		// At the start of a line: the existing text keeps its indentation, and the inserted line needs it —
+		// but only when the formatter left the text at column zero. Where the formatter already indented it
+		// (inserting into a multi-line list, say), that indentation is the correct one.
+		if leadingIndentation(text) != "" {
+			return text
+		}
+		return leadingIndentation(original[lineStart:]) + text
+	}
+	if leadingIndentation(beforePoint) != beforePoint {
+		return text
+	}
+	// Just past the indentation: the inserted line already has it, the text pushed down needs it back.
+	return text + beforePoint
+}
+
+func leadingIndentation(text string) string {
+	end := 0
+	for end < len(text) && (text[end] == ' ' || text[end] == '\t') {
+		end++
+	}
+	return text[:end]
+}
+
 func (t *Tracker) getFormattedTextOfNode(nodeIn *ast.Node, targetSourceFile *ast.SourceFile, sourceFile *ast.SourceFile, pos int, options NodeOptions) string {
 	text, sourceFileLike := t.getNonformattedText(nodeIn, targetSourceFile)
 	// !!! if (validate) validate(node, text);
@@ -163,13 +272,10 @@ func (t *Tracker) getNonformattedText(node *ast.Node, sourceFile *ast.SourceFile
 
 // method on the changeTracker because use of converters
 // GetAdjustedRange computes the adjusted range for a node in a source file, accounting for trivia.
-func (t *Tracker) GetAdjustedRange(sourceFile *ast.SourceFile, startNode *ast.Node, endNode *ast.Node, leadingOption LeadingTriviaOption, trailingOption TrailingTriviaOption) lsproto.Range {
-	return t.toLSPEditRange(
-		sourceFile,
-		core.NewTextRange(
-			t.getAdjustedStartPosition(sourceFile, startNode, leadingOption, false),
-			t.getAdjustedEndPosition(sourceFile, endNode, trailingOption),
-		),
+func (t *Tracker) GetAdjustedRange(sourceFile *ast.SourceFile, startNode *ast.Node, endNode *ast.Node, leadingOption LeadingTriviaOption, trailingOption TrailingTriviaOption) core.TextRange {
+	return core.NewTextRange(
+		t.getAdjustedStartPosition(sourceFile, startNode, leadingOption, false),
+		t.getAdjustedEndPosition(sourceFile, endNode, trailingOption),
 	)
 }
 

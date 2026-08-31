@@ -24,7 +24,7 @@ func deleteDeclaration(t *Tracker, deletedNodesInLists map[*ast.Node]bool, sourc
 			// Lambdas with exactly one parameter are special because, after removal, there
 			// must be an empty parameter list (i.e. `()`) and this won't necessarily be the
 			// case if the parameter is simply removed (e.g. in `x => 1`).
-			t.ReplaceRangeWithText(sourceFile, t.GetAdjustedRange(sourceFile, node, node, LeadingTriviaOptionIncludeAll, TrailingTriviaOptionInclude), "()")
+			t.ReplaceTextRangeWithText(sourceFile, t.GetAdjustedRange(sourceFile, node, node, LeadingTriviaOptionIncludeAll, TrailingTriviaOptionInclude), "()")
 		} else {
 			deleteNodeInList(t, deletedNodesInLists, sourceFile, node)
 		}
@@ -114,7 +114,7 @@ func deleteDefaultImport(t *Tracker, sourceFile *ast.SourceFile, importClause *a
 		if nextToken != nil && nextToken.Kind == ast.KindCommaToken {
 			// shift first non-whitespace position after comma to the start position of the node
 			end := scanner.SkipTriviaEx(sourceFile.Text(), nextToken.End(), &scanner.SkipTriviaOptions{StopAfterLineBreak: false, StopAtComments: true})
-			t.ReplaceRangeWithText(sourceFile, t.toLSPEditRange(sourceFile, core.NewTextRange(start, end)), "")
+			t.ReplaceTextRangeWithText(sourceFile, core.NewTextRange(start, end), "")
 		} else {
 			deleteNode(t, sourceFile, name, LeadingTriviaOptionIncludeAll, TrailingTriviaOptionInclude)
 		}
@@ -130,7 +130,7 @@ func deleteImportBinding(t *Tracker, sourceFile *ast.SourceFile, node *ast.Node)
 		previousToken := astnav.GetTokenAtPosition(sourceFile, node.Pos()-1)
 		debug.Assert(previousToken != nil, "previousToken should not be nil")
 		start := astnav.GetStartOfNode(previousToken, sourceFile, false)
-		t.ReplaceRangeWithText(sourceFile, t.toLSPEditRange(sourceFile, core.NewTextRange(start, node.End())), "")
+		t.ReplaceTextRangeWithText(sourceFile, core.NewTextRange(start, node.End()), "")
 	} else {
 		// Delete the entire import declaration
 		// |import * as ns from './file'|
@@ -183,7 +183,7 @@ func deleteVariableDeclaration(t *Tracker, deletedNodesInLists map[*ast.Node]boo
 func deleteNode(t *Tracker, sourceFile *ast.SourceFile, node *ast.Node, leadingTrivia LeadingTriviaOption, trailingTrivia TrailingTriviaOption) {
 	startPosition := t.getAdjustedStartPosition(sourceFile, node, leadingTrivia, false)
 	endPosition := t.getAdjustedEndPosition(sourceFile, node, trailingTrivia)
-	t.ReplaceRangeWithText(sourceFile, t.toLSPEditRange(sourceFile, core.NewTextRange(startPosition, endPosition)), "")
+	t.ReplaceTextRangeWithText(sourceFile, core.NewTextRange(startPosition, endPosition), "")
 }
 
 func deleteNodeInList(t *Tracker, deletedNodesInLists map[*ast.Node]bool, sourceFile *ast.SourceFile, node *ast.Node) {
@@ -214,7 +214,7 @@ func deleteNodeInList(t *Tracker, deletedNodesInLists map[*ast.Node]bool, source
 		endPos = t.endPositionToDeleteNodeInList(sourceFile, node, prevNode, containingList.Nodes[index+1])
 	}
 
-	t.ReplaceRangeWithText(sourceFile, t.toLSPEditRange(sourceFile, core.NewTextRange(startPos, endPos)), "")
+	t.ReplaceTextRangeWithText(sourceFile, core.NewTextRange(startPos, endPos), "")
 }
 
 // startPositionToDeleteNodeInList finds the first non-whitespace position in the leading trivia of the node

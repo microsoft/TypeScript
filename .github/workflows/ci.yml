@@ -19,12 +19,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be # v1.3.1
-        with:
-          large-packages: false
-          docker-images: false
-          swap-storage: false
-          dotnet: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
@@ -42,7 +36,6 @@ jobs:
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: 'lts/*'
-      - uses: dtolnay/rust-toolchain@fcf085fcb4b4b8f63f96906cd713eb52181b5ea4 # stable
       - uses: ./.github/actions/setup-go
       - run: npm ci
       - run: npx hereby typescript:release --forRelease --setPrerelease dev.0.0
@@ -66,6 +59,26 @@ jobs:
           node-version: 'lts/*'
           package-manager-cache: false
       - run: npm ci --registry=https://packagefeedproxy.microsoft.io/npm/
+
+  go-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: ./.github/actions/setup-go
+      - name: Prepare standalone tsc module
+        run: |
+          mkdir "$RUNNER_TEMP/go-test-bin"
+          ln -s "$(go env GOROOT)/bin/go" "$RUNNER_TEMP/go-test-bin/go"
+          cp -R tsc "$RUNNER_TEMP/tsc"
+      - name: Tests without Node.js
+        run: |
+          export PATH="$RUNNER_TEMP/go-test-bin"
+          export GOEXPERIMENT=ms_nocgo_opensslcrypto
+          export CGO_ENABLED=0
+          ! command -v node
+          cd "$RUNNER_TEMP/tsc"
+          go test ./...
+          go test -run=- -bench=. -benchtime=1x ./...
 
   test:
     strategy:
@@ -98,6 +111,7 @@ jobs:
             name: 'concurrent test programs'
             concurrent-test-programs: true
             coverage: true
+            skip: ${{ github.event_name == 'merge_group' }}
         exclude:
           - config:
               skip: true
@@ -113,12 +127,6 @@ jobs:
       TSGO_HEREBY_CONCURRENT_TEST_PROGRAMS: ${{ (matrix.config.concurrent-test-programs && 'true') || 'false' }}
       TSGO_HEREBY_COVERAGE: ${{ (matrix.config.coverage && github.event_name != 'merge_group' && 'true') || 'false' }}
     steps:
-      - uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be # v1.3.1
-        with:
-          large-packages: false
-          docker-images: false
-          swap-storage: false
-          dotnet: false
       - run: git config --system core.longpaths true
         if: ${{ matrix.config.os == 'windows' }}
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -190,12 +198,6 @@ jobs:
     env:
       TSGO_HEREBY_COVERAGE: ${{ (matrix.config.coverage && github.event_name != 'merge_group' && 'true') || 'false' }}
     steps:
-      - uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be # v1.3.1
-        with:
-          large-packages: false
-          docker-images: false
-          swap-storage: false
-          dotnet: false
       - run: git config --system core.longpaths true
         if: ${{ matrix.config.os == 'windows' }}
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -249,12 +251,6 @@ jobs:
     env:
       TSGO_HEREBY_NOEMBED: ${{ (matrix.config.noembed && 'true') || 'false' }}
     steps:
-      - uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be # v1.3.1
-        with:
-          large-packages: false
-          docker-images: false
-          swap-storage: false
-          dotnet: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
@@ -284,12 +280,6 @@ jobs:
   generate:
     runs-on: ubuntu-latest
     steps:
-      - uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be # v1.3.1
-        with:
-          large-packages: false
-          docker-images: false
-          swap-storage: false
-          dotnet: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
@@ -320,30 +310,15 @@ jobs:
   smoke:
     runs-on: ubuntu-latest
     steps:
-      - uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be # v1.3.1
-        with:
-          large-packages: false
-          docker-images: false
-          swap-storage: false
-          dotnet: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          repository: microsoft/TypeScript
-          ref: v6.0.3
-          path: smoke/typescript-6.0
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: 'lts/*'
       - uses: ./.github/actions/setup-go
       - run: npm ci
       - run: npx hereby build --race
-      - run: npm ci
-        working-directory: smoke/typescript-6.0
-      - run: npx hereby generate-diagnostics
-        working-directory: smoke/typescript-6.0
-      - run: ./built/local/tsc -p ./smoke/typescript-6.0/src/compiler --singleThreaded
-      - run: ./built/local/tsc -p ./smoke/typescript-6.0/src/compiler
+      - run: ./built/local/tsc -p ./tsc/testdata/fixtures/compiler --noEmit --singleThreaded
+      - run: ./built/local/tsc -p ./tsc/testdata/fixtures/compiler --noEmit
 
   misc:
     runs-on: ubuntu-latest
@@ -367,6 +342,7 @@ jobs:
       - extension
       - format
       - generate
+      - go-test
       - lint
       - misc
       - package-feed-proxy

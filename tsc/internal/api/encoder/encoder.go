@@ -63,7 +63,7 @@ const (
 )
 
 const (
-	ProtocolVersion uint8 = 7
+	ProtocolVersion uint8 = 8
 )
 
 // Source File Binary Format
@@ -202,7 +202,8 @@ const (
 // NodeLists are represented as normal nodes with the special `kind` value `0xff_ff_ff_ff`. They are considered the parent
 // of their contents in the encoded format. A client reconstructing an AST similar to TypeScript's internal representation
 // should instead set the `parent` pointers of a NodeList's children to the NodeList's parent. A NodeList's `data` field
-// is the uint32 length of the list, and does not use one of the data types described below.
+// is the uint32 length of the list, and does not use one of the data types described below. A NodeList's `flags` field
+// is not used for AST node flags (NodeLists have none); bit 0 instead encodes `HasTrailingComma`.
 //
 // For node types other than NodeList, the node data field encodes one of the following, determined by the first 2 bits of
 // the field:
@@ -502,7 +503,7 @@ func encodeTree(rootNode *ast.Node, sourceFile *ast.SourceFile) ([]byte, *NodeIn
 					nodes[prevIndex*NodeSize+NodeOffsetNext+3] = b3
 				}
 
-				nodes = appendUint32s(nodes, SyntaxKindNodeList, utf16(nodeList.Pos()), utf16(nodeList.End()), 0, parentIndex, uint32(len(nodeList.Nodes)), 0)
+				nodes = appendUint32s(nodes, SyntaxKindNodeList, utf16(nodeList.Pos()), utf16(nodeList.End()), 0, parentIndex, uint32(len(nodeList.Nodes)), uint32(boolToByte(nodeList.HasTrailingComma())))
 
 				saveParentIndex := parentIndex
 

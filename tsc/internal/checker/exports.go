@@ -113,6 +113,10 @@ func (c *Checker) GetImmediateAliasedSymbol(symbol *ast.Symbol) *ast.Symbol {
 	return c.getImmediateAliasedSymbol(symbol)
 }
 
+func (c *Checker) GetTargetSymbol(symbol *ast.Symbol) *ast.Symbol {
+	return c.getTargetSymbol(symbol)
+}
+
 func (c *Checker) GetTypeOnlyAliasDeclaration(symbol *ast.Symbol) *ast.Node {
 	return c.getTypeOnlyAliasDeclaration(symbol)
 }
@@ -181,6 +185,10 @@ func (c *Checker) GetTypeOfSymbol(symbol *ast.Symbol) *Type {
 	return c.getTypeOfSymbol(symbol)
 }
 
+func (c *Checker) GetNonMissingTypeOfSymbol(symbol *ast.Symbol) *Type {
+	return c.getNonMissingTypeOfSymbol(symbol)
+}
+
 func (c *Checker) GetConstraintOfTypeParameter(typeParameter *Type) *Type {
 	return c.getConstraintOfTypeParameter(typeParameter)
 }
@@ -217,8 +225,16 @@ func IsTupleType(t *Type) bool {
 	return isTupleType(t)
 }
 
+func IsTupleTypeTarget(t *Type) bool {
+	return isTupleType(t) && t.Target() == t
+}
+
 func (c *Checker) IsArrayType(t *Type) bool {
 	return c.isArrayType(t)
+}
+
+func (c *Checker) IsReadonlySymbol(symbol *ast.Symbol) bool {
+	return c.isReadonlySymbol(symbol)
 }
 
 func (c *Checker) GetReturnTypeOfSignature(sig *Signature) *Type {

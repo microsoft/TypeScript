@@ -5,6 +5,7 @@ import (
 	"encoding/base64"
 	"errors"
 	"fmt"
+	"runtime/debug"
 	"slices"
 	"strconv"
 	"strings"
@@ -599,6 +600,8 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 	}
 
 	switch method {
+	case string(MethodBatchRequests):
+		return s.handleBatchRequests(ctx, parsed.(*BatchRequestsParams))
 	case string(MethodRelease):
 		return s.handleRelease(ctx, parsed.(*ReleaseParams))
 	case string(MethodInitialize):
@@ -613,6 +616,8 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleReadConfigFile(ctx, parsed.(*ReadConfigFileParams))
 	case string(MethodParseJsonConfigFile):
 		return s.handleParseJsonConfigFileContent(ctx, parsed.(*ParseJsonConfigFileContentParams))
+	case string(MethodCreateProgram):
+		return s.handleCreateProgram(ctx, parsed.(*CreateProgramParams))
 	case string(MethodParseConfigFile):
 		return s.handleParseConfigFile(ctx, parsed.(*ParseConfigFileParams))
 	case string(MethodTranspileModule):
@@ -653,6 +658,8 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleGetTypesOfSymbols(ctx, parsed.(*GetTypesOfSymbolsParams))
 	case string(MethodGetDeclaredTypeOfSymbol):
 		return s.handleGetDeclaredTypeOfSymbol(ctx, parsed.(*GetTypeOfSymbolParams))
+	case string(MethodGetNonMissingTypeOfSymbol):
+		return s.handleGetNonMissingTypeOfSymbol(ctx, parsed.(*GetTypeOfSymbolParams))
 	case string(MethodResolveName):
 		return s.handleResolveName(ctx, parsed.(*ResolveNameParams))
 	case string(MethodGetSymbolsInScope):
@@ -803,6 +810,8 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleGetAliasedSymbol(ctx, parsed.(*CheckerSymbolParams))
 	case string(MethodGetImmediateAliasedSymbol):
 		return s.handleGetImmediateAliasedSymbol(ctx, parsed.(*CheckerSymbolParams))
+	case string(MethodGetTargetSymbol):
+		return s.handleMethodGetTargetSymbol(ctx, parsed.(*CheckerSymbolParams))
 	case string(MethodGetFullyQualifiedName):
 		return s.handleGetFullyQualifiedName(ctx, parsed.(*CheckerSymbolParams))
 	case string(MethodGetExportsOfModule):
@@ -815,8 +824,8 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleGetDocumentationComment(ctx, parsed.(*CheckerSymbolParams))
 	case string(MethodIsArrayType):
 		return s.handleIsArrayType(ctx, parsed.(*CheckerTypeParams))
-	case string(MethodIsTupleType):
-		return s.handleIsTupleType(ctx, parsed.(*CheckerTypeParams))
+	case string(MethodIsReadonlySymbol):
+		return s.handleIsReadonlySymbol(ctx, parsed.(*CheckerSymbolParams))
 	case string(MethodGetAnyType):
 		return s.handleGetIntrinsicType(ctx, parsed.(*GetIntrinsicTypeParams), (*checker.Checker).GetAnyType)
 	case string(MethodGetStringType):
@@ -878,6 +887,30 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 	default:
 		return nil, fmt.Errorf("unknown method: %s", method)
 	}
+}
+
+func (s *Session) handleBatchRequests(ctx context.Context, params *BatchRequestsParams) (*BatchRequestsResponse, error) {
+	responses := make([]BatchResponse, len(params.Requests))
+	for i, request := range params.Requests {
+		responses[i] = s.handleBatchRequest(ctx, request)
+	}
+	return &BatchRequestsResponse{Responses: responses}, nil
+}
+
+func (s *Session) handleBatchRequest(ctx context.Context, request BatchRequest) (response BatchResponse) {
+	response.Method = request.Method
+	defer func() {
+		if recovered := recover(); recovered != nil {
+			response.Result = nil
+			response.Error = fmt.Sprintf("panic: %v\n%s", recovered, debug.Stack())
+		}
+	}()
+	var err error
+	response.Result, err = s.HandleRequest(ctx, string(request.Method), request.Params)
+	if err != nil {
+		response.Error = err.Error()
+	}
+	return response
 }
 
 func (s *Session) handleStartCPUProfile(_ context.Context, params *ProfileParams) (any, error) {
@@ -1125,6 +1158,73 @@ func (s *Session) handleUpdateTemporarySnapshot(ctx context.Context, params *Upd
 		Snapshot: handle,
 		Projects: projectResponses,
 		Changes:  changes,
+	}, nil
+}
+
+func (s *Session) handleCreateProgram(ctx context.Context, params *CreateProgramParams) (*CreateProgramResponse, error) {
+	if params.FileChanges != nil && params.OldProgram == nil {
+		return nil, fmt.Errorf("%w: fileChanges requires an oldProgram", ErrClientError)
+	}
+
+	rootFileNames := make([]string, len(params.RootFiles))
+	for i, rootFile := range params.RootFiles {
+		rootFileNames[i] = rootFile.ToAbsoluteFileName(s.projectSession.GetCurrentDirectory())
+	}
+
+	var oldSnapshot *project.Snapshot
+	var oldProject *project.Project
+	if params.OldProgram != nil {
+		oldSnapshotID := params.OldProgram.Snapshot
+		oldSD, err := s.retainSnapshotData(oldSnapshotID)
+		if err != nil {
+			return nil, err
+		}
+		defer func() { _ = s.releaseSnapshot(oldSnapshotID) }()
+
+		oldSnapshot = oldSD.snapshot
+		oldProject, err = oldSD.getProject(params.OldProgram.Project)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	snapshot := s.projectSession.APICreateProgram(
+		ctx,
+		rootFileNames,
+		&params.CreateProgramOptions.CompilerOptions,
+		params.CreateProgramOptions.ProjectReferences,
+		core.Map(params.CreateProgramOptions.ConfigFileParsingDiagnostics, func(d *DiagnosticResponse) *ast.Diagnostic { return d.ToDiagnostic() }),
+		oldSnapshot,
+		oldProject,
+		s.toFileChangeSummary(params.FileChanges),
+	)
+	project := snapshot.ProjectCollection.InferredProject()
+	if project == nil {
+		snapshot.Deref(s.projectSession)
+		return nil, fmt.Errorf("%w: failed to create synthetic project", ErrClientError)
+	}
+
+	handle := snapshotHandle(snapshot)
+	s.snapshotsMu.Lock()
+	if sd, exists := s.snapshots[handle]; exists {
+		// Same snapshot already stored: use the existing retained ref and only bump API refcount.
+		snapshot.Deref(s.projectSession)
+		sd.refCount++
+	} else {
+		sd = &snapshotData{
+			snapshot:                snapshot,
+			refCount:                1,
+			symbolRegistry:          make(map[SymbolID]*ast.Symbol),
+			symbolCanonicalProjects: make(map[SymbolID]ProjectID),
+			projectRegistries:       make(map[ProjectID]*projectRegistryData),
+		}
+		s.snapshots[handle] = sd
+	}
+	s.snapshotsMu.Unlock()
+
+	return &CreateProgramResponse{
+		Snapshot: handle,
+		Project:  NewProjectResponse(project),
 	}, nil
 }
 
@@ -1640,6 +1740,22 @@ func (s *Session) handleGetDeclaredTypeOfSymbol(ctx context.Context, params *Get
 	}
 
 	return setup.newTypeResponse(setup.checker.GetDeclaredTypeOfSymbol(symbol)), nil
+}
+
+// handleGetNonMissingTypeOfSymbol returns the type of a symbol, excluding the missing type.
+func (s *Session) handleGetNonMissingTypeOfSymbol(ctx context.Context, params *GetTypeOfSymbolParams) (*TypeResponse, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	symbol, err := setup.resolveSymbolHandle(params.Symbol)
+	if err != nil {
+		return nil, err
+	}
+
+	return setup.newTypeResponse(setup.checker.GetNonMissingTypeOfSymbol(symbol)), nil
 }
 
 // handleResolveName resolves a name to a symbol at a given location.
@@ -2956,20 +3072,20 @@ func (s *Session) handleIsArrayType(ctx context.Context, params *CheckerTypePara
 	return setup.checker.IsArrayType(t), nil
 }
 
-// handleIsTupleType returns whether a type is a tuple type.
-func (s *Session) handleIsTupleType(ctx context.Context, params *CheckerTypeParams) (bool, error) {
+// handleIsReadonlySymbol returns whether a symbol is a readonly symbol.
+func (s *Session) handleIsReadonlySymbol(ctx context.Context, params *CheckerSymbolParams) (bool, error) {
 	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
 	if err != nil {
 		return false, err
 	}
 	defer setup.done()
 
-	t, err := setup.resolveTypeHandle(params.Type)
+	symbol, err := setup.resolveSymbolHandle(params.Symbol)
 	if err != nil {
 		return false, err
 	}
 
-	return checker.IsTupleType(t), nil
+	return setup.checker.IsReadonlySymbol(symbol), nil
 }
 
 // handleGetBaseTypes returns the base types of an interface/class type.
@@ -3317,6 +3433,23 @@ func (s *Session) handleGetImmediateAliasedSymbol(ctx context.Context, params *C
 	}
 
 	return setup.newSymbolResponse(aliased), nil
+}
+
+// handleGetTargetSymbol returns the target symbol if the symbol is instantiated,
+// otherwise returns the provided symbol.
+func (s *Session) handleMethodGetTargetSymbol(ctx context.Context, params *CheckerSymbolParams) (*SymbolResponse, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	symbol, err := setup.resolveSymbolHandle(params.Symbol)
+	if err != nil {
+		return nil, err
+	}
+
+	return setup.newSymbolResponse(setup.checker.GetTargetSymbol(symbol)), nil
 }
 
 // handleGetExportsOfModule returns the resolved exports of a module symbol,

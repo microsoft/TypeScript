@@ -46,8 +46,6 @@ extends:
         fetchTags: false
         retryCount: 3
       sourceAnalysisPool: VSEngSS-MicroBuild2022-1ES
-      sourceRepositoriesToScan:
-        include:
     featureFlags:
       golang:
         internalModuleProxy:

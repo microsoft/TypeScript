@@ -240,18 +240,9 @@ func isFixableDiagnostic(diagnostic *ast.Diagnostic, errorCodes []int32) bool {
 	return diagnostic.Source() == "" && containsErrorCode(errorCodes, diagnostic.Code())
 }
 
-// codeActionKindContains returns true if the requested kind equals or is a
-// hierarchical parent of actionKind, using '.' as the separator. This matches
-// the semantics of VS Code's HierarchicalKind.contains.
-func codeActionKindContains(requestedKind, actionKind lsproto.CodeActionKind) bool {
-	return requestedKind == actionKind ||
-		requestedKind == "" ||
-		strings.HasPrefix(string(actionKind), string(requestedKind)+".")
-}
-
 // isFixAllKind returns true if the requested kind matches source.fixAll
 func isFixAllKind(kind lsproto.CodeActionKind) bool {
-	return codeActionKindContains(kind, lsproto.CodeActionKindSourceFixAll)
+	return kind.Contains(lsproto.CodeActionKindSourceFixAllTs)
 }
 
 // wantsQuickFixes returns true if the Only filter is nil/empty (meaning all kinds are wanted)
@@ -261,7 +252,7 @@ func wantsQuickFixes(only *[]lsproto.CodeActionKind) bool {
 		return true
 	}
 	for _, kind := range *only {
-		if codeActionKindContains(kind, lsproto.CodeActionKindQuickFix) {
+		if kind.Contains(lsproto.CodeActionKindQuickFix) {
 			return true
 		}
 	}
@@ -276,7 +267,7 @@ func (l *LanguageService) createFixAllAction(
 	file *ast.SourceFile,
 	uri lsproto.DocumentUri,
 ) (*lsproto.CommandOrCodeAction, error) {
-	kind := lsproto.CodeActionKindSourceFixAll
+	kind := lsproto.CodeActionKindSourceFixAllTs
 	lspChanges := make(map[lsproto.DocumentUri][]*lsproto.TextEdit)
 
 	for _, provider := range codeFixProviders {
@@ -316,9 +307,9 @@ func (l *LanguageService) createFixAllAction(
 func getOrganizeImportsActionTitle(ctx context.Context, kind lsproto.CodeActionKind) string {
 	loc := locale.FromContext(ctx)
 	switch kind {
-	case lsproto.CodeActionKindSourceRemoveUnusedImports:
+	case lsproto.CodeActionKindSourceRemoveUnusedImportsTs:
 		return diagnostics.Remove_Unused_Imports.Localize(loc)
-	case lsproto.CodeActionKindSourceSortImports:
+	case lsproto.CodeActionKindSourceSortImportsTs:
 		return diagnostics.Sort_Imports.Localize(loc)
 	default:
 		return diagnostics.Organize_Imports.Localize(loc)
@@ -329,14 +320,14 @@ func getOrganizeImportsActionTitle(ctx context.Context, kind lsproto.CodeActionK
 // returned for the given requested kind.
 func getOrganizeImportsActionsForKind(requestedKind lsproto.CodeActionKind) []lsproto.CodeActionKind {
 	organizeImportsKinds := []lsproto.CodeActionKind{
-		lsproto.CodeActionKindSourceOrganizeImports,
-		lsproto.CodeActionKindSourceRemoveUnusedImports,
-		lsproto.CodeActionKindSourceSortImports,
+		lsproto.CodeActionKindSourceOrganizeImportsTs,
+		lsproto.CodeActionKindSourceRemoveUnusedImportsTs,
+		lsproto.CodeActionKindSourceSortImportsTs,
 	}
 
 	var result []lsproto.CodeActionKind
 	for _, organizeKind := range organizeImportsKinds {
-		if codeActionKindContains(requestedKind, organizeKind) {
+		if requestedKind.Contains(organizeKind) {
 			result = append(result, organizeKind)
 		}
 	}

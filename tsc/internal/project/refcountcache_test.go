@@ -7,6 +7,7 @@ import (
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/bundled"
+	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/compiler"
 	"github.com/microsoft/TypeScript/tsc/internal/contentmapper"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
@@ -488,6 +489,82 @@ func TestRefCountingCaches(t *testing.T) {
 
 			_, ok = session.extendedConfigCache.entries.Load(extendedConfigPath)
 			assert.Assert(t, !ok)
+		})
+
+		t.Run("createProgram retains and reloads extended configs from referenced projects", func(t *testing.T) {
+			t.Parallel()
+
+			const (
+				appConfigPath     = "/user/username/projects/app/tsconfig.json"
+				appFilePath       = "/user/username/projects/app/index.ts"
+				libConfigPath     = "/user/username/projects/lib/tsconfig.json"
+				libBaseConfigPath = "/user/username/projects/lib/tsconfig.base.json"
+				libFilePath       = "/user/username/projects/lib/index.ts"
+			)
+			session := setup(map[string]any{
+				appConfigPath:     `{"compilerOptions":{"noLib":true},"files":["index.ts"],"references":[{"path":"../lib"}]}`,
+				appFilePath:       "export const app = 1;",
+				libConfigPath:     `{"extends":"./tsconfig.base.json","files":["index.ts"]}`,
+				libBaseConfigPath: `{"compilerOptions":{"composite":true,"noLib":true}}`,
+				libFilePath:       "export const lib = 1;",
+			})
+			defer session.Close()
+			ctx := context.Background()
+
+			baseSnapshot, err := session.APIUpdate(ctx, FileChangeSummary{}, &APISnapshotRequest{
+				OpenProjects: collections.NewSetFromItems(appConfigPath),
+			})
+			assert.NilError(t, err)
+			defer baseSnapshot.Deref(session)
+			appProject := baseSnapshot.ProjectCollection.GetProjectByPath(baseSnapshot.toPath(appConfigPath))
+			assert.Assert(t, appProject != nil)
+
+			programSnapshot := session.APICreateProgram(
+				ctx,
+				appProject.CommandLine.FileNames(),
+				appProject.CommandLine.CompilerOptions(),
+				appProject.CommandLine.ProjectReferences(),
+				appProject.CommandLine.Errors,
+				baseSnapshot,
+				appProject,
+				FileChangeSummary{},
+			)
+			defer programSnapshot.Deref(session)
+			programProject := programSnapshot.ProjectCollection.InferredProject()
+			assert.Assert(t, programProject != nil)
+			assert.Assert(t, programProject.Program == appProject.Program)
+
+			extendedConfigEntry, ok := session.extendedConfigCache.entries.Load(tspath.Path(libBaseConfigPath))
+			assert.Assert(t, ok)
+			extendedConfigEntry.mu.Lock()
+			_, ownedByBaseSnapshot := extendedConfigEntry.owners[baseSnapshot.id]
+			_, ownedByProgramSnapshot := extendedConfigEntry.owners[programSnapshot.id]
+			ownerCount := len(extendedConfigEntry.owners)
+			extendedConfigEntry.mu.Unlock()
+			assert.Assert(t, ownedByBaseSnapshot)
+			assert.Assert(t, ownedByProgramSnapshot)
+			assert.Equal(t, ownerCount, 2)
+
+			assert.NilError(t, session.fs.fs.WriteFile(libBaseConfigPath, `{"compilerOptions":{"composite":true,"noLib":true,"strict":true}}`))
+			var fileChanges FileChangeSummary
+			fileChanges.Changed.Add(lsproto.DocumentUri("file://" + libBaseConfigPath))
+			updatedProgramSnapshot := session.APICreateProgram(
+				ctx,
+				programProject.CommandLine.FileNames(),
+				programProject.CommandLine.CompilerOptions(),
+				programProject.CommandLine.ProjectReferences(),
+				programProject.CommandLine.Errors,
+				programSnapshot,
+				programProject,
+				fileChanges,
+			)
+			defer updatedProgramSnapshot.Deref(session)
+			updatedProgramProject := updatedProgramSnapshot.ProjectCollection.InferredProject()
+			assert.Assert(t, updatedProgramProject != nil)
+			assert.Assert(t, updatedProgramProject.Program != programProject.Program)
+			updatedReferences := updatedProgramProject.Program.GetResolvedProjectReferences()
+			assert.Equal(t, len(updatedReferences), 1)
+			assert.Equal(t, updatedReferences[0].CompilerOptions().Strict, core.TSTrue)
 		})
 	})
 }
