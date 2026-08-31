@@ -3058,6 +3058,48 @@ array([]);
             await api.close();
         }
     });
+
+    test("tuple targets expose labeled element declarations", async () => {
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/main.ts": `
+export function gh1449<T extends [foo: any, bar?: any]>(a: T): T {
+    return a;
+}
+`,
+        });
+        try {
+            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const sourceFile = await project.program.getSourceFile("/src/main.ts");
+            assert.ok(sourceFile);
+            const functionDeclaration = sourceFile.statements.find(isFunctionDeclaration);
+            assert.ok(functionDeclaration);
+            const constraint = functionDeclaration.typeParameters?.[0].constraint;
+            assert.ok(constraint);
+
+            const type = await project.checker.getTypeFromTypeNode(constraint);
+            assert.ok(type.isTupleType());
+            const target = await type.getTarget();
+            const declarations = target.labeledElementDeclarations;
+            assert.ok(declarations);
+            assert.equal(declarations.length, 2);
+
+            const names: string[] = [];
+            for (const handle of declarations) {
+                assert.ok(handle);
+                assert.equal(handle.kind, SyntaxKind.NamedTupleMember);
+                const declaration = await handle.resolve();
+                assert.ok(declaration);
+                assert.ok(isIdentifier(declaration.name));
+                names.push(declaration.name.text);
+            }
+            assert.deepEqual(names, ["foo", "bar"]);
+        }
+        finally {
+            await api.close();
+        }
+    });
 });
 
 describe("Checker - intrinsic type getters", () => {

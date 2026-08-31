@@ -3,7 +3,11 @@ import type { ElementFlags } from "#enums/elementFlags";
 import type { ObjectFlags } from "#enums/objectFlags";
 import type { TypeFlags } from "#enums/typeFlags";
 import type { TypePredicateKind } from "#enums/typePredicateKind";
-import type { IndexSignatureDeclaration } from "../../ast/ast.ts";
+import type {
+    IndexSignatureDeclaration,
+    NamedTupleMember,
+    ParameterDeclaration,
+} from "../../ast/ast.ts";
 import type { Diagnostic } from "../proto.ts";
 import type {
     NodeHandle,
@@ -205,6 +209,8 @@ export interface TupleType extends InterfaceType {
     readonly fixedLength: number;
     /** Whether the tuple is readonly */
     readonly readonly: boolean;
+    /** Declarations providing tuple element names */
+    readonly labeledElementDeclarations?: readonly (NodeHandle<NamedTupleMember | ParameterDeclaration> | undefined)[];
 }
 
 /** Union or intersection types (TypeFlags.Union | TypeFlags.Intersection) */
