@@ -2493,9 +2493,7 @@ class TypeObject implements Type {
         }
         if (data.readonly !== undefined) this.readonly = data.readonly;
         if (data.labeledElementDeclarations !== undefined) {
-            this.labeledElementDeclarations = data.labeledElementDeclarations.map(handle =>
-                handle ? objectRegistry.createNodeHandle<NamedTupleMember | ParameterDeclaration>(handle) : undefined
-            );
+            this.labeledElementDeclarations = data.labeledElementDeclarations.map(handle => handle ? objectRegistry.createNodeHandle<NamedTupleMember | ParameterDeclaration>(handle) : undefined);
         }
         if (data.texts !== undefined) this.texts = data.texts;
         if (data.objectType !== undefined) this.objectType = data.objectType;
