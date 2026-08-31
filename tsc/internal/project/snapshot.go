@@ -303,6 +303,17 @@ func (s *Snapshot) GetProjectsContainingFile(uri lsproto.DocumentUri) []ls.Proje
 	return s.ProjectCollection.GetProjectsContainingFile(path)
 }
 
+// OpenProjects returns the projects that contain at least one file open in the editor.
+func (s *Snapshot) OpenProjects() []*Project {
+	var open []*Project
+	for _, project := range s.ProjectCollection.Projects() {
+		if s.ProjectCollection.isOpen(project) {
+			open = append(open, project)
+		}
+	}
+	return open
+}
+
 func (s *Snapshot) GetFile(fileName string) FileHandle {
 	return s.fs.GetFile(fileName)
 }

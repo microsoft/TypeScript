@@ -169,6 +169,21 @@ func (c *ProjectCollection) GetOpenConfiguredProjects() *collections.Set[tspath.
 	return c.openConfiguredProjects
 }
 
+// isOpen reports whether the project contains an open file. Configured projects come from the
+// memoized set, which is indexed by default project; the inferred project is not in that set, but
+// there is only ever one and open files are few.
+func (c *ProjectCollection) isOpen(project *Project) bool {
+	if project == c.inferredProject {
+		for path := range c.openFiles.Keys() {
+			if project.containsFile(path) {
+				return true
+			}
+		}
+		return false
+	}
+	return c.GetOpenConfiguredProjects().Has(project.configFilePath)
+}
+
 func openFilePaths(overlays map[tspath.Path]*Overlay) collections.Set[tspath.Path] {
 	openFiles := collections.Set[tspath.Path]{M: make(map[tspath.Path]struct{}, len(overlays))}
 	for path := range overlays {

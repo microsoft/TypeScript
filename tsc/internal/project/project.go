@@ -369,6 +369,19 @@ func (p *Project) setPotentialProjectReference(configFilePath tspath.Path) {
 	p.potentialProjectReferences.Add(configFilePath)
 }
 
+// ReferencedProjectPaths returns the config paths of the projects this project references.
+func (p *Project) ReferencedProjectPaths() []tspath.Path {
+	if p.CommandLine == nil {
+		return nil
+	}
+	referenced := p.CommandLine.ResolvedProjectReferencePaths()
+	paths := make([]tspath.Path, 0, len(referenced))
+	for _, path := range referenced {
+		paths = append(paths, p.toPath(path))
+	}
+	return paths
+}
+
 func (p *Project) hasPotentialProjectReference(projectTreeRequest *ProjectTreeRequest) bool {
 	if p.CommandLine != nil {
 		for _, path := range p.CommandLine.ResolvedProjectReferencePaths() {
