@@ -21,6 +21,7 @@ import {
     isImportDeclaration,
     isInterfaceDeclaration,
     isJSDocParameterTag,
+    isModuleDeclaration,
     isNamedImports,
     isReturnStatement,
     isShorthandPropertyAssignment,
@@ -36,6 +37,7 @@ import {
     type NodeArray,
     NodeFlags,
     SyntaxKind,
+    tryGetAmbientModuleNameFromSymbolName,
     unescapeLeadingUnderscores,
 } from "@typescript/typescript/unstable/ast";
 import {
@@ -4210,6 +4212,52 @@ export const obj: { a: number } = { a: 1 };
             api.close();
         }
     });
+
+    test("distinguishes a pattern ambient module name from a matching user-provided export name", () => {
+        const maliciousName = '"*.css"__pattern@1234';
+        const types = `
+declare module "*.css" with { type: "css" } {
+    const className: string;
+    export default className;
+}
+`;
+        const source = `
+const x = "";
+export { x as '${maliciousName}' };
+`;
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true, module: "preserve" } }),
+            "/src/types.d.ts": types,
+            "/src/main.ts": source,
+        });
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+
+            const typesFile = project.program.getSourceFile("/src/types.d.ts");
+            assert.ok(typesFile);
+            const moduleDeclaration = typesFile.statements.find(isModuleDeclaration);
+            assert.ok(moduleDeclaration);
+            const ambientModule = project.checker.getSymbolAtLocation(moduleDeclaration.name);
+            assert.ok(ambientModule);
+            assert.match(ambientModule.name, /^__"\*\.css"pattern@\d+$/);
+            assert.equal(ambientModule.escapedName, ambientModule.name);
+            assert.equal(tryGetAmbientModuleNameFromSymbolName(ambientModule.escapedName), "*.css");
+
+            const sourceFile = project.program.getSourceFile("/src/main.ts");
+            assert.ok(sourceFile);
+            const sourceFileSymbol = project.checker.getSymbolAtLocation(sourceFile);
+            assert.ok(sourceFileSymbol);
+            const maliciousExport = (sourceFileSymbol.getExports()).get(escapeLeadingUnderscores(maliciousName));
+            assert.ok(maliciousExport);
+            assert.equal(maliciousExport.name, maliciousName);
+            assert.equal(maliciousExport.escapedName, maliciousName);
+            assert.equal(tryGetAmbientModuleNameFromSymbolName(maliciousExport.escapedName), undefined);
+        }
+        finally {
+            api.close();
+        }
+    });
 });
 
 describe("ast - escapeLeadingUnderscores", () => {
@@ -4220,6 +4268,16 @@ describe("ast - escapeLeadingUnderscores", () => {
         assert.equal(unescapeLeadingUnderscores("foo" as __String), "foo");
         assert.equal(unescapeLeadingUnderscores("__type" as __String), "__type");
         assert.equal(unescapeLeadingUnderscores("___foo" as __String), "__foo");
+    });
+});
+
+describe("ast - tryGetAmbientModuleNameFromSymbolName", () => {
+    test("gets ambient module names from escaped symbol names", () => {
+        assert.equal(tryGetAmbientModuleNameFromSymbolName('"pkg"' as __String), "pkg");
+        assert.equal(tryGetAmbientModuleNameFromSymbolName('__"*.css"pattern@1234' as __String), "*.css");
+        assert.equal(tryGetAmbientModuleNameFromSymbolName('"*.css"__pattern@1234' as __String), undefined);
+        assert.equal(tryGetAmbientModuleNameFromSymbolName('___"*.css"pattern@1234' as __String), undefined);
+        assert.equal(tryGetAmbientModuleNameFromSymbolName("value" as __String), undefined);
     });
 });
 

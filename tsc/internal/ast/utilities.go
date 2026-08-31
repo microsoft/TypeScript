@@ -1664,22 +1664,23 @@ func IsAmbientModuleSymbolName(s string) bool {
 	return ok
 }
 
-// Ambient module symbols are either of the form `"modulename"` or `"modulename" + InternalSymbolNamePrefix + "pattern@nodeId"`;
+// Ambient module symbols are either of the form `"modulename"` or `InternalSymbolNamePrefix + "\"modulename\"pattern@nodeId"`;
 // see `getDeclarationName`.
 func TryGetAmbientModuleNameFromSymbolName(s string) (string, bool) {
-	if !strings.HasPrefix(s, "\"") {
-		return "", false
-	}
-	if strings.HasSuffix(s, "\"") {
+	if strings.HasPrefix(s, "\"") && strings.HasSuffix(s, "\"") {
 		return s[1 : len(s)-1], true
 	}
 
-	patternMarker := "\"" + InternalSymbolNamePrefix + "pattern@"
-	markerIndex := strings.LastIndex(s, patternMarker)
+	patternPrefix := InternalSymbolNamePrefix + "\""
+	rest, ok := strings.CutPrefix(s, patternPrefix)
+	if !ok {
+		return "", false
+	}
+	markerIndex := strings.LastIndex(rest, "\"pattern@")
 	if markerIndex < 1 {
 		return "", false
 	}
-	return s[1:markerIndex], true
+	return rest[:markerIndex], true
 }
 
 func IsExternalModule(file *SourceFile) bool {

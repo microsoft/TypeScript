@@ -311,7 +311,7 @@ func (b *Binder) getDeclarationName(node *ast.Node) string {
 			}
 			if pattern := core.TryParsePattern(moduleName); pattern.IsValid() && pattern.StarIndex >= 0 {
 				if attributes := node.AsModuleDeclaration().Attributes; attributes != nil {
-					return "\"" + moduleName + "\"" + ast.InternalSymbolNamePrefix + "pattern@" + strconv.FormatUint(uint64(ast.GetNodeId(attributes)), 10)
+					return ast.InternalSymbolNamePrefix + "\"" + moduleName + "\"pattern@" + strconv.FormatUint(uint64(ast.GetNodeId(attributes)), 10)
 				}
 			}
 			return "\"" + moduleName + "\""
