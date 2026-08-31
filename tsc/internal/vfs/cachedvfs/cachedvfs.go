@@ -27,6 +27,11 @@ func From(fs vfs.FS) *FS {
 	return fsys
 }
 
+// Unwrap returns the filesystem wrapped by this cache.
+func (fsys *FS) Unwrap() vfs.FS {
+	return fsys.fs
+}
+
 func (fsys *FS) DisableAndClearCache() {
 	if fsys.enabled.CompareAndSwap(true, false) {
 		fsys.ClearCache()

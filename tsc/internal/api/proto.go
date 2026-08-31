@@ -341,9 +341,54 @@ type APIFileChanges struct {
 	Deleted       []DocumentIdentifier `json:"deleted,omitempty"`
 }
 
+// SnapshotFileSystemKind controls how an update snapshot filesystem is used.
+type SnapshotFileSystemKind string
+
+const (
+	// SnapshotFileSystemKindMemory makes the supplied filesystem canonical and total.
+	SnapshotFileSystemKindMemory SnapshotFileSystemKind = "memory"
+	// SnapshotFileSystemKindCache checks the supplied filesystem before falling back to the host.
+	SnapshotFileSystemKindCache SnapshotFileSystemKind = "cache"
+)
+
+// SnapshotDirectoryEntries is a cached directory listing. Entry names are
+// relative to the directory, matching vfs.GetAccessibleEntries.
+type SnapshotDirectoryEntries struct {
+	Files       []string `json:"files" nonnil:"true"`
+	Directories []string `json:"directories" nonnil:"true"`
+}
+
+// SnapshotSymlink describes a symbolic link in a snapshot filesystem.
+type SnapshotSymlink struct {
+	// Target is resolved relative to the directory containing the link, matching
+	// native symbolic-link semantics.
+	Target string `json:"target"`
+	// Host routes the target through the host filesystem. This is the only way a
+	// memory filesystem can access paths not supplied in the snapshot filesystem.
+	Host bool `json:"host,omitempty"`
+}
+
+// SnapshotFileSystem supplies file contents and, optionally, directory listings
+// for a snapshot update.
+type SnapshotFileSystem struct {
+	Kind SnapshotFileSystemKind `json:"kind"`
+	// Files maps file names to their complete contents.
+	Files map[string]string `json:"files" nonnil:"true"`
+	// Directories maps directory names to complete listing results.
+	Directories map[string]SnapshotDirectoryEntries `json:"directories,omitempty"`
+	// Symlinks maps link paths to targets in this filesystem or the host filesystem.
+	Symlinks map[string]SnapshotSymlink `json:"symlinks,omitempty"`
+	// RemovedPaths lists files or directory trees that must be treated as missing
+	// even when present in an underlying snapshot or host filesystem.
+	RemovedPaths []string `json:"removedPaths,omitempty"`
+}
+
 // UpdateSnapshotParams are the parameters for creating a new snapshot.
 // All fields are optional. With no fields set, the server adopts the latest LSP state.
 type UpdateSnapshotParams struct {
+	// Snapshot, when set, requires this to be the latest active snapshot and layers
+	// FileSystem over that snapshot's filesystem. Used by Snapshot.update.
+	Snapshot SnapshotID `json:"snapshot,omitempty"`
 	// OpenProjects lists tsconfig.json files to open/load in the new snapshot.
 	// Opens are ref-counted and persist across snapshots until closed.
 	OpenProjects []DocumentIdentifier `json:"openProjects,omitempty"`
@@ -352,6 +397,10 @@ type UpdateSnapshotParams struct {
 	CloseProjects []DocumentIdentifier `json:"closeProjects,omitempty"`
 	// FileChanges describes file system changes since the last snapshot.
 	FileChanges *APIFileChanges `json:"fileChanges,omitempty"`
+	// FileSystem supplies file contents and directory listings for the new snapshot.
+	// A memory filesystem is canonical and total. A cache filesystem is checked
+	// before falling back to the host filesystem.
+	FileSystem *SnapshotFileSystem `json:"fileSystem,omitempty"`
 	// OpenFiles lists files to keep open for the API client, mirroring LSP's
 	// textDocument/didOpen. For each file, ancestor directories are searched for a
 	// tsconfig that contains it; if found, that configured project is loaded and
@@ -376,10 +425,13 @@ type UpdateTemporarySnapshotParams struct {
 }
 
 type CreateProgramParams struct {
-	RootFiles            []DocumentIdentifier           `json:"rootFiles"`
-	CreateProgramOptions CreateProgramOptions           `json:"createProgramOptions"`
-	OldProgram           *CreateProgramOldProgramParams `json:"oldProgram,omitempty"`
-	FileChanges          *APIFileChanges                `json:"fileChanges,omitempty"`
+	RootFiles            []DocumentIdentifier `json:"rootFiles"`
+	CreateProgramOptions CreateProgramOptions `json:"createProgramOptions"`
+	// BaseSnapshot supplies the filesystem and project state from which the
+	// synthetic program snapshot is cloned.
+	BaseSnapshot SnapshotID                     `json:"baseSnapshot,omitempty"`
+	OldProgram   *CreateProgramOldProgramParams `json:"oldProgram,omitempty"`
+	FileChanges  *APIFileChanges                `json:"fileChanges,omitempty"`
 }
 
 type CreateProgramOptions struct {
@@ -1355,6 +1407,9 @@ type EmitResponse struct {
 	EmitSkipped  bool                  `json:"emitSkipped"`
 	Diagnostics  []*DiagnosticResponse `json:"diagnostics" nonnil:"true"`
 	EmittedFiles []string              `json:"emittedFiles" nonnil:"true"`
+	// EmittedFilesContents contains contents parallel to EmittedFiles when the
+	// source snapshot uses a memory filesystem. It is empty for write-through emits.
+	EmittedFilesContents []string `json:"emittedFilesContents" nonnil:"true"`
 }
 
 type EmitOutputFile struct {

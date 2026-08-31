@@ -8,6 +8,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
+	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 )
 
 // APIUpdate creates a new snapshot incorporating the given file changes and the
@@ -24,11 +25,20 @@ func (s *Session) APIUpdate(ctx context.Context, apiFileChanges FileChangeSummar
 
 	fileChanges, overlays, ataChanges, _ := s.flushChanges(ctx)
 	mergeFileChangeSummary(&fileChanges, apiFileChanges)
+	var fs vfs.FS
+	var replaceFileSystem bool
+	if apiRequest != nil {
+		fs = apiRequest.FileSystem
+		replaceFileSystem = apiRequest.ReplaceFileSystem
+	}
 
 	newSnapshot := s.updateSnapshotRef(ctx, overlays, SnapshotChange{
-		apiRequest:  apiRequest,
-		fileChanges: fileChanges,
-		ataChanges:  ataChanges,
+		apiRequest:         apiRequest,
+		fs:                 fs,
+		fileSystemOverride: fs != nil,
+		replaceFileSystem:  replaceFileSystem,
+		fileChanges:        fileChanges,
+		ataChanges:         ataChanges,
 	})
 	return newSnapshot, newSnapshot.apiError
 }
@@ -61,7 +71,9 @@ func (s *Session) APIUpdateTemporary(ctx context.Context, baseSnapshot *Snapshot
 	overlays[path] = newOverlay(uri.FileName(), newText, version, scriptKind)
 
 	newSnapshot := baseSnapshot.Clone(ctx, SnapshotChange{
-		fileChanges: fileChanges,
+		fs:                 baseSnapshot.fs.fs,
+		fileSystemOverride: baseSnapshot.fileSystemOverride,
+		fileChanges:        fileChanges,
 		ResourceRequest: ResourceRequest{
 			Documents: []lsproto.DocumentUri{uri},
 		},

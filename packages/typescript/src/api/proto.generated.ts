@@ -190,6 +190,11 @@ export interface InitializeResponse {
  */
 export interface UpdateSnapshotParams {
     /**
+     * Snapshot, when set, requires this to be the latest active snapshot and layers
+     * FileSystem over that snapshot's filesystem. Used by Snapshot.update.
+     */
+    snapshot?: number;
+    /**
      * OpenProjects lists tsconfig.json files to open/load in the new snapshot.
      * Opens are ref-counted and persist across snapshots until closed.
      */
@@ -201,6 +206,12 @@ export interface UpdateSnapshotParams {
     closeProjects?: readonly DocumentIdentifier[];
     /** FileChanges describes file system changes since the last snapshot. */
     fileChanges?: APIFileChanges;
+    /**
+     * FileSystem supplies file contents and directory listings for the new snapshot.
+     * A memory filesystem is canonical and total. A cache filesystem is checked
+     * before falling back to the host filesystem.
+     */
+    fileSystem?: SnapshotFileSystem;
     /**
      * OpenFiles lists files to keep open for the API client, mirroring LSP's
      * textDocument/didOpen. For each file, ancestor directories are searched for a
@@ -246,6 +257,11 @@ export interface UpdateTemporarySnapshotParams {
 export interface CreateProgramParams {
     rootFiles: readonly DocumentIdentifier[] | null;
     createProgramOptions: CreateProgramOptions;
+    /**
+     * BaseSnapshot supplies the filesystem and project state from which the
+     * synthetic program snapshot is cloned.
+     */
+    baseSnapshot?: number;
     oldProgram?: CreateProgramOldProgramParams;
     fileChanges?: APIFileChanges;
 }
@@ -852,6 +868,11 @@ export interface EmitResponse {
     emitSkipped: boolean;
     diagnostics: DiagnosticResponse[];
     emittedFiles: string[];
+    /**
+     * EmittedFilesContents contains contents parallel to EmittedFiles when the
+     * source snapshot uses a memory filesystem. It is empty for write-through emits.
+     */
+    emittedFilesContents: string[];
 }
 
 export interface EmitOutputResponse {
@@ -1208,6 +1229,25 @@ export interface APIFileChanges {
 }
 
 /**
+ * SnapshotFileSystem supplies file contents and, optionally, directory listings
+ * for a snapshot update.
+ */
+export interface SnapshotFileSystem {
+    kind: "cache" | "memory";
+    /** Files maps file names to their complete contents. */
+    files: Record<string, string>;
+    /** Directories maps directory names to complete listing results. */
+    directories?: Record<string, SnapshotDirectoryEntries>;
+    /** Symlinks maps link paths to targets in this filesystem or the host filesystem. */
+    symlinks?: Record<string, SnapshotSymlink>;
+    /**
+     * RemovedPaths lists files or directory trees that must be treated as missing
+     * even when present in an underlying snapshot or host filesystem.
+     */
+    removedPaths?: string[];
+}
+
+/**
  * SnapshotChanges describes what changed between the previous latest snapshot
  * and the newly created snapshot. Changes are reported per-project so clients
  * can track cache refs at the (snapshot, project) level.
@@ -1396,6 +1436,29 @@ export interface EmitOutputFile {
     fileName: string;
     text: string;
     sourceFileName?: string;
+}
+
+/**
+ * SnapshotDirectoryEntries is a cached directory listing. Entry names are
+ * relative to the directory, matching vfs.GetAccessibleEntries.
+ */
+export interface SnapshotDirectoryEntries {
+    files: string[];
+    directories: string[];
+}
+
+/** SnapshotSymlink describes a symbolic link in a snapshot filesystem. */
+export interface SnapshotSymlink {
+    /**
+     * Target is resolved relative to the directory containing the link, matching
+     * native symbolic-link semantics.
+     */
+    target: string;
+    /**
+     * Host routes the target through the host filesystem. This is the only way a
+     * memory filesystem can access paths not supplied in the snapshot filesystem.
+     */
+    host?: boolean;
 }
 
 /** ProjectFileChanges describes what source files changed within a single project. */
