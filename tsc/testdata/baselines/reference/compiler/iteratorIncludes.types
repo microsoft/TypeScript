@@ -32,7 +32,6 @@ const includesAfterSkipping: boolean = Iterator.from([1, 2, 3]).includes(2, 1);
 >2 : 2
 >1 : 1
 
-// @ts-expect-error the searched value must match the iterator value
 Iterator.from([1, 2, 3]).includes("1");
 >Iterator.from([1, 2, 3]).includes("1") : boolean
 >Iterator.from([1, 2, 3]).includes : (searchElement: number, skippedElements?: number) => boolean
@@ -47,7 +46,6 @@ Iterator.from([1, 2, 3]).includes("1");
 >includes : (searchElement: number, skippedElements?: number) => boolean
 >"1" : "1"
 
-// @ts-expect-error skipped elements must be a number
 Iterator.from([1, 2, 3]).includes(2, "1");
 >Iterator.from([1, 2, 3]).includes(2, "1") : boolean
 >Iterator.from([1, 2, 3]).includes : (searchElement: number, skippedElements?: number) => boolean

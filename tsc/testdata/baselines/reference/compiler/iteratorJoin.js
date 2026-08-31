@@ -4,7 +4,6 @@
 const joined: string = Iterator.from([1, 2, 3]).join("-");
 const joinedWithDefaultSeparator: string = Iterator.from([1, 2, 3]).join();
 
-// @ts-expect-error separator must be a string
 Iterator.from([1, 2, 3]).join(0);
 
 
@@ -12,5 +11,4 @@ Iterator.from([1, 2, 3]).join(0);
 "use strict";
 const joined = Iterator.from([1, 2, 3]).join("-");
 const joinedWithDefaultSeparator = Iterator.from([1, 2, 3]).join();
-// @ts-expect-error separator must be a string
 Iterator.from([1, 2, 3]).join(0);

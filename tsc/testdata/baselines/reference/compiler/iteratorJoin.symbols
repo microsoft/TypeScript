@@ -17,7 +17,6 @@ const joinedWithDefaultSeparator: string = Iterator.from([1, 2, 3]).join();
 >from : Symbol(IteratorConstructor.from, Decl(lib.es2025.iterator.d.ts, --, --))
 >join : Symbol(IteratorObject.join, Decl(lib.esnext.iterator.d.ts, --, --))
 
-// @ts-expect-error separator must be a string
 Iterator.from([1, 2, 3]).join(0);
 >Iterator.from([1, 2, 3]).join : Symbol(IteratorObject.join, Decl(lib.esnext.iterator.d.ts, --, --))
 >Iterator.from : Symbol(IteratorConstructor.from, Decl(lib.es2025.iterator.d.ts, --, --))

@@ -1,0 +1,11 @@
+iteratorJoin.ts(4,31): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+
+
+==== iteratorJoin.ts (1 errors) ====
+    const joined: string = Iterator.from([1, 2, 3]).join("-");
+    const joinedWithDefaultSeparator: string = Iterator.from([1, 2, 3]).join();
+    
+    Iterator.from([1, 2, 3]).join(0);
+                                  ~
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+    

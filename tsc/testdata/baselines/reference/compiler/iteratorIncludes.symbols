@@ -17,7 +17,6 @@ const includesAfterSkipping: boolean = Iterator.from([1, 2, 3]).includes(2, 1);
 >from : Symbol(IteratorConstructor.from, Decl(lib.es2025.iterator.d.ts, --, --))
 >includes : Symbol(IteratorObject.includes, Decl(lib.esnext.iterator.d.ts, --, --))
 
-// @ts-expect-error the searched value must match the iterator value
 Iterator.from([1, 2, 3]).includes("1");
 >Iterator.from([1, 2, 3]).includes : Symbol(IteratorObject.includes, Decl(lib.esnext.iterator.d.ts, --, --))
 >Iterator.from : Symbol(IteratorConstructor.from, Decl(lib.es2025.iterator.d.ts, --, --))
@@ -25,7 +24,6 @@ Iterator.from([1, 2, 3]).includes("1");
 >from : Symbol(IteratorConstructor.from, Decl(lib.es2025.iterator.d.ts, --, --))
 >includes : Symbol(IteratorObject.includes, Decl(lib.esnext.iterator.d.ts, --, --))
 
-// @ts-expect-error skipped elements must be a number
 Iterator.from([1, 2, 3]).includes(2, "1");
 >Iterator.from([1, 2, 3]).includes : Symbol(IteratorObject.includes, Decl(lib.esnext.iterator.d.ts, --, --))
 >Iterator.from : Symbol(IteratorConstructor.from, Decl(lib.es2025.iterator.d.ts, --, --))
