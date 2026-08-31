@@ -33,7 +33,7 @@ export enum SymbolFlags {
     ConstEnumOnlyModule = 1 << 28,
     ReplaceableByMethod = 1 << 29,
     GlobalLookup = 1 << 30,
-    All = 1 << 30 - 1,
+    All = (1 << 30) - 1,
     Enum = RegularEnum | ConstEnum,
     Variable = FunctionScopedVariable | BlockScopedVariable,
     Value = Variable | Property | EnumMember | ObjectLiteral | Function | Class | Enum | ValueModule | Method | GetAccessor | SetAccessor,

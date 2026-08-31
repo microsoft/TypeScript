@@ -11,6 +11,7 @@ import {
     isFunctionDeclaration,
     isIdentifier,
     isImportDeclaration,
+    isInterfaceDeclaration,
     isJSDocParameterTag,
     isNamedImports,
     isReturnStatement,
@@ -51,6 +52,7 @@ import {
     CheckFlags,
     type ConditionalType,
     DiagnosticCategory,
+    type DocumentIdentifier,
     EmitOnly,
     type FreshableType,
     type ImportAdderAction,
@@ -78,7 +80,6 @@ import {
 } from "@typescript/typescript/unstable/async"; // @sync: } from "@typescript/typescript/unstable/sync";
 import { createVirtualFileSystem } from "@typescript/typescript/unstable/fs";
 import type { FileSystem } from "@typescript/typescript/unstable/fs";
-import type { APIRequest } from "@typescript/typescript/unstable/proto";
 import assert from "node:assert";
 import { globSync } from "node:fs";
 import { resolve } from "node:path";
@@ -89,12 +90,10 @@ import {
 import { fileURLToPath } from "node:url";
 import { isSignatureDeclaration } from "../../src/ast/is.ts";
 import { runBenchmarks } from "./api.bench.ts";
-
-const defaultFiles = {
-    "/tsconfig.json": "{}",
-    "/src/index.ts": `import { foo } from './foo';`,
-    "/src/foo.ts": `export const foo = 42;`,
-};
+import {
+    defaultFiles,
+    spawnAPI,
+} from "./api.testUtils.ts";
 
 describe("API", () => {
     test("parseCommandLine", async () => {
@@ -289,7 +288,7 @@ describe("API", () => {
             });
             assert.equal(isolatedDeclarationModuleOutput.diagnostics?.length ?? 0, 0);
 
-            const moduleFileOutput = await api.transpileModuleFromFile("/input.ts", {
+            const moduleFileOutput = await api.transpileModuleFromFile({ uri: "file:///input.ts" }, {
                 compilerOptions: { module: ModuleKind.CommonJS },
             });
             assert.match(moduleFileOutput.outputText, /exports\.x = 1/);
@@ -302,8 +301,261 @@ describe("API", () => {
             });
             assert.equal(windowsDeclarationOutput.outputText, "export declare const x: number;\n");
 
-            const declarationFileOutput = await api.transpileDeclarationFromFile("/input.ts");
+            const declarationFileOutput = await api.transpileDeclarationFromFile({ uri: "file:///input.ts" });
             assert.equal(declarationFileOutput.outputText, "export declare const x: number;\n");
+        }
+        finally {
+            await api.close();
+        }
+    });
+
+    test("createProgram", async () => {
+        const api = spawnAPI({
+            "/src/index.ts": `export const value: string = 1;`,
+        });
+        try {
+            const program = await api.createProgram(["/src/index.ts"], { compilerOptions: { noLib: true, strict: true } });
+
+            assert.deepEqual(program.getCompilerOptions(), { noLib: true, strict: true });
+            assert.deepEqual(await program.getSourceFileNames(), ["/src/index.ts"]);
+            assert.equal((await program.getSemanticDiagnostics("/src/index.ts")).length, 1);
+
+            await program.dispose();
+            await assert.rejects(program.getSourceFileNames(), /snapshot .* not found/); // @sync: assert.throws(() => program.getSourceFileNames(), /snapshot .* not found/);
+        }
+        finally {
+            await api.close();
+        }
+    });
+
+    test("createProgram ignores an on-disk tsconfig", async () => {
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({
+                compilerOptions: { noLib: false, strict: false },
+                files: ["src/from-config.ts"],
+            }),
+            "/src/index.ts": `export const explicitRoot = 1;`,
+            "/src/from-config.ts": `export const configRoot = 1;`,
+        });
+        try {
+            const program = await api.createProgram(
+                ["/src/index.ts"],
+                { compilerOptions: { noLib: true, strict: true } },
+            );
+
+            assert.deepEqual(program.getCompilerOptions(), { noLib: true, strict: true });
+            assert.deepEqual(await program.getSourceFileNames(), ["/src/index.ts"]);
+            assert.deepEqual(await program.getConfigFileNames(), []);
+            assert.equal(await program.getSourceFile("/src/from-config.ts"), undefined);
+            await program.dispose();
+        }
+        finally {
+            await api.close();
+        }
+    });
+
+    test("createProgram includes project references", async () => {
+        const reference = { path: "/lib/tsconfig.json", originalPath: "/lib/tsconfig.json", circular: false };
+        const api = spawnAPI({
+            "/src/index.ts": `export const value = 1;`,
+            "/lib/tsconfig.json": JSON.stringify({ compilerOptions: { composite: true, noLib: true }, files: ["index.ts"] }),
+            "/lib/index.ts": `export const lib = 1;`,
+        });
+        try {
+            const program = await api.createProgram(
+                ["/src/index.ts"],
+                { compilerOptions: { noLib: true }, projectReferences: [reference] },
+            );
+            assert.deepEqual(program.getProject().parsedCommandLine.projectReferences, [reference]);
+            await program.dispose();
+        }
+        finally {
+            await api.close();
+        }
+    });
+
+    test("createProgram includes config file parsing diagnostics", async () => {
+        const diagnostic = {
+            pos: 0,
+            end: 0,
+            code: 9001,
+            category: DiagnosticCategory.Error,
+            text: "Synthetic config parsing error.",
+        };
+        const api = spawnAPI({ "/src/index.ts": `export const value = 1;` });
+        try {
+            const program = await api.createProgram(
+                ["/src/index.ts"],
+                {
+                    compilerOptions: { noLib: true },
+                    configFileParsingDiagnostics: [diagnostic],
+                },
+            );
+
+            assert.deepEqual(await program.getConfigFileParsingDiagnostics(), [diagnostic]);
+            await program.dispose();
+        }
+        finally {
+            await api.close();
+        }
+    });
+
+    test("createProgram updates roots when given an old program", async () => {
+        const options = { compilerOptions: { noLib: true } };
+        const api = spawnAPI({
+            "/src/a.ts": `export const a = 1;`,
+            "/src/b.ts": `export const b = 1;`,
+            "/src/c.ts": `export const c = 1;`,
+        });
+        try {
+            const oldProgram = await api.createProgram(["/src/a.ts", "/src/b.ts"], options);
+            const newProgram = await api.createProgram(["/src/a.ts", "/src/c.ts"], options, oldProgram);
+            assert.deepEqual(await newProgram.getSourceFileNames(), ["/src/a.ts", "/src/c.ts"]);
+            assert.deepEqual(await oldProgram.getSourceFileNames(), ["/src/a.ts", "/src/b.ts"]);
+
+            await newProgram.dispose();
+            await oldProgram.dispose();
+        }
+        finally {
+            await api.close();
+        }
+    });
+
+    test("createProgram rejects an inactive or foreign old program", async () => {
+        const options = { compilerOptions: { noLib: true } };
+        const api = spawnAPI({ "/src/index.ts": `export const local = 1;` });
+        const otherAPI = spawnAPI({ "/src/index.ts": `export const foreign = 1;` });
+        try {
+            const localProgram = await api.createProgram(["/src/index.ts"], options);
+            const foreignProgram = await otherAPI.createProgram(["/src/index.ts"], options);
+
+            const createFromForeignProgram = () => api.createProgram(["/src/index.ts"], options, foreignProgram);
+            await assert.rejects(createFromForeignProgram, /oldProgram must belong to this API instance and reference an active snapshot/); // @sync: assert.throws(createFromForeignProgram, /oldProgram must belong to this API instance and reference an active snapshot/);
+
+            await localProgram.dispose();
+            const createFromDisposedProgram = () => api.createProgram(["/src/index.ts"], options, localProgram);
+            await assert.rejects(createFromDisposedProgram, /oldProgram must belong to this API instance and reference an active snapshot/); // @sync: assert.throws(createFromDisposedProgram, /oldProgram must belong to this API instance and reference an active snapshot/);
+
+            await foreignProgram.dispose();
+        }
+        finally {
+            await api.close();
+            await otherAPI.close();
+        }
+    });
+
+    test("createProgram discovers imported non-root dependencies", async () => {
+        const api = spawnAPI({
+            "/src/main.ts": `import { dependency } from "./dependency"; export const value = dependency;`,
+            "/src/dependency.ts": `export const dependency = 1;`,
+        });
+        try {
+            const program = await api.createProgram(["/src/main.ts"], { compilerOptions: { noLib: true } });
+            assert.deepEqual([...await program.getSourceFileNames()].sort(), ["/src/dependency.ts", "/src/main.ts"]);
+
+            await program.dispose();
+        }
+        finally {
+            await api.close();
+        }
+    });
+
+    test("createProgram updates an old program with file changes", async () => {
+        const fileName = "/src/index.ts";
+        const options = { compilerOptions: { noLib: true, strict: true } };
+        const { api, fs } = spawnAPIWithFS({
+            [fileName]: `export const value: string = 1;`,
+        });
+        try {
+            const oldProgram = await api.createProgram([fileName], options);
+            assert.equal((await oldProgram.getSemanticDiagnostics(fileName)).length, 1);
+
+            fs.writeFile!(fileName, `export const value: string = "valid";`);
+            const newProgram = await api.createProgram(
+                [fileName],
+                options,
+                oldProgram,
+                { changed: [fileName] },
+            );
+
+            assert.equal((await newProgram.getSemanticDiagnostics(fileName)).length, 0);
+            assert.equal((await oldProgram.getSemanticDiagnostics(fileName)).length, 1);
+
+            await newProgram.dispose();
+            await oldProgram.dispose();
+        }
+        finally {
+            await api.close();
+        }
+    });
+
+    test("createProgram updates an old program with invalidateAll", async () => {
+        const fileName = "/src/index.ts";
+        const options = { compilerOptions: { noLib: true, strict: true } };
+        const { api, fs } = spawnAPIWithFS({
+            [fileName]: `export const value: string = 1;`,
+        });
+        try {
+            const oldProgram = await api.createProgram([fileName], options);
+            assert.equal((await oldProgram.getSemanticDiagnostics(fileName)).length, 1);
+
+            fs.writeFile!(fileName, `export const value: string = "valid";`);
+            const newProgram = await api.createProgram(
+                [fileName],
+                options,
+                oldProgram,
+                { invalidateAll: true },
+            );
+
+            assert.equal((await newProgram.getSemanticDiagnostics(fileName)).length, 0);
+            assert.equal((await oldProgram.getSemanticDiagnostics(fileName)).length, 1);
+
+            await newProgram.dispose();
+            await oldProgram.dispose();
+        }
+        finally {
+            await api.close();
+        }
+    });
+
+    test("createProgram accepts a regular project program as the old program", async () => {
+        const fileName = "/src/index.ts";
+        const { api, fs } = spawnAPIWithFS({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { noLib: true, strict: true } }),
+            [fileName]: `export const value: string = 1;`,
+        });
+        try {
+            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            assert.equal((await project.program.getSemanticDiagnostics(fileName)).length, 1);
+
+            fs.writeFile!(fileName, `export const value: string = "valid";`);
+            const newProgram = await api.createProgram(
+                project.parsedCommandLine.fileNames,
+                {
+                    compilerOptions: project.parsedCommandLine.options,
+                    ...(project.parsedCommandLine.projectReferences
+                        ? { projectReferences: project.parsedCommandLine.projectReferences }
+                        : {}),
+                },
+                project.program,
+                { changed: [fileName] },
+            );
+
+            assert.equal((await newProgram.getSemanticDiagnostics(fileName)).length, 0);
+            assert.equal((await project.program.getSemanticDiagnostics(fileName)).length, 1);
+            await newProgram.dispose();
+        }
+        finally {
+            await api.close();
+        }
+    });
+
+    test("createProgram rejects file changes without an old program", async () => {
+        const api = spawnAPI({ "/src/index.ts": `export const value = 1;` });
+        try {
+            const createWithChanges = () => api.createProgram(["/src/index.ts"], { compilerOptions: { noLib: true } }, undefined, { changed: ["/src/index.ts"] });
+            await assert.rejects(createWithChanges, /fileChanges requires an oldProgram/); // @sync: assert.throws(createWithChanges, /fileChanges requires an oldProgram/);
         }
         finally {
             await api.close();
@@ -386,55 +638,6 @@ describe("API", () => {
             const config = await api.parseConfigFile("/tsconfig.json");
             assert.equal(config.typeAcquisition?.enable, true);
             assert.deepEqual(config.typeAcquisition?.include, ["jquery"]);
-        }
-        finally {
-            await api.close();
-        }
-    });
-});
-
-describe("API - batchRequests", () => {
-    test("returns results in request order", async () => {
-        const api = spawnAPI();
-        try {
-            const { responses } = await api.batchRequests([
-                { method: "parseCommandLine", params: { commandLine: ["--strict"] } },
-                { method: "readConfigFile", params: { file: "/tsconfig.json" } },
-            ]);
-
-            assert.strictEqual(responses.length, 2);
-            const commandLine = responses[0];
-            assert.strictEqual(commandLine.method, "parseCommandLine");
-            assert.strictEqual(commandLine.error, undefined);
-            assert.equal(commandLine.result.options.strict, true);
-
-            const config = responses[1];
-            assert.strictEqual(config.method, "readConfigFile");
-            assert.strictEqual(config.error, undefined);
-            assert.deepStrictEqual(config.result.config, {});
-        }
-        finally {
-            await api.close();
-        }
-    });
-
-    test("returns an item error without dropping a sibling result", async () => {
-        const api = spawnAPI();
-        try {
-            const { responses } = await api.batchRequests([
-                { method: "unknown", params: null } as unknown as APIRequest,
-                { method: "parseCommandLine", params: { commandLine: ["--strict"] } },
-            ]);
-
-            assert.equal(responses.length, 2);
-            assert.equal(responses[0].method, "unknown");
-            assert.match(responses[0].error!, /unknown API method/);
-            assert.equal(responses[0].result, null);
-
-            const commandLine = responses[1];
-            assert.strictEqual(commandLine.method, "parseCommandLine");
-            assert.strictEqual(commandLine.error, undefined);
-            assert.strictEqual(commandLine.result.options.strict, true);
         }
         finally {
             await api.close();
@@ -727,6 +930,62 @@ describe("Snapshot", () => {
             const type = await project.checker.getTypeOfSymbol(symbol);
             assert.ok(type);
             assert.ok(type.flags & TypeFlags.NumberLiteral);
+        }
+        finally {
+            await api.close();
+        }
+    });
+
+    test("getNonMissingTypeOfSymbol", async () => {
+        const api = spawnAPI({
+            "/tsconfig-one.json": JSON.stringify({
+                compilerOptions: {
+                    exactOptionalPropertyTypes: true,
+                    strict: true,
+                },
+            }),
+            "/tsconfig-two.json": JSON.stringify({
+                compilerOptions: {
+                    exactOptionalPropertyTypes: false,
+                    strict: true,
+                },
+            }),
+            "/src/index.ts": "const x: Partial<{ a: string }> = {};",
+        });
+
+        try {
+            // when `"exactOptionalPropertyTypes": true`
+            const snapshot1 = await api.updateSnapshot({ openProject: "/tsconfig-one.json" });
+            const project1 = snapshot1.getProject("/tsconfig-one.json")!;
+            const type1 = await project1.checker.getTypeAtPosition("/src/index.ts", 7);
+            assert.ok(type1);
+            const symbol1 = await project1.checker.getPropertyOfType(type1, "a");
+            assert.ok(symbol1);
+            const propertyType1 = await project1.checker.getTypeOfSymbol(symbol1);
+            assert.ok(propertyType1);
+            // getTypeOfSymbol returns 'string | undefined'
+            assert.ok(propertyType1.isUnionType());
+            const propertyType2 = await project1.checker.getNonMissingTypeOfSymbol(symbol1);
+            assert.ok(propertyType2);
+            // getNonMissingTypeOfSymbol returns 'string'
+            assert.ok(!propertyType2.isUnionType());
+            assert.ok(propertyType2.flags & TypeFlags.String);
+
+            // when `"exactOptionalPropertyTypes": false`
+            const snapshot2 = await api.updateSnapshot({ openProject: "/tsconfig-two.json" });
+            const project2 = snapshot2.getProject("/tsconfig-two.json")!;
+            const type2 = await project2.checker.getTypeAtPosition("/src/index.ts", 7);
+            assert.ok(type2);
+            const symbol2 = await project2.checker.getPropertyOfType(type2, "a");
+            assert.ok(symbol2);
+            const propertyType3 = await project2.checker.getTypeOfSymbol(symbol2);
+            assert.ok(propertyType3);
+            // getTypeOfSymbol returns 'string | undefined'
+            assert.ok(propertyType3.isUnionType());
+            const propertyType4 = await project2.checker.getNonMissingTypeOfSymbol(symbol2);
+            assert.ok(propertyType4);
+            // getNonMissingTypeOfSymbol returns 'string | undefined'
+            assert.ok(propertyType4.isUnionType());
         }
         finally {
             await api.close();
@@ -1082,6 +1341,26 @@ describe("Checker - getMemberInModuleExports", () => {
 });
 
 describe("SourceFile", () => {
+    test("getSourceFile rejects invalid document identifiers", async () => {
+        const api = spawnAPI();
+        try {
+            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const program = snapshot.getProject("/tsconfig.json")!.program;
+            const document = { fileName: "/src/index.ts" } as unknown as DocumentIdentifier;
+
+            await assert.rejects( // @sync: assert.throws(
+                () => program.getSourceFile(document),
+                {
+                    name: "TypeError",
+                    message: "Expected a string or { uri } for the document, received an object with keys: fileName",
+                },
+            );
+        }
+        finally {
+            await api.close();
+        }
+    });
+
     test("getSourceFileNames returns all program files, not just root files", async () => {
         const api = spawnAPI({
             "/tsconfig.json": JSON.stringify({
@@ -1168,7 +1447,7 @@ describe("SourceFile", () => {
 
             const mts = await program.getSourceFile("/src/esm.mts");
             assert.ok(mts);
-            assert.equal((await program.getSourceFileMetadata(mts.fileName))?.impliedNodeFormat, ModuleKind.ESNext);
+            assert.equal((await program.getSourceFileMetadata({ uri: "file:///src/esm.mts" }))?.impliedNodeFormat, ModuleKind.ESNext);
             assert.equal((await program.getSourceFileMetadataByPath(mts.path))?.impliedNodeFormat, ModuleKind.ESNext);
 
             const cts = await program.getSourceFile("/src/cjs.cts");
@@ -2721,15 +3000,59 @@ export const tuple: readonly [number, string?, ...boolean[]] = [1];
         }
     });
 
-    test("TupleType properties", async () => {
-        const { type, api } = await getTypeAtName(spawnAPI(typeFiles), "tuple:");
+    test("tuple metadata is owned by tuple targets", async () => {
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/main.ts": `
+declare function empty(value: readonly []): void;
+declare function nonempty(value: readonly [number]): void;
+declare function array(value: readonly number[]): void;
+empty([]);
+nonempty([1]);
+array([]);
+`,
+        });
         try {
-            assert.ok(type.flags & TypeFlags.Object);
-            const ref = type as TypeReference;
-            assert.ok(ref.objectFlags & ObjectFlags.Reference);
-            const target = await ref.getTarget();
-            assert.ok(target);
-            assert.ok(target.flags & TypeFlags.Object);
+            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const sourceFile = await project.program.getSourceFile("/src/main.ts");
+            assert.ok(sourceFile);
+
+            const arrayLiterals: Node[] = [];
+            sourceFile.forEachChild(function visit(node) {
+                if (node.kind === SyntaxKind.ArrayLiteralExpression) {
+                    arrayLiterals.push(node);
+                }
+                node.forEachChild(visit);
+            });
+            assert.equal(arrayLiterals.length, 3);
+
+            for (const [index, expectedFixedLength] of [0, 1].entries()) {
+                const type = await project.checker.getTypeAtLocation(arrayLiterals[index]);
+                assert.equal(await project.checker.isTupleType(type), true);
+                assert.equal(await project.checker.isTupleTypeTarget(type), false);
+                assert.equal(type.isTupleType(), true);
+                assert.equal(type.isTupleTypeTarget(), false);
+                assert.ok(type.isTupleType());
+                assert.equal(Reflect.get(type, "fixedLength"), undefined);
+
+                const target = await type.getTarget();
+                assert.ok(target.objectFlags & ObjectFlags.Tuple);
+                assert.equal(await project.checker.isTupleType(target), true);
+                assert.equal(await project.checker.isTupleTypeTarget(target), true);
+                assert.equal(target.isTupleType(), true);
+                assert.equal(target.isTupleTypeTarget(), true);
+                assert.ok(target.isTupleTypeTarget());
+                assert.equal(target.fixedLength, expectedFixedLength);
+                assert.equal(target.elementFlags.length, expectedFixedLength);
+                assert.equal(target.readonly, false);
+            }
+
+            const arrayType = await project.checker.getTypeAtLocation(arrayLiterals[2]);
+            assert.equal(await project.checker.isTupleType(arrayType), false);
+            assert.equal(await project.checker.isTupleTypeTarget(arrayType), false);
+            assert.equal(arrayType.isTupleType(), false);
+            assert.equal(arrayType.isTupleTypeTarget(), false);
         }
         finally {
             await api.close();
@@ -3393,6 +3716,109 @@ describe("Checker - isArrayType / isTupleType", () => {
             assert.ok(type);
             assert.equal(await project.checker.isArrayType(type), false);
             assert.equal(await project.checker.isTupleType(type), false);
+        }
+        finally {
+            await api.close();
+        }
+    });
+});
+
+describe("Checker - isReadonlySymbol", () => {
+    test("properties with a 'readonly' modifier", async () => {
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/main.ts": `
+export interface User {
+    readonly name: string;
+    age: number;
+}
+
+export type ReadonlyUser = Readonly<User>;
+`,
+        });
+        try {
+            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const sourceFile = await project.program.getSourceFile("/src/main.ts");
+            assert.ok(sourceFile);
+            const user = sourceFile.statements.find(isInterfaceDeclaration);
+            assert.ok(user);
+            const userProperties = await project.checker.getPropertiesOfType(
+                await project.checker.getTypeAtLocation(user),
+            );
+            assert.equal(await project.checker.isReadonlySymbol(userProperties[0]), true);
+            assert.equal(await project.checker.isReadonlySymbol(userProperties[1]), false);
+            const readonlyUser = sourceFile.statements.find(isTypeAliasDeclaration);
+            assert.ok(readonlyUser);
+            const readonlyUserProperties = await project.checker.getPropertiesOfType(
+                await project.checker.getTypeAtLocation(readonlyUser),
+            );
+            assert.equal(await project.checker.isReadonlySymbol(readonlyUserProperties[0]), true);
+            assert.equal(await project.checker.isReadonlySymbol(readonlyUserProperties[1]), true);
+        }
+        finally {
+            await api.close();
+        }
+    });
+
+    test("variables declared with 'const'", async () => {
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/main.ts": `export const a = 1; export let b = 2;`,
+        });
+        try {
+            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const { checker } = snapshot.getProject("/tsconfig.json")!;
+            const a = await checker.getSymbolAtPosition("/src/main.ts", "export const ".length);
+            const b = await checker.getSymbolAtPosition("/src/main.ts", "export const a = 1; export let ".length);
+            assert.ok(a);
+            assert.ok(b);
+            assert.equal(await checker.isReadonlySymbol(a), true);
+            assert.equal(await checker.isReadonlySymbol(b), false);
+        }
+        finally {
+            await api.close();
+        }
+    });
+
+    test("get accessors without matching set accessors", async () => {
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/main.ts": `
+class Alpha {
+    private _value!: number;
+    get value(): number {
+        return this._value;
+    }
+}
+class Bravo {
+    private _value!: number;
+    get value(): number {
+        return this._value;
+    }
+    set value(newValue: number) {
+        this._value = newValue;
+    }
+}
+export type A = InstanceType<typeof Alpha>;
+export type B = InstanceType<typeof Bravo>;
+`,
+        });
+        try {
+            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const sourceFile = await project.program.getSourceFile("/src/main.ts");
+            assert.ok(sourceFile);
+            const typeAliases = sourceFile.statements.filter(isTypeAliasDeclaration);
+            assert.equal(typeAliases.length, 2);
+            const aProperties = await project.checker.getPropertiesOfType(
+                await project.checker.getTypeAtLocation(typeAliases[0]),
+            );
+            assert.equal(await project.checker.isReadonlySymbol(aProperties[1]), true);
+            const bProperties = await project.checker.getPropertiesOfType(
+                await project.checker.getTypeAtLocation(typeAliases[1]),
+            );
+            assert.equal(await project.checker.isReadonlySymbol(bProperties[1]), false);
         }
         finally {
             await api.close();
@@ -4609,6 +5035,27 @@ function f() {
             const names = symbols.map(s => s.name);
             assert.ok(names.includes("OuterType"), "should include interface declared in file");
             assert.ok(names.includes("Array"), "should include global type symbols");
+        }
+        finally {
+            await api.close();
+        }
+    });
+
+    // Regression test: `<<` binds tighter than `-` in Go but looser in JS, so SymbolFlagsAll's
+    // `(1<<30) - 1` needs those parens or the generated enum silently becomes `1 << 29`.
+    test("SymbolFlags.All includes both value and type meanings", async () => {
+        const api = spawnAPI(scopeFiles);
+        try {
+            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const pos = scopeFiles["/src/main.ts"].indexOf("return innerValue");
+            const symbols = await project.checker.getSymbolsInScope(
+                { document: "/src/main.ts", position: pos },
+                SymbolFlags.All,
+            );
+            const names = symbols.map(s => s.name);
+            assert.ok(names.includes("innerValue"), "should include local value symbol");
+            assert.ok(names.includes("OuterType"), "should include type symbol declared in file");
         }
         finally {
             await api.close();
@@ -6931,13 +7378,6 @@ describe("runWithTemporaryFileUpdate", () => {
         }
     });
 });
-
-function spawnAPI(files: Record<string, string> = { ...defaultFiles }) {
-    return new API({
-        cwd: fileURLToPath(new URL("../../../../", import.meta.url).toString()),
-        fs: createVirtualFileSystem(files),
-    });
-}
 
 function spawnAPIWithFS(files: Record<string, string> = { ...defaultFiles }): { api: API; fs: FileSystem; } {
     const fs = createVirtualFileSystem(files);

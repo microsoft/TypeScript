@@ -41,7 +41,7 @@
     },
     "packageManager": "npm@11.17.0+sha512.3eeaf18997b11070d313849268b23766b9db0068997dec9471073170fe43fa17f2b4d0337bf0f52330ee2274e7f5754b21b01052742e48f5c9c74d8b1e32ef43",
     "volta": {
-        "node": "22.22.0",
+        "node": "24.20.0",
         "npm": "11.17.0"
     },
     "allowScripts": {
