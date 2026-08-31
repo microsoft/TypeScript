@@ -1,0 +1,84 @@
+//// [tests/cases/compiler/importAttributeModuleAugmentations.ts] ////
+
+=== /types.d.ts ===
+declare module "*.asset" {
+>"*.asset" : Symbol("*.asset", Decl(types.d.ts, 0, 0))
+
+    export const plain: "plain";
+>plain : Symbol(plain, Decl(types.d.ts, 1, 16))
+}
+
+declare module "attributed/*.asset" with { type: "css" } {
+>"attributed/*.asset" : Symbol("attributed/*.asset", Decl(types.d.ts, 2, 1))
+>type : Symbol(type, Decl(types.d.ts, 4, 42))
+
+    export const attributed: "attributed";
+>attributed : Symbol(attributed, Decl(types.d.ts, 5, 16))
+}
+
+declare module "*.special" with { type: "special" } {
+>"*.special" : Symbol("*.special", Decl(types.d.ts, 6, 1))
+>type : Symbol(type, Decl(types.d.ts, 8, 33))
+
+    export const attributed: "attributed";
+>attributed : Symbol(attributed, Decl(types.d.ts, 9, 16))
+}
+
+=== /augmentations.ts ===
+export {};
+
+declare module "merged.asset" {
+>"merged.asset" : Symbol("merged.asset", Decl(augmentations.ts, 0, 10), Decl(types.d.ts, 0, 0))
+
+    export const augmented: "augmented";
+>augmented : Symbol(augmented, Decl(augmentations.ts, 3, 16))
+}
+
+declare module "attributed/file.asset" {
+>"attributed/file.asset" : Symbol("attributed/file.asset", Decl(augmentations.ts, 4, 1), Decl(types.d.ts, 0, 0))
+
+    export const augmented: "augmented";
+>augmented : Symbol(augmented, Decl(augmentations.ts, 7, 16))
+}
+
+declare module "unattributed.special" {
+>"unattributed.special" : Symbol("unattributed.special", Decl(augmentations.ts, 8, 1))
+
+    export const augmented: "augmented";
+>augmented : Symbol(augmented, Decl(augmentations.ts, 11, 16))
+}
+
+=== /index.ts ===
+import * as merged from "merged.asset";
+>merged : Symbol(merged, Decl(index.ts, 0, 6))
+
+merged.plain;
+>merged.plain : Symbol(merged.plain, Decl(types.d.ts, 1, 16))
+>merged : Symbol(merged, Decl(index.ts, 0, 6))
+>plain : Symbol(merged.plain, Decl(types.d.ts, 1, 16))
+
+merged.augmented;
+>merged.augmented : Symbol(merged.augmented, Decl(augmentations.ts, 3, 16))
+>merged : Symbol(merged, Decl(index.ts, 0, 6))
+>augmented : Symbol(merged.augmented, Decl(augmentations.ts, 3, 16))
+
+import * as attributed from "attributed/file.asset" with { type: "css" };
+>attributed : Symbol(attributed, Decl(index.ts, 4, 6))
+
+attributed.attributed;
+>attributed.attributed : Symbol(attributed.attributed, Decl(types.d.ts, 5, 16))
+>attributed : Symbol(attributed, Decl(index.ts, 4, 6))
+>attributed : Symbol(attributed.attributed, Decl(types.d.ts, 5, 16))
+
+attributed.augmented;
+>attributed : Symbol(attributed, Decl(index.ts, 4, 6))
+
+import * as unattributed from "unattributed.special";
+>unattributed : Symbol(unattributed, Decl(index.ts, 8, 6))
+
+unattributed.attributed;
+>unattributed : Symbol(unattributed, Decl(index.ts, 8, 6))
+
+unattributed.augmented;
+>unattributed : Symbol(unattributed, Decl(index.ts, 8, 6))
+

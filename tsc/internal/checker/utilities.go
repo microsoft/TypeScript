@@ -5,7 +5,6 @@ import (
 	"slices"
 	"strings"
 	"sync"
-	"unicode/utf8"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/binder"
@@ -1651,8 +1650,7 @@ func SkipAlias(symbol *ast.Symbol, checker *Checker) *ast.Symbol {
 
 // True if the symbol is for an external module, as opposed to a namespace.
 func IsExternalModuleSymbol(moduleSymbol *ast.Symbol) bool {
-	firstRune, _ := utf8.DecodeRuneInString(moduleSymbol.Name)
-	return moduleSymbol.Flags&ast.SymbolFlagsModule != 0 && firstRune == '"'
+	return moduleSymbol.IsExternalModule()
 }
 
 func (c *Checker) isCanceled() bool {
