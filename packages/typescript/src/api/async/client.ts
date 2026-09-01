@@ -332,6 +332,7 @@ export class Client {
     }
 
     async close(): Promise<void> {
+        await this.connecting?.catch(() => {}); // if connection is still in-progress, wait for it to finish before closing the connection
         this.closed = true;
         if (this.connection) {
             this.connection.dispose();
