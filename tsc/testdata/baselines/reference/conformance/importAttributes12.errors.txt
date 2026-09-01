@@ -1,10 +1,13 @@
 importAttributes12.ts(10,12): error TS2858: Import attribute values must be string literal expressions.
 importAttributes12.ts(16,28): error TS2858: Import attribute values must be string literal expressions.
+importAttributes12.ts(21,11): error TS2322: Type '{ "resolution-mode": 0; }' is not assignable to type 'ImportAttributes'.
+  Property 'resolution-mode' is incompatible with index signature.
+    Type 'number' is not assignable to type 'string'.
 importAttributes12.ts(22,28): error TS2858: Import attribute values must be string literal expressions.
 importAttributes12.ts(28,28): error TS2858: Import attribute values must be string literal expressions.
 
 
-==== importAttributes12.ts (4 errors) ====
+==== importAttributes12.ts (5 errors) ====
     declare module "dependency" {
         export interface Type {}
     }
@@ -30,10 +33,16 @@ importAttributes12.ts(28,28): error TS2858: Import attribute values must be stri
     
     type T5 = import("dependency", {
         with: {
+              ~
             "resolution-mode": 0,
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                                ~
 !!! error TS2858: Import attribute values must be string literal expressions.
         },
+    ~~~~~
+!!! error TS2322: Type '{ "resolution-mode": 0; }' is not assignable to type 'ImportAttributes'.
+!!! error TS2322:   Property 'resolution-mode' is incompatible with index signature.
+!!! error TS2322:     Type 'number' is not assignable to type 'string'.
     }).Type;
     
     type T6 = import("dependency", {
