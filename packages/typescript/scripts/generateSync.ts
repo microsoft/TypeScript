@@ -1,4 +1,4 @@
-#!/usr/bin/env -S node --experimental-strip-types --no-warnings
+#!/usr/bin/env node
 
 /**
  * Generates sync API from async API source files.
@@ -18,10 +18,9 @@
  *   - Unwrap `Promise<T>` → `T` in synchronous type references
  *
  * Usage:
- *   node --experimental-strip-types --no-warnings generateSync.ts
+ *   node generateSync.ts
  */
 
-import { execaSync } from "execa";
 import {
     mkdirSync,
     readFileSync,
@@ -32,6 +31,7 @@ import {
     join,
     relative,
 } from "node:path";
+import { xSync } from "tinyexec";
 import ts from "typescript";
 
 function generatedHeader(asyncSourceRelPath: string): string {
@@ -579,7 +579,7 @@ function getIndent(source: string, position: number): string {
 // ── Formatting ───────────────────────────────────────────────────
 
 function formatFiles(paths: string[]): void {
-    execaSync("dprint", ["fmt", ...paths]);
+    xSync("dprint", ["fmt", ...paths], { throwOnError: true });
 }
 
 // ── Main ─────────────────────────────────────────────────────────
