@@ -1531,14 +1531,6 @@
         "category": "Message",
         "code": 1461
     },
-    "'resolution-mode' is the only valid key for type import attributes.": {
-        "category": "Error",
-        "code": 1463
-    },
-    "Type import attributes should have exactly one key - 'resolution-mode' - with value 'import' or 'require'.": {
-        "category": "Error",
-        "code": 1464
-    },
 
     "The 'import.meta' meta-property is not allowed in files which will build into CommonJS output.": {
         "category": "Error",
@@ -1859,6 +1851,30 @@
     "Ignore the tsconfig found and build with commandline options and files.": {
         "category": "Message",
         "code": 1549
+    },
+    "An import attributes type may only contain property signatures.": {
+        "category": "Error",
+        "code": 1552
+    },
+    "An import attributes property must have a type annotation.": {
+        "category": "Error",
+        "code": 1553
+    },
+    "An import attributes property must have a string literal or identifier name.": {
+        "category": "Error",
+        "code": 1554
+    },
+    "An import attributes property must have a string literal type annotation.": {
+        "category": "Error",
+        "code": 1555
+    },
+    "An import attributes property cannot be optional.": {
+        "category": "Error",
+        "code": 1556
+    },
+    "'{0}' is not a valid key for an import attributes type.": {
+        "category": "Error",
+        "code": 1557
     },
 
     "The types of '{0}' are incompatible between these types.": {

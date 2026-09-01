@@ -2196,3 +2196,35 @@ func (c *Checker) checkGrammarImportCallExpression(node *ast.Node) bool {
 	}
 	return false
 }
+
+func (c *Checker) checkGrammarImportAttributesType(attributes *ast.TypeLiteralNode) bool {
+	members := attributes.Members
+	if members == nil {
+		return false
+	}
+	for _, member := range members.Nodes {
+		if member.Kind != ast.KindPropertySignature {
+			return c.grammarErrorOnNode(member, diagnostics.An_import_attributes_type_may_only_contain_property_signatures)
+		}
+		propertySignature := member.AsPropertySignatureDeclaration()
+		if propertySignature.Type == nil {
+			return c.grammarErrorOnNode(member, diagnostics.An_import_attributes_property_must_have_a_type_annotation)
+		}
+		if propertySignature.QuestionToken() != nil {
+			return c.grammarErrorOnNode(member, diagnostics.An_import_attributes_property_cannot_be_optional)
+		}
+		name := propertySignature.Name()
+		if !(ast.IsStringLiteralLike(name) || ast.IsIdentifier(name)) {
+			return c.grammarErrorOnNode(name, diagnostics.An_import_attributes_property_must_have_a_string_literal_or_identifier_name)
+		}
+		if name.Text() == "resolution-mode" {
+			return c.grammarErrorOnNode(name, diagnostics.X_0_is_not_a_valid_key_for_an_import_attributes_type, name.Text())
+		}
+
+		typeNode := propertySignature.Type
+		if !ast.IsStringLiteralLikeType(typeNode) {
+			return c.grammarErrorOnNode(typeNode, diagnostics.An_import_attributes_property_must_have_a_string_literal_type_annotation)
+		}
+	}
+	return false
+}

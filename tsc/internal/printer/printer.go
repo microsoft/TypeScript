@@ -2181,9 +2181,11 @@ func (p *Printer) emitMappedType(node *ast.MappedTypeNode) {
 			p.writePunctuation("?")
 		}
 	}
-	p.writePunctuation(":")
-	p.writeSpace()
-	p.emitTypeNodeOutsideExtends(node.Type)
+	if node.Type != nil {
+		p.writePunctuation(":")
+		p.writeSpace()
+		p.emitTypeNodeOutsideExtends(node.Type)
+	}
 	p.writeTrailingSemicolon()
 	if node.Members != nil {
 		if len(node.Members.Nodes) > 0 {
@@ -3839,6 +3841,12 @@ func (p *Printer) emitModuleDeclaration(node *ast.ModuleDeclaration) {
 		p.writePunctuation(".")
 		p.emitNestedModuleName(module.Name())
 		body = module.Body
+	}
+	if node.Attributes != nil {
+		p.writeSpace()
+		p.writeKeyword("with")
+		p.writeSpace()
+		p.emitTypeNode(node.Attributes, ast.TypePrecedenceNonArray)
 	}
 	if body == nil {
 		p.writeTrailingSemicolon()

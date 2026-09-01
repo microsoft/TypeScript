@@ -22,7 +22,9 @@ import {
     type Identifier,
     type IndexSignatureDeclaration,
     ModifierFlags,
+    type NamedTupleMember,
     type Node,
+    type ParameterDeclaration,
     type Path,
     type SourceFile,
     type SyntaxKind,
@@ -722,6 +724,10 @@ class ProjectObjectRegistry {
 
     getType(id: number): TypeObject | undefined {
         return this.types.get(id);
+    }
+
+    createNodeHandle<T extends Node>(handle: string): NodeHandle<T> {
+        return new NodeHandle<T>(handle, this.project);
     }
 
     getOrCreateSignature(data: SignatureResponse): Signature {
@@ -2427,6 +2433,7 @@ class TypeObject implements Type {
     readonly elementFlags!: readonly ElementFlags[];
     readonly fixedLength!: number;
     readonly readonly!: boolean;
+    readonly labeledElementDeclarations?: readonly (NodeHandle<NamedTupleMember | ParameterDeclaration> | undefined)[];
     readonly texts!: readonly string[];
     readonly objectType!: number;
     readonly indexType!: number;
@@ -2485,6 +2492,9 @@ class TypeObject implements Type {
             this.fixedLength = data.fixedLength;
         }
         if (data.readonly !== undefined) this.readonly = data.readonly;
+        if (data.labeledElementDeclarations !== undefined) {
+            this.labeledElementDeclarations = data.labeledElementDeclarations.map(handle => handle ? objectRegistry.createNodeHandle<NamedTupleMember | ParameterDeclaration>(handle) : undefined);
+        }
         if (data.texts !== undefined) this.texts = data.texts;
         if (data.objectType !== undefined) this.objectType = data.objectType;
         if (data.indexType !== undefined) this.indexType = data.indexType;
