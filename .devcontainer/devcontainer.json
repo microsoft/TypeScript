@@ -1,9 +1,6 @@
 {
     "name": "TypeScript Compiler Development",
-    "image": "mcr.microsoft.com/devcontainers/go:dev-1.26-bookworm",
-    "containerEnv": {
-        "GOTOOLCHAIN": "go1.27.0"
-    },
+    "image": "mcr.microsoft.com/devcontainers/go:1.27-bookworm",
     "features": {
         "ghcr.io/devcontainers/features/node:2": {
             "version": "24",
