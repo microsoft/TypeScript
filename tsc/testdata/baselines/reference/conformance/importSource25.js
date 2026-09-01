@@ -2,6 +2,8 @@
 
 //// [a.d.ts]
 declare module "*.txt";
+declare module "*.asset" with { type: "css" } {}
+declare module "*.asset" with { type: "text" } {}
 
 //// [b.ts]
 import source a from "./a.txt";
@@ -31,6 +33,18 @@ export * from "./f.js";
 import { value } from "./g.js";
 value;
 
+//// [i.ts]
+import source a from "./file.asset" with { type: "css" };
+export { a as value };
+
+//// [j.ts]
+import source a from "./file.asset" with { type: "text" };
+export { a as value };
+
+//// [k.ts]
+export * from "./i.js";
+export * from "./j.js";
+
 
 //// [b.js]
 import source a from "./a.txt";
@@ -53,3 +67,12 @@ export * from "./f.js";
 //// [h.js]
 import { value } from "./g.js";
 value;
+//// [i.js]
+import source a from "./file.asset" with { type: "css" };
+export { a as value };
+//// [j.js]
+import source a from "./file.asset" with { type: "text" };
+export { a as value };
+//// [k.js]
+export * from "./i.js";
+export * from "./j.js";

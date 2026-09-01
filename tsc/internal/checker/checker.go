@@ -655,7 +655,6 @@ type Checker struct {
 	unresolvedSymbols                           map[string]*ast.Symbol
 	errorTypes                                  map[CacheHashKey]*Type
 	moduleSymbols                               map[*ast.Node]*ast.Symbol
-	patternAmbientModuleSourceSymbols           map[string]*ast.Symbol
 	resolvedModuleSourceSymbols                 map[tspath.Path]*ast.Symbol
 	globalThisSymbol                            *ast.Symbol
 	symbolTableAliasCache                       map[symbolTableID][]*ast.Symbol
@@ -14766,20 +14765,20 @@ func (c *Checker) getSourcePhaseImportTarget(moduleSpecifier *ast.Node, moduleSy
 		c.resolvedModuleSourceSymbols[path] = sourceSymbol
 		return sourceSymbol
 	}
+	moduleLinks := c.moduleSymbolLinks.Get(moduleSymbol)
 	if c.isPatternAmbientModuleSymbol(moduleSymbol) {
-		key := c.getPatternAmbientModuleSourceKey(moduleSpecifier)
-		sourceSymbol := c.patternAmbientModuleSourceSymbols[key]
+		moduleReference := c.getSourcePhaseImportModuleReference(moduleSpecifier)
+		sourceSymbol := moduleLinks.sourcePhaseTargets[moduleReference]
 		if sourceSymbol != nil {
 			return sourceSymbol
 		}
 		sourceSymbol = c.createSourcePhaseImportTarget(moduleSymbol, sourceType)
-		if c.patternAmbientModuleSourceSymbols == nil {
-			c.patternAmbientModuleSourceSymbols = make(map[string]*ast.Symbol)
+		if moduleLinks.sourcePhaseTargets == nil {
+			moduleLinks.sourcePhaseTargets = make(map[string]*ast.Symbol)
 		}
-		c.patternAmbientModuleSourceSymbols[key] = sourceSymbol
+		moduleLinks.sourcePhaseTargets[moduleReference] = sourceSymbol
 		return sourceSymbol
 	}
-	moduleLinks := c.moduleSymbolLinks.Get(moduleSymbol)
 	sourceSymbol := moduleLinks.sourcePhaseTarget
 	if sourceSymbol == nil {
 		sourceSymbol = c.createSourcePhaseImportTarget(moduleSymbol, sourceType)
@@ -14797,7 +14796,7 @@ func (c *Checker) isPatternAmbientModuleSymbol(moduleSymbol *ast.Symbol) bool {
 	return false
 }
 
-func (c *Checker) getPatternAmbientModuleSourceKey(moduleSpecifier *ast.Node) string {
+func (c *Checker) getSourcePhaseImportModuleReference(moduleSpecifier *ast.Node) string {
 	moduleReference := moduleSpecifier.Text()
 	if tspath.IsExternalModuleNameRelative(moduleReference) {
 		sourceFile := ast.GetSourceFileOfNode(moduleSpecifier)

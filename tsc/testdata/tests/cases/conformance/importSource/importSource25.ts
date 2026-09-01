@@ -3,6 +3,8 @@
 
 // @filename: a.d.ts
 declare module "*.txt";
+declare module "*.asset" with { type: "css" } {}
+declare module "*.asset" with { type: "text" } {}
 
 // @filename: b.ts
 import source a from "./a.txt";
@@ -31,3 +33,15 @@ export * from "./f.js";
 // @filename: h.ts
 import { value } from "./g.js";
 value;
+
+// @filename: i.ts
+import source a from "./file.asset" with { type: "css" };
+export { a as value };
+
+// @filename: j.ts
+import source a from "./file.asset" with { type: "text" };
+export { a as value };
+
+// @filename: k.ts
+export * from "./i.js";
+export * from "./j.js";

@@ -213,6 +213,7 @@ type ModuleSymbolLinks struct {
 	resolvedExports       ast.SymbolTable      // Resolved exports of module or combined early- and late-bound static members of a class.
 	typeOnlyExportStarMap map[string]*ast.Node // Set on a module symbol when some of its exports were resolved through a 'export type * from "mod"' declaration
 	sourcePhaseTarget     *ast.Symbol
+	sourcePhaseTargets    map[string]*ast.Symbol
 	exportsChecked        bool
 }
 
