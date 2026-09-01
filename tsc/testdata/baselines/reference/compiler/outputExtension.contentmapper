@@ -1,0 +1,29 @@
+//// [/other.p] (ScriptKind: ScriptKindTS, ContentMapper: [.y.z .p])
+--- Original ---
+export declare const other: number;
+--- Transformed ---
+const __VERSION = "1.0.0";
+export declare const other: number;
+
+//// [/component.y.z] (ScriptKind: ScriptKindTS, ContentMapper: [.y.z .p])
+--- Original ---
+import { helper } from "./helper.ts";
+import { other } from "./other.p";
+export interface ComponentProps {
+    label: typeof helper;
+    count: typeof other;
+}
+export declare const component: ComponentProps;
+--- Transformed ---
+const __VERSION = "1.0.0";
+import { helper } from "./helper.ts";
+import { other } from "./other.p";
+export interface ComponentProps {
+    label: typeof helper;
+    count: typeof other;
+}
+export declare const component: ComponentProps;
+
+=== Diagnostics ===
+
+<no content>

@@ -431,6 +431,11 @@ Specify an output folder for all emitted files.
 [94m--outFile[39m
 Specify a file that bundles all outputs into one JavaScript file. If 'declaration' is true, also designates a file that bundles all .d.ts output.
 
+[94m--outputExtension[39m
+Specify the file extension that an external build gives every source file, so that declaration file names and their relative imports match the build output.
+one of: .js, .mjs, .cjs
+default: undefined
+
 [94m--preserveConstEnums[39m
 Disable erasing 'const enum' declarations in generated code.
 type: boolean

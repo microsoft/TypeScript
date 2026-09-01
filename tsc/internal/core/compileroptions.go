@@ -83,6 +83,7 @@ type CompilerOptions struct {
 	NoImplicitOverride                        Tristate                                  `json:"noImplicitOverride,omitzero"`
 	NoUncheckedSideEffectImports              Tristate                                  `json:"noUncheckedSideEffectImports,omitzero"`
 	OutDir                                    string                                    `json:"outDir,omitzero"`
+	OutputExtension                           string                                    `json:"outputExtension,omitzero"`
 	Paths                                     *collections.OrderedMap[string, []string] `json:"paths,omitzero"`
 	PreserveConstEnums                        Tristate                                  `json:"preserveConstEnums,omitzero"`
 	PreserveSymlinks                          Tristate                                  `json:"preserveSymlinks,omitzero"`
