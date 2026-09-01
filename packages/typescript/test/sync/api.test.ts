@@ -3589,7 +3589,7 @@ describe("updateSnapshot file systems", () => {
             kind: "memory",
             files: {
                 "/src/index.ts": "posix",
-                "C:\\repo\\src\\index.ts": "windows",
+                "C:/repo/src/index.ts": "windows",
                 "file:///literal%20path.ts": "literal file-name string",
                 "/encoded/path with spaces.ts": "file URI",
                 "c:/repo/encoded#name.ts": "Windows file URI",
@@ -3639,6 +3639,19 @@ describe("updateSnapshot file systems", () => {
                     [{ uri: "file:///duplicate.ts" }, "URI"],
                 ]),
             /Duplicate snapshot filesystem path: \/duplicate\.ts/,
+        );
+
+        const prototypeFileSystem = createMemoryFileSystem([["__proto__", "prototype"]]);
+        assert.equal(prototypeFileSystem.files["__proto__"], "prototype");
+        assert.ok(Object.hasOwn(prototypeFileSystem.files, "__proto__"));
+
+        assert.throws(
+            () =>
+                createMemoryFileSystem([
+                    ["/normalized/duplicate.ts", "forward slash"],
+                    ["\\normalized\\duplicate.ts", "backslash"],
+                ]),
+            /Duplicate snapshot filesystem path: \/normalized\/duplicate\.ts/,
         );
     });
 
@@ -3947,6 +3960,33 @@ describe("updateSnapshot file systems", () => {
         }
     });
 
+    test("Snapshot.update treats a memory filesystem as a total replacement", () => {
+        const host = createVirtualFileSystem({
+            "/host.ts": `export const source = "host";`,
+        });
+        const api = new API({
+            cwd: fileURLToPath(new URL("../../../../", import.meta.url).toString()),
+            fs: host,
+        });
+        try {
+            using snapshot = api.updateSnapshot();
+            using replaced = snapshot.update({
+                fileSystem: createMemoryFileSystem([
+                    ["/memory.ts", `export const source = "memory";`],
+                ]),
+            });
+            using program = replaced.createProgram(
+                ["/memory.ts", "/host.ts"],
+                { compilerOptions: { noLib: true } },
+            );
+            assert.equal((program.getSourceFile("/memory.ts"))?.text, `export const source = "memory";`);
+            assert.equal(program.getSourceFile("/host.ts"), undefined);
+        }
+        finally {
+            api.close();
+        }
+    });
+
     test("Snapshot.update applies target changes through inherited symlinks", () => {
         const api = new API({
             cwd: fileURLToPath(new URL("../../../../", import.meta.url).toString()),
@@ -4026,6 +4066,27 @@ describe("updateSnapshot file systems", () => {
             );
             assert.equal((updatedProgram.getSourceFile("/src/dependency.ts"))?.text, `export const value = "updated";`);
             assert.deepEqual(callbackCalls, []);
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("Snapshot.createProgram rebuilds an old program from a different snapshot when changes are omitted", () => {
+        const api = new API({
+            cwd: fileURLToPath(new URL("../../../../", import.meta.url).toString()),
+        });
+        const options = { compilerOptions: { noLib: true } };
+        try {
+            using base = api.updateSnapshot({
+                fileSystem: createMemoryFileSystem([["/src/main.ts", `export const source = "base";`]]),
+            });
+            using newer = base.update({
+                fileSystem: createMemoryFileSystem([["/src/main.ts", `export const source = "newer";`]]),
+            });
+            using oldProgram = newer.createProgram(["/src/main.ts"], options);
+            using rebuilt = base.createProgram(["/src/main.ts"], options, oldProgram);
+            assert.equal((rebuilt.getSourceFile("/src/main.ts"))?.text, `export const source = "base";`);
         }
         finally {
             api.close();
@@ -4153,6 +4214,40 @@ describe("updateSnapshot file systems", () => {
             );
             assert.ok(readFileCalls.includes("/host/node_modules/pkg/index.d.ts"));
             assert.ok(!readFileCalls.some(path => path.startsWith("/project/node_modules")));
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("Snapshot.update host symlinks bypass an inherited memory filesystem", () => {
+        const host = createVirtualFileSystem({
+            "/host/node_modules/pkg/index.d.ts": `export declare const value: string;`,
+        });
+        const api = new API({
+            cwd: fileURLToPath(new URL("../../../../", import.meta.url).toString()),
+            fs: host,
+        });
+        try {
+            using snapshot = api.updateSnapshot({
+                openProject: "/project/tsconfig.json",
+                fileSystem: createMemoryFileSystem([
+                    ["/project/tsconfig.json", JSON.stringify({ compilerOptions: { noLib: true, moduleResolution: "node" }, files: ["index.ts"] })],
+                    ["/project/index.ts", `import { value } from "pkg"; export { value };`],
+                ]),
+            });
+            using updated = snapshot.update({
+                fileSystem: createCacheFileSystem([], {
+                    symlinks: {
+                        "/project/node_modules": { target: "/host/node_modules", host: true },
+                    },
+                }),
+            });
+            const project = updated.getProject("/project/tsconfig.json")!;
+            assert.equal(
+                (project.program.getSourceFile("/host/node_modules/pkg/index.d.ts"))?.text,
+                `export declare const value: string;`,
+            );
         }
         finally {
             api.close();

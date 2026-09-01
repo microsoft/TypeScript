@@ -72,6 +72,22 @@ func TestSnapshotFileSystem(t *testing.T) {
 		assert.Assert(t, base.SeenFiles.Has("/fallback.ts"))
 	})
 
+	t.Run("layered memory is a total replacement", func(t *testing.T) {
+		t.Parallel()
+		fileSystem, err := newLayeredSnapshotFileSystem(&SnapshotFileSystem{
+			Kind: SnapshotFileSystemKindMemory,
+			Files: map[string]string{
+				"/memory.ts": "memory",
+			},
+		}, vfstest.FromMap(map[string]string{"/host.ts": "host"}, true), "/")
+		assert.NilError(t, err)
+		contents, ok := fileSystem.ReadFile("/memory.ts")
+		assert.Assert(t, ok)
+		assert.Equal(t, contents, "memory")
+		_, ok = fileSystem.ReadFile("/host.ts")
+		assert.Assert(t, !ok)
+	})
+
 	t.Run("memory resolves internal file and directory symlinks", func(t *testing.T) {
 		t.Parallel()
 		base := &trackingvfs.FS{Inner: vfstest.FromMap(map[string]string{
@@ -367,6 +383,75 @@ func TestSnapshotFileSystem(t *testing.T) {
 		assert.DeepEqual(t, entries.Directories, []string{"node_modules"})
 		_, isSymlink := entries.Symlinks["node_modules"]
 		assert.Assert(t, isSymlink)
+	})
+
+	t.Run("layered host symlinks bypass snapshot bases", func(t *testing.T) {
+		t.Parallel()
+		host := &trackingvfs.FS{Inner: vfstest.FromMap(map[string]string{
+			"/host/pkg/index.d.ts": "host",
+		}, true)}
+		base, err := newSnapshotFileSystem(&SnapshotFileSystem{
+			Kind: SnapshotFileSystemKindMemory,
+			Files: map[string]string{
+				"/memory.ts": "memory",
+			},
+		}, host, "/")
+		assert.NilError(t, err)
+
+		layered, err := newLayeredSnapshotFileSystem(&SnapshotFileSystem{
+			Kind:  SnapshotFileSystemKindCache,
+			Files: map[string]string{},
+			Symlinks: map[string]SnapshotSymlink{
+				"/project/pkg": {Target: "/host/pkg", Host: true},
+			},
+		}, base, "/")
+		assert.NilError(t, err)
+
+		contents, ok := layered.ReadFile("/project/pkg/index.d.ts")
+		assert.Assert(t, ok)
+		assert.Equal(t, contents, "host")
+		assert.Assert(t, layered.FileExists("/project/pkg/index.d.ts"))
+		assert.Assert(t, layered.DirectoryExists("/project/pkg"))
+		assert.DeepEqual(t, layered.GetAccessibleEntries("/project/pkg").Files, []string{"index.d.ts"})
+		assert.Equal(t, layered.Realpath("/project/pkg/index.d.ts"), "/host/pkg/index.d.ts")
+		info := layered.Stat("/project/pkg/index.d.ts")
+		assert.Assert(t, info != nil)
+		assert.Equal(t, info.Name(), "index.d.ts")
+		assert.Assert(t, host.SeenFiles.Has("/host/pkg/index.d.ts"))
+	})
+
+	t.Run("canonical path collisions are rejected", func(t *testing.T) {
+		t.Parallel()
+		base := vfstest.FromMap(map[string]string{}, false)
+
+		_, err := newSnapshotFileSystem(&SnapshotFileSystem{
+			Kind: SnapshotFileSystemKindMemory,
+			Files: map[string]string{
+				`C:\Repo\file.ts`: "first",
+				`c:/repo/file.ts`: "second",
+			},
+		}, base, `C:\Workspace`)
+		assert.ErrorContains(t, err, "duplicate snapshot filesystem file path")
+
+		_, err = newSnapshotFileSystem(&SnapshotFileSystem{
+			Kind:  SnapshotFileSystemKindMemory,
+			Files: map[string]string{},
+			Directories: map[string]SnapshotDirectoryEntries{
+				`C:\Repo`:   {},
+				`c:/repo/.`: {},
+			},
+		}, base, `C:\Workspace`)
+		assert.ErrorContains(t, err, "duplicate snapshot filesystem directory path")
+
+		_, err = newSnapshotFileSystem(&SnapshotFileSystem{
+			Kind:  SnapshotFileSystemKindMemory,
+			Files: map[string]string{},
+			Symlinks: map[string]SnapshotSymlink{
+				`C:\Repo\link`: {Target: `C:\Target`},
+				`c:/repo/link`: {Target: `C:\Other`},
+			},
+		}, base, `C:\Workspace`)
+		assert.ErrorContains(t, err, "duplicate snapshot filesystem symlink path")
 	})
 
 	t.Run("symlink cycles are treated as missing", func(t *testing.T) {
@@ -672,4 +757,59 @@ func TestUpdateSnapshotUsesMemoryFileSystem(t *testing.T) {
 	contents, ok = temporarySnapshot.ReadFile("/src/other.ts")
 	assert.Assert(t, ok)
 	assert.Equal(t, contents, `export const other = true;`)
+}
+
+func TestSnapshotUpdateMemoryFileSystemIsTotal(t *testing.T) {
+	t.Parallel()
+
+	projectSession, _ := projecttestutil.Setup(map[string]any{
+		"/host.ts": "host",
+	})
+	defer projectSession.Close()
+	session := NewSession(projectSession, nil)
+	defer session.Close()
+
+	base, err := session.handleUpdateSnapshot(context.Background(), &UpdateSnapshotParams{})
+	assert.NilError(t, err)
+	replaced, err := session.handleUpdateSnapshot(context.Background(), &UpdateSnapshotParams{
+		Snapshot: base.Snapshot,
+		FileSystem: &SnapshotFileSystem{
+			Kind: SnapshotFileSystemKindMemory,
+			Files: map[string]string{
+				"/memory.ts": "memory",
+			},
+		},
+	})
+	assert.NilError(t, err)
+
+	snapshot := session.snapshots[replaced.Snapshot].snapshot
+	contents, ok := snapshot.ReadFile("/memory.ts")
+	assert.Assert(t, ok)
+	assert.Equal(t, contents, "memory")
+	_, ok = snapshot.ReadFile("/host.ts")
+	assert.Assert(t, !ok)
+}
+
+func TestSnapshotUpdateCarriesHostFileSystemWithoutOverride(t *testing.T) {
+	t.Parallel()
+
+	projectSession, _ := projecttestutil.Setup(map[string]any{
+		"/tsconfig.json": `{ "compilerOptions": { "noLib": true }, "files": ["index.ts"] }`,
+		"/index.ts":      `export const value = true;`,
+	})
+	defer projectSession.Close()
+	session := NewSession(projectSession, nil)
+	defer session.Close()
+
+	base, err := session.handleUpdateSnapshot(context.Background(), &UpdateSnapshotParams{
+		OpenProjects: []DocumentIdentifier{{FileName: "/tsconfig.json"}},
+	})
+	assert.NilError(t, err)
+	baseSnapshot := session.snapshots[base.Snapshot].snapshot
+	program := baseSnapshot.ProjectCollection.GetProjectByPath(tspath.Path("/tsconfig.json")).GetProgram()
+
+	updated, err := session.handleUpdateSnapshot(context.Background(), &UpdateSnapshotParams{Snapshot: base.Snapshot})
+	assert.NilError(t, err)
+	updatedSnapshot := session.snapshots[updated.Snapshot].snapshot
+	assert.Assert(t, updatedSnapshot.ProjectCollection.GetProjectByPath(tspath.Path("/tsconfig.json")).GetProgram() == program)
 }

@@ -1016,7 +1016,9 @@ func (s *Session) handleUpdateSnapshot(ctx context.Context, params *UpdateSnapsh
 	baseFS := s.projectSession.FS()
 	if baseSD != nil {
 		baseFS = baseSD.snapshot.FileSystem()
-		apiRequest.FileSystem = baseFS
+		if baseSD.snapshot.HasFileSystemOverride() {
+			apiRequest.FileSystem = baseFS
+		}
 	}
 	if params.FileSystem != nil {
 		var fs vfs.FS
@@ -1024,7 +1026,9 @@ func (s *Session) handleUpdateSnapshot(ctx context.Context, params *UpdateSnapsh
 		if baseSD == nil {
 			fs, err = newSnapshotFileSystem(params.FileSystem, baseFS, s.projectSession.GetCurrentDirectory())
 		} else {
-			s.addLayeredFileSystemChanges(&fileChanges, params.FileSystem, baseFS)
+			if params.FileSystem.Kind == SnapshotFileSystemKindCache {
+				s.addLayeredFileSystemChanges(&fileChanges, params.FileSystem, baseFS)
+			}
 			fs, err = newLayeredSnapshotFileSystem(params.FileSystem, baseFS, s.projectSession.GetCurrentDirectory())
 		}
 		if err != nil {
@@ -1261,6 +1265,12 @@ func (s *Session) handleCreateProgram(ctx context.Context, params *CreateProgram
 		}
 	}
 
+	fileChanges := s.toFileChangeSummary(params.FileChanges)
+	if params.BaseSnapshot != 0 && params.OldProgram != nil && params.OldProgram.Snapshot != params.BaseSnapshot && fileChanges.IsEmpty() {
+		fileChanges.InvalidateAll = true
+		fileChanges.IncludesWatchChangeOutsideNodeModules = true
+	}
+
 	snapshot := s.projectSession.APICreateProgram(
 		ctx,
 		rootFileNames,
@@ -1269,7 +1279,7 @@ func (s *Session) handleCreateProgram(ctx context.Context, params *CreateProgram
 		core.Map(params.CreateProgramOptions.ConfigFileParsingDiagnostics, func(d *DiagnosticResponse) *ast.Diagnostic { return d.ToDiagnostic() }),
 		baseSnapshot,
 		oldProject,
-		s.toFileChangeSummary(params.FileChanges),
+		fileChanges,
 	)
 	project := snapshot.ProjectCollection.InferredProject()
 	if project == nil {

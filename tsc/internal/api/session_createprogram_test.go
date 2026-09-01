@@ -174,6 +174,58 @@ func TestCreateProgramFromSnapshotFileSystem(t *testing.T) {
 	assert.Equal(t, program.GetSourceFile(fileName).Text(), `export const source = "memory";`)
 }
 
+func TestCreateProgramRebuildsOldProgramFromDifferentBaseSnapshot(t *testing.T) {
+	t.Parallel()
+
+	const fileName = "/src/index.ts"
+	projectSession, _ := projecttestutil.Setup(map[string]any{})
+	defer projectSession.Close()
+	session := NewSession(projectSession, nil)
+	defer session.Close()
+	ctx := context.Background()
+
+	base, err := session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{
+		FileSystem: &SnapshotFileSystem{
+			Kind:  SnapshotFileSystemKindMemory,
+			Files: map[string]string{fileName: `export const source = "base";`},
+		},
+	})
+	assert.NilError(t, err)
+	newer, err := session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{
+		Snapshot: base.Snapshot,
+		FileSystem: &SnapshotFileSystem{
+			Kind:  SnapshotFileSystemKindMemory,
+			Files: map[string]string{fileName: `export const source = "newer";`},
+		},
+	})
+	assert.NilError(t, err)
+	oldProgram, err := session.handleCreateProgram(ctx, &CreateProgramParams{
+		RootFiles:    []DocumentIdentifier{{FileName: fileName}},
+		BaseSnapshot: newer.Snapshot,
+		CreateProgramOptions: CreateProgramOptions{
+			CompilerOptions: core.CompilerOptions{NoLib: core.TSTrue},
+		},
+	})
+	assert.NilError(t, err)
+
+	response, err := session.handleCreateProgram(ctx, &CreateProgramParams{
+		RootFiles:    []DocumentIdentifier{{FileName: fileName}},
+		BaseSnapshot: base.Snapshot,
+		CreateProgramOptions: CreateProgramOptions{
+			CompilerOptions: core.CompilerOptions{NoLib: core.TSTrue},
+		},
+		OldProgram: &CreateProgramOldProgramParams{
+			Snapshot: oldProgram.Snapshot,
+			Project:  oldProgram.Project.Id,
+		},
+	})
+	assert.NilError(t, err)
+	created, err := session.getSnapshotData(response.Snapshot)
+	assert.NilError(t, err)
+	program := created.snapshot.ProjectCollection.InferredProject().Program
+	assert.Equal(t, program.GetSourceFile(fileName).Text(), `export const source = "base";`)
+}
+
 func TestCreateProgramRemovesAllRootFiles(t *testing.T) {
 	t.Parallel()
 

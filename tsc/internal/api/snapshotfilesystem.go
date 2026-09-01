@@ -102,7 +102,7 @@ func newSnapshotFileSystem(params *SnapshotFileSystem, base vfs.FS, currentDirec
 }
 
 func newLayeredSnapshotFileSystem(params *SnapshotFileSystem, base vfs.FS, currentDirectory string) (vfs.FS, error) {
-	return newSnapshotFileSystemWorker(params, base, currentDirectory, true)
+	return newSnapshotFileSystemWorker(params, base, currentDirectory, params.Kind == SnapshotFileSystemKindCache)
 }
 
 func newSnapshotFileSystemWorker(params *SnapshotFileSystem, base vfs.FS, currentDirectory string, layered bool) (vfs.FS, error) {
@@ -123,20 +123,32 @@ func newSnapshotFileSystemWorker(params *SnapshotFileSystem, base vfs.FS, curren
 	}
 	for fileName, content := range params.Files {
 		absoluteFileName := result.toAbsolutePath(fileName)
-		result.files[result.toPath(absoluteFileName)] = snapshotFile{fileName: absoluteFileName, content: content}
+		path := result.toPath(absoluteFileName)
+		if existing, ok := result.files[path]; ok {
+			return nil, fmt.Errorf("duplicate snapshot filesystem file path %q and %q", existing.fileName, absoluteFileName)
+		}
+		result.files[path] = snapshotFile{fileName: absoluteFileName, content: content}
 	}
 	for directoryName, entries := range params.Directories {
 		absoluteDirectoryName := result.toAbsolutePath(directoryName)
-		result.directoryListings[result.toPath(absoluteDirectoryName)] = vfs.Entries{
+		path := result.toPath(absoluteDirectoryName)
+		if _, ok := result.directoryListings[path]; ok {
+			return nil, fmt.Errorf("duplicate snapshot filesystem directory path %q", absoluteDirectoryName)
+		}
+		result.directoryListings[path] = vfs.Entries{
 			Files:       slices.Clone(entries.Files),
 			Directories: slices.Clone(entries.Directories),
 		}
 	}
 	for linkName, symlink := range params.Symlinks {
 		absoluteLinkName := result.toAbsolutePath(linkName)
+		path := result.toPath(absoluteLinkName)
+		if existing, ok := result.symlinks[path]; ok {
+			return nil, fmt.Errorf("duplicate snapshot filesystem symlink path %q and %q", existing.linkName, absoluteLinkName)
+		}
 		targetDirectory := tspath.GetDirectoryPath(absoluteLinkName)
 		absoluteTarget := result.toAbsolutePathFrom(symlink.Target, targetDirectory)
-		result.symlinks[result.toPath(absoluteLinkName)] = snapshotSymlink{
+		result.symlinks[path] = snapshotSymlink{
 			linkName: absoluteLinkName,
 			target:   absoluteTarget,
 			host:     symlink.Host,
@@ -408,7 +420,11 @@ func (s *snapshotFileSystem) ReadFile(fileName string) (string, bool) {
 		if s.isRemoved(resolved.path) {
 			return "", false
 		}
-		return s.base.ReadFile(resolved.path)
+		host := getHostFileSystem(s.base)
+		if host == nil {
+			return "", false
+		}
+		return host.ReadFile(resolved.path)
 	}
 	file, ok := s.fileAt(resolved.path)
 	if ok {
@@ -452,7 +468,8 @@ func (s *snapshotFileSystem) FileExists(fileName string) bool {
 		if s.isRemoved(resolved.path) {
 			return false
 		}
-		return s.base.FileExists(resolved.path)
+		host := getHostFileSystem(s.base)
+		return host != nil && host.FileExists(resolved.path)
 	}
 	_, ok := s.fileAt(resolved.path)
 	if ok {
@@ -493,7 +510,8 @@ func (s *snapshotFileSystem) DirectoryExists(directoryName string) bool {
 		if s.isRemoved(resolved.path) {
 			return false
 		}
-		return s.base.DirectoryExists(resolved.path)
+		host := getHostFileSystem(s.base)
+		return host != nil && host.DirectoryExists(resolved.path)
 	}
 	_, ok := s.directoryAt(resolved.path)
 	if ok {
@@ -560,7 +578,9 @@ func (s *snapshotFileSystem) GetAccessibleEntries(directoryName string) vfs.Entr
 	var result vfs.Entries
 	if resolved.host {
 		if !s.isRemoved(resolved.path) {
-			result = s.removeEntries(resolved.path, s.base.GetAccessibleEntries(resolved.path))
+			if host := getHostFileSystem(s.base); host != nil {
+				result = s.removeEntries(resolved.path, host.GetAccessibleEntries(resolved.path))
+			}
 		}
 	} else if !s.fallsBack() || hasExplicitListing && !s.layered {
 		result = localEntries
@@ -748,7 +768,10 @@ func (s *snapshotFileSystem) Realpath(path string) string {
 		return path
 	}
 	if resolved.host {
-		return s.base.Realpath(resolved.path)
+		if host := getHostFileSystem(s.base); host != nil {
+			return host.Realpath(resolved.path)
+		}
+		return path
 	}
 	if resolved.followedSymlink && !s.fallsBack() {
 		return path
@@ -853,23 +876,26 @@ func (s *snapshotFileSystem) Stat(path string) vfs.FileInfo {
 		return nil
 	}
 	if resolved.host {
-		return s.statHost(resolved.path)
+		return statFileSystem(getHostFileSystem(s.base), resolved.path)
 	}
 	if s.fallsBack() {
-		return s.statHost(resolved.path)
+		return statFileSystem(s.base, resolved.path)
 	}
 	return nil
 }
 
-func (s *snapshotFileSystem) statHost(path string) vfs.FileInfo {
-	if info := s.base.Stat(path); info != nil {
+func statFileSystem(fileSystem vfs.FS, path string) vfs.FileInfo {
+	if fileSystem == nil {
+		return nil
+	}
+	if info := fileSystem.Stat(path); info != nil {
 		return info
 	}
 	name := tspath.GetBaseFileName(path)
-	if s.base.DirectoryExists(path) {
+	if fileSystem.DirectoryExists(path) {
 		return snapshotFileInfo{name: name, directory: true}
 	}
-	if s.base.FileExists(path) {
+	if fileSystem.FileExists(path) {
 		return snapshotFileInfo{name: name}
 	}
 	return nil

@@ -355,6 +355,12 @@ func (s *Snapshot) FileSystem() vfs.FS {
 	return s.fs.fs
 }
 
+// HasFileSystemOverride reports whether this snapshot uses an API-supplied
+// filesystem instead of the session host filesystem.
+func (s *Snapshot) HasFileSystemOverride() bool {
+	return s.fileSystemOverride
+}
+
 func (s *Snapshot) ReadFile(fileName string) (string, bool) {
 	handle := s.GetFile(fileName)
 	if handle == nil {

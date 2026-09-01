@@ -109,18 +109,19 @@ function createSnapshotFileSystem(
     files: SnapshotFileEntries,
     options: CreateSnapshotFileSystemOptions,
 ): SnapshotFileSystem {
-    const normalizedFiles: Record<string, string> = {};
+    const normalizedFiles = new Map<string, string>();
     for (const [id, content] of files) {
-        const fileName = resolveFileName(id);
-        if (Object.hasOwn(normalizedFiles, fileName)) {
+        const fileName = normalizePath(resolveFileName(id));
+        if (normalizedFiles.has(fileName)) {
             throw new Error(`Duplicate snapshot filesystem path: ${fileName}`);
         }
-        normalizedFiles[fileName] = content;
+        normalizedFiles.set(fileName, content);
     }
+    const fileRecord = Object.fromEntries(normalizedFiles);
     return {
         kind,
-        files: normalizedFiles,
-        directories: options.directories ?? deriveDirectoryListings(normalizedFiles),
+        files: fileRecord,
+        directories: options.directories ?? deriveDirectoryListings(fileRecord),
         ...(options.symlinks ? { symlinks: options.symlinks } : {}),
         ...(options.removedPaths?.length ? { removedPaths: [...options.removedPaths] } : {}),
     };
