@@ -120,7 +120,8 @@ export class Client {
             const page = this.apiRequest("batchRequests", pageParams);
             if (page.responses.length < 200) {
                 responses.push(...page.responses);
-            } else {
+            }
+            else {
                 // If the number of responses is approaching the max argument length, we need to concat instead of push
                 responses = responses.concat(page.responses);
             }
