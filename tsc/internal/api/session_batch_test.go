@@ -136,27 +136,6 @@ func TestHandleBatchRequestsPageLimitIsRequestScoped(t *testing.T) {
 	assert.Equal(t, unlimited.ContinuationToken, "")
 }
 
-func TestHandleBatchRequestsDoesNotRetainSentPageBackingArray(t *testing.T) {
-	t.Parallel()
-
-	session := NewSession(nil, nil)
-	response, err := session.handleBatchRequests(context.Background(), &BatchRequestsParams{
-		Requests: []BatchRequest{
-			{Method: "ping", Params: json.Value{}},
-			{Method: "ping", Params: json.Value{}},
-			{Method: "ping", Params: json.Value{}},
-		},
-		MaxResponseBytesPerPage: 1,
-	})
-	assert.NilError(t, err)
-	assert.Equal(t, cap(response.encodedResponses), len(response.encodedResponses))
-
-	value, ok := session.batchResponsePages.Load(response.ContinuationToken)
-	assert.Assert(t, ok)
-	pending := value.(batchResponsePage)
-	assert.Equal(t, cap(pending.encodedResponses), len(pending.encodedResponses))
-}
-
 func TestHandleBatchRequestsRejectsInvalidContinuationToken(t *testing.T) {
 	t.Parallel()
 

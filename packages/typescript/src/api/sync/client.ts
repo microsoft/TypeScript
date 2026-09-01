@@ -118,7 +118,12 @@ export class Client {
                 pageParams.maxResponseBytesPerPage = this.maxResponseBytesPerPage;
             }
             const page = this.apiRequest("batchRequests", pageParams);
-            responses = responses.concat(page.responses);
+            if (page.responses.length < 200) {
+                responses.push(...page.responses);
+            } else {
+                // If the number of responses is approaching the max argument length, we need to concat instead of push
+                responses = responses.concat(page.responses);
+            }
             continuationToken = page.continuationToken;
         }
         return { responses };

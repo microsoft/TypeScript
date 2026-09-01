@@ -977,15 +977,17 @@ func (s *Session) paginateBatchResponses(page batchResponsePage, responses []Bat
 		encodedLength -= len(page.encodedResponses[pageLength-1]) + 1
 		pageLength--
 	}
+	currentResponses := page.encodedResponses[:pageLength]
+	remainingResponses := page.encodedResponses[pageLength:]
 	response := &BatchRequestsResponse{
 		ContinuationToken: continuationToken,
-		encodedResponses:  slices.Clone(page.encodedResponses[:pageLength]),
+		encodedResponses:  currentResponses,
 	}
 	if responses != nil {
-		response.Responses = slices.Clone(responses[:pageLength])
+		response.Responses = responses[:pageLength]
 	}
 	s.batchResponsePages.Store(continuationToken, batchResponsePage{
-		encodedResponses: slices.Clone(page.encodedResponses[pageLength:]),
+		encodedResponses: remainingResponses,
 	})
 	return response, nil
 }
