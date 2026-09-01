@@ -454,6 +454,11 @@ function addSyncEdit(node: ts.Node, source: string, sourceFile: ts.SourceFile, e
             edits.push({ start: modifier.getStart(sourceFile) - offset, end: end - offset, newText: "" });
         }
     }
+    if (ts.isVariableDeclarationList(node) && (node.flags & ts.NodeFlags.AwaitUsing) === ts.NodeFlags.AwaitUsing) {
+        const awaitKeyword = node.getFirstToken(sourceFile);
+        if (awaitKeyword?.kind !== ts.SyntaxKind.AwaitKeyword) throw new Error("Expected await using declaration");
+        edits.push({ start: awaitKeyword.getStart(sourceFile) - offset, end: awaitKeyword.end - offset, newText: "" });
+    }
     if (ts.isAwaitExpression(node)) {
         edits.push({
             start: node.getStart(sourceFile) - offset,

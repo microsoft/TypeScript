@@ -251,6 +251,7 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
     private currentDirectory: string | undefined;
     private getCanonicalFileNameWorker: ((fileName: string) => string) | undefined;
     private initialized: boolean = false;
+    private initializing: void | undefined;
     private activeSnapshots: Set<Snapshot> = new Set();
     private latestSnapshot: Snapshot | undefined;
     readonly internal: InternalAPI;
@@ -304,7 +305,26 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
             owner,
             "ensureInitialized",
             function (): void {
-                if (!owner.initialized) {
+                if (owner.initialized) return;
+                return owner.initializing ??= owner.initializeWorker();
+            },
+            function* (): Generator<ProtocolRequest, void, ProtocolResponse["result"]> {
+                if (owner.initialized) return;
+                return owner.initializing ??= yield* owner.initializeWorker.gen();
+            },
+        );
+    }
+
+    private get initializeWorker(): {
+        (): void;
+        gen(): Generator<ProtocolRequest, void, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "initializeWorker",
+            function (): void {
+                try {
                     const response = owner.client.apiRequest("initialize", null);
                     const getCanonicalFileName = createGetCanonicalFileName(response.useCaseSensitiveFileNames);
                     const currentDirectory = response.currentDirectory;
@@ -313,9 +333,13 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
                     owner.toPath = (fileName: string) => toPath(fileName, currentDirectory, getCanonicalFileName) as Path;
                     owner.initialized = true;
                 }
+                catch (error) {
+                    owner.initializing = undefined;
+                    throw error;
+                }
             },
             function* (): Generator<ProtocolRequest, void, ProtocolResponse["result"]> {
-                if (!owner.initialized) {
+                try {
                     const response = yield* apiRequest("initialize", null);
                     const getCanonicalFileName = createGetCanonicalFileName(response.useCaseSensitiveFileNames);
                     const currentDirectory = response.currentDirectory;
@@ -323,6 +347,10 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
                     owner.currentDirectory = currentDirectory;
                     owner.toPath = (fileName: string) => toPath(fileName, currentDirectory, getCanonicalFileName) as Path;
                     owner.initialized = true;
+                }
+                catch (error) {
+                    owner.initializing = undefined;
+                    throw error;
                 }
             },
         );
@@ -591,6 +619,10 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
                 return snapshot;
             },
         );
+    }
+
+    [globalThis.Symbol.dispose](): void {
+        this.close();
     }
 
     get close(): {
@@ -932,6 +964,7 @@ export class Snapshot {
     private toPath: (fileName: string) => Path;
     private client: Client;
     private disposed: boolean = false;
+    private disposePromise: void | undefined;
     private onDispose: () => void;
     private snapshotRegistry: SnapshotObjectRegistry;
     readonly internal: SnapshotInternalAPI;
@@ -999,7 +1032,7 @@ export class Snapshot {
     }
 
     [globalThis.Symbol.dispose](): void {
-        this.dispose();
+        void this.dispose();
     }
 
     get dispose(): {
@@ -1011,6 +1044,23 @@ export class Snapshot {
             owner,
             "dispose",
             function (): void {
+                return owner.disposePromise ??= owner.disposeWorker();
+            },
+            function* (): Generator<ProtocolRequest, void, ProtocolResponse["result"]> {
+                return owner.disposePromise ??= yield* owner.disposeWorker.gen();
+            },
+        );
+    }
+
+    private get disposeWorker(): {
+        (): void;
+        gen(): Generator<ProtocolRequest, void, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "disposeWorker",
+            function (): void {
                 if (owner.disposed) return;
                 owner.disposed = true;
                 for (const project of owner.projectMap.values()) {
@@ -1018,8 +1068,12 @@ export class Snapshot {
                 }
                 owner.projectMap.clear();
                 owner.snapshotRegistry.clear();
-                owner.onDispose();
-                owner.client.apiRequest("release", { snapshot: owner.id });
+                try {
+                    owner.client.apiRequest("release", { snapshot: owner.id });
+                }
+                finally {
+                    owner.onDispose();
+                }
             },
             function* (): Generator<ProtocolRequest, void, ProtocolResponse["result"]> {
                 if (owner.disposed) return;
@@ -1029,8 +1083,12 @@ export class Snapshot {
                 }
                 owner.projectMap.clear();
                 owner.snapshotRegistry.clear();
-                owner.onDispose();
-                yield* apiRequest("release", { snapshot: owner.id });
+                try {
+                    yield* apiRequest("release", { snapshot: owner.id });
+                }
+                finally {
+                    owner.onDispose();
+                }
             },
         );
     }
@@ -1988,6 +2046,7 @@ export class Program implements FormatDiagnosticsHost {
     private readonly decoder = new Wtf8Decoder();
     private readonly sourceFileMetadataCache = new Map<Path, SourceFileMetadata | undefined>();
     private ownedSnapshot: Snapshot | undefined;
+    private disposePromise: void | undefined;
 
     constructor(
         snapshotId: number,
@@ -2023,7 +2082,7 @@ export class Program implements FormatDiagnosticsHost {
     }
 
     [globalThis.Symbol.dispose](): void {
-        this.dispose();
+        void this.dispose();
     }
 
     get dispose(): {
@@ -2034,6 +2093,23 @@ export class Program implements FormatDiagnosticsHost {
         return cacheGeneratorMethod(
             owner,
             "dispose",
+            function (): void {
+                return owner.disposePromise ??= owner.disposeWorker();
+            },
+            function* (): Generator<ProtocolRequest, void, ProtocolResponse["result"]> {
+                return owner.disposePromise ??= yield* owner.disposeWorker.gen();
+            },
+        );
+    }
+
+    private get disposeWorker(): {
+        (): void;
+        gen(): Generator<ProtocolRequest, void, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "disposeWorker",
             function (): void {
                 const snapshot = owner.ownedSnapshot;
                 owner.ownedSnapshot = undefined;
