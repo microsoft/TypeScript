@@ -1033,6 +1033,11 @@ var CompletionGlobalTypeDecls = []fourslash.CompletionsExpectedItem{
 		SortText: new(string(ls.SortTextGlobalsOrKeywords)),
 	},
 	&lsproto.CompletionItem{
+		Label:    "ModuleReference",
+		Kind:     new(lsproto.CompletionItemKindClass),
+		SortText: new(string(ls.SortTextGlobalsOrKeywords)),
+	},
+	&lsproto.CompletionItem{
 		Label:    "ThisType",
 		Kind:     new(lsproto.CompletionItemKindInterface),
 		SortText: new(string(ls.SortTextGlobalsOrKeywords)),

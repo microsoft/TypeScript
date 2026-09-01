@@ -2534,6 +2534,12 @@ func (c *Checker) isMemberOfStringMapping(source *Type, target *Type) bool {
 		return true
 	case target.flags&(TypeFlagsString|TypeFlagsTemplateLiteral) != 0:
 		return c.isTypeAssignableTo(source, target)
+	case isModuleReferenceType(target):
+		// Any string literal may name a module. Whether it actually
+		// resolves is checked where the literal appears, which is
+		// the only place the containing file, and the meaning of
+		// a relative specifier, is known.
+		return source.flags&TypeFlagsStringLiteral != 0
 	case target.flags&TypeFlagsStringMapping != 0:
 		// We need to see whether applying the same mappings of the target
 		// onto the source would produce an identical type *and* that

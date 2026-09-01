@@ -1678,6 +1678,16 @@ type Uncapitalize<S extends string> = intrinsic;
 type NoInfer<T> = intrinsic;
 
 /**
+ * A module path string, resolved exactly as an import written in the same
+ * file would be.
+ * T is the type of the referenced module, as given by `typeof import(...)`.
+ *
+ * The files of a program are fixed before type checking begins, so the
+ * referenced module must already be part of the program.
+ */
+type ModuleReference<T> = intrinsic;
+
+/**
  * Marker for contextual 'this' type
  */
 interface ThisType<T> {}

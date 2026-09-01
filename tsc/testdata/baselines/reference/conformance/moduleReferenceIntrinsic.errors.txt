@@ -1,0 +1,65 @@
+main.ts(9,8): error TS2339: Property 'missing' does not exist on type 'typeof import("mod")'.
+main.ts(12,26): error TS2741: Property 'label' is missing in type '{ getRandom: () => number; }' but required in type 'typeof import("mod")'.
+main.ts(17,15): error TS2741: Property 'doThing' is missing in type 'typeof import("notAPlugin")' but required in type '{ doThing(): void; }'.
+main.ts(18,36): error TS2741: Property 'doThing' is missing in type 'typeof import("notAPlugin")' but required in type '{ doThing(): void; }'.
+main.ts(28,16): error TS2307: Cannot find module './nope' or its corresponding type declarations.
+main.ts(29,16): error TS2345: Argument of type 'string' is not assignable to parameter of type 'ModuleReference<unknown>'.
+
+
+==== mod.ts (0 errors) ====
+    export const getRandom = () => 10;
+    export const label = "mod";
+    
+==== plugin.ts (0 errors) ====
+    export function doThing(): void {}
+    
+==== notAPlugin.ts (0 errors) ====
+    export function somethingElse(): void {}
+    
+==== main.ts (6 errors) ====
+    declare const jest: {
+        requireActual<T>(ref: ModuleReference<T>): T;
+        mock<T>(ref: ModuleReference<T>, factory: () => NoInfer<T>): void;
+    };
+    
+    const actual = jest.requireActual("./mod");
+    actual.getRandom();
+    actual.label;
+    actual.missing; // error, no such export
+           ~~~~~~~
+!!! error TS2339: Property 'missing' does not exist on type 'typeof import("mod")'.
+    
+    jest.mock("./mod", () => ({ ...jest.requireActual("./mod"), getRandom: () => 10 }));
+    jest.mock("./mod", () => ({ getRandom: () => 10 })); // error, 'label' is missing
+                             ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2741: Property 'label' is missing in type '{ getRandom: () => number; }' but required in type 'typeof import("mod")'.
+!!! related TS2728 mod.ts:2:14: 'label' is declared here.
+!!! related TS6502 main.ts:3:47: The expected type comes from the return type of this signature.
+    
+    // The referenced module is checked against the type parameter's constraint.
+    declare function requirePlugin<T extends { doThing(): void }>(ref: ModuleReference<T>): Promise<T>;
+    requirePlugin("./plugin");
+    requirePlugin("./notAPlugin"); // error
+                  ~~~~~~~~~~~~~~
+!!! error TS2741: Property 'doThing' is missing in type 'typeof import("notAPlugin")' but required in type '{ doThing(): void; }'.
+!!! related TS2728 main.ts:15:44: 'doThing' is declared here.
+    requirePlugin<{ doThing(): void }>("./notAPlugin"); // error
+                                       ~~~~~~~~~~~~~~
+!!! error TS2741: Property 'doThing' is missing in type 'typeof import("notAPlugin")' but required in type '{ doThing(): void; }'.
+!!! related TS2728 main.ts:18:17: 'doThing' is declared here.
+    
+    // A module reference is a string, and forwards to another module reference parameter.
+    declare function importDeferred<T>(ref: ModuleReference<T>): Promise<T>;
+    function forward<T>(ref: ModuleReference<T>): Promise<T> {
+        const specifier: string = ref;
+        specifier.length;
+        return importDeferred(ref);
+    }
+    
+    importDeferred("./nope"); // error, no such module
+                   ~~~~~~~~
+!!! error TS2307: Cannot find module './nope' or its corresponding type declarations.
+    importDeferred(String(1)); // error, not a string literal
+                   ~~~~~~~~~
+!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'ModuleReference<unknown>'.
+    

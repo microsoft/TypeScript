@@ -355,14 +355,16 @@ const (
 	IntrinsicTypeKindCapitalize
 	IntrinsicTypeKindUncapitalize
 	IntrinsicTypeKindNoInfer
+	IntrinsicTypeKindModuleReference
 )
 
 var intrinsicTypeKinds = map[string]IntrinsicTypeKind{
-	"Uppercase":    IntrinsicTypeKindUppercase,
-	"Lowercase":    IntrinsicTypeKindLowercase,
-	"Capitalize":   IntrinsicTypeKindCapitalize,
-	"Uncapitalize": IntrinsicTypeKindUncapitalize,
-	"NoInfer":      IntrinsicTypeKindNoInfer,
+	"Uppercase":       IntrinsicTypeKindUppercase,
+	"Lowercase":       IntrinsicTypeKindLowercase,
+	"Capitalize":      IntrinsicTypeKindCapitalize,
+	"Uncapitalize":    IntrinsicTypeKindUncapitalize,
+	"NoInfer":         IntrinsicTypeKindNoInfer,
+	"ModuleReference": IntrinsicTypeKindModuleReference,
 }
 
 type MappedTypeModifiers uint32
@@ -563,6 +565,7 @@ type Program interface {
 	GetImpliedNodeFormatForEmit(sourceFile ast.HasFileName) core.ModuleKind
 	GetResolvedModule(currentSourceFile ast.HasFileName, moduleReference string, mode core.ResolutionMode) *module.ResolvedModule
 	GetResolvedModules() map[tspath.Path]module.ModeAwareCache[*module.ResolvedModule]
+	ResolveModuleName(moduleName string, containingFile string, resolutionMode core.ResolutionMode) *module.ResolvedModule
 	GetPackagesMap() map[string]bool
 	GetSourceFileMetaData(path tspath.Path) ast.SourceFileMetaData
 	GetJSXRuntimeImportSpecifier(path tspath.Path) (moduleReference string, specifier *ast.Node)
@@ -9469,6 +9472,14 @@ func (c *Checker) isSignatureApplicable(node *ast.Node, args []*ast.Node, signat
 				checkArgType = argType
 			}
 			effectiveCheckArgumentNode := c.getEffectiveCheckNode(arg)
+			if moduleType, target := c.getModuleReferenceArgumentTypes(arg, paramType, reportErrors); target != nil {
+				if moduleType == nil {
+					// no such module; the diagnostic is reported when reportErrors is set
+					return false
+				}
+
+				checkArgType, paramType = moduleType, target
+			}
 			if !c.checkTypeRelatedToAndOptionallyElaborate(checkArgType, paramType, relation, core.IfElse(reportErrors, effectiveCheckArgumentNode, nil), effectiveCheckArgumentNode, headMessage, diagnosticOutput) {
 				c.maybeAddMissingAwaitInfo(arg, checkArgType, paramType, relation, reportErrors, diagnosticOutput)
 				return false
@@ -9555,6 +9566,71 @@ func (c *Checker) getEffectiveCheckNode(argument *ast.Node) *ast.Node {
 		ast.OEKParentheses|ast.OEKSatisfies,
 	)
 	return ast.SkipOuterExpressions(argument, flags)
+}
+
+func isModuleReferenceType(t *Type) bool {
+	return t.flags&TypeFlagsStringMapping != 0 && intrinsicTypeKinds[t.symbol.Name] == IntrinsicTypeKindModuleReference
+}
+
+// This handles a string literal passed where a `ModuleReference<T>` is expected.
+// The literal is resolved as a module specifier exactly as an import written
+// in its place would be, so both relative paths and the CommonJS/ESM
+// resolution mode follow the call site rather than wherever `ModuleReference`
+// was declared. Callers check and infer the referenced module's type
+// against T instead of checking the literal against the parameter.
+//
+// The second result is T, and is nil when this isn't a module reference argument.
+// The first is the referenced module's type, and is nil when the specifier names
+// no module in the program, in which case the same diagnostic an unresolvable
+// import would produce is reported if reportErrors is set.
+func (c *Checker) getModuleReferenceArgumentTypes(arg *ast.Node, paramType *Type, reportErrors bool) (moduleType *Type, target *Type) {
+	if !isModuleReferenceType(paramType) {
+		return nil, nil
+	}
+
+	specifier := c.getEffectiveCheckNode(arg)
+
+	if !ast.IsStringLiteralLike(specifier) {
+		return nil, nil
+	}
+
+	if moduleSymbol := c.resolveModuleReference(specifier, reportErrors); moduleSymbol != nil {
+		if resolved := c.resolveExternalModuleSymbol(moduleSymbol, false); resolved != nil {
+			moduleType = c.getTypeOfSymbol(resolved)
+		}
+	}
+
+	return moduleType, paramType.AsStringMappingType().target
+}
+
+// This resolves the specifier named by a `ModuleReference<T>` argument.
+// Module specifiers are collected syntactically and resolved before checking
+// begins, and a module reference is not discoverable without type information,
+// so its specifier usually has no resolution cached.
+// Resolving one here cannot change the set of files in the program.
+// The result is used only when it names a file the program already contains,
+// which is what keeps compilation phased and its output deterministic.
+// https://github.com/microsoft/TypeScript/issues/54022
+func (c *Checker) resolveModuleReference(specifier *ast.Node, reportErrors bool) *ast.Symbol {
+	if moduleSymbol := c.resolveExternalModuleName(specifier, specifier, true, nil); moduleSymbol != nil {
+		return moduleSymbol
+	}
+
+	file := ast.GetSourceFileOfNode(specifier)
+	resolved := c.program.ResolveModuleName(specifier.Text(), file.FileName(), c.program.GetModeForUsageLocation(file, specifier))
+
+	if resolved.IsResolved() {
+		if referenced := c.program.GetSourceFileForResolvedModule(resolved.ResolvedFileName); referenced != nil && referenced.Symbol != nil {
+			return c.getMergedSymbol(referenced.Symbol)
+		}
+	}
+
+	if reportErrors {
+		// Report whatever an import of the same specifier would have reported.
+		c.resolveExternalModuleName(specifier, specifier, false, nil)
+	}
+
+	return nil
 }
 
 func (c *Checker) inferTypeArguments(node *ast.Node, signature *Signature, args []*ast.Node, checkMode CheckMode, context *InferenceContext) []*Type {
@@ -9653,7 +9729,17 @@ func (c *Checker) inferTypeArguments(node *ast.Node, signature *Signature, args 
 			paramType := c.getTypeAtPosition(signature, i)
 			if c.couldContainTypeVariables(paramType) {
 				argType := c.checkExpressionWithContextualType(arg, paramType, context, checkMode)
-				c.inferTypes(context.inferences, argType, paramType, InferencePriorityNone, false)
+
+				if moduleType, target := c.getModuleReferenceArgumentTypes(arg, paramType, false); target != nil {
+					// A specifier naming no module leaves moduleType nil,
+					// and so makes no inference. The error is reported
+					// when the signature's applicability is checked.
+					argType, paramType = moduleType, target
+				}
+
+				if argType != nil {
+					c.inferTypes(context.inferences, argType, paramType, InferencePriorityNone, false)
+				}
 			}
 		}
 	}
@@ -27878,6 +27964,10 @@ func (c *Checker) computeBaseConstraint(t *Type, stack []RecursionId) *Type {
 		}
 		return c.stringType
 	case t.flags&TypeFlagsStringMapping != 0:
+		if isModuleReferenceType(t) {
+			return c.stringType
+		}
+
 		constraint := c.getNextBaseConstraint(t.Target(), stack)
 		if constraint != nil && constraint != t.Target() {
 			return c.getStringMappingType(t.symbol, constraint)
@@ -29558,6 +29648,12 @@ func (c *Checker) getTemplateStringForType(t *Type) string {
 
 func (c *Checker) getStringMappingType(symbol *ast.Symbol, t *Type) *Type {
 	switch {
+	case intrinsicTypeKinds[symbol.Name] == IntrinsicTypeKindModuleReference:
+		// Unlike the string mapping intrinsics, a module reference's type
+		// argument is the type of the referenced module rather than a
+		// string, so there is nothing to map. The type stays deferred
+		// until a string literal is checked against it.
+		return c.getStringMappingTypeForGenericType(symbol, t)
 	case t.flags&(TypeFlagsUnion|TypeFlagsNever) != 0:
 		return c.mapType(t, func(t *Type) *Type { return c.getStringMappingType(symbol, t) })
 	case t.flags&TypeFlagsStringLiteral != 0:

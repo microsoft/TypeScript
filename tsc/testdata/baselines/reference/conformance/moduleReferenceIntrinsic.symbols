@@ -1,0 +1,136 @@
+//// [tests/cases/conformance/types/typeAliases/moduleReferenceIntrinsic.ts] ////
+
+=== mod.ts ===
+export const getRandom = () => 10;
+>getRandom : Symbol(getRandom, Decl(mod.ts, 0, 12))
+
+export const label = "mod";
+>label : Symbol(label, Decl(mod.ts, 1, 12))
+
+=== plugin.ts ===
+export function doThing(): void {}
+>doThing : Symbol(doThing, Decl(plugin.ts, 0, 0))
+
+=== notAPlugin.ts ===
+export function somethingElse(): void {}
+>somethingElse : Symbol(somethingElse, Decl(notAPlugin.ts, 0, 0))
+
+=== main.ts ===
+declare const jest: {
+>jest : Symbol(jest, Decl(main.ts, 0, 13))
+
+    requireActual<T>(ref: ModuleReference<T>): T;
+>requireActual : Symbol(requireActual, Decl(main.ts, 0, 21))
+>T : Symbol(T, Decl(main.ts, 1, 18))
+>ref : Symbol(ref, Decl(main.ts, 1, 21))
+>ModuleReference : Symbol(ModuleReference, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(main.ts, 1, 18))
+>T : Symbol(T, Decl(main.ts, 1, 18))
+
+    mock<T>(ref: ModuleReference<T>, factory: () => NoInfer<T>): void;
+>mock : Symbol(mock, Decl(main.ts, 1, 49))
+>T : Symbol(T, Decl(main.ts, 2, 9))
+>ref : Symbol(ref, Decl(main.ts, 2, 12))
+>ModuleReference : Symbol(ModuleReference, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(main.ts, 2, 9))
+>factory : Symbol(factory, Decl(main.ts, 2, 36))
+>NoInfer : Symbol(NoInfer, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(main.ts, 2, 9))
+
+};
+
+const actual = jest.requireActual("./mod");
+>actual : Symbol(actual, Decl(main.ts, 5, 5))
+>jest.requireActual : Symbol(requireActual, Decl(main.ts, 0, 21))
+>jest : Symbol(jest, Decl(main.ts, 0, 13))
+>requireActual : Symbol(requireActual, Decl(main.ts, 0, 21))
+
+actual.getRandom();
+>actual.getRandom : Symbol(getRandom, Decl(mod.ts, 0, 12))
+>actual : Symbol(actual, Decl(main.ts, 5, 5))
+>getRandom : Symbol(getRandom, Decl(mod.ts, 0, 12))
+
+actual.label;
+>actual.label : Symbol(label, Decl(mod.ts, 1, 12))
+>actual : Symbol(actual, Decl(main.ts, 5, 5))
+>label : Symbol(label, Decl(mod.ts, 1, 12))
+
+actual.missing; // error, no such export
+>actual : Symbol(actual, Decl(main.ts, 5, 5))
+
+jest.mock("./mod", () => ({ ...jest.requireActual("./mod"), getRandom: () => 10 }));
+>jest.mock : Symbol(mock, Decl(main.ts, 1, 49))
+>jest : Symbol(jest, Decl(main.ts, 0, 13))
+>mock : Symbol(mock, Decl(main.ts, 1, 49))
+>jest.requireActual : Symbol(requireActual, Decl(main.ts, 0, 21))
+>jest : Symbol(jest, Decl(main.ts, 0, 13))
+>requireActual : Symbol(requireActual, Decl(main.ts, 0, 21))
+>getRandom : Symbol(getRandom, Decl(main.ts, 10, 59))
+
+jest.mock("./mod", () => ({ getRandom: () => 10 })); // error, 'label' is missing
+>jest.mock : Symbol(mock, Decl(main.ts, 1, 49))
+>jest : Symbol(jest, Decl(main.ts, 0, 13))
+>mock : Symbol(mock, Decl(main.ts, 1, 49))
+>getRandom : Symbol(getRandom, Decl(main.ts, 11, 27))
+
+// The referenced module is checked against the type parameter's constraint.
+declare function requirePlugin<T extends { doThing(): void }>(ref: ModuleReference<T>): Promise<T>;
+>requirePlugin : Symbol(requirePlugin, Decl(main.ts, 11, 52))
+>T : Symbol(T, Decl(main.ts, 14, 31))
+>doThing : Symbol(doThing, Decl(main.ts, 14, 42))
+>ref : Symbol(ref, Decl(main.ts, 14, 62))
+>ModuleReference : Symbol(ModuleReference, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(main.ts, 14, 31))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>T : Symbol(T, Decl(main.ts, 14, 31))
+
+requirePlugin("./plugin");
+>requirePlugin : Symbol(requirePlugin, Decl(main.ts, 11, 52))
+
+requirePlugin("./notAPlugin"); // error
+>requirePlugin : Symbol(requirePlugin, Decl(main.ts, 11, 52))
+
+requirePlugin<{ doThing(): void }>("./notAPlugin"); // error
+>requirePlugin : Symbol(requirePlugin, Decl(main.ts, 11, 52))
+>doThing : Symbol(doThing, Decl(main.ts, 17, 15))
+
+// A module reference is a string, and forwards to another module reference parameter.
+declare function importDeferred<T>(ref: ModuleReference<T>): Promise<T>;
+>importDeferred : Symbol(importDeferred, Decl(main.ts, 17, 51))
+>T : Symbol(T, Decl(main.ts, 20, 32))
+>ref : Symbol(ref, Decl(main.ts, 20, 35))
+>ModuleReference : Symbol(ModuleReference, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(main.ts, 20, 32))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>T : Symbol(T, Decl(main.ts, 20, 32))
+
+function forward<T>(ref: ModuleReference<T>): Promise<T> {
+>forward : Symbol(forward, Decl(main.ts, 20, 72))
+>T : Symbol(T, Decl(main.ts, 21, 17))
+>ref : Symbol(ref, Decl(main.ts, 21, 20))
+>ModuleReference : Symbol(ModuleReference, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(main.ts, 21, 17))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>T : Symbol(T, Decl(main.ts, 21, 17))
+
+    const specifier: string = ref;
+>specifier : Symbol(specifier, Decl(main.ts, 22, 9))
+>ref : Symbol(ref, Decl(main.ts, 21, 20))
+
+    specifier.length;
+>specifier.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>specifier : Symbol(specifier, Decl(main.ts, 22, 9))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+    return importDeferred(ref);
+>importDeferred : Symbol(importDeferred, Decl(main.ts, 17, 51))
+>ref : Symbol(ref, Decl(main.ts, 21, 20))
+}
+
+importDeferred("./nope"); // error, no such module
+>importDeferred : Symbol(importDeferred, Decl(main.ts, 17, 51))
+
+importDeferred(String(1)); // error, not a string literal
+>importDeferred : Symbol(importDeferred, Decl(main.ts, 17, 51))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --) ... and 7 more)
+

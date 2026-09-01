@@ -126,6 +126,12 @@ func (r *aliasResolver) GetResolvedModule(currentSourceFile ast.HasFileName, mod
 	return resolved
 }
 
+func (r *aliasResolver) ResolveModuleName(moduleName string, containingFile string, resolutionMode core.ResolutionMode) *module.ResolvedModule {
+	resolved, _ := r.moduleResolver.ResolveModuleName(moduleName, containingFile, resolutionMode, nil)
+
+	return resolved
+}
+
 // GetSourceFileForResolvedModule implements checker.Program.
 func (r *aliasResolver) GetSourceFileForResolvedModule(fileName string) *ast.SourceFile {
 	return r.GetSourceFile(fileName)

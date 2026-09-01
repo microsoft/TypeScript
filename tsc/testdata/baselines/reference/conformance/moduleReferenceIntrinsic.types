@@ -1,0 +1,148 @@
+//// [tests/cases/conformance/types/typeAliases/moduleReferenceIntrinsic.ts] ////
+
+=== mod.ts ===
+export const getRandom = () => 10;
+>getRandom : () => number
+>() => 10 : () => number
+>10 : 10
+
+export const label = "mod";
+>label : "mod"
+>"mod" : "mod"
+
+=== plugin.ts ===
+export function doThing(): void {}
+>doThing : () => void
+
+=== notAPlugin.ts ===
+export function somethingElse(): void {}
+>somethingElse : () => void
+
+=== main.ts ===
+declare const jest: {
+>jest : { requireActual<T>(ref: ModuleReference<T>): T; mock<T>(ref: ModuleReference<T>, factory: () => NoInfer<T>): void; }
+
+    requireActual<T>(ref: ModuleReference<T>): T;
+>requireActual : <T>(ref: ModuleReference<T>) => T
+>ref : ModuleReference<T>
+
+    mock<T>(ref: ModuleReference<T>, factory: () => NoInfer<T>): void;
+>mock : <T>(ref: ModuleReference<T>, factory: () => NoInfer<T>) => void
+>ref : ModuleReference<T>
+>factory : () => NoInfer<T>
+
+};
+
+const actual = jest.requireActual("./mod");
+>actual : typeof import("./mod")
+>jest.requireActual("./mod") : typeof import("./mod")
+>jest.requireActual : <T>(ref: ModuleReference<T>) => T
+>jest : { requireActual<T>(ref: ModuleReference<T>): T; mock<T>(ref: ModuleReference<T>, factory: () => NoInfer<T>): void; }
+>requireActual : <T>(ref: ModuleReference<T>) => T
+>"./mod" : "./mod"
+
+actual.getRandom();
+>actual.getRandom() : number
+>actual.getRandom : () => number
+>actual : typeof import("./mod")
+>getRandom : () => number
+
+actual.label;
+>actual.label : "mod"
+>actual : typeof import("./mod")
+>label : "mod"
+
+actual.missing; // error, no such export
+>actual.missing : any
+>actual : typeof import("./mod")
+>missing : any
+
+jest.mock("./mod", () => ({ ...jest.requireActual("./mod"), getRandom: () => 10 }));
+>jest.mock("./mod", () => ({ ...jest.requireActual("./mod"), getRandom: () => 10 })) : void
+>jest.mock : <T>(ref: ModuleReference<T>, factory: () => NoInfer<T>) => void
+>jest : { requireActual<T>(ref: ModuleReference<T>): T; mock<T>(ref: ModuleReference<T>, factory: () => NoInfer<T>): void; }
+>mock : <T>(ref: ModuleReference<T>, factory: () => NoInfer<T>) => void
+>"./mod" : "./mod"
+>() => ({ ...jest.requireActual("./mod"), getRandom: () => 10 }) : () => { label: "mod"; getRandom: () => number; }
+>({ ...jest.requireActual("./mod"), getRandom: () => 10 }) : { label: "mod"; getRandom: () => number; }
+>{ ...jest.requireActual("./mod"), getRandom: () => 10 } : { label: "mod"; getRandom: () => number; }
+>jest.requireActual("./mod") : typeof import("./mod")
+>jest.requireActual : <T>(ref: ModuleReference<T>) => T
+>jest : { requireActual<T>(ref: ModuleReference<T>): T; mock<T>(ref: ModuleReference<T>, factory: () => NoInfer<T>): void; }
+>requireActual : <T>(ref: ModuleReference<T>) => T
+>"./mod" : "./mod"
+>getRandom : () => number
+>() => 10 : () => number
+>10 : 10
+
+jest.mock("./mod", () => ({ getRandom: () => 10 })); // error, 'label' is missing
+>jest.mock("./mod", () => ({ getRandom: () => 10 })) : void
+>jest.mock : <T>(ref: ModuleReference<T>, factory: () => NoInfer<T>) => void
+>jest : { requireActual<T>(ref: ModuleReference<T>): T; mock<T>(ref: ModuleReference<T>, factory: () => NoInfer<T>): void; }
+>mock : <T>(ref: ModuleReference<T>, factory: () => NoInfer<T>) => void
+>"./mod" : "./mod"
+>() => ({ getRandom: () => 10 }) : () => { getRandom: () => number; }
+>({ getRandom: () => 10 }) : { getRandom: () => number; }
+>{ getRandom: () => 10 } : { getRandom: () => number; }
+>getRandom : () => number
+>() => 10 : () => number
+>10 : 10
+
+// The referenced module is checked against the type parameter's constraint.
+declare function requirePlugin<T extends { doThing(): void }>(ref: ModuleReference<T>): Promise<T>;
+>requirePlugin : <T extends { doThing(): void; }>(ref: ModuleReference<T>) => Promise<T>
+>doThing : () => void
+>ref : ModuleReference<T>
+
+requirePlugin("./plugin");
+>requirePlugin("./plugin") : Promise<typeof import("./plugin")>
+>requirePlugin : <T extends { doThing(): void; }>(ref: ModuleReference<T>) => Promise<T>
+>"./plugin" : "./plugin"
+
+requirePlugin("./notAPlugin"); // error
+>requirePlugin("./notAPlugin") : Promise<{ doThing(): void; }>
+>requirePlugin : <T extends { doThing(): void; }>(ref: ModuleReference<T>) => Promise<T>
+>"./notAPlugin" : "./notAPlugin"
+
+requirePlugin<{ doThing(): void }>("./notAPlugin"); // error
+>requirePlugin<{ doThing(): void }>("./notAPlugin") : Promise<{ doThing(): void; }>
+>requirePlugin : <T extends { doThing(): void; }>(ref: ModuleReference<T>) => Promise<T>
+>doThing : () => void
+>"./notAPlugin" : "./notAPlugin"
+
+// A module reference is a string, and forwards to another module reference parameter.
+declare function importDeferred<T>(ref: ModuleReference<T>): Promise<T>;
+>importDeferred : <T>(ref: ModuleReference<T>) => Promise<T>
+>ref : ModuleReference<T>
+
+function forward<T>(ref: ModuleReference<T>): Promise<T> {
+>forward : <T>(ref: ModuleReference<T>) => Promise<T>
+>ref : ModuleReference<T>
+
+    const specifier: string = ref;
+>specifier : string
+>ref : ModuleReference<T>
+
+    specifier.length;
+>specifier.length : number
+>specifier : string
+>length : number
+
+    return importDeferred(ref);
+>importDeferred(ref) : Promise<T>
+>importDeferred : <T_1>(ref: ModuleReference<T_1>) => Promise<T_1>
+>ref : ModuleReference<T>
+}
+
+importDeferred("./nope"); // error, no such module
+>importDeferred("./nope") : Promise<unknown>
+>importDeferred : <T>(ref: ModuleReference<T>) => Promise<T>
+>"./nope" : "./nope"
+
+importDeferred(String(1)); // error, not a string literal
+>importDeferred(String(1)) : Promise<unknown>
+>importDeferred : <T>(ref: ModuleReference<T>) => Promise<T>
+>String(1) : string
+>String : StringConstructor
+>1 : 1
+
