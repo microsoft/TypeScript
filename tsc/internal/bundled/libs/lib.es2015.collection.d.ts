@@ -69,21 +69,25 @@ interface ReadonlyMap<K, V> {
 
 interface WeakMap<K extends WeakKey, V> {
     /**
-     * Removes the specified element from the WeakMap.
-     * @returns true if the element was successfully removed, or false if it was not present.
+     * @param key The key of the element to be removed from the WeakMap.
+     * @returns true if an element in the WeakMap existed and has been removed, or false if the element does not exist.
      */
     delete(key: K): boolean;
     /**
+     * Returns a specified element from the WeakMap. If the value that is associated to the provided key is an object, then you will get a reference to that object and any change made to that object will effectively modify it inside the WeakMap.
+     * @param key The key of the element to be retrieved.
      * @returns a specified element.
      */
     get(key: K): V | undefined;
     /**
-     * @returns a boolean indicating whether an element with the specified key exists or not.
+     * @param key The key of said element.
+     * @returns A boolean value indicating whether an element with the specified key exists or not.
      */
     has(key: K): boolean;
     /**
      * Adds a new element with a specified key and value.
      * @param key Must be an object or symbol.
+     * @param value New value for element.
      */
     set(key: K, value: V): this;
 }
