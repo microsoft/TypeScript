@@ -437,8 +437,25 @@ func CompareTypes(t1, t2 *Type) int {
 	case t1.flags&(TypeFlagsAny|TypeFlagsUnknown|TypeFlagsString|TypeFlagsNumber|TypeFlagsBoolean|TypeFlagsBigInt|TypeFlagsESSymbol|TypeFlagsVoid|TypeFlagsUndefined|TypeFlagsNull|TypeFlagsNever|TypeFlagsNonPrimitive) != 0:
 		// Only distinguished by type IDs, handled below.
 	case t1.flags&TypeFlagsObject != 0:
-		// Order unnamed or identically named object types by symbol.
-		if c := t1.checker.compareSymbols(t1.symbol, t2.symbol); c != 0 {
+		// Order instantiation expression types without relying on lazy symbol IDs.
+		// Order other unnamed or identically named object types by symbol.
+		if t1.objectFlags&ObjectFlagsInstantiationExpressionType != 0 && t2.objectFlags&ObjectFlagsInstantiationExpressionType != 0 {
+			var declaration1, declaration2 *ast.Node
+			if t1.symbol != nil && len(t1.symbol.Declarations) != 0 {
+				declaration1 = t1.symbol.Declarations[0]
+			}
+			if t2.symbol != nil && len(t2.symbol.Declarations) != 0 {
+				declaration2 = t2.symbol.Declarations[0]
+			}
+			// A single instantiation expression can produce multiple types for union constituents,
+			// so compare their source declarations before comparing the shared expression node.
+			if c := t1.checker.compareNodes(declaration1, declaration2); c != 0 {
+				return c
+			}
+			if c := t1.checker.compareNodes(t1.AsInstantiationExpressionType().node, t2.AsInstantiationExpressionType().node); c != 0 {
+				return c
+			}
+		} else if c := t1.checker.compareSymbols(t1.symbol, t2.symbol); c != 0 {
 			return c
 		}
 		// When object types have the same or no symbol, order by kind. We order type references before other kinds.
