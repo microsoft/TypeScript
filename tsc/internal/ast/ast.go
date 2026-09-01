@@ -101,6 +101,9 @@ func (f *NodeFactory) AsNodeFactory() *NodeFactory {
 }
 
 func updateNode(updated *Node, original *Node, hooks NodeFactoryHooks) *Node {
+	if updated == nil { 
+		return nil; 
+	}
 	if updated != original {
 		updated.Flags = original.Flags
 		updated.Loc = original.Loc
