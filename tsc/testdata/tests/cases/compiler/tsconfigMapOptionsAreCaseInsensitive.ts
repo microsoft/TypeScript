@@ -2,7 +2,7 @@
 // @filename: tsconfig.json
 {
     "compilerOptions": {
-        "module": "AmD"
+        "module": "CoMmOnJs"
     }
 }
 

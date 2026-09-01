@@ -1,5 +1,5 @@
 // @target: es6
-// @module: amd
+// @module: commonjs
 export let { toString } = 1;
 {
     let { toFixed } = 1;

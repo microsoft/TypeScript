@@ -1,6 +1,7 @@
 // @target: es2015
 // @allowJs: true
-// @module: amd
+// @module: commonjs
+// @outDir: out
 
 // @filename: a.js
 function foo(name) {

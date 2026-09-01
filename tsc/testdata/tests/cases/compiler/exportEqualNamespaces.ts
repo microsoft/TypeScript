@@ -1,5 +1,5 @@
 // @target: es2015
-//@module: amd
+//@module: commonjs
 declare namespace server {
     interface Server extends Object { }
 }

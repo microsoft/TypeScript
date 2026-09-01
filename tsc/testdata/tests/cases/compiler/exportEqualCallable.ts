@@ -1,5 +1,5 @@
 // @target: es2015
-//@module: amd
+//@module: commonjs
 
 // @Filename: exportEqualCallable_0.ts
 var server: {

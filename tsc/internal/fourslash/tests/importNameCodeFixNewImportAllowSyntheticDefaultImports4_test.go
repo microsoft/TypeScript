@@ -11,7 +11,7 @@ func TestImportNameCodeFixNewImportAllowSyntheticDefaultImports4(t *testing.T) {
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @AllowSyntheticDefaultImports: false
-// @Module: amd
+// @Module: commonjs
 // @Filename: a/f1.ts
 [|export var x = 0;
 bar/*0*/();|]

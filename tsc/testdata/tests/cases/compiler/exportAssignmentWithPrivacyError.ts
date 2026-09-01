@@ -1,6 +1,6 @@
 // @target: es2015
 // @strict: false
-//@module: amd
+//@module: commonjs
 interface connectmodule {
     (res, req, next): void;
 }

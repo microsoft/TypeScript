@@ -1,6 +1,7 @@
 // @strict: false
 // @target: es5, es2015
-// @module: amd
+// @outDir: out
+// @module: commonjs
 
 // #15734 failed when test.ts comes before typings.d.ts
 // @Filename: test.ts
