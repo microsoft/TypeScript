@@ -24,11 +24,15 @@
         "setup-hooks": "node tools/scripts/link-hooks.mjs"
     },
     "devDependencies": {
+        "@dprint/json": "^0.22.0",
+        "@dprint/typescript": "^0.96.1",
+        "@jakebailey/dprint-plugin-gofumpt": "^0.0.13",
         "@types/node": "^22.20.1",
         "@unicode/unicode-15.1.0": "^1.6.17",
         "adm-zip": "^0.6.0",
         "chokidar": "^5.0.0",
         "dprint": "^0.56.1",
+        "dprint-plugin-yaml": "^0.6.0",
         "hereby": "^1.15.2",
         "tar": "^7.5.22",
         "tinyexec": "^1.3.0",
