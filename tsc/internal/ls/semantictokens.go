@@ -160,7 +160,7 @@ func (l *LanguageService) ProvideSemanticTokens(ctx context.Context, documentURI
 func (l *LanguageService) ProvideSemanticTokensRange(ctx context.Context, documentURI lsproto.DocumentUri, rng lsproto.Range) (lsproto.SemanticTokensRangeResponse, error) {
 	program, file := l.getProgramAndFile(documentURI)
 
-	mappedRanges := lsconv.FromLSPRangeIntersectingForSourceFile(l.converters, file, rng, spanmap.FeatureSemanticTokens)
+	mappedRanges := l.converters.FromLSPRangeIntersectingForSourceFile(file, rng, spanmap.FeatureSemanticTokens)
 	tokens := make([]semanticToken, 0, len(mappedRanges))
 	var seen collections.Set[semanticToken]
 	for _, mapped := range mappedRanges {

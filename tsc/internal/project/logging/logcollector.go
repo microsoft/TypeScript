@@ -23,11 +23,9 @@ func (lc *logCollector) String() string {
 func NewTestLogger() LogCollector {
 	var builder strings.Builder
 	return &logCollector{
-		logger: logger{
-			writer: &builder,
-			prefix: func() string {
-				return formatTime(time.Unix(1349085672, 0))
-			},
+		writer: &builder,
+		prefix: func() string {
+			return formatTime(time.Unix(1349085672, 0))
 		},
 		builder: &builder,
 	}

@@ -43,8 +43,7 @@ type CrossProjectOrchestrator interface {
 	GetProjectsLoadingProjectTree(ctx context.Context, requestedProjectTrees *collections.Set[tspath.Path]) iter.Seq[Project]
 }
 
-func handleCrossProject[Req lsproto.HasTextDocumentPosition, Resp any](
-	defaultLs *LanguageService,
+func (defaultLs *LanguageService) handleCrossProject[Req lsproto.HasTextDocumentPosition, Resp any](
 	ctx context.Context,
 	params Req,
 	orchestrator CrossProjectOrchestrator,

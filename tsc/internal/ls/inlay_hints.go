@@ -35,7 +35,7 @@ func (l *LanguageService) ProvideInlayHint(
 	program, file := l.getProgramAndFile(params.TextDocument.Uri)
 	quotePreference := lsutil.GetQuotePreference(file, userPreferences)
 
-	mappedRanges := lsconv.FromLSPRangeIntersectingForSourceFile(l.converters, file, params.Range, spanmap.FeatureInlayHints)
+	mappedRanges := l.converters.FromLSPRangeIntersectingForSourceFile(file, params.Range, spanmap.FeatureInlayHints)
 	result := make([]*lsproto.InlayHint, 0, len(mappedRanges))
 	for _, mapped := range mappedRanges {
 		projection := mapped.Script

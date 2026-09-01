@@ -72,8 +72,8 @@ func (h *Handler) HandleRequest(ctx context.Context, method string, params json.
 			return nil, err
 		}
 		return contentmapper.TransformResult{
-			MappedOutput: contentmapper.MappedOutput{Text: text, Extension: mappedExtension(p.Content), Mappings: mappings, DiagnosticDirectives: diagnosticDirectives},
-			Diagnostics:  diagnostics,
+			Text: text, Extension: mappedExtension(p.Content), Mappings: mappings, DiagnosticDirectives: diagnosticDirectives,
+			Diagnostics: diagnostics,
 		}, nil
 	default:
 		return nil, fmt.Errorf("contentmappertest: unexpected method %q", method)

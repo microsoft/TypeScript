@@ -78,11 +78,9 @@ type diskFile struct {
 
 func newDiskFile(fileName string, content string) *diskFile {
 	return &diskFile{
-		fileBase: fileBase{
-			fileName: fileName,
-			content:  content,
-			hash:     xxh3.HashString128(content),
-		},
+		fileName: fileName,
+		content:  content,
+		hash:     xxh3.HashString128(content),
 	}
 }
 
@@ -107,11 +105,9 @@ func (f *diskFile) Kind() core.ScriptKind {
 func (f *diskFile) Clone() *diskFile {
 	return &diskFile{
 		realpathPath: f.realpathPath,
-		fileBase: fileBase{
-			fileName: f.fileName,
-			content:  f.content,
-			hash:     f.hash,
-		},
+		fileName:     f.fileName,
+		content:      f.content,
+		hash:         f.hash,
 	}
 }
 
@@ -126,13 +122,11 @@ type Overlay struct {
 
 func newOverlay(fileName string, content string, version int32, kind core.ScriptKind) *Overlay {
 	return &Overlay{
-		fileBase: fileBase{
-			fileName: fileName,
-			content:  content,
-			hash:     xxh3.HashString128(content),
-		},
-		version: version,
-		kind:    kind,
+		fileName: fileName,
+		content:  content,
+		hash:     xxh3.HashString128(content),
+		version:  version,
+		kind:     kind,
 	}
 }
 
@@ -360,7 +354,7 @@ func (fs *overlayFS) processChanges(changes []FileChange) (FileChangeSummary, ma
 				})
 				for _, textChange := range change.Changes {
 					if partialChange := textChange.Partial; partialChange != nil {
-						ranges := lsconv.FromLSPRange(converters, o, partialChange.Range, spanmap.FeatureAll)
+						ranges := converters.FromLSPRange(o, partialChange.Range, spanmap.FeatureAll)
 						debug.Assert(len(ranges) == 1, "expected exactly one range for partial change")
 						textChange := core.TextChange{TextRange: ranges[0].Span, NewText: partialChange.Text}
 						newContent := textChange.ApplyTo(o.content)

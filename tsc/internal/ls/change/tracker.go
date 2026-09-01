@@ -152,7 +152,7 @@ func (t *Tracker) GetChanges() (map[string][]*lsproto.TextEdit, []string) {
 // range may have several projections; this selects the one belonging to sourceFile. A range with no exact
 // projection cannot be written back and marks the file unmappable.
 func (t *Tracker) fromLSPEditRange(sourceFile *ast.SourceFile, lsprotoRange lsproto.Range) core.TextRange {
-	spans := lsconv.FromLSPRangeForSourceFile(t.converters, sourceFile, lsprotoRange, spanmap.FeatureAll)
+	spans := t.converters.FromLSPRangeForSourceFile(sourceFile, lsprotoRange, spanmap.FeatureAll)
 	for _, span := range spans {
 		if span.Fidelity.IsExact() && span.Script == sourceFile {
 			return span.Span

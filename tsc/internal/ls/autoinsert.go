@@ -5,7 +5,6 @@ import (
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/astnav"
-	"github.com/microsoft/TypeScript/tsc/internal/ls/lsconv"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/scanner"
 	"github.com/microsoft/TypeScript/tsc/internal/spanmap"
@@ -20,7 +19,7 @@ func (l *LanguageService) ProvideOnAutoInsert(ctx context.Context, params *lspro
 	}
 
 	_, sourceFile := l.getProgramAndFile(params.VSTextDocument.Uri)
-	positions := lsconv.FromLSPPositionForSourceFile(l.converters, sourceFile, params.VSPosition, spanmap.FeatureAutoInsert)
+	positions := l.converters.FromLSPPositionForSourceFile(sourceFile, params.VSPosition, spanmap.FeatureAutoInsert)
 	if len(positions) != 1 || !positions[0].Fidelity.IsExact() {
 		return lsproto.VSOnAutoInsertResponse{}, nil
 	}

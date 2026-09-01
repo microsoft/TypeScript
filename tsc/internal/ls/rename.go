@@ -63,8 +63,7 @@ func deduplicateRenameEdits(mappedEdits []mappedRenameEdit) (map[lsproto.Documen
 }
 
 func (l *LanguageService) ProvideRename(ctx context.Context, params *lsproto.RenameParams, orchestrator CrossProjectOrchestrator) (lsproto.WorkspaceEditOrNull, error) {
-	return handleCrossProject(
-		l,
+	return l.handleCrossProject(
 		ctx,
 		params,
 		orchestrator,
@@ -79,7 +78,7 @@ func (l *LanguageService) ProvideRename(ctx context.Context, params *lsproto.Ren
 
 func (l *LanguageService) GetRenameInfo(ctx context.Context, newName string, documentURI lsproto.DocumentUri, position lsproto.Position) RenameInfo {
 	program, sourceFile := l.getProgramAndFile(documentURI)
-	positions := lsconv.FromLSPPositionForSourceFile(l.converters, sourceFile, position, spanmap.FeatureRename)
+	positions := l.converters.FromLSPPositionForSourceFile(sourceFile, position, spanmap.FeatureRename)
 	for _, mapped := range positions {
 		if !mapped.Fidelity.IsExact() {
 			continue

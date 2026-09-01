@@ -38,7 +38,7 @@
         "trailingCommas": "never"
     },
     "gofumpt": {
-        "langVersion": "go1.26",
+        "langVersion": "go1.27",
         "modulePath": "github.com/microsoft/TypeScript/tsc"
     },
     "excludes": [
@@ -66,6 +66,6 @@
         "npm:@dprint/typescript@0.96.1",
         "npm:@dprint/json@0.22.0",
         "npm:dprint-plugin-yaml@0.6.0",
-        "npm:@jakebailey/dprint-plugin-gofumpt@0.0.13"
+        "npm:@jakebailey/dprint-plugin-gofumpt@0.0.16"
     ]
 }

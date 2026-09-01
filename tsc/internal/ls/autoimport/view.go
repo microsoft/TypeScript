@@ -123,7 +123,7 @@ func (v *View) search(searchFn func(*RegistryBucket) []*Export) []*Export {
 	// plus packages that are directly imported by the project's program files.
 	// If no package.json is found, allowedPackages remains nil and all packages are allowed.
 	var allowedPackages *collections.Set[string]
-	tspath.ForEachAncestorDirectoryPath(v.importingFile.Path().GetDirectoryPath(), func(dirPath tspath.Path) (result any, stop bool) {
+	v.importingFile.Path().GetDirectoryPath().ForEachAncestorDirectory(func(dirPath tspath.Path) (result any, stop bool) {
 		if dir, ok := v.registry.directories[dirPath]; ok {
 			if pj := dir.packageJson; pj.Exists() && pj.Contents.Parseable {
 				// Initialize to empty set if this is the first package.json we've seen
@@ -143,7 +143,7 @@ func (v *View) search(searchFn func(*RegistryBucket) []*Export) []*Export {
 	}
 
 	excludePackages := &collections.Set[string]{}
-	tspath.ForEachAncestorDirectoryPath(v.importingFile.Path().GetDirectoryPath(), func(dirPath tspath.Path) (result any, stop bool) {
+	v.importingFile.Path().GetDirectoryPath().ForEachAncestorDirectory(func(dirPath tspath.Path) (result any, stop bool) {
 		if nodeModulesBucket, ok := v.registry.nodeModules[dirPath]; ok {
 			exports := searchFn(nodeModulesBucket)
 			results = slices.Grow(results, len(exports))

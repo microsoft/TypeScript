@@ -6,7 +6,6 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/astnav"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
-	"github.com/microsoft/TypeScript/tsc/internal/ls/lsconv"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/scanner"
 	"github.com/microsoft/TypeScript/tsc/internal/spanmap"
@@ -54,7 +53,7 @@ func (l *LanguageService) ProvideSelectionRanges(ctx context.Context, params *ls
 
 	results := make([]*lsproto.SelectionRange, 0, len(params.Positions))
 	for _, position := range params.Positions {
-		positions := lsconv.FromLSPPositionForSourceFile(l.converters, sourceFile, position, spanmap.FeatureSelectionRanges)
+		positions := l.converters.FromLSPPositionForSourceFile(sourceFile, position, spanmap.FeatureSelectionRanges)
 		if len(positions) != 1 || !positions[0].Fidelity.IsSingleSegment() {
 			return lsproto.SelectionRangesOrNull{}, nil
 		}

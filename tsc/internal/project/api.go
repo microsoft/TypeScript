@@ -62,9 +62,7 @@ func (s *Session) APIUpdateTemporary(ctx context.Context, baseSnapshot *Snapshot
 
 	newSnapshot := baseSnapshot.Clone(ctx, SnapshotChange{
 		fileChanges: fileChanges,
-		ResourceRequest: ResourceRequest{
-			Documents: []lsproto.DocumentUri{uri},
-		},
+		Documents:   []lsproto.DocumentUri{uri},
 	}, overlays, s)
 	return newSnapshot, nil
 }

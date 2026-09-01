@@ -22,7 +22,7 @@ import (
 func TestContentMappedParseCacheBundleLifetime(t *testing.T) {
 	t.Parallel()
 	cache := NewContentMappedParseCache(RefCountCacheOptions{})
-	key := ContentMappedParseCacheKey{SourceFileParseOptions: ast.SourceFileParseOptions{FileName: "/component.vue", Path: "/component.vue"}}
+	key := ContentMappedParseCacheKey{FileName: "/component.vue", Path: "/component.vue"}
 	canonical := &ast.SourceFile{}
 	supplemental := &ast.SourceFile{}
 	produced := contentmapper.SourceFiles{Canonical: canonical, Supplemental: []*ast.SourceFile{supplemental}}
@@ -464,10 +464,8 @@ func TestRefCountingCaches(t *testing.T) {
 			baseSnapshot := session.Snapshot()
 			extendedConfigPath := tspath.Path("/user/username/projects/myproject/tsconfig.base.json")
 			clone := baseSnapshot.Clone(context.Background(), SnapshotChange{
-				reason: UpdateReasonRequestedLanguageServiceProjectNotLoaded,
-				ResourceRequest: ResourceRequest{
-					Documents: []lsproto.DocumentUri{uri},
-				},
+				reason:    UpdateReasonRequestedLanguageServiceProjectNotLoaded,
+				Documents: []lsproto.DocumentUri{uri},
 			}, baseSnapshot.fs.overlays, session)
 
 			project := clone.GetDefaultProject(uri)
