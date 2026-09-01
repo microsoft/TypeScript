@@ -3,7 +3,11 @@ import type { ElementFlags } from "#enums/elementFlags";
 import type { ObjectFlags } from "#enums/objectFlags";
 import type { TypeFlags } from "#enums/typeFlags";
 import type { TypePredicateKind } from "#enums/typePredicateKind";
-import type { IndexSignatureDeclaration } from "../../ast/ast.ts";
+import type {
+    IndexSignatureDeclaration,
+    NamedTupleMember,
+    ParameterDeclaration,
+} from "../../ast/ast.ts";
 import type { Diagnostic } from "../proto.ts";
 import type {
     NodeHandle,
@@ -107,8 +111,10 @@ export interface Type {
     isBooleanLiteralType(): this is BooleanLiteralType;
     /** Whether this type is a type reference */
     isTypeReference(): this is TypeReference;
-    /** Whether this type is a tuple type */
-    isTupleType(): this is TupleType;
+    /** Whether this type is a tuple type reference */
+    isTupleType(): this is TupleTypeReference;
+    /** Whether this type owns tuple metadata */
+    isTupleTypeTarget(): this is TupleType;
     /** Whether this type is an index type (`keyof T`) */
     isIndexType(): this is IndexType;
     /** Whether this type is an indexed access type (`T[K]`) */
@@ -177,6 +183,12 @@ export interface TypeReference extends ObjectType {
     getTarget(): Promise<Type>;
 }
 
+/** References to tuple types */
+export interface TupleTypeReference extends TypeReference {
+    /** Get the tuple type that describes this reference's shape */
+    getTarget(): Promise<TupleType>;
+}
+
 /** Interface types — classes and interfaces (ObjectFlags.ClassOrInterface) */
 export interface InterfaceType extends TypeReference {
     /** Get all type parameters (outer + local, excluding thisType) */
@@ -187,14 +199,18 @@ export interface InterfaceType extends TypeReference {
     getLocalTypeParameters(): Promise<readonly TypeParameter[]>;
 }
 
-/** Tuple types (ObjectFlags.Tuple) */
+/** Tuple type targets (ObjectFlags.Tuple) */
 export interface TupleType extends InterfaceType {
+    /** Get this tuple target */
+    getTarget(): Promise<TupleType>;
     /** Per-element flags (Required, Optional, Rest, Variadic) */
     readonly elementFlags: readonly ElementFlags[];
     /** Number of initial required or optional elements */
     readonly fixedLength: number;
     /** Whether the tuple is readonly */
     readonly readonly: boolean;
+    /** Declarations providing tuple element names */
+    readonly labeledElementDeclarations?: readonly (NodeHandle<NamedTupleMember | ParameterDeclaration> | undefined)[];
 }
 
 /** Union or intersection types (TypeFlags.Union | TypeFlags.Intersection) */

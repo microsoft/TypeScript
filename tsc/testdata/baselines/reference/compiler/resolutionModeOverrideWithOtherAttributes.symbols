@@ -1,0 +1,22 @@
+//// [tests/cases/compiler/resolutionModeOverrideWithOtherAttributes.ts] ////
+
+=== /node_modules/pkg/index.d.mts ===
+export declare const value: "import";
+>value : Symbol(value, Decl(index.d.mts, 0, 20))
+
+=== /node_modules/pkg/index.d.cts ===
+export declare const value: "require";
+>value : Symbol(value, Decl(index.d.cts, 0, 20))
+
+=== /app.ts ===
+import type { value } from "pkg" with { type: "typescript", "resolution-mode": "require" };
+>value : Symbol(value, Decl(app.ts, 0, 13))
+
+declare const expected: "require";
+>expected : Symbol(expected, Decl(app.ts, 2, 13))
+
+const actual: typeof value = expected;
+>actual : Symbol(actual, Decl(app.ts, 3, 5))
+>value : Symbol(value, Decl(app.ts, 0, 13))
+>expected : Symbol(expected, Decl(app.ts, 2, 13))
+

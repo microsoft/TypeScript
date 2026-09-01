@@ -369,6 +369,7 @@ export class RemoteNode extends RemoteNodeBase implements Node {
     }
 
     private getChildAtOrder(order: number): RemoteNode | RemoteNodeList | undefined {
+        if (!this.hasChildren()) return undefined;
         const mask = this.childMask;
         if (!(mask & (1 << order))) {
             // Property is not present

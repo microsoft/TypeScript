@@ -111,10 +111,10 @@ const b = import.source("./a.js", { with: { type: "javascript" } });
 >import.source("./a.js", { with: { type: "javascript" } }) : Promise<any>
 >source : any
 >"./a.js" : "./a.js"
->{ with: { type: "javascript" } } : { with: { type: string; }; }
->with : { type: string; }
->{ type: "javascript" } : { type: string; }
->type : string
+>{ with: { type: "javascript" } } : { with: { readonly type: "javascript"; }; }
+>with : { readonly type: "javascript"; }
+>{ type: "javascript" } : { readonly type: "javascript"; }
+>type : "javascript"
 >"javascript" : "javascript"
 
 a;
@@ -129,10 +129,10 @@ const a = import.source("./a.js", { with: { type: "javascript" } });
 >import.source("./a.js", { with: { type: "javascript" } }) : Promise<any>
 >source : any
 >"./a.js" : "./a.js"
->{ with: { type: "javascript" } } : { with: { type: string; }; }
->with : { type: string; }
->{ type: "javascript" } : { type: string; }
->type : string
+>{ with: { type: "javascript" } } : { with: { readonly type: "javascript"; }; }
+>with : { readonly type: "javascript"; }
+>{ type: "javascript" } : { readonly type: "javascript"; }
+>type : "javascript"
 >"javascript" : "javascript"
 
 a;

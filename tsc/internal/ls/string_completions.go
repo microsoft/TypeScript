@@ -919,7 +919,7 @@ func getAmbientModuleCompletions(fragment string, fragmentDirectory string, type
 	ambientModules := typeChecker.GetAmbientModules()
 	var nonRelativeModuleNames []string
 	for _, sym := range ambientModules {
-		moduleName := stringutil.StripQuotes(sym.Name)
+		moduleName := getAmbientModuleName(sym)
 		if strings.HasPrefix(moduleName, fragment) && !strings.Contains(moduleName, "*") {
 			nonRelativeModuleNames = append(nonRelativeModuleNames, moduleName)
 		}
@@ -932,6 +932,14 @@ func getAmbientModuleCompletions(fragment string, fragmentDirectory string, type
 		}
 	}
 	return nonRelativeModuleNames
+}
+
+func getAmbientModuleName(symbol *ast.Symbol) string {
+	declaration := ast.GetNonAugmentationDeclaration(symbol)
+	if declaration != nil && ast.IsModuleWithStringLiteralName(declaration) {
+		return declaration.Name().Text()
+	}
+	return stringutil.StripQuotes(symbol.Name)
 }
 
 func (l *LanguageService) getCompletionEntriesFromTypings(
@@ -1059,7 +1067,7 @@ func getSupportedExtensionsForModuleResolution(options *core.CompilerOptions, ex
 	if checker != nil {
 		ambientModules := checker.GetAmbientModules()
 		for _, module := range ambientModules {
-			name := stringutil.StripQuotes(module.Name)
+			name := getAmbientModuleName(module)
 			if !strings.HasPrefix(name, "*.") || strings.Contains(name, "/") {
 				continue
 			}

@@ -24,10 +24,10 @@ const a = import.source("./a.wasm", { with: { type: "webassembly" } });
 >import.source("./a.wasm", { with: { type: "webassembly" } }) : Promise<WebAssembly.Module>
 >source : any
 >"./a.wasm" : "./a.wasm"
->{ with: { type: "webassembly" } } : { with: { type: string; }; }
->with : { type: string; }
->{ type: "webassembly" } : { type: string; }
->type : string
+>{ with: { type: "webassembly" } } : { with: { readonly type: "webassembly"; }; }
+>with : { readonly type: "webassembly"; }
+>{ type: "webassembly" } : { readonly type: "webassembly"; }
+>type : "webassembly"
 >"webassembly" : "webassembly"
 
 const b: Promise<WebAssembly.Module> = a;
@@ -53,10 +53,10 @@ const c = import.source("./a.wasm", { with: { type: "webassembly" } },);
 >import.source("./a.wasm", { with: { type: "webassembly" } },) : Promise<WebAssembly.Module>
 >source : any
 >"./a.wasm" : "./a.wasm"
->{ with: { type: "webassembly" } } : { with: { type: string; }; }
->with : { type: string; }
->{ type: "webassembly" } : { type: string; }
->type : string
+>{ with: { type: "webassembly" } } : { with: { readonly type: "webassembly"; }; }
+>with : { readonly type: "webassembly"; }
+>{ type: "webassembly" } : { readonly type: "webassembly"; }
+>type : "webassembly"
 >"webassembly" : "webassembly"
 
 const d: Promise<WebAssembly.Module> = c;

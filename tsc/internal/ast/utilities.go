@@ -1660,7 +1660,27 @@ func IsAmbientModule(node *Node) bool {
 }
 
 func IsAmbientModuleSymbolName(s string) bool {
-	return strings.HasPrefix(s, "\"") && strings.HasSuffix(s, "\"")
+	_, ok := TryGetAmbientModuleNameFromSymbolName(s)
+	return ok
+}
+
+// Ambient module symbols are either of the form `"modulename"` or `InternalSymbolNamePrefix + "\"modulename\"pattern@nodeId"`;
+// see `getDeclarationName`.
+func TryGetAmbientModuleNameFromSymbolName(s string) (string, bool) {
+	if strings.HasPrefix(s, "\"") && strings.HasSuffix(s, "\"") {
+		return s[1 : len(s)-1], true
+	}
+
+	patternPrefix := InternalSymbolNamePrefix + "\""
+	rest, ok := strings.CutPrefix(s, patternPrefix)
+	if !ok {
+		return "", false
+	}
+	markerIndex := strings.LastIndex(rest, "\"pattern@")
+	if markerIndex < 1 {
+		return "", false
+	}
+	return rest[:markerIndex], true
 }
 
 func IsExternalModule(file *SourceFile) bool {
@@ -1941,14 +1961,24 @@ func GetExternalModuleName(node *Node) *Expression {
 	panic("Unhandled case in getExternalModuleName")
 }
 
+func HasImportAttributes(node *Node) bool {
+	switch node.Kind {
+	case KindImportDeclaration, KindJSImportDeclaration, KindExportDeclaration, KindImportType:
+		return true
+	}
+	return false
+}
+
 func GetImportAttributes(node *Node) *Node {
 	switch node.Kind {
 	case KindImportDeclaration, KindJSImportDeclaration:
 		return node.AsImportDeclaration().Attributes
 	case KindExportDeclaration:
 		return node.AsExportDeclaration().Attributes
+	case KindImportType:
+		return node.AsImportTypeNode().Attributes
 	}
-	panic("Unhandled case in getImportAttributes")
+	panic("Unhandled case in getImportAttributes: " + node.Kind.String())
 }
 
 func getImportTypeNodeLiteral(node *Node) *Node {
@@ -3218,10 +3248,6 @@ func IsPartOfTypeOnlyImportOrExportDeclaration(node *Node) bool {
 	return FindAncestor(node, IsTypeOnlyImportOrExportDeclaration) != nil
 }
 
-func IsPartOfExclusivelyTypeOnlyImportOrExportDeclaration(node *Node) bool {
-	return FindAncestor(node, IsExclusivelyTypeOnlyImportOrExport) != nil
-}
-
 func IsEmittableImport(node *Node) bool {
 	switch node.Kind {
 	case KindImportDeclaration:
@@ -3259,7 +3285,7 @@ func HasResolutionModeOverride(node *Node) bool {
 		attributes = node.AsExportDeclaration().Attributes
 	}
 	if attributes != nil {
-		_, ok := attributes.GetResolutionModeOverride()
+		_, ok := attributes.GetResolutionModeOverride(nil)
 		return ok
 	}
 	return false
@@ -3541,6 +3567,7 @@ func ReplaceModifiers(factory *NodeFactory, node *Node, modifierArray *ModifierL
 			modifierArray,
 			node.AsModuleDeclaration().Keyword,
 			node.Name(),
+			node.Attributes(),
 			node.Body(),
 		)
 	case KindImportEqualsDeclaration:
@@ -4616,4 +4643,9 @@ func IsNamedEvaluationSource(node *Node) bool {
 // computed property names.
 func IsProtoSetter(node *Node) bool {
 	return (IsIdentifier(node) || IsStringLiteral(node)) && node.Text() == "__proto__"
+}
+
+func IsStringLiteralLikeType(node *Node) bool {
+	return node.Kind == KindLiteralType &&
+		IsStringLiteralLike(node.AsLiteralTypeNode().Literal)
 }
