@@ -1236,8 +1236,10 @@ func GetConfigNameFromFileName(filename string) string {
 func SkipUnsupportedCompilerOptions(t *testing.T, options *core.CompilerOptions) {
 	t.Helper()
 	switch options.Module {
-	case core.ModuleKindAMD, core.ModuleKindUMD, core.ModuleKindSystem:
+	case core.ModuleKindUMD, core.ModuleKindSystem:
 		t.Skipf("unsupported module kind %s", options.Module)
+	case core.ModuleKindAMD:
+		t.Fatalf("unsupported module kind %s", options.Module)
 	}
 	switch options.ModuleResolution {
 	case core.ModuleResolutionKindNode10, core.ModuleResolutionKindClassic:
@@ -1253,7 +1255,7 @@ func SkipUnsupportedCompilerOptions(t *testing.T, options *core.CompilerOptions)
 		t.Skipf("unsupported baseUrl %s", options.BaseUrl)
 	}
 	if options.OutFile != "" {
-		t.Skipf("unsupported outFile %s", options.OutFile)
+		t.Fatalf("unsupported outFile %s", options.OutFile)
 	}
 	switch options.Target {
 	case core.ScriptTargetES5:
