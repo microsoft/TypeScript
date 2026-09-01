@@ -322,11 +322,11 @@ describe("getSynthesizedDeepClone", () => {
         // Children are also different objects (deep clone)
         assert.notStrictEqual(clone.left, left);
         assert.strictEqual(clone.left.kind, SyntaxKind.Identifier);
-        assert.strictEqual((clone.left as Identifier).text, "a");
+        assert.strictEqual(clone.left.text, "a");
 
         assert.notStrictEqual(clone.right, right);
         assert.strictEqual(clone.right.kind, SyntaxKind.NumericLiteral);
-        assert.strictEqual((clone.right as Identifier).text, "42");
+        assert.strictEqual(clone.right.text, "42");
 
         assert.notStrictEqual(clone.operatorToken, op);
         assert.strictEqual(clone.operatorToken.kind, SyntaxKind.PlusToken);
