@@ -25,8 +25,8 @@ func GetModuleSpecifiers(
 	userPreferences UserPreferences,
 	options ModuleSpecifierOptions,
 	forAutoImports bool,
-) []string {
-	result, _ := GetModuleSpecifiersWithInfo(
+) ModuleSpecifiersResult {
+	return GetModuleSpecifiersWithInfo(
 		moduleSymbol,
 		checker,
 		compilerOptions,
@@ -36,7 +36,6 @@ func GetModuleSpecifiers(
 		options,
 		forAutoImports,
 	)
-	return result
 }
 
 func GetModuleSpecifiersWithInfo(
@@ -48,24 +47,24 @@ func GetModuleSpecifiersWithInfo(
 	userPreferences UserPreferences,
 	options ModuleSpecifierOptions,
 	forAutoImports bool,
-) ([]string, ResultKind) {
+) ModuleSpecifiersResult {
 	ambient := tryGetModuleNameFromAmbientModule(moduleSymbol, checker)
-	if len(ambient) > 0 {
-		if forAutoImports && IsExcludedByRegex(ambient, userPreferences.AutoImportSpecifierExcludeRegexes) {
-			return nil, ResultKindAmbient
+	if len(ambient.name) > 0 {
+		if forAutoImports && IsExcludedByRegex(ambient.name, userPreferences.AutoImportSpecifierExcludeRegexes) {
+			return ModuleSpecifiersResult{Kind: ResultKindAmbient, AmbientModuleSymbol: ambient.symbol}
 		}
-		return []string{ambient}, ResultKindAmbient
+		return ModuleSpecifiersResult{Specifiers: []string{ambient.name}, Kind: ResultKindAmbient, AmbientModuleSymbol: ambient.symbol}
 	}
 
 	moduleSourceFile := ast.GetSourceFileOfModule(moduleSymbol)
 	if moduleSourceFile == nil {
-		return nil, ResultKindNone
+		return ModuleSpecifiersResult{}
 	}
 
 	// Use original source file name when file is from project reference output
 	moduleFileName := host.GetSourceOfProjectReferenceIfOutputIncluded(moduleSourceFile)
 
-	return GetModuleSpecifiersForFileWithInfo(
+	specifiers, kind := GetModuleSpecifiersForFileWithInfo(
 		importingSourceFile,
 		moduleFileName,
 		compilerOptions,
@@ -74,6 +73,7 @@ func GetModuleSpecifiersWithInfo(
 		options,
 		forAutoImports,
 	)
+	return ModuleSpecifiersResult{Specifiers: specifiers, Kind: kind}
 }
 
 func GetModuleSpecifiersForFileWithInfo(
@@ -104,10 +104,15 @@ func GetModuleSpecifiersForFileWithInfo(
 	)
 }
 
-func tryGetModuleNameFromAmbientModule(moduleSymbol *ast.Symbol, checker CheckerShape) string {
+type ambientModuleInfo struct {
+	name   string
+	symbol *ast.Symbol
+}
+
+func tryGetModuleNameFromAmbientModule(moduleSymbol *ast.Symbol, checker CheckerShape) ambientModuleInfo {
 	for _, decl := range moduleSymbol.Declarations {
 		if ast.IsModuleWithStringLiteralName(decl) && (!ast.IsModuleAugmentationExternal(decl) || !tspath.IsExternalModuleNameRelative(decl.Name().Text())) {
-			return decl.Name().Text()
+			return ambientModuleInfo{name: decl.Name().Text(), symbol: moduleSymbol}
 		}
 	}
 
@@ -148,10 +153,10 @@ func tryGetModuleNameFromAmbientModule(moduleSymbol *ast.Symbol, checker Checker
 		}
 		// TODO: Possible strada bug - isn't this insufficient in the presence of merge symbols?
 		if exportSymbol == d.Symbol() {
-			return possibleContainer.Name().Text()
+			return ambientModuleInfo{name: possibleContainer.Name().Text(), symbol: possibleContainer.Symbol()}
 		}
 	}
-	return ""
+	return ambientModuleInfo{}
 }
 
 type Info struct {

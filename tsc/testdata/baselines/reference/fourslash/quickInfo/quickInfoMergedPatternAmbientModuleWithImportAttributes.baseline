@@ -1,0 +1,171 @@
+// === QuickInfo ===
+=== /first.d.ts ===
+// declare module "*.asset" with { type: "css" } {
+//                 ^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | module "*.asset" with { type: "css"; } {
+// |     let cssOnly: "css";
+// |     let cssAlso: "css-also";
+// | }
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//                 ^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | module "*.asset" with { type: "css"; }
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+//     export const cssOnly: "css";
+// }
+// declare module "*.asset" with { type: "text" } {
+//                 ^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | module "*.asset" with { type: "text"; } {
+// |     let textOnly: "text";
+// |     let textAlso: "text-also";
+// | }
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//                 ^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | module "*.asset" with { type: "text"; }
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+//     export const textOnly: "text";
+// }
+// 
+[
+  {
+    "marker": {
+      "Position": 24,
+      "LSPosition": {
+        "line": 0,
+        "character": 24
+      },
+      "Name": "css",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nmodule \"*.asset\" with { type: \"css\"; }\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 16
+          },
+          "end": {
+            "line": 0,
+            "character": 23
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 24,
+      "LSPosition": {
+        "line": 0,
+        "character": 24
+      },
+      "Name": "css",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nmodule \"*.asset\" with { type: \"css\"; } {\n    let cssOnly: \"css\";\n    let cssAlso: \"css-also\";\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 16
+          },
+          "end": {
+            "line": 0,
+            "character": 23
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 107,
+      "LSPosition": {
+        "line": 3,
+        "character": 24
+      },
+      "Name": "text",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nmodule \"*.asset\" with { type: \"text\"; }\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 3,
+            "character": 16
+          },
+          "end": {
+            "line": 3,
+            "character": 23
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 107,
+      "LSPosition": {
+        "line": 3,
+        "character": 24
+      },
+      "Name": "text",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nmodule \"*.asset\" with { type: \"text\"; } {\n    let textOnly: \"text\";\n    let textAlso: \"text-also\";\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 3,
+            "character": 16
+          },
+          "end": {
+            "line": 3,
+            "character": 23
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  }
+]
