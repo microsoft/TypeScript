@@ -1,7 +1,6 @@
 // @target: es2015
 // @module: amd
 // @declaration: true
-// @outFile: f.js
 
 // @filename: a.ts
 export class A {}

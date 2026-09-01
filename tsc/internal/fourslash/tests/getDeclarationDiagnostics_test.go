@@ -12,7 +12,7 @@ func TestGetDeclarationDiagnostics(t *testing.T) {
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @strict: false
 // @declaration: true
-// @outFile: true
+// @outDir: out
 // @Filename: inputFile1.ts
 namespace m {
    export function foo() {

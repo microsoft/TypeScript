@@ -1,7 +1,6 @@
 // @target: es2015
 // @allowJs: true
 // @module: amd
-// @outFile: a_out.js
 
 // @filename: a.js
 function foo(name) {

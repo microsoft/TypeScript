@@ -1,6 +1,5 @@
 // @strict: false
 // @target: es5, es2015
-// @outFile: out.js
 // @module: amd
 
 // #15734 failed when test.ts comes before typings.d.ts
