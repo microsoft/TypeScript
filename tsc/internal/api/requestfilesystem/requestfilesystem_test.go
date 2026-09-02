@@ -1,6 +1,7 @@
 package requestfilesystem
 
 import (
+	"sync"
 	"testing"
 
 	"github.com/microsoft/TypeScript/tsc/internal/project"
@@ -27,9 +28,7 @@ func newLayeredRequestFileSystem(params *RequestFileSystem, base vfs.FS, current
 }
 
 func (h *Handle) applyTo(base *Handle) {
-	requestFileSystemDependenciesMu.Lock()
-	defer requestFileSystemDependenciesMu.Unlock()
-	h.applyToLocked(base)
+	h.compactBase(base)
 }
 
 func TestInitializeForUpdate(t *testing.T) {
@@ -74,6 +73,47 @@ func TestInitializeForUpdate(t *testing.T) {
 		assert.Assert(t, handle.baseFileSystem() == host)
 		assert.Assert(t, getRequestFileSystem(handle.baseFileSystem()) == nil)
 	})
+}
+
+func TestConcurrentCloneAndRelease(t *testing.T) {
+	t.Parallel()
+
+	host := vfstest.FromMap(map[string]string{}, true)
+	for range 100 {
+		base, err := newRequestFileSystem(&RequestFileSystem{
+			Kind:  KindMemory,
+			Files: map[string]string{"/base.ts": "base"},
+		}, host, "/")
+		assert.NilError(t, err)
+		layered, err := newLayeredRequestFileSystem(&RequestFileSystem{
+			Kind:  KindCache,
+			Files: map[string]string{"/layered.ts": "layered"},
+		}, base, "/")
+		assert.NilError(t, err)
+
+		var clone Handle
+		start := make(chan struct{})
+		var waitGroup sync.WaitGroup
+		waitGroup.Go(func() {
+			<-start
+			clone.CloneFrom(layered)
+		})
+		waitGroup.Go(func() {
+			<-start
+			base.Release()
+		})
+		close(start)
+		waitGroup.Wait()
+
+		layered.Release()
+		contents, ok := clone.ReadFile("/base.ts")
+		assert.Assert(t, ok)
+		assert.Equal(t, contents, "base")
+		contents, ok = clone.ReadFile("/layered.ts")
+		assert.Assert(t, ok)
+		assert.Equal(t, contents, "layered")
+		clone.Release()
+	}
 }
 
 func TestRequestFileSystem(t *testing.T) {
