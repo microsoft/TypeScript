@@ -1,49 +1,20 @@
 package requestfilesystem
 
 import (
+	"sync"
 	"sync/atomic"
 	"time"
 
-	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/project"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 )
 
 // Handle is a request filesystem whose backing layers can be compacted as snapshots are released.
 type Handle struct {
-	value        atomic.Pointer[requestFileSystem]
-	dependencies atomic.Pointer[dependencyState]
-}
-
-// dependencyState is immutable once published. The dependency graph has a forward edge
-// from a child's value to its base and a reverse edge from the base to the child:
-//
-//	child                                      base
-//	-----                                      ----
-//	registerWithBase
-//	  base := layeredBase(value)
-//	  ---------------- addDependent(child) --> CAS active[D] -> active[D + child]
-//	  verify value still points to base
-//	  -- if not: removeDependent(child) ------> CAS active[D + child] -> active[D]
-//
-// releaseDependencies closes the reverse-edge set with CAS active[D] -> released and
-// gives D to the releaser. Registration racing that CAS is resolved as follows:
-//
-//	addDependent wins                       releaseDependencies wins
-//	-----------------                       ------------------------
-//	release CAS retries and claims          addDependent observes released
-//	a set containing the child              and returns false
-//	          |                                        |
-//	          +----------> child.compactBase(base) <---+
-//
-// compactBase CASes child.value from a layer over base to the merged value, calls
-// base.removeDependent(child) to discard the old reverse edge, then calls
-// child.registerWithBase() to register the merged value's new base. Stale reverse edges
-// are harmless because compactBase first verifies that child.value still points to base.
-// A nil dependencies pointer means active with no dependents; released is terminal.
-type dependencyState struct {
+	mu         sync.Mutex
+	value      atomic.Pointer[requestFileSystem]
+	dependents map[*Handle]struct{}
 	released   bool
-	dependents *collections.Set[*Handle]
 }
 
 func (h *Handle) load() *requestFileSystem {
@@ -51,10 +22,13 @@ func (h *Handle) load() *requestFileSystem {
 }
 
 func (h *Handle) initialize(value requestFileSystem) {
-	if !h.value.CompareAndSwap(nil, &value) {
+	h.mu.Lock()
+	defer h.mu.Unlock()
+	if h.Initialized() {
 		panic("request filesystem handle already initialized")
 	}
-	h.registerWithBase()
+	h.value.Store(&value)
+	h.registerWithBaseLocked()
 }
 
 // Initialized reports whether the handle contains a request filesystem.
@@ -116,10 +90,13 @@ func (h *Handle) CloneFrom(source *Handle) {
 		return
 	}
 	value := *source.load()
-	if !h.value.CompareAndSwap(nil, &value) {
+	h.mu.Lock()
+	defer h.mu.Unlock()
+	if h.Initialized() {
 		panic("request filesystem handle already initialized")
 	}
-	h.registerWithBase()
+	h.value.Store(&value)
+	h.registerWithBaseLocked()
 }
 
 // Release removes this handle from the dependency graph and compacts live dependents.
@@ -130,137 +107,80 @@ func (h *Handle) Release() {
 	if h.load() == nil {
 		return
 	}
-	dependents, released := h.releaseDependencies()
-	if !released {
+	h.mu.Lock()
+	if h.released {
+		h.mu.Unlock()
 		return
 	}
+	h.released = true
+	h.mu.Unlock()
 
-	h.compactDependents(dependents)
+	h.compactDependents()
 	h.unregisterFromBase()
 }
 
-func (h *Handle) registerWithBase() {
+func (h *Handle) registerWithBaseLocked() {
 	for {
-		if h.isReleased() {
-			return
-		}
 		base := h.layeredBase()
 		if base == nil {
 			return
 		}
-		if !base.addDependent(h) {
-			h.compactBase(base)
+		base.mu.Lock()
+		if base.released {
+			value := h.load().applyTo(*base.load())
+			h.value.Store(&value)
+			base.mu.Unlock()
 			continue
 		}
-		if h.isReleased() {
-			base.removeDependent(h)
-			return
+		if base.dependents == nil {
+			base.dependents = make(map[*Handle]struct{})
 		}
-		if h.layeredBase() == base {
-			return
-		}
-		base.removeDependent(h)
+		base.dependents[h] = struct{}{}
+		base.mu.Unlock()
+		return
 	}
 }
 
 func (h *Handle) unregisterFromBase() {
 	if base := h.layeredBase(); base != nil {
-		base.removeDependent(h)
+		base.mu.Lock()
+		delete(base.dependents, h)
+		base.mu.Unlock()
 	}
 }
 
 func (h *Handle) layeredBase() *Handle {
-	return layeredBase(h.load())
-}
-
-func (h *Handle) compactBase(base *Handle) bool {
-	for {
-		value := h.load()
-		if layeredBase(value) != base {
-			return false
-		}
-		compacted := value.applyTo(*base.load())
-		if h.value.CompareAndSwap(value, &compacted) {
-			base.removeDependent(h)
-			h.registerWithBase()
-			return true
-		}
-	}
-}
-
-func (h *Handle) compactDependents(dependents *collections.Set[*Handle]) {
-	for dependent := range dependents.Keys() {
-		state := dependent.dependencies.Load()
-		if dependent.compactBase(h) && state != nil {
-			dependent.compactDependents(state.dependents)
-		}
-	}
-}
-
-func (h *Handle) addDependent(dependent *Handle) bool {
-	for {
-		state := h.dependencies.Load()
-		if state != nil {
-			if state.released {
-				return false
-			}
-			if state.dependents.Has(dependent) {
-				return true
-			}
-		}
-		dependents := collections.NewSetWithSizeHint[*Handle](1)
-		if state != nil {
-			dependents = state.dependents.Clone()
-		}
-		dependents.Add(dependent)
-		if h.dependencies.CompareAndSwap(state, &dependencyState{dependents: dependents}) {
-			return true
-		}
-	}
-}
-
-func (h *Handle) removeDependent(dependent *Handle) {
-	for {
-		state := h.dependencies.Load()
-		if state == nil || state.released {
-			return
-		}
-		if !state.dependents.Has(dependent) {
-			return
-		}
-		dependents := state.dependents.Clone()
-		dependents.Delete(dependent)
-		if h.dependencies.CompareAndSwap(state, &dependencyState{dependents: dependents}) {
-			return
-		}
-	}
-}
-
-func (h *Handle) releaseDependencies() (*collections.Set[*Handle], bool) {
-	for {
-		state := h.dependencies.Load()
-		if state != nil && state.released {
-			return nil, false
-		}
-		if h.dependencies.CompareAndSwap(state, &dependencyState{released: true}) {
-			if state == nil {
-				return nil, true
-			}
-			return state.dependents, true
-		}
-	}
-}
-
-func (h *Handle) isReleased() bool {
-	state := h.dependencies.Load()
-	return state != nil && state.released
-}
-
-func layeredBase(value *requestFileSystem) *Handle {
+	value := h.load()
 	if !value.layered {
 		return nil
 	}
 	return getRequestFileSystem(value.baseFileSystem())
+}
+
+func (h *Handle) compactDependents() {
+	for {
+		h.mu.Lock()
+		var dependent *Handle
+		for candidate := range h.dependents {
+			dependent = candidate
+			delete(h.dependents, candidate)
+			break
+		}
+		value := h.load()
+		h.mu.Unlock()
+		if dependent == nil {
+			return
+		}
+
+		dependent.mu.Lock()
+		if !dependent.released && dependent.layeredBase() == h {
+			compacted := dependent.load().applyTo(*value)
+			dependent.value.Store(&compacted)
+			dependent.registerWithBaseLocked()
+		}
+		dependent.mu.Unlock()
+		dependent.compactDependents()
+	}
 }
 
 func (h *Handle) baseFileSystem() vfs.FS {

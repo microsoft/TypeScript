@@ -28,7 +28,14 @@ func newLayeredRequestFileSystem(params *RequestFileSystem, base vfs.FS, current
 }
 
 func (h *Handle) applyTo(base *Handle) {
-	h.compactBase(base)
+	h.mu.Lock()
+	defer h.mu.Unlock()
+	base.mu.Lock()
+	delete(base.dependents, h)
+	value := h.load().applyTo(*base.load())
+	base.mu.Unlock()
+	h.value.Store(&value)
+	h.registerWithBaseLocked()
 }
 
 func TestInitializeForUpdate(t *testing.T) {
