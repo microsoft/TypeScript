@@ -20,6 +20,8 @@ type textWriter struct {
 	lineStart               bool
 	lineCount               int
 	linePos                 int
+	columnPos               int
+	column                   core.UTF16Offset
 	hasTrailingCommentState bool
 }
 
@@ -41,9 +43,10 @@ func (w *textWriter) GetColumn() core.UTF16Offset {
 	if w.lineStart {
 		return core.UTF16Offset(w.indent * w.indentSize)
 	}
-	// Count UTF-16 code units from the last line start.
-	// For ASCII-only output (the common case), this equals the byte count.
-	return core.UTF16Len(w.builder.String()[w.linePos:])
+	textPos := w.builder.Len()
+	w.column += core.UTF16Len(w.builder.String()[w.columnPos:textPos])
+	w.columnPos = textPos
+	return w.column
 }
 
 func (w *textWriter) GetIndent() int {
@@ -107,6 +110,8 @@ func (w *textWriter) updateLineCountAndPosFor(s string) {
 		w.lineCount += count - 1
 		curLen := w.builder.Len()
 		w.linePos = curLen - len(s) + int(lastLineStart)
+		w.columnPos = w.linePos
+		w.column = 0
 		w.lineStart = (w.linePos - curLen) == 0
 		return
 	}
@@ -163,6 +168,8 @@ func (w *textWriter) writeLineRaw() {
 	w.lastWritten = w.newLine
 	w.lineCount++
 	w.linePos = w.builder.Len()
+	w.columnPos = w.linePos
+	w.column = 0
 	w.lineStart = true
 	w.hasTrailingCommentState = false
 }
