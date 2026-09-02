@@ -1,0 +1,30 @@
+{
+    "private": true,
+    "name": "@typescript/api-wasm",
+    "version": "0.0.0",
+    "license": "Apache-2.0",
+    "author": "Microsoft Corp.",
+    "homepage": "https://www.typescriptlang.org/",
+    "description": "WebAssembly transport for the native TypeScript compiler API",
+    "type": "module",
+    "files": [
+        "dist"
+    ],
+    "exports": {
+        ".": {
+            "@typescript/source": "./src/index.ts",
+            "default": "./dist/index.js"
+        },
+        "./api.wasm": "./dist/typescript-api.wasm"
+    },
+    "imports": {
+        "#wasmURL": {
+            "@typescript/source": "./src/wasmURL.source.ts",
+            "default": "./dist/wasmURL.js"
+        }
+    },
+    "scripts": {
+        "build": "hereby --herebyfile ../../Herebyfile.mjs build:api:wasm",
+        "build:js": "tsc -b"
+    }
+}

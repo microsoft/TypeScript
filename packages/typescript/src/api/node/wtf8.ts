@@ -1,5 +1,3 @@
-import { Buffer } from "node:buffer";
-
 const surrogateLeadByte = 0xED;
 const surrogateSecondByteMin = 0xA0;
 const surrogateSecondByteMax = 0xBF;
@@ -24,7 +22,7 @@ function getSurrogateCodeUnit(bytes: Uint8Array, index: number): number {
 }
 
 function hasSurrogateLeadByte(bytes: Uint8Array): boolean {
-    return Buffer.from(bytes.buffer, bytes.byteOffset, bytes.byteLength).indexOf(surrogateLeadByte) >= 0;
+    return bytes.includes(surrogateLeadByte);
 }
 
 function toUint8Array(input: Exclude<DecodeInput, null | undefined>): Uint8Array {
