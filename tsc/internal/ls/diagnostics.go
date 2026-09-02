@@ -11,6 +11,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/ls/lsconv"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/spanmap"
+	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfsmatch"
 )
 
 // getAllDiagnostics collects all diagnostics for a file: syntactic, semantic,
@@ -30,24 +31,66 @@ func getAllDiagnostics(ctx context.Context, program *compiler.Program, file *ast
 }
 
 func (l *LanguageService) ProvideDiagnostics(ctx context.Context, uri lsproto.DocumentUri) (lsproto.DocumentDiagnosticResponse, error) {
-	program, file := l.getProgramAndFile(uri)
-
-	if l.UserPreferences().EnableValidation.IsFalse() {
-		diagnostics := []*lsproto.Diagnostic{}
-		return lsproto.RelatedFullDocumentDiagnosticReportOrUnchangedDocumentDiagnosticReport{
-			FullDocumentDiagnosticReport: &lsproto.RelatedFullDocumentDiagnosticReport{
-				Items: diagnostics,
-			},
-		}, nil
-	}
-
-	diagnostics := getAllDiagnostics(ctx, program, file)
-
+	_, file := l.getProgramAndFile(uri)
 	return lsproto.RelatedFullDocumentDiagnosticReportOrUnchangedDocumentDiagnosticReport{
 		FullDocumentDiagnosticReport: &lsproto.RelatedFullDocumentDiagnosticReport{
-			Items: l.toLSPDiagnostics(ctx, diagnostics),
+			Items: l.ProvideDiagnosticsForFile(ctx, file),
 		},
 	}, nil
+}
+
+// ProvideDiagnosticsForFile computes diagnostics for a file of this project's program, for callers
+// that already hold it and need not re-resolve it by URI.
+func (l *LanguageService) ProvideDiagnosticsForFile(ctx context.Context, file *ast.SourceFile) []*lsproto.Diagnostic {
+	if l.UserPreferences().EnableValidation.IsFalse() {
+		return []*lsproto.Diagnostic{}
+	}
+	return l.toLSPDiagnostics(ctx, getAllDiagnostics(ctx, l.program, file))
+}
+
+// defaultWorkspaceDiagnosticsExclude applies when a project does not set
+// experimentalWorkspaceDiagnosticsExclude. Dependencies reached by resolution are filtered out separately; this
+// catches locally installed typings, which are program roots and so not external library imports.
+var defaultWorkspaceDiagnosticsExclude = []string{"**/node_modules/**"}
+
+// workspaceDiagnosticsExcludeMatcher compiles the project's exclusion patterns relative to its
+// tsconfig, falling back to the default when the option is unset.
+func (l *LanguageService) workspaceDiagnosticsExcludeMatcher() *vfsmatch.SpecMatcher {
+	specs := l.program.Options().ExperimentalWorkspaceDiagnosticsExclude
+	if specs == nil {
+		specs = defaultWorkspaceDiagnosticsExclude
+	}
+	return vfsmatch.NewSpecMatcher(specs, l.program.CommandLine().GetCurrentDirectory(), vfsmatch.UsageExclude, l.UseCaseSensitiveFileNames())
+}
+
+// WorkspaceDiagnosticFiles returns the files a workspace pull should report, in program order.
+func (l *LanguageService) WorkspaceDiagnosticFiles() []*ast.SourceFile {
+	program := l.program
+	excluded := l.workspaceDiagnosticsExcludeMatcher()
+	files := make([]*ast.SourceFile, 0, len(program.SourceFiles()))
+	for _, file := range program.SourceFiles() {
+		// Dependencies are not the user's code to fix.
+		if program.IsSourceFileDefaultLibrary(file.Path()) || program.IsSourceFileFromExternalLibrary(file) {
+			continue
+		}
+		if excluded != nil && excluded.MatchString(file.FileName()) {
+			continue
+		}
+		// A referenced project's source, reached through the redirect; it reports its own.
+		if program.IsSourceFromProjectReference(file.Path()) {
+			continue
+		}
+		// A referenced project's emitted declarations, consumed when the redirect is disabled.
+		if program.GetProjectReferenceFromOutputDts(file.Path()) != nil {
+			continue
+		}
+		// A projection of a content-mapped file; its canonical file reports it under the same URI.
+		if file.CanonicalSourceFile() != nil {
+			continue
+		}
+		files = append(files, file)
+	}
+	return files
 }
 
 func (l *LanguageService) toLSPDiagnostics(ctx context.Context, diagnostics ...[]*ast.Diagnostic) []*lsproto.Diagnostic {

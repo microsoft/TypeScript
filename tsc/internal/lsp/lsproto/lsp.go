@@ -224,6 +224,15 @@ func (info NotificationInfo[Params]) NewNotificationMessage(params Params) *Requ
 	}
 }
 
+// WorkspaceDiagnosticPartialResultParams carries one chunk of a streamed `workspace/diagnostic`
+// result. The generated [ProgressParams] narrows `value` to work done progress.
+type WorkspaceDiagnosticPartialResultParams struct {
+	Token IntegerOrString                        `json:"token"`
+	Value WorkspaceDiagnosticReportPartialResult `json:"value"`
+}
+
+var WorkspaceDiagnosticPartialResultInfo = NotificationInfo[*WorkspaceDiagnosticPartialResultParams]{Method: MethodProgress}
+
 // UnmarshalParams decodes the params of an inbound request or notification
 // message into the requested type. Inbound messages store their params as a
 // raw [json.Value] (see [Message.UnmarshalJSON]); decoding is deferred to the

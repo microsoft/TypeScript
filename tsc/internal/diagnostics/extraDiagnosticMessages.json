@@ -339,6 +339,10 @@
         "category": "Message",
         "code": 100068
     },
+    "Checking workspace": {
+        "category": "Message",
+        "code": 100069
+    },
     "Paths that workspace-wide diagnostics in the editor should not report on.": {
         "category": "Message",
         "code": 100070
