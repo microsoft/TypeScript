@@ -228,7 +228,7 @@ export interface TranspileOutput {
 export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHost {
     private client: Client;
     private sourceFileCache: SourceFileCache;
-    private toPath: ((fileName: string) => Path) | undefined;
+    private toPath: ((fileName: string, basePath?: string) => Path) | undefined;
     private currentDirectory: string | undefined;
     private getCanonicalFileNameWorker: ((fileName: string) => string) | undefined;
     private initialized: boolean = false;
@@ -281,7 +281,7 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
             const currentDirectory = response.currentDirectory;
             this.getCanonicalFileNameWorker = getCanonicalFileName;
             this.currentDirectory = currentDirectory;
-            this.toPath = (fileName: string) => toPath(fileName, currentDirectory, getCanonicalFileName) as Path;
+            this.toPath = (fileName: string, basePath = currentDirectory) => toPath(fileName, basePath, getCanonicalFileName) as Path;
             this.initialized = true;
         }
         catch (error) {
@@ -555,7 +555,7 @@ export class InternalAPI {
 export class Snapshot {
     readonly id: number;
     private projectMap: Map<Path, Project>;
-    private toPath: (fileName: string) => Path;
+    private toPath: (fileName: string, basePath?: string) => Path;
     private client: Client;
     private disposed: boolean = false;
     private disposePromise: Promise<void> | undefined;
@@ -567,7 +567,7 @@ export class Snapshot {
         data: UpdateSnapshotResponse,
         client: Client,
         sourceFileCache: SourceFileCache,
-        toPath: (fileName: string) => Path,
+        toPath: (fileName: string, basePath?: string) => Path,
         formatDiagnosticsHost: FormatDiagnosticsHost,
         onDispose: () => void,
     ) {
@@ -941,7 +941,7 @@ export class Project {
         snapshotId: number,
         client: Client,
         sourceFileCache: SourceFileCache,
-        toPath: (fileName: string) => Path,
+        toPath: (fileName: string, basePath?: string) => Path,
         formatDiagnosticsHost: FormatDiagnosticsHost,
         snapshotRegistry: SnapshotObjectRegistry,
     ) {
@@ -1105,7 +1105,7 @@ export class Program implements FormatDiagnosticsHost {
     private readonly project: Project;
     private readonly client: Client;
     private readonly sourceFileCache: SourceFileCache;
-    private readonly toPath: (fileName: string) => Path;
+    private readonly toPath: (fileName: string, basePath?: string) => Path;
     private readonly formatDiagnosticsHost: FormatDiagnosticsHost;
     private readonly decoder = new Wtf8Decoder();
     private readonly sourceFileMetadataCache = new Map<Path, Promise<SourceFileMetadata | undefined>>();
@@ -1117,7 +1117,7 @@ export class Program implements FormatDiagnosticsHost {
         project: Project,
         client: Client,
         sourceFileCache: SourceFileCache,
-        toPath: (fileName: string) => Path,
+        toPath: (fileName: string, basePath?: string) => Path,
         formatDiagnosticsHost: FormatDiagnosticsHost,
     ) {
         this.snapshotId = snapshotId;
@@ -1165,7 +1165,7 @@ export class Program implements FormatDiagnosticsHost {
 
     async getSourceFile(file: DocumentIdentifier): Promise<SourceFile | undefined> {
         const fileName = resolveFileName(file);
-        const path = this.toPath(fileName);
+        const path = this.toPath(fileName, this.project.currentDirectory);
 
         // Check if we already have a retained cache entry for this (snapshot, project) pair
         const retained = this.sourceFileCache.getRetained(path, this.snapshotId, this.project.id);
@@ -1206,7 +1206,7 @@ export class Program implements FormatDiagnosticsHost {
      * `Program` instance.
      */
     getSourceFileMetadata(file: DocumentIdentifier): Promise<SourceFileMetadata | undefined> {
-        return this.getSourceFileMetadataByPath(this.toPath(resolveFileName(file)));
+        return this.getSourceFileMetadataByPath(this.toPath(resolveFileName(file), this.project.currentDirectory));
     }
 
     /**
