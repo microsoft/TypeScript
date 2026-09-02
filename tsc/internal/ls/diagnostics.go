@@ -161,3 +161,47 @@ func worstCategory(diags []*ast.Diagnostic) diagnostics.Category {
 	}
 	return worst
 }
+
+// WorkspaceDiagnosticsForProject checks the whole program at once and returns what each file it
+// owns should report. Checking every file in one call lets the program split the work across the
+// checkers a build would use, and keeps the checker pool's own coordination rather than repeating
+// it per file; the diagnostics come back keyed by the file they belong to.
+func (l *LanguageService) WorkspaceDiagnosticsForProject(ctx context.Context, files []*ast.SourceFile) map[*ast.SourceFile][]*lsproto.Diagnostic {
+	reports := make(map[*ast.SourceFile][]*lsproto.Diagnostic, len(files))
+	if l.UserPreferences().EnableValidation.IsFalse() {
+		for _, file := range files {
+			reports[file] = []*lsproto.Diagnostic{}
+		}
+		return reports
+	}
+
+	byFile := make(map[*ast.SourceFile][]*ast.Diagnostic, len(files))
+	for _, diagnostics := range [][]*ast.Diagnostic{
+		l.program.GetSyntacticDiagnostics(ctx, nil),
+		l.program.GetSemanticDiagnostics(ctx, nil),
+		l.program.GetSuggestionDiagnostics(ctx, nil),
+	} {
+		for _, diagnostic := range diagnostics {
+			if file := diagnostic.File(); file != nil {
+				byFile[file] = append(byFile[file], diagnostic)
+			}
+		}
+	}
+	if l.program.Options().GetEmitDeclarations() {
+		for _, diagnostic := range l.program.GetDeclarationDiagnostics(ctx, nil) {
+			if file := diagnostic.File(); file != nil {
+				byFile[file] = append(byFile[file], diagnostic)
+			}
+		}
+	}
+
+	for _, file := range files {
+		// A file's supplemental sources report under the file itself, as they do for a pull on it.
+		diagnostics := byFile[file]
+		for _, supplemental := range file.SupplementalSourceFiles() {
+			diagnostics = append(diagnostics, byFile[supplemental]...)
+		}
+		reports[file] = l.toLSPDiagnostics(ctx, diagnostics)
+	}
+	return reports
+}

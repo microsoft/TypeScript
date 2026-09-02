@@ -8,7 +8,6 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
-	"github.com/microsoft/TypeScript/tsc/internal/ls"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/lsconv"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/lsutil"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
@@ -234,15 +233,26 @@ func (r *workspaceDiagnosticsRun) checkConcurrently(snapshot *project.Snapshot, 
 
 // checkProject fills in the reports for the files of one project, reporting whether it got through
 // them all. A cancelled project must not be emitted: its remaining reports are still zero values.
+// checkProject checks a project's files and builds their reports. The program checks them all in
+// one call, so the work is split across the checkers a build would use rather than being driven a
+// file at a time from here; the trade is that a project reports once it is done rather than
+// streaming as each of its files finishes.
 func (r *workspaceDiagnosticsRun) checkProject(snapshot *project.Snapshot, pf workspaceDiagnosticsProject) bool {
+	files := make([]*ast.SourceFile, 0, len(pf.files))
+	for _, file := range pf.files {
+		if file != nil {
+			files = append(files, file)
+		}
+	}
+	reports := pf.languageService.WorkspaceDiagnosticsForProject(r.ctx, files)
+	if r.ctx.Err() != nil {
+		return false
+	}
 	for j, file := range pf.files {
 		if file == nil {
 			continue
 		}
-		if r.ctx.Err() != nil {
-			return false
-		}
-		pf.reports[j] = r.reportForFile(snapshot, pf.languageService, file)
+		pf.reports[j] = r.reportForFile(snapshot, file, reports[file])
 	}
 	return true
 }
@@ -265,9 +275,8 @@ func (r *workspaceDiagnosticsRun) emitProject(pf workspaceDiagnosticsProject) {
 	}
 }
 
-func (r *workspaceDiagnosticsRun) reportForFile(snapshot *project.Snapshot, languageService *ls.LanguageService, file *ast.SourceFile) workspaceDiagnosticReport {
+func (r *workspaceDiagnosticsRun) reportForFile(snapshot *project.Snapshot, file *ast.SourceFile, items []*lsproto.Diagnostic) workspaceDiagnosticReport {
 	uri := lsconv.FileNameToDocumentURI(file.FileName())
-	items := languageService.ProvideDiagnosticsForFile(r.ctx, file)
 	resultID := workspaceDiagnosticsResultID(items)
 	version := openDocumentVersion(snapshot, file.FileName())
 
