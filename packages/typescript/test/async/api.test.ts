@@ -98,240 +98,231 @@ import {
 } from "./api.testUtils.ts";
 
 describe("API", () => {
-    test("parseCommandLine", async () => {
+    test("initializes once for concurrent first requests", async () => {
+        await using api = spawnAPI();
+        // @sync-skip-block-start
+        const [commandLine, config] = await Promise.all([
+            api.parseCommandLine(["--strict"]),
+            api.readConfigFile("/tsconfig.json"),
+        ]);
+        // @sync-skip-block-end
+        // @sync-only-start
+        // const [commandLine, config] = api.batch(
+        //     api.parseCommandLine.gen(["--strict"]),
+        //     api.readConfigFile.gen("/tsconfig.json"),
+        // );
+        // @sync-only-end
+        assert.equal(commandLine.options.strict, true);
+        assert.deepEqual(config.config, {});
+    });
+
+    test("disposes", async () => {
+        let disposedAPI: API;
+        {
+            await using api = spawnAPI();
+            await api.parseCommandLine([]);
+            disposedAPI = api;
+        }
+        await assert.rejects(disposedAPI.parseCommandLine([])); // @sync: assert.throws(() => disposedAPI.parseCommandLine([]));
+    });
+
+    // @sync-skip-block-start
+    test("disposal handles concurrent initialization", async () => {
         const api = spawnAPI();
-        try {
-            const commandLine = await api.parseCommandLine([
-                "--strict",
-                "--outDir",
-                "dist",
-                "/src/index.ts",
-            ]);
-            assert.deepEqual(commandLine.fileNames, ["/src/index.ts"]);
-            assert.equal(commandLine.options.strict, true);
-            assert.equal(
-                resolve(commandLine.options.outDir!),
-                resolve(fileURLToPath(new URL("../../../../", import.meta.url)), "dist"),
-            );
-            assert.deepEqual(commandLine.raw, {
-                strict: true,
-                outDir: "dist",
-            });
-            assert.deepEqual(commandLine.errors, []);
-        }
-        finally {
-            await api.close();
-        }
+        const initialization = api.parseCommandLine([]);
+        const [initializationResult] = await Promise.allSettled([initialization, api[Symbol.asyncDispose]()]);
+        if (initializationResult.status !== "rejected") assert.fail("Initialization should reject when disposal closes the client");
+        assert.match(String(initializationResult.reason), /Client is closed/);
+        await assert.rejects(api.parseCommandLine([]), /Client is closed/);
+    });
+    // @sync-skip-block-end
+
+    test("parseCommandLine", async () => {
+        await using api = spawnAPI();
+
+        const commandLine = await api.parseCommandLine([
+            "--strict",
+            "--outDir",
+            "dist",
+            "/src/index.ts",
+        ]);
+        assert.deepEqual(commandLine.fileNames, ["/src/index.ts"]);
+        assert.equal(commandLine.options.strict, true);
+        assert.equal(
+            resolve(commandLine.options.outDir!),
+            resolve(fileURLToPath(new URL("../../../../", import.meta.url)), "dist"),
+        );
+        assert.deepEqual(commandLine.raw, {
+            strict: true,
+            outDir: "dist",
+        });
+        assert.deepEqual(commandLine.errors, []);
     });
 
     test("parseCommandLine reports diagnostics", async () => {
-        const api = spawnAPI();
-        try {
-            const commandLine = await api.parseCommandLine(["--notAnOption"]);
-            assert.deepEqual(commandLine.fileNames, []);
-            assert.equal(commandLine.errors.length, 1);
-            assert.equal(commandLine.errors[0].code, 5023);
-        }
-        finally {
-            await api.close();
-        }
+        await using api = spawnAPI();
+
+        const commandLine = await api.parseCommandLine(["--notAnOption"]);
+        assert.deepEqual(commandLine.fileNames, []);
+        assert.equal(commandLine.errors.length, 1);
+        assert.equal(commandLine.errors[0].code, 5023);
     });
 
     test("readConfigFile", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": `{
                 // Comments and trailing commas are supported.
                 "compilerOptions": { "strict": true, },
             }`,
         });
-        try {
-            const result = await api.readConfigFile("/tsconfig.json");
-            assert.deepEqual(result, {
-                config: { compilerOptions: { strict: true } },
-            });
-        }
-        finally {
-            await api.close();
-        }
+
+        const result = await api.readConfigFile("/tsconfig.json");
+        assert.deepEqual(result, {
+            config: { compilerOptions: { strict: true } },
+        });
     });
 
     test("readConfigFile reports read and parse errors", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/invalid.json": `{ "compilerOptions": { "strict": true,, } }`,
         });
-        try {
-            const invalid = await api.readConfigFile("/invalid.json");
-            assert.deepEqual(invalid.config, { compilerOptions: { strict: true } });
-            assert.ok(invalid.error);
 
-            const missing = await api.readConfigFile("/missing.json");
-            assert.deepEqual(missing.config, {});
-            assert.equal(missing.error?.code, 5083);
-        }
-        finally {
-            await api.close();
-        }
+        const invalid = await api.readConfigFile("/invalid.json");
+        assert.deepEqual(invalid.config, { compilerOptions: { strict: true } });
+        assert.ok(invalid.error);
+
+        const missing = await api.readConfigFile("/missing.json");
+        assert.deepEqual(missing.config, {});
+        assert.equal(missing.error?.code, 5083);
     });
 
     test("parseJsonConfigFileContent with configDirectory", async () => {
-        const api = spawnAPI();
-        try {
-            const config = await api.parseJsonConfigFileContent(
-                {
-                    compilerOptions: { strict: true },
-                    files: ["index.ts"],
-                },
-                { configDirectory: "/src" },
-            );
-            assert.deepEqual(config.fileNames, ["/src/index.ts"]);
-            assert.equal(config.options.strict, true);
-            assert.equal("configFilePath" in config.options, false);
-            assert.equal(config.compileOnSave, false);
-            assert.deepEqual(config.errors, []);
-        }
-        finally {
-            await api.close();
-        }
+        await using api = spawnAPI();
+
+        const config = await api.parseJsonConfigFileContent(
+            {
+                compilerOptions: { strict: true },
+                files: ["index.ts"],
+            },
+            { configDirectory: "/src" },
+        );
+        assert.deepEqual(config.fileNames, ["/src/index.ts"]);
+        assert.equal(config.options.strict, true);
+        assert.equal("configFilePath" in config.options, false);
+        assert.equal(config.compileOnSave, false);
+        assert.deepEqual(config.errors, []);
     });
 
     test("parseJsonConfigFileContent accepts non-object JSON", async () => {
-        const api = spawnAPI();
-        try {
-            const config = await api.parseJsonConfigFileContent(null, { configDirectory: "/src" });
-            assert.deepEqual(config.fileNames, ["/src/index.ts", "/src/foo.ts"]);
-            assert.deepEqual(config.errors, []);
-        }
-        finally {
-            await api.close();
-        }
+        await using api = spawnAPI();
+
+        const config = await api.parseJsonConfigFileContent(null, { configDirectory: "/src" });
+        assert.deepEqual(config.fileNames, ["/src/index.ts", "/src/foo.ts"]);
+        assert.deepEqual(config.errors, []);
     });
 
     test("parseJsonConfigFileContent with configFileName", async () => {
-        const api = spawnAPI();
-        try {
-            const config = await api.parseJsonConfigFileContent(
-                {
-                    compilerOptions: { strict: true },
-                    files: ["index.ts"],
-                },
-                { configFileName: "/src/tsconfig.json" },
-            );
-            assert.deepEqual(config.fileNames, ["/src/index.ts"]);
-            assert.equal(config.options.strict, true);
-            assert.equal(config.options.configFilePath, "/src/tsconfig.json");
-            assert.deepEqual(config.errors, []);
-        }
-        finally {
-            await api.close();
-        }
+        await using api = spawnAPI();
+
+        const config = await api.parseJsonConfigFileContent(
+            {
+                compilerOptions: { strict: true },
+                files: ["index.ts"],
+            },
+            { configFileName: "/src/tsconfig.json" },
+        );
+        assert.deepEqual(config.fileNames, ["/src/index.ts"]);
+        assert.equal(config.options.strict, true);
+        assert.equal(config.options.configFilePath, "/src/tsconfig.json");
+        assert.deepEqual(config.errors, []);
     });
 
     test("parseJsonConfigFileContent preserves raw config", async () => {
-        const api = spawnAPI();
-        try {
-            const input = {
-                compileOnSave: true,
-                customSetting: { enabled: true },
-                files: ["index.ts"],
-            };
-            const config = await api.parseJsonConfigFileContent(input, { configDirectory: "/src" });
-            assert.deepEqual(config.raw, input);
-            assert.equal(config.compileOnSave, true);
-        }
-        finally {
-            await api.close();
-        }
+        await using api = spawnAPI();
+
+        const input = {
+            compileOnSave: true,
+            customSetting: { enabled: true },
+            files: ["index.ts"],
+        };
+        const config = await api.parseJsonConfigFileContent(input, { configDirectory: "/src" });
+        assert.deepEqual(config.raw, input);
+        assert.equal(config.compileOnSave, true);
     });
 
     test("parseJsonConfigFileContent preserves an empty files list", async () => {
-        const api = spawnAPI();
-        try {
-            const config = await api.parseJsonConfigFileContent(
-                { files: [] },
-                { configDirectory: "/src" },
-            );
-            assert.deepEqual(config.fileNames, []);
-            assert.equal(config.errors.length, 1);
-            assert.equal(config.errors[0].code, 18002);
-        }
-        finally {
-            await api.close();
-        }
+        await using api = spawnAPI();
+
+        const config = await api.parseJsonConfigFileContent(
+            { files: [] },
+            { configDirectory: "/src" },
+        );
+        assert.deepEqual(config.fileNames, []);
+        assert.equal(config.errors.length, 1);
+        assert.equal(config.errors[0].code, 18002);
     });
 
     test("parseJsonConfigFileContent reports null array elements", async () => {
-        const api = spawnAPI();
-        try {
-            const config = await api.parseJsonConfigFileContent(
-                { files: [null], include: [null], exclude: [null] },
-                { configDirectory: "/src" },
-            );
-            assert.equal(config.errors.length, 3);
-            assert.ok(config.errors.every(diagnostic => diagnostic.code === 5024));
-        }
-        finally {
-            await api.close();
-        }
+        await using api = spawnAPI();
+
+        const config = await api.parseJsonConfigFileContent(
+            { files: [null], include: [null], exclude: [null] },
+            { configDirectory: "/src" },
+        );
+        assert.equal(config.errors.length, 3);
+        assert.ok(config.errors.every(diagnostic => diagnostic.code === 5024));
     });
 
     test("transpile", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/input.ts": "export const x: number = 1;",
         });
-        try {
-            const moduleOutput = await api.transpileModule("export const x: number = 1;", {
-                compilerOptions: { module: ModuleKind.CommonJS },
-            });
-            assert.match(moduleOutput.outputText, /exports\.x = 1/);
 
-            const isolatedDeclarationModuleOutput = await api.transpileModule("export const x: number = 1;", {
-                compilerOptions: { declaration: true, isolatedDeclarations: true },
-                reportDiagnostics: true,
-            });
-            assert.equal(isolatedDeclarationModuleOutput.diagnostics?.length ?? 0, 0);
+        const moduleOutput = await api.transpileModule("export const x: number = 1;", {
+            compilerOptions: { module: ModuleKind.CommonJS },
+        });
+        assert.match(moduleOutput.outputText, /exports\.x = 1/);
 
-            const moduleFileOutput = await api.transpileModuleFromFile({ uri: "file:///input.ts" }, {
-                compilerOptions: { module: ModuleKind.CommonJS },
-            });
-            assert.match(moduleFileOutput.outputText, /exports\.x = 1/);
+        const isolatedDeclarationModuleOutput = await api.transpileModule("export const x: number = 1;", {
+            compilerOptions: { declaration: true, isolatedDeclarations: true },
+            reportDiagnostics: true,
+        });
+        assert.equal(isolatedDeclarationModuleOutput.diagnostics?.length ?? 0, 0);
 
-            const declarationOutput = await api.transpileDeclaration("export const x: number = 1;");
-            assert.equal(declarationOutput.outputText, "export declare const x: number;\n");
+        const moduleFileOutput = await api.transpileModuleFromFile({ uri: "file:///input.ts" }, {
+            compilerOptions: { module: ModuleKind.CommonJS },
+        });
+        assert.match(moduleFileOutput.outputText, /exports\.x = 1/);
 
-            const windowsDeclarationOutput = await api.transpileDeclaration("export const x: number = 1;", {
-                fileName: "C:/Users/me/project/input.ts",
-            });
-            assert.equal(windowsDeclarationOutput.outputText, "export declare const x: number;\n");
+        const declarationOutput = await api.transpileDeclaration("export const x: number = 1;");
+        assert.equal(declarationOutput.outputText, "export declare const x: number;\n");
 
-            const declarationFileOutput = await api.transpileDeclarationFromFile({ uri: "file:///input.ts" });
-            assert.equal(declarationFileOutput.outputText, "export declare const x: number;\n");
-        }
-        finally {
-            await api.close();
-        }
+        const windowsDeclarationOutput = await api.transpileDeclaration("export const x: number = 1;", {
+            fileName: "C:/Users/me/project/input.ts",
+        });
+        assert.equal(windowsDeclarationOutput.outputText, "export declare const x: number;\n");
+
+        const declarationFileOutput = await api.transpileDeclarationFromFile({ uri: "file:///input.ts" });
+        assert.equal(declarationFileOutput.outputText, "export declare const x: number;\n");
     });
 
     test("createProgram", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/src/index.ts": `export const value: string = 1;`,
         });
-        try {
-            const program = await api.createProgram(["/src/index.ts"], { compilerOptions: { noLib: true, strict: true } });
 
-            assert.deepEqual(program.getCompilerOptions(), { noLib: true, strict: true });
-            assert.deepEqual(await program.getSourceFileNames(), ["/src/index.ts"]);
-            assert.equal((await program.getSemanticDiagnostics("/src/index.ts")).length, 1);
+        const program = await api.createProgram(["/src/index.ts"], { compilerOptions: { noLib: true, strict: true } });
 
-            await program.dispose();
-            await assert.rejects(program.getSourceFileNames(), /snapshot .* not found/); // @sync: assert.throws(() => program.getSourceFileNames(), /snapshot .* not found/);
-        }
-        finally {
-            await api.close();
-        }
+        assert.deepEqual(program.getCompilerOptions(), { noLib: true, strict: true });
+        assert.deepEqual(await program.getSourceFileNames(), ["/src/index.ts"]);
+        assert.equal((await program.getSemanticDiagnostics("/src/index.ts")).length, 1);
+
+        await program.dispose();
+        await assert.rejects(program.getSourceFileNames(), /snapshot .* not found/); // @sync: assert.throws(() => program.getSourceFileNames(), /snapshot .* not found/);
     });
 
     test("createProgram ignores an on-disk tsconfig", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({
                 compilerOptions: { noLib: false, strict: false },
                 files: ["src/from-config.ts"],
@@ -339,41 +330,33 @@ describe("API", () => {
             "/src/index.ts": `export const explicitRoot = 1;`,
             "/src/from-config.ts": `export const configRoot = 1;`,
         });
-        try {
-            const program = await api.createProgram(
-                ["/src/index.ts"],
-                { compilerOptions: { noLib: true, strict: true } },
-            );
 
-            assert.deepEqual(program.getCompilerOptions(), { noLib: true, strict: true });
-            assert.deepEqual(await program.getSourceFileNames(), ["/src/index.ts"]);
-            assert.deepEqual(await program.getConfigFileNames(), []);
-            assert.equal(await program.getSourceFile("/src/from-config.ts"), undefined);
-            await program.dispose();
-        }
-        finally {
-            await api.close();
-        }
+        const program = await api.createProgram(
+            ["/src/index.ts"],
+            { compilerOptions: { noLib: true, strict: true } },
+        );
+
+        assert.deepEqual(program.getCompilerOptions(), { noLib: true, strict: true });
+        assert.deepEqual(await program.getSourceFileNames(), ["/src/index.ts"]);
+        assert.deepEqual(await program.getConfigFileNames(), []);
+        assert.equal(await program.getSourceFile("/src/from-config.ts"), undefined);
+        await program.dispose();
     });
 
     test("createProgram includes project references", async () => {
         const reference = { path: "/lib/tsconfig.json", originalPath: "/lib/tsconfig.json", circular: false };
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/src/index.ts": `export const value = 1;`,
             "/lib/tsconfig.json": JSON.stringify({ compilerOptions: { composite: true, noLib: true }, files: ["index.ts"] }),
             "/lib/index.ts": `export const lib = 1;`,
         });
-        try {
-            const program = await api.createProgram(
-                ["/src/index.ts"],
-                { compilerOptions: { noLib: true }, projectReferences: [reference] },
-            );
-            assert.deepEqual(program.getProject().parsedCommandLine.projectReferences, [reference]);
-            await program.dispose();
-        }
-        finally {
-            await api.close();
-        }
+
+        const program = await api.createProgram(
+            ["/src/index.ts"],
+            { compilerOptions: { noLib: true }, projectReferences: [reference] },
+        );
+        assert.deepEqual(program.getProject().parsedCommandLine.projectReferences, [reference]);
+        await program.dispose();
     });
 
     test("createProgram includes config file parsing diagnostics", async () => {
@@ -384,387 +367,321 @@ describe("API", () => {
             category: DiagnosticCategory.Error,
             text: "Synthetic config parsing error.",
         };
-        const api = spawnAPI({ "/src/index.ts": `export const value = 1;` });
-        try {
-            const program = await api.createProgram(
-                ["/src/index.ts"],
-                {
-                    compilerOptions: { noLib: true },
-                    configFileParsingDiagnostics: [diagnostic],
-                },
-            );
+        await using api = spawnAPI({ "/src/index.ts": `export const value = 1;` });
 
-            assert.deepEqual(await program.getConfigFileParsingDiagnostics(), [diagnostic]);
-            await program.dispose();
-        }
-        finally {
-            await api.close();
-        }
+        const program = await api.createProgram(
+            ["/src/index.ts"],
+            {
+                compilerOptions: { noLib: true },
+                configFileParsingDiagnostics: [diagnostic],
+            },
+        );
+
+        assert.deepEqual(await program.getConfigFileParsingDiagnostics(), [diagnostic]);
+        await program.dispose();
     });
 
     test("createProgram updates roots when given an old program", async () => {
         const options = { compilerOptions: { noLib: true } };
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/src/a.ts": `export const a = 1;`,
             "/src/b.ts": `export const b = 1;`,
             "/src/c.ts": `export const c = 1;`,
         });
-        try {
-            const oldProgram = await api.createProgram(["/src/a.ts", "/src/b.ts"], options);
-            const newProgram = await api.createProgram(["/src/a.ts", "/src/c.ts"], options, oldProgram);
-            assert.deepEqual(await newProgram.getSourceFileNames(), ["/src/a.ts", "/src/c.ts"]);
-            assert.deepEqual(await oldProgram.getSourceFileNames(), ["/src/a.ts", "/src/b.ts"]);
 
-            await newProgram.dispose();
-            await oldProgram.dispose();
-        }
-        finally {
-            await api.close();
-        }
+        const oldProgram = await api.createProgram(["/src/a.ts", "/src/b.ts"], options);
+        const newProgram = await api.createProgram(["/src/a.ts", "/src/c.ts"], options, oldProgram);
+        assert.deepEqual(await newProgram.getSourceFileNames(), ["/src/a.ts", "/src/c.ts"]);
+        assert.deepEqual(await oldProgram.getSourceFileNames(), ["/src/a.ts", "/src/b.ts"]);
+
+        await newProgram.dispose();
+        await oldProgram.dispose();
     });
 
     test("createProgram rejects an inactive or foreign old program", async () => {
         const options = { compilerOptions: { noLib: true } };
-        const api = spawnAPI({ "/src/index.ts": `export const local = 1;` });
-        const otherAPI = spawnAPI({ "/src/index.ts": `export const foreign = 1;` });
-        try {
-            const localProgram = await api.createProgram(["/src/index.ts"], options);
-            const foreignProgram = await otherAPI.createProgram(["/src/index.ts"], options);
+        await using api = spawnAPI({ "/src/index.ts": `export const local = 1;` });
+        await using otherAPI = spawnAPI({ "/src/index.ts": `export const foreign = 1;` });
 
-            const createFromForeignProgram = () => api.createProgram(["/src/index.ts"], options, foreignProgram);
-            await assert.rejects(createFromForeignProgram, /oldProgram must belong to this API instance and reference an active snapshot/); // @sync: assert.throws(createFromForeignProgram, /oldProgram must belong to this API instance and reference an active snapshot/);
+        const localProgram = await api.createProgram(["/src/index.ts"], options);
+        const foreignProgram = await otherAPI.createProgram(["/src/index.ts"], options);
 
-            await localProgram.dispose();
-            const createFromDisposedProgram = () => api.createProgram(["/src/index.ts"], options, localProgram);
-            await assert.rejects(createFromDisposedProgram, /oldProgram must belong to this API instance and reference an active snapshot/); // @sync: assert.throws(createFromDisposedProgram, /oldProgram must belong to this API instance and reference an active snapshot/);
+        const createFromForeignProgram = () => api.createProgram(["/src/index.ts"], options, foreignProgram);
+        await assert.rejects(createFromForeignProgram, /oldProgram must belong to this API instance and reference an active snapshot/); // @sync: assert.throws(createFromForeignProgram, /oldProgram must belong to this API instance and reference an active snapshot/);
 
-            await foreignProgram.dispose();
-        }
-        finally {
-            await api.close();
-            await otherAPI.close();
-        }
+        await localProgram.dispose();
+        const createFromDisposedProgram = () => api.createProgram(["/src/index.ts"], options, localProgram);
+        await assert.rejects(createFromDisposedProgram, /oldProgram must belong to this API instance and reference an active snapshot/); // @sync: assert.throws(createFromDisposedProgram, /oldProgram must belong to this API instance and reference an active snapshot/);
+
+        await foreignProgram.dispose();
     });
 
     test("createProgram discovers imported non-root dependencies", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/src/main.ts": `import { dependency } from "./dependency"; export const value = dependency;`,
             "/src/dependency.ts": `export const dependency = 1;`,
         });
-        try {
-            const program = await api.createProgram(["/src/main.ts"], { compilerOptions: { noLib: true } });
-            assert.deepEqual([...await program.getSourceFileNames()].sort(), ["/src/dependency.ts", "/src/main.ts"]);
 
-            await program.dispose();
-        }
-        finally {
-            await api.close();
-        }
+        const program = await api.createProgram(["/src/main.ts"], { compilerOptions: { noLib: true } });
+        assert.deepEqual([...await program.getSourceFileNames()].sort(), ["/src/dependency.ts", "/src/main.ts"]);
+
+        await program.dispose();
     });
 
     test("createProgram updates an old program with file changes", async () => {
         const fileName = "/src/index.ts";
         const options = { compilerOptions: { noLib: true, strict: true } };
-        const { api, fs } = spawnAPIWithFS({
+        const { api: disposableAPI, fs } = spawnAPIWithFS({
             [fileName]: `export const value: string = 1;`,
         });
-        try {
-            const oldProgram = await api.createProgram([fileName], options);
-            assert.equal((await oldProgram.getSemanticDiagnostics(fileName)).length, 1);
+        await using api = disposableAPI;
 
-            fs.writeFile!(fileName, `export const value: string = "valid";`);
-            const newProgram = await api.createProgram(
-                [fileName],
-                options,
-                oldProgram,
-                { changed: [fileName] },
-            );
+        const oldProgram = await api.createProgram([fileName], options);
+        assert.equal((await oldProgram.getSemanticDiagnostics(fileName)).length, 1);
 
-            assert.equal((await newProgram.getSemanticDiagnostics(fileName)).length, 0);
-            assert.equal((await oldProgram.getSemanticDiagnostics(fileName)).length, 1);
+        fs.writeFile!(fileName, `export const value: string = "valid";`);
+        const newProgram = await api.createProgram(
+            [fileName],
+            options,
+            oldProgram,
+            { changed: [fileName] },
+        );
 
-            await newProgram.dispose();
-            await oldProgram.dispose();
-        }
-        finally {
-            await api.close();
-        }
+        assert.equal((await newProgram.getSemanticDiagnostics(fileName)).length, 0);
+        assert.equal((await oldProgram.getSemanticDiagnostics(fileName)).length, 1);
+
+        await newProgram.dispose();
+        await oldProgram.dispose();
     });
 
     test("createProgram updates an old program with invalidateAll", async () => {
         const fileName = "/src/index.ts";
         const options = { compilerOptions: { noLib: true, strict: true } };
-        const { api, fs } = spawnAPIWithFS({
+        const { api: disposableAPI, fs } = spawnAPIWithFS({
             [fileName]: `export const value: string = 1;`,
         });
-        try {
-            const oldProgram = await api.createProgram([fileName], options);
-            assert.equal((await oldProgram.getSemanticDiagnostics(fileName)).length, 1);
+        await using api = disposableAPI;
 
-            fs.writeFile!(fileName, `export const value: string = "valid";`);
-            const newProgram = await api.createProgram(
-                [fileName],
-                options,
-                oldProgram,
-                { invalidateAll: true },
-            );
+        const oldProgram = await api.createProgram([fileName], options);
+        assert.equal((await oldProgram.getSemanticDiagnostics(fileName)).length, 1);
 
-            assert.equal((await newProgram.getSemanticDiagnostics(fileName)).length, 0);
-            assert.equal((await oldProgram.getSemanticDiagnostics(fileName)).length, 1);
+        fs.writeFile!(fileName, `export const value: string = "valid";`);
+        const newProgram = await api.createProgram(
+            [fileName],
+            options,
+            oldProgram,
+            { invalidateAll: true },
+        );
 
-            await newProgram.dispose();
-            await oldProgram.dispose();
-        }
-        finally {
-            await api.close();
-        }
+        assert.equal((await newProgram.getSemanticDiagnostics(fileName)).length, 0);
+        assert.equal((await oldProgram.getSemanticDiagnostics(fileName)).length, 1);
+
+        await newProgram.dispose();
+        await oldProgram.dispose();
     });
 
     test("createProgram accepts a regular project program as the old program", async () => {
         const fileName = "/src/index.ts";
-        const { api, fs } = spawnAPIWithFS({
+        const { api: disposableAPI, fs } = spawnAPIWithFS({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { noLib: true, strict: true } }),
             [fileName]: `export const value: string = 1;`,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            assert.equal((await project.program.getSemanticDiagnostics(fileName)).length, 1);
+        await using api = disposableAPI;
 
-            fs.writeFile!(fileName, `export const value: string = "valid";`);
-            const newProgram = await api.createProgram(
-                project.parsedCommandLine.fileNames,
-                {
-                    compilerOptions: project.parsedCommandLine.options,
-                    ...(project.parsedCommandLine.projectReferences
-                        ? { projectReferences: project.parsedCommandLine.projectReferences }
-                        : {}),
-                },
-                project.program,
-                { changed: [fileName] },
-            );
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        assert.equal((await project.program.getSemanticDiagnostics(fileName)).length, 1);
 
-            assert.equal((await newProgram.getSemanticDiagnostics(fileName)).length, 0);
-            assert.equal((await project.program.getSemanticDiagnostics(fileName)).length, 1);
-            await newProgram.dispose();
-        }
-        finally {
-            await api.close();
-        }
+        fs.writeFile!(fileName, `export const value: string = "valid";`);
+        const newProgram = await api.createProgram(
+            project.parsedCommandLine.fileNames,
+            {
+                compilerOptions: project.parsedCommandLine.options,
+                ...(project.parsedCommandLine.projectReferences
+                    ? { projectReferences: project.parsedCommandLine.projectReferences }
+                    : {}),
+            },
+            project.program,
+            { changed: [fileName] },
+        );
+
+        assert.equal((await newProgram.getSemanticDiagnostics(fileName)).length, 0);
+        assert.equal((await project.program.getSemanticDiagnostics(fileName)).length, 1);
+        await newProgram.dispose();
     });
 
     test("createProgram rejects file changes without an old program", async () => {
-        const api = spawnAPI({ "/src/index.ts": `export const value = 1;` });
-        try {
-            const createWithChanges = () => api.createProgram(["/src/index.ts"], { compilerOptions: { noLib: true } }, undefined, { changed: ["/src/index.ts"] });
-            await assert.rejects(createWithChanges, /fileChanges requires an oldProgram/); // @sync: assert.throws(createWithChanges, /fileChanges requires an oldProgram/);
-        }
-        finally {
-            await api.close();
-        }
+        await using api = spawnAPI({ "/src/index.ts": `export const value = 1;` });
+
+        const createWithChanges = () => api.createProgram(["/src/index.ts"], { compilerOptions: { noLib: true } }, undefined, { changed: ["/src/index.ts"] });
+        await assert.rejects(createWithChanges, /fileChanges requires an oldProgram/); // @sync: assert.throws(createWithChanges, /fileChanges requires an oldProgram/);
     });
 
     test("parseConfigFile", async () => {
-        const api = spawnAPI();
-        try {
-            const config = await api.parseConfigFile("/tsconfig.json");
-            assert.deepEqual(config.fileNames, ["/src/index.ts", "/src/foo.ts"]);
-            assert.deepEqual(config.options, { configFilePath: "/tsconfig.json" });
-            assert.equal(config.compileOnSave, false);
-            assert.equal(config.typeAcquisition, undefined);
-            assert.equal(config.projectReferences, undefined);
-        }
-        finally {
-            await api.close();
-        }
+        await using api = spawnAPI();
+
+        const config = await api.parseConfigFile("/tsconfig.json");
+        assert.deepEqual(config.fileNames, ["/src/index.ts", "/src/foo.ts"]);
+        assert.deepEqual(config.options, { configFilePath: "/tsconfig.json" });
+        assert.equal(config.compileOnSave, false);
+        assert.equal(config.typeAcquisition, undefined);
+        assert.equal(config.projectReferences, undefined);
     });
 
     test("parseConfigFile includes projectReferences", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ references: [{ path: "./harness" }, { path: "./server" }] }),
         });
-        try {
-            const config = await api.parseConfigFile("/tsconfig.json");
-            assert.deepEqual(config.fileNames, []);
-            assert.deepEqual(config.options, { configFilePath: "/tsconfig.json" });
-            assert.deepEqual(config.projectReferences, [
-                { circular: false, originalPath: "./harness", path: "/harness" },
-                { circular: false, originalPath: "./server", path: "/server" },
-            ]);
-        }
-        finally {
-            await api.close();
-        }
+
+        const config = await api.parseConfigFile("/tsconfig.json");
+        assert.deepEqual(config.fileNames, []);
+        assert.deepEqual(config.options, { configFilePath: "/tsconfig.json" });
+        assert.deepEqual(config.projectReferences, [
+            { circular: false, originalPath: "./harness", path: "/harness" },
+            { circular: false, originalPath: "./server", path: "/server" },
+        ]);
     });
 
     test("parseConfigFile preserves raw config", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({
                 compileOnSave: true,
                 customSetting: { enabled: true },
                 files: ["/src/index.ts"],
             }),
         });
-        try {
-            const config = await api.parseConfigFile("/tsconfig.json");
-            assert.equal(config.compileOnSave, true);
-            assert.deepEqual(config.raw, {
-                compileOnSave: true,
-                customSetting: { enabled: true },
-                files: ["/src/index.ts"],
-            });
-        }
-        finally {
-            await api.close();
-        }
+
+        const config = await api.parseConfigFile("/tsconfig.json");
+        assert.equal(config.compileOnSave, true);
+        assert.deepEqual(config.raw, {
+            compileOnSave: true,
+            customSetting: { enabled: true },
+            files: ["/src/index.ts"],
+        });
     });
 
     test("parseConfigFile includes compileOnSave", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compileOnSave: true }),
         });
-        try {
-            const config = await api.parseConfigFile("/tsconfig.json");
-            assert.equal(config.compileOnSave, true);
-        }
-        finally {
-            await api.close();
-        }
+
+        const config = await api.parseConfigFile("/tsconfig.json");
+        assert.equal(config.compileOnSave, true);
     });
 
     test("parseConfigFile includes typeAcquisition", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ typeAcquisition: { enable: true, include: ["jquery"] } }),
         });
-        try {
-            const config = await api.parseConfigFile("/tsconfig.json");
-            assert.equal(config.typeAcquisition?.enable, true);
-            assert.deepEqual(config.typeAcquisition?.include, ["jquery"]);
-        }
-        finally {
-            await api.close();
-        }
+
+        const config = await api.parseConfigFile("/tsconfig.json");
+        assert.equal(config.typeAcquisition?.enable, true);
+        assert.deepEqual(config.typeAcquisition?.include, ["jquery"]);
     });
 });
 
 // @sync-skip-block-start
 describe("API - automatic batching", () => {
     test("batches multiple concurrent requests into one automatically", async () => {
-        const api = new API({
+        await using api = new API({
             cwd: fileURLToPath(new URL("../../../../", import.meta.url).toString()),
             fs: createVirtualFileSystem(defaultFiles),
             collectTiming: true,
         });
-        try {
-            await api.parseCommandLine([]); // initialize API
-            await api.resetTimingInfo();
-            let { totals: { requestCount } } = await api.getTimingInfo();
-            assert.equal(requestCount, 0);
-            const [parseCommandLine, readConfigFile] = await Promise.all([
-                api.parseCommandLine(["--strict"]),
-                api.readConfigFile("/tsconfig.json"),
-            ]);
-            ({ totals: { requestCount } } = await api.getTimingInfo());
-            assert.equal(requestCount, 1);
 
-            assert.equal(parseCommandLine.options.strict, true);
-            assert.deepStrictEqual(readConfigFile.config, {});
-        }
-        finally {
-            api.close();
-        }
+        await api.parseCommandLine([]); // initialize API
+        await api.resetTimingInfo();
+        let { totals: { requestCount } } = await api.getTimingInfo();
+        assert.equal(requestCount, 0);
+        const [parseCommandLine, readConfigFile] = await Promise.all([
+            api.parseCommandLine(["--strict"]),
+            api.readConfigFile("/tsconfig.json"),
+        ]);
+        ({ totals: { requestCount } } = await api.getTimingInfo());
+        assert.equal(requestCount, 1);
+
+        assert.equal(parseCommandLine.options.strict, true);
+        assert.deepStrictEqual(readConfigFile.config, {});
     });
 });
 
 describe("API - batchContext", () => {
     test("holds requests until disposal", async () => {
-        const api = spawnAPI();
-        try {
-            await api.parseCommandLine([]);
+        await using api = spawnAPI();
 
-            const requests = await (async () => {
-                using _ = api.batchContext();
-                const requests = [
-                    api.parseCommandLine(["--strict"]),
-                    api.readConfigFile("/tsconfig.json"),
-                ] as const;
-                let settled = false;
-                void Promise.all(requests).then(() => {
-                    settled = true;
-                });
+        await api.parseCommandLine([]);
 
-                await new Promise<void>(resolve => setImmediate(resolve));
-                assert.equal(settled, false, "requests should remain pending inside the batch context");
-                return requests;
-            })();
+        const requests = await (async () => {
+            using _ = api.batchContext();
+            const requests = [
+                api.parseCommandLine(["--strict"]),
+                api.readConfigFile("/tsconfig.json"),
+            ] as const;
+            let settled = false;
+            void Promise.all(requests).then(() => {
+                settled = true;
+            });
 
-            const [commandLine, config] = await Promise.all(requests);
-            assert.equal(commandLine.options.strict, true);
-            assert.deepEqual(config.config, {});
-        }
-        finally {
-            await api.close();
-        }
+            await new Promise<void>(resolve => setImmediate(resolve));
+            assert.equal(settled, false, "requests should remain pending inside the batch context");
+            return requests;
+        })();
+
+        const [commandLine, config] = await Promise.all(requests);
+        assert.equal(commandLine.options.strict, true);
+        assert.deepEqual(config.config, {});
     });
 
     test("settles an item error without dropping a sibling result", async () => {
         const src = `export const value: string = "";`;
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
             "/src/main.ts": src,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", src.indexOf("value:"));
-            assert.ok(symbol);
-            const type = await project.checker.getTypeOfSymbol(symbol);
-            assert.ok(type);
 
-            const requests = await (async () => {
-                using _ = api.batchContext();
-                return [
-                    project.checker.getTypeArguments(type as unknown as TypeReference),
-                    project.checker.getStringType(),
-                ] as const;
-            })();
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", src.indexOf("value:"));
+        assert.ok(symbol);
+        const type = await project.checker.getTypeOfSymbol(symbol);
+        assert.ok(type);
 
-            await assert.rejects(requests[0], /panic:/);
-            assert.ok((await requests[1]).flags & TypeFlags.String);
-        }
-        finally {
-            await api.close();
-        }
+        const requests = await (async () => {
+            using _ = api.batchContext();
+            return [
+                project.checker.getTypeArguments(type as unknown as TypeReference),
+                project.checker.getStringType(),
+            ] as const;
+        })();
+
+        await assert.rejects(requests[0], /panic:/);
+        assert.ok((await requests[1]).flags & TypeFlags.String);
     });
 });
 // @sync-skip-block-end
 
 describe("Checker - getImmediateAliasedSymbol", () => {
     test("resolves one level of alias indirection", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
             "/src/foo.ts": `export const foo = 42;`,
             "/src/main.ts": `import { foo } from "./foo";\nexport const usage = foo;`,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const pos = `import { foo } from "./foo";`.indexOf("foo }");
-            const aliasSymbol = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
-            assert.ok(aliasSymbol);
-            const aliased = await project.checker.getImmediateAliasedSymbol(aliasSymbol);
-            assert.ok(aliased, "Should resolve the immediate aliased symbol");
-            assert.equal(aliased.name, "foo");
-        }
-        finally {
-            await api.close();
-        }
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const pos = `import { foo } from "./foo";`.indexOf("foo }");
+        const aliasSymbol = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
+        assert.ok(aliasSymbol);
+        const aliased = await project.checker.getImmediateAliasedSymbol(aliasSymbol);
+        assert.ok(aliased, "Should resolve the immediate aliased symbol");
+        assert.equal(aliased.name, "foo");
     });
 });
 
 describe("Checker - getTargetSymbol", () => {
     test("gets the target symbol of instantiated symbol", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
             "/src/main.ts": `
 class Base<T> {
@@ -778,168 +695,132 @@ test<Alpha>();
 test<Bravo>();
 `,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const sourceFile = await project.program.getSourceFile("/src/main.ts");
-            assert.ok(sourceFile);
-            const nodes: Array<Node> = [];
-            sourceFile.forEachChild(node => {
-                if (isExpressionStatement(node) && isCallExpression(node.expression) && node.expression.typeArguments) {
-                    nodes.push(node.expression.typeArguments[0]);
-                }
-            });
-            const aType = await project.checker.getTypeAtLocation(nodes[0]);
-            const bType = await project.checker.getTypeAtLocation(nodes[1]);
-            const aProperty = (await project.checker.getPropertiesOfType(aType))[0];
-            const bProperty = (await project.checker.getPropertiesOfType(bType))[0];
-            assert.ok(aProperty);
-            assert.ok(bProperty);
-            assert.equal(aProperty === bProperty, false);
-            assert.equal(await project.checker.getTargetSymbol(aProperty) === await project.checker.getTargetSymbol(bProperty), true);
-        }
-        finally {
-            await api.close();
-        }
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const sourceFile = await project.program.getSourceFile("/src/main.ts");
+        assert.ok(sourceFile);
+        const nodes: Array<Node> = [];
+        sourceFile.forEachChild(node => {
+            if (isExpressionStatement(node) && isCallExpression(node.expression) && node.expression.typeArguments) {
+                nodes.push(node.expression.typeArguments[0]);
+            }
+        });
+        const aType = await project.checker.getTypeAtLocation(nodes[0]);
+        const bType = await project.checker.getTypeAtLocation(nodes[1]);
+        const aProperty = (await project.checker.getPropertiesOfType(aType))[0];
+        const bProperty = (await project.checker.getPropertiesOfType(bType))[0];
+        assert.ok(aProperty);
+        assert.ok(bProperty);
+        assert.equal(aProperty === bProperty, false);
+        assert.equal(await project.checker.getTargetSymbol(aProperty) === await project.checker.getTargetSymbol(bProperty), true);
     });
 });
 
 describe("Snapshot", () => {
     test("updateSnapshot returns snapshot with projects", async () => {
-        const api = spawnAPI();
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            assert.ok(snapshot);
-            assert.ok(snapshot.id);
-            assert.ok(snapshot.getProjects().length > 0);
-            assert.ok(snapshot.getProject("/tsconfig.json"));
-        }
-        finally {
-            await api.close();
-        }
+        await using api = spawnAPI();
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        assert.ok(snapshot);
+        assert.ok(snapshot.id);
+        assert.ok(snapshot.getProjects().length > 0);
+        assert.ok(snapshot.getProject("/tsconfig.json"));
     });
 
     test("project exposes parsedCommandLine", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             ...defaultFiles,
             "/tsconfig.json": JSON.stringify({ compileOnSave: true }),
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            assert.deepEqual(project.parsedCommandLine.fileNames, ["/src/index.ts", "/src/foo.ts"]);
-            assert.deepEqual(project.parsedCommandLine.options, { configFilePath: "/tsconfig.json" });
-            assert.equal(project.parsedCommandLine.compileOnSave, true);
-            assert.deepEqual(project.rootFiles, project.parsedCommandLine.fileNames);
-            assert.deepEqual(project.compilerOptions, project.parsedCommandLine.options);
-        }
-        finally {
-            await api.close();
-        }
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        assert.deepEqual(project.parsedCommandLine.fileNames, ["/src/index.ts", "/src/foo.ts"]);
+        assert.deepEqual(project.parsedCommandLine.options, { configFilePath: "/tsconfig.json" });
+        assert.equal(project.parsedCommandLine.compileOnSave, true);
+        assert.deepEqual(project.rootFiles, project.parsedCommandLine.fileNames);
+        assert.deepEqual(project.compilerOptions, project.parsedCommandLine.options);
     });
 
     test("getSymbolAtPosition", async () => {
-        const api = spawnAPI();
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const symbol = await project.checker.getSymbolAtPosition("/src/index.ts", 9);
-            assert.ok(symbol);
-            assert.equal(symbol.name, "foo");
-            assert.ok(symbol.flags & SymbolFlags.Alias);
-        }
-        finally {
-            await api.close();
-        }
+        await using api = spawnAPI();
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const symbol = await project.checker.getSymbolAtPosition("/src/index.ts", 9);
+        assert.ok(symbol);
+        assert.equal(symbol.name, "foo");
+        assert.ok(symbol.flags & SymbolFlags.Alias);
     });
 
     test("getSymbolAtLocation", async () => {
-        const api = spawnAPI();
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const sourceFile = await project.program.getSourceFile("/src/index.ts");
-            assert.ok(sourceFile);
-            const node = cast(
-                cast(sourceFile.statements[0], isImportDeclaration).importClause?.namedBindings,
-                isNamedImports,
-            ).elements[0].name;
-            assert.ok(node);
-            const symbol = await project.checker.getSymbolAtLocation(node);
-            assert.ok(symbol);
-            assert.equal(symbol.name, "foo");
-            assert.ok(symbol.flags & SymbolFlags.Alias);
-        }
-        finally {
-            await api.close();
-        }
+        await using api = spawnAPI();
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const sourceFile = await project.program.getSourceFile("/src/index.ts");
+        assert.ok(sourceFile);
+        const node = cast(
+            cast(sourceFile.statements[0], isImportDeclaration).importClause?.namedBindings,
+            isNamedImports,
+        ).elements[0].name;
+        assert.ok(node);
+        const symbol = await project.checker.getSymbolAtLocation(node);
+        assert.ok(symbol);
+        assert.equal(symbol.name, "foo");
+        assert.ok(symbol.flags & SymbolFlags.Alias);
     });
 
     test("getSymbolOfSourceFile", async () => {
-        const api = spawnAPI();
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const moduleSymbol = await project.checker.getSymbolOfSourceFile("/src/foo.ts");
-            assert.ok(moduleSymbol);
-            const exports = await moduleSymbol.getExports();
-            assert.ok(exports.has(escapeLeadingUnderscores("foo")));
-        }
-        finally {
-            await api.close();
-        }
+        await using api = spawnAPI();
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const moduleSymbol = await project.checker.getSymbolOfSourceFile("/src/foo.ts");
+        assert.ok(moduleSymbol);
+        const exports = await moduleSymbol.getExports();
+        assert.ok(exports.has(escapeLeadingUnderscores("foo")));
     });
 
     test("getSymbolOfSourceFile returns undefined for a non-module file", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": "{}",
             "/src/script.ts": `const x = 1;`,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const symbol = await project.checker.getSymbolOfSourceFile("/src/script.ts");
-            assert.equal(symbol, undefined);
-        }
-        finally {
-            await api.close();
-        }
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const symbol = await project.checker.getSymbolOfSourceFile("/src/script.ts");
+        assert.equal(symbol, undefined);
     });
 
     test("getSymbolOfSourceFile batched", async () => {
-        const api = spawnAPI();
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const symbols = await project.checker.getSymbolOfSourceFile(["/src/index.ts", "/src/foo.ts"]);
-            assert.equal(symbols.length, 2);
-            assert.ok(symbols[0]);
-            assert.ok(symbols[1]);
-            assert.strictEqual(symbols[1], await project.checker.getSymbolOfSourceFile("/src/foo.ts"));
-        }
-        finally {
-            await api.close();
-        }
+        await using api = spawnAPI();
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const symbols = await project.checker.getSymbolOfSourceFile(["/src/index.ts", "/src/foo.ts"]);
+        assert.equal(symbols.length, 2);
+        assert.ok(symbols[0]);
+        assert.ok(symbols[1]);
+        assert.strictEqual(symbols[1], await project.checker.getSymbolOfSourceFile("/src/foo.ts"));
     });
 
     test("getTypeOfSymbol", async () => {
-        const api = spawnAPI();
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const symbol = await project.checker.getSymbolAtPosition("/src/index.ts", 9);
-            assert.ok(symbol);
-            const type = await project.checker.getTypeOfSymbol(symbol);
-            assert.ok(type);
-            assert.ok(type.flags & TypeFlags.NumberLiteral);
-        }
-        finally {
-            await api.close();
-        }
+        await using api = spawnAPI();
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const symbol = await project.checker.getSymbolAtPosition("/src/index.ts", 9);
+        assert.ok(symbol);
+        const type = await project.checker.getTypeOfSymbol(symbol);
+        assert.ok(type);
+        assert.ok(type.flags & TypeFlags.NumberLiteral);
     });
 
     test("getNonMissingTypeOfSymbol", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig-one.json": JSON.stringify({
                 compilerOptions: {
                     exactOptionalPropertyTypes: true,
@@ -955,330 +836,277 @@ describe("Snapshot", () => {
             "/src/index.ts": "const x: Partial<{ a: string }> = {};",
         });
 
-        try {
-            // when `"exactOptionalPropertyTypes": true`
-            const snapshot1 = await api.updateSnapshot({ openProject: "/tsconfig-one.json" });
-            const project1 = snapshot1.getProject("/tsconfig-one.json")!;
-            const type1 = await project1.checker.getTypeAtPosition("/src/index.ts", 7);
-            assert.ok(type1);
-            const symbol1 = await project1.checker.getPropertyOfType(type1, "a");
-            assert.ok(symbol1);
-            const propertyType1 = await project1.checker.getTypeOfSymbol(symbol1);
-            assert.ok(propertyType1);
-            // getTypeOfSymbol returns 'string | undefined'
-            assert.ok(propertyType1.isUnionType());
-            const propertyType2 = await project1.checker.getNonMissingTypeOfSymbol(symbol1);
-            assert.ok(propertyType2);
-            // getNonMissingTypeOfSymbol returns 'string'
-            assert.ok(!propertyType2.isUnionType());
-            assert.ok(propertyType2.flags & TypeFlags.String);
+        // when `"exactOptionalPropertyTypes": true`
+        const snapshot1 = await api.updateSnapshot({ openProject: "/tsconfig-one.json" });
+        const project1 = snapshot1.getProject("/tsconfig-one.json")!;
+        const type1 = await project1.checker.getTypeAtPosition("/src/index.ts", 7);
+        assert.ok(type1);
+        const symbol1 = await project1.checker.getPropertyOfType(type1, "a");
+        assert.ok(symbol1);
+        const propertyType1 = await project1.checker.getTypeOfSymbol(symbol1);
+        assert.ok(propertyType1);
+        // getTypeOfSymbol returns 'string | undefined'
+        assert.ok(propertyType1.isUnionType());
+        const propertyType2 = await project1.checker.getNonMissingTypeOfSymbol(symbol1);
+        assert.ok(propertyType2);
+        // getNonMissingTypeOfSymbol returns 'string'
+        assert.ok(!propertyType2.isUnionType());
+        assert.ok(propertyType2.flags & TypeFlags.String);
 
-            // when `"exactOptionalPropertyTypes": false`
-            const snapshot2 = await api.updateSnapshot({ openProject: "/tsconfig-two.json" });
-            const project2 = snapshot2.getProject("/tsconfig-two.json")!;
-            const type2 = await project2.checker.getTypeAtPosition("/src/index.ts", 7);
-            assert.ok(type2);
-            const symbol2 = await project2.checker.getPropertyOfType(type2, "a");
-            assert.ok(symbol2);
-            const propertyType3 = await project2.checker.getTypeOfSymbol(symbol2);
-            assert.ok(propertyType3);
-            // getTypeOfSymbol returns 'string | undefined'
-            assert.ok(propertyType3.isUnionType());
-            const propertyType4 = await project2.checker.getNonMissingTypeOfSymbol(symbol2);
-            assert.ok(propertyType4);
-            // getNonMissingTypeOfSymbol returns 'string | undefined'
-            assert.ok(propertyType4.isUnionType());
-        }
-        finally {
-            await api.close();
-        }
+        // when `"exactOptionalPropertyTypes": false`
+        const snapshot2 = await api.updateSnapshot({ openProject: "/tsconfig-two.json" });
+        const project2 = snapshot2.getProject("/tsconfig-two.json")!;
+        const type2 = await project2.checker.getTypeAtPosition("/src/index.ts", 7);
+        assert.ok(type2);
+        const symbol2 = await project2.checker.getPropertyOfType(type2, "a");
+        assert.ok(symbol2);
+        const propertyType3 = await project2.checker.getTypeOfSymbol(symbol2);
+        assert.ok(propertyType3);
+        // getTypeOfSymbol returns 'string | undefined'
+        assert.ok(propertyType3.isUnionType());
+        const propertyType4 = await project2.checker.getNonMissingTypeOfSymbol(symbol2);
+        assert.ok(propertyType4);
+        // getNonMissingTypeOfSymbol returns 'string | undefined'
+        assert.ok(propertyType4.isUnionType());
     });
 });
 
 describe("LanguageService - imports", () => {
     test("getImportEditsForSymbols adds a named import", async () => {
         const source = `const value = foo;\n`;
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": "{}",
             "/src/index.ts": source,
             "/src/foo.ts": `export const foo = 1;\n`,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const symbol = await project.checker.getSymbolAtPosition("/src/foo.ts", "export const ".length);
-            assert.ok(symbol);
 
-            const edits = await project.languageService.getImportEditsForSymbols("/src/index.ts", [await symbol.getExportSymbol()]);
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const symbol = await project.checker.getSymbolAtPosition("/src/foo.ts", "export const ".length);
+        assert.ok(symbol);
 
-            assert.equal(applyTextEdits(source, edits), `import { foo } from "./foo";\n\nconst value = foo;\n`);
-        }
-        finally {
-            await api.close();
-        }
+        const edits = await project.languageService.getImportEditsForSymbols("/src/index.ts", [await symbol.getExportSymbol()]);
+
+        assert.equal(applyTextEdits(source, edits), `import { foo } from "./foo";\n\nconst value = foo;\n`);
     });
 
     test("getImportAdderEdits coalesces multiple importSymbol actions", async () => {
         const source = `const value = foo + bar;\n`;
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": "{}",
             "/src/index.ts": source,
             "/src/foo.ts": `export const foo = 1;\nexport const bar = 2;\n`,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const foo = await project.checker.getSymbolAtPosition("/src/foo.ts", "export const ".length);
-            const bar = await project.checker.getSymbolAtPosition("/src/foo.ts", "export const foo = 1;\nexport const ".length);
-            assert.ok(foo);
-            assert.ok(bar);
 
-            const edits = await project.languageService.getImportAdderEdits("/src/index.ts", [
-                { kind: "importSymbol", symbol: await foo.getExportSymbol() },
-                { kind: "importSymbol", symbol: await bar.getExportSymbol() },
-            ]);
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const foo = await project.checker.getSymbolAtPosition("/src/foo.ts", "export const ".length);
+        const bar = await project.checker.getSymbolAtPosition("/src/foo.ts", "export const foo = 1;\nexport const ".length);
+        assert.ok(foo);
+        assert.ok(bar);
 
-            assert.equal(applyTextEdits(source, edits), `import { bar, foo } from "./foo";\n\nconst value = foo + bar;\n`);
-        }
-        finally {
-            await api.close();
-        }
+        const edits = await project.languageService.getImportAdderEdits("/src/index.ts", [
+            { kind: "importSymbol", symbol: await foo.getExportSymbol() },
+            { kind: "importSymbol", symbol: await bar.getExportSymbol() },
+        ]);
+
+        assert.equal(applyTextEdits(source, edits), `import { bar, foo } from "./foo";\n\nconst value = foo + bar;\n`);
     });
 
     test("getImportAdderEdits adds to an existing import", async () => {
         const source = `import { foo } from "./foo";\nconst value = foo + bar;\n`;
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": "{}",
             "/src/index.ts": source,
             "/src/foo.ts": `export const foo = 1;\nexport const bar = 2;\n`,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const bar = await project.checker.getSymbolAtPosition("/src/foo.ts", "export const foo = 1;\nexport const ".length);
-            assert.ok(bar);
 
-            const edits = await project.languageService.getImportAdderEdits("/src/index.ts", [
-                { kind: "importSymbol", symbol: await bar.getExportSymbol() },
-            ]);
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const bar = await project.checker.getSymbolAtPosition("/src/foo.ts", "export const foo = 1;\nexport const ".length);
+        assert.ok(bar);
 
-            assert.equal(applyTextEdits(source, edits), `import { bar, foo } from "./foo";\nconst value = foo + bar;\n`);
-        }
-        finally {
-            await api.close();
-        }
+        const edits = await project.languageService.getImportAdderEdits("/src/index.ts", [
+            { kind: "importSymbol", symbol: await bar.getExportSymbol() },
+        ]);
+
+        assert.equal(applyTextEdits(source, edits), `import { bar, foo } from "./foo";\nconst value = foo + bar;\n`);
     });
 
     test("getImportAdderEdits returns no edits for non-exported symbols", async () => {
         const source = `const value = local;\n`;
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": "{}",
             "/src/index.ts": source,
             "/src/foo.ts": `const local = 1;\n`,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const symbol = await project.checker.getSymbolAtPosition("/src/foo.ts", "const ".length);
-            assert.ok(symbol);
 
-            const edits = await project.languageService.getImportAdderEdits("/src/index.ts", [
-                { kind: "importSymbol", symbol },
-            ]);
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const symbol = await project.checker.getSymbolAtPosition("/src/foo.ts", "const ".length);
+        assert.ok(symbol);
 
-            assert.deepEqual(edits, []);
-        }
-        finally {
-            await api.close();
-        }
+        const edits = await project.languageService.getImportAdderEdits("/src/index.ts", [
+            { kind: "importSymbol", symbol },
+        ]);
+
+        assert.deepEqual(edits, []);
     });
 
     test("getImportAdderEdits rejects invalid actions", async () => {
-        const api = spawnAPI();
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const symbol = await project.checker.getSymbolAtPosition("/src/foo.ts", 13);
-            assert.ok(symbol);
+        await using api = spawnAPI();
 
-            await assert.rejects( // @sync: assert.throws(
-                () => project.languageService.getImportAdderEdits("/src/index.ts", [{ kind: "unknown", symbol: symbol.id } as unknown as ImportAdderAction]),
-                /Debug Failure\. Illegal value: "unknown"/,
-            );
-            await assert.rejects( // @sync: assert.throws(
-                () => project.languageService.getImportAdderEdits("/src/index.ts", [{ kind: "importSymbol", symbol: { ...symbol, id: 999_999_999 } } as unknown as ImportAdderAction]),
-                /symbol handle \d+ not found/,
-            );
-        }
-        finally {
-            await api.close();
-        }
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const symbol = await project.checker.getSymbolAtPosition("/src/foo.ts", 13);
+        assert.ok(symbol);
+
+        await assert.rejects( // @sync: assert.throws(
+            () => project.languageService.getImportAdderEdits("/src/index.ts", [{ kind: "unknown", symbol: symbol.id } as unknown as ImportAdderAction]),
+            /Debug Failure\. Illegal value: "unknown"/,
+        );
+        await assert.rejects( // @sync: assert.throws(
+            () => project.languageService.getImportAdderEdits("/src/index.ts", [{ kind: "importSymbol", symbol: { ...symbol, id: 999_999_999 } } as unknown as ImportAdderAction]),
+            /symbol handle \d+ not found/,
+        );
     });
 });
 
 describe("LanguageService - getCompletionsAtPosition", () => {
     test("returns member completions after a dot", async () => {
         const src = `\nconst obj = { name: "hello", age: 42 };\nobj.\n`;
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": "{}",
             "/src/main.ts": src,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            // Position right after "obj." — member completion trigger
-            const pos = src.indexOf("obj.") + "obj.".length;
-            const completions = await project.languageService.getCompletionsAtPosition("/src/main.ts", pos, { triggerCharacter: "." });
-            assert.ok(completions, "Expected completions to be returned");
-            assert.ok(completions.entries.length > 0, "Expected at least one completion entry");
-            assert.ok(completions.entries.some(e => e.name === "name"), "Expected 'name' property in completions");
-            assert.ok(completions.entries.some(e => e.name === "age"), "Expected 'age' property in completions");
-            assert.ok(completions.entries.every(e => e.symbol === undefined), "Expected no symbol information");
-        }
-        finally {
-            await api.close();
-        }
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        // Position right after "obj." — member completion trigger
+        const pos = src.indexOf("obj.") + "obj.".length;
+        const completions = await project.languageService.getCompletionsAtPosition("/src/main.ts", pos, { triggerCharacter: "." });
+        assert.ok(completions, "Expected completions to be returned");
+        assert.ok(completions.entries.length > 0, "Expected at least one completion entry");
+        assert.ok(completions.entries.some(e => e.name === "name"), "Expected 'name' property in completions");
+        assert.ok(completions.entries.some(e => e.name === "age"), "Expected 'age' property in completions");
+        assert.ok(completions.entries.every(e => e.symbol === undefined), "Expected no symbol information");
     });
 
     test("completion entries include sortText", async () => {
         const src = `\nconst obj = { value: 1 };\nobj.\n`;
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": "{}",
             "/src/main.ts": src,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const pos = src.indexOf("obj.") + "obj.".length;
-            const completions = await project.languageService.getCompletionsAtPosition("/src/main.ts", pos, { triggerCharacter: "." });
-            assert.ok(completions);
-            assert.ok(completions.entries.length > 0);
-            assert.ok(completions.entries.some(e => e.sortText !== undefined), "Expected sortText on all entries");
-        }
-        finally {
-            await api.close();
-        }
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const pos = src.indexOf("obj.") + "obj.".length;
+        const completions = await project.languageService.getCompletionsAtPosition("/src/main.ts", pos, { triggerCharacter: "." });
+        assert.ok(completions);
+        assert.ok(completions.entries.length > 0);
+        assert.ok(completions.entries.some(e => e.sortText !== undefined), "Expected sortText on all entries");
     });
 
     test("returns undefined for a non-existent file", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": "{}",
             "/src/main.ts": `export {};`,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const completions = await project.languageService.getCompletionsAtPosition("/src/does-not-exist.ts", 0);
-            assert.equal(completions, undefined, "Expected undefined for non-existent file");
-        }
-        finally {
-            await api.close();
-        }
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const completions = await project.languageService.getCompletionsAtPosition("/src/does-not-exist.ts", 0);
+        assert.equal(completions, undefined, "Expected undefined for non-existent file");
     });
 
     test("includeSymbol: true populates symbol on property completions", async () => {
         const src = `\nconst obj = { name: "hello", age: 42 };\nobj.\n`;
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": "{}",
             "/src/main.ts": src,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const pos = src.indexOf("obj.") + "obj.".length;
-            const completions = await project.languageService.getCompletionsAtPosition("/src/main.ts", pos, { triggerCharacter: ".", includeSymbol: true });
-            assert.ok(completions, "Expected completions");
-            const nameEntry = completions.entries.find(e => e.name === "name");
-            assert.ok(nameEntry, "Expected 'name' entry");
-            assert.ok(nameEntry.symbol, "Expected symbol to be set on 'name' entry when includeSymbol: true");
-            assert.equal(nameEntry.symbol.name, "name", "Symbol name should match completion name");
-        }
-        finally {
-            await api.close();
-        }
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const pos = src.indexOf("obj.") + "obj.".length;
+        const completions = await project.languageService.getCompletionsAtPosition("/src/main.ts", pos, { triggerCharacter: ".", includeSymbol: true });
+        assert.ok(completions, "Expected completions");
+        const nameEntry = completions.entries.find(e => e.name === "name");
+        assert.ok(nameEntry, "Expected 'name' entry");
+        assert.ok(nameEntry.symbol, "Expected symbol to be set on 'name' entry when includeSymbol: true");
+        assert.equal(nameEntry.symbol.name, "name", "Symbol name should match completion name");
     });
 });
 
 describe("LanguageService - getReferencedSymbolsForNode", () => {
     test("getReferencedSymbolsForNode", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": "{}",
             "/src/index.ts": `function greet(name: string) { return name; }\ngreet("world");`,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const sourceFile = await project.program.getSourceFile("/src/index.ts");
-            assert.ok(sourceFile);
-            const funcDecl = cast(sourceFile.statements[0], isFunctionDeclaration);
-            const funcName = funcDecl.name!;
-            const refs = await project.languageService.getReferencedSymbolsForNode(funcName, funcName.pos);
-            assert.ok(refs.length > 0);
-            // Each entry should have a definition and references
-            const entry = refs[0];
-            assert.ok(entry.definition);
-            assert.ok(entry.references.length > 0);
-        }
-        finally {
-            await api.close();
-        }
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const sourceFile = await project.program.getSourceFile("/src/index.ts");
+        assert.ok(sourceFile);
+        const funcDecl = cast(sourceFile.statements[0], isFunctionDeclaration);
+        const funcName = funcDecl.name!;
+        const refs = await project.languageService.getReferencedSymbolsForNode(funcName, funcName.pos);
+        assert.ok(refs.length > 0);
+        // Each entry should have a definition and references
+        const entry = refs[0];
+        assert.ok(entry.definition);
+        assert.ok(entry.references.length > 0);
     });
 });
 
 describe("LanguageService - getSignatureUsage", () => {
     test("getSignatureUsage", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": "{}",
             "/src/index.ts": `function greet(name: string) { return name; }\ngreet("world");`,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const sourceFile = await project.program.getSourceFile("/src/index.ts");
-            assert.ok(sourceFile);
-            const funcDecl = cast(sourceFile.statements[0], isFunctionDeclaration);
-            const usages = await project.languageService.getSignatureUsage(funcDecl);
-            assert.ok(usages.length > 0);
-            // The call site should have a call expression
-            const usage = usages.find(u => u.call !== undefined);
-            assert.ok(usage, "Expected at least one usage with a call expression");
-        }
-        finally {
-            await api.close();
-        }
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const sourceFile = await project.program.getSourceFile("/src/index.ts");
+        assert.ok(sourceFile);
+        const funcDecl = cast(sourceFile.statements[0], isFunctionDeclaration);
+        const usages = await project.languageService.getSignatureUsage(funcDecl);
+        assert.ok(usages.length > 0);
+        // The call site should have a call expression
+        const usage = usages.find(u => u.call !== undefined);
+        assert.ok(usage, "Expected at least one usage with a call expression");
     });
 });
 
 describe("Checker - getApparentType", () => {
     test("returns the apparent type of a literal type", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
             "/src/main.ts": `export const x = "hello" as const;`,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const pos = `export const x = "hello" as const;`.indexOf("x =");
-            const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
-            assert.ok(symbol);
-            const type = await project.checker.getTypeOfSymbol(symbol);
-            assert.ok(type);
-            assert.equal(type.isLiteralType(), true);
-            assert.equal(type.isStringLiteralType(), true);
-            assert.equal(type.isIntrinsicType(), false);
-            const apparent = await project.checker.getApparentType(type);
-            assert.ok(apparent);
-            assert.ok(apparent.id > 0);
-        }
-        finally {
-            await api.close();
-        }
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const pos = `export const x = "hello" as const;`.indexOf("x =");
+        const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
+        assert.ok(symbol);
+        const type = await project.checker.getTypeOfSymbol(symbol);
+        assert.ok(type);
+        assert.equal(type.isLiteralType(), true);
+        assert.equal(type.isStringLiteralType(), true);
+        assert.equal(type.isIntrinsicType(), false);
+        const apparent = await project.checker.getApparentType(type);
+        assert.ok(apparent);
+        assert.ok(apparent.id > 0);
     });
 });
 
 describe("Checker - getReducedType", () => {
     test("returns the reduced type", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
             "/src/main.ts": `
 declare const TaggedError: <Tag extends string>(
@@ -1297,74 +1125,62 @@ class QuotaExceededError extends TaggedError("QuotaExceededError")<{
 
 export type Result = RateLimitError | (RateLimitError & QuotaExceededError);`,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const sourceFile = await project.program.getSourceFile("/src/main.ts");
-            assert.ok(sourceFile);
-            const typeAlias = sourceFile.statements.find(isTypeAliasDeclaration);
-            assert.ok(typeAlias);
-            const type = await project.checker.getTypeAtLocation(typeAlias);
-            assert.equal(type.isUnionType(), true);
-            assert.equal(type.isObjectType(), false);
-            const reducedType = await project.checker.getReducedType(type);
-            assert.equal(reducedType.isUnionType(), false);
-            assert.equal(reducedType.isObjectType(), true);
-        }
-        finally {
-            await api.close();
-        }
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const sourceFile = await project.program.getSourceFile("/src/main.ts");
+        assert.ok(sourceFile);
+        const typeAlias = sourceFile.statements.find(isTypeAliasDeclaration);
+        assert.ok(typeAlias);
+        const type = await project.checker.getTypeAtLocation(typeAlias);
+        assert.equal(type.isUnionType(), true);
+        assert.equal(type.isObjectType(), false);
+        const reducedType = await project.checker.getReducedType(type);
+        assert.equal(reducedType.isUnionType(), false);
+        assert.equal(reducedType.isObjectType(), true);
     });
 });
 
 describe("Checker - getMemberInModuleExports", () => {
     test("returns a named export when present", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
             "/src/index.ts": `export const direct = 1;`,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const sourceFile = await project.program.getSourceFile("/src/index.ts");
-            assert.ok(sourceFile);
-            const moduleSymbol = await project.checker.getSymbolAtLocation(sourceFile);
-            assert.ok(moduleSymbol);
-            const found = await project.checker.getMemberInModuleExports(moduleSymbol, "direct");
-            assert.ok(found);
-            assert.equal(found.name, "direct");
-            const missing = await project.checker.getMemberInModuleExports(moduleSymbol, "missing");
-            assert.equal(missing, undefined);
-        }
-        finally {
-            await api.close();
-        }
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const sourceFile = await project.program.getSourceFile("/src/index.ts");
+        assert.ok(sourceFile);
+        const moduleSymbol = await project.checker.getSymbolAtLocation(sourceFile);
+        assert.ok(moduleSymbol);
+        const found = await project.checker.getMemberInModuleExports(moduleSymbol, "direct");
+        assert.ok(found);
+        assert.equal(found.name, "direct");
+        const missing = await project.checker.getMemberInModuleExports(moduleSymbol, "missing");
+        assert.equal(missing, undefined);
     });
 });
 
 describe("SourceFile", () => {
     test("getSourceFile rejects invalid document identifiers", async () => {
-        const api = spawnAPI();
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const program = snapshot.getProject("/tsconfig.json")!.program;
-            const document = { fileName: "/src/index.ts" } as unknown as DocumentIdentifier;
+        await using api = spawnAPI();
 
-            await assert.rejects( // @sync: assert.throws(
-                () => program.getSourceFile(document),
-                {
-                    name: "TypeError",
-                    message: "Expected a string or { uri } for the document, received an object with keys: fileName",
-                },
-            );
-        }
-        finally {
-            await api.close();
-        }
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const program = snapshot.getProject("/tsconfig.json")!.program;
+        const document = { fileName: "/src/index.ts" } as unknown as DocumentIdentifier;
+
+        await assert.rejects( // @sync: assert.throws(
+            () => program.getSourceFile(document),
+            {
+                name: "TypeError",
+                message: "Expected a string or { uri } for the document, received an object with keys: fileName",
+            },
+        );
     });
 
     test("getSourceFileNames returns all program files, not just root files", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({
                 compilerOptions: {
                     moduleResolution: "node10",
@@ -1376,23 +1192,19 @@ describe("SourceFile", () => {
             "/node_modules/my-lib/package.json": JSON.stringify({ name: "my-lib", types: "./index.d.ts" }),
             "/node_modules/my-lib/index.d.ts": `export declare const bar: number;`,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const fileNames = await project.program.getSourceFileNames();
-            assert.deepEqual(fileNames, [
-                "/src/foo.ts",
-                "/node_modules/my-lib/index.d.ts",
-                "/src/index.ts",
-            ]);
-        }
-        finally {
-            await api.close();
-        }
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const fileNames = await project.program.getSourceFileNames();
+        assert.deepEqual(fileNames, [
+            "/src/foo.ts",
+            "/node_modules/my-lib/index.d.ts",
+            "/src/index.ts",
+        ]);
     });
 
     test("source file metadata identifies external library and default library files", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({
                 compilerOptions: {
                     moduleResolution: "node10",
@@ -1402,35 +1214,31 @@ describe("SourceFile", () => {
             "/node_modules/my-lib/package.json": JSON.stringify({ name: "my-lib", types: "./index.d.ts" }),
             "/node_modules/my-lib/index.d.ts": `export declare const bar: number;`,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const program = project.program;
 
-            const index = await program.getSourceFile("/src/index.ts");
-            assert.ok(index);
-            assert.equal(await program.isSourceFileFromExternalLibrary(index), false);
-            assert.equal(await program.isSourceFileDefaultLibrary(index), false);
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const program = project.program;
 
-            const lib = await program.getSourceFile("/node_modules/my-lib/index.d.ts");
-            assert.ok(lib);
-            assert.equal(await program.isSourceFileFromExternalLibrary(lib), true);
-            assert.equal(await program.isSourceFileDefaultLibrary(lib), false);
+        const index = await program.getSourceFile("/src/index.ts");
+        assert.ok(index);
+        assert.equal(await program.isSourceFileFromExternalLibrary(index), false);
+        assert.equal(await program.isSourceFileDefaultLibrary(index), false);
 
-            const fileNames = await program.getSourceFileNames();
-            const defaultLibName = fileNames.find(name => name.endsWith("lib.d.ts") || name.includes("/lib."));
-            assert.ok(defaultLibName, "expected a default library file in the program");
-            const defaultLib = await program.getSourceFile(defaultLibName);
-            assert.ok(defaultLib);
-            assert.equal(await program.isSourceFileDefaultLibrary(defaultLib), true);
-        }
-        finally {
-            await api.close();
-        }
+        const lib = await program.getSourceFile("/node_modules/my-lib/index.d.ts");
+        assert.ok(lib);
+        assert.equal(await program.isSourceFileFromExternalLibrary(lib), true);
+        assert.equal(await program.isSourceFileDefaultLibrary(lib), false);
+
+        const fileNames = await program.getSourceFileNames();
+        const defaultLibName = fileNames.find(name => name.endsWith("lib.d.ts") || name.includes("/lib."));
+        assert.ok(defaultLibName, "expected a default library file in the program");
+        const defaultLib = await program.getSourceFile(defaultLibName);
+        assert.ok(defaultLib);
+        assert.equal(await program.isSourceFileDefaultLibrary(defaultLib), true);
     });
 
     test("source file metadata reports implied node format", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({
                 compilerOptions: {
                     module: "nodenext",
@@ -1443,580 +1251,503 @@ describe("SourceFile", () => {
             "/esm/package.json": JSON.stringify({ type: "module" }),
             "/esm/index.ts": `export const m = 1;`,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const program = snapshot.getProject("/tsconfig.json")!.program;
 
-            const mts = await program.getSourceFile("/src/esm.mts");
-            assert.ok(mts);
-            assert.equal((await program.getSourceFileMetadata({ uri: "file:///src/esm.mts" }))?.impliedNodeFormat, ModuleKind.ESNext);
-            assert.equal((await program.getSourceFileMetadataByPath(mts.path))?.impliedNodeFormat, ModuleKind.ESNext);
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const program = snapshot.getProject("/tsconfig.json")!.program;
 
-            const cts = await program.getSourceFile("/src/cjs.cts");
-            assert.ok(cts);
-            assert.equal((await program.getSourceFileMetadata(cts.fileName))?.impliedNodeFormat, ModuleKind.CommonJS);
+        const mts = await program.getSourceFile("/src/esm.mts");
+        assert.ok(mts);
+        assert.equal((await program.getSourceFileMetadata({ uri: "file:///src/esm.mts" }))?.impliedNodeFormat, ModuleKind.ESNext);
+        assert.equal((await program.getSourceFileMetadataByPath(mts.path))?.impliedNodeFormat, ModuleKind.ESNext);
 
-            // A plain .ts file with no nearby `"type": "module"` is CommonJS.
-            const index = await program.getSourceFile("/src/index.ts");
-            assert.ok(index);
-            assert.equal((await program.getSourceFileMetadata(index.fileName))?.impliedNodeFormat, ModuleKind.CommonJS);
+        const cts = await program.getSourceFile("/src/cjs.cts");
+        assert.ok(cts);
+        assert.equal((await program.getSourceFileMetadata(cts.fileName))?.impliedNodeFormat, ModuleKind.CommonJS);
 
-            // A plain .ts file under a `"type": "module"` package is ESM.
-            const esmIndex = await program.getSourceFile("/esm/index.ts");
-            assert.ok(esmIndex);
-            assert.equal((await program.getSourceFileMetadata(esmIndex.fileName))?.impliedNodeFormat, ModuleKind.ESNext);
-        }
-        finally {
-            await api.close();
-        }
+        // A plain .ts file with no nearby `"type": "module"` is CommonJS.
+        const index = await program.getSourceFile("/src/index.ts");
+        assert.ok(index);
+        assert.equal((await program.getSourceFileMetadata(index.fileName))?.impliedNodeFormat, ModuleKind.CommonJS);
+
+        // A plain .ts file under a `"type": "module"` package is ESM.
+        const esmIndex = await program.getSourceFile("/esm/index.ts");
+        assert.ok(esmIndex);
+        assert.equal((await program.getSourceFileMetadata(esmIndex.fileName))?.impliedNodeFormat, ModuleKind.ESNext);
     });
 
     test("file properties", async () => {
-        const api = spawnAPI();
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const sourceFile = await project.program.getSourceFile("/src/index.ts");
+        await using api = spawnAPI();
 
-            assert.ok(sourceFile);
-            assert.equal(sourceFile.text, defaultFiles["/src/index.ts"]);
-            assert.equal(sourceFile.fileName, "/src/index.ts");
-        }
-        finally {
-            await api.close();
-        }
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const sourceFile = await project.program.getSourceFile("/src/index.ts");
+
+        assert.ok(sourceFile);
+        assert.equal(sourceFile.text, defaultFiles["/src/index.ts"]);
+        assert.equal(sourceFile.fileName, "/src/index.ts");
     });
 
     test("extended data", async () => {
-        const api = spawnAPI();
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const sourceFile = await project.program.getSourceFile("/src/index.ts");
+        await using api = spawnAPI();
 
-            assert.ok(sourceFile);
-            let nodeCount = 1;
-            sourceFile.forEachChild(function visit(node) {
-                if (isTemplateHead(node)) {
-                    assert.equal(node.text, "head ");
-                    assert.equal(node.rawText, "head ");
-                    assert.equal(node.templateFlags, 0);
-                }
-                else if (isTemplateMiddle(node)) {
-                    assert.equal(node.text, "middle");
-                    assert.equal(node.rawText, "middle");
-                    assert.equal(node.templateFlags, 0);
-                }
-                else if (isTemplateTail(node)) {
-                    assert.equal(node.text, " tail");
-                    assert.equal(node.rawText, " tail");
-                    assert.equal(node.templateFlags, 0);
-                }
-                nodeCount++;
-                node.forEachChild(visit);
-            });
-            assert.equal(nodeCount, 8);
-        }
-        finally {
-            await api.close();
-        }
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const sourceFile = await project.program.getSourceFile("/src/index.ts");
+
+        assert.ok(sourceFile);
+        let nodeCount = 1;
+        sourceFile.forEachChild(function visit(node) {
+            if (isTemplateHead(node)) {
+                assert.equal(node.text, "head ");
+                assert.equal(node.rawText, "head ");
+                assert.equal(node.templateFlags, 0);
+            }
+            else if (isTemplateMiddle(node)) {
+                assert.equal(node.text, "middle");
+                assert.equal(node.rawText, "middle");
+                assert.equal(node.templateFlags, 0);
+            }
+            else if (isTemplateTail(node)) {
+                assert.equal(node.text, " tail");
+                assert.equal(node.rawText, " tail");
+                assert.equal(node.templateFlags, 0);
+            }
+            nodeCount++;
+            node.forEachChild(visit);
+        });
+        assert.equal(nodeCount, 8);
     });
 
     test("forEachChild with visitList does not visit array children twice", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ files: ["/input.ts"] }),
             "/input.ts": `let arrow = () => {}`,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const sourceFile = await project.program.getSourceFile("/input.ts");
 
-            assert.ok(sourceFile);
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const sourceFile = await project.program.getSourceFile("/input.ts");
 
-            const visited: { kind: SyntaxKind; pos: number; end: number; }[] = [];
-            (function walk(node: Node): void {
-                visited.push({ kind: node.kind, pos: node.pos, end: node.end });
-                node.forEachChild(walk, (nodes: NodeArray<Node>) => {
-                    for (let i = 0; i < nodes.length; i++) {
-                        walk(nodes[i]);
-                    }
-                    return undefined;
-                });
-            })(sourceFile);
+        assert.ok(sourceFile);
 
-            // Each node should be visited exactly once, even when a visitList callback
-            // is supplied. Previously array children were visited twice.
-            const seen = new Set<string>();
-            for (const { kind, pos, end } of visited) {
-                const key = `${kind}.${pos}.${end}`;
-                assert.ok(!seen.has(key), `Node ${key} was visited more than once`);
-                seen.add(key);
-            }
-        }
-        finally {
-            await api.close();
+        const visited: { kind: SyntaxKind; pos: number; end: number; }[] = [];
+        (function walk(node: Node): void {
+            visited.push({ kind: node.kind, pos: node.pos, end: node.end });
+            node.forEachChild(walk, (nodes: NodeArray<Node>) => {
+                for (let i = 0; i < nodes.length; i++) {
+                    walk(nodes[i]);
+                }
+                return undefined;
+            });
+        })(sourceFile);
+
+        // Each node should be visited exactly once, even when a visitList callback
+        // is supplied. Previously array children were visited twice.
+        const seen = new Set<string>();
+        for (const { kind, pos, end } of visited) {
+            const key = `${kind}.${pos}.${end}`;
+            assert.ok(!seen.has(key), `Node ${key} was visited more than once`);
+            seen.add(key);
         }
     });
 });
 
 describe("NodeArray", () => {
     test("hasTrailingComma", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
             "/src/main.ts": `declare function foo(...args: any): void;\nfoo("a", "b",);\nfoo("a", "b");`,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const sourceFile = await project.program.getSourceFile("/src/main.ts");
-            assert.ok(sourceFile);
-            const statements = sourceFile.statements.filter(isExpressionStatement);
-            assert.ok(isCallExpression(statements[0].expression));
-            assert.equal(statements[0].expression.arguments.hasTrailingComma, true);
-            assert.ok(isCallExpression(statements[1].expression));
-            assert.equal(statements[1].expression.arguments.hasTrailingComma, false);
-        }
-        finally {
-            await api.close();
-        }
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const sourceFile = await project.program.getSourceFile("/src/main.ts");
+        assert.ok(sourceFile);
+        const statements = sourceFile.statements.filter(isExpressionStatement);
+        assert.ok(isCallExpression(statements[0].expression));
+        assert.equal(statements[0].expression.arguments.hasTrailingComma, true);
+        assert.ok(isCallExpression(statements[1].expression));
+        assert.equal(statements[1].expression.arguments.hasTrailingComma, false);
     });
 });
 
 test("unicode escapes", async () => {
-    const api = spawnAPI({
+    await using api = spawnAPI({
         "/tsconfig.json": "{}",
         "/src/1.ts": `"😃"`,
         "/src/2.ts": `"\\ud83d\\ude03"`,
         "/src/3.ts": `"\\ud800a\\udc00"`,
     });
-    try {
-        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
-        const expectedTexts = new Map([
-            ["/src/1.ts", "😃"],
-            ["/src/2.ts", "😃"],
-            ["/src/3.ts", "\ud800a\udc00"],
-        ]);
 
-        for (const file of expectedTexts.keys()) {
-            const sourceFile = await project.program.getSourceFile(file);
-            assert.ok(sourceFile);
+    const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+    const project = snapshot.getProject("/tsconfig.json")!;
+    const expectedTexts = new Map([
+        ["/src/1.ts", "😃"],
+        ["/src/2.ts", "😃"],
+        ["/src/3.ts", "\ud800a\udc00"],
+    ]);
 
-            sourceFile.forEachChild(function visit(node) {
-                if (isStringLiteral(node)) {
-                    assert.equal(node.text, expectedTexts.get(file));
-                }
-                node.forEachChild(visit);
-            });
-        }
-    }
-    finally {
-        await api.close();
+    for (const file of expectedTexts.keys()) {
+        const sourceFile = await project.program.getSourceFile(file);
+        assert.ok(sourceFile);
+
+        sourceFile.forEachChild(function visit(node) {
+            if (isStringLiteral(node)) {
+                assert.equal(node.text, expectedTexts.get(file));
+            }
+            node.forEachChild(visit);
+        });
     }
 });
 
 test("template unicode escapes", async () => {
-    const api = spawnAPI({
+    await using api = spawnAPI({
         "/tsconfig.json": "{}",
         "/src/index.ts": "`\\ud800${0}\\udc00`",
     });
-    try {
-        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
-        const sourceFile = await project.program.getSourceFile("/src/index.ts");
-        assert.ok(sourceFile);
 
-        let sawHead = false;
-        let sawTail = false;
-        sourceFile.forEachChild(function visit(node) {
-            if (isTemplateHead(node)) {
-                assert.equal(node.text, "\ud800");
-                sawHead = true;
-            }
-            else if (isTemplateTail(node)) {
-                assert.equal(node.text, "\udc00");
-                sawTail = true;
-            }
-            node.forEachChild(visit);
-        });
-        assert.ok(sawHead);
-        assert.ok(sawTail);
-    }
-    finally {
-        await api.close();
-    }
+    const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+    const project = snapshot.getProject("/tsconfig.json")!;
+    const sourceFile = await project.program.getSourceFile("/src/index.ts");
+    assert.ok(sourceFile);
+
+    let sawHead = false;
+    let sawTail = false;
+    sourceFile.forEachChild(function visit(node) {
+        if (isTemplateHead(node)) {
+            assert.equal(node.text, "\ud800");
+            sawHead = true;
+        }
+        else if (isTemplateTail(node)) {
+            assert.equal(node.text, "\udc00");
+            sawTail = true;
+        }
+        node.forEachChild(visit);
+    });
+    assert.ok(sawHead);
+    assert.ok(sawTail);
 });
 
 test("Object equality", async () => {
-    const api = spawnAPI();
-    try {
-        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
-        // Same symbol returned from same snapshot's checker
-        assert.strictEqual(
-            await project.checker.getSymbolAtPosition("/src/index.ts", 9),
-            await project.checker.getSymbolAtPosition("/src/index.ts", 10),
-        );
-    }
-    finally {
-        await api.close();
-    }
+    await using api = spawnAPI();
+
+    const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+    const project = snapshot.getProject("/tsconfig.json")!;
+    // Same symbol returned from same snapshot's checker
+    assert.strictEqual(
+        await project.checker.getSymbolAtPosition("/src/index.ts", 9),
+        await project.checker.getSymbolAtPosition("/src/index.ts", 10),
+    );
 });
 
 test("Snapshot dispose", async () => {
-    const api = spawnAPI();
-    try {
-        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
-        const symbol = await project.checker.getSymbolAtPosition("/src/index.ts", 9);
-        assert.ok(symbol);
+    await using api = spawnAPI();
 
-        // Snapshot dispose should release server-side resources
-        assert.ok(snapshot.isDisposed() === false);
-        await snapshot.dispose();
-        assert.ok(snapshot.isDisposed() === true);
+    const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+    const project = snapshot.getProject("/tsconfig.json")!;
+    const symbol = await project.checker.getSymbolAtPosition("/src/index.ts", 9);
+    assert.ok(symbol);
 
-        // After dispose, snapshot methods should throw
-        assert.throws(() => {
-            snapshot.getProject("/tsconfig.json");
-        }, {
-            name: "Error",
-            message: "Snapshot is disposed",
-        });
-    }
-    finally {
-        await api.close();
-    }
+    // Snapshot dispose should release server-side resources
+    assert.ok(snapshot.isDisposed() === false);
+    await snapshot.dispose();
+    assert.ok(snapshot.isDisposed() === true);
+
+    // After dispose, snapshot methods should throw
+    assert.throws(() => {
+        snapshot.getProject("/tsconfig.json");
+    }, {
+        name: "Error",
+        message: "Snapshot is disposed",
+    });
 });
 
 describe("Multiple snapshots", () => {
     test("two snapshots work independently", async () => {
-        const api = spawnAPI();
-        try {
-            const snap1 = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const snap2 = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        await using api = spawnAPI();
 
-            // Both can fetch source files
-            const sf1 = await snap1.getProject("/tsconfig.json")!.program.getSourceFile("/src/index.ts");
-            const sf2 = await snap2.getProject("/tsconfig.json")!.program.getSourceFile("/src/index.ts");
-            assert.ok(sf1);
-            assert.ok(sf2);
+        const snap1 = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const snap2 = await api.updateSnapshot({ openProject: "/tsconfig.json" });
 
-            // Disposing one doesn't break the other
-            await snap1.dispose();
-            assert.ok(snap1.isDisposed());
-            assert.ok(!snap2.isDisposed());
+        // Both can fetch source files
+        const sf1 = await snap1.getProject("/tsconfig.json")!.program.getSourceFile("/src/index.ts");
+        const sf2 = await snap2.getProject("/tsconfig.json")!.program.getSourceFile("/src/index.ts");
+        assert.ok(sf1);
+        assert.ok(sf2);
 
-            // snap2 still works after snap1 is disposed
-            const symbol = await snap2.getProject("/tsconfig.json")!.checker.getSymbolAtPosition("/src/index.ts", 9);
-            assert.ok(symbol);
-            assert.equal(symbol.name, "foo");
-        }
-        finally {
-            await api.close();
-        }
+        // Disposing one doesn't break the other
+        await snap1.dispose();
+        assert.ok(snap1.isDisposed());
+        assert.ok(!snap2.isDisposed());
+
+        // snap2 still works after snap1 is disposed
+        const symbol = await snap2.getProject("/tsconfig.json")!.checker.getSymbolAtPosition("/src/index.ts", 9);
+        assert.ok(symbol);
+        assert.equal(symbol.name, "foo");
     });
 
     test("each snapshot has its own server-side lifecycle", async () => {
-        const { api, fs } = spawnAPIWithFS();
-        try {
-            const snap1 = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const { api: disposableAPI, fs } = spawnAPIWithFS();
+        await using api = disposableAPI;
 
-            // Verify initial state
-            const sf1 = await snap1.getProject("/tsconfig.json")!.program.getSourceFile("/src/foo.ts");
-            assert.ok(sf1);
-            assert.equal(sf1.text, `export const foo = 42;`);
+        const snap1 = await api.updateSnapshot({ openProject: "/tsconfig.json" });
 
-            // Mutate the file and create a new snapshot with the change
-            fs.writeFile!("/src/foo.ts", `export const foo = "changed";`);
-            const snap2 = await api.updateSnapshot({
-                fileChanges: { changed: ["/src/foo.ts"] },
-            });
+        // Verify initial state
+        const sf1 = await snap1.getProject("/tsconfig.json")!.program.getSourceFile("/src/foo.ts");
+        assert.ok(sf1);
+        assert.equal(sf1.text, `export const foo = 42;`);
 
-            // snap2 should reflect the updated content
-            const sf2 = await snap2.getProject("/tsconfig.json")!.program.getSourceFile("/src/foo.ts");
-            assert.ok(sf2);
-            assert.equal(sf2.text, `export const foo = "changed";`);
+        // Mutate the file and create a new snapshot with the change
+        fs.writeFile!("/src/foo.ts", `export const foo = "changed";`);
+        const snap2 = await api.updateSnapshot({
+            fileChanges: { changed: ["/src/foo.ts"] },
+        });
 
-            // snap1's source file should still have the original content
-            assert.equal(sf1.text, `export const foo = 42;`);
+        // snap2 should reflect the updated content
+        const sf2 = await snap2.getProject("/tsconfig.json")!.program.getSourceFile("/src/foo.ts");
+        assert.ok(sf2);
+        assert.equal(sf2.text, `export const foo = "changed";`);
 
-            await snap1.dispose();
+        // snap1's source file should still have the original content
+        assert.equal(sf1.text, `export const foo = 42;`);
 
-            // snap2 still works independently after snap1 is disposed
-            const symbol = await snap2.getProject("/tsconfig.json")!.checker.getSymbolAtPosition("/src/index.ts", 9);
-            assert.ok(symbol);
+        await snap1.dispose();
 
-            await snap2.dispose();
+        // snap2 still works independently after snap1 is disposed
+        const symbol = await snap2.getProject("/tsconfig.json")!.checker.getSymbolAtPosition("/src/index.ts", 9);
+        assert.ok(symbol);
 
-            // Both are disposed, new snapshot works fine with latest content
-            const snap3 = await api.updateSnapshot();
-            const sf3 = await snap3.getProject("/tsconfig.json")!.program.getSourceFile("/src/foo.ts");
-            assert.ok(sf3);
-            assert.equal(sf3.text, `export const foo = "changed";`);
-        }
-        finally {
-            await api.close();
-        }
+        await snap2.dispose();
+
+        // Both are disposed, new snapshot works fine with latest content
+        const snap3 = await api.updateSnapshot();
+        const sf3 = await snap3.getProject("/tsconfig.json")!.program.getSourceFile("/src/foo.ts");
+        assert.ok(sf3);
+        assert.equal(sf3.text, `export const foo = "changed";`);
     });
 
     test("adding a new file is reflected in the next snapshot", async () => {
-        const { api, fs } = spawnAPIWithFS();
-        try {
-            const snap1 = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const { api: disposableAPI, fs } = spawnAPIWithFS();
+        await using api = disposableAPI;
 
-            // Add a brand new file
-            fs.writeFile!("/src/bar.ts", `export const bar = true;`);
-            const snap2 = await api.updateSnapshot({
-                fileChanges: { created: ["/src/bar.ts"] },
-            });
+        const snap1 = await api.updateSnapshot({ openProject: "/tsconfig.json" });
 
-            const sf = await snap2.getProject("/tsconfig.json")!.program.getSourceFile("/src/bar.ts");
-            assert.ok(sf);
-            assert.equal(sf.text, `export const bar = true;`);
+        // Add a brand new file
+        fs.writeFile!("/src/bar.ts", `export const bar = true;`);
+        const snap2 = await api.updateSnapshot({
+            fileChanges: { created: ["/src/bar.ts"] },
+        });
 
-            // Original snapshot shouldn't have the new file
-            const sfOld = await snap1.getProject("/tsconfig.json")!.program.getSourceFile("/src/bar.ts");
-            assert.equal(sfOld, undefined);
-        }
-        finally {
-            await api.close();
-        }
+        const sf = await snap2.getProject("/tsconfig.json")!.program.getSourceFile("/src/bar.ts");
+        assert.ok(sf);
+        assert.equal(sf.text, `export const bar = true;`);
+
+        // Original snapshot shouldn't have the new file
+        const sfOld = await snap1.getProject("/tsconfig.json")!.program.getSourceFile("/src/bar.ts");
+        assert.equal(sfOld, undefined);
     });
 
     test("multiple sequential edits produce correct snapshots", async () => {
-        const { api, fs } = spawnAPIWithFS();
-        try {
-            await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const { api: disposableAPI, fs } = spawnAPIWithFS();
+        await using api = disposableAPI;
 
-            const versions = [
-                `export const foo = 1;`,
-                `export const foo = 2;`,
-                `export const foo = 3;`,
-            ];
+        await api.updateSnapshot({ openProject: "/tsconfig.json" });
 
-            for (const version of versions) {
-                fs.writeFile!("/src/foo.ts", version);
-                const snap = await api.updateSnapshot({
-                    fileChanges: { changed: ["/src/foo.ts"] },
-                });
-                const sf = await snap.getProject("/tsconfig.json")!.program.getSourceFile("/src/foo.ts");
-                assert.ok(sf);
-                assert.equal(sf.text, version);
-            }
-        }
-        finally {
-            await api.close();
+        const versions = [
+            `export const foo = 1;`,
+            `export const foo = 2;`,
+            `export const foo = 3;`,
+        ];
+
+        for (const version of versions) {
+            fs.writeFile!("/src/foo.ts", version);
+            const snap = await api.updateSnapshot({
+                fileChanges: { changed: ["/src/foo.ts"] },
+            });
+            const sf = await snap.getProject("/tsconfig.json")!.program.getSourceFile("/src/foo.ts");
+            assert.ok(sf);
+            assert.equal(sf.text, version);
         }
     });
 });
 
 describe("Source file caching", () => {
     test("same file from same snapshot returns cached object", async () => {
-        const api = spawnAPI();
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const sf1 = await project.program.getSourceFile("/src/index.ts");
-            const sf2 = await project.program.getSourceFile("/src/index.ts");
-            assert.ok(sf1);
-            assert.strictEqual(sf1, sf2, "Same source file should be returned from cache");
-        }
-        finally {
-            await api.close();
-        }
+        await using api = spawnAPI();
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const sf1 = await project.program.getSourceFile("/src/index.ts");
+        const sf2 = await project.program.getSourceFile("/src/index.ts");
+        assert.ok(sf1);
+        assert.strictEqual(sf1, sf2, "Same source file should be returned from cache");
     });
 
     test("same file from two snapshots (same content) returns cached object", async () => {
-        const api = spawnAPI();
-        try {
-            const snap1 = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const snap2 = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            // Fetch from snap1 first (populates cache), then snap2 (cache hit via hash)
-            const sf1 = await snap1.getProject("/tsconfig.json")!.program.getSourceFile("/src/index.ts");
-            const sf2 = await snap2.getProject("/tsconfig.json")!.program.getSourceFile("/src/index.ts");
-            assert.ok(sf1);
-            assert.ok(sf2);
-            // Same content hash → cache hit → same object
-            assert.strictEqual(sf1, sf2, "Same file with same content should share cached object");
-        }
-        finally {
-            await api.close();
-        }
+        await using api = spawnAPI();
+
+        const snap1 = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const snap2 = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        // Fetch from snap1 first (populates cache), then snap2 (cache hit via hash)
+        const sf1 = await snap1.getProject("/tsconfig.json")!.program.getSourceFile("/src/index.ts");
+        const sf2 = await snap2.getProject("/tsconfig.json")!.program.getSourceFile("/src/index.ts");
+        assert.ok(sf1);
+        assert.ok(sf2);
+        // Same content hash → cache hit → same object
+        assert.strictEqual(sf1, sf2, "Same file with same content should share cached object");
     });
 
     test("modified file returns a different source file object", async () => {
-        const { api, fs } = spawnAPIWithFS();
-        try {
-            const snap1 = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const sf1 = await snap1.getProject("/tsconfig.json")!.program.getSourceFile("/src/foo.ts");
-            assert.ok(sf1);
-            assert.equal(sf1.text, `export const foo = 42;`);
+        const { api: disposableAPI, fs } = spawnAPIWithFS();
+        await using api = disposableAPI;
 
-            // Mutate the file in the VFS
-            fs.writeFile!("/src/foo.ts", `export const foo = 100;`);
+        const snap1 = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const sf1 = await snap1.getProject("/tsconfig.json")!.program.getSourceFile("/src/foo.ts");
+        assert.ok(sf1);
+        assert.equal(sf1.text, `export const foo = 42;`);
 
-            // Notify the server about the change
-            const snap2 = await api.updateSnapshot({
-                fileChanges: { changed: ["/src/foo.ts"] },
-            });
-            const sf2 = await snap2.getProject("/tsconfig.json")!.program.getSourceFile("/src/foo.ts");
-            assert.ok(sf2);
-            assert.equal(sf2.text, `export const foo = 100;`);
+        // Mutate the file in the VFS
+        fs.writeFile!("/src/foo.ts", `export const foo = 100;`);
 
-            // Different content → different object
-            assert.notStrictEqual(sf1, sf2, "Modified file should return a new source file object");
-        }
-        finally {
-            await api.close();
-        }
+        // Notify the server about the change
+        const snap2 = await api.updateSnapshot({
+            fileChanges: { changed: ["/src/foo.ts"] },
+        });
+        const sf2 = await snap2.getProject("/tsconfig.json")!.program.getSourceFile("/src/foo.ts");
+        assert.ok(sf2);
+        assert.equal(sf2.text, `export const foo = 100;`);
+
+        // Different content → different object
+        assert.notStrictEqual(sf1, sf2, "Modified file should return a new source file object");
     });
 
     test("unmodified file retains cached object across file change notification", async () => {
-        const { api, fs } = spawnAPIWithFS();
-        try {
-            const snap1 = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const sf1 = await snap1.getProject("/tsconfig.json")!.program.getSourceFile("/src/index.ts");
-            assert.ok(sf1);
+        const { api: disposableAPI, fs } = spawnAPIWithFS();
+        await using api = disposableAPI;
 
-            // Mutate a different file
-            fs.writeFile!("/src/foo.ts", `export const foo = 999;`);
+        const snap1 = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const sf1 = await snap1.getProject("/tsconfig.json")!.program.getSourceFile("/src/index.ts");
+        assert.ok(sf1);
 
-            // Notify the server about the change to foo.ts only
-            const snap2 = await api.updateSnapshot({
-                fileChanges: { changed: ["/src/foo.ts"] },
-            });
-            const sf2 = await snap2.getProject("/tsconfig.json")!.program.getSourceFile("/src/index.ts");
-            assert.ok(sf2);
+        // Mutate a different file
+        fs.writeFile!("/src/foo.ts", `export const foo = 999;`);
 
-            // index.ts wasn't changed — should still get cached object
-            assert.strictEqual(sf1, sf2, "Unchanged file should return cached object across snapshots");
-        }
-        finally {
-            await api.close();
-        }
+        // Notify the server about the change to foo.ts only
+        const snap2 = await api.updateSnapshot({
+            fileChanges: { changed: ["/src/foo.ts"] },
+        });
+        const sf2 = await snap2.getProject("/tsconfig.json")!.program.getSourceFile("/src/index.ts");
+        assert.ok(sf2);
+
+        // index.ts wasn't changed — should still get cached object
+        assert.strictEqual(sf1, sf2, "Unchanged file should return cached object across snapshots");
     });
 
     test("cache entries survive when one of two snapshots is disposed", async () => {
-        const api = spawnAPI();
-        try {
-            const snap1 = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            // Fetch from snap1 to populate cache
-            const sf1 = await snap1.getProject("/tsconfig.json")!.program.getSourceFile("/src/index.ts");
-            assert.ok(sf1);
+        await using api = spawnAPI();
 
-            // snap2 retains snap1's cache refs for unchanged files via snapshot changes
-            const snap2 = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const snap1 = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        // Fetch from snap1 to populate cache
+        const sf1 = await snap1.getProject("/tsconfig.json")!.program.getSourceFile("/src/index.ts");
+        assert.ok(sf1);
 
-            // Dispose snap1 — snap2 still holds a ref, so the entry survives
-            await snap1.dispose();
+        // snap2 retains snap1's cache refs for unchanged files via snapshot changes
+        const snap2 = await api.updateSnapshot({ openProject: "/tsconfig.json" });
 
-            // Fetching from snap2 should still return the cached object
-            const sf2 = await snap2.getProject("/tsconfig.json")!.program.getSourceFile("/src/index.ts");
-            assert.ok(sf2);
-            assert.strictEqual(sf1, sf2, "Cache entry should survive when retained by the next snapshot");
-        }
-        finally {
-            await api.close();
-        }
+        // Dispose snap1 — snap2 still holds a ref, so the entry survives
+        await snap1.dispose();
+
+        // Fetching from snap2 should still return the cached object
+        const sf2 = await snap2.getProject("/tsconfig.json")!.program.getSourceFile("/src/index.ts");
+        assert.ok(sf2);
+        assert.strictEqual(sf1, sf2, "Cache entry should survive when retained by the next snapshot");
     });
 
     test("invalidateAll causes all files to be re-fetched", async () => {
-        const { api, fs } = spawnAPIWithFS();
-        try {
-            const snap1 = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const sf1 = await snap1.getProject("/tsconfig.json")!.program.getSourceFile("/src/foo.ts");
-            assert.ok(sf1);
-            assert.equal(sf1.text, `export const foo = 42;`);
+        const { api: disposableAPI, fs } = spawnAPIWithFS();
+        await using api = disposableAPI;
 
-            // Mutate the file
-            fs.writeFile!("/src/foo.ts", `export const foo = "hello";`);
+        const snap1 = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const sf1 = await snap1.getProject("/tsconfig.json")!.program.getSourceFile("/src/foo.ts");
+        assert.ok(sf1);
+        assert.equal(sf1.text, `export const foo = 42;`);
 
-            // Use invalidateAll to force re-fetch
-            const snap2 = await api.updateSnapshot({
-                fileChanges: { invalidateAll: true },
-            });
-            const sf2 = await snap2.getProject("/tsconfig.json")!.program.getSourceFile("/src/foo.ts");
-            assert.ok(sf2);
-            assert.equal(sf2.text, `export const foo = "hello";`);
-            assert.notStrictEqual(sf1, sf2, "invalidateAll should produce new source file objects");
-        }
-        finally {
-            await api.close();
-        }
+        // Mutate the file
+        fs.writeFile!("/src/foo.ts", `export const foo = "hello";`);
+
+        // Use invalidateAll to force re-fetch
+        const snap2 = await api.updateSnapshot({
+            fileChanges: { invalidateAll: true },
+        });
+        const sf2 = await snap2.getProject("/tsconfig.json")!.program.getSourceFile("/src/foo.ts");
+        assert.ok(sf2);
+        assert.equal(sf2.text, `export const foo = "hello";`);
+        assert.notStrictEqual(sf1, sf2, "invalidateAll should produce new source file objects");
     });
 
     test("node handles from a cached source file should be valid in a new snapshot", async () => {
-        const { api, fs } = spawnAPIWithFS({
+        const { api: disposableAPI, fs } = spawnAPIWithFS({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
             "/src/main.ts": `function foo(x: number) {}\nfoo(42);`,
             "/src/other.ts": `export const x = 1;`,
         });
-        try {
-            // Snapshot 1: get a node and verify getContextualType works
-            const snap1 = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const proj1 = snap1.getProject("/tsconfig.json")!;
+        await using api = disposableAPI;
 
-            const sf1 = await proj1.program.getSourceFile("/src/main.ts");
-            assert.ok(sf1);
+        // Snapshot 1: get a node and verify getContextualType works
+        const snap1 = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const proj1 = snap1.getProject("/tsconfig.json")!;
 
-            let numLiteral: Expression | undefined;
-            sf1.forEachChild(function visit(node) {
-                if (isCallExpression(node)) numLiteral = node.arguments[0];
-                node.forEachChild(visit);
-            });
-            assert.ok(numLiteral, "should find the 42 argument");
+        const sf1 = await proj1.program.getSourceFile("/src/main.ts");
+        assert.ok(sf1);
 
-            const type1 = await proj1.checker.getContextualType(numLiteral);
-            assert.ok(type1);
-            assert.ok(type1.flags & TypeFlags.Number);
+        let numLiteral: Expression | undefined;
+        sf1.forEachChild(function visit(node) {
+            if (isCallExpression(node)) numLiteral = node.arguments[0];
+            node.forEachChild(visit);
+        });
+        assert.ok(numLiteral, "should find the 42 argument");
 
-            // Snapshot 2: change a different file
-            fs.writeFile!("/src/other.ts", `export const x = 2;`);
-            const snap2 = await api.updateSnapshot({
-                fileChanges: { changed: ["/src/other.ts"] },
-            });
-            const proj2 = snap2.getProject("/tsconfig.json")!;
+        const type1 = await proj1.checker.getContextualType(numLiteral);
+        assert.ok(type1);
+        assert.ok(type1.flags & TypeFlags.Number);
 
-            // main.ts is unchanged — client returns the cached SourceFile (same object)
-            const sf2 = await proj2.program.getSourceFile("/src/main.ts");
-            assert.ok(sf2);
-            assert.strictEqual(sf1, sf2, "unchanged file should be served from client cache");
+        // Snapshot 2: change a different file
+        fs.writeFile!("/src/other.ts", `export const x = 2;`);
+        const snap2 = await api.updateSnapshot({
+            fileChanges: { changed: ["/src/other.ts"] },
+        });
+        const proj2 = snap2.getProject("/tsconfig.json")!;
 
-            let numLiteral2: Expression | undefined;
-            sf2.forEachChild(function visit(node) {
-                if (isCallExpression(node)) numLiteral2 = node.arguments[0];
-                node.forEachChild(visit);
-            });
-            assert.ok(numLiteral2, "should find the 42 argument");
-            assert.strictEqual(numLiteral, numLiteral2, "unchanged file should be served from client cache");
+        // main.ts is unchanged — client returns the cached SourceFile (same object)
+        const sf2 = await proj2.program.getSourceFile("/src/main.ts");
+        assert.ok(sf2);
+        assert.strictEqual(sf1, sf2, "unchanged file should be served from client cache");
 
-            // A type from new snapshot should be resolved
-            const type2 = await proj2.checker.getContextualType(numLiteral);
-            assert.ok(type2);
-            assert.ok(type2.flags & TypeFlags.Number);
-        }
-        finally {
-            await api.close();
-        }
+        let numLiteral2: Expression | undefined;
+        sf2.forEachChild(function visit(node) {
+            if (isCallExpression(node)) numLiteral2 = node.arguments[0];
+            node.forEachChild(visit);
+        });
+        assert.ok(numLiteral2, "should find the 42 argument");
+        assert.strictEqual(numLiteral, numLiteral2, "unchanged file should be served from client cache");
+
+        // A type from new snapshot should be resolved
+        const type2 = await proj2.checker.getContextualType(numLiteral);
+        assert.ok(type2);
+        assert.ok(type2.flags & TypeFlags.Number);
     });
 });
 
 describe("Snapshot disposal", () => {
     test("dispose is idempotent", async () => {
-        const api = spawnAPI();
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            await snapshot.dispose();
-            assert.ok(snapshot.isDisposed());
-            // Second dispose should not throw
-            await snapshot.dispose();
-            assert.ok(snapshot.isDisposed());
-        }
-        finally {
-            await api.close();
-        }
+        await using api = spawnAPI();
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        await Promise.all([snapshot.dispose(), snapshot.dispose()]); // @sync: snapshot.dispose();
+        assert.ok(snapshot.isDisposed());
+        // Second dispose should not throw
+        await snapshot.dispose();
+        assert.ok(snapshot.isDisposed());
     });
 
     test("api.close disposes all active snapshots", async () => {
@@ -2080,38 +1811,34 @@ describe("Source file cache keying across projects", () => {
     };
 
     test("different parse modes produce separate cached objects; same parse modes share", async () => {
-        const api = spawnAPI(multiProjectFiles);
-        try {
-            // Open all three projects
-            await api.updateSnapshot({ openProject: "/projectA/tsconfig.json" });
-            await api.updateSnapshot({ openProject: "/projectB/tsconfig.json" });
-            const snapshot = await api.updateSnapshot({ openProject: "/projectC/tsconfig.json" });
+        await using api = spawnAPI(multiProjectFiles);
 
-            const projectA = snapshot.getProject("/projectA/tsconfig.json")!;
-            const projectB = snapshot.getProject("/projectB/tsconfig.json")!;
-            const projectC = snapshot.getProject("/projectC/tsconfig.json")!;
-            assert.ok(projectA, "projectA should exist");
-            assert.ok(projectB, "projectB should exist");
-            assert.ok(projectC, "projectC should exist");
+        // Open all three projects
+        await api.updateSnapshot({ openProject: "/projectA/tsconfig.json" });
+        await api.updateSnapshot({ openProject: "/projectB/tsconfig.json" });
+        const snapshot = await api.updateSnapshot({ openProject: "/projectC/tsconfig.json" });
 
-            // Fetch the shared file from each project
-            const sfA = await projectA.program.getSourceFile("/src/shared.ts");
-            const sfB = await projectB.program.getSourceFile("/src/shared.ts");
-            const sfC = await projectC.program.getSourceFile("/src/shared.ts");
-            assert.ok(sfA, "sfA should exist");
-            assert.ok(sfB, "sfB should exist");
-            assert.ok(sfC, "sfC should exist");
+        const projectA = snapshot.getProject("/projectA/tsconfig.json")!;
+        const projectB = snapshot.getProject("/projectB/tsconfig.json")!;
+        const projectC = snapshot.getProject("/projectC/tsconfig.json")!;
+        assert.ok(projectA, "projectA should exist");
+        assert.ok(projectB, "projectB should exist");
+        assert.ok(projectC, "projectC should exist");
 
-            // A should differ from B and C (script vs module parse)
-            assert.notStrictEqual(sfA, sfB, "projectA (script) and projectB (module) should have different cached source files");
-            assert.notStrictEqual(sfA, sfC, "projectA (script) and projectC (module) should have different cached source files");
+        // Fetch the shared file from each project
+        const sfA = await projectA.program.getSourceFile("/src/shared.ts");
+        const sfB = await projectB.program.getSourceFile("/src/shared.ts");
+        const sfC = await projectC.program.getSourceFile("/src/shared.ts");
+        assert.ok(sfA, "sfA should exist");
+        assert.ok(sfB, "sfB should exist");
+        assert.ok(sfC, "sfC should exist");
 
-            // B and C should share the same cached object (both module parse, same content hash)
-            assert.strictEqual(sfB, sfC, "projectB and projectC (both module parse) should share the same cached source file");
-        }
-        finally {
-            await api.close();
-        }
+        // A should differ from B and C (script vs module parse)
+        assert.notStrictEqual(sfA, sfB, "projectA (script) and projectB (module) should have different cached source files");
+        assert.notStrictEqual(sfA, sfC, "projectA (script) and projectC (module) should have different cached source files");
+
+        // B and C should share the same cached object (both module parse, same content hash)
+        assert.strictEqual(sfB, sfC, "projectB and projectC (both module parse) should share the same cached source file");
     });
 });
 
@@ -2123,32 +1850,28 @@ describe("Checker - symbol identity across projects", () => {
     };
 
     test("getSymbolAtPosition returns same Symbol instance across projects", async () => {
-        const api = spawnAPI(sharedSymbolFiles);
-        try {
-            await api.updateSnapshot({ openProject: "/projectA/tsconfig.json" });
-            const snapshot = await api.updateSnapshot({ openProject: "/projectB/tsconfig.json" });
+        await using api = spawnAPI(sharedSymbolFiles);
 
-            const projectA = snapshot.getProject("/projectA/tsconfig.json")!;
-            const projectB = snapshot.getProject("/projectB/tsconfig.json")!;
-            assert.ok(projectA, "projectA should exist");
-            assert.ok(projectB, "projectB should exist");
+        await api.updateSnapshot({ openProject: "/projectA/tsconfig.json" });
+        const snapshot = await api.updateSnapshot({ openProject: "/projectB/tsconfig.json" });
 
-            const src = sharedSymbolFiles["/src/shared.ts"];
-            const varPos = src.indexOf("sharedVar");
+        const projectA = snapshot.getProject("/projectA/tsconfig.json")!;
+        const projectB = snapshot.getProject("/projectB/tsconfig.json")!;
+        assert.ok(projectA, "projectA should exist");
+        assert.ok(projectB, "projectB should exist");
 
-            const symbolA = await projectA.checker.getSymbolAtPosition("/src/shared.ts", varPos);
-            const symbolB = await projectB.checker.getSymbolAtPosition("/src/shared.ts", varPos);
+        const src = sharedSymbolFiles["/src/shared.ts"];
+        const varPos = src.indexOf("sharedVar");
 
-            assert.ok(symbolA, "symbolA should exist");
-            assert.ok(symbolB, "symbolB should exist");
-            assert.equal(symbolA.name, "sharedVar");
-            assert.equal(symbolB.name, "sharedVar");
+        const symbolA = await projectA.checker.getSymbolAtPosition("/src/shared.ts", varPos);
+        const symbolB = await projectB.checker.getSymbolAtPosition("/src/shared.ts", varPos);
 
-            assert.strictEqual(symbolA, symbolB, "Same source symbol queried from two projects should be the same object");
-        }
-        finally {
-            await api.close();
-        }
+        assert.ok(symbolA, "symbolA should exist");
+        assert.ok(symbolB, "symbolB should exist");
+        assert.equal(symbolA.name, "sharedVar");
+        assert.equal(symbolB.name, "sharedVar");
+
+        assert.strictEqual(symbolA, symbolB, "Same source symbol queried from two projects should be the same object");
     });
 });
 
@@ -2166,54 +1889,42 @@ export class MyClass {
     };
 
     test("getTypeAtPosition", async () => {
-        const api = spawnAPI(checkerFiles);
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const src = checkerFiles["/src/main.ts"];
-            const xPos = src.indexOf("x = 42");
-            const type = await project.checker.getTypeAtPosition("/src/main.ts", xPos);
-            assert.ok(type);
-            assert.ok(type.flags & TypeFlags.NumberLiteral);
-        }
-        finally {
-            await api.close();
-        }
+        await using api = spawnAPI(checkerFiles);
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const src = checkerFiles["/src/main.ts"];
+        const xPos = src.indexOf("x = 42");
+        const type = await project.checker.getTypeAtPosition("/src/main.ts", xPos);
+        assert.ok(type);
+        assert.ok(type.flags & TypeFlags.NumberLiteral);
     });
 
     test("getTypeAtPosition batched", async () => {
-        const api = spawnAPI(checkerFiles);
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const src = checkerFiles["/src/main.ts"];
-            const xPos = src.indexOf("x = 42");
-            const addPos = src.indexOf("add(");
-            const types = await project.checker.getTypeAtPosition("/src/main.ts", [xPos, addPos]);
-            assert.equal(types.length, 2);
-            assert.ok(types[0]);
-            assert.ok(types[1]);
-        }
-        finally {
-            await api.close();
-        }
+        await using api = spawnAPI(checkerFiles);
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const src = checkerFiles["/src/main.ts"];
+        const xPos = src.indexOf("x = 42");
+        const addPos = src.indexOf("add(");
+        const types = await project.checker.getTypeAtPosition("/src/main.ts", [xPos, addPos]);
+        assert.equal(types.length, 2);
+        assert.ok(types[0]);
+        assert.ok(types[1]);
     });
 
     test("getTypeAtLocation", async () => {
-        const api = spawnAPI(checkerFiles);
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const sourceFile = await project.program.getSourceFile("/src/main.ts");
-            assert.ok(sourceFile);
-            const firstVarDecl = sourceFile.statements[2]; // "export const x"
-            assert.ok(firstVarDecl);
-            const type = await project.checker.getTypeAtLocation(firstVarDecl);
-            assert.ok(type);
-        }
-        finally {
-            await api.close();
-        }
+        await using api = spawnAPI(checkerFiles);
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const sourceFile = await project.program.getSourceFile("/src/main.ts");
+        assert.ok(sourceFile);
+        const firstVarDecl = sourceFile.statements[2]; // "export const x"
+        assert.ok(firstVarDecl);
+        const type = await project.checker.getTypeAtLocation(firstVarDecl);
+        assert.ok(type);
     });
 
     test("getTypeAtLocation returns property type for parenthesized and chained access (issue #3938)", async () => {
@@ -2231,35 +1942,31 @@ const c = obj.b.c;
 `,
         };
 
-        const api = spawnAPI(files);
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const sourceFile = await project.program.getSourceFile("/src/main.ts");
-            assert.ok(sourceFile);
+        await using api = spawnAPI(files);
 
-            const targetNodes = new Map<string, Node>();
-            sourceFile.forEachChild(function visit(node) {
-                if (node.kind === SyntaxKind.PropertyAccessExpression) {
-                    const text = sourceFile.text.slice(node.pos, node.end).trim();
-                    if (text === "obj.a" || text === "(obj).a" || text === "obj.b.c") {
-                        targetNodes.set(text, node);
-                    }
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const sourceFile = await project.program.getSourceFile("/src/main.ts");
+        assert.ok(sourceFile);
+
+        const targetNodes = new Map<string, Node>();
+        sourceFile.forEachChild(function visit(node) {
+            if (node.kind === SyntaxKind.PropertyAccessExpression) {
+                const text = sourceFile.text.slice(node.pos, node.end).trim();
+                if (text === "obj.a" || text === "(obj).a" || text === "obj.b.c") {
+                    targetNodes.set(text, node);
                 }
-                node.forEachChild(visit);
-            });
-
-            assert.equal(targetNodes.size, 3, "Should find all target property access expressions");
-            for (const expr of ["obj.a", "(obj).a", "obj.b.c"] as const) {
-                const node = targetNodes.get(expr);
-                assert.ok(node, `Should find expression '${expr}'`);
-                const type = await project.checker.getTypeAtLocation(node);
-                assert.ok(type, `Should get a type for '${expr}'`);
-                assert.ok(type.flags & TypeFlags.Number, `Expected '${expr}' to have number type flags, got ${type.flags}`);
             }
-        }
-        finally {
-            await api.close();
+            node.forEachChild(visit);
+        });
+
+        assert.equal(targetNodes.size, 3, "Should find all target property access expressions");
+        for (const expr of ["obj.a", "(obj).a", "obj.b.c"] as const) {
+            const node = targetNodes.get(expr);
+            assert.ok(node, `Should find expression '${expr}'`);
+            const type = await project.checker.getTypeAtLocation(node);
+            assert.ok(type, `Should get a type for '${expr}'`);
+            assert.ok(type.flags & TypeFlags.Number, `Expected '${expr}' to have number type flags, got ${type.flags}`);
         }
     });
 
@@ -2281,211 +1988,187 @@ export class Cache {
 `,
         };
 
-        const api = spawnAPI(files);
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const sourceFile = await project.program.getSourceFile("/src/main.ts");
-            assert.ok(sourceFile);
+        await using api = spawnAPI(files);
 
-            let callNode: import("@typescript/typescript/unstable/ast").CallExpression | undefined;
-            sourceFile.forEachChild(function visit(node) {
-                if (isCallExpression(node)) {
-                    const text = sourceFile.text.slice(node.pos, node.end).trim();
-                    if (text === "this.#buildCapabilities()") {
-                        callNode = node;
-                    }
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const sourceFile = await project.program.getSourceFile("/src/main.ts");
+        assert.ok(sourceFile);
+
+        let callNode: import("@typescript/typescript/unstable/ast").CallExpression | undefined;
+        sourceFile.forEachChild(function visit(node) {
+            if (isCallExpression(node)) {
+                const text = sourceFile.text.slice(node.pos, node.end).trim();
+                if (text === "this.#buildCapabilities()") {
+                    callNode = node;
                 }
-                node.forEachChild(visit);
-            });
+            }
+            node.forEachChild(visit);
+        });
 
-            assert.ok(callNode, "Should find private method call expression");
-            const callType = await project.checker.getTypeAtLocation(callNode);
-            const calleeType = await project.checker.getTypeAtLocation(callNode.expression);
-            assert.ok(callType, "Should get type for call expression");
-            assert.ok(calleeType, "Should get type for callee expression");
+        assert.ok(callNode, "Should find private method call expression");
+        const callType = await project.checker.getTypeAtLocation(callNode);
+        const calleeType = await project.checker.getTypeAtLocation(callNode.expression);
+        assert.ok(callType, "Should get type for call expression");
+        assert.ok(calleeType, "Should get type for callee expression");
 
-            const callSignatures = await project.checker.getSignaturesOfType(calleeType, SignatureKind.Call);
-            assert.ok(callSignatures.length > 0, "Callee should be callable");
-            const returnType = await project.checker.getReturnTypeOfSignature(callSignatures[0]);
-            assert.ok(returnType, "Should get return type for private method call");
-            const callExprSignatures = await project.checker.getSignaturesOfType(callType, SignatureKind.Call);
+        const callSignatures = await project.checker.getSignaturesOfType(calleeType, SignatureKind.Call);
+        assert.ok(callSignatures.length > 0, "Callee should be callable");
+        const returnType = await project.checker.getReturnTypeOfSignature(callSignatures[0]);
+        assert.ok(returnType, "Should get return type for private method call");
+        const callExprSignatures = await project.checker.getSignaturesOfType(callType, SignatureKind.Call);
 
-            assert.ok(callType.flags & TypeFlags.Object, `Expected call expression type to be object-like, got ${callType.flags}`);
-            assert.ok(returnType.flags & TypeFlags.Object, `Expected return type to be object-like, got ${returnType.flags}`);
-            assert.equal(callType.flags, returnType.flags, "Call expression type should have same flags as method return type");
-            assert.equal(callExprSignatures.length, 0, "Call expression result type should not itself be callable");
-        }
-        finally {
-            await api.close();
-        }
+        assert.ok(callType.flags & TypeFlags.Object, `Expected call expression type to be object-like, got ${callType.flags}`);
+        assert.ok(returnType.flags & TypeFlags.Object, `Expected return type to be object-like, got ${returnType.flags}`);
+        assert.equal(callType.flags, returnType.flags, "Call expression type should have same flags as method return type");
+        assert.equal(callExprSignatures.length, 0, "Call expression result type should not itself be callable");
     });
 
     test("getSignaturesOfType - call signatures", async () => {
-        const api = spawnAPI(checkerFiles);
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const src = checkerFiles["/src/main.ts"];
-            const addPos = src.indexOf("add(");
-            const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", addPos);
-            assert.ok(symbol);
-            const type = await project.checker.getTypeOfSymbol(symbol);
-            assert.ok(type);
-            const callSigs = await project.checker.getSignaturesOfType(type, SignatureKind.Call);
-            assert.ok(callSigs.length > 0);
-            const sig = callSigs[0];
-            const typeCallSigs = await type.getCallSignatures();
-            assert.deepEqual(typeCallSigs, callSigs);
-            assert.ok((await sig.getReturnType()).flags & TypeFlags.Number);
-            assert.ok((await sig.getTypeParameterAtPosition(0)).flags & TypeFlags.Number);
-            assert.ok(sig.id);
-            assert.ok(sig.parameters.length >= 2);
-            assert.ok(sig.hasRestParameter);
-            assert.ok(!sig.isConstruct);
-            assert.ok(!sig.isAbstract);
-        }
-        finally {
-            await api.close();
-        }
+        await using api = spawnAPI(checkerFiles);
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const src = checkerFiles["/src/main.ts"];
+        const addPos = src.indexOf("add(");
+        const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", addPos);
+        assert.ok(symbol);
+        const type = await project.checker.getTypeOfSymbol(symbol);
+        assert.ok(type);
+        const callSigs = await project.checker.getSignaturesOfType(type, SignatureKind.Call);
+        assert.ok(callSigs.length > 0);
+        const sig = callSigs[0];
+        const typeCallSigs = await type.getCallSignatures();
+        assert.deepEqual(typeCallSigs, callSigs);
+        assert.ok((await sig.getReturnType()).flags & TypeFlags.Number);
+        assert.ok((await sig.getTypeParameterAtPosition(0)).flags & TypeFlags.Number);
+        assert.ok(sig.id);
+        assert.ok(sig.parameters.length >= 2);
+        assert.ok(sig.hasRestParameter);
+        assert.ok(!sig.isConstruct);
+        assert.ok(!sig.isAbstract);
     });
 
     test("getApparentProperties includes CallableFunction members", async () => {
-        const api = spawnAPI(checkerFiles);
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const src = checkerFiles["/src/main.ts"];
-            const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", src.indexOf("add("));
-            assert.ok(symbol);
-            const type = await project.checker.getTypeOfSymbol(symbol);
-            const propertyNames = (await type.getApparentProperties()).map(property => property.name);
-            assert.ok(propertyNames.includes("apply"));
-            assert.ok(propertyNames.includes("call"));
-            assert.ok(propertyNames.includes("bind"));
-        }
-        finally {
-            await api.close();
-        }
+        await using api = spawnAPI(checkerFiles);
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const src = checkerFiles["/src/main.ts"];
+        const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", src.indexOf("add("));
+        assert.ok(symbol);
+        const type = await project.checker.getTypeOfSymbol(symbol);
+        const propertyNames = (await type.getApparentProperties()).map(property => property.name);
+        assert.ok(propertyNames.includes("apply"));
+        assert.ok(propertyNames.includes("call"));
+        assert.ok(propertyNames.includes("bind"));
     });
 
     test("checker and object methods share cached results", async () => {
-        const api = new API({
+        await using api = new API({
             cwd: fileURLToPath(new URL("../../../../", import.meta.url).toString()),
             fs: createVirtualFileSystem(checkerFiles),
             collectTiming: true,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const src = checkerFiles["/src/main.ts"];
-            const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", src.indexOf("add("));
-            assert.ok(symbol);
-            const type = await project.checker.getTypeOfSymbol(symbol);
-            let signature: Signature | undefined;
 
-            async function assertOneRequest(callback: () => Promise<void>) {
-                await api.resetTimingInfo();
-                await callback();
-                assert.equal((await api.getTimingInfo()).totals.requestCount, 1);
-            }
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const src = checkerFiles["/src/main.ts"];
+        const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", src.indexOf("add("));
+        assert.ok(symbol);
+        const type = await project.checker.getTypeOfSymbol(symbol);
+        let signature: Signature | undefined;
 
-            await assertOneRequest(async () => {
-                const properties = await type.getProperties();
-                assert.strictEqual(await project.checker.getPropertiesOfType(type), properties);
-            });
-            await assertOneRequest(async () => {
-                const signatures = await type.getCallSignatures();
-                assert.strictEqual(await project.checker.getSignaturesOfType(type, SignatureKind.Call), signatures);
-                signature = signatures[0];
-            });
-            await assertOneRequest(async () => {
-                const nonNullable = await project.checker.getNonNullableType(type);
-                assert.strictEqual(await type.getNonNullableType(), nonNullable);
-            });
-            await assertOneRequest(async () => {
-                const apparentType = await type.getApparentType();
-                assert.strictEqual(await project.checker.getApparentType(type), apparentType);
-            });
-            await assertOneRequest(async () => {
-                const indexInfos = await type.getIndexInfos();
-                assert.strictEqual(await project.checker.getIndexInfosOfType(type), indexInfos);
-            });
-            await assertOneRequest(async () => {
-                assert.ok(signature);
-                const returnType = await project.checker.getReturnTypeOfSignature(signature);
-                assert.strictEqual(await signature.getReturnType(), returnType);
-            });
+        async function assertOneRequest(callback: () => Promise<void>) {
+            await api.resetTimingInfo();
+            await callback();
+            assert.equal((await api.getTimingInfo()).totals.requestCount, 1);
         }
-        finally {
-            await api.close();
-        }
+
+        await assertOneRequest(async () => {
+            const properties = await type.getProperties();
+            assert.strictEqual(await project.checker.getPropertiesOfType(type), properties);
+        });
+        await assertOneRequest(async () => {
+            const signatures = await type.getCallSignatures();
+            assert.strictEqual(await project.checker.getSignaturesOfType(type, SignatureKind.Call), signatures);
+            signature = signatures[0];
+        });
+        await assertOneRequest(async () => {
+            const nonNullable = await project.checker.getNonNullableType(type);
+            assert.strictEqual(await type.getNonNullableType(), nonNullable);
+        });
+        await assertOneRequest(async () => {
+            const apparentType = await type.getApparentType();
+            assert.strictEqual(await project.checker.getApparentType(type), apparentType);
+        });
+        await assertOneRequest(async () => {
+            const indexInfos = await type.getIndexInfos();
+            assert.strictEqual(await project.checker.getIndexInfosOfType(type), indexInfos);
+        });
+        await assertOneRequest(async () => {
+            assert.ok(signature);
+            const returnType = await project.checker.getReturnTypeOfSignature(signature);
+            assert.strictEqual(await signature.getReturnType(), returnType);
+        });
     });
 
     test("getSignaturesOfType - construct signatures", async () => {
-        const api = spawnAPI(checkerFiles);
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const src = checkerFiles["/src/main.ts"];
-            const classPos = src.indexOf("MyClass");
-            const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", classPos);
-            assert.ok(symbol);
-            const type = await project.checker.getTypeOfSymbol(symbol);
-            assert.ok(type);
-            const constructSigs = await project.checker.getSignaturesOfType(type, SignatureKind.Construct);
-            assert.ok(constructSigs.length > 0);
-            const sig = constructSigs[0];
-            assert.ok(sig.isConstruct);
-        }
-        finally {
-            await api.close();
-        }
+        await using api = spawnAPI(checkerFiles);
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const src = checkerFiles["/src/main.ts"];
+        const classPos = src.indexOf("MyClass");
+        const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", classPos);
+        assert.ok(symbol);
+        const type = await project.checker.getTypeOfSymbol(symbol);
+        assert.ok(type);
+        const constructSigs = await project.checker.getSignaturesOfType(type, SignatureKind.Construct);
+        assert.ok(constructSigs.length > 0);
+        const sig = constructSigs[0];
+        assert.ok(sig.isConstruct);
     });
 
     test("Signature declaration can be resolved", async () => {
-        const api = spawnAPI(checkerFiles);
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const src = checkerFiles["/src/main.ts"];
-            const addPos = src.indexOf("add(");
-            const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", addPos);
-            assert.ok(symbol);
-            const type = await project.checker.getTypeOfSymbol(symbol);
-            assert.ok(type);
-            const callSigs = await project.checker.getSignaturesOfType(type, SignatureKind.Call);
-            assert.ok(callSigs.length > 0);
-            const sig = callSigs[0];
-            assert.ok(sig.declaration);
-            assert.ok(isSignatureDeclaration.Handle(sig.declaration));
-            const node = await sig.declaration.resolve(project);
-            assert.ok(node);
-            assert.ok(node.parameters);
-            assert.ok(isSignatureDeclaration(node));
-            // The handle remembers its canonical project, so resolve() works without an argument.
-            const nodeFromCanonical = await sig.declaration.resolve();
-            assert.ok(nodeFromCanonical);
-            assert.ok(nodeFromCanonical.parameters);
-            assert.ok(isSignatureDeclaration(nodeFromCanonical));
-            assert.strictEqual(nodeFromCanonical.kind, node.kind);
+        await using api = spawnAPI(checkerFiles);
 
-            const methodPos = src.indexOf("getValue");
-            const methodSymbol = await project.checker.getSymbolAtPosition("/src/main.ts", methodPos);
-            assert.ok(methodSymbol);
-            assert.ok(methodSymbol.valueDeclaration);
-            const methodNode = await methodSymbol.valueDeclaration.resolve(project);
-            assert.ok(methodNode);
-            assert.strictEqual(methodNode.parent.kind, SyntaxKind.ClassDeclaration);
-            assert.strictEqual(methodNode.parent.parent.kind, SyntaxKind.SourceFile);
-            // A symbol's declaration handles default to the symbol's canonical project.
-            const methodNodeFromCanonical = await methodSymbol.valueDeclaration.resolve();
-            assert.ok(methodNodeFromCanonical);
-            assert.strictEqual(methodNodeFromCanonical.kind, methodNode.kind);
-        }
-        finally {
-            await api.close();
-        }
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const src = checkerFiles["/src/main.ts"];
+        const addPos = src.indexOf("add(");
+        const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", addPos);
+        assert.ok(symbol);
+        const type = await project.checker.getTypeOfSymbol(symbol);
+        assert.ok(type);
+        const callSigs = await project.checker.getSignaturesOfType(type, SignatureKind.Call);
+        assert.ok(callSigs.length > 0);
+        const sig = callSigs[0];
+        assert.ok(sig.declaration);
+        assert.ok(isSignatureDeclaration.Handle(sig.declaration));
+        const node = await sig.declaration.resolve(project);
+        assert.ok(node);
+        assert.ok(node.parameters);
+        assert.ok(isSignatureDeclaration(node));
+        // The handle remembers its canonical project, so resolve() works without an argument.
+        const nodeFromCanonical = await sig.declaration.resolve();
+        assert.ok(nodeFromCanonical);
+        assert.ok(nodeFromCanonical.parameters);
+        assert.ok(isSignatureDeclaration(nodeFromCanonical));
+        assert.strictEqual(nodeFromCanonical.kind, node.kind);
+
+        const methodPos = src.indexOf("getValue");
+        const methodSymbol = await project.checker.getSymbolAtPosition("/src/main.ts", methodPos);
+        assert.ok(methodSymbol);
+        assert.ok(methodSymbol.valueDeclaration);
+        const methodNode = await methodSymbol.valueDeclaration.resolve(project);
+        assert.ok(methodNode);
+        assert.strictEqual(methodNode.parent.kind, SyntaxKind.ClassDeclaration);
+        assert.strictEqual(methodNode.parent.parent.kind, SyntaxKind.SourceFile);
+        // A symbol's declaration handles default to the symbol's canonical project.
+        const methodNodeFromCanonical = await methodSymbol.valueDeclaration.resolve();
+        assert.ok(methodNodeFromCanonical);
+        assert.strictEqual(methodNodeFromCanonical.kind, methodNode.kind);
     });
 
     test("getSignaturesOfType - signature type parameters", async () => {
@@ -2496,119 +2179,99 @@ export class Cache {
                 lift<R>(operator: Operator<T, R>): Observable<R>;
             }
             `;
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
             "/src/main.ts": mainFile,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const liftPos = mainFile.indexOf("lift");
-            const type = await project.checker.getTypeAtPosition("/src/main.ts", liftPos);
-            assert.ok(type);
-            const callSigs = await project.checker.getSignaturesOfType(type, SignatureKind.Call);
-            assert.ok(callSigs.length === 1, "should have exactly one call signature, found: " + callSigs.length);
-            const sig = callSigs[0];
-            assert.ok(sig.typeParameters?.length === 1, "should have exactly one type parameter, found: " + sig.typeParameters?.length);
-            const typeParams = await sig.getTypeParameters();
-            const typeParam = typeParams[0];
-            assert.ok(typeParam, "should have type parameter");
-            const name = (await typeParam.getSymbol())?.name;
-            assert.ok(name === "R", "should be named R, instead: " + name);
-            assert.ok(typeParam.flags & TypeFlags.TypeParameter, "should be a type parameter, instead flags: " + typeParam.flags);
-        }
-        finally {
-            await api.close();
-        }
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const liftPos = mainFile.indexOf("lift");
+        const type = await project.checker.getTypeAtPosition("/src/main.ts", liftPos);
+        assert.ok(type);
+        const callSigs = await project.checker.getSignaturesOfType(type, SignatureKind.Call);
+        assert.ok(callSigs.length === 1, "should have exactly one call signature, found: " + callSigs.length);
+        const sig = callSigs[0];
+        assert.ok(sig.typeParameters?.length === 1, "should have exactly one type parameter, found: " + sig.typeParameters?.length);
+        const typeParams = await sig.getTypeParameters();
+        const typeParam = typeParams[0];
+        assert.ok(typeParam, "should have type parameter");
+        const name = (await typeParam.getSymbol())?.name;
+        assert.ok(name === "R", "should be named R, instead: " + name);
+        assert.ok(typeParam.flags & TypeFlags.TypeParameter, "should be a type parameter, instead flags: " + typeParam.flags);
     });
 
     test("Signature.getParameters() returns parameter symbols with correct names", async () => {
-        const api = spawnAPI(checkerFiles);
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const src = checkerFiles["/src/main.ts"];
-            const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", src.indexOf("add("));
-            assert.ok(symbol);
-            const type = await project.checker.getTypeOfSymbol(symbol);
-            assert.ok(type);
-            const sigs = await project.checker.getSignaturesOfType(type, SignatureKind.Call);
-            assert.ok(sigs.length > 0);
-            const params = await sigs[0].getParameters();
-            assert.equal(params.length, 3);
-            assert.equal(params[0].name, "a");
-            assert.equal(params[1].name, "b");
-            assert.equal(params[2].name, "rest");
-            assert.ok(params[0].flags & SymbolFlags.FunctionScopedVariable, `expected FunctionScopedVariable on 'a', got ${params[0].flags}`);
-        }
-        finally {
-            await api.close();
-        }
+        await using api = spawnAPI(checkerFiles);
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const src = checkerFiles["/src/main.ts"];
+        const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", src.indexOf("add("));
+        assert.ok(symbol);
+        const type = await project.checker.getTypeOfSymbol(symbol);
+        assert.ok(type);
+        const sigs = await project.checker.getSignaturesOfType(type, SignatureKind.Call);
+        assert.ok(sigs.length > 0);
+        const params = await sigs[0].getParameters();
+        assert.equal(params.length, 3);
+        assert.equal(params[0].name, "a");
+        assert.equal(params[1].name, "b");
+        assert.equal(params[2].name, "rest");
+        assert.ok(params[0].flags & SymbolFlags.FunctionScopedVariable, `expected FunctionScopedVariable on 'a', got ${params[0].flags}`);
     });
 
     test("Signature.getThisParameter() returns undefined when no explicit this parameter", async () => {
-        const api = spawnAPI(checkerFiles);
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const src = checkerFiles["/src/main.ts"];
-            const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", src.indexOf("add("));
-            assert.ok(symbol);
-            const type = await project.checker.getTypeOfSymbol(symbol);
-            assert.ok(type);
-            const sigs = await project.checker.getSignaturesOfType(type, SignatureKind.Call);
-            assert.ok(sigs.length > 0);
-            const thisParam = await sigs[0].getThisParameter();
-            assert.strictEqual(thisParam, undefined, "add() has no explicit this parameter");
-        }
-        finally {
-            await api.close();
-        }
+        await using api = spawnAPI(checkerFiles);
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const src = checkerFiles["/src/main.ts"];
+        const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", src.indexOf("add("));
+        assert.ok(symbol);
+        const type = await project.checker.getTypeOfSymbol(symbol);
+        assert.ok(type);
+        const sigs = await project.checker.getSignaturesOfType(type, SignatureKind.Call);
+        assert.ok(sigs.length > 0);
+        const thisParam = await sigs[0].getThisParameter();
+        assert.strictEqual(thisParam, undefined, "add() has no explicit this parameter");
     });
 
     test("Signature.getThisParameter() returns symbol for explicit this parameter", async () => {
         const src = `export function foo(this: { n: number }, x: string): void {}`;
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
             "/src/main.ts": src,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", src.indexOf("foo("));
-            assert.ok(symbol);
-            const type = await project.checker.getTypeOfSymbol(symbol);
-            assert.ok(type);
-            const sigs = await project.checker.getSignaturesOfType(type, SignatureKind.Call);
-            assert.ok(sigs.length > 0);
-            const thisParam = await sigs[0].getThisParameter();
-            assert.ok(thisParam, "foo has an explicit this parameter");
-            assert.equal(thisParam.name, "this");
-            assert.ok(thisParam.flags & SymbolFlags.FunctionScopedVariable, `expected FunctionScopedVariable, got ${thisParam.flags}`);
-        }
-        finally {
-            await api.close();
-        }
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", src.indexOf("foo("));
+        assert.ok(symbol);
+        const type = await project.checker.getTypeOfSymbol(symbol);
+        assert.ok(type);
+        const sigs = await project.checker.getSignaturesOfType(type, SignatureKind.Call);
+        assert.ok(sigs.length > 0);
+        const thisParam = await sigs[0].getThisParameter();
+        assert.ok(thisParam, "foo has an explicit this parameter");
+        assert.equal(thisParam.name, "this");
+        assert.ok(thisParam.flags & SymbolFlags.FunctionScopedVariable, `expected FunctionScopedVariable, got ${thisParam.flags}`);
     });
 
     test("Signature.getTarget() returns undefined for a non-instantiated signature", async () => {
-        const api = spawnAPI(checkerFiles);
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const src = checkerFiles["/src/main.ts"];
-            const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", src.indexOf("add("));
-            assert.ok(symbol);
-            const type = await project.checker.getTypeOfSymbol(symbol);
-            assert.ok(type);
-            const sigs = await project.checker.getSignaturesOfType(type, SignatureKind.Call);
-            assert.ok(sigs.length > 0);
-            const target = await sigs[0].getTarget();
-            assert.strictEqual(target, undefined, "add() is not an instantiated signature");
-        }
-        finally {
-            await api.close();
-        }
+        await using api = spawnAPI(checkerFiles);
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const src = checkerFiles["/src/main.ts"];
+        const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", src.indexOf("add("));
+        assert.ok(symbol);
+        const type = await project.checker.getTypeOfSymbol(symbol);
+        assert.ok(type);
+        const sigs = await project.checker.getSignaturesOfType(type, SignatureKind.Call);
+        assert.ok(sigs.length > 0);
+        const target = await sigs[0].getTarget();
+        assert.strictEqual(target, undefined, "add() is not an instantiated signature");
     });
 
     test("Signature.getTarget() returns the generic source signature for an instantiated call", async () => {
@@ -2616,31 +2279,27 @@ export class Cache {
             function identity<T>(x: T): T { return x; }
             identity<string>("hello");
         `;
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
             "/src/main.ts": src,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const sourceFile = await project.program.getSourceFile("/src/main.ts");
-            assert.ok(sourceFile);
-            let callNode: Node | undefined;
-            sourceFile.forEachChild(function visit(node) {
-                if (isCallExpression(node)) callNode = node;
-                node.forEachChild(visit);
-            });
-            assert.ok(callNode, "should find a call expression");
-            const sig = await project.checker.getResolvedSignature(callNode);
-            assert.ok(sig, "should resolve a signature for the call");
-            assert.ok(sig.target !== undefined, "instantiated call should have a target ID");
-            const target = await sig.getTarget();
-            assert.ok(target, "getTarget() should return the generic signature");
-            assert.ok(target.typeParameters && target.typeParameters.length > 0, "target should have type parameters");
-        }
-        finally {
-            await api.close();
-        }
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const sourceFile = await project.program.getSourceFile("/src/main.ts");
+        assert.ok(sourceFile);
+        let callNode: Node | undefined;
+        sourceFile.forEachChild(function visit(node) {
+            if (isCallExpression(node)) callNode = node;
+            node.forEachChild(visit);
+        });
+        assert.ok(callNode, "should find a call expression");
+        const sig = await project.checker.getResolvedSignature(callNode);
+        assert.ok(sig, "should resolve a signature for the call");
+        assert.ok(sig.target !== undefined, "instantiated call should have a target ID");
+        const target = await sig.getTarget();
+        assert.ok(target, "getTarget() should return the generic signature");
+        assert.ok(target.typeParameters && target.typeParameters.length > 0, "target should have type parameters");
     });
 });
 
@@ -2657,83 +2316,67 @@ export const value = 1;
     };
 
     test("getMembers returns class members", async () => {
-        const api = spawnAPI(symbolFiles);
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const src = symbolFiles["/src/mod.ts"];
-            const animalPos = src.indexOf("Animal");
-            const symbol = await project.checker.getSymbolAtPosition("/src/mod.ts", animalPos);
-            assert.ok(symbol);
-            const members = await symbol.getMembers();
-            assert.ok(members.size > 0);
-            const memberNames = [...members.values()].map(m => m.name);
-            assert.ok(memberNames.includes("name"), "should have 'name' member");
-            assert.ok(memberNames.includes("speak"), "should have 'speak' member");
-        }
-        finally {
-            await api.close();
-        }
+        await using api = spawnAPI(symbolFiles);
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const src = symbolFiles["/src/mod.ts"];
+        const animalPos = src.indexOf("Animal");
+        const symbol = await project.checker.getSymbolAtPosition("/src/mod.ts", animalPos);
+        assert.ok(symbol);
+        const members = await symbol.getMembers();
+        assert.ok(members.size > 0);
+        const memberNames = [...members.values()].map(m => m.name);
+        assert.ok(memberNames.includes("name"), "should have 'name' member");
+        assert.ok(memberNames.includes("speak"), "should have 'speak' member");
     });
 
     test("getExports returns module exports via sourceFile symbol", async () => {
-        const api = spawnAPI(symbolFiles);
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const sourceFile = await project.program.getSourceFile("/src/mod.ts");
-            assert.ok(sourceFile);
-            const moduleSymbol = await project.checker.getSymbolAtLocation(sourceFile);
-            assert.ok(moduleSymbol);
-            const exports = await moduleSymbol.getExports();
-            assert.ok(exports.size > 0);
-            const exportNames = [...exports.values()].map(e => e.name);
-            assert.ok(exportNames.includes("Animal"), "should export Animal");
-            assert.ok(exportNames.includes("value"), "should export value");
-        }
-        finally {
-            await api.close();
-        }
+        await using api = spawnAPI(symbolFiles);
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const sourceFile = await project.program.getSourceFile("/src/mod.ts");
+        assert.ok(sourceFile);
+        const moduleSymbol = await project.checker.getSymbolAtLocation(sourceFile);
+        assert.ok(moduleSymbol);
+        const exports = await moduleSymbol.getExports();
+        assert.ok(exports.size > 0);
+        const exportNames = [...exports.values()].map(e => e.name);
+        assert.ok(exportNames.includes("Animal"), "should export Animal");
+        assert.ok(exportNames.includes("value"), "should export value");
     });
 
     test("getParent returns containing symbol", async () => {
-        const api = spawnAPI(symbolFiles);
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const src = symbolFiles["/src/mod.ts"];
-            const namePos = src.indexOf("name:");
-            const nameSymbol = await project.checker.getSymbolAtPosition("/src/mod.ts", namePos);
-            assert.ok(nameSymbol);
-            assert.equal(nameSymbol.name, "name");
-            const parent = await nameSymbol.getParent();
-            assert.ok(parent);
-            assert.equal(parent.name, "Animal");
-        }
-        finally {
-            await api.close();
-        }
+        await using api = spawnAPI(symbolFiles);
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const src = symbolFiles["/src/mod.ts"];
+        const namePos = src.indexOf("name:");
+        const nameSymbol = await project.checker.getSymbolAtPosition("/src/mod.ts", namePos);
+        assert.ok(nameSymbol);
+        assert.equal(nameSymbol.name, "name");
+        const parent = await nameSymbol.getParent();
+        assert.ok(parent);
+        assert.equal(parent.name, "Animal");
     });
 
     test("checkFlags is typed as CheckFlags", async () => {
-        const api = spawnAPI(symbolFiles);
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const symbol = await project.checker.getSymbolAtPosition("/src/mod.ts", symbolFiles["/src/mod.ts"].indexOf("Animal"));
-            assert.ok(symbol);
-            const checkFlags: CheckFlags = symbol.checkFlags;
-            assert.equal(checkFlags & CheckFlags.Readonly, 0);
-        }
-        finally {
-            await api.close();
-        }
+        await using api = spawnAPI(symbolFiles);
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const symbol = await project.checker.getSymbolAtPosition("/src/mod.ts", symbolFiles["/src/mod.ts"].indexOf("Animal"));
+        assert.ok(symbol);
+        const checkFlags: CheckFlags = symbol.checkFlags;
+        assert.equal(checkFlags & CheckFlags.Readonly, 0);
     });
 });
 
 describe("Type - getSymbol", () => {
     test("getSymbol returns the symbol of a type", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
             "/src/types.ts": `
 export class Foo {
@@ -2742,22 +2385,18 @@ export class Foo {
 export const instance: Foo = new Foo();
 `,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const src = `\nexport class Foo {\n    x: number = 0;\n}\nexport const instance: Foo = new Foo();\n`;
-            const instancePos = src.indexOf("instance");
-            const symbol = await project.checker.getSymbolAtPosition("/src/types.ts", instancePos);
-            assert.ok(symbol);
-            const type = await project.checker.getTypeOfSymbol(symbol);
-            assert.ok(type);
-            const typeSymbol = await type.getSymbol();
-            assert.ok(typeSymbol);
-            assert.equal(typeSymbol.name, "Foo");
-        }
-        finally {
-            await api.close();
-        }
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const src = `\nexport class Foo {\n    x: number = 0;\n}\nexport const instance: Foo = new Foo();\n`;
+        const instancePos = src.indexOf("instance");
+        const symbol = await project.checker.getSymbolAtPosition("/src/types.ts", instancePos);
+        assert.ok(symbol);
+        const type = await project.checker.getTypeOfSymbol(symbol);
+        assert.ok(type);
+        const typeSymbol = await type.getSymbol();
+        assert.ok(typeSymbol);
+        assert.equal(typeSymbol.name, "Foo");
     });
 });
 
@@ -2791,219 +2430,183 @@ export const tuple: readonly [number, string?, ...boolean[]] = [1];
     }
 
     test("TypeReference.getTarget() returns the generic target", async () => {
-        const { type, api } = await getTypeAtName(spawnAPI(typeFiles), "arr:");
-        try {
-            assert.ok(type.flags & TypeFlags.Object);
-            const ref = type as TypeReference;
-            assert.ok(ref.objectFlags & ObjectFlags.Reference);
-            assert.equal(type.isObjectType(), true);
-            assert.equal(type.isTypeReference(), true);
-            assert.equal(type.isLiteralType(), false);
-            const target = await ref.getTarget();
-            assert.ok(target);
-            assert.ok(target.flags & TypeFlags.Object);
-            const properties = await type.getProperties();
-            assert.ok(properties.some(property => property.name === "length"));
-            assert.equal((await type.getProperty("length"))?.name, "length");
-            assert.ok((await type.getApparentProperties()).length >= properties.length);
-            assert.strictEqual(await type.getNonNullableType(), type);
-        }
-        finally {
-            await api.close();
-        }
+        const { type, api: disposableAPI } = await getTypeAtName(spawnAPI(typeFiles), "arr:");
+        await using api = disposableAPI;
+
+        assert.ok(type.flags & TypeFlags.Object);
+        const ref = type as TypeReference;
+        assert.ok(ref.objectFlags & ObjectFlags.Reference);
+        assert.equal(type.isObjectType(), true);
+        assert.equal(type.isTypeReference(), true);
+        assert.equal(type.isLiteralType(), false);
+        const target = await ref.getTarget();
+        assert.ok(target);
+        assert.ok(target.flags & TypeFlags.Object);
+        const properties = await type.getProperties();
+        assert.ok(properties.some(property => property.name === "length"));
+        assert.equal((await type.getProperty("length"))?.name, "length");
+        assert.ok((await type.getApparentProperties()).length >= properties.length);
+        assert.strictEqual(await type.getNonNullableType(), type);
     });
 
     test("UnionOrIntersectionType.getTypes() returns union members", async () => {
-        const { type, api } = await getTypeAtName(spawnAPI(typeFiles), "union:");
-        try {
-            assert.ok(type.flags & TypeFlags.Union);
-            const union = type as UnionOrIntersectionType;
-            const types = await union.getTypes();
-            assert.ok(types.length >= 2);
-            assert.equal(type.isUnionType(), true);
-            assert.equal(type.isIntersectionType(), false);
-        }
-        finally {
-            await api.close();
-        }
+        const { type, api: disposableAPI } = await getTypeAtName(spawnAPI(typeFiles), "union:");
+        await using api = disposableAPI;
+
+        assert.ok(type.flags & TypeFlags.Union);
+        const union = type as UnionOrIntersectionType;
+        const types = await union.getTypes();
+        assert.ok(types.length >= 2);
+        assert.equal(type.isUnionType(), true);
+        assert.equal(type.isIntersectionType(), false);
     });
 
     test("UnionOrIntersectionType.getTypes() returns intersection members", async () => {
-        const { type, api } = await getTypeAtName(spawnAPI(typeFiles), "intersection:");
-        try {
-            assert.ok(type.flags & TypeFlags.Intersection);
-            const inter = type as UnionOrIntersectionType;
-            const types = await inter.getTypes();
-            assert.ok(types.length >= 2);
-        }
-        finally {
-            await api.close();
-        }
+        const { type, api: disposableAPI } = await getTypeAtName(spawnAPI(typeFiles), "intersection:");
+        await using api = disposableAPI;
+
+        assert.ok(type.flags & TypeFlags.Intersection);
+        const inter = type as UnionOrIntersectionType;
+        const types = await inter.getTypes();
+        assert.ok(types.length >= 2);
     });
 
     test("UnionOrIntersectionType.getTypes() on a wrongly-cast type returns undefined without hitting the server", async () => {
         const src = `export const s: string = ""; export const u: string | number = "";`;
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
             "/src/main.ts": src,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
 
-            // `string` is neither a union/intersection nor a template literal type,
-            // so it has no constituent types. The client guards on the type's flags
-            // and returns undefined without ever sending a request the server cannot satisfy.
-            const sSymbol = await project.checker.getSymbolAtPosition("/src/main.ts", src.indexOf("s:"));
-            assert.ok(sSymbol);
-            const sType = await project.checker.getTypeOfSymbol(sSymbol);
-            assert.ok(sType);
-            assert.equal(await (sType as unknown as UnionOrIntersectionType).getTypes(), undefined);
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
 
-            // A real union still returns its constituents.
-            const uSymbol = await project.checker.getSymbolAtPosition("/src/main.ts", src.indexOf("u:"));
-            assert.ok(uSymbol);
-            const uType = await project.checker.getTypeOfSymbol(uSymbol);
-            assert.ok(uType);
-            assert.equal((await (uType as UnionOrIntersectionType).getTypes()).length, 2);
-        }
-        finally {
-            await api.close();
-        }
+        // `string` is neither a union/intersection nor a template literal type,
+        // so it has no constituent types. The client guards on the type's flags
+        // and returns undefined without ever sending a request the server cannot satisfy.
+        const sSymbol = await project.checker.getSymbolAtPosition("/src/main.ts", src.indexOf("s:"));
+        assert.ok(sSymbol);
+        const sType = await project.checker.getTypeOfSymbol(sSymbol);
+        assert.ok(sType);
+        assert.equal(await (sType as unknown as UnionOrIntersectionType).getTypes(), undefined);
+
+        // A real union still returns its constituents.
+        const uSymbol = await project.checker.getSymbolAtPosition("/src/main.ts", src.indexOf("u:"));
+        assert.ok(uSymbol);
+        const uType = await project.checker.getTypeOfSymbol(uSymbol);
+        assert.ok(uType);
+        assert.equal((await (uType as UnionOrIntersectionType).getTypes()).length, 2);
     });
 
     test("IndexType.getTarget() returns the target type", async () => {
-        const api = spawnAPI(typeFiles);
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const symbol = await project.checker.resolveName("KeyOf", SymbolFlags.TypeAlias, { document: "/src/types.ts", position: 0 });
-            assert.ok(symbol);
-            const type = await project.checker.getDeclaredTypeOfSymbol(symbol);
-            assert.ok(type);
-            // KeyOf<T> = keyof T — this is an IndexType
-            assert.ok(type.flags & TypeFlags.Index, `Expected IndexType, got flags ${type.flags}`);
-            const indexType = type as IndexType;
-            const target = await indexType.getTarget();
-            assert.ok(target);
-        }
-        finally {
-            await api.close();
-        }
+        await using api = spawnAPI(typeFiles);
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const symbol = await project.checker.resolveName("KeyOf", SymbolFlags.TypeAlias, { document: "/src/types.ts", position: 0 });
+        assert.ok(symbol);
+        const type = await project.checker.getDeclaredTypeOfSymbol(symbol);
+        assert.ok(type);
+        // KeyOf<T> = keyof T — this is an IndexType
+        assert.ok(type.flags & TypeFlags.Index, `Expected IndexType, got flags ${type.flags}`);
+        const indexType = type as IndexType;
+        const target = await indexType.getTarget();
+        assert.ok(target);
     });
 
     test("IndexedAccessType.getObjectType() and getIndexType()", async () => {
-        const api = spawnAPI(typeFiles);
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const symbol = await project.checker.resolveName("Lookup", SymbolFlags.TypeAlias, { document: "/src/types.ts", position: 0 });
-            assert.ok(symbol);
-            const type = await project.checker.getDeclaredTypeOfSymbol(symbol);
-            assert.ok(type);
-            assert.ok(type.flags & TypeFlags.IndexedAccess, `Expected IndexedAccessType, got flags ${type.flags}`);
-            const ia = type as IndexedAccessType;
-            assert.equal(type.isIndexedAccessType(), true);
-            const objectType = await ia.getObjectType();
-            assert.ok(objectType);
-            const indexType = await ia.getIndexType();
-            assert.ok(indexType);
-        }
-        finally {
-            await api.close();
-        }
+        await using api = spawnAPI(typeFiles);
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const symbol = await project.checker.resolveName("Lookup", SymbolFlags.TypeAlias, { document: "/src/types.ts", position: 0 });
+        assert.ok(symbol);
+        const type = await project.checker.getDeclaredTypeOfSymbol(symbol);
+        assert.ok(type);
+        assert.ok(type.flags & TypeFlags.IndexedAccess, `Expected IndexedAccessType, got flags ${type.flags}`);
+        const ia = type as IndexedAccessType;
+        assert.equal(type.isIndexedAccessType(), true);
+        const objectType = await ia.getObjectType();
+        assert.ok(objectType);
+        const indexType = await ia.getIndexType();
+        assert.ok(indexType);
     });
 
     test("ConditionalType.getCheckType() and getExtendsType()", async () => {
-        const api = spawnAPI(typeFiles);
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const symbol = await project.checker.resolveName("Cond", SymbolFlags.TypeAlias, { document: "/src/types.ts", position: 0 });
-            assert.ok(symbol);
-            const type = await project.checker.getDeclaredTypeOfSymbol(symbol);
-            assert.ok(type);
-            assert.ok(type.flags & TypeFlags.Conditional, `Expected ConditionalType, got flags ${type.flags}`);
-            const cond = type as ConditionalType;
-            assert.equal(type.isConditionalType(), true);
-            const checkType = await cond.getCheckType();
-            assert.ok(checkType);
-            const extendsType = await cond.getExtendsType();
-            assert.ok(extendsType);
-        }
-        finally {
-            await api.close();
-        }
+        await using api = spawnAPI(typeFiles);
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const symbol = await project.checker.resolveName("Cond", SymbolFlags.TypeAlias, { document: "/src/types.ts", position: 0 });
+        assert.ok(symbol);
+        const type = await project.checker.getDeclaredTypeOfSymbol(symbol);
+        assert.ok(type);
+        assert.ok(type.flags & TypeFlags.Conditional, `Expected ConditionalType, got flags ${type.flags}`);
+        const cond = type as ConditionalType;
+        assert.equal(type.isConditionalType(), true);
+        const checkType = await cond.getCheckType();
+        assert.ok(checkType);
+        const extendsType = await cond.getExtendsType();
+        assert.ok(extendsType);
     });
 
     test("ConditionalType.getTrueType() and getFalseType()", async () => {
-        const api = spawnAPI(typeFiles);
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const symbol = await project.checker.resolveName("Cond", SymbolFlags.TypeAlias, { document: "/src/types.ts", position: 0 });
-            assert.ok(symbol);
-            const type = await project.checker.getDeclaredTypeOfSymbol(symbol);
-            assert.ok(type);
-            assert.ok(type.flags & TypeFlags.Conditional, `Expected ConditionalType, got flags ${type.flags}`);
+        await using api = spawnAPI(typeFiles);
 
-            const trueType = await (type as ConditionalType).getTrueType();
-            assert.ok(trueType, "should return the true-branch type");
-            assert.ok(trueType.flags & TypeFlags.StringLiteral, `Expected StringLiteral for true branch, got flags ${trueType.flags}`);
-            assert.equal((trueType as LiteralType).value, "yes");
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const symbol = await project.checker.resolveName("Cond", SymbolFlags.TypeAlias, { document: "/src/types.ts", position: 0 });
+        assert.ok(symbol);
+        const type = await project.checker.getDeclaredTypeOfSymbol(symbol);
+        assert.ok(type);
+        assert.ok(type.flags & TypeFlags.Conditional, `Expected ConditionalType, got flags ${type.flags}`);
 
-            const falseType = await (type as ConditionalType).getFalseType();
-            assert.ok(falseType, "should return the false-branch type");
-            assert.ok(falseType.flags & TypeFlags.StringLiteral, `Expected StringLiteral for false branch, got flags ${falseType.flags}`);
-            assert.equal((falseType as LiteralType).value, "no");
-        }
-        finally {
-            await api.close();
-        }
+        const trueType = await (type as ConditionalType).getTrueType();
+        assert.ok(trueType, "should return the true-branch type");
+        assert.ok(trueType.flags & TypeFlags.StringLiteral, `Expected StringLiteral for true branch, got flags ${trueType.flags}`);
+        assert.equal((trueType as LiteralType).value, "yes");
+
+        const falseType = await (type as ConditionalType).getFalseType();
+        assert.ok(falseType, "should return the false-branch type");
+        assert.ok(falseType.flags & TypeFlags.StringLiteral, `Expected StringLiteral for false branch, got flags ${falseType.flags}`);
+        assert.equal((falseType as LiteralType).value, "no");
     });
 
     test("TemplateLiteralType.texts and getTypes()", async () => {
-        const { type, api } = await getTypeAtName(spawnAPI(typeFiles), "tpl:");
-        try {
-            assert.ok(type.flags & TypeFlags.TemplateLiteral, `Expected TemplateLiteralType, got flags ${type.flags}`);
-            const tpl = type as TemplateLiteralType;
-            assert.ok(tpl.texts);
-            assert.ok(tpl.texts.length >= 2);
-            assert.equal(tpl.texts[0], "hello ");
-            const types = await tpl.getTypes();
-            assert.ok(types.length >= 1);
-        }
-        finally {
-            await api.close();
-        }
+        const { type, api: disposableAPI } = await getTypeAtName(spawnAPI(typeFiles), "tpl:");
+        await using api = disposableAPI;
+
+        assert.ok(type.flags & TypeFlags.TemplateLiteral, `Expected TemplateLiteralType, got flags ${type.flags}`);
+        const tpl = type as TemplateLiteralType;
+        assert.ok(tpl.texts);
+        assert.ok(tpl.texts.length >= 2);
+        assert.equal(tpl.texts[0], "hello ");
+        const types = await tpl.getTypes();
+        assert.ok(types.length >= 1);
     });
 
     test("StringMappingType.getTarget() returns the mapped type", async () => {
-        const api = spawnAPI(typeFiles);
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const src = typeFiles["/src/types.ts"];
-            const pos = src.indexOf("Upper");
-            const symbol = await project.checker.getSymbolAtPosition("/src/types.ts", pos);
-            assert.ok(symbol);
-            const type = await project.checker.getTypeOfSymbol(symbol);
-            assert.ok(type);
-            // Uppercase<"hello"> may resolve to a StringMappingType or a string literal
-            if (type.flags & TypeFlags.StringMapping) {
-                const sm = type as StringMappingType;
-                const target = await sm.getTarget();
-                assert.ok(target);
-            }
-            // If it resolved to "HELLO" literal, that's fine too — it means eager evaluation
+        await using api = spawnAPI(typeFiles);
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const src = typeFiles["/src/types.ts"];
+        const pos = src.indexOf("Upper");
+        const symbol = await project.checker.getSymbolAtPosition("/src/types.ts", pos);
+        assert.ok(symbol);
+        const type = await project.checker.getTypeOfSymbol(symbol);
+        assert.ok(type);
+        // Uppercase<"hello"> may resolve to a StringMappingType or a string literal
+        if (type.flags & TypeFlags.StringMapping) {
+            const sm = type as StringMappingType;
+            const target = await sm.getTarget();
+            assert.ok(target);
         }
-        finally {
-            await api.close();
-        }
+        // If it resolved to "HELLO" literal, that's fine too — it means eager evaluation
     });
 
     test("tuple metadata is owned by tuple targets", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
             "/src/main.ts": `
 declare function empty(value: readonly []): void;
@@ -3014,55 +2617,51 @@ nonempty([1]);
 array([]);
 `,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const sourceFile = await project.program.getSourceFile("/src/main.ts");
-            assert.ok(sourceFile);
 
-            const arrayLiterals: Node[] = [];
-            sourceFile.forEachChild(function visit(node) {
-                if (node.kind === SyntaxKind.ArrayLiteralExpression) {
-                    arrayLiterals.push(node);
-                }
-                node.forEachChild(visit);
-            });
-            assert.equal(arrayLiterals.length, 3);
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const sourceFile = await project.program.getSourceFile("/src/main.ts");
+        assert.ok(sourceFile);
 
-            for (const [index, expectedFixedLength] of [0, 1].entries()) {
-                const type = await project.checker.getTypeAtLocation(arrayLiterals[index]);
-                assert.equal(await project.checker.isTupleType(type), true);
-                assert.equal(await project.checker.isTupleTypeTarget(type), false);
-                assert.equal(type.isTupleType(), true);
-                assert.equal(type.isTupleTypeTarget(), false);
-                assert.ok(type.isTupleType());
-                assert.equal(Reflect.get(type, "fixedLength"), undefined);
-
-                const target = await type.getTarget();
-                assert.ok(target.objectFlags & ObjectFlags.Tuple);
-                assert.equal(await project.checker.isTupleType(target), true);
-                assert.equal(await project.checker.isTupleTypeTarget(target), true);
-                assert.equal(target.isTupleType(), true);
-                assert.equal(target.isTupleTypeTarget(), true);
-                assert.ok(target.isTupleTypeTarget());
-                assert.equal(target.fixedLength, expectedFixedLength);
-                assert.equal(target.elementFlags.length, expectedFixedLength);
-                assert.equal(target.readonly, false);
+        const arrayLiterals: Node[] = [];
+        sourceFile.forEachChild(function visit(node) {
+            if (node.kind === SyntaxKind.ArrayLiteralExpression) {
+                arrayLiterals.push(node);
             }
+            node.forEachChild(visit);
+        });
+        assert.equal(arrayLiterals.length, 3);
 
-            const arrayType = await project.checker.getTypeAtLocation(arrayLiterals[2]);
-            assert.equal(await project.checker.isTupleType(arrayType), false);
-            assert.equal(await project.checker.isTupleTypeTarget(arrayType), false);
-            assert.equal(arrayType.isTupleType(), false);
-            assert.equal(arrayType.isTupleTypeTarget(), false);
+        for (const [index, expectedFixedLength] of [0, 1].entries()) {
+            const type = await project.checker.getTypeAtLocation(arrayLiterals[index]);
+            assert.equal(await project.checker.isTupleType(type), true);
+            assert.equal(await project.checker.isTupleTypeTarget(type), false);
+            assert.equal(type.isTupleType(), true);
+            assert.equal(type.isTupleTypeTarget(), false);
+            assert.ok(type.isTupleType());
+            assert.equal(Reflect.get(type, "fixedLength"), undefined);
+
+            const target = await type.getTarget();
+            assert.ok(target.objectFlags & ObjectFlags.Tuple);
+            assert.equal(await project.checker.isTupleType(target), true);
+            assert.equal(await project.checker.isTupleTypeTarget(target), true);
+            assert.equal(target.isTupleType(), true);
+            assert.equal(target.isTupleTypeTarget(), true);
+            assert.ok(target.isTupleTypeTarget());
+            assert.equal(target.fixedLength, expectedFixedLength);
+            assert.equal(target.elementFlags.length, expectedFixedLength);
+            assert.equal(target.readonly, false);
         }
-        finally {
-            await api.close();
-        }
+
+        const arrayType = await project.checker.getTypeAtLocation(arrayLiterals[2]);
+        assert.equal(await project.checker.isTupleType(arrayType), false);
+        assert.equal(await project.checker.isTupleTypeTarget(arrayType), false);
+        assert.equal(arrayType.isTupleType(), false);
+        assert.equal(arrayType.isTupleTypeTarget(), false);
     });
 
     test("tuple targets expose labeled element declarations", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
             "/src/main.ts": `
 export function gh1449<T extends [foo: any, bar?: any]>(a: T): T {
@@ -3070,37 +2669,33 @@ export function gh1449<T extends [foo: any, bar?: any]>(a: T): T {
 }
 `,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const sourceFile = await project.program.getSourceFile("/src/main.ts");
-            assert.ok(sourceFile);
-            const functionDeclaration = sourceFile.statements.find(isFunctionDeclaration);
-            assert.ok(functionDeclaration);
-            const constraint = functionDeclaration.typeParameters?.[0].constraint;
-            assert.ok(constraint);
 
-            const type = await project.checker.getTypeFromTypeNode(constraint);
-            assert.ok(type.isTupleType());
-            const target = await type.getTarget();
-            const declarations = target.labeledElementDeclarations;
-            assert.ok(declarations);
-            assert.equal(declarations.length, 2);
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const sourceFile = await project.program.getSourceFile("/src/main.ts");
+        assert.ok(sourceFile);
+        const functionDeclaration = sourceFile.statements.find(isFunctionDeclaration);
+        assert.ok(functionDeclaration);
+        const constraint = functionDeclaration.typeParameters?.[0].constraint;
+        assert.ok(constraint);
 
-            const names: string[] = [];
-            for (const handle of declarations) {
-                assert.ok(handle);
-                assert.equal(handle.kind, SyntaxKind.NamedTupleMember);
-                const declaration = await handle.resolve();
-                assert.ok(declaration);
-                assert.ok(isIdentifier(declaration.name));
-                names.push(declaration.name.text);
-            }
-            assert.deepEqual(names, ["foo", "bar"]);
+        const type = await project.checker.getTypeFromTypeNode(constraint);
+        assert.ok(type.isTupleType());
+        const target = await type.getTarget();
+        const declarations = target.labeledElementDeclarations;
+        assert.ok(declarations);
+        assert.equal(declarations.length, 2);
+
+        const names: string[] = [];
+        for (const handle of declarations) {
+            assert.ok(handle);
+            assert.equal(handle.kind, SyntaxKind.NamedTupleMember);
+            const declaration = await handle.resolve();
+            assert.ok(declaration);
+            assert.ok(isIdentifier(declaration.name));
+            names.push(declaration.name.text);
         }
-        finally {
-            await api.close();
-        }
+        assert.deepEqual(names, ["foo", "bar"]);
     });
 });
 
@@ -3111,177 +2706,129 @@ describe("Checker - intrinsic type getters", () => {
     };
 
     test("getAnyType returns a type with Any flag", async () => {
-        const api = spawnAPI(intrinsicFiles);
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const type = await project.checker.getAnyType();
-            assert.ok(type);
-            assert.ok(type.flags & TypeFlags.Any);
-        }
-        finally {
-            await api.close();
-        }
+        await using api = spawnAPI(intrinsicFiles);
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const type = await project.checker.getAnyType();
+        assert.ok(type);
+        assert.ok(type.flags & TypeFlags.Any);
     });
 
     test("getStringType returns a type with String flag", async () => {
-        const api = spawnAPI(intrinsicFiles);
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const type = await project.checker.getStringType();
-            assert.ok(type);
-            assert.ok(type.flags & TypeFlags.String);
-        }
-        finally {
-            await api.close();
-        }
+        await using api = spawnAPI(intrinsicFiles);
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const type = await project.checker.getStringType();
+        assert.ok(type);
+        assert.ok(type.flags & TypeFlags.String);
     });
 
     test("getNumberType returns a type with Number flag", async () => {
-        const api = spawnAPI(intrinsicFiles);
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const type = await project.checker.getNumberType();
-            assert.ok(type);
-            assert.ok(type.flags & TypeFlags.Number);
-        }
-        finally {
-            await api.close();
-        }
+        await using api = spawnAPI(intrinsicFiles);
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const type = await project.checker.getNumberType();
+        assert.ok(type);
+        assert.ok(type.flags & TypeFlags.Number);
     });
 
     test("getBooleanType returns a type with Boolean flag", async () => {
-        const api = spawnAPI(intrinsicFiles);
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const type = await project.checker.getBooleanType();
-            assert.ok(type);
-            assert.ok(type.flags & TypeFlags.Boolean);
-        }
-        finally {
-            await api.close();
-        }
+        await using api = spawnAPI(intrinsicFiles);
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const type = await project.checker.getBooleanType();
+        assert.ok(type);
+        assert.ok(type.flags & TypeFlags.Boolean);
     });
 
     test("getVoidType returns a type with Void flag", async () => {
-        const api = spawnAPI(intrinsicFiles);
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const type = await project.checker.getVoidType();
-            assert.ok(type);
-            assert.ok(type.flags & TypeFlags.Void);
-        }
-        finally {
-            await api.close();
-        }
+        await using api = spawnAPI(intrinsicFiles);
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const type = await project.checker.getVoidType();
+        assert.ok(type);
+        assert.ok(type.flags & TypeFlags.Void);
     });
 
     test("getUndefinedType returns a type with Undefined flag", async () => {
-        const api = spawnAPI(intrinsicFiles);
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const type = await project.checker.getUndefinedType();
-            assert.ok(type);
-            assert.ok(type.flags & TypeFlags.Undefined);
-        }
-        finally {
-            await api.close();
-        }
+        await using api = spawnAPI(intrinsicFiles);
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const type = await project.checker.getUndefinedType();
+        assert.ok(type);
+        assert.ok(type.flags & TypeFlags.Undefined);
     });
 
     test("getNullType returns a type with Null flag", async () => {
-        const api = spawnAPI(intrinsicFiles);
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const type = await project.checker.getNullType();
-            assert.ok(type);
-            assert.ok(type.flags & TypeFlags.Null);
-        }
-        finally {
-            await api.close();
-        }
+        await using api = spawnAPI(intrinsicFiles);
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const type = await project.checker.getNullType();
+        assert.ok(type);
+        assert.ok(type.flags & TypeFlags.Null);
     });
 
     test("getNeverType returns a type with Never flag", async () => {
-        const api = spawnAPI(intrinsicFiles);
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const type = await project.checker.getNeverType();
-            assert.ok(type);
-            assert.ok(type.flags & TypeFlags.Never);
-        }
-        finally {
-            await api.close();
-        }
+        await using api = spawnAPI(intrinsicFiles);
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const type = await project.checker.getNeverType();
+        assert.ok(type);
+        assert.ok(type.flags & TypeFlags.Never);
     });
 
     test("getUnknownType returns a type with Unknown flag", async () => {
-        const api = spawnAPI(intrinsicFiles);
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const type = await project.checker.getUnknownType();
-            assert.ok(type);
-            assert.ok(type.flags & TypeFlags.Unknown);
-        }
-        finally {
-            await api.close();
-        }
+        await using api = spawnAPI(intrinsicFiles);
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const type = await project.checker.getUnknownType();
+        assert.ok(type);
+        assert.ok(type.flags & TypeFlags.Unknown);
     });
 
     test("getBigIntType returns a type with BigInt flag", async () => {
-        const api = spawnAPI(intrinsicFiles);
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const type = await project.checker.getBigIntType();
-            assert.ok(type);
-            assert.ok(type.flags & TypeFlags.BigInt);
-        }
-        finally {
-            await api.close();
-        }
+        await using api = spawnAPI(intrinsicFiles);
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const type = await project.checker.getBigIntType();
+        assert.ok(type);
+        assert.ok(type.flags & TypeFlags.BigInt);
     });
 
     test("getESSymbolType returns a type with ESSymbol flag", async () => {
-        const api = spawnAPI(intrinsicFiles);
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const type = await project.checker.getESSymbolType();
-            assert.ok(type);
-            assert.ok(type.flags & TypeFlags.ESSymbol);
-        }
-        finally {
-            await api.close();
-        }
+        await using api = spawnAPI(intrinsicFiles);
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const type = await project.checker.getESSymbolType();
+        assert.ok(type);
+        assert.ok(type.flags & TypeFlags.ESSymbol);
     });
 
     test("getNonPrimitiveType returns a type with NonPrimitive flag", async () => {
-        const api = spawnAPI(intrinsicFiles);
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const type = await project.checker.getNonPrimitiveType();
-            assert.ok(type);
-            assert.ok(type.flags & TypeFlags.NonPrimitive);
-        }
-        finally {
-            await api.close();
-        }
+        await using api = spawnAPI(intrinsicFiles);
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const type = await project.checker.getNonPrimitiveType();
+        assert.ok(type);
+        assert.ok(type.flags & TypeFlags.NonPrimitive);
     });
 });
 
 describe("Checker - multi-project type ID uniqueness", () => {
     test("intrinsic types from 3 projects in the same snapshot have non-colliding IDs", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/proj1/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
             "/proj1/src/index.ts": `export const x = 1;`,
             "/proj2/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
@@ -3289,56 +2836,52 @@ describe("Checker - multi-project type ID uniqueness", () => {
             "/proj3/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
             "/proj3/src/index.ts": `export const z = true;`,
         });
-        try {
-            // Open all 3 projects — each updateSnapshot accumulates open projects
-            await api.updateSnapshot({ openProject: "/proj1/tsconfig.json" });
-            await api.updateSnapshot({ openProject: "/proj2/tsconfig.json" });
-            const snapshot = await api.updateSnapshot({ openProject: "/proj3/tsconfig.json" });
 
-            const proj1 = snapshot.getProject("/proj1/tsconfig.json")!;
-            const proj2 = snapshot.getProject("/proj2/tsconfig.json")!;
-            const proj3 = snapshot.getProject("/proj3/tsconfig.json")!;
-            assert.ok(proj1, "proj1 should be in final snapshot");
-            assert.ok(proj2, "proj2 should be in final snapshot");
-            assert.ok(proj3, "proj3 should be in final snapshot");
+        // Open all 3 projects — each updateSnapshot accumulates open projects
+        await api.updateSnapshot({ openProject: "/proj1/tsconfig.json" });
+        await api.updateSnapshot({ openProject: "/proj2/tsconfig.json" });
+        const snapshot = await api.updateSnapshot({ openProject: "/proj3/tsconfig.json" });
 
-            // Fetch several intrinsic types from each checker.
-            // If type IDs collide across checkers, registerType panics → API error.
-            const num1 = await proj1.checker.getNumberType();
-            const str1 = await proj1.checker.getStringType();
-            const bool1 = await proj1.checker.getBooleanType();
-            const any1 = await proj1.checker.getAnyType();
-            const num2 = await proj2.checker.getNumberType();
-            const str2 = await proj2.checker.getStringType();
-            const bool2 = await proj2.checker.getBooleanType();
-            const any2 = await proj2.checker.getAnyType();
-            const num3 = await proj3.checker.getNumberType();
-            const str3 = await proj3.checker.getStringType();
-            const bool3 = await proj3.checker.getBooleanType();
-            const any3 = await proj3.checker.getAnyType();
+        const proj1 = snapshot.getProject("/proj1/tsconfig.json")!;
+        const proj2 = snapshot.getProject("/proj2/tsconfig.json")!;
+        const proj3 = snapshot.getProject("/proj3/tsconfig.json")!;
+        assert.ok(proj1, "proj1 should be in final snapshot");
+        assert.ok(proj2, "proj2 should be in final snapshot");
+        assert.ok(proj3, "proj3 should be in final snapshot");
 
-            assert.ok(num1.flags & TypeFlags.Number, "proj1 number type");
-            assert.ok(str1.flags & TypeFlags.String, "proj1 string type");
-            assert.ok(bool1.flags & TypeFlags.Boolean, "proj1 boolean type");
-            assert.ok(any1.flags & TypeFlags.Any, "proj1 any type");
+        // Fetch several intrinsic types from each checker.
+        // If type IDs collide across checkers, registerType panics → API error.
+        const num1 = await proj1.checker.getNumberType();
+        const str1 = await proj1.checker.getStringType();
+        const bool1 = await proj1.checker.getBooleanType();
+        const any1 = await proj1.checker.getAnyType();
+        const num2 = await proj2.checker.getNumberType();
+        const str2 = await proj2.checker.getStringType();
+        const bool2 = await proj2.checker.getBooleanType();
+        const any2 = await proj2.checker.getAnyType();
+        const num3 = await proj3.checker.getNumberType();
+        const str3 = await proj3.checker.getStringType();
+        const bool3 = await proj3.checker.getBooleanType();
+        const any3 = await proj3.checker.getAnyType();
 
-            assert.ok(num2.flags & TypeFlags.Number, "proj2 number type");
-            assert.ok(str2.flags & TypeFlags.String, "proj2 string type");
-            assert.ok(bool2.flags & TypeFlags.Boolean, "proj2 boolean type");
-            assert.ok(any2.flags & TypeFlags.Any, "proj2 any type");
+        assert.ok(num1.flags & TypeFlags.Number, "proj1 number type");
+        assert.ok(str1.flags & TypeFlags.String, "proj1 string type");
+        assert.ok(bool1.flags & TypeFlags.Boolean, "proj1 boolean type");
+        assert.ok(any1.flags & TypeFlags.Any, "proj1 any type");
 
-            assert.ok(num3.flags & TypeFlags.Number, "proj3 number type");
-            assert.ok(str3.flags & TypeFlags.String, "proj3 string type");
-            assert.ok(bool3.flags & TypeFlags.Boolean, "proj3 boolean type");
-            assert.ok(any3.flags & TypeFlags.Any, "proj3 any type");
-        }
-        finally {
-            await api.close();
-        }
+        assert.ok(num2.flags & TypeFlags.Number, "proj2 number type");
+        assert.ok(str2.flags & TypeFlags.String, "proj2 string type");
+        assert.ok(bool2.flags & TypeFlags.Boolean, "proj2 boolean type");
+        assert.ok(any2.flags & TypeFlags.Any, "proj2 any type");
+
+        assert.ok(num3.flags & TypeFlags.Number, "proj3 number type");
+        assert.ok(str3.flags & TypeFlags.String, "proj3 string type");
+        assert.ok(bool3.flags & TypeFlags.Boolean, "proj3 boolean type");
+        assert.ok(any3.flags & TypeFlags.Any, "proj3 any type");
     });
 
     test("symbol and signature handles from 3 projects in the same snapshot have non-colliding IDs", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/proj1/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
             "/proj1/src/index.ts": `export function add(a: number, b: number): number { return a + b; }`,
             "/proj2/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
@@ -3346,146 +2889,130 @@ describe("Checker - multi-project type ID uniqueness", () => {
             "/proj3/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
             "/proj3/src/index.ts": `export function toggle(b: boolean): boolean { return !b; }`,
         });
-        try {
-            await api.updateSnapshot({ openProject: "/proj1/tsconfig.json" });
-            await api.updateSnapshot({ openProject: "/proj2/tsconfig.json" });
-            const snapshot = await api.updateSnapshot({ openProject: "/proj3/tsconfig.json" });
 
-            const proj1 = snapshot.getProject("/proj1/tsconfig.json")!;
-            const proj2 = snapshot.getProject("/proj2/tsconfig.json")!;
-            const proj3 = snapshot.getProject("/proj3/tsconfig.json")!;
+        await api.updateSnapshot({ openProject: "/proj1/tsconfig.json" });
+        await api.updateSnapshot({ openProject: "/proj2/tsconfig.json" });
+        const snapshot = await api.updateSnapshot({ openProject: "/proj3/tsconfig.json" });
 
-            // Get a symbol from each project (exercises symbol registry)
-            const src1 = `export function add(a: number, b: number): number { return a + b; }`;
-            const src2 = `export function greet(name: string): string { return "hello " + name; }`;
-            const src3 = `export function toggle(b: boolean): boolean { return !b; }`;
+        const proj1 = snapshot.getProject("/proj1/tsconfig.json")!;
+        const proj2 = snapshot.getProject("/proj2/tsconfig.json")!;
+        const proj3 = snapshot.getProject("/proj3/tsconfig.json")!;
 
-            const sym1 = await proj1.checker.getSymbolAtPosition("/proj1/src/index.ts", src1.indexOf("add"));
-            const sym2 = await proj2.checker.getSymbolAtPosition("/proj2/src/index.ts", src2.indexOf("greet"));
-            const sym3 = await proj3.checker.getSymbolAtPosition("/proj3/src/index.ts", src3.indexOf("toggle"));
-            assert.ok(sym1, "proj1 symbol");
-            assert.ok(sym2, "proj2 symbol");
-            assert.ok(sym3, "proj3 symbol");
-            assert.equal(sym1.name, "add", "proj1 symbol name");
-            assert.equal(sym2.name, "greet", "proj2 symbol name");
-            assert.equal(sym3.name, "toggle", "proj3 symbol name");
+        // Get a symbol from each project (exercises symbol registry)
+        const src1 = `export function add(a: number, b: number): number { return a + b; }`;
+        const src2 = `export function greet(name: string): string { return "hello " + name; }`;
+        const src3 = `export function toggle(b: boolean): boolean { return !b; }`;
 
-            // Get type of each symbol, then signatures (exercises type + signature registries)
-            const type1 = await proj1.checker.getTypeOfSymbol(sym1);
-            const type2 = await proj2.checker.getTypeOfSymbol(sym2);
-            const type3 = await proj3.checker.getTypeOfSymbol(sym3);
-            assert.ok(type1, "proj1 function type");
-            assert.ok(type2, "proj2 function type");
-            assert.ok(type3, "proj3 function type");
+        const sym1 = await proj1.checker.getSymbolAtPosition("/proj1/src/index.ts", src1.indexOf("add"));
+        const sym2 = await proj2.checker.getSymbolAtPosition("/proj2/src/index.ts", src2.indexOf("greet"));
+        const sym3 = await proj3.checker.getSymbolAtPosition("/proj3/src/index.ts", src3.indexOf("toggle"));
+        assert.ok(sym1, "proj1 symbol");
+        assert.ok(sym2, "proj2 symbol");
+        assert.ok(sym3, "proj3 symbol");
+        assert.equal(sym1.name, "add", "proj1 symbol name");
+        assert.equal(sym2.name, "greet", "proj2 symbol name");
+        assert.equal(sym3.name, "toggle", "proj3 symbol name");
 
-            const sigs1 = await proj1.checker.getSignaturesOfType(type1, SignatureKind.Call);
-            const sigs2 = await proj2.checker.getSignaturesOfType(type2, SignatureKind.Call);
-            const sigs3 = await proj3.checker.getSignaturesOfType(type3, SignatureKind.Call);
-            assert.equal(sigs1.length, 1, "proj1 has 1 call signature");
-            assert.equal(sigs2.length, 1, "proj2 has 1 call signature");
-            assert.equal(sigs3.length, 1, "proj3 has 1 call signature");
-            assert.equal(sigs1[0].parameters.length, 2, "proj1 add() has 2 params");
-            assert.equal(sigs2[0].parameters.length, 1, "proj2 greet() has 1 param");
-            assert.equal(sigs3[0].parameters.length, 1, "proj3 toggle() has 1 param");
-        }
-        finally {
-            await api.close();
-        }
+        // Get type of each symbol, then signatures (exercises type + signature registries)
+        const type1 = await proj1.checker.getTypeOfSymbol(sym1);
+        const type2 = await proj2.checker.getTypeOfSymbol(sym2);
+        const type3 = await proj3.checker.getTypeOfSymbol(sym3);
+        assert.ok(type1, "proj1 function type");
+        assert.ok(type2, "proj2 function type");
+        assert.ok(type3, "proj3 function type");
+
+        const sigs1 = await proj1.checker.getSignaturesOfType(type1, SignatureKind.Call);
+        const sigs2 = await proj2.checker.getSignaturesOfType(type2, SignatureKind.Call);
+        const sigs3 = await proj3.checker.getSignaturesOfType(type3, SignatureKind.Call);
+        assert.equal(sigs1.length, 1, "proj1 has 1 call signature");
+        assert.equal(sigs2.length, 1, "proj2 has 1 call signature");
+        assert.equal(sigs3.length, 1, "proj3 has 1 call signature");
+        assert.equal(sigs1[0].parameters.length, 2, "proj1 add() has 2 params");
+        assert.equal(sigs2[0].parameters.length, 1, "proj2 greet() has 1 param");
+        assert.equal(sigs3[0].parameters.length, 1, "proj3 toggle() has 1 param");
     });
 });
 
 describe("Checker - getBaseTypeOfLiteralType", () => {
     test("number literal widens to number", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
             "/src/main.ts": `export const x = 42;`,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const src = `export const x = 42;`;
-            const pos = src.indexOf("x =");
-            const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
-            assert.ok(symbol);
-            const literalType = await project.checker.getTypeOfSymbol(symbol);
-            assert.ok(literalType);
-            assert.ok(literalType.flags & TypeFlags.NumberLiteral);
-            const baseType = await project.checker.getBaseTypeOfLiteralType(literalType);
-            assert.ok(baseType);
-            assert.ok(baseType.flags & TypeFlags.Number);
-        }
-        finally {
-            await api.close();
-        }
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const src = `export const x = 42;`;
+        const pos = src.indexOf("x =");
+        const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
+        assert.ok(symbol);
+        const literalType = await project.checker.getTypeOfSymbol(symbol);
+        assert.ok(literalType);
+        assert.ok(literalType.flags & TypeFlags.NumberLiteral);
+        const baseType = await project.checker.getBaseTypeOfLiteralType(literalType);
+        assert.ok(baseType);
+        assert.ok(baseType.flags & TypeFlags.Number);
     });
 
     test("string literal widens to string", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
             "/src/main.ts": `export const s = "hello";`,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const src = `export const s = "hello";`;
-            const pos = src.indexOf("s ");
-            const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
-            assert.ok(symbol);
-            const literalType = await project.checker.getTypeOfSymbol(symbol);
-            assert.ok(literalType);
-            assert.ok(literalType.flags & TypeFlags.StringLiteral);
-            const baseType = await project.checker.getBaseTypeOfLiteralType(literalType);
-            assert.ok(baseType);
-            assert.ok(baseType.flags & TypeFlags.String);
-        }
-        finally {
-            await api.close();
-        }
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const src = `export const s = "hello";`;
+        const pos = src.indexOf("s ");
+        const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
+        assert.ok(symbol);
+        const literalType = await project.checker.getTypeOfSymbol(symbol);
+        assert.ok(literalType);
+        assert.ok(literalType.flags & TypeFlags.StringLiteral);
+        const baseType = await project.checker.getBaseTypeOfLiteralType(literalType);
+        assert.ok(baseType);
+        assert.ok(baseType.flags & TypeFlags.String);
     });
 });
 
 describe("Checker - getContextualType", () => {
     test("contextual type from function parameter", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
             "/src/main.ts": `
 function foo(x: number) {}
 foo(42);
 `,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
 
-            const sourceFile = await project.program.getSourceFile("/src/main.ts");
-            assert.ok(sourceFile);
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
 
-            // Find the argument "42" in foo(42)
-            // statement[1] = foo(42); which is an ExpressionStatement -> CallExpression
-            const callStmt = sourceFile.statements[1];
-            assert.ok(callStmt);
-            let numLiteral: import("@typescript/typescript/unstable/ast").Expression | undefined;
-            callStmt.forEachChild(function visit(node) {
-                if (isCallExpression(node)) {
-                    // First argument
-                    numLiteral = node.arguments[0];
-                }
-                node.forEachChild(visit);
-            });
-            assert.ok(numLiteral);
-            const contextualType = await project.checker.getContextualType(numLiteral);
-            assert.ok(contextualType);
-            assert.ok(contextualType.flags & TypeFlags.Number);
-        }
-        finally {
-            await api.close();
-        }
+        const sourceFile = await project.program.getSourceFile("/src/main.ts");
+        assert.ok(sourceFile);
+
+        // Find the argument "42" in foo(42)
+        // statement[1] = foo(42); which is an ExpressionStatement -> CallExpression
+        const callStmt = sourceFile.statements[1];
+        assert.ok(callStmt);
+        let numLiteral: import("@typescript/typescript/unstable/ast").Expression | undefined;
+        callStmt.forEachChild(function visit(node) {
+            if (isCallExpression(node)) {
+                // First argument
+                numLiteral = node.arguments[0];
+            }
+            node.forEachChild(visit);
+        });
+        assert.ok(numLiteral);
+        const contextualType = await project.checker.getContextualType(numLiteral);
+        assert.ok(contextualType);
+        assert.ok(contextualType.flags & TypeFlags.Number);
     });
 });
 
 describe("Checker - getTypeOfSymbolAtLocation", () => {
     test("narrowed type via typeof check", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
             "/src/main.ts": `
 export function check(x: string | number) {
@@ -3496,85 +3023,77 @@ export function check(x: string | number) {
 }
 `,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const src = `\nexport function check(x: string | number) {\n    if (typeof x === "string") {\n        return x;\n    }\n    return x;\n}\n`;
 
-            // Get the symbol for parameter "x"
-            const paramPos = src.indexOf("x:");
-            const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", paramPos);
-            assert.ok(symbol);
-            assert.equal(symbol.name, "x");
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const src = `\nexport function check(x: string | number) {\n    if (typeof x === "string") {\n        return x;\n    }\n    return x;\n}\n`;
 
-            // Get the type of "x" at the wider function scope — should be string | number
-            const wideType = await project.checker.getTypeOfSymbol(symbol);
-            assert.ok(wideType);
-            assert.ok(wideType.flags & TypeFlags.Union, `Expected union type, got flags ${wideType.flags}`);
+        // Get the symbol for parameter "x"
+        const paramPos = src.indexOf("x:");
+        const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", paramPos);
+        assert.ok(symbol);
+        assert.equal(symbol.name, "x");
 
-            // Get the narrowed return x inside the if block
-            const sourceFile = await project.program.getSourceFile("/src/main.ts");
-            assert.ok(sourceFile);
+        // Get the type of "x" at the wider function scope — should be string | number
+        const wideType = await project.checker.getTypeOfSymbol(symbol);
+        assert.ok(wideType);
+        assert.ok(wideType.flags & TypeFlags.Union, `Expected union type, got flags ${wideType.flags}`);
 
-            // statement[0] is the function declaration
-            const funcDecl = sourceFile.statements[0];
-            assert.ok(funcDecl);
-            // Walk to find the first "return x" — inside the if, x should be narrowed to string
-            let firstReturnX: import("@typescript/typescript/unstable/ast").Node | undefined;
-            funcDecl.forEachChild(function visit(node) {
-                if (isReturnStatement(node) && !firstReturnX) {
-                    // The expression of the return statement is the identifier "x"
-                    if (node.expression) {
-                        firstReturnX = node.expression;
-                    }
+        // Get the narrowed return x inside the if block
+        const sourceFile = await project.program.getSourceFile("/src/main.ts");
+        assert.ok(sourceFile);
+
+        // statement[0] is the function declaration
+        const funcDecl = sourceFile.statements[0];
+        assert.ok(funcDecl);
+        // Walk to find the first "return x" — inside the if, x should be narrowed to string
+        let firstReturnX: import("@typescript/typescript/unstable/ast").Node | undefined;
+        funcDecl.forEachChild(function visit(node) {
+            if (isReturnStatement(node) && !firstReturnX) {
+                // The expression of the return statement is the identifier "x"
+                if (node.expression) {
+                    firstReturnX = node.expression;
                 }
-                node.forEachChild(visit);
-            });
-            assert.ok(firstReturnX);
-            const narrowedType = await project.checker.getTypeOfSymbolAtLocation(symbol, firstReturnX);
-            assert.ok(narrowedType);
-            // Inside the if (typeof x === "string") branch, x should be narrowed to string
-            assert.ok(narrowedType.flags & TypeFlags.String, `Expected string type, got flags ${narrowedType.flags}`);
-        }
-        finally {
-            await api.close();
-        }
+            }
+            node.forEachChild(visit);
+        });
+        assert.ok(firstReturnX);
+        const narrowedType = await project.checker.getTypeOfSymbolAtLocation(symbol, firstReturnX);
+        assert.ok(narrowedType);
+        // Inside the if (typeof x === "string") branch, x should be narrowed to string
+        assert.ok(narrowedType.flags & TypeFlags.String, `Expected string type, got flags ${narrowedType.flags}`);
     });
 });
 
 describe("Checker - getShorthandAssignmentValueSymbol", () => {
     test("shorthand property symbol resolves to variable", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
             "/src/main.ts": `
 const name = "Alice";
 export const obj = { name };
 `,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
 
-            const sourceFile = await project.program.getSourceFile("/src/main.ts");
-            assert.ok(sourceFile);
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
 
-            // Find the shorthand property assignment { name }
-            // statement[1] = export const obj = { name };
-            let shorthandNode: import("@typescript/typescript/unstable/ast").Node | undefined;
-            sourceFile.forEachChild(function visit(node) {
-                if (isShorthandPropertyAssignment(node)) {
-                    shorthandNode = node;
-                }
-                node.forEachChild(visit);
-            });
-            assert.ok(shorthandNode, "Should find a shorthand property assignment");
-            const valueSymbol = await project.checker.getShorthandAssignmentValueSymbol(shorthandNode);
-            assert.ok(valueSymbol);
-            assert.equal(valueSymbol.name, "name");
-        }
-        finally {
-            await api.close();
-        }
+        const sourceFile = await project.program.getSourceFile("/src/main.ts");
+        assert.ok(sourceFile);
+
+        // Find the shorthand property assignment { name }
+        // statement[1] = export const obj = { name };
+        let shorthandNode: import("@typescript/typescript/unstable/ast").Node | undefined;
+        sourceFile.forEachChild(function visit(node) {
+            if (isShorthandPropertyAssignment(node)) {
+                shorthandNode = node;
+            }
+            node.forEachChild(visit);
+        });
+        assert.ok(shorthandNode, "Should find a shorthand property assignment");
+        const valueSymbol = await project.checker.getShorthandAssignmentValueSymbol(shorthandNode);
+        assert.ok(valueSymbol);
+        assert.equal(valueSymbol.name, "name");
     });
 });
 
@@ -3600,176 +3119,147 @@ describe("readFile callback semantics", () => {
             },
         };
 
-        const api = new API({
+        await using api = new API({
             cwd: fileURLToPath(new URL("../../../../", import.meta.url).toString()),
             fs,
         });
 
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
 
-            // 1. String content: virtual file is found
-            const sf = await project.program.getSourceFile("/src/index.ts");
-            assert.ok(sf, "Virtual file should be found");
-            assert.equal(sf.text, virtualFiles["/src/index.ts"]);
+        // 1. String content: virtual file is found
+        const sf = await project.program.getSourceFile("/src/index.ts");
+        assert.ok(sf, "Virtual file should be found");
+        assert.equal(sf.text, virtualFiles["/src/index.ts"]);
 
-            // 2. undefined fallback: lib files from the real FS should be present.
-            //    If readFile returned null for unknowns, lib files would be missing
-            //    and `number` would not resolve — this was the original async bug.
-            //    Verify by checking that `number` resolves to a proper type (not error).
-            const pos = virtualFiles["/src/index.ts"].indexOf("x:");
-            const type = await project.checker.getTypeAtPosition("/src/index.ts", pos);
-            assert.ok(type, "Type should resolve");
-            assert.ok(type.flags & TypeFlags.Number, `Expected number type, got flags ${type.flags}`);
+        // 2. undefined fallback: lib files from the real FS should be present.
+        //    If readFile returned null for unknowns, lib files would be missing
+        //    and `number` would not resolve — this was the original async bug.
+        //    Verify by checking that `number` resolves to a proper type (not error).
+        const pos = virtualFiles["/src/index.ts"].indexOf("x:");
+        const type = await project.checker.getTypeAtPosition("/src/index.ts", pos);
+        assert.ok(type, "Type should resolve");
+        assert.ok(type.flags & TypeFlags.Number, `Expected number type, got flags ${type.flags}`);
 
-            // 3. null blocks fallback: blocked file should not be found
-            const blockedSf = await project.program.getSourceFile(blockedPath);
-            assert.equal(blockedSf, undefined, "Blocked file should not be found (null prevents fallback)");
-        }
-        finally {
-            await api.close();
-        }
+        // 3. null blocks fallback: blocked file should not be found
+        const blockedSf = await project.program.getSourceFile(blockedPath);
+        assert.equal(blockedSf, undefined, "Blocked file should not be found (null prevents fallback)");
     });
 });
 
 describe("Checker - isArrayType / isTupleType", () => {
     test("number[] is array, not tuple", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
             "/src/main.ts": `export const xs: number[] = [];`,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const src = `export const xs: number[] = [];`;
-            const pos = src.indexOf("xs");
-            const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
-            assert.ok(symbol);
-            const type = await project.checker.getTypeOfSymbol(symbol);
-            assert.ok(type);
-            assert.equal(await project.checker.isArrayType(type), true);
-            assert.equal(await project.checker.isTupleType(type), false);
-        }
-        finally {
-            await api.close();
-        }
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const src = `export const xs: number[] = [];`;
+        const pos = src.indexOf("xs");
+        const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
+        assert.ok(symbol);
+        const type = await project.checker.getTypeOfSymbol(symbol);
+        assert.ok(type);
+        assert.equal(await project.checker.isArrayType(type), true);
+        assert.equal(await project.checker.isTupleType(type), false);
     });
 
     test("readonly number[] is array", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
             "/src/main.ts": `export const xs: readonly number[] = [];`,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const src = `export const xs: readonly number[] = [];`;
-            const pos = src.indexOf("xs");
-            const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
-            assert.ok(symbol);
-            const type = await project.checker.getTypeOfSymbol(symbol);
-            assert.ok(type);
-            assert.equal(await project.checker.isArrayType(type), true);
-            assert.equal(await project.checker.isTupleType(type), false);
-        }
-        finally {
-            await api.close();
-        }
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const src = `export const xs: readonly number[] = [];`;
+        const pos = src.indexOf("xs");
+        const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
+        assert.ok(symbol);
+        const type = await project.checker.getTypeOfSymbol(symbol);
+        assert.ok(type);
+        assert.equal(await project.checker.isArrayType(type), true);
+        assert.equal(await project.checker.isTupleType(type), false);
     });
 
     test("Array<number> is array, not tuple", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
             "/src/main.ts": `export const xs: Array<number> = [];`,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const src = `export const xs: Array<number> = [];`;
-            const pos = src.indexOf("xs");
-            const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
-            assert.ok(symbol);
-            const type = await project.checker.getTypeOfSymbol(symbol);
-            assert.ok(type);
-            assert.equal(await project.checker.isArrayType(type), true);
-            assert.equal(await project.checker.isTupleType(type), false);
-        }
-        finally {
-            await api.close();
-        }
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const src = `export const xs: Array<number> = [];`;
+        const pos = src.indexOf("xs");
+        const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
+        assert.ok(symbol);
+        const type = await project.checker.getTypeOfSymbol(symbol);
+        assert.ok(type);
+        assert.equal(await project.checker.isArrayType(type), true);
+        assert.equal(await project.checker.isTupleType(type), false);
     });
 
     test("[number, string] is tuple, not array", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
             "/src/main.ts": `export const tup: [number, string] = [1, "a"];`,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const src = `export const tup: [number, string] = [1, "a"];`;
-            const pos = src.indexOf("tup");
-            const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
-            assert.ok(symbol);
-            const type = await project.checker.getTypeOfSymbol(symbol);
-            assert.ok(type);
-            assert.equal(await project.checker.isArrayType(type), false);
-            assert.equal(await project.checker.isTupleType(type), true);
-        }
-        finally {
-            await api.close();
-        }
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const src = `export const tup: [number, string] = [1, "a"];`;
+        const pos = src.indexOf("tup");
+        const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
+        assert.ok(symbol);
+        const type = await project.checker.getTypeOfSymbol(symbol);
+        assert.ok(type);
+        assert.equal(await project.checker.isArrayType(type), false);
+        assert.equal(await project.checker.isTupleType(type), true);
     });
 
     test("readonly [number, string] is tuple, not array", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
             "/src/main.ts": `export const tup: readonly [number, string] = [1, "a"];`,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const src = `export const tup: readonly [number, string] = [1, "a"];`;
-            const pos = src.indexOf("tup");
-            const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
-            assert.ok(symbol);
-            const type = await project.checker.getTypeOfSymbol(symbol);
-            assert.ok(type);
-            assert.equal(await project.checker.isArrayType(type), false);
-            assert.equal(await project.checker.isTupleType(type), true);
-        }
-        finally {
-            await api.close();
-        }
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const src = `export const tup: readonly [number, string] = [1, "a"];`;
+        const pos = src.indexOf("tup");
+        const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
+        assert.ok(symbol);
+        const type = await project.checker.getTypeOfSymbol(symbol);
+        assert.ok(type);
+        assert.equal(await project.checker.isArrayType(type), false);
+        assert.equal(await project.checker.isTupleType(type), true);
     });
 
     test("string is neither array nor tuple", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
             "/src/main.ts": `export const str: string = "";`,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const src = `export const str: string = "";`;
-            const pos = src.indexOf("str");
-            const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
-            assert.ok(symbol);
-            const type = await project.checker.getTypeOfSymbol(symbol);
-            assert.ok(type);
-            assert.equal(await project.checker.isArrayType(type), false);
-            assert.equal(await project.checker.isTupleType(type), false);
-        }
-        finally {
-            await api.close();
-        }
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const src = `export const str: string = "";`;
+        const pos = src.indexOf("str");
+        const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
+        assert.ok(symbol);
+        const type = await project.checker.getTypeOfSymbol(symbol);
+        assert.ok(type);
+        assert.equal(await project.checker.isArrayType(type), false);
+        assert.equal(await project.checker.isTupleType(type), false);
     });
 });
 
 describe("Checker - isReadonlySymbol", () => {
     test("properties with a 'readonly' modifier", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
             "/src/main.ts": `
 export interface User {
@@ -3780,53 +3270,45 @@ export interface User {
 export type ReadonlyUser = Readonly<User>;
 `,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const sourceFile = await project.program.getSourceFile("/src/main.ts");
-            assert.ok(sourceFile);
-            const user = sourceFile.statements.find(isInterfaceDeclaration);
-            assert.ok(user);
-            const userProperties = await project.checker.getPropertiesOfType(
-                await project.checker.getTypeAtLocation(user),
-            );
-            assert.equal(await project.checker.isReadonlySymbol(userProperties[0]), true);
-            assert.equal(await project.checker.isReadonlySymbol(userProperties[1]), false);
-            const readonlyUser = sourceFile.statements.find(isTypeAliasDeclaration);
-            assert.ok(readonlyUser);
-            const readonlyUserProperties = await project.checker.getPropertiesOfType(
-                await project.checker.getTypeAtLocation(readonlyUser),
-            );
-            assert.equal(await project.checker.isReadonlySymbol(readonlyUserProperties[0]), true);
-            assert.equal(await project.checker.isReadonlySymbol(readonlyUserProperties[1]), true);
-        }
-        finally {
-            await api.close();
-        }
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const sourceFile = await project.program.getSourceFile("/src/main.ts");
+        assert.ok(sourceFile);
+        const user = sourceFile.statements.find(isInterfaceDeclaration);
+        assert.ok(user);
+        const userProperties = await project.checker.getPropertiesOfType(
+            await project.checker.getTypeAtLocation(user),
+        );
+        assert.equal(await project.checker.isReadonlySymbol(userProperties[0]), true);
+        assert.equal(await project.checker.isReadonlySymbol(userProperties[1]), false);
+        const readonlyUser = sourceFile.statements.find(isTypeAliasDeclaration);
+        assert.ok(readonlyUser);
+        const readonlyUserProperties = await project.checker.getPropertiesOfType(
+            await project.checker.getTypeAtLocation(readonlyUser),
+        );
+        assert.equal(await project.checker.isReadonlySymbol(readonlyUserProperties[0]), true);
+        assert.equal(await project.checker.isReadonlySymbol(readonlyUserProperties[1]), true);
     });
 
     test("variables declared with 'const'", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
             "/src/main.ts": `export const a = 1; export let b = 2;`,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const { checker } = snapshot.getProject("/tsconfig.json")!;
-            const a = await checker.getSymbolAtPosition("/src/main.ts", "export const ".length);
-            const b = await checker.getSymbolAtPosition("/src/main.ts", "export const a = 1; export let ".length);
-            assert.ok(a);
-            assert.ok(b);
-            assert.equal(await checker.isReadonlySymbol(a), true);
-            assert.equal(await checker.isReadonlySymbol(b), false);
-        }
-        finally {
-            await api.close();
-        }
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const { checker } = snapshot.getProject("/tsconfig.json")!;
+        const a = await checker.getSymbolAtPosition("/src/main.ts", "export const ".length);
+        const b = await checker.getSymbolAtPosition("/src/main.ts", "export const a = 1; export let ".length);
+        assert.ok(a);
+        assert.ok(b);
+        assert.equal(await checker.isReadonlySymbol(a), true);
+        assert.equal(await checker.isReadonlySymbol(b), false);
     });
 
     test("get accessors without matching set accessors", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
             "/src/main.ts": `
 class Alpha {
@@ -3848,114 +3330,98 @@ export type A = InstanceType<typeof Alpha>;
 export type B = InstanceType<typeof Bravo>;
 `,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const sourceFile = await project.program.getSourceFile("/src/main.ts");
-            assert.ok(sourceFile);
-            const typeAliases = sourceFile.statements.filter(isTypeAliasDeclaration);
-            assert.equal(typeAliases.length, 2);
-            const aProperties = await project.checker.getPropertiesOfType(
-                await project.checker.getTypeAtLocation(typeAliases[0]),
-            );
-            assert.equal(await project.checker.isReadonlySymbol(aProperties[1]), true);
-            const bProperties = await project.checker.getPropertiesOfType(
-                await project.checker.getTypeAtLocation(typeAliases[1]),
-            );
-            assert.equal(await project.checker.isReadonlySymbol(bProperties[1]), false);
-        }
-        finally {
-            await api.close();
-        }
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const sourceFile = await project.program.getSourceFile("/src/main.ts");
+        assert.ok(sourceFile);
+        const typeAliases = sourceFile.statements.filter(isTypeAliasDeclaration);
+        assert.equal(typeAliases.length, 2);
+        const aProperties = await project.checker.getPropertiesOfType(
+            await project.checker.getTypeAtLocation(typeAliases[0]),
+        );
+        assert.equal(await project.checker.isReadonlySymbol(aProperties[1]), true);
+        const bProperties = await project.checker.getPropertiesOfType(
+            await project.checker.getTypeAtLocation(typeAliases[1]),
+        );
+        assert.equal(await project.checker.isReadonlySymbol(bProperties[1]), false);
     });
 });
 
 describe("Checker - getReturnTypeOfSignature", () => {
     test("returns the return type of a function signature", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
             "/src/main.ts": `export function add(a: number, b: number): number { return a + b; }`,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const src = `export function add(a: number, b: number): number { return a + b; }`;
-            const pos = src.indexOf("add(");
-            const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
-            assert.ok(symbol);
-            const type = await project.checker.getTypeOfSymbol(symbol);
-            assert.ok(type);
-            const sigs = await project.checker.getSignaturesOfType(type, SignatureKind.Call);
-            assert.ok(sigs.length > 0);
-            const returnType = await project.checker.getReturnTypeOfSignature(sigs[0]);
-            assert.ok(returnType);
-            assert.ok(returnType.flags & TypeFlags.Number, `Expected number, got flags ${returnType.flags}`);
-        }
-        finally {
-            await api.close();
-        }
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const src = `export function add(a: number, b: number): number { return a + b; }`;
+        const pos = src.indexOf("add(");
+        const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
+        assert.ok(symbol);
+        const type = await project.checker.getTypeOfSymbol(symbol);
+        assert.ok(type);
+        const sigs = await project.checker.getSignaturesOfType(type, SignatureKind.Call);
+        assert.ok(sigs.length > 0);
+        const returnType = await project.checker.getReturnTypeOfSignature(sigs[0]);
+        assert.ok(returnType);
+        assert.ok(returnType.flags & TypeFlags.Number, `Expected number, got flags ${returnType.flags}`);
     });
 });
 
 describe("Checker - getRestTypeOfSignature", () => {
     test("returns the rest type of a signature with rest parameter", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
             "/src/main.ts": `export function sum(...nums: number[]): number { return nums.reduce((a, b) => a + b, 0); }`,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const src = `export function sum(...nums: number[]): number { return nums.reduce((a, b) => a + b, 0); }`;
-            const pos = src.indexOf("sum(");
-            const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
-            assert.ok(symbol);
-            const type = await project.checker.getTypeOfSymbol(symbol);
-            assert.ok(type);
-            const sigs = await project.checker.getSignaturesOfType(type, SignatureKind.Call);
-            assert.ok(sigs.length > 0);
-            const restType = await project.checker.getRestTypeOfSignature(sigs[0]);
-            assert.ok(restType);
-            assert.ok(restType.flags & TypeFlags.Number, `Expected number type, got flags ${restType.flags}`);
-        }
-        finally {
-            await api.close();
-        }
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const src = `export function sum(...nums: number[]): number { return nums.reduce((a, b) => a + b, 0); }`;
+        const pos = src.indexOf("sum(");
+        const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
+        assert.ok(symbol);
+        const type = await project.checker.getTypeOfSymbol(symbol);
+        assert.ok(type);
+        const sigs = await project.checker.getSignaturesOfType(type, SignatureKind.Call);
+        assert.ok(sigs.length > 0);
+        const restType = await project.checker.getRestTypeOfSignature(sigs[0]);
+        assert.ok(restType);
+        assert.ok(restType.flags & TypeFlags.Number, `Expected number type, got flags ${restType.flags}`);
     });
 });
 
 describe("Checker - getTypePredicateOfSignature", () => {
     test("returns type predicate for 'x is T' guard", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
             "/src/main.ts": `export function isString(x: unknown): x is string { return typeof x === "string"; }`,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const src = `export function isString(x: unknown): x is string { return typeof x === "string"; }`;
-            const pos = src.indexOf("isString(");
-            const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
-            assert.ok(symbol);
-            const type = await project.checker.getTypeOfSymbol(symbol);
-            assert.ok(type);
-            const sigs = await project.checker.getSignaturesOfType(type, SignatureKind.Call);
-            assert.ok(sigs.length > 0);
-            const predicate = await project.checker.getTypePredicateOfSignature(sigs[0]);
-            assert.ok(predicate);
-            assert.equal(predicate.kind, TypePredicateKind.Identifier);
-            assert.equal(predicate.parameterName, "x");
-            assert.equal(predicate.parameterIndex, 0);
-            assert.ok(predicate.type);
-            assert.ok(predicate.type.flags & TypeFlags.String);
-        }
-        finally {
-            await api.close();
-        }
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const src = `export function isString(x: unknown): x is string { return typeof x === "string"; }`;
+        const pos = src.indexOf("isString(");
+        const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
+        assert.ok(symbol);
+        const type = await project.checker.getTypeOfSymbol(symbol);
+        assert.ok(type);
+        const sigs = await project.checker.getSignaturesOfType(type, SignatureKind.Call);
+        assert.ok(sigs.length > 0);
+        const predicate = await project.checker.getTypePredicateOfSignature(sigs[0]);
+        assert.ok(predicate);
+        assert.equal(predicate.kind, TypePredicateKind.Identifier);
+        assert.equal(predicate.parameterName, "x");
+        assert.equal(predicate.parameterIndex, 0);
+        assert.ok(predicate.type);
+        assert.ok(predicate.type.flags & TypeFlags.String);
     });
 
     test("returns type predicate for 'this is T' guard", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
             "/src/main.ts": `
 export class Animal {
@@ -3966,83 +3432,71 @@ export class Dog extends Animal {
 }
 `,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const src = `\nexport class Animal {\n    isdog(): this is Dog { return this instanceof Dog; }\n}\nexport class Dog extends Animal {\n    bark() {}\n}\n`;
-            const pos = src.indexOf("isdog(");
-            const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
-            assert.ok(symbol);
-            const type = await project.checker.getTypeOfSymbol(symbol);
-            assert.ok(type);
-            const sigs = await project.checker.getSignaturesOfType(type, SignatureKind.Call);
-            assert.ok(sigs.length > 0);
-            const predicate = await project.checker.getTypePredicateOfSignature(sigs[0]);
-            assert.ok(predicate);
-            assert.equal(predicate.kind, TypePredicateKind.This);
-        }
-        finally {
-            await api.close();
-        }
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const src = `\nexport class Animal {\n    isdog(): this is Dog { return this instanceof Dog; }\n}\nexport class Dog extends Animal {\n    bark() {}\n}\n`;
+        const pos = src.indexOf("isdog(");
+        const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
+        assert.ok(symbol);
+        const type = await project.checker.getTypeOfSymbol(symbol);
+        assert.ok(type);
+        const sigs = await project.checker.getSignaturesOfType(type, SignatureKind.Call);
+        assert.ok(sigs.length > 0);
+        const predicate = await project.checker.getTypePredicateOfSignature(sigs[0]);
+        assert.ok(predicate);
+        assert.equal(predicate.kind, TypePredicateKind.This);
     });
 
     test("returns type predicate for 'asserts x is T'", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
             "/src/main.ts": `export function assertIsString(x: unknown): asserts x is string { if (typeof x !== "string") throw new Error(); }`,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const src = `export function assertIsString(x: unknown): asserts x is string { if (typeof x !== "string") throw new Error(); }`;
-            const pos = src.indexOf("assertIsString(");
-            const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
-            assert.ok(symbol);
-            const type = await project.checker.getTypeOfSymbol(symbol);
-            assert.ok(type);
-            const sigs = await project.checker.getSignaturesOfType(type, SignatureKind.Call);
-            assert.ok(sigs.length > 0);
-            const predicate = await project.checker.getTypePredicateOfSignature(sigs[0]);
-            assert.ok(predicate);
-            assert.equal(predicate.kind, TypePredicateKind.AssertsIdentifier);
-            assert.equal(predicate.parameterName, "x");
-            assert.equal(predicate.parameterIndex, 0);
-            assert.ok(predicate.type);
-            assert.ok(predicate.type.flags & TypeFlags.String);
-        }
-        finally {
-            await api.close();
-        }
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const src = `export function assertIsString(x: unknown): asserts x is string { if (typeof x !== "string") throw new Error(); }`;
+        const pos = src.indexOf("assertIsString(");
+        const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
+        assert.ok(symbol);
+        const type = await project.checker.getTypeOfSymbol(symbol);
+        assert.ok(type);
+        const sigs = await project.checker.getSignaturesOfType(type, SignatureKind.Call);
+        assert.ok(sigs.length > 0);
+        const predicate = await project.checker.getTypePredicateOfSignature(sigs[0]);
+        assert.ok(predicate);
+        assert.equal(predicate.kind, TypePredicateKind.AssertsIdentifier);
+        assert.equal(predicate.parameterName, "x");
+        assert.equal(predicate.parameterIndex, 0);
+        assert.ok(predicate.type);
+        assert.ok(predicate.type.flags & TypeFlags.String);
     });
 
     test("returns undefined for signature without type predicate", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
             "/src/main.ts": `export function add(a: number, b: number): number { return a + b; }`,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const src = `export function add(a: number, b: number): number { return a + b; }`;
-            const pos = src.indexOf("add(");
-            const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
-            assert.ok(symbol);
-            const type = await project.checker.getTypeOfSymbol(symbol);
-            assert.ok(type);
-            const sigs = await project.checker.getSignaturesOfType(type, SignatureKind.Call);
-            assert.ok(sigs.length > 0);
-            const predicate = await project.checker.getTypePredicateOfSignature(sigs[0]);
-            assert.equal(predicate, undefined);
-        }
-        finally {
-            await api.close();
-        }
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const src = `export function add(a: number, b: number): number { return a + b; }`;
+        const pos = src.indexOf("add(");
+        const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
+        assert.ok(symbol);
+        const type = await project.checker.getTypeOfSymbol(symbol);
+        assert.ok(type);
+        const sigs = await project.checker.getSignaturesOfType(type, SignatureKind.Call);
+        assert.ok(sigs.length > 0);
+        const predicate = await project.checker.getTypePredicateOfSignature(sigs[0]);
+        assert.equal(predicate, undefined);
     });
 });
 
 describe("Checker - getBaseTypes", () => {
     test("returns base types of a class", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
             "/src/main.ts": `
 export class Base {
@@ -4053,28 +3507,24 @@ export class Derived extends Base {
 }
 `,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const src = `\nexport class Base {\n    x: number = 0;\n}\nexport class Derived extends Base {\n    y: string = "";\n}\n`;
-            const pos = src.indexOf("Derived");
-            const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
-            assert.ok(symbol);
-            const type = await project.checker.getDeclaredTypeOfSymbol(symbol);
-            assert.ok(type);
-            const baseTypes = await project.checker.getBaseTypes(type as InterfaceType);
-            assert.ok(baseTypes.length > 0, "Should have at least one base type");
-            const baseSymbol = await baseTypes[0].getSymbol();
-            assert.ok(baseSymbol);
-            assert.equal(baseSymbol.name, "Base");
-        }
-        finally {
-            await api.close();
-        }
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const src = `\nexport class Base {\n    x: number = 0;\n}\nexport class Derived extends Base {\n    y: string = "";\n}\n`;
+        const pos = src.indexOf("Derived");
+        const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
+        assert.ok(symbol);
+        const type = await project.checker.getDeclaredTypeOfSymbol(symbol);
+        assert.ok(type);
+        const baseTypes = await project.checker.getBaseTypes(type as InterfaceType);
+        assert.ok(baseTypes.length > 0, "Should have at least one base type");
+        const baseSymbol = await baseTypes[0].getSymbol();
+        assert.ok(baseSymbol);
+        assert.equal(baseSymbol.name, "Base");
     });
 
     test("returns base types of an interface", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
             "/src/main.ts": `
 export interface Animal {
@@ -4085,28 +3535,24 @@ export interface Dog extends Animal {
 }
 `,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const src = `\nexport interface Animal {\n    name: string;\n}\nexport interface Dog extends Animal {\n    bark(): void;\n}\n`;
-            const pos = src.indexOf("Dog");
-            const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
-            assert.ok(symbol);
-            const type = await project.checker.getDeclaredTypeOfSymbol(symbol);
-            assert.ok(type);
-            const baseTypes = await project.checker.getBaseTypes(type as InterfaceType);
-            assert.ok(baseTypes.length > 0, "Should have at least one base type");
-            const baseSymbol = await baseTypes[0].getSymbol();
-            assert.ok(baseSymbol);
-            assert.equal(baseSymbol.name, "Animal");
-        }
-        finally {
-            await api.close();
-        }
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const src = `\nexport interface Animal {\n    name: string;\n}\nexport interface Dog extends Animal {\n    bark(): void;\n}\n`;
+        const pos = src.indexOf("Dog");
+        const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
+        assert.ok(symbol);
+        const type = await project.checker.getDeclaredTypeOfSymbol(symbol);
+        assert.ok(type);
+        const baseTypes = await project.checker.getBaseTypes(type as InterfaceType);
+        assert.ok(baseTypes.length > 0, "Should have at least one base type");
+        const baseSymbol = await baseTypes[0].getSymbol();
+        assert.ok(baseSymbol);
+        assert.equal(baseSymbol.name, "Animal");
     });
 
     test("does not panic for a type alias to a generic interface instantiation", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
             "/src/main.ts": `
 export interface Box<T> {
@@ -4115,29 +3561,25 @@ export interface Box<T> {
 export type BoxOfString = Box<string>;
 `,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const sourceFile = await project.program.getSourceFile("/src/main.ts");
-            assert.ok(sourceFile);
-            const typeAlias = sourceFile.statements.find(isTypeAliasDeclaration);
-            assert.ok(typeAlias);
-            const type = await project.checker.getTypeAtLocation(typeAlias);
-            assert.ok(type);
-            // A generic interface instantiation produces a type reference, not an
-            // interface type, so it has no base types and yields [].
-            const baseTypes = await project.checker.getBaseTypes(type as InterfaceType);
-            assert.deepEqual(baseTypes, []);
-        }
-        finally {
-            await api.close();
-        }
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const sourceFile = await project.program.getSourceFile("/src/main.ts");
+        assert.ok(sourceFile);
+        const typeAlias = sourceFile.statements.find(isTypeAliasDeclaration);
+        assert.ok(typeAlias);
+        const type = await project.checker.getTypeAtLocation(typeAlias);
+        assert.ok(type);
+        // A generic interface instantiation produces a type reference, not an
+        // interface type, so it has no base types and yields [].
+        const baseTypes = await project.checker.getBaseTypes(type as InterfaceType);
+        assert.deepEqual(baseTypes, []);
     });
 });
 
 describe("Type - getBaseTypes", () => {
     test("returns base types for a class type and undefined for a non-class/interface", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
             "/src/main.ts": `
 export class Base {
@@ -4149,91 +3591,79 @@ export class Derived extends Base {
 export const n: number = 0;
 `,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const src = `\nexport class Base {\n    x: number = 0;\n}\nexport class Derived extends Base {\n    y: string = "";\n}\nexport const n: number = 0;\n`;
 
-            const derivedSymbol = await project.checker.getSymbolAtPosition("/src/main.ts", src.indexOf("Derived"));
-            assert.ok(derivedSymbol);
-            const derivedType = await project.checker.getDeclaredTypeOfSymbol(derivedSymbol);
-            assert.ok(derivedType.isClassOrInterface(), "Derived should be a class/interface type");
-            const baseTypes = await derivedType.getBaseTypes();
-            assert.ok(baseTypes && baseTypes.length > 0, "class type should have base types");
-            const baseSymbol = await baseTypes![0].getSymbol();
-            assert.equal(baseSymbol?.name, "Base");
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const src = `\nexport class Base {\n    x: number = 0;\n}\nexport class Derived extends Base {\n    y: string = "";\n}\nexport const n: number = 0;\n`;
 
-            // A primitive type is not a class/interface, so getBaseTypes() is undefined.
-            const numberSymbol = await project.checker.getSymbolAtPosition("/src/main.ts", src.indexOf("n:"));
-            assert.ok(numberSymbol);
-            const numberType = await project.checker.getTypeOfSymbol(numberSymbol);
-            assert.ok(numberType);
-            assert.equal(numberType.isClassOrInterface(), false);
-            assert.equal(await numberType.getBaseTypes(), undefined);
-        }
-        finally {
-            await api.close();
-        }
+        const derivedSymbol = await project.checker.getSymbolAtPosition("/src/main.ts", src.indexOf("Derived"));
+        assert.ok(derivedSymbol);
+        const derivedType = await project.checker.getDeclaredTypeOfSymbol(derivedSymbol);
+        assert.ok(derivedType.isClassOrInterface(), "Derived should be a class/interface type");
+        const baseTypes = await derivedType.getBaseTypes();
+        assert.ok(baseTypes && baseTypes.length > 0, "class type should have base types");
+        const baseSymbol = await baseTypes![0].getSymbol();
+        assert.equal(baseSymbol?.name, "Base");
+
+        // A primitive type is not a class/interface, so getBaseTypes() is undefined.
+        const numberSymbol = await project.checker.getSymbolAtPosition("/src/main.ts", src.indexOf("n:"));
+        assert.ok(numberSymbol);
+        const numberType = await project.checker.getTypeOfSymbol(numberSymbol);
+        assert.ok(numberType);
+        assert.equal(numberType.isClassOrInterface(), false);
+        assert.equal(await numberType.getBaseTypes(), undefined);
     });
 });
 
 describe("Type - isErrorType", () => {
     test("identifies the error type from an unresolvable annotation", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
             "/src/main.ts": `
 declare const good: string;
 declare const bad: ThisTypeDoesNotExist;
 `,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const src = `\ndeclare const good: string;\ndeclare const bad: ThisTypeDoesNotExist;\n`;
 
-            const badSymbol = await project.checker.getSymbolAtPosition("/src/main.ts", src.indexOf("bad"));
-            assert.ok(badSymbol);
-            const badType = await project.checker.getTypeOfSymbol(badSymbol);
-            assert.ok(badType);
-            assert.ok(badType.isErrorType(), "unresolved annotation should yield the error type");
-            assert.ok(isErrorType(badType));
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const src = `\ndeclare const good: string;\ndeclare const bad: ThisTypeDoesNotExist;\n`;
 
-            const goodSymbol = await project.checker.getSymbolAtPosition("/src/main.ts", src.indexOf("good"));
-            assert.ok(goodSymbol);
-            const goodType = await project.checker.getTypeOfSymbol(goodSymbol);
-            assert.ok(goodType);
-            assert.equal(goodType.isErrorType(), false, "string type is not the error type");
-            assert.equal(isErrorType(goodType), false);
-        }
-        finally {
-            await api.close();
-        }
+        const badSymbol = await project.checker.getSymbolAtPosition("/src/main.ts", src.indexOf("bad"));
+        assert.ok(badSymbol);
+        const badType = await project.checker.getTypeOfSymbol(badSymbol);
+        assert.ok(badType);
+        assert.ok(badType.isErrorType(), "unresolved annotation should yield the error type");
+        assert.ok(isErrorType(badType));
+
+        const goodSymbol = await project.checker.getSymbolAtPosition("/src/main.ts", src.indexOf("good"));
+        assert.ok(goodSymbol);
+        const goodType = await project.checker.getTypeOfSymbol(goodSymbol);
+        assert.ok(goodType);
+        assert.equal(goodType.isErrorType(), false, "string type is not the error type");
+        assert.equal(isErrorType(goodType), false);
     });
 });
 
 describe("Checker - well-known symbols", () => {
     test("isUnknownSymbol identifies the aliased unknown symbol", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
             "/src/main.ts": `
 export const value = 1;
 export type Alias = typeof value;
 `,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const src = `\nexport const value = 1;\nexport type Alias = typeof value;\n`;
 
-            // A real symbol is not the unknown/undefined symbol.
-            const valueSymbol = await project.checker.getSymbolAtPosition("/src/main.ts", src.indexOf("value"));
-            assert.ok(valueSymbol);
-            assert.equal(await project.checker.isUnknownSymbol(valueSymbol), false);
-            assert.equal(await project.checker.isUndefinedSymbol(valueSymbol), false);
-        }
-        finally {
-            await api.close();
-        }
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const src = `\nexport const value = 1;\nexport type Alias = typeof value;\n`;
+
+        // A real symbol is not the unknown/undefined symbol.
+        const valueSymbol = await project.checker.getSymbolAtPosition("/src/main.ts", src.indexOf("value"));
+        assert.ok(valueSymbol);
+        assert.equal(await project.checker.isUnknownSymbol(valueSymbol), false);
+        assert.equal(await project.checker.isUndefinedSymbol(valueSymbol), false);
     });
 });
 
@@ -4245,39 +3675,35 @@ ok(1);
 const notCallable = 1;
 notCallable();
 `;
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
             "/src/main.ts": src,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const sourceFile = await project.program.getSourceFile("/src/main.ts");
-            assert.ok(sourceFile);
-            const calls: Node[] = [];
-            sourceFile.forEachChild(function visit(node) {
-                if (isCallExpression(node)) calls.push(node);
-                node.forEachChild(visit);
-            });
-            assert.equal(calls.length, 2, "should find two call expressions");
 
-            // The valid call resolves to a real signature, not the unknown signature.
-            const okSig = await project.checker.getResolvedSignature(calls[0]);
-            assert.equal(await project.checker.isUnknownSignature(okSig), false);
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const sourceFile = await project.program.getSourceFile("/src/main.ts");
+        assert.ok(sourceFile);
+        const calls: Node[] = [];
+        sourceFile.forEachChild(function visit(node) {
+            if (isCallExpression(node)) calls.push(node);
+            node.forEachChild(visit);
+        });
+        assert.equal(calls.length, 2, "should find two call expressions");
 
-            // The call to a non-callable value yields the unknown signature.
-            const badSig = await project.checker.getResolvedSignature(calls[1]);
-            assert.equal(await project.checker.isUnknownSignature(badSig), true);
-        }
-        finally {
-            await api.close();
-        }
+        // The valid call resolves to a real signature, not the unknown signature.
+        const okSig = await project.checker.getResolvedSignature(calls[0]);
+        assert.equal(await project.checker.isUnknownSignature(okSig), false);
+
+        // The call to a non-callable value yields the unknown signature.
+        const badSig = await project.checker.getResolvedSignature(calls[1]);
+        assert.equal(await project.checker.isUnknownSignature(badSig), true);
     });
 });
 
 describe("Symbol - escaped names and tables", () => {
     test("getExports/getMembers return a cached Map keyed by escaped name", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
             "/src/main.ts": `
 export class Animal {
@@ -4287,56 +3713,48 @@ export class Animal {
 export const value = 1;
 `,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const sourceFile = await project.program.getSourceFile("/src/main.ts");
-            assert.ok(sourceFile);
-            const moduleSymbol = await project.checker.getSymbolAtLocation(sourceFile);
-            assert.ok(moduleSymbol);
 
-            const exports = await moduleSymbol.getExports();
-            assert.ok(exports.has(escapeLeadingUnderscores("Animal")));
-            assert.ok(exports.get(escapeLeadingUnderscores("value")));
-            // Calling again returns the same cached Map instance.
-            assert.strictEqual(await moduleSymbol.getExports(), exports);
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const sourceFile = await project.program.getSourceFile("/src/main.ts");
+        assert.ok(sourceFile);
+        const moduleSymbol = await project.checker.getSymbolAtLocation(sourceFile);
+        assert.ok(moduleSymbol);
 
-            const animal = exports.get(escapeLeadingUnderscores("Animal"))!;
-            const members = await animal.getMembers();
-            assert.ok(members.get(escapeLeadingUnderscores("name")));
-            assert.ok(members.get(escapeLeadingUnderscores("speak")));
-            assert.strictEqual(await animal.getMembers(), members);
-        }
-        finally {
-            await api.close();
-        }
+        const exports = await moduleSymbol.getExports();
+        assert.ok(exports.has(escapeLeadingUnderscores("Animal")));
+        assert.ok(exports.get(escapeLeadingUnderscores("value")));
+        // Calling again returns the same cached Map instance.
+        assert.strictEqual(await moduleSymbol.getExports(), exports);
+
+        const animal = exports.get(escapeLeadingUnderscores("Animal"))!;
+        const members = await animal.getMembers();
+        assert.ok(members.get(escapeLeadingUnderscores("name")));
+        assert.ok(members.get(escapeLeadingUnderscores("speak")));
+        assert.strictEqual(await animal.getMembers(), members);
     });
 
     test("anonymous type symbol has a __-escaped name, never the \\xFE sentinel", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
             "/src/main.ts": `
 export const obj: { a: number } = { a: 1 };
 `,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const src = `\nexport const obj: { a: number } = { a: 1 };\n`;
-            const objSymbol = await project.checker.getSymbolAtPosition("/src/main.ts", src.indexOf("obj"));
-            assert.ok(objSymbol);
-            const objType = await project.checker.getTypeOfSymbol(objSymbol);
-            assert.ok(objType);
-            const typeSymbol = await objType.getSymbol();
-            assert.ok(typeSymbol);
-            // The anonymous type literal symbol is internally named; over the wire
-            // it must be the "__type" escaped form, not the raw "\xFE" sentinel.
-            assert.equal(typeSymbol.escapedName, InternalSymbolName.Type);
-            assert.ok(!typeSymbol.escapedName.includes("\xFE"));
-        }
-        finally {
-            await api.close();
-        }
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const src = `\nexport const obj: { a: number } = { a: 1 };\n`;
+        const objSymbol = await project.checker.getSymbolAtPosition("/src/main.ts", src.indexOf("obj"));
+        assert.ok(objSymbol);
+        const objType = await project.checker.getTypeOfSymbol(objSymbol);
+        assert.ok(objType);
+        const typeSymbol = await objType.getSymbol();
+        assert.ok(typeSymbol);
+        // The anonymous type literal symbol is internally named; over the wire
+        // it must be the "__type" escaped form, not the raw "\xFE" sentinel.
+        assert.equal(typeSymbol.escapedName, InternalSymbolName.Type);
+        assert.ok(!typeSymbol.escapedName.includes("\xFE"));
     });
 
     test("distinguishes a pattern ambient module name from a matching user-provided export name", async () => {
@@ -4351,38 +3769,34 @@ declare module "*.css" with { type: "css" } {
 const x = "";
 export { x as '${maliciousName}' };
 `;
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true, module: "preserve" } }),
             "/src/types.d.ts": types,
             "/src/main.ts": source,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
 
-            const typesFile = await project.program.getSourceFile("/src/types.d.ts");
-            assert.ok(typesFile);
-            const moduleDeclaration = typesFile.statements.find(isModuleDeclaration);
-            assert.ok(moduleDeclaration);
-            const ambientModule = await project.checker.getSymbolAtLocation(moduleDeclaration.name);
-            assert.ok(ambientModule);
-            assert.match(ambientModule.name, /^__"\*\.css"pattern@\d+$/);
-            assert.equal(ambientModule.escapedName, ambientModule.name);
-            assert.equal(tryGetAmbientModuleNameFromSymbolName(ambientModule.escapedName), "*.css");
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
 
-            const sourceFile = await project.program.getSourceFile("/src/main.ts");
-            assert.ok(sourceFile);
-            const sourceFileSymbol = await project.checker.getSymbolAtLocation(sourceFile);
-            assert.ok(sourceFileSymbol);
-            const maliciousExport = (await sourceFileSymbol.getExports()).get(escapeLeadingUnderscores(maliciousName));
-            assert.ok(maliciousExport);
-            assert.equal(maliciousExport.name, maliciousName);
-            assert.equal(maliciousExport.escapedName, maliciousName);
-            assert.equal(tryGetAmbientModuleNameFromSymbolName(maliciousExport.escapedName), undefined);
-        }
-        finally {
-            await api.close();
-        }
+        const typesFile = await project.program.getSourceFile("/src/types.d.ts");
+        assert.ok(typesFile);
+        const moduleDeclaration = typesFile.statements.find(isModuleDeclaration);
+        assert.ok(moduleDeclaration);
+        const ambientModule = await project.checker.getSymbolAtLocation(moduleDeclaration.name);
+        assert.ok(ambientModule);
+        assert.match(ambientModule.name, /^__"\*\.css"pattern@\d+$/);
+        assert.equal(ambientModule.escapedName, ambientModule.name);
+        assert.equal(tryGetAmbientModuleNameFromSymbolName(ambientModule.escapedName), "*.css");
+
+        const sourceFile = await project.program.getSourceFile("/src/main.ts");
+        assert.ok(sourceFile);
+        const sourceFileSymbol = await project.checker.getSymbolAtLocation(sourceFile);
+        assert.ok(sourceFileSymbol);
+        const maliciousExport = (await sourceFileSymbol.getExports()).get(escapeLeadingUnderscores(maliciousName));
+        assert.ok(maliciousExport);
+        assert.equal(maliciousExport.name, maliciousName);
+        assert.equal(maliciousExport.escapedName, maliciousName);
+        assert.equal(tryGetAmbientModuleNameFromSymbolName(maliciousExport.escapedName), undefined);
     });
 });
 
@@ -4409,7 +3823,7 @@ describe("ast - tryGetAmbientModuleNameFromSymbolName", () => {
 
 describe("ast - getJSDocTags", () => {
     test("returns a node's own tags, and inherited @param / @template tags", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
             "/src/main.ts": `
 /**
@@ -4434,61 +3848,57 @@ export function identity<T>(x: T): T {
 export const total = add(1, 2);
 `,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const sourceFile = await project.program.getSourceFile("/src/main.ts");
-            assert.ok(sourceFile);
-            const functions = [...sourceFile.statements].filter(isFunctionDeclaration);
-            const add = functions[0];
-            const identity = functions[1];
-            assert.ok(add);
-            assert.ok(identity);
 
-            // A function reports its own JSDoc tags.
-            assert.deepEqual(getJSDocTags(add).map(t => t.tagName.text), ["param", "param", "returns"]);
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const sourceFile = await project.program.getSourceFile("/src/main.ts");
+        assert.ok(sourceFile);
+        const functions = [...sourceFile.statements].filter(isFunctionDeclaration);
+        const add = functions[0];
+        const identity = functions[1];
+        assert.ok(add);
+        assert.ok(identity);
 
-            // A parameter inherits the matching @param tag from its containing
-            // signature.
-            const paramA = add.parameters[0];
-            const paramATags = getJSDocTags(paramA);
-            assert.deepEqual(paramATags.map(t => t.tagName.text), ["param"]);
-            const paramATag = paramATags[0];
-            assert.ok(isJSDocParameterTag(paramATag));
-            assert.ok(isIdentifier(paramATag.name));
-            assert.equal(paramATag.name.text, "a");
+        // A function reports its own JSDoc tags.
+        assert.deepEqual(getJSDocTags(add).map(t => t.tagName.text), ["param", "param", "returns"]);
 
-            const paramB = add.parameters[1];
-            const paramBTags = getJSDocTags(paramB);
-            assert.deepEqual(paramBTags.map(t => t.tagName.text), ["param"]);
-            const paramBTag = paramBTags[0];
-            assert.ok(isJSDocParameterTag(paramBTag));
-            assert.ok(isIdentifier(paramBTag.name));
-            assert.equal(paramBTag.name.text, "b");
+        // A parameter inherits the matching @param tag from its containing
+        // signature.
+        const paramA = add.parameters[0];
+        const paramATags = getJSDocTags(paramA);
+        assert.deepEqual(paramATags.map(t => t.tagName.text), ["param"]);
+        const paramATag = paramATags[0];
+        assert.ok(isJSDocParameterTag(paramATag));
+        assert.ok(isIdentifier(paramATag.name));
+        assert.equal(paramATag.name.text, "a");
 
-            // A type parameter inherits the matching @template tag.
-            const typeParam = identity.typeParameters![0];
-            assert.deepEqual(getJSDocTags(typeParam).map(t => t.tagName.text), ["template"]);
+        const paramB = add.parameters[1];
+        const paramBTags = getJSDocTags(paramB);
+        assert.deepEqual(paramBTags.map(t => t.tagName.text), ["param"]);
+        const paramBTag = paramBTags[0];
+        assert.ok(isJSDocParameterTag(paramBTag));
+        assert.ok(isIdentifier(paramBTag.name));
+        assert.equal(paramBTag.name.text, "b");
 
-            // The value parameter of `identity` inherits its @param tag.
-            const identityParam = identity.parameters[0];
-            assert.deepEqual(getJSDocTags(identityParam).map(t => t.tagName.text), ["param"]);
+        // A type parameter inherits the matching @template tag.
+        const typeParam = identity.typeParameters![0];
+        assert.deepEqual(getJSDocTags(typeParam).map(t => t.tagName.text), ["template"]);
 
-            // A variable declaration walks up its comment-location chain
-            // (declaration -> declaration list -> statement) to the JSDoc on the
-            // containing variable statement.
-            const variable = sourceFile.statements.find(isVariableStatement);
-            assert.ok(variable);
-            const declaration = variable.declarationList.declarations[0];
-            assert.deepEqual(getJSDocTags(declaration).map(t => t.tagName.text), ["deprecated"]);
-        }
-        finally {
-            await api.close();
-        }
+        // The value parameter of `identity` inherits its @param tag.
+        const identityParam = identity.parameters[0];
+        assert.deepEqual(getJSDocTags(identityParam).map(t => t.tagName.text), ["param"]);
+
+        // A variable declaration walks up its comment-location chain
+        // (declaration -> declaration list -> statement) to the JSDoc on the
+        // containing variable statement.
+        const variable = sourceFile.statements.find(isVariableStatement);
+        assert.ok(variable);
+        const declaration = variable.declarationList.declarations[0];
+        assert.deepEqual(getJSDocTags(declaration).map(t => t.tagName.text), ["deprecated"]);
     });
 
     test("a function-expression parameter inherits @param tags from the variable statement", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { allowJs: true, checkJs: true } }),
             "/src/main.js": `
 /**
@@ -4500,37 +3910,33 @@ var measure = function (name) {
 };
 `,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const sourceFile = await project.program.getSourceFile("/src/main.js");
-            assert.ok(sourceFile);
-            const variable = sourceFile.statements.find(isVariableStatement);
-            assert.ok(variable);
-            const declaration = variable.declarationList.declarations[0];
-            const funcExpr = declaration.initializer;
-            assert.ok(funcExpr);
 
-            // The variable statement carries the @param and @returns tags.
-            assert.deepEqual(getJSDocTags(declaration).map(t => t.tagName.text), ["param", "returns"]);
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const sourceFile = await project.program.getSourceFile("/src/main.js");
+        assert.ok(sourceFile);
+        const variable = sourceFile.statements.find(isVariableStatement);
+        assert.ok(variable);
+        const declaration = variable.declarationList.declarations[0];
+        const funcExpr = declaration.initializer;
+        assert.ok(funcExpr);
 
-            // The function expression's parameter walks declaration -> list ->
-            // statement and inherits the matching @param tag.
-            const param = (funcExpr as unknown as { parameters: NodeArray<Node>; }).parameters[0];
-            const paramTags = getJSDocTags(param);
-            assert.deepEqual(paramTags.map(t => t.tagName.text), ["param"]);
-            const paramTag = paramTags[0];
-            assert.ok(isJSDocParameterTag(paramTag));
-            assert.ok(isIdentifier(paramTag.name));
-            assert.equal(paramTag.name.text, "name");
-        }
-        finally {
-            await api.close();
-        }
+        // The variable statement carries the @param and @returns tags.
+        assert.deepEqual(getJSDocTags(declaration).map(t => t.tagName.text), ["param", "returns"]);
+
+        // The function expression's parameter walks declaration -> list ->
+        // statement and inherits the matching @param tag.
+        const param = (funcExpr as unknown as { parameters: NodeArray<Node>; }).parameters[0];
+        const paramTags = getJSDocTags(param);
+        assert.deepEqual(paramTags.map(t => t.tagName.text), ["param"]);
+        const paramTag = paramTags[0];
+        assert.ok(isJSDocParameterTag(paramTag));
+        assert.ok(isIdentifier(paramTag.name));
+        assert.equal(paramTag.name.text, "name");
     });
 
     test("a @type cast tag is owned by its parenthesized expression, not the declaration", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { allowJs: true, checkJs: true } }),
             "/src/main.js": `
 /** @type {string} */
@@ -4539,31 +3945,27 @@ const value = "hello";
 const cast = /** @type {number} */ (someValue);
 `,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const sourceFile = await project.program.getSourceFile("/src/main.js");
-            assert.ok(sourceFile);
-            const statements = [...sourceFile.statements].filter(isVariableStatement);
 
-            // A @type tag directly on a declaration is reported for that declaration.
-            const valueDecl = statements[0].declarationList.declarations[0];
-            assert.deepEqual(getJSDocTags(valueDecl).map(t => t.tagName.text), ["type"]);
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const sourceFile = await project.program.getSourceFile("/src/main.js");
+        assert.ok(sourceFile);
+        const statements = [...sourceFile.statements].filter(isVariableStatement);
 
-            // A @type cast tag attached to a parenthesized expression is owned by
-            // that expression and is not reported for the enclosing declaration.
-            const castDecl = statements[1].declarationList.declarations[0];
-            assert.deepEqual(getJSDocTags(castDecl).map(t => t.tagName.text), []);
-        }
-        finally {
-            await api.close();
-        }
+        // A @type tag directly on a declaration is reported for that declaration.
+        const valueDecl = statements[0].declarationList.declarations[0];
+        assert.deepEqual(getJSDocTags(valueDecl).map(t => t.tagName.text), ["type"]);
+
+        // A @type cast tag attached to a parenthesized expression is owned by
+        // that expression and is not reported for the enclosing declaration.
+        const castDecl = statements[1].declarationList.declarations[0];
+        assert.deepEqual(getJSDocTags(castDecl).map(t => t.tagName.text), []);
     });
 });
 
 describe("Checker - getPropertiesOfType", () => {
     test("returns properties of an object type", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
             "/src/main.ts": `
 export interface Person {
@@ -4574,31 +3976,27 @@ export interface Person {
 export declare const p: Person;
 `,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const src = `\nexport interface Person {\n    name: string;\n    age: number;\n    greet(): void;\n}\nexport declare const p: Person;\n`;
-            const pos = src.indexOf("p: Person");
-            const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
-            assert.ok(symbol);
-            const type = await project.checker.getTypeOfSymbol(symbol);
-            assert.ok(type);
-            const props = await project.checker.getPropertiesOfType(type);
-            assert.ok(props.length >= 3, `Expected at least 3 properties, got ${props.length}`);
-            const names = props.map(p => p.name);
-            assert.ok(names.includes("name"), "should have 'name' property");
-            assert.ok(names.includes("age"), "should have 'age' property");
-            assert.ok(names.includes("greet"), "should have 'greet' property");
-        }
-        finally {
-            await api.close();
-        }
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const src = `\nexport interface Person {\n    name: string;\n    age: number;\n    greet(): void;\n}\nexport declare const p: Person;\n`;
+        const pos = src.indexOf("p: Person");
+        const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
+        assert.ok(symbol);
+        const type = await project.checker.getTypeOfSymbol(symbol);
+        assert.ok(type);
+        const props = await project.checker.getPropertiesOfType(type);
+        assert.ok(props.length >= 3, `Expected at least 3 properties, got ${props.length}`);
+        const names = props.map(p => p.name);
+        assert.ok(names.includes("name"), "should have 'name' property");
+        assert.ok(names.includes("age"), "should have 'age' property");
+        assert.ok(names.includes("greet"), "should have 'greet' property");
     });
 });
 
 describe("Checker - getIndexInfosOfType", () => {
     test("returns index signatures of an indexed type", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
             "/src/main.ts": `
 export interface StringMap {
@@ -4607,31 +4005,27 @@ export interface StringMap {
 export declare const m: StringMap;
 `,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const src = `\nexport interface StringMap {\n    [key: string]: number;\n}\nexport declare const m: StringMap;\n`;
-            const pos = src.indexOf("m: StringMap");
-            const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
-            assert.ok(symbol);
-            const type = await project.checker.getTypeOfSymbol(symbol);
-            assert.ok(type);
-            const indexInfos = await project.checker.getIndexInfosOfType(type);
-            assert.ok(indexInfos.length > 0, "Should have at least one index info");
-            const info = indexInfos[0];
-            assert.ok(info.keyType);
-            assert.ok(info.keyType.flags & TypeFlags.String, `Expected string key type, got flags ${info.keyType.flags}`);
-            assert.ok(info.valueType);
-            assert.ok(info.valueType.flags & TypeFlags.Number, `Expected number value type, got flags ${info.valueType.flags}`);
-            assert.equal(info.isReadonly, false);
-        }
-        finally {
-            await api.close();
-        }
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const src = `\nexport interface StringMap {\n    [key: string]: number;\n}\nexport declare const m: StringMap;\n`;
+        const pos = src.indexOf("m: StringMap");
+        const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
+        assert.ok(symbol);
+        const type = await project.checker.getTypeOfSymbol(symbol);
+        assert.ok(type);
+        const indexInfos = await project.checker.getIndexInfosOfType(type);
+        assert.ok(indexInfos.length > 0, "Should have at least one index info");
+        const info = indexInfos[0];
+        assert.ok(info.keyType);
+        assert.ok(info.keyType.flags & TypeFlags.String, `Expected string key type, got flags ${info.keyType.flags}`);
+        assert.ok(info.valueType);
+        assert.ok(info.valueType.flags & TypeFlags.Number, `Expected number value type, got flags ${info.valueType.flags}`);
+        assert.equal(info.isReadonly, false);
     });
 
     test("readonly index signature reports isReadonly true", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
             "/src/main.ts": `
 export interface ReadonlyMap {
@@ -4640,226 +4034,194 @@ export interface ReadonlyMap {
 export declare const m: ReadonlyMap;
 `,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const src = `\nexport interface ReadonlyMap {\n    readonly [key: string]: number;\n}\nexport declare const m: ReadonlyMap;\n`;
-            const pos = src.indexOf("m: ReadonlyMap");
-            const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
-            assert.ok(symbol);
-            const type = await project.checker.getTypeOfSymbol(symbol);
-            assert.ok(type);
-            const indexInfos = await project.checker.getIndexInfosOfType(type);
-            assert.ok(indexInfos.length > 0);
-            assert.equal(indexInfos[0].isReadonly, true);
-        }
-        finally {
-            await api.close();
-        }
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const src = `\nexport interface ReadonlyMap {\n    readonly [key: string]: number;\n}\nexport declare const m: ReadonlyMap;\n`;
+        const pos = src.indexOf("m: ReadonlyMap");
+        const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
+        assert.ok(symbol);
+        const type = await project.checker.getTypeOfSymbol(symbol);
+        assert.ok(type);
+        const indexInfos = await project.checker.getIndexInfosOfType(type);
+        assert.ok(indexInfos.length > 0);
+        assert.equal(indexInfos[0].isReadonly, true);
     });
 });
 
 describe("Checker - getConstraintOfTypeParameter", () => {
     test("returns constraint of a type parameter", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
             "/src/main.ts": `export function identity<T extends string>(x: T): T { return x; }`,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const src = `export function identity<T extends string>(x: T): T { return x; }`;
-            const pos = src.indexOf("identity<");
-            const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
-            assert.ok(symbol);
-            const type = await project.checker.getTypeOfSymbol(symbol);
-            assert.ok(type);
-            const sigs = await project.checker.getSignaturesOfType(type, SignatureKind.Call);
-            assert.ok(sigs.length > 0);
-            assert.ok(sigs[0].typeParameters && sigs[0].typeParameters.length > 0, "Should have type parameters");
-            const typeParams = await sigs[0].getTypeParameters();
-            const constraint = await project.checker.getConstraintOfTypeParameter(typeParams[0]);
-            assert.ok(constraint);
-            assert.ok(constraint.flags & TypeFlags.String, `Expected string constraint, got flags ${constraint.flags}`);
-        }
-        finally {
-            await api.close();
-        }
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const src = `export function identity<T extends string>(x: T): T { return x; }`;
+        const pos = src.indexOf("identity<");
+        const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
+        assert.ok(symbol);
+        const type = await project.checker.getTypeOfSymbol(symbol);
+        assert.ok(type);
+        const sigs = await project.checker.getSignaturesOfType(type, SignatureKind.Call);
+        assert.ok(sigs.length > 0);
+        assert.ok(sigs[0].typeParameters && sigs[0].typeParameters.length > 0, "Should have type parameters");
+        const typeParams = await sigs[0].getTypeParameters();
+        const constraint = await project.checker.getConstraintOfTypeParameter(typeParams[0]);
+        assert.ok(constraint);
+        assert.ok(constraint.flags & TypeFlags.String, `Expected string constraint, got flags ${constraint.flags}`);
     });
 });
 
 describe("Checker - TypeParameter getters", () => {
     test("getConstraint() and getDefault() return the constraint and default types", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
             "/src/main.ts": `export function f<T extends string = "hello">(x: T): T { return x; }`,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const src = `export function f<T extends string = "hello">(x: T): T { return x; }`;
-            const pos = src.indexOf("f<");
-            const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
-            assert.ok(symbol);
-            const type = await project.checker.getTypeOfSymbol(symbol);
-            assert.ok(type);
-            const sigs = await project.checker.getSignaturesOfType(type, SignatureKind.Call);
-            assert.ok(sigs.length > 0);
-            const typeParams = await sigs[0].getTypeParameters();
-            assert.ok(typeParams.length > 0, "Should have type parameters");
-            const typeParam = typeParams[0] as TypeParameter;
 
-            const constraint = await typeParam.getConstraint();
-            assert.ok(constraint);
-            assert.ok(constraint.flags & TypeFlags.String, `Expected string constraint, got flags ${constraint.flags}`);
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const src = `export function f<T extends string = "hello">(x: T): T { return x; }`;
+        const pos = src.indexOf("f<");
+        const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
+        assert.ok(symbol);
+        const type = await project.checker.getTypeOfSymbol(symbol);
+        assert.ok(type);
+        const sigs = await project.checker.getSignaturesOfType(type, SignatureKind.Call);
+        assert.ok(sigs.length > 0);
+        const typeParams = await sigs[0].getTypeParameters();
+        assert.ok(typeParams.length > 0, "Should have type parameters");
+        const typeParam = typeParams[0] as TypeParameter;
 
-            const defaultType = await typeParam.getDefault();
-            assert.ok(defaultType);
-            assert.ok(defaultType.flags & TypeFlags.StringLiteral, `Expected string literal default, got flags ${defaultType.flags}`);
-        }
-        finally {
-            await api.close();
-        }
+        const constraint = await typeParam.getConstraint();
+        assert.ok(constraint);
+        assert.ok(constraint.flags & TypeFlags.String, `Expected string constraint, got flags ${constraint.flags}`);
+
+        const defaultType = await typeParam.getDefault();
+        assert.ok(defaultType);
+        assert.ok(defaultType.flags & TypeFlags.StringLiteral, `Expected string literal default, got flags ${defaultType.flags}`);
     });
 
     test("getConstraint() and getDefault() return undefined when there is none", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
             "/src/main.ts": `export function f<T>(x: T): T { return x; }`,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const src = `export function f<T>(x: T): T { return x; }`;
-            const pos = src.indexOf("f<");
-            const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
-            assert.ok(symbol);
-            const type = await project.checker.getTypeOfSymbol(symbol);
-            assert.ok(type);
-            const sigs = await project.checker.getSignaturesOfType(type, SignatureKind.Call);
-            assert.ok(sigs.length > 0);
-            const typeParams = await sigs[0].getTypeParameters();
-            assert.ok(typeParams.length > 0, "Should have type parameters");
-            const typeParam = typeParams[0] as TypeParameter;
 
-            assert.equal(await typeParam.getConstraint(), undefined);
-            assert.equal(await typeParam.getDefault(), undefined);
-        }
-        finally {
-            await api.close();
-        }
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const src = `export function f<T>(x: T): T { return x; }`;
+        const pos = src.indexOf("f<");
+        const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
+        assert.ok(symbol);
+        const type = await project.checker.getTypeOfSymbol(symbol);
+        assert.ok(type);
+        const sigs = await project.checker.getSignaturesOfType(type, SignatureKind.Call);
+        assert.ok(sigs.length > 0);
+        const typeParams = await sigs[0].getTypeParameters();
+        assert.ok(typeParams.length > 0, "Should have type parameters");
+        const typeParam = typeParams[0] as TypeParameter;
+
+        assert.equal(await typeParam.getConstraint(), undefined);
+        assert.equal(await typeParam.getDefault(), undefined);
     });
 });
 
 describe("Checker - getTypeArguments", () => {
     test("returns type arguments of a generic instantiation", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
             "/src/main.ts": `export const arr: Array<number> = [1, 2, 3];`,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const src = `export const arr: Array<number> = [1, 2, 3];`;
-            const pos = src.indexOf("arr:");
-            const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
-            assert.ok(symbol);
-            const type = await project.checker.getTypeOfSymbol(symbol);
-            assert.ok(type);
-            const typeArgs = await project.checker.getTypeArguments(type as TypeReference);
-            assert.ok(typeArgs.length > 0, "Should have type arguments");
-            assert.ok(typeArgs[0].flags & TypeFlags.Number, `Expected number type argument, got flags ${typeArgs[0].flags}`);
-        }
-        finally {
-            await api.close();
-        }
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const src = `export const arr: Array<number> = [1, 2, 3];`;
+        const pos = src.indexOf("arr:");
+        const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
+        assert.ok(symbol);
+        const type = await project.checker.getTypeOfSymbol(symbol);
+        assert.ok(type);
+        const typeArgs = await project.checker.getTypeArguments(type as TypeReference);
+        assert.ok(typeArgs.length > 0, "Should have type arguments");
+        assert.ok(typeArgs[0].flags & TypeFlags.Number, `Expected number type argument, got flags ${typeArgs[0].flags}`);
     });
 
     test("a wrongly-typed call throws on the client without taking down the server", async () => {
         const src = `export const s: string = ""; export const arr: Array<number> = [1];`;
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
             "/src/main.ts": src,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
 
-            // `string` is not a type reference. When getTypeArguments is reached
-            // with one, the server panics, but the per-request panic recovery
-            // converts that into an error response rather than crashing the process.
-            const sSymbol = await project.checker.getSymbolAtPosition("/src/main.ts", src.indexOf("s:"));
-            assert.ok(sSymbol);
-            const sType = await project.checker.getTypeOfSymbol(sSymbol);
-            assert.ok(sType);
-            await assert.rejects(() => project.checker.getTypeArguments(sType as unknown as TypeReference)); // @sync: assert.throws(() => project.checker.getTypeArguments(sType as unknown as TypeReference));
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
 
-            // The server survived: a subsequent valid request still succeeds.
-            const arrSymbol = await project.checker.getSymbolAtPosition("/src/main.ts", src.indexOf("arr:"));
-            assert.ok(arrSymbol);
-            const arrType = await project.checker.getTypeOfSymbol(arrSymbol);
-            assert.ok(arrType);
-            const typeArgs = await project.checker.getTypeArguments(arrType as TypeReference);
-            assert.ok(typeArgs.length > 0, "Server should still serve valid requests");
-        }
-        finally {
-            await api.close();
-        }
+        // `string` is not a type reference. When getTypeArguments is reached
+        // with one, the server panics, but the per-request panic recovery
+        // converts that into an error response rather than crashing the process.
+        const sSymbol = await project.checker.getSymbolAtPosition("/src/main.ts", src.indexOf("s:"));
+        assert.ok(sSymbol);
+        const sType = await project.checker.getTypeOfSymbol(sSymbol);
+        assert.ok(sType);
+        await assert.rejects(() => project.checker.getTypeArguments(sType as unknown as TypeReference)); // @sync: assert.throws(() => project.checker.getTypeArguments(sType as unknown as TypeReference));
+
+        // The server survived: a subsequent valid request still succeeds.
+        const arrSymbol = await project.checker.getSymbolAtPosition("/src/main.ts", src.indexOf("arr:"));
+        assert.ok(arrSymbol);
+        const arrType = await project.checker.getTypeOfSymbol(arrSymbol);
+        assert.ok(arrType);
+        const typeArgs = await project.checker.getTypeArguments(arrType as TypeReference);
+        assert.ok(typeArgs.length > 0, "Server should still serve valid requests");
     });
 });
 
 describe("Checker - getBaseConstraintOfType", () => {
     test("returns the base constraint of a type parameter", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
             "/src/main.ts": `export function identity<T extends string>(x: T): T { return x; }`,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const src = `export function identity<T extends string>(x: T): T { return x; }`;
-            const pos = src.indexOf("identity<");
-            const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
-            assert.ok(symbol);
-            const type = await project.checker.getTypeOfSymbol(symbol);
-            assert.ok(type);
-            const sigs = await project.checker.getSignaturesOfType(type, SignatureKind.Call);
-            assert.ok(sigs.length > 0);
-            const typeParams = await sigs[0].getTypeParameters();
-            const constraint = await project.checker.getBaseConstraintOfType(typeParams[0]);
-            assert.ok(constraint, "Should resolve a base constraint");
-            assert.ok(constraint.flags & TypeFlags.String, `Expected string constraint, got flags ${constraint.flags}`);
-        }
-        finally {
-            await api.close();
-        }
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const src = `export function identity<T extends string>(x: T): T { return x; }`;
+        const pos = src.indexOf("identity<");
+        const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
+        assert.ok(symbol);
+        const type = await project.checker.getTypeOfSymbol(symbol);
+        assert.ok(type);
+        const sigs = await project.checker.getSignaturesOfType(type, SignatureKind.Call);
+        assert.ok(sigs.length > 0);
+        const typeParams = await sigs[0].getTypeParameters();
+        const constraint = await project.checker.getBaseConstraintOfType(typeParams[0]);
+        assert.ok(constraint, "Should resolve a base constraint");
+        assert.ok(constraint.flags & TypeFlags.String, `Expected string constraint, got flags ${constraint.flags}`);
     });
 
     test("returns undefined for a non-instantiable type", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
             "/src/main.ts": `export const x: number = 1;`,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const pos = `export const x: number = 1;`.indexOf("x:");
-            const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
-            assert.ok(symbol);
-            const type = await project.checker.getTypeOfSymbol(symbol);
-            assert.ok(type);
-            const constraint = await project.checker.getBaseConstraintOfType(type);
-            assert.equal(constraint, undefined);
-        }
-        finally {
-            await api.close();
-        }
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const pos = `export const x: number = 1;`.indexOf("x:");
+        const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
+        assert.ok(symbol);
+        const type = await project.checker.getTypeOfSymbol(symbol);
+        assert.ok(type);
+        const constraint = await project.checker.getBaseConstraintOfType(type);
+        assert.equal(constraint, undefined);
     });
 });
 
 describe("Checker - getPropertyOfType", () => {
     test("returns a named property symbol of a type", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
             "/src/main.ts": `
 export interface Person {
@@ -4869,168 +4231,144 @@ export interface Person {
 export declare const p: Person;
 `,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const src = `\nexport interface Person {\n    name: string;\n    age: number;\n}\nexport declare const p: Person;\n`;
-            const pos = src.indexOf("p: Person");
-            const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
-            assert.ok(symbol);
-            const type = await project.checker.getTypeOfSymbol(symbol);
-            assert.ok(type);
-            const nameProp = await project.checker.getPropertyOfType(type, "name");
-            assert.ok(nameProp, "Should find 'name' property");
-            assert.equal(nameProp.name, "name");
-            const missing = await project.checker.getPropertyOfType(type, "doesNotExist");
-            assert.equal(missing, undefined);
-        }
-        finally {
-            await api.close();
-        }
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const src = `\nexport interface Person {\n    name: string;\n    age: number;\n}\nexport declare const p: Person;\n`;
+        const pos = src.indexOf("p: Person");
+        const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
+        assert.ok(symbol);
+        const type = await project.checker.getTypeOfSymbol(symbol);
+        assert.ok(type);
+        const nameProp = await project.checker.getPropertyOfType(type, "name");
+        assert.ok(nameProp, "Should find 'name' property");
+        assert.equal(nameProp.name, "name");
+        const missing = await project.checker.getPropertyOfType(type, "doesNotExist");
+        assert.equal(missing, undefined);
     });
 });
 
 describe("Checker - getConstantValue", () => {
     test("returns numeric value of an enum member", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
             "/src/main.ts": `export enum E { A = 1, B = 2 }`,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const sourceFile = await project.program.getSourceFile("/src/main.ts");
-            assert.ok(sourceFile);
-            let memberB: Node | undefined;
-            sourceFile.forEachChild(function visit(node) {
-                if (node.kind === SyntaxKind.EnumMember) {
-                    const text = sourceFile.text.slice(node.pos, node.end).trim();
-                    if (text.startsWith("B")) memberB = node;
-                }
-                node.forEachChild(visit);
-            });
-            assert.ok(memberB, "Should find enum member B");
-            const value = await project.checker.getConstantValue(memberB);
-            assert.equal(value, 2);
-        }
-        finally {
-            await api.close();
-        }
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const sourceFile = await project.program.getSourceFile("/src/main.ts");
+        assert.ok(sourceFile);
+        let memberB: Node | undefined;
+        sourceFile.forEachChild(function visit(node) {
+            if (node.kind === SyntaxKind.EnumMember) {
+                const text = sourceFile.text.slice(node.pos, node.end).trim();
+                if (text.startsWith("B")) memberB = node;
+            }
+            node.forEachChild(visit);
+        });
+        assert.ok(memberB, "Should find enum member B");
+        const value = await project.checker.getConstantValue(memberB);
+        assert.equal(value, 2);
     });
 
     test("returns string value of a string-initialized enum member", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
             "/src/main.ts": `export enum Color { Red = "red" }`,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const sourceFile = await project.program.getSourceFile("/src/main.ts");
-            assert.ok(sourceFile);
-            let member: Node | undefined;
-            sourceFile.forEachChild(function visit(node) {
-                if (node.kind === SyntaxKind.EnumMember) member = node;
-                node.forEachChild(visit);
-            });
-            assert.ok(member);
-            const value = await project.checker.getConstantValue(member);
-            assert.equal(value, "red");
-        }
-        finally {
-            await api.close();
-        }
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const sourceFile = await project.program.getSourceFile("/src/main.ts");
+        assert.ok(sourceFile);
+        let member: Node | undefined;
+        sourceFile.forEachChild(function visit(node) {
+            if (node.kind === SyntaxKind.EnumMember) member = node;
+            node.forEachChild(visit);
+        });
+        assert.ok(member);
+        const value = await project.checker.getConstantValue(member);
+        assert.equal(value, "red");
     });
 });
 
 describe("Checker - getSignatureFromDeclaration", () => {
     test("returns the signature of a function declaration", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
             "/src/main.ts": `export function add(a: number, b: number): number { return a + b; }`,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const sourceFile = await project.program.getSourceFile("/src/main.ts");
-            assert.ok(sourceFile);
-            let funcDecl: Node | undefined;
-            sourceFile.forEachChild(function visit(node) {
-                if (isFunctionDeclaration(node)) funcDecl = node;
-                node.forEachChild(visit);
-            });
-            assert.ok(funcDecl, "Should find the function declaration");
-            const sig = await project.checker.getSignatureFromDeclaration(funcDecl);
-            assert.ok(sig, "Should resolve a signature");
-            assert.equal(sig.parameters.length, 2);
-            const returnType = await project.checker.getReturnTypeOfSignature(sig);
-            assert.ok(returnType);
-            assert.ok(returnType.flags & TypeFlags.Number);
-        }
-        finally {
-            await api.close();
-        }
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const sourceFile = await project.program.getSourceFile("/src/main.ts");
+        assert.ok(sourceFile);
+        let funcDecl: Node | undefined;
+        sourceFile.forEachChild(function visit(node) {
+            if (isFunctionDeclaration(node)) funcDecl = node;
+            node.forEachChild(visit);
+        });
+        assert.ok(funcDecl, "Should find the function declaration");
+        const sig = await project.checker.getSignatureFromDeclaration(funcDecl);
+        assert.ok(sig, "Should resolve a signature");
+        assert.equal(sig.parameters.length, 2);
+        const returnType = await project.checker.getReturnTypeOfSignature(sig);
+        assert.ok(returnType);
+        assert.ok(returnType.flags & TypeFlags.Number);
     });
 });
 
 describe("Checker - getExportSpecifierLocalTargetSymbol", () => {
     test("resolves the local target of an export specifier", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
             "/src/main.ts": `
 const value = 42;
 export { value as renamed };
 `,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const sourceFile = await project.program.getSourceFile("/src/main.ts");
-            assert.ok(sourceFile);
-            let exportSpecifier: Node | undefined;
-            sourceFile.forEachChild(function visit(node) {
-                if (node.kind === SyntaxKind.ExportSpecifier) exportSpecifier = node;
-                node.forEachChild(visit);
-            });
-            assert.ok(exportSpecifier, "Should find the export specifier");
-            const target = await project.checker.getExportSpecifierLocalTargetSymbol(exportSpecifier);
-            assert.ok(target, "Should resolve a local target symbol");
-            assert.equal(target.name, "value");
-        }
-        finally {
-            await api.close();
-        }
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const sourceFile = await project.program.getSourceFile("/src/main.ts");
+        assert.ok(sourceFile);
+        let exportSpecifier: Node | undefined;
+        sourceFile.forEachChild(function visit(node) {
+            if (node.kind === SyntaxKind.ExportSpecifier) exportSpecifier = node;
+            node.forEachChild(visit);
+        });
+        assert.ok(exportSpecifier, "Should find the export specifier");
+        const target = await project.checker.getExportSpecifierLocalTargetSymbol(exportSpecifier);
+        assert.ok(target, "Should resolve a local target symbol");
+        assert.equal(target.name, "value");
     });
 });
 
 describe("Checker - getAliasedSymbol", () => {
     test("resolves an import alias to its target symbol", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
             "/src/foo.ts": `export const foo = 42;`,
             "/src/main.ts": `import { foo } from "./foo";\nexport const usage = foo;`,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const pos = `import { foo } from "./foo";`.indexOf("foo }");
-            const aliasSymbol = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
-            assert.ok(aliasSymbol);
-            assert.ok(aliasSymbol.flags & SymbolFlags.Alias, "Import binding should be an alias");
-            const aliased = await project.checker.getAliasedSymbol(aliasSymbol);
-            assert.ok(aliased, "Should resolve the aliased symbol");
-            assert.equal(aliased.name, "foo");
-            assert.ok(!(aliased.flags & SymbolFlags.Alias), "Target should not be an alias");
-        }
-        finally {
-            await api.close();
-        }
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const pos = `import { foo } from "./foo";`.indexOf("foo }");
+        const aliasSymbol = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
+        assert.ok(aliasSymbol);
+        assert.ok(aliasSymbol.flags & SymbolFlags.Alias, "Import binding should be an alias");
+        const aliased = await project.checker.getAliasedSymbol(aliasSymbol);
+        assert.ok(aliased, "Should resolve the aliased symbol");
+        assert.equal(aliased.name, "foo");
+        assert.ok(!(aliased.flags & SymbolFlags.Alias), "Target should not be an alias");
     });
 });
 
 describe("Checker - getFullyQualifiedName", () => {
     test("returns module-qualified names for exported symbols and dotted names for members", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
             "/src/index.ts": `
 export namespace Outer {
@@ -5039,32 +4377,28 @@ export namespace Outer {
 export class Standalone {}
 `,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const sourceFile = await project.program.getSourceFile("/src/index.ts");
-            assert.ok(sourceFile);
-            const moduleSymbol = await project.checker.getSymbolAtLocation(sourceFile);
-            assert.ok(moduleSymbol);
-            const exports = await project.checker.getExportsOfModule(moduleSymbol);
-            const standalone = exports.find(e => e.name === "Standalone");
-            assert.ok(standalone);
-            assert.equal(await project.checker.getFullyQualifiedName(standalone), `"/src/index".Standalone`);
-            const outer = exports.find(e => e.name === "Outer");
-            assert.ok(outer);
-            const inner = (await outer.getExports()).get("Inner" as __String);
-            assert.ok(inner);
-            assert.equal(await project.checker.getFullyQualifiedName(inner), `"/src/index".Outer.Inner`);
-        }
-        finally {
-            await api.close();
-        }
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const sourceFile = await project.program.getSourceFile("/src/index.ts");
+        assert.ok(sourceFile);
+        const moduleSymbol = await project.checker.getSymbolAtLocation(sourceFile);
+        assert.ok(moduleSymbol);
+        const exports = await project.checker.getExportsOfModule(moduleSymbol);
+        const standalone = exports.find(e => e.name === "Standalone");
+        assert.ok(standalone);
+        assert.equal(await project.checker.getFullyQualifiedName(standalone), `"/src/index".Standalone`);
+        const outer = exports.find(e => e.name === "Outer");
+        assert.ok(outer);
+        const inner = (await outer.getExports()).get("Inner" as __String);
+        assert.ok(inner);
+        assert.equal(await project.checker.getFullyQualifiedName(inner), `"/src/index".Outer.Inner`);
     });
 });
 
 describe("Checker - getExportsOfModule", () => {
     test("returns all exports including re-exports via 'export *'", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
             "/src/inner.ts": `export const innerValue = 1;`,
             "/src/index.ts": `
@@ -5072,21 +4406,17 @@ export const direct = 1;
 export * from "./inner";
 `,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const sourceFile = await project.program.getSourceFile("/src/index.ts");
-            assert.ok(sourceFile);
-            const moduleSymbol = await project.checker.getSymbolAtLocation(sourceFile);
-            assert.ok(moduleSymbol, "Source file should have a module symbol");
-            const exports = await project.checker.getExportsOfModule(moduleSymbol);
-            const names = exports.map(e => e.name);
-            assert.ok(names.includes("direct"), "should include directly-declared export");
-            assert.ok(names.includes("innerValue"), "should include 'export *' re-export");
-        }
-        finally {
-            await api.close();
-        }
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const sourceFile = await project.program.getSourceFile("/src/index.ts");
+        assert.ok(sourceFile);
+        const moduleSymbol = await project.checker.getSymbolAtLocation(sourceFile);
+        assert.ok(moduleSymbol, "Source file should have a module symbol");
+        const exports = await project.checker.getExportsOfModule(moduleSymbol);
+        const names = exports.map(e => e.name);
+        assert.ok(names.includes("direct"), "should include directly-declared export");
+        assert.ok(names.includes("innerValue"), "should include 'export *' re-export");
     });
 });
 
@@ -5104,62 +4434,50 @@ function f() {
     };
 
     test("returns symbols visible at a position", async () => {
-        const api = spawnAPI(scopeFiles);
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const pos = scopeFiles["/src/main.ts"].indexOf("return innerValue");
-            const symbols = await project.checker.getSymbolsInScope(
-                { document: "/src/main.ts", position: pos },
-                SymbolFlags.Value,
-            );
-            const names = symbols.map(s => s.name);
-            assert.ok(names.includes("innerValue"), "should include local variable");
-            assert.ok(names.includes("outerValue"), "should include outer variable");
-            assert.ok(names.includes("f"), "should include enclosing function");
-            assert.ok(!names.includes("OuterType"), "should not include type-only meanings");
-        }
-        finally {
-            await api.close();
-        }
+        await using api = spawnAPI(scopeFiles);
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const pos = scopeFiles["/src/main.ts"].indexOf("return innerValue");
+        const symbols = await project.checker.getSymbolsInScope(
+            { document: "/src/main.ts", position: pos },
+            SymbolFlags.Value,
+        );
+        const names = symbols.map(s => s.name);
+        assert.ok(names.includes("innerValue"), "should include local variable");
+        assert.ok(names.includes("outerValue"), "should include outer variable");
+        assert.ok(names.includes("f"), "should include enclosing function");
+        assert.ok(!names.includes("OuterType"), "should not include type-only meanings");
     });
 
     test("returns type symbols when asked for type meaning at a node", async () => {
-        const api = spawnAPI(scopeFiles);
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const sourceFile = await project.program.getSourceFile("/src/main.ts");
-            assert.ok(sourceFile);
-            const symbols = await project.checker.getSymbolsInScope(sourceFile, SymbolFlags.Type);
-            const names = symbols.map(s => s.name);
-            assert.ok(names.includes("OuterType"), "should include interface declared in file");
-            assert.ok(names.includes("Array"), "should include global type symbols");
-        }
-        finally {
-            await api.close();
-        }
+        await using api = spawnAPI(scopeFiles);
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const sourceFile = await project.program.getSourceFile("/src/main.ts");
+        assert.ok(sourceFile);
+        const symbols = await project.checker.getSymbolsInScope(sourceFile, SymbolFlags.Type);
+        const names = symbols.map(s => s.name);
+        assert.ok(names.includes("OuterType"), "should include interface declared in file");
+        assert.ok(names.includes("Array"), "should include global type symbols");
     });
 
     // Regression test: `<<` binds tighter than `-` in Go but looser in JS, so SymbolFlagsAll's
     // `(1<<30) - 1` needs those parens or the generated enum silently becomes `1 << 29`.
     test("SymbolFlags.All includes both value and type meanings", async () => {
-        const api = spawnAPI(scopeFiles);
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const pos = scopeFiles["/src/main.ts"].indexOf("return innerValue");
-            const symbols = await project.checker.getSymbolsInScope(
-                { document: "/src/main.ts", position: pos },
-                SymbolFlags.All,
-            );
-            const names = symbols.map(s => s.name);
-            assert.ok(names.includes("innerValue"), "should include local value symbol");
-            assert.ok(names.includes("OuterType"), "should include type symbol declared in file");
-        }
-        finally {
-            await api.close();
-        }
+        await using api = spawnAPI(scopeFiles);
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const pos = scopeFiles["/src/main.ts"].indexOf("return innerValue");
+        const symbols = await project.checker.getSymbolsInScope(
+            { document: "/src/main.ts", position: pos },
+            SymbolFlags.All,
+        );
+        const names = symbols.map(s => s.name);
+        assert.ok(names.includes("innerValue"), "should include local value symbol");
+        assert.ok(names.includes("OuterType"), "should include type symbol declared in file");
     });
 });
 
@@ -5177,160 +4495,132 @@ export function add(a: number, b: number): number { return a + b; }
     };
 
     test("getDocumentationComment returns the leading comment text", async () => {
-        const api = spawnAPI(docFiles);
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const pos = docFiles["/src/main.ts"].indexOf("add(a");
-            const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
-            assert.ok(symbol);
-            const doc = await symbol.getDocumentationComment(project.checker);
-            assert.ok(doc.includes("Adds two numbers together"), `Expected documentation, got: ${doc}`);
-            assert.ok(!doc.includes("@param"), "Documentation comment should not include tags");
-        }
-        finally {
-            await api.close();
-        }
+        await using api = spawnAPI(docFiles);
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const pos = docFiles["/src/main.ts"].indexOf("add(a");
+        const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
+        assert.ok(symbol);
+        const doc = await symbol.getDocumentationComment(project.checker);
+        assert.ok(doc.includes("Adds two numbers together"), `Expected documentation, got: ${doc}`);
+        assert.ok(!doc.includes("@param"), "Documentation comment should not include tags");
     });
 
     test("getJsDocTags returns structured tag name/text pairs", async () => {
-        const api = spawnAPI(docFiles);
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const pos = docFiles["/src/main.ts"].indexOf("add(a");
-            const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
-            assert.ok(symbol);
-            const tags = await symbol.getJsDocTags(project.checker);
-            const param = tags.find(t => t.name === "param");
-            assert.ok(param, `Expected a @param tag, got: ${JSON.stringify(tags)}`);
-            assert.equal(param.text, "a the first number");
-            const returns = tags.find(t => t.name === "returns");
-            assert.ok(returns, `Expected a @returns tag, got: ${JSON.stringify(tags)}`);
-            assert.equal(returns.text, "the sum");
-        }
-        finally {
-            await api.close();
-        }
+        await using api = spawnAPI(docFiles);
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const pos = docFiles["/src/main.ts"].indexOf("add(a");
+        const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
+        assert.ok(symbol);
+        const tags = await symbol.getJsDocTags(project.checker);
+        const param = tags.find(t => t.name === "param");
+        assert.ok(param, `Expected a @param tag, got: ${JSON.stringify(tags)}`);
+        assert.equal(param.text, "a the first number");
+        const returns = tags.find(t => t.name === "returns");
+        assert.ok(returns, `Expected a @returns tag, got: ${JSON.stringify(tags)}`);
+        assert.equal(returns.text, "the sum");
     });
 });
 
 describe("TypeParameter - isThisType", () => {
     test("isThisType is true for the polymorphic 'this' type in a class method", async () => {
         const src = `\nexport class Builder {\n    setName(name: string): this { return this; }\n}\n`;
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": "{}",
             "/src/main.ts": src,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            // ": this {" — offset 2 past ': ' lands on 't' in the return-type 'this'
-            const pos = src.indexOf(": this {") + 2;
-            const type = await project.checker.getTypeAtPosition("/src/main.ts", pos);
-            assert.ok(type, "Expected a type at the 'this' position");
-            assert.ok(type.flags & TypeFlags.TypeParameter, "Expected TypeParameter");
-            const typeParam = type as TypeParameter;
-            assert.equal(typeParam.isThisType, true);
-        }
-        finally {
-            await api.close();
-        }
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        // ": this {" — offset 2 past ': ' lands on 't' in the return-type 'this'
+        const pos = src.indexOf(": this {") + 2;
+        const type = await project.checker.getTypeAtPosition("/src/main.ts", pos);
+        assert.ok(type, "Expected a type at the 'this' position");
+        assert.ok(type.flags & TypeFlags.TypeParameter, "Expected TypeParameter");
+        const typeParam = type as TypeParameter;
+        assert.equal(typeParam.isThisType, true);
     });
 
     test("isThisType is absent for a regular generic type parameter", async () => {
         const src = `\nexport function identity<T>(x: T): T { return x; }\n`;
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": "{}",
             "/src/main.ts": src,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            // Point to 'T' in the type parameter declaration '<T>' — getTypeAtPosition
-            // on a type annotation reference doesn't resolve to TypeParameter, but
-            // the declaration position does.
-            const pos = src.indexOf("<T>") + 1;
-            const type = await project.checker.getTypeAtPosition("/src/main.ts", pos);
-            assert.ok(type, "Expected a type at the 'T' position");
-            assert.ok(type.flags & TypeFlags.TypeParameter, "Expected TypeParameter");
-            const typeParam = type as TypeParameter;
-            assert.ok(!typeParam.isThisType, "Expected isThisType to be absent/false for a regular type parameter");
-        }
-        finally {
-            await api.close();
-        }
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        // Point to 'T' in the type parameter declaration '<T>' — getTypeAtPosition
+        // on a type annotation reference doesn't resolve to TypeParameter, but
+        // the declaration position does.
+        const pos = src.indexOf("<T>") + 1;
+        const type = await project.checker.getTypeAtPosition("/src/main.ts", pos);
+        assert.ok(type, "Expected a type at the 'T' position");
+        assert.ok(type.flags & TypeFlags.TypeParameter, "Expected TypeParameter");
+        const typeParam = type as TypeParameter;
+        assert.ok(!typeParam.isThisType, "Expected isThisType to be absent/false for a regular type parameter");
     });
 });
 
 describe("Type - getAliasTypeArguments", () => {
     test("returns the type arguments of a single-param generic type alias", async () => {
         const src = `\ntype Box<T> = { value: T };\nexport const x: Box<string> = { value: "hi" };\n`;
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": "{}",
             "/src/main.ts": src,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const pos = src.indexOf("x:");
-            const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
-            assert.ok(symbol);
-            const type = await project.checker.getTypeOfSymbol(symbol);
-            assert.ok(type);
-            const aliasArgs = await type.getAliasTypeArguments();
-            assert.equal(aliasArgs.length, 1, "Expected 1 alias type argument");
-            assert.ok(aliasArgs[0].flags & TypeFlags.String, `Expected string, got flags ${aliasArgs[0].flags}`);
-        }
-        finally {
-            await api.close();
-        }
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const pos = src.indexOf("x:");
+        const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
+        assert.ok(symbol);
+        const type = await project.checker.getTypeOfSymbol(symbol);
+        assert.ok(type);
+        const aliasArgs = await type.getAliasTypeArguments();
+        assert.equal(aliasArgs.length, 1, "Expected 1 alias type argument");
+        assert.ok(aliasArgs[0].flags & TypeFlags.String, `Expected string, got flags ${aliasArgs[0].flags}`);
     });
 
     test("returns multiple type arguments for a multi-param generic type alias", async () => {
         const src = `\ntype Pair<A, B> = [A, B];\nexport const p: Pair<string, number> = ["hello", 42];\n`;
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": "{}",
             "/src/main.ts": src,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const pos = src.indexOf("p:");
-            const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
-            assert.ok(symbol);
-            const type = await project.checker.getTypeOfSymbol(symbol);
-            assert.ok(type);
-            const aliasArgs = await type.getAliasTypeArguments();
-            assert.equal(aliasArgs.length, 2, "Expected 2 alias type arguments");
-            assert.ok(aliasArgs[0].flags & TypeFlags.String, `Expected first arg to be string, got flags ${aliasArgs[0].flags}`);
-            assert.ok(aliasArgs[1].flags & TypeFlags.Number, `Expected second arg to be number, got flags ${aliasArgs[1].flags}`);
-        }
-        finally {
-            await api.close();
-        }
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const pos = src.indexOf("p:");
+        const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
+        assert.ok(symbol);
+        const type = await project.checker.getTypeOfSymbol(symbol);
+        assert.ok(type);
+        const aliasArgs = await type.getAliasTypeArguments();
+        assert.equal(aliasArgs.length, 2, "Expected 2 alias type arguments");
+        assert.ok(aliasArgs[0].flags & TypeFlags.String, `Expected first arg to be string, got flags ${aliasArgs[0].flags}`);
+        assert.ok(aliasArgs[1].flags & TypeFlags.Number, `Expected second arg to be number, got flags ${aliasArgs[1].flags}`);
     });
 
     test("returns empty array for a non-alias generic type", async () => {
         const src = `\nexport const arr: Array<string> = ["hello"];\n`;
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": "{}",
             "/src/main.ts": src,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const pos = src.indexOf("arr:");
-            const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
-            assert.ok(symbol);
-            const type = await project.checker.getTypeOfSymbol(symbol);
-            assert.ok(type);
-            const aliasArgs = await type.getAliasTypeArguments();
-            assert.equal(aliasArgs.length, 0, "Expected no alias type arguments for a direct generic reference");
-        }
-        finally {
-            await api.close();
-        }
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const pos = src.indexOf("arr:");
+        const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
+        assert.ok(symbol);
+        const type = await project.checker.getTypeOfSymbol(symbol);
+        assert.ok(type);
+        const aliasArgs = await type.getAliasTypeArguments();
+        assert.equal(aliasArgs.length, 0, "Expected no alias type arguments for a direct generic reference");
     });
 });
 
@@ -5338,209 +4628,177 @@ describe("Type - getAliasSymbol", () => {
     test("returns the symbol for a non-generic type alias", async () => {
         // Object-type aliases preserve aliasSymbol; primitive aliases (type Foo = string) do not.
         const src = `\ntype Point = { x: number; y: number };\nexport const p: Point = { x: 1, y: 2 };\n`;
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": "{}",
             "/src/main.ts": src,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const pos = src.indexOf("p:");
-            const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
-            assert.ok(symbol);
-            const type = await project.checker.getTypeOfSymbol(symbol);
-            assert.ok(type);
-            const aliasSymbol = await type.getAliasSymbol();
-            assert.ok(aliasSymbol, "Expected alias symbol to exist");
-            assert.equal(aliasSymbol.name, "Point");
-        }
-        finally {
-            await api.close();
-        }
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const pos = src.indexOf("p:");
+        const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
+        assert.ok(symbol);
+        const type = await project.checker.getTypeOfSymbol(symbol);
+        assert.ok(type);
+        const aliasSymbol = await type.getAliasSymbol();
+        assert.ok(aliasSymbol, "Expected alias symbol to exist");
+        assert.equal(aliasSymbol.name, "Point");
     });
 
     test("returns the symbol for a generic type alias", async () => {
         const src = `\ntype Container<T> = { item: T };\nexport const c: Container<number> = { item: 42 };\n`;
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": "{}",
             "/src/main.ts": src,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const pos = src.indexOf("c:");
-            const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
-            assert.ok(symbol);
-            const type = await project.checker.getTypeOfSymbol(symbol);
-            assert.ok(type);
-            const aliasSymbol = await type.getAliasSymbol();
-            assert.ok(aliasSymbol, "Expected alias symbol for generic alias");
-            assert.equal(aliasSymbol.name, "Container");
-        }
-        finally {
-            await api.close();
-        }
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const pos = src.indexOf("c:");
+        const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
+        assert.ok(symbol);
+        const type = await project.checker.getTypeOfSymbol(symbol);
+        assert.ok(type);
+        const aliasSymbol = await type.getAliasSymbol();
+        assert.ok(aliasSymbol, "Expected alias symbol for generic alias");
+        assert.equal(aliasSymbol.name, "Container");
     });
 
     test("returns undefined for a non-alias type", async () => {
         const src = `\nexport const str: string = "test";\n`;
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": "{}",
             "/src/main.ts": src,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const pos = src.indexOf("str:");
-            const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
-            assert.ok(symbol);
-            const type = await project.checker.getTypeOfSymbol(symbol);
-            assert.ok(type);
-            const aliasSymbol = await type.getAliasSymbol();
-            assert.equal(aliasSymbol, undefined, "Expected no alias symbol for primitive type");
-        }
-        finally {
-            await api.close();
-        }
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const pos = src.indexOf("str:");
+        const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
+        assert.ok(symbol);
+        const type = await project.checker.getTypeOfSymbol(symbol);
+        assert.ok(type);
+        const aliasSymbol = await type.getAliasSymbol();
+        assert.equal(aliasSymbol, undefined, "Expected no alias symbol for primitive type");
     });
 });
 
 describe("IntrinsicType - intrinsicName", () => {
     test("intrinsicName matches the primitive type name", async () => {
         const src = `\nexport const x: string = "hello";\n`;
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": "{}",
             "/src/main.ts": src,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const stringType = await project.checker.getStringType();
-            assert.equal((stringType as IntrinsicType).intrinsicName, "string");
-            const anyType = await project.checker.getAnyType();
-            assert.equal((anyType as IntrinsicType).intrinsicName, "any");
-            const neverType = await project.checker.getNeverType();
-            assert.equal((neverType as IntrinsicType).intrinsicName, "never");
-            const pos = src.indexOf("x:");
-            const sym = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
-            assert.ok(sym);
-            const litType = await project.checker.getTypeOfSymbol(sym);
-            assert.ok(litType);
-            assert.ok(litType.flags & TypeFlags.Intrinsic);
-            assert.equal((litType as IntrinsicType).intrinsicName, "string");
-        }
-        finally {
-            await api.close();
-        }
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const stringType = await project.checker.getStringType();
+        assert.equal((stringType as IntrinsicType).intrinsicName, "string");
+        const anyType = await project.checker.getAnyType();
+        assert.equal((anyType as IntrinsicType).intrinsicName, "any");
+        const neverType = await project.checker.getNeverType();
+        assert.equal((neverType as IntrinsicType).intrinsicName, "never");
+        const pos = src.indexOf("x:");
+        const sym = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
+        assert.ok(sym);
+        const litType = await project.checker.getTypeOfSymbol(sym);
+        assert.ok(litType);
+        assert.ok(litType.flags & TypeFlags.Intrinsic);
+        assert.equal((litType as IntrinsicType).intrinsicName, "string");
     });
 });
 
 describe("FreshableType - getFreshType and getRegularType", () => {
     test("LiteralType.value is empty string for the empty-string literal type", async () => {
         const src = `\nexport const empty: "" = "";\n`;
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": "{}",
             "/src/main.ts": src,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", src.indexOf("empty:"));
-            assert.ok(symbol);
-            const type = await project.checker.getTypeOfSymbol(symbol);
-            assert.ok(type);
-            assert.ok(type.flags & TypeFlags.StringLiteral, "Expected StringLiteral");
-            const literal = type as LiteralType;
-            assert.equal(literal.value, "", "value should be empty string, not undefined");
-        }
-        finally {
-            await api.close();
-        }
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", src.indexOf("empty:"));
+        assert.ok(symbol);
+        const type = await project.checker.getTypeOfSymbol(symbol);
+        assert.ok(type);
+        assert.ok(type.flags & TypeFlags.StringLiteral, "Expected StringLiteral");
+        const literal = type as LiteralType;
+        assert.equal(literal.value, "", "value should be empty string, not undefined");
     });
 
     test("LiteralType.value is accessible via the FreshableType hierarchy", async () => {
         const src = `\nexport const greeting: "hello" = "hello";\n`;
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": "{}",
             "/src/main.ts": src,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const pos = src.indexOf("greeting:");
-            const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
-            assert.ok(symbol);
-            const type = await project.checker.getTypeOfSymbol(symbol);
-            assert.ok(type);
-            assert.ok(type.flags & TypeFlags.StringLiteral, "Expected StringLiteral");
-            const literal = type as LiteralType;
-            assert.equal(literal.value, "hello");
-        }
-        finally {
-            await api.close();
-        }
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const pos = src.indexOf("greeting:");
+        const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
+        assert.ok(symbol);
+        const type = await project.checker.getTypeOfSymbol(symbol);
+        assert.ok(type);
+        assert.ok(type.flags & TypeFlags.StringLiteral, "Expected StringLiteral");
+        const literal = type as LiteralType;
+        assert.equal(literal.value, "hello");
     });
 
     test("BigIntLiteralType.value is a bigint (positive and negative)", async () => {
         const src = `\nexport const pos = 123n;\nexport const neg = -123n;\n`;
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": "{}",
             "/src/main.ts": src,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
 
-            const posSymbol = await project.checker.getSymbolAtPosition("/src/main.ts", src.indexOf("pos ="));
-            assert.ok(posSymbol);
-            const posType = await project.checker.getTypeOfSymbol(posSymbol);
-            assert.ok(posType);
-            assert.ok(posType.flags & TypeFlags.BigIntLiteral, "Expected BigIntLiteral");
-            const posLiteral = posType as BigIntLiteralType;
-            assert.equal(typeof posLiteral.value, "bigint");
-            assert.equal(posLiteral.value, 123n);
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
 
-            const negSymbol = await project.checker.getSymbolAtPosition("/src/main.ts", src.indexOf("neg ="));
-            assert.ok(negSymbol);
-            const negType = await project.checker.getTypeOfSymbol(negSymbol);
-            assert.ok(negType);
-            assert.ok(negType.flags & TypeFlags.BigIntLiteral, "Expected BigIntLiteral");
-            const negLiteral = negType as BigIntLiteralType;
-            assert.equal(typeof negLiteral.value, "bigint");
-            assert.equal(negLiteral.value, -123n);
-        }
-        finally {
-            await api.close();
-        }
+        const posSymbol = await project.checker.getSymbolAtPosition("/src/main.ts", src.indexOf("pos ="));
+        assert.ok(posSymbol);
+        const posType = await project.checker.getTypeOfSymbol(posSymbol);
+        assert.ok(posType);
+        assert.ok(posType.flags & TypeFlags.BigIntLiteral, "Expected BigIntLiteral");
+        const posLiteral = posType as BigIntLiteralType;
+        assert.equal(typeof posLiteral.value, "bigint");
+        assert.equal(posLiteral.value, 123n);
+
+        const negSymbol = await project.checker.getSymbolAtPosition("/src/main.ts", src.indexOf("neg ="));
+        assert.ok(negSymbol);
+        const negType = await project.checker.getTypeOfSymbol(negSymbol);
+        assert.ok(negType);
+        assert.ok(negType.flags & TypeFlags.BigIntLiteral, "Expected BigIntLiteral");
+        const negLiteral = negType as BigIntLiteralType;
+        assert.equal(typeof negLiteral.value, "bigint");
+        assert.equal(negLiteral.value, -123n);
     });
 
     test("getFreshType() returns a fresh twin with matching value", async () => {
         const src = `\nexport const greeting: "hello" = "hello";\n`;
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": "{}",
             "/src/main.ts": src,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const pos = src.indexOf("greeting:");
-            const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
-            assert.ok(symbol);
-            const type = await project.checker.getTypeOfSymbol(symbol);
-            assert.ok(type);
-            assert.ok(type.flags & TypeFlags.Freshable, "Type should be a freshable type");
-            const fresh = await (type as FreshableType).getFreshType();
-            assert.ok(fresh, "Expected getFreshType() to return non-undefined for a literal type");
-            assert.ok(fresh.flags & TypeFlags.StringLiteral, "Fresh type should be a StringLiteral");
-            assert.equal((fresh as LiteralType).value, "hello", "Fresh type should carry the same value");
-            assert.notEqual(fresh.id, type.id, "Fresh type should not be the original type");
-            const freshFresh = await fresh.getFreshType();
-            assert.ok(freshFresh, "Expected getFreshType() to return non-undefined for a fresh type");
-            assert.equal(freshFresh.id, fresh.id, "Fresh type of a fresh type should be the fresh type");
-        }
-        finally {
-            await api.close();
-        }
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const pos = src.indexOf("greeting:");
+        const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
+        assert.ok(symbol);
+        const type = await project.checker.getTypeOfSymbol(symbol);
+        assert.ok(type);
+        assert.ok(type.flags & TypeFlags.Freshable, "Type should be a freshable type");
+        const fresh = await (type as FreshableType).getFreshType();
+        assert.ok(fresh, "Expected getFreshType() to return non-undefined for a literal type");
+        assert.ok(fresh.flags & TypeFlags.StringLiteral, "Fresh type should be a StringLiteral");
+        assert.equal((fresh as LiteralType).value, "hello", "Fresh type should carry the same value");
+        assert.notEqual(fresh.id, type.id, "Fresh type should not be the original type");
+        const freshFresh = await fresh.getFreshType();
+        assert.ok(freshFresh, "Expected getFreshType() to return non-undefined for a fresh type");
+        assert.equal(freshFresh.id, fresh.id, "Fresh type of a fresh type should be the fresh type");
     });
 
     test("getRegularType() on a fresh literal returns the regular twin", async () => {
@@ -5548,162 +4806,138 @@ describe("FreshableType - getFreshType and getRegularType", () => {
         // regularType handle, so getRegularType() is tested via the fresh twin which
         // always includes its regularType in its own response.
         const src = `\nexport const greeting: "hello" = "hello";\n`;
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": "{}",
             "/src/main.ts": src,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const pos = src.indexOf("greeting:");
-            const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
-            assert.ok(symbol);
-            const type = await project.checker.getTypeOfSymbol(symbol);
-            assert.ok(type);
-            assert.ok(type.flags & TypeFlags.Freshable, "Type should be a freshable type");
-            const fresh = await (type as FreshableType).getFreshType();
-            assert.ok(fresh, "Need fresh type for this test");
-            assert.ok(fresh.flags & TypeFlags.Freshable, "Fresh type should be a freshable type");
-            const regular = await fresh.getRegularType();
-            assert.ok(regular, "Expected getRegularType() on the fresh twin to return non-undefined");
-            assert.ok(regular.flags & TypeFlags.StringLiteral, "Regular type should be a StringLiteral");
-            assert.equal((regular as LiteralType).value, "hello", "Regular type should carry the same value");
-            assert.equal(regular.id, type.id, "Regular type should be the original type");
-        }
-        finally {
-            await api.close();
-        }
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const pos = src.indexOf("greeting:");
+        const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
+        assert.ok(symbol);
+        const type = await project.checker.getTypeOfSymbol(symbol);
+        assert.ok(type);
+        assert.ok(type.flags & TypeFlags.Freshable, "Type should be a freshable type");
+        const fresh = await (type as FreshableType).getFreshType();
+        assert.ok(fresh, "Need fresh type for this test");
+        assert.ok(fresh.flags & TypeFlags.Freshable, "Fresh type should be a freshable type");
+        const regular = await fresh.getRegularType();
+        assert.ok(regular, "Expected getRegularType() on the fresh twin to return non-undefined");
+        assert.ok(regular.flags & TypeFlags.StringLiteral, "Regular type should be a StringLiteral");
+        assert.equal((regular as LiteralType).value, "hello", "Regular type should carry the same value");
+        assert.equal(regular.id, type.id, "Regular type should be the original type");
     });
 
     test("getFreshType() and getRegularType() work for computed enum types (TypeFlags.Enum)", async () => {
         // getTypeOfSymbol on an ambient enum member returns the FRESH computed enum type.
         // For fresh types: getFreshType() returns self, getRegularType() returns the regular twin.
         const src = `\ndeclare enum Status { Pending }\n`;
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": "{}",
             "/src/main.ts": src,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const pos = src.indexOf("Pending");
-            const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
-            assert.ok(symbol);
-            const type = await project.checker.getTypeOfSymbol(symbol);
-            assert.ok(type);
-            assert.ok(type.flags & TypeFlags.Enum, `Expected TypeFlags.Enum, got ${type.flags}`);
-            assert.ok(type.flags & TypeFlags.Freshable, "Enum type should be freshable");
-            // The returned type IS the fresh type: getFreshType() returns itself
-            const fresh = await (type as FreshableType).getFreshType();
-            assert.ok(fresh, "Expected getFreshType() to return non-undefined");
-            assert.equal(fresh.id, type.id, "getFreshType() on a fresh enum type returns itself");
-            // getRegularType() returns the regular twin (a different type)
-            const regular = await (type as FreshableType).getRegularType();
-            assert.ok(regular, "Expected getRegularType() to return non-undefined");
-            assert.ok(regular.flags & TypeFlags.Enum, "Regular enum type should also have TypeFlags.Enum");
-            assert.notEqual(regular.id, type.id, "Regular type should be distinct from the fresh type");
-            // Round-trip: regular → getFreshType() → back to the original fresh type
-            const backToFresh = await (regular as FreshableType).getFreshType();
-            assert.ok(backToFresh);
-            assert.equal(backToFresh.id, type.id, "Round-trip through regular/fresh returns the original type");
-        }
-        finally {
-            await api.close();
-        }
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const pos = src.indexOf("Pending");
+        const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
+        assert.ok(symbol);
+        const type = await project.checker.getTypeOfSymbol(symbol);
+        assert.ok(type);
+        assert.ok(type.flags & TypeFlags.Enum, `Expected TypeFlags.Enum, got ${type.flags}`);
+        assert.ok(type.flags & TypeFlags.Freshable, "Enum type should be freshable");
+        // The returned type IS the fresh type: getFreshType() returns itself
+        const fresh = await (type as FreshableType).getFreshType();
+        assert.ok(fresh, "Expected getFreshType() to return non-undefined");
+        assert.equal(fresh.id, type.id, "getFreshType() on a fresh enum type returns itself");
+        // getRegularType() returns the regular twin (a different type)
+        const regular = await (type as FreshableType).getRegularType();
+        assert.ok(regular, "Expected getRegularType() to return non-undefined");
+        assert.ok(regular.flags & TypeFlags.Enum, "Regular enum type should also have TypeFlags.Enum");
+        assert.notEqual(regular.id, type.id, "Regular type should be distinct from the fresh type");
+        // Round-trip: regular → getFreshType() → back to the original fresh type
+        const backToFresh = await (regular as FreshableType).getFreshType();
+        assert.ok(backToFresh);
+        assert.equal(backToFresh.id, type.id, "Round-trip through regular/fresh returns the original type");
     });
 });
 
 describe("Checker - isContextSensitive", () => {
     test("arrow function with no type annotation is context sensitive", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
             "/src/main.ts": `export const fn = (x) => x;`,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const sourceFile = await project.program.getSourceFile("/src/main.ts");
-            assert.ok(sourceFile);
-            // Find the arrow function node
-            let arrowFn: import("@typescript/typescript/unstable/ast").Node | undefined;
-            sourceFile.forEachChild(function visit(node) {
-                if (node.kind === SyntaxKind.ArrowFunction) {
-                    arrowFn = node;
-                }
-                node.forEachChild(visit);
-            });
-            assert.ok(arrowFn, "Should find an arrow function");
-            const result = await project.checker.isContextSensitive(arrowFn);
-            assert.equal(result, true);
-        }
-        finally {
-            await api.close();
-        }
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const sourceFile = await project.program.getSourceFile("/src/main.ts");
+        assert.ok(sourceFile);
+        // Find the arrow function node
+        let arrowFn: import("@typescript/typescript/unstable/ast").Node | undefined;
+        sourceFile.forEachChild(function visit(node) {
+            if (node.kind === SyntaxKind.ArrowFunction) {
+                arrowFn = node;
+            }
+            node.forEachChild(visit);
+        });
+        assert.ok(arrowFn, "Should find an arrow function");
+        const result = await project.checker.isContextSensitive(arrowFn);
+        assert.equal(result, true);
     });
 });
 
 describe("Checker - isTypeAssignableTo", () => {
     test("returns true when source is assignable to target", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": "{}",
             "/src/main.ts": `export {};`,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const stringType = await project.checker.getStringType();
-            const anyType = await project.checker.getAnyType();
-            const neverType = await project.checker.getNeverType();
-            assert.ok(await project.checker.isTypeAssignableTo(stringType, stringType), "string assignable to string");
-            assert.ok(await project.checker.isTypeAssignableTo(stringType, anyType), "string assignable to any");
-            assert.ok(await project.checker.isTypeAssignableTo(neverType, stringType), "never assignable to string (bottom type)");
-        }
-        finally {
-            await api.close();
-        }
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const stringType = await project.checker.getStringType();
+        const anyType = await project.checker.getAnyType();
+        const neverType = await project.checker.getNeverType();
+        assert.ok(await project.checker.isTypeAssignableTo(stringType, stringType), "string assignable to string");
+        assert.ok(await project.checker.isTypeAssignableTo(stringType, anyType), "string assignable to any");
+        assert.ok(await project.checker.isTypeAssignableTo(neverType, stringType), "never assignable to string (bottom type)");
     });
 
     test("returns false when source is not assignable to target", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": "{}",
             "/src/main.ts": `export {};`,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const stringType = await project.checker.getStringType();
-            const numberType = await project.checker.getNumberType();
-            assert.ok(!await project.checker.isTypeAssignableTo(numberType, stringType), "number not assignable to string");
-            assert.ok(!await project.checker.isTypeAssignableTo(stringType, numberType), "string not assignable to number");
-        }
-        finally {
-            await api.close();
-        }
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const stringType = await project.checker.getStringType();
+        const numberType = await project.checker.getNumberType();
+        assert.ok(!await project.checker.isTypeAssignableTo(numberType, stringType), "number not assignable to string");
+        assert.ok(!await project.checker.isTypeAssignableTo(stringType, numberType), "string not assignable to number");
     });
 
     test("a string literal type is assignable to string but not number", async () => {
         const src = `\nexport const x: "hello" = "hello";\n`;
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": "{}",
             "/src/main.ts": src,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const pos = src.indexOf("x:");
-            const sym = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
-            assert.ok(sym);
-            const litType = await project.checker.getTypeOfSymbol(sym);
-            assert.ok(litType);
-            assert.ok(litType.flags & TypeFlags.StringLiteral);
-            const stringType = await project.checker.getStringType();
-            const numberType = await project.checker.getNumberType();
-            assert.ok(await project.checker.isTypeAssignableTo(litType, stringType));
-            assert.ok(!await project.checker.isTypeAssignableTo(litType, numberType));
-        }
-        finally {
-            await api.close();
-        }
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const pos = src.indexOf("x:");
+        const sym = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
+        assert.ok(sym);
+        const litType = await project.checker.getTypeOfSymbol(sym);
+        assert.ok(litType);
+        assert.ok(litType.flags & TypeFlags.StringLiteral);
+        const stringType = await project.checker.getStringType();
+        const numberType = await project.checker.getNumberType();
+        assert.ok(await project.checker.isTypeAssignableTo(litType, stringType));
+        assert.ok(!await project.checker.isTypeAssignableTo(litType, numberType));
     });
 });
 
@@ -5719,241 +4953,201 @@ export const obj = { m: 1, s: "hi", b: true };
     };
 
     test("printNode with factory-created keyword type", async () => {
-        const api = spawnAPI(emitterFiles);
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const node = createKeywordTypeNode(SyntaxKind.StringKeyword);
-            const text = await project.emitter.printNode(node);
-            assert.strictEqual(text, "string");
-        }
-        finally {
-            await api.close();
-        }
+        await using api = spawnAPI(emitterFiles);
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const node = createKeywordTypeNode(SyntaxKind.StringKeyword);
+        const text = await project.emitter.printNode(node);
+        assert.strictEqual(text, "string");
     });
 
     test("printNode with factory-created union type", async () => {
-        const api = spawnAPI(emitterFiles);
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const node = createUnionTypeNode([
-                createKeywordTypeNode(SyntaxKind.StringKeyword),
-                createKeywordTypeNode(SyntaxKind.NumberKeyword),
-            ]);
-            const text = await project.emitter.printNode(node);
-            assert.strictEqual(text, "string | number");
-        }
-        finally {
-            await api.close();
-        }
+        await using api = spawnAPI(emitterFiles);
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const node = createUnionTypeNode([
+            createKeywordTypeNode(SyntaxKind.StringKeyword),
+            createKeywordTypeNode(SyntaxKind.NumberKeyword),
+        ]);
+        const text = await project.emitter.printNode(node);
+        assert.strictEqual(text, "string | number");
     });
 
     test("printNode with factory-created function type", async () => {
-        const api = spawnAPI(emitterFiles);
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const param = createParameterDeclaration(
-                undefined,
-                undefined,
-                createIdentifier("x"),
-                undefined,
-                createKeywordTypeNode(SyntaxKind.StringKeyword),
-                undefined,
-            );
-            const node = createFunctionTypeNode(
-                undefined,
-                [param],
-                createKeywordTypeNode(SyntaxKind.NumberKeyword),
-            );
-            const text = await project.emitter.printNode(node);
-            assert.strictEqual(text, "(x: string) => number");
-        }
-        finally {
-            await api.close();
-        }
+        await using api = spawnAPI(emitterFiles);
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const param = createParameterDeclaration(
+            undefined,
+            undefined,
+            createIdentifier("x"),
+            undefined,
+            createKeywordTypeNode(SyntaxKind.StringKeyword),
+            undefined,
+        );
+        const node = createFunctionTypeNode(
+            undefined,
+            [param],
+            createKeywordTypeNode(SyntaxKind.NumberKeyword),
+        );
+        const text = await project.emitter.printNode(node);
+        assert.strictEqual(text, "(x: string) => number");
     });
 
     test("printNode with factory-created type reference", async () => {
-        const api = spawnAPI(emitterFiles);
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const node = createTypeReferenceNode(createIdentifier("Array"), [
-                createKeywordTypeNode(SyntaxKind.StringKeyword),
-            ]);
-            const text = await project.emitter.printNode(node);
-            assert.strictEqual(text, "Array<string>");
-        }
-        finally {
-            await api.close();
-        }
+        await using api = spawnAPI(emitterFiles);
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const node = createTypeReferenceNode(createIdentifier("Array"), [
+            createKeywordTypeNode(SyntaxKind.StringKeyword),
+        ]);
+        const text = await project.emitter.printNode(node);
+        assert.strictEqual(text, "Array<string>");
     });
 
     test("printNode with factory-created array type", async () => {
-        const api = spawnAPI(emitterFiles);
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const node = createArrayTypeNode(createKeywordTypeNode(SyntaxKind.NumberKeyword));
-            const text = await project.emitter.printNode(node);
-            assert.strictEqual(text, "number[]");
-        }
-        finally {
-            await api.close();
-        }
+        await using api = spawnAPI(emitterFiles);
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const node = createArrayTypeNode(createKeywordTypeNode(SyntaxKind.NumberKeyword));
+        const text = await project.emitter.printNode(node);
+        assert.strictEqual(text, "number[]");
     });
 
     test("typeToTypeNode + printNode round-trip", async () => {
-        const api = spawnAPI(emitterFiles);
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const { checker, emitter } = snapshot.getProject("/tsconfig.json")!;
-            const src = emitterFiles["/src/main.ts"];
+        await using api = spawnAPI(emitterFiles);
 
-            const greetPos = src.indexOf("greet(");
-            const symbol = await checker.getSymbolAtPosition("/src/main.ts", greetPos);
-            assert.ok(symbol);
-            const type = await checker.getTypeOfSymbol(symbol);
-            assert.ok(type);
-            const typeNode = await checker.typeToTypeNode(type);
-            assert.ok(typeNode);
-            const text = await emitter.printNode(typeNode);
-            assert.ok(text);
-            assert.strictEqual(text, "(name: string) => string");
-        }
-        finally {
-            await api.close();
-        }
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const { checker, emitter } = snapshot.getProject("/tsconfig.json")!;
+        const src = emitterFiles["/src/main.ts"];
+
+        const greetPos = src.indexOf("greet(");
+        const symbol = await checker.getSymbolAtPosition("/src/main.ts", greetPos);
+        assert.ok(symbol);
+        const type = await checker.getTypeOfSymbol(symbol);
+        assert.ok(type);
+        const typeNode = await checker.typeToTypeNode(type);
+        assert.ok(typeNode);
+        const text = await emitter.printNode(typeNode);
+        assert.ok(text);
+        assert.strictEqual(text, "(name: string) => string");
     });
 
     test("visitEachChild on typeToTypeNode result with keyword types", async () => {
-        const api = spawnAPI(emitterFiles);
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const { checker } = snapshot.getProject("/tsconfig.json")!;
-            const src = emitterFiles["/src/main.ts"];
-            const objPos = src.indexOf("obj");
-            const symbol = await checker.getSymbolAtPosition("/src/main.ts", objPos);
-            assert.ok(symbol, "should find symbol for obj");
-            const type = await checker.getTypeOfSymbol(symbol);
-            assert.ok(type);
-            const typeNode = await checker.typeToTypeNode(type);
-            assert.ok(typeNode, "typeToTypeNode should return a type node");
+        await using api = spawnAPI(emitterFiles);
 
-            // Recursively visit to reach PropertySignature.type where isTypeNode is checked.
-            const visited = (function visit(node: Node): Node {
-                return visitEachChild(node, visit);
-            })(typeNode);
-            assert.ok(visited, "visitEachChild should not throw");
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const { checker } = snapshot.getProject("/tsconfig.json")!;
+        const src = emitterFiles["/src/main.ts"];
+        const objPos = src.indexOf("obj");
+        const symbol = await checker.getSymbolAtPosition("/src/main.ts", objPos);
+        assert.ok(symbol, "should find symbol for obj");
+        const type = await checker.getTypeOfSymbol(symbol);
+        assert.ok(type);
+        const typeNode = await checker.typeToTypeNode(type);
+        assert.ok(typeNode, "typeToTypeNode should return a type node");
 
-            const kinds = [
-                SyntaxKind.NumberKeyword,
-                SyntaxKind.StringKeyword,
-                SyntaxKind.BooleanKeyword,
-                SyntaxKind.AnyKeyword,
-                SyntaxKind.VoidKeyword,
-                SyntaxKind.UndefinedKeyword,
-                SyntaxKind.NeverKeyword,
-                SyntaxKind.UnknownKeyword,
-                SyntaxKind.BigIntKeyword,
-                SyntaxKind.ObjectKeyword,
-                SyntaxKind.SymbolKeyword,
-                SyntaxKind.IntrinsicKeyword,
-                SyntaxKind.ExpressionWithTypeArguments,
-                SyntaxKind.JSDocAllType,
-                SyntaxKind.JSDocNullableType,
-                SyntaxKind.JSDocNonNullableType,
-                SyntaxKind.JSDocOptionalType,
-                SyntaxKind.JSDocVariadicType,
-                SyntaxKind.JSDocTypeExpression,
-                SyntaxKind.JSDocTypeLiteral,
-                SyntaxKind.JSDocSignature,
-            ];
-            for (const kind of kinds) {
-                assert.ok(isTypeNode({ kind } as any), `isTypeNode should accept ${SyntaxKind[kind]}`);
-            }
-        }
-        finally {
-            await api.close();
+        // Recursively visit to reach PropertySignature.type where isTypeNode is checked.
+        const visited = (function visit(node: Node): Node {
+            return visitEachChild(node, visit);
+        })(typeNode);
+        assert.ok(visited, "visitEachChild should not throw");
+
+        const kinds = [
+            SyntaxKind.NumberKeyword,
+            SyntaxKind.StringKeyword,
+            SyntaxKind.BooleanKeyword,
+            SyntaxKind.AnyKeyword,
+            SyntaxKind.VoidKeyword,
+            SyntaxKind.UndefinedKeyword,
+            SyntaxKind.NeverKeyword,
+            SyntaxKind.UnknownKeyword,
+            SyntaxKind.BigIntKeyword,
+            SyntaxKind.ObjectKeyword,
+            SyntaxKind.SymbolKeyword,
+            SyntaxKind.IntrinsicKeyword,
+            SyntaxKind.ExpressionWithTypeArguments,
+            SyntaxKind.JSDocAllType,
+            SyntaxKind.JSDocNullableType,
+            SyntaxKind.JSDocNonNullableType,
+            SyntaxKind.JSDocOptionalType,
+            SyntaxKind.JSDocVariadicType,
+            SyntaxKind.JSDocTypeExpression,
+            SyntaxKind.JSDocTypeLiteral,
+            SyntaxKind.JSDocSignature,
+        ];
+        for (const kind of kinds) {
+            assert.ok(isTypeNode({ kind } as any), `isTypeNode should accept ${SyntaxKind[kind]}`);
         }
     });
 
     test("typeToString", async () => {
-        const api = spawnAPI(emitterFiles);
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const { checker } = snapshot.getProject("/tsconfig.json")!;
-            const src = emitterFiles["/src/main.ts"];
+        await using api = spawnAPI(emitterFiles);
 
-            const greetPos = src.indexOf("greet(");
-            const symbol = await checker.getSymbolAtPosition("/src/main.ts", greetPos);
-            assert.ok(symbol);
-            const type = await checker.getTypeOfSymbol(symbol);
-            assert.ok(type);
-            const text = await checker.typeToString(type);
-            assert.strictEqual(text, "(name: string) => string");
-        }
-        finally {
-            await api.close();
-        }
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const { checker } = snapshot.getProject("/tsconfig.json")!;
+        const src = emitterFiles["/src/main.ts"];
+
+        const greetPos = src.indexOf("greet(");
+        const symbol = await checker.getSymbolAtPosition("/src/main.ts", greetPos);
+        assert.ok(symbol);
+        const type = await checker.getTypeOfSymbol(symbol);
+        assert.ok(type);
+        const text = await checker.typeToString(type);
+        assert.strictEqual(text, "(name: string) => string");
     });
 
     test("typeToString with TypeFormatFlags", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
             "/src/main.ts": `export function greet(name: string): string[] { return [name]; }`,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const { checker } = snapshot.getProject("/tsconfig.json")!;
-            const greetPos = "export function greet".indexOf("greet");
-            const symbol = await checker.getSymbolAtPosition("/src/main.ts", greetPos);
-            assert.ok(symbol);
-            const type = await checker.getTypeOfSymbol(symbol);
-            assert.ok(type);
-            const text = await checker.typeToString(type, undefined, TypeFormatFlags.WriteArrayAsGenericType);
-            assert.strictEqual(text, "(name: string) => Array<string>");
-        }
-        finally {
-            await api.close();
-        }
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const { checker } = snapshot.getProject("/tsconfig.json")!;
+        const greetPos = "export function greet".indexOf("greet");
+        const symbol = await checker.getSymbolAtPosition("/src/main.ts", greetPos);
+        assert.ok(symbol);
+        const type = await checker.getTypeOfSymbol(symbol);
+        assert.ok(type);
+        const text = await checker.typeToString(type, undefined, TypeFormatFlags.WriteArrayAsGenericType);
+        assert.strictEqual(text, "(name: string) => Array<string>");
     });
 
     test("printNode with terminateUnterminatedLiterals option", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
             "/src/main.ts": `const foo = /asdfasf;`,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const sourceFile = await project.program.getSourceFile("/src/main.ts");
-            assert.ok(sourceFile);
 
-            // Find the regex literal node
-            let regexNode: import("@typescript/typescript/unstable/ast").Node | undefined;
-            sourceFile.forEachChild(function visit(node) {
-                if (node.kind === SyntaxKind.RegularExpressionLiteral) {
-                    regexNode = node;
-                    return;
-                }
-                node.forEachChild(visit);
-            });
-            assert.ok(regexNode, "Should find a regex literal");
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const sourceFile = await project.program.getSourceFile("/src/main.ts");
+        assert.ok(sourceFile);
 
-            // Without the option, regex is printed as-is
-            const textWithout = await project.emitter.printNode(regexNode);
-            assert.strictEqual(textWithout, "/asdfasf");
+        // Find the regex literal node
+        let regexNode: import("@typescript/typescript/unstable/ast").Node | undefined;
+        sourceFile.forEachChild(function visit(node) {
+            if (node.kind === SyntaxKind.RegularExpressionLiteral) {
+                regexNode = node;
+                return;
+            }
+            node.forEachChild(visit);
+        });
+        assert.ok(regexNode, "Should find a regex literal");
 
-            // With the option, the closing slash is added
-            const textWith = await project.emitter.printNode(regexNode, { terminateUnterminatedLiterals: true });
-            assert.strictEqual(textWith, "/asdfasf/");
-        }
-        finally {
-            await api.close();
-        }
+        // Without the option, regex is printed as-is
+        const textWithout = await project.emitter.printNode(regexNode);
+        assert.strictEqual(textWithout, "/asdfasf");
+
+        // With the option, the closing slash is added
+        const textWith = await project.emitter.printNode(regexNode, { terminateUnterminatedLiterals: true });
+        assert.strictEqual(textWith, "/asdfasf/");
     });
 });
 
@@ -5973,59 +5167,49 @@ describe("Program - selected file emit", () => {
     };
 
     test("getJavaScriptEmit forces JavaScript and source maps", async () => {
-        const { api, fs } = spawnAPIWithFS({ ...files });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const result = await project.program.getJavaScriptEmit(["/src/a.ts", "/src/b.ts"]);
-            assert.equal(result.emitSkipped, false);
-            assert.deepEqual([...result.outputFiles.keys()], [
-                "/src/a.js",
-                "/src/a.js.map",
-                "/src/b.js",
-                "/src/b.js.map",
-            ]);
-            assert.equal(result.outputFiles.get("/src/a.js")?.sourceFileName, "/src/a.ts");
-            assert.match(result.outputFiles.get("/src/a.js")!.text, /export const a = 1/);
-            assert.equal(fs.readFile?.("/src/a.js"), undefined);
-        }
-        finally {
-            await api.close();
-        }
+        const { api: disposableAPI, fs } = spawnAPIWithFS({ ...files });
+        await using api = disposableAPI;
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const result = await project.program.getJavaScriptEmit(["/src/a.ts", "/src/b.ts"]);
+        assert.equal(result.emitSkipped, false);
+        assert.deepEqual([...result.outputFiles.keys()], [
+            "/src/a.js",
+            "/src/a.js.map",
+            "/src/b.js",
+            "/src/b.js.map",
+        ]);
+        assert.equal(result.outputFiles.get("/src/a.js")?.sourceFileName, "/src/a.ts");
+        assert.match(result.outputFiles.get("/src/a.js")!.text, /export const a = 1/);
+        assert.equal(fs.readFile?.("/src/a.js"), undefined);
     });
 
     test("getDeclarationEmit forces declarations and declaration maps", async () => {
-        const { api, fs } = spawnAPIWithFS({ ...files });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const result = await project.program.getDeclarationEmit(["/src/a.ts", "/src/b.ts"]);
-            assert.equal(result.emitSkipped, false);
-            assert.deepEqual([...result.outputFiles.keys()], [
-                "/src/a.d.ts",
-                "/src/a.d.ts.map",
-                "/src/b.d.ts",
-                "/src/b.d.ts.map",
-            ]);
-            assert.equal(result.outputFiles.get("/src/a.d.ts")?.sourceFileName, "/src/a.ts");
-            assert.equal(fs.readFile?.("/src/a.d.ts"), undefined);
-        }
-        finally {
-            await api.close();
-        }
+        const { api: disposableAPI, fs } = spawnAPIWithFS({ ...files });
+        await using api = disposableAPI;
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const result = await project.program.getDeclarationEmit(["/src/a.ts", "/src/b.ts"]);
+        assert.equal(result.emitSkipped, false);
+        assert.deepEqual([...result.outputFiles.keys()], [
+            "/src/a.d.ts",
+            "/src/a.d.ts.map",
+            "/src/b.d.ts",
+            "/src/b.d.ts.map",
+        ]);
+        assert.equal(result.outputFiles.get("/src/a.d.ts")?.sourceFileName, "/src/a.ts");
+        assert.equal(fs.readFile?.("/src/a.d.ts"), undefined);
     });
 
     test("selected file emit accepts empty arrays", async () => {
-        const api = spawnAPI({ ...files });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            assert.deepEqual((await project.program.getJavaScriptEmit([])).outputFiles, new Map());
-            assert.deepEqual((await project.program.getDeclarationEmit([])).outputFiles, new Map());
-        }
-        finally {
-            await api.close();
-        }
+        await using api = spawnAPI({ ...files });
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        assert.deepEqual((await project.program.getJavaScriptEmit([])).outputFiles, new Map());
+        assert.deepEqual((await project.program.getDeclarationEmit([])).outputFiles, new Map());
     });
 });
 
@@ -6035,28 +5219,24 @@ describe("SnapshotInternalAPI - formatNodeForInsertion", () => {
             "/tsconfig.json": "{}",
             "/src/index.ts": `function greet(name: string) {\n    console.log(name);\n}\n`,
         };
-        const api = spawnAPI(files);
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        await using api = spawnAPI(files);
 
-            const node = createVariableStatement(
-                undefined,
-                createVariableDeclarationList(
-                    [createVariableDeclaration(createIdentifier("x"), undefined, undefined, createNumericLiteral("1", 0))],
-                    NodeFlags.Const,
-                ),
-            );
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
 
-            const sourceText = files["/src/index.ts"];
-            const insertionPos = sourceText.indexOf("\n    console.log") + 1;
+        const node = createVariableStatement(
+            undefined,
+            createVariableDeclarationList(
+                [createVariableDeclaration(createIdentifier("x"), undefined, undefined, createNumericLiteral("1", 0))],
+                NodeFlags.Const,
+            ),
+        );
 
-            const formatted = await snapshot.internal.formatNodeForInsertion(node, "/src/index.ts", insertionPos);
-            assert.ok(formatted.includes("const x = 1;"), `Expected 'const x = 1;' in formatted output, got: ${JSON.stringify(formatted)}`);
-            assert.ok(formatted.startsWith("    "), `Expected 4 spaces of indentation, got: ${JSON.stringify(formatted)}`);
-        }
-        finally {
-            await api.close();
-        }
+        const sourceText = files["/src/index.ts"];
+        const insertionPos = sourceText.indexOf("\n    console.log") + 1;
+
+        const formatted = await snapshot.internal.formatNodeForInsertion(node, "/src/index.ts", insertionPos);
+        assert.ok(formatted.includes("const x = 1;"), `Expected 'const x = 1;' in formatted output, got: ${JSON.stringify(formatted)}`);
+        assert.ok(formatted.startsWith("    "), `Expected 4 spaces of indentation, got: ${JSON.stringify(formatted)}`);
     });
 
     test("formats a node at top-level with no indentation", async () => {
@@ -6064,25 +5244,21 @@ describe("SnapshotInternalAPI - formatNodeForInsertion", () => {
             "/tsconfig.json": "{}",
             "/src/index.ts": `const a = 1;\nconst b = 2;\n`,
         };
-        const api = spawnAPI(files);
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        await using api = spawnAPI(files);
 
-            const node = createVariableStatement(
-                undefined,
-                createVariableDeclarationList(
-                    [createVariableDeclaration(createIdentifier("y"), undefined, undefined, createNumericLiteral("42", 0))],
-                    NodeFlags.Const,
-                ),
-            );
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
 
-            const formatted = await snapshot.internal.formatNodeForInsertion(node, "/src/index.ts", 0);
-            assert.ok(formatted.includes("const y = 42;"), `Expected 'const y = 42;' in formatted output, got: ${JSON.stringify(formatted)}`);
-            assert.ok(!formatted.startsWith(" "), `Expected no leading spaces at top level, got: ${JSON.stringify(formatted)}`);
-        }
-        finally {
-            await api.close();
-        }
+        const node = createVariableStatement(
+            undefined,
+            createVariableDeclarationList(
+                [createVariableDeclaration(createIdentifier("y"), undefined, undefined, createNumericLiteral("42", 0))],
+                NodeFlags.Const,
+            ),
+        );
+
+        const formatted = await snapshot.internal.formatNodeForInsertion(node, "/src/index.ts", 0);
+        assert.ok(formatted.includes("const y = 42;"), `Expected 'const y = 42;' in formatted output, got: ${JSON.stringify(formatted)}`);
+        assert.ok(!formatted.startsWith(" "), `Expected no leading spaces at top level, got: ${JSON.stringify(formatted)}`);
     });
 
     test("formats a synthesized statement with correct indentation when non-ASCII characters precede the insertion position", async () => {
@@ -6092,257 +5268,221 @@ describe("SnapshotInternalAPI - formatNodeForInsertion", () => {
             "/tsconfig.json": "{}",
             "/src/index.ts": `// \u00e9\nfunction greet(name: string) {\n    console.log(name);\n}\n`,
         };
-        const api = spawnAPI(files);
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        await using api = spawnAPI(files);
 
-            const node = createVariableStatement(
-                undefined,
-                createVariableDeclarationList(
-                    [createVariableDeclaration(createIdentifier("x"), undefined, undefined, createNumericLiteral("1", 0))],
-                    NodeFlags.Const,
-                ),
-            );
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
 
-            // insertionPos is the UTF-16 code-unit offset of the start of the indented line inside the function body.
-            const sourceText = files["/src/index.ts"];
-            const insertionPos = sourceText.indexOf("\n    console.log") + 1;
+        const node = createVariableStatement(
+            undefined,
+            createVariableDeclarationList(
+                [createVariableDeclaration(createIdentifier("x"), undefined, undefined, createNumericLiteral("1", 0))],
+                NodeFlags.Const,
+            ),
+        );
 
-            const formatted = await snapshot.internal.formatNodeForInsertion(node, "/src/index.ts", insertionPos);
-            // The node should be indented to match the function body (4 spaces)
-            assert.ok(formatted.includes("const x = 1;"), `Expected 'const x = 1;' in formatted output, got: ${JSON.stringify(formatted)}`);
-            assert.ok(formatted.startsWith("    "), `Expected 4 spaces of indentation (UTF-16 offset correctly converted), got: ${JSON.stringify(formatted)}`);
-        }
-        finally {
-            await api.close();
-        }
+        // insertionPos is the UTF-16 code-unit offset of the start of the indented line inside the function body.
+        const sourceText = files["/src/index.ts"];
+        const insertionPos = sourceText.indexOf("\n    console.log") + 1;
+
+        const formatted = await snapshot.internal.formatNodeForInsertion(node, "/src/index.ts", insertionPos);
+        // The node should be indented to match the function body (4 spaces)
+        assert.ok(formatted.includes("const x = 1;"), `Expected 'const x = 1;' in formatted output, got: ${JSON.stringify(formatted)}`);
+        assert.ok(formatted.startsWith("    "), `Expected 4 spaces of indentation (UTF-16 offset correctly converted), got: ${JSON.stringify(formatted)}`);
     });
 });
 
 describe("modifierFlags", () => {
     test("export async function has Export | Async flags", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": "{}",
             "/src/index.ts": `export async function foo() {}`,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const sourceFile = await project.program.getSourceFile("/src/index.ts");
-            assert.ok(sourceFile);
 
-            let fnNode: import("@typescript/typescript/unstable/ast").FunctionDeclaration | undefined;
-            sourceFile.forEachChild(function visit(node) {
-                if (isFunctionDeclaration(node)) {
-                    fnNode = node;
-                }
-                node.forEachChild(visit);
-            });
-            assert.ok(fnNode, "Should find a function declaration");
-            assert.ok(fnNode.modifierFlags & ModifierFlags.Export, "Should have Export flag");
-            assert.ok(fnNode.modifierFlags & ModifierFlags.Async, "Should have Async flag");
-            assert.strictEqual(fnNode.modifierFlags, ModifierFlags.Export | ModifierFlags.Async);
-        }
-        finally {
-            await api.close();
-        }
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const sourceFile = await project.program.getSourceFile("/src/index.ts");
+        assert.ok(sourceFile);
+
+        let fnNode: import("@typescript/typescript/unstable/ast").FunctionDeclaration | undefined;
+        sourceFile.forEachChild(function visit(node) {
+            if (isFunctionDeclaration(node)) {
+                fnNode = node;
+            }
+            node.forEachChild(visit);
+        });
+        assert.ok(fnNode, "Should find a function declaration");
+        assert.ok(fnNode.modifierFlags & ModifierFlags.Export, "Should have Export flag");
+        assert.ok(fnNode.modifierFlags & ModifierFlags.Async, "Should have Async flag");
+        assert.strictEqual(fnNode.modifierFlags, ModifierFlags.Export | ModifierFlags.Async);
     });
 
     test("node without modifiers has ModifierFlags.None", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": "{}",
             "/src/index.ts": `function bar() {}`,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const sourceFile = await project.program.getSourceFile("/src/index.ts");
-            assert.ok(sourceFile);
 
-            let fnNode: import("@typescript/typescript/unstable/ast").FunctionDeclaration | undefined;
-            sourceFile.forEachChild(function visit(node) {
-                if (isFunctionDeclaration(node)) {
-                    fnNode = node;
-                }
-                node.forEachChild(visit);
-            });
-            assert.ok(fnNode, "Should find a function declaration");
-            assert.strictEqual(fnNode.modifierFlags, ModifierFlags.None);
-        }
-        finally {
-            await api.close();
-        }
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const sourceFile = await project.program.getSourceFile("/src/index.ts");
+        assert.ok(sourceFile);
+
+        let fnNode: import("@typescript/typescript/unstable/ast").FunctionDeclaration | undefined;
+        sourceFile.forEachChild(function visit(node) {
+            if (isFunctionDeclaration(node)) {
+                fnNode = node;
+            }
+            node.forEachChild(visit);
+        });
+        assert.ok(fnNode, "Should find a function declaration");
+        assert.strictEqual(fnNode.modifierFlags, ModifierFlags.None);
     });
 });
 
 describe("Checker - getResolvedSymbol", () => {
     test("resolves variable reference to its declaration symbol", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": "{}",
             "/src/index.ts": `const x = 1;\nconst y = x;`,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const sourceFile = await project.program.getSourceFile("/src/index.ts");
-            assert.ok(sourceFile);
 
-            // Find the 'x' identifier in `const y = x`
-            let refNode: import("@typescript/typescript/unstable/ast").Identifier | undefined;
-            sourceFile.forEachChild(function visit(node) {
-                if (isIdentifier(node) && node.text === "x") {
-                    // We want the reference, not the declaration - take the last one
-                    refNode = node;
-                }
-                node.forEachChild(visit);
-            });
-            assert.ok(refNode, "Should find identifier 'x'");
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const sourceFile = await project.program.getSourceFile("/src/index.ts");
+        assert.ok(sourceFile);
 
-            const symbol = await project.checker.getResolvedSymbol(refNode);
-            assert.ok(symbol, "Should resolve symbol for 'x'");
-            assert.equal(symbol.name, "x");
-        }
-        finally {
-            await api.close();
-        }
+        // Find the 'x' identifier in `const y = x`
+        let refNode: import("@typescript/typescript/unstable/ast").Identifier | undefined;
+        sourceFile.forEachChild(function visit(node) {
+            if (isIdentifier(node) && node.text === "x") {
+                // We want the reference, not the declaration - take the last one
+                refNode = node;
+            }
+            node.forEachChild(visit);
+        });
+        assert.ok(refNode, "Should find identifier 'x'");
+
+        const symbol = await project.checker.getResolvedSymbol(refNode);
+        assert.ok(symbol, "Should resolve symbol for 'x'");
+        assert.equal(symbol.name, "x");
     });
 });
 
 describe("VariableDeclarationList - BlockScoped flags", () => {
     test("let declaration has Let flag", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": "{}",
             "/src/index.ts": `let x = 1;`,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const sourceFile = await project.program.getSourceFile("/src/index.ts");
-            assert.ok(sourceFile);
 
-            let declList: import("@typescript/typescript/unstable/ast").Node | undefined;
-            sourceFile.forEachChild(function visit(node) {
-                if (isVariableDeclarationList(node)) {
-                    declList = node;
-                }
-                node.forEachChild(visit);
-            });
-            assert.ok(declList, "Should find VariableDeclarationList");
-            assert.ok(declList.flags & NodeFlags.Let, "Should have Let flag");
-        }
-        finally {
-            await api.close();
-        }
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const sourceFile = await project.program.getSourceFile("/src/index.ts");
+        assert.ok(sourceFile);
+
+        let declList: import("@typescript/typescript/unstable/ast").Node | undefined;
+        sourceFile.forEachChild(function visit(node) {
+            if (isVariableDeclarationList(node)) {
+                declList = node;
+            }
+            node.forEachChild(visit);
+        });
+        assert.ok(declList, "Should find VariableDeclarationList");
+        assert.ok(declList.flags & NodeFlags.Let, "Should have Let flag");
     });
 
     test("const declaration has Const flag", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": "{}",
             "/src/index.ts": `const x = 1;`,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const sourceFile = await project.program.getSourceFile("/src/index.ts");
-            assert.ok(sourceFile);
 
-            let declList: import("@typescript/typescript/unstable/ast").Node | undefined;
-            sourceFile.forEachChild(function visit(node) {
-                if (isVariableDeclarationList(node)) {
-                    declList = node;
-                }
-                node.forEachChild(visit);
-            });
-            assert.ok(declList, "Should find VariableDeclarationList");
-            assert.ok(declList.flags & NodeFlags.Const, "Should have Const flag");
-        }
-        finally {
-            await api.close();
-        }
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const sourceFile = await project.program.getSourceFile("/src/index.ts");
+        assert.ok(sourceFile);
+
+        let declList: import("@typescript/typescript/unstable/ast").Node | undefined;
+        sourceFile.forEachChild(function visit(node) {
+            if (isVariableDeclarationList(node)) {
+                declList = node;
+            }
+            node.forEachChild(visit);
+        });
+        assert.ok(declList, "Should find VariableDeclarationList");
+        assert.ok(declList.flags & NodeFlags.Const, "Should have Const flag");
     });
 });
 
 test("TypeOperator operator kind", async () => {
-    const api = spawnAPI({
+    await using api = spawnAPI({
         "/tsconfig.json": "{}",
         "/src/index.ts": `function test(arg: readonly number[]) { }\n`,
     });
-    try {
-        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
-        const sourceFile = await project.program.getSourceFile("/src/index.ts");
-        assert(sourceFile);
-        const param = (sourceFile.statements[0] as import("@typescript/typescript/unstable/ast").FunctionDeclaration).parameters[0];
-        assert(param);
-        const type = param.type as import("@typescript/typescript/unstable/ast").TypeOperatorNode;
-        assert(type);
-        assert.equal(type.kind, SyntaxKind.TypeOperator);
-        assert.equal(type.operator, SyntaxKind.ReadonlyKeyword);
-        const printed = await project.emitter.printNode(sourceFile);
-        assert.equal(sourceFile.text, printed);
-    }
-    finally {
-        await api.close();
-    }
+
+    const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+    const project = snapshot.getProject("/tsconfig.json")!;
+    const sourceFile = await project.program.getSourceFile("/src/index.ts");
+    assert(sourceFile);
+    const param = (sourceFile.statements[0] as import("@typescript/typescript/unstable/ast").FunctionDeclaration).parameters[0];
+    assert(param);
+    const type = param.type as import("@typescript/typescript/unstable/ast").TypeOperatorNode;
+    assert(type);
+    assert.equal(type.kind, SyntaxKind.TypeOperator);
+    assert.equal(type.operator, SyntaxKind.ReadonlyKeyword);
+    const printed = await project.emitter.printNode(sourceFile);
+    assert.equal(sourceFile.text, printed);
 });
 
 test("SpreadAssignment roundtrip", async () => {
-    const api = spawnAPI({
+    await using api = spawnAPI({
         "/tsconfig.json": "{}",
         "/src/index.ts": `var thing = { ...other };\n`,
     });
-    try {
-        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
-        const sourceFile = await project.program.getSourceFile("/src/index.ts");
-        assert(sourceFile);
-        const stmt = sourceFile.statements[0] as import("@typescript/typescript/unstable/ast").VariableStatement;
-        const object = stmt.declarationList.declarations[0].initializer as import("@typescript/typescript/unstable/ast").ObjectLiteralExpression;
-        const assignment = object.properties[0] as import("@typescript/typescript/unstable/ast").SpreadAssignment;
-        assert(assignment);
-        assert.equal(assignment.kind, SyntaxKind.SpreadAssignment);
-        const expr = assignment.expression;
-        assert(expr);
-        assert.equal(expr.kind, SyntaxKind.Identifier);
-        const printed = await project.emitter.printNode(sourceFile);
-        assert.equal(sourceFile.text, printed);
-    }
-    finally {
-        await api.close();
-    }
+
+    const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+    const project = snapshot.getProject("/tsconfig.json")!;
+    const sourceFile = await project.program.getSourceFile("/src/index.ts");
+    assert(sourceFile);
+    const stmt = sourceFile.statements[0] as import("@typescript/typescript/unstable/ast").VariableStatement;
+    const object = stmt.declarationList.declarations[0].initializer as import("@typescript/typescript/unstable/ast").ObjectLiteralExpression;
+    const assignment = object.properties[0] as import("@typescript/typescript/unstable/ast").SpreadAssignment;
+    assert(assignment);
+    assert.equal(assignment.kind, SyntaxKind.SpreadAssignment);
+    const expr = assignment.expression;
+    assert(expr);
+    assert.equal(expr.kind, SyntaxKind.Identifier);
+    const printed = await project.emitter.printNode(sourceFile);
+    assert.equal(sourceFile.text, printed);
 });
 
 test("VariableDeclarationList const flag clone", async () => {
-    const api = spawnAPI({
+    await using api = spawnAPI({
         "/tsconfig.json": "{}",
         "/src/index.ts": `const thing = 123;\n`,
     });
-    try {
-        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
-        const sourceFile = await project.program.getSourceFile("/src/index.ts");
-        assert(sourceFile);
-        {
-            const stmt = sourceFile.statements[0] as import("@typescript/typescript/unstable/ast").VariableStatement;
-            const list = stmt.declarationList;
-            assert(list.flags & NodeFlags.Const);
-        }
-        const cloned = getSynthesizedDeepClone(sourceFile);
-        {
-            const stmt = cloned.statements[0] as import("@typescript/typescript/unstable/ast").VariableStatement;
-            const list = stmt.declarationList;
-            assert(list.flags & NodeFlags.Const);
-        }
-        const printed = await project.emitter.printNode(cloned);
-        assert.equal(sourceFile.text, printed);
+
+    const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+    const project = snapshot.getProject("/tsconfig.json")!;
+    const sourceFile = await project.program.getSourceFile("/src/index.ts");
+    assert(sourceFile);
+    {
+        const stmt = sourceFile.statements[0] as import("@typescript/typescript/unstable/ast").VariableStatement;
+        const list = stmt.declarationList;
+        assert(list.flags & NodeFlags.Const);
     }
-    finally {
-        await api.close();
+    const cloned = getSynthesizedDeepClone(sourceFile);
+    {
+        const stmt = cloned.statements[0] as import("@typescript/typescript/unstable/ast").VariableStatement;
+        const list = stmt.declarationList;
+        assert(list.flags & NodeFlags.Const);
     }
+    const printed = await project.emitter.printNode(cloned);
+    assert.equal(sourceFile.text, printed);
 });
 
 test("JSDoc before ExpressionStatement allowed", async () => {
-    const api = spawnAPI({
+    await using api = spawnAPI({
         "/tsconfig.json": "{}",
         "/src/index.ts": `
 /**
@@ -6351,44 +5491,36 @@ test("JSDoc before ExpressionStatement allowed", async () => {
 doThing();
         `,
     });
-    try {
-        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
-        const sourceFile = await project.program.getSourceFile("/src/index.ts");
-        assert(sourceFile);
-        const printed = await project.emitter.printNode(sourceFile);
-        assert.equal(sourceFile.text.trim(), printed.trim());
-    }
-    finally {
-        await api.close();
-    }
+
+    const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+    const project = snapshot.getProject("/tsconfig.json")!;
+    const sourceFile = await project.program.getSourceFile("/src/index.ts");
+    assert(sourceFile);
+    const printed = await project.emitter.printNode(sourceFile);
+    assert.equal(sourceFile.text.trim(), printed.trim());
 });
 
 test("Factory ModifierList auto-conversion", async () => {
-    const api = spawnAPI();
-    try {
-        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
-        const node = createTypeAliasDeclaration(
-            [createToken(SyntaxKind.ExportKeyword)],
-            createIdentifier("Test"),
-            undefined,
-            createKeywordTypeNode(SyntaxKind.AnyKeyword),
-        );
+    await using api = spawnAPI();
 
-        assert.equal(await project.emitter.printNode(node), "export type Test = any;");
+    const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+    const project = snapshot.getProject("/tsconfig.json")!;
+    const node = createTypeAliasDeclaration(
+        [createToken(SyntaxKind.ExportKeyword)],
+        createIdentifier("Test"),
+        undefined,
+        createKeywordTypeNode(SyntaxKind.AnyKeyword),
+    );
 
-        const cloned = getSynthesizedDeepClone(node);
-        assert.equal(await project.emitter.printNode(cloned), "export type Test = any;");
-    }
-    finally {
-        await api.close();
-    }
+    assert.equal(await project.emitter.printNode(node), "export type Test = any;");
+
+    const cloned = getSynthesizedDeepClone(node);
+    assert.equal(await project.emitter.printNode(cloned), "export type Test = any;");
 });
 
 test("Parse-clone-emit roundtrip", async () => {
     const tsSource = fileURLToPath(new URL("../../../../tsc/testdata/fixtures", import.meta.url).toString());
-    const api = new API({
+    await using api = new API({
         cwd: tsSource,
     });
     const target = {
@@ -6397,507 +5529,438 @@ test("Parse-clone-emit roundtrip", async () => {
         clonePrintCrashed: 0,
     };
     const errors = { ...target };
-    try {
-        for (const tsconfig of globSync("**/tsconfig.json", { cwd: tsSource })) {
-            const snapshot = await api.updateSnapshot({ openProject: resolve(tsSource, tsconfig) });
-            const project = snapshot.getProject(tsconfig);
-            assert(project);
-            for (const file of project.rootFiles) {
-                const source = await project.program.getSourceFile(file);
-                assert(source);
-                let clone: typeof source;
 
-                try {
-                    await project.emitter.printNode(source);
-                }
-                catch {
-                    errors.printCrashed++;
-                    continue;
-                }
+    for (const tsconfig of globSync("**/tsconfig.json", { cwd: tsSource })) {
+        const snapshot = await api.updateSnapshot({ openProject: resolve(tsSource, tsconfig) });
+        const project = snapshot.getProject(tsconfig);
+        assert(project);
+        for (const file of project.rootFiles) {
+            const source = await project.program.getSourceFile(file);
+            assert(source);
+            let clone: typeof source;
 
-                try {
-                    clone = getSynthesizedDeepClone(source);
-                }
-                catch {
-                    errors.cloneCrashed++;
-                    continue;
-                }
+            try {
+                await project.emitter.printNode(source);
+            }
+            catch {
+                errors.printCrashed++;
+                continue;
+            }
 
-                try {
-                    await project.emitter.printNode(clone);
-                }
-                catch {
-                    errors.clonePrintCrashed++;
-                    continue;
-                }
+            try {
+                clone = getSynthesizedDeepClone(source);
+            }
+            catch {
+                errors.cloneCrashed++;
+                continue;
+            }
+
+            try {
+                await project.emitter.printNode(clone);
+            }
+            catch {
+                errors.clonePrintCrashed++;
+                continue;
             }
         }
     }
-    finally {
-        await api.close();
-    }
+
     assert.deepEqual(errors, target);
 });
 
 describe("Program - diagnostics", () => {
     test("getSyntacticDiagnostics", async () => {
         const source = `const x: = 1;`;
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": "{}",
             "/src/index.ts": source,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const diags = await project.program.getSyntacticDiagnostics("/src/index.ts");
-            assert.deepEqual(diags[0].startPosition, { line: 0, character: 9 });
-            assert.deepEqual(diags[0].endPosition, { line: 0, character: 10 });
-            assert.deepEqual(diags[0].sourceLines, [{ line: 0, text: source }]);
-            assert.deepEqual(withoutFormattingContext(diags), [{
-                fileName: "/src/index.ts",
-                ...rangeOf(source, "="),
-                code: 1110,
-                category: DiagnosticCategory.Error,
-                text: "Type expected.",
-            }]);
-        }
-        finally {
-            await api.close();
-        }
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const diags = await project.program.getSyntacticDiagnostics("/src/index.ts");
+        assert.deepEqual(diags[0].startPosition, { line: 0, character: 9 });
+        assert.deepEqual(diags[0].endPosition, { line: 0, character: 10 });
+        assert.deepEqual(diags[0].sourceLines, [{ line: 0, text: source }]);
+        assert.deepEqual(withoutFormattingContext(diags), [{
+            fileName: "/src/index.ts",
+            ...rangeOf(source, "="),
+            code: 1110,
+            category: DiagnosticCategory.Error,
+            text: "Type expected.",
+        }]);
     });
 
     test("getSemanticDiagnostics with messageChain and relatedInformation", async () => {
         const source = `interface Props { callback: (x: string) => void }\nconst p: Props = { callback: (x: number) => {} };`;
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": "{}",
             "/src/index.ts": source,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const diags = await project.program.getSemanticDiagnostics("/src/index.ts");
-            const declRange = rangeOf(source, "callback", 0);
-            const assignRange = rangeOf(source, "callback", 1);
-            assert.deepEqual(withoutFormattingContext(diags), [{
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const diags = await project.program.getSemanticDiagnostics("/src/index.ts");
+        const declRange = rangeOf(source, "callback", 0);
+        const assignRange = rangeOf(source, "callback", 1);
+        assert.deepEqual(withoutFormattingContext(diags), [{
+            fileName: "/src/index.ts",
+            ...assignRange,
+            code: 2322,
+            category: DiagnosticCategory.Error,
+            text: "Type '(x: number) => void' is not assignable to type '(x: string) => void'.",
+            messageChain: [{
                 fileName: "/src/index.ts",
                 ...assignRange,
-                code: 2322,
+                code: 2328,
                 category: DiagnosticCategory.Error,
-                text: "Type '(x: number) => void' is not assignable to type '(x: string) => void'.",
+                text: "Types of parameters 'x' and 'x' are incompatible.",
                 messageChain: [{
                     fileName: "/src/index.ts",
                     ...assignRange,
-                    code: 2328,
+                    code: 2322,
                     category: DiagnosticCategory.Error,
-                    text: "Types of parameters 'x' and 'x' are incompatible.",
-                    messageChain: [{
-                        fileName: "/src/index.ts",
-                        ...assignRange,
-                        code: 2322,
-                        category: DiagnosticCategory.Error,
-                        text: "Type 'string' is not assignable to type 'number'.",
-                    }],
+                    text: "Type 'string' is not assignable to type 'number'.",
                 }],
-                relatedInformation: [{
-                    fileName: "/src/index.ts",
-                    ...declRange,
-                    code: 6500,
-                    category: DiagnosticCategory.Message,
-                    text: "The expected type comes from property 'callback' which is declared here on type 'Props'",
-                }],
-            }]);
-        }
-        finally {
-            await api.close();
-        }
+            }],
+            relatedInformation: [{
+                fileName: "/src/index.ts",
+                ...declRange,
+                code: 6500,
+                category: DiagnosticCategory.Message,
+                text: "The expected type comes from property 'callback' which is declared here on type 'Props'",
+            }],
+        }]);
     });
 
     test("getSuggestionDiagnostics", async () => {
         const source = `export function f() { const x = 1; return x; }\nconst _unused = 1;\n`;
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": "{}",
             "/src/index.ts": source,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const diags = await project.program.getSuggestionDiagnostics("/src/index.ts");
-            assert.deepEqual(withoutFormattingContext(diags), [{
-                fileName: "/src/index.ts",
-                ...rangeOf(source, "_unused"),
-                code: 6133,
-                category: DiagnosticCategory.Suggestion,
-                text: "'_unused' is declared but its value is never read.",
-                reportsUnnecessary: true,
-            }]);
-        }
-        finally {
-            await api.close();
-        }
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const diags = await project.program.getSuggestionDiagnostics("/src/index.ts");
+        assert.deepEqual(withoutFormattingContext(diags), [{
+            fileName: "/src/index.ts",
+            ...rangeOf(source, "_unused"),
+            code: 6133,
+            category: DiagnosticCategory.Suggestion,
+            text: "'_unused' is declared but its value is never read.",
+            reportsUnnecessary: true,
+        }]);
     });
 
     test("getConfigFileParsingDiagnostics", async () => {
         const config = `{ "compilerOptions": { "target": "invalid" } }`;
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": config,
             "/src/index.ts": `export const x = 1;`,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const diags = await project.program.getConfigFileParsingDiagnostics();
-            assert.deepEqual(withoutFormattingContext(diags), [{
-                fileName: "/tsconfig.json",
-                ...rangeOf(config, `"invalid"`),
-                code: 6046,
-                category: DiagnosticCategory.Error,
-                text: "Argument for '--target' option must be: 'es6', 'es2015', 'es2016', 'es2017', 'es2018', 'es2019', 'es2020', 'es2021', 'es2022', 'es2023', 'es2024', 'es2025', 'esnext'.",
-            }]);
-        }
-        finally {
-            await api.close();
-        }
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const diags = await project.program.getConfigFileParsingDiagnostics();
+        assert.deepEqual(withoutFormattingContext(diags), [{
+            fileName: "/tsconfig.json",
+            ...rangeOf(config, `"invalid"`),
+            code: 6046,
+            category: DiagnosticCategory.Error,
+            text: "Argument for '--target' option must be: 'es6', 'es2015', 'es2016', 'es2017', 'es2018', 'es2019', 'es2020', 'es2021', 'es2022', 'es2023', 'es2024', 'es2025', 'esnext'.",
+        }]);
     });
 
     test("getConfigFileNames and getConfigSourceFile", async () => {
         const baseConfigText = `{ "compilerOptions": { "strict": true } }`;
-        const { api, fs } = spawnAPIWithFS({
+        const { api: disposableAPI, fs } = spawnAPIWithFS({
             "/tsconfig.base.json": baseConfigText,
             "/tsconfig.json": `{ "extends": "./tsconfig.base.json", "files": ["./src/index.ts"] }`,
             "/src/index.ts": `export const x = 1;`,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const names = await project.program.getConfigFileNames();
-            assert.deepEqual(names, ["/tsconfig.json", "/tsconfig.base.json"]);
+        await using api = disposableAPI;
 
-            const rootConfig = await project.program.getConfigSourceFile("/tsconfig.json");
-            assert.ok(rootConfig);
-            assert.equal(rootConfig.fileName, "/tsconfig.json");
-            assert.equal(await project.program.getSourceFile("/tsconfig.json"), undefined);
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const names = await project.program.getConfigFileNames();
+        assert.deepEqual(names, ["/tsconfig.json", "/tsconfig.base.json"]);
 
-            fs.writeFile!("/tsconfig.base.json", `{ "compilerOptions": { "strict": false } }`);
-            const extendedConfig = await project.program.getConfigSourceFile("/tsconfig.base.json");
-            assert.ok(extendedConfig);
-            assert.equal(extendedConfig.fileName, "/tsconfig.base.json");
-            assert.equal(extendedConfig.getFullText(), baseConfigText);
+        const rootConfig = await project.program.getConfigSourceFile("/tsconfig.json");
+        assert.ok(rootConfig);
+        assert.equal(rootConfig.fileName, "/tsconfig.json");
+        assert.equal(await project.program.getSourceFile("/tsconfig.json"), undefined);
 
-            const nonConfig = await project.program.getConfigSourceFile("/src/index.ts");
-            assert.equal(nonConfig, undefined);
-        }
-        finally {
-            await api.close();
-        }
+        fs.writeFile!("/tsconfig.base.json", `{ "compilerOptions": { "strict": false } }`);
+        const extendedConfig = await project.program.getConfigSourceFile("/tsconfig.base.json");
+        assert.ok(extendedConfig);
+        assert.equal(extendedConfig.fileName, "/tsconfig.base.json");
+        assert.equal(extendedConfig.getFullText(), baseConfigText);
+
+        const nonConfig = await project.program.getConfigSourceFile("/src/index.ts");
+        assert.equal(nonConfig, undefined);
     });
 
     test("getDeclarationDiagnostics", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": `{ "compilerOptions": { "declaration": true } }`,
             "/src/index.ts": `export const x: number = 1;`,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const diags = await project.program.getDeclarationDiagnostics("/src/index.ts");
-            assert.deepEqual(diags, []);
-        }
-        finally {
-            await api.close();
-        }
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const diags = await project.program.getDeclarationDiagnostics("/src/index.ts");
+        assert.deepEqual(diags, []);
     });
 
     test("getBindDiagnostics", async () => {
         const source = `let x = 1;\nlet x = 2;`;
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": "{}",
             "/src/index.ts": source,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const diags = await project.program.getBindDiagnostics("/src/index.ts");
-            assert.deepEqual(withoutFormattingContext(diags), [
-                {
-                    fileName: "/src/index.ts",
-                    ...rangeOf(source, "x", 0),
-                    code: 2451,
-                    category: DiagnosticCategory.Error,
-                    text: "Cannot redeclare block-scoped variable 'x'.",
-                },
-                {
-                    fileName: "/src/index.ts",
-                    ...rangeOf(source, "x", 1),
-                    code: 2451,
-                    category: DiagnosticCategory.Error,
-                    text: "Cannot redeclare block-scoped variable 'x'.",
-                },
-            ]);
-        }
-        finally {
-            await api.close();
-        }
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const diags = await project.program.getBindDiagnostics("/src/index.ts");
+        assert.deepEqual(withoutFormattingContext(diags), [
+            {
+                fileName: "/src/index.ts",
+                ...rangeOf(source, "x", 0),
+                code: 2451,
+                category: DiagnosticCategory.Error,
+                text: "Cannot redeclare block-scoped variable 'x'.",
+            },
+            {
+                fileName: "/src/index.ts",
+                ...rangeOf(source, "x", 1),
+                code: 2451,
+                category: DiagnosticCategory.Error,
+                text: "Cannot redeclare block-scoped variable 'x'.",
+            },
+        ]);
     });
 
     test("getProgramDiagnostics", async () => {
         const config = `{ "compilerOptions": { "moduleResolution": "bundler", "module": "nodenext" } }`;
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": config,
             "/src/index.ts": `export const x = 1;`,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const diags = await project.program.getProgramDiagnostics();
-            assert.deepEqual(withoutFormattingContext(diags), [
-                {
-                    fileName: "/tsconfig.json",
-                    ...rangeOf(config, `"bundler"`),
-                    code: 5095,
-                    category: DiagnosticCategory.Error,
-                    text: "Option 'bundler' can only be used when 'module' is set to 'preserve', 'commonjs', or 'es2015' or later.",
-                },
-                {
-                    fileName: "/tsconfig.json",
-                    ...rangeOf(config, `"bundler"`),
-                    code: 5109,
-                    category: DiagnosticCategory.Error,
-                    text: "Option 'moduleResolution' must be set to 'NodeNext' (or left unspecified) when option 'module' is set to 'NodeNext'.",
-                },
-            ]);
-        }
-        finally {
-            await api.close();
-        }
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const diags = await project.program.getProgramDiagnostics();
+        assert.deepEqual(withoutFormattingContext(diags), [
+            {
+                fileName: "/tsconfig.json",
+                ...rangeOf(config, `"bundler"`),
+                code: 5095,
+                category: DiagnosticCategory.Error,
+                text: "Option 'bundler' can only be used when 'module' is set to 'preserve', 'commonjs', or 'es2015' or later.",
+            },
+            {
+                fileName: "/tsconfig.json",
+                ...rangeOf(config, `"bundler"`),
+                code: 5109,
+                category: DiagnosticCategory.Error,
+                text: "Option 'moduleResolution' must be set to 'NodeNext' (or left unspecified) when option 'module' is set to 'NodeNext'.",
+            },
+        ]);
     });
 
     test("getGlobalDiagnostics", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": "{}",
             "/src/index.ts": `export const x = 1;`,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const diags = await project.program.getGlobalDiagnostics();
-            assert.deepEqual(diags, []);
-        }
-        finally {
-            await api.close();
-        }
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const diags = await project.program.getGlobalDiagnostics();
+        assert.deepEqual(diags, []);
     });
 
     test("getGlobalDiagnostics returns file-less diagnostics from the checker", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": `{ "compilerOptions": { "noLib": true } }`,
             "/src/index.ts": `export const x = [1, 2, 3];`,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const diags = await project.program.getGlobalDiagnostics();
-            // With noLib, the checker reports "Cannot find global type" diagnostics that
-            // are not associated with any source file.
-            assert.ok(diags.length > 0, "expected global diagnostics to be reported");
-            for (const diag of diags) {
-                assert.equal(diag.fileName, undefined);
-                assert.equal(diag.code, 2318);
-                assert.equal(diag.category, DiagnosticCategory.Error);
-            }
-            assert.ok(
-                diags.some(d => d.text === "Cannot find global type 'Array'."),
-                "expected a global diagnostic for the 'Array' type",
-            );
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const diags = await project.program.getGlobalDiagnostics();
+        // With noLib, the checker reports "Cannot find global type" diagnostics that
+        // are not associated with any source file.
+        assert.ok(diags.length > 0, "expected global diagnostics to be reported");
+        for (const diag of diags) {
+            assert.equal(diag.fileName, undefined);
+            assert.equal(diag.code, 2318);
+            assert.equal(diag.category, DiagnosticCategory.Error);
         }
-        finally {
-            await api.close();
-        }
+        assert.ok(
+            diags.some(d => d.text === "Cannot find global type 'Array'."),
+            "expected a global diagnostic for the 'Array' type",
+        );
     });
 
     test("getSyntacticDiagnostics with multiple files", async () => {
         const sourceA = `const a: = 1;`;
         const sourceB = `const b: = 2;`;
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": "{}",
             "/src/a.ts": sourceA,
             "/src/b.ts": sourceB,
             "/src/clean.ts": `const c = 3;`,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const diags = await project.program.getSyntacticDiagnostics(["/src/a.ts", "/src/b.ts"]);
-            assert.deepEqual(withoutFormattingContext(diags), [
-                {
-                    fileName: "/src/a.ts",
-                    ...rangeOf(sourceA, "="),
-                    code: 1110,
-                    category: DiagnosticCategory.Error,
-                    text: "Type expected.",
-                },
-                {
-                    fileName: "/src/b.ts",
-                    ...rangeOf(sourceB, "="),
-                    code: 1110,
-                    category: DiagnosticCategory.Error,
-                    text: "Type expected.",
-                },
-            ]);
-        }
-        finally {
-            await api.close();
-        }
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const diags = await project.program.getSyntacticDiagnostics(["/src/a.ts", "/src/b.ts"]);
+        assert.deepEqual(withoutFormattingContext(diags), [
+            {
+                fileName: "/src/a.ts",
+                ...rangeOf(sourceA, "="),
+                code: 1110,
+                category: DiagnosticCategory.Error,
+                text: "Type expected.",
+            },
+            {
+                fileName: "/src/b.ts",
+                ...rangeOf(sourceB, "="),
+                code: 1110,
+                category: DiagnosticCategory.Error,
+                text: "Type expected.",
+            },
+        ]);
     });
 
     test("getSemanticDiagnostics with multiple files", async () => {
         const sourceA = `export const a: number = "hello";`;
         const sourceB = `export const b: string = 42;`;
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": "{}",
             "/src/a.ts": sourceA,
             "/src/b.ts": sourceB,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const diags = await project.program.getSemanticDiagnostics(["/src/a.ts", "/src/b.ts"]);
-            assert.equal(diags.length, 2);
-            assert.equal(diags[0].fileName, "/src/a.ts");
-            assert.equal(diags[0].code, 2322);
-            assert.equal(diags[1].fileName, "/src/b.ts");
-            assert.equal(diags[1].code, 2322);
-        }
-        finally {
-            await api.close();
-        }
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const diags = await project.program.getSemanticDiagnostics(["/src/a.ts", "/src/b.ts"]);
+        assert.equal(diags.length, 2);
+        assert.equal(diags[0].fileName, "/src/a.ts");
+        assert.equal(diags[0].code, 2322);
+        assert.equal(diags[1].fileName, "/src/b.ts");
+        assert.equal(diags[1].code, 2322);
     });
 
     test("getBindDiagnostics with multiple files", async () => {
         const sourceA = `let x = 1;\nlet x = 2;`;
         const sourceB = `let y = 1;\nlet y = 2;`;
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": "{}",
             "/src/a.ts": sourceA,
             "/src/b.ts": sourceB,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const diags = await project.program.getBindDiagnostics(["/src/a.ts", "/src/b.ts"]);
-            assert.equal(diags.length, 4);
-            assert.equal(diags.filter(d => d.fileName === "/src/a.ts").length, 2);
-            assert.equal(diags.filter(d => d.fileName === "/src/b.ts").length, 2);
-        }
-        finally {
-            await api.close();
-        }
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const diags = await project.program.getBindDiagnostics(["/src/a.ts", "/src/b.ts"]);
+        assert.equal(diags.length, 4);
+        assert.equal(diags.filter(d => d.fileName === "/src/a.ts").length, 2);
+        assert.equal(diags.filter(d => d.fileName === "/src/b.ts").length, 2);
     });
 
     test("diagnostics with no files argument returns all", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": "{}",
             "/src/a.ts": `const a: = 1;`,
             "/src/b.ts": `const b: = 2;`,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const diags = await project.program.getSyntacticDiagnostics();
-            assert.equal(diags.length, 2);
-        }
-        finally {
-            await api.close();
-        }
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const diags = await project.program.getSyntacticDiagnostics();
+        assert.equal(diags.length, 2);
     });
 
     test("diagnostics with empty files array returns empty", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": "{}",
             "/src/a.ts": `const a: = 1;`,
             "/src/b.ts": `const b: = 2;`,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const diags = await project.program.getSyntacticDiagnostics([]);
-            assert.deepEqual(diags, []);
-        }
-        finally {
-            await api.close();
-        }
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const diags = await project.program.getSyntacticDiagnostics([]);
+        assert.deepEqual(diags, []);
     });
 });
 
 describe("getDefaultProjectForFile", () => {
     test("finds inferred project for d.ts in node_modules after openFiles", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
             "/src/index.ts": `export const x = 1;`,
             "/node_modules/my-lib/package.json": JSON.stringify({ name: "my-lib", types: "./index.d.ts" }),
             "/node_modules/my-lib/index.d.ts": `export declare const foo: string;`,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
 
-            // The d.ts is not imported, so it is not in the project's program
-            const dtsSf = await project.program.getSourceFile("/node_modules/my-lib/index.d.ts");
-            assert.equal(dtsSf, undefined, "d.ts not in import graph should not be found via project.program.getSourceFile");
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
 
-            // Before opening the file, getDefaultProjectForFile returns undefined (no error)
-            const noProject = await snapshot.getDefaultProjectForFile("/node_modules/my-lib/index.d.ts");
-            assert.equal(noProject, undefined, "getDefaultProjectForFile returns undefined for unloaded file");
+        // The d.ts is not imported, so it is not in the project's program
+        const dtsSf = await project.program.getSourceFile("/node_modules/my-lib/index.d.ts");
+        assert.equal(dtsSf, undefined, "d.ts not in import graph should not be found via project.program.getSourceFile");
 
-            // Load the file into the inferred project via updateSnapshot openFiles
-            const snapshot2 = await api.updateSnapshot({ openFiles: ["/node_modules/my-lib/index.d.ts"] });
-            const defaultProject = await snapshot2.getDefaultProjectForFile("/node_modules/my-lib/index.d.ts");
-            assert.ok(defaultProject, "getDefaultProjectForFile should find inferred project after openFiles");
+        // Before opening the file, getDefaultProjectForFile returns undefined (no error)
+        const noProject = await snapshot.getDefaultProjectForFile("/node_modules/my-lib/index.d.ts");
+        assert.equal(noProject, undefined, "getDefaultProjectForFile returns undefined for unloaded file");
 
-            const fooPos = `export declare const foo: string;`.indexOf("foo");
-            const fooType = await defaultProject.checker.getTypeAtPosition("/node_modules/my-lib/index.d.ts", fooPos);
-            assert.ok(fooType);
-            assert.ok(fooType.flags & TypeFlags.String);
-        }
-        finally {
-            await api.close();
-        }
+        // Load the file into the inferred project via updateSnapshot openFiles
+        const snapshot2 = await api.updateSnapshot({ openFiles: ["/node_modules/my-lib/index.d.ts"] });
+        const defaultProject = await snapshot2.getDefaultProjectForFile("/node_modules/my-lib/index.d.ts");
+        assert.ok(defaultProject, "getDefaultProjectForFile should find inferred project after openFiles");
+
+        const fooPos = `export declare const foo: string;`.indexOf("foo");
+        const fooType = await defaultProject.checker.getTypeAtPosition("/node_modules/my-lib/index.d.ts", fooPos);
+        assert.ok(fooType);
+        assert.ok(fooType.flags & TypeFlags.String);
     });
 
     test("inferred project reflects file changes without a follow-up open/close request", async () => {
-        const { api, fs } = spawnAPIWithFS({
+        const { api: disposableAPI, fs } = spawnAPIWithFS({
             "/loose.ts": `export const foo = 1;`,
         });
-        try {
-            const snapshot1 = await api.updateSnapshot({ openFiles: ["/loose.ts"] });
-            const project1 = await snapshot1.getDefaultProjectForFile("/loose.ts");
-            assert.ok(project1, "file with no config file in its ancestry should load into the inferred project");
-            const sf1 = await project1.program.getSourceFile("/loose.ts");
-            assert.ok(sf1);
-            assert.equal(sf1.text, `export const foo = 1;`);
+        await using api = disposableAPI;
 
-            // Mutate the file and notify only via fileChanges — no follow-up openFiles/closeFiles.
-            fs.writeFile!("/loose.ts", `export const foo = 2;`);
-            const snapshot2 = await api.updateSnapshot({
-                fileChanges: { changed: ["/loose.ts"] },
-            });
+        const snapshot1 = await api.updateSnapshot({ openFiles: ["/loose.ts"] });
+        const project1 = await snapshot1.getDefaultProjectForFile("/loose.ts");
+        assert.ok(project1, "file with no config file in its ancestry should load into the inferred project");
+        const sf1 = await project1.program.getSourceFile("/loose.ts");
+        assert.ok(sf1);
+        assert.equal(sf1.text, `export const foo = 1;`);
 
-            const project2 = await snapshot2.getDefaultProjectForFile("/loose.ts");
-            assert.ok(project2);
-            const sf2 = await project2.program.getSourceFile("/loose.ts");
-            assert.ok(sf2);
-            assert.equal(
-                sf2.text,
-                `export const foo = 2;`,
-                "inferred project's program should reflect the file change even without a follow-up open/close request",
-            );
-        }
-        finally {
-            await api.close();
-        }
+        // Mutate the file and notify only via fileChanges — no follow-up openFiles/closeFiles.
+        fs.writeFile!("/loose.ts", `export const foo = 2;`);
+        const snapshot2 = await api.updateSnapshot({
+            fileChanges: { changed: ["/loose.ts"] },
+        });
+
+        const project2 = await snapshot2.getDefaultProjectForFile("/loose.ts");
+        assert.ok(project2);
+        const sf2 = await project2.program.getSourceFile("/loose.ts");
+        assert.ok(sf2);
+        assert.equal(
+            sf2.text,
+            `export const foo = 2;`,
+            "inferred project's program should reflect the file change even without a follow-up open/close request",
+        );
     });
 
     test("keeps previously opened files open across subsequent openFiles calls", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
             "/src/index.ts": `export const x = 1;`,
             "/node_modules/my-lib/package.json": JSON.stringify({ name: "my-lib", types: "./index.d.ts" }),
@@ -6905,91 +5968,75 @@ describe("getDefaultProjectForFile", () => {
             "/node_modules/other-lib/package.json": JSON.stringify({ name: "other-lib", types: "./index.d.ts" }),
             "/node_modules/other-lib/index.d.ts": `export declare const bar: number;`,
         });
-        try {
-            await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            await api.updateSnapshot({ openFiles: ["/node_modules/my-lib/index.d.ts"] });
 
-            // Opening a second file in a later snapshot must not close the first one.
-            const snapshot = await api.updateSnapshot({ openFiles: ["/node_modules/other-lib/index.d.ts"] });
+        await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        await api.updateSnapshot({ openFiles: ["/node_modules/my-lib/index.d.ts"] });
 
-            const firstProject = await snapshot.getDefaultProjectForFile("/node_modules/my-lib/index.d.ts");
-            assert.ok(firstProject, "previously opened file should remain in the inferred project");
-            const secondProject = await snapshot.getDefaultProjectForFile("/node_modules/other-lib/index.d.ts");
-            assert.ok(secondProject, "newly opened file should be in the inferred project");
-        }
-        finally {
-            await api.close();
-        }
+        // Opening a second file in a later snapshot must not close the first one.
+        const snapshot = await api.updateSnapshot({ openFiles: ["/node_modules/other-lib/index.d.ts"] });
+
+        const firstProject = await snapshot.getDefaultProjectForFile("/node_modules/my-lib/index.d.ts");
+        assert.ok(firstProject, "previously opened file should remain in the inferred project");
+        const secondProject = await snapshot.getDefaultProjectForFile("/node_modules/other-lib/index.d.ts");
+        assert.ok(secondProject, "newly opened file should be in the inferred project");
     });
 
     test("opening a file resolves to a configured project via ancestor search", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
             "/src/index.ts": `export const x = 1;`,
         });
-        try {
-            // Open the file without first opening the project. Like LSP's didOpen, this
-            // should search ancestor directories for a tsconfig that contains the file.
-            const snapshot = await api.updateSnapshot({ openFiles: ["/src/index.ts"] });
-            const defaultProject = await snapshot.getDefaultProjectForFile("/src/index.ts");
-            assert.ok(defaultProject, "should find a project for the opened file");
-            assert.equal(
-                defaultProject.configFileName,
-                "/tsconfig.json",
-                "opened file should resolve to the containing configured project, not the inferred project",
-            );
-        }
-        finally {
-            await api.close();
-        }
+
+        // Open the file without first opening the project. Like LSP's didOpen, this
+        // should search ancestor directories for a tsconfig that contains the file.
+        const snapshot = await api.updateSnapshot({ openFiles: ["/src/index.ts"] });
+        const defaultProject = await snapshot.getDefaultProjectForFile("/src/index.ts");
+        assert.ok(defaultProject, "should find a project for the opened file");
+        assert.equal(
+            defaultProject.configFileName,
+            "/tsconfig.json",
+            "opened file should resolve to the containing configured project, not the inferred project",
+        );
     });
 
     test("closeProjects releases a project opened via openProjects", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
             "/src/index.ts": `export const x = 1;`,
         });
-        try {
-            const opened = await api.updateSnapshot({ openProjects: ["/tsconfig.json"] });
-            assert.ok(opened.getProject("/tsconfig.json"), "project should be open after openProjects");
 
-            const closed = await api.updateSnapshot({ closeProjects: ["/tsconfig.json"] });
-            assert.equal(
-                closed.getProject("/tsconfig.json"),
-                undefined,
-                "project should be unloaded after closeProjects",
-            );
-        }
-        finally {
-            await api.close();
-        }
+        const opened = await api.updateSnapshot({ openProjects: ["/tsconfig.json"] });
+        assert.ok(opened.getProject("/tsconfig.json"), "project should be open after openProjects");
+
+        const closed = await api.updateSnapshot({ closeProjects: ["/tsconfig.json"] });
+        assert.equal(
+            closed.getProject("/tsconfig.json"),
+            undefined,
+            "project should be unloaded after closeProjects",
+        );
     });
 
     test("closeFiles releases a file opened via openFiles", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
             "/src/index.ts": `export const x = 1;`,
             "/node_modules/my-lib/package.json": JSON.stringify({ name: "my-lib", types: "./index.d.ts" }),
             "/node_modules/my-lib/index.d.ts": `export declare const foo: string;`,
         });
-        try {
-            await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const opened = await api.updateSnapshot({ openFiles: ["/node_modules/my-lib/index.d.ts"] });
-            assert.ok(
-                await opened.getDefaultProjectForFile("/node_modules/my-lib/index.d.ts"),
-                "file should resolve to a project after openFiles",
-            );
 
-            const closed = await api.updateSnapshot({ closeFiles: ["/node_modules/my-lib/index.d.ts"] });
-            assert.equal(
-                await closed.getDefaultProjectForFile("/node_modules/my-lib/index.d.ts"),
-                undefined,
-                "file should no longer resolve to a project after closeFiles",
-            );
-        }
-        finally {
-            await api.close();
-        }
+        await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const opened = await api.updateSnapshot({ openFiles: ["/node_modules/my-lib/index.d.ts"] });
+        assert.ok(
+            await opened.getDefaultProjectForFile("/node_modules/my-lib/index.d.ts"),
+            "file should resolve to a project after openFiles",
+        );
+
+        const closed = await api.updateSnapshot({ closeFiles: ["/node_modules/my-lib/index.d.ts"] });
+        assert.equal(
+            await closed.getDefaultProjectForFile("/node_modules/my-lib/index.d.ts"),
+            undefined,
+            "file should no longer resolve to a project after closeFiles",
+        );
     });
 });
 
@@ -7008,129 +6055,111 @@ describe("Program - emit", () => {
     test("emit all files", async () => {
         const fs = createVirtualFileSystem({ ...files });
 
-        const api = new API({
+        await using api = new API({
             cwd: fileURLToPath(new URL("../../../../", import.meta.url).toString()),
             fs: fs,
         });
 
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const result = await project.program.emit();
-            assert.deepEqual(result, {
-                diagnostics: [],
-                emitSkipped: false,
-                emittedFiles: [
-                    "/dist/src/index.js",
-                    "/dist/src/index.d.ts",
-                    "/dist/src/testing.js",
-                    "/dist/src/testing.d.ts",
-                ],
-            });
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const result = await project.program.emit();
+        assert.deepEqual(result, {
+            diagnostics: [],
+            emitSkipped: false,
+            emittedFiles: [
+                "/dist/src/index.js",
+                "/dist/src/index.d.ts",
+                "/dist/src/testing.js",
+                "/dist/src/testing.d.ts",
+            ],
+        });
 
-            const js = fs.readFile?.("/dist/src/index.js");
-            const dts = fs.readFile?.("/dist/src/index.d.ts");
-            const js2 = fs.readFile?.("/dist/src/testing.js");
-            const dts2 = fs.readFile?.("/dist/src/testing.d.ts");
-            assert.strictEqual(js, `export const x = 1;\n`);
-            assert.strictEqual(dts, `export declare const x: number;\n`);
-            assert.strictEqual(js2, `export const y = 'typescript';\n`);
-            assert.strictEqual(dts2, `export declare const y: string;\n`);
-        }
-        finally {
-            await api.close();
-        }
+        const js = fs.readFile?.("/dist/src/index.js");
+        const dts = fs.readFile?.("/dist/src/index.d.ts");
+        const js2 = fs.readFile?.("/dist/src/testing.js");
+        const dts2 = fs.readFile?.("/dist/src/testing.d.ts");
+        assert.strictEqual(js, `export const x = 1;\n`);
+        assert.strictEqual(dts, `export declare const x: number;\n`);
+        assert.strictEqual(js2, `export const y = 'typescript';\n`);
+        assert.strictEqual(dts2, `export declare const y: string;\n`);
     });
 
     test("emit only dts", async () => {
         const fs = createVirtualFileSystem({ ...files });
 
-        const api = new API({
+        await using api = new API({
             cwd: fileURLToPath(new URL("../../../../", import.meta.url).toString()),
             fs: fs,
         });
 
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const result = await project.program.emit(EmitOnly.OnlyDts);
-            assert.deepEqual(result, {
-                diagnostics: [],
-                emitSkipped: false,
-                emittedFiles: [
-                    "/dist/src/index.d.ts",
-                    "/dist/src/testing.d.ts",
-                ],
-            });
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const result = await project.program.emit(EmitOnly.OnlyDts);
+        assert.deepEqual(result, {
+            diagnostics: [],
+            emitSkipped: false,
+            emittedFiles: [
+                "/dist/src/index.d.ts",
+                "/dist/src/testing.d.ts",
+            ],
+        });
 
-            const js = fs.readFile?.("/dist/src/index.js");
-            const dts = fs.readFile?.("/dist/src/index.d.ts");
-            const js2 = fs.readFile?.("/dist/src/testing.js");
-            const dts2 = fs.readFile?.("/dist/src/testing.d.ts");
-            assert.strictEqual(js, undefined);
-            assert.strictEqual(dts, `export declare const x: number;\n`);
-            assert.strictEqual(js2, undefined);
-            assert.strictEqual(dts2, `export declare const y: string;\n`);
-        }
-        finally {
-            await api.close();
-        }
+        const js = fs.readFile?.("/dist/src/index.js");
+        const dts = fs.readFile?.("/dist/src/index.d.ts");
+        const js2 = fs.readFile?.("/dist/src/testing.js");
+        const dts2 = fs.readFile?.("/dist/src/testing.d.ts");
+        assert.strictEqual(js, undefined);
+        assert.strictEqual(dts, `export declare const x: number;\n`);
+        assert.strictEqual(js2, undefined);
+        assert.strictEqual(dts2, `export declare const y: string;\n`);
     });
 
     test("emit only js", async () => {
         const fs = createVirtualFileSystem({ ...files });
 
-        const api = new API({
+        await using api = new API({
             cwd: fileURLToPath(new URL("../../../../", import.meta.url).toString()),
             fs: fs,
         });
 
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const result = await project.program.emit(EmitOnly.OnlyJs);
-            assert.deepEqual(result, {
-                diagnostics: [],
-                emitSkipped: false,
-                emittedFiles: [
-                    "/dist/src/index.js",
-                    "/dist/src/testing.js",
-                ],
-            });
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const result = await project.program.emit(EmitOnly.OnlyJs);
+        assert.deepEqual(result, {
+            diagnostics: [],
+            emitSkipped: false,
+            emittedFiles: [
+                "/dist/src/index.js",
+                "/dist/src/testing.js",
+            ],
+        });
 
-            const js = fs.readFile?.("/dist/src/index.js");
-            const dts = fs.readFile?.("/dist/src/index.d.ts");
-            const js2 = fs.readFile?.("/dist/src/testing.js");
-            const dts2 = fs.readFile?.("/dist/src/testing.d.ts");
-            assert.strictEqual(js, `export const x = 1;\n`);
-            assert.strictEqual(dts, undefined);
-            assert.strictEqual(js2, `export const y = 'typescript';\n`);
-            assert.strictEqual(dts2, undefined);
-        }
-        finally {
-            await api.close();
-        }
+        const js = fs.readFile?.("/dist/src/index.js");
+        const dts = fs.readFile?.("/dist/src/index.d.ts");
+        const js2 = fs.readFile?.("/dist/src/testing.js");
+        const dts2 = fs.readFile?.("/dist/src/testing.d.ts");
+        assert.strictEqual(js, `export const x = 1;\n`);
+        assert.strictEqual(dts, undefined);
+        assert.strictEqual(js2, `export const y = 'typescript';\n`);
+        assert.strictEqual(dts2, undefined);
     });
 
     test("emitToString emits the whole program and respects emitOnly", async () => {
-        const { api, fs } = spawnAPIWithFS({ ...files });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const result = await project.program.emitToString(EmitOnly.OnlyDts);
-            assert.deepEqual([...result.outputFiles.keys()], [
-                "/dist/src/index.d.ts",
-                "/dist/src/testing.d.ts",
-            ]);
-            assert.equal(fs.readFile?.("/dist/src/index.js"), undefined);
-        }
-        finally {
-            await api.close();
-        }
+        const { api: disposableAPI, fs } = spawnAPIWithFS({ ...files });
+        await using api = disposableAPI;
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const result = await project.program.emitToString(EmitOnly.OnlyDts);
+        assert.deepEqual([...result.outputFiles.keys()], [
+            "/dist/src/index.d.ts",
+            "/dist/src/testing.d.ts",
+        ]);
+        assert.equal(fs.readFile?.("/dist/src/index.js"), undefined);
     });
 
     test("whole-program emit includes option-controlled maps", async () => {
-        const { api, fs } = spawnAPIWithFS({
+        const { api: disposableAPI, fs } = spawnAPIWithFS({
             "/tsconfig.json": JSON.stringify({
                 compilerOptions: {
                     declaration: true,
@@ -7141,42 +6170,39 @@ describe("Program - emit", () => {
             }),
             "/src/index.ts": "export const value: number = 1;",
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
+        await using api = disposableAPI;
 
-            const result = await project.program.emit();
-            assert.deepEqual(
-                new Set(result.emittedFiles),
-                new Set([
-                    "/dist/src/index.js",
-                    "/dist/src/index.js.map",
-                    "/dist/src/index.d.ts",
-                    "/dist/src/index.d.ts.map",
-                ]),
-            );
-            assert.ok(fs.fileExists?.("/dist/src/index.js.map"));
-            assert.ok(fs.fileExists?.("/dist/src/index.d.ts.map"));
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
 
-            const js = await project.program.emitToString(EmitOnly.OnlyJs);
-            assert.deepEqual([...js.outputFiles.keys()], [
+        const result = await project.program.emit();
+        assert.deepEqual(
+            new Set(result.emittedFiles),
+            new Set([
                 "/dist/src/index.js",
                 "/dist/src/index.js.map",
-            ]);
-
-            const dts = await project.program.emitToString(EmitOnly.OnlyDts);
-            assert.deepEqual([...dts.outputFiles.keys()], [
                 "/dist/src/index.d.ts",
                 "/dist/src/index.d.ts.map",
-            ]);
-        }
-        finally {
-            await api.close();
-        }
+            ]),
+        );
+        assert.ok(fs.fileExists?.("/dist/src/index.js.map"));
+        assert.ok(fs.fileExists?.("/dist/src/index.d.ts.map"));
+
+        const js = await project.program.emitToString(EmitOnly.OnlyJs);
+        assert.deepEqual([...js.outputFiles.keys()], [
+            "/dist/src/index.js",
+            "/dist/src/index.js.map",
+        ]);
+
+        const dts = await project.program.emitToString(EmitOnly.OnlyDts);
+        assert.deepEqual([...dts.outputFiles.keys()], [
+            "/dist/src/index.d.ts",
+            "/dist/src/index.d.ts.map",
+        ]);
     });
 
     test("noEmitOnError reports diagnostics without writing output", async () => {
-        const { api, fs } = spawnAPIWithFS({
+        const { api: disposableAPI, fs } = spawnAPIWithFS({
             "/tsconfig.json": JSON.stringify({
                 compilerOptions: {
                     noEmitOnError: true,
@@ -7186,78 +6212,68 @@ describe("Program - emit", () => {
             "/src/bad.ts": "export const bad = ;",
             "/src/good.ts": "export const value = 1;",
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const result = await project.program.emit();
-            assert.equal(result.emitSkipped, true);
-            assert.ok(result.diagnostics.some(d => d.code === 1109));
-            assert.deepEqual(result.emittedFiles, []);
-            assert.equal(fs.readFile?.("/dist/src/bad.js"), undefined);
-            assert.equal(fs.readFile?.("/dist/src/good.js"), undefined);
+        await using api = disposableAPI;
 
-            const stringResult = await project.program.emitToString();
-            assert.equal(stringResult.emitSkipped, true);
-            assert.ok(stringResult.diagnostics.some(d => d.code === 1109));
-            assert.deepEqual(stringResult.outputFiles, new Map());
-        }
-        finally {
-            await api.close();
-        }
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const result = await project.program.emit();
+        assert.equal(result.emitSkipped, true);
+        assert.ok(result.diagnostics.some(d => d.code === 1109));
+        assert.deepEqual(result.emittedFiles, []);
+        assert.equal(fs.readFile?.("/dist/src/bad.js"), undefined);
+        assert.equal(fs.readFile?.("/dist/src/good.js"), undefined);
+
+        const stringResult = await project.program.emitToString();
+        assert.equal(stringResult.emitSkipped, true);
+        assert.ok(stringResult.diagnostics.some(d => d.code === 1109));
+        assert.deepEqual(stringResult.outputFiles, new Map());
     });
 
     test("emit and emitToString respect noEmit", async () => {
-        const { api, fs } = spawnAPIWithFS({
+        const { api: disposableAPI, fs } = spawnAPIWithFS({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { noEmit: true } }),
             "/src/index.ts": "export const value = 1;",
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            assert.deepEqual(await project.program.emit(), {
-                diagnostics: [],
-                emitSkipped: false,
-                emittedFiles: [],
-            });
-            assert.deepEqual(await project.program.emitToString(), {
-                diagnostics: [],
-                emitSkipped: false,
-                outputFiles: new Map(),
-            });
-            assert.equal(fs.readFile?.("/src/index.js"), undefined);
-        }
-        finally {
-            await api.close();
-        }
+        await using api = disposableAPI;
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        assert.deepEqual(await project.program.emit(), {
+            diagnostics: [],
+            emitSkipped: false,
+            emittedFiles: [],
+        });
+        assert.deepEqual(await project.program.emitToString(), {
+            diagnostics: [],
+            emitSkipped: false,
+            outputFiles: new Map(),
+        });
+        assert.equal(fs.readFile?.("/src/index.js"), undefined);
     });
 
     test("emit rejects unknown files and invalid emitOnly values", async () => {
-        const api = spawnAPI({ ...files });
+        await using api = spawnAPI({ ...files });
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+
+        let error: unknown;
         try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-
-            let error: unknown;
-            try {
-                await project.program.getJavaScriptEmit(["/src/missing.ts"]);
-            }
-            catch (e) {
-                error = e;
-            }
-            assert.match(String(error), /source file not found/);
-
-            error = undefined;
-            try {
-                await project.program.emitToString(3 as EmitOnly);
-            }
-            catch (e) {
-                error = e;
-            }
-            assert.match(String(error), /invalid emitOnly value/);
+            await project.program.getJavaScriptEmit(["/src/missing.ts"]);
         }
-        finally {
-            await api.close();
+        catch (e) {
+            error = e;
         }
+        assert.match(String(error), /source file not found/);
+
+        error = undefined;
+        try {
+            await project.program.emitToString(3 as EmitOnly);
+        }
+        catch (e) {
+            error = e;
+        }
+        assert.match(String(error), /invalid emitOnly value/);
     });
 
     // @sync-skip-block-start
@@ -7266,20 +6282,16 @@ describe("Program - emit", () => {
         fs.writeFile = () => {
             throw new Error("write failed");
         };
-        const api = new API({
+        await using api = new API({
             cwd: fileURLToPath(new URL("../../../../", import.meta.url).toString()),
             fs,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const result = await project.program.emit();
-            assert.deepEqual(result.emittedFiles, []);
-            assert.ok(result.diagnostics.some(d => d.text.includes("write failed")));
-        }
-        finally {
-            await api.close();
-        }
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const result = await project.program.emit();
+        assert.deepEqual(result.emittedFiles, []);
+        assert.ok(result.diagnostics.some(d => d.text.includes("write failed")));
     });
     // @sync-skip-block-end
 });
@@ -7290,192 +6302,176 @@ test("Benchmarks", async () => {
 
 describe("Timing", () => {
     test("collects combined client, server, and transport timing info", async () => {
-        const api = new API({
+        await using api = new API({
             cwd: fileURLToPath(new URL("../../../../", import.meta.url).toString()),
             fs: createVirtualFileSystem({ ...defaultFiles }),
             collectTiming: true,
         });
-        try {
-            // Baseline: enabled, but nothing measured yet.
-            let info = await api.getTimingInfo();
-            assert.equal(info.enabled, true);
-            assert.equal(info.totals.requestCount, 0);
-            assert.equal(info.recentRequests.length, 0);
 
-            // Exercise a JSON request and a binary source-file request.
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const sourceFile = await project.program.getSourceFile("/src/index.ts");
-            assert.ok(sourceFile);
+        // Baseline: enabled, but nothing measured yet.
+        let info = await api.getTimingInfo();
+        assert.equal(info.enabled, true);
+        assert.equal(info.totals.requestCount, 0);
+        assert.equal(info.recentRequests.length, 0);
 
-            // Client-side timing: round-trip latency and byte counts.
-            info = await api.getTimingInfo();
-            assert.ok(info.totals.requestCount >= 2, "expected at least two measured requests");
-            assert.ok(info.totals.bytesSent > 0);
-            assert.ok(info.totals.bytesReceived > 0);
-            assert.ok(info.totals.roundTripMs >= 0);
+        // Exercise a JSON request and a binary source-file request.
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const sourceFile = await project.program.getSourceFile("/src/index.ts");
+        assert.ok(sourceFile);
 
-            // Server-side timing is folded into the same snapshot.
-            assert.ok(info.totals.serverTimeMs >= 0);
-            assert.ok(info.totals.transportOverheadMs >= 0);
-            assert.equal(
-                info.totals.transportOverheadMs,
-                Math.max(0, info.totals.roundTripMs - info.totals.serverTimeMs),
-            );
+        // Client-side timing: round-trip latency and byte counts.
+        info = await api.getTimingInfo();
+        assert.ok(info.totals.requestCount >= 2, "expected at least two measured requests");
+        assert.ok(info.totals.bytesSent > 0);
+        assert.ok(info.totals.bytesReceived > 0);
+        assert.ok(info.totals.roundTripMs >= 0);
 
-            // The ring buffer retains at most the 5 most recent requests.
-            assert.ok(info.recentRequests.length > 0);
-            assert.ok(info.recentRequests.length <= 5);
-            assert.ok(info.recentRequests.length <= info.totals.requestCount);
+        // Server-side timing is folded into the same snapshot.
+        assert.ok(info.totals.serverTimeMs >= 0);
+        assert.ok(info.totals.transportOverheadMs >= 0);
+        assert.equal(
+            info.totals.transportOverheadMs,
+            Math.max(0, info.totals.roundTripMs - info.totals.serverTimeMs),
+        );
 
-            for (const r of info.recentRequests) {
-                assert.ok(r.roundTripMs >= 0);
-                assert.ok(r.bytesSent >= 0);
-                assert.ok(r.bytesReceived >= 0);
-                assert.ok(typeof r.method === "string" && r.method.length > 0);
-                assert.equal(typeof r.timestamp, "number");
-                // Transport overhead is present exactly when server time is.
-                assert.equal(r.transportOverheadMs === undefined, r.serverTimeMs === undefined);
-                if (r.serverTimeMs !== undefined) {
-                    assert.ok(r.serverTimeMs >= 0);
-                    assert.equal(r.transportOverheadMs, Math.max(0, r.roundTripMs - r.serverTimeMs));
-                }
+        // The ring buffer retains at most the 5 most recent requests.
+        assert.ok(info.recentRequests.length > 0);
+        assert.ok(info.recentRequests.length <= 5);
+        assert.ok(info.recentRequests.length <= info.totals.requestCount);
+
+        for (const r of info.recentRequests) {
+            assert.ok(r.roundTripMs >= 0);
+            assert.ok(r.bytesSent >= 0);
+            assert.ok(r.bytesReceived >= 0);
+            assert.ok(typeof r.method === "string" && r.method.length > 0);
+            assert.equal(typeof r.timestamp, "number");
+            // Transport overhead is present exactly when server time is.
+            assert.equal(r.transportOverheadMs === undefined, r.serverTimeMs === undefined);
+            if (r.serverTimeMs !== undefined) {
+                assert.ok(r.serverTimeMs >= 0);
+                assert.equal(r.transportOverheadMs, Math.max(0, r.roundTripMs - r.serverTimeMs));
             }
-
-            // Server processing time is folded in for the recent requests.
-            assert.ok(info.recentRequests.every(r => r.serverTimeMs !== undefined), "server time should be reported");
-
-            // Reset clears totals and history on both client and server.
-            await api.resetTimingInfo();
-            info = await api.getTimingInfo();
-            assert.equal(info.enabled, true);
-            assert.equal(info.totals.requestCount, 0);
-            assert.equal(info.totals.serverTimeMs, 0);
-            assert.equal(info.totals.transportOverheadMs, 0);
-            assert.equal(info.recentRequests.length, 0);
         }
-        finally {
-            await api.close();
-        }
+
+        // Server processing time is folded in for the recent requests.
+        assert.ok(info.recentRequests.every(r => r.serverTimeMs !== undefined), "server time should be reported");
+
+        // Reset clears totals and history on both client and server.
+        await api.resetTimingInfo();
+        info = await api.getTimingInfo();
+        assert.equal(info.enabled, true);
+        assert.equal(info.totals.requestCount, 0);
+        assert.equal(info.totals.serverTimeMs, 0);
+        assert.equal(info.totals.transportOverheadMs, 0);
+        assert.equal(info.recentRequests.length, 0);
     });
 
     test("tracks source-file node materialization", async () => {
-        const api = new API({
+        await using api = new API({
             cwd: fileURLToPath(new URL("../../../../", import.meta.url).toString()),
             fs: createVirtualFileSystem({ ...defaultFiles }),
             collectTiming: true,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
-            const sourceFile = await project.program.getSourceFile("/src/index.ts");
-            assert.ok(sourceFile);
 
-            // The source file node itself is pre-cached, so before walking the
-            // tree no descendant nodes have been materialized.
-            let info = await api.getTimingInfo();
-            const before = info.totals.nodesMaterialized;
-            assert.equal(info.totals.sourceFilesFetched, 1, "one source file was fetched");
-            assert.ok(info.totals.nodesFetched > 0, "the fetched file contributes materializable nodes");
-            assert.equal(info.totals.nodesMaterialized, 0, "nothing walked yet, so no nodes materialized");
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const sourceFile = await project.program.getSourceFile("/src/index.ts");
+        assert.ok(sourceFile);
 
-            // Walk the whole tree to force lazy materialization of every node.
-            let visited = 0;
-            sourceFile.forEachChild(function visit(node) {
-                visited++;
-                node.forEachChild(visit);
-            });
-            assert.ok(visited > 0, "expected to visit at least one node");
+        // The source file node itself is pre-cached, so before walking the
+        // tree no descendant nodes have been materialized.
+        let info = await api.getTimingInfo();
+        const before = info.totals.nodesMaterialized;
+        assert.equal(info.totals.sourceFilesFetched, 1, "one source file was fetched");
+        assert.ok(info.totals.nodesFetched > 0, "the fetched file contributes materializable nodes");
+        assert.equal(info.totals.nodesMaterialized, 0, "nothing walked yet, so no nodes materialized");
 
-            info = await api.getTimingInfo();
-            assert.ok(
-                info.totals.nodesMaterialized > before,
-                "walking the tree should materialize nodes",
-            );
-            assert.ok(
-                info.totals.nodesMaterialized >= visited,
-                "every visited node should have been materialized",
-            );
+        // Walk the whole tree to force lazy materialization of every node.
+        let visited = 0;
+        sourceFile.forEachChild(function visit(node) {
+            visited++;
+            node.forEachChild(visit);
+        });
+        assert.ok(visited > 0, "expected to visit at least one node");
 
-            // A full walk materializes (nearly) every fetched node, so the share
-            // of fetched nodes materialized should be substantial.
-            assert.equal(info.totals.sourceFilesFetched, 1);
-            assert.ok(
-                info.totals.nodesMaterialized > 0
-                    && info.totals.nodesMaterialized <= info.totals.nodesFetched,
-                "materialized nodes should be in (0, nodesFetched]",
-            );
+        info = await api.getTimingInfo();
+        assert.ok(
+            info.totals.nodesMaterialized > before,
+            "walking the tree should materialize nodes",
+        );
+        assert.ok(
+            info.totals.nodesMaterialized >= visited,
+            "every visited node should have been materialized",
+        );
 
-            // Reset clears materialization totals along with the rest.
-            await api.resetTimingInfo();
-            info = await api.getTimingInfo();
-            assert.equal(info.totals.nodesMaterialized, 0);
-            assert.equal(info.totals.sourceFilesFetched, 0);
-            assert.equal(info.totals.nodesFetched, 0);
-        }
-        finally {
-            await api.close();
-        }
+        // A full walk materializes (nearly) every fetched node, so the share
+        // of fetched nodes materialized should be substantial.
+        assert.equal(info.totals.sourceFilesFetched, 1);
+        assert.ok(
+            info.totals.nodesMaterialized > 0
+                && info.totals.nodesMaterialized <= info.totals.nodesFetched,
+            "materialized nodes should be in (0, nodesFetched]",
+        );
+
+        // Reset clears materialization totals along with the rest.
+        await api.resetTimingInfo();
+        info = await api.getTimingInfo();
+        assert.equal(info.totals.nodesMaterialized, 0);
+        assert.equal(info.totals.sourceFilesFetched, 0);
+        assert.equal(info.totals.nodesFetched, 0);
     });
 
     test("is disabled by default", async () => {
-        const api = spawnAPI();
-        try {
-            await api.parseConfigFile("/tsconfig.json");
-            const info = await api.getTimingInfo();
-            assert.equal(info.enabled, false);
-            assert.equal(info.totals.requestCount, 0);
-            assert.equal(info.totals.nodesMaterialized, 0);
-            assert.equal(info.totals.sourceFilesFetched, 0);
-            assert.equal(info.totals.nodesFetched, 0);
-            assert.equal(info.recentRequests.length, 0);
-        }
-        finally {
-            await api.close();
-        }
+        await using api = spawnAPI();
+
+        await api.parseConfigFile("/tsconfig.json");
+        const info = await api.getTimingInfo();
+        assert.equal(info.enabled, false);
+        assert.equal(info.totals.requestCount, 0);
+        assert.equal(info.totals.nodesMaterialized, 0);
+        assert.equal(info.totals.sourceFilesFetched, 0);
+        assert.equal(info.totals.nodesFetched, 0);
+        assert.equal(info.recentRequests.length, 0);
     });
 });
 
 describe("runWithTemporaryFileUpdate", () => {
     test("temporary file update is visible in the callback and reverted afterward", async () => {
-        const api = spawnAPI({
+        await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
             "/src/index.ts": `export const x: number = 1;`,
         });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const project = snapshot.getProject("/tsconfig.json")!;
 
-            // The original content type-checks cleanly.
-            const baseDiags = await project.program.getSemanticDiagnostics("/src/index.ts");
-            assert.equal(baseDiags.length, 0);
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
 
-            // Keep a newer snapshot active to verify any active snapshot can be the base.
-            const latestSnapshot = await api.updateSnapshot();
-            assert.notEqual(latestSnapshot.id, snapshot.id);
+        // The original content type-checks cleanly.
+        const baseDiags = await project.program.getSemanticDiagnostics("/src/index.ts");
+        assert.equal(baseDiags.length, 0);
 
-            // Inside the callback, the file has the temporary (erroneous) content.
-            let errorCount = -1;
-            await api.runWithTemporaryFileUpdate(snapshot, "/src/index.ts", `export const x: string = 1;`, async tempSnapshot => {
-                const tempProject = tempSnapshot.getProject("/tsconfig.json")!;
-                const diags = await tempProject.program.getSemanticDiagnostics("/src/index.ts");
-                errorCount = diags.length;
-            });
-            assert.ok(errorCount > 0, "temporary content should produce a semantic error inside the callback");
+        // Keep a newer snapshot active to verify any active snapshot can be the base.
+        const latestSnapshot = await api.updateSnapshot();
+        assert.notEqual(latestSnapshot.id, snapshot.id);
 
-            // The original snapshot is unaffected by the temporary update.
-            const afterDiags = await project.program.getSemanticDiagnostics("/src/index.ts");
-            assert.equal(afterDiags.length, 0);
+        // Inside the callback, the file has the temporary (erroneous) content.
+        let errorCount = -1;
+        await api.runWithTemporaryFileUpdate(snapshot, "/src/index.ts", `export const x: string = 1;`, async tempSnapshot => {
+            const tempProject = tempSnapshot.getProject("/tsconfig.json")!;
+            const diags = await tempProject.program.getSemanticDiagnostics("/src/index.ts");
+            errorCount = diags.length;
+        });
+        assert.ok(errorCount > 0, "temporary content should produce a semantic error inside the callback");
 
-            // Subsequent regular updates still work and diff against the real latest snapshot.
-            const snapshot2 = await api.updateSnapshot();
-            const project2 = snapshot2.getProject("/tsconfig.json")!;
-            const diags2 = await project2.program.getSemanticDiagnostics("/src/index.ts");
-            assert.equal(diags2.length, 0);
-        }
-        finally {
-            await api.close();
-        }
+        // The original snapshot is unaffected by the temporary update.
+        const afterDiags = await project.program.getSemanticDiagnostics("/src/index.ts");
+        assert.equal(afterDiags.length, 0);
+
+        // Subsequent regular updates still work and diff against the real latest snapshot.
+        const snapshot2 = await api.updateSnapshot();
+        const project2 = snapshot2.getProject("/tsconfig.json")!;
+        const diags2 = await project2.program.getSemanticDiagnostics("/src/index.ts");
+        assert.equal(diags2.length, 0);
     });
 });
 
