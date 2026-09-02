@@ -10365,7 +10365,9 @@ func (c *Checker) contextuallyCheckFunctionExpressionOrObjectLiteralMethod(node 
 				}
 			}
 			if contextualSignature != nil && c.getReturnTypeFromAnnotation(node) == nil && signature.resolvedReturnType == nil {
-				returnType := c.getReturnTypeFromBody(node, checkMode)
+				// resolvedReturnType is cached indefinitely, so the return type here has to be computed without CheckModeSkipContextSensitive;
+				// otherwise anyFunctionType could leak as part of the computed (and cached) return type.
+				returnType := c.getReturnTypeFromBody(node, checkMode&^CheckModeSkipContextSensitive)
 				if signature.resolvedReturnType == nil {
 					signature.resolvedReturnType = returnType
 				}
