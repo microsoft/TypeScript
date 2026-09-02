@@ -279,11 +279,11 @@ func addReferencedFilesFromImportLiteral(file *ast.SourceFile, referencedFiles *
 }
 
 // Gets the path to reference file from file name, it could be resolvedPath if present otherwise path
-func addReferencedFileFromFileName(program *compiler.Program, fileName string, referencedFiles *collections.Set[tspath.Path], sourceFileDirectory string) {
+func addReferencedFileFromFileName(program *compiler.Program, fileName string, referencedFiles *collections.Set[tspath.Path]) {
 	if redirect := program.GetParseFileRedirect(fileName); redirect != "" {
 		referencedFiles.Add(tspath.ToPath(redirect, program.GetCurrentDirectory(), program.UseCaseSensitiveFileNames()))
 	} else {
-		referencedFiles.Add(tspath.ToPath(fileName, sourceFileDirectory, program.UseCaseSensitiveFileNames()))
+		referencedFiles.Add(tspath.ToPath(fileName, program.GetCurrentDirectory(), program.UseCaseSensitiveFileNames()))
 	}
 }
 
@@ -303,14 +303,18 @@ func getReferencedFiles(program *compiler.Program, file *ast.SourceFile) *collec
 	sourceFileDirectory := tspath.GetDirectoryPath(file.FileName())
 	// Handle triple slash references
 	for _, referencedFile := range file.ReferencedFiles {
-		addReferencedFileFromFileName(program, referencedFile.FileName, &referencedFiles, sourceFileDirectory)
+		addReferencedFileFromFileName(
+			program,
+			tspath.GetNormalizedAbsolutePath(referencedFile.FileName, sourceFileDirectory),
+			&referencedFiles,
+		)
 	}
 
 	// Handle type reference directives
 	if typeRefsInFile, ok := program.GetResolvedTypeReferenceDirectives()[file.Path()]; ok {
 		for _, typeRef := range typeRefsInFile {
 			if typeRef.ResolvedFileName != "" {
-				addReferencedFileFromFileName(program, typeRef.ResolvedFileName, &referencedFiles, sourceFileDirectory)
+				addReferencedFileFromFileName(program, typeRef.ResolvedFileName, &referencedFiles)
 			}
 		}
 	}
