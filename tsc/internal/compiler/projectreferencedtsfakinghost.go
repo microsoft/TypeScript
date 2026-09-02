@@ -175,7 +175,13 @@ func (fs *projectReferenceDtsFakingVfs) fileOrDirectoryExistsUsingSource(fileOrD
 		return false
 	}
 	// Check if the directory or file is a symlinked package
-	if packageRoot := module.ParseNodeModuleFromPath(fileOrDirectory, true /*isFolder*/); packageRoot != "" {
+	var packageRoot string
+	if isFile {
+		packageRoot = module.NodeModulePackageRootForFile(fileOrDirectory)
+	} else {
+		packageRoot = module.NodeModulePackageRootForDirectory(fileOrDirectory)
+	}
+	if packageRoot != "" {
 		fs.handleDirectoryCouldBeSymlink(packageRoot)
 	}
 	knownDirectoryLinks := fs.knownSymlinks.Directories()
