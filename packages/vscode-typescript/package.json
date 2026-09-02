@@ -379,13 +379,13 @@
     },
     "dependencies": {
         "@vscode/extension-telemetry": "^1.5.2",
-        "vscode-languageclient": "^10.0.1",
-        "vscode-tas-client": "^0.2.1"
+        "vscode-languageclient": "^10.1.0",
+        "vscode-tas-client": "^0.3.1"
     },
     "devDependencies": {
         "@types/vscode": "~1.125.0",
         "@typescript/bundled-typescript": "npm:typescript@7.0.2",
         "@vscode/vsce": "^3.9.2",
-        "esbuild": "^0.28.1"
+        "esbuild": "^0.28.2"
     }
 }

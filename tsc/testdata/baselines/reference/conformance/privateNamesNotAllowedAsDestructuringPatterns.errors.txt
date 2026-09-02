@@ -1,0 +1,18 @@
+privateNamesNotAllowedAsDestructuringPatterns.ts(4,17): error TS18064: Private identifiers cannot be used in destructuring patterns.
+privateNamesNotAllowedAsDestructuringPatterns.ts(6,12): error TS18064: Private identifiers cannot be used in destructuring patterns.
+
+
+==== privateNamesNotAllowedAsDestructuringPatterns.ts (2 errors) ====
+    class A {
+        #foo = 1;
+        bar() {
+            const { #foo: foo } = this;
+                    ~~~~
+!!! error TS18064: Private identifiers cannot be used in destructuring patterns.
+            let bar;
+            ({ #foo: bar } = this);
+               ~~~~
+!!! error TS18064: Private identifiers cannot be used in destructuring patterns.
+        }
+    }
+    

@@ -1,0 +1,79 @@
+//// [tests/cases/compiler/classExtendsInstantiationExpressionType.ts] ////
+
+=== classExtendsInstantiationExpressionType.ts ===
+// Regression test for https://github.com/microsoft/TypeScript/issues/64116
+declare function createComponent<Props extends {}, Events extends {}>(
+>createComponent : Symbol(createComponent, Decl(classExtendsInstantiationExpressionType.ts, 0, 0))
+>Props : Symbol(Props, Decl(classExtendsInstantiationExpressionType.ts, 1, 33))
+>Events : Symbol(Events, Decl(classExtendsInstantiationExpressionType.ts, 1, 50))
+
+    render: { props: Props, events: Events }
+>render : Symbol(render, Decl(classExtendsInstantiationExpressionType.ts, 1, 70))
+>props : Symbol(props, Decl(classExtendsInstantiationExpressionType.ts, 2, 13))
+>Props : Symbol(Props, Decl(classExtendsInstantiationExpressionType.ts, 1, 33))
+>events : Symbol(events, Decl(classExtendsInstantiationExpressionType.ts, 2, 27))
+>Events : Symbol(Events, Decl(classExtendsInstantiationExpressionType.ts, 1, 50))
+
+): typeof Component<Events>;
+>Component : Symbol(Component, Decl(classExtendsInstantiationExpressionType.ts, 3, 28))
+>Events : Symbol(Events, Decl(classExtendsInstantiationExpressionType.ts, 1, 50))
+
+declare class Component<Events extends {} = Record<string, any>> {
+>Component : Symbol(Component, Decl(classExtendsInstantiationExpressionType.ts, 3, 28))
+>Events : Symbol(Events, Decl(classExtendsInstantiationExpressionType.ts, 5, 24))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+    $on<K extends keyof Events>(event: K, handler: (e: Events[K]) => void): void;
+>$on : Symbol(Component.$on, Decl(classExtendsInstantiationExpressionType.ts, 5, 66))
+>K : Symbol(K, Decl(classExtendsInstantiationExpressionType.ts, 6, 8))
+>Events : Symbol(Events, Decl(classExtendsInstantiationExpressionType.ts, 5, 24))
+>event : Symbol(event, Decl(classExtendsInstantiationExpressionType.ts, 6, 32))
+>K : Symbol(K, Decl(classExtendsInstantiationExpressionType.ts, 6, 8))
+>handler : Symbol(handler, Decl(classExtendsInstantiationExpressionType.ts, 6, 41))
+>e : Symbol(e, Decl(classExtendsInstantiationExpressionType.ts, 6, 52))
+>Events : Symbol(Events, Decl(classExtendsInstantiationExpressionType.ts, 5, 24))
+>K : Symbol(K, Decl(classExtendsInstantiationExpressionType.ts, 6, 8))
+}
+
+const B = createComponent({
+>B : Symbol(B, Decl(classExtendsInstantiationExpressionType.ts, 9, 5))
+>createComponent : Symbol(createComponent, Decl(classExtendsInstantiationExpressionType.ts, 0, 0))
+
+    props: {},
+>props : Symbol(props, Decl(classExtendsInstantiationExpressionType.ts, 9, 27))
+
+    events: { foo: "", foo2: "2" }
+>events : Symbol(events, Decl(classExtendsInstantiationExpressionType.ts, 10, 14))
+>foo : Symbol(foo, Decl(classExtendsInstantiationExpressionType.ts, 11, 13))
+>foo2 : Symbol(foo2, Decl(classExtendsInstantiationExpressionType.ts, 11, 22))
+
+});
+
+new B().$on("foo", e => {});
+>new B().$on : Symbol(Component.$on, Decl(classExtendsInstantiationExpressionType.ts, 5, 66))
+>B : Symbol(B, Decl(classExtendsInstantiationExpressionType.ts, 9, 5))
+>$on : Symbol(Component.$on, Decl(classExtendsInstantiationExpressionType.ts, 5, 66))
+>e : Symbol(e, Decl(classExtendsInstantiationExpressionType.ts, 14, 18))
+
+new B().$on("foo3", e => {});
+>new B().$on : Symbol(Component.$on, Decl(classExtendsInstantiationExpressionType.ts, 5, 66))
+>B : Symbol(B, Decl(classExtendsInstantiationExpressionType.ts, 9, 5))
+>$on : Symbol(Component.$on, Decl(classExtendsInstantiationExpressionType.ts, 5, 66))
+>e : Symbol(e, Decl(classExtendsInstantiationExpressionType.ts, 15, 19))
+
+class C extends B {}
+>C : Symbol(C, Decl(classExtendsInstantiationExpressionType.ts, 15, 29))
+>B : Symbol(B, Decl(classExtendsInstantiationExpressionType.ts, 9, 5))
+
+new C().$on("foo", e => {});
+>new C().$on : Symbol(Component.$on, Decl(classExtendsInstantiationExpressionType.ts, 5, 66))
+>C : Symbol(C, Decl(classExtendsInstantiationExpressionType.ts, 15, 29))
+>$on : Symbol(Component.$on, Decl(classExtendsInstantiationExpressionType.ts, 5, 66))
+>e : Symbol(e, Decl(classExtendsInstantiationExpressionType.ts, 19, 18))
+
+new C().$on("foo3", e => {});
+>new C().$on : Symbol(Component.$on, Decl(classExtendsInstantiationExpressionType.ts, 5, 66))
+>C : Symbol(C, Decl(classExtendsInstantiationExpressionType.ts, 15, 29))
+>$on : Symbol(Component.$on, Decl(classExtendsInstantiationExpressionType.ts, 5, 66))
+>e : Symbol(e, Decl(classExtendsInstantiationExpressionType.ts, 20, 19))
+

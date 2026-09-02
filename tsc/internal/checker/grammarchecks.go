@@ -2136,6 +2136,19 @@ func (c *Checker) checkGrammarImportClause(node *ast.ImportClause) bool {
 	return false
 }
 
+func (c *Checker) checkGrammarImportAttributeValues(node *ast.ImportAttributes) bool {
+	hasError := false
+	for _, attribute := range node.Attributes.Nodes {
+		value := attribute.AsImportAttribute().Value
+		if ast.IsStringLiteral(value) {
+			continue
+		}
+		hasError = true
+		c.error(value, diagnostics.Import_attribute_values_must_be_string_literal_expressions)
+	}
+	return hasError
+}
+
 func (c *Checker) checkGrammarTypeOnlyNamedImportsOrExports(namedBindings *ast.Node) bool {
 	nodeList := namedBindings.ElementList()
 	for _, specifier := range nodeList.Nodes {

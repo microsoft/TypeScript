@@ -165,6 +165,7 @@ export async function runBenchmarks(options?: { filter?: string; singleIteration
     }
 
     await bench.run(); // @sync: bench.runSync();
+    await teardown(); // @sync: teardown();
 
     if (session) {
         session.post("Profiler.stop", (err, { profile }) => {
