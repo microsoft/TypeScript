@@ -271,14 +271,14 @@ func getPackageRealpathFuncs(fs vfs.FS, packageDir string) (toRealpath, toSymlin
 		}
 		// Files outside the package (e.g. re-exports into symlinked deps):
 		// find the node_modules package directory, resolve it once, and cache.
-		filePackageDir := module.ParseNodeModuleFromPath(fileName, false /*isFolder*/)
+		filePackageDir := module.NodeModulePackageRootForFile(fileName)
 		if filePackageDir == "" {
 			return fileName
 		}
 		// The wrapped FS also calls Realpath while traversing directories.
 		// The two parses differ only when the path may be a package root,
 		// so establish its kind before using the package cache.
-		if directoryPackage := module.ParseNodeModuleFromPath(fileName, true /*isFolder*/); directoryPackage != filePackageDir {
+		if directoryPackage := module.NodeModulePackageRootForDirectory(fileName); directoryPackage != filePackageDir {
 			if fs.DirectoryExists(fileName) {
 				filePackageDir = directoryPackage
 			}

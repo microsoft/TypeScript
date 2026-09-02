@@ -403,7 +403,7 @@ func (r *resolutionState) resolveTypeReferenceDirective(typeRoots []string, from
 			if fromConfig {
 				// Custom typeRoots resolve as file or directory just like we do modules
 				if resolvedFromFile := r.loadModuleFromFile(extensionsDeclaration, candidate); !resolvedFromFile.shouldContinueSearching() {
-					packageDirectory := ParseNodeModuleFromPath(resolvedFromFile.path, false)
+					packageDirectory := NodeModulePackageRootForFile(resolvedFromFile.path)
 					if packageDirectory != "" {
 						resolvedFromFile.packageId = r.getPackageId(resolvedFromFile.path, r.getPackageJsonInfo(packageDirectory))
 					}
@@ -469,7 +469,7 @@ func (r *resolutionState) resolveFromTypeRoot() *resolved {
 			continue
 		}
 		if resolvedFromFile := r.loadModuleFromFile(extensionsDeclaration, candidate); !resolvedFromFile.shouldContinueSearching() {
-			packageDirectory := ParseNodeModuleFromPath(resolvedFromFile.path, false)
+			packageDirectory := NodeModulePackageRootForFile(resolvedFromFile.path)
 			if packageDirectory != "" {
 				resolvedFromFile.packageId = r.getPackageId(resolvedFromFile.path, r.getPackageJsonInfo(packageDirectory))
 			}
@@ -1378,7 +1378,7 @@ func (r *resolutionState) nodeLoadModuleByRelativeName(extensions extensions, ca
 		resolvedFromFile := r.loadModuleFromFile(extensions, candidate)
 		if resolvedFromFile != nil {
 			if considerPackageJson {
-				if packageDirectory := ParseNodeModuleFromPath(resolvedFromFile.path /*isFolder*/, false); packageDirectory != "" {
+				if packageDirectory := NodeModulePackageRootForFile(resolvedFromFile.path); packageDirectory != "" {
 					resolvedFromFile.packageId = r.getPackageId(resolvedFromFile.path, r.getPackageJsonInfo(packageDirectory))
 				}
 			}
