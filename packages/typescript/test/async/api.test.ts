@@ -935,6 +935,30 @@ describe("LanguageService - imports", () => {
         assert.equal(applyTextEdits(source, edits), `import { bar, foo } from "./foo";\n\nconst value = foo + bar;\n`);
     });
 
+    test("getImportAdderEdits roots relative files at the project directory", async () => {
+        const source = `const value = foo;\n`;
+        const api = spawnAPI({
+            "/outside/tsconfig.json": "{}",
+            "/outside/src/index.ts": source,
+            "/outside/src/foo.ts": `export const foo = 1;\n`,
+        });
+        try {
+            const snapshot = await api.updateSnapshot({ openProject: "/outside/tsconfig.json" });
+            const project = snapshot.getProject("/outside/tsconfig.json")!;
+            const foo = await project.checker.getSymbolAtPosition("/outside/src/foo.ts", "export const ".length);
+            assert.ok(foo);
+
+            const edits = await project.languageService.getImportAdderEdits("src/index.ts", [
+                { kind: "importSymbol", symbol: await foo.getExportSymbol() },
+            ]);
+
+            assert.equal(applyTextEdits(source, edits), `import { foo } from "./foo";\n\nconst value = foo;\n`);
+        }
+        finally {
+            await api.close();
+        }
+    });
+
     test("getImportAdderEdits adds to an existing import", async () => {
         const source = `import { foo } from "./foo";\nconst value = foo + bar;\n`;
         await using api = spawnAPI({
