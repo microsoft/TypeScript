@@ -25,17 +25,25 @@ func IsApplicableVersionedTypesKey(key string) bool {
 	return range_.Test(&typeScriptVersion)
 }
 
-func ParseNodeModuleFromPath(resolved string, isFolder bool) string {
-	path := tspath.NormalizePath(resolved)
+func NodeModulePackageRootForFile(resolved string) string {
+	return parseNodeModulePackageRoot(resolved, false /*isDirectory*/)
+}
+
+func NodeModulePackageRootForDirectory(resolved string) string {
+	return parseNodeModulePackageRoot(resolved, true /*isDirectory*/)
+}
+
+func parseNodeModulePackageRoot(path string, isDirectory bool) string {
+	path = tspath.NormalizePath(path)
 	idx := strings.LastIndex(path, "/node_modules/")
 	if idx == -1 {
 		return ""
 	}
 
 	indexAfterNodeModules := idx + len("/node_modules/")
-	indexAfterPackageName := moveToNextDirectorySeparatorIfAvailable(path, indexAfterNodeModules, isFolder)
+	indexAfterPackageName := moveToNextDirectorySeparatorIfAvailable(path, indexAfterNodeModules, isDirectory)
 	if path[indexAfterNodeModules] == '@' {
-		indexAfterPackageName = moveToNextDirectorySeparatorIfAvailable(path, indexAfterPackageName, isFolder)
+		indexAfterPackageName = moveToNextDirectorySeparatorIfAvailable(path, indexAfterPackageName, isDirectory)
 	}
 	return path[:indexAfterPackageName]
 }
