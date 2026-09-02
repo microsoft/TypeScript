@@ -107,7 +107,6 @@ var skippedTests = []string{
 	"mappedTypeUnionConstraintInferences.ts",
 	"lateBoundConstraintTypeChecksCorrectly.ts",
 	"keyofDoesntContainSymbols.ts",
-	"isolatedModulesOut.ts",
 	"noStrictGenericChecks.ts",
 	"noImplicitUseStrict_umd.ts",
 	"noImplicitUseStrict_system.ts",
