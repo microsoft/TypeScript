@@ -134,12 +134,12 @@ export const result4 = fn2({
 });
 
 // should error
-export const result5 = fn({
+export const result5 = fn2({
 >result5 : Symbol(result5, Decl(contextualTypingGenericFunction2.ts, 45, 12))
->fn : Symbol(fn, Decl(contextualTypingGenericFunction2.ts, 0, 0))
+>fn2 : Symbol(fn2, Decl(contextualTypingGenericFunction2.ts, 29, 3))
 
   callback: <T,>(params: T) => {
->callback : Symbol(callback, Decl(contextualTypingGenericFunction2.ts, 45, 27))
+>callback : Symbol(callback, Decl(contextualTypingGenericFunction2.ts, 45, 28))
 >T : Symbol(T, Decl(contextualTypingGenericFunction2.ts, 46, 13))
 >params : Symbol(params, Decl(contextualTypingGenericFunction2.ts, 46, 17))
 >T : Symbol(T, Decl(contextualTypingGenericFunction2.ts, 46, 13))
@@ -156,12 +156,12 @@ export const result5 = fn({
 });
 
 // should error
-export const result6 = fn({
+export const result6 = fn2({
 >result6 : Symbol(result6, Decl(contextualTypingGenericFunction2.ts, 53, 12))
->fn : Symbol(fn, Decl(contextualTypingGenericFunction2.ts, 0, 0))
+>fn2 : Symbol(fn2, Decl(contextualTypingGenericFunction2.ts, 29, 3))
 
   callback: <T,>(params: T) => {
->callback : Symbol(callback, Decl(contextualTypingGenericFunction2.ts, 53, 27))
+>callback : Symbol(callback, Decl(contextualTypingGenericFunction2.ts, 53, 28))
 >T : Symbol(T, Decl(contextualTypingGenericFunction2.ts, 54, 13))
 >params : Symbol(params, Decl(contextualTypingGenericFunction2.ts, 54, 17))
 >T : Symbol(T, Decl(contextualTypingGenericFunction2.ts, 54, 13))

@@ -149,10 +149,10 @@ export const result4 = fn2({
 });
 
 // should error
-export const result5 = fn({
->result5 : (params: unknown) => number
->fn({  callback: <T,>(params: T) => {    return (a, b): boolean => true;  },  unrelated: (_) => {},}) : (params: unknown) => number
->fn : <P>(config: { callback: (params: P) => (context: number, params: P) => number; unrelated?: (arg: string) => void; }) => (params: P) => number
+export const result5 = fn2({
+>result5 : any
+>fn2({  callback: <T,>(params: T) => {    return (a, b): boolean => true;  },  unrelated: (_) => {},}) : any
+>fn2 : <P>(config: { callback: (params: P) => (context: number, params: P) => number; unrelated?: (arg: string) => void; }) => any
 >{  callback: <T,>(params: T) => {    return (a, b): boolean => true;  },  unrelated: (_) => {},} : { callback: <T>(params: T) => (a: number, b: unknown) => boolean; unrelated: (_: string) => void; }
 
   callback: <T,>(params: T) => {
@@ -175,10 +175,10 @@ export const result5 = fn({
 });
 
 // should error
-export const result6 = fn({
->result6 : (params: unknown) => number
->fn({  callback: <T,>(params: T) => {    return (a, b) => true;  },  unrelated: (_) => {},}) : (params: unknown) => number
->fn : <P>(config: { callback: (params: P) => (context: number, params: P) => number; unrelated?: (arg: string) => void; }) => (params: P) => number
+export const result6 = fn2({
+>result6 : any
+>fn2({  callback: <T,>(params: T) => {    return (a, b) => true;  },  unrelated: (_) => {},}) : any
+>fn2 : <P>(config: { callback: (params: P) => (context: number, params: P) => number; unrelated?: (arg: string) => void; }) => any
 >{  callback: <T,>(params: T) => {    return (a, b) => true;  },  unrelated: (_) => {},} : { callback: <T>(params: T) => (a: number, b: unknown) => boolean; unrelated: (_: string) => void; }
 
   callback: <T,>(params: T) => {

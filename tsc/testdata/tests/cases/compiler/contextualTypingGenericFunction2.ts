@@ -46,7 +46,7 @@ export const result4 = fn2({
 });
 
 // should error
-export const result5 = fn({
+export const result5 = fn2({
   callback: <T,>(params: T) => {
     return (a, b): boolean => true;
   },
@@ -54,7 +54,7 @@ export const result5 = fn({
 });
 
 // should error
-export const result6 = fn({
+export const result6 = fn2({
   callback: <T,>(params: T) => {
     return (a, b) => true;
   },
