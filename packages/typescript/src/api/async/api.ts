@@ -1,3 +1,8 @@
+import {
+    Client,
+    type ClientSocketOptions,
+    type ClientSpawnOptions,
+} from "#asyncClient"; // @sync: } from "#syncClient";
 import { CheckFlags } from "#enums/checkFlags";
 import { CompletionItemKind } from "#enums/completionItemKind";
 import { DiagnosticCategory } from "#enums/diagnosticCategory";
@@ -51,7 +56,7 @@ import {
 } from "../node/node.ts";
 import { Wtf8Decoder } from "../node/wtf8.ts";
 import type {
-    APIOptions,
+    APIOptions, // @sync:     SyncAPIOptions as APIOptions,
     LSPConnectionOptions,
 } from "../options.ts";
 import {
@@ -112,11 +117,6 @@ import type {
     TimingAccumulators,
     TimingInfo,
 } from "../timing.ts";
-import {
-    Client,
-    type ClientSocketOptions,
-    type ClientSpawnOptions,
-} from "./client.ts";
 import type {
     AssertsIdentifierTypePredicate,
     AssertsThisTypePredicate,
@@ -607,6 +607,15 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
     }
 
     async close(): Promise<void> {
+        // @sync-skip-block-start
+        if (this.initializing && !this.initialized) {
+            const initializing = this.initializing;
+            await this.client.close();
+            await initializing.catch(() => {});
+            this.sourceFileCache.clear();
+            return;
+        }
+        // @sync-skip-block-end
         await this.initializing?.catch(() => {}); // @sync-skip
         // Dispose all active snapshots
         try {
