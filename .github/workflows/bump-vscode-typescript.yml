@@ -1,0 +1,138 @@
+name: Bump vscode-typescript
+
+on:
+  workflow_dispatch:
+    inputs:
+      extension_version:
+        description: Extension version, without the vscode-typescript/v prefix
+        required: true
+        type: string
+      bundled_typescript_version:
+        description: Exact published TypeScript version to bundle
+        required: true
+        type: string
+
+run-name: Bump vscode-typescript to ${{ inputs.extension_version }}
+
+permissions:
+  contents: read
+  id-token: write
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  bump:
+    if: github.repository == 'microsoft/TypeScript'
+    runs-on: ubuntu-latest
+    environment:
+      name: azure
+      deployment: false
+
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          filter: blob:none
+          fetch-depth: 0
+          persist-credentials: false
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 'lts/*'
+
+      - name: Validate versions
+        env:
+          EXTENSION_VERSION: ${{ inputs.extension_version }}
+          TYPESCRIPT_VERSION: ${{ inputs.bundled_typescript_version }}
+        run: |
+          set -euo pipefail
+          versionPattern='^[0-9]+\.[0-9]+\.[0-9]+$'
+          if ! [[ "$EXTENSION_VERSION" =~ $versionPattern ]] || [ "$EXTENSION_VERSION" = "0.0.0" ]; then
+            echo "Extension version must be a non-placeholder three-component numeric version." >&2
+            exit 1
+          fi
+          if ! [[ "$TYPESCRIPT_VERSION" =~ $versionPattern ]]; then
+            echo "Bundled TypeScript version must be a three-component numeric version." >&2
+            exit 1
+          fi
+          npm view "typescript@$TYPESCRIPT_VERSION" version
+
+      - run: npm ci
+
+      - name: Check Marketplace version
+        env:
+          EXTENSION_VERSION: ${{ inputs.extension_version }}
+        run: |
+          set -euo pipefail
+          publishedVersion="$(npx vsce show TypeScriptTeam.native-preview --json | jq -r '.versions[0].version')"
+          PUBLISHED_VERSION="$publishedVersion" node <<'NODE'
+          const extensionVersion = process.env.EXTENSION_VERSION.split(".").map(Number);
+          const publishedVersion = process.env.PUBLISHED_VERSION.split(".").map(Number);
+          const comparison = extensionVersion.findIndex((part, index) => part !== publishedVersion[index]);
+          if (comparison === -1 || extensionVersion[comparison] < publishedVersion[comparison]) {
+              throw new Error(`Extension version ${process.env.EXTENSION_VERSION} must be greater than published version ${process.env.PUBLISHED_VERSION}.`);
+          }
+          NODE
+
+      - name: Update versions
+        env:
+          EXTENSION_VERSION: ${{ inputs.extension_version }}
+          TYPESCRIPT_VERSION: ${{ inputs.bundled_typescript_version }}
+        run: |
+          set -euo pipefail
+          npm version "$EXTENSION_VERSION" \
+            --workspace native-preview \
+            --no-git-tag-version \
+            --allow-same-version
+          npm install \
+            --workspace native-preview \
+            --save-dev \
+            --save-exact \
+            "@typescript/bundled-typescript@npm:typescript@$TYPESCRIPT_VERSION"
+
+          packageVersion="$(jq -r '.version' packages/vscode-typescript/package.json)"
+          lockVersion="$(jq -r '.packages["packages/vscode-typescript"].version' package-lock.json)"
+          if [ "$packageVersion" != "$lockVersion" ]; then
+            echo "package.json version $packageVersion does not match package-lock.json version $lockVersion." >&2
+            exit 1
+          fi
+
+      - run: npm test -w native-preview
+
+      - name: Package extension
+        run: npx hereby vscode-typescript:pack --forRelease --vscodeTypescriptRelease
+
+      - uses: azure/login@532459ea530d8321f2fb9bb10d1e0bcf23869a43 # v3.0.0
+        with:
+          client-id: ${{ vars.AZURE_CLIENT_ID }}
+          tenant-id: ${{ vars.AZURE_TENANT_ID }}
+          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Create GitHub App token
+        id: app-token
+        uses: microsoft/create-github-app-token-via-key-vault@5ba0d436e9c3cac52feff4d1f2f66f9698ce4a2d # v1
+        with:
+          client-id: ${{ vars.TYPESCRIPT_AUTOMATION_GITHUB_APP_CLIENT_ID }}
+          key-id: ${{ vars.TYPESCRIPT_AUTOMATION_GITHUB_APP_KEY_ID }}
+          owner: microsoft
+          repositories: TypeScript
+          permission-contents: write
+
+      - name: Commit and push release branch
+        env:
+          EXTENSION_VERSION: ${{ inputs.extension_version }}
+          GITHUB_APP_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: |
+          set -euo pipefail
+          branch="vscode-typescript-release/v$EXTENSION_VERSION"
+          git switch -c "$branch"
+          git add packages/vscode-typescript/package.json package-lock.json
+          git config user.email "290192711+typescript-automation[bot]@users.noreply.github.com"
+          git config user.name "typescript-automation[bot]"
+          git commit -m "Bump vscode-typescript to $EXTENSION_VERSION"
+
+          basic_auth="$(node -e 'process.stdout.write(Buffer.from("x-access-token:" + process.env.GITHUB_APP_TOKEN).toString("base64"))')"
+          echo "::add-mask::$basic_auth"
+          git config --local http.https://github.com/.extraheader "AUTHORIZATION: basic ${basic_auth}"
+          git push --set-upstream origin "$branch"
