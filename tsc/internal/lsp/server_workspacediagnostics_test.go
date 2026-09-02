@@ -930,3 +930,41 @@ func TestWorkspaceDiagnosticsDependentsAreTransitive(t *testing.T) {
 		"file:///home/projects/unrelated/index.ts",
 	})
 }
+
+// A client that never pulls per document has nothing for a workspace report to collide with, and
+// would otherwise never hear about the files it has open.
+func TestWorkspaceDiagnosticsReportsOpenDocumentsWithoutServerDeDuplication(t *testing.T) {
+	t.Parallel()
+
+	if !bundled.Embedded {
+		t.Skip("bundled files are not embedded")
+	}
+
+	client, _ := initWorkspaceDiagnosticsClient(t, workspaceDiagnosticsFiles)
+	openWorkspaceDiagnosticsProject(t, client)
+
+	// On by default, so the open document is left to the pull the client makes for it.
+	deDuplicated := pullWorkspaceDiagnostics(t, client, &lsproto.WorkspaceDiagnosticParams{
+		PreviousResultIds: []lsproto.PreviousResultId{},
+	})
+	assert.Assert(t, !slices.Contains(reportURIs(deDuplicated.Items), "file:///home/projects/open.ts"))
+
+	lsptestutil.SendNotification(t, client, lsproto.WorkspaceDidChangeConfigurationInfo, &lsproto.DidChangeConfigurationParams{
+		Settings: map[string]any{
+			"typescript": map[string]any{"experimental": map[string]any{"workspaceDiagnostics": map[string]any{
+				"scope":                          "allProjects",
+				"serverDiagnosticsDeDuplication": false,
+			}}},
+		},
+	})
+
+	reported := pullWorkspaceDiagnostics(t, client, &lsproto.WorkspaceDiagnosticParams{
+		PreviousResultIds: []lsproto.PreviousResultId{},
+	})
+	assert.Assert(t, slices.Contains(reportURIs(reported.Items), "file:///home/projects/open.ts"),
+		"expected the open document, got %v", reportURIs(reported.Items))
+
+	// It is reported with the version the client has, so the client can tell which text it is for.
+	open := findFullReport(t, reported.Items, "file:///home/projects/open.ts")
+	assert.Assert(t, open.Version.Integer != nil, "an open document reports the version it was checked at")
+}

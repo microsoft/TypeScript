@@ -81,6 +81,9 @@ type workspaceDiagnosticsProject struct {
 // it can. Enumerating files needs the program but not a checker, so this runs before any checking.
 func (r *workspaceDiagnosticsRun) assignFilesToProjects(snapshot *project.Snapshot, projects []*project.Project) []workspaceDiagnosticsProject {
 	var work []workspaceDiagnosticsProject
+	// A client that pulls per document reconciles the two providers' results poorly, so open
+	// documents are left to that pull. One that only pulls the workspace needs them included.
+	deDuplicate := !snapshot.UserPreferences().WorkspaceDiagnosticsServerDiagnosticsDeDuplication.IsFalse()
 	for _, p := range projects {
 		program := p.GetProgram()
 		if program == nil {
@@ -93,11 +96,13 @@ func (r *workspaceDiagnosticsRun) assignFilesToProjects(snapshot *project.Snapsh
 
 		pf := workspaceDiagnosticsProject{languageService: languageService, project: p, generation: generation}
 		for _, file := range languageService.WorkspaceDiagnosticFiles() {
-			if handle := snapshot.GetFile(file.FileName()); handle != nil && handle.IsOverlay() {
-				// The client pulls open documents directly. Reporting them here too would duplicate
-				// every problem, since the client only reconciles the two within one provider.
-				// Leaving the file out of `reported` clears anything it still holds.
-				continue
+			if deDuplicate {
+				if handle := snapshot.GetFile(file.FileName()); handle != nil && handle.IsOverlay() {
+					// The client pulls open documents directly. Reporting them here too would
+					// duplicate every problem, since the client only reconciles the two within one
+					// provider. Leaving the file out of `reported` clears anything it still holds.
+					continue
+				}
 			}
 			uri := lsconv.FileNameToDocumentURI(file.FileName())
 			if !r.reported.AddIfAbsent(uri) {
