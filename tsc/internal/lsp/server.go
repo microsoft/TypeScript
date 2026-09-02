@@ -80,6 +80,7 @@ func NewServer(opts *ServerOptions) *Server {
 		startWatchdog:         opts.SetParentProcessID,
 		initComplete:          make(chan struct{}),
 		progressDelay:         opts.ProgressDelay,
+		workspaceDiagnostics:  newWorkspaceDiagnosticsCache(),
 	}
 	s.logger = newLogger(s)
 
@@ -250,6 +251,10 @@ type Server struct {
 	startWatchdog func(parentPID int)
 
 	flakeLogging lsproto.DiagnosticFlakeLogLevel
+
+	// workspaceDiagnostics remembers, across `workspace/diagnostic` pulls, which program version
+	// produced the result id a client holds for each file.
+	workspaceDiagnostics *workspaceDiagnosticsCache
 }
 
 func (s *Server) Session() *project.Session { return s.session }
@@ -1146,11 +1151,11 @@ func (s *Server) handleRequestOrNotification(ctx context.Context, req *lsproto.R
 
 	if handler := handlers()[req.Method]; handler != nil {
 		start := time.Now()
-		doAsyncWork, err := handler(s, ctx, req)
 		idStr := ""
 		if req.ID != nil {
 			idStr = " (" + req.ID.String() + ")"
 		}
+		doAsyncWork, err := handler(s, ctx, req)
 		if err != nil {
 			if resp, ok := contentMapperFallbackResponse(req.Method, err); ok {
 				if !s.logger.IsTracing() {
@@ -1278,6 +1283,7 @@ var handlers = sync.OnceValue(func() handlerMap {
 	registerRequestHandler(handlers, lsproto.CallHierarchyIncomingCallsInfo, (*Server).handleCallHierarchyIncomingCalls)
 	registerRequestHandler(handlers, lsproto.CallHierarchyOutgoingCallsInfo, (*Server).handleCallHierarchyOutgoingCalls)
 
+	registerWorkspaceDiagnosticHandler(handlers)
 	registerRequestHandler(handlers, lsproto.WorkspaceSymbolInfo, (*Server).handleWorkspaceSymbol)
 	registerRequestHandler(handlers, lsproto.CompletionItemResolveInfo, (*Server).handleCompletionItemResolve)
 	registerRequestHandler(handlers, lsproto.CodeLensResolveInfo, (*Server).handleCodeLensResolve)
