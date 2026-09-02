@@ -253,6 +253,10 @@ func addPackageJsonDependencies(contents *packagejson.PackageJson, deps *collect
 func getPackageRealpathFuncs(fs vfs.FS, packageDir string) (toRealpath, toSymlink func(string) string) {
 	realPackageDir := fs.Realpath(packageDir)
 	isSymlinked := realPackageDir != packageDir
+	replacePrefix := func(fileName string, prefix string, replacement string) string {
+		relative, _ := strings.CutPrefix(fileName, prefix)
+		return tspath.CombinePaths(replacement, strings.TrimLeft(relative, `/\`))
+	}
 	// Cache of package-directory-level symlink→realpath prefix mappings for
 	// external packages encountered via re-exports. Keyed by the node_modules
 	// package directory (e.g. "/app/node_modules/dep"), so all files under
@@ -261,28 +265,36 @@ func getPackageRealpathFuncs(fs vfs.FS, packageDir string) (toRealpath, toSymlin
 	toRealpath = func(fileName string) string {
 		// Fast path: files within the package use prefix substitution.
 		if isSymlinked {
-			if after, ok := strings.CutPrefix(fileName, packageDir); ok {
-				return realPackageDir + after
+			if _, ok := strings.CutPrefix(fileName, packageDir); ok {
+				return replacePrefix(fileName, packageDir, realPackageDir)
 			}
 		}
 		// Files outside the package (e.g. re-exports into symlinked deps):
 		// find the node_modules package directory, resolve it once, and cache.
-		pkgDir := module.ParseNodeModuleFromPath(fileName, false /*isFolder*/)
-		if pkgDir == "" {
+		packageDir := module.ParseNodeModuleFromPath(fileName, false /*isFolder*/)
+		if packageDir == "" {
 			return fileName
 		}
-		if realDir, ok := dirCache[pkgDir]; ok {
-			if realDir == pkgDir {
+		// The wrapped FS also calls Realpath while traversing directories.
+		// The two parses differ only when the path may be a package root,
+		// so establish its kind before using the package cache.
+		if directoryPackage := module.ParseNodeModuleFromPath(fileName, true /*isFolder*/); directoryPackage != packageDir {
+			if fs.DirectoryExists(fileName) {
+				packageDir = directoryPackage
+			}
+		}
+		if realDir, ok := dirCache[packageDir]; ok {
+			if realDir == packageDir {
 				return fileName
 			}
-			return realDir + fileName[len(pkgDir):]
+			return replacePrefix(fileName, packageDir, realDir)
 		}
-		realDir := fs.Realpath(pkgDir)
-		dirCache[pkgDir] = realDir
-		if realDir == pkgDir {
+		realDir := fs.Realpath(packageDir)
+		dirCache[packageDir] = realDir
+		if realDir == packageDir {
 			return fileName
 		}
-		return realDir + fileName[len(pkgDir):]
+		return replacePrefix(fileName, packageDir, realDir)
 	}
 	if !isSymlinked {
 		return toRealpath, core.Identity
@@ -291,8 +303,8 @@ func getPackageRealpathFuncs(fs vfs.FS, packageDir string) (toRealpath, toSymlin
 	// packageDir→realPackageDir substitution). It does not handle arbitrary external
 	// paths; callers should only use it for files known to be within the package.
 	toSymlink = func(fileName string) string {
-		if after, ok := strings.CutPrefix(fileName, realPackageDir); ok {
-			return packageDir + after
+		if _, ok := strings.CutPrefix(fileName, realPackageDir); ok {
+			return replacePrefix(fileName, realPackageDir, packageDir)
 		}
 		return fileName
 	}
