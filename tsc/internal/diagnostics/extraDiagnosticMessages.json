@@ -338,5 +338,9 @@
     "Diagnostic directive {0} returned by the content mapper has an invalid 'unusedExpectDirectiveIndex'.": {
         "category": "Message",
         "code": 100068
+    },
+    "Paths that workspace-wide diagnostics in the editor should not report on.": {
+        "category": "Message",
+        "code": 100070
     }
 }

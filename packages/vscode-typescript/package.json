@@ -220,6 +220,36 @@
                         ],
                         "description": "%native-preview.trackFlakyDiagnostics.description%",
                         "scope": "window"
+                    },
+                    "js/ts.experimental.workspaceDiagnostics.scope": {
+                        "type": "string",
+                        "enum": [
+                            "off",
+                            "openProjects",
+                            "openProjectsAndDependents",
+                            "allProjects"
+                        ],
+                        "enumDescriptions": [
+                            "%native-preview.workspaceDiagnostics.off%",
+                            "%native-preview.workspaceDiagnostics.openProjects%",
+                            "%native-preview.workspaceDiagnostics.openProjectsAndDependents%",
+                            "%native-preview.workspaceDiagnostics.allProjects%"
+                        ],
+                        "default": "off",
+                        "tags": [
+                            "experimental"
+                        ],
+                        "description": "%native-preview.workspaceDiagnostics.description%",
+                        "scope": "window"
+                    },
+                    "js/ts.experimental.workspaceDiagnostics.serverDiagnosticsDeDuplication": {
+                        "type": "boolean",
+                        "default": true,
+                        "tags": [
+                            "experimental"
+                        ],
+                        "description": "%native-preview.workspaceDiagnostics.serverDiagnosticsDeDuplication.description%",
+                        "scope": "window"
                     }
                 }
             }

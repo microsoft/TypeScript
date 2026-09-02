@@ -108,6 +108,10 @@ var commandLineOptionElements = map[string]*CommandLineOption{
 		Kind:                    CommandLineOptionTypeEnum, // libMap,
 		DefaultValueDescription: core.TSUnknown,
 	},
+	"experimentalWorkspaceDiagnosticsExclude": {
+		Name: "experimentalWorkspaceDiagnosticsExclude",
+		Kind: CommandLineOptionTypeString,
+	},
 	"rootDirs": {
 		Name:       "rootDirs",
 		Kind:       CommandLineOptionTypeString,
