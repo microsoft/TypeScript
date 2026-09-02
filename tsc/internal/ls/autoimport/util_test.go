@@ -110,14 +110,25 @@ func TestGetPackageRealpathFuncs_FollowsNodeModulesSymlinks(t *testing.T) {
 	// resolves to /real/dep/index.d.ts — otherwise the same dep file gets different
 	// cache keys depending on which path it was reached through.
 	fs := vfstest.FromMap(map[string]any{
-		"/symlink-bin/pkg":                vfstest.Symlink("/real/bin/pkg"),
-		"/real/bin/pkg/index.d.ts":        "export declare const a: number;",
-		"/real/bin/pkg/node_modules/dep":  vfstest.Symlink("/real/dep"),
-		"/real/dep/index.d.ts":            "export declare const b: number;",
-		"/real/dep/src/utils/helper.d.ts": "export declare const c: number;",
+		"/symlink-bin/pkg":                              vfstest.Symlink("/real/bin/pkg"),
+		"/real/bin/pkg/index.d.ts":                      "export declare const a: number;",
+		"/real/bin/pkg/node_modules/.package-lock.json": "{}",
+		"/real/bin/pkg/node_modules/dep":                vfstest.Symlink("/real/dep"),
+		"/real/bin/pkg/node_modules/@scope/dep":         vfstest.Symlink("/real/scoped-dep"),
+		"/real/dep/index.d.ts":                          "export declare const b: number;",
+		"/real/dep/src/utils/helper.d.ts":               "export declare const c: number;",
+		"/real/scoped-dep/index.d.ts":                   "export declare const d: number;",
 	}, true)
 
 	toRealpath, _ := getPackageRealpathFuncs(fs, "/symlink-bin/pkg")
+
+	// Files directly within node_modules must not seed a cache entry that
+	// prevents a later package-root directory from following its symlink.
+	assert.Equal(
+		t,
+		toRealpath("/real/bin/pkg/node_modules/.package-lock.json"),
+		"/real/bin/pkg/node_modules/.package-lock.json",
+	)
 
 	// Files inside the package should be converted via string replacement (fast path).
 	assert.Equal(
@@ -125,6 +136,14 @@ func TestGetPackageRealpathFuncs_FollowsNodeModulesSymlinks(t *testing.T) {
 		toRealpath("/symlink-bin/pkg/index.d.ts"),
 		"/real/bin/pkg/index.d.ts",
 		"package files should be converted via prefix replacement",
+	)
+
+	// A sibling whose name starts with the package name is not inside the package.
+	assert.Equal(
+		t,
+		toRealpath("/symlink-bin/pkg2/index.d.ts"),
+		"/symlink-bin/pkg2/index.d.ts",
+		"sibling package paths must not use prefix replacement",
 	)
 
 	// Files outside the package (e.g. node_modules symlinks) should be resolved via
@@ -137,13 +156,25 @@ func TestGetPackageRealpathFuncs_FollowsNodeModulesSymlinks(t *testing.T) {
 	)
 
 	// The module resolver also uses toRealpath while traversing directories.
-	// Currently, a package-root directory is treated as a file and its package
-	// directory is incorrectly parsed as the enclosing node_modules directory.
 	assert.Equal(
 		t,
 		toRealpath("/real/bin/pkg/node_modules/dep"),
-		"/real/bin/pkg/node_modulesdep",
-		"package-root directories currently do not follow their node_modules symlink",
+		"/real/dep",
+		"package-root directories should follow their node_modules symlink",
+	)
+
+	// Walking the scope directory first must not seed a cache entry that
+	// prevents a nested scoped package from following its symlink.
+	assert.Equal(
+		t,
+		toRealpath("/real/bin/pkg/node_modules/@scope"),
+		"/real/bin/pkg/node_modules/@scope",
+	)
+	assert.Equal(
+		t,
+		toRealpath("/real/bin/pkg/node_modules/@scope/dep"),
+		"/real/scoped-dep",
+		"scoped package-root directories should follow their node_modules symlink",
 	)
 
 	// Files in subdirectories of an already-resolved external package should
