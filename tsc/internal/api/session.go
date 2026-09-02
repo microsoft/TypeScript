@@ -1063,7 +1063,7 @@ func (s *Session) handleUpdateSnapshot(ctx context.Context, params *UpdateSnapsh
 		baseRequestFileSystem = baseSD.fileSystemHandle()
 	}
 	sd := newSnapshotData()
-	if err := sd.fileSystem.InitializeForUpdate(params.FileSystem, baseRequestFileSystem, s.projectSession.FS(), s.projectSession.GetCurrentDirectory(), &fileChanges); err != nil {
+	if err := sd.fileSystem.InitializeForUpdate(params.FileSystem, baseRequestFileSystem, s.projectSession.FS(), s.projectSession.GetCurrentDirectory(), &fileChanges, baseSD != nil); err != nil {
 		return nil, fmt.Errorf("%w: %w", ErrClientError, err)
 	}
 	apiRequest.FileSystem = sd.fileSystem.FS()

@@ -3,6 +3,7 @@ package requestfilesystem
 import (
 	"testing"
 
+	"github.com/microsoft/TypeScript/tsc/internal/project"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/trackingvfs"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfstest"
@@ -29,6 +30,50 @@ func (h *Handle) applyTo(base *Handle) {
 	requestFileSystemDependenciesMu.Lock()
 	defer requestFileSystemDependenciesMu.Unlock()
 	h.applyToLocked(base)
+}
+
+func TestInitializeForUpdate(t *testing.T) {
+	t.Parallel()
+
+	t.Run("cache layers over a host-backed snapshot", func(t *testing.T) {
+		t.Parallel()
+		host := vfstest.FromMap(map[string]string{
+			"/dir/host.ts": "host",
+		}, true)
+		var handle Handle
+		var fileChanges project.FileChangeSummary
+		err := handle.InitializeForUpdate(&RequestFileSystem{
+			Kind:  KindCache,
+			Files: map[string]string{"/dir/cached.ts": "cached"},
+			Directories: map[string]RequestDirectoryEntries{
+				"/dir": {Files: []string{"cached.ts"}, Directories: []string{}},
+			},
+		}, nil, host, "/", &fileChanges, true)
+		assert.NilError(t, err)
+		assert.DeepEqual(t, handle.GetAccessibleEntries("/dir").Files, []string{"cached.ts", "host.ts"})
+	})
+
+	t.Run("memory starts a new chain", func(t *testing.T) {
+		t.Parallel()
+		host := vfstest.FromMap(map[string]string{
+			"/host.ts": "host",
+		}, true)
+		base, err := newRequestFileSystem(&RequestFileSystem{
+			Kind:  KindMemory,
+			Files: map[string]string{"/base.ts": "base"},
+		}, host, "/")
+		assert.NilError(t, err)
+
+		var handle Handle
+		var fileChanges project.FileChangeSummary
+		err = handle.InitializeForUpdate(&RequestFileSystem{
+			Kind:  KindMemory,
+			Files: map[string]string{"/replacement.ts": "replacement"},
+		}, base, host, "/", &fileChanges, true)
+		assert.NilError(t, err)
+		assert.Assert(t, handle.baseFileSystem() == host)
+		assert.Assert(t, getRequestFileSystem(handle.baseFileSystem()) == nil)
+	})
 }
 
 func TestRequestFileSystem(t *testing.T) {

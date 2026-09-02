@@ -61,22 +61,22 @@ func (h *Handle) initializeLayered(params *RequestFileSystem, base vfs.FS, curre
 }
 
 // InitializeForUpdate initializes the handle from a snapshot update request and its optional base.
-func (h *Handle) InitializeForUpdate(params *RequestFileSystem, base *Handle, host vfs.FS, currentDirectory string, fileChanges *project.FileChangeSummary) error {
+func (h *Handle) InitializeForUpdate(params *RequestFileSystem, base *Handle, host vfs.FS, currentDirectory string, fileChanges *project.FileChangeSummary, hasBaseSnapshot bool) error {
 	if params == nil {
 		if base != nil {
 			h.CloneFrom(base)
 		}
 		return nil
 	}
-	baseFS := host
-	if base != nil {
-		baseFS = base
-	}
-	if base != nil && params.Kind == KindCache {
+	if params.Kind == KindCache && hasBaseSnapshot {
+		baseFS := host
+		if base != nil {
+			baseFS = base
+		}
 		addFileChanges(fileChanges, params, baseFS, currentDirectory)
 		return h.initializeLayered(params, baseFS, currentDirectory)
 	}
-	return h.initializeFromRequest(params, baseFS, currentDirectory)
+	return h.initializeFromRequest(params, host, currentDirectory)
 }
 
 // FS returns this handle as a filesystem, or a nil interface when it is uninitialized.
