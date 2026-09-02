@@ -3931,6 +3931,33 @@ describe("updateSnapshot file systems", () => {
         }
     });
 
+    test("cache file system factory preserves host directory entries", async () => {
+        const api = new API({
+            cwd: fileURLToPath(new URL("../../../../", import.meta.url).toString()),
+            fs: createVirtualFileSystem({
+                "/src/from-host.ts": `export const host = true;`,
+            }),
+        });
+
+        try {
+            using snapshot = await api.updateSnapshot({
+                openProject: "/tsconfig.json",
+                fileSystem: createCacheFileSystem([
+                    ["/tsconfig.json", JSON.stringify({ compilerOptions: { noLib: true }, include: ["src/**/*.ts"] })],
+                    ["/src/from-cache.ts", `export const cache = true;`],
+                ]),
+            });
+            const program = snapshot.getProject("/tsconfig.json")!.program;
+            assert.deepEqual(
+                [...await program.getSourceFileNames()].sort(),
+                ["/src/from-cache.ts", "/src/from-host.ts"],
+            );
+        }
+        finally {
+            await api.close();
+        }
+    });
+
     test("memory file system resolves packages through internal monorepo symlinks", async () => {
         const callbackCalls: string[] = [];
         const api = new API({

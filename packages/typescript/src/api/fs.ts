@@ -39,7 +39,7 @@ export interface FileSystem {
 export const fsCallbackNames = ["readFile", "fileExists", "directoryExists", "getAccessibleEntries", "realpath", "writeFile"] as const;
 
 export interface CreateRequestFileSystemOptions {
-    /** Complete directory listings. Derived from `files` when omitted. */
+    /** Complete directory listings. Memory filesystems derive these from `files` when omitted. */
     directories?: Record<string, RequestDirectoryEntries>;
     symlinks?: Record<string, RequestSymlink>;
     /** Files or directory trees hidden from an underlying snapshot or host filesystem. */
@@ -96,7 +96,7 @@ export function createMemoryFileSystemWithLib(
     });
 }
 
-/** Creates a read-through cache request filesystem, deriving directory listings when omitted. */
+/** Creates a read-through cache request filesystem, merging host directory listings when omitted. */
 export function createCacheFileSystem(
     files: RequestFileEntries,
     options: CreateRequestFileSystemOptions = {},
@@ -118,10 +118,11 @@ function createRequestFileSystem(
         normalizedFiles.set(fileName, content);
     }
     const fileRecord = Object.fromEntries(normalizedFiles);
+    const directories = options.directories ?? (kind === "memory" ? deriveDirectoryListings(fileRecord) : undefined);
     return {
         kind,
         files: fileRecord,
-        directories: options.directories ?? deriveDirectoryListings(fileRecord),
+        ...(directories ? { directories } : {}),
         ...(options.symlinks ? { symlinks: options.symlinks } : {}),
         ...(options.removedPaths?.length ? { removedPaths: [...options.removedPaths] } : {}),
     };

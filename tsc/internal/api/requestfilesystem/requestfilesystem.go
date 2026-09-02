@@ -92,6 +92,22 @@ type resolvedRequestPath struct {
 	ok              bool
 }
 
+type requestPathKind uint8
+
+const (
+	requestPathKindMissing requestPathKind = iota
+	requestPathKindFile
+	requestPathKindDirectory
+)
+
+type requestPathLookup struct {
+	path            string
+	kind            requestPathKind
+	fileSystem      vfs.FS
+	followedSymlink bool
+	ok              bool
+}
+
 type requestDirectoryBuilder struct {
 	files       map[tspath.Path]string
 	directories map[tspath.Path]string
@@ -529,6 +545,87 @@ func (s requestFileSystem) directoryAt(path string) (string, bool) {
 	return directory, ok
 }
 
+func (s requestFileSystem) pathKind(path string) requestPathKind {
+	if _, ok := s.fileAt(path); ok {
+		return requestPathKindFile
+	}
+	if _, ok := s.directoryAt(path); ok {
+		return requestPathKindDirectory
+	}
+	return requestPathKindMissing
+}
+
+func (s requestFileSystem) lookupPath(path string) requestPathLookup {
+	absolutePath := s.toAbsolutePath(path)
+	if kind := s.pathKind(absolutePath); kind != requestPathKindMissing {
+		return requestPathLookup{path: absolutePath, kind: kind, ok: true}
+	}
+	if s.isPreSymlinkRemoved(path) {
+		return requestPathLookup{}
+	}
+	resolved := s.resolvePath(path)
+	if !resolved.ok {
+		return requestPathLookup{}
+	}
+	result := requestPathLookup{
+		path:            resolved.path,
+		followedSymlink: resolved.followedSymlink,
+		ok:              true,
+	}
+	if resolved.host {
+		if s.isRemoved(resolved.path) {
+			return requestPathLookup{}
+		}
+		result.fileSystem = getHostFileSystem(s.baseFileSystem())
+		result.ok = result.fileSystem != nil
+		return result
+	}
+	if kind := s.pathKind(resolved.path); kind != requestPathKindMissing {
+		result.kind = kind
+		return result
+	}
+	if !resolved.followedSymlink && s.isRemoved(path) {
+		return requestPathLookup{}
+	}
+	if s.fallsBack() {
+		fallback := s.resolveBasePath(resolved.path)
+		if !fallback.ok {
+			return requestPathLookup{}
+		}
+		if fallback.host {
+			if s.isRemoved(resolved.path) || s.isRemoved(fallback.path) {
+				return requestPathLookup{}
+			}
+			result.path = fallback.path
+			result.fileSystem = getHostFileSystem(s.baseFileSystem())
+			result.ok = result.fileSystem != nil
+			return result
+		}
+		if kind := s.pathKind(fallback.path); kind != requestPathKindMissing {
+			result.path = fallback.path
+			result.kind = kind
+			return result
+		}
+		if s.isRemoved(resolved.path) || s.isRemoved(fallback.path) {
+			return requestPathLookup{}
+		}
+		result.fileSystem = s.baseFileSystem()
+	}
+	return result
+}
+
+func (s requestFileSystem) mutationPath(path string) (vfs.FS, string, bool) {
+	if s.kind != KindCache {
+		return nil, "", false
+	}
+	resolved := s.resolvePathForOverlay(path)
+	if !resolved.ok {
+		return nil, "", false
+	}
+	host := getHostFileSystem(s.baseFileSystem())
+	return host, resolved.path, host != nil
+}
+
 func cloneEntries(entries vfs.Entries) vfs.Entries {
 	result := vfs.Entries{
 		Files:       slices.Clone(entries.Files),
@@ -548,148 +645,40 @@ func (s requestFileSystem) UseCaseSensitiveFileNames() bool {
 }
 
 func (s requestFileSystem) ReadFile(fileName string) (string, bool) {
-	if s.isPreSymlinkRemoved(fileName) {
+	lookup := s.lookupPath(fileName)
+	if !lookup.ok || lookup.kind == requestPathKindDirectory {
 		return "", false
 	}
-	resolved := s.resolvePath(fileName)
-	if !resolved.ok {
-		return "", false
+	if lookup.fileSystem != nil {
+		return lookup.fileSystem.ReadFile(lookup.path)
 	}
-	if resolved.host {
-		if s.isRemoved(resolved.path) {
-			return "", false
-		}
-		host := getHostFileSystem(s.baseFileSystem())
-		if host == nil {
-			return "", false
-		}
-		return host.ReadFile(resolved.path)
-	}
-	file, ok := s.fileAt(resolved.path)
-	if ok {
+	if file, ok := s.fileAt(lookup.path); ok {
 		return file.content, true
-	}
-	if _, ok := s.directoryAt(resolved.path); ok {
-		return "", false
-	}
-	if !resolved.followedSymlink && s.isRemoved(fileName) {
-		return "", false
-	}
-	fallbackPath := resolved.path
-	if s.fallsBack() {
-		fallback := s.resolveBasePath(resolved.path)
-		if !fallback.ok {
-			return "", false
-		}
-		fallbackPath = fallback.path
-		if file, ok := s.fileAt(fallbackPath); ok {
-			return file.content, true
-		}
-		if _, ok := s.directoryAt(fallbackPath); ok {
-			return "", false
-		}
-	}
-	if s.isRemoved(resolved.path) || s.isRemoved(fallbackPath) {
-		return "", false
-	}
-	if s.fallsBack() {
-		return s.baseFileSystem().ReadFile(resolved.path)
 	}
 	return "", false
 }
 
 func (s requestFileSystem) FileExists(fileName string) bool {
-	if s.isPreSymlinkRemoved(fileName) {
+	lookup := s.lookupPath(fileName)
+	if !lookup.ok || lookup.kind == requestPathKindDirectory {
 		return false
 	}
-	resolved := s.resolvePath(fileName)
-	if !resolved.ok {
-		return false
-	}
-	if resolved.host {
-		if s.isRemoved(resolved.path) {
-			return false
-		}
-		host := getHostFileSystem(s.baseFileSystem())
-		return host != nil && host.FileExists(resolved.path)
-	}
-	_, ok := s.fileAt(resolved.path)
-	if ok {
-		return true
-	}
-	if _, ok := s.directoryAt(resolved.path); ok {
-		return false
-	}
-	if !resolved.followedSymlink && s.isRemoved(fileName) {
-		return false
-	}
-	fallbackPath := resolved.path
-	if s.fallsBack() {
-		fallback := s.resolveBasePath(resolved.path)
-		if !fallback.ok {
-			return false
-		}
-		fallbackPath = fallback.path
-		if _, ok := s.fileAt(fallbackPath); ok {
-			return true
-		}
-		if _, ok := s.directoryAt(fallbackPath); ok {
-			return false
-		}
-	}
-	if s.isRemoved(resolved.path) || s.isRemoved(fallbackPath) || !s.fallsBack() {
-		return false
-	}
-	return s.baseFileSystem().FileExists(resolved.path)
+	return lookup.kind == requestPathKindFile || lookup.fileSystem != nil && lookup.fileSystem.FileExists(lookup.path)
 }
 
 func (s requestFileSystem) DirectoryExists(directoryName string) bool {
-	if s.isPreSymlinkRemoved(directoryName) {
+	lookup := s.lookupPath(directoryName)
+	if !lookup.ok || lookup.kind == requestPathKindFile {
 		return false
 	}
-	resolved := s.resolvePath(directoryName)
-	if !resolved.ok {
-		return false
-	}
-	if resolved.host {
-		if s.isRemoved(resolved.path) {
-			return false
-		}
-		host := getHostFileSystem(s.baseFileSystem())
-		return host != nil && host.DirectoryExists(resolved.path)
-	}
-	_, ok := s.directoryAt(resolved.path)
-	if ok {
-		return true
-	}
-	if _, ok := s.fileAt(resolved.path); ok {
-		return false
-	}
-	if !resolved.followedSymlink && s.isRemoved(directoryName) {
-		return false
-	}
-	fallbackPath := resolved.path
-	if s.fallsBack() {
-		fallback := s.resolveBasePath(resolved.path)
-		if !fallback.ok {
-			return false
-		}
-		fallbackPath = fallback.path
-		if _, ok := s.directoryAt(fallbackPath); ok {
-			return true
-		}
-		if _, ok := s.fileAt(fallbackPath); ok {
-			return false
-		}
-	}
-	if s.isRemoved(resolved.path) || s.isRemoved(fallbackPath) || !s.fallsBack() {
-		return false
-	}
-	return s.baseFileSystem().DirectoryExists(resolved.path)
+	return lookup.kind == requestPathKindDirectory || lookup.fileSystem != nil && lookup.fileSystem.DirectoryExists(lookup.path)
 }
 
 func (s requestFileSystem) GetAccessibleEntries(directoryName string) vfs.Entries {
 	if s.isPreSymlinkRemoved(directoryName) {
+		if entries, _, ok := s.getLocalEntries(directoryName); ok {
+			return s.addSymlinkEntries(directoryName, entries)
+		}
 		return vfs.Entries{Symlinks: map[string]struct{}{}}
 	}
 	resolved := s.resolvePath(directoryName)
@@ -706,16 +695,20 @@ func (s requestFileSystem) GetAccessibleEntries(directoryName string) vfs.Entrie
 		return vfs.Entries{Symlinks: map[string]struct{}{}}
 	}
 	fallbackPath := resolved.path
+	fallbackHost := false
 	if !resolved.host && s.fallsBack() {
 		fallback := s.resolveBasePath(resolved.path)
 		if !fallback.ok {
 			return vfs.Entries{Symlinks: map[string]struct{}{}}
 		}
 		fallbackPath = fallback.path
-		if _, ok := s.fileAt(fallbackPath); ok {
-			return vfs.Entries{Symlinks: map[string]struct{}{}}
+		fallbackHost = fallback.host
+		if !fallbackHost {
+			if _, ok := s.fileAt(fallbackPath); ok {
+				return vfs.Entries{Symlinks: map[string]struct{}{}}
+			}
 		}
-		if s.toPath(fallbackPath) != s.toPath(resolved.path) {
+		if !fallbackHost && s.toPath(fallbackPath) != s.toPath(resolved.path) {
 			targetEntries, targetExplicit, targetLocal := s.getLocalEntries(fallbackPath)
 			if targetLocal {
 				localEntries = mergeEntries(localEntries, targetEntries, s.equalEntryNames)
@@ -726,11 +719,24 @@ func (s requestFileSystem) GetAccessibleEntries(directoryName string) vfs.Entrie
 		}
 	}
 	var result vfs.Entries
-	if resolved.host {
-		if !s.isRemoved(resolved.path) {
+	if resolved.host || fallbackHost {
+		hostPath := resolved.path
+		if fallbackHost {
+			hostPath = fallbackPath
+		}
+		if !s.isRemoved(directoryName) && !s.isRemoved(resolved.path) && !s.isRemoved(hostPath) {
 			if host := getHostFileSystem(s.baseFileSystem()); host != nil {
-				result = s.removeEntries(resolved.path, host.GetAccessibleEntries(resolved.path))
+				result = s.removeEntries(directoryName, host.GetAccessibleEntries(hostPath))
+				if s.toPath(directoryName) != s.toPath(resolved.path) {
+					result = s.removeEntries(resolved.path, result)
+				}
+				if s.toPath(hostPath) != s.toPath(resolved.path) {
+					result = s.removeEntries(hostPath, result)
+				}
 			}
+		}
+		if hasLocalEntries {
+			result = mergeEntries(result, localEntries, s.equalEntryNames)
 		}
 	} else if !s.fallsBack() || hasExplicitListing && sealedListing {
 		result = localEntries
@@ -749,7 +755,7 @@ func (s requestFileSystem) GetAccessibleEntries(directoryName string) vfs.Entrie
 		}
 	}
 	result = s.addSymlinkEntries(resolved.path, result)
-	if s.toPath(fallbackPath) != s.toPath(resolved.path) {
+	if !fallbackHost && s.toPath(fallbackPath) != s.toPath(resolved.path) {
 		result = s.addSymlinkEntries(fallbackPath, result)
 	}
 	result = s.removePreSymlinkEntries(directoryName, result)
@@ -760,7 +766,14 @@ func (s requestFileSystem) removePreSymlinkEntries(directoryName string, entries
 	result := cloneEntries(entries)
 	filter := func(values []string) []string {
 		return slices.DeleteFunc(values, func(name string) bool {
-			path := s.toPath(tspath.CombinePaths(directoryName, name))
+			fileName := tspath.CombinePaths(directoryName, name)
+			if _, ok := s.fileAt(fileName); ok {
+				return false
+			}
+			if _, ok := s.directoryAt(fileName); ok {
+				return false
+			}
+			path := s.toPath(fileName)
 			for removedPath := range s.preSymlinkRemovedPaths {
 				if path == removedPath || strings.HasPrefix(string(path), tspath.EnsureTrailingDirectorySeparator(string(removedPath))) {
 					return true
@@ -905,147 +918,66 @@ func (s requestFileSystem) equalEntryNames(left string, right string) bool {
 }
 
 func (s requestFileSystem) Realpath(path string) string {
-	if s.isPreSymlinkRemoved(path) {
+	lookup := s.lookupPath(path)
+	if !lookup.ok {
 		return path
 	}
-	resolved := s.resolvePath(path)
-	if !resolved.ok {
-		return path
+	if lookup.fileSystem != nil {
+		return lookup.fileSystem.Realpath(lookup.path)
 	}
-	if _, ok := s.fileAt(resolved.path); ok {
-		return resolved.path
+	if lookup.kind != requestPathKindMissing || !lookup.followedSymlink {
+		return lookup.path
 	}
-	if _, ok := s.directoryAt(resolved.path); ok {
-		return resolved.path
-	}
-	if !resolved.followedSymlink && s.isRemoved(path) {
-		return path
-	}
-	fallbackPath := resolved.path
-	if !resolved.host && s.fallsBack() {
-		fallback := s.resolveBasePath(resolved.path)
-		if !fallback.ok {
-			return path
-		}
-		fallbackPath = fallback.path
-		if _, ok := s.fileAt(fallbackPath); ok {
-			return fallbackPath
-		}
-		if _, ok := s.directoryAt(fallbackPath); ok {
-			return fallbackPath
-		}
-	}
-	if s.isRemoved(resolved.path) || s.isRemoved(fallbackPath) {
-		return path
-	}
-	if resolved.host {
-		if host := getHostFileSystem(s.baseFileSystem()); host != nil {
-			return host.Realpath(resolved.path)
-		}
-		return path
-	}
-	if resolved.followedSymlink && !s.fallsBack() {
-		return path
-	}
-	if s.fallsBack() {
-		return s.baseFileSystem().Realpath(resolved.path)
-	}
-	return resolved.path
+	return path
 }
 
 func (s requestFileSystem) WriteFile(fileName string, data string) error {
-	if s.kind != KindCache {
+	host, path, ok := s.mutationPath(fileName)
+	if !ok {
 		return vfs.ErrInvalid
 	}
-	host := getHostFileSystem(s.baseFileSystem())
-	if host == nil {
-		return vfs.ErrInvalid
-	}
-	return host.WriteFile(s.toAbsolutePath(fileName), data)
+	return host.WriteFile(path, data)
 }
 
 func (s requestFileSystem) AppendFile(fileName string, data string) error {
-	if s.kind != KindCache {
+	host, path, ok := s.mutationPath(fileName)
+	if !ok {
 		return vfs.ErrInvalid
 	}
-	host := getHostFileSystem(s.baseFileSystem())
-	if host == nil {
-		return vfs.ErrInvalid
-	}
-	return host.AppendFile(s.toAbsolutePath(fileName), data)
+	return host.AppendFile(path, data)
 }
 
 func (s requestFileSystem) Remove(path string) error {
-	if s.kind != KindCache {
+	host, path, ok := s.mutationPath(path)
+	if !ok {
 		return vfs.ErrInvalid
 	}
-	host := getHostFileSystem(s.baseFileSystem())
-	if host == nil {
-		return vfs.ErrInvalid
-	}
-	return host.Remove(s.toAbsolutePath(path))
+	return host.Remove(path)
 }
 
 func (s requestFileSystem) Chtimes(path string, aTime time.Time, mTime time.Time) error {
-	resolved := s.resolvePath(path)
-	if !resolved.ok {
+	host, path, ok := s.mutationPath(path)
+	if !ok {
 		return vfs.ErrInvalid
 	}
-	if s.kind != KindCache {
-		return vfs.ErrInvalid
-	}
-	host := getHostFileSystem(s.baseFileSystem())
-	if host == nil {
-		return vfs.ErrInvalid
-	}
-	return host.Chtimes(s.toAbsolutePath(path), aTime, mTime)
+	return host.Chtimes(path, aTime, mTime)
 }
 
 func (s requestFileSystem) Stat(path string) vfs.FileInfo {
-	if s.isPreSymlinkRemoved(path) {
+	lookup := s.lookupPath(path)
+	if !lookup.ok {
 		return nil
 	}
-	resolved := s.resolvePath(path)
-	if !resolved.ok {
-		return nil
+	if lookup.fileSystem != nil {
+		return statFileSystem(lookup.fileSystem, lookup.path)
 	}
-	canonicalPath := s.toPath(resolved.path)
-	if file, ok := s.files[canonicalPath]; ok {
-		info := requestFileInfo{name: tspath.GetBaseFileName(file.fileName), size: int64(len(file.content))}
-		return info
+	if lookup.kind == requestPathKindFile {
+		file, _ := s.fileAt(lookup.path)
+		return requestFileInfo{name: tspath.GetBaseFileName(file.fileName), size: int64(len(file.content))}
 	}
-	if directoryName, ok := s.directories[canonicalPath]; ok {
-		info := requestFileInfo{name: tspath.GetBaseFileName(directoryName), directory: true}
-		return info
-	}
-	if !resolved.followedSymlink && s.isRemoved(path) {
-		return nil
-	}
-	fallbackPath := resolved.path
-	if !resolved.host && s.fallsBack() {
-		fallback := s.resolveBasePath(resolved.path)
-		if !fallback.ok {
-			return nil
-		}
-		fallbackPath = fallback.path
-		canonicalFallbackPath := s.toPath(fallbackPath)
-		if file, ok := s.files[canonicalFallbackPath]; ok {
-			info := requestFileInfo{name: tspath.GetBaseFileName(file.fileName), size: int64(len(file.content))}
-			return info
-		}
-		if directoryName, ok := s.directories[canonicalFallbackPath]; ok {
-			info := requestFileInfo{name: tspath.GetBaseFileName(directoryName), directory: true}
-			return info
-		}
-	}
-	if s.isRemoved(resolved.path) || s.isRemoved(fallbackPath) {
-		return nil
-	}
-	if resolved.host {
-		return statFileSystem(getHostFileSystem(s.baseFileSystem()), resolved.path)
-	}
-	if s.fallsBack() {
-		return statFileSystem(s.baseFileSystem(), resolved.path)
+	if lookup.kind == requestPathKindDirectory {
+		directoryName, _ := s.directoryAt(lookup.path)
+		return requestFileInfo{name: tspath.GetBaseFileName(directoryName), directory: true}
 	}
 	return nil
 }
