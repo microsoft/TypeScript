@@ -259,7 +259,7 @@ import {
 export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHost {
     private client: Client;
     private sourceFileCache: SourceFileCache;
-    private toPath: ((fileName: string) => Path) | undefined;
+    private toPath: ((fileName: string, basePath?: string) => Path) | undefined;
     private currentDirectory: string | undefined;
     private getCanonicalFileNameWorker: ((fileName: string) => string) | undefined;
     private initialized: boolean = false;
@@ -337,7 +337,7 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
                     const currentDirectory = response.currentDirectory;
                     owner.getCanonicalFileNameWorker = getCanonicalFileName;
                     owner.currentDirectory = currentDirectory;
-                    owner.toPath = (fileName: string) => toPath(fileName, currentDirectory, getCanonicalFileName) as Path;
+                    owner.toPath = (fileName: string, basePath = currentDirectory) => toPath(fileName, basePath, getCanonicalFileName) as Path;
                     owner.initialized = true;
                 }
                 catch (error) {
@@ -352,7 +352,7 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
                     const currentDirectory = response.currentDirectory;
                     owner.getCanonicalFileNameWorker = getCanonicalFileName;
                     owner.currentDirectory = currentDirectory;
-                    owner.toPath = (fileName: string) => toPath(fileName, currentDirectory, getCanonicalFileName) as Path;
+                    owner.toPath = (fileName: string, basePath = currentDirectory) => toPath(fileName, basePath, getCanonicalFileName) as Path;
                     owner.initialized = true;
                 }
                 catch (error) {
@@ -1034,7 +1034,7 @@ export class InternalAPI {
 export class Snapshot {
     readonly id: number;
     private projectMap: Map<Path, Project>;
-    private toPath: (fileName: string) => Path;
+    private toPath: (fileName: string, basePath?: string) => Path;
     private client: Client;
     private disposed: boolean = false;
     private disposePromise: void | undefined;
@@ -1047,7 +1047,7 @@ export class Snapshot {
         data: UpdateSnapshotResponse,
         client: Client,
         sourceFileCache: SourceFileCache,
-        toPath: (fileName: string) => Path,
+        toPath: (fileName: string, basePath?: string) => Path,
         api: SnapshotOwner,
         onDispose: () => void,
     ) {
@@ -1813,7 +1813,7 @@ export class Project {
         snapshotId: number,
         client: Client,
         sourceFileCache: SourceFileCache,
-        toPath: (fileName: string) => Path,
+        toPath: (fileName: string, basePath?: string) => Path,
         formatDiagnosticsHost: FormatDiagnosticsHost,
         snapshotRegistry: SnapshotObjectRegistry,
     ) {
@@ -2138,7 +2138,7 @@ export class Program implements FormatDiagnosticsHost {
     private readonly project: Project;
     private readonly client: Client;
     private readonly sourceFileCache: SourceFileCache;
-    private readonly toPath: (fileName: string) => Path;
+    private readonly toPath: (fileName: string, basePath?: string) => Path;
     private readonly formatDiagnosticsHost: FormatDiagnosticsHost;
     private readonly decoder = new Wtf8Decoder();
     private readonly sourceFileMetadataCache = new Map<Path, SourceFileMetadata | undefined>();
@@ -2150,7 +2150,7 @@ export class Program implements FormatDiagnosticsHost {
         project: Project,
         client: Client,
         sourceFileCache: SourceFileCache,
-        toPath: (fileName: string) => Path,
+        toPath: (fileName: string, basePath?: string) => Path,
         formatDiagnosticsHost: FormatDiagnosticsHost,
     ) {
         this.snapshotId = snapshotId;
@@ -2234,7 +2234,7 @@ export class Program implements FormatDiagnosticsHost {
             "getSourceFile",
             function (file: DocumentIdentifier): SourceFile | undefined {
                 const fileName = resolveFileName(file);
-                const path = owner.toPath(fileName);
+                const path = owner.toPath(fileName, owner.project.currentDirectory);
 
                 // Check if we already have a retained cache entry for this (snapshot, project) pair
                 const retained = owner.sourceFileCache.getRetained(path, owner.snapshotId, owner.project.id);
@@ -2262,7 +2262,7 @@ export class Program implements FormatDiagnosticsHost {
             },
             function* (file: DocumentIdentifier): Generator<ProtocolRequest, SourceFile | undefined, ProtocolResponse["result"]> {
                 const fileName = resolveFileName(file);
-                const path = owner.toPath(fileName);
+                const path = owner.toPath(fileName, owner.project.currentDirectory);
 
                 // Check if we already have a retained cache entry for this (snapshot, project) pair
                 const retained = owner.sourceFileCache.getRetained(path, owner.snapshotId, owner.project.id);
@@ -2452,10 +2452,10 @@ export class Program implements FormatDiagnosticsHost {
             owner,
             "getSourceFileMetadata",
             function (file: DocumentIdentifier): SourceFileMetadata | undefined {
-                return owner.getSourceFileMetadataByPath(owner.toPath(resolveFileName(file)));
+                return owner.getSourceFileMetadataByPath(owner.toPath(resolveFileName(file), owner.project.currentDirectory));
             },
             function* (file: DocumentIdentifier): Generator<ProtocolRequest, SourceFileMetadata | undefined, ProtocolResponse["result"]> {
-                return yield* owner.getSourceFileMetadataByPath.gen(owner.toPath(resolveFileName(file)));
+                return yield* owner.getSourceFileMetadataByPath.gen(owner.toPath(resolveFileName(file), owner.project.currentDirectory));
             },
         );
     }
