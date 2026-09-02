@@ -5,13 +5,13 @@
  *   - packages/typescript/src/ast/factory.generated.ts
  *   - packages/typescript/src/ast/is.generated.ts
  *
- * Usage: node --experimental-strip-types tools/scripts/tsc/generate-ts-ast.ts
+ * Usage: node tools/scripts/tsc/generate-ts-ast.ts
  */
 
-import { execaSync } from "execa";
 import * as fs from "node:fs";
 import * as path from "node:path";
 import { fileURLToPath } from "node:url";
+import { xSync } from "tinyexec";
 import type {
     MemberInfo,
     NodeType,
@@ -1717,7 +1717,10 @@ function generateVisitor(): string {
 
 function writeAndFormat(filePath: string, content: string) {
     fs.writeFileSync(filePath, content);
-    execaSync("dprint", ["fmt", filePath], { stdio: "inherit", cwd: ROOT });
+    xSync("dprint", ["fmt", filePath], {
+        throwOnError: true,
+        nodeOptions: { stdio: "inherit", cwd: ROOT },
+    });
     console.log(`Generated ${filePath}`);
 }
 

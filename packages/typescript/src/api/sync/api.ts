@@ -672,6 +672,10 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         );
     }
 
+    [globalThis.Symbol.dispose](): void {
+        this.close();
+    }
+
     get close(): {
         (): void;
         gen(): Generator<ProtocolRequest, void, ProtocolResponse["result"]>;
@@ -682,29 +686,37 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
             "close",
             function (): void {
                 // Dispose all active snapshots
-                for (const snapshot of [...owner.activeSnapshots]) {
-                    snapshot.dispose();
+                try {
+                    for (const snapshot of [...owner.activeSnapshots]) {
+                        snapshot.dispose();
+                    }
+                    // Release the latest snapshot's cache refs if still held
+                    if (owner.latestSnapshot) {
+                        owner.sourceFileCache.releaseSnapshot(owner.latestSnapshot.id);
+                        owner.latestSnapshot = undefined;
+                    }
+                    owner.sourceFileCache.clear();
                 }
-                // Release the latest snapshot's cache refs if still held
-                if (owner.latestSnapshot) {
-                    owner.sourceFileCache.releaseSnapshot(owner.latestSnapshot.id);
-                    owner.latestSnapshot = undefined;
+                finally {
+                    owner.client.close(); // always close the underlying connection
                 }
-                owner.client.close();
-                owner.sourceFileCache.clear();
             },
             function* (): Generator<ProtocolRequest, void, ProtocolResponse["result"]> {
                 // Dispose all active snapshots
-                for (const snapshot of [...owner.activeSnapshots]) {
-                    yield* snapshot.dispose.gen();
+                try {
+                    for (const snapshot of [...owner.activeSnapshots]) {
+                        yield* snapshot.dispose.gen();
+                    }
+                    // Release the latest snapshot's cache refs if still held
+                    if (owner.latestSnapshot) {
+                        owner.sourceFileCache.releaseSnapshot(owner.latestSnapshot.id);
+                        owner.latestSnapshot = undefined;
+                    }
+                    owner.sourceFileCache.clear();
                 }
-                // Release the latest snapshot's cache refs if still held
-                if (owner.latestSnapshot) {
-                    owner.sourceFileCache.releaseSnapshot(owner.latestSnapshot.id);
-                    owner.latestSnapshot = undefined;
+                finally {
+                    owner.client.close(); // always close the underlying connection
                 }
-                owner.client.close();
-                owner.sourceFileCache.clear();
             },
         );
     }
@@ -1130,7 +1142,6 @@ export class Snapshot {
     [globalThis.Symbol.dispose](): void {
         void this.dispose();
     }
-
     get dispose(): {
         (): void;
         gen(): Generator<ProtocolRequest, void, ProtocolResponse["result"]>;

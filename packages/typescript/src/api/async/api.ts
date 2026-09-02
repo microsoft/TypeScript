@@ -406,18 +406,27 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         return snapshot;
     }
 
+    async [globalThis.Symbol.asyncDispose](): Promise<void> { // @sync: [globalThis.Symbol.dispose](): void {
+        await this.close(); // @sync: this.close();
+    }
+
     async close(): Promise<void> {
+        await this.initializing?.catch(() => {}); // @sync-skip
         // Dispose all active snapshots
-        for (const snapshot of [...this.activeSnapshots]) {
-            await snapshot.dispose();
+        try {
+            for (const snapshot of [...this.activeSnapshots]) {
+                await snapshot.dispose();
+            }
+            // Release the latest snapshot's cache refs if still held
+            if (this.latestSnapshot) {
+                this.sourceFileCache.releaseSnapshot(this.latestSnapshot.id);
+                this.latestSnapshot = undefined;
+            }
+            this.sourceFileCache.clear();
         }
-        // Release the latest snapshot's cache refs if still held
-        if (this.latestSnapshot) {
-            this.sourceFileCache.releaseSnapshot(this.latestSnapshot.id);
-            this.latestSnapshot = undefined;
+        finally {
+            await this.client.close(); // always close the underlying connection
         }
-        await this.client.close();
-        this.sourceFileCache.clear();
     }
 
     clearSourceFileCache(): void {
@@ -644,7 +653,6 @@ export class Snapshot {
     [globalThis.Symbol.dispose](): void {
         void this.dispose();
     }
-
     dispose(): Promise<void> {
         return this.disposePromise ??= this.disposeWorker();
     }
