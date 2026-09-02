@@ -142,7 +142,6 @@ const privateGeneratorGetters = new Set([
     "API.initializeWorker",
     "API.updateSnapshotFrom",
     "API.updateSnapshotWorker",
-    "API.createProgramFromSnapshot",
     "API.createProgramWorker",
     "Checker.getIntrinsicType",
     "Checker.getWellKnownSignatures",
@@ -923,12 +922,6 @@ describe("API - generator batching", () => {
                 const syncUpdated = syncBase.update();
                 assertSnapshotsEquivalent(generatorUpdated, syncUpdated, "Snapshot.update");
                 exercisedMethods.add("Snapshot.update");
-
-                const createProgramOptions = { compilerOptions: { noLib: true } };
-                const generatorProgram = snapshotGeneratorAPI.batch(generatorUpdated.createProgram.gen(["/src/index.ts"], createProgramOptions))[0];
-                const syncProgram = syncUpdated.createProgram(["/src/index.ts"], createProgramOptions);
-                assertProgramsEquivalent(generatorProgram, syncProgram, "Snapshot.createProgram");
-                exercisedMethods.add("Snapshot.createProgram");
             }
             finally {
                 snapshotGeneratorAPI.close();

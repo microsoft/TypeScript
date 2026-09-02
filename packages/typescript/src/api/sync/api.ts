@@ -866,39 +866,15 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         );
     }
 
-    /** @internal */
-    get createProgramFromSnapshot(): {
-        (baseSnapshot: Snapshot, rootFiles: readonly DocumentIdentifier[], createProgramOptions: CreateProgramOptions, oldProgram?: Program, fileChanges?: APIFileChanges): Program;
-        gen(baseSnapshot: Snapshot, rootFiles: readonly DocumentIdentifier[], createProgramOptions: CreateProgramOptions, oldProgram?: Program, fileChanges?: APIFileChanges): Generator<ProtocolRequest, Program, ProtocolResponse["result"]>;
-    } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "createProgramFromSnapshot",
-            function (baseSnapshot: Snapshot, rootFiles: readonly DocumentIdentifier[], createProgramOptions: CreateProgramOptions, oldProgram?: Program, fileChanges?: APIFileChanges): Program {
-                if (!owner.activeSnapshots.has(baseSnapshot) || baseSnapshot.isDisposed()) {
-                    throw new Error("Cannot create a program from an inactive snapshot");
-                }
-                return owner.createProgramWorker(rootFiles, createProgramOptions, oldProgram, fileChanges, baseSnapshot);
-            },
-            function* (baseSnapshot: Snapshot, rootFiles: readonly DocumentIdentifier[], createProgramOptions: CreateProgramOptions, oldProgram?: Program, fileChanges?: APIFileChanges): Generator<ProtocolRequest, Program, ProtocolResponse["result"]> {
-                if (!owner.activeSnapshots.has(baseSnapshot) || baseSnapshot.isDisposed()) {
-                    throw new Error("Cannot create a program from an inactive snapshot");
-                }
-                return yield* owner.createProgramWorker.gen(rootFiles, createProgramOptions, oldProgram, fileChanges, baseSnapshot);
-            },
-        );
-    }
-
     private get createProgramWorker(): {
-        (rootFiles: readonly DocumentIdentifier[], createProgramOptions: CreateProgramOptions, oldProgram?: Program, fileChanges?: APIFileChanges, baseSnapshot?: Snapshot): Program;
-        gen(rootFiles: readonly DocumentIdentifier[], createProgramOptions: CreateProgramOptions, oldProgram?: Program, fileChanges?: APIFileChanges, baseSnapshot?: Snapshot): Generator<ProtocolRequest, Program, ProtocolResponse["result"]>;
+        (rootFiles: readonly DocumentIdentifier[], createProgramOptions: CreateProgramOptions, oldProgram?: Program, fileChanges?: APIFileChanges): Program;
+        gen(rootFiles: readonly DocumentIdentifier[], createProgramOptions: CreateProgramOptions, oldProgram?: Program, fileChanges?: APIFileChanges): Generator<ProtocolRequest, Program, ProtocolResponse["result"]>;
     } {
         const owner = this;
         return cacheGeneratorMethod(
             owner,
             "createProgramWorker",
-            function (rootFiles: readonly DocumentIdentifier[], createProgramOptions: CreateProgramOptions, oldProgram?: Program, fileChanges?: APIFileChanges, baseSnapshot?: Snapshot): Program {
+            function (rootFiles: readonly DocumentIdentifier[], createProgramOptions: CreateProgramOptions, oldProgram?: Program, fileChanges?: APIFileChanges): Program {
                 owner.ensureInitialized();
 
                 if (fileChanges && !oldProgram) {
@@ -911,7 +887,6 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
                 const data: CreateProgramResponse = owner.client.apiRequest("createProgram", {
                     rootFiles,
                     createProgramOptions,
-                    ...(baseSnapshot ? { baseSnapshot: baseSnapshot.id } : {}),
                     ...(oldProgram ? { oldProgram: { snapshot: oldProgram.snapshotId, project: oldProgram.getProject().id } } : {}),
                     ...(fileChanges ? { fileChanges } : {}),
                 });
@@ -934,7 +909,7 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
                 owner.activeSnapshots.add(snapshot);
                 return program;
             },
-            function* (rootFiles: readonly DocumentIdentifier[], createProgramOptions: CreateProgramOptions, oldProgram?: Program, fileChanges?: APIFileChanges, baseSnapshot?: Snapshot): Generator<ProtocolRequest, Program, ProtocolResponse["result"]> {
+            function* (rootFiles: readonly DocumentIdentifier[], createProgramOptions: CreateProgramOptions, oldProgram?: Program, fileChanges?: APIFileChanges): Generator<ProtocolRequest, Program, ProtocolResponse["result"]> {
                 yield* owner.ensureInitialized.gen();
 
                 if (fileChanges && !oldProgram) {
@@ -947,7 +922,6 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
                 const data: CreateProgramResponse = yield* apiRequest("createProgram", {
                     rootFiles,
                     createProgramOptions,
-                    ...(baseSnapshot ? { baseSnapshot: baseSnapshot.id } : {}),
                     ...(oldProgram ? { oldProgram: { snapshot: oldProgram.snapshotId, project: oldProgram.getProject().id } } : {}),
                     ...(fileChanges ? { fileChanges } : {}),
                 });
@@ -980,10 +954,6 @@ interface SnapshotOwner extends FormatDiagnosticsHost {
     updateSnapshotFrom: {
         (baseSnapshot: Snapshot, params?: UpdateSnapshotParams): Snapshot;
         gen(baseSnapshot: Snapshot, params?: UpdateSnapshotParams): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]>;
-    };
-    createProgramFromSnapshot: {
-        (baseSnapshot: Snapshot, rootFiles: readonly DocumentIdentifier[], createProgramOptions: CreateProgramOptions, oldProgram?: Program, fileChanges?: APIFileChanges): Program;
-        gen(baseSnapshot: Snapshot, rootFiles: readonly DocumentIdentifier[], createProgramOptions: CreateProgramOptions, oldProgram?: Program, fileChanges?: APIFileChanges): Generator<ProtocolRequest, Program, ProtocolResponse["result"]>;
     };
 }
 
@@ -1153,29 +1123,6 @@ export class Snapshot {
             function* (params?: UpdateSnapshotParams): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]> {
                 owner.ensureNotDisposed();
                 return yield* owner.api.updateSnapshotFrom.gen(owner, params);
-            },
-        );
-    }
-
-    /**
-     * Creates an isolated program using this snapshot and its effective filesystem
-     * as the base. Usage is otherwise identical to {@link API.createProgram}.
-     */
-    get createProgram(): {
-        (rootFiles: readonly DocumentIdentifier[], createProgramOptions: CreateProgramOptions, oldProgram?: Program, fileChanges?: APIFileChanges): Program;
-        gen(rootFiles: readonly DocumentIdentifier[], createProgramOptions: CreateProgramOptions, oldProgram?: Program, fileChanges?: APIFileChanges): Generator<ProtocolRequest, Program, ProtocolResponse["result"]>;
-    } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "createProgram",
-            function (rootFiles: readonly DocumentIdentifier[], createProgramOptions: CreateProgramOptions, oldProgram?: Program, fileChanges?: APIFileChanges): Program {
-                owner.ensureNotDisposed();
-                return owner.api.createProgramFromSnapshot(owner, rootFiles, createProgramOptions, oldProgram, fileChanges);
-            },
-            function* (rootFiles: readonly DocumentIdentifier[], createProgramOptions: CreateProgramOptions, oldProgram?: Program, fileChanges?: APIFileChanges): Generator<ProtocolRequest, Program, ProtocolResponse["result"]> {
-                owner.ensureNotDisposed();
-                return yield* owner.api.createProgramFromSnapshot.gen(owner, rootFiles, createProgramOptions, oldProgram, fileChanges);
             },
         );
     }

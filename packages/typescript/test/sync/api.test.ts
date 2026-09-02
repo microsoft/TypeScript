@@ -3723,14 +3723,13 @@ describe("updateSnapshot file systems", () => {
         });
         try {
             using snapshot = api.updateSnapshot({
+                openProject: "/tsconfig.json",
                 fileSystem: createMemoryFileSystemWithLib(Object.entries({
+                    "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true }, files: ["src/main.ts"] }),
                     "/src/main.ts": `export const values: Array<number> = [];`,
                 })),
             });
-            using program = snapshot.createProgram(
-                ["/src/main.ts"],
-                { compilerOptions: { strict: true } },
-            );
+            const program = snapshot.getProject("/tsconfig.json")!.program;
             assert.deepEqual(program.getGlobalDiagnostics(), []);
             const sourceFileNames = program.getSourceFileNames();
             const defaultLibraryName = sourceFileNames.find(fileName => fileName.includes("/lib.") && fileName.endsWith(".d.ts"));
@@ -3753,19 +3752,19 @@ describe("updateSnapshot file systems", () => {
         });
         try {
             using snapshot = api.updateSnapshot({
+                openFiles: [fileDocument, remoteDocument, notebookDocument],
                 fileSystem: createMemoryFileSystem([
                     [fileDocument, `export const file = true;`],
                     [remoteDocument, `export const remote = true;`],
                     [notebookDocument, `export const cell = true;`],
                 ]),
             });
-            using program = snapshot.createProgram(
-                [fileDocument, remoteDocument, notebookDocument],
-                { compilerOptions: { noLib: true } },
-            );
-            assert.equal((program.getSourceFile(fileDocument))?.text, `export const file = true;`);
-            assert.equal((program.getSourceFile(remoteDocument))?.text, `export const remote = true;`);
-            assert.equal((program.getSourceFile(notebookDocument))?.text, `export const cell = true;`);
+            const fileProject = snapshot.getDefaultProjectForFile(fileDocument);
+            const remoteProject = snapshot.getDefaultProjectForFile(remoteDocument);
+            const notebookProject = snapshot.getDefaultProjectForFile(notebookDocument);
+            assert.equal((fileProject?.program.getSourceFile(fileDocument))?.text, `export const file = true;`);
+            assert.equal((remoteProject?.program.getSourceFile(remoteDocument))?.text, `export const remote = true;`);
+            assert.equal((notebookProject?.program.getSourceFile(notebookDocument))?.text, `export const cell = true;`);
         }
         finally {
             api.close();
@@ -3966,7 +3965,11 @@ describe("updateSnapshot file systems", () => {
         });
         try {
             let snapshot: Snapshot = api.updateSnapshot({
-                fileSystem: createMemoryFileSystem([["/pkg/index.ts", ""]]),
+                openProject: "/tsconfig.json",
+                fileSystem: createMemoryFileSystem([
+                    ["/tsconfig.json", JSON.stringify({ compilerOptions: { noLib: true }, files: ["pkg/index.ts"] })],
+                    ["/pkg/index.ts", ""],
+                ]),
             });
             try {
                 let content = "";
@@ -3980,10 +3983,7 @@ describe("updateSnapshot file systems", () => {
                     assert.equal(oldSnapshot.isDisposed(), true);
                 }
 
-                using program = snapshot.createProgram(
-                    ["/pkg/index.ts"],
-                    { compilerOptions: { noLib: true } },
-                );
+                const program = snapshot.getProject("/tsconfig.json")!.program;
                 assert.equal((program.getSourceFile("/pkg/index.ts"))?.text, "export const x = 1");
             }
             finally {
@@ -4006,14 +4006,13 @@ describe("updateSnapshot file systems", () => {
         try {
             using snapshot = api.updateSnapshot();
             using replaced = snapshot.update({
+                openProject: "/tsconfig.json",
                 fileSystem: createMemoryFileSystem([
+                    ["/tsconfig.json", JSON.stringify({ compilerOptions: { noLib: true }, files: ["memory.ts", "host.ts"] })],
                     ["/memory.ts", `export const source = "memory";`],
                 ]),
             });
-            using program = replaced.createProgram(
-                ["/memory.ts", "/host.ts"],
-                { compilerOptions: { noLib: true } },
-            );
+            const program = replaced.getProject("/tsconfig.json")!.program;
             assert.equal((program.getSourceFile("/memory.ts"))?.text, `export const source = "memory";`);
             assert.equal(program.getSourceFile("/host.ts"), undefined);
         }
@@ -4028,8 +4027,10 @@ describe("updateSnapshot file systems", () => {
         });
         try {
             using snapshot = api.updateSnapshot({
+                openProject: "/tsconfig.json",
                 fileSystem: createMemoryFileSystem(
                     Object.entries({
+                        "/tsconfig.json": JSON.stringify({ compilerOptions: { noLib: true }, files: ["src/main.ts"] }),
                         "/src/main.ts": `import "./link/change"; import "./link/added"; import "./link/remove";`,
                         "/target/change.ts": `export const version = "old";`,
                         "/target/remove.ts": `export const removed = true;`,
@@ -4053,75 +4054,10 @@ describe("updateSnapshot file systems", () => {
                     },
                 ),
             });
-            using program = updated.createProgram(
-                ["/src/main.ts"],
-                { compilerOptions: { noLib: true } },
-            );
+            const program = updated.getProject("/tsconfig.json")!.program;
             assert.equal((program.getSourceFile("/src/link/change.ts"))?.text, `export const version = "new";`);
             assert.equal((program.getSourceFile("/src/link/added.ts"))?.text, `export const added = true;`);
             assert.equal(program.getSourceFile("/src/link/remove.ts"), undefined);
-        }
-        finally {
-            api.close();
-        }
-    });
-
-    test("Snapshot.createProgram uses the request filesystem as its base", () => {
-        const callbackCalls: string[] = [];
-        const api = new API({
-            cwd: fileURLToPath(new URL("../../../../", import.meta.url).toString()),
-            fs: {
-                readFile: path => {
-                    callbackCalls.push(path);
-                    return undefined;
-                },
-            },
-        });
-        const options = { compilerOptions: { noLib: true, strict: true } };
-        try {
-            using snapshot = api.updateSnapshot({
-                fileSystem: createMemoryFileSystem(Object.entries({
-                    "/src/main.ts": `import { value } from "./dependency"; export const result = value;`,
-                    "/src/dependency.ts": `export const value = "memory";`,
-                })),
-            });
-            using program = snapshot.createProgram(["/src/main.ts"], options);
-            assert.equal((program.getSourceFile("/src/dependency.ts"))?.text, `export const value = "memory";`);
-
-            using updated = snapshot.update({
-                fileSystem: createCacheFileSystem(Object.entries({
-                    "/src/dependency.ts": `export const value = "updated";`,
-                })),
-            });
-            using updatedProgram = updated.createProgram(
-                ["/src/main.ts"],
-                options,
-                program,
-                { changed: ["/src/dependency.ts"] },
-            );
-            assert.equal((updatedProgram.getSourceFile("/src/dependency.ts"))?.text, `export const value = "updated";`);
-            assert.deepEqual(callbackCalls, []);
-        }
-        finally {
-            api.close();
-        }
-    });
-
-    test("Snapshot.createProgram rebuilds an old program from a different snapshot when changes are omitted", () => {
-        const api = new API({
-            cwd: fileURLToPath(new URL("../../../../", import.meta.url).toString()),
-        });
-        const options = { compilerOptions: { noLib: true } };
-        try {
-            using base = api.updateSnapshot({
-                fileSystem: createMemoryFileSystem([["/src/main.ts", `export const source = "base";`]]),
-            });
-            using newer = base.update({
-                fileSystem: createMemoryFileSystem([["/src/main.ts", `export const source = "newer";`]]),
-            });
-            using oldProgram = newer.createProgram(["/src/main.ts"], options);
-            using rebuilt = base.createProgram(["/src/main.ts"], options, oldProgram);
-            assert.equal((rebuilt.getSourceFile("/src/main.ts"))?.text, `export const source = "base";`);
         }
         finally {
             api.close();
@@ -4140,14 +4076,13 @@ describe("updateSnapshot file systems", () => {
         });
         try {
             using snapshot = api.updateSnapshot({
+                openProject: "/tsconfig.json",
                 fileSystem: createMemoryFileSystem(Object.entries({
+                    "/tsconfig.json": JSON.stringify({ compilerOptions: { noLib: true, outDir: "/out", rootDir: "/src" }, files: ["src/main.ts"] }),
                     "/src/main.ts": `export const value: number = 1;`,
                 })),
             });
-            using program = snapshot.createProgram(
-                ["/src/main.ts"],
-                { compilerOptions: { noLib: true, outDir: "/out" } },
-            );
+            const program = snapshot.getProject("/tsconfig.json")!.program;
             const result = program.emit();
             assert.deepEqual(result.emittedFiles, ["/out/main.js"]);
             assert.deepEqual(result.fileSystem, {
@@ -4158,13 +4093,10 @@ describe("updateSnapshot file systems", () => {
             });
             assert.deepEqual(hostWrites, []);
 
-            using updated = snapshot.update({ fileSystem: result.fileSystem! });
-            using updatedProgram = updated.createProgram(
-                ["/src/main.ts", "/out/main.js"],
-                { compilerOptions: { allowJs: true, noLib: true } },
-            );
-            assert.equal((updatedProgram.getSourceFile("/src/main.ts"))?.text, `export const value: number = 1;`);
-            assert.equal((updatedProgram.getSourceFile("/out/main.js"))?.text, `export const value = 1;\n`);
+            using updated = snapshot.update({ fileSystem: result.fileSystem!, openFiles: ["/out/main.js"] });
+            const outputProject = updated.getDefaultProjectForFile("/out/main.js");
+            assert.equal((updated.getProject("/tsconfig.json")!.program.getSourceFile("/src/main.ts"))?.text, `export const value: number = 1;`);
+            assert.equal((outputProject?.program.getSourceFile("/out/main.js"))?.text, `export const value = 1;\n`);
         }
         finally {
             api.close();
@@ -4179,14 +4111,13 @@ describe("updateSnapshot file systems", () => {
         });
         try {
             using snapshot = api.updateSnapshot({
+                openProject: "/tsconfig.json",
                 fileSystem: createCacheFileSystem(Object.entries({
+                    "/tsconfig.json": JSON.stringify({ compilerOptions: { noLib: true, outDir: "/out", rootDir: "/src" }, files: ["src/main.ts"] }),
                     "/src/main.ts": `export const value: number = 1;`,
                 })),
             });
-            using program = snapshot.createProgram(
-                ["/src/main.ts"],
-                { compilerOptions: { noLib: true, outDir: "/out" } },
-            );
+            const program = snapshot.getProject("/tsconfig.json")!.program;
             const result = program.emit();
             assert.equal(result.fileSystem, undefined);
             assert.equal(host.readFile!("/out/main.js"), `export const value = 1;\n`);

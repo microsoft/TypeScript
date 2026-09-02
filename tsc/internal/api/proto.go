@@ -384,13 +384,10 @@ type UpdateTemporarySnapshotParams struct {
 }
 
 type CreateProgramParams struct {
-	RootFiles            []DocumentIdentifier `json:"rootFiles"`
-	CreateProgramOptions CreateProgramOptions `json:"createProgramOptions"`
-	// BaseSnapshot supplies the filesystem and project state from which the
-	// synthetic program snapshot is cloned.
-	BaseSnapshot SnapshotID                     `json:"baseSnapshot,omitempty"`
-	OldProgram   *CreateProgramOldProgramParams `json:"oldProgram,omitempty"`
-	FileChanges  *APIFileChanges                `json:"fileChanges,omitempty"`
+	RootFiles            []DocumentIdentifier           `json:"rootFiles"`
+	CreateProgramOptions CreateProgramOptions           `json:"createProgramOptions"`
+	OldProgram           *CreateProgramOldProgramParams `json:"oldProgram,omitempty"`
+	FileChanges          *APIFileChanges                `json:"fileChanges,omitempty"`
 }
 
 type CreateProgramOptions struct {

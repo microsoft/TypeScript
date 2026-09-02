@@ -514,13 +514,10 @@ func TestRefCountingCaches(t *testing.T) {
 			ctx := context.Background()
 
 			baseSnapshot, err := session.APIUpdate(ctx, FileChangeSummary{}, &APISnapshotRequest{
-				OpenProjects:      collections.NewSetFromItems(appConfigPath),
-				FileSystem:        session.fs.fs,
-				ReplaceFileSystem: true,
+				OpenProjects: collections.NewSetFromItems(appConfigPath),
 			})
 			assert.NilError(t, err)
 			defer baseSnapshot.Deref(session)
-			assert.Assert(t, baseSnapshot.fileSystemOverride)
 			appProject := baseSnapshot.ProjectCollection.GetProjectByPath(baseSnapshot.toPath(appConfigPath))
 			assert.Assert(t, appProject != nil)
 
@@ -532,11 +529,9 @@ func TestRefCountingCaches(t *testing.T) {
 				appProject.CommandLine.Errors,
 				baseSnapshot,
 				appProject,
-				nil,
 				FileChangeSummary{},
 			)
 			defer programSnapshot.Deref(session)
-			assert.Assert(t, programSnapshot.fileSystemOverride)
 			programProject := programSnapshot.ProjectCollection.InferredProject()
 			assert.Assert(t, programProject != nil)
 			assert.Assert(t, programProject.Program == appProject.Program)
@@ -563,11 +558,9 @@ func TestRefCountingCaches(t *testing.T) {
 				programProject.CommandLine.Errors,
 				programSnapshot,
 				programProject,
-				nil,
 				fileChanges,
 			)
 			defer updatedProgramSnapshot.Deref(session)
-			assert.Assert(t, updatedProgramSnapshot.fileSystemOverride)
 			updatedProgramProject := updatedProgramSnapshot.ProjectCollection.InferredProject()
 			assert.Assert(t, updatedProgramProject != nil)
 			assert.Assert(t, updatedProgramProject.Program != programProject.Program)

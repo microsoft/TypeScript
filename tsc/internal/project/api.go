@@ -95,13 +95,9 @@ func (s *Session) APICreateProgram(
 	configFileParsingDiagnostics []*ast.Diagnostic,
 	oldSnapshot *Snapshot,
 	oldProject *Project,
-	fileSystem vfs.FS,
 	fileChanges FileChangeSummary,
 ) *Snapshot {
 	if oldSnapshot != nil {
-		if fileSystem == nil {
-			fileSystem = oldSnapshot.fs.fs
-		}
 		return oldSnapshot.cloneForProgram(
 			ctx,
 			rootFileNames,
@@ -109,7 +105,6 @@ func (s *Session) APICreateProgram(
 			projectReferences,
 			configFileParsingDiagnostics,
 			oldProject,
-			fileSystem,
 			fileChanges,
 			s,
 		)
@@ -117,9 +112,6 @@ func (s *Session) APICreateProgram(
 
 	snapshot, _ := s.APIUpdate(ctx, fileChanges, nil)
 	defer snapshot.Deref(s)
-	if fileSystem == nil {
-		fileSystem = snapshot.fs.fs
-	}
 	return snapshot.cloneForProgram(
 		ctx,
 		rootFileNames,
@@ -127,7 +119,6 @@ func (s *Session) APICreateProgram(
 		projectReferences,
 		configFileParsingDiagnostics,
 		nil,
-		fileSystem,
 		fileChanges,
 		s,
 	)

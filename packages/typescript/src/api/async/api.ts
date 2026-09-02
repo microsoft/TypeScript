@@ -500,26 +500,11 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         return this.createProgramWorker(rootFiles, createProgramOptions, oldProgram, fileChanges);
     }
 
-    /** @internal */
-    async createProgramFromSnapshot(
-        baseSnapshot: Snapshot,
-        rootFiles: readonly DocumentIdentifier[],
-        createProgramOptions: CreateProgramOptions,
-        oldProgram?: Program,
-        fileChanges?: APIFileChanges,
-    ): Promise<Program> {
-        if (!this.activeSnapshots.has(baseSnapshot) || baseSnapshot.isDisposed()) {
-            throw new Error("Cannot create a program from an inactive snapshot");
-        }
-        return this.createProgramWorker(rootFiles, createProgramOptions, oldProgram, fileChanges, baseSnapshot);
-    }
-
     private async createProgramWorker(
         rootFiles: readonly DocumentIdentifier[],
         createProgramOptions: CreateProgramOptions,
         oldProgram?: Program,
         fileChanges?: APIFileChanges,
-        baseSnapshot?: Snapshot,
     ): Promise<Program> {
         await this.ensureInitialized();
 
@@ -533,7 +518,6 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         const data: CreateProgramResponse = await this.client.apiRequest("createProgram", {
             rootFiles,
             createProgramOptions,
-            ...(baseSnapshot ? { baseSnapshot: baseSnapshot.id } : {}),
             ...(oldProgram ? { oldProgram: { snapshot: oldProgram.snapshotId, project: oldProgram.getProject().id } } : {}),
             ...(fileChanges ? { fileChanges } : {}),
         });
@@ -562,13 +546,6 @@ type EnsureInitialized = () => Promise<void>; // @sync: type EnsureInitialized =
 
 interface SnapshotOwner extends FormatDiagnosticsHost {
     updateSnapshotFrom(baseSnapshot: Snapshot, params?: UpdateSnapshotParams): Promise<Snapshot>;
-    createProgramFromSnapshot(
-        baseSnapshot: Snapshot,
-        rootFiles: readonly DocumentIdentifier[],
-        createProgramOptions: CreateProgramOptions,
-        oldProgram?: Program,
-        fileChanges?: APIFileChanges,
-    ): Promise<Program>;
 }
 
 export class InternalAPI {
@@ -662,20 +639,6 @@ export class Snapshot {
     async update(params?: UpdateSnapshotParams): Promise<Snapshot> {
         this.ensureNotDisposed();
         return this.api.updateSnapshotFrom(this, params);
-    }
-
-    /**
-     * Creates an isolated program using this snapshot and its effective filesystem
-     * as the base. Usage is otherwise identical to {@link API.createProgram}.
-     */
-    async createProgram(
-        rootFiles: readonly DocumentIdentifier[],
-        createProgramOptions: CreateProgramOptions,
-        oldProgram?: Program,
-        fileChanges?: APIFileChanges,
-    ): Promise<Program> {
-        this.ensureNotDisposed();
-        return this.api.createProgramFromSnapshot(this, rootFiles, createProgramOptions, oldProgram, fileChanges);
     }
 
     [globalThis.Symbol.dispose](): void {

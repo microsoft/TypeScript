@@ -1235,18 +1235,7 @@ func (s *Session) handleCreateProgram(ctx context.Context, params *CreateProgram
 		rootFileNames[i] = rootFile.ToAbsoluteFileName(s.projectSession.GetCurrentDirectory())
 	}
 
-	var baseSnapshot *project.Snapshot
-	var baseRequestFileSystem *requestfilesystem.Handle
-	if params.BaseSnapshot != 0 {
-		baseSD, err := s.retainSnapshotData(params.BaseSnapshot)
-		if err != nil {
-			return nil, err
-		}
-		defer func() { _ = s.releaseSnapshot(params.BaseSnapshot) }()
-		baseSnapshot = baseSD.snapshot
-		baseRequestFileSystem = baseSD.fileSystemHandle()
-	}
-
+	var oldSnapshot *project.Snapshot
 	var oldProject *project.Project
 	if params.OldProgram != nil {
 		oldSnapshotID := params.OldProgram.Snapshot
@@ -1256,32 +1245,23 @@ func (s *Session) handleCreateProgram(ctx context.Context, params *CreateProgram
 		}
 		defer func() { _ = s.releaseSnapshot(oldSnapshotID) }()
 
-		if baseSnapshot == nil {
-			baseSnapshot = oldSD.snapshot
-			baseRequestFileSystem = oldSD.fileSystemHandle()
-		}
+		oldSnapshot = oldSD.snapshot
 		oldProject, err = oldSD.getProject(params.OldProgram.Project)
 		if err != nil {
 			return nil, err
 		}
 	}
 	sd := newSnapshotData()
-	sd.fileSystem.CloneFrom(baseRequestFileSystem)
 
 	fileChanges := s.toFileChangeSummary(params.FileChanges)
-	if params.BaseSnapshot != 0 && params.OldProgram != nil && params.OldProgram.Snapshot != params.BaseSnapshot && fileChanges.IsEmpty() {
-		fileChanges.InvalidateAll = true
-		fileChanges.IncludesWatchChangeOutsideNodeModules = true
-	}
 	snapshot := s.projectSession.APICreateProgram(
 		ctx,
 		rootFileNames,
 		&params.CreateProgramOptions.CompilerOptions,
 		params.CreateProgramOptions.ProjectReferences,
 		core.Map(params.CreateProgramOptions.ConfigFileParsingDiagnostics, func(d *DiagnosticResponse) *ast.Diagnostic { return d.ToDiagnostic() }),
-		baseSnapshot,
+		oldSnapshot,
 		oldProject,
-		sd.fileSystem.FS(),
 		fileChanges,
 	)
 	project := snapshot.ProjectCollection.InferredProject()

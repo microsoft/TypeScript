@@ -257,11 +257,6 @@ export interface UpdateTemporarySnapshotParams {
 export interface CreateProgramParams {
     rootFiles: readonly DocumentIdentifier[] | null;
     createProgramOptions: CreateProgramOptions;
-    /**
-     * BaseSnapshot supplies the filesystem and project state from which the
-     * synthetic program snapshot is cloned.
-     */
-    baseSnapshot?: number;
     oldProgram?: CreateProgramOldProgramParams;
     fileChanges?: APIFileChanges;
 }
