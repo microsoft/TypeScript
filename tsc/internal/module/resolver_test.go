@@ -356,7 +356,7 @@ func TestResolveSubpathNilContentsRace(t *testing.T) {
 	}
 }
 
-func TestParseNodeModuleFromPath(t *testing.T) {
+func TestNodeModulePackageRoot(t *testing.T) {
 	t.Parallel()
 
 	tests := []struct {
@@ -382,8 +382,14 @@ func TestParseNodeModuleFromPath(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
-			if got := ParseNodeModuleFromPath(tt.path, tt.isFolder); got != tt.want {
-				t.Errorf("ParseNodeModuleFromPath(%q, %v) = %q, want %q", tt.path, tt.isFolder, got, tt.want)
+			var got string
+			if tt.isFolder {
+				got = NodeModulePackageRootForDirectory(tt.path)
+			} else {
+				got = NodeModulePackageRootForFile(tt.path)
+			}
+			if got != tt.want {
+				t.Errorf("nodeModulesPackageRoot(%q, %v) = %q, want %q", tt.path, tt.isFolder, got, tt.want)
 			}
 		})
 	}
