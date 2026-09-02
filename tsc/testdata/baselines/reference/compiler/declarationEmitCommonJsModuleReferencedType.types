@@ -38,15 +38,15 @@ export function bar(): RootProps;
 
 === r/entry.ts ===
 import { foo } from "foo";
->foo : () => [import("foo").SomeProps, import("foo/other").OtherProps, import("foo/other/index").OtherIndexProps, import("foo/subpkg/main").SubpkgProps, import("foo/node_modules/nested").NestedProps]
+>foo : () => [import("foo").SomeProps, import("foo/other").OtherProps, import("foo/other/index").OtherIndexProps, import("foo/subpkg").SubpkgProps, import("foo/node_modules/nested").NestedProps]
 
 import { bar } from "root";
 >bar : () => import("root").RootProps
 
 export const x = foo();
->x : [import("foo").SomeProps, import("foo/other").OtherProps, import("foo/other/index").OtherIndexProps, import("foo/subpkg/main").SubpkgProps, import("foo/node_modules/nested").NestedProps]
->foo() : [import("foo").SomeProps, import("foo/other").OtherProps, import("foo/other/index").OtherIndexProps, import("foo/subpkg/main").SubpkgProps, import("foo/node_modules/nested").NestedProps]
->foo : () => [import("foo").SomeProps, import("foo/other").OtherProps, import("foo/other/index").OtherIndexProps, import("foo/subpkg/main").SubpkgProps, import("foo/node_modules/nested").NestedProps]
+>x : [import("foo").SomeProps, import("foo/other").OtherProps, import("foo/other/index").OtherIndexProps, import("foo/subpkg").SubpkgProps, import("foo/node_modules/nested").NestedProps]
+>foo() : [import("foo").SomeProps, import("foo/other").OtherProps, import("foo/other/index").OtherIndexProps, import("foo/subpkg").SubpkgProps, import("foo/node_modules/nested").NestedProps]
+>foo : () => [import("foo").SomeProps, import("foo/other").OtherProps, import("foo/other/index").OtherIndexProps, import("foo/subpkg").SubpkgProps, import("foo/node_modules/nested").NestedProps]
 
 export const y = bar();
 >y : import("root").RootProps
