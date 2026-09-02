@@ -2120,6 +2120,19 @@ func (c *Checker) checkGrammarImportClause(node *ast.ImportClause) bool {
 	return false
 }
 
+func (c *Checker) checkGrammarImportAttributeValues(node *ast.ImportAttributes) bool {
+	hasError := false
+	for _, attribute := range node.Attributes.Nodes {
+		value := attribute.AsImportAttribute().Value
+		if ast.IsStringLiteral(value) {
+			continue
+		}
+		hasError = true
+		c.error(value, diagnostics.Import_attribute_values_must_be_string_literal_expressions)
+	}
+	return hasError
+}
+
 func (c *Checker) checkGrammarTypeOnlyNamedImportsOrExports(namedBindings *ast.Node) bool {
 	nodeList := namedBindings.ElementList()
 	for _, specifier := range nodeList.Nodes {
@@ -2180,6 +2193,38 @@ func (c *Checker) checkGrammarImportCallExpression(node *ast.Node) bool {
 	spreadElement := core.Find(argumentNodes, ast.IsSpreadElement)
 	if spreadElement != nil {
 		return c.grammarErrorOnNode(spreadElement, diagnostics.Argument_of_dynamic_import_cannot_be_spread_element)
+	}
+	return false
+}
+
+func (c *Checker) checkGrammarImportAttributesType(attributes *ast.TypeLiteralNode) bool {
+	members := attributes.Members
+	if members == nil {
+		return false
+	}
+	for _, member := range members.Nodes {
+		if member.Kind != ast.KindPropertySignature {
+			return c.grammarErrorOnNode(member, diagnostics.An_import_attributes_type_may_only_contain_property_signatures)
+		}
+		propertySignature := member.AsPropertySignatureDeclaration()
+		if propertySignature.Type == nil {
+			return c.grammarErrorOnNode(member, diagnostics.An_import_attributes_property_must_have_a_type_annotation)
+		}
+		if propertySignature.QuestionToken() != nil {
+			return c.grammarErrorOnNode(member, diagnostics.An_import_attributes_property_cannot_be_optional)
+		}
+		name := propertySignature.Name()
+		if !(ast.IsStringLiteralLike(name) || ast.IsIdentifier(name)) {
+			return c.grammarErrorOnNode(name, diagnostics.An_import_attributes_property_must_have_a_string_literal_or_identifier_name)
+		}
+		if name.Text() == "resolution-mode" {
+			return c.grammarErrorOnNode(name, diagnostics.X_0_is_not_a_valid_key_for_an_import_attributes_type, name.Text())
+		}
+
+		typeNode := propertySignature.Type
+		if !ast.IsStringLiteralLikeType(typeNode) {
+			return c.grammarErrorOnNode(typeNode, diagnostics.An_import_attributes_property_must_have_a_string_literal_type_annotation)
+		}
 	}
 	return false
 }

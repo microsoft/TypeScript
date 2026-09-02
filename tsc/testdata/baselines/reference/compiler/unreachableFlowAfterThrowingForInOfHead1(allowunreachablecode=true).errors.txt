@@ -1,0 +1,14 @@
+unreachableFlowAfterThrowingForInOfHead1.ts(2,21): error TS2488: Type 'never' must have a '[Symbol.iterator]()' method that returns an iterator.
+
+
+==== unreachableFlowAfterThrowingForInOfHead1.ts (1 errors) ====
+    try {
+        for (const x of (function () { throw "1"; })()) {
+                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2488: Type 'never' must have a '[Symbol.iterator]()' method that returns an iterator.
+!!! related TS2773 unreachableFlowAfterThrowingForInOfHead1.ts:2:21: Did you forget to use 'await'?
+            console.log("1");
+        }
+    }
+    catch (e) { }
+    

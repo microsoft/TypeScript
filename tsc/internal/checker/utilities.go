@@ -5,7 +5,6 @@ import (
 	"slices"
 	"strings"
 	"sync"
-	"unicode/utf8"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/binder"
@@ -438,8 +437,25 @@ func CompareTypes(t1, t2 *Type) int {
 	case t1.flags&(TypeFlagsAny|TypeFlagsUnknown|TypeFlagsString|TypeFlagsNumber|TypeFlagsBoolean|TypeFlagsBigInt|TypeFlagsESSymbol|TypeFlagsVoid|TypeFlagsUndefined|TypeFlagsNull|TypeFlagsNever|TypeFlagsNonPrimitive) != 0:
 		// Only distinguished by type IDs, handled below.
 	case t1.flags&TypeFlagsObject != 0:
-		// Order unnamed or identically named object types by symbol.
-		if c := t1.checker.compareSymbols(t1.symbol, t2.symbol); c != 0 {
+		// Order instantiation expression types without relying on lazy symbol IDs.
+		// Order other unnamed or identically named object types by symbol.
+		if t1.objectFlags&ObjectFlagsInstantiationExpressionType != 0 && t2.objectFlags&ObjectFlagsInstantiationExpressionType != 0 {
+			var declaration1, declaration2 *ast.Node
+			if t1.symbol != nil && len(t1.symbol.Declarations) != 0 {
+				declaration1 = t1.symbol.Declarations[0]
+			}
+			if t2.symbol != nil && len(t2.symbol.Declarations) != 0 {
+				declaration2 = t2.symbol.Declarations[0]
+			}
+			// A single instantiation expression can produce multiple types for union constituents,
+			// so compare their source declarations before comparing the shared expression node.
+			if c := t1.checker.compareNodes(declaration1, declaration2); c != 0 {
+				return c
+			}
+			if c := t1.checker.compareNodes(t1.AsInstantiationExpressionType().node, t2.AsInstantiationExpressionType().node); c != 0 {
+				return c
+			}
+		} else if c := t1.checker.compareSymbols(t1.symbol, t2.symbol); c != 0 {
 			return c
 		}
 		// When object types have the same or no symbol, order by kind. We order type references before other kinds.
@@ -715,6 +731,21 @@ func getDeclarationModifierFlagsFromSymbol(s *ast.Symbol) ast.ModifierFlags {
 }
 
 func getDeclarationModifierFlagsFromSymbolEx(s *ast.Symbol, isWrite bool) ast.ModifierFlags {
+	if s.CheckFlags&ast.CheckFlagsSynthetic != 0 {
+		var accessModifier ast.ModifierFlags
+		switch {
+		case !isWrite && s.CheckFlags&ast.CheckFlagsContainsPublic != 0 || isWrite && s.CheckFlags&ast.CheckFlagsContainsWritePublic != 0:
+			accessModifier = ast.ModifierFlagsPublic
+		case !isWrite && s.CheckFlags&ast.CheckFlagsContainsProtected != 0 || isWrite && s.CheckFlags&ast.CheckFlagsContainsWriteProtected != 0:
+			accessModifier = ast.ModifierFlagsProtected
+		case !isWrite && s.CheckFlags&ast.CheckFlagsContainsPrivate != 0 || isWrite && s.CheckFlags&ast.CheckFlagsContainsWritePrivate != 0:
+			accessModifier = ast.ModifierFlagsPrivate
+		}
+		if s.CheckFlags&ast.CheckFlagsContainsStatic != 0 {
+			return accessModifier | ast.ModifierFlagsStatic
+		}
+		return accessModifier
+	}
 	if s.ValueDeclaration != nil {
 		var declaration *ast.Node
 		if isWrite {
@@ -731,22 +762,6 @@ func getDeclarationModifierFlagsFromSymbolEx(s *ast.Symbol, isWrite bool) ast.Mo
 			return flags
 		}
 		return flags & ^ast.ModifierFlagsAccessibilityModifier
-	}
-	if s.CheckFlags&ast.CheckFlagsSynthetic != 0 {
-		var accessModifier ast.ModifierFlags
-		switch {
-		case s.CheckFlags&ast.CheckFlagsContainsPrivate != 0:
-			accessModifier = ast.ModifierFlagsPrivate
-		case s.CheckFlags&ast.CheckFlagsContainsPublic != 0:
-			accessModifier = ast.ModifierFlagsPublic
-		default:
-			accessModifier = ast.ModifierFlagsProtected
-		}
-		var staticModifier ast.ModifierFlags
-		if s.CheckFlags&ast.CheckFlagsContainsStatic != 0 {
-			staticModifier = ast.ModifierFlagsStatic
-		}
-		return accessModifier | staticModifier
 	}
 	if s.Flags&ast.SymbolFlagsPrototype != 0 {
 		return ast.ModifierFlagsPublic | ast.ModifierFlagsStatic
@@ -1652,8 +1667,7 @@ func SkipAlias(symbol *ast.Symbol, checker *Checker) *ast.Symbol {
 
 // True if the symbol is for an external module, as opposed to a namespace.
 func IsExternalModuleSymbol(moduleSymbol *ast.Symbol) bool {
-	firstRune, _ := utf8.DecodeRuneInString(moduleSymbol.Name)
-	return moduleSymbol.Flags&ast.SymbolFlagsModule != 0 && firstRune == '"'
+	return moduleSymbol.IsExternalModule()
 }
 
 func (c *Checker) isCanceled() bool {

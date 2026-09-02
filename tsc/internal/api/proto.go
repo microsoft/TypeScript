@@ -11,6 +11,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
+	"github.com/microsoft/TypeScript/tsc/internal/diagnosticwriter"
 	"github.com/microsoft/TypeScript/tsc/internal/jsnum"
 	"github.com/microsoft/TypeScript/tsc/internal/json"
 	"github.com/microsoft/TypeScript/tsc/internal/locale"
@@ -18,6 +19,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/packagejson"
 	"github.com/microsoft/TypeScript/tsc/internal/project"
+	"github.com/microsoft/TypeScript/tsc/internal/scanner"
 	"github.com/microsoft/TypeScript/tsc/internal/tsoptions"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 )
@@ -61,9 +63,12 @@ func parseProjectHandle(handle ProjectID) tspath.Path {
 const (
 	MethodRelease Method = "release"
 
+	MethodBatchRequests Method = "batchRequests"
+
 	MethodInitialize                   Method = "initialize"
 	MethodUpdateSnapshot               Method = "updateSnapshot"
 	MethodUpdateTemporarySnapshot      Method = "updateTemporarySnapshot"
+	MethodCreateProgram                Method = "createProgram"
 	MethodParseCommandLine             Method = "parseCommandLine"
 	MethodReadConfigFile               Method = "readConfigFile"
 	MethodParseJsonConfigFile          Method = "parseJsonConfigFileContent"
@@ -82,6 +87,7 @@ const (
 	MethodGetTypeOfSymbol              Method = "getTypeOfSymbol"
 	MethodGetTypesOfSymbols            Method = "getTypesOfSymbols"
 	MethodGetDeclaredTypeOfSymbol      Method = "getDeclaredTypeOfSymbol"
+	MethodGetNonMissingTypeOfSymbol    Method = "getNonMissingTypeOfSymbol"
 	MethodGetSourceFile                Method = "getSourceFile"
 	MethodGetSourceFileNames           Method = "getSourceFileNames"
 	MethodGetSourceFileMetadata        Method = "getSourceFileMetadata"
@@ -149,6 +155,7 @@ const (
 	MethodGetPropertiesOfType               Method = "getPropertiesOfType"
 	MethodGetApparentPropertiesOfType       Method = "getApparentPropertiesOfType"
 	MethodGetApparentType                   Method = "getApparentType"
+	MethodGetReducedType                    Method = "getReducedType"
 	MethodGetPropertyOfType                 Method = "getPropertyOfType"
 	MethodGetIndexInfosOfType               Method = "getIndexInfosOfType"
 	MethodGetConstraintOfTypeParameter      Method = "getConstraintOfTypeParameter"
@@ -163,13 +170,14 @@ const (
 	MethodGetExportSpecifierLocalTarget     Method = "getExportSpecifierLocalTargetSymbol"
 	MethodGetAliasedSymbol                  Method = "getAliasedSymbol"
 	MethodGetImmediateAliasedSymbol         Method = "getImmediateAliasedSymbol"
+	MethodGetTargetSymbol                   Method = "getTargetSymbol"
 	MethodGetFullyQualifiedName             Method = "getFullyQualifiedName"
 	MethodGetExportsOfModule                Method = "getExportsOfModule"
 	MethodGetMemberInModuleExports          Method = "getMemberInModuleExports"
 	MethodGetJSDocTags                      Method = "getJsDocTags"
 	MethodGetDocumentationComment           Method = "getDocumentationComment"
 	MethodIsArrayType                       Method = "isArrayType"
-	MethodIsTupleType                       Method = "isTupleType"
+	MethodIsReadonlySymbol                  Method = "isReadonlySymbol"
 
 	// Reference methods
 	MethodGetReferencesToSymbolInFile Method = "getReferencesToSymbolInFile"
@@ -188,7 +196,6 @@ const (
 	MethodGetProgramDiagnostics           Method = "getProgramDiagnostics"
 	MethodGetGlobalDiagnostics            Method = "getGlobalDiagnostics"
 	MethodGetConfigFileParsingDiagnostics Method = "getConfigFileParsingDiagnostics"
-
 	// Emitter methods
 	MethodPrintNode              Method = "printNode"
 	MethodFormatNodeForInsertion Method = "formatNodeForInsertion"
@@ -368,6 +375,29 @@ type UpdateTemporarySnapshotParams struct {
 	NewText string `json:"newText"`
 }
 
+type CreateProgramParams struct {
+	RootFiles            []DocumentIdentifier           `json:"rootFiles"`
+	CreateProgramOptions CreateProgramOptions           `json:"createProgramOptions"`
+	OldProgram           *CreateProgramOldProgramParams `json:"oldProgram,omitempty"`
+	FileChanges          *APIFileChanges                `json:"fileChanges,omitempty"`
+}
+
+type CreateProgramOptions struct {
+	CompilerOptions              core.CompilerOptions     `json:"compilerOptions"`
+	ProjectReferences            []*core.ProjectReference `json:"projectReferences,omitempty"`
+	ConfigFileParsingDiagnostics []*DiagnosticResponse    `json:"configFileParsingDiagnostics,omitempty"`
+}
+
+type CreateProgramOldProgramParams struct {
+	Snapshot SnapshotID `json:"snapshot,omitempty"`
+	Project  ProjectID  `json:"project,omitempty"`
+}
+
+type CreateProgramResponse struct {
+	Snapshot SnapshotID       `json:"snapshot"`
+	Project  *ProjectResponse `json:"project"`
+}
+
 // ProjectFileChanges describes what source files changed within a single project.
 type ProjectFileChanges struct {
 	// ChangedFiles lists source file paths whose content differs.
@@ -400,10 +430,12 @@ type UpdateSnapshotResponse struct {
 }
 
 var unmarshalers = map[Method]func([]byte) (any, error){
+	MethodBatchRequests:                unmarshallerFor[BatchRequestsParams],
 	MethodRelease:                      unmarshallerFor[ReleaseParams],
 	MethodInitialize:                   noParams,
 	MethodUpdateSnapshot:               unmarshallerFor[UpdateSnapshotParams],
 	MethodUpdateTemporarySnapshot:      unmarshallerFor[UpdateTemporarySnapshotParams],
+	MethodCreateProgram:                unmarshallerFor[CreateProgramParams],
 	MethodParseCommandLine:             unmarshallerFor[ParseCommandLineParams],
 	MethodReadConfigFile:               unmarshallerFor[ReadConfigFileParams],
 	MethodParseJsonConfigFile:          unmarshallerFor[ParseJsonConfigFileContentParams],
@@ -427,6 +459,7 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodGetTypeOfSymbol:              unmarshallerFor[GetTypeOfSymbolParams],
 	MethodGetTypesOfSymbols:            unmarshallerFor[GetTypesOfSymbolsParams],
 	MethodGetDeclaredTypeOfSymbol:      unmarshallerFor[GetTypeOfSymbolParams],
+	MethodGetNonMissingTypeOfSymbol:    unmarshallerFor[GetTypeOfSymbolParams],
 	MethodResolveName:                  unmarshallerFor[ResolveNameParams],
 	MethodGetSymbolsInScope:            unmarshallerFor[GetSymbolsInScopeParams],
 	MethodGetSignaturesOfType:          unmarshallerFor[GetSignaturesOfTypeParams],
@@ -487,6 +520,7 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodGetPropertiesOfType:               unmarshallerFor[CheckerTypeParams],
 	MethodGetApparentPropertiesOfType:       unmarshallerFor[GetTypePropertyParams],
 	MethodGetApparentType:                   unmarshallerFor[GetTypePropertyParams],
+	MethodGetReducedType:                    unmarshallerFor[GetTypePropertyParams],
 	MethodGetPropertyOfType:                 unmarshallerFor[GetPropertyOfTypeParams],
 	MethodGetIndexInfosOfType:               unmarshallerFor[CheckerTypeParams],
 	MethodGetConstraintOfTypeParameter:      unmarshallerFor[GetTypePropertyParams],
@@ -499,13 +533,14 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodGetExportSpecifierLocalTarget:     unmarshallerFor[CheckerNodeParams],
 	MethodGetAliasedSymbol:                  unmarshallerFor[CheckerSymbolParams],
 	MethodGetImmediateAliasedSymbol:         unmarshallerFor[CheckerSymbolParams],
+	MethodGetTargetSymbol:                   unmarshallerFor[CheckerSymbolParams],
 	MethodGetFullyQualifiedName:             unmarshallerFor[CheckerSymbolParams],
 	MethodGetExportsOfModule:                unmarshallerFor[CheckerSymbolParams],
 	MethodGetMemberInModuleExports:          unmarshallerFor[GetMemberInModuleExportsParams],
 	MethodGetJSDocTags:                      unmarshallerFor[CheckerSymbolParams],
 	MethodGetDocumentationComment:           unmarshallerFor[CheckerSymbolParams],
 	MethodIsArrayType:                       unmarshallerFor[CheckerTypeParams],
-	MethodIsTupleType:                       unmarshallerFor[CheckerTypeParams],
+	MethodIsReadonlySymbol:                  unmarshallerFor[CheckerSymbolParams],
 	MethodGetReferencesToSymbolInFile:       unmarshallerFor[GetReferencesToSymbolInFileParams],
 	MethodGetReferencedSymbolsForNode:       unmarshallerFor[GetReferencedSymbolsForNodeParams],
 	MethodGetSignatureUsages:                unmarshallerFor[GetSignatureUsagesParams],
@@ -608,6 +643,25 @@ type TranspileOutputResponse struct {
 	SourceMapText string                `json:"sourceMapText,omitempty"`
 }
 
+type BatchRequestsParams struct {
+	Requests []BatchRequest `json:"requests"`
+}
+
+type BatchRequest struct {
+	Method Method     `json:"method"`
+	Params json.Value `json:"params,omitempty"`
+}
+
+type BatchRequestsResponse struct {
+	Responses []BatchResponse `json:"responses" nonnil:"true"`
+}
+
+type BatchResponse struct {
+	Method Method `json:"method"`
+	Result any    `json:"result"`
+	Error  string `json:"error,omitempty"`
+}
+
 // ReleaseParams are the parameters for the release method.
 type ReleaseParams struct {
 	Snapshot SnapshotID `json:"snapshot"`
@@ -644,6 +698,7 @@ type GetDefaultProjectForFileParams struct {
 type ProjectResponse struct {
 	Id                ProjectID           `json:"id"`
 	ConfigFileName    string              `json:"configFileName"`
+	CurrentDirectory  string              `json:"currentDirectory"`
 	ParsedCommandLine *ConfigFileResponse `json:"parsedCommandLine" nonnil:"true"`
 	// Deprecated: Use parsedCommandLine.fileNames.
 	RootFiles []string `json:"rootFiles" nonnil:"true"`
@@ -711,6 +766,7 @@ func NewProjectResponse(p *project.Project) *ProjectResponse {
 	return &ProjectResponse{
 		Id:                ProjectHandle(p),
 		ConfigFileName:    p.Name(),
+		CurrentDirectory:  p.CurrentDirectory(),
 		ParsedCommandLine: NewConfigFileResponse(p.CommandLine),
 		RootFiles:         p.CommandLine.FileNames(),
 		CompilerOptions:   p.CommandLine.CompilerOptions(),
@@ -796,6 +852,7 @@ type TypeResponse struct {
 	Id          TypeID `json:"id"`
 	Flags       uint32 `json:"flags"`
 	ObjectFlags uint32 `json:"objectFlags,omitempty"`
+	IsTupleType bool   `json:"isTupleType,omitempty"`
 
 	// Value is literal type data. BigInt literals are encoded as signed decimal
 	// strings because JSON cannot represent bigint; absent values are null.
@@ -810,9 +867,10 @@ type TypeResponse struct {
 	LocalTypeParameters []TypeID `json:"localTypeParameters,omitempty"`
 
 	// TupleType data
-	ElementFlags  []checker.ElementFlags `json:"elementFlags,omitempty"`
-	FixedLength   *int                   `json:"fixedLength,omitempty"`
-	TupleReadonly *bool                  `json:"readonly,omitempty"`
+	ElementFlags               []checker.ElementFlags `json:"elementFlags,omitempty"`
+	FixedLength                *int                   `json:"fixedLength,omitempty"`
+	TupleReadonly              *bool                  `json:"readonly,omitempty"`
+	LabeledElementDeclarations []NodeHandle           `json:"labeledElementDeclarations,omitempty"`
 
 	// IndexedAccessType data
 	ObjectType TypeID `json:"objectType,omitzero"`
@@ -878,19 +936,17 @@ func newTypeResponse(t *checker.Type, id TypeID) *TypeResponse {
 		}
 	case flags&checker.TypeFlagsObject != 0:
 		resp.ObjectFlags = uint32(t.ObjectFlags())
+		resp.IsTupleType = checker.IsTupleType(t)
 		objectFlags := t.ObjectFlags()
 		if objectFlags&checker.ObjectFlagsReference != 0 {
-			var ref *checker.TypeReference
-			if objectFlags&checker.ObjectFlagsTuple != 0 {
+			ref := t.AsTypeReference()
+			if checker.IsTupleTypeTarget(t) {
 				tuple := t.AsTupleType()
-				ref = tuple.AsTypeReference()
 				resp.ElementFlags = tuple.ElementFlags()
 				fixedLen := tuple.FixedLength()
 				resp.FixedLength = &fixedLen
 				isReadonly := tuple.IsReadonly()
 				resp.TupleReadonly = &isReadonly
-			} else {
-				ref = t.AsTypeReference()
 			}
 			if ref.Target() != nil {
 				resp.Target = TypeHandle(ref.Target())
@@ -1417,10 +1473,18 @@ type DiagnosticResponse struct {
 	Pos int `json:"pos"`
 	// End is the end position of the diagnostic in the source file.
 	End int `json:"end"`
+	// StartPosition is the zero-based line and UTF-16 character position of Pos.
+	StartPosition *DiagnosticPositionResponse `json:"startPosition,omitempty"`
+	// EndPosition is the zero-based line and UTF-16 character position of End.
+	EndPosition *DiagnosticPositionResponse `json:"endPosition,omitempty"`
+	// SourceLines contains the source lines needed to render this diagnostic with context.
+	SourceLines []*DiagnosticSourceLineResponse `json:"sourceLines,omitempty"`
 	// Code is the diagnostic error code.
 	Code int32 `json:"code"`
 	// Category is the diagnostic category (error, warning, suggestion, message).
 	Category diagnostics.Category `json:"category"`
+	// Source is a custom diagnostic-code prefix. An empty value uses the default "TS".
+	Source string `json:"source,omitempty"`
 	// Text is the localized diagnostic message text.
 	Text string `json:"text"`
 	// ReportsUnnecessary indicates this diagnostic highlights unnecessary code.
@@ -1433,45 +1497,113 @@ type DiagnosticResponse struct {
 	RelatedInformation []*DiagnosticResponse `json:"relatedInformation,omitempty"`
 }
 
+type DiagnosticPositionResponse struct {
+	Line      int              `json:"line"`
+	Character core.UTF16Offset `json:"character"`
+}
+
+type DiagnosticSourceLineResponse struct {
+	Line int    `json:"line"`
+	Text string `json:"text"`
+}
+
+func diagnosticSourceLines(file diagnosticwriter.FileLike, firstLine int, lastLine int) []*DiagnosticSourceLineResponse {
+	lineMap := file.ECMALineMap()
+	if len(lineMap) == 0 {
+		return nil
+	}
+
+	lines := make([]int, 0, min(lastLine-firstLine+1, 4))
+	if lastLine-firstLine >= 4 {
+		lines = append(lines, firstLine, firstLine+1, lastLine-1, lastLine)
+	} else {
+		for line := firstLine; line <= lastLine; line++ {
+			lines = append(lines, line)
+		}
+	}
+
+	text := file.Text()
+	result := make([]*DiagnosticSourceLineResponse, 0, len(lines))
+	for _, line := range lines {
+		start := int(lineMap[line])
+		end := len(text)
+		if line+1 < len(lineMap) {
+			end = int(lineMap[line+1])
+		}
+		result = append(result, &DiagnosticSourceLineResponse{Line: line, Text: text[start:end]})
+	}
+	return result
+}
+
 // NewDiagnosticResponse converts an ast.Diagnostic to a DiagnosticResponse.
 func NewDiagnosticResponse(d *ast.Diagnostic) *DiagnosticResponse {
-	pos := d.Pos()
-	end := d.End()
+	return newDiagnosticResponse(diagnosticwriter.WrapASTDiagnostic(d))
+}
+
+func newDiagnosticResponse(d *diagnosticwriter.ASTDiagnostic) *DiagnosticResponse {
 	file := d.File()
+	pos, end := d.Pos(), d.End()
 	if file != nil {
-		positionMap := file.GetPositionMap()
-		pos = positionMap.UTF8ToUTF16(pos)
-		end = positionMap.UTF8ToUTF16(end)
+		pos = max(0, min(pos, len(file.Text())))
+		end = max(pos, min(end, len(file.Text())))
 	}
 	resp := &DiagnosticResponse{
 		Pos:                pos,
 		End:                end,
 		Code:               d.Code(),
 		Category:           d.Category(),
+		Source:             d.Source(),
 		Text:               d.Localize(locale.Default),
-		ReportsUnnecessary: d.ReportsUnnecessary(),
-		ReportsDeprecated:  d.ReportsDeprecated(),
+		ReportsUnnecessary: d.Diagnostic.ReportsUnnecessary(),
+		ReportsDeprecated:  d.Diagnostic.ReportsDeprecated(),
 	}
 
 	if file != nil {
 		resp.FileName = file.FileName()
+		if sourceFile, ok := file.(*ast.SourceFile); ok {
+			positionMap := sourceFile.GetPositionMap()
+			resp.Pos = positionMap.UTF8ToUTF16(pos)
+			resp.End = positionMap.UTF8ToUTF16(end)
+		} else {
+			resp.Pos = int(core.UTF16Len(file.Text()[:pos]))
+			resp.End = int(core.UTF16Len(file.Text()[:end]))
+		}
+		startLine, startCharacter := scanner.GetECMALineAndUTF16CharacterOfPosition(file, pos)
+		endLine, endCharacter := scanner.GetECMALineAndUTF16CharacterOfPosition(file, end)
+		resp.StartPosition = &DiagnosticPositionResponse{Line: startLine, Character: startCharacter}
+		resp.EndPosition = &DiagnosticPositionResponse{Line: endLine, Character: endCharacter}
+		resp.SourceLines = diagnosticSourceLines(file, startLine, endLine)
 	}
 
 	if chain := d.MessageChain(); len(chain) > 0 {
 		resp.MessageChain = make([]*DiagnosticResponse, len(chain))
 		for i, c := range chain {
-			resp.MessageChain[i] = NewDiagnosticResponse(c)
+			resp.MessageChain[i] = newDiagnosticResponse(c.(*diagnosticwriter.ASTDiagnostic))
 		}
 	}
 
 	if related := d.RelatedInformation(); len(related) > 0 {
 		resp.RelatedInformation = make([]*DiagnosticResponse, len(related))
 		for i, r := range related {
-			resp.RelatedInformation[i] = NewDiagnosticResponse(r)
+			resp.RelatedInformation[i] = newDiagnosticResponse(r.(*diagnosticwriter.ASTDiagnostic))
 		}
 	}
 
 	return resp
+}
+
+func (d *DiagnosticResponse) ToDiagnostic() *ast.Diagnostic {
+	return ast.NewDiagnosticFromText(
+		nil,
+		core.NewTextRange(d.Pos, d.End),
+		d.Code,
+		d.Category,
+		d.Text,
+		core.Map(d.MessageChain, func(d *DiagnosticResponse) *ast.Diagnostic { return d.ToDiagnostic() }),
+		core.Map(d.RelatedInformation, func(d *DiagnosticResponse) *ast.Diagnostic { return d.ToDiagnostic() }),
+		d.ReportsUnnecessary,
+		d.ReportsDeprecated,
+	)
 }
 
 // NewDiagnosticResponses converts a slice of ast.Diagnostics to DiagnosticResponses.

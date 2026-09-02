@@ -266,6 +266,8 @@ func (gen *Generator) AddGeneratedMapping(generatedLine int, generatedCharacter 
 		return errors.New("generatedCharacter cannot be negative")
 	}
 	gen.addMapping(generatedLine, generatedCharacter, sourceIndexNotSet, notSet /*sourceLine*/, notSetUTF16 /*sourceCharacter*/, nameIndexNotSet)
+	gen.hasPendingSource = false
+	gen.hasPendingName = false
 	return nil
 }
 
@@ -285,6 +287,9 @@ func (gen *Generator) AddSourceMapping(generatedLine int, generatedCharacter cor
 	}
 	if sourceCharacter < 0 {
 		return errors.New("sourceCharacter cannot be negative")
+	}
+	if gen.hasPending && !gen.isNewGeneratedPosition(generatedLine, generatedCharacter) && !gen.hasPendingSource {
+		return nil
 	}
 	gen.addMapping(generatedLine, generatedCharacter, sourceIndex, sourceLine, sourceCharacter, nameIndexNotSet)
 	return nil
@@ -309,6 +314,9 @@ func (gen *Generator) AddNamedSourceMapping(generatedLine int, generatedCharacte
 	}
 	if nameIndex < 0 || int(nameIndex) >= len(gen.names) {
 		return errors.New("nameIndex is out of range")
+	}
+	if gen.hasPending && !gen.isNewGeneratedPosition(generatedLine, generatedCharacter) && !gen.hasPendingSource {
+		return nil
 	}
 	gen.addMapping(generatedLine, generatedCharacter, sourceIndex, sourceLine, sourceCharacter, nameIndex)
 	return nil

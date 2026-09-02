@@ -33,7 +33,7 @@ declare module 'styled-components' {
         keyframes(): Keyframes;
     }
 }`,
-		lsproto.CodeActionKindSourceOrganizeImports,
+		lsproto.CodeActionKindSourceOrganizeImportsTs,
 		nil,
 	)
 }

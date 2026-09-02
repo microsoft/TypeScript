@@ -309,6 +309,11 @@ func (b *Binder) getDeclarationName(node *ast.Node) string {
 			if ast.IsGlobalScopeAugmentation(node) {
 				return ast.InternalSymbolNameGlobal
 			}
+			if pattern := core.TryParsePattern(moduleName); pattern.IsValid() && pattern.StarIndex >= 0 {
+				if attributes := node.AsModuleDeclaration().Attributes; attributes != nil {
+					return ast.InternalSymbolNamePrefix + "\"" + moduleName + "\"pattern@" + strconv.FormatUint(uint64(ast.GetNodeId(attributes)), 10)
+				}
+			}
 			return "\"" + moduleName + "\""
 		}
 		if ast.IsPrivateIdentifier(name) {
@@ -781,12 +786,15 @@ func (b *Binder) bindModuleDeclaration(node *ast.Node) {
 			symbol := b.declareSymbolAndAddToSymbolTable(node, ast.SymbolFlagsValueModule, ast.SymbolFlagsValueModuleExcludes)
 
 			if ast.IsStringLiteral(name) {
+				attributes := node.AsModuleDeclaration().Attributes
 				pattern := core.TryParsePattern(name.Text())
 				if !pattern.IsValid() {
 					// An invalid pattern - must have multiple wildcards.
 					b.errorOnFirstToken(name, diagnostics.Pattern_0_can_have_at_most_one_Asterisk_character, name.Text())
 				} else if pattern.StarIndex >= 0 {
 					b.file.PatternAmbientModules = append(b.file.PatternAmbientModules, &ast.PatternAmbientModule{Pattern: pattern, Symbol: symbol})
+				} else if attributes != nil {
+					b.errorOnNode(name, diagnostics.An_ambient_module_declaration_with_import_attributes_must_use_a_pattern_name_with_an_Asterisk_character)
 				}
 			}
 		}
@@ -1907,9 +1915,19 @@ func (b *Binder) bindForStatement(node *ast.Node) {
 
 func (b *Binder) bindForInOrForOfStatement(node *ast.Node) {
 	stmt := node.AsForInOrOfStatement()
+	b.bind(stmt.Expression)
+	if b.currentFlow == b.unreachableFlow {
+		// Like the for-loop initializer, the for-in/for-of expression is bound before the loop's
+		// flow graph is constructed. If it makes flow unreachable (e.g. a throwing IIFE), addAntecedent
+		// will filter out the unreachable entry to preLoopLabel, leaving only the back-edge from the
+		// loop body. This creates a cycle with no exit that crashes isReachableFlowNodeWorker.
+		// Bail out early and just bind the remaining children with unreachable flow.
+		b.bind(stmt.Initializer)
+		b.bind(stmt.Statement)
+		return
+	}
 	preLoopLabel := b.setContinueTarget(node, b.createLoopLabel())
 	postLoopLabel := b.createBranchLabel()
-	b.bind(stmt.Expression)
 	b.addAntecedent(preLoopLabel, b.currentFlow)
 	b.currentFlow = preLoopLabel
 	if node.Kind == ast.KindForOfStatement {

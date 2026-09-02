@@ -8,10 +8,7 @@ import {
     type Project,
     type Snapshot,
 } from "@typescript/typescript/unstable/async"; // @sync: } from "@typescript/typescript/unstable/sync";
-import {
-    existsSync,
-    writeFileSync,
-} from "node:fs";
+import { writeFileSync } from "node:fs";
 import inspector from "node:inspector";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -35,10 +32,6 @@ if (isMain) {
 export async function runBenchmarks(options?: { filter?: string; singleIteration?: boolean; cpuprofile?: boolean; }) {
     const { filter, singleIteration, cpuprofile } = options ?? {};
     const repoRoot = fileURLToPath(new URL("../../../../", import.meta.url).toString());
-    if (!existsSync(path.join(repoRoot, "tsc/testdata/fixtures/compiler/tsconfig.json"))) {
-        console.warn("Warning: The full compiler fixture is unavailable; skipping benchmarks.");
-        return;
-    }
 
     const bench = new Bench({
         name: "Async API", // @sync: name: "Sync API",
@@ -172,6 +165,7 @@ export async function runBenchmarks(options?: { filter?: string; singleIteration
     }
 
     await bench.run(); // @sync: bench.runSync();
+    await teardown(); // @sync: teardown();
 
     if (session) {
         session.post("Profiler.stop", (err, { profile }) => {

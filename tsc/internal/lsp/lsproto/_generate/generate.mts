@@ -1,11 +1,11 @@
-#!/usr/bin/env -S node --experimental-strip-types
+#!/usr/bin/env node
 
-// Usage: node --experimental-strip-types generate.mts
+// Usage: node generate.mts
 
-import { $ } from "execa";
 import fs from "node:fs";
 import path from "node:path";
 import url from "node:url";
+import { x } from "tinyexec";
 import type {
     Enumeration,
     MetaModel,
@@ -192,6 +192,17 @@ const customStructures: Structure[] = [
                 name: "uri",
                 type: { kind: "base", name: "DocumentUri" },
                 documentation: `The document in which the code lens and its range are located.`,
+            },
+            {
+                name: "position",
+                type: { kind: "base", name: "integer" },
+                documentation: `The position of the code lens declaration in its virtual source file.`,
+            },
+            {
+                name: "supplementalFileIndex",
+                type: { kind: "base", name: "integer" },
+                optional: true,
+                documentation: `Zero-based index into the canonical file's supplemental source files. Absent for the canonical source file.`,
             },
         ],
     },
@@ -3597,7 +3608,10 @@ async function main() {
     const generatedCode = generateCode();
     fs.writeFileSync(out, generatedCode);
 
-    await $({ cwd: repoRoot })`dprint fmt ${out}`;
+    await x("dprint", ["fmt", out], {
+        throwOnError: true,
+        nodeOptions: { cwd: repoRoot, stdio: "inherit" },
+    });
 
     console.log(`Successfully generated ${out}`);
 }

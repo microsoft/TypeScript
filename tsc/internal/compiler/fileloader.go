@@ -199,7 +199,7 @@ func processAllProgramFiles(
 		}
 	}
 
-	if len(rootFiles) > 0 {
+	if len(rootFiles) > 0 && !opts.SkipModuleResolution {
 		loader.addAutomaticTypeDirectiveTasks()
 	}
 
@@ -368,6 +368,12 @@ func (p *fileLoader) getDefaultLibFilePriority(a *ast.SourceFile) int {
 }
 
 func (p *fileLoader) loadSourceFileMetaData(fileName string) ast.SourceFileMetaData {
+	if p.opts.SkipModuleResolution {
+		return ast.SourceFileMetaData{
+			ImpliedNodeFormat: ast.GetImpliedNodeFormatForFile(fileName, ""),
+		}
+	}
+
 	packageJsonScope := p.resolver.GetPackageScopeForPath(tspath.GetDirectoryPath(fileName))
 	moduleResolutionKind := p.opts.Config.CompilerOptions().GetModuleResolutionKind()
 
@@ -453,8 +459,6 @@ func contentMapperTransformDiagnostic(file *ast.SourceFile, label string, err er
 		case contentmapper.TransformErrorKindInitialize:
 			if initializeError, ok := errors.AsType[*contentmapper.InitializeError](transformError); ok {
 				switch initializeError.Kind {
-				case contentmapper.InitializeErrorKindProtocolVersion:
-					return contentMapperTransformDiagnosticChain(file, label, diagnostics.The_content_mapper_uses_unsupported_protocol_version_0_expected_version_1, initializeError.ProtocolVersion, contentmapper.ProtocolVersion)
 				case contentmapper.InitializeErrorKindPositionEncoding:
 					return contentMapperTransformDiagnosticChain(file, label, diagnostics.The_content_mapper_selected_unsupported_position_encoding_0, initializeError.PositionEncoding)
 				case contentmapper.InitializeErrorKindEmptyDiagnosticSource:
@@ -546,8 +550,6 @@ func contentMapperMappingDiagnostic(file *ast.SourceFile, label string, problem 
 		return ast.NewDiagnostic(file, loc, diagnostics.The_content_mapper_0_produced_a_verbatim_mapping_that_does_not_match_the_original_content_virtual_offset_1_original_offset_2, label, int(problem.VirtualPos), int(problem.OriginalPos))
 	case spanmap.MappingErrorKindKind:
 		return ast.NewDiagnostic(file, loc, diagnostics.The_content_mapper_0_produced_a_position_mapping_with_an_invalid_kind_near_virtual_offset_1, label, int(problem.VirtualPos))
-	case spanmap.MappingErrorKindOriginalOverlap:
-		return ast.NewDiagnostic(file, loc, diagnostics.The_content_mapper_0_produced_overlapping_original_position_mappings_that_are_not_identical_near_original_offset_1, label, int(problem.OriginalPos))
 	case spanmap.MappingErrorKindFeature:
 		return ast.NewDiagnostic(file, loc, diagnostics.The_content_mapper_0_produced_invalid_mapping_features_near_original_offset_1, label, int(problem.OriginalPos))
 	default:
@@ -599,8 +601,6 @@ func ContentMapperInitializationDiagnostic(label string, err error) *ast.Diagnos
 			return diagnostic.AddMessageChain(ast.NewCompilerDiagnostic(diagnostics.The_content_mapper_returned_an_initialize_response_that_could_not_be_decoded_Colon_0, initializeError.Detail))
 		case contentmapper.InitializeErrorKindRequest:
 			return diagnostic.AddMessageChain(ast.NewCompilerDiagnostic(diagnostics.The_content_mapper_s_initialize_request_failed_Colon_0, initializeError.Detail))
-		case contentmapper.InitializeErrorKindProtocolVersion:
-			return diagnostic.AddMessageChain(ast.NewCompilerDiagnostic(diagnostics.The_content_mapper_uses_unsupported_protocol_version_0_expected_version_1, initializeError.ProtocolVersion, contentmapper.ProtocolVersion))
 		case contentmapper.InitializeErrorKindPositionEncoding:
 			return diagnostic.AddMessageChain(ast.NewCompilerDiagnostic(diagnostics.The_content_mapper_selected_unsupported_position_encoding_0, initializeError.PositionEncoding))
 		case contentmapper.InitializeErrorKindEmptyDiagnosticSource:
@@ -857,6 +857,10 @@ func (p *fileLoader) resolveImportsAndModuleAugmentations(t *parseTask) {
 		// Do nothing if it's an Identifier; we don't need to do module resolution for `declare global`.
 	}
 
+	if p.opts.SkipModuleResolution {
+		return
+	}
+
 	if len(moduleNames) != 0 {
 		resolutionsInFile := make(module.ModeAwareCache[*module.ResolvedModule], len(moduleNames))
 		var resolutionsTrace []module.DiagAndArgs
@@ -936,7 +940,7 @@ func (p *fileLoader) pathForLibFile(name string) *LibFile {
 
 	path := tspath.CombinePaths(p.defaultLibraryPath, name)
 	replaced := false
-	if p.opts.Config.CompilerOptions().LibReplacement.IsTrue() && name != "lib.d.ts" {
+	if !p.opts.SkipModuleResolution && p.opts.Config.CompilerOptions().LibReplacement.IsTrue() && name != "lib.d.ts" {
 		libraryName := getLibraryNameFromLibFileName(name)
 		resolveFrom := getInferredLibraryNameResolveFrom(p.opts.Config.CompilerOptions(), p.opts.Host.GetCurrentDirectory(), name)
 		resolution, trace := p.resolveLibrary(libraryName, resolveFrom)
@@ -1019,11 +1023,11 @@ func getModeForUsageLocation(fileName string, meta ast.SourceFileMetaData, usage
 			var ok bool
 			switch usage.Parent.Kind {
 			case ast.KindImportDeclaration, ast.KindJSImportDeclaration:
-				override, ok = usage.Parent.AsImportDeclaration().Attributes.GetResolutionModeOverride()
+				override, ok = usage.Parent.AsImportDeclaration().Attributes.GetResolutionModeOverride(nil)
 			case ast.KindExportDeclaration:
-				override, ok = usage.Parent.AsExportDeclaration().Attributes.GetResolutionModeOverride()
+				override, ok = usage.Parent.AsExportDeclaration().Attributes.GetResolutionModeOverride(nil)
 			case ast.KindJSDocImportTag:
-				override, ok = usage.Parent.AsJSDocImportTag().Attributes.GetResolutionModeOverride()
+				override, ok = usage.Parent.AsJSDocImportTag().Attributes.GetResolutionModeOverride(nil)
 			}
 			if ok {
 				return override
@@ -1031,7 +1035,7 @@ func getModeForUsageLocation(fileName string, meta ast.SourceFileMetaData, usage
 		}
 	}
 	if ast.IsLiteralTypeNode(usage.Parent) && ast.IsImportTypeNode(usage.Parent.Parent) {
-		if override, ok := usage.Parent.Parent.AsImportTypeNode().Attributes.GetResolutionModeOverride(); ok {
+		if override, ok := usage.Parent.Parent.AsImportTypeNode().Attributes.GetResolutionModeOverride(nil); ok {
 			return override
 		}
 	}

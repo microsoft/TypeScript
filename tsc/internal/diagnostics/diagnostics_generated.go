@@ -768,10 +768,6 @@ var File_is_CommonJS_module_because_0_does_not_have_field_type = &Message{code: 
 
 var File_is_CommonJS_module_because_package_json_was_not_found = &Message{code: 1461, category: CategoryMessage, key: "File_is_CommonJS_module_because_package_json_was_not_found_1461", text: "File is CommonJS module because 'package.json' was not found"}
 
-var X_resolution_mode_is_the_only_valid_key_for_type_import_attributes = &Message{code: 1463, category: CategoryError, key: "resolution_mode_is_the_only_valid_key_for_type_import_attributes_1463", text: "'resolution-mode' is the only valid key for type import attributes."}
-
-var Type_import_attributes_should_have_exactly_one_key_resolution_mode_with_value_import_or_require = &Message{code: 1464, category: CategoryError, key: "Type_import_attributes_should_have_exactly_one_key_resolution_mode_with_value_import_or_require_1464", text: "Type import attributes should have exactly one key - 'resolution-mode' - with value 'import' or 'require'."}
-
 var The_import_meta_meta_property_is_not_allowed_in_files_which_will_build_into_CommonJS_output = &Message{code: 1470, category: CategoryError, key: "The_import_meta_meta_property_is_not_allowed_in_files_which_will_build_into_CommonJS_output_1470", text: "The 'import.meta' meta-property is not allowed in files which will build into CommonJS output."}
 
 var Module_0_cannot_be_imported_using_this_construct_The_specifier_only_resolves_to_an_ES_module_which_cannot_be_imported_with_require_Use_an_ECMAScript_import_instead = &Message{code: 1471, category: CategoryError, key: "Module_0_cannot_be_imported_using_this_construct_The_specifier_only_resolves_to_an_ES_module_which_c_1471", text: "Module '{0}' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead."}
@@ -931,6 +927,22 @@ var X_using_declarations_are_not_allowed_in_case_or_default_clauses_unless_conta
 var X_await_using_declarations_are_not_allowed_in_case_or_default_clauses_unless_contained_within_a_block = &Message{code: 1548, category: CategoryError, key: "await_using_declarations_are_not_allowed_in_case_or_default_clauses_unless_contained_within_a_block_1548", text: "'await using' declarations are not allowed in 'case' or 'default' clauses unless contained within a block."}
 
 var Ignore_the_tsconfig_found_and_build_with_commandline_options_and_files = &Message{code: 1549, category: CategoryMessage, key: "Ignore_the_tsconfig_found_and_build_with_commandline_options_and_files_1549", text: "Ignore the tsconfig found and build with commandline options and files."}
+
+var An_ambient_module_declaration_with_import_attributes_must_use_a_pattern_name_with_an_Asterisk_character = &Message{code: 1550, category: CategoryError, key: "An_ambient_module_declaration_with_import_attributes_must_use_a_pattern_name_with_an_Asterisk_charac_1550", text: "An ambient module declaration with import attributes must use a pattern name with an '*' character."}
+
+var Import_attributes_are_not_allowed_on_a_module_augmentation = &Message{code: 1551, category: CategoryError, key: "Import_attributes_are_not_allowed_on_a_module_augmentation_1551", text: "Import attributes are not allowed on a module augmentation."}
+
+var An_import_attributes_type_may_only_contain_property_signatures = &Message{code: 1552, category: CategoryError, key: "An_import_attributes_type_may_only_contain_property_signatures_1552", text: "An import attributes type may only contain property signatures."}
+
+var An_import_attributes_property_must_have_a_type_annotation = &Message{code: 1553, category: CategoryError, key: "An_import_attributes_property_must_have_a_type_annotation_1553", text: "An import attributes property must have a type annotation."}
+
+var An_import_attributes_property_must_have_a_string_literal_or_identifier_name = &Message{code: 1554, category: CategoryError, key: "An_import_attributes_property_must_have_a_string_literal_or_identifier_name_1554", text: "An import attributes property must have a string literal or identifier name."}
+
+var An_import_attributes_property_must_have_a_string_literal_type_annotation = &Message{code: 1555, category: CategoryError, key: "An_import_attributes_property_must_have_a_string_literal_type_annotation_1555", text: "An import attributes property must have a string literal type annotation."}
+
+var An_import_attributes_property_cannot_be_optional = &Message{code: 1556, category: CategoryError, key: "An_import_attributes_property_cannot_be_optional_1556", text: "An import attributes property cannot be optional."}
+
+var X_0_is_not_a_valid_key_for_an_import_attributes_type = &Message{code: 1557, category: CategoryError, key: "_0_is_not_a_valid_key_for_an_import_attributes_type_1557", text: "'{0}' is not a valid key for an import attributes type."}
 
 var The_types_of_0_are_incompatible_between_these_types = &Message{code: 2200, category: CategoryError, key: "The_types_of_0_are_incompatible_between_these_types_2200", text: "The types of '{0}' are incompatible between these types."}
 
@@ -3762,6 +3774,8 @@ var Regular_expression_pattern_modifiers_are_only_available_when_targeting_0_or_
 
 var Duplicate_named_capturing_groups_are_only_available_when_targeting_0_or_later = &Message{code: 18063, category: CategoryError, key: "Duplicate_named_capturing_groups_are_only_available_when_targeting_0_or_later_18063", text: "Duplicate named capturing groups are only available when targeting '{0}' or later."}
 
+var Private_identifiers_cannot_be_used_in_destructuring_patterns = &Message{code: 18064, category: CategoryError, key: "Private_identifiers_cannot_be_used_in_destructuring_patterns_18064", text: "Private identifiers cannot be used in destructuring patterns."}
+
 var X_nodenext_if_module_is_nodenext_node16_if_module_is_node16_or_node18_otherwise_bundler = &Message{code: 69010, category: CategoryMessage, key: "nodenext_if_module_is_nodenext_node16_if_module_is_node16_or_node18_otherwise_bundler_69010", text: "`nodenext` if `module` is `nodenext`; `node16` if `module` is `node16` or `node18`; otherwise, `bundler`."}
 
 var File_is_a_CommonJS_module_it_may_be_converted_to_an_ES_module = &Message{code: 80001, category: CategorySuggestion, key: "File_is_a_CommonJS_module_it_may_be_converted_to_an_ES_module_80001", text: "File is a CommonJS module; it may be converted to an ES module."}
@@ -4352,8 +4366,6 @@ var Virtual_code_produced_by_the_content_mapper_0_has_problems_with_no_correspon
 
 var The_content_mapper_0_produced_overlapping_or_out_of_order_position_mappings_near_virtual_offset_1 = &Message{code: 100037, category: CategoryError, key: "The_content_mapper_0_produced_overlapping_or_out_of_order_position_mappings_near_virtual_offset_1_100037", text: "The content mapper '{0}' produced overlapping or out-of-order position mappings (near virtual offset {1})."}
 
-var The_content_mapper_0_produced_overlapping_original_position_mappings_that_are_not_identical_near_original_offset_1 = &Message{code: 100038, category: CategoryError, key: "The_content_mapper_0_produced_overlapping_original_position_mappings_that_are_not_identical_near_ori_100038", text: "The content mapper '{0}' produced overlapping original position mappings that are not identical (near original offset {1})."}
-
 var The_content_mapper_0_produced_invalid_mapping_features_near_original_offset_1 = &Message{code: 100039, category: CategoryError, key: "The_content_mapper_0_produced_invalid_mapping_features_near_original_offset_1_100039", text: "The content mapper '{0}' produced invalid mapping features near original offset {1}."}
 
 var The_content_mapper_0_produced_a_position_mapping_with_an_invalid_kind_near_virtual_offset_1 = &Message{code: 100040, category: CategoryError, key: "The_content_mapper_0_produced_a_position_mapping_with_an_invalid_kind_near_virtual_offset_1_100040", text: "The content mapper '{0}' produced a position mapping with an invalid kind (near virtual offset {1})."}
@@ -4363,8 +4375,6 @@ var The_content_mapper_process_could_not_be_started_or_initialized = &Message{co
 var The_content_mapper_process_failed_while_handling_the_transform_request = &Message{code: 100042, category: CategoryMessage, key: "The_content_mapper_process_failed_while_handling_the_transform_request_100042", text: "The content mapper process failed while handling the transform request."}
 
 var The_content_mapper_returned_an_invalid_transform_response = &Message{code: 100043, category: CategoryMessage, key: "The_content_mapper_returned_an_invalid_transform_response_100043", text: "The content mapper returned an invalid transform response."}
-
-var The_content_mapper_uses_unsupported_protocol_version_0_expected_version_1 = &Message{code: 100044, category: CategoryMessage, key: "The_content_mapper_uses_unsupported_protocol_version_0_expected_version_1_100044", text: "The content mapper uses unsupported protocol version {0}; expected version {1}."}
 
 var The_content_mapper_selected_unsupported_position_encoding_0 = &Message{code: 100045, category: CategoryMessage, key: "The_content_mapper_selected_unsupported_position_encoding_0_100045", text: "The content mapper selected unsupported position encoding '{0}'."}
 
@@ -5182,10 +5192,6 @@ func keyToMessage(key Key) *Message {
 		return File_is_CommonJS_module_because_0_does_not_have_field_type
 	case "File_is_CommonJS_module_because_package_json_was_not_found_1461":
 		return File_is_CommonJS_module_because_package_json_was_not_found
-	case "resolution_mode_is_the_only_valid_key_for_type_import_attributes_1463":
-		return X_resolution_mode_is_the_only_valid_key_for_type_import_attributes
-	case "Type_import_attributes_should_have_exactly_one_key_resolution_mode_with_value_import_or_require_1464":
-		return Type_import_attributes_should_have_exactly_one_key_resolution_mode_with_value_import_or_require
 	case "The_import_meta_meta_property_is_not_allowed_in_files_which_will_build_into_CommonJS_output_1470":
 		return The_import_meta_meta_property_is_not_allowed_in_files_which_will_build_into_CommonJS_output
 	case "Module_0_cannot_be_imported_using_this_construct_The_specifier_only_resolves_to_an_ES_module_which_c_1471":
@@ -5346,6 +5352,22 @@ func keyToMessage(key Key) *Message {
 		return X_await_using_declarations_are_not_allowed_in_case_or_default_clauses_unless_contained_within_a_block
 	case "Ignore_the_tsconfig_found_and_build_with_commandline_options_and_files_1549":
 		return Ignore_the_tsconfig_found_and_build_with_commandline_options_and_files
+	case "An_ambient_module_declaration_with_import_attributes_must_use_a_pattern_name_with_an_Asterisk_charac_1550":
+		return An_ambient_module_declaration_with_import_attributes_must_use_a_pattern_name_with_an_Asterisk_character
+	case "Import_attributes_are_not_allowed_on_a_module_augmentation_1551":
+		return Import_attributes_are_not_allowed_on_a_module_augmentation
+	case "An_import_attributes_type_may_only_contain_property_signatures_1552":
+		return An_import_attributes_type_may_only_contain_property_signatures
+	case "An_import_attributes_property_must_have_a_type_annotation_1553":
+		return An_import_attributes_property_must_have_a_type_annotation
+	case "An_import_attributes_property_must_have_a_string_literal_or_identifier_name_1554":
+		return An_import_attributes_property_must_have_a_string_literal_or_identifier_name
+	case "An_import_attributes_property_must_have_a_string_literal_type_annotation_1555":
+		return An_import_attributes_property_must_have_a_string_literal_type_annotation
+	case "An_import_attributes_property_cannot_be_optional_1556":
+		return An_import_attributes_property_cannot_be_optional
+	case "_0_is_not_a_valid_key_for_an_import_attributes_type_1557":
+		return X_0_is_not_a_valid_key_for_an_import_attributes_type
 	case "The_types_of_0_are_incompatible_between_these_types_2200":
 		return The_types_of_0_are_incompatible_between_these_types
 	case "The_types_returned_by_0_are_incompatible_between_these_types_2201":
@@ -8176,6 +8198,8 @@ func keyToMessage(key Key) *Message {
 		return Regular_expression_pattern_modifiers_are_only_available_when_targeting_0_or_later
 	case "Duplicate_named_capturing_groups_are_only_available_when_targeting_0_or_later_18063":
 		return Duplicate_named_capturing_groups_are_only_available_when_targeting_0_or_later
+	case "Private_identifiers_cannot_be_used_in_destructuring_patterns_18064":
+		return Private_identifiers_cannot_be_used_in_destructuring_patterns
 	case "nodenext_if_module_is_nodenext_node16_if_module_is_node16_or_node18_otherwise_bundler_69010":
 		return X_nodenext_if_module_is_nodenext_node16_if_module_is_node16_or_node18_otherwise_bundler
 	case "File_is_a_CommonJS_module_it_may_be_converted_to_an_ES_module_80001":
@@ -8766,8 +8790,6 @@ func keyToMessage(key Key) *Message {
 		return Virtual_code_produced_by_the_content_mapper_0_has_problems_with_no_corresponding_location_in_this_file
 	case "The_content_mapper_0_produced_overlapping_or_out_of_order_position_mappings_near_virtual_offset_1_100037":
 		return The_content_mapper_0_produced_overlapping_or_out_of_order_position_mappings_near_virtual_offset_1
-	case "The_content_mapper_0_produced_overlapping_original_position_mappings_that_are_not_identical_near_ori_100038":
-		return The_content_mapper_0_produced_overlapping_original_position_mappings_that_are_not_identical_near_original_offset_1
 	case "The_content_mapper_0_produced_invalid_mapping_features_near_original_offset_1_100039":
 		return The_content_mapper_0_produced_invalid_mapping_features_near_original_offset_1
 	case "The_content_mapper_0_produced_a_position_mapping_with_an_invalid_kind_near_virtual_offset_1_100040":
@@ -8778,8 +8800,6 @@ func keyToMessage(key Key) *Message {
 		return The_content_mapper_process_failed_while_handling_the_transform_request
 	case "The_content_mapper_returned_an_invalid_transform_response_100043":
 		return The_content_mapper_returned_an_invalid_transform_response
-	case "The_content_mapper_uses_unsupported_protocol_version_0_expected_version_1_100044":
-		return The_content_mapper_uses_unsupported_protocol_version_0_expected_version_1
 	case "The_content_mapper_selected_unsupported_position_encoding_0_100045":
 		return The_content_mapper_selected_unsupported_position_encoding_0
 	case "The_content_mapper_diagnostic_source_must_not_be_empty_100046":

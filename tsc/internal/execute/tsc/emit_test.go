@@ -25,11 +25,11 @@ type contentMapperLoggingTestSystem struct {
 	stderr  bytes.Buffer
 }
 
-func (s *contentMapperLoggingTestSystem) GetEnvironmentVariable(name string) string {
+func (s *contentMapperLoggingTestSystem) GetEnvironmentVariable(name string) (string, bool) {
 	if name == "TS_CONTENT_MAPPER_DEBUG" && s.enabled {
-		return "1"
+		return "1", true
 	}
-	return ""
+	return "", false
 }
 
 func (s *contentMapperLoggingTestSystem) ErrorWriter() io.Writer {
@@ -106,16 +106,18 @@ type timingTestSystem struct {
 	clock *controlledClock
 }
 
-func (s *timingTestSystem) Writer() io.Writer                         { return io.Discard }
-func (s *timingTestSystem) ErrorWriter() io.Writer                    { return io.Discard }
-func (s *timingTestSystem) FS() vfs.FS                                { return s.fs }
-func (s *timingTestSystem) DefaultLibraryPath() string                { return "/lib" }
-func (s *timingTestSystem) GetCurrentDirectory() string               { return "/project" }
-func (s *timingTestSystem) WriteOutputIsTTY() bool                    { return false }
-func (s *timingTestSystem) GetWidthOfTerminal() int                   { return 0 }
-func (s *timingTestSystem) GetEnvironmentVariable(name string) string { return "" }
-func (s *timingTestSystem) Now() time.Time                            { return s.clock.Now() }
-func (s *timingTestSystem) SinceStart() time.Duration                 { return s.clock.SinceStart() }
+func (s *timingTestSystem) Writer() io.Writer           { return io.Discard }
+func (s *timingTestSystem) ErrorWriter() io.Writer      { return io.Discard }
+func (s *timingTestSystem) FS() vfs.FS                  { return s.fs }
+func (s *timingTestSystem) DefaultLibraryPath() string  { return "/lib" }
+func (s *timingTestSystem) GetCurrentDirectory() string { return "/project" }
+func (s *timingTestSystem) WriteOutputIsTTY() bool      { return false }
+func (s *timingTestSystem) GetWidthOfTerminal() int     { return 0 }
+func (s *timingTestSystem) GetEnvironmentVariable(name string) (string, bool) {
+	return "", false
+}
+func (s *timingTestSystem) Now() time.Time            { return s.clock.Now() }
+func (s *timingTestSystem) SinceStart() time.Duration { return s.clock.SinceStart() }
 
 func (s *timingTestSystem) Spawn([]string, string, io.Writer) (io.ReadWriteCloser, error) {
 	return nil, errors.New("spawn not implemented in timingTestSystem")
@@ -157,7 +159,7 @@ export const make = (): Box => ({ value: "ok" });
 		NoEmit:          core.TSTrue,
 		TsBuildInfoFile: "/project/tsconfig.tsbuildinfo",
 	}
-	config := tsoptions.NewParsedCommandLine(options, []string{"/lib/lib.d.ts", "/project/hub.ts", "/project/spoke.ts"}, tspath.ComparePathsOptions{
+	config := tsoptions.NewParsedCommandLine(options, []string{"/lib/lib.d.ts", "/project/hub.ts", "/project/spoke.ts"}, nil, tspath.ComparePathsOptions{
 		UseCaseSensitiveFileNames: true,
 		CurrentDirectory:          "/project",
 	})

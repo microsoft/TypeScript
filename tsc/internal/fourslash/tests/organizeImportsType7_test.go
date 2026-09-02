@@ -22,7 +22,7 @@ console.log(a, b);`
 		`import { a, type A, b } from "foo";
 interface Use extends A {}
 console.log(a, b);`,
-		lsproto.CodeActionKindSourceOrganizeImports,
+		lsproto.CodeActionKindSourceOrganizeImportsTs,
 		&lsutil.UserPreferences{
 			OrganizeImportsTypeOrder: lsutil.OrganizeImportsTypeOrderInline,
 		},
@@ -32,7 +32,7 @@ console.log(a, b);`,
 		`import { a, type A, b } from "foo1";
 interface Use extends A {}
 console.log(a, b);`,
-		lsproto.CodeActionKindSourceOrganizeImports,
+		lsproto.CodeActionKindSourceOrganizeImportsTs,
 		&lsutil.UserPreferences{
 			OrganizeImportsIgnoreCase: core.TSUnknown,
 			OrganizeImportsTypeOrder:  lsutil.OrganizeImportsTypeOrderInline,
@@ -43,7 +43,7 @@ console.log(a, b);`,
 		`import { a, type A, b } from "foo2";
 interface Use extends A {}
 console.log(a, b);`,
-		lsproto.CodeActionKindSourceOrganizeImports,
+		lsproto.CodeActionKindSourceOrganizeImportsTs,
 		&lsutil.UserPreferences{
 			OrganizeImportsIgnoreCase: core.TSTrue,
 			OrganizeImportsTypeOrder:  lsutil.OrganizeImportsTypeOrderInline,
@@ -54,7 +54,7 @@ console.log(a, b);`,
 		`import { type A, a, b } from "foo3";
 interface Use extends A {}
 console.log(a, b);`,
-		lsproto.CodeActionKindSourceOrganizeImports,
+		lsproto.CodeActionKindSourceOrganizeImportsTs,
 		&lsutil.UserPreferences{
 			OrganizeImportsIgnoreCase: core.TSFalse,
 			OrganizeImportsTypeOrder:  lsutil.OrganizeImportsTypeOrderInline,

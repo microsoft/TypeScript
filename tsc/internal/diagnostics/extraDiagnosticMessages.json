@@ -75,9 +75,13 @@
         "category": "Error",
         "code": 6048
     },
-    "Ignore the tsconfig found and build with commandline options and files.": {
-        "category": "Message",
-        "code": 1549
+    "An ambient module declaration with import attributes must use a pattern name with an '*' character.": {
+        "category": "Error",
+        "code": 1550
+    },
+    "Import attributes are not allowed on a module augmentation.": {
+        "category": "Error",
+        "code": 1551
     },
     "tsconfig.json is present but will not be loaded if files are specified on commandline. Use '--ignoreConfig' to skip this error.": {
         "category": "Error",
@@ -219,10 +223,6 @@
         "category": "Error",
         "code": 100037
     },
-    "The content mapper '{0}' produced overlapping original position mappings that are not identical (near original offset {1}).": {
-        "category": "Error",
-        "code": 100038
-    },
     "The content mapper '{0}' produced invalid mapping features near original offset {1}.": {
         "category": "Error",
         "code": 100039
@@ -242,10 +242,6 @@
     "The content mapper returned an invalid transform response.": {
         "category": "Message",
         "code": 100043
-    },
-    "The content mapper uses unsupported protocol version {0}; expected version {1}.": {
-        "category": "Message",
-        "code": 100044
     },
     "The content mapper selected unsupported position encoding '{0}'.": {
         "category": "Message",

@@ -36,93 +36,140 @@ func (l *LanguageService) ProvideHover(ctx context.Context, params *lsproto.Hove
 
 	program, file := l.getProgramAndFile(params.TextDocument.Uri)
 	positions := lsconv.FromLSPPositionForSourceFile(l.converters, file, params.Position, spanmap.FeatureHover)
-	if len(positions) == 0 || !positions[0].Fidelity.IsSingleSegment() {
-		return lsproto.HoverOrNull{}, nil
-	}
-	file = positions[0].Script
-	position := int(positions[0].Position)
-	node := astnav.GetTouchingPropertyName(file, position)
-	if ast.IsSourceFile(node) || ast.IsPropertyAccessOrQualifiedName(node) && isInComment(file, position, node) == nil {
-		// Avoid giving quickInfo for the sourceFile as a whole or inside the comment of a/**/.b
-		return lsproto.HoverOrNull{}, nil
-	}
-	c, done := program.GetTypeCheckerForFile(ctx, file)
-	defer done()
-	rangeNode := getNodeForQuickInfo(node)
-	symbol := getSymbolAtLocationForQuickInfo(c, rangeNode)
+	var hovers []*lsproto.Hover
+	for _, projection := range positions {
+		if !projection.Fidelity.IsSingleSegment() {
+			continue
+		}
+		file = projection.Script
+		position := int(projection.Position)
+		node := astnav.GetTouchingPropertyName(file, position)
+		if ast.IsSourceFile(node) || ast.IsPropertyAccessOrQualifiedName(node) && isInComment(file, position, node) == nil {
+			// Avoid giving quickInfo for the sourceFile as a whole or inside the comment of a/**/.b
+			continue
+		}
+		c, done := program.GetTypeCheckerForFile(ctx, file)
+		rangeNode := getNodeForQuickInfo(node)
+		symbol := getSymbolAtLocationForQuickInfo(c, rangeNode)
 
-	// Always create VerbosityContext for hover so that canExpandSymbol can signal
-	// canIncreaseVerbosity even at Level 0. The nodebuilder also detects expandable
-	// types at Level 0 via shouldExpandType (maxExpansionDepth = 0).
-	maxTruncLen := l.UserPreferences().MaximumHoverLength
-	if maxTruncLen <= 0 {
-		maxTruncLen = 500
-	}
-	vc := &checker.VerbosityContext{
-		Level:               verbosityLevel,
-		MaxTruncationLength: maxTruncLen,
-	}
+		// Always create VerbosityContext for hover so that canExpandSymbol can signal
+		// canIncreaseVerbosity even at Level 0. The nodebuilder also detects expandable
+		// types at Level 0 via shouldExpandType (maxExpansionDepth = 0).
+		maxTruncLen := l.UserPreferences().MaximumHoverLength
+		if maxTruncLen <= 0 {
+			maxTruncLen = 500
+		}
+		vc := &checker.VerbosityContext{
+			Level:               verbosityLevel,
+			MaxTruncationLength: maxTruncLen,
+		}
 
-	vsCapability := caps.VSSupportsVisualStudioExtensions
-	quickInfo, documentation, vsDocumentation, quickInfoRuns := l.getQuickInfoAndDocumentationForSymbol(c, symbol, rangeNode, contentFormat, vc, vsCapability)
-	if quickInfo == "" {
-		return lsproto.HoverOrNull{}, nil
-	}
-	rangeFile := ast.GetSourceFileOfNode(rangeNode)
-	textRange := getRangeOfNode(rangeNode, rangeFile, nil /*endNode*/)
-	hoverRange, hoverFidelity := l.converters.ToLSPRangeForFeature(rangeFile, textRange, spanmap.FeatureHover)
+		vsCapability := caps.VSSupportsVisualStudioExtensions
+		quickInfo, documentation, vsDocumentation, quickInfoRuns := l.getQuickInfoAndDocumentationForSymbol(c, symbol, rangeNode, contentFormat, vc, vsCapability)
+		if quickInfo == "" {
+			done()
+			continue
+		}
+		rangeFile := ast.GetSourceFileOfNode(rangeNode)
+		textRange := getRangeOfNode(rangeNode, rangeFile, nil /*endNode*/)
+		hoverRange, hoverFidelity := l.converters.ToLSPRangeForFeature(rangeFile, textRange, spanmap.FeatureHover)
 
-	var content string
-	if contentFormat == lsproto.MarkupKindMarkdown {
-		content = formatQuickInfo(quickInfo) + documentation
-	} else {
-		content = quickInfo + documentation
-	}
+		var content string
+		if contentFormat == lsproto.MarkupKindMarkdown {
+			content = formatQuickInfo(quickInfo) + documentation
+		} else {
+			content = quickInfo + documentation
+		}
 
-	hover := &lsproto.Hover{
-		Contents: lsproto.MarkupContentOrStringOrMarkedStringWithLanguageOrMarkedStrings{
-			MarkupContent: &lsproto.MarkupContent{
-				Kind:  contentFormat,
-				Value: content,
+		hover := &lsproto.Hover{
+			Contents: lsproto.MarkupContentOrStringOrMarkedStringWithLanguageOrMarkedStrings{
+				MarkupContent: &lsproto.MarkupContent{
+					Kind:  contentFormat,
+					Value: content,
+				},
 			},
-		},
-	}
-	if hoverFidelity.IsSingleSegment() {
-		hover.Range = &hoverRange
-	}
+		}
+		if hoverFidelity.IsSingleSegment() {
+			hover.Range = &hoverRange
+		}
 
-	if caps.Experimental.HoverVerbosityLevel {
-		hover.CanIncreaseVerbosity = vc.CanIncreaseVerbosity && !vc.Truncated
-	}
+		if caps.Experimental.HoverVerbosityLevel {
+			hover.CanIncreaseVerbosity = vc.CanIncreaseVerbosity && !vc.Truncated
+		}
 
-	// Clients that support Visual Studio extensions (e.g. VS itself, when Corsa/Native TS Preview is
-	// enabled) render `_vs_rawContent` in place of `contents`. Without it, VS shows plain markdown
-	// with no symbol icon and no syntax coloring, unlike the legacy TSServer-backed hover path.
-	if vsCapability && len(quickInfoRuns) > 0 {
-		kind := lsutil.ScriptElementKindKeyword
-		var modifiers lsutil.ScriptElementKindModifier
-		if symbol != nil {
-			// Resolve aliases to their target before computing the icon kind, so e.g. `import { x }`
-			// shows the icon for whatever `x` actually is (const, function, ...) rather than a
-			// generic alias icon. GetSymbolModifiers already accounts for the alias target itself.
-			iconSymbol := symbol
-			if symbol.Flags&ast.SymbolFlagsAlias != 0 {
-				if resolved := c.GetAliasedSymbol(symbol); resolved != nil && resolved != symbol {
-					iconSymbol = resolved
+		// Clients that support Visual Studio extensions (e.g. VS itself, when Corsa/Native TS Preview is
+		// enabled) render `_vs_rawContent` in place of `contents`. Without it, VS shows plain markdown
+		// with no symbol icon and no syntax coloring, unlike the legacy TSServer-backed hover path.
+		if vsCapability && len(quickInfoRuns) > 0 {
+			kind := lsutil.ScriptElementKindKeyword
+			var modifiers lsutil.ScriptElementKindModifier
+			if symbol != nil {
+				// Resolve aliases to their target before computing the icon kind, so e.g. `import { x }`
+				// shows the icon for whatever `x` actually is (const, function, ...) rather than a
+				// generic alias icon. GetSymbolModifiers already accounts for the alias target itself.
+				iconSymbol := symbol
+				if symbol.Flags&ast.SymbolFlagsAlias != 0 {
+					if resolved := c.GetAliasedSymbol(symbol); resolved != nil && resolved != symbol {
+						iconSymbol = resolved
+					}
 				}
+				kind = lsutil.GetSymbolKind(c, iconSymbol, rangeNode)
+				modifiers = lsutil.GetSymbolModifiers(c, symbol)
 			}
-			kind = lsutil.GetSymbolKind(c, iconSymbol, rangeNode)
-			modifiers = lsutil.GetSymbolModifiers(c, symbol)
+			imageId := getVSHoverImageId(kind, modifiers)
+			var documentationRuns []*lsproto.VSClassifiedTextRun
+			if docText := strings.TrimLeft(vsDocumentation, "\n"); docText != "" {
+				documentationRuns = []*lsproto.VSClassifiedTextRun{{ClassificationTypeName: string(lsproto.ClassificationTypeNameText), Text: docText}}
+			}
+			hover.VSRawContent = buildVSHoverRawContent(imageId, quickInfoRuns, documentationRuns)
 		}
-		imageId := getVSHoverImageId(kind, modifiers)
-		var documentationRuns []*lsproto.VSClassifiedTextRun
-		if docText := strings.TrimLeft(vsDocumentation, "\n"); docText != "" {
-			documentationRuns = []*lsproto.VSClassifiedTextRun{{ClassificationTypeName: string(lsproto.ClassificationTypeNameText), Text: docText}}
-		}
-		hover.VSRawContent = buildVSHoverRawContent(imageId, quickInfoRuns, documentationRuns)
+
+		done()
+		hovers = append(hovers, hover)
+	}
+	if len(hovers) == 0 {
+		return lsproto.HoverOrNull{}, nil
+	}
+	if len(hovers) == 1 {
+		return lsproto.HoverOrNull{Hover: hovers[0]}, nil
 	}
 
-	return lsproto.HoverOrNull{Hover: hover}, nil
+	combined := hovers[0]
+	contents := make([]string, 0, len(hovers))
+	seenContents := collections.Set[string]{}
+	var rawContents []lsproto.VSImageElementOrClassifiedTextElementOrContainerElement
+	commonRange := combined.Range
+	for _, hover := range hovers {
+		content := strings.TrimRight(hover.Contents.MarkupContent.Value, "\n")
+		if seenContents.AddIfAbsent(content) {
+			contents = append(contents, content)
+			if hover.VSRawContent != nil {
+				rawContents = append(rawContents, lsproto.VSImageElementOrClassifiedTextElementOrContainerElement{ContainerElement: hover.VSRawContent})
+			}
+		}
+		combined.CanIncreaseVerbosity = combined.CanIncreaseVerbosity || hover.CanIncreaseVerbosity
+		if commonRange == nil || hover.Range == nil || *commonRange != *hover.Range {
+			commonRange = nil
+		}
+	}
+	separator := "\n\n"
+	if contentFormat == lsproto.MarkupKindMarkdown {
+		separator = "\n\n---\n\n"
+	}
+	combined.Contents.MarkupContent.Value = strings.Join(contents, separator)
+	combined.Range = commonRange
+	switch len(rawContents) {
+	case 0:
+		combined.VSRawContent = nil
+	case 1:
+		combined.VSRawContent = rawContents[0].ContainerElement
+	default:
+		combined.VSRawContent = &lsproto.VSContainerElement{
+			Style:    lsproto.VSContainerElementStyleStacked,
+			Elements: rawContents,
+		}
+	}
+	return lsproto.HoverOrNull{Hover: combined}, nil
 }
 
 func (l *LanguageService) getQuickInfoAndDocumentationForSymbol(c *checker.Checker, symbol *ast.Symbol, node *ast.Node, contentFormat lsproto.MarkupKind, vc *checker.VerbosityContext, vsCapability bool) (string, string, string, []*lsproto.VSClassifiedTextRun) {
@@ -465,6 +512,22 @@ func getQuickInfoAndDeclarationAtLocation(c *checker.Checker, symbol *ast.Symbol
 		text := c.SymbolToStringEx(symbol, enclosing, meaning, flags)
 		dpw.WriteSymbol(text, symbol)
 	}
+	writeModuleImportAttributes := func(symbol *ast.Symbol) {
+		declaration := core.Find(symbol.Declarations, func(declaration *ast.Node) bool {
+			return ast.IsModuleDeclaration(declaration) && declaration.AsModuleDeclaration().Attributes != nil
+		})
+		if declaration == nil {
+			return
+		}
+		attributes := declaration.AsModuleDeclaration().Attributes
+		emitContext := printer.NewEmitContext()
+		emitContext.SetEmitFlags(attributes, printer.EFSingleLine)
+		p := printer.NewPrinter(printer.PrinterOptions{NewLine: core.NewLineKindLF}, printer.PrintHandlers{}, emitContext)
+		tempDpw := newDisplayPartsWriter(vsCapability)
+		p.Write(attributes, ast.GetSourceFileOfNode(declaration), tempDpw, nil)
+		dpw.WriteKeyword(" with ")
+		dpw.WriteFrom(tempDpw)
+	}
 	if node.Kind == ast.KindThisKeyword && ast.IsInExpressionContext(node) || ast.IsThisInTypeQuery(node) {
 		dpw.WriteKeyword("this")
 		dpw.WritePunctuation(": ")
@@ -801,6 +864,7 @@ func getQuickInfoAndDeclarationAtLocation(c *checker.Checker, symbol *ast.Symbol
 				isModule := symbol.ValueDeclaration != nil && (ast.IsSourceFile(symbol.ValueDeclaration) || ast.IsAmbientModule(symbol.ValueDeclaration))
 				dpw.WriteKeyword(core.IfElse(isModule, "module ", "namespace "))
 				writeSymbolClassified(symbol, container, ast.SymbolFlagsNone, symbolFormatFlags)
+				writeModuleImportAttributes(symbol)
 			}
 			setDeclaration(core.Find(symbol.Declarations, ast.IsModuleDeclaration))
 		}

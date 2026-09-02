@@ -337,6 +337,45 @@ export function isRootedDiskPath(path: string): boolean {
     return getEncodedRootLength(path) > 0;
 }
 
+export function convertToRelativePath(
+    absoluteOrRelativePath: string,
+    basePath: string,
+    getCanonicalFileName: (path: string) => string,
+): string {
+    if (!isRootedDiskPath(absoluteOrRelativePath)) {
+        return absoluteOrRelativePath;
+    }
+
+    const fromComponents = getPathComponents(getNormalizedAbsolutePath(basePath, ""));
+    const toComponents = getPathComponents(getNormalizedAbsolutePath(absoluteOrRelativePath, ""));
+    let start = 0;
+    for (; start < fromComponents.length && start < toComponents.length; start++) {
+        const fromComponent = getCanonicalFileName(fromComponents[start]);
+        const toComponent = getCanonicalFileName(toComponents[start]);
+        const equal = start === 0
+            ? fromComponent.toLowerCase() === toComponent.toLowerCase()
+            : fromComponent === toComponent;
+        if (!equal) {
+            break;
+        }
+    }
+
+    if (start === 0) {
+        return pathFromComponents(toComponents);
+    }
+
+    const relative = Array(fromComponents.length - start).fill("..");
+    return pathFromComponents(["", ...relative, ...toComponents.slice(start)]);
+}
+
+function pathFromComponents(components: readonly string[]): string {
+    if (components.length === 0) {
+        return "";
+    }
+    const root = components[0] && ensureTrailingDirectorySeparator(components[0]);
+    return root + components.slice(1).join(directorySeparator);
+}
+
 /**
  * Converts a file name to a normalized path.
  *

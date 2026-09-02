@@ -22,7 +22,7 @@ x; y;`
 		`import y from "lib1";
 import x from "lib2";
 x; y;`,
-		lsproto.CodeActionKindSourceSortImports,
+		lsproto.CodeActionKindSourceSortImportsTs,
 		&lsutil.UserPreferences{OrganizeImportsSort: lsutil.OrganizeImportsSortOrdinalIgnoreCase},
 	)
 }
@@ -40,7 +40,7 @@ x; y;`
 		`import y from "./lib1";
 import x from "./lib2";
 x; y;`,
-		lsproto.CodeActionKindSourceSortImports,
+		lsproto.CodeActionKindSourceSortImportsTs,
 		&lsutil.UserPreferences{OrganizeImportsSort: lsutil.OrganizeImportsSortOrdinalIgnoreCase},
 	)
 }
@@ -58,7 +58,7 @@ x; y;`
 		`import y from "lib";
 import x from "./lib";
 x; y;`,
-		lsproto.CodeActionKindSourceSortImports,
+		lsproto.CodeActionKindSourceSortImportsTs,
 		&lsutil.UserPreferences{OrganizeImportsSort: lsutil.OrganizeImportsSortOrdinalIgnoreCase},
 	)
 }
@@ -77,7 +77,7 @@ x; y;`
 		`import y from "a";
 import x from "Z";
 x; y;`,
-		lsproto.CodeActionKindSourceSortImports,
+		lsproto.CodeActionKindSourceSortImportsTs,
 		&lsutil.UserPreferences{OrganizeImportsSort: lsutil.OrganizeImportsSortOrdinalIgnoreCase},
 	)
 }
@@ -96,7 +96,7 @@ x; y;`
 		`import y from "A";
 import x from "z";
 x; y;`,
-		lsproto.CodeActionKindSourceSortImports,
+		lsproto.CodeActionKindSourceSortImportsTs,
 		&lsutil.UserPreferences{OrganizeImportsSort: lsutil.OrganizeImportsSortOrdinalIgnoreCase},
 	)
 }

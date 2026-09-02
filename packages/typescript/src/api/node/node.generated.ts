@@ -43,7 +43,6 @@ export class RemoteNodeList extends Array<RemoteNode> implements NodeArray<Remot
     }
 
     parent: RemoteNode;
-    hasTrailingComma?: boolean;
     transformFlags: number = 0;
     protected view: DataView;
     protected index: number;
@@ -69,6 +68,10 @@ export class RemoteNodeList extends Array<RemoteNode> implements NodeArray<Remot
 
     private get data(): number {
         return this.view.getUint32(this._byteIndex + NODE_OFFSET_DATA, true);
+    }
+
+    get hasTrailingComma(): boolean {
+        return (this.view.getUint32(this._byteIndex + NODE_OFFSET_FLAGS, true) & 1) !== 0;
     }
 
     private sourceFile: SourceFileInfo;
@@ -366,6 +369,7 @@ export class RemoteNode extends RemoteNodeBase implements Node {
     }
 
     private getChildAtOrder(order: number): RemoteNode | RemoteNodeList | undefined {
+        if (!this.hasChildren()) return undefined;
         const mask = this.childMask;
         if (!(mask & (1 << order))) {
             // Property is not present

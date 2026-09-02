@@ -2,7 +2,6 @@ package checker
 
 import (
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
-	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
 )
 
@@ -113,12 +112,16 @@ func (c *Checker) GetImmediateAliasedSymbol(symbol *ast.Symbol) *ast.Symbol {
 	return c.getImmediateAliasedSymbol(symbol)
 }
 
+func (c *Checker) GetTargetSymbol(symbol *ast.Symbol) *ast.Symbol {
+	return c.getTargetSymbol(symbol)
+}
+
 func (c *Checker) GetTypeOnlyAliasDeclaration(symbol *ast.Symbol) *ast.Node {
 	return c.getTypeOnlyAliasDeclaration(symbol)
 }
 
-func (c *Checker) ResolveExternalModuleName(moduleSpecifier *ast.Node) *ast.Symbol {
-	return c.resolveExternalModuleName(moduleSpecifier, moduleSpecifier, true /*ignoreErrors*/)
+func (c *Checker) ResolveExternalModuleName(moduleSpecifier *ast.Node, importAttributesType *Type) *ast.Symbol {
+	return c.resolveExternalModuleName(moduleSpecifier, moduleSpecifier, true /*ignoreErrors*/, importAttributesType)
 }
 
 func (c *Checker) ResolveExternalModuleSymbol(moduleSymbol *ast.Symbol) *ast.Symbol {
@@ -181,6 +184,10 @@ func (c *Checker) GetTypeOfSymbol(symbol *ast.Symbol) *Type {
 	return c.getTypeOfSymbol(symbol)
 }
 
+func (c *Checker) GetNonMissingTypeOfSymbol(symbol *ast.Symbol) *Type {
+	return c.getNonMissingTypeOfSymbol(symbol)
+}
+
 func (c *Checker) GetConstraintOfTypeParameter(typeParameter *Type) *Type {
 	return c.getConstraintOfTypeParameter(typeParameter)
 }
@@ -195,10 +202,6 @@ func (c *Checker) GetFalseTypeOfConditionalType(t *Type) *Type {
 
 func (c *Checker) GetDefaultFromTypeParameter(typeParameter *Type) *Type {
 	return c.getDefaultFromTypeParameter(typeParameter)
-}
-
-func (c *Checker) GetResolutionModeOverride(node *ast.ImportAttributes, reportErrors bool) core.ResolutionMode {
-	return c.getResolutionModeOverride(node, reportErrors)
 }
 
 func (c *Checker) GetEffectiveDeclarationFlags(n *ast.Node, flagsToCheck ast.ModifierFlags) ast.ModifierFlags {
@@ -217,8 +220,16 @@ func IsTupleType(t *Type) bool {
 	return isTupleType(t)
 }
 
+func IsTupleTypeTarget(t *Type) bool {
+	return isTupleType(t) && t.Target() == t
+}
+
 func (c *Checker) IsArrayType(t *Type) bool {
 	return c.isArrayType(t)
+}
+
+func (c *Checker) IsReadonlySymbol(symbol *ast.Symbol) bool {
+	return c.isReadonlySymbol(symbol)
 }
 
 func (c *Checker) GetReturnTypeOfSignature(sig *Signature) *Type {
@@ -292,6 +303,10 @@ func (c *Checker) GetBaseTypes(t *Type) []*Type {
 
 func (c *Checker) GetApparentType(t *Type) *Type {
 	return c.getApparentType(t)
+}
+
+func (c *Checker) GetReducedType(t *Type) *Type {
+	return c.getReducedType(t)
 }
 
 // GetFullyQualifiedName returns the fully qualified name of a symbol, walking up
