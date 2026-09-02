@@ -1,27 +1,81 @@
-package api
+package requestfilesystem
 
 import (
-	"context"
 	"testing"
 
-	"github.com/microsoft/TypeScript/tsc/internal/testutil/projecttestutil"
-	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/trackingvfs"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfstest"
 	"gotest.tools/v3/assert"
 )
 
-func TestSnapshotFileSystem(t *testing.T) {
+func newRequestFileSystem(params *RequestFileSystem, base vfs.FS, currentDirectory string) (*Handle, error) {
+	handle := &Handle{}
+	if err := handle.initializeFromRequest(params, base, currentDirectory); err != nil {
+		return nil, err
+	}
+	return handle, nil
+}
+
+func newLayeredRequestFileSystem(params *RequestFileSystem, base vfs.FS, currentDirectory string) (*Handle, error) {
+	handle := &Handle{}
+	if err := handle.initializeLayered(params, base, currentDirectory); err != nil {
+		return nil, err
+	}
+	return handle, nil
+}
+
+func (h *Handle) applyTo(base *Handle) {
+	requestFileSystemDependenciesMu.Lock()
+	defer requestFileSystemDependenciesMu.Unlock()
+	h.applyToLocked(base)
+}
+
+func TestRequestFileSystem(t *testing.T) {
 	t.Parallel()
+
+	t.Run("compaction preserves host fallback", func(t *testing.T) {
+		t.Parallel()
+		host := vfstest.FromMap(map[string]string{
+			"/host.ts": "host",
+		}, true)
+		baseFS, err := newRequestFileSystem(&RequestFileSystem{
+			Kind: KindCache,
+		}, host, "/")
+		assert.NilError(t, err)
+		base := getRequestFileSystem(baseFS)
+		assert.Assert(t, base != nil)
+		assert.Assert(t, base.baseFileSystem() == host)
+		assert.Assert(t, !base.FileExists("/created-after-base.ts"))
+		assert.NilError(t, host.WriteFile("/created-after-base.ts", "created"))
+
+		layeredFS, err := newLayeredRequestFileSystem(&RequestFileSystem{
+			Kind:  KindCache,
+			Files: map[string]string{"/layered.ts": "layered"},
+		}, baseFS, "/")
+		assert.NilError(t, err)
+		layered := getRequestFileSystem(layeredFS)
+		assert.Assert(t, layered != nil)
+		assert.Assert(t, layered.baseFileSystem() == baseFS)
+		assert.Assert(t, layered.FileExists("/created-after-base.ts"))
+		assert.NilError(t, host.Remove("/created-after-base.ts"))
+
+		layered.applyTo(base)
+
+		assert.Assert(t, layered.baseFileSystem() == host)
+		assert.Assert(t, !layered.FileExists("/created-after-base.ts"))
+		contents, ok := layered.ReadFile("/host.ts")
+		assert.Assert(t, ok)
+		assert.Equal(t, contents, "host")
+	})
 
 	t.Run("memory is total and never falls back", func(t *testing.T) {
 		t.Parallel()
 		base := &trackingvfs.FS{Inner: vfstest.FromMap(map[string]string{
 			"/host.ts": "host",
 		}, true)}
-		fileSystem, err := newSnapshotFileSystem(&SnapshotFileSystem{
-			Kind: SnapshotFileSystemKindMemory,
+		fileSystem, err := newRequestFileSystem(&RequestFileSystem{
+			Kind: KindMemory,
 			Files: map[string]string{
 				"/src/index.ts": "memory",
 			},
@@ -46,12 +100,12 @@ func TestSnapshotFileSystem(t *testing.T) {
 		base := &trackingvfs.FS{Inner: vfstest.FromMap(map[string]string{
 			"/fallback.ts": "fallback",
 		}, true)}
-		fileSystem, err := newSnapshotFileSystem(&SnapshotFileSystem{
-			Kind: SnapshotFileSystemKindCache,
+		fileSystem, err := newRequestFileSystem(&RequestFileSystem{
+			Kind: KindCache,
 			Files: map[string]string{
 				"/cached/index.ts": "cached",
 			},
-			Directories: map[string]SnapshotDirectoryEntries{
+			Directories: map[string]RequestDirectoryEntries{
 				"/cached": {Files: []string{"index.ts"}, Directories: []string{}},
 			},
 		}, base, "/")
@@ -74,8 +128,8 @@ func TestSnapshotFileSystem(t *testing.T) {
 
 	t.Run("layered memory is a total replacement", func(t *testing.T) {
 		t.Parallel()
-		fileSystem, err := newLayeredSnapshotFileSystem(&SnapshotFileSystem{
-			Kind: SnapshotFileSystemKindMemory,
+		fileSystem, err := newLayeredRequestFileSystem(&RequestFileSystem{
+			Kind: KindMemory,
 			Files: map[string]string{
 				"/memory.ts": "memory",
 			},
@@ -93,12 +147,12 @@ func TestSnapshotFileSystem(t *testing.T) {
 		base := &trackingvfs.FS{Inner: vfstest.FromMap(map[string]string{
 			"/host.ts": "host",
 		}, true)}
-		fileSystem, err := newSnapshotFileSystem(&SnapshotFileSystem{
-			Kind: SnapshotFileSystemKindMemory,
+		fileSystem, err := newRequestFileSystem(&RequestFileSystem{
+			Kind: KindMemory,
 			Files: map[string]string{
 				"/packages/pkg/index.d.ts": "export declare const value: number;",
 			},
-			Symlinks: map[string]SnapshotSymlink{
+			Symlinks: map[string]RequestSymlink{
 				"/project/node_modules/pkg": {Target: "../../../packages/pkg"},
 				"/project/pkg.d.ts":         {Target: "../packages/pkg/index.d.ts"},
 			},
@@ -129,15 +183,15 @@ func TestSnapshotFileSystem(t *testing.T) {
 		base := &trackingvfs.FS{Inner: vfstest.FromMap(map[string]string{
 			"/packages/pkg/index.d.ts": "host content",
 		}, true)}
-		fileSystem, err := newSnapshotFileSystem(&SnapshotFileSystem{
-			Kind: SnapshotFileSystemKindCache,
+		fileSystem, err := newRequestFileSystem(&RequestFileSystem{
+			Kind: KindCache,
 			Files: map[string]string{
 				"/packages/pkg/index.d.ts": "cached content",
 			},
-			Directories: map[string]SnapshotDirectoryEntries{
+			Directories: map[string]RequestDirectoryEntries{
 				"/project/node_modules": {Files: []string{}, Directories: []string{}},
 			},
-			Symlinks: map[string]SnapshotSymlink{
+			Symlinks: map[string]RequestSymlink{
 				"/project/node_modules/pkg": {Target: "/packages/pkg"},
 			},
 		}, base, "/")
@@ -160,8 +214,8 @@ func TestSnapshotFileSystem(t *testing.T) {
 			"/project/node_modules/pkg": vfstest.Symlink("/host/pkg"),
 			"/host/pkg/index.d.ts":      "host content",
 		}, true)
-		fileSystem, err := newSnapshotFileSystem(&SnapshotFileSystem{
-			Kind: SnapshotFileSystemKindCache,
+		fileSystem, err := newRequestFileSystem(&RequestFileSystem{
+			Kind: KindCache,
 			Files: map[string]string{
 				"/project/node_modules/pkg/index.d.ts": "cached content",
 			},
@@ -181,8 +235,8 @@ func TestSnapshotFileSystem(t *testing.T) {
 	t.Run("layered cache adds changes and blocks removed entries", func(t *testing.T) {
 		t.Parallel()
 		host := vfstest.FromMap(map[string]string{}, true)
-		base, err := newSnapshotFileSystem(&SnapshotFileSystem{
-			Kind: SnapshotFileSystemKindMemory,
+		base, err := newRequestFileSystem(&RequestFileSystem{
+			Kind: KindMemory,
 			Files: map[string]string{
 				"/keep.ts":               "keep",
 				"/change.ts":             "old",
@@ -194,8 +248,8 @@ func TestSnapshotFileSystem(t *testing.T) {
 		}, host, "/")
 		assert.NilError(t, err)
 
-		layered, err := newLayeredSnapshotFileSystem(&SnapshotFileSystem{
-			Kind: SnapshotFileSystemKindCache,
+		layered, err := newLayeredRequestFileSystem(&RequestFileSystem{
+			Kind: KindCache,
 			Files: map[string]string{
 				"/change.ts":                     "new",
 				"/added.ts":                      "added",
@@ -204,7 +258,7 @@ func TestSnapshotFileSystem(t *testing.T) {
 				"/becomes-file":                  "file",
 				"/becomes-directory.ts/child.ts": "child",
 			},
-			Directories: map[string]SnapshotDirectoryEntries{
+			Directories: map[string]RequestDirectoryEntries{
 				"/": {Files: []string{"added.ts", "becomes-file", "change.ts", "remove.ts"}, Directories: []string{"becomes-directory.ts", "removed-dir"}},
 			},
 			RemovedPaths: []string{"/remove.ts", "/removed-dir"},
@@ -241,20 +295,21 @@ func TestSnapshotFileSystem(t *testing.T) {
 	t.Run("new layers override targets of inherited symlinks", func(t *testing.T) {
 		t.Parallel()
 		host := vfstest.FromMap(map[string]string{}, true)
-		base, err := newSnapshotFileSystem(&SnapshotFileSystem{
-			Kind: SnapshotFileSystemKindMemory,
+		base, err := newRequestFileSystem(&RequestFileSystem{
+			Kind: KindMemory,
 			Files: map[string]string{
 				"/target/change.ts": "old",
+				"/target/keep.ts":   "keep",
 				"/target/remove.ts": "remove",
 			},
-			Symlinks: map[string]SnapshotSymlink{
+			Symlinks: map[string]RequestSymlink{
 				"/link": {Target: "/target"},
 			},
 		}, host, "/")
 		assert.NilError(t, err)
 
-		layered, err := newLayeredSnapshotFileSystem(&SnapshotFileSystem{
-			Kind: SnapshotFileSystemKindCache,
+		layered, err := newLayeredRequestFileSystem(&RequestFileSystem{
+			Kind: KindCache,
 			Files: map[string]string{
 				"/target/change.ts": "new",
 				"/target/added.ts":  "added",
@@ -271,25 +326,25 @@ func TestSnapshotFileSystem(t *testing.T) {
 		assert.Equal(t, contents, "added")
 		_, ok = layered.ReadFile("/link/remove.ts")
 		assert.Assert(t, !ok)
-		assert.DeepEqual(t, layered.GetAccessibleEntries("/link").Files, []string{"added.ts", "change.ts"})
+		assert.DeepEqual(t, layered.GetAccessibleEntries("/link").Files, []string{"added.ts", "change.ts", "keep.ts"})
 	})
 
 	t.Run("alias tombstones take precedence over inherited symlink targets", func(t *testing.T) {
 		t.Parallel()
 		host := vfstest.FromMap(map[string]string{}, true)
-		base, err := newSnapshotFileSystem(&SnapshotFileSystem{
-			Kind: SnapshotFileSystemKindMemory,
+		base, err := newRequestFileSystem(&RequestFileSystem{
+			Kind: KindMemory,
 			Files: map[string]string{
 				"/target/file.ts": "old",
 			},
-			Symlinks: map[string]SnapshotSymlink{
+			Symlinks: map[string]RequestSymlink{
 				"/link": {Target: "/target"},
 			},
 		}, host, "/")
 		assert.NilError(t, err)
 
-		layered, err := newLayeredSnapshotFileSystem(&SnapshotFileSystem{
-			Kind: SnapshotFileSystemKindCache,
+		layered, err := newLayeredRequestFileSystem(&RequestFileSystem{
+			Kind: KindCache,
 			Files: map[string]string{
 				"/target/file.ts": "new",
 			},
@@ -305,22 +360,125 @@ func TestSnapshotFileSystem(t *testing.T) {
 		assert.Equal(t, len(layered.GetAccessibleEntries("/link").Files), 0)
 	})
 
+	t.Run("compaction preserves overlays addressed through inherited symlinks", func(t *testing.T) {
+		t.Parallel()
+		host := vfstest.FromMap(map[string]string{}, true)
+		baseFS, err := newRequestFileSystem(&RequestFileSystem{
+			Kind: KindMemory,
+			Files: map[string]string{
+				"/target/remove.ts": "remove",
+			},
+			Symlinks: map[string]RequestSymlink{
+				"/link": {Target: "/target"},
+			},
+		}, host, "/")
+		assert.NilError(t, err)
+		base := getRequestFileSystem(baseFS)
+
+		layeredFS, err := newLayeredRequestFileSystem(&RequestFileSystem{
+			Kind:         KindCache,
+			Files:        map[string]string{},
+			RemovedPaths: []string{"/link/remove.ts"},
+		}, baseFS, "/")
+		assert.NilError(t, err)
+		layered := getRequestFileSystem(layeredFS)
+
+		_, ok := layered.ReadFile("/link/remove.ts")
+		assert.Assert(t, !ok)
+
+		layered.applyTo(base)
+
+		_, ok = layered.ReadFile("/link/remove.ts")
+		assert.Assert(t, !ok)
+	})
+
+	t.Run("compaction removes tombstones from explicit listings", func(t *testing.T) {
+		t.Parallel()
+		host := vfstest.FromMap(map[string]string{}, true)
+		baseFS, err := newRequestFileSystem(&RequestFileSystem{
+			Kind: KindMemory,
+			Files: map[string]string{
+				"/dir/remove.ts": "remove",
+			},
+			Directories: map[string]RequestDirectoryEntries{
+				"/dir": {Files: []string{"remove.ts"}, Directories: []string{}},
+			},
+		}, host, "/")
+		assert.NilError(t, err)
+		base := getRequestFileSystem(baseFS)
+
+		layeredFS, err := newLayeredRequestFileSystem(&RequestFileSystem{
+			Kind:         KindCache,
+			Files:        map[string]string{},
+			RemovedPaths: []string{"/dir/remove.ts"},
+		}, baseFS, "/")
+		assert.NilError(t, err)
+		layered := getRequestFileSystem(layeredFS)
+		assert.Equal(t, len(layered.GetAccessibleEntries("/dir").Files), 0)
+
+		layered.applyTo(base)
+
+		assert.Equal(t, len(layered.GetAccessibleEntries("/dir").Files), 0)
+	})
+
+	t.Run("compaction allows recreating a path removed through an inherited symlink", func(t *testing.T) {
+		t.Parallel()
+		host := vfstest.FromMap(map[string]string{}, true)
+		baseFS, err := newRequestFileSystem(&RequestFileSystem{
+			Kind: KindMemory,
+			Files: map[string]string{
+				"/target/recreated.ts": "base",
+			},
+			Symlinks: map[string]RequestSymlink{
+				"/link": {Target: "/target"},
+			},
+		}, host, "/")
+		assert.NilError(t, err)
+		base := getRequestFileSystem(baseFS)
+
+		removedFS, err := newLayeredRequestFileSystem(&RequestFileSystem{
+			Kind:         KindCache,
+			RemovedPaths: []string{"/link/recreated.ts"},
+		}, baseFS, "/")
+		assert.NilError(t, err)
+		removed := getRequestFileSystem(removedFS)
+		removed.applyTo(base)
+
+		recreatedFS, err := newLayeredRequestFileSystem(&RequestFileSystem{
+			Kind: KindCache,
+			Files: map[string]string{
+				"/link/recreated.ts": "recreated",
+			},
+		}, removedFS, "/")
+		assert.NilError(t, err)
+		recreated := getRequestFileSystem(recreatedFS)
+		contents, ok := recreated.ReadFile("/link/recreated.ts")
+		assert.Assert(t, ok)
+		assert.Equal(t, contents, "recreated")
+
+		recreated.applyTo(removed)
+
+		contents, ok = recreated.ReadFile("/link/recreated.ts")
+		assert.Assert(t, ok)
+		assert.Equal(t, contents, "recreated")
+	})
+
 	t.Run("files replacing inherited symlink target directories have empty listings", func(t *testing.T) {
 		t.Parallel()
 		host := vfstest.FromMap(map[string]string{}, true)
-		base, err := newSnapshotFileSystem(&SnapshotFileSystem{
-			Kind: SnapshotFileSystemKindMemory,
+		base, err := newRequestFileSystem(&RequestFileSystem{
+			Kind: KindMemory,
 			Files: map[string]string{
 				"/target/item/child.ts": "child",
 			},
-			Symlinks: map[string]SnapshotSymlink{
+			Symlinks: map[string]RequestSymlink{
 				"/link": {Target: "/target"},
 			},
 		}, host, "/")
 		assert.NilError(t, err)
 
-		layered, err := newLayeredSnapshotFileSystem(&SnapshotFileSystem{
-			Kind: SnapshotFileSystemKindCache,
+		layered, err := newLayeredRequestFileSystem(&RequestFileSystem{
+			Kind: KindCache,
 			Files: map[string]string{
 				"/target/item": "file",
 			},
@@ -339,8 +497,8 @@ func TestSnapshotFileSystem(t *testing.T) {
 			"/remove.ts":           "host",
 			"/removed-dir/gone.ts": "host",
 		}, true)}
-		fileSystem, err := newSnapshotFileSystem(&SnapshotFileSystem{
-			Kind:         SnapshotFileSystemKindCache,
+		fileSystem, err := newRequestFileSystem(&RequestFileSystem{
+			Kind:         KindCache,
 			Files:        map[string]string{},
 			RemovedPaths: []string{"/remove.ts", "/removed-dir"},
 		}, base, "/")
@@ -352,18 +510,116 @@ func TestSnapshotFileSystem(t *testing.T) {
 		assert.Assert(t, base.SeenFiles.IsEmpty())
 	})
 
+	t.Run("compacted cache layers retain host fallback", func(t *testing.T) {
+		t.Parallel()
+		host := vfstest.FromMap(map[string]string{
+			"/host.ts":              "host",
+			"/removed.ts":           "host removed",
+			"/sealed/host.ts":       "hidden from listing",
+			"/open/host.ts":         "host listing",
+			"/open/layer-listed.ts": "host listed",
+		}, true)
+		baseFS, err := newRequestFileSystem(&RequestFileSystem{
+			Kind: KindCache,
+			Files: map[string]string{
+				"/inherited.ts":        "inherited",
+				"/sealed/inherited.ts": "sealed inherited",
+			},
+			Directories: map[string]RequestDirectoryEntries{
+				"/sealed": {Files: []string{"inherited.ts"}, Directories: []string{}},
+			},
+			RemovedPaths: []string{"/removed.ts"},
+		}, host, "/")
+		assert.NilError(t, err)
+		base := getRequestFileSystem(baseFS)
+
+		layeredFS, err := newLayeredRequestFileSystem(&RequestFileSystem{
+			Kind: KindCache,
+			Files: map[string]string{
+				"/added.ts":        "added",
+				"/sealed/added.ts": "sealed added",
+			},
+			Directories: map[string]RequestDirectoryEntries{
+				"/open": {Files: []string{"layer-listed.ts"}, Directories: []string{}},
+			},
+		}, baseFS, "/")
+		assert.NilError(t, err)
+		layered := getRequestFileSystem(layeredFS)
+		layered.applyTo(base)
+		assert.Assert(t, getRequestFileSystem(layered.baseFileSystem()) != base)
+		assert.Equal(t, layered.load().kind, KindCache)
+
+		for path, expected := range map[string]string{
+			"/host.ts":      "host",
+			"/inherited.ts": "inherited",
+			"/added.ts":     "added",
+		} {
+			contents, ok := layered.ReadFile(path)
+			assert.Assert(t, ok, path)
+			assert.Equal(t, contents, expected)
+		}
+		_, ok := layered.ReadFile("/removed.ts")
+		assert.Assert(t, !ok)
+		assert.DeepEqual(t, layered.GetAccessibleEntries("/sealed").Files, []string{"added.ts", "inherited.ts"})
+		assert.DeepEqual(t, layered.GetAccessibleEntries("/open").Files, []string{"host.ts", "layer-listed.ts"})
+	})
+
+	t.Run("compacting a cache layer over memory produces memory", func(t *testing.T) {
+		t.Parallel()
+		host := vfstest.FromMap(map[string]string{
+			"/host.ts": "host",
+		}, true)
+		baseFS, err := newRequestFileSystem(&RequestFileSystem{
+			Kind: KindMemory,
+			Files: map[string]string{
+				"/target/inherited.ts": "inherited",
+			},
+			Directories: map[string]RequestDirectoryEntries{
+				"/target": {Files: []string{"inherited.ts"}, Directories: []string{}},
+			},
+			Symlinks: map[string]RequestSymlink{
+				"/link": {Target: "/target"},
+			},
+		}, host, "/")
+		assert.NilError(t, err)
+		base := getRequestFileSystem(baseFS)
+
+		layeredFS, err := newLayeredRequestFileSystem(&RequestFileSystem{
+			Kind: KindCache,
+			Files: map[string]string{
+				"/target/added.ts": "added",
+			},
+		}, baseFS, "/")
+		assert.NilError(t, err)
+		layered := getRequestFileSystem(layeredFS)
+		layered.applyTo(base)
+		assert.Equal(t, layered.load().kind, KindMemory)
+		assert.Assert(t, getRequestFileSystem(layered.baseFileSystem()) != base)
+
+		for path, expected := range map[string]string{
+			"/link/inherited.ts": "inherited",
+			"/link/added.ts":     "added",
+		} {
+			contents, ok := layered.ReadFile(path)
+			assert.Assert(t, ok, path)
+			assert.Equal(t, contents, expected)
+		}
+		_, ok := layered.ReadFile("/host.ts")
+		assert.Assert(t, !ok)
+	})
+
 	t.Run("memory routes explicit host symlinks to the host only through the link", func(t *testing.T) {
 		t.Parallel()
 		base := &trackingvfs.FS{Inner: vfstest.FromMap(map[string]string{
 			"/host/node_modules/pkg/index.d.ts": "export declare const hostValue: string;",
 			"/host/outside.ts":                  "outside",
 		}, true)}
-		fileSystem, err := newSnapshotFileSystem(&SnapshotFileSystem{
-			Kind: SnapshotFileSystemKindMemory,
+		fileSystem, err := newRequestFileSystem(&RequestFileSystem{
+			Kind: KindMemory,
 			Files: map[string]string{
 				"/project/index.ts": `import { hostValue } from "pkg";`,
 			},
-			Symlinks: map[string]SnapshotSymlink{
+			Symlinks: map[string]RequestSymlink{
 				"/project/node_modules": {Target: "/host/node_modules", Host: true},
 			},
 		}, base, "/")
@@ -390,18 +646,18 @@ func TestSnapshotFileSystem(t *testing.T) {
 		host := &trackingvfs.FS{Inner: vfstest.FromMap(map[string]string{
 			"/host/pkg/index.d.ts": "host",
 		}, true)}
-		base, err := newSnapshotFileSystem(&SnapshotFileSystem{
-			Kind: SnapshotFileSystemKindMemory,
+		base, err := newRequestFileSystem(&RequestFileSystem{
+			Kind: KindMemory,
 			Files: map[string]string{
 				"/memory.ts": "memory",
 			},
 		}, host, "/")
 		assert.NilError(t, err)
 
-		layered, err := newLayeredSnapshotFileSystem(&SnapshotFileSystem{
-			Kind:  SnapshotFileSystemKindCache,
+		layered, err := newLayeredRequestFileSystem(&RequestFileSystem{
+			Kind:  KindCache,
 			Files: map[string]string{},
-			Symlinks: map[string]SnapshotSymlink{
+			Symlinks: map[string]RequestSymlink{
 				"/project/pkg": {Target: "/host/pkg", Host: true},
 			},
 		}, base, "/")
@@ -424,34 +680,34 @@ func TestSnapshotFileSystem(t *testing.T) {
 		t.Parallel()
 		base := vfstest.FromMap(map[string]string{}, false)
 
-		_, err := newSnapshotFileSystem(&SnapshotFileSystem{
-			Kind: SnapshotFileSystemKindMemory,
+		_, err := newRequestFileSystem(&RequestFileSystem{
+			Kind: KindMemory,
 			Files: map[string]string{
 				`C:\Repo\file.ts`: "first",
 				`c:/repo/file.ts`: "second",
 			},
 		}, base, `C:\Workspace`)
-		assert.ErrorContains(t, err, "duplicate snapshot filesystem file path")
+		assert.ErrorContains(t, err, "duplicate request filesystem file path")
 
-		_, err = newSnapshotFileSystem(&SnapshotFileSystem{
-			Kind:  SnapshotFileSystemKindMemory,
+		_, err = newRequestFileSystem(&RequestFileSystem{
+			Kind:  KindMemory,
 			Files: map[string]string{},
-			Directories: map[string]SnapshotDirectoryEntries{
+			Directories: map[string]RequestDirectoryEntries{
 				`C:\Repo`:   {},
 				`c:/repo/.`: {},
 			},
 		}, base, `C:\Workspace`)
-		assert.ErrorContains(t, err, "duplicate snapshot filesystem directory path")
+		assert.ErrorContains(t, err, "duplicate request filesystem directory path")
 
-		_, err = newSnapshotFileSystem(&SnapshotFileSystem{
-			Kind:  SnapshotFileSystemKindMemory,
+		_, err = newRequestFileSystem(&RequestFileSystem{
+			Kind:  KindMemory,
 			Files: map[string]string{},
-			Symlinks: map[string]SnapshotSymlink{
+			Symlinks: map[string]RequestSymlink{
 				`C:\Repo\link`: {Target: `C:\Target`},
 				`c:/repo/link`: {Target: `C:\Other`},
 			},
 		}, base, `C:\Workspace`)
-		assert.ErrorContains(t, err, "duplicate snapshot filesystem symlink path")
+		assert.ErrorContains(t, err, "duplicate request filesystem symlink path")
 	})
 
 	t.Run("symlink cycles are treated as missing", func(t *testing.T) {
@@ -459,10 +715,10 @@ func TestSnapshotFileSystem(t *testing.T) {
 		base := &trackingvfs.FS{Inner: vfstest.FromMap(map[string]string{
 			"/host.ts": "host",
 		}, true)}
-		fileSystem, err := newSnapshotFileSystem(&SnapshotFileSystem{
-			Kind:  SnapshotFileSystemKindMemory,
+		fileSystem, err := newRequestFileSystem(&RequestFileSystem{
+			Kind:  KindMemory,
 			Files: map[string]string{},
-			Symlinks: map[string]SnapshotSymlink{
+			Symlinks: map[string]RequestSymlink{
 				"/a": {Target: "/b"},
 				"/b": {Target: "/a"},
 			},
@@ -479,12 +735,12 @@ func TestSnapshotFileSystem(t *testing.T) {
 	t.Run("posix relative symlink targets resolve from the link directory", func(t *testing.T) {
 		t.Parallel()
 		base := &trackingvfs.FS{Inner: vfstest.FromMap(map[string]string{}, true)}
-		fileSystem, err := newSnapshotFileSystem(&SnapshotFileSystem{
-			Kind: SnapshotFileSystemKindMemory,
+		fileSystem, err := newRequestFileSystem(&RequestFileSystem{
+			Kind: KindMemory,
 			Files: map[string]string{
 				"/packages/pkg/index.d.ts": "export declare const value: number;",
 			},
-			Symlinks: map[string]SnapshotSymlink{
+			Symlinks: map[string]RequestSymlink{
 				"/project/pkg": {Target: "../packages/pkg"},
 			},
 		}, base, `C:\Workspace`)
@@ -500,13 +756,13 @@ func TestSnapshotFileSystem(t *testing.T) {
 	t.Run("vscode document URI paths support listings symlinks and tombstones", func(t *testing.T) {
 		t.Parallel()
 		base := &trackingvfs.FS{Inner: vfstest.FromMap(map[string]string{}, true)}
-		fileSystem, err := newSnapshotFileSystem(&SnapshotFileSystem{
-			Kind: SnapshotFileSystemKindMemory,
+		fileSystem, err := newRequestFileSystem(&RequestFileSystem{
+			Kind: KindMemory,
 			Files: map[string]string{
 				"vscode-remote://ssh-remote+host/workspace/src/index.ts":      "index",
 				"vscode-remote://ssh-remote+host/workspace/packages/pkg/a.ts": "package",
 			},
-			Symlinks: map[string]SnapshotSymlink{
+			Symlinks: map[string]RequestSymlink{
 				"vscode-remote://ssh-remote+host/workspace/src/pkg": {Target: "../packages/pkg"},
 			},
 			RemovedPaths: []string{
@@ -545,15 +801,15 @@ func TestSnapshotFileSystem(t *testing.T) {
 		base := &trackingvfs.FS{Inner: vfstest.FromMap(map[string]string{
 			"C:/Host/outside.ts": "outside",
 		}, false)}
-		fileSystem, err := newSnapshotFileSystem(&SnapshotFileSystem{
-			Kind: SnapshotFileSystemKindMemory,
+		fileSystem, err := newRequestFileSystem(&RequestFileSystem{
+			Kind: KindMemory,
 			Files: map[string]string{
 				`C:\Repo\Packages\Pkg\Index.d.ts`: "export declare const windowsValue: number;",
 			},
-			Directories: map[string]SnapshotDirectoryEntries{
+			Directories: map[string]RequestDirectoryEntries{
 				`C:\Repo\Project\node_modules`: {Files: []string{}, Directories: []string{"pkg"}},
 			},
-			Symlinks: map[string]SnapshotSymlink{
+			Symlinks: map[string]RequestSymlink{
 				`C:\Repo\Project\node_modules\PKG`: {Target: `..\..\Packages\Pkg`},
 				`C:\Repo\Project\Current.d.ts`:     {Target: `..\Packages\Pkg\Index.d.ts`},
 			},
@@ -582,12 +838,12 @@ func TestSnapshotFileSystem(t *testing.T) {
 	t.Run("case insensitive symlink matching handles unicode byte length changes", func(t *testing.T) {
 		t.Parallel()
 		base := &trackingvfs.FS{Inner: vfstest.FromMap(map[string]string{}, false)}
-		fileSystem, err := newSnapshotFileSystem(&SnapshotFileSystem{
-			Kind: SnapshotFileSystemKindMemory,
+		fileSystem, err := newRequestFileSystem(&RequestFileSystem{
+			Kind: KindMemory,
 			Files: map[string]string{
 				"C:/Repo/target.ts": "target",
 			},
-			Symlinks: map[string]SnapshotSymlink{
+			Symlinks: map[string]RequestSymlink{
 				"C:/Repo/K": {Target: "C:/Repo/target.ts"},
 			},
 		}, base, "C:/Repo")
@@ -598,13 +854,13 @@ func TestSnapshotFileSystem(t *testing.T) {
 		assert.Equal(t, contents, "target")
 	})
 
-	t.Run("snapshot filesystems are immutable and cache mutations write through to the host", func(t *testing.T) {
+	t.Run("request filesystems are immutable and cache mutations write through to the host", func(t *testing.T) {
 		t.Parallel()
 		host := vfstest.FromMap(map[string]string{
 			"/host.ts": "host",
 		}, true)
-		memory, err := newSnapshotFileSystem(&SnapshotFileSystem{
-			Kind: SnapshotFileSystemKindMemory,
+		memory, err := newRequestFileSystem(&RequestFileSystem{
+			Kind: KindMemory,
 			Files: map[string]string{
 				"/src/a.ts": "a",
 			},
@@ -617,8 +873,8 @@ func TestSnapshotFileSystem(t *testing.T) {
 		assert.Assert(t, ok)
 		assert.Equal(t, contents, "a")
 
-		cache, err := newLayeredSnapshotFileSystem(&SnapshotFileSystem{
-			Kind:  SnapshotFileSystemKindCache,
+		cache, err := newLayeredRequestFileSystem(&RequestFileSystem{
+			Kind:  KindCache,
 			Files: map[string]string{},
 		}, memory, "/")
 		assert.NilError(t, err)
@@ -636,13 +892,13 @@ func TestSnapshotFileSystem(t *testing.T) {
 		base := &trackingvfs.FS{Inner: vfstest.FromMap(map[string]string{
 			"C:/Host/node_modules/host-pkg/index.d.ts": "export declare const hostValue: boolean;",
 		}, false)}
-		fileSystem, err := newSnapshotFileSystem(&SnapshotFileSystem{
-			Kind: SnapshotFileSystemKindMemory,
+		fileSystem, err := newRequestFileSystem(&RequestFileSystem{
+			Kind: KindMemory,
 			Files: map[string]string{
 				`C:\Repo\Packages\windows-pkg\index.d.ts`: "export declare const windowsValue: number;",
 				"/repo/packages/posix-pkg/index.d.ts":     "export declare const posixValue: string;",
 			},
-			Symlinks: map[string]SnapshotSymlink{
+			Symlinks: map[string]RequestSymlink{
 				// Cross between drive-letter and POSIX roots in both directions.
 				`C:\Repo\Project\node_modules\posix-pkg`: {Target: "/repo/packages/posix-pkg"},
 				"/repo/project/node_modules/windows-pkg": {Target: `C:\Repo\Packages\windows-pkg`},
@@ -681,135 +937,4 @@ func TestSnapshotFileSystem(t *testing.T) {
 		)
 		assert.Assert(t, base.SeenFiles.Has("C:/Host/node_modules/host-pkg/index.d.ts"))
 	})
-}
-
-func TestUpdateSnapshotUsesMemoryFileSystem(t *testing.T) {
-	t.Parallel()
-
-	projectSession, _ := projecttestutil.Setup(map[string]any{
-		"/host.ts": "host",
-	})
-	defer projectSession.Close()
-	session := NewSession(projectSession, nil)
-	defer session.Close()
-
-	response, err := session.handleUpdateSnapshot(context.Background(), &UpdateSnapshotParams{
-		OpenProjects: []DocumentIdentifier{{FileName: "/tsconfig.json"}},
-		FileSystem: &SnapshotFileSystem{
-			Kind: SnapshotFileSystemKindMemory,
-			Files: map[string]string{
-				"/tsconfig.json": `{ "compilerOptions": { "noLib": true }, "files": ["src/index.ts"] }`,
-				"/src/index.ts":  `export const value = "memory";`,
-				"/src/other.ts":  `export const other = true;`,
-			},
-		},
-	})
-	assert.NilError(t, err)
-	assert.Equal(t, len(response.Projects), 1)
-	assert.Equal(t, response.Projects[0].ConfigFileName, "/tsconfig.json")
-
-	snapshot := session.snapshots[response.Snapshot].snapshot
-	contents, ok := snapshot.ReadFile("/src/index.ts")
-	assert.Assert(t, ok)
-	assert.Equal(t, contents, `export const value = "memory";`)
-	_, ok = snapshot.ReadFile("/host.ts")
-	assert.Assert(t, !ok)
-
-	// Carrying the same filesystem forward without a delta must preserve
-	// incremental state instead of forcing a full program rebuild.
-	program := snapshot.ProjectCollection.GetProjectByPath(tspath.Path("/tsconfig.json")).GetProgram()
-	unchanged, err := session.handleUpdateSnapshot(context.Background(), &UpdateSnapshotParams{Snapshot: response.Snapshot})
-	assert.NilError(t, err)
-	unchangedSnapshot := session.snapshots[unchanged.Snapshot].snapshot
-	assert.Assert(t, unchangedSnapshot.ProjectCollection.GetProjectByPath(tspath.Path("/tsconfig.json")).GetProgram() == program)
-	response = unchanged
-
-	// Supplying a new filesystem replaces inherited snapshot disk caches even
-	// when the caller does not redundantly list every file in FileChanges.
-	response, err = session.handleUpdateSnapshot(context.Background(), &UpdateSnapshotParams{
-		FileSystem: &SnapshotFileSystem{
-			Kind: SnapshotFileSystemKindMemory,
-			Files: map[string]string{
-				"/tsconfig.json": `{ "compilerOptions": { "noLib": true }, "files": ["src/index.ts", "src/other.ts"] }`,
-				"/src/index.ts":  `export const value = "updated";`,
-				"/src/other.ts":  `export const other = true;`,
-			},
-		},
-	})
-	assert.NilError(t, err)
-	snapshot = session.snapshots[response.Snapshot].snapshot
-	contents, ok = snapshot.ReadFile("/src/index.ts")
-	assert.Assert(t, ok)
-	assert.Equal(t, contents, `export const value = "updated";`)
-
-	// Temporary snapshots retain the base snapshot's supplied filesystem for
-	// every file other than the temporary overlay.
-	temporary, err := session.handleUpdateTemporarySnapshot(context.Background(), &UpdateTemporarySnapshotParams{
-		Snapshot: response.Snapshot,
-		File:     DocumentIdentifier{FileName: "/src/index.ts"},
-		NewText:  `export const value = "temporary";`,
-	})
-	assert.NilError(t, err)
-	temporarySnapshot := session.snapshots[temporary.Snapshot].snapshot
-	contents, ok = temporarySnapshot.ReadFile("/src/index.ts")
-	assert.Assert(t, ok)
-	assert.Equal(t, contents, `export const value = "temporary";`)
-	contents, ok = temporarySnapshot.ReadFile("/src/other.ts")
-	assert.Assert(t, ok)
-	assert.Equal(t, contents, `export const other = true;`)
-}
-
-func TestSnapshotUpdateMemoryFileSystemIsTotal(t *testing.T) {
-	t.Parallel()
-
-	projectSession, _ := projecttestutil.Setup(map[string]any{
-		"/host.ts": "host",
-	})
-	defer projectSession.Close()
-	session := NewSession(projectSession, nil)
-	defer session.Close()
-
-	base, err := session.handleUpdateSnapshot(context.Background(), &UpdateSnapshotParams{})
-	assert.NilError(t, err)
-	replaced, err := session.handleUpdateSnapshot(context.Background(), &UpdateSnapshotParams{
-		Snapshot: base.Snapshot,
-		FileSystem: &SnapshotFileSystem{
-			Kind: SnapshotFileSystemKindMemory,
-			Files: map[string]string{
-				"/memory.ts": "memory",
-			},
-		},
-	})
-	assert.NilError(t, err)
-
-	snapshot := session.snapshots[replaced.Snapshot].snapshot
-	contents, ok := snapshot.ReadFile("/memory.ts")
-	assert.Assert(t, ok)
-	assert.Equal(t, contents, "memory")
-	_, ok = snapshot.ReadFile("/host.ts")
-	assert.Assert(t, !ok)
-}
-
-func TestSnapshotUpdateCarriesHostFileSystemWithoutOverride(t *testing.T) {
-	t.Parallel()
-
-	projectSession, _ := projecttestutil.Setup(map[string]any{
-		"/tsconfig.json": `{ "compilerOptions": { "noLib": true }, "files": ["index.ts"] }`,
-		"/index.ts":      `export const value = true;`,
-	})
-	defer projectSession.Close()
-	session := NewSession(projectSession, nil)
-	defer session.Close()
-
-	base, err := session.handleUpdateSnapshot(context.Background(), &UpdateSnapshotParams{
-		OpenProjects: []DocumentIdentifier{{FileName: "/tsconfig.json"}},
-	})
-	assert.NilError(t, err)
-	baseSnapshot := session.snapshots[base.Snapshot].snapshot
-	program := baseSnapshot.ProjectCollection.GetProjectByPath(tspath.Path("/tsconfig.json")).GetProgram()
-
-	updated, err := session.handleUpdateSnapshot(context.Background(), &UpdateSnapshotParams{Snapshot: base.Snapshot})
-	assert.NilError(t, err)
-	updatedSnapshot := session.snapshots[updated.Snapshot].snapshot
-	assert.Assert(t, updatedSnapshot.ProjectCollection.GetProjectByPath(tspath.Path("/tsconfig.json")).GetProgram() == program)
 }

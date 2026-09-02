@@ -49,7 +49,7 @@ func (s *Session) APIUpdate(ctx context.Context, apiFileChanges FileChangeSummar
 // An error is returned if the file name does not have a recognized script extension.
 // On success, the returned snapshot carries a single reference (the clone ref);
 // the caller must call snapshot.Deref(s) when done.
-func (s *Session) APIUpdateTemporary(ctx context.Context, baseSnapshot *Snapshot, uri lsproto.DocumentUri, newText string) (*Snapshot, error) {
+func (s *Session) APIUpdateTemporary(ctx context.Context, baseSnapshot *Snapshot, fileSystem vfs.FS, uri lsproto.DocumentUri, newText string) (*Snapshot, error) {
 	path := uri.Path(baseSnapshot.UseCaseSensitiveFileNames())
 
 	overlays := maps.Clone(baseSnapshot.fs.overlays)
@@ -69,9 +69,12 @@ func (s *Session) APIUpdateTemporary(ctx context.Context, baseSnapshot *Snapshot
 		fileChanges.Opened = uri
 	}
 	overlays[path] = newOverlay(uri.FileName(), newText, version, scriptKind)
+	if fileSystem == nil {
+		fileSystem = baseSnapshot.fs.fs
+	}
 
 	newSnapshot := baseSnapshot.Clone(ctx, SnapshotChange{
-		fs:                 baseSnapshot.fs.fs,
+		fs:                 fileSystem,
 		fileSystemOverride: baseSnapshot.fileSystemOverride,
 		fileChanges:        fileChanges,
 		ResourceRequest: ResourceRequest{
@@ -92,9 +95,13 @@ func (s *Session) APICreateProgram(
 	configFileParsingDiagnostics []*ast.Diagnostic,
 	oldSnapshot *Snapshot,
 	oldProject *Project,
+	fileSystem vfs.FS,
 	fileChanges FileChangeSummary,
 ) *Snapshot {
 	if oldSnapshot != nil {
+		if fileSystem == nil {
+			fileSystem = oldSnapshot.fs.fs
+		}
 		return oldSnapshot.cloneForProgram(
 			ctx,
 			rootFileNames,
@@ -102,6 +109,7 @@ func (s *Session) APICreateProgram(
 			projectReferences,
 			configFileParsingDiagnostics,
 			oldProject,
+			fileSystem,
 			fileChanges,
 			s,
 		)
@@ -109,6 +117,9 @@ func (s *Session) APICreateProgram(
 
 	snapshot, _ := s.APIUpdate(ctx, fileChanges, nil)
 	defer snapshot.Deref(s)
+	if fileSystem == nil {
+		fileSystem = snapshot.fs.fs
+	}
 	return snapshot.cloneForProgram(
 		ctx,
 		rootFileNames,
@@ -116,6 +127,7 @@ func (s *Session) APICreateProgram(
 		projectReferences,
 		configFileParsingDiagnostics,
 		nil,
+		fileSystem,
 		fileChanges,
 		s,
 	)

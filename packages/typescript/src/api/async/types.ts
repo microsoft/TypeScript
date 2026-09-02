@@ -10,7 +10,7 @@ import type {
 } from "../../ast/ast.ts";
 import type {
     Diagnostic,
-    SnapshotFileSystem,
+    RequestFileSystem,
 } from "../proto.ts";
 import type {
     NodeHandle,
@@ -405,7 +405,7 @@ export interface EmitResult {
     readonly diagnostics: readonly Diagnostic[];
     readonly emittedFiles: readonly string[];
     /** Emitted files captured as a cache layer suitable for {@link Snapshot.update}. */
-    readonly fileSystem?: SnapshotFileSystem | undefined;
+    readonly fileSystem?: RequestFileSystem | undefined;
 }
 
 export interface EmitOutput {

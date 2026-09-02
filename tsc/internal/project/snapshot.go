@@ -122,6 +122,7 @@ func (s *Snapshot) cloneForProgram(
 	projectReferences []*core.ProjectReference,
 	configFileParsingDiagnostics []*ast.Diagnostic,
 	oldProject *Project,
+	fileSystem vfs.FS,
 	fileChanges FileChangeSummary,
 	session *Session,
 ) *Snapshot {
@@ -138,7 +139,7 @@ func (s *Snapshot) cloneForProgram(
 	}
 
 	start := time.Now()
-	fs := newSnapshotFSBuilder(s.fs.fs, s.fs.overlays, s.fs.overlays, s.fs.diskFiles, s.fs.diskDirectories, s.fs.nodeModulesRealpathAliases, session.options.PositionEncoding, s.toPath)
+	fs := newSnapshotFSBuilder(fileSystem, s.fs.overlays, s.fs.overlays, s.fs.diskFiles, s.fs.diskDirectories, s.fs.nodeModulesRealpathAliases, session.options.PositionEncoding, s.toPath)
 	fileChanges = s.processFileChanges(fs, fileChanges, logger, nil)
 
 	newSnapshotID := session.snapshotID.Add(1)

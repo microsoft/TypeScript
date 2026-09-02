@@ -1,154 +1,166 @@
-package api
+package requestfilesystem
 
 import (
 	"errors"
 	"fmt"
 	"io/fs"
+	"maps"
 	"slices"
 	"strings"
-	"sync"
 	"time"
 
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 )
 
-// snapshotFileSystem is either a total in-memory filesystem or a read-through
-// cache layered over the session host filesystem. Cache misses deliberately go
-// through base, which may itself be a callback filesystem.
-type snapshotFileSystem struct {
-	mu                    sync.RWMutex
-	kind                  SnapshotFileSystemKind
-	base                  vfs.FS
-	layered               bool
-	currentDirectory      string
-	useCaseSensitiveNames bool
-	files                 map[tspath.Path]snapshotFile
-	directoryListings     map[tspath.Path]vfs.Entries
-	symlinks              map[tspath.Path]snapshotSymlink
-	removedPaths          map[tspath.Path]struct{}
-	directories           map[tspath.Path]string
-	derivedListings       map[tspath.Path]*snapshotDirectoryBuilder
+// Kind controls how a request filesystem is used.
+type Kind string
+
+const (
+	// KindMemory makes the supplied filesystem canonical and total.
+	KindMemory Kind = "memory"
+	// KindCache checks the supplied filesystem before falling back to the host.
+	KindCache Kind = "cache"
+)
+
+// RequestDirectoryEntries is a cached directory listing. Entry names are
+// relative to the directory, matching vfs.GetAccessibleEntries.
+type RequestDirectoryEntries struct {
+	Files       []string `json:"files" nonnil:"true"`
+	Directories []string `json:"directories" nonnil:"true"`
 }
 
-type snapshotFile struct {
+// RequestSymlink describes a symbolic link in a request filesystem.
+type RequestSymlink struct {
+	// Target is resolved relative to the directory containing the link, matching
+	// native symbolic-link semantics.
+	Target string `json:"target"`
+	// Host routes the target through the host filesystem. This is the only way a
+	// memory filesystem can access paths not supplied in the request filesystem.
+	Host bool `json:"host,omitempty"`
+}
+
+// RequestFileSystem supplies file contents and, optionally, directory listings
+// for a request that creates a snapshot.
+type RequestFileSystem struct {
+	Kind Kind `json:"kind"`
+	// Files maps file names to their complete contents.
+	Files map[string]string `json:"files" nonnil:"true"`
+	// Directories maps directory names to complete listing results.
+	Directories map[string]RequestDirectoryEntries `json:"directories,omitempty"`
+	// Symlinks maps link paths to targets in this filesystem or the host filesystem.
+	Symlinks map[string]RequestSymlink `json:"symlinks,omitempty"`
+	// RemovedPaths lists files or directory trees that must be treated as missing
+	// even when present in an underlying snapshot or host filesystem.
+	RemovedPaths []string `json:"removedPaths,omitempty"`
+}
+
+// requestFileSystem is either a total in-memory filesystem or a read-through
+// cache layered over the session host filesystem. Cache misses deliberately go
+// through base, which may itself be a callback filesystem.
+type requestFileSystem struct {
+	kind                   Kind
+	base                   vfs.FS
+	layered                bool
+	currentDirectory       string
+	useCaseSensitiveNames  bool
+	files                  map[tspath.Path]requestFile
+	directoryListings      map[tspath.Path]vfs.Entries
+	symlinks               map[tspath.Path]requestSymlink
+	removedPaths           map[tspath.Path]struct{}
+	preSymlinkRemovedPaths map[tspath.Path]struct{}
+	sealedListings         map[tspath.Path]struct{}
+	directories            map[tspath.Path]string
+	derivedListings        map[tspath.Path]*requestDirectoryBuilder
+}
+
+type requestFile struct {
 	fileName string
 	content  string
 }
 
-type snapshotSymlink struct {
+type requestSymlink struct {
 	linkName string
 	target   string
 	host     bool
 }
 
-type resolvedSnapshotPath struct {
+type resolvedRequestPath struct {
 	path            string
 	followedSymlink bool
 	host            bool
 	ok              bool
 }
 
-type snapshotDirectoryBuilder struct {
+type requestDirectoryBuilder struct {
 	files       map[tspath.Path]string
 	directories map[tspath.Path]string
 }
 
-type fileSystemUnwrapper interface {
-	Unwrap() vfs.FS
-}
-
-func getSnapshotFileSystem(fileSystem vfs.FS) *snapshotFileSystem {
-	seen := make(map[vfs.FS]struct{})
-	for fileSystem != nil {
-		if _, ok := seen[fileSystem]; ok {
-			return nil
-		}
-		seen[fileSystem] = struct{}{}
-		if snapshotFileSystem, ok := fileSystem.(*snapshotFileSystem); ok {
-			return snapshotFileSystem
-		}
-		unwrapper, ok := fileSystem.(fileSystemUnwrapper)
-		if !ok {
-			return nil
-		}
-		fileSystem = unwrapper.Unwrap()
-	}
-	return nil
+func getRequestFileSystem(fileSystem vfs.FS) *Handle {
+	requestFileSystem, _ := fileSystem.(*Handle)
+	return requestFileSystem
 }
 
 func getHostFileSystem(fileSystem vfs.FS) vfs.FS {
-	seen := make(map[vfs.FS]struct{})
-	for fileSystem != nil {
-		if _, ok := seen[fileSystem]; ok {
-			return nil
+	for {
+		requestFileSystem := getRequestFileSystem(fileSystem)
+		if requestFileSystem == nil {
+			return fileSystem
 		}
-		seen[fileSystem] = struct{}{}
-		if snapshotFileSystem, ok := fileSystem.(*snapshotFileSystem); ok {
-			fileSystem = snapshotFileSystem.base
-			continue
-		}
-		if unwrapper, ok := fileSystem.(fileSystemUnwrapper); ok {
-			fileSystem = unwrapper.Unwrap()
-			continue
-		}
-		return fileSystem
+		fileSystem = requestFileSystem.baseFileSystem()
 	}
-	return nil
 }
 
-func newSnapshotFileSystem(params *SnapshotFileSystem, base vfs.FS, currentDirectory string) (vfs.FS, error) {
-	return newSnapshotFileSystemWorker(params, base, currentDirectory, false)
-}
-
-func newLayeredSnapshotFileSystem(params *SnapshotFileSystem, base vfs.FS, currentDirectory string) (vfs.FS, error) {
-	return newSnapshotFileSystemWorker(params, base, currentDirectory, params.Kind == SnapshotFileSystemKindCache)
-}
-
-func newSnapshotFileSystemWorker(params *SnapshotFileSystem, base vfs.FS, currentDirectory string, layered bool) (vfs.FS, error) {
-	if params.Kind != SnapshotFileSystemKindMemory && params.Kind != SnapshotFileSystemKindCache {
-		return nil, fmt.Errorf("unknown snapshot filesystem kind %q", params.Kind)
+func newRequestFileSystemWorker(params *RequestFileSystem, base vfs.FS, currentDirectory string, layered bool) (*requestFileSystem, error) {
+	if params.Kind != KindMemory && params.Kind != KindCache {
+		return nil, fmt.Errorf("unknown request filesystem kind %q", params.Kind)
 	}
 
-	result := &snapshotFileSystem{
-		kind:                  params.Kind,
-		base:                  base,
-		layered:               layered,
-		currentDirectory:      currentDirectory,
-		useCaseSensitiveNames: base.UseCaseSensitiveFileNames(),
-		files:                 make(map[tspath.Path]snapshotFile, len(params.Files)),
-		directoryListings:     make(map[tspath.Path]vfs.Entries, len(params.Directories)),
-		symlinks:              make(map[tspath.Path]snapshotSymlink, len(params.Symlinks)),
-		removedPaths:          make(map[tspath.Path]struct{}, len(params.RemovedPaths)),
+	result := requestFileSystem{
+		kind:                   params.Kind,
+		base:                   base,
+		layered:                layered,
+		currentDirectory:       currentDirectory,
+		useCaseSensitiveNames:  base.UseCaseSensitiveFileNames(),
+		files:                  make(map[tspath.Path]requestFile, len(params.Files)),
+		directoryListings:      make(map[tspath.Path]vfs.Entries, len(params.Directories)),
+		symlinks:               make(map[tspath.Path]requestSymlink, len(params.Symlinks)),
+		removedPaths:           make(map[tspath.Path]struct{}, len(params.RemovedPaths)),
+		preSymlinkRemovedPaths: make(map[tspath.Path]struct{}),
+		sealedListings:         make(map[tspath.Path]struct{}, len(params.Directories)),
 	}
 	for fileName, content := range params.Files {
 		absoluteFileName := result.toAbsolutePath(fileName)
 		path := result.toPath(absoluteFileName)
 		if existing, ok := result.files[path]; ok {
-			return nil, fmt.Errorf("duplicate snapshot filesystem file path %q and %q", existing.fileName, absoluteFileName)
+			return nil, fmt.Errorf("duplicate request filesystem file path %q and %q", existing.fileName, absoluteFileName)
 		}
-		result.files[path] = snapshotFile{fileName: absoluteFileName, content: content}
+		result.files[path] = requestFile{fileName: absoluteFileName, content: content}
 	}
 	for directoryName, entries := range params.Directories {
 		absoluteDirectoryName := result.toAbsolutePath(directoryName)
 		path := result.toPath(absoluteDirectoryName)
 		if _, ok := result.directoryListings[path]; ok {
-			return nil, fmt.Errorf("duplicate snapshot filesystem directory path %q", absoluteDirectoryName)
+			return nil, fmt.Errorf("duplicate request filesystem directory path %q", absoluteDirectoryName)
 		}
 		result.directoryListings[path] = vfs.Entries{
 			Files:       slices.Clone(entries.Files),
 			Directories: slices.Clone(entries.Directories),
+		}
+		if !layered {
+			result.sealedListings[path] = struct{}{}
 		}
 	}
 	for linkName, symlink := range params.Symlinks {
 		absoluteLinkName := result.toAbsolutePath(linkName)
 		path := result.toPath(absoluteLinkName)
 		if existing, ok := result.symlinks[path]; ok {
-			return nil, fmt.Errorf("duplicate snapshot filesystem symlink path %q and %q", existing.linkName, absoluteLinkName)
+			return nil, fmt.Errorf("duplicate request filesystem symlink path %q and %q", existing.linkName, absoluteLinkName)
 		}
 		targetDirectory := tspath.GetDirectoryPath(absoluteLinkName)
 		absoluteTarget := result.toAbsolutePathFrom(symlink.Target, targetDirectory)
-		result.symlinks[path] = snapshotSymlink{
+		result.symlinks[path] = requestSymlink{
 			linkName: absoluteLinkName,
 			target:   absoluteTarget,
 			host:     symlink.Host,
@@ -157,21 +169,156 @@ func newSnapshotFileSystemWorker(params *SnapshotFileSystem, base vfs.FS, curren
 	for _, path := range params.RemovedPaths {
 		result.removedPaths[result.toPath(result.toAbsolutePath(path))] = struct{}{}
 	}
-	result.rebuildDirectoriesLocked()
-	return result, nil
+	result = result.rebuildDirectories()
+	return &result, nil
 }
 
-func (s *snapshotFileSystem) fallsBack() bool {
-	return s.layered || s.kind == SnapshotFileSystemKindCache
+func (s requestFileSystem) fallsBack() bool {
+	return s.layered || s.kind == KindCache
 }
 
-func (s *snapshotFileSystem) isRemoved(path string) bool {
-	s.mu.RLock()
-	defer s.mu.RUnlock()
-	return s.isRemovedLocked(path)
+func (s requestFileSystem) baseFileSystem() vfs.FS {
+	return s.base
 }
 
-func (s *snapshotFileSystem) isRemovedLocked(path string) bool {
+func (s requestFileSystem) applyTo(base requestFileSystem) requestFileSystem {
+	files := maps.Clone(base.files)
+	directoryListings := make(map[tspath.Path]vfs.Entries, len(base.directoryListings)+len(s.directoryListings))
+	for path, entries := range base.directoryListings {
+		directoryListings[path] = cloneEntries(entries)
+	}
+	symlinks := maps.Clone(base.symlinks)
+	removedPaths := maps.Clone(base.removedPaths)
+	preSymlinkRemovedPaths := maps.Clone(base.preSymlinkRemovedPaths)
+	sealedListings := maps.Clone(base.sealedListings)
+
+	removeListingEntry := func(path tspath.Path) {
+		parentPath := s.toPath(tspath.GetDirectoryPath(string(path)))
+		entries, ok := directoryListings[parentPath]
+		if !ok {
+			return
+		}
+		name := tspath.GetBaseFileName(string(path))
+		entries.Files = s.deleteEntryName(entries.Files, name)
+		entries.Directories = s.deleteEntryName(entries.Directories, name)
+		for existingName := range entries.Symlinks {
+			if s.equalEntryNames(existingName, name) {
+				delete(entries.Symlinks, existingName)
+			}
+		}
+		directoryListings[parentPath] = entries
+	}
+	removePath := func(path tspath.Path) {
+		removeListingEntry(path)
+		prefix := tspath.EnsureTrailingDirectorySeparator(string(path))
+		for candidate := range files {
+			if candidate == path || strings.HasPrefix(string(candidate), prefix) {
+				delete(files, candidate)
+			}
+		}
+		for candidate := range symlinks {
+			if candidate == path || strings.HasPrefix(string(candidate), prefix) {
+				delete(symlinks, candidate)
+			}
+		}
+		for candidate := range directoryListings {
+			if candidate == path || strings.HasPrefix(string(candidate), prefix) {
+				delete(directoryListings, candidate)
+				delete(sealedListings, candidate)
+			}
+		}
+	}
+	clearPreSymlinkRemovedPath := func(path tspath.Path) {
+		for removedPath := range preSymlinkRemovedPaths {
+			if path == removedPath || strings.HasPrefix(string(removedPath), tspath.EnsureTrailingDirectorySeparator(string(path))) {
+				delete(preSymlinkRemovedPaths, removedPath)
+			}
+		}
+	}
+	for path := range s.removedPaths {
+		if !s.pathUsesSymlink(path) && base.pathUsesSymlink(path) {
+			preSymlinkRemovedPaths[path] = struct{}{}
+		}
+		removePath(path)
+		removedPaths[path] = struct{}{}
+	}
+	for path := range s.directories {
+		delete(files, path)
+		delete(symlinks, path)
+	}
+	for path, file := range s.files {
+		clearPreSymlinkRemovedPath(path)
+		removePath(path)
+		files[path] = file
+	}
+	for path, symlink := range s.symlinks {
+		clearPreSymlinkRemovedPath(path)
+		removePath(path)
+		symlinks[path] = symlink
+	}
+	for path, entries := range s.directoryListings {
+		if baseEntries, ok := directoryListings[path]; ok {
+			directoryListings[path] = mergeEntries(baseEntries, entries, s.equalEntryNames)
+		} else {
+			directoryListings[path] = cloneEntries(entries)
+		}
+	}
+	for path, builder := range s.derivedListings {
+		entries, ok := directoryListings[path]
+		if !ok {
+			continue
+		}
+		if _, explicit := s.directoryListings[path]; explicit {
+			continue
+		}
+		var overlay vfs.Entries
+		for _, name := range builder.files {
+			overlay.Files = append(overlay.Files, name)
+		}
+		for _, name := range builder.directories {
+			overlay.Directories = append(overlay.Directories, name)
+		}
+		directoryListings[path] = mergeEntries(entries, overlay, s.equalEntryNames)
+	}
+
+	compacted := requestFileSystem{
+		kind:                   base.kind,
+		base:                   base.base,
+		layered:                base.layered,
+		currentDirectory:       s.currentDirectory,
+		useCaseSensitiveNames:  s.useCaseSensitiveNames,
+		files:                  files,
+		directoryListings:      directoryListings,
+		symlinks:               symlinks,
+		removedPaths:           removedPaths,
+		preSymlinkRemovedPaths: preSymlinkRemovedPaths,
+		sealedListings:         sealedListings,
+	}
+	return compacted.rebuildDirectories()
+}
+
+func (s requestFileSystem) pathUsesSymlink(path tspath.Path) bool {
+	canonicalPath := string(path)
+	for linkPath := range s.symlinks {
+		canonicalLink := string(linkPath)
+		if canonicalPath == canonicalLink || strings.HasPrefix(canonicalPath, tspath.EnsureTrailingDirectorySeparator(canonicalLink)) {
+			return true
+		}
+	}
+	return false
+}
+
+func (s requestFileSystem) isPreSymlinkRemoved(path string) bool {
+	canonicalPath := s.toPath(path)
+	for removedPath := range s.preSymlinkRemovedPaths {
+		if canonicalPath == removedPath || strings.HasPrefix(string(canonicalPath), tspath.EnsureTrailingDirectorySeparator(string(removedPath))) {
+			return true
+		}
+	}
+	return false
+}
+
+func (s requestFileSystem) isRemoved(path string) bool {
 	canonicalPath := s.toPath(path)
 	for removedPath := range s.removedPaths {
 		if canonicalPath == removedPath || strings.HasPrefix(string(canonicalPath), tspath.EnsureTrailingDirectorySeparator(string(removedPath))) {
@@ -181,11 +328,11 @@ func (s *snapshotFileSystem) isRemovedLocked(path string) bool {
 	return false
 }
 
-func (s *snapshotFileSystem) toAbsolutePath(path string) string {
+func (s requestFileSystem) toAbsolutePath(path string) string {
 	return s.toAbsolutePathFrom(path, s.currentDirectory)
 }
 
-func (s *snapshotFileSystem) toAbsolutePathFrom(path string, currentDirectory string) string {
+func (s requestFileSystem) toAbsolutePathFrom(path string, currentDirectory string) string {
 	absolutePath := tspath.GetNormalizedAbsolutePath(path, currentDirectory)
 	if tspath.IsDiskPathRoot(absolutePath) {
 		return absolutePath
@@ -193,42 +340,42 @@ func (s *snapshotFileSystem) toAbsolutePathFrom(path string, currentDirectory st
 	return tspath.RemoveTrailingDirectorySeparator(absolutePath)
 }
 
-func (s *snapshotFileSystem) toPath(path string) tspath.Path {
+func (s requestFileSystem) toPath(path string) tspath.Path {
 	return tspath.ToPath(path, s.currentDirectory, s.useCaseSensitiveNames)
 }
 
-func (s *snapshotFileSystem) registerDirectoryLocked(directoryName string) {
-	directoryName = s.toAbsolutePath(directoryName)
-	directoryPath := s.toPath(directoryName)
-	if _, ok := s.directories[directoryPath]; ok {
-		return
-	}
-	s.directories[directoryPath] = directoryName
-	if s.derivedListings[directoryPath] == nil {
-		s.derivedListings[directoryPath] = &snapshotDirectoryBuilder{}
-	}
-
-	parentName := tspath.GetDirectoryPath(directoryName)
-	parentPath := s.toPath(parentName)
-	if parentPath == directoryPath {
-		return
-	}
-	s.registerDirectoryLocked(parentName)
-	parent := s.derivedListings[parentPath]
-	if parent.directories == nil {
-		parent.directories = make(map[tspath.Path]string)
-	}
-	parent.directories[directoryPath] = tspath.GetBaseFileName(directoryName)
-}
-
-func (s *snapshotFileSystem) rebuildDirectoriesLocked() {
+func (s requestFileSystem) rebuildDirectories() requestFileSystem {
 	s.directories = make(map[tspath.Path]string)
-	s.derivedListings = make(map[tspath.Path]*snapshotDirectoryBuilder)
-	s.registerDirectoryLocked(s.currentDirectory)
+	s.derivedListings = make(map[tspath.Path]*requestDirectoryBuilder)
+	var registerDirectory func(string)
+	registerDirectory = func(directoryName string) {
+		directoryName = s.toAbsolutePath(directoryName)
+		directoryPath := s.toPath(directoryName)
+		if _, ok := s.directories[directoryPath]; ok {
+			return
+		}
+		s.directories[directoryPath] = directoryName
+		if s.derivedListings[directoryPath] == nil {
+			s.derivedListings[directoryPath] = &requestDirectoryBuilder{}
+		}
+
+		parentName := tspath.GetDirectoryPath(directoryName)
+		parentPath := s.toPath(parentName)
+		if parentPath == directoryPath {
+			return
+		}
+		registerDirectory(parentName)
+		parent := s.derivedListings[parentPath]
+		if parent.directories == nil {
+			parent.directories = make(map[tspath.Path]string)
+		}
+		parent.directories[directoryPath] = tspath.GetBaseFileName(directoryName)
+	}
+	registerDirectory(s.currentDirectory)
 	for path, file := range s.files {
 		parentName := tspath.GetDirectoryPath(file.fileName)
 		parentPath := s.toPath(parentName)
-		s.registerDirectoryLocked(parentName)
+		registerDirectory(parentName)
 		listing := s.derivedListings[parentPath]
 		if listing.files == nil {
 			listing.files = make(map[tspath.Path]string)
@@ -237,30 +384,25 @@ func (s *snapshotFileSystem) rebuildDirectoriesLocked() {
 	}
 	for path, entries := range s.directoryListings {
 		directoryName := string(path)
-		s.registerDirectoryLocked(directoryName)
+		registerDirectory(directoryName)
 		for _, child := range entries.Directories {
-			s.registerDirectoryLocked(tspath.CombinePaths(directoryName, child))
+			registerDirectory(tspath.CombinePaths(directoryName, child))
 		}
 	}
 	for _, symlink := range s.symlinks {
-		s.registerDirectoryLocked(tspath.GetDirectoryPath(symlink.linkName))
+		registerDirectory(tspath.GetDirectoryPath(symlink.linkName))
 	}
+	return s
 }
 
-func (s *snapshotFileSystem) resolvePath(path string) resolvedSnapshotPath {
-	s.mu.RLock()
-	defer s.mu.RUnlock()
-	return s.resolvePathLocked(path)
-}
-
-func (s *snapshotFileSystem) resolvePathLocked(path string) resolvedSnapshotPath {
+func (s requestFileSystem) resolvePath(path string) resolvedRequestPath {
 	path = s.toAbsolutePath(path)
-	result := resolvedSnapshotPath{path: path, ok: true}
+	result := resolvedRequestPath{path: path, ok: true}
 	seen := make(map[tspath.Path]struct{}, len(s.symlinks))
 	for {
 		canonicalPath := string(s.toPath(result.path))
 		var matchPath tspath.Path
-		var match snapshotSymlink
+		var match requestSymlink
 		for linkPath, symlink := range s.symlinks {
 			canonicalLink := string(linkPath)
 			if canonicalPath != canonicalLink && !strings.HasPrefix(canonicalPath, tspath.EnsureTrailingDirectorySeparator(canonicalLink)) {
@@ -274,7 +416,7 @@ func (s *snapshotFileSystem) resolvePathLocked(path string) resolvedSnapshotPath
 			}
 		}
 		if matchPath == "" {
-			result.host = s.isHostPathLocked(result.path)
+			result.host = s.isHostPath(result.path)
 			return result
 		}
 		if _, ok := seen[matchPath]; ok {
@@ -300,7 +442,7 @@ func (s *snapshotFileSystem) resolvePathLocked(path string) resolvedSnapshotPath
 // and any underlying snapshot layers, stopping when this layer supplies or removes
 // the resolved path. Callers in a newer layer use this to apply their own entries
 // to targets of inherited symlinks before delegating the operation to the base.
-func (s *snapshotFileSystem) resolvePathForOverlay(path string) resolvedSnapshotPath {
+func (s requestFileSystem) resolvePathForOverlay(path string) resolvedRequestPath {
 	resolved := s.resolvePath(path)
 	if !resolved.ok || resolved.host {
 		return resolved
@@ -319,14 +461,14 @@ func (s *snapshotFileSystem) resolvePathForOverlay(path string) resolvedSnapshot
 	return baseResolved
 }
 
-func (s *snapshotFileSystem) resolveBasePath(path string) resolvedSnapshotPath {
-	if base := getSnapshotFileSystem(s.base); base != nil {
-		return base.resolvePathForOverlay(path)
+func (s requestFileSystem) resolveBasePath(path string) resolvedRequestPath {
+	if base := getRequestFileSystem(s.baseFileSystem()); base != nil {
+		return base.load().resolvePathForOverlay(path)
 	}
-	return resolvedSnapshotPath{path: path, ok: true}
+	return resolvedRequestPath{path: path, ok: true}
 }
 
-func (s *snapshotFileSystem) isHostPathLocked(path string) bool {
+func (s requestFileSystem) isHostPath(path string) bool {
 	canonicalPath := string(s.toPath(path))
 	for _, symlink := range s.symlinks {
 		if !symlink.host {
@@ -340,19 +482,17 @@ func (s *snapshotFileSystem) isHostPathLocked(path string) bool {
 	return false
 }
 
-func (s *snapshotFileSystem) aliasesForPath(path string) []string {
-	symlinks := make([]snapshotSymlink, 0, len(s.symlinks))
-	for current := s; current != nil; {
-		current.mu.RLock()
+func (s requestFileSystem) aliasesForPath(path string) []string {
+	symlinks := make([]requestSymlink, 0, len(s.symlinks))
+	for current := s; ; {
 		for _, symlink := range current.symlinks {
 			symlinks = append(symlinks, symlink)
 		}
-		current.mu.RUnlock()
-		base := getSnapshotFileSystem(current.base)
+		base := getRequestFileSystem(current.baseFileSystem())
 		if base == nil {
 			break
 		}
-		current = base
+		current = *base.load()
 	}
 
 	seen := map[tspath.Path]struct{}{s.toPath(path): {}}
@@ -379,17 +519,13 @@ func (s *snapshotFileSystem) aliasesForPath(path string) []string {
 	return aliases
 }
 
-func (s *snapshotFileSystem) fileAt(path string) (snapshotFile, bool) {
-	s.mu.RLock()
+func (s requestFileSystem) fileAt(path string) (requestFile, bool) {
 	file, ok := s.files[s.toPath(path)]
-	s.mu.RUnlock()
 	return file, ok
 }
 
-func (s *snapshotFileSystem) directoryAt(path string) (string, bool) {
-	s.mu.RLock()
+func (s requestFileSystem) directoryAt(path string) (string, bool) {
 	directory, ok := s.directories[s.toPath(path)]
-	s.mu.RUnlock()
 	return directory, ok
 }
 
@@ -407,11 +543,14 @@ func cloneEntries(entries vfs.Entries) vfs.Entries {
 	return result
 }
 
-func (s *snapshotFileSystem) UseCaseSensitiveFileNames() bool {
+func (s requestFileSystem) UseCaseSensitiveFileNames() bool {
 	return s.useCaseSensitiveNames
 }
 
-func (s *snapshotFileSystem) ReadFile(fileName string) (string, bool) {
+func (s requestFileSystem) ReadFile(fileName string) (string, bool) {
+	if s.isPreSymlinkRemoved(fileName) {
+		return "", false
+	}
 	resolved := s.resolvePath(fileName)
 	if !resolved.ok {
 		return "", false
@@ -420,7 +559,7 @@ func (s *snapshotFileSystem) ReadFile(fileName string) (string, bool) {
 		if s.isRemoved(resolved.path) {
 			return "", false
 		}
-		host := getHostFileSystem(s.base)
+		host := getHostFileSystem(s.baseFileSystem())
 		if host == nil {
 			return "", false
 		}
@@ -454,12 +593,15 @@ func (s *snapshotFileSystem) ReadFile(fileName string) (string, bool) {
 		return "", false
 	}
 	if s.fallsBack() {
-		return s.base.ReadFile(resolved.path)
+		return s.baseFileSystem().ReadFile(resolved.path)
 	}
 	return "", false
 }
 
-func (s *snapshotFileSystem) FileExists(fileName string) bool {
+func (s requestFileSystem) FileExists(fileName string) bool {
+	if s.isPreSymlinkRemoved(fileName) {
+		return false
+	}
 	resolved := s.resolvePath(fileName)
 	if !resolved.ok {
 		return false
@@ -468,7 +610,7 @@ func (s *snapshotFileSystem) FileExists(fileName string) bool {
 		if s.isRemoved(resolved.path) {
 			return false
 		}
-		host := getHostFileSystem(s.base)
+		host := getHostFileSystem(s.baseFileSystem())
 		return host != nil && host.FileExists(resolved.path)
 	}
 	_, ok := s.fileAt(resolved.path)
@@ -498,10 +640,13 @@ func (s *snapshotFileSystem) FileExists(fileName string) bool {
 	if s.isRemoved(resolved.path) || s.isRemoved(fallbackPath) || !s.fallsBack() {
 		return false
 	}
-	return s.base.FileExists(resolved.path)
+	return s.baseFileSystem().FileExists(resolved.path)
 }
 
-func (s *snapshotFileSystem) DirectoryExists(directoryName string) bool {
+func (s requestFileSystem) DirectoryExists(directoryName string) bool {
+	if s.isPreSymlinkRemoved(directoryName) {
+		return false
+	}
 	resolved := s.resolvePath(directoryName)
 	if !resolved.ok {
 		return false
@@ -510,7 +655,7 @@ func (s *snapshotFileSystem) DirectoryExists(directoryName string) bool {
 		if s.isRemoved(resolved.path) {
 			return false
 		}
-		host := getHostFileSystem(s.base)
+		host := getHostFileSystem(s.baseFileSystem())
 		return host != nil && host.DirectoryExists(resolved.path)
 	}
 	_, ok := s.directoryAt(resolved.path)
@@ -540,10 +685,13 @@ func (s *snapshotFileSystem) DirectoryExists(directoryName string) bool {
 	if s.isRemoved(resolved.path) || s.isRemoved(fallbackPath) || !s.fallsBack() {
 		return false
 	}
-	return s.base.DirectoryExists(resolved.path)
+	return s.baseFileSystem().DirectoryExists(resolved.path)
 }
 
-func (s *snapshotFileSystem) GetAccessibleEntries(directoryName string) vfs.Entries {
+func (s requestFileSystem) GetAccessibleEntries(directoryName string) vfs.Entries {
+	if s.isPreSymlinkRemoved(directoryName) {
+		return vfs.Entries{Symlinks: map[string]struct{}{}}
+	}
 	resolved := s.resolvePath(directoryName)
 	if !resolved.ok {
 		return vfs.Entries{Symlinks: map[string]struct{}{}}
@@ -553,6 +701,7 @@ func (s *snapshotFileSystem) GetAccessibleEntries(directoryName string) vfs.Entr
 	}
 
 	localEntries, hasExplicitListing, hasLocalEntries := s.getLocalEntries(resolved.path)
+	sealedListing := s.hasSealedListing(resolved.path)
 	if !resolved.followedSymlink && s.isRemoved(directoryName) && !hasLocalEntries {
 		return vfs.Entries{Symlinks: map[string]struct{}{}}
 	}
@@ -573,20 +722,21 @@ func (s *snapshotFileSystem) GetAccessibleEntries(directoryName string) vfs.Entr
 				hasLocalEntries = true
 			}
 			hasExplicitListing = hasExplicitListing || targetExplicit
+			sealedListing = sealedListing || s.hasSealedListing(fallbackPath)
 		}
 	}
 	var result vfs.Entries
 	if resolved.host {
 		if !s.isRemoved(resolved.path) {
-			if host := getHostFileSystem(s.base); host != nil {
+			if host := getHostFileSystem(s.baseFileSystem()); host != nil {
 				result = s.removeEntries(resolved.path, host.GetAccessibleEntries(resolved.path))
 			}
 		}
-	} else if !s.fallsBack() || hasExplicitListing && !s.layered {
+	} else if !s.fallsBack() || hasExplicitListing && sealedListing {
 		result = localEntries
 	} else {
 		if !s.isRemoved(directoryName) && !s.isRemoved(resolved.path) && !s.isRemoved(fallbackPath) {
-			result = s.removeEntries(directoryName, s.base.GetAccessibleEntries(resolved.path))
+			result = s.removeEntries(directoryName, s.baseFileSystem().GetAccessibleEntries(resolved.path))
 			if s.toPath(directoryName) != s.toPath(resolved.path) {
 				result = s.removeEntries(resolved.path, result)
 			}
@@ -602,12 +752,39 @@ func (s *snapshotFileSystem) GetAccessibleEntries(directoryName string) vfs.Entr
 	if s.toPath(fallbackPath) != s.toPath(resolved.path) {
 		result = s.addSymlinkEntries(fallbackPath, result)
 	}
+	result = s.removePreSymlinkEntries(directoryName, result)
 	return result
 }
 
-func (s *snapshotFileSystem) getLocalEntries(directoryName string) (entries vfs.Entries, explicit bool, ok bool) {
-	s.mu.RLock()
-	defer s.mu.RUnlock()
+func (s requestFileSystem) removePreSymlinkEntries(directoryName string, entries vfs.Entries) vfs.Entries {
+	result := cloneEntries(entries)
+	filter := func(values []string) []string {
+		return slices.DeleteFunc(values, func(name string) bool {
+			path := s.toPath(tspath.CombinePaths(directoryName, name))
+			for removedPath := range s.preSymlinkRemovedPaths {
+				if path == removedPath || strings.HasPrefix(string(path), tspath.EnsureTrailingDirectorySeparator(string(removedPath))) {
+					return true
+				}
+			}
+			return false
+		})
+	}
+	result.Files = filter(result.Files)
+	result.Directories = filter(result.Directories)
+	for name := range result.Symlinks {
+		if len(filter([]string{name})) == 0 {
+			delete(result.Symlinks, name)
+		}
+	}
+	return result
+}
+
+func (s requestFileSystem) hasSealedListing(directoryName string) bool {
+	_, ok := s.sealedListings[s.toPath(directoryName)]
+	return ok
+}
+
+func (s requestFileSystem) getLocalEntries(directoryName string) (entries vfs.Entries, explicit bool, ok bool) {
 	path := s.toPath(directoryName)
 	if listing, ok := s.directoryListings[path]; ok {
 		return cloneEntries(listing), true, true
@@ -667,45 +844,36 @@ func mergeEntries(base vfs.Entries, overlay vfs.Entries, equal func(string, stri
 	return result
 }
 
-func (s *snapshotFileSystem) removeEntries(directoryName string, entries vfs.Entries) vfs.Entries {
-	s.mu.RLock()
-	defer s.mu.RUnlock()
-	return s.removeEntriesLocked(directoryName, entries)
-}
-
-func (s *snapshotFileSystem) removeEntriesLocked(directoryName string, entries vfs.Entries) vfs.Entries {
+func (s requestFileSystem) removeEntries(directoryName string, entries vfs.Entries) vfs.Entries {
 	result := cloneEntries(entries)
 	filter := func(values []string) []string {
 		return slices.DeleteFunc(values, func(name string) bool {
-			return s.isRemovedLocked(tspath.CombinePaths(directoryName, name))
+			return s.isRemoved(tspath.CombinePaths(directoryName, name))
 		})
 	}
 	result.Files = filter(result.Files)
 	result.Directories = filter(result.Directories)
 	for name := range result.Symlinks {
-		if s.isRemovedLocked(tspath.CombinePaths(directoryName, name)) {
+		if s.isRemoved(tspath.CombinePaths(directoryName, name)) {
 			delete(result.Symlinks, name)
 		}
 	}
 	return result
 }
 
-func (s *snapshotFileSystem) addSymlinkEntries(directoryName string, entries vfs.Entries) vfs.Entries {
+func (s requestFileSystem) addSymlinkEntries(directoryName string, entries vfs.Entries) vfs.Entries {
 	result := cloneEntries(entries)
 	if result.Symlinks == nil {
 		result.Symlinks = map[string]struct{}{}
 	}
 
-	s.mu.RLock()
 	directoryPath := s.toPath(directoryName)
-	var links []snapshotSymlink
+	var links []requestSymlink
 	for _, symlink := range s.symlinks {
 		if s.toPath(tspath.GetDirectoryPath(symlink.linkName)) == directoryPath {
 			links = append(links, symlink)
 		}
 	}
-	s.mu.RUnlock()
-
 	for _, symlink := range links {
 		name := tspath.GetBaseFileName(symlink.linkName)
 		result.Files = s.deleteEntryName(result.Files, name)
@@ -728,15 +896,18 @@ func (s *snapshotFileSystem) addSymlinkEntries(directoryName string, entries vfs
 	return result
 }
 
-func (s *snapshotFileSystem) deleteEntryName(values []string, value string) []string {
+func (s requestFileSystem) deleteEntryName(values []string, value string) []string {
 	return slices.DeleteFunc(values, func(candidate string) bool { return s.equalEntryNames(candidate, value) })
 }
 
-func (s *snapshotFileSystem) equalEntryNames(left string, right string) bool {
+func (s requestFileSystem) equalEntryNames(left string, right string) bool {
 	return tspath.GetCanonicalFileName(left, s.useCaseSensitiveNames) == tspath.GetCanonicalFileName(right, s.useCaseSensitiveNames)
 }
 
-func (s *snapshotFileSystem) Realpath(path string) string {
+func (s requestFileSystem) Realpath(path string) string {
+	if s.isPreSymlinkRemoved(path) {
+		return path
+	}
 	resolved := s.resolvePath(path)
 	if !resolved.ok {
 		return path
@@ -768,7 +939,7 @@ func (s *snapshotFileSystem) Realpath(path string) string {
 		return path
 	}
 	if resolved.host {
-		if host := getHostFileSystem(s.base); host != nil {
+		if host := getHostFileSystem(s.baseFileSystem()); host != nil {
 			return host.Realpath(resolved.path)
 		}
 		return path
@@ -777,77 +948,76 @@ func (s *snapshotFileSystem) Realpath(path string) string {
 		return path
 	}
 	if s.fallsBack() {
-		return s.base.Realpath(resolved.path)
+		return s.baseFileSystem().Realpath(resolved.path)
 	}
 	return resolved.path
 }
 
-func (s *snapshotFileSystem) WriteFile(fileName string, data string) error {
-	if s.kind != SnapshotFileSystemKindCache {
+func (s requestFileSystem) WriteFile(fileName string, data string) error {
+	if s.kind != KindCache {
 		return vfs.ErrInvalid
 	}
-	host := getHostFileSystem(s.base)
+	host := getHostFileSystem(s.baseFileSystem())
 	if host == nil {
 		return vfs.ErrInvalid
 	}
 	return host.WriteFile(s.toAbsolutePath(fileName), data)
 }
 
-func (s *snapshotFileSystem) AppendFile(fileName string, data string) error {
-	if s.kind != SnapshotFileSystemKindCache {
+func (s requestFileSystem) AppendFile(fileName string, data string) error {
+	if s.kind != KindCache {
 		return vfs.ErrInvalid
 	}
-	host := getHostFileSystem(s.base)
+	host := getHostFileSystem(s.baseFileSystem())
 	if host == nil {
 		return vfs.ErrInvalid
 	}
 	return host.AppendFile(s.toAbsolutePath(fileName), data)
 }
 
-func (s *snapshotFileSystem) Remove(path string) error {
-	if s.kind != SnapshotFileSystemKindCache {
+func (s requestFileSystem) Remove(path string) error {
+	if s.kind != KindCache {
 		return vfs.ErrInvalid
 	}
-	host := getHostFileSystem(s.base)
+	host := getHostFileSystem(s.baseFileSystem())
 	if host == nil {
 		return vfs.ErrInvalid
 	}
 	return host.Remove(s.toAbsolutePath(path))
 }
 
-func (s *snapshotFileSystem) Chtimes(path string, aTime time.Time, mTime time.Time) error {
+func (s requestFileSystem) Chtimes(path string, aTime time.Time, mTime time.Time) error {
 	resolved := s.resolvePath(path)
 	if !resolved.ok {
 		return vfs.ErrInvalid
 	}
-	if s.kind != SnapshotFileSystemKindCache {
+	if s.kind != KindCache {
 		return vfs.ErrInvalid
 	}
-	host := getHostFileSystem(s.base)
+	host := getHostFileSystem(s.baseFileSystem())
 	if host == nil {
 		return vfs.ErrInvalid
 	}
 	return host.Chtimes(s.toAbsolutePath(path), aTime, mTime)
 }
 
-func (s *snapshotFileSystem) Stat(path string) vfs.FileInfo {
+func (s requestFileSystem) Stat(path string) vfs.FileInfo {
+	if s.isPreSymlinkRemoved(path) {
+		return nil
+	}
 	resolved := s.resolvePath(path)
 	if !resolved.ok {
 		return nil
 	}
-	s.mu.RLock()
 	canonicalPath := s.toPath(resolved.path)
 	if file, ok := s.files[canonicalPath]; ok {
-		info := snapshotFileInfo{name: tspath.GetBaseFileName(file.fileName), size: int64(len(file.content))}
-		s.mu.RUnlock()
+		info := requestFileInfo{name: tspath.GetBaseFileName(file.fileName), size: int64(len(file.content))}
 		return info
 	}
 	if directoryName, ok := s.directories[canonicalPath]; ok {
-		info := snapshotFileInfo{name: tspath.GetBaseFileName(directoryName), directory: true}
-		s.mu.RUnlock()
+		info := requestFileInfo{name: tspath.GetBaseFileName(directoryName), directory: true}
 		return info
 	}
-	s.mu.RUnlock()
 	if !resolved.followedSymlink && s.isRemoved(path) {
 		return nil
 	}
@@ -858,28 +1028,24 @@ func (s *snapshotFileSystem) Stat(path string) vfs.FileInfo {
 			return nil
 		}
 		fallbackPath = fallback.path
-		s.mu.RLock()
 		canonicalFallbackPath := s.toPath(fallbackPath)
 		if file, ok := s.files[canonicalFallbackPath]; ok {
-			info := snapshotFileInfo{name: tspath.GetBaseFileName(file.fileName), size: int64(len(file.content))}
-			s.mu.RUnlock()
+			info := requestFileInfo{name: tspath.GetBaseFileName(file.fileName), size: int64(len(file.content))}
 			return info
 		}
 		if directoryName, ok := s.directories[canonicalFallbackPath]; ok {
-			info := snapshotFileInfo{name: tspath.GetBaseFileName(directoryName), directory: true}
-			s.mu.RUnlock()
+			info := requestFileInfo{name: tspath.GetBaseFileName(directoryName), directory: true}
 			return info
 		}
-		s.mu.RUnlock()
 	}
 	if s.isRemoved(resolved.path) || s.isRemoved(fallbackPath) {
 		return nil
 	}
 	if resolved.host {
-		return statFileSystem(getHostFileSystem(s.base), resolved.path)
+		return statFileSystem(getHostFileSystem(s.baseFileSystem()), resolved.path)
 	}
 	if s.fallsBack() {
-		return statFileSystem(s.base, resolved.path)
+		return statFileSystem(s.baseFileSystem(), resolved.path)
 	}
 	return nil
 }
@@ -893,15 +1059,15 @@ func statFileSystem(fileSystem vfs.FS, path string) vfs.FileInfo {
 	}
 	name := tspath.GetBaseFileName(path)
 	if fileSystem.DirectoryExists(path) {
-		return snapshotFileInfo{name: name, directory: true}
+		return requestFileInfo{name: name, directory: true}
 	}
 	if fileSystem.FileExists(path) {
-		return snapshotFileInfo{name: name}
+		return requestFileInfo{name: name}
 	}
 	return nil
 }
 
-func (s *snapshotFileSystem) WalkDir(root string, walkFn vfs.WalkDirFunc) error {
+func (s requestFileSystem) WalkDir(root string, walkFn vfs.WalkDirFunc) error {
 	originalRoot := s.toAbsolutePath(root)
 	resolved := s.resolvePath(originalRoot)
 	if !resolved.ok {
@@ -912,14 +1078,14 @@ func (s *snapshotFileSystem) WalkDir(root string, walkFn vfs.WalkDirFunc) error 
 		return walkFn(originalRoot, nil, vfs.ErrNotExist)
 	}
 	visited := map[string]struct{}{}
-	if err := s.walkDir(originalRoot, snapshotDirEntry{info: info}, walkFn, visited); errors.Is(err, fs.SkipAll) {
+	if err := s.walkDir(originalRoot, requestDirEntry{info: info}, walkFn, visited); errors.Is(err, fs.SkipAll) {
 		return nil
 	} else {
 		return err
 	}
 }
 
-func (s *snapshotFileSystem) walkDir(path string, entry snapshotDirEntry, walkFn vfs.WalkDirFunc, visited map[string]struct{}) error {
+func (s requestFileSystem) walkDir(path string, entry requestDirEntry, walkFn vfs.WalkDirFunc, visited map[string]struct{}) error {
 	realpath := s.Realpath(path)
 	if _, ok := visited[realpath]; ok {
 		return nil
@@ -944,7 +1110,7 @@ func (s *snapshotFileSystem) walkDir(path string, entry snapshotDirEntry, walkFn
 		if childInfo == nil {
 			continue
 		}
-		if err := s.walkDir(childPath, snapshotDirEntry{info: childInfo}, walkFn, visited); err != nil {
+		if err := s.walkDir(childPath, requestDirEntry{info: childInfo}, walkFn, visited); err != nil {
 			if errors.Is(err, fs.SkipDir) {
 				return nil
 			}
@@ -954,31 +1120,29 @@ func (s *snapshotFileSystem) walkDir(path string, entry snapshotDirEntry, walkFn
 	return nil
 }
 
-type snapshotFileInfo struct {
+type requestFileInfo struct {
 	name      string
 	size      int64
 	directory bool
 }
 
-func (i snapshotFileInfo) Name() string       { return i.name }
-func (i snapshotFileInfo) Size() int64        { return i.size }
-func (i snapshotFileInfo) ModTime() time.Time { return time.Time{} }
-func (i snapshotFileInfo) IsDir() bool        { return i.directory }
-func (i snapshotFileInfo) Sys() any           { return nil }
-func (i snapshotFileInfo) Mode() fs.FileMode {
+func (i requestFileInfo) Name() string       { return i.name }
+func (i requestFileInfo) Size() int64        { return i.size }
+func (i requestFileInfo) ModTime() time.Time { return time.Time{} }
+func (i requestFileInfo) IsDir() bool        { return i.directory }
+func (i requestFileInfo) Sys() any           { return nil }
+func (i requestFileInfo) Mode() fs.FileMode {
 	if i.directory {
 		return fs.ModeDir | 0o555
 	}
 	return 0o444
 }
 
-type snapshotDirEntry struct {
+type requestDirEntry struct {
 	info vfs.FileInfo
 }
 
-func (e snapshotDirEntry) Name() string               { return e.info.Name() }
-func (e snapshotDirEntry) IsDir() bool                { return e.info.IsDir() }
-func (e snapshotDirEntry) Type() fs.FileMode          { return e.info.Mode().Type() }
-func (e snapshotDirEntry) Info() (fs.FileInfo, error) { return e.info, nil }
-
-var _ vfs.FS = (*snapshotFileSystem)(nil)
+func (e requestDirEntry) Name() string               { return e.info.Name() }
+func (e requestDirEntry) IsDir() bool                { return e.info.IsDir() }
+func (e requestDirEntry) Type() fs.FileMode          { return e.info.Mode().Type() }
+func (e requestDirEntry) Info() (fs.FileInfo, error) { return e.info, nil }

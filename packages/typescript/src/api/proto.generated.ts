@@ -211,7 +211,7 @@ export interface UpdateSnapshotParams {
      * A memory filesystem is canonical and total. A cache filesystem is checked
      * before falling back to the host filesystem.
      */
-    fileSystem?: SnapshotFileSystem;
+    fileSystem?: RequestFileSystem;
     /**
      * OpenFiles lists files to keep open for the API client, mirroring LSP's
      * textDocument/didOpen. For each file, ancestor directories are searched for a
@@ -1229,17 +1229,17 @@ export interface APIFileChanges {
 }
 
 /**
- * SnapshotFileSystem supplies file contents and, optionally, directory listings
- * for a snapshot update.
+ * RequestFileSystem supplies file contents and, optionally, directory listings
+ * for a request that creates a snapshot.
  */
-export interface SnapshotFileSystem {
+export interface RequestFileSystem {
     kind: "cache" | "memory";
     /** Files maps file names to their complete contents. */
     files: Record<string, string>;
     /** Directories maps directory names to complete listing results. */
-    directories?: Record<string, SnapshotDirectoryEntries>;
+    directories?: Record<string, RequestDirectoryEntries>;
     /** Symlinks maps link paths to targets in this filesystem or the host filesystem. */
-    symlinks?: Record<string, SnapshotSymlink>;
+    symlinks?: Record<string, RequestSymlink>;
     /**
      * RemovedPaths lists files or directory trees that must be treated as missing
      * even when present in an underlying snapshot or host filesystem.
@@ -1439,16 +1439,16 @@ export interface EmitOutputFile {
 }
 
 /**
- * SnapshotDirectoryEntries is a cached directory listing. Entry names are
+ * RequestDirectoryEntries is a cached directory listing. Entry names are
  * relative to the directory, matching vfs.GetAccessibleEntries.
  */
-export interface SnapshotDirectoryEntries {
+export interface RequestDirectoryEntries {
     files: string[];
     directories: string[];
 }
 
-/** SnapshotSymlink describes a symbolic link in a snapshot filesystem. */
-export interface SnapshotSymlink {
+/** RequestSymlink describes a symbolic link in a request filesystem. */
+export interface RequestSymlink {
     /**
      * Target is resolved relative to the directory containing the link, matching
      * native symbolic-link semantics.
@@ -1456,7 +1456,7 @@ export interface SnapshotSymlink {
     target: string;
     /**
      * Host routes the target through the host filesystem. This is the only way a
-     * memory filesystem can access paths not supplied in the snapshot filesystem.
+     * memory filesystem can access paths not supplied in the request filesystem.
      */
     host?: boolean;
 }

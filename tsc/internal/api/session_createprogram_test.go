@@ -4,6 +4,7 @@ import (
 	"context"
 	"testing"
 
+	"github.com/microsoft/TypeScript/tsc/internal/api/requestfilesystem"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/project"
@@ -138,7 +139,7 @@ func TestCreateProgramWithNoRootFiles(t *testing.T) {
 	assert.Equal(t, len(project.Program.GetSourceFiles()), 0)
 }
 
-func TestCreateProgramFromSnapshotFileSystem(t *testing.T) {
+func TestCreateProgramFromRequestFileSystem(t *testing.T) {
 	t.Parallel()
 
 	const fileName = "/src/index.ts"
@@ -151,8 +152,8 @@ func TestCreateProgramFromSnapshotFileSystem(t *testing.T) {
 	ctx := context.Background()
 
 	base, err := session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{
-		FileSystem: &SnapshotFileSystem{
-			Kind: SnapshotFileSystemKindMemory,
+		FileSystem: &requestfilesystem.RequestFileSystem{
+			Kind: requestfilesystem.KindMemory,
 			Files: map[string]string{
 				fileName: `export const source = "memory";`,
 			},
@@ -170,6 +171,9 @@ func TestCreateProgramFromSnapshotFileSystem(t *testing.T) {
 	assert.NilError(t, err)
 	created, err := session.getSnapshotData(response.Snapshot)
 	assert.NilError(t, err)
+	baseData, err := session.getSnapshotData(base.Snapshot)
+	assert.NilError(t, err)
+	assert.Assert(t, created.fileSystemHandle() != baseData.fileSystemHandle())
 	program := created.snapshot.ProjectCollection.InferredProject().Program
 	assert.Equal(t, program.GetSourceFile(fileName).Text(), `export const source = "memory";`)
 }
@@ -185,16 +189,16 @@ func TestCreateProgramRebuildsOldProgramFromDifferentBaseSnapshot(t *testing.T) 
 	ctx := context.Background()
 
 	base, err := session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{
-		FileSystem: &SnapshotFileSystem{
-			Kind:  SnapshotFileSystemKindMemory,
+		FileSystem: &requestfilesystem.RequestFileSystem{
+			Kind:  requestfilesystem.KindMemory,
 			Files: map[string]string{fileName: `export const source = "base";`},
 		},
 	})
 	assert.NilError(t, err)
 	newer, err := session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{
 		Snapshot: base.Snapshot,
-		FileSystem: &SnapshotFileSystem{
-			Kind:  SnapshotFileSystemKindMemory,
+		FileSystem: &requestfilesystem.RequestFileSystem{
+			Kind:  requestfilesystem.KindMemory,
 			Files: map[string]string{fileName: `export const source = "newer";`},
 		},
 	})

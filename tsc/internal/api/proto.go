@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/microsoft/TypeScript/tsc/internal/api/requestfilesystem"
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/checker"
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
@@ -341,48 +342,6 @@ type APIFileChanges struct {
 	Deleted       []DocumentIdentifier `json:"deleted,omitempty"`
 }
 
-// SnapshotFileSystemKind controls how an update snapshot filesystem is used.
-type SnapshotFileSystemKind string
-
-const (
-	// SnapshotFileSystemKindMemory makes the supplied filesystem canonical and total.
-	SnapshotFileSystemKindMemory SnapshotFileSystemKind = "memory"
-	// SnapshotFileSystemKindCache checks the supplied filesystem before falling back to the host.
-	SnapshotFileSystemKindCache SnapshotFileSystemKind = "cache"
-)
-
-// SnapshotDirectoryEntries is a cached directory listing. Entry names are
-// relative to the directory, matching vfs.GetAccessibleEntries.
-type SnapshotDirectoryEntries struct {
-	Files       []string `json:"files" nonnil:"true"`
-	Directories []string `json:"directories" nonnil:"true"`
-}
-
-// SnapshotSymlink describes a symbolic link in a snapshot filesystem.
-type SnapshotSymlink struct {
-	// Target is resolved relative to the directory containing the link, matching
-	// native symbolic-link semantics.
-	Target string `json:"target"`
-	// Host routes the target through the host filesystem. This is the only way a
-	// memory filesystem can access paths not supplied in the snapshot filesystem.
-	Host bool `json:"host,omitempty"`
-}
-
-// SnapshotFileSystem supplies file contents and, optionally, directory listings
-// for a snapshot update.
-type SnapshotFileSystem struct {
-	Kind SnapshotFileSystemKind `json:"kind"`
-	// Files maps file names to their complete contents.
-	Files map[string]string `json:"files" nonnil:"true"`
-	// Directories maps directory names to complete listing results.
-	Directories map[string]SnapshotDirectoryEntries `json:"directories,omitempty"`
-	// Symlinks maps link paths to targets in this filesystem or the host filesystem.
-	Symlinks map[string]SnapshotSymlink `json:"symlinks,omitempty"`
-	// RemovedPaths lists files or directory trees that must be treated as missing
-	// even when present in an underlying snapshot or host filesystem.
-	RemovedPaths []string `json:"removedPaths,omitempty"`
-}
-
 // UpdateSnapshotParams are the parameters for creating a new snapshot.
 // All fields are optional. With no fields set, the server adopts the latest LSP state.
 type UpdateSnapshotParams struct {
@@ -400,7 +359,7 @@ type UpdateSnapshotParams struct {
 	// FileSystem supplies file contents and directory listings for the new snapshot.
 	// A memory filesystem is canonical and total. A cache filesystem is checked
 	// before falling back to the host filesystem.
-	FileSystem *SnapshotFileSystem `json:"fileSystem,omitempty"`
+	FileSystem *requestfilesystem.RequestFileSystem `json:"fileSystem,omitempty"`
 	// OpenFiles lists files to keep open for the API client, mirroring LSP's
 	// textDocument/didOpen. For each file, ancestor directories are searched for a
 	// tsconfig that contains it; if found, that configured project is loaded and

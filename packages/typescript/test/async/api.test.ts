@@ -3679,7 +3679,7 @@ describe("readFile callback semantics", () => {
 });
 
 describe("updateSnapshot file systems", () => {
-    test("snapshot filesystem factories derive directory listings", () => {
+    test("request filesystem factories derive directory listings", () => {
         const memory = createMemoryFileSystem([
             ["/src/index.ts", "posix"],
             ["C:\\repo\\src\\index.ts", "windows"],
@@ -3746,7 +3746,7 @@ describe("updateSnapshot file systems", () => {
                     ["/duplicate.ts", "path"],
                     [{ uri: "file:///duplicate.ts" }, "URI"],
                 ]),
-            /Duplicate snapshot filesystem path: \/duplicate\.ts/,
+            /Duplicate request filesystem path: \/duplicate\.ts/,
         );
 
         const prototypeFileSystem = createMemoryFileSystem([["__proto__", "prototype"]]);
@@ -3759,7 +3759,7 @@ describe("updateSnapshot file systems", () => {
                     ["/normalized/duplicate.ts", "forward slash"],
                     ["\\normalized\\duplicate.ts", "backslash"],
                 ]),
-            /Duplicate snapshot filesystem path: \/normalized\/duplicate\.ts/,
+            /Duplicate request filesystem path: \/normalized\/duplicate\.ts/,
         );
     });
 
@@ -4068,6 +4068,41 @@ describe("updateSnapshot file systems", () => {
         }
     });
 
+    test("eager snapshot disposal does not retain filesystem history", async () => {
+        const api = new API({
+            cwd: fileURLToPath(new URL("../../../../", import.meta.url).toString()),
+        });
+        try {
+            let snapshot: Snapshot = await api.updateSnapshot({
+                fileSystem: createMemoryFileSystem([["/pkg/index.ts", ""]]),
+            });
+            try {
+                let content = "";
+                for (const character of "export const x = 1") {
+                    const oldSnapshot: Snapshot = snapshot;
+                    content += character;
+                    snapshot = await oldSnapshot.update({
+                        fileSystem: createCacheFileSystem([["/pkg/index.ts", content]]),
+                    });
+                    await oldSnapshot.dispose();
+                    assert.equal(oldSnapshot.isDisposed(), true);
+                }
+
+                using program = await snapshot.createProgram(
+                    ["/pkg/index.ts"],
+                    { compilerOptions: { noLib: true } },
+                );
+                assert.equal((await program.getSourceFile("/pkg/index.ts"))?.text, "export const x = 1");
+            }
+            finally {
+                await snapshot.dispose();
+            }
+        }
+        finally {
+            await api.close();
+        }
+    });
+
     test("Snapshot.update treats a memory filesystem as a total replacement", async () => {
         const host = createVirtualFileSystem({
             "/host.ts": `export const source = "host";`,
@@ -4139,7 +4174,7 @@ describe("updateSnapshot file systems", () => {
         }
     });
 
-    test("Snapshot.createProgram uses the snapshot filesystem as its base", async () => {
+    test("Snapshot.createProgram uses the request filesystem as its base", async () => {
         const callbackCalls: string[] = [];
         const api = new API({
             cwd: fileURLToPath(new URL("../../../../", import.meta.url).toString()),
@@ -4362,7 +4397,7 @@ describe("updateSnapshot file systems", () => {
         }
     });
 
-    // TODO: Add snapshot filesystem coverage for `tsc -b` and `tsc -b --clean`
+    // TODO: Add request filesystem coverage for `tsc -b` and `tsc -b --clean`
     // once build and clean are exposed through the client API. In particular,
     // verify that clean removes synthetic outputs and that build-mode re-timestamping
     // of emitted-but-unchanged files works for memory filesystems, which currently

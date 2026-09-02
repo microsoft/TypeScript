@@ -532,6 +532,7 @@ func TestRefCountingCaches(t *testing.T) {
 				appProject.CommandLine.Errors,
 				baseSnapshot,
 				appProject,
+				nil,
 				FileChangeSummary{},
 			)
 			defer programSnapshot.Deref(session)
@@ -562,6 +563,7 @@ func TestRefCountingCaches(t *testing.T) {
 				programProject.CommandLine.Errors,
 				programSnapshot,
 				programProject,
+				nil,
 				fileChanges,
 			)
 			defer updatedProgramSnapshot.Deref(session)

@@ -5,9 +5,9 @@ import {
     normalizePath,
 } from "./path.ts";
 import type {
-    SnapshotDirectoryEntries,
-    SnapshotFileSystem,
-    SnapshotSymlink,
+    RequestDirectoryEntries,
+    RequestFileSystem,
+    RequestSymlink,
 } from "./proto.generated.ts";
 import {
     type DocumentIdentifier,
@@ -38,41 +38,41 @@ export interface FileSystem {
 /** The callback names supported by the Go server for virtual FS delegation. */
 export const fsCallbackNames = ["readFile", "fileExists", "directoryExists", "getAccessibleEntries", "realpath", "writeFile"] as const;
 
-export interface CreateSnapshotFileSystemOptions {
+export interface CreateRequestFileSystemOptions {
     /** Complete directory listings. Derived from `files` when omitted. */
-    directories?: Record<string, SnapshotDirectoryEntries>;
-    symlinks?: Record<string, SnapshotSymlink>;
+    directories?: Record<string, RequestDirectoryEntries>;
+    symlinks?: Record<string, RequestSymlink>;
     /** Files or directory trees hidden from an underlying snapshot or host filesystem. */
     removedPaths?: readonly string[];
 }
 
-export interface CreateMemoryFileSystemWithLibOptions extends CreateSnapshotFileSystemOptions {
+export interface CreateMemoryFileSystemWithLibOptions extends CreateRequestFileSystemOptions {
     /** Default library directory used by a custom or non-embedded compiler executable. */
     defaultLibraryPath?: string;
 }
 
 /**
- * Files supplied to a snapshot filesystem. String identifiers are file names;
+ * Files supplied to a request filesystem. String identifiers are file names;
  * use `{ uri }` when supplying a document URI so it can be decoded correctly.
  */
-export type SnapshotFileEntries = readonly (readonly [id: DocumentIdentifier, content: string])[];
+export type RequestFileEntries = readonly (readonly [id: DocumentIdentifier, content: string])[];
 
-/** Creates a total memory snapshot filesystem, deriving directory listings when omitted. */
+/** Creates a total memory request filesystem, deriving directory listings when omitted. */
 export function createMemoryFileSystem(
-    files: SnapshotFileEntries,
-    options: CreateSnapshotFileSystemOptions = {},
-): SnapshotFileSystem {
-    return createSnapshotFileSystem("memory", files, options);
+    files: RequestFileEntries,
+    options: CreateRequestFileSystemOptions = {},
+): RequestFileSystem {
+    return createRequestFileSystem("memory", files, options);
 }
 
 /**
- * Creates a total memory snapshot filesystem with the compiler's default library
+ * Creates a total memory request filesystem with the compiler's default library
  * directory mounted read-only through the host filesystem.
  */
 export function createMemoryFileSystemWithLib(
-    files: SnapshotFileEntries,
+    files: RequestFileEntries,
     options: CreateMemoryFileSystemWithLibOptions = {},
-): SnapshotFileSystem {
+): RequestFileSystem {
     const defaultLibraryPaths = options.defaultLibraryPath
         ? [normalizePath(options.defaultLibraryPath)]
         : [normalizePath("bundled:///libs")];
@@ -89,31 +89,31 @@ export function createMemoryFileSystemWithLib(
     for (const defaultLibraryPath of defaultLibraryPaths) {
         symlinks[defaultLibraryPath] ??= { target: defaultLibraryPath, host: true };
     }
-    return createSnapshotFileSystem("memory", files, {
+    return createRequestFileSystem("memory", files, {
         symlinks,
         ...(options.directories ? { directories: options.directories } : {}),
         ...(options.removedPaths?.length ? { removedPaths: options.removedPaths } : {}),
     });
 }
 
-/** Creates a read-through cache snapshot filesystem, deriving directory listings when omitted. */
+/** Creates a read-through cache request filesystem, deriving directory listings when omitted. */
 export function createCacheFileSystem(
-    files: SnapshotFileEntries,
-    options: CreateSnapshotFileSystemOptions = {},
-): SnapshotFileSystem {
-    return createSnapshotFileSystem("cache", files, options);
+    files: RequestFileEntries,
+    options: CreateRequestFileSystemOptions = {},
+): RequestFileSystem {
+    return createRequestFileSystem("cache", files, options);
 }
 
-function createSnapshotFileSystem(
-    kind: SnapshotFileSystem["kind"],
-    files: SnapshotFileEntries,
-    options: CreateSnapshotFileSystemOptions,
-): SnapshotFileSystem {
+function createRequestFileSystem(
+    kind: RequestFileSystem["kind"],
+    files: RequestFileEntries,
+    options: CreateRequestFileSystemOptions,
+): RequestFileSystem {
     const normalizedFiles = new Map<string, string>();
     for (const [id, content] of files) {
         const fileName = normalizePath(resolveFileName(id));
         if (normalizedFiles.has(fileName)) {
-            throw new Error(`Duplicate snapshot filesystem path: ${fileName}`);
+            throw new Error(`Duplicate request filesystem path: ${fileName}`);
         }
         normalizedFiles.set(fileName, content);
     }
@@ -127,7 +127,7 @@ function createSnapshotFileSystem(
     };
 }
 
-function deriveDirectoryListings(files: Record<string, string>): Record<string, SnapshotDirectoryEntries> {
+function deriveDirectoryListings(files: Record<string, string>): Record<string, RequestDirectoryEntries> {
     const listings = new Map<string, { files: Set<string>; directories: Set<string>; }>();
     const getListing = (directory: string) => {
         let listing = listings.get(directory);
