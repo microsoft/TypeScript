@@ -21,7 +21,7 @@ type textWriter struct {
 	lineCount               int
 	linePos                 int
 	columnPos               int
-	column                   core.UTF16Offset
+	column                  core.UTF16Offset
 	hasTrailingCommentState bool
 }
 
