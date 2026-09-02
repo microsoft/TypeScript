@@ -1603,6 +1603,21 @@ describe("Checker - getMemberInModuleExports", { concurrency }, () => {
 });
 
 describe("SourceFile", { concurrency }, () => {
+    test("relative and absolute identifiers share the project source file cache", () => {
+        using api = spawnAPI({
+            "/outside/tsconfig.json": "{}",
+            "/outside/src/index.ts": "export const value = 1;",
+        });
+
+        const snapshot = api.createSnapshot({ openProject: "/outside/tsconfig.json" });
+        const program = snapshot.getConfiguredProject("/outside/tsconfig.json")!.program;
+        const absolute = program.getSourceFile("/outside/src/index.ts");
+        const relative = program.getSourceFile("src/index.ts");
+
+        assert.ok(absolute);
+        assert.strictEqual(relative, absolute);
+    });
+
     test("getSourceFile rejects invalid document identifiers", () => {
         using api = spawnAPI();
 
