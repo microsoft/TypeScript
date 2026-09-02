@@ -313,6 +313,8 @@ func TestParseNodeModuleFromPath(t *testing.T) {
 		{"folder subpath scoped", "/a/node_modules/@scope/b/lib/File", true, "/a/node_modules/@scope/b"},
 		{"package root folder", "/a/node_modules/b", true, "/a/node_modules/b"},
 		{"scoped package root folder", "/a/node_modules/@scope/b", true, "/a/node_modules/@scope/b"},
+		{"package root interpreted as file", "/a/node_modules/b", false, "/a/node_modules/"},
+		{"scoped package root interpreted as file", "/a/node_modules/@scope/b", false, "/a/node_modules/@scope"},
 		// A bare scope directory has no package name; must not panic (https://github.com/microsoft/TypeScript/tsc/issues/4373).
 		{"scope-only folder", "/a/node_modules/@scope", true, "/a/node_modules/@scope"},
 		{"types scope-only folder", "/a/node_modules/@types", true, "/a/node_modules/@types"},
