@@ -218,6 +218,10 @@ jobs:
       - run: npx hereby test:extension
       - run: npx hereby test:tools
       - run: npx hereby test:api
+      - run: npx playwright install --with-deps chromium
+        if: ${{ matrix.config.main }}
+      - run: npx hereby test:api:browser
+        if: ${{ matrix.config.main }}
       - run: git add .
       - uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
         if: ${{ always() && matrix.config.coverage && github.event_name != 'merge_group' }}

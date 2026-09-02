@@ -14,10 +14,12 @@ import {
     fsCallbackNames,
 } from "../fs.ts";
 import {
+    type AsyncClientOptions,
     type ClientOptions,
     type ClientSocketOptions,
     type ClientSpawnOptions,
     getAPIProcessArgs,
+    isAsyncTransportOptions,
     isSpawnOptions,
     resolveExePath,
 } from "../options.ts";
@@ -36,8 +38,10 @@ import {
     TimingCollector,
     type TimingInfo,
 } from "../timing.ts";
+import { TransportClient } from "./transportClient.ts";
 
-export type { ClientOptions, ClientSocketOptions, ClientSpawnOptions };
+export type { AsyncClientOptions as ClientOptions, AsyncClientTransportOptions, ClientSocketOptions, ClientSpawnOptions } from "../options.ts";
+export type { AsyncTransport } from "./transport.ts";
 
 /**
  * Client handles communication with the TypeScript API server
@@ -47,7 +51,8 @@ export class Client {
     private socket: Socket | undefined;
     private process: ChildProcess | undefined;
     private connection: MessageConnection | undefined;
-    private options: ClientOptions;
+    private options: ClientOptions | undefined;
+    private transportClient: TransportClient | undefined;
     private connected = false;
     private closed = false;
     private connecting: Promise<void> | undefined;
@@ -55,7 +60,15 @@ export class Client {
     private batchedRequests: { method: APIRequest["method"]; params: APIRequest["params"]; resolve: (value: unknown) => void; reject: (reason?: any) => void; }[] = [];
     private nextBatch: NodeJS.Immediate | "manual" | undefined;
 
-    constructor(options: ClientOptions) {
+    constructor(options: AsyncClientOptions) {
+        if (isAsyncTransportOptions(options)) {
+            this.transportClient = new TransportClient(
+                options.transport,
+                options.collectTiming ?? false,
+                options.maxResponseBytesPerPage,
+            );
+            return;
+        }
         this.options = options;
         if (isSpawnOptions(options) && options.collectTiming) {
             this.timing = new TimingCollector();
@@ -63,6 +76,7 @@ export class Client {
     }
 
     connect(): Promise<void> {
+        if (this.transportClient) return this.transportClient.connect();
         if (this.closed) return Promise.reject(new Error("Client is closed"));
         if (this.connected) return Promise.resolve();
         return this.connecting ??= this.connectWorker().finally(() => {
@@ -71,6 +85,7 @@ export class Client {
     }
 
     private async connectWorker(): Promise<void> {
+        if (!this.options) throw new Error("Client options are not available");
         if (isSpawnOptions(this.options)) {
             await this.connectViaSpawn(this.options);
         }
@@ -222,8 +237,9 @@ export class Client {
 
             const requestType = new RequestType<unknown, BatchRequestsResponse, void>("batchRequests");
             const params: BatchRequestsParams = { requests: requests.map(request => ({ method: request.method, params: request.params })) };
-            if (this.options.maxResponseBytesPerPage !== undefined) {
-                params.maxResponseBytesPerPage = this.options.maxResponseBytesPerPage;
+            const maxResponseBytesPerPage = this.options?.maxResponseBytesPerPage;
+            if (maxResponseBytesPerPage !== undefined) {
+                params.maxResponseBytesPerPage = maxResponseBytesPerPage;
             }
             const response = await this.sendRequestWithTiming(requestType, params);
             let responses = response.responses;
@@ -233,8 +249,8 @@ export class Client {
                     requests: [],
                     continuationToken,
                 };
-                if (this.options.maxResponseBytesPerPage !== undefined) {
-                    pageParams.maxResponseBytesPerPage = this.options.maxResponseBytesPerPage;
+                if (maxResponseBytesPerPage !== undefined) {
+                    pageParams.maxResponseBytesPerPage = maxResponseBytesPerPage;
                 }
                 const page = await this.sendRequestWithTiming(requestType, pageParams);
                 responses = responses.concat(page.responses);
@@ -262,6 +278,7 @@ export class Client {
     }
 
     batchContext(): { [Symbol.dispose](): void; } {
+        if (this.transportClient) return this.transportClient.batchContext();
         if (this.nextBatch === "manual") {
             throw new Error("Already in a manual batch context");
         }
@@ -279,6 +296,7 @@ export class Client {
     }
 
     async apiRequest<K extends APIRequest["method"]>(method: K, params: APIMethodInfo[K]["params"]): Promise<APIMethodInfo[K]["result"]> {
+        if (this.transportClient) return this.transportClient.apiRequest(method, params);
         if (this.closed) throw new Error("Client is closed");
         if (!this.connected) {
             await this.connect();
@@ -295,6 +313,7 @@ export class Client {
     }
 
     async apiRequestBinary<K extends SourceFileResponseMethod>(method: K, params: APIMethodInfo[K]["params"]): Promise<Uint8Array | undefined> {
+        if (this.transportClient) return this.transportClient.apiRequestBinary(method, params);
         const response = await this.apiRequest(method, params);
         if (!response) return undefined;
         const buffer = Buffer.from(response.data, "base64");
@@ -308,6 +327,7 @@ export class Client {
      * materialization totals surface alongside request timings.
      */
     getTimingCollector(): TimingCollector | undefined {
+        if (this.transportClient) return this.transportClient.getTimingCollector();
         return this.timing;
     }
 
@@ -317,6 +337,7 @@ export class Client {
      * (fetched via a getServerTiming request) and estimated transport overhead.
      */
     async getTimingInfo(): Promise<TimingInfo> {
+        if (this.transportClient) return this.transportClient.getTimingInfo();
         if (!this.timing) {
             return disabledTimingInfo();
         }
@@ -329,6 +350,7 @@ export class Client {
     }
 
     async resetTimingInfo(): Promise<void> {
+        if (this.transportClient) return this.transportClient.resetTimingInfo();
         if (!this.timing) return;
         this.timing.reset();
         if (this.connected && this.connection) {
@@ -349,6 +371,7 @@ export class Client {
     }
 
     async close(): Promise<void> {
+        if (this.transportClient) return this.transportClient.close();
         await this.connecting?.catch(() => {}); // if connection is still in-progress, wait for it to finish before closing the connection
         this.closed = true;
         if (this.connection) {

@@ -1,4 +1,3 @@
-import { TextEncoder } from "node:util";
 import type {
     FileReference,
     LiteralLikeNode,
@@ -80,8 +79,12 @@ class StringTable {
     }
 }
 
-let _encoder: TextEncoder | undefined;
-function cachedEncoder(): TextEncoder {
+interface Encoder {
+    encode(input?: string): Uint8Array;
+}
+
+let _encoder: Encoder | undefined;
+function cachedEncoder(): Encoder {
     return _encoder ??= new TextEncoder();
 }
 
@@ -376,5 +379,32 @@ export function encodeNode(node: Node): Uint8Array {
  * Encode a Uint8Array to a base64 string.
  */
 export function uint8ArrayToBase64(data: Uint8Array): string {
-    return Buffer.from(data).toString("base64");
+    const nativeToBase64 = (data as Uint8Array & { toBase64?: () => string; }).toBase64;
+    if (nativeToBase64) {
+        return nativeToBase64.call(data);
+    }
+
+    const bufferConstructor = (globalThis as {
+        Buffer?: {
+            from(buffer: ArrayBufferLike, byteOffset: number, length: number): {
+                toString(encoding: "base64"): string;
+            };
+        };
+    }).Buffer;
+    if (bufferConstructor) {
+        return bufferConstructor.from(data.buffer, data.byteOffset, data.byteLength).toString("base64");
+    }
+
+    const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+    let result = "";
+    for (let i = 0; i < data.length; i += 3) {
+        const first = data[i];
+        const second = data[i + 1];
+        const third = data[i + 2];
+        result += alphabet[first >> 2];
+        result += alphabet[((first & 0x03) << 4) | ((second ?? 0) >> 4)];
+        result += second === undefined ? "=" : alphabet[((second & 0x0F) << 2) | ((third ?? 0) >> 6)];
+        result += third === undefined ? "=" : alphabet[third & 0x3F];
+    }
+    return result;
 }
