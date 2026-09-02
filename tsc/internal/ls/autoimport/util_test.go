@@ -136,6 +136,16 @@ func TestGetPackageRealpathFuncs_FollowsNodeModulesSymlinks(t *testing.T) {
 		"node_modules symlinks must be followed so the same file gets a consistent cache key",
 	)
 
+	// The module resolver also uses toRealpath while traversing directories.
+	// Currently, a package-root directory is treated as a file and its package
+	// directory is incorrectly parsed as the enclosing node_modules directory.
+	assert.Equal(
+		t,
+		toRealpath("/real/bin/pkg/node_modules/dep"),
+		"/real/bin/pkg/node_modulesdep",
+		"package-root directories currently do not follow their node_modules symlink",
+	)
+
 	// Files in subdirectories of an already-resolved external package should
 	// use the cached prefix mapping without additional realpath calls.
 	assert.Equal(
