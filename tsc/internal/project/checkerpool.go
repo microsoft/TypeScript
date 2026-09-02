@@ -265,6 +265,21 @@ func (p *checkerPool) ForEachCheckerGroupDo(ctx context.Context, files []*ast.So
 	pool.ForEachCheckerGroupDo(ctx, files, singleThreaded, cb)
 }
 
+// releaseCheckingPool drops the checkers a whole-program check used. They hold the types of every
+// file in the program, which is worth keeping only while something is likely to ask again. The
+// global diagnostics they found are kept, since nothing else collects them.
+func (p *checkerPool) releaseCheckingPool() bool {
+	p.mu.Lock()
+	defer p.mu.Unlock()
+	if p.checkingPool == nil {
+		return false
+	}
+	p.log("checkerpool: Releasing checking pool on request")
+	p.mergeGlobalDiagnosticsLocked(p.checkingPool.GetGlobalDiagnostics())
+	p.checkingPool = nil
+	return true
+}
+
 // getQueryChecker returns an ephemeral query checker from indices 1+.
 // Uses request affinity, then file affinity, then finds/creates.
 // Blocks on querySem if all query slots are in use.

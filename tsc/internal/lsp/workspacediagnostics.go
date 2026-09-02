@@ -184,6 +184,7 @@ func (r *workspaceDiagnosticsRun) checkSequentially(snapshot *project.Snapshot, 
 			continue
 		}
 		completed := r.checkProject(snapshot, pf)
+		snapshot.ReleaseCheckingPool(pf.project)
 		if !completed {
 			return
 		}
@@ -217,6 +218,9 @@ func (r *workspaceDiagnosticsRun) checkConcurrently(snapshot *project.Snapshot, 
 			case <-r.ctx.Done():
 				return
 			}
+			// Hand back the checkers before the next project builds its own, so a sweep holds
+			// only as many programs' worth of types as it is checking at once.
+			defer snapshot.ReleaseCheckingPool(pf.project)
 			completed[i] = r.checkProject(snapshot, pf)
 		})
 	}

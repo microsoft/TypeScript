@@ -1314,9 +1314,30 @@ func TestCheckerPoolChecksWholeProgramWithCompilerPool(t *testing.T) {
 	diagnostics := pool.program.GetSemanticDiagnostics(context.Background(), nil)
 	assert.Assert(t, len(diagnostics) > 0, "expected the seeded error")
 	assert.Assert(t, pool.checkingPool != nil, "a whole-program check must go through the compiler's pool")
+}
+
+// The checkers a sweep uses are handed back when it is done with them: they hold the types of every
+// file in the program, and a later pull either finds the project unchanged, and answers from result
+// ids without checking, or finds it changed and needs new ones anyway.
+func TestCheckerPoolReleasesCheckersAfterAWholeProgramCheck(t *testing.T) {
+	t.Parallel()
+	_, pool := setupCheckerPoolSessionWithFiles(t, CheckerPoolOptions{IdleTimeout: 10 * time.Second}, map[string]any{
+		"/src/tsconfig.json": `{ "compilerOptions": { "noLib": true } }`,
+		"/src/index.ts":      "export const x: number = 1;",
+		"/src/a.ts":          "export const a: string = 1;",
+	})
+
+	pool.program.GetSemanticDiagnostics(context.Background(), nil)
+	assert.Assert(t, pool.checkingPool != nil)
+
+	assert.Assert(t, pool.releaseCheckingPool(), "releasing reports that it dropped the checkers")
+	assert.Assert(t, pool.checkingPool == nil)
+	assert.Assert(t, !pool.releaseCheckingPool(), "nothing left to release")
 
 	// Discarding is what the project system does once a program is replaced, and it has to happen
 	// before the next program's checkers are built or both generations are held at once.
+	pool.program.GetSemanticDiagnostics(context.Background(), nil)
+	assert.Assert(t, pool.checkingPool != nil, "a later check builds them again")
 	pool.Discard()
 	assert.Assert(t, pool.checkingPool == nil, "a discarded pool must let go of its checkers")
 }
