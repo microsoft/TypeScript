@@ -267,7 +267,7 @@ func wouldRenameInOtherNodeModules(originalFile *ast.SourceFile, symbol *ast.Sym
 		return nil
 	}
 
-	originalPackage := module.ParseNodeModuleFromPath(originalFile.FileName(), false /*isFolder*/)
+	originalPackage := module.NodeModulePackageRootForFile(originalFile.FileName())
 	if originalPackage == "" {
 		// Original source file is not in node_modules.
 		for _, declaration := range declarations {
@@ -280,7 +280,7 @@ func wouldRenameInOtherNodeModules(originalFile *ast.SourceFile, symbol *ast.Sym
 
 	// Original source file is in node_modules.
 	for _, declaration := range declarations {
-		declPackage := module.ParseNodeModuleFromPath(ast.GetSourceFileOfNode(declaration).FileName(), false /*isFolder*/)
+		declPackage := module.NodeModulePackageRootForFile(ast.GetSourceFileOfNode(declaration).FileName())
 		if declPackage != "" && declPackage != originalPackage {
 			return diagnostics.You_cannot_rename_elements_that_are_defined_in_another_node_modules_folder
 		}
