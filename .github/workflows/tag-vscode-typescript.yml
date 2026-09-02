@@ -50,6 +50,11 @@ jobs:
             echo "Requested version $EXTENSION_VERSION does not match main's package version $packageVersion." >&2
             exit 1
           fi
+          lockVersion="$(jq -r '.packages["packages/vscode-typescript"].version' package-lock.json)"
+          if [ "$packageVersion" != "$lockVersion" ]; then
+            echo "package.json version $packageVersion does not match package-lock.json version $lockVersion." >&2
+            exit 1
+          fi
 
           tag="vscode-typescript/v$EXTENSION_VERSION"
           if git rev-parse --verify --quiet "refs/tags/$tag"; then

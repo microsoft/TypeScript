@@ -8,15 +8,6 @@ pr: none
 name: vscode-typescript-$(Date:yyyyMMdd)$(Rev:.r)
 appendCommitMessageToRunName: false
 
-parameters:
-  - name: signType
-    displayName: Sign type
-    type: string
-    default: real
-    values:
-      - real
-      - test
-
 variables:
   - name: TeamName
     value: TypeScript
@@ -122,10 +113,9 @@ extends:
               - task: MicroBuildSigningPlugin@4
                 displayName: '🔩 Install Signing Plugin'
                 inputs:
-                  signType: ${{ parameters.signType }}
+                  signType: real
                   azureSubscription: MicroBuild Signing Task (DevDiv)
-                  ${{ if eq(parameters.signType, 'real') }}:
-                    ConnectedPMEServiceName: beb8cb23-b303-4c95-ab26-9e44bc958d39
+                  ConnectedPMEServiceName: beb8cb23-b303-4c95-ab26-9e44bc958d39
                   zipSources: false
                 env:
                   MicroBuildOutputFolderOverride: $(Agent.TempDirectory)
@@ -153,27 +143,26 @@ extends:
                 displayName: Build and sign extensions
                 env:
                   SYSTEM_ACCESSTOKEN: $(System.AccessToken)
-                  VSCODE_TYPESCRIPT_SIGN_TYPE: ${{ parameters.signType }}
+                  VSCODE_TYPESCRIPT_SIGN_TYPE: real
 
-              - ${{ if eq(parameters.signType, 'real') }}:
-                  - bash: |
-                      set -euo pipefail
-                      shopt -s nullglob
-                      signatureFiles=(built/vsix/*.signature.p7s)
-                      if (( ${#signatureFiles[@]} == 0 )); then
-                        echo "No VSIX signatures were produced." >&2
-                        exit 1
-                      fi
-                      for signatureFile in "${signatureFiles[@]}"; do
-                        manifestFile="${signatureFile%.signature.p7s}.manifest"
-                        if cmp -s "$manifestFile" "$signatureFile"; then
-                          echo "$signatureFile was not replaced with a real signature." >&2
-                          exit 1
-                        fi
-                        openssl pkcs7 -inform DER -in "$signatureFile" -noout
-                      done
-                      echo "##vso[build.addbuildtag]vscode-typescript-release"
-                    displayName: Validate release signatures
+              - bash: |
+                  set -euo pipefail
+                  shopt -s nullglob
+                  signatureFiles=(built/vsix/*.signature.p7s)
+                  if (( ${#signatureFiles[@]} == 0 )); then
+                    echo "No VSIX signatures were produced." >&2
+                    exit 1
+                  fi
+                  for signatureFile in "${signatureFiles[@]}"; do
+                    manifestFile="${signatureFile%.signature.p7s}.manifest"
+                    if cmp -s "$manifestFile" "$signatureFile"; then
+                      echo "$signatureFile was not replaced with a real signature." >&2
+                      exit 1
+                    fi
+                    openssl pkcs7 -inform DER -in "$signatureFile" -noout
+                  done
+                  echo "##vso[build.addbuildtag]vscode-typescript-release"
+                displayName: Validate release signatures
 
               - bash: |
                   set -euo pipefail
