@@ -33,6 +33,7 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          ref: main
           filter: blob:none
           fetch-depth: 0
           persist-credentials: false
@@ -118,11 +119,14 @@ jobs:
           owner: microsoft
           repositories: TypeScript
           permission-contents: write
+          permission-pull-requests: write
 
-      - name: Commit and push release branch
+      - name: Commit, push, and open pull request
         env:
           EXTENSION_VERSION: ${{ inputs.extension_version }}
+          TYPESCRIPT_VERSION: ${{ inputs.bundled_typescript_version }}
           GITHUB_APP_TOKEN: ${{ steps.app-token.outputs.token }}
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
           set -euo pipefail
           branch="vscode-typescript-release/v$EXTENSION_VERSION"
@@ -136,3 +140,10 @@ jobs:
           echo "::add-mask::$basic_auth"
           git config --local http.https://github.com/.extraheader "AUTHORIZATION: basic ${basic_auth}"
           git push --set-upstream origin "$branch"
+
+          gh pr create \
+            --repo microsoft/TypeScript \
+            --base main \
+            --head "$branch" \
+            --title "Bump vscode-typescript to $EXTENSION_VERSION" \
+            --body "Updates the vscode-typescript extension to $EXTENSION_VERSION and bundles TypeScript $TYPESCRIPT_VERSION."
