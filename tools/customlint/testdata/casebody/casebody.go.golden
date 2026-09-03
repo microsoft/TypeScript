@@ -79,6 +79,9 @@
 			println(`unreachable`)
 			~~~~~~~~~~~~~~~~~~~~~~
 !!! casebody: this statement is unreachable after a break
+			break
+			~~~~~
+!!! casebody: this top-level break statement is redundant
 		}
 	}
 	
@@ -121,6 +124,13 @@
 			break
 			~~~~~
 !!! casebody: this top-level break statement is redundant
+		case complex64:
+			break
+			~~~~~
+!!! casebody: this top-level break statement is redundant
+			println(`unreachable`)
+			~~~~~~~~~~~~~~~~~~~~~~
+!!! casebody: this statement is unreachable after a break
 		}
 	}
 	
@@ -135,6 +145,13 @@
 			break
 			~~~~~
 !!! casebody: this top-level break statement is redundant
+		case <-ch2:
+			break
+			~~~~~
+!!! casebody: this top-level break statement is redundant
+			println(`unreachable`)
+			~~~~~~~~~~~~~~~~~~~~~~
+!!! casebody: this statement is unreachable after a break
 		}
 	}
 	

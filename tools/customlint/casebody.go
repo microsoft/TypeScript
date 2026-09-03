@@ -78,6 +78,7 @@ func (e *caseBodyPass) checkCaseStatement(stmt ast.Stmt, nextCasePos token.Pos) 
 		panic(fmt.Sprintf("unhandled statement type %T", stmt))
 	}
 
+	reportedUnreachable := false
 	for i, statement := range body {
 		branch, ok := statement.(*ast.BranchStmt)
 		if !ok || branch.Tok != token.BREAK {
@@ -90,13 +91,13 @@ func (e *caseBodyPass) checkCaseStatement(stmt ast.Stmt, nextCasePos token.Pos) 
 				Message: "this top-level break statement is redundant",
 			})
 		}
-		if i+1 < len(body) {
+		if !reportedUnreachable && i+1 < len(body) {
 			e.pass.Report(analysis.Diagnostic{
 				Pos:     body[i+1].Pos(),
 				End:     body[i+1].End(),
 				Message: "this statement is unreachable after a break",
 			})
-			break
+			reportedUnreachable = true
 		}
 	}
 

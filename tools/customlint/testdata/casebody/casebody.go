@@ -53,6 +53,7 @@ func SwitchBreak() {
 	case 5:
 		break
 		println(`unreachable`)
+		break
 	}
 }
 
@@ -87,6 +88,9 @@ func TypeSwitch(x any) {
 	case float64:
 		println(`oops`)
 		break
+	case complex64:
+		break
+		println(`unreachable`)
 	}
 }
 
@@ -97,6 +101,9 @@ func SelectBreak() {
 	default:
 		println(`oops`)
 		break
+	case <-ch2:
+		break
+		println(`unreachable`)
 	}
 }
 
