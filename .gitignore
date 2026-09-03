@@ -51,7 +51,6 @@ dist
 /go.work.sum
 /tsc/cmd/tsc/tsc
 /tsc/tsc
-tools/custom-gcl.exe.hash
 
 # Native compiler outputs
 *.exe
@@ -129,6 +128,7 @@ tsc/testdata/baselines/tmp
 tools/custom-gcl
 tools/custom-gcl.exe
 tools/custom-gcl.hash
+tools/custom-gcl.exe.hash
 
 # Keep tracked text assets that overlap broad output patterns
 !tsc/testdata/baselines/reference/**/*.txt
