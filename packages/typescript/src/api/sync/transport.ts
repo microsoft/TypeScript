@@ -14,5 +14,7 @@ export interface SyncTransport {
     requestBinarySync(method: string, payload: Uint8Array): Uint8Array;
     registerCallback?(name: string, callback: (name: string, payload: string) => string): void;
     unregisterCallback?(name: string): void;
+    setFileSystem?(fs: FileSystem | undefined): void;
     close(): void;
 }
+import type { FileSystem } from "../fs.ts";

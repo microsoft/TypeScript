@@ -34,9 +34,9 @@ describe("API over WebAssembly in a browser", () => {
                         transport.setFile("/tsconfig.json", "{}");
                         transport.setFile("/src/index.ts", "export const value = 42 as const;");
                         try {
-                            const snapshot = await api.updateSnapshot({
+                            const snapshot = await api.createSnapshot({
                                 openFiles: ["/src/index.ts"],
-                                fileChanges: {
+                                fileNotifications: {
                                     changed: ["/tsconfig.json", "/src/index.ts"],
                                     deleted: [],
                                 },

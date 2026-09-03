@@ -404,6 +404,20 @@ export function uint8ArrayToBase64(data: Uint8Array): string {
 
 export function sourceFileResponseToUint8Array(response: { readonly data: string; } | null | undefined): Uint8Array | undefined {
     if (!response) return undefined;
-    const buffer = Buffer.from(response.data, "base64");
-    return new Uint8Array(buffer.buffer, buffer.byteOffset, buffer.byteLength);
+    const fromBase64 = (Uint8Array as {
+        fromBase64?: (data: string) => Uint8Array;
+    }).fromBase64;
+    if (fromBase64) {
+        return fromBase64(response.data);
+    }
+    const bufferConstructor = (globalThis as {
+        Buffer?: {
+            from(data: string, encoding: "base64"): Uint8Array;
+        };
+    }).Buffer;
+    if (bufferConstructor) {
+        return new Uint8Array(bufferConstructor.from(response.data, "base64"));
+    }
+    const decoded = atob(response.data);
+    return Uint8Array.from(decoded, character => character.charCodeAt(0));
 }
