@@ -24,6 +24,15 @@ describe("API over WebAssembly", () => {
         );
         const instance = await instantiateWasm(module);
 
+        assert.throws(
+            () =>
+                new WasmTransport({
+                    instance: { exports: instance.exports },
+                    fs: { writeFile() {} },
+                }),
+            /was not created by instantiateWasm/,
+        );
+
         const emittedFiles = new Map<string, string>();
         const transport = new WasmTransport({
             instance,
