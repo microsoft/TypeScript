@@ -597,10 +597,8 @@ func (p *Parser) reparseHosted(tag *ast.Node, parent *ast.Node, jsDoc *ast.Node)
 			}); extendsClause != nil && len(extendsClause.AsHeritageClause().Types.Nodes) == 1 {
 				target := extendsClause.AsHeritageClause().Types.Nodes[0].AsExpressionWithTypeArguments()
 				source := tag.ClassName().AsExpressionWithTypeArguments()
-				if target.TypeArguments == nil && source.TypeArguments != nil {
-					if ast.IsCallExpression(ast.SkipParentheses(target.Expression)) || ast.HasSamePropertyAccessName(target.Expression, source.Expression) {
-						p.setReparsedTypeArguments(target, source.TypeArguments)
-					}
+				if target.TypeArguments == nil && source.TypeArguments != nil && ast.HasSamePropertyAccessName(target.Expression, source.Expression) {
+					p.setReparsedTypeArguments(target, source.TypeArguments)
 				}
 			}
 		}

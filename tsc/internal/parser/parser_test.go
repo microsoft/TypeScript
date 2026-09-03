@@ -308,7 +308,7 @@ function foo(options) {}`
 	assert.Equal(t, scanner.GetTokenPosOfNode(typeNode, file, false /*includeJSDoc*/), strings.Index(sourceText, "{{")+1)
 }
 
-func TestJSDocAugmentsCallHeritage(t *testing.T) {
+func TestJSDocDoesNotAugmentCallHeritage(t *testing.T) {
 	t.Parallel()
 	sourceText := `/** @template T */
 class A {
@@ -337,11 +337,7 @@ class B extends A.extend() {}`
 	assert.Equal(t, scanner.GetTextOfNode(baseType.Expression()), "A.extend()")
 
 	typeArguments := baseType.TypeArguments()
-	assert.Equal(t, len(typeArguments), 1)
-
-	typeArgument := typeArguments[0]
-	assert.Equal(t, typeArgument.Kind, ast.KindStringKeyword)
-	assert.Assert(t, typeArgument.Flags&ast.NodeFlagsReparsed != 0)
+	assert.Equal(t, len(typeArguments), 0)
 
 	jsDocs := classB.JSDoc(file)
 	assert.Equal(t, len(jsDocs), 1)
@@ -355,7 +351,8 @@ class B extends A.extend() {}`
 
 	sourceTypeArguments := tag.ClassName().TypeArguments()
 	assert.Equal(t, len(sourceTypeArguments), 1)
-	assert.Equal(t, ast.GetReparsedNodeForNode(sourceTypeArguments[0]), typeArgument)
+	assert.Equal(t, sourceTypeArguments[0].Kind, ast.KindStringKeyword)
+	assert.Equal(t, ast.GetReparsedNodeForNode(sourceTypeArguments[0]), sourceTypeArguments[0])
 }
 
 func TestSourceFilePositionMapWithNonASCIIStringLiteral(t *testing.T) {

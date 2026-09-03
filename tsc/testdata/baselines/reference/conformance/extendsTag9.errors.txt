@@ -1,8 +1,9 @@
 a.js(22,15): error TS8023: JSDoc '@extends A' does not match the 'extends C' clause.
+a.js(23,17): error TS8026: Expected C<T> type arguments; provide these with an '@extends' tag.
 a.js(25,19): error TS2339: Property 'a' does not exist on type 'B'.
 
 
-==== a.js (2 errors) ====
+==== a.js (3 errors) ====
     /** @template T */
     class A {
         /** @returns {T} */
@@ -28,6 +29,8 @@ a.js(25,19): error TS2339: Property 'a' does not exist on type 'B'.
                   ~
 !!! error TS8023: JSDoc '@extends A' does not match the 'extends C' clause.
     class B extends A.extend() {}
+                    ~~~~~~~~~~
+!!! error TS8026: Expected C<T> type arguments; provide these with an '@extends' tag.
     
     const a = new B().a;
                       ~

@@ -36,6 +36,21 @@ func NewDiagnosticChainForNode(chain *ast.Diagnostic, node *ast.Node, message *d
 	return NewDiagnosticForNode(node, message, args...)
 }
 
+func getIdentifierNameOfSymbolDeclaration(symbol *ast.Symbol) *ast.Node {
+	if symbol == nil {
+		return nil
+	}
+	if name := ast.GetNameOfDeclaration(symbol.ValueDeclaration); name != nil && ast.IsIdentifier(name) {
+		return name
+	}
+	for _, declaration := range symbol.Declarations {
+		if name := ast.GetNameOfDeclaration(declaration); name != nil && ast.IsIdentifier(name) {
+			return name
+		}
+	}
+	return nil
+}
+
 func findInMap[K comparable, V any](m map[K]V, predicate func(V) bool) V {
 	for _, value := range m {
 		if predicate(value) {

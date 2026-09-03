@@ -40,7 +40,7 @@ class C {
 /** @extends {A<string>} */
 class B extends A.extend() {}
 >B : B
->A.extend() : C<string>
+>A.extend() : C<any>
 >A.extend : () => typeof C
 >A : typeof A
 >extend : () => typeof C
@@ -53,9 +53,9 @@ const a = new B().a;
 >a : any
 
 const c = new B().c;
->c : string
->new B().c : string
+>c : any
+>new B().c : any
 >new B() : B
 >B : typeof B
->c : string
+>c : any
 
