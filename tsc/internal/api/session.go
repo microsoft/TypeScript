@@ -212,7 +212,19 @@ func (sd *snapshotData) newTypeResponse(projectID ProjectID, t *checker.Type) *T
 	if t == nil {
 		return nil
 	}
-	return newTypeResponse(t, sd.registerType(projectID, t))
+	resp := newTypeResponse(t, sd.registerType(projectID, t))
+	if checker.IsTupleTypeTarget(t) {
+		elementInfos := t.AsTupleType().ElementInfos()
+		for i := range elementInfos {
+			if declaration := elementInfos[i].LabeledDeclaration(); declaration != nil {
+				if resp.LabeledElementDeclarations == nil {
+					resp.LabeledElementDeclarations = make([]NodeHandle, len(elementInfos))
+				}
+				resp.LabeledElementDeclarations[i] = sd.nodeHandleFrom(declaration)
+			}
+		}
+	}
+	return resp
 }
 
 func (sd *snapshotData) registerType(projectID ProjectID, t *checker.Type) TypeID {

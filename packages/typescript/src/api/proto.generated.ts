@@ -400,6 +400,7 @@ export interface TypeResponse {
     elementFlags?: number[];
     fixedLength?: number;
     readonly?: boolean;
+    labeledElementDeclarations?: string[];
     /** IndexedAccessType data */
     objectType?: number;
     indexType?: number;

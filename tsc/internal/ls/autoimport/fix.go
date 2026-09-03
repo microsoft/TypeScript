@@ -858,7 +858,7 @@ func (v *View) getExistingImports(ctx context.Context) *collections.MultiMap[Mod
 		if node == nil {
 			panic("error: did not expect node kind " + moduleSpecifier.Kind.String())
 		} else if ast.IsVariableDeclarationInitializedToRequire(node.Parent) {
-			if moduleSymbol := ch.ResolveExternalModuleName(moduleSpecifier); moduleSymbol != nil {
+			if moduleSymbol := ch.ResolveExternalModuleName(moduleSpecifier, nil /*importAttributesType*/); moduleSymbol != nil {
 				if moduleID, _, ok := tryGetModuleIDAndFileNameOfModuleSymbol(moduleSymbol); ok {
 					result.Add(moduleID, existingImport{node: node.Parent, moduleSpecifier: moduleSpecifier.Text(), index: i})
 				}
@@ -1097,7 +1097,7 @@ func (v *View) compareNodeCoreModuleSpecifiers(a, b string, importingFile *ast.S
 func isFixPossiblyReExportingImportingFile(fix *Fix, importingFileName string) bool {
 	if fix.IsReExport && isIndexFileName(fix.ModuleFileName) {
 		reExportDir := tspath.GetDirectoryPath(fix.ModuleFileName)
-		return strings.HasPrefix(importingFileName, reExportDir)
+		return strings.HasPrefix(importingFileName, tspath.EnsureTrailingDirectorySeparator(reExportDir))
 	}
 	return false
 }

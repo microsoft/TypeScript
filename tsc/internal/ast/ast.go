@@ -9,6 +9,7 @@ import (
 
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/internal/spanmap"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/zeebo/xxh3"
@@ -968,6 +969,8 @@ func (n *Node) Attributes() *Node {
 		return n.AsJsxOpeningElement().Attributes
 	case KindJsxSelfClosingElement:
 		return n.AsJsxSelfClosingElement().Attributes
+	case KindModuleDeclaration:
+		return n.AsModuleDeclaration().Attributes
 	}
 	panic("Unhandled case in Node.Attributes: " + n.Kind.String())
 }
@@ -2211,44 +2214,28 @@ func (node *ExpressionWithTypeArguments) computeSubtreeFacts() SubtreeFacts {
 		propagateEraseableSyntaxListSubtreeFacts(node.TypeArguments)
 }
 
-func (node *ImportAttributesNode) GetResolutionModeOverride( /* !!! grammarErrorOnNode?: (node: Node, diagnostic: DiagnosticMessage) => void*/ ) (core.ResolutionMode, bool) {
+func (node *ImportAttributesNode) GetResolutionModeOverride(grammarErrorOnNode func(node *Node, message *diagnostics.Message, args ...any) bool) (core.ResolutionMode, bool) {
 	if node == nil {
 		return core.ResolutionModeNone, false
 	}
 
 	attributes := node.AsImportAttributes().Attributes
 
-	if len(attributes.Nodes) != 1 {
-		// !!!
-		// grammarErrorOnNode?.(
-		//     node,
-		//     node.token === SyntaxKind.WithKeyword
-		//         ? Diagnostics.Type_import_attributes_should_have_exactly_one_key_resolution_mode_with_value_import_or_require
-		//         : Diagnostics.Type_import_assertions_should_have_exactly_one_key_resolution_mode_with_value_import_or_require,
-		// );
+	attribute := core.Find(attributes.Nodes, func(attribute *Node) bool {
+		return attribute.Name().Text() == "resolution-mode"
+	})
+	if attribute == nil {
 		return core.ResolutionModeNone, false
 	}
 
-	elem := attributes.Nodes[0].AsImportAttribute()
-	if !IsStringLiteralLike(elem.Name()) {
-		return core.ResolutionModeNone, false
-	}
-	if elem.Name().Text() != "resolution-mode" {
-		// !!!
-		// grammarErrorOnNode?.(
-		//     elem.name,
-		//     node.token === SyntaxKind.WithKeyword
-		//         ? Diagnostics.resolution_mode_is_the_only_valid_key_for_type_import_attributes
-		//         : Diagnostics.resolution_mode_is_the_only_valid_key_for_type_import_assertions,
-		// );
-		return core.ResolutionModeNone, false
-	}
+	elem := attribute.AsImportAttribute()
 	if !IsStringLiteralLike(elem.Value) {
 		return core.ResolutionModeNone, false
 	}
 	if elem.Value.Text() != "import" && elem.Value.Text() != "require" {
-		// !!!
-		// grammarErrorOnNode?.(elem.value, Diagnostics.resolution_mode_should_be_either_require_or_import);
+		if grammarErrorOnNode != nil {
+			grammarErrorOnNode(elem.Value, diagnostics.X_resolution_mode_should_be_either_require_or_import)
+		}
 		return core.ResolutionModeNone, false
 	}
 	if elem.Value.Text() == "import" {
