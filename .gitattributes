@@ -1,4 +1,10 @@
 *.js linguist-language=TypeScript
 **/*.json linguist-language=jsonc
-* -text
-*.go text eol=lf
+
+* text=auto eol=lf
+
+# Preserve line-ending-sensitive fixtures exactly.
+tsc/testdata/** -text
+
+# TODO: Remove this exception when this directory is converted or removed.
+tsc/internal/locale/lcl/** -text
