@@ -24,7 +24,17 @@ describe("API over WebAssembly", () => {
         );
         const instance = await instantiateWasm(module);
 
-        const transport = new WasmTransport({ instance, cwd: "/", collectTiming: true });
+        const emittedFiles = new Map<string, string>();
+        const transport = new WasmTransport({
+            instance,
+            cwd: "/",
+            collectTiming: true,
+            fs: {
+                writeFile(path, data) {
+                    emittedFiles.set(path, data);
+                },
+            },
+        });
         const api = new SyncAPI({ transport, collectTiming: true });
         assert.strictEqual(transport.requestSync("echo", "text"), "text");
         assert.deepStrictEqual(
@@ -51,6 +61,12 @@ describe("API over WebAssembly", () => {
         assert.ok(isIdentifier(name));
         const type = project.checker.getTypeAtLocation(name);
         assert.strictEqual(project.checker.typeToString(type), "42");
+        assert.deepStrictEqual(project.program.emit(), {
+            diagnostics: [],
+            emitSkipped: false,
+            emittedFiles: ["/src/index.js"],
+        });
+        assert.strictEqual(emittedFiles.get("/src/index.js"), "export const value = 42;\n");
 
         const timing = api.getTimingInfo();
         assert.strictEqual(timing.enabled, true);

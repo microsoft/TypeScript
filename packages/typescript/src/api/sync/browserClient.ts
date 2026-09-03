@@ -14,7 +14,9 @@ export class Client extends TransportClient {
         if (!("transport" in options)) {
             throw new Error("The browser sync API requires an injected transport");
         }
-        options.transport.setFileSystem?.(options.fs);
+        if (options.fs !== undefined) {
+            options.transport.setFileSystem?.(options.fs);
+        }
         super(options.transport, options.collectTiming ?? false, options.maxResponseBytesPerPage);
     }
 }
