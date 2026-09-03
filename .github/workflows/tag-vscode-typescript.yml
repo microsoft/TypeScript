@@ -92,9 +92,21 @@ jobs:
           git config user.email "290192711+typescript-automation[bot]@users.noreply.github.com"
           git config user.name "typescript-automation[bot]"
           git config core.hooksPath /dev/null
-          git tag --annotate "$tag" --message "vscode-typescript $EXTENSION_VERSION"
 
           basic_auth="$(node -e 'process.stdout.write(Buffer.from("x-access-token:" + process.env.GITHUB_APP_TOKEN).toString("base64"))')"
           echo "::add-mask::$basic_auth"
           git config --local http.https://github.com/.extraheader "AUTHORIZATION: basic ${basic_auth}"
+
+          if git ls-remote --exit-code --tags origin "refs/tags/$tag" >/dev/null; then
+            git fetch origin "refs/tags/$tag:refs/tags/$tag"
+            existingCommit="$(git rev-list -n 1 "$tag")"
+            if [ "$existingCommit" != "$(git rev-parse HEAD)" ]; then
+              echo "Tag $tag already exists at $existingCommit." >&2
+              exit 1
+            fi
+            echo "Tag $tag already exists at the release commit."
+            exit 0
+          fi
+
+          git tag --annotate "$tag" --message "vscode-typescript $EXTENSION_VERSION"
           git push origin "refs/tags/$tag"
