@@ -867,9 +867,10 @@ type TypeResponse struct {
 	LocalTypeParameters []TypeID `json:"localTypeParameters,omitempty"`
 
 	// TupleType data
-	ElementFlags  []checker.ElementFlags `json:"elementFlags,omitempty"`
-	FixedLength   *int                   `json:"fixedLength,omitempty"`
-	TupleReadonly *bool                  `json:"readonly,omitempty"`
+	ElementFlags               []checker.ElementFlags `json:"elementFlags,omitempty"`
+	FixedLength                *int                   `json:"fixedLength,omitempty"`
+	TupleReadonly              *bool                  `json:"readonly,omitempty"`
+	LabeledElementDeclarations []NodeHandle           `json:"labeledElementDeclarations,omitempty"`
 
 	// IndexedAccessType data
 	ObjectType TypeID `json:"objectType,omitzero"`

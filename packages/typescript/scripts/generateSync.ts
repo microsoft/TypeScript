@@ -1,4 +1,4 @@
-#!/usr/bin/env -S node --experimental-strip-types --no-warnings
+#!/usr/bin/env node
 
 /**
  * Generates sync API from async API source files.
@@ -18,10 +18,9 @@
  *   - Unwrap `Promise<T>` → `T` in synchronous type references
  *
  * Usage:
- *   node --experimental-strip-types --no-warnings generateSync.ts
+ *   node generateSync.ts
  */
 
-import { execaSync } from "execa";
 import {
     mkdirSync,
     readFileSync,
@@ -32,6 +31,7 @@ import {
     join,
     relative,
 } from "node:path";
+import { xSync } from "tinyexec";
 import ts from "typescript";
 
 function generatedHeader(asyncSourceRelPath: string): string {
@@ -454,6 +454,11 @@ function addSyncEdit(node: ts.Node, source: string, sourceFile: ts.SourceFile, e
             edits.push({ start: modifier.getStart(sourceFile) - offset, end: end - offset, newText: "" });
         }
     }
+    if (ts.isVariableDeclarationList(node) && (node.flags & ts.NodeFlags.AwaitUsing) === ts.NodeFlags.AwaitUsing) {
+        const awaitKeyword = node.getFirstToken(sourceFile);
+        if (awaitKeyword?.kind !== ts.SyntaxKind.AwaitKeyword) throw new Error("Expected await using declaration");
+        edits.push({ start: awaitKeyword.getStart(sourceFile) - offset, end: awaitKeyword.end - offset, newText: "" });
+    }
     if (ts.isAwaitExpression(node)) {
         edits.push({
             start: node.getStart(sourceFile) - offset,
@@ -579,7 +584,7 @@ function getIndent(source: string, position: number): string {
 // ── Formatting ───────────────────────────────────────────────────
 
 function formatFiles(paths: string[]): void {
-    execaSync("dprint", ["fmt", ...paths]);
+    xSync("dprint", ["fmt", ...paths], { throwOnError: true });
 }
 
 // ── Main ─────────────────────────────────────────────────────────
