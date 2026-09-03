@@ -208,7 +208,7 @@ export interface UpdateSnapshotParams {
     fileChanges?: APIFileChanges;
     /**
      * FileSystem supplies file contents and directory listings for the new snapshot.
-     * A memory filesystem is canonical and total. A cache filesystem is checked
+     * A full filesystem is canonical and total. A filesystem layer is checked
      * before falling back to the host filesystem.
      */
     fileSystem?: RequestFileSystem;
@@ -865,7 +865,7 @@ export interface EmitResponse {
     emittedFiles: string[];
     /**
      * EmittedFilesContents contains contents parallel to EmittedFiles when the
-     * source snapshot uses a memory filesystem. It is empty for write-through emits.
+     * source snapshot uses a full filesystem. It is empty for write-through emits.
      */
     emittedFilesContents: string[];
 }
@@ -1228,7 +1228,7 @@ export interface APIFileChanges {
  * for a request that creates a snapshot.
  */
 export interface RequestFileSystem {
-    kind: "cache" | "memory";
+    kind: "full" | "layer";
     /** Files maps file names to their complete contents. */
     files: Record<string, string>;
     /** Directories maps directory names to complete listing results. */
@@ -1451,7 +1451,7 @@ export interface RequestSymlink {
     target: string;
     /**
      * Host routes the target through the host filesystem. This is the only way a
-     * memory filesystem can access paths not supplied in the request filesystem.
+     * full filesystem can access paths not supplied in the request filesystem.
      */
     host?: boolean;
 }

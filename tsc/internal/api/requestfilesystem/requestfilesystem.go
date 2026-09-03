@@ -17,10 +17,10 @@ import (
 type Kind string
 
 const (
-	// KindMemory makes the supplied filesystem canonical and total.
-	KindMemory Kind = "memory"
-	// KindCache checks the supplied filesystem before falling back to the host.
-	KindCache Kind = "cache"
+	// KindFull makes the supplied filesystem canonical and total.
+	KindFull Kind = "full"
+	// KindLayer checks the supplied filesystem before falling back to the host.
+	KindLayer Kind = "layer"
 )
 
 // RequestDirectoryEntries is a cached directory listing. Entry names are
@@ -36,7 +36,7 @@ type RequestSymlink struct {
 	// native symbolic-link semantics.
 	Target string `json:"target"`
 	// Host routes the target through the host filesystem. This is the only way a
-	// memory filesystem can access paths not supplied in the request filesystem.
+	// full filesystem can access paths not supplied in the request filesystem.
 	Host bool `json:"host,omitempty"`
 }
 
@@ -55,8 +55,8 @@ type RequestFileSystem struct {
 	RemovedPaths []string `json:"removedPaths,omitempty"`
 }
 
-// requestFileSystem is either a total in-memory filesystem or a read-through
-// cache layered over the session host filesystem. Cache misses deliberately go
+// requestFileSystem is either a full filesystem or a layer over the session
+// host filesystem. Layer misses deliberately go
 // through base, which may itself be a callback filesystem.
 type requestFileSystem struct {
 	kind                   Kind
@@ -129,7 +129,7 @@ func getHostFileSystem(fileSystem vfs.FS) vfs.FS {
 }
 
 func newRequestFileSystemWorker(params *RequestFileSystem, base vfs.FS, currentDirectory string, layered bool) (*requestFileSystem, error) {
-	if params.Kind != KindMemory && params.Kind != KindCache {
+	if params.Kind != KindFull && params.Kind != KindLayer {
 		return nil, fmt.Errorf("unknown request filesystem kind %q", params.Kind)
 	}
 
@@ -190,7 +190,7 @@ func newRequestFileSystemWorker(params *RequestFileSystem, base vfs.FS, currentD
 }
 
 func (s requestFileSystem) fallsBack() bool {
-	return s.layered || s.kind == KindCache
+	return s.layered || s.kind == KindLayer
 }
 
 func (s requestFileSystem) baseFileSystem() vfs.FS {
@@ -615,7 +615,7 @@ func (s requestFileSystem) lookupPath(path string) requestPathLookup {
 }
 
 func (s requestFileSystem) mutationPath(path string) (vfs.FS, string, bool) {
-	if s.kind != KindCache {
+	if s.kind != KindLayer {
 		return nil, "", false
 	}
 	resolved := s.resolvePathForOverlay(path)

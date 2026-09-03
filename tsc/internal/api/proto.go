@@ -357,7 +357,7 @@ type UpdateSnapshotParams struct {
 	// FileChanges describes file system changes since the last snapshot.
 	FileChanges *APIFileChanges `json:"fileChanges,omitempty"`
 	// FileSystem supplies file contents and directory listings for the new snapshot.
-	// A memory filesystem is canonical and total. A cache filesystem is checked
+	// A full filesystem is canonical and total. A filesystem layer is checked
 	// before falling back to the host filesystem.
 	FileSystem *requestfilesystem.RequestFileSystem `json:"fileSystem,omitempty"`
 	// OpenFiles lists files to keep open for the API client, mirroring LSP's
@@ -1364,7 +1364,7 @@ type EmitResponse struct {
 	Diagnostics  []*DiagnosticResponse `json:"diagnostics" nonnil:"true"`
 	EmittedFiles []string              `json:"emittedFiles" nonnil:"true"`
 	// EmittedFilesContents contains contents parallel to EmittedFiles when the
-	// source snapshot uses a memory filesystem. It is empty for write-through emits.
+	// source snapshot uses a full filesystem. It is empty for write-through emits.
 	EmittedFilesContents []string `json:"emittedFilesContents" nonnil:"true"`
 }
 

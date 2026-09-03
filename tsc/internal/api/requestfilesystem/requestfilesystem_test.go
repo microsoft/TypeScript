@@ -42,7 +42,7 @@ func (h *Handle) applyTo(base *Handle) {
 func TestInitializeForUpdate(t *testing.T) {
 	t.Parallel()
 
-	t.Run("cache layers over a host-backed snapshot", func(t *testing.T) {
+	t.Run("filesystem layers over a host-backed snapshot", func(t *testing.T) {
 		t.Parallel()
 		host := vfstest.FromMap(map[string]string{
 			"/dir/host.ts": "host",
@@ -50,7 +50,7 @@ func TestInitializeForUpdate(t *testing.T) {
 		var handle Handle
 		var fileChanges project.FileChangeSummary
 		err := handle.InitializeForUpdate(&RequestFileSystem{
-			Kind:  KindCache,
+			Kind:  KindLayer,
 			Files: map[string]string{"/dir/cached.ts": "cached"},
 			Directories: map[string]RequestDirectoryEntries{
 				"/dir": {Files: []string{"cached.ts"}, Directories: []string{}},
@@ -66,7 +66,7 @@ func TestInitializeForUpdate(t *testing.T) {
 			"/host.ts": "host",
 		}, true)
 		base, err := newRequestFileSystem(&RequestFileSystem{
-			Kind:  KindMemory,
+			Kind:  KindFull,
 			Files: map[string]string{"/base.ts": "base"},
 		}, host, "/")
 		assert.NilError(t, err)
@@ -74,7 +74,7 @@ func TestInitializeForUpdate(t *testing.T) {
 		var handle Handle
 		var fileChanges project.FileChangeSummary
 		err = handle.InitializeForUpdate(&RequestFileSystem{
-			Kind:  KindMemory,
+			Kind:  KindFull,
 			Files: map[string]string{"/replacement.ts": "replacement"},
 		}, base, host, "/", &fileChanges, true)
 		assert.NilError(t, err)
@@ -89,12 +89,12 @@ func TestConcurrentCloneAndRelease(t *testing.T) {
 	host := vfstest.FromMap(map[string]string{}, true)
 	for range 100 {
 		base, err := newRequestFileSystem(&RequestFileSystem{
-			Kind:  KindMemory,
+			Kind:  KindFull,
 			Files: map[string]string{"/base.ts": "base"},
 		}, host, "/")
 		assert.NilError(t, err)
 		layered, err := newLayeredRequestFileSystem(&RequestFileSystem{
-			Kind:  KindCache,
+			Kind:  KindLayer,
 			Files: map[string]string{"/layered.ts": "layered"},
 		}, base, "/")
 		assert.NilError(t, err)
@@ -133,7 +133,7 @@ func TestRequestFileSystem(t *testing.T) {
 			"/host.ts": "host",
 		}, true)
 		baseFS, err := newRequestFileSystem(&RequestFileSystem{
-			Kind: KindCache,
+			Kind: KindLayer,
 		}, host, "/")
 		assert.NilError(t, err)
 		base := getRequestFileSystem(baseFS)
@@ -143,7 +143,7 @@ func TestRequestFileSystem(t *testing.T) {
 		assert.NilError(t, host.WriteFile("/created-after-base.ts", "created"))
 
 		layeredFS, err := newLayeredRequestFileSystem(&RequestFileSystem{
-			Kind:  KindCache,
+			Kind:  KindLayer,
 			Files: map[string]string{"/layered.ts": "layered"},
 		}, baseFS, "/")
 		assert.NilError(t, err)
@@ -168,7 +168,7 @@ func TestRequestFileSystem(t *testing.T) {
 			"/host.ts": "host",
 		}, true)}
 		fileSystem, err := newRequestFileSystem(&RequestFileSystem{
-			Kind: KindMemory,
+			Kind: KindFull,
 			Files: map[string]string{
 				"/src/index.ts": "memory",
 			},
@@ -194,7 +194,7 @@ func TestRequestFileSystem(t *testing.T) {
 			"/fallback.ts": "fallback",
 		}, true)}
 		fileSystem, err := newRequestFileSystem(&RequestFileSystem{
-			Kind: KindCache,
+			Kind: KindLayer,
 			Files: map[string]string{
 				"/cached/index.ts": "cached",
 			},
@@ -222,7 +222,7 @@ func TestRequestFileSystem(t *testing.T) {
 	t.Run("layered memory is a total replacement", func(t *testing.T) {
 		t.Parallel()
 		fileSystem, err := newLayeredRequestFileSystem(&RequestFileSystem{
-			Kind: KindMemory,
+			Kind: KindFull,
 			Files: map[string]string{
 				"/memory.ts": "memory",
 			},
@@ -241,7 +241,7 @@ func TestRequestFileSystem(t *testing.T) {
 			"/host.ts": "host",
 		}, true)}
 		fileSystem, err := newRequestFileSystem(&RequestFileSystem{
-			Kind: KindMemory,
+			Kind: KindFull,
 			Files: map[string]string{
 				"/packages/pkg/index.d.ts": "export declare const value: number;",
 			},
@@ -277,7 +277,7 @@ func TestRequestFileSystem(t *testing.T) {
 			"/packages/pkg/index.d.ts": "host content",
 		}, true)}
 		fileSystem, err := newRequestFileSystem(&RequestFileSystem{
-			Kind: KindCache,
+			Kind: KindLayer,
 			Files: map[string]string{
 				"/packages/pkg/index.d.ts": "cached content",
 			},
@@ -308,7 +308,7 @@ func TestRequestFileSystem(t *testing.T) {
 			"/host/pkg/index.d.ts":      "host content",
 		}, true)
 		fileSystem, err := newRequestFileSystem(&RequestFileSystem{
-			Kind: KindCache,
+			Kind: KindLayer,
 			Files: map[string]string{
 				"/project/node_modules/pkg/index.d.ts": "cached content",
 			},
@@ -329,7 +329,7 @@ func TestRequestFileSystem(t *testing.T) {
 		t.Parallel()
 		host := vfstest.FromMap(map[string]string{}, true)
 		base, err := newRequestFileSystem(&RequestFileSystem{
-			Kind: KindMemory,
+			Kind: KindFull,
 			Files: map[string]string{
 				"/keep.ts":               "keep",
 				"/change.ts":             "old",
@@ -342,7 +342,7 @@ func TestRequestFileSystem(t *testing.T) {
 		assert.NilError(t, err)
 
 		layered, err := newLayeredRequestFileSystem(&RequestFileSystem{
-			Kind: KindCache,
+			Kind: KindLayer,
 			Files: map[string]string{
 				"/change.ts":                     "new",
 				"/added.ts":                      "added",
@@ -389,7 +389,7 @@ func TestRequestFileSystem(t *testing.T) {
 		t.Parallel()
 		host := vfstest.FromMap(map[string]string{}, true)
 		base, err := newRequestFileSystem(&RequestFileSystem{
-			Kind: KindMemory,
+			Kind: KindFull,
 			Files: map[string]string{
 				"/target/change.ts": "old",
 				"/target/keep.ts":   "keep",
@@ -402,7 +402,7 @@ func TestRequestFileSystem(t *testing.T) {
 		assert.NilError(t, err)
 
 		layered, err := newLayeredRequestFileSystem(&RequestFileSystem{
-			Kind: KindCache,
+			Kind: KindLayer,
 			Files: map[string]string{
 				"/target/change.ts": "new",
 				"/target/added.ts":  "added",
@@ -426,7 +426,7 @@ func TestRequestFileSystem(t *testing.T) {
 		t.Parallel()
 		host := vfstest.FromMap(map[string]string{}, true)
 		base, err := newRequestFileSystem(&RequestFileSystem{
-			Kind: KindMemory,
+			Kind: KindFull,
 			Files: map[string]string{
 				"/target/file.ts": "old",
 			},
@@ -437,7 +437,7 @@ func TestRequestFileSystem(t *testing.T) {
 		assert.NilError(t, err)
 
 		layered, err := newLayeredRequestFileSystem(&RequestFileSystem{
-			Kind: KindCache,
+			Kind: KindLayer,
 			Files: map[string]string{
 				"/target/file.ts": "new",
 			},
@@ -457,7 +457,7 @@ func TestRequestFileSystem(t *testing.T) {
 		t.Parallel()
 		host := vfstest.FromMap(map[string]string{}, true)
 		baseFS, err := newRequestFileSystem(&RequestFileSystem{
-			Kind: KindMemory,
+			Kind: KindFull,
 			Files: map[string]string{
 				"/target/remove.ts": "remove",
 			},
@@ -469,7 +469,7 @@ func TestRequestFileSystem(t *testing.T) {
 		base := getRequestFileSystem(baseFS)
 
 		layeredFS, err := newLayeredRequestFileSystem(&RequestFileSystem{
-			Kind:         KindCache,
+			Kind:         KindLayer,
 			Files:        map[string]string{},
 			RemovedPaths: []string{"/link/remove.ts"},
 		}, baseFS, "/")
@@ -489,7 +489,7 @@ func TestRequestFileSystem(t *testing.T) {
 		t.Parallel()
 		host := vfstest.FromMap(map[string]string{}, true)
 		baseFS, err := newRequestFileSystem(&RequestFileSystem{
-			Kind: KindMemory,
+			Kind: KindFull,
 			Files: map[string]string{
 				"/dir/remove.ts": "remove",
 			},
@@ -501,7 +501,7 @@ func TestRequestFileSystem(t *testing.T) {
 		base := getRequestFileSystem(baseFS)
 
 		layeredFS, err := newLayeredRequestFileSystem(&RequestFileSystem{
-			Kind:         KindCache,
+			Kind:         KindLayer,
 			Files:        map[string]string{},
 			RemovedPaths: []string{"/dir/remove.ts"},
 		}, baseFS, "/")
@@ -518,7 +518,7 @@ func TestRequestFileSystem(t *testing.T) {
 		t.Parallel()
 		host := vfstest.FromMap(map[string]string{}, true)
 		baseFS, err := newRequestFileSystem(&RequestFileSystem{
-			Kind: KindMemory,
+			Kind: KindFull,
 			Files: map[string]string{
 				"/target/recreated.ts": "base",
 			},
@@ -530,7 +530,7 @@ func TestRequestFileSystem(t *testing.T) {
 		base := getRequestFileSystem(baseFS)
 
 		removedFS, err := newLayeredRequestFileSystem(&RequestFileSystem{
-			Kind:         KindCache,
+			Kind:         KindLayer,
 			RemovedPaths: []string{"/link/recreated.ts"},
 		}, baseFS, "/")
 		assert.NilError(t, err)
@@ -538,7 +538,7 @@ func TestRequestFileSystem(t *testing.T) {
 		removed.applyTo(base)
 
 		recreatedFS, err := newLayeredRequestFileSystem(&RequestFileSystem{
-			Kind: KindCache,
+			Kind: KindLayer,
 			Files: map[string]string{
 				"/link/recreated.ts": "recreated",
 			},
@@ -560,7 +560,7 @@ func TestRequestFileSystem(t *testing.T) {
 		t.Parallel()
 		host := vfstest.FromMap(map[string]string{}, true)
 		base, err := newRequestFileSystem(&RequestFileSystem{
-			Kind: KindMemory,
+			Kind: KindFull,
 			Files: map[string]string{
 				"/target/dir/existing.ts": "existing",
 			},
@@ -571,14 +571,14 @@ func TestRequestFileSystem(t *testing.T) {
 		assert.NilError(t, err)
 
 		removed, err := newLayeredRequestFileSystem(&RequestFileSystem{
-			Kind:         KindCache,
+			Kind:         KindLayer,
 			RemovedPaths: []string{"/link/dir"},
 		}, base, "/")
 		assert.NilError(t, err)
 		removed.applyTo(base)
 
 		recreated, err := newLayeredRequestFileSystem(&RequestFileSystem{
-			Kind: KindCache,
+			Kind: KindLayer,
 			Files: map[string]string{
 				"/link/dir/recreated.ts": "recreated",
 			},
@@ -602,7 +602,7 @@ func TestRequestFileSystem(t *testing.T) {
 		t.Parallel()
 		host := vfstest.FromMap(map[string]string{}, true)
 		base, err := newRequestFileSystem(&RequestFileSystem{
-			Kind: KindMemory,
+			Kind: KindFull,
 			Files: map[string]string{
 				"/target/item/child.ts": "child",
 			},
@@ -613,7 +613,7 @@ func TestRequestFileSystem(t *testing.T) {
 		assert.NilError(t, err)
 
 		layered, err := newLayeredRequestFileSystem(&RequestFileSystem{
-			Kind: KindCache,
+			Kind: KindLayer,
 			Files: map[string]string{
 				"/target/item": "file",
 			},
@@ -633,7 +633,7 @@ func TestRequestFileSystem(t *testing.T) {
 			"/removed-dir/gone.ts": "host",
 		}, true)}
 		fileSystem, err := newRequestFileSystem(&RequestFileSystem{
-			Kind:         KindCache,
+			Kind:         KindLayer,
 			Files:        map[string]string{},
 			RemovedPaths: []string{"/remove.ts", "/removed-dir"},
 		}, base, "/")
@@ -645,7 +645,7 @@ func TestRequestFileSystem(t *testing.T) {
 		assert.Assert(t, base.SeenFiles.IsEmpty())
 	})
 
-	t.Run("compacted cache layers retain host fallback", func(t *testing.T) {
+	t.Run("compacted filesystem layers retain host fallback", func(t *testing.T) {
 		t.Parallel()
 		host := vfstest.FromMap(map[string]string{
 			"/host.ts":              "host",
@@ -655,7 +655,7 @@ func TestRequestFileSystem(t *testing.T) {
 			"/open/layer-listed.ts": "host listed",
 		}, true)
 		baseFS, err := newRequestFileSystem(&RequestFileSystem{
-			Kind: KindCache,
+			Kind: KindLayer,
 			Files: map[string]string{
 				"/inherited.ts":        "inherited",
 				"/sealed/inherited.ts": "sealed inherited",
@@ -669,7 +669,7 @@ func TestRequestFileSystem(t *testing.T) {
 		base := getRequestFileSystem(baseFS)
 
 		layeredFS, err := newLayeredRequestFileSystem(&RequestFileSystem{
-			Kind: KindCache,
+			Kind: KindLayer,
 			Files: map[string]string{
 				"/added.ts":        "added",
 				"/sealed/added.ts": "sealed added",
@@ -682,7 +682,7 @@ func TestRequestFileSystem(t *testing.T) {
 		layered := getRequestFileSystem(layeredFS)
 		layered.applyTo(base)
 		assert.Assert(t, getRequestFileSystem(layered.baseFileSystem()) != base)
-		assert.Equal(t, layered.load().kind, KindCache)
+		assert.Equal(t, layered.load().kind, KindLayer)
 
 		for path, expected := range map[string]string{
 			"/host.ts":      "host",
@@ -699,13 +699,13 @@ func TestRequestFileSystem(t *testing.T) {
 		assert.DeepEqual(t, layered.GetAccessibleEntries("/open").Files, []string{"host.ts", "layer-listed.ts"})
 	})
 
-	t.Run("compacting a cache layer over memory produces memory", func(t *testing.T) {
+	t.Run("compacting a filesystem layer over a full filesystem produces a full filesystem", func(t *testing.T) {
 		t.Parallel()
 		host := vfstest.FromMap(map[string]string{
 			"/host.ts": "host",
 		}, true)
 		baseFS, err := newRequestFileSystem(&RequestFileSystem{
-			Kind: KindMemory,
+			Kind: KindFull,
 			Files: map[string]string{
 				"/target/inherited.ts": "inherited",
 			},
@@ -720,7 +720,7 @@ func TestRequestFileSystem(t *testing.T) {
 		base := getRequestFileSystem(baseFS)
 
 		layeredFS, err := newLayeredRequestFileSystem(&RequestFileSystem{
-			Kind: KindCache,
+			Kind: KindLayer,
 			Files: map[string]string{
 				"/target/added.ts": "added",
 			},
@@ -728,7 +728,7 @@ func TestRequestFileSystem(t *testing.T) {
 		assert.NilError(t, err)
 		layered := getRequestFileSystem(layeredFS)
 		layered.applyTo(base)
-		assert.Equal(t, layered.load().kind, KindMemory)
+		assert.Equal(t, layered.load().kind, KindFull)
 		assert.Assert(t, getRequestFileSystem(layered.baseFileSystem()) != base)
 
 		for path, expected := range map[string]string{
@@ -750,7 +750,7 @@ func TestRequestFileSystem(t *testing.T) {
 			"/host/outside.ts":                  "outside",
 		}, true)}
 		fileSystem, err := newRequestFileSystem(&RequestFileSystem{
-			Kind: KindMemory,
+			Kind: KindFull,
 			Files: map[string]string{
 				"/project/index.ts": `import { hostValue } from "pkg";`,
 			},
@@ -782,7 +782,7 @@ func TestRequestFileSystem(t *testing.T) {
 			"/host/pkg/index.d.ts": "host",
 		}, true)}
 		base, err := newRequestFileSystem(&RequestFileSystem{
-			Kind: KindMemory,
+			Kind: KindFull,
 			Files: map[string]string{
 				"/memory.ts": "memory",
 			},
@@ -790,7 +790,7 @@ func TestRequestFileSystem(t *testing.T) {
 		assert.NilError(t, err)
 
 		layered, err := newLayeredRequestFileSystem(&RequestFileSystem{
-			Kind:  KindCache,
+			Kind:  KindLayer,
 			Files: map[string]string{},
 			Symlinks: map[string]RequestSymlink{
 				"/project/pkg": {Target: "/host/pkg", Host: true},
@@ -818,7 +818,7 @@ func TestRequestFileSystem(t *testing.T) {
 			"/host/pkg/removed.ts": "removed",
 		}, true)
 		base, err := newRequestFileSystem(&RequestFileSystem{
-			Kind:  KindMemory,
+			Kind:  KindFull,
 			Files: map[string]string{},
 			Symlinks: map[string]RequestSymlink{
 				"/link": {Target: "/host/pkg", Host: true},
@@ -827,7 +827,7 @@ func TestRequestFileSystem(t *testing.T) {
 		assert.NilError(t, err)
 
 		layered, err := newLayeredRequestFileSystem(&RequestFileSystem{
-			Kind:         KindCache,
+			Kind:         KindLayer,
 			RemovedPaths: []string{"/link/removed.ts"},
 			Files: map[string]string{
 				"/host/pkg/host.ts":       "cache",
@@ -850,7 +850,7 @@ func TestRequestFileSystem(t *testing.T) {
 		base := vfstest.FromMap(map[string]string{}, false)
 
 		_, err := newRequestFileSystem(&RequestFileSystem{
-			Kind: KindMemory,
+			Kind: KindFull,
 			Files: map[string]string{
 				`C:\Repo\file.ts`: "first",
 				`c:/repo/file.ts`: "second",
@@ -859,7 +859,7 @@ func TestRequestFileSystem(t *testing.T) {
 		assert.ErrorContains(t, err, "duplicate request filesystem file path")
 
 		_, err = newRequestFileSystem(&RequestFileSystem{
-			Kind:  KindMemory,
+			Kind:  KindFull,
 			Files: map[string]string{},
 			Directories: map[string]RequestDirectoryEntries{
 				`C:\Repo`:   {},
@@ -869,7 +869,7 @@ func TestRequestFileSystem(t *testing.T) {
 		assert.ErrorContains(t, err, "duplicate request filesystem directory path")
 
 		_, err = newRequestFileSystem(&RequestFileSystem{
-			Kind:  KindMemory,
+			Kind:  KindFull,
 			Files: map[string]string{},
 			Symlinks: map[string]RequestSymlink{
 				`C:\Repo\link`: {Target: `C:\Target`},
@@ -885,7 +885,7 @@ func TestRequestFileSystem(t *testing.T) {
 			"/host.ts": "host",
 		}, true)}
 		fileSystem, err := newRequestFileSystem(&RequestFileSystem{
-			Kind:  KindMemory,
+			Kind:  KindFull,
 			Files: map[string]string{},
 			Symlinks: map[string]RequestSymlink{
 				"/a": {Target: "/b"},
@@ -905,7 +905,7 @@ func TestRequestFileSystem(t *testing.T) {
 		t.Parallel()
 		base := &trackingvfs.FS{Inner: vfstest.FromMap(map[string]string{}, true)}
 		fileSystem, err := newRequestFileSystem(&RequestFileSystem{
-			Kind: KindMemory,
+			Kind: KindFull,
 			Files: map[string]string{
 				"/packages/pkg/index.d.ts": "export declare const value: number;",
 			},
@@ -926,7 +926,7 @@ func TestRequestFileSystem(t *testing.T) {
 		t.Parallel()
 		base := &trackingvfs.FS{Inner: vfstest.FromMap(map[string]string{}, true)}
 		fileSystem, err := newRequestFileSystem(&RequestFileSystem{
-			Kind: KindMemory,
+			Kind: KindFull,
 			Files: map[string]string{
 				"vscode-remote://ssh-remote+host/workspace/src/index.ts":      "index",
 				"vscode-remote://ssh-remote+host/workspace/packages/pkg/a.ts": "package",
@@ -971,7 +971,7 @@ func TestRequestFileSystem(t *testing.T) {
 			"C:/Host/outside.ts": "outside",
 		}, false)}
 		fileSystem, err := newRequestFileSystem(&RequestFileSystem{
-			Kind: KindMemory,
+			Kind: KindFull,
 			Files: map[string]string{
 				`C:\Repo\Packages\Pkg\Index.d.ts`: "export declare const windowsValue: number;",
 			},
@@ -1008,7 +1008,7 @@ func TestRequestFileSystem(t *testing.T) {
 		t.Parallel()
 		base := &trackingvfs.FS{Inner: vfstest.FromMap(map[string]string{}, false)}
 		fileSystem, err := newRequestFileSystem(&RequestFileSystem{
-			Kind: KindMemory,
+			Kind: KindFull,
 			Files: map[string]string{
 				"C:/Repo/target.ts": "target",
 			},
@@ -1029,7 +1029,7 @@ func TestRequestFileSystem(t *testing.T) {
 			"/host.ts": "host",
 		}, true)
 		memory, err := newRequestFileSystem(&RequestFileSystem{
-			Kind: KindMemory,
+			Kind: KindFull,
 			Files: map[string]string{
 				"/src/a.ts": "a",
 			},
@@ -1043,7 +1043,7 @@ func TestRequestFileSystem(t *testing.T) {
 		assert.Equal(t, contents, "a")
 
 		cache, err := newLayeredRequestFileSystem(&RequestFileSystem{
-			Kind:  KindCache,
+			Kind:  KindLayer,
 			Files: map[string]string{},
 		}, memory, "/")
 		assert.NilError(t, err)
@@ -1069,14 +1069,14 @@ func TestRequestFileSystem(t *testing.T) {
 			"/link/times.ts":    "alias",
 		}, true)
 		base, err := newRequestFileSystem(&RequestFileSystem{
-			Kind:  KindMemory,
+			Kind:  KindFull,
 			Files: map[string]string{},
 			Symlinks: map[string]RequestSymlink{
 				"/link": {Target: "/target"},
 			},
 		}, host, "/")
 		assert.NilError(t, err)
-		cache, err := newLayeredRequestFileSystem(&RequestFileSystem{Kind: KindCache}, base, "/")
+		cache, err := newLayeredRequestFileSystem(&RequestFileSystem{Kind: KindLayer}, base, "/")
 		assert.NilError(t, err)
 
 		assert.NilError(t, cache.WriteFile("/link/write.ts", "written"))
@@ -1103,7 +1103,7 @@ func TestRequestFileSystem(t *testing.T) {
 			"C:/Host/node_modules/host-pkg/index.d.ts": "export declare const hostValue: boolean;",
 		}, false)}
 		fileSystem, err := newRequestFileSystem(&RequestFileSystem{
-			Kind: KindMemory,
+			Kind: KindFull,
 			Files: map[string]string{
 				`C:\Repo\Packages\windows-pkg\index.d.ts`: "export declare const windowsValue: number;",
 				"/repo/packages/posix-pkg/index.d.ts":     "export declare const posixValue: string;",

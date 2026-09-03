@@ -46,7 +46,7 @@ func (h *Handle) initializeFromRequest(params *RequestFileSystem, base vfs.FS, c
 }
 
 func (h *Handle) initializeLayered(params *RequestFileSystem, base vfs.FS, currentDirectory string) error {
-	if params.Kind != KindCache {
+	if params.Kind != KindLayer {
 		return h.initializeFromRequest(params, base, currentDirectory)
 	}
 	value, err := newRequestFileSystemWorker(params, base, currentDirectory, true)
@@ -65,7 +65,7 @@ func (h *Handle) InitializeForUpdate(params *RequestFileSystem, base *Handle, ho
 		}
 		return nil
 	}
-	if params.Kind == KindCache && hasBaseSnapshot {
+	if params.Kind == KindLayer && hasBaseSnapshot {
 		baseFS := host
 		if base != nil {
 			baseFS = base
@@ -187,11 +187,11 @@ func (h *Handle) baseFileSystem() vfs.FS {
 	return h.load().baseFileSystem()
 }
 
-// HasMemoryFileSystem reports whether any backing layer is a total memory filesystem.
-func (h *Handle) HasMemoryFileSystem() bool {
+// HasFullFileSystem reports whether any backing layer is a full filesystem.
+func (h *Handle) HasFullFileSystem() bool {
 	for h != nil {
 		value := h.load()
-		if value.kind == KindMemory {
+		if value.kind == KindFull {
 			return true
 		}
 		h = getRequestFileSystem(value.baseFileSystem())

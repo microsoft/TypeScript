@@ -14,7 +14,7 @@ import (
 	"gotest.tools/v3/assert"
 )
 
-func TestUpdateSnapshotUsesMemoryFileSystem(t *testing.T) {
+func TestUpdateSnapshotUsesFullFileSystem(t *testing.T) {
 	t.Parallel()
 
 	projectSession, _ := projecttestutil.Setup(map[string]any{
@@ -27,7 +27,7 @@ func TestUpdateSnapshotUsesMemoryFileSystem(t *testing.T) {
 	response, err := session.handleUpdateSnapshot(context.Background(), &UpdateSnapshotParams{
 		OpenProjects: []DocumentIdentifier{{FileName: "/tsconfig.json"}},
 		FileSystem: &requestfilesystem.RequestFileSystem{
-			Kind: requestfilesystem.KindMemory,
+			Kind: requestfilesystem.KindFull,
 			Files: map[string]string{
 				"/tsconfig.json": `{ "compilerOptions": { "noLib": true }, "files": ["src/index.ts"] }`,
 				"/src/index.ts":  `export const value = "memory";`,
@@ -59,7 +59,7 @@ func TestUpdateSnapshotUsesMemoryFileSystem(t *testing.T) {
 	// when the caller does not redundantly list every file in FileChanges.
 	response, err = session.handleUpdateSnapshot(context.Background(), &UpdateSnapshotParams{
 		FileSystem: &requestfilesystem.RequestFileSystem{
-			Kind: requestfilesystem.KindMemory,
+			Kind: requestfilesystem.KindFull,
 			Files: map[string]string{
 				"/tsconfig.json": `{ "compilerOptions": { "noLib": true }, "files": ["src/index.ts", "src/other.ts"] }`,
 				"/src/index.ts":  `export const value = "updated";`,
@@ -90,7 +90,7 @@ func TestUpdateSnapshotUsesMemoryFileSystem(t *testing.T) {
 	assert.Equal(t, contents, `export const other = true;`)
 }
 
-func TestSnapshotUpdateMemoryFileSystemIsTotal(t *testing.T) {
+func TestSnapshotUpdateFullFileSystemIsTotal(t *testing.T) {
 	t.Parallel()
 
 	projectSession, _ := projecttestutil.Setup(map[string]any{
@@ -105,7 +105,7 @@ func TestSnapshotUpdateMemoryFileSystemIsTotal(t *testing.T) {
 	replaced, err := session.handleUpdateSnapshot(context.Background(), &UpdateSnapshotParams{
 		Snapshot: base.Snapshot,
 		FileSystem: &requestfilesystem.RequestFileSystem{
-			Kind: requestfilesystem.KindMemory,
+			Kind: requestfilesystem.KindFull,
 			Files: map[string]string{
 				"/memory.ts": "memory",
 			},
@@ -145,7 +145,7 @@ func TestSnapshotUpdateCarriesHostFileSystemWithoutOverride(t *testing.T) {
 	assert.Assert(t, updatedSnapshot.ProjectCollection.GetProjectByPath(tspath.Path("/tsconfig.json")).GetProgram() == program)
 }
 
-func TestEmitFromCacheLayeredOverMemoryReturnsFileContents(t *testing.T) {
+func TestEmitFromLayerOverFullFileSystemReturnsFileContents(t *testing.T) {
 	t.Parallel()
 
 	projectSession, _ := projecttestutil.Setup(map[string]any{})
@@ -157,7 +157,7 @@ func TestEmitFromCacheLayeredOverMemoryReturnsFileContents(t *testing.T) {
 	base, err := session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{
 		OpenProjects: []DocumentIdentifier{{FileName: "/tsconfig.json"}},
 		FileSystem: &requestfilesystem.RequestFileSystem{
-			Kind: requestfilesystem.KindMemory,
+			Kind: requestfilesystem.KindFull,
 			Files: map[string]string{
 				"/tsconfig.json": `{ "compilerOptions": { "noLib": true, "outDir": "/out" }, "files": ["src/main.ts"] }`,
 				"/src/main.ts":   `export const value: number = 1;`,
@@ -168,7 +168,7 @@ func TestEmitFromCacheLayeredOverMemoryReturnsFileContents(t *testing.T) {
 	layered, err := session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{
 		Snapshot: base.Snapshot,
 		FileSystem: &requestfilesystem.RequestFileSystem{
-			Kind:  requestfilesystem.KindCache,
+			Kind:  requestfilesystem.KindLayer,
 			Files: map[string]string{},
 		},
 	})
@@ -206,7 +206,7 @@ func TestReleaseSnapshotCompactsSoleLayeredFileSystem(t *testing.T) {
 
 	base, err := session.handleUpdateSnapshot(context.Background(), &UpdateSnapshotParams{
 		FileSystem: &requestfilesystem.RequestFileSystem{
-			Kind: requestfilesystem.KindMemory,
+			Kind: requestfilesystem.KindFull,
 			Files: map[string]string{
 				"/inherited.ts": "inherited",
 				"/changed.ts":   "old",
@@ -221,7 +221,7 @@ func TestReleaseSnapshotCompactsSoleLayeredFileSystem(t *testing.T) {
 	layered, err := session.handleUpdateSnapshot(context.Background(), &UpdateSnapshotParams{
 		Snapshot: base.Snapshot,
 		FileSystem: &requestfilesystem.RequestFileSystem{
-			Kind: requestfilesystem.KindCache,
+			Kind: requestfilesystem.KindLayer,
 			Files: map[string]string{
 				"/changed.ts": "new",
 				"/added.ts":   "added",
@@ -253,7 +253,7 @@ func TestReleaseSnapshotCompactsSoleLayeredFileSystem(t *testing.T) {
 	assert.Assert(t, !ok)
 	_, ok = layeredSnapshot.ReadFile("/host.ts")
 	assert.Assert(t, !ok)
-	assert.Assert(t, layeredFileSystem.HasMemoryFileSystem())
+	assert.Assert(t, layeredFileSystem.HasFullFileSystem())
 }
 
 func TestEagerSnapshotReleaseDoesNotRetainFileSystemHistory(t *testing.T) {
@@ -266,7 +266,7 @@ func TestEagerSnapshotReleaseDoesNotRetainFileSystemHistory(t *testing.T) {
 
 	response, err := session.handleUpdateSnapshot(context.Background(), &UpdateSnapshotParams{
 		FileSystem: &requestfilesystem.RequestFileSystem{
-			Kind: requestfilesystem.KindMemory,
+			Kind: requestfilesystem.KindFull,
 			Files: map[string]string{
 				"/pkg/index.ts": "",
 			},
@@ -281,7 +281,7 @@ func TestEagerSnapshotReleaseDoesNotRetainFileSystemHistory(t *testing.T) {
 		response, err = session.handleUpdateSnapshot(context.Background(), &UpdateSnapshotParams{
 			Snapshot: oldSnapshot,
 			FileSystem: &requestfilesystem.RequestFileSystem{
-				Kind: requestfilesystem.KindCache,
+				Kind: requestfilesystem.KindLayer,
 				Files: map[string]string{
 					"/pkg/index.ts": content,
 				},
@@ -297,7 +297,7 @@ func TestEagerSnapshotReleaseDoesNotRetainFileSystemHistory(t *testing.T) {
 		assert.Equal(t, current.refCount, 1)
 		fileSystem := current.fileSystemHandle()
 		assert.Assert(t, fileSystem != nil)
-		assert.Assert(t, fileSystem.HasMemoryFileSystem())
+		assert.Assert(t, fileSystem.HasFullFileSystem())
 		actual, ok := current.snapshot.ReadFile("/pkg/index.ts")
 		assert.Assert(t, ok)
 		assert.Equal(t, actual, content)
@@ -316,7 +316,7 @@ func TestSnapshotReleaseCompactsChainedFileSystems(t *testing.T) {
 	var err error
 	responses[0], err = session.handleUpdateSnapshot(context.Background(), &UpdateSnapshotParams{
 		FileSystem: &requestfilesystem.RequestFileSystem{
-			Kind:  requestfilesystem.KindMemory,
+			Kind:  requestfilesystem.KindFull,
 			Files: map[string]string{"/pkg/index.ts": "0"},
 		},
 	})
@@ -325,7 +325,7 @@ func TestSnapshotReleaseCompactsChainedFileSystems(t *testing.T) {
 		responses[i], err = session.handleUpdateSnapshot(context.Background(), &UpdateSnapshotParams{
 			Snapshot: responses[i-1].Snapshot,
 			FileSystem: &requestfilesystem.RequestFileSystem{
-				Kind:  requestfilesystem.KindCache,
+				Kind:  requestfilesystem.KindLayer,
 				Files: map[string]string{"/pkg/index.ts": strconv.Itoa(i)},
 			},
 		})
@@ -342,7 +342,7 @@ func TestSnapshotReleaseCompactsChainedFileSystems(t *testing.T) {
 		assert.Equal(t, current.refCount, 1)
 		fileSystem := current.fileSystemHandle()
 		assert.Assert(t, fileSystem != nil)
-		assert.Assert(t, fileSystem.HasMemoryFileSystem())
+		assert.Assert(t, fileSystem.HasFullFileSystem())
 		contents, ok := current.snapshot.ReadFile("/pkg/index.ts")
 		assert.Assert(t, ok)
 		assert.Equal(t, contents, strconv.Itoa(i))
@@ -359,7 +359,7 @@ func TestTemporarySnapshotRetainsLayeredFileSystemHistory(t *testing.T) {
 
 	base, err := session.handleUpdateSnapshot(context.Background(), &UpdateSnapshotParams{
 		FileSystem: &requestfilesystem.RequestFileSystem{
-			Kind:  requestfilesystem.KindMemory,
+			Kind:  requestfilesystem.KindFull,
 			Files: map[string]string{"/pkg/index.ts": "base"},
 		},
 	})
@@ -367,7 +367,7 @@ func TestTemporarySnapshotRetainsLayeredFileSystemHistory(t *testing.T) {
 	layered, err := session.handleUpdateSnapshot(context.Background(), &UpdateSnapshotParams{
 		Snapshot: base.Snapshot,
 		FileSystem: &requestfilesystem.RequestFileSystem{
-			Kind:  requestfilesystem.KindCache,
+			Kind:  requestfilesystem.KindLayer,
 			Files: map[string]string{"/pkg/index.ts": "layered"},
 		},
 	})
@@ -390,7 +390,7 @@ func TestTemporarySnapshotRetainsLayeredFileSystemHistory(t *testing.T) {
 	fileSystem := current.fileSystemHandle()
 	assert.Assert(t, fileSystem != nil)
 	assert.Assert(t, fileSystem != layeredFileSystem)
-	assert.Assert(t, fileSystem.HasMemoryFileSystem())
+	assert.Assert(t, fileSystem.HasFullFileSystem())
 }
 
 func TestSnapshotReleaseCompactionSupportsConcurrentReaders(t *testing.T) {
@@ -406,13 +406,13 @@ func TestSnapshotReleaseCompactionSupportsConcurrentReaders(t *testing.T) {
 		files[fmt.Sprintf("/pkg/file%d.ts", index)] = strconv.Itoa(index)
 	}
 	base, err := session.handleUpdateSnapshot(context.Background(), &UpdateSnapshotParams{
-		FileSystem: &requestfilesystem.RequestFileSystem{Kind: requestfilesystem.KindMemory, Files: files},
+		FileSystem: &requestfilesystem.RequestFileSystem{Kind: requestfilesystem.KindFull, Files: files},
 	})
 	assert.NilError(t, err)
 	layered, err := session.handleUpdateSnapshot(context.Background(), &UpdateSnapshotParams{
 		Snapshot: base.Snapshot,
 		FileSystem: &requestfilesystem.RequestFileSystem{
-			Kind:  requestfilesystem.KindCache,
+			Kind:  requestfilesystem.KindLayer,
 			Files: map[string]string{"/pkg/file0.ts": "updated"},
 		},
 	})

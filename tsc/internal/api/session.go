@@ -2802,7 +2802,7 @@ func (s *Session) handleEmit(ctx context.Context, params *EmitParams) (*EmitResp
 	if err != nil {
 		return nil, err
 	}
-	if fileSystem := sd.fileSystemHandle(); fileSystem != nil && fileSystem.HasMemoryFileSystem() {
+	if fileSystem := sd.fileSystemHandle(); fileSystem != nil && fileSystem.HasFullFileSystem() {
 		outputFiles = make(map[string]string)
 		var outputMu sync.Mutex
 		options.WriteFile = func(fileName string, text string, _ *compiler.WriteFileData) error {

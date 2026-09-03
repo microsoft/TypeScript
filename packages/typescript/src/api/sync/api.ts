@@ -2794,8 +2794,8 @@ export class Program implements FormatDiagnosticsHost {
     }
 
     /**
-     * Emits files to the configured filesystem. Cache and host filesystems are
-     * written through; memory filesystems remain immutable and return emitted
+     * Emits files to the configured filesystem. Layer and host filesystems are
+     * written through; full filesystems remain immutable and return emitted
      * files in {@link EmitResult.fileSystem}.
      */
     get emit(): {
@@ -2814,7 +2814,7 @@ export class Program implements FormatDiagnosticsHost {
                 });
                 const fileSystem = response.emittedFilesContents.length
                     ? {
-                        kind: "cache" as const,
+                        kind: "layer" as const,
                         files: Object.fromEntries(response.emittedFiles.map((fileName, index) => [fileName, response.emittedFilesContents[index]])),
                     }
                     : undefined;
@@ -2833,7 +2833,7 @@ export class Program implements FormatDiagnosticsHost {
                 });
                 const fileSystem = response.emittedFilesContents.length
                     ? {
-                        kind: "cache" as const,
+                        kind: "layer" as const,
                         files: Object.fromEntries(response.emittedFiles.map((fileName, index) => [fileName, response.emittedFilesContents[index]])),
                     }
                     : undefined;

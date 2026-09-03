@@ -528,7 +528,7 @@ export interface EmitResult {
     readonly emitSkipped: boolean;
     readonly diagnostics: readonly Diagnostic[];
     readonly emittedFiles: readonly string[];
-    /** Emitted files captured as a cache layer suitable for {@link Snapshot.update}. */
+    /** Emitted files captured as a filesystem layer suitable for {@link Snapshot.update}. */
     readonly fileSystem?: RequestFileSystem | undefined;
 }
 

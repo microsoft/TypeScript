@@ -82,9 +82,9 @@ import {
     type UnionOrIntersectionType,
 } from "@typescript/typescript/unstable/async"; // @sync: } from "@typescript/typescript/unstable/sync";
 import {
-    createCacheFileSystem,
-    createMemoryFileSystem,
-    createMemoryFileSystemWithLib,
+    createFileSystem,
+    createFileSystemLayer,
+    createFileSystemWithLib,
     createVirtualFileSystem,
 } from "@typescript/typescript/unstable/fs";
 import type { FileSystem } from "@typescript/typescript/unstable/fs";
@@ -3189,7 +3189,7 @@ describe("readFile callback semantics", () => {
 
 describe("updateSnapshot file systems", () => {
     test("request filesystem factories derive directory listings", () => {
-        const memory = createMemoryFileSystem([
+        const memory = createFileSystem([
             ["/src/index.ts", "posix"],
             ["C:\\repo\\src\\index.ts", "windows"],
             ["file:///literal%20path.ts", "literal file-name string"],
@@ -3203,7 +3203,7 @@ describe("updateSnapshot file systems", () => {
             ["vscode-notebook-cell://authority/workspace/notebook.ipynb/cell.ts", "notebook"],
         ]);
         assert.deepEqual(memory, {
-            kind: "memory",
+            kind: "full",
             files: {
                 "/src/index.ts": "posix",
                 "C:/repo/src/index.ts": "windows",
@@ -3242,29 +3242,30 @@ describe("updateSnapshot file systems", () => {
         });
 
         const directories = { "/explicit": { files: ["provided.ts"], directories: [] } };
-        const cache = createCacheFileSystem([["/ignored/derived.ts", "cache"]], {
+        const cache = createFileSystemLayer([["/ignored/derived.ts", "cache"]], {
             directories,
             removedPaths: ["/removed.ts", "/removed"],
         });
+        assert.equal(cache.kind, "layer");
         assert.deepEqual(cache.directories, directories);
         assert.deepEqual(cache.removedPaths, ["/removed.ts", "/removed"]);
 
         assert.throws(
             () =>
-                createMemoryFileSystem([
+                createFileSystem([
                     ["/duplicate.ts", "path"],
                     [{ uri: "file:///duplicate.ts" }, "URI"],
                 ]),
             /Duplicate request filesystem path: \/duplicate\.ts/,
         );
 
-        const prototypeFileSystem = createMemoryFileSystem([["__proto__", "prototype"]]);
+        const prototypeFileSystem = createFileSystem([["__proto__", "prototype"]]);
         assert.equal(prototypeFileSystem.files["__proto__"], "prototype");
         assert.ok(Object.hasOwn(prototypeFileSystem.files, "__proto__"));
 
         assert.throws(
             () =>
-                createMemoryFileSystem([
+                createFileSystem([
                     ["/normalized/duplicate.ts", "forward slash"],
                     ["\\normalized\\duplicate.ts", "backslash"],
                 ]),
@@ -3272,7 +3273,7 @@ describe("updateSnapshot file systems", () => {
         );
     });
 
-    test("memory file system is total and does not invoke host callbacks", async () => {
+    test("full file system is total and does not invoke host callbacks", async () => {
         const callbackCalls: string[] = [];
         const host = createVirtualFileSystem({
             "/host.ts": `export const source = "host";`,
@@ -3311,7 +3312,7 @@ describe("updateSnapshot file systems", () => {
         using snapshot = await api.updateSnapshot({
             openProject: "/tsconfig.json",
             fileSystem: {
-                kind: "memory",
+                kind: "full",
                 files: {
                     "/tsconfig.json": JSON.stringify({ compilerOptions: { noLib: true }, include: ["src/**/*.ts"] }),
                     "/src/index.ts": `export const source = "memory";`,
@@ -3329,13 +3330,13 @@ describe("updateSnapshot file systems", () => {
         assert.deepEqual(callbackCalls, []);
     });
 
-    test("memory file system with lib resolves the default library", async () => {
+    test("full file system with lib resolves the default library", async () => {
         await using api = new API({
             cwd: fileURLToPath(new URL("../../../../", import.meta.url).toString()),
         });
         using snapshot = await api.updateSnapshot({
             openProject: "/tsconfig.json",
-            fileSystem: createMemoryFileSystemWithLib(Object.entries({
+            fileSystem: createFileSystemWithLib(Object.entries({
                 "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true }, files: ["src/main.ts"] }),
                 "/src/main.ts": `export const values: Array<number> = [];`,
             })),
@@ -3350,7 +3351,7 @@ describe("updateSnapshot file systems", () => {
         assert.equal(await program.isSourceFileDefaultLibrary(defaultLibrary), true);
     });
 
-    test("memory file system accepts paths decoded from VS Code document URIs", async () => {
+    test("full file system accepts paths decoded from VS Code document URIs", async () => {
         const fileDocument = { uri: "file:///workspace/file%20name.ts" };
         const remoteDocument = { uri: "vscode-remote://ssh-remote+host/workspace/src/remote%20name.ts" };
         const notebookDocument = { uri: "vscode-notebook-cell:/workspace/notebook.ipynb/cell%20name.ts" };
@@ -3359,7 +3360,7 @@ describe("updateSnapshot file systems", () => {
         });
         using snapshot = await api.updateSnapshot({
             openFiles: [fileDocument, remoteDocument, notebookDocument],
-            fileSystem: createMemoryFileSystem([
+            fileSystem: createFileSystem([
                 [fileDocument, `export const file = true;`],
                 [remoteDocument, `export const remote = true;`],
                 [notebookDocument, `export const cell = true;`],
@@ -3373,7 +3374,7 @@ describe("updateSnapshot file systems", () => {
         assert.equal((await notebookProject?.program.getSourceFile(notebookDocument))?.text, `export const cell = true;`);
     });
 
-    test("cache file system bypasses callbacks on hits and falls back on misses", async () => {
+    test("file system layer bypasses callbacks on hits and falls back on misses", async () => {
         const readFileCalls: string[] = [];
         const directoryCalls: string[] = [];
         const host = createVirtualFileSystem({
@@ -3398,7 +3399,7 @@ describe("updateSnapshot file systems", () => {
         using snapshot = await api.updateSnapshot({
             openProject: "/tsconfig.json",
             fileSystem: {
-                kind: "cache",
+                kind: "layer",
                 files: {
                     "/tsconfig.json": JSON.stringify({ compilerOptions: { noLib: true }, include: ["src/**/*.ts"] }),
                     "/src/index.ts": `export const cached = true;`,
@@ -3420,7 +3421,7 @@ describe("updateSnapshot file systems", () => {
         assert.ok(!directoryCalls.includes("/src"));
     });
 
-    test("cache file system factory preserves host directory entries", async () => {
+    test("file system layer factory preserves host directory entries", async () => {
         await using api = new API({
             cwd: fileURLToPath(new URL("../../../../", import.meta.url).toString()),
             fs: createVirtualFileSystem({
@@ -3430,7 +3431,7 @@ describe("updateSnapshot file systems", () => {
 
         using snapshot = await api.updateSnapshot({
             openProject: "/tsconfig.json",
-            fileSystem: createCacheFileSystem([
+            fileSystem: createFileSystemLayer([
                 ["/tsconfig.json", JSON.stringify({ compilerOptions: { noLib: true }, include: ["src/**/*.ts"] })],
                 ["/src/from-cache.ts", `export const cache = true;`],
             ]),
@@ -3442,7 +3443,7 @@ describe("updateSnapshot file systems", () => {
         );
     });
 
-    test("memory file system resolves packages through internal monorepo symlinks", async () => {
+    test("full file system resolves packages through internal monorepo symlinks", async () => {
         const callbackCalls: string[] = [];
         await using api = new API({
             cwd: fileURLToPath(new URL("../../../../", import.meta.url).toString()),
@@ -3457,7 +3458,7 @@ describe("updateSnapshot file systems", () => {
         using snapshot = await api.updateSnapshot({
             openProject: "/project/tsconfig.json",
             fileSystem: {
-                kind: "memory",
+                kind: "full",
                 files: {
                     "/project/tsconfig.json": JSON.stringify({ compilerOptions: { noLib: true, moduleResolution: "node" }, files: ["index.ts"] }),
                     "/project/index.ts": `import { value } from "pkg"; export { value };`,
@@ -3476,7 +3477,7 @@ describe("updateSnapshot file systems", () => {
         assert.deepEqual(callbackCalls, []);
     });
 
-    test("memory file system resolves relative symlink targets", async () => {
+    test("full file system resolves relative symlink targets", async () => {
         const callbackCalls: string[] = [];
         await using api = new API({
             cwd: fileURLToPath(new URL("../../../../", import.meta.url).toString()),
@@ -3491,7 +3492,7 @@ describe("updateSnapshot file systems", () => {
         using snapshot = await api.updateSnapshot({
             openProject: "/project/tsconfig.json",
             fileSystem: {
-                kind: "memory",
+                kind: "full",
                 files: {
                     "/project/tsconfig.json": JSON.stringify({ compilerOptions: { noLib: true }, files: ["index.ts"] }),
                     "/project/index.ts": `export { value } from "./pkg";`,
@@ -3516,7 +3517,7 @@ describe("updateSnapshot file systems", () => {
         });
         using snapshot = await api.updateSnapshot({
             openProject: "/tsconfig.json",
-            fileSystem: createMemoryFileSystem(Object.entries({
+            fileSystem: createFileSystem(Object.entries({
                 "/tsconfig.json": JSON.stringify({
                     compilerOptions: { noLib: true },
                     include: ["src/**/*.ts"],
@@ -3529,7 +3530,7 @@ describe("updateSnapshot file systems", () => {
         });
 
         using updated = await snapshot.update({
-            fileSystem: createCacheFileSystem(
+            fileSystem: createFileSystemLayer(
                 Object.entries({
                     "/src/change.ts": `export const version = "new";`,
                     "/src/added.ts": `export const added = true;`,
@@ -3548,7 +3549,7 @@ describe("updateSnapshot file systems", () => {
         await assert.rejects(() => snapshot.update(), /can only update the latest snapshot/); // @sync: assert.throws(() => snapshot.update(), /can only update the latest snapshot/);
 
         using updatedAgain = await updated.update({
-            fileSystem: createCacheFileSystem(
+            fileSystem: createFileSystemLayer(
                 Object.entries({
                     "/src/added.ts": `export const added = "updated again";`,
                 }),
@@ -3569,7 +3570,7 @@ describe("updateSnapshot file systems", () => {
         });
         let snapshot: Snapshot = await api.updateSnapshot({
             openProject: "/tsconfig.json",
-            fileSystem: createMemoryFileSystem([
+            fileSystem: createFileSystem([
                 ["/tsconfig.json", JSON.stringify({ compilerOptions: { noLib: true }, files: ["pkg/index.ts"] })],
                 ["/pkg/index.ts", ""],
             ]),
@@ -3580,7 +3581,7 @@ describe("updateSnapshot file systems", () => {
                 const oldSnapshot: Snapshot = snapshot;
                 content += character;
                 snapshot = await oldSnapshot.update({
-                    fileSystem: createCacheFileSystem([["/pkg/index.ts", content]]),
+                    fileSystem: createFileSystemLayer([["/pkg/index.ts", content]]),
                 });
                 await oldSnapshot.dispose();
                 assert.equal(oldSnapshot.isDisposed(), true);
@@ -3594,7 +3595,7 @@ describe("updateSnapshot file systems", () => {
         }
     });
 
-    test("Snapshot.update treats a memory filesystem as a total replacement", async () => {
+    test("Snapshot.update treats a full filesystem as a total replacement", async () => {
         const host = createVirtualFileSystem({
             "/host.ts": `export const source = "host";`,
         });
@@ -3605,7 +3606,7 @@ describe("updateSnapshot file systems", () => {
         using snapshot = await api.updateSnapshot();
         using replaced = await snapshot.update({
             openProject: "/tsconfig.json",
-            fileSystem: createMemoryFileSystem([
+            fileSystem: createFileSystem([
                 ["/tsconfig.json", JSON.stringify({ compilerOptions: { noLib: true }, files: ["memory.ts", "host.ts"] })],
                 ["/memory.ts", `export const source = "memory";`],
             ]),
@@ -3621,7 +3622,7 @@ describe("updateSnapshot file systems", () => {
         });
         using snapshot = await api.updateSnapshot({
             openProject: "/tsconfig.json",
-            fileSystem: createMemoryFileSystem(
+            fileSystem: createFileSystem(
                 Object.entries({
                     "/tsconfig.json": JSON.stringify({ compilerOptions: { noLib: true }, files: ["src/main.ts"] }),
                     "/src/main.ts": `import "./link/change"; import "./link/added"; import "./link/remove";`,
@@ -3637,7 +3638,7 @@ describe("updateSnapshot file systems", () => {
         });
 
         using updated = await snapshot.update({
-            fileSystem: createCacheFileSystem(
+            fileSystem: createFileSystemLayer(
                 Object.entries({
                     "/target/change.ts": `export const version = "new";`,
                     "/target/added.ts": `export const added = true;`,
@@ -3653,7 +3654,7 @@ describe("updateSnapshot file systems", () => {
         assert.equal(await program.getSourceFile("/src/link/remove.ts"), undefined);
     });
 
-    test("memory filesystem emit returns outputs without mutating the host", async () => {
+    test("full filesystem emit returns outputs without mutating the host", async () => {
         const hostWrites: string[] = [];
         await using api = new API({
             cwd: fileURLToPath(new URL("../../../../", import.meta.url).toString()),
@@ -3665,7 +3666,7 @@ describe("updateSnapshot file systems", () => {
         });
         using snapshot = await api.updateSnapshot({
             openProject: "/tsconfig.json",
-            fileSystem: createMemoryFileSystem(Object.entries({
+            fileSystem: createFileSystem(Object.entries({
                 "/tsconfig.json": JSON.stringify({ compilerOptions: { noLib: true, outDir: "/out", rootDir: "/src" }, files: ["src/main.ts"] }),
                 "/src/main.ts": `export const value: number = 1;`,
             })),
@@ -3674,7 +3675,7 @@ describe("updateSnapshot file systems", () => {
         const result = await program.emit();
         assert.deepEqual(result.emittedFiles, ["/out/main.js"]);
         assert.deepEqual(result.fileSystem, {
-            kind: "cache",
+            kind: "layer",
             files: {
                 "/out/main.js": `export const value = 1;\n`,
             },
@@ -3687,7 +3688,7 @@ describe("updateSnapshot file systems", () => {
         assert.equal((await outputProject?.program.getSourceFile("/out/main.js"))?.text, `export const value = 1;\n`);
     });
 
-    test("cache filesystem emit writes through to the host", async () => {
+    test("filesystem layer emit writes through to the host", async () => {
         const host = createVirtualFileSystem({});
         await using api = new API({
             cwd: fileURLToPath(new URL("../../../../", import.meta.url).toString()),
@@ -3695,7 +3696,7 @@ describe("updateSnapshot file systems", () => {
         });
         using snapshot = await api.updateSnapshot({
             openProject: "/tsconfig.json",
-            fileSystem: createCacheFileSystem(Object.entries({
+            fileSystem: createFileSystemLayer(Object.entries({
                 "/tsconfig.json": JSON.stringify({ compilerOptions: { noLib: true, outDir: "/out", rootDir: "/src" }, files: ["src/main.ts"] }),
                 "/src/main.ts": `export const value: number = 1;`,
             })),
@@ -3706,7 +3707,7 @@ describe("updateSnapshot file systems", () => {
         assert.equal(host.readFile!("/out/main.js"), `export const value = 1;\n`);
     });
 
-    test("memory file system can link node_modules from the host", async () => {
+    test("full file system can link node_modules from the host", async () => {
         const readFileCalls: string[] = [];
         const directoryExistsCalls: string[] = [];
         const fileExistsCalls: string[] = [];
@@ -3736,7 +3737,7 @@ describe("updateSnapshot file systems", () => {
         using snapshot = await api.updateSnapshot({
             openProject: "/project/tsconfig.json",
             fileSystem: {
-                kind: "memory",
+                kind: "full",
                 files: {
                     "/project/tsconfig.json": JSON.stringify({ compilerOptions: { noLib: true, moduleResolution: "node" }, files: ["index.ts"] }),
                     "/project/index.ts": `import { value } from "pkg"; export { value };`,
@@ -3760,7 +3761,7 @@ describe("updateSnapshot file systems", () => {
         assert.ok(!readFileCalls.some(path => path.startsWith("/project/node_modules")));
     });
 
-    test("Snapshot.update host symlinks bypass an inherited memory filesystem", async () => {
+    test("Snapshot.update host symlinks bypass an inherited full filesystem", async () => {
         const host = createVirtualFileSystem({
             "/host/node_modules/pkg/index.d.ts": `export declare const value: string;`,
         });
@@ -3770,13 +3771,13 @@ describe("updateSnapshot file systems", () => {
         });
         using snapshot = await api.updateSnapshot({
             openProject: "/project/tsconfig.json",
-            fileSystem: createMemoryFileSystem([
+            fileSystem: createFileSystem([
                 ["/project/tsconfig.json", JSON.stringify({ compilerOptions: { noLib: true, moduleResolution: "node" }, files: ["index.ts"] })],
                 ["/project/index.ts", `import { value } from "pkg"; export { value };`],
             ]),
         });
         using updated = await snapshot.update({
-            fileSystem: createCacheFileSystem([], {
+            fileSystem: createFileSystemLayer([], {
                 symlinks: {
                     "/project/node_modules": { target: "/host/node_modules", host: true },
                 },
@@ -3792,7 +3793,7 @@ describe("updateSnapshot file systems", () => {
     // TODO: Add request filesystem coverage for `tsc -b` and `tsc -b --clean`
     // once build and clean are exposed through the client API. In particular,
     // verify that clean removes synthetic outputs and that build-mode re-timestamping
-    // of emitted-but-unchanged files works for memory filesystems, which currently
+    // of emitted-but-unchanged files works for full filesystems, which currently
     // do not model modification times.
 });
 
