@@ -53,6 +53,19 @@ func SwitchBreak() {
 	}
 }
 
+func TypeSwitch(x any) {
+	switch x.(type) {
+	case int:
+	case string:
+		// intentionally empty
+	case bool:
+		break
+	case float64:
+		println(`oops`)
+		break
+	}
+}
+
 func SelectBreak() {
 	select {
 	case <-ch:

@@ -75,6 +75,25 @@
 		}
 	}
 	
+	func TypeSwitch(x any) {
+		switch x.(type) {
+		case int:
+		~~~~~~~~~
+!!! casebody: this case block is empty and will do nothing
+		case string:
+			// intentionally empty
+		case bool:
+			break
+			~~~~~
+!!! casebody: this top-level break statement is redundant
+		case float64:
+			println(`oops`)
+			break
+			~~~~~
+!!! casebody: this top-level break statement is redundant
+		}
+	}
+	
 	func SelectBreak() {
 		select {
 		case <-ch:

@@ -1406,6 +1406,7 @@ func verifyCompletionsItemDefaults(t *testing.T, actual *lsproto.CompletionItemD
 			t.Fatalf(prefix+"Expected nil EditRange but got non-nil: %s", cmp.Diff(actual.EditRange, nil))
 		}
 	case Ignored:
+		// The edit range is intentionally ignored.
 	default:
 		t.Fatalf(prefix+"Expected EditRange to be *EditRange or Ignored, got %T", editRange)
 	}

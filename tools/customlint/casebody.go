@@ -33,12 +33,15 @@ func (e *caseBodyPass) run() (any, error) {
 	for c := range in.Root().Preorder(
 		(*ast.File)(nil),
 		(*ast.SwitchStmt)(nil),
+		(*ast.TypeSwitchStmt)(nil),
 		(*ast.SelectStmt)(nil),
 	) {
 		switch n := c.Node().(type) {
 		case *ast.File:
 			e.file = n
 		case *ast.SwitchStmt:
+			e.checkCases(n.Body)
+		case *ast.TypeSwitchStmt:
 			e.checkCases(n.Body)
 		case *ast.SelectStmt:
 			e.checkCases(n.Body)
