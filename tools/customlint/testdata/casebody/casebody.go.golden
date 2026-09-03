@@ -1,0 +1,139 @@
+	package casebody
+	
+	var X int
+	
+	func Switch() {
+		switch X {
+		case 1:
+		~~~~~~~
+!!! casebody: this case block is empty and will do nothing
+		case 2:
+		~~~~~~~
+!!! casebody: this case block is empty and will do nothing
+		case 3:
+		~~~~~~~
+!!! casebody: this case block is empty and will do nothing
+		case 4:
+			println(`oops`)
+		}
+	}
+	
+	func SwitchCommented() {
+		switch X {
+		case 1:
+			// do nothing
+		case 2:
+		~~~~~~~
+!!! casebody: this case block is empty and will do nothing
+		case 3:
+		~~~~~~~
+!!! casebody: this case block is empty and will do nothing
+		case 4:
+			println(`oops`)
+		}
+	}
+	
+	func SwitchSingleCase() {
+		switch X {
+		case 1:
+		~~~~~~~
+!!! casebody: this case block is empty and will do nothing
+		}
+	}
+	
+	func SwitchDefaultCase() {
+		switch X {
+		case 1:
+		~~~~~~~
+!!! casebody: this case block is empty and will do nothing
+		default:
+		~~~~~~~~
+!!! casebody: this case block is empty and will do nothing
+		}
+	}
+	
+	func SwitchBreak() {
+		switch X {
+		case 1:
+			break
+			~~~~~
+!!! casebody: this top-level break statement is redundant
+		case 2:
+			// intentionally empty
+			break
+			~~~~~
+!!! casebody: this top-level break statement is redundant
+		case 3:
+			println(`oops`)
+			break
+			~~~~~
+!!! casebody: this top-level break statement is redundant
+		case 4:
+			for {
+				break
+			}
+		}
+	}
+	
+	func SelectBreak() {
+		select {
+		case <-ch:
+			break
+			~~~~~
+!!! casebody: this top-level break statement is redundant
+		default:
+			println(`oops`)
+			break
+			~~~~~
+!!! casebody: this top-level break statement is redundant
+		}
+	}
+	
+	var (
+		ch  = make(chan int)
+		ch2 = make(chan int)
+		ch3 = make(chan int)
+		ch4 = make(chan int)
+	)
+	
+	func Select() {
+		select {
+		case <-ch:
+		~~~~~~~~~~
+!!! casebody: this case block is empty and will do nothing
+		case <-ch2:
+		~~~~~~~~~~~
+!!! casebody: this case block is empty and will do nothing
+		case <-ch3:
+		~~~~~~~~~~~
+!!! casebody: this case block is empty and will do nothing
+		case <-ch4:
+			println(`oops`)
+		}
+	}
+	
+	func SelectCommented() {
+		select {
+		case <-ch:
+			// do nothing
+		}
+	}
+	
+	func SelectSingleCase() {
+		select {
+		case <-ch:
+		~~~~~~~~~~
+!!! casebody: this case block is empty and will do nothing
+		}
+	}
+	
+	func SelectDefaultCase() {
+		select {
+		case x := <-ch:
+			println(x)
+		default:
+		~~~~~~~~
+!!! casebody: this case block is empty and will do nothing
+		}
+	}
+	

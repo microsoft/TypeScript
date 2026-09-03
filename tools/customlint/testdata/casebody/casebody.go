@@ -1,4 +1,4 @@
-package emptycase
+package casebody
 
 var X int
 
@@ -44,6 +44,20 @@ func SwitchBreak() {
 		// intentionally empty
 		break
 	case 3:
+		println(`oops`)
+		break
+	case 4:
+		for {
+			break
+		}
+	}
+}
+
+func SelectBreak() {
+	select {
+	case <-ch:
+		break
+	default:
 		println(`oops`)
 		break
 	}

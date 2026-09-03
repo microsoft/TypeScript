@@ -225,7 +225,7 @@ func (s *metadataSerializer) serializeTypeNode(node *ast.Node) *ast.Node {
 		}
 		// TODO: why is `unique symbol` not handled as `Symbol`? This falls back to `Object`
 	case ast.KindTypeQuery, ast.KindIndexedAccessType, ast.KindMappedType, ast.KindTypeLiteral, ast.KindAnyKeyword, ast.KindUnknownKeyword, ast.KindThisType, ast.KindImportType:
-		break
+		// These types fall back to Object.
 
 	// handle JSDoc types from an invalid parse
 	case ast.KindJSDocAllType, ast.KindJSDocVariadicType:

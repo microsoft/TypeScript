@@ -11,23 +11,23 @@ import (
 	"golang.org/x/tools/go/ast/inspector"
 )
 
-var emptyCaseAnalyzer = &analysis.Analyzer{
-	Name: "emptycase",
-	Doc:  "finds empty switch/select cases",
+var caseBodyAnalyzer = &analysis.Analyzer{
+	Name: "casebody",
+	Doc:  "finds empty switch/select cases and redundant break statements",
 	Requires: []*analysis.Analyzer{
 		inspect.Analyzer,
 	},
 	Run: func(pass *analysis.Pass) (any, error) {
-		return (&emptyCasePass{pass: pass}).run()
+		return (&caseBodyPass{pass: pass}).run()
 	},
 }
 
-type emptyCasePass struct {
+type caseBodyPass struct {
 	pass *analysis.Pass
 	file *ast.File
 }
 
-func (e *emptyCasePass) run() (any, error) {
+func (e *caseBodyPass) run() (any, error) {
 	in := e.pass.ResultOf[inspect.Analyzer].(*inspector.Inspector)
 
 	for c := range in.Root().Preorder(
@@ -48,7 +48,7 @@ func (e *emptyCasePass) run() (any, error) {
 	return nil, nil
 }
 
-func (e *emptyCasePass) checkCases(clause *ast.BlockStmt) {
+func (e *caseBodyPass) checkCases(clause *ast.BlockStmt) {
 	endOfBlock := clause.End()
 
 	for i, stmt := range clause.List {
@@ -60,7 +60,7 @@ func (e *emptyCasePass) checkCases(clause *ast.BlockStmt) {
 	}
 }
 
-func (e *emptyCasePass) checkCaseStatement(stmt ast.Stmt, nextCasePos token.Pos) {
+func (e *caseBodyPass) checkCaseStatement(stmt ast.Stmt, nextCasePos token.Pos) {
 	var body []ast.Stmt
 	var colon token.Pos
 
@@ -75,7 +75,15 @@ func (e *emptyCasePass) checkCaseStatement(stmt ast.Stmt, nextCasePos token.Pos)
 		panic(fmt.Sprintf("unhandled statement type %T", stmt))
 	}
 
-	message := "this case block is empty and will do nothing"
+	for _, statement := range body {
+		if branch, ok := statement.(*ast.BranchStmt); ok && branch.Tok == token.BREAK && branch.Label == nil {
+			e.pass.Report(analysis.Diagnostic{
+				Pos:     branch.Pos(),
+				End:     branch.End(),
+				Message: "this top-level break statement is redundant",
+			})
+		}
+	}
 
 	if len(body) == 1 {
 		// Also error on a case statement containing a single empty block.
@@ -83,9 +91,6 @@ func (e *emptyCasePass) checkCaseStatement(stmt ast.Stmt, nextCasePos token.Pos)
 			if len(block.List) != 0 {
 				return
 			}
-		} else if branch, ok := body[0].(*ast.BranchStmt); ok && branch.Tok == token.BREAK && branch.Label == nil {
-			// Also error on a case statement containing only a redundant "break".
-			message = "this case block only contains a redundant break statement and will do nothing"
 		} else {
 			return
 		}
@@ -101,7 +106,7 @@ func (e *emptyCasePass) checkCaseStatement(stmt ast.Stmt, nextCasePos token.Pos)
 	e.pass.Report(analysis.Diagnostic{
 		Pos:     stmt.Pos(),
 		End:     afterColon,
-		Message: message,
+		Message: "this case block is empty and will do nothing",
 	})
 }
 
