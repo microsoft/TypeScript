@@ -26,9 +26,12 @@ import type {
 } from "@typescript/typescript/unstable/proto";
 import {
     all,
+    type AllAPIRequestGenerator,
+    type AnyAPIRequestGenerator,
     type API,
     type ConditionalType,
     defer,
+    type DeferredAPIRequestGenerator,
     type IndexedAccessType,
     type IndexInfo,
     type InterfaceType,
@@ -54,8 +57,13 @@ import assert from "node:assert";
 import {
     describe,
     test,
+    type TestContext,
 } from "node:test";
-import { executeRequestGenerators } from "../../src/api/sync/generatorSupport.ts";
+import {
+    type APIRequestGenerator,
+    executeRequestGenerators,
+} from "../../src/api/sync/generatorSupport.ts";
+import { runBenchmarks } from "../generators/api.bench.ts";
 import { spawnAPI } from "./api.testUtils.ts";
 
 const parityFiles = {
@@ -365,22 +373,17 @@ function runParityBatch(api: API, cases: readonly ParityCase[]): void {
     }
 }
 
-function* observeRequestBatches<Result>(
-    requestGenerator: Generator<any, Result, any>,
+function observeRequestBatches(
+    api: API,
     requestBatches: string[][],
-): Generator<any, Result, any> {
-    let state = requestGenerator.next();
-    while (!state.done) {
-        const request = state.value;
-        if (!Array.isArray(request) && "deferred" in request) {
-            state = requestGenerator.next(yield request);
-            continue;
-        }
-        const requests = Array.isArray(request) ? request : [request as APIRequest];
-        requestBatches.push(requests.map(current => current.method));
-        state = requestGenerator.next(yield request);
-    }
-    return state.value;
+    context: TestContext,
+): void {
+    const client = api["client"];
+    const batchRequests = client.batchRequests.bind(client);
+    context.mock.method(client, "batchRequests", (requests: readonly APIRequest[]) => {
+        requestBatches.push(requests.map(request => request.method));
+        return batchRequests(requests);
+    });
 }
 
 function assertPublicGeneratorCoverage(owners: readonly { readonly name: string; readonly value: object; readonly own?: boolean; }[]): void {
@@ -401,9 +404,256 @@ function assertPublicGeneratorCoverage(owners: readonly { readonly name: string;
 }
 
 describe("API - generator batching", () => {
-    test("composes request generators with all", () => {
+    test("all and defer yield discriminated host messages without starting children", () => {
+        let started = false;
+        function* child() {
+            started = true;
+            return "child";
+        }
+        const joined = child();
+        const deferred = child();
+        assert.deepEqual(all(joined).next(), { done: false, value: { method: "__all", generators: [joined] } });
+        assert.deepEqual(defer(deferred).next(), { done: false, value: { method: "__defer", deferred } });
+        const generators: APIRequestGenerator[] = [all(joined), defer(deferred)];
+        for (const generator of generators) {
+            const state = generator.next();
+            if (state.done || !("method" in state.value)) assert.fail("Expected a host message");
+            switch (state.value.method) {
+                case "__all":
+                    assert.deepEqual(state.value.generators, [joined]);
+                    break;
+                case "__defer":
+                    assert.strictEqual(state.value.deferred, deferred);
+                    break;
+                default: {
+                    const request: APIRequest = state.value;
+                    assert.fail(`Unexpected API request: ${request.method}`);
+                }
+            }
+        }
+        assert.equal(started, false);
+    });
+
+    test("joins nested, empty, and synchronously completed groups in result order", () => {
+        function* completed(value: string) {
+            return value;
+        }
+        function* request(value: string, rounds: number): Generator<APIRequest, string, string> {
+            for (let round = 0; round < rounds; round++) {
+                yield { method: value, params: null } as unknown as APIRequest;
+            }
+            return value;
+        }
+        const batches: string[][] = [];
+        const results = executeRequestGenerators([
+            all(request("slow", 2), all(), completed("sync"), all(request("fast", 1), defer(request("background", 3)))),
+        ], requests => {
+            batches.push(requests.map(request => request.method));
+            return requests.map(request => ({ result: request.method }));
+        });
+        assert.deepEqual(results, [["slow", [], "sync", ["fast"]]]);
+        assert.equal(batches.length, 3);
+        assert.deepEqual(batches.map(batch => [...batch].sort()), [["background", "fast", "slow"], ["background", "slow"], ["background"]]);
+    });
+
+    test("preserves tuple results through all and any generator types", () => {
+        function* numberResult() {
+            return 42;
+        }
+        function* stringResult() {
+            return "result";
+        }
+        const joined: AllAPIRequestGenerator<[number, [string]]> = all(numberResult(), defer(stringResult()), all(stringResult()));
+        const generator: AnyAPIRequestGenerator<[number, [string]]> = joined;
+        const results: [[number, [string]]] = executeRequestGenerators([generator] as const, () => assert.fail("Unexpected request round"));
+        assert.deepEqual(results, [[42, ["result"]]]);
+
+        const mixed: (APIRequestGenerator<number> | AllAPIRequestGenerator<[string]> | DeferredAPIRequestGenerator)[] = [
+            numberResult(),
+            all(stringResult()),
+            defer(stringResult()),
+        ];
+        const arrayResults: (number | [string])[] = executeRequestGenerators(mixed, () => assert.fail("Unexpected request round"));
+        assert.deepEqual(arrayResults, [42, ["result"]]);
+
+        const variadic: readonly [APIRequestGenerator<number>, ...AllAPIRequestGenerator<[string]>[]] = [numberResult(), all(stringResult()), all(stringResult())];
+        const variadicResults: (number | [string])[] = executeRequestGenerators(variadic, () => assert.fail("Unexpected request round"));
+        assert.deepEqual(variadicResults, [42, ["result"], ["result"]]);
+    });
+
+    test("preserves sibling order across repeated nested joins", () => {
+        function* request(method: string): Generator<APIRequest, string, string> {
+            return yield { method, params: null } as unknown as APIRequest;
+        }
+        function* foreground() {
+            for (let round = 0; round < 3; round++) {
+                yield* all(all(request("first")), request("second"));
+            }
+        }
+        function* sibling() {
+            for (let round = 0; round < 3; round++) yield* request("sibling");
+        }
+        const batches: string[][] = [];
+        executeRequestGenerators([foreground(), sibling()], requests => {
+            batches.push(requests.map(request => request.method));
+            return requests.map(request => ({ result: request.method }));
+        });
+        assert.deepEqual(batches, Array.from({ length: 3 }, () => ["first", "second", "sibling"]));
+    });
+
+    test("finishes joined foreground cleanup before deferred request errors", () => {
+        const events: string[] = [];
+        function* request(method: string): Generator<APIRequest, void, unknown> {
+            yield { method, params: null } as unknown as APIRequest;
+        }
+        function* foreground() {
+            try {
+                yield* defer(request("background"));
+                yield* all(request("foreground"));
+                events.push("foreground finished");
+            }
+            finally {
+                events.push("foreground cleanup");
+            }
+        }
+        assert.throws(
+            () => executeRequestGenerators([foreground()], requests => requests.map(request => request.method as string === "background" ? { result: undefined, error: "background failed" } : { result: true })),
+            /background failed/,
+        );
+        assert.deepEqual(events, ["foreground finished", "foreground cleanup"]);
+    });
+
+    test("throws nested all failures into the waiting parent", () => {
+        const events: string[] = [];
+        function* failing(): Generator<APIRequest, void, unknown> {
+            yield { method: "bad", params: null } as unknown as APIRequest;
+        }
+        function* parent() {
+            try {
+                yield* all(all(failing()));
+            }
+            catch (error) {
+                events.push((error as Error).message);
+                return "recovered";
+            }
+            return "unexpected";
+        }
+        assert.deepEqual(executeRequestGenerators([parent()], requests => requests.map(() => ({ result: undefined, error: "failed" }))), ["recovered"]);
+        assert.deepEqual(events, ["failed"]);
+    });
+
+    test("cancels failed join siblings but finishes detached and unrelated work", () => {
+        const events: string[] = [];
+        function* request(method: string): Generator<APIRequest, string, string> {
+            const result = yield { method, params: null } as unknown as APIRequest;
+            events.push(method);
+            return result;
+        }
+        function* parent() {
+            try {
+                yield* all(defer(request("background")), request("bad"), all(request("cancelled")));
+            }
+            catch {
+                return yield* request("recovery");
+            }
+        }
+        assert.deepEqual(
+            executeRequestGenerators([parent(), request("unrelated")], requests => requests.map(request => request.method as string === "bad" ? { result: undefined, error: "failed" } : { result: request.method })),
+            ["recovery", "unrelated"],
+        );
+        assert.deepEqual(events, ["background", "unrelated", "recovery"]);
+    });
+
+    test("catches synchronous join failures including undefined", () => {
+        function* failing(): APIRequestGenerator {
+            throw undefined;
+        }
+        function* parent() {
+            try {
+                yield* all(all(failing()));
+            }
+            catch (error) {
+                assert.strictEqual(error, undefined);
+                return "recovered";
+            }
+            return "unexpected";
+        }
+        assert.deepEqual(executeRequestGenerators([parent()], () => assert.fail("Unexpected request round")), ["recovered"]);
+    });
+
+    test("does not route synchronous deferred failures through a waiting join", () => {
+        const events: string[] = [];
+        function* failing(): APIRequestGenerator {
+            throw new Error("deferred failure");
+        }
+        function* parent() {
+            try {
+                yield* all(defer(failing()));
+            }
+            catch {
+                events.push("caught by parent");
+            }
+        }
+        assert.throws(
+            () => executeRequestGenerators([parent()], () => assert.fail("Unexpected request round")),
+            /deferred failure/,
+        );
+        assert.deepEqual(events, []);
+    });
+
+    test("rejects generator reuse across joins and deferred work", () => {
+        function* request(): Generator<APIRequest, string, string> {
+            return yield { method: "request", params: null } as unknown as APIRequest;
+        }
+        for (const wrap of [all, defer]) {
+            const generator = request();
+            assert.throws(
+                () => executeRequestGenerators([all(generator), wrap(generator)], requests => requests.map(request => ({ result: request.method }))),
+                /same generator instance more than once/,
+            );
+        }
+    });
+
+    test("rejects completed generator reuse after a join finishes", () => {
+        function* request(): Generator<APIRequest, string, string> {
+            return yield { method: "request", params: null } as unknown as APIRequest;
+        }
+        for (const wrap of [all, defer]) {
+            const generator = request();
+            function* parent() {
+                yield* all(generator);
+                yield* wrap(generator);
+            }
+            let requestsExecuted = 0;
+            assert.throws(
+                () =>
+                    executeRequestGenerators([parent()], requests => {
+                        requestsExecuted += requests.length;
+                        return requests.map(request => ({ result: request.method }));
+                    }),
+                /same generator instance more than once/,
+            );
+            assert.equal(requestsExecuted, 1);
+        }
+    });
+
+    test("deduplicates initialization across nested joins", () => {
+        function* request(method: string): Generator<APIRequest, string, string> {
+            return yield { method, params: null } as unknown as APIRequest;
+        }
+        const batches: string[][] = [];
+        const results = executeRequestGenerators([all(request("initialize"), all(request("initialize"), request("other"))), request("other")], requests => {
+            batches.push(requests.map(request => request.method));
+            return requests.map((request, index) => ({ result: `${request.method}:${index}` }));
+        });
+        assert.deepEqual(batches, [["initialize", "other", "other"]]);
+        assert.deepEqual(results, [["initialize:0", ["initialize:0", "other:1"]], "other:2"]);
+    });
+
+    test("composes request generators with all", context => {
         const api = spawnAPI(parityFiles);
         const requestBatches: string[][] = [];
+        observeRequestBatches(api, requestBatches, context);
         function* getStrictOption() {
             const commandLine = yield* api.parseCommandLine.gen(["--strict"]);
             const config = yield* api.readConfigFile.gen("/tsconfig.json");
@@ -418,7 +668,7 @@ describe("API - generator batching", () => {
         }
 
         try {
-            const [[config, outputText]] = api.batch(observeRequestBatches(all(getStrictOption(), getTranspiledText()), requestBatches));
+            const [[config, outputText]] = api.batch(all(getStrictOption(), getTranspiledText()));
             assert.equal(config.strict, true);
             assert.deepEqual([...config.fileNames].sort(), ["/src/bind.ts", "/src/index.ts", "/src/models.ts", "/src/suggestions.ts", "/src/syntax.ts"]);
             assert.match(outputText, /const value = ['"]ok['"]/);
@@ -536,9 +786,10 @@ describe("API - generator batching", () => {
         }
     });
 
-    test("executes deferred generators without returning their results", () => {
+    test("executes deferred generators without returning their results", context => {
         const api = spawnAPI();
         const requestBatches: string[][] = [];
+        observeRequestBatches(api, requestBatches, context);
         function* runConcurrentRequests() {
             yield* defer(api.parseCommandLine.gen(["--strict"]));
             yield* defer(api.readConfigFile.gen("/tsconfig.json"));
@@ -549,12 +800,12 @@ describe("API - generator batching", () => {
         }
 
         try {
-            const [[[commandLine, config]]] = api.batch(observeRequestBatches(all(runConcurrentRequests()), requestBatches));
+            const [[[commandLine, config]]] = api.batch(all(runConcurrentRequests()));
             assert.equal(commandLine.options.target, 99);
             assert.deepEqual(config.config, {});
             assert.deepEqual(requestBatches, [
                 ["initialize"],
-                ["parseCommandLine", "readConfigFile"],
+                ["parseCommandLine", "readConfigFile", "parseCommandLine", "readConfigFile"],
             ]);
 
             const [onlyConfig] = api.batch(
@@ -1261,4 +1512,8 @@ describe("API - generator batching", () => {
             api.close();
         }
     });
+});
+
+test("Generator benchmarks", () => {
+    runBenchmarks({ singleIteration: true });
 });
