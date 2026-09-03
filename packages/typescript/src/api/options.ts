@@ -46,6 +46,8 @@ export interface ClientTransportOptions {
     transport: SyncTransport;
     /** Maximum encoded byte size of each batch response page. Defaults to 300 million bytes. Individual responses can be larger than this size, but this controls where batch pages are cutoff. */
     maxResponseBytesPerPage?: number;
+    /** Virtual filesystem callbacks used by transports that support them. */
+    fs?: FileSystem;
     /** Collect timing information for requests made through the transport. */
     collectTiming?: boolean;
 }
@@ -61,6 +63,8 @@ export interface AsyncClientTransportOptions {
     transport: AsyncTransport;
     /** Maximum encoded byte size of each batch response page. Defaults to 300 million bytes. Individual responses can be larger than this size, but this controls where batch pages are cutoff. */
     maxResponseBytesPerPage?: number;
+    /** Virtual filesystem callbacks used by transports that support them. */
+    fs?: FileSystem;
     /** Collect timing information for requests made through the transport. */
     collectTiming?: boolean;
 }

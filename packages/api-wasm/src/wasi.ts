@@ -5,10 +5,31 @@ const errnoBadFileDescriptor = 8;
 const errnoInvalidArgument = 28;
 const errnoNoSys = 52;
 const fileTypeCharacterDevice = 2;
+const eventTypeClock = 0;
+const subscriptionClockAbstime = 1;
 
 export interface InstantiateWasmOptions {
     stdout?: (text: string) => void;
     stderr?: (text: string) => void;
+}
+
+export interface WasmFileSystem {
+    writeFile?(path: string, data: string): void;
+}
+
+interface WasmHost {
+    setFileSystem(fs: WasmFileSystem | undefined): void;
+}
+
+const wasmHosts = new WeakMap<object, WasmHost>();
+
+export function setWasmFileSystem(instance: WasmReactorInstance, fs: WasmFileSystem | undefined): void {
+    const host = wasmHosts.get(instance);
+    if (!host) {
+        if (fs === undefined) return;
+        throw new Error("The TypeScript WASM reactor was not created by instantiateWasm");
+    }
+    host.setFileSystem(fs);
 }
 
 /** Instantiate and initialize the TypeScript reactor with its minimal WASI host. */
@@ -16,10 +37,32 @@ export async function instantiateWasm(
     module: WebAssembly.Module,
     options: InstantiateWasmOptions = {},
 ): Promise<WasmReactorInstance> {
+    const host = createWasiHost(options);
+    const instance = await WebAssembly.instantiate(module, host.imports);
+    return host.initialize(instance);
+}
+
+/** Synchronously instantiate and initialize the TypeScript reactor with its minimal WASI host. */
+export function instantiateWasmSync(
+    module: WebAssembly.Module,
+    options: InstantiateWasmOptions = {},
+): WasmReactorInstance {
+    const host = createWasiHost(options);
+    const instance = new WebAssembly.Instance(module, host.imports);
+    return host.initialize(instance);
+}
+
+function createWasiHost(options: InstantiateWasmOptions): {
+    imports: WebAssembly.Imports;
+    initialize(instance: WebAssembly.Instance): WasmReactorInstance;
+} {
     let instance: WebAssembly.Instance | undefined;
     const stdout = options.stdout ?? (text => console.log(text));
     const stderr = options.stderr ?? (text => console.error(text));
     const decoders = new Map<number, TextDecoder>();
+    const encoder = new TextEncoder();
+    let fileSystem: WasmFileSystem | undefined;
+    let hostError = new Uint8Array();
 
     function getMemory(): WebAssembly.Memory {
         const memory = instance?.exports.memory;
@@ -119,6 +162,63 @@ export async function instantiateWasm(
         return errnoSuccess;
     }
 
+    function hostWriteFile(pathPointer: number, pathLength: number, dataPointer: number, dataLength: number): number {
+        if (!fileSystem?.writeFile) return 2;
+        const memory = getMemory();
+        const decoder = new TextDecoder();
+        const path = decoder.decode(new Uint8Array(memory.buffer, pathPointer, pathLength));
+        const data = decoder.decode(new Uint8Array(memory.buffer, dataPointer, dataLength));
+        try {
+            fileSystem.writeFile(path, data);
+            return errnoSuccess;
+        }
+        catch (error) {
+            hostError = encoder.encode(error instanceof Error ? error.message : String(error));
+            return 1;
+        }
+    }
+
+    function pollOneoff(
+        subscriptionsPointer: number,
+        eventsPointer: number,
+        subscriptionsLength: number,
+        eventsLengthPointer: number,
+    ): number {
+        if (subscriptionsLength === 0) return errnoInvalidArgument;
+        const memory = getMemory();
+        const view = new DataView(memory.buffer);
+        let selected = -1;
+        let shortestDelay = Number.POSITIVE_INFINITY;
+        for (let i = 0; i < subscriptionsLength; i++) {
+            const subscription = subscriptionsPointer + i * 48;
+            if (view.getUint8(subscription + 8) !== eventTypeClock) continue;
+            const clockId = view.getUint32(subscription + 16, true);
+            if (clockId !== 0 && clockId !== 1) return errnoInvalidArgument;
+            const timeout = view.getBigUint64(subscription + 24, true);
+            const flags = view.getUint16(subscription + 40, true);
+            const now = clockId === 0 ? Date.now() : performance.now();
+            const delay = flags & subscriptionClockAbstime
+                ? Number(timeout) / 1e6 - now
+                : Number(timeout) / 1e6;
+            if (delay < shortestDelay) {
+                selected = subscription;
+                shortestDelay = delay;
+            }
+        }
+        if (selected < 0) return errnoNoSys;
+
+        const deadline = performance.now() + Math.max(0, shortestDelay);
+        while (performance.now() < deadline) {
+            // WASI imports are synchronous, so a clock subscription must wait here.
+        }
+
+        new Uint8Array(memory.buffer, eventsPointer, 32).fill(0);
+        view.setBigUint64(eventsPointer, view.getBigUint64(selected, true), true);
+        view.setUint8(eventsPointer + 10, eventTypeClock);
+        view.setUint32(eventsLengthPointer, 1, true);
+        return errnoSuccess;
+    }
+
     function unsupported(): number {
         return errnoNoSys;
     }
@@ -144,7 +244,7 @@ export async function instantiateWasm(
         path_open: unsupported,
         path_remove_directory: unsupported,
         path_unlink_file: unsupported,
-        poll_oneoff: unsupported,
+        poll_oneoff: pollOneoff,
         proc_exit: (code: number) => {
             throw new Error(`TypeScript WASM runtime exited with code ${code}`);
         },
@@ -152,13 +252,30 @@ export async function instantiateWasm(
         sched_yield: () => errnoSuccess,
     };
 
-    instance = await WebAssembly.instantiate(module, {
-        wasi_snapshot_preview1: wasi,
-    });
-    const initialize = instance.exports._initialize;
-    if (typeof initialize !== "function") {
-        throw new Error("TypeScript WASM reactor did not export _initialize");
-    }
-    initialize();
-    return instance;
+    return {
+        imports: {
+            typescript_host: {
+                error_copy: (bufferPointer: number, bufferLength: number) => {
+                    new Uint8Array(getMemory().buffer, bufferPointer, bufferLength).set(hostError.subarray(0, bufferLength));
+                },
+                error_length: () => hostError.length,
+                write_file: hostWriteFile,
+            },
+            wasi_snapshot_preview1: wasi,
+        },
+        initialize(value) {
+            instance = value;
+            const initialize = instance.exports._initialize;
+            if (typeof initialize !== "function") {
+                throw new Error("TypeScript WASM reactor did not export _initialize");
+            }
+            initialize();
+            wasmHosts.set(instance, {
+                setFileSystem(value) {
+                    fileSystem = value;
+                },
+            });
+            return instance;
+        },
+    };
 }
