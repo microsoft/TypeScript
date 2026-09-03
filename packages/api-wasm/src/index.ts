@@ -59,7 +59,21 @@ export class WasmTransport {
         if (this.exports.create_session(this.requestPointer, sessionOptions.length) !== 0) {
             throw new Error(`Failed to create TypeScript WASM session: ${this.readResponseText()}`);
         }
-        setWasmFileSystem(options.instance, options.fs);
+        try {
+            setWasmFileSystem(options.instance, options.fs);
+        }
+        catch (error) {
+            try {
+                this.exports.close_session();
+            }
+            catch (closeError) {
+                throw new AggregateError(
+                    [error, closeError],
+                    "Failed to configure the TypeScript WASM filesystem and close its session",
+                );
+            }
+            throw error;
+        }
     }
 
     setFileSystem(fs: WasmFileSystem | undefined): void {
