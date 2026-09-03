@@ -3,12 +3,20 @@ name: Tag vscode-typescript release
 on:
   workflow_dispatch:
     inputs:
-      extension_version:
-        description: Reviewed extension version to release
+      major:
+        description: Extension major version
         required: true
-        type: string
+        type: number
+      minor:
+        description: Extension minor version
+        required: true
+        type: number
+      patch:
+        description: Extension patch version
+        required: true
+        type: number
 
-run-name: Tag vscode-typescript/v${{ inputs.extension_version }}
+run-name: Tag vscode-typescript/v${{ inputs.major }}.${{ inputs.minor }}.${{ inputs.patch }}
 
 permissions:
   contents: read
@@ -36,7 +44,7 @@ jobs:
 
       - name: Validate release version
         env:
-          EXTENSION_VERSION: ${{ inputs.extension_version }}
+          EXTENSION_VERSION: ${{ inputs.major }}.${{ inputs.minor }}.${{ inputs.patch }}
         run: |
           set -euo pipefail
           versionPattern='^[0-9]+\.[0-9]+\.[0-9]+$'
@@ -80,7 +88,7 @@ jobs:
 
       - name: Create release tag
         env:
-          EXTENSION_VERSION: ${{ inputs.extension_version }}
+          EXTENSION_VERSION: ${{ inputs.major }}.${{ inputs.minor }}.${{ inputs.patch }}
           GITHUB_APP_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
           set -euo pipefail

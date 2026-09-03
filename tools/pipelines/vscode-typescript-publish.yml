@@ -1,6 +1,6 @@
 trigger: none
 
-name: vscode-typescript-publish-$(Date:yyyyMMdd)$(Rev:.r)
+name: TypeScript-VS-Code-Extension-Release-Publish-$(Date:yyyyMMdd)$(Rev:.r)
 appendCommitMessageToRunName: false
 
 parameters:
@@ -20,9 +20,9 @@ resources:
       name: 1ESPipelineTemplates/MicroBuildTemplate
       ref: refs/tags/release
   pipelines:
-    - pipeline: VSCode_TypeScript_Release_Build
+    - pipeline: TypeScript_VS_Code_Extension_Release_Build
       project: DevDiv
-      source: VSCode TypeScript Release Build
+      source: TypeScript VS Code Extension Release Build
       trigger:
         tags:
           - vscode-typescript-release
@@ -52,7 +52,7 @@ extends:
               isProduction: true
               inputs:
                 - input: pipelineArtifact
-                  pipeline: VSCode_TypeScript_Release_Build
+                  pipeline: TypeScript_VS_Code_Extension_Release_Build
                   artifactName: vsix
                   targetPath: $(Pipeline.Workspace)/vsix
 
@@ -146,8 +146,8 @@ extends:
                   fi
                 displayName: Validate signed release artifacts
                 env:
-                  RELEASE_SOURCE_BRANCH: $(resources.pipeline.VSCode_TypeScript_Release_Build.sourceBranch)
-                  RELEASE_SOURCE_COMMIT: $(resources.pipeline.VSCode_TypeScript_Release_Build.sourceCommit)
+                  RELEASE_SOURCE_BRANCH: $(resources.pipeline.TypeScript_VS_Code_Extension_Release_Build.sourceBranch)
+                  RELEASE_SOURCE_COMMIT: $(resources.pipeline.TypeScript_VS_Code_Extension_Release_Build.sourceCommit)
 
               - task: NodeTool@0
                 inputs:

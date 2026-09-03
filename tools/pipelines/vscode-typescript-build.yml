@@ -5,7 +5,7 @@ trigger:
 
 pr: none
 
-name: vscode-typescript-$(Date:yyyyMMdd)$(Rev:.r)
+name: TypeScript-VS-Code-Extension-Release-Build-$(Date:yyyyMMdd)$(Rev:.r)
 appendCommitMessageToRunName: false
 
 variables:
