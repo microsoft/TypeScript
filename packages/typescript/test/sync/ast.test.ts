@@ -1305,7 +1305,7 @@ describe("RemoteNode + child/token getters", () => {
         // different reparse shape (single nodes, whole NodeArrays, mixed arrays, statements).
         { name: "JS with reparsed @param/@returns types", source: "/**\n * @param {number} a the a\n * @returns {string} something\n */\nfunction f(a) { return String(a); }\n", js: true },
         { name: "JS with @type, @template and reparsed type parameters", source: "/** @type {number} */\nconst n = 1;\n/**\n * @template T\n * @param {T} x\n */\nfunction id(x) { return x; }\n", js: true },
-        { name: "JS with optional, default and rest @param variants", source: "/**\n * @param {number} [a]\n * @param {string} [b=\"x\"]\n * @param {...number} rest\n */\nfunction f(a, b, ...rest) {}\n", js: true },
+        { name: "JS with optional, default and rest @param variants", source: '/**\n * @param {number} [a]\n * @param {string} [b="x"]\n * @param {...number} rest\n */\nfunction f(a, b, ...rest) {}\n', js: true },
         { name: "JS with a @type cast on a parenthesized expression", source: "function g() { return 1; }\nconst x = /** @type {number} */ (g());\n", js: true },
         { name: "JS with @typedef and @property hoisted into statements", source: "/**\n * @typedef {Object} Pt\n * @property {number} x\n * @property {number} y\n */\nconst p = { x: 1, y: 2 };\n", js: true },
         { name: "JS with @callback", source: "/**\n * @callback Cb\n * @param {number} n\n * @returns {void}\n */\nlet cb;\n", js: true },
@@ -1315,10 +1315,10 @@ describe("RemoteNode + child/token getters", () => {
         { name: "JS with @enum", source: "/** @enum {number} */\nconst E = { A: 1, B: 2 };\n", js: true },
         { name: "JS with trailing orphan @typedef attached to EndOfFile", source: "let x = 1;\n/** @typedef {number} N */", js: true },
         { name: "JS with @satisfies", source: "/** @satisfies {{ a: number }} */\nconst o = { a: 1 };\n", js: true },
-        { name: "JS with @import declaration", source: "/** @import { T } from \"./t\" */\n/** @type {number} */\nlet v = 1;\n", js: true },
+        { name: "JS with @import declaration", source: '/** @import { T } from "./t" */\n/** @type {number} */\nlet v = 1;\n', js: true },
         { name: "JS with reparsed types on exported and nested functions", source: "/** @param {number} a */\nexport function outer(a) {\n    /** @returns {number} */\n    function inner() { return a; }\n    return inner();\n}\n", js: true },
-        { name: "JSX component with reparsed @param props type", source: "/**\n * @param {{ name: string }} props\n * @returns {object}\n */\nexport function Greeting(props) {\n    return <div className=\"greeting\">hello {props.name}<br /></div>;\n}\n", js: true, jsx: true },
-        { name: "JSX with @type cast and @typedef around elements", source: "/**\n * @typedef {Object} Item\n * @property {string} label\n */\nconst item = /** @type {Item} */ ({ label: \"x\" });\nconst el = <span title={item.label}>{item.label}</span>;\n", js: true, jsx: true },
+        { name: "JSX component with reparsed @param props type", source: '/**\n * @param {{ name: string }} props\n * @returns {object}\n */\nexport function Greeting(props) {\n    return <div className="greeting">hello {props.name}<br /></div>;\n}\n', js: true, jsx: true },
+        { name: "JSX with @type cast and @typedef around elements", source: '/**\n * @typedef {Object} Item\n * @property {string} label\n */\nconst item = /** @type {Item} */ ({ label: "x" });\nconst el = <span title={item.label}>{item.label}</span>;\n', js: true, jsx: true },
     ];
 
     for (const entry of corpus) {
