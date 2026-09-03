@@ -30,18 +30,15 @@ IF THESE COMMANDS FAIL, CI WILL FAIL, AND YOUR PR WILL BE REJECTED OUT OF HAND.
 FIXING ERRORS FROM THESE COMMANDS IS YOUR HIGHEST PRIORITY.
 ENSURE YOU DO THE RIGHT THINGS TO MAKE THEM PASS.
 ```sh
-npx hereby build  # Build the project
-npx hereby test   # Run tests
-npx hereby lint   # Run linters
-npx hereby format # Format the code
+npx hereby validate # Build, test, lint, and format the project
 ```
 </critical>
 
 If you are writing or testing TS API features (eg, code in packages/typescript/src/api/async/api.ts), additionally, you need to run
 ```sh
-npx hereby test:api
+npx hereby validate --api # Also run the TypeScript API tests
 ```
-which is not run as part of the primary suite.
+instead. API tests are not run by `npx hereby validate` without `--api`.
 
 ## Compiler Features, Fixes, and Tests
 
@@ -134,10 +131,8 @@ Were alternate fixes considered? Describe them briefly if so
 ## Copilot Checklist
 
 <!-- don't lie! -->
-I successfully ran these commands at the end of my session, and they completed without error:
- * [ ] npx hereby build
- * [ ] npx hereby test
- * [ ] npx hereby lint
- * [ ] npx hereby format
+I successfully ran the applicable command at the end of my session, and it completed without error:
+ * [ ] npx hereby validate
+ * [ ] npx hereby validate --api (for TypeScript API changes)
 
 ```

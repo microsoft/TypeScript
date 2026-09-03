@@ -103,6 +103,7 @@ const { values: rawOptions } = parseArgs({
     options: {
         tests: { type: "string", short: "t" },
         fix: { type: "boolean" },
+        api: { type: "boolean" },
         debug: { type: "boolean" },
         dirty: { type: "boolean" },
         release: { type: "boolean" },
@@ -1363,6 +1364,43 @@ export const format = task({
 async function runFormat() {
     await run("dprint", ["fmt"]);
 }
+
+export const validate = task({
+    name: "validate",
+    description: "Builds, tests, lints, and formats the repo. Pass --api to include API tests.",
+    dependencies: [build],
+    run: async () => {
+        /** @type {{ name: string; error: unknown }[]} */
+        const failures = [];
+        /** @param {string} name @param {() => Promise<void>} action */
+        const runValidation = async (name, action) => {
+            try {
+                await action();
+            }
+            catch (error) {
+                failures.push({ name, error });
+                console.error(styleText("red", `${name} failed; continuing validation.`));
+            }
+        };
+
+        await runValidation("test", async () => {
+            await runTests();
+            await runTestExtension();
+        });
+        if (options.api) {
+            await runValidation("test:api", runTestAPI);
+        }
+        await runValidation("lint", runLint);
+        await runValidation("format", runFormat);
+
+        if (failures.length) {
+            throw new AggregateError(
+                failures.map(failure => failure.error),
+                `Validation failed: ${failures.map(failure => failure.name).join(", ")}`,
+            );
+        }
+    },
+});
 
 export const checkFormat = task({
     name: "check:format",
