@@ -194,6 +194,11 @@ describe("API test suite in a browser", () => {
             assert.ok(results.passed > 0);
             const excludedFiles = fileExclusions.filter(exclusion => exclusion.mode === mode);
             const excludedFileTests = excludedFiles.reduce((count, exclusion) => count + exclusion.tests, 0);
+            assert.strictEqual(
+                results.passed + results.skipped.length + excludedFileTests,
+                expectedTestCounts[mode],
+                `Browser ${mode} API test accounting changed`,
+            );
             t.diagnostic(`${results.passed} passed, ${results.skipped.length + excludedFileTests} skipped`);
             for (const skipped of results.skipped) {
                 t.diagnostic(`SKIP ${skipped.name}: ${skipped.reason}`);
