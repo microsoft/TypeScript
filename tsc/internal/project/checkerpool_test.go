@@ -19,14 +19,18 @@ import (
 
 func setupCheckerPoolSession(t *testing.T, opts CheckerPoolOptions) (*Session, *checkerPool) {
 	t.Helper()
+	return setupCheckerPoolSessionWithFiles(t, opts, map[string]any{
+		"/src/tsconfig.json": `{ "compilerOptions": { "noLib": true } }`,
+		"/src/index.ts":      "export const x: number = 1;",
+	})
+}
+
+func setupCheckerPoolSessionWithFiles(t *testing.T, opts CheckerPoolOptions, files map[string]any) (*Session, *checkerPool) {
+	t.Helper()
 	if !bundled.Embedded {
 		t.Skip("bundled files are not embedded")
 	}
 
-	files := map[string]any{
-		"/src/tsconfig.json": `{ "compilerOptions": { "noLib": true } }`,
-		"/src/index.ts":      "export const x: number = 1;",
-	}
 	fs := bundled.WrapFS(vfstest.FromMap(files, false))
 	session := NewSession(&SessionInit{
 		BackgroundCtx: context.Background(),
@@ -1292,4 +1296,27 @@ func TestCheckerPoolCleanupAfterDiscardIsNoop(t *testing.T) {
 		assert.Assert(t, hasChecker, "idle checkers must survive cleanup on a discarded pool")
 		pool.mu.Unlock()
 	})
+}
+
+// A whole-program check must run on the pool the compiler would have built, so a pull in the editor
+// checks each file with the same checker, out of the same number of checkers, that a build uses.
+// The checkers individual requests share are a different, smaller pool.
+func TestCheckerPoolChecksWholeProgramWithCompilerPool(t *testing.T) {
+	t.Parallel()
+	_, pool := setupCheckerPoolSessionWithFiles(t, CheckerPoolOptions{IdleTimeout: 10 * time.Second}, map[string]any{
+		"/src/tsconfig.json": `{ "compilerOptions": { "noLib": true } }`,
+		"/src/index.ts":      "export const x: number = 1;",
+		"/src/a.ts":          "export const a: string = 1;",
+		"/src/b.ts":          "export const b = 1;",
+	})
+	assert.Assert(t, pool.checkingPool == nil, "nothing built before a check is asked for")
+
+	diagnostics := pool.program.GetSemanticDiagnostics(context.Background(), nil)
+	assert.Assert(t, len(diagnostics) > 0, "expected the seeded error")
+	assert.Assert(t, pool.checkingPool != nil, "a whole-program check must go through the compiler's pool")
+
+	// Discarding is what the project system does once a program is replaced, and it has to happen
+	// before the next program's checkers are built or both generations are held at once.
+	pool.Discard()
+	assert.Assert(t, pool.checkingPool == nil, "a discarded pool must let go of its checkers")
 }

@@ -49,6 +49,12 @@ type checkerPool struct {
 	// query checkers are not disposed until the pool is GC'd.
 	discarded bool
 
+	// checkingPool is the pool the compiler would check this program with. A whole-program check
+	// goes through it so each file is checked by the same checker, out of the same number of
+	// checkers, that a build would use. Individual requests keep using the checkers below, which
+	// this pool knows nothing about. Built on first use and dropped once a sweep is done with it.
+	checkingPool compiler.CheckerPool
+
 	// checkers[0] is the diagnostics checker.
 	// checkers[1:] are ephemeral query checkers.
 	// All are idle-cleaned.
@@ -244,6 +250,19 @@ func (p *checkerPool) getDiagnosticsChecker(ctx context.Context, requestID strin
 		}
 	}
 	return c, p.createRelease(requestID, diagIndex, c)
+}
+
+// ForEachCheckerGroupDo implements compiler.CheckerPool, so a whole-program check runs on the
+// compiler's own checkers rather than the single diagnostics checker individual requests share.
+func (p *checkerPool) ForEachCheckerGroupDo(ctx context.Context, files []*ast.SourceFile, singleThreaded bool, cb func(c *checker.Checker, fileIndex int, file *ast.SourceFile)) {
+	p.mu.Lock()
+	if p.checkingPool == nil {
+		p.log("checkerpool: Creating checking pool")
+		p.checkingPool = compiler.NewCheckerPool(p.program)
+	}
+	pool := p.checkingPool
+	p.mu.Unlock()
+	pool.ForEachCheckerGroupDo(ctx, files, singleThreaded, cb)
 }
 
 // getQueryChecker returns an ephemeral query checker from indices 1+.
@@ -484,6 +503,15 @@ func (p *checkerPool) mergeGlobalDiagnosticsFromCheckerLocked(index int, c *chec
 		return
 	}
 	p.globalDiagCheckerCount[index] = len(globals)
+	p.mergeGlobalDiagnosticsLocked(globals)
+}
+
+// mergeGlobalDiagnosticsLocked merges global diagnostics into the accumulated set.
+// Must be called with p.mu held.
+func (p *checkerPool) mergeGlobalDiagnosticsLocked(globals []*ast.Diagnostic) {
+	if len(globals) == 0 {
+		return
+	}
 	before := len(p.globalDiagAccumulated)
 	p.globalDiagAccumulated = compiler.SortAndDeduplicateDiagnostics(append(p.globalDiagAccumulated, globals...))
 	if len(p.globalDiagAccumulated) != before {
@@ -521,6 +549,9 @@ func (p *checkerPool) Discard() {
 	}
 	p.log("checkerpool: Discarding pool, stopping idle cleanup")
 	p.discarded = true
+	// A discarded pool belongs to a project nothing is using, so let go of the checkers a sweep
+	// left behind rather than holding their types for the life of the snapshot.
+	p.checkingPool = nil
 	if p.cleanupTimer != nil {
 		p.cleanupTimer.Stop()
 		p.cleanupTimer = nil

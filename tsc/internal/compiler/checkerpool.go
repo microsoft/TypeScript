@@ -19,8 +19,22 @@ import (
 // The returned checker must not be accessed concurrently; each acquisition is exclusive.
 // If file is non-nil, the pool may use it as an affinity hint to return the same
 // checker for the same file across calls.
+// CheckerPool owns the checkers a program is checked with: one per the program's `checkers` option,
+// with the program's files partitioned across them. Which checker sees a file is part of how a
+// program is checked, so anything wanting to check one the way the command line does has to check
+// it through this.
 type CheckerPool interface {
 	GetChecker(ctx context.Context, file *ast.SourceFile) (*checker.Checker, func())
+	// ForEachCheckerGroupDo runs one task per checker rather than one per file, so each checker is
+	// taken once for the whole group of files assigned to it.
+	ForEachCheckerGroupDo(ctx context.Context, files []*ast.SourceFile, singleThreaded bool, cb func(c *checker.Checker, fileIndex int, file *ast.SourceFile))
+	GetGlobalDiagnostics() []*ast.Diagnostic
+}
+
+// NewCheckerPool returns the pool the compiler would check this program with. A Program builds its
+// own, so this is for callers that supply a pool of their own and need the compiler's for checking.
+func NewCheckerPool(program *Program) CheckerPool {
+	return newCheckerPool(program)
 }
 
 type checkerPool struct {
@@ -466,10 +480,10 @@ func (p *checkerPool) GetGlobalDiagnostics() []*ast.Diagnostic {
 	return SortAndDeduplicateDiagnostics(slices.Concat(globalDiagnostics...))
 }
 
-// forEachCheckerGroupDo runs one task per checker in parallel. Each task iterates
+// ForEachCheckerGroupDo runs one task per checker in parallel. Each task iterates
 // the provided files, processing only those assigned to its checker. Within each
 // checker's set, files are visited in their original order.
-func (p *checkerPool) forEachCheckerGroupDo(ctx context.Context, files []*ast.SourceFile, singleThreaded bool, cb func(c *checker.Checker, fileIndex int, file *ast.SourceFile)) {
+func (p *checkerPool) ForEachCheckerGroupDo(ctx context.Context, files []*ast.SourceFile, singleThreaded bool, cb func(c *checker.Checker, fileIndex int, file *ast.SourceFile)) {
 	p.createCheckers()
 
 	checkerCount := len(p.checkers)
