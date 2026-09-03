@@ -15,6 +15,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/internal/execute/incremental"
 	"github.com/microsoft/TypeScript/tsc/internal/locale"
+	"github.com/microsoft/TypeScript/tsc/internal/pnp"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 )
@@ -29,6 +30,8 @@ type System interface {
 	GetWidthOfTerminal() int
 	GetEnvironmentVariable(name string) (string, bool)
 	Spawn(command []string, dir string, stderr io.Writer) (io.ReadWriteCloser, error)
+
+	PnpApi() *pnp.PnpApi
 
 	Now() time.Time
 	SinceStart() time.Duration

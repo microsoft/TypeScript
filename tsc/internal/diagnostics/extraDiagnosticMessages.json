@@ -39,6 +39,38 @@
         "category": "Message",
         "code": 100009
     },
+    "Your application tried to access '{0}'. While this module is usually interpreted as a Node builtin, your resolver is running inside a non-Node resolution context where such builtins are ignored. Since '{0}' isn't otherwise declared in your dependencies, this makes the require call ambiguous and unsound.\n\nRequired package: {0}{1}\nRequired by: {2}": {
+        "category": "Error",
+        "code": 110001
+    },
+    "{0} tried to access '{1}'. While this module is usually interpreted as a Node builtin, your resolver is running inside a non-Node resolution context where such builtins are ignored. Since '{1}' isn't otherwise declared in {0}'s dependencies, this makes the require call ambiguous and unsound.\n\nRequired package: {1}{2}\nRequired by: {3}": {
+        "category": "Error",
+        "code": 110002
+    },
+    "Your application tried to access '{0}', but it isn't declared in your dependencies; this makes the require call ambiguous and unsound.\n\nRequired package: {0}{1}\nRequired by: {2}": {
+        "category": "Error",
+        "code": 110003
+    },
+    "Your application tried to access '{0}' (a peer dependency); this isn't allowed as there is no ancestor to satisfy the requirement. Use a devDependency if needed.\n\nRequired package: {0}\nRequired by: {1}": {
+        "category": "Error",
+        "code": 110004
+    },
+    "{0} tried to access '{1}' (a peer dependency) but it isn't provided by its ancestors/your application; this makes the require call ambiguous and unsound.\n\nRequired package: {1}\nRequired by: {2}": {
+        "category": "Error",
+        "code": 110005
+    },
+    "no package found for path '{0}'": {
+        "category": "Error",
+        "code": 110006
+    },
+    "Empty specifier: '{0}'": {
+        "category": "Error",
+        "code": 110007
+    },
+    "Invalid specifier: '{0}'": {
+        "category": "Error",
+        "code": 110008
+    },
     "Non-relative paths are not allowed. Did you forget a leading './'?": {
         "category": "Error",
         "code": 5090

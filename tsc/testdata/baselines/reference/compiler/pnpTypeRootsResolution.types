@@ -1,0 +1,53 @@
+//// [tests/cases/compiler/pnpTypeRootsResolution.ts] ////
+
+=== /src/index.ts ===
+// Test that TypeScript can resolve @types packages through PnP
+import type { Request, Response } from 'server-lib';
+>Request : Request
+>Response : Response
+
+import { createServer } from 'server-lib';
+>createServer : () => Record<string, unknown>
+
+export function handleRequest(req: Request, res: Response): void {
+>handleRequest : (req: Request, res: Response) => void
+>req : Request
+>res : Response
+
+  res.json({ data: 'Hello, world!' });
+>res.json({ data: 'Hello, world!' }) : void
+>res.json : (body: Record<string, unknown>) => void
+>res : Response
+>json : (body: Record<string, unknown>) => void
+>{ data: 'Hello, world!' } : { data: string; }
+>data : string
+>'Hello, world!' : "Hello, world!"
+}
+
+export const server = createServer();
+>server : Record<string, unknown>
+>createServer() : Record<string, unknown>
+>createServer : () => Record<string, unknown>
+
+=== /.yarn/cache/@types-server-lib-npm-2.0.0-mnop3456/node_modules/@types/server-lib/index.d.ts ===
+export interface Request {
+  params: Record<string, unknown>;
+>params : Record<string, unknown>
+
+  query: Record<string, unknown>;
+>query : Record<string, unknown>
+}
+
+export interface Response {
+  send(body: Record<string, unknown>): void;
+>send : (body: Record<string, unknown>) => void
+>body : Record<string, unknown>
+
+  json(body: Record<string, unknown>): void;
+>json : (body: Record<string, unknown>) => void
+>body : Record<string, unknown>
+}
+
+export declare function createServer(): Record<string, unknown>;
+>createServer : () => Record<string, unknown>
+

@@ -26,6 +26,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/ls/lsconv"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/lsutil"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
+	"github.com/microsoft/TypeScript/tsc/internal/pnp"
 	"github.com/microsoft/TypeScript/tsc/internal/project/ata"
 	"github.com/microsoft/TypeScript/tsc/internal/project/background"
 	"github.com/microsoft/TypeScript/tsc/internal/project/logging"
@@ -88,6 +89,7 @@ type SessionInit struct {
 	Client        Client
 	Logger        logging.Logger
 	NpmExecutor   ata.NpmExecutor
+	PnpApi        *pnp.PnpApi
 	// Spawner launches content mapper processes. It is nil when the host cannot spawn processes.
 	Spawner                 contentmapper.Spawner
 	ContentMapperLogger     contentmapper.Logger
@@ -117,6 +119,8 @@ type Session struct {
 	contentMapperTimings   contentmapper.Timings
 	contentMapperTimingsMu sync.Mutex
 	fs                     *overlayFS
+
+	pnpApi *pnp.PnpApi
 
 	// registeredContentMapperSnapshotID is the ID of the newest snapshot whose registration has been
 	// applied. Registration runs from background tasks that may finish out of order, so
@@ -257,6 +261,7 @@ func NewSession(init *SessionInit) *Session {
 		npmExecutor:             init.NpmExecutor,
 		contentMapperHost:       newContentMapperHost(init),
 		fs:                      overlayFS,
+		pnpApi:                  init.PnpApi,
 		parseCache:              parseCache,
 		contentMappedParseCache: contentMappedParseCache,
 		extendedConfigCache:     extendedConfigCache,
@@ -290,6 +295,7 @@ func NewSession(init *SessionInit) *Session {
 				},
 			),
 			toPath,
+			init.PnpApi,
 		),
 		initialUserPreferences:   lsutil.NewDefaultUserPreferences(),
 		workspaceUserPreferences: lsutil.NewDefaultUserPreferences(),
@@ -318,6 +324,11 @@ func (s *Session) FS() vfs.FS {
 // GetCurrentDirectory implements module.ResolutionHost
 func (s *Session) GetCurrentDirectory() string {
 	return s.options.CurrentDirectory
+}
+
+// PnpApi implements module.ResolutionHost
+func (s *Session) PnpApi() *pnp.PnpApi {
+	return s.pnpApi
 }
 
 // Gets copy of current configuration
@@ -493,7 +504,11 @@ func (s *Session) DidChangeWatchedFiles(ctx context.Context, changes []*lsproto.
 		case lsproto.FileChangeTypeCreated:
 			kind = FileChangeKindWatchCreate
 		case lsproto.FileChangeTypeChanged:
-			kind = FileChangeKindWatchChange
+			if s.pnpApi != nil && strings.HasSuffix(change.Uri.FileName(), ".pnp.cjs") {
+				kind = FileChangeKindPnpInstall
+			} else {
+				kind = FileChangeKindWatchChange
+			}
 		case lsproto.FileChangeTypeDeleted:
 			kind = FileChangeKindWatchDelete
 		default:
@@ -1704,11 +1719,13 @@ func (s *Session) updateWatches(oldSnapshot *Snapshot, newSnapshot *Snapshot) er
 			errors = append(errors, updateWatch(ctx, s, s.logger, nil, addedProject.programFilesWatch)...)
 			errors = append(errors, updateWatch(ctx, s, s.logger, nil, addedProject.typingsWatch)...)
 			errors = append(errors, updateWatch(ctx, s, s.logger, nil, addedProject.contentMapperWatch)...)
+			errors = append(errors, updateWatch(ctx, s, s.logger, nil, addedProject.pnpManifestWatch)...)
 		},
 		func(_ tspath.Path, removedProject *Project) {
 			errors = append(errors, updateWatch(ctx, s, s.logger, removedProject.programFilesWatch, nil)...)
 			errors = append(errors, updateWatch(ctx, s, s.logger, removedProject.typingsWatch, nil)...)
 			errors = append(errors, updateWatch(ctx, s, s.logger, removedProject.contentMapperWatch, nil)...)
+			errors = append(errors, updateWatch(ctx, s, s.logger, removedProject.pnpManifestWatch, nil)...)
 		},
 		func(_ tspath.Path, oldProject, newProject *Project) {
 			if oldProject.programFilesWatch.ID() != newProject.programFilesWatch.ID() {
@@ -1729,6 +1746,13 @@ func (s *Session) updateWatches(oldSnapshot *Snapshot, newSnapshot *Snapshot) er
 				errors = append(errors, updateWatch(ctx, s, s.logger, oldProject.contentMapperWatch, newProject.contentMapperWatch)...)
 			} else if s.watches.IsPending(newProject.contentMapperWatch.ID()) {
 				errors = append(errors, updateWatch(ctx, s, s.logger, nil, newProject.contentMapperWatch)...)
+			}
+			if oldProject.pnpManifestWatch.ID() != newProject.pnpManifestWatch.ID() {
+				errors = append(errors, updateWatch(ctx, s, s.logger, oldProject.pnpManifestWatch, newProject.pnpManifestWatch)...)
+			} else {
+				if s.watches.IsPending(newProject.pnpManifestWatch.ID()) {
+					errors = append(errors, updateWatch(ctx, s, s.logger, nil, newProject.pnpManifestWatch)...)
+				}
 			}
 		},
 	)

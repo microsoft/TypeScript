@@ -7,6 +7,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/contentmapper"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
+	"github.com/microsoft/TypeScript/tsc/internal/pnp"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfstest"
@@ -14,7 +15,8 @@ import (
 )
 
 type resolveContentMapperHost struct {
-	fs vfs.FS
+	fs     vfs.FS
+	pnpApi *pnp.PnpApi
 }
 
 func TestGetContentMapperForFileNameUsesLongestExtension(t *testing.T) {
@@ -64,6 +66,7 @@ func TestGetOutputFileNamesExcludesMapperOwnedOutputs(t *testing.T) {
 
 func (h resolveContentMapperHost) FS() vfs.FS                  { return h.fs }
 func (h resolveContentMapperHost) GetCurrentDirectory() string { return "/home/project" }
+func (h resolveContentMapperHost) PnpApi() *pnp.PnpApi         { return h.pnpApi }
 
 func TestResolveContentMapperManifest(t *testing.T) {
 	t.Parallel()

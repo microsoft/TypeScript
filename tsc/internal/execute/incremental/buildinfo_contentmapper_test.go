@@ -91,7 +91,7 @@ func TestDynamicContentMapperIdentities(t *testing.T) {
 		FileNames:               []string{"/src/a.ts"},
 		ContentMapperIdentities: []string{"dynamic@1.0.0:old"},
 	}
-	host := compiler.NewCompilerHost("/", vfstest.FromMap[any](nil, true), "", nil, nil, project)
+	host := compiler.NewCompilerHost("/", vfstest.FromMap[any](nil, true), "", nil, nil, nil, project)
 	program := incremental.ReadBuildInfoProgram(config, fakeBuildInfoReader{buildInfo}, host)
 	assert.Assert(t, program == nil, "expected opaque mapper identity changes to discard the old program")
 }
@@ -116,7 +116,7 @@ func TestReadBuildInfoProgramContentMapperIdentityMismatch(t *testing.T) {
 	}
 	config := configWithMappers(&contentmapper.Mapper{Definition: contentmapper.Definition{Package: "vue", Extensions: []string{".vue"}}, Manifest: contentmapper.Manifest{Name: "vue", Version: "2.0.0"}})
 	project := fakeContentMapperProject{identities: []string{"vue@2.0.0:current"}}
-	host := compiler.NewCompilerHost("/", vfstest.FromMap[any](nil, true), "", nil, nil, project)
+	host := compiler.NewCompilerHost("/", vfstest.FromMap[any](nil, true), "", nil, nil, nil, project)
 
 	program := incremental.ReadBuildInfoProgram(config, fakeBuildInfoReader{buildInfo}, host)
 	assert.Assert(t, program == nil, "expected the old program to be discarded when the mapper identity changed")

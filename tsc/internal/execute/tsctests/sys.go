@@ -19,6 +19,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/execute/tsc"
 	"github.com/microsoft/TypeScript/tsc/internal/execute/watchmanager"
 	"github.com/microsoft/TypeScript/tsc/internal/locale"
+	"github.com/microsoft/TypeScript/tsc/internal/pnp"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/contentmappertest"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/fsbaselineutil"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/harnessutil"
@@ -27,6 +28,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/iovfs"
+	"github.com/microsoft/TypeScript/tsc/internal/vfs/pnpvfs"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfstest"
 	"golang.org/x/text/language"
 )
@@ -92,11 +94,19 @@ func (t *TestClock) SinceStart() time.Duration {
 
 func NewTscSystem(files FileMap, useCaseSensitiveFileNames bool, cwd string) *TestSys {
 	clock := &TestClock{start: time.Now()}
+	var fs vfs.FS = vfstest.FromMapWithClock(files, useCaseSensitiveFileNames, clock)
+
+	pnpApi := pnp.InitPnpApi(fs, tspath.NormalizePath(cwd))
+	if pnpApi != nil {
+		fs = pnpvfs.From(fs)
+	}
+
 	return &TestSys{
 		fs: &testFs{
-			FS: vfstest.FromMapWithClock(files, useCaseSensitiveFileNames, clock),
+			FS: fs,
 		},
 		cwd:         cwd,
+		pnpApi:      pnpApi,
 		outputIsTTY: true,
 		clock:       clock,
 	}
@@ -173,6 +183,8 @@ type TestSys struct {
 	env                map[string]string
 	outputIsTTY        bool
 	clock              *TestClock
+
+	pnpApi *pnp.PnpApi
 }
 
 var (
@@ -220,6 +232,10 @@ func (s *TestSys) DefaultLibraryPath() string {
 
 func (s *TestSys) GetCurrentDirectory() string {
 	return s.cwd
+}
+
+func (s *TestSys) PnpApi() *pnp.PnpApi {
+	return s.pnpApi
 }
 
 func (s *TestSys) Writer() io.Writer {

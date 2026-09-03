@@ -8,6 +8,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/module"
 	"github.com/microsoft/TypeScript/tsc/internal/outputpaths"
 	"github.com/microsoft/TypeScript/tsc/internal/packagejson"
+	"github.com/microsoft/TypeScript/tsc/internal/pnp"
 	"github.com/microsoft/TypeScript/tsc/internal/printer"
 	"github.com/microsoft/TypeScript/tsc/internal/symlinks"
 	"github.com/microsoft/TypeScript/tsc/internal/transformers/declarations"
@@ -25,6 +26,7 @@ type EmitHost interface {
 	GetCurrentDirectory() string
 	CommonSourceDirectory() string
 	IsEmitBlocked(file string) bool
+	PnpApi() *pnp.PnpApi
 }
 
 var _ EmitHost = (*emitHost)(nil)
@@ -116,6 +118,8 @@ func (host *emitHost) ContentMapperExtensions() []string {
 func (host *emitHost) UseCaseSensitiveFileNames() bool {
 	return host.program.UseCaseSensitiveFileNames()
 }
+
+func (host *emitHost) PnpApi() *pnp.PnpApi { return host.program.PnpApi() }
 
 func (host *emitHost) IsEmitBlocked(file string) bool {
 	return host.program.IsEmitBlocked(file)

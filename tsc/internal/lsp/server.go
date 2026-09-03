@@ -30,12 +30,14 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/ls/lsutil"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lspwatcher"
+	"github.com/microsoft/TypeScript/tsc/internal/pnp"
 	"github.com/microsoft/TypeScript/tsc/internal/pprof"
 	"github.com/microsoft/TypeScript/tsc/internal/project"
 	"github.com/microsoft/TypeScript/tsc/internal/project/ata"
 	"github.com/microsoft/TypeScript/tsc/internal/tsoptions"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
+	"github.com/microsoft/TypeScript/tsc/internal/vfs/pnpvfs"
 	"golang.org/x/sync/errgroup"
 )
 
@@ -1725,6 +1727,11 @@ func (s *Server) handleInitialized(ctx context.Context, params *lsproto.Initiali
 		cwd = s.cwd
 	}
 
+	pnpApi := pnp.InitPnpApi(s.fs, cwd)
+	if pnpApi != nil {
+		s.fs = pnpvfs.From(s.fs)
+	}
+
 	s.telemetryEnabled = enableTelemetry
 
 	s.session = project.NewSession(&project.SessionInit{
@@ -1742,6 +1749,7 @@ func (s *Server) handleInitialized(ctx context.Context, params *lsproto.Initiali
 			RunExternalCode:        runExternalCode,
 		},
 		FS:                  s.fs,
+		PnpApi:              pnpApi,
 		Logger:              s.logger,
 		Client:              s,
 		NpmExecutor:         s,

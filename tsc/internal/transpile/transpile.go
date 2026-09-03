@@ -196,7 +196,7 @@ func transpileWorker(ctx context.Context, input string, options Options, declara
 		files[tspath.CombinePaths(libDirectory, libFileName)] = barebonesLibContent
 	}
 
-	host := compiler.NewCompilerHost(inputDirectory, &transpileFS{files: files}, libDirectory, nil, nil, nil)
+	host := compiler.NewCompilerHost(inputDirectory, &transpileFS{files: files}, libDirectory, nil, nil, nil, nil)
 
 	program := compiler.NewProgram(compiler.ProgramOptions{
 		Config: &tsoptions.ParsedCommandLine{

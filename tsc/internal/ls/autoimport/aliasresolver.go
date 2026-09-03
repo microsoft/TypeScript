@@ -8,6 +8,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/module"
 	"github.com/microsoft/TypeScript/tsc/internal/packagejson"
+	"github.com/microsoft/TypeScript/tsc/internal/pnp"
 	"github.com/microsoft/TypeScript/tsc/internal/symlinks"
 	"github.com/microsoft/TypeScript/tsc/internal/tsoptions"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
@@ -231,6 +232,11 @@ func (r *aliasResolver) IsSourceFromProjectReference(path tspath.Path) bool {
 
 // SourceFileMayBeEmitted implements checker.Program.
 func (r *aliasResolver) SourceFileMayBeEmitted(sourceFile *ast.SourceFile, forceDtsEmit bool) bool {
+	panic("unimplemented")
+}
+
+// PnpApi implements checker.Program.
+func (r *aliasResolver) PnpApi() *pnp.PnpApi {
 	panic("unimplemented")
 }
 
