@@ -162,11 +162,16 @@ func worstCategory(diags []*ast.Diagnostic) diagnostics.Category {
 	return worst
 }
 
-// WorkspaceDiagnosticsForProject checks the whole program at once and returns what each file it
-// owns should report. Checking every file in one call lets the program split the work across the
-// checkers a build would use, and keeps the checker pool's own coordination rather than repeating
-// it per file; the diagnostics come back keyed by the file they belong to.
-func (l *LanguageService) WorkspaceDiagnosticsForProject(ctx context.Context, files []*ast.SourceFile) map[*ast.SourceFile][]*lsproto.Diagnostic {
+// WorkspaceDiagnosticsForProject checks a project in one call and returns what each of its files
+// should report, keyed by file. Checking everything in one call lets the program split the work
+// across the checkers a build would use and keeps the pool's own coordination rather than repeating
+// it per file.
+//
+// The program is passed in rather than taken from the language service because a sweep hands over
+// the incremental view of it, which re-checks only the files a change reached and serves the rest
+// from what it cached last time. Suggestions are left out: nothing caches them, so asking would
+// re-check every file and undo that.
+func (l *LanguageService) WorkspaceDiagnosticsForProject(ctx context.Context, program compiler.ProgramLike, files []*ast.SourceFile) map[*ast.SourceFile][]*lsproto.Diagnostic {
 	reports := make(map[*ast.SourceFile][]*lsproto.Diagnostic, len(files))
 	if l.UserPreferences().EnableValidation.IsFalse() {
 		for _, file := range files {
@@ -176,23 +181,17 @@ func (l *LanguageService) WorkspaceDiagnosticsForProject(ctx context.Context, fi
 	}
 
 	byFile := make(map[*ast.SourceFile][]*ast.Diagnostic, len(files))
-	for _, diagnostics := range [][]*ast.Diagnostic{
-		l.program.GetSyntacticDiagnostics(ctx, nil),
-		l.program.GetSemanticDiagnostics(ctx, nil),
-		l.program.GetSuggestionDiagnostics(ctx, nil),
-	} {
+	collect := func(diagnostics []*ast.Diagnostic) {
 		for _, diagnostic := range diagnostics {
 			if file := diagnostic.File(); file != nil {
 				byFile[file] = append(byFile[file], diagnostic)
 			}
 		}
 	}
-	if l.program.Options().GetEmitDeclarations() {
-		for _, diagnostic := range l.program.GetDeclarationDiagnostics(ctx, nil) {
-			if file := diagnostic.File(); file != nil {
-				byFile[file] = append(byFile[file], diagnostic)
-			}
-		}
+	collect(program.GetSyntacticDiagnostics(ctx, nil))
+	collect(program.GetSemanticDiagnostics(ctx, nil))
+	if program.Options().GetEmitDeclarations() {
+		collect(program.GetDeclarationDiagnostics(ctx, nil))
 	}
 
 	for _, file := range files {

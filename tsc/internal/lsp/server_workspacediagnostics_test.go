@@ -931,6 +931,69 @@ func TestWorkspaceDiagnosticsDependentsAreTransitive(t *testing.T) {
 	})
 }
 
+// An edit should cost what it affects, not what the project contains. These files form a chain
+// where each consumes the previous file's interface, so widening one breaks its direct importer and
+// nothing beyond it.
+func TestWorkspaceDiagnosticsRechecksOnlyWhatAnEditAffects(t *testing.T) {
+	t.Parallel()
+
+	if !bundled.Embedded {
+		t.Skip("bundled files are not embedded")
+	}
+
+	const n = 12
+	body := func(f int, extra string) string {
+		prev := ""
+		if f > 0 {
+			prev = fmt.Sprintf("import type { I%d } from \"./f%d.js\";\nexport const uses%d: I%d = { a: \"x\", b: %d };\n", f-1, f-1, f, f-1, f)
+		}
+		return fmt.Sprintf("%sexport interface I%d { a: string; b: number%s }\n", prev, f, extra)
+	}
+	files := map[string]string{"/home/projects/tsconfig.json": `{"compilerOptions":{"strict":true}}`}
+	for f := range n {
+		files[fmt.Sprintf("/home/projects/f%d.ts", f)] = body(f, "")
+	}
+
+	client, _ := initWorkspaceDiagnosticsClient(t, files)
+	lsptestutil.SendNotification(t, client, lsproto.TextDocumentDidOpenInfo, &lsproto.DidOpenTextDocumentParams{
+		TextDocument: &lsproto.TextDocumentItem{
+			Uri: "file:///home/projects/f0.ts", LanguageId: "typescript", Version: 1, Text: body(0, ""),
+		},
+	})
+
+	first := pullWorkspaceDiagnostics(t, client, &lsproto.WorkspaceDiagnosticParams{
+		PreviousResultIds: []lsproto.PreviousResultId{},
+	})
+	var ids []lsproto.PreviousResultId
+	for _, item := range first.Items {
+		if full := item.FullDocumentDiagnosticReport; full != nil && full.ResultId != nil {
+			ids = append(ids, lsproto.PreviousResultId{Uri: full.Uri, Value: *full.ResultId})
+		}
+	}
+
+	// Requiring a new member of I0 breaks f1, which builds one, and leaves f2 onwards alone.
+	lsptestutil.SendNotification(t, client, lsproto.TextDocumentDidChangeInfo, &lsproto.DidChangeTextDocumentParams{
+		TextDocument: lsproto.VersionedTextDocumentIdentifier{Uri: "file:///home/projects/f0.ts", Version: 2},
+		ContentChanges: []lsproto.TextDocumentContentChangePartialOrWholeDocument{
+			{WholeDocument: &lsproto.TextDocumentContentChangeWholeDocument{Text: body(0, "; c: string")}},
+		},
+	})
+
+	second := pullWorkspaceDiagnostics(t, client, &lsproto.WorkspaceDiagnosticParams{PreviousResultIds: ids})
+
+	var reportedInFull []string
+	for _, item := range second.Items {
+		if full := item.FullDocumentDiagnosticReport; full != nil {
+			reportedInFull = append(reportedInFull, string(full.Uri))
+		}
+	}
+	assert.DeepEqual(t, reportedInFull, []string{"file:///home/projects/f1.ts"})
+
+	broken := findFullReport(t, second.Items, "file:///home/projects/f1.ts")
+	assert.Equal(t, len(broken.Items), 1)
+	assert.Assert(t, strings.Contains(broken.Items[0].Message.AsString(), "c"))
+}
+
 // A client that never pulls per document has nothing for a workspace report to collide with, and
 // would otherwise never hear about the files it has open.
 func TestWorkspaceDiagnosticsReportsOpenDocumentsWithoutServerDeDuplication(t *testing.T) {

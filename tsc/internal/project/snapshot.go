@@ -13,6 +13,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/contentmapper"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/execute/incremental"
 	"github.com/microsoft/TypeScript/tsc/internal/ls"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/autoimport"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/lsconv"
@@ -313,6 +314,13 @@ func (s *Snapshot) ReleaseCheckingPool(project *Project) bool {
 		return false
 	}
 	return project.checkerPool.releaseCheckingPool()
+}
+
+// IncrementalProgram returns a project's program together with the record of which files a change
+// since the previous program reached, so a caller checking the project can skip the files it did
+// not. Built on first use, and shared by every snapshot holding the same program.
+func (s *Snapshot) IncrementalProgram(project *Project) *incremental.Program {
+	return project.incremental.get(project.Program)
 }
 
 func (s *Snapshot) OpenProjects() []*Project {

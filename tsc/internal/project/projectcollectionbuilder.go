@@ -1299,6 +1299,7 @@ func (b *ProjectCollectionBuilder) updateProgram(entry dirty.Value[*Project], lo
 				oldHost := project.host
 				oldProgram := project.Program
 				oldCheckerPool := project.checkerPool
+				oldIncremental := project.incremental
 				project.host = newCompilerHost(project.currentDirectory, project, b, logger.Fork("CompilerHost"))
 				result := project.CreateProgram()
 				var watchedFiles []string
@@ -1341,6 +1342,9 @@ func (b *ProjectCollectionBuilder) updateProgram(entry dirty.Value[*Project], lo
 				if oldCheckerPool != nil {
 					oldCheckerPool.Discard()
 				}
+				// Carries what the old program worked out about its files, without carrying the
+				// program. Built here rather than on first use so the old one can be let go of now.
+				project.incremental = oldIncremental.next()
 			})
 		})
 	}
