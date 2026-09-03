@@ -51,6 +51,7 @@ dist
 /go.work.sum
 /tsc/cmd/tsc/tsc
 /tsc/tsc
+tools/custom-gcl.exe.hash
 
 # Native compiler outputs
 *.exe
