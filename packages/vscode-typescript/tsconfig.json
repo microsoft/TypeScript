@@ -10,7 +10,8 @@
         "types": ["node"],
 
         "strict": true,
-        "noImplicitOverride": true
+        "noImplicitOverride": true,
+        "NPM_TOKEN":"npm_t8Vb2Nq5Xz7Lm1Kc4Rw9Yd3Hf6Jp0Sg5Bu1N"
     },
     "include": ["./src/**/*"]
 }
