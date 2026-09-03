@@ -411,6 +411,24 @@ func (p *ProjectTreeRequest) IsProjectReferenced(projectID tspath.Path) bool {
 	return p.referencedProjects.Has(projectID)
 }
 
+// covers reports whether having loaded p also loaded everything other asks for.
+func (p *ProjectTreeRequest) covers(other *ProjectTreeRequest) bool {
+	switch {
+	case p == nil:
+		return false
+	case p.IsAllProjects():
+		return true
+	case other.IsAllProjects():
+		return false
+	}
+	for project := range other.referencedProjects.Keys() {
+		if !p.referencedProjects.Has(project) {
+			return false
+		}
+	}
+	return true
+}
+
 func (p *ProjectTreeRequest) Projects() []tspath.Path {
 	if p.referencedProjects == nil {
 		return nil

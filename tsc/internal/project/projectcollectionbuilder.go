@@ -49,7 +49,9 @@ type ProjectCollectionBuilder struct {
 
 	client Client // optional; used for project loading notifications
 
-	newSnapshotID              uint64
+	newSnapshotID uint64
+	// loadedProjectTrees is what this build has loaded trees for, carried from the base collection.
+	loadedProjectTrees         *ProjectTreeRequest
 	programStructureChanged    bool
 	defaultProjectsInvalidated bool
 	openFilesChanged           bool
@@ -94,6 +96,7 @@ func newProjectCollectionBuilder(
 		base:                               oldProjectCollection,
 		configFileRegistryBuilder:          newConfigFileRegistryBuilder(lsproto.GetClientCapabilities(ctx).Workspace.DidChangeWatchedFiles.RelativePatternSupport, fs, oldConfigFileRegistry, extendedConfigCache, newSnapshotID, sessionOptions, customConfigFileName, nil),
 		newSnapshotID:                      newSnapshotID,
+		loadedProjectTrees:                 oldProjectCollection.loadedProjectTrees,
 		configuredProjects:                 dirty.NewSyncMap(oldProjectCollection.configuredProjects),
 		inferredProject:                    dirty.NewBox(oldProjectCollection.inferredProject),
 		apiState:                           oldAPIState.clone(),
@@ -114,6 +117,11 @@ func (b *ProjectCollectionBuilder) Finalize(logger *logging.LogTree) (*ProjectCo
 	if configuredProjects, configuredProjectsChanged := b.configuredProjects.Finalize(); configuredProjectsChanged {
 		ensureCloned()
 		newProjectCollection.configuredProjects = configuredProjects
+	}
+
+	if newProjectCollection.loadedProjectTrees != b.loadedProjectTrees {
+		ensureCloned()
+		newProjectCollection.loadedProjectTrees = b.loadedProjectTrees
 	}
 
 	if b.openFilesChanged {
@@ -603,6 +611,11 @@ func (b *ProjectCollectionBuilder) DidRequestProject(projectId tspath.Path, logg
 
 func (b *ProjectCollectionBuilder) DidRequestProjectTrees(projectTreeRequest *ProjectTreeRequest, logger *logging.LogTree) {
 	startTime := time.Now()
+	// Recorded so a later request this one covers can be answered without building a snapshot to
+	// discover there was nothing to load.
+	if !b.loadedProjectTrees.covers(projectTreeRequest) {
+		b.loadedProjectTrees = projectTreeRequest
+	}
 
 	var currentProjects []tspath.Path
 	b.configuredProjects.Range(func(sme *dirty.SyncMapEntry[tspath.Path, *Project]) bool {

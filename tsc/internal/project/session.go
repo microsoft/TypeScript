@@ -1116,7 +1116,8 @@ func (s *Session) getSnapshot(
 	var updateReason UpdateReason
 	if len(request.Projects) > 0 {
 		updateReason = UpdateReasonRequestedLanguageServiceProjectDirty
-	} else if request.ProjectTree != nil {
+	} else if request.ProjectTree != nil && !snapshot.ProjectCollection.loadedProjectTrees.covers(request.ProjectTree) {
+		// Only worth a new snapshot if there is something the loaded trees do not already cover.
 		updateReason = UpdateReasonRequestedLoadProjectTree
 	} else if request.AutoImports != "" {
 		updateReason = UpdateReasonRequestedLanguageServiceWithAutoImports
