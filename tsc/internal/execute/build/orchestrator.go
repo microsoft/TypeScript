@@ -29,7 +29,6 @@ type Options struct {
 	Command *tsoptions.ParsedBuildCommandLine
 	Testing tsc.CommandLineTesting
 }
-
 type orchestratorResult struct {
 	result        tsc.CommandLineResult
 	errors        []*ast.Diagnostic
@@ -71,9 +70,10 @@ type Orchestrator struct {
 	contentMapperHost contentmapper.Host
 
 	// order generation result
-	tasks  *collections.SyncMap[tspath.Path, *BuildTask]
-	order  []string
-	errors []*ast.Diagnostic
+	tasks          *collections.SyncMap[tspath.Path, *BuildTask]
+	order          []string
+	errors         []*ast.Diagnostic
+	graphGenerated bool
 
 	errorSummaryReporter tsc.DiagnosticsReporter
 	watchStatusReporter  tsc.DiagnosticReporter
@@ -242,9 +242,27 @@ func (o *Orchestrator) GenerateGraph(oldTasks *collections.SyncMap[tspath.Path, 
 			return true
 		})
 	}
+	o.graphGenerated = true
 }
 
+// tsc -b entrypoint
 func (o *Orchestrator) Start(ctx context.Context) tsc.CommandLineResult {
+	return o.start(ctx, "", false)
+}
+
+// orchestrator.Build() entrypoint for api
+func (o *Orchestrator) Build(ctx context.Context, project string) tsc.CommandLineResult {
+	o.recheckAllProjects(project)
+	return o.start(ctx, project, false)
+}
+
+// orchestrator.BuildReferences() entrypoint for api
+func (o *Orchestrator) BuildReferences(ctx context.Context, project string) tsc.CommandLineResult {
+	o.recheckAllProjects(project)
+	return o.start(ctx, project, true)
+}
+
+func (o *Orchestrator) start(ctx context.Context, project string, onlyReferences bool) tsc.CommandLineResult {
 	o.contentMapperHost = tsc.NewContentMapperHost(ctx, o.opts.Sys, o.opts.Command.CompilerOptions)
 	if o.contentMapperHost != nil && (!o.opts.Command.CompilerOptions.Watch.IsTrue() || o.opts.Testing == nil) {
 		defer o.contentMapperHost.Close()
@@ -252,13 +270,170 @@ func (o *Orchestrator) Start(ctx context.Context) tsc.CommandLineResult {
 	if o.opts.Command.CompilerOptions.Watch.IsTrue() {
 		o.watchStatusReporter(ast.NewCompilerDiagnostic(diagnostics.Starting_compilation_in_watch_mode))
 	}
-	o.GenerateGraph(nil)
-	result := o.buildOrClean()
+	if o.graphGenerated {
+		o.GenerateGraphReusingOldTasks()
+	} else {
+		o.GenerateGraph(nil)
+	}
+	order, ok := o.getBuildOrderFor(project)
+	if !ok {
+		return tsc.CommandLineResult{Status: tsc.ExitStatusInvalidProject_OutputsSkipped}
+	}
+	if onlyReferences && len(o.errors) == 0 {
+		if project == "" {
+			return tsc.CommandLineResult{Status: tsc.ExitStatusInvalidProject_OutputsSkipped}
+		}
+		order = order[:len(order)-1]
+	}
+	result := o.buildOrCleanOrder(order)
 	if o.opts.Command.CompilerOptions.Watch.IsTrue() {
 		o.Watch(ctx)
 		result.Watcher = o
 	}
 	return result
+}
+
+func (o *Orchestrator) recheckAllProjects(project string) {
+	if !o.graphGenerated {
+		return
+	}
+	order, ok := o.getBuildOrderFor(project)
+	if !ok {
+		return
+	}
+	o.rangeTasks(order, func(path tspath.Path, task *BuildTask) {
+		task.resetStatus()
+	})
+	o.host.mTimes = &collections.SyncMap[tspath.Path, time.Time]{}
+	o.resetCaches()
+}
+
+// orchestrator.Clean() entrypoint for api
+func (o *Orchestrator) Clean(project string) tsc.ExitStatus {
+	return o.clean(project, false)
+}
+
+// orchestrator.CleanReferences() entrypoint for api
+func (o *Orchestrator) CleanReferences(project string) tsc.ExitStatus {
+	return o.clean(project, true)
+}
+
+func (o *Orchestrator) clean(project string, onlyReferences bool) tsc.ExitStatus {
+	if !o.graphGenerated {
+		o.GenerateGraph(nil)
+	}
+	if len(o.errors) != 0 {
+		reportDiagnostic := o.createDiagnosticReporter(nil)
+		for _, err := range o.errors {
+			reportDiagnostic(err)
+		}
+		return tsc.ExitStatusProjectReferenceCycle_OutputsSkipped
+	}
+
+	order, ok := o.getBuildOrderFor(project)
+	if !ok {
+		return tsc.ExitStatusInvalidProject_OutputsSkipped
+	}
+	if onlyReferences {
+		if project == "" {
+			return tsc.ExitStatusInvalidProject_OutputsSkipped
+		}
+		order = order[:len(order)-1]
+	}
+
+	dry := o.opts.Command.BuildOptions.Dry.IsTrue()
+	var filesToDelete []string
+	reportDiagnostic := o.createDiagnosticReporter(nil)
+	for _, config := range order {
+		task := o.getTask(o.toPath(config))
+		if task.resolved == nil {
+			reportDiagnostic(ast.NewCompilerDiagnostic(diagnostics.File_0_not_found, task.config))
+			continue
+		}
+
+		inputs := collections.NewSetFromItems(core.Map(task.resolved.FileNames(), o.toPath)...)
+		projectOutputs := task.resolved.GetOutputFileNames()
+		deleted := false
+		for outputFile := range projectOutputs {
+			deleted = o.cleanProjectOutput(outputFile, inputs, dry, &filesToDelete, reportDiagnostic) || deleted
+		}
+		deleted = o.cleanProjectOutput(task.resolved.GetBuildInfoFileName(), inputs, dry, &filesToDelete, reportDiagnostic) || deleted
+		if deleted {
+			task.resetStatus()
+			task.buildInfoEntryMu.Lock()
+			task.buildInfoEntry = nil
+			task.buildInfoEntryMu.Unlock()
+		}
+	}
+
+	if dry {
+		o.createBuilderStatusReporter(nil)(ast.NewCompilerDiagnostic(
+			diagnostics.A_non_dry_build_would_delete_the_following_files_Colon_0,
+			strings.Join(core.Map(filesToDelete, func(file string) string {
+				return "\r\n * " + file
+			}), ""),
+		))
+	} else {
+		o.resetCaches()
+	}
+	return tsc.ExitStatusSuccess
+}
+
+func (o *Orchestrator) getBuildOrderFor(project string) ([]string, bool) {
+	if project == "" {
+		return o.order, true
+	}
+
+	config := core.ResolveConfigFileNameOfProjectReference(
+		tspath.ResolvePath(o.opts.Sys.GetCurrentDirectory(), project),
+	)
+	target, ok := o.tasks.Load(o.toPath(config))
+	if !ok {
+		return nil, false
+	}
+
+	projects := collections.Set[tspath.Path]{}
+	var addProjectAndReferences func(*BuildTask)
+	addProjectAndReferences = func(task *BuildTask) {
+		path := o.toPath(task.config)
+		if projects.Has(path) {
+			return
+		}
+		projects.Add(path)
+		for _, upstream := range task.upStream {
+			addProjectAndReferences(upstream.task)
+		}
+	}
+	addProjectAndReferences(target)
+
+	order := make([]string, 0, len(projects.M))
+	for _, config := range o.order {
+		if projects.Has(o.toPath(config)) {
+			order = append(order, config)
+		}
+	}
+	return order, true
+}
+
+func (o *Orchestrator) cleanProjectOutput(
+	outputFile string,
+	inputs *collections.Set[tspath.Path],
+	dry bool,
+	filesToDelete *[]string,
+	reportDiagnostic tsc.DiagnosticReporter,
+) bool {
+	if outputFile == "" || inputs.Has(o.toPath(outputFile)) || !o.host.FS().FileExists(outputFile) {
+		return false
+	}
+	if dry {
+		*filesToDelete = append(*filesToDelete, outputFile)
+		return false
+	}
+	if err := o.host.FS().Remove(outputFile); err != nil {
+		reportDiagnostic(ast.NewCompilerDiagnostic(diagnostics.Failed_to_delete_file_0, outputFile))
+		return false
+	}
+	return true
 }
 
 func (o *Orchestrator) Watch(ctx context.Context) {
@@ -658,18 +833,28 @@ func (o *Orchestrator) DoCycle() {
 }
 
 func (o *Orchestrator) buildOrClean() tsc.CommandLineResult {
+	return o.buildOrCleanOrder(o.order)
+}
+
+func (o *Orchestrator) buildOrCleanOrder(order []string) tsc.CommandLineResult {
 	if !o.opts.Command.BuildOptions.Clean.IsTrue() && o.opts.Command.BuildOptions.Verbose.IsTrue() {
 		o.createBuilderStatusReporter(nil)(ast.NewCompilerDiagnostic(
 			diagnostics.Projects_in_this_build_Colon_0,
-			strings.Join(core.Map(o.Order(), func(p string) string {
+			strings.Join(core.Map(order, func(p string) string {
 				return "\r\n    * " + o.relativeFileName(p)
 			}), ""),
 		))
 	}
 	var buildResult orchestratorResult
 	if len(o.errors) == 0 {
-		buildResult.statistics.Projects = len(o.Order())
-		o.rangeTask(func(path tspath.Path, task *BuildTask) {
+		buildResult.statistics.Projects = len(order)
+		var prevReporter *BuildTask
+		for _, config := range order {
+			task := o.getTask(o.toPath(config))
+			task.prevReporter = prevReporter
+			prevReporter = task
+		}
+		o.rangeTasks(order, func(path tspath.Path, task *BuildTask) {
 			o.buildOrCleanProject(task, path, &buildResult)
 		})
 	} else {
@@ -686,6 +871,10 @@ func (o *Orchestrator) buildOrClean() tsc.CommandLineResult {
 }
 
 func (o *Orchestrator) rangeTask(f func(path tspath.Path, task *BuildTask)) {
+	o.rangeTasks(o.order, f)
+}
+
+func (o *Orchestrator) rangeTasks(order []string, f func(path tspath.Path, task *BuildTask)) {
 	numRoutines := 4
 	if o.opts.Command.CompilerOptions.SingleThreaded.IsTrue() {
 		numRoutines = 1
@@ -696,10 +885,10 @@ func (o *Orchestrator) rangeTask(f func(path tspath.Path, task *BuildTask)) {
 	var currentTaskIndex atomic.Int64
 	getNextTask := func() (tspath.Path, *BuildTask, bool) {
 		index := int(currentTaskIndex.Add(1) - 1)
-		if index >= len(o.order) {
+		if index >= len(order) {
 			return "", nil, false
 		}
-		config := o.order[index]
+		config := order[index]
 		path := o.toPath(config)
 		task := o.getTask(path)
 		return path, task, true

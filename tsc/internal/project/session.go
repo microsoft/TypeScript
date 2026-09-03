@@ -320,6 +320,10 @@ func (s *Session) GetCurrentDirectory() string {
 	return s.options.CurrentDirectory
 }
 
+func (s *Session) DefaultLibraryPath() string {
+	return s.options.DefaultLibraryPath
+}
+
 // Gets copy of current configuration
 func (s *Session) Config() lsutil.UserPreferences {
 	s.userConfigRWMu.Lock()

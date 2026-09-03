@@ -20,6 +20,7 @@ import { SymbolFlags } from "#enums/symbolFlags";
 import { TypeFlags } from "#enums/typeFlags";
 import { TypeFormatFlags } from "#enums/typeFormatFlags";
 import { TypePredicateKind } from "#enums/typePredicateKind";
+import type { CancellationToken } from "../../../vendor/vscode-jsonrpc/lib/common/cancellation.js";
 import {
     type __String,
     type Declaration,
@@ -220,6 +221,7 @@ export class API<FromLSP extends boolean = false> {
     private initialized: boolean = false;
     private activeSnapshots: Set<Snapshot> = new Set();
     private latestSnapshot: Snapshot | undefined;
+    private buildOrchestrators: Map<number, BuildOrchestrator> = new Map();
     readonly internal: InternalAPI;
 
     constructor(options: APIOptions | LSPConnectionOptions = {}) {
@@ -246,6 +248,14 @@ export class API<FromLSP extends boolean = false> {
             this.toPath = (fileName: string) => toPath(fileName, currentDirectory, getCanonicalFileName) as Path;
             this.initialized = true;
         }
+    }
+
+    createBuildOrchestrator(host: ClientSpawnOptions, rootNames: readonly string[], defaultOptions: ParsedCommandLine): BuildOrchestrator {
+        this.ensureInitialized();
+        const orchestratorResponse = this.client.apiRequest("createBuildOrchestrator", { hostOptions: host, rootNames, defaultOptions });
+
+        const orchestrator = new BuildOrchestrator(this.client, orchestratorResponse.buildOrchestratorID);
+        return orchestrator;
     }
 
     parseConfigFile(file: DocumentIdentifier): ParsedCommandLine {
@@ -1267,6 +1277,45 @@ export class Program {
         });
         return toEmitOutput(response);
     }
+}
+
+export class BuildOrchestrator {
+    private client: Client;
+    private id: number;
+
+    constructor(client: Client, id: number) {
+        this.client = client;
+        this.id = id;
+    }
+    build(project?: string): number { // , cancellationToken?: CancellationToken, writeFile?: WriteFileCallback, getCustomTransformers?: (project: string) => CustomTransformers): ExitStatus{
+        const response = this.client.apiRequest("build", {
+            buildOrchestratorID: this.id,
+            ...(project !== undefined ? { project } : {}),
+        });
+        return response.exitStatus;
+    }
+    buildReferences(project: string): number {
+        const response = this.client.apiRequest("buildReferences", {
+            buildOrchestratorID: this.id,
+            project,
+        });
+        return response.exitStatus;
+    }
+    clean(project?: string): number {
+        const response = this.client.apiRequest("cleanBuild", {
+            buildOrchestratorID: this.id,
+            ...(project !== undefined ? { project } : {}),
+        });
+        return response.exitStatus;
+    }
+    cleanReferences(project?: string): number {
+        const response = this.client.apiRequest("cleanReferences", {
+            buildOrchestratorID: this.id,
+            ...(project !== undefined ? { project } : {}),
+        });
+        return response.exitStatus;
+    }
+    // getNextInvalidatedProject(cancellationToken?: CancellationToken): InvalidatedProject<T> | undefined;
 }
 
 function toEmitOutput(response: ProtocolEmitOutputResponse): EmitOutput {

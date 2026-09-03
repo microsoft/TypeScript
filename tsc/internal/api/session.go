@@ -5,11 +5,13 @@ import (
 	"encoding/base64"
 	"errors"
 	"fmt"
+	"io"
 	"slices"
 	"strconv"
 	"strings"
 	"sync"
 	"sync/atomic"
+	"time"
 
 	"github.com/microsoft/TypeScript/tsc/internal/api/encoder"
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
@@ -19,6 +21,8 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/compiler"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
+	"github.com/microsoft/TypeScript/tsc/internal/execute/build"
+	"github.com/microsoft/TypeScript/tsc/internal/execute/tsc"
 	"github.com/microsoft/TypeScript/tsc/internal/format"
 	"github.com/microsoft/TypeScript/tsc/internal/ipc"
 	"github.com/microsoft/TypeScript/tsc/internal/json"
@@ -33,6 +37,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/transpile"
 	"github.com/microsoft/TypeScript/tsc/internal/tsoptions"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
+	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 )
 
 var sessionIDCounter atomic.Uint64
@@ -407,6 +412,9 @@ type Session struct {
 	// snapshots. Lock ordering is updateMu -> snapshotsMu (never the reverse).
 	updateMu sync.Mutex
 
+	buildOrchestrators map[BuildOrchestratorID]*build.Orchestrator
+	buildMu            sync.Mutex
+
 	cpuProfiler pprof.CPUProfiler
 }
 
@@ -423,9 +431,10 @@ type SessionOptions struct {
 func NewSession(projectSession *project.Session, options *SessionOptions) *Session {
 	id := sessionIDCounter.Add(1)
 	s := &Session{
-		id:             formatSessionID(id),
-		projectSession: projectSession,
-		snapshots:      make(map[SnapshotID]*snapshotData),
+		id:                 formatSessionID(id),
+		projectSession:     projectSession,
+		snapshots:          make(map[SnapshotID]*snapshotData),
+		buildOrchestrators: make(map[BuildOrchestratorID]*build.Orchestrator),
 	}
 	if options != nil {
 		s.useBinaryResponses = options.UseBinaryResponses
@@ -607,6 +616,16 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleUpdateSnapshot(ctx, parsed.(*UpdateSnapshotParams))
 	case string(MethodUpdateTemporarySnapshot):
 		return s.handleUpdateTemporarySnapshot(ctx, parsed.(*UpdateTemporarySnapshotParams))
+	case string(MethodCreateBuildOrchestrator):
+		return s.handleCreateBuildOrchestrator(ctx, parsed.(*CreateBuildOrchestratorParams))
+	case string(MethodBuild):
+		return s.handleBuild(ctx, parsed.(*BuildParams))
+	case string(MethodBuildReferences):
+		return s.handleBuildReferences(ctx, parsed.(*BuildParams))
+	case string(MethodCleanBuild):
+		return s.handleCleanBuild(ctx, parsed.(*CleanBuildParams))
+	case string(MethodCleanReferences):
+		return s.handleCleanReferences(ctx, parsed.(*CleanBuildParams))
 	case string(MethodParseCommandLine):
 		return s.handleParseCommandLine(ctx, parsed.(*ParseCommandLineParams))
 	case string(MethodReadConfigFile):
@@ -1158,6 +1177,97 @@ func (s *Session) handleGetDefaultProjectForFile(ctx context.Context, params *Ge
 
 	return NewProjectResponse(proj), nil
 }
+
+func (s *Session) handleCreateBuildOrchestrator(ctx context.Context, params *CreateBuildOrchestratorParams) (*CreateBuildOrchestratorResponse, error) {
+	command := tsoptions.ParseBuildCommandLine(params.RootNames, s.projectSession)
+	if params.Options != nil {
+		command.CompilerOptions = params.Options
+	}
+	if params.BuildOptions != nil {
+		command.BuildOptions = params.BuildOptions
+	}
+	if params.WatchOptions != nil {
+		command.WatchOptions = params.WatchOptions
+	}
+	orchestrator := build.NewOrchestrator(build.Options{
+		Sys:     s.getBuildSys(params),
+		Command: command,
+	})
+	orchestratorId := NewBuildOrchestratorID()
+	s.buildMu.Lock()
+	s.buildOrchestrators[orchestratorId] = orchestrator
+	s.buildMu.Unlock()
+	return &CreateBuildOrchestratorResponse{
+		BuildOrchestratorID: orchestratorId,
+	}, nil
+}
+
+func (s *Session) getBuildSys(params *CreateBuildOrchestratorParams) tsc.System {
+	currentDirectory := params.HostOptions.Cwd
+	if currentDirectory == "" {
+		currentDirectory = s.projectSession.GetCurrentDirectory()
+	}
+	return &apiBuildSystem{
+		session:          s.projectSession,
+		currentDirectory: currentDirectory,
+		start:            time.Now(),
+	}
+}
+
+func (s *Session) handleBuild(ctx context.Context, params *BuildParams) (*BuildResponse, error) {
+	s.buildMu.Lock()
+	defer s.buildMu.Unlock()
+	return &BuildResponse{
+		ExitStatus: s.buildOrchestrators[params.BuildOrchestratorID].Build(ctx, string(params.Project)).Status,
+	}, nil
+}
+
+func (s *Session) handleBuildReferences(ctx context.Context, params *BuildParams) (*BuildResponse, error) {
+	s.buildMu.Lock()
+	defer s.buildMu.Unlock()
+	return &BuildResponse{
+		ExitStatus: s.buildOrchestrators[params.BuildOrchestratorID].BuildReferences(ctx, string(params.Project)).Status,
+	}, nil
+}
+
+func (s *Session) handleCleanBuild(ctx context.Context, params *CleanBuildParams) (*CleanBuildResponse, error) {
+	s.buildMu.Lock()
+	defer s.buildMu.Unlock()
+	return &CleanBuildResponse{
+		ExitStatus: s.buildOrchestrators[params.BuildOrchestratorID].Clean(string(params.Project)),
+	}, nil
+}
+
+func (s *Session) handleCleanReferences(ctx context.Context, params *CleanBuildParams) (*CleanBuildResponse, error) {
+	s.buildMu.Lock()
+	defer s.buildMu.Unlock()
+	return &CleanBuildResponse{
+		ExitStatus: s.buildOrchestrators[params.BuildOrchestratorID].CleanReferences(string(params.Project)),
+	}, nil
+}
+
+type apiBuildSystem struct {
+	session          *project.Session
+	currentDirectory string
+	start            time.Time
+}
+
+func (s *apiBuildSystem) Writer() io.Writer           { return io.Discard }
+func (s *apiBuildSystem) ErrorWriter() io.Writer      { return io.Discard }
+func (s *apiBuildSystem) FS() vfs.FS                  { return s.session.FS() }
+func (s *apiBuildSystem) DefaultLibraryPath() string  { return s.session.DefaultLibraryPath() }
+func (s *apiBuildSystem) GetCurrentDirectory() string { return s.currentDirectory }
+func (s *apiBuildSystem) WriteOutputIsTTY() bool      { return false }
+func (s *apiBuildSystem) GetWidthOfTerminal() int     { return 0 }
+func (s *apiBuildSystem) GetEnvironmentVariable(name string) (string, bool) {
+	return "", false
+}
+
+func (s *apiBuildSystem) Spawn(command []string, dir string, stderr io.Writer) (io.ReadWriteCloser, error) {
+	return nil, errors.New("spawning processes is not supported by the API build orchestrator")
+}
+func (s *apiBuildSystem) Now() time.Time            { return time.Now() }
+func (s *apiBuildSystem) SinceStart() time.Duration { return time.Since(s.start) }
 
 // handleParseCommandLine parses command-line arguments.
 func (s *Session) handleParseCommandLine(ctx context.Context, params *ParseCommandLineParams) (*ConfigFileResponse, error) {

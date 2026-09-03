@@ -240,6 +240,14 @@ export class API<FromLSP extends boolean = false> {
         }
     }
 
+    async createBuildOrchestrator(host: ClientSpawnOptions, rootNames: readonly string[], defaultOptions: ParsedCommandLine): Promise<BuildOrchestrator> {
+        await this.ensureInitialized();
+        const orchestratorResponse = await this.client.apiRequest("createBuildOrchestrator", { hostOptions: host, rootNames, defaultOptions });
+
+        const orchestrator = new BuildOrchestrator(this.client, orchestratorResponse.buildOrchestratorID);
+        return orchestrator;
+    }
+
     async parseConfigFile(file: DocumentIdentifier): Promise<ParsedCommandLine> {
         await this.ensureInitialized();
         return this.client.apiRequest("parseConfigFile", { file });
@@ -1258,6 +1266,44 @@ export class Program {
             files,
         });
         return toEmitOutput(response);
+    }
+}
+
+export class BuildOrchestrator {
+    private client: Client;
+    private id: number;
+
+    constructor(client: Client, id: number) {
+        this.client = client;
+        this.id = id;
+    }
+    async build(project?: string): Promise<number> { // , cancellationToken?: CancellationToken, writeFile?: WriteFileCallback, getCustomTransformers?: (project: string) => CustomTransformers): ExitStatus{
+        const response = await this.client.apiRequest("build", {
+            buildOrchestratorID: this.id,
+            ...(project !== undefined ? { project } : {}),
+        });
+        return response.exitStatus;
+    }
+    async buildReferences(project: string): Promise<number> {
+        const response = await this.client.apiRequest("buildReferences", {
+            buildOrchestratorID: this.id,
+            project,
+        });
+        return response.exitStatus;
+    }
+    async clean(project?: string): Promise<number> {
+        const response = await this.client.apiRequest("cleanBuild", {
+            buildOrchestratorID: this.id,
+            ...(project !== undefined ? { project } : {}),
+        });
+        return response.exitStatus;
+    }
+    async cleanReferences(project?: string): Promise<number> {
+        const response = await this.client.apiRequest("cleanReferences", {
+            buildOrchestratorID: this.id,
+            ...(project !== undefined ? { project } : {}),
+        });
+        return response.exitStatus;
     }
 }
 

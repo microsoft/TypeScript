@@ -14,6 +14,11 @@ export interface APIMethodInfo {
     initialize: APIMethod<null, InitializeResponse>;
     updateSnapshot: APIMethod<UpdateSnapshotParams, UpdateSnapshotResponse>;
     updateTemporarySnapshot: APIMethod<UpdateTemporarySnapshotParams, UpdateSnapshotResponse>;
+    createBuildOrchestrator: APIMethod<CreateBuildOrchestratorParams, CreateBuildOrchestratorResponse>;
+    build: APIMethod<BuildParams, BuildResponse>;
+    buildReferences: APIMethod<BuildParams, BuildResponse>;
+    cleanBuild: APIMethod<CleanBuildParams, CleanBuildResponse>;
+    cleanReferences: APIMethod<CleanBuildParams, CleanBuildResponse>;
     parseCommandLine: APIMethod<ParseCommandLineParams, ConfigFileResponse>;
     readConfigFile: APIMethod<ReadConfigFileParams, ReadConfigFileResponse>;
     parseJsonConfigFileContent: APIMethod<ParseJsonConfigFileContentParams, ConfigFileResponse>;
@@ -224,6 +229,34 @@ export interface UpdateTemporarySnapshotParams {
     newText: string;
 }
 
+export interface CreateBuildOrchestratorParams {
+    hostOptions: BuildOrchestratorHostOptions;
+    rootNames: readonly string[] | null;
+    defaultOptions: ConfigFileResponse;
+}
+
+export interface CreateBuildOrchestratorResponse {
+    buildOrchestratorID: number;
+}
+
+export interface BuildParams {
+    buildOrchestratorID: number;
+    project?: string;
+}
+
+export interface BuildResponse {
+    exitStatus: number;
+}
+
+export interface CleanBuildParams {
+    buildOrchestratorID: number;
+    project?: string;
+}
+
+export interface CleanBuildResponse {
+    exitStatus: number;
+}
+
 export interface ParseCommandLineParams {
     commandLine: readonly string[] | null;
 }
@@ -231,6 +264,8 @@ export interface ParseCommandLineParams {
 export interface ConfigFileResponse {
     fileNames: string[];
     options: CompilerOptions;
+    buildOptions?: BuildOptions;
+    watchOptions?: WatchOptions;
     projectReferences?: ProjectReference[];
     typeAcquisition?: TypeAcquisition;
     compileOnSave?: boolean;
@@ -888,6 +923,10 @@ export interface SnapshotChanges {
     removedProjects?: string[];
 }
 
+export interface BuildOrchestratorHostOptions {
+    cwd?: string;
+}
+
 /** CompilerOptions contains the compiler options exposed by the API. */
 export interface CompilerOptions {
     allowJs?: boolean;
@@ -992,6 +1031,26 @@ export interface CompilerOptions {
     maxNodeModuleJsDepth?: number;
     /** Internal fields */
     configFilePath?: string;
+}
+
+export interface BuildOptions {
+    dry?: boolean;
+    force?: boolean;
+    verbose?: boolean;
+    builders?: number;
+    stopBuildOnErrors?: boolean;
+    /** Internal fields */
+    clean?: boolean;
+}
+
+export interface WatchOptions {
+    watchInterval: number | null;
+    watchFile: number;
+    watchDirectory: number;
+    fallbackPolling: number;
+    synchronousWatchDirectory: boolean;
+    excludeDirectories: string[] | null;
+    excludeFiles: string[] | null;
 }
 
 export interface ProjectReference {

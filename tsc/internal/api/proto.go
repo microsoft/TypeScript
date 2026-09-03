@@ -5,12 +5,14 @@ package api
 import (
 	"errors"
 	"fmt"
+	"sync/atomic"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/checker"
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
+	"github.com/microsoft/TypeScript/tsc/internal/execute/tsc"
 	"github.com/microsoft/TypeScript/tsc/internal/jsnum"
 	"github.com/microsoft/TypeScript/tsc/internal/json"
 	"github.com/microsoft/TypeScript/tsc/internal/locale"
@@ -30,13 +32,20 @@ var (
 type Method string
 
 type (
-	SnapshotID  uint64
-	ProjectID   string
-	SymbolID    uint64
-	TypeID      uint32
-	SignatureID uint64
-	NodeHandle  string
+	SnapshotID          uint64
+	ProjectID           string
+	BuildOrchestratorID uint64
+	SymbolID            uint64
+	TypeID              uint32
+	SignatureID         uint64
+	NodeHandle          string
 )
+
+var nextBuildOrchestratorId atomic.Uint64
+
+func NewBuildOrchestratorID() BuildOrchestratorID {
+	return BuildOrchestratorID(nextBuildOrchestratorId.Add(1))
+}
 
 func ProjectHandle(p *project.Project) ProjectID {
 	return ProjectID(p.ID())
@@ -64,6 +73,11 @@ const (
 	MethodInitialize                   Method = "initialize"
 	MethodUpdateSnapshot               Method = "updateSnapshot"
 	MethodUpdateTemporarySnapshot      Method = "updateTemporarySnapshot"
+	MethodCreateBuildOrchestrator      Method = "createBuildOrchestrator"
+	MethodBuild                        Method = "build"
+	MethodBuildReferences              Method = "buildReferences"
+	MethodCleanBuild                   Method = "cleanBuild"
+	MethodCleanReferences              Method = "cleanReferences"
 	MethodParseCommandLine             Method = "parseCommandLine"
 	MethodReadConfigFile               Method = "readConfigFile"
 	MethodParseJsonConfigFile          Method = "parseJsonConfigFileContent"
@@ -405,6 +419,11 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodInitialize:                   noParams,
 	MethodUpdateSnapshot:               unmarshallerFor[UpdateSnapshotParams],
 	MethodUpdateTemporarySnapshot:      unmarshallerFor[UpdateTemporarySnapshotParams],
+	MethodCreateBuildOrchestrator:      unmarshallerFor[CreateBuildOrchestratorParams],
+	MethodBuild:                        unmarshallerFor[BuildParams],
+	MethodBuildReferences:              unmarshallerFor[BuildParams],
+	MethodCleanBuild:                   unmarshallerFor[CleanBuildParams],
+	MethodCleanReferences:              unmarshallerFor[CleanBuildParams],
 	MethodParseCommandLine:             unmarshallerFor[ParseCommandLineParams],
 	MethodReadConfigFile:               unmarshallerFor[ReadConfigFileParams],
 	MethodParseJsonConfigFile:          unmarshallerFor[ParseJsonConfigFileContentParams],
@@ -623,14 +642,62 @@ type ProfileResult struct {
 	File string `json:"file"`
 }
 
+type CreateBuildOrchestratorParams struct {
+	HostOptions        BuildOrchestratorHostOptions `json:"hostOptions"`
+	RootNames          []string                     `json:"rootNames"`
+	ConfigFileResponse `json:"defaultOptions"`
+}
+
+type BuildOrchestratorHostOptions struct {
+	Cwd string `json:"cwd,omitempty"`
+}
+
+type CreateBuildOrchestratorResponse struct {
+	BuildOrchestratorID BuildOrchestratorID `json:"buildOrchestratorID"`
+}
+
+type BuildParams struct {
+	BuildOrchestratorID BuildOrchestratorID `json:"buildOrchestratorID"`
+	Project             ProjectID           `json:"project,omitempty"`
+}
+
+type BuildResponse struct {
+	tsc.ExitStatus `json:"exitStatus"`
+}
+type CleanBuildParams struct {
+	BuildOrchestratorID BuildOrchestratorID `json:"buildOrchestratorID"`
+	Project             ProjectID           `json:"project,omitempty"`
+}
+
+type CleanBuildResponse struct {
+	tsc.ExitStatus `json:"exitStatus"`
+}
+
+type BuildOrchestrator struct {
+	Build           func(project ProjectID) tsc.ExitStatus //, cancellationToken *CancellationToken, writeFile WriteFileCallback, getCustomTransformers func(project string) CustomTransformers)
+	BuildReferences func(project ProjectID) tsc.ExitStatus //, cancellationToken *CancellationToken, writeFile WriteFileCallback, getCustomTransformers func(project string) CustomTransformers)
+	Clean           func(project ProjectID) tsc.ExitStatus
+	CleanReferences func(project ProjectID) tsc.ExitStatus
+}
+
 type ConfigFileResponse struct {
 	FileNames         []string                 `json:"fileNames" nonnil:"true"`
 	Options           *core.CompilerOptions    `json:"options" nonnil:"true"`
+	BuildOptions      *core.BuildOptions       `json:"buildOptions,omitempty"`
+	WatchOptions      *core.WatchOptions       `json:"watchOptions,omitempty"`
 	ProjectReferences []*core.ProjectReference `json:"projectReferences,omitempty"`
 	TypeAcquisition   *core.TypeAcquisition    `json:"typeAcquisition,omitempty"`
 	CompileOnSave     *bool                    `json:"compileOnSave,omitempty"`
 	Raw               any                      `json:"raw,omitempty"`
 	Errors            []*DiagnosticResponse    `json:"errors" nonnil:"true"`
+}
+
+func (c *ConfigFileResponse) toParsedCommandLine() *tsoptions.ParsedBuildCommandLine {
+	return &tsoptions.ParsedBuildCommandLine{
+		CompilerOptions: c.Options,
+		BuildOptions:    c.BuildOptions,
+		WatchOptions:    c.WatchOptions,
+	}
 }
 
 type ReadConfigFileResponse struct {
