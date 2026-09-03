@@ -75,10 +75,18 @@ func (e *emptyCasePass) checkCaseStatement(stmt ast.Stmt, nextCasePos token.Pos)
 		panic(fmt.Sprintf("unhandled statement type %T", stmt))
 	}
 
+	message := "this case block is empty and will do nothing"
+
 	if len(body) == 1 {
 		// Also error on a case statement containing a single empty block.
-		block, ok := body[0].(*ast.BlockStmt)
-		if !ok || len(block.List) != 0 {
+		if block, ok := body[0].(*ast.BlockStmt); ok {
+			if len(block.List) != 0 {
+				return
+			}
+		} else if branch, ok := body[0].(*ast.BranchStmt); ok && branch.Tok == token.BREAK && branch.Label == nil {
+			// Also error on a case statement containing only a redundant "break".
+			message = "this case block only contains a redundant break statement and will do nothing"
+		} else {
 			return
 		}
 	} else if len(body) != 0 {
@@ -93,7 +101,7 @@ func (e *emptyCasePass) checkCaseStatement(stmt ast.Stmt, nextCasePos token.Pos)
 	e.pass.Report(analysis.Diagnostic{
 		Pos:     stmt.Pos(),
 		End:     afterColon,
-		Message: "this case block is empty and will do nothing",
+		Message: message,
 	})
 }
 

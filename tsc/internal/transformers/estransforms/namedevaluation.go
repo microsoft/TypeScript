@@ -74,7 +74,7 @@ func isAnonymousFunctionDefinition(emitContext *printer.EmitContext, node *ast.E
 		}
 		break
 	case ast.KindArrowFunction:
-		break
+		// arrow functions are always anonymous
 	default:
 		return false
 	}

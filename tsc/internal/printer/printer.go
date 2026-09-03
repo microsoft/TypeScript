@@ -4879,7 +4879,7 @@ func (p *Printer) hasTrailingComma(parentNode *ast.Node, children *ast.NodeList)
 func (p *Printer) writeDelimiter(format ListFormat) {
 	switch format & LFDelimitersMask {
 	case LFNone:
-		break
+		// no delimiter for this format
 	case LFCommaDelimited:
 		p.writePunctuation(",")
 	case LFBarDelimited:

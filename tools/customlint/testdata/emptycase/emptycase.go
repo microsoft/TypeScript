@@ -36,6 +36,19 @@ func SwitchDefaultCase() {
 	}
 }
 
+func SwitchBreak() {
+	switch X {
+	case 1:
+		break
+	case 2:
+		// intentionally empty
+		break
+	case 3:
+		println(`oops`)
+		break
+	}
+}
+
 var (
 	ch  = make(chan int)
 	ch2 = make(chan int)
