@@ -662,7 +662,7 @@ function generateFactory(): string {
         out.push(`    ${t},`);
     }
     out.push(`} from "./ast.ts";`);
-    out.push(`import { getTokenPosOfNode } from "./astnav.ts";`);
+    out.push(`import { getChildren, getFirstToken, getLastToken, getTokenPosOfNode } from "./astnav.ts";`);
     if (handWrittenCloneHelpers.length > 0) {
         out.push(`import {`);
         for (const helperName of [...new Set(handWrittenCloneHelpers.map(h => h.helperName))].sort((a, b) => a.localeCompare(b))) {
@@ -758,6 +758,26 @@ function generateFactory(): string {
     out.push(`    getText(sourceFile?: SourceFile): string {`);
     out.push(`        sourceFile ??= this.getSourceFile();`);
     out.push(`        return sourceFile.text.substring(this.getStart(sourceFile), this.end);`);
+    out.push(`    }`);
+    out.push(``);
+    out.push(`    getChildCount(sourceFile?: SourceFile): number {`);
+    out.push(`        return this.getChildren(sourceFile).length;`);
+    out.push(`    }`);
+    out.push(``);
+    out.push(`    getChildAt(index: number, sourceFile?: SourceFile): Node {`);
+    out.push(`        return this.getChildren(sourceFile)[index];`);
+    out.push(`    }`);
+    out.push(``);
+    out.push(`    getChildren(sourceFile?: SourceFile): readonly Node[] {`);
+    out.push(`        return getChildren(this as unknown as Node, sourceFile ?? this.getSourceFile());`);
+    out.push(`    }`);
+    out.push(``);
+    out.push(`    getFirstToken(sourceFile?: SourceFile): Node | undefined {`);
+    out.push(`        return getFirstToken(this as unknown as Node, sourceFile ?? this.getSourceFile());`);
+    out.push(`    }`);
+    out.push(``);
+    out.push(`    getLastToken(sourceFile?: SourceFile): Node | undefined {`);
+    out.push(`        return getLastToken(this as unknown as Node, sourceFile ?? this.getSourceFile());`);
     out.push(`    }`);
     out.push(`}`);
     out.push(``);
