@@ -3502,11 +3502,15 @@ func (r *Relater) structuredTypeRelatedToWorker(source *Type, target *Type, repo
 				return TernaryFalse
 			}
 		}
-		// Otherwise, if the source is a concrete (non-instantiable) type, it overlaps with T and is therefore
-		// not related to 'not T'. We must not fall through to the generic instantiable handling below, which
-		// would relate S to the (permissive) constraint of the negated type and incorrectly report relatedness.
-		// For instantiable sources we do fall through, so that constraint-based reasoning can still apply.
+		// Otherwise, if the source is a concrete (non-instantiable) type, it isn't assignable to 'not T'.
+		// For comparability, however, S overlaps with 'not T' unless every value in S is excluded by T.
+		// We must not fall through to the generic instantiable handling below, which would relate S to the
+		// (permissive) constraint of the negated type and incorrectly report relatedness. For instantiable
+		// sources we do fall through, so that constraint-based reasoning can still apply.
 		if source.flags&TypeFlagsInstantiable == 0 {
+			if r.relation == r.c.comparableRelation && !r.c.isTypeAssignableTo(source, target.AsNegatedType().baseType) {
+				return TernaryTrue
+			}
 			return TernaryFalse
 		}
 	case target.flags&TypeFlagsTypeParameter != 0:
