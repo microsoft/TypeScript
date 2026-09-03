@@ -22,7 +22,10 @@ jobs:
   tag:
     if: >-
       github.repository == 'microsoft/TypeScript' &&
-      (github.event_name == 'workflow_dispatch' || github.event.pull_request.merged == true)
+      (
+        (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main') ||
+        github.event.pull_request.merged == true
+      )
     runs-on: ubuntu-latest
     environment:
       name: azure
@@ -49,6 +52,7 @@ jobs:
         uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         env:
           EVENT_NAME: ${{ github.event_name }}
+          DISPATCH_REF: ${{ github.ref }}
           DISPATCH_COMMIT_SHA: ${{ github.sha }}
           PR_BASE_SHA: ${{ github.event.pull_request.base.sha }}
           MERGE_COMMIT_SHA: ${{ github.event.pull_request.merge_commit_sha }}
@@ -57,6 +61,7 @@ jobs:
           script: |
             const {
               EVENT_NAME,
+              DISPATCH_REF,
               DISPATCH_COMMIT_SHA,
               PR_BASE_SHA,
               MERGE_COMMIT_SHA,
@@ -64,6 +69,9 @@ jobs:
 
             const owner = context.repo.owner;
             const repo = context.repo.repo;
+            if (EVENT_NAME === "workflow_dispatch" && DISPATCH_REF !== "refs/heads/main") {
+              throw new Error(`Manual releases must be dispatched from main, got ${DISPATCH_REF}.`);
+            }
             const releaseCommit = EVENT_NAME === "workflow_dispatch"
               ? DISPATCH_COMMIT_SHA
               : MERGE_COMMIT_SHA;
