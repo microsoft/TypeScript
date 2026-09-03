@@ -54,6 +54,13 @@ func SwitchBreak() {
 		break
 		println(`unreachable`)
 		break
+	case 6:
+		if X != 0 {
+			goto afterBreak
+		}
+		break
+	afterBreak:
+		println(`reachable via goto`)
 	}
 }
 

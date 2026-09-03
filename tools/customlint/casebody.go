@@ -95,7 +95,7 @@ func (e *caseBodyPass) checkCaseStatement(stmt ast.Stmt, nextCasePos token.Pos) 
 			e.pass.Report(analysis.Diagnostic{
 				Pos:     body[i+1].Pos(),
 				End:     body[i+1].End(),
-				Message: "this statement is unreachable after a break",
+				Message: "statements after a break are not allowed in the same case body",
 			})
 			reportedUnreachable = true
 		}
