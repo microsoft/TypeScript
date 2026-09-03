@@ -17,8 +17,11 @@ func TestReactor(t *testing.T) {
 	if err := reactor.SetFile("/src/index.ts", "export const value = 1;"); err != nil {
 		t.Fatal(err)
 	}
-	if contents, ok := reactor.files.ReadFile("/src/index.ts"); !ok || contents != "export const value = 1;" {
+	if contents, ok := reactor.ReadFile("/src/index.ts"); !ok || contents != "export const value = 1;" {
 		t.Fatalf("ReadFile() = %q, %v", contents, ok)
+	}
+	if _, ok := reactor.ReadFile("/src/missing.ts"); ok {
+		t.Fatal("ReadFile() found a missing file")
 	}
 
 	initialize, err := reactor.HandleRequest("initialize", nil)

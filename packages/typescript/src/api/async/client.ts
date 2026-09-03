@@ -62,6 +62,7 @@ export class Client {
 
     constructor(options: AsyncClientOptions) {
         if (isAsyncTransportOptions(options)) {
+            options.transport.setFileSystem?.(options.fs);
             this.transportClient = new TransportClient(
                 options.transport,
                 options.collectTiming ?? false,

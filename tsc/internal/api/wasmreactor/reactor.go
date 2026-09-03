@@ -17,9 +17,10 @@ import (
 )
 
 type Options struct {
-	Cwd                       string `json:"cwd"`
-	UseCaseSensitiveFileNames *bool  `json:"useCaseSensitiveFileNames"`
-	CollectTiming             bool   `json:"collectTiming"`
+	Cwd                       string              `json:"cwd"`
+	UseCaseSensitiveFileNames *bool               `json:"useCaseSensitiveFileNames"`
+	CollectTiming             bool                `json:"collectTiming"`
+	WrapFS                    func(vfs.FS) vfs.FS `json:"-"`
 }
 
 type Response struct {
@@ -41,10 +42,14 @@ func New(ctx context.Context, options Options) *Reactor {
 	}
 	useCaseSensitiveFileNames := options.UseCaseSensitiveFileNames == nil || *options.UseCaseSensitiveFileNames
 	files := vfstest.FromMap(map[string]string{}, useCaseSensitiveFileNames)
+	var projectFiles vfs.FS = files
+	if options.WrapFS != nil {
+		projectFiles = options.WrapFS(projectFiles)
+	}
 	ctx, cancel := context.WithCancel(ctx)
 	sessionInit := &project.SessionInit{
 		BackgroundCtx: ctx,
-		FS:            bundled.WrapFS(files),
+		FS:            bundled.WrapFS(projectFiles),
 		Options: &project.SessionOptions{
 			CurrentDirectory:   options.Cwd,
 			DefaultLibraryPath: bundled.LibPath(),
@@ -99,6 +104,10 @@ func marshalResponse(result any) (Response, error) {
 
 func (r *Reactor) SetFile(path string, content string) error {
 	return r.files.WriteFile(path, content)
+}
+
+func (r *Reactor) ReadFile(path string) (string, bool) {
+	return r.files.ReadFile(path)
 }
 
 func (r *Reactor) RemoveFile(path string) error {

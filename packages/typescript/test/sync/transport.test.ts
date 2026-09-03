@@ -135,6 +135,16 @@ describe("sync transport", () => {
                 files.set(path, content);
                 return 0;
             },
+            read_file(pathLength) {
+                const path = new TextDecoder().decode(new Uint8Array(memory.buffer, requestPointer, pathLength));
+                const content = files.get(path);
+                if (content === undefined) {
+                    setResponse("");
+                    return 2;
+                }
+                setResponse(content);
+                return 0;
+            },
             remove_file(pathLength) {
                 const path = new TextDecoder().decode(new Uint8Array(memory.buffer, requestPointer, pathLength));
                 files.delete(path);
@@ -150,11 +160,17 @@ describe("sync transport", () => {
         });
         transport.setFile("/workspace/index.ts", "const value = 1;");
         assert.strictEqual(files.get("/workspace/index.ts"), "const value = 1;");
+        assert.strictEqual(transport.readFile("/workspace/index.ts"), "const value = 1;");
+        assert.strictEqual(transport.readFile("/workspace/missing.ts"), undefined);
         assert.strictEqual(transport.requestSync("text", "hello"), "HELLO");
         assert.deepStrictEqual(transport.requestBinarySync("binary", new Uint8Array([1, 2, 3])), new Uint8Array([3, 2, 1]));
         transport.removeFile("/workspace/index.ts");
         assert.strictEqual(files.has("/workspace/index.ts"), false);
         transport.close();
         assert.strictEqual(closed, true);
+        assert.throws(
+            () => transport.setFileSystem({ writeFile() {} }),
+            /TypeScript WASM transport is closed/,
+        );
     });
 });

@@ -1,5 +1,9 @@
 export { wasmURL } from "#wasmURL";
-export { instantiateWasm, type InstantiateWasmOptions } from "./wasi.ts";
+export { instantiateWasm, type InstantiateWasmOptions, instantiateWasmSync } from "./wasi.ts";
+import {
+    setWasmFileSystem,
+    type WasmFileSystem,
+} from "./wasi.ts";
 
 export interface WasmReactorExports {
     memory: { readonly buffer: ArrayBufferLike; };
@@ -8,6 +12,7 @@ export interface WasmReactorExports {
     get_request_buffer(size: number): number;
     handle_request(methodLength: number, payloadLength: number): number;
     set_file(pathLength: number, contentLength: number): number;
+    read_file(pathLength: number): number;
     remove_file(pathLength: number): number;
     response_ptr(): number;
     response_len(): number;
@@ -26,6 +31,7 @@ export interface WasmTransportOptions {
     cwd?: string;
     useCaseSensitiveFileNames?: boolean;
     collectTiming?: boolean;
+    fs?: WasmFileSystem;
 }
 
 const encoder = new TextEncoder();
@@ -37,11 +43,14 @@ export class WasmTransport {
     lastBytesReceived = 0;
 
     private readonly exports: WasmReactorExports;
+    private readonly instance: WasmReactorInstance;
     private requestPointer = 0;
     private closed = false;
 
     constructor(options: WasmTransportOptions) {
+        this.instance = options.instance;
         this.exports = getReactorExports(options.instance);
+        setWasmFileSystem(options.instance, options.fs);
         const sessionOptions = encoder.encode(JSON.stringify({
             cwd: options.cwd ?? "/",
             useCaseSensitiveFileNames: options.useCaseSensitiveFileNames,
@@ -49,8 +58,15 @@ export class WasmTransport {
         }));
         this.writeRequest(sessionOptions);
         if (this.exports.create_session(this.requestPointer, sessionOptions.length) !== 0) {
-            throw new Error(`Failed to create TypeScript WASM session: ${this.readResponseText()}`);
+            const message = this.readResponseText();
+            setWasmFileSystem(this.instance, undefined);
+            throw new Error(`Failed to create TypeScript WASM session: ${message}`);
         }
+    }
+
+    setFileSystem(fs: WasmFileSystem | undefined): void {
+        this.ensureOpen();
+        setWasmFileSystem(this.instance, fs);
     }
 
     requestSync(method: string, payload: string): string {
@@ -89,6 +105,19 @@ export class WasmTransport {
         }
     }
 
+    /** Read a file from the reactor's in-memory filesystem. */
+    readFile(path: string): string | undefined {
+        this.ensureOpen();
+        const pathBytes = encoder.encode(path);
+        this.writeRequest(pathBytes);
+        const status = this.exports.read_file(pathBytes.length);
+        if (status === 2) return undefined;
+        if (status !== 0) {
+            throw new Error(`Failed to read ${path}: ${this.readResponseText()}`);
+        }
+        return this.readResponseText();
+    }
+
     removeFile(path: string): void {
         this.ensureOpen();
         const pathBytes = encoder.encode(path);
@@ -101,7 +130,12 @@ export class WasmTransport {
     close(): void {
         if (this.closed) return;
         this.closed = true;
-        this.exports.close_session();
+        try {
+            this.exports.close_session();
+        }
+        finally {
+            setWasmFileSystem(this.instance, undefined);
+        }
     }
 
     private call(method: string, payload: Uint8Array): Uint8Array {
@@ -151,6 +185,7 @@ function getReactorExports(instance: WasmReactorInstance): WasmReactorExports {
         "get_request_buffer",
         "handle_request",
         "set_file",
+        "read_file",
         "remove_file",
         "response_ptr",
         "response_len",

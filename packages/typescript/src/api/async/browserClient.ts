@@ -14,6 +14,7 @@ export class Client extends TransportClient {
         if (!("transport" in options)) {
             throw new Error("The browser async API requires an injected transport");
         }
+        options.transport.setFileSystem?.(options.fs);
         super(options.transport, options.collectTiming ?? false, options.maxResponseBytesPerPage);
     }
 }
