@@ -4031,6 +4031,9 @@ func (s *Session) handleGetCompletionsAtPosition(ctx context.Context, params *Ge
 	if errors.Is(err, ls.ErrNeedsAutoImports) {
 		preparedSnapshot := s.projectSession.GetSnapshotWithAutoImports(ctx, sd.snapshot, params.File.ToURI(s.projectSession.GetCurrentDirectory()))
 		defer preparedSnapshot.Deref(s.projectSession)
+		if err = ctx.Err(); err != nil {
+			return nil, err
+		}
 		projectPath := parseProjectHandle(params.Project)
 		proj := preparedSnapshot.ProjectCollection.GetProjectByPath(projectPath)
 		if proj == nil {

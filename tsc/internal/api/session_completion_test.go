@@ -1,7 +1,6 @@
 package api
 
 import (
-	"context"
 	"testing"
 
 	"github.com/microsoft/TypeScript/tsc/internal/bundled"
@@ -42,14 +41,12 @@ func TestCompletionSymbolTypeIsResolvable(t *testing.T) {
 	session := NewSession(projectSession, nil)
 	defer session.Close()
 
-	ctx := context.Background()
-
-	snapshotResp, err := session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{
+	snapshotResp, err := session.handleUpdateSnapshot(t.Context(), &UpdateSnapshotParams{
 		OpenFiles: []DocumentIdentifier{{FileName: fileName}},
 	})
 	assert.NilError(t, err)
 
-	proj, err := session.handleGetDefaultProjectForFile(ctx, &GetDefaultProjectForFileParams{
+	proj, err := session.handleGetDefaultProjectForFile(t.Context(), &GetDefaultProjectForFileParams{
 		Snapshot: snapshotResp.Snapshot,
 		File:     DocumentIdentifier{FileName: fileName},
 	})
@@ -57,7 +54,7 @@ func TestCompletionSymbolTypeIsResolvable(t *testing.T) {
 	assert.Assert(t, proj != nil, "file should resolve to a default project")
 
 	// content is pure ASCII, so the UTF-16 caret offset equals the byte length.
-	completions, err := session.handleGetCompletionsAtPosition(ctx, &GetCompletionsAtPositionParams{
+	completions, err := session.handleGetCompletionsAtPosition(t.Context(), &GetCompletionsAtPositionParams{
 		Snapshot:      snapshotResp.Snapshot,
 		Project:       proj.Id,
 		File:          DocumentIdentifier{FileName: fileName},
@@ -75,7 +72,7 @@ func TestCompletionSymbolTypeIsResolvable(t *testing.T) {
 			continue
 		}
 		sawSymbol = true
-		typeResp, err := session.handleGetTypeOfSymbol(ctx, &GetTypeOfSymbolParams{
+		typeResp, err := session.handleGetTypeOfSymbol(t.Context(), &GetTypeOfSymbolParams{
 			Snapshot: snapshotResp.Snapshot,
 			Project:  proj.Id,
 			Symbol:   entry.Symbol.Id,
@@ -116,14 +113,12 @@ func TestCompletionOnInferredProject(t *testing.T) {
 	session := NewSession(projectSession, nil)
 	defer session.Close()
 
-	ctx := context.Background()
-
-	snapshotResp, err := session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{
+	snapshotResp, err := session.handleUpdateSnapshot(t.Context(), &UpdateSnapshotParams{
 		OpenFiles: []DocumentIdentifier{{FileName: fileName}},
 	})
 	assert.NilError(t, err)
 
-	proj, err := session.handleGetDefaultProjectForFile(ctx, &GetDefaultProjectForFileParams{
+	proj, err := session.handleGetDefaultProjectForFile(t.Context(), &GetDefaultProjectForFileParams{
 		Snapshot: snapshotResp.Snapshot,
 		File:     DocumentIdentifier{FileName: fileName},
 	})
@@ -132,7 +127,7 @@ func TestCompletionOnInferredProject(t *testing.T) {
 
 	// This request previously panicked in setupLanguageService.
 	// content is pure ASCII, so the UTF-16 caret offset equals the byte length.
-	completions, err := session.handleGetCompletionsAtPosition(ctx, &GetCompletionsAtPositionParams{
+	completions, err := session.handleGetCompletionsAtPosition(t.Context(), &GetCompletionsAtPositionParams{
 		Snapshot: snapshotResp.Snapshot,
 		Project:  proj.Id,
 		File:     DocumentIdentifier{FileName: fileName},
@@ -163,20 +158,19 @@ func TestCompletionRetriesWithAutoImports(t *testing.T) {
 
 	session := NewSession(projectSession, nil)
 	defer session.Close()
-	ctx := context.Background()
 
-	snapshotResp, err := session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{
+	snapshotResp, err := session.handleUpdateSnapshot(t.Context(), &UpdateSnapshotParams{
 		OpenFiles: []DocumentIdentifier{{FileName: fileName}},
 	})
 	assert.NilError(t, err)
-	proj, err := session.handleGetDefaultProjectForFile(ctx, &GetDefaultProjectForFileParams{
+	proj, err := session.handleGetDefaultProjectForFile(t.Context(), &GetDefaultProjectForFileParams{
 		Snapshot: snapshotResp.Snapshot,
 		File:     DocumentIdentifier{FileName: fileName},
 	})
 	assert.NilError(t, err)
 	assert.Assert(t, proj != nil, "file should resolve to a default project")
 
-	completions, err := session.handleGetCompletionsAtPosition(ctx, &GetCompletionsAtPositionParams{
+	completions, err := session.handleGetCompletionsAtPosition(t.Context(), &GetCompletionsAtPositionParams{
 		Snapshot: snapshotResp.Snapshot,
 		Project:  proj.Id,
 		File:     DocumentIdentifier{FileName: fileName},
