@@ -25,6 +25,8 @@ jobs:
   prepare:
     if: github.repository == 'microsoft/TypeScript'
     runs-on: ubuntu-latest
+    outputs:
+      source-sha: ${{ steps.source.outputs.sha }}
 
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -33,6 +35,10 @@ jobs:
           filter: blob:none
           fetch-depth: 0
           persist-credentials: false
+
+      - name: Record source commit
+        id: source
+        run: echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
 
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
@@ -123,7 +129,7 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          ref: main
+          ref: ${{ needs.prepare.outputs.source-sha }}
           filter: blob:none
           fetch-depth: 0
           persist-credentials: false
@@ -166,6 +172,7 @@ jobs:
         env:
           EXTENSION_VERSION: ${{ inputs.extension_version }}
           TYPESCRIPT_VERSION: ${{ inputs.bundled_typescript_version }}
+          SOURCE_SHA: ${{ needs.prepare.outputs.source-sha }}
           GITHUB_APP_TOKEN: ${{ steps.app-token.outputs.token }}
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
@@ -180,11 +187,33 @@ jobs:
           basic_auth="$(node -e 'process.stdout.write(Buffer.from("x-access-token:" + process.env.GITHUB_APP_TOKEN).toString("base64"))')"
           echo "::add-mask::$basic_auth"
           git config --local http.https://github.com/.extraheader "AUTHORIZATION: basic ${basic_auth}"
-          git push --set-upstream origin "$branch"
 
-          gh pr create \
+          if git ls-remote --exit-code --heads origin "$branch" >/dev/null; then
+            git fetch origin "refs/heads/$branch:refs/remotes/origin/$branch"
+            existingCommit="$(git rev-parse "origin/$branch")"
+            existingParent="$(git rev-parse "origin/$branch^")"
+            if [ "$existingParent" != "$SOURCE_SHA" ] || ! git diff --quiet HEAD "$existingCommit"; then
+              echo "Existing branch $branch does not match this release bump." >&2
+              exit 1
+            fi
+          else
+            git push --set-upstream origin "$branch"
+          fi
+
+          existingPr="$(gh pr list \
             --repo microsoft/TypeScript \
             --base main \
             --head "$branch" \
-            --title "Bump vscode-typescript to $EXTENSION_VERSION" \
-            --body "Updates the vscode-typescript extension to $EXTENSION_VERSION and bundles TypeScript $TYPESCRIPT_VERSION."
+            --state open \
+            --json url \
+            --jq '.[0].url // empty')"
+          if [ -n "$existingPr" ]; then
+            echo "Pull request already exists: $existingPr"
+          else
+            gh pr create \
+              --repo microsoft/TypeScript \
+              --base main \
+              --head "$branch" \
+              --title "Bump vscode-typescript to $EXTENSION_VERSION" \
+              --body "Updates the vscode-typescript extension to $EXTENSION_VERSION and bundles TypeScript $TYPESCRIPT_VERSION."
+          fi
