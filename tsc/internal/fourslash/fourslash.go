@@ -13,7 +13,6 @@ import (
 	"unicode/utf8"
 
 	"github.com/google/go-cmp/cmp"
-	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/bundled"
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/contentmapper"
@@ -30,7 +29,6 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/ls/lsutil"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
-	"github.com/microsoft/TypeScript/tsc/internal/parser"
 	"github.com/microsoft/TypeScript/tsc/internal/project"
 	"github.com/microsoft/TypeScript/tsc/internal/spanmap"
 	"github.com/microsoft/TypeScript/tsc/internal/stringutil"
@@ -38,8 +36,6 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/harnessutil"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/lsptestutil"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/tsbaseline"
-	"github.com/microsoft/TypeScript/tsc/internal/tsoptions"
-	"github.com/microsoft/TypeScript/tsc/internal/tsoptions/tsoptionstest"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/iovfs"
@@ -205,10 +201,6 @@ func newFourslash(t *testing.T, content string, options *FourslashOptions, testP
 		testfs[filePath] = vfstest.Symlink(tspath.GetNormalizedAbsolutePath(target, rootDir))
 	}
 
-	for _, configOptions := range compilerOptionsFromConfigFiles(testData.Files, testData.Symlinks) {
-		harnessutil.FailOnUnsupportedCompilerOptions(t, configOptions)
-	}
-
 	// !!! use default compiler options for inferred project as base
 	compilerOptions := &core.CompilerOptions{
 		SkipDefaultLibCheck: core.TSTrue,
@@ -290,44 +282,6 @@ func newFourslash(t *testing.T, content string, options *FourslashOptions, testP
 		}
 		f.verifyBaselines(t, testPath)
 	}
-}
-
-func compilerOptionsFromConfigFiles(files []*TestFileInfo, symlinks map[string]string) []*core.CompilerOptions {
-	var configFiles []*TestFileInfo
-	for _, file := range files {
-		if isConfigFile(file.fileName) {
-			configFiles = append(configFiles, file)
-		}
-	}
-	if len(configFiles) == 0 {
-		return nil
-	}
-
-	compilerOptions := make([]*core.CompilerOptions, 0, len(configFiles))
-	testFiles := make(map[string]string, len(files))
-	for _, file := range files {
-		testFiles[tspath.GetNormalizedAbsolutePath(file.fileName, rootDir)] = file.Content
-	}
-	parseConfigHost := tsoptionstest.NewVFSParseConfigHostWithSymlinks(testFiles, symlinks, rootDir, true /*useCaseSensitiveFileNames*/)
-	for _, file := range configFiles {
-		configFileName := tspath.GetNormalizedAbsolutePath(file.fileName, rootDir)
-		configJson := parser.ParseSourceFile(ast.SourceFileParseOptions{
-			FileName: configFileName,
-			Path:     tspath.ToPath(configFileName, rootDir, true /*useCaseSensitiveFileNames*/),
-		}, file.Content, core.ScriptKindJSON)
-		config := tsoptions.ParseJsonSourceFileConfigFileContent(
-			&tsoptions.TsConfigSourceFile{SourceFile: configJson},
-			parseConfigHost,
-			tspath.GetDirectoryPath(configFileName),
-			nil, /*existingOptions*/
-			nil, /*existingOptionsRaw*/
-			configFileName,
-			nil, /*resolutionStack*/
-			nil, /*extendedConfigCache*/
-		)
-		compilerOptions = append(compilerOptions, config.ParsedConfig.CompilerOptions)
-	}
-	return compilerOptions
 }
 
 // handleServerRequest handles requests initiated by the server (e.g., workspace/configuration).

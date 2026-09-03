@@ -1235,7 +1235,7 @@ func GetConfigNameFromFileName(filename string) string {
 
 func SkipUnsupportedCompilerOptions(t *testing.T, options *core.CompilerOptions) {
 	t.Helper()
-	FailOnUnsupportedCompilerOptions(t, options)
+	failOnUnsupportedCompilerOptions(t, options)
 	switch options.Module {
 	case core.ModuleKindUMD, core.ModuleKindSystem:
 		t.Skipf("unsupported module kind %s", options.Module)
@@ -1262,7 +1262,7 @@ func SkipUnsupportedCompilerOptions(t *testing.T, options *core.CompilerOptions)
 	}
 }
 
-func FailOnUnsupportedCompilerOptions(t *testing.T, options *core.CompilerOptions) {
+func failOnUnsupportedCompilerOptions(t *testing.T, options *core.CompilerOptions) {
 	t.Helper()
 	if options.Module == core.ModuleKindAMD {
 		t.Fatalf("unsupported module kind %s", options.Module)
