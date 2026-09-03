@@ -50,7 +50,6 @@ export class WasmTransport {
     constructor(options: WasmTransportOptions) {
         this.instance = options.instance;
         this.exports = getReactorExports(options.instance);
-        setWasmFileSystem(options.instance, options.fs);
         const sessionOptions = encoder.encode(JSON.stringify({
             cwd: options.cwd ?? "/",
             useCaseSensitiveFileNames: options.useCaseSensitiveFileNames,
@@ -58,10 +57,9 @@ export class WasmTransport {
         }));
         this.writeRequest(sessionOptions);
         if (this.exports.create_session(this.requestPointer, sessionOptions.length) !== 0) {
-            const message = this.readResponseText();
-            setWasmFileSystem(this.instance, undefined);
-            throw new Error(`Failed to create TypeScript WASM session: ${message}`);
+            throw new Error(`Failed to create TypeScript WASM session: ${this.readResponseText()}`);
         }
+        setWasmFileSystem(options.instance, options.fs);
     }
 
     setFileSystem(fs: WasmFileSystem | undefined): void {

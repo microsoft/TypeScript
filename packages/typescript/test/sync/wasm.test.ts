@@ -61,6 +61,14 @@ describe("API over WebAssembly", () => {
         assert.ok(isIdentifier(name));
         const type = project.checker.getTypeAtLocation(name);
         assert.strictEqual(project.checker.typeToString(type), "42");
+        assert.throws(
+            () =>
+                new WasmTransport({
+                    instance,
+                    fs: { writeFile() {} },
+                }),
+            /session already created/,
+        );
         assert.deepStrictEqual(project.program.emit(), {
             diagnostics: [],
             emitSkipped: false,
