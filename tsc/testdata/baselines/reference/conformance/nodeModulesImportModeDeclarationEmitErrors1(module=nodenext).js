@@ -33,7 +33,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [index.d.ts]
-import type { RequireInterface } from "pkg";
+import type { RequireInterface } from "pkg" with { "resolution-mode": "foobar" };
 import { ImportInterface } from "pkg" with { "resolution-mode": "import" };
 export interface LocalInterface extends RequireInterface, ImportInterface {
 }
