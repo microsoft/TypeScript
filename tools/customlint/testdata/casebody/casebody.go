@@ -53,6 +53,16 @@ func SwitchBreak() {
 	}
 }
 
+func SwitchLabeledBreak() {
+outer:
+	for {
+		switch X {
+		case 1:
+			break outer
+		}
+	}
+}
+
 func TypeSwitch(x any) {
 	switch x.(type) {
 	case int:
