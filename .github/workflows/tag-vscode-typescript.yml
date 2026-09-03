@@ -9,6 +9,10 @@ on:
 
 run-name: Tag vscode-typescript release
 
+concurrency:
+  group: tag-vscode-typescript-${{ github.event.pull_request.merge_commit_sha }}
+  cancel-in-progress: false
+
 permissions:
   contents: read
   id-token: write
