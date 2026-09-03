@@ -1,4 +1,4 @@
-// @module: amd
+// @module: commonjs
 // @declaration: true
 // @target: ES5, ES2015
 
