@@ -1,5 +1,5 @@
 // @target: es2015
-// @outFile: foo.js
+// @outDir: out
 // @Filename: c.ts
 let foo: typeof C;
 // @Filename: b.ts

@@ -1,0 +1,47 @@
+//// [tests/cases/conformance/jsdoc/checkJsdocReturnTag1.ts] ////
+
+//// [returns.js]
+// @ts-check
+/**
+ * @returns {string} This comment is not currently exposed
+ */
+function f() {
+    return "hello";
+}
+
+/**
+ * @returns {string=} This comment is not currently exposed
+ */
+function f1() {
+    return "hello world";
+}
+
+/**
+ * @returns {string|number} This comment is not currently exposed
+ */
+function f2() {
+    return 5 || "hello";
+}
+
+
+//// [returns.js]
+"use strict";
+// @ts-check
+/**
+ * @returns {string} This comment is not currently exposed
+ */
+function f() {
+    return "hello";
+}
+/**
+ * @returns {string=} This comment is not currently exposed
+ */
+function f1() {
+    return "hello world";
+}
+/**
+ * @returns {string|number} This comment is not currently exposed
+ */
+function f2() {
+    return 5 || "hello";
+}

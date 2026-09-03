@@ -1,0 +1,18 @@
+instanceOfInExternalModules_1.ts(2,22): error TS2307: Cannot find module 'instanceOfInExternalModules_require' or its corresponding type declarations.
+instanceOfInExternalModules_require.ts(1,20): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+
+
+==== instanceOfInExternalModules_1.ts (1 errors) ====
+    ///<reference path='instanceOfInExternalModules_require.ts'/>
+    import Bar = require("instanceOfInExternalModules_require");
+                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'instanceOfInExternalModules_require' or its corresponding type declarations.
+    function IsFoo(value: any): boolean {
+        return value instanceof Bar.Foo;
+    }
+    
+==== instanceOfInExternalModules_require.ts (1 errors) ====
+    export class Foo { foo: string; }
+                       ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+    
