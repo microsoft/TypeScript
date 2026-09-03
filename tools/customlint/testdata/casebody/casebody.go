@@ -50,6 +50,9 @@ func SwitchBreak() {
 		for {
 			break
 		}
+	case 5:
+		break
+		println(`unreachable`)
 	}
 }
 
@@ -59,6 +62,17 @@ outer:
 		switch X {
 		case 1:
 			break outer
+		}
+	}
+}
+
+func SwitchCodeAfterLabeledBreak() {
+outer:
+	for {
+		switch X {
+		case 1:
+			break outer
+			println(`unreachable`)
 		}
 	}
 }

@@ -72,6 +72,13 @@
 			for {
 				break
 			}
+		case 5:
+			break
+			~~~~~
+!!! casebody: this top-level break statement is redundant
+			println(`unreachable`)
+			~~~~~~~~~~~~~~~~~~~~~~
+!!! casebody: this statement is unreachable after a break
 		}
 	}
 	
@@ -81,6 +88,19 @@
 			switch X {
 			case 1:
 				break outer
+			}
+		}
+	}
+	
+	func SwitchCodeAfterLabeledBreak() {
+	outer:
+		for {
+			switch X {
+			case 1:
+				break outer
+				println(`unreachable`)
+				~~~~~~~~~~~~~~~~~~~~~~
+!!! casebody: this statement is unreachable after a break
 			}
 		}
 	}

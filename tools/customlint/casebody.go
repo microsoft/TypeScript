@@ -13,7 +13,7 @@ import (
 
 var caseBodyAnalyzer = &analysis.Analyzer{
 	Name: "casebody",
-	Doc:  "finds empty switch/select cases and redundant break statements",
+	Doc:  "finds empty switch/select cases, redundant break statements, and code after breaks",
 	Requires: []*analysis.Analyzer{
 		inspect.Analyzer,
 	},
@@ -78,13 +78,25 @@ func (e *caseBodyPass) checkCaseStatement(stmt ast.Stmt, nextCasePos token.Pos) 
 		panic(fmt.Sprintf("unhandled statement type %T", stmt))
 	}
 
-	for _, statement := range body {
-		if branch, ok := statement.(*ast.BranchStmt); ok && branch.Tok == token.BREAK && branch.Label == nil {
+	for i, statement := range body {
+		branch, ok := statement.(*ast.BranchStmt)
+		if !ok || branch.Tok != token.BREAK {
+			continue
+		}
+		if branch.Label == nil {
 			e.pass.Report(analysis.Diagnostic{
 				Pos:     branch.Pos(),
 				End:     branch.End(),
 				Message: "this top-level break statement is redundant",
 			})
+		}
+		if i+1 < len(body) {
+			e.pass.Report(analysis.Diagnostic{
+				Pos:     body[i+1].Pos(),
+				End:     body[i+1].End(),
+				Message: "this statement is unreachable after a break",
+			})
+			break
 		}
 	}
 
