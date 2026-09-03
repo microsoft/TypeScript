@@ -1,0 +1,17 @@
+/types.d.ts(3,39): error TS1555: An import attributes property must have a string literal type annotation.
+
+
+==== /types.d.ts (1 errors) ====
+    type AttributeValue = "css";
+    
+    declare module "*.asset" with { type: AttributeValue } {
+                                          ~~~~~~~~~~~~~~
+!!! error TS1555: An import attributes property must have a string literal type annotation.
+        export type AttributeValue = "text";
+        export const value: "css";
+    }
+    
+==== /index.ts (0 errors) ====
+    import { value } from "./file.asset" with { type: "css" };
+    
+    const result: "css" = value;

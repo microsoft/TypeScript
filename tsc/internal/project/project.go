@@ -105,6 +105,7 @@ func NewInferredProject(
 	currentDirectory string,
 	compilerOptions *core.CompilerOptions,
 	rootFileNames []string,
+	projectReferences []*core.ProjectReference,
 	contentMappers []*contentmapper.Mapper,
 	builder *ProjectCollectionBuilder,
 	logger *logging.LogTree,
@@ -128,6 +129,7 @@ func NewInferredProject(
 	p.CommandLine = newInferredProjectCommandLine(
 		compilerOptions,
 		rootFileNames,
+		projectReferences,
 		contentMappers,
 		tspath.ComparePathsOptions{
 			UseCaseSensitiveFileNames: builder.fs.fs.UseCaseSensitiveFileNames(),
@@ -140,12 +142,31 @@ func NewInferredProject(
 func newInferredProjectCommandLine(
 	compilerOptions *core.CompilerOptions,
 	rootFileNames []string,
+	projectReferences []*core.ProjectReference,
 	contentMappers []*contentmapper.Mapper,
 	comparePathsOptions tspath.ComparePathsOptions,
 ) *tsoptions.ParsedCommandLine {
-	commandLine := tsoptions.NewParsedCommandLine(compilerOptions, rootFileNames, comparePathsOptions)
+	commandLine := tsoptions.NewParsedCommandLine(compilerOptions, rootFileNames, projectReferences, comparePathsOptions)
 	commandLine.ParsedConfig.ContentMappers = contentMappers
 	return commandLine
+}
+
+// newInferredProjectFromProject creates an isolated synthetic project seeded
+// from an existing project's compiler state.
+func newInferredProjectFromProject(
+	project *Project,
+	builder *ProjectCollectionBuilder,
+	logger *logging.LogTree,
+) *Project {
+	inferred := NewProject(inferredProjectName, KindInferred, project.currentDirectory, builder, logger)
+	inferred.CommandLine = project.Program.CommandLine()
+	inferred.Program = project.Program
+	inferred.ProgramLastUpdate = project.ProgramLastUpdate
+	inferred.host = project.host
+	inferred.checkerPool = project.checkerPool
+	inferred.contentMapperWatchedFiles = project.contentMapperWatchedFiles
+	inferred.dirty = false
+	return inferred
 }
 
 func NewProject(

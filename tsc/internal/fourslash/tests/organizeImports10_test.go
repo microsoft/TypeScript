@@ -26,7 +26,7 @@ export function fun() { /* ... */ }
 
 /** Intended to be used in combination with {@link ZodType} */
 export function fun() { /* ... */ }`,
-		lsproto.CodeActionKindSourceOrganizeImports,
+		lsproto.CodeActionKindSourceOrganizeImportsTs,
 		nil,
 	)
 }

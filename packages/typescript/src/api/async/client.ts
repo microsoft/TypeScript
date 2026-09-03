@@ -49,6 +49,8 @@ export class Client {
     private connection: MessageConnection | undefined;
     private options: ClientOptions;
     private connected = false;
+    private closed = false;
+    private connecting: Promise<void> | undefined;
     private timing: TimingCollector | undefined;
     private batchedRequests: { method: APIRequest["method"]; params: APIRequest["params"]; resolve: (value: unknown) => void; reject: (reason?: any) => void; }[] = [];
     private nextBatch: NodeJS.Immediate | "manual" | undefined;
@@ -60,9 +62,15 @@ export class Client {
         }
     }
 
-    async connect(): Promise<void> {
-        if (this.connected) return;
+    connect(): Promise<void> {
+        if (this.closed) return Promise.reject(new Error("Client is closed"));
+        if (this.connected) return Promise.resolve();
+        return this.connecting ??= this.connectWorker().finally(() => {
+            this.connecting = undefined;
+        });
+    }
 
+    private async connectWorker(): Promise<void> {
         if (isSpawnOptions(this.options)) {
             await this.connectViaSpawn(this.options);
         }
@@ -254,6 +262,7 @@ export class Client {
     }
 
     async apiRequest<K extends keyof APIMethodInfo>(method: K, params: APIMethodInfo[K]["params"]): Promise<APIMethodInfo[K]["result"]> {
+        if (this.closed) throw new Error("Client is closed");
         if (!this.connected) {
             await this.connect();
         }
@@ -323,6 +332,8 @@ export class Client {
     }
 
     async close(): Promise<void> {
+        await this.connecting?.catch(() => {}); // if connection is still in-progress, wait for it to finish before closing the connection
+        this.closed = true;
         if (this.connection) {
             this.connection.dispose();
             this.connection = undefined;

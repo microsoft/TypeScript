@@ -1,0 +1,41 @@
+// === QuickInfo ===
+=== /hoverMappedTypeWithoutPropertyType.ts ===
+// 
+// declare function uhoh<T>(x: { [K in keyof T] }): void;
+//                  ^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | function uhoh<T>(x: { [K in keyof T]; }): void
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// 
+[
+  {
+    "marker": {
+      "Position": 22,
+      "LSPosition": {
+        "line": 1,
+        "character": 21
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nfunction uhoh<T>(x: { [K in keyof T]; }): void\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 1,
+          "character": 17
+        },
+        "end": {
+          "line": 1,
+          "character": 21
+        }
+      }
+    }
+  }
+]

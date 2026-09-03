@@ -655,7 +655,11 @@ func (r *typeRenderer) importDeclarations() string {
 	for _, path := range paths {
 		names := r.imports[path]
 		sort.Strings(names)
-		fmt.Fprintf(&out, "import type { %s } from %q;\n", strings.Join(names, ", "), path)
+		fmt.Fprintf(&out, "import { %s } from %q;\n", strings.Join(names, ", "), path)
+	}
+	out.WriteString("\n")
+	for _, path := range paths {
+		fmt.Fprintf(&out, "export { %s } from %q;\n", strings.Join(r.imports[path], ", "), path)
 	}
 	return out.String()
 }

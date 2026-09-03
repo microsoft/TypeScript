@@ -60,6 +60,26 @@ jobs:
           package-manager-cache: false
       - run: npm ci --registry=https://packagefeedproxy.microsoft.io/npm/
 
+  go-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: ./.github/actions/setup-go
+      - name: Prepare standalone tsc module
+        run: |
+          mkdir "$RUNNER_TEMP/go-test-bin"
+          ln -s "$(go env GOROOT)/bin/go" "$RUNNER_TEMP/go-test-bin/go"
+          cp -R tsc "$RUNNER_TEMP/tsc"
+      - name: Tests without Node.js
+        run: |
+          export PATH="$RUNNER_TEMP/go-test-bin"
+          export GOEXPERIMENT=ms_nocgo_opensslcrypto
+          export CGO_ENABLED=0
+          ! command -v node
+          cd "$RUNNER_TEMP/tsc"
+          go test ./...
+          go test -run=- -bench=. -benchtime=1x ./...
+
   test:
     strategy:
       fail-fast: ${{ github.event_name == 'merge_group' }}
@@ -263,15 +283,15 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
-          node-version: '>=22.16.0'
+          node-version: '>=22.18.0'
       - uses: ./.github/actions/setup-go
       - run: npm ci
       - run: npx hereby generate
       - run: npx hereby generate:enums
       - run: npx hereby generate:ast
       - run: npx hereby generate:vendor
-      - run: node --experimental-strip-types ./tsc/internal/lsp/lsproto/_generate/fetchModel.mts
-      - run: node --experimental-strip-types ./tsc/internal/lsp/lsproto/_generate/generate.mts
+      - run: node ./tsc/internal/lsp/lsproto/_generate/fetchModel.mts
+      - run: node ./tsc/internal/lsp/lsproto/_generate/generate.mts
       - run: npx hereby generate:extension
       - run: npx hereby check:scripts
       - run: git add .
@@ -310,6 +330,7 @@ jobs:
       - uses: ./.github/actions/setup-go
       - run: npm ci
       - run: go -C ./tools run ./cmd/checkmodpaths "$PWD"
+      - run: npx hereby check:herebyfile
       - run: npx hereby check:scripts
       - run: npx hereby typescript:check-platforms
 
@@ -322,6 +343,7 @@ jobs:
       - extension
       - format
       - generate
+      - go-test
       - lint
       - misc
       - package-feed-proxy

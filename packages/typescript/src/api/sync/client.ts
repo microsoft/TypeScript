@@ -9,6 +9,8 @@ import {
 } from "../options.ts";
 import type {
     APIMethodInfo,
+    APIRequest,
+    BatchRequestsResponse,
     SourceFileResponseMethod,
 } from "../proto.ts";
 import { SyncRpcChannel } from "../syncChannel.ts";
@@ -94,6 +96,10 @@ export class Client {
             return JSON.parse(result) as APIMethodInfo[K]["result"];
         }
         return undefined as APIMethodInfo[K]["result"];
+    }
+
+    batchRequests(requests: readonly APIRequest[]): BatchRequestsResponse {
+        return this.apiRequest("batchRequests", { requests });
     }
 
     apiRequestBinary<K extends SourceFileResponseMethod>(method: K, params?: APIMethodInfo[K]["params"]): Uint8Array | undefined {

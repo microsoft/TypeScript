@@ -28,7 +28,7 @@ import b from "B";
 import d from "D";
 
 console.log(a, b, c, d)`,
-		lsproto.CodeActionKindSourceOrganizeImports,
+		lsproto.CodeActionKindSourceOrganizeImportsTs,
 		nil,
 	)
 }
