@@ -2,7 +2,7 @@
  * Encoder/decoder code generator: reads tools/scripts/tsc/ast.json and produces binary
  * encoding/decoding code for Go and TypeScript.
  *
- * Usage: node --experimental-strip-types tools/scripts/tsc/generate-encoder.ts
+ * Usage: node tools/scripts/tsc/generate-encoder.ts
  *
  * Generates:
  *   - internal/api/encoder/encoder_generated.go
@@ -10,10 +10,10 @@
  *   - packages/typescript/src/api/node/protocol.generated.ts
  */
 
-import { execaSync } from "execa";
 import * as fs from "node:fs";
 import * as path from "node:path";
 import { fileURLToPath } from "node:url";
+import { xSync } from "tinyexec";
 import type {
     KindType,
     MemberInfo,
@@ -1990,7 +1990,10 @@ function writeAndFormat(filePath: string, content: string, formatter: string) {
     fs.writeFileSync(filePath, content);
     try {
         const [cmd, ...args] = formatter.split(" ");
-        execaSync(cmd, [...args, filePath], { stdio: "inherit", cwd: ROOT });
+        xSync(cmd, [...args, filePath], {
+            throwOnError: true,
+            nodeOptions: { stdio: "inherit", cwd: ROOT },
+        });
     }
     catch {
         console.warn(`Warning: formatter failed for ${filePath}`);
