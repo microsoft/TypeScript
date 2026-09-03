@@ -3,20 +3,16 @@ name: Bump vscode-typescript
 on:
   workflow_dispatch:
     inputs:
-      major:
-        description: Extension major version
+      bump:
+        description: Version component to bump
         required: true
-        type: number
-      minor:
-        description: Extension minor version
-        required: true
-        type: number
-      patch:
-        description: Extension patch version
-        required: true
-        type: number
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
 
-run-name: Bump vscode-typescript to ${{ inputs.major }}.${{ inputs.minor }}.${{ inputs.patch }}
+run-name: Bump vscode-typescript (${{ inputs.bump }})
 
 permissions:
   contents: read
@@ -48,43 +44,16 @@ jobs:
         with:
           node-version: 'lts/*'
 
-      - name: Validate extension version
-        env:
-          EXTENSION_VERSION: ${{ inputs.major }}.${{ inputs.minor }}.${{ inputs.patch }}
-        run: |
-          set -euo pipefail
-          versionPattern='^[0-9]+\.[0-9]+\.[0-9]+$'
-          if ! [[ "$EXTENSION_VERSION" =~ $versionPattern ]] || [ "$EXTENSION_VERSION" = "0.0.0" ]; then
-            echo "Extension version must be a non-placeholder three-component numeric version." >&2
-            exit 1
-          fi
-
       - run: npm ci
-
-      - name: Check Marketplace version
-        env:
-          EXTENSION_VERSION: ${{ inputs.major }}.${{ inputs.minor }}.${{ inputs.patch }}
-        run: |
-          set -euo pipefail
-          publishedVersion="$(npx vsce show TypeScriptTeam.native-preview --json | jq -r '.versions[0].version')"
-          PUBLISHED_VERSION="$publishedVersion" node <<'NODE'
-          const extensionVersion = process.env.EXTENSION_VERSION.split(".").map(Number);
-          const publishedVersion = process.env.PUBLISHED_VERSION.split(".").map(Number);
-          const comparison = extensionVersion.findIndex((part, index) => part !== publishedVersion[index]);
-          if (comparison === -1 || extensionVersion[comparison] < publishedVersion[comparison]) {
-              throw new Error(`Extension version ${process.env.EXTENSION_VERSION} must be greater than published version ${process.env.PUBLISHED_VERSION}.`);
-          }
-          NODE
 
       - name: Update extension version
         env:
-          EXTENSION_VERSION: ${{ inputs.major }}.${{ inputs.minor }}.${{ inputs.patch }}
+          BUMP: ${{ inputs.bump }}
         run: |
           set -euo pipefail
-          npm version "$EXTENSION_VERSION" \
+          npm version "$BUMP" \
             --workspace native-preview \
             --no-git-tag-version \
-            --allow-same-version
 
           packageVersion="$(jq -r '.version' packages/vscode-typescript/package.json)"
           lockVersion="$(jq -r '.packages["packages/vscode-typescript"].version' package-lock.json)"
@@ -92,6 +61,20 @@ jobs:
             echo "package.json version $packageVersion does not match package-lock.json version $lockVersion." >&2
             exit 1
           fi
+
+      - name: Check Marketplace version
+        run: |
+          set -euo pipefail
+          packageVersion="$(jq -r '.version' packages/vscode-typescript/package.json)"
+          publishedVersion="$(npx vsce show TypeScriptTeam.native-preview --json | jq -r '.versions[0].version')"
+          EXTENSION_VERSION="$packageVersion" PUBLISHED_VERSION="$publishedVersion" node <<'NODE'
+          const extensionVersion = process.env.EXTENSION_VERSION.split(".").map(Number);
+          const publishedVersion = process.env.PUBLISHED_VERSION.split(".").map(Number);
+          const comparison = extensionVersion.findIndex((part, index) => part !== publishedVersion[index]);
+          if (comparison === -1 || extensionVersion[comparison] < publishedVersion[comparison]) {
+              throw new Error(`Extension version ${process.env.EXTENSION_VERSION} must be greater than published version ${process.env.PUBLISHED_VERSION}.`);
+          }
+          NODE
 
       - run: npm test -w native-preview
 
@@ -162,12 +145,12 @@ jobs:
 
       - name: Commit, push, and open pull request
         env:
-          EXTENSION_VERSION: ${{ inputs.major }}.${{ inputs.minor }}.${{ inputs.patch }}
           SOURCE_SHA: ${{ needs.prepare.outputs.source-sha }}
           GITHUB_APP_TOKEN: ${{ steps.app-token.outputs.token }}
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
           set -euo pipefail
+          EXTENSION_VERSION="$(jq -r '.version' packages/vscode-typescript/package.json)"
           branch="vscode-typescript-release/v$EXTENSION_VERSION"
           git switch -c "$branch"
           git config user.email "290192711+typescript-automation[bot]@users.noreply.github.com"

@@ -1,22 +1,14 @@
 name: Tag vscode-typescript release
 
 on:
+  pull_request_target:
+    types: [closed]
+    branches: [main]
+    paths:
+      - packages/vscode-typescript/package.json
   workflow_dispatch:
-    inputs:
-      major:
-        description: Extension major version
-        required: true
-        type: number
-      minor:
-        description: Extension minor version
-        required: true
-        type: number
-      patch:
-        description: Extension patch version
-        required: true
-        type: number
 
-run-name: Tag vscode-typescript/v${{ inputs.major }}.${{ inputs.minor }}.${{ inputs.patch }}
+run-name: Tag vscode-typescript release
 
 permissions:
   contents: read
@@ -28,48 +20,15 @@ defaults:
 
 jobs:
   tag:
-    if: github.repository == 'microsoft/TypeScript'
+    if: >-
+      github.repository == 'microsoft/TypeScript' &&
+      (github.event_name == 'workflow_dispatch' || github.event.pull_request.merged == true)
     runs-on: ubuntu-latest
     environment:
       name: azure
       deployment: false
 
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          ref: main
-          filter: blob:none
-          fetch-depth: 0
-          persist-credentials: false
-
-      - name: Validate release version
-        env:
-          EXTENSION_VERSION: ${{ inputs.major }}.${{ inputs.minor }}.${{ inputs.patch }}
-        run: |
-          set -euo pipefail
-          versionPattern='^[0-9]+\.[0-9]+\.[0-9]+$'
-          if ! [[ "$EXTENSION_VERSION" =~ $versionPattern ]] || [ "$EXTENSION_VERSION" = "0.0.0" ]; then
-            echo "Extension version must be a non-placeholder three-component numeric version." >&2
-            exit 1
-          fi
-
-          packageVersion="$(jq -r '.version' packages/vscode-typescript/package.json)"
-          if [ "$EXTENSION_VERSION" != "$packageVersion" ]; then
-            echo "Requested version $EXTENSION_VERSION does not match main's package version $packageVersion." >&2
-            exit 1
-          fi
-          lockVersion="$(jq -r '.packages["packages/vscode-typescript"].version' package-lock.json)"
-          if [ "$packageVersion" != "$lockVersion" ]; then
-            echo "package.json version $packageVersion does not match package-lock.json version $lockVersion." >&2
-            exit 1
-          fi
-
-          tag="vscode-typescript/v$EXTENSION_VERSION"
-          if git rev-parse --verify --quiet "refs/tags/$tag"; then
-            echo "Tag $tag already exists." >&2
-            exit 1
-          fi
-
       - uses: azure/login@532459ea530d8321f2fb9bb10d1e0bcf23869a43 # v3.0.0
         with:
           client-id: ${{ vars.AZURE_CLIENT_ID }}
@@ -87,17 +46,99 @@ jobs:
           permission-contents: write
 
       - name: Create release tag
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         env:
-          EXTENSION_VERSION: ${{ inputs.major }}.${{ inputs.minor }}.${{ inputs.patch }}
-          GITHUB_APP_TOKEN: ${{ steps.app-token.outputs.token }}
-        run: |
-          set -euo pipefail
-          tag="vscode-typescript/v$EXTENSION_VERSION"
-          git config user.email "290192711+typescript-automation[bot]@users.noreply.github.com"
-          git config user.name "typescript-automation[bot]"
-          git tag --annotate "$tag" --message "vscode-typescript $EXTENSION_VERSION"
+          EVENT_NAME: ${{ github.event_name }}
+          DISPATCH_COMMIT_SHA: ${{ github.sha }}
+          PR_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          MERGE_COMMIT_SHA: ${{ github.event.pull_request.merge_commit_sha }}
+        with:
+          github-token: ${{ steps.app-token.outputs.token }}
+          script: |
+            const {
+              EVENT_NAME,
+              DISPATCH_COMMIT_SHA,
+              PR_BASE_SHA,
+              MERGE_COMMIT_SHA,
+            } = process.env;
 
-          basic_auth="$(node -e 'process.stdout.write(Buffer.from("x-access-token:" + process.env.GITHUB_APP_TOKEN).toString("base64"))')"
-          echo "::add-mask::$basic_auth"
-          git config --local http.https://github.com/.extraheader "AUTHORIZATION: basic ${basic_auth}"
-          git push origin "refs/tags/$tag"
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const releaseCommit = EVENT_NAME === "workflow_dispatch"
+              ? DISPATCH_COMMIT_SHA
+              : MERGE_COMMIT_SHA;
+
+            if (!releaseCommit) {
+              throw new Error("Could not determine the release commit.");
+            }
+
+            const readJson = async (path, ref) => {
+              const response = await github.rest.repos.getContent({
+                owner,
+                repo,
+                path,
+                ref,
+              });
+              if (Array.isArray(response.data) || response.data.type !== "file") {
+                throw new Error(`${path} is not a file.`);
+              }
+              return JSON.parse(Buffer.from(response.data.content, "base64").toString());
+            };
+
+            const packagePath = "packages/vscode-typescript/package.json";
+            const packageJson = await readJson(packagePath, releaseCommit);
+            const version = packageJson.version;
+            if (typeof version !== "string" || !/^\d+\.\d+\.\d+$/.test(version) || version === "0.0.0") {
+              throw new Error(`Invalid extension version: ${JSON.stringify(version)}.`);
+            }
+
+            if (EVENT_NAME !== "workflow_dispatch") {
+              if (!PR_BASE_SHA) {
+                throw new Error("Could not determine the pull request base commit.");
+              }
+
+              const previousPackageJson = await readJson(packagePath, PR_BASE_SHA);
+              if (previousPackageJson.version === version) {
+                console.log(`${packagePath} changed without changing its version.`);
+                return;
+              }
+            }
+
+            const packageLock = await readJson("package-lock.json", releaseCommit);
+            const lockVersion = packageLock.packages?.["packages/vscode-typescript"]?.version;
+            if (lockVersion !== version) {
+              throw new Error(`package.json version ${version} does not match package-lock.json version ${lockVersion}.`);
+            }
+
+            const tag = `vscode-typescript/v${version}`;
+            try {
+              await github.rest.git.getRef({
+                owner,
+                repo,
+                ref: `tags/${tag}`,
+              });
+              throw new Error(`Tag ${tag} already exists.`);
+            }
+            catch (error) {
+              if (error.status !== 404) throw error;
+            }
+
+            const annotatedTag = await github.rest.git.createTag({
+              owner,
+              repo,
+              tag,
+              message: `vscode-typescript ${version}`,
+              object: releaseCommit,
+              type: "commit",
+              tagger: {
+                name: "typescript-automation[bot]",
+                email: "290192711+typescript-automation[bot]@users.noreply.github.com",
+              },
+            });
+
+            await github.rest.git.createRef({
+              owner,
+              repo,
+              ref: `refs/tags/${tag}`,
+              sha: annotatedTag.data.sha,
+            });
