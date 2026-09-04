@@ -3823,7 +3823,7 @@ func (s *Session) releaseOpenRefs() {
 		s.openFiles.Clear()
 		return
 	}
-	snapshot, err := s.projectSession.APIUpdate(context.Background(), project.FileChangeSummary{}, apiRequest)
+	snapshot, err := s.projectSession.APIUpdate(s.withLocale(context.Background()), project.FileChangeSummary{}, apiRequest)
 	// APIUpdate returns a ref'd snapshot even on error; always release it.
 	snapshot.Deref()
 	if err != nil {

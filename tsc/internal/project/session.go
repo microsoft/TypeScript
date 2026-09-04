@@ -1356,6 +1356,9 @@ func (s *Session) updateSnapshotRef(ctx context.Context, overlays map[tspath.Pat
 func (s *Session) updateSnapshot(ctx context.Context, overlays map[tspath.Path]*Overlay, change SnapshotChange, callerRef bool) *Snapshot {
 	s.snapshotMu.Lock()
 	oldSnapshot := s.snapshot
+	if !locale.HasLocale(ctx) {
+		ctx = s.WithCurrentLocale(ctx)
+	}
 	change.client = s.client
 	newSnapshot := oldSnapshot.Clone(ctx, change, overlays, s.logger)
 	s.snapshot = newSnapshot
