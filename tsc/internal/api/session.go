@@ -1124,10 +1124,11 @@ func (s *Session) handleUpdateSnapshot(ctx context.Context, params *UpdateSnapsh
 
 	// Open projects: only take a new ref for projects we aren't already holding open.
 	var openedProjects []tspath.Path
+	pendingOpenProjects := collections.NewSetWithSizeHint[tspath.Path](len(params.OpenProjects))
 	for _, p := range params.OpenProjects {
 		configFileName := p.ToAbsoluteFileName(s.currentDirectory())
 		configPath := s.toPath(configFileName)
-		if s.openProjects.Has(configPath) {
+		if s.openProjects.Has(configPath) || !pendingOpenProjects.AddIfAbsent(configPath) {
 			continue
 		}
 		if apiRequest.OpenProjects == nil {
@@ -1154,10 +1155,11 @@ func (s *Session) handleUpdateSnapshot(ctx context.Context, params *UpdateSnapsh
 	// Open files: only open files we aren't already holding open, so each file is
 	// held by at most one API ref from this session.
 	var openedFiles []tspath.Path
+	pendingOpenFiles := collections.NewSetWithSizeHint[tspath.Path](len(params.OpenFiles))
 	for _, f := range params.OpenFiles {
 		uri := f.ToURI(s.currentDirectory())
 		path := s.toPath(uri.FileName())
-		if s.openFiles.Has(path) {
+		if s.openFiles.Has(path) || !pendingOpenFiles.AddIfAbsent(path) {
 			continue
 		}
 		if apiRequest.OpenFiles == nil {
