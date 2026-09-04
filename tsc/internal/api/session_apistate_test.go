@@ -14,7 +14,11 @@ import (
 )
 
 func configuredProjectID(path string) project.ID {
-	return project.ConfiguredProjectID(tspath.Path(path)).AsID()
+	id, ok := project.ParseConfiguredProjectID(tspath.PathKeyFromCanonical(path))
+	if !ok {
+		panic("invalid configured project ID")
+	}
+	return id.AsID()
 }
 
 func inferredProjectID() project.ID {
@@ -48,7 +52,7 @@ func TestGetCurrentLanguageServerSnapshotAdoptsChanges(t *testing.T) {
 	assert.NilError(t, err)
 	assert.Equal(t, session.openProjects.Len(), 1)
 	assert.Equal(t, response.Snapshot, snapshotHandle(projectSession.Snapshot()))
-	assert.Assert(t, projectSession.Snapshot().ProjectCollection.ConfiguredProject(tspath.Path(configFileName)) != nil)
+	assert.Assert(t, projectSession.Snapshot().ProjectCollection.ConfiguredProject(tspath.PathKeyFromCanonical(configFileName)) != nil)
 	assert.NilError(t, utils.FS().WriteFile(fileName, `export const x = 2;`))
 	projectSession.DidChangeWatchedFiles(context.Background(), []*lsproto.FileEvent{{
 		Uri:  DocumentIdentifier{FileName: fileName}.ToURI(projectSession.GetCurrentDirectory()),
@@ -56,7 +60,7 @@ func TestGetCurrentLanguageServerSnapshotAdoptsChanges(t *testing.T) {
 	}})
 	dirty, err := session.handleGetCurrentLanguageServerSnapshot(context.Background(), &GetCurrentLanguageServerSnapshotParams{BaseSnapshot: response.Snapshot})
 	assert.NilError(t, err)
-	assert.Equal(t, projectSession.Snapshot().ProjectCollection.ConfiguredProject(tspath.Path(configFileName)).IsDirty(), true)
+	assert.Equal(t, projectSession.Snapshot().ProjectCollection.ConfiguredProject(tspath.PathKeyFromCanonical(configFileName)).IsDirty(), true)
 
 	unchanged, err := session.handleGetCurrentLanguageServerSnapshot(context.Background(), &GetCurrentLanguageServerSnapshotParams{
 		BaseSnapshot: dirty.Snapshot,
@@ -81,7 +85,7 @@ func TestGetCurrentLanguageServerSnapshotAdoptsChanges(t *testing.T) {
 
 	session.Close()
 	assert.Equal(t, session.openProjects.Len(), 0)
-	assert.Assert(t, projectSession.Snapshot().ProjectCollection.ConfiguredProject(tspath.Path(configFileName)) == nil)
+	assert.Assert(t, projectSession.Snapshot().ProjectCollection.ConfiguredProject(tspath.PathKeyFromCanonical(configFileName)) == nil)
 }
 
 func TestGetCurrentLanguageServerSnapshotRejectsStandaloneSession(t *testing.T) {
@@ -132,7 +136,7 @@ func TestGetCurrentLanguageServerSnapshotCloseAndReopenProject(t *testing.T) {
 	}})
 	assert.NilError(t, err)
 	assert.Equal(t, session.openProjects.Len(), 1)
-	assert.Assert(t, projectSession.Snapshot().ProjectCollection.ConfiguredProject(tspath.Path(configFileName)) != nil)
+	assert.Assert(t, projectSession.Snapshot().ProjectCollection.ConfiguredProject(tspath.PathKeyFromCanonical(configFileName)) != nil)
 
 	_, err = session.handleGetCurrentLanguageServerSnapshot(ctx, &GetCurrentLanguageServerSnapshotParams{Changes: &LanguageServerSnapshotChanges{
 		CloseProjects: []DocumentIdentifier{open},
@@ -231,7 +235,7 @@ func TestGetCurrentLanguageServerSnapshotReportsOpenedFilesInRequestOrder(t *tes
 	}})
 	dirty, err := session.handleGetCurrentLanguageServerSnapshot(context.Background(), &GetCurrentLanguageServerSnapshotParams{BaseSnapshot: first.Snapshot})
 	assert.NilError(t, err)
-	assert.Equal(t, projectSession.Snapshot().ProjectCollection.ConfiguredProject(tspath.Path("/home/projects/p/tsconfig.json")).IsDirty(), true)
+	assert.Equal(t, projectSession.Snapshot().ProjectCollection.ConfiguredProject(tspath.PathKeyFromCanonical("/home/projects/p/tsconfig.json")).IsDirty(), true)
 
 	reopened, err := session.handleGetCurrentLanguageServerSnapshot(context.Background(), &GetCurrentLanguageServerSnapshotParams{
 		BaseSnapshot: dirty.Snapshot,
@@ -239,7 +243,7 @@ func TestGetCurrentLanguageServerSnapshotReportsOpenedFilesInRequestOrder(t *tes
 	})
 	assert.NilError(t, err)
 	assert.DeepEqual(t, *reopened.Operation.OpenedFiles, *first.Operation.OpenedFiles)
-	assert.Equal(t, projectSession.Snapshot().ProjectCollection.ConfiguredProject(tspath.Path("/home/projects/p/tsconfig.json")).IsDirty(), false)
+	assert.Equal(t, projectSession.Snapshot().ProjectCollection.ConfiguredProject(tspath.PathKeyFromCanonical("/home/projects/p/tsconfig.json")).IsDirty(), false)
 	assert.Equal(t, session.openFiles.Len(), 2)
 }
 
@@ -388,7 +392,7 @@ func TestOpeningProjectOwnedByAnotherAPISessionEnsuresProgram(t *testing.T) {
 	}})
 	_, err = owner.handleGetCurrentLanguageServerSnapshot(context.Background(), &GetCurrentLanguageServerSnapshotParams{})
 	assert.NilError(t, err)
-	assert.Equal(t, projectSession.Snapshot().ProjectCollection.ConfiguredProject(tspath.Path(configFileName)).IsDirty(), true)
+	assert.Equal(t, projectSession.Snapshot().ProjectCollection.ConfiguredProject(tspath.PathKeyFromCanonical(configFileName)).IsDirty(), true)
 
 	other := NewLSPSession(projectSession, nil)
 	opened, err := other.handleGetCurrentLanguageServerSnapshot(context.Background(), &GetCurrentLanguageServerSnapshotParams{Changes: openProject})
@@ -397,9 +401,9 @@ func TestOpeningProjectOwnedByAnotherAPISessionEnsuresProgram(t *testing.T) {
 	assert.Equal(t, other.openProjects.Len(), 1)
 
 	other.Close()
-	assert.Assert(t, projectSession.Snapshot().ProjectCollection.ConfiguredProject(tspath.Path(configFileName)) != nil)
+	assert.Assert(t, projectSession.Snapshot().ProjectCollection.ConfiguredProject(tspath.PathKeyFromCanonical(configFileName)) != nil)
 	owner.Close()
-	assert.Assert(t, projectSession.Snapshot().ProjectCollection.ConfiguredProject(tspath.Path(configFileName)) == nil)
+	assert.Assert(t, projectSession.Snapshot().ProjectCollection.ConfiguredProject(tspath.PathKeyFromCanonical(configFileName)) == nil)
 }
 
 func TestFailedLanguageServerSnapshotOpenIsNotAdopted(t *testing.T) {

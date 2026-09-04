@@ -21,7 +21,7 @@ func TestSnapshot(t *testing.T) {
 	}
 
 	setup := func(files map[string]any) *Session {
-		fs := bundled.WrapFS(vfstest.FromMap(files, false /*useCaseSensitiveFileNames*/))
+		fs := bundled.WrapFS(vfstest.FromMap(files, tspath.CaseInsensitive /*caseSensitivity*/))
 		session := NewSession(&SessionInit{
 			BackgroundCtx: context.Background(),
 			Options: &SessionOptions{
@@ -49,11 +49,11 @@ func TestSnapshot(t *testing.T) {
 		options := &core.CompilerOptions{NoLib: core.TSTrue}
 		createRequest := &APISnapshotRequest{CreatePrograms: []*APICreateProgramRequest{
 			{
-				RootFileNames:   []string{"/a.ts"},
+				RootFileNames:   []tspath.RootedFilePath{"/a.ts"},
 				CompilerOptions: options,
 			},
 			{
-				RootFileNames:   []string{"/b.ts"},
+				RootFileNames:   []tspath.RootedFilePath{"/b.ts"},
 				CompilerOptions: options,
 			},
 		}}
@@ -69,8 +69,8 @@ func TestSnapshot(t *testing.T) {
 		assert.Equal(t, len(createdPrograms), 2)
 		firstProject := createdPrograms[0]
 		secondProject := createdPrograms[1]
-		assert.Equal(t, firstProject.configFilePath, tspath.Path(""))
-		assert.Equal(t, secondProject.configFilePath, tspath.Path(""))
+		assert.Equal(t, firstProject.configFilePath, tspath.PathKey(""))
+		assert.Equal(t, secondProject.configFilePath, tspath.PathKey(""))
 
 		firstProgramID, ok := firstProject.ID().Synthetic()
 		assert.Assert(t, ok)
@@ -88,13 +88,13 @@ func TestSnapshot(t *testing.T) {
 		assert.Assert(t, firstProject != nil)
 		assert.Assert(t, secondProject != nil)
 		assert.Assert(t, firstProject.ID() != secondProject.ID())
-		assert.DeepEqual(t, firstProject.CommandLine.FileNames(), []string{"/a.ts"})
-		assert.DeepEqual(t, secondProject.CommandLine.FileNames(), []string{"/b.ts"})
+		assert.DeepEqual(t, firstProject.CommandLine.FileNames(), []tspath.RootedFilePath{"/a.ts"})
+		assert.DeepEqual(t, secondProject.CommandLine.FileNames(), []tspath.RootedFilePath{"/b.ts"})
 		assert.Assert(t, createdSnapshot.ProjectCollection.InferredProject() == nil)
 		assert.Equal(t, len(createdSnapshot.ProjectCollection.SyntheticProjects()), 2)
 		assert.Equal(t, len(createdSnapshot.ProjectCollection.LanguageServiceProjects()), 0)
 		assert.Equal(t, len(createdSnapshot.GetLanguageServiceProjectsContainingFile(lsproto.DocumentUri("file:///a.ts"))), 0)
-		assert.Assert(t, createdSnapshot.ProjectCollection.GetDefaultProject(createdSnapshot.toPath("/a.ts")) == nil)
+		assert.Assert(t, createdSnapshot.ProjectCollection.GetDefaultProject(tspath.PathKeyFromCanonical("/a.ts")) == nil)
 		assert.Equal(t, createdSnapshot.ProjectCollection.GetProject(firstProject.ID()), firstProject)
 
 		openedSnapshot, err := session.CloneSnapshot(
@@ -109,10 +109,10 @@ func TestSnapshot(t *testing.T) {
 		assert.Assert(t, inferredProject != nil)
 		_, ok = inferredProject.ID().Inferred()
 		assert.Assert(t, ok)
-		assert.Equal(t, inferredProject.configFilePath, tspath.Path(""))
+		assert.Equal(t, inferredProject.configFilePath, tspath.PathKey(""))
 		assert.Equal(t, len(openedSnapshot.ProjectCollection.LanguageServiceProjects()), 1)
 		assert.Equal(t, len(openedSnapshot.GetLanguageServiceProjectsContainingFile(lsproto.DocumentUri("file:///a.ts"))), 1)
-		assert.Equal(t, openedSnapshot.ProjectCollection.GetDefaultProject(openedSnapshot.toPath("/a.ts")), openedSnapshot.ProjectCollection.InferredProject())
+		assert.Equal(t, openedSnapshot.ProjectCollection.GetDefaultProject(tspath.PathKeyFromCanonical("/a.ts")), openedSnapshot.ProjectCollection.InferredProject())
 		assert.Equal(t, openedSnapshot.ProjectCollection.GetProject(firstProject.ID()), firstProject)
 
 		assert.Assert(t, removedSnapshot.ProjectCollection.GetProject(firstProject.ID()) == nil)
@@ -201,7 +201,7 @@ func TestSnapshot(t *testing.T) {
 		snapshotAfter := session.Snapshot()
 
 		// Configured project was updated by a clone
-		assert.Equal(t, snapshotAfter.ProjectCollection.ConfiguredProject(tspath.Path("/home/projects/ts/p1/tsconfig.json")).ProgramUpdateKind, ProgramUpdateKindCloned)
+		assert.Equal(t, snapshotAfter.ProjectCollection.ConfiguredProject(tspath.PathKey("/home/projects/ts/p1/tsconfig.json")).ProgramUpdateKind, ProgramUpdateKindCloned)
 		// Inferred project wasn't updated last snapshot change, so its program update kind is still NewFiles
 		assert.Equal(t, snapshotBefore.ProjectCollection.InferredProject(), snapshotAfter.ProjectCollection.InferredProject())
 		assert.Equal(t, snapshotAfter.ProjectCollection.InferredProject().ProgramUpdateKind, ProgramUpdateKindNewFiles)
@@ -386,7 +386,7 @@ func TestSnapshot(t *testing.T) {
 		t.Cleanup(session.Close)
 		ctx := context.Background()
 		uri := lsproto.DocumentUri("file:///home/projects/TS/p1/index.ts")
-		configPath := tspath.Path("/home/projects/ts/p1/tsconfig.json")
+		configPath := tspath.PathKey("/home/projects/ts/p1/tsconfig.json")
 
 		session.DidOpenFile(ctx, uri, 1, files["/home/projects/TS/p1/index.ts"].(string), lsproto.LanguageKindTypeScript)
 		_, err := session.GetLanguageService(ctx, uri)
@@ -432,7 +432,7 @@ func TestProjectIDNarrowing(t *testing.T) {
 	configured := ID("/project/tsconfig.json")
 	configuredID, ok := configured.Configured()
 	assert.Assert(t, ok)
-	assert.Equal(t, configuredID, ConfiguredProjectID("/project/tsconfig.json"))
+	assert.Equal(t, configuredID.PathKey(), tspath.PathKeyFromCanonical("/project/tsconfig.json"))
 	_, ok = configured.Inferred()
 	assert.Assert(t, !ok)
 	_, ok = configured.Synthetic()
@@ -461,7 +461,7 @@ func TestProjectIDNarrowing(t *testing.T) {
 
 	_, ok = ParseConfiguredProjectID(inferredProjectName)
 	assert.Assert(t, !ok)
-	_, ok = ParseConfiguredProjectID(tspath.Path(NewSyntheticProjectID(1)))
+	_, ok = ParseConfiguredProjectID(tspath.PathKeyFromCanonical(NewSyntheticProjectID(1).AsID().String()))
 	assert.Assert(t, !ok)
 }
 
@@ -489,7 +489,7 @@ func BenchmarkSnapshotCloneRefCost(b *testing.B) {
 				files[fmt.Sprintf("/large/file%d.ts", i)] = fmt.Sprintf("export const large%d = %d;", i, i)
 			}
 
-			fs := bundled.WrapFS(vfstest.FromMap(files, false /*useCaseSensitiveFileNames*/))
+			fs := bundled.WrapFS(vfstest.FromMap(files, tspath.CaseInsensitive /*caseSensitivity*/))
 			session := NewSession(&SessionInit{
 				BackgroundCtx: context.Background(),
 				Options: &SessionOptions{

@@ -4,18 +4,19 @@ import (
 	"testing"
 
 	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"gotest.tools/v3/assert"
 )
 
 type sourceMapperTestHost struct {
-	files map[string]string
+	files map[tspath.RootedFilePath]string
 }
 
-func (h *sourceMapperTestHost) UseCaseSensitiveFileNames() bool {
-	return true
+func (h *sourceMapperTestHost) CaseSensitivity() tspath.CaseSensitivity {
+	return tspath.CaseSensitive
 }
 
-func (h *sourceMapperTestHost) GetECMALineInfo(fileName string) *ECMALineInfo {
+func (h *sourceMapperTestHost) GetECMALineInfo(fileName tspath.RootedFilePath) *ECMALineInfo {
 	text, ok := h.files[fileName]
 	if !ok {
 		return nil
@@ -23,7 +24,7 @@ func (h *sourceMapperTestHost) GetECMALineInfo(fileName string) *ECMALineInfo {
 	return CreateECMALineInfo(text, core.ComputeECMALineStarts(text))
 }
 
-func (h *sourceMapperTestHost) ReadFile(fileName string) (string, bool) {
+func (h *sourceMapperTestHost) ReadFile(fileName tspath.RootedFilePath) (string, bool) {
 	text, ok := h.files[fileName]
 	return text, ok
 }
@@ -31,7 +32,7 @@ func (h *sourceMapperTestHost) ReadFile(fileName string) (string, bool) {
 func TestSourceMapperPreservesEmptySourceEntries(t *testing.T) {
 	t.Parallel()
 
-	host := &sourceMapperTestHost{files: map[string]string{
+	host := &sourceMapperTestHost{files: map[tspath.RootedFilePath]string{
 		"/project/out/out.d.ts": "generated",
 		"/project/src/real.ts":  "source",
 	}}
@@ -60,7 +61,7 @@ func TestSourceMapperPreservesEmptySourceEntries(t *testing.T) {
 func TestSourceMapperResolvesEmptySourceToSourceRoot(t *testing.T) {
 	t.Parallel()
 
-	host := &sourceMapperTestHost{files: map[string]string{
+	host := &sourceMapperTestHost{files: map[tspath.RootedFilePath]string{
 		"/project/out/out.d.ts": "generated",
 		"/project/src":          "source",
 	}}
@@ -82,7 +83,7 @@ func TestSourceMapperResolvesEmptySourceToSourceRoot(t *testing.T) {
 func TestSourceMapperResolvesEmptySourceToMapURLWithoutSourceRoot(t *testing.T) {
 	t.Parallel()
 
-	host := &sourceMapperTestHost{files: map[string]string{
+	host := &sourceMapperTestHost{files: map[tspath.RootedFilePath]string{
 		"/project/out/out.d.ts":     "generated",
 		"/project/out/out.d.ts.map": "source",
 	}}
@@ -104,7 +105,7 @@ func TestSourceMapperResolvesEmptySourceToMapURLWithoutSourceRoot(t *testing.T) 
 func TestSourceMapperDistinguishesExplicitEmptySourceRoot(t *testing.T) {
 	t.Parallel()
 
-	host := &sourceMapperTestHost{files: map[string]string{
+	host := &sourceMapperTestHost{files: map[tspath.RootedFilePath]string{
 		"/project/out/out.d.ts": "generated",
 		"/":                     "empty source",
 		"/a.ts":                 "named source",
@@ -141,7 +142,7 @@ func TestSourceMapperDistinguishesExplicitEmptySourceRoot(t *testing.T) {
 func TestSourceMapperSupportsLegacyExplicitEmptySourceRoot(t *testing.T) {
 	t.Parallel()
 
-	host := &sourceMapperTestHost{files: map[string]string{
+	host := &sourceMapperTestHost{files: map[tspath.RootedFilePath]string{
 		"/project/out/out.d.ts": "generated",
 		"/project/out/a.ts":     "legacy source",
 	}}
@@ -163,7 +164,7 @@ func TestSourceMapperSupportsLegacyExplicitEmptySourceRoot(t *testing.T) {
 func TestSourceMapperDoesNotMapEmptySourceToMapFile(t *testing.T) {
 	t.Parallel()
 
-	host := &sourceMapperTestHost{files: map[string]string{
+	host := &sourceMapperTestHost{files: map[tspath.RootedFilePath]string{
 		"/project/out/out.d.ts":     "generated",
 		"/project/out/out.d.ts.map": "map",
 	}}
@@ -182,7 +183,7 @@ func TestSourceMapperDoesNotMapEmptySourceToMapFile(t *testing.T) {
 func TestSourceMapperRetainsDuplicateSourceIndices(t *testing.T) {
 	t.Parallel()
 
-	host := &sourceMapperTestHost{files: map[string]string{
+	host := &sourceMapperTestHost{files: map[tspath.RootedFilePath]string{
 		"/project/out/out.d.ts": "generated",
 		"/project/src":          "source",
 	}}
@@ -204,7 +205,7 @@ func TestSourceMapperRetainsDuplicateSourceIndices(t *testing.T) {
 func TestSourceMapperPreservesNullSourceEntries(t *testing.T) {
 	t.Parallel()
 
-	host := &sourceMapperTestHost{files: map[string]string{
+	host := &sourceMapperTestHost{files: map[tspath.RootedFilePath]string{
 		"/project/out/out.d.ts": "generated",
 		"/project/out/real.ts":  "source",
 	}}
@@ -247,4 +248,32 @@ func TestSourceMapperIgnoresOutOfRangeSourceIndex(t *testing.T) {
 		FileName: "/project/out/out.d.ts",
 		Pos:      0,
 	}) == nil)
+}
+
+func TestSourceMapperIgnoresSourceURLSuffix(t *testing.T) {
+	t.Parallel()
+
+	host := &sourceMapperTestHost{files: map[tspath.RootedFilePath]string{
+		"/project/out/out.d.ts": "generated",
+	}}
+	mapper := convertDocumentToSourceMapper(
+		host,
+		`{"version":3,"file":"out.d.ts","sources":["https://example.com/source.ts?version=1"],"names":[],"mappings":"AAAA"}`,
+		"/project/out/out.d.ts.map",
+	)
+	assert.Assert(t, mapper != nil)
+	assert.Assert(t, mapper.GetSourcePosition(&DocumentPosition{
+		FileName: "/project/out/out.d.ts",
+		Pos:      0,
+	}) == nil)
+}
+
+func TestSourceMapperIgnoresExternalMapURLSuffix(t *testing.T) {
+	t.Parallel()
+
+	const generatedFile = "/project/out/out.d.ts"
+	host := &sourceMapperTestHost{files: map[tspath.RootedFilePath]string{
+		generatedFile: "declare const value: number;\n//# sourceMappingURL=https://example.com/out.d.ts.map?version=1",
+	}}
+	assert.Assert(t, GetDocumentPositionMapper(host, generatedFile) == nil)
 }

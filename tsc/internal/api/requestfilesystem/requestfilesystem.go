@@ -57,22 +57,22 @@ type RequestFileSystem struct {
 // host filesystem. Its base is always the host, which may be a callback filesystem;
 // inherited request entries are compacted into paths.
 type requestFileSystem struct {
-	kind                  Kind
-	base                  vfs.FS
-	currentDirectory      string
-	useCaseSensitiveNames bool
-	paths                 *requestPathNode
+	kind             Kind
+	base             vfs.FS
+	currentDirectory tspath.RootedDirectoryPath
+	caseSensitivity  tspath.CaseSensitivity
+	paths            *requestPathNode
 }
 
 type resolvedRequestPath struct {
-	path            string
+	path            tspath.RootedPath
 	followedSymlink bool
 	host            bool
 	ok              bool
 }
 
 type requestPathLookup struct {
-	path            string
+	path            tspath.RootedPath
 	info            vfs.FileInfo
 	fileSystem      vfs.FS
 	followedSymlink bool
@@ -87,7 +87,7 @@ func getRequestFileSystem(fileSystem vfs.FS) *requestFileSystem {
 // NewForUpdate creates a request filesystem for a snapshot update. Layers over
 // request filesystems are compacted eagerly so the result does not retain its
 // base snapshot's filesystem.
-func NewForUpdate(params *RequestFileSystem, base vfs.FS, currentDirectory string, fileChanges *project.FileChangeSummary) (vfs.FS, error) {
+func NewForUpdate(params *RequestFileSystem, base vfs.FS, currentDirectory tspath.RootedDirectoryPath, fileChanges *project.FileChangeSummary) (vfs.FS, error) {
 	if params == nil {
 		return base, nil
 	}
@@ -118,34 +118,34 @@ func HasFullFileSystem(fileSystem vfs.FS) bool {
 	return requestFileSystem != nil && requestFileSystem.kind == KindFull
 }
 
-func newRequestFileSystemWorker(params *RequestFileSystem, base vfs.FS, currentDirectory string) (*requestFileSystem, error) {
+func newRequestFileSystemWorker(params *RequestFileSystem, base vfs.FS, currentDirectory tspath.RootedDirectoryPath) (*requestFileSystem, error) {
 	if params.Kind != KindFull && params.Kind != KindLayer {
 		return nil, fmt.Errorf("unknown request filesystem kind %q", params.Kind)
 	}
 
 	result := requestFileSystem{
-		kind:                  params.Kind,
-		base:                  base,
-		currentDirectory:      currentDirectory,
-		useCaseSensitiveNames: base.UseCaseSensitiveFileNames(),
-		paths:                 &requestPathNode{},
+		kind:             params.Kind,
+		base:             base,
+		currentDirectory: currentDirectory,
+		caseSensitivity:  base.CaseSensitivity(),
+		paths:            &requestPathNode{},
 	}
 	result.registerDirectory(currentDirectory)
 	for fileName, content := range params.Files {
-		absoluteFileName := result.toAbsolutePath(fileName)
-		path := result.toPath(absoluteFileName)
+		absoluteFileName := tspath.RootedFilePathFromPath(result.toAbsolutePath(fileName))
+		path := result.caseSensitivity.PathKey(absoluteFileName.AsPath())
 		node := result.paths.ensure(path)
 		if existing, ok := node.entry.(*requestFile); ok {
 			return nil, fmt.Errorf("duplicate request filesystem file path %q and %q", existing.fileName, absoluteFileName)
 		}
 		node.entry = &requestFile{fileName: absoluteFileName, content: content}
-		result.registerDirectory(tspath.GetDirectoryPath(absoluteFileName))
+		result.registerDirectory(absoluteFileName.Directory())
 	}
-	seenDirectories := make(map[tspath.Path]struct{}, len(params.Directories))
-	var listedDirectories []string
+	seenDirectories := make(map[tspath.PathKey]struct{}, len(params.Directories))
+	var listedDirectories []tspath.RootedDirectoryPath
 	for directoryName, entries := range params.Directories {
-		absoluteDirectoryName := result.toAbsolutePath(directoryName)
-		path := result.toPath(absoluteDirectoryName)
+		absoluteDirectoryName := tspath.RootedDirectoryPathFromPath(result.toAbsolutePath(directoryName))
+		path := result.caseSensitivity.PathKey(absoluteDirectoryName.AsPath())
 		node := result.paths.ensure(path)
 		if _, ok := seenDirectories[path]; ok {
 			return nil, fmt.Errorf("duplicate request filesystem directory path %q", absoluteDirectoryName)
@@ -160,24 +160,24 @@ func newRequestFileSystemWorker(params *RequestFileSystem, base vfs.FS, currentD
 				},
 			}
 		}
-		result.registerDirectory(tspath.GetDirectoryPath(absoluteDirectoryName))
+		result.registerDirectory(absoluteDirectoryName.AsPath().Directory())
 		for _, child := range entries.Directories {
-			listedDirectories = append(listedDirectories, tspath.CombinePaths(absoluteDirectoryName, child))
+			listedDirectories = append(listedDirectories, absoluteDirectoryName.ResolveDirectory(child))
 		}
 	}
 	for linkName := range params.Symlinks {
-		result.registerDirectory(tspath.GetDirectoryPath(result.toAbsolutePath(linkName)))
+		result.registerDirectory(result.toAbsolutePath(linkName).Directory())
 	}
-	seenSymlinks := make(map[tspath.Path]string, len(params.Symlinks))
+	seenSymlinks := make(map[tspath.PathKey]tspath.RootedPath, len(params.Symlinks))
 	for linkName, symlink := range params.Symlinks {
 		absoluteLinkName := result.toAbsolutePath(linkName)
-		path := result.toPath(absoluteLinkName)
+		path := result.caseSensitivity.PathKey(absoluteLinkName)
 		node := result.paths.ensure(path)
 		if existing, ok := seenSymlinks[path]; ok {
 			return nil, fmt.Errorf("duplicate request filesystem symlink path %q and %q", existing, absoluteLinkName)
 		}
 		seenSymlinks[path] = absoluteLinkName
-		targetDirectory := tspath.GetDirectoryPath(absoluteLinkName)
+		targetDirectory := absoluteLinkName.Directory()
 		absoluteTarget := result.toAbsolutePathFrom(symlink.Target, targetDirectory)
 		if node.entry == nil {
 			node.entry = &requestSymlink{
@@ -191,9 +191,9 @@ func newRequestFileSystemWorker(params *RequestFileSystem, base vfs.FS, currentD
 		result.registerDirectory(directoryName)
 	}
 	for _, path := range params.RemovedPaths {
-		result.paths.ensure(result.toPath(result.toAbsolutePath(path))).fallback = requestFallbackMissing
+		result.paths.ensure(result.caseSensitivity.PathKey(result.toAbsolutePath(path))).fallback = requestFallbackMissing
 	}
-	result.paths = composeRequestPaths(nil, result.paths, requestFallbackAllowed, result.useCaseSensitiveNames)
+	result.paths = composeRequestPaths(nil, result.paths, requestFallbackAllowed, result.caseSensitivity)
 	return &result, nil
 }
 
@@ -211,19 +211,19 @@ func (s *requestFileSystem) WithBaseFileSystem(base vfs.FS) project.LayeredFileS
 	return &clone
 }
 
-func (s *requestFileSystem) Overlays() map[tspath.Path]*project.Overlay {
+func (s *requestFileSystem) Overlays() map[tspath.PathKey]*project.Overlay {
 	base, ok := s.base.(project.LayeredFileSystem)
 	if !ok {
 		return nil
 	}
-	var result map[tspath.Path]*project.Overlay
+	var result map[tspath.PathKey]*project.Overlay
 	for path, overlay := range base.Overlays() {
-		lookup := s.lookupPath(overlay.FileName())
-		if lookup.fileSystem == nil || s.toPath(lookup.path) != path {
+		lookup := s.lookupPath(overlay.FileName().AsPath())
+		if lookup.fileSystem == nil || s.caseSensitivity.PathKey(lookup.path) != path {
 			continue
 		}
 		if result == nil {
-			result = make(map[tspath.Path]*project.Overlay)
+			result = make(map[tspath.PathKey]*project.Overlay)
 		}
 		result[path] = overlay
 	}
@@ -231,42 +231,33 @@ func (s *requestFileSystem) Overlays() map[tspath.Path]*project.Overlay {
 }
 
 func (s requestFileSystem) applyTo(base requestFileSystem) requestFileSystem {
-	s.paths = composeRequestPaths(base.paths, s.paths, requestFallbackAllowed, s.useCaseSensitiveNames)
+	s.paths = composeRequestPaths(base.paths, s.paths, requestFallbackAllowed, s.caseSensitivity)
 	s.kind = base.kind
 	s.base = base.base
 	return s
 }
 
-func (s requestFileSystem) blocksFallback(path string) bool {
-	_, fallback := s.paths.lookup(s.toPath(path))
+func (s requestFileSystem) blocksFallback(path tspath.RootedPath) bool {
+	_, fallback := s.paths.lookup(s.caseSensitivity.PathKey(path))
 	return fallback == requestFallbackMissing
 }
 
-func (s requestFileSystem) toAbsolutePath(path string) string {
+func (s requestFileSystem) toAbsolutePath(path string) tspath.RootedPath {
 	return s.toAbsolutePathFrom(path, s.currentDirectory)
 }
 
-func (s requestFileSystem) toAbsolutePathFrom(path string, currentDirectory string) string {
-	absolutePath := tspath.GetNormalizedAbsolutePath(path, currentDirectory)
-	if tspath.IsDiskPathRoot(absolutePath) {
-		return absolutePath
-	}
-	return tspath.RemoveTrailingDirectorySeparator(absolutePath)
+func (s requestFileSystem) toAbsolutePathFrom(path string, currentDirectory tspath.RootedDirectoryPath) tspath.RootedPath {
+	return tspath.ToRootedPath(path, currentDirectory)
 }
 
-func (s requestFileSystem) toPath(path string) tspath.Path {
-	return tspath.ToPath(path, s.currentDirectory, s.useCaseSensitiveNames)
-}
-
-func (s requestFileSystem) registerDirectory(directoryName string) {
-	directoryName = s.toAbsolutePath(directoryName)
+func (s requestFileSystem) registerDirectory(directoryName tspath.RootedDirectoryPath) {
 	for {
-		node := s.paths.ensure(s.toPath(directoryName))
+		node := s.paths.ensure(s.caseSensitivity.PathKey(directoryName.AsPath()))
 		if node.entry != nil {
 			return
 		}
 		node.entry = &requestDirectory{directoryName: directoryName}
-		parentName := tspath.GetDirectoryPath(directoryName)
+		parentName := directoryName.AsPath().Directory()
 		if parentName == directoryName {
 			return
 		}
@@ -274,12 +265,11 @@ func (s requestFileSystem) registerDirectory(directoryName string) {
 	}
 }
 
-func (s requestFileSystem) resolvePath(path string) resolvedRequestPath {
-	path = s.toAbsolutePath(path)
+func (s requestFileSystem) resolvePath(path tspath.RootedPath) resolvedRequestPath {
 	result := resolvedRequestPath{path: path, ok: true}
-	seen := make(map[tspath.Path]struct{})
+	seen := make(map[tspath.PathKey]struct{})
 	for {
-		canonicalPath := s.toPath(result.path)
+		canonicalPath := s.caseSensitivity.PathKey(result.path)
 		if s.paths.containsFileAncestor(canonicalPath) {
 			result.ok = false
 			return result
@@ -295,12 +285,12 @@ func (s requestFileSystem) resolvePath(path string) resolvedRequestPath {
 		}
 		seen[matchPath] = struct{}{}
 		result.followedSymlink = true
-		suffix, ok := tspath.TrimFilePathPrefix(result.path, match.linkName, s.useCaseSensitiveNames)
+		suffix, ok := s.caseSensitivity.TrimPrefix(result.path.AsString(), match.linkName.AsString())
 		if !ok {
 			result.ok = false
 			return result
 		}
-		result.path = s.toAbsolutePath(tspath.CombinePaths(match.target, strings.TrimPrefix(suffix, "/")))
+		result.path = tspath.RootedPathFromAbsolute(tspath.CombinePaths(match.target.AsString(), strings.TrimPrefix(suffix, "/")))
 		if match.host {
 			result.host = true
 			return result
@@ -308,36 +298,36 @@ func (s requestFileSystem) resolvePath(path string) resolvedRequestPath {
 	}
 }
 
-func (s requestFileSystem) isHostPath(path string) bool {
-	canonicalPath := s.toPath(path)
+func (s requestFileSystem) isHostPath(path tspath.RootedPath) bool {
+	canonicalPath := s.caseSensitivity.PathKey(path)
 	found := false
-	s.paths.walkSymlinks(func(_ tspath.Path, symlink *requestSymlink) {
-		if symlink.host && requestPathContains(s.toPath(symlink.target), canonicalPath) {
+	s.paths.walkSymlinks(func(_ tspath.PathKey, symlink *requestSymlink) {
+		if symlink.host && requestPathContains(s.caseSensitivity.PathKey(symlink.target), canonicalPath) {
 			found = true
 		}
 	})
 	return found
 }
 
-func (s requestFileSystem) aliasesForPath(path string) []string {
+func (s requestFileSystem) aliasesForPath(path tspath.RootedPath) []tspath.RootedPath {
 	var symlinks []requestSymlink
-	s.paths.walkSymlinks(func(_ tspath.Path, symlink *requestSymlink) {
+	s.paths.walkSymlinks(func(_ tspath.PathKey, symlink *requestSymlink) {
 		symlinks = append(symlinks, *symlink)
 	})
 
-	seen := map[tspath.Path]struct{}{s.toPath(path): {}}
-	queue := []string{s.toAbsolutePath(path)}
-	var aliases []string
+	seen := map[tspath.PathKey]struct{}{s.caseSensitivity.PathKey(path): {}}
+	queue := []tspath.RootedPath{path}
+	var aliases []tspath.RootedPath
 	for len(queue) > 0 {
 		candidate := queue[0]
 		queue = queue[1:]
 		for _, symlink := range symlinks {
-			suffix, ok := tspath.TrimFilePathPrefix(candidate, symlink.target, s.useCaseSensitiveNames)
-			if !ok || suffix != "" && !tspath.HasTrailingDirectorySeparator(symlink.target) && !strings.HasPrefix(suffix, "/") {
+			suffix, ok := s.caseSensitivity.TrimPrefix(candidate.AsString(), symlink.target.AsString())
+			if !ok || suffix != "" && !tspath.HasTrailingDirectorySeparator(symlink.target.AsString()) && !strings.HasPrefix(suffix, "/") {
 				continue
 			}
-			alias := s.toAbsolutePath(tspath.CombinePaths(symlink.linkName, strings.TrimPrefix(suffix, "/")))
-			aliasPath := s.toPath(alias)
+			alias := tspath.RootedPathFromAbsolute(tspath.CombinePaths(symlink.linkName.AsString(), strings.TrimPrefix(suffix, "/")))
+			aliasPath := s.caseSensitivity.PathKey(alias)
 			if _, ok := seen[aliasPath]; ok {
 				continue
 			}
@@ -352,8 +342,8 @@ func (s requestFileSystem) aliasesForPath(path string) []string {
 	return aliases
 }
 
-func (s requestFileSystem) localPathInfo(path string) (vfs.FileInfo, requestFallback) {
-	node, fallback := s.paths.lookup(s.toPath(path))
+func (s requestFileSystem) localPathInfo(path tspath.RootedPath) (vfs.FileInfo, requestFallback) {
+	node, fallback := s.paths.lookup(s.caseSensitivity.PathKey(path))
 	if node == nil {
 		return nil, fallback
 	}
@@ -361,11 +351,10 @@ func (s requestFileSystem) localPathInfo(path string) (vfs.FileInfo, requestFall
 	return info, fallback
 }
 
-func (s requestFileSystem) lookupPath(path string) requestPathLookup {
-	absolutePath := s.toAbsolutePath(path)
-	info, pathFallback := s.localPathInfo(absolutePath)
+func (s requestFileSystem) lookupPath(path tspath.RootedPath) requestPathLookup {
+	info, pathFallback := s.localPathInfo(path)
 	if info != nil {
-		return requestPathLookup{path: absolutePath, info: info, ok: true}
+		return requestPathLookup{path: path, info: info, ok: true}
 	}
 	if pathFallback == requestFallbackMissing {
 		return requestPathLookup{}
@@ -392,7 +381,7 @@ func (s requestFileSystem) lookupPath(path string) requestPathLookup {
 	return result
 }
 
-func (s requestFileSystem) mutationPath(path string) (vfs.FS, string, bool) {
+func (s requestFileSystem) mutationPath(path tspath.RootedPath) (vfs.FS, tspath.RootedPath, bool) {
 	if s.kind != KindLayer {
 		return nil, "", false
 	}
@@ -417,24 +406,24 @@ func cloneEntries(entries vfs.Entries) vfs.Entries {
 	return result
 }
 
-func (s requestFileSystem) UseCaseSensitiveFileNames() bool {
-	return s.useCaseSensitiveNames
+func (s requestFileSystem) CaseSensitivity() tspath.CaseSensitivity {
+	return s.caseSensitivity
 }
 
-func (s requestFileSystem) GetFile(fileName string) project.FileHandle {
-	return s.GetFileByPath(fileName, s.toPath(fileName))
+func (s requestFileSystem) GetFile(fileName tspath.RootedFilePath) project.FileHandle {
+	return s.GetFileByPath(fileName, s.caseSensitivity.PathKey(fileName.AsPath()))
 }
 
-func (s requestFileSystem) GetFileByPath(fileName string, _ tspath.Path) project.FileHandle {
-	lookup := s.lookupPath(fileName)
+func (s requestFileSystem) GetFileByPath(fileName tspath.RootedFilePath, _ tspath.PathKey) project.FileHandle {
+	lookup := s.lookupPath(fileName.AsPath())
 	if !lookup.ok || lookup.info != nil && lookup.info.IsDir() {
 		return nil
 	}
 	if lookup.fileSystem != nil {
 		if source, ok := lookup.fileSystem.(project.FileHandleSource); ok {
-			return source.GetFile(lookup.path)
+			return source.GetFile(tspath.RootedFilePathFromPath(lookup.path))
 		}
-		if content, ok := lookup.fileSystem.ReadFile(lookup.path); ok {
+		if content, ok := lookup.fileSystem.ReadFile(tspath.RootedFilePathFromPath(lookup.path)); ok {
 			return project.NewCachedFileHandle(fileName, content)
 		}
 		return nil
@@ -445,13 +434,13 @@ func (s requestFileSystem) GetFileByPath(fileName string, _ tspath.Path) project
 	return nil
 }
 
-func (s requestFileSystem) ReadFile(fileName string) (string, bool) {
-	lookup := s.lookupPath(fileName)
+func (s requestFileSystem) ReadFile(fileName tspath.RootedFilePath) (string, bool) {
+	lookup := s.lookupPath(fileName.AsPath())
 	if !lookup.ok || lookup.info != nil && lookup.info.IsDir() {
 		return "", false
 	}
 	if lookup.fileSystem != nil {
-		return lookup.fileSystem.ReadFile(lookup.path)
+		return lookup.fileSystem.ReadFile(tspath.RootedFilePathFromPath(lookup.path))
 	}
 	if file, ok := lookup.info.(*requestFile); ok {
 		return file.content, true
@@ -459,35 +448,37 @@ func (s requestFileSystem) ReadFile(fileName string) (string, bool) {
 	return "", false
 }
 
-func (s requestFileSystem) FileExists(fileName string) bool {
-	lookup := s.lookupPath(fileName)
+func (s requestFileSystem) FileExists(fileName tspath.RootedFilePath) bool {
+	lookup := s.lookupPath(fileName.AsPath())
 	if !lookup.ok || lookup.info != nil && lookup.info.IsDir() {
 		return false
 	}
-	return lookup.info != nil || lookup.fileSystem != nil && lookup.fileSystem.FileExists(lookup.path)
+	return lookup.info != nil || lookup.fileSystem != nil && lookup.fileSystem.FileExists(tspath.RootedFilePathFromPath(lookup.path))
 }
 
-func (s requestFileSystem) DirectoryExists(directoryName string) bool {
-	lookup := s.lookupPath(directoryName)
+func (s requestFileSystem) DirectoryExists(directoryName tspath.RootedDirectoryPath) bool {
+	lookup := s.lookupPath(directoryName.AsPath())
 	if !lookup.ok || lookup.info != nil && !lookup.info.IsDir() {
 		return false
 	}
-	return lookup.info != nil || lookup.fileSystem != nil && lookup.fileSystem.DirectoryExists(lookup.path)
+	return lookup.info != nil || lookup.fileSystem != nil && lookup.fileSystem.DirectoryExists(tspath.RootedDirectoryPathFromPath(lookup.path))
 }
 
-func (s requestFileSystem) GetAccessibleEntries(directoryName string) vfs.Entries {
-	lookup := s.lookupPath(directoryName)
+func (s requestFileSystem) GetAccessibleEntries(directoryName tspath.RootedDirectoryPath) vfs.Entries {
+	lookup := s.lookupPath(directoryName.AsPath())
 	if !lookup.ok || lookup.info != nil && !lookup.info.IsDir() {
 		return vfs.Entries{Symlinks: map[string]struct{}{}}
 	}
 	var result vfs.Entries
 	if lookup.fileSystem != nil {
-		result = s.removeEntries(lookup.path, lookup.fileSystem.GetAccessibleEntries(lookup.path))
+		resolvedDirectory := tspath.RootedDirectoryPathFromPath(lookup.path)
+		result = s.removeEntries(resolvedDirectory, lookup.fileSystem.GetAccessibleEntries(resolvedDirectory))
 	} else {
 		localEntries, explicit, _ := s.getLocalEntries(lookup.path)
 		result = localEntries
-		if s.kind == KindLayer && !explicit && !s.blocksFallback(directoryName) && !s.blocksFallback(lookup.path) {
-			result = s.removeEntries(lookup.path, s.baseFileSystem().GetAccessibleEntries(lookup.path))
+		if s.kind == KindLayer && !explicit && !s.blocksFallback(directoryName.AsPath()) && !s.blocksFallback(lookup.path) {
+			resolvedDirectory := tspath.RootedDirectoryPathFromPath(lookup.path)
+			result = s.removeEntries(resolvedDirectory, s.baseFileSystem().GetAccessibleEntries(resolvedDirectory))
 			result = mergeEntries(result, localEntries, s.equalEntryNames)
 		}
 		result = s.addSymlinkEntries(lookup.path, result)
@@ -496,15 +487,15 @@ func (s requestFileSystem) GetAccessibleEntries(directoryName string) vfs.Entrie
 	return result
 }
 
-func (s requestFileSystem) filterLocalEntries(directoryName string, entries vfs.Entries) vfs.Entries {
+func (s requestFileSystem) filterLocalEntries(directoryName tspath.RootedDirectoryPath, entries vfs.Entries) vfs.Entries {
 	result := cloneEntries(entries)
 	filter := func(values []string) []string {
 		return slices.DeleteFunc(values, func(name string) bool {
-			fileName := tspath.CombinePaths(directoryName, name)
-			if info, _ := s.localPathInfo(fileName); info != nil {
+			path := directoryName.ResolveDirectory(name).AsPath()
+			if info, _ := s.localPathInfo(path); info != nil {
 				return false
 			}
-			return s.blocksFallback(fileName)
+			return s.blocksFallback(path)
 		})
 	}
 	result.Files = filter(result.Files)
@@ -517,8 +508,8 @@ func (s requestFileSystem) filterLocalEntries(directoryName string, entries vfs.
 	return result
 }
 
-func (s requestFileSystem) getLocalEntries(directoryName string) (entries vfs.Entries, explicit bool, ok bool) {
-	node, _ := s.paths.lookup(s.toPath(directoryName))
+func (s requestFileSystem) getLocalEntries(directoryName tspath.RootedPath) (entries vfs.Entries, explicit bool, ok bool) {
+	node, _ := s.paths.lookup(s.caseSensitivity.PathKey(directoryName))
 	entries, ok = node.entries()
 	if node != nil {
 		if directory, isDirectory := node.entry.(*requestDirectory); isDirectory {
@@ -568,30 +559,30 @@ func mergeEntries(base vfs.Entries, overlay vfs.Entries, equal func(string, stri
 	return result
 }
 
-func (s requestFileSystem) removeEntries(directoryName string, entries vfs.Entries) vfs.Entries {
+func (s requestFileSystem) removeEntries(directoryName tspath.RootedDirectoryPath, entries vfs.Entries) vfs.Entries {
 	result := cloneEntries(entries)
 	filter := func(values []string) []string {
 		return slices.DeleteFunc(values, func(name string) bool {
-			return s.blocksFallback(tspath.CombinePaths(directoryName, name))
+			return s.blocksFallback(directoryName.ResolveDirectory(name).AsPath())
 		})
 	}
 	result.Files = filter(result.Files)
 	result.Directories = filter(result.Directories)
 	for name := range result.Symlinks {
-		if s.blocksFallback(tspath.CombinePaths(directoryName, name)) {
+		if s.blocksFallback(directoryName.ResolveDirectory(name).AsPath()) {
 			delete(result.Symlinks, name)
 		}
 	}
 	return result
 }
 
-func (s requestFileSystem) addSymlinkEntries(directoryName string, entries vfs.Entries) vfs.Entries {
+func (s requestFileSystem) addSymlinkEntries(directoryName tspath.RootedPath, entries vfs.Entries) vfs.Entries {
 	result := cloneEntries(entries)
 	if result.Symlinks == nil {
 		result.Symlinks = map[string]struct{}{}
 	}
 
-	directoryPath := s.toPath(directoryName)
+	directoryPath := s.caseSensitivity.PathKey(directoryName)
 	var links []requestSymlink
 	if node, _ := s.paths.lookup(directoryPath); node != nil {
 		for _, child := range node.children {
@@ -604,7 +595,7 @@ func (s requestFileSystem) addSymlinkEntries(directoryName string, entries vfs.E
 		return result
 	}
 	for _, symlink := range links {
-		name := tspath.GetBaseFileName(symlink.linkName)
+		name := symlink.linkName.BaseName()
 		result.Files = s.deleteEntryName(result.Files, name)
 		result.Directories = s.deleteEntryName(result.Directories, name)
 		for existingName := range result.Symlinks {
@@ -612,10 +603,10 @@ func (s requestFileSystem) addSymlinkEntries(directoryName string, entries vfs.E
 				delete(result.Symlinks, existingName)
 			}
 		}
-		if s.DirectoryExists(symlink.linkName) {
+		if s.DirectoryExists(tspath.RootedDirectoryPathFromPath(symlink.linkName)) {
 			result.Directories = append(result.Directories, name)
 			result.Symlinks[name] = struct{}{}
-		} else if s.FileExists(symlink.linkName) {
+		} else if s.FileExists(tspath.RootedFilePathFromPath(symlink.linkName)) {
 			result.Files = append(result.Files, name)
 			result.Symlinks[name] = struct{}{}
 		}
@@ -630,10 +621,10 @@ func (s requestFileSystem) deleteEntryName(values []string, value string) []stri
 }
 
 func (s requestFileSystem) equalEntryNames(left string, right string) bool {
-	return tspath.GetCanonicalFileName(left, s.useCaseSensitiveNames) == tspath.GetCanonicalFileName(right, s.useCaseSensitiveNames)
+	return s.caseSensitivity.GetComparer()(left, right) == 0
 }
 
-func (s requestFileSystem) Realpath(path string) string {
+func (s requestFileSystem) Realpath(path tspath.RootedPath) tspath.RootedPath {
 	lookup := s.lookupPath(path)
 	if !lookup.ok {
 		return path
@@ -647,23 +638,23 @@ func (s requestFileSystem) Realpath(path string) string {
 	return path
 }
 
-func (s requestFileSystem) WriteFile(fileName string, data string) error {
-	host, path, ok := s.mutationPath(fileName)
+func (s requestFileSystem) WriteFile(fileName tspath.RootedFilePath, data string) error {
+	host, path, ok := s.mutationPath(fileName.AsPath())
 	if !ok {
 		return vfs.ErrInvalid
 	}
-	return host.WriteFile(path, data)
+	return host.WriteFile(tspath.RootedFilePathFromPath(path), data)
 }
 
-func (s requestFileSystem) AppendFile(fileName string, data string) error {
-	host, path, ok := s.mutationPath(fileName)
+func (s requestFileSystem) AppendFile(fileName tspath.RootedFilePath, data string) error {
+	host, path, ok := s.mutationPath(fileName.AsPath())
 	if !ok {
 		return vfs.ErrInvalid
 	}
-	return host.AppendFile(path, data)
+	return host.AppendFile(tspath.RootedFilePathFromPath(path), data)
 }
 
-func (s requestFileSystem) Remove(path string) error {
+func (s requestFileSystem) Remove(path tspath.RootedPath) error {
 	host, path, ok := s.mutationPath(path)
 	if !ok {
 		return vfs.ErrInvalid
@@ -671,7 +662,7 @@ func (s requestFileSystem) Remove(path string) error {
 	return host.Remove(path)
 }
 
-func (s requestFileSystem) Chtimes(path string, aTime time.Time, mTime time.Time) error {
+func (s requestFileSystem) Chtimes(path tspath.RootedPath, aTime time.Time, mTime time.Time) error {
 	host, path, ok := s.mutationPath(path)
 	if !ok {
 		return vfs.ErrInvalid
@@ -679,7 +670,7 @@ func (s requestFileSystem) Chtimes(path string, aTime time.Time, mTime time.Time
 	return host.Chtimes(path, aTime, mTime)
 }
 
-func (s requestFileSystem) Stat(path string) vfs.FileInfo {
+func (s requestFileSystem) Stat(path tspath.RootedPath) vfs.FileInfo {
 	lookup := s.lookupPath(path)
 	if !lookup.ok {
 		return nil
@@ -690,18 +681,18 @@ func (s requestFileSystem) Stat(path string) vfs.FileInfo {
 	return lookup.info
 }
 
-func statFileSystem(fileSystem vfs.FS, path string) vfs.FileInfo {
+func statFileSystem(fileSystem vfs.FS, path tspath.RootedPath) vfs.FileInfo {
 	if fileSystem == nil {
 		return nil
 	}
 	if info := fileSystem.Stat(path); info != nil {
 		return info
 	}
-	if fileSystem.DirectoryExists(path) {
-		return &requestDirectory{directoryName: path}
+	if fileSystem.DirectoryExists(tspath.RootedDirectoryPathFromPath(path)) {
+		return &requestDirectory{directoryName: tspath.RootedDirectoryPathFromPath(path)}
 	}
-	if fileSystem.FileExists(path) {
-		return &requestFile{fileName: path}
+	if fileSystem.FileExists(tspath.RootedFilePathFromPath(path)) {
+		return &requestFile{fileName: tspath.RootedFilePathFromPath(path)}
 	}
 	return nil
 }

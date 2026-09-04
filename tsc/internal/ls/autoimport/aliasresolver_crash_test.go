@@ -21,9 +21,8 @@ type fakeCloneHost struct {
 	fs vfs.FS
 }
 
-func (h *fakeCloneHost) FS() vfs.FS                  { return h.fs }
-func (h *fakeCloneHost) GetCurrentDirectory() string { return "/" }
-func (h *fakeCloneHost) GetDefaultProject(path tspath.Path) (ProjectID, *compiler.Program) {
+func (h *fakeCloneHost) FS() vfs.FS { return h.fs }
+func (h *fakeCloneHost) GetDefaultProject(path tspath.PathKey) (ProjectID, *compiler.Program) {
 	return nil, nil
 }
 
@@ -31,10 +30,14 @@ func (h *fakeCloneHost) GetProgramForProject(projectID ProjectID) *compiler.Prog
 	return nil
 }
 
-func (h *fakeCloneHost) GetPackageJson(fileName string) *packagejson.InfoCacheEntry { return nil }
+func (h *fakeCloneHost) GetPackageJson(fileName tspath.RootedFilePath) *packagejson.InfoCacheEntry {
+	return nil
+}
 
-func (h *fakeCloneHost) GetSourceFile(fileName string, path tspath.Path) *ast.SourceFile { return nil }
-func (h *fakeCloneHost) Dispose()                                                        {}
+func (h *fakeCloneHost) GetSourceFile(fileName tspath.RootedFilePath, path tspath.PathKey) *ast.SourceFile {
+	return nil
+}
+func (h *fakeCloneHost) Dispose() {}
 
 var _ RegistryCloneHost = (*fakeCloneHost)(nil)
 
@@ -49,22 +52,21 @@ func TestAliasResolverGetDiagnosticsDoesNotPanic(t *testing.T) {
 	const fileName = "/pkg/index.ts"
 	text := "declare function f(arg: { a: string }): () => void;\nexport const x = f({ a: 1 });\n"
 
-	fs := vfstest.FromMap(map[string]string{fileName: text}, true /*useCaseSensitiveFileNames*/)
+	fs := vfstest.FromMap(map[string]string{fileName: text}, tspath.CaseSensitive /*caseSensitivity*/)
 	host := &fakeCloneHost{fs: fs}
 
 	sourceFile := parser.ParseSourceFile(ast.SourceFileParseOptions{
 		FileName: fileName,
-		Path:     tspath.Path(fileName),
+		PathKey:  tspath.PathKey(fileName),
 	}, text, core.ScriptKindTS)
 	binder.BindSourceFile(sourceFile)
 
-	resolver := module.NewResolver(host, core.EmptyCompilerOptions, "", "", nil)
+	resolver := module.NewResolver(host.FS(), "/", core.EmptyCompilerOptions, "", "", nil)
 	r := newAliasResolver(
 		[]*ast.SourceFile{sourceFile},
 		nil,
 		host,
 		resolver,
-		func(f string) tspath.Path { return tspath.Path(f) },
 		func(ast.HasFileName, string) {},
 	)
 
