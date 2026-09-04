@@ -380,7 +380,15 @@ func (sd *snapshotData) registerSignature(projectID ProjectID, sig *checker.Sign
 // symbol and type registries for maintaining object identity.
 type Session struct {
 	id             string
+	snapshotHost   *project.SnapshotHost
+	withLocale     func(context.Context) context.Context
 	projectSession *project.Session
+	// compatibilitySnapshot is the standalone API session's canonical snapshot.
+	// It preserves the legacy linear updateSnapshot behavior.
+	compatibilitySnapshot *project.Snapshot
+	compatibilityMu       sync.Mutex
+
+	closeOnce sync.Once
 
 	// This is set to true when using MessagePackProtocol.
 	useBinaryResponses bool
@@ -403,9 +411,9 @@ type Session struct {
 	latestSnapshot SnapshotID
 
 	// openProjects and openFiles track the projects and files this session
-	// currently holds open in the project session's API state. The session holds
-	// at most one ref per project/file (opens are idempotent), so it can release
-	// exactly those refs on Close and never send a close for a ref it doesn't hold.
+	// currently holds open in the API snapshot state. The session holds at most
+	// one ref per project/file (opens are idempotent), so it can release exactly
+	// those refs on Close and never send a close for a ref it doesn't hold.
 	// Guarded by updateMu.
 	openProjects collections.Set[tspath.Path]
 	openFiles    collections.Set[tspath.Path]
@@ -432,13 +440,31 @@ type SessionOptions struct {
 	UseBinaryResponses bool
 }
 
-// NewSession creates a new API session with the given project session.
-func NewSession(projectSession *project.Session, options *SessionOptions) *Session {
+// NewLSPSession creates a new API session with the given project session.
+func NewLSPSession(projectSession *project.Session, options *SessionOptions) *Session {
+	s := newSession(projectSession.SnapshotHost, projectSession.WithCurrentLocale, options)
+	s.projectSession = projectSession
+	return s
+}
+
+// NewStandaloneSession creates an API session with an independently owned snapshot host.
+func NewStandaloneSession(init *project.SessionInit, options *SessionOptions) *Session {
+	snapshotHost := project.NewSnapshotHost(init)
+	s := newSession(snapshotHost, nil, options)
+	s.compatibilitySnapshot = snapshotHost.NewStandaloneRootSnapshot()
+	return s
+}
+
+func newSession(snapshotHost *project.SnapshotHost, withLocale func(context.Context) context.Context, options *SessionOptions) *Session {
 	id := sessionIDCounter.Add(1)
+	if withLocale == nil {
+		withLocale = func(ctx context.Context) context.Context { return ctx }
+	}
 	s := &Session{
-		id:             formatSessionID(id),
-		projectSession: projectSession,
-		snapshots:      make(map[SnapshotID]*snapshotData),
+		id:           formatSessionID(id),
+		snapshotHost: snapshotHost,
+		withLocale:   withLocale,
+		snapshots:    make(map[SnapshotID]*snapshotData),
 	}
 	if options != nil {
 		s.useBinaryResponses = options.UseBinaryResponses
@@ -451,9 +477,31 @@ func (s *Session) ID() string {
 	return s.id
 }
 
-// ProjectSession returns the underlying project session.
-func (s *Session) ProjectSession() *project.Session {
-	return s.projectSession
+func (s *Session) currentDirectory() string {
+	return s.snapshotHost.GetCurrentDirectory()
+}
+
+func (s *Session) useCaseSensitiveFileNames() bool {
+	return s.snapshotHost.FS().UseCaseSensitiveFileNames()
+}
+
+func (s *Session) apiUpdate(
+	ctx context.Context,
+	fileChanges project.FileChangeSummary,
+	apiRequest *project.APISnapshotRequest,
+) (*project.Snapshot, error) {
+	if s.projectSession != nil {
+		return s.projectSession.APIUpdate(ctx, fileChanges, apiRequest)
+	}
+
+	s.compatibilityMu.Lock()
+	defer s.compatibilityMu.Unlock()
+	oldSnapshot := s.compatibilitySnapshot
+	snapshot, err := s.snapshotHost.CloneSnapshot(ctx, oldSnapshot, fileChanges, apiRequest)
+	s.snapshotHost.RetainSnapshot(snapshot)
+	s.compatibilitySnapshot = snapshot
+	oldSnapshot.Deref()
+	return snapshot, err
 }
 
 // snapshotHandle creates a snapshot handle from a snapshot's ID.
@@ -494,7 +542,7 @@ func (s *Session) releaseSnapshot(handle SnapshotID) error {
 	sd.refCount--
 	if sd.refCount <= 0 {
 		delete(s.snapshots, handle)
-		sd.snapshot.Deref(s.projectSession)
+		sd.snapshot.Deref()
 	}
 	s.snapshotsMu.Unlock()
 	return nil
@@ -594,6 +642,9 @@ func (s *Session) setupLanguageService(snapshot *project.Snapshot, program *comp
 
 // HandleRequest implements Handler.
 func (s *Session) HandleRequest(ctx context.Context, method string, params json.Value) (any, error) {
+	if s != nil && s.withLocale != nil {
+		ctx = s.withLocale(ctx)
+	}
 	// Handle simple methods that don't need param parsing
 	switch method {
 	case "echo":
@@ -962,8 +1013,8 @@ func (s *Session) HandleNotification(ctx context.Context, method string, params 
 
 func (s *Session) handleInitialize(ctx context.Context) (*InitializeResponse, error) {
 	return &InitializeResponse{
-		UseCaseSensitiveFileNames: s.projectSession.FS().UseCaseSensitiveFileNames(),
-		CurrentDirectory:          s.projectSession.GetCurrentDirectory(),
+		UseCaseSensitiveFileNames: s.useCaseSensitiveFileNames(),
+		CurrentDirectory:          s.currentDirectory(),
 	}, nil
 }
 
@@ -987,7 +1038,7 @@ func (s *Session) handleUpdateSnapshot(ctx context.Context, params *UpdateSnapsh
 	// Open projects: only take a new ref for projects we aren't already holding open.
 	var openedProjects []tspath.Path
 	for _, p := range params.OpenProjects {
-		configFileName := p.ToAbsoluteFileName(s.projectSession.GetCurrentDirectory())
+		configFileName := p.ToAbsoluteFileName(s.currentDirectory())
 		configPath := s.toPath(configFileName)
 		if s.openProjects.Has(configPath) {
 			continue
@@ -1002,7 +1053,7 @@ func (s *Session) handleUpdateSnapshot(ctx context.Context, params *UpdateSnapsh
 	// Close projects: only release a ref we currently hold.
 	var closedProjects []tspath.Path
 	for _, p := range params.CloseProjects {
-		configPath := s.toPath(p.ToAbsoluteFileName(s.projectSession.GetCurrentDirectory()))
+		configPath := s.toPath(p.ToAbsoluteFileName(s.currentDirectory()))
 		if !s.openProjects.Has(configPath) {
 			continue
 		}
@@ -1017,7 +1068,7 @@ func (s *Session) handleUpdateSnapshot(ctx context.Context, params *UpdateSnapsh
 	// held by at most one API ref from this session.
 	var openedFiles []tspath.Path
 	for _, f := range params.OpenFiles {
-		uri := f.ToURI(s.projectSession.GetCurrentDirectory())
+		uri := f.ToURI(s.currentDirectory())
 		path := s.toPath(uri.FileName())
 		if s.openFiles.Has(path) {
 			continue
@@ -1032,7 +1083,7 @@ func (s *Session) handleUpdateSnapshot(ctx context.Context, params *UpdateSnapsh
 	// Close files: only release a ref we currently hold.
 	var closedFiles []tspath.Path
 	for _, f := range params.CloseFiles {
-		path := s.toPath(f.ToURI(s.projectSession.GetCurrentDirectory()).FileName())
+		path := s.toPath(f.ToURI(s.currentDirectory()).FileName())
 		if !s.openFiles.Has(path) {
 			continue
 		}
@@ -1047,10 +1098,10 @@ func (s *Session) handleUpdateSnapshot(ctx context.Context, params *UpdateSnapsh
 	// files opened by the API are up to date. For an API connected to an LSP server,
 	// this brings the API state up to date with the LSP state and ensures projects
 	// the API cares about are ready to be queried.
-	snapshot, err := s.projectSession.APIUpdate(ctx, fileChanges, apiRequest)
+	snapshot, err := s.apiUpdate(ctx, fileChanges, apiRequest)
 	if err != nil {
 		// APIUpdate returns a ref'd snapshot even on error; release it.
-		snapshot.Deref(s.projectSession)
+		snapshot.Deref()
 		return nil, fmt.Errorf("%w: failed to update snapshot: %w", ErrClientError, err)
 	}
 
@@ -1078,7 +1129,7 @@ func (s *Session) handleUpdateSnapshot(ctx context.Context, params *UpdateSnapsh
 	if exists {
 		// Same snapshot already stored — release the caller's ref since
 		// the stored snapshot already has one, and bump the API refcount.
-		snapshot.Deref(s.projectSession)
+		snapshot.Deref()
 		sd.refCount++
 	} else {
 		sd = &snapshotData{
@@ -1127,9 +1178,9 @@ func (s *Session) handleUpdateTemporarySnapshot(ctx context.Context, params *Upd
 	}
 	defer func() { _ = s.releaseSnapshot(params.Snapshot) }()
 
-	uri := params.File.ToURI(s.projectSession.GetCurrentDirectory())
+	uri := params.File.ToURI(s.currentDirectory())
 
-	snapshot, err := s.projectSession.APIUpdateTemporary(ctx, baseSD.snapshot, uri, params.NewText)
+	snapshot, err := s.snapshotHost.CloneSnapshotWithTemporaryFile(ctx, baseSD.snapshot, uri, params.NewText)
 	if err != nil {
 		return nil, fmt.Errorf("%w: failed to update temporary snapshot: %w", ErrClientError, err)
 	}
@@ -1138,7 +1189,7 @@ func (s *Session) handleUpdateTemporarySnapshot(ctx context.Context, params *Upd
 	s.snapshotsMu.Lock()
 	sd, exists := s.snapshots[handle]
 	if exists {
-		snapshot.Deref(s.projectSession)
+		snapshot.Deref()
 		sd.refCount++
 	} else {
 		sd = &snapshotData{
@@ -1180,7 +1231,7 @@ func (s *Session) handleCreateProgram(ctx context.Context, params *CreateProgram
 
 	rootFileNames := make([]string, len(params.RootFiles))
 	for i, rootFile := range params.RootFiles {
-		rootFileNames[i] = rootFile.ToAbsoluteFileName(s.projectSession.GetCurrentDirectory())
+		rootFileNames[i] = rootFile.ToAbsoluteFileName(s.currentDirectory())
 	}
 
 	var oldSnapshot *project.Snapshot
@@ -1200,19 +1251,31 @@ func (s *Session) handleCreateProgram(ctx context.Context, params *CreateProgram
 		}
 	}
 
-	snapshot := s.projectSession.APICreateProgram(
+	baseSnapshot := oldSnapshot
+	fileChanges := s.toFileChangeSummary(params.FileChanges)
+	if baseSnapshot == nil {
+		var err error
+		baseSnapshot, err = s.apiUpdate(ctx, fileChanges, nil)
+		if err != nil {
+			baseSnapshot.Deref()
+			return nil, fmt.Errorf("%w: failed to update snapshot: %w", ErrClientError, err)
+		}
+		defer baseSnapshot.Deref()
+		fileChanges = project.FileChangeSummary{}
+	}
+	snapshot := s.snapshotHost.CloneSnapshotForProgram(
 		ctx,
+		baseSnapshot,
 		rootFileNames,
 		&params.CreateProgramOptions.CompilerOptions,
 		params.CreateProgramOptions.ProjectReferences,
 		core.Map(params.CreateProgramOptions.ConfigFileParsingDiagnostics, func(d *DiagnosticResponse) *ast.Diagnostic { return d.ToDiagnostic() }),
-		oldSnapshot,
 		oldProject,
-		s.toFileChangeSummary(params.FileChanges),
+		fileChanges,
 	)
 	project := snapshot.ProjectCollection.InferredProject()
 	if project == nil {
-		snapshot.Deref(s.projectSession)
+		snapshot.Deref()
 		return nil, fmt.Errorf("%w: failed to create synthetic project", ErrClientError)
 	}
 
@@ -1220,7 +1283,7 @@ func (s *Session) handleCreateProgram(ctx context.Context, params *CreateProgram
 	s.snapshotsMu.Lock()
 	if sd, exists := s.snapshots[handle]; exists {
 		// Same snapshot already stored: use the existing retained ref and only bump API refcount.
-		snapshot.Deref(s.projectSession)
+		snapshot.Deref()
 		sd.refCount++
 	} else {
 		sd = &snapshotData{
@@ -1262,7 +1325,7 @@ func (s *Session) handleGetDefaultProjectForFile(ctx context.Context, params *Ge
 		return nil, err
 	}
 
-	uri := params.File.ToURI(s.projectSession.GetCurrentDirectory())
+	uri := params.File.ToURI(s.currentDirectory())
 	proj := sd.snapshot.GetDefaultProject(uri)
 	if proj == nil {
 		return nil, nil
@@ -1273,13 +1336,13 @@ func (s *Session) handleGetDefaultProjectForFile(ctx context.Context, params *Ge
 
 // handleParseCommandLine parses command-line arguments.
 func (s *Session) handleParseCommandLine(ctx context.Context, params *ParseCommandLineParams) (*ConfigFileResponse, error) {
-	return NewConfigFileResponse(tsoptions.ParseCommandLine(params.CommandLine, s.projectSession)), nil
+	return NewConfigFileResponse(tsoptions.ParseCommandLine(params.CommandLine, s.snapshotHost)), nil
 }
 
 // handleReadConfigFile reads and parses a JSON configuration file.
 func (s *Session) handleReadConfigFile(ctx context.Context, params *ReadConfigFileParams) (*ReadConfigFileResponse, error) {
-	configFileName := params.File.ToAbsoluteFileName(s.projectSession.GetCurrentDirectory())
-	configFileContent, ok := s.projectSession.FS().ReadFile(configFileName)
+	configFileName := params.File.ToAbsoluteFileName(s.currentDirectory())
+	configFileContent, ok := s.snapshotHost.FS().ReadFile(configFileName)
 	if !ok {
 		return &ReadConfigFileResponse{
 			Config: map[string]any{},
@@ -1308,15 +1371,15 @@ func (s *Session) handleParseJsonConfigFileContent(ctx context.Context, params *
 	var basePath string
 	var configFileName string
 	if params.ConfigDirectory != nil {
-		basePath = tspath.GetNormalizedAbsolutePath(*params.ConfigDirectory, s.projectSession.GetCurrentDirectory())
+		basePath = tspath.GetNormalizedAbsolutePath(*params.ConfigDirectory, s.currentDirectory())
 	} else {
-		configFileName = params.ConfigFileName.ToAbsoluteFileName(s.projectSession.GetCurrentDirectory())
+		configFileName = params.ConfigFileName.ToAbsoluteFileName(s.currentDirectory())
 		basePath = tspath.GetDirectoryPath(configFileName)
 	}
 
 	parsedCommandLine := tsoptions.ParseJsonConfigFileContent(
 		jsonValueToAny(params.JSON),
-		s.projectSession,
+		s.snapshotHost,
 		basePath,
 		nil, /*existingOptions*/
 		configFileName,
@@ -1328,8 +1391,8 @@ func (s *Session) handleParseJsonConfigFileContent(ctx context.Context, params *
 
 // handleParseConfigFile parses a tsconfig.json file and returns its contents.
 func (s *Session) handleParseConfigFile(ctx context.Context, params *ParseConfigFileParams) (*ConfigFileResponse, error) {
-	configFileName := params.File.ToAbsoluteFileName(s.projectSession.GetCurrentDirectory())
-	configFileContent, ok := s.projectSession.FS().ReadFile(configFileName)
+	configFileName := params.File.ToAbsoluteFileName(s.currentDirectory())
+	configFileContent, ok := s.snapshotHost.FS().ReadFile(configFileName)
 	if !ok {
 		return nil, fmt.Errorf("%w: could not read file %q", ErrClientError, configFileName)
 	}
@@ -1342,7 +1405,7 @@ func (s *Session) handleParseConfigFile(ctx context.Context, params *ParseConfig
 	)
 	parsedCommandLine := tsoptions.ParseJsonSourceFileConfigFileContent(
 		tsConfigSourceFile,
-		s.projectSession,
+		s.snapshotHost,
 		configDir,
 		nil, /*existingOptions*/
 		nil, /*existingOptionsRaw*/
@@ -1358,8 +1421,8 @@ func (s *Session) handleTranspile(ctx context.Context, params *TranspileParams, 
 }
 
 func (s *Session) handleTranspileFromFile(ctx context.Context, params *TranspileFromFileParams, declaration bool) (*TranspileOutputResponse, error) {
-	fileName := tspath.GetNormalizedAbsolutePath(params.FileName, s.projectSession.GetCurrentDirectory())
-	input, ok := s.projectSession.FS().ReadFile(fileName)
+	fileName := tspath.GetNormalizedAbsolutePath(params.FileName, s.currentDirectory())
+	input, ok := s.snapshotHost.FS().ReadFile(fileName)
 	if !ok {
 		return nil, fmt.Errorf("%w: could not read file %q", ErrClientError, fileName)
 	}
@@ -2100,8 +2163,11 @@ func (s *Session) handleGetImportAdderEdits(ctx context.Context, params *GetImpo
 	userPreferences := workingSnapshot.UserPreferences()
 	if registry := workingSnapshot.AutoImportRegistry(); registry == nil ||
 		!registry.IsPreparedForImportingFile(sourceFile.FileName(), projectPath, userPreferences) {
-		preparedSnapshot := s.projectSession.GetSnapshotWithAutoImports(ctx, workingSnapshot, params.File.ToURI(s.projectSession.GetCurrentDirectory()))
-		defer preparedSnapshot.Deref(s.projectSession)
+		preparedSnapshot := s.snapshotHost.CloneSnapshotWithAutoImports(ctx, workingSnapshot, params.File.ToURI(s.currentDirectory()), nil)
+		if s.projectSession != nil {
+			s.projectSession.TryAdoptSnapshotInBackground(workingSnapshot, preparedSnapshot)
+		}
+		defer preparedSnapshot.Deref()
 
 		workingSnapshot = preparedSnapshot
 		proj := workingSnapshot.ProjectCollection.GetProjectByPath(projectPath)
@@ -2758,7 +2824,7 @@ func (s *Session) handleEmit(ctx context.Context, params *EmitParams) (*EmitResp
 		return nil, err
 	}
 	options.WriteFile = func(fileName string, text string, _ *compiler.WriteFileData) error {
-		return s.projectSession.FS().WriteFile(fileName, text)
+		return s.snapshotHost.FS().WriteFile(fileName, text)
 	}
 	result, err := emitProgram(ctx, program, options)
 	if err != nil {
@@ -3714,21 +3780,29 @@ func computeSnapshotChanges(prev *project.Snapshot, next *project.Snapshot) *Sna
 // Close closes the session and releases all active snapshots,
 // regardless of their ref counts.
 func (s *Session) Close() {
-	s.releaseOpenRefs()
+	s.closeOnce.Do(func() {
+		s.releaseOpenRefs()
 
-	s.snapshotsMu.Lock()
-	defer s.snapshotsMu.Unlock()
-	for handle, sd := range s.snapshots {
-		sd.snapshot.Deref(s.projectSession)
-		delete(s.snapshots, handle)
-	}
+		s.snapshotsMu.Lock()
+		for handle, sd := range s.snapshots {
+			sd.snapshot.Deref()
+			delete(s.snapshots, handle)
+		}
+		s.snapshotsMu.Unlock()
+
+		if s.projectSession == nil {
+			if s.compatibilitySnapshot != nil {
+				s.compatibilitySnapshot.Deref()
+				s.compatibilitySnapshot = nil
+			}
+			s.snapshotHost.Close()
+		}
+	})
 }
 
-// releaseOpenRefs releases every project and file ref this session is holding open
-// in the project session. This keeps the API's ref counts balanced when an API
-// session is shut down while sharing a longer-lived project session (e.g. one
-// backing an LSP server), so API-opened projects and files aren't leaked. Only
-// refs the session currently holds are closed, so it never over-releases.
+// releaseOpenRefs releases every project and file ref this session is holding
+// open in a shared project session. Standalone sessions release the entire
+// compatibility snapshot when they close, so there is no shared state to update.
 func (s *Session) releaseOpenRefs() {
 	s.updateMu.Lock()
 	defer s.updateMu.Unlock()
@@ -3744,9 +3818,14 @@ func (s *Session) releaseOpenRefs() {
 	if s.openFiles.Len() > 0 {
 		apiRequest.CloseFiles = s.openFiles.Clone()
 	}
-	snapshot, err := s.projectSession.APIUpdate(context.Background(), project.FileChangeSummary{}, apiRequest)
+	if s.projectSession == nil {
+		s.openProjects.Clear()
+		s.openFiles.Clear()
+		return
+	}
+	snapshot, err := s.projectSession.APIUpdate(s.withLocale(context.Background()), project.FileChangeSummary{}, apiRequest)
 	// APIUpdate returns a ref'd snapshot even on error; always release it.
-	snapshot.Deref(s.projectSession)
+	snapshot.Deref()
 	if err != nil {
 		return
 	}
@@ -3761,7 +3840,7 @@ func formatSessionID(id uint64) string {
 
 // toPath converts a file name to a normalized path.
 func (s *Session) toPath(fileName string) tspath.Path {
-	return tspath.ToPath(fileName, s.projectSession.GetCurrentDirectory(), s.projectSession.FS().UseCaseSensitiveFileNames())
+	return tspath.ToPath(fileName, s.currentDirectory(), s.useCaseSensitiveFileNames())
 }
 
 // toFileChangeSummary converts API file changes to a project.FileChangeSummary.
@@ -3775,7 +3854,7 @@ func (s *Session) toFileChangeSummary(changes *APIFileChanges) project.FileChang
 		summary.IncludesWatchChangeOutsideNodeModules = true
 		return summary
 	}
-	cwd := s.projectSession.GetCurrentDirectory()
+	cwd := s.currentDirectory()
 	for _, doc := range changes.Changed {
 		uri := doc.ToURI(cwd)
 		summary.Changed.Add(uri)
@@ -4029,8 +4108,11 @@ func (s *Session) handleGetCompletionsAtPosition(ctx context.Context, params *Ge
 	}
 	result, err := run(sd.snapshot, program)
 	if errors.Is(err, ls.ErrNeedsAutoImports) {
-		preparedSnapshot := s.projectSession.GetSnapshotWithAutoImports(ctx, sd.snapshot, params.File.ToURI(s.projectSession.GetCurrentDirectory()))
-		defer preparedSnapshot.Deref(s.projectSession)
+		preparedSnapshot := s.snapshotHost.CloneSnapshotWithAutoImports(ctx, sd.snapshot, params.File.ToURI(s.currentDirectory()), nil)
+		if s.projectSession != nil {
+			s.projectSession.TryAdoptSnapshotInBackground(sd.snapshot, preparedSnapshot)
+		}
+		defer preparedSnapshot.Deref()
 		if err = ctx.Err(); err != nil {
 			return nil, err
 		}

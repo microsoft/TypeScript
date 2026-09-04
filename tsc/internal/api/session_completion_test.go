@@ -38,7 +38,7 @@ func TestCompletionSymbolTypeIsResolvable(t *testing.T) {
 	}
 	projectSession, _ := projecttestutil.Setup(files)
 	defer projectSession.Close()
-	session := NewSession(projectSession, nil)
+	session := NewLSPSession(projectSession, nil)
 	defer session.Close()
 
 	snapshotResp, err := session.handleUpdateSnapshot(t.Context(), &UpdateSnapshotParams{
@@ -110,7 +110,7 @@ func TestCompletionOnInferredProject(t *testing.T) {
 	}
 	projectSession, _ := projecttestutil.Setup(files)
 	defer projectSession.Close()
-	session := NewSession(projectSession, nil)
+	session := NewLSPSession(projectSession, nil)
 	defer session.Close()
 
 	snapshotResp, err := session.handleUpdateSnapshot(t.Context(), &UpdateSnapshotParams{
@@ -156,7 +156,7 @@ func TestCompletionRetriesWithAutoImports(t *testing.T) {
 		IncludeCompletionsForImportStatements: core.TSTrue,
 	})
 
-	session := NewSession(projectSession, nil)
+	session := NewLSPSession(projectSession, nil)
 	defer session.Close()
 
 	snapshotResp, err := session.handleUpdateSnapshot(t.Context(), &UpdateSnapshotParams{

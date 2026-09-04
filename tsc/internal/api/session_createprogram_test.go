@@ -21,7 +21,7 @@ func TestCreateProgram(t *testing.T) {
 	})
 	defer projectSession.Close()
 
-	session := NewSession(projectSession, nil)
+	session := NewLSPSession(projectSession, nil)
 	defer session.Close()
 	ctx := context.Background()
 
@@ -46,6 +46,7 @@ func TestCreateProgram(t *testing.T) {
 	})
 	assert.NilError(t, err)
 	assert.Assert(t, response.Snapshot != baseResponse.Snapshot)
+	assert.Equal(t, response.Snapshot, SnapshotID(4))
 	assert.Equal(t, session.latestSnapshot, baseResponse.Snapshot)
 	assert.Assert(t, response.Project != nil)
 	assert.DeepEqual(t, response.Project.RootFiles, []string{fileName})
@@ -118,7 +119,7 @@ func TestCreateProgramWithNoRootFiles(t *testing.T) {
 	projectSession, _ := projecttestutil.Setup(map[string]any{})
 	defer projectSession.Close()
 
-	session := NewSession(projectSession, nil)
+	session := NewLSPSession(projectSession, nil)
 	defer session.Close()
 
 	response, err := session.handleCreateProgram(context.Background(), &CreateProgramParams{
@@ -138,6 +139,24 @@ func TestCreateProgramWithNoRootFiles(t *testing.T) {
 	assert.Equal(t, len(project.Program.GetSourceFiles()), 0)
 }
 
+func TestCreateProgramFileChangesRequireOldProgram(t *testing.T) {
+	t.Parallel()
+
+	projectSession, _ := projecttestutil.Setup(map[string]any{})
+	defer projectSession.Close()
+
+	session := NewLSPSession(projectSession, nil)
+	defer session.Close()
+
+	_, err := session.handleCreateProgram(context.Background(), &CreateProgramParams{
+		CreateProgramOptions: CreateProgramOptions{
+			CompilerOptions: core.CompilerOptions{NoLib: core.TSTrue},
+		},
+		FileChanges: &APIFileChanges{InvalidateAll: true},
+	})
+	assert.ErrorContains(t, err, "fileChanges requires an oldProgram")
+}
+
 func TestCreateProgramRemovesAllRootFiles(t *testing.T) {
 	t.Parallel()
 
@@ -147,7 +166,7 @@ func TestCreateProgramRemovesAllRootFiles(t *testing.T) {
 	})
 	defer projectSession.Close()
 
-	session := NewSession(projectSession, nil)
+	session := NewLSPSession(projectSession, nil)
 	defer session.Close()
 	ctx := context.Background()
 
@@ -196,7 +215,7 @@ func TestCreateProgramPreservesRootFileOrder(t *testing.T) {
 	})
 	defer projectSession.Close()
 
-	session := NewSession(projectSession, nil)
+	session := NewLSPSession(projectSession, nil)
 	defer session.Close()
 	ctx := context.Background()
 
@@ -236,7 +255,7 @@ func TestCreateProgramReusesProgram(t *testing.T) {
 	})
 	defer projectSession.Close()
 
-	session := NewSession(projectSession, nil)
+	session := NewLSPSession(projectSession, nil)
 	defer session.Close()
 	ctx := context.Background()
 
@@ -315,7 +334,7 @@ func TestCreateProgramProjectReferencesAndReuse(t *testing.T) {
 	})
 	defer projectSession.Close()
 
-	session := NewSession(projectSession, nil)
+	session := NewLSPSession(projectSession, nil)
 	defer session.Close()
 	ctx := context.Background()
 	libReference := &core.ProjectReference{Path: libConfigName, OriginalPath: libConfigName}
@@ -391,7 +410,7 @@ func TestCreateProgramFromConfiguredProgramDoesNotRetainOtherProjects(t *testing
 	})
 	defer projectSession.Close()
 
-	session := NewSession(projectSession, nil)
+	session := NewLSPSession(projectSession, nil)
 	defer session.Close()
 	ctx := context.Background()
 
