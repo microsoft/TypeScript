@@ -56,6 +56,39 @@ describe("API over WebAssembly", () => {
         }
     });
 
+    test("exits successfully when LSP stdin closes", async () => {
+        const WebAssembly = (globalThis as any).WebAssembly;
+        const directory = await mkdtemp(path.join(tmpdir(), "typescript-wasip1-"));
+        try {
+            const stdin = await open(path.join(directory, "stdin"), "w+");
+            const stdout = await open(path.join(directory, "stdout"), "w+");
+            const stderr = await open(path.join(directory, "stderr"), "w+");
+            try {
+                const wasi = new WASI({
+                    version: "preview1",
+                    args: ["tsc.wasm", "--lsp", "--stdio"],
+                    env: { PWD: "/" },
+                    preopens: { "/": process.cwd() },
+                    stdin: stdin.fd,
+                    stdout: stdout.fd,
+                    stderr: stderr.fd,
+                    returnOnExit: true,
+                });
+                const module = await WebAssembly.compile(await readFile(wasmURL));
+                const instance = await WebAssembly.instantiate(module, {
+                    wasi_snapshot_preview1: wasi.wasiImport,
+                });
+                assert.strictEqual(wasi.start(instance), 0);
+            }
+            finally {
+                await Promise.all([stdin.close(), stdout.close(), stderr.close()]);
+            }
+        }
+        finally {
+            await rm(directory, { recursive: true });
+        }
+    });
+
     test("runs the compiler and checker through the reactor", async () => {
         const WebAssembly = (globalThis as any).WebAssembly;
         const module = await WebAssembly.compile(
