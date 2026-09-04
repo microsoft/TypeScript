@@ -16,7 +16,7 @@ and limitations under the License.
 
 interface ErrorConstructor {
     /**
-     * Indicates whether the provided value is a built-in Error object.
+     * Indicates whether the argument provided is a built-in Error instance or not.
      */
     isError(error: unknown): error is Error;
 }
