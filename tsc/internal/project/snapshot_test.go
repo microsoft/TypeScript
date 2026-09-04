@@ -228,7 +228,7 @@ func TestSnapshot(t *testing.T) {
 		assert.NilError(t, err)
 
 		baseSnapshot := session.Snapshot()
-		preparedSnapshot := session.SnapshotHost().DeriveWithAutoImports(ctx, baseSnapshot, uri)
+		preparedSnapshot := session.SnapshotHost.CloneSnapshotWithAutoImports(ctx, baseSnapshot, uri, nil)
 		session.TryAdoptSnapshotInBackground(baseSnapshot, preparedSnapshot)
 		defer preparedSnapshot.Deref()
 

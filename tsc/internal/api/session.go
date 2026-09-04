@@ -441,7 +441,7 @@ type SessionOptions struct {
 
 // NewLSPSession creates a new API session with the given project session.
 func NewLSPSession(projectSession *project.Session, options *SessionOptions) *Session {
-	s := newSession(projectSession.SnapshotHost(), options)
+	s := newSession(projectSession.SnapshotHost, options)
 	s.projectSession = projectSession
 	return s
 }
@@ -492,7 +492,7 @@ func (s *Session) apiUpdate(
 	s.compatibilityMu.Lock()
 	defer s.compatibilityMu.Unlock()
 	oldSnapshot := s.compatibilitySnapshot
-	snapshot, err := s.snapshotHost.DeriveSnapshot(ctx, oldSnapshot, fileChanges, apiRequest)
+	snapshot, err := s.snapshotHost.CloneSnapshot(ctx, oldSnapshot, fileChanges, apiRequest)
 	s.snapshotHost.RetainSnapshot(snapshot)
 	s.compatibilitySnapshot = snapshot
 	oldSnapshot.Deref()
@@ -1176,7 +1176,7 @@ func (s *Session) handleUpdateTemporarySnapshot(ctx context.Context, params *Upd
 
 	uri := params.File.ToURI(s.currentDirectory())
 
-	snapshot, err := s.snapshotHost.DeriveTemporarySnapshot(ctx, baseSD.snapshot, uri, params.NewText)
+	snapshot, err := s.snapshotHost.CloneSnapshotWithTemporaryFile(ctx, baseSD.snapshot, uri, params.NewText)
 	if err != nil {
 		return nil, fmt.Errorf("%w: failed to update temporary snapshot: %w", ErrClientError, err)
 	}
@@ -1259,7 +1259,7 @@ func (s *Session) handleCreateProgram(ctx context.Context, params *CreateProgram
 		defer baseSnapshot.Deref()
 		fileChanges = project.FileChangeSummary{}
 	}
-	snapshot := s.snapshotHost.DeriveProgramSnapshot(
+	snapshot := s.snapshotHost.CloneSnapshotForProgram(
 		ctx,
 		baseSnapshot,
 		rootFileNames,
@@ -2159,7 +2159,7 @@ func (s *Session) handleGetImportAdderEdits(ctx context.Context, params *GetImpo
 	userPreferences := workingSnapshot.UserPreferences()
 	if registry := workingSnapshot.AutoImportRegistry(); registry == nil ||
 		!registry.IsPreparedForImportingFile(sourceFile.FileName(), projectPath, userPreferences) {
-		preparedSnapshot := s.snapshotHost.DeriveWithAutoImports(ctx, workingSnapshot, params.File.ToURI(s.currentDirectory()))
+		preparedSnapshot := s.snapshotHost.CloneSnapshotWithAutoImports(ctx, workingSnapshot, params.File.ToURI(s.currentDirectory()), nil)
 		if s.projectSession != nil {
 			s.projectSession.TryAdoptSnapshotInBackground(workingSnapshot, preparedSnapshot)
 		}

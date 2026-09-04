@@ -70,6 +70,18 @@ func (h *blockingHandler) HandleNotification(context.Context, string, json.Value
 	return nil
 }
 
+type contextHandler struct{}
+
+func (contextHandler) HandleRequest(ctx context.Context, _ string, _ json.Value) (any, error) {
+	<-ctx.Done()
+	return nil, ctx.Err()
+}
+
+func (contextHandler) HandleNotification(ctx context.Context, _ string, _ json.Value) error {
+	<-ctx.Done()
+	return ctx.Err()
+}
+
 func TestAsyncConnRunWaitsForHandlers(t *testing.T) {
 	t.Parallel()
 
@@ -100,6 +112,24 @@ func TestAsyncConnRunWaitsForHandlers(t *testing.T) {
 
 	close(handler.release)
 	assert.NilError(t, <-runDone)
+}
+
+func TestAsyncConnRunCancelsHandlersOnEOF(t *testing.T) {
+	t.Parallel()
+
+	id := jsonrpc.NewIDString("1")
+	protocol := &queuedProtocol{messages: []*ipc.Message{{ID: id, Method: "request"}}}
+	conn := ipc.NewAsyncConnWithProtocol(nil, protocol, contextHandler{})
+
+	runDone := make(chan error, 1)
+	go func() { runDone <- conn.Run(t.Context()) }()
+
+	select {
+	case err := <-runDone:
+		assert.NilError(t, err)
+	case <-time.After(time.Second):
+		t.Fatal("Run did not cancel active handlers after EOF")
+	}
 }
 
 func TestAsyncConnCallReturnsWhenPeerCloses(t *testing.T) {

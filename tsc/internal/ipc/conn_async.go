@@ -65,8 +65,10 @@ func (c *AsyncConn) SetCollectTiming(enabled bool) {
 // Run starts processing messages on the connection.
 // It blocks until the context is cancelled or an error occurs.
 func (c *AsyncConn) Run(ctx context.Context) (err error) {
+	handlerCtx, cancelHandlers := context.WithCancel(ctx)
 	defer func() {
 		c.closePendingCalls(err)
+		cancelHandlers()
 		c.handlers.Wait()
 	}()
 	for {
@@ -86,11 +88,11 @@ func (c *AsyncConn) Run(ctx context.Context) (err error) {
 			c.handleResponse(msg)
 		} else if msg.IsRequest() {
 			c.handlers.Go(func() {
-				c.handleRequest(ctx, msg)
+				c.handleRequest(handlerCtx, msg)
 			})
 		} else if msg.IsNotification() {
 			c.handlers.Go(func() {
-				c.handleNotification(ctx, msg)
+				c.handleNotification(handlerCtx, msg)
 			})
 		}
 	}

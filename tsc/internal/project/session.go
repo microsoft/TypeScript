@@ -102,7 +102,7 @@ type SessionInit struct {
 // next, it diffs them and updates file watchers and Automatic Type
 // Acquisition (ATA) state accordingly.
 type Session struct {
-	host          *SnapshotHost
+	*SnapshotHost
 	options       *SessionOptions
 	logger        logging.Logger
 	backgroundCtx context.Context
@@ -214,7 +214,7 @@ func NewSession(init *SessionInit) *Session {
 		sessionLogger = logging.NewNopLogger()
 	}
 	session := &Session{
-		host:            snapshotHost,
+		SnapshotHost:            snapshotHost,
 		options:         init.Options,
 		logger:          sessionLogger,
 		backgroundCtx:   init.BackgroundCtx,
@@ -250,11 +250,6 @@ func NewSession(init *SessionInit) *Session {
 // FS implements module.ResolutionHost
 func (s *Session) FS() vfs.FS {
 	return s.fs.fs
-}
-
-// SnapshotHost returns the host shared by this session's snapshots.
-func (s *Session) SnapshotHost() *SnapshotHost {
-	return s.host
 }
 
 // GetCurrentDirectory implements module.ResolutionHost
@@ -299,8 +294,8 @@ func (s *Session) Configure(config lsutil.UserPreferences) {
 		s.client.SetLocale(config.Locale)
 		newLocale := s.client.GetLocale()
 		if oldLocale.String() != newLocale.String() {
-			if s.host.contentMapperHost != nil {
-				s.host.contentMapperHost.SetLocale(newLocale)
+			if s.contentMapperHost != nil {
+				s.contentMapperHost.SetLocale(newLocale)
 			}
 		}
 	}
@@ -1284,7 +1279,7 @@ func (s *Session) WithLanguageServiceAndSnapshot(
 // The cloned snapshot will be adopted as the session's current snapshot in the background
 // if other changes haven't been adopted in the meantime.
 func (s *Session) GetLanguageServiceWithAutoImports(ctx context.Context, baseSnapshot *Snapshot, uri lsproto.DocumentUri) (*ls.LanguageService, error) {
-	newSnapshot := s.host.deriveWithAutoImports(ctx, baseSnapshot, uri, s.logger)
+	newSnapshot := s.CloneSnapshotWithAutoImports(ctx, baseSnapshot, uri, s.logger)
 	project := newSnapshot.GetDefaultProject(uri)
 	if project == nil {
 		// Clone's initial ref (1) is released since we won't use this snapshot.
@@ -1410,10 +1405,10 @@ func (s *Session) updateSnapshot(ctx context.Context, overlays map[tspath.Path]*
 }
 
 func (s *Session) takeContentMapperTimingDelta() contentmapper.Timings {
-	if s.host.contentMapperHost == nil {
+	if s.contentMapperHost == nil {
 		return contentmapper.Timings{}
 	}
-	current := s.host.contentMapperHost.Timings()
+	current := s.contentMapperHost.Timings()
 	s.contentMapperTimingsMu.Lock()
 	delta := current.Since(s.contentMapperTimings)
 	s.contentMapperTimings = current
@@ -1684,7 +1679,7 @@ func (s *Session) Close() {
 	// Cancel periodic performance telemetry
 	s.stopPerformanceTelemetry()
 	s.backgroundQueue.Close()
-	s.host.Close()
+	s.Close()
 }
 
 func (s *Session) flushChanges(ctx context.Context) (FileChangeSummary, map[tspath.Path]*Overlay, map[tspath.Path]*ATAStateChange, *lsutil.UserPreferences) {
@@ -1758,11 +1753,11 @@ func (s *Session) logCacheStats(snapshot *Snapshot) {
 	var parseCacheSize int
 	var extendedConfigCount int
 	if s.logger.IsVerbose() {
-		s.host.parseCache.entries.Range(func(_ ParseCacheKey, _ *refCountCacheEntry[*ast.SourceFile]) bool {
+		s.parseCache.entries.Range(func(_ ParseCacheKey, _ *refCountCacheEntry[*ast.SourceFile]) bool {
 			parseCacheSize++
 			return true
 		})
-		s.host.extendedConfigCache.entries.Range(func(_ tspath.Path, _ *ownerCacheEntry[*ExtendedConfigCacheEntry]) bool {
+		s.extendedConfigCache.entries.Range(func(_ tspath.Path, _ *ownerCacheEntry[*ExtendedConfigCacheEntry]) bool {
 			extendedConfigCount++
 			return true
 		})
@@ -1775,7 +1770,7 @@ func (s *Session) logCacheStats(snapshot *Snapshot) {
 	s.logger.Logf("Config count:      %6d", len(snapshot.ConfigFileRegistry.configs))
 	if s.logger.IsVerbose() {
 		s.logger.Logf("Parse cache size:           %6d", parseCacheSize)
-		s.logger.Logf("Program count:              %6d", s.host.programCounter.Len())
+		s.logger.Logf("Program count:              %6d", s.programCounter.Len())
 		s.logger.Logf("Extended config cache size: %6d", extendedConfigCount)
 
 		s.logger.Log("Auto Imports:")

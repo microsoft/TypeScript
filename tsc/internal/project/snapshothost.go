@@ -71,9 +71,9 @@ func (s *SnapshotHost) RetainSnapshot(snapshot *Snapshot) {
 	snapshot.ref()
 }
 
-// DeriveSnapshot derives a snapshot from baseSnapshot without adopting it as any
+// CloneSnapshot derives a snapshot from baseSnapshot without adopting it as any
 // canonical session state or performing session side effects.
-func (s *SnapshotHost) DeriveSnapshot(
+func (s *SnapshotHost) CloneSnapshot(
 	ctx context.Context,
 	baseSnapshot *Snapshot,
 	fileChanges FileChangeSummary,
@@ -92,8 +92,8 @@ func (s *SnapshotHost) update(ctx context.Context, baseSnapshot *Snapshot, chang
 	return baseSnapshot.Clone(ctx, change, baseSnapshot.fs.overlays, nil)
 }
 
-// DeriveTemporarySnapshot derives a snapshot with a temporary file content override.
-func (s *SnapshotHost) DeriveTemporarySnapshot(
+// CloneSnapshotWithTemporaryFile derives a snapshot with a temporary file content override.
+func (s *SnapshotHost) CloneSnapshotWithTemporaryFile(
 	ctx context.Context,
 	baseSnapshot *Snapshot,
 	uri lsproto.DocumentUri,
@@ -102,9 +102,9 @@ func (s *SnapshotHost) DeriveTemporarySnapshot(
 	return baseSnapshot.cloneWithTemporaryFile(ctx, uri, newText)
 }
 
-// DeriveProgramSnapshot derives an isolated snapshot containing one synthetic
+// CloneSnapshotForProgram derives an isolated snapshot containing one synthetic
 // project. The base snapshot is not adopted as canonical state.
-func (s *SnapshotHost) DeriveProgramSnapshot(
+func (s *SnapshotHost) CloneSnapshotForProgram(
 	ctx context.Context,
 	baseSnapshot *Snapshot,
 	rootFileNames []string,
@@ -126,13 +126,9 @@ func (s *SnapshotHost) DeriveProgramSnapshot(
 	)
 }
 
-// DeriveWithAutoImports derives a snapshot with auto-import preparation without
+// CloneSnapshotWithAutoImports derives a snapshot with auto-import preparation without
 // adopting the clone in the background.
-func (s *SnapshotHost) DeriveWithAutoImports(ctx context.Context, baseSnapshot *Snapshot, uri lsproto.DocumentUri) *Snapshot {
-	return s.deriveWithAutoImports(ctx, baseSnapshot, uri, nil)
-}
-
-func (s *SnapshotHost) deriveWithAutoImports(ctx context.Context, baseSnapshot *Snapshot, uri lsproto.DocumentUri, logger logging.Logger) *Snapshot {
+func (s *SnapshotHost) CloneSnapshotWithAutoImports(ctx context.Context, baseSnapshot *Snapshot, uri lsproto.DocumentUri, logger logging.Logger) *Snapshot {
 	change := SnapshotChange{
 		reason: UpdateReasonRequestedLanguageServiceWithAutoImports,
 		ResourceRequest: ResourceRequest{

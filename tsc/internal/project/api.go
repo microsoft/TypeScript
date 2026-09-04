@@ -30,6 +30,6 @@ func (s *Session) APIUpdate(ctx context.Context, apiFileChanges FileChangeSummar
 // TryAdoptSnapshotInBackground retains a derived snapshot and attempts to adopt it
 // as the session's current snapshot without blocking the caller.
 func (s *Session) TryAdoptSnapshotInBackground(baseSnapshot, newSnapshot *Snapshot) {
-	s.host.RetainSnapshot(newSnapshot)
+	s.RetainSnapshot(newSnapshot)
 	s.tryAdoptSnapshotChangeInBackground(baseSnapshot, newSnapshot)
 }
