@@ -1427,6 +1427,19 @@ export const checkVsceVersion = task({
         if (matches.length !== 1 || matches[0][1] !== version) {
             throw new Error(`tools/pipelines/steps/setup-vsce.yml must install exactly @vscode/vsce@${version}.`);
         }
+
+        for (
+            const pipeline of [
+                "./tools/pipelines/typescript-publish.yml",
+                "./tools/pipelines/vscode-typescript-publish.yml",
+            ]
+        ) {
+            const contents = fs.readFileSync(pipeline, "utf8");
+            const templateReferences = contents.match(/\/tools\/pipelines\/steps\/setup-vsce\.yml@self/g) ?? [];
+            if (templateReferences.length !== 1 || contents.includes("@vscode/vsce")) {
+                throw new Error(`${pipeline} must use setup-vsce.yml exactly once and must not install @vscode/vsce directly.`);
+            }
+        }
     },
 });
 
