@@ -53,6 +53,8 @@ func TestGetRootLength(t *testing.T) {
 	assert.Equal(t, GetRootLength("file://localhost/c%3A"), 21)
 	assert.Equal(t, GetRootLength("file://localhost/c%3Ad"), 17)
 	assert.Equal(t, GetRootLength("file://localhost/c%3A/path"), 22)
+	assert.Equal(t, GetRootLength("FILE:///C:/path"), 11)
+	assert.Equal(t, GetRootLength("file://LOCALHOST/C%3A/path"), 22)
 	assert.Equal(t, GetRootLength("file://server"), 13)
 	assert.Equal(t, GetRootLength("file://server/"), 14)
 	assert.Equal(t, GetRootLength("file://server/path"), 14)
