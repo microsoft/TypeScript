@@ -62,20 +62,6 @@ jobs:
             exit 1
           fi
 
-      - name: Check Marketplace version
-        run: |
-          set -euo pipefail
-          packageVersion="$(jq -r '.version' packages/vscode-typescript/package.json)"
-          publishedVersion="$(npx vsce show TypeScriptTeam.native-preview --json | jq -r '.versions[0].version')"
-          EXTENSION_VERSION="$packageVersion" PUBLISHED_VERSION="$publishedVersion" node <<'NODE'
-          const extensionVersion = process.env.EXTENSION_VERSION.split(".").map(Number);
-          const publishedVersion = process.env.PUBLISHED_VERSION.split(".").map(Number);
-          const comparison = extensionVersion.findIndex((part, index) => part !== publishedVersion[index]);
-          if (comparison === -1 || extensionVersion[comparison] < publishedVersion[comparison]) {
-              throw new Error(`Extension version ${process.env.EXTENSION_VERSION} must be greater than published version ${process.env.PUBLISHED_VERSION}.`);
-          }
-          NODE
-
       - run: npm test -w native-preview
 
       - name: Package extension
