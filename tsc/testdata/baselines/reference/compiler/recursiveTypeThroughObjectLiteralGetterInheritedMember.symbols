@@ -157,9 +157,11 @@ const topName: string = sample.name;
 // The recursive one does not resolve. Pinned so that closing this shows up here.
 const parentName: string = sample.parent!.name;
 >parentName : Symbol(parentName, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 60, 5))
+>sample.parent!.name : Symbol(name, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 47, 25))
 >sample.parent : Symbol(parent, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 48, 17))
 >sample : Symbol(sample, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 54, 13))
 >parent : Symbol(parent, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 48, 17))
+>name : Symbol(name, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 47, 25))
 
 // A property that is genuinely absent must still be reported, whoever is asking.
 interface Base { readonly own: number; }

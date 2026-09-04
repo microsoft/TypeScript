@@ -19116,6 +19116,35 @@ func (c *Checker) getCombinedModifierFlagsCached(node *ast.Node) ast.ModifierFla
 	return c.lastGetCombinedModifierFlagsResult
 }
 
+// A constraint comparison postponed because the member could not be worked out yet.
+type skippedMemberCheck struct {
+	property  *ast.Symbol
+	target    *Type
+	relation  *Relation
+	errorNode *ast.Node
+}
+
+// Raised when a resolution started by a provisional question re-enters a declaration that was already
+// being resolved when that question was asked. Nothing computed from the circular value is allowed to
+// complete, so no diagnostic is reported and no cache records it.
+type circularQuestion struct{}
+
+// The checker's push/pop state, so an abandoned attempt can be unwound without leaving a push behind.
+type checkerStacks struct {
+	typeResolutions, varianceStack, activeMappers, activeTypeMappersCaches int
+	antecedentTypes, awaitedTypeStack, contextualBindingPatterns           int
+	contextualInfos, flowLoopStack, inferenceContextInfos, sharedFlows     int
+	reverseMappedSourceStack, reverseMappedTargetStack                     int
+	renamedBindingElementsInTypes, resolutionStart                         int
+	instantiationDepth, conditionalConstraintDepth                         uint32
+	currentNode                                                            *ast.Node
+	varianceTypeParameter                                                  *Type
+	flowTypeCache                                                          map[*ast.Node]*Type
+	reliabilityFlags                                                       RelationComparisonResult
+	reverseExpandingFlags                                                  ExpandingFlags
+	flowAnalysisDisabled, withinUnreachableCode                            bool
+}
+
 // Whether any base of t could still contribute a member named name. resolveObjectTypeMembers publishes
 // the self-declared table before it walks the bases, so a miss inside that window is "not known yet"
 // rather than "absent" -- but only for a name a base actually declares. Reading declaration tables
@@ -19149,35 +19178,6 @@ func (c *Checker) mayInheritProperty(t *Type, name string, seen []*Type) bool {
 		}
 	}
 	return false
-}
-
-// A constraint comparison postponed because the member could not be worked out yet.
-type skippedMemberCheck struct {
-	property  *ast.Symbol
-	target    *Type
-	relation  *Relation
-	errorNode *ast.Node
-}
-
-// Raised when a resolution started by a provisional question re-enters a declaration that was already
-// being resolved when that question was asked. Nothing computed from the circular value is allowed to
-// complete, so no diagnostic is reported and no cache records it.
-type circularQuestion struct{}
-
-// The checker's push/pop state, so an abandoned attempt can be unwound without leaving a push behind.
-type checkerStacks struct {
-	typeResolutions, varianceStack, activeMappers, activeTypeMappersCaches int
-	antecedentTypes, awaitedTypeStack, contextualBindingPatterns           int
-	contextualInfos, flowLoopStack, inferenceContextInfos, sharedFlows     int
-	reverseMappedSourceStack, reverseMappedTargetStack                     int
-	renamedBindingElementsInTypes, resolutionStart                         int
-	instantiationDepth, conditionalConstraintDepth                         uint32
-	currentNode                                                            *ast.Node
-	varianceTypeParameter                                                  *Type
-	flowTypeCache                                                          map[*ast.Node]*Type
-	reliabilityFlags                                                       RelationComparisonResult
-	reverseExpandingFlags                                                  ExpandingFlags
-	flowAnalysisDisabled, withinUnreachableCode                            bool
 }
 
 func (c *Checker) saveStacks() checkerStacks {
@@ -19444,7 +19444,7 @@ func (c *Checker) getPropertyOfTypeEx(t *Type, name string, skipObjectFunctionPr
 	case t.flags&TypeFlagsObject != 0:
 		resolved := c.resolveStructuredTypeMembers(t)
 		symbol := resolved.members[name]
-		if symbol == nil && t.objectFlags&ObjectFlagsUnresolvedMembers != 0 {
+		if symbol == nil && t.objectFlags&ObjectFlagsUnresolvedMembers != 0 && c.provisionalDepth == 0 {
 			symbol = c.getPendingInheritedProperty(t, name)
 		}
 		if symbol != nil {
@@ -22008,7 +22008,7 @@ func (c *Checker) getPropertyOfObjectType(t *Type, name string) *ast.Symbol {
 	if t.flags&TypeFlagsObject != 0 {
 		resolved := c.resolveStructuredTypeMembers(t)
 		symbol := resolved.members[name]
-		if symbol == nil && t.objectFlags&ObjectFlagsUnresolvedMembers != 0 {
+		if symbol == nil && t.objectFlags&ObjectFlagsUnresolvedMembers != 0 && c.provisionalDepth == 0 {
 			symbol = c.getPendingInheritedProperty(t, name)
 		}
 		if symbol != nil && c.symbolIsValue(symbol) {

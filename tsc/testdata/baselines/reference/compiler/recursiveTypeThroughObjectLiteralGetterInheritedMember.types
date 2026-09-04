@@ -92,7 +92,7 @@ const category = object({
 });
 
 declare const sample: (typeof category)["out"];
->sample : { name: string; readonly parent?: unknown; }
+>sample : { name: string; readonly parent?: { name: string; readonly parent?: any | undefined; } | undefined; }
 >category : ObjectSchema<{ name: StringSchema; readonly parent: OptionalSchema<ObjectSchema<any>>; }>
 
 // The key that does not recurse resolves fully, and the remapping put the recursive one in the
@@ -101,18 +101,18 @@ declare const sample: (typeof category)["out"];
 const topName: string = sample.name;
 >topName : string
 >sample.name : string
->sample : { name: string; readonly parent?: unknown; }
+>sample : { name: string; readonly parent?: { name: string; readonly parent?: any | undefined; } | undefined; }
 >name : string
 
 // The recursive one does not resolve. Pinned so that closing this shows up here.
 const parentName: string = sample.parent!.name;
 >parentName : string
->sample.parent!.name : any
->sample.parent! : {}
->sample.parent : unknown
->sample : { name: string; readonly parent?: unknown; }
->parent : unknown
->name : any
+>sample.parent!.name : string
+>sample.parent! : { name: string; readonly parent?: any | undefined; }
+>sample.parent : { name: string; readonly parent?: any | undefined; } | undefined
+>sample : { name: string; readonly parent?: { name: string; readonly parent?: any | undefined; } | undefined; }
+>parent : { name: string; readonly parent?: any | undefined; } | undefined
+>name : string
 
 // A property that is genuinely absent must still be reported, whoever is asking.
 interface Base { readonly own: number; }
@@ -126,7 +126,7 @@ declare const derived: Derived;
 
 // @ts-expect-error
 derived.missing;
->derived.missing : any
+>derived.missing : error
 >derived : Derived
 >missing : any
 
