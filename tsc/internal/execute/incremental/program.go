@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"slices"
-	"strings"
 	"sync"
 	"time"
 
@@ -59,17 +58,17 @@ func NewProgram(program *compiler.Program, oldProgram *Program, host Host, neste
 		if oldProgram != nil {
 			incrementalProgram.testingData.OldProgramSemanticDiagnosticsPerFile = &oldProgram.snapshot.semanticDiagnosticsPerFile
 		} else {
-			incrementalProgram.testingData.OldProgramSemanticDiagnosticsPerFile = &collections.SyncMap[tspath.Path, *DiagnosticsOrBuildInfoDiagnosticsWithFileName]{}
+			incrementalProgram.testingData.OldProgramSemanticDiagnosticsPerFile = &collections.SyncMap[tspath.PathKey, *DiagnosticsOrBuildInfoDiagnosticsWithFileName]{}
 		}
-		incrementalProgram.testingData.UpdatedSignatureKinds = make(map[tspath.Path]SignatureUpdateKind)
+		incrementalProgram.testingData.UpdatedSignatureKinds = make(map[tspath.PathKey]SignatureUpdateKind)
 	}
 	return incrementalProgram
 }
 
 type TestingData struct {
-	SemanticDiagnosticsPerFile           *collections.SyncMap[tspath.Path, *DiagnosticsOrBuildInfoDiagnosticsWithFileName]
-	OldProgramSemanticDiagnosticsPerFile *collections.SyncMap[tspath.Path, *DiagnosticsOrBuildInfoDiagnosticsWithFileName]
-	UpdatedSignatureKinds                map[tspath.Path]SignatureUpdateKind
+	SemanticDiagnosticsPerFile           *collections.SyncMap[tspath.PathKey, *DiagnosticsOrBuildInfoDiagnosticsWithFileName]
+	OldProgramSemanticDiagnosticsPerFile *collections.SyncMap[tspath.PathKey, *DiagnosticsOrBuildInfoDiagnosticsWithFileName]
+	UpdatedSignatureKinds                map[tspath.PathKey]SignatureUpdateKind
 }
 
 func (p *Program) GetTestingData() *TestingData {
@@ -128,7 +127,7 @@ func (p *Program) Options() *core.CompilerOptions {
 }
 
 // CommonSourceDirectory implements compiler.AnyProgram interface.
-func (p *Program) CommonSourceDirectory() string {
+func (p *Program) CommonSourceDirectory() tspath.RootedDirectoryPath {
 	p.panicIfNoProgram("CommonSourceDirectory")
 	return p.program.CommonSourceDirectory()
 }
@@ -140,7 +139,7 @@ func (p *Program) Program() *compiler.Program {
 }
 
 // IsSourceFileDefaultLibrary implements compiler.AnyProgram interface.
-func (p *Program) IsSourceFileDefaultLibrary(path tspath.Path) bool {
+func (p *Program) IsSourceFileDefaultLibrary(path tspath.PathKey) bool {
 	p.panicIfNoProgram("IsSourceFileDefaultLibrary")
 	return p.program.IsSourceFileDefaultLibrary(path)
 }
@@ -152,7 +151,7 @@ func (p *Program) GetSourceFiles() []*ast.SourceFile {
 }
 
 // GetSourceFile implements compiler.AnyProgram interface.
-func (p *Program) GetSourceFile(path string) *ast.SourceFile {
+func (p *Program) GetSourceFile(path tspath.RootedFilePath) *ast.SourceFile {
 	p.panicIfNoProgram("GetSourceFile")
 	return p.program.GetSourceFile(path)
 }
@@ -211,7 +210,7 @@ func (p *Program) GetSemanticDiagnostics(ctx context.Context, file *ast.SourceFi
 }
 
 func (p *Program) getSemanticDiagnosticsOfFile(file *ast.SourceFile) []*ast.Diagnostic {
-	cachedDiagnostics, ok := p.snapshot.semanticDiagnosticsPerFile.Load(file.Path())
+	cachedDiagnostics, ok := p.snapshot.semanticDiagnosticsPerFile.Load(file.PathKey())
 	if !ok {
 		panic("After handling all the affected files, there shouldnt be more changes")
 	}
@@ -289,14 +288,14 @@ func (p *Program) collectSemanticDiagnosticsOfAffectedFiles(ctx context.Context,
 
 	var affectedFiles []*ast.SourceFile
 	if file != nil {
-		_, ok := p.snapshot.semanticDiagnosticsPerFile.Load(file.Path())
+		_, ok := p.snapshot.semanticDiagnosticsPerFile.Load(file.PathKey())
 		if ok {
 			return
 		}
 		affectedFiles = []*ast.SourceFile{file}
 	} else {
 		for _, file := range p.program.GetSourceFiles() {
-			if _, ok := p.snapshot.semanticDiagnosticsPerFile.Load(file.Path()); !ok {
+			if _, ok := p.snapshot.semanticDiagnosticsPerFile.Load(file.PathKey()); !ok {
 				affectedFiles = append(affectedFiles, file)
 			}
 		}
@@ -311,7 +310,7 @@ func (p *Program) collectSemanticDiagnosticsOfAffectedFiles(ctx context.Context,
 
 	// Commit changes to snapshot
 	for file, diagnostics := range diagnosticsPerFile {
-		p.snapshot.semanticDiagnosticsPerFile.Store(file.Path(), &DiagnosticsOrBuildInfoDiagnosticsWithFileName{diagnostics: diagnostics})
+		p.snapshot.semanticDiagnosticsPerFile.Store(file.PathKey(), &DiagnosticsOrBuildInfoDiagnosticsWithFileName{diagnostics: diagnostics})
 	}
 	if p.snapshot.semanticDiagnosticsPerFile.Size() == len(p.program.GetSourceFiles()) && p.snapshot.checkPending && !p.snapshot.options.NoCheck.IsTrue() {
 		p.snapshot.checkPending = false
@@ -323,10 +322,10 @@ func (p *Program) emitBuildInfo(ctx context.Context, options compiler.EmitOption
 	if tr := p.program.Tracing(); tr != nil {
 		defer tr.Push(tracing.PhaseEmit, "emitBuildInfo", nil, true)()
 	}
-	buildInfoFileName := outputpaths.GetBuildInfoFileName(p.snapshot.options, tspath.ComparePathsOptions{
-		CurrentDirectory:          p.program.GetCurrentDirectory(),
-		UseCaseSensitiveFileNames: p.program.UseCaseSensitiveFileNames(),
-	})
+	buildInfoFileName := outputpaths.GetBuildInfoFileName(
+		p.snapshot.options,
+		p.program.CaseSensitivity(),
+	)
 	if buildInfoFileName == "" || p.program.IsEmitBlocked(buildInfoFileName) {
 		return nil
 	}
@@ -380,7 +379,7 @@ func (p *Program) emitBuildInfo(ctx context.Context, options compiler.EmitOption
 	p.snapshot.buildInfoEmitPending.Store(false)
 	return &compiler.EmitResult{
 		EmitSkipped:  false,
-		EmittedFiles: []string{buildInfoFileName},
+		EmittedFiles: []tspath.RootedFilePath{buildInfoFileName},
 	}
 }
 
@@ -389,7 +388,7 @@ func (p *Program) ensureHasErrorsForState(ctx context.Context, program *compiler
 	var hasEmitDiagnostics bool
 	if p.snapshot.canUseIncrementalState() {
 		if slices.ContainsFunc(program.GetSourceFiles(), func(file *ast.SourceFile) bool {
-			if _, ok := p.snapshot.emitDiagnosticsPerFile.Load(file.Path()); ok {
+			if _, ok := p.snapshot.emitDiagnosticsPerFile.Load(file.PathKey()); ok {
 				// emit diagnostics will be encoded in buildInfo;
 				return true
 			}
@@ -434,7 +433,7 @@ func (p *Program) ensureHasErrorsForState(ctx context.Context, program *compiler
 	p.snapshot.hasErrors = core.TSFalse
 	// Check semantic and emit diagnostics first as we dont need to ask program about it
 	if slices.ContainsFunc(p.program.GetSourceFiles(), func(file *ast.SourceFile) bool {
-		semanticDiagnostics, ok := p.snapshot.semanticDiagnosticsPerFile.Load(file.Path())
+		semanticDiagnostics, ok := p.snapshot.semanticDiagnosticsPerFile.Load(file.PathKey())
 		if !ok {
 			// Missing semantic diagnostics in cache will be encoded in incremental buildInfo
 			return p.snapshot.options.IsIncremental()
@@ -452,19 +451,19 @@ func (p *Program) ensureHasErrorsForState(ctx context.Context, program *compiler
 }
 
 func (p *Program) ensurePackageJsonsForState() {
-	config := tspath.GetDirectoryPath(p.program.CommandLine().ConfigName())
+	config := p.program.CommandLine().ConfigName().Directory()
 	if config != "" {
-		p.program.PackageJsonCacheEntries(func(key tspath.Path, value *packagejson.InfoCacheEntry) bool {
+		p.program.PackageJsonCacheEntries(func(key tspath.PathKey, value *packagejson.InfoCacheEntry) bool {
 			if value == nil {
 				return true
 			}
-			packageJson := tspath.CombinePaths(value.PackageDirectory, "package.json")
+			packageJson := value.PackageDirectory.ResolveFile("package.json")
 			if value.Exists() || value.DirectoryExists {
-				packageJson = p.program.Host().FS().Realpath(packageJson)
+				packageJson = tspath.RootedFilePathFromPath(p.program.Host().FS().Realpath(packageJson.AsPath()))
 			}
 			if value.Exists() {
 				p.snapshot.packageJsons = append(p.snapshot.packageJsons, packageJson)
-			} else if strings.Contains(packageJson, "/node_modules/") {
+			} else if packageJson.ContainsLowercaseDirectorySequence("/node_modules/") {
 				p.snapshot.missingPackageJsons = append(p.snapshot.missingPackageJsons, packageJson)
 			}
 			return true
@@ -474,28 +473,28 @@ func (p *Program) ensurePackageJsonsForState() {
 	p.snapshot.missingPackageJsons = normalizePackageJsons(p.snapshot.missingPackageJsons)
 }
 
-func normalizePackageJsons(packageJsons []string) []string {
+func normalizePackageJsons(packageJsons []tspath.RootedFilePath) []tspath.RootedFilePath {
 	if packageJsons == nil {
-		return make([]string, 0)
+		return make([]tspath.RootedFilePath, 0)
 	}
 	slices.Sort(packageJsons)
 	return core.Deduplicate(packageJsons)
 }
 
-func (p *Program) PackageJsonLookupPaths() []string {
-	config := tspath.GetDirectoryPath(p.program.CommandLine().ConfigName())
+func (p *Program) PackageJsonLookupPaths() []tspath.RootedFilePath {
+	config := p.program.CommandLine().ConfigName().Directory()
 	if config == "" {
 		return nil
 	}
 
-	var packageJsons []string
-	p.program.PackageJsonCacheEntries(func(key tspath.Path, value *packagejson.InfoCacheEntry) bool {
+	var packageJsons []tspath.RootedFilePath
+	p.program.PackageJsonCacheEntries(func(key tspath.PathKey, value *packagejson.InfoCacheEntry) bool {
 		if value == nil {
 			return true
 		}
-		packageJson := tspath.CombinePaths(value.PackageDirectory, "package.json")
+		packageJson := value.PackageDirectory.ResolveFile("package.json")
 		if value.Exists() || value.DirectoryExists {
-			packageJson = p.program.Host().FS().Realpath(packageJson)
+			packageJson = tspath.RootedFilePathFromPath(p.program.Host().FS().Realpath(packageJson.AsPath()))
 		}
 		packageJsons = append(packageJsons, packageJson)
 		return true

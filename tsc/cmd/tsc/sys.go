@@ -19,8 +19,8 @@ import (
 type osSys struct {
 	writer             io.Writer
 	fs                 vfs.FS
-	defaultLibraryPath string
-	cwd                string
+	defaultLibraryPath tspath.RootedDirectoryPath
+	cwd                tspath.RootedDirectoryPath
 	start              time.Time
 }
 
@@ -36,11 +36,11 @@ func (s *osSys) FS() vfs.FS {
 	return s.fs
 }
 
-func (s *osSys) DefaultLibraryPath() string {
+func (s *osSys) DefaultLibraryPath() tspath.RootedDirectoryPath {
 	return s.defaultLibraryPath
 }
 
-func (s *osSys) GetCurrentDirectory() string {
+func (s *osSys) GetCurrentDirectory() tspath.RootedDirectoryPath {
 	return s.cwd
 }
 
@@ -129,7 +129,7 @@ func newSystem() *osSys {
 	}
 
 	return &osSys{
-		cwd:                tspath.NormalizePath(cwd),
+		cwd:                tspath.RootedDirectoryPathFromAbsolute(cwd),
 		fs:                 bundled.WrapFS(osvfs.FS()),
 		defaultLibraryPath: bundled.LibPath(),
 		writer:             os.Stdout,

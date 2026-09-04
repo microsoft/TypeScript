@@ -20,6 +20,7 @@ import (
 	lsproto "github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	nodebuilder "github.com/microsoft/TypeScript/tsc/internal/nodebuilder"
 	spanmap "github.com/microsoft/TypeScript/tsc/internal/spanmap"
+	tspath "github.com/microsoft/TypeScript/tsc/internal/tspath"
 )
 
 func main() {
@@ -858,6 +859,10 @@ func main() {
 			"TS":      toInt32(core.ScriptKindTS),
 			"TSX":     toInt32(core.ScriptKindTSX),
 			"JSON":    toInt32(core.ScriptKindJSON),
+		},
+		"CaseSensitivity": {
+			"Insensitive": toInt32(tspath.CaseInsensitive),
+			"Sensitive":   toInt32(tspath.CaseSensitive),
 		},
 		"TokenFlags": {
 			"None":                           toInt32(ast.TokenFlagsNone),

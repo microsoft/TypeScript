@@ -13,6 +13,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/harnessutil"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/stringtestutil"
 	"github.com/microsoft/TypeScript/tsc/internal/tsoptions"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfstest"
 	"gotest.tools/v3/assert"
 )
@@ -2247,7 +2248,7 @@ func TestBuildOutputPaths(t *testing.T) {
 	type tscOutputPathScenario struct {
 		subScenario      string
 		files            FileMap
-		expectedDtsNames []string
+		expectedDtsNames []tspath.RootedFilePath
 	}
 	runOutputPaths := func(s *tscOutputPathScenario) {
 		t.Helper()
@@ -2267,7 +2268,7 @@ func TestBuildOutputPaths(t *testing.T) {
 		t.Run("GetOutputFileNames/"+s.subScenario, func(t *testing.T) {
 			t.Parallel()
 			sys := newTestSys(input, false)
-			config, _ := tsoptions.GetParsedCommandLineOfConfigFile("/home/src/workspaces/project/tsconfig.json", &core.CompilerOptions{}, nil, sys, nil)
+			config, _ := tsoptions.GetParsedCommandLineOfConfigFile("/home/src/workspaces/project/tsconfig.json", &core.CompilerOptions{}, nil, sys.FS(), nil)
 			assert.DeepEqual(t, slices.Collect(config.GetOutputFileNames()), s.expectedDtsNames)
 		})
 	}
@@ -2283,7 +2284,7 @@ func TestBuildOutputPaths(t *testing.T) {
                     },
                 }`),
 			},
-			expectedDtsNames: []string{
+			expectedDtsNames: []tspath.RootedFilePath{
 				"/home/src/workspaces/project/dist/src/index.js",
 			},
 		},
@@ -2299,7 +2300,7 @@ func TestBuildOutputPaths(t *testing.T) {
                     },
                 }`),
 			},
-			expectedDtsNames: []string{
+			expectedDtsNames: []tspath.RootedFilePath{
 				"/home/src/workspaces/project/dist/src/index.js",
 				"/home/src/workspaces/project/dist/src/index.d.ts",
 			},
@@ -2316,7 +2317,7 @@ func TestBuildOutputPaths(t *testing.T) {
                     },
                 }`),
 			},
-			expectedDtsNames: []string{
+			expectedDtsNames: []tspath.RootedFilePath{
 				"/home/src/workspaces/project/dist/index.js",
 			},
 		},
@@ -2334,7 +2335,7 @@ func TestBuildOutputPaths(t *testing.T) {
                     },
                 }`),
 			},
-			expectedDtsNames: []string{
+			expectedDtsNames: []tspath.RootedFilePath{
 				"/home/src/workspaces/project/dist/index.js",
 				"/home/src/workspaces/project/types/type.js",
 			},
@@ -2354,7 +2355,7 @@ func TestBuildOutputPaths(t *testing.T) {
                     },
                 }`),
 			},
-			expectedDtsNames: []string{
+			expectedDtsNames: []tspath.RootedFilePath{
 				"/home/src/workspaces/project/dist/index.js",
 				"/home/src/workspaces/project/dist/index.d.ts",
 				"/home/src/workspaces/project/types/type.js",

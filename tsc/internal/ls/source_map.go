@@ -35,12 +35,12 @@ func (l *LanguageService) sourceFileRangeToLSPLocationForFeature(file *ast.Sourc
 // getMappedLocation follows declaration source maps from a .d.ts range to its source location.
 // It is an implementation detail of sourceFileRangeToLSPLocation; LS features should not call it directly,
 // because it does not preserve a content-mapper projection or apply span-map feature filtering.
-func (l *LanguageService) getMappedLocation(fileName string, fileRange core.TextRange) (lsproto.Location, spanmap.Fidelity) {
+func (l *LanguageService) getMappedLocation(fileName tspath.RootedFilePath, fileRange core.TextRange) (lsproto.Location, spanmap.Fidelity) {
 	startPos := l.tryGetSourcePosition(fileName, core.TextPos(fileRange.Pos()))
 	if startPos == nil {
 		lspRange, fidelity := l.createLspRangeFromRange(fileRange, l.getScript(fileName))
 		return lsproto.Location{
-			Uri:   lsconv.FileNameToDocumentURI(fileName),
+			Uri:   lsconv.FilePathToDocumentURI(fileName),
 			Range: lspRange,
 		}, fidelity
 	}
@@ -57,21 +57,21 @@ func (l *LanguageService) getMappedLocation(fileName string, fileRange core.Text
 	newRange := core.NewTextRange(startPos.Pos, endPos.Pos)
 	lspRange, fidelity := l.createLspRangeFromRange(newRange, l.getScript(startPos.FileName))
 	return lsproto.Location{
-		Uri:   lsconv.FileNameToDocumentURI(startPos.FileName),
+		Uri:   lsconv.FilePathToDocumentURI(startPos.FileName),
 		Range: lspRange,
 	}, fidelity
 }
 
 type script struct {
-	fileName string
+	fileName tspath.RootedFilePath
 	text     string
 }
 
-func (s *script) FileName() string {
+func (s *script) FileName() tspath.RootedFilePath {
 	return s.fileName
 }
 
-func (s *script) OriginalFileName() string { return s.fileName }
+func (s *script) OriginalFileName() tspath.RootedFilePath { return s.fileName }
 
 func (s *script) Text() string {
 	return s.text
@@ -82,7 +82,7 @@ func (s *script) SpanMap() *spanmap.SpanMap { return nil }
 
 var _ lsconv.Script = (*script)(nil)
 
-func (l *LanguageService) getScript(fileName string) *script {
+func (l *LanguageService) getScript(fileName tspath.RootedFilePath) *script {
 	text, ok := l.host.ReadFile(fileName)
 	if !ok {
 		return nil
@@ -91,7 +91,7 @@ func (l *LanguageService) getScript(fileName string) *script {
 }
 
 func (l *LanguageService) tryGetSourcePosition(
-	fileName string,
+	fileName tspath.RootedFilePath,
 	position core.TextPos,
 ) *sourcemap.DocumentPosition {
 	newPos := l.tryGetSourcePositionWorker(fileName, position)
@@ -104,10 +104,10 @@ func (l *LanguageService) tryGetSourcePosition(
 }
 
 func (l *LanguageService) tryGetSourcePositionWorker(
-	fileName string,
+	fileName tspath.RootedFilePath,
 	position core.TextPos,
 ) *sourcemap.DocumentPosition {
-	if !tspath.IsDeclarationFileName(fileName) {
+	if !fileName.IsDeclarationFile() {
 		return nil
 	}
 
@@ -123,7 +123,7 @@ func (l *LanguageService) tryGetSourcePositionWorker(
 }
 
 func (l *LanguageService) tryGetGeneratedPosition(
-	fileName string,
+	fileName tspath.RootedFilePath,
 	position core.TextPos,
 ) *sourcemap.DocumentPosition {
 	newPos := l.tryGetGeneratedPositionWorker(fileName, position)
@@ -136,10 +136,10 @@ func (l *LanguageService) tryGetGeneratedPosition(
 }
 
 func (l *LanguageService) tryGetGeneratedPositionWorker(
-	fileName string,
+	fileName tspath.RootedFilePath,
 	position core.TextPos,
 ) *sourcemap.DocumentPosition {
-	if tspath.IsDeclarationFileName(fileName) {
+	if fileName.IsDeclarationFile() {
 		return nil
 	}
 
@@ -148,7 +148,7 @@ func (l *LanguageService) tryGetGeneratedPositionWorker(
 		return nil
 	}
 
-	path := l.toPath(fileName)
+	path := program.PathKeyForFileName(fileName)
 	// If this is source file of project reference source (instead of redirect) there is no generated position
 	if program.IsSourceFromProjectReference(path) {
 		return nil

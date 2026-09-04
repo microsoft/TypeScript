@@ -350,9 +350,11 @@ type typeRenderer struct {
 	seen               map[*types.TypeName]bool
 	names              map[string]*types.TypeName
 	imports            map[string][]string
+	typeImports        map[string][]string
 	docs               map[types.Object]string
 	packages           map[string]*packages.Package
 	documentIdentifier *types.TypeName
+	rawCompilerOptions *types.TypeName
 }
 
 func newTypeRenderer(apiPackage *packages.Package) *typeRenderer {
@@ -361,6 +363,7 @@ func newTypeRenderer(apiPackage *packages.Package) *typeRenderer {
 		seen:           make(map[*types.TypeName]bool),
 		names:          make(map[string]*types.TypeName),
 		imports:        make(map[string][]string),
+		typeImports:    make(map[string][]string),
 		docs:           make(map[types.Object]string),
 		packages:       make(map[string]*packages.Package),
 	}
@@ -448,7 +451,7 @@ func (r *typeRenderer) typeString(t types.Type, allowNull bool) string {
 	case *types.Array:
 		result = arrayElement(r.typeString(t.Elem(), false)) + "[]"
 	case *types.Map:
-		result = fmt.Sprintf("Record<string, %s>", r.typeString(t.Elem(), true))
+		result = fmt.Sprintf("Record<%s, %s>", r.typeString(t.Key(), false), r.typeString(t.Elem(), true))
 	case *types.Interface:
 		result = "unknown"
 	case *types.Struct:
@@ -492,6 +495,8 @@ func (r *typeRenderer) namedType(named *types.Named) string {
 	case r.apiPackagePath + ".DocumentIdentifier":
 		r.documentIdentifier = obj
 		return "DocumentIdentifier"
+	case r.apiPackagePath + ".ProjectID":
+		return r.importTypeOnly("PathKey", "../ast/index.ts")
 	case "github.com/microsoft/TypeScript/tsc/internal/packagejson.JSONValue":
 		return "unknown"
 	case "github.com/microsoft/TypeScript/tsc/internal/json.Value":
@@ -514,6 +519,21 @@ func (r *typeRenderer) namedType(named *types.Named) string {
 		return r.importType("NewLineKind", "#enums/newLineKind")
 	case "github.com/microsoft/TypeScript/tsc/internal/core.ScriptTarget":
 		return r.importType("ScriptTarget", "#enums/scriptTarget")
+	case "github.com/microsoft/TypeScript/tsc/internal/tspath.RootedPath":
+		return r.importTypeOnly("RootedPath", "../ast/index.ts")
+	case "github.com/microsoft/TypeScript/tsc/internal/tspath.RootedFilePath":
+		return r.importTypeOnly("RootedFilePath", "../ast/index.ts")
+	case "github.com/microsoft/TypeScript/tsc/internal/tspath.RootedDirectoryPath":
+		return r.importTypeOnly("RootedDirectoryPath", "../ast/index.ts")
+	case "github.com/microsoft/TypeScript/tsc/internal/tspath.PathKey":
+		return r.importTypeOnly("PathKey", "../ast/index.ts")
+	case "github.com/microsoft/TypeScript/tsc/internal/tspath.CaseSensitivity":
+		return r.importType("CaseSensitivity", "#enums/caseSensitivity")
+	case "github.com/microsoft/TypeScript/tsc/internal/tsoptions.RawCompilerOptions":
+		r.rawCompilerOptions = obj
+		compilerOptions := r.packages["github.com/microsoft/TypeScript/tsc/internal/core"].Types.Scope().Lookup("CompilerOptions").(*types.TypeName)
+		r.namedType(compilerOptions.Type().(*types.Named))
+		return "RawCompilerOptions"
 	case "github.com/microsoft/TypeScript/tsc/internal/collections.OrderedMap":
 		if named.TypeArgs().Len() != 2 {
 			return "Record<string, unknown>"
@@ -618,7 +638,60 @@ func (r *typeRenderer) declarations() (string, error) {
 		}
 		out.WriteString("}\n\n")
 	}
+	if r.rawCompilerOptions != nil {
+		compilerOptions := r.packages["github.com/microsoft/TypeScript/tsc/internal/core"].Types.Scope().Lookup("CompilerOptions").Type().Underlying().(*types.Struct)
+		writeDoc(&out, "", r.docs[r.rawCompilerOptions])
+		out.WriteString("export interface RawCompilerOptions {\n")
+		for i := range compilerOptions.NumFields() {
+			field, include, optional, nonnil, deprecated, internal := jsonField(compilerOptions, i)
+			if !include || deprecated || internal {
+				continue
+			}
+			fieldType := r.rawCompilerOptionType(compilerOptions.Field(i).Type(), !optional && !nonnil)
+			writeDoc(&out, "    ", r.docs[compilerOptions.Field(i)])
+			fmt.Fprintf(&out, "    %s%s: %s;\n", propertyName(field), optionalMarker(optional), fieldType)
+		}
+		out.WriteString("}\n\n")
+	}
 	return strings.TrimRight(out.String(), "\n") + "\n", nil
+}
+
+func (r *typeRenderer) rawCompilerOptionType(t types.Type, allowNull bool) string {
+	t = types.Unalias(t)
+	switch t := t.(type) {
+	case *types.Pointer:
+		result := r.rawCompilerOptionType(t.Elem(), false)
+		if allowNull {
+			result += " | null"
+		}
+		return result
+	case *types.Slice:
+		result := arrayElement(r.rawCompilerOptionType(t.Elem(), false)) + "[]"
+		if allowNull {
+			result += " | null"
+		}
+		return result
+	case *types.Array:
+		return arrayElement(r.rawCompilerOptionType(t.Elem(), false)) + "[]"
+	case *types.Map:
+		result := fmt.Sprintf(
+			"Record<%s, %s>",
+			r.rawCompilerOptionType(t.Key(), false),
+			r.rawCompilerOptionType(t.Elem(), true),
+		)
+		if allowNull {
+			result += " | null"
+		}
+		return result
+	case *types.Named:
+		switch t.Obj().Pkg().Path() + "." + t.Obj().Name() {
+		case "github.com/microsoft/TypeScript/tsc/internal/tspath.RootedPath",
+			"github.com/microsoft/TypeScript/tsc/internal/tspath.RootedFilePath",
+			"github.com/microsoft/TypeScript/tsc/internal/tspath.RootedDirectoryPath":
+			return "string"
+		}
+	}
+	return r.typeString(t, allowNull)
 }
 
 func writeDoc(out *bytes.Buffer, indent string, doc string) {
@@ -647,26 +720,54 @@ func jsDocLine(line string) string {
 
 func (r *typeRenderer) importDeclarations() string {
 	var out bytes.Buffer
-	paths := make([]string, 0, len(r.imports))
+	paths := make([]string, 0, len(r.imports)+len(r.typeImports))
 	for path := range r.imports {
 		paths = append(paths, path)
 	}
+	for path := range r.typeImports {
+		if _, ok := r.imports[path]; !ok {
+			paths = append(paths, path)
+		}
+	}
 	sort.Strings(paths)
 	for _, path := range paths {
-		names := r.imports[path]
-		sort.Strings(names)
-		fmt.Fprintf(&out, "import { %s } from %q;\n", strings.Join(names, ", "), path)
+		if names := r.imports[path]; len(names) > 0 {
+			sort.Strings(names)
+			fmt.Fprintf(&out, "import { %s } from %q;\n", strings.Join(names, ", "), path)
+		}
+		if names := r.typeImports[path]; len(names) > 0 {
+			sort.Strings(names)
+			fmt.Fprintf(&out, "import type { %s } from %q;\n", strings.Join(names, ", "), path)
+		}
 	}
 	out.WriteString("\n")
 	for _, path := range paths {
-		fmt.Fprintf(&out, "export { %s } from %q;\n", strings.Join(r.imports[path], ", "), path)
+		if names := r.imports[path]; len(names) > 0 {
+			fmt.Fprintf(&out, "export { %s } from %q;\n", strings.Join(names, ", "), path)
+		}
+		if names := r.typeImports[path]; len(names) > 0 {
+			fmt.Fprintf(&out, "export type { %s } from %q;\n", strings.Join(names, ", "), path)
+		}
 	}
 	return out.String()
 }
 
 func (r *typeRenderer) importType(name string, path string) string {
+	if slices.Contains(r.typeImports[path], name) {
+		panic(fmt.Sprintf("%s from %s imported as both a type and a value", name, path))
+	}
 	if !slices.Contains(r.imports[path], name) {
 		r.imports[path] = append(r.imports[path], name)
+	}
+	return name
+}
+
+func (r *typeRenderer) importTypeOnly(name string, path string) string {
+	if slices.Contains(r.imports[path], name) {
+		panic(fmt.Sprintf("%s from %s imported as both a value and a type", name, path))
+	}
+	if !slices.Contains(r.typeImports[path], name) {
+		r.typeImports[path] = append(r.typeImports[path], name)
 	}
 	return name
 }

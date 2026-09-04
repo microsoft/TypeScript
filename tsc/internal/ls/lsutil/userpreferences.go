@@ -10,6 +10,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/json"
 	"github.com/microsoft/TypeScript/tsc/internal/modulespecifiers"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfsmatch"
 )
 
@@ -882,8 +883,8 @@ func (p UserPreferences) ModuleSpecifierPreferences() modulespecifiers.UserPrefe
 	}
 }
 
-func (p UserPreferences) ParsedAutoImportFileExcludePatterns(useCaseSensitiveFileNames bool) *vfsmatch.SpecMatcher {
-	return vfsmatch.NewSpecMatcher(p.AutoImportFileExcludePatterns, "", vfsmatch.UsageExclude, useCaseSensitiveFileNames)
+func (p UserPreferences) ParsedAutoImportFileExcludePatterns(caseSensitivity tspath.CaseSensitivity) *vfsmatch.SpecMatcher {
+	return vfsmatch.NewSpecMatcher(p.AutoImportFileExcludePatterns, "", vfsmatch.UsageExclude, caseSensitivity)
 }
 
 func (p UserPreferences) IsModuleSpecifierExcluded(moduleSpecifier string) bool {

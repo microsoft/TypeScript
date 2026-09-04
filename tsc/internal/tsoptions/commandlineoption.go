@@ -4,6 +4,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 )
 
 type CommandLineOptionKind string
@@ -18,12 +19,75 @@ const (
 	CommandLineOptionTypeEnum          CommandLineOptionKind = "enum" // map
 )
 
+type CommandLineOptionPathKind uint8
+
+const (
+	CommandLineOptionPathKindNone CommandLineOptionPathKind = iota
+	CommandLineOptionPathKindFile
+	CommandLineOptionPathKindDirectory
+	CommandLineOptionPathKindFileOrDirectory
+	CommandLineOptionPathKindSourceMapLocation
+	CommandLineOptionPathKindFileSpec
+	CommandLineOptionPathKindPathPattern
+	CommandLineOptionPathKindResolvedPathPattern
+	CommandLineOptionPathKindConfigLocator
+)
+
+func (k CommandLineOptionPathKind) IsRooted() bool {
+	switch k {
+	case CommandLineOptionPathKindFile,
+		CommandLineOptionPathKindDirectory,
+		CommandLineOptionPathKindFileOrDirectory,
+		CommandLineOptionPathKindResolvedPathPattern:
+		return true
+	default:
+		return false
+	}
+}
+
+func (k CommandLineOptionPathKind) IsFileSystemPath() bool {
+	switch k {
+	case CommandLineOptionPathKindFile,
+		CommandLineOptionPathKindDirectory,
+		CommandLineOptionPathKindFileOrDirectory:
+		return true
+	default:
+		return false
+	}
+}
+
+func PathValueAsString(value any) (string, bool) {
+	switch value := value.(type) {
+	case tspath.RootedFilePath:
+		return value.AsString(), true
+	case tspath.RootedDirectoryPath:
+		return value.AsString(), true
+	case tspath.RootedPath:
+		return value.AsString(), true
+	case tspath.SourceMapLocation:
+		return value.AsString(), true
+	default:
+		return "", false
+	}
+}
+
+func PathValuesAsStrings(value any) ([]string, bool) {
+	switch value := value.(type) {
+	case []tspath.RootedFilePath:
+		return core.Map(value, func(path tspath.RootedFilePath) string { return path.AsString() }), true
+	case []tspath.RootedDirectoryPath:
+		return core.Map(value, func(path tspath.RootedDirectoryPath) string { return path.AsString() }), true
+	default:
+		return nil, false
+	}
+}
+
 type CommandLineOption struct {
 	Name, ShortName string
 	Kind            CommandLineOptionKind
 
 	// used in parsing
-	IsFilePath        bool
+	PathKind          CommandLineOptionPathKind
 	IsTSConfigOnly    bool
 	IsCommandLineOnly bool
 
@@ -109,14 +173,14 @@ var commandLineOptionElements = map[string]*CommandLineOption{
 		DefaultValueDescription: core.TSUnknown,
 	},
 	"rootDirs": {
-		Name:       "rootDirs",
-		Kind:       CommandLineOptionTypeString,
-		IsFilePath: true,
+		Name:     "rootDirs",
+		Kind:     CommandLineOptionTypeString,
+		PathKind: CommandLineOptionPathKindDirectory,
 	},
 	"typeRoots": {
-		Name:       "typeRoots",
-		Kind:       CommandLineOptionTypeString,
-		IsFilePath: true,
+		Name:     "typeRoots",
+		Kind:     CommandLineOptionTypeString,
+		PathKind: CommandLineOptionPathKindDirectory,
 	},
 	"types": {
 		Name: "types",
@@ -144,32 +208,36 @@ var commandLineOptionElements = map[string]*CommandLineOption{
 		Kind: CommandLineOptionTypeObject,
 	},
 	"files": {
-		Name: "files",
-		Kind: CommandLineOptionTypeString,
+		Name:     "files",
+		Kind:     CommandLineOptionTypeString,
+		PathKind: CommandLineOptionPathKindFileSpec,
 	},
 	"include": {
-		Name: "include",
-		Kind: CommandLineOptionTypeString,
+		Name:     "include",
+		Kind:     CommandLineOptionTypeString,
+		PathKind: CommandLineOptionPathKindPathPattern,
 	},
 	"exclude": {
-		Name: "exclude",
-		Kind: CommandLineOptionTypeString,
+		Name:     "exclude",
+		Kind:     CommandLineOptionTypeString,
+		PathKind: CommandLineOptionPathKindPathPattern,
 	},
 	"extends": {
-		Name: "extends",
-		Kind: CommandLineOptionTypeString,
+		Name:     "extends",
+		Kind:     CommandLineOptionTypeString,
+		PathKind: CommandLineOptionPathKindConfigLocator,
 	},
 	// For Watch options
 	"excludeDirectories": {
 		Name:            "excludeDirectory",
 		Kind:            CommandLineOptionTypeString,
-		IsFilePath:      true,
+		PathKind:        CommandLineOptionPathKindResolvedPathPattern,
 		extraValidation: extraValidationSpec,
 	},
 	"excludeFiles": {
 		Name:            "excludeFile",
 		Kind:            CommandLineOptionTypeString,
-		IsFilePath:      true,
+		PathKind:        CommandLineOptionPathKindResolvedPathPattern,
 		extraValidation: extraValidationSpec,
 	},
 	// Test infra options

@@ -112,8 +112,8 @@ const flushThreshold = 256 * 1024
 // Tracing manages the overall tracing session including all checkers
 type Tracing struct {
 	fs               vfs.FS
-	traceDir         string
-	tracePath        string
+	traceDir         tspath.RootedDirectoryPath
+	tracePath        tspath.RootedFilePath
 	configFilePath   string
 	legend           []TraceRecord
 	tracers          []*typeTracer
@@ -149,11 +149,11 @@ const (
 // StartTracing creates a new tracing session.
 // When deterministic is true, timestamps use a monotonic counter instead of
 // real wall-clock time, producing stable output for test baselines.
-func StartTracing(fs vfs.FS, traceDir string, configFilePath string, deterministic bool) (*Tracing, error) {
+func StartTracing(fs vfs.FS, traceDir tspath.RootedDirectoryPath, configFilePath string, deterministic bool) (*Tracing, error) {
 	tr := &Tracing{
 		fs:             fs,
 		traceDir:       traceDir,
-		tracePath:      tspath.CombinePaths(traceDir, traceFileName),
+		tracePath:      traceDir.ResolveFile(traceFileName),
 		configFilePath: configFilePath,
 		legend:         []TraceRecord{},
 		tracers:        []*typeTracer{},
@@ -416,7 +416,7 @@ func (tr *Tracing) NewTypeTracer(checkerIndex int) Tracer {
 	tr.mu.Lock()
 	defer tr.mu.Unlock()
 
-	typesPath := tspath.CombinePaths(tr.traceDir, fmt.Sprintf("types_%d.json", checkerIndex))
+	typesPath := tr.traceDir.ResolveFile(fmt.Sprintf("types_%d.json", checkerIndex))
 	tracer := &typeTracer{
 		fs:           tr.fs,
 		checkerIndex: checkerIndex,
@@ -426,8 +426,8 @@ func (tr *Tracing) NewTypeTracer(checkerIndex int) Tracer {
 	tr.tracers = append(tr.tracers, tracer)
 	tr.legend = append(tr.legend, TraceRecord{
 		ConfigFilePath: tr.configFilePath,
-		TracePath:      tr.tracePath,
-		TypesPath:      typesPath,
+		TracePath:      tr.tracePath.AsString(),
+		TypesPath:      typesPath.AsString(),
 		CheckerID:      checkerIndex,
 	})
 	return tracer
@@ -469,7 +469,7 @@ func (tr *Tracing) StopTracing() error {
 	})
 
 	// Write the legend file
-	legendPath := tspath.CombinePaths(tr.traceDir, "legend.json")
+	legendPath := tr.traceDir.ResolveFile("legend.json")
 	legendData, err := json.MarshalIndent(tr.legend, "", "  ")
 	if err != nil {
 		return fmt.Errorf("failed to marshal legend file: %w", err)
@@ -485,7 +485,7 @@ func (tr *Tracing) StopTracing() error {
 type typeTracer struct {
 	fs           vfs.FS
 	checkerIndex int
-	typesPath    string
+	typesPath    tspath.RootedFilePath
 	types        []TracedType
 	mu           sync.Mutex
 }
@@ -750,7 +750,7 @@ func getLocation(node *ast.Node) *Location {
 	endLine, endChar := scanner.GetECMALineAndUTF16CharacterOfPosition(file, node.End())
 
 	return &Location{
-		Path: string(tspath.ToPath(file.FileName(), "", false)),
+		Path: tspath.CaseInsensitive.PathKey(tspath.RootedPath(file.FileName())).AsString(),
 		Start: &LineAndChar{
 			Line:      startLine + 1,
 			Character: int(startChar) + 1,

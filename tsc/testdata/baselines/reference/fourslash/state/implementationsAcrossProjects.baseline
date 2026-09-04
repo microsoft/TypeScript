@@ -1,4 +1,4 @@
-UseCaseSensitiveFileNames: true
+CaseSensitivity: true
 //// [/projects/container/compositeExec/index.ts] *new* 
 import { Foo } from "../lib";
 class A2 implements Foo {

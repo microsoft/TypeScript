@@ -49,7 +49,7 @@ func TestCreateProgram(t *testing.T) {
 	assert.Equal(t, response.Snapshot, SnapshotID(4))
 	assert.Equal(t, session.latestSnapshot, baseResponse.Snapshot)
 	assert.Assert(t, response.Project != nil)
-	assert.DeepEqual(t, response.Project.RootFiles, []string{fileName})
+	assert.DeepEqual(t, response.Project.RootFiles, []tspath.RootedFilePath{tspath.RootedFilePathFromNormalized(fileName)})
 	assert.Equal(t, response.Project.CompilerOptions.Strict, core.TSTrue)
 
 	snapshot, err := session.getSnapshotData(response.Snapshot)
@@ -226,7 +226,10 @@ func TestCreateProgramPreservesRootFileOrder(t *testing.T) {
 		},
 	})
 	assert.NilError(t, err)
-	assert.DeepEqual(t, oldResponse.Project.RootFiles, []string{fileB, fileA})
+	assert.DeepEqual(t, oldResponse.Project.RootFiles, []tspath.RootedFilePath{
+		tspath.RootedFilePathFromNormalized(fileB),
+		tspath.RootedFilePathFromNormalized(fileA),
+	})
 
 	response, err := session.handleCreateProgram(ctx, &CreateProgramParams{
 		RootFiles: []DocumentIdentifier{{FileName: fileA}, {FileName: fileB}},
@@ -239,7 +242,10 @@ func TestCreateProgramPreservesRootFileOrder(t *testing.T) {
 		},
 	})
 	assert.NilError(t, err)
-	assert.DeepEqual(t, response.Project.RootFiles, []string{fileA, fileB})
+	assert.DeepEqual(t, response.Project.RootFiles, []tspath.RootedFilePath{
+		tspath.RootedFilePathFromNormalized(fileA),
+		tspath.RootedFilePathFromNormalized(fileB),
+	})
 
 	snapshot, err := session.getSnapshotData(response.Snapshot)
 	assert.NilError(t, err)
@@ -352,7 +358,7 @@ func TestCreateProgramProjectReferencesAndReuse(t *testing.T) {
 	assert.NilError(t, err)
 	resolvedReferences := oldSnapshot.snapshot.ProjectCollection.InferredProject().Program.GetResolvedProjectReferences()
 	assert.Equal(t, len(resolvedReferences), 1)
-	assert.Equal(t, resolvedReferences[0].ConfigName(), libConfigName)
+	assert.Equal(t, resolvedReferences[0].ConfigName().AsString(), libConfigName)
 
 	assert.NilError(t, sessionUtils.FS().WriteFile(fileName, `export const value: string = "valid";`))
 	equivalentLibReference := &core.ProjectReference{Path: libConfigName, OriginalPath: "../lib"}
@@ -428,7 +434,7 @@ func TestCreateProgramFromConfiguredProgramDoesNotRetainOtherProjects(t *testing
 	assert.Assert(t, baseProject != nil)
 	rootFiles := make([]DocumentIdentifier, len(baseProject.RootFiles))
 	for i, rootFile := range baseProject.RootFiles {
-		rootFiles[i] = DocumentIdentifier{FileName: rootFile}
+		rootFiles[i] = DocumentIdentifier{FileName: rootFile.AsString()}
 	}
 
 	assert.NilError(t, sessionUtils.FS().WriteFile(fileName, `export const value: string = "valid";`))
@@ -454,7 +460,7 @@ func TestCreateProgramFromConfiguredProgramDoesNotRetainOtherProjects(t *testing
 	assert.NilError(t, err)
 	assert.Equal(t, len(updatedSnapshot.snapshot.ProjectCollection.Projects()), 1)
 	assert.Equal(t, len(updatedSnapshot.snapshot.ProjectCollection.ConfiguredProjects()), 0)
-	assert.Assert(t, updatedSnapshot.snapshot.ConfigFileRegistry.GetConfig(tspath.Path(otherConfigFileName)) == nil)
+	assert.Assert(t, updatedSnapshot.snapshot.ConfigFileRegistry.GetConfig(tspath.PathKey(otherConfigFileName)) == nil)
 	updatedProject := updatedSnapshot.snapshot.ProjectCollection.InferredProject()
 	assert.Assert(t, updatedProject != nil)
 	assert.Equal(t, updatedProject.ProgramUpdateKind, project.ProgramUpdateKindSameFileNames)

@@ -92,7 +92,7 @@ func TestCompletionSymbolTypeIsResolvable(t *testing.T) {
 // inferred project — panicked with "ConfigFilePath called on non-configured
 // project".
 //
-// setupLanguageService called Project.ConfigFilePath(), which is only valid for
+// setupLanguageService called Project.ConfigFileKey(), which is only valid for
 // configured projects and panics for inferred ones. The fix uses Project.ID(),
 // which returns the project's path for both configured and inferred projects without panicking.
 func TestCompletionOnInferredProject(t *testing.T) {

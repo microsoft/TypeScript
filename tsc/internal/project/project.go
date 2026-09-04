@@ -21,9 +21,11 @@ import (
 )
 
 const (
-	inferredProjectName = "/dev/null/inferred" // lowercase so toPath is a no-op regardless of settings
+	inferredProjectName = "/dev/null/inferred" // lowercase so canonicalization is a no-op regardless of case sensitivity
 	hr                  = "-----------------------------------------------"
 )
+
+var inferredProjectKey = tspath.PathKeyFromCanonical(inferredProjectName)
 
 //go:generate go tool golang.org/x/tools/cmd/stringer -type=Kind -trimprefix=Kind -output=project_stringer_generated.go
 //go:generate npx dprint fmt project_stringer_generated.go
@@ -56,12 +58,12 @@ const (
 // If changing struct fields, also update the Clone method.
 type Project struct {
 	Kind             Kind
-	currentDirectory string
-	configFileName   string
-	configFilePath   tspath.Path
+	projectDirectory tspath.RootedDirectoryPath
+	configFileName   tspath.RootedFilePath
+	configFilePath   tspath.PathKey
 
 	dirty         bool
-	dirtyFilePath tspath.Path
+	dirtyFilePath tspath.PathKey
 
 	host                            *compilerHost
 	CommandLine                     *tsoptions.ParsedCommandLine
@@ -74,12 +76,12 @@ type Project struct {
 	ProgramLastUpdate uint64
 	// Set of projects that this project could be referencing.
 	// Only set before actually loading config file to get actual project references
-	potentialProjectReferences *collections.Set[tspath.Path]
+	potentialProjectReferences *collections.Set[tspath.PathKey]
 
-	programFilesWatch         *WatchedFiles[*collections.SyncMap[tspath.Path, string]]
+	programFilesWatch         *WatchedFiles[*collections.SyncMap[tspath.PathKey, tspath.RootedFilePath]]
 	typingsWatch              *WatchedFiles[PatternsAndIgnored]
-	contentMapperWatch        *WatchedFiles[[]string]
-	contentMapperWatchedFiles *collections.Set[tspath.Path]
+	contentMapperWatch        *WatchedFiles[[]tspath.RootedFilePath]
+	contentMapperWatchedFiles *collections.Set[tspath.PathKey]
 
 	checkerPool *checkerPool
 
@@ -87,30 +89,38 @@ type Project struct {
 	// used during the most recently completed typings installation.
 	installedTypingsInfo *ata.TypingsInfo
 	// typingsFiles are the root files added by the typings installer.
-	typingsFiles []string
+	typingsFiles []tspath.RootedFilePath
 }
 
 var _ ls.Project = (*Project)(nil)
 
 func NewConfiguredProject(
-	configFileName string,
-	configFilePath tspath.Path,
+	configFileName tspath.RootedFilePath,
+	configFilePath tspath.PathKey,
 	builder *ProjectCollectionBuilder,
 	logger *logging.LogTree,
 ) *Project {
-	return NewProject(configFileName, KindConfigured, tspath.GetDirectoryPath(configFileName), builder, logger)
+	return newProject(configFileName, configFilePath, KindConfigured, configFileName.Directory(), builder, logger)
 }
 
 func NewInferredProject(
-	currentDirectory string,
+	projectDirectory tspath.RootedDirectoryPath,
 	compilerOptions *core.CompilerOptions,
-	rootFileNames []string,
+	rootFileNames []tspath.RootedFilePath,
 	projectReferences []*core.ProjectReference,
 	contentMappers []*contentmapper.Mapper,
 	builder *ProjectCollectionBuilder,
 	logger *logging.LogTree,
 ) *Project {
-	p := NewProject(inferredProjectName, KindInferred, currentDirectory, builder, logger)
+	configFileName := projectDirectory.ResolveFile(inferredProjectName)
+	p := newProject(
+		configFileName,
+		builder.fs.fs.CaseSensitivity().PathKey(tspath.RootedPath(configFileName)),
+		KindInferred,
+		projectDirectory,
+		builder,
+		logger,
+	)
 	if compilerOptions == nil {
 		compilerOptions = &core.CompilerOptions{
 			AllowJs:                    core.TSTrue,
@@ -131,22 +141,21 @@ func NewInferredProject(
 		rootFileNames,
 		projectReferences,
 		contentMappers,
-		tspath.ComparePathsOptions{
-			UseCaseSensitiveFileNames: builder.fs.fs.UseCaseSensitiveFileNames(),
-			CurrentDirectory:          currentDirectory,
-		},
+		projectDirectory,
+		builder.fs.fs.CaseSensitivity(),
 	)
 	return p
 }
 
 func newInferredProjectCommandLine(
 	compilerOptions *core.CompilerOptions,
-	rootFileNames []string,
+	rootFileNames []tspath.RootedFilePath,
 	projectReferences []*core.ProjectReference,
 	contentMappers []*contentmapper.Mapper,
-	comparePathsOptions tspath.ComparePathsOptions,
+	projectDirectory tspath.RootedDirectoryPath,
+	caseSensitivity tspath.CaseSensitivity,
 ) *tsoptions.ParsedCommandLine {
-	commandLine := tsoptions.NewParsedCommandLine(compilerOptions, rootFileNames, projectReferences, comparePathsOptions)
+	commandLine := tsoptions.NewParsedCommandLine(compilerOptions, rootFileNames, projectReferences, projectDirectory, caseSensitivity)
 	commandLine.ParsedConfig.ContentMappers = contentMappers
 	return commandLine
 }
@@ -158,7 +167,15 @@ func newInferredProjectFromProject(
 	builder *ProjectCollectionBuilder,
 	logger *logging.LogTree,
 ) *Project {
-	inferred := NewProject(inferredProjectName, KindInferred, project.currentDirectory, builder, logger)
+	configFileName := project.projectDirectory.ResolveFile(inferredProjectName)
+	inferred := newProject(
+		configFileName,
+		builder.fs.fs.CaseSensitivity().PathKey(tspath.RootedPath(configFileName)),
+		KindInferred,
+		project.projectDirectory,
+		builder,
+		logger,
+	)
 	inferred.CommandLine = project.Program.CommandLine()
 	inferred.Program = project.Program
 	inferred.ProgramLastUpdate = project.ProgramLastUpdate
@@ -169,29 +186,35 @@ func newInferredProjectFromProject(
 	return inferred
 }
 
-func NewProject(
-	configFileName string,
+func newProject(
+	configFileName tspath.RootedFilePath,
+	configFilePath tspath.PathKey,
 	kind Kind,
-	currentDirectory string,
+	projectDirectory tspath.RootedDirectoryPath,
 	builder *ProjectCollectionBuilder,
 	logger *logging.LogTree,
 ) *Project {
 	if logger != nil {
-		logger.Log(fmt.Sprintf("Creating %sProject: %s, currentDirectory: %s", kind.String(), configFileName, currentDirectory))
+		logger.Log(fmt.Sprintf("Creating %sProject: %s, projectDirectory: %s", kind.String(), configFileName, projectDirectory))
 	}
 	project := &Project{
 		configFileName:   configFileName,
+		configFilePath:   configFilePath,
 		Kind:             kind,
-		currentDirectory: currentDirectory,
+		projectDirectory: projectDirectory,
 		dirty:            true,
 	}
 
-	project.configFilePath = tspath.ToPath(configFileName, currentDirectory, builder.fs.fs.UseCaseSensitiveFileNames())
 	project.programFilesWatch = NewWatchedFiles(
-		"program files for "+configFileName,
+		"program files for "+configFileName.AsString(),
 		lsproto.WatchKindCreate|lsproto.WatchKindChange|lsproto.WatchKindDelete,
 		lsproto.GetClientCapabilities(builder.ctx).Workspace.DidChangeWatchedFiles.RelativePatternSupport,
-		createResolutionLookupGlobMapper(builder.sessionOptions.CurrentDirectory, builder.sessionOptions.DefaultLibraryPath, project.currentDirectory, builder.fs.fs.UseCaseSensitiveFileNames()),
+		createResolutionLookupGlobMapper(
+			builder.sessionOptions.CurrentDirectory,
+			builder.sessionOptions.DefaultLibraryPath,
+			projectDirectory,
+			builder.fs.fs.CaseSensitivity(),
+		),
 	)
 	if builder.sessionOptions.TypingsLocation != "" {
 		project.typingsWatch = NewWatchedFiles(
@@ -202,43 +225,43 @@ func NewProject(
 		)
 	}
 	project.contentMapperWatch = NewWatchedFilesForPaths(
-		"content mapper configuration files for "+configFileName,
+		"content mapper configuration files for "+configFileName.AsString(),
 		lsproto.WatchKindCreate|lsproto.WatchKindChange|lsproto.WatchKindDelete,
 		lsproto.GetClientCapabilities(builder.ctx).Workspace.DidChangeWatchedFiles.RelativePatternSupport,
 		builder.sessionOptions.CurrentDirectory,
-		builder.sessionOptions.CurrentDirectory,
-		builder.fs.fs.UseCaseSensitiveFileNames(),
+		builder.fs.fs.CaseSensitivity(),
 	)
 	return project
 }
 
-func (p *Project) Name() string {
+func (p *Project) Name() tspath.RootedFilePath {
 	return p.configFileName
 }
 
-func (p *Project) CurrentDirectory() string {
-	return p.currentDirectory
+func (p *Project) CurrentDirectory() tspath.RootedDirectoryPath {
+	return p.projectDirectory
 }
 
 // DisplayName returns a short, human-readable name for the project,
 // relative to the given workspace root directory.
 // For configured projects, this is the config file path made relative.
-// For inferred projects, this is the last component of the current directory.
-func (p *Project) DisplayName(cwd string) string {
+// For inferred projects, this is the last component of the project directory.
+func (p *Project) DisplayName(cwd tspath.RootedDirectoryPath) string {
 	if p.Kind == KindInferred {
-		return tspath.GetBaseFileName(p.currentDirectory)
+		return p.projectDirectory.BaseName()
 	}
-	return tspath.ConvertToRelativePath(p.configFileName, tspath.ComparePathsOptions{
-		CurrentDirectory: cwd,
-	})
+	if relativePath, ok := tspath.CaseInsensitive.RelativePathFromDirectory(cwd, p.configFileName); ok {
+		return relativePath.AsString()
+	}
+	return p.configFileName.AsString()
 }
 
-func (p *Project) ID() tspath.Path {
+func (p *Project) ID() tspath.PathKey {
 	return p.configFilePath
 }
 
 // ConfigFileName panics if Kind() is not KindConfigured.
-func (p *Project) ConfigFileName() string {
+func (p *Project) ConfigFileName() tspath.RootedFilePath {
 	if p.Kind != KindConfigured {
 		panic("ConfigFileName called on non-configured project")
 	}
@@ -246,14 +269,14 @@ func (p *Project) ConfigFileName() string {
 }
 
 // ConfigFilePath panics if Kind() is not KindConfigured.
-func (p *Project) ConfigFilePath() tspath.Path {
+func (p *Project) ConfigFileKey() tspath.PathKey {
 	if p.Kind != KindConfigured {
-		panic("ConfigFilePath called on non-configured project")
+		panic("ConfigFileKey called on non-configured project")
 	}
 	return p.configFilePath
 }
 
-func (p *Project) Id() tspath.Path {
+func (p *Project) Id() tspath.PathKey {
 	return p.configFilePath
 }
 
@@ -276,22 +299,22 @@ func (p *Project) GetProjectDiagnostics(ctx context.Context) []*ast.Diagnostic {
 	))
 }
 
-func (p *Project) HasFile(fileName string) bool {
-	return p.containsFile(p.toPath(fileName))
+func (p *Project) HasFile(fileName tspath.RootedFilePath) bool {
+	return p.containsFile(p.host.FS().CaseSensitivity().PathKey(tspath.RootedPath(fileName)))
 }
 
-func (p *Project) containsFile(path tspath.Path) bool {
+func (p *Project) containsFile(path tspath.PathKey) bool {
 	return p.Program != nil && p.Program.GetSourceFileByPath(path) != nil
 }
 
-func (p *Project) IsSourceFromProjectReference(path tspath.Path) bool {
+func (p *Project) IsSourceFromProjectReference(path tspath.PathKey) bool {
 	return p.Program != nil && p.Program.IsSourceFromProjectReference(path)
 }
 
 func (p *Project) Clone() *Project {
 	return &Project{
 		Kind:             p.Kind,
-		currentDirectory: p.currentDirectory,
+		projectDirectory: p.projectDirectory,
 		configFileName:   p.configFileName,
 		configFilePath:   p.configFilePath,
 
@@ -350,7 +373,7 @@ func (p *Project) getCommandLineWithTypingsFiles() *tsoptions.ParsedCommandLine 
 		if p.commandLineWithTypingsFiles == nil {
 			// Create an augmented command line that includes typing files
 			originalRootNames := p.CommandLine.FileNames()
-			newRootNames := make([]string, 0, len(originalRootNames)+len(p.typingsFiles))
+			newRootNames := make([]tspath.RootedFilePath, 0, len(originalRootNames)+len(p.typingsFiles))
 			newRootNames = append(newRootNames, originalRootNames...)
 			newRootNames = append(newRootNames, p.typingsFiles...)
 
@@ -360,9 +383,9 @@ func (p *Project) getCommandLineWithTypingsFiles() *tsoptions.ParsedCommandLine 
 	return p.commandLineWithTypingsFiles
 }
 
-func (p *Project) setPotentialProjectReference(configFilePath tspath.Path) {
+func (p *Project) setPotentialProjectReference(configFilePath tspath.PathKey) {
 	if p.potentialProjectReferences == nil {
-		p.potentialProjectReferences = &collections.Set[tspath.Path]{}
+		p.potentialProjectReferences = &collections.Set[tspath.PathKey]{}
 	} else {
 		p.potentialProjectReferences = p.potentialProjectReferences.Clone()
 	}
@@ -372,7 +395,7 @@ func (p *Project) setPotentialProjectReference(configFilePath tspath.Path) {
 func (p *Project) hasPotentialProjectReference(projectTreeRequest *ProjectTreeRequest) bool {
 	if p.CommandLine != nil {
 		for _, path := range p.CommandLine.ResolvedProjectReferencePaths() {
-			if projectTreeRequest.IsProjectReferenced(p.toPath(path)) {
+			if projectTreeRequest.IsProjectReferenced(p.host.FS().CaseSensitivity().PathKey(tspath.RootedPath(path))) {
 				return true
 			}
 		}
@@ -443,7 +466,7 @@ func (p *Project) CreateProgram() CreateProgramResult {
 			}
 		}
 	} else {
-		var typingsLocation string
+		var typingsLocation tspath.RootedDirectoryPath
 		if p.GetTypeAcquisition().Enable.IsTrue() {
 			typingsLocation = p.host.sessionOptions.TypingsLocation
 		}
@@ -470,7 +493,7 @@ func (p *Project) CreateProgram() CreateProgramResult {
 	}
 }
 
-func (p *Project) CloneWatchers() *WatchedFiles[*collections.SyncMap[tspath.Path, string]] {
+func (p *Project) CloneWatchers() *WatchedFiles[*collections.SyncMap[tspath.PathKey, tspath.RootedFilePath]] {
 	return p.programFilesWatch.Clone(p.host.sourceFS.seenFiles)
 }
 
@@ -478,12 +501,8 @@ func (p *Project) log(msg string) {
 	// !!!
 }
 
-func (p *Project) toPath(fileName string) tspath.Path {
-	return tspath.ToPath(fileName, p.currentDirectory, p.host.FS().UseCaseSensitiveFileNames())
-}
-
 func (p *Project) print(writeFileNames bool, writeFileExplanation bool, builder *strings.Builder) string {
-	builder.WriteString(fmt.Sprintf("\nProject '%s'\n", p.Name()))
+	builder.WriteString(fmt.Sprintf("\nProject '%s'\n", p.Name().AsString()))
 	if p.Program == nil {
 		builder.WriteString("\tFiles (0) NoProgram\n")
 	} else {
@@ -492,7 +511,7 @@ func (p *Project) print(writeFileNames bool, writeFileExplanation bool, builder 
 		if writeFileNames {
 			for _, sourceFile := range sourceFiles {
 				builder.WriteString("\t\t")
-				builder.WriteString(sourceFile.FileName())
+				builder.WriteString(sourceFile.FileName().AsString())
 				builder.WriteString("\n")
 			}
 			// !!!

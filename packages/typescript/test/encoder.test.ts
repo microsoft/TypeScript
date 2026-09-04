@@ -1,5 +1,4 @@
 import type {
-    Path,
     SourceFile,
     Statement,
 } from "@typescript/typescript/unstable/ast";
@@ -27,6 +26,11 @@ import {
     createVariableDeclarationList,
     createVariableStatement,
 } from "@typescript/typescript/unstable/ast/factory";
+import {
+    CaseSensitivity,
+    pathKey,
+    toRootedFilePath,
+} from "@typescript/typescript/unstable/path";
 import assert from "node:assert";
 import {
     describe,
@@ -49,7 +53,14 @@ import {
 
 function makeSF(text: string, fileName: string, statements: readonly Statement[]): SourceFile {
     const endOfFileToken = createToken(SyntaxKind.EndOfFile);
-    return createSourceFile(statements, endOfFileToken, text, fileName, fileName as Path);
+    const rootedFilePath = toRootedFilePath(fileName, undefined);
+    return createSourceFile(
+        statements,
+        endOfFileToken,
+        text,
+        rootedFilePath,
+        pathKey(rootedFilePath, CaseSensitivity.Sensitive),
+    );
 }
 
 function decode(data: Uint8Array): RemoteSourceFile {

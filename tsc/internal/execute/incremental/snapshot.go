@@ -132,7 +132,7 @@ func (e *emitSignature) getNewEmitSignature(oldOptions *core.CompilerOptions, ne
 
 type buildInfoDiagnosticWithFileName struct {
 	// filename if it is for a File thats other than its stored for
-	file               tspath.Path
+	file               tspath.PathKey
 	noFile             bool
 	pos                int
 	end                int
@@ -307,22 +307,22 @@ type snapshot struct {
 	// These are the fields that get serialized
 
 	// Information of the file eg. its version, signature etc
-	fileInfos collections.SyncMap[tspath.Path, *FileInfo]
+	fileInfos collections.SyncMap[tspath.PathKey, *FileInfo]
 	options   *core.CompilerOptions
 	//  Contains the map of ReferencedSet=Referenced files of the file if module emit is enabled
 	referencedMap referenceMap
 	// Cache of semantic diagnostics for files with their Path being the key
-	semanticDiagnosticsPerFile collections.SyncMap[tspath.Path, *DiagnosticsOrBuildInfoDiagnosticsWithFileName]
+	semanticDiagnosticsPerFile collections.SyncMap[tspath.PathKey, *DiagnosticsOrBuildInfoDiagnosticsWithFileName]
 	// Cache of dts emit diagnostics for files with their Path being the key
-	emitDiagnosticsPerFile collections.SyncMap[tspath.Path, *DiagnosticsOrBuildInfoDiagnosticsWithFileName]
+	emitDiagnosticsPerFile collections.SyncMap[tspath.PathKey, *DiagnosticsOrBuildInfoDiagnosticsWithFileName]
 	// The map has key by source file's path that has been changed
-	changedFilesSet collections.SyncSet[tspath.Path]
+	changedFilesSet collections.SyncSet[tspath.PathKey]
 	// Files pending to be emitted
-	affectedFilesPendingEmit collections.SyncMap[tspath.Path, FileEmitKind]
+	affectedFilesPendingEmit collections.SyncMap[tspath.PathKey, FileEmitKind]
 	// Name of the file whose dts was the latest to change
-	latestChangedDtsFile string
+	latestChangedDtsFile tspath.RootedFilePath
 	// Hash of d.ts emitted for the file, use to track when emit of d.ts changes
-	emitSignatures collections.SyncMap[tspath.Path, *emitSignature]
+	emitSignatures collections.SyncMap[tspath.PathKey, *emitSignature]
 	// Recorded if program had errors that need to be reported even with --noCheck
 	hasErrors core.Tristate
 	// Recorded if program had semantic errors only for non incremental build
@@ -330,8 +330,8 @@ type snapshot struct {
 	// If semantic diagnostic check is pending
 	checkPending bool
 	// Looked up package.json files from
-	packageJsons        []string
-	missingPackageJsons []string
+	packageJsons        []tspath.RootedFilePath
+	missingPackageJsons []tspath.RootedFilePath
 
 	// Additional fields that are not serialized but needed to track state
 
@@ -340,8 +340,8 @@ type snapshot struct {
 	hasErrorsFromOldState                   core.Tristate
 	hasSemanticErrorsFromOldState           bool
 	allFilesExcludingDefaultLibraryFileOnce sync.Once
-	packageJsonsFromOldState                []string
-	missingPackageJsonsFromOldState         []string
+	packageJsonsFromOldState                []tspath.RootedFilePath
+	missingPackageJsonsFromOldState         []tspath.RootedFilePath
 	//  Cache of all files excluding default library file for the current program
 	allFilesExcludingDefaultLibraryFile []*ast.SourceFile
 	hasChangedDtsFile                   bool
@@ -351,12 +351,12 @@ type snapshot struct {
 	hashWithText bool
 }
 
-func (s *snapshot) addFileToChangeSet(filePath tspath.Path) {
+func (s *snapshot) addFileToChangeSet(filePath tspath.PathKey) {
 	s.changedFilesSet.Add(filePath)
 	s.buildInfoEmitPending.Store(true)
 }
 
-func (s *snapshot) addFileToAffectedFilesPendingEmit(filePath tspath.Path, emitKind FileEmitKind) {
+func (s *snapshot) addFileToAffectedFilesPendingEmit(filePath tspath.PathKey, emitKind FileEmitKind) {
 	existingKind, _ := s.affectedFilesPendingEmit.Load(filePath)
 	s.affectedFilesPendingEmit.Store(filePath, existingKind|emitKind)
 	if emitKind&FileEmitKindDtsErrors != 0 {
@@ -370,7 +370,7 @@ func (s *snapshot) getAllFilesExcludingDefaultLibraryFile(program *compiler.Prog
 		files := program.GetSourceFiles()
 		s.allFilesExcludingDefaultLibraryFile = make([]*ast.SourceFile, 0, len(files))
 		addSourceFile := func(file *ast.SourceFile) {
-			if !program.IsSourceFileDefaultLibrary(file.Path()) {
+			if !program.IsSourceFileDefaultLibrary(file.PathKey()) {
 				s.allFilesExcludingDefaultLibraryFile = append(s.allFilesExcludingDefaultLibraryFile, file)
 			}
 		}
@@ -408,11 +408,12 @@ func diagnosticToStringBuilder(diagnostic *ast.Diagnostic, file *ast.SourceFile,
 	}
 	builder.WriteString("\n")
 	if diagnostic.File() != file {
-		builder.WriteString(tspath.EnsurePathIsNonModuleName(tspath.GetRelativePathFromDirectory(
-			tspath.GetDirectoryPath(string(file.Path())),
-			string(diagnostic.File().Path()),
-			tspath.ComparePathsOptions{},
-		)))
+		diagnosticFileName := diagnostic.File().FileName()
+		if relativePath, ok := tspath.CaseInsensitive.RelativePathFromFile(file.FileName(), diagnosticFileName); ok {
+			builder.WriteString(relativePath.AsModuleSpecifier().AsString())
+		} else {
+			builder.WriteString(diagnosticFileName.AsString())
+		}
 	}
 	if diagnostic.File() != nil {
 		builder.WriteString(fmt.Sprintf("(%d,%d): ", diagnostic.Pos(), diagnostic.Len()))

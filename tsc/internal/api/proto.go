@@ -56,8 +56,12 @@ func SignatureHandle(sig *checker.Signature) SignatureID {
 	return SignatureID(sig.Id())
 }
 
-func parseProjectHandle(handle ProjectID) tspath.Path {
-	return tspath.Path(handle)
+func parseProjectHandle(handle ProjectID) (tspath.PathKey, error) {
+	path, ok := tspath.TryPathKeyFromCanonical(string(handle))
+	if !ok {
+		return "", fmt.Errorf("%w: invalid project handle %q", ErrClientError, handle)
+	}
+	return path, nil
 }
 
 const (
@@ -232,10 +236,10 @@ const (
 
 // InitializeResponse is returned by the initialize method.
 type InitializeResponse struct {
-	// UseCaseSensitiveFileNames indicates whether the host file system is case-sensitive.
-	UseCaseSensitiveFileNames bool `json:"useCaseSensitiveFileNames"`
+	// CaseSensitivity determines how the host file system compares paths.
+	CaseSensitivity tspath.CaseSensitivity `json:"caseSensitivity"`
 	// CurrentDirectory is the server's current working directory.
-	CurrentDirectory string `json:"currentDirectory"`
+	CurrentDirectory tspath.RootedDirectoryPath `json:"currentDirectory"`
 }
 
 // DocumentIdentifier identifies a document by either a file name (plain string) or a URI object.
@@ -258,6 +262,7 @@ type DocumentIdentifier struct {
 var _ json.UnmarshalerFrom = (*DocumentIdentifier)(nil)
 
 func (d *DocumentIdentifier) UnmarshalJSONFrom(dec *json.Decoder) error {
+	*d = DocumentIdentifier{}
 	// Try reading as a plain string first
 	tok, err := dec.ReadToken()
 	if err != nil {
@@ -265,27 +270,44 @@ func (d *DocumentIdentifier) UnmarshalJSONFrom(dec *json.Decoder) error {
 	}
 	switch tok.Kind() {
 	case '"':
+		if tok.String() == "" {
+			return errors.New("DocumentIdentifier: file name must not be empty")
+		}
 		d.FileName = tok.String()
 		return nil
 	case '{':
-		// Read the object fields
+		foundURI := false
 		for dec.PeekKind() != '}' {
 			key, err := dec.ReadToken()
 			if err != nil {
 				return err
 			}
-			isURI := key.String() == "uri"
-			val, err := dec.ReadToken()
-			if err != nil {
-				return err
+			if key.Kind() != '"' {
+				return fmt.Errorf("DocumentIdentifier: expected object field name, got %v", key.Kind())
 			}
-			if isURI {
+			if key.String() == "uri" {
+				if foundURI {
+					return fmt.Errorf("DocumentIdentifier: duplicate field %q", key.String())
+				}
+				val, err := dec.ReadToken()
+				if err != nil {
+					return err
+				}
+				if val.Kind() != '"' || val.String() == "" {
+					return errors.New("DocumentIdentifier: uri must be a non-empty string")
+				}
 				d.URI = lsproto.DocumentUri(val.String())
+				foundURI = true
+			} else if err := dec.SkipValue(); err != nil {
+				return err
 			}
 		}
 		// Consume the closing brace
 		if _, err := dec.ReadToken(); err != nil {
 			return err
+		}
+		if !foundURI {
+			return errors.New("DocumentIdentifier: object must contain uri")
 		}
 		return nil
 	default:
@@ -293,28 +315,21 @@ func (d *DocumentIdentifier) UnmarshalJSONFrom(dec *json.Decoder) error {
 	}
 }
 
-func (d DocumentIdentifier) ToFileName() string {
+func (d DocumentIdentifier) ToFileName(cwd tspath.RootedDirectoryPath) tspath.RootedFilePath {
 	if d.URI != "" {
 		return d.URI.FileName()
 	}
-	return d.FileName
+	return tspath.ToRootedFilePath(d.FileName, cwd)
 }
 
 // ToURI returns the document URI for this identifier. An explicitly provided URI
 // is returned as-is; a file name is first normalized to an absolute path against
 // cwd before being converted to a URI.
-func (d DocumentIdentifier) ToURI(cwd string) lsproto.DocumentUri {
+func (d DocumentIdentifier) ToURI(cwd tspath.RootedDirectoryPath) lsproto.DocumentUri {
 	if d.URI != "" {
 		return d.URI
 	}
-	return lsconv.FileNameToDocumentURI(tspath.GetNormalizedAbsolutePath(d.FileName, cwd))
-}
-
-func (d DocumentIdentifier) ToAbsoluteFileName(cwd string) string {
-	if d.URI != "" {
-		return d.URI.FileName()
-	}
-	return tspath.GetNormalizedAbsolutePath(d.FileName, cwd)
+	return lsconv.FilePathToDocumentURI(d.ToFileName(cwd))
 }
 
 func (d DocumentIdentifier) String() string {
@@ -383,9 +398,10 @@ type CreateProgramParams struct {
 }
 
 type CreateProgramOptions struct {
-	CompilerOptions              core.CompilerOptions     `json:"compilerOptions"`
-	ProjectReferences            []*core.ProjectReference `json:"projectReferences,omitempty"`
-	ConfigFileParsingDiagnostics []*DiagnosticResponse    `json:"configFileParsingDiagnostics,omitempty"`
+	CompilerOptions              core.CompilerOptions          `json:"-"`
+	CompilerOptionsInput         *tsoptions.RawCompilerOptions `json:"compilerOptions" nonnil:"true"`
+	ProjectReferences            []*core.ProjectReference      `json:"projectReferences,omitempty"`
+	ConfigFileParsingDiagnostics []*DiagnosticResponse         `json:"configFileParsingDiagnostics,omitempty"`
 }
 
 type CreateProgramOldProgramParams struct {
@@ -401,9 +417,9 @@ type CreateProgramResponse struct {
 // ProjectFileChanges describes what source files changed within a single project.
 type ProjectFileChanges struct {
 	// ChangedFiles lists source file paths whose content differs.
-	ChangedFiles []tspath.Path `json:"changedFiles,omitempty"`
+	ChangedFiles []tspath.PathKey `json:"changedFiles,omitempty"`
 	// DeletedFiles lists source file paths removed from the project's program.
-	DeletedFiles []tspath.Path `json:"deletedFiles,omitempty"`
+	DeletedFiles []tspath.PathKey `json:"deletedFiles,omitempty"`
 }
 
 // SnapshotChanges describes what changed between the previous latest snapshot
@@ -622,9 +638,10 @@ func jsonValueToAny(value packagejson.JSONValue) any {
 }
 
 type TranspileOptions struct {
-	CompilerOptions   *core.CompilerOptions `json:"compilerOptions,omitempty"`
-	FileName          string                `json:"fileName,omitempty"`
-	ReportDiagnostics bool                  `json:"reportDiagnostics,omitempty"`
+	CompilerOptions      *core.CompilerOptions         `json:"-"`
+	CompilerOptionsInput *tsoptions.RawCompilerOptions `json:"compilerOptions,omitempty"`
+	FileName             string                        `json:"fileName,omitempty"`
+	ReportDiagnostics    bool                          `json:"reportDiagnostics,omitempty"`
 }
 
 type TranspileParams struct {
@@ -715,11 +732,11 @@ type ProfileParams struct {
 }
 
 type ProfileResult struct {
-	File string `json:"file"`
+	File tspath.RootedFilePath `json:"file"`
 }
 
 type ConfigFileResponse struct {
-	FileNames         []string                 `json:"fileNames" nonnil:"true"`
+	FileNames         []tspath.RootedFilePath  `json:"fileNames" nonnil:"true"`
 	Options           *core.CompilerOptions    `json:"options" nonnil:"true"`
 	ProjectReferences []*core.ProjectReference `json:"projectReferences,omitempty"`
 	TypeAcquisition   *core.TypeAcquisition    `json:"typeAcquisition,omitempty"`
@@ -739,12 +756,12 @@ type GetDefaultProjectForFileParams struct {
 }
 
 type ProjectResponse struct {
-	Id                ProjectID           `json:"id"`
-	ConfigFileName    string              `json:"configFileName"`
-	CurrentDirectory  string              `json:"currentDirectory"`
-	ParsedCommandLine *ConfigFileResponse `json:"parsedCommandLine" nonnil:"true"`
+	Id                ProjectID                  `json:"id"`
+	ConfigFileName    tspath.RootedFilePath      `json:"configFileName"`
+	CurrentDirectory  tspath.RootedDirectoryPath `json:"currentDirectory"`
+	ParsedCommandLine *ConfigFileResponse        `json:"parsedCommandLine" nonnil:"true"`
 	// Deprecated: Use parsedCommandLine.fileNames.
-	RootFiles []string `json:"rootFiles" nonnil:"true"`
+	RootFiles []tspath.RootedFilePath `json:"rootFiles" nonnil:"true"`
 	// Deprecated: Use parsedCommandLine.options.
 	CompilerOptions *core.CompilerOptions `json:"compilerOptions" nonnil:"true"`
 }
@@ -1083,11 +1100,11 @@ type GetSourceFileNamesParams struct {
 
 // SourceFileMetadata carries program-stored metadata about a single source file.
 type SourceFileMetadata struct {
-	IsDefaultLibrary      bool                `json:"isDefaultLibrary"`
-	IsFromExternalLibrary bool                `json:"isFromExternalLibrary"`
-	PackageJsonType       string              `json:"packageJsonType"`
-	PackageJsonDirectory  string              `json:"packageJsonDirectory"`
-	ImpliedNodeFormat     core.ResolutionMode `json:"impliedNodeFormat"`
+	IsDefaultLibrary      bool                       `json:"isDefaultLibrary"`
+	IsFromExternalLibrary bool                       `json:"isFromExternalLibrary"`
+	PackageJsonType       string                     `json:"packageJsonType"`
+	PackageJsonDirectory  tspath.RootedDirectoryPath `json:"packageJsonDirectory"`
+	ImpliedNodeFormat     core.ResolutionMode        `json:"impliedNodeFormat"`
 }
 
 type ResolveNameParams struct {
@@ -1395,15 +1412,15 @@ type SelectedFilesEmitParams struct {
 }
 
 type EmitResponse struct {
-	EmitSkipped  bool                  `json:"emitSkipped"`
-	Diagnostics  []*DiagnosticResponse `json:"diagnostics" nonnil:"true"`
-	EmittedFiles []string              `json:"emittedFiles" nonnil:"true"`
+	EmitSkipped  bool                    `json:"emitSkipped"`
+	Diagnostics  []*DiagnosticResponse   `json:"diagnostics" nonnil:"true"`
+	EmittedFiles []tspath.RootedFilePath `json:"emittedFiles" nonnil:"true"`
 }
 
 type EmitOutputFile struct {
-	FileName       string  `json:"fileName"`
-	Text           string  `json:"text"`
-	SourceFileName *string `json:"sourceFileName,omitempty"`
+	FileName       tspath.RootedFilePath  `json:"fileName"`
+	Text           string                 `json:"text"`
+	SourceFileName *tspath.RootedFilePath `json:"sourceFileName,omitempty"`
 }
 
 type EmitOutputResponse struct {
@@ -1510,8 +1527,8 @@ type GetProjectDiagnosticsParams struct {
 
 // DiagnosticResponse is the API response for a single diagnostic.
 type DiagnosticResponse struct {
-	// FileName is the path of the file this diagnostic belongs to, if any.
-	FileName string `json:"fileName,omitempty"`
+	// The file name of the file this diagnostic belongs to, if any.
+	FileName tspath.RootedFilePath `json:"fileName,omitempty"`
 	// Pos is the start position of the diagnostic in the source file.
 	Pos int `json:"pos"`
 	// End is the end position of the diagnostic in the source file.

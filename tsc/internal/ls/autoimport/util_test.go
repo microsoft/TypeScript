@@ -4,6 +4,7 @@ import (
 	"reflect"
 	"testing"
 
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfstest"
 	"gotest.tools/v3/assert"
 )
@@ -118,7 +119,7 @@ func TestGetPackageRealpathFuncs_FollowsNodeModulesSymlinks(t *testing.T) {
 		"/real/dep/index.d.ts":                          "export declare const b: number;",
 		"/real/dep/src/utils/helper.d.ts":               "export declare const c: number;",
 		"/real/scoped-dep/index.d.ts":                   "export declare const d: number;",
-	}, true)
+	}, tspath.CaseSensitive)
 
 	toRealpath, _ := getPackageRealpathFuncs(fs, "/symlink-bin/pkg")
 
@@ -126,14 +127,14 @@ func TestGetPackageRealpathFuncs_FollowsNodeModulesSymlinks(t *testing.T) {
 	// prevents a later package-root directory from following its symlink.
 	assert.Equal(
 		t,
-		toRealpath("/real/bin/pkg/node_modules/.package-lock.json"),
+		toRealpath("/real/bin/pkg/node_modules/.package-lock.json").AsString(),
 		"/real/bin/pkg/node_modules/.package-lock.json",
 	)
 
 	// Files inside the package should be converted via string replacement (fast path).
 	assert.Equal(
 		t,
-		toRealpath("/symlink-bin/pkg/index.d.ts"),
+		toRealpath("/symlink-bin/pkg/index.d.ts").AsString(),
 		"/real/bin/pkg/index.d.ts",
 		"package files should be converted via prefix replacement",
 	)
@@ -142,7 +143,7 @@ func TestGetPackageRealpathFuncs_FollowsNodeModulesSymlinks(t *testing.T) {
 	// fs.Realpath so the cache key is the canonical realpath, not the symlink path.
 	assert.Equal(
 		t,
-		toRealpath("/real/bin/pkg/node_modules/dep/index.d.ts"),
+		toRealpath("/real/bin/pkg/node_modules/dep/index.d.ts").AsString(),
 		"/real/dep/index.d.ts",
 		"node_modules symlinks must be followed so the same file gets a consistent cache key",
 	)
@@ -150,7 +151,7 @@ func TestGetPackageRealpathFuncs_FollowsNodeModulesSymlinks(t *testing.T) {
 	// The module resolver also uses toRealpath while traversing directories.
 	assert.Equal(
 		t,
-		toRealpath("/real/bin/pkg/node_modules/dep"),
+		toRealpath("/real/bin/pkg/node_modules/dep").AsString(),
 		"/real/dep",
 		"package-root directories should follow their node_modules symlink",
 	)
@@ -159,12 +160,12 @@ func TestGetPackageRealpathFuncs_FollowsNodeModulesSymlinks(t *testing.T) {
 	// prevents a nested scoped package from following its symlink.
 	assert.Equal(
 		t,
-		toRealpath("/real/bin/pkg/node_modules/@scope"),
+		toRealpath("/real/bin/pkg/node_modules/@scope").AsString(),
 		"/real/bin/pkg/node_modules/@scope",
 	)
 	assert.Equal(
 		t,
-		toRealpath("/real/bin/pkg/node_modules/@scope/dep"),
+		toRealpath("/real/bin/pkg/node_modules/@scope/dep").AsString(),
 		"/real/scoped-dep",
 		"scoped package-root directories should follow their node_modules symlink",
 	)
@@ -173,7 +174,7 @@ func TestGetPackageRealpathFuncs_FollowsNodeModulesSymlinks(t *testing.T) {
 	// use the cached prefix mapping without additional realpath calls.
 	assert.Equal(
 		t,
-		toRealpath("/real/bin/pkg/node_modules/dep/src/utils/helper.d.ts"),
+		toRealpath("/real/bin/pkg/node_modules/dep/src/utils/helper.d.ts").AsString(),
 		"/real/dep/src/utils/helper.d.ts",
 		"subdirectories of a resolved external package should use cached prefix mapping",
 	)
@@ -202,7 +203,7 @@ func TestGetPackageRealpathFuncs_DuplicateCacheKeys(t *testing.T) {
 		"/store/app-a/node_modules/shared-lib": vfstest.Symlink("/store/shared-lib"),
 		"/store/app-b/node_modules/shared-lib": vfstest.Symlink("/store/shared-lib"),
 		"/store/shared-lib/index.d.ts":         "export declare const shared: string;",
-	}, true)
+	}, tspath.CaseSensitive)
 
 	toRealpathA, _ := getPackageRealpathFuncs(fs, "/workspace/packages/app-a")
 	toRealpathB, _ := getPackageRealpathFuncs(fs, "/workspace/packages/app-b")
@@ -210,15 +211,15 @@ func TestGetPackageRealpathFuncs_DuplicateCacheKeys(t *testing.T) {
 	sharedFileViaA := "/store/app-a/node_modules/shared-lib/index.d.ts"
 	sharedFileViaB := "/store/app-b/node_modules/shared-lib/index.d.ts"
 
-	resolvedA := toRealpathA(sharedFileViaA)
-	resolvedB := toRealpathB(sharedFileViaB)
+	resolvedA := toRealpathA(tspath.RootedFilePathFromNormalized(sharedFileViaA))
+	resolvedB := toRealpathB(tspath.RootedFilePathFromNormalized(sharedFileViaB))
 
 	// Both should resolve to the same canonical realpath so the module resolver
 	// uses a single cache key for the shared dependency, avoiding duplicate loads.
 	expectedRealpath := "/store/shared-lib/index.d.ts"
-	assert.Equal(t, resolvedA, expectedRealpath,
+	assert.Equal(t, resolvedA.AsString(), expectedRealpath,
 		"app-a's toRealpath should follow the node_modules symlink to the realpath")
-	assert.Equal(t, resolvedB, expectedRealpath,
+	assert.Equal(t, resolvedB.AsString(), expectedRealpath,
 		"app-b's toRealpath should follow the node_modules symlink to the realpath")
 }
 
@@ -232,21 +233,21 @@ func TestGetPackageRealpathFuncs_NonSymlinkedPackageWithSymlinkedDeps(t *testing
 		"/real/my-pkg/index.d.ts":       "export declare const a: number;",
 		"/real/my-pkg/node_modules/dep": vfstest.Symlink("/real/dep"),
 		"/real/dep/index.d.ts":          "export declare const b: number;",
-	}, true)
+	}, tspath.CaseSensitive)
 
 	toRealpath, _ := getPackageRealpathFuncs(fs, "/real/my-pkg")
 
 	// Files inside the (non-symlinked) package should be returned unchanged.
 	assert.Equal(
 		t,
-		toRealpath("/real/my-pkg/index.d.ts"),
+		toRealpath("/real/my-pkg/index.d.ts").AsString(),
 		"/real/my-pkg/index.d.ts",
 	)
 
 	// Files outside the package reached via symlinked node_modules should still be resolved.
 	assert.Equal(
 		t,
-		toRealpath("/real/my-pkg/node_modules/dep/index.d.ts"),
+		toRealpath("/real/my-pkg/node_modules/dep/index.d.ts").AsString(),
 		"/real/dep/index.d.ts",
 		"symlinked deps must be resolved even when the package dir itself is not a symlink",
 	)

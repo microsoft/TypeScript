@@ -44,7 +44,7 @@ func TestFormatNoTrailingSpace(t *testing.T) {
 			}, "\n")
 			sourceFile := parser.ParseSourceFile(ast.SourceFileParseOptions{
 				FileName: "/test.ts",
-				Path:     "/test.ts",
+				PathKey:  "/test.ts",
 			}, tc.text, core.ScriptKindTS)
 			edits := format.FormatDocument(ctx, sourceFile)
 			newText := applyBulkEdits(tc.text, edits)

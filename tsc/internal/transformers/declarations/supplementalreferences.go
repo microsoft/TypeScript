@@ -12,11 +12,11 @@ import (
 type SupplementalReferencesTransformer struct {
 	host                  DeclarationEmitHost
 	supplementalFiles     []*ast.SourceFile
-	declarationFilePath   string
+	declarationFilePath   tspath.RootedFilePath
 	forceDeclarationPaths bool
 }
 
-func NewSupplementalReferencesTransformer(host DeclarationEmitHost, sourceFile *ast.SourceFile, declarationFilePath string, forceDeclarationPaths bool) *SupplementalReferencesTransformer {
+func NewSupplementalReferencesTransformer(host DeclarationEmitHost, sourceFile *ast.SourceFile, declarationFilePath tspath.RootedFilePath, forceDeclarationPaths bool) *SupplementalReferencesTransformer {
 	return &SupplementalReferencesTransformer{
 		host:                  host,
 		supplementalFiles:     sourceFile.SupplementalSourceFiles(),
@@ -34,16 +34,13 @@ func (t *SupplementalReferencesTransformer) TransformSourceFile(sourceFile *ast.
 		if declarationPath == "" {
 			continue
 		}
+		relativePath, ok := t.host.CaseSensitivity().RelativePathFromFile(t.declarationFilePath, declarationPath)
+		if !ok {
+			panic("supplemental declaration output must share a root with the primary declaration")
+		}
 		sourceFile.ReferencedFiles = append(sourceFile.ReferencedFiles, &ast.FileReference{
 			TextRange: core.NewTextRange(-1, -1),
-			FileName: tspath.GetRelativePathFromFile(
-				t.declarationFilePath,
-				declarationPath,
-				tspath.ComparePathsOptions{
-					CurrentDirectory:          t.host.GetCurrentDirectory(),
-					UseCaseSensitiveFileNames: t.host.UseCaseSensitiveFileNames(),
-				},
-			),
+			FileName:  relativePath.AsModuleSpecifier().AsString(),
 		})
 	}
 	return sourceFile

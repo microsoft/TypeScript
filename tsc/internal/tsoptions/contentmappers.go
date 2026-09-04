@@ -8,22 +8,23 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/module"
 	"github.com/microsoft/TypeScript/tsc/internal/packagejson"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
+	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 )
 
 // resolveContentMapperManifest locates packageName in node_modules (walking up from the directory of
 // containingFile via node module resolution) and reads its package.json to produce the mapper's manifest
 // and package directory. It never executes the package. On failure it returns a diagnostic describing why
 // the mapper could not be resolved; on success the diagnostic is nil.
-func resolveContentMapperManifest(host ParseConfigHost, containingFile string, packageName string) (contentmapper.Manifest, string, *ast.Diagnostic) {
-	resolver := module.NewResolver(host, &core.CompilerOptions{ModuleResolution: core.ModuleResolutionKindBundler}, "", "", nil)
+func resolveContentMapperManifest(fs vfs.FS, containingFile tspath.RootedFilePath, packageName string) (contentmapper.Manifest, tspath.RootedDirectoryPath, *ast.Diagnostic) {
+	resolver := module.NewResolver(fs, containingFile.Directory(), &core.CompilerOptions{ModuleResolution: core.ModuleResolutionKindBundler}, "", "", nil)
 	resolved := resolver.ResolvePackageDirectory(packageName, containingFile, core.ResolutionModeNone, nil)
 	if resolved == nil || resolved.ResolvedFileName == "" {
 		return contentmapper.Manifest{}, "", ast.NewCompilerDiagnostic(diagnostics.The_content_mapper_package_0_could_not_be_resolved, packageName)
 	}
-	packageDirectory := resolved.ResolvedFileName
+	packageDirectory := tspath.RootedDirectoryPathFromPath(tspath.RootedPath(resolved.ResolvedFileName))
 
-	packageJsonPath := tspath.CombinePaths(packageDirectory, "package.json")
-	contents, ok := host.FS().ReadFile(packageJsonPath)
+	packageJsonPath := packageDirectory.ResolveFile("package.json")
+	contents, ok := fs.ReadFile(packageJsonPath)
 	if !ok {
 		return contentmapper.Manifest{}, packageDirectory, ast.NewCompilerDiagnostic(diagnostics.The_content_mapper_package_0_could_not_be_resolved, packageName)
 	}

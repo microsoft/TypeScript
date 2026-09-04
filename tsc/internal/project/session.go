@@ -66,9 +66,9 @@ const watchRequestTimeout = time.Second
 // SessionOptions are the immutable initialization options for a session.
 // Snapshots may reference them as a pointer since they never change.
 type SessionOptions struct {
-	CurrentDirectory       string
-	DefaultLibraryPath     string
-	TypingsLocation        string
+	CurrentDirectory       tspath.RootedDirectoryPath
+	DefaultLibraryPath     tspath.RootedDirectoryPath
+	TypingsLocation        tspath.RootedDirectoryPath
 	PositionEncoding       lsproto.PositionEncodingKind
 	WatchEnabled           bool
 	LoggingEnabled         bool
@@ -107,7 +107,7 @@ type Session struct {
 	logger           logging.Logger
 	backgroundCtx    context.Context
 	backgroundCancel context.CancelFunc
-	toPath           func(string) tspath.Path
+	caseSensitivity  tspath.CaseSensitivity
 	client           Client
 	startTime        time.Time
 	npmExecutor      ata.NpmExecutor
@@ -155,7 +155,7 @@ type Session struct {
 
 	// pendingATAChanges are produced by Automatic Type Acquisition (ATA)
 	// installations and applied to the next snapshot update.
-	pendingATAChanges   map[tspath.Path]*ATAStateChange
+	pendingATAChanges   map[tspath.PathKey]*ATAStateChange
 	pendingATAChangesMu sync.Mutex
 
 	// diagnosticsRefreshCancel is the cancelation function for a scheduled
@@ -184,7 +184,7 @@ type Session struct {
 	performanceTelemetryCancel context.CancelFunc
 
 	// seenProjects tracks projects that have already had telemetry sent.
-	seenProjects collections.SyncSet[tspath.Path]
+	seenProjects collections.SyncSet[tspath.PathKey]
 
 	// watches tracks the current watch globs and how many individual WatchedFiles
 	// are using each glob.
@@ -223,10 +223,10 @@ func NewSession(init *SessionInit) *Session {
 		logger:           sessionLogger,
 		backgroundCtx:    backgroundCtx,
 		backgroundCancel: backgroundCancel,
-		toPath:           snapshotHost.toPath,
+		caseSensitivity:  snapshotHost.caseSensitivity,
 		client:           init.Client,
 		npmExecutor:      init.NpmExecutor,
-		fs:               newOverlayFS(snapshotHost.fs, make(map[tspath.Path]*Overlay), init.Options.PositionEncoding, snapshotHost.toPath),
+		fs:               newOverlayFS(snapshotHost.fs, make(map[tspath.PathKey]*Overlay), init.Options.PositionEncoding),
 		backgroundQueue:  background.NewQueue(),
 		startTime:        time.Now(),
 		snapshot: snapshotHost.newRootSnapshot(
@@ -235,7 +235,7 @@ func NewSession(init *SessionInit) *Session {
 		),
 		initialUserPreferences:   lsutil.NewDefaultUserPreferences(),
 		workspaceUserPreferences: lsutil.NewDefaultUserPreferences(),
-		pendingATAChanges:        make(map[tspath.Path]*ATAStateChange),
+		pendingATAChanges:        make(map[tspath.PathKey]*ATAStateChange),
 		watches:                  newWatchRegistry(),
 	}
 
@@ -243,7 +243,7 @@ func NewSession(init *SessionInit) *Session {
 		session.typingsInstaller = ata.NewTypingsInstaller(&ata.TypingsInstallerOptions{
 			TypingsLocation: init.Options.TypingsLocation,
 			ThrottleLimit:   5,
-		}, session)
+		}, session.FS(), session)
 	}
 	if snapshotHost.contentMapperHost != nil {
 		session.contentMapperTimings = snapshotHost.contentMapperHost.Timings()
@@ -252,14 +252,8 @@ func NewSession(init *SessionInit) *Session {
 	return session
 }
 
-// FS implements module.ResolutionHost
 func (s *Session) FS() vfs.FS {
 	return s.fs.fs
-}
-
-// GetCurrentDirectory implements module.ResolutionHost
-func (s *Session) GetCurrentDirectory() string {
-	return s.options.CurrentDirectory
 }
 
 // Gets copy of current configuration
@@ -278,11 +272,6 @@ func (s *Session) WithCurrentLocale(ctx context.Context) context.Context {
 		return ctx
 	}
 	return locale.WithLocale(ctx, s.client.GetLocale())
-}
-
-// Trace implements module.ResolutionHost
-func (s *Session) Trace(msg string) {
-	panic("ATA module resolution should not use tracing")
 }
 
 func (s *Session) Configure(config lsutil.UserPreferences) {
@@ -409,7 +398,7 @@ func (s *Session) isContentMapperFile(uri lsproto.DocumentUri) bool {
 	snapshot := s.Snapshot()
 	configured := snapshot.ConfigFileRegistry.contentMappers()
 	extensions := append(slices.Clone(configured.extensions), snapshot.inferredProjectContentMapperExtensions...)
-	return tspath.FileExtensionIsOneOf(uri.FileName(), extensions)
+	return uri.FileName().ExtensionIsOneOf(extensions)
 }
 
 func (s *Session) DidSaveFile(ctx context.Context, uri lsproto.DocumentUri) {
@@ -446,25 +435,24 @@ func (s *Session) DidChangeWatchedFiles(ctx context.Context, changes []*lsproto.
 			URI:  change.Uri,
 		})
 
-		if !hasConfigChange && configFileRegistry.isTracked(s.toPath(change.Uri.FileName())) {
+		if !hasConfigChange && configFileRegistry.isTracked(change.Uri.PathKey(s.caseSensitivity)) {
 			hasConfigChange = true
 		}
 
 		if !hasRelevantChange {
-			fileName := change.Uri.FileName()
-			path := s.toPath(fileName).RemoveTrailingDirectorySeparator()
-			pathStr := string(path)
+			filePath := change.Uri.Path()
+			path := s.caseSensitivity.PathKey(filePath).RemoveTrailingDirectorySeparator()
 			if contentMapperWatchedFiles.Has(path) {
 				hasRelevantChange = true
 				continue
 			}
-			i := strings.LastIndexByte(pathStr, '.')
-			if i < 0 || strings.LastIndexByte(pathStr, '/') > i {
+			extension := path.Extension()
+			if extension == "" {
 				// Extensionless paths might be directories.
 				// For creations/changes, we can check the file system.
 				// For deletions, consult the current snapshot cache to avoid treating extensionless file deletions as relevant.
 				if kind != FileChangeKindWatchDelete {
-					hasRelevantChange = s.fs.fs.DirectoryExists(fileName)
+					hasRelevantChange = s.fs.fs.DirectoryExists(tspath.RootedDirectoryPathFromPath(filePath))
 				} else {
 					s.snapshotMu.RLock()
 					snapshot := s.snapshot
@@ -474,8 +462,8 @@ func (s *Session) DidChangeWatchedFiles(ctx context.Context, changes []*lsproto.
 					}
 				}
 			} else {
-				if isRelevantExtension(pathStr[i:]) ||
-					tspath.FileExtensionIsOneOf(pathStr, contentMapperExtensions) {
+				if isRelevantExtension(extension) ||
+					path.ExtensionIsOneOf(contentMapperExtensions) {
 					hasRelevantChange = true
 				}
 			}
@@ -894,11 +882,11 @@ func (s *Session) sendProjectInfoTelemetryForNewProjects(oldSnapshot *Snapshot, 
 	collections.DiffOrderedMaps(
 		oldSnapshot.ProjectCollection.ProjectsByPath(),
 		newSnapshot.ProjectCollection.ProjectsByPath(),
-		func(_ tspath.Path, addedProject *Project) {
+		func(_ tspath.PathKey, addedProject *Project) {
 			s.sendProjectInfoTelemetry(ctx, addedProject)
 		},
-		func(_ tspath.Path, _ *Project) {},
-		func(_ tspath.Path, _, _ *Project) {},
+		func(_ tspath.PathKey, _ *Project) {},
+		func(_ tspath.PathKey, _, _ *Project) {},
 	)
 }
 
@@ -933,7 +921,7 @@ func (s *Session) collectProjectInfoTelemetry(project *Project) lsproto.Telemetr
 
 	configFileName := "other"
 	if project.Kind == KindConfigured {
-		baseName := tspath.GetBaseFileName(project.configFileName)
+		baseName := project.configFileName.BaseName()
 		if baseName == "tsconfig.json" || baseName == "jsconfig.json" {
 			configFileName = baseName
 		}
@@ -1030,7 +1018,7 @@ func countFileStats(sourceFiles []*ast.SourceFile) *lsproto.ProjectInfoTelemetry
 			stats.JsxFileCount++
 			stats.JsxFileSize += size
 		case core.ScriptKindTS:
-			if tspath.IsDeclarationFileName(sf.FileName()) {
+			if sf.FileName().IsDeclarationFile() {
 				stats.DtsFileCount++
 				stats.DtsFileSize += size
 			} else {
@@ -1142,7 +1130,7 @@ func (s *Session) getSnapshotAndDefaultProject(ctx context.Context, uri lsproto.
 		}
 		return nil, nil, nil, fmt.Errorf("no project found for URI %s", uri)
 	}
-	return snapshot, project, ls.NewLanguageService(project.configFilePath, project.GetProgram(), snapshot, uri.FileName()), nil
+	return snapshot, project, ls.NewLanguageService(project.configFilePath, project.GetProgram(), snapshot, uri.FileName().AsString()), nil
 }
 
 func (s *Session) GetLanguageService(ctx context.Context, uri lsproto.DocumentUri) (*ls.LanguageService, error) {
@@ -1192,7 +1180,7 @@ func (s *Session) GetLanguageServicesForDocumentsLoadingProjectTree(ctx context.
 
 	activeFile := ""
 	if len(uris) > 0 {
-		activeFile = uris[0].FileName()
+		activeFile = uris[0].FileName().AsString()
 	}
 
 	projects := snapshot.ProjectCollection.Projects()
@@ -1211,7 +1199,7 @@ func (s *Session) GetLanguageServicesForDocumentsLoadingProjectTree(ctx context.
 func (s *Session) GetLanguageServiceForProjectWithFile(ctx context.Context, project *Project, uri lsproto.DocumentUri) *ls.LanguageService {
 	snapshot := s.getSnapshot(
 		ctx,
-		ResourceRequest{Projects: []tspath.Path{project.Id()}},
+		ResourceRequest{Projects: []tspath.PathKey{project.Id()}},
 		false, /*callerRef*/
 	)
 	// Ensure we have updated project
@@ -1223,7 +1211,7 @@ func (s *Session) GetLanguageServiceForProjectWithFile(ctx context.Context, proj
 	if !project.HasFile(uri.FileName()) {
 		return nil
 	}
-	return ls.NewLanguageService(project.configFilePath, project.GetProgram(), snapshot, uri.FileName())
+	return ls.NewLanguageService(project.configFilePath, project.GetProgram(), snapshot, uri.FileName().AsString())
 }
 
 // WithSnapshotLoadingProjectTree acquires a ref'd snapshot with the
@@ -1231,7 +1219,7 @@ func (s *Session) GetLanguageServiceForProjectWithFile(ctx context.Context, proj
 // for the duration of fn.
 func (s *Session) WithSnapshotLoadingProjectTree(
 	ctx context.Context,
-	requestedProjectTrees *collections.Set[tspath.Path],
+	requestedProjectTrees *collections.Set[tspath.PathKey],
 	fn func(*Snapshot),
 ) {
 	snapshot := s.getSnapshot(
@@ -1271,7 +1259,7 @@ func (s *Session) GetCurrentLanguageServiceWithAutoImports(ctx context.Context, 
 	if project == nil {
 		return nil, fmt.Errorf("no project found for URI %s", uri)
 	}
-	return ls.NewLanguageService(project.configFilePath, project.GetProgram(), snapshot, uri.FileName()), nil
+	return ls.NewLanguageService(project.configFilePath, project.GetProgram(), snapshot, uri.FileName().AsString()), nil
 }
 
 // WithLanguageServiceAndSnapshot synchronously acquires a ref'd snapshot and
@@ -1319,7 +1307,7 @@ func (s *Session) GetLanguageServiceWithAutoImports(ctx context.Context, baseSna
 
 	s.tryAdoptSnapshotChangeInBackground(baseSnapshot, newSnapshot)
 
-	return ls.NewLanguageService(project.configFilePath, project.GetProgram(), newSnapshot, uri.FileName()), nil
+	return ls.NewLanguageService(project.configFilePath, project.GetProgram(), newSnapshot, uri.FileName().AsString()), nil
 }
 
 func (s *Session) tryAdoptSnapshotChangeInBackground(baseSnapshot, newSnapshot *Snapshot) {
@@ -1371,7 +1359,7 @@ func (s *Session) adoptSnapshotChange(baseSnapshot, newSnapshot *Snapshot) {
 	}
 }
 
-func (s *Session) UpdateSnapshot(ctx context.Context, overlays map[tspath.Path]*Overlay, change SnapshotChange) {
+func (s *Session) UpdateSnapshot(ctx context.Context, overlays map[tspath.PathKey]*Overlay, change SnapshotChange) {
 	s.updateSnapshot(ctx, overlays, change, false)
 }
 
@@ -1379,11 +1367,11 @@ func (s *Session) UpdateSnapshot(ctx context.Context, overlays map[tspath.Path]*
 // with an extra reference for the caller. The ref is taken atomically with
 // the snapshot assignment under snapshotMu, so the snapshot is guaranteed
 // to be alive when returned. The caller must call snapshot.Deref() when done.
-func (s *Session) updateSnapshotRef(ctx context.Context, overlays map[tspath.Path]*Overlay, change SnapshotChange) *Snapshot {
+func (s *Session) updateSnapshotRef(ctx context.Context, overlays map[tspath.PathKey]*Overlay, change SnapshotChange) *Snapshot {
 	return s.updateSnapshot(ctx, overlays, change, true)
 }
 
-func (s *Session) updateSnapshot(ctx context.Context, overlays map[tspath.Path]*Overlay, change SnapshotChange, callerRef bool) *Snapshot {
+func (s *Session) updateSnapshot(ctx context.Context, overlays map[tspath.PathKey]*Overlay, change SnapshotChange, callerRef bool) *Snapshot {
 	s.snapshotMu.Lock()
 	oldSnapshot := s.snapshot
 	if !locale.HasLocale(ctx) {
@@ -1547,7 +1535,7 @@ func updateWatch[T any](ctx context.Context, session *Session, logger logging.Lo
 				logger.Logf("%d paths ineligible for watching", len(w.IgnoredPaths))
 				if logger.IsVerbose() {
 					for path := range w.IgnoredPaths {
-						logger.Log("\t" + path)
+						logger.Log("\t" + path.AsString())
 					}
 				}
 			}
@@ -1627,13 +1615,13 @@ func (s *Session) updateWatches(oldSnapshot *Snapshot, newSnapshot *Snapshot) er
 		func(a, b *configFileEntry) bool {
 			return a.rootFilesWatch.ID() == b.rootFilesWatch.ID()
 		},
-		func(_ tspath.Path, addedEntry *configFileEntry) {
+		func(_ tspath.PathKey, addedEntry *configFileEntry) {
 			errors = append(errors, updateWatch(ctx, s, s.logger, nil, addedEntry.rootFilesWatch)...)
 		},
-		func(_ tspath.Path, removedEntry *configFileEntry) {
+		func(_ tspath.PathKey, removedEntry *configFileEntry) {
 			errors = append(errors, updateWatch(ctx, s, s.logger, removedEntry.rootFilesWatch, nil)...)
 		},
-		func(_ tspath.Path, oldEntry, newEntry *configFileEntry) {
+		func(_ tspath.PathKey, oldEntry, newEntry *configFileEntry) {
 			errors = append(errors, updateWatch(ctx, s, s.logger, oldEntry.rootFilesWatch, newEntry.rootFilesWatch)...)
 		},
 	)
@@ -1651,17 +1639,17 @@ func (s *Session) updateWatches(oldSnapshot *Snapshot, newSnapshot *Snapshot) er
 	collections.DiffOrderedMaps(
 		oldSnapshot.ProjectCollection.ProjectsByPath(),
 		newSnapshot.ProjectCollection.ProjectsByPath(),
-		func(_ tspath.Path, addedProject *Project) {
+		func(_ tspath.PathKey, addedProject *Project) {
 			errors = append(errors, updateWatch(ctx, s, s.logger, nil, addedProject.programFilesWatch)...)
 			errors = append(errors, updateWatch(ctx, s, s.logger, nil, addedProject.typingsWatch)...)
 			errors = append(errors, updateWatch(ctx, s, s.logger, nil, addedProject.contentMapperWatch)...)
 		},
-		func(_ tspath.Path, removedProject *Project) {
+		func(_ tspath.PathKey, removedProject *Project) {
 			errors = append(errors, updateWatch(ctx, s, s.logger, removedProject.programFilesWatch, nil)...)
 			errors = append(errors, updateWatch(ctx, s, s.logger, removedProject.typingsWatch, nil)...)
 			errors = append(errors, updateWatch(ctx, s, s.logger, removedProject.contentMapperWatch, nil)...)
 		},
-		func(_ tspath.Path, oldProject, newProject *Project) {
+		func(_ tspath.PathKey, oldProject, newProject *Project) {
 			if oldProject.programFilesWatch.ID() != newProject.programFilesWatch.ID() {
 				errors = append(errors, updateWatch(ctx, s, s.logger, oldProject.programFilesWatch, newProject.programFilesWatch)...)
 			} else {
@@ -1727,13 +1715,13 @@ func (s *Session) Close() {
 	s.SnapshotHost.Close()
 }
 
-func (s *Session) flushChanges(ctx context.Context) (FileChangeSummary, map[tspath.Path]*Overlay, map[tspath.Path]*ATAStateChange, *lsutil.UserPreferences) {
+func (s *Session) flushChanges(ctx context.Context) (FileChangeSummary, map[tspath.PathKey]*Overlay, map[tspath.PathKey]*ATAStateChange, *lsutil.UserPreferences) {
 	s.pendingFileChangesMu.Lock()
 	defer s.pendingFileChangesMu.Unlock()
 	s.pendingATAChangesMu.Lock()
 	defer s.pendingATAChangesMu.Unlock()
 	pendingATAChanges := s.pendingATAChanges
-	s.pendingATAChanges = make(map[tspath.Path]*ATAStateChange)
+	s.pendingATAChanges = make(map[tspath.PathKey]*ATAStateChange)
 	fileChanges, overlays := s.flushChangesLocked(ctx)
 	s.userConfigRWMu.Lock()
 	defer s.userConfigRWMu.Unlock()
@@ -1747,7 +1735,7 @@ func (s *Session) flushChanges(ctx context.Context) (FileChangeSummary, map[tspa
 }
 
 // flushChangesLocked should only be called with s.pendingFileChangesMu held.
-func (s *Session) flushChangesLocked(ctx context.Context) (FileChangeSummary, map[tspath.Path]*Overlay) {
+func (s *Session) flushChangesLocked(ctx context.Context) (FileChangeSummary, map[tspath.PathKey]*Overlay) {
 	if len(s.pendingFileChanges) == 0 {
 		return FileChangeSummary{}, s.fs.Overlays()
 	}
@@ -1773,15 +1761,15 @@ func (s *Session) logProjectChanges(oldSnapshot *Snapshot, newSnapshot *Snapshot
 	collections.DiffOrderedMaps(
 		oldSnapshot.ProjectCollection.ProjectsByPath(),
 		newSnapshot.ProjectCollection.ProjectsByPath(),
-		func(path tspath.Path, addedProject *Project) {
+		func(path tspath.PathKey, addedProject *Project) {
 			// New project added
 			logProject(addedProject)
 		},
-		func(path tspath.Path, removedProject *Project) {
+		func(path tspath.PathKey, removedProject *Project) {
 			// Project removed
 			s.logger.Logf("\nProject '%s' removed\n%s", removedProject.Name(), hr)
 		},
-		func(path tspath.Path, oldProject, newProject *Project) {
+		func(path tspath.PathKey, oldProject, newProject *Project) {
 			// Project updated
 			if newProject.ProgramUpdateKind == ProgramUpdateKindNewFiles {
 				logProject(newProject)
@@ -1802,7 +1790,7 @@ func (s *Session) logCacheStats(snapshot *Snapshot) {
 			parseCacheSize++
 			return true
 		})
-		s.extendedConfigCache.entries.Range(func(_ tspath.Path, _ *ownerCacheEntry[*ExtendedConfigCacheEntry]) bool {
+		s.extendedConfigCache.entries.Range(func(_ tspath.PathKey, _ *ownerCacheEntry[*ExtendedConfigCacheEntry]) bool {
 			extendedConfigCount++
 			return true
 		})
@@ -1856,7 +1844,7 @@ func (s *Session) logCacheStats(snapshot *Snapshot) {
 	}
 }
 
-func (s *Session) NpmInstall(ctx context.Context, cwd string, npmInstallArgs []string) ([]byte, error) {
+func (s *Session) NpmInstall(ctx context.Context, cwd tspath.RootedDirectoryPath, npmInstallArgs []string) ([]byte, error) {
 	return s.npmExecutor.NpmInstall(ctx, cwd, npmInstallArgs)
 }
 
@@ -1902,7 +1890,7 @@ func (s *Session) publishProgramDiagnostics(oldSnapshot *Snapshot, newSnapshot *
 		}
 		for configFilePath, oldProject := range oldSnapshot.ProjectCollection.ProjectsByPath().Entries() {
 			if oldProject.Kind == KindConfigured && oldSnapshot.ProjectCollection.GetOpenConfiguredProjects().Has(configFilePath) {
-				s.publishProjectDiagnostics(s.backgroundContext(), string(configFilePath), nil, oldSnapshot.converters)
+				s.publishProjectDiagnostics(s.backgroundContext(), oldProject.ConfigFileName(), nil, oldSnapshot.converters)
 			}
 		}
 		return
@@ -1916,23 +1904,23 @@ func (s *Session) publishProgramDiagnostics(oldSnapshot *Snapshot, newSnapshot *
 	collections.DiffOrderedMaps(
 		oldProjects,
 		newProjects,
-		func(configFilePath tspath.Path, addedProject *Project) {
+		func(configFilePath tspath.PathKey, addedProject *Project) {
 			if !shouldPublishProgramDiagnostics(addedProject, newSnapshot.ID()) || !newOpenProjects.Has(configFilePath) {
 				return
 			}
-			s.publishProjectDiagnostics(ctx, string(configFilePath), addedProject.GetProjectDiagnostics(ctx), newSnapshot.converters)
+			s.publishProjectDiagnostics(ctx, addedProject.ConfigFileName(), addedProject.GetProjectDiagnostics(ctx), newSnapshot.converters)
 		},
-		func(configFilePath tspath.Path, removedProject *Project) {
+		func(configFilePath tspath.PathKey, removedProject *Project) {
 			if removedProject.Kind != KindConfigured {
 				return
 			}
-			s.publishProjectDiagnostics(ctx, string(configFilePath), nil, oldSnapshot.converters)
+			s.publishProjectDiagnostics(ctx, removedProject.ConfigFileName(), nil, oldSnapshot.converters)
 		},
-		func(configFilePath tspath.Path, oldProject, newProject *Project) {
+		func(configFilePath tspath.PathKey, oldProject, newProject *Project) {
 			if !shouldPublishProgramDiagnostics(newProject, newSnapshot.ID()) || !newOpenProjects.Has(configFilePath) {
 				return
 			}
-			s.publishProjectDiagnostics(ctx, string(configFilePath), newProject.GetProjectDiagnostics(ctx), newSnapshot.converters)
+			s.publishProjectDiagnostics(ctx, newProject.ConfigFileName(), newProject.GetProjectDiagnostics(ctx), newSnapshot.converters)
 		},
 	)
 	// Sync diagnostics for projects whose open-file state changed without a program update.
@@ -1949,10 +1937,10 @@ func (s *Session) publishProgramDiagnostics(oldSnapshot *Snapshot, newSnapshot *
 		if newHasOpenFiles && !oldHasOpenFiles &&
 			(newProject == oldProject || !shouldPublishProgramDiagnostics(newProject, newSnapshot.ID())) {
 			// Project reopened without a program update
-			s.publishProjectDiagnostics(ctx, string(configFilePath), newProject.GetProjectDiagnostics(ctx), newSnapshot.converters)
+			s.publishProjectDiagnostics(ctx, newProject.ConfigFileName(), newProject.GetProjectDiagnostics(ctx), newSnapshot.converters)
 		} else if !newHasOpenFiles && oldHasOpenFiles {
 			// Project closed
-			s.publishProjectDiagnostics(ctx, string(configFilePath), nil, newSnapshot.converters)
+			s.publishProjectDiagnostics(ctx, newProject.ConfigFileName(), nil, newSnapshot.converters)
 		}
 	}
 }
@@ -1964,7 +1952,7 @@ func shouldPublishProgramDiagnostics(p *Project, snapshotID uint64) bool {
 	return p.ProgramUpdateKind > ProgramUpdateKindCloned
 }
 
-func (s *Session) publishProjectDiagnostics(ctx context.Context, configFilePath string, diagnostics []*ast.Diagnostic, converters *lsconv.Converters) {
+func (s *Session) publishProjectDiagnostics(ctx context.Context, configFileName tspath.RootedFilePath, diagnostics []*ast.Diagnostic, converters *lsconv.Converters) {
 	if s.Config().EnableValidation.IsFalse() {
 		diagnostics = nil
 	}
@@ -1975,7 +1963,7 @@ func (s *Session) publishProjectDiagnostics(ctx context.Context, configFilePath 
 	}
 
 	if err := s.client.PublishDiagnostics(ctx, &lsproto.PublishDiagnosticsParams{
-		Uri:         lsconv.FileNameToDocumentURI(configFilePath),
+		Uri:         lsconv.FilePathToDocumentURI(configFileName),
 		Diagnostics: lspDiagnostics,
 	}); err != nil && s.options.LoggingEnabled {
 		s.logger.Logf("Error publishing diagnostics: %v", err)
@@ -2008,7 +1996,7 @@ func (s *Session) publishGlobalDiagnostics(ctx context.Context) {
 			continue
 		}
 		if project.checkerPool.TakeNewGlobalDiagnostics() {
-			s.publishProjectDiagnostics(ctx, string(project.configFilePath), project.GetProjectDiagnostics(ctx), snapshot.converters)
+			s.publishProjectDiagnostics(ctx, project.ConfigFileName(), project.GetProjectDiagnostics(ctx), snapshot.converters)
 		}
 	}
 }
@@ -2019,21 +2007,18 @@ func (s *Session) triggerATAForUpdatedProjects(newSnapshot *Snapshot) {
 			s.backgroundQueue.Enqueue(s.backgroundContext(), func(ctx context.Context) {
 				var logTree *logging.LogTree
 				if s.options.LoggingEnabled {
-					logTree = logging.NewLogTree("Triggering ATA for project " + project.Name())
+					logTree = logging.NewLogTree("Triggering ATA for project " + project.Name().AsString())
 				}
 
 				typingsInfo := project.ComputeTypingsInfo()
 				request := &ata.TypingsInstallRequest{
-					Context:          ctx,
-					ProjectID:        project.configFilePath,
-					TypingsInfo:      &typingsInfo,
-					FileNames:        core.Map(project.Program.GetSourceFiles(), func(file *ast.SourceFile) string { return file.FileName() }),
-					ProjectRootPath:  project.currentDirectory,
-					CompilerOptions:  project.CommandLine.CompilerOptions(),
-					CurrentDirectory: s.options.CurrentDirectory,
-					GetScriptKind:    core.GetScriptKindFromFileName,
-					FS:               s.fs.fs,
-					Logger:           logTree,
+					Context:         ctx,
+					ProjectID:       project.configFilePath,
+					TypingsInfo:     &typingsInfo,
+					FileNames:       core.Map(project.Program.GetSourceFiles(), func(file *ast.SourceFile) tspath.RootedFilePath { return file.FileName() }),
+					ProjectRootPath: project.projectDirectory,
+					FS:              s.fs.fs,
+					Logger:          logTree,
 				}
 
 				projectDisplayName := project.DisplayName(s.options.CurrentDirectory)
@@ -2046,7 +2031,7 @@ func (s *Session) triggerATAForUpdatedProjects(newSnapshot *Snapshot) {
 				}
 				if err != nil {
 					if logTree != nil {
-						s.logger.Log(fmt.Sprintf("ATA installation failed for project %s: %v", project.Name(), err))
+						s.logger.Log(fmt.Sprintf("ATA installation failed for project %s: %v", project.Name().AsString(), err))
 						s.logger.Log(logTree.String())
 					}
 				} else {

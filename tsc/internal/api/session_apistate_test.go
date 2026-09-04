@@ -85,13 +85,13 @@ func TestSessionTracksAndReleasesAPIRefs(t *testing.T) {
 		assert.NilError(t, err)
 		assert.Equal(t, session.openProjects.Len(), 1)
 
-		assert.Assert(t, projectSession.Snapshot().ProjectCollection.ConfiguredProject(tspath.Path(configFileName)) != nil)
+		assert.Assert(t, projectSession.Snapshot().ProjectCollection.ConfiguredProject(tspath.PathKey(configFileName)) != nil)
 
 		// Closing the session releases the single API ref, so the project is no
 		// longer kept loaded.
 		session.Close()
 		assert.Equal(t, session.openProjects.Len(), 0)
-		assert.Assert(t, projectSession.Snapshot().ProjectCollection.ConfiguredProject(tspath.Path(configFileName)) == nil)
+		assert.Assert(t, projectSession.Snapshot().ProjectCollection.ConfiguredProject(tspath.PathKey(configFileName)) == nil)
 	})
 
 	t.Run("explicit close releases the project ref", func(t *testing.T) {
@@ -111,7 +111,7 @@ func TestSessionTracksAndReleasesAPIRefs(t *testing.T) {
 		})
 		assert.NilError(t, err)
 		assert.Equal(t, session.openProjects.Len(), 1)
-		assert.Assert(t, projectSession.Snapshot().ProjectCollection.ConfiguredProject(tspath.Path(configFileName)) != nil)
+		assert.Assert(t, projectSession.Snapshot().ProjectCollection.ConfiguredProject(tspath.PathKey(configFileName)) != nil)
 
 		// Closing a project we hold releases the ref and unloads the project.
 		_, err = session.handleUpdateSnapshot(context.Background(), &UpdateSnapshotParams{
@@ -119,7 +119,7 @@ func TestSessionTracksAndReleasesAPIRefs(t *testing.T) {
 		})
 		assert.NilError(t, err)
 		assert.Equal(t, session.openProjects.Len(), 0)
-		assert.Assert(t, projectSession.Snapshot().ProjectCollection.ConfiguredProject(tspath.Path(configFileName)) == nil)
+		assert.Assert(t, projectSession.Snapshot().ProjectCollection.ConfiguredProject(tspath.PathKey(configFileName)) == nil)
 
 		// Closing a project we don't hold is a no-op (never over-releases).
 		_, err = session.handleUpdateSnapshot(context.Background(), &UpdateSnapshotParams{
@@ -154,7 +154,7 @@ func TestSessionTracksAndReleasesAPIRefs(t *testing.T) {
 		assert.Equal(t, session.openFiles.Len(), 1)
 
 		// The file should resolve to the configured project via ancestor search.
-		assert.Assert(t, projectSession.Snapshot().ProjectCollection.ConfiguredProject(tspath.Path("/home/projects/p/tsconfig.json")) != nil)
+		assert.Assert(t, projectSession.Snapshot().ProjectCollection.ConfiguredProject(tspath.PathKey("/home/projects/p/tsconfig.json")) != nil)
 
 		// Closing a file we don't hold is a no-op (never over-releases).
 		_, err = session.handleUpdateSnapshot(context.Background(), &UpdateSnapshotParams{
@@ -173,7 +173,7 @@ func TestSessionTracksAndReleasesAPIRefs(t *testing.T) {
 		// Closing the file also tears down the configured project that was
 		// auto-loaded to serve it, instead of leaking it.
 		assert.Assert(t,
-			projectSession.Snapshot().ProjectCollection.ConfiguredProject(tspath.Path("/home/projects/p/tsconfig.json")) == nil,
+			projectSession.Snapshot().ProjectCollection.ConfiguredProject(tspath.PathKey("/home/projects/p/tsconfig.json")) == nil,
 			"configured project auto-loaded for the API-opened file should be unloaded after close",
 		)
 
@@ -201,8 +201,8 @@ func TestSessionTracksAndReleasesAPIRefs(t *testing.T) {
 		})
 		assert.NilError(t, err)
 		assert.Equal(t, session.openFiles.Len(), 1)
-		assert.Assert(t, session.openFiles.Has(tspath.Path("/src/index.ts")))
-		assert.Assert(t, projectSession.Snapshot().ProjectCollection.ConfiguredProject(tspath.Path("/src/tsconfig.json")) != nil)
+		assert.Assert(t, session.openFiles.Has(tspath.PathKey("/src/index.ts")))
+		assert.Assert(t, projectSession.Snapshot().ProjectCollection.ConfiguredProject(tspath.PathKey("/src/tsconfig.json")) != nil)
 
 		// getDefaultProjectForFile must also resolve a relative path to the same
 		// configured project (it builds a URI from the identifier internally).
@@ -212,7 +212,7 @@ func TestSessionTracksAndReleasesAPIRefs(t *testing.T) {
 		})
 		assert.NilError(t, err)
 		assert.Assert(t, proj != nil, "relative path should resolve to a default project")
-		assert.Equal(t, proj.ConfigFileName, "/src/tsconfig.json")
+		assert.Equal(t, proj.ConfigFileName.AsString(), "/src/tsconfig.json")
 
 		// Re-opening via the absolute path must match the relative open (no new ref).
 		_, err = session.handleUpdateSnapshot(context.Background(), &UpdateSnapshotParams{
@@ -228,7 +228,7 @@ func TestSessionTracksAndReleasesAPIRefs(t *testing.T) {
 		assert.NilError(t, err)
 		assert.Equal(t, session.openFiles.Len(), 0)
 		assert.Assert(t,
-			projectSession.Snapshot().ProjectCollection.ConfiguredProject(tspath.Path("/src/tsconfig.json")) == nil,
+			projectSession.Snapshot().ProjectCollection.ConfiguredProject(tspath.PathKey("/src/tsconfig.json")) == nil,
 			"configured project should be unloaded after closing the relatively-pathed file",
 		)
 	})
@@ -254,7 +254,7 @@ func TestSessionTracksAndReleasesAPIRefs(t *testing.T) {
 		assert.Equal(t, session.openProjects.Len(), 1)
 
 		session.Close()
-		assert.Assert(t, projectSession.Snapshot().ProjectCollection.ConfiguredProject(tspath.Path(configFileName)) == nil)
+		assert.Assert(t, projectSession.Snapshot().ProjectCollection.ConfiguredProject(tspath.PathKey(configFileName)) == nil)
 	})
 
 	t.Run("canonical file aliases take one reference", func(t *testing.T) {
@@ -281,7 +281,7 @@ func TestSessionTracksAndReleasesAPIRefs(t *testing.T) {
 		assert.Equal(t, session.openFiles.Len(), 1)
 
 		session.Close()
-		assert.Assert(t, projectSession.Snapshot().ProjectCollection.ConfiguredProject(tspath.Path(configFileName)) == nil)
+		assert.Assert(t, projectSession.Snapshot().ProjectCollection.ConfiguredProject(tspath.PathKey(configFileName)) == nil)
 	})
 }
 
@@ -314,10 +314,10 @@ func TestUpdateSnapshotResponseSkipsUnloadedAncestorProject(t *testing.T) {
 
 	projectSession.DidOpenFile(context.Background(), lsproto.DocumentUri("file://"+fileName), 1, files[fileName].(string), lsproto.LanguageKindTypeScript)
 	snapshot := projectSession.Snapshot()
-	nestedProject := snapshot.ProjectCollection.ConfiguredProject(tspath.Path(nestedConfigFileName))
+	nestedProject := snapshot.ProjectCollection.ConfiguredProject(tspath.PathKey(nestedConfigFileName))
 	assert.Assert(t, nestedProject != nil)
 	assert.Assert(t, nestedProject.CommandLine != nil)
-	ancestorProject := snapshot.ProjectCollection.ConfiguredProject(tspath.Path(ancestorConfigFileName))
+	ancestorProject := snapshot.ProjectCollection.ConfiguredProject(tspath.PathKey(ancestorConfigFileName))
 	assert.Assert(t, ancestorProject != nil)
 	assert.Assert(t, ancestorProject.CommandLine == nil)
 

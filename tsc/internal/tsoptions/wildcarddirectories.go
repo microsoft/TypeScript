@@ -7,7 +7,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfsmatch"
 )
 
-func getWildcardDirectories(include []string, exclude []string, comparePathsOptions tspath.ComparePathsOptions) map[string]bool {
+func getWildcardDirectories[T ~string](include []T, exclude []T, currentDirectory tspath.RootedDirectoryPath, caseSensitivity tspath.CaseSensitivity) map[tspath.RootedDirectoryPath]bool {
 	// We watch a directory recursively if it contains a wildcard anywhere in a directory segment
 	// of the pattern:
 	//
@@ -25,23 +25,26 @@ func getWildcardDirectories(include []string, exclude []string, comparePathsOpti
 		return nil
 	}
 
-	excludeMatcher := vfsmatch.NewSpecMatcher(exclude, comparePathsOptions.CurrentDirectory, vfsmatch.UsageExclude, comparePathsOptions.UseCaseSensitiveFileNames)
+	excludeMatcher := vfsmatch.NewSpecMatcher(exclude, currentDirectory, vfsmatch.UsageExclude, caseSensitivity)
 
-	wildcardDirectories := make(map[string]bool)
-	wildCardKeyToPath := make(map[string]string)
+	wildcardDirectories := make(map[tspath.RootedDirectoryPath]bool)
+	wildCardKeyToPath := make(map[tspath.PathKey]tspath.RootedDirectoryPath)
 
-	var recursiveKeys []string
+	var recursiveKeys []tspath.PathKey
 
 	for _, file := range include {
-		spec := tspath.NormalizePath(tspath.CombinePaths(comparePathsOptions.CurrentDirectory, file))
+		spec := tspath.NormalizePath(tspath.CombinePaths(currentDirectory.AsString(), string(file)))
 		if excludeMatcher != nil && excludeMatcher.MatchString(spec) {
 			continue
 		}
 
-		match := getWildcardDirectoryFromSpec(spec, comparePathsOptions.UseCaseSensitiveFileNames)
+		match := getWildcardDirectoryFromSpec(spec)
 		if match != nil {
-			key := match.Key
 			path := match.Path
+			if path == "" {
+				path = tspath.RootedDirectoryPathFromNormalized(spec[:tspath.GetRootLength(spec)])
+			}
+			key := caseSensitivity.PathKey(path.AsPath())
 			recursive := match.Recursive
 
 			existingPath, existsPath := wildCardKeyToPath[key]
@@ -71,8 +74,8 @@ func getWildcardDirectories(include []string, exclude []string, comparePathsOpti
 		// Remove any subpaths under an existing recursively watched directory
 		for path := range wildcardDirectories {
 			for _, recursiveKey := range recursiveKeys {
-				key := toCanonicalKey(path, comparePathsOptions.UseCaseSensitiveFileNames)
-				if key != recursiveKey && tspath.ContainsPath(recursiveKey, key, comparePathsOptions) {
+				key := caseSensitivity.PathKey(path.AsPath())
+				if key != recursiveKey && recursiveKey.ContainsPath(key) {
 					delete(wildcardDirectories, path)
 				}
 			}
@@ -82,28 +85,23 @@ func getWildcardDirectories(include []string, exclude []string, comparePathsOpti
 	return wildcardDirectories
 }
 
-func toCanonicalKey(path string, useCaseSensitiveFileNames bool) string {
-	if useCaseSensitiveFileNames {
-		return path
-	}
-	return strings.ToLower(path)
-}
-
 // wildcardDirectoryMatch represents the result of a wildcard directory match
 type wildcardDirectoryMatch struct {
-	Key       string
-	Path      string
+	Path      tspath.RootedDirectoryPath
 	Recursive bool
 }
 
-func getWildcardDirectoryFromSpec(spec string, useCaseSensitiveFileNames bool) *wildcardDirectoryMatch {
+func getWildcardDirectoryFromSpec(spec string) *wildcardDirectoryMatch {
 	// Find the first occurrence of a wildcard character
 	firstWildcard := strings.IndexAny(spec, "*?")
 	if firstWildcard != -1 {
 		// Find the last directory separator before the wildcard
 		lastSepBeforeWildcard := strings.LastIndexByte(spec[:firstWildcard], tspath.DirectorySeparator)
 		if lastSepBeforeWildcard != -1 {
-			path := spec[:lastSepBeforeWildcard]
+			var path tspath.RootedDirectoryPath
+			if pathText := spec[:lastSepBeforeWildcard]; pathText != "" {
+				path = tspath.RootedDirectoryPathFromAbsolute(pathText)
+			}
 			lastDirectorySeparatorIndex := strings.LastIndexByte(spec, tspath.DirectorySeparator)
 
 			// Determine if this should be watched recursively:
@@ -111,7 +109,6 @@ func getWildcardDirectoryFromSpec(spec string, useCaseSensitiveFileNames bool) *
 			recursive := firstWildcard < lastDirectorySeparatorIndex
 
 			return &wildcardDirectoryMatch{
-				Key:       toCanonicalKey(path, useCaseSensitiveFileNames),
 				Path:      path,
 				Recursive: recursive,
 			}
@@ -121,9 +118,8 @@ func getWildcardDirectoryFromSpec(spec string, useCaseSensitiveFileNames bool) *
 	if lastSepIndex := strings.LastIndexByte(spec, tspath.DirectorySeparator); lastSepIndex != -1 {
 		lastSegment := spec[lastSepIndex+1:]
 		if vfsmatch.IsImplicitGlob(lastSegment) {
-			path := tspath.RemoveTrailingDirectorySeparator(spec)
+			path := tspath.RootedDirectoryPathFromAbsolute(tspath.RemoveTrailingDirectorySeparator(spec))
 			return &wildcardDirectoryMatch{
-				Key:       toCanonicalKey(path, useCaseSensitiveFileNames),
 				Path:      path,
 				Recursive: true,
 			}

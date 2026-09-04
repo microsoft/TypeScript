@@ -24,7 +24,7 @@ import (
 //
 // is a range with `text in range` "selected".
 type RangeMarker struct {
-	fileName string
+	fileName tspath.RootedFilePath
 	Range    core.TextRange
 	LSRange  lsproto.Range
 	Marker   *Marker
@@ -34,7 +34,7 @@ func (r *RangeMarker) LSPos() lsproto.Position {
 	return r.LSRange.Start
 }
 
-func (r *RangeMarker) FileName() string {
+func (r *RangeMarker) FileName() tspath.RootedFilePath {
 	return r.fileName
 }
 
@@ -47,13 +47,13 @@ func (r *RangeMarker) GetName() *string {
 
 func (r *RangeMarker) LSLocation() lsproto.Location {
 	return lsproto.Location{
-		Uri:   lsconv.FileNameToDocumentURI(r.fileName),
+		Uri:   lsconv.FilePathToDocumentURI(r.fileName),
 		Range: r.LSRange,
 	}
 }
 
 type Marker struct {
-	fileName   string
+	fileName   tspath.RootedFilePath
 	Position   int
 	LSPosition lsproto.Position
 	Name       *string // `nil` for anonymous markers such as `{| "foo": "bar" |}`
@@ -64,7 +64,7 @@ func (m *Marker) LSPos() lsproto.Position {
 	return m.LSPosition
 }
 
-func (m *Marker) FileName() string {
+func (m *Marker) FileName() tspath.RootedFilePath {
 	return m.fileName
 }
 
@@ -72,7 +72,7 @@ func (m *Marker) GetName() *string {
 	return m.Name
 }
 
-func (m *Marker) MakerWithSymlink(fileName string) *Marker {
+func (m *Marker) MakerWithSymlink(fileName tspath.RootedFilePath) *Marker {
 	return &Marker{
 		fileName:   fileName,
 		Position:   m.Position,
@@ -83,7 +83,7 @@ func (m *Marker) MakerWithSymlink(fileName string) *Marker {
 }
 
 type MarkerOrRange interface {
-	FileName() string
+	FileName() tspath.RootedFilePath
 	LSPos() lsproto.Position
 	GetName() *string
 }
@@ -134,7 +134,7 @@ func ParseTestData(t *testing.T, contents string, fileName string) TestData {
 	hasTSConfig := false
 	for _, file := range filesWithMarker {
 		files = append(files, file.file)
-		hasTSConfig = hasTSConfig || isConfigFile(file.file.fileName)
+		hasTSConfig = hasTSConfig || isConfigFile(file.file.fileName.AsString())
 
 		markers = append(markers, file.markers...)
 		ranges = append(ranges, file.ranges...)
@@ -198,7 +198,7 @@ type rangeLocationInformation struct {
 }
 
 type TestFileInfo struct {
-	fileName string
+	fileName tspath.RootedFilePath
 	// The contents of the file (with markers, etc stripped out)
 	Content string
 	emit    bool
@@ -206,12 +206,14 @@ type TestFileInfo struct {
 }
 
 // FileName implements lsconv.Script.
-func (t *TestFileInfo) FileName() string {
+func (t *TestFileInfo) FileName() tspath.RootedFilePath {
 	return t.fileName
 }
 
 // OriginalFileName implements lsconv.Script.
-func (t *TestFileInfo) OriginalFileName() string { return t.fileName }
+func (t *TestFileInfo) OriginalFileName() tspath.RootedFilePath {
+	return t.fileName
+}
 
 // Text implements lsconv.Script.
 func (t *TestFileInfo) Text() string {
@@ -240,7 +242,10 @@ const (
 )
 
 func parseFileContent(fileName string, content string, fileOptions map[string]string) (*testFileWithMarkers, error) {
-	fileName = tspath.GetNormalizedAbsolutePath(fileName, "/")
+	return parseFileContentWorker(tspath.ToRootedFilePath(fileName, rootDir), content, fileOptions)
+}
+
+func parseFileContentWorker(fileName tspath.RootedFilePath, content string, fileOptions map[string]string) (*testFileWithMarkers, error) {
 	content = chompLeadingSpace(content)
 
 	// The file content (minus metacharacters) so far
@@ -428,7 +433,7 @@ func parseFileContent(fileName string, content string, fileOptions map[string]st
 	outputString := output.String()
 	// Set LS positions for markers
 	lineMap := lsconv.ComputeLSPLineStarts(outputString)
-	converters := newTestConverters(lsconv.NewConverters(lsproto.PositionEncodingKindUTF8, func(_ string) *lsconv.LSPLineMap {
+	converters := newTestConverters(lsconv.NewConverters(lsproto.PositionEncodingKindUTF8, func(_ tspath.RootedFilePath) *lsconv.LSPLineMap {
 		return lineMap
 	}))
 
@@ -465,7 +470,7 @@ func parseFileContent(fileName string, content string, fileOptions map[string]st
 	}, nil
 }
 
-func getObjectMarker(fileName string, location *locationInformation, text string) (*Marker, error) {
+func getObjectMarker(fileName tspath.RootedFilePath, location *locationInformation, text string) (*Marker, error) {
 	// Attempt to parse the marker value as JSON
 	var v any
 	e := json.Unmarshal([]byte("{ "+text+" }"), &v)
@@ -494,7 +499,7 @@ func getObjectMarker(fileName string, location *locationInformation, text string
 	return marker, nil
 }
 
-func reportError(fileName string, line int, col int, message string) error {
+func reportError(fileName tspath.RootedFilePath, line int, col int, message string) error {
 	return &fourslashError{fmt.Sprintf("%v (%v,%v): %v", fileName, line, col, message)}
 }
 

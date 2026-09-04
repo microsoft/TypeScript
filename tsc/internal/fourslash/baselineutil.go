@@ -18,6 +18,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/spanmap"
 	"github.com/microsoft/TypeScript/tsc/internal/stringutil"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/baseline"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 )
 
@@ -166,8 +167,8 @@ func (f *FourslashTest) getBaselineForGroupedSpansWithFileContents(groupedRanges
 	spanToContextId := map[documentSpan]int{}
 
 	baselineEntries := []string{}
-	addFileEntry := func(path string) {
-		fileName := lsconv.FileNameToDocumentURI(path)
+	addFileEntry := func(path tspath.RootedFilePath) {
+		fileName := lsconv.FilePathToDocumentURI(path)
 		ranges := groupedRanges.Get(fileName)
 		if len(ranges) == 0 {
 			return
@@ -188,7 +189,7 @@ func (f *FourslashTest) getBaselineForGroupedSpansWithFileContents(groupedRanges
 
 		baselineEntries = append(baselineEntries, f.getBaselineContentForFile(path, content, ranges, spanToContextId, options))
 	}
-	walkDirFn := func(path string, d vfs.DirEntry, e error) error {
+	walkDirFn := func(path tspath.RootedPath, d vfs.DirEntry, e error) error {
 		if e != nil {
 			return e
 		}
@@ -197,7 +198,7 @@ func (f *FourslashTest) getBaselineForGroupedSpansWithFileContents(groupedRanges
 			return nil
 		}
 
-		addFileEntry(path)
+		addFileEntry(tspath.RootedFilePathFromPath(path))
 		return nil
 	}
 
@@ -206,12 +207,12 @@ func (f *FourslashTest) getBaselineForGroupedSpansWithFileContents(groupedRanges
 			addFileEntry(uri.FileName())
 		}
 	} else {
-		err := f.vfs.WalkDir("/", walkDirFn)
+		err := f.vfs.WalkDir(tspath.RootedDirectoryPathFromNormalized("/"), walkDirFn)
 		if err != nil && !errors.Is(err, fs.ErrNotExist) {
 			panic("walkdir error during fourslash baseline: " + err.Error())
 		}
 
-		err = f.vfs.WalkDir("bundled:///", walkDirFn)
+		err = f.vfs.WalkDir(tspath.RootedDirectoryPathFromNormalized("bundled:///"), walkDirFn)
 		if err != nil && !errors.Is(err, fs.ErrNotExist) {
 			panic("walkdir error during fourslash baseline: " + err.Error())
 		}
@@ -261,7 +262,7 @@ func uniqueFilesInSpanOrder(spans []documentSpan) []lsproto.DocumentUri {
 	return result
 }
 
-func (f *FourslashTest) textOfFile(fileName string) (string, bool) {
+func (f *FourslashTest) textOfFile(fileName tspath.RootedFilePath) (string, bool) {
 	if _, ok := f.openFiles[fileName]; ok {
 		return f.getScriptInfo(fileName).content, true
 	}
@@ -314,7 +315,7 @@ func (d *baselineDetail) getRange() lsproto.Range {
 }
 
 func (f *FourslashTest) getBaselineContentForFile(
-	fileName string,
+	fileName tspath.RootedFilePath,
 	content string,
 	spansInFile []documentSpan,
 	spanToContextId map[documentSpan]int,
@@ -462,7 +463,7 @@ func (f *FourslashTest) getBaselineContentForFile(
 	})
 	// !!! if canDetermineContextIdInline
 
-	textWithContext := newTextWithContext(fileName, content)
+	textWithContext := newTextWithContextFromFileName(fileName, content)
 	for index, detail := range details {
 		textWithContext.add(detail)
 		textWithContext.pos = detail.pos
@@ -531,7 +532,7 @@ type textWithContext struct {
 	newContent *strings.Builder // helper; the part of the original file content to write between details
 	pos        lsproto.Position
 	isLibFile  bool
-	fileName   string
+	fileName   tspath.RootedFilePath
 	content    string // content of the original file
 	lineStarts *lsconv.LSPLineMap
 	converters *testConverters
@@ -542,12 +543,14 @@ type textWithContext struct {
 }
 
 // implements lsconv.Script
-func (t *textWithContext) FileName() string {
+func (t *textWithContext) FileName() tspath.RootedFilePath {
 	return t.fileName
 }
 
 // implements lsconv.Script
-func (t *textWithContext) OriginalFileName() string { return t.fileName }
+func (t *textWithContext) OriginalFileName() tspath.RootedFilePath {
+	return t.fileName
+}
 
 // implements lsconv.Script
 func (t *textWithContext) Text() string {
@@ -560,13 +563,13 @@ func (t *textWithContext) OriginalText() string { return t.content }
 // implements lsconv.Script
 func (t *textWithContext) SpanMap() *spanmap.SpanMap { return nil }
 
-func newTextWithContext(fileName string, content string) *textWithContext {
+func newTextWithContextFromFileName(fileName tspath.RootedFilePath, content string) *textWithContext {
 	t := &textWithContext{
 		nLinesContext: 4,
 
 		readableContents: &strings.Builder{},
 
-		isLibFile:  isLibFile(fileName),
+		isLibFile:  isLibFile(fileName.AsString()),
 		newContent: &strings.Builder{},
 		pos:        lsproto.Position{Line: 0, Character: 0},
 		fileName:   fileName,
@@ -574,11 +577,11 @@ func newTextWithContext(fileName string, content string) *textWithContext {
 		lineStarts: lsconv.ComputeLSPLineStarts(content),
 	}
 
-	t.converters = newTestConverters(lsconv.NewConverters(lsproto.PositionEncodingKindUTF8, func(_ string) *lsconv.LSPLineMap {
+	t.converters = newTestConverters(lsconv.NewConverters(lsproto.PositionEncodingKindUTF8, func(_ tspath.RootedFilePath) *lsconv.LSPLineMap {
 		return t.lineStarts
 	}))
 	t.readableContents.WriteString("// === ")
-	t.readableContents.WriteString(fileName)
+	t.readableContents.WriteString(fileName.AsString())
 	t.readableContents.WriteString(" ===")
 	return t
 }
@@ -685,7 +688,7 @@ func annotateContentWithTooltips[T comparable](
 		return -cmp.Compare(a.Marker.Position, b.Marker.Position)
 	})
 
-	filesToLines := collections.NewOrderedMapWithSizeHint[string, []string](1)
+	filesToLines := collections.NewOrderedMapWithSizeHint[tspath.RootedFilePath, []string](1)
 	var previous T
 	for _, itemAndMarker := range sorted {
 		marker := itemAndMarker.Marker

@@ -16,7 +16,7 @@ func TestToAPITextEditsUsesOriginalCoordinates(t *testing.T) {
 
 	sourceFile := parser.ParseSourceFile(ast.SourceFileParseOptions{
 		FileName: "/app.vue",
-		Path:     tspath.Path("/app.vue"),
+		PathKey:  tspath.PathKey("/app.vue"),
 	}, "const transformed = true;", core.ScriptKindTS)
 	sourceFile.SetContentMapperInfo(ast.ContentMapperSourceFileInfo{
 		OriginalText:  "😀\nabc",

@@ -47,7 +47,7 @@ type refOptions struct {
 
 type refInfo struct {
 	file       *ast.SourceFile
-	fileName   string
+	fileName   tspath.RootedFilePath
 	reference  *ast.FileReference
 	unverified bool
 }
@@ -520,7 +520,7 @@ func (l *LanguageService) getNonLocalDefinition(ctx context.Context, entry *Symb
 			}
 			return &nonLocalDefinition{
 				position: position{
-					uri: lsconv.FileNameToDocumentURI(fileName),
+					uri: lsconv.FilePathToDocumentURI(fileName),
 					pos: lspPosition,
 				},
 				GetSourcePosition: sync.OnceValue(func() lsproto.HasTextDocumentPosition {
@@ -531,7 +531,7 @@ func (l *LanguageService) getNonLocalDefinition(ctx context.Context, entry *Symb
 							return nil
 						}
 						return &position{
-							uri: lsconv.FileNameToDocumentURI(mapped.FileName),
+							uri: lsconv.FilePathToDocumentURI(mapped.FileName),
 							pos: mappedPosition,
 						}
 					}
@@ -545,7 +545,7 @@ func (l *LanguageService) getNonLocalDefinition(ctx context.Context, entry *Symb
 							return nil
 						}
 						return &position{
-							uri: lsconv.FileNameToDocumentURI(mapped.FileName),
+							uri: lsconv.FilePathToDocumentURI(mapped.FileName),
 							pos: mappedPosition,
 						}
 					}
@@ -612,19 +612,19 @@ func (l *LanguageService) forEachOriginalDefinitionLocation(
 	for _, d := range entry.definition.symbol.Declarations {
 		file, startPos := getFileAndStartPosFromDeclaration(d)
 		fileName := file.FileName()
-		if tspath.IsDeclarationFileName(fileName) {
+		if fileName.IsDeclarationFile() {
 			// Map to ts position
 			mapped := l.tryGetSourcePosition(file.FileName(), startPos)
 			if mapped != nil {
 				lspPosition, fidelity := l.converters.ToLSPPosition(l.getScript(mapped.FileName), core.TextPos(mapped.Pos))
 				if !fidelity.IsNone() {
-					cb(lsconv.FileNameToDocumentURI(mapped.FileName), lspPosition)
+					cb(lsconv.FilePathToDocumentURI(mapped.FileName), lspPosition)
 				}
 			}
-		} else if program.IsSourceFromProjectReference(l.toPath(fileName)) {
+		} else if program.IsSourceFromProjectReference(file.PathKey()) {
 			lspPosition, fidelity := l.converters.ToLSPPosition(file, startPos)
 			if !fidelity.IsNone() {
-				cb(lsconv.FileNameToDocumentURI(fileName), lspPosition)
+				cb(lsconv.FilePathToDocumentURI(fileName), lspPosition)
 			}
 		}
 	}
@@ -1145,7 +1145,7 @@ func (l *LanguageService) convertEntriesToLocationLinks(entries []*ReferenceEntr
 		}
 
 		links = append(links, &lsproto.LocationLink{
-			TargetUri:            lsconv.FileNameToDocumentURI(entry.sourceFile.OriginalFileName()),
+			TargetUri:            lsconv.FilePathToDocumentURI(entry.sourceFile.OriginalFileName()),
 			TargetRange:          targetRange,
 			TargetSelectionRange: targetSelectionRange,
 		})
@@ -1275,7 +1275,7 @@ func (l *LanguageService) GetSignatureUsages(ctx context.Context, signatureDecl 
 
 func (l *LanguageService) getReferencedSymbolsForNode(ctx context.Context, position int, node *ast.Node, program *compiler.Program, sourceFiles []*ast.SourceFile, options refOptions) []*SymbolAndEntries {
 	// !!! cancellationToken
-	sourceFilesSet := collections.NewSetWithSizeHint[string](len(sourceFiles))
+	sourceFilesSet := collections.NewSetWithSizeHint[tspath.RootedFilePath](len(sourceFiles))
 	for _, file := range sourceFiles {
 		sourceFilesSet.Add(file.FileName())
 	}
@@ -1405,8 +1405,8 @@ func isStringLiteralPropertyReference(node *ast.StringLiteralLike, checker *chec
 	return false
 }
 
-func (l *LanguageService) getReferencedSymbolsForModuleIfDeclaredBySourceFile(ctx context.Context, symbol *ast.Symbol, program *compiler.Program, sourceFiles []*ast.SourceFile, checker *checker.Checker, options refOptions, sourceFilesSet *collections.Set[string]) []*SymbolAndEntries {
-	moduleSourceFileName := ""
+func (l *LanguageService) getReferencedSymbolsForModuleIfDeclaredBySourceFile(ctx context.Context, symbol *ast.Symbol, program *compiler.Program, sourceFiles []*ast.SourceFile, checker *checker.Checker, options refOptions, sourceFilesSet *collections.Set[tspath.RootedFilePath]) []*SymbolAndEntries {
+	var moduleSourceFileName tspath.RootedFilePath
 	if symbol == nil || !((symbol.Flags&ast.SymbolFlagsModule != 0) && len(symbol.Declarations) != 0) {
 		return nil
 	}
@@ -1739,7 +1739,7 @@ func getMergedAliasedSymbolOfNamespaceExportDeclaration(node *ast.Node, symbol *
 	return nil
 }
 
-func (l *LanguageService) getReferencedSymbolsForModule(ctx context.Context, program *compiler.Program, symbol *ast.Symbol, excludeImportTypeOfExportEquals bool, sourceFiles []*ast.SourceFile, sourceFilesSet *collections.Set[string]) []*SymbolAndEntries {
+func (l *LanguageService) getReferencedSymbolsForModule(ctx context.Context, program *compiler.Program, symbol *ast.Symbol, excludeImportTypeOfExportEquals bool, sourceFiles []*ast.SourceFile, sourceFilesSet *collections.Set[tspath.RootedFilePath]) []*SymbolAndEntries {
 	debug.Assert(symbol.ValueDeclaration != nil)
 
 	checker, done := program.GetTypeChecker(ctx)
@@ -1860,7 +1860,7 @@ func getSpecialSearchKind(node *ast.Node) string {
 	}
 }
 
-func getReferencedSymbolsForSymbol(ctx context.Context, program *compiler.Program, originalSymbol *ast.Symbol, node *ast.Node, sourceFiles []*ast.SourceFile, sourceFilesSet *collections.Set[string], checker *checker.Checker, options refOptions) []*SymbolAndEntries {
+func getReferencedSymbolsForSymbol(ctx context.Context, program *compiler.Program, originalSymbol *ast.Symbol, node *ast.Node, sourceFiles []*ast.SourceFile, sourceFilesSet *collections.Set[tspath.RootedFilePath], checker *checker.Checker, options refOptions) []*SymbolAndEntries {
 	// Core find-all-references algorithm for a normal symbol.
 
 	symbol := core.Coalesce(skipPastExportOrImportSpecifierOrUnion(originalSymbol, node, checker /*useLocalSymbolForExportSpecifier*/, !isForRenameWithPrefixAndSuffixText(options)), originalSymbol)
@@ -1917,7 +1917,7 @@ type inheritKey struct {
 
 type refState struct {
 	sourceFiles                  []*ast.SourceFile
-	sourceFilesSet               *collections.Set[string]
+	sourceFilesSet               *collections.Set[tspath.RootedFilePath]
 	specialSearchKind            string // "none", "constructor", or "class"
 	checker                      *checker.Checker
 	ctx                          context.Context
@@ -1933,7 +1933,7 @@ type refState struct {
 	sourceFileToSeenSymbols      map[*ast.SourceFile]*collections.Set[*ast.Symbol]
 }
 
-func newState(ctx context.Context, program *compiler.Program, sourceFiles []*ast.SourceFile, sourceFilesSet *collections.Set[string], node *ast.Node, checker *checker.Checker, searchMeaning ast.SemanticMeaning, options refOptions) *refState {
+func newState(ctx context.Context, program *compiler.Program, sourceFiles []*ast.SourceFile, sourceFilesSet *collections.Set[tspath.RootedFilePath], node *ast.Node, checker *checker.Checker, searchMeaning ast.SemanticMeaning, options refOptions) *refState {
 	return &refState{
 		sourceFiles:             sourceFiles,
 		sourceFilesSet:          sourceFilesSet,

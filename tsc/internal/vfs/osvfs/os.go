@@ -87,31 +87,34 @@ func swapCase(str string) string {
 	}, str)
 }
 
-func (vfs *osFS) UseCaseSensitiveFileNames() bool {
-	return isFileSystemCaseSensitive
+func (vfs *osFS) CaseSensitivity() tspath.CaseSensitivity {
+	if isFileSystemCaseSensitive {
+		return tspath.CaseSensitive
+	}
+	return tspath.CaseInsensitive
 }
 
-func (vfs *osFS) ReadFile(path string) (contents string, ok bool) {
+func (vfs *osFS) ReadFile(path tspath.RootedFilePath) (contents string, ok bool) {
 	defer readSema.Acquire()()
 	return vfs.common.ReadFile(path)
 }
 
-func (vfs *osFS) DirectoryExists(path string) bool {
+func (vfs *osFS) DirectoryExists(path tspath.RootedDirectoryPath) bool {
 	defer blockingOpSema.Acquire()()
 	return vfs.common.DirectoryExists(path)
 }
 
-func (vfs *osFS) FileExists(path string) bool {
+func (vfs *osFS) FileExists(path tspath.RootedFilePath) bool {
 	defer blockingOpSema.Acquire()()
 	return vfs.common.FileExists(path)
 }
 
-func (vfs *osFS) GetAccessibleEntries(path string) vfs.Entries {
+func (vfs *osFS) GetAccessibleEntries(path tspath.RootedDirectoryPath) vfs.Entries {
 	defer blockingOpSema.Acquire()()
 	return vfs.common.GetAccessibleEntries(path)
 }
 
-func (vfs *osFS) Stat(path string) vfs.FileInfo {
+func (vfs *osFS) Stat(path tspath.RootedPath) vfs.FileInfo {
 	defer blockingOpSema.Acquire()()
 	return vfs.common.Stat(path)
 }
@@ -140,36 +143,34 @@ type limitedWalkDirFunc struct {
 	walk  vfs.WalkDirFunc
 }
 
-func (w *limitedWalkDirFunc) walker(path string, d fs.DirEntry, err error) error {
+func (w *limitedWalkDirFunc) walker(path tspath.RootedPath, d fs.DirEntry, err error) error {
 	defer blockingOpSema.Acquire()()
 	return w.inner(path, d, err)
 }
 
-func (vfs *osFS) WalkDir(root string, walkFn vfs.WalkDirFunc) error {
+func (vfs *osFS) WalkDir(root tspath.RootedDirectoryPath, walkFn vfs.WalkDirFunc) error {
 	walker := getLimitedWalkDirFunc(walkFn)
 	defer putLimitedWalkDirFunc(walker)
 	return vfs.common.WalkDir(root, walker.walk)
 }
 
-func (vfs *osFS) Realpath(path string) string {
+func (vfs *osFS) Realpath(path tspath.RootedPath) tspath.RootedPath {
 	defer blockingOpSema.Acquire()()
 	return osFSRealpath(path)
 }
 
-func osFSRealpath(path string) string {
-	_ = internal.RootLength(path) // Assert path is rooted
-
+func osFSRealpath(path tspath.RootedPath) tspath.RootedPath {
 	orig := path
-	path = filepath.FromSlash(path)
-	path, err := nativepath.Realpath(path)
+	nativePath := filepath.FromSlash(path.AsString())
+	nativePath, err := nativepath.Realpath(nativePath)
 	if err != nil {
 		return orig
 	}
-	path, err = filepath.Abs(path)
+	nativePath, err = filepath.Abs(nativePath)
 	if err != nil {
 		return orig
 	}
-	return tspath.NormalizeSlashes(path)
+	return tspath.RootedPathFromAbsolute(nativePath)
 }
 
 func isReparsePoint(path string) bool {
@@ -197,34 +198,34 @@ func (vfs *osFS) ensureDirectoryExists(directoryPath string) error {
 	return os.MkdirAll(directoryPath, 0o777)
 }
 
-func (vfs *osFS) writeFileEnsuringDir(path string, content string, flag int) error {
-	_ = internal.RootLength(path) // Assert path is rooted
-	if err := vfs.writeFileWithFlag(path, content, flag); err == nil {
+func (vfs *osFS) writeFileEnsuringDir(path tspath.RootedFilePath, content string, flag int) error {
+	pathString := path.AsString()
+	if err := vfs.writeFileWithFlag(pathString, content, flag); err == nil {
 		return nil
 	}
-	if err := vfs.ensureDirectoryExists(tspath.GetDirectoryPath(tspath.NormalizePath(path))); err != nil {
+	if err := vfs.ensureDirectoryExists(path.Directory().AsString()); err != nil {
 		return err
 	}
-	return vfs.writeFileWithFlag(path, content, flag)
+	return vfs.writeFileWithFlag(pathString, content, flag)
 }
 
-func (vfs *osFS) WriteFile(path string, content string) error {
+func (vfs *osFS) WriteFile(path tspath.RootedFilePath, content string) error {
 	return vfs.writeFileEnsuringDir(path, content, os.O_WRONLY|os.O_CREATE|os.O_TRUNC)
 }
 
-func (vfs *osFS) AppendFile(path string, content string) error {
+func (vfs *osFS) AppendFile(path tspath.RootedFilePath, content string) error {
 	return vfs.writeFileEnsuringDir(path, content, os.O_WRONLY|os.O_CREATE|os.O_APPEND)
 }
 
-func (vfs *osFS) Remove(path string) error {
+func (vfs *osFS) Remove(path tspath.RootedPath) error {
 	defer blockingOpSema.Acquire()()
 	// todo: #701 add retry mechanism?
-	return os.RemoveAll(path)
+	return os.RemoveAll(path.AsString())
 }
 
-func (vfs *osFS) Chtimes(path string, aTime time.Time, mTime time.Time) error {
+func (vfs *osFS) Chtimes(path tspath.RootedPath, aTime time.Time, mTime time.Time) error {
 	defer blockingOpSema.Acquire()()
-	return os.Chtimes(path, aTime, mTime)
+	return os.Chtimes(path.AsString(), aTime, mTime)
 }
 
 func GetGlobalTypingsCacheLocation() string {

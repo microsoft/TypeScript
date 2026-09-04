@@ -11,6 +11,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/lsp"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/lsptestutil"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/iovfs"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfstest"
 	"gotest.tools/v3/assert"
@@ -19,7 +20,7 @@ import (
 func initMutableLSPClient(t *testing.T, files map[string]string, prefs *lsutil.UserPreferences) (*lsptestutil.LSPClient, *vfstest.MapFS) {
 	t.Helper()
 
-	base := vfstest.FromMap(files, false)
+	base := vfstest.FromMap(files, tspath.CaseInsensitive)
 	baseFS := base.(iovfs.FsWithSys).FSys().(*vfstest.MapFS)
 	fs := bundled.WrapFS(base)
 
@@ -83,7 +84,7 @@ func TestReferencesAfterAncestorProjectConfigDeletion1(t *testing.T) {
 		"/root/project/src/main.ts": "export function helloWorld() {}\nhelloWorld()\n",
 	}, &lsutil.UserPreferences{})
 
-	mainURI := lsconv.FileNameToDocumentURI("/root/project/src/main.ts")
+	mainURI := lsconv.FilePathToDocumentURI("/root/project/src/main.ts")
 	lsptestutil.SendNotification(t, client, lsproto.TextDocumentDidOpenInfo, &lsproto.DidOpenTextDocumentParams{
 		TextDocument: &lsproto.TextDocumentItem{Uri: mainURI, LanguageId: "typescript", Text: "export function helloWorld() {}\nhelloWorld()\n"},
 	})
@@ -98,7 +99,7 @@ func TestReferencesAfterAncestorProjectConfigDeletion1(t *testing.T) {
 	assert.NilError(t, fs.Remove("root/tsconfig.json"))
 	lsptestutil.SendNotification(t, client, lsproto.WorkspaceDidChangeWatchedFilesInfo, &lsproto.DidChangeWatchedFilesParams{
 		Changes: []*lsproto.FileEvent{{
-			Uri:  lsconv.FileNameToDocumentURI("/root/tsconfig.json"),
+			Uri:  lsconv.FilePathToDocumentURI("/root/tsconfig.json"),
 			Type: lsproto.FileChangeTypeDeleted,
 		}},
 	})

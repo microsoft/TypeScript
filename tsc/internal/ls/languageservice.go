@@ -13,16 +13,16 @@ import (
 )
 
 type LanguageService struct {
-	projectPath             tspath.Path
+	projectPath             tspath.PathKey
 	host                    Host
 	activeConfig            lsutil.UserPreferences
 	program                 *compiler.Program
 	converters              *lsconv.Converters
-	documentPositionMappers map[string]*sourcemap.DocumentPositionMapper
+	documentPositionMappers map[tspath.PathKey]*sourcemap.DocumentPositionMapper
 }
 
 func NewLanguageService(
-	projectPath tspath.Path,
+	projectPath tspath.PathKey,
 	program *compiler.Program,
 	host Host,
 	activeFile string,
@@ -33,12 +33,8 @@ func NewLanguageService(
 		program:                 program,
 		converters:              host.Converters(),
 		activeConfig:            host.GetPreferences(activeFile),
-		documentPositionMappers: map[string]*sourcemap.DocumentPositionMapper{},
+		documentPositionMappers: map[tspath.PathKey]*sourcemap.DocumentPositionMapper{},
 	}
-}
-
-func (l *LanguageService) toPath(fileName string) tspath.Path {
-	return tspath.ToPath(fileName, l.program.GetCurrentDirectory(), l.UseCaseSensitiveFileNames())
 }
 
 func (l *LanguageService) GetProgram() *compiler.Program {
@@ -53,7 +49,7 @@ func (l *LanguageService) FormatOptions() lsutil.FormatCodeSettings {
 	return l.activeConfig.FormatCodeSettings
 }
 
-func (l *LanguageService) tryGetProgramAndFile(fileName string) (*compiler.Program, *ast.SourceFile) {
+func (l *LanguageService) tryGetProgramAndFile(fileName tspath.RootedFilePath) (*compiler.Program, *ast.SourceFile) {
 	program := l.GetProgram()
 	file := program.GetSourceFile(fileName)
 	return program, file
@@ -63,29 +59,30 @@ func (l *LanguageService) getProgramAndFile(documentURI lsproto.DocumentUri) (*c
 	fileName := documentURI.FileName()
 	program, file := l.tryGetProgramAndFile(fileName)
 	if file == nil {
-		panic("file not found: " + fileName)
+		panic("file not found: " + fileName.AsString())
 	}
 	return program, file
 }
 
-func (l *LanguageService) GetDocumentPositionMapper(fileName string) *sourcemap.DocumentPositionMapper {
-	d, ok := l.documentPositionMappers[fileName]
+func (l *LanguageService) GetDocumentPositionMapper(fileName tspath.RootedFilePath) *sourcemap.DocumentPositionMapper {
+	path := l.program.PathKeyForFileName(fileName)
+	d, ok := l.documentPositionMappers[path]
 	if !ok {
 		d = sourcemap.GetDocumentPositionMapper(l, fileName)
-		l.documentPositionMappers[fileName] = d
+		l.documentPositionMappers[path] = d
 	}
 	return d
 }
 
-func (l *LanguageService) ReadFile(fileName string) (string, bool) {
+func (l *LanguageService) ReadFile(fileName tspath.RootedFilePath) (string, bool) {
 	return l.host.ReadFile(fileName)
 }
 
-func (l *LanguageService) UseCaseSensitiveFileNames() bool {
-	return l.host.UseCaseSensitiveFileNames()
+func (l *LanguageService) CaseSensitivity() tspath.CaseSensitivity {
+	return l.host.CaseSensitivity()
 }
 
-func (l *LanguageService) GetECMALineInfo(fileName string) *sourcemap.ECMALineInfo {
+func (l *LanguageService) GetECMALineInfo(fileName tspath.RootedFilePath) *sourcemap.ECMALineInfo {
 	return l.host.GetECMALineInfo(fileName)
 }
 
@@ -118,15 +115,15 @@ func (l *LanguageService) getCurrentAutoImportView(fromFile *ast.SourceFile) *au
 }
 
 // Used for module specifier completions.
-func (l *LanguageService) DirectoryExists(path string) bool {
+func (l *LanguageService) DirectoryExists(path tspath.RootedDirectoryPath) bool {
 	return l.host.DirectoryExists(path)
 }
 
 // Used for module specifier completions.
-func (l *LanguageService) ReadDirectory(path string, extensions []string, includes []string) []string {
-	return l.host.ReadDirectory(l.program.GetCurrentDirectory(), path, extensions, nil /*excludes*/, includes, vfsmatch.UnlimitedDepth)
+func (l *LanguageService) ReadDirectory(path tspath.RootedDirectoryPath, extensions []string, includes []string) []tspath.RootedFilePath {
+	return l.host.ReadDirectory(path, extensions, nil /*excludes*/, includes, vfsmatch.UnlimitedDepth)
 }
 
-func (l *LanguageService) GetDirectories(path string) []string {
+func (l *LanguageService) GetDirectories(path tspath.RootedDirectoryPath) []string {
 	return l.host.GetDirectories(path)
 }

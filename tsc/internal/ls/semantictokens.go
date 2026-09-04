@@ -200,7 +200,7 @@ func sortSemanticTokens(tokens []semanticToken, converters *lsconv.Converters) {
 		if result := cmp.Compare(aRange.Start.Character, bRange.Start.Character); result != 0 {
 			return result
 		}
-		if result := cmp.Compare(a.file.Path(), b.file.Path()); result != 0 {
+		if result := cmp.Compare(a.file.PathKey(), b.file.PathKey()); result != 0 {
 			return result
 		}
 		return cmp.Compare(a.node.Pos(), b.node.Pos())
@@ -302,13 +302,13 @@ func (l *LanguageService) collectSemanticTokensInRange(ctx context.Context, c *c
 							tokenModifier |= tokenModifierLocal
 						}
 						declSourceFile := ast.GetSourceFileOfNode(decl)
-						if declSourceFile != nil && program.IsSourceFileDefaultLibrary(declSourceFile.Path()) {
+						if declSourceFile != nil && program.IsSourceFileDefaultLibrary(declSourceFile.PathKey()) {
 							tokenModifier |= tokenModifierDefaultLibrary
 						}
 					} else if symbol.Declarations != nil {
 						for _, decl := range symbol.Declarations {
 							declSourceFile := ast.GetSourceFileOfNode(decl)
-							if declSourceFile != nil && program.IsSourceFileDefaultLibrary(declSourceFile.Path()) {
+							if declSourceFile != nil && program.IsSourceFileDefaultLibrary(declSourceFile.PathKey()) {
 								tokenModifier |= tokenModifierDefaultLibrary
 								break
 							}

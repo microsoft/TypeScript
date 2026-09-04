@@ -769,6 +769,15 @@ func TestUnmarshalFieldOrdering(t *testing.T) {
 	})
 }
 
+func TestUnmarshalCompletionItemDataFileName(t *testing.T) {
+	t.Parallel()
+
+	var data CompletionItemData
+	err := json.Unmarshal([]byte(`{"fileName":"/src/index.ts","position":1,"name":"value"}`), &data)
+	assert.NilError(t, err)
+	assert.Equal(t, data.FileName, "/src/index.ts")
+}
+
 func TestUnmarshalEmptyObject(t *testing.T) {
 	t.Parallel()
 

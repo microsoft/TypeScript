@@ -16,15 +16,16 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/printer"
 	"github.com/microsoft/TypeScript/tsc/internal/scanner"
 	"github.com/microsoft/TypeScript/tsc/internal/stringutil"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 )
 
-func (t *Tracker) getTextChangesFromChanges() map[string][]*lsproto.TextEdit {
-	changes := map[string][]*lsproto.TextEdit{}
+func (t *Tracker) getTextChangesFromChanges() map[tspath.RootedFilePath][]*lsproto.TextEdit {
+	changes := map[tspath.RootedFilePath][]*lsproto.TextEdit{}
 	// A content-mapped file can have several projections, each keyed separately in t.changes but
 	// all sharing one original file. Their edits are collected together before being ordered and checked,
 	// so duplicate edits are emitted once and conflicting edits are rejected regardless of map iteration
 	// order.
-	projections := map[string]int{}
+	projections := map[tspath.RootedFilePath]int{}
 	for sourceFile, changesInFile := range t.changes.M {
 		fileName := sourceFile.OriginalFileName()
 		if t.unmappableFiles.Has(fileName) {
@@ -240,7 +241,7 @@ func (t *Tracker) getNonformattedText(node *ast.Node, sourceFile *ast.SourceFile
 		t.NodeFactory,
 		nodeOut,
 		text,
-		ast.SourceFileParseOptions{FileName: sourceFile.FileName(), Path: sourceFile.Path()},
+		ast.SourceFileParseOptions{FileName: sourceFile.FileName(), PathKey: sourceFile.PathKey()},
 	)
 	return text, sourceFileLike.AsNode()
 }

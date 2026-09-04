@@ -18,7 +18,14 @@ import (
 type (
 	BuildInfoFileId       int
 	BuildInfoFileIdListId int
+	// BuildInfoPath is a serialized build-info path. It may be relative to the
+	// build-info file, absolute, or a symbolic default-library name.
+	BuildInfoPath string
 )
+
+func (p BuildInfoPath) AsString() string {
+	return string(p)
+}
 
 // buildInfoRoot is
 // - for incremental program buildinfo
@@ -30,7 +37,7 @@ type (
 type BuildInfoRoot struct {
 	Start          BuildInfoFileId
 	End            BuildInfoFileId
-	NonIncremental string // Root of a non incremental program
+	NonIncremental BuildInfoPath // Root of a non incremental program
 }
 
 func (b *BuildInfoRoot) MarshalJSON() ([]byte, error) {
@@ -50,7 +57,7 @@ func (b *BuildInfoRoot) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, &startAndEnd); err != nil {
 		var start int
 		if err := json.Unmarshal(data, &start); err != nil {
-			var name string
+			var name BuildInfoPath
 			if err := json.Unmarshal(data, &name); err != nil {
 				return fmt.Errorf("invalid BuildInfoRoot: %s", data)
 			}
@@ -351,7 +358,7 @@ func (b *BuildInfoEmitSignature) noEmitSignature() bool {
 	return b.Signature == "" && !b.DiffersOnlyInDtsMap && !b.DiffersInOptions
 }
 
-func (b *BuildInfoEmitSignature) toEmitSignature(path tspath.Path, emitSignatures *collections.SyncMap[tspath.Path, *emitSignature]) *emitSignature {
+func (b *BuildInfoEmitSignature) toEmitSignature(path tspath.PathKey, emitSignatures *collections.SyncMap[tspath.PathKey, *emitSignature]) *emitSignature {
 	var signature string
 	var signatureWithDifferentOptions []string
 	if b.DiffersOnlyInDtsMap {
@@ -470,12 +477,12 @@ type BuildInfo struct {
 	Errors                  bool             `json:"errors,omitzero"`
 	CheckPending            bool             `json:"checkPending,omitzero"`
 	Root                    []*BuildInfoRoot `json:"root,omitzero"`
-	PackageJsons            []string         `json:"packageJsons,omitzero"`
-	MissingPackageJsons     []string         `json:"missingPackageJsons,omitzero"`
+	PackageJsons            []BuildInfoPath  `json:"packageJsons,omitzero"`
+	MissingPackageJsons     []BuildInfoPath  `json:"missingPackageJsons,omitzero"`
 	ContentMapperIdentities []string         `json:"contentMapperIdentities,omitzero"`
 
 	// IncrementalProgram info
-	FileNames                  []string                             `json:"fileNames,omitzero"`
+	FileNames                  []BuildInfoPath                      `json:"fileNames,omitzero"`
 	FileInfos                  []*BuildInfoFileInfo                 `json:"fileInfos,omitzero"`
 	FileIdsList                [][]BuildInfoFileId                  `json:"fileIdsList,omitzero"`
 	Options                    *collections.OrderedMap[string, any] `json:"options,omitzero"`
@@ -484,7 +491,7 @@ type BuildInfo struct {
 	EmitDiagnosticsPerFile     []*BuildInfoDiagnosticsOfFile        `json:"emitDiagnosticsPerFile,omitzero"`
 	ChangeFileSet              []BuildInfoFileId                    `json:"changeFileSet,omitzero"`
 	AffectedFilesPendingEmit   []*BuildInfoFilePendingEmit          `json:"affectedFilesPendingEmit,omitzero"`
-	LatestChangedDtsFile       string                               `json:"latestChangedDtsFile,omitzero"` // Because this is only output file in the program, we dont need fileId to deduplicate name
+	LatestChangedDtsFile       BuildInfoPath                        `json:"latestChangedDtsFile,omitzero"` // Because this is only output file in the program, we dont need fileId to deduplicate name
 	EmitSignatures             []*BuildInfoEmitSignature            `json:"emitSignatures,omitzero"`
 	ResolvedRoot               []*BuildInfoResolvedRoot             `json:"resolvedRoot,omitzero"`
 
@@ -515,11 +522,18 @@ func (b *BuildInfo) IsIncremental() bool {
 	return b != nil && len(b.FileNames) != 0
 }
 
-func IsBuildInfoFileNameDefaultLibrary(fileName string) bool {
-	return !tspath.PathIsRelative(fileName) && !tspath.PathIsAbsolute(fileName)
+func IsBuildInfoFileNameDefaultLibrary(fileName BuildInfoPath) bool {
+	return !tspath.PathIsRelative(fileName.AsString()) && !tspath.PathIsAbsolute(fileName.AsString())
 }
 
-func (b *BuildInfo) fileName(fileId BuildInfoFileId) string {
+func ResolveBuildInfoFileName(fileName BuildInfoPath, buildInfoDirectory tspath.RootedDirectoryPath, defaultLibraryPath tspath.RootedDirectoryPath) tspath.RootedFilePath {
+	if IsBuildInfoFileNameDefaultLibrary(fileName) {
+		return defaultLibraryPath.ResolveFile(fileName.AsString())
+	}
+	return tspath.ToRootedFilePath(fileName.AsString(), buildInfoDirectory)
+}
+
+func (b *BuildInfo) fileName(fileId BuildInfoFileId) BuildInfoPath {
 	if fileId < 1 || int(fileId) > len(b.FileNames) {
 		return ""
 	}
@@ -533,9 +547,21 @@ func (b *BuildInfo) fileInfo(fileId BuildInfoFileId) *BuildInfoFileInfo {
 	return b.FileInfos[fileId-1]
 }
 
-func (b *BuildInfo) GetCompilerOptions(buildInfoDirectory string) *core.CompilerOptions {
+func (b *BuildInfo) GetCompilerOptions(buildInfoDirectory tspath.RootedDirectoryPath) *core.CompilerOptions {
 	options := &core.CompilerOptions{}
 	for option, value := range b.Options.Entries() {
+		optionDeclaration := tsoptions.CommandLineCompilerOptionsMap.Get(option)
+		if buildInfoDirectory == "" && optionDeclaration != nil {
+			pathKind := optionDeclaration.PathKind
+			if optionDeclaration.Kind == tsoptions.CommandLineOptionTypeList {
+				if element := optionDeclaration.Elements(); element != nil {
+					pathKind = element.PathKind
+				}
+			}
+			if pathKind.IsRooted() {
+				continue
+			}
+		}
 		if buildInfoDirectory != "" {
 			result, ok := tsoptions.ConvertOptionToAbsolutePath(option, value, tsoptions.CommandLineCompilerOptionsMap, buildInfoDirectory)
 			if ok {
@@ -549,7 +575,7 @@ func (b *BuildInfo) GetCompilerOptions(buildInfoDirectory string) *core.Compiler
 	return options
 }
 
-func (b *BuildInfo) IsEmitPending(resolved *tsoptions.ParsedCommandLine, buildInfoDirectory string) bool {
+func (b *BuildInfo) IsEmitPending(resolved *tsoptions.ParsedCommandLine, buildInfoDirectory tspath.RootedDirectoryPath) bool {
 	// Some of the emit files like source map or dts etc are not yet done
 	if !resolved.CompilerOptions().NoEmit.IsTrue() || resolved.CompilerOptions().GetEmitDeclarations() {
 		pendingEmit := getPendingEmitKindWithOptions(resolved.CompilerOptions(), b.GetCompilerOptions(buildInfoDirectory))
@@ -561,31 +587,33 @@ func (b *BuildInfo) IsEmitPending(resolved *tsoptions.ParsedCommandLine, buildIn
 	return false
 }
 
-func (b *BuildInfo) GetPackageJsons(buildInfoDirectory string) iter.Seq[string] {
-	return getNormalizedPaths(b.PackageJsons, buildInfoDirectory)
+func (b *BuildInfo) GetPackageJsons(buildInfoDirectory tspath.RootedDirectoryPath) iter.Seq[tspath.RootedFilePath] {
+	return getBuildInfoFileNames(b.PackageJsons, buildInfoDirectory)
 }
 
-func (b *BuildInfo) GetMissingPackageJsons(buildInfoDirectory string) iter.Seq[string] {
-	return getNormalizedPaths(b.MissingPackageJsons, buildInfoDirectory)
+func (b *BuildInfo) GetMissingPackageJsons(buildInfoDirectory tspath.RootedDirectoryPath) iter.Seq[tspath.RootedFilePath] {
+	return getBuildInfoFileNames(b.MissingPackageJsons, buildInfoDirectory)
 }
 
-func getNormalizedPaths(paths []string, buildInfoDirectory string) iter.Seq[string] {
-	return func(yield func(string) bool) {
+func getBuildInfoFileNames(paths []BuildInfoPath, buildInfoDirectory tspath.RootedDirectoryPath) iter.Seq[tspath.RootedFilePath] {
+	return func(yield func(tspath.RootedFilePath) bool) {
 		for _, path := range paths {
-			if !yield(tspath.GetNormalizedAbsolutePath(path, buildInfoDirectory)) {
+			if !yield(buildInfoDirectory.ResolveFile(path.AsString())) {
 				return
 			}
 		}
 	}
 }
 
-func (b *BuildInfo) GetBuildInfoRootInfoReader(buildInfoDirectory string, comparePathOptions tspath.ComparePathsOptions) *BuildInfoRootInfoReader {
-	resolvedRootFileInfos := make(map[tspath.Path]*BuildInfoFileInfo, len(b.FileNames))
+func (b *BuildInfo) GetBuildInfoRootInfoReader(buildInfoDirectory tspath.RootedDirectoryPath, caseSensitivity tspath.CaseSensitivity) *BuildInfoRootInfoReader {
+	resolvedRootFileInfos := make(map[tspath.PathKey]*BuildInfoFileInfo, len(b.FileNames))
+	resolvedRootFileNames := make(map[tspath.PathKey]tspath.RootedFilePath, len(b.FileNames))
+	rootFileNames := make(map[tspath.PathKey]tspath.RootedFilePath, len(b.FileNames))
 	// Roots of the File
-	rootToResolved := collections.NewOrderedMapWithSizeHint[tspath.Path, tspath.Path](len(b.FileNames))
-	resolvedToRoot := make(map[tspath.Path]tspath.Path, len(b.ResolvedRoot))
-	toPath := func(fileName string) tspath.Path {
-		return tspath.ToPath(fileName, buildInfoDirectory, comparePathOptions.UseCaseSensitiveFileNames)
+	rootToResolved := collections.NewOrderedMapWithSizeHint[tspath.PathKey, tspath.PathKey](len(b.FileNames))
+	resolvedToRoot := make(map[tspath.PathKey]tspath.PathKey, len(b.ResolvedRoot))
+	toFileName := func(fileName BuildInfoPath) tspath.RootedFilePath {
+		return tspath.ToRootedFilePath(fileName.AsString(), buildInfoDirectory)
 	}
 
 	// Create map from resolvedRoot to Root
@@ -593,19 +621,25 @@ func (b *BuildInfo) GetBuildInfoRootInfoReader(buildInfoDirectory string, compar
 		resolvedRoot := b.fileName(resolved.Resolved)
 		root := b.fileName(resolved.Root)
 		if resolvedRoot != "" && root != "" {
-			resolvedToRoot[toPath(resolvedRoot)] = toPath(root)
+			rootFileName := toFileName(root)
+			rootPath := caseSensitivity.PathKey(rootFileName.AsPath())
+			resolvedToRoot[caseSensitivity.PathKey(toFileName(resolvedRoot).AsPath())] = rootPath
+			rootFileNames[rootPath] = rootFileName
 		}
 	}
 
-	addRoot := func(resolvedRoot string, fileInfo *BuildInfoFileInfo) {
+	addRoot := func(resolvedRoot BuildInfoPath, fileInfo *BuildInfoFileInfo) {
 		if resolvedRoot == "" {
 			return
 		}
-		resolvedRootPath := toPath(resolvedRoot)
+		resolvedRootFileName := toFileName(resolvedRoot)
+		resolvedRootPath := caseSensitivity.PathKey(resolvedRootFileName.AsPath())
+		resolvedRootFileNames[resolvedRootPath] = resolvedRootFileName
 		if rootPath, ok := resolvedToRoot[resolvedRootPath]; ok {
 			rootToResolved.Set(rootPath, resolvedRootPath)
 		} else {
 			rootToResolved.Set(resolvedRootPath, resolvedRootPath)
+			rootFileNames[resolvedRootPath] = resolvedRootFileName
 		}
 		if fileInfo != nil {
 			resolvedRootFileInfos[resolvedRootPath] = fileInfo
@@ -626,25 +660,37 @@ func (b *BuildInfo) GetBuildInfoRootInfoReader(buildInfoDirectory string, compar
 
 	return &BuildInfoRootInfoReader{
 		resolvedRootFileInfos: resolvedRootFileInfos,
+		resolvedRootFileNames: resolvedRootFileNames,
+		rootFileNames:         rootFileNames,
 		rootToResolved:        rootToResolved,
 	}
 }
 
 type BuildInfoRootInfoReader struct {
-	resolvedRootFileInfos map[tspath.Path]*BuildInfoFileInfo
-	rootToResolved        *collections.OrderedMap[tspath.Path, tspath.Path]
+	resolvedRootFileInfos map[tspath.PathKey]*BuildInfoFileInfo
+	resolvedRootFileNames map[tspath.PathKey]tspath.RootedFilePath
+	rootFileNames         map[tspath.PathKey]tspath.RootedFilePath
+	rootToResolved        *collections.OrderedMap[tspath.PathKey, tspath.PathKey]
 }
 
-func (b *BuildInfoRootInfoReader) GetBuildInfoFileInfo(inputFilePath tspath.Path) (*BuildInfoFileInfo, tspath.Path) {
+func (b *BuildInfoRootInfoReader) GetBuildInfoFileInfo(inputFilePath tspath.PathKey) (*BuildInfoFileInfo, tspath.RootedFilePath) {
 	if info, ok := b.resolvedRootFileInfos[inputFilePath]; ok {
-		return info, inputFilePath
+		return info, b.resolvedRootFileNames[inputFilePath]
 	}
 	if resolved, ok := b.rootToResolved.Get(inputFilePath); ok {
-		return b.resolvedRootFileInfos[resolved], resolved
+		return b.resolvedRootFileInfos[resolved], b.resolvedRootFileNames[resolved]
 	}
 	return nil, ""
 }
 
-func (b *BuildInfoRootInfoReader) Roots() iter.Seq[tspath.Path] {
+func (b *BuildInfoRootInfoReader) Roots() iter.Seq[tspath.PathKey] {
 	return b.rootToResolved.Keys()
+}
+
+func (b *BuildInfoRootInfoReader) RootFileName(path tspath.PathKey) tspath.RootedFilePath {
+	fileName, ok := b.rootFileNames[path]
+	if !ok {
+		panic("root file name not found")
+	}
+	return fileName
 }
