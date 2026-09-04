@@ -1,0 +1,50 @@
+//// [tests/cases/compiler/recursiveTypeThroughObjectLiteralGetterAbsentProperty.ts] ////
+
+=== recursiveTypeThroughObjectLiteralGetterAbsentProperty.ts ===
+// A property that is genuinely absent has to stay absent. While ObjectFlagsUnresolvedMembers is set
+// the member table holds only what the type declares itself, so a miss in that window is treated as
+// "not known yet" -- but only inside a speculative region, where the answer is provisional anyway.
+//
+// Without that restriction this compiles clean: `D` never has `missing`, so the conditional has to
+// pick `string` and `.run()` on it is an error. Suppressing the unmatched property during an ordinary
+// check makes the conditional take the wrong branch and the call goes unreported.
+
+interface Need {
+>Need : Symbol(Need, Decl(recursiveTypeThroughObjectLiteralGetterAbsentProperty.ts, 0, 0))
+
+    missing: string;
+>missing : Symbol(Need.missing, Decl(recursiveTypeThroughObjectLiteralGetterAbsentProperty.ts, 8, 16))
+}
+type Guarded<T> = [T] extends [Need] ? { run(): void } : string;
+>Guarded : Symbol(Guarded, Decl(recursiveTypeThroughObjectLiteralGetterAbsentProperty.ts, 10, 1))
+>T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetterAbsentProperty.ts, 11, 13))
+>T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetterAbsentProperty.ts, 11, 13))
+>Need : Symbol(Need, Decl(recursiveTypeThroughObjectLiteralGetterAbsentProperty.ts, 0, 0))
+>run : Symbol(run, Decl(recursiveTypeThroughObjectLiteralGetterAbsentProperty.ts, 11, 40))
+
+interface Base<T> {
+>Base : Symbol(Base, Decl(recursiveTypeThroughObjectLiteralGetterAbsentProperty.ts, 11, 64))
+>T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetterAbsentProperty.ts, 12, 15))
+
+    [k: string]: Guarded<T>;
+>k : Symbol(k, Decl(recursiveTypeThroughObjectLiteralGetterAbsentProperty.ts, 13, 5))
+>Guarded : Symbol(Guarded, Decl(recursiveTypeThroughObjectLiteralGetterAbsentProperty.ts, 10, 1))
+>T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetterAbsentProperty.ts, 12, 15))
+}
+interface D extends Base<D> {
+>D : Symbol(D, Decl(recursiveTypeThroughObjectLiteralGetterAbsentProperty.ts, 14, 1))
+>Base : Symbol(Base, Decl(recursiveTypeThroughObjectLiteralGetterAbsentProperty.ts, 11, 64))
+>D : Symbol(D, Decl(recursiveTypeThroughObjectLiteralGetterAbsentProperty.ts, 14, 1))
+
+    own: never;
+>own : Symbol(D.own, Decl(recursiveTypeThroughObjectLiteralGetterAbsentProperty.ts, 15, 29))
+}
+declare const d: D;
+>d : Symbol(d, Decl(recursiveTypeThroughObjectLiteralGetterAbsentProperty.ts, 18, 13))
+>D : Symbol(D, Decl(recursiveTypeThroughObjectLiteralGetterAbsentProperty.ts, 14, 1))
+
+d.anything.run();
+>d.anything : Symbol(D.__index, Decl(recursiveTypeThroughObjectLiteralGetterAbsentProperty.ts, 12, 19))
+>d : Symbol(d, Decl(recursiveTypeThroughObjectLiteralGetterAbsentProperty.ts, 18, 13))
+>anything : Symbol(D.__index, Decl(recursiveTypeThroughObjectLiteralGetterAbsentProperty.ts, 12, 19))
+

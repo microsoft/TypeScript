@@ -1,0 +1,74 @@
+//// [tests/cases/compiler/recursiveTypeThroughObjectLiteralGetterDeclarationEmit.ts] ////
+
+=== recursiveTypeThroughObjectLiteralGetterDeclarationEmit.ts ===
+// What the recursive schema looks like coming out as a declaration. On main this is
+// `export declare const node: any` plus two implicit-any errors, because the type never resolved.
+// The recursion point itself still comes out as `/*elided*/ any` -- the node builder has no way to
+// write a reference back into the type it is in the middle of writing, and main elides the same way
+// on a type it can resolve. Everything around it is now the real shape.
+
+interface Internals<out O = unknown> {
+    readonly out: O;
+>out : O
+}
+interface Schema {
+    readonly internals: Internals;
+>internals : Internals<unknown>
+}
+type Out<T extends Schema> = T["internals"]["out"];
+>Out : Out<T>
+
+interface ArrayInternals<T extends Schema> extends Internals<Out<T>[]> {}
+interface ArraySchema<T extends Schema = Schema> extends Schema {
+    readonly internals: ArrayInternals<T>;
+>internals : ArrayInternals<T>
+}
+interface StringInternals extends Internals<string> {}
+interface StringSchema extends Schema {
+    readonly internals: StringInternals;
+>internals : StringInternals
+}
+
+type Shape = Readonly<{ [k: string]: Schema }>;
+>Shape : Readonly<{ [k: string]: Schema; }>
+>k : string
+
+interface ObjectInternals<S extends Shape> extends Internals<{ [K in keyof S]: Out<S[K]> }> {}
+interface ObjectSchema<S extends Shape = Shape> extends Schema {
+    readonly internals: ObjectInternals<S>;
+>internals : ObjectInternals<S>
+}
+
+declare function object<S extends Shape>(shape: S): ObjectSchema<S>;
+>object : <S extends Shape>(shape: S) => ObjectSchema<S>
+>shape : S
+
+declare function array<T extends Schema>(element: T): ArraySchema<T>;
+>array : <T extends Schema>(element: T) => ArraySchema<T>
+>element : T
+
+declare function text(): StringSchema;
+>text : () => StringSchema
+
+export const node = object({
+>node : ObjectSchema<{ name: StringSchema; readonly children: ArraySchema<ObjectSchema<any>>; }>
+>object({    name: text(),    get children() {        return array(node);    },}) : ObjectSchema<{ name: StringSchema; readonly children: ArraySchema<ObjectSchema<any>>; }>
+>object : <S extends Shape>(shape: S) => ObjectSchema<S>
+>{    name: text(),    get children() {        return array(node);    },} : { name: StringSchema; readonly children: ArraySchema<ObjectSchema<{ name: StringSchema; readonly children: ArraySchema<ObjectSchema<any>>; }>>; }
+
+    name: text(),
+>name : StringSchema
+>text() : StringSchema
+>text : () => StringSchema
+
+    get children() {
+>children : ArraySchema<ObjectSchema<{ name: StringSchema; readonly children: ArraySchema<ObjectSchema<any>>; }>>
+
+        return array(node);
+>array(node) : ArraySchema<ObjectSchema<{ name: StringSchema; readonly children: ArraySchema<ObjectSchema<any>>; }>>
+>array : <T extends Schema>(element: T) => ArraySchema<T>
+>node : ObjectSchema<{ name: StringSchema; readonly children: ArraySchema<ObjectSchema<any>>; }>
+
+    },
+});
+

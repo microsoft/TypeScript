@@ -1,0 +1,58 @@
+//// [tests/cases/compiler/recursiveTypeThroughObjectLiteralGetterConstraint.ts] ////
+
+=== recursiveTypeThroughObjectLiteralGetterConstraint.ts ===
+// Skipping an accessor during a check that reports nothing is a deferral, not a waiver. An array of
+// schemas is not a Schema, so this reports. The baseline is byte-identical to what an unpatched
+// compiler produces, pinning that the constraint is still enforced rather than which pass enforced
+// it. The recursive shape where the deferred pass is the only thing
+// that can report it is recursiveTypeThroughObjectLiteralGetterPostponedConstraint.ts.
+
+interface Schema<O> {
+>Schema : Symbol(Schema, Decl(recursiveTypeThroughObjectLiteralGetterConstraint.ts, 0, 0))
+>O : Symbol(O, Decl(recursiveTypeThroughObjectLiteralGetterConstraint.ts, 6, 17))
+
+    readonly out: O;
+>out : Symbol(Schema.out, Decl(recursiveTypeThroughObjectLiteralGetterConstraint.ts, 6, 21))
+>O : Symbol(O, Decl(recursiveTypeThroughObjectLiteralGetterConstraint.ts, 6, 17))
+}
+type Shape = Record<string, Schema<any>>;
+>Shape : Symbol(Shape, Decl(recursiveTypeThroughObjectLiteralGetterConstraint.ts, 8, 1))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Schema : Symbol(Schema, Decl(recursiveTypeThroughObjectLiteralGetterConstraint.ts, 0, 0))
+
+declare function object<S extends Shape>(shape: S): Schema<{ [K in keyof S]: S[K]["out"] }> & { shape: S };
+>object : Symbol(object, Decl(recursiveTypeThroughObjectLiteralGetterConstraint.ts, 9, 41))
+>S : Symbol(S, Decl(recursiveTypeThroughObjectLiteralGetterConstraint.ts, 10, 24))
+>Shape : Symbol(Shape, Decl(recursiveTypeThroughObjectLiteralGetterConstraint.ts, 8, 1))
+>shape : Symbol(shape, Decl(recursiveTypeThroughObjectLiteralGetterConstraint.ts, 10, 41))
+>S : Symbol(S, Decl(recursiveTypeThroughObjectLiteralGetterConstraint.ts, 10, 24))
+>Schema : Symbol(Schema, Decl(recursiveTypeThroughObjectLiteralGetterConstraint.ts, 0, 0))
+>K : Symbol(K, Decl(recursiveTypeThroughObjectLiteralGetterConstraint.ts, 10, 62))
+>S : Symbol(S, Decl(recursiveTypeThroughObjectLiteralGetterConstraint.ts, 10, 24))
+>S : Symbol(S, Decl(recursiveTypeThroughObjectLiteralGetterConstraint.ts, 10, 24))
+>K : Symbol(K, Decl(recursiveTypeThroughObjectLiteralGetterConstraint.ts, 10, 62))
+>shape : Symbol(shape, Decl(recursiveTypeThroughObjectLiteralGetterConstraint.ts, 10, 95))
+>S : Symbol(S, Decl(recursiveTypeThroughObjectLiteralGetterConstraint.ts, 10, 24))
+
+declare const leaf: Schema<string>;
+>leaf : Symbol(leaf, Decl(recursiveTypeThroughObjectLiteralGetterConstraint.ts, 11, 13))
+>Schema : Symbol(Schema, Decl(recursiveTypeThroughObjectLiteralGetterConstraint.ts, 0, 0))
+
+const flat = object({
+>flat : Symbol(flat, Decl(recursiveTypeThroughObjectLiteralGetterConstraint.ts, 13, 5))
+>object : Symbol(object, Decl(recursiveTypeThroughObjectLiteralGetterConstraint.ts, 9, 41))
+
+    get bad() {
+>bad : Symbol(bad, Decl(recursiveTypeThroughObjectLiteralGetterConstraint.ts, 13, 21))
+
+        return [leaf];
+>leaf : Symbol(leaf, Decl(recursiveTypeThroughObjectLiteralGetterConstraint.ts, 11, 13))
+
+    },
+});
+export const out = flat.out;
+>out : Symbol(out, Decl(recursiveTypeThroughObjectLiteralGetterConstraint.ts, 18, 12))
+>flat.out : Symbol(Schema.out, Decl(recursiveTypeThroughObjectLiteralGetterConstraint.ts, 6, 21))
+>flat : Symbol(flat, Decl(recursiveTypeThroughObjectLiteralGetterConstraint.ts, 13, 5))
+>out : Symbol(Schema.out, Decl(recursiveTypeThroughObjectLiteralGetterConstraint.ts, 6, 21))
+

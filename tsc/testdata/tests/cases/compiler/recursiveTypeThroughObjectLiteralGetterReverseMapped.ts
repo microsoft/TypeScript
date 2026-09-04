@@ -1,0 +1,53 @@
+// @strict: true
+// @noEmit: true
+
+// The same schema shape, but the parameter is written as a mapped type over the inferred one, so
+// inference runs through a reverse mapped type. Neither this change nor main resolves this variant --
+// both report TS7022/TS7023 on the declaration -- and the case asserts they report the same thing.
+//
+// A provisional comparison explores further than an ordinary check does, so it can walk into a
+// circularity that main never reaches because it collapses the getter first. Reporting that, or
+// caching it as the type parameter's constraint, adds a diagnostic to a program main accepts. The
+// circularity belongs to the question, so inside a region it neither reports nor sticks, and the next
+// ask outside one is free to reach a real one.
+
+interface Internals<O> {
+    optional: "true" | "false";
+    out: O;
+}
+
+interface StringSchema extends Internals<string> {
+    optional: "false";
+}
+
+type Shape = Record<string, any>;
+type Prettify<T> = { [K in keyof T]: T[K] } & {};
+type ObjectOut<S extends Shape> = Prettify<
+    {
+        [K in keyof S as S[K] extends { optional: "true" } ? K : never]?: S[K]["out"];
+    } & {
+        [K in keyof S as S[K] extends { optional: "true" } ? never : K]: S[K]["out"];
+    }
+>;
+
+interface ObjectSchema<S extends Shape> extends Internals<ObjectOut<S>> {
+    optional: "false";
+}
+
+interface OptionalSchema<T extends Internals<any>> extends Internals<T["out"] | undefined> {
+    optional: "true";
+}
+
+declare function object<S extends Shape>(shape: { [K in keyof S]: S[K] }): ObjectSchema<S>;
+declare function text(): StringSchema;
+declare function optional<T extends Internals<any>>(schema: T): OptionalSchema<T>;
+
+const category = object({
+    name: text(),
+    get parent() {
+        return optional(category);
+    },
+});
+
+declare const sample: (typeof category)["out"];
+const topName: string = sample.name;

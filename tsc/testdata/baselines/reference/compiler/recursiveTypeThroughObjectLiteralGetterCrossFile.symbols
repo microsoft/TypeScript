@@ -1,0 +1,53 @@
+//// [tests/cases/compiler/recursiveTypeThroughObjectLiteralGetterCrossFile.ts] ////
+
+=== schema.ts ===
+export interface Schema<O> {
+>Schema : Symbol(Schema, Decl(schema.ts, 0, 0))
+>O : Symbol(O, Decl(schema.ts, 0, 24))
+
+    readonly out: O;
+>out : Symbol(Schema.out, Decl(schema.ts, 0, 28))
+>O : Symbol(O, Decl(schema.ts, 0, 24))
+}
+export type Shape = Record<string, Schema<any>>;
+>Shape : Symbol(Shape, Decl(schema.ts, 2, 1))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Schema : Symbol(Schema, Decl(schema.ts, 0, 0))
+
+export declare function object<S extends Shape>(shape: S): Schema<{ [K in keyof S]: S[K]["out"] }> & { shape: S };
+>object : Symbol(object, Decl(schema.ts, 3, 48))
+>S : Symbol(S, Decl(schema.ts, 4, 31))
+>Shape : Symbol(Shape, Decl(schema.ts, 2, 1))
+>shape : Symbol(shape, Decl(schema.ts, 4, 48))
+>S : Symbol(S, Decl(schema.ts, 4, 31))
+>Schema : Symbol(Schema, Decl(schema.ts, 0, 0))
+>K : Symbol(K, Decl(schema.ts, 4, 69))
+>S : Symbol(S, Decl(schema.ts, 4, 31))
+>S : Symbol(S, Decl(schema.ts, 4, 31))
+>K : Symbol(K, Decl(schema.ts, 4, 69))
+>shape : Symbol(shape, Decl(schema.ts, 4, 102))
+>S : Symbol(S, Decl(schema.ts, 4, 31))
+
+export const tree = object({
+>tree : Symbol(tree, Decl(schema.ts, 6, 12))
+>object : Symbol(object, Decl(schema.ts, 3, 48))
+
+    get bad() {
+>bad : Symbol(bad, Decl(schema.ts, 6, 28))
+
+        return [tree];
+>tree : Symbol(tree, Decl(schema.ts, 6, 12))
+
+    },
+});
+
+=== consumer.ts ===
+import { tree } from "./schema.js";
+>tree : Symbol(tree, Decl(consumer.ts, 0, 8))
+
+export const out = tree.out;
+>out : Symbol(out, Decl(consumer.ts, 2, 12))
+>tree.out : Symbol(Schema.out, Decl(schema.ts, 0, 28))
+>tree : Symbol(tree, Decl(consumer.ts, 0, 8))
+>out : Symbol(Schema.out, Decl(schema.ts, 0, 28))
+

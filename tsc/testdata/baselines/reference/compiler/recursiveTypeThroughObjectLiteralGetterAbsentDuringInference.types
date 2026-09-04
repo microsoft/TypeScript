@@ -1,0 +1,64 @@
+//// [tests/cases/compiler/recursiveTypeThroughObjectLiteralGetterAbsentDuringInference.ts] ////
+
+=== recursiveTypeThroughObjectLiteralGetterAbsentDuringInference.ts ===
+// The companion to recursiveTypeThroughObjectLiteralGetterAbsentProperty, on the speculative path.
+// Inferring `T` from `Wrapper<D>` opens a region, and checking the inferred type against the constraint
+// reads `D` while its base is still being instantiated. A conditional asked about `D` in that window used
+// to be told every property matched, so `[D] extends [Need]` took the true branch, the index signature
+// became `{ run(): void }`, and `d.anything.run()` went unreported.
+//
+// The window withholds inherited members and nothing else, so `missing`, which no base of `D` declares,
+// is absent even there. The conditional takes the branch it would take once the table is complete.
+//
+// The opposite direction, a name a base does declare and which stays withheld, is covered by the two
+// #62181 hover tests and the mapped-type case; a case written here would not reach the skip.
+
+export function run(): void {
+>run : () => void
+
+    force(w);
+>force(w) : D
+>force : <T extends { own: never; }>(x: Wrapper<T>) => T
+>w : Wrapper<D>
+}
+
+export function probe(): void {
+>probe : () => void
+
+    d.anything.run();
+>d.anything.run() : any
+>d.anything.run : any
+>d.anything : string
+>d : D
+>anything : string
+>run : any
+}
+
+interface Need { missing: string }
+>missing : string
+
+type Guarded<T> = [T] extends [Need] ? { run(): void } : string;
+>Guarded : Guarded<T>
+>run : () => void
+
+interface Base<T> { [k: string]: Guarded<T>; }
+>k : string
+
+interface D extends Base<D> { own: never; }
+>own : never
+
+interface Wrapper<T> { readonly w: T }
+>w : T
+
+declare function force<T extends { own: never }>(x: Wrapper<T>): T;
+>force : <T extends { own: never; }>(x: Wrapper<T>) => T
+>own : never
+>x : Wrapper<T>
+
+declare const w: Wrapper<D>;
+>w : Wrapper<D>
+
+declare const d: D;
+>d : D
+
+

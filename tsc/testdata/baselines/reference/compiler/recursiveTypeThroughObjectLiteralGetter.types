@@ -1,0 +1,124 @@
+//// [tests/cases/compiler/recursiveTypeThroughObjectLiteralGetter.ts] ////
+
+=== recursiveTypeThroughObjectLiteralGetter.ts ===
+// A getter is how a self-referential object literal is written, and its type is worked out lazily.
+// Inferring the type argument for `object` must not force that getter, which reports a circularity
+// and fixes the member at `any`. Reduced from #62180 and #62181.
+
+interface Internals<out O = unknown> {
+    readonly out: O;
+>out : O
+}
+interface Schema {
+    readonly internals: Internals;
+>internals : Internals<unknown>
+}
+type Out<T extends Schema> = T["internals"]["out"];
+>Out : Out<T>
+
+interface ArrayInternals<T extends Schema> extends Internals<Out<T>[]> {}
+interface ArraySchema<T extends Schema = Schema> extends Schema {
+    readonly internals: ArrayInternals<T>;
+>internals : ArrayInternals<T>
+}
+interface StringInternals extends Internals<string> {}
+interface StringSchema extends Schema {
+    readonly internals: StringInternals;
+>internals : StringInternals
+}
+
+type Shape = Readonly<{ [k: string]: Schema }>;
+>Shape : Readonly<{ [k: string]: Schema; }>
+>k : string
+
+interface ObjectInternals<S extends Shape> extends Internals<{ [K in keyof S]: Out<S[K]> }> {}
+interface ObjectSchema<S extends Shape = Shape> extends Schema {
+    readonly internals: ObjectInternals<S>;
+>internals : ObjectInternals<S>
+}
+
+declare function object<S extends Shape>(shape: S): ObjectSchema<S>;
+>object : <S extends Shape>(shape: S) => ObjectSchema<S>
+>shape : S
+
+declare function array<T extends Schema>(element: T): ArraySchema<T>;
+>array : <T extends Schema>(element: T) => ArraySchema<T>
+>element : T
+
+declare function text(): StringSchema;
+>text : () => StringSchema
+
+const node = object({
+>node : ObjectSchema<{ name: StringSchema; readonly children: ArraySchema<ObjectSchema<any>>; }>
+>object({    name: text(),    get children() {        return array(node);    },}) : ObjectSchema<{ name: StringSchema; readonly children: ArraySchema<ObjectSchema<any>>; }>
+>object : <S extends Shape>(shape: S) => ObjectSchema<S>
+>{    name: text(),    get children() {        return array(node);    },} : { name: StringSchema; readonly children: ArraySchema<ObjectSchema<{ name: StringSchema; readonly children: ArraySchema<ObjectSchema<any>>; }>>; }
+
+    name: text(),
+>name : StringSchema
+>text() : StringSchema
+>text : () => StringSchema
+
+    get children() {
+>children : ArraySchema<ObjectSchema<{ name: StringSchema; readonly children: ArraySchema<ObjectSchema<any>>; }>>
+
+        return array(node);
+>array(node) : ArraySchema<ObjectSchema<{ name: StringSchema; readonly children: ArraySchema<ObjectSchema<any>>; }>>
+>array : <T extends Schema>(element: T) => ArraySchema<T>
+>node : ObjectSchema<{ name: StringSchema; readonly children: ArraySchema<ObjectSchema<any>>; }>
+
+    },
+});
+
+type TreeNode = Out<typeof node>;
+>TreeNode : { name: string; readonly children: any[]; }
+>node : ObjectSchema<{ name: StringSchema; readonly children: ArraySchema<ObjectSchema<any>>; }>
+
+declare const sample: TreeNode;
+>sample : { name: string; readonly children: any[]; }
+
+// The recursive member is an array of the same node type, not `any` and not `unknown`.
+const leafName: string = sample.name;
+>leafName : string
+>sample.name : string
+>sample : { name: string; readonly children: any[]; }
+>name : string
+
+const nestedName: string = sample.children[0].children[0].name;
+>nestedName : string
+>sample.children[0].children[0].name : string
+>sample.children[0].children[0] : { name: string; readonly children: any[]; }
+>sample.children[0].children : { name: string; readonly children: any[]; }[]
+>sample.children[0] : { name: string; readonly children: any[]; }
+>sample.children : { name: string; readonly children: any[]; }[]
+>sample : { name: string; readonly children: any[]; }
+>children : { name: string; readonly children: any[]; }[]
+>0 : 0
+>children : { name: string; readonly children: any[]; }[]
+>0 : 0
+>name : string
+
+// Both assertions above pass if the whole thing collapsed to `any`, so the recursion point is also
+// probed where `any` cannot hide. An unknown key must be an error, and a known one must carry its
+// declared type.
+// @ts-expect-error
+sample.children[0].missing;
+>sample.children[0].missing : error
+>sample.children[0] : { name: string; readonly children: any[]; }
+>sample.children : { name: string; readonly children: any[]; }[]
+>sample : { name: string; readonly children: any[]; }
+>children : { name: string; readonly children: any[]; }[]
+>0 : 0
+>missing : any
+
+// @ts-expect-error
+const wrongLeafType: number = sample.children[0].name;
+>wrongLeafType : number
+>sample.children[0].name : string
+>sample.children[0] : { name: string; readonly children: any[]; }
+>sample.children : { name: string; readonly children: any[]; }[]
+>sample : { name: string; readonly children: any[]; }
+>children : { name: string; readonly children: any[]; }[]
+>0 : 0
+>name : string
+

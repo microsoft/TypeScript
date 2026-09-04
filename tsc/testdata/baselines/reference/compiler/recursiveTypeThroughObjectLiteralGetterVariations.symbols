@@ -1,0 +1,269 @@
+//// [tests/cases/compiler/recursiveTypeThroughObjectLiteralGetterVariations.ts] ////
+
+=== recursiveTypeThroughObjectLiteralGetterVariations.ts ===
+// The recursive getter written the several ways it comes up: as a class's static, nested inside
+// another object literal, through an intermediate call, spelled out with an annotation, and twice
+// over in one file. main reports TS7022/TS7023 on every one of these, and TS2502 on the annotated
+// one.
+
+interface Schema<O> {
+>Schema : Symbol(Schema, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 0, 0))
+>O : Symbol(O, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 5, 17))
+
+    readonly out: O;
+>out : Symbol(Schema.out, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 5, 21))
+>O : Symbol(O, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 5, 17))
+}
+type Shape = Record<string, Schema<any>>;
+>Shape : Symbol(Shape, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 7, 1))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Schema : Symbol(Schema, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 0, 0))
+
+declare function object<S extends Shape>(shape: S): Schema<{ [K in keyof S]: S[K]["out"] }> & { shape: S };
+>object : Symbol(object, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 8, 41))
+>S : Symbol(S, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 9, 24))
+>Shape : Symbol(Shape, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 7, 1))
+>shape : Symbol(shape, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 9, 41))
+>S : Symbol(S, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 9, 24))
+>Schema : Symbol(Schema, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 0, 0))
+>K : Symbol(K, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 9, 62))
+>S : Symbol(S, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 9, 24))
+>S : Symbol(S, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 9, 24))
+>K : Symbol(K, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 9, 62))
+>shape : Symbol(shape, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 9, 95))
+>S : Symbol(S, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 9, 24))
+
+declare function arr<T extends Schema<any>>(t: T): Schema<T["out"][]>;
+>arr : Symbol(arr, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 9, 107))
+>T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 10, 21))
+>Schema : Symbol(Schema, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 0, 0))
+>t : Symbol(t, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 10, 44))
+>T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 10, 21))
+>Schema : Symbol(Schema, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 0, 0))
+>T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 10, 21))
+
+declare const leaf: Schema<string>;
+>leaf : Symbol(leaf, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 11, 13))
+>Schema : Symbol(Schema, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 0, 0))
+
+class Holder {
+>Holder : Symbol(Holder, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 11, 35))
+
+    static readonly schema = object({
+>schema : Symbol(Holder.schema, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 13, 14))
+>object : Symbol(object, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 8, 41))
+
+        name: leaf,
+>name : Symbol(name, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 14, 37))
+>leaf : Symbol(leaf, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 11, 13))
+
+        get self() {
+>self : Symbol(self, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 15, 19))
+
+            return Holder.schema;
+>Holder.schema : Symbol(Holder.schema, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 13, 14))
+>Holder : Symbol(Holder, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 11, 35))
+>schema : Symbol(Holder.schema, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 13, 14))
+
+        },
+    });
+}
+declare const fromClass: typeof Holder.schema.out;
+>fromClass : Symbol(fromClass, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 21, 13))
+>Holder.schema.out : Symbol(Schema.out, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 5, 21))
+>Holder.schema : Symbol(Holder.schema, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 13, 14))
+>Holder : Symbol(Holder, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 11, 35))
+>schema : Symbol(Holder.schema, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 13, 14))
+>out : Symbol(Schema.out, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 5, 21))
+
+const className: string = fromClass.name;
+>className : Symbol(className, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 22, 5))
+>fromClass.name : Symbol(name, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 14, 37))
+>fromClass : Symbol(fromClass, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 21, 13))
+>name : Symbol(name, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 14, 37))
+
+const nested = object({
+>nested : Symbol(nested, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 24, 5))
+>object : Symbol(object, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 8, 41))
+
+    name: leaf,
+>name : Symbol(name, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 24, 23))
+>leaf : Symbol(leaf, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 11, 13))
+
+    get inner() {
+>inner : Symbol(inner, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 25, 15))
+
+        return object({ deeper: nested });
+>object : Symbol(object, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 8, 41))
+>deeper : Symbol(deeper, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 27, 23))
+>nested : Symbol(nested, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 24, 5))
+
+    },
+});
+declare const fromNested: typeof nested.out;
+>fromNested : Symbol(fromNested, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 30, 13))
+>nested.out : Symbol(Schema.out, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 5, 21))
+>nested : Symbol(nested, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 24, 5))
+>out : Symbol(Schema.out, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 5, 21))
+
+const nestedName: string = fromNested.inner.deeper.name;
+>nestedName : Symbol(nestedName, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 31, 5))
+>fromNested.inner.deeper.name : Symbol(name, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 24, 23))
+>fromNested.inner.deeper : Symbol(deeper, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 27, 23))
+>fromNested.inner : Symbol(inner, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 25, 15))
+>fromNested : Symbol(fromNested, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 30, 13))
+>inner : Symbol(inner, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 25, 15))
+>deeper : Symbol(deeper, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 27, 23))
+>name : Symbol(name, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 24, 23))
+
+const viaCall = object({
+>viaCall : Symbol(viaCall, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 33, 5))
+>object : Symbol(object, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 8, 41))
+
+    name: leaf,
+>name : Symbol(name, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 33, 24))
+>leaf : Symbol(leaf, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 11, 13))
+
+    get items() {
+>items : Symbol(items, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 34, 15))
+
+        return arr(viaCall);
+>arr : Symbol(arr, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 9, 107))
+>viaCall : Symbol(viaCall, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 33, 5))
+
+    },
+});
+declare const fromCall: typeof viaCall.out;
+>fromCall : Symbol(fromCall, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 39, 13))
+>viaCall.out : Symbol(Schema.out, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 5, 21))
+>viaCall : Symbol(viaCall, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 33, 5))
+>out : Symbol(Schema.out, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 5, 21))
+
+const callName: string = fromCall.items[0].items[0].name;
+>callName : Symbol(callName, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 40, 5))
+>fromCall.items[0].items[0].name : Symbol(name, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 33, 24))
+>fromCall.items[0].items : Symbol(items, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 34, 15))
+>fromCall.items : Symbol(items, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 34, 15))
+>fromCall : Symbol(fromCall, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 39, 13))
+>items : Symbol(items, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 34, 15))
+>items : Symbol(items, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 34, 15))
+>name : Symbol(name, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 33, 24))
+
+const annotated = object({
+>annotated : Symbol(annotated, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 42, 5))
+>object : Symbol(object, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 8, 41))
+
+    name: leaf,
+>name : Symbol(name, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 42, 26))
+>leaf : Symbol(leaf, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 11, 13))
+
+    get self(): typeof annotated {
+>self : Symbol(self, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 43, 15))
+>annotated : Symbol(annotated, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 42, 5))
+
+        return annotated;
+>annotated : Symbol(annotated, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 42, 5))
+
+    },
+});
+declare const fromAnnotated: typeof annotated.out;
+>fromAnnotated : Symbol(fromAnnotated, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 48, 13))
+>annotated.out : Symbol(Schema.out, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 5, 21))
+>annotated : Symbol(annotated, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 42, 5))
+>out : Symbol(Schema.out, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 5, 21))
+
+const annotatedName: string = fromAnnotated.self.self.name;
+>annotatedName : Symbol(annotatedName, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 49, 5))
+>fromAnnotated.self.self.name : Symbol(name, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 42, 26))
+>fromAnnotated.self.self : Symbol(self, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 43, 15))
+>fromAnnotated.self : Symbol(self, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 43, 15))
+>fromAnnotated : Symbol(fromAnnotated, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 48, 13))
+>self : Symbol(self, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 43, 15))
+>self : Symbol(self, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 43, 15))
+>name : Symbol(name, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 42, 26))
+
+// Two independent recursive schemas must not contaminate each other.
+const first = object({ a: leaf, get me() { return first; } });
+>first : Symbol(first, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 52, 5))
+>object : Symbol(object, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 8, 41))
+>a : Symbol(a, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 52, 22))
+>leaf : Symbol(leaf, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 11, 13))
+>me : Symbol(me, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 52, 31))
+>first : Symbol(first, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 52, 5))
+
+const second = object({ b: leaf, get me() { return second; } });
+>second : Symbol(second, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 53, 5))
+>object : Symbol(object, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 8, 41))
+>b : Symbol(b, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 53, 23))
+>leaf : Symbol(leaf, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 11, 13))
+>me : Symbol(me, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 53, 32))
+>second : Symbol(second, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 53, 5))
+
+declare const fromFirst: typeof first.out;
+>fromFirst : Symbol(fromFirst, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 54, 13))
+>first.out : Symbol(Schema.out, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 5, 21))
+>first : Symbol(first, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 52, 5))
+>out : Symbol(Schema.out, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 5, 21))
+
+declare const fromSecond: typeof second.out;
+>fromSecond : Symbol(fromSecond, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 55, 13))
+>second.out : Symbol(Schema.out, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 5, 21))
+>second : Symbol(second, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 53, 5))
+>out : Symbol(Schema.out, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 5, 21))
+
+const firstA: string = fromFirst.me.a;
+>firstA : Symbol(firstA, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 56, 5))
+>fromFirst.me.a : Symbol(a, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 52, 22))
+>fromFirst.me : Symbol(me, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 52, 31))
+>fromFirst : Symbol(fromFirst, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 54, 13))
+>me : Symbol(me, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 52, 31))
+>a : Symbol(a, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 52, 22))
+
+const secondB: string = fromSecond.me.b;
+>secondB : Symbol(secondB, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 57, 5))
+>fromSecond.me.b : Symbol(b, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 53, 23))
+>fromSecond.me : Symbol(me, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 53, 32))
+>fromSecond : Symbol(fromSecond, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 55, 13))
+>me : Symbol(me, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 53, 32))
+>b : Symbol(b, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 53, 23))
+
+// Every assertion above still passes if the type degraded to `any`. These do not; each names a key the
+// schema does not have.
+// @ts-expect-error
+fromClass.self.missing;
+>fromClass.self : Symbol(self, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 15, 19))
+>fromClass : Symbol(fromClass, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 21, 13))
+>self : Symbol(self, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 15, 19))
+
+// @ts-expect-error
+fromNested.inner.deeper.missing;
+>fromNested.inner.deeper : Symbol(deeper, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 27, 23))
+>fromNested.inner : Symbol(inner, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 25, 15))
+>fromNested : Symbol(fromNested, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 30, 13))
+>inner : Symbol(inner, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 25, 15))
+>deeper : Symbol(deeper, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 27, 23))
+
+// @ts-expect-error
+fromCall.items[0].missing;
+>fromCall.items : Symbol(items, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 34, 15))
+>fromCall : Symbol(fromCall, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 39, 13))
+>items : Symbol(items, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 34, 15))
+
+// @ts-expect-error
+fromAnnotated.self.missing;
+>fromAnnotated.self : Symbol(self, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 43, 15))
+>fromAnnotated : Symbol(fromAnnotated, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 48, 13))
+>self : Symbol(self, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 43, 15))
+
+// @ts-expect-error
+fromFirst.me.missing;
+>fromFirst.me : Symbol(me, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 52, 31))
+>fromFirst : Symbol(fromFirst, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 54, 13))
+>me : Symbol(me, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 52, 31))
+
+// @ts-expect-error
+fromSecond.me.missing;
+>fromSecond.me : Symbol(me, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 53, 32))
+>fromSecond : Symbol(fromSecond, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 55, 13))
+>me : Symbol(me, Decl(recursiveTypeThroughObjectLiteralGetterVariations.ts, 53, 32))
+

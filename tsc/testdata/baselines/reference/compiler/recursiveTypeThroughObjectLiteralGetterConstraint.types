@@ -1,0 +1,45 @@
+//// [tests/cases/compiler/recursiveTypeThroughObjectLiteralGetterConstraint.ts] ////
+
+=== recursiveTypeThroughObjectLiteralGetterConstraint.ts ===
+// Skipping an accessor during a check that reports nothing is a deferral, not a waiver. An array of
+// schemas is not a Schema, so this reports. The baseline is byte-identical to what an unpatched
+// compiler produces, pinning that the constraint is still enforced rather than which pass enforced
+// it. The recursive shape where the deferred pass is the only thing
+// that can report it is recursiveTypeThroughObjectLiteralGetterPostponedConstraint.ts.
+
+interface Schema<O> {
+    readonly out: O;
+>out : O
+}
+type Shape = Record<string, Schema<any>>;
+>Shape : Shape
+
+declare function object<S extends Shape>(shape: S): Schema<{ [K in keyof S]: S[K]["out"] }> & { shape: S };
+>object : <S extends Shape>(shape: S) => Schema<{ [K in keyof S]: S[K]["out"]; }> & { shape: S; }
+>shape : S
+>shape : S
+
+declare const leaf: Schema<string>;
+>leaf : Schema<string>
+
+const flat = object({
+>flat : Schema<{ [x: string]: any; }> & { shape: Shape; }
+>object({    get bad() {        return [leaf];    },}) : Schema<{ [x: string]: any; }> & { shape: Shape; }
+>object : <S extends Shape>(shape: S) => Schema<{ [K in keyof S]: S[K]["out"]; }> & { shape: S; }
+>{    get bad() {        return [leaf];    },} : { readonly bad: Schema<string>[]; }
+
+    get bad() {
+>bad : Schema<string>[]
+
+        return [leaf];
+>[leaf] : Schema<string>[]
+>leaf : Schema<string>
+
+    },
+});
+export const out = flat.out;
+>out : { [x: string]: any; }
+>flat.out : { [x: string]: any; }
+>flat : Schema<{ [x: string]: any; }> & { shape: Shape; }
+>out : { [x: string]: any; }
+

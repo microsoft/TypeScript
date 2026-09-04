@@ -1,0 +1,272 @@
+//// [tests/cases/compiler/recursiveTypeThroughObjectLiteralGetterMutual.ts] ////
+
+=== recursiveTypeThroughObjectLiteralGetterMutual.ts ===
+// Two schemas naming each other through getters, with the object's members reached through two separate
+// key remappings, one per variance side, each keyed on a different member of the internals.
+//
+// Both remappings read the member table of a type whose bases are still being inherited, at different
+// points in that assembly, which is what makes this shape separate the two answers a miss can have. A
+// speculative comparison must decline, since the member it would force is the subject of its own
+// question. An ordinary lookup must resolve against the bases still to be inherited. Giving a speculative
+// miss the second answer forces `posts` mid-inference and the getter falls back to an implicit `any`. A
+// single remapping does not reach this.
+
+interface Internals<out O = unknown, out I = unknown> {
+>Internals : Symbol(Internals, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 0, 0))
+>O : Symbol(O, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 10, 20))
+>I : Symbol(I, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 10, 36))
+
+    output: O;
+>output : Symbol(Internals.output, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 10, 55))
+>O : Symbol(O, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 10, 20))
+
+    input: I;
+>input : Symbol(Internals.input, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 11, 14))
+>I : Symbol(I, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 10, 36))
+
+    optin?: "optional" | undefined;
+>optin : Symbol(Internals.optin, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 12, 13))
+
+    optout?: "optional" | undefined;
+>optout : Symbol(Internals.optout, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 13, 35))
+}
+
+interface Schema<out O = unknown, out I = unknown> {
+>Schema : Symbol(Schema, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 15, 1))
+>O : Symbol(O, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 17, 17))
+>I : Symbol(I, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 17, 33))
+
+    _zod: Internals<O, I>;
+>_zod : Symbol(Schema._zod, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 17, 52))
+>Internals : Symbol(Internals, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 0, 0))
+>O : Symbol(O, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 17, 17))
+>I : Symbol(I, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 17, 33))
+}
+
+type output<T extends Schema> = T["_zod"]["output"];
+>output : Symbol(output, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 19, 1))
+>T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 21, 12))
+>Schema : Symbol(Schema, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 15, 1))
+>T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 21, 12))
+
+type input<T extends Schema> = T["_zod"]["input"];
+>input : Symbol(input, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 21, 52))
+>T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 22, 11))
+>Schema : Symbol(Schema, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 15, 1))
+>T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 22, 11))
+
+interface StringSchema extends Schema<string, string> {}
+>StringSchema : Symbol(StringSchema, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 22, 50))
+>Schema : Symbol(Schema, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 15, 1))
+
+declare function text(): StringSchema;
+>text : Symbol(text, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 24, 56))
+>StringSchema : Symbol(StringSchema, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 22, 50))
+
+interface ArraySchema<T extends Schema = Schema> extends Schema<output<T>[], input<T>[]> {}
+>ArraySchema : Symbol(ArraySchema, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 25, 38))
+>T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 27, 22))
+>Schema : Symbol(Schema, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 15, 1))
+>Schema : Symbol(Schema, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 15, 1))
+>Schema : Symbol(Schema, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 15, 1))
+>output : Symbol(output, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 19, 1))
+>T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 27, 22))
+>input : Symbol(input, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 21, 52))
+>T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 27, 22))
+
+declare function array<T extends Schema>(element: T): ArraySchema<T>;
+>array : Symbol(array, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 27, 91))
+>T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 28, 23))
+>Schema : Symbol(Schema, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 15, 1))
+>element : Symbol(element, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 28, 41))
+>T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 28, 23))
+>ArraySchema : Symbol(ArraySchema, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 25, 38))
+>T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 28, 23))
+
+type OptionalOutSchema = { _zod: { optout: "optional" } };
+>OptionalOutSchema : Symbol(OptionalOutSchema, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 28, 69))
+>_zod : Symbol(_zod, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 30, 26))
+>optout : Symbol(optout, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 30, 34))
+
+type OptionalInSchema = { _zod: { optin: "optional" } };
+>OptionalInSchema : Symbol(OptionalInSchema, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 30, 58))
+>_zod : Symbol(_zod, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 31, 25))
+>optin : Symbol(optin, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 31, 33))
+
+type Shape = Readonly<{ [k: string]: Schema }>;
+>Shape : Symbol(Shape, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 31, 56))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>k : Symbol(k, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 32, 25))
+>Schema : Symbol(Schema, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 15, 1))
+
+type Prettify<T> = { [K in keyof T]: T[K] } & {};
+>Prettify : Symbol(Prettify, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 32, 47))
+>T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 33, 14))
+>K : Symbol(K, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 33, 22))
+>T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 33, 14))
+>T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 33, 14))
+>K : Symbol(K, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 33, 22))
+
+type ObjectOut<T extends Shape> = Prettify<
+>ObjectOut : Symbol(ObjectOut, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 33, 49))
+>T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 35, 15))
+>Shape : Symbol(Shape, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 31, 56))
+>Prettify : Symbol(Prettify, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 32, 47))
+    {
+        [k in keyof T as T[k] extends OptionalOutSchema ? never : k]: output<T[k]>;
+>k : Symbol(k, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 37, 9))
+>T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 35, 15))
+>T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 35, 15))
+>k : Symbol(k, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 37, 9))
+>OptionalOutSchema : Symbol(OptionalOutSchema, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 28, 69))
+>k : Symbol(k, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 37, 9))
+>output : Symbol(output, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 19, 1))
+>T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 35, 15))
+>k : Symbol(k, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 37, 9))
+
+    } & {
+        [k in keyof T as T[k] extends OptionalOutSchema ? k : never]?: output<T[k]>;
+>k : Symbol(k, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 39, 9))
+>T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 35, 15))
+>T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 35, 15))
+>k : Symbol(k, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 39, 9))
+>OptionalOutSchema : Symbol(OptionalOutSchema, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 28, 69))
+>k : Symbol(k, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 39, 9))
+>output : Symbol(output, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 19, 1))
+>T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 35, 15))
+>k : Symbol(k, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 39, 9))
+    }
+>;
+
+type ObjectIn<T extends Shape> = Prettify<
+>ObjectIn : Symbol(ObjectIn, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 41, 2))
+>T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 43, 14))
+>Shape : Symbol(Shape, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 31, 56))
+>Prettify : Symbol(Prettify, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 32, 47))
+    {
+        [k in keyof T as T[k] extends OptionalInSchema ? never : k]: input<T[k]>;
+>k : Symbol(k, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 45, 9))
+>T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 43, 14))
+>T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 43, 14))
+>k : Symbol(k, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 45, 9))
+>OptionalInSchema : Symbol(OptionalInSchema, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 30, 58))
+>k : Symbol(k, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 45, 9))
+>input : Symbol(input, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 21, 52))
+>T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 43, 14))
+>k : Symbol(k, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 45, 9))
+
+    } & {
+        [k in keyof T as T[k] extends OptionalInSchema ? k : never]?: input<T[k]>;
+>k : Symbol(k, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 47, 9))
+>T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 43, 14))
+>T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 43, 14))
+>k : Symbol(k, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 47, 9))
+>OptionalInSchema : Symbol(OptionalInSchema, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 30, 58))
+>k : Symbol(k, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 47, 9))
+>input : Symbol(input, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 21, 52))
+>T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 43, 14))
+>k : Symbol(k, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 47, 9))
+    }
+>;
+
+interface ObjectSchema<S extends Shape = Shape> extends Schema<ObjectOut<S>, ObjectIn<S>> {
+>ObjectSchema : Symbol(ObjectSchema, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 49, 2))
+>S : Symbol(S, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 51, 23))
+>Shape : Symbol(Shape, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 31, 56))
+>Shape : Symbol(Shape, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 31, 56))
+>Schema : Symbol(Schema, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 15, 1))
+>ObjectOut : Symbol(ObjectOut, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 33, 49))
+>S : Symbol(S, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 51, 23))
+>ObjectIn : Symbol(ObjectIn, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 41, 2))
+>S : Symbol(S, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 51, 23))
+
+    shape: S;
+>shape : Symbol(ObjectSchema.shape, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 51, 91))
+>S : Symbol(S, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 51, 23))
+}
+declare function object<T extends Shape>(shape: T): ObjectSchema<T>;
+>object : Symbol(object, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 53, 1))
+>T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 54, 24))
+>Shape : Symbol(Shape, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 31, 56))
+>shape : Symbol(shape, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 54, 41))
+>T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 54, 24))
+>ObjectSchema : Symbol(ObjectSchema, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 49, 2))
+>T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 54, 24))
+
+const user = object({
+>user : Symbol(user, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 56, 5))
+>object : Symbol(object, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 53, 1))
+
+    email: text(),
+>email : Symbol(email, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 56, 21))
+>text : Symbol(text, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 24, 56))
+
+    get posts() {
+>posts : Symbol(posts, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 57, 18))
+
+        return array(post);
+>array : Symbol(array, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 27, 91))
+>post : Symbol(post, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 63, 5))
+
+    },
+});
+
+const post = object({
+>post : Symbol(post, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 63, 5))
+>object : Symbol(object, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 53, 1))
+
+    title: text(),
+>title : Symbol(title, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 63, 21))
+>text : Symbol(text, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 24, 56))
+
+    get author() {
+>author : Symbol(author, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 64, 18))
+
+        return user;
+>user : Symbol(user, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 56, 5))
+
+    },
+});
+
+type UserT = output<typeof user>;
+>UserT : Symbol(UserT, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 68, 3))
+>output : Symbol(output, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 19, 1))
+>user : Symbol(user, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 56, 5))
+
+declare const sampleUser: UserT;
+>sampleUser : Symbol(sampleUser, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 71, 13))
+>UserT : Symbol(UserT, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 68, 3))
+
+// Every step of the cycle resolves, including the one that walks back to where it started. On main
+// both declarations get an implicit `any` instead.
+const email: string = sampleUser.email;
+>email : Symbol(email, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 74, 5))
+>sampleUser.email : Symbol(email, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 56, 21))
+>sampleUser : Symbol(sampleUser, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 71, 13))
+>email : Symbol(email, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 56, 21))
+
+const postTitle: string = sampleUser.posts[0].title;
+>postTitle : Symbol(postTitle, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 75, 5))
+>sampleUser.posts[0].title : Symbol(title, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 63, 21))
+>sampleUser.posts : Symbol(posts, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 57, 18))
+>sampleUser : Symbol(sampleUser, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 71, 13))
+>posts : Symbol(posts, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 57, 18))
+>title : Symbol(title, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 63, 21))
+
+const authorEmail: string = sampleUser.posts[0].author.email;
+>authorEmail : Symbol(authorEmail, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 76, 5))
+>sampleUser.posts[0].author.email : Symbol(email, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 56, 21))
+>sampleUser.posts[0].author : Symbol(author, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 64, 18))
+>sampleUser.posts : Symbol(posts, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 57, 18))
+>sampleUser : Symbol(sampleUser, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 71, 13))
+>posts : Symbol(posts, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 57, 18))
+>author : Symbol(author, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 64, 18))
+>email : Symbol(email, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 56, 21))
+
+// The printer elides a recursive reference as `any`, so a collapsed result prints the same as a
+// resolved one. Reading a key neither schema declares is what tells them apart: it is an error here
+// and permitted on `any`, so a collapse turns this directive into an unused one.
+// @ts-expect-error
+sampleUser.missing;
+>sampleUser : Symbol(sampleUser, Decl(recursiveTypeThroughObjectLiteralGetterMutual.ts, 71, 13))
+

@@ -1,0 +1,41 @@
+//// [tests/cases/compiler/recursiveTypeThroughObjectLiteralGetterCrossFile.ts] ////
+
+=== schema.ts ===
+export interface Schema<O> {
+    readonly out: O;
+>out : O
+}
+export type Shape = Record<string, Schema<any>>;
+>Shape : Shape
+
+export declare function object<S extends Shape>(shape: S): Schema<{ [K in keyof S]: S[K]["out"] }> & { shape: S };
+>object : <S extends Shape>(shape: S) => Schema<{ [K in keyof S]: S[K]["out"]; }> & { shape: S; }
+>shape : S
+>shape : S
+
+export const tree = object({
+>tree : Schema<{ readonly bad: unknown; }> & { shape: { readonly bad: (Schema<{ readonly bad: unknown; }> & any)[]; }; }
+>object({    get bad() {        return [tree];    },}) : Schema<{ readonly bad: unknown; }> & { shape: { readonly bad: (Schema<{ readonly bad: unknown; }> & any)[]; }; }
+>object : <S extends Shape>(shape: S) => Schema<{ [K in keyof S]: S[K]["out"]; }> & { shape: S; }
+>{    get bad() {        return [tree];    },} : { readonly bad: (Schema<{ readonly bad: unknown; }> & { shape: { readonly bad: (Schema<{ readonly bad: unknown; }> & any)[]; }; })[]; }
+
+    get bad() {
+>bad : (Schema<{ readonly bad: unknown; }> & { shape: { readonly bad: (Schema<{ readonly bad: unknown; }> & any)[]; }; })[]
+
+        return [tree];
+>[tree] : (Schema<{ readonly bad: unknown; }> & { shape: { readonly bad: (Schema<{ readonly bad: unknown; }> & any)[]; }; })[]
+>tree : Schema<{ readonly bad: unknown; }> & { shape: { readonly bad: (Schema<{ readonly bad: unknown; }> & any)[]; }; }
+
+    },
+});
+
+=== consumer.ts ===
+import { tree } from "./schema.js";
+>tree : import("./schema.js").Schema<{ readonly bad: unknown; }> & { shape: { readonly bad: (import("./schema.js").Schema<{ readonly bad: unknown; }> & any)[]; }; }
+
+export const out = tree.out;
+>out : { readonly bad: unknown; }
+>tree.out : { readonly bad: unknown; }
+>tree : import("./schema.js").Schema<{ readonly bad: unknown; }> & { shape: { readonly bad: (import("./schema.js").Schema<{ readonly bad: unknown; }> & any)[]; }; }
+>out : { readonly bad: unknown; }
+

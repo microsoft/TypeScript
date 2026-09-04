@@ -1,0 +1,191 @@
+//// [tests/cases/compiler/recursiveTypeThroughObjectLiteralGetterUnionOptional.ts] ////
+
+=== recursiveTypeThroughObjectLiteralGetterUnionOptional.ts ===
+// Recursion through a union, with the recursive member optional. This is the companion to
+// recursiveTypeThroughObjectLiteralGetterUnion.ts, which is the same shape with the member left
+// required. main fails on both, with an implicit-any on every declaration involved.
+
+interface Internals<out O = unknown> {
+>Internals : Symbol(Internals, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 0, 0))
+>O : Symbol(O, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 4, 20))
+
+    readonly out: O;
+>out : Symbol(Internals.out, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 4, 38))
+>O : Symbol(O, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 4, 20))
+}
+interface Schema {
+>Schema : Symbol(Schema, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 6, 1))
+
+    readonly internals: Internals;
+>internals : Symbol(Schema.internals, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 7, 18))
+>Internals : Symbol(Internals, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 0, 0))
+}
+type Out<T extends Schema> = T["internals"]["out"];
+>Out : Symbol(Out, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 9, 1))
+>T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 10, 9))
+>Schema : Symbol(Schema, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 6, 1))
+>T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 10, 9))
+
+interface OptionalInternals<T extends Schema> extends Internals<Out<T> | undefined> {}
+>OptionalInternals : Symbol(OptionalInternals, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 10, 51))
+>T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 12, 28))
+>Schema : Symbol(Schema, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 6, 1))
+>Internals : Symbol(Internals, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 0, 0))
+>Out : Symbol(Out, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 9, 1))
+>T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 12, 28))
+
+interface OptionalSchema<T extends Schema = Schema> extends Schema {
+>OptionalSchema : Symbol(OptionalSchema, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 12, 86))
+>T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 13, 25))
+>Schema : Symbol(Schema, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 6, 1))
+>Schema : Symbol(Schema, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 6, 1))
+>Schema : Symbol(Schema, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 6, 1))
+
+    readonly internals: OptionalInternals<T>;
+>internals : Symbol(OptionalSchema.internals, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 13, 68))
+>OptionalInternals : Symbol(OptionalInternals, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 10, 51))
+>T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 13, 25))
+}
+interface StringInternals extends Internals<string> {}
+>StringInternals : Symbol(StringInternals, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 15, 1))
+>Internals : Symbol(Internals, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 0, 0))
+
+interface StringSchema extends Schema {
+>StringSchema : Symbol(StringSchema, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 16, 54))
+>Schema : Symbol(Schema, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 6, 1))
+
+    readonly internals: StringInternals;
+>internals : Symbol(StringSchema.internals, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 17, 39))
+>StringInternals : Symbol(StringInternals, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 15, 1))
+}
+
+type Shape = Readonly<{ [k: string]: Schema }>;
+>Shape : Symbol(Shape, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 19, 1))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>k : Symbol(k, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 21, 25))
+>Schema : Symbol(Schema, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 6, 1))
+
+interface ObjectInternals<S extends Shape> extends Internals<{ [K in keyof S]: Out<S[K]> }> {}
+>ObjectInternals : Symbol(ObjectInternals, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 21, 47))
+>S : Symbol(S, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 22, 26))
+>Shape : Symbol(Shape, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 19, 1))
+>Internals : Symbol(Internals, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 0, 0))
+>K : Symbol(K, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 22, 64))
+>S : Symbol(S, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 22, 26))
+>Out : Symbol(Out, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 9, 1))
+>S : Symbol(S, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 22, 26))
+>K : Symbol(K, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 22, 64))
+
+interface ObjectSchema<S extends Shape = Shape> extends Schema {
+>ObjectSchema : Symbol(ObjectSchema, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 22, 94))
+>S : Symbol(S, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 23, 23))
+>Shape : Symbol(Shape, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 19, 1))
+>Shape : Symbol(Shape, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 19, 1))
+>Schema : Symbol(Schema, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 6, 1))
+
+    readonly internals: ObjectInternals<S>;
+>internals : Symbol(ObjectSchema.internals, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 23, 64))
+>ObjectInternals : Symbol(ObjectInternals, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 21, 47))
+>S : Symbol(S, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 23, 23))
+}
+interface UnionInternals<T extends readonly Schema[]> extends Internals<Out<T[number]>> {}
+>UnionInternals : Symbol(UnionInternals, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 25, 1))
+>T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 26, 25))
+>Schema : Symbol(Schema, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 6, 1))
+>Internals : Symbol(Internals, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 0, 0))
+>Out : Symbol(Out, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 9, 1))
+>T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 26, 25))
+
+interface UnionSchema<T extends readonly Schema[] = Schema[]> extends Schema {
+>UnionSchema : Symbol(UnionSchema, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 26, 90))
+>T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 27, 22))
+>Schema : Symbol(Schema, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 6, 1))
+>Schema : Symbol(Schema, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 6, 1))
+>Schema : Symbol(Schema, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 6, 1))
+
+    readonly internals: UnionInternals<T>;
+>internals : Symbol(UnionSchema.internals, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 27, 78))
+>UnionInternals : Symbol(UnionInternals, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 25, 1))
+>T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 27, 22))
+}
+
+declare function object<S extends Shape>(shape: S): ObjectSchema<S>;
+>object : Symbol(object, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 29, 1))
+>S : Symbol(S, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 31, 24))
+>Shape : Symbol(Shape, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 19, 1))
+>shape : Symbol(shape, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 31, 41))
+>S : Symbol(S, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 31, 24))
+>ObjectSchema : Symbol(ObjectSchema, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 22, 94))
+>S : Symbol(S, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 31, 24))
+
+declare function union<T extends readonly Schema[]>(options: T): UnionSchema<T>;
+>union : Symbol(union, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 31, 68))
+>T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 32, 23))
+>Schema : Symbol(Schema, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 6, 1))
+>options : Symbol(options, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 32, 52))
+>T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 32, 23))
+>UnionSchema : Symbol(UnionSchema, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 26, 90))
+>T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 32, 23))
+
+declare function optional<T extends Schema>(t: T): OptionalSchema<T>;
+>optional : Symbol(optional, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 32, 80))
+>T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 33, 26))
+>Schema : Symbol(Schema, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 6, 1))
+>t : Symbol(t, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 33, 44))
+>T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 33, 26))
+>OptionalSchema : Symbol(OptionalSchema, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 12, 86))
+>T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 33, 26))
+
+declare function text(): StringSchema;
+>text : Symbol(text, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 33, 69))
+>StringSchema : Symbol(StringSchema, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 16, 54))
+
+const variantA = object({
+>variantA : Symbol(variantA, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 36, 5))
+>object : Symbol(object, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 29, 1))
+
+    name: text(),
+>name : Symbol(name, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 36, 25))
+>text : Symbol(text, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 33, 69))
+
+    get child() {
+>child : Symbol(child, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 37, 17))
+
+        return optional(tree);
+>optional : Symbol(optional, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 32, 80))
+>tree : Symbol(tree, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 42, 5))
+
+    },
+});
+const tree = union([variantA]);
+>tree : Symbol(tree, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 42, 5))
+>union : Symbol(union, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 31, 68))
+>variantA : Symbol(variantA, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 36, 5))
+
+declare const sample: Out<typeof tree>;
+>sample : Symbol(sample, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 44, 13))
+>Out : Symbol(Out, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 9, 1))
+>tree : Symbol(tree, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 42, 5))
+
+// The recursive member resolves: two levels in, `name` is still a string.
+const topName: string = sample.name;
+>topName : Symbol(topName, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 46, 5))
+>sample.name : Symbol(name, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 36, 25))
+>sample : Symbol(sample, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 44, 13))
+>name : Symbol(name, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 36, 25))
+
+const nestedName: string | undefined = sample.child?.name;
+>nestedName : Symbol(nestedName, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 47, 5))
+>sample.child?.name : Symbol(name, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 36, 25))
+>sample.child : Symbol(child, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 37, 17))
+>sample : Symbol(sample, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 44, 13))
+>child : Symbol(child, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 37, 17))
+>name : Symbol(name, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 36, 25))
+
+// An `any` would swallow this; the expected error shows the member is a real object.
+// @ts-expect-error
+sample.child?.missing;
+>sample.child : Symbol(child, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 37, 17))
+>sample : Symbol(sample, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 44, 13))
+>child : Symbol(child, Decl(recursiveTypeThroughObjectLiteralGetterUnionOptional.ts, 37, 17))
+

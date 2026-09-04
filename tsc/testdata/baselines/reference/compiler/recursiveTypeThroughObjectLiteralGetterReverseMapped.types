@@ -1,0 +1,97 @@
+//// [tests/cases/compiler/recursiveTypeThroughObjectLiteralGetterReverseMapped.ts] ////
+
+=== recursiveTypeThroughObjectLiteralGetterReverseMapped.ts ===
+// The same schema shape, but the parameter is written as a mapped type over the inferred one, so
+// inference runs through a reverse mapped type. Neither this change nor main resolves this variant --
+// both report TS7022/TS7023 on the declaration -- and the case asserts they report the same thing.
+//
+// A provisional comparison explores further than an ordinary check does, so it can walk into a
+// circularity that main never reaches because it collapses the getter first. Reporting that, or
+// caching it as the type parameter's constraint, adds a diagnostic to a program main accepts. The
+// circularity belongs to the question, so inside a region it neither reports nor sticks, and the next
+// ask outside one is free to reach a real one.
+
+interface Internals<O> {
+    optional: "true" | "false";
+>optional : "false" | "true"
+
+    out: O;
+>out : O
+}
+
+interface StringSchema extends Internals<string> {
+    optional: "false";
+>optional : "false"
+}
+
+type Shape = Record<string, any>;
+>Shape : Shape
+
+type Prettify<T> = { [K in keyof T]: T[K] } & {};
+>Prettify : { [K in keyof T]: T[K]; }
+
+type ObjectOut<S extends Shape> = Prettify<
+>ObjectOut : { [K in keyof S as S[K] extends { optional: "true"; } ? K : never]?: S[K]["out"] | undefined; } & { [K in keyof S as S[K] extends { optional: "true"; } ? never : K]: S[K]["out"]; } extends infer T ? { [K in keyof T]: T[K]; } : never
+    {
+        [K in keyof S as S[K] extends { optional: "true" } ? K : never]?: S[K]["out"];
+>optional : "true"
+
+    } & {
+        [K in keyof S as S[K] extends { optional: "true" } ? never : K]: S[K]["out"];
+>optional : "true"
+    }
+>;
+
+interface ObjectSchema<S extends Shape> extends Internals<ObjectOut<S>> {
+    optional: "false";
+>optional : "false"
+}
+
+interface OptionalSchema<T extends Internals<any>> extends Internals<T["out"] | undefined> {
+    optional: "true";
+>optional : "true"
+}
+
+declare function object<S extends Shape>(shape: { [K in keyof S]: S[K] }): ObjectSchema<S>;
+>object : <S extends Shape>(shape: { [K in keyof S]: S[K]; }) => ObjectSchema<S>
+>shape : { [K in keyof S]: S[K]; }
+
+declare function text(): StringSchema;
+>text : () => StringSchema
+
+declare function optional<T extends Internals<any>>(schema: T): OptionalSchema<T>;
+>optional : <T extends Internals<any>>(schema: T) => OptionalSchema<T>
+>schema : T
+
+const category = object({
+>category : any
+>object({    name: text(),    get parent() {        return optional(category);    },}) : ObjectSchema<{ name: StringSchema; readonly parent: any; }>
+>object : <S extends Shape>(shape: { [K in keyof S]: S[K]; }) => ObjectSchema<S>
+>{    name: text(),    get parent() {        return optional(category);    },} : { name: StringSchema; readonly parent: any; }
+
+    name: text(),
+>name : StringSchema
+>text() : StringSchema
+>text : () => StringSchema
+
+    get parent() {
+>parent : any
+
+        return optional(category);
+>optional(category) : OptionalSchema<any>
+>optional : <T extends Internals<any>>(schema: T) => OptionalSchema<T>
+>category : any
+
+    },
+});
+
+declare const sample: (typeof category)["out"];
+>sample : any
+>category : any
+
+const topName: string = sample.name;
+>topName : string
+>sample.name : any
+>sample : any
+>name : any
+

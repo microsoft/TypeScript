@@ -1380,7 +1380,13 @@ func (c *Checker) getInferredType(n *InferenceContext, index int) *Type {
 			instantiatedConstraint := c.instantiateType(constraint, n.nonFixingMapper)
 			if inferredType != nil {
 				constraintWithThis := c.getTypeWithThisArgument(instantiatedConstraint, inferredType, false)
-				if n.compareTypes(inferredType, constraintWithThis, false) == TernaryFalse {
+				// Constraint verification must not force a member whose type is still being computed, since an object
+				// literal argument routinely names the declaration being resolved. A comparison that passed over such a
+				// member answered for less than the whole type, so it may keep the candidate but never reject it.
+				comparison, answeredInFull := c.compareProvisionally(func() Ternary {
+					return n.compareTypes(inferredType, constraintWithThis, false)
+				})
+				if comparison == TernaryFalse && answeredInFull {
 					var filteredByConstraint *Type
 					if inference.priority == InferencePriorityReturnType {
 						// If we have a pure return type inference, we may succeed by removing constituents of the inferred type

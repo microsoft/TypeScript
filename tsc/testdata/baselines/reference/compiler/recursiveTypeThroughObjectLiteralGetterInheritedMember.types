@@ -1,0 +1,179 @@
+//// [tests/cases/compiler/recursiveTypeThroughObjectLiteralGetterInheritedMember.ts] ////
+
+=== recursiveTypeThroughObjectLiteralGetterInheritedMember.ts ===
+// The shape from #62180. The recursive member is reached through a mapped type that remaps keys by
+// reading each member's discriminant, so resolving the object schema instantiates its base with a type
+// naming the schema back, and the table is read before its inherited `out` is added.
+//
+// A miss there resolves against the bases still to be inherited. Answering `any` instead would clear
+// this error and break the self-referential interface case, where an unpatched compiler answers from the
+// index signature and `any` would accept an indexed access every other compiler rejects.
+//
+// The `any` against `parent` in the .types baseline is printer elision, not an unresolved member; the
+// assertions below tell those apart.
+
+interface Internals<O> {
+    optional: "true" | "false";
+>optional : "false" | "true"
+
+    out: O;
+>out : O
+}
+
+interface StringSchema extends Internals<string> {
+    optional: "false";
+>optional : "false"
+}
+
+type Shape = Record<string, any>;
+>Shape : Shape
+
+type Prettify<T> = { [K in keyof T]: T[K] } & {};
+>Prettify : { [K in keyof T]: T[K]; }
+
+type ObjectOut<S extends Shape> = Prettify<
+>ObjectOut : { [K in keyof S as S[K] extends { optional: "true"; } ? K : never]?: S[K]["out"] | undefined; } & { [K in keyof S as S[K] extends { optional: "true"; } ? never : K]: S[K]["out"]; } extends infer T ? { [K in keyof T]: T[K]; } : never
+    {
+        [K in keyof S as S[K] extends { optional: "true" } ? K : never]?: S[K]["out"];
+>optional : "true"
+
+    } & {
+        [K in keyof S as S[K] extends { optional: "true" } ? never : K]: S[K]["out"];
+>optional : "true"
+    }
+>;
+
+interface ObjectSchema<S extends Shape> extends Internals<ObjectOut<S>> {
+    optional: "false";
+>optional : "false"
+}
+
+interface OptionalSchema<T extends Internals<any>> extends Internals<T["out"] | undefined> {
+    optional: "true";
+>optional : "true"
+}
+
+declare function object<S extends Shape>(shape: S): ObjectSchema<S>;
+>object : <S extends Shape>(shape: S) => ObjectSchema<S>
+>shape : S
+
+declare function text(): StringSchema;
+>text : () => StringSchema
+
+declare function optional<T extends Internals<any>>(schema: T): OptionalSchema<T>;
+>optional : <T extends Internals<any>>(schema: T) => OptionalSchema<T>
+>schema : T
+
+const category = object({
+>category : ObjectSchema<{ name: StringSchema; readonly parent: OptionalSchema<ObjectSchema<any>>; }>
+>object({    name: text(),    get parent() {        return optional(category);    },}) : ObjectSchema<{ name: StringSchema; readonly parent: OptionalSchema<ObjectSchema<any>>; }>
+>object : <S extends Shape>(shape: S) => ObjectSchema<S>
+>{    name: text(),    get parent() {        return optional(category);    },} : { name: StringSchema; readonly parent: OptionalSchema<ObjectSchema<{ name: StringSchema; readonly parent: OptionalSchema<ObjectSchema<any>>; }>>; }
+
+    name: text(),
+>name : StringSchema
+>text() : StringSchema
+>text : () => StringSchema
+
+    get parent() {
+>parent : OptionalSchema<ObjectSchema<{ name: StringSchema; readonly parent: OptionalSchema<ObjectSchema<any>>; }>>
+
+        return optional(category);
+>optional(category) : OptionalSchema<ObjectSchema<{ name: StringSchema; readonly parent: OptionalSchema<ObjectSchema<any>>; }>>
+>optional : <T extends Internals<any>>(schema: T) => OptionalSchema<T>
+>category : ObjectSchema<{ name: StringSchema; readonly parent: OptionalSchema<ObjectSchema<any>>; }>
+
+    },
+});
+
+declare const sample: (typeof category)["out"];
+>sample : { name: string; readonly parent?: { name: string; readonly parent?: any | undefined; } | undefined; }
+>category : ObjectSchema<{ name: StringSchema; readonly parent: OptionalSchema<ObjectSchema<any>>; }>
+
+// The non-recursive key resolves fully, and the remapping put the recursive one in the optional bucket,
+// so it is `parent?:`. Both are new; main gives the whole declaration an implicit `any`.
+const topName: string = sample.name;
+>topName : string
+>sample.name : string
+>sample : { name: string; readonly parent?: { name: string; readonly parent?: any | undefined; } | undefined; }
+>name : string
+
+// The recursive one resolves too, at any depth walked.
+const parentName: string = sample.parent!.name;
+>parentName : string
+>sample.parent!.name : string
+>sample.parent! : { name: string; readonly parent?: any | undefined; }
+>sample.parent : { name: string; readonly parent?: any | undefined; } | undefined
+>sample : { name: string; readonly parent?: { name: string; readonly parent?: any | undefined; } | undefined; }
+>parent : { name: string; readonly parent?: any | undefined; } | undefined
+>name : string
+
+const deepName: string = sample.parent!.parent!.parent!.name;
+>deepName : string
+>sample.parent!.parent!.parent!.name : string
+>sample.parent!.parent!.parent! : { name: string; readonly parent?: any | undefined; }
+>sample.parent!.parent!.parent : { name: string; readonly parent?: any | undefined; } | undefined
+>sample.parent!.parent! : { name: string; readonly parent?: any | undefined; }
+>sample.parent!.parent : { name: string; readonly parent?: any | undefined; } | undefined
+>sample.parent! : { name: string; readonly parent?: any | undefined; }
+>sample.parent : { name: string; readonly parent?: any | undefined; } | undefined
+>sample : { name: string; readonly parent?: { name: string; readonly parent?: any | undefined; } | undefined; }
+>parent : { name: string; readonly parent?: any | undefined; } | undefined
+>parent : { name: string; readonly parent?: any | undefined; } | undefined
+>parent : { name: string; readonly parent?: any | undefined; } | undefined
+>name : string
+
+// A collapse to `any` would accept both of these.
+// @ts-expect-error
+const wrongType: number = sample.parent!.parent!.name;
+>wrongType : number
+>sample.parent!.parent!.name : string
+>sample.parent!.parent! : { name: string; readonly parent?: any | undefined; }
+>sample.parent!.parent : { name: string; readonly parent?: any | undefined; } | undefined
+>sample.parent! : { name: string; readonly parent?: any | undefined; }
+>sample.parent : { name: string; readonly parent?: any | undefined; } | undefined
+>sample : { name: string; readonly parent?: { name: string; readonly parent?: any | undefined; } | undefined; }
+>parent : { name: string; readonly parent?: any | undefined; } | undefined
+>parent : { name: string; readonly parent?: any | undefined; } | undefined
+>name : string
+
+// @ts-expect-error
+sample.parent!.parent!.missing;
+>sample.parent!.parent!.missing : error
+>sample.parent!.parent! : { name: string; readonly parent?: any | undefined; }
+>sample.parent!.parent : { name: string; readonly parent?: any | undefined; } | undefined
+>sample.parent! : { name: string; readonly parent?: any | undefined; }
+>sample.parent : { name: string; readonly parent?: any | undefined; } | undefined
+>sample : { name: string; readonly parent?: { name: string; readonly parent?: any | undefined; } | undefined; }
+>parent : { name: string; readonly parent?: any | undefined; } | undefined
+>parent : { name: string; readonly parent?: any | undefined; } | undefined
+>missing : any
+
+// A genuinely absent property is still reported.
+interface Base { readonly own: number; }
+>own : number
+
+interface Derived extends Base { readonly extra: string; }
+>extra : string
+
+declare const derived: Derived;
+>derived : Derived
+
+// @ts-expect-error
+derived.missing;
+>derived.missing : error
+>derived : Derived
+>missing : any
+
+const ownValue: number = derived.own;
+>ownValue : number
+>derived.own : number
+>derived : Derived
+>own : number
+
+const extraValue: string = derived.extra;
+>extraValue : string
+>derived.extra : string
+>derived : Derived
+>extra : string
+

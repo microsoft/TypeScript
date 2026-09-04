@@ -1,0 +1,119 @@
+//// [tests/cases/compiler/recursiveTypeThroughObjectLiteralGetterOverloads.ts] ////
+
+=== recursiveTypeThroughObjectLiteralGetterOverloads.ts ===
+// Whether a get accessor has been resolved records what has been asked for so far, not anything
+// about the program, so skipping one on that alone makes an ordinary comparison depend on
+// resolution order. This picked the numeric overload for an object whose only member is a string.
+//
+// Only a generic signature opens the speculative region where the skip is allowed, so the non-generic
+// overloads never reach the code under test. The generic pair at the bottom covers that. Skipping there made the object look like it had no string member and picked the
+// numeric candidate again, this time with the region wide open.
+
+declare function pick(x: { [k: string]: number }): "num";
+>pick : { (x: { [k: string]: number; }): "num"; (x: object): "obj"; }
+>x : { [k: string]: number; }
+>k : string
+
+declare function pick(x: object): "obj";
+>pick : { (x: { [k: string]: number; }): "num"; (x: object): "obj"; }
+>x : object
+
+const inferred = pick({
+>inferred : "obj"
+>pick({    get s() {        return "hello";    },}) : "obj"
+>pick : { (x: { [k: string]: number; }): "num"; (x: object): "obj"; }
+>{    get s() {        return "hello";    },} : { readonly s: string; }
+
+    get s() {
+>s : string
+
+        return "hello";
+>"hello" : "hello"
+
+    },
+});
+const mustBeObj: "obj" = inferred;
+>mustBeObj : "obj"
+>inferred : "obj"
+
+const annotated = pick({
+>annotated : "obj"
+>pick({    get s(): string {        return "hello";    },}) : "obj"
+>pick : { (x: { [k: string]: number; }): "num"; (x: object): "obj"; }
+>{    get s(): string {        return "hello";    },} : { readonly s: string; }
+
+    get s(): string {
+>s : string
+
+        return "hello";
+>"hello" : "hello"
+
+    },
+});
+const alsoObj: "obj" = annotated;
+>alsoObj : "obj"
+>annotated : "obj"
+
+const numeric = pick({
+>numeric : "num"
+>pick({    get n() {        return 1;    },}) : "num"
+>pick : { (x: { [k: string]: number; }): "num"; (x: object): "obj"; }
+>{    get n() {        return 1;    },} : { readonly n: number; }
+
+    get n() {
+>n : number
+
+        return 1;
+>1 : 1
+
+    },
+});
+const mustBeNum: "num" = numeric;
+>mustBeNum : "num"
+>numeric : "num"
+
+declare function generic<T extends { [k: string]: number }>(x: T): "num";
+>generic : { <T extends { [k: string]: number; }>(x: T): "num"; <T_1 extends object>(x: T_1): "obj"; }
+>k : string
+>x : T
+
+declare function generic<T extends object>(x: T): "obj";
+>generic : { <T_1 extends { [k: string]: number; }>(x: T_1): "num"; <T extends object>(x: T): "obj"; }
+>x : T
+
+const inferredGeneric = generic({
+>inferredGeneric : "obj"
+>generic({    get s() {        return "hello";    },}) : "obj"
+>generic : { <T extends { [k: string]: number; }>(x: T): "num"; <T extends object>(x: T): "obj"; }
+>{    get s() {        return "hello";    },} : { readonly s: string; }
+
+    get s() {
+>s : string
+
+        return "hello";
+>"hello" : "hello"
+
+    },
+});
+const genericMustBeObj: "obj" = inferredGeneric;
+>genericMustBeObj : "obj"
+>inferredGeneric : "obj"
+
+const numericGeneric = generic({
+>numericGeneric : "num"
+>generic({    get n() {        return 1;    },}) : "num"
+>generic : { <T extends { [k: string]: number; }>(x: T): "num"; <T extends object>(x: T): "obj"; }
+>{    get n() {        return 1;    },} : { readonly n: number; }
+
+    get n() {
+>n : number
+
+        return 1;
+>1 : 1
+
+    },
+});
+const genericMustBeNum: "num" = numericGeneric;
+>genericMustBeNum : "num"
+>numericGeneric : "num"
+

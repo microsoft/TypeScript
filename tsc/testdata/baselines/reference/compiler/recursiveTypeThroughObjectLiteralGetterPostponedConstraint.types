@@ -1,0 +1,40 @@
+//// [tests/cases/compiler/recursiveTypeThroughObjectLiteralGetterPostponedConstraint.ts] ////
+
+=== recursiveTypeThroughObjectLiteralGetterPostponedConstraint.ts ===
+// Skipping a member that genuinely cannot be worked out yet postpones the constraint check; it does
+// not waive it. The getter names the declaration being resolved, so the skip is right, but what it
+// returns still violates the constraint and that has to surface once the declaration has a type.
+
+interface Schema<O> {
+    readonly out: O;
+>out : O
+}
+type Shape = Record<string, Schema<any>>;
+>Shape : Shape
+
+declare function object<S extends Shape>(shape: S): Schema<{ [K in keyof S]: S[K]["out"] }> & { shape: S };
+>object : <S extends Shape>(shape: S) => Schema<{ [K in keyof S]: S[K]["out"]; }> & { shape: S; }
+>shape : S
+>shape : S
+
+const tree = object({
+>tree : Schema<{ readonly bad: unknown; }> & { shape: { readonly bad: (Schema<{ readonly bad: unknown; }> & any)[]; }; }
+>object({    get bad() {        return [tree];    },}) : Schema<{ readonly bad: unknown; }> & { shape: { readonly bad: (Schema<{ readonly bad: unknown; }> & any)[]; }; }
+>object : <S extends Shape>(shape: S) => Schema<{ [K in keyof S]: S[K]["out"]; }> & { shape: S; }
+>{    get bad() {        return [tree];    },} : { readonly bad: (Schema<{ readonly bad: unknown; }> & { shape: { readonly bad: (Schema<{ readonly bad: unknown; }> & any)[]; }; })[]; }
+
+    get bad() {
+>bad : (Schema<{ readonly bad: unknown; }> & { shape: { readonly bad: (Schema<{ readonly bad: unknown; }> & any)[]; }; })[]
+
+        return [tree];
+>[tree] : (Schema<{ readonly bad: unknown; }> & { shape: { readonly bad: (Schema<{ readonly bad: unknown; }> & any)[]; }; })[]
+>tree : Schema<{ readonly bad: unknown; }> & { shape: { readonly bad: (Schema<{ readonly bad: unknown; }> & any)[]; }; }
+
+    },
+});
+export const out = tree.out;
+>out : { readonly bad: unknown; }
+>tree.out : { readonly bad: unknown; }
+>tree : Schema<{ readonly bad: unknown; }> & { shape: { readonly bad: (Schema<{ readonly bad: unknown; }> & any)[]; }; }
+>out : { readonly bad: unknown; }
+

@@ -1,0 +1,175 @@
+//// [tests/cases/compiler/recursiveTypeThroughObjectLiteralGetter.ts] ////
+
+=== recursiveTypeThroughObjectLiteralGetter.ts ===
+// A getter is how a self-referential object literal is written, and its type is worked out lazily.
+// Inferring the type argument for `object` must not force that getter, which reports a circularity
+// and fixes the member at `any`. Reduced from #62180 and #62181.
+
+interface Internals<out O = unknown> {
+>Internals : Symbol(Internals, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 0, 0))
+>O : Symbol(O, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 4, 20))
+
+    readonly out: O;
+>out : Symbol(Internals.out, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 4, 38))
+>O : Symbol(O, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 4, 20))
+}
+interface Schema {
+>Schema : Symbol(Schema, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 6, 1))
+
+    readonly internals: Internals;
+>internals : Symbol(Schema.internals, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 7, 18))
+>Internals : Symbol(Internals, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 0, 0))
+}
+type Out<T extends Schema> = T["internals"]["out"];
+>Out : Symbol(Out, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 9, 1))
+>T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 10, 9))
+>Schema : Symbol(Schema, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 6, 1))
+>T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 10, 9))
+
+interface ArrayInternals<T extends Schema> extends Internals<Out<T>[]> {}
+>ArrayInternals : Symbol(ArrayInternals, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 10, 51))
+>T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 12, 25))
+>Schema : Symbol(Schema, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 6, 1))
+>Internals : Symbol(Internals, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 0, 0))
+>Out : Symbol(Out, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 9, 1))
+>T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 12, 25))
+
+interface ArraySchema<T extends Schema = Schema> extends Schema {
+>ArraySchema : Symbol(ArraySchema, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 12, 73))
+>T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 13, 22))
+>Schema : Symbol(Schema, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 6, 1))
+>Schema : Symbol(Schema, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 6, 1))
+>Schema : Symbol(Schema, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 6, 1))
+
+    readonly internals: ArrayInternals<T>;
+>internals : Symbol(ArraySchema.internals, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 13, 65))
+>ArrayInternals : Symbol(ArrayInternals, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 10, 51))
+>T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 13, 22))
+}
+interface StringInternals extends Internals<string> {}
+>StringInternals : Symbol(StringInternals, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 15, 1))
+>Internals : Symbol(Internals, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 0, 0))
+
+interface StringSchema extends Schema {
+>StringSchema : Symbol(StringSchema, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 16, 54))
+>Schema : Symbol(Schema, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 6, 1))
+
+    readonly internals: StringInternals;
+>internals : Symbol(StringSchema.internals, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 17, 39))
+>StringInternals : Symbol(StringInternals, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 15, 1))
+}
+
+type Shape = Readonly<{ [k: string]: Schema }>;
+>Shape : Symbol(Shape, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 19, 1))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>k : Symbol(k, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 21, 25))
+>Schema : Symbol(Schema, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 6, 1))
+
+interface ObjectInternals<S extends Shape> extends Internals<{ [K in keyof S]: Out<S[K]> }> {}
+>ObjectInternals : Symbol(ObjectInternals, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 21, 47))
+>S : Symbol(S, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 22, 26))
+>Shape : Symbol(Shape, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 19, 1))
+>Internals : Symbol(Internals, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 0, 0))
+>K : Symbol(K, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 22, 64))
+>S : Symbol(S, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 22, 26))
+>Out : Symbol(Out, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 9, 1))
+>S : Symbol(S, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 22, 26))
+>K : Symbol(K, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 22, 64))
+
+interface ObjectSchema<S extends Shape = Shape> extends Schema {
+>ObjectSchema : Symbol(ObjectSchema, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 22, 94))
+>S : Symbol(S, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 23, 23))
+>Shape : Symbol(Shape, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 19, 1))
+>Shape : Symbol(Shape, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 19, 1))
+>Schema : Symbol(Schema, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 6, 1))
+
+    readonly internals: ObjectInternals<S>;
+>internals : Symbol(ObjectSchema.internals, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 23, 64))
+>ObjectInternals : Symbol(ObjectInternals, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 21, 47))
+>S : Symbol(S, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 23, 23))
+}
+
+declare function object<S extends Shape>(shape: S): ObjectSchema<S>;
+>object : Symbol(object, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 25, 1))
+>S : Symbol(S, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 27, 24))
+>Shape : Symbol(Shape, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 19, 1))
+>shape : Symbol(shape, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 27, 41))
+>S : Symbol(S, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 27, 24))
+>ObjectSchema : Symbol(ObjectSchema, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 22, 94))
+>S : Symbol(S, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 27, 24))
+
+declare function array<T extends Schema>(element: T): ArraySchema<T>;
+>array : Symbol(array, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 27, 68))
+>T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 28, 23))
+>Schema : Symbol(Schema, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 6, 1))
+>element : Symbol(element, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 28, 41))
+>T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 28, 23))
+>ArraySchema : Symbol(ArraySchema, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 12, 73))
+>T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 28, 23))
+
+declare function text(): StringSchema;
+>text : Symbol(text, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 28, 69))
+>StringSchema : Symbol(StringSchema, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 16, 54))
+
+const node = object({
+>node : Symbol(node, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 31, 5))
+>object : Symbol(object, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 25, 1))
+
+    name: text(),
+>name : Symbol(name, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 31, 21))
+>text : Symbol(text, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 28, 69))
+
+    get children() {
+>children : Symbol(children, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 32, 17))
+
+        return array(node);
+>array : Symbol(array, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 27, 68))
+>node : Symbol(node, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 31, 5))
+
+    },
+});
+
+type TreeNode = Out<typeof node>;
+>TreeNode : Symbol(TreeNode, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 36, 3))
+>Out : Symbol(Out, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 9, 1))
+>node : Symbol(node, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 31, 5))
+
+declare const sample: TreeNode;
+>sample : Symbol(sample, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 39, 13))
+>TreeNode : Symbol(TreeNode, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 36, 3))
+
+// The recursive member is an array of the same node type, not `any` and not `unknown`.
+const leafName: string = sample.name;
+>leafName : Symbol(leafName, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 42, 5))
+>sample.name : Symbol(name, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 31, 21))
+>sample : Symbol(sample, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 39, 13))
+>name : Symbol(name, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 31, 21))
+
+const nestedName: string = sample.children[0].children[0].name;
+>nestedName : Symbol(nestedName, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 43, 5))
+>sample.children[0].children[0].name : Symbol(name, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 31, 21))
+>sample.children[0].children : Symbol(children, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 32, 17))
+>sample.children : Symbol(children, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 32, 17))
+>sample : Symbol(sample, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 39, 13))
+>children : Symbol(children, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 32, 17))
+>children : Symbol(children, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 32, 17))
+>name : Symbol(name, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 31, 21))
+
+// Both assertions above pass if the whole thing collapsed to `any`, so the recursion point is also
+// probed where `any` cannot hide. An unknown key must be an error, and a known one must carry its
+// declared type.
+// @ts-expect-error
+sample.children[0].missing;
+>sample.children : Symbol(children, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 32, 17))
+>sample : Symbol(sample, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 39, 13))
+>children : Symbol(children, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 32, 17))
+
+// @ts-expect-error
+const wrongLeafType: number = sample.children[0].name;
+>wrongLeafType : Symbol(wrongLeafType, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 51, 5))
+>sample.children[0].name : Symbol(name, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 31, 21))
+>sample.children : Symbol(children, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 32, 17))
+>sample : Symbol(sample, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 39, 13))
+>children : Symbol(children, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 32, 17))
+>name : Symbol(name, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 31, 21))
+
