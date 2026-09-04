@@ -27,6 +27,8 @@ const __filename = url.fileURLToPath(new URL(import.meta.url));
 const __dirname = path.dirname(__filename);
 
 const isCI = !!process.env.CI || !!process.env.TF_BUILD;
+const stableThreeComponentVersionPatternSource = String.raw`^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$`;
+const stableThreeComponentVersionPattern = new RegExp(stableThreeComponentVersionPatternSource);
 
 /**
  * @typedef {{
@@ -1407,10 +1409,31 @@ export const checkVsceVersion = task({
     name: "check:vsce-version",
     description: "Checks that Azure release jobs use the repository's pinned vsce version.",
     run: () => {
+        for (const validVersion of ["0.0.0", "1.2.3", "10.20.30"]) {
+            assert(stableThreeComponentVersionPattern.test(validVersion), `${validVersion} should be a valid stable version.`);
+        }
+        for (const invalidVersion of ["01.0.0", "1.02.0", "1.2.03", "1.2", "1.2.3-beta"]) {
+            assert(!stableThreeComponentVersionPattern.test(invalidVersion), `${invalidVersion} should not be a valid stable version.`);
+        }
+
+        for (
+            const [workflow, expectedCount] of [
+                ["./.github/workflows/tag-vscode-typescript.yml", 1],
+                ["./tools/pipelines/vscode-typescript-build.yml", 1],
+                ["./tools/pipelines/vscode-typescript-publish.yml", 2],
+            ]
+        ) {
+            const activeLines = fs.readFileSync(workflow, "utf8").split(/\r?\n/).filter(line => !line.trimStart().startsWith("#"));
+            const validators = activeLines.filter(line => line.includes(`=~ ${stableThreeComponentVersionPatternSource} ]]`));
+            if (validators.length !== expectedCount) {
+                throw new Error(`${workflow} must contain exactly ${expectedCount} active stable version validator(s).`);
+            }
+        }
+
         const packageJson = JSON.parse(fs.readFileSync("./packages/vscode-typescript/package.json", "utf8"));
         const packageLock = JSON.parse(fs.readFileSync("./package-lock.json", "utf8"));
         const version = packageJson.devDependencies?.["@vscode/vsce"];
-        if (typeof version !== "string" || !/^\d+\.\d+\.\d+$/.test(version)) {
+        if (typeof version !== "string" || !stableThreeComponentVersionPattern.test(version)) {
             throw new Error(`packages/vscode-typescript must pin @vscode/vsce to an exact version, got ${JSON.stringify(version)}.`);
         }
 
@@ -1757,8 +1780,8 @@ const getVscodeTypeScriptExtensionPackageJson = memoize(() => JSON.parse(fs.read
 
 function getVscodeTypeScriptExtensionVersion() {
     const version = getVscodeTypeScriptExtensionPackageJson().version;
-    if (typeof version !== "string" || !/^\d+\.\d+\.\d+$/.test(version)) {
-        throw new Error(`packages/vscode-typescript/package.json must contain a three-component numeric version, got ${JSON.stringify(version)}.`);
+    if (typeof version !== "string" || !stableThreeComponentVersionPattern.test(version)) {
+        throw new Error(`packages/vscode-typescript/package.json must contain a stable three-component version, got ${JSON.stringify(version)}.`);
     }
     return version;
 }
@@ -2712,7 +2735,7 @@ const getPublishedTypeScriptPackageJson = memoize(() => {
 
 function getPublishedTypeScriptVersion() {
     const version = getPublishedTypeScriptPackageJson().version;
-    if (releaseVscodeTypescript && !/^\d+\.\d+\.\d+$/.test(version)) {
+    if (releaseVscodeTypescript && !stableThreeComponentVersionPattern.test(version)) {
         throw new Error(`vscode-typescript releases require a stable three-component TypeScript version, got ${version}.`);
     }
     return version;
