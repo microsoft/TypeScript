@@ -42,6 +42,8 @@ const (
 	UpdateReasonUnknown UpdateReason = iota
 	UpdateReasonDidOpenFile
 	UpdateReasonDidCloseFile
+	UpdateReasonDidChangeFile
+	UpdateReasonDiagnosticsRefresh
 	UpdateReasonDidChangeCompilerOptionsForInferredProjects
 	UpdateReasonRequestedLanguageServicePendingChanges
 	UpdateReasonRequestedLanguageServiceProjectNotLoaded
@@ -74,6 +76,9 @@ type SessionOptions struct {
 	LoggingEnabled         bool
 	TelemetryEnabled       bool
 	PushDiagnosticsEnabled bool
+	// PushFileDiagnosticsEnabled pushes per-file diagnostics for open files,
+	// for clients that do not support pull diagnostics.
+	PushFileDiagnosticsEnabled bool
 	// RunExternalCode allows configured content mappers to run their (external) processes,
 	// gated on workspace trust by the client. It corresponds to the --runExternalCode CLI flag.
 	RunExternalCode    bool
@@ -211,6 +216,26 @@ type Session struct {
 	// task should be enqueued. It is reset when the task runs, coalescing multiple
 	// requests into a single background task.
 	globalDiagPublishPending atomic.Bool
+
+	// publishFileDiagnosticsMu serializes open-file diagnostics publishes, which
+	// otherwise run on unordered background tasks. It guards the two fields below.
+	publishFileDiagnosticsMu sync.Mutex
+	// publishedFileDiagnosticsSnapshot is the ID of the newest snapshot whose
+	// open-file diagnostics have been published; older snapshots are skipped.
+	publishedFileDiagnosticsSnapshot uint64
+	// publishedFileDiagnostics tracks the open files considered by the last
+	// publish pass and whether their last published diagnostics were non-empty,
+	// so closed files are cleared and redundant empty publishes are skipped.
+	publishedFileDiagnostics map[tspath.Path]publishedFileDiagnosticsState
+}
+
+type publishedFileDiagnosticsState struct {
+	uri      lsproto.DocumentUri
+	nonEmpty bool
+}
+
+func (s *Session) pushFileDiagnosticsEnabled() bool {
+	return s.options.PushDiagnosticsEnabled && s.options.PushFileDiagnosticsEnabled
 }
 
 // newContentMapperHost creates the session's shared content mapper host when the workspace is trusted and
@@ -249,20 +274,21 @@ func NewSession(init *SessionInit) *Session {
 		sessionLogger = logging.NewNopLogger()
 	}
 	session := &Session{
-		backgroundCtx:           init.BackgroundCtx,
-		options:                 init.Options,
-		toPath:                  toPath,
-		client:                  init.Client,
-		logger:                  sessionLogger,
-		npmExecutor:             init.NpmExecutor,
-		contentMapperHost:       newContentMapperHost(init),
-		fs:                      overlayFS,
-		parseCache:              parseCache,
-		contentMappedParseCache: contentMappedParseCache,
-		extendedConfigCache:     extendedConfigCache,
-		programCounter:          &programCounter{},
-		backgroundQueue:         background.NewQueue(),
-		startTime:               time.Now(),
+		backgroundCtx:            init.BackgroundCtx,
+		options:                  init.Options,
+		toPath:                   toPath,
+		client:                   init.Client,
+		logger:                   sessionLogger,
+		npmExecutor:              init.NpmExecutor,
+		contentMapperHost:        newContentMapperHost(init),
+		fs:                       overlayFS,
+		parseCache:               parseCache,
+		contentMappedParseCache:  contentMappedParseCache,
+		extendedConfigCache:      extendedConfigCache,
+		programCounter:           &programCounter{},
+		backgroundQueue:          background.NewQueue(),
+		startTime:                time.Now(),
+		publishedFileDiagnostics: make(map[tspath.Path]publishedFileDiagnosticsState),
 		snapshot: NewSnapshot(
 			uint64(0),
 			&SnapshotFS{
@@ -447,6 +473,13 @@ func (s *Session) DidChangeFile(ctx context.Context, uri lsproto.DocumentUri, ve
 	})
 	s.pendingFileChangesMu.Unlock()
 
+	if s.pushFileDiagnosticsEnabled() {
+		// Push-only clients get diagnostics from snapshot updates rather than
+		// client-side re-pulls, so schedule an update instead of a refresh.
+		s.ScheduleSnapshotUpdate(UpdateReasonDidChangeFile)
+		return
+	}
+
 	// Editing a content-mapped file changes the program like any source edit, but the client's
 	// pull-diagnostics machinery won't re-request diagnostics for dependent files: the content-mapped file is not
 	// in the diagnostic provider's document selector, so a change to it never triggers the client's
@@ -568,6 +601,12 @@ func (s *Session) DidChangeCompilerOptionsForInferredProjects(ctx context.Contex
 }
 
 func (s *Session) ScheduleDiagnosticsRefresh() {
+	if s.pushFileDiagnosticsEnabled() {
+		// Push-only clients can't re-pull in response to workspace/diagnostic/refresh.
+		s.ScheduleSnapshotUpdate(UpdateReasonDiagnosticsRefresh)
+		return
+	}
+
 	s.scheduleDiagnosticsRefresh(s.options.DebounceDelay)
 }
 
@@ -690,12 +729,23 @@ func (s *Session) ScheduleSnapshotUpdate(reason UpdateReason) {
 			return
 		}
 
-		s.UpdateSnapshot(ctx, overlays, SnapshotChange{
+		change := SnapshotChange{
 			reason:      reason,
 			fileChanges: fileChanges,
 			ataChanges:  ataChanges,
 			newConfig:   newConfig,
-		})
+		}
+		if s.pushFileDiagnosticsEnabled() {
+			// Request open documents so dirty programs are rebuilt eagerly;
+			// push-only clients send no requests that would otherwise do it.
+			documents := make([]lsproto.DocumentUri, 0, len(overlays))
+			for _, overlay := range overlays {
+				documents = append(documents, lsconv.FileNameToDocumentURI(overlay.FileName()))
+			}
+			slices.Sort(documents)
+			change.ResourceRequest = ResourceRequest{Documents: documents}
+		}
+		s.UpdateSnapshot(ctx, overlays, change)
 	})
 }
 
@@ -1479,6 +1529,7 @@ func (s *Session) updateSnapshot(ctx context.Context, overlays map[tspath.Path]*
 		}
 		_ = s.updateContentMapperRegistrations(ctx, newSnapshot)
 		s.publishProgramDiagnostics(oldSnapshot, newSnapshot)
+		s.publishOpenFileDiagnostics(change, oldSnapshot, newSnapshot)
 		s.sendProjectInfoTelemetryForNewProjects(oldSnapshot, newSnapshot)
 		s.warmAutoImportCache(ctx, change, oldSnapshot, newSnapshot)
 	})
@@ -2010,12 +2061,93 @@ func (s *Session) publishProjectDiagnostics(ctx context.Context, configFilePath 
 	ctx = s.withCurrentLocale(ctx)
 	lspDiagnostics := make([]*lsproto.Diagnostic, 0, len(diagnostics))
 	for _, diag := range diagnostics {
-		lspDiagnostics = append(lspDiagnostics, lsconv.DiagnosticToLSPPush(ctx, converters, diag))
+		lspDiagnostics = append(lspDiagnostics, lsconv.DiagnosticToLSPPush(ctx, converters, diag, false /*reportStyleChecksAsWarnings*/))
 	}
 
 	if err := s.client.PublishDiagnostics(ctx, &lsproto.PublishDiagnosticsParams{
 		Uri:         lsconv.FileNameToDocumentURI(configFilePath),
 		Diagnostics: lspDiagnostics,
+	}); err != nil && s.options.LoggingEnabled {
+		s.logger.Logf("Error publishing diagnostics: %v", err)
+	}
+}
+
+// publishOpenFileDiagnostics pushes diagnostics for open files after a
+// snapshot update, for clients that do not support pull diagnostics.
+func (s *Session) publishOpenFileDiagnostics(change SnapshotChange, oldSnapshot *Snapshot, newSnapshot *Snapshot) {
+	if !s.pushFileDiagnosticsEnabled() {
+		return
+	}
+
+	// Snapshot side effects run as unordered background tasks, so hold the mutex
+	// for the whole pass to keep publishes ordered, and skip snapshots older than
+	// one whose diagnostics were already published.
+	s.publishFileDiagnosticsMu.Lock()
+	defer s.publishFileDiagnosticsMu.Unlock()
+	if newSnapshot.ID() <= s.publishedFileDiagnosticsSnapshot {
+		return
+	}
+	prevPublished := s.publishedFileDiagnosticsSnapshot
+	s.publishedFileDiagnosticsSnapshot = newSnapshot.ID()
+
+	// Semantic and suggestion diagnostics are a diagnostics workload, matching
+	// the checker the pull handler uses instead of consuming query checkers.
+	ctx := core.WithCheckerLifetime(s.backgroundContext(), core.CheckerLifetimeDiagnostics)
+
+	for path, state := range s.publishedFileDiagnostics {
+		if _, stillOpen := newSnapshot.fs.overlays[path]; !stillOpen {
+			delete(s.publishedFileDiagnostics, path)
+			if state.nonEmpty {
+				s.publishFileDiagnostics(ctx, state.uri, nil, nil)
+			}
+		}
+	}
+
+	// Preference changes (e.g. enableValidation) and diagnostics refreshes affect
+	// diagnostics without updating programs, so they republish every open file.
+	force := change.newConfig != nil || change.reason == UpdateReasonDiagnosticsRefresh
+
+	for path, overlay := range newSnapshot.fs.overlays {
+		uri := lsconv.FileNameToDocumentURI(overlay.FileName())
+		project := newSnapshot.GetDefaultProject(uri)
+		if project == nil {
+			continue
+		}
+		program := project.GetProgram()
+		if program == nil {
+			continue
+		}
+		// Skip files already considered whose program has not updated since the
+		// last publish; prevPublished (not the parent snapshot) is the reference
+		// because intermediate snapshots may have been skipped.
+		state, seen := s.publishedFileDiagnostics[path]
+		if !force && seen && project.ProgramLastUpdate <= prevPublished {
+			continue
+		}
+		languageService := ls.NewLanguageService(project.configFilePath, program, newSnapshot, overlay.FileName())
+		diagnostics := languageService.ProvidePushDiagnostics(ctx, uri)
+		nonEmpty := len(diagnostics) > 0
+		s.publishedFileDiagnostics[path] = publishedFileDiagnosticsState{uri: uri, nonEmpty: nonEmpty}
+		if !nonEmpty && (!seen || !state.nonEmpty) {
+			// The file has no published diagnostics, so there is nothing to clear.
+			continue
+		}
+		version := overlay.Version()
+		s.publishFileDiagnostics(ctx, uri, &version, diagnostics)
+	}
+}
+
+func (s *Session) publishFileDiagnostics(ctx context.Context, uri lsproto.DocumentUri, version *int32, diagnostics []*lsproto.Diagnostic) {
+	if diagnostics == nil {
+		diagnostics = []*lsproto.Diagnostic{}
+	}
+	if !lsproto.GetClientCapabilities(ctx).TextDocument.PublishDiagnostics.VersionSupport {
+		version = nil
+	}
+	if err := s.client.PublishDiagnostics(ctx, &lsproto.PublishDiagnosticsParams{
+		Uri:         uri,
+		Version:     version,
+		Diagnostics: diagnostics,
 	}); err != nil && s.options.LoggingEnabled {
 		s.logger.Logf("Error publishing diagnostics: %v", err)
 	}
