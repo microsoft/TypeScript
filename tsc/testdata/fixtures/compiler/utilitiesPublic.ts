@@ -311,7 +311,6 @@ export function sortAndDeduplicateDiagnostics<T extends Diagnostic>(diagnostics:
 //       compiler/utilitiesPublic.ts, and the contents of each lib/esnext.*.d.ts file.
 export const targetToLibMap: Map<ScriptTarget, string> = new Map([
     [ScriptTarget.ESNext, "lib.esnext.full.d.ts"],
-    [ScriptTarget.ES2026, "lib.es2026.full.d.ts"],
     [ScriptTarget.ES2025, "lib.es2025.full.d.ts"],
     [ScriptTarget.ES2024, "lib.es2024.full.d.ts"],
     [ScriptTarget.ES2023, "lib.es2023.full.d.ts"],
@@ -329,7 +328,6 @@ export function getDefaultLibFileName(options: CompilerOptions): string {
     const target = getEmitScriptTarget(options);
     switch (target) {
         case ScriptTarget.ESNext:
-        case ScriptTarget.ES2026:
         case ScriptTarget.ES2025:
         case ScriptTarget.ES2024:
         case ScriptTarget.ES2023:

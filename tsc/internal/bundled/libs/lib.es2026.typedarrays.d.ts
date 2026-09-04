@@ -32,7 +32,8 @@ interface Uint8Array<TArrayBuffer extends ArrayBufferLike> {
      * @param string The base64-encoded string.
      * @param options If provided, specifies the alphabet and handling of the last chunk.
      * @returns An object containing the number of bytes read and written.
-     * @throws {SyntaxError} If the input contains invalid base64 syntax for the selected options.
+     * @throws {SyntaxError} If the input string contains characters outside the specified alphabet, or if the last
+     * chunk is inconsistent with the `lastChunkHandling` option.
      */
     setFromBase64(
         string: string,
@@ -46,14 +47,14 @@ interface Uint8Array<TArrayBuffer extends ArrayBufferLike> {
     };
 
     /**
-     * Converts the `Uint8Array` to a hexadecimal-encoded string.
-     * @returns A hexadecimal-encoded string.
+     * Converts the `Uint8Array` to a base16-encoded string.
+     * @returns A base16-encoded string.
      */
     toHex(): string;
 
     /**
-     * Sets the `Uint8Array` from a hexadecimal-encoded string.
-     * @param string The hexadecimal-encoded string.
+     * Sets the `Uint8Array` from a base16-encoded string.
+     * @param string The base16-encoded string.
      * @returns An object containing the number of bytes read and written.
      */
     setFromHex(string: string): {
@@ -68,7 +69,8 @@ interface Uint8ArrayConstructor {
      * @param string The base64-encoded string.
      * @param options If provided, specifies the alphabet and handling of the last chunk.
      * @returns A new `Uint8Array` instance.
-     * @throws {SyntaxError} If the input contains invalid base64 syntax for the selected options.
+     * @throws {SyntaxError} If the input string contains characters outside the specified alphabet, or if the last
+     * chunk is inconsistent with the `lastChunkHandling` option.
      */
     fromBase64(
         string: string,
@@ -79,8 +81,7 @@ interface Uint8ArrayConstructor {
     ): Uint8Array<ArrayBuffer>;
 
     /**
-     * Creates a new `Uint8Array` from a hexadecimal-encoded string.
-     * @param string The hexadecimal-encoded string.
+     * Creates a new `Uint8Array` from a base16-encoded string.
      * @returns A new `Uint8Array` instance.
      */
     fromHex(

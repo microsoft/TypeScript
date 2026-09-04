@@ -1415,20 +1415,6 @@ export const getScriptTargetFeatures: () => ScriptTargetFeatures = /* @__PURE__ 
         Iterator: new Map(Object.entries({
             es2015: emptyArray,
         })),
-        IteratorConstructor: new Map(Object.entries({
-            es2026: [
-                "concat",
-            ],
-        })),
-        RawJSON: new Map(Object.entries({
-            es2026: emptyArray,
-        })),
-        JSON: new Map(Object.entries({
-            es2026: [
-                "isRawJSON",
-                "rawJSON",
-            ],
-        })),
         AsyncIterator: new Map(Object.entries({
             es2015: emptyArray,
         })),
@@ -1527,7 +1513,7 @@ export const getScriptTargetFeatures: () => ScriptTargetFeatures = /* @__PURE__ 
                 "from",
                 "of",
             ],
-            es2026: [
+            esnext: [
                 "fromAsync",
             ],
         })),
@@ -1587,9 +1573,6 @@ export const getScriptTargetFeatures: () => ScriptTargetFeatures = /* @__PURE__ 
             es2025: [
                 "f16round",
             ],
-            es2026: [
-                "sumPrecise",
-            ],
         })),
         Map: new Map(Object.entries({
             es2015: [
@@ -1597,7 +1580,7 @@ export const getScriptTargetFeatures: () => ScriptTargetFeatures = /* @__PURE__ 
                 "keys",
                 "values",
             ],
-            es2026: [
+            esnext: [
                 "getOrInsert",
                 "getOrInsertComputed",
             ],
@@ -1658,7 +1641,7 @@ export const getScriptTargetFeatures: () => ScriptTargetFeatures = /* @__PURE__ 
                 "keys",
                 "values",
             ],
-            es2026: [
+            esnext: [
                 "getOrInsert",
                 "getOrInsertComputed",
             ],
@@ -1825,7 +1808,7 @@ export const getScriptTargetFeatures: () => ScriptTargetFeatures = /* @__PURE__ 
                 "toSpliced",
                 "with",
             ],
-            es2026: [
+            esnext: [
                 "toBase64",
                 "setFromBase64",
                 "toHex",
@@ -1960,12 +1943,12 @@ export const getScriptTargetFeatures: () => ScriptTargetFeatures = /* @__PURE__ 
             ],
         })),
         ErrorConstructor: new Map(Object.entries({
-            es2026: [
+            esnext: [
                 "isError",
             ],
         })),
         Uint8ArrayConstructor: new Map(Object.entries({
-            es2026: [
+            esnext: [
                 "fromBase64",
                 "fromHex",
             ],
