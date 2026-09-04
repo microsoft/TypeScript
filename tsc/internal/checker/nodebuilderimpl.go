@@ -2843,7 +2843,8 @@ func getTypeAliasForTypeLiteral(c *Checker, t *Type) *ast.Symbol {
 }
 
 func (b *NodeBuilderImpl) shouldWriteTypeOfFunctionSymbol(symbol *ast.Symbol, typeId TypeId) (bool, *ast.Symbol) {
-	isStaticMethodSymbol := symbol.Flags&ast.SymbolFlagsMethod != 0 && core.Some(symbol.Declarations, func(declaration *ast.Node) bool {
+	// `typeof C.name` can only be written when the member name is a valid identifier
+	isStaticMethodSymbol := symbol.Flags&ast.SymbolFlagsMethod != 0 && scanner.IsIdentifierText(symbol.Name, core.LanguageVariantStandard) && core.Some(symbol.Declarations, func(declaration *ast.Node) bool {
 		return ast.IsStatic(declaration) && !b.ch.isLateBindableIndexSignature(ast.GetNameOfDeclaration(declaration))
 	})
 	isNonLocalFunctionSymbol := false
