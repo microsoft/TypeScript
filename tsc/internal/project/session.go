@@ -103,14 +103,15 @@ type SessionInit struct {
 // Acquisition (ATA) state accordingly.
 type Session struct {
 	*SnapshotHost
-	options       *SessionOptions
-	logger        logging.Logger
-	backgroundCtx context.Context
-	toPath        func(string) tspath.Path
-	client        Client
-	startTime     time.Time
-	npmExecutor   ata.NpmExecutor
-	fs            *overlayFS
+	options          *SessionOptions
+	logger           logging.Logger
+	backgroundCtx    context.Context
+	backgroundCancel context.CancelFunc
+	toPath           func(string) tspath.Path
+	client           Client
+	startTime        time.Time
+	npmExecutor      ata.NpmExecutor
+	fs               *overlayFS
 	// contentMapperTimings is the cumulative host snapshot at the most recent session snapshot adoption.
 	contentMapperTimings   contentmapper.Timings
 	contentMapperTimingsMu sync.Mutex
@@ -174,8 +175,10 @@ type Session struct {
 	// idleCacheCleanTimer is a resettable timer for scheduling idle disk
 	// cache cleans. The timer resets on any file event (open, close,
 	// change, save, watch) and fires after 30 seconds of inactivity.
-	idleCacheCleanTimer *time.Timer
-	idleCacheCleanMu    sync.Mutex
+	idleCacheCleanTimer  *time.Timer
+	idleCacheCleanMu     sync.Mutex
+	idleCacheCleanWG     sync.WaitGroup
+	idleCacheCleanClosed bool
 
 	// performanceTelemetryCancel cancels the periodic performance telemetry ticker.
 	performanceTelemetryCancel context.CancelFunc
@@ -209,21 +212,23 @@ func newContentMapperHost(init *SessionInit) contentmapper.Host {
 
 func NewSession(init *SessionInit) *Session {
 	snapshotHost := NewSnapshotHost(init)
+	backgroundCtx, backgroundCancel := context.WithCancel(init.BackgroundCtx)
 	sessionLogger := init.Logger
 	if sessionLogger == nil {
 		sessionLogger = logging.NewNopLogger()
 	}
 	session := &Session{
-		SnapshotHost:    snapshotHost,
-		options:         init.Options,
-		logger:          sessionLogger,
-		backgroundCtx:   init.BackgroundCtx,
-		toPath:          snapshotHost.toPath,
-		client:          init.Client,
-		npmExecutor:     init.NpmExecutor,
-		fs:              newOverlayFS(snapshotHost.fs, make(map[tspath.Path]*Overlay), init.Options.PositionEncoding, snapshotHost.toPath),
-		backgroundQueue: background.NewQueue(),
-		startTime:       time.Now(),
+		SnapshotHost:     snapshotHost,
+		options:          init.Options,
+		logger:           sessionLogger,
+		backgroundCtx:    backgroundCtx,
+		backgroundCancel: backgroundCancel,
+		toPath:           snapshotHost.toPath,
+		client:           init.Client,
+		npmExecutor:      init.NpmExecutor,
+		fs:               newOverlayFS(snapshotHost.fs, make(map[tspath.Path]*Overlay), init.Options.PositionEncoding, snapshotHost.toPath),
+		backgroundQueue:  background.NewQueue(),
+		startTime:        time.Now(),
 		snapshot: snapshotHost.newRootSnapshot(
 			0,
 			lsproto.GetClientCapabilities(init.BackgroundCtx).Workspace.DidChangeWatchedFiles.RelativePatternSupport,
@@ -664,13 +669,23 @@ func (s *Session) scheduleIdleCacheClean() {
 	s.idleCacheCleanMu.Lock()
 	defer s.idleCacheCleanMu.Unlock()
 
+	if s.idleCacheCleanClosed {
+		return
+	}
 	if s.idleCacheCleanTimer != nil {
-		s.idleCacheCleanTimer.Stop()
+		if s.idleCacheCleanTimer.Stop() {
+			s.idleCacheCleanWG.Done()
+		}
 	}
 
-	s.idleCacheCleanTimer = time.AfterFunc(idleCacheCleanDelay, func() {
+	s.idleCacheCleanWG.Add(1)
+	var timer *time.Timer
+	timer = time.AfterFunc(idleCacheCleanDelay, func() {
+		defer s.idleCacheCleanWG.Done()
 		s.idleCacheCleanMu.Lock()
-		s.idleCacheCleanTimer = nil
+		if s.idleCacheCleanTimer == timer {
+			s.idleCacheCleanTimer = nil
+		}
 		s.idleCacheCleanMu.Unlock()
 
 		s.snapshotUpdateMu.Lock()
@@ -695,9 +710,24 @@ func (s *Session) cancelIdleCacheClean() {
 	s.idleCacheCleanMu.Lock()
 	defer s.idleCacheCleanMu.Unlock()
 	if s.idleCacheCleanTimer != nil {
-		s.idleCacheCleanTimer.Stop()
+		if s.idleCacheCleanTimer.Stop() {
+			s.idleCacheCleanWG.Done()
+		}
 		s.idleCacheCleanTimer = nil
 	}
+}
+
+func (s *Session) closeIdleCacheClean() {
+	s.idleCacheCleanMu.Lock()
+	s.idleCacheCleanClosed = true
+	if s.idleCacheCleanTimer != nil {
+		if s.idleCacheCleanTimer.Stop() {
+			s.idleCacheCleanWG.Done()
+		}
+		s.idleCacheCleanTimer = nil
+	}
+	s.idleCacheCleanMu.Unlock()
+	s.idleCacheCleanWG.Wait()
 }
 
 const performanceTelemetryInterval = 5 * time.Minute
@@ -1678,10 +1708,22 @@ func (s *Session) Close() {
 	// Cancel any pending auto-import cache warming
 	s.cancelWarmAutoImportCache()
 	// Cancel any pending idle cache clean
-	s.cancelIdleCacheClean()
+	s.closeIdleCacheClean()
 	// Cancel periodic performance telemetry
 	s.stopPerformanceTelemetry()
+	s.backgroundCancel()
 	s.backgroundQueue.Close()
+
+	s.snapshotUpdateMu.Lock()
+	defer s.snapshotUpdateMu.Unlock()
+	s.snapshotMu.Lock()
+	snapshot := s.snapshot
+	s.snapshot = nil
+	s.snapshotMu.Unlock()
+	if snapshot != nil {
+		snapshot.Deref()
+	}
+
 	s.SnapshotHost.Close()
 }
 
@@ -1814,8 +1856,8 @@ func (s *Session) logCacheStats(snapshot *Snapshot) {
 	}
 }
 
-func (s *Session) NpmInstall(cwd string, npmInstallArgs []string) ([]byte, error) {
-	return s.npmExecutor.NpmInstall(cwd, npmInstallArgs)
+func (s *Session) NpmInstall(ctx context.Context, cwd string, npmInstallArgs []string) ([]byte, error) {
+	return s.npmExecutor.NpmInstall(ctx, cwd, npmInstallArgs)
 }
 
 func (s *Session) refreshInlayHintsIfNeeded(oldPrefs lsutil.UserPreferences, newPrefs lsutil.UserPreferences) {
@@ -1982,6 +2024,7 @@ func (s *Session) triggerATAForUpdatedProjects(newSnapshot *Snapshot) {
 
 				typingsInfo := project.ComputeTypingsInfo()
 				request := &ata.TypingsInstallRequest{
+					Context:          ctx,
 					ProjectID:        project.configFilePath,
 					TypingsInfo:      &typingsInfo,
 					FileNames:        core.Map(project.Program.GetSourceFiles(), func(file *ast.SourceFile) string { return file.FileName() }),

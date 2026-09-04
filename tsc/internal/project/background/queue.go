@@ -23,20 +23,23 @@ func (q *Queue) Enqueue(ctx context.Context, fn func(context.Context)) {
 		q.mu.RUnlock()
 		return
 	}
-	q.mu.RUnlock()
 
 	// Don't start new tasks if context is already cancelled
 	if ctx.Err() != nil {
+		q.mu.RUnlock()
 		return
 	}
 
-	q.wg.Go(func() {
+	q.wg.Add(1)
+	q.mu.RUnlock()
+	go func() {
+		defer q.wg.Done()
 		// Check context again before executing
 		if ctx.Err() != nil {
 			return
 		}
 		fn(ctx)
-	})
+	}()
 }
 
 // Wait waits for all active tasks to complete.
@@ -49,4 +52,5 @@ func (q *Queue) Close() {
 	q.mu.Lock()
 	q.closed = true
 	q.mu.Unlock()
+	q.wg.Wait()
 }

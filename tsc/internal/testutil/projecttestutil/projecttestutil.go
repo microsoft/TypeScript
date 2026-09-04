@@ -65,7 +65,7 @@ func (h *SessionUtils) SetupNpmExecutorForTypingsInstaller() {
 		return
 	}
 
-	h.npmExecutor.NpmInstallFunc = func(cwd string, packageNames []string) ([]byte, error) {
+	h.npmExecutor.NpmInstallFunc = func(ctx context.Context, cwd string, packageNames []string) ([]byte, error) {
 		// packageNames is actually npmInstallArgs due to interface misnaming
 		npmInstallArgs := packageNames
 		lenNpmInstallArgs := len(npmInstallArgs)
