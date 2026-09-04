@@ -1,0 +1,13 @@
+//// [tests/cases/compiler/exportSpecifierForAGlobalAugmentation.ts] ////
+
+=== exportSpecifierForAGlobalAugmentation.ts ===
+declare global {
+>global : typeof global
+
+    var XYZ: number;
+>XYZ : number
+}
+
+export { XYZ };
+>XYZ : number
+
