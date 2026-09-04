@@ -722,7 +722,7 @@ type sourceFS struct {
 	tracking           bool
 	toPath             func(fileName string) tspath.Path
 	missingDirectories *collections.SyncSet[tspath.Path]
-	seenFiles          *collections.SyncSet[tspath.Path]
+	seenFiles          *collections.SyncMap[tspath.Path, string]
 	source             FileSource
 }
 
@@ -733,7 +733,7 @@ func newSourceFS(tracking bool, source FileSource, toPath func(fileName string) 
 		source:   source,
 	}
 	if tracking {
-		fs.seenFiles = &collections.SyncSet[tspath.Path]{}
+		fs.seenFiles = &collections.SyncMap[tspath.Path, string]{}
 		fs.missingDirectories = &collections.SyncSet[tspath.Path]{}
 	}
 	return fs
@@ -749,19 +749,22 @@ func (fs *sourceFS) Track(fileName string) {
 	if !fs.tracking {
 		return
 	}
-	fs.seenFiles.Add(fs.toPath(fileName))
+	fs.seenFiles.Store(fs.toPath(fileName), fileName)
 }
 
 func (fs *sourceFS) SeenFile(path tspath.Path) bool {
 	if fs.seenFiles == nil {
 		return false
 	}
-	return fs.seenFiles.Has(path)
+	_, ok := fs.seenFiles.Load(path)
+	return ok
 }
 
 func (fs *sourceFS) SeenFileOrMissingParentDirectory(path tspath.Path) bool {
-	if fs.seenFiles != nil && fs.seenFiles.Has(path) {
-		return true
+	if fs.seenFiles != nil {
+		if _, ok := fs.seenFiles.Load(path); ok {
+			return true
+		}
 	}
 	if fs.missingDirectories != nil && !fs.missingDirectories.IsEmpty() {
 		for {

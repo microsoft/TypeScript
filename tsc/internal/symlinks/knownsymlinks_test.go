@@ -45,6 +45,9 @@ func TestSetDirectory(t *testing.T) {
 	if stored.RealPath != realDirectory.RealPath {
 		t.Errorf("Expected RealPath to be '%s', got '%s'", realDirectory.RealPath, stored.RealPath)
 	}
+	if stored.Symlink != "/test/symlink/" {
+		t.Errorf("Expected Symlink to preserve '/test/symlink/', got '%s'", stored.Symlink)
+	}
 
 	// Check that realpath mapping was created
 	set, ok := cache.DirectoriesByRealpath().Load(realDirectory.RealPath)
@@ -53,6 +56,30 @@ func TestSetDirectory(t *testing.T) {
 	}
 	if !set.Has("/test/symlink") {
 		t.Error("Expected symlink '/test/symlink' to be in set")
+	}
+}
+
+func TestKnownDirectoryLinkPreservesChildSpelling(t *testing.T) {
+	t.Parallel()
+
+	cache := NewKnownSymlink("/test/dir", false)
+	symlink := "/Project/Node_Modules/pkg"
+	symlinkPath := tspath.ToPath(symlink, "/test/dir", false).EnsureTrailingDirectorySeparator()
+	cache.SetDirectory(symlink, symlinkPath, &KnownDirectoryLink{
+		Real:     "/Real/Package/",
+		RealPath: tspath.ToPath("/Real/Package", "/test/dir", false).EnsureTrailingDirectorySeparator(),
+	})
+
+	link, ok := cache.Directories().Load(symlinkPath)
+	if !ok {
+		t.Fatal("Expected directory link")
+	}
+	resolved, ok := link.ResolveFileName("/PROJECT/node_modules/pkg/Src/File.ts", false)
+	if !ok {
+		t.Fatal("Expected child path to resolve through directory link")
+	}
+	if resolved != "/Real/Package/Src/File.ts" {
+		t.Errorf("Expected child spelling to be preserved, got '%s'", resolved)
 	}
 }
 

@@ -295,20 +295,20 @@ func (w *WatchedFiles[T]) Clone(input T) *WatchedFiles[T] {
 	}
 }
 
-func createResolutionLookupGlobMapper(workspaceDirectory string, libDirectory string, currentDirectory string, useCaseSensitiveFileNames bool) func(data *collections.SyncSet[tspath.Path]) PatternsAndIgnored {
+func createResolutionLookupGlobMapper(workspaceDirectory string, libDirectory string, currentDirectory string, useCaseSensitiveFileNames bool) func(data *collections.SyncMap[tspath.Path, string]) PatternsAndIgnored {
 	workspaceDirectoryPath := tspath.ToPath(workspaceDirectory, currentDirectory, useCaseSensitiveFileNames)
 	currentDirectoryPath := tspath.ToPath(currentDirectory, currentDirectory, useCaseSensitiveFileNames)
 	libDirectoryPath := tspath.ToPath(libDirectory, currentDirectory, useCaseSensitiveFileNames)
 
-	return func(data *collections.SyncSet[tspath.Path]) PatternsAndIgnored {
+	return func(data *collections.SyncMap[tspath.Path, string]) PatternsAndIgnored {
 		var ignored map[string]struct{}
 		var seenDirs collections.Set[tspath.Path]
 		var includeWorkspace, includeRoot, includeLib bool
-		var nodeModulesDirectories collections.Set[tspath.Path]
-		var externalDirectories collections.Set[tspath.Path]
+		nodeModulesDirectories := make(map[tspath.Path]string)
+		externalDirectories := make(map[tspath.Path]string)
 
 		if data != nil {
-			data.Range(func(path tspath.Path) bool {
+			data.Range(func(path tspath.Path, fileName string) bool {
 				if tspath.IsDynamicFileName(string(path)) {
 					return true
 				}
@@ -325,10 +325,19 @@ func createResolutionLookupGlobMapper(workspaceDirectory string, libDirectory st
 					includeRoot = true
 				} else if libDirectoryPath.ContainsPath(path) {
 					includeLib = true
-				} else if idx := strings.Index(string(path), "/node_modules/"); idx != -1 {
-					nodeModulesDirectories.Add(path[:idx+len("/node_modules")])
+				} else if canonicalComponents, fileNameComponents := tspath.GetPathComponents(string(path), ""), tspath.GetPathComponents(fileName, ""); len(canonicalComponents) == len(fileNameComponents) {
+					for i, component := range canonicalComponents {
+						if component == "node_modules" {
+							nodeModulesDirectory := tspath.GetPathFromPathComponents(fileNameComponents[:i+1])
+							nodeModulesDirectories[tspath.ToPath(nodeModulesDirectory, currentDirectory, useCaseSensitiveFileNames)] = nodeModulesDirectory
+							return true
+						}
+					}
+					directory := tspath.GetDirectoryPath(fileName)
+					externalDirectories[path.GetDirectoryPath()] = directory
 				} else {
-					externalDirectories.Add(path.GetDirectoryPath())
+					directory := tspath.GetDirectoryPath(fileName)
+					externalDirectories[path.GetDirectoryPath()] = directory
 				}
 				return true
 			})
@@ -336,30 +345,26 @@ func createResolutionLookupGlobMapper(workspaceDirectory string, libDirectory st
 
 		var globs []string
 		if includeWorkspace {
-			globs = append(globs, getRecursiveGlobPattern(string(workspaceDirectoryPath)))
+			globs = append(globs, getRecursiveGlobPattern(workspaceDirectory))
 		}
 		if includeRoot {
-			globs = append(globs, getRecursiveGlobPattern(string(currentDirectoryPath)))
+			globs = append(globs, getRecursiveGlobPattern(currentDirectory))
 		}
 		if includeLib {
-			globs = append(globs, getRecursiveGlobPattern(string(libDirectoryPath)))
+			globs = append(globs, getRecursiveGlobPattern(libDirectory))
 		}
-		if nodeModulesDirectories.Len() > 0 {
-			nodeModulesGlobs := make([]string, 0, nodeModulesDirectories.Len())
-			for dir := range nodeModulesDirectories.Keys() {
-				nodeModulesGlobs = append(nodeModulesGlobs, getRecursiveGlobPattern(string(dir)))
+		if len(nodeModulesDirectories) > 0 {
+			nodeModulesGlobs := make([]string, 0, len(nodeModulesDirectories))
+			for _, dir := range nodeModulesDirectories {
+				nodeModulesGlobs = append(nodeModulesGlobs, getRecursiveGlobPattern(dir))
 			}
 			slices.Sort(nodeModulesGlobs)
 			globs = append(globs, nodeModulesGlobs...)
 		}
 		var outsideDirs []string
-		if externalDirectories.Len() > 0 {
-			externalDirStrings := make([]string, 0, externalDirectories.Len())
-			for dir := range externalDirectories.Keys() {
-				externalDirStrings = append(externalDirStrings, string(dir))
-			}
+		if len(externalDirectories) > 0 {
 			externalDirectoryParents, ignoredExternalDirs := tspath.GetCommonParents(
-				externalDirStrings,
+				slices.Collect(maps.Values(externalDirectories)),
 				minWatchLocationDepth,
 				getPathComponentsForWatching,
 				tspath.ComparePathsOptions{UseCaseSensitiveFileNames: true}, // Already using tspath.Path
