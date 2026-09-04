@@ -6,16 +6,16 @@
 // its base with a type that names the schema back, so the schema's table is read while it is still
 // being assembled and its inherited `out` is not in it yet.
 //
-// This case is NOT fixed, and the baseline records how far it gets. An earlier draft answered every
-// miss in that window with `any`, which cleared the error here -- but that answer is not confined to
-// this shape. A self-referential interface reaches the same window with no getter and no inference
-// anywhere in the program, and an unpatched compiler answers it from the index signature; making it
-// `any` silently accepted an indexed access that every other compiler rejects. Nothing available at
-// the miss distinguishes the two, so the answer was withdrawn rather than guessed.
+// A lookup that misses in that window finishes itself against the base types still to be inherited,
+// so it returns the member the table is about to hold. An earlier draft instead answered such a miss
+// with `any`, which cleared the error here and was wrong everywhere else: a self-referential
+// interface reaches the same window with no getter and no inference anywhere in the program, and an
+// unpatched compiler answers it from the index signature, so `any` silently accepted an indexed
+// access that every other compiler rejects. Completing the lookup is what separates the two -- a name
+// no base carries is still absent.
 //
-// What is left is still an improvement on main, which cannot type the declaration at all: the
-// getter resolves, the non-recursive members are real types, and only the remapped member is
-// unresolved.
+// The `any` that appears against `parent` in the .types baseline is the printer eliding a recursive
+// reference, not an unresolved member. The assertions below are what distinguish those two.
 
 interface Internals<O> {
     optional: "true" | "false";
@@ -60,8 +60,15 @@ declare const sample: (typeof category)["out"];
 // optional bucket, so it is `parent?:` rather than `parent:`. Both of those are new: main gives the
 // whole declaration an implicit `any` and reports it.
 const topName: string = sample.name;
-// The recursive one does not resolve. Pinned so that closing this shows up here.
+// The recursive one resolves too, and keeps resolving as far down as it is walked.
 const parentName: string = sample.parent!.name;
+const deepName: string = sample.parent!.parent!.parent!.name;
+// Depth is where a collapse would hide: `any` would accept both of these, so they are what keeps the
+// comment above honest.
+// @ts-expect-error
+const wrongType: number = sample.parent!.parent!.name;
+// @ts-expect-error
+sample.parent!.parent!.missing;
 
 // A property that is genuinely absent must still be reported, whoever is asking.
 interface Base { readonly own: number; }
