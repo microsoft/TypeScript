@@ -1403,6 +1403,33 @@ export const checkHerebyfile = task({
         ]),
 });
 
+export const checkVsceVersion = task({
+    name: "check:vsce-version",
+    description: "Checks that Azure release jobs use the repository's pinned vsce version.",
+    run: () => {
+        const packageJson = JSON.parse(fs.readFileSync("./packages/vscode-typescript/package.json", "utf8"));
+        const packageLock = JSON.parse(fs.readFileSync("./package-lock.json", "utf8"));
+        const version = packageJson.devDependencies?.["@vscode/vsce"];
+        if (typeof version !== "string" || !/^\d+\.\d+\.\d+$/.test(version)) {
+            throw new Error(`packages/vscode-typescript must pin @vscode/vsce to an exact version, got ${JSON.stringify(version)}.`);
+        }
+
+        const workspaceVersion = packageLock.packages?.["packages/vscode-typescript"]?.devDependencies?.["@vscode/vsce"];
+        const installedVersion = packageLock.packages?.["node_modules/@vscode/vsce"]?.version;
+        if (workspaceVersion !== version || installedVersion !== version) {
+            throw new Error(
+                `@vscode/vsce version mismatch: package.json=${version}, package-lock workspace=${workspaceVersion}, package-lock package=${installedVersion}.`,
+            );
+        }
+
+        const setupVsce = fs.readFileSync("./tools/pipelines/steps/setup-vsce.yml", "utf8");
+        const matches = [...setupVsce.matchAll(/npm install --no-save @vscode\/vsce@(\d+\.\d+\.\d+)/g)];
+        if (matches.length !== 1 || matches[0][1] !== version) {
+            throw new Error(`tools/pipelines/steps/setup-vsce.yml must install exactly @vscode/vsce@${version}.`);
+        }
+    },
+});
+
 const scriptTsconfigs = [
     "./tools/scripts/tsc/tsconfig.json",
     "./tsc/internal/lsp/lsproto/_generate/tsconfig.json",

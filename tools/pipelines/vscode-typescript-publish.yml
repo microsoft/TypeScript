@@ -186,20 +186,7 @@ extends:
                 steps:
                   - checkout: none
 
-                  - task: NodeTool@0
-                    inputs:
-                      versionSpec: 24.x
-                    displayName: Install Node
-
-                  - bash: |
-                      cat > .npmrc << 'EOF'
-                      registry=https://packagefeedproxy.microsoft.io/npm/
-                      EOF
-                      npm init -y
-                    displayName: Set up npm
-
-                  - bash: npm install @vscode/vsce@3.9.2
-                    displayName: Install vsce
+                  - template: /tools/pipelines/steps/setup-vsce.yml@self
 
                   - task: AzureCLI@2
                     displayName: Publish VSIXs to Marketplace

@@ -181,23 +181,9 @@ extends:
                   fi
                 displayName: 'Check VSIX artifacts'
 
-              - task: NodeTool@0
-                condition: and(succeeded(), eq(variables['HasVsix'], 'true'))
-                inputs:
-                  versionSpec: 24.x
-                displayName: 'Install Node'
-
-              - bash: |
-                  cat > .npmrc << 'EOF'
-                  registry=https://packagefeedproxy.microsoft.io/npm/
-                  EOF
-                  npm init -y
-                displayName: 'Set up .npmrc'
-                condition: and(succeeded(), eq(variables['HasVsix'], 'true'))
-
-              - bash: npm install @vscode/vsce@latest
-                displayName: 'Install vsce'
-                condition: and(succeeded(), eq(variables['HasVsix'], 'true'))
+              - template: /tools/pipelines/steps/setup-vsce.yml@self
+                parameters:
+                  condition: and(succeeded(), eq(variables['HasVsix'], 'true'))
 
               - task: AzureCLI@2
                 displayName: 'Check Marketplace Auth'
