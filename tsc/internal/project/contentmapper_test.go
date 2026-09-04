@@ -683,6 +683,13 @@ func TestContentMapperOpenFileExcludedByConfigChange(t *testing.T) {
 		Uri:  "file:///home/project/tsconfig.json",
 		Type: lsproto.FileChangeTypeChanged,
 	}})
+	session.WaitForBackgroundTasks()
+
+	// The background update removes app.box from the configured project, but inferred
+	// project cleanup is deferred until the next file open.
+	assert.Assert(t, session.Snapshot().GetDefaultProject(boxURI) == nil)
+	mainURI := lsproto.DocumentUri("file:///home/project/src/main.ts")
+	session.DidOpenFile(ctx, mainURI, 1, files["/home/project/src/main.ts"].(string), lsproto.LanguageKindTypeScript)
 
 	languageService, err = session.GetLanguageService(ctx, boxURI)
 	assert.NilError(t, err)

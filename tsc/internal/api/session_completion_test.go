@@ -1,10 +1,11 @@
 package api
 
 import (
-	"context"
 	"testing"
 
 	"github.com/microsoft/TypeScript/tsc/internal/bundled"
+	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/ls/lsutil"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/projecttestutil"
 	"gotest.tools/v3/assert"
 )
@@ -40,14 +41,12 @@ func TestCompletionSymbolTypeIsResolvable(t *testing.T) {
 	session := NewLSPSession(projectSession, nil)
 	defer session.Close()
 
-	ctx := context.Background()
-
-	snapshotResp, err := session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{
+	snapshotResp, err := session.handleUpdateSnapshot(t.Context(), &UpdateSnapshotParams{
 		OpenFiles: []DocumentIdentifier{{FileName: fileName}},
 	})
 	assert.NilError(t, err)
 
-	proj, err := session.handleGetDefaultProjectForFile(ctx, &GetDefaultProjectForFileParams{
+	proj, err := session.handleGetDefaultProjectForFile(t.Context(), &GetDefaultProjectForFileParams{
 		Snapshot: snapshotResp.Snapshot,
 		File:     DocumentIdentifier{FileName: fileName},
 	})
@@ -55,7 +54,7 @@ func TestCompletionSymbolTypeIsResolvable(t *testing.T) {
 	assert.Assert(t, proj != nil, "file should resolve to a default project")
 
 	// content is pure ASCII, so the UTF-16 caret offset equals the byte length.
-	completions, err := session.handleGetCompletionsAtPosition(ctx, &GetCompletionsAtPositionParams{
+	completions, err := session.handleGetCompletionsAtPosition(t.Context(), &GetCompletionsAtPositionParams{
 		Snapshot:      snapshotResp.Snapshot,
 		Project:       proj.Id,
 		File:          DocumentIdentifier{FileName: fileName},
@@ -73,7 +72,7 @@ func TestCompletionSymbolTypeIsResolvable(t *testing.T) {
 			continue
 		}
 		sawSymbol = true
-		typeResp, err := session.handleGetTypeOfSymbol(ctx, &GetTypeOfSymbolParams{
+		typeResp, err := session.handleGetTypeOfSymbol(t.Context(), &GetTypeOfSymbolParams{
 			Snapshot: snapshotResp.Snapshot,
 			Project:  proj.Id,
 			Symbol:   entry.Symbol.Id,
@@ -114,14 +113,12 @@ func TestCompletionOnInferredProject(t *testing.T) {
 	session := NewLSPSession(projectSession, nil)
 	defer session.Close()
 
-	ctx := context.Background()
-
-	snapshotResp, err := session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{
+	snapshotResp, err := session.handleUpdateSnapshot(t.Context(), &UpdateSnapshotParams{
 		OpenFiles: []DocumentIdentifier{{FileName: fileName}},
 	})
 	assert.NilError(t, err)
 
-	proj, err := session.handleGetDefaultProjectForFile(ctx, &GetDefaultProjectForFileParams{
+	proj, err := session.handleGetDefaultProjectForFile(t.Context(), &GetDefaultProjectForFileParams{
 		Snapshot: snapshotResp.Snapshot,
 		File:     DocumentIdentifier{FileName: fileName},
 	})
@@ -130,7 +127,7 @@ func TestCompletionOnInferredProject(t *testing.T) {
 
 	// This request previously panicked in setupLanguageService.
 	// content is pure ASCII, so the UTF-16 caret offset equals the byte length.
-	completions, err := session.handleGetCompletionsAtPosition(ctx, &GetCompletionsAtPositionParams{
+	completions, err := session.handleGetCompletionsAtPosition(t.Context(), &GetCompletionsAtPositionParams{
 		Snapshot: snapshotResp.Snapshot,
 		Project:  proj.Id,
 		File:     DocumentIdentifier{FileName: fileName},
@@ -138,4 +135,53 @@ func TestCompletionOnInferredProject(t *testing.T) {
 	})
 	assert.NilError(t, err)
 	assert.Assert(t, completions != nil, "expected a completion list for array members")
+}
+
+func TestCompletionRetriesWithAutoImports(t *testing.T) {
+	t.Parallel()
+	if !bundled.Embedded {
+		t.Skip("bundled files are not embedded")
+	}
+
+	const fileName = "/home/projects/p/src/index.ts"
+	const content = "someV"
+	projectSession, _ := projecttestutil.Setup(map[string]any{
+		"/home/projects/p/tsconfig.json": `{ "compilerOptions": { "module": "esnext", "target": "esnext" } }`,
+		"/home/projects/p/src/export.ts": "export const someValue = 1;",
+		fileName:                         content,
+	})
+	defer projectSession.Close()
+	projectSession.Configure(lsutil.UserPreferences{
+		IncludeCompletionsForModuleExports:    core.TSTrue,
+		IncludeCompletionsForImportStatements: core.TSTrue,
+	})
+
+	session := NewSession(projectSession, nil)
+	defer session.Close()
+
+	snapshotResp, err := session.handleUpdateSnapshot(t.Context(), &UpdateSnapshotParams{
+		OpenFiles: []DocumentIdentifier{{FileName: fileName}},
+	})
+	assert.NilError(t, err)
+	proj, err := session.handleGetDefaultProjectForFile(t.Context(), &GetDefaultProjectForFileParams{
+		Snapshot: snapshotResp.Snapshot,
+		File:     DocumentIdentifier{FileName: fileName},
+	})
+	assert.NilError(t, err)
+	assert.Assert(t, proj != nil, "file should resolve to a default project")
+
+	completions, err := session.handleGetCompletionsAtPosition(t.Context(), &GetCompletionsAtPositionParams{
+		Snapshot: snapshotResp.Snapshot,
+		Project:  proj.Id,
+		File:     DocumentIdentifier{FileName: fileName},
+		Position: uint32(len(content)),
+	})
+	assert.NilError(t, err)
+	assert.Assert(t, completions != nil, "expected a completion list")
+	for _, entry := range completions.Entries {
+		if entry.Name == "someValue" {
+			return
+		}
+	}
+	t.Fatal("expected auto-import completion for someValue")
 }

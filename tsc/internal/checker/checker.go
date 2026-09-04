@@ -3368,7 +3368,9 @@ func (c *Checker) checkTemplateLiteralType(node *ast.Node) {
 func (c *Checker) checkImportType(node *ast.Node) {
 	c.checkSourceElement(node.AsImportTypeNode().Argument)
 	if attributes := node.AsImportTypeNode().Attributes; attributes != nil {
-		c.getResolutionModeOverride(attributes.AsImportAttributes(), true /*reportErrors*/)
+		importAttributes := attributes.AsImportAttributes()
+		c.checkGrammarImportAttributeValues(importAttributes)
+		c.getResolutionModeOverride(importAttributes, true /*reportErrors*/)
 	}
 	c.checkTypeReferenceOrImport(node)
 	c.checkImportAttributes(node)
@@ -5492,14 +5494,9 @@ func (c *Checker) checkExternalImportOrExportDeclaration(node *ast.Node) bool {
 	if !ast.IsImportEqualsDeclaration(node) {
 		attributes := ast.GetImportAttributes(node)
 		if attributes != nil {
-			hasError := false
-			for _, attr := range attributes.AsImportAttributes().Attributes.Nodes {
-				if !ast.IsStringLiteral(attr.AsImportAttribute().Value) {
-					hasError = true
-					c.error(attr.AsImportAttribute().Value, diagnostics.Import_attribute_values_must_be_string_literal_expressions)
-				}
+			if c.checkGrammarImportAttributeValues(attributes.AsImportAttributes()) {
+				return false
 			}
-			return !hasError
 		}
 	}
 	return true
@@ -5978,6 +5975,11 @@ func (c *Checker) checkVariableLikeDeclaration(node *ast.Node) {
 	}
 	if ast.IsBindingElement(node) {
 		propName := node.PropertyName()
+
+		if propName != nil && ast.IsPrivateIdentifier(propName) {
+			c.grammarErrorOnNode(propName, diagnostics.Private_identifiers_cannot_be_used_in_destructuring_patterns)
+		}
+
 		if propName != nil && ast.IsIdentifier(node.Name()) && ast.IsPartOfParameterDeclaration(node) && ast.NodeIsMissing(ast.GetContainingFunction(node).Body()) {
 			// type F = ({a: string}) => void;
 			//               ^^^^^^
@@ -10363,7 +10365,9 @@ func (c *Checker) contextuallyCheckFunctionExpressionOrObjectLiteralMethod(node 
 				}
 			}
 			if contextualSignature != nil && c.getReturnTypeFromAnnotation(node) == nil && signature.resolvedReturnType == nil {
-				returnType := c.getReturnTypeFromBody(node, checkMode)
+				// resolvedReturnType is cached indefinitely, so the return type here has to be computed without CheckModeSkipContextSensitive;
+				// otherwise anyFunctionType could leak as part of the computed (and cached) return type.
+				returnType := c.getReturnTypeFromBody(node, checkMode&^CheckModeSkipContextSensitive)
 				if signature.resolvedReturnType == nil {
 					signature.resolvedReturnType = returnType
 				}
@@ -10863,7 +10867,10 @@ func (c *Checker) getInstantiationExpressionType(exprType *Type, node *ast.Node)
 				hasSignatures = hasSignatures || len(resolved.CallSignatures()) != 0 || len(resolved.ConstructSignatures()) != 0
 				hasApplicableSignature = hasApplicableSignature || len(callSignatures) != 0 || len(constructSignatures) != 0
 				if !core.Same(callSignatures, resolved.CallSignatures()) || !core.Same(constructSignatures, resolved.ConstructSignatures()) {
-					result := c.newObjectType(ObjectFlagsAnonymous|ObjectFlagsInstantiationExpressionType, t.symbol)
+					symbol := c.newSymbol(ast.SymbolFlagsNone, ast.InternalSymbolNameInstantiationExpression)
+					debug.Assert(t.symbol != nil, "Instantiation expression source type must have a symbol")
+					symbol.Declarations = t.symbol.Declarations
+					result := c.newObjectType(ObjectFlagsAnonymous|ObjectFlagsInstantiationExpressionType, symbol)
 					c.setStructuredTypeMembers(result, resolved.members, callSignatures, constructSignatures, resolved.indexInfos)
 					result.AsInstantiationExpressionType().node = node
 					return result
@@ -12771,6 +12778,11 @@ func (c *Checker) checkObjectLiteralDestructuringPropertyAssignment(node *ast.No
 	property := properties[propertyIndex]
 	if ast.IsPropertyAssignment(property) || ast.IsShorthandPropertyAssignment(property) {
 		name := property.Name()
+
+		if name != nil && ast.IsPrivateIdentifier(name) {
+			c.grammarErrorOnNode(name, diagnostics.Private_identifiers_cannot_be_used_in_destructuring_patterns)
+		}
+
 		exprType := c.getLiteralTypeFromPropertyName(name)
 		if isTypeUsableAsPropertyName(exprType) {
 			text := getPropertyNameFromType(exprType)

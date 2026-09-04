@@ -1,5 +1,5 @@
 // @target: es2015
-//@module: amd
+//@module: commonjs
 export class Collection<TItem extends CollectionItem> {
     _itemsByKey: { [key: string]: TItem; };
 }

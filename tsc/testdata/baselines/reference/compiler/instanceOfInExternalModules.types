@@ -1,0 +1,24 @@
+//// [tests/cases/compiler/instanceOfInExternalModules.ts] ////
+
+=== instanceOfInExternalModules_1.ts ===
+///<reference path='instanceOfInExternalModules_require.ts'/>
+import Bar = require("instanceOfInExternalModules_require");
+>Bar : any
+
+function IsFoo(value: any): boolean {
+>IsFoo : (value: any) => boolean
+>value : any
+
+    return value instanceof Bar.Foo;
+>value instanceof Bar.Foo : boolean
+>value : any
+>Bar.Foo : any
+>Bar : any
+>Foo : any
+}
+
+=== instanceOfInExternalModules_require.ts ===
+export class Foo { foo: string; }
+>Foo : Foo
+>foo : string
+

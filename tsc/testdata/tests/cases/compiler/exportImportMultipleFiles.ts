@@ -1,6 +1,6 @@
 // @target: es2015
 // @strict: false
-//@module: amd
+//@module: commonjs
 // @Filename: exportImportMultipleFiles_math.ts
 export function add(a, b) { return a + b; }
 
