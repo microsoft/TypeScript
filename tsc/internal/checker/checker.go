@@ -9373,7 +9373,7 @@ func (c *Checker) getLegacyDecoratorArgumentCount(node *ast.Node, signature *Sig
 		return 2
 	case ast.KindMethodDeclaration, ast.KindGetAccessor, ast.KindSetAccessor:
 		// For decorators with only two parameters we supply only two arguments
-		if len(signature.parameters) <= 2 {
+		if c.getParameterCount(signature) <= 2 {
 			return 2
 		}
 		return 3
