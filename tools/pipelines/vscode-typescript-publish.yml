@@ -234,17 +234,99 @@ extends:
                               exit 1
                             fi
 
-                            if gh release view "$tag" --repo microsoft/TypeScript >/dev/null 2>&1; then
-                              gh release upload "$tag" "${vsixFiles[@]}" \
+                            existingAssetsDirectory="$(mktemp -d)"
+                            trap 'rm -rf "$existingAssetsDirectory"' EXIT
+
+                            refreshExistingAssetNames() {
+                              local output
+                              if ! output="$(
+                                gh release view "$tag" \
+                                  --repo microsoft/TypeScript \
+                                  --json assets \
+                                  --jq '.assets[].name'
+                              )"; then
+                                echo "Could not list assets for GitHub Release $tag." >&2
+                                return 1
+                              fi
+                              mapfile -t existingAssetNames <<< "$output"
+                            }
+
+                            assetExists() {
+                              local filename="$1"
+                              local existingAssetName
+                              for existingAssetName in "${existingAssetNames[@]}"; do
+                                if [ "$existingAssetName" = "$filename" ]; then
+                                  return 0
+                                fi
+                              done
+                              return 1
+                            }
+
+                            verifyExistingAsset() {
+                              local filename="$1"
+                              local expectedHash="$2"
+                              local existingHash
+
+                              gh release download "$tag" \
                                 --repo microsoft/TypeScript \
+                                --pattern "$filename" \
+                                --dir "$existingAssetsDirectory" \
                                 --clobber
-                            else
-                              gh release create "$tag" "${vsixFiles[@]}" \
+                              existingHash="$(sha256sum "$existingAssetsDirectory/$filename" | cut -d' ' -f1)"
+                              if [ "$existingHash" != "$expectedHash" ]; then
+                                echo "Existing GitHub Release asset $filename does not match the release manifest." >&2
+                                return 1
+                              fi
+                              echo "Existing GitHub Release asset $filename matches the release manifest."
+                            }
+
+                            syncReleaseAssets() {
+                              local vsixFilePath
+                              local filename
+                              local expectedHash
+                              local -a missingVsixFiles=()
+
+                              refreshExistingAssetNames
+                              for vsixFilePath in "${vsixFiles[@]}"; do
+                                filename="$(basename "$vsixFilePath")"
+                                expectedHash="$(jq -r --arg filename "$filename" '.artifacts[$filename].sha256 // empty' "$manifest")"
+                                if [ -z "$expectedHash" ]; then
+                                  echo "No manifest hash found for $filename." >&2
+                                  exit 1
+                                fi
+
+                                if assetExists "$filename"; then
+                                  verifyExistingAsset "$filename" "$expectedHash"
+                                else
+                                  missingVsixFiles+=("$vsixFilePath")
+                                fi
+                              done
+
+                              for vsixFilePath in "${missingVsixFiles[@]}"; do
+                                filename="$(basename "$vsixFilePath")"
+                                expectedHash="$(jq -r --arg filename "$filename" '.artifacts[$filename].sha256' "$manifest")"
+                                if ! gh release upload "$tag" "$vsixFilePath" --repo microsoft/TypeScript; then
+                                  echo "Upload of $filename failed; checking whether another run uploaded it."
+                                  refreshExistingAssetNames
+                                  if ! assetExists "$filename"; then
+                                    return 1
+                                  fi
+                                  verifyExistingAsset "$filename" "$expectedHash"
+                                fi
+                              done
+                            }
+
+                            if ! gh release view "$tag" --repo microsoft/TypeScript >/dev/null 2>&1; then
+                              if ! gh release create "$tag" \
                                 --repo microsoft/TypeScript \
                                 --title "$tag" \
                                 --latest=false \
-                                --notes "Bundles TypeScript $bundledTypeScriptVersion from commit $sourceCommit."
+                                --notes "Bundles TypeScript $bundledTypeScriptVersion from commit $sourceCommit."; then
+                                echo "Creation of $tag failed; checking whether another run created it."
+                                gh release view "$tag" --repo microsoft/TypeScript >/dev/null
+                              fi
                             fi
+                            syncReleaseAssets
                           displayName: Create GitHub Release
                           env:
                             GH_TOKEN: $(GH_TOKEN)
