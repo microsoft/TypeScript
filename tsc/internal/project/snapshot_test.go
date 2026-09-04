@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/microsoft/TypeScript/tsc/internal/bundled"
+	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfstest"
@@ -47,6 +48,48 @@ func TestSnapshot(t *testing.T) {
 		defer snapshot.Deref()
 
 		assert.Equal(t, snapshot.GetFile(uri.FileName()).Content(), "export const value = 1;")
+	})
+
+	t.Run("createProgram uses dedicated synthetic projects", func(t *testing.T) {
+		t.Parallel()
+		session := setup(map[string]any{
+			"/a.ts": "export const a = 1;",
+			"/b.ts": "export const b = 1;",
+		})
+		defer session.Close()
+
+		ctx := context.Background()
+		options := &core.CompilerOptions{NoLib: core.TSTrue}
+		firstSnapshot, firstProject := session.CloneSnapshotForProgram(
+			ctx,
+			session.Snapshot(),
+			[]string{"/a.ts"},
+			options,
+			nil,
+			nil,
+			nil,
+			FileChangeSummary{},
+		)
+		defer firstSnapshot.Deref()
+		secondSnapshot, secondProject := session.CloneSnapshotForProgram(
+			ctx,
+			firstSnapshot,
+			[]string{"/b.ts"},
+			options,
+			nil,
+			nil,
+			nil,
+			FileChangeSummary{},
+		)
+		defer secondSnapshot.Deref()
+
+		assert.Assert(t, firstProject != nil)
+		assert.Assert(t, secondProject != nil)
+		assert.Assert(t, firstProject.ID() != secondProject.ID())
+		assert.Assert(t, secondSnapshot.ProjectCollection.InferredProject() == nil)
+		assert.Equal(t, len(secondSnapshot.ProjectCollection.SyntheticProjects()), 2)
+		assert.Equal(t, secondSnapshot.ProjectCollection.GetProjectByPath(firstProject.ID()), firstProject)
+		assert.Equal(t, secondSnapshot.ProjectCollection.GetDefaultProject(secondSnapshot.toPath(firstProject.CommandLine.FileNames()[0])), firstProject)
 	})
 
 	t.Run("compilerHost gets frozen with snapshot's FS only once", func(t *testing.T) {

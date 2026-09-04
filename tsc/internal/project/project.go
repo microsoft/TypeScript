@@ -21,9 +21,14 @@ import (
 )
 
 const (
-	inferredProjectName = "/dev/null/inferred" // lowercase so toPath is a no-op regardless of settings
-	hr                  = "-----------------------------------------------"
+	inferredProjectName    = "/dev/null/inferred" // lowercase so toPath is a no-op regardless of settings
+	syntheticProjectPrefix = "/dev/null/synthetic/"
+	hr                     = "-----------------------------------------------"
 )
+
+func syntheticProjectName(index int) string {
+	return fmt.Sprintf("%s%d", syntheticProjectPrefix, index)
+}
 
 //go:generate go tool golang.org/x/tools/cmd/stringer -type=Kind -trimprefix=Kind -output=project_stringer_generated.go
 //go:generate npx dprint fmt project_stringer_generated.go
@@ -33,6 +38,7 @@ type Kind int
 const (
 	KindInferred Kind = iota
 	KindConfigured
+	KindSynthetic
 )
 
 type ProgramUpdateKind int
@@ -139,6 +145,30 @@ func NewInferredProject(
 	return p
 }
 
+func newSyntheticProject(
+	name string,
+	currentDirectory string,
+	compilerOptions *core.CompilerOptions,
+	rootFileNames []string,
+	projectReferences []*core.ProjectReference,
+	contentMappers []*contentmapper.Mapper,
+	builder *ProjectCollectionBuilder,
+	logger *logging.LogTree,
+) *Project {
+	project := NewProject(name, KindSynthetic, currentDirectory, builder, logger)
+	project.CommandLine = newInferredProjectCommandLine(
+		compilerOptions,
+		rootFileNames,
+		projectReferences,
+		contentMappers,
+		tspath.ComparePathsOptions{
+			UseCaseSensitiveFileNames: builder.fs.fs.UseCaseSensitiveFileNames(),
+			CurrentDirectory:          currentDirectory,
+		},
+	)
+	return project
+}
+
 func newInferredProjectCommandLine(
 	compilerOptions *core.CompilerOptions,
 	rootFileNames []string,
@@ -151,22 +181,21 @@ func newInferredProjectCommandLine(
 	return commandLine
 }
 
-// newInferredProjectFromProject creates an isolated synthetic project seeded
-// from an existing project's compiler state.
-func newInferredProjectFromProject(
+func newSyntheticProjectFromProject(
+	name string,
 	project *Project,
 	builder *ProjectCollectionBuilder,
 	logger *logging.LogTree,
 ) *Project {
-	inferred := NewProject(inferredProjectName, KindInferred, project.currentDirectory, builder, logger)
-	inferred.CommandLine = project.Program.CommandLine()
-	inferred.Program = project.Program
-	inferred.ProgramLastUpdate = project.ProgramLastUpdate
-	inferred.host = project.host
-	inferred.checkerPool = project.checkerPool
-	inferred.contentMapperWatchedFiles = project.contentMapperWatchedFiles
-	inferred.dirty = false
-	return inferred
+	syntheticProject := NewProject(name, KindSynthetic, project.currentDirectory, builder, logger)
+	syntheticProject.CommandLine = project.Program.CommandLine()
+	syntheticProject.Program = project.Program
+	syntheticProject.ProgramLastUpdate = project.ProgramLastUpdate
+	syntheticProject.host = project.host
+	syntheticProject.checkerPool = project.checkerPool
+	syntheticProject.contentMapperWatchedFiles = project.contentMapperWatchedFiles
+	syntheticProject.dirty = false
+	return syntheticProject
 }
 
 func NewProject(
@@ -505,8 +534,8 @@ func (p *Project) print(writeFileNames bool, writeFileExplanation bool, builder 
 
 // GetTypeAcquisition returns the type acquisition settings for this project.
 func (p *Project) GetTypeAcquisition() *core.TypeAcquisition {
-	if p.Kind == KindInferred {
-		// For inferred projects, use default settings
+	if p.Kind == KindInferred || p.Kind == KindSynthetic {
+		// For inferred and synthetic projects, use default settings.
 		return &core.TypeAcquisition{
 			Enable:                              core.TSTrue,
 			Include:                             nil,

@@ -521,7 +521,7 @@ func TestRefCountingCaches(t *testing.T) {
 			appProject := baseSnapshot.ProjectCollection.GetProjectByPath(baseSnapshot.toPath(appConfigPath))
 			assert.Assert(t, appProject != nil)
 
-			programSnapshot := session.CloneSnapshotForProgram(
+			programSnapshot, programProject := session.CloneSnapshotForProgram(
 				ctx,
 				baseSnapshot,
 				appProject.CommandLine.FileNames(),
@@ -532,7 +532,6 @@ func TestRefCountingCaches(t *testing.T) {
 				FileChangeSummary{},
 			)
 			defer programSnapshot.Deref()
-			programProject := programSnapshot.ProjectCollection.InferredProject()
 			assert.Assert(t, programProject != nil)
 			assert.Assert(t, programProject.Program == appProject.Program)
 
@@ -550,7 +549,7 @@ func TestRefCountingCaches(t *testing.T) {
 			assert.NilError(t, session.fs.fs.WriteFile(libBaseConfigPath, `{"compilerOptions":{"composite":true,"noLib":true,"strict":true}}`))
 			var fileChanges FileChangeSummary
 			fileChanges.Changed.Add(lsproto.DocumentUri("file://" + libBaseConfigPath))
-			updatedProgramSnapshot := session.CloneSnapshotForProgram(
+			updatedProgramSnapshot, updatedProgramProject := session.CloneSnapshotForProgram(
 				ctx,
 				programSnapshot,
 				programProject.CommandLine.FileNames(),
@@ -561,7 +560,6 @@ func TestRefCountingCaches(t *testing.T) {
 				fileChanges,
 			)
 			defer updatedProgramSnapshot.Deref()
-			updatedProgramProject := updatedProgramSnapshot.ProjectCollection.InferredProject()
 			assert.Assert(t, updatedProgramProject != nil)
 			assert.Assert(t, updatedProgramProject.Program != programProject.Program)
 			updatedReferences := updatedProgramProject.Program.GetResolvedProjectReferences()

@@ -56,6 +56,7 @@ type ProjectCollectionBuilder struct {
 
 	fileDefaultProjects map[tspath.Path]tspath.Path
 	configuredProjects  *dirty.SyncMap[tspath.Path, *Project]
+	syntheticProjects   *dirty.SyncMap[tspath.Path, *Project]
 	inferredProject     *dirty.Box[*Project]
 
 	apiState APIState
@@ -95,6 +96,7 @@ func newProjectCollectionBuilder(
 		configFileRegistryBuilder:          newConfigFileRegistryBuilder(lsproto.GetClientCapabilities(ctx).Workspace.DidChangeWatchedFiles.RelativePatternSupport, fs, oldConfigFileRegistry, extendedConfigCache, newSnapshotID, sessionOptions, customConfigFileName, nil),
 		newSnapshotID:                      newSnapshotID,
 		configuredProjects:                 dirty.NewSyncMap(oldProjectCollection.configuredProjects),
+		syntheticProjects:                  dirty.NewSyncMap(oldProjectCollection.syntheticProjects),
 		inferredProject:                    dirty.NewBox(oldProjectCollection.inferredProject),
 		apiState:                           oldAPIState.clone(),
 		client:                             client,
@@ -114,6 +116,10 @@ func (b *ProjectCollectionBuilder) Finalize(logger *logging.LogTree) (*ProjectCo
 	if configuredProjects, configuredProjectsChanged := b.configuredProjects.Finalize(); configuredProjectsChanged {
 		ensureCloned()
 		newProjectCollection.configuredProjects = configuredProjects
+	}
+	if syntheticProjects, syntheticProjectsChanged := b.syntheticProjects.Finalize(); syntheticProjectsChanged {
+		ensureCloned()
+		newProjectCollection.syntheticProjects = syntheticProjects
 	}
 
 	if b.openFilesChanged {
@@ -151,6 +157,12 @@ func (b *ProjectCollectionBuilder) forEachProject(fn func(entry dirty.Value[*Pro
 		keepGoing = fn(entry)
 		return keepGoing
 	})
+	if keepGoing {
+		b.syntheticProjects.Range(func(entry *dirty.SyncMapEntry[tspath.Path, *Project]) bool {
+			keepGoing = fn(entry)
+			return keepGoing
+		})
+	}
 	if !keepGoing {
 		return
 	}
@@ -590,7 +602,9 @@ func (b *ProjectCollectionBuilder) DidRequestProject(projectId tspath.Path, logg
 			b.updateProgram(b.inferredProject, logger)
 		}
 	} else {
-		if entry, ok := b.configuredProjects.Load(projectId); ok {
+		if entry, ok := b.syntheticProjects.Load(projectId); ok {
+			b.updateProgram(entry, logger)
+		} else if entry, ok := b.configuredProjects.Load(projectId); ok {
 			b.updateProgram(entry, logger)
 		}
 	}
@@ -767,7 +781,11 @@ func (b *ProjectCollectionBuilder) markProjectsAffectedByConfigChanges(
 		if projectPath == inferredProjectName {
 			project = b.inferredProject
 		} else {
-			project, _ = b.configuredProjects.Load(projectPath)
+			if syntheticProject, ok := b.syntheticProjects.Load(projectPath); ok {
+				project = syntheticProject
+			} else {
+				project, _ = b.configuredProjects.Load(projectPath)
+			}
 		}
 		if project == nil || project.Value() == nil {
 			panic(fmt.Sprintf("project %s affected by config change not found", projectPath))
@@ -1131,17 +1149,63 @@ func (b *ProjectCollectionBuilder) updateInferredProjectRoots(rootFileNames []st
 	return b.updateInferredProject(rootFileNames, b.compilerOptionsForInferredProjects, projectReferences, configFileParsingDiagnostics, b.inferredContentMappers, logger)
 }
 
-// seedInferredProjectForProgram copies the specified project into the synthetic inferred project used by createProgram.
-func (b *ProjectCollectionBuilder) seedInferredProjectForProgram(project *Project, logger *logging.LogTree) {
+func (b *ProjectCollectionBuilder) seedSyntheticProjectForProgram(name string, project *Project, logger *logging.LogTree) {
 	if project == nil || project.Program == nil {
 		return
 	}
-	inferredProject := newInferredProjectFromProject(project, b, logger)
+	syntheticProject := newSyntheticProjectFromProject(name, project, b, logger)
+	if _, loaded := b.syntheticProjects.LoadOrStore(syntheticProject.configFilePath, syntheticProject); loaded {
+		return
+	}
 	project.Program.RangeResolvedProjectReference(func(referencePath tspath.Path, _ *tsoptions.ParsedCommandLine, _ *tsoptions.ParsedCommandLine, _ int) bool {
-		b.configFileRegistryBuilder.retainConfigForProject(referencePath, inferredProject.configFilePath)
+		b.configFileRegistryBuilder.retainConfigForProject(referencePath, syntheticProject.configFilePath)
 		return true
 	})
-	b.inferredProject.Set(inferredProject)
+}
+
+func (b *ProjectCollectionBuilder) updateOrCreateSyntheticProject(
+	name string,
+	rootFileNames []string,
+	compilerOptions *core.CompilerOptions,
+	projectReferences []*core.ProjectReference,
+	configFileParsingDiagnostics []*ast.Diagnostic,
+	contentMappers []*contentmapper.Mapper,
+	logger *logging.LogTree,
+) *dirty.SyncMapEntry[tspath.Path, *Project] {
+	projectPath := b.toPath(name)
+	project, loaded := b.syntheticProjects.Load(projectPath)
+	if !loaded {
+		syntheticProject := newSyntheticProject(name, b.sessionOptions.CurrentDirectory, compilerOptions, rootFileNames, projectReferences, contentMappers, b, logger)
+		syntheticProject.CommandLine.Errors = configFileParsingDiagnostics
+		project, _ = b.syntheticProjects.LoadOrStore(projectPath, syntheticProject)
+		return project
+	}
+
+	currentProject := project.Value()
+	if compilerOptions == nil {
+		compilerOptions = currentProject.CommandLine.CompilerOptions()
+	}
+	newCommandLine := newInferredProjectCommandLine(compilerOptions, rootFileNames, projectReferences, contentMappers, tspath.ComparePathsOptions{
+		UseCaseSensitiveFileNames: b.fs.fs.UseCaseSensitiveFileNames(),
+		CurrentDirectory:          currentProject.currentDirectory,
+	})
+	newCommandLine.Errors = configFileParsingDiagnostics
+	project.ChangeIf(
+		func(p *Project) bool {
+			return !slices.Equal(p.CommandLine.FileNames(), newCommandLine.FileNames()) ||
+				!reflect.DeepEqual(p.CommandLine.CompilerOptions(), compilerOptions) ||
+				!projectReferencesEqual(p.CommandLine.ProjectReferences(), projectReferences) ||
+				!reflect.DeepEqual(p.CommandLine.Errors, configFileParsingDiagnostics) ||
+				!slices.Equal(p.CommandLine.ContentMappers(), newCommandLine.ContentMappers())
+		},
+		func(p *Project) {
+			if logger != nil {
+				logger.Log(fmt.Sprintf("Updating synthetic project config with %d root files", len(rootFileNames)))
+			}
+			p.SetCommandLine(newCommandLine)
+		},
+	)
+	return project
 }
 
 // updateInferredProject preserves the current command line when roots/options are unchanged.
@@ -1154,18 +1218,29 @@ func (b *ProjectCollectionBuilder) updateInferredProject(
 	logger *logging.LogTree,
 ) bool {
 	if len(rootFileNames) == 0 {
-		if b.inferredProject.Value() != nil {
-			if logger != nil {
-				logger.Log("Deleting inferred project")
-			}
-			b.inferredProject.Delete()
-			return true
-		}
-		return false
+		return b.deleteInferredProject(logger)
 	}
 	rootFileNames = slices.Clone(rootFileNames)
 	slices.Sort(rootFileNames)
 	return b.updateOrCreateInferredProject(rootFileNames, compilerOptions, projectReferences, configFileParsingDiagnostics, contentMappers, logger)
+}
+
+func (b *ProjectCollectionBuilder) deleteInferredProject(logger *logging.LogTree) bool {
+	project := b.inferredProject.Value()
+	if project == nil {
+		return false
+	}
+	if logger != nil {
+		logger.Log("Deleting inferred project")
+	}
+	if project.Program != nil {
+		project.Program.RangeResolvedProjectReference(func(referencePath tspath.Path, _ *tsoptions.ParsedCommandLine, _ *tsoptions.ParsedCommandLine, _ int) bool {
+			b.configFileRegistryBuilder.releaseConfigForProject(referencePath, project.configFilePath)
+			return true
+		})
+	}
+	b.inferredProject.Delete()
+	return true
 }
 
 // updateOrCreateInferredProject always retains an inferred project, including when rootFileNames is empty.

@@ -12,6 +12,13 @@ import (
 	"gotest.tools/v3/assert"
 )
 
+func createProgramProject(t *testing.T, snapshot *snapshotData, response *CreateProgramResponse) *project.Project {
+	t.Helper()
+	project, err := snapshot.getProject(response.Project.Id)
+	assert.NilError(t, err)
+	return project
+}
+
 func TestCreateProgram(t *testing.T) {
 	t.Parallel()
 
@@ -82,9 +89,10 @@ func TestCreateProgram(t *testing.T) {
 		},
 	})
 	assert.NilError(t, err)
+	assert.Equal(t, updatedResponse.Project.Id, response.Project.Id)
 	updatedSnapshot, err := session.getSnapshotData(updatedResponse.Snapshot)
 	assert.NilError(t, err)
-	updatedProject := updatedSnapshot.snapshot.ProjectCollection.InferredProject()
+	updatedProject := createProgramProject(t, updatedSnapshot, updatedResponse)
 	assert.Assert(t, updatedProject != nil)
 
 	updatedDiagnostics, err := session.handleGetSemanticDiagnostics(ctx, &GetDiagnosticsParams{
@@ -133,10 +141,9 @@ func TestCreateProgramWithNoRootFiles(t *testing.T) {
 
 	snapshot, err := session.getSnapshotData(response.Snapshot)
 	assert.NilError(t, err)
-	project := snapshot.snapshot.ProjectCollection.InferredProject()
-	assert.Assert(t, project != nil)
-	assert.Assert(t, project.Program != nil)
-	assert.Equal(t, len(project.Program.GetSourceFiles()), 0)
+	createdProject := createProgramProject(t, snapshot, response)
+	assert.Assert(t, createdProject.Program != nil)
+	assert.Equal(t, len(createdProject.Program.GetSourceFiles()), 0)
 }
 
 func TestCreateProgramFileChangesRequireOldProgram(t *testing.T) {
@@ -196,10 +203,9 @@ func TestCreateProgramRemovesAllRootFiles(t *testing.T) {
 
 	snapshot, err := session.getSnapshotData(response.Snapshot)
 	assert.NilError(t, err)
-	project := snapshot.snapshot.ProjectCollection.InferredProject()
-	assert.Assert(t, project != nil)
-	assert.Assert(t, project.Program != nil)
-	assert.Equal(t, len(project.Program.GetSourceFiles()), 0)
+	createdProject := createProgramProject(t, snapshot, response)
+	assert.Assert(t, createdProject.Program != nil)
+	assert.Equal(t, len(createdProject.Program.GetSourceFiles()), 0)
 }
 
 func TestCreateProgramPreservesRootFileOrder(t *testing.T) {
@@ -243,7 +249,7 @@ func TestCreateProgramPreservesRootFileOrder(t *testing.T) {
 
 	snapshot, err := session.getSnapshotData(response.Snapshot)
 	assert.NilError(t, err)
-	assert.Equal(t, snapshot.snapshot.ProjectCollection.InferredProject().ProgramUpdateKind, project.ProgramUpdateKindSameFileNames)
+	assert.Equal(t, createProgramProject(t, snapshot, response).ProgramUpdateKind, project.ProgramUpdateKindSameFileNames)
 }
 
 func TestCreateProgramReusesProgram(t *testing.T) {
@@ -291,7 +297,7 @@ func TestCreateProgramReusesProgram(t *testing.T) {
 
 	updatedSnapshot, err := session.getSnapshotData(updatedResponse.Snapshot)
 	assert.NilError(t, err)
-	updatedProject := updatedSnapshot.snapshot.ProjectCollection.InferredProject()
+	updatedProject := createProgramProject(t, updatedSnapshot, updatedResponse)
 	assert.Assert(t, updatedProject != nil)
 	assert.Equal(t, updatedProject.ProgramUpdateKind, project.ProgramUpdateKindCloned)
 
@@ -311,7 +317,7 @@ func TestCreateProgramReusesProgram(t *testing.T) {
 	assert.NilError(t, err)
 	changedOptionsSnapshot, err := session.getSnapshotData(changedOptionsResponse.Snapshot)
 	assert.NilError(t, err)
-	changedOptionsProject := changedOptionsSnapshot.snapshot.ProjectCollection.InferredProject()
+	changedOptionsProject := createProgramProject(t, changedOptionsSnapshot, changedOptionsResponse)
 	assert.Assert(t, changedOptionsProject != nil)
 	assert.Equal(t, changedOptionsProject.CommandLine.CompilerOptions().Strict, core.TSFalse)
 	assert.Equal(t, changedOptionsProject.ProgramUpdateKind, project.ProgramUpdateKindSameFileNames)
@@ -350,7 +356,7 @@ func TestCreateProgramProjectReferencesAndReuse(t *testing.T) {
 	assert.DeepEqual(t, oldResponse.Project.ParsedCommandLine.ProjectReferences, []*core.ProjectReference{libReference})
 	oldSnapshot, err := session.getSnapshotData(oldResponse.Snapshot)
 	assert.NilError(t, err)
-	resolvedReferences := oldSnapshot.snapshot.ProjectCollection.InferredProject().Program.GetResolvedProjectReferences()
+	resolvedReferences := createProgramProject(t, oldSnapshot, oldResponse).Program.GetResolvedProjectReferences()
 	assert.Equal(t, len(resolvedReferences), 1)
 	assert.Equal(t, resolvedReferences[0].ConfigName(), libConfigName)
 
@@ -371,7 +377,7 @@ func TestCreateProgramProjectReferencesAndReuse(t *testing.T) {
 	assert.NilError(t, err)
 	reusedSnapshot, err := session.getSnapshotData(reusedResponse.Snapshot)
 	assert.NilError(t, err)
-	assert.Equal(t, reusedSnapshot.snapshot.ProjectCollection.InferredProject().ProgramUpdateKind, project.ProgramUpdateKindCloned)
+	assert.Equal(t, createProgramProject(t, reusedSnapshot, reusedResponse).ProgramUpdateKind, project.ProgramUpdateKindCloned)
 
 	otherReference := &core.ProjectReference{Path: otherConfigName, OriginalPath: otherConfigName}
 	changedResponse, err := session.handleCreateProgram(ctx, &CreateProgramParams{
@@ -388,7 +394,7 @@ func TestCreateProgramProjectReferencesAndReuse(t *testing.T) {
 	assert.NilError(t, err)
 	changedSnapshot, err := session.getSnapshotData(changedResponse.Snapshot)
 	assert.NilError(t, err)
-	changedProject := changedSnapshot.snapshot.ProjectCollection.InferredProject()
+	changedProject := createProgramProject(t, changedSnapshot, changedResponse)
 	assert.Equal(t, changedProject.ProgramUpdateKind, project.ProgramUpdateKindSameFileNames)
 	assert.DeepEqual(t, changedProject.CommandLine.ProjectReferences(), []*core.ProjectReference{otherReference})
 }
@@ -455,8 +461,7 @@ func TestCreateProgramFromConfiguredProgramDoesNotRetainOtherProjects(t *testing
 	assert.Equal(t, len(updatedSnapshot.snapshot.ProjectCollection.Projects()), 1)
 	assert.Equal(t, len(updatedSnapshot.snapshot.ProjectCollection.ConfiguredProjects()), 0)
 	assert.Assert(t, updatedSnapshot.snapshot.ConfigFileRegistry.GetConfig(tspath.Path(otherConfigFileName)) == nil)
-	updatedProject := updatedSnapshot.snapshot.ProjectCollection.InferredProject()
-	assert.Assert(t, updatedProject != nil)
+	updatedProject := createProgramProject(t, updatedSnapshot, updatedResponse)
 	assert.Equal(t, updatedProject.ProgramUpdateKind, project.ProgramUpdateKindSameFileNames)
 	updatedDiagnostics, err := session.handleGetSemanticDiagnostics(ctx, &GetDiagnosticsParams{
 		Snapshot: updatedResponse.Snapshot,

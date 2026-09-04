@@ -24,6 +24,8 @@ type ProjectCollection struct {
 	// configuredProjects is the set of loaded projects associated with a tsconfig
 	// file, keyed by the config file path.
 	configuredProjects map[tspath.Path]*Project
+	// syntheticProjects contains synthetic projects created explicitly through the API.
+	syntheticProjects map[tspath.Path]*Project
 	// openFiles is the set of open file paths associated with the snapshot that owns
 	// this project collection.
 	openFiles collections.Set[tspath.Path]
@@ -79,6 +81,9 @@ func (c *ProjectCollection) GetProjectByPath(projectPath tspath.Path) *Project {
 	if project, ok := c.configuredProjects[projectPath]; ok {
 		return project
 	}
+	if project, ok := c.syntheticProjects[projectPath]; ok {
+		return project
+	}
 
 	if projectPath == inferredProjectName {
 		return c.inferredProject
@@ -103,13 +108,28 @@ func (c *ProjectCollection) fillConfiguredProjects(projects *[]*Project) {
 	})
 }
 
+// SyntheticProjects returns all synthetic projects in a stable order.
+func (c *ProjectCollection) SyntheticProjects() []*Project {
+	projects := make([]*Project, 0, len(c.syntheticProjects))
+	for _, project := range c.syntheticProjects {
+		projects = append(projects, project)
+	}
+	slices.SortFunc(projects, func(a, b *Project) int {
+		return cmp.Compare(a.Name(), b.Name())
+	})
+	return projects
+}
+
 // ProjectsByPath returns an ordered map of configured projects keyed by their config file path,
-// plus the inferred project, if it exists, with the key `inferredProjectName`.
+// followed by synthetic projects and the inferred project, if it exists.
 func (c *ProjectCollection) ProjectsByPath() *collections.OrderedMap[tspath.Path, *Project] {
 	projects := collections.NewOrderedMapWithSizeHint[tspath.Path, *Project](
-		len(c.configuredProjects) + core.IfElse(c.inferredProject != nil, 1, 0),
+		len(c.configuredProjects) + len(c.syntheticProjects) + core.IfElse(c.inferredProject != nil, 1, 0),
 	)
 	for _, project := range c.ConfiguredProjects() {
+		projects.Set(project.configFilePath, project)
+	}
+	for _, project := range c.SyntheticProjects() {
 		projects.Set(project.configFilePath, project)
 	}
 	if c.inferredProject != nil {
@@ -118,14 +138,14 @@ func (c *ProjectCollection) ProjectsByPath() *collections.OrderedMap[tspath.Path
 	return projects
 }
 
-// Projects returns all projects, including the inferred project if it exists, in a stable order.
+// Projects returns all configured, synthetic, and inferred projects in a stable order.
 func (c *ProjectCollection) Projects() []*Project {
-	if c.inferredProject == nil {
-		return c.ConfiguredProjects()
-	}
-	projects := make([]*Project, 0, len(c.configuredProjects)+1)
+	projects := make([]*Project, 0, len(c.configuredProjects)+len(c.syntheticProjects)+core.IfElse(c.inferredProject != nil, 1, 0))
 	c.fillConfiguredProjects(&projects)
-	projects = append(projects, c.inferredProject)
+	projects = append(projects, c.SyntheticProjects()...)
+	if c.inferredProject != nil {
+		projects = append(projects, c.inferredProject)
+	}
 	return projects
 }
 
@@ -136,6 +156,11 @@ func (c *ProjectCollection) InferredProject() *Project {
 func (c *ProjectCollection) GetProjectsContainingFile(path tspath.Path) []ls.Project {
 	var projects []ls.Project
 	for _, project := range c.ConfiguredProjects() {
+		if project.containsFile(path) {
+			projects = append(projects, project)
+		}
+	}
+	for _, project := range c.SyntheticProjects() {
 		if project.containsFile(path) {
 			projects = append(projects, project)
 		}
@@ -211,6 +236,11 @@ func (c *ProjectCollection) GetDefaultProject(path tspath.Path) *Project {
 		return containingProjects[0]
 	}
 	if len(containingProjects) == 0 {
+		for _, project := range c.SyntheticProjects() {
+			if project.containsFile(path) {
+				return project
+			}
+		}
 		if c.inferredProject != nil && c.inferredProject.containsFile(path) {
 			return c.inferredProject
 		}
@@ -300,6 +330,7 @@ func (c *ProjectCollection) clone() *ProjectCollection {
 		toPath:              c.toPath,
 		configFileRegistry:  c.configFileRegistry,
 		configuredProjects:  c.configuredProjects,
+		syntheticProjects:   c.syntheticProjects,
 		openFiles:           c.openFiles,
 		inferredProject:     c.inferredProject,
 		fileDefaultProjects: c.fileDefaultProjects,

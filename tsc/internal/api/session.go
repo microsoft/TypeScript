@@ -1350,7 +1350,7 @@ func (s *Session) handleCreateProgram(ctx context.Context, params *CreateProgram
 		defer baseSnapshot.Deref()
 		fileChanges = project.FileChangeSummary{}
 	}
-	snapshot := s.snapshotHost.CloneSnapshotForProgram(
+	snapshot, project := s.snapshotHost.CloneSnapshotForProgram(
 		ctx,
 		baseSnapshot,
 		rootFileNames,
@@ -1360,7 +1360,6 @@ func (s *Session) handleCreateProgram(ctx context.Context, params *CreateProgram
 		oldProject,
 		fileChanges,
 	)
-	project := snapshot.ProjectCollection.InferredProject()
 	if project == nil {
 		snapshot.Deref()
 		return nil, fmt.Errorf("%w: failed to create synthetic project", ErrClientError)

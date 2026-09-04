@@ -100,8 +100,8 @@ func (host *SnapshotHost) newSnapshot(
 	return s
 }
 
-// cloneForProgram clones a snapshot and creates a single synthetic inferred
-// project representing createProgram input.
+// cloneForProgram clones a snapshot and creates a synthetic project representing
+// createProgram input.
 func (s *Snapshot) cloneForProgram(
 	ctx context.Context,
 	rootFileNames []string,
@@ -111,7 +111,7 @@ func (s *Snapshot) cloneForProgram(
 	oldProject *Project,
 	fileChanges FileChangeSummary,
 	sessionLogger logging.Logger,
-) *Snapshot {
+) (*Snapshot, *Project) {
 	store := s.host
 	var logger *logging.LogTree
 
@@ -130,6 +130,18 @@ func (s *Snapshot) cloneForProgram(
 	fileChanges = s.processFileChanges(fs, fileChanges, logger, nil)
 
 	newSnapshotID := store.nextSnapshotID()
+	projectName := ""
+	if oldProject != nil && oldProject.Kind == KindSynthetic {
+		projectName = oldProject.Name()
+	} else {
+		for index := 0; ; index++ {
+			candidate := syntheticProjectName(index)
+			if s.ProjectCollection.GetProjectByPath(s.toPath(candidate)) == nil {
+				projectName = candidate
+				break
+			}
+		}
+	}
 	projectCollectionBuilder := newProjectCollectionBuilder(
 		ctx,
 		newSnapshotID,
@@ -149,7 +161,8 @@ func (s *Snapshot) cloneForProgram(
 		nil,
 	)
 
-	projectCollectionBuilder.seedInferredProjectForProgram(oldProject, logger)
+	projectCollectionBuilder.deleteInferredProject(logger)
+	projectCollectionBuilder.seedSyntheticProjectForProgram(projectName, oldProject, logger)
 	if !fileChanges.IsEmpty() {
 		changeLogger := logger
 		if changeLogger != nil {
@@ -161,7 +174,8 @@ func (s *Snapshot) cloneForProgram(
 	if updateLogger != nil {
 		updateLogger = logger.Fork("UpdateProgramConfig")
 	}
-	projectCollectionBuilder.updateOrCreateInferredProject(
+	syntheticProject := projectCollectionBuilder.updateOrCreateSyntheticProject(
+		projectName,
 		slices.Clone(rootFileNames),
 		compilerOptions,
 		projectReferences,
@@ -169,12 +183,12 @@ func (s *Snapshot) cloneForProgram(
 		s.inferredProjectContentMappers,
 		updateLogger,
 	)
-	if projectCollectionBuilder.inferredProject.Value().dirty {
+	if syntheticProject.Value().dirty {
 		createLogger := logger
 		if createLogger != nil {
 			createLogger = logger.Fork("CreateProgram")
 		}
-		projectCollectionBuilder.updateProgram(projectCollectionBuilder.inferredProject, createLogger)
+		projectCollectionBuilder.updateProgram(syntheticProject, createLogger)
 	}
 	projectCollectionBuilder.cleanupAllConfiguredProjects(logger.Fork("cleanupAllConfiguredProjects"))
 	newProjectCollection, newConfigFileRegistry := projectCollectionBuilder.Finalize(logger)
@@ -232,7 +246,7 @@ func (s *Snapshot) cloneForProgram(
 	if logger != nil {
 		logger.Logf("Finished cloning snapshot %d into snapshot %d for program in %v", s.id, newSnapshot.id, time.Since(start))
 	}
-	return newSnapshot
+	return newSnapshot, newSnapshot.ProjectCollection.GetProjectByPath(newSnapshot.toPath(projectName))
 }
 
 func (s *Snapshot) cloneWithTemporaryFile(
@@ -261,11 +275,23 @@ func (s *Snapshot) cloneWithTemporaryFile(
 	overlays[path] = newOverlay(uri.FileName(), newText, version, scriptKind)
 
 	return s.Clone(ctx, SnapshotChange{
-		fileChanges: fileChanges,
-		ResourceRequest: ResourceRequest{
-			Documents: []lsproto.DocumentUri{uri},
-		},
+		fileChanges:     fileChanges,
+		ResourceRequest: s.resourceRequestForDocument(uri),
 	}, overlays, nil), nil
+}
+
+func (s *Snapshot) resourceRequestForDocument(uri lsproto.DocumentUri) ResourceRequest {
+	path := uri.Path(s.UseCaseSensitiveFileNames())
+	var projects []tspath.Path
+	for _, project := range s.ProjectCollection.SyntheticProjects() {
+		if project.containsFile(path) {
+			projects = append(projects, project.configFilePath)
+		}
+	}
+	if len(projects) != 0 {
+		return ResourceRequest{Projects: projects}
+	}
+	return ResourceRequest{Documents: []lsproto.DocumentUri{uri}}
 }
 
 func (s *Snapshot) processFileChanges(
