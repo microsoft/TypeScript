@@ -102,10 +102,11 @@ func (s *SnapshotHost) update(ctx context.Context, baseSnapshot *Snapshot, chang
 func (s *SnapshotHost) CloneSnapshotWithTemporaryFile(
 	ctx context.Context,
 	baseSnapshot *Snapshot,
+	fileSystem vfs.FS,
 	uri lsproto.DocumentUri,
 	newText string,
 ) (*Snapshot, error) {
-	return baseSnapshot.cloneWithTemporaryFile(ctx, uri, newText)
+	return baseSnapshot.cloneWithTemporaryFile(ctx, fileSystem, uri, newText)
 }
 
 // CloneSnapshotForProgram derives an isolated snapshot containing one synthetic
@@ -113,6 +114,7 @@ func (s *SnapshotHost) CloneSnapshotWithTemporaryFile(
 func (s *SnapshotHost) CloneSnapshotForProgram(
 	ctx context.Context,
 	baseSnapshot *Snapshot,
+	fileSystem vfs.FS,
 	rootFileNames []string,
 	options *core.CompilerOptions,
 	projectReferences []*core.ProjectReference,
@@ -122,6 +124,7 @@ func (s *SnapshotHost) CloneSnapshotForProgram(
 ) *Snapshot {
 	return baseSnapshot.cloneForProgram(
 		ctx,
+		fileSystem,
 		rootFileNames,
 		options,
 		projectReferences,

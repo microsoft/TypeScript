@@ -1246,7 +1246,7 @@ func (s *Session) handleUpdateTemporarySnapshot(ctx context.Context, params *Upd
 	sd := newSnapshotData()
 	sd.fileSystem.CloneFrom(baseSD.fileSystemHandle())
 
-	snapshot, err := s.snapshotHost.CloneSnapshotWithTemporaryFile(ctx, baseSD.snapshot, uri, params.NewText)
+	snapshot, err := s.snapshotHost.CloneSnapshotWithTemporaryFile(ctx, baseSD.snapshot, sd.fileSystem.FS(), uri, params.NewText)
 	if err != nil {
 		sd.fileSystem.Release()
 		return nil, fmt.Errorf("%w: failed to update temporary snapshot: %w", ErrClientError, err)
@@ -1323,6 +1323,7 @@ func (s *Session) handleCreateProgram(ctx context.Context, params *CreateProgram
 	snapshot := s.snapshotHost.CloneSnapshotForProgram(
 		ctx,
 		baseSnapshot,
+		sd.fileSystem.FS(),
 		rootFileNames,
 		&params.CreateProgramOptions.CompilerOptions,
 		params.CreateProgramOptions.ProjectReferences,

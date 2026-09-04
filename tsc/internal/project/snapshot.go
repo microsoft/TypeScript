@@ -108,6 +108,7 @@ func (host *SnapshotHost) newSnapshot(
 // project representing createProgram input.
 func (s *Snapshot) cloneForProgram(
 	ctx context.Context,
+	fileSystem vfs.FS,
 	rootFileNames []string,
 	compilerOptions *core.CompilerOptions,
 	projectReferences []*core.ProjectReference,
@@ -130,7 +131,10 @@ func (s *Snapshot) cloneForProgram(
 	}
 
 	start := time.Now()
-	fs := newSnapshotFSBuilder(store.fs, s.fs.overlays, s.fs.overlays, s.fs.diskFiles, s.fs.diskDirectories, s.fs.nodeModulesRealpathAliases, store.options.PositionEncoding, store.toPath)
+	if fileSystem == nil {
+		fileSystem = store.fs
+	}
+	fs := newSnapshotFSBuilder(fileSystem, s.fs.overlays, s.fs.overlays, s.fs.diskFiles, s.fs.diskDirectories, s.fs.nodeModulesRealpathAliases, store.options.PositionEncoding, store.toPath)
 	fileChanges = s.processFileChanges(fs, fileChanges, logger, nil)
 
 	newSnapshotID := store.nextSnapshotID()
@@ -241,6 +245,7 @@ func (s *Snapshot) cloneForProgram(
 
 func (s *Snapshot) cloneWithTemporaryFile(
 	ctx context.Context,
+	fileSystem vfs.FS,
 	uri lsproto.DocumentUri,
 	newText string,
 ) (*Snapshot, error) {
@@ -263,9 +268,12 @@ func (s *Snapshot) cloneWithTemporaryFile(
 		fileChanges.Opened = uri
 	}
 	overlays[path] = newOverlay(uri.FileName(), newText, version, scriptKind)
+	if fileSystem == nil {
+		fileSystem = s.fs.fs
+	}
 
 	return s.Clone(ctx, SnapshotChange{
-		fs:                 s.fs.fs,
+		fs:                 fileSystem,
 		fileSystemOverride: s.fileSystemOverride,
 		fileChanges:        fileChanges,
 		ResourceRequest: ResourceRequest{

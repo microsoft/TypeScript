@@ -90,6 +90,44 @@ func TestUpdateSnapshotUsesFullFileSystem(t *testing.T) {
 	assert.Equal(t, contents, `export const other = true;`)
 }
 
+func TestCreateProgramRetainsFullFileSystem(t *testing.T) {
+	t.Parallel()
+
+	projectSession, _ := projecttestutil.Setup(map[string]any{})
+	defer projectSession.Close()
+	session := NewLSPSession(projectSession, nil)
+	defer session.Close()
+
+	ctx := context.Background()
+	base, err := session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{
+		OpenFiles: []DocumentIdentifier{{FileName: "/old.ts"}},
+		FileSystem: &requestfilesystem.RequestFileSystem{
+			Kind: requestfilesystem.KindFull,
+			Files: map[string]string{
+				"/old.ts": `export const oldValue = 1;`,
+				"/new.ts": `export const newValue = 2;`,
+			},
+		},
+	})
+	assert.NilError(t, err)
+	assert.Equal(t, len(base.Projects), 1)
+
+	created, err := session.handleCreateProgram(ctx, &CreateProgramParams{
+		RootFiles: []DocumentIdentifier{{FileName: "/new.ts"}},
+		OldProgram: &CreateProgramOldProgramParams{
+			Snapshot: base.Snapshot,
+			Project:  base.Projects[0].Id,
+		},
+	})
+	assert.NilError(t, err)
+
+	snapshot, err := session.getSnapshotData(created.Snapshot)
+	assert.NilError(t, err)
+	program, err := snapshot.getProgram(created.Project.Id)
+	assert.NilError(t, err)
+	assert.Assert(t, program.GetSourceFile("/new.ts") != nil)
+}
+
 func TestSnapshotUpdateFullFileSystemIsTotal(t *testing.T) {
 	t.Parallel()
 
