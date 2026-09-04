@@ -2,7 +2,7 @@ import {
     instantiateWasm,
     type WasmReactorInstance,
     WasmTransport,
-} from "@typescript/api-wasm";
+} from "@typescript/typescript-wasip1-wasm";
 import type { FileSystem } from "@typescript/typescript/unstable/fs";
 import {
     type APIFileChanges,

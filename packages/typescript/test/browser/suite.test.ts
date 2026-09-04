@@ -1,4 +1,4 @@
-import { wasmURL } from "@typescript/api-wasm";
+import { wasmURL } from "@typescript/typescript-wasip1-wasm";
 import {
     build,
     type Plugin,
@@ -32,8 +32,8 @@ const fileExclusions = [
     {
         mode: "async",
         file: "version.test.ts",
-        tests: 1,
-        reason: "This test compares the Node.js executable and generated declaration files.",
+        tests: 2,
+        reason: "These tests exercise Node.js executable and package resolution behavior.",
     },
     {
         mode: "async",
@@ -50,8 +50,8 @@ const fileExclusions = [
     {
         mode: "sync",
         file: "sync/wasm.test.ts",
-        tests: 1,
-        reason: "This Node.js integration test loads the WASM binary through node:fs; wasm.test.ts covers browser loading.",
+        tests: 2,
+        reason: "These Node.js integration tests use node:fs and node:wasi; wasm.test.ts covers browser API loading.",
     },
 ] as const;
 
@@ -79,7 +79,7 @@ describe("API test suite in a browser", () => {
                         import { runRegisteredTests } from ${JSON.stringify(path.join(browserDir, "harness.ts"))};
                         import { initializeBrowserAPIInstances } from ${JSON.stringify(path.join(browserDir, "apiWrapper.ts"))};
                         try {
-                            const module = await WebAssembly.compileStreaming(fetch("/typescript-api.wasm"));
+                            const module = await WebAssembly.compileStreaming(fetch("/tsc.wasm"));
                             await initializeBrowserAPIInstances(module, 4);
                             globalThis.browserTestResults = await runRegisteredTests([
                                 {
@@ -123,7 +123,7 @@ describe("API test suite in a browser", () => {
         const wasm = await readFile(wasmURL);
 
         server.on("request", (request, response) => {
-            if (request.url === "/typescript-api.wasm") {
+            if (request.url === "/tsc.wasm") {
                 response.setHeader("Content-Type", "application/wasm");
                 response.end(wasm);
                 return;

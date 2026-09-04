@@ -3,10 +3,12 @@ import type { WasmReactorInstance } from "./index.ts";
 const errnoSuccess = 0;
 const errnoBadFileDescriptor = 8;
 const errnoInvalidArgument = 28;
+const errnoIo = 29;
 const errnoNoSys = 52;
 const fileTypeCharacterDevice = 2;
 const eventTypeClock = 0;
 const subscriptionClockAbstime = 1;
+const hostWriteFileFD = 0x7fff_fffe;
 
 export interface InstantiateWasmOptions {
     stdout?: (text: string) => void;
@@ -62,7 +64,6 @@ function createWasiHost(options: InstantiateWasmOptions): {
     const decoders = new Map<number, TextDecoder>();
     const encoder = new TextEncoder();
     let fileSystem: WasmFileSystem | undefined;
-    let hostError = new Uint8Array();
 
     function getMemory(): WebAssembly.Memory {
         const memory = instance?.exports.memory;
@@ -128,6 +129,9 @@ function createWasiHost(options: InstantiateWasmOptions): {
     function fdWrite(fd: number, iovsPointer: number, iovsLength: number, writtenPointer: number): number {
         iovsPointer >>>= 0;
         writtenPointer >>>= 0;
+        if (fd === hostWriteFileFD) {
+            return hostWriteFile(iovsPointer, iovsLength, writtenPointer);
+        }
         if (fd !== 1 && fd !== 2) return errnoBadFileDescriptor;
         const memory = getMemory();
         const view = new DataView(memory.buffer);
@@ -162,19 +166,38 @@ function createWasiHost(options: InstantiateWasmOptions): {
         return errnoSuccess;
     }
 
-    function hostWriteFile(pathPointer: number, pathLength: number, dataPointer: number, dataLength: number): number {
-        if (!fileSystem?.writeFile) return 2;
+    function hostWriteFile(iovsPointer: number, iovsLength: number, writtenPointer: number): number {
+        iovsPointer >>>= 0;
+        writtenPointer >>>= 0;
+        if (!fileSystem?.writeFile) return errnoBadFileDescriptor;
+        if (iovsLength !== 1) return errnoInvalidArgument;
         const memory = getMemory();
+        const view = new DataView(memory.buffer);
+        const bufferPointer = view.getUint32(iovsPointer, true);
+        const bufferLength = view.getUint32(iovsPointer + 4, true);
+        if (bufferLength < 12) return errnoInvalidArgument;
+        const pathLength = view.getUint32(bufferPointer, true);
+        const dataLength = view.getUint32(bufferPointer + 4, true);
+        const errorCapacity = view.getUint32(bufferPointer + 8, true);
+        if (12 + pathLength + dataLength + errorCapacity !== bufferLength) return errnoInvalidArgument;
         const decoder = new TextDecoder();
+        const pathPointer = bufferPointer + 12;
+        const dataPointer = pathPointer + pathLength;
+        const errorPointer = dataPointer + dataLength;
         const path = decoder.decode(new Uint8Array(memory.buffer, pathPointer, pathLength));
         const data = decoder.decode(new Uint8Array(memory.buffer, dataPointer, dataLength));
         try {
             fileSystem.writeFile(path, data);
+            view.setUint32(writtenPointer, bufferLength, true);
             return errnoSuccess;
         }
         catch (error) {
-            hostError = encoder.encode(error instanceof Error ? error.message : String(error));
-            return 1;
+            const errorBytes = encoder.encode(error instanceof Error ? error.message : String(error));
+            const errorLength = Math.min(errorBytes.length, errorCapacity);
+            new Uint8Array(memory.buffer, errorPointer, errorLength).set(errorBytes.subarray(0, errorLength));
+            view.setUint32(bufferPointer + 8, errorLength, true);
+            view.setUint32(writtenPointer, 0, true);
+            return errnoIo;
         }
     }
 
@@ -184,6 +207,9 @@ function createWasiHost(options: InstantiateWasmOptions): {
         subscriptionsLength: number,
         eventsLengthPointer: number,
     ): number {
+        subscriptionsPointer >>>= 0;
+        eventsPointer >>>= 0;
+        eventsLengthPointer >>>= 0;
         if (subscriptionsLength === 0) return errnoInvalidArgument;
         const memory = getMemory();
         const view = new DataView(memory.buffer);
@@ -241,7 +267,9 @@ function createWasiHost(options: InstantiateWasmOptions): {
         fd_write: fdWrite,
         path_create_directory: unsupported,
         path_filestat_get: unsupported,
+        path_filestat_set_times: unsupported,
         path_open: unsupported,
+        path_readlink: unsupported,
         path_remove_directory: unsupported,
         path_unlink_file: unsupported,
         poll_oneoff: pollOneoff,
@@ -250,24 +278,18 @@ function createWasiHost(options: InstantiateWasmOptions): {
         },
         random_get: randomGet,
         sched_yield: () => errnoSuccess,
+        sock_accept: unsupported,
     };
 
     return {
         imports: {
-            typescript_host: {
-                error_copy: (bufferPointer: number, bufferLength: number) => {
-                    new Uint8Array(getMemory().buffer, bufferPointer, bufferLength).set(hostError.subarray(0, bufferLength));
-                },
-                error_length: () => hostError.length,
-                write_file: hostWriteFile,
-            },
             wasi_snapshot_preview1: wasi,
         },
         initialize(value) {
             instance = value;
-            const initialize = instance.exports._initialize;
+            const initialize = instance.exports.typescript_initialize;
             if (typeof initialize !== "function") {
-                throw new Error("TypeScript WASM reactor did not export _initialize");
+                throw new Error("TypeScript WASM reactor did not export typescript_initialize");
             }
             initialize();
             wasmHosts.set(instance, {

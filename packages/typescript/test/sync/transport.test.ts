@@ -1,7 +1,7 @@
 import {
     type WasmReactorExports,
     WasmTransport,
-} from "@typescript/api-wasm";
+} from "@typescript/typescript-wasip1-wasm";
 import {
     API,
     type ParsedCommandLine,

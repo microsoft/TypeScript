@@ -1,4 +1,4 @@
-import { wasmURL } from "@typescript/api-wasm";
+import { wasmURL } from "@typescript/typescript-wasip1-wasm";
 import { build } from "esbuild";
 import assert from "node:assert";
 import { readFile } from "node:fs/promises";
@@ -23,7 +23,7 @@ describe("API over WebAssembly in a browser", () => {
         const result = await build({
             stdin: {
                 contents: `
-                    import { instantiateWasm, WasmTransport } from "@typescript/api-wasm";
+                    import { instantiateWasm, WasmTransport } from "@typescript/typescript-wasip1-wasm";
                     import { API as AsyncAPI } from "typescript/unstable/async";
                     import { API as SyncAPI } from "typescript/unstable/sync";
 
@@ -53,7 +53,7 @@ describe("API over WebAssembly in a browser", () => {
                     }
 
                     export async function run() {
-                        const module = await WebAssembly.compileStreaming(fetch("/typescript-api.wasm"));
+                        const module = await WebAssembly.compileStreaming(fetch("/tsc.wasm"));
                         return [
                             await check(AsyncAPI, module),
                             await check(SyncAPI, module),
@@ -86,7 +86,7 @@ describe("API over WebAssembly in a browser", () => {
                     response.setHeader("Content-Type", "text/javascript");
                     response.end(bundle);
                     break;
-                case "/typescript-api.wasm":
+                case "/tsc.wasm":
                     response.setHeader("Content-Type", "application/wasm");
                     response.end(wasm);
                     break;

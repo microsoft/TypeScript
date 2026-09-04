@@ -74,9 +74,9 @@ extends:
                   artifactName: 'npm-main'
                   displayName: 'Publish npm-main artifact'
                 - output: pipelineArtifact
-                  targetPath: '$(Build.ArtifactStagingDirectory)/npm-api-wasm'
-                  artifactName: 'npm-api-wasm'
-                  displayName: 'Publish npm-api-wasm artifact'
+                  targetPath: '$(Build.ArtifactStagingDirectory)/npm-wasip1'
+                  artifactName: 'npm-wasip1'
+                  displayName: 'Publish npm-wasip1 artifact'
 
             steps:
               - checkout: none
@@ -87,7 +87,7 @@ extends:
                   src="$(Pipeline.Workspace)/npm"
                   platformDst="$(Build.ArtifactStagingDirectory)/npm-platform"
                   mainDst="$(Build.ArtifactStagingDirectory)/npm-main"
-                  wasmDst="$(Build.ArtifactStagingDirectory)/npm-api-wasm"
+                  wasmDst="$(Build.ArtifactStagingDirectory)/npm-wasip1"
                   mkdir -p "$platformDst" "$mainDst" "$wasmDst"
 
                   manifest="$src/publish-manifest.json"
@@ -134,8 +134,8 @@ extends:
                   artifactName: 'npm-main'
                   targetPath: '$(Pipeline.Workspace)/npm-main'
                 - input: pipelineArtifact
-                  artifactName: 'npm-api-wasm'
-                  targetPath: '$(Pipeline.Workspace)/npm-api-wasm'
+                  artifactName: 'npm-wasip1'
+                  targetPath: '$(Pipeline.Workspace)/npm-wasip1'
 
             steps:
               - checkout: none
@@ -165,7 +165,7 @@ extends:
                   intent: 'PackageDistribution'
                   contentType: 'npm'
                   contentSource: 'Folder'
-                  folderLocation: '$(Pipeline.Workspace)/npm-api-wasm'
+                  folderLocation: '$(Pipeline.Workspace)/npm-wasip1'
                   waitForReleaseCompletion: true
                   owners: 'jabaile@microsoft.com'
                   approvers: 'alexchi@microsoft.com'

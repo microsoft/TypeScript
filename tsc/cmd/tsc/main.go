@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"os"
-	"os/signal"
 	"syscall"
 
 	"github.com/microsoft/TypeScript/tsc/internal/core"
@@ -26,7 +25,7 @@ func runMain() int {
 			return runAPI(args[1:])
 		}
 	}
-	ctx, stop := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
+	ctx, stop := notifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
 	defer stop()
 	result := execute.CommandLine(ctx, newSystem(), args, nil)
 	return int(result.Status)
