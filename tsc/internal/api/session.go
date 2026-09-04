@@ -1322,20 +1322,21 @@ func (s *Session) handleCreateProgram(ctx context.Context, params *CreateProgram
 	}
 
 	var oldSnapshot *project.Snapshot
-	var oldProject *project.Project
+	var programID int
 	if params.OldProgram != nil {
+		projectPath := parseProjectHandle(params.OldProgram.Project)
+		var ok bool
+		programID, ok = project.SyntheticProgramID(projectPath)
+		if !ok {
+			return nil, fmt.Errorf("%w: invalid oldProgram project handle: %s", ErrClientError, projectPath)
+		}
 		oldSnapshotID := params.OldProgram.Snapshot
 		oldSD, err := s.retainSnapshotData(oldSnapshotID)
 		if err != nil {
 			return nil, err
 		}
 		defer func() { _ = s.releaseSnapshot(oldSnapshotID) }()
-
 		oldSnapshot = oldSD.snapshot
-		oldProject, err = oldSD.getProject(params.OldProgram.Project)
-		if err != nil {
-			return nil, err
-		}
 	}
 
 	baseSnapshot := oldSnapshot
@@ -1350,20 +1351,26 @@ func (s *Session) handleCreateProgram(ctx context.Context, params *CreateProgram
 		defer baseSnapshot.Deref()
 		fileChanges = project.FileChangeSummary{}
 	}
-	snapshot, project := s.snapshotHost.CloneSnapshotForProgram(
-		ctx,
-		baseSnapshot,
-		rootFileNames,
-		&params.CreateProgramOptions.CompilerOptions,
-		params.CreateProgramOptions.ProjectReferences,
-		core.Map(params.CreateProgramOptions.ConfigFileParsingDiagnostics, func(d *DiagnosticResponse) *ast.Diagnostic { return d.ToDiagnostic() }),
-		oldProject,
-		fileChanges,
-	)
-	if project == nil {
+	apiRequest := &project.APISnapshotRequest{
+		CreatePrograms: []*project.APICreateProgramRequest{{
+			ProgramID:                    programID,
+			RootFileNames:                rootFileNames,
+			CompilerOptions:              &params.CreateProgramOptions.CompilerOptions,
+			ProjectReferences:            params.CreateProgramOptions.ProjectReferences,
+			ConfigFileParsingDiagnostics: core.Map(params.CreateProgramOptions.ConfigFileParsingDiagnostics, func(d *DiagnosticResponse) *ast.Diagnostic { return d.ToDiagnostic() }),
+		}},
+	}
+	snapshot, err := s.snapshotHost.CloneSnapshot(ctx, baseSnapshot, fileChanges, apiRequest)
+	if err != nil {
+		snapshot.Deref()
+		return nil, fmt.Errorf("%w: failed to create synthetic project: %w", ErrClientError, err)
+	}
+	createdPrograms := snapshot.CreatedPrograms()
+	if len(createdPrograms) != 1 {
 		snapshot.Deref()
 		return nil, fmt.Errorf("%w: failed to create synthetic project", ErrClientError)
 	}
+	createdProject := createdPrograms[0]
 
 	handle := snapshotHandle(snapshot)
 	s.snapshotsMu.Lock()
@@ -1385,7 +1392,7 @@ func (s *Session) handleCreateProgram(ctx context.Context, params *CreateProgram
 
 	return &CreateProgramResponse{
 		Snapshot: handle,
-		Project:  NewProjectResponse(project),
+		Project:  NewProjectResponse(createdProject),
 	}, nil
 }
 

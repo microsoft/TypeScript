@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"slices"
+	"strconv"
 	"strings"
 	"sync"
 
@@ -26,8 +27,17 @@ const (
 	hr                     = "-----------------------------------------------"
 )
 
-func syntheticProjectName(index int) string {
-	return fmt.Sprintf("%s%d", syntheticProjectPrefix, index)
+func syntheticProjectName(id int) string {
+	return fmt.Sprintf("%s%d", syntheticProjectPrefix, id)
+}
+
+func SyntheticProgramID(path tspath.Path) (int, bool) {
+	value, ok := strings.CutPrefix(string(path), syntheticProjectPrefix)
+	if !ok {
+		return 0, false
+	}
+	id, err := strconv.Atoi(value)
+	return id, err == nil && id > 0
 }
 
 //go:generate go tool golang.org/x/tools/cmd/stringer -type=Kind -trimprefix=Kind -output=project_stringer_generated.go
@@ -179,23 +189,6 @@ func newInferredProjectCommandLine(
 	commandLine := tsoptions.NewParsedCommandLine(compilerOptions, rootFileNames, projectReferences, comparePathsOptions)
 	commandLine.ParsedConfig.ContentMappers = contentMappers
 	return commandLine
-}
-
-func newSyntheticProjectFromProject(
-	name string,
-	project *Project,
-	builder *ProjectCollectionBuilder,
-	logger *logging.LogTree,
-) *Project {
-	syntheticProject := NewProject(name, KindSynthetic, project.currentDirectory, builder, logger)
-	syntheticProject.CommandLine = project.Program.CommandLine()
-	syntheticProject.Program = project.Program
-	syntheticProject.ProgramLastUpdate = project.ProgramLastUpdate
-	syntheticProject.host = project.host
-	syntheticProject.checkerPool = project.checkerPool
-	syntheticProject.contentMapperWatchedFiles = project.contentMapperWatchedFiles
-	syntheticProject.dirty = false
-	return syntheticProject
 }
 
 func NewProject(

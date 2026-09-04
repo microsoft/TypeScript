@@ -468,7 +468,7 @@ func TestRefCountingCaches(t *testing.T) {
 				ResourceRequest: ResourceRequest{
 					Documents: []lsproto.DocumentUri{uri},
 				},
-			}, baseSnapshot.fs.overlays, nil)
+			}, baseSnapshot.fs.overlays, nil, nil)
 
 			project := clone.GetDefaultProject(uri)
 			assert.Assert(t, project != nil)
@@ -521,19 +521,23 @@ func TestRefCountingCaches(t *testing.T) {
 			appProject := baseSnapshot.ProjectCollection.GetProjectByPath(baseSnapshot.toPath(appConfigPath))
 			assert.Assert(t, appProject != nil)
 
-			programSnapshot, programProject := session.CloneSnapshotForProgram(
+			createRequest := &APISnapshotRequest{CreatePrograms: []*APICreateProgramRequest{{
+				RootFileNames:                appProject.CommandLine.FileNames(),
+				CompilerOptions:              appProject.CommandLine.CompilerOptions(),
+				ProjectReferences:            appProject.CommandLine.ProjectReferences(),
+				ConfigFileParsingDiagnostics: appProject.CommandLine.Errors,
+			}}}
+			programSnapshot, err := session.CloneSnapshot(
 				ctx,
 				baseSnapshot,
-				appProject.CommandLine.FileNames(),
-				appProject.CommandLine.CompilerOptions(),
-				appProject.CommandLine.ProjectReferences(),
-				appProject.CommandLine.Errors,
-				appProject,
 				FileChangeSummary{},
+				createRequest,
 			)
+			assert.NilError(t, err)
 			defer programSnapshot.Deref()
+			programProject := programSnapshot.CreatedPrograms()[0]
 			assert.Assert(t, programProject != nil)
-			assert.Assert(t, programProject.Program == appProject.Program)
+			assert.Assert(t, programProject.Program != appProject.Program)
 
 			extendedConfigEntry, ok := session.extendedConfigCache.entries.Load(tspath.Path(libBaseConfigPath))
 			assert.Assert(t, ok)
@@ -549,17 +553,24 @@ func TestRefCountingCaches(t *testing.T) {
 			assert.NilError(t, session.fs.fs.WriteFile(libBaseConfigPath, `{"compilerOptions":{"composite":true,"noLib":true,"strict":true}}`))
 			var fileChanges FileChangeSummary
 			fileChanges.Changed.Add(lsproto.DocumentUri("file://" + libBaseConfigPath))
-			updatedProgramSnapshot, updatedProgramProject := session.CloneSnapshotForProgram(
+			programID, ok := SyntheticProgramID(programProject.ID())
+			assert.Assert(t, ok)
+			updateRequest := &APISnapshotRequest{CreatePrograms: []*APICreateProgramRequest{{
+				ProgramID:                    programID,
+				RootFileNames:                programProject.CommandLine.FileNames(),
+				CompilerOptions:              programProject.CommandLine.CompilerOptions(),
+				ProjectReferences:            programProject.CommandLine.ProjectReferences(),
+				ConfigFileParsingDiagnostics: programProject.CommandLine.Errors,
+			}}}
+			updatedProgramSnapshot, err := session.CloneSnapshot(
 				ctx,
 				programSnapshot,
-				programProject.CommandLine.FileNames(),
-				programProject.CommandLine.CompilerOptions(),
-				programProject.CommandLine.ProjectReferences(),
-				programProject.CommandLine.Errors,
-				programProject,
 				fileChanges,
+				updateRequest,
 			)
+			assert.NilError(t, err)
 			defer updatedProgramSnapshot.Deref()
+			updatedProgramProject := updatedProgramSnapshot.CreatedPrograms()[0]
 			assert.Assert(t, updatedProgramProject != nil)
 			assert.Assert(t, updatedProgramProject.Program != programProject.Program)
 			updatedReferences := updatedProgramProject.Program.GetResolvedProjectReferences()

@@ -381,41 +381,6 @@ describe("API", () => {
         await program.dispose();
     });
 
-    test("createProgram updates roots when given an old program", async () => {
-        const options = { compilerOptions: { noLib: true } };
-        await using api = spawnAPI({
-            "/src/a.ts": `export const a = 1;`,
-            "/src/b.ts": `export const b = 1;`,
-            "/src/c.ts": `export const c = 1;`,
-        });
-
-        const oldProgram = await api.createProgram(["/src/a.ts", "/src/b.ts"], options);
-        const newProgram = await api.createProgram(["/src/a.ts", "/src/c.ts"], options, oldProgram);
-        assert.deepEqual(await newProgram.getSourceFileNames(), ["/src/a.ts", "/src/c.ts"]);
-        assert.deepEqual(await oldProgram.getSourceFileNames(), ["/src/a.ts", "/src/b.ts"]);
-
-        await newProgram.dispose();
-        await oldProgram.dispose();
-    });
-
-    test("createProgram rejects an inactive or foreign old program", async () => {
-        const options = { compilerOptions: { noLib: true } };
-        await using api = spawnAPI({ "/src/index.ts": `export const local = 1;` });
-        await using otherAPI = spawnAPI({ "/src/index.ts": `export const foreign = 1;` });
-
-        const localProgram = await api.createProgram(["/src/index.ts"], options);
-        const foreignProgram = await otherAPI.createProgram(["/src/index.ts"], options);
-
-        const createFromForeignProgram = () => api.createProgram(["/src/index.ts"], options, foreignProgram);
-        await assert.rejects(createFromForeignProgram, /oldProgram must belong to this API instance and reference an active snapshot/); // @sync: assert.throws(createFromForeignProgram, /oldProgram must belong to this API instance and reference an active snapshot/);
-
-        await localProgram.dispose();
-        const createFromDisposedProgram = () => api.createProgram(["/src/index.ts"], options, localProgram);
-        await assert.rejects(createFromDisposedProgram, /oldProgram must belong to this API instance and reference an active snapshot/); // @sync: assert.throws(createFromDisposedProgram, /oldProgram must belong to this API instance and reference an active snapshot/);
-
-        await foreignProgram.dispose();
-    });
-
     test("createProgram discovers imported non-root dependencies", async () => {
         await using api = spawnAPI({
             "/src/main.ts": `import { dependency } from "./dependency"; export const value = dependency;`,
@@ -426,95 +391,6 @@ describe("API", () => {
         assert.deepEqual([...await program.getSourceFileNames()].sort(), ["/src/dependency.ts", "/src/main.ts"]);
 
         await program.dispose();
-    });
-
-    test("createProgram updates an old program with file changes", async () => {
-        const fileName = "/src/index.ts";
-        const options = { compilerOptions: { noLib: true, strict: true } };
-        const { api: disposableAPI, fs } = spawnAPIWithFS({
-            [fileName]: `export const value: string = 1;`,
-        });
-        await using api = disposableAPI;
-
-        const oldProgram = await api.createProgram([fileName], options);
-        assert.equal((await oldProgram.getSemanticDiagnostics(fileName)).length, 1);
-
-        fs.writeFile!(fileName, `export const value: string = "valid";`);
-        const newProgram = await api.createProgram(
-            [fileName],
-            options,
-            oldProgram,
-            { changed: [fileName] },
-        );
-
-        assert.equal((await newProgram.getSemanticDiagnostics(fileName)).length, 0);
-        assert.equal((await oldProgram.getSemanticDiagnostics(fileName)).length, 1);
-
-        await newProgram.dispose();
-        await oldProgram.dispose();
-    });
-
-    test("createProgram updates an old program with invalidateAll", async () => {
-        const fileName = "/src/index.ts";
-        const options = { compilerOptions: { noLib: true, strict: true } };
-        const { api: disposableAPI, fs } = spawnAPIWithFS({
-            [fileName]: `export const value: string = 1;`,
-        });
-        await using api = disposableAPI;
-
-        const oldProgram = await api.createProgram([fileName], options);
-        assert.equal((await oldProgram.getSemanticDiagnostics(fileName)).length, 1);
-
-        fs.writeFile!(fileName, `export const value: string = "valid";`);
-        const newProgram = await api.createProgram(
-            [fileName],
-            options,
-            oldProgram,
-            { invalidateAll: true },
-        );
-
-        assert.equal((await newProgram.getSemanticDiagnostics(fileName)).length, 0);
-        assert.equal((await oldProgram.getSemanticDiagnostics(fileName)).length, 1);
-
-        await newProgram.dispose();
-        await oldProgram.dispose();
-    });
-
-    test("createProgram accepts a regular project program as the old program", async () => {
-        const fileName = "/src/index.ts";
-        const { api: disposableAPI, fs } = spawnAPIWithFS({
-            "/tsconfig.json": JSON.stringify({ compilerOptions: { noLib: true, strict: true } }),
-            [fileName]: `export const value: string = 1;`,
-        });
-        await using api = disposableAPI;
-
-        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
-        assert.equal((await project.program.getSemanticDiagnostics(fileName)).length, 1);
-
-        fs.writeFile!(fileName, `export const value: string = "valid";`);
-        const newProgram = await api.createProgram(
-            project.parsedCommandLine.fileNames,
-            {
-                compilerOptions: project.parsedCommandLine.options,
-                ...(project.parsedCommandLine.projectReferences
-                    ? { projectReferences: project.parsedCommandLine.projectReferences }
-                    : {}),
-            },
-            project.program,
-            { changed: [fileName] },
-        );
-
-        assert.equal((await newProgram.getSemanticDiagnostics(fileName)).length, 0);
-        assert.equal((await project.program.getSemanticDiagnostics(fileName)).length, 1);
-        await newProgram.dispose();
-    });
-
-    test("createProgram rejects file changes without an old program", async () => {
-        await using api = spawnAPI({ "/src/index.ts": `export const value = 1;` });
-
-        const createWithChanges = () => api.createProgram(["/src/index.ts"], { compilerOptions: { noLib: true } }, undefined, { changed: ["/src/index.ts"] });
-        await assert.rejects(createWithChanges, /fileChanges requires an oldProgram/); // @sync: assert.throws(createWithChanges, /fileChanges requires an oldProgram/);
     });
 
     test("parseConfigFile", async () => {

@@ -61,7 +61,8 @@ func TestCreateProgram(t *testing.T) {
 
 	snapshot, err := session.getSnapshotData(response.Snapshot)
 	assert.NilError(t, err)
-	assert.Equal(t, len(snapshot.snapshot.ProjectCollection.Projects()), 1)
+	assert.Equal(t, len(snapshot.snapshot.ProjectCollection.SyntheticProjects()), 1)
+	assert.Assert(t, snapshot.snapshot.ProjectCollection.InferredProject() != nil)
 
 	diagnostics, err := session.handleGetSemanticDiagnostics(ctx, &GetDiagnosticsParams{
 		Snapshot: response.Snapshot,
@@ -399,7 +400,7 @@ func TestCreateProgramProjectReferencesAndReuse(t *testing.T) {
 	assert.DeepEqual(t, changedProject.CommandLine.ProjectReferences(), []*core.ProjectReference{otherReference})
 }
 
-func TestCreateProgramFromConfiguredProgramDoesNotRetainOtherProjects(t *testing.T) {
+func TestCreateProgramRetainsBaseProjects(t *testing.T) {
 	t.Parallel()
 
 	const (
@@ -408,9 +409,9 @@ func TestCreateProgramFromConfiguredProgramDoesNotRetainOtherProjects(t *testing
 		otherConfigFileName = "/home/projects/other/tsconfig.json"
 		otherFileName       = "/home/projects/other/index.ts"
 	)
-	projectSession, sessionUtils := projecttestutil.Setup(map[string]any{
+	projectSession, _ := projecttestutil.Setup(map[string]any{
 		configFileName:      `{ "compilerOptions": { "noLib": true, "strict": true }, "files": ["index.ts"] }`,
-		fileName:            `export const value: string = 1;`,
+		fileName:            `export const value: string = "valid";`,
 		otherConfigFileName: `{ "files": ["index.ts"] }`,
 		otherFileName:       `export const other = 1;`,
 	})
@@ -437,7 +438,6 @@ func TestCreateProgramFromConfiguredProgramDoesNotRetainOtherProjects(t *testing
 		rootFiles[i] = DocumentIdentifier{FileName: rootFile}
 	}
 
-	assert.NilError(t, sessionUtils.FS().WriteFile(fileName, `export const value: string = "valid";`))
 	updatedResponse, err := session.handleCreateProgram(ctx, &CreateProgramParams{
 		RootFiles: rootFiles,
 		CreateProgramOptions: CreateProgramOptions{
@@ -446,23 +446,16 @@ func TestCreateProgramFromConfiguredProgramDoesNotRetainOtherProjects(t *testing
 				Strict: core.TSTrue,
 			},
 		},
-		OldProgram: &CreateProgramOldProgramParams{
-			Snapshot: baseResponse.Snapshot,
-			Project:  baseProject.Id,
-		},
-		FileChanges: &APIFileChanges{
-			Changed: []DocumentIdentifier{{FileName: fileName}},
-		},
 	})
 	assert.NilError(t, err)
 
 	updatedSnapshot, err := session.getSnapshotData(updatedResponse.Snapshot)
 	assert.NilError(t, err)
-	assert.Equal(t, len(updatedSnapshot.snapshot.ProjectCollection.Projects()), 1)
-	assert.Equal(t, len(updatedSnapshot.snapshot.ProjectCollection.ConfiguredProjects()), 0)
-	assert.Assert(t, updatedSnapshot.snapshot.ConfigFileRegistry.GetConfig(tspath.Path(otherConfigFileName)) == nil)
+	assert.Equal(t, len(updatedSnapshot.snapshot.ProjectCollection.Projects()), 3)
+	assert.Equal(t, len(updatedSnapshot.snapshot.ProjectCollection.ConfiguredProjects()), 2)
+	assert.Assert(t, updatedSnapshot.snapshot.ConfigFileRegistry.GetConfig(tspath.Path(otherConfigFileName)) != nil)
 	updatedProject := createProgramProject(t, updatedSnapshot, updatedResponse)
-	assert.Equal(t, updatedProject.ProgramUpdateKind, project.ProgramUpdateKindSameFileNames)
+	assert.Equal(t, updatedProject.Kind, project.KindSynthetic)
 	updatedDiagnostics, err := session.handleGetSemanticDiagnostics(ctx, &GetDiagnosticsParams{
 		Snapshot: updatedResponse.Snapshot,
 		Project:  updatedResponse.Project.Id,
@@ -479,5 +472,38 @@ func TestCreateProgramFromConfiguredProgramDoesNotRetainOtherProjects(t *testing
 		Files:    []DocumentIdentifier{{FileName: fileName}},
 	})
 	assert.NilError(t, err)
-	assert.Equal(t, len(baseDiagnostics), 1)
+	assert.Equal(t, len(baseDiagnostics), 0)
+}
+
+func TestCreateProgramRejectsConfiguredOldProgram(t *testing.T) {
+	t.Parallel()
+
+	const (
+		configFileName = "/home/projects/p/tsconfig.json"
+		fileName       = "/home/projects/p/index.ts"
+	)
+	projectSession, _ := projecttestutil.Setup(map[string]any{
+		configFileName: `{ "compilerOptions": { "noLib": true }, "files": ["index.ts"] }`,
+		fileName:       "export {};",
+	})
+	defer projectSession.Close()
+
+	session := NewLSPSession(projectSession, nil)
+	defer session.Close()
+	baseResponse, err := session.handleUpdateSnapshot(context.Background(), &UpdateSnapshotParams{
+		OpenProjects: []DocumentIdentifier{{FileName: configFileName}},
+	})
+	assert.NilError(t, err)
+
+	_, err = session.handleCreateProgram(context.Background(), &CreateProgramParams{
+		RootFiles: []DocumentIdentifier{{FileName: fileName}},
+		CreateProgramOptions: CreateProgramOptions{
+			CompilerOptions: core.CompilerOptions{NoLib: core.TSTrue},
+		},
+		OldProgram: &CreateProgramOldProgramParams{
+			Snapshot: baseResponse.Snapshot,
+			Project:  baseResponse.Projects[0].Id,
+		},
+	})
+	assert.ErrorContains(t, err, "invalid oldProgram project handle")
 }

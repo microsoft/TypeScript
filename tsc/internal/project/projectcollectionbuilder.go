@@ -6,6 +6,7 @@ import (
 	"maps"
 	"reflect"
 	"slices"
+	"sync"
 	"time"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
@@ -58,6 +59,7 @@ type ProjectCollectionBuilder struct {
 	configuredProjects  *dirty.SyncMap[tspath.Path, *Project]
 	syntheticProjects   *dirty.SyncMap[tspath.Path, *Project]
 	inferredProject     *dirty.Box[*Project]
+	createdPrograms     []*Project
 
 	apiState APIState
 }
@@ -249,7 +251,7 @@ func (b *ProjectCollectionBuilder) HandleAPIRequest(apiRequest *APISnapshotReque
 
 	for projectPath := range projectsToClose {
 		if entry, ok := b.configuredProjects.Load(projectPath); ok {
-			b.deleteConfiguredProject(entry, logger)
+			b.deleteProject(entry, logger)
 		}
 	}
 
@@ -272,11 +274,67 @@ func (b *ProjectCollectionBuilder) HandleAPIRequest(apiRequest *APISnapshotReque
 		}
 		b.cleanupConfiguredProjects(&retain, logger)
 	}
+	for _, programID := range apiRequest.RemovePrograms {
+		projectPath := b.toPath(syntheticProjectName(programID))
+		project, ok := b.syntheticProjects.Load(projectPath)
+		if !ok {
+			return fmt.Errorf("synthetic program not found for removal: %d", programID)
+		}
+		b.deleteProject(project, logger)
+	}
+	createdPrograms := make([]*Project, len(apiRequest.CreatePrograms))
+	entries := make([]*dirty.SyncMapEntry[tspath.Path, *Project], len(apiRequest.CreatePrograms))
+	updatedPrograms := make(map[int]struct{}, len(apiRequest.CreatePrograms))
+	for i, request := range apiRequest.CreatePrograms {
+		projectName := ""
+		if request.ProgramID != 0 {
+			if _, duplicate := updatedPrograms[request.ProgramID]; duplicate {
+				return fmt.Errorf("synthetic program updated more than once: %d", request.ProgramID)
+			}
+			updatedPrograms[request.ProgramID] = struct{}{}
+			projectName = syntheticProjectName(request.ProgramID)
+			if _, ok := b.syntheticProjects.Load(b.toPath(projectName)); !ok {
+				return fmt.Errorf("synthetic program not found for update: %d", request.ProgramID)
+			}
+		}
+		if projectName == "" {
+			projectName = b.nextSyntheticProjectName()
+		}
+		entry := b.updateOrCreateSyntheticProject(
+			projectName,
+			slices.Clone(request.RootFileNames),
+			request.CompilerOptions,
+			request.ProjectReferences,
+			request.ConfigFileParsingDiagnostics,
+			b.inferredContentMappers,
+			logger,
+		)
+		entries[i] = entry
+	}
+	var wg sync.WaitGroup
+	for i, entry := range entries {
+		wg.Go(func() {
+			if entry.Value().dirty {
+				b.updateProgram(entry, logger)
+			}
+			createdPrograms[i] = entry.Value()
+		})
+	}
+	wg.Wait()
+	b.createdPrograms = createdPrograms
 	if b.inferredProject.Value() != nil {
 		b.updateProgram(b.inferredProject, logger)
 	}
-
 	return nil
+}
+
+func (b *ProjectCollectionBuilder) nextSyntheticProjectName() string {
+	for id := 1; ; id++ {
+		name := syntheticProjectName(id)
+		if _, ok := b.syntheticProjects.Load(b.toPath(name)); !ok {
+			return name
+		}
+	}
 }
 
 func (b *ProjectCollectionBuilder) DidChangeFiles(summary FileChangeSummary, logger *logging.LogTree) {
@@ -454,7 +512,7 @@ func (b *ProjectCollectionBuilder) cleanupConfiguredProjects(retain *collections
 			continue
 		}
 		if p, ok := b.configuredProjects.Load(projectPath); ok {
-			b.deleteConfiguredProject(p, logger)
+			b.deleteProject(p, logger)
 		}
 	}
 	b.updateInferredProjectRoots(inferredProjectFiles, logger)
@@ -465,7 +523,7 @@ func (b *ProjectCollectionBuilder) cleanupConfiguredProjects(retain *collections
 func (b *ProjectCollectionBuilder) cleanupAllConfiguredProjects(logger *logging.LogTree) {
 	b.configuredProjects.Range(func(entry *dirty.SyncMapEntry[tspath.Path, *Project]) bool {
 		if p, ok := b.configuredProjects.Load(entry.Key()); ok {
-			b.deleteConfiguredProject(p, logger)
+			b.deleteProject(p, logger)
 		}
 		return true
 	})
@@ -1149,20 +1207,6 @@ func (b *ProjectCollectionBuilder) updateInferredProjectRoots(rootFileNames []st
 	return b.updateInferredProject(rootFileNames, b.compilerOptionsForInferredProjects, projectReferences, configFileParsingDiagnostics, b.inferredContentMappers, logger)
 }
 
-func (b *ProjectCollectionBuilder) seedSyntheticProjectForProgram(name string, project *Project, logger *logging.LogTree) {
-	if project == nil || project.Program == nil {
-		return
-	}
-	syntheticProject := newSyntheticProjectFromProject(name, project, b, logger)
-	if _, loaded := b.syntheticProjects.LoadOrStore(syntheticProject.configFilePath, syntheticProject); loaded {
-		return
-	}
-	project.Program.RangeResolvedProjectReference(func(referencePath tspath.Path, _ *tsoptions.ParsedCommandLine, _ *tsoptions.ParsedCommandLine, _ int) bool {
-		b.configFileRegistryBuilder.retainConfigForProject(referencePath, syntheticProject.configFilePath)
-		return true
-	})
-}
-
 func (b *ProjectCollectionBuilder) updateOrCreateSyntheticProject(
 	name string,
 	rootFileNames []string,
@@ -1353,7 +1397,7 @@ func (b *ProjectCollectionBuilder) updateProgram(entry dirty.Value[*Project], lo
 		b.client.ProgressStart(diagnostics.Project_0, displayName)
 	}
 	if deleteProject {
-		b.deleteConfiguredProject(entry, logger)
+		b.deleteProject(entry, logger)
 	}
 	if updateProgram {
 		entry.Locked(func(entry dirty.Value[*Project]) {
@@ -1470,18 +1514,21 @@ func (b *ProjectCollectionBuilder) markFilesChanged(entry dirty.Value[*Project],
 	)
 }
 
-func (b *ProjectCollectionBuilder) deleteConfiguredProject(project dirty.Value[*Project], logger *logging.LogTree) {
-	projectPath := project.Value().configFilePath
+func (b *ProjectCollectionBuilder) deleteProject(project dirty.Value[*Project], logger *logging.LogTree) {
+	value := project.Value()
+	projectPath := value.configFilePath
 	if logger != nil {
-		logger.Log("Deleting configured project: " + project.Value().configFileName)
+		logger.Logf("Deleting %s project: %s", value.Kind.String(), value.Name())
 	}
-	if program := project.Value().Program; program != nil {
-		program.RangeResolvedProjectReference(func(referencePath tspath.Path, config *tsoptions.ParsedCommandLine, _ *tsoptions.ParsedCommandLine, _ int) bool {
+	if value.Program != nil {
+		value.Program.RangeResolvedProjectReference(func(referencePath tspath.Path, _ *tsoptions.ParsedCommandLine, _ *tsoptions.ParsedCommandLine, _ int) bool {
 			b.configFileRegistryBuilder.releaseConfigForProject(referencePath, projectPath)
 			return true
 		})
 	}
-	b.configFileRegistryBuilder.releaseConfigForProject(projectPath, projectPath)
+	if value.Kind == KindConfigured {
+		b.configFileRegistryBuilder.releaseConfigForProject(projectPath, projectPath)
+	}
 	project.Delete()
 }
 

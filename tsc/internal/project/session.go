@@ -1359,8 +1359,7 @@ func (s *Session) updateSnapshot(ctx context.Context, overlays map[tspath.Path]*
 	if !locale.HasLocale(ctx) {
 		ctx = s.WithCurrentLocale(ctx)
 	}
-	change.client = s.client
-	newSnapshot := oldSnapshot.Clone(ctx, change, overlays, s.logger)
+	newSnapshot := oldSnapshot.Clone(ctx, change, overlays, s.logger, s.client)
 	s.snapshot = newSnapshot
 	if callerRef {
 		newSnapshot.ref()
@@ -2083,13 +2082,12 @@ func (s *Session) warmAutoImportCache(ctx context.Context, change SnapshotChange
 
 		warmChange := SnapshotChange{
 			reason: UpdateReasonRequestedLanguageServiceWithAutoImports,
-			client: s.client,
 			ResourceRequest: ResourceRequest{
 				Documents:   []lsproto.DocumentUri{changedFile},
 				AutoImports: changedFile,
 			},
 		}
-		clonedSnapshot := newSnapshot.Clone(warmCtx, warmChange, newSnapshot.fs.overlays, s.logger)
+		clonedSnapshot := newSnapshot.Clone(warmCtx, warmChange, newSnapshot.fs.overlays, s.logger, s.client)
 
 		// If cancelled during clone, discard the incomplete result.
 		if warmCtx.Err() != nil {

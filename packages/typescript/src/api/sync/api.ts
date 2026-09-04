@@ -797,42 +797,21 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         );
     }
 
-    private isProgramActive(program: Program): boolean {
-        const project = program.getProject();
-        for (const snapshot of this.activeSnapshots) {
-            if (!snapshot.isDisposed() && snapshot.getProject(project.configFileName)?.program === program) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Creates a program from current filesystem state, or derives one from oldProgram after applying fileChanges.
-     */
+    /** Creates a program from current filesystem state. */
     get createProgram(): {
-        (rootFiles: readonly DocumentIdentifier[], createProgramOptions: CreateProgramOptions, oldProgram?: Program, fileChanges?: APIFileChanges): Program;
-        gen(rootFiles: readonly DocumentIdentifier[], createProgramOptions: CreateProgramOptions, oldProgram?: Program, fileChanges?: APIFileChanges): Generator<ProtocolRequest, Program, ProtocolResponse["result"]>;
+        (rootFiles: readonly DocumentIdentifier[], createProgramOptions: CreateProgramOptions): Program;
+        gen(rootFiles: readonly DocumentIdentifier[], createProgramOptions: CreateProgramOptions): Generator<ProtocolRequest, Program, ProtocolResponse["result"]>;
     } {
         const owner = this;
         return cacheGeneratorMethod(
             owner,
             "createProgram",
-            function (rootFiles: readonly DocumentIdentifier[], createProgramOptions: CreateProgramOptions, oldProgram?: Program, fileChanges?: APIFileChanges): Program {
+            function (rootFiles: readonly DocumentIdentifier[], createProgramOptions: CreateProgramOptions): Program {
                 owner.ensureInitialized();
-
-                if (fileChanges && !oldProgram) {
-                    throw new Error("fileChanges requires an oldProgram");
-                }
-                if (oldProgram && !owner.isProgramActive(oldProgram)) {
-                    throw new Error("oldProgram must belong to this API instance and reference an active snapshot");
-                }
 
                 const data: CreateProgramResponse = owner.client.apiRequest("createProgram", {
                     rootFiles,
                     createProgramOptions,
-                    ...(oldProgram ? { oldProgram: { snapshot: oldProgram.snapshotId, project: oldProgram.getProject().id } } : {}),
-                    ...(fileChanges ? { fileChanges } : {}),
                 });
                 if (!data.project) {
                     throw new Error("createProgram did not return a project");
@@ -853,21 +832,12 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
                 owner.activeSnapshots.add(snapshot);
                 return program;
             },
-            function* (rootFiles: readonly DocumentIdentifier[], createProgramOptions: CreateProgramOptions, oldProgram?: Program, fileChanges?: APIFileChanges): Generator<ProtocolRequest, Program, ProtocolResponse["result"]> {
+            function* (rootFiles: readonly DocumentIdentifier[], createProgramOptions: CreateProgramOptions): Generator<ProtocolRequest, Program, ProtocolResponse["result"]> {
                 yield* owner.ensureInitialized.gen();
-
-                if (fileChanges && !oldProgram) {
-                    throw new Error("fileChanges requires an oldProgram");
-                }
-                if (oldProgram && !owner.isProgramActive(oldProgram)) {
-                    throw new Error("oldProgram must belong to this API instance and reference an active snapshot");
-                }
 
                 const data: CreateProgramResponse = yield* apiRequest("createProgram", {
                     rootFiles,
                     createProgramOptions,
-                    ...(oldProgram ? { oldProgram: { snapshot: oldProgram.snapshotId, project: oldProgram.getProject().id } } : {}),
-                    ...(fileChanges ? { fileChanges } : {}),
                 });
                 if (!data.project) {
                     throw new Error("createProgram did not return a project");

@@ -50,6 +50,8 @@ type Snapshot struct {
 
 	builderLogs *logging.LogTree
 	apiError    error
+
+	createdPrograms []*Project
 }
 
 func (s *Snapshot) contentMapperWatchState() ([]string, *collections.Set[tspath.Path]) {
@@ -100,153 +102,8 @@ func (host *SnapshotHost) newSnapshot(
 	return s
 }
 
-// cloneForProgram clones a snapshot and creates a synthetic project representing
-// createProgram input.
-func (s *Snapshot) cloneForProgram(
-	ctx context.Context,
-	rootFileNames []string,
-	compilerOptions *core.CompilerOptions,
-	projectReferences []*core.ProjectReference,
-	configFileParsingDiagnostics []*ast.Diagnostic,
-	oldProject *Project,
-	fileChanges FileChangeSummary,
-	sessionLogger logging.Logger,
-) (*Snapshot, *Project) {
-	store := s.host
-	var logger *logging.LogTree
-
-	if store.options.LoggingEnabled && sessionLogger != nil {
-		defer func() {
-			if r := recover(); r != nil {
-				sessionLogger.Log(logger.String())
-				panic(r)
-			}
-		}()
-		logger = logging.NewLogTree(fmt.Sprintf("Cloning snapshot %d for program", s.id))
-	}
-
-	start := time.Now()
-	fs := newSnapshotFSBuilder(store.fs, s.fs.overlays, s.fs.overlays, s.fs.diskFiles, s.fs.diskDirectories, s.fs.nodeModulesRealpathAliases, store.options.PositionEncoding, store.toPath)
-	fileChanges = s.processFileChanges(fs, fileChanges, logger, nil)
-
-	newSnapshotID := store.nextSnapshotID()
-	projectName := ""
-	if oldProject != nil && oldProject.Kind == KindSynthetic {
-		projectName = oldProject.Name()
-	} else {
-		for index := 0; ; index++ {
-			candidate := syntheticProjectName(index)
-			if s.ProjectCollection.GetProjectByPath(s.toPath(candidate)) == nil {
-				projectName = candidate
-				break
-			}
-		}
-	}
-	projectCollectionBuilder := newProjectCollectionBuilder(
-		ctx,
-		newSnapshotID,
-		fs,
-		s.ProjectCollection,
-		s.ConfigFileRegistry,
-		APIState{},
-		compilerOptions,
-		s.inferredProjectContentMappers,
-		s.inferredProjectContentMapperExtensions,
-		store.options,
-		s.ConfigFileRegistry.customConfigFileName,
-		store.parseCache,
-		store.contentMappedParseCache,
-		store.extendedConfigCache,
-		store.contentMapperHost,
-		nil,
-	)
-
-	projectCollectionBuilder.deleteInferredProject(logger)
-	projectCollectionBuilder.seedSyntheticProjectForProgram(projectName, oldProject, logger)
-	if !fileChanges.IsEmpty() {
-		changeLogger := logger
-		if changeLogger != nil {
-			changeLogger = logger.Fork("DidChangeFiles")
-		}
-		projectCollectionBuilder.DidChangeFiles(fileChanges, changeLogger)
-	}
-	updateLogger := logger
-	if updateLogger != nil {
-		updateLogger = logger.Fork("UpdateProgramConfig")
-	}
-	syntheticProject := projectCollectionBuilder.updateOrCreateSyntheticProject(
-		projectName,
-		slices.Clone(rootFileNames),
-		compilerOptions,
-		projectReferences,
-		configFileParsingDiagnostics,
-		s.inferredProjectContentMappers,
-		updateLogger,
-	)
-	if syntheticProject.Value().dirty {
-		createLogger := logger
-		if createLogger != nil {
-			createLogger = logger.Fork("CreateProgram")
-		}
-		projectCollectionBuilder.updateProgram(syntheticProject, createLogger)
-	}
-	projectCollectionBuilder.cleanupAllConfiguredProjects(logger.Fork("cleanupAllConfiguredProjects"))
-	newProjectCollection, newConfigFileRegistry := projectCollectionBuilder.Finalize(logger)
-
-	cleanFilesStart := time.Now()
-	removedFiles := 0
-	fs.diskFiles.Range(func(entry *dirty.SyncMapEntry[tspath.Path, *diskFile]) bool {
-		for _, project := range newProjectCollection.Projects() {
-			if project.host != nil && project.host.sourceFS.SeenFile(entry.Key()) {
-				return true
-			}
-		}
-		entry.Delete()
-		removedFiles++
-		return true
-	})
-	if logger != nil {
-		logger.Logf("Removed %d cached file(s) in %v", removedFiles, time.Since(cleanFilesStart))
-	}
-
-	snapshotFS, _ := fs.Finalize()
-	newSnapshot := store.newSnapshot(
-		newSnapshotID,
-		snapshotFS,
-		newConfigFileRegistry,
-		compilerOptions,
-		s.userPreferences,
-		nil,
-		nil,
-	)
-	newSnapshot.parentId = s.id
-	newSnapshot.ProjectCollection = newProjectCollection
-	newSnapshot.ConfigFileRegistry = newConfigFileRegistry
-	newSnapshot.inferredProjectContentMappers = s.inferredProjectContentMappers
-	newSnapshot.inferredProjectContentMapperExtensions = s.inferredProjectContentMapperExtensions
-	newSnapshot.builderLogs = logger
-
-	for _, project := range newSnapshot.ProjectCollection.Projects() {
-		if project.Program != nil {
-			store.programCounter.Ref(project.Program)
-			if project.ProgramLastUpdate == newSnapshotID {
-				project.host.freeze(snapshotFS, newConfigFileRegistry)
-			}
-		}
-	}
-
-	for _, config := range newSnapshot.ConfigFileRegistry.configs {
-		if config.commandLine != nil && config.commandLine.ConfigFile != nil {
-			for _, file := range config.commandLine.ConfigFile.ExtendedSourceFiles {
-				store.extendedConfigCache.AddOwner(store.toPath(file), newSnapshot.id)
-			}
-		}
-	}
-
-	if logger != nil {
-		logger.Logf("Finished cloning snapshot %d into snapshot %d for program in %v", s.id, newSnapshot.id, time.Since(start))
-	}
-	return newSnapshot, newSnapshot.ProjectCollection.GetProjectByPath(newSnapshot.toPath(projectName))
+func (s *Snapshot) CreatedPrograms() []*Project {
+	return s.createdPrograms
 }
 
 func (s *Snapshot) cloneWithTemporaryFile(
@@ -277,7 +134,7 @@ func (s *Snapshot) cloneWithTemporaryFile(
 	return s.Clone(ctx, SnapshotChange{
 		fileChanges:     fileChanges,
 		ResourceRequest: s.resourceRequestForDocument(uri),
-	}, overlays, nil), nil
+	}, overlays, nil, nil), nil
 }
 
 func (s *Snapshot) resourceRequestForDocument(uri lsproto.DocumentUri) ResourceRequest {
@@ -422,11 +279,21 @@ func (s *Snapshot) ReadDirectory(currentDir string, path string, extensions []st
 	return vfsmatch.ReadDirectory(s.fs.fs, currentDir, path, extensions, excludes, includes, depth)
 }
 
+type APICreateProgramRequest struct {
+	ProgramID                    int
+	RootFileNames                []string
+	CompilerOptions              *core.CompilerOptions
+	ProjectReferences            []*core.ProjectReference
+	ConfigFileParsingDiagnostics []*ast.Diagnostic
+}
+
 type APISnapshotRequest struct {
-	OpenProjects  *collections.Set[string]
-	CloseProjects *collections.Set[tspath.Path]
-	OpenFiles     *collections.Set[lsproto.DocumentUri]
-	CloseFiles    *collections.Set[tspath.Path]
+	OpenProjects   *collections.Set[string]
+	CloseProjects  *collections.Set[tspath.Path]
+	OpenFiles      *collections.Set[lsproto.DocumentUri]
+	CloseFiles     *collections.Set[tspath.Path]
+	CreatePrograms []*APICreateProgramRequest
+	RemovePrograms []int
 }
 
 type ProjectTreeRequest struct {
@@ -483,7 +350,6 @@ type SnapshotChange struct {
 	// ataChanges contains ATA-related changes to apply to projects in the new snapshot.
 	ataChanges map[tspath.Path]*ATAStateChange
 	apiRequest *APISnapshotRequest
-	client     Client
 	// cleanDiskCache triggers cleaning of cached disk files not referenced by any open project.
 	cleanDiskCache bool
 }
@@ -505,6 +371,7 @@ func (s *Snapshot) Clone(
 	change SnapshotChange,
 	overlays map[tspath.Path]*Overlay,
 	sessionLogger logging.Logger,
+	client Client,
 ) *Snapshot {
 	store := s.host
 	var logger *logging.LogTree
@@ -601,7 +468,7 @@ func (s *Snapshot) Clone(
 		store.contentMappedParseCache,
 		store.extendedConfigCache,
 		store.contentMapperHost,
-		change.client,
+		client,
 	)
 
 	if len(change.ataChanges) != 0 {
@@ -744,6 +611,7 @@ func (s *Snapshot) Clone(
 	newSnapshot.inferredProjectContentMapperExtensions = inferredContentMapperExtensions
 	newSnapshot.builderLogs = logger
 	newSnapshot.apiError = apiError
+	newSnapshot.createdPrograms = projectCollectionBuilder.createdPrograms
 
 	for _, project := range newSnapshot.ProjectCollection.Projects() {
 		if project.Program != nil {

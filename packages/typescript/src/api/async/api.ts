@@ -467,39 +467,16 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         return this.client.resetTimingInfo();
     }
 
-    private isProgramActive(program: Program): boolean {
-        const project = program.getProject();
-        for (const snapshot of this.activeSnapshots) {
-            if (!snapshot.isDisposed() && snapshot.getProject(project.configFileName)?.program === program) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Creates a program from current filesystem state, or derives one from oldProgram after applying fileChanges.
-     */
+    /** Creates a program from current filesystem state. */
     async createProgram(
         rootFiles: readonly DocumentIdentifier[],
         createProgramOptions: CreateProgramOptions,
-        oldProgram?: Program,
-        fileChanges?: APIFileChanges,
     ): Promise<Program> {
         await this.ensureInitialized();
-
-        if (fileChanges && !oldProgram) {
-            throw new Error("fileChanges requires an oldProgram");
-        }
-        if (oldProgram && !this.isProgramActive(oldProgram)) {
-            throw new Error("oldProgram must belong to this API instance and reference an active snapshot");
-        }
 
         const data: CreateProgramResponse = await this.client.apiRequest("createProgram", {
             rootFiles,
             createProgramOptions,
-            ...(oldProgram ? { oldProgram: { snapshot: oldProgram.snapshotId, project: oldProgram.getProject().id } } : {}),
-            ...(fileChanges ? { fileChanges } : {}),
         });
         if (!data.project) {
             throw new Error("createProgram did not return a project");

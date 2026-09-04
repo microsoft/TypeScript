@@ -50,7 +50,7 @@ func TestSnapshot(t *testing.T) {
 		assert.Equal(t, snapshot.GetFile(uri.FileName()).Content(), "export const value = 1;")
 	})
 
-	t.Run("createProgram uses dedicated synthetic projects", func(t *testing.T) {
+	t.Run("creates and removes synthetic programs", func(t *testing.T) {
 		t.Parallel()
 		session := setup(map[string]any{
 			"/a.ts": "export const a = 1;",
@@ -60,36 +60,51 @@ func TestSnapshot(t *testing.T) {
 
 		ctx := context.Background()
 		options := &core.CompilerOptions{NoLib: core.TSTrue}
-		firstSnapshot, firstProject := session.CloneSnapshotForProgram(
+		createRequest := &APISnapshotRequest{CreatePrograms: []*APICreateProgramRequest{
+			{
+				RootFileNames:   []string{"/a.ts"},
+				CompilerOptions: options,
+			},
+			{
+				RootFileNames:   []string{"/b.ts"},
+				CompilerOptions: options,
+			},
+		}}
+		createdSnapshot, err := session.CloneSnapshot(
 			ctx,
 			session.Snapshot(),
-			[]string{"/a.ts"},
-			options,
-			nil,
-			nil,
-			nil,
 			FileChangeSummary{},
+			createRequest,
 		)
-		defer firstSnapshot.Deref()
-		secondSnapshot, secondProject := session.CloneSnapshotForProgram(
+		assert.NilError(t, err)
+		defer createdSnapshot.Deref()
+		assert.Equal(t, len(createdSnapshot.CreatedPrograms()), 2)
+		firstProject := createdSnapshot.CreatedPrograms()[0]
+		secondProject := createdSnapshot.CreatedPrograms()[1]
+
+		firstProgramID, ok := SyntheticProgramID(firstProject.ID())
+		assert.Assert(t, ok)
+		removeRequest := &APISnapshotRequest{RemovePrograms: []int{firstProgramID}}
+		removedSnapshot, err := session.CloneSnapshot(
 			ctx,
-			firstSnapshot,
-			[]string{"/b.ts"},
-			options,
-			nil,
-			nil,
-			nil,
+			createdSnapshot,
 			FileChangeSummary{},
+			removeRequest,
 		)
-		defer secondSnapshot.Deref()
+		assert.NilError(t, err)
+		defer removedSnapshot.Deref()
 
 		assert.Assert(t, firstProject != nil)
 		assert.Assert(t, secondProject != nil)
 		assert.Assert(t, firstProject.ID() != secondProject.ID())
-		assert.Assert(t, secondSnapshot.ProjectCollection.InferredProject() == nil)
-		assert.Equal(t, len(secondSnapshot.ProjectCollection.SyntheticProjects()), 2)
-		assert.Equal(t, secondSnapshot.ProjectCollection.GetProjectByPath(firstProject.ID()), firstProject)
-		assert.Equal(t, secondSnapshot.ProjectCollection.GetDefaultProject(secondSnapshot.toPath(firstProject.CommandLine.FileNames()[0])), firstProject)
+		assert.DeepEqual(t, firstProject.CommandLine.FileNames(), []string{"/a.ts"})
+		assert.DeepEqual(t, secondProject.CommandLine.FileNames(), []string{"/b.ts"})
+		assert.Assert(t, createdSnapshot.ProjectCollection.InferredProject() == nil)
+		assert.Equal(t, len(createdSnapshot.ProjectCollection.SyntheticProjects()), 2)
+		assert.Equal(t, createdSnapshot.ProjectCollection.GetDefaultProject(createdSnapshot.toPath("/a.ts")), firstProject)
+		assert.Assert(t, removedSnapshot.ProjectCollection.GetProjectByPath(firstProject.ID()) == nil)
+		assert.Equal(t, removedSnapshot.ProjectCollection.GetProjectByPath(secondProject.ID()), secondProject)
+		assert.Equal(t, len(removedSnapshot.ProjectCollection.SyntheticProjects()), 1)
 	})
 
 	t.Run("compilerHost gets frozen with snapshot's FS only once", func(t *testing.T) {
