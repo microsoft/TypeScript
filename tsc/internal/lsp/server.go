@@ -2338,7 +2338,10 @@ func (s *Server) handleInitializeAPISession(ctx context.Context, params *lsproto
 		s.apiSessions = make(map[string]*apiSessionState)
 	}
 
-	apiSession := api.NewLSPSession(s.session, nil)
+	synchronous := params.Synchronous != nil && *params.Synchronous
+	apiSession := api.NewLSPSession(s.session, &api.SessionOptions{
+		UseBinaryResponses: synchronous,
+	})
 
 	// Use provided pipe path or generate a unique one
 	var pipePath string
@@ -2348,11 +2351,16 @@ func (s *Server) handleInitializeAPISession(ctx context.Context, params *lsproto
 		pipePath = s.generateAPIPipePath()
 	}
 
-	transport, err := ipc.NewPipeTransport(pipePath)
+	var transport ipc.Transport
+	var err error
+	if synchronous {
+		transport, err = ipc.NewSyncTransport(pipePath)
+	} else {
+		transport, err = ipc.NewPipeTransport(pipePath)
+	}
 	if err != nil {
 		return nil, fmt.Errorf("failed to create API transport: %w", err)
 	}
-
 	apiCtx, apiCancel := context.WithCancel(s.backgroundCtx)
 	state := &apiSessionState{
 		session:   apiSession,
@@ -2367,11 +2375,12 @@ func (s *Server) handleInitializeAPISession(ctx context.Context, params *lsproto
 		defer close(state.done)
 		defer apiCancel()
 		defer func() {
+			apiCancel()
 			apiSession.Close()
 			s.removeAPISession(apiSession.ID())
 		}()
 
-		rwc, acceptErr := transport.Accept()
+		rwc, acceptErr := transport.Accept(apiCtx)
 		_ = transport.Close()
 		if acceptErr != nil {
 			s.logger.Errorf("API session %s: failed to accept connection: %v", apiSession.ID(), acceptErr)
@@ -2381,6 +2390,18 @@ func (s *Server) handleInitializeAPISession(ctx context.Context, params *lsproto
 			return
 		}
 		defer rwc.Close()
+
+		// Create a cancellable context for the API connection
+		connectionDone := make(chan struct{})
+		defer close(connectionDone)
+		go func() {
+			select {
+			case <-apiCtx.Done():
+				_ = rwc.Close()
+			case <-connectionDone:
+				return
+			}
+		}()
 
 		// Run the connection with panic recovery
 		defer func() {
@@ -2394,7 +2415,13 @@ func (s *Server) handleInitializeAPISession(ctx context.Context, params *lsproto
 			}
 		}()
 
-		conn := ipc.NewAsyncConn(rwc, apiSession)
+		var conn ipc.Conn
+		if synchronous {
+			protocol := api.NewMessagePackProtocol(rwc)
+			conn = ipc.NewSyncConn(rwc, protocol, apiSession)
+		} else {
+			conn = ipc.NewAsyncConn(rwc, apiSession)
+		}
 		apiSession.SetConnection(conn)
 		if apiErr := conn.Run(apiCtx); apiErr != nil {
 			s.logger.Errorf("API session %s: %v", apiSession.ID(), apiErr)

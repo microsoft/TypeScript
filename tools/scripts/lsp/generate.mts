@@ -407,7 +407,13 @@ const customStructures: Structure[] = [
                 name: "pipe",
                 type: { kind: "base", name: "string" },
                 optional: true,
-                documentation: "Optional path to use for the named pipe or Unix domain socket. If not provided, a unique path will be generated.",
+                documentation: "Optional path to use for API communication. If not provided, a unique path will be generated.",
+            },
+            {
+                name: "synchronous",
+                type: { kind: "base", name: "boolean" },
+                optional: true,
+                documentation: "Use the synchronous MessagePack API protocol over FIFOs on Unix or a named pipe on Windows.",
             },
         ],
         documentation: "Parameters for the initializeAPISession request.",
@@ -423,7 +429,7 @@ const customStructures: Structure[] = [
             {
                 name: "pipe",
                 type: { kind: "base", name: "string" },
-                documentation: "The path to the named pipe or Unix domain socket for API communication.",
+                documentation: "The path to use for API communication.",
             },
         ],
         documentation: "Result for the initializeAPISession request.",

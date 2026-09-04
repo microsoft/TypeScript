@@ -119,7 +119,7 @@ export class SessionManager implements vscode.Disposable {
         this.sdk = createTypeScriptSDK(
             exe.version,
             exe.apiPackageJsonPath,
-            pipe => this.initializeAPISession(exe, pipe),
+            (pipe, synchronous) => this.initializeAPISession(exe, pipe, synchronous),
             () => {
                 const client = this.currentSession?.client;
                 return !!client?.isInitialized && isSameTypeScriptInstallation(client.getCurrentExe(), exe);
@@ -182,7 +182,7 @@ export class SessionManager implements vscode.Disposable {
         }
     }
 
-    private initializeAPISession(exe: ExeInfo, pipe?: string): Promise<string> {
+    private initializeAPISession(exe: ExeInfo, pipe?: string, synchronous?: boolean): Promise<string> {
         return this.enqueueLifecycleOperation(async () => {
             const client = this.currentSession?.client;
             if (!client) {
@@ -191,7 +191,7 @@ export class SessionManager implements vscode.Disposable {
             if (!isSameTypeScriptInstallation(client.getCurrentExe(), exe)) {
                 throw new Error(vscode.l10n.t("The selected TypeScript installation has changed. Use the SDK from the latest language server initialization."));
             }
-            const result = await client.initializeAPISession(pipe);
+            const result = await client.initializeAPISession(pipe, synchronous);
             return result.pipe;
         });
     }

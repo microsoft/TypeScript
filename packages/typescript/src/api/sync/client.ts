@@ -1,6 +1,8 @@
+import type { FileSystemCallbacks } from "../fs.ts";
 import {
     configureFileSystemCallbacks,
     encodeFileSystemCallbackResult,
+    type FileSystemCallbackConfiguration,
 } from "../fsCallbacks.ts";
 import {
     type ClientOptions,
@@ -35,30 +37,40 @@ export class Client {
     private maxResponseBytesPerPage: number | undefined;
 
     constructor(options: ClientOptions) {
-        if (!isSpawnOptions(options)) {
-            throw new Error("Socket connections are not yet supported in the sync client");
-        }
+        let fsConfiguration: FileSystemCallbackConfiguration | undefined;
+        let channel: SyncRpcChannel;
+        let fs: FileSystemCallbacks | undefined;
+        let collectTiming = false;
 
-        const args = getAPIProcessArgs(options, false);
         this.maxResponseBytesPerPage = options.maxResponseBytesPerPage;
+        if (isSpawnOptions(options)) {
+            const args = getAPIProcessArgs(options, false);
 
-        const fsConfiguration = configureFileSystemCallbacks(options.fs);
-        if (fsConfiguration.arguments.length > 0) {
-            args.push(`--callbacks=${fsConfiguration.arguments.join(",")}`);
+            fsConfiguration = configureFileSystemCallbacks(options.fs);
+            if (fsConfiguration.arguments.length > 0) {
+                args.push(`--callbacks=${fsConfiguration.arguments.join(",")}`);
+            }
+
+            collectTiming = options.collectTiming ?? false;
+            fs = options.fs;
+            channel = new SyncRpcChannel({
+                exe: resolveExePath(options),
+                args,
+            }, collectTiming);
         }
-
-        const collectTiming = options.collectTiming ?? false;
+        else {
+            channel = new SyncRpcChannel({ pipe: options.pipe }, collectTiming);
+        }
         if (collectTiming) {
             this.timing = new TimingCollector();
         }
 
-        const channel = new SyncRpcChannel(resolveExePath(options), args, collectTiming);
         this.channel = channel;
 
-        if (options.fs) {
+        if (fs && fsConfiguration) {
             for (const name of fsConfiguration.callbackNames) {
                 if (name === "writeFile") {
-                    const callback = options.fs.writeFile;
+                    const callback = fs.writeFile;
                     if (typeof callback !== "function") throw new Error("Invalid writeFile callback configuration");
 
                     channel.registerCallback(name, (_, arg) => {
@@ -69,7 +81,7 @@ export class Client {
                     continue;
                 }
 
-                const callback = options.fs[name];
+                const callback = fs[name];
                 if (typeof callback !== "function") throw new Error(`Invalid ${name} callback configuration`);
                 channel.registerCallback(name, (_, arg) => {
                     return JSON.stringify(encodeFileSystemCallbackResult(name, callback(JSON.parse(arg))));
