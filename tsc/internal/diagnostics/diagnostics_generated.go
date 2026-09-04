@@ -2244,6 +2244,10 @@ var This_member_cannot_have_an_override_modifier_because_its_name_is_dynamic = &
 
 var This_member_cannot_have_a_JSDoc_comment_with_an_override_tag_because_its_name_is_dynamic = &Message{code: 4128, category: CategoryError, key: "This_member_cannot_have_a_JSDoc_comment_with_an_override_tag_because_its_name_is_dynamic_4128", text: "This member cannot have a JSDoc comment with an '@override' tag because its name is dynamic."}
 
+var Property_0_is_readonly_in_the_source_but_not_in_the_target = &Message{code: 4129, category: CategoryError, key: "Property_0_is_readonly_in_the_source_but_not_in_the_target_4129", text: "Property '{0}' is 'readonly' in the source but not in the target."}
+
+var X_0_index_signature_is_readonly_in_the_source_but_not_in_the_target = &Message{code: 4130, category: CategoryError, key: "_0_index_signature_is_readonly_in_the_source_but_not_in_the_target_4130", text: "'{0}' index signature is 'readonly' in the source but not in the target."}
+
 var The_current_host_does_not_support_the_0_option = &Message{code: 5001, category: CategoryError, key: "The_current_host_does_not_support_the_0_option_5001", text: "The current host does not support the '{0}' option."}
 
 var Option_0_requires_value_to_be_greater_than_1 = &Message{code: 5002, category: CategoryError, key: "Option_0_requires_value_to_be_greater_than_1_5002", text: "Option '{0}' requires value to be greater than '{1}'."}
@@ -3293,6 +3297,8 @@ var Require_sufficient_annotation_on_exports_so_other_tools_can_trivially_genera
 var Built_in_iterators_are_instantiated_with_a_TReturn_type_of_undefined_instead_of_any = &Message{code: 6720, category: CategoryMessage, key: "Built_in_iterators_are_instantiated_with_a_TReturn_type_of_undefined_instead_of_any_6720", text: "Built-in iterators are instantiated with a 'TReturn' type of 'undefined' instead of 'any'."}
 
 var Do_not_allow_runtime_constructs_that_are_not_part_of_ECMAScript = &Message{code: 6721, category: CategoryMessage, key: "Do_not_allow_runtime_constructs_that_are_not_part_of_ECMAScript_6721", text: "Do not allow runtime constructs that are not part of ECMAScript."}
+
+var Ensure_that_readonly_properties_remain_read_only_in_type_relationships = &Message{code: 6722, category: CategoryMessage, key: "Ensure_that_readonly_properties_remain_read_only_in_type_relationships_6722", text: "Ensure that 'readonly' properties remain read-only in type relationships."}
 
 var Default_catch_clause_variables_as_unknown_instead_of_any = &Message{code: 6803, category: CategoryMessage, key: "Default_catch_clause_variables_as_unknown_instead_of_any_6803", text: "Default catch clause variables as 'unknown' instead of 'any'."}
 
@@ -6668,6 +6674,10 @@ func keyToMessage(key Key) *Message {
 		return This_member_cannot_have_an_override_modifier_because_its_name_is_dynamic
 	case "This_member_cannot_have_a_JSDoc_comment_with_an_override_tag_because_its_name_is_dynamic_4128":
 		return This_member_cannot_have_a_JSDoc_comment_with_an_override_tag_because_its_name_is_dynamic
+	case "Property_0_is_readonly_in_the_source_but_not_in_the_target_4129":
+		return Property_0_is_readonly_in_the_source_but_not_in_the_target
+	case "_0_index_signature_is_readonly_in_the_source_but_not_in_the_target_4130":
+		return X_0_index_signature_is_readonly_in_the_source_but_not_in_the_target
 	case "The_current_host_does_not_support_the_0_option_5001":
 		return The_current_host_does_not_support_the_0_option
 	case "Option_0_requires_value_to_be_greater_than_1_5002":
@@ -7718,6 +7728,8 @@ func keyToMessage(key Key) *Message {
 		return Built_in_iterators_are_instantiated_with_a_TReturn_type_of_undefined_instead_of_any
 	case "Do_not_allow_runtime_constructs_that_are_not_part_of_ECMAScript_6721":
 		return Do_not_allow_runtime_constructs_that_are_not_part_of_ECMAScript
+	case "Ensure_that_readonly_properties_remain_read_only_in_type_relationships_6722":
+		return Ensure_that_readonly_properties_remain_read_only_in_type_relationships
 	case "Default_catch_clause_variables_as_unknown_instead_of_any_6803":
 		return Default_catch_clause_variables_as_unknown_instead_of_any
 	case "Do_not_transform_or_elide_any_imports_or_exports_not_marked_as_type_only_ensuring_they_are_written_i_6804":

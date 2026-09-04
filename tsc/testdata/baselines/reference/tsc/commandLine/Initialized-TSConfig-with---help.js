@@ -34,6 +34,7 @@ You can learn more at https://aka.ms/tsconfig
 
     // Stricter Typechecking Options
     "noUncheckedIndexedAccess": true,
+    "enforceReadonly": true,
     "exactOptionalPropertyTypes": true,
 
     // Style Options

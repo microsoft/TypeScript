@@ -176,6 +176,7 @@ func generateTSConfig(options *collections.OrderedMap[string, any], locale local
 
 	emitHeader(diagnostics.Stricter_Typechecking_Options)
 	emitOption("noUncheckedIndexedAccess" /*defaultValue*/, true, commentedNever)
+	emitOption("enforceReadonly" /*defaultValue*/, true, commentedNever)
 	emitOption("exactOptionalPropertyTypes" /*defaultValue*/, true, commentedNever)
 
 	newline()

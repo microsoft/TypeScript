@@ -20,11 +20,11 @@ Build one or more projects and their dependencies, if out of date
 [94m--checkers[39m
 Set the number of checkers per project.
 
-[94m--help, -h[39m
-Print this message.
-
 [94m--help, -?[39m
 
+
+[94m--help, -h[39m
+Print this message.
 
 [94m--ignoreConfig[39m
 Ignore the tsconfig found and build with commandline options and files.
@@ -228,6 +228,11 @@ default: true
 Deduplicate packages with the same name and version.
 type: boolean
 default: true
+
+[94m--enforceReadonly[39m
+Ensure that 'readonly' properties remain read-only in type relationships.
+type: boolean
+default: false
 
 [94m--exactOptionalPropertyTypes[39m
 Interpret optional property types as written, rather than adding 'undefined'.
