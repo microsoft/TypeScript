@@ -1,6 +1,6 @@
 // @target: es2022
 // @lib: esnext,dom
-// @module: commonjs,amd
+// @module: commonjs
 // @noTypesAndSymbols: true
 // @noEmitHelpers: true
 

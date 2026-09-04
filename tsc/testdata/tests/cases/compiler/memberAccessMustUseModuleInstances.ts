@@ -1,5 +1,5 @@
 // @target: es2015
-//@module: amd
+//@module: commonjs
 // @Filename: memberAccessMustUseModuleInstances_0.ts
 export class Promise {
     static timeout(delay: number): Promise {

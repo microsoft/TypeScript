@@ -1,0 +1,29 @@
+file3.ts(2,8): error TS2882: Cannot find module or type declarations for side-effect import of 'file2'.
+
+
+==== file1.d.ts (0 errors) ====
+    declare module "file1" {
+        class foo {}
+        namespace foo {
+            class A {}
+        }
+        export = foo;
+    }
+    
+    
+==== file2.ts (0 errors) ====
+    /// <reference path="file1.d.ts"/>
+    import x = require("file1"); 
+    
+    // OK - './file1' is a namespace
+    declare module "file1" {
+        interface A { a: number }
+    }
+    
+==== file3.ts (1 errors) ====
+    import * as x from "file1";
+    import "file2";
+           ~~~~~~~
+!!! error TS2882: Cannot find module or type declarations for side-effect import of 'file2'.
+    let a: x.A;
+    let b = a.a;
