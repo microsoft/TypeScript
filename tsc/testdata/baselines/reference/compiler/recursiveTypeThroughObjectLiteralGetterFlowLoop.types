@@ -1,0 +1,130 @@
+//// [tests/cases/compiler/recursiveTypeThroughObjectLiteralGetterFlowLoop.ts] ////
+
+=== recursiveTypeThroughObjectLiteralGetterFlowLoop.ts ===
+// A recursive getter whose body runs a loop, assigning to a union-typed variable.
+//
+// The loop puts entries on the flow-loop stack, and the assignment's declared type being a union is
+// what makes control flow analysis evaluate the assigned expression rather than take the declared
+// type. So the inner getter is forced from inside a loop back-edge, while a provisional comparison is
+// open.
+//
+// This is the case that separates saving a stack's length from saving the stack itself.
+// `checkExpressionCachedEx` swaps in a nil flow-loop stack and puts the original back only when it
+// returns normally, so an unwind that crosses it leaves the nil in place. Restoring by length then
+// re-slices the replacement instead of the saved stack, which is a runtime panic rather than a
+// diagnostic. The three stacks some caller replaces wholesale are therefore held as slice headers.
+
+interface Internals<out O = unknown> {
+    readonly out: O;
+>out : O
+}
+
+interface Schema {
+    readonly internals: Internals;
+>internals : Internals<unknown>
+}
+
+type Out<T extends Schema> = T["internals"]["out"];
+>Out : Out<T>
+
+interface ArrayInternals<T extends Schema> extends Internals<Out<T>[]> {}
+interface ArraySchema<T extends Schema = Schema> extends Schema {
+    readonly internals: ArrayInternals<T>;
+>internals : ArrayInternals<T>
+}
+
+interface StringInternals extends Internals<string> {}
+interface StringSchema extends Schema {
+    readonly internals: StringInternals;
+>internals : StringInternals
+}
+
+type Shape = Readonly<{ [k: string]: Schema }>;
+>Shape : Readonly<{ [k: string]: Schema; }>
+>k : string
+
+interface ObjectInternals<S extends Shape> extends Internals<{ [K in keyof S]: Out<S[K]> }> {}
+interface ObjectSchema<S extends Shape = Shape> extends Schema {
+    readonly internals: ObjectInternals<S>;
+>internals : ObjectInternals<S>
+}
+
+declare function object<S extends Shape>(shape: S): ObjectSchema<S>;
+>object : <S extends Shape>(shape: S) => ObjectSchema<S>
+>shape : S
+
+declare function array<T extends Schema>(element: T): ArraySchema<T>;
+>array : <T extends Schema>(element: T) => ArraySchema<T>
+>element : T
+
+declare function text(): StringSchema;
+>text : () => StringSchema
+
+const node = object({
+>node : ObjectSchema<{ name: StringSchema; readonly children: Schema | null; }>
+>object({    name: text(),    get children() {        let holder: Schema | null = null;        for (let i = 0; i < 2; i++) {            holder = object({                get inner() {                    return array(node);                },            });        }        return holder;    },}) : ObjectSchema<{ name: StringSchema; readonly children: Schema | null; }>
+>object : <S extends Shape>(shape: S) => ObjectSchema<S>
+>{    name: text(),    get children() {        let holder: Schema | null = null;        for (let i = 0; i < 2; i++) {            holder = object({                get inner() {                    return array(node);                },            });        }        return holder;    },} : { name: StringSchema; readonly children: Schema | null; }
+
+    name: text(),
+>name : StringSchema
+>text() : StringSchema
+>text : () => StringSchema
+
+    get children() {
+>children : Schema | null
+
+        let holder: Schema | null = null;
+>holder : Schema | null
+
+        for (let i = 0; i < 2; i++) {
+>i : number
+>0 : 0
+>i < 2 : boolean
+>i : number
+>2 : 2
+>i++ : number
+>i : number
+
+            holder = object({
+>holder = object({                get inner() {                    return array(node);                },            }) : ObjectSchema<{ readonly inner: ArraySchema<ObjectSchema<{ name: StringSchema; readonly children: Schema | null; }>>; }>
+>holder : Schema | null
+>object({                get inner() {                    return array(node);                },            }) : ObjectSchema<{ readonly inner: ArraySchema<ObjectSchema<{ name: StringSchema; readonly children: Schema | null; }>>; }>
+>object : <S extends Shape>(shape: S) => ObjectSchema<S>
+>{                get inner() {                    return array(node);                },            } : { readonly inner: ArraySchema<ObjectSchema<{ name: StringSchema; readonly children: Schema | null; }>>; }
+
+                get inner() {
+>inner : ArraySchema<ObjectSchema<{ name: StringSchema; readonly children: Schema | null; }>>
+
+                    return array(node);
+>array(node) : ArraySchema<ObjectSchema<{ name: StringSchema; readonly children: Schema | null; }>>
+>array : <T extends Schema>(element: T) => ArraySchema<T>
+>node : ObjectSchema<{ name: StringSchema; readonly children: Schema | null; }>
+
+                },
+            });
+        }
+        return holder;
+>holder : Schema | null
+
+    },
+});
+
+declare const sample: Out<typeof node>;
+>sample : { name: string; readonly children: unknown; }
+>node : ObjectSchema<{ name: StringSchema; readonly children: Schema | null; }>
+
+const topName: string = sample.name;
+>topName : string
+>sample.name : string
+>sample : { name: string; readonly children: unknown; }
+>name : string
+
+// A key the shape does not declare is still absent, which is what tells a resolved type apart from
+// one that collapsed to `any`.
+// @ts-expect-error
+sample.missing;
+>sample.missing : error
+>sample : { name: string; readonly children: unknown; }
+>missing : any
+

@@ -19131,18 +19131,25 @@ type circularQuestion struct{}
 
 // The checker's push/pop state, so an abandoned attempt can be unwound without leaving a push behind.
 type checkerStacks struct {
-	typeResolutions, varianceStack, activeMappers, activeTypeMappersCaches int
-	antecedentTypes, awaitedTypeStack, contextualBindingPatterns           int
-	contextualInfos, flowLoopStack, inferenceContextInfos, sharedFlows     int
-	reverseMappedSourceStack, reverseMappedTargetStack                     int
-	renamedBindingElementsInTypes, resolutionStart                         int
-	instantiationDepth, conditionalConstraintDepth                         uint32
-	currentNode                                                            *ast.Node
-	varianceTypeParameter                                                  *Type
-	flowTypeCache                                                          map[*ast.Node]*Type
-	reliabilityFlags                                                       RelationComparisonResult
-	reverseExpandingFlags                                                  ExpandingFlags
-	flowAnalysisDisabled, withinUnreachableCode                            bool
+	typeResolutions, activeMappers, activeTypeMappersCaches             int
+	antecedentTypes, awaitedTypeStack, contextualBindingPatterns        int
+	contextualInfos, inferenceContextInfos, sharedFlows                 int
+	reverseMappedSourceStack, reverseMappedTargetStack, resolutionStart int
+	instantiationDepth, conditionalConstraintDepth                      uint32
+	// These three are held as slice headers rather than lengths because they are the ones some caller
+	// replaces wholesale -- checkExpressionCachedEx and getVariancesWorker swap in a nil stack and put
+	// the old one back only on a normal return, and checkSourceFile clears one per file. A length is
+	// meaningless against a slice that was swapped out, and restoring one would re-slice the
+	// replacement rather than the stack that was saved.
+	varianceStack                               []VarianceStackEntry
+	flowLoopStack                               []FlowLoopInfo
+	renamedBindingElementsInTypes               []*ast.Node
+	currentNode                                 *ast.Node
+	varianceTypeParameter                       *Type
+	flowTypeCache                               map[*ast.Node]*Type
+	reliabilityFlags                            RelationComparisonResult
+	reverseExpandingFlags                       ExpandingFlags
+	flowAnalysisDisabled, withinUnreachableCode bool
 }
 
 // Whether any base of t could still contribute a member named name. resolveObjectTypeMembers publishes
@@ -19182,14 +19189,16 @@ func (c *Checker) mayInheritProperty(t *Type, name string, seen []*Type) bool {
 
 func (c *Checker) saveStacks() checkerStacks {
 	return checkerStacks{
-		typeResolutions: len(c.typeResolutions), varianceStack: len(c.varianceStack),
-		activeMappers: len(c.activeMappers), activeTypeMappersCaches: len(c.activeTypeMappersCaches),
+		typeResolutions: len(c.typeResolutions),
+		activeMappers:   len(c.activeMappers), activeTypeMappersCaches: len(c.activeTypeMappersCaches),
 		antecedentTypes: len(c.antecedentTypes), awaitedTypeStack: len(c.awaitedTypeStack),
 		contextualBindingPatterns: len(c.contextualBindingPatterns), contextualInfos: len(c.contextualInfos),
-		flowLoopStack: len(c.flowLoopStack), inferenceContextInfos: len(c.inferenceContextInfos),
-		sharedFlows: len(c.sharedFlows), reverseMappedSourceStack: len(c.reverseMappedSourceStack),
+		inferenceContextInfos: len(c.inferenceContextInfos),
+		sharedFlows:           len(c.sharedFlows), reverseMappedSourceStack: len(c.reverseMappedSourceStack),
 		reverseMappedTargetStack:      len(c.reverseMappedTargetStack),
-		renamedBindingElementsInTypes: len(c.renamedBindingElementsInTypes),
+		varianceStack:                 c.varianceStack,
+		flowLoopStack:                 c.flowLoopStack,
+		renamedBindingElementsInTypes: c.renamedBindingElementsInTypes,
 		resolutionStart:               c.resolutionStart, instantiationDepth: c.instantiationDepth,
 		conditionalConstraintDepth: c.conditionalConstraintDepth, currentNode: c.currentNode,
 		varianceTypeParameter: c.varianceTypeParameter, flowTypeCache: c.flowTypeCache,
@@ -19201,7 +19210,7 @@ func (c *Checker) saveStacks() checkerStacks {
 func (c *Checker) restoreStacks(s checkerStacks) {
 	clear(c.typeResolutions[s.typeResolutions:])
 	c.typeResolutions = c.typeResolutions[:s.typeResolutions]
-	c.varianceStack = c.varianceStack[:s.varianceStack]
+	c.varianceStack = s.varianceStack
 	clear(c.activeMappers[s.activeMappers:])
 	c.activeMappers = c.activeMappers[:s.activeMappers]
 	for _, cache := range c.activeTypeMappersCaches[s.activeTypeMappersCaches:] {
@@ -19212,12 +19221,12 @@ func (c *Checker) restoreStacks(s checkerStacks) {
 	c.awaitedTypeStack = c.awaitedTypeStack[:s.awaitedTypeStack]
 	c.contextualBindingPatterns = c.contextualBindingPatterns[:s.contextualBindingPatterns]
 	c.contextualInfos = c.contextualInfos[:s.contextualInfos]
-	c.flowLoopStack = c.flowLoopStack[:s.flowLoopStack]
+	c.flowLoopStack = s.flowLoopStack
 	c.inferenceContextInfos = c.inferenceContextInfos[:s.inferenceContextInfos]
 	c.sharedFlows = c.sharedFlows[:s.sharedFlows]
 	c.reverseMappedSourceStack = c.reverseMappedSourceStack[:s.reverseMappedSourceStack]
 	c.reverseMappedTargetStack = c.reverseMappedTargetStack[:s.reverseMappedTargetStack]
-	c.renamedBindingElementsInTypes = c.renamedBindingElementsInTypes[:s.renamedBindingElementsInTypes]
+	c.renamedBindingElementsInTypes = s.renamedBindingElementsInTypes
 	c.resolutionStart = s.resolutionStart
 	c.instantiationDepth = s.instantiationDepth
 	c.conditionalConstraintDepth = s.conditionalConstraintDepth
