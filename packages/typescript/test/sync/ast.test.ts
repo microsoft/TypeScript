@@ -1072,6 +1072,38 @@ describe("RemoteNode + child/token getters", () => {
         });
     });
 
+    test("public getChildren API preserves leaf tokens when type arguments begin with less-than", () => {
+        for (
+            const source of [
+                "type X = ReturnType<<T>(x: T) => number>;",
+                "type X = ReturnType <<T>(x: T) => number>;",
+                "type X = ReturnType/* c */ <<T>(x: T) => number>;",
+                "const x = foo<<T>(x: T) => T>();",
+            ]
+        ) {
+            withFirstStatement(source, (stmt, sf) => {
+                const node = findFirstOfKind(stmt, SyntaxKind.CallExpression)
+                    ?? findFirstOfKind(stmt, SyntaxKind.TypeReference)!;
+                const leafTokens: Node[] = [];
+                const collectLeafTokens = (current: Node): void => {
+                    const children = current.getChildren(sf);
+                    if (children.length === 0) {
+                        leafTokens.push(current);
+                    }
+                    else {
+                        children.forEach(collectLeafTokens);
+                    }
+                };
+                collectLeafTokens(node);
+
+                const firstLessThan = leafTokens.find(child => child.kind === SyntaxKind.LessThanToken);
+                assert.ok(firstLessThan, "expected the public API to expose the opening less-than token");
+                assert.strictEqual(firstLessThan.getStart(sf), source.indexOf("<<"));
+                assert.strictEqual(leafTokens.map(child => child.getFullText(sf)).join(""), node.getFullText(sf));
+            });
+        }
+    });
+
     test("getChildCount and getChildAt agree with getChildren", () => {
         withFirstStatement("if (x) {}", stmt => {
             const children = stmt.getChildren();
