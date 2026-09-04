@@ -4530,14 +4530,9 @@ func (c *Checker) areTypeParametersIdentical(declarations []*ast.Node, targetPar
 
 func (c *Checker) checkBaseTypeAccessibility(t *Type, node *ast.Node) {
 	signatures := c.getSignaturesOfType(t, SignatureKindConstruct)
-	if len(signatures) != 0 {
-		declaration := signatures[0].declaration
-		if declaration != nil && ast.HasModifier(declaration, ast.ModifierFlagsPrivate) {
-			typeClassDeclaration := ast.GetClassLikeDeclarationOfSymbol(t.symbol)
-			if !c.isNodeWithinClass(node, typeClassDeclaration) {
-				c.error(node, diagnostics.Cannot_extend_a_class_0_Class_constructor_is_marked_as_private, c.getFullyQualifiedName(t.symbol, nil))
-			}
-		}
+	accessibilityError := c.getConstructorAccessibilityError(node, signatures, ast.ModifierFlagsPrivate)
+	if accessibilityError != nil {
+		c.error(node, diagnostics.Cannot_extend_a_class_0_Class_constructor_is_marked_as_private, c.getFullyQualifiedName(accessibilityError.declaringClass.symbol, nil))
 	}
 }
 
@@ -8777,7 +8772,14 @@ func (c *Checker) resolveNewExpression(node *ast.Node, candidatesOutArray *[]*Si
 	// that the user will not add any.
 	constructSignatures := c.getSignaturesOfType(expressionType, SignatureKindConstruct)
 	if len(constructSignatures) != 0 {
-		if !c.isConstructorAccessible(node, constructSignatures[0]) {
+		accessibilityError := c.getConstructorAccessibilityError(node, constructSignatures, ast.ModifierFlagsNonPublicAccessibilityModifier)
+		if accessibilityError != nil {
+			if accessibilityError.kind&ast.ModifierFlagsPrivate != 0 {
+				c.error(node, diagnostics.Constructor_of_class_0_is_private_and_only_accessible_within_the_class_declaration, c.TypeToString(accessibilityError.declaringClass))
+			}
+			if accessibilityError.kind&ast.ModifierFlagsProtected != 0 {
+				c.error(node, diagnostics.Constructor_of_class_0_is_protected_and_only_accessible_within_the_class_declaration, c.TypeToString(accessibilityError.declaringClass))
+			}
 			return c.resolveErrorCall(node)
 		}
 		// If the expression is a class of abstract type, or an abstract construct signature,
@@ -8820,36 +8822,39 @@ func (c *Checker) resolveNewExpression(node *ast.Node, candidatesOutArray *[]*Si
 	return c.resolveErrorCall(node)
 }
 
-func (c *Checker) isConstructorAccessible(node *ast.Node, signature *Signature) bool {
-	if signature == nil || signature.declaration == nil {
-		return true
-	}
-	declaration := signature.declaration
-	modifiers := getSelectedModifierFlags(declaration, ast.ModifierFlagsNonPublicAccessibilityModifier)
-	// (1) Public constructors and (2) constructor functions are always accessible.
-	if modifiers == 0 || !ast.IsConstructorDeclaration(declaration) {
-		return true
-	}
-	declaringClassDeclaration := ast.GetClassLikeDeclarationOfSymbol(declaration.Parent.Symbol())
-	declaringClass := c.getDeclaredTypeOfSymbol(declaration.Parent.Symbol())
-	// A private or protected constructor can only be instantiated within its own class (or a subclass, for protected)
-	if !c.isNodeWithinClass(node, declaringClassDeclaration) {
-		containingClass := ast.GetContainingClass(node)
-		if containingClass != nil && modifiers&ast.ModifierFlagsProtected != 0 {
-			containingType := c.getDeclaredTypeOfSymbol(containingClass.Symbol())
-			if c.typeHasProtectedAccessibleBase(declaration.Parent.Symbol(), containingType) {
-				return true
+type constructorAccessibilityError struct {
+	kind           ast.ModifierFlags
+	declaringClass *Type
+}
+
+func (c *Checker) getConstructorAccessibilityError(node *ast.Node, signatures []*Signature, modifiersMask ast.ModifierFlags) *constructorAccessibilityError {
+	for _, signature := range signatures {
+		if signature.declaration == nil {
+			continue
+		}
+		declaration := signature.declaration
+		modifiers := getSelectedModifierFlags(declaration, modifiersMask)
+		// (1) Public constructors and (2) constructor functions are always accessible.
+		if modifiers == 0 || !ast.IsConstructorDeclaration(declaration) {
+			continue
+		}
+		declaringClassDeclaration := ast.GetClassLikeDeclarationOfSymbol(declaration.Parent.Symbol())
+		// A private or protected constructor can only be instantiated within its own class (or a subclass, for protected)
+		if !c.isNodeWithinClass(node, declaringClassDeclaration) {
+			containingClass := ast.GetContainingClass(node)
+			if containingClass != nil && modifiers&ast.ModifierFlagsProtected != 0 {
+				containingType := c.getTypeOfNode(containingClass)
+				if c.typeHasProtectedAccessibleBase(declaration.Parent.Symbol(), containingType) {
+					continue
+				}
+			}
+			return &constructorAccessibilityError{
+				kind:           modifiers,
+				declaringClass: c.getDeclaredTypeOfSymbol(declaration.Parent.Symbol()),
 			}
 		}
-		if modifiers&ast.ModifierFlagsPrivate != 0 {
-			c.error(node, diagnostics.Constructor_of_class_0_is_private_and_only_accessible_within_the_class_declaration, c.TypeToString(declaringClass))
-		}
-		if modifiers&ast.ModifierFlagsProtected != 0 {
-			c.error(node, diagnostics.Constructor_of_class_0_is_protected_and_only_accessible_within_the_class_declaration, c.TypeToString(declaringClass))
-		}
-		return false
 	}
-	return true
+	return nil
 }
 
 func (c *Checker) typeHasProtectedAccessibleBase(target *ast.Symbol, t *Type) bool {
