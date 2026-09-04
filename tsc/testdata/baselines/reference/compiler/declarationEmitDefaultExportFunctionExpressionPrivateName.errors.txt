@@ -1,0 +1,25 @@
+repro.ts(3,1): error TS4082: Default export of the module has or is using private name 'brand'.
+
+
+==== helper.ts (0 errors) ====
+    declare const brand: unique symbol;
+    
+    class Foo {
+      [brand]: number = 1;
+    }
+    
+    export function makeFoo() {
+      return new Foo();
+    }
+    
+==== repro.ts (1 errors) ====
+    import { makeFoo } from './helper';
+    
+    export default (function () {
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      return makeFoo();
+    ~~~~~~~~~~~~~~~~~~~
+    });
+    ~~~
+!!! error TS4082: Default export of the module has or is using private name 'brand'.
+    
