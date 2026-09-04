@@ -44,12 +44,10 @@ extends:
       - stage: Publish
         displayName: Publish vscode-typescript
         jobs:
-          - job: Publish
-            displayName: Publish vscode-typescript
+          - job: Validate
+            displayName: Validate vscode-typescript release
 
             templateContext:
-              type: releaseJob
-              isProduction: true
               inputs:
                 - input: pipelineArtifact
                   pipeline: TypeScript_VS_Code_Extension_Release_Build
@@ -180,7 +178,61 @@ extends:
                     az rest -u https://app.vssps.visualstudio.com/_apis/profile/profiles/me --resource 499b84ac-1321-427f-aa17-267ca6975798
                     npx vsce verify-pat TypeScriptTeam --azure-credential
 
-              - ${{ if eq(parameters.dryRun, false) }}:
+          - ${{ if eq(parameters.dryRun, false) }}:
+              - job: Approve
+                displayName: Approve production publication
+                dependsOn: Validate
+                pool: server
+                timeoutInMinutes: 5760
+                steps:
+                  - task: ManualValidation@1
+                    timeoutInMinutes: 4320
+                    inputs:
+                      notifyUsers: '[DevDiv]\TypeScript Team'
+                      approvers: '[DevDiv]\TypeScript Team'
+                      allowApproversToApproveTheirOwnRuns: true
+                      instructions: |
+                        Review the validated source tag, commit, extension version,
+                        bundled TypeScript version, target list, and signing results.
+                        Resume to publish the VSIXs to the Marketplace and GitHub Release.
+                      onTimeout: reject
+
+              - job: Publish
+                displayName: Publish vscode-typescript
+                dependsOn: Approve
+
+                templateContext:
+                  type: releaseJob
+                  isProduction: true
+                  inputs:
+                    - input: pipelineArtifact
+                      pipeline: TypeScript_VS_Code_Extension_Release_Build
+                      artifactName: vsix
+                      targetPath: $(Pipeline.Workspace)/vsix
+
+                steps:
+                  - checkout: none
+
+                  - task: NodeTool@0
+                    inputs:
+                      versionSpec: 24.x
+                    displayName: Install Node
+
+                  - bash: |
+                      cat > .npmrc << 'EOF'
+                      registry=https://pkgs.dev.azure.com/devdiv/devdiv/_packaging/devdiv_PublicPackages/npm/registry/
+                      EOF
+                      npm init -y
+                    displayName: Set up npm
+
+                  - task: npmAuthenticate@0
+                    inputs:
+                      workingFile: .npmrc
+                    displayName: Authenticate npm
+
+                  - bash: npm install @vscode/vsce@3.9.2
+                    displayName: Install vsce
+
                   - task: AzureCLI@2
                     displayName: Publish VSIXs to Marketplace
                     retryCountOnTaskFailure: 3
