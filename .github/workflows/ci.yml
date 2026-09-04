@@ -39,6 +39,7 @@ jobs:
       - uses: ./.github/actions/setup-go
       - run: npm ci
       - run: npx hereby typescript:release --forRelease --setPrerelease dev.0.0
+      - run: npx hereby vscode-typescript:release --forRelease --vscodeTypescriptRelease
 
   extension:
     runs-on: ubuntu-latest

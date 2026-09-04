@@ -1748,6 +1748,10 @@ const builtPublishedPlatformPackages = path.resolve("./built/published-platform-
 const builtSignTmp = path.resolve("./built/sign-tmp");
 const publishedTypeScriptAliasPackageName = "@typescript/bundled-typescript";
 const releasePackageEnv = { COREPACK_ENABLE_STRICT: "0" };
+const getReleasePackageRegistry = memoize(async () => {
+    const { stdout } = await runOutput("npm", ["config", "get", "registry"], { env: releasePackageEnv });
+    return stdout.trim();
+});
 
 const getVscodeTypeScriptExtensionPackageJson = memoize(() => JSON.parse(fs.readFileSync(path.join(extensionDir, "package.json"), "utf8")));
 
@@ -2765,17 +2769,36 @@ async function getPublishedPlatformPackageLibDirWorker(npmPackageName) {
     if (!lockEntry.resolved || typeof lockEntry.resolved !== "string") {
         throw new Error(`package-lock.json entry for ${npmPackageName}@${version} does not contain a tarball URL.`);
     }
-
-    console.log(`Fetching ${npmPackageName}@${version} with npm.`);
-    const { stdout } = await runOutput("npm", ["pack", "--json", `${npmPackageName}@${version}`], {
-        cwd: tarballDestination,
-        env: releasePackageEnv,
-    });
-    const [packed] = JSON.parse(stdout);
-    if (!packed.filename || typeof packed.filename !== "string") {
-        throw new Error(`npm pack ${npmPackageName}@${version} did not return a filename.`);
+    if (!lockEntry.integrity || typeof lockEntry.integrity !== "string") {
+        throw new Error(`package-lock.json entry for ${npmPackageName}@${version} does not contain an integrity hash.`);
     }
-    await tar.x({ file: path.join(tarballDestination, packed.filename), cwd: dest, strip: 1 });
+
+    const resolved = new URL(lockEntry.resolved);
+    if (resolved.origin === "https://registry.npmjs.org") {
+        const registry = new URL(await getReleasePackageRegistry());
+        resolved.protocol = registry.protocol;
+        resolved.host = registry.host;
+        resolved.pathname = path.posix.join(registry.pathname, resolved.pathname);
+    }
+
+    console.log(`Fetching locked ${npmPackageName}@${version} tarball from ${resolved}.`);
+    const response = await fetch(resolved);
+    if (!response.ok) {
+        throw new Error(`Failed to fetch ${npmPackageName}@${version}: ${response.status} ${response.statusText}.`);
+    }
+    const tarball = Buffer.from(await response.arrayBuffer());
+    const integrityMatch = /^sha512-(.+)$/.exec(lockEntry.integrity);
+    if (!integrityMatch) {
+        throw new Error(`Unsupported integrity hash for ${npmPackageName}@${version}: ${lockEntry.integrity}.`);
+    }
+    const expectedIntegrity = Buffer.from(integrityMatch[1], "base64");
+    const actualIntegrity = crypto.createHash("sha512").update(tarball).digest();
+    if (expectedIntegrity.length !== actualIntegrity.length || !crypto.timingSafeEqual(expectedIntegrity, actualIntegrity)) {
+        throw new Error(`Integrity check failed for ${npmPackageName}@${version}.`);
+    }
+    const tarballPath = path.join(tarballDestination, path.basename(resolved.pathname));
+    await fs.promises.writeFile(tarballPath, tarball);
+    await tar.x({ file: tarballPath, cwd: dest, strip: 1 });
 
     if (!fs.existsSync(lib)) {
         throw new Error(`Published platform package ${npmPackageName}@${version} did not contain a lib directory.`);

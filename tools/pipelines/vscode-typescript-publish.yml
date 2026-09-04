@@ -1,5 +1,7 @@
 trigger: none
 
+pr: none
+
 name: TypeScript-VS-Code-Extension-Release-Publish-$(Date:yyyyMMdd)$(Rev:.r)
 appendCommitMessageToRunName: false
 
