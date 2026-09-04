@@ -72,6 +72,12 @@ Iterator.zip(0);
 
 Iterator.zipKeyed({ a: 0 });
 
+const emptyKeyed: never[] = Iterator.zipKeyed({}).toArray();
+const emptyKeyedLongest: never[] = Iterator.zipKeyed({}, { mode: "longest", padding: {} }).toArray();
+
+declare const unionInputs: { a: Iterable<number>; } | { b: Iterator<string>; };
+const unionRows: ({ a: number; } | { b: string; })[] = Iterator.zipKeyed(unionInputs).toArray();
+
 
 //// [iteratorZip.js]
 "use strict";
@@ -116,3 +122,6 @@ Iterator.zip([[1], ["a"]], { mode: "longest", padding: [true] });
 Iterator.zip([[1]], { mode: "shortest", padding: [1] });
 Iterator.zip(0);
 Iterator.zipKeyed({ a: 0 });
+const emptyKeyed = Iterator.zipKeyed({}).toArray();
+const emptyKeyedLongest = Iterator.zipKeyed({}, { mode: "longest", padding: {} }).toArray();
+const unionRows = Iterator.zipKeyed(unionInputs).toArray();

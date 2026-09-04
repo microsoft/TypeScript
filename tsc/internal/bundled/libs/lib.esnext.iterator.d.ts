@@ -60,6 +60,8 @@ type IteratorZipResult<T, TExtra = never> = {
     -readonly [K in keyof T]: IteratorYield<T[K]> | TExtra;
 };
 
+type IteratorZipKeyedResult<T, TExtra = never> = T extends unknown ? keyof T extends never ? never : IteratorZipResult<T, TExtra> : never;
+
 declare global {
     interface IteratorObject<T, TReturn, TNext> {
         /**
@@ -113,7 +115,7 @@ declare global {
          * @param iterables An object whose enumerable own properties contain iterators or iterables to zip.
          * @param options Controls how differing input lengths are handled.
          */
-        zipKeyed<T extends object>(iterables: T & Record<keyof T, IteratorInput<unknown>>, options?: IteratorZipShortestOptions | (IteratorZipLongestOptions<NoInfer<IteratorZipResult<T>>> & { padding: NoInfer<IteratorZipResult<T>>; }) | IteratorZipStrictOptions): IteratorObject<IteratorZipResult<T>, undefined, unknown>;
-        zipKeyed<T extends object>(iterables: T & Record<keyof T, IteratorInput<unknown>>, options: IteratorZipOptions<NoInfer<Partial<IteratorZipResult<T>>>>): IteratorObject<IteratorZipResult<T, undefined>, undefined, unknown>;
+        zipKeyed<T extends object>(iterables: T & Record<keyof T, IteratorInput<unknown>>, options?: IteratorZipShortestOptions | (IteratorZipLongestOptions<NoInfer<IteratorZipResult<T>>> & { padding: NoInfer<IteratorZipResult<T>>; }) | IteratorZipStrictOptions): IteratorObject<IteratorZipKeyedResult<T>, undefined, unknown>;
+        zipKeyed<T extends object>(iterables: T & Record<keyof T, IteratorInput<unknown>>, options: IteratorZipOptions<NoInfer<Partial<IteratorZipResult<T>>>>): IteratorObject<IteratorZipKeyedResult<T, undefined>, undefined, unknown>;
     }
 }

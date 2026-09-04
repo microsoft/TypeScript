@@ -118,3 +118,9 @@ iteratorZip.ts(70,21): error TS2322: Type 'number' is not assignable to type 'nu
 !!! error TS2322: Type 'number' is not assignable to type 'number & IteratorInput<unknown>'.
 !!! related TS6500 iteratorZip.ts:70:21: The expected type comes from property 'a' which is declared here on type '{ a: number; } & Record<"a", IteratorInput<unknown>>'
     
+    const emptyKeyed: never[] = Iterator.zipKeyed({}).toArray();
+    const emptyKeyedLongest: never[] = Iterator.zipKeyed({}, { mode: "longest", padding: {} }).toArray();
+    
+    declare const unionInputs: { a: Iterable<number>; } | { b: Iterator<string>; };
+    const unionRows: ({ a: number; } | { b: string; })[] = Iterator.zipKeyed(unionInputs).toArray();
+    
