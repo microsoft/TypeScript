@@ -10,6 +10,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/execute/build"
 	"github.com/microsoft/TypeScript/tsc/internal/execute/tsctests"
 	"github.com/microsoft/TypeScript/tsc/internal/tsoptions"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"gotest.tools/v3/assert"
 )
 
@@ -108,7 +109,7 @@ func (b *buildOrderTestCase) run(t *testing.T) {
             }`, project, referencesStr)
 		}
 
-		sys := tsctests.NewTscSystem(files, true, "/home/src/workspaces/project")
+		sys := tsctests.NewTscSystem(files, tspath.CaseSensitive, "/home/src/workspaces/project")
 		args := append([]string{"--build", "--dry"}, b.projects...)
 		buildCommand := tsoptions.ParseBuildCommandLine(args, sys)
 		orchestrator := build.NewOrchestrator(build.Options{
@@ -116,7 +117,7 @@ func (b *buildOrderTestCase) run(t *testing.T) {
 			Command: buildCommand,
 		})
 		orchestrator.GenerateGraph(nil)
-		buildOrder := core.Map(orchestrator.Order(), b.projectName)
+		buildOrder := core.Map(orchestrator.Order(), func(config tspath.RootedFilePath) string { return b.projectName(config.AsString()) })
 		assert.DeepEqual(t, buildOrder, b.expected)
 		verifyDeps(orchestrator, buildOrder, false)
 
@@ -137,7 +138,7 @@ func (b *buildOrderTestCase) run(t *testing.T) {
 		}
 
 		orchestrator.GenerateGraphReusingOldTasks()
-		buildOrder2 := core.Map(orchestrator.Order(), b.projectName)
+		buildOrder2 := core.Map(orchestrator.Order(), func(config tspath.RootedFilePath) string { return b.projectName(config.AsString()) })
 		assert.DeepEqual(t, buildOrder2, b.expected)
 
 		argsWatch := append([]string{"--build", "--watch"}, b.projects...)
@@ -147,7 +148,7 @@ func (b *buildOrderTestCase) run(t *testing.T) {
 			Command: buildCommandWatch,
 		})
 		orchestrator.GenerateGraph(nil)
-		buildOrder3 := core.Map(orchestrator.Order(), b.projectName)
+		buildOrder3 := core.Map(orchestrator.Order(), func(config tspath.RootedFilePath) string { return b.projectName(config.AsString()) })
 		verifyDeps(orchestrator, buildOrder3, true)
 	})
 }

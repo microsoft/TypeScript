@@ -1,0 +1,271 @@
+	package typedpaths
+	
+	import (
+		"testdata/constants"
+		"testdata/internal/tspath"
+	)
+	
+	var implicitPath tspath.PathKey = "/implicit/path"
+	                                  ~
+!!! typedpaths: implicit conversion of non-empty constant to PathKey adds path invariants; use a tspath constructor
+	var emptyPath tspath.PathKey = ""
+	
+	type holder struct {
+		path tspath.PathKey
+	}
+	
+	type localPath tspath.PathKey
+	     ~
+!!! typedpaths: defining a new type from PathKey bypasses typed-path invariants; use a type alias
+	type pathAlias = tspath.PathKey
+	
+	// Invalid conversions and operations.
+	func bad(
+		value string,
+		path tspath.PathKey,
+		rootedPath tspath.RootedPath,
+		file tspath.RootedFilePath,
+		directory tspath.RootedDirectoryPath,
+	) {
+		_ = tspath.PathKey(value)
+		    ~
+!!! typedpaths: conversion from string to PathKey adds path invariants; use a tspath constructor
+		_ = tspath.RootedPath(value)
+		    ~
+!!! typedpaths: conversion from string to RootedPath adds path invariants; use a tspath constructor
+		_ = tspath.RootedFilePath(rootedPath)
+		    ~
+!!! typedpaths: conversion from RootedPath to RootedFilePath adds path invariants; use a tspath constructor
+		_ = tspath.RootedDirectoryPath(rootedPath)
+		    ~
+!!! typedpaths: conversion from RootedPath to RootedDirectoryPath adds path invariants; use a tspath constructor
+		_ = tspath.RootedDirectoryPath(file)
+		    ~
+!!! typedpaths: conversion from RootedFilePath to RootedDirectoryPath adds path invariants; use a tspath constructor
+		_ = tspath.RootedFilePath(directory)
+		    ~
+!!! typedpaths: conversion from RootedDirectoryPath to RootedFilePath adds path invariants; use a tspath constructor
+		_ = tspath.RelativePath(value)
+		    ~
+!!! typedpaths: conversion from string to RelativePath adds path invariants; use a tspath constructor
+		_ = tspath.SourceMapLocation(value)
+		    ~
+!!! typedpaths: conversion from string to SourceMapLocation adds path invariants; use a tspath constructor
+		_ = tspath.ModuleSpecifier(value)
+		    ~
+!!! typedpaths: conversion from string to ModuleSpecifier adds path invariants; use a tspath constructor
+		_ = tspath.FileSpec(value)
+		    ~
+!!! typedpaths: conversion from string to FileSpec adds path invariants; use a tspath constructor
+		_ = tspath.PathPattern(value)
+		    ~
+!!! typedpaths: conversion from string to PathPattern adds path invariants; use a tspath constructor
+		_ = tspath.PathKey("/constant/is/still/a/cast")
+		    ~
+!!! typedpaths: conversion from constant to PathKey adds path invariants; use a tspath constructor
+		_ = tspath.NormalizePath(path.AsString())
+		                         ~
+!!! typedpaths: path.AsString() converts PathKey to string before NormalizePath; use a typed tspath operation
+		_ = tspath.NormalizeSlashes(string(file))
+		                            ~
+!!! typedpaths: string(file) converts RootedFilePath to string before NormalizeSlashes; use a typed tspath operation
+		_ = tspath.GetDirectoryPath(path.AsString())
+		                            ~
+!!! typedpaths: path.AsString() converts PathKey to string before GetDirectoryPath; use a typed tspath operation
+		_ = tspath.GetDirectoryPath(file.AsString())
+		                            ~
+!!! typedpaths: file.AsString() converts RootedFilePath to string before GetDirectoryPath; use a typed tspath operation
+		_ = tspath.EnsureTrailingDirectorySeparator(string(path))
+		_ = tspath.RemoveTrailingDirectorySeparator(path.AsString())
+		                                            ~
+!!! typedpaths: path.AsString() converts PathKey to string before RemoveTrailingDirectorySeparator; use a typed tspath operation
+		_ = tspath.RootedPathFromNormalized(path.AsString())
+		                                    ~
+!!! typedpaths: path.AsString() converts PathKey to string before RootedPathFromNormalized; use a typed tspath operation
+		_ = tspath.RootedFilePathFromAbsolute(path.AsString())
+		                                      ~
+!!! typedpaths: path.AsString() converts PathKey to string before RootedFilePathFromAbsolute; use a typed tspath operation
+		_ = tspath.ToRootedDirectoryPath(path.AsString(), directory)
+		                                 ~
+!!! typedpaths: path.AsString() converts PathKey to string before ToRootedDirectoryPath; use a typed tspath operation
+		_ = tspath.RootedPathFromNormalized((path.AsString()))
+		                                    ~
+!!! typedpaths: (path.AsString()) converts PathKey to string before RootedPathFromNormalized; use a typed tspath operation
+		_ = holder{path: "/implicit/field"}
+		                 ~
+!!! typedpaths: implicit conversion of non-empty constant to PathKey adds path invariants; use a tspath constructor
+		_ = path[1:]
+		    ~
+!!! typedpaths: slicing PathKey produces an unvalidated substring; use a typed tspath operation
+		_ = file[:len(file)-1]
+		    ~
+!!! typedpaths: slicing RootedFilePath produces an unvalidated substring; use a typed tspath operation
+		_ = path + "/child"
+		    ~
+!!! typedpaths: concatenating PathKey may invalidate path invariants; use a typed tspath operation
+		_ = "prefix/" + file
+		    ~
+!!! typedpaths: concatenating RootedFilePath may invalidate path invariants; use a typed tspath operation
+		path += "/child"
+		~
+!!! typedpaths: concatenating PathKey may invalidate path invariants; use a typed tspath operation
+		_ = path.ContainsLowercaseDirectorySequence("/node_modules/@Types/")
+		                                            ~
+!!! typedpaths: directory sequence must be lowercase and include leading and trailing separators
+		sequence := "/node_modules/@types/"
+		_ = path.ContainsLowercaseDirectorySequence(sequence)
+		                                            ~
+!!! typedpaths: directory sequence must be a lowercase string constant
+	}
+	
+	func badReturn() tspath.PathKey {
+		return "/implicit/return"
+		       ~
+!!! typedpaths: implicit conversion of non-empty constant to PathKey adds path invariants; use a tspath constructor
+	}
+	
+	func consumePath(tspath.PathKey) {}
+	
+	func badImportedConstants() tspath.PathKey {
+		var path tspath.PathKey
+		path = constants.Path
+		       ~
+!!! typedpaths: implicit conversion of non-empty constant to PathKey adds path invariants; use a tspath constructor
+		_ = path
+		_ = holder{path: constants.Path}
+		                 ~
+!!! typedpaths: implicit conversion of non-empty constant to PathKey adds path invariants; use a tspath constructor
+		consumePath(constants.Path)
+		            ~
+!!! typedpaths: implicit conversion of non-empty constant to PathKey adds path invariants; use a tspath constructor
+		_ = []tspath.PathKey{constants.Path}
+		                     ~
+!!! typedpaths: implicit conversion of non-empty constant to PathKey adds path invariants; use a tspath constructor
+		_ = map[string]tspath.PathKey{"path": constants.Path}
+		                                      ~
+!!! typedpaths: implicit conversion of non-empty constant to PathKey adds path invariants; use a tspath constructor
+		_ = map[tspath.PathKey]bool{constants.Path: true}
+		                            ~
+!!! typedpaths: implicit conversion of non-empty constant to PathKey adds path invariants; use a tspath constructor
+		return constants.Path
+		       ~
+!!! typedpaths: implicit conversion of non-empty constant to PathKey adds path invariants; use a tspath constructor
+	}
+	
+	func badGeneric[T tspath.PathKey](path T) {
+		_ = path[1:]
+		    ~
+!!! typedpaths: slicing PathKey produces an unvalidated substring; use a typed tspath operation
+		_ = path + "/child"
+		    ~
+!!! typedpaths: concatenating PathKey may invalidate path invariants; use a typed tspath operation
+		path += "/child"
+		~
+!!! typedpaths: concatenating PathKey may invalidate path invariants; use a typed tspath operation
+	}
+	
+	// Invalid operations through a union constraint.
+	// Valid typed-path operations.
+	func good(
+		path tspath.PathKey,
+		rootedPath tspath.RootedPath,
+		file tspath.RootedFilePath,
+		directory tspath.RootedDirectoryPath,
+	) {
+		_ = tspath.RootedPath(file)
+		_ = tspath.RootedPath(directory)
+		_ = tspath.ToRootedFilePath("through/a/constructor", tspath.RootedDirectoryPathFromNormalized("/project"))
+		_ = tspath.NormalizePath("raw/input")
+		_ = file.Directory()
+		_ = path.Parent()
+		_ = path.ContainsLowercaseDirectorySequence("/node_modules/@types/")
+		_ = path[0]
+	}
+	
+	const constantRoot = "/project"
+	
+	func badConstructorConstants() {
+		_ = tspath.RootedPathFromAbsolute("relative/path")
+		                                  ~
+!!! typedpaths: constant argument to RootedPathFromAbsolute must be absolute
+		_ = tspath.RootedPathFromAbsolute("http://server/file.ts?query")
+		                                  ~
+!!! typedpaths: constant argument to RootedPathFromAbsolute must be absolute
+		_ = tspath.RootedFilePathFromAbsolute("relative/path")
+		                                      ~
+!!! typedpaths: constant argument to RootedFilePathFromAbsolute must be absolute
+		_ = tspath.RootedDirectoryPathFromAbsolute("relative/path")
+		                                           ~
+!!! typedpaths: constant argument to RootedDirectoryPathFromAbsolute must be absolute
+		_ = tspath.RootedPathFromNormalized("")
+		                                    ~
+!!! typedpaths: constant argument to RootedPathFromNormalized must be rooted and normalized
+		_ = tspath.RootedFilePathFromNormalized("/project/../file.ts")
+		                                        ~
+!!! typedpaths: constant argument to RootedFilePathFromNormalized must be rooted and normalized
+		_ = tspath.RootedDirectoryPathFromNormalized("/project/")
+		                                             ~
+!!! typedpaths: constant argument to RootedDirectoryPathFromNormalized must be rooted and normalized
+		_ = tspath.RelativePathFromNormalized("/project/file.ts")
+		                                      ~
+!!! typedpaths: constant argument to RelativePathFromNormalized must be relative and normalized
+		_ = tspath.PathKeyFromCanonical("project/file.ts")
+		                                ~
+!!! typedpaths: constant argument to PathKeyFromCanonical must be empty or rooted and normalized
+		_ = tspath.PathKeyFromCanonical("c:")
+		                                ~
+!!! typedpaths: constant argument to PathKeyFromCanonical must be empty or rooted and normalized
+		_ = tspath.PathKeyFromCanonical("//server")
+		                                ~
+!!! typedpaths: constant argument to PathKeyFromCanonical must be empty or rooted and normalized
+		_ = tspath.PathKeyFromCanonical("http://server")
+		                                ~
+!!! typedpaths: constant argument to PathKeyFromCanonical must be empty or rooted and normalized
+		_ = tspath.PathKeyFromCanonical("file:///c:")
+		                                ~
+!!! typedpaths: constant argument to PathKeyFromCanonical must be empty or rooted and normalized
+		_ = tspath.ToRelativePath("/project/file.ts")
+		                          ~
+!!! typedpaths: constant argument to ToRelativePath must be relative
+		_ = tspath.ToRootedFilePath("relative/path", "")
+		                            ~
+!!! typedpaths: constant argument to ToRootedFilePath must be non-empty and rooted, or relative to a rooted current directory
+		_ = tspath.ToRootedFilePath("http://server/file.ts#fragment", tspath.RootedDirectoryPathFromNormalized("/project"))
+		                            ~
+!!! typedpaths: constant argument to ToRootedFilePath must not contain a URL query or fragment
+		_ = tspath.ToRootedFilePath("file.ts?query", tspath.RootedDirectoryPathFromNormalized("http://server/base"))
+		                            ~
+!!! typedpaths: constant argument to ToRootedFilePath must be non-empty and rooted, or relative to a rooted current directory
+		_ = tspath.ToRootedFilePath("file.ts?query", tspath.RootedDirectoryPathFromPath(tspath.RootedPathFromNormalized("http://server/base")))
+		                            ~
+!!! typedpaths: constant argument to ToRootedFilePath must be non-empty and rooted, or relative to a rooted current directory
+		_ = tspath.ToRootedFilePath("file.ts?query", (tspath.RootedDirectoryPathFromNormalized("http://server/base")))
+		                            ~
+!!! typedpaths: constant argument to ToRootedFilePath must be non-empty and rooted, or relative to a rooted current directory
+		_ = tspath.ToRootedFilePath("file.ts?query", tspath.RootedDirectoryPath(tspath.RootedFilePathFromNormalized("http://server/base")))
+		                            ~
+!!! typedpaths: constant argument to ToRootedFilePath must be non-empty and rooted, or relative to a rooted current directory
+		                                             ~
+!!! typedpaths: conversion from RootedFilePath to RootedDirectoryPath adds path invariants; use a tspath constructor
+		_ = tspath.ToRootedFilePath("file.ts", tspath.RootedDirectoryPathFromAbsolute("/project/../base"))
+		_ = tspath.ToRootedFilePath("file.ts", tspath.ToRootedDirectoryPath("base", tspath.RootedDirectoryPathFromNormalized("/project")))
+		_ = tspath.ToRootedFilePath("", tspath.RootedDirectoryPathFromNormalized("/project"))
+		                            ~
+!!! typedpaths: constant argument to ToRootedFilePath must be non-empty and rooted, or relative to a rooted current directory
+	}
+	
+	func goodConstructorConstants(dynamic string) {
+		_ = tspath.RootedPathFromAbsolute("/project/file.ts")
+		_ = tspath.RootedFilePathFromAbsolute(`C:\project\file.ts`)
+		_ = tspath.RootedDirectoryPathFromAbsolute("file:///project")
+		_ = tspath.RootedPathFromNormalized("/")
+		_ = tspath.RootedPathFromNormalized("FILE:///C:/")
+		_ = tspath.RootedFilePathFromNormalized(constantRoot + "/file.ts")
+		_ = tspath.RootedDirectoryPathFromNormalized("^/untitled")
+		_ = tspath.RelativePathFromNormalized("../project/")
+		_ = tspath.PathKeyFromCanonical("")
+		_ = tspath.PathKeyFromCanonical("/project/file.ts")
+		_ = tspath.ToRelativePath("../project/file.ts")
+		_ = tspath.RootedFilePathFromNormalized(dynamic)
+	}
+	

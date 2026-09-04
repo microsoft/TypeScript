@@ -3,6 +3,7 @@ package change
 import (
 	"context"
 	"slices"
+	"strings"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/astnav"
@@ -16,6 +17,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/scanner"
 	"github.com/microsoft/TypeScript/tsc/internal/spanmap"
 	"github.com/microsoft/TypeScript/tsc/internal/stringutil"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 )
 
 type NodeOptions struct {
@@ -97,7 +99,7 @@ type Tracker struct {
 	// unmappableFiles collects the files for which an edit could not be represented within a single
 	// verbatim span of the original text. GetChanges drops their edits so a partial, corrupting change is
 	// never emitted for a content-mapped file.
-	unmappableFiles collections.Set[string]
+	unmappableFiles collections.Set[tspath.RootedFilePath]
 
 	// created during call to getChanges
 	writer *printer.ChangeTrackerWriter
@@ -131,7 +133,7 @@ func NewTracker(ctx context.Context, compilerOptions *core.CompilerOptions, form
 // logical change atomic, and returning the result inline means a caller cannot forget to check it or
 // accidentally emit a partial, corrupting change.
 // Note: after calling this, the Tracker object must be discarded!
-func (t *Tracker) GetChanges() (map[string][]*lsproto.TextEdit, []string) {
+func (t *Tracker) GetChanges() (map[tspath.RootedFilePath][]*lsproto.TextEdit, []tspath.RootedFilePath) {
 	t.finishDeleteDeclarations()
 	t.finishNodesWithInsertionsAtStart()
 	changes := t.getTextChangesFromChanges()
@@ -139,12 +141,14 @@ func (t *Tracker) GetChanges() (map[string][]*lsproto.TextEdit, []string) {
 	if t.unmappableFiles.Len() == 0 {
 		return changes, nil
 	}
-	unmappable := make([]string, 0, t.unmappableFiles.Len())
+	unmappable := make([]tspath.RootedFilePath, 0, t.unmappableFiles.Len())
 	for fileName := range t.unmappableFiles.Keys() {
 		delete(changes, fileName)
 		unmappable = append(unmappable, fileName)
 	}
-	slices.Sort(unmappable)
+	slices.SortFunc(unmappable, func(a, b tspath.RootedFilePath) int {
+		return strings.Compare(a.AsString(), b.AsString())
+	})
 	return changes, unmappable
 }
 

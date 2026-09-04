@@ -16,9 +16,9 @@ import (
 
 type DocumentUri string // !!!
 
-func (uri DocumentUri) FileName() string {
+func (uri DocumentUri) FileName() tspath.RootedFilePath {
 	if bundled.IsBundled(string(uri)) {
-		return string(uri)
+		return tspath.RootedFilePathFromAbsolute(string(uri))
 	}
 	if strings.HasPrefix(string(uri), "file://") {
 		parsed, err := url.Parse(string(uri))
@@ -26,9 +26,9 @@ func (uri DocumentUri) FileName() string {
 			panic(fmt.Sprintf("invalid file URI: %s", uri))
 		}
 		if parsed.Host != "" {
-			return "//" + parsed.Host + parsed.Path
+			return tspath.RootedFilePathFromAbsolute("//" + parsed.Host + parsed.Path)
 		}
-		return fixWindowsURIPath(parsed.Path)
+		return tspath.RootedFilePathFromAbsolute(fixWindowsURIPath(parsed.Path))
 	}
 
 	// Leave all other URIs escaped so we can round-trip them.
@@ -37,7 +37,6 @@ func (uri DocumentUri) FileName() string {
 	if !ok {
 		panic(fmt.Sprintf("invalid URI: %s", uri))
 	}
-
 	var suffix string
 	if suffixStart := strings.IndexAny(path, "?#"); suffixStart != -1 {
 		path, suffix = path[:suffixStart], path[suffixStart:]
@@ -55,7 +54,6 @@ func (uri DocumentUri) FileName() string {
 			hasPath = false
 		}
 	}
-
 	encodedAuthority := authority
 	if hasAuthority {
 		if authority == "ts-nul-authority" {
@@ -71,37 +69,29 @@ func (uri DocumentUri) FileName() string {
 		encodedPath = tspath.EncodeDynamicURINoPath(suffix)
 	}
 
-	return tspath.DynamicURIFileNamePrefix + scheme + "/" + encodedAuthority + "/" + encodedPath
+	return tspath.RootedFilePathFromNormalized(
+		tspath.DynamicURIFileNamePrefix + scheme + "/" + encodedAuthority + "/" + encodedPath,
+	)
 }
 
-func (uri DocumentUri) Path(useCaseSensitiveFileNames bool) tspath.Path {
-	fileName := uri.FileName()
-	if tspath.IsEncodedDynamicFileName(fileName) {
-		return tspath.Path(canonicalDynamicFileName(fileName))
-	}
-	return tspath.ToPath(fileName, "", useCaseSensitiveFileNames)
+func (uri DocumentUri) PathKey(caseSensitivity tspath.CaseSensitivity) tspath.PathKey {
+	return caseSensitivity.PathKey(tspath.RootedPath(uri.FileName()))
 }
 
-func canonicalDynamicFileName(fileName string) string {
-	if tspath.GetRootLength(fileName) == len(fileName) && !tspath.HasTrailingDirectorySeparator(fileName) {
-		return fileName + string(tspath.DirectorySeparator)
-	}
-	return fileName
-}
-
-func DynamicFileNameToDocumentUri(fileName string) DocumentUri {
-	encoded := tspath.IsEncodedDynamicFileName(fileName)
+func DynamicFileNameToDocumentUri(fileName tspath.RootedPath) DocumentUri {
+	path := fileName.AsString()
+	encoded := tspath.IsEncodedDynamicFileName(path)
 	start := 2
 	if encoded {
 		start = len(tspath.DynamicURIFileNamePrefix)
 	}
-	scheme, rest, ok := strings.Cut(fileName[start:], "/")
+	scheme, rest, ok := strings.Cut(path[start:], "/")
 	if !ok {
-		panic("invalid file name: " + fileName)
+		panic("invalid file name: " + path)
 	}
 	authority, uriPath, ok := strings.Cut(rest, "/")
 	if !ok {
-		panic("invalid file name: " + fileName)
+		panic("invalid file name: " + path)
 	}
 	hasAuthority := authority != "ts-nul-authority"
 	if encoded {

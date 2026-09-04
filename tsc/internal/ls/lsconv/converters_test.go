@@ -24,7 +24,7 @@ func TestDocumentURIToFileName(t *testing.T) {
 
 	tests := []struct {
 		uri      lsproto.DocumentUri
-		fileName string
+		fileName tspath.RootedFilePath
 	}{
 		{"file:///path/to/file.ts", "/path/to/file.ts"},
 		{"file://server/share/file.ts", "//server/share/file.ts"},
@@ -38,7 +38,8 @@ func TestDocumentURIToFileName(t *testing.T) {
 		{"file:///c:/test %25/path", "c:/test %/path"},
 		// {"file:?q", "/"},
 		{"file:///_:/path", "/_:/path"},
-		{"file:///users/me/c%23-projects/", "/users/me/c#-projects/"},
+		{"file:///users/me/c%23-projects/", "/users/me/c#-projects"},
+		{"file:///a/../b.ts", "/b.ts"},
 		{"file://localhost/c%24/GitDevelopment/express", "//localhost/c$/GitDevelopment/express"},
 		{"file:///c%3A/test%20with%20%2525/c%23code", "c:/test with %25/c#code"},
 
@@ -61,34 +62,34 @@ func TestFileNameToDocumentURI(t *testing.T) {
 	t.Parallel()
 
 	tests := []struct {
-		fileName string
+		fileName tspath.RootedFilePath
 		uri      lsproto.DocumentUri
 	}{
-		{"/path/to/file.ts", "file:///path/to/file.ts"},
-		{"//server/share/file.ts", "file://server/share/file.ts"},
-		{"d:/work/tsgo932/lib/utils.ts", "file:///d%3A/work/tsgo932/lib/utils.ts"},
-		{"d:/work/tsgo932/lib/utils.ts", "file:///d%3A/work/tsgo932/lib/utils.ts"},
-		{"d:/work/tsgo932/app/(test)/comp/comp-test.tsx", "file:///d%3A/work/tsgo932/app/%28test%29/comp/comp-test.tsx"},
-		{"/path/to/file.ts", "file:///path/to/file.ts"},
-		{"c:/test/me", "file:///c%3A/test/me"},
-		{"//shares/files/c#/p.cs", "file://shares/files/c%23/p.cs"},
-		{"c:/Source/Zürich or Zurich (ˈzjʊərɪk,/Code/resources/app/plugins/c#/plugin.json", "file:///c%3A/Source/Z%C3%BCrich%20or%20Zurich%20%28%CB%88zj%CA%8A%C9%99r%C9%AAk%2C/Code/resources/app/plugins/c%23/plugin.json"},
-		{"c:/test %/path", "file:///c%3A/test%20%25/path"},
-		{"/", "file:///"},
-		{"/_:/path", "file:///_%3A/path"},
-		{"/users/me/c#-projects/", "file:///users/me/c%23-projects/"},
-		{"//localhost/c$/GitDevelopment/express", "file://localhost/c%24/GitDevelopment/express"},
-		{"c:/test with %25/c#code", "file:///c%3A/test%20with%20%2525/c%23code"},
+		{tspath.RootedFilePathFromAbsolute("/path/to/file.ts"), "file:///path/to/file.ts"},
+		{tspath.RootedFilePathFromAbsolute("//server/share/file.ts"), "file://server/share/file.ts"},
+		{tspath.RootedFilePathFromAbsolute("d:/work/tsgo932/lib/utils.ts"), "file:///d%3A/work/tsgo932/lib/utils.ts"},
+		{tspath.RootedFilePathFromAbsolute("d:/work/tsgo932/lib/utils.ts"), "file:///d%3A/work/tsgo932/lib/utils.ts"},
+		{tspath.RootedFilePathFromAbsolute("d:/work/tsgo932/app/(test)/comp/comp-test.tsx"), "file:///d%3A/work/tsgo932/app/%28test%29/comp/comp-test.tsx"},
+		{tspath.RootedFilePathFromAbsolute("/path/to/file.ts"), "file:///path/to/file.ts"},
+		{tspath.RootedFilePathFromAbsolute("c:/test/me"), "file:///c%3A/test/me"},
+		{tspath.RootedFilePathFromAbsolute("//shares/files/c#/p.cs"), "file://shares/files/c%23/p.cs"},
+		{tspath.RootedFilePathFromAbsolute("c:/Source/Zürich or Zurich (ˈzjʊərɪk,/Code/resources/app/plugins/c#/plugin.json"), "file:///c%3A/Source/Z%C3%BCrich%20or%20Zurich%20%28%CB%88zj%CA%8A%C9%99r%C9%AAk%2C/Code/resources/app/plugins/c%23/plugin.json"},
+		{tspath.RootedFilePathFromAbsolute("c:/test %/path"), "file:///c%3A/test%20%25/path"},
+		{tspath.RootedFilePathFromAbsolute("/"), "file:///"},
+		{tspath.RootedFilePathFromAbsolute("/_:/path"), "file:///_%3A/path"},
+		{tspath.RootedFilePathFromAbsolute("/users/me/c#-projects/"), "file:///users/me/c%23-projects"},
+		{tspath.RootedFilePathFromAbsolute("//localhost/c$/GitDevelopment/express"), "file://localhost/c%24/GitDevelopment/express"},
+		{tspath.RootedFilePathFromAbsolute("c:/test with %25/c#code"), "file:///c%3A/test%20with%20%2525/c%23code"},
 
-		{"^/untitled/ts-nul-authority/Untitled-1", "untitled:Untitled-1"},
-		{"^/untitled/ts-nul-authority/c:/Users/jrieken/Code/abc.txt", "untitled:c:/Users/jrieken/Code/abc.txt"},
-		{"^/untitled/ts-nul-authority///wsl%2Bubuntu/home/jabaile/work/TypeScript/newfile.ts", "untitled://wsl%2Bubuntu/home/jabaile/work/TypeScript/newfile.ts"},
+		{tspath.RootedFilePathFromAbsolute("^/untitled/ts-nul-authority/Untitled-1"), "untitled:Untitled-1"},
+		{tspath.RootedFilePathFromAbsolute("^/untitled/ts-nul-authority/c:/Users/jrieken/Code/abc.txt"), "untitled:c:/Users/jrieken/Code/abc.txt"},
+		{tspath.RootedFilePathFromAbsolute("^/untitled/wsl%2Bubuntu/home/jabaile/work/TypeScript/newfile.ts"), "untitled://wsl%2Bubuntu/home/jabaile/work/TypeScript/newfile.ts"},
 	}
 
 	for _, test := range tests {
-		t.Run(test.fileName, func(t *testing.T) {
+		t.Run(test.fileName.AsString(), func(t *testing.T) {
 			t.Parallel()
-			assert.Equal(t, lsconv.FileNameToDocumentURI(test.fileName), test.uri)
+			assert.Equal(t, lsconv.FilePathToDocumentURI(test.fileName), test.uri)
 		})
 	}
 }
@@ -99,12 +100,24 @@ func TestNonFileDocumentURIRoundTripsThroughNormalizedFileName(t *testing.T) {
 	assert.Equal(
 		t,
 		lsproto.DocumentUri(`custom:folder/../~ts-uri~/café\file.ts`).FileName(),
-		`^/~ts-uri-v2~/custom/ts-nul-authority/folder/~ts-uri~v2~2e2e~/~ts-uri~/~ts-uri~v2~636166c3a95c66696c65~.ts`,
+		tspath.RootedFilePathFromNormalized(`^/~ts-uri-v2~/custom/ts-nul-authority/folder/~ts-uri~v2~2e2e~/~ts-uri~/~ts-uri~v2~636166c3a95c66696c65~.ts`),
+	)
+	assert.Equal(
+		t,
+		lsproto.DocumentUri("custom:.git/file.ts").FileName(),
+		tspath.RootedFilePathFromNormalized("^/~ts-uri-v2~/custom/ts-nul-authority/.git/file.ts"),
 	)
 	assert.Equal(
 		t,
 		lsproto.DocumentUri("custom:~ts-uri~v2~dir.js/file.ts?x=1").FileName(),
-		"^/~ts-uri-v2~/custom/ts-nul-authority/~ts-uri~v2~7e74732d7572697e76327e6469722e6a73~/~ts-uri~v2~66696c65003f783d31~.ts",
+		tspath.RootedFilePathFromNormalized(
+			"^/~ts-uri-v2~/custom/ts-nul-authority/~ts-uri~v2~7e74732d7572697e76327e6469722e6a73~/~ts-uri~v2~66696c65003f783d31~.ts",
+		),
+	)
+	assert.Equal(
+		t,
+		lsproto.DocumentUri("custom:c:/dir/file.ts?x=1").FileName().Directory(),
+		lsproto.DocumentUri("custom:c:/dir/other.ts").FileName().Directory(),
 	)
 
 	for _, uri := range []lsproto.DocumentUri{
@@ -135,8 +148,10 @@ func TestNonFileDocumentURIRoundTripsThroughNormalizedFileName(t *testing.T) {
 	} {
 		t.Run(string(uri), func(t *testing.T) {
 			t.Parallel()
+
 			fileName := uri.FileName()
-			assert.Equal(t, lsconv.FileNameToDocumentURI(fileName), uri)
+			assert.Equal(t, tspath.RootedFilePathFromNormalized(fileName.AsString()), fileName)
+			assert.Equal(t, lsconv.FilePathToDocumentURI(fileName), uri)
 		})
 	}
 
@@ -147,23 +162,52 @@ func TestNonFileDocumentURIRoundTripsThroughNormalizedFileName(t *testing.T) {
 		"custom:~ts-uri~v1~file.ts",
 		"custom:~ts-uri~v2~file.ts",
 	} {
-		assert.Equal(t, tspath.TryGetExtensionFromPath(uri.FileName()), tspath.ExtensionTs)
+		assert.Equal(t, uri.FileName().Extension(), tspath.ExtensionTs)
 	}
+	for _, uri := range []lsproto.DocumentUri{
+		"custom:~ts-uri~v2~types.d.ts",
+		"custom:~ts-uri~v2~types.d.mts",
+		"custom:~ts-uri~v2~types.d.css.ts",
+	} {
+		assert.Equal(t, uri.FileName().IsDeclarationFile(), true)
+	}
+	assert.Equal(t, lsproto.DocumentUri("custom:~ts-uri~v2~types.d.ts").FileName().Extension(), tspath.ExtensionDts)
+	assert.Equal(t, lsproto.DocumentUri("custom:~ts-uri~v2~types.d.mts").FileName().Extension(), tspath.ExtensionDmts)
+	assert.Equal(t, strings.HasSuffix(lsproto.DocumentUri("custom:~ts-uri~v2~types.d.css.ts").FileName().AsString(), ".d.css.ts"), true)
 
-	legacyFileName := "^/custom/ts-nul-authority/~ts-uri~2e2e"
-	assert.Equal(t, lsconv.FileNameToDocumentURI(legacyFileName), lsproto.DocumentUri("custom:~ts-uri~2e2e"))
+	exceptionalSibling := lsproto.DocumentUri(`custom:folder/main\file.ts`).FileName()
+	ordinarySibling := lsproto.DocumentUri("custom:folder/dep.ts").FileName()
+	assert.Equal(t, exceptionalSibling.Directory(), ordinarySibling.Directory())
 
-	previousVersionFileName := "^/custom/ts-nul-authority/~ts-uri~v1~466f6f~.ts"
-	assert.Equal(t, lsconv.FileNameToDocumentURI(previousVersionFileName), lsproto.DocumentUri("custom:~ts-uri~v1~466f6f~.ts"))
+	authorityFile := lsproto.DocumentUri("custom://a/main.ts").FileName()
+	authoritySibling := lsproto.DocumentUri("custom://a/b/dep.ts").FileName()
+	assert.Equal(t, authorityFile.Directory().ResolveFile("../b/dep.ts"), authoritySibling)
+	authorityOnly := lsproto.DocumentUri("custom://a").FileName()
+	assert.Equal(t, authorityOnly.Directory().ResolveFile("dep.ts"), lsproto.DocumentUri("custom://a/dep.ts").FileName())
+	queryFile := lsproto.DocumentUri("custom:path/file.ts?rev=a/b").FileName()
+	assert.Equal(t, queryFile.Extension(), tspath.ExtensionTs)
+	assert.Equal(t, queryFile.Directory(), lsproto.DocumentUri("custom:path/other.ts").FileName().Directory())
+	assert.Assert(
+		t,
+		lsproto.DocumentUri("custom:~ts-uri~v2~Foo.ts").PathKey(tspath.CaseInsensitive) !=
+			lsproto.DocumentUri("custom:~ts-uri~v2~foo.ts").PathKey(tspath.CaseInsensitive),
+	)
 
-	invalidUTF8FileName := "^/~ts-uri-v2~/custom/ts-nul-authority/~ts-uri~v2~ff~"
-	assert.Equal(t, lsconv.FileNameToDocumentURI(invalidUTF8FileName), lsproto.DocumentUri("custom:~ts-uri~v2~ff~"))
+	legacyFileName := tspath.RootedFilePathFromNormalized("^/custom/ts-nul-authority/~ts-uri~2e2e")
+	assert.Equal(t, lsconv.FilePathToDocumentURI(legacyFileName), lsproto.DocumentUri("custom:~ts-uri~2e2e"))
+
+	previousVersionFileName := tspath.RootedFilePathFromNormalized("^/custom/ts-nul-authority/~ts-uri~v1~466f6f~.ts")
+	assert.Equal(t, lsconv.FilePathToDocumentURI(previousVersionFileName), lsproto.DocumentUri("custom:~ts-uri~v1~466f6f~.ts"))
+
+	invalidUTF8FileName := tspath.RootedFilePathFromNormalized(
+		"^/~ts-uri-v2~/custom/ts-nul-authority/~ts-uri~v2~ff~",
+	)
+	assert.Equal(t, lsconv.FilePathToDocumentURI(invalidUTF8FileName), lsproto.DocumentUri("custom:~ts-uri~v2~ff~"))
 
 	assert.Assert(
 		t,
 		lsproto.DocumentUri(`custom:name.ts\`).FileName() != lsproto.DocumentUri("custom:name..ts").FileName(),
 	)
-	assert.Assert(t, strings.HasSuffix(lsproto.DocumentUri("custom:~ts-uri~v2~types.d.css.ts").FileName(), ".d.css.ts"))
 }
 
 type testScript struct {
@@ -173,9 +217,12 @@ type testScript struct {
 	spanMap      *spanmap.SpanMap
 }
 
-func (s *testScript) FileName() string         { return s.name }
-func (s *testScript) OriginalFileName() string { return s.name }
-func (s *testScript) Text() string             { return s.text }
+func (s *testScript) FileName() tspath.RootedFilePath { return tspath.ToRootedFilePath(s.name, "/") }
+
+func (s *testScript) OriginalFileName() tspath.RootedFilePath {
+	return tspath.ToRootedFilePath(s.name, "/")
+}
+func (s *testScript) Text() string { return s.text }
 func (s *testScript) OriginalText() string {
 	if s.originalText != "" {
 		return s.originalText
@@ -187,7 +234,7 @@ func (s *testScript) SpanMap() *spanmap.SpanMap { return s.spanMap }
 func newTestConverters(text string) (*lsconv.Converters, *testScript) {
 	script := &testScript{name: "test.ts", text: text}
 	lineMap := lsconv.ComputeLSPLineStarts(text)
-	conv := lsconv.NewConverters(lsproto.PositionEncodingKindUTF16, func(_ string) *lsconv.LSPLineMap {
+	conv := lsconv.NewConverters(lsproto.PositionEncodingKindUTF16, func(_ tspath.RootedFilePath) *lsconv.LSPLineMap {
 		return lineMap
 	})
 	return conv, script
@@ -196,10 +243,10 @@ func newTestConverters(text string) (*lsconv.Converters, *testScript) {
 func TestConvertersSourceFileProjectionExpansion(t *testing.T) {
 	t.Parallel()
 	original := "x"
-	parseOptions := ast.SourceFileParseOptions{FileName: "/component.vue", Path: "/component.vue"}
+	parseOptions := ast.SourceFileParseOptions{FileName: "/component.vue", PathKey: "/component.vue"}
 	canonical := parser.ParseSourceFile(parseOptions, " x", core.ScriptKindTS)
 	supplementalOptions := parseOptions
-	supplementalOptions.Path = "/component.vue::supplemental"
+	supplementalOptions.PathKey = "/component.vue::supplemental"
 	supplemental := parser.ParseSourceFile(supplementalOptions, "  x", core.ScriptKindTS)
 	canonical.SetContentMapperInfo(ast.ContentMapperSourceFileInfo{
 		OriginalText:            original,
@@ -214,7 +261,7 @@ func TestConvertersSourceFileProjectionExpansion(t *testing.T) {
 		CanonicalSourceFile: canonical,
 	})
 	lineMap := lsconv.ComputeLSPLineStarts(original)
-	converters := lsconv.NewConverters(lsproto.PositionEncodingKindUTF16, func(_ string) *lsconv.LSPLineMap { return lineMap })
+	converters := lsconv.NewConverters(lsproto.PositionEncodingKindUTF16, func(_ tspath.RootedFilePath) *lsconv.LSPLineMap { return lineMap })
 
 	positions := lsconv.FromLSPPositionForSourceFile(converters, canonical, lsproto.Position{}, spanmap.FeatureHover)
 	assert.Equal(t, len(positions), 2)

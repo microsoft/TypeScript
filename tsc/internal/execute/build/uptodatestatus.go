@@ -1,6 +1,10 @@
 package build
 
-import "time"
+import (
+	"time"
+
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
+)
 
 type upToDateStatusType uint16
 
@@ -52,23 +56,22 @@ const (
 )
 
 type inputOutputName struct {
-	input  string
-	output string
+	input  tspath.RootedPath
+	output tspath.RootedFilePath
 }
 
 type fileAndTime struct {
-	file string
+	file tspath.RootedFilePath
 	time time.Time
 }
 
 type inputOutputFileAndTime struct {
-	input     fileAndTime
-	output    fileAndTime
-	buildInfo string
+	input  fileAndTime
+	output fileAndTime
 }
 
 type upstreamErrors struct {
-	ref                  string
+	ref                  tspath.RootedPath
 	refHasUpstreamErrors bool
 }
 
@@ -114,7 +117,7 @@ func (s *upToDateStatus) inputOutputName() *inputOutputName {
 	return data
 }
 
-func (s *upToDateStatus) oldestOutputFileName() string {
+func (s *upToDateStatus) oldestOutputFileName() tspath.RootedFilePath {
 	if !s.isPseudoBuild() && s.kind != upToDateStatusTypeUpToDate {
 		panic("only valid for up to date status of pseudo-build or up to date")
 	}
@@ -125,7 +128,7 @@ func (s *upToDateStatus) oldestOutputFileName() string {
 	if inputOutputName := s.inputOutputName(); inputOutputName != nil {
 		return inputOutputName.output
 	}
-	return s.data.(string)
+	return s.data.(tspath.RootedFilePath)
 }
 
 func (s *upToDateStatus) upstreamErrors() *upstreamErrors {

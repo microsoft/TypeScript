@@ -23,7 +23,7 @@ func TestUntitledReferences(t *testing.T) {
 	convertedFileName := untitledURI.FileName()
 	t.Logf("URI '%s' converts to filename '%s'", untitledURI, convertedFileName)
 
-	backToURI := lsconv.FileNameToDocumentURI(convertedFileName)
+	backToURI := lsconv.FilePathToDocumentURI(convertedFileName)
 	t.Logf("Filename '%s' converts back to URI '%s'", convertedFileName, backToURI)
 
 	if string(backToURI) != string(untitledURI) {

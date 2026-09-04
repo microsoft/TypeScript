@@ -57,7 +57,7 @@ func TestFormat(t *testing.T) {
 		text := string(fileContent)
 		sourceFile := parser.ParseSourceFile(ast.SourceFileParseOptions{
 			FileName: "/checker.ts",
-			Path:     "/checker.ts",
+			PathKey:  "/checker.ts",
 		}, text, core.ScriptKindTS)
 		edits := format.FormatDocument(ctx, sourceFile)
 		newText := applyBulkEdits(text, edits)
@@ -85,7 +85,7 @@ func BenchmarkFormat(b *testing.B) {
 	text := string(fileContent)
 	sourceFile := parser.ParseSourceFile(ast.SourceFileParseOptions{
 		FileName: "/checker.ts",
-		Path:     "/checker.ts",
+		PathKey:  "/checker.ts",
 	}, text, core.ScriptKindTS)
 
 	b.Run("format checker.ts", func(b *testing.B) {

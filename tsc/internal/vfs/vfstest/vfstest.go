@@ -27,7 +27,7 @@ type MapFS struct {
 	// keys in m are canonicalPaths
 	m fstest.MapFS
 
-	useCaseSensitiveFileNames bool
+	caseSensitivity tspath.CaseSensitivity
 
 	symlinks map[canonicalPath]canonicalPath
 
@@ -67,8 +67,8 @@ type sys struct {
 // The paths must be normalized absolute paths according to the tspath package,
 // without trailing directory separators.
 // The paths must be all POSIX-style or all Windows-style, but not both.
-func FromMap[File any](m map[string]File, useCaseSensitiveFileNames bool) vfs.FS {
-	return FromMapWithClock(m, useCaseSensitiveFileNames, &clockImpl{start: time.Now()})
+func FromMap[File any](m map[string]File, caseSensitivity tspath.CaseSensitivity) vfs.FS {
+	return FromMapWithClock(m, caseSensitivity, &clockImpl{start: time.Now()})
 }
 
 // FromMapWithClock creates a new [vfs.FS] from a map of paths to file contents.
@@ -77,7 +77,7 @@ func FromMap[File any](m map[string]File, useCaseSensitiveFileNames bool) vfs.FS
 // The paths must be normalized absolute paths according to the tspath package,
 // without trailing directory separators.
 // The paths must be all POSIX-style or all Windows-style, but not both.
-func FromMapWithClock[File any](m map[string]File, useCaseSensitiveFileNames bool, clock Clock) vfs.FS {
+func FromMapWithClock[File any](m map[string]File, caseSensitivity tspath.CaseSensitivity, clock Clock) vfs.FS {
 	posix := false
 	windows := false
 
@@ -137,17 +137,17 @@ func FromMapWithClock[File any](m map[string]File, useCaseSensitiveFileNames boo
 		panic("mixed posix and windows paths")
 	}
 
-	return iovfs.From(convertMapFS(mfs, useCaseSensitiveFileNames, clock), useCaseSensitiveFileNames)
+	return iovfs.From(convertMapFS(mfs, caseSensitivity, clock), caseSensitivity)
 }
 
-func convertMapFS(input fstest.MapFS, useCaseSensitiveFileNames bool, clock Clock) *MapFS {
+func convertMapFS(input fstest.MapFS, caseSensitivity tspath.CaseSensitivity, clock Clock) *MapFS {
 	if clock == nil {
 		clock = &clockImpl{start: time.Now()}
 	}
 	m := &MapFS{
-		m:                         make(fstest.MapFS, len(input)),
-		useCaseSensitiveFileNames: useCaseSensitiveFileNames,
-		clock:                     clock,
+		m:               make(fstest.MapFS, len(input)),
+		caseSensitivity: caseSensitivity,
+		clock:           clock,
 	}
 
 	// Verify that the input is well-formed.
@@ -204,7 +204,7 @@ func comparePathsByParts(a, b string) int {
 type canonicalPath string
 
 func (m *MapFS) getCanonicalPath(p string) canonicalPath {
-	return canonicalPath(tspath.GetCanonicalFileName(p, m.useCaseSensitiveFileNames))
+	return canonicalPath(m.caseSensitivity.Canonicalize(p))
 }
 
 func (m *MapFS) open(p canonicalPath) (fs.File, error) {

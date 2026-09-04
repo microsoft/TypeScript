@@ -53,8 +53,6 @@ func TestGetRootLength(t *testing.T) {
 	assert.Equal(t, GetRootLength("file://localhost/c%3A"), 21)
 	assert.Equal(t, GetRootLength("file://localhost/c%3Ad"), 17)
 	assert.Equal(t, GetRootLength("file://localhost/c%3A/path"), 22)
-	assert.Equal(t, GetRootLength("FILE:///C:/path"), 11)
-	assert.Equal(t, GetRootLength("file://LOCALHOST/C%3A/path"), 22)
 	assert.Equal(t, GetRootLength("file://server"), 13)
 	assert.Equal(t, GetRootLength("file://server/"), 14)
 	assert.Equal(t, GetRootLength("file://server/path"), 14)
@@ -173,10 +171,10 @@ func TestGetDirectoryPath(t *testing.T) {
 func TestGetLongestExtensionFromPath(t *testing.T) {
 	t.Parallel()
 	extensions := []string{".z", ".y.z", ".other"}
-	assert.Equal(t, GetLongestExtensionFromPath("/src/Component.y.z", extensions, false), ".y.z")
-	assert.Equal(t, GetLongestExtensionFromPath("/src/Component.z", extensions, false), ".z")
-	assert.Equal(t, GetLongestExtensionFromPath("/src/Component.y.Z", extensions, false), "")
-	assert.Equal(t, GetLongestExtensionFromPath("/src/Component.y.Z", extensions, true), ".y.Z")
+	assert.Equal(t, GetLongestExtensionFromPath("/src/Component.y.z", extensions, CaseSensitive), ".y.z")
+	assert.Equal(t, GetLongestExtensionFromPath("/src/Component.z", extensions, CaseSensitive), ".z")
+	assert.Equal(t, GetLongestExtensionFromPath("/src/Component.y.Z", extensions, CaseSensitive), "")
+	assert.Equal(t, GetLongestExtensionFromPath("/src/Component.y.Z", extensions, CaseInsensitive), ".y.Z")
 }
 
 func TestRemoveAnyFileExtension(t *testing.T) {
@@ -192,31 +190,31 @@ func TestRemoveAnyFileExtension(t *testing.T) {
 
 func TestGetPathComponents(t *testing.T) {
 	t.Parallel()
-	assert.DeepEqual(t, GetPathComponents("", ""), []string{""})
-	assert.DeepEqual(t, GetPathComponents("a", ""), []string{"", "a"})
-	assert.DeepEqual(t, GetPathComponents("./a", ""), []string{"", ".", "a"})
-	assert.DeepEqual(t, GetPathComponents("/", ""), []string{"/"})
-	assert.DeepEqual(t, GetPathComponents("/a", ""), []string{"/", "a"})
-	assert.DeepEqual(t, GetPathComponents("/a/", ""), []string{"/", "a"})
-	assert.DeepEqual(t, GetPathComponents("c:", ""), []string{"c:"})
-	assert.DeepEqual(t, GetPathComponents("c:d", ""), []string{"", "c:d"})
-	assert.DeepEqual(t, GetPathComponents("c:/", ""), []string{"c:/"})
-	assert.DeepEqual(t, GetPathComponents("c:/path", ""), []string{"c:/", "path"})
-	assert.DeepEqual(t, GetPathComponents("//server", ""), []string{"//server"})
-	assert.DeepEqual(t, GetPathComponents("//server/", ""), []string{"//server/"})
-	assert.DeepEqual(t, GetPathComponents("//server/share", ""), []string{"//server/", "share"})
-	assert.DeepEqual(t, GetPathComponents("file:///", ""), []string{"file:///"})
-	assert.DeepEqual(t, GetPathComponents("file:///path", ""), []string{"file:///", "path"})
-	assert.DeepEqual(t, GetPathComponents("file:///c:", ""), []string{"file:///c:"})
-	assert.DeepEqual(t, GetPathComponents("file:///c:d", ""), []string{"file:///", "c:d"})
-	assert.DeepEqual(t, GetPathComponents("file:///c:/", ""), []string{"file:///c:/"})
-	assert.DeepEqual(t, GetPathComponents("file:///c:/path", ""), []string{"file:///c:/", "path"})
-	assert.DeepEqual(t, GetPathComponents("file://server", ""), []string{"file://server"})
-	assert.DeepEqual(t, GetPathComponents("file://server/", ""), []string{"file://server/"})
-	assert.DeepEqual(t, GetPathComponents("file://server/path", ""), []string{"file://server/", "path"})
-	assert.DeepEqual(t, GetPathComponents("http://server", ""), []string{"http://server"})
-	assert.DeepEqual(t, GetPathComponents("http://server/", ""), []string{"http://server/"})
-	assert.DeepEqual(t, GetPathComponents("http://server/path", ""), []string{"http://server/", "path"})
+	assert.DeepEqual(t, GetPathComponents(""), []string{""})
+	assert.DeepEqual(t, GetPathComponents("a"), []string{"", "a"})
+	assert.DeepEqual(t, GetPathComponents("./a"), []string{"", ".", "a"})
+	assert.DeepEqual(t, GetPathComponents("/"), []string{"/"})
+	assert.DeepEqual(t, GetPathComponents("/a"), []string{"/", "a"})
+	assert.DeepEqual(t, GetPathComponents("/a/"), []string{"/", "a"})
+	assert.DeepEqual(t, GetPathComponents("c:"), []string{"c:"})
+	assert.DeepEqual(t, GetPathComponents("c:d"), []string{"", "c:d"})
+	assert.DeepEqual(t, GetPathComponents("c:/"), []string{"c:/"})
+	assert.DeepEqual(t, GetPathComponents("c:/path"), []string{"c:/", "path"})
+	assert.DeepEqual(t, GetPathComponents("//server"), []string{"//server"})
+	assert.DeepEqual(t, GetPathComponents("//server/"), []string{"//server/"})
+	assert.DeepEqual(t, GetPathComponents("//server/share"), []string{"//server/", "share"})
+	assert.DeepEqual(t, GetPathComponents("file:///"), []string{"file:///"})
+	assert.DeepEqual(t, GetPathComponents("file:///path"), []string{"file:///", "path"})
+	assert.DeepEqual(t, GetPathComponents("file:///c:"), []string{"file:///c:"})
+	assert.DeepEqual(t, GetPathComponents("file:///c:d"), []string{"file:///", "c:d"})
+	assert.DeepEqual(t, GetPathComponents("file:///c:/"), []string{"file:///c:/"})
+	assert.DeepEqual(t, GetPathComponents("file:///c:/path"), []string{"file:///c:/", "path"})
+	assert.DeepEqual(t, GetPathComponents("file://server"), []string{"file://server"})
+	assert.DeepEqual(t, GetPathComponents("file://server/"), []string{"file://server/"})
+	assert.DeepEqual(t, GetPathComponents("file://server/path"), []string{"file://server/", "path"})
+	assert.DeepEqual(t, GetPathComponents("http://server"), []string{"http://server"})
+	assert.DeepEqual(t, GetPathComponents("http://server/"), []string{"http://server/"})
+	assert.DeepEqual(t, GetPathComponents("http://server/path"), []string{"http://server/", "path"})
 }
 
 func TestReducePathComponents(t *testing.T) {
@@ -311,6 +309,21 @@ func TestResolvePath(t *testing.T) {
 	assert.Equal(t, ResolvePath("a", "b", "c"), "a/b/c")
 	assert.Equal(t, ResolvePath("a", "b", "/c"), "/c")
 	assert.Equal(t, ResolvePath("a", "b", "../c"), "a/c")
+}
+
+func TestResolvePathWithoutTrailingDirectorySeparator(t *testing.T) {
+	t.Parallel()
+
+	assert.Equal(t, ResolvePathWithoutTrailingDirectorySeparator("/"), "/")
+	assert.Equal(t, ResolvePathWithoutTrailingDirectorySeparator("c:/"), "c:/")
+	assert.Equal(t, ResolvePathWithoutTrailingDirectorySeparator("/a/"), "/a")
+	assert.Equal(t, ResolvePathWithoutTrailingDirectorySeparator("a", "b/"), "a/b")
+}
+
+func TestNormalizePathDriveRoot(t *testing.T) {
+	t.Parallel()
+
+	assert.Equal(t, NormalizePath("c:"), "c:/")
 }
 
 func TestGetNormalizedAbsolutePath(t *testing.T) {
@@ -435,14 +448,6 @@ func TestGetNormalizedAbsolutePath(t *testing.T) {
 	assert.Equal(t, GetNormalizedAbsolutePath("\\\\a\\b\\\\c", ""), "//a/b/c")
 }
 
-func TestGetNormalizedAbsolutePathWithoutRoot(t *testing.T) {
-	t.Parallel()
-
-	assert.Equal(t, GetNormalizedAbsolutePathWithoutRoot("/a/b/c.txt", "/a/b"), "a/b/c.txt")
-	assert.Equal(t, GetNormalizedAbsolutePathWithoutRoot("c:/work/hello.txt", "c:/work"), "work/hello.txt")
-	assert.Equal(t, GetNormalizedAbsolutePathWithoutRoot("c:/work/hello.txt", "d:/worspaces"), "work/hello.txt")
-}
-
 var getNormalizedAbsolutePathTests = map[string][][]string{
 	"non-normalized inputs": {
 		{"/.", ""},
@@ -479,10 +484,19 @@ var getNormalizedAbsolutePathTests = map[string][][]string{
 	},
 }
 
+func normalizedTestDirectory(path string) RootedDirectoryPath {
+	if path == "" {
+		return ""
+	}
+	return ToRootedDirectoryPath(path, "/")
+}
+
 func BenchmarkGetNormalizedAbsolutePath(b *testing.B) {
-	funcs := map[string]func(string, string) string{
-		"GetNormalizedAbsolutePath":       GetNormalizedAbsolutePath,
-		"GetNormalizedAbsolutePath (old)": getNormalizedAbsolutePath_old,
+	funcs := map[string]func(string, RootedDirectoryPath) string{
+		"GetNormalizedAbsolutePath": GetNormalizedAbsolutePath,
+		"GetNormalizedAbsolutePath (old)": func(fileName string, currentDirectory RootedDirectoryPath) string {
+			return getNormalizedAbsolutePath_old(fileName, currentDirectory.AsString())
+		},
 	}
 	for name, tests := range getNormalizedAbsolutePathTests {
 		b.Run(name, func(b *testing.B) {
@@ -491,7 +505,7 @@ func BenchmarkGetNormalizedAbsolutePath(b *testing.B) {
 					b.ReportAllocs()
 					for b.Loop() {
 						for _, test := range tests {
-							fn(test[0], test[1])
+							fn(test[0], normalizedTestDirectory(test[1]))
 						}
 					}
 				})
@@ -508,7 +522,8 @@ func FuzzGetNormalizedAbsolutePath(f *testing.F) {
 	}
 
 	f.Fuzz(func(t *testing.T, p string, dir string) {
-		assert.Equal(t, GetNormalizedAbsolutePath(p, dir), getNormalizedAbsolutePath_old(p, dir), fmt.Sprintf("p=%q, dir=%q", p, dir))
+		currentDirectory := normalizedTestDirectory(dir)
+		assert.Equal(t, GetNormalizedAbsolutePath(p, currentDirectory), getNormalizedAbsolutePath_old(p, currentDirectory.AsString()), fmt.Sprintf("p=%q, dir=%q", p, dir))
 	})
 }
 
@@ -517,26 +532,26 @@ func TestGetRelativePathToDirectoryOrUrl(t *testing.T) {
 	// !!!
 	// Based on tests for `getRelativePathFromDirectory`.
 
-	assert.Equal(t, GetRelativePathToDirectoryOrUrl("/", "/", false /*isAbsolutePathAnUrl*/, ComparePathsOptions{}), "")
-	assert.Equal(t, GetRelativePathToDirectoryOrUrl("/a", "/a", false /*isAbsolutePathAnUrl*/, ComparePathsOptions{}), "")
-	assert.Equal(t, GetRelativePathToDirectoryOrUrl("/a/", "/a", false /*isAbsolutePathAnUrl*/, ComparePathsOptions{}), "")
-	assert.Equal(t, GetRelativePathToDirectoryOrUrl("/a", "/", false /*isAbsolutePathAnUrl*/, ComparePathsOptions{}), "..")
-	assert.Equal(t, GetRelativePathToDirectoryOrUrl("/a", "/b", false /*isAbsolutePathAnUrl*/, ComparePathsOptions{}), "../b")
-	assert.Equal(t, GetRelativePathToDirectoryOrUrl("/a/b", "/b", false /*isAbsolutePathAnUrl*/, ComparePathsOptions{}), "../../b")
-	assert.Equal(t, GetRelativePathToDirectoryOrUrl("/a/b/c", "/b", false /*isAbsolutePathAnUrl*/, ComparePathsOptions{}), "../../../b")
-	assert.Equal(t, GetRelativePathToDirectoryOrUrl("/a/b/c", "/b/c", false /*isAbsolutePathAnUrl*/, ComparePathsOptions{}), "../../../b/c")
-	assert.Equal(t, GetRelativePathToDirectoryOrUrl("/a/b/c", "/a/b", false /*isAbsolutePathAnUrl*/, ComparePathsOptions{}), "..")
-	assert.Equal(t, GetRelativePathToDirectoryOrUrl("c:", "d:", false /*isAbsolutePathAnUrl*/, ComparePathsOptions{}), "d:/")
-	assert.Equal(t, GetRelativePathToDirectoryOrUrl("file:///", "file:///", false /*isAbsolutePathAnUrl*/, ComparePathsOptions{}), "")
-	assert.Equal(t, GetRelativePathToDirectoryOrUrl("file:///a", "file:///a", false /*isAbsolutePathAnUrl*/, ComparePathsOptions{}), "")
-	assert.Equal(t, GetRelativePathToDirectoryOrUrl("file:///a/", "file:///a", false /*isAbsolutePathAnUrl*/, ComparePathsOptions{}), "")
-	assert.Equal(t, GetRelativePathToDirectoryOrUrl("file:///a", "file:///", false /*isAbsolutePathAnUrl*/, ComparePathsOptions{}), "..")
-	assert.Equal(t, GetRelativePathToDirectoryOrUrl("file:///a", "file:///b", false /*isAbsolutePathAnUrl*/, ComparePathsOptions{}), "../b")
-	assert.Equal(t, GetRelativePathToDirectoryOrUrl("file:///a/b", "file:///b", false /*isAbsolutePathAnUrl*/, ComparePathsOptions{}), "../../b")
-	assert.Equal(t, GetRelativePathToDirectoryOrUrl("file:///a/b/c", "file:///b", false /*isAbsolutePathAnUrl*/, ComparePathsOptions{}), "../../../b")
-	assert.Equal(t, GetRelativePathToDirectoryOrUrl("file:///a/b/c", "file:///b/c", false /*isAbsolutePathAnUrl*/, ComparePathsOptions{}), "../../../b/c")
-	assert.Equal(t, GetRelativePathToDirectoryOrUrl("file:///a/b/c", "file:///a/b", false /*isAbsolutePathAnUrl*/, ComparePathsOptions{}), "..")
-	assert.Equal(t, GetRelativePathToDirectoryOrUrl("file:///c:", "file:///d:", false /*isAbsolutePathAnUrl*/, ComparePathsOptions{}), "file:///d:/")
+	assert.Equal(t, GetRelativePathToDirectoryOrUrl("/", "/", false, CaseInsensitive), "")
+	assert.Equal(t, GetRelativePathToDirectoryOrUrl("/a", "/a", false, CaseInsensitive), "")
+	assert.Equal(t, GetRelativePathToDirectoryOrUrl("/a/", "/a", false, CaseInsensitive), "")
+	assert.Equal(t, GetRelativePathToDirectoryOrUrl("/a", "/", false, CaseInsensitive), "..")
+	assert.Equal(t, GetRelativePathToDirectoryOrUrl("/a", "/b", false, CaseInsensitive), "../b")
+	assert.Equal(t, GetRelativePathToDirectoryOrUrl("/a/b", "/b", false, CaseInsensitive), "../../b")
+	assert.Equal(t, GetRelativePathToDirectoryOrUrl("/a/b/c", "/b", false, CaseInsensitive), "../../../b")
+	assert.Equal(t, GetRelativePathToDirectoryOrUrl("/a/b/c", "/b/c", false, CaseInsensitive), "../../../b/c")
+	assert.Equal(t, GetRelativePathToDirectoryOrUrl("/a/b/c", "/a/b", false, CaseInsensitive), "..")
+	assert.Equal(t, GetRelativePathToDirectoryOrUrl("c:", "d:", false, CaseInsensitive), "d:/")
+	assert.Equal(t, GetRelativePathToDirectoryOrUrl("file:///", "file:///", false, CaseInsensitive), "")
+	assert.Equal(t, GetRelativePathToDirectoryOrUrl("file:///a", "file:///a", false, CaseInsensitive), "")
+	assert.Equal(t, GetRelativePathToDirectoryOrUrl("file:///a/", "file:///a", false, CaseInsensitive), "")
+	assert.Equal(t, GetRelativePathToDirectoryOrUrl("file:///a", "file:///", false, CaseInsensitive), "..")
+	assert.Equal(t, GetRelativePathToDirectoryOrUrl("file:///a", "file:///b", false, CaseInsensitive), "../b")
+	assert.Equal(t, GetRelativePathToDirectoryOrUrl("file:///a/b", "file:///b", false, CaseInsensitive), "../../b")
+	assert.Equal(t, GetRelativePathToDirectoryOrUrl("file:///a/b/c", "file:///b", false, CaseInsensitive), "../../../b")
+	assert.Equal(t, GetRelativePathToDirectoryOrUrl("file:///a/b/c", "file:///b/c", false, CaseInsensitive), "../../../b/c")
+	assert.Equal(t, GetRelativePathToDirectoryOrUrl("file:///a/b/c", "file:///a/b", false, CaseInsensitive), "..")
+	assert.Equal(t, GetRelativePathToDirectoryOrUrl("file:///c:", "file:///d:", false, CaseInsensitive), "file:///d:/")
 }
 
 func TestToFileNameLowerCase(t *testing.T) {
@@ -590,33 +605,33 @@ func FuzzToFileNameLowerCase(f *testing.F) {
 	})
 }
 
-func TestTrimFilePathPrefix(t *testing.T) {
+func TestCaseSensitivityTrimPrefix(t *testing.T) {
 	t.Parallel()
 
 	t.Run("case-sensitive exact match", func(t *testing.T) {
 		t.Parallel()
-		suffix, ok := TrimFilePathPrefix("/project/src/file.ts", "/project/src", true /*useCaseSensitiveFileNames*/)
+		suffix, ok := CaseSensitive.TrimPrefix("/project/src/file.ts", "/project/src")
 		assert.Assert(t, ok)
 		assert.Equal(t, suffix, "/file.ts")
 	})
 
 	t.Run("case-sensitive mismatch", func(t *testing.T) {
 		t.Parallel()
-		suffix, ok := TrimFilePathPrefix("/project/SRC/file.ts", "/project/src", true /*useCaseSensitiveFileNames*/)
+		suffix, ok := CaseSensitive.TrimPrefix("/project/SRC/file.ts", "/project/src")
 		assert.Assert(t, !ok)
 		assert.Equal(t, suffix, "/project/SRC/file.ts")
 	})
 
 	t.Run("case-insensitive match", func(t *testing.T) {
 		t.Parallel()
-		suffix, ok := TrimFilePathPrefix("/project/SRC/file.ts", "/project/src", false /*useCaseSensitiveFileNames*/)
+		suffix, ok := CaseInsensitive.TrimPrefix("/project/SRC/file.ts", "/project/src")
 		assert.Assert(t, ok)
 		assert.Equal(t, suffix, "/file.ts")
 	})
 
 	t.Run("no match", func(t *testing.T) {
 		t.Parallel()
-		suffix, ok := TrimFilePathPrefix("/other/file.ts", "/project/src", false /*useCaseSensitiveFileNames*/)
+		suffix, ok := CaseInsensitive.TrimPrefix("/other/file.ts", "/project/src")
 		assert.Assert(t, !ok)
 		assert.Equal(t, suffix, "/other/file.ts")
 	})
@@ -627,31 +642,20 @@ func TestTrimFilePathPrefix(t *testing.T) {
 		// (non-canonicalized) prefix is longer, in bytes, than the path it's a
 		// case-insensitive prefix of, even though the path itself is longer overall
 		// once its own (already-lowercase) suffix is included. Slicing path by
-		// len(prefix) bytes would panic here ([10:9]); TrimFilePathPrefix must
+		// len(prefix) bytes would panic here ([10:9]); TrimPrefix must
 		// clamp per-rune instead, like the reference implementation's substring
 		// does.
-		suffix, ok := TrimFilePathPrefix("/kkk/a.ts", "/\u212A\u212A\u212A", false /*useCaseSensitiveFileNames*/)
+		suffix, ok := CaseInsensitive.TrimPrefix("/kkk/a.ts", "/\u212A\u212A\u212A")
 		assert.Assert(t, ok)
 		assert.Equal(t, suffix, "/a.ts")
 	})
 
 	t.Run("path equal to prefix", func(t *testing.T) {
 		t.Parallel()
-		suffix, ok := TrimFilePathPrefix("/project/src", "/project/src", true /*useCaseSensitiveFileNames*/)
+		suffix, ok := CaseSensitive.TrimPrefix("/project/src", "/project/src")
 		assert.Assert(t, ok)
 		assert.Equal(t, suffix, "")
 	})
-}
-
-func TestToPath(t *testing.T) {
-	t.Parallel()
-	assert.Equal(t, string(ToPath("file.ext", "path/to", false /*useCaseSensitiveFileNames*/)), "path/to/file.ext")
-	assert.Equal(t, string(ToPath("file.ext", "/path/to", true /*useCaseSensitiveFileNames*/)), "/path/to/file.ext")
-	assert.Equal(t, string(ToPath("/path/to/../file.ext", "path/to", true /*useCaseSensitiveFileNames*/)), "/path/file.ext")
-	assert.Equal(t,
-		string(ToPath("^/~ts-uri-v2~/custom/ts-nul-authority/CaseSensitive.ts", "/", false /*useCaseSensitiveFileNames*/)),
-		"^/~ts-uri-v2~/custom/ts-nul-authority/CaseSensitive.ts",
-	)
 }
 
 var relativePathSegmentRegExp = regexp.MustCompile(`//|(?:^|/)\.\.?(?:$|/)`)
@@ -777,7 +781,7 @@ func normalizePath_old(path string) string {
 		return path
 	}
 	// Other paths require full normalization
-	normalized := GetPathFromPathComponents(reducePathComponents(GetPathComponents(path, "")))
+	normalized := GetPathFromPathComponents(reducePathComponents(GetPathComponents(path)))
 	if normalized != "" && HasTrailingDirectorySeparator(path) {
 		normalized = EnsureTrailingDirectorySeparator(normalized)
 	}
@@ -791,12 +795,12 @@ func getNormalizedAbsolutePath_old(fileName string, currentDirectory string) str
 func TestGetCommonParents(t *testing.T) {
 	t.Parallel()
 
-	opts := ComparePathsOptions{}
+	opts := CaseInsensitive
 
 	t.Run("empty input", func(t *testing.T) {
 		t.Parallel()
 		var paths []string
-		got, ignored := GetCommonParents(paths, 1, GetPathComponents, opts)
+		got, ignored := getCommonParents(paths, 1, GetPathComponents, opts)
 		assert.Equal(t, len(ignored), 0)
 		assert.DeepEqual(t, got, ([]string)(nil))
 	})
@@ -804,7 +808,7 @@ func TestGetCommonParents(t *testing.T) {
 	t.Run("single path returns itself", func(t *testing.T) {
 		t.Parallel()
 		paths := []string{"/a/b/c/d"}
-		got, ignored := GetCommonParents(paths, 1, GetPathComponents, opts)
+		got, ignored := getCommonParents(paths, 1, GetPathComponents, opts)
 		assert.Equal(t, len(ignored), 0)
 		expected := []string{paths[0]}
 		assert.DeepEqual(t, got, expected)
@@ -813,7 +817,7 @@ func TestGetCommonParents(t *testing.T) {
 	t.Run("paths shorter than minComponents are ignored", func(t *testing.T) {
 		t.Parallel()
 		paths := []string{"/a/b/c/d", "/a/b/c/e", "/a/b/f/g", "/x/y"}
-		got, ignored := GetCommonParents(paths, 4, GetPathComponents, opts)
+		got, ignored := getCommonParents(paths, 4, GetPathComponents, opts)
 		assert.DeepEqual(t, ignored, map[string]struct{}{"/x/y": {}})
 		expected := []string{"/a/b/c", "/a/b/f/g"}
 		assert.DeepEqual(t, got, expected)
@@ -822,7 +826,7 @@ func TestGetCommonParents(t *testing.T) {
 	t.Run("three paths share /a/b", func(t *testing.T) {
 		t.Parallel()
 		paths := []string{"/a/b/c/d", "/a/b/c/e", "/a/b/f/g"}
-		got, ignored := GetCommonParents(paths, 1, GetPathComponents, opts)
+		got, ignored := getCommonParents(paths, 1, GetPathComponents, opts)
 		assert.Equal(t, len(ignored), 0)
 		expected := []string{"/a/b"}
 		assert.DeepEqual(t, got, expected)
@@ -831,7 +835,7 @@ func TestGetCommonParents(t *testing.T) {
 	t.Run("mixed with short path collapses to root when minComponents=1", func(t *testing.T) {
 		t.Parallel()
 		paths := []string{"/a/b/c/d", "/a/b/c/e", "/a/b/f/g", "/x/y/z"}
-		got, ignored := GetCommonParents(paths, 1, GetPathComponents, opts)
+		got, ignored := getCommonParents(paths, 1, GetPathComponents, opts)
 		assert.Equal(t, len(ignored), 0)
 		expected := []string{"/"}
 		assert.DeepEqual(t, got, expected)
@@ -840,7 +844,7 @@ func TestGetCommonParents(t *testing.T) {
 	t.Run("mixed with short path preserves both when minComponents=3", func(t *testing.T) {
 		t.Parallel()
 		paths := []string{"/a/b/c/d", "/a/b/c/e", "/a/b/f/g", "/x/y/z"}
-		got, ignored := GetCommonParents(paths, 3, GetPathComponents, opts)
+		got, ignored := getCommonParents(paths, 3, GetPathComponents, opts)
 		assert.Equal(t, len(ignored), 0)
 		expected := []string{"/a/b", "/x/y/z"}
 		assert.DeepEqual(t, got, expected)
@@ -849,7 +853,7 @@ func TestGetCommonParents(t *testing.T) {
 	t.Run("different volumes are returned individually", func(t *testing.T) {
 		t.Parallel()
 		paths := []string{"c:/a/b/c/d", "d:/a/b/c/d"}
-		got, ignored := GetCommonParents(paths, 1, GetPathComponents, opts)
+		got, ignored := getCommonParents(paths, 1, GetPathComponents, opts)
 		assert.Equal(t, len(ignored), 0)
 		expected := []string{paths[0], paths[1]}
 		assert.DeepEqual(t, got, expected)
@@ -858,7 +862,7 @@ func TestGetCommonParents(t *testing.T) {
 	t.Run("duplicate paths deduplicate result", func(t *testing.T) {
 		t.Parallel()
 		paths := []string{"/a/b/c/d", "/a/b/c/d"}
-		got, ignored := GetCommonParents(paths, 1, GetPathComponents, opts)
+		got, ignored := getCommonParents(paths, 1, GetPathComponents, opts)
 		assert.Equal(t, len(ignored), 0)
 		expected := []string{paths[0]}
 		assert.DeepEqual(t, got, expected)
@@ -867,7 +871,7 @@ func TestGetCommonParents(t *testing.T) {
 	t.Run("paths with few components are returned as-is when minComponents met", func(t *testing.T) {
 		t.Parallel()
 		paths := []string{"/a/b/c/d", "/x/y"}
-		got, ignored := GetCommonParents(paths, 2, GetPathComponents, opts)
+		got, ignored := getCommonParents(paths, 2, GetPathComponents, opts)
 		assert.Equal(t, len(ignored), 0)
 		expected := []string{"/a/b/c/d", "/x/y"}
 		assert.DeepEqual(t, got, expected)
@@ -876,7 +880,7 @@ func TestGetCommonParents(t *testing.T) {
 	t.Run("minComponents=2", func(t *testing.T) {
 		t.Parallel()
 		paths := []string{"/a/b/c/d", "/a/z/c/e", "/a/aaa/f/g", "/x/y/z"}
-		got, ignored := GetCommonParents(paths, 2, GetPathComponents, opts)
+		got, ignored := getCommonParents(paths, 2, GetPathComponents, opts)
 		assert.Equal(t, len(ignored), 0)
 		expected := []string{"/a", "/x/y/z"}
 		assert.DeepEqual(t, got, expected)
@@ -885,7 +889,7 @@ func TestGetCommonParents(t *testing.T) {
 	t.Run("trailing separators are handled", func(t *testing.T) {
 		t.Parallel()
 		paths := []string{"/a/b/", "/a/b/c"}
-		got, ignored := GetCommonParents(paths, 1, GetPathComponents, opts)
+		got, ignored := getCommonParents(paths, 1, GetPathComponents, opts)
 		assert.Equal(t, len(ignored), 0)
 		expected := []string{"/a/b"}
 		assert.DeepEqual(t, got, expected)

@@ -40,7 +40,7 @@ type FsWithSys interface {
 //
 // From does not actually handle case-insensitivity; ensure the passed in [fs.FS]
 // respects case-insensitive file names if needed. Consider using [vfstest.FromMap] for testing.
-func From(fsys fs.FS, useCaseSensitiveFileNames bool) FsWithSys {
+func From(fsys fs.FS, caseSensitivity tspath.CaseSensitivity) FsWithSys {
 	var realpath func(path string) (string, error)
 	if fsys, ok := fsys.(RealpathFS); ok {
 		realpath = func(path string) (string, error) {
@@ -122,98 +122,93 @@ func From(fsys fs.FS, useCaseSensitiveFileNames bool) FsWithSys {
 				return sub
 			},
 		},
-		useCaseSensitiveFileNames: useCaseSensitiveFileNames,
-		realpath:                  realpath,
-		writeFile:                 writeFile,
-		appendFile:                appendFile,
-		mkdirAll:                  mkdirAll,
-		remove:                    remove,
-		chtimes:                   chtimes,
-		fsys:                      fsys,
+		caseSensitivity: caseSensitivity,
+		realpath:        realpath,
+		writeFile:       writeFile,
+		appendFile:      appendFile,
+		mkdirAll:        mkdirAll,
+		remove:          remove,
+		chtimes:         chtimes,
+		fsys:            fsys,
 	}
 }
 
 type ioFS struct {
 	common internal.Common
 
-	useCaseSensitiveFileNames bool
-	realpath                  func(path string) (string, error)
-	writeFile                 func(path string, content string) error
-	appendFile                func(path string, content string) error
-	mkdirAll                  func(path string) error
-	remove                    func(path string) error
-	chtimes                   func(path string, aTime time.Time, mTime time.Time) error
-	fsys                      fs.FS
+	caseSensitivity tspath.CaseSensitivity
+	realpath        func(path string) (string, error)
+	writeFile       func(path string, content string) error
+	appendFile      func(path string, content string) error
+	mkdirAll        func(path string) error
+	remove          func(path string) error
+	chtimes         func(path string, aTime time.Time, mTime time.Time) error
+	fsys            fs.FS
 }
 
 var _ FsWithSys = (*ioFS)(nil)
 
-func (vfs *ioFS) UseCaseSensitiveFileNames() bool {
-	return vfs.useCaseSensitiveFileNames
+func (vfs *ioFS) CaseSensitivity() tspath.CaseSensitivity {
+	return vfs.caseSensitivity
 }
 
-func (vfs *ioFS) DirectoryExists(path string) bool {
+func (vfs *ioFS) DirectoryExists(path tspath.RootedDirectoryPath) bool {
 	return vfs.common.DirectoryExists(path)
 }
 
-func (vfs *ioFS) FileExists(path string) bool {
+func (vfs *ioFS) FileExists(path tspath.RootedFilePath) bool {
 	return vfs.common.FileExists(path)
 }
 
-func (vfs *ioFS) GetAccessibleEntries(path string) vfs.Entries {
+func (vfs *ioFS) GetAccessibleEntries(path tspath.RootedDirectoryPath) vfs.Entries {
 	return vfs.common.GetAccessibleEntries(path)
 }
 
-func (vfs *ioFS) Stat(path string) vfs.FileInfo {
-	_ = internal.RootLength(path) // Assert path is rooted
+func (vfs *ioFS) Stat(path tspath.RootedPath) vfs.FileInfo {
 	return vfs.common.Stat(path)
 }
 
-func (vfs *ioFS) ReadFile(path string) (contents string, ok bool) {
+func (vfs *ioFS) ReadFile(path tspath.RootedFilePath) (contents string, ok bool) {
 	return vfs.common.ReadFile(path)
 }
 
-func (vfs *ioFS) WalkDir(root string, walkFn vfs.WalkDirFunc) error {
+func (vfs *ioFS) WalkDir(root tspath.RootedDirectoryPath, walkFn vfs.WalkDirFunc) error {
 	return vfs.common.WalkDir(root, walkFn)
 }
 
-func (vfs *ioFS) Remove(path string) error {
-	_ = internal.RootLength(path) // Assert path is rooted
-	return vfs.remove(path)
+func (vfs *ioFS) Remove(path tspath.RootedPath) error {
+	return vfs.remove(path.AsString())
 }
 
-func (vfs *ioFS) Chtimes(path string, aTime time.Time, mTime time.Time) error {
-	_ = internal.RootLength(path) // Assert path is rooted
-	return vfs.chtimes(path, aTime, mTime)
+func (vfs *ioFS) Chtimes(path tspath.RootedPath, aTime time.Time, mTime time.Time) error {
+	return vfs.chtimes(path.AsString(), aTime, mTime)
 }
 
-func (vfs *ioFS) Realpath(path string) string {
-	root, rest := internal.SplitPath(path)
-	// splitPath normalizes the path into parts (e.g. "c:/foo/bar" -> "c:/", "foo/bar")
-	// Put them back together to call realpath.
-	realpath, err := vfs.realpath(root + rest)
+func (vfs *ioFS) Realpath(path tspath.RootedPath) tspath.RootedPath {
+	root, rest := path.RootAndRelativePath()
+	realpath, err := vfs.realpath(root.AsString() + rest)
 	if err != nil {
 		return path
 	}
-	return realpath
+	return tspath.RootedPathFromAbsolute(realpath)
 }
 
-func (vfs *ioFS) writeFileEnsuringDir(path string, content string, write func(path, content string) error) error {
-	_ = internal.RootLength(path) // Assert path is rooted
-	if err := write(path, content); err == nil {
+func (vfs *ioFS) writeFileEnsuringDir(path tspath.RootedFilePath, content string, write func(path, content string) error) error {
+	pathString := path.AsString()
+	if err := write(pathString, content); err == nil {
 		return nil
 	}
-	if err := vfs.mkdirAll(tspath.GetDirectoryPath(tspath.NormalizePath(path))); err != nil {
+	if err := vfs.mkdirAll(path.Directory().AsString()); err != nil {
 		return err
 	}
-	return write(path, content)
+	return write(pathString, content)
 }
 
-func (vfs *ioFS) WriteFile(path string, content string) error {
+func (vfs *ioFS) WriteFile(path tspath.RootedFilePath, content string) error {
 	return vfs.writeFileEnsuringDir(path, content, vfs.writeFile)
 }
 
-func (vfs *ioFS) AppendFile(path string, content string) error {
+func (vfs *ioFS) AppendFile(path tspath.RootedFilePath, content string) error {
 	return vfs.writeFileEnsuringDir(path, content, vfs.appendFile)
 }
 

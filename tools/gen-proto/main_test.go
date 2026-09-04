@@ -40,13 +40,32 @@ func TestGenerate(t *testing.T) {
 		`moduleDetection?: ModuleDetectionKind;`,
 		`newLine?: NewLineKind;`,
 		`paths?: Record<string, string[]>;`,
+		`changedProjects?: Record<PathKey, ProjectFileChanges | null>;`,
 		`target?: ScriptTarget;`,
 		`/** InitializeResponse is returned by the initialize method. */
 export interface InitializeResponse`,
-		`/** UseCaseSensitiveFileNames indicates whether the host file system is case-sensitive. */
-    useCaseSensitiveFileNames: boolean;`,
+		`/** CaseSensitivity determines how the host file system compares paths. */
+    caseSensitivity: CaseSensitivity;`,
 		`/** CompilerOptions contains the compiler options exposed by the API. */
 export interface CompilerOptions`,
+		`/**
+ * RawCompilerOptions is the JSON/API representation of compiler options.
+ * Filesystem paths remain strings until Finalize resolves them against a base
+ * directory and constructs a CompilerOptions with typed path guarantees.
+ */
+export interface RawCompilerOptions`,
+		`export interface CreateProgramOptions {
+    compilerOptions: RawCompilerOptions;`,
+		`export interface RawCompilerOptions {
+    allowJs?: boolean;`,
+		`declarationDir?: string;`,
+		`rootDirs?: string[];`,
+		`tsBuildInfoFile?: string;`,
+		`export interface CompilerOptions {
+    allowJs?: boolean;`,
+		`declarationDir?: RootedDirectoryPath;`,
+		`rootDirs?: RootedDirectoryPath[];`,
+		`tsBuildInfoFile?: RootedFilePath;`,
 		`projectReferences?: ProjectReference[];`,
 		`errors: DiagnosticResponse[];`,
 		`getSymbolsAtPositions: APIMethod<GetSymbolsAtPositionsParams, SymbolResponse[]>;`,
@@ -66,7 +85,7 @@ export interface CompilerOptions`,
 		`entries: CompletionEntryResponse[];`,
 		`outputFiles: EmitOutputFile[];`,
 		`/** Path is a normalized path on disk. */
-    path: string;`,
+    path: RootedPath;`,
 		`/** Snapshot is the current client snapshot on which to layer the temporary update. */
     snapshot: number;`,
 		`kind: "importSymbol";`,

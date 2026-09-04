@@ -106,13 +106,13 @@ type timingTestSystem struct {
 	clock *controlledClock
 }
 
-func (s *timingTestSystem) Writer() io.Writer           { return io.Discard }
-func (s *timingTestSystem) ErrorWriter() io.Writer      { return io.Discard }
-func (s *timingTestSystem) FS() vfs.FS                  { return s.fs }
-func (s *timingTestSystem) DefaultLibraryPath() string  { return "/lib" }
-func (s *timingTestSystem) GetCurrentDirectory() string { return "/project" }
-func (s *timingTestSystem) WriteOutputIsTTY() bool      { return false }
-func (s *timingTestSystem) GetWidthOfTerminal() int     { return 0 }
+func (s *timingTestSystem) Writer() io.Writer                               { return io.Discard }
+func (s *timingTestSystem) ErrorWriter() io.Writer                          { return io.Discard }
+func (s *timingTestSystem) FS() vfs.FS                                      { return s.fs }
+func (s *timingTestSystem) DefaultLibraryPath() tspath.RootedDirectoryPath  { return "/lib" }
+func (s *timingTestSystem) GetCurrentDirectory() tspath.RootedDirectoryPath { return "/project" }
+func (s *timingTestSystem) WriteOutputIsTTY() bool                          { return false }
+func (s *timingTestSystem) GetWidthOfTerminal() int                         { return 0 }
 func (s *timingTestSystem) GetEnvironmentVariable(name string) (string, bool) {
 	return "", false
 }
@@ -149,7 +149,7 @@ export const make = (): Box => ({ value: "ok" });
 	}
 	clock := &controlledClock{now: time.Unix(0, 0)}
 	sys := &timingTestSystem{
-		fs:    vfstest.FromMapWithClock(files, true, &fileClock{}),
+		fs:    vfstest.FromMapWithClock(files, tspath.CaseSensitive, &fileClock{}),
 		clock: clock,
 	}
 	options := &core.CompilerOptions{
@@ -159,13 +159,13 @@ export const make = (): Box => ({ value: "ok" });
 		NoEmit:          core.TSTrue,
 		TsBuildInfoFile: "/project/tsconfig.tsbuildinfo",
 	}
-	config := tsoptions.NewParsedCommandLine(options, []string{"/lib/lib.d.ts", "/project/hub.ts", "/project/spoke.ts"}, nil, tspath.ComparePathsOptions{
-		UseCaseSensitiveFileNames: true,
-		CurrentDirectory:          "/project",
-	})
+	currentDirectory := tspath.RootedDirectoryPathFromNormalized("/project")
+	config := tsoptions.NewParsedCommandLine(options, core.Map([]string{"/lib/lib.d.ts", "/project/hub.ts", "/project/spoke.ts"}, func(fileName string) tspath.RootedFilePath {
+		return tspath.ToRootedFilePath(fileName, currentDirectory)
+	}), nil, currentDirectory, tspath.CaseSensitive)
 
 	compile := func(oldProgram *incremental.Program) (*incremental.Program, *CompileTimes) {
-		host := compiler.NewCachedFSCompilerHost(sys.GetCurrentDirectory(), sys.FS(), sys.DefaultLibraryPath(), nil, nil, nil)
+		host := compiler.NewCachedFSCompilerHost(sys.FS(), sys.DefaultLibraryPath(), nil, nil, nil)
 		program := compiler.NewProgram(compiler.ProgramOptions{
 			Config: config,
 			Host:   host,
@@ -183,7 +183,7 @@ export const make = (): Box => ({ value: "ok" });
 			ReportDiagnostic:   QuietDiagnosticReporter,
 			ReportErrorSummary: QuietDiagnosticsReporter,
 			Writer:             io.Discard,
-			WriteFile: func(fileName string, text string, data *compiler.WriteFileData) error {
+			WriteFile: func(fileName tspath.RootedFilePath, text string, data *compiler.WriteFileData) error {
 				return sys.fs.WriteFile(fileName, text)
 			},
 			CompileTimes: times,

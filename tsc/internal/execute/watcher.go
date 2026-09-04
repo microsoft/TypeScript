@@ -30,13 +30,13 @@ type cachedSourceFile struct {
 
 type watchCompilerHost struct {
 	compiler.CompilerHost
-	cache *collections.SyncMap[tspath.Path, *cachedSourceFile]
+	cache *collections.SyncMap[tspath.PathKey, *cachedSourceFile]
 }
 
 func (h *watchCompilerHost) GetSourceFile(opts ast.SourceFileParseOptions) *ast.SourceFile {
-	info := h.CompilerHost.FS().Stat(opts.FileName)
+	info := h.CompilerHost.FS().Stat(opts.FileName.AsPath())
 
-	if cached, ok := h.cache.Load(opts.Path); ok {
+	if cached, ok := h.cache.Load(opts.PathKey); ok {
 		if info != nil && info.ModTime().Equal(cached.modTime) {
 			return cached.file
 		}
@@ -45,20 +45,20 @@ func (h *watchCompilerHost) GetSourceFile(opts ast.SourceFileParseOptions) *ast.
 	file := h.CompilerHost.GetSourceFile(opts)
 	if file != nil {
 		if info != nil {
-			h.cache.Store(opts.Path, &cachedSourceFile{
+			h.cache.Store(opts.PathKey, &cachedSourceFile{
 				file:    file,
 				modTime: info.ModTime(),
 			})
 		}
 	} else {
-		h.cache.Delete(opts.Path)
+		h.cache.Delete(opts.PathKey)
 	}
 	return file
 }
 
 type Watcher struct {
 	sys                            tsc.System
-	configFileName                 string
+	configFileName                 tspath.RootedFilePath
 	config                         *tsoptions.ParsedCommandLine
 	compilerOptionsFromCommandLine *core.CompilerOptions
 	commandLineRaw                 *collections.OrderedMap[string, any]
@@ -77,13 +77,13 @@ type Watcher struct {
 	extendedConfigCache *tsc.ExtendedConfigCache
 	configModified      bool
 	configHasErrors     bool
-	configFilePaths     []string
+	configFilePaths     []tspath.RootedFilePath
 
-	sourceFileCache *collections.SyncMap[tspath.Path, *cachedSourceFile]
+	sourceFileCache *collections.SyncMap[tspath.PathKey, *cachedSourceFile]
 
 	wm            *watchmanager.WatchManager
-	seenFiles     *collections.Set[tspath.Path] // all build dependencies (for event filtering)
-	configMtimes  map[string]time.Time
+	seenFiles     *collections.Set[tspath.PathKey] // all build dependencies (for event filtering)
+	configMtimes  map[tspath.RootedFilePath]time.Time
 	watchSetDirty bool
 	// forceFullRebuild records a reason that requires a full NewProgram rebuild
 	// (e.g. an event overflow, a mid-cycle watch failure, a newly appeared
@@ -111,7 +111,8 @@ func createWatcher(
 	reportErrorSummary tsc.DiagnosticsReporter,
 	testing tsc.CommandLineTesting,
 ) *Watcher {
-	wm := watchmanager.NewWatchManager(sys.Writer(), sys.FS().DirectoryExists)
+	caseSensitivity := sys.FS().CaseSensitivity()
+	wm := watchmanager.NewWatchManager(sys.Writer(), sys.FS().DirectoryExists, caseSensitivity)
 	if t, ok := testing.(watchmanager.CommandLineTestingWithWatchBackend); ok {
 		wm.SetBackend(t.WatchBackend())
 	}
@@ -124,7 +125,7 @@ func createWatcher(
 		reportErrorSummary:             reportErrorSummary,
 		reportWatchStatus:              tsc.CreateWatchStatusReporter(sys, configParseResult.Locale(), configParseResult.CompilerOptions(), testing),
 		testing:                        testing,
-		sourceFileCache:                &collections.SyncMap[tspath.Path, *cachedSourceFile]{},
+		sourceFileCache:                &collections.SyncMap[tspath.PathKey, *cachedSourceFile]{},
 		wm:                             wm,
 	}
 	if configParseResult.ConfigFile != nil {
@@ -141,11 +142,17 @@ func (w *Watcher) start(ctx context.Context) {
 	w.replaceContentMapperProject(w.config)
 	w.wm.Lock()
 	w.extendedConfigCache = &tsc.ExtendedConfigCache{}
-	host := compiler.NewCompilerHost(w.sys.GetCurrentDirectory(), w.sys.FS(), w.sys.DefaultLibraryPath(), w.extendedConfigCache, getTraceFromSys(w.sys, w.config.Locale(), w.testing), w.contentMapperProject)
+	host := compiler.NewCompilerHost(
+		w.sys.FS(),
+		w.sys.DefaultLibraryPath(),
+		w.extendedConfigCache,
+		getTraceFromSys(w.sys, w.config.Locale(), w.testing),
+		w.contentMapperProject,
+	)
 	w.program = incremental.ReadBuildInfoProgram(w.config, incremental.NewBuildInfoReader(host), host)
 
 	if w.configFileName != "" {
-		w.configFilePaths = append([]string{w.configFileName}, w.config.ExtendedSourceFiles()...)
+		w.configFilePaths = append([]tspath.RootedFilePath{w.configFileName}, w.config.ExtendedSourceFiles()...)
 	}
 
 	if value, _ := w.sys.GetEnvironmentVariable("TS_WATCH_DEBUG"); value != "" {
@@ -184,11 +191,11 @@ func (w *Watcher) replaceContentMapperProject(config *tsoptions.ParsedCommandLin
 	w.contentMapperProject = project
 }
 
-func (w *Watcher) contentMapperWatchedFiles() []string {
-	var files []string
+func (w *Watcher) contentMapperWatchedFiles() []tspath.RootedFilePath {
+	var files []tspath.RootedFilePath
 	for _, mapper := range w.config.ContentMappers() {
 		if mapper.PackageDirectory != "" && mapper.ContributionID == "" {
-			files = append(files, tspath.CombinePaths(mapper.PackageDirectory, "package.json"))
+			files = append(files, mapper.PackageDirectory.ResolveFile("package.json"))
 		}
 	}
 	if w.contentMapperProject != nil {
@@ -204,29 +211,29 @@ func (w *Watcher) contentMapperWatchedFiles() []string {
 	return files
 }
 
-func (w *Watcher) computeDesiredWatches(seenFilePaths []string) map[string]bool {
+func (w *Watcher) computeDesiredWatches(seenFilePaths []tspath.RootedPath) map[tspath.RootedDirectoryPath]bool {
 	cwd := w.sys.GetCurrentDirectory()
 
-	desiredDirs := make(map[string]bool) // dir → recursive
+	desiredDirs := make(map[tspath.RootedDirectoryPath]bool) // dir → recursive
 
 	// Wildcard directories from tsconfig (recursive or non-recursive)
 	if w.config.ConfigFile != nil {
 		for dir, recursive := range w.config.WildcardDirectories() {
-			realDir := w.sys.FS().Realpath(dir)
+			realDir := tspath.RootedDirectoryPathFromPath(w.sys.FS().Realpath(dir.AsPath()))
 			desiredDirs[realDir] = recursive
 		}
 	}
 
 	// For no-config CLI mode, ensure CWD is watched
 	if w.config.ConfigFile == nil && len(desiredDirs) == 0 {
-		dir := w.sys.FS().Realpath(cwd)
+		dir := tspath.RootedDirectoryPathFromPath(w.sys.FS().Realpath(cwd.AsPath()))
 		desiredDirs[dir] = false
 	}
 
 	// Config file parent directories as non-recursive watches
 	for _, cfgPath := range w.configFilePaths {
-		realPath := w.sys.FS().Realpath(cfgPath)
-		dir := tspath.GetDirectoryPath(realPath)
+		realPath := w.sys.FS().Realpath(cfgPath.AsPath())
+		dir := realPath.Directory()
 		if _, has := desiredDirs[dir]; !has {
 			desiredDirs[dir] = false
 		}
@@ -235,9 +242,8 @@ func (w *Watcher) computeDesiredWatches(seenFilePaths []string) map[string]bool 
 	// For no-config CLI mode, also watch the CLI-specified files' directories
 	if w.config.ConfigFile == nil {
 		for _, fileName := range w.config.FileNames() {
-			absPath := tspath.GetNormalizedAbsolutePath(fileName, cwd)
-			realPath := w.sys.FS().Realpath(absPath)
-			dir := tspath.GetDirectoryPath(realPath)
+			realPath := w.sys.FS().Realpath(fileName.AsPath())
+			dir := realPath.Directory()
 			if _, has := desiredDirs[dir]; !has {
 				desiredDirs[dir] = false
 			}
@@ -248,12 +254,12 @@ func (w *Watcher) computeDesiredWatches(seenFilePaths []string) map[string]bool 
 	// Resolve ancestor fallbacks first so coverage checks use final dirs.
 	resolvedDirs := w.wm.ResolveDesiredDirs(desiredDirs)
 
-	coverage := watchmanager.NewDirWatchSet(w.comparePathsOptions())
+	coverage := watchmanager.NewDirWatchSet(w.caseSensitivity())
 	for dir, recursive := range resolvedDirs {
 		coverage.Set(dir, recursive)
 	}
 	for _, filePath := range seenFilePaths {
-		dir := tspath.GetDirectoryPath(filePath)
+		dir := filePath.Directory()
 		if !coverage.Covered(dir) && watchmanager.CanWatchDirectory(dir) {
 			coverage.Set(dir, false)
 		}
@@ -263,16 +269,13 @@ func (w *Watcher) computeDesiredWatches(seenFilePaths []string) map[string]bool 
 	return w.wm.ResolveDesiredDirs(coverage.Dirs())
 }
 
-func (w *Watcher) reconcileWatches(seenFilePaths []string) error {
+func (w *Watcher) reconcileWatches(seenFilePaths []tspath.RootedPath) error {
 	desiredDirs := w.computeDesiredWatches(seenFilePaths)
 	return w.wm.ReconcileWatches(desiredDirs)
 }
 
-func (w *Watcher) comparePathsOptions() tspath.ComparePathsOptions {
-	return tspath.ComparePathsOptions{
-		UseCaseSensitiveFileNames: w.sys.FS().UseCaseSensitiveFileNames(),
-		CurrentDirectory:          w.sys.GetCurrentDirectory(),
-	}
+func (w *Watcher) caseSensitivity() tspath.CaseSensitivity {
+	return w.sys.FS().CaseSensitivity()
 }
 
 func (w *Watcher) DoCycle() {
@@ -290,21 +293,20 @@ func (w *Watcher) DoCycle() {
 		// Filter fswatch events against known dependencies
 		if w.isRelevantChange(changedPaths) {
 			w.evictChangedSourceFiles(changedPaths)
-			caseSensitive := w.sys.FS().UseCaseSensitiveFileNames()
-			cwd := w.sys.GetCurrentDirectory()
+			caseSensitivity := w.sys.FS().CaseSensitivity()
 			programFiles := w.program.GetProgram().FilesByPath()
-			contentMapperWatchedFiles := collections.NewSetFromItems(core.Map(w.contentMapperWatchedFiles(), func(fileName string) tspath.Path {
-				return tspath.ToPath(fileName, cwd, caseSensitive)
+			contentMapperWatchedFiles := collections.NewSetFromItems(core.Map(w.contentMapperWatchedFiles(), func(fileName tspath.RootedFilePath) tspath.PathKey {
+				return caseSensitivity.PathKey(tspath.RootedPath(fileName))
 			})...)
 			contentMapperConfigChanged := false
 			for eventPath := range changedPaths {
-				if w.sys.FS().DirectoryExists(eventPath) {
+				if w.sys.FS().DirectoryExists(tspath.RootedDirectoryPathFromPath(tspath.RootedPath(eventPath))) {
 					// A watched directory changed: the wildcard file set may have
 					// changed, so reload file names on the next build.
 					w.watchSetDirty = true
 					continue
 				}
-				p := tspath.ToPath(eventPath, cwd, caseSensitive)
+				p := w.caseSensitivity().PathKey(tspath.RootedPath(eventPath))
 				if contentMapperWatchedFiles.Has(p) {
 					contentMapperConfigChanged = true
 					w.forceFullRebuild = true
@@ -354,7 +356,7 @@ func (w *Watcher) DoCycle() {
 		// program would present exactly one cache miss and be misread as a
 		// single-file content edit, silently reusing a stale (e.g. unresolved
 		// import) program instead of rediscovering the file graph.
-		w.sourceFileCache = &collections.SyncMap[tspath.Path, *cachedSourceFile]{}
+		w.sourceFileCache = &collections.SyncMap[tspath.PathKey, *cachedSourceFile]{}
 		w.watchSetDirty = true
 		w.forceFullRebuild = true
 	} else if !hasEvents && !w.configModified {
@@ -375,15 +377,14 @@ func (w *Watcher) DoCycle() {
 	}
 }
 
-func (w *Watcher) isRelevantChange(changedPaths map[string]fswatch.EventKind) bool {
-	caseSensitive := w.sys.FS().UseCaseSensitiveFileNames()
-	cwd := w.sys.GetCurrentDirectory()
-	opts := w.comparePathsOptions()
-	contentMapperWatchedFiles := collections.NewSetFromItems(core.Map(w.contentMapperWatchedFiles(), func(fileName string) tspath.Path {
-		return tspath.ToPath(fileName, cwd, caseSensitive)
+func (w *Watcher) isRelevantChange(changedPaths map[tspath.RootedFilePath]fswatch.EventKind) bool {
+	caseSensitivity := w.sys.FS().CaseSensitivity()
+	opts := w.caseSensitivity()
+	contentMapperWatchedFiles := collections.NewSetFromItems(core.Map(w.contentMapperWatchedFiles(), func(fileName tspath.RootedFilePath) tspath.PathKey {
+		return caseSensitivity.PathKey(tspath.RootedPath(fileName))
 	})...)
 	for eventPath := range changedPaths {
-		p := tspath.ToPath(eventPath, cwd, caseSensitive)
+		p := opts.PathKey(tspath.RootedPath(eventPath))
 		if contentMapperWatchedFiles.Has(p) {
 			return true
 		}
@@ -396,8 +397,8 @@ func (w *Watcher) isRelevantChange(changedPaths map[string]fswatch.EventKind) bo
 		if w.config.ConfigFile != nil && w.config.PossiblyMatchesDirectoryName(p) {
 			return true
 		}
-		if w.sys.FS().DirectoryExists(eventPath) {
-			if w.wm.IsPathUnderWatch(eventPath, opts) {
+		if w.sys.FS().DirectoryExists(tspath.RootedDirectoryPathFromPath(tspath.RootedPath(eventPath))) {
+			if w.wm.IsPathUnderWatch(eventPath) {
 				return true
 			}
 		}
@@ -407,7 +408,7 @@ func (w *Watcher) isRelevantChange(changedPaths map[string]fswatch.EventKind) bo
 
 func (w *Watcher) doBuild() error {
 	if w.configModified {
-		w.sourceFileCache = &collections.SyncMap[tspath.Path, *cachedSourceFile]{}
+		w.sourceFileCache = &collections.SyncMap[tspath.PathKey, *cachedSourceFile]{}
 		w.watchSetDirty = true
 	}
 
@@ -429,7 +430,13 @@ func (w *Watcher) doBuild() error {
 
 	if w.program != nil && w.programReady && !w.configModified && !w.watchSetDirty && !w.forceFullRebuild {
 		cached := cachedvfs.From(w.sys.FS())
-		innerHost := compiler.NewCompilerHost(w.sys.GetCurrentDirectory(), cached, w.sys.DefaultLibraryPath(), w.extendedConfigCache, getTraceFromSys(w.sys, w.config.Locale(), w.testing), w.contentMapperProject)
+		innerHost := compiler.NewCompilerHost(
+			cached,
+			w.sys.DefaultLibraryPath(),
+			w.extendedConfigCache,
+			getTraceFromSys(w.sys, w.config.Locale(), w.testing),
+			w.contentMapperProject,
+		)
 		host := &watchCompilerHost{CompilerHost: innerHost, cache: w.sourceFileCache}
 
 		if w.tryUpdateProgram(host) {
@@ -437,9 +444,9 @@ func (w *Watcher) doBuild() error {
 			result := w.compileAndEmit()
 			cached.DisableAndClearCache()
 
-			w.configMtimes = make(map[string]time.Time, len(w.configFilePaths))
+			w.configMtimes = make(map[tspath.RootedFilePath]time.Time, len(w.configFilePaths))
 			for _, cfgPath := range w.configFilePaths {
-				if s := w.sys.FS().Stat(cfgPath); s != nil {
+				if s := w.sys.FS().Stat(cfgPath.AsPath()); s != nil {
 					w.configMtimes[cfgPath] = s.ModTime()
 				}
 			}
@@ -461,22 +468,28 @@ func (w *Watcher) doBuild() error {
 
 	cached := cachedvfs.From(w.sys.FS())
 	tfs := &trackingvfs.FS{Inner: cached}
-	innerHost := compiler.NewCompilerHost(w.sys.GetCurrentDirectory(), tfs, w.sys.DefaultLibraryPath(), w.extendedConfigCache, getTraceFromSys(w.sys, w.config.Locale(), w.testing), w.contentMapperProject)
+	innerHost := compiler.NewCompilerHost(
+		tfs,
+		w.sys.DefaultLibraryPath(),
+		w.extendedConfigCache,
+		getTraceFromSys(w.sys, w.config.Locale(), w.testing),
+		w.contentMapperProject,
+	)
 	host := &watchCompilerHost{CompilerHost: innerHost, cache: w.sourceFileCache}
 
 	if w.config.ConfigFile != nil {
 		for dir := range w.config.WildcardDirectories() {
-			tfs.SeenFiles.Add(dir)
+			tfs.SeenFiles.Add(dir.AsPath())
 		}
 		if !reloadedFileNames && !w.watchSetDirty && len(w.config.WildcardDirectories()) > 0 {
 			w.config = w.config.ReloadFileNamesOfParsedCommandLine(w.sys.FS())
 		}
 	}
 	for _, path := range w.configFilePaths {
-		tfs.SeenFiles.Add(path)
+		tfs.SeenFiles.Add(path.AsPath())
 	}
 	for _, path := range w.contentMapperWatchedFiles() {
-		tfs.SeenFiles.Add(path)
+		tfs.SeenFiles.Add(path.AsPath())
 	}
 
 	w.program = incremental.NewProgram(compiler.NewProgram(compiler.ProgramOptions{
@@ -489,17 +502,16 @@ func (w *Watcher) doBuild() error {
 	result := w.compileAndEmit()
 	cached.DisableAndClearCache()
 
-	caseSensitive := w.sys.FS().UseCaseSensitiveFileNames()
-	cwd := w.sys.GetCurrentDirectory()
+	caseSensitivity := w.sys.FS().CaseSensitivity()
 	seenSlice := tfs.SeenFiles.ToSlice()
-	w.seenFiles = collections.NewSetWithSizeHint[tspath.Path](len(seenSlice))
+	w.seenFiles = collections.NewSetWithSizeHint[tspath.PathKey](len(seenSlice))
 	for _, p := range seenSlice {
-		w.seenFiles.Add(tspath.ToPath(p, cwd, caseSensitive))
+		w.seenFiles.Add(caseSensitivity.PathKey(p))
 	}
 
-	w.configMtimes = make(map[string]time.Time, len(w.configFilePaths))
+	w.configMtimes = make(map[tspath.RootedFilePath]time.Time, len(w.configFilePaths))
 	for _, cfgPath := range w.configFilePaths {
-		if s := w.sys.FS().Stat(cfgPath); s != nil {
+		if s := w.sys.FS().Stat(cfgPath.AsPath()); s != nil {
 			w.configMtimes[cfgPath] = s.ModTime()
 		}
 	}
@@ -513,7 +525,7 @@ func (w *Watcher) doBuild() error {
 	w.forceFullRebuild = false
 
 	programFiles := w.program.GetProgram().FilesByPath()
-	w.sourceFileCache.Range(func(path tspath.Path, _ *cachedSourceFile) bool {
+	w.sourceFileCache.Range(func(path tspath.PathKey, _ *cachedSourceFile) bool {
 		if _, ok := programFiles[path]; !ok {
 			w.sourceFileCache.Delete(path)
 		}
@@ -536,7 +548,7 @@ func (w *Watcher) doBuild() error {
 func (w *Watcher) tryUpdateProgram(host *watchCompilerHost) bool {
 	oldProgram := w.program.GetProgram()
 
-	var changedPath tspath.Path
+	var changedPath tspath.PathKey
 	var changedCount int
 	for path, file := range oldProgram.FilesByPath() {
 		if file.ContentMapper() != "" {
@@ -590,11 +602,10 @@ func equalJSXImplicitImport(options *core.CompilerOptions, oldFile *ast.SourceFi
 	return oldImport == newImport
 }
 
-func (w *Watcher) evictChangedSourceFiles(changedPaths map[string]fswatch.EventKind) {
-	caseSensitive := w.sys.FS().UseCaseSensitiveFileNames()
-	cwd := w.sys.GetCurrentDirectory()
+func (w *Watcher) evictChangedSourceFiles(changedPaths map[tspath.RootedFilePath]fswatch.EventKind) {
+	caseSensitivity := w.sys.FS().CaseSensitivity()
 	for eventPath := range changedPaths {
-		p := tspath.ToPath(eventPath, cwd, caseSensitive)
+		p := caseSensitivity.PathKey(tspath.RootedPath(eventPath))
 		if _, ok := w.sourceFileCache.Load(p); ok {
 			if w.wm.DebugLog != nil {
 				fmt.Fprintf(w.wm.DebugLog, "[watch] evicting cached source file: %s\n", p)
@@ -618,22 +629,21 @@ func (w *Watcher) compileAndEmit() tsc.CompileAndEmitResult {
 	})
 }
 
-func (w *Watcher) contentMapperManifestChanged(changedPaths map[string]fswatch.EventKind) bool {
-	comparePathsOptions := w.comparePathsOptions()
-	var changedPathKeys map[tspath.Path]struct{}
+func (w *Watcher) contentMapperManifestChanged(changedPaths map[tspath.RootedFilePath]fswatch.EventKind) bool {
+	caseSensitivity := w.caseSensitivity()
+	var changedPathKeys map[tspath.PathKey]struct{}
 	for _, mapper := range w.config.ContentMappers() {
 		if mapper.PackageDirectory == "" || mapper.ContributionID != "" {
 			continue
 		}
 		if changedPathKeys == nil {
-			changedPathKeys = make(map[tspath.Path]struct{}, len(changedPaths))
+			changedPathKeys = make(map[tspath.PathKey]struct{}, len(changedPaths))
 			for path := range changedPaths {
-				changedPathKeys[tspath.ToPath(path, comparePathsOptions.CurrentDirectory, comparePathsOptions.UseCaseSensitiveFileNames)] = struct{}{}
+				changedPathKeys[caseSensitivity.PathKey(path.AsPath())] = struct{}{}
 			}
 		}
-		manifestPath := tspath.CombinePaths(mapper.PackageDirectory, "package.json")
-		manifestKey := tspath.ToPath(manifestPath, comparePathsOptions.CurrentDirectory, comparePathsOptions.UseCaseSensitiveFileNames)
-		if _, changed := changedPathKeys[manifestKey]; changed {
+		manifestPath := mapper.PackageDirectory.ResolveFile("package.json")
+		if _, changed := changedPathKeys[caseSensitivity.PathKey(manifestPath.AsPath())]; changed {
 			return true
 		}
 	}
@@ -649,7 +659,7 @@ func (w *Watcher) recheckTsConfig(force bool) bool {
 		changed := false
 		for _, path := range w.configFilePaths {
 			oldMtime, ok := w.configMtimes[path]
-			s := w.sys.FS().Stat(path)
+			s := w.sys.FS().Stat(path.AsPath())
 			if !ok {
 				if s != nil {
 					changed = true
@@ -673,7 +683,7 @@ func (w *Watcher) recheckTsConfig(force bool) bool {
 		w.configModified = true
 	}
 	w.configHasErrors = false
-	w.configFilePaths = append([]string{w.configFileName}, configParseResult.ExtendedSourceFiles()...)
+	w.configFilePaths = append([]tspath.RootedFilePath{w.configFileName}, configParseResult.ExtendedSourceFiles()...)
 	if !reflect.DeepEqual(w.config.ParsedConfig, configParseResult.ParsedConfig) {
 		w.configModified = true
 	}

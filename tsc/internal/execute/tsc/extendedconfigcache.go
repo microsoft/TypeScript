@@ -13,7 +13,7 @@ import (
 // should not be used for long-running processes where configuration changes over the
 // course of multiple compilations.
 type ExtendedConfigCache struct {
-	m collections.SyncMap[tspath.Path, *extendedConfigCacheEntry]
+	m collections.SyncMap[tspath.PathKey, *extendedConfigCacheEntry]
 }
 
 type extendedConfigCacheEntry struct {
@@ -24,7 +24,7 @@ type extendedConfigCacheEntry struct {
 var _ tsoptions.ExtendedConfigCache = (*ExtendedConfigCache)(nil)
 
 // GetExtendedConfig implements tsoptions.ExtendedConfigCache.
-func (e *ExtendedConfigCache) GetExtendedConfig(fileName string, path tspath.Path, resolutionStack []tspath.Path, host tsoptions.ParseConfigHost) *tsoptions.ExtendedConfigCacheEntry {
+func (e *ExtendedConfigCache) GetExtendedConfig(fileName tspath.RootedFilePath, path tspath.PathKey, resolutionStack []tspath.PathKey, host tsoptions.ParseConfigHost) *tsoptions.ExtendedConfigCacheEntry {
 	entry, loaded := e.loadOrStoreNewLockedEntry(path)
 	defer entry.mu.Unlock()
 	if !loaded {
@@ -34,7 +34,7 @@ func (e *ExtendedConfigCache) GetExtendedConfig(fileName string, path tspath.Pat
 }
 
 // loadOrStoreNewLockedEntry loads an existing entry or creates a new one. The returned entry's mutex is locked.
-func (c *ExtendedConfigCache) loadOrStoreNewLockedEntry(path tspath.Path) (*extendedConfigCacheEntry, bool) {
+func (c *ExtendedConfigCache) loadOrStoreNewLockedEntry(path tspath.PathKey) (*extendedConfigCacheEntry, bool) {
 	entry := &extendedConfigCacheEntry{}
 	entry.mu.Lock()
 	if existing, loaded := c.m.LoadOrStore(path, entry); loaded {

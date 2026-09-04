@@ -4,13 +4,14 @@ import (
 	"time"
 
 	"github.com/microsoft/TypeScript/tsc/internal/compiler"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 )
 
 type Host interface {
 	FS() vfs.FS
-	GetMTime(fileName string) time.Time
-	SetMTime(fileName string, mTime time.Time) error
+	GetMTime(fileName tspath.RootedFilePath) time.Time
+	SetMTime(fileName tspath.RootedFilePath, mTime time.Time) error
 }
 
 type host struct {
@@ -23,20 +24,20 @@ func (h *host) FS() vfs.FS {
 	return h.host.FS()
 }
 
-func (h *host) GetMTime(fileName string) time.Time {
+func (h *host) GetMTime(fileName tspath.RootedFilePath) time.Time {
 	return GetMTime(h.host, fileName)
 }
 
-func (h *host) SetMTime(fileName string, mTime time.Time) error {
-	return h.host.FS().Chtimes(fileName, time.Time{}, mTime)
+func (h *host) SetMTime(fileName tspath.RootedFilePath, mTime time.Time) error {
+	return h.host.FS().Chtimes(fileName.AsPath(), time.Time{}, mTime)
 }
 
 func CreateHost(compilerHost compiler.CompilerHost) Host {
 	return &host{host: compilerHost}
 }
 
-func GetMTime(host compiler.CompilerHost, fileName string) time.Time {
-	stat := host.FS().Stat(fileName)
+func GetMTime(host compiler.CompilerHost, fileName tspath.RootedFilePath) time.Time {
+	stat := host.FS().Stat(fileName.AsPath())
 	var mTime time.Time
 	if stat != nil {
 		mTime = stat.ModTime()

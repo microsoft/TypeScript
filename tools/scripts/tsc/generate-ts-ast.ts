@@ -4,6 +4,7 @@
  *   - packages/typescript/src/ast/ast.generated.ts
  *   - packages/typescript/src/ast/factory.generated.ts
  *   - packages/typescript/src/ast/is.generated.ts
+ *   - packages/typescript/src/ast/visitor.generated.ts
  *
  * Usage: node tools/scripts/tsc/generate-ts-ast.ts
  */
@@ -638,7 +639,7 @@ function generateFactory(): string {
         }
     }
     // Always needed
-    for (const t of ["Node", "NodeArray", "KeywordTypeSyntaxKind", "Token", "SourceFile", "KeywordTypeNode", "EndOfFile", "ImportPhaseModifierSyntaxKind", "Path", "Statement"]) {
+    for (const t of ["Node", "NodeArray", "KeywordTypeSyntaxKind", "Token", "SourceFile", "KeywordTypeNode", "EndOfFile", "RootedFilePath", "ImportPhaseModifierSyntaxKind", "PathKey", "Statement"]) {
         importTypes.add(t);
     }
     const handWrittenCloneHelpers = api.nodes()
@@ -1192,8 +1193,8 @@ function generateFactory(): string {
         out.push(``);
     }
 
-    // ── createSourceFile (hand-written — SourceFile is handWritten in schema) ──
-    out.push(`export function createSourceFile(statements: readonly Statement[], endOfFileToken: EndOfFile, text: string, fileName: string, path: Path): SourceFile {`);
+    // ── createSourceFile (custom generated implementation — SourceFile is handWritten in schema) ──
+    out.push(`export function createSourceFile(statements: readonly Statement[], endOfFileToken: EndOfFile, text: string, fileName: RootedFilePath, path: PathKey): SourceFile {`);
     out.push(`    return new NodeObject(SyntaxKind.SourceFile, {`);
     out.push(`        statements: createNodeArray(statements),`);
     out.push(`        endOfFileToken,`);

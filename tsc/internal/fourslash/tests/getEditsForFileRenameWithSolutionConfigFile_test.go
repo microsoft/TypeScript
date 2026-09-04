@@ -96,8 +96,8 @@ helper;`
 	defer done()
 	f.GoToMarker(t, "helper")
 	result := f.WillRenameFiles(t, &lsproto.FileRename{
-		OldUri: string(lsconv.FileNameToDocumentURI("/lib/helper.ts")),
-		NewUri: string(lsconv.FileNameToDocumentURI("/lib/renamed-helper.ts")),
+		OldUri: lsconv.FilePathToDocumentURI("/lib/helper.ts"),
+		NewUri: lsconv.FilePathToDocumentURI("/lib/renamed-helper.ts"),
 	})
 	if result.WorkspaceEdit == nil || result.WorkspaceEdit.DocumentChanges == nil {
 		t.Fatal("workspace/willRenameFiles returned no document changes")

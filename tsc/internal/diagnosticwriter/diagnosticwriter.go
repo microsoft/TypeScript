@@ -19,9 +19,16 @@ import (
 )
 
 type FileLike interface {
-	FileName() string
+	FileName() tspath.RootedFilePath
 	Text() string
 	ECMALineMap() []core.TextPos
+}
+
+func formatFileNameRelativeTo(fileName tspath.RootedFilePath, directory tspath.RootedDirectoryPath, caseSensitivity tspath.CaseSensitivity) string {
+	if relativePath, ok := caseSensitivity.RelativePathFromDirectory(directory, fileName); ok {
+		return relativePath.AsString()
+	}
+	return fileName.AsString()
 }
 
 // Diagnostic interface abstracts over ast.Diagnostic and LSP diagnostics
@@ -116,12 +123,12 @@ func (d *ASTDiagnostic) resolve() resolvedLocation {
 // originalTextFile presents a source file's original (untransformed) text as a FileLike, so that
 // diagnostics whose ranges point into that text render at the correct locations.
 type originalTextFile struct {
-	fileName string
+	fileName tspath.RootedFilePath
 	text     string
 	lineMap  []core.TextPos
 }
 
-func newOriginalTextFile(file *ast.SourceFile, fileName string) *originalTextFile {
+func newOriginalTextFile(file *ast.SourceFile, fileName tspath.RootedFilePath) *originalTextFile {
 	text := file.OriginalText()
 	return &originalTextFile{
 		fileName: fileName,
@@ -130,18 +137,18 @@ func newOriginalTextFile(file *ast.SourceFile, fileName string) *originalTextFil
 	}
 }
 
-func (f *originalTextFile) FileName() string            { return f.fileName }
-func (f *originalTextFile) Text() string                { return f.text }
-func (f *originalTextFile) ECMALineMap() []core.TextPos { return f.lineMap }
+func (f *originalTextFile) FileName() tspath.RootedFilePath { return f.fileName }
+func (f *originalTextFile) Text() string                    { return f.text }
+func (f *originalTextFile) ECMALineMap() []core.TextPos     { return f.lineMap }
 
 type renamedFile struct {
 	file     *ast.SourceFile
-	fileName string
+	fileName tspath.RootedFilePath
 }
 
-func (f *renamedFile) FileName() string            { return f.fileName }
-func (f *renamedFile) Text() string                { return f.file.Text() }
-func (f *renamedFile) ECMALineMap() []core.TextPos { return f.file.ECMALineMap() }
+func (f *renamedFile) FileName() tspath.RootedFilePath { return f.fileName }
+func (f *renamedFile) Text() string                    { return f.file.Text() }
+func (f *renamedFile) ECMALineMap() []core.TextPos     { return f.file.ECMALineMap() }
 
 func (d *ASTDiagnostic) MessageChain() []Diagnostic {
 	chain := d.Diagnostic.MessageChain()
@@ -195,8 +202,9 @@ func CompareASTDiagnostics(a, b *ASTDiagnostic) int {
 
 type FormattingOptions struct {
 	Locale locale.Locale
-	tspath.ComparePathsOptions
-	NewLine string
+	tspath.CaseSensitivity
+	CurrentDirectory tspath.RootedDirectoryPath
+	NewLine          string
 }
 
 const (
@@ -410,9 +418,9 @@ func WriteLocation(output io.Writer, file FileLike, pos int, formatOpts *Formatt
 	firstLine, firstChar := scanner.GetECMALineAndUTF16CharacterOfPosition(file, pos)
 	var relativeFileName string
 	if formatOpts != nil {
-		relativeFileName = tspath.ConvertToRelativePath(file.FileName(), formatOpts.ComparePathsOptions)
+		relativeFileName = formatFileNameRelativeTo(file.FileName(), formatOpts.CurrentDirectory, formatOpts.CaseSensitivity)
 	} else {
-		relativeFileName = file.FileName()
+		relativeFileName = file.FileName().AsString()
 	}
 
 	writeWithStyleAndReset(output, relativeFileName, foregroundColorEscapeCyan)
@@ -502,7 +510,7 @@ func getErrorSummary(diags []Diagnostic) *ErrorSummary {
 	// !!!
 	// Need an ordered map here, but sorting for consistency.
 	sortedFiles := slices.SortedFunc(maps.Keys(errorsByFile), func(a, b FileLike) int {
-		return strings.Compare(a.FileName(), b.FileName())
+		return strings.Compare(a.FileName().AsString(), b.FileName().AsString())
 	})
 
 	return &ErrorSummary{
@@ -549,10 +557,7 @@ func prettyPathForFileError(file FileLike, fileErrors []Diagnostic, formatOpts *
 		return ""
 	}
 	line := scanner.GetECMALineOfPosition(file, fileErrors[0].Pos())
-	fileName := file.FileName()
-	if tspath.PathIsAbsolute(fileName) && tspath.PathIsAbsolute(formatOpts.CurrentDirectory) {
-		fileName = tspath.ConvertToRelativePath(file.FileName(), formatOpts.ComparePathsOptions)
-	}
+	fileName := formatFileNameRelativeTo(file.FileName(), formatOpts.CurrentDirectory, formatOpts.CaseSensitivity)
 	return fmt.Sprintf(
 		"%s%s:%d%s",
 		fileName,
@@ -572,7 +577,7 @@ func WriteFormatDiagnostic(output io.Writer, diagnostic Diagnostic, formatOpts *
 	if diagnostic.File() != nil {
 		line, character := scanner.GetECMALineAndUTF16CharacterOfPosition(diagnostic.File(), diagnostic.Pos())
 		fileName := diagnostic.File().FileName()
-		relativeFileName := tspath.ConvertToRelativePath(fileName, formatOpts.ComparePathsOptions)
+		relativeFileName := formatFileNameRelativeTo(fileName, formatOpts.CurrentDirectory, formatOpts.CaseSensitivity)
 		fmt.Fprintf(output, "%s(%d,%d): ", relativeFileName, line+1, int(character)+1)
 	}
 

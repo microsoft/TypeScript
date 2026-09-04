@@ -13,12 +13,14 @@ import (
 )
 
 type watchedDir struct {
+	dir       tspath.RootedDirectoryPath
 	closer    io.Closer
 	recursive bool
 }
 
 type dirWatchUpdate struct {
-	dir       string
+	key       tspath.PathKey
+	dir       tspath.RootedDirectoryPath
 	recursive bool
 }
 
@@ -31,28 +33,30 @@ type dirWatchUpdate struct {
 //   - ReconcileWatches must be called under Lock.
 //   - CloseAllWatches and handleWatchTerminated manage their own locking.
 type WatchManager struct {
-	mu          sync.Mutex
-	backend     WatchBackend
-	watchedDirs map[string]*watchedDir
-	doCycleCh   chan struct{}
+	mu              sync.Mutex
+	backend         WatchBackend
+	watchedDirs     map[tspath.PathKey]*watchedDir
+	doCycleCh       chan struct{}
+	caseSensitivity tspath.CaseSensitivity
 
 	// DebugLog receives verbose watch diagnostics when non-nil
 	DebugLog io.Writer
 
 	warnWriter io.Writer
-	dirExists  func(string) bool
+	dirExists  func(tspath.RootedDirectoryPath) bool
 
 	changedMu       sync.Mutex
-	changedPaths    map[string]fswatch.EventKind
+	changedPaths    map[tspath.RootedFilePath]fswatch.EventKind
 	changedOverflow bool
 }
 
-func NewWatchManager(warnWriter io.Writer, dirExists func(string) bool) *WatchManager {
+func NewWatchManager(warnWriter io.Writer, dirExists func(tspath.RootedDirectoryPath) bool, caseSensitivity tspath.CaseSensitivity) *WatchManager {
 	return &WatchManager{
-		watchedDirs: make(map[string]*watchedDir),
-		doCycleCh:   make(chan struct{}, 1),
-		warnWriter:  warnWriter,
-		dirExists:   dirExists,
+		watchedDirs:     make(map[tspath.PathKey]*watchedDir),
+		doCycleCh:       make(chan struct{}, 1),
+		warnWriter:      warnWriter,
+		dirExists:       dirExists,
+		caseSensitivity: caseSensitivity,
 	}
 }
 
@@ -76,7 +80,7 @@ func (wm *WatchManager) Unlock() { wm.mu.Unlock() }
 
 func (wm *WatchManager) DoCycleCh() <-chan struct{} { return wm.doCycleCh }
 
-func (wm *WatchManager) DrainEvents() (changed map[string]fswatch.EventKind, overflow bool) {
+func (wm *WatchManager) DrainEvents() (changed map[tspath.RootedFilePath]fswatch.EventKind, overflow bool) {
 	wm.changedMu.Lock()
 	changed = wm.changedPaths
 	overflow = wm.changedOverflow
@@ -101,7 +105,7 @@ func (wm *WatchManager) signalDoCycle() {
 	}
 }
 
-func (wm *WatchManager) onWatchEvents(events []fswatch.Event, err error) {
+func (wm *WatchManager) onWatchEvents(events []WatchEvent, err error) {
 	if err != nil {
 		if errors.Is(err, fswatch.ErrOverflow) {
 			if wm.DebugLog != nil {
@@ -134,7 +138,7 @@ func (wm *WatchManager) onWatchEvents(events []fswatch.Event, err error) {
 		}
 		wm.changedMu.Lock()
 		if wm.changedPaths == nil {
-			wm.changedPaths = make(map[string]fswatch.EventKind, len(events))
+			wm.changedPaths = make(map[tspath.RootedFilePath]fswatch.EventKind, len(events))
 		}
 		for _, e := range events {
 			wm.changedPaths[e.Path] = e.Kind
@@ -144,15 +148,15 @@ func (wm *WatchManager) onWatchEvents(events []fswatch.Event, err error) {
 	}
 }
 
-func (wm *WatchManager) handleWatchTerminated(dir string, identity *watchedDir) {
+func (wm *WatchManager) handleWatchTerminated(key tspath.PathKey, identity *watchedDir) {
 	if wm.DebugLog != nil {
-		fmt.Fprintf(wm.DebugLog, "[watch] watch terminated: %s\n", dir)
+		fmt.Fprintf(wm.DebugLog, "[watch] watch terminated: %s\n", identity.dir)
 	}
 	var staleCloser io.Closer
 	wm.mu.Lock()
-	if wd, ok := wm.watchedDirs[dir]; ok && wd == identity {
+	if wd, ok := wm.watchedDirs[key]; ok && wd == identity {
 		staleCloser = wd.closer
-		delete(wm.watchedDirs, dir)
+		delete(wm.watchedDirs, key)
 	}
 	wm.mu.Unlock()
 	if staleCloser != nil {
@@ -177,14 +181,14 @@ func (wm *WatchManager) CloseAllWatches() {
 	}
 }
 
-func (wm *WatchManager) createDirWatchRequest(dir string, entry *watchedDir) WatchDirectoryRequest {
+func (wm *WatchManager) createDirWatchRequest(update dirWatchUpdate, entry *watchedDir) WatchDirectoryRequest {
 	return WatchDirectoryRequest{
-		Dir:       dir,
+		Dir:       update.dir,
 		Recursive: entry.recursive,
 		Ignore:    ShouldIgnoreWatchPath,
-		Callback: func(events []fswatch.Event, err error) {
+		Callback: func(events []WatchEvent, err error) {
 			if err != nil && errors.Is(err, fswatch.ErrWatchTerminated) {
-				wm.handleWatchTerminated(dir, entry)
+				wm.handleWatchTerminated(update.key, entry)
 				return
 			}
 			wm.onWatchEvents(events, err)
@@ -192,13 +196,13 @@ func (wm *WatchManager) createDirWatchRequest(dir string, entry *watchedDir) Wat
 	}
 }
 
-func (wm *WatchManager) ResolveDesiredDirs(desiredDirs map[string]bool) map[string]bool {
-	resolved := make(map[string]bool, len(desiredDirs))
+func (wm *WatchManager) ResolveDesiredDirs(desiredDirs map[tspath.RootedDirectoryPath]bool) map[tspath.RootedDirectoryPath]bool {
+	resolvedByPath := make(map[tspath.PathKey]dirWatchUpdate, len(desiredDirs))
 	for dir, recursive := range desiredDirs {
 		watchDir := dir
 		watchRecursive := recursive
 		for !wm.dirExists(watchDir) {
-			parent := tspath.GetDirectoryPath(watchDir)
+			parent := watchDir.AsPath().Directory()
 			if parent == watchDir {
 				break
 			}
@@ -214,18 +218,35 @@ func (wm *WatchManager) ResolveDesiredDirs(desiredDirs map[string]bool) map[stri
 		if watchDir != dir && wm.DebugLog != nil {
 			fmt.Fprintf(wm.DebugLog, "[watch] resolved %s to ancestor %s\n", dir, watchDir)
 		}
-		if existing, has := resolved[watchDir]; has {
-			resolved[watchDir] = existing || watchRecursive
+		key := wm.caseSensitivity.PathKey(watchDir.AsPath())
+		if existing, has := resolvedByPath[key]; has {
+			existing.recursive = existing.recursive || watchRecursive
+			resolvedByPath[key] = existing
 		} else {
-			resolved[watchDir] = watchRecursive
+			resolvedByPath[key] = dirWatchUpdate{key: key, dir: watchDir, recursive: watchRecursive}
 		}
+	}
+	resolved := make(map[tspath.RootedDirectoryPath]bool, len(resolvedByPath))
+	for _, watch := range resolvedByPath {
+		resolved[watch.dir] = watch.recursive
 	}
 	return resolved
 }
 
-func (wm *WatchManager) ReconcileWatches(desiredDirs map[string]bool) error {
+func (wm *WatchManager) ReconcileWatches(desiredDirs map[tspath.RootedDirectoryPath]bool) error {
 	if wm.backend == nil {
 		return nil
+	}
+
+	desiredByPath := make(map[tspath.PathKey]dirWatchUpdate, len(desiredDirs))
+	for dir, recursive := range desiredDirs {
+		key := wm.caseSensitivity.PathKey(dir.AsPath())
+		if existing, ok := desiredByPath[key]; ok {
+			existing.recursive = existing.recursive || recursive
+			desiredByPath[key] = existing
+		} else {
+			desiredByPath[key] = dirWatchUpdate{key: key, dir: dir, recursive: recursive}
+		}
 	}
 
 	var additions []dirWatchUpdate
@@ -233,28 +254,28 @@ func (wm *WatchManager) ReconcileWatches(desiredDirs map[string]bool) error {
 
 	core.DiffMapsFunc(
 		wm.watchedDirs,
-		desiredDirs,
-		func(wd *watchedDir, recursive bool) bool { return wd.recursive == recursive },
-		func(dir string, recursive bool) {
+		desiredByPath,
+		func(wd *watchedDir, desired dirWatchUpdate) bool { return wd.recursive == desired.recursive },
+		func(_ tspath.PathKey, desired dirWatchUpdate) {
 			if wm.DebugLog != nil {
-				fmt.Fprintf(wm.DebugLog, "[watch] watching directory %s (recursive=%v)\n", dir, recursive)
+				fmt.Fprintf(wm.DebugLog, "[watch] watching directory %s (recursive=%v)\n", desired.dir, desired.recursive)
 			}
-			additions = append(additions, dirWatchUpdate{dir: dir, recursive: recursive})
+			additions = append(additions, desired)
 		},
-		func(dir string, wd *watchedDir) {
+		func(key tspath.PathKey, wd *watchedDir) {
 			if wm.DebugLog != nil {
-				fmt.Fprintf(wm.DebugLog, "[watch] closing stale dir watch: %s\n", dir)
+				fmt.Fprintf(wm.DebugLog, "[watch] closing stale dir watch: %s\n", wd.dir)
 			}
 			wd.closer.Close()
-			delete(wm.watchedDirs, dir)
+			delete(wm.watchedDirs, key)
 		},
-		func(dir string, wd *watchedDir, recursive bool) {
+		func(key tspath.PathKey, wd *watchedDir, desired dirWatchUpdate) {
 			if wm.DebugLog != nil {
-				fmt.Fprintf(wm.DebugLog, "[watch] recreating dir watch %s (recursive %v→%v)\n", dir, wd.recursive, recursive)
+				fmt.Fprintf(wm.DebugLog, "[watch] recreating dir watch %s (recursive %v→%v)\n", wd.dir, wd.recursive, desired.recursive)
 			}
 			wd.closer.Close()
-			delete(wm.watchedDirs, dir)
-			changes = append(changes, dirWatchUpdate{dir: dir, recursive: recursive})
+			delete(wm.watchedDirs, key)
+			changes = append(changes, desired)
 		},
 	)
 	additions = append(additions, changes...)
@@ -268,15 +289,15 @@ func (wm *WatchManager) createDirWatches(updates []dirWatchUpdate) error {
 	requests := make([]WatchDirectoryRequest, len(updates))
 	entries := make([]*watchedDir, len(updates))
 	for i, update := range updates {
-		entry := &watchedDir{recursive: update.recursive}
+		entry := &watchedDir{dir: update.dir, recursive: update.recursive}
 		entries[i] = entry
-		requests[i] = wm.createDirWatchRequest(update.dir, entry)
+		requests[i] = wm.createDirWatchRequest(update, entry)
 	}
 	closers, err := wm.backend.WatchDirectories(requests)
 	if err == nil {
 		for i, update := range updates {
 			entries[i].closer = closers[i]
-			wm.watchedDirs[update.dir] = entries[i]
+			wm.watchedDirs[update.key] = entries[i]
 		}
 		return nil
 	}
@@ -293,48 +314,55 @@ func (wm *WatchManager) createDirWatches(updates []dirWatchUpdate) error {
 // already present in the set, or when it is contained within a recursive watch
 // directory already in the set.
 type DirWatchSet struct {
-	opts tspath.ComparePathsOptions
-	dirs map[string]bool
+	caseSensitivity tspath.CaseSensitivity
+	dirs            map[tspath.PathKey]dirWatchUpdate
 }
 
-func NewDirWatchSet(opts tspath.ComparePathsOptions) *DirWatchSet {
+func NewDirWatchSet(caseSensitivity tspath.CaseSensitivity) *DirWatchSet {
 	return &DirWatchSet{
-		opts: opts,
-		dirs: make(map[string]bool),
+		caseSensitivity: caseSensitivity,
+		dirs:            make(map[tspath.PathKey]dirWatchUpdate),
 	}
 }
 
-func (s *DirWatchSet) canonical(dir string) string {
-	return tspath.GetCanonicalFileName(dir, s.opts.UseCaseSensitiveFileNames)
+func (s *DirWatchSet) Set(dir tspath.RootedDirectoryPath, recursive bool) {
+	key := s.caseSensitivity.PathKey(dir.AsPath())
+	if existing, ok := s.dirs[key]; ok {
+		existing.recursive = existing.recursive || recursive
+		s.dirs[key] = existing
+	} else {
+		s.dirs[key] = dirWatchUpdate{dir: dir, recursive: recursive}
+	}
 }
 
-func (s *DirWatchSet) Set(dir string, recursive bool) {
-	dir = s.canonical(dir)
-	s.dirs[dir] = s.dirs[dir] || recursive
-}
-
-func (s *DirWatchSet) Covered(dir string) bool {
-	dir = s.canonical(dir)
-	if _, has := s.dirs[dir]; has {
+func (s *DirWatchSet) Covered(dir tspath.RootedDirectoryPath) bool {
+	path := s.caseSensitivity.PathKey(dir.AsPath())
+	if _, has := s.dirs[path]; has {
 		return true
 	}
-	rootLength := tspath.GetRootLength(dir)
-	for len(dir) > rootLength {
-		dir = tspath.GetDirectoryPath(dir)
-		if s.dirs[dir] {
+	for {
+		parent := path.Parent()
+		if parent == path {
+			return false
+		}
+		path = parent
+		if watch, ok := s.dirs[path]; ok && watch.recursive {
 			return true
 		}
 	}
-	return false
 }
 
-func (s *DirWatchSet) Dirs() map[string]bool {
-	return s.dirs
+func (s *DirWatchSet) Dirs() map[tspath.RootedDirectoryPath]bool {
+	dirs := make(map[tspath.RootedDirectoryPath]bool, len(s.dirs))
+	for _, watch := range s.dirs {
+		dirs[watch.dir] = watch.recursive
+	}
+	return dirs
 }
 
-func (wm *WatchManager) IsPathUnderWatch(path string, opts tspath.ComparePathsOptions) bool {
-	for dir := range wm.watchedDirs {
-		if tspath.ContainsPath(dir, path, opts) {
+func (wm *WatchManager) IsPathUnderWatch(fileName tspath.RootedFilePath) bool {
+	for _, watch := range wm.watchedDirs {
+		if wm.caseSensitivity.ContainsFilePath(watch.dir, fileName) {
 			return true
 		}
 	}

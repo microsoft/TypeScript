@@ -91,7 +91,7 @@ func TestResponseFileDoesNotPanic(t *testing.T) {
 
 	// Passing `@` with an empty or relative filename should not panic.
 	// It should produce a diagnostic error instead.
-	cwd := t.TempDir()
+	cwd := tspath.RootedDirectoryPathFromAbsolute(t.TempDir())
 	t.Run("empty response file", func(t *testing.T) {
 		t.Parallel()
 		parsed := tsoptions.ParseCommandLineTestWorker(nil, []string{"@"}, osvfs.FS(), cwd)
@@ -112,11 +112,11 @@ func TestResponseFileParsing(t *testing.T) {
 		t.Parallel()
 		host := tsoptionstest.NewVFSParseConfigHost(map[string]string{
 			"/project/args.txt": "--strict --outDir dist",
-		}, "/project", true)
+		}, "/project", tspath.CaseSensitive)
 		parsed := tsoptions.ParseCommandLine([]string{"@args.txt"}, host)
 		assert.Equal(t, len(parsed.Errors), 0)
 		assert.Assert(t, parsed.CompilerOptions().Strict.IsTrue())
-		assert.Equal(t, parsed.CompilerOptions().OutDir, "/project/dist")
+		assert.Equal(t, parsed.CompilerOptions().OutDir, tspath.RootedDirectoryPathFromNormalized("/project/dist"))
 	})
 
 	t.Run("cyclic response files", func(t *testing.T) {
@@ -124,11 +124,11 @@ func TestResponseFileParsing(t *testing.T) {
 		host := tsoptionstest.NewVFSParseConfigHost(map[string]string{
 			"/project/a.txt": "@/project/b.txt --strict",
 			"/project/b.txt": "@/project/a.txt --outDir dist",
-		}, "/project", true)
+		}, "/project", tspath.CaseSensitive)
 		parsed := tsoptions.ParseCommandLine([]string{"@a.txt"}, host)
 		assert.Equal(t, len(parsed.Errors), 0)
 		assert.Assert(t, parsed.CompilerOptions().Strict.IsTrue())
-		assert.Equal(t, parsed.CompilerOptions().OutDir, "/project/dist")
+		assert.Equal(t, parsed.CompilerOptions().OutDir, tspath.RootedDirectoryPathFromNormalized("/project/dist"))
 	})
 }
 
@@ -137,15 +137,14 @@ func TestParseCommandLineTypeRootsRelativePath(t *testing.T) {
 
 	host := tsoptionstest.NewVFSParseConfigHost(map[string]string{
 		"/home/project/bug.ts": `let x = 1;`,
-	}, "/home/project", true)
+	}, "/home/project", tspath.CaseSensitive)
 
 	cmdLine := tsoptions.ParseCommandLine([]string{"--typeRoots", "t", "bug.ts"}, host)
 
 	typeRoots := cmdLine.CompilerOptions().TypeRoots
 	assert.Assert(t, typeRoots != nil, "typeRoots should not be nil")
 	assert.Equal(t, len(typeRoots), 1)
-	assert.Assert(t, tspath.IsRootedDiskPath(typeRoots[0]), "typeRoots entry should be an absolute path, got: %s", typeRoots[0])
-	assert.Assert(t, strings.HasSuffix(typeRoots[0], "/t"), "typeRoots entry should end with '/t', got: %s", typeRoots[0])
+	assert.Equal(t, typeRoots[0], tspath.RootedDirectoryPathFromNormalized("/home/project/t"))
 }
 
 func TestCustomConditionsNullOverride(t *testing.T) {
@@ -160,7 +159,7 @@ func TestCustomConditionsNullOverride(t *testing.T) {
 		"/project/index.ts": `console.log("Hello, World!");`,
 	}
 
-	host := tsoptionstest.NewVFSParseConfigHost(files, "/project", true)
+	host := tsoptionstest.NewVFSParseConfigHost(files, "/project", tspath.CaseSensitive)
 
 	// Parse command line with --customConditions null
 	cmdLine := tsoptions.ParseCommandLine([]string{"--project", "/project", "--customConditions", "null"}, host)
@@ -277,7 +276,7 @@ func (f commandLineSubScenario) assertParseResult(t *testing.T) {
 		tsBaseline := parseExistingCompilerBaseline(t, originalBaseline)
 
 		// f.workerDiagnostic is either defined or set to default pointer in `createSubScenario`
-		parsed := tsoptions.ParseCommandLineTestWorker(f.optDecls, f.commandLine, osvfs.FS(), t.TempDir())
+		parsed := tsoptions.ParseCommandLineTestWorker(f.optDecls, f.commandLine, osvfs.FS(), tspath.RootedDirectoryPathFromAbsolute(t.TempDir()))
 
 		newBaselineFileNames := strings.Join(parsed.FileNames, ",")
 		assert.Equal(t, tsBaseline.fileNames, newBaselineFileNames)
@@ -381,7 +380,7 @@ func (f commandLineSubScenario) assertBuildParseResultWithTsBaseline(t *testing.
 		// f.workerDiagnostic is either defined or set to default pointer in `createSubScenario`
 		parsed := tsoptions.ParseBuildCommandLine(f.commandLine, &tsoptionstest.VfsParseConfigHost{
 			Vfs:              osvfs.FS(),
-			CurrentDirectory: tspath.NormalizeSlashes(repo.TestDataPath()),
+			CurrentDirectory: tspath.RootedDirectoryPathFromAbsolute(repo.TestDataPath()),
 		})
 
 		newBaselineProjects := strings.Join(parsed.Projects, ",")

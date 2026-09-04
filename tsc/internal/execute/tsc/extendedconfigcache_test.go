@@ -5,6 +5,7 @@ import (
 
 	"github.com/microsoft/TypeScript/tsc/internal/execute/tsc"
 	"github.com/microsoft/TypeScript/tsc/internal/tsoptions"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfstest"
 )
@@ -14,8 +15,10 @@ type testParseConfigHost struct {
 	cwd string
 }
 
-func (h *testParseConfigHost) FS() vfs.FS                  { return h.fs }
-func (h *testParseConfigHost) GetCurrentDirectory() string { return h.cwd }
+func (h *testParseConfigHost) FS() vfs.FS { return h.fs }
+func (h *testParseConfigHost) GetCurrentDirectory() tspath.RootedDirectoryPath {
+	return tspath.RootedDirectoryPathFromNormalized(h.cwd)
+}
 
 func TestExtendedConfigCacheExtendsCircularity(t *testing.T) {
 	t.Parallel()
@@ -31,7 +34,7 @@ func TestExtendedConfigCacheExtendsCircularity(t *testing.T) {
 			"/project/main.ts":       `// Hello World!`,
 		}
 
-		fs := vfstest.FromMap(files, false /*useCaseSensitiveFileNames*/)
+		fs := vfstest.FromMap(files, tspath.CaseInsensitive /*caseSensitivity*/)
 		host := &testParseConfigHost{fs: fs, cwd: "/project"}
 		cache := &tsc.ExtendedConfigCache{}
 
@@ -52,7 +55,7 @@ func TestExtendedConfigCacheExtendsCircularity(t *testing.T) {
 			"/project/main.ts":       `// Hello World!`,
 		}
 
-		fs := vfstest.FromMap(files, false /*useCaseSensitiveFileNames*/)
+		fs := vfstest.FromMap(files, tspath.CaseInsensitive /*caseSensitivity*/)
 		host := &testParseConfigHost{fs: fs, cwd: "/project"}
 		cache := &tsc.ExtendedConfigCache{}
 
@@ -74,7 +77,7 @@ func TestExtendedConfigCacheExtendsCircularity(t *testing.T) {
 			"/project/main.ts":       `// Hello World!`,
 		}
 
-		fs := vfstest.FromMap(files, false /*useCaseSensitiveFileNames*/)
+		fs := vfstest.FromMap(files, tspath.CaseInsensitive /*caseSensitivity*/)
 		host := &testParseConfigHost{fs: fs, cwd: "/project"}
 		cache := &tsc.ExtendedConfigCache{}
 
@@ -94,7 +97,7 @@ func TestExtendedConfigCacheNullExtendsDoesNotPanic(t *testing.T) {
 		"/project/main.ts":       `// Hello World!`,
 	}
 
-	fs := vfstest.FromMap(files, false /*useCaseSensitiveFileNames*/)
+	fs := vfstest.FromMap(files, tspath.CaseInsensitive /*caseSensitivity*/)
 	host := &testParseConfigHost{fs: fs, cwd: "/project"}
 	cache := &tsc.ExtendedConfigCache{}
 

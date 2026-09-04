@@ -27,8 +27,8 @@ type RenameInfo struct {
 	LocalizedErrorMessage string
 	DisplayName           string
 	TriggerSpan           lsproto.Range
-	FileToRename          string
-	NewFileName           string
+	FileToRename          tspath.RootedPath
+	NewFileName           tspath.RootedPath
 }
 
 type mappedRenameEdit struct {
@@ -249,7 +249,7 @@ func (l *LanguageService) renameBlockedReason(sourceFile *ast.SourceFile, node *
 // isDefinedInLibraryFile checks if a declaration is from a default library file (e.g., lib.d.ts).
 func isDefinedInLibraryFile(program *compiler.Program, declaration *ast.Node) bool {
 	declSourceFile := ast.GetSourceFileOfNode(declaration)
-	return program.IsSourceFileDefaultLibrary(declSourceFile.Path()) && tspath.IsDeclarationFileName(declSourceFile.FileName())
+	return program.IsSourceFileDefaultLibrary(declSourceFile.PathKey()) && declSourceFile.FileName().IsDeclarationFile()
 }
 
 // wouldRenameInOtherNodeModules checks if renaming the symbol would affect node_modules.
@@ -315,15 +315,12 @@ func (l *LanguageService) getRenameInfoForModule(ctx context.Context, newName st
 	}
 
 	fileName := moduleSourceFile.AsSourceFile().FileName()
-	withoutIndex := ""
+	var withoutIndex tspath.RootedPath
 	if !strings.HasSuffix(specifier.Text(), "/index") && !strings.HasSuffix(specifier.Text(), "/index.js") {
-		candidate := tspath.RemoveFileExtension(fileName)
-		if trimmed, ok := strings.CutSuffix(candidate, "/index"); ok {
-			withoutIndex = trimmed
-		}
+		withoutIndex = tryRemoveIndexFileName(fileName)
 	}
 
-	displayName := fileName
+	displayName := fileName.AsPath()
 	if withoutIndex != "" {
 		displayName = withoutIndex
 	}
@@ -347,23 +344,36 @@ func (l *LanguageService) getRenameInfoForModule(ctx context.Context, newName st
 	}, true
 }
 
+func tryRemoveIndexFileName(fileName tspath.RootedFilePath) tspath.RootedPath {
+	candidate := fileName.RemoveFileExtension()
+	if candidate.BaseName() == "index" {
+		root, relative := candidate.RootAndRelativePath()
+		if (root == "/" || root == "^/") && relative == "index" {
+			return ""
+		}
+		return candidate.Directory().AsPath()
+	}
+	return ""
+}
+
 // Adjust the new name based on the old path that an import specifier resolves to.
 // For example, if specifier "a.js" resolves to file a.ts, renaming "a.js" -> "b.js" should mean file rename a.ts -> b.ts.
-func (l *LanguageService) getNewFileNameForModuleRename(oldPath, specifierText, newName string) string {
-	newPath := tspath.CombinePaths(tspath.GetDirectoryPath(oldPath), newName)
-	ignoreCase := !l.host.UseCaseSensitiveFileNames()
+func (l *LanguageService) getNewFileNameForModuleRename(oldPath tspath.RootedPath, specifierText, newName string) tspath.RootedPath {
+	oldFileName := tspath.RootedFilePathFromPath(oldPath)
+	newPath := oldPath.Directory().ResolveFile(newName)
+	caseSensitivity := l.host.CaseSensitivity()
 	var oldExt string
-	if tspath.IsDeclarationFileName(oldPath) {
-		oldExt = tspath.GetDeclarationFileExtension(oldPath)
+	if oldFileName.IsDeclarationFile() {
+		oldExt = oldFileName.DeclarationFileExtension()
 	} else {
-		oldExt = tspath.GetAnyExtensionFromPath(oldPath, nil /*extensions*/, ignoreCase)
+		oldExt = oldFileName.AnyExtension(nil /*extensions*/, caseSensitivity)
 	}
-	if !tspath.HasExtension(newPath) {
-		newPath = newPath + oldExt
-	} else if tspath.GetAnyExtensionFromPath(newPath, nil /*extensions*/, ignoreCase) == tspath.GetAnyExtensionFromPath(specifierText, nil /*extensions*/, ignoreCase) {
-		newPath = tspath.ChangeAnyExtension(newPath, oldExt, nil /*extensions*/, ignoreCase)
+	if !newPath.HasExtension() {
+		newPath = newPath.AppendSuffix(oldExt)
+	} else if newPath.AnyExtension(nil /*extensions*/, caseSensitivity) == tspath.GetAnyExtensionFromPath(specifierText, nil /*extensions*/, caseSensitivity) {
+		newPath = newPath.ChangeAnyExtension(oldExt, nil /*extensions*/, caseSensitivity)
 	}
-	return newPath
+	return newPath.AsPath()
 }
 
 func (l *LanguageService) getTextForRename(originalNode *ast.Node, entry *ReferenceEntry, newText string, ch *checker.Checker, quotePreference lsutil.QuotePreference, useAliasesForRename bool) string {

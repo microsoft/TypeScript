@@ -17,10 +17,10 @@ import (
 )
 
 type resolved struct {
-	path                         string
+	path                         tspath.RootedFilePath
 	extension                    string
 	packageId                    PackageId
-	originalPath                 string
+	originalPath                 tspath.RootedFilePath
 	resolvedUsingTsExtension     bool
 	resolvedUsingExtraExtensions bool
 }
@@ -41,8 +41,93 @@ func unresolved() *resolved {
 	return &resolved{}
 }
 
-func pathForDynamicResolution(directory string, path string, directoryOnly bool) string {
-	if tspath.IsEncodedDynamicFileName(directory) && !tspath.PathIsAbsolute(path) {
+// resolutionCandidate is a rooted, normalized lookup location. Its FileName
+// omits any trailing separator; directoryOnly preserves the resolver behavior
+// that skips file lookup for candidates written with directory intent.
+type resolutionCandidate struct {
+	path          tspath.RootedPath
+	directoryPath tspath.RootedDirectoryPath
+	directoryOnly bool
+}
+
+func resolutionCandidateFromNormalized(path string) resolutionCandidate {
+	directoryOnly := tspath.HasTrailingDirectorySeparator(path)
+	if directoryOnly && len(path) > tspath.GetRootLength(path) {
+		path = tspath.RemoveTrailingDirectorySeparator(path)
+	}
+	return resolutionCandidate{
+		path:          tspath.RootedPathFromNormalized(path),
+		directoryOnly: directoryOnly,
+	}
+}
+
+func resolveResolutionCandidate(path string, paths ...string) resolutionCandidate {
+	return resolutionCandidateFromNormalized(tspath.ResolvePath(path, paths...))
+}
+
+func resolutionCandidateFromDirectory(directory tspath.RootedDirectoryPath) resolutionCandidate {
+	return resolutionCandidate{path: directory.AsPath()}
+}
+
+func resolutionCandidateFromFileName(fileName tspath.RootedFilePath) resolutionCandidate {
+	return resolutionCandidate{path: fileName.AsPath()}
+}
+
+func resolutionCandidateFromDirectoryPath(directory tspath.RootedDirectoryPath, path string) resolutionCandidate {
+	filePath := pathForDynamicResolution(directory, path, false)
+	directoryPath := pathForDynamicResolution(directory, path, true)
+	return resolutionCandidateFromEncodedPaths(directory, filePath, directoryPath, tspath.HasTrailingDirectorySeparator(path))
+}
+
+func resolutionCandidateFromDynamicLogicalPath(directory tspath.RootedDirectoryPath, path string) resolutionCandidate {
+	empty := path == ""
+	directoryOnly := path == "" || tspath.HasTrailingDirectorySeparator(path)
+	if path != "" && directoryOnly {
+		path = tspath.RemoveTrailingDirectorySeparator(path)
+	}
+	if empty {
+		return resolutionCandidate{path: directory.AsPath(), directoryOnly: true}
+	}
+	return resolutionCandidateFromEncodedPaths(
+		directory,
+		tspath.EncodeDynamicRelativeURIPath(path),
+		tspath.EncodeDynamicRelativeURIDirectoryPath(path),
+		directoryOnly,
+	)
+}
+
+func resolutionCandidateFromDiskLogicalPath(directory tspath.RootedDirectoryPath, path string, directoryOnly bool) resolutionCandidate {
+	if path != "" && directoryOnly {
+		path = tspath.RemoveTrailingDirectorySeparator(path)
+	}
+	if path == "" {
+		return resolutionCandidate{path: directory.AsPath(), directoryOnly: directoryOnly}
+	}
+	return resolutionCandidate{
+		path:          directory.ResolveFileFromNormalizedRelative(path).AsPath(),
+		directoryOnly: directoryOnly,
+	}
+}
+
+func resolutionCandidateFromEncodedPaths(directory tspath.RootedDirectoryPath, filePath string, directoryPath string, directoryOnly bool) resolutionCandidate {
+	resolvedDirectoryPath := directory.ResolveDirectory(directoryPath)
+	if directoryOnly {
+		return resolutionCandidate{
+			path:          resolvedDirectoryPath.AsPath(),
+			directoryOnly: true,
+		}
+	}
+	candidate := resolutionCandidate{
+		path: directory.ResolveFile(filePath).AsPath(),
+	}
+	if resolvedDirectoryPath.AsPath() != candidate.path {
+		candidate.directoryPath = resolvedDirectoryPath
+	}
+	return candidate
+}
+
+func pathForDynamicResolution(directory tspath.RootedDirectoryPath, path string, directoryOnly bool) string {
+	if tspath.IsEncodedDynamicFileName(directory.AsString()) && !tspath.PathIsAbsolute(path) {
 		if directoryOnly {
 			return tspath.EncodeDynamicDirectorySpecifier(path)
 		}
@@ -51,44 +136,98 @@ func pathForDynamicResolution(directory string, path string, directoryOnly bool)
 	return path
 }
 
-func resolvePathForModule(directory string, path string, directoryOnly bool) string {
-	resolved := tspath.NormalizePath(tspath.CombinePaths(directory, pathForDynamicResolution(directory, path, directoryOnly)))
-	if directoryOnly {
-		return tspath.EnsureTrailingDirectorySeparator(resolved)
-	}
-	return resolved
-}
-
-func resolveDynamicLogicalPath(directory string, path string, directoryOnly bool) string {
+func resolutionCandidateFromRelativePath(directory tspath.RootedDirectoryPath, path tspath.RelativePath) resolutionCandidate {
+	directoryOnly := path == "" || path.HasTrailingDirectorySeparator()
 	if path != "" && directoryOnly {
-		path = tspath.RemoveTrailingDirectorySeparator(path)
+		path = path.WithoutTrailingDirectorySeparator()
 	}
-	encoded := tspath.EncodeDynamicRelativeURIPath(path)
-	if directoryOnly {
-		encoded = tspath.EncodeDynamicRelativeURIDirectoryPath(path)
+	if path == "" {
+		return resolutionCandidate{path: directory.AsPath(), directoryOnly: true}
 	}
-	resolved := tspath.NormalizePath(tspath.CombinePaths(directory, encoded))
-	if directoryOnly {
-		return tspath.EnsureTrailingDirectorySeparator(resolved)
+	return resolutionCandidate{
+		path:          directory.ResolveFileFromNormalizedRelative(path.AsString()).AsPath(),
+		directoryOnly: directoryOnly,
 	}
-	return resolved
 }
 
-func dynamicDirectoryCandidate(candidate string) string {
-	if !tspath.IsEncodedDynamicFileName(candidate) {
-		return candidate
+func (c resolutionCandidate) AsString() string {
+	if c.directoryOnly {
+		return tspath.EnsureTrailingDirectorySeparator(c.path.AsString())
 	}
-	directory := tspath.GetDirectoryPath(candidate)
-	base := tspath.GetBaseFileName(candidate)
-	logicalBase := tspath.DecodeDynamicURIPathSegment(base)
-	encodedBase := tspath.EncodeDynamicURIDirectoryPath(logicalBase)
-	if encodedBase == base {
-		return candidate
-	}
-	return tspath.CombinePaths(directory, encodedBase)
+	return c.path.AsString()
 }
 
-type resolutionKindSpecificLoader = func(extensions extensions, candidate string) *resolved
+func (c resolutionCandidate) String() string {
+	return c.AsString()
+}
+
+func (c resolutionCandidate) AsDirectoryPath() tspath.RootedDirectoryPath {
+	if c.directoryPath != "" {
+		return c.directoryPath
+	}
+	return tspath.RootedDirectoryPathFromPath(c.path)
+}
+
+func (c resolutionCandidate) Directory() tspath.RootedDirectoryPath {
+	return c.path.Directory()
+}
+
+func (c resolutionCandidate) HasTrailingDirectorySeparator() bool {
+	return c.directoryOnly
+}
+
+func (c resolutionCandidate) RemoveFileExtension() resolutionCandidate {
+	return resolutionCandidateFromFileName(tspath.RootedFilePathFromPath(c.path).RemoveFileExtension())
+}
+
+func (c resolutionCandidate) RemoveExtension(extension string) resolutionCandidate {
+	return resolutionCandidateFromFileName(tspath.RootedFilePathFromPath(c.path).RemoveExtension(extension))
+}
+
+func (c resolutionCandidate) AppendSuffix(suffix string) resolutionCandidate {
+	return resolutionCandidateFromFileName(tspath.RootedFilePathFromPath(c.path).AppendSuffix(suffix))
+}
+
+func (c resolutionCandidate) Resolve(path string) resolutionCandidate {
+	return resolutionCandidateFromDirectoryPath(tspath.RootedDirectoryPathFromPath(c.path), path)
+}
+
+func (c resolutionCandidate) HasDirectoryPrefix(directory tspath.RootedDirectoryPath) bool {
+	relative, ok := c.path.RelativeTo(directory)
+	return ok && (relative != "" || c.directoryOnly)
+}
+
+func (c resolutionCandidate) RelativeToDirectory(directory tspath.RootedDirectoryPath) tspath.RelativePath {
+	relative, ok := c.path.RelativeTo(directory)
+	if !ok {
+		panic("resolution candidate must be within prefix")
+	}
+	if c.directoryOnly {
+		return relative.WithTrailingDirectorySeparator()
+	}
+	return relative
+}
+
+func (c resolutionCandidate) SplitExtension(extraExtensions []string) (resolutionCandidate, string) {
+	fileName := tspath.RootedFilePathFromPath(c.path)
+	extension := fileName.Extension()
+	extensionless := c.RemoveFileExtension()
+	if extensionless.path == c.path {
+		extension = fileName.LongestExtension(extraExtensions, tspath.CaseSensitive)
+		if extension == "" {
+			path := c.path.AsString()
+			extension = path[strings.LastIndex(path, "."):]
+		}
+		extensionless = c.RemoveExtension(extension)
+	}
+	return extensionless, extension
+}
+
+func (c resolutionCandidate) FilePathWithSuffix(suffix string, extension string) tspath.RootedFilePath {
+	return tspath.RootedFilePathFromPath(c.path).AppendSuffix(suffix + extension)
+}
+
+type resolutionKindSpecificLoader = func(extensions extensions, candidate resolutionCandidate) *resolved
 
 type tracer struct {
 	traces []DiagAndArgs
@@ -117,15 +256,16 @@ type resolutionState struct {
 	tracer   *tracer
 
 	// request fields
-	name                        string
-	containingDirectory         string
-	isConfigLookup              bool
-	features                    NodeResolutionFeatures
-	esmMode                     bool
-	conditions                  []string
-	extensions                  extensions
-	compilerOptions             *core.CompilerOptions
-	resolvePackageDirectoryOnly bool
+	name                                    string
+	containingDirectory                     tspath.RootedDirectoryPath
+	containingDirectoryHasTrailingSeparator bool
+	isConfigLookup                          bool
+	features                                NodeResolutionFeatures
+	esmMode                                 bool
+	conditions                              []string
+	extensions                              extensions
+	compilerOptions                         *core.CompilerOptions
+	resolvePackageDirectoryOnly             bool
 
 	// state fields
 	// candidateEndingIsFromConfig is set when the candidate file extension originated from
@@ -139,7 +279,7 @@ type resolutionState struct {
 
 func newResolutionState(
 	name string,
-	containingDirectory string,
+	containingDirectory tspath.RootedDirectoryPath,
 	isTypeReferenceDirective bool,
 	resolutionMode core.ResolutionMode,
 	compilerOptions *core.CompilerOptions,
@@ -183,6 +323,13 @@ func newResolutionState(
 	return state
 }
 
+func (r *resolutionState) containingDirectoryPath() string {
+	if r.containingDirectoryHasTrailingSeparator {
+		return tspath.EnsureTrailingDirectorySeparator(r.containingDirectory.AsString())
+	}
+	return r.containingDirectory.AsString()
+}
+
 func GetCompilerOptionsWithRedirect(compilerOptions *core.CompilerOptions, redirectedReference ResolvedProjectReference) *core.CompilerOptions {
 	if redirectedReference == nil {
 		return compilerOptions
@@ -196,8 +343,9 @@ func GetCompilerOptionsWithRedirect(compilerOptions *core.CompilerOptions, redir
 type Resolver struct {
 	caches
 	host            ResolutionHost
+	baseDirectory   tspath.RootedDirectoryPath
 	compilerOptions *core.CompilerOptions
-	typingsLocation string
+	typingsLocation tspath.RootedDirectoryPath
 	projectName     string
 	extraExtensions []string
 	// reportDiagnostic: DiagnosticReporter
@@ -209,14 +357,19 @@ type ResolverOptions struct {
 
 func NewResolver(
 	host ResolutionHost,
+	baseDirectory tspath.RootedDirectoryPath,
 	options *core.CompilerOptions,
-	typingsLocation string,
+	typingsLocation tspath.RootedDirectoryPath,
 	projectName string,
 	extraExtensions []string,
 ) *Resolver {
+	if baseDirectory == "" {
+		panic("resolver must have a rooted base directory")
+	}
 	return &Resolver{
 		host:            host,
-		caches:          newCaches(host.GetCurrentDirectory(), host.FS().UseCaseSensitiveFileNames(), options),
+		baseDirectory:   baseDirectory,
+		caches:          newCaches(host.FS().CaseSensitivity()),
 		compilerOptions: options,
 		typingsLocation: typingsLocation,
 		projectName:     projectName,
@@ -226,21 +379,29 @@ func NewResolver(
 
 func NewResolverWithOptions(
 	host ResolutionHost,
+	baseDirectory tspath.RootedDirectoryPath,
 	compilerOptions *core.CompilerOptions,
-	typingsLocation string,
+	typingsLocation tspath.RootedDirectoryPath,
 	projectName string,
 	opts ResolverOptions,
 ) *Resolver {
+	if baseDirectory == "" {
+		panic("resolver must have a rooted base directory")
+	}
 	r := &Resolver{
 		host:            host,
+		baseDirectory:   baseDirectory,
 		compilerOptions: compilerOptions,
 		typingsLocation: typingsLocation,
 		projectName:     projectName,
 	}
 	if opts.PackageJsonCache != nil {
+		if opts.PackageJsonCache.CaseSensitivity() != host.FS().CaseSensitivity() {
+			panic("package JSON cache and resolver must use the same case sensitivity")
+		}
 		r.packageJsonInfoCache = opts.PackageJsonCache
 	} else {
-		r.caches = newCaches(host.GetCurrentDirectory(), host.FS().UseCaseSensitiveFileNames(), compilerOptions)
+		r.caches = newCaches(host.FS().CaseSensitivity())
 	}
 	return r
 }
@@ -252,11 +413,11 @@ func (r *Resolver) newTraceBuilder() *tracer {
 	return nil
 }
 
-func (r *Resolver) GetPackageScopeForPath(directory string) *packagejson.InfoCacheEntry {
+func (r *Resolver) GetPackageScopeForPath(directory tspath.RootedDirectoryPath) *packagejson.InfoCacheEntry {
 	return (&resolutionState{compilerOptions: r.compilerOptions, resolver: r}).getPackageScopeForPath(directory)
 }
 
-func (r *Resolver) PackageJsonCacheEntries(f func(key tspath.Path, value *packagejson.InfoCacheEntry) bool) {
+func (r *Resolver) PackageJsonCacheEntries(f func(key tspath.PathKey, value *packagejson.InfoCacheEntry) bool) {
 	r.caches.packageJsonInfoCache.Range(f)
 }
 
@@ -268,14 +429,14 @@ func (r *tracer) traceResolutionUsingProjectReference(redirectedReference Resolv
 
 func (r *Resolver) ResolveTypeReferenceDirective(
 	typeReferenceDirectiveName string,
-	containingFile string,
+	containingFile tspath.RootedFilePath,
 	resolutionMode core.ResolutionMode,
 	redirectedReference ResolvedProjectReference,
 ) (*ResolvedTypeReferenceDirective, []DiagAndArgs) {
-	containingDirectory := tspath.GetDirectoryPath(containingFile)
+	containingDirectory := containingFile.Directory()
 	traceBuilder := r.newTraceBuilder()
 
-	fromInferredTypesContainingFile := strings.HasSuffix(containingFile, InferredTypesContainingFile)
+	fromInferredTypesContainingFile := containingFile.BaseName() == InferredTypesContainingFile
 
 	cacheKey := typeRefDirectiveResolutionCacheKey{
 		containingDirectory:             containingDirectory,
@@ -293,9 +454,9 @@ func (r *Resolver) ResolveTypeReferenceDirective(
 
 	compilerOptions := GetCompilerOptionsWithRedirect(r.compilerOptions, redirectedReference)
 
-	typeRoots, fromConfig := compilerOptions.GetEffectiveTypeRoots(r.host.GetCurrentDirectory())
+	typeRoots, fromConfig := compilerOptions.GetEffectiveTypeRoots(r.baseDirectory)
 	if traceBuilder != nil {
-		traceBuilder.write(diagnostics.Resolving_type_reference_directive_0_containing_file_1_root_directory_2, typeReferenceDirectiveName, containingFile, strings.Join(typeRoots, ","))
+		traceBuilder.write(diagnostics.Resolving_type_reference_directive_0_containing_file_1_root_directory_2, typeReferenceDirectiveName, containingFile.AsString(), strings.Join(core.Map(typeRoots, func(root tspath.RootedDirectoryPath) string { return root.AsString() }), ","))
 		traceBuilder.traceResolutionUsingProjectReference(redirectedReference)
 	}
 
@@ -311,8 +472,8 @@ func (r *Resolver) ResolveTypeReferenceDirective(
 	return result, traceBuilder.getTraces()
 }
 
-func (r *Resolver) ResolveModuleName(moduleName string, containingFile string, resolutionMode core.ResolutionMode, redirectedReference ResolvedProjectReference) (*ResolvedModule, []DiagAndArgs) {
-	containingDirectory := tspath.GetDirectoryPath(containingFile)
+func (r *Resolver) ResolveModuleName(moduleName string, containingFile tspath.RootedFilePath, resolutionMode core.ResolutionMode, redirectedReference ResolvedProjectReference) (*ResolvedModule, []DiagAndArgs) {
+	containingDirectory := containingFile.Directory()
 	traceBuilder := r.newTraceBuilder()
 
 	cacheKey := moduleResolutionCacheKey{
@@ -330,7 +491,7 @@ func (r *Resolver) ResolveModuleName(moduleName string, containingFile string, r
 
 	compilerOptions := GetCompilerOptionsWithRedirect(r.compilerOptions, redirectedReference)
 	if traceBuilder != nil {
-		traceBuilder.write(diagnostics.Resolving_module_0_from_1, moduleName, containingFile)
+		traceBuilder.write(diagnostics.Resolving_module_0_from_1, moduleName, containingFile.AsString())
 		traceBuilder.traceResolutionUsingProjectReference(redirectedReference)
 	}
 
@@ -372,9 +533,9 @@ func (r *Resolver) ResolveModuleName(moduleName string, containingFile string, r
 	return finalResult, traceBuilder.getTraces()
 }
 
-func (r *Resolver) ResolvePackageDirectory(moduleName string, containingFile string, resolutionMode core.ResolutionMode, redirectedReference ResolvedProjectReference) *ResolvedModule {
+func (r *Resolver) ResolvePackageDirectory(moduleName string, containingFile tspath.RootedFilePath, resolutionMode core.ResolutionMode, redirectedReference ResolvedProjectReference) *ResolvedModule {
 	compilerOptions := GetCompilerOptionsWithRedirect(r.compilerOptions, redirectedReference)
-	containingDirectory := tspath.GetDirectoryPath(containingFile)
+	containingDirectory := containingFile.Directory()
 	state := newResolutionState(moduleName, containingDirectory, false /*isTypeReferenceDirective*/, resolutionMode, compilerOptions, redirectedReference, r, nil)
 	state.resolvePackageDirectoryOnly = true
 	if result := state.loadModuleFromNearestNodeModulesDirectory(false /*typesScopeOnly*/); result != nil && result.path != "" {
@@ -383,7 +544,7 @@ func (r *Resolver) ResolvePackageDirectory(moduleName string, containingFile str
 	return nil
 }
 
-func (r *Resolver) tryResolveFromTypingsLocation(moduleName string, containingDirectory string, originalResult *ResolvedModule, traceBuilder *tracer) *ResolvedModule {
+func (r *Resolver) tryResolveFromTypingsLocation(moduleName string, containingDirectory tspath.RootedDirectoryPath, originalResult *ResolvedModule, traceBuilder *tracer) *ResolvedModule {
 	if r.typingsLocation == "" ||
 		tspath.IsExternalModuleNameRelative(moduleName) ||
 		(originalResult.ResolvedFileName != "" && tspath.ExtensionIsOneOf(originalResult.Extension, tspath.SupportedTSExtensionsWithJsonFlat)) {
@@ -401,7 +562,7 @@ func (r *Resolver) tryResolveFromTypingsLocation(moduleName string, containingDi
 		traceBuilder,
 	)
 	if traceBuilder != nil {
-		traceBuilder.write(diagnostics.Auto_discovery_for_typings_is_enabled_in_project_0_Running_extra_resolution_pass_for_module_1_using_cache_location_2, r.projectName, moduleName, r.typingsLocation)
+		traceBuilder.write(diagnostics.Auto_discovery_for_typings_is_enabled_in_project_0_Running_extra_resolution_pass_for_module_1_using_cache_location_2, r.projectName, moduleName, r.typingsLocation.AsString())
 	}
 	globalResolved := state.loadModuleFromImmediateNodeModulesDirectory(extensionsDeclaration, r.typingsLocation, false)
 	if globalResolved == nil {
@@ -412,8 +573,8 @@ func (r *Resolver) tryResolveFromTypingsLocation(moduleName string, containingDi
 	return result
 }
 
-func (r *Resolver) resolveConfig(moduleName string, containingFile string) *ResolvedModule {
-	containingDirectory := tspath.GetDirectoryPath(containingFile)
+func (r *Resolver) resolveConfig(moduleName string, containingFile tspath.RootedFilePath) *ResolvedModule {
+	containingDirectory := containingFile.Directory()
 	state := newResolutionState(moduleName, containingDirectory, false /*isTypeReferenceDirective*/, core.ModuleKindCommonJS, r.compilerOptions, nil, r, nil)
 	state.isConfigLookup = true
 	state.extensions = extensionsJson
@@ -441,11 +602,11 @@ func (r *tracer) traceTypeReferenceDirectiveResult(typeReferenceDirectiveName st
 	}
 }
 
-func (r *resolutionState) resolveTypeReferenceDirective(typeRoots []string, fromConfig bool, fromInferredTypesContainingFile bool) *ResolvedTypeReferenceDirective {
+func (r *resolutionState) resolveTypeReferenceDirective(typeRoots []tspath.RootedDirectoryPath, fromConfig bool, fromInferredTypesContainingFile bool) *ResolvedTypeReferenceDirective {
 	// Primary lookup
 	if len(typeRoots) > 0 {
 		if r.tracer != nil {
-			r.tracer.write(diagnostics.Resolving_with_primary_search_path_0, strings.Join(typeRoots, ", "))
+			r.tracer.write(diagnostics.Resolving_with_primary_search_path_0, strings.Join(core.Map(typeRoots, func(root tspath.RootedDirectoryPath) string { return root.AsString() }), ", "))
 		}
 		for _, typeRoot := range typeRoots {
 			candidate := r.getCandidateFromTypeRoot(typeRoot)
@@ -458,12 +619,14 @@ func (r *resolutionState) resolveTypeReferenceDirective(typeRoots []string, from
 			}
 			if fromConfig {
 				// Custom typeRoots resolve as file or directory just like we do modules
-				if resolvedFromFile := r.loadModuleFromFile(extensionsDeclaration, candidate); !resolvedFromFile.shouldContinueSearching() {
-					packageDirectory := NodeModulePackageRootForFile(resolvedFromFile.path)
-					if packageDirectory != "" {
-						resolvedFromFile.packageId = r.getPackageId(resolvedFromFile.path, r.getPackageJsonInfo(packageDirectory))
+				if !candidate.HasTrailingDirectorySeparator() {
+					if resolvedFromFile := r.loadModuleFromFile(extensionsDeclaration, candidate); !resolvedFromFile.shouldContinueSearching() {
+						packageDirectory := NodeModulePackageRootForFile(resolvedFromFile.path)
+						if packageDirectory != "" {
+							resolvedFromFile.packageId = r.getPackageId(resolvedFromFile.path, r.getPackageJsonInfo(r.packageDirectory(packageDirectory)))
+						}
+						return r.createResolvedTypeReferenceDirective(resolvedFromFile, true /*primary*/)
 					}
-					return r.createResolvedTypeReferenceDirective(resolvedFromFile, true /*primary*/)
 				}
 			}
 			if resolvedFromDirectory := r.loadNodeModuleFromDirectory(extensionsDeclaration, candidate, true /*considerPackageJson*/); !resolvedFromDirectory.shouldContinueSearching() {
@@ -478,7 +641,7 @@ func (r *resolutionState) resolveTypeReferenceDirective(typeRoots []string, from
 	var resolved *resolved
 	if !fromConfig || !fromInferredTypesContainingFile {
 		if r.tracer != nil {
-			r.tracer.write(diagnostics.Looking_up_in_node_modules_folder_initial_location_0, r.containingDirectory)
+			r.tracer.write(diagnostics.Looking_up_in_node_modules_folder_initial_location_0, r.containingDirectoryPath())
 		}
 		if !tspath.IsExternalModuleNameRelative(r.name) {
 			resolved = r.loadModuleFromNearestNodeModulesDirectory(false /*typesScopeOnly*/)
@@ -492,12 +655,12 @@ func (r *resolutionState) resolveTypeReferenceDirective(typeRoots []string, from
 	return r.createResolvedTypeReferenceDirective(resolved, false /*primary*/)
 }
 
-func (r *resolutionState) getCandidateFromTypeRoot(typeRoot string) string {
+func (r *resolutionState) getCandidateFromTypeRoot(typeRoot tspath.RootedDirectoryPath) resolutionCandidate {
 	nameForLookup := r.name
-	if strings.HasSuffix(typeRoot, "/node_modules/@types") || strings.HasSuffix(typeRoot, "/node_modules/@types/") {
+	if typeRoot.BaseName() == "@types" && typeRoot.AsPath().Directory().BaseName() == "node_modules" {
 		nameForLookup = r.mangleScopedPackageName(r.name)
 	}
-	return tspath.CombinePaths(typeRoot, nameForLookup)
+	return resolutionCandidateFromDirectoryPath(typeRoot, nameForLookup)
 }
 
 func (r *resolutionState) mangleScopedPackageName(name string) string {
@@ -524,12 +687,14 @@ func (r *resolutionState) resolveFromTypeRoot() *resolved {
 			}
 			continue
 		}
-		if resolvedFromFile := r.loadModuleFromFile(extensionsDeclaration, candidate); !resolvedFromFile.shouldContinueSearching() {
-			packageDirectory := NodeModulePackageRootForFile(resolvedFromFile.path)
-			if packageDirectory != "" {
-				resolvedFromFile.packageId = r.getPackageId(resolvedFromFile.path, r.getPackageJsonInfo(packageDirectory))
+		if !candidate.HasTrailingDirectorySeparator() {
+			if resolvedFromFile := r.loadModuleFromFile(extensionsDeclaration, candidate); !resolvedFromFile.shouldContinueSearching() {
+				packageDirectory := NodeModulePackageRootForFile(resolvedFromFile.path)
+				if packageDirectory != "" {
+					resolvedFromFile.packageId = r.getPackageId(resolvedFromFile.path, r.getPackageJsonInfo(r.packageDirectory(packageDirectory)))
+				}
+				return resolvedFromFile
 			}
-			return resolvedFromFile
 		}
 		if resolved := r.loadNodeModuleFromDirectory(extensionsDeclaration, candidate, true /*considerPackageJson*/); !resolved.shouldContinueSearching() {
 			return resolved
@@ -538,18 +703,16 @@ func (r *resolutionState) resolveFromTypeRoot() *resolved {
 	return nil
 }
 
-func (r *resolutionState) getPackageScopeForPath(directory string) *packagejson.InfoCacheEntry {
-	result := tspath.ForEachAncestorDirectoryStoppingAtGlobalCache(
+func (r *resolutionState) getPackageScopeForPath(directory tspath.RootedDirectoryPath) *packagejson.InfoCacheEntry {
+	packageDirectory := r.resolver.packageJsonInfoCache.PackageDirectory(directory)
+	return packagejson.ForEachAncestorDirectoryStoppingAtGlobalCache(
 		r.resolver.typingsLocation,
-		directory,
-		func(directory string) (*packagejson.InfoCacheEntry, bool) {
-			if result := r.getPackageJsonInfo(directory); result != nil {
-				return result, true
-			}
-			return nil, false
+		packageDirectory,
+		func(directory packagejson.PackageDirectory) (*packagejson.InfoCacheEntry, bool) {
+			result := r.getPackageJsonInfo(directory)
+			return result, result != nil
 		},
 	)
-	return result
 }
 
 func (r *resolutionState) resolveNodeLike() *ResolvedModule {
@@ -623,15 +786,14 @@ func (r *resolutionState) resolveNodeLikeWorker() *ResolvedModule {
 		resolved := r.nodeLoadModuleByRelativeName(r.extensions, candidate, true)
 		return r.createResolvedModule(
 			resolved,
-			resolved != nil && strings.Contains(resolved.path, "/node_modules/"),
+			resolved != nil && resolved.path.ContainsLowercaseDirectorySequence("/node_modules/"),
 		)
 	}
 	return r.createResolvedModule(nil, false)
 }
 
 func (r *resolutionState) loadModuleFromSelfNameReference() *resolved {
-	directoryPath := tspath.GetNormalizedAbsolutePath(r.containingDirectory, r.resolver.host.GetCurrentDirectory())
-	scope := r.getPackageScopeForPath(directoryPath)
+	scope := r.getPackageScopeForPath(r.containingDirectory)
 	if !scope.Exists() || scope.Contents.Exports.IsFalsy() {
 		// !!! falsy check seems wrong?
 		return continueSearching()
@@ -640,8 +802,8 @@ func (r *resolutionState) loadModuleFromSelfNameReference() *resolved {
 	if !ok {
 		return continueSearching()
 	}
-	parts := tspath.GetPathComponents(r.name, "")
-	nameParts := tspath.GetPathComponents(name, "")
+	parts := tspath.GetPathComponents(r.name)
+	nameParts := tspath.GetPathComponents(name)
 	if len(parts) < len(nameParts) || !slices.Equal(nameParts, parts[:len(nameParts)]) {
 		return continueSearching()
 	}
@@ -665,7 +827,7 @@ func (r *resolutionState) loadModuleFromSelfNameReference() *resolved {
 	// to ensure that self-name imports of their own package can resolve back to their
 	// input JS files via `tryLoadInputFileForPath` at a higher priority than their output
 	// declaration files, so we need to do a single pass with all extensions for that case.
-	if r.compilerOptions.GetAllowJS() && !strings.Contains(r.containingDirectory, "/node_modules/") {
+	if r.compilerOptions.GetAllowJS() && !r.containingDirectory.ContainsLowercaseDirectorySequence("/node_modules/") {
 		return r.loadModuleFromExports(scope, r.extensions, subpath)
 	}
 	priorityExtensions := r.extensions & (extensionsTypeScript | extensionsDeclaration)
@@ -683,11 +845,11 @@ func (r *resolutionState) loadModuleFromImports() *resolved {
 		}
 		return continueSearching()
 	}
-	directoryPath := tspath.GetNormalizedAbsolutePath(r.containingDirectory, r.resolver.host.GetCurrentDirectory())
+	directoryPath := r.containingDirectory
 	scope := r.getPackageScopeForPath(directoryPath)
 	if !scope.Exists() {
 		if r.tracer != nil {
-			r.tracer.write(diagnostics.Directory_0_has_no_containing_package_json_scope_Imports_will_not_resolve, directoryPath)
+			r.tracer.write(diagnostics.Directory_0_has_no_containing_package_json_scope_Imports_will_not_resolve, directoryPath.AsString())
 		}
 		return continueSearching()
 	}
@@ -800,15 +962,17 @@ func (r *resolutionState) loadModuleFromTargetExportOrImport(extensions extensio
 				if isPattern {
 					combinedLookup = strings.ReplaceAll(targetString, "*", subpath)
 				}
-				scopeContainingDirectory := tspath.EnsureTrailingDirectorySeparator(scope.PackageDirectory)
+				scopeContainingDirectory := tspath.EnsureTrailingDirectorySeparator(scope.PackageDirectory.AsDirectoryPath().AsString())
 				if r.tracer != nil {
 					r.tracer.write(diagnostics.Using_0_subpath_1_with_target_2, "imports", key, combinedLookup)
 					r.tracer.write(diagnostics.Resolving_module_0_from_1, combinedLookup, scopeContainingDirectory)
 				}
-				name, containingDirectory := r.name, r.containingDirectory
-				r.name, r.containingDirectory = combinedLookup, scopeContainingDirectory
+				name, containingDirectory, containingDirectoryHasTrailingSeparator := r.name, r.containingDirectory, r.containingDirectoryHasTrailingSeparator
+				r.name = combinedLookup
+				r.containingDirectory = scope.PackageDirectory.AsDirectoryPath()
+				r.containingDirectoryHasTrailingSeparator = true
 				defer func() {
-					r.name, r.containingDirectory = name, containingDirectory
+					r.name, r.containingDirectory, r.containingDirectoryHasTrailingSeparator = name, containingDirectory, containingDirectoryHasTrailingSeparator
 				}()
 				if result := r.resolveNodeLike(); result.IsResolved() {
 					return &resolved{
@@ -828,9 +992,9 @@ func (r *resolutionState) loadModuleFromTargetExportOrImport(extensions extensio
 		}
 		var parts []string
 		if tspath.PathIsRelative(targetString) {
-			parts = tspath.GetPathComponents(targetString, "")[1:]
+			parts = tspath.GetPathComponents(targetString)[1:]
 		} else {
-			parts = tspath.GetPathComponents(targetString, "")
+			parts = tspath.GetPathComponents(targetString)
 		}
 		partsAfterFirst := parts[1:]
 		if slices.Contains(partsAfterFirst, "..") || slices.Contains(partsAfterFirst, ".") || slices.Contains(partsAfterFirst, "node_modules") {
@@ -841,7 +1005,7 @@ func (r *resolutionState) loadModuleFromTargetExportOrImport(extensions extensio
 		}
 		// TODO: Assert that `resolvedTarget` is actually within the package directory? That's what the spec says.... but I'm not sure we need
 		// to be in the business of validating everyone's import and export map correctness.
-		subpathParts := tspath.GetPathComponents(subpath, "")
+		subpathParts := tspath.GetPathComponents(subpath)
 		if slices.Contains(subpathParts, "..") || slices.Contains(subpathParts, ".") || slices.Contains(subpathParts, "node_modules") {
 			if r.tracer != nil {
 				r.tracer.write(diagnostics.X_package_json_scope_0_has_invalid_type_for_target_of_specifier_1, scope.PackageDirectory, moduleName)
@@ -849,23 +1013,17 @@ func (r *resolutionState) loadModuleFromTargetExportOrImport(extensions extensio
 			return continueSearching()
 		}
 
-		if r.tracer != nil {
-			var messageTarget string
-			if isPattern {
-				messageTarget = strings.ReplaceAll(targetString, "*", subpath)
-			} else {
-				messageTarget = targetString + subpath
-			}
-			r.tracer.write(diagnostics.Using_0_subpath_1_with_target_2, core.IfElse(isImports, "imports", "exports"), key, messageTarget)
-		}
 		var targetPath string
 		if isPattern {
 			targetPath = strings.ReplaceAll(targetString, "*", subpath)
 		} else {
 			targetPath = targetString + subpath
 		}
-		finalPath := resolvePathForModule(scope.PackageDirectory, targetPath, tspath.HasTrailingDirectorySeparator(targetPath))
-		if inputLink := r.tryLoadInputFileForPath(finalPath, subpath, tspath.CombinePaths(scope.PackageDirectory, "package.json"), isImports); !inputLink.shouldContinueSearching() {
+		if r.tracer != nil {
+			r.tracer.write(diagnostics.Using_0_subpath_1_with_target_2, core.IfElse(isImports, "imports", "exports"), key, targetPath)
+		}
+		finalPath := resolutionCandidateFromDirectoryPath(scope.PackageDirectory.AsDirectoryPath(), targetPath)
+		if inputLink := r.tryLoadInputFileForPath(finalPath, subpath, scope.PackageDirectory.ResolveFile("package.json"), isImports); !inputLink.shouldContinueSearching() {
 			inputLink.packageId = r.getPackageId(inputLink.path, scope)
 			return inputLink
 		}
@@ -932,30 +1090,32 @@ func (r *resolutionState) loadModuleFromTargetExportOrImport(extensions extensio
 	return continueSearching()
 }
 
-func (r *resolutionState) tryLoadInputFileForPath(finalPath string, entry string, packagePath string, isImports bool) *resolved {
+func (r *resolutionState) tryLoadInputFileForPath(finalCandidate resolutionCandidate, entry string, packagePath tspath.RootedFilePath, isImports bool) *resolved {
+	if finalCandidate.directoryOnly {
+		return continueSearching()
+	}
+	finalPath := finalCandidate.path
+	finalFileName := tspath.RootedFilePathFromPath(finalPath)
+	caseSensitivity := r.resolver.host.FS().CaseSensitivity()
 	// Replace any references to outputs for files in the program with the input files to support package self-names used with outDir
 	if !r.isConfigLookup &&
 		(r.compilerOptions.DeclarationDir != "" || r.compilerOptions.OutDir != "") &&
-		!strings.Contains(finalPath, "/node_modules/") &&
-		(r.compilerOptions.ConfigFilePath == "" || tspath.ContainsPath(
-			tspath.GetDirectoryPath(packagePath),
+		!finalFileName.ContainsLowercaseDirectorySequence("/node_modules/") &&
+		(r.compilerOptions.ConfigFilePath == "" || caseSensitivity.ContainsFilePath(
+			packagePath.Directory(),
 			r.compilerOptions.ConfigFilePath,
-			tspath.ComparePathsOptions{
-				UseCaseSensitiveFileNames: r.resolver.host.FS().UseCaseSensitiveFileNames(),
-				CurrentDirectory:          r.resolver.host.GetCurrentDirectory(),
-			},
 		)) {
 
 		// Note: this differs from Strada's tryLoadInputFileForPath in that it
 		// does not attempt to perform "guesses", instead requring a clear root indicator.
 
-		var rootDir string
+		var rootDir tspath.RootedDirectoryPath
 		if r.compilerOptions.RootDir != "" {
 			// A `rootDir` compiler option strongly indicates the root location
 			rootDir = r.compilerOptions.RootDir
 		} else if r.compilerOptions.ConfigFilePath != "" {
 			// When no explicit rootDir is set, treat the config file's directory as the project root, which establishes the common source directory, so no other locations need to be checked.
-			rootDir = tspath.GetDirectoryPath(r.compilerOptions.ConfigFilePath)
+			rootDir = r.compilerOptions.ConfigFilePath.Directory()
 		} else {
 			diagnostic := ast.NewDiagnostic(
 				nil,
@@ -966,35 +1126,28 @@ func (r *resolutionState) tryLoadInputFileForPath(finalPath string, entry string
 					diagnostics.The_project_root_is_ambiguous_but_is_required_to_resolve_export_map_entry_0_in_file_1_Supply_the_rootDir_compiler_option_to_disambiguate,
 				),
 				core.IfElse(entry == "", ".", entry), // replace empty string with `.` - the reverse of the operation done when entries are built - so main entrypoint errors don't look weird
-				packagePath,
+				packagePath.AsString(),
 			)
 			r.diagnostics = append(r.diagnostics, diagnostic)
 			return unresolved()
 		}
 
-		candidateDirectories := r.getOutputDirectoriesForBaseDirectory(rootDir)
+		candidateDirectories := r.getOutputDirectories()
 		for _, candidateDir := range candidateDirectories {
-			if tspath.ContainsPath(candidateDir, finalPath, tspath.ComparePathsOptions{
-				UseCaseSensitiveFileNames: r.resolver.host.FS().UseCaseSensitiveFileNames(),
-				CurrentDirectory:          r.resolver.host.GetCurrentDirectory(),
-			}) {
+			if pathFragment, ok := caseSensitivity.RelativeFilePathFromDirectory(candidateDir, finalFileName); ok {
 				// The matched export is looking up something in either the out declaration or js dir, now map the written path back into the source dir and source extension
-				var pathFragment string
-				if len(finalPath) > len(candidateDir) {
-					pathFragment = finalPath[len(candidateDir)+1:] // +1 to also remove directory separator
-				}
-				possibleInputBase := tspath.CombinePaths(rootDir, pathFragment)
+				possibleInputBase := rootDir.ResolveRelativeFile(pathFragment)
 				jsAndDtsExtensions := []string{tspath.ExtensionMjs, tspath.ExtensionCjs, tspath.ExtensionJs, tspath.ExtensionJson, tspath.ExtensionDmts, tspath.ExtensionDcts, tspath.ExtensionDts}
 				for _, ext := range jsAndDtsExtensions {
-					if tspath.FileExtensionIs(possibleInputBase, ext) {
-						inputExts := tspath.GetPossibleOriginalInputExtensionForExtension(possibleInputBase)
+					if possibleInputBase.ExtensionIs(ext) {
+						inputExts := possibleInputBase.PossibleOriginalInputExtensions()
 						for _, possibleExt := range inputExts {
 							if !extensionIsOk(r.extensions, possibleExt) {
 								continue
 							}
-							possibleInputWithInputExtension := tspath.ChangeExtension(possibleInputBase, possibleExt)
+							possibleInputWithInputExtension := possibleInputBase.ChangeExtension(possibleExt)
 							if r.resolver.host.FS().FileExists(possibleInputWithInputExtension) {
-								resolved := r.loadFileNameFromPackageJSONField(r.extensions, possibleInputWithInputExtension, "")
+								resolved := r.loadFileNameFromPackageJSONField(r.extensions, resolutionCandidateFromFileName(possibleInputWithInputExtension), "")
 								if !resolved.shouldContinueSearching() {
 									return resolved
 								}
@@ -1008,16 +1161,13 @@ func (r *resolutionState) tryLoadInputFileForPath(finalPath string, entry string
 	return continueSearching()
 }
 
-func (r *resolutionState) getOutputDirectoriesForBaseDirectory(commonSourceDirGuess string) []string {
-	// Config file output paths are processed to be relative to the host's current directory, while
-	// otherwise the paths are resolved relative to the common source dir the compiler puts together
-	currentDir := core.IfElse(r.compilerOptions.ConfigFilePath != "", r.resolver.host.GetCurrentDirectory(), commonSourceDirGuess)
-	var candidateDirectories []string
+func (r *resolutionState) getOutputDirectories() []tspath.RootedDirectoryPath {
+	var candidateDirectories []tspath.RootedDirectoryPath
 	if r.compilerOptions.DeclarationDir != "" {
-		candidateDirectories = append(candidateDirectories, tspath.GetNormalizedAbsolutePath(tspath.CombinePaths(currentDir, r.compilerOptions.DeclarationDir), r.resolver.host.GetCurrentDirectory()))
+		candidateDirectories = append(candidateDirectories, r.compilerOptions.DeclarationDir)
 	}
 	if r.compilerOptions.OutDir != "" && r.compilerOptions.OutDir != r.compilerOptions.DeclarationDir {
-		candidateDirectories = append(candidateDirectories, tspath.GetNormalizedAbsolutePath(tspath.CombinePaths(currentDir, r.compilerOptions.OutDir), r.resolver.host.GetCurrentDirectory()))
+		candidateDirectories = append(candidateDirectories, r.compilerOptions.OutDir)
 	}
 	return candidateDirectories
 }
@@ -1055,11 +1205,11 @@ func (r *resolutionState) loadModuleFromNearestNodeModulesDirectory(typesScopeOn
 }
 
 func (r *resolutionState) loadModuleFromNearestNodeModulesDirectoryWorker(ext extensions, mode core.ResolutionMode, typesScopeOnly bool) *resolved {
-	result, _ := tspath.ForEachAncestorDirectory(
+	result, _ := tspath.ForEachAncestorDirectoryPath(
 		r.containingDirectory,
-		func(directory string) (result *resolved, stop bool) {
+		func(directory tspath.RootedDirectoryPath) (result *resolved, stop bool) {
 			// !!! stop at global cache
-			if tspath.GetBaseFileName(directory) != "node_modules" {
+			if directory.AsPath().BaseName() != "node_modules" {
 				result := r.loadModuleFromImmediateNodeModulesDirectory(ext, directory, typesScopeOnly)
 				return result, !result.shouldContinueSearching()
 			}
@@ -1069,8 +1219,8 @@ func (r *resolutionState) loadModuleFromNearestNodeModulesDirectoryWorker(ext ex
 	return result
 }
 
-func (r *resolutionState) loadModuleFromImmediateNodeModulesDirectory(extensions extensions, directory string, typesScopeOnly bool) *resolved {
-	nodeModulesFolder := tspath.CombinePaths(directory, "node_modules")
+func (r *resolutionState) loadModuleFromImmediateNodeModulesDirectory(extensions extensions, directory tspath.RootedDirectoryPath, typesScopeOnly bool) *resolved {
+	nodeModulesFolder := directory.ResolveDirectory("node_modules")
 	if !r.resolver.host.FS().DirectoryExists(nodeModulesFolder) {
 		if r.tracer != nil {
 			r.tracer.write(diagnostics.Directory_0_does_not_exist_skipping_all_lookups_in_it, nodeModulesFolder)
@@ -1085,7 +1235,7 @@ func (r *resolutionState) loadModuleFromImmediateNodeModulesDirectory(extensions
 	}
 
 	if extensions&extensionsDeclaration != 0 {
-		nodeModulesAtTypes := tspath.CombinePaths(nodeModulesFolder, "@types")
+		nodeModulesAtTypes := nodeModulesFolder.ResolveDirectory("@types")
 		if !r.resolver.host.FS().DirectoryExists(nodeModulesAtTypes) {
 			if r.tracer != nil {
 				r.tracer.write(diagnostics.Directory_0_does_not_exist_skipping_all_lookups_in_it, nodeModulesAtTypes)
@@ -1098,7 +1248,7 @@ func (r *resolutionState) loadModuleFromImmediateNodeModulesDirectory(extensions
 	return continueSearching()
 }
 
-func (r *resolutionState) loadModuleFromSpecificNodeModulesDirectory(ext extensions, moduleName string, nodeModulesDirectory string) *resolved {
+func (r *resolutionState) loadModuleFromSpecificNodeModulesDirectory(ext extensions, moduleName string, nodeModulesDirectory tspath.RootedDirectoryPath) *resolved {
 	// Strip any trailing directory separator so that imports like `pkg/` and `pkg`
 	// produce identical `candidate` and `packageDirectory` strings. Otherwise the
 	// `package.json` info cache (which is keyed by normalized path but stores the
@@ -1107,29 +1257,30 @@ func (r *resolutionState) loadModuleFromSpecificNodeModulesDirectory(ext extensi
 	// causing `loadNodeModuleFromDirectoryWorker`'s `ComparePaths(candidate, ...)`
 	// check to fail and skip loading the package's `main`/`types` entry.
 	// https://github.com/microsoft/TypeScript/tsc/issues/3526
-	candidate := resolvePathForModule(nodeModulesDirectory, tspath.RemoveTrailingDirectorySeparator(moduleName), false)
-	candidateDirectory := dynamicDirectoryCandidate(candidate)
+	candidate := resolutionCandidateFromDirectoryPath(nodeModulesDirectory, moduleName)
+	candidateDirectory := candidate.AsDirectoryPath()
 	packageName, rest := ParsePackageName(moduleName)
-	packageDirectory := resolvePathForModule(nodeModulesDirectory, packageName, true)
-	packageDirectory = tspath.RemoveTrailingDirectorySeparator(packageDirectory)
+	var packageDirectory tspath.RootedDirectoryPath
 	if packageName == "" {
 		packageDirectory = candidateDirectory
+	} else {
+		packageDirectory = nodeModulesDirectory.ResolveDirectory(pathForDynamicResolution(nodeModulesDirectory, packageName, true))
 	}
 
 	if r.resolvePackageDirectoryOnly {
 		if r.resolver.host.FS().DirectoryExists(packageDirectory) {
-			return &resolved{path: packageDirectory}
+			return &resolved{path: tspath.RootedFilePathFromPath(packageDirectory.AsPath())}
 		}
 		return continueSearching()
 	}
 
 	var rootPackageInfo *packagejson.InfoCacheEntry
 	// First look for a nested package.json, as in `node_modules/foo/bar/package.json`
-	packageInfo := r.getPackageJsonInfo(candidateDirectory)
+	packageInfo := r.getPackageJsonInfo(r.packageDirectory(candidateDirectory))
 	// But only if we're not respecting export maps (if we are, we might redirect around this location)
 	if rest != "" && packageInfo.Exists() {
 		if r.features&NodeResolutionFeaturesExports != 0 {
-			rootPackageInfo = r.getPackageJsonInfo(packageDirectory)
+			rootPackageInfo = r.getPackageJsonInfo(r.packageDirectory(packageDirectory))
 		}
 		if !rootPackageInfo.Exists() || rootPackageInfo.Contents.Exports.Type == packagejson.JSONValueTypeNotPresent {
 			if fromFile := r.loadModuleFromFile(ext, candidate); !fromFile.shouldContinueSearching() {
@@ -1143,15 +1294,14 @@ func (r *resolutionState) loadModuleFromSpecificNodeModulesDirectory(ext extensi
 		}
 	}
 
-	loader := func(extensions extensions, candidate string) *resolved {
-		candidateDirectory := dynamicDirectoryCandidate(candidate)
+	loader := func(extensions extensions, candidate resolutionCandidate) *resolved {
 		if rest != "" || !r.esmMode {
 			if fromFile := r.loadModuleFromFile(extensions, candidate); !fromFile.shouldContinueSearching() {
 				fromFile.packageId = r.getPackageId(fromFile.path, packageInfo)
 				return fromFile
 			}
 		}
-		if fromDirectory := r.loadNodeModuleFromDirectoryWorker(extensions, candidateDirectory, packageInfo); !fromDirectory.shouldContinueSearching() {
+		if fromDirectory := r.loadNodeModuleFromDirectoryWorker(extensions, candidate.AsDirectoryPath(), packageInfo); !fromDirectory.shouldContinueSearching() {
 			fromDirectory.packageId = r.getPackageId(fromDirectory.path, packageInfo)
 			return fromDirectory
 		}
@@ -1160,7 +1310,8 @@ func (r *resolutionState) loadModuleFromSpecificNodeModulesDirectory(ext extensi
 			r.esmMode {
 			// EsmMode disables index lookup in `loadNodeModuleFromDirectoryWorker` generally, however non-relative package resolutions still assume
 			// a default `index.js` entrypoint if no `main` or `exports` are present
-			if indexResult := r.loadModuleFromFile(extensions, tspath.CombinePaths(candidateDirectory, "index.js")); !indexResult.shouldContinueSearching() {
+			indexCandidate := resolutionCandidateFromDirectoryPath(candidate.AsDirectoryPath(), "index.js")
+			if indexResult := r.loadModuleFromFile(extensions, indexCandidate); !indexResult.shouldContinueSearching() {
 				indexResult.packageId = r.getPackageId(indexResult.path, packageInfo)
 				return indexResult
 			}
@@ -1172,7 +1323,7 @@ func (r *resolutionState) loadModuleFromSpecificNodeModulesDirectory(ext extensi
 		packageInfo = rootPackageInfo
 		if packageInfo == nil {
 			// Previous `packageInfo` may have been from a nested package.json; ensure we have the one from the package root now.
-			packageInfo = r.getPackageJsonInfo(packageDirectory)
+			packageInfo = r.getPackageJsonInfo(r.packageDirectory(packageDirectory))
 		}
 	}
 	if packageInfo != nil {
@@ -1202,7 +1353,7 @@ func (r *resolutionState) loadModuleFromSpecificNodeModulesDirectory(ext extensi
 }
 
 func (r *resolutionState) createResolvedModuleHandlingSymlink(resolved *resolved) *ResolvedModule {
-	isExternalLibraryImport := resolved != nil && strings.Contains(resolved.path, "/node_modules/")
+	isExternalLibraryImport := resolved != nil && resolved.path.ContainsLowercaseDirectorySequence("/node_modules/")
 	if r.compilerOptions.PreserveSymlinks != core.TSTrue &&
 		isExternalLibraryImport &&
 		resolved.originalPath == "" &&
@@ -1221,8 +1372,13 @@ func (r *resolutionState) createResolvedModule(resolved *resolved, isExternalLib
 	resolvedModule.ResolutionDiagnostics = r.diagnostics
 
 	if resolved != nil {
-		resolvedModule.ResolvedFileName = resolved.path
-		resolvedModule.OriginalPath = resolved.originalPath
+		if resolved.isResolved() {
+			resolvedModule.ResolvedFileName = resolved.path
+			resolvedModule.ResolvedPath = r.resolver.host.FS().CaseSensitivity().PathKey(tspath.RootedPath(resolved.path))
+			if resolved.originalPath != "" {
+				resolvedModule.OriginalPath = resolved.originalPath
+			}
+		}
 		resolvedModule.IsExternalLibraryImport = isExternalLibraryImport
 		resolvedModule.ResolvedUsingTsExtension = resolved.resolvedUsingTsExtension
 		resolvedModule.ResolvedUsingExtraExtensions = resolved.resolvedUsingExtraExtensions
@@ -1243,7 +1399,7 @@ func (r *resolutionState) createResolvedTypeReferenceDirective(resolved *resolve
 		resolvedTypeReferenceDirective.ResolvedFileName = resolved.path
 		resolvedTypeReferenceDirective.Primary = primary
 		resolvedTypeReferenceDirective.PackageId = resolved.packageId
-		resolvedTypeReferenceDirective.IsExternalLibraryImport = strings.Contains(resolved.path, "/node_modules/")
+		resolvedTypeReferenceDirective.IsExternalLibraryImport = resolved.path.ContainsLowercaseDirectorySequence("/node_modules/")
 
 		if r.compilerOptions.PreserveSymlinks != core.TSTrue {
 			originalPath, resolvedFileName := r.getOriginalAndResolvedFileName(resolved.path)
@@ -1252,17 +1408,15 @@ func (r *resolutionState) createResolvedTypeReferenceDirective(resolved *resolve
 				resolvedTypeReferenceDirective.OriginalPath = originalPath
 			}
 		}
+		resolvedTypeReferenceDirective.ResolvedPath = r.resolver.host.FS().CaseSensitivity().PathKey(tspath.RootedPath(resolvedTypeReferenceDirective.ResolvedFileName))
 	}
 	return &resolvedTypeReferenceDirective
 }
 
-func (r *resolutionState) getOriginalAndResolvedFileName(fileName string) (string, string) {
+func (r *resolutionState) getOriginalAndResolvedFileName(fileName tspath.RootedFilePath) (tspath.RootedFilePath, tspath.RootedFilePath) {
 	resolvedFileName := r.realPath(fileName)
-	comparePathsOptions := tspath.ComparePathsOptions{
-		UseCaseSensitiveFileNames: r.resolver.host.FS().UseCaseSensitiveFileNames(),
-		CurrentDirectory:          r.resolver.host.GetCurrentDirectory(),
-	}
-	if tspath.ComparePaths(fileName, resolvedFileName, comparePathsOptions) == 0 {
+	caseSensitivity := r.resolver.host.FS().CaseSensitivity()
+	if caseSensitivity.CompareFilePaths(fileName, resolvedFileName) == 0 {
 		// If the fileName and realpath are differing only in casing, prefer fileName
 		// so that we can issue correct errors for casing under forceConsistentCasingInFileNames
 		return "", fileName
@@ -1295,7 +1449,7 @@ func (r *resolutionState) tryLoadModuleUsingPathsIfEligible() *resolved {
 	} else {
 		return continueSearching()
 	}
-	baseDirectory := r.compilerOptions.GetPathsBasePath(r.resolver.host.GetCurrentDirectory())
+	baseDirectory := r.compilerOptions.GetPathsBasePath(r.resolver.baseDirectory)
 	pathPatterns := r.getParsedPatternsForPaths()
 	return r.tryLoadModuleUsingPaths(
 		r.extensions,
@@ -1303,13 +1457,13 @@ func (r *resolutionState) tryLoadModuleUsingPathsIfEligible() *resolved {
 		baseDirectory,
 		r.compilerOptions.Paths,
 		pathPatterns,
-		func(extensions extensions, candidate string) *resolved {
+		func(extensions extensions, candidate resolutionCandidate) *resolved {
 			return r.nodeLoadModuleByRelativeName(extensions, candidate, true /*considerPackageJson*/)
 		},
 	)
 }
 
-func (r *resolutionState) tryLoadModuleUsingPaths(extensions extensions, moduleName string, containingDirectory string, paths *collections.OrderedMap[string, []string], pathPatterns *ParsedPatterns, loader resolutionKindSpecificLoader) *resolved {
+func (r *resolutionState) tryLoadModuleUsingPaths(extensions extensions, moduleName string, containingDirectory tspath.RootedDirectoryPath, paths *collections.OrderedMap[string, []string], pathPatterns *ParsedPatterns, loader resolutionKindSpecificLoader) *resolved {
 	if matchedPattern := MatchPatternOrExact(pathPatterns, moduleName); matchedPattern.IsValid() {
 		matchedStar := matchedPattern.MatchedText(moduleName)
 		if r.tracer != nil {
@@ -1317,7 +1471,7 @@ func (r *resolutionState) tryLoadModuleUsingPaths(extensions extensions, moduleN
 		}
 		for _, subst := range paths.GetOrZero(matchedPattern.Text) {
 			path := strings.Replace(subst, "*", matchedStar, 1)
-			candidate := resolvePathForModule(containingDirectory, path, tspath.HasTrailingDirectorySeparator(path))
+			candidate := resolutionCandidateFromDirectoryPath(containingDirectory, path)
 			if r.tracer != nil {
 				r.tracer.write(diagnostics.Trying_substitution_0_candidate_module_location_Colon_1, subst, path)
 			}
@@ -1348,7 +1502,8 @@ func (r *resolutionState) tryLoadModuleUsingPaths(extensions extensions, moduleN
 }
 
 func (r *resolutionState) tryLoadModuleUsingRootDirs() *resolved {
-	if len(r.compilerOptions.RootDirs) == 0 {
+	rootDirs := r.compilerOptions.GetEffectiveRootDirs()
+	if len(rootDirs) == 0 {
 		return continueSearching()
 	}
 
@@ -1356,42 +1511,33 @@ func (r *resolutionState) tryLoadModuleUsingRootDirs() *resolved {
 		r.tracer.write(diagnostics.X_rootDirs_option_is_set_using_it_to_resolve_relative_module_name_0, r.name)
 	}
 
-	candidate := resolvePathForModule(r.containingDirectory, r.name, tspath.HasTrailingDirectorySeparator(r.name))
+	candidate := resolutionCandidateFromDirectoryPath(r.containingDirectory, r.name)
 
-	var matchedRootDir string
-	var matchedNormalizedPrefix string
-	for _, rootDir := range r.compilerOptions.RootDirs {
-		// rootDirs are expected to be absolute
-		// in case of tsconfig.json this will happen automatically - compiler will expand relative names
-		// using location of tsconfig.json as base location
-		normalizedRoot := tspath.NormalizePath(rootDir)
-		if !strings.HasSuffix(normalizedRoot, "/") {
-			normalizedRoot += "/"
-		}
-		isLongestMatchingPrefix := strings.HasPrefix(candidate, normalizedRoot) &&
-			(matchedNormalizedPrefix == "" || len(matchedNormalizedPrefix) < len(normalizedRoot))
+	var matchedRootDir tspath.RootedDirectoryPath
+	for _, rootDir := range rootDirs {
+		isLongestMatchingPrefix := candidate.HasDirectoryPrefix(rootDir) &&
+			(matchedRootDir == "" || len(matchedRootDir) < len(rootDir))
 
 		if r.tracer != nil {
-			r.tracer.write(diagnostics.Checking_if_0_is_the_longest_matching_prefix_for_1_2, normalizedRoot, candidate, isLongestMatchingPrefix)
+			r.tracer.write(diagnostics.Checking_if_0_is_the_longest_matching_prefix_for_1_2, tspath.EnsureTrailingDirectorySeparator(rootDir.AsString()), candidate, isLongestMatchingPrefix)
 		}
 
 		if isLongestMatchingPrefix {
-			matchedNormalizedPrefix = normalizedRoot
 			matchedRootDir = rootDir
 		}
 	}
 
-	if matchedNormalizedPrefix != "" {
+	if matchedRootDir != "" {
 		if r.tracer != nil {
-			r.tracer.write(diagnostics.Longest_matching_prefix_for_0_is_1, candidate, matchedNormalizedPrefix)
+			r.tracer.write(diagnostics.Longest_matching_prefix_for_0_is_1, candidate, tspath.EnsureTrailingDirectorySeparator(matchedRootDir.AsString()))
 		}
-		suffix := candidate[len(matchedNormalizedPrefix):]
+		suffix := candidate.RelativeToDirectory(matchedRootDir)
 
 		// first - try to load from a initial location
 		if r.tracer != nil {
-			r.tracer.write(diagnostics.Loading_0_from_the_root_dir_1_candidate_location_2, suffix, matchedNormalizedPrefix, candidate)
+			r.tracer.write(diagnostics.Loading_0_from_the_root_dir_1_candidate_location_2, suffix.AsString(), tspath.EnsureTrailingDirectorySeparator(matchedRootDir.AsString()), candidate)
 		}
-		loader := func(extensions extensions, candidate string) *resolved {
+		loader := func(extensions extensions, candidate resolutionCandidate) *resolved {
 			return r.nodeLoadModuleByRelativeName(extensions, candidate, true /*considerPackageJson*/)
 		}
 		if resolvedFileName := loader(r.extensions, candidate); !resolvedFileName.shouldContinueSearching() {
@@ -1402,30 +1548,31 @@ func (r *resolutionState) tryLoadModuleUsingRootDirs() *resolved {
 			r.tracer.write(diagnostics.Trying_other_entries_in_rootDirs)
 		}
 		// then try to resolve using remaining entries in rootDirs
-		for _, rootDir := range r.compilerOptions.RootDirs {
+		for _, rootDir := range rootDirs {
 			if rootDir == matchedRootDir {
 				// skip the initially matched entry
 				continue
 			}
-			directoryOnly := suffix == "" || tspath.HasTrailingDirectorySeparator(suffix)
-			logicalSuffix := suffix
-			var candidate string
-			switch {
-			case tspath.IsEncodedDynamicFileName(rootDir) && tspath.IsEncodedDynamicFileName(matchedRootDir):
-				candidate = resolveDynamicLogicalPath(tspath.NormalizePath(rootDir), tspath.DecodeDynamicURIPath(logicalSuffix), directoryOnly)
-			case tspath.IsEncodedDynamicFileName(rootDir):
-				candidate = resolveDynamicLogicalPath(tspath.NormalizePath(rootDir), logicalSuffix, directoryOnly)
-			case tspath.IsEncodedDynamicFileName(matchedRootDir):
-				decoded, ok := tspath.DecodeDynamicURIPathForDisk(logicalSuffix)
+			logicalSuffix := suffix.AsString()
+			directoryOnly := suffix == "" || suffix.HasTrailingDirectorySeparator()
+			var candidate resolutionCandidate
+			if tspath.IsEncodedDynamicFileName(rootDir.AsString()) {
+				if tspath.IsEncodedDynamicFileName(matchedRootDir.AsString()) {
+					logicalSuffix = tspath.DecodeDynamicURIPath(logicalSuffix)
+				}
+				candidate = resolutionCandidateFromDynamicLogicalPath(rootDir, logicalSuffix)
+			} else if tspath.IsEncodedDynamicFileName(matchedRootDir.AsString()) {
+				var ok bool
+				logicalSuffix, ok = tspath.DecodeDynamicURIPathForDisk(logicalSuffix)
 				if !ok {
 					continue
 				}
-				candidate = resolvePathForModule(tspath.NormalizePath(rootDir), decoded, directoryOnly)
-			default:
-				candidate = resolvePathForModule(tspath.NormalizePath(rootDir), logicalSuffix, directoryOnly)
+				candidate = resolutionCandidateFromDiskLogicalPath(rootDir, logicalSuffix, directoryOnly)
+			} else {
+				candidate = resolutionCandidateFromRelativePath(rootDir, suffix)
 			}
 			if r.tracer != nil {
-				r.tracer.write(diagnostics.Loading_0_from_the_root_dir_1_candidate_location_2, suffix, rootDir, candidate)
+				r.tracer.write(diagnostics.Loading_0_from_the_root_dir_1_candidate_location_2, suffix.AsString(), rootDir.AsString(), candidate)
 			}
 			if resolvedFileName := loader(r.extensions, candidate); !resolvedFileName.shouldContinueSearching() {
 				return resolvedFileName
@@ -1438,12 +1585,12 @@ func (r *resolutionState) tryLoadModuleUsingRootDirs() *resolved {
 	return continueSearching()
 }
 
-func (r *resolutionState) nodeLoadModuleByRelativeName(extensions extensions, candidate string, considerPackageJson bool) *resolved {
+func (r *resolutionState) nodeLoadModuleByRelativeName(extensions extensions, candidate resolutionCandidate, considerPackageJson bool) *resolved {
 	if r.tracer != nil {
 		r.tracer.write(diagnostics.Loading_module_as_file_Slash_folder_candidate_module_location_0_target_file_types_Colon_1, candidate, extensions.String())
 	}
-	if !tspath.HasTrailingDirectorySeparator(candidate) {
-		parentOfCandidate := tspath.GetDirectoryPath(candidate)
+	if !candidate.HasTrailingDirectorySeparator() {
+		parentOfCandidate := candidate.Directory()
 		if !r.resolver.host.FS().DirectoryExists(parentOfCandidate) {
 			if r.tracer != nil {
 				r.tracer.write(diagnostics.Directory_0_does_not_exist_skipping_all_lookups_in_it, parentOfCandidate)
@@ -1454,16 +1601,15 @@ func (r *resolutionState) nodeLoadModuleByRelativeName(extensions extensions, ca
 		if resolvedFromFile != nil {
 			if considerPackageJson {
 				if packageDirectory := NodeModulePackageRootForFile(resolvedFromFile.path); packageDirectory != "" {
-					resolvedFromFile.packageId = r.getPackageId(resolvedFromFile.path, r.getPackageJsonInfo(packageDirectory))
+					resolvedFromFile.packageId = r.getPackageId(resolvedFromFile.path, r.getPackageJsonInfo(r.packageDirectory(packageDirectory)))
 				}
 			}
 			return resolvedFromFile
 		}
 	}
-	directoryCandidate := dynamicDirectoryCandidate(candidate)
-	if !r.resolver.host.FS().DirectoryExists(directoryCandidate) {
+	if !r.resolver.host.FS().DirectoryExists(candidate.AsDirectoryPath()) {
 		if r.tracer != nil {
-			r.tracer.write(diagnostics.Directory_0_does_not_exist_skipping_all_lookups_in_it, directoryCandidate)
+			r.tracer.write(diagnostics.Directory_0_does_not_exist_skipping_all_lookups_in_it, candidate)
 		}
 		return continueSearching()
 	}
@@ -1471,12 +1617,12 @@ func (r *resolutionState) nodeLoadModuleByRelativeName(extensions extensions, ca
 	// files or implicit `index.js`es). This is a notable departure from cjs norms, where `./foo/pkg`
 	// could have been redirected by `./foo/pkg/package.json` to an arbitrary location!
 	if !r.esmMode {
-		return r.loadNodeModuleFromDirectory(extensions, directoryCandidate, considerPackageJson)
+		return r.loadNodeModuleFromDirectory(extensions, candidate, considerPackageJson)
 	}
 	return continueSearching()
 }
 
-func (r *resolutionState) loadModuleFromFile(extensions extensions, candidate string) *resolved {
+func (r *resolutionState) loadModuleFromFile(extensions extensions, candidate resolutionCandidate) *resolved {
 	// ./foo.js -> ./foo.ts
 	resolvedByReplacingExtension := r.loadModuleFromFileNoImplicitExtensions(extensions, candidate)
 	if resolvedByReplacingExtension != nil {
@@ -1491,30 +1637,20 @@ func (r *resolutionState) loadModuleFromFile(extensions extensions, candidate st
 	return continueSearching()
 }
 
-func (r *resolutionState) loadModuleFromFileNoImplicitExtensions(extensions extensions, candidate string) *resolved {
-	base := tspath.GetBaseFileName(candidate)
+func (r *resolutionState) loadModuleFromFileNoImplicitExtensions(extensions extensions, candidate resolutionCandidate) *resolved {
+	base := candidate.path.BaseName()
 	if !strings.Contains(base, ".") {
 		return continueSearching() // extensionless import, no lookups performed, since we don't support extensionless files
 	}
-	extensionless := tspath.RemoveFileExtension(candidate)
-	if extensionless == candidate {
-		// Once TS native extensions are handled, handle arbitrary extensions for declaration file mapping
-		extension := tspath.GetLongestExtensionFromPath(candidate, r.resolver.extraExtensions, false)
-		if extension == "" {
-			extension = candidate[strings.LastIndex(candidate, "."):]
-		}
-		extensionless = tspath.RemoveExtension(candidate, extension)
-	}
-
-	extension := candidate[len(extensionless):]
+	extensionless, extension := candidate.SplitExtension(r.resolver.extraExtensions)
 	if r.tracer != nil {
 		r.tracer.write(diagnostics.File_name_0_has_a_1_extension_stripping_it, candidate, extension)
 	}
 	return r.tryAddingExtensions(extensionless, extensions, extension)
 }
 
-func (r *resolutionState) tryAddingExtensions(extensionless string, extensions extensions, originalExtension string) *resolved {
-	directory := tspath.GetDirectoryPath(extensionless)
+func (r *resolutionState) tryAddingExtensions(extensionless resolutionCandidate, extensions extensions, originalExtension string) *resolved {
+	directory := extensionless.Directory()
 	if directory != "" && !r.resolver.host.FS().DirectoryExists(directory) {
 		return continueSearching()
 	}
@@ -1628,7 +1764,7 @@ func (r *resolutionState) tryAddingExtensions(extensionless string, extensions e
 				return resolved
 			}
 		}
-		if extensions&extensionsDeclaration != 0 && !tspath.IsDeclarationFileName(extensionless+originalExtension) {
+		if extensions&extensionsDeclaration != 0 && !tspath.RootedFilePathFromPath(extensionless.AppendSuffix(originalExtension).path).IsDeclarationFile() {
 			if resolved := r.tryExtension(".d"+originalExtension+".ts", extensionless, false); !resolved.shouldContinueSearching() {
 				return resolved
 			}
@@ -1637,8 +1773,8 @@ func (r *resolutionState) tryAddingExtensions(extensionless string, extensions e
 	}
 }
 
-func (r *resolutionState) tryExtension(extension string, extensionless string, resolvedUsingTsExtension bool) *resolved {
-	fileName := extensionless + extension
+func (r *resolutionState) tryExtension(extension string, extensionless resolutionCandidate, resolvedUsingTsExtension bool) *resolved {
+	fileName := extensionless.AppendSuffix(extension)
 	if path, ok := r.tryFile(fileName); ok {
 		return &resolved{
 			path:                     path,
@@ -1649,23 +1785,30 @@ func (r *resolutionState) tryExtension(extension string, extensionless string, r
 	return continueSearching()
 }
 
-func (r *resolutionState) tryFile(fileName string) (string, bool) {
+func (r *resolutionState) tryFile(fileName resolutionCandidate) (tspath.RootedFilePath, bool) {
+	if fileName.directoryOnly {
+		return "", false
+	}
 	if len(r.compilerOptions.ModuleSuffixes) == 0 {
-		return fileName, r.tryFileLookup(fileName)
+		candidate := tspath.RootedFilePathFromPath(fileName.path)
+		if r.tryFileLookup(candidate) {
+			return candidate, true
+		}
+		return "", false
 	}
 
-	ext := tspath.TryGetExtensionFromPath(fileName)
-	fileNameNoExtension := tspath.RemoveExtension(fileName, ext)
+	ext := tspath.RootedFilePathFromPath(fileName.path).Extension()
+	fileNameNoExtension := fileName.RemoveExtension(ext)
 	for _, suffix := range r.compilerOptions.ModuleSuffixes {
-		path := fileNameNoExtension + suffix + ext
+		path := fileNameNoExtension.FilePathWithSuffix(suffix, ext)
 		if r.tryFileLookup(path) {
 			return path, true
 		}
 	}
-	return fileName, false
+	return "", false
 }
 
-func (r *resolutionState) tryFileLookup(fileName string) bool {
+func (r *resolutionState) tryFileLookup(fileName tspath.RootedFilePath) bool {
 	if r.resolver.host.FS().FileExists(fileName) {
 		if r.tracer != nil {
 			r.tracer.write(diagnostics.File_0_exists_use_it_as_a_name_resolution_result, fileName)
@@ -1677,31 +1820,33 @@ func (r *resolutionState) tryFileLookup(fileName string) bool {
 	return false
 }
 
-func (r *resolutionState) loadNodeModuleFromDirectory(extensions extensions, candidate string, considerPackageJson bool) *resolved {
+func (r *resolutionState) loadNodeModuleFromDirectory(extensions extensions, candidate resolutionCandidate, considerPackageJson bool) *resolved {
+	candidateDirectory := candidate.AsDirectoryPath()
 	var packageInfo *packagejson.InfoCacheEntry
 	if considerPackageJson {
-		packageInfo = r.getPackageJsonInfo(candidate)
+		packageInfo = r.getPackageJsonInfo(r.packageDirectory(candidateDirectory))
 	}
 
-	return r.loadNodeModuleFromDirectoryWorker(extensions, candidate, packageInfo)
+	return r.loadNodeModuleFromDirectoryWorker(extensions, candidateDirectory, packageInfo)
 }
 
-func (r *resolutionState) loadNodeModuleFromDirectoryWorker(ext extensions, candidate string, packageInfo *packagejson.InfoCacheEntry) *resolved {
+func (r *resolutionState) loadNodeModuleFromDirectoryWorker(ext extensions, candidate tspath.RootedDirectoryPath, packageInfo *packagejson.InfoCacheEntry) *resolved {
 	var (
-		packageFile  string
+		packageFile  resolutionCandidate
 		versionPaths packagejson.VersionPaths
 	)
 	if packageInfo.Exists() {
 		versionPaths = packageInfo.Contents.GetVersionPaths(r.getTraceFunc())
-		if tspath.ComparePaths(candidate, packageInfo.PackageDirectory, tspath.ComparePathsOptions{UseCaseSensitiveFileNames: r.resolver.host.FS().UseCaseSensitiveFileNames()}) == 0 {
+		caseSensitivity := r.resolver.host.FS().CaseSensitivity()
+		if caseSensitivity.ComparePaths(candidate.AsPath(), packageInfo.PackageDirectory.AsDirectoryPath().AsPath()) == 0 {
 			if file, ok := r.getPackageFile(ext, packageInfo); ok {
 				packageFile = file
 			}
 		}
 	}
 
-	loader := func(extensions extensions, candidate string) *resolved {
-		if fromFile := r.loadFileNameFromPackageJSONField(extensions, candidate, packageFile); !fromFile.shouldContinueSearching() {
+	loader := func(extensions extensions, candidate resolutionCandidate) *resolved {
+		if fromFile := r.loadFileNameFromPackageJSONField(extensions, candidate, packageFile.AsString()); !fromFile.shouldContinueSearching() {
 			return fromFile
 		}
 
@@ -1725,21 +1870,24 @@ func (r *resolutionState) loadNodeModuleFromDirectoryWorker(ext extensions, cand
 		return result
 	}
 
-	var indexPath string
+	var indexPath resolutionCandidate
 	if r.isConfigLookup {
-		indexPath = tspath.CombinePaths(candidate, "tsconfig")
+		indexPath = resolutionCandidateFromFileName(candidate.ResolveFile("tsconfig"))
 	} else {
-		indexPath = tspath.CombinePaths(candidate, "index")
+		indexPath = resolutionCandidateFromFileName(candidate.ResolveFile("index"))
 	}
 
-	if versionPaths.Exists() && (packageFile == "" || tspath.ContainsPath(candidate, packageFile, tspath.ComparePathsOptions{})) {
-		var moduleName string
-		if packageFile != "" {
-			moduleName = tspath.GetRelativePathFromDirectory(candidate, packageFile, tspath.ComparePathsOptions{})
-		} else {
-			moduleName = tspath.GetRelativePathFromDirectory(candidate, indexPath, tspath.ComparePathsOptions{})
+	if versionPaths.Exists() && (packageFile.path == "" || tspath.CaseInsensitive.ContainsPath(candidate, packageFile.path)) {
+		modulePath := indexPath.path
+		if packageFile.path != "" {
+			modulePath = packageFile.path
 		}
-		if tspath.IsEncodedDynamicFileName(candidate) {
+		relativeModulePath, ok := tspath.CaseInsensitive.RelativePathFromDirectory(candidate, tspath.RootedFilePathFromPath(modulePath))
+		if !ok {
+			panic("package module path must have the same root as its candidate directory")
+		}
+		moduleName := relativeModulePath.AsString()
+		if tspath.IsEncodedDynamicFileName(candidate.AsString()) {
 			moduleName = tspath.DecodeDynamicURIPath(moduleName)
 		}
 		if r.tracer != nil {
@@ -1755,7 +1903,7 @@ func (r *resolutionState) loadNodeModuleFromDirectoryWorker(ext extensions, cand
 		}
 	}
 
-	if packageFile != "" {
+	if packageFile.path != "" {
 		if packageFileResult := loader(ext, packageFile); !packageFileResult.shouldContinueSearching() {
 			if packageFileResult.packageId.Name != "" {
 				// !!! are these asserts really necessary?
@@ -1778,10 +1926,14 @@ func (r *resolutionState) loadNodeModuleFromDirectoryWorker(ext extensions, cand
 // This function is only ever called with paths written in package.json files - never
 // module specifiers written in source files - and so it always allows the
 // candidate to end with a TS extension (but will also try substituting a JS extension for a TS extension).
-func (r *resolutionState) loadFileNameFromPackageJSONField(extensions extensions, candidate string, packageJSONValue string) *resolved {
-	if extensions&extensionsTypeScript != 0 && tspath.HasImplementationTSFileExtension(candidate) || extensions&extensionsDeclaration != 0 && tspath.IsDeclarationFileName(candidate) {
+func (r *resolutionState) loadFileNameFromPackageJSONField(extensions extensions, candidate resolutionCandidate, packageJSONValue string) *resolved {
+	if candidate.directoryOnly {
+		return continueSearching()
+	}
+	fileName := tspath.RootedFilePathFromPath(candidate.path)
+	if extensions&extensionsTypeScript != 0 && fileName.HasImplementationTSFileExtension() || extensions&extensionsDeclaration != 0 && fileName.IsDeclarationFile() {
 		if path, ok := r.tryFile(candidate); ok {
-			extension := tspath.TryExtractTSExtension(path)
+			extension := path.TryExtractTSExtension()
 			// resolvedUsingTsExtension should be true when the pattern ends with * and the
 			// candidate file ends in a TS extension. This means the * matched a TS extension
 			// from the module specifier. For example:
@@ -1798,7 +1950,7 @@ func (r *resolutionState) loadFileNameFromPackageJSONField(extensions extensions
 		return continueSearching()
 	}
 
-	if r.isConfigLookup && extensions&extensionsJson != 0 && tspath.FileExtensionIs(candidate, tspath.ExtensionJson) {
+	if r.isConfigLookup && extensions&extensionsJson != 0 && fileName.ExtensionIs(tspath.ExtensionJson) {
 		if path, ok := r.tryFile(candidate); ok {
 			return &resolved{
 				path:      path,
@@ -1810,51 +1962,50 @@ func (r *resolutionState) loadFileNameFromPackageJSONField(extensions extensions
 	return r.loadModuleFromFileNoImplicitExtensions(extensions, candidate)
 }
 
-func (r *resolutionState) getPackageFile(extensions extensions, packageInfo *packagejson.InfoCacheEntry) (string, bool) {
+func (r *resolutionState) getPackageFile(extensions extensions, packageInfo *packagejson.InfoCacheEntry) (resolutionCandidate, bool) {
 	if !packageInfo.Exists() {
-		return "", false
+		return resolutionCandidate{}, false
 	}
 	if r.isConfigLookup {
-		return r.getPackageJSONPathField("tsconfig", &packageInfo.Contents.TSConfig, packageInfo.PackageDirectory)
+		return r.getPackageJSONPathField("tsconfig", &packageInfo.Contents.TSConfig, packageInfo.PackageDirectory.AsDirectoryPath())
 	}
 	if extensions&extensionsDeclaration != 0 {
-		if packageFile, ok := r.getPackageJSONPathField("typings", &packageInfo.Contents.Typings, packageInfo.PackageDirectory); ok {
+		if packageFile, ok := r.getPackageJSONPathField("typings", &packageInfo.Contents.Typings, packageInfo.PackageDirectory.AsDirectoryPath()); ok {
 			return packageFile, ok
 		}
-		if packageFile, ok := r.getPackageJSONPathField("types", &packageInfo.Contents.Types, packageInfo.PackageDirectory); ok {
+		if packageFile, ok := r.getPackageJSONPathField("types", &packageInfo.Contents.Types, packageInfo.PackageDirectory.AsDirectoryPath()); ok {
 			return packageFile, ok
 		}
 	}
 	if extensions&(extensionsImplementationFiles|extensionsDeclaration) != 0 {
-		return r.getPackageJSONPathField("main", &packageInfo.Contents.Main, packageInfo.PackageDirectory)
+		return r.getPackageJSONPathField("main", &packageInfo.Contents.Main, packageInfo.PackageDirectory.AsDirectoryPath())
 	}
-	return "", false
+	return resolutionCandidate{}, false
 }
 
-func (r *resolutionState) getPackageJsonInfo(packageDirectory string) *packagejson.InfoCacheEntry {
-	packageJsonPath := tspath.CombinePaths(packageDirectory, "package.json")
-
-	if existing := r.resolver.packageJsonInfoCache.Get(packageJsonPath); existing != nil {
+func (r *resolutionState) getPackageJsonInfo(packageDirectory packagejson.PackageDirectory) *packagejson.InfoCacheEntry {
+	if existing := r.resolver.packageJsonInfoCache.Get(packageDirectory); existing != nil {
 		if existing.Contents != nil {
 			if r.tracer != nil {
-				r.tracer.write(diagnostics.File_0_exists_according_to_earlier_cached_lookups, packageJsonPath)
+				r.tracer.write(diagnostics.File_0_exists_according_to_earlier_cached_lookups, packageDirectory.ResolveFile("package.json"))
 			}
 			return existing.WithPackageDirectory(packageDirectory)
 		} else {
 			if existing.DirectoryExists && r.tracer != nil {
-				r.tracer.write(diagnostics.File_0_does_not_exist_according_to_earlier_cached_lookups, packageJsonPath)
+				r.tracer.write(diagnostics.File_0_does_not_exist_according_to_earlier_cached_lookups, packageDirectory.ResolveFile("package.json"))
 			}
 			return nil
 		}
 	}
 
-	directoryExists := r.resolver.host.FS().DirectoryExists(packageDirectory)
-	if directoryExists && r.resolver.host.FS().FileExists(packageJsonPath) {
+	packageJsonFileName := packageDirectory.ResolveFile("package.json")
+	directoryExists := r.resolver.host.FS().DirectoryExists(packageDirectory.AsDirectoryPath())
+	if directoryExists && r.resolver.host.FS().FileExists(packageJsonFileName) {
 		// Ignore error
-		contents, _ := r.resolver.host.FS().ReadFile(packageJsonPath)
+		contents, _ := r.resolver.host.FS().ReadFile(packageJsonFileName)
 		packageJsonContent, err := packagejson.Parse([]byte(contents))
 		if r.tracer != nil {
-			r.tracer.write(diagnostics.Found_package_json_at_0, packageJsonPath)
+			r.tracer.write(diagnostics.Found_package_json_at_0, packageJsonFileName)
 		}
 		result := &packagejson.InfoCacheEntry{
 			PackageDirectory: packageDirectory,
@@ -1864,13 +2015,13 @@ func (r *resolutionState) getPackageJsonInfo(packageDirectory string) *packagejs
 				Parseable: err == nil,
 			},
 		}
-		result = r.resolver.packageJsonInfoCache.Set(packageJsonPath, result)
+		result = r.resolver.packageJsonInfoCache.Set(packageDirectory, result)
 		return result.WithPackageDirectory(packageDirectory)
 	} else {
 		if directoryExists && r.tracer != nil {
-			r.tracer.write(diagnostics.File_0_does_not_exist, packageJsonPath)
+			r.tracer.write(diagnostics.File_0_does_not_exist, packageJsonFileName)
 		}
-		_ = r.resolver.packageJsonInfoCache.Set(packageJsonPath, &packagejson.InfoCacheEntry{
+		_ = r.resolver.packageJsonInfoCache.Set(packageDirectory, &packagejson.InfoCacheEntry{
 			PackageDirectory: packageDirectory,
 			DirectoryExists:  directoryExists,
 		})
@@ -1878,14 +2029,18 @@ func (r *resolutionState) getPackageJsonInfo(packageDirectory string) *packagejs
 	return nil
 }
 
-func (r *resolutionState) getPackageId(resolvedFileName string, packageInfo *packagejson.InfoCacheEntry) PackageId {
+func (r *resolutionState) packageDirectory(directory tspath.RootedDirectoryPath) packagejson.PackageDirectory {
+	return r.resolver.packageJsonInfoCache.PackageDirectory(directory)
+}
+
+func (r *resolutionState) getPackageId(resolvedFileName tspath.RootedFilePath, packageInfo *packagejson.InfoCacheEntry) PackageId {
 	if packageInfo.Exists() {
 		packageJsonContent := packageInfo.Contents
 		if name, ok := packageJsonContent.Name.GetValue(); ok {
 			if version, ok := packageJsonContent.Version.GetValue(); ok {
 				var subModuleName string
-				if len(resolvedFileName) > len(packageInfo.PackageDirectory) {
-					subModuleName = resolvedFileName[len(packageInfo.PackageDirectory)+1:]
+				if relative, ok := resolvedFileName.RelativeTo(packageInfo.PackageDirectory.AsDirectoryPath()); ok {
+					subModuleName = relative.AsString()
 				}
 				return PackageId{
 					Name:             name,
@@ -1908,17 +2063,16 @@ func (r *resolutionState) readPackageJsonPeerDependencies(packageJsonInfo *packa
 	if r.tracer != nil {
 		r.tracer.write(diagnostics.X_package_json_has_a_peerDependencies_field)
 	}
-	packageDirectory := r.realPath(packageJsonInfo.PackageDirectory)
-	nodeModulesIndex := strings.LastIndex(packageDirectory, "/node_modules")
-	if nodeModulesIndex == -1 {
+	packageDirectory := r.realPath(tspath.RootedFilePathFromPath(packageJsonInfo.PackageDirectory.AsDirectoryPath().AsPath()))
+	_, nodeModules, ok := packageDirectory.SplitAtLastComponent("node_modules")
+	if !ok {
 		return ""
 	}
-	nodeModules := packageDirectory[:nodeModulesIndex+len("/node_modules")] + "/"
 	names := slices.AppendSeq(make([]string, 0, len(peerDependencies.Value)), maps.Keys(peerDependencies.Value))
 	slices.Sort(names)
 	builder := strings.Builder{}
 	for _, name := range names {
-		peerPackageJson := r.getPackageJsonInfo(resolvePathForModule(nodeModules, name, true))
+		peerPackageJson := r.getPackageJsonInfo(r.packageDirectory(nodeModules.ResolveDirectory(pathForDynamicResolution(nodeModules, name, true))))
 		if peerPackageJson.Exists() {
 			version := peerPackageJson.Contents.Version.Value
 			builder.WriteString("+")
@@ -1935,12 +2089,12 @@ func (r *resolutionState) readPackageJsonPeerDependencies(packageJsonInfo *packa
 	return builder.String()
 }
 
-func (r *resolutionState) realPath(path string) string {
-	rp := tspath.NormalizePath(r.resolver.host.FS().Realpath(path))
+func (r *resolutionState) realPath(path tspath.RootedFilePath) tspath.RootedFilePath {
+	rp := r.resolver.host.FS().Realpath(path.AsPath())
 	if r.tracer != nil {
 		r.tracer.write(diagnostics.Resolving_real_path_for_0_result_1, path, rp)
 	}
-	return rp
+	return tspath.RootedFilePathFromPath(rp)
 }
 
 func (r *resolutionState) validatePackageJSONField(fieldName string, field packagejson.TypeValidatedField) bool {
@@ -1958,17 +2112,17 @@ func (r *resolutionState) validatePackageJSONField(fieldName string, field packa
 	return false
 }
 
-func (r *resolutionState) getPackageJSONPathField(fieldName string, field *packagejson.Expected[string], directory string) (string, bool) {
+func (r *resolutionState) getPackageJSONPathField(fieldName string, field *packagejson.Expected[string], directory tspath.RootedDirectoryPath) (resolutionCandidate, bool) {
 	if !r.validatePackageJSONField(fieldName, field) {
-		return "", false
+		return resolutionCandidate{}, false
 	}
 	if field.Value == "" {
 		if r.tracer != nil {
 			r.tracer.write(diagnostics.X_package_json_had_a_falsy_0_field, fieldName)
 		}
-		return "", false
+		return resolutionCandidate{}, false
 	}
-	path := resolvePathForModule(directory, field.Value, tspath.HasTrailingDirectorySeparator(field.Value))
+	path := resolutionCandidateFromDirectoryPath(directory, field.Value)
 	if r.tracer != nil {
 		r.tracer.write(diagnostics.X_package_json_has_0_field_1_that_references_2, fieldName, field.Value, path)
 	}
@@ -2119,14 +2273,17 @@ func MatchPatternOrExact(patterns *ParsedPatterns, candidate string) core.Patter
 // to look inside of it. The Node CommonJS resolution algorithm doesn't call this out
 // (https://nodejs.org/api/modules.html#all-together), but it seems that module paths ending
 // in `.` are actually normalized to `./` before proceeding with the resolution algorithm.
-func normalizePathForCJSResolution(containingDirectory string, moduleName string) string {
-	combined := tspath.CombinePaths(containingDirectory, pathForDynamicResolution(containingDirectory, moduleName, false))
-	parts := tspath.GetPathComponents(combined, "")
-	lastPart := parts[len(parts)-1]
-	if lastPart == "." || lastPart == ".." {
-		return tspath.EnsureTrailingDirectorySeparator(tspath.NormalizePath(combined))
-	}
-	return tspath.NormalizePath(combined)
+func normalizePathForCJSResolution(containingDirectory tspath.RootedDirectoryPath, moduleName string) resolutionCandidate {
+	trimmedModuleName := strings.TrimRight(moduleName, `/\`)
+	lastSeparator := strings.LastIndexAny(trimmedModuleName, `/\`)
+	lastPart := trimmedModuleName[lastSeparator+1:]
+	candidate := resolutionCandidateFromDirectoryPath(containingDirectory, moduleName)
+	directoryOnly := len(trimmedModuleName) != len(moduleName) ||
+		lastPart == "." ||
+		lastPart == ".." ||
+		tspath.HasTrailingDirectorySeparator(candidate.path.AsString())
+	candidate.directoryOnly = directoryOnly
+	return candidate
 }
 
 func matchesPatternWithTrailer(target string, name string) bool {
@@ -2148,12 +2305,12 @@ func extensionIsOk(extensions extensions, extension string) bool {
 		(extensions&extensionsJson != 0 && extension == tspath.ExtensionJson))
 }
 
-func ResolveConfig(moduleName string, containingFile string, host ResolutionHost) *ResolvedModule {
-	resolver := NewResolver(host, &core.CompilerOptions{ModuleResolution: core.ModuleResolutionKindNodeNext}, "", "", nil)
+func ResolveConfig(moduleName string, containingFile tspath.RootedFilePath, host ResolutionHost) *ResolvedModule {
+	resolver := NewResolver(host, containingFile.Directory(), &core.CompilerOptions{ModuleResolution: core.ModuleResolutionKindNodeNext}, "", "", nil)
 	return resolver.resolveConfig(moduleName, containingFile)
 }
 
-func GetAutomaticTypeDirectiveNames(options *core.CompilerOptions, host ResolutionHost) []string {
+func GetAutomaticTypeDirectiveNames(options *core.CompilerOptions, baseDirectory tspath.RootedDirectoryPath, host ResolutionHost) []string {
 	if !options.UsesWildcardTypes() {
 		if options.Types != nil {
 			return options.Types
@@ -2163,12 +2320,12 @@ func GetAutomaticTypeDirectiveNames(options *core.CompilerOptions, host Resoluti
 
 	// Walk the primary type lookup locations
 	var wildcardMatches []string
-	typeRoots, _ := options.GetEffectiveTypeRoots(host.GetCurrentDirectory())
+	typeRoots, _ := options.GetEffectiveTypeRoots(baseDirectory)
 	for _, root := range typeRoots {
 		if host.FS().DirectoryExists(root) {
 			for _, typeDirectivePath := range host.FS().GetAccessibleEntries(root).Directories {
-				normalized := tspath.NormalizePath(typeDirectivePath)
-				packageJsonPath := tspath.CombinePaths(root, normalized, "package.json")
+				typeDirectiveDirectory := root.ResolveDirectory(typeDirectivePath)
+				packageJsonPath := typeDirectiveDirectory.ResolveFile("package.json")
 				isNotNeededPackage := false
 				if host.FS().FileExists(packageJsonPath) {
 					contents, _ := host.FS().ReadFile(packageJsonPath)
@@ -2178,7 +2335,7 @@ func GetAutomaticTypeDirectiveNames(options *core.CompilerOptions, host Resoluti
 					isNotNeededPackage = packageJsonContent.Typings.Null
 				}
 				if !isNotNeededPackage {
-					baseFileName := tspath.GetBaseFileName(normalized)
+					baseFileName := typeDirectiveDirectory.AsPath().BaseName()
 					if !strings.HasPrefix(baseFileName, ".") {
 						wildcardMatches = append(wildcardMatches, baseFileName)
 					}
@@ -2216,10 +2373,11 @@ const (
 
 type ResolvedEntrypoint struct {
 	// OriginalFileName is the symlink path if the entrypoint was discovered at a symlink. Empty otherwise.
-	OriginalFileName string
+	OriginalFileName tspath.RootedFilePath
 	// ResolvedFileName is the real path to the entrypoint file.
-	ResolvedFileName string
-	ModuleSpecifier  string
+	ResolvedFileName tspath.RootedFilePath
+	ResolvedPath     tspath.PathKey
+	ModuleSpecifier  tspath.ModuleSpecifier
 	// Ending indicates whether the file name and extension portion of ModuleSpecifier is fixed or can be changed.
 	Ending Ending
 	// IncludeConditions are the conditions that a resolver must have to reach this entrypoint.
@@ -2228,7 +2386,7 @@ type ResolvedEntrypoint struct {
 	ExcludeConditions *collections.Set[string]
 }
 
-func (e *ResolvedEntrypoint) SymlinkOrRealpath() string {
+func (e *ResolvedEntrypoint) SymlinkOrRealpath() tspath.RootedFilePath {
 	if e.OriginalFileName != "" {
 		return e.OriginalFileName
 	}
@@ -2239,7 +2397,7 @@ func (r *Resolver) GetEntrypointsFromPackageJsonInfo(packageJson *packagejson.In
 	extensions := extensionsTypeScript | extensionsDeclaration
 	features := NodeResolutionFeaturesAll
 	state := &resolutionState{resolver: r, extensions: extensions, features: features, compilerOptions: r.compilerOptions}
-	dynamicPackage := tspath.IsEncodedDynamicFileName(packageJson.PackageDirectory)
+	dynamicPackage := tspath.IsEncodedDynamicFileName(packageJson.PackageDirectory.String())
 	sourcePackageName := packageName
 	if dynamicPackage {
 		sourcePackageName = tspath.DynamicURIPathToModuleSpecifier(packageName)
@@ -2252,14 +2410,14 @@ func (r *Resolver) GetEntrypointsFromPackageJsonInfo(packageJson *packagejson.In
 	var result []*ResolvedEntrypoint
 	mainResolution := state.loadNodeModuleFromDirectoryWorker(
 		extensions,
-		packageJson.PackageDirectory,
+		packageJson.PackageDirectory.AsDirectoryPath(),
 		packageJson,
 	)
 
 	if mainResolution.isResolved() {
 		result = append(result, r.createResolvedEntrypointHandlingSymlink(
 			mainResolution.path,
-			sourcePackageName,
+			tspath.ToModuleSpecifier(sourcePackageName),
 			nil,
 			nil,
 			EndingFixed,
@@ -2269,27 +2427,27 @@ func (r *Resolver) GetEntrypointsFromPackageJsonInfo(packageJson *packagejson.In
 	if enableDirectorySearch {
 		otherFiles := vfsmatch.ReadDirectory(
 			r.host.FS(),
-			r.host.GetCurrentDirectory(),
-			packageJson.PackageDirectory,
+			packageJson.PackageDirectory.AsDirectoryPath(),
 			extensions.Array(),
 			[]string{"node_modules"},
 			[]string{"**/*"},
 			vfsmatch.UnlimitedDepth,
 		)
 
-		comparePathsOptions := tspath.ComparePathsOptions{UseCaseSensitiveFileNames: r.host.FS().UseCaseSensitiveFileNames()}
+		caseSensitivity := r.host.FS().CaseSensitivity()
 		for _, file := range otherFiles {
-			if mainResolution.isResolved() && tspath.ComparePaths(file, mainResolution.path, comparePathsOptions) == 0 {
+			if mainResolution.isResolved() && caseSensitivity.CompareFilePaths(file, mainResolution.path) == 0 {
 				continue
 			}
 
-			relative := tspath.GetRelativePathFromDirectory(packageJson.PackageDirectory, file, comparePathsOptions)
+			relative, _ := caseSensitivity.RelativeFilePathFromDirectory(packageJson.PackageDirectory.AsDirectoryPath(), file)
+			relativeSpecifier := relative.AsString()
 			if dynamicPackage {
-				relative = tspath.DynamicURIPathToModuleSpecifier(relative)
+				relativeSpecifier = tspath.DynamicURIPathToModuleSpecifier(relativeSpecifier)
 			}
 			result = append(result, r.createResolvedEntrypointHandlingSymlink(
 				file,
-				tspath.ResolvePath(sourcePackageName, relative),
+				tspath.ToModuleSpecifier(sourcePackageName+"/"+relativeSpecifier),
 				nil,
 				nil,
 				EndingChangeable,
@@ -2303,16 +2461,17 @@ func (r *Resolver) GetEntrypointsFromPackageJsonInfo(packageJson *packagejson.In
 	return nil
 }
 
-func (r *Resolver) createResolvedEntrypointHandlingSymlink(fileName string, moduleSpecifier string, includeConditions *collections.Set[string], excludeConditions *collections.Set[string], ending Ending) *ResolvedEntrypoint {
-	var originalFileName string
+func (r *Resolver) createResolvedEntrypointHandlingSymlink(fileName tspath.RootedFilePath, moduleSpecifier tspath.ModuleSpecifier, includeConditions *collections.Set[string], excludeConditions *collections.Set[string], ending Ending) *ResolvedEntrypoint {
+	var originalFileName tspath.RootedFilePath
 	resolvedFileName := fileName
-	if realPath := r.host.FS().Realpath(fileName); realPath != fileName {
+	if realPath := r.host.FS().Realpath(fileName.AsPath()); realPath != fileName.AsPath() {
 		originalFileName = fileName
-		resolvedFileName = realPath
+		resolvedFileName = tspath.RootedFilePathFromPath(realPath)
 	}
 	return &ResolvedEntrypoint{
 		OriginalFileName:  originalFileName,
 		ResolvedFileName:  resolvedFileName,
+		ResolvedPath:      r.host.FS().CaseSensitivity().PathKey(tspath.RootedPath(resolvedFileName)),
 		ModuleSpecifier:   moduleSpecifier,
 		IncludeConditions: includeConditions,
 		ExcludeConditions: excludeConditions,
@@ -2334,44 +2493,46 @@ func (r *resolutionState) loadEntrypointsFromExportMap(
 				if strings.IndexByte(exports.AsString(), '*') != strings.LastIndexByte(exports.AsString(), '*') {
 					return
 				}
-				dynamicPackage := tspath.IsEncodedDynamicFileName(packageJson.PackageDirectory)
+				dynamicPackage := tspath.IsEncodedDynamicFileName(packageJson.PackageDirectory.String())
 				includePatterns := []string{tspath.ChangeFullExtension(strings.Replace(exports.AsString(), "*", "**/*", 1), ".*")}
 				if dynamicPackage {
 					includePatterns = []string{"**/*"}
 				}
 				patternPath := strings.TrimPrefix(exports.AsString(), "./")
 				leadingSlice, trailingSlice, _ := strings.Cut(patternPath, "*")
-				caseSensitive := dynamicPackage || r.resolver.host.FS().UseCaseSensitiveFileNames()
 				files := vfsmatch.ReadDirectory(
 					r.resolver.host.FS(),
-					r.resolver.host.GetCurrentDirectory(),
-					packageJson.PackageDirectory,
+					packageJson.PackageDirectory.AsDirectoryPath(),
 					r.extensions.Array(),
 					nil,
 					includePatterns,
 					vfsmatch.UnlimitedDepth,
 				)
 				for _, file := range files {
-					logicalFile := tspath.GetRelativePathFromDirectory(
-						packageJson.PackageDirectory,
+					relativeFile, ok := r.resolver.host.FS().CaseSensitivity().RelativeFilePathFromDirectory(
+						packageJson.PackageDirectory.AsDirectoryPath(),
 						file,
-						tspath.ComparePathsOptions{UseCaseSensitiveFileNames: caseSensitive},
 					)
+					if !ok {
+						continue
+					}
+					logicalFile := relativeFile.AsString()
 					if dynamicPackage {
 						logicalFile = tspath.DecodeDynamicURIPath(logicalFile)
 					}
-					matchedStar, ok := r.getMatchedStarForPatternEntrypoint(logicalFile, leadingSlice, trailingSlice, caseSensitive)
+					matchedStar, ok := r.getMatchedStarForPatternEntrypoint(logicalFile, leadingSlice, trailingSlice, dynamicPackage)
 					if !ok {
 						continue
 					}
 					if dynamicPackage {
 						matchedStar = tspath.EncodeDynamicLogicalModuleSpecifier(matchedStar)
 					}
-					resolvedSubpath := strings.TrimPrefix(strings.Replace(subpath, "*", matchedStar, 1), "./")
+					resolvedSubpath := strings.Replace(subpath, "*", matchedStar, 1)
+					resolvedSubpath = strings.TrimPrefix(resolvedSubpath, "./")
 					if resolvedSubpath == "" {
 						continue
 					}
-					moduleSpecifier := tspath.ResolvePath(packageName, resolvedSubpath)
+					moduleSpecifier := tspath.ToModuleSpecifier(packageName + "/" + resolvedSubpath)
 					entrypoints = append(entrypoints, r.resolver.createResolvedEntrypointHandlingSymlink(
 						file,
 						moduleSpecifier,
@@ -2381,15 +2542,15 @@ func (r *resolutionState) loadEntrypointsFromExportMap(
 					))
 				}
 			} else {
-				partsAfterFirst := tspath.GetPathComponents(exports.AsString(), "")[2:]
+				partsAfterFirst := tspath.GetPathComponents(exports.AsString())[2:]
 				if slices.Contains(partsAfterFirst, "..") || slices.Contains(partsAfterFirst, ".") || slices.Contains(partsAfterFirst, "node_modules") {
 					return
 				}
-				resolvedTarget := tspath.ResolvePath(packageJson.PackageDirectory, exports.AsString())
+				resolvedTarget := resolutionCandidateFromDirectoryPath(packageJson.PackageDirectory.AsDirectoryPath(), exports.AsString())
 				if result := r.loadFileNameFromPackageJSONField(r.extensions, resolvedTarget, exports.AsString()); result.isResolved() {
 					entrypoints = append(entrypoints, r.resolver.createResolvedEntrypointHandlingSymlink(
 						result.path,
-						tspath.ResolvePath(packageName, subpath),
+						tspath.ToModuleSpecifier(tspath.ResolvePath(packageName, subpath)),
 						includeConditions,
 						excludeConditions,
 						core.IfElse(strings.HasSuffix(exports.AsString(), "*"), EndingExtensionChangeable, EndingFixed),
@@ -2453,14 +2614,16 @@ func (r *resolutionState) loadEntrypointsFromExportMap(
 	return entrypoints
 }
 
-func (r *resolutionState) getMatchedStarForPatternEntrypoint(file string, leadingSlice string, trailingSlice string, caseSensitive bool) (string, bool) {
-	if stringutil.HasPrefixAndSuffixWithoutOverlap(file, leadingSlice, trailingSlice, caseSensitive) {
+func (r *resolutionState) getMatchedStarForPatternEntrypoint(file string, leadingSlice string, trailingSlice string, forceCaseSensitive bool) (string, bool) {
+	caseSensitivity := r.resolver.host.FS().CaseSensitivity()
+	isCaseSensitive := forceCaseSensitive || caseSensitivity.IsCaseSensitive()
+	if stringutil.HasPrefixAndSuffixWithoutOverlap(file, leadingSlice, trailingSlice, isCaseSensitive) {
 		return file[len(leadingSlice) : len(file)-len(trailingSlice)], true
 	}
 
 	if jsExtension := TryGetJSExtensionForFile(file, r.compilerOptions); len(jsExtension) > 0 {
 		swapped := tspath.ChangeFullExtension(file, jsExtension)
-		if stringutil.HasPrefixAndSuffixWithoutOverlap(swapped, leadingSlice, trailingSlice, caseSensitive) {
+		if stringutil.HasPrefixAndSuffixWithoutOverlap(swapped, leadingSlice, trailingSlice, isCaseSensitive) {
 			return swapped[len(leadingSlice) : len(swapped)-len(trailingSlice)], true
 		}
 	}

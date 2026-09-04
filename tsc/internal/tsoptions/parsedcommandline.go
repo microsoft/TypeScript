@@ -1,13 +1,13 @@
 package tsoptions
 
 import (
-	"fmt"
 	"iter"
 	"slices"
 	"strings"
 	"sync"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
+	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/contentmapper"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
@@ -50,25 +50,28 @@ type ParsedCommandLine struct {
 	Raw           any                 `json:"raw"`
 	CompileOnSave *bool               `json:"compileOnSave"`
 
-	comparePathsOptions     tspath.ComparePathsOptions
+	configFileSpecs         *configFileSpecs
+	baseDirectory           tspath.RootedDirectoryPath
+	caseSensitivity         tspath.CaseSensitivity
 	wildcardDirectoriesOnce sync.Once
-	wildcardDirectories     map[string]bool
+	wildcardDirectories     map[tspath.RootedDirectoryPath]bool
 	includeGlobsOnce        sync.Once
 	includeGlobs            []*glob.Glob
 
 	sourceAndOutputMapsOnce     sync.Once
-	sourceToProjectReference    map[tspath.Path]*SourceOutputAndProjectReference
-	outputDtsToProjectReference map[tspath.Path]*SourceOutputAndProjectReference
+	sourceToProjectReference    map[tspath.PathKey]*SourceOutputAndProjectReference
+	outputDtsToProjectReference map[tspath.PathKey]*SourceOutputAndProjectReference
 
-	commonSourceDirectory     string
+	commonSourceDirectory     tspath.RootedDirectoryPath
 	commonSourceDirectoryOnce sync.Once
 
-	resolvedProjectReferencePaths     []string
+	resolvedProjectReferencePaths     []tspath.RootedFilePath
 	resolvedProjectReferencePathsOnce sync.Once
 
-	literalFileNamesLen int
-	fileNamesByPath     map[tspath.Path]string // maps file names to their paths, used for quick lookups
-	fileNamesByPathOnce sync.Once
+	literalFileNamesLen         int
+	rootFileNamesForDiagnostics []string
+	filePaths                   *collections.Set[tspath.PathKey]
+	filePathsOnce               sync.Once
 
 	locale     locale.Locale
 	localeOnce sync.Once
@@ -76,9 +79,10 @@ type ParsedCommandLine struct {
 
 func NewParsedCommandLine(
 	compilerOptions *core.CompilerOptions,
-	rootFileNames []string,
+	rootFileNames []tspath.RootedFilePath,
 	projectReferences []*core.ProjectReference,
-	comparePathsOptions tspath.ComparePathsOptions,
+	baseDirectory tspath.RootedDirectoryPath,
+	caseSensitivity tspath.CaseSensitivity,
 ) *ParsedCommandLine {
 	return &ParsedCommandLine{
 		ParsedConfig: &ParsedOptions{
@@ -86,30 +90,46 @@ func NewParsedCommandLine(
 			FileNames:         rootFileNames,
 			ProjectReferences: projectReferences,
 		},
-		comparePathsOptions: comparePathsOptions,
+		baseDirectory:   baseDirectory,
+		caseSensitivity: caseSensitivity,
 	}
 }
 
-func (p *ParsedCommandLine) WithFileNames(fileNames []string) *ParsedCommandLine {
+func (p *ParsedCommandLine) WithFileNames(fileNames []tspath.RootedFilePath) *ParsedCommandLine {
 	parsedConfig := *p.ParsedConfig
 	parsedConfig.FileNames = fileNames
 	return &ParsedCommandLine{
-		ParsedConfig:        &parsedConfig,
-		ConfigFile:          p.ConfigFile,
-		Errors:              p.Errors,
-		Raw:                 p.Raw,
-		CompileOnSave:       p.CompileOnSave,
-		comparePathsOptions: p.comparePathsOptions,
-		wildcardDirectories: p.wildcardDirectories,
-		includeGlobs:        p.includeGlobs,
-		literalFileNamesLen: p.literalFileNamesLen,
+		ParsedConfig:                &parsedConfig,
+		ConfigFile:                  p.ConfigFile,
+		Errors:                      p.Errors,
+		Raw:                         p.Raw,
+		CompileOnSave:               p.CompileOnSave,
+		configFileSpecs:             p.configFileSpecs,
+		baseDirectory:               p.baseDirectory,
+		caseSensitivity:             p.caseSensitivity,
+		wildcardDirectories:         p.wildcardDirectories,
+		includeGlobs:                p.includeGlobs,
+		literalFileNamesLen:         p.literalFileNamesLen,
+		rootFileNamesForDiagnostics: p.rootFileNamesForDiagnostics,
 	}
 }
 
+func (p *ParsedCommandLine) getConfigFileSpecs() *configFileSpecs {
+	if p.configFileSpecs != nil {
+		return p.configFileSpecs
+	}
+	if p.ConfigFile != nil {
+		return p.ConfigFile.configFileSpecs
+	}
+	return nil
+}
+
 type SourceOutputAndProjectReference struct {
-	Source    string
-	OutputDts string
-	Resolved  *ParsedCommandLine
+	Source        tspath.RootedFilePath
+	SourcePath    tspath.PathKey
+	OutputDts     tspath.RootedFilePath
+	OutputDtsPath tspath.PathKey
+	Resolved      *ParsedCommandLine
 }
 
 var (
@@ -117,68 +137,75 @@ var (
 	_ outputpaths.OutputPathsHost     = (*ParsedCommandLine)(nil)
 )
 
-func (p *ParsedCommandLine) ConfigName() string {
+func (p *ParsedCommandLine) ConfigName() tspath.RootedFilePath {
 	if p == nil || p.ConfigFile == nil {
 		return ""
 	}
 	return p.ConfigFile.SourceFile.FileName()
 }
 
-func (p *ParsedCommandLine) SourceToProjectReference() map[tspath.Path]*SourceOutputAndProjectReference {
+func (p *ParsedCommandLine) ConfigFileName() tspath.RootedFilePath {
+	if configName := p.ConfigName(); configName != "" {
+		return configName
+	}
+	return p.CompilerOptions().ConfigFilePath
+}
+
+func (p *ParsedCommandLine) SourceToProjectReference() map[tspath.PathKey]*SourceOutputAndProjectReference {
 	return p.sourceToProjectReference
 }
 
-func (p *ParsedCommandLine) OutputDtsToProjectReference() map[tspath.Path]*SourceOutputAndProjectReference {
+func (p *ParsedCommandLine) OutputDtsToProjectReference() map[tspath.PathKey]*SourceOutputAndProjectReference {
 	return p.outputDtsToProjectReference
 }
 
 func (p *ParsedCommandLine) ParseInputOutputNames() {
 	p.sourceAndOutputMapsOnce.Do(func() {
-		sourceToOutput := map[tspath.Path]*SourceOutputAndProjectReference{}
-		outputDtsToSource := map[tspath.Path]*SourceOutputAndProjectReference{}
+		sourceToOutput := map[tspath.PathKey]*SourceOutputAndProjectReference{}
+		outputDtsToSource := map[tspath.PathKey]*SourceOutputAndProjectReference{}
 
-		for outputDts, source := range p.getOutputDeclarationAndSourceFileNames() {
-			path := tspath.ToPath(source, p.GetCurrentDirectory(), p.UseCaseSensitiveFileNames())
+		for outputDtsFileName, sourceFileName := range p.getOutputDeclarationAndSourceFileNames() {
 			projectReference := &SourceOutputAndProjectReference{
-				Source:    source,
-				OutputDts: outputDts,
-				Resolved:  p,
+				Source:     sourceFileName,
+				SourcePath: p.caseSensitivity.PathKey(tspath.RootedPath(sourceFileName)),
+				OutputDts:  outputDtsFileName,
+				Resolved:   p,
 			}
-			if outputDts != "" {
-				outputDtsToSource[tspath.ToPath(outputDts, p.GetCurrentDirectory(), p.UseCaseSensitiveFileNames())] = projectReference
+			if outputDtsFileName != "" {
+				projectReference.OutputDtsPath = p.caseSensitivity.PathKey(tspath.RootedPath(outputDtsFileName))
+				outputDtsToSource[projectReference.OutputDtsPath] = projectReference
 			}
-			sourceToOutput[path] = projectReference
+			sourceToOutput[projectReference.SourcePath] = projectReference
 		}
 		p.outputDtsToProjectReference = outputDtsToSource
 		p.sourceToProjectReference = sourceToOutput
 	})
 }
 
-func (p *ParsedCommandLine) CommonSourceDirectory() string {
+func (p *ParsedCommandLine) CommonSourceDirectory() tspath.RootedDirectoryPath {
 	p.commonSourceDirectoryOnce.Do(func() {
-		files := func() []string {
-			return core.Filter(p.ParsedConfig.FileNames, func(file string) bool {
-				return !(p.ParsedConfig.CompilerOptions.NoEmitForJsFiles.IsTrue() && tspath.HasJSFileExtension(file)) && !tspath.IsDeclarationFileName(file)
+		files := func() []tspath.RootedFilePath {
+			return core.Filter(p.ParsedConfig.FileNames, func(file tspath.RootedFilePath) bool {
+				return !(p.ParsedConfig.CompilerOptions.NoEmitForJsFiles.IsTrue() && file.HasJSFileExtension()) && !file.IsDeclarationFile()
 			})
 		}
 
 		p.commonSourceDirectory = outputpaths.GetCommonSourceDirectory(
 			p.ParsedConfig.CompilerOptions,
 			files,
-			p.GetCurrentDirectory(),
-			p.UseCaseSensitiveFileNames(),
+			p.BaseDirectory(),
+			p.CaseSensitivity(),
 			p.checkSourceFilesBelongToPath,
 		)
 	})
 	return p.commonSourceDirectory
 }
 
-func (p *ParsedCommandLine) checkSourceFilesBelongToPath(sourceFiles []string, rootDirectory string) bool {
+func (p *ParsedCommandLine) checkSourceFilesBelongToPath(sourceFiles []tspath.RootedFilePath, rootDirectory tspath.RootedDirectoryPath) bool {
 	allFilesBelongToPath := true
 	for _, file := range sourceFiles {
-		absoluteSourceFilePath := tspath.GetCanonicalFileName(tspath.GetNormalizedAbsolutePath(file, p.GetCurrentDirectory()), p.UseCaseSensitiveFileNames())
-		if !tspath.ContainsPath(rootDirectory, file, p.comparePathsOptions) {
-			p.Errors = append(p.Errors, ast.NewCompilerDiagnostic(diagnostics.File_0_is_not_under_rootDir_1_rootDir_is_expected_to_contain_all_source_files, absoluteSourceFilePath, rootDirectory))
+		if !p.caseSensitivity.ContainsFilePath(rootDirectory, file) {
+			p.Errors = append(p.Errors, ast.NewCompilerDiagnostic(diagnostics.File_0_is_not_under_rootDir_1_rootDir_is_expected_to_contain_all_source_files, p.caseSensitivity.PathKey(tspath.RootedPath(file)), rootDirectory))
 			allFilesBelongToPath = false
 		}
 	}
@@ -186,19 +213,23 @@ func (p *ParsedCommandLine) checkSourceFilesBelongToPath(sourceFiles []string, r
 	return allFilesBelongToPath
 }
 
-func (p *ParsedCommandLine) GetCurrentDirectory() string {
-	return p.comparePathsOptions.CurrentDirectory
+func (p *ParsedCommandLine) BaseDirectory() tspath.RootedDirectoryPath {
+	return p.baseDirectory
 }
 
-func (p *ParsedCommandLine) UseCaseSensitiveFileNames() bool {
-	return p.comparePathsOptions.UseCaseSensitiveFileNames
+func (p *ParsedCommandLine) GetCurrentDirectory() tspath.RootedDirectoryPath {
+	return p.baseDirectory
 }
 
-func (p *ParsedCommandLine) getOutputDeclarationAndSourceFileNames() iter.Seq2[string, string] {
-	return func(yield func(dtsName string, inputName string) bool) {
+func (p *ParsedCommandLine) CaseSensitivity() tspath.CaseSensitivity {
+	return p.caseSensitivity
+}
+
+func (p *ParsedCommandLine) getOutputDeclarationAndSourceFileNames() iter.Seq2[tspath.RootedFilePath, tspath.RootedFilePath] {
+	return func(yield func(dtsName tspath.RootedFilePath, inputName tspath.RootedFilePath) bool) {
 		for _, fileName := range p.ParsedConfig.FileNames {
-			var outputDts string
-			if !tspath.IsDeclarationFileName(fileName) && !tspath.FileExtensionIs(fileName, tspath.ExtensionJson) {
+			var outputDts tspath.RootedFilePath
+			if !fileName.IsDeclarationFile() && !fileName.ExtensionIs(tspath.ExtensionJson) {
 				outputDts = outputpaths.GetOutputDeclarationFileNameWorker(fileName, p.CompilerOptions(), p)
 			}
 			if !yield(outputDts, fileName) {
@@ -208,14 +239,14 @@ func (p *ParsedCommandLine) getOutputDeclarationAndSourceFileNames() iter.Seq2[s
 	}
 }
 
-func (p *ParsedCommandLine) GetOutputFileNames() iter.Seq[string] {
-	return func(yield func(outputName string) bool) {
+func (p *ParsedCommandLine) GetOutputFileNames() iter.Seq[tspath.RootedFilePath] {
+	return func(yield func(outputName tspath.RootedFilePath) bool) {
 		for _, fileName := range p.ParsedConfig.FileNames {
-			if tspath.IsDeclarationFileName(fileName) {
+			if fileName.IsDeclarationFile() {
 				continue
 			}
 			jsFileName := outputpaths.GetOutputJSFileName(fileName, p.CompilerOptions(), p)
-			isJson := tspath.FileExtensionIs(fileName, tspath.ExtensionJson)
+			isJson := fileName.ExtensionIs(tspath.ExtensionJson)
 			if jsFileName != "" {
 				if !yield(jsFileName) {
 					return
@@ -234,15 +265,13 @@ func (p *ParsedCommandLine) GetOutputFileNames() iter.Seq[string] {
 			}
 			if p.CompilerOptions().GetEmitDeclarations() {
 				dtsFileName := outputpaths.GetOutputDeclarationFileNameWorker(fileName, p.CompilerOptions(), p)
-				if dtsFileName != "" {
-					if !yield(dtsFileName) {
+				if !yield(dtsFileName) {
+					return
+				}
+				if p.GetContentMapperForFileName(fileName) == nil && p.CompilerOptions().GetAreDeclarationMapsEnabled() {
+					declarationMap := dtsFileName.AppendSuffix(".map")
+					if !yield(declarationMap) {
 						return
-					}
-					if p.GetContentMapperForFileName(fileName) == nil && p.CompilerOptions().GetAreDeclarationMapsEnabled() {
-						declarationMap := dtsFileName + ".map"
-						if !yield(declarationMap) {
-							return
-						}
 					}
 				}
 			}
@@ -250,22 +279,24 @@ func (p *ParsedCommandLine) GetOutputFileNames() iter.Seq[string] {
 	}
 }
 
-func (p *ParsedCommandLine) GetBuildInfoFileName() string {
-	return outputpaths.GetBuildInfoFileName(p.CompilerOptions(), p.comparePathsOptions)
+func (p *ParsedCommandLine) GetBuildInfoFileName() tspath.RootedFilePath {
+	return outputpaths.GetBuildInfoFileName(p.CompilerOptions(), p.caseSensitivity)
 }
 
 // WildcardDirectories returns the cached wildcard directories, initializing them if needed
-func (p *ParsedCommandLine) WildcardDirectories() map[string]bool {
+func (p *ParsedCommandLine) WildcardDirectories() map[tspath.RootedDirectoryPath]bool {
 	if p == nil {
 		return nil
 	}
 
 	p.wildcardDirectoriesOnce.Do(func() {
 		if p.wildcardDirectories == nil {
+			specs := p.getConfigFileSpecs()
 			p.wildcardDirectories = getWildcardDirectories(
-				p.ConfigFile.configFileSpecs.validatedIncludeSpecs,
-				p.ConfigFile.configFileSpecs.validatedExcludeSpecs,
-				p.comparePathsOptions,
+				specs.validatedIncludeSpecs,
+				specs.validatedExcludeSpecs,
+				p.baseDirectory,
+				p.caseSensitivity,
 			)
 		}
 	})
@@ -284,7 +315,8 @@ func (p *ParsedCommandLine) WildcardDirectoryGlobs() []*glob.Glob {
 			fileGlob, recursiveFileGlob := p.fileGlobPatterns()
 			globs := make([]*glob.Glob, 0, len(wildcardDirectories))
 			for dir, recursive := range wildcardDirectories {
-				if parsed, err := glob.Parse(fmt.Sprintf("%s/%s", tspath.NormalizePath(dir), core.IfElse(recursive, recursiveFileGlob, fileGlob))); err == nil {
+				pattern := tspath.CombinePaths(dir.AsString(), core.IfElse(recursive, recursiveFileGlob, fileGlob))
+				if parsed, err := glob.Parse(pattern); err == nil {
 					globs = append(globs, parsed)
 				}
 			}
@@ -296,7 +328,7 @@ func (p *ParsedCommandLine) WildcardDirectoryGlobs() []*glob.Glob {
 }
 
 // Normalized file names explicitly specified in `files`
-func (p *ParsedCommandLine) LiteralFileNames() []string {
+func (p *ParsedCommandLine) LiteralFileNames() []tspath.RootedFilePath {
 	if p != nil && p.ConfigFile != nil {
 		return p.FileNames()[0:p.literalFileNamesLen]
 	}
@@ -327,19 +359,26 @@ func (p *ParsedCommandLine) TypeAcquisition() *core.TypeAcquisition {
 }
 
 // All file names matched by files, include, and exclude patterns
-func (p *ParsedCommandLine) FileNames() []string {
+func (p *ParsedCommandLine) FileNames() []tspath.RootedFilePath {
 	return p.ParsedConfig.FileNames
 }
 
-func (p *ParsedCommandLine) FileNamesByPath() map[tspath.Path]string {
-	p.fileNamesByPathOnce.Do(func() {
-		p.fileNamesByPath = make(map[tspath.Path]string, len(p.ParsedConfig.FileNames))
+func (p *ParsedCommandLine) RootFileNameForDiagnostic(index int) string {
+	if index < len(p.rootFileNamesForDiagnostics) {
+		return p.rootFileNamesForDiagnostics[index]
+	}
+	return p.ParsedConfig.FileNames[index].AsString()
+}
+
+func (p *ParsedCommandLine) FilePaths() *collections.Set[tspath.PathKey] {
+	p.filePathsOnce.Do(func() {
+		p.filePaths = collections.NewSetWithSizeHint[tspath.PathKey](len(p.ParsedConfig.FileNames))
 		for _, fileName := range p.ParsedConfig.FileNames {
-			path := tspath.ToPath(fileName, p.GetCurrentDirectory(), p.UseCaseSensitiveFileNames())
-			p.fileNamesByPath[path] = fileName
+			path := p.caseSensitivity.PathKey(tspath.RootedPath(fileName))
+			p.filePaths.Add(path)
 		}
 	})
-	return p.fileNamesByPath
+	return p.filePaths
 }
 
 func (p *ParsedCommandLine) ProjectReferences() []*core.ProjectReference {
@@ -363,12 +402,12 @@ func (p *ParsedCommandLine) ContentMapperExtensions() []string {
 
 // GetContentMapperForFileName returns the configured content mapper whose extensions include fileName,
 // or nil if no content mapper is registered for the file's extension.
-func (p *ParsedCommandLine) GetContentMapperForFileName(fileName string) *contentmapper.Mapper {
-	ignoreCase := !p.UseCaseSensitiveFileNames()
-	extension := tspath.GetLongestExtensionFromPath(fileName, p.ContentMapperExtensions(), ignoreCase)
+func (p *ParsedCommandLine) GetContentMapperForFileName(fileName tspath.RootedFilePath) *contentmapper.Mapper {
+	caseSensitivity := p.CaseSensitivity()
+	extension := fileName.LongestExtension(p.ContentMapperExtensions(), caseSensitivity)
 	for _, mapper := range p.ContentMappers() {
 		if slices.ContainsFunc(mapper.Definition.Extensions, func(mapperExtension string) bool {
-			return extension == mapperExtension || ignoreCase && strings.EqualFold(extension, mapperExtension)
+			return extension == mapperExtension || caseSensitivity.IsCaseInsensitive() && strings.EqualFold(extension, mapperExtension)
 		}) {
 			return mapper
 		}
@@ -376,14 +415,14 @@ func (p *ParsedCommandLine) GetContentMapperForFileName(fileName string) *conten
 	return nil
 }
 
-func (p *ParsedCommandLine) ResolvedProjectReferencePaths() []string {
+func (p *ParsedCommandLine) ResolvedProjectReferencePaths() []tspath.RootedFilePath {
 	p.resolvedProjectReferencePathsOnce.Do(func() {
 		p.resolvedProjectReferencePaths = core.Map(p.ParsedConfig.ProjectReferences, core.ResolveProjectReferencePath)
 	})
 	return p.resolvedProjectReferencePaths
 }
 
-func (p *ParsedCommandLine) ExtendedSourceFiles() []string {
+func (p *ParsedCommandLine) ExtendedSourceFiles() []tspath.RootedFilePath {
 	if p == nil || p.ConfigFile == nil {
 		return nil
 	}
@@ -400,29 +439,31 @@ func (p *ParsedCommandLine) GetConfigFileParsingDiagnostics() []*ast.Diagnostic 
 
 // PossiblyMatchesFileName is a fast check to see if a file is currently included by a config
 // or would be included if the file were to be created. It may return false positives.
-func (p *ParsedCommandLine) PossiblyMatchesFileName(fileName string) bool {
-	path := tspath.ToPath(fileName, p.GetCurrentDirectory(), p.UseCaseSensitiveFileNames())
-	if _, ok := p.FileNamesByPath()[path]; ok {
+func (p *ParsedCommandLine) PossiblyMatchesFileName(fileName tspath.RootedFilePath) bool {
+	path := p.caseSensitivity.PathKey(tspath.RootedPath(fileName))
+	if p.FilePaths().Has(path) {
 		return true
 	}
 
-	for _, include := range p.ConfigFile.configFileSpecs.validatedIncludeSpecs {
-		if !strings.ContainsAny(include, "*?") && !vfsmatch.IsImplicitGlob(include) {
-			includePath := tspath.ToPath(include, p.GetCurrentDirectory(), p.UseCaseSensitiveFileNames())
+	specs := p.getConfigFileSpecs()
+	for _, include := range specs.validatedIncludeSpecs {
+		text := include.AsString()
+		if !strings.ContainsAny(text, "*?") && !vfsmatch.IsImplicitGlob(text) {
+			includePath := p.CaseSensitivity().PathKey(tspath.ToRootedPath(text, p.BaseDirectory()))
 			if includePath == path {
 				return true
 			}
 		}
 	}
 	if p.GetContentMapperForFileName(fileName) != nil {
-		directoryPath := path.GetDirectoryPath()
+		directoryPath := path.Parent()
 		if p.PossiblyMatchesDirectoryName(directoryPath) {
 			return true
 		}
 	}
 	if wildcardDirectoryGlobs := p.WildcardDirectoryGlobs(); len(wildcardDirectoryGlobs) > 0 {
 		for _, glob := range wildcardDirectoryGlobs {
-			if glob.Match(fileName) {
+			if glob.Match(fileName.AsString()) {
 				return true
 			}
 		}
@@ -430,9 +471,9 @@ func (p *ParsedCommandLine) PossiblyMatchesFileName(fileName string) bool {
 	return false
 }
 
-func (p *ParsedCommandLine) PossiblyMatchesDirectoryName(directoryPath tspath.Path) bool {
+func (p *ParsedCommandLine) PossiblyMatchesDirectoryName(directoryPath tspath.PathKey) bool {
 	for wildcardDir, recursive := range p.WildcardDirectories() {
-		wildcardDirPath := tspath.ToPath(wildcardDir, p.GetCurrentDirectory(), p.UseCaseSensitiveFileNames())
+		wildcardDirPath := p.caseSensitivity.PathKey(wildcardDir.AsPath())
 		if recursive {
 			if wildcardDirPath.ContainsPath(directoryPath) {
 				return true
@@ -446,42 +487,46 @@ func (p *ParsedCommandLine) PossiblyMatchesDirectoryName(directoryPath tspath.Pa
 	return false
 }
 
-func (p *ParsedCommandLine) GetMatchedFileSpec(fileName string) string {
-	return p.ConfigFile.configFileSpecs.getMatchedFileSpec(fileName, p.comparePathsOptions)
+func (p *ParsedCommandLine) GetMatchedFileSpec(fileName tspath.RootedFilePath) string {
+	return p.getConfigFileSpecs().getMatchedFileSpec(p.caseSensitivity.PathKey(tspath.RootedPath(fileName))).AsString()
 }
 
-func (p *ParsedCommandLine) GetMatchedIncludeSpec(fileName string) (string, bool) {
-	if len(p.ConfigFile.configFileSpecs.validatedIncludeSpecs) == 0 {
+func (p *ParsedCommandLine) GetMatchedIncludeSpec(fileName tspath.RootedFilePath) (string, bool) {
+	specs := p.getConfigFileSpecs()
+	if len(specs.validatedIncludeSpecs) == 0 {
 		return "", false
 	}
 
-	if p.ConfigFile.configFileSpecs.isDefaultIncludeSpec {
-		return p.ConfigFile.configFileSpecs.validatedIncludeSpecs[0], true
+	if specs.isDefaultIncludeSpec {
+		return specs.validatedIncludeSpecs[0].AsString(), true
 	}
 
-	return p.ConfigFile.configFileSpecs.getMatchedIncludeSpec(fileName, p.comparePathsOptions), false
+	return specs.getMatchedIncludeSpec(fileName, p.baseDirectory, p.caseSensitivity).AsString(), false
 }
 
 func (p *ParsedCommandLine) ReloadFileNamesOfParsedCommandLine(fs vfs.FS) *ParsedCommandLine {
 	parsedConfig := *p.ParsedConfig
 	fileNames, literalFileNamesLen := getFileNamesFromConfigSpecs(
-		*p.ConfigFile.configFileSpecs,
-		p.GetCurrentDirectory(),
+		*p.getConfigFileSpecs(),
+		p.BaseDirectory(),
 		p.CompilerOptions(),
 		fs,
 		p.ContentMapperExtensions(),
 	)
 	parsedConfig.FileNames = fileNames
 	parsedCommandLine := ParsedCommandLine{
-		ParsedConfig:        &parsedConfig,
-		ConfigFile:          p.ConfigFile,
-		Errors:              p.Errors,
-		Raw:                 p.Raw,
-		CompileOnSave:       p.CompileOnSave,
-		comparePathsOptions: p.comparePathsOptions,
-		wildcardDirectories: p.wildcardDirectories,
-		includeGlobs:        p.includeGlobs,
-		literalFileNamesLen: literalFileNamesLen,
+		ParsedConfig:                &parsedConfig,
+		ConfigFile:                  p.ConfigFile,
+		Errors:                      p.Errors,
+		Raw:                         p.Raw,
+		CompileOnSave:               p.CompileOnSave,
+		configFileSpecs:             p.configFileSpecs,
+		baseDirectory:               p.baseDirectory,
+		caseSensitivity:             p.caseSensitivity,
+		wildcardDirectories:         p.wildcardDirectories,
+		includeGlobs:                p.includeGlobs,
+		literalFileNamesLen:         literalFileNamesLen,
+		rootFileNamesForDiagnostics: p.rootFileNamesForDiagnostics,
 	}
 	return &parsedCommandLine
 }

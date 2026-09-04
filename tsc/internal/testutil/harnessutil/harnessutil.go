@@ -62,20 +62,20 @@ type NamedTestConfiguration struct {
 }
 
 type HarnessOptions struct {
-	UseCaseSensitiveFileNames bool
-	BaselineFile              string
-	IncludeBuiltFile          string
-	FileName                  string
-	LibFiles                  []string
-	NoImplicitReferences      bool
-	CurrentDirectory          string
-	Symlink                   string
-	Link                      string
-	NoTypesAndSymbols         bool
-	FullEmitPaths             bool
-	ReportDiagnostics         bool
-	CaptureSuggestions        bool
-	TypescriptVersion         string
+	CaseSensitivity      tspath.CaseSensitivity
+	BaselineFile         string
+	IncludeBuiltFile     string
+	FileName             string
+	LibFiles             []string
+	NoImplicitReferences bool
+	CurrentDirectory     tspath.RootedDirectoryPath
+	Symlink              string
+	Link                 string
+	NoTypesAndSymbols    bool
+	FullEmitPaths        bool
+	ReportDiagnostics    bool
+	CaptureSuggestions   bool
+	TypescriptVersion    string
 }
 
 func CompileFiles(
@@ -84,7 +84,7 @@ func CompileFiles(
 	otherFiles []*TestFile,
 	testConfig TestConfiguration,
 	tsconfig *tsoptions.ParsedCommandLine,
-	currentDirectory string,
+	currentDirectory tspath.RootedDirectoryPath,
 	symlinks map[string]string,
 ) *CompilationResult {
 	var compilerOptions *core.CompilerOptions
@@ -102,7 +102,7 @@ func CompileFiles(
 		compilerOptions.SkipDefaultLibCheck = core.TSTrue
 	}
 	compilerOptions.NoErrorTruncation = core.TSTrue
-	harnessOptions := HarnessOptions{UseCaseSensitiveFileNames: true, CurrentDirectory: currentDirectory}
+	harnessOptions := HarnessOptions{CaseSensitivity: tspath.CaseSensitive, CurrentDirectory: currentDirectory}
 
 	// Parse harness and compiler options from the test configuration
 	if testConfig != nil {
@@ -118,16 +118,16 @@ func CompileFilesEx(
 	otherFiles []*TestFile,
 	harnessOptions *HarnessOptions,
 	compilerOptions *core.CompilerOptions,
-	currentDirectory string,
+	currentDirectory tspath.RootedDirectoryPath,
 	symlinks map[string]string,
 	tsconfig *tsoptions.ParsedCommandLine,
 ) *CompilationResult {
-	var programFileNames []string
+	var programFileNames []tspath.RootedFilePath
 	for _, file := range inputFiles {
-		fileName := tspath.GetNormalizedAbsolutePath(file.UnitName, currentDirectory)
+		fileName := tspath.ToRootedFilePath(file.UnitName, currentDirectory)
 
-		if !tspath.FileExtensionIs(fileName, tspath.ExtensionJson) &&
-			!tspath.FileExtensionIs(fileName, tspath.ExtensionTsBuildInfo) {
+		if !fileName.ExtensionIs(tspath.ExtensionJson) &&
+			!fileName.ExtensionIs(tspath.ExtensionTsBuildInfo) {
 			programFileNames = append(programFileNames, fileName)
 		}
 	}
@@ -150,39 +150,12 @@ func CompileFilesEx(
 				// We used to override lib with a custom lib.d.ts for some reason. Skip this unless it becomes necessary.
 				continue
 			}
-			programFileNames = append(programFileNames, tspath.CombinePaths(testLibFolder, libFile))
+			programFileNames = append(programFileNames, currentDirectory.ResolveFile(tspath.CombinePaths(testLibFolder, libFile)))
 			includeLibDir = true
 		}
 	}
 
 	if includeLibDir {
-	}
-
-	// !!!
-	// ts.assign(options, ts.convertToOptionsWithAbsolutePaths(options, path => ts.getNormalizedAbsolutePath(path, currentDirectory)));
-	if compilerOptions.OutDir != "" {
-		compilerOptions.OutDir = tspath.GetNormalizedAbsolutePath(compilerOptions.OutDir, currentDirectory)
-	}
-	if compilerOptions.Project != "" {
-		compilerOptions.Project = tspath.GetNormalizedAbsolutePath(compilerOptions.Project, currentDirectory)
-	}
-	if compilerOptions.RootDir != "" {
-		compilerOptions.RootDir = tspath.GetNormalizedAbsolutePath(compilerOptions.RootDir, currentDirectory)
-	}
-	if compilerOptions.TsBuildInfoFile != "" {
-		compilerOptions.TsBuildInfoFile = tspath.GetNormalizedAbsolutePath(compilerOptions.TsBuildInfoFile, currentDirectory)
-	}
-	if compilerOptions.BaseUrl != "" {
-		compilerOptions.BaseUrl = tspath.GetNormalizedAbsolutePath(compilerOptions.BaseUrl, currentDirectory)
-	}
-	if compilerOptions.DeclarationDir != "" {
-		compilerOptions.DeclarationDir = tspath.GetNormalizedAbsolutePath(compilerOptions.DeclarationDir, currentDirectory)
-	}
-	for i, rootDir := range compilerOptions.RootDirs {
-		compilerOptions.RootDirs[i] = tspath.GetNormalizedAbsolutePath(rootDir, currentDirectory)
-	}
-	for i, typeRoot := range compilerOptions.TypeRoots {
-		compilerOptions.TypeRoots[i] = tspath.GetNormalizedAbsolutePath(typeRoot, currentDirectory)
 	}
 
 	var contentMappers []*contentmapper.Mapper
@@ -214,7 +187,7 @@ func CompileFilesEx(
 		maps.Copy(testfs, testLibFolderMap())
 	}
 
-	fs := vfstest.FromMap(testfs, harnessOptions.UseCaseSensitiveFileNames)
+	fs := vfstest.FromMap(testfs, harnessOptions.CaseSensitivity)
 	fs = bundled.WrapFS(fs)
 	fs = NewOutputRecorderFS(fs)
 
@@ -232,15 +205,14 @@ func CompileFilesEx(
 		configFile = tsconfig.ConfigFile
 		errors = tsconfig.Errors
 	}
-	config := &tsoptions.ParsedCommandLine{
-		ParsedConfig: &tsoptions.ParsedOptions{
-			CompilerOptions: compilerOptions,
-			FileNames:       programFileNames,
-			ContentMappers:  contentMappers,
-		},
-		ConfigFile: configFile,
-		Errors:     errors,
+	baseDirectory := currentDirectory
+	if tsconfig != nil && tsconfig.BaseDirectory() != "" {
+		baseDirectory = tsconfig.BaseDirectory()
 	}
+	config := tsoptions.NewParsedCommandLine(compilerOptions, programFileNames, nil, baseDirectory, harnessOptions.CaseSensitivity)
+	config.ParsedConfig.ContentMappers = contentMappers
+	config.ConfigFile = configFile
+	config.Errors = errors
 	var contentMapperProject contentmapper.Project
 	if contentMapperHost != nil {
 		contentMapperProject = contentMapperHost.Project(contentmapper.ProjectSpec{
@@ -288,7 +260,7 @@ var testLibFolderMap = sync.OnceValue(func() map[string]any {
 	return testfs
 })
 
-func SetOptionsFromTestConfig(t *testing.T, testConfig TestConfiguration, compilerOptions *core.CompilerOptions, harnessOptions *HarnessOptions, currentDirectory string, allowUnknownOptions bool) {
+func SetOptionsFromTestConfig(t *testing.T, testConfig TestConfiguration, compilerOptions *core.CompilerOptions, harnessOptions *HarnessOptions, currentDirectory tspath.RootedDirectoryPath, allowUnknownOptions bool) {
 	for name, value := range testConfig {
 		if name == "typescriptversion" {
 			continue
@@ -404,7 +376,11 @@ func getHarnessOption(name string) *tsoptions.CommandLineOption {
 func parseHarnessOption(t *testing.T, key string, value any, harnessOptions *HarnessOptions) {
 	switch key {
 	case "useCaseSensitiveFileNames":
-		harnessOptions.UseCaseSensitiveFileNames = value.(bool)
+		if value.(bool) {
+			harnessOptions.CaseSensitivity = tspath.CaseSensitive
+		} else {
+			harnessOptions.CaseSensitivity = tspath.CaseInsensitive
+		}
 	case "baselineFile":
 		harnessOptions.BaselineFile = value.(string)
 	case "includeBuiltFile":
@@ -419,7 +395,7 @@ func parseHarnessOption(t *testing.T, key string, value any, harnessOptions *Har
 	case "noImplicitReferences":
 		harnessOptions.NoImplicitReferences = value.(bool)
 	case "currentDirectory":
-		harnessOptions.CurrentDirectory = value.(string)
+		harnessOptions.CurrentDirectory = tspath.ToRootedDirectoryPath(value.(string), harnessOptions.CurrentDirectory)
 	case "symlink":
 		harnessOptions.Symlink = value.(string)
 	case "link":
@@ -439,10 +415,10 @@ func parseHarnessOption(t *testing.T, key string, value any, harnessOptions *Har
 	}
 }
 
-func getOptionValue(t *testing.T, option *tsoptions.CommandLineOption, value string, cwd string) tsoptions.CompilerOptionsValue {
+func getOptionValue(t *testing.T, option *tsoptions.CommandLineOption, value string, cwd tspath.RootedDirectoryPath) tsoptions.CompilerOptionsValue {
 	switch option.Kind {
 	case tsoptions.CommandLineOptionTypeString:
-		if option.IsFilePath {
+		if option.PathKind.IsRooted() {
 			return tspath.GetNormalizedAbsolutePath(value, cwd)
 		}
 		return value
@@ -469,7 +445,7 @@ func getOptionValue(t *testing.T, option *tsoptions.CommandLineOption, value str
 		return enumVal
 	case tsoptions.CommandLineOptionTypeList, tsoptions.CommandLineOptionTypeListOrElement:
 		listVal, errors := tsoptions.ParseListTypeOption(option, value)
-		if option.Elements().IsFilePath {
+		if option.Elements().PathKind.IsRooted() {
 			return core.Map(listVal, func(item any) any {
 				return tspath.GetNormalizedAbsolutePath(item.(string), cwd)
 			})
@@ -513,7 +489,7 @@ func (h *cachedCompilerHost) GetSourceFile(opts ast.SourceFileParseOptions) *ast
 
 	scriptKind := core.GetScriptKindFromFileName(opts.FileName)
 	if scriptKind == core.ScriptKindUnknown {
-		panic("Unknown script kind for file  " + opts.FileName)
+		panic("Unknown script kind for file  " + opts.FileName.AsString())
 	}
 
 	key := GetSourceFileCacheKey(opts, text, scriptKind)
@@ -528,15 +504,17 @@ func (h *cachedCompilerHost) GetSourceFile(opts ast.SourceFileParseOptions) *ast
 }
 
 type TracerForBaselining struct {
-	opts             tspath.ComparePathsOptions
-	packageJsonCache map[tspath.Path]bool
+	currentDirectory tspath.RootedDirectoryPath
+	caseSensitivity  tspath.CaseSensitivity
+	packageJsonCache map[tspath.PathKey]bool
 	builder          *strings.Builder
 }
 
-func NewTracerForBaselining(opts tspath.ComparePathsOptions, builder *strings.Builder) *TracerForBaselining {
+func NewTracerForBaselining(currentDirectory tspath.RootedDirectoryPath, caseSensitivity tspath.CaseSensitivity, builder *strings.Builder) *TracerForBaselining {
 	return &TracerForBaselining{
-		opts:             opts,
-		packageJsonCache: make(map[tspath.Path]bool),
+		currentDirectory: currentDirectory,
+		caseSensitivity:  caseSensitivity,
+		packageJsonCache: make(map[tspath.PathKey]bool),
 		builder:          builder,
 	}
 }
@@ -558,7 +536,7 @@ func (t *TracerForBaselining) sanitizeTrace(msg string, usePackageJsonCache bool
 	if str, ok := strings.CutSuffix(msg, "' does not exist according to earlier cached lookups."); ok {
 		file := strings.TrimPrefix(str, "File '")
 		if usePackageJsonCache {
-			filePath := tspath.ToPath(file, t.opts.CurrentDirectory, t.opts.UseCaseSensitiveFileNames)
+			filePath := t.caseSensitivity.PathKey(tspath.ToRootedPath(file, t.currentDirectory))
 			if _, has := t.packageJsonCache[filePath]; has {
 				return msg
 			} else {
@@ -570,7 +548,7 @@ func (t *TracerForBaselining) sanitizeTrace(msg string, usePackageJsonCache bool
 	if str, ok := strings.CutSuffix(msg, "' exists according to earlier cached lookups."); ok {
 		file := strings.TrimPrefix(str, "File '")
 		if usePackageJsonCache {
-			filePath := tspath.ToPath(file, t.opts.CurrentDirectory, t.opts.UseCaseSensitiveFileNames)
+			filePath := t.caseSensitivity.PathKey(tspath.ToRootedPath(file, t.currentDirectory))
 			if _, has := t.packageJsonCache[filePath]; has {
 				return msg
 			} else {
@@ -582,7 +560,7 @@ func (t *TracerForBaselining) sanitizeTrace(msg string, usePackageJsonCache bool
 	if usePackageJsonCache {
 		if str, ok := strings.CutSuffix(msg, "' does not exist."); ok {
 			file := strings.TrimPrefix(str, "File '")
-			filePath := tspath.ToPath(file, t.opts.CurrentDirectory, t.opts.UseCaseSensitiveFileNames)
+			filePath := t.caseSensitivity.PathKey(tspath.ToRootedPath(file, t.currentDirectory))
 			if _, has := t.packageJsonCache[filePath]; !has {
 				t.packageJsonCache[filePath] = false
 				return msg
@@ -592,7 +570,7 @@ func (t *TracerForBaselining) sanitizeTrace(msg string, usePackageJsonCache bool
 		}
 		if str, ok := strings.CutPrefix(msg, "Found 'package.json' at '"); ok {
 			file := strings.TrimSuffix(str, "'.")
-			filePath := tspath.ToPath(file, t.opts.CurrentDirectory, t.opts.UseCaseSensitiveFileNames)
+			filePath := t.caseSensitivity.PathKey(tspath.ToRootedPath(file, t.currentDirectory))
 			if _, has := t.packageJsonCache[filePath]; !has {
 				t.packageJsonCache[filePath] = true
 				return msg
@@ -609,16 +587,17 @@ func (t *TracerForBaselining) String() string {
 }
 
 func (t *TracerForBaselining) Reset() {
-	t.packageJsonCache = make(map[tspath.Path]bool)
+	t.packageJsonCache = make(map[tspath.PathKey]bool)
 }
 
-func createCompilerHost(fs vfs.FS, defaultLibraryPath string, currentDirectory string, contentMapperProject contentmapper.Project) *cachedCompilerHost {
-	tracer := NewTracerForBaselining(tspath.ComparePathsOptions{
-		UseCaseSensitiveFileNames: fs.UseCaseSensitiveFileNames(),
-		CurrentDirectory:          currentDirectory,
-	}, &strings.Builder{})
+func createCompilerHost(fs vfs.FS, defaultLibraryPath tspath.RootedDirectoryPath, currentDirectory tspath.RootedDirectoryPath, contentMapperProject contentmapper.Project) *cachedCompilerHost {
+	tracer := NewTracerForBaselining(
+		currentDirectory,
+		fs.CaseSensitivity(),
+		&strings.Builder{},
+	)
 	return &cachedCompilerHost{
-		CompilerHost: compiler.NewCompilerHost(currentDirectory, fs, defaultLibraryPath, nil, tracer.Trace, contentMapperProject),
+		CompilerHost: compiler.NewCompilerHost(fs, defaultLibraryPath, nil, tracer.Trace, contentMapperProject),
 		tracer:       tracer,
 	}
 }
@@ -648,15 +627,16 @@ func compileFilesWithHost(
 	var preErrors []*ast.Diagnostic
 	preCompilerOptions := config.CompilerOptions().Clone()
 	preCompilerOptions.TraceResolution = core.TSFalse
-	preConfig := &tsoptions.ParsedCommandLine{
-		ParsedConfig: &tsoptions.ParsedOptions{
-			CompilerOptions: preCompilerOptions,
-			FileNames:       config.FileNames(),
-			ContentMappers:  config.ContentMappers(),
-		},
-		ConfigFile: config.ConfigFile,
-		Errors:     config.Errors,
-	}
+	preConfig := tsoptions.NewParsedCommandLine(
+		preCompilerOptions,
+		config.FileNames(),
+		config.ProjectReferences(),
+		config.BaseDirectory(),
+		config.CaseSensitivity(),
+	)
+	preConfig.ParsedConfig.ContentMappers = config.ContentMappers()
+	preConfig.ConfigFile = config.ConfigFile
+	preConfig.Errors = config.Errors
 	preProgram := createProgram(host, preConfig)
 	preErrors = append(preErrors, preProgram.GetConfigFileParsingDiagnostics()...)
 	preErrors = append(preErrors, preProgram.GetProgramDiagnostics()...)
@@ -715,7 +695,7 @@ func compileFilesWithHost(
 		errors = append(errors, diag)
 	}
 
-	return newCompilationResult(host, config.CompilerOptions(), postProgram, emitResult, errors, harnessOptions)
+	return newCompilationResult(host, harnessOptions.CurrentDirectory, config.CompilerOptions(), postProgram, emitResult, errors, harnessOptions)
 }
 
 type CompilationResult struct {
@@ -734,6 +714,7 @@ type CompilationResult struct {
 	inputsAndOutputs collections.OrderedMap[string, *CompilationOutput]
 	Trace            string
 	Host             compiler.CompilerHost
+	currentDirectory tspath.RootedDirectoryPath
 }
 
 type CompilationOutput struct {
@@ -745,6 +726,7 @@ type CompilationOutput struct {
 
 func newCompilationResult(
 	host compiler.CompilerHost,
+	currentDirectory tspath.RootedDirectoryPath,
 	options *core.CompilerOptions,
 	program compiler.ProgramLike,
 	result *compiler.EmitResult,
@@ -756,12 +738,13 @@ func newCompilationResult(
 	}
 
 	c := &CompilationResult{
-		Diagnostics:    diagnostics,
-		Result:         result,
-		Program:        program,
-		Options:        options,
-		HarnessOptions: harnessOptions,
-		Host:           host,
+		Diagnostics:      diagnostics,
+		Result:           result,
+		Program:          program,
+		Options:          options,
+		HarnessOptions:   harnessOptions,
+		Host:             host,
+		currentDirectory: currentDirectory,
 	}
 
 	fs := host.FS().(*OutputRecorderFS)
@@ -782,17 +765,19 @@ func newCompilationResult(
 
 		// using the order from the inputs, populate the outputs
 		for _, sourceFile := range program.GetSourceFiles() {
-			input := &TestFile{UnitName: sourceFile.FileName(), Content: sourceFile.Text()}
+			fileName := sourceFile.FileName()
+			fileNameString := fileName.AsString()
+			input := &TestFile{UnitName: fileNameString, Content: sourceFile.Text()}
 			c.inputs = append(c.inputs, input)
-			if !tspath.IsDeclarationFileName(sourceFile.FileName()) {
-				extname := outputpaths.GetOutputExtension(sourceFile.FileName(), options.Jsx)
+			if !fileName.IsDeclarationFile() {
+				extname := outputpaths.GetOutputExtensionForFileName(fileName, options.Jsx)
 				outputs := &CompilationOutput{
 					Inputs: []*TestFile{input},
-					JS:     js.GetOrZero(c.getOutputPath(sourceFile.FileName(), extname)),
-					DTS:    dts.GetOrZero(c.getOutputPath(sourceFile.FileName(), tspath.GetDeclarationEmitExtensionForPath(sourceFile.FileName()))),
-					Map:    maps.GetOrZero(c.getOutputPath(sourceFile.FileName(), extname+".map")),
+					JS:     js.GetOrZero(c.getOutputPath(fileNameString, extname)),
+					DTS:    dts.GetOrZero(c.getOutputPath(fileNameString, tspath.GetDeclarationEmitExtensionForPath(fileNameString))),
+					Map:    maps.GetOrZero(c.getOutputPath(fileNameString, extname+".map")),
 				}
-				c.inputsAndOutputs.Set(sourceFile.FileName(), outputs)
+				c.inputsAndOutputs.Set(fileNameString, outputs)
 				if outputs.JS != nil {
 					c.inputsAndOutputs.Set(outputs.JS.UnitName, outputs)
 					c.JS.Set(outputs.JS.UnitName, outputs.JS)
@@ -834,8 +819,9 @@ func compareTestFiles(a *TestFile, b *TestFile) int {
 }
 
 func (c *CompilationResult) getOutputPath(path string, ext string) string {
-	path = tspath.ResolvePath(c.Host.GetCurrentDirectory(), path)
-	var outDir string
+	filePath := c.currentDirectory.ResolveFile(path)
+	outputPath := filePath
+	var outDir tspath.RootedDirectoryPath
 	if ext == ".d.ts" || ext == ".d.mts" || ext == ".d.cts" || (strings.HasSuffix(ext, ".ts") && strings.Contains(ext, ".d.")) {
 		outDir = c.Options.DeclarationDir
 		if outDir == "" {
@@ -847,17 +833,19 @@ func (c *CompilationResult) getOutputPath(path string, ext string) string {
 	if outDir != "" {
 		common := c.Program.CommonSourceDirectory()
 		if common != "" {
-			path = tspath.GetRelativePathFromDirectory(common, path, tspath.ComparePathsOptions{
-				UseCaseSensitiveFileNames: c.Host.FS().UseCaseSensitiveFileNames(),
-				CurrentDirectory:          c.Host.GetCurrentDirectory(),
-			})
-			path = tspath.CombinePaths(tspath.ResolvePath(c.Host.GetCurrentDirectory(), c.Options.OutDir), path)
+			if relativePath, ok := c.Host.FS().CaseSensitivity().RelativePathFromDirectory(common, filePath); ok {
+				outputDirectory := c.Options.OutDir
+				if outputDirectory == "" {
+					outputDirectory = outDir
+				}
+				outputPath = outputDirectory.ResolveRelativeFile(relativePath)
+			}
 		}
 	}
-	if ext == tspath.GetDeclarationEmitExtensionForPath(path) {
-		return outputpaths.ChangeToDeclarationExtension(path, c.Program.Program())
+	if ext == outputPath.DeclarationEmitExtension() {
+		return outputpaths.ChangeToDeclarationExtension(outputPath, c.Program.Program()).AsString()
 	}
-	return tspath.ChangeExtension(path, ext)
+	return outputPath.ChangeExtension(ext).AsString()
 }
 
 func (r *CompilationResult) FS() vfs.FS {
@@ -885,8 +873,12 @@ func (c *CompilationResult) Outputs() []*TestFile {
 	return c.outputs
 }
 
+func (c *CompilationResult) CurrentDirectory() tspath.RootedDirectoryPath {
+	return c.currentDirectory
+}
+
 func (c *CompilationResult) GetInputsAndOutputsForFile(path string) *CompilationOutput {
-	return c.inputsAndOutputs.GetOrZero(tspath.ResolvePath(c.Host.GetCurrentDirectory(), path))
+	return c.inputsAndOutputs.GetOrZero(c.currentDirectory.ResolveFile(path).AsString())
 }
 
 func (c *CompilationResult) GetInputsForFile(path string) []*TestFile {
@@ -935,7 +927,10 @@ func (c *CompilationResult) GetSourceMapRecord() string {
 				sourceMapSpanWriter.recordSourceMapSpan(decodedSourceMapping)
 				continue
 			}
-			currentSourceFile := c.Program.GetSourceFile(sourceMapData.InputSourceFileNames[decodedSourceMapping.SourceIndex])
+			currentSourceFile := c.Program.GetSourceFile(tspath.ToRootedFilePath(
+				sourceMapData.InputSourceFileNames[decodedSourceMapping.SourceIndex],
+				c.currentDirectory,
+			))
 			if currentSourceFile != prevSourceFile {
 				if currentSourceFile != nil {
 					sourceMapSpanWriter.recordNewSourceFileSpan(decodedSourceMapping, currentSourceFile.OriginalText())
@@ -988,36 +983,35 @@ func createProgram(host compiler.CompilerHost, config *tsoptions.ParsedCommandLi
 }
 
 func EnumerateFiles(folder string, testRegex *regexp.Regexp, recursive bool) ([]string, error) {
-	files, err := listFiles(folder, testRegex, recursive)
+	testDataDirectory := tspath.RootedDirectoryPathFromAbsolute(repo.TestDataPath())
+	files, err := listFilesWorker(testRegex, recursive, tspath.ToRootedDirectoryPath(folder, testDataDirectory))
 	if err != nil {
 		return nil, err
 	}
-	return core.Map(files, tspath.NormalizeSlashes), nil
+	return files, nil
 }
 
-func listFiles(path string, spec *regexp.Regexp, recursive bool) ([]string, error) {
-	return listFilesWorker(spec, recursive, path)
-}
-
-func listFilesWorker(spec *regexp.Regexp, recursive bool, folder string) ([]string, error) {
-	folder = tspath.GetNormalizedAbsolutePath(folder, repo.TestDataPath())
-	entries, err := os.ReadDir(folder)
+func listFilesWorker(spec *regexp.Regexp, recursive bool, folder tspath.RootedDirectoryPath) ([]string, error) {
+	entries, err := os.ReadDir(folder.AsString())
 	if err != nil {
 		return nil, err
 	}
 	var paths []string
 	for _, entry := range entries {
-		path := tspath.NormalizePath(filepath.Join(folder, entry.Name()))
-		if !entry.IsDir() {
-			if spec == nil || spec.MatchString(path) {
-				paths = append(paths, path)
+		if entry.IsDir() {
+			if !recursive {
+				continue
 			}
-		} else if recursive {
-			subPaths, err := listFilesWorker(spec, recursive, path)
+			subPaths, err := listFilesWorker(spec, recursive, folder.ResolveDirectory(entry.Name()))
 			if err != nil {
 				return nil, err
 			}
 			paths = append(paths, subPaths...)
+			continue
+		}
+		path := folder.ResolveFile(entry.Name())
+		if spec == nil || spec.MatchString(path.AsString()) {
+			paths = append(paths, path.AsString())
 		}
 	}
 	return paths, nil

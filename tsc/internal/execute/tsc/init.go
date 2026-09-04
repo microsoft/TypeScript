@@ -13,12 +13,11 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/json"
 	"github.com/microsoft/TypeScript/tsc/internal/locale"
 	"github.com/microsoft/TypeScript/tsc/internal/tsoptions"
-	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 )
 
 func WriteConfigFile(sys System, locale locale.Locale, reportDiagnostic DiagnosticReporter, options *collections.OrderedMap[string, any]) {
 	getCurrentDirectory := sys.GetCurrentDirectory()
-	file := tspath.NormalizePath(tspath.CombinePaths(getCurrentDirectory, "tsconfig.json"))
+	file := getCurrentDirectory.ResolveFile("tsconfig.json")
 	if sys.FS().FileExists(file) {
 		reportDiagnostic(ast.NewCompilerDiagnostic(diagnostics.A_tsconfig_json_file_is_already_defined_at_Colon_0, file))
 	} else {

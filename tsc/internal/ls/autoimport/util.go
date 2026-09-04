@@ -3,7 +3,6 @@ package autoimport
 import (
 	"context"
 	"runtime"
-	"strings"
 	"sync/atomic"
 	"unicode"
 	"unicode/utf8"
@@ -21,24 +20,24 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/wrapvfs"
 )
 
-func tryGetModuleIDAndFileNameOfModuleSymbol(symbol *ast.Symbol) (ModuleID, string, bool) {
+func tryGetModuleIDAndFileNameOfModuleSymbol(symbol *ast.Symbol) (ModuleID, tspath.RootedFilePath, bool) {
 	if !symbol.IsExternalModule() {
-		return "", "", false
+		return ModuleID{}, "", false
 	}
 	decl := ast.GetNonAugmentationDeclaration(symbol)
 	if decl == nil {
-		return "", "", false
+		return ModuleID{}, "", false
 	}
 	if decl.Kind == ast.KindSourceFile {
-		return ModuleID(decl.AsSourceFile().Path()), decl.AsSourceFile().FileName(), true
+		return fileModuleID(decl.AsSourceFile().PathKey()), decl.AsSourceFile().FileName(), true
 	}
 	if ast.IsModuleWithStringLiteralName(decl) {
-		return ModuleID(decl.Name().Text()), "", true
+		return ambientModuleID(decl.Name().Text()), "", true
 	}
-	return "", "", false
+	return ModuleID{}, "", false
 }
 
-func getModuleIDAndFileNameOfModuleSymbol(symbol *ast.Symbol) (ModuleID, string) {
+func getModuleIDAndFileNameOfModuleSymbol(symbol *ast.Symbol) (ModuleID, tspath.RootedFilePath) {
 	if !symbol.IsExternalModule() {
 		panic("symbol is not an external module")
 	}
@@ -47,10 +46,10 @@ func getModuleIDAndFileNameOfModuleSymbol(symbol *ast.Symbol) (ModuleID, string)
 		panic("module symbol has no non-augmentation declaration")
 	}
 	if decl.Kind == ast.KindSourceFile {
-		return ModuleID(decl.AsSourceFile().Path()), decl.AsSourceFile().FileName()
+		return fileModuleID(decl.AsSourceFile().PathKey()), decl.AsSourceFile().FileName()
 	}
 	if ast.IsModuleWithStringLiteralName(decl) {
-		return ModuleID(decl.Name().Text()), ""
+		return ambientModuleID(decl.Name().Text()), ""
 	}
 	panic("could not determine module ID of module symbol")
 }
@@ -85,9 +84,9 @@ func wordIndices(s string) []int {
 	return indices
 }
 
-func getPackageNamesInNodeModules(nodeModulesDir string, fs vfs.FS) *collections.Set[string] {
+func getPackageNamesInNodeModules(nodeModulesDir tspath.RootedDirectoryPath, fs vfs.FS) *collections.Set[string] {
 	packageNames := &collections.Set[string]{}
-	if tspath.GetBaseFileName(nodeModulesDir) != "node_modules" {
+	if nodeModulesDir.AsPath().BaseName() != "node_modules" {
 		panic("nodeModulesDir is not a node_modules directory")
 	}
 	// A missing node_modules directory yields no entries (GetAccessibleEntries returns
@@ -99,7 +98,7 @@ func getPackageNamesInNodeModules(nodeModulesDir string, fs vfs.FS) *collections
 			continue
 		}
 		if baseName[0] == '@' {
-			scopedDirPath := tspath.CombinePaths(nodeModulesDir, baseName)
+			scopedDirPath := nodeModulesDir.ResolveDirectory(baseName)
 			for _, scopedPackageDirName := range fs.GetAccessibleEntries(scopedDirPath).Directories {
 				scopedBaseName := tspath.GetBaseFileName(scopedPackageDirName)
 				if baseName == "@types" {
@@ -167,7 +166,7 @@ func getResolvedPackageNames(ctx context.Context, program *compiler.Program) *co
 		for name := range unresolvedPackageNames.Keys() {
 			if symbol := checker.TryFindAmbientModule(name); symbol != nil {
 				declaringFile := ast.GetSourceFileOfModule(symbol)
-				if packageName := modulespecifiers.GetPackageNameFromDirectory(declaringFile.FileName()); packageName != "" {
+				if packageName := modulespecifiers.GetPackageNameFromDirectory(tspath.RootedPath(declaringFile.FileName())); packageName != "" {
 					resolvedPackageNames.Add(module.GetPackageNameFromTypesPackageName(packageName))
 				}
 			}
@@ -180,7 +179,7 @@ func getResolvedPackageNames(ctx context.Context, program *compiler.Program) *co
 // from a program's project references to the provided map.
 // This is used during node_modules bucket building to redirect extraction
 // from output files to source files when the output is from a project reference.
-func addProjectReferenceOutputMappings(program *compiler.Program, result map[tspath.Path]string) {
+func addProjectReferenceOutputMappings(program *compiler.Program, result map[tspath.PathKey]tspath.RootedFilePath) {
 	refs := program.GetResolvedProjectReferences()
 	for _, ref := range refs {
 		if ref == nil {
@@ -250,23 +249,19 @@ func addPackageJsonDependencies(contents *packagejson.PackageJson, deps *collect
 // dependencies reached through node_modules symlinks), it resolves the file's directory realpath once,
 // finds the symlink boundary (the package root where the symlink lives), and caches that prefix mapping.
 // All subsequent files under the same symlinked package directory use prefix substitution with no syscalls.
-func getPackageRealpathFuncs(fs vfs.FS, packageDir string) (toRealpath, toSymlink func(string) string) {
-	realPackageDir := fs.Realpath(packageDir)
-	isSymlinked := realPackageDir != packageDir
-	replacePrefix := func(fileName string, prefix string, replacement string) string {
-		relative, _ := strings.CutPrefix(fileName, prefix)
-		return tspath.CombinePaths(replacement, strings.TrimLeft(relative, `/\`))
-	}
+func getPackageRealpathFuncs(fs vfs.FS, packageDirectory tspath.RootedDirectoryPath) (toRealpath, toSymlink func(tspath.RootedFilePath) tspath.RootedFilePath) {
+	realPackageDirectory := tspath.RootedDirectoryPathFromPath(fs.Realpath(packageDirectory.AsPath()))
+	isSymlinked := realPackageDirectory != packageDirectory
 	// Cache of package-directory-level symlink→realpath prefix mappings for
 	// external packages encountered via re-exports. Keyed by the node_modules
 	// package directory (e.g. "/app/node_modules/dep"), so all files under
 	// that package reuse a single realpath lookup.
-	dirCache := make(map[string]string)
-	toRealpath = func(fileName string) string {
+	dirCache := make(map[tspath.RootedDirectoryPath]tspath.RootedDirectoryPath)
+	toRealpath = func(fileName tspath.RootedFilePath) tspath.RootedFilePath {
 		// Fast path: files within the package use prefix substitution.
 		if isSymlinked {
-			if _, ok := strings.CutPrefix(fileName, packageDir); ok {
-				return replacePrefix(fileName, packageDir, realPackageDir)
+			if relative, ok := fileName.RelativeTo(packageDirectory); ok {
+				return realPackageDirectory.ResolveRelativeFile(relative)
 			}
 		}
 		// Files outside the package (e.g. re-exports into symlinked deps):
@@ -278,8 +273,9 @@ func getPackageRealpathFuncs(fs vfs.FS, packageDir string) (toRealpath, toSymlin
 		// The wrapped FS also calls Realpath while traversing directories.
 		// The two parses differ only when the path may be a package root,
 		// so establish its kind before using the package cache.
-		if directoryPackage := module.NodeModulePackageRootForDirectory(fileName); directoryPackage != packageDir {
-			if fs.DirectoryExists(fileName) {
+		directory := tspath.RootedDirectoryPathFromPath(tspath.RootedPath(fileName))
+		if directoryPackage := module.NodeModulePackageRootForDirectory(directory); directoryPackage != packageDir {
+			if fs.DirectoryExists(directory) {
 				packageDir = directoryPackage
 			}
 		}
@@ -287,14 +283,16 @@ func getPackageRealpathFuncs(fs vfs.FS, packageDir string) (toRealpath, toSymlin
 			if realDir == packageDir {
 				return fileName
 			}
-			return replacePrefix(fileName, packageDir, realDir)
+			relative, _ := fileName.RelativeTo(packageDir)
+			return realDir.ResolveRelativeFile(relative)
 		}
-		realDir := fs.Realpath(packageDir)
+		realDir := tspath.RootedDirectoryPathFromPath(fs.Realpath(packageDir.AsPath()))
 		dirCache[packageDir] = realDir
 		if realDir == packageDir {
 			return fileName
 		}
-		return replacePrefix(fileName, packageDir, realDir)
+		relative, _ := fileName.RelativeTo(packageDir)
+		return realDir.ResolveRelativeFile(relative)
 	}
 	if !isSymlinked {
 		return toRealpath, core.Identity
@@ -302,9 +300,9 @@ func getPackageRealpathFuncs(fs vfs.FS, packageDir string) (toRealpath, toSymlin
 	// toSymlink only handles files within the package directory (reversing the
 	// packageDir→realPackageDir substitution). It does not handle arbitrary external
 	// paths; callers should only use it for files known to be within the package.
-	toSymlink = func(fileName string) string {
-		if _, ok := strings.CutPrefix(fileName, realPackageDir); ok {
-			return replacePrefix(fileName, realPackageDir, packageDir)
+	toSymlink = func(fileName tspath.RootedFilePath) tspath.RootedFilePath {
+		if relative, ok := fileName.RelativeTo(realPackageDirectory); ok {
+			return packageDirectory.ResolveRelativeFile(relative)
 		}
 		return fileName
 	}
@@ -313,12 +311,12 @@ func getPackageRealpathFuncs(fs vfs.FS, packageDir string) (toRealpath, toSymlin
 
 type resolutionHost struct {
 	fs               vfs.FS
-	currentDirectory string
+	currentDirectory tspath.RootedDirectoryPath
 }
 
 var _ module.ResolutionHost = (*resolutionHost)(nil)
 
-func (rh *resolutionHost) GetCurrentDirectory() string {
+func (rh *resolutionHost) GetCurrentDirectory() tspath.RootedDirectoryPath {
 	return rh.currentDirectory
 }
 
@@ -326,10 +324,13 @@ func (rh *resolutionHost) FS() vfs.FS {
 	return rh.fs
 }
 
-func getModuleResolver(host RegistryCloneHost, realpath func(string) string, opts module.ResolverOptions) *module.Resolver {
+func getModuleResolver(host RegistryCloneHost, realpath func(tspath.RootedFilePath) tspath.RootedFilePath, opts module.ResolverOptions) *module.Resolver {
+	realpathPath := func(path tspath.RootedPath) tspath.RootedPath {
+		return realpath(tspath.RootedFilePathFromPath(path)).AsPath()
+	}
 	rh := &resolutionHost{
-		fs:               wrapvfs.Wrap(host.FS(), wrapvfs.Replacements{Realpath: realpath}),
+		fs:               wrapvfs.Wrap(host.FS(), wrapvfs.Replacements{Realpath: realpathPath}),
 		currentDirectory: host.GetCurrentDirectory(),
 	}
-	return module.NewResolverWithOptions(rh, core.EmptyCompilerOptions, "", "", opts)
+	return module.NewResolverWithOptions(rh, rh.GetCurrentDirectory(), core.EmptyCompilerOptions, "", "", opts)
 }

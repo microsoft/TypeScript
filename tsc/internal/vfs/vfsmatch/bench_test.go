@@ -3,6 +3,7 @@ package vfsmatch
 import (
 	"testing"
 
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/cachedvfs"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfstest"
@@ -106,7 +107,7 @@ func BenchmarkReadDirectory(b *testing.B) {
 			host := cachedvfs.From(bc.host())
 			b.ReportAllocs()
 			for b.Loop() {
-				matchFiles(bc.path, bc.extensions, bc.excludes, bc.includes, host.UseCaseSensitiveFileNames(), "/", UnlimitedDepth, host)
+				matchFileNames(tspath.ToRootedDirectoryPath(bc.path, tspath.RootedDirectoryPathFromAbsolute("/")), bc.extensions, bc.excludes, bc.includes, UnlimitedDepth, host)
 			}
 		})
 	}
@@ -142,7 +143,7 @@ func largeFileSystemHost() vfs.FS {
 	files["/project/src/.hidden/secret.ts"] = ""
 	files["/project/.config/settings.ts"] = ""
 
-	return vfstest.FromMap(files, false)
+	return vfstest.FromMap(files, tspath.CaseInsensitive)
 }
 
 // BenchmarkPatternCompilation benchmarks the pattern compilation step
@@ -162,7 +163,7 @@ func BenchmarkPatternCompilation(b *testing.B) {
 	for _, p := range patterns {
 		b.Run(p.name, func(b *testing.B) {
 			for b.Loop() {
-				_, _ = compileGlobPattern(p.spec, "/project", UsageFiles, true)
+				_, _ = compileGlobPattern(p.spec, "/project", UsageFiles, tspath.CaseSensitive)
 			}
 		})
 	}
@@ -217,7 +218,7 @@ func BenchmarkPatternMatching(b *testing.B) {
 	}
 
 	for _, tc := range testCases {
-		pattern, ok := compileGlobPattern(tc.spec, "/project", UsageFiles, true)
+		pattern, ok := compileGlobPattern(tc.spec, "/project", UsageFiles, tspath.CaseSensitive)
 		if !ok {
 			continue
 		}

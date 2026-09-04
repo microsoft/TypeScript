@@ -120,8 +120,67 @@ func (v *VersionPaths) GetPaths() *collections.OrderedMap[string, []string] {
 	return v.paths
 }
 
+type PackageDirectory struct {
+	name tspath.RootedDirectoryPath
+	key  tspath.PathKey
+}
+
+func NewPackageDirectory(directory tspath.RootedDirectoryPath, caseSensitivity tspath.CaseSensitivity) PackageDirectory {
+	return PackageDirectory{
+		name: directory,
+		key:  caseSensitivity.PathKey(directory.AsPath()),
+	}
+}
+
+func (p PackageDirectory) String() string {
+	return p.name.AsString()
+}
+
+func (p PackageDirectory) AsDirectoryPath() tspath.RootedDirectoryPath {
+	return p.name
+}
+
+func (p PackageDirectory) PathKey() tspath.PathKey {
+	return p.key
+}
+
+func (p PackageDirectory) Parent() PackageDirectory {
+	parentName := p.name.AsPath().Directory()
+	parentKey := p.key.Parent()
+	if parentName == p.name {
+		return p
+	}
+	return PackageDirectory{name: parentName, key: parentKey}
+}
+
+func (p PackageDirectory) ResolveFile(path string) tspath.RootedFilePath {
+	return p.name.ResolveFile(path)
+}
+
+// ForEachAncestorDirectoryStoppingAtGlobalCache calls callback for directory
+// and its ancestors while advancing presentation and canonical identity
+// together.
+func ForEachAncestorDirectoryStoppingAtGlobalCache[T any](
+	globalCache tspath.RootedDirectoryPath,
+	directory PackageDirectory,
+	callback func(directory PackageDirectory) (result T, stop bool),
+) T {
+	for {
+		result, stop := callback(directory)
+		if stop || directory.AsDirectoryPath() == globalCache {
+			return result
+		}
+		parent := directory.Parent()
+		if parent == directory {
+			var zero T
+			return zero
+		}
+		directory = parent
+	}
+}
+
 type InfoCacheEntry struct {
-	PackageDirectory string
+	PackageDirectory PackageDirectory
 	DirectoryExists  bool
 	Contents         *PackageJson
 }
@@ -137,25 +196,16 @@ func (p *InfoCacheEntry) GetContents() *PackageJson {
 	return p.Contents
 }
 
-func (p *InfoCacheEntry) GetDirectory() string {
-	if p == nil {
-		return ""
-	}
-	return p.PackageDirectory
-}
-
 // WithPackageDirectory returns an entry whose PackageDirectory matches the
 // caller's value. The package.json info cache is keyed by the canonical
-// path of the package.json file, but multiple callers may look up the same
-// package.json using directory paths that differ only by a trailing
-// separator (e.g. "node_modules/preact/compat" vs
-// "node_modules/preact/compat/"). Because the cache uses first-writer-wins
-// semantics, a later caller may receive an entry whose PackageDirectory
-// doesn't match its own candidate path. Downstream code compares the
-// candidate against PackageDirectory, so we must return a corrected
-// shallow copy when they diverge.
+// package directory, but multiple callers may use directory paths whose
+// presentation differs while their canonical identity is the same. Because
+// the cache uses first-writer-wins semantics, a later caller may receive an
+// entry whose PackageDirectory doesn't match its own candidate path.
+// Downstream code compares the candidate against PackageDirectory, so return a
+// corrected shallow copy when they diverge.
 // See https://github.com/microsoft/TypeScript/pull/50740.
-func (p *InfoCacheEntry) WithPackageDirectory(packageDirectory string) *InfoCacheEntry {
+func (p *InfoCacheEntry) WithPackageDirectory(packageDirectory PackageDirectory) *InfoCacheEntry {
 	if p.PackageDirectory == packageDirectory {
 		return p
 	}
@@ -167,32 +217,36 @@ func (p *InfoCacheEntry) WithPackageDirectory(packageDirectory string) *InfoCach
 }
 
 type InfoCache struct {
-	cache                     collections.SyncMap[tspath.Path, *InfoCacheEntry]
-	currentDirectory          string
-	useCaseSensitiveFileNames bool
+	cache           collections.SyncMap[tspath.PathKey, *InfoCacheEntry]
+	caseSensitivity tspath.CaseSensitivity
 }
 
-func NewInfoCache(currentDirectory string, useCaseSensitiveFileNames bool) *InfoCache {
+func NewInfoCache(caseSensitivity tspath.CaseSensitivity) *InfoCache {
 	return &InfoCache{
-		currentDirectory:          currentDirectory,
-		useCaseSensitiveFileNames: useCaseSensitiveFileNames,
+		caseSensitivity: caseSensitivity,
 	}
 }
 
-func (p *InfoCache) Get(packageJsonPath string) *InfoCacheEntry {
-	key := tspath.ToPath(packageJsonPath, p.currentDirectory, p.useCaseSensitiveFileNames)
-	if value, ok := p.cache.Load(key); ok {
+func (p *InfoCache) PackageDirectory(directory tspath.RootedDirectoryPath) PackageDirectory {
+	return NewPackageDirectory(directory, p.caseSensitivity)
+}
+
+func (p *InfoCache) CaseSensitivity() tspath.CaseSensitivity {
+	return p.caseSensitivity
+}
+
+func (p *InfoCache) Get(directory PackageDirectory) *InfoCacheEntry {
+	if value, ok := p.cache.Load(directory.PathKey()); ok {
 		return value
 	}
 	return nil
 }
 
-func (p *InfoCache) Set(packageJsonPath string, info *InfoCacheEntry) *InfoCacheEntry {
-	key := tspath.ToPath(packageJsonPath, p.currentDirectory, p.useCaseSensitiveFileNames)
-	actual, _ := p.cache.LoadOrStore(key, info)
+func (p *InfoCache) Set(directory PackageDirectory, info *InfoCacheEntry) *InfoCacheEntry {
+	actual, _ := p.cache.LoadOrStore(directory.PathKey(), info)
 	return actual
 }
 
-func (p *InfoCache) Range(f func(key tspath.Path, value *InfoCacheEntry) bool) {
+func (p *InfoCache) Range(f func(key tspath.PathKey, value *InfoCacheEntry) bool) {
 	p.cache.Range(f)
 }

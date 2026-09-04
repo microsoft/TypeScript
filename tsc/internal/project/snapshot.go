@@ -39,20 +39,20 @@ type Snapshot struct {
 	ProjectCollection                      *ProjectCollection
 	ConfigFileRegistry                     *ConfigFileRegistry
 	AutoImports                            *autoimport.Registry
-	autoImportsWatch                       *WatchedFiles[map[tspath.Path]string]
+	autoImportsWatch                       *WatchedFiles[map[tspath.PathKey]tspath.RootedDirectoryPath]
 	compilerOptionsForInferredProjects     *core.CompilerOptions
 	inferredProjectContentMappers          []*contentmapper.Mapper
 	inferredProjectContentMapperExtensions []string
 	userPreferences                        lsutil.UserPreferences
 	contentMapperWatchStateOnce            sync.Once
 	contentMapperExtensions                []string
-	contentMapperWatchedFiles              *collections.Set[tspath.Path]
+	contentMapperWatchedFiles              *collections.Set[tspath.PathKey]
 
 	builderLogs *logging.LogTree
 	apiError    error
 }
 
-func (s *Snapshot) contentMapperWatchState() ([]string, *collections.Set[tspath.Path]) {
+func (s *Snapshot) contentMapperWatchState() ([]string, *collections.Set[tspath.PathKey]) {
 	s.contentMapperWatchStateOnce.Do(func() {
 		configured := s.ConfigFileRegistry.contentMappers()
 		if configured != nil {
@@ -62,7 +62,7 @@ func (s *Snapshot) contentMapperWatchState() ([]string, *collections.Set[tspath.
 		slices.Sort(s.contentMapperExtensions)
 		s.contentMapperExtensions = slices.Compact(s.contentMapperExtensions)
 
-		s.contentMapperWatchedFiles = &collections.Set[tspath.Path]{}
+		s.contentMapperWatchedFiles = &collections.Set[tspath.PathKey]{}
 		for _, project := range s.ProjectCollection.Projects() {
 			if project.contentMapperWatchedFiles != nil {
 				for path := range project.contentMapperWatchedFiles.Keys() {
@@ -81,7 +81,7 @@ func (host *SnapshotHost) newSnapshot(
 	compilerOptionsForInferredProjects *core.CompilerOptions,
 	userPreferences lsutil.UserPreferences,
 	autoImports *autoimport.Registry,
-	autoImportsWatch *WatchedFiles[map[tspath.Path]string],
+	autoImportsWatch *WatchedFiles[map[tspath.PathKey]tspath.RootedDirectoryPath],
 ) *Snapshot {
 	s := &Snapshot{
 		host: host,
@@ -89,7 +89,7 @@ func (host *SnapshotHost) newSnapshot(
 
 		fs:                                 fs,
 		ConfigFileRegistry:                 configFileRegistry,
-		ProjectCollection:                  &ProjectCollection{toPath: host.toPath, openFiles: openFilePaths(fs.overlays)},
+		ProjectCollection:                  &ProjectCollection{caseSensitivity: host.caseSensitivity, openFiles: openFilePaths(fs.overlays)},
 		compilerOptionsForInferredProjects: compilerOptionsForInferredProjects,
 		userPreferences:                    userPreferences,
 		AutoImports:                        autoImports,
@@ -104,7 +104,7 @@ func (host *SnapshotHost) newSnapshot(
 // project representing createProgram input.
 func (s *Snapshot) cloneForProgram(
 	ctx context.Context,
-	rootFileNames []string,
+	rootFileNames []tspath.RootedFilePath,
 	compilerOptions *core.CompilerOptions,
 	projectReferences []*core.ProjectReference,
 	configFileParsingDiagnostics []*ast.Diagnostic,
@@ -126,7 +126,7 @@ func (s *Snapshot) cloneForProgram(
 	}
 
 	start := time.Now()
-	fs := newSnapshotFSBuilder(store.fs, s.fs.overlays, s.fs.overlays, s.fs.diskFiles, s.fs.diskDirectories, s.fs.nodeModulesRealpathAliases, store.options.PositionEncoding, store.toPath)
+	fs := newSnapshotFSBuilder(store.fs, s.fs.overlays, s.fs.overlays, s.fs.diskFiles, s.fs.diskDirectories, s.fs.nodeModulesRealpathAliases, store.options.PositionEncoding)
 	fileChanges = s.processFileChanges(fs, fileChanges, logger, nil)
 
 	newSnapshotID := store.nextSnapshotID()
@@ -181,7 +181,7 @@ func (s *Snapshot) cloneForProgram(
 
 	cleanFilesStart := time.Now()
 	removedFiles := 0
-	fs.diskFiles.Range(func(entry *dirty.SyncMapEntry[tspath.Path, *diskFile]) bool {
+	fs.diskFiles.Range(func(entry *dirty.SyncMapEntry[tspath.PathKey, *diskFile]) bool {
 		for _, project := range newProjectCollection.Projects() {
 			if project.host != nil && project.host.sourceFS.SeenFile(entry.Key()) {
 				return true
@@ -224,7 +224,7 @@ func (s *Snapshot) cloneForProgram(
 	for _, config := range newSnapshot.ConfigFileRegistry.configs {
 		if config.commandLine != nil && config.commandLine.ConfigFile != nil {
 			for _, file := range config.commandLine.ConfigFile.ExtendedSourceFiles {
-				store.extendedConfigCache.AddOwner(store.toPath(file), newSnapshot.id)
+				store.extendedConfigCache.AddOwner(store.caseSensitivity.PathKey(tspath.RootedPath(file)), newSnapshot.id)
 			}
 		}
 	}
@@ -240,7 +240,7 @@ func (s *Snapshot) cloneWithTemporaryFile(
 	uri lsproto.DocumentUri,
 	newText string,
 ) (*Snapshot, error) {
-	path := uri.Path(s.UseCaseSensitiveFileNames())
+	path := uri.PathKey(s.CaseSensitivity())
 
 	overlays := maps.Clone(s.fs.overlays)
 	version := int32(0)
@@ -316,28 +316,28 @@ func (s *Snapshot) processFileChanges(
 }
 
 func (s *Snapshot) GetDefaultProject(uri lsproto.DocumentUri) *Project {
-	return s.ProjectCollection.GetDefaultProject(uri.Path(s.UseCaseSensitiveFileNames()))
+	return s.ProjectCollection.GetDefaultProject(uri.PathKey(s.CaseSensitivity()))
 }
 
 func (s *Snapshot) GetProjectsContainingFile(uri lsproto.DocumentUri) []ls.Project {
 	fileName := uri.FileName()
-	path := s.host.toPath(fileName)
+	path := s.CaseSensitivity().PathKey(tspath.RootedPath(fileName))
 	// TODO!! sheetal may be change this to handle symlinks!!
 	return s.ProjectCollection.GetProjectsContainingFile(path)
 }
 
-func (s *Snapshot) GetFile(fileName string) FileHandle {
+func (s *Snapshot) GetFile(fileName tspath.RootedFilePath) FileHandle {
 	return s.fs.GetFile(fileName)
 }
 
-func (s *Snapshot) LSPLineMap(fileName string) *lsconv.LSPLineMap {
+func (s *Snapshot) LSPLineMap(fileName tspath.RootedFilePath) *lsconv.LSPLineMap {
 	if file := s.fs.GetFile(fileName); file != nil {
 		return file.LSPLineMap()
 	}
 	return nil
 }
 
-func (s *Snapshot) GetECMALineInfo(fileName string) *sourcemap.ECMALineInfo {
+func (s *Snapshot) GetECMALineInfo(fileName tspath.RootedFilePath) *sourcemap.ECMALineInfo {
 	if file := s.fs.GetFile(fileName); file != nil {
 		return file.ECMALineInfo()
 	}
@@ -364,15 +364,11 @@ func (s *Snapshot) ID() uint64 {
 	return s.id
 }
 
-func (s *Snapshot) toPath(fileName string) tspath.Path {
-	return s.host.toPath(fileName)
+func (s *Snapshot) CaseSensitivity() tspath.CaseSensitivity {
+	return s.fs.caseSensitivity
 }
 
-func (s *Snapshot) UseCaseSensitiveFileNames() bool {
-	return s.fs.fs.UseCaseSensitiveFileNames()
-}
-
-func (s *Snapshot) ReadFile(fileName string) (string, bool) {
+func (s *Snapshot) ReadFile(fileName tspath.RootedFilePath) (string, bool) {
 	handle := s.GetFile(fileName)
 	if handle == nil {
 		return "", false
@@ -380,43 +376,43 @@ func (s *Snapshot) ReadFile(fileName string) (string, bool) {
 	return handle.Content(), true
 }
 
-func (s *Snapshot) DirectoryExists(path string) bool {
+func (s *Snapshot) DirectoryExists(path tspath.RootedDirectoryPath) bool {
 	return s.fs.fs.DirectoryExists(path)
 }
 
-func (s *Snapshot) FileExists(path string) bool {
+func (s *Snapshot) FileExists(path tspath.RootedFilePath) bool {
 	return s.fs.fs.FileExists(path)
 }
 
-func (s *Snapshot) GetDirectories(path string) []string {
+func (s *Snapshot) GetDirectories(path tspath.RootedDirectoryPath) []string {
 	return s.fs.fs.GetAccessibleEntries(path).Directories
 }
 
-func (s *Snapshot) ReadDirectory(currentDir string, path string, extensions []string, excludes []string, includes []string, depth int) []string {
-	return vfsmatch.ReadDirectory(s.fs.fs, currentDir, path, extensions, excludes, includes, depth)
+func (s *Snapshot) ReadDirectory(path tspath.RootedDirectoryPath, extensions []string, excludes []string, includes []string, depth int) []tspath.RootedFilePath {
+	return vfsmatch.ReadDirectory(s.fs.fs, path, extensions, excludes, includes, depth)
 }
 
 type APISnapshotRequest struct {
-	OpenProjects  *collections.Set[string]
-	CloseProjects *collections.Set[tspath.Path]
+	OpenProjects  *collections.Set[tspath.RootedFilePath]
+	CloseProjects *collections.Set[tspath.PathKey]
 	OpenFiles     *collections.Set[lsproto.DocumentUri]
-	CloseFiles    *collections.Set[tspath.Path]
+	CloseFiles    *collections.Set[tspath.PathKey]
 }
 
 type ProjectTreeRequest struct {
 	// If null, all project trees need to be loaded, otherwise only those that are referenced
-	referencedProjects *collections.Set[tspath.Path]
+	referencedProjects *collections.Set[tspath.PathKey]
 }
 
 func (p *ProjectTreeRequest) IsAllProjects() bool {
 	return p.referencedProjects == nil
 }
 
-func (p *ProjectTreeRequest) IsProjectReferenced(projectID tspath.Path) bool {
+func (p *ProjectTreeRequest) IsProjectReferenced(projectID tspath.PathKey) bool {
 	return p.referencedProjects.Has(projectID)
 }
 
-func (p *ProjectTreeRequest) Projects() []tspath.Path {
+func (p *ProjectTreeRequest) Projects() []tspath.PathKey {
 	if p.referencedProjects == nil {
 		return nil
 	}
@@ -434,7 +430,7 @@ type ResourceRequest struct {
 	ConfiguredProjectDocuments []lsproto.DocumentUri
 	// Update requested Projects.
 	// this is used when we want to get LS and from all the Projects the file can be part of
-	Projects []tspath.Path
+	Projects []tspath.PathKey
 	// Update and ensure project trees that reference the projects
 	// This is used to compute the solution and project tree so that
 	// we can find references across all the projects in the solution irrespective of which project is open
@@ -455,7 +451,7 @@ type SnapshotChange struct {
 	contentMapperContributions         *ContentMapperContributions
 	newConfig                          *lsutil.UserPreferences
 	// ataChanges contains ATA-related changes to apply to projects in the new snapshot.
-	ataChanges map[tspath.Path]*ATAStateChange
+	ataChanges map[tspath.PathKey]*ATAStateChange
 	apiRequest *APISnapshotRequest
 	client     Client
 	// cleanDiskCache triggers cleaning of cached disk files not referenced by any open project.
@@ -464,20 +460,20 @@ type SnapshotChange struct {
 
 // ATAStateChange represents a change to a project's ATA state.
 type ATAStateChange struct {
-	ProjectID tspath.Path
+	ProjectID tspath.PathKey
 	// TypingsInfo is the new typings info for the project.
 	TypingsInfo *ata.TypingsInfo
 	// TypingsFiles is the new list of typing files for the project.
-	TypingsFiles []string
+	TypingsFiles []tspath.RootedFilePath
 	// TypingsFilesToWatch is the new list of typing files to watch for changes.
-	TypingsFilesToWatch []string
+	TypingsFilesToWatch []tspath.RootedPath
 	Logs                *logging.LogTree
 }
 
 func (s *Snapshot) Clone(
 	ctx context.Context,
 	change SnapshotChange,
-	overlays map[tspath.Path]*Overlay,
+	overlays map[tspath.PathKey]*Overlay,
 	sessionLogger logging.Logger,
 ) *Snapshot {
 	store := s.host
@@ -544,7 +540,7 @@ func (s *Snapshot) Clone(
 		inferredContentMappers = change.contentMapperContributions.Mappers
 		inferredContentMapperExtensions = change.contentMapperContributions.Extensions
 	}
-	fs := newSnapshotFSBuilder(store.fs, s.fs.overlays, overlays, s.fs.diskFiles, s.fs.diskDirectories, s.fs.nodeModulesRealpathAliases, store.options.PositionEncoding, store.toPath)
+	fs := newSnapshotFSBuilder(store.fs, s.fs.overlays, overlays, s.fs.diskFiles, s.fs.diskDirectories, s.fs.nodeModulesRealpathAliases, store.options.PositionEncoding)
 	change.fileChanges = s.processFileChanges(fs, change.fileChanges, logger, change.contentMapperContributions)
 
 	compilerOptionsForInferredProjects := s.compilerOptionsForInferredProjects
@@ -627,7 +623,7 @@ func (s *Snapshot) Clone(
 
 	projectCollection, configFileRegistry := projectCollectionBuilder.Finalize(logger)
 
-	projectsWithNewProgramStructure := make(map[tspath.Path]bool)
+	projectsWithNewProgramStructure := make(map[tspath.PathKey]bool)
 	for _, project := range projectCollection.Projects() {
 		if project.ProgramLastUpdate == newSnapshotID && project.ProgramUpdateKind != ProgramUpdateKindCloned {
 			projectsWithNewProgramStructure[project.configFilePath] = project.ProgramUpdateKind == ProgramUpdateKindNewFiles
@@ -647,7 +643,7 @@ func (s *Snapshot) Clone(
 		if len(projectsWithNewProgramStructure) > 0 || change.cleanDiskCache {
 			cleanFilesStart := time.Now()
 			removedFiles := 0
-			fs.diskFiles.Range(func(entry *dirty.SyncMapEntry[tspath.Path, *diskFile]) bool {
+			fs.diskFiles.Range(func(entry *dirty.SyncMapEntry[tspath.PathKey, *diskFile]) bool {
 				for _, project := range projectCollection.Projects() {
 					if project.host != nil && project.host.sourceFS.SeenFile(entry.Key()) {
 						return true
@@ -673,21 +669,20 @@ func (s *Snapshot) Clone(
 		store.parseCache,
 		fs,
 		store.options.CurrentDirectory,
-		store.toPath,
 	)
-	openFiles := make(map[tspath.Path]string, len(overlays))
+	openFiles := make(map[tspath.PathKey]tspath.RootedFilePath, len(overlays))
 	for path, overlay := range overlays {
 		openFiles[path] = overlay.FileName()
 	}
-	prepareAutoImports := tspath.Path("")
+	var prepareAutoImports tspath.PathKey
 	if change.ResourceRequest.AutoImports != "" {
-		prepareAutoImports = change.ResourceRequest.AutoImports.Path(s.UseCaseSensitiveFileNames())
+		prepareAutoImports = change.ResourceRequest.AutoImports.PathKey(s.CaseSensitivity())
 	}
 	oldAutoImports := s.AutoImports
 	if oldAutoImports == nil {
-		oldAutoImports = autoimport.NewRegistry(store.toPath, s.userPreferences)
+		oldAutoImports = autoimport.NewRegistry(store.caseSensitivity, s.userPreferences)
 	}
-	var autoImportsWatch *WatchedFiles[map[tspath.Path]string]
+	var autoImportsWatch *WatchedFiles[map[tspath.PathKey]tspath.RootedDirectoryPath]
 	autoImports, err := oldAutoImports.Clone(ctx, autoimport.RegistryChange{
 		RequestedFile:   prepareAutoImports,
 		OpenFiles:       openFiles,
@@ -742,7 +737,7 @@ func (s *Snapshot) Clone(
 	for _, config := range newSnapshot.ConfigFileRegistry.configs {
 		if config.commandLine != nil && config.commandLine.ConfigFile != nil {
 			for _, file := range config.commandLine.ConfigFile.ExtendedSourceFiles {
-				store.extendedConfigCache.AddOwner(store.toPath(file), newSnapshot.id)
+				store.extendedConfigCache.AddOwner(store.caseSensitivity.PathKey(tspath.RootedPath(file)), newSnapshot.id)
 			}
 		}
 	}
@@ -826,7 +821,7 @@ func (s *Snapshot) dispose() {
 	for _, config := range s.ConfigFileRegistry.configs {
 		if config.commandLine != nil {
 			for _, file := range config.commandLine.ExtendedSourceFiles() {
-				store.extendedConfigCache.Release(store.toPath(file), s.id)
+				store.extendedConfigCache.Release(store.caseSensitivity.PathKey(tspath.RootedPath(file)), s.id)
 			}
 		}
 	}

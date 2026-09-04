@@ -592,7 +592,7 @@ func (c *Checker) elaborateElement(source *Type, target *Type, relation *Relatio
 	issuedElaboration := false
 	if targetProp == nil {
 		indexInfo := c.getApplicableIndexInfo(target, nameType)
-		if indexInfo != nil && indexInfo.declaration != nil && !c.program.IsSourceFileDefaultLibrary(ast.GetSourceFileOfNode(indexInfo.declaration).Path()) {
+		if indexInfo != nil && indexInfo.declaration != nil && !c.program.IsSourceFileDefaultLibrary(ast.GetSourceFileOfNode(indexInfo.declaration).PathKey()) {
 			issuedElaboration = true
 			diagnostic.AddRelatedInfo(createDiagnosticForNode(indexInfo.declaration, diagnostics.The_expected_type_comes_from_this_index_signature))
 		}
@@ -607,7 +607,7 @@ func (c *Checker) elaborateElement(source *Type, target *Type, relation *Relatio
 		if propertyName == "" || nameType.flags&TypeFlagsUniqueESSymbol != 0 {
 			propertyName = c.TypeToString(nameType)
 		}
-		if !c.program.IsSourceFileDefaultLibrary(ast.GetSourceFileOfNode(targetNode).Path()) {
+		if !c.program.IsSourceFileDefaultLibrary(ast.GetSourceFileOfNode(targetNode).PathKey()) {
 			diagnostic.AddRelatedInfo(createDiagnosticForNode(targetNode, diagnostics.The_expected_type_comes_from_property_0_which_is_declared_here_on_type_1, propertyName, c.TypeToString(target)))
 		}
 	}

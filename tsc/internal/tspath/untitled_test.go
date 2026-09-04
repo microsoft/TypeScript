@@ -20,11 +20,11 @@ func TestUntitledPathHandling(t *testing.T) {
 	isRooted := tspath.IsRootedDiskPath(untitledPath)
 	assert.Assert(t, isRooted, "IsRootedDiskPath should return true for untitled paths")
 
-	// ToPath should not resolve untitled paths against current directory
-	currentDir := "/home/user/project"
-	path := tspath.ToPath(untitledPath, currentDir, true)
+	// Rooting should not resolve untitled paths against current directory.
+	currentDir := tspath.RootedDirectoryPathFromNormalized("/home/user/project")
+	path := tspath.CaseSensitive.PathKey(tspath.ToRootedPath(untitledPath, currentDir))
 	// The path should be the original untitled path
-	assert.Equal(t, string(path), "^/untitled/ts-nul-authority/Untitled-2", "ToPath should not resolve untitled paths against current directory")
+	assert.Equal(t, string(path), "^/untitled/ts-nul-authority/Untitled-2", "rooting should not resolve untitled paths against current directory")
 
 	// Test GetNormalizedAbsolutePath doesn't resolve untitled paths
 	normalized := tspath.GetNormalizedAbsolutePath(untitledPath, currentDir)

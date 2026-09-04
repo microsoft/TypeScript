@@ -1,8 +1,12 @@
+import type {
+    RootedDirectoryPath,
+    RootedFilePath,
+} from "../ast/index.ts";
 import { convertToRelativePath } from "./path.ts";
 import type { DiagnosticResponse as Diagnostic } from "./proto.generated.ts";
 
 export interface FormatDiagnosticsHost {
-    getCurrentDirectory(): string;
+    getCurrentDirectory(): RootedDirectoryPath;
     getCanonicalFileName(fileName: string): string;
     getNewLine(): string;
 }
@@ -70,7 +74,7 @@ function flattenDiagnosticMessage(diagnostic: Diagnostic, newLine: string, inden
     return result;
 }
 
-function relativeFileName(fileName: string, host: FormatDiagnosticsHost): string {
+function relativeFileName(fileName: RootedFilePath, host: FormatDiagnosticsHost): string {
     return convertToRelativePath(
         fileName,
         host.getCurrentDirectory(),

@@ -5,7 +5,6 @@ import (
 	"context"
 	"maps"
 	"slices"
-	"strings"
 	"sync"
 	"time"
 
@@ -126,7 +125,7 @@ type BucketState struct {
 	// indicate that no other files have been edited, so it should be ignored if
 	// `multipleFilesDirty` is set. It should not be used for node_modules buckets,
 	// which rely on `dirtyPackages` instead.
-	dirtyFile           tspath.Path
+	dirtyFile           tspath.PathKey
 	multipleFilesDirty  bool
 	newProgramStructure newProgramStructure
 	// buildPreferences holds the user preferences that were in effect when
@@ -159,7 +158,7 @@ func (b BucketState) Dirty() bool {
 	return b.multipleFilesDirty || b.dirtyFile != "" || b.newProgramStructure > 0 || b.dirtyPackages.Len() > 0
 }
 
-func (b BucketState) DirtyFile() tspath.Path {
+func (b BucketState) DirtyFile() tspath.PathKey {
 	if b.multipleFilesDirty {
 		return ""
 	}
@@ -177,14 +176,14 @@ func (b BucketState) RecursiveSearchPackages() *collections.Set[string] {
 	return b.recursiveSearchPackages
 }
 
-func (b BucketState) possiblyNeedsRebuildForFile(file tspath.Path, preferences lsutil.UserPreferences) bool {
+func (b BucketState) possiblyNeedsRebuildForFile(file tspath.PathKey, preferences lsutil.UserPreferences) bool {
 	return b.newProgramStructure > 0 ||
 		b.hasDirtyFileBesides(file) ||
 		!b.buildPreferences.Equal(bucketBuildPreferencesFromUserPreferences(preferences)) ||
 		b.dirtyPackages.Len() > 0
 }
 
-func (b BucketState) hasDirtyFileBesides(file tspath.Path) bool {
+func (b BucketState) hasDirtyFileBesides(file tspath.PathKey) bool {
 	return b.multipleFilesDirty || b.dirtyFile != "" && b.dirtyFile != file
 }
 
@@ -216,7 +215,7 @@ type RegistryBucket struct {
 	//
 	// Paths is considered immutable after the bucket is finalized.
 	// It should be fully replaced rather than mutated while changing a bucket.
-	Paths map[tspath.Path]string
+	Paths map[tspath.PathKey]string
 	// PackageFiles maps package names to their file paths and file names.
 	// All package directory names in node_modules are keys; indexed packages have
 	// non-nil maps with path→fileName entries, unindexed packages have nil maps.
@@ -225,7 +224,7 @@ type RegistryBucket struct {
 	//
 	// PackageFiles is considered immutable after the bucket is finalized.
 	// It should be fully replaced rather than mutated while changing a bucket.
-	PackageFiles map[string]map[tspath.Path]string
+	PackageFiles map[string]map[tspath.PathKey]tspath.RootedFilePath
 	// ResolvedPackageNames is only defined for project buckets. It is the set of
 	// package names that were resolved from imports in the project's program files.
 	// This is passed to node_modules buckets so they include packages that are
@@ -249,7 +248,7 @@ type RegistryBucket struct {
 	//
 	// AmbientModuleNames is considered immutable after the bucket is finalized.
 	// It should be fully replaced rather than mutated while changing a bucket.
-	AmbientModuleNames map[string][]string
+	AmbientModuleNames map[string][]tspath.RootedFilePath
 	// Index is considered immutable after the bucket is finalized.
 	// It should be cloned and replaced rather than mutated while changing a bucket.
 	Index *Index[*Export]
@@ -279,7 +278,7 @@ func (b *RegistryBucket) Clone() *RegistryBucket {
 // markProjectFileDirty should only be called within a Change call on the dirty map.
 // Buckets are considered immutable once in a finalized registry. Should only
 // be used for project buckets.
-func (b *RegistryBucket) markProjectFileDirty(file tspath.Path) {
+func (b *RegistryBucket) markProjectFileDirty(file tspath.PathKey) {
 	if b.state.hasDirtyFileBesides(file) {
 		b.state.multipleFilesDirty = true
 	} else {
@@ -307,7 +306,7 @@ func (b *RegistryBucket) markNodeModulesDirty(packageName string) {
 }
 
 type directory struct {
-	name           string
+	name           tspath.RootedDirectoryPath
 	packageJson    *packagejson.InfoCacheEntry
 	hasNodeModules bool
 }
@@ -321,32 +320,32 @@ func (d *directory) Clone() *directory {
 }
 
 type Registry struct {
-	toPath          func(fileName string) tspath.Path
+	caseSensitivity tspath.CaseSensitivity
 	userPreferences lsutil.UserPreferences
 
-	// exports      map[tspath.Path][]*RawExport
-	directories map[tspath.Path]*directory
+	// exports      map[tspath.PathKey][]*RawExport
+	directories map[tspath.PathKey]*directory
 
-	nodeModules        map[tspath.Path]*RegistryBucket
-	projects           map[tspath.Path]*RegistryBucket
+	nodeModules        map[tspath.PathKey]*RegistryBucket
+	projects           map[tspath.PathKey]*RegistryBucket
 	uniquePackageCount int
 
 	// entrypoints maps from file path to the resolved entrypoints for that file, shared across all node_modules buckets.
-	entrypoints map[tspath.Path][]*module.ResolvedEntrypoint
+	entrypoints map[tspath.PathKey][]*module.ResolvedEntrypoint
 
 	// specifierCache maps from importing file to target file to specifier.
-	specifierCache map[tspath.Path]*collections.SyncMap[tspath.Path, string]
+	specifierCache map[tspath.PathKey]*collections.SyncMap[tspath.PathKey, tspath.ModuleSpecifier]
 }
 
-func NewRegistry(toPath func(fileName string) tspath.Path, preferences lsutil.UserPreferences) *Registry {
+func NewRegistry(caseSensitivity tspath.CaseSensitivity, preferences lsutil.UserPreferences) *Registry {
 	return &Registry{
-		toPath:          toPath,
+		caseSensitivity: caseSensitivity,
 		userPreferences: preferences,
-		directories:     make(map[tspath.Path]*directory),
+		directories:     make(map[tspath.PathKey]*directory),
 	}
 }
 
-func (r *Registry) IsPreparedForImportingFile(fileName string, projectPath tspath.Path, preferences lsutil.UserPreferences) bool {
+func (r *Registry) IsPreparedForImportingFile(fileName tspath.RootedFilePath, projectPath tspath.PathKey, preferences lsutil.UserPreferences) bool {
 	if r == nil {
 		return false
 	}
@@ -354,19 +353,19 @@ func (r *Registry) IsPreparedForImportingFile(fileName string, projectPath tspat
 	if !ok {
 		return false
 	}
-	path := r.toPath(fileName)
+	path := r.caseSensitivity.PathKey(tspath.RootedPath(fileName))
 	if projectBucket.state.possiblyNeedsRebuildForFile(path, preferences) {
 		return false
 	}
 
-	dirPath := path.GetDirectoryPath()
+	dirPath := path.Parent()
 	for {
 		if dirBucket, ok := r.nodeModules[dirPath]; ok {
 			if dirBucket.state.possiblyNeedsRebuildForFile(path, preferences) {
 				return false
 			}
 		}
-		parent := dirPath.GetDirectoryPath()
+		parent := dirPath.Parent()
 		if parent == dirPath {
 			break
 		}
@@ -375,11 +374,11 @@ func (r *Registry) IsPreparedForImportingFile(fileName string, projectPath tspat
 	return true
 }
 
-func (r *Registry) NodeModulesDirectories() map[tspath.Path]string {
-	dirs := make(map[tspath.Path]string)
+func (r *Registry) NodeModulesDirectories() map[tspath.PathKey]tspath.RootedDirectoryPath {
+	dirs := make(map[tspath.PathKey]tspath.RootedDirectoryPath)
 	for dirPath, dir := range r.directories {
 		if dir.hasNodeModules {
-			dirs[tspath.Path(tspath.CombinePaths(string(dirPath), "node_modules"))] = tspath.CombinePaths(dir.name, "node_modules")
+			dirs[dirPath.AppendCanonicalComponent("node_modules")] = dir.name.ResolveDirectory("node_modules")
 		}
 	}
 	return dirs
@@ -410,7 +409,7 @@ func (r *Registry) Clone(ctx context.Context, change RegistryChange, host Regist
 }
 
 type BucketStats struct {
-	Path            tspath.Path
+	Path            tspath.PathKey
 	ExportCount     int
 	FileCount       int
 	State           BucketState
@@ -480,25 +479,26 @@ func (r *Registry) GetCacheStats() *CacheStats {
 }
 
 type RegistryChange struct {
-	RequestedFile tspath.Path
-	OpenFiles     map[tspath.Path]string
+	RequestedFile tspath.PathKey
+	OpenFiles     map[tspath.PathKey]tspath.RootedFilePath
 	Changed       collections.Set[lsproto.DocumentUri]
 	Created       collections.Set[lsproto.DocumentUri]
 	Deleted       collections.Set[lsproto.DocumentUri]
 	// RebuiltPrograms maps from project path to:
 	//   - true: the program was rebuilt with a different set of file names
 	//   - false: the program was rebuilt but the set of file names is unchanged
-	RebuiltPrograms map[tspath.Path]bool
+	RebuiltPrograms map[tspath.PathKey]bool
 	UserPreferences *lsutil.UserPreferences
 }
 
 type RegistryCloneHost interface {
 	module.ResolutionHost
 	FS() vfs.FS
-	GetDefaultProject(path tspath.Path) (tspath.Path, *compiler.Program)
-	GetProgramForProject(projectPath tspath.Path) *compiler.Program
-	GetPackageJson(fileName string) *packagejson.InfoCacheEntry
-	GetSourceFile(fileName string, path tspath.Path) *ast.SourceFile
+	GetCurrentDirectory() tspath.RootedDirectoryPath
+	GetDefaultProject(path tspath.PathKey) (tspath.PathKey, *compiler.Program)
+	GetProgramForProject(projectPath tspath.PathKey) *compiler.Program
+	GetPackageJson(fileName tspath.RootedFilePath) *packagejson.InfoCacheEntry
+	GetSourceFile(fileName tspath.RootedFilePath, path tspath.PathKey) *ast.SourceFile
 	Dispose()
 }
 
@@ -507,14 +507,14 @@ type registryBuilder struct {
 	base *Registry
 
 	userPreferences lsutil.UserPreferences
-	directories     *dirty.Map[tspath.Path, *directory]
-	nodeModules     *dirty.Map[tspath.Path, *RegistryBucket]
-	projects        *dirty.Map[tspath.Path, *RegistryBucket]
-	specifierCache  *dirty.MapBuilder[tspath.Path, *collections.SyncMap[tspath.Path, string], *collections.SyncMap[tspath.Path, string]]
+	directories     *dirty.Map[tspath.PathKey, *directory]
+	nodeModules     *dirty.Map[tspath.PathKey, *RegistryBucket]
+	projects        *dirty.Map[tspath.PathKey, *RegistryBucket]
+	specifierCache  *dirty.MapBuilder[tspath.PathKey, *collections.SyncMap[tspath.PathKey, tspath.ModuleSpecifier], *collections.SyncMap[tspath.PathKey, tspath.ModuleSpecifier]]
 	resolverOptions module.ResolverOptions
 
 	uniquePackageCount int
-	entrypoints        *dirty.MapBuilder[tspath.Path, []*module.ResolvedEntrypoint, []*module.ResolvedEntrypoint]
+	entrypoints        *dirty.MapBuilder[tspath.PathKey, []*module.ResolvedEntrypoint, []*module.ResolvedEntrypoint]
 }
 
 func newRegistryBuilder(registry *Registry, host RegistryCloneHost) *registryBuilder {
@@ -534,7 +534,7 @@ func newRegistryBuilder(registry *Registry, host RegistryCloneHost) *registryBui
 
 func (b *registryBuilder) Build() *Registry {
 	return &Registry{
-		toPath:             b.base.toPath,
+		caseSensitivity:    b.base.caseSensitivity,
 		userPreferences:    b.userPreferences,
 		directories:        core.FirstResult(b.directories.Finalize()),
 		nodeModules:        core.FirstResult(b.nodeModules.Finalize()),
@@ -547,37 +547,38 @@ func (b *registryBuilder) Build() *Registry {
 
 func (b *registryBuilder) updateBucketAndDirectoryExistence(change RegistryChange, logger *logging.LogTree) {
 	start := time.Now()
-	neededProjects := make(map[tspath.Path]struct{})
-	neededDirectories := make(map[tspath.Path]string)
+	neededProjects := make(map[tspath.PathKey]struct{})
+	neededDirectories := make(map[tspath.PathKey]tspath.RootedDirectoryPath)
 	for path, fileName := range change.OpenFiles {
 		neededProjects[core.FirstResult(b.host.GetDefaultProject(path))] = struct{}{}
-		if tspath.IsDynamicFileName(fileName) {
+		if fileName.IsDynamic() {
 			continue
 		}
-		dir := fileName
-		dirPath := path
+		dir := fileName.Directory()
+		dirPath := path.Parent()
 		for {
-			dir = tspath.GetDirectoryPath(dir)
-			lastDirPath := dirPath
-			dirPath = dirPath.GetDirectoryPath()
-			if dirPath == lastDirPath {
-				break
-			}
 			if _, ok := neededDirectories[dirPath]; ok {
 				break
 			}
 			neededDirectories[dirPath] = dir
+			parentPath := dirPath.Parent()
+			parentDir := dir.AsPath().Directory()
+			if parentPath == dirPath || parentDir == dir {
+				break
+			}
+			dirPath = parentPath
+			dir = parentDir
 		}
 
 		if !b.specifierCache.Has(path) {
-			b.specifierCache.Set(path, &collections.SyncMap[tspath.Path, string]{})
+			b.specifierCache.Set(path, &collections.SyncMap[tspath.PathKey, tspath.ModuleSpecifier]{})
 		}
 	}
 
 	if change.RequestedFile != "" {
 		neededProjects[core.FirstResult(b.host.GetDefaultProject(change.RequestedFile))] = struct{}{}
 		if !b.specifierCache.Has(change.RequestedFile) {
-			b.specifierCache.Set(change.RequestedFile, &collections.SyncMap[tspath.Path, string]{})
+			b.specifierCache.Set(change.RequestedFile, &collections.SyncMap[tspath.PathKey, tspath.ModuleSpecifier]{})
 		}
 	}
 
@@ -587,19 +588,19 @@ func (b *registryBuilder) updateBucketAndDirectoryExistence(change RegistryChang
 		}
 	}
 
-	var addedProjects, removedProjects []tspath.Path
+	var addedProjects, removedProjects []tspath.PathKey
 	core.DiffMapsFunc(
 		b.base.projects,
 		neededProjects,
 		func(_ *RegistryBucket, _ struct{}) bool {
 			panic("never called because onChanged is nil")
 		},
-		func(projectPath tspath.Path, _ struct{}) {
+		func(projectPath tspath.PathKey, _ struct{}) {
 			// Need and don't have
 			b.projects.Add(projectPath, newRegistryBucket())
 			addedProjects = append(addedProjects, projectPath)
 		},
-		func(projectPath tspath.Path, _ *RegistryBucket) {
+		func(projectPath tspath.PathKey, _ *RegistryBucket) {
 			// Have and don't need
 			b.projects.Delete(projectPath)
 			removedProjects = append(removedProjects, projectPath)
@@ -615,9 +616,9 @@ func (b *registryBuilder) updateBucketAndDirectoryExistence(change RegistryChang
 		}
 	}
 
-	updateDirectory := func(dirPath tspath.Path, dirName string, packageJsonChanged bool) {
-		packageJsonFileName := tspath.CombinePaths(dirName, "package.json")
-		hasNodeModules := b.host.FS().DirectoryExists(tspath.CombinePaths(dirName, "node_modules"))
+	updateDirectory := func(dirPath tspath.PathKey, dirName tspath.RootedDirectoryPath, packageJsonChanged bool) {
+		packageJsonFileName := dirName.ResolveFile("package.json")
+		hasNodeModules := b.host.FS().DirectoryExists(dirName.ResolveDirectory("node_modules"))
 		if entry, ok := b.directories.Get(dirPath); ok {
 			entry.ChangeIf(func(dir *directory) bool {
 				return packageJsonChanged || dir.hasNodeModules != hasNodeModules
@@ -642,18 +643,18 @@ func (b *registryBuilder) updateBucketAndDirectoryExistence(change RegistryChang
 		}
 	}
 
-	var addedNodeModulesDirs, removedNodeModulesDirs []tspath.Path
-	packageJsonChanged := func(dirName string) bool {
-		uri := lsconv.FileNameToDocumentURI(tspath.CombinePaths(dirName, "package.json"))
+	var addedNodeModulesDirs, removedNodeModulesDirs []tspath.PathKey
+	packageJsonChanged := func(dirName tspath.RootedDirectoryPath) bool {
+		uri := lsconv.FilePathToDocumentURI(dirName.ResolveFile("package.json"))
 		return change.Changed.Has(uri) || change.Deleted.Has(uri) || change.Created.Has(uri)
 	}
 	core.DiffMapsFunc(
 		b.base.directories,
 		neededDirectories,
-		func(dir *directory, dirName string) bool {
-			return !packageJsonChanged(dirName) && dir.hasNodeModules == b.host.FS().DirectoryExists(tspath.CombinePaths(dirName, "node_modules"))
+		func(dir *directory, dirName tspath.RootedDirectoryPath) bool {
+			return !packageJsonChanged(dirName) && dir.hasNodeModules == b.host.FS().DirectoryExists(dirName.ResolveDirectory("node_modules"))
 		},
-		func(dirPath tspath.Path, dirName string) {
+		func(dirPath tspath.PathKey, dirName tspath.RootedDirectoryPath) {
 			// Need and don't have
 			hadNodeModules := b.base.nodeModules[dirPath] != nil
 			updateDirectory(dirPath, dirName, false)
@@ -664,7 +665,7 @@ func (b *registryBuilder) updateBucketAndDirectoryExistence(change RegistryChang
 				addedNodeModulesDirs = append(addedNodeModulesDirs, dirPath)
 			}
 		},
-		func(dirPath tspath.Path, dir *directory) {
+		func(dirPath tspath.PathKey, dir *directory) {
 			// Have and don't need
 			hadNodeModules := b.base.nodeModules[dirPath] != nil
 			b.directories.Delete(dirPath)
@@ -676,7 +677,7 @@ func (b *registryBuilder) updateBucketAndDirectoryExistence(change RegistryChang
 				removedNodeModulesDirs = append(removedNodeModulesDirs, dirPath)
 			}
 		},
-		func(dirPath tspath.Path, dir *directory, dirName string) {
+		func(dirPath tspath.PathKey, dir *directory, dirName tspath.RootedDirectoryPath) {
 			updateDirectory(dirPath, dirName, packageJsonChanged(dirName))
 			if logger != nil {
 				logger.Logf("Changed directory: %s", dirPath)
@@ -706,15 +707,15 @@ func (b *registryBuilder) markBucketsDirty(change RegistryChange, logger *loggin
 	}
 
 	// Mark files dirty, bailing out if all buckets already have multiple files dirty
-	cleanNodeModulesBuckets := make(map[tspath.Path]struct{})
-	cleanProjectBuckets := make(map[tspath.Path]struct{})
-	b.nodeModules.Range(func(entry *dirty.MapEntry[tspath.Path, *RegistryBucket]) bool {
+	cleanNodeModulesBuckets := make(map[tspath.PathKey]struct{})
+	cleanProjectBuckets := make(map[tspath.PathKey]struct{})
+	b.nodeModules.Range(func(entry *dirty.MapEntry[tspath.PathKey, *RegistryBucket]) bool {
 		if !entry.Value().state.multipleFilesDirty {
 			cleanNodeModulesBuckets[entry.Key()] = struct{}{}
 		}
 		return true
 	})
-	b.projects.Range(func(entry *dirty.MapEntry[tspath.Path, *RegistryBucket]) bool {
+	b.projects.Range(func(entry *dirty.MapEntry[tspath.PathKey, *RegistryBucket]) bool {
 		if !entry.Value().state.multipleFilesDirty {
 			cleanProjectBuckets[entry.Key()] = struct{}{}
 		}
@@ -726,13 +727,12 @@ func (b *registryBuilder) markBucketsDirty(change RegistryChange, logger *loggin
 			return
 		}
 		for uri := range uris {
-			path := b.base.toPath(uri.FileName())
+			path := b.base.caseSensitivity.PathKey(tspath.RootedPath(uri.FileName()))
 			if len(cleanNodeModulesBuckets) > 0 {
 				// For node_modules, mark the bucket dirty if anything changes in the directory.
 				// The path could be either a symlink path (containing /node_modules/) or a realpath
 				// (for symlinked project references). Both are recorded in Paths for granular updates.
-				if nodeModulesIndex := strings.Index(string(path), "/node_modules/"); nodeModulesIndex != -1 {
-					dirPath := path[:nodeModulesIndex]
+				if dirPath, _, ok := path.SplitAtCanonicalComponent("node_modules"); ok {
 					if _, ok := cleanNodeModulesBuckets[dirPath]; ok {
 						entry := core.FirstResult(b.nodeModules.Get(dirPath))
 						// Look up the package name for granular updates
@@ -781,10 +781,10 @@ func (b *registryBuilder) markBucketsDirty(change RegistryChange, logger *loggin
 
 func (b *registryBuilder) updateIndexes(ctx context.Context, change RegistryChange, logger *logging.LogTree) {
 	type nodeModulesBucketTask struct {
-		entry           *dirty.MapEntry[tspath.Path, *RegistryBucket]
+		entry           *dirty.MapEntry[tspath.PathKey, *RegistryBucket]
 		dependencyNames *collections.Set[string]
-		dirName         string
-		dirPath         tspath.Path
+		dirName         tspath.RootedDirectoryPath
+		dirPath         tspath.PathKey
 
 		// For granular updates.
 		isUpdate       bool
@@ -810,13 +810,13 @@ func (b *registryBuilder) updateIndexes(ctx context.Context, change RegistryChan
 	// Project reference output mappings are needed to redirect extraction from output .d.ts files
 	// to source files for packages that are project references.
 	// We need all projects because a node_modules directory can be used by multiple projects.
-	allResolvedPackageNames := make(map[tspath.Path]*collections.Set[string])
-	projectReferenceOutputs := make(map[tspath.Path]string)
+	allResolvedPackageNames := make(map[tspath.PathKey]*collections.Set[string])
+	projectReferenceOutputs := make(map[tspath.PathKey]tspath.RootedFilePath)
 	// Compute which packages have implicit deep imports (subpath imports in packages
 	// without exports). These packages need recursive directory search to discover
 	// all auto-importable files, even when the preference is disabled.
 	allDeepImportPackages := &collections.Set[string]{}
-	b.projects.Range(func(entry *dirty.MapEntry[tspath.Path, *RegistryBucket]) bool {
+	b.projects.Range(func(entry *dirty.MapEntry[tspath.PathKey, *RegistryBucket]) bool {
 		program := b.host.GetProgramForProject(entry.Key())
 		if program != nil {
 			allResolvedPackageNames[entry.Key()] = getResolvedPackageNames(ctx, program)
@@ -828,7 +828,7 @@ func (b *registryBuilder) updateIndexes(ctx context.Context, change RegistryChan
 		return true
 	})
 
-	fileExcludePatterns := b.userPreferences.ParsedAutoImportFileExcludePatterns(b.host.FS().UseCaseSensitiveFileNames())
+	fileExcludePatterns := b.userPreferences.ParsedAutoImportFileExcludePatterns(b.host.FS().CaseSensitivity())
 
 	// Determine which packages need recursive directory search for this build.
 	// nil means all packages (preference is enabled for all).
@@ -839,10 +839,10 @@ func (b *registryBuilder) updateIndexes(ctx context.Context, change RegistryChan
 
 	// --- Collect node_modules tasks ---
 	var nodeModulesTasks []*nodeModulesBucketTask
-	tspath.ForEachAncestorDirectoryPath(change.RequestedFile, func(dirPath tspath.Path) (any, bool) {
+	tspath.ForEachAncestorPathKey(change.RequestedFile, func(dirPath tspath.PathKey) (any, bool) {
 		if nodeModulesBucket, ok := b.nodeModules.Get(dirPath); ok {
 			dirName := core.FirstResult(b.directories.Get(dirPath)).Value().name
-			dependencies := b.computeDependenciesForNodeModulesDirectory(change, allResolvedPackageNames, dirName, dirPath)
+			dependencies := b.computeDependenciesForNodeModulesDirectory(change, allResolvedPackageNames, dirPath)
 			bucketState := nodeModulesBucket.Value().state
 			// !!! Optimization: handle different dependency set via granular updates
 			needsFullRebuild := bucketState.multipleFilesDirty ||
@@ -887,7 +887,7 @@ func (b *registryBuilder) updateIndexes(ctx context.Context, change RegistryChan
 			if task.isUpdate {
 				task.packageNames = task.dirtyPackages
 			} else {
-				task.directoryPackageNames = getPackageNamesInNodeModules(tspath.CombinePaths(task.dirName, "node_modules"), b.host.FS())
+				task.directoryPackageNames = getPackageNamesInNodeModules(task.dirName.ResolveDirectory("node_modules"), b.host.FS())
 				task.packageNames = core.Coalesce(task.dependencyNames, task.directoryPackageNames)
 			}
 			task.discovered = b.discoverBucketPackages(task.packageNames, task.dirName, task.dirPath)
@@ -903,8 +903,8 @@ func (b *registryBuilder) updateIndexes(ctx context.Context, change RegistryChan
 	// we fall back to extracting from @types in a second pass. Packages with no main
 	// package extract directly from @types in the primary pass.
 	extractionStart := time.Now()
-	seen := make(map[string]bool)
-	extractionCache := make(map[string]*perPackageExtractionResult)
+	seen := make(map[tspath.RootedDirectoryPath]bool)
+	extractionCache := make(map[tspath.RootedDirectoryPath]*perPackageExtractionResult)
 	var extractionMu sync.Mutex
 	// Collect all packages that have an @types fallback. After the primary pass, we
 	// filter to only those whose main extraction failed, then deduplicate by typesRealpath.
@@ -1003,12 +1003,12 @@ func (b *registryBuilder) updateIndexes(ctx context.Context, change RegistryChan
 			if task.isUpdate {
 				b.updateNodeModulesBucket(
 					ctx, br, task.existingBucket, task.dirtyPackages, task.discovered, extractionCache,
-					targetRecursivePackages, nodeModulesLogger.Fork(task.dirName),
+					targetRecursivePackages, nodeModulesLogger.Fork(task.dirName.AsString()),
 				)
 			} else {
 				b.buildNodeModulesBucket(
 					ctx, br, task.dependencyNames, task.dirPath, task.discovered, task.directoryPackageNames, extractionCache,
-					targetRecursivePackages, nodeModulesLogger.Fork(task.dirName),
+					targetRecursivePackages, nodeModulesLogger.Fork(task.dirName.AsString()),
 				)
 			}
 		})
@@ -1073,32 +1073,33 @@ func (b *registryBuilder) updateIndexes(ctx context.Context, change RegistryChan
 		if br.possibleFailedAmbientModuleLookupTargets == nil {
 			continue
 		}
-		rootFiles := make(map[string]*ast.SourceFile)
+		rootFiles := make(map[tspath.RootedFilePath]*ast.SourceFile)
 		for target := range br.possibleFailedAmbientModuleLookupTargets.Keys() {
 			for _, fileName := range b.resolveAmbientModuleName(target, br.entry.Key()) {
 				if _, exists := rootFiles[fileName]; exists {
 					continue
 				}
-				rootFiles[fileName] = b.host.GetSourceFile(fileName, b.base.toPath(fileName))
+				rootFiles[fileName] = b.host.GetSourceFile(fileName, b.base.caseSensitivity.PathKey(tspath.RootedPath(fileName)))
 				secondPassFileCount++
 			}
 		}
 		if len(rootFiles) > 0 {
-			moduleResolver := module.NewResolverWithOptions(b.host, core.EmptyCompilerOptions, "", "", b.resolverOptions)
+			moduleResolver := module.NewResolverWithOptions(b.host, b.host.GetCurrentDirectory(), core.EmptyCompilerOptions, "", "", b.resolverOptions)
 			aliasResolver := newAliasResolver(
 				slices.Collect(maps.Values(rootFiles)),
 				nil,
 				b.host,
 				moduleResolver,
-				b.base.toPath,
 				func(_ ast.HasFileName, _ string) {
 					// no-op
 				},
 			)
 			ch, _ := checker.NewChecker(aliasResolver, nil)
-			br.possibleFailedAmbientModuleLookupSources.Range(func(path tspath.Path, source *failedAmbientModuleLookupSource) bool {
-				sourceFile := aliasResolver.GetSourceFile(source.fileName)
-				extractor := b.newExportExtractor(source.packageName, ch, moduleResolver, b.host.FS().Realpath)
+			br.possibleFailedAmbientModuleLookupSources.Range(func(path tspath.PathKey, source *failedAmbientModuleLookupSource) bool {
+				sourceFile := aliasResolver.getSourceFileByFileName(source.fileName, path)
+				extractor := b.newExportExtractor(source.packageName, ch, moduleResolver, func(fileName tspath.RootedFilePath) tspath.RootedFilePath {
+					return tspath.RootedFilePathFromPath(b.host.FS().Realpath(fileName.AsPath()))
+				})
 				fileExports := extractor.extractFromFile(sourceFile)
 				for _, exp := range fileExports {
 					br.bucket.Index.insertAsWords(exp)
@@ -1121,10 +1122,10 @@ func hasNewNonNodeModulesFiles(program *compiler.Program, bucket *RegistryBucket
 		return false
 	}
 	for _, file := range program.GetSourceFiles() {
-		if file.IsContentMapperSupplemental() || strings.Contains(file.FileName(), "/node_modules/") || isIgnoredFile(program, file) {
+		if file.IsContentMapperSupplemental() || file.FileName().ContainsLowercaseDirectorySequence("/node_modules/") || isIgnoredFile(program, file) {
 			continue
 		}
-		if _, ok := bucket.Paths[file.Path()]; !ok {
+		if _, ok := bucket.Paths[file.PathKey()]; !ok {
 			return true
 		}
 	}
@@ -1132,13 +1133,13 @@ func hasNewNonNodeModulesFiles(program *compiler.Program, bucket *RegistryBucket
 }
 
 func isIgnoredFile(program *compiler.Program, file *ast.SourceFile) bool {
-	return program.IsSourceFileDefaultLibrary(file.Path()) || program.IsGlobalTypingsFile(file.FileName())
+	return program.IsSourceFileDefaultLibrary(file.PathKey()) || program.IsGlobalTypingsFile(file.FileName())
 }
 
 // hasSymlinkToNodeModules checks if a file's realpath has a symlink that points
 // to a node_modules directory. This is used to skip files in the project bucket
 // that would be duplicated by the node_modules bucket via their symlink.
-func hasSymlinkToNodeModules(filePath tspath.Path, projectRootPath tspath.Path, symlinkCache *symlinks.KnownSymlinks) bool {
+func hasSymlinkToNodeModules(filePath tspath.PathKey, projectRootPath tspath.PathKey, symlinkCache *symlinks.KnownSymlinks) bool {
 	if symlinkCache == nil {
 		return false
 	}
@@ -1152,8 +1153,8 @@ func hasSymlinkToNodeModules(filePath tspath.Path, projectRootPath tspath.Path, 
 	if filesByRealpath := symlinkCache.FilesByRealpath(); filesByRealpath != nil {
 		if symlinkPaths, ok := filesByRealpath.Load(filePath); ok {
 			found := false
-			symlinkPaths.Range(func(symlinkPath string) bool {
-				if strings.Contains(symlinkPath, "/node_modules/") {
+			symlinkPaths.Range(func(symlinkPath tspath.RootedFilePath) bool {
+				if symlinkPath.ContainsLowercaseDirectorySequence("/node_modules/") {
 					found = true
 					return false // stop ranging
 				}
@@ -1171,14 +1172,14 @@ func hasSymlinkToNodeModules(filePath tspath.Path, projectRootPath tspath.Path, 
 		return false
 	}
 	found := false
-	tspath.ForEachAncestorDirectoryPath(filePath, func(dirPath tspath.Path) (any, bool) {
-		symlinkPaths, ok := directoriesByRealpath.Load(dirPath.EnsureTrailingDirectorySeparator())
+	tspath.ForEachAncestorPathKey(filePath, func(dirPath tspath.PathKey) (any, bool) {
+		symlinkPaths, ok := directoriesByRealpath.Load(dirPath)
 		if !ok {
 			return nil, false
 		}
 		// Check if any of the symlinks point to a node_modules directory
-		symlinkPaths.Range(func(symlinkPath string) bool {
-			if strings.Contains(symlinkPath, "/node_modules/") {
+		symlinkPaths.Range(func(symlinkPath tspath.RootedDirectoryPath) bool {
+			if symlinkPath.ContainsLowercaseDirectorySequence("/node_modules/") {
 				found = true
 				return false // stop ranging
 			}
@@ -1191,23 +1192,23 @@ func hasSymlinkToNodeModules(filePath tspath.Path, projectRootPath tspath.Path, 
 
 type failedAmbientModuleLookupSource struct {
 	mu          sync.Mutex
-	fileName    string
+	fileName    tspath.RootedFilePath
 	packageName string
 }
 
 type bucketBuildResult struct {
-	entry *dirty.MapEntry[tspath.Path, *RegistryBucket]
+	entry *dirty.MapEntry[tspath.PathKey, *RegistryBucket]
 	err   error
 
 	bucket *RegistryBucket
 	// entrypoints are the resolved entrypoints from this bucket's packages,
 	// to be merged into the registry-level entrypoints map.
-	entrypoints map[tspath.Path][]*module.ResolvedEntrypoint
+	entrypoints map[tspath.PathKey][]*module.ResolvedEntrypoint
 	// removedEntrypointPaths lists paths whose entrypoints should be removed from
 	// the registry-level map before merging new entrypoints. Used for granular updates.
-	removedEntrypointPaths []tspath.Path
+	removedEntrypointPaths []tspath.PathKey
 	// File path to filename and package name
-	possibleFailedAmbientModuleLookupSources *collections.SyncMap[tspath.Path, *failedAmbientModuleLookupSource]
+	possibleFailedAmbientModuleLookupSources *collections.SyncMap[tspath.PathKey, *failedAmbientModuleLookupSource]
 	// Likely ambient module name
 	possibleFailedAmbientModuleLookupTargets *collections.SyncSet[string]
 }
@@ -1215,7 +1216,7 @@ type bucketBuildResult struct {
 func (b *registryBuilder) buildProjectBucket(
 	ctx context.Context,
 	result *bucketBuildResult,
-	projectPath tspath.Path,
+	projectPath tspath.PathKey,
 	resolvedPackageNames *collections.Set[string],
 	logger *logging.LogTree,
 ) {
@@ -1226,15 +1227,15 @@ func (b *registryBuilder) buildProjectBucket(
 
 	start := time.Now()
 	var mu sync.Mutex
-	fileExcludePatterns := b.userPreferences.ParsedAutoImportFileExcludePatterns(b.host.FS().UseCaseSensitiveFileNames())
+	fileExcludePatterns := b.userPreferences.ParsedAutoImportFileExcludePatterns(b.host.FS().CaseSensitivity())
 	result.bucket = &RegistryBucket{}
-	moduleResolver := module.NewResolverWithOptions(b.host, core.EmptyCompilerOptions, "", "", b.resolverOptions)
+	moduleResolver := module.NewResolverWithOptions(b.host, b.host.GetCurrentDirectory(), core.EmptyCompilerOptions, "", "", b.resolverOptions)
 	program := b.host.GetProgramForProject(projectPath)
-	projectRootPath := b.base.toPath(program.GetCurrentDirectory())
+	projectRootPath := program.PathKeyForFileName(tspath.RootedFilePathFromPath(program.BaseDirectory().AsPath()))
 	symlinkCache := program.GetSymlinkCache()
 	getChecker, closePool, checkerCount := createCheckerPool(program)
 	defer closePool()
-	exports := make(map[tspath.Path][]*Export)
+	exports := make(map[tspath.PathKey][]*Export)
 	var wg sync.WaitGroup
 	var skippedFileCount int
 	var combinedStats extractorStats
@@ -1243,14 +1244,14 @@ func (b *registryBuilder) buildProjectBucket(
 		if file.IsContentMapperSupplemental() || isIgnoredFile(program, file) {
 			continue
 		}
-		if fileExcludePatterns != nil && fileExcludePatterns.MatchString(file.FileName()) {
+		if fileExcludePatterns != nil && fileExcludePatterns.MatchFileName(file.FileName()) {
 			skippedFileCount++
 			continue
 		}
 		// Ordinary node_modules files are owned by node_modules buckets. Content-mapped files are not
 		// discovered by those buckets, but files already transformed in the Program can be indexed here.
 		if file.ContentMapper() == "" &&
-			(strings.Contains(file.FileName(), "/node_modules/") || hasSymlinkToNodeModules(file.Path(), projectRootPath, symlinkCache)) {
+			(file.FileName().ContainsLowercaseDirectorySequence("/node_modules/") || hasSymlinkToNodeModules(file.PathKey(), projectRootPath, symlinkCache)) {
 			continue
 		}
 		wg.Go(func() {
@@ -1260,7 +1261,7 @@ func (b *registryBuilder) buildProjectBucket(
 				extractor := b.newExportExtractor("", checker, moduleResolver, nil)
 				fileExports := extractor.extractFromFile(file)
 				mu.Lock()
-				exports[file.Path()] = fileExports
+				exports[file.PathKey()] = fileExports
 				mu.Unlock()
 				stats := extractor.Stats()
 				combinedStats.exports.Add(stats.exports.Load())
@@ -1273,7 +1274,7 @@ func (b *registryBuilder) buildProjectBucket(
 
 	indexStart := time.Now()
 	idx := &Index[*Export]{}
-	paths := make(map[tspath.Path]string, len(exports))
+	paths := make(map[tspath.PathKey]string, len(exports))
 	for path, fileExports := range exports {
 		paths[path] = "" // Empty string for project buckets
 		for _, exp := range fileExports {
@@ -1296,7 +1297,7 @@ func (b *registryBuilder) buildProjectBucket(
 	}
 }
 
-func (b *registryBuilder) computeDependenciesForNodeModulesDirectory(change RegistryChange, allResolvedPackageNames map[tspath.Path]*collections.Set[string], dirName string, dirPath tspath.Path) *collections.Set[string] {
+func (b *registryBuilder) computeDependenciesForNodeModulesDirectory(change RegistryChange, allResolvedPackageNames map[tspath.PathKey]*collections.Set[string], dirPath tspath.PathKey) *collections.Set[string] {
 	// If any open files are in scope of this directory but not in scope of any package.json,
 	// we need to add all packages in this node_modules directory.
 	for path := range change.OpenFiles {
@@ -1307,7 +1308,7 @@ func (b *registryBuilder) computeDependenciesForNodeModulesDirectory(change Regi
 
 	// Get all package.jsons that have this node_modules directory in their spine
 	dependencies := &collections.Set[string]{}
-	b.directories.Range(func(entry *dirty.MapEntry[tspath.Path, *directory]) bool {
+	b.directories.Range(func(entry *dirty.MapEntry[tspath.PathKey, *directory]) bool {
 		if entry.Value().packageJson.Exists() && dirPath.ContainsPath(entry.Key()) {
 			addPackageJsonDependencies(entry.Value().packageJson.Contents, dependencies)
 		}
@@ -1334,37 +1335,37 @@ func (b *registryBuilder) computeDependenciesForNodeModulesDirectory(change Regi
 type discoveredPackage struct {
 	packageName      string
 	packageJson      *packagejson.InfoCacheEntry
-	realpath         string
+	realpath         tspath.RootedDirectoryPath
 	typesPackageJson *packagejson.InfoCacheEntry
-	typesRealpath    string
-	dirPath          tspath.Path // bucket directory path (used as extraction context)
-	isLocal          bool        // true if realpath is within the workspace root
+	typesRealpath    tspath.RootedDirectoryPath
+	dirPath          tspath.PathKey // bucket directory path (used as extraction context)
+	isLocal          bool           // true if realpath is within the workspace root
 }
 
 // perPackageExtractionResult holds the extraction output for one physical package.
 // Produced once per unique realpath during the extraction phase, then installed
 // into every bucket that needs it during the bucket-building phase.
 type perPackageExtractionResult struct {
-	packageFiles                     map[tspath.Path]string
+	packageFiles                     map[tspath.PathKey]tspath.RootedFilePath
 	entrypoints                      []*module.ResolvedEntrypoint
-	exports                          map[tspath.Path][]*Export
-	ambientModules                   map[string][]string
+	exports                          map[tspath.PathKey][]*Export
+	ambientModules                   map[string][]tspath.RootedFilePath
 	statsExports                     int
 	statsUsedChecker                 int
 	skippedEntrypoints               int
 	isSymlinked                      bool
-	failedAmbientModuleLookupSources map[tspath.Path]*failedAmbientModuleLookupSource
+	failedAmbientModuleLookupSources map[tspath.PathKey]*failedAmbientModuleLookupSource
 	failedAmbientModuleLookupTargets *collections.Set[string]
 }
 
 // packageExtractionResult holds the results of extracting exports from a set of packages.
 type packageExtractionResult struct {
-	exports                                  map[tspath.Path][]*Export
-	packageFiles                             map[string]map[tspath.Path]string
-	ambientModuleNames                       map[string][]string
+	exports                                  map[tspath.PathKey][]*Export
+	packageFiles                             map[string]map[tspath.PathKey]tspath.RootedFilePath
+	ambientModuleNames                       map[string][]tspath.RootedFilePath
 	entrypoints                              [][]*module.ResolvedEntrypoint
 	workspacePackages                        *collections.Set[string]
-	possibleFailedAmbientModuleLookupSources *collections.SyncMap[tspath.Path, *failedAmbientModuleLookupSource]
+	possibleFailedAmbientModuleLookupSources *collections.SyncMap[tspath.PathKey, *failedAmbientModuleLookupSource]
 	possibleFailedAmbientModuleLookupTargets *collections.SyncSet[string]
 	stats                                    extractorStats
 	skippedEntrypointsCount                  int
@@ -1374,34 +1375,33 @@ type packageExtractionResult struct {
 // in a node_modules directory. This is the discovery phase of the three-phase extraction pipeline.
 func (b *registryBuilder) discoverBucketPackages(
 	packageNames *collections.Set[string],
-	dirName string,
-	dirPath tspath.Path,
+	dirName tspath.RootedDirectoryPath,
+	dirPath tspath.PathKey,
 ) []*discoveredPackage {
 	result := make([]*discoveredPackage, 0, packageNames.Len())
 	for packageName := range packageNames.Keys() {
 		typesPackageName := module.GetTypesPackageName(packageName)
-		packageJson := b.host.GetPackageJson(tspath.CombinePaths(dirName, "node_modules", packageName, "package.json"))
+		packageJson := b.host.GetPackageJson(dirName.ResolveFile(tspath.CombinePaths("node_modules", packageName, "package.json")))
 		var typesPackageJson *packagejson.InfoCacheEntry
 		if packageName != typesPackageName {
-			typesJson := b.host.GetPackageJson(tspath.CombinePaths(dirName, "node_modules", typesPackageName, "package.json"))
+			typesJson := b.host.GetPackageJson(dirName.ResolveFile(tspath.CombinePaths("node_modules", typesPackageName, "package.json")))
 			if typesJson.DirectoryExists {
 				typesPackageJson = typesJson
 			}
 		}
-		var realpath string
+		var realpath tspath.RootedDirectoryPath
 		if packageJson.DirectoryExists {
-			realpath = b.host.FS().Realpath(packageJson.PackageDirectory)
+			realpath = tspath.RootedDirectoryPathFromPath(b.host.FS().Realpath(packageJson.PackageDirectory.AsDirectoryPath().AsPath()))
 		}
-		var typesRealpath string
+		var typesRealpath tspath.RootedDirectoryPath
 		if typesPackageJson != nil {
-			typesRealpath = b.host.FS().Realpath(typesPackageJson.PackageDirectory)
+			typesRealpath = tspath.RootedDirectoryPathFromPath(b.host.FS().Realpath(typesPackageJson.PackageDirectory.AsDirectoryPath().AsPath()))
 		}
+		caseSensitivity := b.host.FS().CaseSensitivity()
 		isLocal := realpath != "" &&
-			!strings.Contains(realpath, "/node_modules/") &&
-			tspath.ContainsPath(
-				b.host.GetCurrentDirectory(),
-				realpath,
-				tspath.ComparePathsOptions{UseCaseSensitiveFileNames: b.host.FS().UseCaseSensitiveFileNames()},
+			!realpath.ContainsLowercaseDirectorySequence("/node_modules/") &&
+			caseSensitivity.PathKey(b.host.GetCurrentDirectory().AsPath()).ContainsPath(
+				caseSensitivity.PathKey(realpath.AsPath()),
 			)
 		result = append(result, &discoveredPackage{
 			packageName:      packageName,
@@ -1423,14 +1423,14 @@ func (b *registryBuilder) extractPackage(
 	ctx context.Context,
 	packageJson *packagejson.InfoCacheEntry,
 	packageName string,
-	projectReferenceOutputs map[tspath.Path]string,
+	projectReferenceOutputs map[tspath.PathKey]tspath.RootedFilePath,
 	fileExcludePatterns *vfsmatch.SpecMatcher,
 	enableDirectorySearch bool,
 ) *perPackageExtractionResult {
 	if packageJson == nil || !packageJson.DirectoryExists {
 		return nil
 	}
-	toRealpath, toSymlink := getPackageRealpathFuncs(b.host.FS(), packageJson.PackageDirectory)
+	toRealpath, toSymlink := getPackageRealpathFuncs(b.host.FS(), packageJson.PackageDirectory.AsDirectoryPath())
 	resolver := getModuleResolver(b.host, toRealpath, b.resolverOptions)
 	packageEntrypoints := resolver.GetEntrypointsFromPackageJsonInfo(packageJson, packageName, enableDirectorySearch)
 	if packageEntrypoints == nil {
@@ -1441,7 +1441,7 @@ func (b *registryBuilder) extractPackage(
 	if fileExcludePatterns != nil {
 		count := len(packageEntrypoints)
 		packageEntrypoints = slices.DeleteFunc(packageEntrypoints, func(entrypoint *module.ResolvedEntrypoint) bool {
-			return fileExcludePatterns.MatchString(entrypoint.ResolvedFileName)
+			return fileExcludePatterns.MatchFileName(entrypoint.ResolvedFileName)
 		})
 		skippedEntrypoints = count - len(packageEntrypoints)
 	}
@@ -1450,36 +1450,36 @@ func (b *registryBuilder) extractPackage(
 	}
 
 	result := &perPackageExtractionResult{
-		packageFiles:                     make(map[tspath.Path]string),
+		packageFiles:                     make(map[tspath.PathKey]tspath.RootedFilePath),
 		entrypoints:                      packageEntrypoints,
-		exports:                          make(map[tspath.Path][]*Export),
-		ambientModules:                   make(map[string][]string),
+		exports:                          make(map[tspath.PathKey][]*Export),
+		ambientModules:                   make(map[string][]tspath.RootedFilePath),
 		skippedEntrypoints:               skippedEntrypoints,
-		failedAmbientModuleLookupSources: make(map[tspath.Path]*failedAmbientModuleLookupSource),
+		failedAmbientModuleLookupSources: make(map[tspath.PathKey]*failedAmbientModuleLookupSource),
 		failedAmbientModuleLookupTargets: &collections.Set[string]{},
 	}
 
 	// Resolve entrypoint source files and build the alias resolver.
-	seenFiles := collections.NewSetWithSizeHint[tspath.Path](len(packageEntrypoints))
+	seenFiles := collections.NewSetWithSizeHint[tspath.PathKey](len(packageEntrypoints))
 	rootFiles := make([]*ast.SourceFile, len(packageEntrypoints))
-	symlinks := make(map[tspath.Path]pathAndFileName)
+	symlinks := make(map[tspath.PathKey]pathAndFileName)
 	var wg sync.WaitGroup
 	for i, entrypoint := range packageEntrypoints {
 		fileName := entrypoint.SymlinkOrRealpath()
 		realpathFileName := entrypoint.ResolvedFileName
-		realpathPath := b.base.toPath(realpathFileName)
+		realpathPath := b.base.caseSensitivity.PathKey(tspath.RootedPath(realpathFileName))
 
 		if inputFileName, ok := projectReferenceOutputs[realpathPath]; ok {
 			fileName = toSymlink(inputFileName)
 			realpathFileName = inputFileName
-			realpathPath = b.base.toPath(realpathFileName)
+			realpathPath = b.base.caseSensitivity.PathKey(tspath.RootedPath(realpathFileName))
 		}
 
 		if !seenFiles.AddIfAbsent(realpathPath) {
 			continue
 		}
 		if fileName != realpathFileName {
-			symlinkPath := b.base.toPath(fileName)
+			symlinkPath := b.base.caseSensitivity.PathKey(tspath.RootedPath(fileName))
 			symlinks[realpathPath] = pathAndFileName{path: symlinkPath, fileName: fileName}
 			result.isSymlinked = true
 		}
@@ -1494,10 +1494,10 @@ func (b *registryBuilder) extractPackage(
 	wg.Wait()
 	rootFiles = slices.DeleteFunc(rootFiles, func(f *ast.SourceFile) bool { return f == nil })
 
-	aliasResolver := newAliasResolver(rootFiles, symlinks, b.host, resolver, b.base.toPath, func(source ast.HasFileName, moduleName string) {
+	aliasResolver := newAliasResolver(rootFiles, symlinks, b.host, resolver, func(source ast.HasFileName, moduleName string) {
 		result.failedAmbientModuleLookupTargets.Add(moduleName)
-		if _, exists := result.failedAmbientModuleLookupSources[source.Path()]; !exists {
-			result.failedAmbientModuleLookupSources[source.Path()] = &failedAmbientModuleLookupSource{
+		if _, exists := result.failedAmbientModuleLookupSources[source.PathKey()]; !exists {
+			result.failedAmbientModuleLookupSources[source.PathKey()] = &failedAmbientModuleLookupSource{
 				fileName: source.FileName(),
 			}
 		}
@@ -1506,7 +1506,7 @@ func (b *registryBuilder) extractPackage(
 	ch, _ := checker.NewChecker(aliasResolver, nil)
 	extractor := b.newExportExtractor(packageName, ch, resolver, toRealpath)
 
-	var nonModuleFiles collections.Set[tspath.Path]
+	var nonModuleFiles collections.Set[tspath.PathKey]
 	for _, entrypoint := range aliasResolver.rootFiles {
 		if ctx.Err() != nil {
 			return nil
@@ -1515,22 +1515,22 @@ func (b *registryBuilder) extractPackage(
 		for _, name := range entrypoint.AmbientModuleNames {
 			result.ambientModules[name] = append(result.ambientModules[name], entrypoint.FileName())
 		}
-		result.packageFiles[entrypoint.Path()] = entrypoint.FileName()
-		symlink, hasSymlink := aliasResolver.symlinks[entrypoint.Path()]
+		result.packageFiles[entrypoint.PathKey()] = entrypoint.FileName()
+		symlink, hasSymlink := aliasResolver.symlinks[entrypoint.PathKey()]
 		if hasSymlink {
 			result.packageFiles[symlink.path] = symlink.fileName
 		}
 
 		hasExports := len(fileExports) > 0 && entrypoint.ExternalModuleIndicator != nil
-		if source, ok := result.failedAmbientModuleLookupSources[entrypoint.Path()]; !ok {
-			result.exports[entrypoint.Path()] = fileExports
+		if source, ok := result.failedAmbientModuleLookupSources[entrypoint.PathKey()]; !ok {
+			result.exports[entrypoint.PathKey()] = fileExports
 		} else {
 			source.packageName = packageName
 			hasExports = entrypoint.ExternalModuleIndicator != nil
 		}
 
 		if !hasExports {
-			nonModuleFiles.Add(entrypoint.Path())
+			nonModuleFiles.Add(entrypoint.PathKey())
 			if hasSymlink {
 				nonModuleFiles.Add(symlink.path)
 			}
@@ -1539,7 +1539,7 @@ func (b *registryBuilder) extractPackage(
 
 	// Discard entrypoints for non-module files and empty modules.
 	result.entrypoints = slices.DeleteFunc(result.entrypoints, func(ep *module.ResolvedEntrypoint) bool {
-		return nonModuleFiles.Has(b.base.toPath(ep.ResolvedFileName))
+		return nonModuleFiles.Has(ep.ResolvedPath)
 	})
 
 	stats := extractor.Stats()
@@ -1552,14 +1552,14 @@ func (b *registryBuilder) extractPackage(
 // packageExtractionResult for one bucket. This is the install phase of the three-phase pipeline.
 func installExtractions(
 	discovered []*discoveredPackage,
-	extractionCache map[string]*perPackageExtractionResult,
+	extractionCache map[tspath.RootedDirectoryPath]*perPackageExtractionResult,
 ) *packageExtractionResult {
 	result := &packageExtractionResult{
-		exports:                                  make(map[tspath.Path][]*Export),
-		packageFiles:                             make(map[string]map[tspath.Path]string),
-		ambientModuleNames:                       make(map[string][]string),
+		exports:                                  make(map[tspath.PathKey][]*Export),
+		packageFiles:                             make(map[string]map[tspath.PathKey]tspath.RootedFilePath),
+		ambientModuleNames:                       make(map[string][]tspath.RootedFilePath),
 		workspacePackages:                        &collections.Set[string]{},
-		possibleFailedAmbientModuleLookupSources: &collections.SyncMap[tspath.Path, *failedAmbientModuleLookupSource]{},
+		possibleFailedAmbientModuleLookupSources: &collections.SyncMap[tspath.PathKey, *failedAmbientModuleLookupSource]{},
 		possibleFailedAmbientModuleLookupTargets: &collections.SyncSet[string]{},
 	}
 
@@ -1573,7 +1573,7 @@ func installExtractions(
 		}
 		maps.Copy(result.exports, extraction.exports)
 		if result.packageFiles[pkg.packageName] == nil {
-			result.packageFiles[pkg.packageName] = make(map[tspath.Path]string, len(extraction.packageFiles))
+			result.packageFiles[pkg.packageName] = make(map[tspath.PathKey]tspath.RootedFilePath, len(extraction.packageFiles))
 		}
 		maps.Copy(result.packageFiles[pkg.packageName], extraction.packageFiles)
 		for name, fileNames := range extraction.ambientModules {
@@ -1603,10 +1603,10 @@ func (b *registryBuilder) buildNodeModulesBucket(
 	ctx context.Context,
 	result *bucketBuildResult,
 	dependencies *collections.Set[string],
-	dirPath tspath.Path,
+	dirPath tspath.PathKey,
 	discovered []*discoveredPackage,
 	directoryPackageNames *collections.Set[string],
-	extractionCache map[string]*perPackageExtractionResult,
+	extractionCache map[tspath.RootedDirectoryPath]*perPackageExtractionResult,
 	recursiveSearchPackages *collections.Set[string],
 	logger *logging.LogTree,
 ) {
@@ -1620,14 +1620,14 @@ func (b *registryBuilder) buildNodeModulesBucket(
 	indexStart := time.Now()
 	// Build PackageFiles with all directory package names; indexed packages have
 	// non-nil maps, unindexed packages have nil maps.
-	allPackageFiles := make(map[string]map[tspath.Path]string, directoryPackageNames.Len())
+	allPackageFiles := make(map[string]map[tspath.PathKey]tspath.RootedFilePath, directoryPackageNames.Len())
 	for pkgName := range directoryPackageNames.Keys() {
 		allPackageFiles[pkgName] = extraction.packageFiles[pkgName]
 	}
 
 	// Build Paths as reverse mapping from path to package name.
 	// Only include paths for local workspace packages (eligible for granular updates).
-	paths := make(map[tspath.Path]string)
+	paths := make(map[tspath.PathKey]string)
 	for pkgName := range extraction.workspacePackages.Keys() {
 		if files, ok := extraction.packageFiles[pkgName]; ok {
 			for path := range files {
@@ -1647,7 +1647,7 @@ func (b *registryBuilder) buildNodeModulesBucket(
 			recursiveSearchPackages: recursiveSearchPackages.Clone(),
 		},
 	}
-	result.entrypoints = make(map[tspath.Path][]*module.ResolvedEntrypoint, len(extraction.exports))
+	result.entrypoints = make(map[tspath.PathKey][]*module.ResolvedEntrypoint, len(extraction.exports))
 	result.possibleFailedAmbientModuleLookupSources = extraction.possibleFailedAmbientModuleLookupSources
 	result.possibleFailedAmbientModuleLookupTargets = extraction.possibleFailedAmbientModuleLookupTargets
 	for _, fileExports := range extraction.exports {
@@ -1657,8 +1657,7 @@ func (b *registryBuilder) buildNodeModulesBucket(
 	}
 	for _, entrypointSet := range extraction.entrypoints {
 		for _, entrypoint := range entrypointSet {
-			path := b.base.toPath(entrypoint.ResolvedFileName)
-			result.entrypoints[path] = append(result.entrypoints[path], entrypoint)
+			result.entrypoints[entrypoint.ResolvedPath] = append(result.entrypoints[entrypoint.ResolvedPath], entrypoint)
 		}
 	}
 
@@ -1694,7 +1693,7 @@ func (b *registryBuilder) updateNodeModulesBucket(
 	existingBucket *RegistryBucket,
 	dirtyPackages *collections.Set[string],
 	discovered []*discoveredPackage,
-	extractionCache map[string]*perPackageExtractionResult,
+	extractionCache map[tspath.RootedDirectoryPath]*perPackageExtractionResult,
 	recursiveSearchPackages *collections.Set[string],
 	logger *logging.LogTree,
 ) {
@@ -1722,7 +1721,7 @@ func (b *registryBuilder) updateNodeModulesBucket(
 	maps.Copy(newPackageFiles, extraction.packageFiles)
 
 	// Clone Paths, removing dirty package paths
-	newPaths := make(map[tspath.Path]string, len(existingBucket.Paths))
+	newPaths := make(map[tspath.PathKey]string, len(existingBucket.Paths))
 	for path, pkgName := range existingBucket.Paths {
 		if dirtyPackages.Has(pkgName) {
 			continue
@@ -1739,12 +1738,12 @@ func (b *registryBuilder) updateNodeModulesBucket(
 	}
 
 	// Clone AmbientModuleNames, removing dirty package entries
-	newAmbientModuleNames := make(map[string][]string, len(existingBucket.AmbientModuleNames))
+	newAmbientModuleNames := make(map[string][]tspath.RootedFilePath, len(existingBucket.AmbientModuleNames))
 	for moduleName, fileNames := range existingBucket.AmbientModuleNames {
 		// Filter out files from dirty packages
-		var filtered []string
+		var filtered []tspath.RootedFilePath
 		for _, fileName := range fileNames {
-			path := b.base.toPath(fileName)
+			path := b.base.caseSensitivity.PathKey(tspath.RootedPath(fileName))
 			if pkgName, ok := existingBucket.Paths[path]; ok && dirtyPackages.Has(pkgName) {
 				continue
 			}
@@ -1761,18 +1760,17 @@ func (b *registryBuilder) updateNodeModulesBucket(
 
 	// Collect entrypoint paths that need to be removed from the registry-level map
 	// (paths belonging to dirty packages)
-	var removedEntrypointPaths []tspath.Path
+	var removedEntrypointPaths []tspath.PathKey
 	for path := range b.base.entrypoints {
 		if pkgName, ok := existingBucket.Paths[path]; ok && dirtyPackages.Has(pkgName) {
 			removedEntrypointPaths = append(removedEntrypointPaths, path)
 		}
 	}
 	// Build new entrypoints from extraction
-	newEntrypoints := make(map[tspath.Path][]*module.ResolvedEntrypoint)
+	newEntrypoints := make(map[tspath.PathKey][]*module.ResolvedEntrypoint)
 	for _, entrypointSet := range extraction.entrypoints {
 		for _, entrypoint := range entrypointSet {
-			path := b.base.toPath(entrypoint.ResolvedFileName)
-			newEntrypoints[path] = append(newEntrypoints[path], entrypoint)
+			newEntrypoints[entrypoint.ResolvedPath] = append(newEntrypoints[entrypoint.ResolvedPath], entrypoint)
 		}
 	}
 
@@ -1807,8 +1805,8 @@ func (b *registryBuilder) updateNodeModulesBucket(
 	result.err = ctx.Err()
 }
 
-func (b *registryBuilder) getNearestAncestorDirectoryWithPackageJson(filePath tspath.Path) *directory {
-	return core.FirstResult(tspath.ForEachAncestorDirectoryPath(filePath.GetDirectoryPath(), func(dirPath tspath.Path) (result *directory, stop bool) {
+func (b *registryBuilder) getNearestAncestorDirectoryWithPackageJson(filePath tspath.PathKey) *directory {
+	return core.FirstResult(tspath.ForEachAncestorPathKey(filePath.Parent(), func(dirPath tspath.PathKey) (result *directory, stop bool) {
 		if dirEntry, ok := b.directories.Get(dirPath); ok && dirEntry.Value().packageJson.Exists() {
 			return dirEntry.Value(), true
 		}
@@ -1816,8 +1814,8 @@ func (b *registryBuilder) getNearestAncestorDirectoryWithPackageJson(filePath ts
 	}))
 }
 
-func (b *registryBuilder) resolveAmbientModuleName(moduleName string, fromPath tspath.Path) []string {
-	return core.FirstResult(tspath.ForEachAncestorDirectoryPath(fromPath, func(dirPath tspath.Path) (result []string, stop bool) {
+func (b *registryBuilder) resolveAmbientModuleName(moduleName string, fromPath tspath.PathKey) []tspath.RootedFilePath {
+	return core.FirstResult(tspath.ForEachAncestorPathKey(fromPath, func(dirPath tspath.PathKey) (result []tspath.RootedFilePath, stop bool) {
 		if bucket, ok := b.nodeModules.Get(dirPath); ok {
 			if fileNames, ok := bucket.Value().AmbientModuleNames[moduleName]; ok {
 				return fileNames, true

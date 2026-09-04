@@ -30,7 +30,6 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/scanner"
 	"github.com/microsoft/TypeScript/tsc/internal/spanmap"
 	"github.com/microsoft/TypeScript/tsc/internal/stringutil"
-	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 )
 
 var ErrNeedsAutoImports = errors.New("completion list needs auto imports")
@@ -310,7 +309,6 @@ type symbolOriginInfo struct {
 	kind              symbolOriginInfoKind
 	isDefaultExport   bool
 	isFromPackageJson bool
-	fileName          string
 	data              any
 }
 
@@ -1201,7 +1199,7 @@ func (l *LanguageService) getCompletionData(
 	}
 
 	shouldOfferImportCompletions := func() bool {
-		if tspath.IsDynamicFileName(file.FileName()) {
+		if file.FileName().IsDynamic() {
 			return false
 		}
 		// If already typing an import statement, provide completions for it.
@@ -2850,7 +2848,7 @@ func createSnippetTabStopBody(factory *ast.NodeFactory, emitContext *printer.Emi
 }
 
 func (l *LanguageService) createImportAdder(ctx context.Context, typeChecker *checker.Checker, file *ast.SourceFile) (autoimport.ImportAdder, error) {
-	if tspath.IsDynamicFileName(file.FileName()) {
+	if file.FileName().IsDynamic() {
 		return nil, nil
 	}
 	view, err := l.getPreparedAutoImportView(file)
@@ -6579,7 +6577,7 @@ func (l *LanguageService) getExhaustiveCaseSnippets(
 		quotePreference := lsutil.GetQuotePreference(file, l.UserPreferences())
 		// Tolerate a nil import adder in untitled files.
 		var importAdder autoimport.ImportAdder
-		if !tspath.IsDynamicFileName(file.FileName()) {
+		if !file.FileName().IsDynamic() {
 			view, err := l.getPreparedAutoImportView(file)
 			if err != nil {
 				return nil, err

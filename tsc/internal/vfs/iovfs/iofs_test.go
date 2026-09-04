@@ -6,6 +6,7 @@ import (
 	"testing/fstest"
 
 	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/iovfs"
 	"gotest.tools/v3/assert"
@@ -29,7 +30,7 @@ func TestIOFS(t *testing.T) {
 		},
 	}
 
-	fs := iovfs.From(testfs, true)
+	fs := iovfs.From(testfs, tspath.CaseSensitive)
 
 	t.Run("ReadFile", func(t *testing.T) {
 		t.Parallel()
@@ -46,7 +47,7 @@ func TestIOFS(t *testing.T) {
 	t.Run("ReadFileUnrooted", func(t *testing.T) {
 		t.Parallel()
 
-		testutil.AssertPanics(t, func() { fs.ReadFile("bar") }, `vfs: path "bar" is not absolute`)
+		testutil.AssertPanics(t, func() { fs.ReadFile(tspath.RootedFilePath("bar")) }, `vfs: path "bar" is not absolute`)
 	})
 
 	t.Run("FileExists", func(t *testing.T) {
@@ -61,8 +62,8 @@ func TestIOFS(t *testing.T) {
 
 		assert.Assert(t, fs.DirectoryExists("/"))
 		assert.Assert(t, fs.DirectoryExists("/dir1"))
-		assert.Assert(t, fs.DirectoryExists("/dir1/"))
-		assert.Assert(t, fs.DirectoryExists("/dir1/./"))
+		assert.Assert(t, fs.DirectoryExists(tspath.RootedDirectoryPathFromAbsolute("/dir1/")))
+		assert.Assert(t, fs.DirectoryExists(tspath.RootedDirectoryPathFromAbsolute("/dir1/./")))
 		assert.Assert(t, !fs.DirectoryExists("/bar"))
 	})
 
@@ -78,12 +79,12 @@ func TestIOFS(t *testing.T) {
 		t.Parallel()
 
 		var files []string
-		err := fs.WalkDir("/", func(path string, d vfs.DirEntry, err error) error {
+		err := fs.WalkDir("/", func(path tspath.RootedPath, d vfs.DirEntry, err error) error {
 			if err != nil {
 				return err
 			}
 			if !d.IsDir() {
-				files = append(files, path)
+				files = append(files, path.AsString())
 			}
 			return nil
 		})
@@ -98,15 +99,15 @@ func TestIOFS(t *testing.T) {
 		t.Parallel()
 
 		var files []string
-		err := fs.WalkDir("/", func(path string, d vfs.DirEntry, err error) error {
+		err := fs.WalkDir("/", func(path tspath.RootedPath, d vfs.DirEntry, err error) error {
 			if err != nil {
 				return err
 			}
 			if !d.IsDir() {
-				files = append(files, path)
+				files = append(files, path.AsString())
 			}
 
-			if path == "/" {
+			if path.AsString() == "/" {
 				return nil
 			}
 
@@ -123,12 +124,12 @@ func TestIOFS(t *testing.T) {
 		t.Parallel()
 
 		realpath := fs.Realpath("/foo.ts")
-		assert.Equal(t, realpath, "/foo.ts")
+		assert.Equal(t, realpath.AsString(), "/foo.ts")
 	})
 
-	t.Run("UseCaseSensitiveFileNames", func(t *testing.T) {
+	t.Run("CaseSensitivity", func(t *testing.T) {
 		t.Parallel()
 
-		assert.Assert(t, fs.UseCaseSensitiveFileNames())
+		assert.Assert(t, fs.CaseSensitivity().IsCaseSensitive())
 	})
 }

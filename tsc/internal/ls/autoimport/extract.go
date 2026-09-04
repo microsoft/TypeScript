@@ -19,11 +19,11 @@ type symbolExtractor struct {
 
 	localNameResolver *binder.NameResolver
 	checker           *checker.Checker
-	toPath            func(fileName string) tspath.Path
+	caseSensitivity   tspath.CaseSensitivity
 	// realpath, if set, is used to resolve symlinks for ModuleID generation.
 	// This ensures that symlinked packages use their realpath as ModuleID,
 	// deduplicating exports from files that appear via multiple symlink paths.
-	realpath func(fileName string) string
+	realpath func(fileName tspath.RootedFilePath) tspath.RootedFilePath
 }
 
 type exportExtractor struct {
@@ -57,33 +57,33 @@ func (l *checkerLease) TryChecker() *checker.Checker {
 	return nil
 }
 
-func newSymbolExtractor(packageName string, checker *checker.Checker, toPath func(string) tspath.Path, realpath func(string) string) *symbolExtractor {
+func newSymbolExtractor(packageName string, checker *checker.Checker, caseSensitivity tspath.CaseSensitivity, realpath func(tspath.RootedFilePath) tspath.RootedFilePath) *symbolExtractor {
 	return &symbolExtractor{
 		packageName: packageName,
 		checker:     checker,
 		localNameResolver: &binder.NameResolver{
 			CompilerOptions: core.EmptyCompilerOptions,
 		},
-		stats:    &extractorStats{},
-		toPath:   toPath,
-		realpath: realpath,
+		stats:           &extractorStats{},
+		caseSensitivity: caseSensitivity,
+		realpath:        realpath,
 	}
 }
 
-func (b *registryBuilder) newExportExtractor(packageName string, checker *checker.Checker, moduleResolver *module.Resolver, realpath func(string) string) *exportExtractor {
+func (b *registryBuilder) newExportExtractor(packageName string, checker *checker.Checker, moduleResolver *module.Resolver, realpath func(tspath.RootedFilePath) tspath.RootedFilePath) *exportExtractor {
 	return &exportExtractor{
-		symbolExtractor: newSymbolExtractor(packageName, checker, b.base.toPath, realpath),
+		symbolExtractor: newSymbolExtractor(packageName, checker, b.base.caseSensitivity, realpath),
 		moduleResolver:  moduleResolver,
 	}
 }
 
 // getModuleID returns the ModuleID for a file, using realpath if available.
 func (e *symbolExtractor) getModuleID(file *ast.SourceFile) ModuleID {
-	if e.realpath != nil && e.toPath != nil {
+	if e.realpath != nil {
 		realpath := e.realpath(file.FileName())
-		return ModuleID(e.toPath(realpath))
+		return fileModuleID(e.caseSensitivity.PathKey(tspath.RootedPath(realpath)))
 	}
-	return ModuleID(file.Path())
+	return fileModuleID(file.PathKey())
 }
 
 // getModuleIDForSymbol returns the ModuleID for a module symbol, using realpath
@@ -91,7 +91,7 @@ func (e *symbolExtractor) getModuleID(file *ast.SourceFile) ModuleID {
 func (e *symbolExtractor) getModuleIDForSymbol(symbol *ast.Symbol) (ModuleID, bool) {
 	moduleID, fileName, ok := tryGetModuleIDAndFileNameOfModuleSymbol(symbol)
 	if !ok {
-		return "", false
+		return ModuleID{}, false
 	}
 	// If fileName is set, this is a source file that may need realpath normalization
 	if fileName != "" && e.realpath != nil {
@@ -117,7 +117,7 @@ func (e *exportExtractor) extractFromFile(file *ast.SourceFile) []*Export {
 		exports := make([]*Export, 0, exportCount)
 		for _, statement := range file.Statements.Nodes {
 			if ast.IsModuleWithStringLiteralName(statement) && isNonPatternAmbientModuleDeclaration(file, statement.AsModuleDeclaration()) {
-				e.extractFromModuleDeclaration(statement.AsModuleDeclaration(), file, ModuleID(statement.Name().Text()), "", &exports)
+				e.extractFromModuleDeclaration(statement.AsModuleDeclaration(), file, ambientModuleID(statement.Name().Text()), "", &exports)
 			}
 		}
 		return exports
@@ -153,30 +153,35 @@ func (e *exportExtractor) extractFromModule(file *ast.SourceFile) []*Export {
 	}
 	for _, decl := range moduleAugmentations {
 		name := decl.Name().AsStringLiteral().Text
-		moduleID := ModuleID(name)
-		var moduleFileName string
+		moduleID := ambientModuleID(name)
+		var moduleFileName tspath.RootedFilePath
+		var unresolvedModuleSpecifier tspath.ModuleSpecifier
 		if tspath.IsExternalModuleNameRelative(name) {
 			if resolved, _ := e.moduleResolver.ResolveModuleName(name, file.FileName(), core.ModuleKindCommonJS, nil); resolved.IsResolved() {
 				moduleFileName = resolved.ResolvedFileName
-				moduleID = ModuleID(e.toPath(moduleFileName))
+				moduleID = fileModuleID(e.caseSensitivity.PathKey(tspath.RootedPath(moduleFileName)))
 			} else {
-				// :shrug:
-				moduleFileName = tspath.ResolvePath(tspath.GetDirectoryPath(file.FileName()), name)
-				moduleID = ModuleID(e.toPath(moduleFileName))
+				moduleFileName = file.FileName().Directory().ResolveFile(name)
+				moduleID = fileModuleID(e.caseSensitivity.PathKey(moduleFileName.AsPath()))
+				unresolvedModuleSpecifier = tspath.ToModuleSpecifier(name)
 			}
 		}
+		exportStart := len(exports)
 		e.extractFromModuleDeclaration(decl, file, moduleID, moduleFileName, &exports)
+		for _, export := range exports[exportStart:] {
+			export.UnresolvedModuleSpecifier = unresolvedModuleSpecifier
+		}
 	}
 	return exports
 }
 
-func (e *exportExtractor) extractFromModuleDeclaration(decl *ast.ModuleDeclaration, file *ast.SourceFile, moduleID ModuleID, moduleFileName string, exports *[]*Export) {
+func (e *exportExtractor) extractFromModuleDeclaration(decl *ast.ModuleDeclaration, file *ast.SourceFile, moduleID ModuleID, moduleFileName tspath.RootedFilePath, exports *[]*Export) {
 	for name, symbol := range decl.Symbol.Exports {
 		e.extractFromSymbol(name, symbol, moduleID, moduleFileName, file, exports)
 	}
 }
 
-func (e *symbolExtractor) extractFromSymbol(name string, symbol *ast.Symbol, moduleID ModuleID, moduleFileName string, file *ast.SourceFile, exports *[]*Export) {
+func (e *symbolExtractor) extractFromSymbol(name string, symbol *ast.Symbol, moduleID ModuleID, moduleFileName tspath.RootedFilePath, file *ast.SourceFile, exports *[]*Export) {
 	if shouldIgnoreSymbol(symbol) {
 		return
 	}
@@ -258,7 +263,7 @@ func (e *symbolExtractor) extractFromSymbol(name string, symbol *ast.Symbol, mod
 }
 
 // createExport creates an Export for the given symbol, returning the Export and the target symbol if the export is an alias.
-func (e *symbolExtractor) createExport(symbol *ast.Symbol, moduleID ModuleID, moduleFileName string, syntax ExportSyntax, file *ast.SourceFile, checkerLease *checkerLease) (*Export, *ast.Symbol) {
+func (e *symbolExtractor) createExport(symbol *ast.Symbol, moduleID ModuleID, moduleFileName tspath.RootedFilePath, syntax ExportSyntax, file *ast.SourceFile, checkerLease *checkerLease) (*Export, *ast.Symbol) {
 	if shouldIgnoreSymbol(symbol) {
 		return nil, nil
 	}
@@ -271,7 +276,7 @@ func (e *symbolExtractor) createExport(symbol *ast.Symbol, moduleID ModuleID, mo
 		ModuleFileName: moduleFileName,
 		Syntax:         syntax,
 		Flags:          symbol.CombinedLocalAndExportSymbolFlags(),
-		Path:           file.Path(),
+		Path:           file.PathKey(),
 		PackageName:    e.packageName,
 	}
 
@@ -311,7 +316,7 @@ func (e *symbolExtractor) createExport(symbol *ast.Symbol, moduleID ModuleID, mo
 			}
 			export.ScriptElementKind = lsutil.GetSymbolKind(checkerLease.TryChecker(), targetSymbol, decl)
 			export.ScriptElementKindModifiers = lsutil.GetSymbolModifiers(checkerLease.TryChecker(), targetSymbol)
-			targetModuleID := ModuleID(ast.GetSourceFileOfNode(decl).Path())
+			targetModuleID := fileModuleID(ast.GetSourceFileOfNode(decl).PathKey())
 			if parent != nil && parent.IsExternalModule() {
 				if id, ok := e.getModuleIDForSymbol(parent); ok {
 					targetModuleID = id
@@ -460,14 +465,14 @@ func isUnusableName(name string) bool {
 // source file (closest to the export origin), falls back to the module's original
 // file name, and uses the lowercased moduleID only for ambient modules where no
 // original file name is available.
-func fileNameForDefaultExportName(targetSymbol *ast.Symbol, moduleFileName string, moduleID ModuleID) string {
+func fileNameForDefaultExportName(targetSymbol *ast.Symbol, moduleFileName tspath.RootedFilePath, moduleID ModuleID) string {
 	if targetSymbol != nil && len(targetSymbol.Declarations) > 0 {
 		if fn := ast.GetSourceFileOfNode(targetSymbol.Declarations[0]).FileName(); fn != "" {
-			return fn
+			return fn.AsString()
 		}
 	}
 	if moduleFileName != "" {
-		return moduleFileName
+		return moduleFileName.AsString()
 	}
-	return string(moduleID)
+	return moduleID.AsString()
 }

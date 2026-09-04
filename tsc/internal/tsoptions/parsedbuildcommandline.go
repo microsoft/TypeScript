@@ -17,20 +17,20 @@ type ParsedBuildCommandLine struct {
 	Errors          []*ast.Diagnostic     `json:"errors"`
 	Raw             any                   `json:"raw"`
 
-	comparePathsOptions tspath.ComparePathsOptions
+	currentDirectory tspath.RootedDirectoryPath
 
-	resolvedProjectPaths     []string
+	resolvedProjectPaths     []tspath.RootedFilePath
 	resolvedProjectPathsOnce sync.Once
 
 	locale     locale.Locale
 	localeOnce sync.Once
 }
 
-func (p *ParsedBuildCommandLine) ResolvedProjectPaths() []string {
+func (p *ParsedBuildCommandLine) ResolvedProjectPaths() []tspath.RootedFilePath {
 	p.resolvedProjectPathsOnce.Do(func() {
-		p.resolvedProjectPaths = core.Map(p.Projects, func(project string) string {
+		p.resolvedProjectPaths = core.Map(p.Projects, func(project string) tspath.RootedFilePath {
 			return core.ResolveConfigFileNameOfProjectReference(
-				tspath.ResolvePath(p.comparePathsOptions.CurrentDirectory, project),
+				p.currentDirectory.ResolveFile(project).AsPath(),
 			)
 		})
 	})

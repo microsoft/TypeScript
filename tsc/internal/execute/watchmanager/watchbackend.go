@@ -10,15 +10,21 @@ import (
 
 // WatchBackend abstracts fswatch.Watcher for testing
 type WatchBackend interface {
-	WatchDirectory(dir string, fn fswatch.WatchCallback, recursive bool, ignore func(string) bool) (io.Closer, error)
 	WatchDirectories(requests []WatchDirectoryRequest) ([]io.Closer, error)
 }
 
+type WatchEvent struct {
+	Path tspath.RootedFilePath
+	Kind fswatch.EventKind
+}
+
+type WatchCallback func(events []WatchEvent, err error)
+
 type WatchDirectoryRequest struct {
-	Dir       string
-	Callback  fswatch.WatchCallback
+	Dir       tspath.RootedDirectoryPath
+	Callback  WatchCallback
 	Recursive bool
-	Ignore    func(string) bool
+	Ignore    func(tspath.RootedFilePath) bool
 }
 
 // CommandLineTestingWithWatchBackend is an optional extension of
@@ -29,19 +35,6 @@ type CommandLineTestingWithWatchBackend interface {
 
 type FSWatchBackend struct{ Inner fswatch.Watcher }
 
-func (b *FSWatchBackend) WatchDirectory(dir string, fn fswatch.WatchCallback, recursive bool, ignore func(string) bool) (io.Closer, error) {
-	closers, err := b.WatchDirectories([]WatchDirectoryRequest{{
-		Dir:       dir,
-		Callback:  fn,
-		Recursive: recursive,
-		Ignore:    ignore,
-	}})
-	if err != nil {
-		return nil, err
-	}
-	return closers[0], nil
-}
-
 func (b *FSWatchBackend) WatchDirectories(requests []WatchDirectoryRequest) ([]io.Closer, error) {
 	fswatchRequests := make([]fswatch.WatchDirectoryRequest, len(requests))
 	for i, request := range requests {
@@ -50,12 +43,23 @@ func (b *FSWatchBackend) WatchDirectories(requests []WatchDirectoryRequest) ([]i
 			opts = append(opts, fswatch.WithRecursive())
 		}
 		if request.Ignore != nil {
-			opts = append(opts, fswatch.WithIgnore(request.Ignore))
+			opts = append(opts, fswatch.WithIgnore(func(path string) bool {
+				return request.Ignore(tspath.RootedFilePathFromAbsolute(path))
+			}))
 		}
 		fswatchRequests[i] = fswatch.WatchDirectoryRequest{
-			Dir:      request.Dir,
-			Callback: request.Callback,
-			Options:  opts,
+			Dir: request.Dir.AsString(),
+			Callback: func(events []fswatch.Event, err error) {
+				typedEvents := make([]WatchEvent, len(events))
+				for i, event := range events {
+					typedEvents[i] = WatchEvent{
+						Path: tspath.RootedFilePathFromAbsolute(event.Path),
+						Kind: event.Kind,
+					}
+				}
+				request.Callback(typedEvents, err)
+			},
+			Options: opts,
 		}
 	}
 	watches, err := b.Inner.WatchDirectories(fswatchRequests)
@@ -69,16 +73,16 @@ func (b *FSWatchBackend) WatchDirectories(requests []WatchDirectoryRequest) ([]i
 	return closers, nil
 }
 
-func ShouldIgnoreWatchPath(path string) bool {
-	p := tspath.NormalizeSlashes(path)
-	return strings.HasSuffix(p, "/.git") ||
-		strings.Contains(p, "/.git/") ||
-		strings.Contains(p, "/node_modules/.") ||
-		strings.Contains(p, "/.#")
+func ShouldIgnoreWatchPath(path tspath.RootedFilePath) bool {
+	text := path.AsString()
+	return strings.HasSuffix(text, "/.git") ||
+		strings.Contains(text, "/.git/") ||
+		strings.Contains(text, "/node_modules/.") ||
+		strings.Contains(text, "/.#")
 }
 
-func CanWatchDirectory(dir string) bool {
-	components := tspath.GetPathComponents(dir, "")
+func CanWatchDirectory(dir tspath.RootedDirectoryPath) bool {
+	components := dir.Components()
 	length := len(components)
 	if length <= 2 {
 		return false

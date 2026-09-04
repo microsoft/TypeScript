@@ -9,6 +9,11 @@ import {
 } from "#vscode-jsonrpc/node";
 import type { ChildProcess } from "node:child_process";
 import type { Socket } from "node:net";
+import type {
+    RootedDirectoryPath,
+    RootedFilePath,
+    RootedPath,
+} from "../../ast/index.ts";
 import {
     type FileSystem,
     fsCallbackNames,
@@ -141,32 +146,45 @@ export class Client {
     private registerFSCallbacks(connection: MessageConnection, fs: FileSystem | undefined): void {
         if (!fs) return;
         for (const name of fsCallbackNames) {
-            if (name === "writeFile") {
-                if (!fs.writeFile) continue;
-                const callback = fs.writeFile;
-
-                const requestType = new RequestType<{ path: string; data: string; }, unknown, void>(name);
-                connection.onRequest(requestType, (arg: { path: string; data: string; }) => {
-                    callback(arg.path, arg.data);
-                    return null;
-                });
-
-                continue;
-            }
-
-            const callback = fs[name];
-            if (callback) {
-                const requestType = new RequestType<unknown, unknown, void>(name);
-                connection.onRequest(requestType, (arg: unknown) => {
-                    const result = callback(arg as any);
-                    if (name === "readFile") {
-                        // readFile has 3 returns: string (content), null (not found), undefined (fall back).
-                        // JSON-RPC can't distinguish null from undefined, so wrap in object.
-                        if (result === undefined) return null;
-                        return { content: result };
+            switch (name) {
+                case "readFile":
+                    if (fs.readFile) {
+                        connection.onRequest(new RequestType<RootedFilePath, unknown, void>(name), fileName => {
+                            const result = fs.readFile!(fileName);
+                            // readFile has 3 returns: string (content), null (not found), undefined (fall back).
+                            // JSON-RPC can't distinguish null from undefined, so wrap in object.
+                            return result === undefined ? null : { content: result };
+                        });
                     }
-                    return result ?? null;
-                });
+                    break;
+                case "fileExists":
+                    if (fs.fileExists) {
+                        connection.onRequest(new RequestType<RootedFilePath, unknown, void>(name), fileName => fs.fileExists!(fileName) ?? null);
+                    }
+                    break;
+                case "directoryExists":
+                    if (fs.directoryExists) {
+                        connection.onRequest(new RequestType<RootedDirectoryPath, unknown, void>(name), directoryName => fs.directoryExists!(directoryName) ?? null);
+                    }
+                    break;
+                case "getAccessibleEntries":
+                    if (fs.getAccessibleEntries) {
+                        connection.onRequest(new RequestType<RootedDirectoryPath, unknown, void>(name), directoryName => fs.getAccessibleEntries!(directoryName) ?? null);
+                    }
+                    break;
+                case "realpath":
+                    if (fs.realpath) {
+                        connection.onRequest(new RequestType<RootedPath, unknown, void>(name), path => fs.realpath!(path) ?? null);
+                    }
+                    break;
+                case "writeFile":
+                    if (fs.writeFile) {
+                        connection.onRequest(new RequestType<{ path: RootedFilePath; data: string; }, unknown, void>(name), arg => {
+                            fs.writeFile!(arg.path, arg.data);
+                            return null;
+                        });
+                    }
+                    break;
             }
         }
     }

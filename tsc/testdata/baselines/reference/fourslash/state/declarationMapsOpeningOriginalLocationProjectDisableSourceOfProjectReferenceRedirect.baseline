@@ -1,4 +1,4 @@
-UseCaseSensitiveFileNames: true
+CaseSensitivity: true
 //// [/a/a.d.ts] *new* 
 export declare class A {
 }

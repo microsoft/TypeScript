@@ -66,6 +66,6 @@ func sanitizeTestFilePath(name string) string {
 	path := testPathCharacters.ReplaceAllString(name, "_")
 	path = tspath.NormalizeSlashes(path)
 	path = testPathDotDot.ReplaceAllString(path, "__dotdot/")
-	path = string(tspath.ToPath(path, "", false /*useCaseSensitiveFileNames*/))
+	path = tspath.CaseInsensitive.Canonicalize(tspath.NormalizePath(path))
 	return strings.TrimPrefix(path, "/")
 }

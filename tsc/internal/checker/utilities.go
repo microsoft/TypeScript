@@ -1801,7 +1801,7 @@ func CreateModuleNotFoundChain(program Program, file *ast.SourceFile, moduleRefe
 	resolvedModule := program.GetResolvedModule(file, moduleReference, mode)
 
 	if resolvedModule != nil && resolvedModule.AlternateResult != "" {
-		if strings.Contains(resolvedModule.AlternateResult, "/node_modules/@types/") {
+		if resolvedModule.AlternateResult.ContainsLowercaseDirectorySequence("/node_modules/@types/") {
 			packageName = "@types/" + module.MangleScopedPackageName(packageName)
 		}
 		return DiagnosticDetails{
@@ -1834,9 +1834,9 @@ func CreateModuleNotFoundChain(program Program, file *ast.SourceFile, moduleRefe
 // incremental builder (repopulation of cached diagnostics).
 // Mirrors createModeMismatchDetails in the TypeScript compiler's utilities.ts.
 func CreateModeMismatchDetails(program Program, file *ast.SourceFile) DiagnosticDetails {
-	ext := tspath.TryGetExtensionFromPath(file.FileName())
+	ext := file.FileName().Extension()
 	targetExt := core.IfElse(ext == tspath.ExtensionTs, tspath.ExtensionMts, core.IfElse(ext == tspath.ExtensionJs, tspath.ExtensionMjs, ""))
-	meta := program.GetSourceFileMetaData(file.Path())
+	meta := program.GetSourceFileMetaData(file.PathKey())
 	packageJsonType := meta.PackageJsonType
 	packageJsonDirectory := meta.PackageJsonDirectory
 
@@ -1844,12 +1844,12 @@ func CreateModeMismatchDetails(program Program, file *ast.SourceFile) Diagnostic
 		if targetExt != "" {
 			return DiagnosticDetails{
 				Message: diagnostics.To_convert_this_file_to_an_ECMAScript_module_change_its_file_extension_to_0_or_add_the_field_type_Colon_module_to_1,
-				Args:    []any{targetExt, tspath.CombinePaths(packageJsonDirectory, "package.json")},
+				Args:    []any{targetExt, packageJsonDirectory.ResolveFile("package.json").AsString()},
 			}
 		}
 		return DiagnosticDetails{
 			Message: diagnostics.To_convert_this_file_to_an_ECMAScript_module_add_the_field_type_Colon_module_to_0,
-			Args:    []any{tspath.CombinePaths(packageJsonDirectory, "package.json")},
+			Args:    []any{packageJsonDirectory.ResolveFile("package.json").AsString()},
 		}
 	}
 	if targetExt != "" {

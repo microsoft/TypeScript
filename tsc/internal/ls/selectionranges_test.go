@@ -11,6 +11,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/ls/lsconv"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/parser"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 )
 
 func TestSelectionRangeDepthIsLimited(t *testing.T) {
@@ -20,11 +21,11 @@ func TestSelectionRangeDepthIsLimited(t *testing.T) {
 	text := "const x = " + strings.Repeat("(", nestingDepth) + "1" + strings.Repeat(")", nestingDepth) + ";"
 	sourceFile := parser.ParseSourceFile(ast.SourceFileParseOptions{
 		FileName: "/index.ts",
-		Path:     "/index.ts",
+		PathKey:  "/index.ts",
 	}, text, core.ScriptKindTS)
 	lineMap := lsconv.ComputeLSPLineStarts(text)
 	languageService := &LanguageService{
-		converters: lsconv.NewConverters(lsproto.PositionEncodingKindUTF16, func(string) *lsconv.LSPLineMap {
+		converters: lsconv.NewConverters(lsproto.PositionEncodingKindUTF16, func(tspath.RootedFilePath) *lsconv.LSPLineMap {
 			return lineMap
 		}),
 	}

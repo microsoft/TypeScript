@@ -231,7 +231,7 @@ func splitDynamicURIFileExtension(segment string) (base string, extension string
 	baseName := segment[strings.LastIndexByte(segment, '\\')+1:]
 	extension = GetDeclarationFileExtension(baseName)
 	if extension == "" {
-		extension = GetAnyExtensionFromPath(baseName, nil, true)
+		extension = GetAnyExtensionFromPath(baseName, nil, CaseSensitive)
 	}
 	if extension != "" {
 		segment = segment[:len(segment)-len(extension)]
