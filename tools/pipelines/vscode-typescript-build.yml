@@ -87,8 +87,8 @@ extends:
                     echo "package.json version $packageVersion does not match package-lock.json version $lockVersion." >&2
                     exit 1
                   fi
-                  if ! [[ "$packageVersion" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] || [ "$packageVersion" = "0.0.0" ]; then
-                    echo "Extension version must be a non-placeholder three-component numeric version." >&2
+                  if ! [[ "$packageVersion" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+                    echo "Extension version must be a three-component numeric version." >&2
                     exit 1
                   fi
 

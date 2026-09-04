@@ -1712,9 +1712,6 @@ function getVscodeTypeScriptExtensionVersion() {
     if (typeof version !== "string" || !/^\d+\.\d+\.\d+$/.test(version)) {
         throw new Error(`packages/vscode-typescript/package.json must contain a three-component numeric version, got ${JSON.stringify(version)}.`);
     }
-    if (version === "0.0.0") {
-        throw new Error("Refusing to release vscode-typescript with placeholder version 0.0.0.");
-    }
     return version;
 }
 

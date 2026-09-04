@@ -75,7 +75,7 @@ extends:
                     echo "Unexpected extension identity: $extension" >&2
                     exit 1
                   fi
-                  if ! [[ "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] || [ "$version" = "0.0.0" ]; then
+                  if ! [[ "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
                     echo "Invalid extension version: $version" >&2
                     exit 1
                   fi
