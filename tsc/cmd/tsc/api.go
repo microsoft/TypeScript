@@ -5,7 +5,6 @@ import (
 	"flag"
 	"fmt"
 	"os"
-	"os/signal"
 	"strings"
 	"syscall"
 
@@ -26,7 +25,7 @@ type apiFlags struct {
 func parseAPIFlags(args []string) (apiFlags, error) {
 	flags := flag.NewFlagSet("api", flag.ContinueOnError)
 	result := apiFlags{}
-	flags.StringVar(&result.cwd, "cwd", core.Must(os.Getwd()), "current working directory")
+	flags.StringVar(&result.cwd, "cwd", core.Must(getCurrentDirectory()), "current working directory")
 	flags.StringVar(&result.pipePath, "pipe", "", "use named pipe or Unix domain socket for communication instead of stdio")
 	flags.StringVar(&result.callbacks, "callbacks", "", "comma-separated list of FS callbacks to enable (readFile,fileExists,directoryExists,getAccessibleEntries,realpath)")
 	flags.BoolVar(&result.async, "async", false, "use JSON-RPC protocol instead of MessagePack (for async API)")
@@ -71,7 +70,7 @@ func runAPI(args []string) int {
 
 	s := api.NewStdioServer(options)
 
-	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+	ctx, stop := notifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	defer stop()
 
 	if err := s.Run(ctx); err != nil {

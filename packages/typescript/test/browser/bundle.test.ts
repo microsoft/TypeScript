@@ -10,7 +10,7 @@ describe("browser API bundle", () => {
         const result = await build({
             stdin: {
                 contents: `
-                    import { WasmTransport, wasmURL } from "@typescript/api-wasm";
+                    import { WasmTransport, wasmURL } from "@typescript/typescript-wasip1-wasm";
                     import { API as AsyncAPI } from "typescript/unstable/async";
                     import { API as SyncAPI } from "typescript/unstable/sync";
                     globalThis.typescriptAPI = { AsyncAPI, SyncAPI, WasmTransport, wasmURL };

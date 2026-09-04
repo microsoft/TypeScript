@@ -30,6 +30,7 @@
         "@types/node": "^22.20.1",
         "@unicode/unicode-15.1.0": "^1.6.17",
         "adm-zip": "^0.6.0",
+        "binaryen": "^132.0.0",
         "chokidar": "^5.0.0",
         "dprint": "^0.56.1",
         "dprint-plugin-yaml": "^0.6.0",
