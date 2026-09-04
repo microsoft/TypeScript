@@ -26199,28 +26199,82 @@ func (c *Checker) removeRedundantLiteralTypes(types []*Type, includes TypeFlags,
 	return types
 }
 
+// templateLiteralTrieMinComparisons is the number of template-vs-literal comparisons a
+// linear scan would perform at which building the template literal trie starts to pay
+// for its construction cost, as measured by
+// BenchmarkTemplateLiteralMatchingPaths/BenchmarkRemoveStringLiteralsMatchedByTemplateLiterals.
+const templateLiteralTrieMinComparisons = 512
+
 func (c *Checker) removeStringLiteralsMatchedByTemplateLiterals(types []*Type) []*Type {
 	templates := core.Filter(types, c.isPatternLiteralType)
-	if len(templates) != 0 {
-		i := len(types)
-		for i > 0 {
-			i--
-			t := types[i]
-			if t.flags&TypeFlagsStringLiteral != 0 && core.Some(templates, func(template *Type) bool {
-				return c.isTypeMatchedByTemplateLiteralOrStringMapping(t, template)
-			}) {
-				types = slices.Delete(types, i, i+1)
+	if len(templates) == 0 {
+		return types
+	}
+	templateLiterals := core.Filter(templates, func(t *Type) bool {
+		return t.flags&TypeFlagsTemplateLiteral != 0
+	})
+	stringMappings := core.Filter(templates, func(t *Type) bool {
+		return t.flags&TypeFlagsStringMapping != 0
+	})
+	var trie *templateLiteralTrieNode
+	if len(templateLiterals) >= 2 && isTemplateLiteralTrieSelective(templateLiterals) {
+		stringLiteralCount := 0
+		for _, t := range types {
+			if t.flags&TypeFlagsStringLiteral != 0 {
+				stringLiteralCount++
 			}
+		}
+		if len(templateLiterals)*stringLiteralCount >= templateLiteralTrieMinComparisons {
+			trie = c.buildTemplateLiteralTrieFromTypes(templateLiterals)
+		}
+	}
+	i := len(types)
+	for i > 0 {
+		i--
+		t := types[i]
+		if t.flags&TypeFlagsStringLiteral != 0 && c.isStringLiteralMatchedByTemplates(t, trie, templateLiterals, stringMappings) {
+			types = slices.Delete(types, i, i+1)
 		}
 	}
 	return types
 }
 
-func (c *Checker) isTypeMatchedByTemplateLiteralOrStringMapping(t *Type, template *Type) bool {
-	if template.flags&TypeFlagsTemplateLiteral != 0 {
-		return c.isTypeMatchedByTemplateLiteralType(t, template.AsTemplateLiteralType(), c.compareTypesAssignable)
+// isTemplateLiteralTrieSelective reports whether the templates differ in their first or
+// final static text. If they do not, the trie cannot discriminate between them and only
+// adds construction and traversal overhead over the linear scan.
+func isTemplateLiteralTrieSelective(templateLiterals []*Type) bool {
+	firstTexts := templateLiterals[0].AsTemplateLiteralType().texts
+	firstPrefix := firstTexts[0]
+	firstSuffix := firstTexts[len(firstTexts)-1]
+	for _, t := range templateLiterals[1:] {
+		texts := t.AsTemplateLiteralType().texts
+		if texts[0] != firstPrefix || texts[len(texts)-1] != firstSuffix {
+			return true
+		}
 	}
-	return c.isMemberOfStringMapping(t, template)
+	return false
+}
+
+func (c *Checker) isStringLiteralMatchedByTemplates(source *Type, trie *templateLiteralTrieNode, templateLiterals []*Type, stringMappings []*Type) bool {
+	if trie != nil {
+		if c.findMatchingTemplateLiteralInTrie(trie, source, c.compareTypesAssignable) != nil {
+			return true
+		}
+	} else if len(templateLiterals) > 0 {
+		if core.Some(templateLiterals, func(tl *Type) bool {
+			return c.isTypeMatchedByTemplateLiteralType(source, tl.AsTemplateLiteralType(), c.compareTypesAssignable)
+		}) {
+			return true
+		}
+	}
+	if len(stringMappings) > 0 {
+		if core.Some(stringMappings, func(sm *Type) bool {
+			return c.isMemberOfStringMapping(source, sm)
+		}) {
+			return true
+		}
+	}
+	return false
 }
 
 func (c *Checker) removeConstrainedTypeVariables(types []*Type) []*Type {

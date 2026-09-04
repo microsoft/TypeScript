@@ -1105,6 +1105,125 @@ func (c *Checker) getMatchingUnionConstituentForType(unionType *Type, t *Type) *
 	return c.getConstituentTypeForKeyType(unionType, propType)
 }
 
+func (c *Checker) buildTemplateLiteralTrieFromTypes(templateTypes []*Type) *templateLiteralTrieNode {
+	var arena core.Arena[templateLiteralTrieNode]
+	var suffixArena core.Arena[templateLiteralSuffixTrieNode]
+	root := arena.New()
+	for _, t := range templateTypes {
+		texts := t.AsTemplateLiteralType().texts
+		node := root
+		for i := range len(texts[0]) {
+			node = node.getOrInsertChild(&arena, texts[0][i])
+		}
+		if node.bySuffix == nil {
+			node.bySuffix = suffixArena.New()
+		}
+		// A string literal can only match a template literal if it ends with the template's
+		// final static text, so candidates are indexed by that text reversed.
+		suffixNode := node.bySuffix
+		suffix := texts[len(texts)-1]
+		for i := len(suffix) - 1; i >= 0; i-- {
+			suffixNode = suffixNode.getOrInsertChild(&suffixArena, suffix[i])
+		}
+		suffixNode.types = append(suffixNode.types, t)
+	}
+	return root
+}
+
+func (n *templateLiteralTrieNode) getOrInsertChild(arena *core.Arena[templateLiteralTrieNode], ch byte) *templateLiteralTrieNode {
+	for _, edge := range n.children {
+		if edge.b == ch {
+			return edge.node
+		}
+	}
+	child := arena.New()
+	n.children = append(n.children, templateLiteralTrieEdge{b: ch, node: child})
+	return child
+}
+
+func (n *templateLiteralTrieNode) findChild(ch byte) *templateLiteralTrieNode {
+	for _, edge := range n.children {
+		if edge.b == ch {
+			return edge.node
+		}
+	}
+	return nil
+}
+
+func (n *templateLiteralSuffixTrieNode) getOrInsertChild(arena *core.Arena[templateLiteralSuffixTrieNode], ch byte) *templateLiteralSuffixTrieNode {
+	for _, edge := range n.children {
+		if edge.b == ch {
+			return edge.node
+		}
+	}
+	child := arena.New()
+	n.children = append(n.children, templateLiteralSuffixTrieEdge{b: ch, node: child})
+	return child
+}
+
+func (n *templateLiteralSuffixTrieNode) findChild(ch byte) *templateLiteralSuffixTrieNode {
+	for _, edge := range n.children {
+		if edge.b == ch {
+			return edge.node
+		}
+	}
+	return nil
+}
+
+func (c *Checker) findMatchingTemplateLiteralInTrie(trie *templateLiteralTrieNode, source *Type, compareTypes TypeComparer) *Type {
+	value := source.AsLiteralType().Value().(string)
+	node := trie
+	// Check root candidates (empty-prefix templates like `${number}`)
+	if t := c.findMatchingTemplateLiteralBySuffix(node.bySuffix, value, 0, source, compareTypes); t != nil {
+		return t
+	}
+	for i := range len(value) {
+		node = node.findChild(value[i])
+		if node == nil {
+			return nil
+		}
+		if t := c.findMatchingTemplateLiteralBySuffix(node.bySuffix, value, i+1, source, compareTypes); t != nil {
+			return t
+		}
+	}
+	return nil
+}
+
+func (c *Checker) findMatchingTemplateLiteralBySuffix(trie *templateLiteralSuffixTrieNode, value string, prefixLength int, source *Type, compareTypes TypeComparer) *Type {
+	if trie == nil {
+		return nil
+	}
+	// Candidates with an empty final static text (e.g. `/${string}`) are stored at the root.
+	if t := c.matchTemplateLiteralTrieCandidates(trie.types, value, prefixLength, 0, source, compareTypes); t != nil {
+		return t
+	}
+	node := trie
+	for i := len(value) - 1; i >= 0; i-- {
+		node = node.findChild(value[i])
+		if node == nil {
+			return nil
+		}
+		if t := c.matchTemplateLiteralTrieCandidates(node.types, value, prefixLength, len(value)-i, source, compareTypes); t != nil {
+			return t
+		}
+	}
+	return nil
+}
+
+func (c *Checker) matchTemplateLiteralTrieCandidates(candidates []*Type, value string, prefixLength int, suffixLength int, source *Type, compareTypes TypeComparer) *Type {
+	// The first and last static texts cannot overlap in the source, so a shorter string
+	// can never match (mirrors the guard in inferFromLiteralPartsToTemplateLiteral).
+	if prefixLength+suffixLength > len(value) {
+		return nil
+	}
+	for _, t := range candidates {
+		if c.isTypeMatchedByTemplateLiteralType(source, t.AsTemplateLiteralType(), compareTypes) {
+			return t
+		}
+	}
+	return nil
+}
+
 // Return the name of a discriminant property for which it was possible and feasible to construct a map of
 // constituent types keyed by the literal types of the property by that name in each constituent type. Return
 // an empty string if no such discriminant property exists.
