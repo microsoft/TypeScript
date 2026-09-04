@@ -6,6 +6,7 @@ import (
 	"strings"
 	"sync"
 	"testing"
+	"unicode/utf16"
 
 	"github.com/microsoft/TypeScript/tsc/internal/bundled"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp"
@@ -27,13 +28,21 @@ func TestSetContentMapperContributionsBeforeDidOpen(t *testing.T) {
 <script lang="ts">
 export const title = "Profile";
 </script>`
+	const box = `// 💥
+// @box-expect-error: unused
+const café = 1;`
 	files := map[string]string{
 		"/home/project/tsconfig.json": `{
 			"compilerOptions": { "target": "es2020", "module": "esnext", "moduleResolution": "bundler", "strict": true },
-			"contentMappers": [ { "package": "mapper", "extensions": [".vue"] } ]
+			"contentMappers": [
+				{ "package": "mapper", "extensions": [".vue"] },
+				{ "package": "box-mapper", "extensions": [".box"] }
+			]
 		}`,
-		"/home/project/node_modules/mapper/package.json": contentmappertest.PackageJSON(contentmappertest.ComponentMapper),
-		"/home/project/ProfileCard.vue":                  component,
+		"/home/project/node_modules/mapper/package.json":     contentmappertest.PackageJSON(contentmappertest.ComponentMapper),
+		"/home/project/node_modules/box-mapper/package.json": strings.Replace(contentmappertest.PackageJSON(contentmappertest.TransformingMapper), `"name": "mapper"`, `"name": "box-mapper"`, 1),
+		"/home/project/ProfileCard.vue":                      component,
+		"/home/project/example.box":                          box,
 	}
 
 	var mu sync.Mutex
@@ -156,14 +165,24 @@ export const title = "Profile";
 		if registration.Id == "content-mapper-did-open" {
 			assert.Assert(t, registration.RegisterOptions != nil && registration.RegisterOptions.TextDocumentDidOpen != nil)
 			selector := registration.RegisterOptions.TextDocumentDidOpen.DocumentSelector.DocumentSelector
-			assert.Assert(t, selector != nil && len(*selector) == 1)
-			assert.Equal(t, *(*selector)[0].Pattern.Pattern.Pattern, "**/*.vue")
+			assert.Assert(t, selector != nil && len(*selector) == 2)
+			patterns := map[string]bool{}
+			for _, filter := range *selector {
+				patterns[*filter.Pattern.Pattern.Pattern] = true
+			}
+			assert.Assert(t, patterns["**/*.vue"])
+			assert.Assert(t, patterns["**/*.box"])
 		}
 		if registration.Id == "content-mapper-semantic-tokens" {
 			assert.Assert(t, registration.RegisterOptions != nil && registration.RegisterOptions.TextDocumentSemanticTokens != nil)
 			selector := registration.RegisterOptions.TextDocumentSemanticTokens.DocumentSelector.DocumentSelector
-			assert.Assert(t, selector != nil && len(*selector) == 1)
-			assert.Equal(t, *(*selector)[0].Pattern.Pattern.Pattern, "**/*.vue")
+			assert.Assert(t, selector != nil && len(*selector) == 2)
+			patterns := map[string]bool{}
+			for _, filter := range *selector {
+				patterns[*filter.Pattern.Pattern.Pattern] = true
+			}
+			assert.Assert(t, patterns["**/*.vue"])
+			assert.Assert(t, patterns["**/*.box"])
 		}
 		if registration.Id == "content-mapper-code-action" {
 			assert.Assert(t, registration.RegisterOptions != nil && registration.RegisterOptions.TextDocumentCodeAction != nil)
@@ -184,6 +203,52 @@ export const title = "Profile";
 	assert.Assert(t, ok && hoverMsg.AsResponse().Error == nil)
 	assert.Assert(t, hover.Hover != nil, "expected hover after first foreign didOpen")
 
+	isContentMappedMsg, isContentMapped, ok := lsptestutil.SendRequest(t, client, lsproto.CustomIsContentMappedInfo, &lsproto.IsContentMappedParams{
+		TextDocument: lsproto.TextDocumentIdentifier{Uri: uri},
+	})
+	assert.Assert(t, ok && isContentMappedMsg.AsResponse().Error == nil)
+	assert.Assert(t, isContentMapped.IsContentMapped)
+
+	virtualFilesMsg, virtualFiles, ok := lsptestutil.SendRequest(t, client, lsproto.CustomContentMapperVirtualFilesInfo, &lsproto.ContentMapperVirtualFilesParams{
+		TextDocument: lsproto.TextDocumentIdentifier{Uri: uri},
+	})
+	assert.Assert(t, ok && virtualFilesMsg.AsResponse().Error == nil)
+	assert.Equal(t, len(virtualFiles.Files), 1)
+	assert.Equal(t, virtualFiles.Files[0].FileName, "/home/project/ProfileCard.vue.ts")
+	assert.Equal(t, virtualFiles.Files[0].ScriptKind, int32(3))
+	assert.Assert(t, strings.Contains(virtualFiles.Files[0].Text, `export const title = "Profile";`))
+	assert.Assert(t, len(virtualFiles.Files[0].Mappings) > 0)
+	assert.Equal(t, virtualFiles.Files[0].Mappings[0].Kind, int32(0))
+	assert.Equal(t, virtualFiles.Files[0].Mappings[0].Features, int32((1<<20)-1))
+
+	boxURI := lsproto.DocumentUri("file:///home/project/example.box")
+	lsptestutil.SendNotification(t, client, lsproto.TextDocumentDidOpenInfo, &lsproto.DidOpenTextDocumentParams{
+		TextDocument: &lsproto.TextDocumentItem{Uri: boxURI, LanguageId: "box", Version: 1, Text: box},
+	})
+	_, boxVirtualFiles, ok := lsptestutil.SendRequest(t, client, lsproto.CustomContentMapperVirtualFilesInfo, &lsproto.ContentMapperVirtualFilesParams{
+		TextDocument: lsproto.TextDocumentIdentifier{Uri: boxURI},
+	})
+	assert.Assert(t, ok)
+	assert.Equal(t, len(boxVirtualFiles.Files), 1)
+	boxVirtualFile := boxVirtualFiles.Files[0]
+	assert.Equal(t, len(boxVirtualFile.Mappings), 1)
+	mappedTextStart := strings.Index(boxVirtualFile.Text, "// 💥")
+	assert.Assert(t, mappedTextStart >= 0)
+	assert.Equal(t, boxVirtualFile.Mappings[0].GeneratedStart, int32(utf16Length(boxVirtualFile.Text[:mappedTextStart])))
+	assert.Equal(t, boxVirtualFile.Mappings[0].GeneratedLength, int32(utf16Length(box)))
+	assert.Equal(t, boxVirtualFile.Mappings[0].OriginalLength, int32(utf16Length(box)))
+	assert.Equal(t, len(boxVirtualFile.DiagnosticDirectives), 1)
+	directive := boxVirtualFile.DiagnosticDirectives[0]
+	directiveStart := strings.Index(box, "// @box-expect-error")
+	directiveEnd := directiveStart + strings.IndexByte(box[directiveStart:], '\n')
+	assert.Equal(t, directive.OriginalRange.Pos, int32(utf16Length(box[:directiveStart])))
+	assert.Equal(t, directive.OriginalRange.End, int32(utf16Length(box[:directiveEnd])))
+	affectedText := "const café = 1;"
+	affectedStart := strings.Index(boxVirtualFile.Text, affectedText)
+	assert.Assert(t, affectedStart >= 0)
+	assert.Equal(t, directive.VirtualRange.Pos, int32(utf16Length(boxVirtualFile.Text[:affectedStart])))
+	assert.Equal(t, directive.VirtualRange.End, int32(utf16Length(boxVirtualFile.Text[:affectedStart+len(affectedText)])))
+
 	assert.NilError(t, fs.WriteFile("/home/project/tsconfig.json", `{
 		"compilerOptions": { "target": "es2020", "module": "esnext", "moduleResolution": "bundler", "strict": true }
 	}`))
@@ -196,6 +261,16 @@ export const title = "Profile";
 	})
 	assert.Assert(t, hoverMsg != nil && hoverMsg.AsResponse().Error == nil, "request before didClose should return a null result")
 	assert.Assert(t, hover.Hover == nil)
+	isContentMappedMsg, isContentMapped, ok = lsptestutil.SendRequest(t, client, lsproto.CustomIsContentMappedInfo, &lsproto.IsContentMappedParams{
+		TextDocument: lsproto.TextDocumentIdentifier{Uri: uri},
+	})
+	assert.Assert(t, ok && isContentMappedMsg.AsResponse().Error == nil)
+	assert.Assert(t, !isContentMapped.IsContentMapped)
+	virtualFilesMsg, virtualFiles, ok = lsptestutil.SendRequest(t, client, lsproto.CustomContentMapperVirtualFilesInfo, &lsproto.ContentMapperVirtualFilesParams{
+		TextDocument: lsproto.TextDocumentIdentifier{Uri: uri},
+	})
+	assert.Assert(t, ok && virtualFilesMsg.AsResponse().Error == nil)
+	assert.Equal(t, len(virtualFiles.Files), 0)
 	diagnosticMsg, diagnostics, ok := lsptestutil.SendRequest(t, client, lsproto.TextDocumentDiagnosticInfo, &lsproto.DocumentDiagnosticParams{
 		TextDocument: lsproto.TextDocumentIdentifier{Uri: uri},
 	})
@@ -245,4 +320,11 @@ export const title = "Profile";
 	lsptestutil.SendNotification(t, client, lsproto.TextDocumentDidCloseInfo, &lsproto.DidCloseTextDocumentParams{
 		TextDocument: lsproto.TextDocumentIdentifier{Uri: uri},
 	})
+	lsptestutil.SendNotification(t, client, lsproto.TextDocumentDidCloseInfo, &lsproto.DidCloseTextDocumentParams{
+		TextDocument: lsproto.TextDocumentIdentifier{Uri: boxURI},
+	})
+}
+
+func utf16Length(text string) int {
+	return len(utf16.Encode([]rune(text)))
 }

@@ -12,6 +12,7 @@ import {
     serializeContentMapperContributions,
     validateContentMapperRegistration,
 } from "./contentMapperContributions";
+import type { MappedOutput } from "./contentMapperVirtualFiles";
 import { ProjectStatus } from "./projectStatus";
 import { setupStatusBar } from "./statusBar";
 import { TelemetryReporter } from "./telemetryReporting";
@@ -37,10 +38,14 @@ export class SessionManager implements vscode.Disposable {
     private disposables: vscode.Disposable[] = [];
     private outputChannel: vscode.LogOutputChannel;
     private initializedEventEmitter: vscode.EventEmitter<void>;
+    private contentMapperContributionsSynchronizedEmitter = new vscode.EventEmitter<void>();
     private telemetryReporter: TelemetryReporter;
     private readonly contentMapperRegistrations = new Map<string, readonly ContentMapperContribution[]>();
     private lifecycleOperation = Promise.resolve();
     private contentMapperSyncOperation = Promise.resolve();
+
+    readonly onDidInitializeLanguageServer: vscode.Event<void>;
+    readonly onDidSynchronizeContentMapperContributions = this.contentMapperContributionsSynchronizedEmitter.event;
 
     constructor(
         context: vscode.ExtensionContext,
@@ -51,6 +56,7 @@ export class SessionManager implements vscode.Disposable {
         this.outputChannel = outputChannel;
         this.telemetryReporter = telemetryReporter;
         this.initializedEventEmitter = initializedEventEmitter;
+        this.onDidInitializeLanguageServer = initializedEventEmitter.event;
 
         this.disposables.push(vscode.workspace.onDidChangeConfiguration(event => {
             if (this.currentSession && event.affectsConfiguration("js/ts.contentMappers.enabled")) {
@@ -59,6 +65,7 @@ export class SessionManager implements vscode.Disposable {
                 });
             }
         }));
+        this.disposables.push(this.contentMapperContributionsSynchronizedEmitter);
         this.disposables.push(vscode.workspace.onDidOpenTextDocument(document => {
             if (documentMatchesContentMapperContributions(document, this.contentMapperRegistrations)) {
                 void this.syncContentMapperContributions();
@@ -114,6 +121,17 @@ export class SessionManager implements vscode.Disposable {
         return result.pipe;
     }
 
+    getContentMapperVirtualFiles(uri: vscode.Uri): Promise<readonly MappedOutput[]> {
+        if (!this.currentSession) {
+            throw new Error(vscode.l10n.t("Language server is not running."));
+        }
+        return this.currentSession.client.getContentMapperVirtualFiles(uri);
+    }
+
+    isContentMapped(uri: vscode.Uri): Promise<boolean> {
+        return this.currentSession?.client.isContentMapped(uri) ?? Promise.resolve(false);
+    }
+
     registerContentMappers(contributorId: string, contributions: readonly ContentMapperContribution[]): vscode.Disposable {
         validateContentMapperRegistration(contributorId, contributions);
         if (this.contentMapperRegistrations.has(contributorId)) {
@@ -146,6 +164,7 @@ export class SessionManager implements vscode.Disposable {
                 serializeContentMapperContributions(this.contentMapperRegistrations),
                 openDocuments,
             );
+            this.contentMapperContributionsSynchronizedEmitter.fire();
         }
         catch (error) {
             this.outputChannel.warn(`Content mapper contribution synchronization failed: ${String(error)}`);

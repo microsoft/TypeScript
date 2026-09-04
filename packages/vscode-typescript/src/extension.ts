@@ -5,6 +5,7 @@ import {
     updateUseTsgoSetting,
 } from "./commands";
 import type { ContentMapperContribution } from "./contentMapperContributions";
+import { registerContentMapperVirtualDocumentProvider } from "./contentMapperVirtualDocuments";
 import {
     aiConnectionString,
     getExplicitConfigTarget,
@@ -51,7 +52,10 @@ export async function activate(context: vscode.ExtensionContext): Promise<Extens
     context.subscriptions.push(languageServerInitializedEventEmitter);
 
     const sessionManager = new SessionManager(context, output, languageServerInitializedEventEmitter, telemetryReporter);
-    context.subscriptions.push(sessionManager);
+    context.subscriptions.push(
+        sessionManager,
+        registerContentMapperVirtualDocumentProvider(sessionManager, output),
+    );
     registerEnablementCommands(context, telemetryReporter, () => sessionManager.stop());
 
     let pluginWarningShown = false;

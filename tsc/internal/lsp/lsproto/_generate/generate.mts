@@ -445,6 +445,76 @@ const customStructures: Structure[] = [
         documentation: "Result for the custom/projectInfo request.",
     },
     {
+        name: "ContentMapperTextRange",
+        properties: [
+            { name: "pos", type: { kind: "base", name: "integer" }, documentation: "The zero-based start offset." },
+            { name: "end", type: { kind: "base", name: "integer" }, documentation: "The zero-based exclusive end offset." },
+        ],
+        documentation: "An offset-based range in a content-mapped document.",
+    },
+    {
+        name: "ContentMapperVirtualSpan",
+        properties: [
+            { name: "generatedStart", type: { kind: "base", name: "integer" } },
+            { name: "generatedLength", type: { kind: "base", name: "integer" } },
+            { name: "originalStart", type: { kind: "base", name: "integer" } },
+            { name: "originalLength", type: { kind: "base", name: "integer" } },
+            { name: "kind", type: { kind: "base", name: "integer" } },
+            { name: "features", type: { kind: "base", name: "integer" } },
+        ],
+        documentation: "One span mapping between a generated output and its original source.",
+    },
+    {
+        name: "ContentMapperDiagnosticDirective",
+        properties: [
+            { name: "originalRange", type: { kind: "reference", name: "ContentMapperTextRange" } },
+            { name: "virtualRange", type: { kind: "reference", name: "ContentMapperTextRange" } },
+            { name: "policy", type: { kind: "base", name: "integer" } },
+            { name: "unusedCode", type: { kind: "base", name: "integer" } },
+        ],
+        documentation: "A diagnostic directive mapped between original and generated text.",
+    },
+    {
+        name: "ContentMapperVirtualFile",
+        properties: [
+            { name: "fileName", type: { kind: "base", name: "string" } },
+            { name: "text", type: { kind: "base", name: "string" } },
+            { name: "originalText", type: { kind: "base", name: "string" } },
+            { name: "scriptKind", type: { kind: "base", name: "integer" } },
+            { name: "mappings", type: { kind: "array", element: { kind: "reference", name: "ContentMapperVirtualSpan" } } },
+            { name: "diagnosticDirectives", type: { kind: "array", element: { kind: "reference", name: "ContentMapperDiagnosticDirective" } } },
+        ],
+        documentation: "A generated content-mapper output and its mapping metadata.",
+    },
+    {
+        name: "ContentMapperVirtualFilesParams",
+        properties: [
+            { name: "textDocument", type: { kind: "reference", name: "TextDocumentIdentifier" } },
+        ],
+        documentation: "Parameters for the custom/contentMapperVirtualFiles request.",
+    },
+    {
+        name: "ContentMapperVirtualFilesResult",
+        properties: [
+            { name: "files", type: { kind: "array", element: { kind: "reference", name: "ContentMapperVirtualFile" } } },
+        ],
+        documentation: "Generated outputs for a content-mapped source file, or an empty array for an ordinary file.",
+    },
+    {
+        name: "IsContentMappedParams",
+        properties: [
+            { name: "textDocument", type: { kind: "reference", name: "TextDocumentIdentifier" } },
+        ],
+        documentation: "Parameters for the custom/isContentMapped request.",
+    },
+    {
+        name: "IsContentMappedResult",
+        properties: [
+            { name: "isContentMapped", type: { kind: "base", name: "boolean" } },
+        ],
+        documentation: "Whether a source file is currently transformed by a content mapper.",
+    },
+    {
         name: "ContentMapperManifest",
         properties: [
             { name: "name", type: { kind: "base", name: "string" }, documentation: "Human-readable mapper name." },
@@ -933,6 +1003,22 @@ const customRequests: Request[] = [
         result: { kind: "reference", name: "ProjectInfoResult" },
         messageDirection: "clientToServer",
         documentation: "Returns project information (e.g. the tsconfig.json path) for a given text document.",
+    },
+    {
+        method: "custom/contentMapperVirtualFiles",
+        typeName: "CustomContentMapperVirtualFilesRequest",
+        params: { kind: "reference", name: "ContentMapperVirtualFilesParams" },
+        result: { kind: "reference", name: "ContentMapperVirtualFilesResult" },
+        messageDirection: "clientToServer",
+        documentation: "Returns generated outputs and mapping metadata for a content-mapped source file.",
+    },
+    {
+        method: "custom/isContentMapped",
+        typeName: "CustomIsContentMappedRequest",
+        params: { kind: "reference", name: "IsContentMappedParams" },
+        result: { kind: "reference", name: "IsContentMappedResult" },
+        messageDirection: "clientToServer",
+        documentation: "Reports whether a source file is currently transformed by a content mapper.",
     },
     {
         method: "custom/setContentMapperContributions",
