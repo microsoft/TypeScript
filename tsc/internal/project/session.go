@@ -265,10 +265,10 @@ func (s *Session) Config() lsutil.UserPreferences {
 }
 
 func (s *Session) backgroundContext() context.Context {
-	return s.withCurrentLocale(s.backgroundCtx)
+	return s.WithCurrentLocale(s.backgroundCtx)
 }
 
-func (s *Session) withCurrentLocale(ctx context.Context) context.Context {
+func (s *Session) WithCurrentLocale(ctx context.Context) context.Context {
 	if s.client == nil {
 		return ctx
 	}
@@ -1923,7 +1923,7 @@ func (s *Session) publishProjectDiagnostics(ctx context.Context, configFilePath 
 	if s.Config().EnableValidation.IsFalse() {
 		diagnostics = nil
 	}
-	ctx = s.withCurrentLocale(ctx)
+	ctx = s.WithCurrentLocale(ctx)
 	lspDiagnostics := make([]*lsproto.Diagnostic, 0, len(diagnostics))
 	for _, diag := range diagnostics {
 		lspDiagnostics = append(lspDiagnostics, lsconv.DiagnosticToLSPPush(ctx, converters, diag))

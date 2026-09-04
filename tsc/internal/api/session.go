@@ -381,6 +381,7 @@ func (sd *snapshotData) registerSignature(projectID ProjectID, sig *checker.Sign
 type Session struct {
 	id             string
 	snapshotHost   *project.SnapshotHost
+	withLocale     func(context.Context) context.Context
 	projectSession *project.Session
 	// compatibilitySnapshot is the standalone API session's canonical snapshot.
 	// It preserves the legacy linear updateSnapshot behavior.
@@ -441,7 +442,7 @@ type SessionOptions struct {
 
 // NewLSPSession creates a new API session with the given project session.
 func NewLSPSession(projectSession *project.Session, options *SessionOptions) *Session {
-	s := newSession(projectSession.SnapshotHost, options)
+	s := newSession(projectSession.SnapshotHost, projectSession.WithCurrentLocale, options)
 	s.projectSession = projectSession
 	return s
 }
@@ -449,16 +450,20 @@ func NewLSPSession(projectSession *project.Session, options *SessionOptions) *Se
 // NewStandaloneSession creates an API session with an independently owned snapshot host.
 func NewStandaloneSession(init *project.SessionInit, options *SessionOptions) *Session {
 	snapshotHost := project.NewSnapshotHost(init)
-	s := newSession(snapshotHost, options)
+	s := newSession(snapshotHost, nil, options)
 	s.compatibilitySnapshot = snapshotHost.NewStandaloneRootSnapshot()
 	return s
 }
 
-func newSession(snapshotHost *project.SnapshotHost, options *SessionOptions) *Session {
+func newSession(snapshotHost *project.SnapshotHost, withLocale func(context.Context) context.Context, options *SessionOptions) *Session {
 	id := sessionIDCounter.Add(1)
+	if withLocale == nil {
+		withLocale = func(ctx context.Context) context.Context { return ctx }
+	}
 	s := &Session{
 		id:           formatSessionID(id),
 		snapshotHost: snapshotHost,
+		withLocale:   withLocale,
 		snapshots:    make(map[SnapshotID]*snapshotData),
 	}
 	if options != nil {
@@ -637,6 +642,9 @@ func (s *Session) setupLanguageService(sd *snapshotData, program *compiler.Progr
 
 // HandleRequest implements Handler.
 func (s *Session) HandleRequest(ctx context.Context, method string, params json.Value) (any, error) {
+	if s != nil && s.withLocale != nil {
+		ctx = s.withLocale(ctx)
+	}
 	// Handle simple methods that don't need param parsing
 	switch method {
 	case "echo":

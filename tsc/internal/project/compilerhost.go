@@ -116,8 +116,8 @@ func (c *compilerHost) GetContentMappedSourceFiles(parseOptions ast.SourceFilePa
 	if fh == nil {
 		return contentmapper.SourceFiles{}, nil
 	}
-	diagnosticLocale := locale.Default
-	if c.builder.client != nil {
+	diagnosticLocale := locale.FromContext(c.builder.ctx)
+	if diagnosticLocale == locale.Default && c.builder.client != nil {
 		diagnosticLocale = c.builder.client.GetLocale()
 	}
 	c.ensureContentMapperProject()
