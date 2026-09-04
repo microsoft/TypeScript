@@ -23,6 +23,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/project/logging"
 	"github.com/microsoft/TypeScript/tsc/internal/sourcemap"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
+	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfsmatch"
 )
 
@@ -50,6 +51,9 @@ type Snapshot struct {
 
 	builderLogs *logging.LogTree
 	apiError    error
+	// fileSystemOverride indicates that this snapshot was built from a filesystem
+	// supplied by an API update rather than the session host filesystem.
+	fileSystemOverride bool
 }
 
 func (s *Snapshot) contentMapperWatchState() ([]string, *collections.Set[tspath.Path]) {
@@ -104,6 +108,7 @@ func (host *SnapshotHost) newSnapshot(
 // project representing createProgram input.
 func (s *Snapshot) cloneForProgram(
 	ctx context.Context,
+	fileSystem vfs.FS,
 	rootFileNames []string,
 	compilerOptions *core.CompilerOptions,
 	projectReferences []*core.ProjectReference,
@@ -126,7 +131,10 @@ func (s *Snapshot) cloneForProgram(
 	}
 
 	start := time.Now()
-	fs := newSnapshotFSBuilder(store.fs, s.fs.overlays, s.fs.overlays, s.fs.diskFiles, s.fs.diskDirectories, s.fs.nodeModulesRealpathAliases, store.options.PositionEncoding, store.toPath)
+	if fileSystem == nil {
+		fileSystem = store.fs
+	}
+	fs := newSnapshotFSBuilder(fileSystem, s.fs.overlays, s.fs.overlays, s.fs.diskFiles, s.fs.diskDirectories, s.fs.nodeModulesRealpathAliases, store.options.PositionEncoding, store.toPath)
 	fileChanges = s.processFileChanges(fs, fileChanges, logger, nil)
 
 	newSnapshotID := store.nextSnapshotID()
@@ -237,6 +245,7 @@ func (s *Snapshot) cloneForProgram(
 
 func (s *Snapshot) cloneWithTemporaryFile(
 	ctx context.Context,
+	fileSystem vfs.FS,
 	uri lsproto.DocumentUri,
 	newText string,
 ) (*Snapshot, error) {
@@ -259,9 +268,14 @@ func (s *Snapshot) cloneWithTemporaryFile(
 		fileChanges.Opened = uri
 	}
 	overlays[path] = newOverlay(uri.FileName(), newText, version, scriptKind)
+	if fileSystem == nil {
+		fileSystem = s.fs.fs
+	}
 
 	return s.Clone(ctx, SnapshotChange{
-		fileChanges: fileChanges,
+		fs:                 fileSystem,
+		fileSystemOverride: s.fileSystemOverride,
+		fileChanges:        fileChanges,
 		ResourceRequest: ResourceRequest{
 			Documents: []lsproto.DocumentUri{uri},
 		},
@@ -372,6 +386,17 @@ func (s *Snapshot) UseCaseSensitiveFileNames() bool {
 	return s.fs.fs.UseCaseSensitiveFileNames()
 }
 
+// FileSystem returns the filesystem backing this snapshot.
+func (s *Snapshot) FileSystem() vfs.FS {
+	return s.fs.fs
+}
+
+// HasFileSystemOverride reports whether this snapshot uses an API-supplied
+// filesystem instead of the session host filesystem.
+func (s *Snapshot) HasFileSystemOverride() bool {
+	return s.fileSystemOverride
+}
+
 func (s *Snapshot) ReadFile(fileName string) (string, bool) {
 	handle := s.GetFile(fileName)
 	if handle == nil {
@@ -401,6 +426,10 @@ type APISnapshotRequest struct {
 	CloseProjects *collections.Set[tspath.Path]
 	OpenFiles     *collections.Set[lsproto.DocumentUri]
 	CloseFiles    *collections.Set[tspath.Path]
+	FileSystem    vfs.FS
+	// ReplaceFileSystem indicates that FileSystem is a new source rather than the
+	// unchanged filesystem carried forward from the base snapshot.
+	ReplaceFileSystem bool
 }
 
 type ProjectTreeRequest struct {
@@ -446,6 +475,11 @@ type ResourceRequest struct {
 type SnapshotChange struct {
 	ResourceRequest
 	reason UpdateReason
+	// fs overrides the session filesystem for this snapshot. It is used by API
+	// snapshots that supply their own memory or cache filesystem.
+	fs                 vfs.FS
+	fileSystemOverride bool
+	replaceFileSystem  bool
 	// fileChanges are the changes that have occurred since the last snapshot.
 	fileChanges FileChangeSummary
 	// compilerOptionsForInferredProjects is the compiler options to use for inferred projects.
@@ -544,7 +578,17 @@ func (s *Snapshot) Clone(
 		inferredContentMappers = change.contentMapperContributions.Mappers
 		inferredContentMapperExtensions = change.contentMapperContributions.Extensions
 	}
-	fs := newSnapshotFSBuilder(store.fs, s.fs.overlays, overlays, s.fs.diskFiles, s.fs.diskDirectories, s.fs.nodeModulesRealpathAliases, store.options.PositionEncoding, store.toPath)
+	baseFS := store.fs
+	if change.fs != nil {
+		baseFS = change.fs
+	}
+	// A supplied filesystem must take precedence over disk files inherited from
+	// the previous snapshot. Likewise, returning to the session host must not retain
+	// files from a previous total memory filesystem.
+	if change.replaceFileSystem || s.fileSystemOverride != change.fileSystemOverride {
+		change.fileChanges.InvalidateAll = true
+	}
+	fs := newSnapshotFSBuilder(baseFS, s.fs.overlays, overlays, s.fs.diskFiles, s.fs.diskDirectories, s.fs.nodeModulesRealpathAliases, store.options.PositionEncoding, store.toPath)
 	change.fileChanges = s.processFileChanges(fs, change.fileChanges, logger, change.contentMapperContributions)
 
 	compilerOptionsForInferredProjects := s.compilerOptionsForInferredProjects
@@ -718,6 +762,7 @@ func (s *Snapshot) Clone(
 	newSnapshot.inferredProjectContentMapperExtensions = inferredContentMapperExtensions
 	newSnapshot.builderLogs = logger
 	newSnapshot.apiError = apiError
+	newSnapshot.fileSystemOverride = change.fileSystemOverride
 
 	for _, project := range newSnapshot.ProjectCollection.Projects() {
 		if project.Program != nil {

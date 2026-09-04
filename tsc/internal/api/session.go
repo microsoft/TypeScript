@@ -13,6 +13,7 @@ import (
 	"sync/atomic"
 
 	"github.com/microsoft/TypeScript/tsc/internal/api/encoder"
+	"github.com/microsoft/TypeScript/tsc/internal/api/requestfilesystem"
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/astnav"
 	"github.com/microsoft/TypeScript/tsc/internal/checker"
@@ -43,8 +44,9 @@ var sessionIDCounter atomic.Uint64
 // Multiple clients may hold references to the same snapshot via ref counting;
 // the registries are cleaned up when refCount reaches zero.
 type snapshotData struct {
-	snapshot *project.Snapshot
-	refCount int
+	snapshot   *project.Snapshot
+	fileSystem requestfilesystem.Handle
+	refCount   int
 
 	// Symbol IDs come from ast.GetSymbolId, a global atomic counter, so the same
 	// *ast.Symbol pointer always has the same unique ID across all projects in the
@@ -542,6 +544,23 @@ func (s *Session) retainSnapshotData(handle SnapshotID) (*snapshotData, error) {
 	return sd, nil
 }
 
+// retainLatestSnapshotData atomically verifies that handle identifies the latest
+// active snapshot and takes a temporary reference that pins it for an update.
+// The caller must pair a successful call with releaseSnapshot, including on errors.
+func (s *Session) retainLatestSnapshotData(handle SnapshotID) (*snapshotData, error) {
+	s.snapshotsMu.Lock()
+	defer s.snapshotsMu.Unlock()
+	if handle != s.latestSnapshot {
+		return nil, fmt.Errorf("%w: snapshot %d is not the latest snapshot", ErrClientError, handle)
+	}
+	sd := s.snapshots[handle]
+	if sd == nil {
+		return nil, fmt.Errorf("%w: snapshot %d not found", ErrClientError, handle)
+	}
+	sd.refCount++
+	return sd, nil
+}
+
 func (s *Session) releaseSnapshot(handle SnapshotID) error {
 	s.snapshotsMu.Lock()
 	sd := s.snapshots[handle]
@@ -550,12 +569,56 @@ func (s *Session) releaseSnapshot(handle SnapshotID) error {
 		return fmt.Errorf("%w: snapshot %d not found", ErrClientError, handle)
 	}
 	sd.refCount--
-	if sd.refCount <= 0 {
-		delete(s.snapshots, handle)
-		sd.snapshot.Deref()
+	if sd.refCount > 0 {
+		s.snapshotsMu.Unlock()
+		return nil
+	}
+	delete(s.snapshots, snapshotHandle(sd.snapshot))
+	s.snapshotsMu.Unlock()
+
+	sd.snapshot.Deref()
+	sd.fileSystem.Release()
+	return nil
+}
+
+func newSnapshotData() *snapshotData {
+	sd := &snapshotData{
+		refCount:                1,
+		symbolRegistry:          make(map[SymbolID]*ast.Symbol),
+		symbolCanonicalProjects: make(map[SymbolID]ProjectID),
+		projectRegistries:       make(map[ProjectID]*projectRegistryData),
+	}
+	return sd
+}
+
+func (s *Session) registerSnapshotData(sd *snapshotData, updateLatest bool) (SnapshotID, *snapshotData) {
+	handle := snapshotHandle(sd.snapshot)
+	s.snapshotsMu.Lock()
+	existingSD := s.snapshots[handle]
+	if existingSD != nil {
+		existingSD.refCount++
+	} else {
+		s.snapshots[handle] = sd
+	}
+	var previous *snapshotData
+	if updateLatest {
+		previous = s.snapshots[s.latestSnapshot]
+		s.latestSnapshot = handle
 	}
 	s.snapshotsMu.Unlock()
-	return nil
+
+	if existingSD != nil {
+		sd.snapshot.Deref()
+		sd.fileSystem.Release()
+	}
+	return handle, previous
+}
+
+func (sd *snapshotData) fileSystemHandle() *requestfilesystem.Handle {
+	if !sd.fileSystem.Initialized() {
+		return nil
+	}
+	return &sd.fileSystem
 }
 
 // checkerSetup holds the common context needed by handlers that require a type checker.
@@ -1118,9 +1181,31 @@ func (s *Session) handleUpdateSnapshot(ctx context.Context, params *UpdateSnapsh
 	s.updateMu.Lock()
 	defer s.updateMu.Unlock()
 
+	var baseSD *snapshotData
+	if params.Snapshot != 0 {
+		var err error
+		baseSD, err = s.retainLatestSnapshotData(params.Snapshot)
+		if err != nil {
+			return nil, err
+		}
+		// Release only the temporary pin acquired above; the client's Snapshot
+		// continues to own its existing reference even if this update fails.
+		defer func() { _ = s.releaseSnapshot(params.Snapshot) }()
+	}
+
 	fileChanges := s.toFileChangeSummary(params.FileChanges)
 
 	apiRequest := &project.APISnapshotRequest{}
+	var baseRequestFileSystem *requestfilesystem.Handle
+	if baseSD != nil {
+		baseRequestFileSystem = baseSD.fileSystemHandle()
+	}
+	sd := newSnapshotData()
+	if err := sd.fileSystem.InitializeForUpdate(params.FileSystem, baseRequestFileSystem, s.snapshotHost.FS(), s.currentDirectory(), &fileChanges, baseSD != nil); err != nil {
+		return nil, fmt.Errorf("%w: %w", ErrClientError, err)
+	}
+	apiRequest.FileSystem = sd.fileSystem.FS()
+	apiRequest.ReplaceFileSystem = params.FileSystem != nil
 
 	// Open projects: only take a new ref for projects we aren't already holding open.
 	var openedProjects []tspath.Path
@@ -1189,8 +1274,10 @@ func (s *Session) handleUpdateSnapshot(ctx context.Context, params *UpdateSnapsh
 	if err != nil {
 		// APIUpdate returns a ref'd snapshot even on error; release it.
 		snapshot.Deref()
+		sd.fileSystem.Release()
 		return nil, fmt.Errorf("%w: failed to update snapshot: %w", ErrClientError, err)
 	}
+	sd.snapshot = snapshot
 
 	// Commit ref tracking now that the update succeeded.
 	for _, configPath := range openedProjects {
@@ -1206,31 +1293,8 @@ func (s *Session) handleUpdateSnapshot(ctx context.Context, params *UpdateSnapsh
 		s.openFiles.Delete(path)
 	}
 
-	// Create or ref-count snapshot data, then atomically read the previous latest
-	// snapshot (the diff base) and advance latestSnapshot to the new handle.
-	// If the same snapshot ID is returned (no changes), we increment the ref count
-	// so each client-side Snapshot can be disposed independently.
-	handle := snapshotHandle(snapshot)
-	s.snapshotsMu.Lock()
-	sd, exists := s.snapshots[handle]
-	if exists {
-		// Same snapshot already stored — release the caller's ref since
-		// the stored snapshot already has one, and bump the API refcount.
-		snapshot.Deref()
-		sd.refCount++
-	} else {
-		sd = &snapshotData{
-			snapshot:                snapshot,
-			refCount:                1,
-			symbolRegistry:          make(map[SymbolID]*ast.Symbol),
-			symbolCanonicalProjects: make(map[SymbolID]ProjectID),
-			projectRegistries:       make(map[ProjectID]*projectRegistryData),
-		}
-		s.snapshots[handle] = sd
-	}
-	prevSD := s.snapshots[s.latestSnapshot]
-	s.latestSnapshot = handle
-	s.snapshotsMu.Unlock()
+	// Atomically advance latestSnapshot and retain duplicate handles independently.
+	handle, prevSD := s.registerSnapshotData(sd, true)
 
 	// Build projects list
 	projects := snapshot.ProjectCollection.Projects()
@@ -1266,29 +1330,17 @@ func (s *Session) handleUpdateTemporarySnapshot(ctx context.Context, params *Upd
 	defer func() { _ = s.releaseSnapshot(params.Snapshot) }()
 
 	uri := params.File.ToURI(s.currentDirectory())
+	sd := newSnapshotData()
+	sd.fileSystem.CloneFrom(baseSD.fileSystemHandle())
 
-	snapshot, err := s.snapshotHost.CloneSnapshotWithTemporaryFile(ctx, baseSD.snapshot, uri, params.NewText)
+	snapshot, err := s.snapshotHost.CloneSnapshotWithTemporaryFile(ctx, baseSD.snapshot, sd.fileSystem.FS(), uri, params.NewText)
 	if err != nil {
+		sd.fileSystem.Release()
 		return nil, fmt.Errorf("%w: failed to update temporary snapshot: %w", ErrClientError, err)
 	}
+	sd.snapshot = snapshot
 
-	handle := snapshotHandle(snapshot)
-	s.snapshotsMu.Lock()
-	sd, exists := s.snapshots[handle]
-	if exists {
-		snapshot.Deref()
-		sd.refCount++
-	} else {
-		sd = &snapshotData{
-			snapshot:                snapshot,
-			refCount:                1,
-			symbolRegistry:          make(map[SymbolID]*ast.Symbol),
-			symbolCanonicalProjects: make(map[SymbolID]ProjectID),
-			projectRegistries:       make(map[ProjectID]*projectRegistryData),
-		}
-		s.snapshots[handle] = sd
-	}
-	s.snapshotsMu.Unlock()
+	handle, _ := s.registerSnapshotData(sd, false)
 
 	// Build projects list
 	projects := snapshot.ProjectCollection.Projects()
@@ -1323,6 +1375,7 @@ func (s *Session) handleCreateProgram(ctx context.Context, params *CreateProgram
 
 	var oldSnapshot *project.Snapshot
 	var oldProject *project.Project
+	var oldFileSystem *requestfilesystem.Handle
 	if params.OldProgram != nil {
 		oldSnapshotID := params.OldProgram.Snapshot
 		oldSD, err := s.retainSnapshotData(oldSnapshotID)
@@ -1332,11 +1385,14 @@ func (s *Session) handleCreateProgram(ctx context.Context, params *CreateProgram
 		defer func() { _ = s.releaseSnapshot(oldSnapshotID) }()
 
 		oldSnapshot = oldSD.snapshot
+		oldFileSystem = oldSD.fileSystemHandle()
 		oldProject, err = oldSD.getProject(params.OldProgram.Project)
 		if err != nil {
 			return nil, err
 		}
 	}
+	sd := newSnapshotData()
+	sd.fileSystem.CloneFrom(oldFileSystem)
 
 	baseSnapshot := oldSnapshot
 	fileChanges := s.toFileChangeSummary(params.FileChanges)
@@ -1345,6 +1401,7 @@ func (s *Session) handleCreateProgram(ctx context.Context, params *CreateProgram
 		baseSnapshot, err = s.apiUpdate(ctx, fileChanges, nil)
 		if err != nil {
 			baseSnapshot.Deref()
+			sd.fileSystem.Release()
 			return nil, fmt.Errorf("%w: failed to update snapshot: %w", ErrClientError, err)
 		}
 		defer baseSnapshot.Deref()
@@ -1353,6 +1410,7 @@ func (s *Session) handleCreateProgram(ctx context.Context, params *CreateProgram
 	snapshot := s.snapshotHost.CloneSnapshotForProgram(
 		ctx,
 		baseSnapshot,
+		sd.fileSystem.FS(),
 		rootFileNames,
 		&params.CreateProgramOptions.CompilerOptions,
 		params.CreateProgramOptions.ProjectReferences,
@@ -1363,26 +1421,12 @@ func (s *Session) handleCreateProgram(ctx context.Context, params *CreateProgram
 	project := snapshot.ProjectCollection.InferredProject()
 	if project == nil {
 		snapshot.Deref()
+		sd.fileSystem.Release()
 		return nil, fmt.Errorf("%w: failed to create synthetic project", ErrClientError)
 	}
+	sd.snapshot = snapshot
 
-	handle := snapshotHandle(snapshot)
-	s.snapshotsMu.Lock()
-	if sd, exists := s.snapshots[handle]; exists {
-		// Same snapshot already stored: use the existing retained ref and only bump API refcount.
-		snapshot.Deref()
-		sd.refCount++
-	} else {
-		sd = &snapshotData{
-			snapshot:                snapshot,
-			refCount:                1,
-			symbolRegistry:          make(map[SymbolID]*ast.Symbol),
-			symbolCanonicalProjects: make(map[SymbolID]ProjectID),
-			projectRegistries:       make(map[ProjectID]*projectRegistryData),
-		}
-		s.snapshots[handle] = sd
-	}
-	s.snapshotsMu.Unlock()
+	handle, _ := s.registerSnapshotData(sd, false)
 
 	return &CreateProgramResponse{
 		Snapshot: handle,
@@ -2910,8 +2954,24 @@ func (s *Session) handleEmit(ctx context.Context, params *EmitParams) (*EmitResp
 	if err != nil {
 		return nil, err
 	}
-	options.WriteFile = func(fileName string, text string, _ *compiler.WriteFileData) error {
-		return s.snapshotHost.FS().WriteFile(fileName, text)
+	var outputFiles map[string]string
+	sd, err := s.getSnapshotData(params.Snapshot)
+	if err != nil {
+		return nil, err
+	}
+	if fileSystem := sd.fileSystemHandle(); fileSystem != nil && fileSystem.HasFullFileSystem() {
+		outputFiles = make(map[string]string)
+		var outputMu sync.Mutex
+		options.WriteFile = func(fileName string, text string, _ *compiler.WriteFileData) error {
+			outputMu.Lock()
+			outputFiles[fileName] = text
+			outputMu.Unlock()
+			return nil
+		}
+	} else {
+		options.WriteFile = func(fileName string, text string, _ *compiler.WriteFileData) error {
+			return s.snapshotHost.FS().WriteFile(fileName, text)
+		}
 	}
 	result, err := emitProgram(ctx, program, options)
 	if err != nil {
@@ -2921,10 +2981,18 @@ func (s *Session) handleEmit(ctx context.Context, params *EmitParams) (*EmitResp
 	if emittedFiles == nil {
 		emittedFiles = []string{}
 	}
+	emittedFilesContents := []string{}
+	if outputFiles != nil {
+		emittedFilesContents = make([]string, len(emittedFiles))
+		for i, fileName := range emittedFiles {
+			emittedFilesContents[i] = outputFiles[fileName]
+		}
+	}
 	return &EmitResponse{
-		EmitSkipped:  result.EmitSkipped,
-		Diagnostics:  nonNilDiagnostics(result.Diagnostics),
-		EmittedFiles: emittedFiles,
+		EmitSkipped:          result.EmitSkipped,
+		Diagnostics:          nonNilDiagnostics(result.Diagnostics),
+		EmittedFiles:         emittedFiles,
+		EmittedFilesContents: emittedFilesContents,
 	}, nil
 }
 
@@ -3873,6 +3941,7 @@ func (s *Session) Close() {
 		s.snapshotsMu.Lock()
 		for handle, sd := range s.snapshots {
 			sd.snapshot.Deref()
+			sd.fileSystem.Release()
 			delete(s.snapshots, handle)
 		}
 		s.snapshotsMu.Unlock()

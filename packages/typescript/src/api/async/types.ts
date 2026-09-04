@@ -8,7 +8,10 @@ import type {
     NamedTupleMember,
     ParameterDeclaration,
 } from "../../ast/ast.ts";
-import type { Diagnostic } from "../proto.ts";
+import type {
+    Diagnostic,
+    RequestFileSystem,
+} from "../proto.ts";
 import type {
     NodeHandle,
     Signature,
@@ -401,6 +404,8 @@ export interface EmitResult {
     readonly emitSkipped: boolean;
     readonly diagnostics: readonly Diagnostic[];
     readonly emittedFiles: readonly string[];
+    /** Emitted files captured as a filesystem layer suitable for {@link Snapshot.update}. */
+    readonly fileSystem?: RequestFileSystem | undefined;
 }
 
 export interface EmitOutput {

@@ -42,7 +42,7 @@ func TestSnapshot(t *testing.T) {
 
 		baseSnapshot := session.Snapshot()
 		uri := lsproto.DocumentUri("file:///temporary.ts")
-		snapshot, err := session.CloneSnapshotWithTemporaryFile(context.Background(), baseSnapshot, uri, "export const value = 1;")
+		snapshot, err := session.CloneSnapshotWithTemporaryFile(context.Background(), baseSnapshot, nil, uri, "export const value = 1;")
 		assert.NilError(t, err)
 		defer snapshot.Deref()
 

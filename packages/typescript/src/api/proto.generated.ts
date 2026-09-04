@@ -193,6 +193,11 @@ export interface InitializeResponse {
  */
 export interface UpdateSnapshotParams {
     /**
+     * Snapshot, when set, requires this to be the latest active snapshot and layers
+     * FileSystem over that snapshot's filesystem. Used by Snapshot.update.
+     */
+    snapshot?: number;
+    /**
      * OpenProjects lists tsconfig.json files to open/load in the new snapshot.
      * Opens are ref-counted and persist across snapshots until closed.
      */
@@ -204,6 +209,12 @@ export interface UpdateSnapshotParams {
     closeProjects?: readonly DocumentIdentifier[];
     /** FileChanges describes file system changes since the last snapshot. */
     fileChanges?: APIFileChanges;
+    /**
+     * FileSystem supplies file contents and directory listings for the new snapshot.
+     * A full filesystem is canonical and total. A filesystem layer is checked
+     * before falling back to the host filesystem.
+     */
+    fileSystem?: RequestFileSystem;
     /**
      * OpenFiles lists files to keep open for the API client, mirroring LSP's
      * textDocument/didOpen. For each file, ancestor directories are searched for a
@@ -855,6 +866,11 @@ export interface EmitResponse {
     emitSkipped: boolean;
     diagnostics: DiagnosticResponse[];
     emittedFiles: string[];
+    /**
+     * EmittedFilesContents contains contents parallel to EmittedFiles when the
+     * source snapshot uses a full filesystem. It is empty for write-through emits.
+     */
+    emittedFilesContents: string[];
 }
 
 export interface EmitOutputResponse {
@@ -1211,6 +1227,25 @@ export interface APIFileChanges {
 }
 
 /**
+ * RequestFileSystem supplies file contents and, optionally, directory listings
+ * for a request that creates a snapshot.
+ */
+export interface RequestFileSystem {
+    kind: "full" | "layer";
+    /** Files maps file names to their complete contents. */
+    files: Record<string, string>;
+    /** Directories maps directory names to complete listing results. */
+    directories?: Record<string, RequestDirectoryEntries>;
+    /** Symlinks maps link paths to targets in this filesystem or the host filesystem. */
+    symlinks?: Record<string, RequestSymlink>;
+    /**
+     * RemovedPaths lists files or directory trees that must be treated as missing
+     * even when present in an underlying snapshot or host filesystem.
+     */
+    removedPaths?: string[];
+}
+
+/**
  * SnapshotChanges describes what changed between the previous latest snapshot
  * and the newly created snapshot. Changes are reported per-project so clients
  * can track cache refs at the (snapshot, project) level.
@@ -1399,6 +1434,29 @@ export interface EmitOutputFile {
     fileName: string;
     text: string;
     sourceFileName?: string;
+}
+
+/**
+ * RequestDirectoryEntries is a cached directory listing. Entry names are
+ * relative to the directory, matching vfs.GetAccessibleEntries.
+ */
+export interface RequestDirectoryEntries {
+    files: string[];
+    directories: string[];
+}
+
+/** RequestSymlink describes a symbolic link in a request filesystem. */
+export interface RequestSymlink {
+    /**
+     * Target is resolved relative to the directory containing the link, matching
+     * native symbolic-link semantics.
+     */
+    target: string;
+    /**
+     * Host routes the target through the host filesystem. This is the only way a
+     * full filesystem can access paths not supplied in the request filesystem.
+     */
+    host?: boolean;
 }
 
 /** ProjectFileChanges describes what source files changed within a single project. */

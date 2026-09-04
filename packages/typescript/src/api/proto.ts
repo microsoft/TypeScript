@@ -81,7 +81,7 @@ export function resolveDocumentURI(identifier: DocumentIdentifier): string {
     return identifier.uri;
 }
 
-export interface LSPUpdateSnapshotParams extends CoreUpdateSnapshotParams {
+export interface LSPUpdateSnapshotParams extends Omit<CoreUpdateSnapshotParams, "snapshot"> {
     /**
      * @deprecated Use {@link openProjects} instead.
      * Path to a tsconfig.json file to open in the new snapshot.
@@ -95,7 +95,7 @@ export interface LSPUpdateSnapshotParams extends CoreUpdateSnapshotParams {
 /**
  * Parameters for updateSnapshot, including deprecated members handled by `toUpdateSnapshotRequest`
  */
-export interface UpdateSnapshotParams extends CoreUpdateSnapshotParams {
+export interface UpdateSnapshotParams extends Omit<CoreUpdateSnapshotParams, "snapshot"> {
     /**
      * @deprecated Use {@link openProjects} instead.
      * Path to a tsconfig.json file to open in the new snapshot.
@@ -108,13 +108,14 @@ export interface UpdateSnapshotParams extends CoreUpdateSnapshotParams {
  * compatibility shim: a single `openProject` is folded into `openProjects` and is
  * never sent on the wire.
  */
-export function toUpdateSnapshotRequest(params?: UpdateSnapshotParams): UpdateSnapshotParams {
+export function toUpdateSnapshotRequest(params?: UpdateSnapshotParams, snapshot?: number): CoreUpdateSnapshotParams {
     const { openProject, openProjects, ...rest } = params ?? {};
     const mergedOpenProjects = openProject !== undefined
         ? [resolveFileName(openProject), ...(openProjects ?? [])]
         : openProjects;
     return {
         ...rest,
+        ...(snapshot !== undefined ? { snapshot } : {}),
         ...(mergedOpenProjects !== undefined ? { openProjects: mergedOpenProjects } : {}),
     };
 }

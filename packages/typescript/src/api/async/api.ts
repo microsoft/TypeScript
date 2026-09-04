@@ -354,9 +354,29 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
     }
 
     async updateSnapshot(params?: FromLSP extends true ? LSPUpdateSnapshotParams : UpdateSnapshotParams): Promise<Snapshot> {
+        return this.updateSnapshotWorker(params);
+    }
+
+    /** @internal */
+    async updateSnapshotFrom(baseSnapshot: Snapshot, params?: UpdateSnapshotParams): Promise<Snapshot> {
+        if (!this.activeSnapshots.has(baseSnapshot) || baseSnapshot.isDisposed()) {
+            throw new Error("Cannot update an inactive snapshot");
+        }
+        if (baseSnapshot !== this.latestSnapshot) {
+            // TODO: Support forking active memory/cache snapshots once the server-side
+            // ownership, project state, and cache semantics have been worked out.
+            throw new Error("Snapshot.update can only update the latest snapshot");
+        }
+        return this.updateSnapshotWorker(params, baseSnapshot);
+    }
+
+    private async updateSnapshotWorker(
+        params?: LSPUpdateSnapshotParams | UpdateSnapshotParams,
+        baseSnapshot?: Snapshot,
+    ): Promise<Snapshot> {
         await this.ensureInitialized();
 
-        const requestParams = toUpdateSnapshotRequest(params);
+        const requestParams = toUpdateSnapshotRequest(params, baseSnapshot?.id);
         const data = await this.client.apiRequest("updateSnapshot", requestParams);
 
         // Retain cached source files from previous snapshot for unchanged files
@@ -486,6 +506,15 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         oldProgram?: Program,
         fileChanges?: APIFileChanges,
     ): Promise<Program> {
+        return this.createProgramWorker(rootFiles, createProgramOptions, oldProgram, fileChanges);
+    }
+
+    private async createProgramWorker(
+        rootFiles: readonly DocumentIdentifier[],
+        createProgramOptions: CreateProgramOptions,
+        oldProgram?: Program,
+        fileChanges?: APIFileChanges,
+    ): Promise<Program> {
         await this.ensureInitialized();
 
         if (fileChanges && !oldProgram) {
@@ -524,6 +553,10 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
 
 type EnsureInitialized = () => Promise<void>; // @sync: type EnsureInitialized = (() => void) & { gen(): Generator<ProtocolRequest, void, ProtocolResponse["result"]>; };
 
+interface SnapshotOwner extends FormatDiagnosticsHost {
+    updateSnapshotFrom(baseSnapshot: Snapshot, params?: UpdateSnapshotParams): Promise<Snapshot>;
+}
+
 export class InternalAPI {
     private client: Client;
     private ensureInitialized: EnsureInitialized;
@@ -560,6 +593,7 @@ export class Snapshot {
     private disposed: boolean = false;
     private disposePromise: Promise<void> | undefined;
     private onDispose: () => void;
+    private api: SnapshotOwner;
     private snapshotRegistry: SnapshotObjectRegistry;
     readonly internal: SnapshotInternalAPI;
 
@@ -568,18 +602,19 @@ export class Snapshot {
         client: Client,
         sourceFileCache: SourceFileCache,
         toPath: (fileName: string) => Path,
-        formatDiagnosticsHost: FormatDiagnosticsHost,
+        api: SnapshotOwner,
         onDispose: () => void,
     ) {
         this.id = data.snapshot;
         this.client = client;
         this.toPath = toPath;
+        this.api = api;
         this.onDispose = onDispose;
         this.projectMap = new Map();
         this.snapshotRegistry = new SnapshotObjectRegistry(client, this.id, projectId => this.projectMap.get(projectId));
 
         for (const projData of data.projects) {
-            const project = new Project(projData, this.id, client, sourceFileCache, toPath, formatDiagnosticsHost, this.snapshotRegistry);
+            const project = new Project(projData, this.id, client, sourceFileCache, toPath, api, this.snapshotRegistry);
             this.projectMap.set(toPath(projData.configFileName), project);
         }
 
@@ -606,10 +641,18 @@ export class Snapshot {
         return this.projectMap.get(this.toPath(data.configFileName));
     }
 
+    /**
+     * Creates the next snapshot, layering its filesystem over this snapshot's
+     * filesystem. This snapshot must still be active and be the latest snapshot.
+     */
+    async update(params?: UpdateSnapshotParams): Promise<Snapshot> {
+        this.ensureNotDisposed();
+        return this.api.updateSnapshotFrom(this, params);
+    }
+
     [globalThis.Symbol.dispose](): void {
         void this.dispose();
     }
-
     dispose(): Promise<void> {
         return this.disposePromise ??= this.disposeWorker();
     }
@@ -1396,10 +1439,9 @@ export class Program implements FormatDiagnosticsHost {
     }
 
     /**
-     * Emits files to the configured filesystem.
-     *
-     * When the API has a virtual filesystem with a `writeFile` callback, output
-     * is written there. Otherwise, the server writes directly to the host filesystem.
+     * Emits files to the configured filesystem. Layer and host filesystems are
+     * written through; full filesystems remain immutable and return emitted
+     * files in {@link EmitResult.fileSystem}.
      */
     async emit(emitOnly?: EmitOnly): Promise<EmitResult> {
         const response = await this.client.apiRequest("emit", {
@@ -1407,10 +1449,17 @@ export class Program implements FormatDiagnosticsHost {
             project: this.project.id,
             ...(emitOnly !== undefined ? { emitOnly } : {}),
         });
+        const fileSystem = response.emittedFilesContents.length
+            ? {
+                kind: "layer" as const,
+                files: Object.fromEntries(response.emittedFiles.map((fileName, index) => [fileName, response.emittedFilesContents[index]])),
+            }
+            : undefined;
         return {
             emitSkipped: response.emitSkipped,
             diagnostics: response.diagnostics,
             emittedFiles: response.emittedFiles,
+            ...(fileSystem ? { fileSystem } : {}),
         };
     }
 
