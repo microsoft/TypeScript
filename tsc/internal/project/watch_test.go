@@ -3,6 +3,8 @@ package project
 import (
 	"testing"
 
+	"github.com/microsoft/TypeScript/tsc/internal/collections"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"gotest.tools/v3/assert"
 )
 
@@ -25,4 +27,47 @@ func TestNilWatchedFilesClone(t *testing.T) {
 	var w *WatchedFiles[int]
 	result := w.Clone(42)
 	assert.Assert(t, result == nil, "clone on a nil `WatchedFiles` should return nil")
+}
+
+func TestResolutionLookupWatcherPreservesIncludedDirectorySpelling(t *testing.T) {
+	t.Parallel()
+
+	var files collections.SyncMap[tspath.Path, string]
+	for _, fileName := range []string{
+		"/Workspace/src/index.ts",
+		"/Project/src/index.ts",
+		"/Lib/lib.d.ts",
+	} {
+		files.Store(tspath.ToPath(fileName, "/", false), fileName)
+	}
+
+	result := createResolutionLookupGlobMapper(
+		"/Workspace",
+		"/Lib",
+		"/Project",
+		false,
+	)(&files)
+
+	assert.DeepEqual(t, result.patternsInsideWorkspace, []string{
+		"/Workspace/**/*",
+		"/Project/**/*",
+		"/Lib/**/*",
+	})
+}
+
+func TestResolutionLookupWatcherPreservesNodeModulesSpelling(t *testing.T) {
+	t.Parallel()
+
+	var files collections.SyncMap[tspath.Path, string]
+	fileName := "/External/Node_Modules/pkg/index.ts"
+	files.Store(tspath.ToPath(fileName, "/", false), fileName)
+
+	result := createResolutionLookupGlobMapper(
+		"/Workspace",
+		"/Lib",
+		"/Project",
+		false,
+	)(&files)
+
+	assert.DeepEqual(t, result.patternsInsideWorkspace, []string{"/External/Node_Modules/**/*"})
 }
