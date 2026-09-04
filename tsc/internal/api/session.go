@@ -380,7 +380,7 @@ func (sd *snapshotData) registerSignature(projectID ProjectID, sig *checker.Sign
 // symbol and type registries for maintaining object identity.
 type Session struct {
 	id             string
-	snapshotStore  *project.SnapshotStore
+	snapshotHost   *project.SnapshotHost
 	projectSession *project.Session
 	// compatibilitySnapshot is the standalone API session's canonical snapshot.
 	// It preserves the legacy linear updateSnapshot behavior.
@@ -441,25 +441,25 @@ type SessionOptions struct {
 
 // NewLSPSession creates a new API session with the given project session.
 func NewLSPSession(projectSession *project.Session, options *SessionOptions) *Session {
-	s := newSession(projectSession.SnapshotStore(), options)
+	s := newSession(projectSession.SnapshotHost(), options)
 	s.projectSession = projectSession
 	return s
 }
 
-// NewStandaloneSession creates an API session with an independently owned store.
+// NewStandaloneSession creates an API session with an independently owned snapshot host.
 func NewStandaloneSession(init *project.SessionInit, options *SessionOptions) *Session {
-	snapshotStore := project.NewSnapshotStore(init)
-	s := newSession(snapshotStore, options)
-	s.compatibilitySnapshot = snapshotStore.NewStandaloneRootSnapshot()
+	snapshotHost := project.NewSnapshotHost(init)
+	s := newSession(snapshotHost, options)
+	s.compatibilitySnapshot = snapshotHost.NewStandaloneRootSnapshot()
 	return s
 }
 
-func newSession(snapshotStore *project.SnapshotStore, options *SessionOptions) *Session {
+func newSession(snapshotHost *project.SnapshotHost, options *SessionOptions) *Session {
 	id := sessionIDCounter.Add(1)
 	s := &Session{
-		id:            formatSessionID(id),
-		snapshotStore: snapshotStore,
-		snapshots:     make(map[SnapshotID]*snapshotData),
+		id:           formatSessionID(id),
+		snapshotHost: snapshotHost,
+		snapshots:    make(map[SnapshotID]*snapshotData),
 	}
 	if options != nil {
 		s.useBinaryResponses = options.UseBinaryResponses
@@ -473,11 +473,11 @@ func (s *Session) ID() string {
 }
 
 func (s *Session) currentDirectory() string {
-	return s.snapshotStore.GetCurrentDirectory()
+	return s.snapshotHost.GetCurrentDirectory()
 }
 
 func (s *Session) useCaseSensitiveFileNames() bool {
-	return s.snapshotStore.FS().UseCaseSensitiveFileNames()
+	return s.snapshotHost.FS().UseCaseSensitiveFileNames()
 }
 
 func (s *Session) apiUpdate(
@@ -492,8 +492,8 @@ func (s *Session) apiUpdate(
 	s.compatibilityMu.Lock()
 	defer s.compatibilityMu.Unlock()
 	oldSnapshot := s.compatibilitySnapshot
-	snapshot, err := s.snapshotStore.DeriveSnapshot(ctx, oldSnapshot, fileChanges, apiRequest)
-	s.snapshotStore.RetainSnapshot(snapshot)
+	snapshot, err := s.snapshotHost.DeriveSnapshot(ctx, oldSnapshot, fileChanges, apiRequest)
+	s.snapshotHost.RetainSnapshot(snapshot)
 	s.compatibilitySnapshot = snapshot
 	oldSnapshot.Deref()
 	return snapshot, err
@@ -1176,7 +1176,7 @@ func (s *Session) handleUpdateTemporarySnapshot(ctx context.Context, params *Upd
 
 	uri := params.File.ToURI(s.currentDirectory())
 
-	snapshot, err := s.snapshotStore.DeriveTemporarySnapshot(ctx, baseSD.snapshot, uri, params.NewText)
+	snapshot, err := s.snapshotHost.DeriveTemporarySnapshot(ctx, baseSD.snapshot, uri, params.NewText)
 	if err != nil {
 		return nil, fmt.Errorf("%w: failed to update temporary snapshot: %w", ErrClientError, err)
 	}
@@ -1259,7 +1259,7 @@ func (s *Session) handleCreateProgram(ctx context.Context, params *CreateProgram
 		defer baseSnapshot.Deref()
 		fileChanges = project.FileChangeSummary{}
 	}
-	snapshot := s.snapshotStore.DeriveProgramSnapshot(
+	snapshot := s.snapshotHost.DeriveProgramSnapshot(
 		ctx,
 		baseSnapshot,
 		rootFileNames,
@@ -1332,13 +1332,13 @@ func (s *Session) handleGetDefaultProjectForFile(ctx context.Context, params *Ge
 
 // handleParseCommandLine parses command-line arguments.
 func (s *Session) handleParseCommandLine(ctx context.Context, params *ParseCommandLineParams) (*ConfigFileResponse, error) {
-	return NewConfigFileResponse(tsoptions.ParseCommandLine(params.CommandLine, s.snapshotStore)), nil
+	return NewConfigFileResponse(tsoptions.ParseCommandLine(params.CommandLine, s.snapshotHost)), nil
 }
 
 // handleReadConfigFile reads and parses a JSON configuration file.
 func (s *Session) handleReadConfigFile(ctx context.Context, params *ReadConfigFileParams) (*ReadConfigFileResponse, error) {
 	configFileName := params.File.ToAbsoluteFileName(s.currentDirectory())
-	configFileContent, ok := s.snapshotStore.FS().ReadFile(configFileName)
+	configFileContent, ok := s.snapshotHost.FS().ReadFile(configFileName)
 	if !ok {
 		return &ReadConfigFileResponse{
 			Config: map[string]any{},
@@ -1375,7 +1375,7 @@ func (s *Session) handleParseJsonConfigFileContent(ctx context.Context, params *
 
 	parsedCommandLine := tsoptions.ParseJsonConfigFileContent(
 		jsonValueToAny(params.JSON),
-		s.snapshotStore,
+		s.snapshotHost,
 		basePath,
 		nil, /*existingOptions*/
 		configFileName,
@@ -1388,7 +1388,7 @@ func (s *Session) handleParseJsonConfigFileContent(ctx context.Context, params *
 // handleParseConfigFile parses a tsconfig.json file and returns its contents.
 func (s *Session) handleParseConfigFile(ctx context.Context, params *ParseConfigFileParams) (*ConfigFileResponse, error) {
 	configFileName := params.File.ToAbsoluteFileName(s.currentDirectory())
-	configFileContent, ok := s.snapshotStore.FS().ReadFile(configFileName)
+	configFileContent, ok := s.snapshotHost.FS().ReadFile(configFileName)
 	if !ok {
 		return nil, fmt.Errorf("%w: could not read file %q", ErrClientError, configFileName)
 	}
@@ -1401,7 +1401,7 @@ func (s *Session) handleParseConfigFile(ctx context.Context, params *ParseConfig
 	)
 	parsedCommandLine := tsoptions.ParseJsonSourceFileConfigFileContent(
 		tsConfigSourceFile,
-		s.snapshotStore,
+		s.snapshotHost,
 		configDir,
 		nil, /*existingOptions*/
 		nil, /*existingOptionsRaw*/
@@ -1418,7 +1418,7 @@ func (s *Session) handleTranspile(ctx context.Context, params *TranspileParams, 
 
 func (s *Session) handleTranspileFromFile(ctx context.Context, params *TranspileFromFileParams, declaration bool) (*TranspileOutputResponse, error) {
 	fileName := tspath.GetNormalizedAbsolutePath(params.FileName, s.currentDirectory())
-	input, ok := s.snapshotStore.FS().ReadFile(fileName)
+	input, ok := s.snapshotHost.FS().ReadFile(fileName)
 	if !ok {
 		return nil, fmt.Errorf("%w: could not read file %q", ErrClientError, fileName)
 	}
@@ -2159,7 +2159,7 @@ func (s *Session) handleGetImportAdderEdits(ctx context.Context, params *GetImpo
 	userPreferences := workingSnapshot.UserPreferences()
 	if registry := workingSnapshot.AutoImportRegistry(); registry == nil ||
 		!registry.IsPreparedForImportingFile(sourceFile.FileName(), projectPath, userPreferences) {
-		preparedSnapshot := s.snapshotStore.DeriveWithAutoImports(ctx, workingSnapshot, params.File.ToURI(s.currentDirectory()))
+		preparedSnapshot := s.snapshotHost.DeriveWithAutoImports(ctx, workingSnapshot, params.File.ToURI(s.currentDirectory()))
 		if s.projectSession != nil {
 			s.projectSession.TryAdoptSnapshotInBackground(workingSnapshot, preparedSnapshot)
 		}
@@ -2820,7 +2820,7 @@ func (s *Session) handleEmit(ctx context.Context, params *EmitParams) (*EmitResp
 		return nil, err
 	}
 	options.WriteFile = func(fileName string, text string, _ *compiler.WriteFileData) error {
-		return s.snapshotStore.FS().WriteFile(fileName, text)
+		return s.snapshotHost.FS().WriteFile(fileName, text)
 	}
 	result, err := emitProgram(ctx, program, options)
 	if err != nil {
@@ -3791,7 +3791,7 @@ func (s *Session) Close() {
 				s.compatibilitySnapshot.Deref()
 				s.compatibilitySnapshot = nil
 			}
-			s.snapshotStore.Close()
+			s.snapshotHost.Close()
 		}
 	})
 }

@@ -102,7 +102,7 @@ type SessionInit struct {
 // next, it diffs them and updates file watchers and Automatic Type
 // Acquisition (ATA) state accordingly.
 type Session struct {
-	store         *SnapshotStore
+	host          *SnapshotHost
 	options       *SessionOptions
 	logger        logging.Logger
 	backgroundCtx context.Context
@@ -208,23 +208,23 @@ func newContentMapperHost(init *SessionInit) contentmapper.Host {
 }
 
 func NewSession(init *SessionInit) *Session {
-	snapshotStore := NewSnapshotStore(init)
+	snapshotHost := NewSnapshotHost(init)
 	sessionLogger := init.Logger
 	if sessionLogger == nil {
 		sessionLogger = logging.NewNopLogger()
 	}
 	session := &Session{
-		store:           snapshotStore,
+		host:            snapshotHost,
 		options:         init.Options,
 		logger:          sessionLogger,
 		backgroundCtx:   init.BackgroundCtx,
-		toPath:          snapshotStore.toPath,
+		toPath:          snapshotHost.toPath,
 		client:          init.Client,
 		npmExecutor:     init.NpmExecutor,
-		fs:              newOverlayFS(snapshotStore.fs, make(map[tspath.Path]*Overlay), init.Options.PositionEncoding, snapshotStore.toPath),
+		fs:              newOverlayFS(snapshotHost.fs, make(map[tspath.Path]*Overlay), init.Options.PositionEncoding, snapshotHost.toPath),
 		backgroundQueue: background.NewQueue(),
 		startTime:       time.Now(),
-		snapshot: snapshotStore.newRootSnapshot(
+		snapshot: snapshotHost.newRootSnapshot(
 			0,
 			lsproto.GetClientCapabilities(init.BackgroundCtx).Workspace.DidChangeWatchedFiles.RelativePatternSupport,
 		),
@@ -240,8 +240,8 @@ func NewSession(init *SessionInit) *Session {
 			ThrottleLimit:   5,
 		}, session)
 	}
-	if snapshotStore.contentMapperHost != nil {
-		session.contentMapperTimings = snapshotStore.contentMapperHost.Timings()
+	if snapshotHost.contentMapperHost != nil {
+		session.contentMapperTimings = snapshotHost.contentMapperHost.Timings()
 	}
 
 	return session
@@ -252,9 +252,9 @@ func (s *Session) FS() vfs.FS {
 	return s.fs.fs
 }
 
-// SnapshotStore returns the store shared by this session's snapshots.
-func (s *Session) SnapshotStore() *SnapshotStore {
-	return s.store
+// SnapshotHost returns the host shared by this session's snapshots.
+func (s *Session) SnapshotHost() *SnapshotHost {
+	return s.host
 }
 
 // GetCurrentDirectory implements module.ResolutionHost
@@ -299,8 +299,8 @@ func (s *Session) Configure(config lsutil.UserPreferences) {
 		s.client.SetLocale(config.Locale)
 		newLocale := s.client.GetLocale()
 		if oldLocale.String() != newLocale.String() {
-			if s.store.contentMapperHost != nil {
-				s.store.contentMapperHost.SetLocale(newLocale)
+			if s.host.contentMapperHost != nil {
+				s.host.contentMapperHost.SetLocale(newLocale)
 			}
 		}
 	}
@@ -1284,8 +1284,8 @@ func (s *Session) WithLanguageServiceAndSnapshot(
 // The cloned snapshot will be adopted as the session's current snapshot in the background
 // if other changes haven't been adopted in the meantime.
 func (s *Session) GetLanguageServiceWithAutoImports(ctx context.Context, baseSnapshot *Snapshot, uri lsproto.DocumentUri) (*ls.LanguageService, error) {
-	s.store.assertOwns(baseSnapshot)
-	newSnapshot := s.store.deriveWithAutoImports(ctx, baseSnapshot, uri, s.logger)
+	s.host.assertOwns(baseSnapshot)
+	newSnapshot := s.host.deriveWithAutoImports(ctx, baseSnapshot, uri, s.logger)
 	project := newSnapshot.GetDefaultProject(uri)
 	if project == nil {
 		// Clone's initial ref (1) is released since we won't use this snapshot.
@@ -1312,8 +1312,8 @@ func (s *Session) tryAdoptSnapshotChangeInBackground(baseSnapshot, newSnapshot *
 // session has moved on, the snapshot is discarded; the next request needing
 // auto-imports will redo the work on the latest snapshot.
 func (s *Session) adoptSnapshotChange(baseSnapshot, newSnapshot *Snapshot) {
-	s.store.assertOwns(baseSnapshot)
-	s.store.assertOwns(newSnapshot)
+	s.host.assertOwns(baseSnapshot)
+	s.host.assertOwns(newSnapshot)
 	s.snapshotMu.Lock()
 	oldSnapshot := s.snapshot
 	if oldSnapshot == baseSnapshot {
@@ -1413,10 +1413,10 @@ func (s *Session) updateSnapshot(ctx context.Context, overlays map[tspath.Path]*
 }
 
 func (s *Session) takeContentMapperTimingDelta() contentmapper.Timings {
-	if s.store.contentMapperHost == nil {
+	if s.host.contentMapperHost == nil {
 		return contentmapper.Timings{}
 	}
-	current := s.store.contentMapperHost.Timings()
+	current := s.host.contentMapperHost.Timings()
 	s.contentMapperTimingsMu.Lock()
 	delta := current.Since(s.contentMapperTimings)
 	s.contentMapperTimings = current
@@ -1687,7 +1687,7 @@ func (s *Session) Close() {
 	// Cancel periodic performance telemetry
 	s.stopPerformanceTelemetry()
 	s.backgroundQueue.Close()
-	s.store.Close()
+	s.host.Close()
 }
 
 func (s *Session) flushChanges(ctx context.Context) (FileChangeSummary, map[tspath.Path]*Overlay, map[tspath.Path]*ATAStateChange, *lsutil.UserPreferences) {
@@ -1761,11 +1761,11 @@ func (s *Session) logCacheStats(snapshot *Snapshot) {
 	var parseCacheSize int
 	var extendedConfigCount int
 	if s.logger.IsVerbose() {
-		s.store.parseCache.entries.Range(func(_ ParseCacheKey, _ *refCountCacheEntry[*ast.SourceFile]) bool {
+		s.host.parseCache.entries.Range(func(_ ParseCacheKey, _ *refCountCacheEntry[*ast.SourceFile]) bool {
 			parseCacheSize++
 			return true
 		})
-		s.store.extendedConfigCache.entries.Range(func(_ tspath.Path, _ *ownerCacheEntry[*ExtendedConfigCacheEntry]) bool {
+		s.host.extendedConfigCache.entries.Range(func(_ tspath.Path, _ *ownerCacheEntry[*ExtendedConfigCacheEntry]) bool {
 			extendedConfigCount++
 			return true
 		})
@@ -1778,7 +1778,7 @@ func (s *Session) logCacheStats(snapshot *Snapshot) {
 	s.logger.Logf("Config count:      %6d", len(snapshot.ConfigFileRegistry.configs))
 	if s.logger.IsVerbose() {
 		s.logger.Logf("Parse cache size:           %6d", parseCacheSize)
-		s.logger.Logf("Program count:              %6d", s.store.programCounter.Len())
+		s.logger.Logf("Program count:              %6d", s.host.programCounter.Len())
 		s.logger.Logf("Extended config cache size: %6d", extendedConfigCount)
 
 		s.logger.Log("Auto Imports:")

@@ -27,7 +27,7 @@ import (
 )
 
 type Snapshot struct {
-	store    *SnapshotStore
+	host     *SnapshotHost
 	id       uint64
 	parentId uint64
 	refCount atomic.Int32
@@ -74,7 +74,7 @@ func (s *Snapshot) contentMapperWatchState() ([]string, *collections.Set[tspath.
 	return s.contentMapperExtensions, s.contentMapperWatchedFiles
 }
 
-func (store *SnapshotStore) newSnapshot(
+func (host *SnapshotHost) newSnapshot(
 	id uint64,
 	fs *SnapshotFS,
 	configFileRegistry *ConfigFileRegistry,
@@ -84,19 +84,19 @@ func (store *SnapshotStore) newSnapshot(
 	autoImportsWatch *WatchedFiles[map[tspath.Path]string],
 ) *Snapshot {
 	s := &Snapshot{
-		store: store,
-		id:    id,
+		host: host,
+		id:   id,
 
 		fs:                                 fs,
 		ConfigFileRegistry:                 configFileRegistry,
-		ProjectCollection:                  &ProjectCollection{toPath: store.toPath, openFiles: openFilePaths(fs.overlays)},
+		ProjectCollection:                  &ProjectCollection{toPath: host.toPath, openFiles: openFilePaths(fs.overlays)},
 		compilerOptionsForInferredProjects: compilerOptionsForInferredProjects,
 		userPreferences:                    userPreferences,
 		AutoImports:                        autoImports,
 		autoImportsWatch:                   autoImportsWatch,
 	}
 	s.refCount.Store(1)
-	s.converters = lsconv.NewConverters(store.options.PositionEncoding, s.LSPLineMap)
+	s.converters = lsconv.NewConverters(host.options.PositionEncoding, s.LSPLineMap)
 	return s
 }
 
@@ -112,7 +112,7 @@ func (s *Snapshot) cloneForProgram(
 	fileChanges FileChangeSummary,
 	sessionLogger logging.Logger,
 ) *Snapshot {
-	store := s.store
+	store := s.host
 	var logger *logging.LogTree
 
 	if store.options.LoggingEnabled && sessionLogger != nil {
@@ -321,7 +321,7 @@ func (s *Snapshot) GetDefaultProject(uri lsproto.DocumentUri) *Project {
 
 func (s *Snapshot) GetProjectsContainingFile(uri lsproto.DocumentUri) []ls.Project {
 	fileName := uri.FileName()
-	path := s.store.toPath(fileName)
+	path := s.host.toPath(fileName)
 	// TODO!! sheetal may be change this to handle symlinks!!
 	return s.ProjectCollection.GetProjectsContainingFile(path)
 }
@@ -365,7 +365,7 @@ func (s *Snapshot) ID() uint64 {
 }
 
 func (s *Snapshot) toPath(fileName string) tspath.Path {
-	return s.store.toPath(fileName)
+	return s.host.toPath(fileName)
 }
 
 func (s *Snapshot) UseCaseSensitiveFileNames() bool {
@@ -480,7 +480,7 @@ func (s *Snapshot) Clone(
 	overlays map[tspath.Path]*Overlay,
 	sessionLogger logging.Logger,
 ) *Snapshot {
-	store := s.store
+	store := s.host
 	var logger *logging.LogTree
 
 	// Print in-progress logs immediately if cloning fails
@@ -790,7 +790,7 @@ func (s *Snapshot) Deref() {
 }
 
 func (s *Snapshot) dispose() {
-	store := s.store
+	store := s.host
 	for _, project := range s.ProjectCollection.Projects() {
 		if project.Program != nil && store.programCounter.Deref(project.Program) {
 			if contentMapperProject := project.Program.ContentMapperProject(); contentMapperProject != nil {

@@ -12,7 +12,7 @@ import (
 	"gotest.tools/v3/assert"
 )
 
-func TestStandaloneSessionUsesSnapshotStoreWithoutProjectSession(t *testing.T) {
+func TestStandaloneSessionUsesSnapshotHostWithoutProjectSession(t *testing.T) {
 	t.Parallel()
 	if !bundled.Embedded {
 		t.Skip("bundled files are not embedded")

@@ -16,8 +16,8 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 )
 
-// SnapshotStore owns the services shared by a collection of immutable snapshots.
-type SnapshotStore struct {
+// SnapshotHost owns the services shared by a collection of immutable snapshots.
+type SnapshotHost struct {
 	options *SessionOptions
 	toPath  func(string) tspath.Path
 	fs      vfs.FS
@@ -31,15 +31,15 @@ type SnapshotStore struct {
 	snapshotID atomic.Uint64
 }
 
-func (s *SnapshotStore) nextSnapshotID() uint64 {
+func (s *SnapshotHost) nextSnapshotID() uint64 {
 	return s.snapshotID.Add(1)
 }
 
-func (s *SnapshotStore) assertOwns(snapshot *Snapshot) {
-	debug.Assert(snapshot.store == s, "snapshot belongs to a different store")
+func (s *SnapshotHost) assertOwns(snapshot *Snapshot) {
+	debug.Assert(snapshot.host == s, "snapshot belongs to a different host")
 }
 
-func NewSnapshotStore(init *SessionInit) *SnapshotStore {
+func NewSnapshotHost(init *SessionInit) *SnapshotHost {
 	currentDirectory := init.Options.CurrentDirectory
 	useCaseSensitiveFileNames := init.FS.UseCaseSensitiveFileNames()
 	toPath := func(fileName string) tspath.Path {
@@ -54,7 +54,7 @@ func NewSnapshotStore(init *SessionInit) *SnapshotStore {
 		contentMappedParseCache = NewContentMappedParseCache(RefCountCacheOptions{})
 	}
 
-	return &SnapshotStore{
+	return &SnapshotHost{
 		options:                 init.Options,
 		toPath:                  toPath,
 		fs:                      init.FS,
@@ -67,19 +67,19 @@ func NewSnapshotStore(init *SessionInit) *SnapshotStore {
 }
 
 // NewStandaloneRootSnapshot creates the compatibility root for a standalone API session.
-func (s *SnapshotStore) NewStandaloneRootSnapshot() *Snapshot {
+func (s *SnapshotHost) NewStandaloneRootSnapshot() *Snapshot {
 	return s.newRootSnapshot(0, false)
 }
 
-// RetainSnapshot adds a reference to a snapshot owned by this store.
-func (s *SnapshotStore) RetainSnapshot(snapshot *Snapshot) {
+// RetainSnapshot adds a reference to a snapshot owned by this host.
+func (s *SnapshotHost) RetainSnapshot(snapshot *Snapshot) {
 	s.assertOwns(snapshot)
 	snapshot.ref()
 }
 
 // DeriveSnapshot derives a snapshot from baseSnapshot without adopting it as any
 // canonical session state or performing session side effects.
-func (s *SnapshotStore) DeriveSnapshot(
+func (s *SnapshotHost) DeriveSnapshot(
 	ctx context.Context,
 	baseSnapshot *Snapshot,
 	fileChanges FileChangeSummary,
@@ -95,12 +95,12 @@ func (s *SnapshotStore) DeriveSnapshot(
 
 // update derives a snapshot from baseSnapshot without adopting it as any
 // canonical session state or performing session side effects.
-func (s *SnapshotStore) update(ctx context.Context, baseSnapshot *Snapshot, change SnapshotChange) *Snapshot {
+func (s *SnapshotHost) update(ctx context.Context, baseSnapshot *Snapshot, change SnapshotChange) *Snapshot {
 	return baseSnapshot.Clone(ctx, change, baseSnapshot.fs.overlays, nil)
 }
 
 // DeriveTemporarySnapshot derives a snapshot with a temporary file content override.
-func (s *SnapshotStore) DeriveTemporarySnapshot(
+func (s *SnapshotHost) DeriveTemporarySnapshot(
 	ctx context.Context,
 	baseSnapshot *Snapshot,
 	uri lsproto.DocumentUri,
@@ -112,7 +112,7 @@ func (s *SnapshotStore) DeriveTemporarySnapshot(
 
 // DeriveProgramSnapshot derives an isolated snapshot containing one synthetic
 // project. The base snapshot is not adopted as canonical state.
-func (s *SnapshotStore) DeriveProgramSnapshot(
+func (s *SnapshotHost) DeriveProgramSnapshot(
 	ctx context.Context,
 	baseSnapshot *Snapshot,
 	rootFileNames []string,
@@ -137,11 +137,11 @@ func (s *SnapshotStore) DeriveProgramSnapshot(
 
 // DeriveWithAutoImports derives a snapshot with auto-import preparation without
 // adopting the clone in the background.
-func (s *SnapshotStore) DeriveWithAutoImports(ctx context.Context, baseSnapshot *Snapshot, uri lsproto.DocumentUri) *Snapshot {
+func (s *SnapshotHost) DeriveWithAutoImports(ctx context.Context, baseSnapshot *Snapshot, uri lsproto.DocumentUri) *Snapshot {
 	return s.deriveWithAutoImports(ctx, baseSnapshot, uri, nil)
 }
 
-func (s *SnapshotStore) deriveWithAutoImports(ctx context.Context, baseSnapshot *Snapshot, uri lsproto.DocumentUri, logger logging.Logger) *Snapshot {
+func (s *SnapshotHost) deriveWithAutoImports(ctx context.Context, baseSnapshot *Snapshot, uri lsproto.DocumentUri, logger logging.Logger) *Snapshot {
 	s.assertOwns(baseSnapshot)
 	change := SnapshotChange{
 		reason: UpdateReasonRequestedLanguageServiceWithAutoImports,
@@ -153,7 +153,7 @@ func (s *SnapshotStore) deriveWithAutoImports(ctx context.Context, baseSnapshot 
 	return baseSnapshot.Clone(ctx, change, baseSnapshot.fs.overlays, logger)
 }
 
-func (s *SnapshotStore) newRootSnapshot(id uint64, relativePatternSupport bool) *Snapshot {
+func (s *SnapshotHost) newRootSnapshot(id uint64, relativePatternSupport bool) *Snapshot {
 	return s.newSnapshot(
 		id,
 		&SnapshotFS{
@@ -182,15 +182,15 @@ func (s *SnapshotStore) newRootSnapshot(id uint64, relativePatternSupport bool) 
 	)
 }
 
-func (s *SnapshotStore) FS() vfs.FS {
+func (s *SnapshotHost) FS() vfs.FS {
 	return s.fs
 }
 
-func (s *SnapshotStore) GetCurrentDirectory() string {
+func (s *SnapshotHost) GetCurrentDirectory() string {
 	return s.options.CurrentDirectory
 }
 
-func (s *SnapshotStore) Close() {
+func (s *SnapshotHost) Close() {
 	if s.contentMapperHost != nil {
 		_ = s.contentMapperHost.Close()
 	}
