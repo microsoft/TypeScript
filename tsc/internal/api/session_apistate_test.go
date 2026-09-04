@@ -232,6 +232,57 @@ func TestSessionTracksAndReleasesAPIRefs(t *testing.T) {
 			"configured project should be unloaded after closing the relatively-pathed file",
 		)
 	})
+
+	t.Run("canonical project aliases take one reference", func(t *testing.T) {
+		t.Parallel()
+		const configFileName = "/home/projects/p/tsconfig.json"
+		files := map[string]any{
+			configFileName:                  `{ "compilerOptions": { "strict": true } }`,
+			"/home/projects/p/src/index.ts": `export const x = 1;`,
+		}
+		projectSession, _ := projecttestutil.Setup(files)
+		defer projectSession.Close()
+		session := NewLSPSession(projectSession, nil)
+
+		_, err := session.handleUpdateSnapshot(context.Background(), &UpdateSnapshotParams{
+			OpenProjects: []DocumentIdentifier{
+				{FileName: configFileName},
+				{FileName: "/HOME/PROJECTS/P/TSCONFIG.JSON"},
+			},
+		})
+		assert.NilError(t, err)
+		assert.Equal(t, session.openProjects.Len(), 1)
+
+		session.Close()
+		assert.Assert(t, projectSession.Snapshot().ProjectCollection.ConfiguredProject(tspath.Path(configFileName)) == nil)
+	})
+
+	t.Run("canonical file aliases take one reference", func(t *testing.T) {
+		t.Parallel()
+		const (
+			configFileName = "/home/projects/p/tsconfig.json"
+			fileName       = "/home/projects/p/src/index.ts"
+		)
+		files := map[string]any{
+			configFileName: `{ "compilerOptions": { "strict": true } }`,
+			fileName:       `export const x = 1;`,
+		}
+		projectSession, _ := projecttestutil.Setup(files)
+		defer projectSession.Close()
+		session := NewLSPSession(projectSession, nil)
+
+		_, err := session.handleUpdateSnapshot(context.Background(), &UpdateSnapshotParams{
+			OpenFiles: []DocumentIdentifier{
+				{FileName: fileName},
+				{FileName: "/HOME/PROJECTS/P/SRC/INDEX.TS"},
+			},
+		})
+		assert.NilError(t, err)
+		assert.Equal(t, session.openFiles.Len(), 1)
+
+		session.Close()
+		assert.Assert(t, projectSession.Snapshot().ProjectCollection.ConfiguredProject(tspath.Path(configFileName)) == nil)
+	})
 }
 
 // TestUpdateSnapshotResponseSkipsUnloadedAncestorProject verifies that API
