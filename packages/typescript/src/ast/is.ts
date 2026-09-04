@@ -8,11 +8,13 @@ import { ScriptKind } from "#enums/scriptKind";
 import { SyntaxKind } from "#enums/syntaxKind";
 import type {
     AsExpression,
+    AwaitExpression,
     BindingPattern,
     BlockOrExpression,
     BooleanLiteral,
     ComputedPropertyName,
     ConciseBody,
+    DeleteExpression,
     ExclamationToken,
     Expression,
     ExpressionWithTypeArguments,
@@ -34,6 +36,7 @@ import type {
     ParenthesizedExpression,
     PartiallyEmittedExpression,
     PlusToken,
+    PostfixUnaryExpression,
     PrefixUnaryExpression,
     QuestionToken,
     ReadonlyKeyword,
@@ -44,7 +47,9 @@ import type {
     ThisTypeNode,
     TypeAssertion,
     TypeNode,
+    TypeOfExpression,
     UnaryExpressionBase,
+    VoidExpression,
 } from "./ast.ts";
 import {
     isBinaryExpression,
@@ -304,11 +309,11 @@ function isExpressionNode(node: Node): boolean {
 }
 
 function isImportCall(node: Node): node is Node & { readonly expression: MetaProperty; } {
-    if (node.kind !== SyntaxKind.CallExpression || !hasExpression(node) || !node.expression) {
+    if (node.kind !== SyntaxKind.CallExpression) {
         return false;
     }
     return node.expression.kind === SyntaxKind.MetaProperty
-        && (node.expression as MetaProperty).keywordToken === SyntaxKind.ImportKeyword;
+        && node.expression.keywordToken === SyntaxKind.ImportKeyword;
 }
 
 function isJSDocLinkLike(node: Node): boolean {
@@ -456,12 +461,9 @@ function isLeftHandSideExpressionKind(kind: SyntaxKind): boolean {
     }
 }
 
-export function isUnaryExpression(node: Node): node is UnaryExpressionBase {
-    return isUnaryExpressionKind(skipPartiallyEmittedExpressions(node).kind);
-}
-
-function isUnaryExpressionKind(kind: SyntaxKind): boolean {
-    switch (kind) {
+export function isUnaryExpression(node: Node): node is PrefixUnaryExpression | PostfixUnaryExpression | DeleteExpression | TypeOfExpression | VoidExpression | AwaitExpression | TypeAssertion | LeftHandSideExpression {
+    const expression = skipPartiallyEmittedExpressions(node);
+    switch (expression.kind) {
         case SyntaxKind.PrefixUnaryExpression:
         case SyntaxKind.PostfixUnaryExpression:
         case SyntaxKind.DeleteExpression:
@@ -471,7 +473,7 @@ function isUnaryExpressionKind(kind: SyntaxKind): boolean {
         case SyntaxKind.TypeAssertionExpression:
             return true;
         default:
-            return isLeftHandSideExpressionKind(kind);
+            return isLeftHandSideExpression(expression);
     }
 }
 
@@ -506,10 +508,11 @@ export function skipOuterExpressions(node: Expression, kinds?: OuterExpressionKi
 export function skipOuterExpressions(node: Node, kinds?: OuterExpressionKinds): Node;
 /** @internal */
 export function skipOuterExpressions(node: Node, kinds = OuterExpressionKinds.All) {
+    let innerNode: Expression | undefined;
     while (isOuterExpression(node, kinds)) {
-        node = node.expression;
+        innerNode = node.expression;
     }
-    return node;
+    return innerNode ?? node;
 }
 
 function isJSDocTypeAssertion(node: ParenthesizedExpression): boolean {
