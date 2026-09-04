@@ -188,8 +188,8 @@ extends:
                   - task: ManualValidation@1
                     timeoutInMinutes: 4320
                     inputs:
-                      notifyUsers: '[DevDiv]\TypeScript Team'
-                      approvers: '[DevDiv]\TypeScript Team'
+                      notifyUsers: '[DevDiv]\JSTSteam'
+                      approvers: '[DevDiv]\JSTSteam'
                       allowApproversToApproveTheirOwnRuns: true
                       instructions: |
                         Review the validated source tag, commit, extension version,
