@@ -2497,14 +2497,20 @@ func contentMapperVirtualFile(file *ast.SourceFile) *lsproto.ContentMapperVirtua
 	if fileName == "" {
 		fileName = file.FileName()
 	}
+	virtualPositions := file.GetPositionMap()
+	originalPositions := ast.ComputePositionMap(file.OriginalText())
 	segments := file.SpanMap().Segments()
 	mappings := make([]*lsproto.ContentMapperVirtualSpan, len(segments))
 	for i, segment := range segments {
+		virtualStart := virtualPositions.UTF8ToUTF16(int(segment.VirtualStart))
+		virtualEnd := virtualPositions.UTF8ToUTF16(int(segment.VirtualEnd))
+		originalStart := originalPositions.UTF8ToUTF16(int(segment.OriginalStart))
+		originalEnd := originalPositions.UTF8ToUTF16(int(segment.OriginalEnd))
 		mappings[i] = &lsproto.ContentMapperVirtualSpan{
-			GeneratedStart:  int32(segment.VirtualStart),
-			GeneratedLength: int32(segment.VirtualEnd - segment.VirtualStart),
-			OriginalStart:   int32(segment.OriginalStart),
-			OriginalLength:  int32(segment.OriginalEnd - segment.OriginalStart),
+			GeneratedStart:  int32(virtualStart),
+			GeneratedLength: int32(virtualEnd - virtualStart),
+			OriginalStart:   int32(originalStart),
+			OriginalLength:  int32(originalEnd - originalStart),
 			Kind:            int32(segment.Kind),
 			Features:        int32(segment.Features),
 		}
@@ -2514,12 +2520,12 @@ func contentMapperVirtualFile(file *ast.SourceFile) *lsproto.ContentMapperVirtua
 	for i, directive := range sourceDirectives {
 		directives[i] = &lsproto.ContentMapperDiagnosticDirective{
 			OriginalRange: &lsproto.ContentMapperTextRange{
-				Pos: int32(directive.OriginalRange.Pos()),
-				End: int32(directive.OriginalRange.End()),
+				Pos: int32(originalPositions.UTF8ToUTF16(directive.OriginalRange.Pos())),
+				End: int32(originalPositions.UTF8ToUTF16(directive.OriginalRange.End())),
 			},
 			VirtualRange: &lsproto.ContentMapperTextRange{
-				Pos: int32(directive.VirtualRange.Pos()),
-				End: int32(directive.VirtualRange.End()),
+				Pos: int32(virtualPositions.UTF8ToUTF16(directive.VirtualRange.Pos())),
+				End: int32(virtualPositions.UTF8ToUTF16(directive.VirtualRange.End())),
 			},
 			Policy:     int32(directive.Policy),
 			UnusedCode: directive.UnusedCode,

@@ -70,7 +70,9 @@ export class DiagnosticDirectivesView implements vscode.TreeDataProvider<Directi
                 path.basename(node.output.fileName),
                 vscode.TreeItemCollapsibleState.Expanded,
             );
-            item.description = vscode.l10n.t("{0} {1}", count, count === 1 ? "directive" : "directives");
+            item.description = count === 1
+                ? vscode.l10n.t("{0} directive", count)
+                : vscode.l10n.t("{0} directives", count);
             item.iconPath = new vscode.ThemeIcon("file-code");
             return item;
         }

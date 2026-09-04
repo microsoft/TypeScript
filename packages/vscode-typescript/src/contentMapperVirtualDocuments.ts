@@ -17,6 +17,7 @@ export const showVirtualDocumentsCommand = "typescript.native-preview.showConten
 
 export interface ContentMapperVirtualFilesProvider {
     readonly onDidInitializeLanguageServer: vscode.Event<void>;
+    readonly onDidSynchronizeContentMapperContributions: vscode.Event<void>;
     getContentMapperVirtualFiles(uri: vscode.Uri): Promise<readonly MappedOutput[]>;
     isContentMapped(uri: vscode.Uri): Promise<boolean>;
 }
@@ -120,6 +121,9 @@ class ContentMapperVirtualDocumentProvider implements vscode.FileSystemProvider,
                 for (const source of this.sourceToVirtualUris.keys()) {
                     this.refreshSource(vscode.Uri.parse(source));
                 }
+            }),
+            provider.onDidSynchronizeContentMapperContributions(() => {
+                this.updateActiveEditorContext(vscode.window.activeTextEditor);
             }),
         ];
         this.updateActiveEditorContext(vscode.window.activeTextEditor);
@@ -616,30 +620,32 @@ function mappingKindName(kind: number): string {
 }
 
 const featureLabels = [
-    "Hover",
-    "Signature Help",
-    "Completion",
-    "Definition",
-    "Type Definition",
-    "Implementation",
-    "References",
-    "Document Highlights",
-    "Rename",
-    "Call Hierarchy",
-    "Code Actions",
-    "Formatting",
-    "Inlay Hints",
-    "Semantic Tokens",
-    "Folding Ranges",
-    "Selection Ranges",
-    "Linked Editing",
-    "Auto Insert",
-    "Document Symbols",
-    "CodeLens",
+    () => vscode.l10n.t("Hover"),
+    () => vscode.l10n.t("Signature Help"),
+    () => vscode.l10n.t("Completion"),
+    () => vscode.l10n.t("Definition"),
+    () => vscode.l10n.t("Type Definition"),
+    () => vscode.l10n.t("Implementation"),
+    () => vscode.l10n.t("References"),
+    () => vscode.l10n.t("Document Highlights"),
+    () => vscode.l10n.t("Rename"),
+    () => vscode.l10n.t("Call Hierarchy"),
+    () => vscode.l10n.t("Code Actions"),
+    () => vscode.l10n.t("Formatting"),
+    () => vscode.l10n.t("Inlay Hints"),
+    () => vscode.l10n.t("Semantic Tokens"),
+    () => vscode.l10n.t("Folding Ranges"),
+    () => vscode.l10n.t("Selection Ranges"),
+    () => vscode.l10n.t("Linked Editing"),
+    () => vscode.l10n.t("Auto Insert"),
+    () => vscode.l10n.t("Document Symbols"),
+    () => vscode.l10n.t("CodeLens"),
 ] as const;
 
 function featureNames(features: number): string[] {
-    return featureLabels.filter((_, index) => (features & (1 << index)) !== 0);
+    return featureLabels
+        .filter((_, index) => (features & (1 << index)) !== 0)
+        .map(label => label());
 }
 
 function virtualUriForOutput(sourceUri: vscode.Uri, output: MappedOutput): vscode.Uri {

@@ -38,12 +38,14 @@ export class SessionManager implements vscode.Disposable {
     private disposables: vscode.Disposable[] = [];
     private outputChannel: vscode.LogOutputChannel;
     private initializedEventEmitter: vscode.EventEmitter<void>;
+    private contentMapperContributionsSynchronizedEmitter = new vscode.EventEmitter<void>();
     private telemetryReporter: TelemetryReporter;
     private readonly contentMapperRegistrations = new Map<string, readonly ContentMapperContribution[]>();
     private lifecycleOperation = Promise.resolve();
     private contentMapperSyncOperation = Promise.resolve();
 
     readonly onDidInitializeLanguageServer: vscode.Event<void>;
+    readonly onDidSynchronizeContentMapperContributions = this.contentMapperContributionsSynchronizedEmitter.event;
 
     constructor(
         context: vscode.ExtensionContext,
@@ -63,6 +65,7 @@ export class SessionManager implements vscode.Disposable {
                 });
             }
         }));
+        this.disposables.push(this.contentMapperContributionsSynchronizedEmitter);
         this.disposables.push(vscode.workspace.onDidOpenTextDocument(document => {
             if (documentMatchesContentMapperContributions(document, this.contentMapperRegistrations)) {
                 void this.syncContentMapperContributions();
@@ -161,6 +164,7 @@ export class SessionManager implements vscode.Disposable {
                 serializeContentMapperContributions(this.contentMapperRegistrations),
                 openDocuments,
             );
+            this.contentMapperContributionsSynchronizedEmitter.fire();
         }
         catch (error) {
             this.outputChannel.warn(`Content mapper contribution synchronization failed: ${String(error)}`);
