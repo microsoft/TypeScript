@@ -1,6 +1,6 @@
 // @target: es2015
 // @strict: false
-// @module: amd
+// @module: commonjs
 // @Filename: foo_0.ts
 import foo1 = require('./foo_1');
 namespace Foo {

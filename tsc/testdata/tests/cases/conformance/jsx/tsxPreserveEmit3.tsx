@@ -1,6 +1,6 @@
 // @target: es2015
 //@jsx: preserve
-//@module: amd
+//@module: commonjs
 
 //@filename: file.tsx
 declare namespace JSX {

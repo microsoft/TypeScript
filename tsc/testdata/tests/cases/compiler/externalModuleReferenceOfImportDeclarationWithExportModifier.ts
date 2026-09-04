@@ -1,5 +1,5 @@
 // @target: es2015
-//@module: amd
+//@module: commonjs
 // @Filename: externalModuleReferenceOfImportDeclarationWithExportModifier_0.ts
 export function foo() { };
 
