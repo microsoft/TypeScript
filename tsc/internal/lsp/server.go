@@ -15,6 +15,7 @@ import (
 	"time"
 
 	"github.com/microsoft/TypeScript/tsc/internal/api"
+	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/compiler"
 	"github.com/microsoft/TypeScript/tsc/internal/contentmapper"
@@ -1293,6 +1294,8 @@ var handlers = sync.OnceValue(func() handlerMap {
 
 	registerRequestHandler(handlers, lsproto.CustomInitializeAPISessionInfo, (*Server).handleInitializeAPISession)
 	registerRequestHandler(handlers, lsproto.CustomProjectInfoInfo, (*Server).handleProjectInfo)
+	registerRequestHandler(handlers, lsproto.CustomContentMapperVirtualFilesInfo, (*Server).handleContentMapperVirtualFiles)
+	registerRequestHandler(handlers, lsproto.CustomIsContentMappedInfo, (*Server).handleIsContentMapped)
 	registerRequestHandler(handlers, lsproto.CustomSetContentMapperContributionsInfo, (*Server).handleSetContentMapperContributions)
 	return handlers
 })
@@ -2447,6 +2450,89 @@ func (s *Server) handleProjectInfo(ctx context.Context, params *lsproto.ProjectI
 	return &lsproto.ProjectInfoResult{
 		ConfigFilePath: configFilePath,
 	}, nil
+}
+
+func (s *Server) handleContentMapperVirtualFiles(ctx context.Context, params *lsproto.ContentMapperVirtualFilesParams, _ *lsproto.RequestMessage) (lsproto.CustomContentMapperVirtualFilesResponse, error) {
+	sourceFile, err := s.contentMappedSourceFile(ctx, params.TextDocument.Uri)
+	if err != nil {
+		return nil, err
+	}
+	if sourceFile == nil {
+		return &lsproto.ContentMapperVirtualFilesResult{Files: []*lsproto.ContentMapperVirtualFile{}}, nil
+	}
+
+	sourceFiles := append([]*ast.SourceFile{sourceFile}, sourceFile.SupplementalSourceFiles()...)
+	files := make([]*lsproto.ContentMapperVirtualFile, len(sourceFiles))
+	for i, file := range sourceFiles {
+		files[i] = contentMapperVirtualFile(file)
+	}
+	return &lsproto.ContentMapperVirtualFilesResult{Files: files}, nil
+}
+
+func (s *Server) handleIsContentMapped(ctx context.Context, params *lsproto.IsContentMappedParams, _ *lsproto.RequestMessage) (lsproto.CustomIsContentMappedResponse, error) {
+	sourceFile, err := s.contentMappedSourceFile(ctx, params.TextDocument.Uri)
+	if err != nil {
+		return nil, err
+	}
+	return &lsproto.IsContentMappedResult{IsContentMapped: sourceFile != nil}, nil
+}
+
+func (s *Server) contentMappedSourceFile(ctx context.Context, uri lsproto.DocumentUri) (*ast.SourceFile, error) {
+	defaultProject, _, _, err := s.session.GetLanguageServiceAndProjectsForFile(ctx, uri)
+	if err != nil {
+		if errors.Is(err, project.ErrNoProjectForUnknownScriptKind) {
+			return nil, nil
+		}
+		return nil, err
+	}
+	sourceFile := defaultProject.GetProgram().GetSourceFile(uri.FileName())
+	if sourceFile == nil || sourceFile.SpanMap() == nil || sourceFile.IsContentMapperSupplemental() {
+		return nil, nil
+	}
+	return sourceFile, nil
+}
+
+func contentMapperVirtualFile(file *ast.SourceFile) *lsproto.ContentMapperVirtualFile {
+	fileName := file.VirtualFileName()
+	if fileName == "" {
+		fileName = file.FileName()
+	}
+	segments := file.SpanMap().Segments()
+	mappings := make([]*lsproto.ContentMapperVirtualSpan, len(segments))
+	for i, segment := range segments {
+		mappings[i] = &lsproto.ContentMapperVirtualSpan{
+			GeneratedStart:  int32(segment.VirtualStart),
+			GeneratedLength: int32(segment.VirtualEnd - segment.VirtualStart),
+			OriginalStart:   int32(segment.OriginalStart),
+			OriginalLength:  int32(segment.OriginalEnd - segment.OriginalStart),
+			Kind:            int32(segment.Kind),
+			Features:        int32(segment.Features),
+		}
+	}
+	sourceDirectives := file.DiagnosticDirectives()
+	directives := make([]*lsproto.ContentMapperDiagnosticDirective, len(sourceDirectives))
+	for i, directive := range sourceDirectives {
+		directives[i] = &lsproto.ContentMapperDiagnosticDirective{
+			OriginalRange: &lsproto.ContentMapperTextRange{
+				Pos: int32(directive.OriginalRange.Pos()),
+				End: int32(directive.OriginalRange.End()),
+			},
+			VirtualRange: &lsproto.ContentMapperTextRange{
+				Pos: int32(directive.VirtualRange.Pos()),
+				End: int32(directive.VirtualRange.End()),
+			},
+			Policy:     int32(directive.Policy),
+			UnusedCode: directive.UnusedCode,
+		}
+	}
+	return &lsproto.ContentMapperVirtualFile{
+		FileName:             fileName,
+		Text:                 file.Text(),
+		OriginalText:         file.OriginalText(),
+		ScriptKind:           int32(core.EnsureScriptKindFromFileName(fileName)),
+		Mappings:             mappings,
+		DiagnosticDirectives: directives,
+	}
 }
 
 func (s *Server) handleSetContentMapperContributions(ctx context.Context, params *lsproto.SetContentMapperContributionsParams, _ *lsproto.RequestMessage) (lsproto.CustomSetContentMapperContributionsResponse, error) {

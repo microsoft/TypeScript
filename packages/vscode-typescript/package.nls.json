@@ -23,6 +23,8 @@
     "native-preview.reportIssue.title": "Report Issue",
     "native-preview.selectVersion.title": "Select TypeScript Version...",
     "native-preview.goToSourceDefinition.title": "Go to Source Definition",
+    "native-preview.showContentMapperVirtualDocuments.title": "Show Content Mapper Virtual Documents",
+    "native-preview.contentMapperDiagnosticDirectives.name": "Content Mapper Diagnostic Directives",
     "native-preview.sortImports.title": "Sort Imports",
     "native-preview.removeUnusedImports.title": "Remove Unused Imports",
     "native-preview.codeLens.showLocations.title": "Show References of CodeLens",

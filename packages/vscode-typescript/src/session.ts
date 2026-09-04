@@ -12,6 +12,7 @@ import {
     serializeContentMapperContributions,
     validateContentMapperRegistration,
 } from "./contentMapperContributions";
+import type { MappedOutput } from "./contentMapperVirtualFiles";
 import { ProjectStatus } from "./projectStatus";
 import { setupStatusBar } from "./statusBar";
 import { TelemetryReporter } from "./telemetryReporting";
@@ -42,6 +43,8 @@ export class SessionManager implements vscode.Disposable {
     private lifecycleOperation = Promise.resolve();
     private contentMapperSyncOperation = Promise.resolve();
 
+    readonly onDidInitializeLanguageServer: vscode.Event<void>;
+
     constructor(
         context: vscode.ExtensionContext,
         outputChannel: vscode.LogOutputChannel,
@@ -51,6 +54,7 @@ export class SessionManager implements vscode.Disposable {
         this.outputChannel = outputChannel;
         this.telemetryReporter = telemetryReporter;
         this.initializedEventEmitter = initializedEventEmitter;
+        this.onDidInitializeLanguageServer = initializedEventEmitter.event;
 
         this.disposables.push(vscode.workspace.onDidChangeConfiguration(event => {
             if (this.currentSession && event.affectsConfiguration("js/ts.contentMappers.enabled")) {
@@ -112,6 +116,17 @@ export class SessionManager implements vscode.Disposable {
         }
         const result = await this.currentSession.client.initializeAPISession(pipe);
         return result.pipe;
+    }
+
+    getContentMapperVirtualFiles(uri: vscode.Uri): Promise<readonly MappedOutput[]> {
+        if (!this.currentSession) {
+            throw new Error(vscode.l10n.t("Language server is not running."));
+        }
+        return this.currentSession.client.getContentMapperVirtualFiles(uri);
+    }
+
+    isContentMapped(uri: vscode.Uri): Promise<boolean> {
+        return this.currentSession?.client.isContentMapped(uri) ?? Promise.resolve(false);
     }
 
     registerContentMappers(contributorId: string, contributions: readonly ContentMapperContribution[]): vscode.Disposable {

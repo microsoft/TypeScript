@@ -25,6 +25,11 @@ import {
     sendNotificationMiddleware,
 } from "./configurationMiddleware";
 import type { SerializedContentMapperContribution } from "./contentMapperContributions";
+import {
+    type ContentMapperVirtualFile,
+    type MappedOutput,
+    toMappedOutputs,
+} from "./contentMapperVirtualFiles";
 import { registerMultiDocumentHighlightFeature } from "./languageFeatures/documentHighlight";
 import { registerHoverFeature } from "./languageFeatures/hover";
 import { registerOnAutoInsertFeature } from "./languageFeatures/onAutoInsert";
@@ -434,6 +439,28 @@ export class Client implements vscode.Disposable {
             throw new Error(vscode.l10n.t("Language client is not initialized"));
         }
         return this.client.sendRequest<{ sessionId: string; pipe: string; }>("custom/initializeAPISession", { pipe });
+    }
+
+    async getContentMapperVirtualFiles(uri: vscode.Uri): Promise<readonly MappedOutput[]> {
+        if (!this.client) {
+            throw new Error(vscode.l10n.t("Language client is not initialized"));
+        }
+        const result = await this.client.sendRequest<{ files: ContentMapperVirtualFile[]; }>(
+            "custom/contentMapperVirtualFiles",
+            { textDocument: { uri: uri.toString() } },
+        );
+        return toMappedOutputs(result.files);
+    }
+
+    async isContentMapped(uri: vscode.Uri): Promise<boolean> {
+        if (!this.client) {
+            throw new Error(vscode.l10n.t("Language client is not initialized"));
+        }
+        const result = await this.client.sendRequest<{ isContentMapped: boolean; }>(
+            "custom/isContentMapped",
+            { textDocument: { uri: uri.toString() } },
+        );
+        return result.isContentMapped;
     }
 
     /**

@@ -184,6 +184,24 @@ export const title = "Profile";
 	assert.Assert(t, ok && hoverMsg.AsResponse().Error == nil)
 	assert.Assert(t, hover.Hover != nil, "expected hover after first foreign didOpen")
 
+	isContentMappedMsg, isContentMapped, ok := lsptestutil.SendRequest(t, client, lsproto.CustomIsContentMappedInfo, &lsproto.IsContentMappedParams{
+		TextDocument: lsproto.TextDocumentIdentifier{Uri: uri},
+	})
+	assert.Assert(t, ok && isContentMappedMsg.AsResponse().Error == nil)
+	assert.Assert(t, isContentMapped.IsContentMapped)
+
+	virtualFilesMsg, virtualFiles, ok := lsptestutil.SendRequest(t, client, lsproto.CustomContentMapperVirtualFilesInfo, &lsproto.ContentMapperVirtualFilesParams{
+		TextDocument: lsproto.TextDocumentIdentifier{Uri: uri},
+	})
+	assert.Assert(t, ok && virtualFilesMsg.AsResponse().Error == nil)
+	assert.Equal(t, len(virtualFiles.Files), 1)
+	assert.Equal(t, virtualFiles.Files[0].FileName, "/home/project/ProfileCard.vue.ts")
+	assert.Equal(t, virtualFiles.Files[0].ScriptKind, int32(3))
+	assert.Assert(t, strings.Contains(virtualFiles.Files[0].Text, `export const title = "Profile";`))
+	assert.Assert(t, len(virtualFiles.Files[0].Mappings) > 0)
+	assert.Equal(t, virtualFiles.Files[0].Mappings[0].Kind, int32(0))
+	assert.Equal(t, virtualFiles.Files[0].Mappings[0].Features, int32((1<<20)-1))
+
 	assert.NilError(t, fs.WriteFile("/home/project/tsconfig.json", `{
 		"compilerOptions": { "target": "es2020", "module": "esnext", "moduleResolution": "bundler", "strict": true }
 	}`))
@@ -196,6 +214,16 @@ export const title = "Profile";
 	})
 	assert.Assert(t, hoverMsg != nil && hoverMsg.AsResponse().Error == nil, "request before didClose should return a null result")
 	assert.Assert(t, hover.Hover == nil)
+	isContentMappedMsg, isContentMapped, ok = lsptestutil.SendRequest(t, client, lsproto.CustomIsContentMappedInfo, &lsproto.IsContentMappedParams{
+		TextDocument: lsproto.TextDocumentIdentifier{Uri: uri},
+	})
+	assert.Assert(t, ok && isContentMappedMsg.AsResponse().Error == nil)
+	assert.Assert(t, !isContentMapped.IsContentMapped)
+	virtualFilesMsg, virtualFiles, ok = lsptestutil.SendRequest(t, client, lsproto.CustomContentMapperVirtualFilesInfo, &lsproto.ContentMapperVirtualFilesParams{
+		TextDocument: lsproto.TextDocumentIdentifier{Uri: uri},
+	})
+	assert.Assert(t, ok && virtualFilesMsg.AsResponse().Error == nil)
+	assert.Equal(t, len(virtualFiles.Files), 0)
 	diagnosticMsg, diagnostics, ok := lsptestutil.SendRequest(t, client, lsproto.TextDocumentDiagnosticInfo, &lsproto.DocumentDiagnosticParams{
 		TextDocument: lsproto.TextDocumentIdentifier{Uri: uri},
 	})

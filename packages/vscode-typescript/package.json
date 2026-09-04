@@ -224,6 +224,16 @@
                 }
             }
         ],
+        "views": {
+            "explorer": [
+                {
+                    "id": "typescript.native-preview.contentMapperDiagnosticDirectives",
+                    "name": "%native-preview.contentMapperDiagnosticDirectives.name%",
+                    "icon": "$(list-tree)",
+                    "when": "typescript.native-preview.serverRunning && config.js/ts.showDebugInfo"
+                }
+            ]
+        },
         "commands": [
             {
                 "command": "typescript.native-preview.enable",
@@ -265,6 +275,12 @@
                 "command": "typescript.native-preview.goToSourceDefinition",
                 "title": "%native-preview.goToSourceDefinition.title%",
                 "enablement": "typescript.native-preview.serverRunning",
+                "category": "TypeScript"
+            },
+            {
+                "command": "typescript.native-preview.showContentMapperVirtualDocuments",
+                "title": "%native-preview.showContentMapperVirtualDocuments.title%",
+                "enablement": "typescript.native-preview.serverRunning && config.js/ts.showDebugInfo && typescript.native-preview.activeEditorIsContentMapped",
                 "category": "TypeScript"
             },
             {
@@ -340,6 +356,10 @@
                     "when": "typescript.native-preview.serverRunning && tsSupportsSourceDefinition"
                 },
                 {
+                    "command": "typescript.native-preview.showContentMapperVirtualDocuments",
+                    "when": "typescript.native-preview.serverRunning && config.js/ts.showDebugInfo && typescript.native-preview.activeEditorIsContentMapped"
+                },
+                {
                     "command": "typescript.native-preview.sortImports",
                     "when": "typescript.native-preview.serverRunning && supportedCodeAction =~ /(\\s|^)source\\.sortImports\\b/ && editorLangId =~ /^(typescript|javascript)(react)?$/"
                 },
@@ -353,6 +373,13 @@
                     "command": "typescript.native-preview.goToSourceDefinition",
                     "when": "typescript.native-preview.serverRunning && tsSupportsSourceDefinition && (resourceLangId == typescript || resourceLangId == typescriptreact || resourceLangId == javascript || resourceLangId == javascriptreact)",
                     "group": "navigation@1.41"
+                }
+            ],
+            "editor/title/context": [
+                {
+                    "command": "typescript.native-preview.showContentMapperVirtualDocuments",
+                    "when": "typescript.native-preview.serverRunning && config.js/ts.showDebugInfo && typescript.native-preview.activeEditorIsContentMapped",
+                    "group": "navigation@1.5"
                 }
             ]
         }
