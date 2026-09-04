@@ -14,15 +14,22 @@ and limitations under the License.
 ***************************************************************************** */
 
 
-/// <reference lib="es2025" />
-/// <reference lib="esnext.intl" />
-/// <reference lib="esnext.collection" />
-/// <reference lib="esnext.decorators" />
-/// <reference lib="esnext.disposable" />
-/// <reference lib="esnext.array" />
-/// <reference lib="esnext.error" />
-/// <reference lib="esnext.sharedmemory" />
-/// <reference lib="esnext.typedarrays" />
-/// <reference lib="esnext.temporal" />
-/// <reference lib="esnext.date" />
-/// <reference lib="esnext.promise" />
+/// <reference lib="es2020.promise" />
+/// <reference lib="es2025.promise" />
+
+interface PromiseConstructor {
+    /**
+     * Creates a Promise that is resolved with an object of results when all of the provided Promises resolve,
+     * or rejected when any Promise is rejected.
+     * @param promises An object of Promises.
+     * @returns A new Promise.
+     */
+    allKeyed<T extends object>(promises: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>;
+
+    /**
+     * Creates a Promise that is resolved with an object of results when all of the provided Promises resolve or reject.
+     * @param promises An object of Promises.
+     * @returns A new Promise.
+     */
+    allSettledKeyed<T extends object>(promises: T): Promise<{ -readonly [P in keyof T]: PromiseSettledResult<Awaited<T[P]>>; }>;
+}
