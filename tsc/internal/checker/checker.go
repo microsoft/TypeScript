@@ -30022,7 +30022,8 @@ func (c *Checker) getContextualReturnType(functionDecl *ast.Node, contextFlags C
 	// Otherwise, if the containing function is contextually typed by a function type with exactly one call signature
 	// and that call signature is non-generic, return statements are contextually typed by the return type of the signature
 	signature := c.getContextualSignatureForFunctionLikeDeclaration(functionDecl)
-	if signature != nil && !c.isResolvingReturnTypeOfSignature(signature) {
+	// A function's own inferred return type must not become contextual evidence for its body.
+	if signature != nil && signature != c.getSignatureFromDeclaration(functionDecl) && !c.isResolvingReturnTypeOfSignature(signature) {
 		returnType := c.getReturnTypeOfSignature(signature)
 		functionFlags := ast.GetFunctionFlags(functionDecl)
 		if functionFlags&ast.FunctionFlagsGenerator != 0 {

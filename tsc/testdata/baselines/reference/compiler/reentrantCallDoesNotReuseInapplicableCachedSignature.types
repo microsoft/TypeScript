@@ -1,0 +1,26 @@
+//// [tests/cases/compiler/reentrantCallDoesNotReuseInapplicableCachedSignature.ts] ////
+
+=== reentrantCallDoesNotReuseInapplicableCachedSignature.ts ===
+declare const example: (f: (a: string) => number) => string;
+>example : (f: (a: string) => number) => string
+>f : (a: string) => number
+>a : string
+
+const f = (a: string) => g();
+>f : (a: string) => string
+>(a: string) => g() : (a: string) => string
+>a : string
+>g() : string
+>g : () => string
+
+const g = () => {
+>g : () => string
+>() => {    return example(f);} : () => string
+
+    return example(f);
+>example(f) : string
+>example : (f: (a: string) => number) => string
+>f : (a: string) => string
+
+};
+
