@@ -1,0 +1,44 @@
+//// [tests/cases/conformance/es2026/jsonRawJSON.ts] ////
+
+=== jsonRawJSON.ts ===
+const raw = JSON.rawJSON("12345678901234567890");
+>raw : Symbol(raw, Decl(jsonRawJSON.ts, 0, 5))
+>JSON.rawJSON : Symbol(JSON.rawJSON, Decl(lib.es2026.json.d.ts, --, --))
+>JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2026.json.d.ts, --, --))
+>rawJSON : Symbol(JSON.rawJSON, Decl(lib.es2026.json.d.ts, --, --))
+
+const rawText: string = raw.rawJSON;
+>rawText : Symbol(rawText, Decl(jsonRawJSON.ts, 1, 5))
+>raw.rawJSON : Symbol(RawJSON.rawJSON, Decl(lib.es2026.json.d.ts, --, --))
+>raw : Symbol(raw, Decl(jsonRawJSON.ts, 0, 5))
+>rawJSON : Symbol(RawJSON.rawJSON, Decl(lib.es2026.json.d.ts, --, --))
+
+const serialized: string = JSON.stringify({ value: raw });
+>serialized : Symbol(serialized, Decl(jsonRawJSON.ts, 2, 5))
+>JSON.stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2026.json.d.ts, --, --))
+>stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>value : Symbol(value, Decl(jsonRawJSON.ts, 2, 43))
+>raw : Symbol(raw, Decl(jsonRawJSON.ts, 0, 5))
+
+raw.rawJSON = "0";
+>raw.rawJSON : Symbol(RawJSON.rawJSON, Decl(lib.es2026.json.d.ts, --, --))
+>raw : Symbol(raw, Decl(jsonRawJSON.ts, 0, 5))
+>rawJSON : Symbol(RawJSON.rawJSON, Decl(lib.es2026.json.d.ts, --, --))
+
+declare const value: unknown;
+>value : Symbol(value, Decl(jsonRawJSON.ts, 6, 13))
+
+if (JSON.isRawJSON(value)) {
+>JSON.isRawJSON : Symbol(JSON.isRawJSON, Decl(lib.es2026.json.d.ts, --, --))
+>JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2026.json.d.ts, --, --))
+>isRawJSON : Symbol(JSON.isRawJSON, Decl(lib.es2026.json.d.ts, --, --))
+>value : Symbol(value, Decl(jsonRawJSON.ts, 6, 13))
+
+    const narrowedText: string = value.rawJSON;
+>narrowedText : Symbol(narrowedText, Decl(jsonRawJSON.ts, 8, 9))
+>value.rawJSON : Symbol(RawJSON.rawJSON, Decl(lib.es2026.json.d.ts, --, --))
+>value : Symbol(value, Decl(jsonRawJSON.ts, 6, 13))
+>rawJSON : Symbol(RawJSON.rawJSON, Decl(lib.es2026.json.d.ts, --, --))
+}
+

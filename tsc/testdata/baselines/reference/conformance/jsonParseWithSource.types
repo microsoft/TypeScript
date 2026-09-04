@@ -1,0 +1,25 @@
+//// [tests/cases/conformance/es2026/jsonParseWithSource.ts] ////
+
+=== jsonParseWithSource.ts ===
+JSON.parse('{"value": 1}', function (key, parsedValue, context) {
+>JSON.parse('{"value": 1}', function (key, parsedValue, context) {    const source: string | undefined = context.source;    return parsedValue;}) : any
+>JSON.parse : { (text: string, reviver?: (this: any, key: string, value: any) => any): any; (text: string, reviver: (this: any, key: string, value: any, context: { source?: string; }) => any): any; }
+>JSON : JSON
+>parse : { (text: string, reviver?: (this: any, key: string, value: any) => any): any; (text: string, reviver: (this: any, key: string, value: any, context: { source?: string; }) => any): any; }
+>'{"value": 1}' : "{\"value\": 1}"
+>function (key, parsedValue, context) {    const source: string | undefined = context.source;    return parsedValue;} : (this: any, key: string, parsedValue: any, context: { source?: string; }) => any
+>key : string
+>parsedValue : any
+>context : { source?: string; }
+
+    const source: string | undefined = context.source;
+>source : string | undefined
+>context.source : string | undefined
+>context : { source?: string; }
+>source : string | undefined
+
+    return parsedValue;
+>parsedValue : any
+
+});
+

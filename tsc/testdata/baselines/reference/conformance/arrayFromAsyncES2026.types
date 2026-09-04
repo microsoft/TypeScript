@@ -1,0 +1,43 @@
+//// [tests/cases/conformance/es2026/arrayFromAsyncES2026.ts] ////
+
+=== arrayFromAsyncES2026.ts ===
+const resolvedValues: Promise<number[]> = Array.fromAsync([
+>resolvedValues : Promise<number[]>
+>Array.fromAsync([    Promise.resolve(1),    Promise.resolve(2),]) : Promise<number[]>
+>Array.fromAsync : { <T>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T | PromiseLike<T>> | ArrayLike<T | PromiseLike<T>>): Promise<T[]>; <T, U>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T> | ArrayLike<T>, mapFn: (value: Awaited<T>, index: number) => U, thisArg?: any): Promise<Awaited<U>[]>; }
+>Array : ArrayConstructor
+>fromAsync : { <T>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T | PromiseLike<T>> | ArrayLike<T | PromiseLike<T>>): Promise<T[]>; <T, U>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T> | ArrayLike<T>, mapFn: (value: Awaited<T>, index: number) => U, thisArg?: any): Promise<Awaited<U>[]>; }
+>[    Promise.resolve(1),    Promise.resolve(2),] : Promise<number>[]
+
+    Promise.resolve(1),
+>Promise.resolve(1) : Promise<number>
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>Promise : PromiseConstructor
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>1 : 1
+
+    Promise.resolve(2),
+>Promise.resolve(2) : Promise<number>
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>Promise : PromiseConstructor
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>2 : 2
+
+]);
+
+const mapped: Promise<string[]> = Array.fromAsync([1, 2], async value => value.toString());
+>mapped : Promise<string[]>
+>Array.fromAsync([1, 2], async value => value.toString()) : Promise<string[]>
+>Array.fromAsync : { <T>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T | PromiseLike<T>> | ArrayLike<T | PromiseLike<T>>): Promise<T[]>; <T, U>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T> | ArrayLike<T>, mapFn: (value: Awaited<T>, index: number) => U, thisArg?: any): Promise<Awaited<U>[]>; }
+>Array : ArrayConstructor
+>fromAsync : { <T>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T | PromiseLike<T>> | ArrayLike<T | PromiseLike<T>>): Promise<T[]>; <T, U>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T> | ArrayLike<T>, mapFn: (value: Awaited<T>, index: number) => U, thisArg?: any): Promise<Awaited<U>[]>; }
+>[1, 2] : number[]
+>1 : 1
+>2 : 2
+>async value => value.toString() : (value: number) => Promise<string>
+>value : number
+>value.toString() : string
+>value.toString : (radix?: number) => string
+>value : number
+>toString : (radix?: number) => string
+

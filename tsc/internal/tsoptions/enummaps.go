@@ -24,6 +24,7 @@ var LibMap = collections.NewOrderedMapFromList([]collections.MapEntry[string, an
 	{Key: "es2023", Value: "lib.es2023.d.ts"},
 	{Key: "es2024", Value: "lib.es2024.d.ts"},
 	{Key: "es2025", Value: "lib.es2025.d.ts"},
+	{Key: "es2026", Value: "lib.es2026.d.ts"},
 	{Key: "esnext", Value: "lib.esnext.d.ts"},
 	// Host only
 	{Key: "dom", Value: "lib.dom.d.ts"},
@@ -97,6 +98,13 @@ var LibMap = collections.NewOrderedMapFromList([]collections.MapEntry[string, an
 	{Key: "es2025.iterator", Value: "lib.es2025.iterator.d.ts"},
 	{Key: "es2025.promise", Value: "lib.es2025.promise.d.ts"},
 	{Key: "es2025.regexp", Value: "lib.es2025.regexp.d.ts"},
+	{Key: "es2026.array", Value: "lib.es2026.array.d.ts"},
+	{Key: "es2026.collection", Value: "lib.es2026.collection.d.ts"},
+	{Key: "es2026.error", Value: "lib.es2026.error.d.ts"},
+	{Key: "es2026.iterator", Value: "lib.es2026.iterator.d.ts"},
+	{Key: "es2026.json", Value: "lib.es2026.json.d.ts"},
+	{Key: "es2026.math", Value: "lib.es2026.math.d.ts"},
+	{Key: "es2026.typedarrays", Value: "lib.es2026.typedarrays.d.ts"},
 	// Fallback for backward compatibility
 	{Key: "esnext.asynciterable", Value: "lib.es2018.asynciterable.d.ts"},
 	{Key: "esnext.symbol", Value: "lib.es2019.symbol.d.ts"},
@@ -106,19 +114,19 @@ var LibMap = collections.NewOrderedMapFromList([]collections.MapEntry[string, an
 	{Key: "esnext.regexp", Value: "lib.es2024.regexp.d.ts"},
 	{Key: "esnext.string", Value: "lib.es2024.string.d.ts"},
 	{Key: "esnext.float16", Value: "lib.es2025.float16.d.ts"},
-	{Key: "esnext.iterator", Value: "lib.es2025.iterator.d.ts"},
 	{Key: "esnext.promise", Value: "lib.es2025.promise.d.ts"},
+	{Key: "esnext.array", Value: "lib.es2026.array.d.ts"},
+	{Key: "esnext.collection", Value: "lib.es2026.collection.d.ts"},
+	{Key: "esnext.error", Value: "lib.es2026.error.d.ts"},
+	{Key: "esnext.iterator", Value: "lib.es2026.iterator.d.ts"},
+	{Key: "esnext.typedarrays", Value: "lib.es2026.typedarrays.d.ts"},
 	// ESNext By-feature options
-	{Key: "esnext.array", Value: "lib.esnext.array.d.ts"},
-	{Key: "esnext.collection", Value: "lib.esnext.collection.d.ts"},
 	{Key: "esnext.date", Value: "lib.esnext.date.d.ts"},
 	{Key: "esnext.decorators", Value: "lib.esnext.decorators.d.ts"},
 	{Key: "esnext.disposable", Value: "lib.esnext.disposable.d.ts"},
-	{Key: "esnext.error", Value: "lib.esnext.error.d.ts"},
 	{Key: "esnext.intl", Value: "lib.esnext.intl.d.ts"},
 	{Key: "esnext.sharedmemory", Value: "lib.esnext.sharedmemory.d.ts"},
 	{Key: "esnext.temporal", Value: "lib.esnext.temporal.d.ts"},
-	{Key: "esnext.typedarrays", Value: "lib.esnext.typedarrays.d.ts"},
 	// Decorators
 	{Key: "decorators", Value: "lib.decorators.d.ts"},
 	{Key: "decorators.legacy", Value: "lib.decorators.legacy.d.ts"},
@@ -165,6 +173,7 @@ var targetOptionMap = collections.NewOrderedMapFromList([]collections.MapEntry[s
 	{Key: "es2023", Value: core.ScriptTargetES2023},
 	{Key: "es2024", Value: core.ScriptTargetES2024},
 	{Key: "es2025", Value: core.ScriptTargetES2025},
+	{Key: "es2026", Value: core.ScriptTargetES2026},
 	{Key: "esnext", Value: core.ScriptTargetESNext},
 })
 
@@ -206,6 +215,7 @@ var newLineOptionMap = collections.NewOrderedMapFromList([]collections.MapEntry[
 
 var targetToLibMap = map[core.ScriptTarget]string{
 	core.ScriptTargetESNext: "lib.esnext.full.d.ts",
+	core.ScriptTargetES2026: "lib.es2026.full.d.ts",
 	core.ScriptTargetES2025: "lib.es2025.full.d.ts",
 	core.ScriptTargetES2024: "lib.es2024.full.d.ts",
 	core.ScriptTargetES2023: "lib.es2023.full.d.ts",

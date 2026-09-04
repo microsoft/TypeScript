@@ -11,6 +11,7 @@ export var ScriptTarget: any;
     ScriptTarget[ScriptTarget["ES2023"] = 10] = "ES2023";
     ScriptTarget[ScriptTarget["ES2024"] = 11] = "ES2024";
     ScriptTarget[ScriptTarget["ES2025"] = 12] = "ES2025";
+    ScriptTarget[ScriptTarget["ES2026"] = 13] = "ES2026";
     ScriptTarget[ScriptTarget["ESNext"] = 99] = "ESNext";
     ScriptTarget[ScriptTarget["JSON"] = 100] = "JSON";
     ScriptTarget[ScriptTarget["Latest"] = 99] = "Latest";

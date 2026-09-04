@@ -973,6 +973,110 @@ Searching all ancestor node_modules directories for fallback extensions: JavaScr
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Module name '@typescript/lib-es2025/regexp' was not resolved. ========
+======== Resolving module '@typescript/lib-es2026/array' from '/.src/__lib_node_modules_lookup_lib.es2026.array.d.ts__.ts'. ========
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'require', 'types'.
+File '/.src/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+Loading module '@typescript/lib-es2026/array' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
+Directory '/.src/node_modules' does not exist, skipping all lookups in it.
+Directory '/node_modules' does not exist, skipping all lookups in it.
+Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
+Directory '/.src/node_modules' does not exist, skipping all lookups in it.
+Directory '/node_modules' does not exist, skipping all lookups in it.
+======== Module name '@typescript/lib-es2026/array' was not resolved. ========
+======== Resolving module '@typescript/lib-es2026/collection' from '/.src/__lib_node_modules_lookup_lib.es2026.collection.d.ts__.ts'. ========
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'require', 'types'.
+File '/.src/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+Loading module '@typescript/lib-es2026/collection' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
+Directory '/.src/node_modules' does not exist, skipping all lookups in it.
+Directory '/node_modules' does not exist, skipping all lookups in it.
+Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
+Directory '/.src/node_modules' does not exist, skipping all lookups in it.
+Directory '/node_modules' does not exist, skipping all lookups in it.
+======== Module name '@typescript/lib-es2026/collection' was not resolved. ========
+======== Resolving module '@typescript/lib-es2026' from '/.src/__lib_node_modules_lookup_lib.es2026.d.ts__.ts'. ========
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'require', 'types'.
+File '/.src/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+Loading module '@typescript/lib-es2026' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
+Directory '/.src/node_modules' does not exist, skipping all lookups in it.
+Directory '/node_modules' does not exist, skipping all lookups in it.
+Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
+Directory '/.src/node_modules' does not exist, skipping all lookups in it.
+Directory '/node_modules' does not exist, skipping all lookups in it.
+======== Module name '@typescript/lib-es2026' was not resolved. ========
+======== Resolving module '@typescript/lib-es2026/error' from '/.src/__lib_node_modules_lookup_lib.es2026.error.d.ts__.ts'. ========
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'require', 'types'.
+File '/.src/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+Loading module '@typescript/lib-es2026/error' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
+Directory '/.src/node_modules' does not exist, skipping all lookups in it.
+Directory '/node_modules' does not exist, skipping all lookups in it.
+Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
+Directory '/.src/node_modules' does not exist, skipping all lookups in it.
+Directory '/node_modules' does not exist, skipping all lookups in it.
+======== Module name '@typescript/lib-es2026/error' was not resolved. ========
+======== Resolving module '@typescript/lib-es2026/iterator' from '/.src/__lib_node_modules_lookup_lib.es2026.iterator.d.ts__.ts'. ========
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'require', 'types'.
+File '/.src/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+Loading module '@typescript/lib-es2026/iterator' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
+Directory '/.src/node_modules' does not exist, skipping all lookups in it.
+Directory '/node_modules' does not exist, skipping all lookups in it.
+Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
+Directory '/.src/node_modules' does not exist, skipping all lookups in it.
+Directory '/node_modules' does not exist, skipping all lookups in it.
+======== Module name '@typescript/lib-es2026/iterator' was not resolved. ========
+======== Resolving module '@typescript/lib-es2026/json' from '/.src/__lib_node_modules_lookup_lib.es2026.json.d.ts__.ts'. ========
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'require', 'types'.
+File '/.src/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+Loading module '@typescript/lib-es2026/json' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
+Directory '/.src/node_modules' does not exist, skipping all lookups in it.
+Directory '/node_modules' does not exist, skipping all lookups in it.
+Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
+Directory '/.src/node_modules' does not exist, skipping all lookups in it.
+Directory '/node_modules' does not exist, skipping all lookups in it.
+======== Module name '@typescript/lib-es2026/json' was not resolved. ========
+======== Resolving module '@typescript/lib-es2026/math' from '/.src/__lib_node_modules_lookup_lib.es2026.math.d.ts__.ts'. ========
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'require', 'types'.
+File '/.src/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+Loading module '@typescript/lib-es2026/math' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
+Directory '/.src/node_modules' does not exist, skipping all lookups in it.
+Directory '/node_modules' does not exist, skipping all lookups in it.
+Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
+Directory '/.src/node_modules' does not exist, skipping all lookups in it.
+Directory '/node_modules' does not exist, skipping all lookups in it.
+======== Module name '@typescript/lib-es2026/math' was not resolved. ========
+======== Resolving module '@typescript/lib-es2026/typedarrays' from '/.src/__lib_node_modules_lookup_lib.es2026.typedarrays.d.ts__.ts'. ========
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'require', 'types'.
+File '/.src/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+Loading module '@typescript/lib-es2026/typedarrays' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
+Directory '/.src/node_modules' does not exist, skipping all lookups in it.
+Directory '/node_modules' does not exist, skipping all lookups in it.
+Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
+Directory '/.src/node_modules' does not exist, skipping all lookups in it.
+Directory '/node_modules' does not exist, skipping all lookups in it.
+======== Module name '@typescript/lib-es2026/typedarrays' was not resolved. ========
 ======== Resolving module '@typescript/lib-es5' from '/.src/__lib_node_modules_lookup_lib.es5.d.ts__.ts'. ========
 Module resolution kind is not specified, using 'Bundler'.
 Resolving in CJS mode with conditions 'require', 'types'.
@@ -986,32 +1090,6 @@ Searching all ancestor node_modules directories for fallback extensions: JavaScr
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Module name '@typescript/lib-es5' was not resolved. ========
-======== Resolving module '@typescript/lib-esnext/array' from '/.src/__lib_node_modules_lookup_lib.esnext.array.d.ts__.ts'. ========
-Module resolution kind is not specified, using 'Bundler'.
-Resolving in CJS mode with conditions 'require', 'types'.
-File '/.src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-Loading module '@typescript/lib-esnext/array' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
-Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
-Directory '/.src/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules' does not exist, skipping all lookups in it.
-Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
-Directory '/.src/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules' does not exist, skipping all lookups in it.
-======== Module name '@typescript/lib-esnext/array' was not resolved. ========
-======== Resolving module '@typescript/lib-esnext/collection' from '/.src/__lib_node_modules_lookup_lib.esnext.collection.d.ts__.ts'. ========
-Module resolution kind is not specified, using 'Bundler'.
-Resolving in CJS mode with conditions 'require', 'types'.
-File '/.src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-Loading module '@typescript/lib-esnext/collection' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
-Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
-Directory '/.src/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules' does not exist, skipping all lookups in it.
-Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
-Directory '/.src/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules' does not exist, skipping all lookups in it.
-======== Module name '@typescript/lib-esnext/collection' was not resolved. ========
 ======== Resolving module '@typescript/lib-esnext' from '/.src/__lib_node_modules_lookup_lib.esnext.d.ts__.ts'. ========
 Module resolution kind is not specified, using 'Bundler'.
 Resolving in CJS mode with conditions 'require', 'types'.
@@ -1064,19 +1142,6 @@ Searching all ancestor node_modules directories for fallback extensions: JavaScr
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Module name '@typescript/lib-esnext/disposable' was not resolved. ========
-======== Resolving module '@typescript/lib-esnext/error' from '/.src/__lib_node_modules_lookup_lib.esnext.error.d.ts__.ts'. ========
-Module resolution kind is not specified, using 'Bundler'.
-Resolving in CJS mode with conditions 'require', 'types'.
-File '/.src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-Loading module '@typescript/lib-esnext/error' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
-Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
-Directory '/.src/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules' does not exist, skipping all lookups in it.
-Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
-Directory '/.src/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules' does not exist, skipping all lookups in it.
-======== Module name '@typescript/lib-esnext/error' was not resolved. ========
 ======== Resolving module '@typescript/lib-esnext/intl' from '/.src/__lib_node_modules_lookup_lib.esnext.intl.d.ts__.ts'. ========
 Module resolution kind is not specified, using 'Bundler'.
 Resolving in CJS mode with conditions 'require', 'types'.
@@ -1116,16 +1181,3 @@ Searching all ancestor node_modules directories for fallback extensions: JavaScr
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Module name '@typescript/lib-esnext/temporal' was not resolved. ========
-======== Resolving module '@typescript/lib-esnext/typedarrays' from '/.src/__lib_node_modules_lookup_lib.esnext.typedarrays.d.ts__.ts'. ========
-Module resolution kind is not specified, using 'Bundler'.
-Resolving in CJS mode with conditions 'require', 'types'.
-File '/.src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-Loading module '@typescript/lib-esnext/typedarrays' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
-Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
-Directory '/.src/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules' does not exist, skipping all lookups in it.
-Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
-Directory '/.src/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules' does not exist, skipping all lookups in it.
-======== Module name '@typescript/lib-esnext/typedarrays' was not resolved. ========

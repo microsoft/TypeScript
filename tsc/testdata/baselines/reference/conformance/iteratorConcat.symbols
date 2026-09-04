@@ -1,0 +1,29 @@
+//// [tests/cases/conformance/es2026/iteratorConcat.ts] ////
+
+=== iteratorConcat.ts ===
+const concatenated: IteratorObject<number | string, undefined, unknown> = Iterator.concat(
+>concatenated : Symbol(concatenated, Decl(iteratorConcat.ts, 0, 5))
+>IteratorObject : Symbol(IteratorObject, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2025.iterator.d.ts, --, --))
+>Iterator.concat : Symbol(IteratorConstructor.concat, Decl(lib.es2026.iterator.d.ts, --, --))
+>Iterator : Symbol(Iterator, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2025.iterator.d.ts, --, --))
+>concat : Symbol(IteratorConstructor.concat, Decl(lib.es2026.iterator.d.ts, --, --))
+
+    [1, 2],
+    new Set(["a", "b"]),
+>Set : Symbol(Set, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2025.collection.d.ts, --, --))
+
+);
+
+const empty: IteratorObject<never, undefined, unknown> = Iterator.concat();
+>empty : Symbol(empty, Decl(iteratorConcat.ts, 5, 5))
+>IteratorObject : Symbol(IteratorObject, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2025.iterator.d.ts, --, --))
+>Iterator.concat : Symbol(IteratorConstructor.concat, Decl(lib.es2026.iterator.d.ts, --, --))
+>Iterator : Symbol(Iterator, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2025.iterator.d.ts, --, --))
+>concat : Symbol(IteratorConstructor.concat, Decl(lib.es2026.iterator.d.ts, --, --))
+
+// Iterator.concat requires iterable objects; unlike Iterator.from, it does not accept string primitives.
+Iterator.concat("abc");
+>Iterator.concat : Symbol(IteratorConstructor.concat, Decl(lib.es2026.iterator.d.ts, --, --))
+>Iterator : Symbol(Iterator, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2025.iterator.d.ts, --, --))
+>concat : Symbol(IteratorConstructor.concat, Decl(lib.es2026.iterator.d.ts, --, --))
+
