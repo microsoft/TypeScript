@@ -3,12 +3,12 @@
 === fakeInfinity1.ts ===
 // These are not actually the real infinity.
 export type PositiveInfinity = 1e999;
->PositiveInfinity : Infinity
+>PositiveInfinity : 1e999
 
 export type NegativeInfinity = -1e999;
->NegativeInfinity : -Infinity
->-1e999 : -Infinity
->1e999 : Infinity
+>NegativeInfinity : -1e999
+>-1e999 : -1e999
+>1e999 : 1e999
 
 export type TypeOfInfinity = typeof Infinity;
 >TypeOfInfinity : number
@@ -19,41 +19,41 @@ export type TypeOfNaN = typeof NaN;
 >NaN : number
 
 type A = 1e999;
->A : Infinity
+>A : 1e999
 
 type B = 1e9999;
->B : Infinity
+>B : 1e999
 
 declare let a: A;
->a : Infinity
+>a : 1e999
 
 declare let b: B;
->b : Infinity
+>b : 1e999
 
 a = b;
->a = b : Infinity
->a : Infinity
->b : Infinity
+>a = b : 1e999
+>a : 1e999
+>b : 1e999
 
 b = a;
->b = a : Infinity
->b : Infinity
->a : Infinity
+>b = a : 1e999
+>b : 1e999
+>a : 1e999
 
 a = Infinity;
 >a = Infinity : number
->a : Infinity
+>a : 1e999
 >Infinity : number
 
 a = 1e999;
->a = 1e999 : Infinity
->a : Infinity
->1e999 : Infinity
+>a = 1e999 : 1e999
+>a : 1e999
+>1e999 : 1e999
 
 a = 1e9999;
->a = 1e9999 : Infinity
->a : Infinity
->1e9999 : Infinity
+>a = 1e9999 : 1e999
+>a : 1e999
+>1e9999 : 1e999
 
 export type Oops = 123456789123456789123456789123456789123456789123456789;
 >Oops : 1.2345678912345678e+53

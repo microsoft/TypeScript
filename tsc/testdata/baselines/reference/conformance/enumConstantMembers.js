@@ -62,11 +62,11 @@ var E3;
 })(E3 || (E3 = {}));
 var E5;
 (function (E5) {
-    E5[E5["a"] = Infinity] = "a";
-    E5[E5["b"] = Infinity] = "b";
-    E5[E5["c"] = Infinity] = "c";
+    E5[E5["a"] = 1e999] = "a";
+    E5[E5["b"] = 1e999] = "b";
+    E5[E5["c"] = 1e999] = "c";
     E5[E5["d"] = NaN] = "d";
     E5[E5["e"] = NaN] = "e";
-    E5[E5["f"] = Infinity] = "f";
-    E5[E5["g"] = -Infinity] = "g";
+    E5[E5["f"] = 1e999] = "f";
+    E5[E5["g"] = -1e999] = "g";
 })(E5 || (E5 = {}));
