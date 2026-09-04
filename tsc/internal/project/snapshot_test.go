@@ -35,6 +35,20 @@ func TestSnapshot(t *testing.T) {
 		return session
 	}
 
+	t.Run("temporary file can be added to an empty root snapshot", func(t *testing.T) {
+		t.Parallel()
+		session := setup(map[string]any{})
+		defer session.Close()
+
+		baseSnapshot := session.Snapshot()
+		uri := lsproto.DocumentUri("file:///temporary.ts")
+		snapshot, err := session.CloneSnapshotWithTemporaryFile(context.Background(), baseSnapshot, uri, "export const value = 1;")
+		assert.NilError(t, err)
+		defer snapshot.Deref()
+
+		assert.Equal(t, snapshot.GetFile(uri.FileName()).Content(), "export const value = 1;")
+	})
+
 	t.Run("compilerHost gets frozen with snapshot's FS only once", func(t *testing.T) {
 		t.Parallel()
 		files := map[string]any{
