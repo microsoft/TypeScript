@@ -1,4 +1,7 @@
-import { fsCallbackNames } from "../fs.ts";
+import {
+    type FileSystem,
+    fsCallbackNames,
+} from "../fs.ts";
 import {
     type ClientOptions,
     type ClientSocketOptions,
@@ -32,39 +35,48 @@ export class Client {
     private maxResponseBytesPerPage: number | undefined;
 
     constructor(options: ClientOptions) {
-        if (!isSpawnOptions(options)) {
-            throw new Error("Socket connections are not yet supported in the sync client");
-        }
+        let enabledCallbacks: (typeof fsCallbackNames[number])[] = [];
+        let channel: SyncRpcChannel;
+        let fs: FileSystem | undefined;
+        let collectTiming = false;
 
-        const args = getAPIProcessArgs(options, false);
         this.maxResponseBytesPerPage = options.maxResponseBytesPerPage;
+        if (isSpawnOptions(options)) {
+            const args = getAPIProcessArgs(options, false);
 
-        // Enable virtual FS callbacks for each provided FS function
-        const enabledCallbacks: (typeof fsCallbackNames[number])[] = [];
-        if (options.fs) {
-            for (const name of fsCallbackNames) {
-                if (options.fs[name]) {
-                    enabledCallbacks.push(name);
+            // Enable virtual FS callbacks for each provided FS function
+            if (options.fs) {
+                for (const name of fsCallbackNames) {
+                    if (options.fs[name]) {
+                        enabledCallbacks.push(name);
+                    }
                 }
             }
-        }
-        if (enabledCallbacks.length > 0) {
-            args.push(`--callbacks=${enabledCallbacks.join(",")}`);
-        }
+            if (enabledCallbacks.length > 0) {
+                args.push(`--callbacks=${enabledCallbacks.join(",")}`);
+            }
 
-        const collectTiming = options.collectTiming ?? false;
+            collectTiming = options.collectTiming ?? false;
+            fs = options.fs;
+            channel = new SyncRpcChannel({
+                exe: resolveExePath(options),
+                args,
+            }, collectTiming);
+        }
+        else {
+            channel = new SyncRpcChannel({ pipe: options.pipe }, collectTiming);
+        }
         if (collectTiming) {
             this.timing = new TimingCollector();
         }
 
-        const channel = new SyncRpcChannel(resolveExePath(options), args, collectTiming);
         this.channel = channel;
 
-        if (options.fs) {
+        if (fs) {
             for (const name of enabledCallbacks) {
                 if (name === "writeFile") {
-                    if (!options.fs.writeFile) continue;
-                    const callback = options.fs.writeFile;
+                    if (!fs.writeFile) continue;
+                    const callback = fs.writeFile;
 
                     channel.registerCallback(name, (_, arg) => {
                         const { path, data } = JSON.parse(arg);
@@ -75,7 +87,7 @@ export class Client {
                     continue;
                 }
 
-                const callback = options.fs[name]!;
+                const callback = fs[name]!;
                 channel.registerCallback(name, (_, arg) => {
                     const result = callback(JSON.parse(arg));
                     if (name === "readFile") {

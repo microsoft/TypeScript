@@ -106,11 +106,11 @@ export class SessionManager implements vscode.Disposable {
         });
     }
 
-    async initializeAPIConnection(pipe?: string): Promise<string> {
+    async initializeAPIConnection(pipe?: string, synchronous?: boolean): Promise<string> {
         if (!this.currentSession) {
             throw new Error(vscode.l10n.t("Language server is not running."));
         }
-        const result = await this.currentSession.client.initializeAPISession(pipe);
+        const result = await this.currentSession.client.initializeAPISession(pipe, synchronous);
         return result.pipe;
     }
 

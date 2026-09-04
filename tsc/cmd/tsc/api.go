@@ -16,7 +16,7 @@ import (
 
 type apiFlags struct {
 	cwd             string
-	pipePath        string
+	transport       string
 	callbacks       string
 	async           bool
 	timing          bool
@@ -27,7 +27,7 @@ func parseAPIFlags(args []string) (apiFlags, error) {
 	flags := flag.NewFlagSet("api", flag.ContinueOnError)
 	result := apiFlags{}
 	flags.StringVar(&result.cwd, "cwd", core.Must(os.Getwd()), "current working directory")
-	flags.StringVar(&result.pipePath, "pipe", "", "use named pipe or Unix domain socket for communication instead of stdio")
+	flags.StringVar(&result.transport, "transport", "", "transport mechanism: stdio, pipe=<path>, sync=<path>")
 	flags.StringVar(&result.callbacks, "callbacks", "", "comma-separated list of FS callbacks to enable (readFile,fileExists,directoryExists,getAccessibleEntries,realpath)")
 	flags.BoolVar(&result.async, "async", false, "use JSON-RPC protocol instead of MessagePack (for async API)")
 	flags.BoolVar(&result.timing, "timing", false, "collect per-request server processing time, folded into the client's timing snapshot")
@@ -52,24 +52,17 @@ func runAPI(args []string) int {
 		callbacksList = strings.Split(flags.callbacks, ",")
 	}
 
-	options := &api.StdioServerOptions{
-		Err:                  os.Stderr,
+	options := &api.ServerOptions{
 		Cwd:                  flags.cwd,
 		DefaultLibraryPath:   defaultLibraryPath,
+		Transport:            flags.transport,
 		Callbacks:            callbacksList,
 		Async:                flags.async,
 		CollectTiming:        flags.timing,
 		RunExternalCode:      flags.runExternalCode,
 		ContentMapperSpawner: newSystem(),
 	}
-	if flags.pipePath != "" {
-		options.PipePath = flags.pipePath
-	} else {
-		options.In = os.Stdin
-		options.Out = os.Stdout
-	}
-
-	s := api.NewStdioServer(options)
+	s := api.NewServer(options)
 
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	defer stop()

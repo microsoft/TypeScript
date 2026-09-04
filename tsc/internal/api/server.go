@@ -3,7 +3,8 @@ package api
 import (
 	"context"
 	"fmt"
-	"io"
+	"os"
+	"strings"
 
 	"github.com/microsoft/TypeScript/tsc/internal/bundled"
 	"github.com/microsoft/TypeScript/tsc/internal/contentmapper"
@@ -13,16 +14,12 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/osvfs"
 )
 
-// StdioServerOptions configures the STDIO-based API server.
-type StdioServerOptions struct {
-	In                 io.ReadCloser
-	Out                io.WriteCloser
-	Err                io.Writer
+// ServerOptions configures the API server.
+type ServerOptions struct {
 	Cwd                string
 	DefaultLibraryPath string
-	// PipePath, if set, listens on a named pipe (Windows) or Unix domain
-	// socket instead of using In/Out for communication.
-	PipePath string
+	// Transport specifies "stdio", "pipe=<path>", or "sync=<path>".
+	Transport string
 	// Callbacks specifies which filesystem operations should be delegated
 	// to the client (e.g., "readFile", "fileExists"). Empty means no callbacks.
 	Callbacks []string
@@ -40,39 +37,31 @@ type StdioServerOptions struct {
 	ContentMapperSpawner contentmapper.Spawner
 }
 
-// StdioServer runs an API session over STDIO using MessagePack protocol.
-// This is the entry point for the synchronous STDIO-based API used by
+// Server runs an API session using MessagePack or JSON-RPC.
+// This is the entry point for the API used by
 // native TypeScript tooling integration.
-type StdioServer struct {
-	options *StdioServerOptions
+type Server struct {
+	options *ServerOptions
 }
 
-// NewStdioServer creates a new STDIO-based API server.
-func NewStdioServer(options *StdioServerOptions) *StdioServer {
+// NewServer creates an API server.
+func NewServer(options *ServerOptions) *Server {
 	if options.Cwd == "" {
-		panic("StdioServerOptions.Cwd is required")
+		panic("ServerOptions.Cwd is required")
 	}
 
-	return &StdioServer{
+	return &Server{
 		options: options,
 	}
 }
 
 // Run starts the server and blocks until the connection closes.
-func (s *StdioServer) Run(ctx context.Context) error {
-	var transport ipc.Transport
-	if s.options.PipePath != "" {
-		t, err := ipc.NewPipeTransport(s.options.PipePath)
-		if err != nil {
-			return fmt.Errorf("failed to create pipe transport: %w", err)
-		}
-		defer t.Close()
-		transport = t
-	} else {
-		t := ipc.NewStdioTransport(s.options.In, s.options.Out)
-		defer t.Close()
-		transport = t
+func (s *Server) Run(ctx context.Context) error {
+	transport, err := s.createTransport()
+	if err != nil {
+		return fmt.Errorf("failed to create transport: %w", err)
 	}
+	defer transport.Close()
 
 	fs := bundled.WrapFS(osvfs.FS())
 
@@ -103,10 +92,21 @@ func (s *StdioServer) Run(ctx context.Context) error {
 	defer session.Close()
 
 	// Accept connection from transport
-	rwc, err := transport.Accept()
+	rwc, err := transport.Accept(ctx)
 	if err != nil {
 		return fmt.Errorf("failed to accept connection: %w", err)
 	}
+	defer rwc.Close()
+	connectionDone := make(chan struct{})
+	defer close(connectionDone)
+	go func() {
+		select {
+		case <-ctx.Done():
+			_ = rwc.Close()
+		case <-connectionDone:
+			return
+		}
+	}()
 
 	// Create protocol and connection based on async mode
 	var conn ipc.Conn
@@ -128,4 +128,21 @@ func (s *StdioServer) Run(ctx context.Context) error {
 	}
 
 	return conn.Run(ctx)
+}
+
+func (s *Server) createTransport() (ipc.Transport, error) {
+	spec := s.options.Transport
+	switch {
+	case spec == "" || spec == "stdio":
+		return ipc.NewStdioTransport(
+			os.Stdin,  //nolint:forbidigo
+			os.Stdout, //nolint:forbidigo
+		), nil
+	case strings.HasPrefix(spec, "pipe="):
+		return ipc.NewPipeTransport(strings.TrimPrefix(spec, "pipe="))
+	case strings.HasPrefix(spec, "sync="):
+		return ipc.NewSyncTransport(strings.TrimPrefix(spec, "sync="))
+	default:
+		return nil, fmt.Errorf("unknown transport: %q", spec)
+	}
 }
