@@ -32,6 +32,7 @@ type AsyncConn struct {
 	pendingMu sync.Mutex
 	terminal  error
 	writeMu   sync.Mutex
+	handlers  sync.WaitGroup
 }
 
 // NewAsyncConn creates a new async connection with the given transport and handler.
@@ -64,7 +65,10 @@ func (c *AsyncConn) SetCollectTiming(enabled bool) {
 // Run starts processing messages on the connection.
 // It blocks until the context is cancelled or an error occurs.
 func (c *AsyncConn) Run(ctx context.Context) (err error) {
-	defer func() { c.closePendingCalls(err) }()
+	defer func() {
+		c.closePendingCalls(err)
+		c.handlers.Wait()
+	}()
 	for {
 		if ctx.Err() != nil {
 			return ctx.Err()
@@ -81,9 +85,13 @@ func (c *AsyncConn) Run(ctx context.Context) (err error) {
 		if msg.IsResponse() {
 			c.handleResponse(msg)
 		} else if msg.IsRequest() {
-			go c.handleRequest(ctx, msg)
+			c.handlers.Go(func() {
+				c.handleRequest(ctx, msg)
+			})
 		} else if msg.IsNotification() {
-			go c.handleNotification(ctx, msg)
+			c.handlers.Go(func() {
+				c.handleNotification(ctx, msg)
+			})
 		}
 	}
 }

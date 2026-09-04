@@ -1,0 +1,197 @@
+package project
+
+import (
+	"context"
+	"slices"
+	"sync/atomic"
+
+	"github.com/microsoft/TypeScript/tsc/internal/ast"
+	"github.com/microsoft/TypeScript/tsc/internal/contentmapper"
+	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/debug"
+	"github.com/microsoft/TypeScript/tsc/internal/ls/lsutil"
+	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
+	"github.com/microsoft/TypeScript/tsc/internal/project/logging"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
+	"github.com/microsoft/TypeScript/tsc/internal/vfs"
+)
+
+// SnapshotStore owns the services shared by a collection of immutable snapshots.
+type SnapshotStore struct {
+	options *SessionOptions
+	toPath  func(string) tspath.Path
+	fs      vfs.FS
+
+	parseCache              *ParseCache
+	contentMappedParseCache *ContentMappedParseCache
+	extendedConfigCache     *ExtendedConfigCache
+	programCounter          *programCounter
+	contentMapperHost       contentmapper.Host
+
+	snapshotID atomic.Uint64
+}
+
+func (s *SnapshotStore) nextSnapshotID() uint64 {
+	return s.snapshotID.Add(1)
+}
+
+func (s *SnapshotStore) assertOwns(snapshot *Snapshot) {
+	debug.Assert(snapshot.store == s, "snapshot belongs to a different store")
+}
+
+func NewSnapshotStore(init *SessionInit) *SnapshotStore {
+	currentDirectory := init.Options.CurrentDirectory
+	useCaseSensitiveFileNames := init.FS.UseCaseSensitiveFileNames()
+	toPath := func(fileName string) tspath.Path {
+		return tspath.ToPath(fileName, currentDirectory, useCaseSensitiveFileNames)
+	}
+	parseCache := init.ParseCache
+	if parseCache == nil {
+		parseCache = NewParseCache(RefCountCacheOptions{})
+	}
+	contentMappedParseCache := init.ContentMappedParseCache
+	if contentMappedParseCache == nil {
+		contentMappedParseCache = NewContentMappedParseCache(RefCountCacheOptions{})
+	}
+
+	return &SnapshotStore{
+		options:                 init.Options,
+		toPath:                  toPath,
+		fs:                      init.FS,
+		parseCache:              parseCache,
+		contentMappedParseCache: contentMappedParseCache,
+		extendedConfigCache:     NewExtendedConfigCache(),
+		programCounter:          &programCounter{},
+		contentMapperHost:       newContentMapperHost(init),
+	}
+}
+
+// NewStandaloneRootSnapshot creates the compatibility root for a standalone API session.
+func (s *SnapshotStore) NewStandaloneRootSnapshot() *Snapshot {
+	return s.newRootSnapshot(0, false)
+}
+
+// RetainSnapshot adds a reference to a snapshot owned by this store.
+func (s *SnapshotStore) RetainSnapshot(snapshot *Snapshot) {
+	s.assertOwns(snapshot)
+	snapshot.ref()
+}
+
+// DeriveSnapshot derives a snapshot from baseSnapshot without adopting it as any
+// canonical session state or performing session side effects.
+func (s *SnapshotStore) DeriveSnapshot(
+	ctx context.Context,
+	baseSnapshot *Snapshot,
+	fileChanges FileChangeSummary,
+	apiRequest *APISnapshotRequest,
+) (*Snapshot, error) {
+	s.assertOwns(baseSnapshot)
+	snapshot := s.update(ctx, baseSnapshot, SnapshotChange{
+		apiRequest:  apiRequest,
+		fileChanges: fileChanges,
+	})
+	return snapshot, snapshot.apiError
+}
+
+// update derives a snapshot from baseSnapshot without adopting it as any
+// canonical session state or performing session side effects.
+func (s *SnapshotStore) update(ctx context.Context, baseSnapshot *Snapshot, change SnapshotChange) *Snapshot {
+	return baseSnapshot.Clone(ctx, change, baseSnapshot.fs.overlays, nil)
+}
+
+// DeriveTemporarySnapshot derives a snapshot with a temporary file content override.
+func (s *SnapshotStore) DeriveTemporarySnapshot(
+	ctx context.Context,
+	baseSnapshot *Snapshot,
+	uri lsproto.DocumentUri,
+	newText string,
+) (*Snapshot, error) {
+	s.assertOwns(baseSnapshot)
+	return baseSnapshot.cloneWithTemporaryFile(ctx, uri, newText)
+}
+
+// DeriveProgramSnapshot derives an isolated snapshot containing one synthetic
+// project. The base snapshot is not adopted as canonical state.
+func (s *SnapshotStore) DeriveProgramSnapshot(
+	ctx context.Context,
+	baseSnapshot *Snapshot,
+	rootFileNames []string,
+	options *core.CompilerOptions,
+	projectReferences []*core.ProjectReference,
+	configFileParsingDiagnostics []*ast.Diagnostic,
+	oldProject *Project,
+	fileChanges FileChangeSummary,
+) *Snapshot {
+	s.assertOwns(baseSnapshot)
+	return baseSnapshot.cloneForProgram(
+		ctx,
+		rootFileNames,
+		options,
+		projectReferences,
+		configFileParsingDiagnostics,
+		oldProject,
+		fileChanges,
+		nil,
+	)
+}
+
+// DeriveWithAutoImports derives a snapshot with auto-import preparation without
+// adopting the clone in the background.
+func (s *SnapshotStore) DeriveWithAutoImports(ctx context.Context, baseSnapshot *Snapshot, uri lsproto.DocumentUri) *Snapshot {
+	return s.deriveWithAutoImports(ctx, baseSnapshot, uri, nil)
+}
+
+func (s *SnapshotStore) deriveWithAutoImports(ctx context.Context, baseSnapshot *Snapshot, uri lsproto.DocumentUri, logger logging.Logger) *Snapshot {
+	s.assertOwns(baseSnapshot)
+	change := SnapshotChange{
+		reason: UpdateReasonRequestedLanguageServiceWithAutoImports,
+		ResourceRequest: ResourceRequest{
+			Documents:   []lsproto.DocumentUri{uri},
+			AutoImports: uri,
+		},
+	}
+	return baseSnapshot.Clone(ctx, change, baseSnapshot.fs.overlays, logger)
+}
+
+func (s *SnapshotStore) newRootSnapshot(id uint64, relativePatternSupport bool) *Snapshot {
+	return s.newSnapshot(
+		id,
+		&SnapshotFS{
+			toPath: s.toPath,
+			fs:     s.fs,
+		},
+		&ConfigFileRegistry{},
+		nil,
+		lsutil.NewDefaultUserPreferences(),
+		nil,
+		NewWatchedFiles(
+			"auto-import",
+			lsproto.WatchKindCreate|lsproto.WatchKindChange|lsproto.WatchKindDelete,
+			relativePatternSupport,
+			func(nodeModulesDirs map[tspath.Path]string) PatternsAndIgnored {
+				patterns := make([]string, 0, len(nodeModulesDirs))
+				for _, dir := range nodeModulesDirs {
+					patterns = append(patterns, getRecursiveGlobPattern(dir))
+				}
+				slices.Sort(patterns)
+				return PatternsAndIgnored{
+					patternsInsideWorkspace: patterns,
+				}
+			},
+		),
+	)
+}
+
+func (s *SnapshotStore) FS() vfs.FS {
+	return s.fs
+}
+
+func (s *SnapshotStore) GetCurrentDirectory() string {
+	return s.options.CurrentDirectory
+}
+
+func (s *SnapshotStore) Close() {
+	if s.contentMapperHost != nil {
+		_ = s.contentMapperHost.Close()
+	}
+}

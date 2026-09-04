@@ -99,7 +99,7 @@ func TestExtendedConfigCacheOwnership(t *testing.T) {
 	}
 
 	ownerCount := func(session *Session, path tspath.Path) int {
-		entry, ok := session.extendedConfigCache.entries.Load(path)
+		entry, ok := session.store.extendedConfigCache.entries.Load(path)
 		if !ok {
 			return 0
 		}
@@ -108,8 +108,8 @@ func TestExtendedConfigCacheOwnership(t *testing.T) {
 
 	assertNoEntry := func(t *testing.T, session *Session, fileName string) {
 		t.Helper()
-		path := session.toPath(fileName)
-		_, ok := session.extendedConfigCache.entries.Load(path)
+		path := session.store.toPath(fileName)
+		_, ok := session.store.extendedConfigCache.entries.Load(path)
 		assert.Equal(t, ok, false)
 	}
 
@@ -120,7 +120,7 @@ func TestExtendedConfigCacheOwnership(t *testing.T) {
 				continue
 			}
 			for _, file := range cfg.commandLine.ExtendedSourceFiles() {
-				result[session.toPath(file)]++
+				result[session.store.toPath(file)]++
 			}
 		}
 		return result
@@ -237,7 +237,7 @@ func TestExtendedConfigCacheOwnership(t *testing.T) {
 		assert.Assert(t, config != nil)
 		extended := config.ExtendedSourceFiles()
 		assert.Equal(t, len(extended), 1)
-		assert.Equal(t, session.toPath(extended[0]), session.toPath("/project/shared.json"))
+		assert.Equal(t, session.store.toPath(extended[0]), session.store.toPath("/project/shared.json"))
 	})
 
 	t.Run("transitive extended config ownership with new project", func(t *testing.T) {
@@ -276,8 +276,8 @@ func TestExtendedConfigCacheOwnership(t *testing.T) {
 		session.DidOpenFile(context.Background(), "file:///user/username/projects/projectA/src/main.ts", 1, files["/user/username/projects/projectA/src/main.ts"].(string), lsproto.LanguageKindTypeScript)
 
 		// Verify extended configs are in cache with correct owner counts
-		baseEntry, baseOk := session.extendedConfigCache.entries.Load("/user/username/projects/shared/tsconfig.base.json")
-		commonEntry, commonOk := session.extendedConfigCache.entries.Load("/user/username/projects/shared/tsconfig.common.json")
+		baseEntry, baseOk := session.store.extendedConfigCache.entries.Load("/user/username/projects/shared/tsconfig.base.json")
+		commonEntry, commonOk := session.store.extendedConfigCache.entries.Load("/user/username/projects/shared/tsconfig.common.json")
 		assert.Assert(t, baseOk, "tsconfig.base.json should be in cache")
 		assert.Assert(t, commonOk, "tsconfig.common.json should be in cache")
 		assert.Equal(t, len(baseEntry.owners), 1)

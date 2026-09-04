@@ -131,8 +131,8 @@ func TestRefCountingCaches(t *testing.T) {
 			program := snapshot.ProjectCollection.InferredProject().Program
 			main := program.GetSourceFile("/user/username/projects/myproject/src/main.ts")
 			utils := program.GetSourceFile("/user/username/projects/myproject/src/utils.ts")
-			mainEntry, _ := session.parseCache.entries.Load(NewParseCacheKey(main.ParseOptions(), main.Hash, main.ScriptKind))
-			utilsEntry, _ := session.parseCache.entries.Load(NewParseCacheKey(utils.ParseOptions(), utils.Hash, utils.ScriptKind))
+			mainEntry, _ := session.store.parseCache.entries.Load(NewParseCacheKey(main.ParseOptions(), main.Hash, main.ScriptKind))
+			utilsEntry, _ := session.store.parseCache.entries.Load(NewParseCacheKey(utils.ParseOptions(), utils.Hash, utils.ScriptKind))
 			assert.Equal(t, mainEntry.refCount, 1)
 			assert.Equal(t, utilsEntry.refCount, 1)
 
@@ -151,7 +151,7 @@ func TestRefCountingCaches(t *testing.T) {
 			assert.NilError(t, err)
 			session.WaitForBackgroundTasks()
 			newMain := ls.GetProgram().GetSourceFile("/user/username/projects/myproject/src/main.ts")
-			newMainEntry, _ := session.parseCache.entries.Load(NewParseCacheKey(newMain.ParseOptions(), newMain.Hash, newMain.ScriptKind))
+			newMainEntry, _ := session.store.parseCache.entries.Load(NewParseCacheKey(newMain.ParseOptions(), newMain.Hash, newMain.ScriptKind))
 			assert.Assert(t, newMain != main)
 			assert.Assert(t, newMainEntry != mainEntry)
 			assert.Equal(t, ls.GetProgram().GetSourceFile("/user/username/projects/myproject/src/utils.ts"), utils)
@@ -172,8 +172,8 @@ func TestRefCountingCaches(t *testing.T) {
 			program := snapshot.ProjectCollection.InferredProject().Program
 			main := program.GetSourceFile("/user/username/projects/myproject/src/main.ts")
 			utils := program.GetSourceFile("/user/username/projects/myproject/src/utils.ts")
-			mainEntry, _ := session.parseCache.entries.Load(NewParseCacheKey(main.ParseOptions(), main.Hash, main.ScriptKind))
-			utilsEntry, _ := session.parseCache.entries.Load(NewParseCacheKey(utils.ParseOptions(), utils.Hash, utils.ScriptKind))
+			mainEntry, _ := session.store.parseCache.entries.Load(NewParseCacheKey(main.ParseOptions(), main.Hash, main.ScriptKind))
+			utilsEntry, _ := session.store.parseCache.entries.Load(NewParseCacheKey(utils.ParseOptions(), utils.Hash, utils.ScriptKind))
 			assert.Equal(t, mainEntry.refCount, 1)
 			assert.Equal(t, utilsEntry.refCount, 1)
 
@@ -183,7 +183,7 @@ func TestRefCountingCaches(t *testing.T) {
 			session.WaitForBackgroundTasks()
 			assert.Equal(t, utilsEntry.refCount, 1)
 			assert.Equal(t, mainEntry.refCount, 0)
-			mainEntry, ok := session.parseCache.entries.Load(NewParseCacheKey(main.ParseOptions(), main.Hash, main.ScriptKind))
+			mainEntry, ok := session.store.parseCache.entries.Load(NewParseCacheKey(main.ParseOptions(), main.Hash, main.ScriptKind))
 			assert.Equal(t, ok, false)
 		})
 
@@ -201,7 +201,7 @@ func TestRefCountingCaches(t *testing.T) {
 			snapshot1 := session.Snapshot()
 			program1 := snapshot1.ProjectCollection.InferredProject().Program
 			main := program1.GetSourceFile("/user/username/projects/myproject/src/main.ts")
-			mainEntry, _ := session.parseCache.entries.Load(NewParseCacheKey(main.ParseOptions(), main.Hash, main.ScriptKind))
+			mainEntry, _ := session.store.parseCache.entries.Load(NewParseCacheKey(main.ParseOptions(), main.Hash, main.ScriptKind))
 			assert.Equal(t, mainEntry.refCount, 1, "initial refCount should be 1")
 
 			// Change utils.ts to trigger a new snapshot, but main.ts stays the same
@@ -228,7 +228,7 @@ func TestRefCountingCaches(t *testing.T) {
 
 			// main.ts refCount should be 1: the old snapshot was immediately deref'd
 			// when replaced, so only the new snapshot holds a ref.
-			mainEntry, _ = session.parseCache.entries.Load(NewParseCacheKey(main.ParseOptions(), main.Hash, main.ScriptKind))
+			mainEntry, _ = session.store.parseCache.entries.Load(NewParseCacheKey(main.ParseOptions(), main.Hash, main.ScriptKind))
 			assert.Equal(t, mainEntry.refCount, 1, "refCount should be 1 (only new snapshot)")
 
 			// Close files to trigger cleanup
@@ -238,7 +238,7 @@ func TestRefCountingCaches(t *testing.T) {
 			session.WaitForBackgroundTasks()
 
 			// Entry should now be gone (refCount 0, deleted)
-			mainEntry, ok := session.parseCache.entries.Load(NewParseCacheKey(main.ParseOptions(), main.Hash, main.ScriptKind))
+			mainEntry, ok := session.store.parseCache.entries.Load(NewParseCacheKey(main.ParseOptions(), main.Hash, main.ScriptKind))
 			if ok {
 				t.Logf("Entry still exists with refCount=%d", mainEntry.refCount)
 			}
@@ -277,7 +277,7 @@ func TestRefCountingCaches(t *testing.T) {
 
 			main := lsAfter.GetProgram().GetSourceFile("/user/username/projects/myproject/src/main.ts")
 			mainKey := NewParseCacheKey(main.ParseOptions(), main.Hash, main.ScriptKind)
-			mainEntry, ok := session.parseCache.entries.Load(mainKey)
+			mainEntry, ok := session.store.parseCache.entries.Load(mainKey)
 			assert.Assert(t, ok)
 			assert.Equal(t, mainEntry.refCount, 1)
 
@@ -285,7 +285,7 @@ func TestRefCountingCaches(t *testing.T) {
 			session.DidOpenFile(context.Background(), "untitled:Untitled-1", 1, "", lsproto.LanguageKindTypeScript)
 			session.WaitForBackgroundTasks()
 
-			_, ok = session.parseCache.entries.Load(mainKey)
+			_, ok = session.store.parseCache.entries.Load(mainKey)
 			assert.Assert(t, !ok)
 		})
 
@@ -304,7 +304,7 @@ func TestRefCountingCaches(t *testing.T) {
 			assert.NilError(t, err)
 
 			var projectEntries int
-			session.parseCache.entries.Range(func(key ParseCacheKey, _ *refCountCacheEntry[*ast.SourceFile]) bool {
+			session.store.parseCache.entries.Range(func(key ParseCacheKey, _ *refCountCacheEntry[*ast.SourceFile]) bool {
 				if strings.HasPrefix(key.FileName, "/user/username/projects/myproject/src/") {
 					projectEntries++
 				}
@@ -320,7 +320,7 @@ func TestRefCountingCaches(t *testing.T) {
 			session.WaitForBackgroundTasks()
 
 			projectEntries = 0
-			session.parseCache.entries.Range(func(key ParseCacheKey, _ *refCountCacheEntry[*ast.SourceFile]) bool {
+			session.store.parseCache.entries.Range(func(key ParseCacheKey, _ *refCountCacheEntry[*ast.SourceFile]) bool {
 				if strings.HasPrefix(key.FileName, "/user/username/projects/myproject/src/") {
 					projectEntries++
 				}
@@ -363,7 +363,7 @@ func TestRefCountingCaches(t *testing.T) {
 				}
 			}
 			assert.Equal(t, len(dupKeys), 1, "case-only duplicate should be recorded exactly once")
-			dupEntry, ok := session.parseCache.entries.Load(dupKeys[0])
+			dupEntry, ok := session.store.parseCache.entries.Load(dupKeys[0])
 			assert.Assert(t, ok, "duplicate entry should exist in the parse cache")
 			assert.Equal(t, dupEntry.refCount, 1)
 
@@ -386,7 +386,7 @@ func TestRefCountingCaches(t *testing.T) {
 			// Every parse-cache key referenced by the live program must still exist.
 			rebuiltProgram := lsAfterRebuild.GetProgram()
 			assertKeyAlive := func(key ParseCacheKey) {
-				_, alive := session.parseCache.entries.Load(key)
+				_, alive := session.store.parseCache.entries.Load(key)
 				assert.Assert(t, alive, "live program references a deleted parse-cache entry: %s", key.FileName)
 			}
 			for _, file := range rebuiltProgram.SourceFiles() {
@@ -417,7 +417,7 @@ func TestRefCountingCaches(t *testing.T) {
 			session.WaitForBackgroundTasks()
 
 			projectEntries := 0
-			session.parseCache.entries.Range(func(key ParseCacheKey, _ *refCountCacheEntry[*ast.SourceFile]) bool {
+			session.store.parseCache.entries.Range(func(key ParseCacheKey, _ *refCountCacheEntry[*ast.SourceFile]) bool {
 				if strings.HasPrefix(key.FileName, "/user/username/projects/myproject/src/") {
 					projectEntries++
 				}
@@ -446,13 +446,13 @@ func TestRefCountingCaches(t *testing.T) {
 			snapshot := session.Snapshot()
 			config := snapshot.ConfigFileRegistry.GetConfig("/user/username/projects/myproject/tsconfig.json")
 			assert.Equal(t, config.ExtendedSourceFiles()[0], "/user/username/projects/myproject/tsconfig.base.json")
-			extendedConfigEntry, _ := session.extendedConfigCache.entries.Load("/user/username/projects/myproject/tsconfig.base.json")
+			extendedConfigEntry, _ := session.store.extendedConfigCache.entries.Load("/user/username/projects/myproject/tsconfig.base.json")
 			assert.Equal(t, len(extendedConfigEntry.owners), 1)
 
 			session.DidCloseFile(context.Background(), "file:///user/username/projects/myproject/src/main.ts")
 			session.DidOpenFile(context.Background(), "untitled:Untitled-1", 1, "", lsproto.LanguageKindTypeScript)
 			session.WaitForBackgroundTasks()
-			_, ok := session.extendedConfigCache.entries.Load("/user/username/projects/myproject/tsconfig.base.json")
+			_, ok := session.store.extendedConfigCache.entries.Load("/user/username/projects/myproject/tsconfig.base.json")
 			assert.Equal(t, ok, false)
 		})
 
@@ -468,7 +468,7 @@ func TestRefCountingCaches(t *testing.T) {
 				ResourceRequest: ResourceRequest{
 					Documents: []lsproto.DocumentUri{uri},
 				},
-			}, baseSnapshot.fs.overlays, session)
+			}, baseSnapshot.fs.overlays, nil)
 
 			project := clone.GetDefaultProject(uri)
 			assert.Assert(t, project != nil)
@@ -476,20 +476,20 @@ func TestRefCountingCaches(t *testing.T) {
 
 			main := project.Program.GetSourceFile("/user/username/projects/myproject/src/main.ts")
 			mainKey := NewParseCacheKey(main.ParseOptions(), main.Hash, main.ScriptKind)
-			mainEntry, ok := session.parseCache.entries.Load(mainKey)
+			mainEntry, ok := session.store.parseCache.entries.Load(mainKey)
 			assert.Assert(t, ok)
 			assert.Equal(t, mainEntry.refCount, 1)
 
-			extendedConfigEntry, ok := session.extendedConfigCache.entries.Load(extendedConfigPath)
+			extendedConfigEntry, ok := session.store.extendedConfigCache.entries.Load(extendedConfigPath)
 			assert.Assert(t, ok)
 			assert.Equal(t, len(extendedConfigEntry.owners), 1)
 
-			clone.Deref(session)
+			clone.Deref()
 
-			_, ok = session.parseCache.entries.Load(mainKey)
+			_, ok = session.store.parseCache.entries.Load(mainKey)
 			assert.Assert(t, !ok)
 
-			_, ok = session.extendedConfigCache.entries.Load(extendedConfigPath)
+			_, ok = session.store.extendedConfigCache.entries.Load(extendedConfigPath)
 			assert.Assert(t, !ok)
 		})
 
@@ -517,26 +517,26 @@ func TestRefCountingCaches(t *testing.T) {
 				OpenProjects: collections.NewSetFromItems(appConfigPath),
 			})
 			assert.NilError(t, err)
-			defer baseSnapshot.Deref(session)
+			defer baseSnapshot.Deref()
 			appProject := baseSnapshot.ProjectCollection.GetProjectByPath(baseSnapshot.toPath(appConfigPath))
 			assert.Assert(t, appProject != nil)
 
-			programSnapshot := session.APICreateProgram(
+			programSnapshot := session.store.DeriveProgramSnapshot(
 				ctx,
+				baseSnapshot,
 				appProject.CommandLine.FileNames(),
 				appProject.CommandLine.CompilerOptions(),
 				appProject.CommandLine.ProjectReferences(),
 				appProject.CommandLine.Errors,
-				baseSnapshot,
 				appProject,
 				FileChangeSummary{},
 			)
-			defer programSnapshot.Deref(session)
+			defer programSnapshot.Deref()
 			programProject := programSnapshot.ProjectCollection.InferredProject()
 			assert.Assert(t, programProject != nil)
 			assert.Assert(t, programProject.Program == appProject.Program)
 
-			extendedConfigEntry, ok := session.extendedConfigCache.entries.Load(tspath.Path(libBaseConfigPath))
+			extendedConfigEntry, ok := session.store.extendedConfigCache.entries.Load(tspath.Path(libBaseConfigPath))
 			assert.Assert(t, ok)
 			extendedConfigEntry.mu.Lock()
 			_, ownedByBaseSnapshot := extendedConfigEntry.owners[baseSnapshot.id]
@@ -550,17 +550,17 @@ func TestRefCountingCaches(t *testing.T) {
 			assert.NilError(t, session.fs.fs.WriteFile(libBaseConfigPath, `{"compilerOptions":{"composite":true,"noLib":true,"strict":true}}`))
 			var fileChanges FileChangeSummary
 			fileChanges.Changed.Add(lsproto.DocumentUri("file://" + libBaseConfigPath))
-			updatedProgramSnapshot := session.APICreateProgram(
+			updatedProgramSnapshot := session.store.DeriveProgramSnapshot(
 				ctx,
+				programSnapshot,
 				programProject.CommandLine.FileNames(),
 				programProject.CommandLine.CompilerOptions(),
 				programProject.CommandLine.ProjectReferences(),
 				programProject.CommandLine.Errors,
-				programSnapshot,
 				programProject,
 				fileChanges,
 			)
-			defer updatedProgramSnapshot.Deref(session)
+			defer updatedProgramSnapshot.Deref()
 			updatedProgramProject := updatedProgramSnapshot.ProjectCollection.InferredProject()
 			assert.Assert(t, updatedProgramProject != nil)
 			assert.Assert(t, updatedProgramProject.Program != programProject.Program)

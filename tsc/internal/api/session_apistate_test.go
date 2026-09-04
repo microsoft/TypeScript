@@ -5,11 +5,50 @@ import (
 	"testing"
 
 	"github.com/microsoft/TypeScript/tsc/internal/bundled"
+	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/projecttestutil"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"gotest.tools/v3/assert"
 )
+
+func TestStandaloneSessionUsesSnapshotStoreWithoutProjectSession(t *testing.T) {
+	t.Parallel()
+	if !bundled.Embedded {
+		t.Skip("bundled files are not embedded")
+	}
+
+	const configFileName = "/home/projects/p/tsconfig.json"
+	init, _ := projecttestutil.GetSessionInitOptions(map[string]any{
+		configFileName:                  `{ "compilerOptions": { "strict": true } }`,
+		"/home/projects/p/src/index.ts": `export const x = 1;`,
+	}, nil, &projecttestutil.TypingsInstallerOptions{})
+	session := NewStandaloneSession(init, nil)
+	defer session.Close()
+
+	firstResponse, err := session.handleUpdateSnapshot(context.Background(), &UpdateSnapshotParams{
+		OpenFiles: []DocumentIdentifier{{FileName: "/home/projects/p/src/index.ts"}},
+	})
+	assert.NilError(t, err)
+	assert.Equal(t, firstResponse.Snapshot, SnapshotID(1))
+	assert.Equal(t, len(firstResponse.Projects), 1)
+
+	response, err := session.handleUpdateSnapshot(context.Background(), &UpdateSnapshotParams{
+		OpenProjects: []DocumentIdentifier{{FileName: configFileName}},
+	})
+	assert.NilError(t, err)
+	assert.Equal(t, response.Snapshot, SnapshotID(2))
+
+	programResponse, err := session.handleCreateProgram(context.Background(), &CreateProgramParams{
+		RootFiles: []DocumentIdentifier{{FileName: "/home/projects/p/src/index.ts"}},
+		CreateProgramOptions: CreateProgramOptions{
+			CompilerOptions: core.CompilerOptions{NoLib: core.TSTrue},
+		},
+	})
+	assert.NilError(t, err)
+	assert.Assert(t, programResponse.Project != nil)
+	assert.Equal(t, programResponse.Snapshot, SnapshotID(4))
+}
 
 // TestSessionTracksAndReleasesAPIRefs verifies that an API session holds at most
 // one ref per opened project/file (opens are idempotent) and releases exactly
@@ -30,7 +69,8 @@ func TestSessionTracksAndReleasesAPIRefs(t *testing.T) {
 		}
 		projectSession, _ := projecttestutil.Setup(files)
 		defer projectSession.Close()
-		session := NewSession(projectSession, nil)
+		session := NewLSPSession(projectSession, nil)
+		assert.Assert(t, session.compatibilitySnapshot == nil)
 
 		_, err := session.handleUpdateSnapshot(context.Background(), &UpdateSnapshotParams{
 			OpenProjects: []DocumentIdentifier{{FileName: configFileName}},
@@ -63,7 +103,7 @@ func TestSessionTracksAndReleasesAPIRefs(t *testing.T) {
 		}
 		projectSession, _ := projecttestutil.Setup(files)
 		defer projectSession.Close()
-		session := NewSession(projectSession, nil)
+		session := NewLSPSession(projectSession, nil)
 		defer session.Close()
 
 		_, err := session.handleUpdateSnapshot(context.Background(), &UpdateSnapshotParams{
@@ -98,7 +138,7 @@ func TestSessionTracksAndReleasesAPIRefs(t *testing.T) {
 		}
 		projectSession, _ := projecttestutil.Setup(files)
 		defer projectSession.Close()
-		session := NewSession(projectSession, nil)
+		session := NewLSPSession(projectSession, nil)
 
 		_, err := session.handleUpdateSnapshot(context.Background(), &UpdateSnapshotParams{
 			OpenFiles: []DocumentIdentifier{{FileName: fileName}},
@@ -151,7 +191,7 @@ func TestSessionTracksAndReleasesAPIRefs(t *testing.T) {
 		}
 		projectSession, _ := projecttestutil.Setup(files)
 		defer projectSession.Close()
-		session := NewSession(projectSession, nil)
+		session := NewLSPSession(projectSession, nil)
 		defer session.Close()
 
 		// Open via a relative path; it should be tracked under the absolute path
@@ -230,7 +270,7 @@ func TestUpdateSnapshotResponseSkipsUnloadedAncestorProject(t *testing.T) {
 	assert.Assert(t, ancestorProject != nil)
 	assert.Assert(t, ancestorProject.CommandLine == nil)
 
-	session := NewSession(projectSession, nil)
+	session := NewLSPSession(projectSession, nil)
 	defer session.Close()
 
 	response, err := session.handleUpdateSnapshot(context.Background(), &UpdateSnapshotParams{

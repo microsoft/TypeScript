@@ -228,8 +228,9 @@ func TestSnapshot(t *testing.T) {
 		assert.NilError(t, err)
 
 		baseSnapshot := session.Snapshot()
-		preparedSnapshot := session.GetSnapshotWithAutoImports(ctx, baseSnapshot, uri)
-		defer preparedSnapshot.Deref(session)
+		preparedSnapshot := session.SnapshotStore().DeriveWithAutoImports(ctx, baseSnapshot, uri)
+		session.TryAdoptSnapshotInBackground(baseSnapshot, preparedSnapshot)
+		defer preparedSnapshot.Deref()
 
 		session.WaitForBackgroundTasks()
 		assert.Equal(t, session.Snapshot(), preparedSnapshot)

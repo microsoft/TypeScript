@@ -37,7 +37,7 @@ func TestCompletionSymbolTypeIsResolvable(t *testing.T) {
 	}
 	projectSession, _ := projecttestutil.Setup(files)
 	defer projectSession.Close()
-	session := NewSession(projectSession, nil)
+	session := NewLSPSession(projectSession, nil)
 	defer session.Close()
 
 	ctx := context.Background()
@@ -111,7 +111,7 @@ func TestCompletionOnInferredProject(t *testing.T) {
 	}
 	projectSession, _ := projecttestutil.Setup(files)
 	defer projectSession.Close()
-	session := NewSession(projectSession, nil)
+	session := NewLSPSession(projectSession, nil)
 	defer session.Close()
 
 	ctx := context.Background()
