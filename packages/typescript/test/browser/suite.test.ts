@@ -50,7 +50,7 @@ const fileExclusions = [
     {
         mode: "sync",
         file: "sync/wasm.test.ts",
-        tests: 2,
+        tests: 3,
         reason: "These Node.js integration tests use node:fs and node:wasi; wasm.test.ts covers browser API loading.",
     },
 ] as const;
