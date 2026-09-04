@@ -1,0 +1,332 @@
+trigger: none
+
+pr: none
+
+name: TypeScript-VS-Code-Extension-Release-Publish-$(Date:yyyyMMdd)$(Rev:.r)
+appendCommitMessageToRunName: false
+
+parameters:
+  - name: dryRun
+    displayName: Dry run
+    type: boolean
+    default: false
+
+variables:
+  - name: TeamName
+    value: TypeScript
+  - name: TYPESCRIPT_AUTOMATION_GITHUB_APP_CLIENT_ID
+    value: Iv23li4GolzJSEp1mzHI
+  - name: TYPESCRIPT_AUTOMATION_GITHUB_APP_KEY_ID
+    value: https://jststeam-passwords.vault.azure.net/keys/typescript-automation
+
+resources:
+  repositories:
+    - repository: MicroBuildTemplate
+      type: git
+      name: 1ESPipelineTemplates/MicroBuildTemplate
+      ref: refs/tags/release
+  pipelines:
+    - pipeline: TypeScript_VS_Code_Extension_Release_Build
+      project: DevDiv
+      source: TypeScript VS Code Extension Release Build
+      trigger:
+        tags:
+          - vscode-typescript-release
+
+extends:
+  template: azure-pipelines/MicroBuild.1ES.Official.Publish.yml@MicroBuildTemplate
+
+  parameters:
+    sdl:
+      sourceAnalysisPool: VSEngSS-MicroBuild2022-1ES
+    pool:
+      name: AzurePipelines-EO
+      image: 1ESPT-Ubuntu22.04
+      os: linux
+    settings:
+      networkIsolationPolicy: Permissive,CFSClean
+
+    stages:
+      - stage: Publish
+        displayName: Publish vscode-typescript
+        jobs:
+          - job: Validate
+            displayName: Validate vscode-typescript release
+
+            templateContext:
+              inputs:
+                - input: pipelineArtifact
+                  pipeline: TypeScript_VS_Code_Extension_Release_Build
+                  artifactName: vsix
+                  targetPath: $(Pipeline.Workspace)/vsix
+
+            steps:
+              - checkout: none
+
+              - bash: |
+                  set -euo pipefail
+                  artifactDirectory="$(Pipeline.Workspace)/vsix"
+                  manifest="$artifactDirectory/release-manifest.json"
+                  test -f "$manifest"
+
+                  extension="$(jq -r '.extension' "$manifest")"
+                  version="$(jq -r '.extensionVersion' "$manifest")"
+                  bundledTypeScriptVersion="$(jq -r '.bundledTypeScriptVersion' "$manifest")"
+                  signType="$(jq -r '.signType' "$manifest")"
+                  sourceRef="$(jq -r '.sourceRef' "$manifest")"
+                  sourceCommit="$(jq -r '.sourceCommit' "$manifest")"
+                  if [ "$extension" != "TypeScriptTeam.native-preview" ]; then
+                    echo "Unexpected extension identity: $extension" >&2
+                    exit 1
+                  fi
+                  if ! [[ "$version" =~ ^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$ ]]; then
+                    echo "Invalid extension version: $version" >&2
+                    exit 1
+                  fi
+                  if ! [[ "$bundledTypeScriptVersion" =~ ^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$ ]]; then
+                    echo "Invalid bundled TypeScript version: $bundledTypeScriptVersion" >&2
+                    exit 1
+                  fi
+                  if [ "$signType" != "real" ]; then
+                    echo "Refusing to publish artifacts signed with signType=$signType." >&2
+                    exit 1
+                  fi
+                  if [ "$sourceRef" != "$RELEASE_SOURCE_BRANCH" ]; then
+                    echo "Artifact source ref $sourceRef does not match triggering build ref $RELEASE_SOURCE_BRANCH." >&2
+                    exit 1
+                  fi
+                  if [ "$sourceCommit" != "$RELEASE_SOURCE_COMMIT" ]; then
+                    echo "Artifact source commit $sourceCommit does not match triggering build commit $RELEASE_SOURCE_COMMIT." >&2
+                    exit 1
+                  fi
+                  case "$sourceRef" in
+                    refs/tags/vscode-typescript/v"$version") ;;
+                    *)
+                      echo "Source ref $sourceRef does not match extension version $version." >&2
+                      exit 1
+                      ;;
+                  esac
+
+                  while IFS=$'\t' read -r filename expectedHash; do
+                    artifact="$artifactDirectory/$filename"
+                    test -f "$artifact"
+                    actualHash="$(sha256sum "$artifact" | cut -d' ' -f1)"
+                    if [ "$actualHash" != "$expectedHash" ]; then
+                      echo "Hash mismatch for $filename." >&2
+                      exit 1
+                    fi
+                  done < <(jq -r '.artifacts | to_entries[] | [.key, .value.sha256] | @tsv' "$manifest")
+
+                  shopt -s nullglob
+                  vsixFiles=("$artifactDirectory"/*.vsix)
+                  if (( ${#vsixFiles[@]} == 0 )); then
+                    echo "No VSIX artifacts found." >&2
+                    exit 1
+                  fi
+                  for vsixFilePath in "${vsixFiles[@]}"; do
+                    manifestFile="${vsixFilePath%.vsix}.manifest"
+                    signatureFile="${vsixFilePath%.vsix}.signature.p7s"
+                    for artifact in "$vsixFilePath" "$manifestFile" "$signatureFile"; do
+                      filename="$(basename "$artifact")"
+                      jq -e --arg filename "$filename" '.artifacts | has($filename)' "$manifest" >/dev/null
+                    done
+                    if cmp -s "$manifestFile" "$signatureFile"; then
+                      echo "$signatureFile does not contain a real signature." >&2
+                      exit 1
+                    fi
+                    openssl pkcs7 -inform DER -in "$signatureFile" -noout
+
+                    packageVersion="$(unzip -p "$vsixFilePath" extension/package.json | jq -r '.version')"
+                    packageBundledTypeScriptVersion="$(unzip -p "$vsixFilePath" extension/package.json | jq -r '.bundledTypeScriptVersion')"
+                    if [ "$packageVersion" != "$version" ] || [ "$packageBundledTypeScriptVersion" != "$bundledTypeScriptVersion" ]; then
+                      echo "Version metadata mismatch in $(basename "$vsixFilePath")." >&2
+                      exit 1
+                    fi
+                  done
+                  targetCount="$(jq '.targets | length' "$manifest")"
+                  if [ "${#vsixFiles[@]}" -ne "$targetCount" ]; then
+                    echo "Expected $targetCount VSIXs, found ${#vsixFiles[@]}." >&2
+                    exit 1
+                  fi
+                displayName: Validate signed release artifacts
+                env:
+                  RELEASE_SOURCE_BRANCH: $(resources.pipeline.TypeScript_VS_Code_Extension_Release_Build.sourceBranch)
+                  RELEASE_SOURCE_COMMIT: $(resources.pipeline.TypeScript_VS_Code_Extension_Release_Build.sourceCommit)
+
+          - ${{ if eq(parameters.dryRun, false) }}:
+              - job: Approve
+                displayName: Approve production publication
+                dependsOn: Validate
+                pool: server
+                timeoutInMinutes: 5760
+                steps:
+                  - task: ManualValidation@1
+                    timeoutInMinutes: 4320
+                    inputs:
+                      notifyUsers: '[DevDiv]\JSTSteam'
+                      approvers: '[DevDiv]\JSTSteam'
+                      allowApproversToApproveTheirOwnRuns: true
+                      instructions: |
+                        Review the validated source tag, commit, extension version,
+                        bundled TypeScript version, target list, and signing results.
+                        Resume to publish the VSIXs to the Marketplace and GitHub Release.
+                      onTimeout: reject
+
+              - job: Publish
+                displayName: Publish vscode-typescript
+                dependsOn: Approve
+
+                templateContext:
+                  type: releaseJob
+                  isProduction: true
+                  inputs:
+                    - input: pipelineArtifact
+                      pipeline: TypeScript_VS_Code_Extension_Release_Build
+                      artifactName: vsix
+                      targetPath: $(Pipeline.Workspace)/vsix
+
+                steps:
+                  - checkout: none
+
+                  - template: /tools/pipelines/steps/setup-vsce.yml@self
+
+                  - task: AzureCLI@2
+                    displayName: Publish VSIXs to Marketplace
+                    retryCountOnTaskFailure: 3
+                    inputs:
+                      azureSubscription: TypeScript-VSMarketplacePublishAuth
+                      scriptType: bash
+                      scriptLocation: inlineScript
+                      inlineScript: |
+                        set -euo pipefail
+                        shopt -s nullglob
+                        for vsixFilePath in "$(Pipeline.Workspace)"/vsix/*.vsix; do
+                          manifestFilePath="${vsixFilePath%.vsix}.manifest"
+                          signatureFilePath="${vsixFilePath%.vsix}.signature.p7s"
+                          npx vsce publish \
+                            --packagePath "$vsixFilePath" \
+                            --manifestPath "$manifestFilePath" \
+                            --signaturePath "$signatureFilePath" \
+                            --azure-credential \
+                            --skip-duplicate \
+                            --allow-all-proposed-apis
+                        done
+
+                  - template: /tools/pipelines/steps/create-github-app-token.yml@self
+                    parameters:
+                      azureSubscription: TypeScript-DevDiv-KeyVault
+                      repositories: TypeScript
+                      permissions: contents:write
+                      insertSteps:
+                        - bash: |
+                            set -euo pipefail
+                            artifactDirectory="$(Pipeline.Workspace)/vsix"
+                            manifest="$artifactDirectory/release-manifest.json"
+                            version="$(jq -r '.extensionVersion' "$manifest")"
+                            bundledTypeScriptVersion="$(jq -r '.bundledTypeScriptVersion' "$manifest")"
+                            sourceCommit="$(jq -r '.sourceCommit' "$manifest")"
+                            tag="vscode-typescript/v$version"
+
+                            shopt -s nullglob
+                            vsixFiles=("$artifactDirectory"/*.vsix)
+                            if (( ${#vsixFiles[@]} == 0 )); then
+                              echo "No VSIX artifacts found." >&2
+                              exit 1
+                            fi
+
+                            existingAssetsDirectory="$(mktemp -d)"
+                            trap 'rm -rf "$existingAssetsDirectory"' EXIT
+
+                            refreshExistingAssetNames() {
+                              local output
+                              if ! output="$(
+                                gh release view "$tag" \
+                                  --repo microsoft/TypeScript \
+                                  --json assets \
+                                  --jq '.assets[].name'
+                              )"; then
+                                echo "Could not list assets for GitHub Release $tag." >&2
+                                return 1
+                              fi
+                              mapfile -t existingAssetNames <<< "$output"
+                            }
+
+                            assetExists() {
+                              local filename="$1"
+                              local existingAssetName
+                              for existingAssetName in "${existingAssetNames[@]}"; do
+                                if [ "$existingAssetName" = "$filename" ]; then
+                                  return 0
+                                fi
+                              done
+                              return 1
+                            }
+
+                            verifyExistingAsset() {
+                              local filename="$1"
+                              local expectedHash="$2"
+                              local existingHash
+
+                              gh release download "$tag" \
+                                --repo microsoft/TypeScript \
+                                --pattern "$filename" \
+                                --dir "$existingAssetsDirectory" \
+                                --clobber
+                              existingHash="$(sha256sum "$existingAssetsDirectory/$filename" | cut -d' ' -f1)"
+                              if [ "$existingHash" != "$expectedHash" ]; then
+                                echo "Existing GitHub Release asset $filename does not match the release manifest." >&2
+                                return 1
+                              fi
+                              echo "Existing GitHub Release asset $filename matches the release manifest."
+                            }
+
+                            syncReleaseAssets() {
+                              local vsixFilePath
+                              local filename
+                              local expectedHash
+                              local -a missingVsixFiles=()
+
+                              refreshExistingAssetNames
+                              for vsixFilePath in "${vsixFiles[@]}"; do
+                                filename="$(basename "$vsixFilePath")"
+                                expectedHash="$(jq -r --arg filename "$filename" '.artifacts[$filename].sha256 // empty' "$manifest")"
+                                if [ -z "$expectedHash" ]; then
+                                  echo "No manifest hash found for $filename." >&2
+                                  exit 1
+                                fi
+
+                                if assetExists "$filename"; then
+                                  verifyExistingAsset "$filename" "$expectedHash"
+                                else
+                                  missingVsixFiles+=("$vsixFilePath")
+                                fi
+                              done
+
+                              for vsixFilePath in "${missingVsixFiles[@]}"; do
+                                filename="$(basename "$vsixFilePath")"
+                                expectedHash="$(jq -r --arg filename "$filename" '.artifacts[$filename].sha256' "$manifest")"
+                                if ! gh release upload "$tag" "$vsixFilePath" --repo microsoft/TypeScript; then
+                                  echo "Upload of $filename failed; checking whether another run uploaded it."
+                                  refreshExistingAssetNames
+                                  if ! assetExists "$filename"; then
+                                    return 1
+                                  fi
+                                  verifyExistingAsset "$filename" "$expectedHash"
+                                fi
+                              done
+                            }
+
+                            if ! gh release view "$tag" --repo microsoft/TypeScript >/dev/null 2>&1; then
+                              if ! gh release create "$tag" \
+                                --repo microsoft/TypeScript \
+                                --title "$tag" \
+                                --latest=false \
+                                --notes "Bundles TypeScript $bundledTypeScriptVersion from commit $sourceCommit."; then
+                                echo "Creation of $tag failed; checking whether another run created it."
+                                gh release view "$tag" --repo microsoft/TypeScript >/dev/null
+                              fi
+                            fi
+                            syncReleaseAssets
+                          displayName: Create GitHub Release
+                          env:
+                            GH_TOKEN: $(GH_TOKEN)

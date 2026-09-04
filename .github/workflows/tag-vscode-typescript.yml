@@ -1,0 +1,116 @@
+name: Tag vscode-typescript release
+
+on:
+  pull_request_target:
+    types: [closed]
+    branches: [main]
+    paths:
+      - packages/vscode-typescript/package.json
+
+run-name: Tag vscode-typescript release
+
+concurrency:
+  group: tag-vscode-typescript-${{ github.event.pull_request.merge_commit_sha }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  id-token: write
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  tag:
+    if: >-
+      github.repository == 'microsoft/TypeScript' &&
+      github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    environment:
+      name: azure
+      deployment: false
+
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.pull_request.merge_commit_sha }}
+          filter: blob:none
+          fetch-depth: 2
+          persist-credentials: false
+
+      - name: Check for extension version bump
+        id: version
+        run: |
+          set -euo pipefail
+          packagePath="packages/vscode-typescript/package.json"
+          previousVersion="$(git show "HEAD^:$packagePath" | jq -r '.version')"
+          version="$(jq -r '.version' "$packagePath")"
+
+          if [ "$previousVersion" = "$version" ]; then
+            echo "$packagePath changed without changing its version."
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          if ! [[ "$version" =~ ^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$ ]]; then
+            echo "Invalid extension version: $version" >&2
+            exit 1
+          fi
+
+          lockVersion="$(jq -r '.packages["packages/vscode-typescript"].version' package-lock.json)"
+          if [ "$version" != "$lockVersion" ]; then
+            echo "package.json version $version does not match package-lock.json version $lockVersion." >&2
+            exit 1
+          fi
+
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+
+      - uses: azure/login@532459ea530d8321f2fb9bb10d1e0bcf23869a43 # v3.0.0
+        if: steps.version.outputs.changed == 'true'
+        with:
+          client-id: ${{ vars.AZURE_CLIENT_ID }}
+          tenant-id: ${{ vars.AZURE_TENANT_ID }}
+          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Create GitHub App token
+        if: steps.version.outputs.changed == 'true'
+        id: app-token
+        uses: microsoft/create-github-app-token-via-key-vault@5ba0d436e9c3cac52feff4d1f2f66f9698ce4a2d # v1
+        with:
+          client-id: ${{ vars.TYPESCRIPT_AUTOMATION_GITHUB_APP_CLIENT_ID }}
+          key-id: ${{ vars.TYPESCRIPT_AUTOMATION_GITHUB_APP_KEY_ID }}
+          owner: microsoft
+          repositories: TypeScript
+          permission-contents: write
+
+      - name: Create release tag
+        if: steps.version.outputs.changed == 'true'
+        env:
+          EXTENSION_VERSION: ${{ steps.version.outputs.version }}
+          GITHUB_APP_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: |
+          set -euo pipefail
+          tag="vscode-typescript/v$EXTENSION_VERSION"
+          git config user.email "290192711+typescript-automation[bot]@users.noreply.github.com"
+          git config user.name "typescript-automation[bot]"
+          git config core.hooksPath /dev/null
+
+          basic_auth="$(node -e 'process.stdout.write(Buffer.from("x-access-token:" + process.env.GITHUB_APP_TOKEN).toString("base64"))')"
+          echo "::add-mask::$basic_auth"
+          git config --local http.https://github.com/.extraheader "AUTHORIZATION: basic ${basic_auth}"
+
+          if git ls-remote --exit-code --tags origin "refs/tags/$tag" >/dev/null; then
+            git fetch origin "refs/tags/$tag:refs/tags/$tag"
+            existingCommit="$(git rev-list -n 1 "$tag")"
+            if [ "$existingCommit" != "$(git rev-parse HEAD)" ]; then
+              echo "Tag $tag already exists at $existingCommit." >&2
+              exit 1
+            fi
+            echo "Tag $tag already exists at the release commit."
+            exit 0
+          fi
+
+          git tag --annotate "$tag" --message "vscode-typescript $EXTENSION_VERSION"
+          git push origin "refs/tags/$tag"

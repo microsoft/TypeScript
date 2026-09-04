@@ -6,14 +6,9 @@ steps:
 
   - bash: |
       cat > .npmrc << 'EOF'
-      registry=https://pkgs.dev.azure.com/devdiv/devdiv/_packaging/devdiv_PublicPackages/npm/registry/
+      registry=https://packagefeedproxy.microsoft.io/npm/
       EOF
     displayName: 'Set up .npmrc'
-
-  - task: npmAuthenticate@0
-    inputs:
-      workingFile: .npmrc
-    displayName: 'Authenticate npm'
 
   - pwsh: |
       npm install -g (Get-Content package.json | ConvertFrom-Json).packageManager

@@ -1,0 +1,161 @@
+trigger:
+  tags:
+    include:
+      - vscode-typescript/v*
+
+pr: none
+
+name: TypeScript-VS-Code-Extension-Release-Build-$(Date:yyyyMMdd)$(Rev:.r)
+appendCommitMessageToRunName: false
+
+variables:
+  - name: TeamName
+    value: TypeScript
+
+resources:
+  repositories:
+    - repository: MicroBuildTemplate
+      type: git
+      name: 1ESPipelineTemplates/MicroBuildTemplate
+      ref: refs/tags/release
+
+extends:
+  template: azure-pipelines/MicroBuild.1ES.Official.yml@MicroBuildTemplate
+
+  parameters:
+    settings:
+      networkIsolationPolicy: Permissive,CFSClean
+    sdl:
+      git:
+        submodules: false
+        fetchDepth: 0
+        fetchTags: false
+        retryCount: 3
+      sourceAnalysisPool: VSEngSS-MicroBuild2022-1ES
+    pool:
+      name: AzurePipelines-EO
+      image: 1ESPT-Ubuntu22.04
+      os: linux
+
+    stages:
+      - stage: Build
+        displayName: Build and sign vscode-typescript
+        jobs:
+          - job: Build
+            displayName: Build and sign vscode-typescript
+            timeoutInMinutes: 90
+
+            templateContext:
+              outputs:
+                - output: pipelineArtifact
+                  targetPath: $(Build.ArtifactStagingDirectory)/vsix
+                  artifactName: vsix
+
+            steps:
+              - checkout: self
+                clean: true
+                submodules: false
+                fetchDepth: 0
+                fetchFilter: blob:none
+                fetchTags: false
+
+              - bash: |
+                  set -euo pipefail
+                  git fetch origin main --no-tags
+                  if ! git merge-base --is-ancestor "$BUILD_SOURCEVERSION" refs/remotes/origin/main; then
+                    echo "Release tags must point to commits already merged into main." >&2
+                    exit 1
+                  fi
+
+                  tag="${BUILD_SOURCEBRANCH#refs/tags/}"
+                  case "$tag" in
+                    vscode-typescript/v*) ;;
+                    *)
+                      echo "Expected a vscode-typescript/v* tag, got $BUILD_SOURCEBRANCH." >&2
+                      exit 1
+                      ;;
+                  esac
+
+                  tagVersion="${tag#vscode-typescript/v}"
+                  packageVersion="$(jq -r '.version' packages/vscode-typescript/package.json)"
+                  lockVersion="$(jq -r '.packages["packages/vscode-typescript"].version' package-lock.json)"
+                  if [ "$tagVersion" != "$packageVersion" ]; then
+                    echo "Tag version $tagVersion does not match package version $packageVersion." >&2
+                    exit 1
+                  fi
+                  if [ "$packageVersion" != "$lockVersion" ]; then
+                    echo "package.json version $packageVersion does not match package-lock.json version $lockVersion." >&2
+                    exit 1
+                  fi
+                  if ! [[ "$packageVersion" =~ ^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$ ]]; then
+                    echo "Extension version must be a stable three-component version." >&2
+                    exit 1
+                  fi
+
+                  echo "##vso[build.updatebuildnumber]vscode-typescript-$packageVersion"
+                displayName: Validate release tag
+
+              - task: NuGetAuthenticate@1
+                displayName: '🔩 NuGet Authenticate'
+              - task: UsePythonVersion@0
+                displayName: Use Python 3.11
+                inputs:
+                  versionSpec: 3.11
+              - task: UseDotNet@2
+                displayName: Use .NET Core 3.1.x
+                inputs:
+                  packageType: sdk
+                  version: 3.1.x
+              - task: UseDotNet@2
+                displayName: Use .NET Core SDK 8.0.x
+                inputs:
+                  version: 8.0.x
+              - task: MicroBuildSigningPlugin@4
+                displayName: '🔩 Install Signing Plugin'
+                inputs:
+                  signType: real
+                  azureSubscription: MicroBuild Signing Task (DevDiv)
+                  ConnectedPMEServiceName: beb8cb23-b303-4c95-ab26-9e44bc958d39
+                  zipSources: false
+                env:
+                  MicroBuildOutputFolderOverride: $(Agent.TempDirectory)
+
+              - template: /tools/pipelines/steps/setup-node-npm-ci.yml@self
+
+              - bash: npm test -w native-preview
+                displayName: Test extension
+
+              - bash: npx hereby vscode-typescript:release --forRelease --vscodeTypescriptRelease
+                displayName: Build and sign extensions
+                env:
+                  SYSTEM_ACCESSTOKEN: $(System.AccessToken)
+                  VSCODE_TYPESCRIPT_SIGN_TYPE: real
+
+              - bash: |
+                  set -euo pipefail
+                  shopt -s nullglob
+                  signatureFiles=(built/vsix/*.signature.p7s)
+                  if (( ${#signatureFiles[@]} == 0 )); then
+                    echo "No VSIX signatures were produced." >&2
+                    exit 1
+                  fi
+                  for signatureFile in "${signatureFiles[@]}"; do
+                    manifestFile="${signatureFile%.signature.p7s}.manifest"
+                    if cmp -s "$manifestFile" "$signatureFile"; then
+                      echo "$signatureFile was not replaced with a real signature." >&2
+                      exit 1
+                    fi
+                    openssl pkcs7 -inform DER -in "$signatureFile" -noout
+                  done
+                  echo "##vso[build.addbuildtag]vscode-typescript-release"
+                displayName: Validate release signatures
+
+              - bash: |
+                  set -euo pipefail
+                  artifactDirectory="$(Build.ArtifactStagingDirectory)/vsix"
+                  mkdir -p "$artifactDirectory"
+                  cp -v built/vsix/*.vsix "$artifactDirectory"
+                  cp -v built/vsix/*.manifest "$artifactDirectory"
+                  cp -v built/vsix/*.signature.p7s "$artifactDirectory"
+                  cp -v built/vsix/release-manifest.json "$artifactDirectory"
+                displayName: Stage release artifacts
