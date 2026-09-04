@@ -1,0 +1,35 @@
+//// [tests/cases/compiler/iteratorChunks.ts] ////
+
+=== iteratorChunks.ts ===
+const chunks: number[][] = Iterator.from([1, 2, 3]).chunks(2).toArray();
+>chunks : number[][]
+>Iterator.from([1, 2, 3]).chunks(2).toArray() : number[][]
+>Iterator.from([1, 2, 3]).chunks(2).toArray : () => number[][]
+>Iterator.from([1, 2, 3]).chunks(2) : IteratorObject<number[], undefined, unknown>
+>Iterator.from([1, 2, 3]).chunks : (chunkSize: number) => IteratorObject<number[], undefined, unknown>
+>Iterator.from([1, 2, 3]) : IteratorObject<number, undefined, unknown>
+>Iterator.from : <T>(value: Iterable<T, unknown, undefined> | Iterator<T, unknown, undefined>) => IteratorObject<T, undefined, unknown>
+>Iterator : IteratorConstructor
+>from : <T>(value: Iterable<T, unknown, undefined> | Iterator<T, unknown, undefined>) => IteratorObject<T, undefined, unknown>
+>[1, 2, 3] : number[]
+>1 : 1
+>2 : 2
+>3 : 3
+>chunks : (chunkSize: number) => IteratorObject<number[], undefined, unknown>
+>2 : 2
+>toArray : () => number[][]
+
+Iterator.from([1, 2, 3]).chunks("2");
+>Iterator.from([1, 2, 3]).chunks("2") : IteratorObject<number[], undefined, unknown>
+>Iterator.from([1, 2, 3]).chunks : (chunkSize: number) => IteratorObject<number[], undefined, unknown>
+>Iterator.from([1, 2, 3]) : IteratorObject<number, undefined, unknown>
+>Iterator.from : <T>(value: Iterable<T, unknown, undefined> | Iterator<T, unknown, undefined>) => IteratorObject<T, undefined, unknown>
+>Iterator : IteratorConstructor
+>from : <T>(value: Iterable<T, unknown, undefined> | Iterator<T, unknown, undefined>) => IteratorObject<T, undefined, unknown>
+>[1, 2, 3] : number[]
+>1 : 1
+>2 : 2
+>3 : 3
+>chunks : (chunkSize: number) => IteratorObject<number[], undefined, unknown>
+>"2" : "2"
+
