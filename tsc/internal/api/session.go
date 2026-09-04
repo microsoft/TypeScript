@@ -583,13 +583,13 @@ func (s *Session) setupChecker(ctx context.Context, snapshot SnapshotID, project
 // are produced on the persistent API checker and stay resolvable. Only safe when the
 // LS operation acquires a checker exactly once; nested acquisitions (e.g. find-all-
 // references) would deadlock on the single-slot persistent checker.
-func (s *Session) setupLanguageService(sd *snapshotData, program *compiler.Program, projectHandle ProjectID, activeFile string) (*ls.LanguageService, error) {
+func (s *Session) setupLanguageService(snapshot *project.Snapshot, program *compiler.Program, projectHandle ProjectID, activeFile string) (*ls.LanguageService, error) {
 	projectName := parseProjectHandle(projectHandle)
-	proj := sd.snapshot.ProjectCollection.GetProjectByPath(projectName)
+	proj := snapshot.ProjectCollection.GetProjectByPath(projectName)
 	if proj == nil {
 		return nil, fmt.Errorf("%w: project %s not found", ErrClientError, projectName)
 	}
-	return ls.NewLanguageService(proj.ID(), program, sd.snapshot, activeFile), nil
+	return ls.NewLanguageService(proj.ID(), program, snapshot, activeFile), nil
 }
 
 // HandleRequest implements Handler.
@@ -3977,7 +3977,7 @@ func (s *Session) handleGetSignatureUsages(ctx context.Context, params *GetSigna
 		return nil, nil
 	}
 
-	langSvc, err := s.setupLanguageService(sd, program, params.Project, "")
+	langSvc, err := s.setupLanguageService(sd.snapshot, program, params.Project, "")
 	if err != nil {
 		return nil, err
 	}
@@ -4010,21 +4010,41 @@ func (s *Session) handleGetCompletionsAtPosition(ctx context.Context, params *Ge
 	if err != nil {
 		return nil, err
 	}
+	run := func(snapshot *project.Snapshot, program *compiler.Program) (*ls.CompletionList, error) {
+		sourceFile := program.GetSourceFile(params.File.ToFileName())
+		if sourceFile == nil {
+			return nil, nil
+		}
+		langSvc, e := s.setupLanguageService(snapshot, program, params.Project, "")
+		if e != nil {
+			return nil, e
+		}
+		internalPos := sourceFile.GetPositionMap().UTF16ToUTF8(int(params.Position))
+		return langSvc.GetCompletionsAtPosition(ctx, sourceFile, internalPos, params.TriggerCharacter, params.IncludeSymbol)
+	}
+
 	program, err := sd.getProgram(params.Project)
 	if err != nil {
 		return nil, err
 	}
-	sourceFile := program.GetSourceFile(params.File.ToFileName())
-	if sourceFile == nil {
-		return nil, nil
+	result, err := run(sd.snapshot, program)
+	if errors.Is(err, ls.ErrNeedsAutoImports) {
+		preparedSnapshot := s.projectSession.GetSnapshotWithAutoImports(ctx, sd.snapshot, params.File.ToURI(s.projectSession.GetCurrentDirectory()))
+		defer preparedSnapshot.Deref(s.projectSession)
+		if err = ctx.Err(); err != nil {
+			return nil, err
+		}
+		projectPath := parseProjectHandle(params.Project)
+		proj := preparedSnapshot.ProjectCollection.GetProjectByPath(projectPath)
+		if proj == nil {
+			return nil, fmt.Errorf("%w: project %s not found", ErrClientError, projectPath)
+		}
+		program = proj.GetProgram()
+		if program == nil {
+			return nil, fmt.Errorf("%w: project has no program", ErrClientError)
+		}
+		result, err = run(preparedSnapshot, program)
 	}
-	langSvc, err := s.setupLanguageService(sd, program, params.Project, "")
-	if err != nil {
-		return nil, err
-	}
-	positionMap := sourceFile.GetPositionMap()
-	internalPos := positionMap.UTF16ToUTF8(int(params.Position))
-	result, err := langSvc.GetCompletionsAtPosition(ctx, sourceFile, internalPos, params.TriggerCharacter, params.IncludeSymbol)
 	if err != nil || result == nil {
 		return nil, err
 	}
@@ -4077,7 +4097,7 @@ func (s *Session) handleGetReferencedSymbolsForNode(ctx context.Context, params 
 		return nil, nil
 	}
 
-	langSvc, err := s.setupLanguageService(sd, program, params.Project, "")
+	langSvc, err := s.setupLanguageService(sd.snapshot, program, params.Project, "")
 	if err != nil {
 		return nil, err
 	}
