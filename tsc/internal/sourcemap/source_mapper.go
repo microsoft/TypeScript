@@ -42,29 +42,55 @@ type DocumentPositionMapper struct {
 	useCaseSensitiveFileNames bool
 
 	sourceFileAbsolutePaths   []string
-	sourceToSourceIndexMap    map[string]SourceIndex
+	sourceMappingsByPath      map[string][]*SourceMappedPosition
 	generatedAbsoluteFilePath string
 
 	generatedMappings []*MappedPosition
 	sourceMappings    map[SourceIndex][]*SourceMappedPosition
 }
 
-func createDocumentPositionMapper(host Host, sourceMap *RawSourceMap, mapPath string) *DocumentPositionMapper {
+func createDocumentPositionMapper(host Host, sourceMap *RawSourceMap, sourceRootField *string, nullSources []bool, mapPath string) *DocumentPositionMapper {
 	mapDirectory := tspath.GetDirectoryPath(mapPath)
-	var sourceRoot string
-	if sourceMap.SourceRoot != "" {
-		sourceRoot = tspath.GetNormalizedAbsolutePath(sourceMap.SourceRoot, mapDirectory)
-	} else {
-		sourceRoot = mapDirectory
+	sourceURLPrefix := ""
+	if sourceRootField != nil {
+		sourceURLPrefix = *sourceRootField
+		if !strings.HasSuffix(sourceURLPrefix, "/") {
+			sourceURLPrefix += "/"
+		}
 	}
 	generatedAbsoluteFilePath := tspath.GetNormalizedAbsolutePath(sourceMap.File, mapDirectory)
-	sourceFileAbsolutePaths := core.Map(sourceMap.Sources, func(source string) string {
-		return tspath.GetNormalizedAbsolutePath(source, sourceRoot)
-	})
+	unmappedSources := make([]bool, len(sourceMap.Sources))
+	copy(unmappedSources, nullSources)
+	sourceFileAbsolutePaths := make([]string, len(sourceMap.Sources))
+	for i, source := range sourceMap.Sources {
+		if unmappedSources[i] {
+			continue
+		}
+		sourceWithPrefix := sourceURLPrefix + source
+		var resolved string
+		if sourceWithPrefix == "" {
+			resolved = mapPath
+		} else {
+			resolved = tspath.GetNormalizedAbsolutePath(sourceWithPrefix, mapDirectory)
+		}
+		if sourceRootField != nil && *sourceRootField == "" && source != "" {
+			legacy := tspath.GetNormalizedAbsolutePath(source, mapDirectory)
+			if resolved != legacy &&
+				host.GetECMALineInfo(resolved) == nil &&
+				host.GetECMALineInfo(legacy) != nil {
+				resolved = legacy
+			}
+		}
+		sourceFileAbsolutePaths[i] = resolved
+	}
 	useCaseSensitiveFileNames := host.UseCaseSensitiveFileNames()
-	sourceToSourceIndexMap := make(map[string]SourceIndex, len(sourceFileAbsolutePaths))
+	sourceToSourceIndexMap := make(map[string][]SourceIndex, len(sourceFileAbsolutePaths))
 	for i, source := range sourceFileAbsolutePaths {
-		sourceToSourceIndexMap[tspath.GetCanonicalFileName(source, useCaseSensitiveFileNames)] = SourceIndex(i)
+		if unmappedSources[i] {
+			continue
+		}
+		key := tspath.GetCanonicalFileName(source, useCaseSensitiveFileNames)
+		sourceToSourceIndexMap[key] = append(sourceToSourceIndexMap[key], SourceIndex(i))
 	}
 
 	var decodedMappings []*MappedPosition
@@ -89,16 +115,21 @@ func createDocumentPositionMapper(host Host, sourceMap *RawSourceMap, mapPath st
 
 		sourcePosition := -1
 		if mapping.IsSourceMapping() {
-			lineInfo := host.GetECMALineInfo(sourceFileAbsolutePaths[mapping.SourceIndex])
-			if lineInfo != nil {
-				pos := scanner.ComputePositionOfLineAndUTF16Character(
-					lineInfo.lineStarts,
-					mapping.SourceLine,
-					mapping.SourceCharacter,
-					lineInfo.text,
-					true, /*allowEdits*/
-				)
-				sourcePosition = pos
+			sourceIndex := int(mapping.SourceIndex)
+			if sourceIndex >= 0 &&
+				sourceIndex < len(sourceFileAbsolutePaths) &&
+				!unmappedSources[sourceIndex] {
+				lineInfo := host.GetECMALineInfo(sourceFileAbsolutePaths[sourceIndex])
+				if lineInfo != nil {
+					pos := scanner.ComputePositionOfLineAndUTF16Character(
+						lineInfo.lineStarts,
+						mapping.SourceLine,
+						mapping.SourceCharacter,
+						lineInfo.text,
+						true, /*allowEdits*/
+					)
+					sourcePosition = pos
+				}
 			}
 		}
 
@@ -139,6 +170,17 @@ func createDocumentPositionMapper(host Host, sourceMap *RawSourceMap, mapPath st
 				a.sourcePosition == b.sourcePosition
 		})
 	}
+	sourceMappingsByPath := make(map[string][]*SourceMappedPosition, len(sourceToSourceIndexMap))
+	for path, sourceIndices := range sourceToSourceIndexMap {
+		var mappings []*SourceMappedPosition
+		for _, sourceIndex := range sourceIndices {
+			mappings = append(mappings, sourceMappings[sourceIndex]...)
+		}
+		slices.SortFunc(mappings, func(a, b *SourceMappedPosition) int {
+			return a.sourcePosition - b.sourcePosition
+		})
+		sourceMappingsByPath[path] = mappings
+	}
 
 	// getGeneratedMappings()
 	generatedMappings = decodedMappings
@@ -154,7 +196,7 @@ func createDocumentPositionMapper(host Host, sourceMap *RawSourceMap, mapPath st
 	return &DocumentPositionMapper{
 		useCaseSensitiveFileNames: useCaseSensitiveFileNames,
 		sourceFileAbsolutePaths:   sourceFileAbsolutePaths,
-		sourceToSourceIndexMap:    sourceToSourceIndexMap,
+		sourceMappingsByPath:      sourceMappingsByPath,
 		generatedAbsoluteFilePath: generatedAbsoluteFilePath,
 		generatedMappings:         generatedMappings,
 		sourceMappings:            sourceMappings,
@@ -198,14 +240,13 @@ func (d *DocumentPositionMapper) GetGeneratedPosition(loc *DocumentPosition) *Do
 	if d == nil {
 		return nil
 	}
-	sourceIndex, ok := d.sourceToSourceIndexMap[tspath.GetCanonicalFileName(loc.FileName, d.useCaseSensitiveFileNames)]
+	sourceMappings, ok := d.sourceMappingsByPath[tspath.GetCanonicalFileName(loc.FileName, d.useCaseSensitiveFileNames)]
 	if !ok {
 		return nil
 	}
-	if sourceIndex < 0 || int(sourceIndex) >= len(d.sourceMappings) {
+	if len(sourceMappings) == 0 {
 		return nil
 	}
-	sourceMappings := d.sourceMappings[sourceIndex]
 	targetIndex, _ := slices.BinarySearchFunc(sourceMappings, loc.Pos, func(m *SourceMappedPosition, pos int) int {
 		return m.sourcePosition - pos
 	})
@@ -215,9 +256,6 @@ func (d *DocumentPositionMapper) GetGeneratedPosition(loc *DocumentPosition) *Do
 	}
 
 	mapping := sourceMappings[targetIndex]
-	if mapping.sourceIndex != sourceIndex {
-		return nil
-	}
 
 	// Closest position
 	return &DocumentPosition{
@@ -255,30 +293,66 @@ func GetDocumentPositionMapper(host Host, generatedFileName string) *DocumentPos
 }
 
 func convertDocumentToSourceMapper(host Host, contents string, mapFileName string) *DocumentPositionMapper {
-	sourceMap := tryParseRawSourceMap(contents)
-	if sourceMap == nil || len(sourceMap.Sources) == 0 || sourceMap.File == "" || sourceMap.Mappings == "" {
+	parsed := tryParseRawSourceMap(contents)
+	if parsed == nil || len(parsed.sourceMap.Sources) == 0 || parsed.sourceMap.File == "" || parsed.sourceMap.Mappings == "" {
 		// invalid map
 		return nil
 	}
 
 	// Don't support source maps that contain inlined sources
-	if core.Some(sourceMap.SourcesContent, func(s *string) bool { return s != nil }) {
+	if core.Some(parsed.sourceMap.SourcesContent, func(s *string) bool { return s != nil }) {
 		return nil
 	}
 
-	return createDocumentPositionMapper(host, sourceMap, mapFileName)
+	return createDocumentPositionMapper(host, parsed.sourceMap, parsed.sourceRoot, parsed.nullSources, mapFileName)
 }
 
-func tryParseRawSourceMap(contents string) *RawSourceMap {
-	sourceMap := &RawSourceMap{}
-	err := json.Unmarshal([]byte(contents), sourceMap)
+type parsedRawSourceMap struct {
+	sourceMap   *RawSourceMap
+	sourceRoot  *string
+	nullSources []bool
+}
+
+func tryParseRawSourceMap(contents string) *parsedRawSourceMap {
+	type rawSourceMapJSON struct {
+		Version        int       `json:"version"`
+		File           string    `json:"file"`
+		SourceRoot     *string   `json:"sourceRoot"`
+		Sources        []*string `json:"sources"`
+		Names          []string  `json:"names"`
+		Mappings       string    `json:"mappings"`
+		SourcesContent []*string `json:"sourcesContent,omitzero"`
+	}
+
+	encoded := &rawSourceMapJSON{}
+	err := json.Unmarshal([]byte(contents), encoded)
 	if err != nil {
 		return nil
 	}
-	if sourceMap.Version != 3 {
+	if encoded.Version != 3 {
 		return nil
 	}
-	return sourceMap
+	sources := make([]string, len(encoded.Sources))
+	nullSources := make([]bool, len(encoded.Sources))
+	for i, source := range encoded.Sources {
+		if source == nil {
+			nullSources[i] = true
+			continue
+		}
+		sources[i] = *source
+	}
+	return &parsedRawSourceMap{
+		sourceMap: &RawSourceMap{
+			Version:        encoded.Version,
+			File:           encoded.File,
+			Sources:        sources,
+			Names:          encoded.Names,
+			Mappings:       encoded.Mappings,
+			SourcesContent: encoded.SourcesContent,
+		},
+		sourceRoot:  encoded.SourceRoot,
+		nullSources: nullSources,
+	}
 }
 
 func tryGetSourceMappingURL(host Host, fileName string) string {

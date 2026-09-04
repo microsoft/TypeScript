@@ -56,7 +56,7 @@ type Generator struct {
 type RawSourceMap struct {
 	Version        int       `json:"version"`
 	File           string    `json:"file"`
-	SourceRoot     string    `json:"sourceRoot"`
+	SourceRoot     string    `json:"sourceRoot,omitzero"`
 	Sources        []string  `json:"sources"`
 	Names          []string  `json:"names"`
 	Mappings       string    `json:"mappings"`
