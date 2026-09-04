@@ -20583,15 +20583,18 @@ func (c *Checker) checkAndAggregateReturnExpressionTypes(fn *ast.Node, checkMode
 			return false
 		}
 		expr = ast.SkipParentheses(expr)
-		// Bare calls to this same function don't contribute to inference
-		// and `return await` is also safe to unwrap here
+		// Bare calls to this same function that don't require a new generic instantiation
+		// don't contribute to inference, and `return await` is also safe to unwrap here.
 		if functionFlags&ast.FunctionFlagsAsync != 0 && ast.IsAwaitExpression(expr) {
 			expr = ast.SkipParentheses(expr.Expression())
 		}
 		if ast.IsCallExpression(expr) && ast.IsIdentifier(expr.Expression()) && c.checkExpressionCached(expr.Expression()).symbol == c.getMergedSymbol(fn.Symbol()) &&
 			(!ast.IsFunctionExpressionOrArrowFunction(fn.Symbol().ValueDeclaration) || c.isConstantReference(expr.Expression())) {
-			hasReturnOfTypeNever = true
-			return false
+			signature := c.getSignatureFromDeclaration(fn)
+			if len(signature.typeParameters) == 0 || len(expr.TypeArguments()) == 0 && c.isSignatureApplicable(expr, c.getEffectiveCallArguments(expr), signature, c.assignableRelation, checkMode, false /*reportErrors*/, nil /*diagnosticOutput*/) {
+				hasReturnOfTypeNever = true
+				return false
+			}
 		}
 		t := c.checkExpressionCachedEx(expr, checkMode & ^CheckModeSkipGenericFunctions)
 		if functionFlags&ast.FunctionFlagsAsync != 0 {
