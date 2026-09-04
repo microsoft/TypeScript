@@ -221,8 +221,8 @@ export interface TranspileOutput {
 }
 
 // @sync-only-start
-// export { all } from "./generatorSupport.ts";
-// import {all, type ExecutedGeneratorsResults, type APIRequestGenerator} from "./generatorSupport.ts";
+// export { all, defer } from "./generatorSupport.ts";
+// import {executeRequestGenerators, type ExecutedGeneratorsResults, type APIRequestGenerator} from "./generatorSupport.ts";
 // @sync-only-end
 
 export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHost {
@@ -260,12 +260,7 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
     // @sync-skip-block-end
     // @sync-only-start
     // batch<T extends readonly APIRequestGenerator[]>(...requestGenerators: T): ExecutedGeneratorsResults<T> {
-    //     const batches = all(...requestGenerators);
-    //     let state = batches.next();
-    //     while (!state.done) {
-    //         state = batches.next(this.client.batchRequests(state.value).responses);
-    //     }
-    //     return state.value;
+    //     return executeRequestGenerators(requestGenerators, requests => this.client.batchRequests(requests).responses);
     // }
     // @sync-only-end
 
