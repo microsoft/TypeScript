@@ -217,7 +217,10 @@ func GetEncodedRootLength(path string) int {
 			// special case interpreted as "the machine from which the URL is being interpreted".
 			scheme := path[:schemeEnd]
 			authority := path[authorityStart:authorityEnd]
-			if scheme == "file" && (authority == "" || authority == "localhost") && (len(path) > authorityEnd+2) && IsVolumeCharacter(path[authorityEnd+1]) {
+			if stringutil.EquateStringCaseInsensitive(scheme, "file") &&
+				(authority == "" || stringutil.EquateStringCaseInsensitive(authority, "localhost")) &&
+				(len(path) > authorityEnd+2) &&
+				IsVolumeCharacter(path[authorityEnd+1]) {
 				volumeSeparatorEnd := getFileUrlVolumeSeparatorEnd(path, authorityEnd+2)
 				if volumeSeparatorEnd != -1 {
 					if volumeSeparatorEnd == len(path) {
