@@ -3361,6 +3361,8 @@ func isContextTokenTypeLocation(contextToken *ast.Node) bool {
 			return parentKind == ast.KindTypeParameter
 		case ast.KindSatisfiesKeyword:
 			return parentKind == ast.KindSatisfiesExpression
+		case ast.KindOpenBracketToken, ast.KindCommaToken:
+			return parentKind == ast.KindTupleType
 		}
 	}
 	return false
