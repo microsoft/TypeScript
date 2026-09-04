@@ -68,6 +68,10 @@ type fileLoader struct {
 	pathForLibFileCache       collections.SyncMap[string, *LibFile]
 	pathForLibFileResolutions collections.SyncMap[tspath.Path, *libResolution]
 
+	// toPath is called repeatedly for the same file names (once per import edge);
+	// caching avoids re-normalizing and re-lowercasing the same path.
+	toPathCache collections.SyncMap[string, tspath.Path]
+
 	// contentMapperMu guards the content-mapper bookkeeping below, which is written concurrently as
 	// content-mapped files are parsed across worker goroutines.
 	contentMapperMu          sync.Mutex
@@ -213,7 +217,12 @@ func processAllProgramFiles(
 }
 
 func (p *fileLoader) toPath(file string) tspath.Path {
-	return tspath.ToPath(file, p.opts.Host.GetCurrentDirectory(), p.opts.Host.FS().UseCaseSensitiveFileNames())
+	if path, ok := p.toPathCache.Load(file); ok {
+		return path
+	}
+	path := tspath.ToPath(file, p.opts.Host.GetCurrentDirectory(), p.opts.Host.FS().UseCaseSensitiveFileNames())
+	p.toPathCache.Store(file, path)
+	return path
 }
 
 func (p *fileLoader) addRootTask(fileName string, libFile *LibFile, includeReason *FileIncludeReason) {
