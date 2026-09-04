@@ -1,18 +1,15 @@
 // @strict: true
 // @noEmit: true
 
-// Two schemas that name each other through getters, with the object's members reached through two
-// separate key remappings -- one for the output side and one for the input side, each keyed on a
-// different member of the schema's own internals.
+// Two schemas naming each other through getters, with the object's members reached through two separate
+// key remappings, one per variance side, each keyed on a different member of the internals.
 //
-// Both remappings read the member table of a type whose bases are still being inherited, and they
-// read it at different points in that assembly. That is what makes this shape the one that separates
-// the two answers a miss in that window can have. A speculative comparison has to decline, because
-// the member it would force is the one its own question is about. An ordinary lookup has to finish
-// itself against the base types still to be inherited, which is what keeps the window unobservable.
-// Giving a speculative miss the second answer forces `posts` while its own return type is still
-// being inferred, and the getter falls back to an implicit `any` -- so the two cannot be merged into
-// one answer, and a single remapping does not reach the case.
+// Both remappings read the member table of a type whose bases are still being inherited, at different
+// points in that assembly, which is what makes this shape separate the two answers a miss can have. A
+// speculative comparison must decline, since the member it would force is the subject of its own
+// question. An ordinary lookup must resolve against the bases still to be inherited. Giving a speculative
+// miss the second answer forces `posts` mid-inference and the getter falls back to an implicit `any`. A
+// single remapping does not reach this.
 
 interface Internals<out O = unknown, out I = unknown> {
     output: O;

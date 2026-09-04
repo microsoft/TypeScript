@@ -3,8 +3,7 @@
 
 // The same schema shape, but the parameter is written as a mapped type over the inferred one, so
 // inference runs through a reverse mapped type. Neither this change nor main resolves this variant --
-// both report TS7022/TS7023 on the declaration -- and the point of the case is that they report the
-// SAME thing.
+// both report TS7022/TS7023 on the declaration -- and the case asserts they report the same thing.
 //
 // A provisional comparison explores further than an ordinary check does, so it can walk into a
 // circularity that main never reaches because it collapses the getter first. Reporting that, or

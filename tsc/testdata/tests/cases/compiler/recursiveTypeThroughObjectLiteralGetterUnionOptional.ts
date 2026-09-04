@@ -49,6 +49,6 @@ declare const sample: Out<typeof tree>;
 // The recursive member resolves: two levels in, `name` is still a string.
 const topName: string = sample.name;
 const nestedName: string | undefined = sample.child?.name;
-// An `any` here would swallow this, so the expected error is what proves the member is a real object.
+// An `any` would swallow this; the expected error shows the member is a real object.
 // @ts-expect-error
 sample.child?.missing;

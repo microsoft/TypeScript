@@ -104,7 +104,7 @@ const nestedName: string | undefined = sample.child?.name;
 >child : { name: string; readonly child: any | undefined; } | undefined
 >name : string | undefined
 
-// An `any` here would swallow this, so the expected error is what proves the member is a real object.
+// An `any` would swallow this; the expected error shows the member is a real object.
 // @ts-expect-error
 sample.child?.missing;
 >sample.child?.missing : error

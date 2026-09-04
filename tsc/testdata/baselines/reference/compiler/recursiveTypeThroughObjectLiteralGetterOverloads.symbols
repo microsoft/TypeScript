@@ -5,100 +5,99 @@
 // about the program, so skipping one on that alone makes an ordinary comparison depend on
 // resolution order. This picked the numeric overload for an object whose only member is a string.
 //
-// The generic pair at the bottom matters more than the plain one: only a generic signature opens the
-// speculative region where the skip is allowed at all, so the non-generic overloads never reach the
-// code under test. Skipping there made the object look like it had no string member and picked the
+// Only a generic signature opens the speculative region where the skip is allowed, so the non-generic
+// overloads never reach the code under test. The generic pair at the bottom covers that. Skipping there made the object look like it had no string member and picked the
 // numeric candidate again, this time with the region wide open.
 
 declare function pick(x: { [k: string]: number }): "num";
->pick : Symbol(pick, Decl(recursiveTypeThroughObjectLiteralGetterOverloads.ts, 0, 0), Decl(recursiveTypeThroughObjectLiteralGetterOverloads.ts, 9, 57))
->x : Symbol(x, Decl(recursiveTypeThroughObjectLiteralGetterOverloads.ts, 9, 22))
->k : Symbol(k, Decl(recursiveTypeThroughObjectLiteralGetterOverloads.ts, 9, 28))
+>pick : Symbol(pick, Decl(recursiveTypeThroughObjectLiteralGetterOverloads.ts, 0, 0), Decl(recursiveTypeThroughObjectLiteralGetterOverloads.ts, 8, 57))
+>x : Symbol(x, Decl(recursiveTypeThroughObjectLiteralGetterOverloads.ts, 8, 22))
+>k : Symbol(k, Decl(recursiveTypeThroughObjectLiteralGetterOverloads.ts, 8, 28))
 
 declare function pick(x: object): "obj";
->pick : Symbol(pick, Decl(recursiveTypeThroughObjectLiteralGetterOverloads.ts, 0, 0), Decl(recursiveTypeThroughObjectLiteralGetterOverloads.ts, 9, 57))
->x : Symbol(x, Decl(recursiveTypeThroughObjectLiteralGetterOverloads.ts, 10, 22))
+>pick : Symbol(pick, Decl(recursiveTypeThroughObjectLiteralGetterOverloads.ts, 0, 0), Decl(recursiveTypeThroughObjectLiteralGetterOverloads.ts, 8, 57))
+>x : Symbol(x, Decl(recursiveTypeThroughObjectLiteralGetterOverloads.ts, 9, 22))
 
 const inferred = pick({
->inferred : Symbol(inferred, Decl(recursiveTypeThroughObjectLiteralGetterOverloads.ts, 12, 5))
->pick : Symbol(pick, Decl(recursiveTypeThroughObjectLiteralGetterOverloads.ts, 0, 0), Decl(recursiveTypeThroughObjectLiteralGetterOverloads.ts, 9, 57))
+>inferred : Symbol(inferred, Decl(recursiveTypeThroughObjectLiteralGetterOverloads.ts, 11, 5))
+>pick : Symbol(pick, Decl(recursiveTypeThroughObjectLiteralGetterOverloads.ts, 0, 0), Decl(recursiveTypeThroughObjectLiteralGetterOverloads.ts, 8, 57))
 
     get s() {
->s : Symbol(s, Decl(recursiveTypeThroughObjectLiteralGetterOverloads.ts, 12, 23))
+>s : Symbol(s, Decl(recursiveTypeThroughObjectLiteralGetterOverloads.ts, 11, 23))
 
         return "hello";
     },
 });
 const mustBeObj: "obj" = inferred;
->mustBeObj : Symbol(mustBeObj, Decl(recursiveTypeThroughObjectLiteralGetterOverloads.ts, 17, 5))
->inferred : Symbol(inferred, Decl(recursiveTypeThroughObjectLiteralGetterOverloads.ts, 12, 5))
+>mustBeObj : Symbol(mustBeObj, Decl(recursiveTypeThroughObjectLiteralGetterOverloads.ts, 16, 5))
+>inferred : Symbol(inferred, Decl(recursiveTypeThroughObjectLiteralGetterOverloads.ts, 11, 5))
 
 const annotated = pick({
->annotated : Symbol(annotated, Decl(recursiveTypeThroughObjectLiteralGetterOverloads.ts, 19, 5))
->pick : Symbol(pick, Decl(recursiveTypeThroughObjectLiteralGetterOverloads.ts, 0, 0), Decl(recursiveTypeThroughObjectLiteralGetterOverloads.ts, 9, 57))
+>annotated : Symbol(annotated, Decl(recursiveTypeThroughObjectLiteralGetterOverloads.ts, 18, 5))
+>pick : Symbol(pick, Decl(recursiveTypeThroughObjectLiteralGetterOverloads.ts, 0, 0), Decl(recursiveTypeThroughObjectLiteralGetterOverloads.ts, 8, 57))
 
     get s(): string {
->s : Symbol(s, Decl(recursiveTypeThroughObjectLiteralGetterOverloads.ts, 19, 24))
+>s : Symbol(s, Decl(recursiveTypeThroughObjectLiteralGetterOverloads.ts, 18, 24))
 
         return "hello";
     },
 });
 const alsoObj: "obj" = annotated;
->alsoObj : Symbol(alsoObj, Decl(recursiveTypeThroughObjectLiteralGetterOverloads.ts, 24, 5))
->annotated : Symbol(annotated, Decl(recursiveTypeThroughObjectLiteralGetterOverloads.ts, 19, 5))
+>alsoObj : Symbol(alsoObj, Decl(recursiveTypeThroughObjectLiteralGetterOverloads.ts, 23, 5))
+>annotated : Symbol(annotated, Decl(recursiveTypeThroughObjectLiteralGetterOverloads.ts, 18, 5))
 
 const numeric = pick({
->numeric : Symbol(numeric, Decl(recursiveTypeThroughObjectLiteralGetterOverloads.ts, 26, 5))
->pick : Symbol(pick, Decl(recursiveTypeThroughObjectLiteralGetterOverloads.ts, 0, 0), Decl(recursiveTypeThroughObjectLiteralGetterOverloads.ts, 9, 57))
+>numeric : Symbol(numeric, Decl(recursiveTypeThroughObjectLiteralGetterOverloads.ts, 25, 5))
+>pick : Symbol(pick, Decl(recursiveTypeThroughObjectLiteralGetterOverloads.ts, 0, 0), Decl(recursiveTypeThroughObjectLiteralGetterOverloads.ts, 8, 57))
 
     get n() {
->n : Symbol(n, Decl(recursiveTypeThroughObjectLiteralGetterOverloads.ts, 26, 22))
+>n : Symbol(n, Decl(recursiveTypeThroughObjectLiteralGetterOverloads.ts, 25, 22))
 
         return 1;
     },
 });
 const mustBeNum: "num" = numeric;
->mustBeNum : Symbol(mustBeNum, Decl(recursiveTypeThroughObjectLiteralGetterOverloads.ts, 31, 5))
->numeric : Symbol(numeric, Decl(recursiveTypeThroughObjectLiteralGetterOverloads.ts, 26, 5))
+>mustBeNum : Symbol(mustBeNum, Decl(recursiveTypeThroughObjectLiteralGetterOverloads.ts, 30, 5))
+>numeric : Symbol(numeric, Decl(recursiveTypeThroughObjectLiteralGetterOverloads.ts, 25, 5))
 
 declare function generic<T extends { [k: string]: number }>(x: T): "num";
->generic : Symbol(generic, Decl(recursiveTypeThroughObjectLiteralGetterOverloads.ts, 31, 33), Decl(recursiveTypeThroughObjectLiteralGetterOverloads.ts, 33, 73))
->T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetterOverloads.ts, 33, 25))
->k : Symbol(k, Decl(recursiveTypeThroughObjectLiteralGetterOverloads.ts, 33, 38))
->x : Symbol(x, Decl(recursiveTypeThroughObjectLiteralGetterOverloads.ts, 33, 60))
->T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetterOverloads.ts, 33, 25))
+>generic : Symbol(generic, Decl(recursiveTypeThroughObjectLiteralGetterOverloads.ts, 30, 33), Decl(recursiveTypeThroughObjectLiteralGetterOverloads.ts, 32, 73))
+>T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetterOverloads.ts, 32, 25))
+>k : Symbol(k, Decl(recursiveTypeThroughObjectLiteralGetterOverloads.ts, 32, 38))
+>x : Symbol(x, Decl(recursiveTypeThroughObjectLiteralGetterOverloads.ts, 32, 60))
+>T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetterOverloads.ts, 32, 25))
 
 declare function generic<T extends object>(x: T): "obj";
->generic : Symbol(generic, Decl(recursiveTypeThroughObjectLiteralGetterOverloads.ts, 31, 33), Decl(recursiveTypeThroughObjectLiteralGetterOverloads.ts, 33, 73))
->T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetterOverloads.ts, 34, 25))
->x : Symbol(x, Decl(recursiveTypeThroughObjectLiteralGetterOverloads.ts, 34, 43))
->T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetterOverloads.ts, 34, 25))
+>generic : Symbol(generic, Decl(recursiveTypeThroughObjectLiteralGetterOverloads.ts, 30, 33), Decl(recursiveTypeThroughObjectLiteralGetterOverloads.ts, 32, 73))
+>T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetterOverloads.ts, 33, 25))
+>x : Symbol(x, Decl(recursiveTypeThroughObjectLiteralGetterOverloads.ts, 33, 43))
+>T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetterOverloads.ts, 33, 25))
 
 const inferredGeneric = generic({
->inferredGeneric : Symbol(inferredGeneric, Decl(recursiveTypeThroughObjectLiteralGetterOverloads.ts, 36, 5))
->generic : Symbol(generic, Decl(recursiveTypeThroughObjectLiteralGetterOverloads.ts, 31, 33), Decl(recursiveTypeThroughObjectLiteralGetterOverloads.ts, 33, 73))
+>inferredGeneric : Symbol(inferredGeneric, Decl(recursiveTypeThroughObjectLiteralGetterOverloads.ts, 35, 5))
+>generic : Symbol(generic, Decl(recursiveTypeThroughObjectLiteralGetterOverloads.ts, 30, 33), Decl(recursiveTypeThroughObjectLiteralGetterOverloads.ts, 32, 73))
 
     get s() {
->s : Symbol(s, Decl(recursiveTypeThroughObjectLiteralGetterOverloads.ts, 36, 33))
+>s : Symbol(s, Decl(recursiveTypeThroughObjectLiteralGetterOverloads.ts, 35, 33))
 
         return "hello";
     },
 });
 const genericMustBeObj: "obj" = inferredGeneric;
->genericMustBeObj : Symbol(genericMustBeObj, Decl(recursiveTypeThroughObjectLiteralGetterOverloads.ts, 41, 5))
->inferredGeneric : Symbol(inferredGeneric, Decl(recursiveTypeThroughObjectLiteralGetterOverloads.ts, 36, 5))
+>genericMustBeObj : Symbol(genericMustBeObj, Decl(recursiveTypeThroughObjectLiteralGetterOverloads.ts, 40, 5))
+>inferredGeneric : Symbol(inferredGeneric, Decl(recursiveTypeThroughObjectLiteralGetterOverloads.ts, 35, 5))
 
 const numericGeneric = generic({
->numericGeneric : Symbol(numericGeneric, Decl(recursiveTypeThroughObjectLiteralGetterOverloads.ts, 43, 5))
->generic : Symbol(generic, Decl(recursiveTypeThroughObjectLiteralGetterOverloads.ts, 31, 33), Decl(recursiveTypeThroughObjectLiteralGetterOverloads.ts, 33, 73))
+>numericGeneric : Symbol(numericGeneric, Decl(recursiveTypeThroughObjectLiteralGetterOverloads.ts, 42, 5))
+>generic : Symbol(generic, Decl(recursiveTypeThroughObjectLiteralGetterOverloads.ts, 30, 33), Decl(recursiveTypeThroughObjectLiteralGetterOverloads.ts, 32, 73))
 
     get n() {
->n : Symbol(n, Decl(recursiveTypeThroughObjectLiteralGetterOverloads.ts, 43, 32))
+>n : Symbol(n, Decl(recursiveTypeThroughObjectLiteralGetterOverloads.ts, 42, 32))
 
         return 1;
     },
 });
 const genericMustBeNum: "num" = numericGeneric;
->genericMustBeNum : Symbol(genericMustBeNum, Decl(recursiveTypeThroughObjectLiteralGetterOverloads.ts, 48, 5))
->numericGeneric : Symbol(numericGeneric, Decl(recursiveTypeThroughObjectLiteralGetterOverloads.ts, 43, 5))
+>genericMustBeNum : Symbol(genericMustBeNum, Decl(recursiveTypeThroughObjectLiteralGetterOverloads.ts, 47, 5))
+>numericGeneric : Symbol(numericGeneric, Decl(recursiveTypeThroughObjectLiteralGetterOverloads.ts, 42, 5))
 

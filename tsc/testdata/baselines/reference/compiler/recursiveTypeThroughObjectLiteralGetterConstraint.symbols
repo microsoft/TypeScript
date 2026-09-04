@@ -3,8 +3,8 @@
 === recursiveTypeThroughObjectLiteralGetterConstraint.ts ===
 // Skipping an accessor during a check that reports nothing is a deferral, not a waiver. An array of
 // schemas is not a Schema, so this reports. The baseline is byte-identical to what an unpatched
-// compiler produces, and that is the whole point of the case: it pins that the constraint is still
-// enforced, not which pass enforced it. The recursive shape where the deferred pass is the only thing
+// compiler produces, pinning that the constraint is still enforced rather than which pass enforced
+// it. The recursive shape where the deferred pass is the only thing
 // that can report it is recursiveTypeThroughObjectLiteralGetterPostponedConstraint.ts.
 
 interface Schema<O> {

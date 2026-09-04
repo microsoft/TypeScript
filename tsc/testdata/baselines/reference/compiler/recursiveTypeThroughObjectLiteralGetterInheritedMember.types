@@ -1,21 +1,16 @@
 //// [tests/cases/compiler/recursiveTypeThroughObjectLiteralGetterInheritedMember.ts] ////
 
 === recursiveTypeThroughObjectLiteralGetterInheritedMember.ts ===
-// The shape from #62180, where the recursive member is reached through a mapped type that remaps its
-// keys by reading each member's own discriminant. Resolving the object schema's members instantiates
-// its base with a type that names the schema back, so the schema's table is read while it is still
-// being assembled and its inherited `out` is not in it yet.
+// The shape from #62180. The recursive member is reached through a mapped type that remaps keys by
+// reading each member's discriminant, so resolving the object schema instantiates its base with a type
+// naming the schema back, and the table is read before its inherited `out` is added.
 //
-// A lookup that misses in that window finishes itself against the base types still to be inherited,
-// so it returns the member the table is about to hold. An earlier draft instead answered such a miss
-// with `any`, which cleared the error here and was wrong everywhere else: a self-referential
-// interface reaches the same window with no getter and no inference anywhere in the program, and an
-// unpatched compiler answers it from the index signature, so `any` silently accepted an indexed
-// access that every other compiler rejects. Completing the lookup is what separates the two -- a name
-// no base carries is still absent.
+// A miss there resolves against the bases still to be inherited. Answering `any` instead would clear
+// this error and break the self-referential interface case, where an unpatched compiler answers from the
+// index signature and `any` would accept an indexed access every other compiler rejects.
 //
-// The `any` that appears against `parent` in the .types baseline is the printer eliding a recursive
-// reference, not an unresolved member. The assertions below are what distinguish those two.
+// The `any` against `parent` in the .types baseline is printer elision, not an unresolved member; the
+// assertions below tell those apart.
 
 interface Internals<O> {
     optional: "true" | "false";
@@ -95,16 +90,15 @@ declare const sample: (typeof category)["out"];
 >sample : { name: string; readonly parent?: { name: string; readonly parent?: any | undefined; } | undefined; }
 >category : ObjectSchema<{ name: StringSchema; readonly parent: OptionalSchema<ObjectSchema<any>>; }>
 
-// The key that does not recurse resolves fully, and the remapping put the recursive one in the
-// optional bucket, so it is `parent?:` rather than `parent:`. Both of those are new: main gives the
-// whole declaration an implicit `any` and reports it.
+// The non-recursive key resolves fully, and the remapping put the recursive one in the optional bucket,
+// so it is `parent?:`. Both are new; main gives the whole declaration an implicit `any`.
 const topName: string = sample.name;
 >topName : string
 >sample.name : string
 >sample : { name: string; readonly parent?: { name: string; readonly parent?: any | undefined; } | undefined; }
 >name : string
 
-// The recursive one resolves too, and keeps resolving as far down as it is walked.
+// The recursive one resolves too, at any depth walked.
 const parentName: string = sample.parent!.name;
 >parentName : string
 >sample.parent!.name : string
@@ -129,8 +123,7 @@ const deepName: string = sample.parent!.parent!.parent!.name;
 >parent : { name: string; readonly parent?: any | undefined; } | undefined
 >name : string
 
-// Depth is where a collapse would hide: `any` would accept both of these, so they are what keeps the
-// comment above honest.
+// A collapse to `any` would accept both of these.
 // @ts-expect-error
 const wrongType: number = sample.parent!.parent!.name;
 >wrongType : number
@@ -156,7 +149,7 @@ sample.parent!.parent!.missing;
 >parent : { name: string; readonly parent?: any | undefined; } | undefined
 >missing : any
 
-// A property that is genuinely absent must still be reported, whoever is asking.
+// A genuinely absent property is still reported.
 interface Base { readonly own: number; }
 >own : number
 

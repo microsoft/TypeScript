@@ -1,12 +1,11 @@
-recursiveTypeThroughObjectLiteralGetterReverseMapped.ts(43,7): error TS7022: 'category' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
-recursiveTypeThroughObjectLiteralGetterReverseMapped.ts(45,9): error TS7023: 'parent' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+recursiveTypeThroughObjectLiteralGetterReverseMapped.ts(42,7): error TS7022: 'category' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+recursiveTypeThroughObjectLiteralGetterReverseMapped.ts(44,9): error TS7023: 'parent' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
 
 
 ==== recursiveTypeThroughObjectLiteralGetterReverseMapped.ts (2 errors) ====
     // The same schema shape, but the parameter is written as a mapped type over the inferred one, so
     // inference runs through a reverse mapped type. Neither this change nor main resolves this variant --
-    // both report TS7022/TS7023 on the declaration -- and the point of the case is that they report the
-    // SAME thing.
+    // both report TS7022/TS7023 on the declaration -- and the case asserts they report the same thing.
     //
     // A provisional comparison explores further than an ordinary check does, so it can walk into a
     // circularity that main never reaches because it collapses the getter first. Reporting that, or

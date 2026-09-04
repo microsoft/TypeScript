@@ -155,9 +155,9 @@ const nestedName: string = sample.children[0].children[0].name;
 >children : Symbol(children, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 32, 17))
 >name : Symbol(name, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 31, 21))
 
-// Those two pass on their own if the whole thing collapsed to `any`, which is exactly the failure
-// this test exists to catch, so the recursion point is also probed where `any` cannot hide: an
-// unknown key has to be an error, and a known one has to have the type it is declared with.
+// Both assertions above pass if the whole thing collapsed to `any`, so the recursion point is also
+// probed where `any` cannot hide. An unknown key must be an error, and a known one must carry its
+// declared type.
 // @ts-expect-error
 sample.children[0].missing;
 >sample.children : Symbol(children, Decl(recursiveTypeThroughObjectLiteralGetter.ts, 32, 17))

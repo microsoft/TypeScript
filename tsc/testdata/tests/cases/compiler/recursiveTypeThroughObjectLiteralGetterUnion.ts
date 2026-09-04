@@ -6,8 +6,8 @@
 // recursiveTypeThroughObjectLiteralGetterUnionOptional.ts is the same shape with the member optional.
 //
 // The .types baseline prints the recursive member as `any` once it is a few levels deep. That is the
-// type printer truncating, not the type -- the member accesses at the bottom are what pin the real
-// shape, and the @ts-expect-error is what would catch an `any` standing in for it.
+// type printer truncating, not the type. The member accesses at the bottom pin the real shape, and
+// the @ts-expect-error would catch an `any` standing in for it.
 
 interface Internals<out O = unknown> {
     readonly out: O;
@@ -51,6 +51,6 @@ declare const sample: TreeOut;
 const topName: string = sample.name;
 const nestedName: string = sample.child.name;
 const deepName: string = sample.child.child.name;
-// An `any` here would swallow this, so the expected error is what proves the member is a real object.
+// An `any` would swallow this; the expected error shows the member is a real object.
 // @ts-expect-error
 sample.child.missing;

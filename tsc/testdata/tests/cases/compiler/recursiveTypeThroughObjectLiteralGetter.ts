@@ -46,9 +46,9 @@ declare const sample: TreeNode;
 const leafName: string = sample.name;
 const nestedName: string = sample.children[0].children[0].name;
 
-// Those two pass on their own if the whole thing collapsed to `any`, which is exactly the failure
-// this test exists to catch, so the recursion point is also probed where `any` cannot hide: an
-// unknown key has to be an error, and a known one has to have the type it is declared with.
+// Both assertions above pass if the whole thing collapsed to `any`, so the recursion point is also
+// probed where `any` cannot hide. An unknown key must be an error, and a known one must carry its
+// declared type.
 // @ts-expect-error
 sample.children[0].missing;
 // @ts-expect-error

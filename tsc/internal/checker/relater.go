@@ -3179,10 +3179,8 @@ func (r *Relater) recursiveTypeRelatedTo(source *Type, target *Type, reportError
 	if result != TernaryFalse {
 		if result == TernaryTrue || (len(r.sourceStack) == 0 && len(r.targetStack) == 0) {
 			if (result == TernaryTrue || result == TernaryMaybe) && r.c.unresolvableMembers == skipsBefore {
-				// If result is definitely true, record all maybe keys as having succeeded. Also, record Ternary.Maybe
-				// results as having succeeded once we reach depth 0, but never record Ternary.Unknown results.
-				// A comparison that passed over a member it could not resolve answered for less than the whole
-				// type, and the relation cache is global, so the next question must ask again rather than read it.
+				// This comparison answered for less than the whole type and the relation cache is global, so the next
+				// question must ask again rather than read it.
 				r.resetMaybeStack(maybeStart, propagatingVarianceFlags, true)
 			} else {
 				r.resetMaybeStack(maybeStart, propagatingVarianceFlags, false)
@@ -4266,10 +4264,9 @@ func (r *Relater) propertiesRelatedTo(source *Type, target *Type, reportErrors b
 	}
 	requireOptionalProperties := (r.relation == r.c.subtypeRelation || r.relation == r.c.strictSubtypeRelation) && !isObjectLiteralType(source) && !r.c.isEmptyArrayLiteralType(source) && !isTupleType(source)
 	unmatchedProperty := r.c.getUnmatchedProperty(source, target, requireOptionalProperties, false /*matchDiscriminantProperties*/)
-	// A miss while the source's member table is mid-assembly means "not known yet", not "absent" -- but
-	// only inside a provisional region, where the verdict is kept rather than reported, and only for a
-	// name some base declares. Suppressing it during an ordinary check makes a genuinely absent property
-	// look present, which is enough to send a conditional type down the wrong branch.
+	// A miss while the source's table is mid-assembly means "not yet" rather than "absent", but only inside
+	// a provisional region, and only for a name some base declares. Suppressing it during an ordinary check
+	// makes an absent property look present, which can send a conditional type down the wrong branch.
 	if unmatchedProperty != nil && r.c.provisionalDepth != 0 && source.objectFlags&ObjectFlagsUnresolvedMembers != 0 &&
 		r.c.mayInheritProperty(source, unmatchedProperty.Name, nil) {
 		unmatchedProperty = nil

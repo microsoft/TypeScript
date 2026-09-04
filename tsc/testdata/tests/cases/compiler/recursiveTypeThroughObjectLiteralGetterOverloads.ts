@@ -5,9 +5,8 @@
 // about the program, so skipping one on that alone makes an ordinary comparison depend on
 // resolution order. This picked the numeric overload for an object whose only member is a string.
 //
-// The generic pair at the bottom matters more than the plain one: only a generic signature opens the
-// speculative region where the skip is allowed at all, so the non-generic overloads never reach the
-// code under test. Skipping there made the object look like it had no string member and picked the
+// Only a generic signature opens the speculative region where the skip is allowed, so the non-generic
+// overloads never reach the code under test. The generic pair at the bottom covers that. Skipping there made the object look like it had no string member and picked the
 // numeric candidate again, this time with the region wide open.
 
 declare function pick(x: { [k: string]: number }): "num";

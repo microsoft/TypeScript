@@ -3,8 +3,7 @@
 === recursiveTypeThroughObjectLiteralGetterReverseMapped.ts ===
 // The same schema shape, but the parameter is written as a mapped type over the inferred one, so
 // inference runs through a reverse mapped type. Neither this change nor main resolves this variant --
-// both report TS7022/TS7023 on the declaration -- and the point of the case is that they report the
-// SAME thing.
+// both report TS7022/TS7023 on the declaration -- and the case asserts they report the same thing.
 //
 // A provisional comparison explores further than an ordinary check does, so it can walk into a
 // circularity that main never reaches because it collapses the getter first. Reporting that, or
@@ -14,136 +13,136 @@
 
 interface Internals<O> {
 >Internals : Symbol(Internals, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 0, 0))
->O : Symbol(O, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 11, 20))
+>O : Symbol(O, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 10, 20))
 
     optional: "true" | "false";
->optional : Symbol(Internals.optional, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 11, 24))
+>optional : Symbol(Internals.optional, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 10, 24))
 
     out: O;
->out : Symbol(Internals.out, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 12, 31))
->O : Symbol(O, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 11, 20))
+>out : Symbol(Internals.out, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 11, 31))
+>O : Symbol(O, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 10, 20))
 }
 
 interface StringSchema extends Internals<string> {
->StringSchema : Symbol(StringSchema, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 14, 1))
+>StringSchema : Symbol(StringSchema, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 13, 1))
 >Internals : Symbol(Internals, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 0, 0))
 
     optional: "false";
->optional : Symbol(StringSchema.optional, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 16, 50))
+>optional : Symbol(StringSchema.optional, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 15, 50))
 }
 
 type Shape = Record<string, any>;
->Shape : Symbol(Shape, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 18, 1))
+>Shape : Symbol(Shape, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 17, 1))
 >Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
 
 type Prettify<T> = { [K in keyof T]: T[K] } & {};
->Prettify : Symbol(Prettify, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 20, 33))
->T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 21, 14))
->K : Symbol(K, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 21, 22))
->T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 21, 14))
->T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 21, 14))
->K : Symbol(K, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 21, 22))
+>Prettify : Symbol(Prettify, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 19, 33))
+>T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 20, 14))
+>K : Symbol(K, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 20, 22))
+>T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 20, 14))
+>T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 20, 14))
+>K : Symbol(K, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 20, 22))
 
 type ObjectOut<S extends Shape> = Prettify<
->ObjectOut : Symbol(ObjectOut, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 21, 49))
->S : Symbol(S, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 22, 15))
->Shape : Symbol(Shape, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 18, 1))
->Prettify : Symbol(Prettify, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 20, 33))
+>ObjectOut : Symbol(ObjectOut, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 20, 49))
+>S : Symbol(S, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 21, 15))
+>Shape : Symbol(Shape, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 17, 1))
+>Prettify : Symbol(Prettify, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 19, 33))
     {
         [K in keyof S as S[K] extends { optional: "true" } ? K : never]?: S[K]["out"];
->K : Symbol(K, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 24, 9))
->S : Symbol(S, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 22, 15))
->S : Symbol(S, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 22, 15))
->K : Symbol(K, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 24, 9))
->optional : Symbol(optional, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 24, 39))
->K : Symbol(K, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 24, 9))
->S : Symbol(S, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 22, 15))
->K : Symbol(K, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 24, 9))
+>K : Symbol(K, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 23, 9))
+>S : Symbol(S, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 21, 15))
+>S : Symbol(S, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 21, 15))
+>K : Symbol(K, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 23, 9))
+>optional : Symbol(optional, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 23, 39))
+>K : Symbol(K, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 23, 9))
+>S : Symbol(S, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 21, 15))
+>K : Symbol(K, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 23, 9))
 
     } & {
         [K in keyof S as S[K] extends { optional: "true" } ? never : K]: S[K]["out"];
->K : Symbol(K, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 26, 9))
->S : Symbol(S, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 22, 15))
->S : Symbol(S, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 22, 15))
->K : Symbol(K, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 26, 9))
->optional : Symbol(optional, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 26, 39))
->K : Symbol(K, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 26, 9))
->S : Symbol(S, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 22, 15))
->K : Symbol(K, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 26, 9))
+>K : Symbol(K, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 25, 9))
+>S : Symbol(S, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 21, 15))
+>S : Symbol(S, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 21, 15))
+>K : Symbol(K, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 25, 9))
+>optional : Symbol(optional, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 25, 39))
+>K : Symbol(K, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 25, 9))
+>S : Symbol(S, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 21, 15))
+>K : Symbol(K, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 25, 9))
     }
 >;
 
 interface ObjectSchema<S extends Shape> extends Internals<ObjectOut<S>> {
->ObjectSchema : Symbol(ObjectSchema, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 28, 2))
->S : Symbol(S, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 30, 23))
->Shape : Symbol(Shape, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 18, 1))
+>ObjectSchema : Symbol(ObjectSchema, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 27, 2))
+>S : Symbol(S, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 29, 23))
+>Shape : Symbol(Shape, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 17, 1))
 >Internals : Symbol(Internals, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 0, 0))
->ObjectOut : Symbol(ObjectOut, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 21, 49))
->S : Symbol(S, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 30, 23))
+>ObjectOut : Symbol(ObjectOut, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 20, 49))
+>S : Symbol(S, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 29, 23))
 
     optional: "false";
->optional : Symbol(ObjectSchema.optional, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 30, 73))
+>optional : Symbol(ObjectSchema.optional, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 29, 73))
 }
 
 interface OptionalSchema<T extends Internals<any>> extends Internals<T["out"] | undefined> {
->OptionalSchema : Symbol(OptionalSchema, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 32, 1))
->T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 34, 25))
+>OptionalSchema : Symbol(OptionalSchema, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 31, 1))
+>T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 33, 25))
 >Internals : Symbol(Internals, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 0, 0))
 >Internals : Symbol(Internals, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 0, 0))
->T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 34, 25))
+>T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 33, 25))
 
     optional: "true";
->optional : Symbol(OptionalSchema.optional, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 34, 92))
+>optional : Symbol(OptionalSchema.optional, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 33, 92))
 }
 
 declare function object<S extends Shape>(shape: { [K in keyof S]: S[K] }): ObjectSchema<S>;
->object : Symbol(object, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 36, 1))
->S : Symbol(S, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 38, 24))
->Shape : Symbol(Shape, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 18, 1))
->shape : Symbol(shape, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 38, 41))
->K : Symbol(K, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 38, 51))
->S : Symbol(S, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 38, 24))
->S : Symbol(S, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 38, 24))
->K : Symbol(K, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 38, 51))
->ObjectSchema : Symbol(ObjectSchema, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 28, 2))
->S : Symbol(S, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 38, 24))
+>object : Symbol(object, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 35, 1))
+>S : Symbol(S, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 37, 24))
+>Shape : Symbol(Shape, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 17, 1))
+>shape : Symbol(shape, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 37, 41))
+>K : Symbol(K, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 37, 51))
+>S : Symbol(S, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 37, 24))
+>S : Symbol(S, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 37, 24))
+>K : Symbol(K, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 37, 51))
+>ObjectSchema : Symbol(ObjectSchema, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 27, 2))
+>S : Symbol(S, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 37, 24))
 
 declare function text(): StringSchema;
->text : Symbol(text, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 38, 91))
->StringSchema : Symbol(StringSchema, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 14, 1))
+>text : Symbol(text, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 37, 91))
+>StringSchema : Symbol(StringSchema, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 13, 1))
 
 declare function optional<T extends Internals<any>>(schema: T): OptionalSchema<T>;
->optional : Symbol(optional, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 39, 38))
->T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 40, 26))
+>optional : Symbol(optional, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 38, 38))
+>T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 39, 26))
 >Internals : Symbol(Internals, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 0, 0))
->schema : Symbol(schema, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 40, 52))
->T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 40, 26))
->OptionalSchema : Symbol(OptionalSchema, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 32, 1))
->T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 40, 26))
+>schema : Symbol(schema, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 39, 52))
+>T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 39, 26))
+>OptionalSchema : Symbol(OptionalSchema, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 31, 1))
+>T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 39, 26))
 
 const category = object({
->category : Symbol(category, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 42, 5))
->object : Symbol(object, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 36, 1))
+>category : Symbol(category, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 41, 5))
+>object : Symbol(object, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 35, 1))
 
     name: text(),
->name : Symbol(name, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 42, 25))
->text : Symbol(text, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 38, 91))
+>name : Symbol(name, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 41, 25))
+>text : Symbol(text, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 37, 91))
 
     get parent() {
->parent : Symbol(parent, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 43, 17))
+>parent : Symbol(parent, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 42, 17))
 
         return optional(category);
->optional : Symbol(optional, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 39, 38))
->category : Symbol(category, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 42, 5))
+>optional : Symbol(optional, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 38, 38))
+>category : Symbol(category, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 41, 5))
 
     },
 });
 
 declare const sample: (typeof category)["out"];
->sample : Symbol(sample, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 49, 13))
->category : Symbol(category, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 42, 5))
+>sample : Symbol(sample, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 48, 13))
+>category : Symbol(category, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 41, 5))
 
 const topName: string = sample.name;
->topName : Symbol(topName, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 50, 5))
->sample : Symbol(sample, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 49, 13))
+>topName : Symbol(topName, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 49, 5))
+>sample : Symbol(sample, Decl(recursiveTypeThroughObjectLiteralGetterReverseMapped.ts, 48, 13))
 

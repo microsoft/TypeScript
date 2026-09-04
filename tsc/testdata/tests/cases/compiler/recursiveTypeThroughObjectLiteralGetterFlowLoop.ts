@@ -3,16 +3,14 @@
 
 // A recursive getter whose body runs a loop, assigning to a union-typed variable.
 //
-// The loop puts entries on the flow-loop stack, and the assignment's declared type being a union is
-// what makes control flow analysis evaluate the assigned expression rather than take the declared
-// type. So the inner getter is forced from inside a loop back-edge, while a provisional comparison is
-// open.
+// The loop puts entries on the flow-loop stack, and the union declared type makes control flow analysis
+// evaluate the assigned expression rather than take the declared type, so the inner getter is forced
+// from inside a loop back-edge while a provisional comparison is open.
 //
-// This is the case that separates saving a stack's length from saving the stack itself.
-// `checkExpressionCachedEx` swaps in a nil flow-loop stack and puts the original back only when it
-// returns normally, so an unwind that crosses it leaves the nil in place. Restoring by length then
-// re-slices the replacement instead of the saved stack, which is a runtime panic rather than a
-// diagnostic. The three stacks some caller replaces wholesale are therefore held as slice headers.
+// checkExpressionCachedEx swaps in a nil flow-loop stack and restores it only on a normal return, so an
+// unwind crossing it leaves the nil in place. Restoring by length then re-slices the replacement rather
+// than the saved stack, which is a panic rather than a diagnostic. The three stacks a caller replaces
+// wholesale are held as slice headers for this reason.
 
 interface Internals<out O = unknown> {
     readonly out: O;
@@ -62,7 +60,6 @@ const node = object({
 declare const sample: Out<typeof node>;
 const topName: string = sample.name;
 
-// A key the shape does not declare is still absent, which is what tells a resolved type apart from
-// one that collapsed to `any`.
+// A key the shape does not declare is still absent; a collapse to `any` would permit this.
 // @ts-expect-error
 sample.missing;

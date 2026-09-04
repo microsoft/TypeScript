@@ -1,228 +1,221 @@
 //// [tests/cases/compiler/recursiveTypeThroughObjectLiteralGetterInheritedMember.ts] ////
 
 === recursiveTypeThroughObjectLiteralGetterInheritedMember.ts ===
-// The shape from #62180, where the recursive member is reached through a mapped type that remaps its
-// keys by reading each member's own discriminant. Resolving the object schema's members instantiates
-// its base with a type that names the schema back, so the schema's table is read while it is still
-// being assembled and its inherited `out` is not in it yet.
+// The shape from #62180. The recursive member is reached through a mapped type that remaps keys by
+// reading each member's discriminant, so resolving the object schema instantiates its base with a type
+// naming the schema back, and the table is read before its inherited `out` is added.
 //
-// A lookup that misses in that window finishes itself against the base types still to be inherited,
-// so it returns the member the table is about to hold. An earlier draft instead answered such a miss
-// with `any`, which cleared the error here and was wrong everywhere else: a self-referential
-// interface reaches the same window with no getter and no inference anywhere in the program, and an
-// unpatched compiler answers it from the index signature, so `any` silently accepted an indexed
-// access that every other compiler rejects. Completing the lookup is what separates the two -- a name
-// no base carries is still absent.
+// A miss there resolves against the bases still to be inherited. Answering `any` instead would clear
+// this error and break the self-referential interface case, where an unpatched compiler answers from the
+// index signature and `any` would accept an indexed access every other compiler rejects.
 //
-// The `any` that appears against `parent` in the .types baseline is the printer eliding a recursive
-// reference, not an unresolved member. The assertions below are what distinguish those two.
+// The `any` against `parent` in the .types baseline is printer elision, not an unresolved member; the
+// assertions below tell those apart.
 
 interface Internals<O> {
 >Internals : Symbol(Internals, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 0, 0))
->O : Symbol(O, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 16, 20))
+>O : Symbol(O, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 11, 20))
 
     optional: "true" | "false";
->optional : Symbol(Internals.optional, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 16, 24))
+>optional : Symbol(Internals.optional, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 11, 24))
 
     out: O;
->out : Symbol(Internals.out, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 17, 31))
->O : Symbol(O, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 16, 20))
+>out : Symbol(Internals.out, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 12, 31))
+>O : Symbol(O, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 11, 20))
 }
 
 interface StringSchema extends Internals<string> {
->StringSchema : Symbol(StringSchema, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 19, 1))
+>StringSchema : Symbol(StringSchema, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 14, 1))
 >Internals : Symbol(Internals, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 0, 0))
 
     optional: "false";
->optional : Symbol(StringSchema.optional, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 21, 50))
+>optional : Symbol(StringSchema.optional, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 16, 50))
 }
 
 type Shape = Record<string, any>;
->Shape : Symbol(Shape, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 23, 1))
+>Shape : Symbol(Shape, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 18, 1))
 >Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
 
 type Prettify<T> = { [K in keyof T]: T[K] } & {};
->Prettify : Symbol(Prettify, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 25, 33))
->T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 26, 14))
->K : Symbol(K, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 26, 22))
->T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 26, 14))
->T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 26, 14))
->K : Symbol(K, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 26, 22))
+>Prettify : Symbol(Prettify, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 20, 33))
+>T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 21, 14))
+>K : Symbol(K, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 21, 22))
+>T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 21, 14))
+>T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 21, 14))
+>K : Symbol(K, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 21, 22))
 
 type ObjectOut<S extends Shape> = Prettify<
->ObjectOut : Symbol(ObjectOut, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 26, 49))
->S : Symbol(S, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 27, 15))
->Shape : Symbol(Shape, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 23, 1))
->Prettify : Symbol(Prettify, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 25, 33))
+>ObjectOut : Symbol(ObjectOut, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 21, 49))
+>S : Symbol(S, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 22, 15))
+>Shape : Symbol(Shape, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 18, 1))
+>Prettify : Symbol(Prettify, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 20, 33))
     {
         [K in keyof S as S[K] extends { optional: "true" } ? K : never]?: S[K]["out"];
->K : Symbol(K, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 29, 9))
->S : Symbol(S, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 27, 15))
->S : Symbol(S, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 27, 15))
->K : Symbol(K, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 29, 9))
->optional : Symbol(optional, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 29, 39))
->K : Symbol(K, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 29, 9))
->S : Symbol(S, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 27, 15))
->K : Symbol(K, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 29, 9))
+>K : Symbol(K, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 24, 9))
+>S : Symbol(S, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 22, 15))
+>S : Symbol(S, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 22, 15))
+>K : Symbol(K, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 24, 9))
+>optional : Symbol(optional, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 24, 39))
+>K : Symbol(K, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 24, 9))
+>S : Symbol(S, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 22, 15))
+>K : Symbol(K, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 24, 9))
 
     } & {
         [K in keyof S as S[K] extends { optional: "true" } ? never : K]: S[K]["out"];
->K : Symbol(K, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 31, 9))
->S : Symbol(S, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 27, 15))
->S : Symbol(S, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 27, 15))
->K : Symbol(K, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 31, 9))
->optional : Symbol(optional, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 31, 39))
->K : Symbol(K, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 31, 9))
->S : Symbol(S, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 27, 15))
->K : Symbol(K, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 31, 9))
+>K : Symbol(K, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 26, 9))
+>S : Symbol(S, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 22, 15))
+>S : Symbol(S, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 22, 15))
+>K : Symbol(K, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 26, 9))
+>optional : Symbol(optional, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 26, 39))
+>K : Symbol(K, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 26, 9))
+>S : Symbol(S, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 22, 15))
+>K : Symbol(K, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 26, 9))
     }
 >;
 
 interface ObjectSchema<S extends Shape> extends Internals<ObjectOut<S>> {
->ObjectSchema : Symbol(ObjectSchema, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 33, 2))
->S : Symbol(S, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 35, 23))
->Shape : Symbol(Shape, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 23, 1))
+>ObjectSchema : Symbol(ObjectSchema, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 28, 2))
+>S : Symbol(S, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 30, 23))
+>Shape : Symbol(Shape, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 18, 1))
 >Internals : Symbol(Internals, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 0, 0))
->ObjectOut : Symbol(ObjectOut, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 26, 49))
->S : Symbol(S, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 35, 23))
+>ObjectOut : Symbol(ObjectOut, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 21, 49))
+>S : Symbol(S, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 30, 23))
 
     optional: "false";
->optional : Symbol(ObjectSchema.optional, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 35, 73))
+>optional : Symbol(ObjectSchema.optional, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 30, 73))
 }
 
 interface OptionalSchema<T extends Internals<any>> extends Internals<T["out"] | undefined> {
->OptionalSchema : Symbol(OptionalSchema, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 37, 1))
->T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 39, 25))
+>OptionalSchema : Symbol(OptionalSchema, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 32, 1))
+>T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 34, 25))
 >Internals : Symbol(Internals, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 0, 0))
 >Internals : Symbol(Internals, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 0, 0))
->T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 39, 25))
+>T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 34, 25))
 
     optional: "true";
->optional : Symbol(OptionalSchema.optional, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 39, 92))
+>optional : Symbol(OptionalSchema.optional, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 34, 92))
 }
 
 declare function object<S extends Shape>(shape: S): ObjectSchema<S>;
->object : Symbol(object, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 41, 1))
->S : Symbol(S, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 43, 24))
->Shape : Symbol(Shape, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 23, 1))
->shape : Symbol(shape, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 43, 41))
->S : Symbol(S, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 43, 24))
->ObjectSchema : Symbol(ObjectSchema, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 33, 2))
->S : Symbol(S, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 43, 24))
+>object : Symbol(object, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 36, 1))
+>S : Symbol(S, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 38, 24))
+>Shape : Symbol(Shape, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 18, 1))
+>shape : Symbol(shape, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 38, 41))
+>S : Symbol(S, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 38, 24))
+>ObjectSchema : Symbol(ObjectSchema, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 28, 2))
+>S : Symbol(S, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 38, 24))
 
 declare function text(): StringSchema;
->text : Symbol(text, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 43, 68))
->StringSchema : Symbol(StringSchema, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 19, 1))
+>text : Symbol(text, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 38, 68))
+>StringSchema : Symbol(StringSchema, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 14, 1))
 
 declare function optional<T extends Internals<any>>(schema: T): OptionalSchema<T>;
->optional : Symbol(optional, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 44, 38))
->T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 45, 26))
+>optional : Symbol(optional, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 39, 38))
+>T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 40, 26))
 >Internals : Symbol(Internals, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 0, 0))
->schema : Symbol(schema, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 45, 52))
->T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 45, 26))
->OptionalSchema : Symbol(OptionalSchema, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 37, 1))
->T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 45, 26))
+>schema : Symbol(schema, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 40, 52))
+>T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 40, 26))
+>OptionalSchema : Symbol(OptionalSchema, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 32, 1))
+>T : Symbol(T, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 40, 26))
 
 const category = object({
->category : Symbol(category, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 47, 5))
->object : Symbol(object, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 41, 1))
+>category : Symbol(category, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 42, 5))
+>object : Symbol(object, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 36, 1))
 
     name: text(),
->name : Symbol(name, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 47, 25))
->text : Symbol(text, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 43, 68))
+>name : Symbol(name, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 42, 25))
+>text : Symbol(text, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 38, 68))
 
     get parent() {
->parent : Symbol(parent, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 48, 17))
+>parent : Symbol(parent, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 43, 17))
 
         return optional(category);
->optional : Symbol(optional, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 44, 38))
->category : Symbol(category, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 47, 5))
+>optional : Symbol(optional, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 39, 38))
+>category : Symbol(category, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 42, 5))
 
     },
 });
 
 declare const sample: (typeof category)["out"];
->sample : Symbol(sample, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 54, 13))
->category : Symbol(category, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 47, 5))
+>sample : Symbol(sample, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 49, 13))
+>category : Symbol(category, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 42, 5))
 
-// The key that does not recurse resolves fully, and the remapping put the recursive one in the
-// optional bucket, so it is `parent?:` rather than `parent:`. Both of those are new: main gives the
-// whole declaration an implicit `any` and reports it.
+// The non-recursive key resolves fully, and the remapping put the recursive one in the optional bucket,
+// so it is `parent?:`. Both are new; main gives the whole declaration an implicit `any`.
 const topName: string = sample.name;
->topName : Symbol(topName, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 58, 5))
->sample.name : Symbol(name, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 47, 25))
->sample : Symbol(sample, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 54, 13))
->name : Symbol(name, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 47, 25))
+>topName : Symbol(topName, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 52, 5))
+>sample.name : Symbol(name, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 42, 25))
+>sample : Symbol(sample, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 49, 13))
+>name : Symbol(name, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 42, 25))
 
-// The recursive one resolves too, and keeps resolving as far down as it is walked.
+// The recursive one resolves too, at any depth walked.
 const parentName: string = sample.parent!.name;
->parentName : Symbol(parentName, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 60, 5))
->sample.parent!.name : Symbol(name, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 47, 25))
->sample.parent : Symbol(parent, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 48, 17))
->sample : Symbol(sample, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 54, 13))
->parent : Symbol(parent, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 48, 17))
->name : Symbol(name, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 47, 25))
+>parentName : Symbol(parentName, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 54, 5))
+>sample.parent!.name : Symbol(name, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 42, 25))
+>sample.parent : Symbol(parent, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 43, 17))
+>sample : Symbol(sample, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 49, 13))
+>parent : Symbol(parent, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 43, 17))
+>name : Symbol(name, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 42, 25))
 
 const deepName: string = sample.parent!.parent!.parent!.name;
->deepName : Symbol(deepName, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 61, 5))
->sample.parent!.parent!.parent!.name : Symbol(name, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 47, 25))
->sample.parent!.parent!.parent : Symbol(parent, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 48, 17))
->sample.parent!.parent : Symbol(parent, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 48, 17))
->sample.parent : Symbol(parent, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 48, 17))
->sample : Symbol(sample, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 54, 13))
->parent : Symbol(parent, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 48, 17))
->parent : Symbol(parent, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 48, 17))
->parent : Symbol(parent, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 48, 17))
->name : Symbol(name, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 47, 25))
+>deepName : Symbol(deepName, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 55, 5))
+>sample.parent!.parent!.parent!.name : Symbol(name, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 42, 25))
+>sample.parent!.parent!.parent : Symbol(parent, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 43, 17))
+>sample.parent!.parent : Symbol(parent, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 43, 17))
+>sample.parent : Symbol(parent, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 43, 17))
+>sample : Symbol(sample, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 49, 13))
+>parent : Symbol(parent, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 43, 17))
+>parent : Symbol(parent, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 43, 17))
+>parent : Symbol(parent, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 43, 17))
+>name : Symbol(name, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 42, 25))
 
-// Depth is where a collapse would hide: `any` would accept both of these, so they are what keeps the
-// comment above honest.
+// A collapse to `any` would accept both of these.
 // @ts-expect-error
 const wrongType: number = sample.parent!.parent!.name;
->wrongType : Symbol(wrongType, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 65, 5))
->sample.parent!.parent!.name : Symbol(name, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 47, 25))
->sample.parent!.parent : Symbol(parent, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 48, 17))
->sample.parent : Symbol(parent, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 48, 17))
->sample : Symbol(sample, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 54, 13))
->parent : Symbol(parent, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 48, 17))
->parent : Symbol(parent, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 48, 17))
->name : Symbol(name, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 47, 25))
+>wrongType : Symbol(wrongType, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 58, 5))
+>sample.parent!.parent!.name : Symbol(name, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 42, 25))
+>sample.parent!.parent : Symbol(parent, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 43, 17))
+>sample.parent : Symbol(parent, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 43, 17))
+>sample : Symbol(sample, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 49, 13))
+>parent : Symbol(parent, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 43, 17))
+>parent : Symbol(parent, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 43, 17))
+>name : Symbol(name, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 42, 25))
 
 // @ts-expect-error
 sample.parent!.parent!.missing;
->sample.parent!.parent : Symbol(parent, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 48, 17))
->sample.parent : Symbol(parent, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 48, 17))
->sample : Symbol(sample, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 54, 13))
->parent : Symbol(parent, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 48, 17))
->parent : Symbol(parent, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 48, 17))
+>sample.parent!.parent : Symbol(parent, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 43, 17))
+>sample.parent : Symbol(parent, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 43, 17))
+>sample : Symbol(sample, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 49, 13))
+>parent : Symbol(parent, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 43, 17))
+>parent : Symbol(parent, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 43, 17))
 
-// A property that is genuinely absent must still be reported, whoever is asking.
+// A genuinely absent property is still reported.
 interface Base { readonly own: number; }
->Base : Symbol(Base, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 67, 31))
->own : Symbol(Base.own, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 70, 16))
+>Base : Symbol(Base, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 60, 31))
+>own : Symbol(Base.own, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 63, 16))
 
 interface Derived extends Base { readonly extra: string; }
->Derived : Symbol(Derived, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 70, 40))
->Base : Symbol(Base, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 67, 31))
->extra : Symbol(Derived.extra, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 71, 32))
+>Derived : Symbol(Derived, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 63, 40))
+>Base : Symbol(Base, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 60, 31))
+>extra : Symbol(Derived.extra, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 64, 32))
 
 declare const derived: Derived;
->derived : Symbol(derived, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 72, 13))
->Derived : Symbol(Derived, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 70, 40))
+>derived : Symbol(derived, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 65, 13))
+>Derived : Symbol(Derived, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 63, 40))
 
 // @ts-expect-error
 derived.missing;
->derived : Symbol(derived, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 72, 13))
+>derived : Symbol(derived, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 65, 13))
 
 const ownValue: number = derived.own;
->ownValue : Symbol(ownValue, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 75, 5))
->derived.own : Symbol(Base.own, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 70, 16))
->derived : Symbol(derived, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 72, 13))
->own : Symbol(Base.own, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 70, 16))
+>ownValue : Symbol(ownValue, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 68, 5))
+>derived.own : Symbol(Base.own, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 63, 16))
+>derived : Symbol(derived, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 65, 13))
+>own : Symbol(Base.own, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 63, 16))
 
 const extraValue: string = derived.extra;
->extraValue : Symbol(extraValue, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 76, 5))
->derived.extra : Symbol(Derived.extra, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 71, 32))
->derived : Symbol(derived, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 72, 13))
->extra : Symbol(Derived.extra, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 71, 32))
+>extraValue : Symbol(extraValue, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 69, 5))
+>derived.extra : Symbol(Derived.extra, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 64, 32))
+>derived : Symbol(derived, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 65, 13))
+>extra : Symbol(Derived.extra, Decl(recursiveTypeThroughObjectLiteralGetterInheritedMember.ts, 64, 32))
 
