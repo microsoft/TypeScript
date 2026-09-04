@@ -42,9 +42,17 @@
             "@typescript/source": "./src/api/sync/api.ts",
             "default": "./dist/api/sync/api.js"
         },
+        "./unstable/sync/transport": {
+            "@typescript/source": "./src/api/sync/transport.ts",
+            "default": "./dist/api/sync/transport.js"
+        },
         "./unstable/async": {
             "@typescript/source": "./src/api/async/api.ts",
             "default": "./dist/api/async/api.js"
+        },
+        "./unstable/async/transport": {
+            "@typescript/source": "./src/api/async/transport.ts",
+            "default": "./dist/api/async/transport.js"
         },
         "./unstable/fs": {
             "@typescript/source": "./src/api/fs.ts",
@@ -85,6 +93,22 @@
     },
     "imports": {
         "#getExePath": "./lib/getExePath.js",
+        "#asyncClient": {
+            "@typescript/source": {
+                "browser": "./src/api/async/browserClient.ts",
+                "default": "./src/api/async/client.ts"
+            },
+            "browser": "./dist/api/async/browserClient.js",
+            "default": "./dist/api/async/client.js"
+        },
+        "#syncClient": {
+            "@typescript/source": {
+                "browser": "./src/api/sync/browserClient.ts",
+                "default": "./src/api/sync/client.ts"
+            },
+            "browser": "./dist/api/sync/browserClient.js",
+            "default": "./dist/api/sync/client.js"
+        },
         "#enums/*": {
             "@typescript/source": {
                 "types": "./src/enums/*.enum.ts",
@@ -103,11 +127,15 @@
         "generate:sync": "npm run node -- scripts/generateSync.ts",
         "build": "tsc -b",
         "build:test": "tsc -b test",
-        "test:only": "npm run node -- --test './test/**/*.test.ts'",
+        "test:only": "npm run node -- --test './test/*.test.ts' './test/async/**/*.test.ts' './test/sync/**/*.test.ts'",
+        "test:browser:only": "npm run node -- --test './test/browser/**/*.test.ts'",
         "test": "npm run test:only"
     },
     "devDependencies": {
         "@types/node": "^22.20.1",
+        "assert": "^2.1.0",
+        "playwright": "^1.62.1",
+        "process": "^0.11.10",
         "tinybench": "^6.1.3",
         "vscode-jsonrpc": "^9.0.1"
     }

@@ -1,6 +1,7 @@
 // @ts-check
 
 import AdmZip from "adm-zip";
+import binaryen from "binaryen";
 import chokidar from "chokidar";
 import { task } from "hereby";
 import assert from "node:assert";
@@ -1214,7 +1215,15 @@ async function runTestTools() {
 
 async function runTestAPI() {
     // Running the package script doesn't work on Windows; some path escaping isn't done correctly and the test runner runs no tests.
-    await run("node", ["--conditions", "@typescript/source", "--test", "./test/**/*.test.ts"], { cwd: "./packages/typescript" });
+    await run(
+        "node",
+        ["--conditions", "@typescript/source", "--test", "./test/*.test.ts", "./test/async/**/*.test.ts", "./test/sync/**/*.test.ts"],
+        { cwd: "./packages/typescript" },
+    );
+}
+
+async function runTestAPIBrowser() {
+    await run("node", ["--conditions", "@typescript/source", "--test", "./test/browser/**/*.test.ts"], { cwd: "./packages/typescript" });
 }
 
 export const testTools = task({
@@ -1237,10 +1246,78 @@ export const buildAPI = task({
     },
 });
 
+/**
+ * @param {string} out
+ * @param {string[]} [extraFlags]
+ */
+async function buildWasiFile(out, extraFlags = []) {
+    out = path.resolve(out);
+    await fs.promises.mkdir(path.dirname(out), { recursive: true });
+    await run("go", ["build", "-buildmode=c-shared", ...extraFlags, "-o", out, "./cmd/tsc"], {
+        cwd: "./tsc",
+        env: { GOOS: "wasip1", GOARCH: "wasm" },
+    });
+    patchWasiFile(out);
+}
+
+/**
+ * @param {string} file
+ */
+function patchWasiFile(file) {
+    const module = binaryen.readBinary(fs.readFileSync(file));
+    try {
+        module.setFeatures(
+            binaryen.Features.MutableGlobals
+                | binaryen.Features.NontrappingFPToInt
+                | binaryen.Features.BulkMemory
+                | binaryen.Features.BulkMemoryOpt
+                | binaryen.Features.SignExt,
+        );
+
+        const initialize = binaryen.getExportInfo(module.getExport("_initialize")).value;
+        const cliStart = binaryen.getExportInfo(module.getExport("__typescript_cli_start")).value;
+        // Go emits either a WASI command or reactor entrypoint, but the API binary needs both.
+        // Hide the standard reactor export from command hosts and synthesize a command entrypoint
+        // that initializes the runtime before entering the real Go CLI.
+        module.addFunction(
+            "__typescript_command_start",
+            binaryen.none,
+            binaryen.none,
+            [],
+            module.block(null, [
+                module.call(initialize, [], binaryen.none),
+                module.call(cliStart, [], binaryen.none),
+            ]),
+        );
+        module.removeExport("_initialize");
+        module.removeExport("__typescript_cli_start");
+        module.addFunctionExport(initialize, "typescript_initialize");
+        module.addFunctionExport("__typescript_command_start", "_start");
+
+        if (!module.validate()) {
+            throw new Error("patched WebAssembly module is invalid");
+        }
+        fs.writeFileSync(file, module.emitBinary());
+    }
+    finally {
+        module.dispose();
+    }
+}
+
+export const buildWasi = task({
+    name: "build:wasip1",
+    description: "Builds the @typescript/typescript-wasip1-wasm package.",
+    dependencies: [lib],
+    run: async () => {
+        await run("npm", ["run", "-w", "@typescript/typescript-wasip1-wasm", "build:js"]);
+        await buildWasiFile("./packages/typescript-wasip1-wasm/dist/tsc.wasm");
+    },
+});
+
 export const buildAPITests = task({
     name: "build:api:test",
     description: "Builds the @typescript/typescript JS API tests.",
-    dependencies: [generateEnums, generateAPI],
+    dependencies: [generateEnums, generateAPI, buildWasi],
     run: async () => {
         await run("npm", ["run", "-w", "@typescript/typescript", "build:test"]);
     },
@@ -1251,6 +1328,13 @@ export const testAPI = task({
     description: "Runs the @typescript/typescript JS API tests.",
     dependencies: [tsgo, buildAPITests],
     run: runTestAPI,
+});
+
+export const testAPIBrowser = task({
+    name: "test:api:browser",
+    description: "Runs the @typescript/typescript browser API tests.",
+    dependencies: [buildAPITests],
+    run: runTestAPIBrowser,
 });
 
 export const testAll = task({
@@ -1264,6 +1348,7 @@ export const testAll = task({
         await runTestBenchmarks();
         await runTestTools();
         await runTestAPI();
+        await runTestAPIBrowser();
     },
 });
 
@@ -1934,6 +2019,12 @@ const mainNativePreviewPackage = {
     npmTarball: path.join(builtNpm, publishAsTypescript ? "typescript.tgz" : "native-preview.tgz"),
 };
 
+const wasip1Package = {
+    npmPackageName: "@typescript/typescript-wasip1-wasm",
+    npmDir: path.join(builtNpm, "typescript-wasip1-wasm"),
+    npmTarball: path.join(builtNpm, "typescript-wasip1-wasm.tgz"),
+};
+
 const typescriptMacEntitlements = [
     "com.apple.security.cs.allow-dyld-environment-variables",
     "com.apple.security.cs.disable-library-validation",
@@ -2289,6 +2380,13 @@ async function runBuildNativePreviewPackages() {
     const platforms = getPlatforms();
 
     const inputDir = "./packages/typescript";
+    await Promise.all([
+        fs.promises.rm(path.join(inputDir, "dist", "tsc.wasm"), { force: true }),
+        fs.promises.rm(path.join(inputDir, "dist", "api", "wasm.js"), { force: true }),
+        fs.promises.rm(path.join(inputDir, "dist", "api", "wasm.js.map"), { force: true }),
+        fs.promises.rm(path.join(inputDir, "dist", "api", "wasm.d.ts"), { force: true }),
+        fs.promises.rm(path.join(inputDir, "dist", "api", "wasm.d.ts.map"), { force: true }),
+    ]);
 
     const inputPackageJson = JSON.parse(fs.readFileSync(path.join(inputDir, "package.json"), "utf8"));
     inputPackageJson.version = getVersion();
@@ -2349,7 +2447,7 @@ async function runBuildNativePreviewPackages() {
     await fs.promises.copyFile("LICENSE.txt", path.join(mainPackageDir, "LICENSE"));
     await fs.promises.copyFile("NOTICE.txt", path.join(mainPackageDir, "NOTICE.txt"));
 
-    // Build JS API and copy dist into the package.
+    // Build the JS API and copy dist into the main package.
     await run("npm", ["run", "-w", "@typescript/typescript", "build"]);
     await cpRecursive(path.join(inputDir, "dist"), path.join(mainPackageDir, "dist"));
 
@@ -2377,7 +2475,33 @@ async function runBuildNativePreviewPackages() {
         throw new Error(`Found external imports in .d.ts files:\n${importErrors.map(e => "  " + e).join("\n")}`);
     }
 
+    const wasmInputDir = "./packages/typescript-wasip1-wasm";
     const extraFlags = getReleaseBuildFlags(options.setPrerelease || nativePreviewReleaseVersion ? getVersion() : undefined);
+    const wasmPackageJson = JSON.parse(fs.readFileSync(path.join(wasmInputDir, "package.json"), "utf8"));
+    wasmPackageJson.version = getVersion();
+    wasmPackageJson.gitHead = gitHead;
+    wasmPackageJson.peerDependencies = {
+        [mainNativePreviewPackage.npmPackageName]: getVersion(),
+    };
+    wasmPackageJson.publishConfig = {
+        access: "public",
+        tag: getPublishTag(),
+    };
+    wasmPackageJson.files = [...new Set([...(wasmPackageJson.files ?? []), "NOTICE.txt"])];
+    delete wasmPackageJson.private;
+    delete wasmPackageJson.scripts;
+    stripSourceConditions(wasmPackageJson);
+
+    await run("npm", ["run", "-w", "@typescript/typescript-wasip1-wasm", "build:js"]);
+    await buildWasiFile(path.join(wasmInputDir, "dist", "tsc.wasm"), extraFlags);
+    await cpRecursive(wasmInputDir, wasip1Package.npmDir, p => !p.endsWith("/node_modules") && !p.includes("/dist"));
+    await cpRecursive(path.join(wasmInputDir, "dist"), path.join(wasip1Package.npmDir, "dist"));
+    await fs.promises.writeFile(
+        path.join(wasip1Package.npmDir, "package.json"),
+        JSON.stringify(wasmPackageJson, undefined, 4),
+    );
+    await fs.promises.copyFile("LICENSE.txt", path.join(wasip1Package.npmDir, "LICENSE"));
+    await fs.promises.copyFile("NOTICE.txt", path.join(wasip1Package.npmDir, "NOTICE.txt"));
 
     const platformBuilders = platforms.map(({ npmDir, npmPackageName, nodeOs, nodeArch, goos, goarch }) => async () => {
         const packageJson = {
@@ -2587,14 +2711,14 @@ async function runPackNativePreviewPackages() {
     }
 
     const platforms = getPlatforms();
-    await Promise.all([mainNativePreviewPackage, ...platforms].map(async ({ npmDir, npmTarball }) => {
+    await Promise.all([mainNativePreviewPackage, wasip1Package, ...platforms].map(async ({ npmDir, npmTarball }) => {
         const { stdout } = await runOutput("npm", ["pack", "--json", npmDir]);
         const filename = JSON.parse(stdout)[0].filename.replace("@", "").replace("/", "-");
         await fs.promises.rename(filename, npmTarball);
     }));
 
-    // npm packages need to be published in dependency order: platform packages
-    // first, then the main package that references them as optionalDependencies.
+    // Publish in dependency order: platform packages, the main package that references
+    // them as optionalDependencies, then the WASI package with its exact main-package peer.
     const publishManifest = {
         stages: [
             platforms.map(p => ({
@@ -2603,6 +2727,11 @@ async function runPackNativePreviewPackages() {
             [
                 {
                     filename: path.basename(mainNativePreviewPackage.npmTarball),
+                },
+            ],
+            [
+                {
+                    filename: path.basename(wasip1Package.npmTarball),
                 },
             ],
         ],

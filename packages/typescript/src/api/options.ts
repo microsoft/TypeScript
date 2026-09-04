@@ -3,7 +3,9 @@
  */
 
 import getExePath from "#getExePath";
+import type { AsyncTransport } from "./async/transport.ts";
 import type { FileSystem } from "./fs.ts";
+import type { SyncTransport } from "./sync/transport.ts";
 
 export interface ClientSocketOptions {
     /** Path to the Unix domain socket or Windows named pipe for API communication */
@@ -39,6 +41,40 @@ export function isSpawnOptions(options: ClientOptions): options is ClientSpawnOp
     return !("pipe" in options);
 }
 
+export interface ClientTransportOptions {
+    /** An existing synchronous transport connected to an API session. */
+    transport: SyncTransport;
+    /** Maximum encoded byte size of each batch response page. Defaults to 300 million bytes. Individual responses can be larger than this size, but this controls where batch pages are cutoff. */
+    maxResponseBytesPerPage?: number;
+    /** Virtual filesystem callbacks used by transports that support them. */
+    fs?: FileSystem;
+    /** Collect timing information for requests made through the transport. */
+    collectTiming?: boolean;
+}
+
+export type SyncClientOptions = ClientSocketOptions | ClientSpawnOptions | ClientTransportOptions;
+
+export function isTransportOptions(options: SyncClientOptions): options is ClientTransportOptions {
+    return "transport" in options;
+}
+
+export interface AsyncClientTransportOptions {
+    /** An existing asynchronous transport connected to an API session. */
+    transport: AsyncTransport;
+    /** Maximum encoded byte size of each batch response page. Defaults to 300 million bytes. Individual responses can be larger than this size, but this controls where batch pages are cutoff. */
+    maxResponseBytesPerPage?: number;
+    /** Virtual filesystem callbacks used by transports that support them. */
+    fs?: FileSystem;
+    /** Collect timing information for requests made through the transport. */
+    collectTiming?: boolean;
+}
+
+export type AsyncClientOptions = ClientOptions | AsyncClientTransportOptions;
+
+export function isAsyncTransportOptions(options: AsyncClientOptions): options is AsyncClientTransportOptions {
+    return "transport" in options;
+}
+
 export function resolveExePath(options: ClientSpawnOptions): string {
     return options.tsserverPath ?? getExePath();
 }
@@ -55,5 +91,6 @@ export function getAPIProcessArgs(options: ClientSpawnOptions, async: boolean): 
 export interface LSPConnectionOptions extends ClientSocketOptions {
 }
 
-export interface APIOptions extends ClientSpawnOptions {
-}
+export type APIOptions = ClientSpawnOptions | AsyncClientTransportOptions;
+
+export type SyncAPIOptions = ClientSpawnOptions | ClientTransportOptions;

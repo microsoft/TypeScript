@@ -35,6 +35,7 @@ import {
 import {
     encodeNode,
     encodeSourceFile,
+    uint8ArrayToBase64,
 } from "../src/api/node/encoder.ts";
 import {
     RemoteNode,
@@ -57,6 +58,16 @@ function decode(data: Uint8Array): RemoteSourceFile {
 }
 
 describe("Encoder", () => {
+    test("encodes base64 using the available platform implementation", () => {
+        const data = new Uint8Array([0, 1, 2, 3, 4]).subarray(1, 4);
+        assert.strictEqual(uint8ArrayToBase64(data), "AQID");
+
+        Object.defineProperty(data, "toBase64", {
+            value: () => "native",
+        });
+        assert.strictEqual(uint8ArrayToBase64(data), "native");
+    });
+
     test("encodes empty source file", () => {
         const sf = makeSF("", "/test.ts", []);
 
