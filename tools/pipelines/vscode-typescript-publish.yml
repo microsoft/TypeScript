@@ -12,6 +12,10 @@ parameters:
 variables:
   - name: TeamName
     value: TypeScript
+  - name: TYPESCRIPT_AUTOMATION_GITHUB_APP_CLIENT_ID
+    value: Iv23li4GolzJSEp1mzHI
+  - name: TYPESCRIPT_AUTOMATION_GITHUB_APP_KEY_ID
+    value: https://jststeam-passwords.vault.azure.net/keys/typescript-automation
 
 resources:
   repositories:
@@ -226,6 +230,7 @@ extends:
 
                   - template: /tools/pipelines/steps/create-github-app-token.yml@self
                     parameters:
+                      azureSubscription: TypeScript-DevDiv-KeyVault
                       repositories: TypeScript
                       permissions: contents:write
                       insertSteps:
