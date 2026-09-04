@@ -1,6 +1,6 @@
 // @target: es2015
 // @strict: false
-//@module: amd
+//@module: commonjs
 // @Filename: exportAssignmentInternalModule_A.ts
 namespace M {
 	export var x;

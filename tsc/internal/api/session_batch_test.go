@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/microsoft/TypeScript/tsc/internal/json"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil/projecttestutil"
 	"gotest.tools/v3/assert"
 )
 
@@ -62,9 +63,12 @@ func TestBatchResponseEncodesEmptyResult(t *testing.T) {
 
 func TestHandleBatchRequestsPaginatesResponses(t *testing.T) {
 	t.Parallel()
+	projectSession, _ := projecttestutil.Setup(map[string]any{})
+	defer projectSession.Close()
+	session := NewLSPSession(projectSession, nil)
+	defer session.Close()
 
 	const maxResponseBytesPerPage = 150
-	session := NewSession(nil, nil)
 	requests := make([]BatchRequest, 10)
 	for i := range requests {
 		requests[i] = BatchRequest{Method: "ping", Params: json.Value{}}
@@ -103,7 +107,11 @@ func TestHandleBatchRequestsPaginatesResponses(t *testing.T) {
 func TestHandleBatchRequestsAllowsOversizedSingleResponse(t *testing.T) {
 	t.Parallel()
 
-	session := NewSession(nil, nil)
+	projectSession, _ := projecttestutil.Setup(map[string]any{})
+	defer projectSession.Close()
+	session := NewLSPSession(projectSession, nil)
+	defer session.Close()
+
 	response, err := session.handleBatchRequests(context.Background(), &BatchRequestsParams{
 		Requests:                []BatchRequest{{Method: "ping", Params: json.Value{}}},
 		MaxResponseBytesPerPage: 1,
@@ -116,7 +124,11 @@ func TestHandleBatchRequestsAllowsOversizedSingleResponse(t *testing.T) {
 func TestHandleBatchRequestsPageLimitIsRequestScoped(t *testing.T) {
 	t.Parallel()
 
-	session := NewSession(nil, nil)
+	projectSession, _ := projecttestutil.Setup(map[string]any{})
+	defer projectSession.Close()
+	session := NewLSPSession(projectSession, nil)
+	defer session.Close()
+
 	requests := []BatchRequest{
 		{Method: "ping", Params: json.Value{}},
 		{Method: "ping", Params: json.Value{}},
@@ -139,7 +151,11 @@ func TestHandleBatchRequestsPageLimitIsRequestScoped(t *testing.T) {
 func TestHandleBatchRequestsRejectsInvalidContinuationToken(t *testing.T) {
 	t.Parallel()
 
-	session := NewSession(nil, nil)
+	projectSession, _ := projecttestutil.Setup(map[string]any{})
+	defer projectSession.Close()
+	session := NewLSPSession(projectSession, nil)
+	defer session.Close()
+
 	_, err := session.handleBatchRequests(context.Background(), &BatchRequestsParams{ContinuationToken: "invalid"})
 	assert.ErrorContains(t, err, "invalid batch continuation token")
 }
@@ -147,7 +163,11 @@ func TestHandleBatchRequestsRejectsInvalidContinuationToken(t *testing.T) {
 func TestHandleBatchRequestsRejectsNestedBatch(t *testing.T) {
 	t.Parallel()
 
-	session := NewSession(nil, nil)
+	projectSession, _ := projecttestutil.Setup(map[string]any{})
+	defer projectSession.Close()
+	session := NewLSPSession(projectSession, nil)
+	defer session.Close()
+
 	response, err := session.handleBatchRequests(context.Background(), &BatchRequestsParams{
 		Requests: []BatchRequest{{Method: MethodBatchRequests, Params: json.Value(`{"requests":[]}`)}},
 	})

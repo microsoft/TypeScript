@@ -1,5 +1,5 @@
 // @target: es2015
-//@module: amd
+//@module: commonjs
 class Foo {
     public get foo() {
         var i: Foo;

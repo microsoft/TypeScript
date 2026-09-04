@@ -139,10 +139,13 @@ const publicGeneratorExemptions = new Map<string, string>([
 ]);
 const privateGeneratorGetters = new Set([
     "API.ensureInitialized",
+    "API.initializeWorker",
     "Checker.getIntrinsicType",
     "Checker.getWellKnownSignatures",
     "Checker.getWellKnownSymbols",
+    "Program.disposeWorker",
     "Program.fetchSourceFileMetadata",
+    "Snapshot.disposeWorker",
     "Symbol.fetchSymbolTable",
     "Type.getNumberIndexTypeWorker",
     "Type.getStringIndexTypeWorker",
