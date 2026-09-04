@@ -2812,7 +2812,6 @@ func (p *Printer) getBinaryExpressionPrecedence(node *ast.BinaryExpression) (lef
 		// No need to parenthesize the right operand when the binary operator and
 		// operand are both ,:
 		//  x,(a,b)     => x,a,b
-		break
 	case ast.OperatorPrecedenceAssignment:
 		// assignment is right-associative
 		leftPrec = ast.OperatorPrecedenceConditional
@@ -2825,17 +2824,14 @@ func (p *Printer) getBinaryExpressionPrecedence(node *ast.BinaryExpression) (lef
 		// No need to parenthesize the right operand when the binary operator and
 		// operand are both | due to the associative property of mathematics:
 		//  x|(a|b)     => x|a|b
-		break
 	case ast.OperatorPrecedenceBitwiseXOR:
 		// No need to parenthesize the right operand when the binary operator and
 		// operand are both ^ due to the associative property of mathematics:
 		//  x^(a^b)     => x^a^b
-		break
 	case ast.OperatorPrecedenceBitwiseAND:
 		// No need to parenthesize the right operand when the binary operator and
 		// operand are both & due to the associative property of mathematics:
 		//  x&(a&b)     => x&a&b
-		break
 	case ast.OperatorPrecedenceEquality:
 		rightPrec = ast.OperatorPrecedenceRelational
 	case ast.OperatorPrecedenceRelational:
@@ -3316,7 +3312,7 @@ func (p *Printer) emitExpression(node *ast.Expression, precedence ast.OperatorPr
 	case ast.KindSyntheticExpression:
 		panic("SyntheticExpression should never be printed.")
 	case ast.KindMissingDeclaration:
-		break
+		// Missing declarations do not emit an expression.
 
 	// JSX
 	case ast.KindJsxElement:
@@ -4219,7 +4215,7 @@ func (p *Printer) emitStatement(node *ast.Statement) {
 	case ast.KindModuleDeclaration:
 		p.emitModuleDeclaration(node.AsModuleDeclaration())
 	case ast.KindMissingDeclaration:
-		break
+		// Missing declarations do not emit a statement.
 
 	// Import/Export Statements
 	case ast.KindNamespaceExportDeclaration:
@@ -4879,7 +4875,7 @@ func (p *Printer) hasTrailingComma(parentNode *ast.Node, children *ast.NodeList)
 func (p *Printer) writeDelimiter(format ListFormat) {
 	switch format & LFDelimitersMask {
 	case LFNone:
-		break
+		// no delimiter for this format
 	case LFCommaDelimited:
 		p.writePunctuation(",")
 	case LFBarDelimited:
