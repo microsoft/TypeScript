@@ -2051,8 +2051,10 @@ func MatchPatternOrExact(patterns *ParsedPatterns, candidate string) core.Patter
 // in `.` are actually normalized to `./` before proceeding with the resolution algorithm.
 func normalizePathForCJSResolution(containingDirectory string, moduleName string) string {
 	combined := tspath.CombinePaths(containingDirectory, moduleName)
-	parts := tspath.GetPathComponents(combined, "")
-	lastPart := parts[len(parts)-1]
+	// Equivalent to checking whether the last element of
+	// tspath.GetPathComponents(combined, "") is "." or "..", but without
+	// allocating a component slice for every relative import.
+	lastPart := tspath.GetBaseFileName(combined)
 	if lastPart == "." || lastPart == ".." {
 		return tspath.EnsureTrailingDirectorySeparator(tspath.NormalizePath(combined))
 	}

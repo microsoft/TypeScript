@@ -370,8 +370,10 @@ func (fs *overlayFS) processChanges(changes []FileChange) (FileChangeSummary, ma
 					}
 				}
 				if len(change.Changes) > 0 {
+					// o was just rebuilt via newOverlay in the loop above, which already
+					// computed o.hash from o.content — recomputing it here would hash the
+					// same content a second time.
 					o.version = change.Version
-					o.hash = xxh3.HashString128(o.content)
 					o.matchesDiskText = false
 					newOverlays[path] = o
 				}
