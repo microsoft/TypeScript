@@ -1,6 +1,6 @@
 // @target: es2015
 // @strict: false
-//@module: amd
+//@module: commonjs
 // @sourcemap: true
 export namespace TopLevelModule1 {
     export namespace SubModule1 {

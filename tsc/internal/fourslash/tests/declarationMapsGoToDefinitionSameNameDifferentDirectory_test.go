@@ -43,7 +43,7 @@ class /*2*/Control{
 {
     "extends": "../tsbase.json",
     "compilerOptions": {
-      "outFile": "Source.js"
+      "outDir": "."
     },
     "files": [
       "Source.ts"

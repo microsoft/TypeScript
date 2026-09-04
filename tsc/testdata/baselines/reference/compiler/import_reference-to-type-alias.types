@@ -1,0 +1,22 @@
+//// [tests/cases/compiler/import_reference-to-type-alias.ts] ////
+
+=== file2.ts ===
+import appJs = require("file1");
+>appJs : any
+
+import Services = appJs.App.Services;
+>Services : any
+>appJs : any
+>App : any
+>Services : any
+
+var x = new Services.UserServices().getUserName();
+>x : any
+>new Services.UserServices().getUserName() : any
+>new Services.UserServices().getUserName : any
+>new Services.UserServices() : any
+>Services.UserServices : any
+>Services : any
+>UserServices : any
+>getUserName : any
+

@@ -1,5 +1,5 @@
 // @target: es2015
-//@module: amd
+//@module: commonjs
 // @Filename: moduleImportedForTypeArgumentPosition_0.ts
 export interface M2C { }
 
