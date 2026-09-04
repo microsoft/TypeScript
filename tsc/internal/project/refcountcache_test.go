@@ -575,7 +575,7 @@ func TestRefCountingCaches(t *testing.T) {
 
 		const configFileName = "/project/tsconfig.json"
 		session := setup(map[string]any{
-			configFileName:     `{"compilerOptions":{"noLib":true},"files":["index.ts"]}`,
+			configFileName:      `{"compilerOptions":{"noLib":true},"files":["index.ts"]}`,
 			"/project/index.ts": "export const value = 1;",
 		})
 		defer session.Close()
@@ -600,5 +600,25 @@ func TestRefCountingCaches(t *testing.T) {
 		apiState := session.Snapshot().ProjectCollection.apiState
 		assert.Equal(t, apiState.openProjects[configPath], 1)
 		assert.Equal(t, apiState.openProjects[missingPath], 1)
+	})
+
+	t.Run("session close releases the current snapshot", func(t *testing.T) {
+		t.Parallel()
+
+		const fileName = "/project/index.ts"
+		session := setup(map[string]any{
+			fileName: "export const value = 1;",
+		})
+		session.DidOpenFile(context.Background(), "file://"+fileName, 1, "export const value = 1;", lsproto.LanguageKindTypeScript)
+
+		program := session.Snapshot().ProjectCollection.InferredProject().Program
+		sourceFile := program.GetSourceFile(fileName)
+		key := NewParseCacheKey(sourceFile.ParseOptions(), sourceFile.Hash, sourceFile.ScriptKind)
+		assert.Assert(t, session.parseCache.Has(key))
+
+		session.Close()
+
+		assert.Assert(t, !session.parseCache.Has(key))
+		assert.Equal(t, session.programCounter.Len(), 0)
 	})
 }
