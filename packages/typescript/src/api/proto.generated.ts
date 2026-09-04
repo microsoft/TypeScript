@@ -170,10 +170,13 @@ export interface ReleaseParams {
 
 export interface BatchRequestsParams {
     requests: readonly BatchRequest[] | null;
+    continuationToken?: string;
+    maxResponseBytesPerPage?: number;
 }
 
 export interface BatchRequestsResponse {
     responses: BatchResponse[];
+    continuationToken?: string;
 }
 
 /** InitializeResponse is returned by the initialize method. */
