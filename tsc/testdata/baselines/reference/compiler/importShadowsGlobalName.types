@@ -1,0 +1,13 @@
+//// [tests/cases/compiler/importShadowsGlobalName.ts] ////
+
+=== Bar.ts ===
+import Error = require('Foo');
+>Error : any
+
+class Bar extends Error {}
+>Bar : Bar
+>Error : any
+
+export = Bar;
+>Bar : Bar
+

@@ -1,0 +1,16 @@
+exportingContainingVisibleType.ts(4,16): error TS2454: Variable 'i' is used before being assigned.
+
+
+==== exportingContainingVisibleType.ts (1 errors) ====
+    class Foo {
+        public get foo() {
+            var i: Foo;
+            return i; // Should be fine (previous bug report visibility error).
+                   ~
+!!! error TS2454: Variable 'i' is used before being assigned.
+     
+        }
+    }
+     
+    export var x = 5;
+    

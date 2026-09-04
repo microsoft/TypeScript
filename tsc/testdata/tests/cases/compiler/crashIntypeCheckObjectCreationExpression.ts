@@ -1,5 +1,5 @@
 // @target: es2015
-//@module: amd
+//@module: commonjs
 export class BuildWorkspaceService {
     public injectRequestService<P0, P1, P2>(service: P0) {
         this.injectBuildService<number>(new X(service));
