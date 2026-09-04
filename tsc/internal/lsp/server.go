@@ -49,7 +49,7 @@ type ServerOptions struct {
 	DefaultLibraryPath string
 	TypingsLocation    string
 	ParseCache         *project.ParseCache
-	NpmInstall         func(cwd string, args []string) ([]byte, error)
+	NpmInstall         func(ctx context.Context, cwd string, args []string) ([]byte, error)
 	// Spawn launches a child process, returning its stdio as an io.ReadWriteCloser (Read is its stdout,
 	// Write is its stdin). It is nil when the host cannot spawn processes. Currently used for content mappers.
 	Spawn              func(command []string, dir string, stderr io.Writer) (io.ReadWriteCloser, error)
@@ -224,7 +224,7 @@ type Server struct {
 	session *project.Session
 
 	// apiSessions holds active API sessions keyed by their ID
-	apiSessions   map[string]*api.Session
+	apiSessions   map[string]*apiSessionState
 	apiSessionsMu sync.Mutex
 
 	// Test options for initializing session
@@ -239,7 +239,7 @@ type Server struct {
 	// parseCache can be passed in so separate tests can share ASTs
 	parseCache *project.ParseCache
 
-	npmInstall func(cwd string, args []string) ([]byte, error)
+	npmInstall func(ctx context.Context, cwd string, args []string) ([]byte, error)
 	spawn      func(command []string, dir string, stderr io.Writer) (io.ReadWriteCloser, error)
 
 	cpuProfiler pprof.CPUProfiler
@@ -250,6 +250,42 @@ type Server struct {
 	startWatchdog func(parentPID int)
 
 	flakeLogging lsproto.DiagnosticFlakeLogLevel
+}
+
+type apiSessionState struct {
+	session   *api.Session
+	transport ipc.Transport
+	cancel    context.CancelFunc
+	done      chan struct{}
+
+	mu         sync.Mutex
+	connection io.ReadWriteCloser
+	stopped    bool
+}
+
+func (s *apiSessionState) attachConnection(connection io.ReadWriteCloser) bool {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	if s.stopped {
+		_ = connection.Close()
+		return false
+	}
+	s.connection = connection
+	return true
+}
+
+func (s *apiSessionState) stop() {
+	s.mu.Lock()
+	if !s.stopped {
+		s.stopped = true
+		s.cancel()
+		_ = s.transport.Close()
+		if s.connection != nil {
+			_ = s.connection.Close()
+		}
+	}
+	s.mu.Unlock()
+	<-s.done
 }
 
 func (s *Server) Session() *project.Session { return s.session }
@@ -1791,6 +1827,7 @@ func (s *Server) handleShutdown(ctx context.Context, _ lsproto.NoParams, _ *lspr
 	if s.builtinWatcher != nil {
 		s.builtinWatcher.Close()
 	}
+	s.closeAPISessions()
 	s.session.Close()
 	return lsproto.ShutdownResponse{}, nil
 }
@@ -2284,11 +2321,10 @@ func (s *Server) handleInitializeAPISession(ctx context.Context, params *lsproto
 	defer s.apiSessionsMu.Unlock()
 
 	if s.apiSessions == nil {
-		s.apiSessions = make(map[string]*api.Session)
+		s.apiSessions = make(map[string]*apiSessionState)
 	}
 
-	var apiSession *api.Session
-	apiSession = api.NewLSPSession(s.session, nil)
+	apiSession := api.NewLSPSession(s.session, nil)
 
 	// Use provided pipe path or generate a unique one
 	var pipePath string
@@ -2303,8 +2339,19 @@ func (s *Server) handleInitializeAPISession(ctx context.Context, params *lsproto
 		return nil, fmt.Errorf("failed to create API transport: %w", err)
 	}
 
+	apiCtx, apiCancel := context.WithCancel(s.backgroundCtx)
+	state := &apiSessionState{
+		session:   apiSession,
+		transport: transport,
+		cancel:    apiCancel,
+		done:      make(chan struct{}),
+	}
+	s.apiSessions[apiSession.ID()] = state
+
 	// Start accepting connections in the background
 	go func() {
+		defer close(state.done)
+		defer apiCancel()
 		defer func() {
 			apiSession.Close()
 			s.removeAPISession(apiSession.ID())
@@ -2316,10 +2363,10 @@ func (s *Server) handleInitializeAPISession(ctx context.Context, params *lsproto
 			s.logger.Errorf("API session %s: failed to accept connection: %v", apiSession.ID(), acceptErr)
 			return
 		}
-
-		// Create a cancellable context for the API connection
-		apiCtx, apiCancel := context.WithCancel(s.backgroundCtx)
-		defer apiCancel()
+		if !state.attachConnection(rwc) {
+			return
+		}
+		defer rwc.Close()
 
 		// Run the connection with panic recovery
 		defer func() {
@@ -2338,8 +2385,6 @@ func (s *Server) handleInitializeAPISession(ctx context.Context, params *lsproto
 			s.logger.Errorf("API session %s: %v", apiSession.ID(), apiErr)
 		}
 	}()
-
-	s.apiSessions[apiSession.ID()] = apiSession
 
 	return &lsproto.InitializeAPISessionResult{
 		SessionId: apiSession.ID(),
@@ -2360,6 +2405,20 @@ func (s *Server) removeAPISession(id string) {
 	delete(s.apiSessions, id)
 }
 
+func (s *Server) closeAPISessions() {
+	s.apiSessionsMu.Lock()
+	apiSessions := make([]*apiSessionState, 0, len(s.apiSessions))
+	for id, state := range s.apiSessions {
+		apiSessions = append(apiSessions, state)
+		delete(s.apiSessions, id)
+	}
+	s.apiSessionsMu.Unlock()
+
+	for _, state := range apiSessions {
+		state.stop()
+	}
+}
+
 // !!! temporary; remove when we have `handleDidChangeConfiguration`/implicit project config support
 func (s *Server) SetCompilerOptionsForInferredProjects(ctx context.Context, options *core.CompilerOptions) {
 	s.compilerOptionsForInferredProjects = options
@@ -2369,8 +2428,8 @@ func (s *Server) SetCompilerOptionsForInferredProjects(ctx context.Context, opti
 }
 
 // NpmInstall implements ata.NpmExecutor
-func (s *Server) NpmInstall(cwd string, args []string) ([]byte, error) {
-	return s.npmInstall(cwd, args)
+func (s *Server) NpmInstall(ctx context.Context, cwd string, args []string) ([]byte, error) {
+	return s.npmInstall(ctx, cwd, args)
 }
 
 // contentMapperSpawner adapts the server's spawn callback to a content mapper spawner, or returns nil when
