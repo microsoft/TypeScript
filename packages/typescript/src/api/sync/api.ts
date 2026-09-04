@@ -74,14 +74,15 @@ import type {
     APIFileChanges,
     CompilerOptions,
     CreateProgramOptions,
-    CreateProgramResponse,
+    CreateSnapshotParams,
+    CreateSnapshotResponse,
     Diagnostic,
     DocumentIdentifier,
     DocumentPosition,
     EmitOutputResponse as ProtocolEmitOutputResponse,
     ImportAdderAction,
     IntrinsicTypeMethod,
-    LSPUpdateSnapshotParams,
+    LanguageServerSnapshotChanges,
     ParsedCommandLine,
     ProjectReference,
     ProjectResponse,
@@ -97,12 +98,10 @@ import type {
     TypePropertyMethod,
     TypeResponse,
     TypesPropertyMethod,
-    UpdateSnapshotParams,
-    UpdateSnapshotResponse,
 } from "../proto.ts";
 import {
     resolveFileName,
-    toUpdateSnapshotRequest,
+    toCreateSnapshotRequest,
 } from "../proto.ts";
 import { SourceFileCache } from "../sourceFileCache.ts";
 import type {
@@ -178,6 +177,7 @@ export type {
     CompletionOptions,
     ConditionalType,
     CreateProgramOptions,
+    CreateSnapshotParams,
     Diagnostic,
     DocumentIdentifier,
     DocumentPosition,
@@ -195,6 +195,7 @@ export type {
     IntersectionType,
     IntrinsicType,
     JSDocTagInfo,
+    LanguageServerSnapshotChanges,
     LiteralType,
     LSPConnectionOptions,
     NumberLiteralType,
@@ -253,7 +254,6 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
     private initialized: boolean = false;
     private initializing: void | undefined;
     private activeSnapshots: Set<Snapshot> = new Set();
-    private latestSnapshot: Snapshot | undefined;
     readonly internal: InternalAPI;
 
     constructor(options: APIOptions | LSPConnectionOptions = {}) {
@@ -546,27 +546,19 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         );
     }
 
-    get updateSnapshot(): {
-        (params?: FromLSP extends true ? LSPUpdateSnapshotParams : UpdateSnapshotParams): Snapshot;
-        gen(params?: FromLSP extends true ? LSPUpdateSnapshotParams : UpdateSnapshotParams): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]>;
+    get createSnapshot(): {
+        (params?: CreateSnapshotParams): Snapshot;
+        gen(params?: CreateSnapshotParams): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]>;
     } {
         const owner = this;
         return cacheGeneratorMethod(
             owner,
-            "updateSnapshot",
-            function (params?: FromLSP extends true ? LSPUpdateSnapshotParams : UpdateSnapshotParams): Snapshot {
+            "createSnapshot",
+            function (params?: CreateSnapshotParams): Snapshot {
                 owner.ensureInitialized();
 
-                const requestParams = toUpdateSnapshotRequest(params);
-                const data = owner.client.apiRequest("updateSnapshot", requestParams);
-
-                // Retain cached source files from previous snapshot for unchanged files
-                if (owner.latestSnapshot) {
-                    owner.sourceFileCache.retainForSnapshot(data.snapshot, owner.latestSnapshot.id, data.changes);
-                    if (owner.latestSnapshot.isDisposed()) {
-                        owner.sourceFileCache.releaseSnapshot(owner.latestSnapshot.id);
-                    }
-                }
+                const requestParams = toCreateSnapshotRequest(params);
+                const data = owner.client.apiRequest("createSnapshot", requestParams);
 
                 const snapshot = new Snapshot(
                     data,
@@ -576,29 +568,18 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
                     owner,
                     () => {
                         owner.activeSnapshots.delete(snapshot);
-                        if (snapshot !== owner.latestSnapshot) {
-                            owner.sourceFileCache.releaseSnapshot(snapshot.id);
-                        }
+                        owner.sourceFileCache.releaseSnapshot(snapshot.id);
                     },
                 );
-                owner.latestSnapshot = snapshot;
                 owner.activeSnapshots.add(snapshot);
 
                 return snapshot;
             },
-            function* (params?: FromLSP extends true ? LSPUpdateSnapshotParams : UpdateSnapshotParams): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]> {
+            function* (params?: CreateSnapshotParams): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]> {
                 yield* owner.ensureInitialized.gen();
 
-                const requestParams = toUpdateSnapshotRequest(params);
-                const data = yield* apiRequest("updateSnapshot", requestParams);
-
-                // Retain cached source files from previous snapshot for unchanged files
-                if (owner.latestSnapshot) {
-                    owner.sourceFileCache.retainForSnapshot(data.snapshot, owner.latestSnapshot.id, data.changes);
-                    if (owner.latestSnapshot.isDisposed()) {
-                        owner.sourceFileCache.releaseSnapshot(owner.latestSnapshot.id);
-                    }
-                }
+                const requestParams = toCreateSnapshotRequest(params);
+                const data = yield* apiRequest("createSnapshot", requestParams);
 
                 const snapshot = new Snapshot(
                     data,
@@ -608,17 +589,71 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
                     owner,
                     () => {
                         owner.activeSnapshots.delete(snapshot);
-                        if (snapshot !== owner.latestSnapshot) {
-                            owner.sourceFileCache.releaseSnapshot(snapshot.id);
-                        }
+                        owner.sourceFileCache.releaseSnapshot(snapshot.id);
                     },
                 );
-                owner.latestSnapshot = snapshot;
                 owner.activeSnapshots.add(snapshot);
 
                 return snapshot;
             },
         );
+    }
+
+    /**
+     * Returns the language server's current canonical snapshot after atomically
+     * adopting any supplied API-driven changes. Only available on LSP-connected APIs.
+     */
+    get getCurrentLanguageServerSnapshot(): FromLSP extends true ? {
+            (changes?: LanguageServerSnapshotChanges): Snapshot;
+            gen(changes?: LanguageServerSnapshotChanges): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]>;
+        } :
+        never
+    {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getCurrentLanguageServerSnapshot",
+            function (changes?: LanguageServerSnapshotChanges): Snapshot {
+                owner.ensureInitialized();
+
+                const data = owner.client.apiRequest("getCurrentLanguageServerSnapshot", changes ? { changes } : {});
+                const snapshot = new Snapshot(
+                    data,
+                    owner.client,
+                    owner.sourceFileCache,
+                    owner.toPath!,
+                    owner,
+                    () => {
+                        owner.activeSnapshots.delete(snapshot);
+                        owner.sourceFileCache.releaseSnapshot(snapshot.id);
+                    },
+                );
+                owner.activeSnapshots.add(snapshot);
+                return snapshot;
+            },
+            function* (changes?: LanguageServerSnapshotChanges): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]> {
+                yield* owner.ensureInitialized.gen();
+
+                const data = yield* apiRequest("getCurrentLanguageServerSnapshot", changes ? { changes } : {});
+                const snapshot = new Snapshot(
+                    data,
+                    owner.client,
+                    owner.sourceFileCache,
+                    owner.toPath!,
+                    owner,
+                    () => {
+                        owner.activeSnapshots.delete(snapshot);
+                        owner.sourceFileCache.releaseSnapshot(snapshot.id);
+                    },
+                );
+                owner.activeSnapshots.add(snapshot);
+                return snapshot;
+            },
+        ) as FromLSP extends true ? {
+                (changes?: LanguageServerSnapshotChanges): Snapshot;
+                gen(changes?: LanguageServerSnapshotChanges): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]>;
+            } :
+            never;
     }
 
     [globalThis.Symbol.dispose](): void {
@@ -639,11 +674,6 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
                     for (const snapshot of [...owner.activeSnapshots]) {
                         snapshot.dispose();
                     }
-                    // Release the latest snapshot's cache refs if still held
-                    if (owner.latestSnapshot) {
-                        owner.sourceFileCache.releaseSnapshot(owner.latestSnapshot.id);
-                        owner.latestSnapshot = undefined;
-                    }
                     owner.sourceFileCache.clear();
                 }
                 finally {
@@ -655,11 +685,6 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
                 try {
                     for (const snapshot of [...owner.activeSnapshots]) {
                         yield* snapshot.dispose.gen();
-                    }
-                    // Release the latest snapshot's cache refs if still held
-                    if (owner.latestSnapshot) {
-                        owner.sourceFileCache.releaseSnapshot(owner.latestSnapshot.id);
-                        owner.latestSnapshot = undefined;
                     }
                     owner.sourceFileCache.clear();
                 }
@@ -809,53 +834,29 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
             function (rootFiles: readonly DocumentIdentifier[], createProgramOptions: CreateProgramOptions): Program {
                 owner.ensureInitialized();
 
-                const data: CreateProgramResponse = owner.client.apiRequest("createProgram", {
-                    rootFiles,
-                    createProgramOptions,
+                const snapshot = owner.createSnapshot({
+                    createPrograms: [{ rootFiles, options: createProgramOptions }],
                 });
-                if (!data.project) {
+                const program = snapshot.getProjects()[0]?.program;
+                if (!program) {
+                    snapshot.dispose();
                     throw new Error("createProgram did not return a project");
                 }
-                const snapshot = new Snapshot(
-                    { snapshot: data.snapshot, projects: [data.project] },
-                    owner.client,
-                    owner.sourceFileCache,
-                    owner.toPath!,
-                    owner,
-                    () => {
-                        owner.activeSnapshots.delete(snapshot);
-                        owner.sourceFileCache.releaseSnapshot(snapshot.id);
-                    },
-                );
-                const program = snapshot.getProjects()[0].program;
                 program.setOwnedSnapshot(snapshot);
-                owner.activeSnapshots.add(snapshot);
                 return program;
             },
             function* (rootFiles: readonly DocumentIdentifier[], createProgramOptions: CreateProgramOptions): Generator<ProtocolRequest, Program, ProtocolResponse["result"]> {
                 yield* owner.ensureInitialized.gen();
 
-                const data: CreateProgramResponse = yield* apiRequest("createProgram", {
-                    rootFiles,
-                    createProgramOptions,
+                const snapshot = yield* owner.createSnapshot.gen({
+                    createPrograms: [{ rootFiles, options: createProgramOptions }],
                 });
-                if (!data.project) {
+                const program = snapshot.getProjects()[0]?.program;
+                if (!program) {
+                    yield* snapshot.dispose.gen();
                     throw new Error("createProgram did not return a project");
                 }
-                const snapshot = new Snapshot(
-                    { snapshot: data.snapshot, projects: [data.project] },
-                    owner.client,
-                    owner.sourceFileCache,
-                    owner.toPath!,
-                    owner,
-                    () => {
-                        owner.activeSnapshots.delete(snapshot);
-                        owner.sourceFileCache.releaseSnapshot(snapshot.id);
-                    },
-                );
-                const program = snapshot.getProjects()[0].program;
                 program.setOwnedSnapshot(snapshot);
-                owner.activeSnapshots.add(snapshot);
                 return program;
             },
         );
@@ -948,7 +949,7 @@ export class Snapshot {
     readonly internal: SnapshotInternalAPI;
 
     constructor(
-        data: UpdateSnapshotResponse,
+        data: CreateSnapshotResponse,
         client: Client,
         sourceFileCache: SourceFileCache,
         toPath: (fileName: string) => Path,

@@ -57,14 +57,15 @@ import type {
     APIFileChanges,
     CompilerOptions,
     CreateProgramOptions,
-    CreateProgramResponse,
+    CreateSnapshotParams,
+    CreateSnapshotResponse,
     Diagnostic,
     DocumentIdentifier,
     DocumentPosition,
     EmitOutputResponse as ProtocolEmitOutputResponse,
     ImportAdderAction,
     IntrinsicTypeMethod,
-    LSPUpdateSnapshotParams,
+    LanguageServerSnapshotChanges,
     ParsedCommandLine,
     ProjectReference,
     ProjectResponse,
@@ -80,12 +81,10 @@ import type {
     TypePropertyMethod,
     TypeResponse,
     TypesPropertyMethod,
-    UpdateSnapshotParams,
-    UpdateSnapshotResponse,
 } from "../proto.ts";
 import {
     resolveFileName,
-    toUpdateSnapshotRequest,
+    toCreateSnapshotRequest,
 } from "../proto.ts";
 import { SourceFileCache } from "../sourceFileCache.ts";
 import type {
@@ -161,6 +160,7 @@ export type {
     CompletionOptions,
     ConditionalType,
     CreateProgramOptions,
+    CreateSnapshotParams,
     Diagnostic,
     DocumentIdentifier,
     DocumentPosition,
@@ -178,6 +178,7 @@ export type {
     IntersectionType,
     IntrinsicType,
     JSDocTagInfo,
+    LanguageServerSnapshotChanges,
     LiteralType,
     LSPConnectionOptions,
     NumberLiteralType,
@@ -234,7 +235,6 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
     private initialized: boolean = false;
     private initializing: Promise<void> | undefined;
     private activeSnapshots: Set<Snapshot> = new Set();
-    private latestSnapshot: Snapshot | undefined;
     readonly internal: InternalAPI;
 
     constructor(options: APIOptions | LSPConnectionOptions = {}) {
@@ -353,19 +353,11 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         return this.client.apiRequest("transpileDeclarationFromFile", { fileName: resolveFileName(file), options });
     }
 
-    async updateSnapshot(params?: FromLSP extends true ? LSPUpdateSnapshotParams : UpdateSnapshotParams): Promise<Snapshot> {
+    async createSnapshot(params?: CreateSnapshotParams): Promise<Snapshot> {
         await this.ensureInitialized();
 
-        const requestParams = toUpdateSnapshotRequest(params);
-        const data = await this.client.apiRequest("updateSnapshot", requestParams);
-
-        // Retain cached source files from previous snapshot for unchanged files
-        if (this.latestSnapshot) {
-            this.sourceFileCache.retainForSnapshot(data.snapshot, this.latestSnapshot.id, data.changes);
-            if (this.latestSnapshot.isDisposed()) {
-                this.sourceFileCache.releaseSnapshot(this.latestSnapshot.id);
-            }
-        }
+        const requestParams = toCreateSnapshotRequest(params);
+        const data = await this.client.apiRequest("createSnapshot", requestParams);
 
         const snapshot = new Snapshot(
             data,
@@ -375,14 +367,37 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
             this,
             () => {
                 this.activeSnapshots.delete(snapshot);
-                if (snapshot !== this.latestSnapshot) {
-                    this.sourceFileCache.releaseSnapshot(snapshot.id);
-                }
+                this.sourceFileCache.releaseSnapshot(snapshot.id);
             },
         );
-        this.latestSnapshot = snapshot;
         this.activeSnapshots.add(snapshot);
 
+        return snapshot;
+    }
+
+    /**
+     * Returns the language server's current canonical snapshot after atomically
+     * adopting any supplied API-driven changes. Only available on LSP-connected APIs.
+     */
+    async getCurrentLanguageServerSnapshot(
+        ...args: FromLSP extends true ? [changes?: LanguageServerSnapshotChanges] : [changes: never]
+    ): Promise<Snapshot> {
+        await this.ensureInitialized();
+
+        const changes = args[0] as LanguageServerSnapshotChanges | undefined;
+        const data = await this.client.apiRequest("getCurrentLanguageServerSnapshot", changes ? { changes } : {});
+        const snapshot = new Snapshot(
+            data,
+            this.client,
+            this.sourceFileCache,
+            this.toPath!,
+            this,
+            () => {
+                this.activeSnapshots.delete(snapshot);
+                this.sourceFileCache.releaseSnapshot(snapshot.id);
+            },
+        );
+        this.activeSnapshots.add(snapshot);
         return snapshot;
     }
 
@@ -396,11 +411,6 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         try {
             for (const snapshot of [...this.activeSnapshots]) {
                 await snapshot.dispose();
-            }
-            // Release the latest snapshot's cache refs if still held
-            if (this.latestSnapshot) {
-                this.sourceFileCache.releaseSnapshot(this.latestSnapshot.id);
-                this.latestSnapshot = undefined;
             }
             this.sourceFileCache.clear();
         }
@@ -474,27 +484,15 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
     ): Promise<Program> {
         await this.ensureInitialized();
 
-        const data: CreateProgramResponse = await this.client.apiRequest("createProgram", {
-            rootFiles,
-            createProgramOptions,
+        const snapshot = await this.createSnapshot({
+            createPrograms: [{ rootFiles, options: createProgramOptions }],
         });
-        if (!data.project) {
+        const program = snapshot.getProjects()[0]?.program;
+        if (!program) {
+            await snapshot.dispose();
             throw new Error("createProgram did not return a project");
         }
-        const snapshot = new Snapshot(
-            { snapshot: data.snapshot, projects: [data.project] },
-            this.client,
-            this.sourceFileCache,
-            this.toPath!,
-            this,
-            () => {
-                this.activeSnapshots.delete(snapshot);
-                this.sourceFileCache.releaseSnapshot(snapshot.id);
-            },
-        );
-        const program = snapshot.getProjects()[0].program;
         program.setOwnedSnapshot(snapshot);
-        this.activeSnapshots.add(snapshot);
         return program;
     }
 }
@@ -541,7 +539,7 @@ export class Snapshot {
     readonly internal: SnapshotInternalAPI;
 
     constructor(
-        data: UpdateSnapshotResponse,
+        data: CreateSnapshotResponse,
         client: Client,
         sourceFileCache: SourceFileCache,
         toPath: (fileName: string) => Path,

@@ -18,7 +18,7 @@ describe("diagnosticFormatter", () => {
             "/project/index.ts": source,
         });
         try {
-            const snapshot = await api.updateSnapshot({ openProject: "/project/tsconfig.json" });
+            const snapshot = await api.createSnapshot({ openProject: "/project/tsconfig.json" });
             const program = snapshot.getProject("/project/tsconfig.json")!.program;
             const diagnostics = await program.getSemanticDiagnostics("/project/index.ts");
             assert.equal(diagnostics.length, 1);
@@ -87,7 +87,7 @@ describe("diagnosticFormatter", () => {
             "/workspace/index.ts": `const x: number = "oops";`,
         });
         try {
-            const snapshot = await api.updateSnapshot({ openProject: "/workspace/tsconfig.json" });
+            const snapshot = await api.createSnapshot({ openProject: "/workspace/tsconfig.json" });
             const program = snapshot.getProject("/workspace/tsconfig.json")!.program;
             const diagnostics = await program.getSemanticDiagnostics("/workspace/index.ts");
             const configDiagnostics = (await api.parseConfigFile("/workspace/tsconfig.json")).errors;
@@ -113,7 +113,7 @@ describe("diagnosticFormatter", () => {
             "/workspace/index.ts": `const x: number = "oops";`,
         });
         try {
-            const snapshot = await api.updateSnapshot({ openFiles: ["/workspace/index.ts"] });
+            const snapshot = await api.createSnapshot({ openFiles: ["/workspace/index.ts"] });
             const project = await snapshot.getDefaultProjectForFile("/workspace/index.ts");
             assert.ok(project);
             assert.equal(project.program.getCurrentDirectory(), api.getCurrentDirectory());

@@ -20,9 +20,9 @@ export interface APIMethodInfo {
     release: APIMethod<ReleaseParams, void>;
     batchRequests: APIMethod<BatchRequestsParams, BatchRequestsResponse>;
     initialize: APIMethod<null, InitializeResponse>;
-    updateSnapshot: APIMethod<UpdateSnapshotParams, UpdateSnapshotResponse>;
-    updateTemporarySnapshot: APIMethod<UpdateTemporarySnapshotParams, UpdateSnapshotResponse>;
-    createProgram: APIMethod<CreateProgramParams, CreateProgramResponse>;
+    createSnapshot: APIMethod<CreateSnapshotParams, CreateSnapshotResponse>;
+    getCurrentLanguageServerSnapshot: APIMethod<GetCurrentLanguageServerSnapshotParams, CreateSnapshotResponse>;
+    updateTemporarySnapshot: APIMethod<UpdateTemporarySnapshotParams, CreateSnapshotResponse>;
     parseCommandLine: APIMethod<ParseCommandLineParams, ConfigFileResponse>;
     readConfigFile: APIMethod<ReadConfigFileParams, ReadConfigFileResponse>;
     parseJsonConfigFileContent: APIMethod<ParseJsonConfigFileContentParams, ConfigFileResponse>;
@@ -187,30 +187,23 @@ export interface InitializeResponse {
     currentDirectory: string;
 }
 
-/**
- * UpdateSnapshotParams are the parameters for creating a new snapshot.
- * All fields are optional. With no fields set, the server adopts the latest LSP state.
- */
-export interface UpdateSnapshotParams {
-    /**
-     * OpenProjects lists tsconfig.json files to open/load in the new snapshot.
-     * Opens are ref-counted and persist across snapshots until closed.
-     */
+/** CreateSnapshotParams are the parameters for creating a new independent snapshot. */
+export interface CreateSnapshotParams {
+    /** OpenProjects lists tsconfig.json files to open/load in the new snapshot. */
     openProjects?: readonly DocumentIdentifier[];
     /**
      * CloseProjects lists tsconfig.json files to release in the new snapshot.
      * A project is only unloaded once every API client that opened it closes it.
      */
     closeProjects?: readonly DocumentIdentifier[];
-    /** FileChanges describes file system changes since the last snapshot. */
+    /** FileChanges describes host file system changes to invalidate while creating the snapshot. */
     fileChanges?: APIFileChanges;
     /**
-     * OpenFiles lists files to keep open for the API client, mirroring LSP's
+     * OpenFiles lists files to open in the new snapshot, mirroring LSP's
      * textDocument/didOpen. For each file, ancestor directories are searched for a
      * tsconfig that contains it; if found, that configured project is loaded and
      * becomes the file's default project. Otherwise the file is loaded into the
      * inferred project (e.g. a node_modules d.ts not in any project's import graph).
-     * Opens persist across snapshots until the file is closed.
      */
     openFiles?: readonly DocumentIdentifier[];
     /**
@@ -218,19 +211,24 @@ export interface UpdateSnapshotParams {
      * closed once every API client that opened it closes it.
      */
     closeFiles?: readonly DocumentIdentifier[];
+    /** CreatePrograms describes synthetic programs to create in the snapshot. */
+    createPrograms?: readonly CreateSnapshotProgramParams[];
+    /** RemovePrograms lists synthetic project handles to remove from the snapshot. */
+    removePrograms?: readonly string[];
 }
 
-/** UpdateSnapshotResponse is returned by updateSnapshot. */
-export interface UpdateSnapshotResponse {
+/** CreateSnapshotResponse is returned by createSnapshot. */
+export interface CreateSnapshotResponse {
     /** Snapshot is the handle for the newly created snapshot. */
     snapshot: number;
     /** Projects is the list of projects in the snapshot. */
     projects: ProjectResponse[];
-    /**
-     * Changes describes source file differences from the previous snapshot.
-     * Nil for the first snapshot in a session.
-     */
+    /** Changes describes source file differences from a parent snapshot. */
     changes?: SnapshotChanges;
+}
+
+export interface GetCurrentLanguageServerSnapshotParams {
+    changes?: LanguageServerSnapshotChanges;
 }
 
 /**
@@ -244,18 +242,6 @@ export interface UpdateTemporarySnapshotParams {
     file: DocumentIdentifier;
     /** NewText is the temporary content for the file. */
     newText: string;
-}
-
-export interface CreateProgramParams {
-    rootFiles: readonly DocumentIdentifier[] | null;
-    createProgramOptions: CreateProgramOptions;
-    oldProgram?: CreateProgramOldProgramParams;
-    fileChanges?: APIFileChanges;
-}
-
-export interface CreateProgramResponse {
-    snapshot: number;
-    project: ProjectResponse | null;
 }
 
 export interface ParseCommandLineParams {
@@ -906,7 +892,7 @@ export interface ProfileResult {
 export interface BatchRequest {
     method:
         | "batchRequests"
-        | "createProgram"
+        | "createSnapshot"
         | "emit"
         | "emitToString"
         | "formatNodeForInsertion"
@@ -932,6 +918,7 @@ export interface BatchRequest {
         | "getConstraintOfType"
         | "getConstraintOfTypeParameter"
         | "getContextualType"
+        | "getCurrentLanguageServerSnapshot"
         | "getDeclarationDiagnostics"
         | "getDeclarationEmit"
         | "getDeclaredTypeOfSymbol"
@@ -1045,7 +1032,6 @@ export interface BatchRequest {
         | "transpileModuleFromFile"
         | "typeToString"
         | "typeToTypeNode"
-        | "updateSnapshot"
         | "updateTemporarySnapshot";
     params?: unknown;
 }
@@ -1053,7 +1039,7 @@ export interface BatchRequest {
 export interface BatchResponse {
     method:
         | "batchRequests"
-        | "createProgram"
+        | "createSnapshot"
         | "emit"
         | "emitToString"
         | "formatNodeForInsertion"
@@ -1079,6 +1065,7 @@ export interface BatchResponse {
         | "getConstraintOfType"
         | "getConstraintOfTypeParameter"
         | "getContextualType"
+        | "getCurrentLanguageServerSnapshot"
         | "getDeclarationDiagnostics"
         | "getDeclarationEmit"
         | "getDeclaredTypeOfSymbol"
@@ -1192,7 +1179,6 @@ export interface BatchResponse {
         | "transpileModuleFromFile"
         | "typeToString"
         | "typeToTypeNode"
-        | "updateSnapshot"
         | "updateTemporarySnapshot";
     result: unknown;
     error?: string;
@@ -1210,9 +1196,14 @@ export interface APIFileChanges {
     deleted?: DocumentIdentifier[];
 }
 
+export interface CreateSnapshotProgramParams {
+    rootFiles: readonly DocumentIdentifier[] | null;
+    options: CreateProgramOptions;
+}
+
 /**
- * SnapshotChanges describes what changed between the previous latest snapshot
- * and the newly created snapshot. Changes are reported per-project so clients
+ * SnapshotChanges describes what changed between a parent snapshot and a derived
+ * snapshot. Changes are reported per-project so clients
  * can track cache refs at the (snapshot, project) level.
  */
 export interface SnapshotChanges {
@@ -1228,15 +1219,17 @@ export interface SnapshotChanges {
     removedProjects?: string[];
 }
 
-export interface CreateProgramOptions {
-    compilerOptions: CompilerOptions;
-    projectReferences?: ProjectReference[];
-    configFileParsingDiagnostics?: DiagnosticResponse[];
-}
-
-export interface CreateProgramOldProgramParams {
-    snapshot?: number;
-    project?: string;
+/**
+ * LanguageServerSnapshotChanges describes API-driven changes to adopt into the
+ * language server's canonical state.
+ */
+export interface LanguageServerSnapshotChanges {
+    openProjects?: DocumentIdentifier[];
+    closeProjects?: DocumentIdentifier[];
+    openFiles?: DocumentIdentifier[];
+    closeFiles?: DocumentIdentifier[];
+    createPrograms?: CreateSnapshotProgramParams[];
+    removePrograms?: string[];
 }
 
 /** CompilerOptions contains the compiler options exposed by the API. */
@@ -1399,6 +1392,12 @@ export interface EmitOutputFile {
     fileName: string;
     text: string;
     sourceFileName?: string;
+}
+
+export interface CreateProgramOptions {
+    compilerOptions: CompilerOptions;
+    projectReferences?: ProjectReference[];
+    configFileParsingDiagnostics?: DiagnosticResponse[];
 }
 
 /** ProjectFileChanges describes what source files changed within a single project. */

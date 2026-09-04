@@ -65,42 +65,42 @@ const (
 
 	MethodBatchRequests Method = "batchRequests"
 
-	MethodInitialize                   Method = "initialize"
-	MethodUpdateSnapshot               Method = "updateSnapshot"
-	MethodUpdateTemporarySnapshot      Method = "updateTemporarySnapshot"
-	MethodCreateProgram                Method = "createProgram"
-	MethodParseCommandLine             Method = "parseCommandLine"
-	MethodReadConfigFile               Method = "readConfigFile"
-	MethodParseJsonConfigFile          Method = "parseJsonConfigFileContent"
-	MethodParseConfigFile              Method = "parseConfigFile"
-	MethodTranspileModule              Method = "transpileModule"
-	MethodTranspileModuleFromFile      Method = "transpileModuleFromFile"
-	MethodTranspileDeclaration         Method = "transpileDeclaration"
-	MethodTranspileDeclarationFromFile Method = "transpileDeclarationFromFile"
-	MethodGetDefaultProjectForFile     Method = "getDefaultProjectForFile"
-	MethodGetSymbolAtPosition          Method = "getSymbolAtPosition"
-	MethodGetSymbolsAtPositions        Method = "getSymbolsAtPositions"
-	MethodGetSymbolAtLocation          Method = "getSymbolAtLocation"
-	MethodGetSymbolsAtLocations        Method = "getSymbolsAtLocations"
-	MethodGetSymbolOfSourceFile        Method = "getSymbolOfSourceFile"
-	MethodGetSymbolsOfSourceFiles      Method = "getSymbolsOfSourceFiles"
-	MethodGetTypeOfSymbol              Method = "getTypeOfSymbol"
-	MethodGetTypesOfSymbols            Method = "getTypesOfSymbols"
-	MethodGetDeclaredTypeOfSymbol      Method = "getDeclaredTypeOfSymbol"
-	MethodGetNonMissingTypeOfSymbol    Method = "getNonMissingTypeOfSymbol"
-	MethodGetSourceFile                Method = "getSourceFile"
-	MethodGetSourceFileNames           Method = "getSourceFileNames"
-	MethodGetSourceFileMetadata        Method = "getSourceFileMetadata"
-	MethodGetConfigFileNames           Method = "getConfigFileNames"
-	MethodGetConfigSourceFile          Method = "getConfigSourceFile"
-	MethodResolveName                  Method = "resolveName"
-	MethodGetSymbolsInScope            Method = "getSymbolsInScope"
-	MethodGetSignaturesOfType          Method = "getSignaturesOfType"
-	MethodGetResolvedSignature         Method = "getResolvedSignature"
-	MethodGetTypeAtLocation            Method = "getTypeAtLocation"
-	MethodGetTypeAtLocations           Method = "getTypeAtLocations"
-	MethodGetTypeAtPosition            Method = "getTypeAtPosition"
-	MethodGetTypesAtPositions          Method = "getTypesAtPositions"
+	MethodInitialize                       Method = "initialize"
+	MethodCreateSnapshot                   Method = "createSnapshot"
+	MethodGetCurrentLanguageServerSnapshot Method = "getCurrentLanguageServerSnapshot"
+	MethodUpdateTemporarySnapshot          Method = "updateTemporarySnapshot"
+	MethodParseCommandLine                 Method = "parseCommandLine"
+	MethodReadConfigFile                   Method = "readConfigFile"
+	MethodParseJsonConfigFile              Method = "parseJsonConfigFileContent"
+	MethodParseConfigFile                  Method = "parseConfigFile"
+	MethodTranspileModule                  Method = "transpileModule"
+	MethodTranspileModuleFromFile          Method = "transpileModuleFromFile"
+	MethodTranspileDeclaration             Method = "transpileDeclaration"
+	MethodTranspileDeclarationFromFile     Method = "transpileDeclarationFromFile"
+	MethodGetDefaultProjectForFile         Method = "getDefaultProjectForFile"
+	MethodGetSymbolAtPosition              Method = "getSymbolAtPosition"
+	MethodGetSymbolsAtPositions            Method = "getSymbolsAtPositions"
+	MethodGetSymbolAtLocation              Method = "getSymbolAtLocation"
+	MethodGetSymbolsAtLocations            Method = "getSymbolsAtLocations"
+	MethodGetSymbolOfSourceFile            Method = "getSymbolOfSourceFile"
+	MethodGetSymbolsOfSourceFiles          Method = "getSymbolsOfSourceFiles"
+	MethodGetTypeOfSymbol                  Method = "getTypeOfSymbol"
+	MethodGetTypesOfSymbols                Method = "getTypesOfSymbols"
+	MethodGetDeclaredTypeOfSymbol          Method = "getDeclaredTypeOfSymbol"
+	MethodGetNonMissingTypeOfSymbol        Method = "getNonMissingTypeOfSymbol"
+	MethodGetSourceFile                    Method = "getSourceFile"
+	MethodGetSourceFileNames               Method = "getSourceFileNames"
+	MethodGetSourceFileMetadata            Method = "getSourceFileMetadata"
+	MethodGetConfigFileNames               Method = "getConfigFileNames"
+	MethodGetConfigSourceFile              Method = "getConfigSourceFile"
+	MethodResolveName                      Method = "resolveName"
+	MethodGetSymbolsInScope                Method = "getSymbolsInScope"
+	MethodGetSignaturesOfType              Method = "getSignaturesOfType"
+	MethodGetResolvedSignature             Method = "getResolvedSignature"
+	MethodGetTypeAtLocation                Method = "getTypeAtLocation"
+	MethodGetTypeAtLocations               Method = "getTypeAtLocations"
+	MethodGetTypeAtPosition                Method = "getTypeAtPosition"
+	MethodGetTypesAtPositions              Method = "getTypesAtPositions"
 
 	// Symbol sub-property methods
 	MethodGetParentOfSymbol       Method = "getParentOfSymbol"
@@ -341,27 +341,48 @@ type APIFileChanges struct {
 	Deleted       []DocumentIdentifier `json:"deleted,omitempty"`
 }
 
-// UpdateSnapshotParams are the parameters for creating a new snapshot.
-// All fields are optional. With no fields set, the server adopts the latest LSP state.
-type UpdateSnapshotParams struct {
+// CreateSnapshotParams are the parameters for creating a new independent snapshot.
+type CreateSnapshotParams struct {
 	// OpenProjects lists tsconfig.json files to open/load in the new snapshot.
-	// Opens are ref-counted and persist across snapshots until closed.
 	OpenProjects []DocumentIdentifier `json:"openProjects,omitempty"`
 	// CloseProjects lists tsconfig.json files to release in the new snapshot.
 	// A project is only unloaded once every API client that opened it closes it.
 	CloseProjects []DocumentIdentifier `json:"closeProjects,omitempty"`
-	// FileChanges describes file system changes since the last snapshot.
+	// FileChanges describes host file system changes to invalidate while creating the snapshot.
 	FileChanges *APIFileChanges `json:"fileChanges,omitempty"`
-	// OpenFiles lists files to keep open for the API client, mirroring LSP's
+	// OpenFiles lists files to open in the new snapshot, mirroring LSP's
 	// textDocument/didOpen. For each file, ancestor directories are searched for a
 	// tsconfig that contains it; if found, that configured project is loaded and
 	// becomes the file's default project. Otherwise the file is loaded into the
 	// inferred project (e.g. a node_modules d.ts not in any project's import graph).
-	// Opens persist across snapshots until the file is closed.
 	OpenFiles []DocumentIdentifier `json:"openFiles,omitempty"`
 	// CloseFiles lists files to release in the new snapshot. A file is only fully
 	// closed once every API client that opened it closes it.
 	CloseFiles []DocumentIdentifier `json:"closeFiles,omitempty"`
+	// CreatePrograms describes synthetic programs to create in the snapshot.
+	CreatePrograms []*CreateSnapshotProgramParams `json:"createPrograms,omitempty"`
+	// RemovePrograms lists synthetic project handles to remove from the snapshot.
+	RemovePrograms []ProjectID `json:"removePrograms,omitempty"`
+}
+
+type CreateSnapshotProgramParams struct {
+	RootFiles []DocumentIdentifier `json:"rootFiles"`
+	Options   CreateProgramOptions `json:"options"`
+}
+
+type GetCurrentLanguageServerSnapshotParams struct {
+	Changes *LanguageServerSnapshotChanges `json:"changes,omitempty"`
+}
+
+// LanguageServerSnapshotChanges describes API-driven changes to adopt into the
+// language server's canonical state.
+type LanguageServerSnapshotChanges struct {
+	OpenProjects   []DocumentIdentifier           `json:"openProjects,omitempty"`
+	CloseProjects  []DocumentIdentifier           `json:"closeProjects,omitempty"`
+	OpenFiles      []DocumentIdentifier           `json:"openFiles,omitempty"`
+	CloseFiles     []DocumentIdentifier           `json:"closeFiles,omitempty"`
+	CreatePrograms []*CreateSnapshotProgramParams `json:"createPrograms,omitempty"`
+	RemovePrograms []ProjectID                    `json:"removePrograms,omitempty"`
 }
 
 // UpdateTemporarySnapshotParams are the parameters for creating a temporary
@@ -375,27 +396,10 @@ type UpdateTemporarySnapshotParams struct {
 	NewText string `json:"newText"`
 }
 
-type CreateProgramParams struct {
-	RootFiles            []DocumentIdentifier           `json:"rootFiles"`
-	CreateProgramOptions CreateProgramOptions           `json:"createProgramOptions"`
-	OldProgram           *CreateProgramOldProgramParams `json:"oldProgram,omitempty"`
-	FileChanges          *APIFileChanges                `json:"fileChanges,omitempty"`
-}
-
 type CreateProgramOptions struct {
 	CompilerOptions              core.CompilerOptions     `json:"compilerOptions"`
 	ProjectReferences            []*core.ProjectReference `json:"projectReferences,omitempty"`
 	ConfigFileParsingDiagnostics []*DiagnosticResponse    `json:"configFileParsingDiagnostics,omitempty"`
-}
-
-type CreateProgramOldProgramParams struct {
-	Snapshot SnapshotID `json:"snapshot,omitempty"`
-	Project  ProjectID  `json:"project,omitempty"`
-}
-
-type CreateProgramResponse struct {
-	Snapshot SnapshotID       `json:"snapshot"`
-	Project  *ProjectResponse `json:"project"`
 }
 
 // ProjectFileChanges describes what source files changed within a single project.
@@ -406,8 +410,8 @@ type ProjectFileChanges struct {
 	DeletedFiles []tspath.Path `json:"deletedFiles,omitempty"`
 }
 
-// SnapshotChanges describes what changed between the previous latest snapshot
-// and the newly created snapshot. Changes are reported per-project so clients
+// SnapshotChanges describes what changed between a parent snapshot and a derived
+// snapshot. Changes are reported per-project so clients
 // can track cache refs at the (snapshot, project) level.
 type SnapshotChanges struct {
 	// ChangedProjects maps project handles to the file changes within that project.
@@ -418,56 +422,55 @@ type SnapshotChanges struct {
 	RemovedProjects []ProjectID `json:"removedProjects,omitempty"`
 }
 
-// UpdateSnapshotResponse is returned by updateSnapshot.
-type UpdateSnapshotResponse struct {
+// CreateSnapshotResponse is returned by createSnapshot.
+type CreateSnapshotResponse struct {
 	// Snapshot is the handle for the newly created snapshot.
 	Snapshot SnapshotID `json:"snapshot"`
 	// Projects is the list of projects in the snapshot.
 	Projects []*ProjectResponse `json:"projects" nonnil:"true"`
-	// Changes describes source file differences from the previous snapshot.
-	// Nil for the first snapshot in a session.
+	// Changes describes source file differences from a parent snapshot.
 	Changes *SnapshotChanges `json:"changes,omitempty"`
 }
 
 var unmarshalers = map[Method]func([]byte) (any, error){
-	MethodBatchRequests:                unmarshallerFor[BatchRequestsParams],
-	MethodRelease:                      unmarshallerFor[ReleaseParams],
-	MethodInitialize:                   noParams,
-	MethodUpdateSnapshot:               unmarshallerFor[UpdateSnapshotParams],
-	MethodUpdateTemporarySnapshot:      unmarshallerFor[UpdateTemporarySnapshotParams],
-	MethodCreateProgram:                unmarshallerFor[CreateProgramParams],
-	MethodParseCommandLine:             unmarshallerFor[ParseCommandLineParams],
-	MethodReadConfigFile:               unmarshallerFor[ReadConfigFileParams],
-	MethodParseJsonConfigFile:          unmarshallerFor[ParseJsonConfigFileContentParams],
-	MethodParseConfigFile:              unmarshallerFor[ParseConfigFileParams],
-	MethodTranspileModule:              unmarshallerFor[TranspileParams],
-	MethodTranspileModuleFromFile:      unmarshallerFor[TranspileFromFileParams],
-	MethodTranspileDeclaration:         unmarshallerFor[TranspileParams],
-	MethodTranspileDeclarationFromFile: unmarshallerFor[TranspileFromFileParams],
-	MethodGetDefaultProjectForFile:     unmarshallerFor[GetDefaultProjectForFileParams],
-	MethodGetSourceFile:                unmarshallerFor[GetSourceFileParams],
-	MethodGetSourceFileNames:           unmarshallerFor[GetSourceFileNamesParams],
-	MethodGetSourceFileMetadata:        unmarshallerFor[GetSourceFileParams],
-	MethodGetConfigFileNames:           unmarshallerFor[GetProjectDiagnosticsParams],
-	MethodGetConfigSourceFile:          unmarshallerFor[GetSourceFileParams],
-	MethodGetSymbolAtPosition:          unmarshallerFor[GetSymbolAtPositionParams],
-	MethodGetSymbolsAtPositions:        unmarshallerFor[GetSymbolsAtPositionsParams],
-	MethodGetSymbolAtLocation:          unmarshallerFor[GetSymbolAtLocationParams],
-	MethodGetSymbolsAtLocations:        unmarshallerFor[GetSymbolsAtLocationsParams],
-	MethodGetSymbolOfSourceFile:        unmarshallerFor[GetSymbolOfSourceFileParams],
-	MethodGetSymbolsOfSourceFiles:      unmarshallerFor[GetSymbolsOfSourceFilesParams],
-	MethodGetTypeOfSymbol:              unmarshallerFor[GetTypeOfSymbolParams],
-	MethodGetTypesOfSymbols:            unmarshallerFor[GetTypesOfSymbolsParams],
-	MethodGetDeclaredTypeOfSymbol:      unmarshallerFor[GetTypeOfSymbolParams],
-	MethodGetNonMissingTypeOfSymbol:    unmarshallerFor[GetTypeOfSymbolParams],
-	MethodResolveName:                  unmarshallerFor[ResolveNameParams],
-	MethodGetSymbolsInScope:            unmarshallerFor[GetSymbolsInScopeParams],
-	MethodGetSignaturesOfType:          unmarshallerFor[GetSignaturesOfTypeParams],
-	MethodGetResolvedSignature:         unmarshallerFor[GetResolvedSignatureParams],
-	MethodGetTypeAtLocation:            unmarshallerFor[GetTypeAtLocationParams],
-	MethodGetTypeAtLocations:           unmarshallerFor[GetTypeAtLocationsParams],
-	MethodGetTypeAtPosition:            unmarshallerFor[GetTypeAtPositionParams],
-	MethodGetTypesAtPositions:          unmarshallerFor[GetTypesAtPositionsParams],
+	MethodBatchRequests:                    unmarshallerFor[BatchRequestsParams],
+	MethodRelease:                          unmarshallerFor[ReleaseParams],
+	MethodInitialize:                       noParams,
+	MethodCreateSnapshot:                   unmarshallerFor[CreateSnapshotParams],
+	MethodGetCurrentLanguageServerSnapshot: unmarshallerFor[GetCurrentLanguageServerSnapshotParams],
+	MethodUpdateTemporarySnapshot:          unmarshallerFor[UpdateTemporarySnapshotParams],
+	MethodParseCommandLine:                 unmarshallerFor[ParseCommandLineParams],
+	MethodReadConfigFile:                   unmarshallerFor[ReadConfigFileParams],
+	MethodParseJsonConfigFile:              unmarshallerFor[ParseJsonConfigFileContentParams],
+	MethodParseConfigFile:                  unmarshallerFor[ParseConfigFileParams],
+	MethodTranspileModule:                  unmarshallerFor[TranspileParams],
+	MethodTranspileModuleFromFile:          unmarshallerFor[TranspileFromFileParams],
+	MethodTranspileDeclaration:             unmarshallerFor[TranspileParams],
+	MethodTranspileDeclarationFromFile:     unmarshallerFor[TranspileFromFileParams],
+	MethodGetDefaultProjectForFile:         unmarshallerFor[GetDefaultProjectForFileParams],
+	MethodGetSourceFile:                    unmarshallerFor[GetSourceFileParams],
+	MethodGetSourceFileNames:               unmarshallerFor[GetSourceFileNamesParams],
+	MethodGetSourceFileMetadata:            unmarshallerFor[GetSourceFileParams],
+	MethodGetConfigFileNames:               unmarshallerFor[GetProjectDiagnosticsParams],
+	MethodGetConfigSourceFile:              unmarshallerFor[GetSourceFileParams],
+	MethodGetSymbolAtPosition:              unmarshallerFor[GetSymbolAtPositionParams],
+	MethodGetSymbolsAtPositions:            unmarshallerFor[GetSymbolsAtPositionsParams],
+	MethodGetSymbolAtLocation:              unmarshallerFor[GetSymbolAtLocationParams],
+	MethodGetSymbolsAtLocations:            unmarshallerFor[GetSymbolsAtLocationsParams],
+	MethodGetSymbolOfSourceFile:            unmarshallerFor[GetSymbolOfSourceFileParams],
+	MethodGetSymbolsOfSourceFiles:          unmarshallerFor[GetSymbolsOfSourceFilesParams],
+	MethodGetTypeOfSymbol:                  unmarshallerFor[GetTypeOfSymbolParams],
+	MethodGetTypesOfSymbols:                unmarshallerFor[GetTypesOfSymbolsParams],
+	MethodGetDeclaredTypeOfSymbol:          unmarshallerFor[GetTypeOfSymbolParams],
+	MethodGetNonMissingTypeOfSymbol:        unmarshallerFor[GetTypeOfSymbolParams],
+	MethodResolveName:                      unmarshallerFor[ResolveNameParams],
+	MethodGetSymbolsInScope:                unmarshallerFor[GetSymbolsInScopeParams],
+	MethodGetSignaturesOfType:              unmarshallerFor[GetSignaturesOfTypeParams],
+	MethodGetResolvedSignature:             unmarshallerFor[GetResolvedSignatureParams],
+	MethodGetTypeAtLocation:                unmarshallerFor[GetTypeAtLocationParams],
+	MethodGetTypeAtLocations:               unmarshallerFor[GetTypeAtLocationsParams],
+	MethodGetTypeAtPosition:                unmarshallerFor[GetTypeAtPositionParams],
+	MethodGetTypesAtPositions:              unmarshallerFor[GetTypesAtPositionsParams],
 
 	MethodGetParentOfSymbol:       unmarshallerFor[GetSymbolPropertyParams],
 	MethodGetMembersOfSymbol:      unmarshallerFor[GetSymbolPropertyParams],

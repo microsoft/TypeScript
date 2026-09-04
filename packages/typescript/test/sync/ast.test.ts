@@ -576,7 +576,7 @@ function spawnAPI(files: Record<string, string> = {
 }
 
 function getRemoteSourceFile(api: API, configPath: string, filePath: string) {
-    const snapshot = api.updateSnapshot({ openProject: configPath });
+    const snapshot = api.createSnapshot({ openProject: configPath });
     const project = snapshot.getProject(configPath)!;
     return project.program.getSourceFile(filePath)!;
 }

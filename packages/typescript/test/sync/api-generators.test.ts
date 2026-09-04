@@ -133,6 +133,7 @@ interface ParityCase {
 const exercisedMethods = new Set<string>();
 const publicGeneratorExemptions = new Map<string, string>([
     ["API.fromLSPConnection", "requires an existing LSP API session"],
+    ["API.getCurrentLanguageServerSnapshot", "requires an existing LSP API session"],
     ["InternalAPI.startCPUProfile", "writes a CPU profile and changes process-global profiling state"],
     ["InternalAPI.stopCPUProfile", "requires a matching active CPU profile"],
     ["InternalAPI.saveHeapProfile", "writes a potentially large heap profile to disk"],
@@ -560,7 +561,7 @@ describe("API - generator batching", () => {
     test("yields source file metadata requests on cache misses", () => {
         const api = spawnAPI();
         try {
-            using snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            using snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
             const program = snapshot.getProject("/tsconfig.json")!.program;
             const sourceFile = program.getSourceFile("/src/index.ts")!;
             const state = program.getSourceFileMetadataByPath.gen(sourceFile.path).next();
@@ -576,7 +577,7 @@ describe("API - generator batching", () => {
     test("uses generators attached to sync API methods", () => {
         const api = spawnAPI();
         try {
-            using snapshot = api.batch(api.updateSnapshot.gen({ openProject: "/tsconfig.json" }))[0];
+            using snapshot = api.batch(api.createSnapshot.gen({ openProject: "/tsconfig.json" }))[0];
             const project = snapshot.getProject("/tsconfig.json")!;
             const sourceFile = project.program.getSourceFile("/src/index.ts");
             assert.ok(sourceFile);
@@ -628,7 +629,7 @@ describe("API - generator batching", () => {
     test("keeps every publicly reachable generator-backed method in sync", () => {
         const api = spawnAPI(parityFiles);
         try {
-            using snapshot = api.batch(api.updateSnapshot.gen({ openProject: "/tsconfig.json" }))[0];
+            using snapshot = api.batch(api.createSnapshot.gen({ openProject: "/tsconfig.json" }))[0];
             const project = snapshot.getProject("/tsconfig.json")!;
             const { checker, emitter, languageService, program } = project;
             const indexFile = program.getSourceFile("/src/index.ts")!;
@@ -771,7 +772,7 @@ describe("API - generator batching", () => {
                 parityCase("API", "transpileModuleFromFile", api.transpileModuleFromFile, assertDeepEquivalent, "/src/index.ts"),
                 parityCase("API", "transpileDeclaration", api.transpileDeclaration, assertDeepEquivalent, "export function declared(value: string): number { return value.length; }"),
                 parityCase("API", "transpileDeclarationFromFile", api.transpileDeclarationFromFile, assertDeepEquivalent, "/src/index.ts"),
-                parityCase("API", "updateSnapshot", api.updateSnapshot, assertSnapshotsEquivalent, { openProject: "/tsconfig.json" }),
+                parityCase("API", "createSnapshot", api.createSnapshot, assertSnapshotsEquivalent, { openProject: "/tsconfig.json" }),
                 parityCase("API", "createProgram", api.createProgram, assertProgramsEquivalent, ["/src/index.ts"], { compilerOptions: { noLib: true } }),
                 parityCase("API", "runWithTemporaryFileUpdate", api.runWithTemporaryFileUpdate, assertDeepEquivalent, snapshot, "/src/index.ts", parityFiles["/src/index.ts"].replace("123", '"fixed"'), (temporarySnapshot: Snapshot) => {
                     temporaryProjects.push(temporarySnapshot.getProjects()[0].configFileName);
@@ -952,7 +953,7 @@ describe("API - generator batching", () => {
             assert.deepEqual(temporaryProjects, ["/tsconfig.json", "/tsconfig.json"]);
 
             const destructiveAPI = spawnAPI(parityFiles);
-            const disposableSnapshot = destructiveAPI.batch(destructiveAPI.updateSnapshot.gen({ openProject: "/tsconfig.json" }))[0];
+            const disposableSnapshot = destructiveAPI.batch(destructiveAPI.createSnapshot.gen({ openProject: "/tsconfig.json" }))[0];
             destructiveAPI.batch(disposableSnapshot.dispose.gen());
             assert.equal(disposableSnapshot.isDisposed(), true);
             assert.equal(disposableSnapshot.dispose(), undefined);

@@ -103,7 +103,7 @@ describe("astnav", () => {
             }),
         });
 
-        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const snapshot = await api.createSnapshot({ openProject: "/tsconfig.json" });
         const project = snapshot.getProject("/tsconfig.json")!;
         const sf = await project.program.getSourceFile("/src/testFile.ts");
         assert.ok(sf, "Failed to get source file from API");

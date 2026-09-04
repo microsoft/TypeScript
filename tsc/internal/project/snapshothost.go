@@ -59,8 +59,8 @@ func NewSnapshotHost(init *SessionInit) *SnapshotHost {
 	}
 }
 
-// NewStandaloneRootSnapshot creates the compatibility root for a standalone API session.
-func (s *SnapshotHost) NewStandaloneRootSnapshot() *Snapshot {
+// NewRootSnapshot creates an independent root snapshot.
+func (s *SnapshotHost) NewRootSnapshot() *Snapshot {
 	return s.newRootSnapshot(0, false)
 }
 

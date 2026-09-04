@@ -196,7 +196,7 @@ export async function runBenchmarks(options?: { filter?: string; singleIteration
     }
 
     async function loadSnapshot() {
-        snapshot = await api.updateSnapshot({ openProject: "tsc/testdata/fixtures/compiler/tsconfig.json" });
+        snapshot = await api.createSnapshot({ openProject: "tsc/testdata/fixtures/compiler/tsconfig.json" });
         project = snapshot.getProjects()[0];
     }
 
