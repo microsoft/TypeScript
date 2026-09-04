@@ -1,0 +1,74 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameStaticMethodDeclarationEmit.ts] ////
+
+=== privateNameStaticMethodDeclarationEmit.ts ===
+export class Foo {
+>Foo : Symbol(Foo, Decl(privateNameStaticMethodDeclarationEmit.ts, 0, 0))
+
+    static #bar() { }
+>#bar : Symbol(Foo.#bar, Decl(privateNameStaticMethodDeclarationEmit.ts, 0, 18))
+
+    // inferred return type must not be `typeof Foo.#bar`
+    static getBar() {
+>getBar : Symbol(Foo.getBar, Decl(privateNameStaticMethodDeclarationEmit.ts, 1, 21))
+
+        return Foo.#bar;
+>Foo.#bar : Symbol(Foo.#bar, Decl(privateNameStaticMethodDeclarationEmit.ts, 0, 18))
+>Foo : Symbol(Foo, Decl(privateNameStaticMethodDeclarationEmit.ts, 0, 0))
+    }
+
+    static #baz<T>(x: T): T { return x; }
+>#baz : Symbol(Foo.#baz, Decl(privateNameStaticMethodDeclarationEmit.ts, 6, 5))
+>T : Symbol(T, Decl(privateNameStaticMethodDeclarationEmit.ts, 8, 16))
+>x : Symbol(x, Decl(privateNameStaticMethodDeclarationEmit.ts, 8, 19))
+>T : Symbol(T, Decl(privateNameStaticMethodDeclarationEmit.ts, 8, 16))
+>T : Symbol(T, Decl(privateNameStaticMethodDeclarationEmit.ts, 8, 16))
+>x : Symbol(x, Decl(privateNameStaticMethodDeclarationEmit.ts, 8, 19))
+
+    static getBaz() {
+>getBaz : Symbol(Foo.getBaz, Decl(privateNameStaticMethodDeclarationEmit.ts, 8, 41))
+
+        return Foo.#baz;
+>Foo.#baz : Symbol(Foo.#baz, Decl(privateNameStaticMethodDeclarationEmit.ts, 6, 5))
+>Foo : Symbol(Foo, Decl(privateNameStaticMethodDeclarationEmit.ts, 0, 0))
+    }
+
+    // inferred property type must not be `typeof Foo.#bar`
+    static barRef = Foo.#bar;
+>barRef : Symbol(Foo.barRef, Decl(privateNameStaticMethodDeclarationEmit.ts, 12, 5))
+>Foo.#bar : Symbol(Foo.#bar, Decl(privateNameStaticMethodDeclarationEmit.ts, 0, 18))
+>Foo : Symbol(Foo, Decl(privateNameStaticMethodDeclarationEmit.ts, 0, 0))
+}
+
+export class Recursive {
+>Recursive : Symbol(Recursive, Decl(privateNameStaticMethodDeclarationEmit.ts, 16, 1))
+
+    static #rec() { return Recursive.#rec; }
+>#rec : Symbol(Recursive.#rec, Decl(privateNameStaticMethodDeclarationEmit.ts, 18, 24))
+>Recursive.#rec : Symbol(Recursive.#rec, Decl(privateNameStaticMethodDeclarationEmit.ts, 18, 24))
+>Recursive : Symbol(Recursive, Decl(privateNameStaticMethodDeclarationEmit.ts, 16, 1))
+
+    static getRec() {
+>getRec : Symbol(Recursive.getRec, Decl(privateNameStaticMethodDeclarationEmit.ts, 19, 44))
+
+        return Recursive.#rec;
+>Recursive.#rec : Symbol(Recursive.#rec, Decl(privateNameStaticMethodDeclarationEmit.ts, 18, 24))
+>Recursive : Symbol(Recursive, Decl(privateNameStaticMethodDeclarationEmit.ts, 16, 1))
+    }
+}
+
+// instance private methods already fall back to a structural type
+export class Instance {
+>Instance : Symbol(Instance, Decl(privateNameStaticMethodDeclarationEmit.ts, 24, 1))
+
+    #bar() { }
+>#bar : Symbol(Instance.#bar, Decl(privateNameStaticMethodDeclarationEmit.ts, 27, 23))
+
+    getBar() {
+>getBar : Symbol(Instance.getBar, Decl(privateNameStaticMethodDeclarationEmit.ts, 28, 14))
+
+        return this.#bar;
+>this.#bar : Symbol(Instance.#bar, Decl(privateNameStaticMethodDeclarationEmit.ts, 27, 23))
+>this : Symbol(Instance, Decl(privateNameStaticMethodDeclarationEmit.ts, 24, 1))
+    }
+}
+

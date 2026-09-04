@@ -1,0 +1,71 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameStaticMethodDeclarationEmit.ts] ////
+
+=== privateNameStaticMethodDeclarationEmit.ts ===
+export class Foo {
+>Foo : Foo
+
+    static #bar() { }
+>#bar : () => void
+
+    // inferred return type must not be `typeof Foo.#bar`
+    static getBar() {
+>getBar : () => () => void
+
+        return Foo.#bar;
+>Foo.#bar : () => void
+>Foo : typeof Foo
+    }
+
+    static #baz<T>(x: T): T { return x; }
+>#baz : <T>(x: T) => T
+>x : T
+>x : T
+
+    static getBaz() {
+>getBaz : () => <T>(x: T) => T
+
+        return Foo.#baz;
+>Foo.#baz : <T>(x: T) => T
+>Foo : typeof Foo
+    }
+
+    // inferred property type must not be `typeof Foo.#bar`
+    static barRef = Foo.#bar;
+>barRef : () => void
+>Foo.#bar : () => void
+>Foo : typeof Foo
+}
+
+export class Recursive {
+>Recursive : Recursive
+
+    static #rec() { return Recursive.#rec; }
+>#rec : () => any
+>Recursive.#rec : () => any
+>Recursive : typeof Recursive
+
+    static getRec() {
+>getRec : () => () => any
+
+        return Recursive.#rec;
+>Recursive.#rec : () => any
+>Recursive : typeof Recursive
+    }
+}
+
+// instance private methods already fall back to a structural type
+export class Instance {
+>Instance : Instance
+
+    #bar() { }
+>#bar : () => void
+
+    getBar() {
+>getBar : () => () => void
+
+        return this.#bar;
+>this.#bar : () => void
+>this : this
+    }
+}
+
