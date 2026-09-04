@@ -1065,6 +1065,11 @@ describe("RemoteNode + child/token getters", () => {
         return found;
     }
 
+    function getLeafTokens(node: Node, sourceFile: SourceFile): Node[] {
+        const children = node.getChildren(sourceFile);
+        return children.length === 0 ? [node] : children.flatMap(child => getLeafTokens(child, sourceFile));
+    }
+
     test("getChildren materializes the punctuation/keyword tokens the AST omits", () => {
         withFirstStatement("if (x) {}", stmt => {
             const texts = stmt.getChildren().map(c => c.getText());
@@ -1084,17 +1089,7 @@ describe("RemoteNode + child/token getters", () => {
             withFirstStatement(source, (stmt, sf) => {
                 const node = findFirstOfKind(stmt, SyntaxKind.CallExpression)
                     ?? findFirstOfKind(stmt, SyntaxKind.TypeReference)!;
-                const leafTokens: Node[] = [];
-                const collectLeafTokens = (current: Node): void => {
-                    const children = current.getChildren(sf);
-                    if (children.length === 0) {
-                        leafTokens.push(current);
-                    }
-                    else {
-                        children.forEach(collectLeafTokens);
-                    }
-                };
-                collectLeafTokens(node);
+                const leafTokens = getLeafTokens(node, sf);
 
                 const firstLessThan = leafTokens.find(child => child.kind === SyntaxKind.LessThanToken);
                 assert.ok(firstLessThan, "expected the public API to expose the opening less-than token");
@@ -1102,6 +1097,14 @@ describe("RemoteNode + child/token getters", () => {
                 assert.strictEqual(leafTokens.map(child => child.getFullText(sf)).join(""), node.getFullText(sf));
             });
         }
+    });
+
+    test("public getChildren API preserves ordinary left-shift tokens", () => {
+        withFirstStatement("const x = a << b;", (stmt, sf) => {
+            const leafTokens = getLeafTokens(stmt, sf);
+            assert.strictEqual(leafTokens.filter(child => child.kind === SyntaxKind.LessThanLessThanToken).length, 1);
+            assert.strictEqual(leafTokens.filter(child => child.kind === SyntaxKind.LessThanToken).length, 0);
+        });
     });
 
     test("getChildCount and getChildAt agree with getChildren", () => {

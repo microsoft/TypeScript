@@ -711,7 +711,7 @@ function addSyntheticNodes(children: Node[], pos: number, end: number, parent: N
     while (pos < end) {
         let token = scanner.getToken();
         let tokenEnd = scanner.getTokenEnd();
-        if (tokenEnd > end) {
+        if (token === SyntaxKind.LessThanLessThanToken && scanner.getTokenStart() < end && tokenEnd > end) {
             // The parser rescans `<<` as `<` when opening type arguments; mirror that split
             // when the combined token crosses the next AST child's boundary.
             token = scanner.reScanLessThanToken();
