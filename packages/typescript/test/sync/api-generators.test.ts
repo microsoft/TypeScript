@@ -489,6 +489,47 @@ describe("API - generator batching", () => {
         }
     });
 
+    test("transparently paginates batch responses", () => {
+        const api = spawnAPI(undefined, { maxResponseBytesPerPage: 1 });
+        try {
+            const [strict, config, noImplicitAny] = api.batch(
+                api.parseCommandLine.gen(["--strict"]),
+                api.readConfigFile.gen("/tsconfig.json"),
+                api.parseCommandLine.gen(["--noImplicitAny"]),
+            );
+
+            assert.equal(strict.options.strict, true);
+            assert.deepEqual(config.config, {});
+            assert.equal(noImplicitAny.options.noImplicitAny, true);
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("transparently paginates responses at the default batch size limit", () => {
+        const largeConfigValue = "x".repeat(5_000_000);
+        const requestCount = 64;
+        const api = spawnAPI({ "/large.json": JSON.stringify({ largeConfigValue }) }, { collectTiming: true });
+        try {
+            api.parseCommandLine([]);
+            api.resetTimingInfo();
+
+            const configs = api.batch(...Array.from({ length: requestCount }, () => api.readConfigFile.gen("/large.json")));
+            assert.equal(configs.length, requestCount);
+            for (const config of configs) {
+                assert.deepEqual(config.config, { largeConfigValue });
+            }
+
+            const timing = api.getTimingInfo();
+            assert.equal(timing.totals.requestCount, 2);
+            assert.deepEqual(timing.recentRequests.map(request => request.method), ["batchRequests", "batchRequests"]);
+        }
+        finally {
+            api.close();
+        }
+    });
+
     test("all deduplicates only initialize requests within a batch round", () => {
         const api = spawnAPI();
         const requestBatches: string[][] = [];
