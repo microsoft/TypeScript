@@ -156,7 +156,7 @@ func TestCompletionRetriesWithAutoImports(t *testing.T) {
 		IncludeCompletionsForImportStatements: core.TSTrue,
 	})
 
-	session := NewSession(projectSession, nil)
+	session := NewLSPSession(projectSession, nil)
 	defer session.Close()
 
 	snapshotResp, err := session.handleUpdateSnapshot(t.Context(), &UpdateSnapshotParams{

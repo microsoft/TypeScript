@@ -4108,8 +4108,11 @@ func (s *Session) handleGetCompletionsAtPosition(ctx context.Context, params *Ge
 	}
 	result, err := run(sd.snapshot, program)
 	if errors.Is(err, ls.ErrNeedsAutoImports) {
-		preparedSnapshot := s.projectSession.GetSnapshotWithAutoImports(ctx, sd.snapshot, params.File.ToURI(s.projectSession.GetCurrentDirectory()))
-		defer preparedSnapshot.Deref(s.projectSession)
+		preparedSnapshot := s.snapshotHost.CloneSnapshotWithAutoImports(ctx, sd.snapshot, params.File.ToURI(s.currentDirectory()), nil)
+		if s.projectSession != nil {
+			s.projectSession.TryAdoptSnapshotInBackground(sd.snapshot, preparedSnapshot)
+		}
+		defer preparedSnapshot.Deref()
 		if err = ctx.Err(); err != nil {
 			return nil, err
 		}
