@@ -106,7 +106,7 @@ function getEncodedRootLength(path: string): number {
             const scheme = path.slice(0, schemeEnd);
             const authority = path.slice(authorityStart, authorityEnd);
             if (
-                scheme === "file" && (authority === "" || authority === "localhost") &&
+                scheme.toLowerCase() === "file" && (authority === "" || authority.toLowerCase() === "localhost") &&
                 isVolumeCharacter(path.charCodeAt(authorityEnd + 1))
             ) {
                 const volumeSeparatorEnd = getFileUrlVolumeSeparatorEnd(path, authorityEnd + 2);
