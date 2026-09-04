@@ -569,4 +569,36 @@ func TestRefCountingCaches(t *testing.T) {
 			assert.Equal(t, updatedReferences[0].CompilerOptions().Strict, core.TSTrue)
 		})
 	})
+
+	t.Run("failed API update preserves API references", func(t *testing.T) {
+		t.Parallel()
+
+		const configFileName = "/project/tsconfig.json"
+		session := setup(map[string]any{
+			configFileName:     `{"compilerOptions":{"noLib":true},"files":["index.ts"]}`,
+			"/project/index.ts": "export const value = 1;",
+		})
+		defer session.Close()
+
+		ctx := context.Background()
+		snapshot, err := session.APIUpdate(ctx, FileChangeSummary{}, &APISnapshotRequest{
+			OpenProjects: collections.NewSetFromItems(configFileName),
+		})
+		assert.NilError(t, err)
+		snapshot.Deref()
+
+		configPath := session.toPath(configFileName)
+		missingPath := session.toPath("/missing/tsconfig.json")
+		session.Snapshot().ProjectCollection.apiState.openProjects[missingPath] = 1
+
+		failedSnapshot, err := session.APIUpdate(ctx, FileChangeSummary{}, &APISnapshotRequest{
+			CloseProjects: collections.NewSetFromItems(configPath),
+		})
+		assert.ErrorContains(t, err, "project not found for update")
+		failedSnapshot.Deref()
+
+		apiState := session.Snapshot().ProjectCollection.apiState
+		assert.Equal(t, apiState.openProjects[configPath], 1)
+		assert.Equal(t, apiState.openProjects[missingPath], 1)
+	})
 }
