@@ -1219,6 +1219,24 @@ func IsVarUsing(node *Node) bool {
 	return GetCombinedNodeFlags(node)&NodeFlagsBlockScoped == NodeFlagsUsing
 }
 
+// GetJSDocAugmentsTag returns the first @augments JSDoc tag for the given node, or nil if none exists.
+func GetJSDocAugmentsTag(node *Node) *Node {
+	if node == nil {
+		return nil
+	}
+	for _, jsdoc := range node.JSDoc(nil) {
+		tags := jsdoc.AsJSDoc().Tags
+		if tags != nil {
+			for _, tag := range tags.Nodes {
+				if IsJSDocAugmentsTag(tag) {
+					return tag
+				}
+			}
+		}
+	}
+	return nil
+}
+
 // GetJSDocDeprecatedTag returns the first @deprecated JSDoc tag for the given node, or nil if none exists.
 func GetJSDocDeprecatedTag(node *Node) *Node {
 	for _, jsdoc := range node.JSDoc(nil) {

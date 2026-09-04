@@ -1321,3 +1321,14 @@ func (r *EmitResolver) IsThisPropertyAssignmentDeclarationRedundant(node *ast.No
 	}
 	return false
 }
+
+func (r *EmitResolver) GetEffectiveBaseTypeNode(node *ast.Node) *ast.Node {
+	r.checkerMu.Lock()
+	defer r.checkerMu.Unlock()
+	symbol := r.checker.getSymbolOfDeclaration(node)
+	if symbol == nil {
+		return ast.GetClassExtendsHeritageElement(node)
+	}
+	classType := r.checker.getDeclaredTypeOfSymbol(symbol)
+	return r.checker.getEffectiveBaseTypeNode(classType)
+}

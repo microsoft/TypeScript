@@ -4334,14 +4334,14 @@ func (c *Checker) checkClassLikeDeclaration(node *ast.Node) {
 		c.checkClassForStaticPropertyNameConflicts(node)
 	}
 
-	baseTypeNode := ast.GetClassExtendsHeritageElement(node)
+	baseTypeNode := c.getEffectiveBaseTypeNode(classType)
 	if baseTypeNode != nil {
 		c.checkSourceElements(baseTypeNode.TypeArguments())
 		baseTypes := c.getBaseTypes(classType)
 		if len(baseTypes) != 0 {
 			baseType := baseTypes[0]
-			c.checkJSDocAugmentsTagMatchesExtends(node, baseTypeNode, baseType)
 			baseConstructorType := c.getBaseConstructorTypeOfClass(classType)
+			c.checkJSDocAugmentsTagMatchesExtends(node, baseTypeNode, baseType, baseConstructorType)
 			staticBaseType := c.getApparentType(baseConstructorType)
 			c.checkBaseTypeAccessibility(staticBaseType, baseTypeNode)
 			c.checkSourceElement(baseTypeNode.Expression())
@@ -4414,32 +4414,6 @@ func (c *Checker) checkClassLikeDeclaration(node *ast.Node) {
 	c.checkIndexConstraints(staticType, symbol, true /*isStaticIndex*/)
 	c.checkClassOrInterfaceForDuplicateIndexSignatures(node)
 	c.checkPropertyInitialization(node)
-}
-
-func (c *Checker) checkJSDocAugmentsTagMatchesExtends(node *ast.Node, baseTypeNode *ast.ExpressionWithTypeArgumentsNode, baseType *Type) {
-	if !ast.IsInJSFile(node) {
-		return
-	}
-	file := ast.GetSourceFileOfNode(node)
-	for _, j := range node.EagerJSDoc(file) {
-		if j.AsJSDoc().Tags == nil {
-			continue
-		}
-		for _, tag := range j.AsJSDoc().Tags.Nodes {
-			if tag.Kind != ast.KindJSDocAugmentsTag {
-				continue
-			}
-			sourceTypeNode := tag.ClassName()
-			if c.isTypeIdenticalTo(c.getTypeFromTypeNode(sourceTypeNode), baseType) {
-				continue
-			}
-			targetName := getIdentifierFromEntityNameExpression(baseTypeNode.Expression())
-			sourceName := getIdentifierFromEntityNameExpression(sourceTypeNode.Expression())
-			if targetName != nil && sourceName != nil {
-				c.error(sourceName, diagnostics.JSDoc_0_1_does_not_match_the_extends_2_clause, tag.TagName().Text(), sourceName.Text(), targetName.Text())
-			}
-		}
-	}
 }
 
 func (c *Checker) checkClassForStaticPropertyNameConflicts(node *ast.Node) {
@@ -8653,7 +8627,9 @@ func (c *Checker) resolveCallExpression(node *ast.Node, candidatesOutArray *[]*S
 		if !c.isErrorType(superType) {
 			// In super call, the candidate signatures are the matching arity signatures of the base constructor function instantiated
 			// with the type arguments specified in the extends clause.
-			baseTypeNode := ast.GetClassExtendsHeritageElement(ast.GetContainingClass(node))
+			containingClass := ast.GetContainingClass(node)
+			classType := c.getDeclaredTypeOfSymbol(c.getSymbolOfDeclaration(containingClass))
+			baseTypeNode := c.getEffectiveBaseTypeNode(classType)
 			if baseTypeNode != nil {
 				baseConstructors := c.getInstantiatedConstructorsForTypeArguments(superType, baseTypeNode.TypeArguments(), baseTypeNode)
 				return c.resolveCall(node, baseConstructors, candidatesOutArray, checkMode, SignatureFlagsNone, nil)
@@ -19537,7 +19513,7 @@ func (c *Checker) resolveBaseTypesOfClass(t *Type) {
 	if baseConstructorType.flags&(TypeFlagsObject|TypeFlagsIntersection|TypeFlagsAny) == 0 {
 		return
 	}
-	baseTypeNode := getBaseTypeNodeOfClass(t)
+	baseTypeNode := c.getEffectiveBaseTypeNode(t)
 	var baseType *Type
 	var originalBaseType *Type
 	if baseConstructorType.symbol != nil {
@@ -21178,7 +21154,7 @@ func (c *Checker) getDefaultConstructSignatures(classType *Type) []*Signature {
 		flags := core.IfElse(isAbstract, SignatureFlagsConstruct|SignatureFlagsAbstract, SignatureFlagsConstruct)
 		return []*Signature{c.newSignature(flags, nil, classType.AsInterfaceType().LocalTypeParameters(), nil, nil, classType, nil, 0)}
 	}
-	baseTypeNode := getBaseTypeNodeOfClass(classType)
+	baseTypeNode := c.getEffectiveBaseTypeNode(classType)
 	isJavaScript := declaration != nil && ast.IsInJSFile(declaration)
 	typeArguments := c.getTypeArgumentsFromNode(baseTypeNode)
 	typeArgCount := len(typeArguments)
