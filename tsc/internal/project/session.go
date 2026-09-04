@@ -214,7 +214,7 @@ func NewSession(init *SessionInit) *Session {
 		sessionLogger = logging.NewNopLogger()
 	}
 	session := &Session{
-		SnapshotHost:            snapshotHost,
+		SnapshotHost:    snapshotHost,
 		options:         init.Options,
 		logger:          sessionLogger,
 		backgroundCtx:   init.BackgroundCtx,
@@ -1679,7 +1679,7 @@ func (s *Session) Close() {
 	// Cancel periodic performance telemetry
 	s.stopPerformanceTelemetry()
 	s.backgroundQueue.Close()
-	s.Close()
+	s.SnapshotHost.Close()
 }
 
 func (s *Session) flushChanges(ctx context.Context) (FileChangeSummary, map[tspath.Path]*Overlay, map[tspath.Path]*ATAStateChange, *lsutil.UserPreferences) {

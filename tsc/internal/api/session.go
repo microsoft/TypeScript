@@ -637,10 +637,6 @@ func (s *Session) setupLanguageService(sd *snapshotData, program *compiler.Progr
 
 // HandleRequest implements Handler.
 func (s *Session) HandleRequest(ctx context.Context, method string, params json.Value) (any, error) {
-	return s.handleRequest(ctx, method, params)
-}
-
-func (s *Session) handleRequest(ctx context.Context, method string, params json.Value) (any, error) {
 	// Handle simple methods that don't need param parsing
 	switch method {
 	case "echo":
@@ -965,7 +961,7 @@ func (s *Session) handleBatchRequest(ctx context.Context, request BatchRequest) 
 		}
 	}()
 	var err error
-	response.Result, err = s.handleRequest(ctx, string(request.Method), request.Params)
+	response.Result, err = s.HandleRequest(ctx, string(request.Method), request.Params)
 	if err != nil {
 		response.Error = err.Error()
 	}
