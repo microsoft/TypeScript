@@ -147,37 +147,6 @@ extends:
                   RELEASE_SOURCE_BRANCH: $(resources.pipeline.TypeScript_VS_Code_Extension_Release_Build.sourceBranch)
                   RELEASE_SOURCE_COMMIT: $(resources.pipeline.TypeScript_VS_Code_Extension_Release_Build.sourceCommit)
 
-              - task: NodeTool@0
-                inputs:
-                  versionSpec: 24.x
-                displayName: Install Node
-
-              - bash: |
-                  cat > .npmrc << 'EOF'
-                  registry=https://pkgs.dev.azure.com/devdiv/devdiv/_packaging/devdiv_PublicPackages/npm/registry/
-                  EOF
-                  npm init -y
-                displayName: Set up npm
-
-              - task: npmAuthenticate@0
-                inputs:
-                  workingFile: .npmrc
-                displayName: Authenticate npm
-
-              - bash: npm install @vscode/vsce@3.9.2
-                displayName: Install vsce
-
-              - task: AzureCLI@2
-                displayName: Check Marketplace authentication
-                inputs:
-                  azureSubscription: TypeScript-VSMarketplacePublishAuth
-                  scriptType: bash
-                  scriptLocation: inlineScript
-                  inlineScript: |
-                    set -euo pipefail
-                    az rest -u https://app.vssps.visualstudio.com/_apis/profile/profiles/me --resource 499b84ac-1321-427f-aa17-267ca6975798
-                    npx vsce verify-pat TypeScriptTeam --azure-credential
-
           - ${{ if eq(parameters.dryRun, false) }}:
               - job: Approve
                 displayName: Approve production publication
