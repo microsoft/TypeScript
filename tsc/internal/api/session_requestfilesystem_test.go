@@ -21,7 +21,7 @@ func TestUpdateSnapshotUsesFullFileSystem(t *testing.T) {
 		"/host.ts": "host",
 	})
 	defer projectSession.Close()
-	session := NewSession(projectSession, nil)
+	session := NewLSPSession(projectSession, nil)
 	defer session.Close()
 
 	response, err := session.handleUpdateSnapshot(context.Background(), &UpdateSnapshotParams{
@@ -97,7 +97,7 @@ func TestSnapshotUpdateFullFileSystemIsTotal(t *testing.T) {
 		"/host.ts": "host",
 	})
 	defer projectSession.Close()
-	session := NewSession(projectSession, nil)
+	session := NewLSPSession(projectSession, nil)
 	defer session.Close()
 
 	base, err := session.handleUpdateSnapshot(context.Background(), &UpdateSnapshotParams{})
@@ -129,7 +129,7 @@ func TestSnapshotUpdateCarriesHostFileSystemWithoutOverride(t *testing.T) {
 		"/index.ts":      `export const value = true;`,
 	})
 	defer projectSession.Close()
-	session := NewSession(projectSession, nil)
+	session := NewLSPSession(projectSession, nil)
 	defer session.Close()
 
 	base, err := session.handleUpdateSnapshot(context.Background(), &UpdateSnapshotParams{
@@ -150,7 +150,7 @@ func TestEmitFromLayerOverFullFileSystemReturnsFileContents(t *testing.T) {
 
 	projectSession, _ := projecttestutil.Setup(map[string]any{})
 	defer projectSession.Close()
-	session := NewSession(projectSession, nil)
+	session := NewLSPSession(projectSession, nil)
 	defer session.Close()
 	ctx := context.Background()
 
@@ -201,7 +201,7 @@ func TestReleaseSnapshotCompactsSoleLayeredFileSystem(t *testing.T) {
 		"/host.ts": "host",
 	})
 	defer projectSession.Close()
-	session := NewSession(projectSession, nil)
+	session := NewLSPSession(projectSession, nil)
 	defer session.Close()
 
 	base, err := session.handleUpdateSnapshot(context.Background(), &UpdateSnapshotParams{
@@ -261,7 +261,7 @@ func TestEagerSnapshotReleaseDoesNotRetainFileSystemHistory(t *testing.T) {
 
 	projectSession, _ := projecttestutil.Setup(map[string]any{})
 	defer projectSession.Close()
-	session := NewSession(projectSession, nil)
+	session := NewLSPSession(projectSession, nil)
 	defer session.Close()
 
 	response, err := session.handleUpdateSnapshot(context.Background(), &UpdateSnapshotParams{
@@ -309,7 +309,7 @@ func TestSnapshotReleaseCompactsChainedFileSystems(t *testing.T) {
 
 	projectSession, _ := projecttestutil.Setup(map[string]any{})
 	defer projectSession.Close()
-	session := NewSession(projectSession, nil)
+	session := NewLSPSession(projectSession, nil)
 	defer session.Close()
 
 	responses := make([]*UpdateSnapshotResponse, 4)
@@ -354,7 +354,7 @@ func TestTemporarySnapshotRetainsLayeredFileSystemHistory(t *testing.T) {
 
 	projectSession, _ := projecttestutil.Setup(map[string]any{})
 	defer projectSession.Close()
-	session := NewSession(projectSession, nil)
+	session := NewLSPSession(projectSession, nil)
 	defer session.Close()
 
 	base, err := session.handleUpdateSnapshot(context.Background(), &UpdateSnapshotParams{
@@ -398,7 +398,7 @@ func TestSnapshotReleaseCompactionSupportsConcurrentReaders(t *testing.T) {
 
 	projectSession, _ := projecttestutil.Setup(map[string]any{})
 	defer projectSession.Close()
-	session := NewSession(projectSession, nil)
+	session := NewLSPSession(projectSession, nil)
 	defer session.Close()
 
 	files := make(map[string]string, 1024)

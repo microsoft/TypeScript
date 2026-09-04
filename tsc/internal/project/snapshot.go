@@ -28,15 +28,12 @@ import (
 )
 
 type Snapshot struct {
+	host     *SnapshotHost
 	id       uint64
 	parentId uint64
 	refCount atomic.Int32
 
-	// Session options are immutable for the server lifetime,
-	// so can be a pointer.
-	sessionOptions *SessionOptions
-	toPath         func(fileName string) tspath.Path
-	converters     *lsconv.Converters
+	converters *lsconv.Converters
 
 	// Immutable state, cloned between snapshots
 	fs                                     *SnapshotFS
@@ -81,35 +78,29 @@ func (s *Snapshot) contentMapperWatchState() ([]string, *collections.Set[tspath.
 	return s.contentMapperExtensions, s.contentMapperWatchedFiles
 }
 
-// NewSnapshot initializes a snapshot with refCount 1.
-// The caller is responsible for calling Deref when done.
-func NewSnapshot(
+func (host *SnapshotHost) newSnapshot(
 	id uint64,
 	fs *SnapshotFS,
-	sessionOptions *SessionOptions,
 	configFileRegistry *ConfigFileRegistry,
 	compilerOptionsForInferredProjects *core.CompilerOptions,
 	userPreferences lsutil.UserPreferences,
 	autoImports *autoimport.Registry,
 	autoImportsWatch *WatchedFiles[map[tspath.Path]string],
-	toPath func(fileName string) tspath.Path,
 ) *Snapshot {
 	s := &Snapshot{
-		id: id,
-
-		sessionOptions: sessionOptions,
-		toPath:         toPath,
+		host: host,
+		id:   id,
 
 		fs:                                 fs,
 		ConfigFileRegistry:                 configFileRegistry,
-		ProjectCollection:                  &ProjectCollection{toPath: toPath, openFiles: openFilePaths(fs.overlays)},
+		ProjectCollection:                  &ProjectCollection{toPath: host.toPath, openFiles: openFilePaths(fs.overlays)},
 		compilerOptionsForInferredProjects: compilerOptionsForInferredProjects,
 		userPreferences:                    userPreferences,
 		AutoImports:                        autoImports,
 		autoImportsWatch:                   autoImportsWatch,
 	}
 	s.refCount.Store(1)
-	s.converters = lsconv.NewConverters(s.sessionOptions.PositionEncoding, s.LSPLineMap)
+	s.converters = lsconv.NewConverters(host.options.PositionEncoding, s.LSPLineMap)
 	return s
 }
 
@@ -123,14 +114,15 @@ func (s *Snapshot) cloneForProgram(
 	configFileParsingDiagnostics []*ast.Diagnostic,
 	oldProject *Project,
 	fileChanges FileChangeSummary,
-	session *Session,
+	sessionLogger logging.Logger,
 ) *Snapshot {
+	store := s.host
 	var logger *logging.LogTree
 
-	if session.options.LoggingEnabled {
+	if store.options.LoggingEnabled && sessionLogger != nil {
 		defer func() {
 			if r := recover(); r != nil {
-				session.logger.Log(logger.String())
+				sessionLogger.Log(logger.String())
 				panic(r)
 			}
 		}()
@@ -138,10 +130,10 @@ func (s *Snapshot) cloneForProgram(
 	}
 
 	start := time.Now()
-	fs := newSnapshotFSBuilder(session.fs.fs, s.fs.overlays, s.fs.overlays, s.fs.diskFiles, s.fs.diskDirectories, s.fs.nodeModulesRealpathAliases, session.options.PositionEncoding, s.toPath)
+	fs := newSnapshotFSBuilder(store.fs, s.fs.overlays, s.fs.overlays, s.fs.diskFiles, s.fs.diskDirectories, s.fs.nodeModulesRealpathAliases, store.options.PositionEncoding, store.toPath)
 	fileChanges = s.processFileChanges(fs, fileChanges, logger, nil)
 
-	newSnapshotID := session.snapshotID.Add(1)
+	newSnapshotID := store.nextSnapshotID()
 	projectCollectionBuilder := newProjectCollectionBuilder(
 		ctx,
 		newSnapshotID,
@@ -152,13 +144,13 @@ func (s *Snapshot) cloneForProgram(
 		compilerOptions,
 		s.inferredProjectContentMappers,
 		s.inferredProjectContentMapperExtensions,
-		s.sessionOptions,
+		store.options,
 		s.ConfigFileRegistry.customConfigFileName,
-		session.parseCache,
-		session.contentMappedParseCache,
-		session.extendedConfigCache,
-		session.contentMapperHost,
-		session.client,
+		store.parseCache,
+		store.contentMappedParseCache,
+		store.extendedConfigCache,
+		store.contentMapperHost,
+		nil,
 	)
 
 	projectCollectionBuilder.seedInferredProjectForProgram(oldProject, logger)
@@ -203,21 +195,19 @@ func (s *Snapshot) cloneForProgram(
 		removedFiles++
 		return true
 	})
-	if session.options.LoggingEnabled {
+	if logger != nil {
 		logger.Logf("Removed %d cached file(s) in %v", removedFiles, time.Since(cleanFilesStart))
 	}
 
 	snapshotFS, _ := fs.Finalize()
-	newSnapshot := NewSnapshot(
+	newSnapshot := store.newSnapshot(
 		newSnapshotID,
 		snapshotFS,
-		s.sessionOptions,
 		newConfigFileRegistry,
 		compilerOptions,
 		s.userPreferences,
 		nil,
 		nil,
-		s.toPath,
 	)
 	newSnapshot.parentId = s.id
 	newSnapshot.ProjectCollection = newProjectCollection
@@ -228,7 +218,7 @@ func (s *Snapshot) cloneForProgram(
 
 	for _, project := range newSnapshot.ProjectCollection.Projects() {
 		if project.Program != nil {
-			session.programCounter.Ref(project.Program)
+			store.programCounter.Ref(project.Program)
 			if project.ProgramLastUpdate == newSnapshotID {
 				project.host.freeze(snapshotFS, newConfigFileRegistry)
 			}
@@ -238,7 +228,7 @@ func (s *Snapshot) cloneForProgram(
 	for _, config := range newSnapshot.ConfigFileRegistry.configs {
 		if config.commandLine != nil && config.commandLine.ConfigFile != nil {
 			for _, file := range config.commandLine.ConfigFile.ExtendedSourceFiles {
-				session.extendedConfigCache.AddOwner(newSnapshot.toPath(file), newSnapshot.id)
+				store.extendedConfigCache.AddOwner(store.toPath(file), newSnapshot.id)
 			}
 		}
 	}
@@ -247,6 +237,41 @@ func (s *Snapshot) cloneForProgram(
 		logger.Logf("Finished cloning snapshot %d into snapshot %d for program in %v", s.id, newSnapshot.id, time.Since(start))
 	}
 	return newSnapshot
+}
+
+func (s *Snapshot) cloneWithTemporaryFile(
+	ctx context.Context,
+	uri lsproto.DocumentUri,
+	newText string,
+) (*Snapshot, error) {
+	path := uri.Path(s.UseCaseSensitiveFileNames())
+
+	overlays := maps.Clone(s.fs.overlays)
+	version := int32(0)
+	var fileChanges FileChangeSummary
+	existing := overlays[path]
+	var scriptKind core.ScriptKind
+	if existing != nil {
+		version = existing.Version() + 1
+		scriptKind = existing.Kind()
+		fileChanges.Changed.Add(uri)
+	} else {
+		scriptKind = core.GetScriptKindFromFileName(uri.FileName())
+		if scriptKind == core.ScriptKindUnknown {
+			return nil, fmt.Errorf("unsupported file extension: %s", uri.FileName())
+		}
+		fileChanges.Opened = uri
+	}
+	overlays[path] = newOverlay(uri.FileName(), newText, version, scriptKind)
+
+	return s.Clone(ctx, SnapshotChange{
+		fs:                 s.fs.fs,
+		fileSystemOverride: s.fileSystemOverride,
+		fileChanges:        fileChanges,
+		ResourceRequest: ResourceRequest{
+			Documents: []lsproto.DocumentUri{uri},
+		},
+	}, overlays, nil), nil
 }
 
 func (s *Snapshot) processFileChanges(
@@ -302,7 +327,7 @@ func (s *Snapshot) GetDefaultProject(uri lsproto.DocumentUri) *Project {
 
 func (s *Snapshot) GetProjectsContainingFile(uri lsproto.DocumentUri) []ls.Project {
 	fileName := uri.FileName()
-	path := s.toPath(fileName)
+	path := s.host.toPath(fileName)
 	// TODO!! sheetal may be change this to handle symlinks!!
 	return s.ProjectCollection.GetProjectsContainingFile(path)
 }
@@ -343,6 +368,10 @@ func (s *Snapshot) AutoImportRegistry() *autoimport.Registry {
 
 func (s *Snapshot) ID() uint64 {
 	return s.id
+}
+
+func (s *Snapshot) toPath(fileName string) tspath.Path {
+	return s.host.toPath(fileName)
 }
 
 func (s *Snapshot) UseCaseSensitiveFileNames() bool {
@@ -454,6 +483,7 @@ type SnapshotChange struct {
 	// ataChanges contains ATA-related changes to apply to projects in the new snapshot.
 	ataChanges map[tspath.Path]*ATAStateChange
 	apiRequest *APISnapshotRequest
+	client     Client
 	// cleanDiskCache triggers cleaning of cached disk files not referenced by any open project.
 	cleanDiskCache bool
 }
@@ -474,21 +504,22 @@ func (s *Snapshot) Clone(
 	ctx context.Context,
 	change SnapshotChange,
 	overlays map[tspath.Path]*Overlay,
-	session *Session,
+	sessionLogger logging.Logger,
 ) *Snapshot {
+	store := s.host
 	var logger *logging.LogTree
 
 	// Print in-progress logs immediately if cloning fails
-	if session.options.LoggingEnabled {
+	if store.options.LoggingEnabled && sessionLogger != nil {
 		defer func() {
 			if r := recover(); r != nil {
-				session.logger.Log(logger.String())
+				sessionLogger.Log(logger.String())
 				panic(r)
 			}
 		}()
 	}
 
-	if session.options.LoggingEnabled {
+	if store.options.LoggingEnabled && sessionLogger != nil {
 		logger = logging.NewLogTree(fmt.Sprintf("Cloning snapshot %d", s.id))
 		getDetails := func() string {
 			details := ""
@@ -539,7 +570,7 @@ func (s *Snapshot) Clone(
 		inferredContentMappers = change.contentMapperContributions.Mappers
 		inferredContentMapperExtensions = change.contentMapperContributions.Extensions
 	}
-	baseFS := session.fs.fs
+	baseFS := store.fs
 	if change.fs != nil {
 		baseFS = change.fs
 	}
@@ -549,7 +580,7 @@ func (s *Snapshot) Clone(
 	if change.replaceFileSystem || s.fileSystemOverride != change.fileSystemOverride {
 		change.fileChanges.InvalidateAll = true
 	}
-	fs := newSnapshotFSBuilder(baseFS, s.fs.overlays, overlays, s.fs.diskFiles, s.fs.diskDirectories, s.fs.nodeModulesRealpathAliases, session.options.PositionEncoding, s.toPath)
+	fs := newSnapshotFSBuilder(baseFS, s.fs.overlays, overlays, s.fs.diskFiles, s.fs.diskDirectories, s.fs.nodeModulesRealpathAliases, store.options.PositionEncoding, store.toPath)
 	change.fileChanges = s.processFileChanges(fs, change.fileChanges, logger, change.contentMapperContributions)
 
 	compilerOptionsForInferredProjects := s.compilerOptionsForInferredProjects
@@ -563,7 +594,7 @@ func (s *Snapshot) Clone(
 		customConfigFileName = change.newConfig.CustomConfigFileName
 	}
 
-	newSnapshotID := session.snapshotID.Add(1)
+	newSnapshotID := store.nextSnapshotID()
 	projectCollectionBuilder := newProjectCollectionBuilder(
 		ctx,
 		newSnapshotID,
@@ -574,13 +605,13 @@ func (s *Snapshot) Clone(
 		compilerOptionsForInferredProjects,
 		inferredContentMappers,
 		inferredContentMapperExtensions,
-		s.sessionOptions,
+		store.options,
 		customConfigFileName,
-		session.parseCache,
-		session.contentMappedParseCache,
-		session.extendedConfigCache,
-		session.contentMapperHost,
-		session.client,
+		store.parseCache,
+		store.contentMappedParseCache,
+		store.extendedConfigCache,
+		store.contentMapperHost,
+		change.client,
 	)
 
 	if len(change.ataChanges) != 0 {
@@ -662,7 +693,7 @@ func (s *Snapshot) Clone(
 				removedFiles++
 				return true
 			})
-			if session.options.LoggingEnabled {
+			if logger != nil {
 				logger.Logf("Removed %d cached file(s) in %v", removedFiles, time.Since(cleanFilesStart))
 			}
 		}
@@ -675,10 +706,10 @@ func (s *Snapshot) Clone(
 
 	autoImportHost := newAutoImportRegistryCloneHost(
 		projectCollection,
-		session.parseCache,
+		store.parseCache,
 		fs,
-		s.sessionOptions.CurrentDirectory,
-		s.toPath,
+		store.options.CurrentDirectory,
+		store.toPath,
 	)
 	openFiles := make(map[tspath.Path]string, len(overlays))
 	for path, overlay := range overlays {
@@ -690,7 +721,7 @@ func (s *Snapshot) Clone(
 	}
 	oldAutoImports := s.AutoImports
 	if oldAutoImports == nil {
-		oldAutoImports = autoimport.NewRegistry(s.toPath, s.userPreferences)
+		oldAutoImports = autoimport.NewRegistry(store.toPath, s.userPreferences)
 	}
 	var autoImportsWatch *WatchedFiles[map[tspath.Path]string]
 	autoImports, err := oldAutoImports.Clone(ctx, autoimport.RegistryChange{
@@ -707,16 +738,14 @@ func (s *Snapshot) Clone(
 	}
 
 	snapshotFS, _ := fs.Finalize()
-	newSnapshot := NewSnapshot(
+	newSnapshot := store.newSnapshot(
 		newSnapshotID,
 		snapshotFS,
-		s.sessionOptions,
 		nil,
 		compilerOptionsForInferredProjects,
 		config,
 		autoImports,
 		autoImportsWatch,
-		s.toPath,
 	)
 	newSnapshot.parentId = s.id
 	newSnapshot.ProjectCollection = projectCollection
@@ -729,7 +758,7 @@ func (s *Snapshot) Clone(
 
 	for _, project := range newSnapshot.ProjectCollection.Projects() {
 		if project.Program != nil {
-			session.programCounter.Ref(project.Program)
+			store.programCounter.Ref(project.Program)
 			if project.ProgramLastUpdate == newSnapshotID {
 				// If the program was updated during this clone, the project and its host are new
 				// and still retain references to the builder. Freezing clears the builder reference
@@ -750,7 +779,7 @@ func (s *Snapshot) Clone(
 	for _, config := range newSnapshot.ConfigFileRegistry.configs {
 		if config.commandLine != nil && config.commandLine.ConfigFile != nil {
 			for _, file := range config.commandLine.ConfigFile.ExtendedSourceFiles {
-				session.extendedConfigCache.AddOwner(newSnapshot.toPath(file), newSnapshot.id)
+				store.extendedConfigCache.AddOwner(store.toPath(file), newSnapshot.id)
 			}
 		}
 	}
@@ -763,8 +792,7 @@ func (s *Snapshot) Clone(
 
 // ref increments the snapshot's reference count, preventing it from being
 // disposed until a corresponding Deref is called. The snapshot must still
-// be alive (refCount > 0) when ref is called. Only the project Session
-// should call ref(), and it should be done while holding session.snapshotMu.
+// be alive (refCount > 0) when ref is called.
 func (s *Snapshot) ref() {
 	if s.refCount.Add(1) <= 1 {
 		panic(fmt.Sprintf("snapshot %d: ref on disposed snapshot, parentId=%d", s.id, s.parentId))
@@ -787,20 +815,21 @@ func (s *Snapshot) tryRef() bool {
 }
 
 // Deref decrements the snapshot's reference count. When the count reaches
-// zero, the snapshot is disposed and its resources are released.
-func (s *Snapshot) Deref(session *Session) {
+// zero, the snapshot is disposed and its store-owned resources are released.
+func (s *Snapshot) Deref() {
 	rc := s.refCount.Add(-1)
 	if rc < 0 {
 		panic(fmt.Sprintf("snapshot %d: ref count below zero, parentId=%d", s.id, s.parentId))
 	}
 	if rc == 0 {
-		s.dispose(session)
+		s.dispose()
 	}
 }
 
-func (s *Snapshot) dispose(session *Session) {
+func (s *Snapshot) dispose() {
+	store := s.host
 	for _, project := range s.ProjectCollection.Projects() {
-		if project.Program != nil && session.programCounter.Deref(project.Program) {
+		if project.Program != nil && store.programCounter.Deref(project.Program) {
 			if contentMapperProject := project.Program.ContentMapperProject(); contentMapperProject != nil {
 				_ = contentMapperProject.Close()
 			}
@@ -814,18 +843,18 @@ func (s *Snapshot) dispose(session *Session) {
 			for _, file := range project.Program.SourceFiles() {
 				if !file.IsContentMapperFailureStub() && !file.IsContentMapperSupplemental() {
 					if file.ContentMapper() != "" {
-						session.contentMappedParseCache.Deref(contentMappedParseCacheKeyForFile(file))
+						store.contentMappedParseCache.Deref(contentMappedParseCacheKeyForFile(file))
 					} else {
-						session.parseCache.Deref(parseCacheKeyForFile(file))
+						store.parseCache.Deref(parseCacheKeyForFile(file))
 					}
 				}
 			}
 			for _, file := range project.Program.DuplicateSourceFiles() {
 				if !file.IsContentMapperFailureStub {
 					if file.ContentMapper != "" {
-						session.contentMappedParseCache.Deref(contentMappedParseCacheKeyForDuplicate(file))
+						store.contentMappedParseCache.Deref(contentMappedParseCacheKeyForDuplicate(file))
 					} else {
-						session.parseCache.Deref(parseCacheKeyForDuplicate(file))
+						store.parseCache.Deref(parseCacheKeyForDuplicate(file))
 					}
 				}
 			}
@@ -834,7 +863,7 @@ func (s *Snapshot) dispose(session *Session) {
 	for _, config := range s.ConfigFileRegistry.configs {
 		if config.commandLine != nil {
 			for _, file := range config.commandLine.ExtendedSourceFiles() {
-				session.extendedConfigCache.Release(session.toPath(file), s.id)
+				store.extendedConfigCache.Release(store.toPath(file), s.id)
 			}
 		}
 	}
