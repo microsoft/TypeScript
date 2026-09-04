@@ -261,13 +261,21 @@ func (d *astDecoder) decodeExtendedData_SourceFile(data uint32, childIndices []i
 	pathIdx := readLE32(d.raw, extOff+8)
 	text := d.getString(textIdx)
 	fileName := d.getString(fileNameIdx)
-	path := d.getString(pathIdx)
+	pathText := d.getString(pathIdx)
+	path, ok := tspath.TryPathKeyFromCanonical(pathText)
+	if !ok {
+		return nil, fmt.Errorf("invalid source file path %q", pathText)
+	}
+	typedFileName, ok := tspath.TryRootedFilePathFromNormalized(fileName)
+	if !ok {
+		return nil, fmt.Errorf("invalid source file name %q", fileName)
+	}
 
 	// Recover parse options from header.
 	parseOpts := readLE32(d.raw, HeaderOffsetParseOptions)
 	opts := ast.SourceFileParseOptions{
-		FileName: fileName,
-		Path:     tspath.Path(path),
+		FileName: typedFileName,
+		PathKey:  path,
 		ExternalModuleIndicatorOptions: ast.ExternalModuleIndicatorOptions{
 			JSX:   parseOpts&1 != 0,
 			Force: parseOpts&2 != 0,

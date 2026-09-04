@@ -20,7 +20,7 @@ func newRequestFileSystem(params *RequestFileSystem, base vfs.FS, currentDirecto
 
 func newLayeredRequestFileSystem(params *RequestFileSystem, base vfs.FS, currentDirectory string) (*requestFileSystem, error) {
 	var fileChanges project.FileChangeSummary
-	fileSystem, err := NewForUpdate(params, base, currentDirectory, &fileChanges)
+	fileSystem, err := NewForUpdate(params, base, tspath.RootedDirectoryPathFromAbsolute(currentDirectory), &fileChanges)
 	if err != nil {
 		return nil, err
 	}
@@ -29,7 +29,7 @@ func newLayeredRequestFileSystem(params *RequestFileSystem, base vfs.FS, current
 
 func verifyCompactionWithoutHostReads(t *testing.T, layer *requestFileSystem, host *trackingvfs.FS, paths []string) {
 	t.Helper()
-	compacted, err := newRequestFileSystem(&RequestFileSystem{Kind: KindLayer}, layer, layer.currentDirectory)
+	compacted, err := newRequestFileSystem(&RequestFileSystem{Kind: KindLayer}, layer, layer.currentDirectory.AsString())
 	assert.NilError(t, err)
 	verify := func(name string, run func(vfs.FS, string) any) {
 		t.Helper()
@@ -47,19 +47,27 @@ func verifyCompactionWithoutHostReads(t *testing.T, layer *requestFileSystem, ho
 			assert.DeepEqual(t, actual, expected)
 		}
 	}
-	verify("FileExists", func(fileSystem vfs.FS, path string) any { return fileSystem.FileExists(path) })
-	verify("DirectoryExists", func(fileSystem vfs.FS, path string) any { return fileSystem.DirectoryExists(path) })
+	verify("FileExists", func(fileSystem vfs.FS, path string) any {
+		return fileSystem.FileExists(tspath.RootedFilePathFromAbsolute(path))
+	})
+	verify("DirectoryExists", func(fileSystem vfs.FS, path string) any {
+		return fileSystem.DirectoryExists(tspath.RootedDirectoryPathFromAbsolute(path))
+	})
 	verify("ReadFile", func(fileSystem vfs.FS, path string) any {
-		content, ok := fileSystem.ReadFile(path)
+		content, ok := fileSystem.ReadFile(tspath.RootedFilePathFromAbsolute(path))
 		return struct {
 			Content string
 			OK      bool
 		}{content, ok}
 	})
-	verify("Realpath", func(fileSystem vfs.FS, path string) any { return fileSystem.Realpath(path) })
-	verify("GetAccessibleEntries", func(fileSystem vfs.FS, path string) any { return fileSystem.GetAccessibleEntries(path) })
+	verify("Realpath", func(fileSystem vfs.FS, path string) any {
+		return fileSystem.Realpath(tspath.RootedPathFromAbsolute(path))
+	})
+	verify("GetAccessibleEntries", func(fileSystem vfs.FS, path string) any {
+		return fileSystem.GetAccessibleEntries(tspath.RootedDirectoryPathFromAbsolute(path))
+	})
 	verify("Stat", func(fileSystem vfs.FS, path string) any {
-		info := fileSystem.Stat(path)
+		info := fileSystem.Stat(tspath.RootedPathFromAbsolute(path))
 		if info == nil {
 			return nil
 		}
@@ -79,7 +87,7 @@ func TestInitializeForUpdate(t *testing.T) {
 
 	t.Run("filesystem layers eagerly compact a request filesystem base", func(t *testing.T) {
 		t.Parallel()
-		host := vfstest.FromMap(map[string]string{}, true)
+		host := vfstest.FromMap(map[string]string{}, tspath.CaseSensitive)
 		var fileChanges project.FileChangeSummary
 		base, err := NewForUpdate(&RequestFileSystem{
 			Kind:  KindFull,
@@ -104,7 +112,7 @@ func TestInitializeForUpdate(t *testing.T) {
 		t.Parallel()
 		host := &trackingvfs.FS{Inner: vfstest.FromMap(map[string]string{
 			"/dir/host.ts": "host",
-		}, true)}
+		}, tspath.CaseSensitive)}
 		var fileChanges project.FileChangeSummary
 		fileSystem, err := NewForUpdate(&RequestFileSystem{
 			Kind:  KindLayer,
@@ -125,7 +133,8 @@ func TestInitializeForUpdate(t *testing.T) {
 		t.Parallel()
 		host := vfstest.FromMap(map[string]string{
 			"/host.ts": "host",
-		}, true)
+		}, tspath.CaseSensitive)
+
 		base, err := newRequestFileSystem(&RequestFileSystem{
 			Kind:  KindFull,
 			Files: map[string]string{"/base.ts": "base"},
@@ -189,7 +198,7 @@ func testCompleteDirectoryListing(t *testing.T, kind Kind, explicit bool, replac
 	host := &trackingvfs.FS{Inner: vfstest.FromMap(map[string]string{
 		"/dir/host.ts":           "host",
 		"/dir/host-dir/index.ts": "host child",
-	}, true)}
+	}, tspath.CaseSensitive)}
 	params := &RequestFileSystem{
 		Kind: kind,
 		Files: map[string]string{
@@ -375,6 +384,10 @@ func testSymlinkReplacesDirectory(t *testing.T, options symlinkReplacementOption
 	t.Helper()
 	linkPath := options.linkPath
 	remove := options.remove
+	caseSensitivity := tspath.CaseInsensitive
+	if options.caseSensitive {
+		caseSensitivity = tspath.CaseSensitive
+	}
 	host := vfstest.FromMap(map[string]string{
 		"/dir/removed/old.ts":       "old host",
 		"/dir/removed/child/old.ts": "old host child",
@@ -382,7 +395,7 @@ func testSymlinkReplacesDirectory(t *testing.T, options symlinkReplacementOption
 		"/dir/removed-other/old.ts": "unrelated",
 		"/target/new.ts":            "host target",
 		"/target/removed/new.ts":    "host target",
-	}, options.caseSensitive)
+	}, caseSensitivity)
 	params := &RequestFileSystem{
 		Kind: options.kind,
 		Files: map[string]string{
@@ -443,40 +456,42 @@ func testSymlinkReplacesDirectory(t *testing.T, options symlinkReplacementOption
 		t.Helper()
 		assert.Assert(t, fileSystem.baseFileSystem() == host)
 		assert.Equal(t, fileSystem.kind, options.kind)
-		assert.Assert(t, fileSystem.DirectoryExists(linkPath))
-		assert.Assert(t, !fileSystem.FileExists(linkPath))
+		rootedLinkPath := tspath.RootedPathFromAbsolute(linkPath)
+		assert.Assert(t, fileSystem.DirectoryExists(tspath.RootedDirectoryPathFromPath(rootedLinkPath)))
+		assert.Assert(t, !fileSystem.FileExists(tspath.RootedFilePathFromPath(rootedLinkPath)))
 		for _, suffix := range []string{"/new.ts", "/removed/new.ts"} {
 			fileName := linkPath + suffix
-			assert.Assert(t, fileSystem.FileExists(fileName), fileName)
-			content, ok := fileSystem.ReadFile(fileName)
+			rootedFileName := tspath.RootedFilePathFromAbsolute(fileName)
+			assert.Assert(t, fileSystem.FileExists(rootedFileName), fileName)
+			content, ok := fileSystem.ReadFile(rootedFileName)
 			assert.Assert(t, ok)
 			assert.Equal(t, content, expectedContent)
-			info := fileSystem.Stat(fileName)
+			info := fileSystem.Stat(rootedFileName.AsPath())
 			assert.Assert(t, info != nil)
 			assert.Assert(t, !info.IsDir())
 			assert.Equal(t, info.Size(), int64(len(expectedContent)))
-			assert.Equal(t, fileSystem.Realpath(fileName), "/target"+suffix)
+			assert.Equal(t, fileSystem.Realpath(rootedFileName.AsPath()).AsString(), "/target"+suffix)
 		}
-		info := fileSystem.Stat(linkPath)
+		info := fileSystem.Stat(rootedLinkPath)
 		assert.Assert(t, info != nil)
 		assert.Assert(t, info.IsDir())
-		assert.Equal(t, fileSystem.Realpath(linkPath), "/target")
-		assert.DeepEqual(t, fileSystem.GetAccessibleEntries(linkPath).Files, []string{"new.ts"})
-		assert.DeepEqual(t, fileSystem.GetAccessibleEntries(linkPath).Directories, []string{"removed"})
-		parentEntries := fileSystem.GetAccessibleEntries(tspath.GetDirectoryPath(linkPath))
+		assert.Equal(t, fileSystem.Realpath(rootedLinkPath).AsString(), "/target")
+		assert.DeepEqual(t, fileSystem.GetAccessibleEntries(tspath.RootedDirectoryPathFromPath(rootedLinkPath)).Files, []string{"new.ts"})
+		assert.DeepEqual(t, fileSystem.GetAccessibleEntries(tspath.RootedDirectoryPathFromPath(rootedLinkPath)).Directories, []string{"removed"})
+		parentEntries := fileSystem.GetAccessibleEntries(rootedLinkPath.Directory())
 		linkName := tspath.GetBaseFileName(linkPath)
 		assert.Assert(t, slices.Contains(parentEntries.Directories, linkName))
 		_, isSymlink := parentEntries.Symlinks[linkName]
 		assert.Assert(t, isSymlink)
-		assert.Assert(t, !fileSystem.FileExists(linkPath+"/old.ts"))
-		assert.Assert(t, !fileSystem.FileExists(linkPath+"/cached.ts"))
+		assert.Assert(t, !fileSystem.FileExists(tspath.RootedFilePathFromAbsolute(linkPath+"/old.ts")))
+		assert.Assert(t, !fileSystem.FileExists(tspath.RootedFilePathFromAbsolute(linkPath+"/cached.ts")))
 		if linkPath != "/dir" {
 			assert.Assert(t, fileSystem.FileExists("/dir/removed-other/old.ts"))
 		}
 		if remove {
 			assert.Assert(t, !fileSystem.FileExists("/dir/removed/sibling.ts"))
 		}
-		assert.DeepEqual(t, fileSystem.GetAccessibleEntries(linkPath+"/removed").Files, []string{"new.ts"})
+		assert.DeepEqual(t, fileSystem.GetAccessibleEntries(tspath.RootedDirectoryPathFromAbsolute(linkPath+"/removed")).Files, []string{"new.ts"})
 	}
 	verifyLinked(linked)
 	next, err := newLayeredRequestFileSystem(&RequestFileSystem{Kind: KindLayer}, linked, "/")
@@ -487,9 +502,9 @@ func testSymlinkReplacesDirectory(t *testing.T, options symlinkReplacementOption
 		RemovedPaths: []string{linkPath + "/new.ts"},
 	}, next, "/")
 	assert.NilError(t, err)
-	assert.Assert(t, !deleted.FileExists(linkPath+"/new.ts"))
-	assert.Assert(t, deleted.FileExists(linkPath+"/removed/new.ts"))
-	assert.Equal(t, len(deleted.GetAccessibleEntries(linkPath).Files), 0)
+	assert.Assert(t, !deleted.FileExists(tspath.RootedFilePathFromAbsolute(linkPath+"/new.ts")))
+	assert.Assert(t, deleted.FileExists(tspath.RootedFilePathFromAbsolute(linkPath+"/removed/new.ts")))
+	assert.Equal(t, len(deleted.GetAccessibleEntries(tspath.RootedDirectoryPathFromAbsolute(linkPath)).Files), 0)
 	verifyLinked(linked)
 	assert.Assert(t, base.FileExists("/dir/removed/cached.ts"))
 	verifyPrevious()
@@ -622,7 +637,7 @@ func testObjectOverridesTombstone(t *testing.T, object string, inheritedLink boo
 		"/dir/removed/child.ts": "old child",
 		"/old/removed/old.ts":   "old target",
 		"/target/file.ts":       "target",
-	}, true)}
+	}, tspath.CaseSensitive)}
 	baseParams := &RequestFileSystem{Kind: KindLayer}
 	if inheritedLink {
 		baseParams.Symlinks = map[string]RequestSymlink{"/dir": {Target: "/old"}}
@@ -648,10 +663,11 @@ func testObjectOverridesTombstone(t *testing.T, object string, inheritedLink boo
 	replaced, err := newLayeredRequestFileSystem(params, removed, "/")
 	assert.NilError(t, err)
 	isFile := object == "file" || object == "file-symlink"
-	assert.Equal(t, replaced.FileExists(path), isFile)
-	assert.Equal(t, replaced.DirectoryExists(path), !isFile)
-	assert.Assert(t, replaced.Stat(path) != nil)
-	entries := replaced.GetAccessibleEntries(tspath.GetDirectoryPath(path))
+	rootedPath := tspath.RootedPathFromAbsolute(path)
+	assert.Equal(t, replaced.FileExists(tspath.RootedFilePathFromPath(rootedPath)), isFile)
+	assert.Equal(t, replaced.DirectoryExists(tspath.RootedDirectoryPathFromPath(rootedPath)), !isFile)
+	assert.Assert(t, replaced.Stat(rootedPath) != nil)
+	entries := replaced.GetAccessibleEntries(rootedPath.Directory())
 	entryName := tspath.GetBaseFileName(path)
 	assert.Equal(t, slices.Contains(entries.Files, entryName), isFile)
 	assert.Equal(t, slices.Contains(entries.Directories, entryName), !isFile)
@@ -662,8 +678,8 @@ func testObjectOverridesTombstone(t *testing.T, object string, inheritedLink boo
 	assert.Assert(t, !ok)
 	assert.Assert(t, replaced.Stat("/dir/removed/old.ts") == nil)
 	if isFile {
-		assert.Equal(t, len(replaced.GetAccessibleEntries(path+"/removed").Files), 0)
-		assert.Equal(t, len(replaced.GetAccessibleEntries(path).Directories), 0)
+		assert.Equal(t, len(replaced.GetAccessibleEntries(tspath.RootedDirectoryPathFromAbsolute(path+"/removed")).Files), 0)
+		assert.Equal(t, len(replaced.GetAccessibleEntries(tspath.RootedDirectoryPathFromPath(rootedPath)).Directories), 0)
 	}
 	assert.Assert(t, !removed.DirectoryExists("/dir/removed"))
 	verifyCompactionWithoutHostReads(t, replaced, host, []string{
@@ -718,7 +734,7 @@ func testReplacementPreservesCurrentRemoval(t *testing.T, kind Kind, removedPath
 		"/target/keep.ts":         "keep",
 		"/target/blocked/gone.ts": "gone",
 	}
-	host := vfstest.FromMap(files, true)
+	host := vfstest.FromMap(files, tspath.CaseSensitive)
 	params := &RequestFileSystem{Kind: kind}
 	if kind == KindFull {
 		params.Files = files
@@ -907,7 +923,7 @@ func TestRequestFileSystemSameLayerRemovalHostDescendantCompactedInput(t *testin
 
 func testSameLayerRemoval(t *testing.T, hostTarget bool, removedPath string, form string) {
 	t.Helper()
-	host := &trackingvfs.FS{Inner: vfstest.FromMap(map[string]string{"/target/file.ts": "host"}, true)}
+	host := &trackingvfs.FS{Inner: vfstest.FromMap(map[string]string{"/target/file.ts": "host"}, tspath.CaseSensitive)}
 	base, err := newRequestFileSystem(&RequestFileSystem{
 		Kind: KindFull,
 	}, host, "/")
@@ -939,7 +955,7 @@ func testSameLayerRemoval(t *testing.T, hostTarget bool, removedPath string, for
 	_, ok := fileSystem.ReadFile("/links/pkg/file.ts")
 	assert.Assert(t, !ok)
 	assert.Assert(t, fileSystem.Stat("/links/pkg/file.ts") == nil)
-	assert.Equal(t, fileSystem.Realpath("/links/pkg/file.ts"), "/links/pkg/file.ts")
+	assert.Equal(t, fileSystem.Realpath("/links/pkg/file.ts").AsString(), "/links/pkg/file.ts")
 	assert.Equal(t, len(fileSystem.GetAccessibleEntries("/links/pkg").Files), 0)
 	linkExists := removedPath == "/links/pkg/file.ts"
 	assert.Equal(t, fileSystem.DirectoryExists("/links/pkg"), linkExists)
@@ -980,7 +996,8 @@ func testRemovalExceptions(t *testing.T, hostTarget bool, removeAgain bool) {
 		"/target/a.ts":     "a",
 		"/target/b.ts":     "b",
 		"/target/sub/c.ts": "c",
-	}, true)
+	}, tspath.CaseSensitive)
+
 	base, err := newRequestFileSystem(&RequestFileSystem{Kind: KindLayer}, host, "/")
 	assert.NilError(t, err)
 	removed, err := newLayeredRequestFileSystem(&RequestFileSystem{
@@ -1036,7 +1053,8 @@ func TestRequestFileSystem(t *testing.T) {
 		t.Parallel()
 		host := vfstest.FromMap(map[string]string{
 			"/host.ts": "host",
-		}, true)
+		}, tspath.CaseSensitive)
+
 		baseFS, err := newRequestFileSystem(&RequestFileSystem{
 			Kind: KindLayer,
 		}, host, "/")
@@ -1069,7 +1087,7 @@ func TestRequestFileSystem(t *testing.T) {
 		t.Parallel()
 		base := &trackingvfs.FS{Inner: vfstest.FromMap(map[string]string{
 			"/host.ts": "host",
-		}, true)}
+		}, tspath.CaseSensitive)}
 		fileSystem, err := newRequestFileSystem(&RequestFileSystem{
 			Kind: KindFull,
 			Files: map[string]string{
@@ -1095,7 +1113,7 @@ func TestRequestFileSystem(t *testing.T) {
 		t.Parallel()
 		base := &trackingvfs.FS{Inner: vfstest.FromMap(map[string]string{
 			"/fallback.ts": "fallback",
-		}, true)}
+		}, tspath.CaseSensitive)}
 		fileSystem, err := newRequestFileSystem(&RequestFileSystem{
 			Kind: KindLayer,
 			Files: map[string]string{
@@ -1132,7 +1150,7 @@ func TestRequestFileSystem(t *testing.T) {
 			Files: map[string]string{
 				"/memory.ts": "memory",
 			},
-		}, vfstest.FromMap(map[string]string{"/host.ts": "host"}, true), "/")
+		}, vfstest.FromMap(map[string]string{"/host.ts": "host"}, tspath.CaseSensitive), "/")
 		assert.NilError(t, err)
 		contents, ok := fileSystem.ReadFile("/memory.ts")
 		assert.Assert(t, ok)
@@ -1145,7 +1163,7 @@ func TestRequestFileSystem(t *testing.T) {
 		t.Parallel()
 		base := &trackingvfs.FS{Inner: vfstest.FromMap(map[string]string{
 			"/host.ts": "host",
-		}, true)}
+		}, tspath.CaseSensitive)}
 		fileSystem, err := newRequestFileSystem(&RequestFileSystem{
 			Kind: KindFull,
 			Files: map[string]string{
@@ -1164,7 +1182,7 @@ func TestRequestFileSystem(t *testing.T) {
 		contents, ok = fileSystem.ReadFile("/project/pkg.d.ts")
 		assert.Assert(t, ok)
 		assert.Equal(t, contents, "export declare const value: number;")
-		assert.Equal(t, fileSystem.Realpath("/project/node_modules/pkg/index.d.ts"), "/packages/pkg/index.d.ts")
+		assert.Equal(t, fileSystem.Realpath("/project/node_modules/pkg/index.d.ts").AsString(), "/packages/pkg/index.d.ts")
 
 		entries := fileSystem.GetAccessibleEntries("/project/node_modules")
 		assert.DeepEqual(t, entries.Directories, []string{"pkg"})
@@ -1181,7 +1199,7 @@ func TestRequestFileSystem(t *testing.T) {
 		t.Parallel()
 		base := &trackingvfs.FS{Inner: vfstest.FromMap(map[string]string{
 			"/packages/pkg/index.d.ts": "host content",
-		}, true)}
+		}, tspath.CaseSensitive)}
 		fileSystem, err := newRequestFileSystem(&RequestFileSystem{
 			Kind: KindLayer,
 			Files: map[string]string{
@@ -1202,7 +1220,7 @@ func TestRequestFileSystem(t *testing.T) {
 		contents, ok := fileSystem.ReadFile("/project/node_modules/pkg/index.d.ts")
 		assert.Assert(t, ok)
 		assert.Equal(t, contents, "cached content")
-		assert.Equal(t, fileSystem.Realpath("/project/node_modules/pkg/index.d.ts"), "/packages/pkg/index.d.ts")
+		assert.Equal(t, fileSystem.Realpath("/project/node_modules/pkg/index.d.ts").AsString(), "/packages/pkg/index.d.ts")
 		entries := fileSystem.GetAccessibleEntries("/project/node_modules")
 		assert.DeepEqual(t, entries.Directories, []string{"pkg"})
 		_, isSymlink := entries.Symlinks["pkg"]
@@ -1215,7 +1233,8 @@ func TestRequestFileSystem(t *testing.T) {
 		base := vfstest.FromMap(map[string]any{
 			"/project/node_modules/pkg": vfstest.Symlink("/host/pkg"),
 			"/host/pkg/index.d.ts":      "host content",
-		}, true)
+		}, tspath.CaseSensitive)
+
 		fileSystem, err := newRequestFileSystem(&RequestFileSystem{
 			Kind: KindLayer,
 			Files: map[string]string{
@@ -1229,14 +1248,18 @@ func TestRequestFileSystem(t *testing.T) {
 		assert.Equal(t, contents, "cached content")
 		assert.Equal(
 			t,
-			fileSystem.Realpath("/project/node_modules/pkg/index.d.ts"),
+			fileSystem.Realpath(
+
+				"/project/node_modules/pkg/index.d.ts",
+			).AsString(),
+
 			"/project/node_modules/pkg/index.d.ts",
 		)
 	})
 
 	t.Run("layered cache adds changes and blocks removed entries", func(t *testing.T) {
 		t.Parallel()
-		host := vfstest.FromMap(map[string]string{}, true)
+		host := vfstest.FromMap(map[string]string{}, tspath.CaseSensitive)
 		base, err := newRequestFileSystem(&RequestFileSystem{
 			Kind: KindFull,
 			Files: map[string]string{
@@ -1276,7 +1299,7 @@ func TestRequestFileSystem(t *testing.T) {
 			"/becomes-file":                  "file",
 			"/becomes-directory.ts/child.ts": "child",
 		} {
-			contents, ok := layered.ReadFile(path)
+			contents, ok := layered.ReadFile(tspath.RootedFilePathFromAbsolute(path))
 			assert.Assert(t, ok, path)
 			assert.Equal(t, contents, expected)
 		}
@@ -1285,7 +1308,7 @@ func TestRequestFileSystem(t *testing.T) {
 		assert.Assert(t, !layered.FileExists("/removed-dir/gone.ts"))
 		assert.Assert(t, layered.Stat("/remove.ts") != nil)
 		assert.Assert(t, layered.Stat("/removed-dir/replacement.ts") != nil)
-		assert.Equal(t, layered.Realpath("/removed-dir/replacement.ts"), "/removed-dir/replacement.ts")
+		assert.Equal(t, layered.Realpath("/removed-dir/replacement.ts").AsString(), "/removed-dir/replacement.ts")
 		assert.Assert(t, layered.FileExists("/becomes-file"))
 		assert.Assert(t, !layered.DirectoryExists("/becomes-file"))
 		assert.Assert(t, !layered.FileExists("/becomes-directory.ts"))
@@ -1296,7 +1319,7 @@ func TestRequestFileSystem(t *testing.T) {
 
 	t.Run("new layers override targets of inherited symlinks", func(t *testing.T) {
 		t.Parallel()
-		host := vfstest.FromMap(map[string]string{}, true)
+		host := vfstest.FromMap(map[string]string{}, tspath.CaseSensitive)
 		base, err := newRequestFileSystem(&RequestFileSystem{
 			Kind: KindFull,
 			Files: map[string]string{
@@ -1333,7 +1356,7 @@ func TestRequestFileSystem(t *testing.T) {
 
 	t.Run("alias tombstones take precedence over inherited symlink targets", func(t *testing.T) {
 		t.Parallel()
-		host := vfstest.FromMap(map[string]string{}, true)
+		host := vfstest.FromMap(map[string]string{}, tspath.CaseSensitive)
 		base, err := newRequestFileSystem(&RequestFileSystem{
 			Kind: KindFull,
 			Files: map[string]string{
@@ -1366,7 +1389,8 @@ func TestRequestFileSystem(t *testing.T) {
 		t.Parallel()
 		host := vfstest.FromMap(map[string]string{
 			"/host-target/file.ts": "host",
-		}, true)
+		}, tspath.CaseSensitive)
+
 		fileSystem, err := newRequestFileSystem(&RequestFileSystem{
 			Kind: KindFull,
 			Files: map[string]string{
@@ -1381,10 +1405,11 @@ func TestRequestFileSystem(t *testing.T) {
 		assert.NilError(t, err)
 
 		for _, path := range []string{"/link/file.ts", "/host-link/file.ts"} {
-			_, ok := fileSystem.ReadFile(path)
+			rootedPath := tspath.RootedFilePathFromAbsolute(path)
+			_, ok := fileSystem.ReadFile(rootedPath)
 			assert.Assert(t, !ok, path)
-			assert.Assert(t, !fileSystem.FileExists(path), path)
-			assert.Assert(t, fileSystem.Stat(path) == nil, path)
+			assert.Assert(t, !fileSystem.FileExists(rootedPath), path)
+			assert.Assert(t, fileSystem.Stat(rootedPath.AsPath()) == nil, path)
 		}
 		assert.Equal(t, len(fileSystem.GetAccessibleEntries("/link").Files), 0)
 		assert.Equal(t, len(fileSystem.GetAccessibleEntries("/host-link").Files), 0)
@@ -1392,7 +1417,7 @@ func TestRequestFileSystem(t *testing.T) {
 
 	t.Run("compaction preserves overlays addressed through inherited symlinks", func(t *testing.T) {
 		t.Parallel()
-		host := vfstest.FromMap(map[string]string{}, true)
+		host := vfstest.FromMap(map[string]string{}, tspath.CaseSensitive)
 		baseFS, err := newRequestFileSystem(&RequestFileSystem{
 			Kind: KindFull,
 			Files: map[string]string{
@@ -1418,7 +1443,7 @@ func TestRequestFileSystem(t *testing.T) {
 
 	t.Run("compaction removes tombstones from explicit listings", func(t *testing.T) {
 		t.Parallel()
-		host := vfstest.FromMap(map[string]string{}, true)
+		host := vfstest.FromMap(map[string]string{}, tspath.CaseSensitive)
 		baseFS, err := newRequestFileSystem(&RequestFileSystem{
 			Kind: KindFull,
 			Files: map[string]string{
@@ -1442,7 +1467,7 @@ func TestRequestFileSystem(t *testing.T) {
 
 	t.Run("compaction allows recreating a path removed through an inherited symlink", func(t *testing.T) {
 		t.Parallel()
-		host := vfstest.FromMap(map[string]string{}, true)
+		host := vfstest.FromMap(map[string]string{}, tspath.CaseSensitive)
 		baseFS, err := newRequestFileSystem(&RequestFileSystem{
 			Kind: KindFull,
 			Files: map[string]string{
@@ -1475,7 +1500,7 @@ func TestRequestFileSystem(t *testing.T) {
 
 	t.Run("compaction allows recreating a descendant of a path removed through an inherited symlink", func(t *testing.T) {
 		t.Parallel()
-		host := vfstest.FromMap(map[string]string{}, true)
+		host := vfstest.FromMap(map[string]string{}, tspath.CaseSensitive)
 		base, err := newRequestFileSystem(&RequestFileSystem{
 			Kind: KindFull,
 			Files: map[string]string{
@@ -1510,7 +1535,7 @@ func TestRequestFileSystem(t *testing.T) {
 
 	t.Run("files replacing inherited symlink target directories have empty listings", func(t *testing.T) {
 		t.Parallel()
-		host := vfstest.FromMap(map[string]string{}, true)
+		host := vfstest.FromMap(map[string]string{}, tspath.CaseSensitive)
 		base, err := newRequestFileSystem(&RequestFileSystem{
 			Kind: KindFull,
 			Files: map[string]string{
@@ -1541,7 +1566,7 @@ func TestRequestFileSystem(t *testing.T) {
 		base := &trackingvfs.FS{Inner: vfstest.FromMap(map[string]string{
 			"/remove.ts":           "host",
 			"/removed-dir/gone.ts": "host",
-		}, true)}
+		}, tspath.CaseSensitive)}
 		fileSystem, err := newRequestFileSystem(&RequestFileSystem{
 			Kind:         KindLayer,
 			Files:        map[string]string{},
@@ -1566,7 +1591,8 @@ func TestRequestFileSystem(t *testing.T) {
 			"/sealed/host.ts":       "hidden from listing",
 			"/open/host.ts":         "host listing",
 			"/open/layer-listed.ts": "host listed",
-		}, true)
+		}, tspath.CaseSensitive)
+
 		baseFS, err := newRequestFileSystem(&RequestFileSystem{
 			Kind: KindLayer,
 			Files: map[string]string{
@@ -1600,7 +1626,7 @@ func TestRequestFileSystem(t *testing.T) {
 			"/inherited.ts": "inherited",
 			"/added.ts":     "added",
 		} {
-			contents, ok := layered.ReadFile(path)
+			contents, ok := layered.ReadFile(tspath.RootedFilePathFromAbsolute(path))
 			assert.Assert(t, ok, path)
 			assert.Equal(t, contents, expected)
 		}
@@ -1614,7 +1640,8 @@ func TestRequestFileSystem(t *testing.T) {
 		t.Parallel()
 		host := vfstest.FromMap(map[string]string{
 			"/host.ts": "host",
-		}, true)
+		}, tspath.CaseSensitive)
+
 		baseFS, err := newRequestFileSystem(&RequestFileSystem{
 			Kind: KindFull,
 			Files: map[string]string{
@@ -1644,7 +1671,7 @@ func TestRequestFileSystem(t *testing.T) {
 			"/link/inherited.ts": "inherited",
 			"/link/added.ts":     "added",
 		} {
-			contents, ok := layered.ReadFile(path)
+			contents, ok := layered.ReadFile(tspath.RootedFilePathFromAbsolute(path))
 			assert.Assert(t, ok, path)
 			assert.Equal(t, contents, expected)
 		}
@@ -1657,7 +1684,7 @@ func TestRequestFileSystem(t *testing.T) {
 		base := &trackingvfs.FS{Inner: vfstest.FromMap(map[string]string{
 			"/host/node_modules/pkg/index.d.ts": "export declare const hostValue: string;",
 			"/host/outside.ts":                  "outside",
-		}, true)}
+		}, tspath.CaseSensitive)}
 		fileSystem, err := newRequestFileSystem(&RequestFileSystem{
 			Kind: KindFull,
 			Files: map[string]string{
@@ -1677,7 +1704,7 @@ func TestRequestFileSystem(t *testing.T) {
 		assert.Assert(t, ok)
 		assert.Equal(t, contents, "export declare const hostValue: string;")
 		assert.Assert(t, base.SeenFiles.Has("/host/node_modules/pkg/index.d.ts"))
-		assert.Equal(t, fileSystem.Realpath("/project/node_modules/pkg/index.d.ts"), "/host/node_modules/pkg/index.d.ts")
+		assert.Equal(t, fileSystem.Realpath("/project/node_modules/pkg/index.d.ts").AsString(), "/host/node_modules/pkg/index.d.ts")
 
 		entries := fileSystem.GetAccessibleEntries("/project")
 		assert.DeepEqual(t, entries.Directories, []string{"node_modules"})
@@ -1689,7 +1716,7 @@ func TestRequestFileSystem(t *testing.T) {
 		t.Parallel()
 		host := &trackingvfs.FS{Inner: vfstest.FromMap(map[string]string{
 			"/host/pkg/index.d.ts": "host",
-		}, true)}
+		}, tspath.CaseSensitive)}
 		base, err := newRequestFileSystem(&RequestFileSystem{
 			Kind: KindFull,
 			Files: map[string]string{
@@ -1713,7 +1740,7 @@ func TestRequestFileSystem(t *testing.T) {
 		assert.Assert(t, layered.FileExists("/project/pkg/index.d.ts"))
 		assert.Assert(t, layered.DirectoryExists("/project/pkg"))
 		assert.DeepEqual(t, layered.GetAccessibleEntries("/project/pkg").Files, []string{"index.d.ts"})
-		assert.Equal(t, layered.Realpath("/project/pkg/index.d.ts"), "/host/pkg/index.d.ts")
+		assert.Equal(t, layered.Realpath("/project/pkg/index.d.ts").AsString(), "/host/pkg/index.d.ts")
 		info := layered.Stat("/project/pkg/index.d.ts")
 		assert.Assert(t, info != nil)
 		assert.Equal(t, info.Name(), "index.d.ts")
@@ -1725,7 +1752,8 @@ func TestRequestFileSystem(t *testing.T) {
 		host := vfstest.FromMap(map[string]string{
 			"/host/pkg/host.ts":    "host",
 			"/host/pkg/removed.ts": "removed",
-		}, true)
+		}, tspath.CaseSensitive)
+
 		base, err := newRequestFileSystem(&RequestFileSystem{
 			Kind:  KindFull,
 			Files: map[string]string{},
@@ -1756,7 +1784,7 @@ func TestRequestFileSystem(t *testing.T) {
 
 	t.Run("canonical path collisions are rejected", func(t *testing.T) {
 		t.Parallel()
-		base := vfstest.FromMap(map[string]string{}, false)
+		base := vfstest.FromMap(map[string]string{}, tspath.CaseInsensitive)
 
 		_, err := newRequestFileSystem(&RequestFileSystem{
 			Kind: KindFull,
@@ -1792,7 +1820,7 @@ func TestRequestFileSystem(t *testing.T) {
 		t.Parallel()
 		base := &trackingvfs.FS{Inner: vfstest.FromMap(map[string]string{
 			"/host.ts": "host",
-		}, true)}
+		}, tspath.CaseSensitive)}
 		fileSystem, err := newRequestFileSystem(&RequestFileSystem{
 			Kind:  KindFull,
 			Files: map[string]string{},
@@ -1806,13 +1834,13 @@ func TestRequestFileSystem(t *testing.T) {
 		_, ok := fileSystem.ReadFile("/a/file.ts")
 		assert.Assert(t, !ok)
 		assert.Assert(t, !fileSystem.DirectoryExists("/a"))
-		assert.Equal(t, fileSystem.Realpath("/a"), "/a")
+		assert.Equal(t, fileSystem.Realpath("/a").AsString(), "/a")
 		assert.Assert(t, base.SeenFiles.IsEmpty())
 	})
 
 	t.Run("posix relative symlink targets resolve from the link directory", func(t *testing.T) {
 		t.Parallel()
-		base := &trackingvfs.FS{Inner: vfstest.FromMap(map[string]string{}, true)}
+		base := &trackingvfs.FS{Inner: vfstest.FromMap(map[string]string{}, tspath.CaseSensitive)}
 		fileSystem, err := newRequestFileSystem(&RequestFileSystem{
 			Kind: KindFull,
 			Files: map[string]string{
@@ -1827,13 +1855,13 @@ func TestRequestFileSystem(t *testing.T) {
 		contents, ok := fileSystem.ReadFile("/project/pkg/index.d.ts")
 		assert.Assert(t, ok)
 		assert.Equal(t, contents, "export declare const value: number;")
-		assert.Equal(t, fileSystem.Realpath("/project/pkg/index.d.ts"), "/packages/pkg/index.d.ts")
+		assert.Equal(t, fileSystem.Realpath("/project/pkg/index.d.ts").AsString(), "/packages/pkg/index.d.ts")
 		assert.Assert(t, base.SeenFiles.IsEmpty())
 	})
 
 	t.Run("vscode document URI paths support listings symlinks and tombstones", func(t *testing.T) {
 		t.Parallel()
-		base := &trackingvfs.FS{Inner: vfstest.FromMap(map[string]string{}, true)}
+		base := &trackingvfs.FS{Inner: vfstest.FromMap(map[string]string{}, tspath.CaseSensitive)}
 		fileSystem, err := newRequestFileSystem(&RequestFileSystem{
 			Kind: KindFull,
 			Files: map[string]string{
@@ -1857,9 +1885,14 @@ func TestRequestFileSystem(t *testing.T) {
 		assert.Equal(t, contents, "package")
 		assert.Equal(
 			t,
-			fileSystem.Realpath("vscode-remote://ssh-remote+host/workspace/src/pkg/a.ts"),
+			fileSystem.Realpath(
+
+				"vscode-remote://ssh-remote+host/workspace/src/pkg/a.ts",
+			).AsString(),
+
 			"vscode-remote://ssh-remote+host/workspace/packages/pkg/a.ts",
 		)
+
 		assert.DeepEqual(
 			t,
 			fileSystem.GetAccessibleEntries("vscode-remote://ssh-remote+host/workspace/src").Files,
@@ -1878,7 +1911,7 @@ func TestRequestFileSystem(t *testing.T) {
 		t.Parallel()
 		base := &trackingvfs.FS{Inner: vfstest.FromMap(map[string]string{
 			"C:/Host/outside.ts": "outside",
-		}, false)}
+		}, tspath.CaseInsensitive)}
 		fileSystem, err := newRequestFileSystem(&RequestFileSystem{
 			Kind: KindFull,
 			Files: map[string]string{
@@ -1894,19 +1927,22 @@ func TestRequestFileSystem(t *testing.T) {
 		}, base, `C:\Workspace`)
 		assert.NilError(t, err)
 
-		contents, ok := fileSystem.ReadFile(`c:\repo\project\NODE_MODULES\pkg\INDEX.D.TS`)
+		contents, ok := fileSystem.ReadFile(tspath.RootedFilePathFromAbsolute(`c:\repo\project\NODE_MODULES\pkg\INDEX.D.TS`))
 		assert.Assert(t, ok)
 		assert.Equal(t, contents, "export declare const windowsValue: number;")
-		contents, ok = fileSystem.ReadFile(`C:\REPO\PROJECT\current.d.ts`)
+		contents, ok = fileSystem.ReadFile(tspath.RootedFilePathFromAbsolute(`C:\REPO\PROJECT\current.d.ts`))
 		assert.Assert(t, ok)
 		assert.Equal(t, contents, "export declare const windowsValue: number;")
 		assert.Equal(
 			t,
-			fileSystem.Realpath(`c:\repo\project\node_modules\pkg\index.d.ts`),
+			fileSystem.Realpath(tspath.RootedPathFromAbsolute(
+				`c:\repo\project\node_modules\pkg\index.d.ts`,
+			)).AsString(),
+
 			"C:/Repo/Packages/Pkg/index.d.ts",
 		)
 
-		entries := fileSystem.GetAccessibleEntries(`c:\REPO\project\NODE_MODULES`)
+		entries := fileSystem.GetAccessibleEntries(tspath.RootedDirectoryPathFromAbsolute(`c:\REPO\project\NODE_MODULES`))
 		assert.DeepEqual(t, entries.Directories, []string{"PKG"})
 		_, isSymlink := entries.Symlinks["PKG"]
 		assert.Assert(t, isSymlink)
@@ -1915,7 +1951,7 @@ func TestRequestFileSystem(t *testing.T) {
 
 	t.Run("case insensitive symlink matching handles unicode byte length changes", func(t *testing.T) {
 		t.Parallel()
-		base := &trackingvfs.FS{Inner: vfstest.FromMap(map[string]string{}, false)}
+		base := &trackingvfs.FS{Inner: vfstest.FromMap(map[string]string{}, tspath.CaseInsensitive)}
 		fileSystem, err := newRequestFileSystem(&RequestFileSystem{
 			Kind: KindFull,
 			Files: map[string]string{
@@ -1936,7 +1972,8 @@ func TestRequestFileSystem(t *testing.T) {
 		t.Parallel()
 		host := vfstest.FromMap(map[string]string{
 			"/host.ts": "host",
-		}, true)
+		}, tspath.CaseSensitive)
+
 		memory, err := newRequestFileSystem(&RequestFileSystem{
 			Kind: KindFull,
 			Files: map[string]string{
@@ -1962,7 +1999,7 @@ func TestRequestFileSystem(t *testing.T) {
 
 	t.Run("layer request filesystems write through after eager compaction", func(t *testing.T) {
 		t.Parallel()
-		host := vfstest.FromMap(map[string]string{}, true)
+		host := vfstest.FromMap(map[string]string{}, tspath.CaseSensitive)
 		base, err := newRequestFileSystem(&RequestFileSystem{
 			Kind:  KindLayer,
 			Files: map[string]string{},
@@ -1994,7 +2031,8 @@ func TestRequestFileSystem(t *testing.T) {
 			"/link/append.ts":   "alias",
 			"/link/remove.ts":   "alias",
 			"/link/times.ts":    "alias",
-		}, true)
+		}, tspath.CaseSensitive)
+
 		base, err := newRequestFileSystem(&RequestFileSystem{
 			Kind:  KindLayer,
 			Files: map[string]string{},
@@ -2028,7 +2066,7 @@ func TestRequestFileSystem(t *testing.T) {
 		t.Parallel()
 		base := &trackingvfs.FS{Inner: vfstest.FromMap(map[string]string{
 			"C:/Host/node_modules/host-pkg/index.d.ts": "export declare const hostValue: boolean;",
-		}, false)}
+		}, tspath.CaseInsensitive)}
 		fileSystem, err := newRequestFileSystem(&RequestFileSystem{
 			Kind: KindFull,
 			Files: map[string]string{
@@ -2049,29 +2087,37 @@ func TestRequestFileSystem(t *testing.T) {
 		}, base, `C:\Workspace`)
 		assert.NilError(t, err)
 
-		contents, ok := fileSystem.ReadFile(`c:\REPO\project\NODE_MODULES\POSIX-PKG\INDEX.D.TS`)
+		contents, ok := fileSystem.ReadFile(tspath.RootedFilePathFromAbsolute(`c:\REPO\project\NODE_MODULES\POSIX-PKG\INDEX.D.TS`))
 		assert.Assert(t, ok)
 		assert.Equal(t, contents, "export declare const posixValue: string;")
 		contents, ok = fileSystem.ReadFile("/REPO/PROJECT/NODE_MODULES/WINDOWS-PKG/INDEX.D.TS")
 		assert.Assert(t, ok)
 		assert.Equal(t, contents, "export declare const windowsValue: number;")
-		contents, ok = fileSystem.ReadFile(`c:\repo\project\WINDOWS-PKG.D.TS`)
+		contents, ok = fileSystem.ReadFile(tspath.RootedFilePathFromAbsolute(`c:\repo\project\WINDOWS-PKG.D.TS`))
 		assert.Assert(t, ok)
 		assert.Equal(t, contents, "export declare const windowsValue: number;")
-		contents, ok = fileSystem.ReadFile(`C:\Repo\Project\node_modules\HOST-PKG\index.d.ts`)
+		contents, ok = fileSystem.ReadFile(tspath.RootedFilePathFromAbsolute(`C:\Repo\Project\node_modules\HOST-PKG\index.d.ts`))
 		assert.Assert(t, ok)
 		assert.Equal(t, contents, "export declare const hostValue: boolean;")
 
 		assert.Equal(
 			t,
-			fileSystem.Realpath(`c:\repo\project\node_modules\posix-pkg\index.d.ts`),
+			fileSystem.Realpath(tspath.RootedPathFromAbsolute(
+				`c:\repo\project\node_modules\posix-pkg\index.d.ts`,
+			)).AsString(),
+
 			"/repo/packages/posix-pkg/index.d.ts",
 		)
+
 		assert.Equal(
 			t,
-			fileSystem.Realpath("/repo/project/node_modules/windows-pkg/index.d.ts"),
+			fileSystem.Realpath(
+				"/repo/project/node_modules/windows-pkg/index.d.ts",
+			).AsString(),
+
 			"C:/Repo/Packages/windows-pkg/index.d.ts",
 		)
+
 		assert.Assert(t, base.SeenFiles.Has("C:/Host/node_modules/host-pkg/index.d.ts"))
 	})
 }

@@ -9,17 +9,14 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/diagnosticwriter"
 	"github.com/microsoft/TypeScript/tsc/internal/locale"
-	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 )
 
 func getFormatOptsOfSys(sys System, locale locale.Locale) *diagnosticwriter.FormattingOptions {
 	return &diagnosticwriter.FormattingOptions{
-		NewLine: "\n",
-		ComparePathsOptions: tspath.ComparePathsOptions{
-			CurrentDirectory:          sys.GetCurrentDirectory(),
-			UseCaseSensitiveFileNames: sys.FS().UseCaseSensitiveFileNames(),
-		},
-		Locale: locale,
+		NewLine:          "\n",
+		CurrentDirectory: sys.GetCurrentDirectory(),
+		CaseSensitivity:  sys.FS().CaseSensitivity(),
+		Locale:           locale,
 	}
 }
 

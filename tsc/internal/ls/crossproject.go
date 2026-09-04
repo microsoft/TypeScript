@@ -15,9 +15,9 @@ import (
 )
 
 type Project interface {
-	Id() tspath.Path
+	Id() tspath.PathKey
 	GetProgram() *compiler.Program
-	HasFile(fileName string) bool
+	HasFile(fileName tspath.RootedFilePath) bool
 }
 
 type projectAndTextDocumentPosition struct {
@@ -40,7 +40,7 @@ type CrossProjectOrchestrator interface {
 	GetAllProjectsForInitialRequest() []Project
 	GetLanguageServiceForProjectWithFile(ctx context.Context, project Project, uri lsproto.DocumentUri) *LanguageService
 	GetProjectsForFile(ctx context.Context, uri lsproto.DocumentUri) ([]Project, error)
-	GetProjectsLoadingProjectTree(ctx context.Context, requestedProjectTrees *collections.Set[tspath.Path]) iter.Seq[Project]
+	GetProjectsLoadingProjectTree(ctx context.Context, requestedProjectTrees *collections.Set[tspath.PathKey]) iter.Seq[Project]
 }
 
 func handleCrossProject[Req lsproto.HasTextDocumentPosition, Resp any](
@@ -71,7 +71,7 @@ func handleCrossProject[Req lsproto.HasTextDocumentPosition, Resp any](
 
 	defaultProject := orchestrator.GetDefaultProject()
 	allProjects := orchestrator.GetAllProjectsForInitialRequest()
-	var results collections.SyncMap[tspath.Path, *response[Resp]]
+	var results collections.SyncMap[tspath.PathKey, *response[Resp]]
 	var defaultDefinition *nonLocalDefinition
 	canSearchProject := func(project Project) bool {
 		_, searched := results.Load(project.Id())
@@ -184,7 +184,7 @@ func handleCrossProject[Req lsproto.HasTextDocumentPosition, Resp any](
 
 	getResultsIterator := func() iter.Seq[Resp] {
 		return func(yield func(Resp) bool) {
-			var seenProjects collections.SyncSet[tspath.Path]
+			var seenProjects collections.SyncSet[tspath.PathKey]
 			if response, loaded := results.Load(defaultProject.Id()); loaded && response.complete {
 				if !yield(response.result) {
 					return
@@ -201,14 +201,14 @@ func handleCrossProject[Req lsproto.HasTextDocumentPosition, Resp any](
 				}
 			}
 			// Prefer the searches from locations for default definition
-			results.Range(func(key tspath.Path, response *response[Resp]) bool {
+			results.Range(func(key tspath.PathKey, response *response[Resp]) bool {
 				if !response.forOriginalLocation && seenProjects.AddIfAbsent(key) && response.complete {
 					return yield(response.result)
 				}
 				return true
 			})
 			// Then the searches from original locations
-			results.Range(func(key tspath.Path, response *response[Resp]) bool {
+			results.Range(func(key tspath.PathKey, response *response[Resp]) bool {
 				if response.forOriginalLocation && seenProjects.AddIfAbsent(key) && response.complete {
 					return yield(response.result)
 				}
@@ -235,8 +235,8 @@ func handleCrossProject[Req lsproto.HasTextDocumentPosition, Resp any](
 		wg = core.NewWorkGroup(false)
 		hasMoreWork := false
 		if defaultDefinition != nil {
-			var requestedProjectTrees collections.Set[tspath.Path]
-			results.Range(func(key tspath.Path, response *response[Resp]) bool {
+			var requestedProjectTrees collections.Set[tspath.PathKey]
+			results.Range(func(key tspath.PathKey, response *response[Resp]) bool {
 				if response.complete {
 					requestedProjectTrees.Add(key)
 				}

@@ -1128,7 +1128,7 @@ func (c *Checker) IsLibSymbolForHoverVerbosity(symbol *ast.Symbol) bool {
 	}
 	for _, decl := range symbol.Declarations {
 		sf := ast.GetSourceFileOfNode(decl)
-		if sf != nil && c.program.IsSourceFileDefaultLibrary(sf.Path()) {
+		if sf != nil && c.program.IsSourceFileDefaultLibrary(sf.PathKey()) {
 			return true
 		}
 	}

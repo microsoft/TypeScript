@@ -21,6 +21,7 @@ import {
     type SourceFile,
     SyntaxKind,
 } from "@typescript/typescript/unstable/ast";
+import { toRootedFilePath } from "@typescript/typescript/unstable/path";
 import type {
     APIRequest,
     APIResponse,
@@ -162,6 +163,7 @@ const privateGeneratorGetters = new Set([
     "Checker.getWellKnownSymbols",
     "Program.disposeWorker",
     "Program.fetchSourceFileMetadata",
+    "Program.getSourceFileWorker",
     "Snapshot.disposeWorker",
     "Symbol.fetchSymbolTable",
     "Type.getNumberIndexTypeWorker",
@@ -1323,8 +1325,8 @@ describe("API - generator batching", () => {
                 project.program.getSourceFileNames.gen(),
             );
             assert.strictEqual(defaultProject, project);
-            assert.ok(sourceFileNames.includes("/src/foo.ts"));
-            assert.ok(sourceFileNames.includes("/src/index.ts"));
+            assert.ok(sourceFileNames.includes(toRootedFilePath("/src/foo.ts", undefined)));
+            assert.ok(sourceFileNames.includes(toRootedFilePath("/src/index.ts", undefined)));
 
             const [symbol, type] = api.batch(
                 project.checker.getSymbolAtLocation.gen(node),
@@ -1528,6 +1530,7 @@ describe("API - generator batching", () => {
                 parityCase("Program", "getResolvedModuleFromModuleSpecifier", program.getResolvedModuleFromModuleSpecifier, assertDeepEquivalent, importSpecifier),
                 parityCase("Program", "getResolvedTypeReferenceDirective", program.getResolvedTypeReferenceDirective, assertDeepEquivalent, "/src/index.ts", "parity", ModuleKind.CommonJS),
                 parityCase("Program", "getResolvedTypeReferenceDirectiveFromTypeReferenceDirective", program.getResolvedTypeReferenceDirectiveFromTypeReferenceDirective, assertDeepEquivalent, typeReferenceDirective, "/src/index.ts"),
+                parityCase("Program", "getSourceFileByPath", program.getSourceFileByPath, assertOptionalSourceFilesEquivalent, indexFile.path),
                 parityCase("Program", "getSourceFileNames", program.getSourceFileNames, assertDeepEquivalent),
                 parityCase("Program", "getSourceFileMetadata", program.getSourceFileMetadata, assertDeepEquivalent, "/src/index.ts"),
                 parityCase("Program", "getSourceFileMetadataByPath", program.getSourceFileMetadataByPath, assertDeepEquivalent, indexFile.path),

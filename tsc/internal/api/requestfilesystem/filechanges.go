@@ -7,26 +7,24 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 )
 
-func addFileChanges(summary *project.FileChangeSummary, request *RequestFileSystem, baseFS vfs.FS, currentDirectory string) {
-	toPath := func(fileName string) tspath.Path {
-		return tspath.ToPath(fileName, currentDirectory, baseFS.UseCaseSensitiveFileNames())
-	}
+func addFileChanges(summary *project.FileChangeSummary, request *RequestFileSystem, baseFS vfs.FS, currentDirectory tspath.RootedDirectoryPath) {
+	toPath := baseFS.CaseSensitivity().PathKey
 	baseRequestFS := getRequestFileSystem(baseFS)
-	addChange := func(fileName string, deleted bool) {
-		uri := lsconv.FileNameToDocumentURI(fileName)
+	addChange := func(fileName tspath.RootedPath, deleted bool) {
+		uri := lsconv.FileNameToDocumentURI(tspath.RootedFilePathFromPath(fileName))
 		if deleted {
-			if baseFS.FileExists(fileName) || baseFS.DirectoryExists(fileName) {
+			if baseFS.FileExists(tspath.RootedFilePathFromPath(fileName)) || baseFS.DirectoryExists(tspath.RootedDirectoryPathFromPath(fileName)) {
 				summary.Deleted.Add(uri)
 			}
 			return
 		}
-		if baseFS.FileExists(fileName) {
+		if baseFS.FileExists(tspath.RootedFilePathFromPath(fileName)) {
 			summary.Changed.Add(uri)
 		} else {
 			summary.Created.Add(uri)
 		}
 	}
-	addChangeAndAliases := func(fileName string, deleted bool) {
+	addChangeAndAliases := func(fileName tspath.RootedPath, deleted bool) {
 		addChange(fileName, deleted)
 		if baseRequestFS != nil {
 			for _, alias := range baseRequestFS.aliasesForPath(fileName) {
@@ -34,29 +32,29 @@ func addFileChanges(summary *project.FileChangeSummary, request *RequestFileSyst
 			}
 		}
 	}
-	overlayFiles := make(map[tspath.Path]struct{}, len(request.Files))
+	overlayFiles := make(map[tspath.PathKey]struct{}, len(request.Files))
 	for fileName := range request.Files {
-		absoluteFileName := tspath.GetNormalizedAbsolutePath(fileName, currentDirectory)
-		overlayFiles[toPath(absoluteFileName)] = struct{}{}
-		addChangeAndAliases(absoluteFileName, false)
+		absoluteFileName := tspath.ToRootedFilePath(fileName, currentDirectory)
+		overlayFiles[toPath(absoluteFileName.AsPath())] = struct{}{}
+		addChangeAndAliases(absoluteFileName.AsPath(), false)
 	}
 	for _, removedPath := range request.RemovedPaths {
-		absoluteFileName := tspath.GetNormalizedAbsolutePath(removedPath, currentDirectory)
-		if _, replaced := overlayFiles[toPath(absoluteFileName)]; replaced {
+		absolutePath := tspath.ToRootedPath(removedPath, currentDirectory)
+		if _, replaced := overlayFiles[toPath(absolutePath)]; replaced {
 			continue
 		}
-		addChangeAndAliases(absoluteFileName, true)
+		addChangeAndAliases(absolutePath, true)
 	}
 	// Replacing a listing or a symlink can change every cached descendant.
 	// Delete events expand through the snapshot's cached directory tree and create
 	// events that refresh wildcard roots and previously missing module resolutions.
 	addReplacement := func(path string) {
-		absolutePath := tspath.GetNormalizedAbsolutePath(path, currentDirectory)
+		absolutePath := tspath.ToRootedPath(path, currentDirectory)
 		addChangeAndAliases(absolutePath, true)
-		summary.Created.Add(lsconv.FileNameToDocumentURI(absolutePath))
+		summary.Created.Add(lsconv.FileNameToDocumentURI(tspath.RootedFilePathFromPath(absolutePath)))
 		if baseRequestFS != nil {
 			for _, alias := range baseRequestFS.aliasesForPath(absolutePath) {
-				summary.Created.Add(lsconv.FileNameToDocumentURI(alias))
+				summary.Created.Add(lsconv.FileNameToDocumentURI(tspath.RootedFilePathFromPath(alias)))
 			}
 		}
 	}

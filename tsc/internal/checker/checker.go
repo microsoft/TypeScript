@@ -555,23 +555,22 @@ type Program interface {
 	Options() *core.CompilerOptions
 	SourceFiles() []*ast.SourceFile
 	BindSourceFiles()
-	FileExists(fileName string) bool
-	GetSourceFile(fileName string) *ast.SourceFile
-	GetSourceFileForResolvedModule(fileName string) *ast.SourceFile
+	FileExists(fileName tspath.RootedFilePath) bool
+	GetSourceFileForResolvedModule(resolved *module.ResolvedModule) *ast.SourceFile
 	GetEmitModuleFormatOfFile(sourceFile ast.HasFileName) core.ModuleKind
 	GetEmitSyntaxForUsageLocation(sourceFile ast.HasFileName, usageLocation *ast.StringLiteralLike) core.ResolutionMode
 	GetImpliedNodeFormatForEmit(sourceFile ast.HasFileName) core.ModuleKind
 	GetResolvedModule(currentSourceFile ast.HasFileName, moduleReference string, mode core.ResolutionMode) *module.ResolvedModule
-	GetResolvedModules() map[tspath.Path]module.ModeAwareCache[*module.ResolvedModule]
+	GetResolvedModules() map[tspath.PathKey]module.ModeAwareCache[*module.ResolvedModule]
 	GetPackagesMap() map[string]bool
-	GetSourceFileMetaData(path tspath.Path) ast.SourceFileMetaData
-	GetJSXRuntimeImportSpecifier(path tspath.Path) (moduleReference string, specifier *ast.Node)
-	GetImportHelpersImportSpecifier(path tspath.Path) *ast.Node
+	GetSourceFileMetaData(path tspath.PathKey) ast.SourceFileMetaData
+	GetJSXRuntimeImportSpecifier(path tspath.PathKey) (moduleReference string, specifier *ast.Node)
+	GetImportHelpersImportSpecifier(path tspath.PathKey) *ast.Node
 	SourceFileMayBeEmitted(sourceFile *ast.SourceFile, forceDtsEmit bool) bool
-	IsSourceFileDefaultLibrary(path tspath.Path) bool
-	GetProjectReferenceFromOutputDts(path tspath.Path) *tsoptions.SourceOutputAndProjectReference
+	IsSourceFileDefaultLibrary(path tspath.PathKey) bool
+	GetProjectReferenceFromOutputDts(path tspath.PathKey) *tsoptions.SourceOutputAndProjectReference
 	GetRedirectForResolution(file ast.HasFileName) *tsoptions.ParsedCommandLine
-	CommonSourceDirectory() string
+	CommonSourceDirectory() tspath.RootedDirectoryPath
 }
 
 type Host interface {
@@ -5843,7 +5842,7 @@ func getVerbatimModuleSyntaxErrorMessage(node *ast.Node) *diagnostics.Message {
 	fileName := sourceFile.FileName()
 
 	// Check if the file is .cts or .cjs (CommonJS-specific extensions)
-	if tspath.FileExtensionIsOneOf(fileName, []string{tspath.ExtensionCts, tspath.ExtensionCjs}) {
+	if fileName.ExtensionIsOneOf([]string{tspath.ExtensionCts, tspath.ExtensionCjs}) {
 		return diagnostics.ECMAScript_imports_and_exports_cannot_be_written_in_a_CommonJS_file_under_verbatimModuleSyntax
 	}
 	// For .ts, .tsx, .js, etc.
@@ -7012,7 +7011,7 @@ func (c *Checker) checkAliasSymbol(node *ast.Node) {
 		}
 		if c.compilerOptions.VerbatimModuleSyntax.IsTrue() && !ast.IsTypeOnlyImportOrExportDeclaration(node) && node.Flags&ast.NodeFlagsAmbient == 0 && targetFlags&ast.SymbolFlagsConstEnum != 0 {
 			constEnumDeclaration := target.ValueDeclaration
-			redirect := c.program.GetProjectReferenceFromOutputDts(ast.GetSourceFileOfNode(constEnumDeclaration).Path())
+			redirect := c.program.GetProjectReferenceFromOutputDts(ast.GetSourceFileOfNode(constEnumDeclaration).PathKey())
 			if constEnumDeclaration.Flags&ast.NodeFlagsAmbient != 0 && (redirect == nil || !redirect.Resolved.CompilerOptions().ShouldPreserveConstEnums()) {
 				c.error(node, diagnostics.Cannot_access_ambient_const_enums_when_0_is_enabled, c.getIsolatedModulesLikeFlagName())
 			}
@@ -7754,7 +7753,7 @@ func (c *Checker) checkConstEnumAccess(node *ast.Node, t *Type) {
 	if c.compilerOptions.IsolatedModules.IsTrue() || c.compilerOptions.VerbatimModuleSyntax.IsTrue() && ok && c.resolveName(node, ast.GetFirstIdentifier(node).Text(), ast.SymbolFlagsAlias, nil, false, true) == nil {
 		debug.Assert(t.symbol.Flags&ast.SymbolFlagsConstEnum != 0)
 		constEnumDeclaration := t.symbol.ValueDeclaration
-		redirect := c.program.GetProjectReferenceFromOutputDts(ast.GetSourceFileOfNode(constEnumDeclaration).Path())
+		redirect := c.program.GetProjectReferenceFromOutputDts(ast.GetSourceFileOfNode(constEnumDeclaration).PathKey())
 		if constEnumDeclaration.Flags&ast.NodeFlagsAmbient != 0 && !ast.IsValidTypeOnlyAliasUseSite(node) && (redirect == nil || !redirect.Resolved.CompilerOptions().ShouldPreserveConstEnums()) {
 			c.error(node, diagnostics.Cannot_access_ambient_const_enums_when_0_is_enabled, c.getIsolatedModulesLikeFlagName())
 		}
@@ -10963,7 +10962,7 @@ func (c *Checker) checkNewTargetMetaProperty(node *ast.Node) *Type {
 
 func (c *Checker) checkImportMetaProperty(node *ast.Node) *Type {
 	if core.ModuleKindNode16 <= c.moduleKind && c.moduleKind <= core.ModuleKindNodeNext {
-		sourceFileMetaData := c.program.GetSourceFileMetaData(ast.GetSourceFileOfNode(node).Path())
+		sourceFileMetaData := c.program.GetSourceFileMetaData(ast.GetSourceFileOfNode(node).PathKey())
 		if sourceFileMetaData.ImpliedNodeFormat != core.ModuleKindESNext {
 			c.error(node, diagnostics.The_import_meta_meta_property_is_not_allowed_in_files_which_will_build_into_CommonJS_output)
 		}
@@ -12471,7 +12470,7 @@ func (c *Checker) classDeclarationExtendsNull(classDecl *ast.Node) bool {
 func (c *Checker) checkAssertion(node *ast.Node, checkMode CheckMode) *Type {
 	if node.Kind == ast.KindTypeAssertionExpression {
 		file := ast.GetSourceFileOfNode(node)
-		if file != nil && tspath.FileExtensionIsOneOf(file.FileName(), []string{tspath.ExtensionMts, tspath.ExtensionCts}) {
+		if file != nil && file.FileName().ExtensionIsOneOf([]string{tspath.ExtensionMts, tspath.ExtensionCts}) {
 			c.grammarErrorOnNode(node, diagnostics.This_syntax_is_reserved_in_files_with_the_mts_or_cts_extension_Use_an_as_expression_instead)
 		}
 		if c.shouldCheckErasableSyntax(node) {
@@ -15032,7 +15031,7 @@ func (c *Checker) isOnlyImportableAsDefault(usage *ast.Node, resolvedModule *ast
 			if resolvedModule != nil {
 				targetFile = ast.GetSourceFileOfModule(resolvedModule)
 			}
-			return targetFile != nil && (ast.IsJsonSourceFile(targetFile) || tspath.GetDeclarationFileExtension(targetFile.FileName()) == ".d.json.ts")
+			return targetFile != nil && (ast.IsJsonSourceFile(targetFile) || targetFile.FileName().DeclarationFileExtension() == ".d.json.ts")
 		}
 	}
 	return false
@@ -15059,7 +15058,7 @@ func (c *Checker) canHaveSyntheticDefault(file *ast.Node, moduleSymbol *ast.Symb
 		if targetMode == core.ModuleKindNone && file.AsSourceFile().IsDeclarationFile {
 			// Try to get the project reference - try both source file mapping and output file mapping
 			// since declaration files can be mapped either way depending on how they're resolved
-			if c.program.GetRedirectForResolution(file.AsSourceFile()) != nil || c.program.GetProjectReferenceFromOutputDts(file.AsSourceFile().Path()) != nil {
+			if c.program.GetRedirectForResolution(file.AsSourceFile()) != nil || c.program.GetProjectReferenceFromOutputDts(file.AsSourceFile().PathKey()) != nil {
 				// This is a declaration file from a project reference, so we can determine
 				// its module format from the referenced project's options
 				targetModuleKind := c.program.GetEmitModuleFormatOfFile(file.AsSourceFile())
@@ -15451,7 +15450,7 @@ func (c *Checker) resolveExternalModule(
 
 	var sourceFile *ast.SourceFile
 	if resolvedModule.IsResolved() && (resolutionDiagnostic == nil || resolutionDiagnostic == diagnostics.Module_0_was_resolved_to_1_but_jsx_is_not_set) {
-		sourceFile = c.program.GetSourceFileForResolvedModule(resolvedModule.ResolvedFileName)
+		sourceFile = c.program.GetSourceFileForResolvedModule(resolvedModule)
 	}
 
 	if sourceFile != nil {
@@ -15503,14 +15502,14 @@ func (c *Checker) resolveExternalModule(
 				!ast.IsPartOfTypeOnlyImportOrExportDeclaration(location) {
 				shouldRewrite := core.ShouldRewriteModuleSpecifier(moduleReference, c.compilerOptions)
 				if !resolvedModule.ResolvedUsingTsExtension && shouldRewrite {
-					relativeToSourceFile := tspath.GetRelativePathFromFile(
-						tspath.GetNormalizedAbsolutePath(importingSourceFile.FileName(), c.program.GetCurrentDirectory()),
+					relativeToSourceFile := resolvedModule.ResolvedFileName.AsString()
+					if relativePath, ok := c.program.CaseSensitivity().RelativePathFromFile(
+						importingSourceFile.FileName(),
 						resolvedModule.ResolvedFileName,
-						tspath.ComparePathsOptions{
-							UseCaseSensitiveFileNames: c.program.UseCaseSensitiveFileNames(),
-							CurrentDirectory:          c.program.GetCurrentDirectory(),
-						},
-					)
+					); ok {
+						relativeToSourceFile = relativePath.AsModuleSpecifier().AsString()
+					}
+
 					c.error(
 						errorNode,
 						diagnostics.This_relative_import_path_is_unsafe_to_rewrite_because_it_looks_like_a_file_name_but_actually_resolves_to_0,
@@ -15520,32 +15519,35 @@ func (c *Checker) resolveExternalModule(
 					c.error(
 						errorNode,
 						diagnostics.This_import_uses_a_0_extension_to_resolve_to_an_input_TypeScript_file_but_will_not_be_rewritten_during_emit_because_it_is_not_a_relative_path,
-						tspath.GetAnyExtensionFromPath(moduleReference, nil, false),
+						tspath.GetAnyExtensionFromPath(moduleReference, nil, tspath.CaseSensitive),
 					)
 				} else if resolvedModule.ResolvedUsingTsExtension && shouldRewrite {
 					if redirect := c.program.GetRedirectForResolution(sourceFile); redirect != nil {
 						ownRootDir := c.program.CommonSourceDirectory()
 						otherRootDir := redirect.CommonSourceDirectory()
 
-						compareOptions := tspath.ComparePathsOptions{
-							UseCaseSensitiveFileNames: c.program.UseCaseSensitiveFileNames(),
-							CurrentDirectory:          c.program.GetCurrentDirectory(),
-						}
+						caseSensitivity := c.program.CaseSensitivity()
 
-						rootDirPath := tspath.GetRelativePathFromDirectory(ownRootDir, otherRootDir, compareOptions)
+						rootDirPath, rootsCompatible := caseSensitivity.RelativePathFromDirectory(
+							ownRootDir,
+							tspath.RootedFilePathFromPath(otherRootDir.AsPath()),
+						)
 
 						// Get outDir paths, defaulting to root directories if not specified
-						ownOutDir := c.compilerOptions.OutDir
-						if ownOutDir == "" {
-							ownOutDir = ownRootDir
+						ownOutDir := ownRootDir
+						if c.compilerOptions.OutDir != "" {
+							ownOutDir = c.compilerOptions.OutDir
 						}
-						otherOutDir := redirect.CompilerOptions().OutDir
-						if otherOutDir == "" {
-							otherOutDir = otherRootDir
+						otherOutDir := otherRootDir
+						if redirect.CompilerOptions().OutDir != "" {
+							otherOutDir = redirect.CompilerOptions().OutDir
 						}
-						outDirPath := tspath.GetRelativePathFromDirectory(ownOutDir, otherOutDir, compareOptions)
+						outDirPath, outDirsCompatible := caseSensitivity.RelativePathFromDirectory(
+							ownOutDir,
+							tspath.RootedFilePathFromPath(otherOutDir.AsPath()),
+						)
 
-						if rootDirPath != outDirPath {
+						if !rootsCompatible || !outDirsCompatible || rootDirPath != outDirPath {
 							c.error(
 								errorNode,
 								diagnostics.This_import_path_is_unsafe_to_rewrite_because_it_resolves_to_another_project_and_the_relative_path_between_the_projects_output_files_is_not_the_same_as_the_relative_path_between_its_input_files,
@@ -15572,7 +15574,7 @@ func (c *Checker) resolveExternalModule(
 						} else {
 							// CJS file resolving to an ESM file
 							var diagnosticDetails *ast.Diagnostic
-							ext := tspath.TryGetExtensionFromPath(importingSourceFile.FileName())
+							ext := importingSourceFile.FileName().Extension()
 							if ext == tspath.ExtensionTs || ext == tspath.ExtensionJs || ext == tspath.ExtensionTsx || ext == tspath.ExtensionJsx {
 								diagnosticDetails = c.createModeMismatchDetails(importingSourceFile, errorNode)
 							}
@@ -15629,7 +15631,9 @@ func (c *Checker) resolveExternalModule(
 	if moduleNotFoundError != nil {
 		// See if this was possibly a projectReference redirect
 		if resolvedModule.IsResolved() {
-			redirect := c.program.GetProjectReferenceFromSource(tspath.ToPath(resolvedModule.ResolvedFileName, c.program.GetCurrentDirectory(), c.program.UseCaseSensitiveFileNames()))
+			redirect := c.program.GetProjectReferenceFromSource(
+				resolvedModule.ResolvedPath,
+			)
 			if redirect != nil && redirect.OutputDts != "" {
 				c.error(
 					errorNode,
@@ -15649,8 +15653,12 @@ func (c *Checker) resolveExternalModule(
 			if !c.compilerOptions.GetResolveJsonModule() && tspath.FileExtensionIs(moduleReference, tspath.ExtensionJson) {
 				c.error(errorNode, diagnostics.Cannot_find_module_0_Consider_using_resolveJsonModule_to_import_module_with_json_extension, moduleReference)
 			} else if mode == core.ResolutionModeESM && resolutionIsNode16OrNext && isExtensionlessRelativePathImport {
-				absoluteRef := tspath.GetNormalizedAbsolutePath(moduleReference, tspath.GetDirectoryPath(importingSourceFile.FileName()))
-				if suggestedExt := c.getSuggestedImportExtension(absoluteRef); suggestedExt != "" {
+				var suggestedExt string
+				if !tspath.HasTrailingDirectorySeparator(moduleReference) {
+					absoluteRef := importingSourceFile.FileName().Directory().ResolveFile(moduleReference)
+					suggestedExt = c.getSuggestedImportExtension(absoluteRef)
+				}
+				if suggestedExt != "" {
 					c.error(errorNode, diagnostics.Relative_import_paths_need_explicit_file_extensions_in_ECMAScript_imports_when_moduleResolution_is_node16_or_nodenext_Did_you_mean_0, moduleReference+suggestedExt)
 				} else {
 					c.error(errorNode, diagnostics.Relative_import_paths_need_explicit_file_extensions_in_ECMAScript_imports_when_moduleResolution_is_node16_or_nodenext_Consider_adding_an_extension_to_the_import_path)
@@ -15749,25 +15757,25 @@ func (c *Checker) getSuggestedImportSource(moduleReference string, tsExtension s
 	return importSourceWithoutExtension
 }
 
-func (c *Checker) getSuggestedImportExtension(extensionlessImportPath string) string {
+func (c *Checker) getSuggestedImportExtension(extensionlessImportPath tspath.RootedFilePath) string {
 	switch true {
-	case c.program.FileExists(extensionlessImportPath + ".mts"):
+	case c.program.FileExists(extensionlessImportPath.AppendSuffix(".mts")):
 		return ".mjs"
-	case c.program.FileExists(extensionlessImportPath + ".ts"):
+	case c.program.FileExists(extensionlessImportPath.AppendSuffix(".ts")):
 		return ".js"
-	case c.program.FileExists(extensionlessImportPath + ".cts"):
+	case c.program.FileExists(extensionlessImportPath.AppendSuffix(".cts")):
 		return ".cjs"
-	case c.program.FileExists(extensionlessImportPath + ".mjs"):
+	case c.program.FileExists(extensionlessImportPath.AppendSuffix(".mjs")):
 		return ".mjs"
-	case c.program.FileExists(extensionlessImportPath + ".js"):
+	case c.program.FileExists(extensionlessImportPath.AppendSuffix(".js")):
 		return ".js"
-	case c.program.FileExists(extensionlessImportPath + ".cjs"):
+	case c.program.FileExists(extensionlessImportPath.AppendSuffix(".cjs")):
 		return ".cjs"
-	case c.program.FileExists(extensionlessImportPath + ".tsx"):
+	case c.program.FileExists(extensionlessImportPath.AppendSuffix(".tsx")):
 		return core.IfElse(c.compilerOptions.Jsx == core.JsxEmitPreserve, ".jsx", ".js")
-	case c.program.FileExists(extensionlessImportPath + ".jsx"):
+	case c.program.FileExists(extensionlessImportPath.AppendSuffix(".jsx")):
 		return ".jsx"
-	case c.program.FileExists(extensionlessImportPath + ".json"):
+	case c.program.FileExists(extensionlessImportPath.AppendSuffix(".json")):
 		return ".json"
 	}
 	return ""
@@ -29023,7 +29031,7 @@ func (c *Checker) getHelperNames(helper ExternalEmitHelpers) []string {
 func (c *Checker) resolveHelpersModule(file *ast.SourceFile, errorNode *ast.Node) *ast.Symbol {
 	links := c.sourceFileLinks.Get(file)
 	if links.externalHelpersModule == nil {
-		location := c.program.GetImportHelpersImportSpecifier(file.Path())
+		location := c.program.GetImportHelpersImportSpecifier(file.PathKey())
 		helpersModule := c.resolveExternalModule(location, externalHelpersModuleNameText, diagnostics.This_syntax_requires_an_imported_helper_but_module_0_cannot_be_found, errorNode, false /*isForAugmentation*/, nil /*importAttributesType*/)
 		if helpersModule == nil {
 			helpersModule = c.unknownSymbol

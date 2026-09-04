@@ -13,12 +13,12 @@ import (
 )
 
 type includeProcessor struct {
-	fileIncludeReasons    map[tspath.Path][]*FileIncludeReason
+	fileIncludeReasons    map[tspath.PathKey][]*FileIncludeReason
 	processingDiagnostics []*processingDiagnostic
 
 	reasonToReferenceLocation  collections.SyncMap[*FileIncludeReason, *referenceFileLocation]
 	includeReasonToRelatedInfo collections.SyncMap[*FileIncludeReason, *ast.Diagnostic]
-	redirectAndFileFormat      collections.SyncMap[tspath.Path, []*ast.Diagnostic]
+	redirectAndFileFormat      collections.SyncMap[tspath.PathKey, []*ast.Diagnostic]
 	computedDiagnostics        *ast.DiagnosticsCollection
 	computedDiagnosticsOnce    sync.Once
 	compilerOptionsSyntax      *ast.ObjectLiteralExpression
@@ -60,7 +60,7 @@ func (i *includeProcessor) addProcessingDiagnostic(d ...*processingDiagnostic) {
 	i.processingDiagnostics = append(i.processingDiagnostics, d...)
 }
 
-func (i *includeProcessor) addProcessingDiagnosticsForFileCasing(file tspath.Path, existingCasing string, currentCasing string, reason *FileIncludeReason) {
+func (i *includeProcessor) addProcessingDiagnosticsForFileCasing(file tspath.PathKey, existingCasing string, currentCasing string, reason *FileIncludeReason) {
 	if !reason.isReferencedFile() && slices.ContainsFunc(i.fileIncludeReasons[file], func(r *FileIncludeReason) bool {
 		return r.isReferencedFile()
 	}) {
@@ -122,8 +122,8 @@ func (i *includeProcessor) getRelatedInfo(r *FileIncludeReason, program *Program
 
 func (i *includeProcessor) explainRedirectAndImpliedFormat(
 	program *Program,
-	filePath tspath.Path,
-	toFileName func(fileName string) string,
+	filePath tspath.PathKey,
+	toFileName func(fileName tspath.RootedFilePath) string,
 ) []*ast.Diagnostic {
 	if existing, ok := i.redirectAndFileFormat.Load(filePath); ok {
 		return existing
@@ -157,21 +157,21 @@ func (i *includeProcessor) explainRedirectAndImpliedFormat(
 	}
 
 	if sourceFile != nil && ast.IsExternalOrCommonJSModule(sourceFile) {
-		metaData := program.GetSourceFileMetaData(file.Path())
+		metaData := program.GetSourceFileMetaData(file.PathKey())
 		switch program.GetImpliedNodeFormatForEmit(file) {
 		case core.ModuleKindESNext:
 			if metaData.PackageJsonType == "module" {
 				result = append(result, ast.NewCompilerDiagnostic(
 					diagnostics.File_is_ECMAScript_module_because_0_has_field_type_with_value_module,
-					toFileName(metaData.PackageJsonDirectory+"/package.json"),
+					toFileName(metaData.PackageJsonDirectory.ResolveFile("package.json")),
 				))
 			}
 		case core.ModuleKindCommonJS:
 			if metaData.PackageJsonType != "" {
-				result = append(result, ast.NewCompilerDiagnostic(diagnostics.File_is_CommonJS_module_because_0_has_field_type_whose_value_is_not_module, toFileName(metaData.PackageJsonDirectory+"/package.json")))
+				result = append(result, ast.NewCompilerDiagnostic(diagnostics.File_is_CommonJS_module_because_0_has_field_type_whose_value_is_not_module, toFileName(metaData.PackageJsonDirectory.ResolveFile("package.json"))))
 			} else if metaData.PackageJsonDirectory != "" {
 				if metaData.PackageJsonType == "" {
-					result = append(result, ast.NewCompilerDiagnostic(diagnostics.File_is_CommonJS_module_because_0_does_not_have_field_type, toFileName(metaData.PackageJsonDirectory+"/package.json")))
+					result = append(result, ast.NewCompilerDiagnostic(diagnostics.File_is_CommonJS_module_because_0_does_not_have_field_type, toFileName(metaData.PackageJsonDirectory.ResolveFile("package.json"))))
 				}
 			} else {
 				result = append(result, ast.NewCompilerDiagnostic(diagnostics.File_is_CommonJS_module_because_package_json_was_not_found))

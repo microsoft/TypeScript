@@ -1050,6 +1050,8 @@ func TestProjectLifecycle(t *testing.T) {
 	assert.NilError(t, err)
 	assert.Equal(t, len(projectAWatchedFiles), 1)
 	assert.Equal(t, len(projectBWatchedFiles), 1)
+	assert.Equal(t, projectAWatchedFiles[0].AsString(), "/repo/a/mapper.config.js")
+	assert.Equal(t, projectBWatchedFiles[0].AsString(), "/repo/b/mapper.config.js")
 
 	_, err = projectA.Transform(dynamicB, contentmapper.Request{FileName: "/repo/a/file.ext", Content: "x"})
 	assert.NilError(t, err)

@@ -8,24 +8,27 @@ import (
 	"gotest.tools/v3/assert"
 )
 
-func TestCompletionItemResolveRejectsInvalidFileName(t *testing.T) {
+func TestCompletionItemResolveRejectsRelativeFileName(t *testing.T) {
 	t.Parallel()
 
-	for _, test := range []struct {
-		fileName string
-		message  string
-	}{
-		{"relative.ts", "completion item data fileName must be absolute"},
-		{"^/invalid", "completion item data fileName must be a valid dynamic path"},
-		{"^/~ts-uri~/scheme/authority/~ts-uri-escape~zz~", "completion item data fileName must be a valid dynamic path"},
+	server := &Server{}
+	_, err := server.handleCompletionItemResolve(context.Background(), &lsproto.CompletionItem{
+		Data: &lsproto.CompletionItemData{FileName: "relative.ts"},
+	}, nil)
+	assert.Error(t, err, "completion item data fileName must be absolute")
+}
+
+func TestCompletionItemResolveRejectsMalformedDynamicFileName(t *testing.T) {
+	t.Parallel()
+
+	for _, fileName := range []string{
+		"^/invalid",
+		"^/~ts-uri~/scheme/authority/~ts-uri-escape~zz~",
 	} {
-		t.Run(test.fileName, func(t *testing.T) {
-			t.Parallel()
-			server := &Server{}
-			_, err := server.handleCompletionItemResolve(context.Background(), &lsproto.CompletionItem{
-				Data: &lsproto.CompletionItemData{FileName: test.fileName},
-			}, nil)
-			assert.Error(t, err, test.message)
-		})
+		server := &Server{}
+		_, err := server.handleCompletionItemResolve(context.Background(), &lsproto.CompletionItem{
+			Data: &lsproto.CompletionItemData{FileName: fileName},
+		}, nil)
+		assert.Error(t, err, "completion item data fileName must be a valid dynamic path")
 	}
 }

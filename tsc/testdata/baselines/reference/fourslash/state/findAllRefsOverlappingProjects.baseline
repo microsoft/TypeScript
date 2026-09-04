@@ -1,4 +1,4 @@
-UseCaseSensitiveFileNames: true
+CaseSensitivity: true
 //// [/solution/a/index.ts] *new* 
 export interface I {
 	M(): void;

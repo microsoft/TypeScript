@@ -22,6 +22,10 @@ import type {
     ParameterDeclaration,
 } from "../../ast/ast.ts";
 import type {
+    RootedDirectoryPath,
+    RootedFilePath,
+} from "../../ast/index.ts";
+import type {
     Diagnostic,
     RequestFileSystem,
 } from "../proto.ts";
@@ -523,20 +527,20 @@ export interface CompletionInfo {
 }
 
 export interface FormatDiagnosticsHost {
-    getCurrentDirectory(): string;
+    getCurrentDirectory(): RootedDirectoryPath;
     getCanonicalFileName(fileName: string): string;
     getNewLine(): string;
 }
 
 export interface EmitOutputFile {
     readonly text: string;
-    readonly sourceFileName?: string | undefined;
+    readonly sourceFileName?: RootedFilePath | undefined;
 }
 
 export interface EmitResult {
     readonly emitSkipped: boolean;
     readonly diagnostics: readonly Diagnostic[];
-    readonly emittedFiles: readonly string[];
+    readonly emittedFiles: readonly RootedFilePath[];
     /** Emitted files captured as a filesystem layer suitable for {@link Snapshot.update}. */
     readonly fileSystem?: RequestFileSystem | undefined;
 }
@@ -544,7 +548,7 @@ export interface EmitResult {
 export interface EmitOutput {
     readonly emitSkipped: boolean;
     readonly diagnostics: readonly Diagnostic[];
-    readonly outputFiles: ReadonlyMap<string, EmitOutputFile>;
+    readonly outputFiles: ReadonlyMap<RootedFilePath, EmitOutputFile>;
 }
 
 export interface ImportSymbolAction {

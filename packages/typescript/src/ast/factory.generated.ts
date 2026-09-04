@@ -191,7 +191,7 @@ import type {
     ParenthesizedExpression,
     ParenthesizedTypeNode,
     PartiallyEmittedExpression,
-    Path,
+    PathKey,
     PlusToken,
     PostfixUnaryExpression,
     PrefixUnaryExpression,
@@ -208,6 +208,7 @@ import type {
     RegularExpressionLiteral,
     RestTypeNode,
     ReturnStatement,
+    RootedFilePath,
     SatisfiesExpression,
     SemicolonClassElement,
     SetAccessorDeclaration,
@@ -3833,7 +3834,7 @@ export function updateJSDocPropertyTag(node: JSDocPropertyTag, tagName: Identifi
     return node.tagName !== tagName || node.name !== name || node.typeExpression !== typeExpression || node.comment !== comment ? createJSDocPropertyTag(tagName, name, node.isBracketed, typeExpression, node.isNameFirst, comment) : node;
 }
 
-export function createSourceFile(statements: readonly Statement[], endOfFileToken: EndOfFile, text: string, fileName: string, path: Path): SourceFile {
+export function createSourceFile(statements: readonly Statement[], endOfFileToken: EndOfFile, text: string, fileName: RootedFilePath, path: PathKey): SourceFile {
     return new NodeObject(SyntaxKind.SourceFile, {
         statements: createNodeArray(statements),
         endOfFileToken,
