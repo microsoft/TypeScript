@@ -6,6 +6,7 @@ import (
 
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/projecttestutil"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"gotest.tools/v3/assert"
 )
 
@@ -23,14 +24,14 @@ func TestCreateSourceFile(t *testing.T) {
 	t.Run("text", func(t *testing.T) {
 		t.Parallel()
 		sourceFile, err := session.createSourceFile(
-			"src/input.tsx",
+			tspath.ToRootedFilePath("src/input.tsx", session.currentDirectory()),
 			`export const element = <div />;`,
 			CreateSourceFileOptions{},
 		)
 
 		assert.NilError(t, err)
-		assert.Equal(t, sourceFile.FileName(), "/src/input.tsx")
-		assert.Equal(t, string(sourceFile.Path()), "/src/input.tsx")
+		assert.Equal(t, sourceFile.FileName(), tspath.RootedFilePathFromNormalized("/src/input.tsx"))
+		assert.Equal(t, sourceFile.PathKey().AsString(), "/src/input.tsx")
 		assert.Equal(t, sourceFile.Text(), `export const element = <div />;`)
 		assert.Equal(t, sourceFile.ScriptKind, core.ScriptKindTSX)
 		assert.Equal(t, len(sourceFile.Statements.Nodes), 1)
@@ -40,7 +41,7 @@ func TestCreateSourceFile(t *testing.T) {
 	t.Run("script kind override", func(t *testing.T) {
 		t.Parallel()
 		sourceFile, err := session.createSourceFile(
-			"/src/component.txt",
+			tspath.RootedFilePathFromNormalized("/src/component.txt"),
 			`export const element = <div />;`,
 			CreateSourceFileOptions{ScriptKind: core.ScriptKindTSX},
 		)
@@ -53,7 +54,7 @@ func TestCreateSourceFile(t *testing.T) {
 	t.Run("unknown extension defaults to TypeScript", func(t *testing.T) {
 		t.Parallel()
 		sourceFile, err := session.createSourceFile(
-			"/src/component.txt",
+			tspath.RootedFilePathFromNormalized("/src/component.txt"),
 			`export const value: string = "ok";`,
 			CreateSourceFileOptions{},
 		)
@@ -76,7 +77,7 @@ func TestCreateSourceFile(t *testing.T) {
 	t.Run("invalid script kind", func(t *testing.T) {
 		t.Parallel()
 		_, err := session.createSourceFile(
-			"/src/input.ts",
+			tspath.RootedFilePathFromNormalized("/src/input.ts"),
 			"",
 			CreateSourceFileOptions{ScriptKind: 999},
 		)

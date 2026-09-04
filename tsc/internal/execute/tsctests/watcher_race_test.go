@@ -11,6 +11,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/execute"
 	"github.com/microsoft/TypeScript/tsc/internal/execute/tsc"
 	"github.com/microsoft/TypeScript/tsc/internal/fswatch"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"gotest.tools/v3/assert"
 )
 
@@ -121,7 +122,7 @@ func TestWatcherConcurrentFileChangesAndDoCycle(t *testing.T) {
 			defer wg.Done()
 			for j := range 20 {
 				path := fmt.Sprintf("/home/src/workspaces/project/gen_%d_%d.ts", i, j)
-				_ = sys.fsFromFileMap().WriteFile(path, fmt.Sprintf("export const x%d_%d = %d;", i, j, j))
+				_ = sys.fsFromFileMap().WriteFile(tspath.RootedFilePathFromNormalized(path), fmt.Sprintf("export const x%d_%d = %d;", i, j, j))
 			}
 		}(i)
 	}
@@ -130,7 +131,7 @@ func TestWatcherConcurrentFileChangesAndDoCycle(t *testing.T) {
 	wg.Go(func() {
 		for j := range 20 {
 			_ = sys.fsFromFileMap().Remove(
-				fmt.Sprintf("/home/src/workspaces/project/gen_0_%d.ts", j),
+				tspath.RootedFilePathFromNormalized(fmt.Sprintf("/home/src/workspaces/project/gen_0_%d.ts", j)).AsPath(),
 			)
 		}
 	})
@@ -379,7 +380,7 @@ func TestWatcherUpdateProgramFastPath(t *testing.T) {
 	// Helper to write a file, send the event, cycle, and return output
 	editAndCycle := func(path, content string) string {
 		sys.currentWrite.Reset()
-		_ = sys.fsFromFileMap().WriteFile(path, content)
+		_ = sys.fsFromFileMap().WriteFile(tspath.RootedFilePathFromNormalized(path), content)
 		sys.mockWatchBackend.SendEvents([]fswatch.Event{
 			{Kind: fswatch.EventUpdate, Path: path},
 		})

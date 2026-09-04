@@ -91,7 +91,7 @@ func TestResponseFileDoesNotPanic(t *testing.T) {
 
 	// Passing `@` with an empty or relative filename should not panic.
 	// It should produce a diagnostic error instead.
-	cwd := t.TempDir()
+	cwd := tspath.RootedDirectoryPathFromAbsolute(t.TempDir())
 	t.Run("empty response file", func(t *testing.T) {
 		t.Parallel()
 		parsed := tsoptions.ParseCommandLineTestWorker(nil, []string{"@"}, osvfs.FS(), cwd)
@@ -110,42 +110,41 @@ func TestResponseFileParsing(t *testing.T) {
 
 	t.Run("final token without trailing whitespace", func(t *testing.T) {
 		t.Parallel()
-		host := tsoptionstest.NewVFSParseConfigHost(map[string]string{
+		fs := tsoptionstest.NewVFS(map[string]string{
 			"/project/args.txt": "--strict --outDir dist",
-		}, "/project", true)
-		parsed := tsoptions.ParseCommandLine([]string{"@args.txt"}, host)
+		}, tspath.CaseSensitive)
+		parsed := tsoptions.ParseCommandLine([]string{"@args.txt"}, fs, "/project")
 		assert.Equal(t, len(parsed.Errors), 0)
 		assert.Assert(t, parsed.CompilerOptions().Strict.IsTrue())
-		assert.Equal(t, parsed.CompilerOptions().OutDir, "/project/dist")
+		assert.Equal(t, parsed.CompilerOptions().OutDir, tspath.RootedDirectoryPath("/project/dist"))
 	})
 
 	t.Run("cyclic response files", func(t *testing.T) {
 		t.Parallel()
-		host := tsoptionstest.NewVFSParseConfigHost(map[string]string{
+		fs := tsoptionstest.NewVFS(map[string]string{
 			"/project/a.txt": "@/project/b.txt --strict",
 			"/project/b.txt": "@/project/a.txt --outDir dist",
-		}, "/project", true)
-		parsed := tsoptions.ParseCommandLine([]string{"@a.txt"}, host)
+		}, tspath.CaseSensitive)
+		parsed := tsoptions.ParseCommandLine([]string{"@a.txt"}, fs, "/project")
 		assert.Equal(t, len(parsed.Errors), 0)
 		assert.Assert(t, parsed.CompilerOptions().Strict.IsTrue())
-		assert.Equal(t, parsed.CompilerOptions().OutDir, "/project/dist")
+		assert.Equal(t, parsed.CompilerOptions().OutDir, tspath.RootedDirectoryPath("/project/dist"))
 	})
 }
 
 func TestParseCommandLineTypeRootsRelativePath(t *testing.T) {
 	t.Parallel()
 
-	host := tsoptionstest.NewVFSParseConfigHost(map[string]string{
+	fs := tsoptionstest.NewVFS(map[string]string{
 		"/home/project/bug.ts": `let x = 1;`,
-	}, "/home/project", true)
+	}, tspath.CaseSensitive)
 
-	cmdLine := tsoptions.ParseCommandLine([]string{"--typeRoots", "t", "bug.ts"}, host)
+	cmdLine := tsoptions.ParseCommandLine([]string{"--typeRoots", "t", "bug.ts"}, fs, "/home/project")
 
 	typeRoots := cmdLine.CompilerOptions().TypeRoots
 	assert.Assert(t, typeRoots != nil, "typeRoots should not be nil")
 	assert.Equal(t, len(typeRoots), 1)
-	assert.Assert(t, tspath.IsRootedDiskPath(typeRoots[0]), "typeRoots entry should be an absolute path, got: %s", typeRoots[0])
-	assert.Assert(t, strings.HasSuffix(typeRoots[0], "/t"), "typeRoots entry should end with '/t', got: %s", typeRoots[0])
+	assert.Equal(t, typeRoots[0], tspath.RootedDirectoryPath("/home/project/t"))
 }
 
 func TestCustomConditionsNullOverride(t *testing.T) {
@@ -160,10 +159,10 @@ func TestCustomConditionsNullOverride(t *testing.T) {
 		"/project/index.ts": `console.log("Hello, World!");`,
 	}
 
-	host := tsoptionstest.NewVFSParseConfigHost(files, "/project", true)
+	fs := tsoptionstest.NewVFS(files, tspath.CaseSensitive)
 
 	// Parse command line with --customConditions null
-	cmdLine := tsoptions.ParseCommandLine([]string{"--project", "/project", "--customConditions", "null"}, host)
+	cmdLine := tsoptions.ParseCommandLine([]string{"--project", "/project", "--customConditions", "null"}, fs, "/project")
 
 	// Check that the raw options contain null for customConditions
 	if rawMap, ok := cmdLine.Raw.(*collections.OrderedMap[string, any]); ok {
@@ -182,7 +181,7 @@ func TestCustomConditionsNullOverride(t *testing.T) {
 		"/project/tsconfig.json",
 		cmdLine.CompilerOptions(),
 		wrappedRaw,
-		host,
+		fs,
 		nil,
 	)
 
@@ -277,7 +276,7 @@ func (f commandLineSubScenario) assertParseResult(t *testing.T) {
 		tsBaseline := parseExistingCompilerBaseline(t, originalBaseline)
 
 		// f.workerDiagnostic is either defined or set to default pointer in `createSubScenario`
-		parsed := tsoptions.ParseCommandLineTestWorker(f.optDecls, f.commandLine, osvfs.FS(), t.TempDir())
+		parsed := tsoptions.ParseCommandLineTestWorker(f.optDecls, f.commandLine, osvfs.FS(), tspath.RootedDirectoryPathFromAbsolute(t.TempDir()))
 
 		newBaselineFileNames := strings.Join(parsed.FileNames, ",")
 		assert.Equal(t, tsBaseline.fileNames, newBaselineFileNames)
@@ -379,10 +378,7 @@ func (f commandLineSubScenario) assertBuildParseResultWithTsBaseline(t *testing.
 		}
 
 		// f.workerDiagnostic is either defined or set to default pointer in `createSubScenario`
-		parsed := tsoptions.ParseBuildCommandLine(f.commandLine, &tsoptionstest.VfsParseConfigHost{
-			Vfs:              osvfs.FS(),
-			CurrentDirectory: tspath.NormalizeSlashes(repo.TestDataPath()),
-		})
+		parsed := tsoptions.ParseBuildCommandLine(f.commandLine, osvfs.FS(), tspath.RootedDirectoryPathFromAbsolute(repo.TestDataPath()))
 
 		newBaselineProjects := strings.Join(parsed.Projects, ",")
 		if getTsBaseline != nil {

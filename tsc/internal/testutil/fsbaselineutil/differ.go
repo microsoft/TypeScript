@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/iovfs"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfstest"
 )
@@ -24,13 +25,13 @@ type DiffEntry struct {
 
 type Snapshot struct {
 	Snap        map[string]*DiffEntry
-	DefaultLibs *collections.SyncSet[string]
+	DefaultLibs *collections.SyncSet[tspath.RootedPath]
 }
 
 type FSDiffer struct {
 	FS           iovfs.FsWithSys
-	DefaultLibs  func() *collections.SyncSet[string]
-	WrittenFiles *collections.SyncSet[string]
+	DefaultLibs  func() *collections.SyncSet[tspath.RootedPath]
+	WrittenFiles *collections.SyncSet[tspath.RootedFilePath]
 
 	serializedDiff *Snapshot
 }
@@ -61,7 +62,11 @@ func (d *FSDiffer) BaselineFSwithDiff(baseline io.Writer) {
 			continue
 		} else if file.Mode.IsRegular() {
 			content := SanitizeInternalSymbolName(string(file.Data))
-			newEntry := &DiffEntry{Content: content, MTime: file.ModTime, IsWritten: d.WrittenFiles.Has(path)}
+			newEntry := &DiffEntry{
+				Content:   content,
+				MTime:     file.ModTime,
+				IsWritten: d.WrittenFiles.Has(tspath.RootedFilePathFromNormalized(path)),
+			}
 			snap[path] = newEntry
 			d.addFsEntryDiff(diffs, newEntry, path)
 		}
@@ -74,9 +79,9 @@ func (d *FSDiffer) BaselineFSwithDiff(baseline io.Writer) {
 			}
 		}
 	}
-	var defaultLibs collections.SyncSet[string]
+	var defaultLibs collections.SyncSet[tspath.RootedPath]
 	if d.DefaultLibs != nil && d.DefaultLibs() != nil {
-		d.DefaultLibs().Range(func(libPath string) bool {
+		d.DefaultLibs().Range(func(libPath tspath.RootedPath) bool {
 			defaultLibs.Add(libPath)
 			return true
 		})
@@ -91,7 +96,7 @@ func (d *FSDiffer) BaselineFSwithDiff(baseline io.Writer) {
 		fmt.Fprint(baseline, "//// ["+path+"] ", diffs[path], "\n")
 	}
 	fmt.Fprintln(baseline)
-	*d.WrittenFiles = collections.SyncSet[string]{} // Reset written files after baseline
+	*d.WrittenFiles = collections.SyncSet[tspath.RootedFilePath]{} // Reset written files after baseline
 }
 
 var internalSymbolRegex = regexp.MustCompile(`\x{FFFD}@[^@]+@[0-9]+`)
@@ -110,14 +115,15 @@ func SanitizeInternalSymbolName(s string) string {
 
 func (d *FSDiffer) addFsEntryDiff(diffs map[string]string, newDirContent *DiffEntry, path string) {
 	var oldDirContent *DiffEntry
-	var defaultLibs *collections.SyncSet[string]
+	var defaultLibs *collections.SyncSet[tspath.RootedPath]
 	if d.serializedDiff != nil {
 		oldDirContent = d.serializedDiff.Snap[path]
 		defaultLibs = d.serializedDiff.DefaultLibs
 	}
+	rootedPath := tspath.RootedPathFromNormalized(path)
 	// todo handle more cases of fs changes
 	if oldDirContent == nil {
-		if d.DefaultLibs == nil || d.DefaultLibs() == nil || !d.DefaultLibs().Has(path) {
+		if d.DefaultLibs == nil || d.DefaultLibs() == nil || !d.DefaultLibs().Has(rootedPath) {
 			if newDirContent.SymlinkTarget != "" {
 				diffs[path] = "-> " + newDirContent.SymlinkTarget + " *new*"
 			} else {
@@ -132,7 +138,7 @@ func (d *FSDiffer) addFsEntryDiff(diffs map[string]string, newDirContent *DiffEn
 		diffs[path] = "*rewrite with same content*"
 	} else if newDirContent.MTime != oldDirContent.MTime {
 		diffs[path] = "*mTime changed*"
-	} else if defaultLibs != nil && defaultLibs.Has(path) && d.DefaultLibs != nil && d.DefaultLibs() != nil && !d.DefaultLibs().Has(path) {
+	} else if defaultLibs != nil && defaultLibs.Has(rootedPath) && d.DefaultLibs != nil && d.DefaultLibs() != nil && !d.DefaultLibs().Has(rootedPath) {
 		// Lib file that was read
 		diffs[path] = "*Lib*\n" + newDirContent.Content
 	}

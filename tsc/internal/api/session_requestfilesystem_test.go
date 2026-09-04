@@ -13,6 +13,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/project"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/projecttestutil"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"gotest.tools/v3/assert"
 )
 
@@ -246,7 +247,7 @@ func TestCreateSnapshotUsesFullFileSystem(t *testing.T) {
 	})
 	assert.NilError(t, err)
 	assert.Equal(t, len(response.Projects), 1)
-	assert.Equal(t, response.Projects[0].ConfigFileName, "/tsconfig.json")
+	assert.Equal(t, response.Projects[0].ConfigFileName.AsString(), "/tsconfig.json")
 
 	snapshot := session.snapshots[response.Snapshot].snapshot
 	contents, ok := snapshot.ReadFile("/src/index.ts")
@@ -427,7 +428,7 @@ func TestUpdateSnapshotRequestMaskUpdatesOpenConfiguredProjects(t *testing.T) {
 	})
 	assert.NilError(t, err)
 	baseSnapshot := session.snapshots[base.Snapshot].snapshot
-	assert.Assert(t, baseSnapshot.ProjectCollection.GetOpenConfiguredProjects().Has("/tsconfig.json"))
+	assert.Assert(t, baseSnapshot.ProjectCollection.GetOpenConfiguredProjects().Has(project.ConfiguredProjectIDFromPathKey(tspath.PathKeyFromCanonical("/tsconfig.json"))))
 
 	masked, err := session.handleUpdateSnapshot(context.Background(), &UpdateSnapshotParams{
 		Snapshot: base.Snapshot,
@@ -442,7 +443,7 @@ func TestUpdateSnapshotRequestMaskUpdatesOpenConfiguredProjects(t *testing.T) {
 	})
 	assert.NilError(t, err)
 	maskedSnapshot := session.snapshots[masked.Snapshot].snapshot
-	assert.Assert(t, !maskedSnapshot.ProjectCollection.GetOpenConfiguredProjects().Has("/tsconfig.json"))
+	assert.Assert(t, !maskedSnapshot.ProjectCollection.GetOpenConfiguredProjects().Has(project.ConfiguredProjectIDFromPathKey(tspath.PathKeyFromCanonical("/tsconfig.json"))))
 
 	unmasked, err := session.handleGetCurrentLanguageServerSnapshot(context.Background(), &GetCurrentLanguageServerSnapshotParams{
 		Changes: &LanguageServerSnapshotChanges{
@@ -451,7 +452,7 @@ func TestUpdateSnapshotRequestMaskUpdatesOpenConfiguredProjects(t *testing.T) {
 	})
 	assert.NilError(t, err)
 	unmaskedSnapshot := session.snapshots[unmasked.Snapshot].snapshot
-	assert.Assert(t, unmaskedSnapshot.ProjectCollection.GetOpenConfiguredProjects().Has("/tsconfig.json"))
+	assert.Assert(t, unmaskedSnapshot.ProjectCollection.GetOpenConfiguredProjects().Has(project.ConfiguredProjectIDFromPathKey(tspath.PathKeyFromCanonical("/tsconfig.json"))))
 }
 
 func TestUpdateSnapshotConfigChangeSkipsMaskedOpenOverlay(t *testing.T) {
@@ -668,9 +669,10 @@ func TestSnapshotFileSystemLayersPreserveIncrementalState(t *testing.T) {
 			removedSnapshot := session.snapshots[removed.Snapshot].snapshot
 			removedProgram := removedSnapshot.ProjectCollection.GetProject(project.ID("/a/tsconfig.json")).GetProgram()
 			for _, path := range []string{"/a/removed/nested.ts", "/a/removed/deep/file.ts"} {
-				assert.Assert(t, removedProgram.GetSourceFile(path) == nil, path)
-				assert.Assert(t, removedSnapshot.GetFile(path) == nil, path)
-				assert.Assert(t, baseProgram.GetSourceFile(path) != nil, path)
+				fileName := tspath.RootedFilePathFromAbsolute(path)
+				assert.Assert(t, removedProgram.GetSourceFile(fileName) == nil, path)
+				assert.Assert(t, removedSnapshot.GetFile(fileName) == nil, path)
+				assert.Assert(t, baseProgram.GetSourceFile(fileName) != nil, path)
 			}
 			assert.Assert(t, removedSnapshot.ProjectCollection.GetProject(project.ID("/b/tsconfig.json")).GetProgram() == unrelatedProgram)
 			assert.Assert(t, removedSnapshot.GetFile("/b/index.ts") == unrelatedFile)
@@ -754,7 +756,7 @@ func TestEmitFromLayerOverFullFileSystemReturnsFileContents(t *testing.T) {
 		Project:  base.Projects[0].Id,
 	})
 	assert.NilError(t, err)
-	assert.DeepEqual(t, emitted.EmittedFiles, []string{"/out/src/main.js"})
+	assert.DeepEqual(t, emitted.EmittedFiles, []tspath.RootedFilePath{"/out/src/main.js"})
 	assert.DeepEqual(t, emitted.EmittedFilesContents, []string{"export const value = 1;\n"})
 
 	_, err = session.handleRelease(ctx, &ReleaseParams{Snapshot: base.Snapshot})
@@ -819,7 +821,7 @@ func TestReleaseSnapshotCompactsSoleLayeredFileSystem(t *testing.T) {
 		"/changed.ts":   "new",
 		"/added.ts":     "added",
 	} {
-		contents, readOK := layeredSnapshot.ReadFile(path)
+		contents, readOK := layeredSnapshot.ReadFile(tspath.RootedFilePathFromAbsolute(path))
 		assert.Assert(t, readOK, path)
 		assert.Equal(t, contents, expected)
 	}

@@ -1,13 +1,16 @@
 import type {
-    Path,
+    PathKey,
     SourceFile,
 } from "../ast/index.ts";
-import type { SnapshotChanges } from "./proto.ts";
+import type {
+    ProjectId,
+    SnapshotChanges,
+} from "./proto.ts";
 
 /**
  * Builds a composite ref key from a snapshot ID and project ID.
  */
-function refKey(snapshotId: number, projectId: string): string {
+function refKey(snapshotId: number, projectId: ProjectId): string {
     return `${snapshotId}:${projectId}`;
 }
 
@@ -42,9 +45,9 @@ export interface CachedSourceFile {
  */
 export class SourceFileCache {
     /** Map from path to all cached versions of that file */
-    private cache: Map<Path, CachedSourceFile[]> = new Map();
+    private cache: Map<PathKey, CachedSourceFile[]> = new Map();
     /** Map from snapshotId to (projectId → Set of paths fetched through that project) */
-    private snapshotProjectPaths: Map<number, Map<string, Set<Path>>> = new Map();
+    private snapshotProjectPaths: Map<number, Map<ProjectId, Set<PathKey>>> = new Map();
 
     /**
      * Get a cached source file already retained for the given (snapshot, project) pair.
@@ -55,7 +58,7 @@ export class SourceFileCache {
      * A given (snapshot, project) pair always parses a file the same way, so there is
      * at most one matching entry per ref.
      */
-    getRetained(path: Path, snapshotId: number, projectId: string): SourceFile | undefined {
+    getRetained(path: PathKey, snapshotId: number, projectId: ProjectId): SourceFile | undefined {
         const entries = this.cache.get(path);
         if (!entries) return undefined;
         const key = refKey(snapshotId, projectId);
@@ -67,7 +70,7 @@ export class SourceFileCache {
      * Store a source file in the cache and retain it for the given (snapshot, project) pair.
      * Returns the cached file — which may be an existing entry if the hash matches.
      */
-    set(path: Path, file: SourceFile, parseOptionsKey: string, contentHash: string, snapshotId: number, projectId: string): SourceFile {
+    set(path: PathKey, file: SourceFile, parseOptionsKey: string, contentHash: string, snapshotId: number, projectId: ProjectId): SourceFile {
         let entries = this.cache.get(path);
         if (!entries) {
             entries = [];
@@ -97,16 +100,16 @@ export class SourceFileCache {
         const prevProjectMap = this.snapshotProjectPaths.get(previousSnapshotId);
         if (!prevProjectMap) return;
 
-        const removedProjects = new Set<string>(changes?.removedProjects ?? []);
+        const removedProjects = new Set<ProjectId>(changes?.removedProjects ?? []);
         const changedProjects = changes?.changedProjects ?? {};
 
         for (const [projectId, paths] of prevProjectMap) {
             if (removedProjects.has(projectId)) continue;
 
             const projectChanges = changedProjects[projectId];
-            let invalidPaths: Set<string> | undefined;
+            let invalidPaths: Set<PathKey> | undefined;
             if (projectChanges) {
-                invalidPaths = new Set<string>();
+                invalidPaths = new Set<PathKey>();
                 for (const p of projectChanges.changedFiles ?? []) invalidPaths.add(p);
                 for (const p of projectChanges.deletedFiles ?? []) invalidPaths.add(p);
             }
@@ -155,10 +158,10 @@ export class SourceFileCache {
         this.snapshotProjectPaths.delete(snapshotId);
     }
 
-    private trackPath(snapshotId: number, projectId: string, path: Path): void {
+    private trackPath(snapshotId: number, projectId: ProjectId, path: PathKey): void {
         let projectMap = this.snapshotProjectPaths.get(snapshotId);
         if (!projectMap) {
-            projectMap = new Map();
+            projectMap = new Map<ProjectId, Set<PathKey>>();
             this.snapshotProjectPaths.set(snapshotId, projectMap);
         }
         let paths = projectMap.get(projectId);
@@ -187,7 +190,7 @@ export class SourceFileCache {
     /**
      * Check if a path is in the cache.
      */
-    has(path: Path): boolean {
+    has(path: PathKey): boolean {
         return this.cache.has(path);
     }
 }

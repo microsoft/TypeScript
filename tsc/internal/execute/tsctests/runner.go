@@ -78,7 +78,7 @@ func (test *tscInput) run(t *testing.T, scenario string) {
 			"currentDirectory::",
 			sys.GetCurrentDirectory(),
 			"\nuseCaseSensitiveFileNames::",
-			sys.FS().UseCaseSensitiveFileNames(),
+			sys.FS().CaseSensitivity(),
 			"\nInput::\n",
 		)
 		sys.baselineFSwithDiff(baselineBuilder)
@@ -152,21 +152,22 @@ func getDiffForIncremental(incrementalSys *TestSys, nonIncrementalSys *TestSys) 
 	nonIncrementalOutputs := nonIncrementalSys.fs.writtenFiles.ToSlice()
 	slices.Sort(nonIncrementalOutputs)
 	for _, nonIncrementalOutput := range nonIncrementalOutputs {
-		if tspath.FileExtensionIs(nonIncrementalOutput, tspath.ExtensionTsBuildInfo) ||
-			strings.HasSuffix(nonIncrementalOutput, ".readable.baseline.txt") {
+		nonIncrementalOutputText := nonIncrementalOutput.AsString()
+		if nonIncrementalOutput.ExtensionIs(tspath.ExtensionTsBuildInfo) ||
+			strings.HasSuffix(nonIncrementalOutputText, ".readable.baseline.txt") {
 			// Just check existence
 			if !incrementalSys.fsFromFileMap().FileExists(nonIncrementalOutput) {
-				diffBuilder.WriteString(baseline.DiffText("nonIncremental "+nonIncrementalOutput, "incremental "+nonIncrementalOutput, "Exists", ""))
+				diffBuilder.WriteString(baseline.DiffText("nonIncremental "+nonIncrementalOutputText, "incremental "+nonIncrementalOutputText, "Exists", ""))
 				diffBuilder.WriteString("\n")
 			}
 		} else {
 			nonIncrementalText, ok := nonIncrementalSys.fsFromFileMap().ReadFile(nonIncrementalOutput)
 			if !ok {
-				panic("Written file not found " + nonIncrementalOutput)
+				panic("Written file not found " + nonIncrementalOutputText)
 			}
 			incrementalText, ok := incrementalSys.fsFromFileMap().ReadFile(nonIncrementalOutput)
 			if !ok || incrementalText != nonIncrementalText {
-				diffBuilder.WriteString(baseline.DiffText("nonIncremental "+nonIncrementalOutput, "incremental "+nonIncrementalOutput, nonIncrementalText, incrementalText))
+				diffBuilder.WriteString(baseline.DiffText("nonIncremental "+nonIncrementalOutputText, "incremental "+nonIncrementalOutputText, nonIncrementalText, incrementalText))
 				diffBuilder.WriteString("\n")
 			}
 		}

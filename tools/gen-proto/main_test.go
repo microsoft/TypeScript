@@ -36,7 +36,7 @@ func TestGenerate(t *testing.T) {
 		`openProjects?: readonly DocumentIdentifier[] | undefined;`,
 		`export type EnsurePrograms = true | readonly ProjectId[];`,
 		`export type InferredProjectId = string & { __inferredProjectIdBrand: any; };`,
-		`export type ConfiguredProjectId = Path & { __configuredProjectIdBrand: any; };`,
+		`export type ConfiguredProjectId = PathKey & { __configuredProjectIdBrand: any; };`,
 		`export type SyntheticProjectId = string & { __syntheticProjectIdBrand: any; };`,
 		`export type ProjectId = InferredProjectId | ConfiguredProjectId | SyntheticProjectId;`,
 		`ensurePrograms?: EnsurePrograms | undefined;`,
@@ -49,14 +49,34 @@ func TestGenerate(t *testing.T) {
 		`moduleDetection?: ModuleDetectionKind | undefined;`,
 		`newLine?: NewLineKind | undefined;`,
 		`paths?: Record<string, string[]> | undefined;`,
+		`changedProjects?: Record<ProjectId, ProjectFileChanges | null> | undefined;`,
 		`target?: ScriptTarget | undefined;`,
 		`scriptKind?: ScriptKind | undefined;`,
 		`/** InitializeResponse is returned by the initialize method. */
 export interface InitializeResponse`,
-		`/** UseCaseSensitiveFileNames indicates whether the host file system is case-sensitive. */
-    useCaseSensitiveFileNames: boolean;`,
+		`/** CaseSensitivity determines how the host file system compares paths. */
+    caseSensitivity: CaseSensitivity;`,
 		`/** CompilerOptions contains the compiler options exposed by the API. */
 export interface CompilerOptions`,
+		`/**
+ * RawCompilerOptions is the JSON/API representation of compiler options.
+ * Filesystem paths remain strings until Finalize resolves them against a base
+ * directory and constructs a CompilerOptions with typed path guarantees.
+ */
+export interface RawCompilerOptions`,
+		`export interface CreateSnapshotProgramParams {
+    rootFiles: readonly DocumentIdentifier[] | null;
+    compilerOptions: RawCompilerOptions;`,
+		`export interface RawCompilerOptions {
+    allowJs?: boolean | undefined;`,
+		`declarationDir?: string | undefined;`,
+		`rootDirs?: string[] | undefined;`,
+		`tsBuildInfoFile?: string | undefined;`,
+		`export interface CompilerOptions {
+    allowJs?: boolean | undefined;`,
+		`declarationDir?: RootedDirectoryPath | undefined;`,
+		`rootDirs?: RootedDirectoryPath[] | undefined;`,
+		`tsBuildInfoFile?: RootedFilePath | undefined;`,
 		`projectReferences?: ProjectReference[] | undefined;`,
 		`errors: DiagnosticResponse[];`,
 		`getSymbolsAtPositions: APIMethod<GetSymbolsAtPositionsParams, SymbolResponse[]>;`,
@@ -82,7 +102,7 @@ export interface CompilerOptions`,
 		`entries: CompletionEntryResponse[];`,
 		`outputFiles: EmitOutputFile[];`,
 		`/** Path is a normalized path on disk. */
-    path: string;`,
+    path: RootedPath;`,
 		`kind: "importSymbol";`,
 	} {
 		if !strings.Contains(generated, expected) {

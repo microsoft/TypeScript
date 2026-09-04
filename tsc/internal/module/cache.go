@@ -4,15 +4,16 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/packagejson"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 )
 
 type ModeAwareCache[T any] map[ModeAwareCacheKey]T
 
 type moduleResolutionCacheKey struct {
-	containingDirectory string
+	containingDirectory tspath.RootedDirectoryPath
 	moduleName          string
 	resolutionMode      core.ResolutionMode
-	redirectConfigName  string
+	redirectConfigName  tspath.RootedFilePath
 }
 
 type moduleResolutionCache struct {
@@ -28,10 +29,10 @@ func (c *moduleResolutionCache) Set(key moduleResolutionCacheKey, value *Resolve
 }
 
 type typeRefDirectiveResolutionCacheKey struct {
-	containingDirectory             string
+	containingDirectory             tspath.RootedDirectoryPath
 	typeReferenceName               string
 	resolutionMode                  core.ResolutionMode
-	redirectConfigName              string
+	redirectConfigName              tspath.RootedFilePath
 	fromInferredTypesContainingFile bool
 }
 
@@ -72,16 +73,14 @@ type caches struct {
 }
 
 func newCaches(
-	currentDirectory string,
-	useCaseSensitiveFileNames bool,
-	options *core.CompilerOptions,
+	caseSensitivity tspath.CaseSensitivity,
 ) caches {
 	return caches{
-		packageJsonInfoCache: packagejson.NewInfoCache(currentDirectory, useCaseSensitiveFileNames),
+		packageJsonInfoCache: packagejson.NewInfoCache(caseSensitivity),
 	}
 }
 
-func getRedirectConfigName(redirect ResolvedProjectReference) string {
+func getRedirectConfigName(redirect ResolvedProjectReference) tspath.RootedFilePath {
 	if redirect == nil {
 		return ""
 	}

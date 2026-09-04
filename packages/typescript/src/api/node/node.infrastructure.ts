@@ -2,6 +2,7 @@ import {
     type FileReference,
     ModifierFlags,
     type Node,
+    type PathKey,
     SyntaxKind,
 } from "../../ast/index.ts";
 import type { TimingCollector } from "../timing.ts";

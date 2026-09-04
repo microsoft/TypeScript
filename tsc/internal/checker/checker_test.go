@@ -33,13 +33,11 @@ foo.bar;`
 					"files": ["foo.ts"]
 				}
 			`,
-	}, false /*useCaseSensitiveFileNames*/)
+	}, tspath.CaseInsensitive /*caseSensitivity*/)
 	fs = bundled.WrapFS(fs)
 
-	cd := "/"
-	host := compiler.NewCompilerHost(cd, fs, bundled.LibPath(), nil, nil, nil)
-
-	parsed, errors := tsoptions.GetParsedCommandLineOfConfigFile("/tsconfig.json", &core.CompilerOptions{}, nil, host, nil)
+	host := compiler.NewCompilerHost(fs, bundled.LibPath(), nil, nil, nil)
+	parsed, errors := tsoptions.GetParsedCommandLineOfConfigFile("/tsconfig.json", &core.CompilerOptions{}, nil, fs, nil)
 	assert.Equal(t, len(errors), 0, "Expected no errors in parsed command line")
 
 	p := compiler.NewProgram(compiler.ProgramOptions{
@@ -64,9 +62,9 @@ foo.bar;`
 
 func BenchmarkNewChecker(b *testing.B) {
 	fs := bundled.WrapFS(osvfs.FS())
-	rootPath := tspath.NormalizeSlashes(filepath.Join(repo.TestDataPath(), "fixtures/compiler"))
-	host := compiler.NewCompilerHost(rootPath, fs, bundled.LibPath(), nil, nil, nil)
-	parsed, errors := tsoptions.GetParsedCommandLineOfConfigFile(tspath.CombinePaths(rootPath, "tsconfig.json"), &core.CompilerOptions{}, nil, host, nil)
+	rootPath := tspath.RootedDirectoryPathFromAbsolute(filepath.Join(repo.TestDataPath(), "fixtures/compiler"))
+	host := compiler.NewCompilerHost(fs, bundled.LibPath(), nil, nil, nil)
+	parsed, errors := tsoptions.GetParsedCommandLineOfConfigFile(rootPath.ResolveFile("tsconfig.json"), &core.CompilerOptions{}, nil, fs, nil)
 	assert.Equal(b, len(errors), 0, "Expected no errors in parsed command line")
 	program := compiler.NewProgram(compiler.ProgramOptions{
 		Config: parsed,
