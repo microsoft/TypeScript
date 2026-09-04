@@ -619,11 +619,21 @@ func (w *Watcher) compileAndEmit() tsc.CompileAndEmitResult {
 }
 
 func (w *Watcher) contentMapperManifestChanged(changedPaths map[string]fswatch.EventKind) bool {
+	comparePathsOptions := w.comparePathsOptions()
+	var changedPathKeys map[tspath.Path]struct{}
 	for _, mapper := range w.config.ContentMappers() {
 		if mapper.PackageDirectory == "" || mapper.ContributionID != "" {
 			continue
 		}
-		if _, changed := changedPaths[tspath.CombinePaths(mapper.PackageDirectory, "package.json")]; changed {
+		if changedPathKeys == nil {
+			changedPathKeys = make(map[tspath.Path]struct{}, len(changedPaths))
+			for path := range changedPaths {
+				changedPathKeys[tspath.ToPath(path, comparePathsOptions.CurrentDirectory, comparePathsOptions.UseCaseSensitiveFileNames)] = struct{}{}
+			}
+		}
+		manifestPath := tspath.CombinePaths(mapper.PackageDirectory, "package.json")
+		manifestKey := tspath.ToPath(manifestPath, comparePathsOptions.CurrentDirectory, comparePathsOptions.UseCaseSensitiveFileNames)
+		if _, changed := changedPathKeys[manifestKey]; changed {
 			return true
 		}
 	}
