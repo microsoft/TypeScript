@@ -100,6 +100,11 @@ export interface Node extends ReadonlyTextRange {
     getLeadingTriviaWidth(sourceFile?: SourceFile): number;
     getFullText(sourceFile?: SourceFile): string;
     getText(sourceFile?: SourceFile): string;
+    getChildCount(sourceFile?: SourceFile): number;
+    getChildAt(index: number, sourceFile?: SourceFile): Node;
+    getChildren(sourceFile?: SourceFile): readonly Node[];
+    getFirstToken(sourceFile?: SourceFile): Node | undefined;
+    getLastToken(sourceFile?: SourceFile): Node | undefined;
 }
 
 export interface FileReference extends TextRange {
@@ -159,6 +164,8 @@ export interface SourceFile extends Node {
     getPositionOfLineAndCharacter(line: number, character: number): number;
     /** @internal */
     tokenCache?: Map<string, Node>;
+    /** @internal */
+    childrenCache?: Map<Node, readonly Node[]>;
 }
 
 // ── Token hierarchy ──
