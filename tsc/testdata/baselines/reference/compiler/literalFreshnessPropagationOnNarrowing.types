@@ -71,7 +71,7 @@ function f2() {
 >elOrA : (string | false)[] | (string | false)
 >elOrA : (string | false)[]
 >[elOrA] : (string | false)[]
->elOrA : string | false
+>elOrA : (string | false) & not any[]
 
     // Desired: OK
     // 3.0: Error
@@ -88,7 +88,7 @@ function f2() {
 >elOrA : (string | false)[] | (string | false)
 >elOrA : (string | false)[]
 >[elOrA] : (string | false)[]
->elOrA : string | false
+>elOrA : (string | false) & not any[]
 }
 
 function f3() {

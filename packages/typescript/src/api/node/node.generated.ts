@@ -546,6 +546,7 @@ export class RemoteNode extends RemoteNodeBase implements Node {
                 const idx = (this.data >> 24) & 0x3;
                 if (idx === 1) return SyntaxKind.ReadonlyKeyword;
                 if (idx === 2) return SyntaxKind.UniqueKeyword;
+                if (idx === 3) return SyntaxKind.NotKeyword;
                 return SyntaxKind.KeyOfKeyword;
             }
         }

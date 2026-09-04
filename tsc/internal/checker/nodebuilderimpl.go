@@ -3591,6 +3591,11 @@ func (b *NodeBuilderImpl) typeToTypeNode(t *Type) *ast.TypeNode {
 	if t.flags&TypeFlagsConditional != 0 {
 		return b.visitAndTransformType(t, (*NodeBuilderImpl).conditionalTypeToTypeNode)
 	}
+	if t.flags&TypeFlagsNegated != 0 {
+		b.ctx.approximateLength += 4
+		baseTypeNode := b.typeToTypeNode(t.AsNegatedType().baseType)
+		return b.f.NewTypeOperatorNode(ast.KindNotKeyword, baseTypeNode)
+	}
 	if t.flags&TypeFlagsSubstitution != 0 {
 		typeNode := b.typeToTypeNode(t.AsSubstitutionType().baseType)
 		if !b.ch.isNoInferType(t) {

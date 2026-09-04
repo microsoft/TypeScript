@@ -25,7 +25,7 @@ let validate: (x: unknown) => SomeResponse = x => (x === 'yes' || x === 'no') ? 
 >x : unknown
 >'yes' : "yes"
 >x === 'no' : boolean
->x : unknown
+>x : not "yes"
 >'no' : "no"
 >x : "no" | "yes"
 >'idk' : "idk"
@@ -60,7 +60,7 @@ if (u === true || u === false) {
 >u : unknown
 >true : true
 >u === false : boolean
->u : unknown
+>u : not true
 >false : false
 
     const someBool: boolean = u;
@@ -106,8 +106,8 @@ if (!(u === 42)) {
 >42 : 42
 
     type A = isTrue<isUnknown<typeof u>>
->A : true
->u : unknown
+>A : false
+>u : not 42
 }
 
 if (u !== 42) {
@@ -116,8 +116,8 @@ if (u !== 42) {
 >42 : 42
 
     type B = isTrue<isUnknown<typeof u>>
->B : true
->u : unknown
+>B : false
+>u : not 42
 }
 
 if (u == 42) {
@@ -687,12 +687,12 @@ function notNotEquals(u: unknown)  {
 >NumberEnum : typeof NumberEnum
 >A : NumberEnum.A
 >u !== NumberEnum.B : boolean
->u : unknown
+>u : not NumberEnum.A
 >NumberEnum.B : NumberEnum.B
 >NumberEnum : typeof NumberEnum
 >B : NumberEnum.B
 >u !== StringEnum.A : boolean
->u : unknown
+>u : not NumberEnum.A & not NumberEnum.B
 >StringEnum.A : StringEnum.A
 >StringEnum : typeof StringEnum
 >A : StringEnum.A
@@ -718,12 +718,12 @@ function notNotEquals(u: unknown)  {
 >NumberEnum : typeof NumberEnum
 >A : NumberEnum.A
 >u === NumberEnum.B : boolean
->u : unknown
+>u : not NumberEnum.A
 >NumberEnum.B : NumberEnum.B
 >NumberEnum : typeof NumberEnum
 >B : NumberEnum.B
 >u === StringEnum.A : boolean
->u : unknown
+>u : not NumberEnum.A & not NumberEnum.B
 >StringEnum.A : StringEnum.A
 >StringEnum : typeof StringEnum
 >A : StringEnum.A

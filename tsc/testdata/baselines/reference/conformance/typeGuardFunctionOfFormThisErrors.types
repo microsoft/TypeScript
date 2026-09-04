@@ -133,7 +133,7 @@ else {
 >c : number | number[]
 
     holder;
->holder : { invalidGuard: (c: any) => this is number; }
+>holder : { invalidGuard: (c: any) => this is number; } & not number
 }
 
 let detached = a.isFollower;

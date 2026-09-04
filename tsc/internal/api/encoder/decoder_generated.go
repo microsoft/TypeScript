@@ -198,6 +198,7 @@ func (d *astDecoder) createChildrenNode(kind ast.Kind, data uint32, childIndices
 		ast.KindKeyOfKeyword,
 		ast.KindModuleKeyword,
 		ast.KindNamespaceKeyword,
+		ast.KindNotKeyword,
 		ast.KindOutKeyword,
 		ast.KindReadonlyKeyword,
 		ast.KindRequireKeyword,
@@ -750,6 +751,8 @@ func (d *astDecoder) createChildrenNode(kind ast.Kind, data uint32, childIndices
 			operator = ast.KindReadonlyKeyword
 		case 2:
 			operator = ast.KindUniqueKeyword
+		case 3:
+			operator = ast.KindNotKeyword
 		}
 		return d.factory.NewTypeOperatorNode(operator, d.singleChild(childIndices)), nil
 	case ast.KindInferType:

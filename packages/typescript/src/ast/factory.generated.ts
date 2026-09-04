@@ -2477,7 +2477,7 @@ export function createConditionalTypeNode(checkType: TypeNode, extendsType: Type
     }) as unknown as ConditionalTypeNode;
 }
 
-export function createTypeOperatorNode(operator: SyntaxKind.KeyOfKeyword | SyntaxKind.ReadonlyKeyword | SyntaxKind.UniqueKeyword, type: TypeNode): TypeOperatorNode {
+export function createTypeOperatorNode(operator: SyntaxKind.KeyOfKeyword | SyntaxKind.ReadonlyKeyword | SyntaxKind.UniqueKeyword | SyntaxKind.NotKeyword, type: TypeNode): TypeOperatorNode {
     return new NodeObject(SyntaxKind.TypeOperator, {
         operator,
         type,

@@ -16,8 +16,8 @@ try {
 >$ERROR : any
 >'#6.1: var \\u0078x = 1; xx === 6. Actual: ' + (xx) : string
 >'#6.1: var \\u0078x = 1; xx === 6. Actual: ' : "#6.1: var \\u0078x = 1; xx === 6. Actual: "
->(xx) : number
->xx : number
+>(xx) : number & not 6
+>xx : number & not 6
   }
 }
 catch (e) {

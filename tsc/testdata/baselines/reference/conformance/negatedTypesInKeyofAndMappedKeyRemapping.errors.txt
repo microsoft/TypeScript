@@ -1,0 +1,62 @@
+negatedTypesInKeyofAndMappedKeyRemapping.ts(32,11): error TS2339: Property 'id' does not exist on type 'WithoutId'.
+negatedTypesInKeyofAndMappedKeyRemapping.ts(36,10): error TS2339: Property 'id' does not exist on type 'OnlyData'.
+negatedTypesInKeyofAndMappedKeyRemapping.ts(37,10): error TS2339: Property 'method' does not exist on type 'OnlyData'.
+negatedTypesInKeyofAndMappedKeyRemapping.ts(46,11): error TS2339: Property 'name' does not exist on type 'Omit2<Obj, "name">'.
+
+
+==== negatedTypesInKeyofAndMappedKeyRemapping.ts (4 errors) ====
+    // Negated types combined with keyof and mapped-type key remapping (`as`).
+    
+    interface Obj {
+        id: number;
+        name: string;
+        method(): void;
+    }
+    
+    // keyof over the object.
+    type K = keyof Obj; // "id" | "name" | "method"
+    
+    // Negation of a keyof union.
+    type NotKeyof = not keyof Obj; // not ("id" | "name" | "method")
+    
+    // keyof applied to a negated object type.
+    type KeyofNot = keyof (not Obj);
+    
+    // Key remapping that filters out a specific key via `as (K & not "id")`.
+    type WithoutId = {
+        [P in keyof Obj as (P & not "id")]: Obj[P];
+    };
+    
+    // Key remapping that filters out several keys.
+    type OnlyData = {
+        [P in keyof Obj as (P & not ("id" | "method"))]: Obj[P];
+    };
+    
+    // Probes against the remapped types.
+    declare let withoutId: WithoutId;
+    withoutId.name;   // should exist
+    withoutId.method; // should exist
+    withoutId.id;     // should be removed
+              ~~
+!!! error TS2339: Property 'id' does not exist on type 'WithoutId'.
+    
+    declare let onlyData: OnlyData;
+    onlyData.name;   // should exist
+    onlyData.id;     // should be removed
+             ~~
+!!! error TS2339: Property 'id' does not exist on type 'OnlyData'.
+    onlyData.method; // should be removed
+             ~~~~~~
+!!! error TS2339: Property 'method' does not exist on type 'OnlyData'.
+    
+    // Generic key filtering.
+    type Omit2<T, K extends keyof T> = {
+        [P in keyof T as (P & not K)]: T[P];
+    };
+    type ObjNoName = Omit2<Obj, "name">;
+    declare let objNoName: ObjNoName;
+    objNoName.id;   // should exist
+    objNoName.name; // should be removed
+              ~~~~
+!!! error TS2339: Property 'name' does not exist on type 'Omit2<Obj, "name">'.
+    

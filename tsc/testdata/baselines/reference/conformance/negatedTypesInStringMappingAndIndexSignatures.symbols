@@ -1,0 +1,74 @@
+//// [tests/cases/conformance/types/negated/negatedTypesInStringMappingAndIndexSignatures.ts] ////
+
+=== negatedTypesInStringMappingAndIndexSignatures.ts ===
+// Combination: negated types with BOTH string mapping types and index signatures.
+
+// Index signature whose key is a string mapping of a negated type.
+type UpperKey = {
+>UpperKey : Symbol(UpperKey, Decl(negatedTypesInStringMappingAndIndexSignatures.ts, 0, 0))
+
+    [idx: Uppercase<string & not "bar">]: number;
+>idx : Symbol(idx, Decl(negatedTypesInStringMappingAndIndexSignatures.ts, 4, 5))
+>Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
+
+};
+
+declare let upperKey: UpperKey;
+>upperKey : Symbol(upperKey, Decl(negatedTypesInStringMappingAndIndexSignatures.ts, 7, 11))
+>UpperKey : Symbol(UpperKey, Decl(negatedTypesInStringMappingAndIndexSignatures.ts, 0, 0))
+
+upperKey["FOO"] = 1; // depends on representation
+>upperKey : Symbol(upperKey, Decl(negatedTypesInStringMappingAndIndexSignatures.ts, 7, 11))
+
+upperKey["foo"] = 1; // depends on representation
+>upperKey : Symbol(upperKey, Decl(negatedTypesInStringMappingAndIndexSignatures.ts, 7, 11))
+
+// Index signature whose key is a negation of a string mapping type.
+type NotUpperKey = {
+>NotUpperKey : Symbol(NotUpperKey, Decl(negatedTypesInStringMappingAndIndexSignatures.ts, 9, 20))
+
+    [idx: string & not Uppercase<string>]: number;
+>idx : Symbol(idx, Decl(negatedTypesInStringMappingAndIndexSignatures.ts, 13, 5))
+>Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
+
+};
+
+declare let notUpperKey: NotUpperKey;
+>notUpperKey : Symbol(notUpperKey, Decl(negatedTypesInStringMappingAndIndexSignatures.ts, 16, 11))
+>NotUpperKey : Symbol(NotUpperKey, Decl(negatedTypesInStringMappingAndIndexSignatures.ts, 9, 20))
+
+notUpperKey["foo"] = 1; // depends on representation
+>notUpperKey : Symbol(notUpperKey, Decl(negatedTypesInStringMappingAndIndexSignatures.ts, 16, 11))
+
+notUpperKey["FOO"] = 1; // depends on representation
+>notUpperKey : Symbol(notUpperKey, Decl(negatedTypesInStringMappingAndIndexSignatures.ts, 16, 11))
+
+// Mapped type over a string-mapping key type that uses a negated placeholder.
+type MappedUpper = {
+>MappedUpper : Symbol(MappedUpper, Decl(negatedTypesInStringMappingAndIndexSignatures.ts, 18, 23))
+
+    [k in Uppercase<string & not "bar">]: number;
+>k : Symbol(k, Decl(negatedTypesInStringMappingAndIndexSignatures.ts, 22, 5))
+>Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
+
+};
+
+// Generic index signature combination.
+type WrapUpperKey<T extends string> = {
+>WrapUpperKey : Symbol(WrapUpperKey, Decl(negatedTypesInStringMappingAndIndexSignatures.ts, 23, 2))
+>T : Symbol(T, Decl(negatedTypesInStringMappingAndIndexSignatures.ts, 26, 18))
+
+    [idx: Uppercase<T & not "bar">]: number;
+>idx : Symbol(idx, Decl(negatedTypesInStringMappingAndIndexSignatures.ts, 27, 5))
+>Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(negatedTypesInStringMappingAndIndexSignatures.ts, 26, 18))
+
+};
+type WrapUpperKeyString = WrapUpperKey<string>;
+>WrapUpperKeyString : Symbol(WrapUpperKeyString, Decl(negatedTypesInStringMappingAndIndexSignatures.ts, 28, 2))
+>WrapUpperKey : Symbol(WrapUpperKey, Decl(negatedTypesInStringMappingAndIndexSignatures.ts, 23, 2))
+
+type WrapUpperKeyLiteral = WrapUpperKey<"baz">;
+>WrapUpperKeyLiteral : Symbol(WrapUpperKeyLiteral, Decl(negatedTypesInStringMappingAndIndexSignatures.ts, 29, 47))
+>WrapUpperKey : Symbol(WrapUpperKey, Decl(negatedTypesInStringMappingAndIndexSignatures.ts, 23, 2))
+

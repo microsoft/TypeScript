@@ -1,0 +1,97 @@
+//// [tests/cases/conformance/types/negated/negatedTypesControlFlowNarrowing.ts] ////
+
+=== negatedTypesControlFlowNarrowing.ts ===
+// Control flow narrowing introduces negated types in the false branch of a narrowing check.
+// The negation is only retained where it is non-redundant (i.e. the narrowed base type overlaps
+// the removed candidate, such as `{}` / `unknown`); for ordinary disjoint unions it reduces away.
+
+declare function wantsStr(x: string): void;
+>wantsStr : Symbol(wantsStr, Decl(negatedTypesControlFlowNarrowing.ts, 0, 0))
+>x : Symbol(x, Decl(negatedTypesControlFlowNarrowing.ts, 4, 26))
+
+declare function wantsNotStr(x: not string): void;
+>wantsNotStr : Symbol(wantsNotStr, Decl(negatedTypesControlFlowNarrowing.ts, 4, 43))
+>x : Symbol(x, Decl(negatedTypesControlFlowNarrowing.ts, 5, 29))
+
+declare function wantsNegatedCallbackResult(cb: () => not string): void;
+>wantsNegatedCallbackResult : Symbol(wantsNegatedCallbackResult, Decl(negatedTypesControlFlowNarrowing.ts, 5, 50))
+>cb : Symbol(cb, Decl(negatedTypesControlFlowNarrowing.ts, 6, 44))
+
+const item = {};
+>item : Symbol(item, Decl(negatedTypesControlFlowNarrowing.ts, 8, 5))
+
+if (typeof item === "string") {
+>item : Symbol(item, Decl(negatedTypesControlFlowNarrowing.ts, 8, 5))
+
+    wantsStr(item); // item: string
+>wantsStr : Symbol(wantsStr, Decl(negatedTypesControlFlowNarrowing.ts, 0, 0))
+>item : Symbol(item, Decl(negatedTypesControlFlowNarrowing.ts, 8, 5))
+
+} else {
+    wantsNotStr(item); // item: {} & not string
+>wantsNotStr : Symbol(wantsNotStr, Decl(negatedTypesControlFlowNarrowing.ts, 4, 43))
+>item : Symbol(item, Decl(negatedTypesControlFlowNarrowing.ts, 8, 5))
+
+    // The negation also flows through an arrow function body (a position a syntactic check misses).
+    wantsNegatedCallbackResult(() => item); // item: {} & not string
+>wantsNegatedCallbackResult : Symbol(wantsNegatedCallbackResult, Decl(negatedTypesControlFlowNarrowing.ts, 5, 50))
+>item : Symbol(item, Decl(negatedTypesControlFlowNarrowing.ts, 8, 5))
+}
+
+// No negation is introduced against a disjoint union: 'not number' reduces away.
+declare const value: string | number;
+>value : Symbol(value, Decl(negatedTypesControlFlowNarrowing.ts, 19, 13))
+
+if (typeof value === "string") {
+>value : Symbol(value, Decl(negatedTypesControlFlowNarrowing.ts, 19, 13))
+
+    value; // string
+>value : Symbol(value, Decl(negatedTypesControlFlowNarrowing.ts, 19, 13))
+
+} else {
+    value; // number
+>value : Symbol(value, Decl(negatedTypesControlFlowNarrowing.ts, 19, 13))
+}
+
+// Union base where the negation is redundant against every constituent.
+declare function wantsNotNum(x: not number): void;
+>wantsNotNum : Symbol(wantsNotNum, Decl(negatedTypesControlFlowNarrowing.ts, 24, 1))
+>x : Symbol(x, Decl(negatedTypesControlFlowNarrowing.ts, 27, 29))
+
+declare const u: string | number | boolean;
+>u : Symbol(u, Decl(negatedTypesControlFlowNarrowing.ts, 28, 13))
+
+if (typeof u === "number") {
+>u : Symbol(u, Decl(negatedTypesControlFlowNarrowing.ts, 28, 13))
+
+    u; // number
+>u : Symbol(u, Decl(negatedTypesControlFlowNarrowing.ts, 28, 13))
+
+} else {
+    wantsNotNum(u); // string | boolean
+>wantsNotNum : Symbol(wantsNotNum, Decl(negatedTypesControlFlowNarrowing.ts, 24, 1))
+>u : Symbol(u, Decl(negatedTypesControlFlowNarrowing.ts, 28, 13))
+}
+
+// The value flows into a negated position nested inside an object literal argument.
+declare function wantsNestedNegated(x: { member: not string }): void;
+>wantsNestedNegated : Symbol(wantsNestedNegated, Decl(negatedTypesControlFlowNarrowing.ts, 33, 1))
+>x : Symbol(x, Decl(negatedTypesControlFlowNarrowing.ts, 36, 36))
+>member : Symbol(member, Decl(negatedTypesControlFlowNarrowing.ts, 36, 40))
+
+declare const nested: {};
+>nested : Symbol(nested, Decl(negatedTypesControlFlowNarrowing.ts, 37, 13))
+
+if (typeof nested === "string") {
+>nested : Symbol(nested, Decl(negatedTypesControlFlowNarrowing.ts, 37, 13))
+
+    nested; // string
+>nested : Symbol(nested, Decl(negatedTypesControlFlowNarrowing.ts, 37, 13))
+
+} else {
+    wantsNestedNegated({ member: nested }); // nested: {} & not string
+>wantsNestedNegated : Symbol(wantsNestedNegated, Decl(negatedTypesControlFlowNarrowing.ts, 33, 1))
+>member : Symbol(member, Decl(negatedTypesControlFlowNarrowing.ts, 41, 24))
+>nested : Symbol(nested, Decl(negatedTypesControlFlowNarrowing.ts, 37, 13))
+}
+

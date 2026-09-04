@@ -58,13 +58,13 @@ if (a.isLeader()) {
 else if (a.isFollower()) {
 >a.isFollower() : boolean
 >a.isFollower : () => this is FollowerGuard
->a : RoyalGuard
+>a : RoyalGuard & not LeadGuard
 >isFollower : () => this is FollowerGuard
 
     a.follow();
 >a.follow() : void
 >a.follow : () => void
->a : FollowerGuard
+>a : RoyalGuard & not LeadGuard & FollowerGuard
 >follow : () => void
 }
 
@@ -88,13 +88,13 @@ if (b.isLeader()) {
 else if (b.isFollower()) {
 >b.isFollower() : boolean
 >b.isFollower : () => this is FollowerGuard
->b : GuardInterface
+>b : GuardInterface & not LeadGuard
 >isFollower : () => this is FollowerGuard
 
     b.follow();
 >b.follow() : void
 >b.follow : () => void
->b : FollowerGuard
+>b : GuardInterface & not LeadGuard & FollowerGuard
 >follow : () => void
 }
 
@@ -132,9 +132,9 @@ if (holder2.a.isLeader()) {
 }
 else {
     holder2.a;
->holder2.a : RoyalGuard
+>holder2.a : RoyalGuard & not LeadGuard
 >holder2 : { a: RoyalGuard; }
->a : RoyalGuard
+>a : RoyalGuard & not LeadGuard
 }
 
 class ArrowGuard {
@@ -196,13 +196,13 @@ if (guard.isElite()) {
 else if (guard.isMedic()) {
 >guard.isMedic() : boolean
 >guard.isMedic : () => this is ArrowMedic
->guard : ArrowGuard
+>guard : ArrowGuard & not ArrowElite
 >isMedic : () => this is ArrowMedic
 
     guard.heal();
 >guard.heal() : void
 >guard.heal : () => void
->guard : ArrowMedic
+>guard : ArrowGuard & not ArrowElite & ArrowMedic
 >heal : () => void
 }
 
@@ -251,14 +251,14 @@ if (crate.isSundries()) {
 else if (crate.isSupplies()) {
 >crate.isSupplies() : boolean
 >crate.isSupplies : () => this is Crate<Supplies>
->crate : Crate<{}>
+>crate : Crate<{}> & not Crate<Sundries>
 >isSupplies : () => this is Crate<Supplies>
 
     crate.contents.spoiled = true;
 >crate.contents.spoiled = true : true
 >crate.contents.spoiled : boolean
 >crate.contents : Supplies
->crate : Crate<Supplies>
+>crate : Crate<{}> & not Crate<Sundries> & Crate<Supplies>
 >contents : Supplies
 >spoiled : boolean
 >true : true

@@ -1,0 +1,35 @@
+//// [tests/cases/conformance/types/negated/negatedTypesComparability.ts] ////
+
+=== negatedTypesComparability.ts ===
+declare const stringValue: string;
+>stringValue : string
+
+declare const excludedStringValue: string & not "excluded";
+>excludedStringValue : string & not "excluded"
+
+stringValue === excludedStringValue;
+>stringValue === excludedStringValue : boolean
+>stringValue : string
+>excludedStringValue : string & not "excluded"
+
+excludedStringValue === stringValue;
+>excludedStringValue === stringValue : boolean
+>excludedStringValue : string & not "excluded"
+>stringValue : string
+
+declare const zero: 0;
+>zero : 0
+
+declare const nonzeroNumber: number & not 0;
+>nonzeroNumber : number & not 0
+
+zero === nonzeroNumber; // error
+>zero === nonzeroNumber : boolean
+>zero : 0
+>nonzeroNumber : number & not 0
+
+nonzeroNumber === zero; // error
+>nonzeroNumber === zero : boolean
+>nonzeroNumber : number & not 0
+>zero : 0
+

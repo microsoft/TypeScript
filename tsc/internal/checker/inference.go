@@ -244,6 +244,11 @@ func (c *Checker) inferFromTypes(n *InferenceState, source *Type, target *Type) 
 		if source.symbol == target.symbol {
 			c.inferFromTypes(n, source.AsStringMappingType().target, target.AsStringMappingType().target)
 		}
+	case source.flags&TypeFlagsNegated != 0 && target.flags&TypeFlagsNegated != 0:
+		// Infer from 'not S' to 'not T' by inferring from the base type S to the base type T.
+		// Negation reverses subtyping (S <: T implies 'not T' <: 'not S'), so the base types
+		// occupy a contravariant position and inference is flipped accordingly.
+		c.inferFromContravariantTypes(n, source.AsNegatedType().baseType, target.AsNegatedType().baseType)
 	case source.flags&TypeFlagsSubstitution != 0:
 		c.inferFromTypes(n, source.AsSubstitutionType().baseType, target)
 		// Make substitute inference at a lower priority
