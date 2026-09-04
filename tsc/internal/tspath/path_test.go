@@ -265,6 +265,8 @@ func BenchmarkCombinePaths(b *testing.B) {
 		{"/path", "/to", "file.ext"},
 		{"c:/path", "to", "file.ext"},
 		{"file:///path", "to", "file.ext"},
+		{"/path", "/abs/to/file.ext"},
+		{"/lone/path/to/file.ext"},
 	}
 
 	for _, test := range tests {
