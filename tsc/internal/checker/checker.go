@@ -28103,8 +28103,13 @@ func (c *Checker) getResolvedBaseConstraint(t *Type, stack []RecursionId) *Type 
 	if len(stack) < 10 || len(stack) < 50 && !slices.Contains(stack, identity) {
 		constraint = c.computeBaseConstraint(c.getSimplifiedType(t /*writing*/, false), append(stack, identity))
 	}
+	circular := false
 	if !c.popTypeResolution() {
-		if t.flags&TypeFlagsTypeParameter != 0 {
+		// A provisional comparison reports nothing and decides nothing, so a circularity it runs into is
+		// the question's own and neither reports nor sticks. It explores further than an ordinary check
+		// does -- that is the point of it -- and finding a cycle out there says nothing about the program.
+		// Declining the cache leaves the next ask, outside any region, to reach and report a real one.
+		if t.flags&TypeFlagsTypeParameter != 0 && c.provisionalDepth == 0 {
 			errorNode := c.getConstraintDeclaration(t)
 			if errorNode != nil {
 				diagnostic := c.error(errorNode, diagnostics.Type_parameter_0_has_a_circular_constraint, c.TypeToString(t))
@@ -28114,11 +28119,12 @@ func (c *Checker) getResolvedBaseConstraint(t *Type, stack []RecursionId) *Type 
 			}
 		}
 		constraint = c.circularConstraintType
+		circular = true
 	}
 	if constraint == nil {
 		constraint = c.noConstraintType
 	}
-	if constrained.resolvedBaseConstraint == nil {
+	if constrained.resolvedBaseConstraint == nil && !(circular && c.provisionalDepth != 0) {
 		constrained.resolvedBaseConstraint = constraint
 	}
 	return constraint
