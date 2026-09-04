@@ -281,7 +281,15 @@ func NewNodeBuilder(ch *Checker, e *printer.EmitContext) *NodeBuilder {
 }
 
 func NewNodeBuilderEx(ch *Checker, e *printer.EmitContext, idToSymbol map[*ast.IdentifierNode]*ast.Symbol) *NodeBuilder {
-	impl := newNodeBuilderImpl(ch, e, idToSymbol)
+	return newNodeBuilderEx(ch, e, idToSymbol, ch.NewEmitResolver())
+}
+
+func newNodeBuilder(ch *Checker, e *printer.EmitContext, emitResolver *EmitResolver) *NodeBuilder {
+	return newNodeBuilderEx(ch, e, nil /*idToSymbol*/, emitResolver)
+}
+
+func newNodeBuilderEx(ch *Checker, e *printer.EmitContext, idToSymbol map[*ast.IdentifierNode]*ast.Symbol, emitResolver *EmitResolver) *NodeBuilder {
+	impl := newNodeBuilderImpl(ch, e, idToSymbol, emitResolver)
 	return &NodeBuilder{impl: impl, ctxStack: make([]*NodeBuilderContext, 0, 1), host: ch.program}
 }
 

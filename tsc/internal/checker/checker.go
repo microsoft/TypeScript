@@ -886,8 +886,6 @@ type Checker struct {
 	isStringIndexSignatureOnlyType              func(*Type) bool
 	markNodeAssignments                         func(*ast.Node) bool
 	compareTypesAssignable                      TypeComparer
-	emitResolver                                *EmitResolver
-	emitResolverOnce                            sync.Once
 	_jsxNamespace                               string
 	_jsxFactoryEntity                           *ast.Node
 	skipDirectInferenceNodes                    collections.Set[*ast.Node]
@@ -32505,12 +32503,8 @@ func (c *Checker) GetTypeAtLocation(node *ast.Node) *Type {
 	return c.getTypeOfNode(ast.GetReparsedNodeForNode(node))
 }
 
-func (c *Checker) GetEmitResolver() *EmitResolver {
-	c.emitResolverOnce.Do(func() {
-		c.emitResolver = newEmitResolver(c)
-	})
-
-	return c.emitResolver
+func (c *Checker) NewEmitResolver() *EmitResolver {
+	return newEmitResolver(c)
 }
 
 func (c *Checker) GetAliasedSymbol(symbol *ast.Symbol) *ast.Symbol {

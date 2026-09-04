@@ -245,7 +245,7 @@ func (b *NodeBuilderImpl) getModuleSpecifierOverride(parent *ast.Node, lit *ast.
 			meaning = ast.SymbolFlagsValue
 		}
 		var parentSymbol *ast.Symbol
-		if nodeSymbol != nil && b.ch.IsSymbolAccessible(nodeSymbol, b.ctx.enclosingDeclaration, meaning, false).Accessibility == printer.SymbolAccessibilityAccessible {
+		if nodeSymbol != nil && b.isSymbolAccessible(nodeSymbol, b.ctx.enclosingDeclaration, meaning, true /*allowModules*/) {
 			parentSymbol = b.lookupSymbolChain(nodeSymbol, meaning, true)[0]
 		}
 		if parentSymbol != nil && IsExternalModuleSymbol(parentSymbol) {
@@ -330,7 +330,7 @@ func getExistingNodeTreeVisitor(b *NodeBuilderImpl, bound *recoveryBoundary) *as
 		if ast.IsThisIdentifier(leftmost) {
 			// `this` isn't a bindable identifier - skip resolution, find a relevant `this` symbol directly and avoid exhaustive scope traversal
 			sym = b.ch.getSymbolOfDeclaration(b.ch.getThisContainer(leftmost, false, false))
-			if b.ch.IsSymbolAccessible(sym, leftmost, meaning, false).Accessibility != printer.SymbolAccessibilityAccessible {
+			if !b.isSymbolAccessible(sym, leftmost, meaning, true /*allowModules*/) {
 				introducesError = true
 				b.ctx.tracker.ReportInaccessibleThisError()
 			}
@@ -371,7 +371,7 @@ func getExistingNodeTreeVisitor(b *NodeBuilderImpl, bound *recoveryBoundary) *as
 				}
 			}
 			if sym.Flags&ast.SymbolFlagsTypeParameter == 0 /* Type parameters are visible in the current context if they are are resolvable */ && !ast.IsDeclarationName(node) &&
-				b.ch.IsSymbolAccessible(sym, enclosingDeclaration, meaning, false).Accessibility != printer.SymbolAccessibilityAccessible {
+				!b.isSymbolAccessible(sym, enclosingDeclaration, meaning, true /*allowModules*/) {
 				b.ctx.tracker.ReportInferenceFallback(node)
 				introducesError = true
 			} else {

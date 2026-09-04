@@ -679,7 +679,7 @@ func (r *EmitResolver) IsExpandoFunctionDeclaration(node *ast.Node) bool {
 }
 
 func (r *EmitResolver) isSymbolAccessible(symbol *ast.Symbol, enclosingDeclaration *ast.Node, meaning ast.SymbolFlags, shouldComputeAliasToMarkVisible bool) printer.SymbolAccessibilityResult {
-	return r.checker.IsSymbolAccessible(symbol, enclosingDeclaration, meaning, shouldComputeAliasToMarkVisible)
+	return r.checker.isSymbolAccessibleWorkerWithResolver(symbol, enclosingDeclaration, meaning, shouldComputeAliasToMarkVisible, true /*allowModules*/, r)
 }
 
 func (r *EmitResolver) IsSymbolAccessible(symbol *ast.Symbol, enclosingDeclaration *ast.Node, meaning ast.SymbolFlags, shouldComputeAliasToMarkVisible bool) printer.SymbolAccessibilityResult {
@@ -955,7 +955,7 @@ func (r *EmitResolver) CreateReturnTypeOfSignatureDeclaration(emitContext *print
 
 	r.checkerMu.Lock()
 	defer r.checkerMu.Unlock()
-	requestNodeBuilder := NewNodeBuilder(r.checker, emitContext) // TODO: cache per-context
+	requestNodeBuilder := newNodeBuilder(r.checker, emitContext, r) // TODO: cache per-context
 	return requestNodeBuilder.SerializeReturnTypeForSignature(original, enclosingDeclaration, flags, internalFlags, tracker)
 }
 
@@ -967,7 +967,7 @@ func (r *EmitResolver) CreateTypeParametersOfSignatureDeclaration(emitContext *p
 
 	r.checkerMu.Lock()
 	defer r.checkerMu.Unlock()
-	requestNodeBuilder := NewNodeBuilder(r.checker, emitContext) // TODO: cache per-context
+	requestNodeBuilder := newNodeBuilder(r.checker, emitContext, r) // TODO: cache per-context
 	return requestNodeBuilder.SerializeTypeParametersForSignature(original, enclosingDeclaration, flags, internalFlags, tracker)
 }
 
@@ -979,7 +979,7 @@ func (r *EmitResolver) CreateTypeOfDeclaration(emitContext *printer.EmitContext,
 
 	r.checkerMu.Lock()
 	defer r.checkerMu.Unlock()
-	requestNodeBuilder := NewNodeBuilder(r.checker, emitContext) // TODO: cache per-context
+	requestNodeBuilder := newNodeBuilder(r.checker, emitContext, r) // TODO: cache per-context
 	// // Get type of the symbol if this is the valid symbol otherwise get type at location
 	symbol := r.checker.getSymbolOfDeclaration(declaration)
 	return requestNodeBuilder.SerializeTypeForDeclaration(declaration, symbol, enclosingDeclaration, flags|nodebuilder.FlagsMultilineObjectLiterals, internalFlags, tracker)
@@ -998,7 +998,7 @@ func (r *EmitResolver) CreateLiteralConstValue(emitContext *printer.EmitContext,
 	if t.flags&TypeFlagsEnumLike != 0 {
 		r.checkerMu.Lock()
 		defer r.checkerMu.Unlock()
-		requestNodeBuilder := NewNodeBuilder(r.checker, emitContext) // TODO: cache per-context
+		requestNodeBuilder := newNodeBuilder(r.checker, emitContext, r) // TODO: cache per-context
 		enumResult = requestNodeBuilder.SymbolToExpression(t.symbol, ast.SymbolFlagsValue, node, nodebuilder.FlagsNone, nodebuilder.InternalFlagsNone, tracker)
 		// What about regularTrueType/regularFalseType - since those aren't fresh, we never make initializers from them
 		// TODO: handle those if this function is ever used for more than initializers in declaration emit
@@ -1054,7 +1054,7 @@ func (r *EmitResolver) CreateTypeOfExpression(emitContext *printer.EmitContext, 
 
 	r.checkerMu.Lock()
 	defer r.checkerMu.Unlock()
-	requestNodeBuilder := NewNodeBuilder(r.checker, emitContext) // TODO: cache per-context
+	requestNodeBuilder := newNodeBuilder(r.checker, emitContext, r) // TODO: cache per-context
 	return requestNodeBuilder.SerializeTypeForExpression(expression, enclosingDeclaration, flags|nodebuilder.FlagsMultilineObjectLiterals, internalFlags, tracker)
 }
 
@@ -1072,7 +1072,7 @@ func (r *EmitResolver) CreateLateBoundIndexSignatures(emitContext *printer.EmitC
 		instanceInfos = r.checker.getIndexInfosOfIndexSymbol(instanceIndexSymbol, siblingSymbols)
 	}
 
-	requestNodeBuilder := NewNodeBuilder(r.checker, emitContext) // TODO: cache per-context
+	requestNodeBuilder := newNodeBuilder(r.checker, emitContext, r) // TODO: cache per-context
 
 	var result []*ast.Node
 	for i, infoList := range [][]*IndexInfo{staticInfos, instanceInfos} {
@@ -1274,7 +1274,7 @@ func (r *EmitResolver) TryJSTypeNodeToTypeNode(emitContext *printer.EmitContext,
 	r.checkerMu.Lock()
 	defer r.checkerMu.Unlock()
 
-	requestNodeBuilder := NewNodeBuilder(r.checker, emitContext) // TODO: cache per-context
+	requestNodeBuilder := newNodeBuilder(r.checker, emitContext, r) // TODO: cache per-context
 	return requestNodeBuilder.TryJSTypeNodeToTypeNode(typeNode, enclosingDeclaration, flags, internalFlags, tracker)
 }
 
