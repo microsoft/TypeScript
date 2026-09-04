@@ -1,6 +1,6 @@
 // @importHelpers: true
 // @target: es6
-// @module: commonjs, system, amd, es2015
+// @module: commonjs, system, es2015
 // @experimentalDecorators: true
 // @filename: a.ts
 // @noTypesAndSymbols: true

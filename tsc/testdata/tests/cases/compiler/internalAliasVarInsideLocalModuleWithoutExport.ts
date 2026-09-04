@@ -1,5 +1,5 @@
 // @target: es2015
-//@module: amd
+//@module: commonjs
 // @declaration: true
 export namespace a {
     export var x = 10;

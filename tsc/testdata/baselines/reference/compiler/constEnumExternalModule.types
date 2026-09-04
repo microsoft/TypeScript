@@ -1,0 +1,12 @@
+//// [tests/cases/compiler/constEnumExternalModule.ts] ////
+
+=== m2.ts ===
+import A = require('m1')
+>A : any
+
+var v = A.V;
+>v : any
+>A.V : any
+>A : any
+>V : any
+
