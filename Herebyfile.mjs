@@ -1423,8 +1423,9 @@ export const checkVsceVersion = task({
         }
 
         const setupVsce = fs.readFileSync("./tools/pipelines/steps/setup-vsce.yml", "utf8");
-        const matches = [...setupVsce.matchAll(/npm install --no-save @vscode\/vsce@(\d+\.\d+\.\d+)/g)];
-        if (matches.length !== 1 || matches[0][1] !== version) {
+        const activeSetupLines = setupVsce.split(/\r?\n/).filter(line => !line.trimStart().startsWith("#"));
+        const installCommand = `- bash: npm install --no-save @vscode/vsce@${version}`;
+        if (activeSetupLines.filter(line => line.trim() === installCommand).length !== 1) {
             throw new Error(`tools/pipelines/steps/setup-vsce.yml must install exactly @vscode/vsce@${version}.`);
         }
 
@@ -1435,8 +1436,11 @@ export const checkVsceVersion = task({
             ]
         ) {
             const contents = fs.readFileSync(pipeline, "utf8");
-            const templateReferences = contents.match(/\/tools\/pipelines\/steps\/setup-vsce\.yml@self/g) ?? [];
-            if (templateReferences.length !== 1 || contents.includes("@vscode/vsce")) {
+            const activeLines = contents.split(/\r?\n/).filter(line => !line.trimStart().startsWith("#"));
+            const templateReferences = activeLines.filter(
+                line => line.trim() === "- template: /tools/pipelines/steps/setup-vsce.yml@self",
+            );
+            if (templateReferences.length !== 1 || activeLines.some(line => line.includes("@vscode/vsce"))) {
                 throw new Error(`${pipeline} must use setup-vsce.yml exactly once and must not install @vscode/vsce directly.`);
             }
         }
