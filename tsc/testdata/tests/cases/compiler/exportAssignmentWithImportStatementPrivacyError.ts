@@ -1,6 +1,6 @@
 // @target: es2015
 // @strict: false
-//@module: amd
+//@module: commonjs
 namespace m2 {
     export interface connectModule {
         (res, req, next): void;
