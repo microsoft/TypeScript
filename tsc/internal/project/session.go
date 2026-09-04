@@ -1284,7 +1284,6 @@ func (s *Session) WithLanguageServiceAndSnapshot(
 // The cloned snapshot will be adopted as the session's current snapshot in the background
 // if other changes haven't been adopted in the meantime.
 func (s *Session) GetLanguageServiceWithAutoImports(ctx context.Context, baseSnapshot *Snapshot, uri lsproto.DocumentUri) (*ls.LanguageService, error) {
-	s.host.assertOwns(baseSnapshot)
 	newSnapshot := s.host.deriveWithAutoImports(ctx, baseSnapshot, uri, s.logger)
 	project := newSnapshot.GetDefaultProject(uri)
 	if project == nil {
@@ -1312,8 +1311,6 @@ func (s *Session) tryAdoptSnapshotChangeInBackground(baseSnapshot, newSnapshot *
 // session has moved on, the snapshot is discarded; the next request needing
 // auto-imports will redo the work on the latest snapshot.
 func (s *Session) adoptSnapshotChange(baseSnapshot, newSnapshot *Snapshot) {
-	s.host.assertOwns(baseSnapshot)
-	s.host.assertOwns(newSnapshot)
 	s.snapshotMu.Lock()
 	oldSnapshot := s.snapshot
 	if oldSnapshot == baseSnapshot {

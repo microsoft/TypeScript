@@ -8,7 +8,6 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/contentmapper"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
-	"github.com/microsoft/TypeScript/tsc/internal/debug"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/lsutil"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/project/logging"
@@ -33,10 +32,6 @@ type SnapshotHost struct {
 
 func (s *SnapshotHost) nextSnapshotID() uint64 {
 	return s.snapshotID.Add(1)
-}
-
-func (s *SnapshotHost) assertOwns(snapshot *Snapshot) {
-	debug.Assert(snapshot.host == s, "snapshot belongs to a different host")
 }
 
 func NewSnapshotHost(init *SessionInit) *SnapshotHost {
@@ -73,7 +68,6 @@ func (s *SnapshotHost) NewStandaloneRootSnapshot() *Snapshot {
 
 // RetainSnapshot adds a reference to a snapshot owned by this host.
 func (s *SnapshotHost) RetainSnapshot(snapshot *Snapshot) {
-	s.assertOwns(snapshot)
 	snapshot.ref()
 }
 
@@ -85,7 +79,6 @@ func (s *SnapshotHost) DeriveSnapshot(
 	fileChanges FileChangeSummary,
 	apiRequest *APISnapshotRequest,
 ) (*Snapshot, error) {
-	s.assertOwns(baseSnapshot)
 	snapshot := s.update(ctx, baseSnapshot, SnapshotChange{
 		apiRequest:  apiRequest,
 		fileChanges: fileChanges,
@@ -106,7 +99,6 @@ func (s *SnapshotHost) DeriveTemporarySnapshot(
 	uri lsproto.DocumentUri,
 	newText string,
 ) (*Snapshot, error) {
-	s.assertOwns(baseSnapshot)
 	return baseSnapshot.cloneWithTemporaryFile(ctx, uri, newText)
 }
 
@@ -122,7 +114,6 @@ func (s *SnapshotHost) DeriveProgramSnapshot(
 	oldProject *Project,
 	fileChanges FileChangeSummary,
 ) *Snapshot {
-	s.assertOwns(baseSnapshot)
 	return baseSnapshot.cloneForProgram(
 		ctx,
 		rootFileNames,
@@ -142,7 +133,6 @@ func (s *SnapshotHost) DeriveWithAutoImports(ctx context.Context, baseSnapshot *
 }
 
 func (s *SnapshotHost) deriveWithAutoImports(ctx context.Context, baseSnapshot *Snapshot, uri lsproto.DocumentUri, logger logging.Logger) *Snapshot {
-	s.assertOwns(baseSnapshot)
 	change := SnapshotChange{
 		reason: UpdateReasonRequestedLanguageServiceWithAutoImports,
 		ResourceRequest: ResourceRequest{
