@@ -2027,6 +2027,22 @@ export class Checker {
         return type.getIndexInfos();
     }
 
+    async getIndexInfoOfType(type: Type, keyType: Type): Promise<IndexInfo | undefined> {
+        const data = await this.client.apiRequest("getIndexInfoOfType", {
+            snapshot: this.snapshotId,
+            project: this.project.id,
+            type: type.id,
+            keyType: keyType.id,
+        });
+        if (!data) return undefined;
+        return {
+            keyType: this.objectRegistry.getOrCreateType(data.keyType),
+            valueType: this.objectRegistry.getOrCreateType(data.valueType),
+            isReadonly: data.isReadonly ?? false,
+            declaration: data.declaration ? new NodeHandle<IndexSignatureDeclaration>(data.declaration, this.project) : undefined,
+        };
+    }
+
     /**
      * Get the constraint of a type parameter (the `T` in `<U extends T>`), or
      * undefined if it has none.

@@ -800,6 +800,8 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleGetReducedType(ctx, parsed.(*GetTypePropertyParams))
 	case string(MethodGetPropertyOfType):
 		return s.handleGetPropertyOfType(ctx, parsed.(*GetPropertyOfTypeParams))
+	case string(MethodGetIndexInfoOfType):
+		return s.handleGetIndexInfoOfType(ctx, parsed.(*GetIndexInfoOfTypeParams))
 	case string(MethodGetIndexInfosOfType):
 		return s.handleGetIndexInfosOfType(ctx, parsed.(*CheckerTypeParams))
 	case string(MethodGetConstraintOfTypeParameter):
@@ -3240,6 +3242,41 @@ func (s *Session) handleGetIndexInfosOfType(ctx context.Context, params *Checker
 	}
 
 	return results, nil
+}
+
+// handleGetIndexInfoOfType returns the index info for a key type, or nil if none.
+// @gen-proto-nullable
+func (s *Session) handleGetIndexInfoOfType(ctx context.Context, params *GetIndexInfoOfTypeParams) (*IndexInfoResponse, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	t, err := setup.resolveTypeHandle(params.Type)
+	if err != nil {
+		return nil, err
+	}
+
+	keyType, err := setup.resolveTypeHandle(params.KeyType)
+	if err != nil {
+		return nil, err
+	}
+
+	info := setup.checker.GetIndexInfoOfType(t, keyType)
+	if info == nil {
+		return nil, nil
+	}
+
+	result := &IndexInfoResponse{
+		KeyType:    *setup.newTypeResponse(info.KeyType()),
+		ValueType:  *setup.newTypeResponse(info.ValueType()),
+		IsReadonly: info.IsReadonly(),
+	}
+	if info.Declaration() != nil {
+		result.Declaration = setup.sd.nodeHandleFrom(info.Declaration())
+	}
+	return result, nil
 }
 
 // handleGetConstraintOfTypeParameter returns the constraint of a type parameter.

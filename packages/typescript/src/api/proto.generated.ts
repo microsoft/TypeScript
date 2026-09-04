@@ -103,6 +103,7 @@ export interface APIMethodInfo {
     getApparentType: APIMethod<GetTypePropertyParams, TypeResponse>;
     getReducedType: APIMethod<GetTypePropertyParams, TypeResponse>;
     getPropertyOfType: APIMethod<GetPropertyOfTypeParams, SymbolResponse | null>;
+    getIndexInfoOfType: APIMethod<GetIndexInfoOfTypeParams, IndexInfoResponse | null>;
     getIndexInfosOfType: APIMethod<CheckerTypeParams, IndexInfoResponse[] | null>;
     getConstraintOfTypeParameter: APIMethod<GetTypePropertyParams, TypeResponse | null>;
     getDefaultFromTypeParameter: APIMethod<GetTypePropertyParams, TypeResponse | null>;
@@ -676,6 +677,14 @@ export interface GetPropertyOfTypeParams {
     project: string;
     type: number;
     name: string;
+}
+
+/** GetIndexInfoOfTypeParams are parameters for getIndexInfoOfType. */
+export interface GetIndexInfoOfTypeParams {
+    snapshot: number;
+    project: string;
+    type: number;
+    keyType: number;
 }
 
 /** IndexInfoResponse represents a single index signature. */

@@ -3958,6 +3958,90 @@ export declare const m: ReadonlyMap;
     });
 });
 
+describe("Checker - getIndexInfoOfType", () => {
+    test("returns the index info for a matching key type", () => {
+        const src = `
+export interface StringMap {
+    [key: string]: number;
+}
+export declare const m: StringMap;
+`;
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/main.ts": src,
+        });
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const symbol = project.checker.getSymbolAtPosition("/src/main.ts", src.indexOf("m: StringMap"));
+            assert.ok(symbol);
+            const type = project.checker.getTypeOfSymbol(symbol);
+            const stringType = project.checker.getStringType();
+            const info = project.checker.getIndexInfoOfType(type, stringType);
+            assert.ok(info);
+            assert.ok(info.keyType.flags & TypeFlags.String, `Expected string key, got flags ${info.keyType.flags}`);
+            assert.ok(info.valueType.flags & TypeFlags.Number, `Expected number value, got flags ${info.valueType.flags}`);
+            assert.equal(info.isReadonly, false);
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("returns undefined when the type has no matching index", () => {
+        const src = `
+export interface Person {
+    name: string;
+}
+export declare const p: Person;
+`;
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/main.ts": src,
+        });
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const symbol = project.checker.getSymbolAtPosition("/src/main.ts", src.indexOf("p: Person"));
+            assert.ok(symbol);
+            const type = project.checker.getTypeOfSymbol(symbol);
+            const stringType = project.checker.getStringType();
+            const info = project.checker.getIndexInfoOfType(type, stringType);
+            assert.equal(info, undefined);
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("reports isReadonly for a readonly index signature", () => {
+        const src = `
+export interface ReadonlyMap {
+    readonly [key: string]: number;
+}
+export declare const m: ReadonlyMap;
+`;
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/main.ts": src,
+        });
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const symbol = project.checker.getSymbolAtPosition("/src/main.ts", src.indexOf("m: ReadonlyMap"));
+            assert.ok(symbol);
+            const type = project.checker.getTypeOfSymbol(symbol);
+            const stringType = project.checker.getStringType();
+            const info = project.checker.getIndexInfoOfType(type, stringType);
+            assert.ok(info);
+            assert.equal(info.isReadonly, true);
+        }
+        finally {
+            api.close();
+        }
+    });
+});
+
 describe("Checker - getConstraintOfTypeParameter", () => {
     test("returns constraint of a type parameter", () => {
         using api = spawnAPI({
