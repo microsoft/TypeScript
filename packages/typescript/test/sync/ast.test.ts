@@ -1065,11 +1065,6 @@ describe("RemoteNode + child/token getters", () => {
         return found;
     }
 
-    function getLeafTokens(node: Node, sourceFile: SourceFile): Node[] {
-        const children = node.getChildren(sourceFile);
-        return children.length === 0 ? [node] : children.flatMap(child => getLeafTokens(child, sourceFile));
-    }
-
     test("getChildren materializes the punctuation/keyword tokens the AST omits", () => {
         withFirstStatement("if (x) {}", stmt => {
             const texts = stmt.getChildren().map(c => c.getText());
@@ -1089,21 +1084,23 @@ describe("RemoteNode + child/token getters", () => {
             withFirstStatement(source, (stmt, sf) => {
                 const node = findFirstOfKind(stmt, SyntaxKind.CallExpression)
                     ?? findFirstOfKind(stmt, SyntaxKind.TypeReference)!;
-                const leafTokens = getLeafTokens(node, sf);
+                const children = node.getChildren(sf);
+                assertChildInvariants(node, sf);
 
-                const firstLessThan = leafTokens.find(child => child.kind === SyntaxKind.LessThanToken);
+                const firstLessThan = children.find(child => child.kind === SyntaxKind.LessThanToken);
                 assert.ok(firstLessThan, "expected the public API to expose the opening less-than token");
                 assert.strictEqual(firstLessThan.getStart(sf), source.indexOf("<<"));
-                assert.strictEqual(leafTokens.map(child => child.getFullText(sf)).join(""), node.getFullText(sf));
+                assert.strictEqual(children.map(child => child.getFullText(sf)).join(""), node.getFullText(sf));
             });
         }
     });
 
     test("public getChildren API preserves ordinary left-shift tokens", () => {
         withFirstStatement("const x = a << b;", (stmt, sf) => {
-            const leafTokens = getLeafTokens(stmt, sf);
-            assert.strictEqual(leafTokens.filter(child => child.kind === SyntaxKind.LessThanLessThanToken).length, 1);
-            assert.strictEqual(leafTokens.filter(child => child.kind === SyntaxKind.LessThanToken).length, 0);
+            const binary = findFirstOfKind(stmt, SyntaxKind.BinaryExpression)!;
+            const children = binary.getChildren(sf);
+            assert.strictEqual(children.filter(child => child.kind === SyntaxKind.LessThanLessThanToken).length, 1);
+            assert.strictEqual(children.filter(child => child.kind === SyntaxKind.LessThanToken).length, 0);
         });
     });
 
