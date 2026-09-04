@@ -1191,6 +1191,41 @@ func TestReadDirectoryMatchesTypeScriptBaselines(t *testing.T) {
 	}
 }
 
+func TestReadDirectoryWithExtendedDynamicRoot(t *testing.T) {
+	t.Parallel()
+
+	const packageDirectory = "^/~ts-uri-v2~/custom/ts-nul-authority/node_modules/Pkg"
+	host := vfstest.FromMap(map[string]string{
+		packageDirectory + "/value.d.ts":                  "",
+		packageDirectory + "/node_modules/dep/index.d.ts": "",
+	}, true)
+	got := ReadDirectory(
+		host,
+		packageDirectory,
+		packageDirectory,
+		[]string{".d.ts"},
+		nil,
+		[]string{"**/*"},
+		UnlimitedDepth,
+	)
+	assert.DeepEqual(t, got, []string{packageDirectory + "/value.d.ts"})
+}
+
+func TestDynamicAbsoluteGlobUsesCaseSensitivePattern(t *testing.T) {
+	t.Parallel()
+
+	const root = "^/~ts-uri-v2~/custom/ts-nul-authority"
+	matcher := NewSpecMatcher(
+		[]string{root + "/Foo/**/*.ts"},
+		"/dev",
+		UsageFiles,
+		false,
+	)
+	assert.Assert(t, matcher != nil)
+	assert.Assert(t, matcher.MatchString(root+"/Foo/a.ts"))
+	assert.Assert(t, !matcher.MatchString(root+"/foo/a.ts"))
+}
+
 // TestSpecMatcher tests the SpecMatcher API
 func TestSpecMatcher(t *testing.T) {
 	t.Parallel()

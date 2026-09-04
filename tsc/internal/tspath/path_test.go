@@ -648,6 +648,10 @@ func TestToPath(t *testing.T) {
 	assert.Equal(t, string(ToPath("file.ext", "path/to", false /*useCaseSensitiveFileNames*/)), "path/to/file.ext")
 	assert.Equal(t, string(ToPath("file.ext", "/path/to", true /*useCaseSensitiveFileNames*/)), "/path/to/file.ext")
 	assert.Equal(t, string(ToPath("/path/to/../file.ext", "path/to", true /*useCaseSensitiveFileNames*/)), "/path/file.ext")
+	assert.Equal(t,
+		string(ToPath("^/~ts-uri-v2~/custom/ts-nul-authority/CaseSensitive.ts", "/", false /*useCaseSensitiveFileNames*/)),
+		"^/~ts-uri-v2~/custom/ts-nul-authority/CaseSensitive.ts",
+	)
 }
 
 var relativePathSegmentRegExp = regexp.MustCompile(`//|(?:^|/)\.\.?(?:$|/)`)

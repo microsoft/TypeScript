@@ -140,6 +140,9 @@ const (
 // Returns (pattern, false) if the pattern would match nothing.
 func compileGlobPattern(spec string, basePath string, usage Usage, caseSensitive bool) (globPattern, bool) {
 	parts := tspath.GetNormalizedPathComponents(spec, basePath)
+	if tspath.IsEncodedDynamicFileName(parts[0]) {
+		caseSensitive = true
+	}
 
 	// "src/**" without a filename matches nothing (for include patterns)
 	if usage != UsageExclude && core.LastOrNil(parts) == "**" {
@@ -148,6 +151,10 @@ func compileGlobPattern(spec string, basePath string, usage Usage, caseSensitive
 
 	// Normalize root: "/home/" -> "/home"
 	parts[0] = tspath.RemoveTrailingDirectorySeparator(parts[0])
+	if tspath.IsEncodedDynamicFileName(parts[0]) {
+		rootParts := strings.Split(parts[0], "/")
+		parts = append(rootParts, parts[1:]...)
+	}
 
 	// Directories implicitly match all files: "src" -> "src/**/*"
 	if IsImplicitGlob(core.LastOrNil(parts)) {
