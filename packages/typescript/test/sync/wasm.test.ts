@@ -2,7 +2,7 @@ import {
     instantiateWasm,
     WasmTransport,
     wasmURL,
-} from "@typescript/api-wasm";
+} from "@typescript/typescript-wasip1-wasm";
 import {
     isIdentifier,
     isVariableStatement,
@@ -10,18 +10,65 @@ import {
 import { API as AsyncAPI } from "@typescript/typescript/unstable/async";
 import { API as SyncAPI } from "@typescript/typescript/unstable/sync";
 import assert from "node:assert";
-import { readFile } from "node:fs/promises";
+import {
+    mkdtemp,
+    open,
+    readFile,
+    rm,
+} from "node:fs/promises";
+import { tmpdir } from "node:os";
+import path from "node:path";
 import {
     describe,
     test,
 } from "node:test";
+import { WASI } from "node:wasi";
 
 describe("API over WebAssembly", () => {
+    test("runs the compiler command from the same module", async () => {
+        const WebAssembly = (globalThis as any).WebAssembly;
+        const directory = await mkdtemp(path.join(tmpdir(), "typescript-wasip1-"));
+        try {
+            const stdoutPath = path.join(directory, "stdout");
+            const stdout = await open(stdoutPath, "w+");
+            try {
+                const wasi = new WASI({
+                    version: "preview1",
+                    args: ["tsc.wasm", "--version"],
+                    env: { PWD: "/" },
+                    preopens: { "/": process.cwd() },
+                    stdout: stdout.fd,
+                    returnOnExit: true,
+                });
+                const module = await WebAssembly.compile(await readFile(wasmURL));
+                const instance = await WebAssembly.instantiate(module, {
+                    wasi_snapshot_preview1: wasi.wasiImport,
+                });
+                assert.strictEqual(wasi.start(instance), 0);
+            }
+            finally {
+                await stdout.close();
+            }
+            assert.match(await readFile(stdoutPath, "utf8"), /^Version \d+\.\d+\.\d+/);
+        }
+        finally {
+            await rm(directory, { recursive: true });
+        }
+    });
+
     test("runs the compiler and checker through the reactor", async () => {
         const WebAssembly = (globalThis as any).WebAssembly;
         const module = await WebAssembly.compile(
             await readFile(wasmURL),
         );
+        assert.deepStrictEqual(
+            [...new Set(WebAssembly.Module.imports(module).map((value: { module: string; }) => value.module))],
+            ["wasi_snapshot_preview1"],
+        );
+        const exportNames = WebAssembly.Module.exports(module).map((value: { name: string; }) => value.name);
+        assert.ok(exportNames.includes("_start"));
+        assert.ok(exportNames.includes("typescript_initialize"));
+        assert.ok(!exportNames.includes("_initialize"));
         const instance = await instantiateWasm(module);
 
         assert.throws(

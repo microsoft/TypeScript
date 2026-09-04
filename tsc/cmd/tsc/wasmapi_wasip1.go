@@ -1,6 +1,5 @@
 //go:build wasip1
 
-// Command tsc-api-wasm builds the TypeScript API server as a WebAssembly reactor.
 package main
 
 import (
@@ -8,6 +7,7 @@ import (
 	"encoding/binary"
 	"errors"
 	"fmt"
+	"os"
 	"runtime/debug"
 	"unsafe"
 
@@ -18,11 +18,10 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/wrapvfs"
 )
 
-func main() {}
-
 const (
-	// API callbacks are tunneled through a reserved descriptor so that
+	// API callbacks are tunneled through reserved descriptors so that
 	// the module only requires standard WASI imports and remains directly runnable.
+	hostWriteFileFD    = 0x7fff_fffe
 	hostCallbackFD     = 0x7fff_fffd
 	hostErrorCapacity  = 16 * 1024
 	hostResultCapacity = 16 * 1024 * 1024
@@ -61,16 +60,11 @@ func createSession(optionsPtr uint32, optionsLen uint32) (status uint32) {
 	options.WrapFS = func(files vfs.FS) vfs.FS {
 		return wrapvfs.Wrap(files, wrapvfs.Replacements{
 			WriteFile: func(path string, data string) error {
-				pathBytes := []byte(path)
-				dataBytes := []byte(data)
-				switch hostWriteFile(bytePointer(pathBytes), uint32(len(pathBytes)), bytePointer(dataBytes), uint32(len(dataBytes))) {
-				case 0:
-					return nil
-				case 2:
+				handled, err := writeFileToHost(path, data)
+				if !handled {
 					return files.WriteFile(path, data)
-				default:
-					return fmt.Errorf("%s", readHostError())
 				}
+				return err
 			},
 		})
 	}
@@ -205,6 +199,11 @@ func responseLength() uint32 {
 	return responseLen
 }
 
+//go:wasmexport __typescript_cli_start
+func cliStart() {
+	os.Exit(runMain())
+}
+
 func fail(message string) uint32 {
 	setResponse([]byte(message))
 	return 1
@@ -288,25 +287,38 @@ func (hostCallbackConn) Notify(context.Context, string, any) error {
 	return errors.New("host callback notifications are not supported")
 }
 
+func writeFileToHost(path string, data string) (bool, error) {
+	pathBytes := []byte(path)
+	dataBytes := []byte(data)
+	buffer := make([]byte, 12+len(pathBytes)+len(dataBytes)+hostErrorCapacity)
+	binary.LittleEndian.PutUint32(buffer, uint32(len(pathBytes)))
+	binary.LittleEndian.PutUint32(buffer[4:], uint32(len(dataBytes)))
+	binary.LittleEndian.PutUint32(buffer[8:], hostErrorCapacity)
+	copy(buffer[12:], pathBytes)
+	copy(buffer[12+len(pathBytes):], dataBytes)
+
+	iov := [2]uint32{bytesPointer(buffer), uint32(len(buffer))}
+	var written uint32
+	errno := hostFDWrite(hostWriteFileFD, unsafe.Pointer(&iov[0]), 1, &written)
+	if errno == errnoBadFileNumber {
+		return false, nil
+	}
+	if errno == 0 {
+		return true, nil
+	}
+
+	errorLength := binary.LittleEndian.Uint32(buffer[8:])
+	if errorLength > hostErrorCapacity {
+		errorLength = hostErrorCapacity
+	}
+	errorStart := 12 + len(pathBytes) + len(dataBytes)
+	message := string(buffer[errorStart : errorStart+int(errorLength)])
+	if message == "" {
+		message = "host filesystem callback failed"
+	}
+	return true, errors.New(message)
+}
+
 //go:wasmimport wasi_snapshot_preview1 fd_write
 //go:noescape
 func hostFDWrite(fd int32, iovs unsafe.Pointer, iovsLen uint32, written *uint32) uint32
-
-func readHostError() string {
-	length := hostErrorLength()
-	if length == 0 {
-		return "host filesystem callback failed"
-	}
-	buffer := make([]byte, length)
-	hostErrorCopy(&buffer[0], length)
-	return string(buffer)
-}
-
-//go:wasmimport typescript_host write_file
-func hostWriteFile(path *byte, pathLen uint32, data *byte, dataLen uint32) uint32
-
-//go:wasmimport typescript_host error_length
-func hostErrorLength() uint32
-
-//go:wasmimport typescript_host error_copy
-func hostErrorCopy(buffer *byte, length uint32)

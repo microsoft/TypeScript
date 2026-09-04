@@ -5,8 +5,6 @@ import (
 	"flag"
 	"fmt"
 	"os"
-	"os/exec"
-	"os/signal"
 	"syscall"
 	"time"
 
@@ -45,23 +43,19 @@ func runLSP(args []string) int {
 	defaultLibraryPath := bundled.LibPath()
 	typingsLocation := osvfs.GetGlobalTypingsCacheLocation()
 
-	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+	ctx, stop := notifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	defer stop()
 
 	s := lsp.NewServer(&lsp.ServerOptions{
-		In:                 lsp.ToReader(os.Stdin),
+		In:                 lsp.ToReader(lspStdin),
 		Out:                lsp.ToWriter(os.Stdout),
 		Err:                os.Stderr,
-		Cwd:                core.Must(os.Getwd()),
+		Cwd:                core.Must(getCurrentDirectory()),
 		FS:                 fs,
 		DefaultLibraryPath: defaultLibraryPath,
 		TypingsLocation:    typingsLocation,
-		NpmInstall: func(cwd string, args []string) ([]byte, error) {
-			cmd := exec.Command("npm", args...)
-			cmd.Dir = cwd
-			return cmd.Output()
-		},
-		Spawn:              spawnProcess,
+		NpmInstall:         getNpmInstall(),
+		Spawn:              getLSPSpawn(),
 		ProgressDelay:      250 * time.Millisecond,
 		SetParentProcessID: newParentProcessWatchdog(ctx, stop, *clientProcessID),
 	})
