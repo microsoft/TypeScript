@@ -1,13 +1,15 @@
 /**
  * Pure JS replacement for @typescript/libsyncrpc.
  *
- * Spawns a child process and communicates with it synchronously over
- * stdin/stdout pipes using the same MessagePack-based tuple protocol:
+ * Communicates synchronously with an API server using a MessagePack-based
+ * tuple protocol:
  *   [MessageType (u8), method (bin), payload (bin)]
  *
+ * Spawned servers use stdin/stdout on Unix and a named pipe on Windows.
+ * Existing servers use two POSIX FIFOs on Unix and a named pipe on Windows.
+ *
  * Synchronous I/O is achieved by calling fs.readSync / fs.writeSync
- * directly on the pipe file descriptors obtained from the spawned
- * ChildProcess.
+ * directly on the pipe file descriptors.
  */
 
 import {
@@ -16,8 +18,10 @@ import {
 } from "node:child_process";
 import {
     closeSync,
+    constants,
     openSync,
     readSync,
+    writeFileSync,
     writeSync,
 } from "node:fs";
 import type {
@@ -87,23 +91,14 @@ process.on("exit", () => {
 });
 
 /**
- * SyncRpcChannel – drop-in replacement for the native libsyncrpc class.
- *
- * API surface intentionally matches the original:
- *   - constructor(exe, args)
- *   - requestSync(method, payload): string
- *   - requestBinarySync(method, payload): Uint8Array
- *   - registerCallback(name, cb)
- *   - close()
- *
  * The protocol is unversioned; both sides (this JS channel and the Go
- * child process) must be built from the same tree.
+ * server must be built from the same tree.
  *
  * This class is **not** thread-safe. All calls must originate from a
  * single thread — do not share an instance across worker threads.
  */
 export class SyncRpcChannel {
-    private child: ChildProcess;
+    private child: ChildProcess | undefined;
     private readFd: number;
     private writeFd: number;
     private pipeFd: number | undefined;
@@ -137,85 +132,135 @@ export class SyncRpcChannel {
     // Write buffer – assembles entire tuples for a single writeSync.
     private writeBuf = Buffer.allocUnsafe(65536);
 
-    constructor(exe: string, args: string[], collectTiming = false) {
+    constructor(options: { exe: string; args: string[]; } | { pipe: string; }, collectTiming = false) {
         this.collectTiming = collectTiming;
-        const isWindows = process.platform === "win32";
-
-        if (isWindows) {
-            // On Windows, libuv pipe handles don't expose POSIX fds, so
-            // readSync/writeSync can't be used on stdio pipes. Instead,
-            // we create a Windows named pipe path, pass it to the child
-            // via --pipe, and open it with fs.openSync which returns a
-            // real C-runtime fd backed by a proper HANDLE.
-            const pipePath = `\\\\.\\pipe\\tsgo-sync-${process.pid}-${Date.now()}`;
-            this.child = spawn(exe, [...args, "--pipe", pipePath], {
-                stdio: ["ignore", "ignore", "inherit"],
-            });
-
-            // Retry openSync until the child creates the named pipe.
-            let fd: number | undefined;
-            for (let i = 0; i < 500; i++) {
-                try {
-                    fd = openSync(pipePath, "r+");
-                    break;
-                }
-                catch {
-                    if (this.child.exitCode !== null) {
-                        throw new Error(
-                            `Child process exited with code ${this.child.exitCode} before pipe was ready`,
-                        );
-                    }
-                    Atomics.wait(sleepBuf, 0, 0, 10);
-                }
+        if ("exe" in options) {
+            if (process.platform === "win32") {
+                const pipePath = `\\\\.\\pipe\\tsgo-sync-${process.pid}-${Date.now()}`;
+                this.child = spawn(options.exe, [...options.args, "--transport", `sync=${pipePath}`], {
+                    stdio: ["ignore", "ignore", "inherit"],
+                });
+                const fd = this.openPipe(pipePath, this.child);
+                this.readFd = fd;
+                this.writeFd = fd;
+                this.pipeFd = fd;
             }
-            if (fd === undefined) {
-                this.child.kill();
-                throw new Error("SyncRpcChannel: timed out connecting to named pipe");
+            else {
+                this.child = spawn(options.exe, options.args, {
+                    stdio: ["pipe", "pipe", "inherit"],
+                });
+
+                const stdout = this.child.stdout! as StdoutWithHandle;
+                const stdin = this.child.stdin! as StdinWithHandle;
+
+                this.readFd = stdout._handle.fd;
+                this.writeFd = stdin._handle.fd;
+
+                if (typeof this.readFd !== "number" || this.readFd < 0 || typeof this.writeFd !== "number" || this.writeFd < 0) {
+                    stdout.destroy();
+                    stdin.destroy();
+                    this.child.kill();
+                    throw new Error(
+                        "SyncRpcChannel: could not obtain pipe file descriptors.",
+                    );
+                }
+
+                // Set the pipe handles to blocking mode. Under node --test's
+                // process isolation, pipes are created in non-blocking mode
+                // (for the IPC channel). This causes readSync/writeSync to get
+                // EAGAIN, requiring costly 1ms sleeps per retry. Setting
+                // blocking mode ensures readSync blocks properly until data
+                // arrives, matching the behavior of the native libsyncrpc.
+                stdout._handle.setBlocking?.(true);
+                stdin._handle.setBlocking?.(true);
+
+                // Prevent Node's event-loop from reading stdout or keeping the
+                // process alive - we will use fs.readSync exclusively.
+                stdout.pause();
+                stdout.unref();
+                stdin.unref();
             }
+
+            liveChildren.add(this.child);
+            this.child.unref();
+        }
+        else if (process.platform === "win32") {
+            const fd = this.openPipe(options.pipe);
             this.readFd = fd;
             this.writeFd = fd;
             this.pipeFd = fd;
         }
         else {
-            // POSIX: use stdio pipe file descriptors directly.
-            this.child = spawn(exe, args, {
-                stdio: ["pipe", "pipe", "inherit"],
-            });
+            const { readFd, writeFd } = this.openFIFOs(options.pipe);
+            this.readFd = readFd;
+            this.writeFd = writeFd;
+        }
+    }
 
-            const stdout = this.child.stdout! as StdoutWithHandle;
-            const stdin = this.child.stdin! as StdinWithHandle;
+    private openPipe(pipePath: string, child?: ChildProcess): number {
+        for (let i = 0; i < 500; i++) {
+            try {
+                return openSync(pipePath, "r+");
+            }
+            catch {
+                if (child?.exitCode !== null && child?.exitCode !== undefined) {
+                    throw new Error(
+                        `Child process exited with code ${child.exitCode} before pipe was ready`,
+                    );
+                }
+                Atomics.wait(sleepBuf, 0, 0, 10);
+            }
+        }
+        child?.kill();
+        throw new Error("SyncRpcChannel: timed out connecting to named pipe");
+    }
 
-            this.readFd = stdout._handle.fd;
-            this.writeFd = stdin._handle.fd;
-
-            if (typeof this.readFd !== "number" || this.readFd < 0 || typeof this.writeFd !== "number" || this.writeFd < 0) {
-                stdout.destroy();
-                stdin.destroy();
-                this.child.kill();
-                throw new Error(
-                    "SyncRpcChannel: could not obtain pipe file descriptors.",
-                );
+    private openFIFOs(prefix: string): { readFd: number; writeFd: number; } {
+        const outPath = prefix + ".out";
+        const inPath = prefix + ".in";
+        let probeReadFd: number | undefined;
+        let probeWriteFd: number | undefined;
+        try {
+            for (let i = 0; i < 500; i++) {
+                try {
+                    probeReadFd = openSync(outPath, constants.O_RDONLY | constants.O_NONBLOCK);
+                    break;
+                }
+                catch {
+                    Atomics.wait(sleepBuf, 0, 0, 10);
+                }
+            }
+            if (probeReadFd === undefined) {
+                throw new Error("SyncRpcChannel: timed out connecting to FIFOs");
             }
 
-            // Set the pipe handles to blocking mode. Under node --test's
-            // process isolation, pipes are created in non-blocking mode
-            // (for the IPC channel). This causes readSync/writeSync to get
-            // EAGAIN, requiring costly 1ms sleeps per retry. Setting
-            // blocking mode ensures readSync blocks properly until data
-            // arrives, matching the behavior of the native libsyncrpc.
-            stdout._handle.setBlocking?.(true);
-            stdin._handle.setBlocking?.(true);
+            for (let i = 0; i < 500; i++) {
+                try {
+                    probeWriteFd = openSync(inPath, constants.O_WRONLY | constants.O_NONBLOCK);
+                    break;
+                }
+                catch {
+                    Atomics.wait(sleepBuf, 0, 0, 10);
+                }
+            }
+            if (probeWriteFd === undefined) {
+                throw new Error("SyncRpcChannel: timed out connecting to FIFOs");
+            }
 
-            // Prevent Node's event-loop from reading stdout or keeping the
-            // process alive – we will use fs.readSync exclusively.
-            stdout.pause();
-            stdout.unref();
-            stdin.unref();
+            writeFileSync(prefix + ".ready", "", {
+                flag: "wx",
+                mode: 0o600,
+            });
+            const readFd = probeReadFd;
+            const writeFd = probeWriteFd;
+            probeReadFd = undefined;
+            probeWriteFd = undefined;
+            return { readFd, writeFd };
         }
-
-        // Track for auto-cleanup on process exit.
-        liveChildren.add(this.child);
-        this.child.unref();
+        finally {
+            if (probeReadFd !== undefined) closeSync(probeReadFd);
+            if (probeWriteFd !== undefined) closeSync(probeWriteFd);
+        }
     }
 
     // ── Public API ──────────────────────────────────────────────────
@@ -244,19 +289,27 @@ export class SyncRpcChannel {
         this.callbacks.set(name, callback);
     }
 
-    /** Kill the child process and release resources. */
+    /** Release resources and kill the server if this channel spawned it. */
     close(): void {
         try {
-            liveChildren.delete(this.child);
+            if (this.child) {
+                liveChildren.delete(this.child);
+            }
             if (this.pipeFd !== undefined) {
                 closeSync(this.pipeFd);
                 this.pipeFd = undefined;
             }
-            // Destroy the stdio streams so that their pipe handles are closed
-            // and no longer prevent the event loop from draining.
-            this.child.stdout?.destroy();
-            this.child.stdin?.destroy();
-            this.child.kill();
+            else if (this.child) {
+                // Destroy the stdio streams so that their pipe handles are closed
+                // and no longer prevent the event loop from draining.
+                this.child.stdout?.destroy();
+                this.child.stdin?.destroy();
+            }
+            else {
+                if (this.readFd >= 0) closeSync(this.readFd);
+                if (this.writeFd >= 0) closeSync(this.writeFd);
+            }
+            this.child?.kill();
             this.readFd = -1;
             this.writeFd = -1;
         }
@@ -495,8 +548,11 @@ export class SyncRpcChannel {
 
     // ── Low-level synchronous I/O ───────────────────────────────────
 
-    /** Build an EOF error with the child's exit code/signal if available. */
+    /** Build an EOF error with the child process status, if this channel owns one. */
     private eofError(): Error {
+        if (!this.child) {
+            return new Error("Unexpected EOF while reading from API server");
+        }
         const code = this.child.exitCode;
         const signal = this.child.signalCode;
         const detail = signal ? `killed by signal ${signal}` : code !== null ? `exited with code ${code}` : "unknown reason";

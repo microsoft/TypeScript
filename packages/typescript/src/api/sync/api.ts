@@ -264,7 +264,8 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
 
     /**
      * Create an API instance from an existing LSP connection's API session.
-     * Use this when connecting to an API pipe provided by an LSP server via custom/initializeAPISession.
+     * Use this with the pipe returned by custom/initializeAPISession. The
+     * requested session transport must match the async or sync API variant.
      */
     static get fromLSPConnection(): {
         (options: LSPConnectionOptions): API<true>;
