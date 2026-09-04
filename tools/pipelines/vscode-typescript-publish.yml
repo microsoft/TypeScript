@@ -193,15 +193,10 @@ extends:
 
                   - bash: |
                       cat > .npmrc << 'EOF'
-                      registry=https://pkgs.dev.azure.com/devdiv/devdiv/_packaging/devdiv_PublicPackages/npm/registry/
+                      registry=https://packagefeedproxy.microsoft.io/npm/
                       EOF
                       npm init -y
                     displayName: Set up npm
-
-                  - task: npmAuthenticate@0
-                    inputs:
-                      workingFile: .npmrc
-                    displayName: Authenticate npm
 
                   - bash: npm install @vscode/vsce@3.9.2
                     displayName: Install vsce

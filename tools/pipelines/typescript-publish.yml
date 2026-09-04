@@ -189,17 +189,11 @@ extends:
 
               - bash: |
                   cat > .npmrc << 'EOF'
-                  registry=https://pkgs.dev.azure.com/devdiv/devdiv/_packaging/devdiv_PublicPackages/npm/registry/
+                  registry=https://packagefeedproxy.microsoft.io/npm/
                   EOF
                   npm init -y
                 displayName: 'Set up .npmrc'
                 condition: and(succeeded(), eq(variables['HasVsix'], 'true'))
-
-              - task: npmAuthenticate@0
-                condition: and(succeeded(), eq(variables['HasVsix'], 'true'))
-                inputs:
-                  workingFile: .npmrc
-                displayName: 'Authenticate npm'
 
               - bash: npm install @vscode/vsce@latest
                 displayName: 'Install vsce'
