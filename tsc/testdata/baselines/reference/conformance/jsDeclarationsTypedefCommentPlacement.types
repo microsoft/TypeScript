@@ -1,0 +1,123 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsTypedefCommentPlacement.ts] ////
+
+=== typedef.js ===
+export function noop() {}
+>noop : () => void
+
+/**
+ * A point in 2D space.
+ * @typedef {Object} Point
+ * @property {number} x
+ * @property {number} y
+ */
+
+/**
+ * @param {Point} p
+ */
+export function dist(p) {
+>dist : (p: Point) => number
+>p : Point
+
+  return p.x;
+>p.x : number
+>p : Point
+>x : number
+}
+
+=== callback.js ===
+export function noop() {}
+>noop : () => void
+
+/**
+ * Compares two numbers.
+ * @callback Comparator
+ * @param {number} a
+ * @param {number} b
+ * @returns {number}
+ */
+
+/**
+ * @param {number[]} arr
+ * @param {Comparator} cmp
+ */
+export function sortWith(arr, cmp) {
+>sortWith : (arr: number[], cmp: Comparator) => number[]
+>arr : number[]
+>cmp : Comparator
+
+  return arr.slice().sort(cmp);
+>arr.slice().sort(cmp) : number[]
+>arr.slice().sort : (compareFn?: ((a: number, b: number) => number) | undefined) => number[]
+>arr.slice() : number[]
+>arr.slice : (start?: number, end?: number) => number[]
+>arr : number[]
+>slice : (start?: number, end?: number) => number[]
+>sort : (compareFn?: ((a: number, b: number) => number) | undefined) => number[]
+>cmp : Comparator
+}
+
+=== shared.js ===
+export function noop() {}
+>noop : () => void
+
+/**
+ * Two aliases from one comment.
+ * @typedef {number} A
+ * @typedef {string} B
+ */
+
+export function f() {}
+>f : () => void
+
+=== hosted.js ===
+export function noop() {}
+>noop : () => void
+
+/**
+ * Documents g, not N.
+ * @typedef {number} N
+ * @param {N} x
+ */
+export function g(x) {
+>g : (x: N) => number
+>x : number
+
+  return x;
+>x : number
+}
+
+=== trailing.js ===
+export function noop() {}
+>noop : () => void
+
+/**
+ * Nothing follows this one.
+ * @typedef {Object} Trailing
+ * @property {number} x
+ */
+
+=== imported.js ===
+export function noop() {}
+>noop : () => void
+
+/**
+ * Imports and defines in one comment.
+ * @import {Point} from "./typedef.js"
+ * @typedef {Point[]} Path
+ */
+
+export function h() {}
+>h : () => void
+
+=== preceded.js ===
+export function noop() {}
+>noop : () => void
+
+// not a JSDoc comment
+/**
+ * @typedef {number} Q
+ */
+
+export function i() {}
+>i : () => void
+

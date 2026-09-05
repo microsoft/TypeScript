@@ -1,0 +1,121 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsTypedefCommentPlacement.ts] ////
+
+=== typedef.js ===
+export function noop() {}
+>noop : Symbol(noop, Decl(typedef.js, 0, 0))
+
+/**
+ * A point in 2D space.
+ * @typedef {Object} Point
+ * @property {number} x
+ * @property {number} y
+ */
+
+/**
+ * @param {Point} p
+ */
+export function dist(p) {
+>dist : Symbol(dist, Decl(typedef.js, 0, 25))
+>p : Symbol(p, Decl(typedef.js, 12, 21))
+
+  return p.x;
+>p.x : Symbol(x, Decl(typedef.js, 5, 3))
+>p : Symbol(p, Decl(typedef.js, 12, 21))
+>x : Symbol(x, Decl(typedef.js, 5, 3))
+}
+
+=== callback.js ===
+export function noop() {}
+>noop : Symbol(noop, Decl(callback.js, 0, 0))
+
+/**
+ * Compares two numbers.
+ * @callback Comparator
+ * @param {number} a
+ * @param {number} b
+ * @returns {number}
+ */
+
+/**
+ * @param {number[]} arr
+ * @param {Comparator} cmp
+ */
+export function sortWith(arr, cmp) {
+>sortWith : Symbol(sortWith, Decl(callback.js, 0, 25))
+>arr : Symbol(arr, Decl(callback.js, 14, 25))
+>cmp : Symbol(cmp, Decl(callback.js, 14, 29))
+
+  return arr.slice().sort(cmp);
+>arr.slice().sort : Symbol(Array.sort, Decl(lib.es5.d.ts, --, --))
+>arr.slice : Symbol(Array.slice, Decl(lib.es5.d.ts, --, --))
+>arr : Symbol(arr, Decl(callback.js, 14, 25))
+>slice : Symbol(Array.slice, Decl(lib.es5.d.ts, --, --))
+>sort : Symbol(Array.sort, Decl(lib.es5.d.ts, --, --))
+>cmp : Symbol(cmp, Decl(callback.js, 14, 29))
+}
+
+=== shared.js ===
+export function noop() {}
+>noop : Symbol(noop, Decl(shared.js, 0, 0))
+
+/**
+ * Two aliases from one comment.
+ * @typedef {number} A
+ * @typedef {string} B
+ */
+
+export function f() {}
+>f : Symbol(f, Decl(shared.js, 0, 25))
+
+=== hosted.js ===
+export function noop() {}
+>noop : Symbol(noop, Decl(hosted.js, 0, 0))
+
+/**
+ * Documents g, not N.
+ * @typedef {number} N
+ * @param {N} x
+ */
+export function g(x) {
+>g : Symbol(g, Decl(hosted.js, 0, 25))
+>x : Symbol(x, Decl(hosted.js, 7, 18))
+
+  return x;
+>x : Symbol(x, Decl(hosted.js, 7, 18))
+}
+
+=== trailing.js ===
+export function noop() {}
+>noop : Symbol(noop, Decl(trailing.js, 0, 0))
+
+/**
+ * Nothing follows this one.
+ * @typedef {Object} Trailing
+ * @property {number} x
+ */
+
+=== imported.js ===
+export function noop() {}
+>noop : Symbol(noop, Decl(imported.js, 0, 0))
+
+/**
+ * Imports and defines in one comment.
+ * @import {Point} from "./typedef.js"
+ * @typedef {Point[]} Path
+ */
+
+export function h() {}
+>h : Symbol(h, Decl(imported.js, 0, 25))
+
+=== preceded.js ===
+export function noop() {}
+>noop : Symbol(noop, Decl(preceded.js, 0, 0))
+
+// not a JSDoc comment
+/**
+ * @typedef {number} Q
+ */
+
+export function i() {}
+>i : Symbol(i, Decl(preceded.js, 0, 25))
+

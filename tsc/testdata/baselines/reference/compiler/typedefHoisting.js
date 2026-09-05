@@ -19,15 +19,15 @@ export {}
 
 
 //// [y.d.ts]
-export type Bar = string;
 /** @typedef {string} Bar */
+export type Bar = string;
 export {};
 //// [x.d.ts]
 import type { Bar } from "./y";
+/** @typedef {Bar[]} Bars */
 type Bars = Bar[];
 declare class C {
     /** @import {Bar} from "./y" */
-    /** @typedef {Bar[]} Bars */
     /** @type {Bars} */
     foo: Bars;
     bar(/** @type {Bar} */ x: Bar): string;

@@ -458,7 +458,60 @@ func (tx *DeclarationTransformer) transformAndReplaceLatePaintedStatements(state
 		}
 	}
 
+	tx.claimReparsedJSDocComments(results)
 	return tx.Factory().NewNodeList(results)
+}
+
+// Tags that reparse into a declaration of their own rather than contributing to the node the
+// containing JSDoc comment is attached to.
+func isUnhostedJSDocTag(tag *ast.Node) bool {
+	switch tag.Kind {
+	case ast.KindJSDocTypedefTag, ast.KindJSDocCallbackTag, ast.KindJSDocImportTag, ast.KindJSDocOverloadTag:
+		return true
+	}
+	return false
+}
+
+// A JSDoc comment whose every tag is unhosted documents the declarations reparsed out of it, not the
+// statement it is attached to.
+func documentsOnlyReparsedDeclarations(jsdoc *ast.Node) bool {
+	tags := jsdoc.AsJSDoc().Tags
+	return tags != nil && len(tags.Nodes) > 0 && core.Every(tags.Nodes, isUnhostedJSDocTag)
+}
+
+// A JSDoc node starts at the full start of the node it documents rather than at its own `/**`, so
+// recover the range of the comment itself.
+func (tx *DeclarationTransformer) commentRangeOfJSDoc(jsdoc *ast.Node, file *ast.SourceFile) (core.TextRange, bool) {
+	for comment := range scanner.GetLeadingCommentRanges(tx.EmitContext().Factory.AsNodeFactory(), file.Text(), jsdoc.Pos()) {
+		if comment.End() == jsdoc.End() {
+			return comment.TextRange, true
+		}
+	}
+	return core.TextRange{}, false
+}
+
+// Declarations reparsed from JSDoc (`@typedef`, `@callback`, `@import`, `@overload`) take the text
+// range of the tag they came from, which sits inside the comment. The printer therefore finds no
+// leading comment for them and hands the comment to the following statement instead, documenting
+// the wrong declaration. Claim each such comment for the first declaration reparsed out of it.
+func (tx *DeclarationTransformer) claimReparsedJSDocComments(statements []*ast.Node) {
+	file := tx.state.currentSourceFile
+	if file == nil || !ast.IsSourceFileJS(file) {
+		return
+	}
+	for _, statement := range statements {
+		original := tx.EmitContext().MostOriginal(statement)
+		if original.Flags&ast.NodeFlagsReparsed == 0 {
+			continue
+		}
+		jsdoc := core.FirstOrNil(original.EagerJSDoc(file))
+		if jsdoc == nil || !documentsOnlyReparsedDeclarations(jsdoc) {
+			continue
+		}
+		if loc, ok := tx.commentRangeOfJSDoc(jsdoc, file); ok {
+			tx.EmitContext().ClaimComment(statement, jsdoc.Pos(), loc)
+		}
+	}
 }
 
 func (tx *DeclarationTransformer) getReferencedFiles(outputFilePath string) (results []*ast.FileReference) {
