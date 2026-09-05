@@ -471,17 +471,34 @@ func TestTryGetModuleNameFromExportsOrImports(t *testing.T) {
 		}
 		host := &mockModuleSpecifierGenerationHost{currentDir: "/pkg", useCaseSensitiveFileNames: true}
 		conditions := []string{"import", "types", "node"}
+		cjsConditions := []string{"require", "types", "node"}
 
-		// Array fallback is allowed at runtime: second element match is valid.
+		// Arrays are not file-existence fallbacks in Node: first valid string wins,
+		// even if the file is missing. Only undefined/invalid entries fall through.
 		arrayCond := condExports(
 			collections.MapEntry[string, packagejson.ExportsOrImports]{Key: "node", Value: arrExports(strExports("./dist/a.js"), strExports("./dist/b.js"))},
 			collections.MapEntry[string, packagejson.ExportsOrImports]{Key: "default", Value: strExports("./dist/c.js")},
 		)
-		if got := tryGetModuleNameFromExportsOrImports(&core.CompilerOptions{}, host, "/pkg/dist/b.js", "/pkg", "#a", arrayCond, conditions, MatchingModeExact, true, false); got != "#a" {
-			t.Errorf("array second-element match should be valid, got %q", got)
+		if got := tryGetModuleNameFromExportsOrImports(&core.CompilerOptions{}, host, "/pkg/dist/a.js", "/pkg", "#a", arrayCond, conditions, MatchingModeExact, true, false); got != "#a" {
+			t.Errorf("array first-element match should be valid, got %q", got)
+		}
+		if got := tryGetModuleNameFromExportsOrImports(&core.CompilerOptions{}, host, "/pkg/dist/b.js", "/pkg", "#a", arrayCond, conditions, MatchingModeExact, true, false); got != "" {
+			t.Errorf("array second-element match should be blocked (first valid string wins at runtime), got %q", got)
 		}
 		if got := tryGetModuleNameFromExportsOrImports(&core.CompilerOptions{}, host, "/pkg/dist/c.js", "/pkg", "#a", arrayCond, conditions, MatchingModeExact, true, false); got != "" {
 			t.Errorf("array miss under node should block default, got %q", got)
+		}
+
+		// Array with undefined first entry falls through: [{ import: ... }] skipped when import inactive.
+		arrayUndefinedFirst := condExports(
+			collections.MapEntry[string, packagejson.ExportsOrImports]{Key: "node", Value: arrExports(
+				condExports(collections.MapEntry[string, packagejson.ExportsOrImports]{Key: "import", Value: strExports("./dist/a.js")}),
+				strExports("./dist/b.js"),
+			)},
+			collections.MapEntry[string, packagejson.ExportsOrImports]{Key: "default", Value: strExports("./dist/c.js")},
+		)
+		if got := tryGetModuleNameFromExportsOrImports(&core.CompilerOptions{}, host, "/pkg/dist/b.js", "/pkg", "#a", arrayUndefinedFirst, cjsConditions, MatchingModeExact, true, false); got != "#a" {
+			t.Errorf("array undefined first entry should fallback to second element, got %q", got)
 		}
 
 		// Nested conditional with no active runtime key should not block outer default.
@@ -492,9 +509,22 @@ func TestTryGetModuleNameFromExportsOrImports(t *testing.T) {
 			)},
 			collections.MapEntry[string, packagejson.ExportsOrImports]{Key: "default", Value: strExports("./dist/b.js")},
 		)
-		cjsConditions := []string{"require", "types", "node"}
 		if got := tryGetModuleNameFromExportsOrImports(&core.CompilerOptions{}, host, "/pkg/dist/b.js", "/pkg", "#a", nestedNoMatch, cjsConditions, MatchingModeExact, true, false); got != "#a" {
 			t.Errorf("nested no-active-key should fallback to outer default, got %q", got)
+		}
+
+		// Deeper nesting: { node: { import: { browser: ./a.js } }, default: ./b.js }
+		// with active node/import but inactive browser -> undefined, fallback to default valid.
+		deepNested := condExports(
+			collections.MapEntry[string, packagejson.ExportsOrImports]{Key: "node", Value: condExports(
+				collections.MapEntry[string, packagejson.ExportsOrImports]{Key: "import", Value: condExports(
+					collections.MapEntry[string, packagejson.ExportsOrImports]{Key: "browser", Value: strExports("./dist/a.js")},
+				)},
+			)},
+			collections.MapEntry[string, packagejson.ExportsOrImports]{Key: "default", Value: strExports("./dist/b.js")},
+		)
+		if got := tryGetModuleNameFromExportsOrImports(&core.CompilerOptions{}, host, "/pkg/dist/b.js", "/pkg", "#a", deepNested, conditions, MatchingModeExact, true, false); got != "#a" {
+			t.Errorf("deep nested undefined should fallback to outer default, got %q", got)
 		}
 
 		// Default-first is terminal: later node unreachable.
