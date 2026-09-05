@@ -216,7 +216,7 @@ func prepareDeclarationCompilationContext(
 			sourceFileName = sourceFile.FileName()
 		}
 
-		dTsFileName := outputpaths.ChangeToDeclarationExtension(sourceFileName, result.Program.Program())
+		dTsFileName := outputpaths.ChangeToDeclarationExtension(sourceFileName, result.Program.Program().Options(), result.Program.Program())
 		return result.DTS.GetOrZero(dTsFileName)
 	}
 

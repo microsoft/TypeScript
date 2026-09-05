@@ -1,0 +1,17 @@
+/tsconfig.json(5,28): error TS6046: Argument for '--outputExtension' option must be: '.js', '.mjs', '.cjs'.
+
+
+==== /tsconfig.json (1 errors) ====
+    {
+        "compilerOptions": {
+            "declaration": true,
+            "emitDeclarationOnly": true,
+            "outputExtension": ".jsx"
+                               ~~~~~~
+!!! error TS6046: Argument for '--outputExtension' option must be: '.js', '.mjs', '.cjs'.
+        }
+    }
+    
+==== /main.ts (0 errors) ====
+    export declare const main: string;
+    

@@ -204,6 +204,12 @@ var newLineOptionMap = collections.NewOrderedMapFromList([]collections.MapEntry[
 	{Key: "lf", Value: core.NewLineKindLF},
 })
 
+var outputExtensionOptionMap = collections.NewOrderedMapFromList([]collections.MapEntry[string, any]{
+	{Key: ".js", Value: ".js"},
+	{Key: ".mjs", Value: ".mjs"},
+	{Key: ".cjs", Value: ".cjs"},
+})
+
 var targetToLibMap = map[core.ScriptTarget]string{
 	core.ScriptTargetESNext: "lib.esnext.full.d.ts",
 	core.ScriptTargetES2025: "lib.es2025.full.d.ts",

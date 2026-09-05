@@ -4424,6 +4424,8 @@ var The_invalid_diagnostic_directive_is_in_supplemental_output_0_returned_by_the
 
 var Diagnostic_directive_0_returned_by_the_content_mapper_has_an_invalid_unusedExpectDirectiveIndex = &Message{code: 100068, category: CategoryMessage, key: "Diagnostic_directive_0_returned_by_the_content_mapper_has_an_invalid_unusedExpectDirectiveIndex_100068", text: "Diagnostic directive {0} returned by the content mapper has an invalid 'unusedExpectDirectiveIndex'."}
 
+var Specify_the_file_extension_that_an_external_build_gives_every_source_file_so_that_declaration_file_names_and_their_relative_imports_match_the_build_output = &Message{code: 100069, category: CategoryMessage, key: "Specify_the_file_extension_that_an_external_build_gives_every_source_file_so_that_declaration_file_n_100069", text: "Specify the file extension that an external build gives every source file, so that declaration file names and their relative imports match the build output."}
+
 func keyToMessage(key Key) *Message {
 	switch key {
 	case "Unterminated_string_literal_1002":
@@ -8848,6 +8850,8 @@ func keyToMessage(key Key) *Message {
 		return The_invalid_diagnostic_directive_is_in_supplemental_output_0_returned_by_the_content_mapper
 	case "Diagnostic_directive_0_returned_by_the_content_mapper_has_an_invalid_unusedExpectDirectiveIndex_100068":
 		return Diagnostic_directive_0_returned_by_the_content_mapper_has_an_invalid_unusedExpectDirectiveIndex
+	case "Specify_the_file_extension_that_an_external_build_gives_every_source_file_so_that_declaration_file_n_100069":
+		return Specify_the_file_extension_that_an_external_build_gives_every_source_file_so_that_declaration_file_names_and_their_relative_imports_match_the_build_output
 	default:
 		return nil
 	}

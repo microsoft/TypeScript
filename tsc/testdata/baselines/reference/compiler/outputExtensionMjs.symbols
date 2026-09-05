@@ -1,0 +1,21 @@
+//// [tests/cases/compiler/outputExtensionMjs.ts] ////
+
+=== /a.ts ===
+export declare const a: string;
+>a : Symbol(a, Decl(a.ts, 0, 20))
+
+=== /b.tsx ===
+export declare const b: number;
+>b : Symbol(b, Decl(b.tsx, 0, 20))
+
+=== /main.ts ===
+export { a } from "./a.ts";
+>a : Symbol(a, Decl(main.ts, 0, 8))
+
+export { b } from "./b.tsx";
+>b : Symbol(b, Decl(main.ts, 1, 8))
+
+export type A = typeof import("./a.ts").a;
+>A : Symbol(A, Decl(main.ts, 1, 28))
+>a : Symbol(a, Decl(a.ts, 0, 20))
+

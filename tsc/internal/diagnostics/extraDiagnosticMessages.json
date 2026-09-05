@@ -338,5 +338,9 @@
     "Diagnostic directive {0} returned by the content mapper has an invalid 'unusedExpectDirectiveIndex'.": {
         "category": "Message",
         "code": 100068
+    },
+    "Specify the file extension that an external build gives every source file, so that declaration file names and their relative imports match the build output.": {
+        "category": "Message",
+        "code": 100069
     }
 }
