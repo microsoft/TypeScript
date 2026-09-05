@@ -949,6 +949,52 @@ func TestParseJsonConfigFileContentDefaultsCompileOnSaveToFalse(t *testing.T) {
 	assert.Equal(t, *parsed.CompileOnSave, false)
 }
 
+// TestGetExactFile verifies the contract of the getExactFile helper directly: a lookup only
+// succeeds if the entry found via the (possibly case-folding) canonical key is an exact,
+// case-sensitive match for the requested file name.
+func TestGetExactFile(t *testing.T) {
+	t.Parallel()
+
+	caseInsensitiveKeyMapper := func(value string) string {
+		return tspath.GetCanonicalFileName(value, false /*useCaseSensitiveFileNames*/)
+	}
+	caseSensitiveKeyMapper := func(value string) string {
+		return tspath.GetCanonicalFileName(value, true /*useCaseSensitiveFileNames*/)
+	}
+
+	t.Run("exact match is found", func(t *testing.T) {
+		t.Parallel()
+		var m collections.OrderedMap[string, string]
+		m.Set(caseInsensitiveKeyMapper("/project/src/brand.ts"), "/project/src/brand.ts")
+		key, ok := tsoptions.GetExactFileTestWorker(&m, caseInsensitiveKeyMapper, "/project/src/brand.ts")
+		assert.Assert(t, ok)
+		assert.Equal(t, key, caseInsensitiveKeyMapper("/project/src/brand.ts"))
+	})
+
+	t.Run("canonical key collision without exact match is rejected", func(t *testing.T) {
+		t.Parallel()
+		var m collections.OrderedMap[string, string]
+		m.Set(caseInsensitiveKeyMapper("/project/src/brand.ts"), "/project/src/brand.ts")
+		_, ok := tsoptions.GetExactFileTestWorker(&m, caseInsensitiveKeyMapper, "/project/src/Brand.ts")
+		assert.Assert(t, !ok)
+	})
+
+	t.Run("no entry for canonical key", func(t *testing.T) {
+		t.Parallel()
+		var m collections.OrderedMap[string, string]
+		_, ok := tsoptions.GetExactFileTestWorker(&m, caseInsensitiveKeyMapper, "/project/src/brand.ts")
+		assert.Assert(t, !ok)
+	})
+
+	t.Run("case sensitive key mapper never collides", func(t *testing.T) {
+		t.Parallel()
+		var m collections.OrderedMap[string, string]
+		m.Set(caseSensitiveKeyMapper("/project/src/brand.ts"), "/project/src/brand.ts")
+		_, ok := tsoptions.GetExactFileTestWorker(&m, caseSensitiveKeyMapper, "/project/src/Brand.ts")
+		assert.Assert(t, !ok)
+	})
+}
+
 // TestGetFileNamesFromConfigSpecsCaseInsensitiveBaseNameMismatch verifies that wildcard "include"
 // expansion never drops a file just because its base name case-insensitively collides with another,
 // differently-cased, unrelated file's base name once its extension is changed to look for a
