@@ -27036,6 +27036,8 @@ func (c *Checker) getIndexTypeEx(t *Type, indexFlags IndexFlags) *Type {
 	switch {
 	case c.isNoInferType(t):
 		return c.getNoInferType(c.getIndexTypeEx(t.AsSubstitutionType().baseType, indexFlags))
+	case t.flags&TypeFlagsSubstitution != 0 && !c.isGenericType(t):
+		return c.getIndexTypeEx(c.getSubstitutionIntersection(t), indexFlags)
 	case c.shouldDeferIndexType(t, indexFlags):
 		return c.getIndexTypeForGenericType(t, indexFlags)
 	case t.flags&TypeFlagsUnion != 0:
