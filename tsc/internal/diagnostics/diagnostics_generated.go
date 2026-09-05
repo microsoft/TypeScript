@@ -944,6 +944,8 @@ var An_import_attributes_property_cannot_be_optional = &Message{code: 1556, cate
 
 var X_0_is_not_a_valid_key_for_an_import_attributes_type = &Message{code: 1557, category: CategoryError, key: "_0_is_not_a_valid_key_for_an_import_attributes_type_1557", text: "'{0}' is not a valid key for an import attributes type."}
 
+var An_import_attributes_property_cannot_have_a_readonly_modifier = &Message{code: 1558, category: CategoryError, key: "An_import_attributes_property_cannot_have_a_readonly_modifier_1558", text: "An import attributes property cannot have a 'readonly' modifier."}
+
 var The_types_of_0_are_incompatible_between_these_types = &Message{code: 2200, category: CategoryError, key: "The_types_of_0_are_incompatible_between_these_types_2200", text: "The types of '{0}' are incompatible between these types."}
 
 var The_types_returned_by_0_are_incompatible_between_these_types = &Message{code: 2201, category: CategoryError, key: "The_types_returned_by_0_are_incompatible_between_these_types_2201", text: "The types returned by '{0}' are incompatible between these types."}
@@ -5368,6 +5370,8 @@ func keyToMessage(key Key) *Message {
 		return An_import_attributes_property_cannot_be_optional
 	case "_0_is_not_a_valid_key_for_an_import_attributes_type_1557":
 		return X_0_is_not_a_valid_key_for_an_import_attributes_type
+	case "An_import_attributes_property_cannot_have_a_readonly_modifier_1558":
+		return An_import_attributes_property_cannot_have_a_readonly_modifier
 	case "The_types_of_0_are_incompatible_between_these_types_2200":
 		return The_types_of_0_are_incompatible_between_these_types
 	case "The_types_returned_by_0_are_incompatible_between_these_types_2201":

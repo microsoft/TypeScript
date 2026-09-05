@@ -1876,6 +1876,10 @@
         "category": "Error",
         "code": 1557
     },
+    "An import attributes property cannot have a 'readonly' modifier.": {
+        "category": "Error",
+        "code": 1558
+    },
 
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
