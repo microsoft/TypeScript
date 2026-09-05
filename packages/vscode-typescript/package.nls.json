@@ -41,5 +41,11 @@
     "native-preview.trackFlakyDiagnostics.log": "Log an error when a flaky diagnostic is detected.",
     "native-preview.trackFlakyDiagnostics.never": "Never perform flaky diagnostic checking and logging.",
     "native-preview.trackFlakyDiagnostics.auto": "Perform flaky diagnostic logging only on VS Code Insiders.",
+    "native-preview.workspaceDiagnostics.description": "Controls how much of the workspace is checked for errors, including files that are not open. Checking whole projects is expensive.",
+    "native-preview.workspaceDiagnostics.serverDiagnosticsDeDuplication.description": "Leave a file out of workspace diagnostics while it is open, because the editor reports open files separately and would otherwise show every problem in them twice. Turn this off only for a client that does not request diagnostics per document.",
+    "native-preview.workspaceDiagnostics.off": "Only report errors in open files.",
+    "native-preview.workspaceDiagnostics.openProjects": "Report errors in every file of the projects that contain an open file.",
+    "native-preview.workspaceDiagnostics.openProjectsAndDependents": "Also report errors in the projects that reference those projects.",
+    "native-preview.workspaceDiagnostics.allProjects": "Report errors in every project in the workspace.",
     "developer": "Developer"
 }

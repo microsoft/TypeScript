@@ -4424,6 +4424,10 @@ var The_invalid_diagnostic_directive_is_in_supplemental_output_0_returned_by_the
 
 var Diagnostic_directive_0_returned_by_the_content_mapper_has_an_invalid_unusedExpectDirectiveIndex = &Message{code: 100068, category: CategoryMessage, key: "Diagnostic_directive_0_returned_by_the_content_mapper_has_an_invalid_unusedExpectDirectiveIndex_100068", text: "Diagnostic directive {0} returned by the content mapper has an invalid 'unusedExpectDirectiveIndex'."}
 
+var Checking_workspace = &Message{code: 100069, category: CategoryMessage, key: "Checking_workspace_100069", text: "Checking workspace"}
+
+var Paths_that_workspace_wide_diagnostics_in_the_editor_should_not_report_on = &Message{code: 100070, category: CategoryMessage, key: "Paths_that_workspace_wide_diagnostics_in_the_editor_should_not_report_on_100070", text: "Paths that workspace-wide diagnostics in the editor should not report on."}
+
 func keyToMessage(key Key) *Message {
 	switch key {
 	case "Unterminated_string_literal_1002":
@@ -8848,6 +8852,10 @@ func keyToMessage(key Key) *Message {
 		return The_invalid_diagnostic_directive_is_in_supplemental_output_0_returned_by_the_content_mapper
 	case "Diagnostic_directive_0_returned_by_the_content_mapper_has_an_invalid_unusedExpectDirectiveIndex_100068":
 		return Diagnostic_directive_0_returned_by_the_content_mapper_has_an_invalid_unusedExpectDirectiveIndex
+	case "Checking_workspace_100069":
+		return Checking_workspace
+	case "Paths_that_workspace_wide_diagnostics_in_the_editor_should_not_report_on_100070":
+		return Paths_that_workspace_wide_diagnostics_in_the_editor_should_not_report_on
 	default:
 		return nil
 	}

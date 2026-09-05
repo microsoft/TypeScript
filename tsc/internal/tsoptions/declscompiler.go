@@ -1083,6 +1083,15 @@ var optionsForCompiler = []*CommandLineOption{
 		DefaultValueDescription: false,
 	},
 	{
+		Name:                               "experimentalWorkspaceDiagnosticsExclude",
+		Kind:                               CommandLineOptionTypeList,
+		IsTSConfigOnly:                     true,
+		allowConfigDirTemplateSubstitution: true,
+		Category:                           diagnostics.Projects,
+		Description:                        diagnostics.Paths_that_workspace_wide_diagnostics_in_the_editor_should_not_report_on,
+		DefaultValueDescription:            "**/node_modules/**",
+	},
+	{
 		Name:                    "disableReferencedProjectLoad",
 		Kind:                    CommandLineOptionTypeBoolean,
 		IsTSConfigOnly:          true,

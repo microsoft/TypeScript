@@ -591,6 +591,11 @@ Config::
         "autoClosingTags": {
           "enabled": true
         },
+        "experimental": {
+          "workspaceDiagnostics": {
+            "scope": "off"
+          }
+        },
         "format": {
           "convertTabsToSpaces": true,
           "enabled": true,

@@ -13,6 +13,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/contentmapper"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/execute/incremental"
 	"github.com/microsoft/TypeScript/tsc/internal/ls"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/autoimport"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/lsconv"
@@ -326,6 +327,41 @@ func (s *Snapshot) GetProjectsContainingFile(uri lsproto.DocumentUri) []ls.Proje
 	return s.ProjectCollection.GetProjectsContainingFile(path)
 }
 
+// IncrementalProgram returns a project's program together with the record of which files a change
+// since the previous program reached, so a caller checking the project can skip the files it did
+// not. Built on first use, and shared by every snapshot holding the same program.
+// The returned function must be called when the caller is done with the program: only one caller
+// may check through it at a time.
+func (s *Snapshot) IncrementalProgram(project *Project) (*incremental.Program, func()) {
+	state := project.incremental
+	if state == nil {
+		return incremental.NewProgramFromPriorState(project.Program, nil, nil), func() {}
+	}
+	state.use.Lock()
+	return state.get(project.Program), state.use.Unlock
+}
+
+// ReleaseSweptCheckers lets go of the checkers a whole-project check used, for a project nothing
+// has open. They hold the types of every file in it, which is the largest thing a pull creates, and
+// nothing is going to ask about that project again until the user opens something in it. A project
+// the user is working in keeps them, so the file being edited stays warm.
+func (s *Snapshot) ReleaseSweptCheckers(project *Project) bool {
+	if project.checkerPool == nil || s.ProjectCollection.isOpen(project) {
+		return false
+	}
+	return project.checkerPool.releaseSweptCheckers()
+}
+
+func (s *Snapshot) OpenProjects() []*Project {
+	var open []*Project
+	for _, project := range s.ProjectCollection.Projects() {
+		if s.ProjectCollection.isOpen(project) {
+			open = append(open, project)
+		}
+	}
+	return open
+}
+
 func (s *Snapshot) GetFile(fileName string) FileHandle {
 	return s.fs.GetFile(fileName)
 }
@@ -414,6 +450,24 @@ func (p *ProjectTreeRequest) IsAllProjects() bool {
 
 func (p *ProjectTreeRequest) IsProjectReferenced(projectID tspath.Path) bool {
 	return p.referencedProjects.Has(projectID)
+}
+
+// covers reports whether having loaded p also loaded everything other asks for.
+func (p *ProjectTreeRequest) covers(other *ProjectTreeRequest) bool {
+	switch {
+	case p == nil:
+		return false
+	case p.IsAllProjects():
+		return true
+	case other.IsAllProjects():
+		return false
+	}
+	for project := range other.referencedProjects.Keys() {
+		if !p.referencedProjects.Has(project) {
+			return false
+		}
+	}
+	return true
 }
 
 func (p *ProjectTreeRequest) Projects() []tspath.Path {
