@@ -1,0 +1,50 @@
+//// [tests/cases/compiler/htmlImageElementCrossOrigin.ts] ////
+
+=== htmlImageElementCrossOrigin.ts ===
+const img = new Image(10, 10);
+>img : HTMLImageElement
+>new Image(10, 10) : HTMLImageElement
+>Image : new (width?: number, height?: number) => HTMLImageElement
+>10 : 10
+>10 : 10
+
+img.crossOrigin = "anonymous";
+>img.crossOrigin = "anonymous" : "anonymous"
+>img.crossOrigin : "" | "anonymous" | "use-credentials" | null
+>img : HTMLImageElement
+>crossOrigin : "" | "anonymous" | "use-credentials" | null
+>"anonymous" : "anonymous"
+
+img.crossOrigin = "use-credentials";
+>img.crossOrigin = "use-credentials" : "use-credentials"
+>img.crossOrigin : "" | "anonymous" | "use-credentials" | null
+>img : HTMLImageElement
+>crossOrigin : "" | "anonymous" | "use-credentials" | null
+>"use-credentials" : "use-credentials"
+
+img.crossOrigin = "";
+>img.crossOrigin = "" : ""
+>img.crossOrigin : "" | "anonymous" | "use-credentials" | null
+>img : HTMLImageElement
+>crossOrigin : "" | "anonymous" | "use-credentials" | null
+>"" : ""
+
+img.crossOrigin = null;
+>img.crossOrigin = null : null
+>img.crossOrigin : "" | "anonymous" | "use-credentials" | null
+>img : HTMLImageElement
+>crossOrigin : "" | "anonymous" | "use-credentials" | null
+
+img.crossOrigin = "abc";
+>img.crossOrigin = "abc" : "abc"
+>img.crossOrigin : "" | "anonymous" | "use-credentials" | null
+>img : HTMLImageElement
+>crossOrigin : "" | "anonymous" | "use-credentials" | null
+>"abc" : "abc"
+
+const value: "anonymous" | "use-credentials" | "" | null = img.crossOrigin;
+>value : "" | "anonymous" | "use-credentials" | null
+>img.crossOrigin : "" | "anonymous" | "use-credentials" | null
+>img : HTMLImageElement
+>crossOrigin : "" | "anonymous" | "use-credentials" | null
+
