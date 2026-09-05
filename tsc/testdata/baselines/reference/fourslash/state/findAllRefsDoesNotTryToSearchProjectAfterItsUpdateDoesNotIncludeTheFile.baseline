@@ -1,4 +1,4 @@
-UseCaseSensitiveFileNames: true
+CaseSensitivity: true
 //// [/packages/babel-loader/src/index.ts] *new* 
 import type { Foo } from "../../core/src/index.js";
 //// [/packages/babel-loader/tsconfig.json] *new* 

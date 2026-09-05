@@ -290,13 +290,13 @@ type typeWriterResult struct {
 }
 
 func (walker *typeWriterWalker) getTypes(filename string) []*typeWriterResult {
-	sourceFile := walker.program.GetSourceFile(filename)
+	sourceFile := walker.program.GetSourceFile(tspath.ToRootedFilePath(filename, walker.program.Program().BaseDirectory()))
 	walker.currentSourceFile = sourceFile
 	return walker.visitNode(sourceFile.AsNode(), false /*isSymbolWalk*/)
 }
 
 func (walker *typeWriterWalker) getSymbols(filename string) []*typeWriterResult {
-	sourceFile := walker.program.GetSourceFile(filename)
+	sourceFile := walker.program.GetSourceFile(tspath.ToRootedFilePath(filename, walker.program.Program().BaseDirectory()))
 	walker.currentSourceFile = sourceFile
 	return walker.visitNode(sourceFile.AsNode(), true /*isSymbolWalk*/)
 }
@@ -438,7 +438,7 @@ func (walker *typeWriterWalker) writeTypeOrSymbol(node *ast.Node, isSymbolWalk b
 
 		declSourceFile := ast.GetSourceFileOfNode(declaration)
 		declLine, declChar := scanner.GetECMALineAndUTF16CharacterOfPosition(declSourceFile, declaration.Pos())
-		fileName := tspath.GetBaseFileName(declSourceFile.FileName())
+		fileName := declSourceFile.FileName().BaseName()
 		symbolString.WriteString("Decl(")
 		symbolString.WriteString(fileName)
 		symbolString.WriteString(", ")

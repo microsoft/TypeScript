@@ -12,6 +12,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/api"
 	"github.com/microsoft/TypeScript/tsc/internal/bundled"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 )
 
 type apiFlags struct {
@@ -45,6 +46,7 @@ func runAPI(args []string) int {
 	}
 
 	defaultLibraryPath := bundled.LibPath()
+	system := newSystem()
 
 	// Parse callbacks list
 	var callbacksList []string
@@ -54,13 +56,13 @@ func runAPI(args []string) int {
 
 	options := &api.StdioServerOptions{
 		Err:                  os.Stderr,
-		Cwd:                  flags.cwd,
+		Cwd:                  tspath.ToRootedDirectoryPath(flags.cwd, system.cwd),
 		DefaultLibraryPath:   defaultLibraryPath,
 		Callbacks:            callbacksList,
 		Async:                flags.async,
 		CollectTiming:        flags.timing,
 		RunExternalCode:      flags.runExternalCode,
-		ContentMapperSpawner: newSystem(),
+		ContentMapperSpawner: system,
 	}
 	if flags.pipePath != "" {
 		options.PipePath = flags.pipePath

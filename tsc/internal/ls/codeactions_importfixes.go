@@ -15,7 +15,6 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/ls/autoimport"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/scanner"
-	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 )
 
 var importFixErrorCodes = []int32{
@@ -94,7 +93,7 @@ func getImportCodeActions(ctx context.Context, fixContext *CodeFixContext) ([]*C
 }
 
 func getAllImportCodeActions(ctx context.Context, fixContext *CodeFixContext) (*CombinedCodeActions, error) {
-	if tspath.IsDynamicFileName(fixContext.SourceFile.FileName()) {
+	if fixContext.SourceFile.FileName().IsDynamic() {
 		return nil, nil
 	}
 
@@ -171,7 +170,7 @@ func addImportFromDiagnostic(ctx context.Context, importAdder autoimport.ImportA
 
 func getFixInfos(ctx context.Context, fixContext *CodeFixContext, errorCode int32, pos int) ([]*fixInfo, error) {
 	// Can't compute import fixes for dynamic/untitled files since they don't have real file paths
-	if tspath.IsDynamicFileName(fixContext.SourceFile.FileName()) {
+	if fixContext.SourceFile.FileName().IsDynamic() {
 		return nil, nil
 	}
 

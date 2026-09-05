@@ -13,7 +13,6 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/internal/scanner"
 	"github.com/microsoft/TypeScript/tsc/internal/stringutil"
-	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 )
 
 type ParsingContext int
@@ -290,7 +289,7 @@ func ParseIsolatedEntityName(text string) *ast.EntityName {
 
 func (p *Parser) initializeState(opts ast.SourceFileParseOptions, sourceText string, scriptKind core.ScriptKind) {
 	if scriptKind == core.ScriptKindUnknown {
-		panic("ScriptKind must be specified when parsing source file: " + opts.FileName)
+		panic("ScriptKind must be specified when parsing source file: " + opts.FileName.AsString())
 	}
 
 	if p.scanner == nil {
@@ -429,7 +428,7 @@ func (p *Parser) jsdocScannerInfo() jsdocScannerInfo {
 }
 
 func (p *Parser) parseSourceFileWorker() *ast.SourceFile {
-	isDeclarationFile := tspath.IsDeclarationFileName(p.opts.FileName)
+	isDeclarationFile := p.opts.FileName.IsDeclarationFile()
 	if isDeclarationFile {
 		p.contextFlags |= ast.NodeFlagsAmbient
 	}

@@ -794,7 +794,7 @@ func (s *inlayHintState) getNodeDisplayPart(text string, node *ast.Node) *lsprot
 	// user somewhere wrong, so it is better to omit the target than to fabricate one.
 	if lspRange, fidelity := s.converters.ToLSPRangeForFeature(file, core.NewTextRange(pos, end), spanmap.FeatureInlayHints); fidelity.IsSingleSegment() {
 		part.Location = &lsproto.Location{
-			Uri:   lsconv.FileNameToDocumentURI(file.OriginalFileName()),
+			Uri:   lsconv.FilePathToDocumentURI(file.OriginalFileName()),
 			Range: lspRange,
 		}
 	}

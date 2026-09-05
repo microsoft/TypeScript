@@ -50,6 +50,10 @@
             "@typescript/source": "./src/api/fs.ts",
             "default": "./dist/api/fs.js"
         },
+        "./unstable/path": {
+            "@typescript/source": "./src/api/typedPaths.ts",
+            "default": "./dist/api/typedPaths.js"
+        },
         "./unstable/proto": {
             "@typescript/source": "./src/api/proto.ts",
             "default": "./dist/api/proto.js"

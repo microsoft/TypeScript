@@ -8,6 +8,10 @@ import type {
     NamedTupleMember,
     ParameterDeclaration,
 } from "../../ast/ast.ts";
+import type {
+    RootedDirectoryPath,
+    RootedFilePath,
+} from "../../ast/index.ts";
 import type { Diagnostic } from "../proto.ts";
 import type {
     NodeHandle,
@@ -387,26 +391,26 @@ export interface CompletionInfo {
 }
 
 export interface FormatDiagnosticsHost {
-    getCurrentDirectory(): string;
+    getCurrentDirectory(): RootedDirectoryPath;
     getCanonicalFileName(fileName: string): string;
     getNewLine(): string;
 }
 
 export interface EmitOutputFile {
     readonly text: string;
-    readonly sourceFileName?: string | undefined;
+    readonly sourceFileName?: RootedFilePath | undefined;
 }
 
 export interface EmitResult {
     readonly emitSkipped: boolean;
     readonly diagnostics: readonly Diagnostic[];
-    readonly emittedFiles: readonly string[];
+    readonly emittedFiles: readonly RootedFilePath[];
 }
 
 export interface EmitOutput {
     readonly emitSkipped: boolean;
     readonly diagnostics: readonly Diagnostic[];
-    readonly outputFiles: ReadonlyMap<string, EmitOutputFile>;
+    readonly outputFiles: ReadonlyMap<RootedFilePath, EmitOutputFile>;
 }
 
 export interface ImportSymbolAction {

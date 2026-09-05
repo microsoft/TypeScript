@@ -59,12 +59,12 @@ func TestDiagnosticsCollectionPreservesDistinctAdHocMessages(t *testing.T) {
 func TestDiagnosticsCollectionGetsDiagnosticsForEquivalentSourceFile(t *testing.T) {
 	t.Parallel()
 
-	path := tspath.Path("/src/file.ts")
+	path := tspath.PathKey("/src/file.ts")
 	diagnosticFile := &SourceFile{
-		parseOptions: SourceFileParseOptions{FileName: string(path), Path: path},
+		parseOptions: SourceFileParseOptions{FileName: tspath.RootedFilePathFromNormalized(path.AsString()), PathKey: path},
 	}
 	requestedFile := &SourceFile{
-		parseOptions: SourceFileParseOptions{FileName: string(path), Path: path},
+		parseOptions: SourceFileParseOptions{FileName: tspath.RootedFilePathFromNormalized(path.AsString()), PathKey: path},
 	}
 	diagnostic := NewDiagnostic(diagnosticFile, core.TextRange{}, diagnostics.Cannot_find_name_0, "x")
 
@@ -79,7 +79,7 @@ func TestDiagnosticsCollectionGetsDiagnosticsForEquivalentSourceFile(t *testing.
 
 func TestExternalDiagnosticIdentity(t *testing.T) {
 	t.Parallel()
-	file := &SourceFile{parseOptions: SourceFileParseOptions{FileName: "/src/file.vue", Path: "/src/file.vue"}}
+	file := &SourceFile{parseOptions: SourceFileParseOptions{FileName: "/src/file.vue", PathKey: "/src/file.vue"}}
 	loc := core.NewTextRange(1, 2)
 	first := NewExternalDiagnostic(file, loc, "mapper-a", diagnostics.CategoryError, 0, "first")
 	diagnostics := []*Diagnostic{

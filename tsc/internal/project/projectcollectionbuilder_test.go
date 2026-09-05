@@ -34,7 +34,7 @@ func TestProjectCollectionBuilder(t *testing.T) {
 		session.DidOpenFile(context.Background(), uri, 1, content, lsproto.LanguageKindTypeScript)
 		snapshot := session.Snapshot()
 		assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 1)
-		assert.Assert(t, snapshot.ProjectCollection.ConfiguredProject(tspath.Path("/user/username/projects/myproject/tsconfig-src.json")) != nil)
+		assert.Assert(t, snapshot.ProjectCollection.ConfiguredProject(tspath.PathKey("/user/username/projects/myproject/tsconfig-src.json")) != nil)
 
 		// Ensure request can use existing snapshot
 		_, err := session.GetLanguageService(context.Background(), uri)
@@ -72,7 +72,7 @@ func TestProjectCollectionBuilder(t *testing.T) {
 		session.DidOpenFile(context.Background(), uri, 1, content, lsproto.LanguageKindTypeScript)
 		snapshot := session.Snapshot()
 		assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 1)
-		srcProject := snapshot.ProjectCollection.ConfiguredProject(tspath.Path("/user/username/projects/myproject/tsconfig-src.json"))
+		srcProject := snapshot.ProjectCollection.ConfiguredProject(tspath.PathKey("/user/username/projects/myproject/tsconfig-src.json"))
 		assert.Assert(t, srcProject != nil)
 
 		// Verify the default project is the source project
@@ -110,7 +110,7 @@ func TestProjectCollectionBuilder(t *testing.T) {
 		session.DidOpenFile(context.Background(), uri, 1, content, lsproto.LanguageKindTypeScript)
 		snapshot := session.Snapshot()
 		assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 1)
-		assert.Assert(t, snapshot.ProjectCollection.ConfiguredProject(tspath.Path("/user/username/projects/myproject/tsconfig-src.json")) == nil)
+		assert.Assert(t, snapshot.ProjectCollection.ConfiguredProject(tspath.PathKey("/user/username/projects/myproject/tsconfig-src.json")) == nil)
 
 		// Should use inferred project instead
 		defaultProject := snapshot.GetDefaultProject(uri)
@@ -146,7 +146,7 @@ func TestProjectCollectionBuilder(t *testing.T) {
 		session.DidOpenFile(context.Background(), uri, 1, content, lsproto.LanguageKindTypeScript)
 		snapshot := session.Snapshot()
 		assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 1)
-		assert.Assert(t, snapshot.ProjectCollection.ConfiguredProject(tspath.Path("/user/username/projects/myproject/tsconfig-src.json")) == nil)
+		assert.Assert(t, snapshot.ProjectCollection.ConfiguredProject(tspath.PathKey("/user/username/projects/myproject/tsconfig-src.json")) == nil)
 
 		// Should use inferred project instead
 		defaultProject := snapshot.GetDefaultProject(uri)
@@ -185,7 +185,7 @@ func TestProjectCollectionBuilder(t *testing.T) {
 		session.DidOpenFile(context.Background(), uri, 1, content, lsproto.LanguageKindTypeScript)
 		snapshot := session.Snapshot()
 		assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 1)
-		srcProject := snapshot.ProjectCollection.ConfiguredProject(tspath.Path("/user/username/projects/myproject/tsconfig-src.json"))
+		srcProject := snapshot.ProjectCollection.ConfiguredProject(tspath.PathKey("/user/username/projects/myproject/tsconfig-src.json"))
 		assert.Assert(t, srcProject != nil)
 
 		// Verify the default project is the source project (found through indirect2, not indirect1)
@@ -229,9 +229,9 @@ func TestProjectCollectionBuilder(t *testing.T) {
 		session.DidOpenFile(context.Background(), uri, 1, content, lsproto.LanguageKindTypeScript)
 		snapshot := session.Snapshot()
 		assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 2)
-		srcProject := snapshot.ProjectCollection.ConfiguredProject(tspath.Path("/user/username/projects/myproject/tsconfig-src.json"))
+		srcProject := snapshot.ProjectCollection.ConfiguredProject(tspath.PathKey("/user/username/projects/myproject/tsconfig-src.json"))
 		assert.Assert(t, srcProject != nil)
-		ancestorProject := snapshot.ProjectCollection.ConfiguredProject(tspath.Path("/user/username/projects/myproject/tsconfig.json"))
+		ancestorProject := snapshot.ProjectCollection.ConfiguredProject(tspath.PathKey("/user/username/projects/myproject/tsconfig.json"))
 		assert.Assert(t, ancestorProject != nil)
 
 		// Verify the default project is the source project
@@ -307,9 +307,9 @@ func TestProjectCollectionBuilder(t *testing.T) {
 		session.DidOpenFile(context.Background(), uri, 1, content, lsproto.LanguageKindTypeScript)
 		snapshot := session.Snapshot()
 		assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 2)
-		demoProject := snapshot.ProjectCollection.ConfiguredProject(tspath.Path("/home/src/projects/project/demos/tsconfig.json"))
+		demoProject := snapshot.ProjectCollection.ConfiguredProject(tspath.PathKey("/home/src/projects/project/demos/tsconfig.json"))
 		assert.Assert(t, demoProject != nil)
-		solutionProject := snapshot.ProjectCollection.ConfiguredProject(tspath.Path("/home/src/projects/project/tsconfig.json"))
+		solutionProject := snapshot.ProjectCollection.ConfiguredProject(tspath.PathKey("/home/src/projects/project/tsconfig.json"))
 		assert.Assert(t, solutionProject != nil)
 
 		// Verify the default project is the demos project (not the app project that excludes demos files)
@@ -368,7 +368,7 @@ func TestProjectCollectionBuilder(t *testing.T) {
 		session.DidOpenFile(context.Background(), uri, 1, content, lsproto.LanguageKindTypeScript)
 		snapshot := session.Snapshot()
 		assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 2)
-		rootProject := snapshot.ProjectCollection.ConfiguredProject(tspath.Path("/home/src/projects/project/tsconfig.json"))
+		rootProject := snapshot.ProjectCollection.ConfiguredProject(tspath.PathKey("/home/src/projects/project/tsconfig.json"))
 		assert.Assert(t, rootProject != nil)
 
 		// Verify the default project is inferred
@@ -447,10 +447,10 @@ func TestProjectCollectionBuilder(t *testing.T) {
 		// It's more bookkeeping to maintain order of opening, since any file can move into or out of
 		// the inferred project due to changes in other projects. Order shouldn't matter for correctness,
 		// we just want it to be consistent, in case there are observable type ordering issues.
-		assert.DeepEqual(t, inferredProject.Program.CommandLine().FileNames(), []string{
-			"/project/a.ts",
-			"/project/b.ts",
-			"/project/c.ts",
+		assert.DeepEqual(t, inferredProject.Program.CommandLine().FileNames(), []tspath.RootedFilePath{
+			tspath.RootedFilePathFromNormalized("/project/a.ts"),
+			tspath.RootedFilePathFromNormalized("/project/b.ts"),
+			tspath.RootedFilePathFromNormalized("/project/c.ts"),
 		})
 	})
 
@@ -520,7 +520,7 @@ func TestProjectCollectionBuilder(t *testing.T) {
 		session.DidOpenFile(context.Background(), depUri, 1, files["/project/node_modules/dep/index.d.ts"].(string), lsproto.LanguageKindTypeScript)
 
 		snapshot := session.Snapshot()
-		configuredProject := snapshot.ProjectCollection.ConfiguredProject(tspath.Path("/project/tsconfig.json"))
+		configuredProject := snapshot.ProjectCollection.ConfiguredProject(tspath.PathKey("/project/tsconfig.json"))
 		assert.Assert(t, configuredProject != nil, "configured project should exist")
 		defaultProject := snapshot.GetDefaultProject(depUri)
 		assert.Equal(t, defaultProject, configuredProject, "dependency should be in the configured project initially")

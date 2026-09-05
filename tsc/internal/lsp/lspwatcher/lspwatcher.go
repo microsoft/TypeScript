@@ -24,15 +24,31 @@ import (
 const throttleWindow = 75 * time.Millisecond
 
 type watcherBackend interface {
-	WatchDirectory(dir string, fn fswatch.WatchCallback, opts ...fswatch.WatchOption) (io.Closer, error)
+	WatchDirectory(dir tspath.RootedDirectoryPath, fn watchCallback, opts ...fswatch.WatchOption) (io.Closer, error)
 }
+
+type watchEvent struct {
+	path tspath.RootedFilePath
+	kind fswatch.EventKind
+}
+
+type watchCallback func(events []watchEvent, err error)
 
 type defaultWatcherBackend struct {
 	watcher fswatch.Watcher
 }
 
-func (d defaultWatcherBackend) WatchDirectory(dir string, fn fswatch.WatchCallback, opts ...fswatch.WatchOption) (io.Closer, error) {
-	return d.watcher.WatchDirectory(dir, fn, opts...)
+func (d defaultWatcherBackend) WatchDirectory(dir tspath.RootedDirectoryPath, fn watchCallback, opts ...fswatch.WatchOption) (io.Closer, error) {
+	return d.watcher.WatchDirectory(dir.AsString(), func(events []fswatch.Event, err error) {
+		typedEvents := make([]watchEvent, len(events))
+		for i, event := range events {
+			typedEvents[i] = watchEvent{
+				path: tspath.RootedFilePathFromAbsolute(event.Path),
+				kind: event.Kind,
+			}
+		}
+		fn(typedEvents, err)
+	}, opts...)
 }
 
 // Watcher manages a set of file system subscriptions identified by
@@ -79,14 +95,14 @@ type Watcher struct {
 // All path fields are tspath-style (forward-slash) absolute paths.
 type watch struct {
 	watcher            *Watcher
-	requestedDirectory string // directory requested by the LSP layer (possibly a symlink)
+	requestedDirectory tspath.RootedDirectoryPath // directory requested by the LSP layer (possibly a symlink)
 	kind               lsproto.WatchKind
 	recursive          bool // whether the target subscription should be recursive
 
 	mu               sync.Mutex
-	subscription     io.Closer // current subscription (target or ancestor); nil if none
-	watchedDirectory string    // canonicalized directory 'subscription' is rooted at
-	watchingTarget   bool      // whether 'subscription' is rooted at the target directory
+	subscription     io.Closer                  // current subscription (target or ancestor); nil if none
+	watchedDirectory tspath.RootedDirectoryPath // canonicalized directory 'subscription' is rooted at
+	watchingTarget   bool                       // whether 'subscription' is rooted at the target directory
 	closed           bool
 }
 
@@ -315,9 +331,9 @@ func (w *watch) reconcile(emitSyntheticCreates bool) error {
 // watchedReal. It forwards events to the session and, on ErrWatchTerminated
 // (the watched directory was deleted), falls back to watching the nearest
 // existing ancestor so the watch re-attaches when the directory is recreated.
-func (w *watch) targetCallback(watchedDirectory string) fswatch.WatchCallback {
+func (w *watch) targetCallback(watchedDirectory tspath.RootedDirectoryPath) watchCallback {
 	watcher := w.watcher
-	return func(events []fswatch.Event, err error) {
+	return func(events []watchEvent, err error) {
 		terminated := false
 		if err != nil {
 			switch {
@@ -369,8 +385,8 @@ func (w *watch) handleTerminated() {
 // watches exist only to detect the target — or an intermediate path component —
 // being created; their events are about ancestor directories the session
 // doesn't track, so they are ignored and the watch is simply re-evaluated.
-func (w *watch) ancestorCallback() fswatch.WatchCallback {
-	return func(events []fswatch.Event, err error) {
+func (w *watch) ancestorCallback() watchCallback {
+	return func(events []watchEvent, err error) {
 		_ = w.reconcile(true /*emitSyntheticCreates*/)
 	}
 }
@@ -378,12 +394,12 @@ func (w *watch) ancestorCallback() fswatch.WatchCallback {
 // nearestExistingAncestor returns the deepest existing directory that is dir or
 // an ancestor of dir, walking upward. ok is false only if nothing in the chain
 // (including the root) exists.
-func nearestExistingAncestor(fs vfs.FS, dir string) (string, bool) {
+func nearestExistingAncestor(fs vfs.FS, dir tspath.RootedDirectoryPath) (tspath.RootedDirectoryPath, bool) {
 	for {
 		if fs.DirectoryExists(dir) {
 			return dir, true
 		}
-		parent := tspath.GetDirectoryPath(dir)
+		parent := dir.AsPath().Directory()
 		if parent == dir {
 			return "", false
 		}
@@ -393,7 +409,7 @@ func nearestExistingAncestor(fs vfs.FS, dir string) (string, bool) {
 
 // forwardEvents translates fswatch events into LSP file events and enqueues
 // them for the next debounced flush.
-func (w *Watcher) forwardEvents(kind lsproto.WatchKind, events []fswatch.Event) {
+func (w *Watcher) forwardEvents(kind lsproto.WatchKind, events []watchEvent) {
 	w.mu.Lock()
 	if w.closed {
 		w.mu.Unlock()
@@ -404,7 +420,7 @@ func (w *Watcher) forwardEvents(kind lsproto.WatchKind, events []fswatch.Event) 
 	}
 	for _, event := range events {
 		var changeType lsproto.FileChangeType
-		switch event.Kind {
+		switch event.kind {
 		case fswatch.EventUpdate:
 			// fswatch intentionally doesn't distinguish create vs update.
 			// For LSP consumers this is fine: callers infer create/update
@@ -422,8 +438,7 @@ func (w *Watcher) forwardEvents(kind lsproto.WatchKind, events []fswatch.Event) 
 			continue
 		}
 
-		path := tspath.NormalizeSlashes(event.Path)
-		uri := lsconv.FileNameToDocumentURI(path)
+		uri := lsconv.FilePathToDocumentURI(event.path)
 		w.pending[string(uri)] = &lsproto.FileEvent{
 			Uri:  uri,
 			Type: changeType,
@@ -439,30 +454,29 @@ func (w *Watcher) forwardEvents(kind lsproto.WatchKind, events []fswatch.Event) 
 // directory itself is always included; for a non-recursive watch its immediate
 // children are added, and for a recursive watch its whole subtree is walked.
 // Nothing is emitted if the watch doesn't request create notifications.
-func (w *Watcher) emitSyntheticCreates(directory string, kind lsproto.WatchKind, recursive bool) {
+func (w *Watcher) emitSyntheticCreates(directory tspath.RootedDirectoryPath, kind lsproto.WatchKind, recursive bool) {
 	if kind&lsproto.WatchKindCreate == 0 {
 		return
 	}
-	paths := []string{directory}
+	paths := []tspath.RootedPath{directory.AsPath()}
 	if recursive {
-		_ = w.fs.WalkDir(directory, func(path string, entry vfs.DirEntry, err error) error {
+		_ = w.fs.WalkDir(directory, func(path tspath.RootedPath, entry vfs.DirEntry, err error) error {
 			if err != nil {
 				return nil
 			}
-			normalizedPath := tspath.NormalizeSlashes(path)
-			if normalizedPath == directory {
+			if path == directory.AsPath() {
 				return nil
 			}
-			paths = append(paths, normalizedPath)
+			paths = append(paths, path)
 			return nil
 		})
 	} else {
 		entries := w.fs.GetAccessibleEntries(directory)
 		for _, name := range entries.Files {
-			paths = append(paths, tspath.CombinePaths(directory, name))
+			paths = append(paths, directory.ResolveFile(name).AsPath())
 		}
 		for _, name := range entries.Directories {
-			paths = append(paths, tspath.CombinePaths(directory, name))
+			paths = append(paths, directory.ResolveDirectory(name).AsPath())
 		}
 	}
 	w.enqueueSyntheticCreates(paths)
@@ -471,7 +485,7 @@ func (w *Watcher) emitSyntheticCreates(directory string, kind lsproto.WatchKind,
 // enqueueSyntheticCreates adds synthetic create events for paths, without
 // clobbering a more specific event already pending for the same path (e.g. a
 // real delete).
-func (w *Watcher) enqueueSyntheticCreates(paths []string) {
+func (w *Watcher) enqueueSyntheticCreates(paths []tspath.RootedPath) {
 	w.mu.Lock()
 	if w.closed {
 		w.mu.Unlock()
@@ -481,7 +495,7 @@ func (w *Watcher) enqueueSyntheticCreates(paths []string) {
 		w.pending = make(map[string]*lsproto.FileEvent, len(paths))
 	}
 	for _, path := range paths {
-		uri := lsconv.FileNameToDocumentURI(path)
+		uri := lsconv.FilePathToDocumentURI(tspath.RootedFilePathFromPath(path))
 		if _, ok := w.pending[string(uri)]; ok {
 			continue
 		}
@@ -533,21 +547,27 @@ func (w *Watcher) flush() {
 // whether the subscription should be recursive.
 //
 // Returned roots are tspath-normalized (forward-slash) absolute paths.
-func watchRoot(fileSystemWatcher *lsproto.FileSystemWatcher) (string, bool) {
+func watchRoot(fileSystemWatcher *lsproto.FileSystemWatcher) (tspath.RootedDirectoryPath, bool) {
 	if fileSystemWatcher.GlobPattern.Pattern != nil {
-		return rootFromGlob(*fileSystemWatcher.GlobPattern.Pattern), true
+		return toWatchRoot(rootFromGlob(*fileSystemWatcher.GlobPattern.Pattern))
 	}
 	if relativePattern := fileSystemWatcher.GlobPattern.RelativePattern; relativePattern != nil {
-		var base string
 		if relativePattern.BaseUri.URI != nil {
-			base = lsproto.DocumentUri(*relativePattern.BaseUri.URI).FileName()
-		} else {
-			return "", false
+			if base := lsproto.DocumentUri(*relativePattern.BaseUri.URI).FileName(); base != "" {
+				root := rootFromGlob(relativePattern.Pattern)
+				return tspath.RootedDirectoryPathFromPath(tspath.RootedPath(base)).ResolveDirectory(root), true
+			}
 		}
-		pattern := tspath.CombinePaths(base, relativePattern.Pattern)
-		return rootFromGlob(pattern), true
+		return "", false
 	}
 	return "", false
+}
+
+func toWatchRoot(root string) (tspath.RootedDirectoryPath, bool) {
+	if root == "" || !tspath.PathIsAbsolute(root) {
+		return "", false
+	}
+	return tspath.RootedDirectoryPathFromNormalized(root), true
 }
 
 func rootFromGlob(pattern string) string {

@@ -56,9 +56,10 @@ func DoJSEmitBaseline(
 			jsCode.WriteString("\r\n")
 		}
 		if len(result.Diagnostics) == 0 && strings.HasSuffix(file.UnitName, tspath.ExtensionJson) {
+			fileName := tspath.ToRootedFilePath(file.UnitName, result.CurrentDirectory())
 			fileParseResult := parser.ParseSourceFile(ast.SourceFileParseOptions{
-				FileName: file.UnitName,
-				Path:     tspath.Path(file.UnitName),
+				FileName: fileName,
+				PathKey:  tspath.CaseSensitive.PathKey(tspath.RootedPath(fileName)),
 			}, file.Content, core.ScriptKindJSON)
 			if len(fileParseResult.Diagnostics()) > 0 {
 				jsCode.WriteString(GetErrorBaseline(t, []*harnessutil.TestFile{file}, diagnosticwriter.WrapASTDiagnostics(fileParseResult.Diagnostics()), diagnosticwriter.CompareASTDiagnostics, false /*pretty*/))
@@ -161,7 +162,7 @@ type declarationCompilationContext struct {
 	declOtherFiles   []*harnessutil.TestFile
 	harnessSettings  *harnessutil.HarnessOptions
 	options          *core.CompilerOptions
-	currentDirectory string
+	currentDirectory tspath.RootedDirectoryPath
 	config           *tsoptions.ParsedCommandLine
 }
 
@@ -201,29 +202,30 @@ func prepareDeclarationCompilationContext(
 	}
 
 	findResultCodeFile := func(fileName string) *harnessutil.TestFile {
-		sourceFile := result.Program.GetSourceFile(fileName)
+		sourceFile := result.Program.GetSourceFile(tspath.ToRootedFilePath(fileName, result.CurrentDirectory()))
 		if sourceFile == nil {
 			panic("Program has no source file with name '" + fileName + "'")
 		}
 		// Is this file going to be emitted separately
-		var sourceFileName string
+		sourceFileName := sourceFile.FileName()
 
 		if len(options.OutDir) != 0 {
-			sourceFilePath := tspath.GetNormalizedAbsolutePath(sourceFile.FileName(), result.Host.GetCurrentDirectory())
-			sourceFilePath = strings.Replace(sourceFilePath, result.Program.CommonSourceDirectory(), "", 1)
-			sourceFileName = tspath.CombinePaths(options.OutDir, sourceFilePath)
-		} else {
-			sourceFileName = sourceFile.FileName()
+			if relativePath, ok := result.Host.FS().CaseSensitivity().RelativePathFromDirectory(
+				result.Program.CommonSourceDirectory(),
+				sourceFileName,
+			); ok {
+				sourceFileName = options.OutDir.ResolveRelativeFile(relativePath)
+			}
 		}
 
 		dTsFileName := outputpaths.ChangeToDeclarationExtension(sourceFileName, result.Program.Program())
-		return result.DTS.GetOrZero(dTsFileName)
+		return result.DTS.GetOrZero(dTsFileName.AsString())
 	}
 
 	addDtsFile := func(file *harnessutil.TestFile, dtsFiles []*harnessutil.TestFile) []*harnessutil.TestFile {
 		if tspath.IsDeclarationFileName(file.UnitName) || tspath.HasJSONFileExtension(file.UnitName) {
 			dtsFiles = append(dtsFiles, file)
-		} else if sourceFile := result.Program.GetSourceFile(file.UnitName); sourceFile != nil &&
+		} else if sourceFile := result.Program.GetSourceFile(tspath.ToRootedFilePath(file.UnitName, result.CurrentDirectory())); sourceFile != nil &&
 			(tspath.HasTSFileExtension(file.UnitName) || (tspath.HasJSFileExtension(file.UnitName) && options.GetAllowJS()) || sourceFile.ContentMapper() != "") {
 			declFile := findResultCodeFile(file.UnitName)
 			if declFile != nil && findUnit(declFile.UnitName, declInputFiles) == nil && findUnit(declFile.UnitName, declOtherFiles) == nil {
@@ -238,6 +240,10 @@ func prepareDeclarationCompilationContext(
 
 	// if the .d.ts is non-empty, confirm it compiles correctly as well
 	if options.Declaration.IsTrue() && len(result.Diagnostics) == 0 && result.DTS.Size() > 0 {
+		declarationCurrentDirectory := harnessSettings.CurrentDirectory
+		if currentDirectory != "" {
+			declarationCurrentDirectory = tspath.ToRootedDirectoryPath(currentDirectory, harnessSettings.CurrentDirectory)
+		}
 		for _, file := range inputFiles {
 			declInputFiles = addDtsFile(file, declInputFiles)
 		}
@@ -249,7 +255,7 @@ func prepareDeclarationCompilationContext(
 			declOtherFiles:   declOtherFiles,
 			harnessSettings:  harnessSettings,
 			options:          options,
-			currentDirectory: core.IfElse(len(currentDirectory) > 0, currentDirectory, harnessSettings.CurrentDirectory),
+			currentDirectory: declarationCurrentDirectory,
 			config:           result.Program.Program().CommandLine(),
 		}
 	}

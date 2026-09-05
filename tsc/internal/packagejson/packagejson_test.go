@@ -21,6 +21,60 @@ var packageJsonFixtures = []filefixture.Fixture{
 	filefixture.FromFile("date-fns.json", filepath.Join(repo.TestDataPath(), "fixtures", "packagejson", "date-fns.json")),
 }
 
+func TestPackageDirectory(t *testing.T) {
+	t.Parallel()
+
+	directory := packagejson.NewPackageDirectory(tspath.RootedDirectoryPathFromAbsolute("/package/"), tspath.CaseSensitive)
+
+	assert.Equal(t, directory.String(), "/package")
+	assert.Equal(t, directory.AsDirectoryPath().AsString(), "/package")
+	assert.Equal(t, directory.PathKey().AsString(), "/package")
+	assert.Equal(t, directory.Parent().String(), "/")
+	assert.Equal(t, directory.Parent().PathKey().AsString(), "/")
+}
+
+func TestPackageDirectoryCacheIdentityPreservesPresentation(t *testing.T) {
+	t.Parallel()
+
+	cache := packagejson.NewInfoCache(tspath.CaseInsensitive)
+	upper := cache.PackageDirectory(tspath.RootedDirectoryPathFromNormalized("/Repo/Package"))
+	lower := cache.PackageDirectory(tspath.RootedDirectoryPathFromNormalized("/repo/package"))
+	assert.Equal(t, upper.PathKey(), lower.PathKey())
+
+	entry := &packagejson.InfoCacheEntry{
+		PackageDirectory: upper,
+		DirectoryExists:  true,
+		Contents:         &packagejson.PackageJson{},
+	}
+	assert.Equal(t, cache.Set(upper, entry), entry)
+	assert.Equal(t, cache.Get(lower), entry)
+
+	corrected := entry.WithPackageDirectory(lower)
+	assert.Equal(t, corrected.PackageDirectory.AsDirectoryPath(), lower.AsDirectoryPath())
+	assert.Equal(t, corrected.PackageDirectory.PathKey(), upper.PathKey())
+	assert.Equal(t, entry.PackageDirectory.AsDirectoryPath(), upper.AsDirectoryPath())
+}
+
+func TestForEachAncestorDirectoryStoppingAtGlobalCache(t *testing.T) {
+	t.Parallel()
+
+	cache := packagejson.NewInfoCache(tspath.CaseInsensitive)
+	start := cache.PackageDirectory(tspath.RootedDirectoryPathFromNormalized("/Repo/Project/src"))
+	var names []string
+	var keys []string
+	packagejson.ForEachAncestorDirectoryStoppingAtGlobalCache(
+		tspath.RootedDirectoryPathFromNormalized("/Repo"),
+		start,
+		func(directory packagejson.PackageDirectory) (any, bool) {
+			names = append(names, directory.String())
+			keys = append(keys, directory.PathKey().AsString())
+			return nil, false
+		},
+	)
+	assert.DeepEqual(t, names, []string{"/Repo/Project/src", "/Repo/Project", "/Repo"})
+	assert.DeepEqual(t, keys, []string{"/repo/project/src", "/repo/project", "/repo"})
+}
+
 func BenchmarkPackageJSON(b *testing.B) {
 	for _, f := range packageJsonFixtures {
 		f.SkipIfNotExist(b)
@@ -52,8 +106,8 @@ func BenchmarkPackageJSON(b *testing.B) {
 				fileName := "/" + f.Name()
 				for b.Loop() {
 					parser.ParseSourceFile(ast.SourceFileParseOptions{
-						FileName: fileName,
-						Path:     tspath.Path(fileName),
+						FileName: tspath.RootedFilePathFromNormalized(fileName),
+						PathKey:  tspath.PathKeyFromCanonical(fileName),
 					}, string(content), core.ScriptKindJSON)
 				}
 			})

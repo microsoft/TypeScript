@@ -7,10 +7,10 @@ import (
 )
 
 type ExtendedConfigParseArgs struct {
-	FileName        string
+	FileName        tspath.RootedFilePath
 	Content         string
 	FS              FileSource
-	ResolutionStack []tspath.Path
+	ResolutionStack []tspath.PathKey
 	Host            tsoptions.ParseConfigHost
 	Cache           tsoptions.ExtendedConfigCache
 }
@@ -20,18 +20,18 @@ type ExtendedConfigCacheEntry struct {
 	Hash xxh3.Uint128
 }
 
-type ExtendedConfigCache = OwnerCache[tspath.Path, *ExtendedConfigCacheEntry, ExtendedConfigParseArgs]
+type ExtendedConfigCache = OwnerCache[tspath.PathKey, *ExtendedConfigCacheEntry, ExtendedConfigParseArgs]
 
 func NewExtendedConfigCache() *ExtendedConfigCache {
 	return NewOwnerCache(
-		func(path tspath.Path, args ExtendedConfigParseArgs) *ExtendedConfigCacheEntry {
+		func(path tspath.PathKey, args ExtendedConfigParseArgs) *ExtendedConfigCacheEntry {
 			result := &ExtendedConfigCacheEntry{
 				ExtendedConfigCacheEntry: tsoptions.ParseExtendedConfig(args.FileName, path, args.ResolutionStack, args.Host, args.Cache),
 			}
 			result.Hash = hash(result.ExtendedConfigCacheEntry, args)
 			return result
 		},
-		func(path tspath.Path, entry *ExtendedConfigCacheEntry, args ExtendedConfigParseArgs) bool {
+		func(path tspath.PathKey, entry *ExtendedConfigCacheEntry, args ExtendedConfigParseArgs) bool {
 			return entry.Hash == xxh3.Uint128{} || entry.Hash != hash(entry.ExtendedConfigCacheEntry, args)
 		},
 	)

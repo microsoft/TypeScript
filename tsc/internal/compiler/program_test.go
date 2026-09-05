@@ -13,10 +13,24 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/repo"
 	"github.com/microsoft/TypeScript/tsc/internal/tsoptions"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
+	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/osvfs"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfstest"
 	"gotest.tools/v3/assert"
 )
+
+type parseConfigHost struct {
+	fs               vfs.FS
+	currentDirectory tspath.RootedDirectoryPath
+}
+
+func (h *parseConfigHost) FS() vfs.FS {
+	return h.fs
+}
+
+func (h *parseConfigHost) GetCurrentDirectory() tspath.RootedDirectoryPath {
+	return h.currentDirectory
+}
 
 type testFile struct {
 	fileName string
@@ -234,29 +248,24 @@ func TestProgram(t *testing.T) {
 	for _, testCase := range programTestCases {
 		t.Run(testCase.testName, func(t *testing.T) {
 			t.Parallel()
-			libPrefix := bundled.LibPath() + "/"
-			fs := vfstest.FromMap[any](nil, false /*useCaseSensitiveFileNames*/)
+			libPrefix := bundled.LibPath().AsString() + "/"
+			fs := vfstest.FromMap[any](nil, tspath.CaseInsensitive /*caseSensitivity*/)
 			fs = bundled.WrapFS(fs)
 
 			for _, testFile := range testCase.files {
-				_ = fs.WriteFile(testFile.fileName, testFile.contents)
+				_ = fs.WriteFile(tspath.RootedFilePathFromNormalized(testFile.fileName), testFile.contents)
 			}
 
 			opts := core.CompilerOptions{Target: testCase.target}
 
 			program := compiler.NewProgram(compiler.ProgramOptions{
-				Config: &tsoptions.ParsedCommandLine{
-					ParsedConfig: &tsoptions.ParsedOptions{
-						FileNames:       []string{"c:/dev/src/index.ts"},
-						CompilerOptions: &opts,
-					},
-				},
-				Host: compiler.NewCompilerHost("c:/dev/src", fs, bundled.LibPath(), nil, nil, nil),
+				Config: tsoptions.NewParsedCommandLine(&opts, testFileNames("c:/dev/src/index.ts"), nil, "c:/dev/src", fs.CaseSensitivity()),
+				Host:   compiler.NewCompilerHost(fs, bundled.LibPath(), nil, nil, nil),
 			})
 
 			actualFiles := []string{}
 			for _, file := range program.GetSourceFiles() {
-				actualFiles = append(actualFiles, strings.TrimPrefix(file.FileName(), libPrefix))
+				actualFiles = append(actualFiles, strings.TrimPrefix(file.FileName().AsString(), libPrefix))
 			}
 
 			assert.DeepEqual(t, testCase.expectedFiles, actualFiles)
@@ -274,7 +283,7 @@ func TestIncludeProcessorDiagnosticsWithMissingFileCasing(t *testing.T) {
 	// Use case-sensitive file names so that /src/MyFile.ts and /src/myFile.ts
 	// have different canonical paths but the same lower-case path, triggering
 	// file casing diagnostics in the include processor.
-	fs := vfstest.FromMap[any](nil, true /*useCaseSensitiveFileNames*/)
+	fs := vfstest.FromMap[any](nil, tspath.CaseSensitive /*caseSensitivity*/)
 	fs = bundled.WrapFS(fs)
 
 	// Only create the lowercase version; /src/MyFile.ts does not exist.
@@ -285,13 +294,8 @@ func TestIncludeProcessorDiagnosticsWithMissingFileCasing(t *testing.T) {
 	// List both casings as root files. The first one (/src/MyFile.ts) will fail
 	// to load because it does not exist on the case-sensitive filesystem.
 	program := compiler.NewProgram(compiler.ProgramOptions{
-		Config: &tsoptions.ParsedCommandLine{
-			ParsedConfig: &tsoptions.ParsedOptions{
-				FileNames:       []string{"/src/MyFile.ts", "/src/myFile.ts"},
-				CompilerOptions: &opts,
-			},
-		},
-		Host: compiler.NewCompilerHost("/", fs, bundled.LibPath(), nil, nil, nil),
+		Config: tsoptions.NewParsedCommandLine(&opts, testFileNames("/src/MyFile.ts", "/src/myFile.ts"), nil, "/", fs.CaseSensitivity()),
+		Host:   compiler.NewCompilerHost(fs, bundled.LibPath(), nil, nil, nil),
 	})
 
 	// GetProgramDiagnostics triggers getDiagnostics which processes all
@@ -309,6 +313,59 @@ func TestIncludeProcessorDiagnosticsWithMissingFileCasing(t *testing.T) {
 	}())
 }
 
+func TestBaseURLRemovedOptionDiagnosticAcrossRoots(t *testing.T) {
+	t.Parallel()
+
+	tests := []struct {
+		name              string
+		baseURL           string
+		expectsSuggestion bool
+	}{
+		{name: "same root", baseURL: "c:/base", expectsSuggestion: true},
+		{name: "different drive", baseURL: "d:/base"},
+		{name: "UNC", baseURL: "//server/share/base"},
+		{name: "URL", baseURL: "file:///base"},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
+
+			const configFileName = "c:/project/tsconfig.json"
+			fs := vfstest.FromMap(map[string]string{
+				configFileName:        fmt.Sprintf(`{"compilerOptions":{"baseUrl":%q},"files":["index.ts"]}`, test.baseURL),
+				"c:/project/index.ts": "export {};",
+			}, tspath.CaseInsensitive)
+			fs = bundled.WrapFS(fs)
+			configPath := tspath.RootedFilePathFromNormalized(configFileName)
+			parseHost := &parseConfigHost{fs: fs, currentDirectory: configPath.Directory()}
+			parsed, errors := tsoptions.GetParsedCommandLineOfConfigFile(configPath, nil, nil, parseHost, nil)
+			assert.Equal(t, len(errors), 0)
+
+			program := compiler.NewProgram(compiler.ProgramOptions{
+				Config: parsed,
+				Host:   compiler.NewCompilerHost(fs, bundled.LibPath(), nil, nil, nil),
+			})
+
+			var removedBaseURLDiagnosticFound bool
+			var suggestionFound bool
+			for _, diagnostic := range program.GetProgramDiagnostics() {
+				if diagnostic.Code() != 5102 {
+					continue
+				}
+				removedBaseURLDiagnosticFound = true
+				for _, message := range diagnostic.MessageChain() {
+					if message.Code() == 5106 {
+						suggestionFound = true
+					}
+				}
+			}
+			assert.Assert(t, removedBaseURLDiagnosticFound)
+			assert.Equal(t, suggestionFound, test.expectsSuggestion)
+		})
+	}
+}
+
 func BenchmarkNewProgram(b *testing.B) {
 	if !bundled.Embedded {
 		// Without embedding, we'd need to read all of the lib files out from disk into the MapFS.
@@ -318,22 +375,17 @@ func BenchmarkNewProgram(b *testing.B) {
 
 	for _, testCase := range programTestCases {
 		b.Run(testCase.testName, func(b *testing.B) {
-			fs := vfstest.FromMap[any](nil, false /*useCaseSensitiveFileNames*/)
+			fs := vfstest.FromMap[any](nil, tspath.CaseInsensitive /*caseSensitivity*/)
 			fs = bundled.WrapFS(fs)
 
 			for _, testFile := range testCase.files {
-				_ = fs.WriteFile(testFile.fileName, testFile.contents)
+				_ = fs.WriteFile(tspath.RootedFilePathFromNormalized(testFile.fileName), testFile.contents)
 			}
 
 			opts := core.CompilerOptions{Target: testCase.target}
 			programOpts := compiler.ProgramOptions{
-				Config: &tsoptions.ParsedCommandLine{
-					ParsedConfig: &tsoptions.ParsedOptions{
-						FileNames:       []string{"c:/dev/src/index.ts"},
-						CompilerOptions: &opts,
-					},
-				},
-				Host: compiler.NewCompilerHost("c:/dev/src", fs, bundled.LibPath(), nil, nil, nil),
+				Config: tsoptions.NewParsedCommandLine(&opts, testFileNames("c:/dev/src/index.ts"), nil, "c:/dev/src", fs.CaseSensitivity()),
+				Host:   compiler.NewCompilerHost(fs, bundled.LibPath(), nil, nil, nil),
 			}
 
 			for b.Loop() {
@@ -343,10 +395,11 @@ func BenchmarkNewProgram(b *testing.B) {
 	}
 
 	b.Run("compiler", func(b *testing.B) {
-		rootPath := tspath.NormalizeSlashes(filepath.Join(repo.TestDataPath(), "fixtures/compiler"))
+		rootPath := tspath.RootedDirectoryPathFromAbsolute(filepath.Join(repo.TestDataPath(), "fixtures/compiler"))
 		fs := bundled.WrapFS(osvfs.FS())
-		host := compiler.NewCompilerHost(rootPath, fs, bundled.LibPath(), nil, nil, nil)
-		parsed, errors := tsoptions.GetParsedCommandLineOfConfigFile(tspath.CombinePaths(rootPath, "tsconfig.json"), nil, nil, host, nil)
+		host := compiler.NewCompilerHost(fs, bundled.LibPath(), nil, nil, nil)
+		parseHost := &parseConfigHost{fs: fs, currentDirectory: rootPath}
+		parsed, errors := tsoptions.GetParsedCommandLineOfConfigFile(rootPath.ResolveFile("tsconfig.json"), nil, nil, parseHost, nil)
 		assert.Equal(b, len(errors), 0, "Expected no errors in parsed command line")
 		opts := compiler.ProgramOptions{
 			Config: parsed,

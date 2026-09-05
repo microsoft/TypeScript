@@ -6,9 +6,9 @@ import (
 	"gotest.tools/v3/assert"
 )
 
-func GetParsedCommandLine(t assert.TestingT, jsonText string, files map[string]string, currentDirectory string, useCaseSensitiveFileNames bool) *tsoptions.ParsedCommandLine {
-	host := NewVFSParseConfigHost(files, currentDirectory, useCaseSensitiveFileNames)
-	configFileName := tspath.CombinePaths(currentDirectory, "tsconfig.json")
-	tsconfigSourceFile := tsoptions.NewTsconfigSourceFileFromFilePath(configFileName, tspath.ToPath(configFileName, currentDirectory, useCaseSensitiveFileNames), jsonText)
-	return tsoptions.ParseJsonSourceFileConfigFileContent(tsconfigSourceFile, host, currentDirectory, nil, nil, configFileName, nil, nil)
+func GetParsedCommandLine(t assert.TestingT, jsonText string, files map[string]string, currentDirectory tspath.RootedDirectoryPath, caseSensitivity tspath.CaseSensitivity) *tsoptions.ParsedCommandLine {
+	host := NewVFSParseConfigHost(files, currentDirectory, caseSensitivity)
+	configFileName := currentDirectory.ResolveFile("tsconfig.json")
+	tsconfigSourceFile := tsoptions.NewTsconfigSourceFileFromFilePath(configFileName, caseSensitivity.PathKey(tspath.RootedPath(configFileName)), jsonText)
+	return tsoptions.ParseJsonSourceFileConfigFileContent(tsconfigSourceFile, host, currentDirectory, nil, nil, nil, nil)
 }

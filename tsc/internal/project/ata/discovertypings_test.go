@@ -10,6 +10,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/project/logging"
 	"github.com/microsoft/TypeScript/tsc/internal/semver"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/projecttestutil"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfstest"
 	"gotest.tools/v3/assert"
 )
@@ -24,7 +25,7 @@ func TestDiscoverTypings(t *testing.T) {
 			"/home/src/projects/project/jquery.js":     "",
 			"/home/src/projects/project/chroma.min.js": "",
 		}
-		fs := vfstest.FromMap(files, false /*useCaseSensitiveFileNames*/)
+		fs := vfstest.FromMap(files, tspath.CaseInsensitive /*caseSensitivity*/)
 		cachedTypingPaths, newTypingNames, filesToWatch := ata.DiscoverTypings(
 			fs,
 			logger,
@@ -32,7 +33,7 @@ func TestDiscoverTypings(t *testing.T) {
 				CompilerOptions: &core.CompilerOptions{},
 				TypeAcquisition: &core.TypeAcquisition{Enable: core.TSTrue},
 			},
-			[]string{"/home/src/projects/project/app.js", "/home/src/projects/project/jquery.js", "/home/src/projects/project/chroma.min.js"},
+			[]tspath.RootedFilePath{"/home/src/projects/project/app.js", "/home/src/projects/project/jquery.js", "/home/src/projects/project/chroma.min.js"},
 			"/home/src/projects/project",
 			&collections.SyncMap[string, *ata.CachedTyping]{},
 			map[string]map[string]string{},
@@ -42,7 +43,7 @@ func TestDiscoverTypings(t *testing.T) {
 			"jquery",
 			"chroma-js",
 		))
-		assert.DeepEqual(t, filesToWatch, []string{
+		assert.DeepEqual(t, filesToWatch, []tspath.RootedPath{
 			"/home/src/projects/project/bower_components",
 			"/home/src/projects/project/node_modules",
 		})
@@ -54,7 +55,7 @@ func TestDiscoverTypings(t *testing.T) {
 		files := map[string]string{
 			"/home/src/projects/project/app.js": "",
 		}
-		fs := vfstest.FromMap(files, false /*useCaseSensitiveFileNames*/)
+		fs := vfstest.FromMap(files, tspath.CaseInsensitive /*caseSensitivity*/)
 		unresolvedImports := collections.NewSetFromItems("assert", "somename")
 		cachedTypingPaths, newTypingNames, filesToWatch := ata.DiscoverTypings(
 			fs,
@@ -64,7 +65,7 @@ func TestDiscoverTypings(t *testing.T) {
 				TypeAcquisition:   &core.TypeAcquisition{Enable: core.TSTrue},
 				UnresolvedImports: unresolvedImports,
 			},
-			[]string{"/home/src/projects/project/app.js"},
+			[]tspath.RootedFilePath{"/home/src/projects/project/app.js"},
 			"/home/src/projects/project",
 			&collections.SyncMap[string, *ata.CachedTyping]{},
 			map[string]map[string]string{},
@@ -74,7 +75,7 @@ func TestDiscoverTypings(t *testing.T) {
 			"node",
 			"somename",
 		))
-		assert.DeepEqual(t, filesToWatch, []string{
+		assert.DeepEqual(t, filesToWatch, []tspath.RootedPath{
 			"/home/src/projects/project/bower_components",
 			"/home/src/projects/project/node_modules",
 		})
@@ -87,7 +88,7 @@ func TestDiscoverTypings(t *testing.T) {
 			"/home/src/projects/project/app.js":    "",
 			"/home/src/projects/project/node.d.ts": "",
 		}
-		fs := vfstest.FromMap(files, false /*useCaseSensitiveFileNames*/)
+		fs := vfstest.FromMap(files, tspath.CaseInsensitive /*caseSensitivity*/)
 		cache := collections.SyncMap[string, *ata.CachedTyping]{}
 		version := semver.MustParse("1.3.0")
 		cache.Store("node", &ata.CachedTyping{
@@ -103,20 +104,20 @@ func TestDiscoverTypings(t *testing.T) {
 				TypeAcquisition:   &core.TypeAcquisition{Enable: core.TSTrue},
 				UnresolvedImports: unresolvedImports,
 			},
-			[]string{"/home/src/projects/project/app.js"},
+			[]tspath.RootedFilePath{"/home/src/projects/project/app.js"},
 			"/home/src/projects/project",
 			&cache,
 			map[string]map[string]string{
 				"node": projecttestutil.TypesRegistryConfig(),
 			},
 		)
-		assert.DeepEqual(t, cachedTypingPaths, []string{
+		assert.DeepEqual(t, cachedTypingPaths, []tspath.RootedFilePath{
 			"/home/src/projects/project/node.d.ts",
 		})
 		assert.DeepEqual(t, collections.NewSetFromItems(newTypingNames...), collections.NewSetFromItems(
 			"bar",
 		))
-		assert.DeepEqual(t, filesToWatch, []string{
+		assert.DeepEqual(t, filesToWatch, []tspath.RootedPath{
 			"/home/src/projects/project/bower_components",
 			"/home/src/projects/project/node_modules",
 		})
@@ -129,7 +130,7 @@ func TestDiscoverTypings(t *testing.T) {
 			"/home/src/projects/project/app.js":    "",
 			"/home/src/projects/project/node.d.ts": "",
 		}
-		fs := vfstest.FromMap(files, false /*useCaseSensitiveFileNames*/)
+		fs := vfstest.FromMap(files, tspath.CaseInsensitive /*caseSensitivity*/)
 		cache := collections.SyncMap[string, *ata.CachedTyping]{}
 		version := semver.MustParse("1.3.0")
 		cache.Store("node", &ata.CachedTyping{
@@ -145,7 +146,7 @@ func TestDiscoverTypings(t *testing.T) {
 				TypeAcquisition:   &core.TypeAcquisition{Enable: core.TSTrue},
 				UnresolvedImports: unresolvedImports,
 			},
-			[]string{"/home/src/projects/project/app.js"},
+			[]tspath.RootedFilePath{"/home/src/projects/project/app.js"},
 			"/home/src/projects/project",
 			&cache,
 			map[string]map[string]string{},
@@ -155,7 +156,7 @@ func TestDiscoverTypings(t *testing.T) {
 			"node",
 			"bar",
 		))
-		assert.DeepEqual(t, filesToWatch, []string{
+		assert.DeepEqual(t, filesToWatch, []tspath.RootedPath{
 			"/home/src/projects/project/bower_components",
 			"/home/src/projects/project/node_modules",
 		})
@@ -169,7 +170,7 @@ func TestDiscoverTypings(t *testing.T) {
 			"/home/src/projects/project/node_modules/a/package.json":   `{ "name": "a" }`,
 			"/home/src/projects/project/node_modules/a/b/package.json": `{ "name": "b" }`,
 		}
-		fs := vfstest.FromMap(files, false /*useCaseSensitiveFileNames*/)
+		fs := vfstest.FromMap(files, tspath.CaseInsensitive /*caseSensitivity*/)
 		cachedTypingPaths, newTypingNames, filesToWatch := ata.DiscoverTypings(
 			fs,
 			logger,
@@ -177,7 +178,7 @@ func TestDiscoverTypings(t *testing.T) {
 				CompilerOptions: &core.CompilerOptions{},
 				TypeAcquisition: &core.TypeAcquisition{Enable: core.TSTrue},
 			},
-			[]string{"/home/src/projects/project/app.js"},
+			[]tspath.RootedFilePath{"/home/src/projects/project/app.js"},
 			"/home/src/projects/project",
 			&collections.SyncMap[string, *ata.CachedTyping]{},
 			map[string]map[string]string{},
@@ -186,7 +187,7 @@ func TestDiscoverTypings(t *testing.T) {
 		assert.DeepEqual(t, collections.NewSetFromItems(newTypingNames...), collections.NewSetFromItems(
 			"a",
 		))
-		assert.DeepEqual(t, filesToWatch, []string{
+		assert.DeepEqual(t, filesToWatch, []tspath.RootedPath{
 			"/home/src/projects/project/bower_components",
 			"/home/src/projects/project/node_modules",
 		})
@@ -199,7 +200,7 @@ func TestDiscoverTypings(t *testing.T) {
 			"/home/src/projects/project/app.js":                         "",
 			"/home/src/projects/project/node_modules/@a/b/package.json": `{ "name": "@a/b" }`,
 		}
-		fs := vfstest.FromMap(files, false /*useCaseSensitiveFileNames*/)
+		fs := vfstest.FromMap(files, tspath.CaseInsensitive /*caseSensitivity*/)
 		cachedTypingPaths, newTypingNames, filesToWatch := ata.DiscoverTypings(
 			fs,
 			logger,
@@ -207,7 +208,7 @@ func TestDiscoverTypings(t *testing.T) {
 				CompilerOptions: &core.CompilerOptions{},
 				TypeAcquisition: &core.TypeAcquisition{Enable: core.TSTrue},
 			},
-			[]string{"/home/src/projects/project/app.js"},
+			[]tspath.RootedFilePath{"/home/src/projects/project/app.js"},
 			"/home/src/projects/project",
 			&collections.SyncMap[string, *ata.CachedTyping]{},
 			map[string]map[string]string{},
@@ -216,7 +217,7 @@ func TestDiscoverTypings(t *testing.T) {
 		assert.DeepEqual(t, collections.NewSetFromItems(newTypingNames...), collections.NewSetFromItems(
 			"@a/b",
 		))
-		assert.DeepEqual(t, filesToWatch, []string{
+		assert.DeepEqual(t, filesToWatch, []tspath.RootedPath{
 			"/home/src/projects/project/bower_components",
 			"/home/src/projects/project/node_modules",
 		})
@@ -228,7 +229,7 @@ func TestDiscoverTypings(t *testing.T) {
 		files := map[string]string{
 			"/home/src/projects/project/app.js": "",
 		}
-		fs := vfstest.FromMap(files, false /*useCaseSensitiveFileNames*/)
+		fs := vfstest.FromMap(files, tspath.CaseInsensitive /*caseSensitivity*/)
 		cache := collections.SyncMap[string, *ata.CachedTyping]{}
 		nodeVersion := semver.MustParse("1.3.0")
 		commanderVersion := semver.MustParse("1.0.0")
@@ -249,7 +250,7 @@ func TestDiscoverTypings(t *testing.T) {
 				TypeAcquisition:   &core.TypeAcquisition{Enable: core.TSTrue},
 				UnresolvedImports: unresolvedImports,
 			},
-			[]string{"/home/src/projects/project/app.js"},
+			[]tspath.RootedFilePath{"/home/src/projects/project/app.js"},
 			"/home/src/projects/project",
 			&cache,
 			map[string]map[string]string{
@@ -257,13 +258,13 @@ func TestDiscoverTypings(t *testing.T) {
 				"commander": projecttestutil.TypesRegistryConfig(),
 			},
 		)
-		assert.DeepEqual(t, cachedTypingPaths, []string{
+		assert.DeepEqual(t, cachedTypingPaths, []tspath.RootedFilePath{
 			"/home/src/Library/Caches/typescript/node_modules/@types/node/index.d.ts",
 		})
 		assert.DeepEqual(t, collections.NewSetFromItems(newTypingNames...), collections.NewSetFromItems(
 			"commander",
 		))
-		assert.DeepEqual(t, filesToWatch, []string{
+		assert.DeepEqual(t, filesToWatch, []tspath.RootedPath{
 			"/home/src/projects/project/bower_components",
 			"/home/src/projects/project/node_modules",
 		})
@@ -275,7 +276,7 @@ func TestDiscoverTypings(t *testing.T) {
 		files := map[string]string{
 			"/home/src/projects/project/app.js": "",
 		}
-		fs := vfstest.FromMap(files, false /*useCaseSensitiveFileNames*/)
+		fs := vfstest.FromMap(files, tspath.CaseInsensitive /*caseSensitivity*/)
 		cache := collections.SyncMap[string, *ata.CachedTyping]{}
 		nodeVersion := semver.MustParse("1.0.0")
 		cache.Store("node", &ata.CachedTyping{
@@ -294,7 +295,7 @@ func TestDiscoverTypings(t *testing.T) {
 				TypeAcquisition:   &core.TypeAcquisition{Enable: core.TSTrue},
 				UnresolvedImports: unresolvedImports,
 			},
-			[]string{"/home/src/projects/project/app.js"},
+			[]tspath.RootedFilePath{"/home/src/projects/project/app.js"},
 			"/home/src/projects/project",
 			&cache,
 			map[string]map[string]string{
@@ -305,7 +306,7 @@ func TestDiscoverTypings(t *testing.T) {
 		assert.DeepEqual(t, collections.NewSetFromItems(newTypingNames...), collections.NewSetFromItems(
 			"node",
 		))
-		assert.DeepEqual(t, filesToWatch, []string{
+		assert.DeepEqual(t, filesToWatch, []tspath.RootedPath{
 			"/home/src/projects/project/bower_components",
 			"/home/src/projects/project/node_modules",
 		})
@@ -317,7 +318,7 @@ func TestDiscoverTypings(t *testing.T) {
 		files := map[string]string{
 			"/home/src/projects/project/app.js": "",
 		}
-		fs := vfstest.FromMap(files, false /*useCaseSensitiveFileNames*/)
+		fs := vfstest.FromMap(files, tspath.CaseInsensitive /*caseSensitivity*/)
 		cache := collections.SyncMap[string, *ata.CachedTyping]{}
 		nodeVersion := semver.MustParse("1.3.0-next.0")
 		commanderVersion := semver.MustParse("1.3.0-next.0")
@@ -340,7 +341,7 @@ func TestDiscoverTypings(t *testing.T) {
 				TypeAcquisition:   &core.TypeAcquisition{Enable: core.TSTrue},
 				UnresolvedImports: unresolvedImports,
 			},
-			[]string{"/home/src/projects/project/app.js"},
+			[]tspath.RootedFilePath{"/home/src/projects/project/app.js"},
 			"/home/src/projects/project",
 			&cache,
 			map[string]map[string]string{
@@ -353,7 +354,7 @@ func TestDiscoverTypings(t *testing.T) {
 			"node",
 			"commander",
 		))
-		assert.DeepEqual(t, filesToWatch, []string{
+		assert.DeepEqual(t, filesToWatch, []tspath.RootedPath{
 			"/home/src/projects/project/bower_components",
 			"/home/src/projects/project/node_modules",
 		})

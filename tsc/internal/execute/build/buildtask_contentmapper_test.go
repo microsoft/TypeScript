@@ -10,7 +10,7 @@ import (
 
 func TestIsContentMapperSupplementalBuildInfoPath(t *testing.T) {
 	t.Parallel()
-	roots := []tspath.Path{"/src/app.vue", "/src/index.ts"}
+	roots := []tspath.PathKey{"/src/app.vue", "/src/index.ts"}
 
 	assert.Assert(t, isContentMapperSupplementalBuildInfoPath("/src/app.vue.0.ts", slices.Values(roots)))
 	assert.Assert(t, isContentMapperSupplementalBuildInfoPath("/src/app.vue.12.mts", slices.Values(roots)))

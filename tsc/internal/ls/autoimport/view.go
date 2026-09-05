@@ -3,7 +3,6 @@ package autoimport
 import (
 	"context"
 	"slices"
-	"strings"
 	"unicode"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
@@ -21,10 +20,10 @@ import (
 type View struct {
 	registry          *Registry
 	importingFile     *ast.SourceFile
-	importingFilePath tspath.Path
+	importingFilePath tspath.PathKey
 	program           *compiler.Program
 	preferences       modulespecifiers.UserPreferences
-	projectKey        tspath.Path
+	projectKey        tspath.PathKey
 
 	allowedEndings                   []modulespecifiers.ModuleSpecifierEnding
 	conditions                       *collections.Set[string]
@@ -33,10 +32,10 @@ type View struct {
 	shouldUseRequireForFixes         *bool
 }
 
-func NewView(registry *Registry, importingFile *ast.SourceFile, projectKey tspath.Path, program *compiler.Program, preferences modulespecifiers.UserPreferences) *View {
-	importingFilePath := importingFile.Path()
+func NewView(registry *Registry, importingFile *ast.SourceFile, projectKey tspath.PathKey, program *compiler.Program, preferences modulespecifiers.UserPreferences) *View {
+	importingFilePath := importingFile.PathKey()
 	if canonical := importingFile.CanonicalSourceFile(); canonical != nil {
-		importingFilePath = canonical.Path()
+		importingFilePath = canonical.PathKey()
 	}
 	return &View{
 		registry:          registry,
@@ -110,7 +109,7 @@ func (v *View) search(searchFn func(*RegistryBucket) []*Export) []*Export {
 		exports := searchFn(bucket)
 		results = slices.Grow(results, len(exports))
 		for _, e := range exports {
-			if string(e.ModuleID) == string(v.importingFile.Path()) {
+			if modulePath, ok := e.ModuleID.AsPathKey(); ok && modulePath == v.importingFile.PathKey() {
 				// Don't auto-import from the importing file itself
 				continue
 			}
@@ -123,7 +122,7 @@ func (v *View) search(searchFn func(*RegistryBucket) []*Export) []*Export {
 	// plus packages that are directly imported by the project's program files.
 	// If no package.json is found, allowedPackages remains nil and all packages are allowed.
 	var allowedPackages *collections.Set[string]
-	tspath.ForEachAncestorDirectoryPath(v.importingFile.Path().GetDirectoryPath(), func(dirPath tspath.Path) (result any, stop bool) {
+	tspath.ForEachAncestorPathKey(v.importingFile.PathKey().Parent(), func(dirPath tspath.PathKey) (result any, stop bool) {
 		if dir, ok := v.registry.directories[dirPath]; ok {
 			if pj := dir.packageJson; pj.Exists() && pj.Contents.Parseable {
 				// Initialize to empty set if this is the first package.json we've seen
@@ -143,7 +142,7 @@ func (v *View) search(searchFn func(*RegistryBucket) []*Export) []*Export {
 	}
 
 	excludePackages := &collections.Set[string]{}
-	tspath.ForEachAncestorDirectoryPath(v.importingFile.Path().GetDirectoryPath(), func(dirPath tspath.Path) (result any, stop bool) {
+	tspath.ForEachAncestorPathKey(v.importingFile.PathKey().Parent(), func(dirPath tspath.PathKey) (result any, stop bool) {
 		if nodeModulesBucket, ok := v.registry.nodeModules[dirPath]; ok {
 			exports := searchFn(nodeModulesBucket)
 			results = slices.Grow(results, len(exports))
@@ -202,7 +201,7 @@ outer:
 			name:                       name,
 			ambientModuleOrPackageName: core.FirstNonZero(e.AmbientModuleName(), e.PackageName),
 		}
-		if e.PackageName == "@types/node" || strings.Contains(string(e.Path), "/node_modules/@types/node/") {
+		if e.PackageName == "@types/node" || e.Path.ContainsLowercaseDirectorySequence("/node_modules/@types/node/") {
 			if _, ok := core.UnprefixedNodeCoreModules[key.ambientModuleOrPackageName]; ok {
 				// Group URI-style and non-URI style node core modules together so the ranking logic
 				// is allowed to drop one if an explicit preference is detected.
@@ -215,6 +214,7 @@ outer:
 					grouped[key] = slices.Replace(existing, i, i+1, &Export{
 						ExportID:                   e.ExportID,
 						ModuleFileName:             e.ModuleFileName,
+						UnresolvedModuleSpecifier:  e.UnresolvedModuleSpecifier,
 						PackageName:                e.PackageName,
 						IsTypeOnly:                 e.IsTypeOnly || ex.IsTypeOnly,
 						Syntax:                     min(e.Syntax, ex.Syntax),

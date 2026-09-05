@@ -78,7 +78,7 @@ func (test *tscInput) run(t *testing.T, scenario string) {
 			"currentDirectory::",
 			sys.GetCurrentDirectory(),
 			"\nuseCaseSensitiveFileNames::",
-			sys.FS().UseCaseSensitiveFileNames(),
+			sys.FS().CaseSensitivity(),
 			"\nInput::\n",
 		)
 		sys.baselineFSwithDiff(baselineBuilder)
@@ -155,16 +155,16 @@ func getDiffForIncremental(incrementalSys *TestSys, nonIncrementalSys *TestSys) 
 		if tspath.FileExtensionIs(nonIncrementalOutput, tspath.ExtensionTsBuildInfo) ||
 			strings.HasSuffix(nonIncrementalOutput, ".readable.baseline.txt") {
 			// Just check existence
-			if !incrementalSys.fsFromFileMap().FileExists(nonIncrementalOutput) {
+			if !incrementalSys.fsFromFileMap().FileExists(tspath.RootedFilePathFromNormalized(nonIncrementalOutput)) {
 				diffBuilder.WriteString(baseline.DiffText("nonIncremental "+nonIncrementalOutput, "incremental "+nonIncrementalOutput, "Exists", ""))
 				diffBuilder.WriteString("\n")
 			}
 		} else {
-			nonIncrementalText, ok := nonIncrementalSys.fsFromFileMap().ReadFile(nonIncrementalOutput)
+			nonIncrementalText, ok := nonIncrementalSys.fsFromFileMap().ReadFile(tspath.RootedFilePathFromNormalized(nonIncrementalOutput))
 			if !ok {
 				panic("Written file not found " + nonIncrementalOutput)
 			}
-			incrementalText, ok := incrementalSys.fsFromFileMap().ReadFile(nonIncrementalOutput)
+			incrementalText, ok := incrementalSys.fsFromFileMap().ReadFile(tspath.RootedFilePathFromNormalized(nonIncrementalOutput))
 			if !ok || incrementalText != nonIncrementalText {
 				diffBuilder.WriteString(baseline.DiffText("nonIncremental "+nonIncrementalOutput, "incremental "+nonIncrementalOutput, nonIncrementalText, incrementalText))
 				diffBuilder.WriteString("\n")

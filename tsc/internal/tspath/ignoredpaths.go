@@ -8,11 +8,23 @@ var ignoredPaths = []string{
 	".#",
 }
 
-func ContainsIgnoredPath(path string) bool {
+func containsIgnoredPath(path string) bool {
 	for _, pattern := range ignoredPaths {
 		if strings.Contains(path, pattern) {
 			return true
 		}
 	}
 	return false
+}
+
+func ContainsIgnoredFilePath(fileName RootedFilePath) bool {
+	return containsIgnoredPath(fileName.AsString())
+}
+
+func ContainsIgnoredDirectory(directory RootedDirectoryPath) bool {
+	return containsIgnoredPath(directory.AsString())
+}
+
+func ContainsIgnoredPathKey(path PathKey) bool {
+	return containsIgnoredPath(path.AsString())
 }

@@ -4,6 +4,8 @@ import (
 	"slices"
 	"testing"
 
+	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfstest"
 	"gotest.tools/v3/assert"
@@ -38,7 +40,7 @@ func caseInsensitiveHost() vfs.FS {
 		"/dev/js/ab.min.js": "",
 		"/ext/ext.ts":       "",
 		"/ext/b/a..b.ts":    "",
-	}, false)
+	}, tspath.CaseInsensitive)
 }
 
 // caseSensitiveHost simulates a Unix-like case-sensitive file system
@@ -66,7 +68,7 @@ func caseSensitiveHost() vfs.FS {
 		"/dev/js/a.js":      "",
 		"/dev/js/b.js":      "",
 		"/dev/js/d.MIN.js":  "",
-	}, true)
+	}, tspath.CaseSensitive)
 }
 
 // commonFoldersHost includes node_modules, bower_components, jspm_packages
@@ -80,7 +82,7 @@ func commonFoldersHost() vfs.FS {
 		"/dev/node_modules/a.ts":     "",
 		"/dev/bower_components/a.ts": "",
 		"/dev/jspm_packages/a.ts":    "",
-	}, false)
+	}, tspath.CaseInsensitive)
 }
 
 // dottedFoldersHost includes files and folders starting with a dot
@@ -94,7 +96,7 @@ func dottedFoldersHost() vfs.FS {
 		"/dev/.z/c.ts":          "",
 		"/dev/w/.u/e.ts":        "",
 		"/dev/g.min.js/.g/g.ts": "",
-	}, false)
+	}, tspath.CaseInsensitive)
 }
 
 // mixedExtensionHost has various file extensions
@@ -111,7 +113,7 @@ func mixedExtensionHost() vfs.FS {
 		"/dev/d.js":    "",
 		"/dev/e.jsx":   "",
 		"/dev/f.other": "",
-	}, false)
+	}, tspath.CaseInsensitive)
 }
 
 // sameNamedDeclarationsHost has files with same names but different extensions
@@ -129,7 +131,7 @@ func sameNamedDeclarationsHost() vfs.FS {
 		"/dev/n.d.ts": "",
 		"/dev/o.ts":   "",
 		"/dev/x.d.ts": "",
-	}, false)
+	}, tspath.CaseInsensitive)
 }
 
 type readDirTestCase struct {
@@ -158,7 +160,10 @@ func runReadDirectoryCase(t *testing.T, tc readDirTestCase) {
 		depth = UnlimitedDepth
 	}
 	host := tc.host()
-	got := matchFiles(path, tc.extensions, tc.excludes, tc.includes, host.UseCaseSensitiveFileNames(), currentDir, depth, host)
+	basePath := tspath.ToRootedDirectoryPath(path, tspath.RootedDirectoryPathFromAbsolute(currentDir))
+	got := core.Map(matchFileNames(basePath, tc.extensions, tc.excludes, tc.includes, depth, host), func(fileName tspath.RootedFilePath) string {
+		return fileName.AsString()
+	})
 	tc.expect(t, got)
 }
 
@@ -269,6 +274,7 @@ func TestReadDirectory(t *testing.T) {
 					"/dev/z/a.ts", "/dev/z/aba.ts", "/dev/z/abz.ts", "/dev/z/b.ts", "/dev/z/bba.ts", "/dev/z/bbz.ts",
 					"/dev/x/a.ts", "/dev/x/aa.ts", "/dev/x/b.ts",
 				}
+
 				assert.DeepEqual(t, got, expected)
 			},
 		},
@@ -797,7 +803,7 @@ func TestReadDirectoryEdgeCases(t *testing.T) {
 					"/dev/file^start.ts": "",
 					"/dev/file|pipe.ts":  "",
 					"/dev/file#hash.ts":  "",
-				}, false)
+				}, tspath.CaseInsensitive)
 			},
 			extensions: []string{".ts"},
 			includes:   []string{"file+test.ts"},
@@ -826,7 +832,7 @@ func TestReadDirectoryEdgeCases(t *testing.T) {
 				return vfstest.FromMap(map[string]string{
 					"/dev/File.ts": "",
 					"/dev/FILE.ts": "",
-				}, true)
+				}, tspath.CaseSensitive)
 			},
 			extensions: []string{".ts"},
 			includes:   []string{"*.ts"},
@@ -864,7 +870,7 @@ func TestReadDirectoryEmptyIncludes(t *testing.T) {
 			host: func() vfs.FS {
 				return vfstest.FromMap(map[string]string{
 					"/root/a.ts": "",
-				}, true)
+				}, tspath.CaseSensitive)
 			},
 			path:       "/root",
 			currentDir: "/",
@@ -900,7 +906,7 @@ func TestReadDirectorySymlinkCycle(t *testing.T) {
 					"/root/file.ts":   "",
 					"/root/a/file.ts": "",
 					"/root/a/b":       vfstest.Symlink("/root/a"),
-				}, true)
+				}, tspath.CaseSensitive)
 			},
 			path:       "/root",
 			currentDir: "/",
@@ -940,7 +946,7 @@ func TestReadDirectoryMatchesTypeScriptBaselines(t *testing.T) {
 					"/dev/x/a.ts":   "",
 					"/dev/x/aa.ts":  "",
 					"/dev/x/b.ts":   "",
-				}, false)
+				}, tspath.CaseInsensitive)
 			},
 			extensions: []string{".ts", ".tsx", ".d.ts"},
 			includes:   []string{"z/*.ts", "x/*.ts"},
@@ -964,7 +970,7 @@ func TestReadDirectoryMatchesTypeScriptBaselines(t *testing.T) {
 					"/dev/.z/c.ts":          "",
 					"/dev/w/.u/e.ts":        "",
 					"/dev/g.min.js/.g/g.ts": "",
-				}, false)
+				}, tspath.CaseInsensitive)
 			},
 			extensions: []string{".ts", ".tsx", ".d.ts"},
 			includes:   []string{"**/.*/*"},
@@ -988,7 +994,7 @@ func TestReadDirectoryMatchesTypeScriptBaselines(t *testing.T) {
 					"/dev/node_modules/a.ts":     "",
 					"/dev/bower_components/a.ts": "",
 					"/dev/jspm_packages/a.ts":    "",
-				}, false)
+				}, tspath.CaseInsensitive)
 			},
 			extensions: []string{".ts", ".tsx", ".d.ts"},
 			includes:   []string{"**/a.ts"},
@@ -1002,7 +1008,7 @@ func TestReadDirectoryMatchesTypeScriptBaselines(t *testing.T) {
 					"/dev/js/b.js":      "",
 					"/dev/js/d.min.js":  "",
 					"/dev/js/ab.min.js": "",
-				}, false)
+				}, tspath.CaseInsensitive)
 			},
 			extensions: []string{".js"},
 			includes:   []string{"js/*"},
@@ -1016,7 +1022,7 @@ func TestReadDirectoryMatchesTypeScriptBaselines(t *testing.T) {
 					"/dev/js/b.js":      "",
 					"/dev/js/d.min.js":  "",
 					"/dev/js/ab.min.js": "",
-				}, false)
+				}, tspath.CaseInsensitive)
 			},
 			extensions: []string{".js"},
 			includes:   []string{"js/*.min.js"},
@@ -1191,70 +1197,131 @@ func TestReadDirectoryMatchesTypeScriptBaselines(t *testing.T) {
 	}
 }
 
+func TestReadDirectoryWithExtendedDynamicRoot(t *testing.T) {
+	t.Parallel()
+
+	const packageDirectory = "^/~ts-uri-v2~/custom/ts-nul-authority/node_modules/Pkg"
+	host := vfstest.FromMap(map[string]string{
+		packageDirectory + "/value.d.ts":                  "",
+		packageDirectory + "/node_modules/dep/index.d.ts": "",
+	}, tspath.CaseSensitive)
+	got := ReadDirectory(
+		host,
+		tspath.RootedDirectoryPathFromNormalized(packageDirectory),
+		[]string{".d.ts"},
+		nil,
+		[]string{"**/*"},
+		UnlimitedDepth,
+	)
+	assert.DeepEqual(t, got, []tspath.RootedFilePath{packageDirectory + "/value.d.ts"})
+}
+
+func TestReadDirectoryDynamicRootUsesCaseSensitivePatterns(t *testing.T) {
+	t.Parallel()
+
+	const root = "^/~ts-uri-v2~/custom/ts-nul-authority"
+	host := caseInsensitiveMatchFS{vfstest.FromMap(map[string]string{
+		root + "/Foo/a.ts": "",
+		root + "/foo/b.ts": "",
+	}, tspath.CaseSensitive)}
+	got := ReadDirectory(
+		host,
+		tspath.RootedDirectoryPathFromNormalized(root+"/"),
+		[]string{".ts"},
+		nil,
+		[]string{"Foo/**/*.ts"},
+		UnlimitedDepth,
+	)
+	assert.DeepEqual(t, got, []tspath.RootedFilePath{root + "/Foo/a.ts"})
+}
+
+func TestDynamicAbsoluteGlobUsesCaseSensitivePattern(t *testing.T) {
+	t.Parallel()
+
+	const root = "^/~ts-uri-v2~/custom/ts-nul-authority"
+	matcher := NewSpecMatcher(
+		[]string{root + "/Foo/**/*.ts"},
+		tspath.RootedDirectoryPathFromNormalized("/dev"),
+		UsageFiles,
+		tspath.CaseInsensitive,
+	)
+	assert.Assert(t, matcher != nil)
+	assert.Assert(t, matcher.MatchString(root+"/Foo/a.ts"))
+	assert.Assert(t, !matcher.MatchString(root+"/foo/a.ts"))
+}
+
+type caseInsensitiveMatchFS struct {
+	vfs.FS
+}
+
+func (caseInsensitiveMatchFS) CaseSensitivity() tspath.CaseSensitivity {
+	return tspath.CaseInsensitive
+}
+
 // TestSpecMatcher tests the SpecMatcher API
 func TestSpecMatcher(t *testing.T) {
 	t.Parallel()
 
 	cases := []struct {
-		name                      string
-		specs                     []string
-		basePath                  string
-		usage                     Usage
-		useCaseSensitiveFileNames bool
-		matchingPaths             []string
-		nonMatchingPaths          []string
+		name             string
+		specs            []string
+		basePath         tspath.RootedDirectoryPath
+		usage            Usage
+		caseSensitivity  tspath.CaseSensitivity
+		matchingPaths    []string
+		nonMatchingPaths []string
 	}{
 		{
-			name:                      "simple wildcard",
-			specs:                     []string{"*.ts"},
-			basePath:                  "/project",
-			usage:                     UsageFiles,
-			useCaseSensitiveFileNames: true,
-			matchingPaths:             []string{"/project/a.ts", "/project/b.ts", "/project/foo.ts"},
-			nonMatchingPaths:          []string{"/project/a.js", "/project/sub/a.ts"},
+			name:             "simple wildcard",
+			specs:            []string{"*.ts"},
+			basePath:         "/project",
+			usage:            UsageFiles,
+			caseSensitivity:  tspath.CaseSensitive,
+			matchingPaths:    []string{"/project/a.ts", "/project/b.ts", "/project/foo.ts"},
+			nonMatchingPaths: []string{"/project/a.js", "/project/sub/a.ts"},
 		},
 		{
-			name:                      "recursive wildcard",
-			specs:                     []string{"**/*.ts"},
-			basePath:                  "/project",
-			usage:                     UsageFiles,
-			useCaseSensitiveFileNames: true,
-			matchingPaths:             []string{"/project/a.ts", "/project/sub/a.ts", "/project/sub/deep/a.ts"},
-			nonMatchingPaths:          []string{"/project/a.js"},
+			name:             "recursive wildcard",
+			specs:            []string{"**/*.ts"},
+			basePath:         "/project",
+			usage:            UsageFiles,
+			caseSensitivity:  tspath.CaseSensitive,
+			matchingPaths:    []string{"/project/a.ts", "/project/sub/a.ts", "/project/sub/deep/a.ts"},
+			nonMatchingPaths: []string{"/project/a.js"},
 		},
 		{
-			name:                      "exclude pattern",
-			specs:                     []string{"node_modules"},
-			basePath:                  "/project",
-			usage:                     UsageExclude,
-			useCaseSensitiveFileNames: true,
-			matchingPaths:             []string{"/project/node_modules/foo"},
-			nonMatchingPaths:          []string{"/project/node_modules", "/project/src"},
+			name:             "exclude pattern",
+			specs:            []string{"node_modules"},
+			basePath:         "/project",
+			usage:            UsageExclude,
+			caseSensitivity:  tspath.CaseSensitive,
+			matchingPaths:    []string{"/project/node_modules/foo"},
+			nonMatchingPaths: []string{"/project/node_modules", "/project/src"},
 		},
 		{
-			name:                      "case insensitive",
-			specs:                     []string{"*.ts"},
-			basePath:                  "/project",
-			usage:                     UsageFiles,
-			useCaseSensitiveFileNames: false,
-			matchingPaths:             []string{"/project/A.TS", "/project/B.Ts"},
-			nonMatchingPaths:          []string{"/project/a.js"},
+			name:             "case insensitive",
+			specs:            []string{"*.ts"},
+			basePath:         "/project",
+			usage:            UsageFiles,
+			caseSensitivity:  tspath.CaseInsensitive,
+			matchingPaths:    []string{"/project/A.TS", "/project/B.Ts"},
+			nonMatchingPaths: []string{"/project/a.js"},
 		},
 		{
-			name:                      "multiple specs",
-			specs:                     []string{"*.ts", "*.tsx"},
-			basePath:                  "/project",
-			usage:                     UsageFiles,
-			useCaseSensitiveFileNames: true,
-			matchingPaths:             []string{"/project/a.ts", "/project/b.tsx"},
-			nonMatchingPaths:          []string{"/project/a.js"},
+			name:             "multiple specs",
+			specs:            []string{"*.ts", "*.tsx"},
+			basePath:         "/project",
+			usage:            UsageFiles,
+			caseSensitivity:  tspath.CaseSensitive,
+			matchingPaths:    []string{"/project/a.ts", "/project/b.tsx"},
+			nonMatchingPaths: []string{"/project/a.js"},
 		},
 	}
 
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
-			matcher := NewSpecMatcher(tc.specs, tc.basePath, tc.usage, tc.useCaseSensitiveFileNames)
+			matcher := NewSpecMatcher(tc.specs, tc.basePath, tc.usage, tc.caseSensitivity)
 			if matcher == nil {
 				t.Fatal("matcher should not be nil")
 			}
@@ -1272,40 +1339,40 @@ func TestSpecMatcher_MatchString(t *testing.T) {
 	t.Parallel()
 
 	cases := []struct {
-		name                      string
-		specs                     []string
-		basePath                  string
-		usage                     Usage
-		useCaseSensitiveFileNames bool
-		paths                     []string
-		expected                  []bool
+		name            string
+		specs           []string
+		basePath        tspath.RootedDirectoryPath
+		usage           Usage
+		caseSensitivity tspath.CaseSensitivity
+		paths           []string
+		expected        []bool
 	}{
 		{
-			name:                      "simple wildcard files",
-			specs:                     []string{"*.ts"},
-			basePath:                  "/project",
-			usage:                     UsageFiles,
-			useCaseSensitiveFileNames: true,
-			paths:                     []string{"/project/a.ts", "/project/sub/a.ts", "/project/a.js"},
-			expected:                  []bool{true, false, false},
+			name:            "simple wildcard files",
+			specs:           []string{"*.ts"},
+			basePath:        "/project",
+			usage:           UsageFiles,
+			caseSensitivity: tspath.CaseSensitive,
+			paths:           []string{"/project/a.ts", "/project/sub/a.ts", "/project/a.js"},
+			expected:        []bool{true, false, false},
 		},
 		{
-			name:                      "recursive wildcard files",
-			specs:                     []string{"**/*.ts"},
-			basePath:                  "/project",
-			usage:                     UsageFiles,
-			useCaseSensitiveFileNames: true,
-			paths:                     []string{"/project/a.ts", "/project/sub/a.ts", "/project/a.js"},
-			expected:                  []bool{true, true, false},
+			name:            "recursive wildcard files",
+			specs:           []string{"**/*.ts"},
+			basePath:        "/project",
+			usage:           UsageFiles,
+			caseSensitivity: tspath.CaseSensitive,
+			paths:           []string{"/project/a.ts", "/project/sub/a.ts", "/project/a.js"},
+			expected:        []bool{true, true, false},
 		},
 		{
-			name:                      "exclude pattern matches prefix",
-			specs:                     []string{"node_modules"},
-			basePath:                  "/project",
-			usage:                     UsageExclude,
-			useCaseSensitiveFileNames: true,
-			paths:                     []string{"/project/node_modules", "/project/node_modules/foo", "/project/src"},
-			expected:                  []bool{false, true, false},
+			name:            "exclude pattern matches prefix",
+			specs:           []string{"node_modules"},
+			basePath:        "/project",
+			usage:           UsageExclude,
+			caseSensitivity: tspath.CaseSensitive,
+			paths:           []string{"/project/node_modules", "/project/node_modules/foo", "/project/src"},
+			expected:        []bool{false, true, false},
 		},
 	}
 
@@ -1313,7 +1380,7 @@ func TestSpecMatcher_MatchString(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
 			assert.Equal(t, len(tc.paths), len(tc.expected))
-			m := NewSpecMatcher(tc.specs, tc.basePath, tc.usage, tc.useCaseSensitiveFileNames)
+			m := NewSpecMatcher(tc.specs, tc.basePath, tc.usage, tc.caseSensitivity)
 			assert.Assert(t, m != nil)
 			for i, path := range tc.paths {
 				assert.Equal(t, m.MatchString(path), tc.expected[i], "path: %s", path)
@@ -1326,31 +1393,31 @@ func TestSingleSpecMatcher_MatchString(t *testing.T) {
 	t.Parallel()
 
 	cases := []struct {
-		name                      string
-		spec                      string
-		basePath                  string
-		usage                     Usage
-		useCaseSensitiveFileNames bool
-		paths                     []string
-		expected                  []bool
+		name            string
+		spec            string
+		basePath        tspath.RootedDirectoryPath
+		usage           Usage
+		caseSensitivity tspath.CaseSensitivity
+		paths           []string
+		expected        []bool
 	}{
 		{
-			name:                      "single spec wildcard",
-			spec:                      "*.ts",
-			basePath:                  "/project",
-			usage:                     UsageFiles,
-			useCaseSensitiveFileNames: true,
-			paths:                     []string{"/project/a.ts", "/project/sub/a.ts", "/project/a.js"},
-			expected:                  []bool{true, false, false},
+			name:            "single spec wildcard",
+			spec:            "*.ts",
+			basePath:        "/project",
+			usage:           UsageFiles,
+			caseSensitivity: tspath.CaseSensitive,
+			paths:           []string{"/project/a.ts", "/project/sub/a.ts", "/project/a.js"},
+			expected:        []bool{true, false, false},
 		},
 		{
-			name:                      "single spec trailing starstar exclude allowed",
-			spec:                      "**",
-			basePath:                  "/project",
-			usage:                     UsageExclude,
-			useCaseSensitiveFileNames: true,
-			paths:                     []string{"/project/a.ts", "/project/sub/a.ts"},
-			expected:                  []bool{true, true},
+			name:            "single spec trailing starstar exclude allowed",
+			spec:            "**",
+			basePath:        "/project",
+			usage:           UsageExclude,
+			caseSensitivity: tspath.CaseSensitive,
+			paths:           []string{"/project/a.ts", "/project/sub/a.ts"},
+			expected:        []bool{true, true},
 		},
 	}
 
@@ -1358,7 +1425,7 @@ func TestSingleSpecMatcher_MatchString(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
 			assert.Equal(t, len(tc.paths), len(tc.expected))
-			m := NewSpecMatcher([]string{tc.spec}, tc.basePath, tc.usage, tc.useCaseSensitiveFileNames)
+			m := NewSpecMatcher([]string{tc.spec}, tc.basePath, tc.usage, tc.caseSensitivity)
 			assert.Assert(t, m != nil)
 			for i, path := range tc.paths {
 				assert.Equal(t, m.MatchString(path), tc.expected[i], "path: %s", path)
@@ -1371,31 +1438,31 @@ func TestSpecMatchers_MatchIndex(t *testing.T) {
 	t.Parallel()
 
 	cases := []struct {
-		name                      string
-		specs                     []string
-		basePath                  string
-		usage                     Usage
-		useCaseSensitiveFileNames bool
-		paths                     []string
-		expected                  []int
+		name            string
+		specs           []string
+		basePath        tspath.RootedDirectoryPath
+		usage           Usage
+		caseSensitivity tspath.CaseSensitivity
+		paths           []string
+		expected        []int
 	}{
 		{
-			name:                      "index lookup prefers first match",
-			specs:                     []string{"*.ts", "*.tsx"},
-			basePath:                  "/project",
-			usage:                     UsageFiles,
-			useCaseSensitiveFileNames: true,
-			paths:                     []string{"/project/a.ts", "/project/a.tsx", "/project/a.js"},
-			expected:                  []int{0, 1, -1},
+			name:            "index lookup prefers first match",
+			specs:           []string{"*.ts", "*.tsx"},
+			basePath:        "/project",
+			usage:           UsageFiles,
+			caseSensitivity: tspath.CaseSensitive,
+			paths:           []string{"/project/a.ts", "/project/a.tsx", "/project/a.js"},
+			expected:        []int{0, 1, -1},
 		},
 		{
-			name:                      "exclude index lookup",
-			specs:                     []string{"node_modules", "bower_components"},
-			basePath:                  "/project",
-			usage:                     UsageExclude,
-			useCaseSensitiveFileNames: true,
-			paths:                     []string{"/project/node_modules", "/project/node_modules/foo", "/project/bower_components", "/project/bower_components/bar", "/project/src"},
-			expected:                  []int{-1, 0, -1, 1, -1},
+			name:            "exclude index lookup",
+			specs:           []string{"node_modules", "bower_components"},
+			basePath:        "/project",
+			usage:           UsageExclude,
+			caseSensitivity: tspath.CaseSensitive,
+			paths:           []string{"/project/node_modules", "/project/node_modules/foo", "/project/bower_components", "/project/bower_components/bar", "/project/src"},
+			expected:        []int{-1, 0, -1, 1, -1},
 		},
 	}
 
@@ -1403,7 +1470,7 @@ func TestSpecMatchers_MatchIndex(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
 			assert.Equal(t, len(tc.paths), len(tc.expected))
-			m := NewSpecMatcher(tc.specs, tc.basePath, tc.usage, tc.useCaseSensitiveFileNames)
+			m := NewSpecMatcher(tc.specs, tc.basePath, tc.usage, tc.caseSensitivity)
 			assert.Assert(t, m != nil)
 			for i, path := range tc.paths {
 				assert.Equal(t, m.MatchIndex(path), tc.expected[i], "path: %s", path)
@@ -1416,46 +1483,46 @@ func TestSingleSpecMatcher(t *testing.T) {
 	t.Parallel()
 
 	cases := []struct {
-		name                      string
-		spec                      string
-		basePath                  string
-		usage                     Usage
-		useCaseSensitiveFileNames bool
-		expectNil                 bool
-		matchingPaths             []string
-		nonMatchingPaths          []string
+		name             string
+		spec             string
+		basePath         tspath.RootedDirectoryPath
+		usage            Usage
+		caseSensitivity  tspath.CaseSensitivity
+		expectNil        bool
+		matchingPaths    []string
+		nonMatchingPaths []string
 	}{
 		{
-			name:                      "simple spec",
-			spec:                      "*.ts",
-			basePath:                  "/project",
-			usage:                     UsageFiles,
-			useCaseSensitiveFileNames: true,
-			matchingPaths:             []string{"/project/a.ts"},
-			nonMatchingPaths:          []string{"/project/a.js"},
+			name:             "simple spec",
+			spec:             "*.ts",
+			basePath:         "/project",
+			usage:            UsageFiles,
+			caseSensitivity:  tspath.CaseSensitive,
+			matchingPaths:    []string{"/project/a.ts"},
+			nonMatchingPaths: []string{"/project/a.js"},
 		},
 		{
-			name:                      "trailing ** non-exclude returns nil",
-			spec:                      "**",
-			basePath:                  "/project",
-			usage:                     UsageFiles,
-			useCaseSensitiveFileNames: true,
-			expectNil:                 true,
+			name:            "trailing ** non-exclude returns nil",
+			spec:            "**",
+			basePath:        "/project",
+			usage:           UsageFiles,
+			caseSensitivity: tspath.CaseSensitive,
+			expectNil:       true,
 		},
 		{
-			name:                      "trailing ** exclude works",
-			spec:                      "**",
-			basePath:                  "/project",
-			usage:                     UsageExclude,
-			useCaseSensitiveFileNames: true,
-			matchingPaths:             []string{"/project/anything", "/project/deep/path"},
+			name:            "trailing ** exclude works",
+			spec:            "**",
+			basePath:        "/project",
+			usage:           UsageExclude,
+			caseSensitivity: tspath.CaseSensitive,
+			matchingPaths:   []string{"/project/anything", "/project/deep/path"},
 		},
 	}
 
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
-			matcher := NewSpecMatcher([]string{tc.spec}, tc.basePath, tc.usage, tc.useCaseSensitiveFileNames)
+			matcher := NewSpecMatcher([]string{tc.spec}, tc.basePath, tc.usage, tc.caseSensitivity)
 			if tc.expectNil {
 				assert.Assert(t, matcher == nil, "should be nil")
 				return
@@ -1477,20 +1544,20 @@ func TestSpecMatchers(t *testing.T) {
 	t.Parallel()
 
 	cases := []struct {
-		name                      string
-		specs                     []string
-		basePath                  string
-		usage                     Usage
-		useCaseSensitiveFileNames bool
-		expectNil                 bool
-		pathToIndex               map[string]int
+		name            string
+		specs           []string
+		basePath        tspath.RootedDirectoryPath
+		usage           Usage
+		caseSensitivity tspath.CaseSensitivity
+		expectNil       bool
+		pathToIndex     map[string]int
 	}{
 		{
-			name:                      "multiple specs return correct index",
-			specs:                     []string{"*.ts", "*.tsx", "*.js"},
-			basePath:                  "/project",
-			usage:                     UsageFiles,
-			useCaseSensitiveFileNames: true,
+			name:            "multiple specs return correct index",
+			specs:           []string{"*.ts", "*.tsx", "*.js"},
+			basePath:        "/project",
+			usage:           UsageFiles,
+			caseSensitivity: tspath.CaseSensitive,
 			pathToIndex: map[string]int{
 				"/project/a.ts":  0,
 				"/project/b.tsx": 1,
@@ -1499,19 +1566,19 @@ func TestSpecMatchers(t *testing.T) {
 			},
 		},
 		{
-			name:                      "empty specs returns nil",
-			specs:                     []string{},
-			basePath:                  "/project",
-			usage:                     UsageFiles,
-			useCaseSensitiveFileNames: true,
-			expectNil:                 true,
+			name:            "empty specs returns nil",
+			specs:           []string{},
+			basePath:        "/project",
+			usage:           UsageFiles,
+			caseSensitivity: tspath.CaseSensitive,
+			expectNil:       true,
 		},
 	}
 
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
-			matchers := NewSpecMatcher(tc.specs, tc.basePath, tc.usage, tc.useCaseSensitiveFileNames)
+			matchers := NewSpecMatcher(tc.specs, tc.basePath, tc.usage, tc.caseSensitivity)
 			if tc.expectNil {
 				assert.Assert(t, matchers == nil, "should be nil")
 				return
@@ -1630,7 +1697,7 @@ func TestGlobPatternInternals(t *testing.T) {
 	t.Run("question mark segment at end of string", func(t *testing.T) {
 		t.Parallel()
 		// Create pattern with question mark that should fail when string is exhausted
-		p, ok := compileGlobPattern("a?", "/", UsageFiles, true)
+		p, ok := compileGlobPattern("a?", "/", UsageFiles, tspath.CaseSensitive)
 		assert.Assert(t, ok)
 
 		// Should match "ab"
@@ -1643,7 +1710,7 @@ func TestGlobPatternInternals(t *testing.T) {
 	t.Run("star segment with complex pattern", func(t *testing.T) {
 		t.Parallel()
 		// Pattern like "a*b*c" requires backtracking in star matching
-		p, ok := compileGlobPattern("a*b*c", "/", UsageFiles, true)
+		p, ok := compileGlobPattern("a*b*c", "/", UsageFiles, tspath.CaseSensitive)
 		assert.Assert(t, ok)
 
 		// Should match "abc"
@@ -1659,22 +1726,6 @@ func TestGlobPatternInternals(t *testing.T) {
 		assert.Assert(t, !p.matches("/aXbY"))
 	})
 
-	t.Run("ensureTrailingSlash with existing slash", func(t *testing.T) {
-		t.Parallel()
-		// Test that ensureTrailingSlash doesn't double-add slashes
-		result := ensureTrailingSlash("/dev/")
-		assert.Equal(t, result, "/dev/")
-
-		result = ensureTrailingSlash("/")
-		assert.Equal(t, result, "/")
-	})
-
-	t.Run("ensureTrailingSlash with empty string", func(t *testing.T) {
-		t.Parallel()
-		result := ensureTrailingSlash("")
-		assert.Equal(t, result, "")
-	})
-
 	t.Run("literal component with package folder in include", func(t *testing.T) {
 		t.Parallel()
 		// When a literal include path goes through a package folder,
@@ -1682,11 +1733,11 @@ func TestGlobPatternInternals(t *testing.T) {
 		// because literal components in includes don't have skipPackageFolders=true
 		host := vfstest.FromMap(map[string]string{
 			"/dev/node_modules/pkg/index.ts": "",
-		}, false)
+		}, tspath.CaseInsensitive)
 
 		// Explicit literal path should work
-		got := matchFiles("/dev", []string{".ts"}, nil,
-			[]string{"node_modules/pkg/index.ts"}, false, "/", UnlimitedDepth, host)
+		got := matchFileNames(tspath.RootedDirectoryPathFromAbsolute("/dev"), []string{".ts"}, nil,
+			[]string{"node_modules/pkg/index.ts"}, UnlimitedDepth, host)
 		assert.Assert(t, slices.Contains(got, "/dev/node_modules/pkg/index.ts"))
 	})
 }
@@ -1699,7 +1750,7 @@ func TestMatchSegmentsEdgeCases(t *testing.T) {
 		t.Parallel()
 		// This tests the case where question mark encounters a slash character
 		// which should fail since ? doesn't match /
-		p, ok := compileGlobPattern("a?b", "/", UsageFiles, true)
+		p, ok := compileGlobPattern("a?b", "/", UsageFiles, tspath.CaseSensitive)
 		assert.Assert(t, ok)
 
 		// "a/b" should not match "a?b" pattern since ? shouldn't match /
@@ -1715,7 +1766,7 @@ func TestMatchSegmentsEdgeCases(t *testing.T) {
 	t.Run("star with no trailing content", func(t *testing.T) {
 		t.Parallel()
 		// Test that star can match to end of string
-		p, ok := compileGlobPattern("a*", "/", UsageFiles, true)
+		p, ok := compileGlobPattern("a*", "/", UsageFiles, tspath.CaseSensitive)
 		assert.Assert(t, ok)
 
 		assert.Assert(t, p.matches("/a"))
@@ -1726,7 +1777,7 @@ func TestMatchSegmentsEdgeCases(t *testing.T) {
 	t.Run("multiple stars in pattern", func(t *testing.T) {
 		t.Parallel()
 		// Test patterns with multiple stars that require backtracking
-		p, ok := compileGlobPattern("*a*", "/", UsageFiles, true)
+		p, ok := compileGlobPattern("*a*", "/", UsageFiles, tspath.CaseSensitive)
 		assert.Assert(t, ok)
 
 		assert.Assert(t, p.matches("/a"))
@@ -1742,7 +1793,7 @@ func TestMatchSegmentsEdgeCases(t *testing.T) {
 		// A naive greedy algorithm would fail on these.
 
 		// Pattern: *a*a - must find two 'a' characters
-		p1, ok := compileGlobPattern("*a*a", "/", UsageFiles, true)
+		p1, ok := compileGlobPattern("*a*a", "/", UsageFiles, tspath.CaseSensitive)
 		assert.Assert(t, ok)
 		assert.Assert(t, p1.matches("/aa"))     // minimal: first * matches "", second * matches ""
 		assert.Assert(t, p1.matches("/Xaa"))    // first * matches "X"
@@ -1755,7 +1806,7 @@ func TestMatchSegmentsEdgeCases(t *testing.T) {
 		assert.Assert(t, !p1.matches("/XaYaZ")) // doesn't end with 'a'
 
 		// Pattern: *a*b*c - must find a, then b, then c in order
-		p2, ok := compileGlobPattern("*a*b*c", "/", UsageFiles, true)
+		p2, ok := compileGlobPattern("*a*b*c", "/", UsageFiles, tspath.CaseSensitive)
 		assert.Assert(t, ok)
 		assert.Assert(t, p2.matches("/abc"))       // minimal
 		assert.Assert(t, p2.matches("/XaYbZc"))    // chars between
@@ -1767,7 +1818,7 @@ func TestMatchSegmentsEdgeCases(t *testing.T) {
 		assert.Assert(t, !p2.matches("/abcX"))     // doesn't end with c
 
 		// Pattern: *a*a*a - must find three 'a' characters
-		p3, ok := compileGlobPattern("*a*a*a", "/", UsageFiles, true)
+		p3, ok := compileGlobPattern("*a*a*a", "/", UsageFiles, tspath.CaseSensitive)
 		assert.Assert(t, ok)
 		assert.Assert(t, p3.matches("/aaa"))
 		assert.Assert(t, p3.matches("/aXaYa"))
@@ -1776,7 +1827,7 @@ func TestMatchSegmentsEdgeCases(t *testing.T) {
 		assert.Assert(t, !p3.matches("/aaX")) // doesn't end with 'a'
 
 		// Pattern: a*b*a - starts with a, ends with a, has b in middle
-		p4, ok := compileGlobPattern("a*b*a", "/", UsageFiles, true)
+		p4, ok := compileGlobPattern("a*b*a", "/", UsageFiles, tspath.CaseSensitive)
 		assert.Assert(t, ok)
 		assert.Assert(t, p4.matches("/aba"))
 		assert.Assert(t, p4.matches("/aXbYa"))
@@ -1791,7 +1842,7 @@ func TestMatchSegmentsEdgeCases(t *testing.T) {
 		// This pattern could cause exponential backtracking in naive implementations.
 		// Pattern: *a*a*a*a*b against "aaaaaaaaaaaaaaaa" (no b)
 		// Should return false quickly, not hang.
-		p, ok := compileGlobPattern("*a*a*a*a*b", "/", UsageFiles, true)
+		p, ok := compileGlobPattern("*a*a*a*a*b", "/", UsageFiles, tspath.CaseSensitive)
 		assert.Assert(t, ok)
 
 		// These should complete quickly (not hang)
@@ -1804,7 +1855,7 @@ func TestMatchSegmentsEdgeCases(t *testing.T) {
 	t.Run("literal segment not matching", func(t *testing.T) {
 		t.Parallel()
 		// Test literal segment that's longer than remaining string
-		p, ok := compileGlobPattern("abcdefgh.ts", "/", UsageFiles, true)
+		p, ok := compileGlobPattern("abcdefgh.ts", "/", UsageFiles, tspath.CaseSensitive)
 		assert.Assert(t, ok)
 
 		assert.Assert(t, !p.matches("/abc.ts"))     // different literal
@@ -1816,7 +1867,7 @@ func TestMatchSegmentsEdgeCases(t *testing.T) {
 		// ? should match one full Unicode codepoint, not one byte.
 		// 'é' is 2 bytes in UTF-8, '🎉' is 4 bytes, '中' is 3 bytes.
 
-		p1, ok := compileGlobPattern("?.ts", "/", UsageFiles, true)
+		p1, ok := compileGlobPattern("?.ts", "/", UsageFiles, tspath.CaseSensitive)
 		assert.Assert(t, ok)
 
 		assert.Assert(t, p1.matches("/a.ts"))   // single ASCII char
@@ -1827,7 +1878,7 @@ func TestMatchSegmentsEdgeCases(t *testing.T) {
 		assert.Assert(t, !p1.matches("/ab.ts")) // two chars
 
 		// Two question marks should match exactly two runes
-		p2, ok := compileGlobPattern("??.ts", "/", UsageFiles, true)
+		p2, ok := compileGlobPattern("??.ts", "/", UsageFiles, tspath.CaseSensitive)
 		assert.Assert(t, ok)
 
 		assert.Assert(t, p2.matches("/ab.ts"))   // two ASCII chars
@@ -1842,7 +1893,7 @@ func TestMatchSegmentsEdgeCases(t *testing.T) {
 		// * should advance by full runes during backtracking.
 
 		// Pattern: *é.ts - anything ending in é.ts
-		p, ok := compileGlobPattern("*é.ts", "/", UsageFiles, true)
+		p, ok := compileGlobPattern("*é.ts", "/", UsageFiles, tspath.CaseSensitive)
 		assert.Assert(t, ok)
 
 		assert.Assert(t, p.matches("/é.ts"))
@@ -1850,7 +1901,7 @@ func TestMatchSegmentsEdgeCases(t *testing.T) {
 		assert.Assert(t, !p.matches("/cafe.ts")) // 'e' != 'é'
 
 		// Pattern: *🎉* - contains 🎉 somewhere
-		p2, ok := compileGlobPattern("*🎉*", "/", UsageFiles, true)
+		p2, ok := compileGlobPattern("*🎉*", "/", UsageFiles, tspath.CaseSensitive)
 		assert.Assert(t, ok)
 
 		assert.Assert(t, p2.matches("/🎉"))
@@ -1866,10 +1917,10 @@ func TestReadDirectoryConsecutiveSlashes(t *testing.T) {
 	host := vfstest.FromMap(map[string]string{
 		"/dev/a.ts":   "",
 		"/dev/x/b.ts": "",
-	}, false)
+	}, tspath.CaseInsensitive)
 
 	// The matchFilesNoRegex function normalizes paths, but we can test internal handling
-	got := matchFiles("/dev", []string{".ts"}, nil, []string{"**/*.ts"}, false, "/", UnlimitedDepth, host)
+	got := matchFileNames(tspath.RootedDirectoryPathFromAbsolute("/dev"), []string{".ts"}, nil, []string{"**/*.ts"}, UnlimitedDepth, host)
 	assert.Assert(t, len(got) >= 2, "should find files")
 	assert.Assert(t, slices.Contains(got, "/dev/a.ts"))
 	assert.Assert(t, slices.Contains(got, "/dev/x/b.ts"))
@@ -1885,9 +1936,9 @@ func TestGlobPatternLiteralWithPackageFolders(t *testing.T) {
 		host := vfstest.FromMap(map[string]string{
 			"/dev/a.ts":              "",
 			"/dev/node_modules/b.ts": "",
-		}, false)
+		}, tspath.CaseInsensitive)
 
-		got := matchFiles("/dev", []string{".ts"}, nil, []string{"*/*.ts"}, false, "/", UnlimitedDepth, host)
+		got := matchFileNames(tspath.RootedDirectoryPathFromAbsolute("/dev"), []string{".ts"}, nil, []string{"*/*.ts"}, UnlimitedDepth, host)
 		assert.Assert(t, !slices.Contains(got, "/dev/node_modules/b.ts"), "should skip node_modules with wildcard")
 	})
 
@@ -1896,9 +1947,9 @@ func TestGlobPatternLiteralWithPackageFolders(t *testing.T) {
 		// Explicit literal paths should include package folders
 		host := vfstest.FromMap(map[string]string{
 			"/dev/node_modules/b.ts": "",
-		}, false)
+		}, tspath.CaseInsensitive)
 
-		got := matchFiles("/dev", []string{".ts"}, nil, []string{"node_modules/b.ts"}, false, "/", UnlimitedDepth, host)
+		got := matchFileNames(tspath.RootedDirectoryPathFromAbsolute("/dev"), []string{".ts"}, nil, []string{"node_modules/b.ts"}, UnlimitedDepth, host)
 		assert.Assert(t, slices.Contains(got, "/dev/node_modules/b.ts"), "should include explicit node_modules path")
 	})
 }
@@ -1916,7 +1967,7 @@ func TestGetBasePathsCaseSensitivity(t *testing.T) {
 		// When they're both included as base paths, they should not be deduplicated.
 		// Use include patterns that point to directories outside the root path so the root
 		// path doesn't subsume them via containsPath.
-		basePaths := getBasePaths("/root", []string{"../Other/**/*.ts", "../other/**/*.ts"}, true /*caseSensitive*/)
+		basePaths := getBasePaths("/root", []string{"../Other/**/*.ts", "../other/**/*.ts"}, tspath.CaseSensitive)
 		// Both /Other and /other should appear because they differ by case on a case-sensitive FS.
 		assert.Assert(t, slices.Contains(basePaths, "/Other"), "expected /Other in base paths: %v", basePaths)
 		assert.Assert(t, slices.Contains(basePaths, "/other"), "expected /other in base paths: %v", basePaths)
@@ -1926,7 +1977,7 @@ func TestGetBasePathsCaseSensitivity(t *testing.T) {
 		t.Parallel()
 		// On a case-insensitive file system, /Other and /other refer to the same directory;
 		// only one should appear.
-		basePaths := getBasePaths("/root", []string{"../Other/**/*.ts", "../other/**/*.ts"}, false /*caseSensitive*/)
+		basePaths := getBasePaths("/root", []string{"../Other/**/*.ts", "../other/**/*.ts"}, tspath.CaseInsensitive)
 		count := 0
 		for _, bp := range basePaths {
 			if bp == "/Other" || bp == "/other" {

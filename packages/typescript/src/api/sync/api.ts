@@ -42,7 +42,9 @@ import {
     type NamedTupleMember,
     type Node,
     type ParameterDeclaration,
-    type Path,
+    type PathKey,
+    type RootedDirectoryPath,
+    type RootedFilePath,
     type SourceFile,
     type SyntaxKind,
     type TypeNode,
@@ -56,7 +58,7 @@ import {
 import {
     decodeNode,
     getNodeId,
-    parseNodeHandle,
+    parseNodeHandleFromCompiler,
     readParseOptionsKey,
     readSourceFileHash,
     RemoteSourceFile,
@@ -67,8 +69,10 @@ import type {
     LSPConnectionOptions,
 } from "../options.ts";
 import {
-    createGetCanonicalFileName,
-    toPath,
+    canonicalize,
+    CaseSensitivity,
+    pathKey,
+    toRootedPath,
 } from "../path.ts";
 import type {
     APIFileChanges,
@@ -85,6 +89,7 @@ import type {
     ParsedCommandLine,
     ProjectReference,
     ProjectResponse,
+    RawCompilerOptions,
     ReadConfigFileResponse,
     SignaturePropertyMethod,
     SignatureResponse,
@@ -201,6 +206,7 @@ export type {
     ObjectType,
     ParsedCommandLine,
     ProjectReference,
+    RawCompilerOptions,
     ReadConfigFileResponse,
     RequestTiming,
     SourceFileMetadata,
@@ -226,7 +232,7 @@ export type {
 };
 
 export interface TranspileOptions {
-    compilerOptions?: CompilerOptions;
+    compilerOptions?: RawCompilerOptions;
     fileName?: string;
     reportDiagnostics?: boolean;
 }
@@ -247,9 +253,8 @@ import {
 export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHost {
     private client: Client;
     private sourceFileCache: SourceFileCache;
-    private toPath: ((fileName: string) => Path) | undefined;
-    private currentDirectory: string | undefined;
-    private getCanonicalFileNameWorker: ((fileName: string) => string) | undefined;
+    private currentDirectory: RootedDirectoryPath | undefined;
+    private caseSensitivity: CaseSensitivity | undefined;
     private initialized: boolean = false;
     private initializing: void | undefined;
     private activeSnapshots: Set<Snapshot> = new Set();
@@ -326,11 +331,8 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
             function (): void {
                 try {
                     const response = owner.client.apiRequest("initialize", null);
-                    const getCanonicalFileName = createGetCanonicalFileName(response.useCaseSensitiveFileNames);
-                    const currentDirectory = response.currentDirectory;
-                    owner.getCanonicalFileNameWorker = getCanonicalFileName;
-                    owner.currentDirectory = currentDirectory;
-                    owner.toPath = (fileName: string) => toPath(fileName, currentDirectory, getCanonicalFileName) as Path;
+                    owner.currentDirectory = response.currentDirectory;
+                    owner.caseSensitivity = response.caseSensitivity;
                     owner.initialized = true;
                 }
                 catch (error) {
@@ -341,11 +343,8 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
             function* (): Generator<ProtocolRequest, void, ProtocolResponse["result"]> {
                 try {
                     const response = yield* apiRequest("initialize", null);
-                    const getCanonicalFileName = createGetCanonicalFileName(response.useCaseSensitiveFileNames);
-                    const currentDirectory = response.currentDirectory;
-                    owner.getCanonicalFileNameWorker = getCanonicalFileName;
-                    owner.currentDirectory = currentDirectory;
-                    owner.toPath = (fileName: string) => toPath(fileName, currentDirectory, getCanonicalFileName) as Path;
+                    owner.currentDirectory = response.currentDirectory;
+                    owner.caseSensitivity = response.caseSensitivity;
                     owner.initialized = true;
                 }
                 catch (error) {
@@ -356,7 +355,7 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         );
     }
 
-    getCurrentDirectory(): string {
+    getCurrentDirectory(): RootedDirectoryPath {
         if (this.currentDirectory === undefined) {
             throw new Error("API has not been initialized");
         }
@@ -364,10 +363,14 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
     }
 
     getCanonicalFileName(fileName: string): string {
-        if (this.getCanonicalFileNameWorker === undefined) {
+        return canonicalize(fileName, this.getCaseSensitivity());
+    }
+
+    private getCaseSensitivity(): CaseSensitivity {
+        if (this.caseSensitivity === undefined) {
             throw new Error("API has not been initialized");
         }
-        return this.getCanonicalFileNameWorker(fileName);
+        return this.caseSensitivity;
     }
 
     getNewLine(): string {
@@ -572,7 +575,8 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
                     data,
                     owner.client,
                     owner.sourceFileCache,
-                    owner.toPath!,
+                    owner.getCurrentDirectory(),
+                    owner.getCaseSensitivity(),
                     owner,
                     () => {
                         owner.activeSnapshots.delete(snapshot);
@@ -604,7 +608,8 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
                     data,
                     owner.client,
                     owner.sourceFileCache,
-                    owner.toPath!,
+                    owner.getCurrentDirectory(),
+                    owner.getCaseSensitivity(),
                     owner,
                     () => {
                         owner.activeSnapshots.delete(snapshot);
@@ -699,7 +704,8 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
                     data,
                     owner.client,
                     owner.sourceFileCache,
-                    owner.toPath!,
+                    owner.getCurrentDirectory(),
+                    owner.getCaseSensitivity(),
                     owner,
                     () => {
                         owner.activeSnapshots.delete(snapshot);
@@ -732,7 +738,8 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
                     data,
                     owner.client,
                     owner.sourceFileCache,
-                    owner.toPath!,
+                    owner.getCurrentDirectory(),
+                    owner.getCaseSensitivity(),
                     owner,
                     () => {
                         owner.activeSnapshots.delete(snapshot);
@@ -800,7 +807,7 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
     private isProgramActive(program: Program): boolean {
         const project = program.getProject();
         for (const snapshot of this.activeSnapshots) {
-            if (!snapshot.isDisposed() && snapshot.getProject(project.configFileName)?.program === program) {
+            if (!snapshot.isDisposed() && snapshot.getProjectById(project.id)?.program === program) {
                 return true;
             }
         }
@@ -841,7 +848,8 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
                     { snapshot: data.snapshot, projects: [data.project] },
                     owner.client,
                     owner.sourceFileCache,
-                    owner.toPath!,
+                    owner.getCurrentDirectory(),
+                    owner.getCaseSensitivity(),
                     owner,
                     () => {
                         owner.activeSnapshots.delete(snapshot);
@@ -876,7 +884,8 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
                     { snapshot: data.snapshot, projects: [data.project] },
                     owner.client,
                     owner.sourceFileCache,
-                    owner.toPath!,
+                    owner.getCurrentDirectory(),
+                    owner.getCaseSensitivity(),
                     owner,
                     () => {
                         owner.activeSnapshots.delete(snapshot);
@@ -924,19 +933,19 @@ export class InternalAPI {
     }
 
     get stopCPUProfile(): {
-        (): string;
-        gen(): Generator<ProtocolRequest, string, ProtocolResponse["result"]>;
+        (): RootedFilePath;
+        gen(): Generator<ProtocolRequest, RootedFilePath, ProtocolResponse["result"]>;
     } {
         const owner = this;
         return cacheGeneratorMethod(
             owner,
             "stopCPUProfile",
-            function (): string {
+            function (): RootedFilePath {
                 owner.ensureInitialized();
                 const result = owner.client.apiRequest("stopCPUProfile", null);
                 return result.file;
             },
-            function* (): Generator<ProtocolRequest, string, ProtocolResponse["result"]> {
+            function* (): Generator<ProtocolRequest, RootedFilePath, ProtocolResponse["result"]> {
                 yield* owner.ensureInitialized.gen();
                 const result = yield* apiRequest("stopCPUProfile", null);
                 return result.file;
@@ -945,19 +954,19 @@ export class InternalAPI {
     }
 
     get saveHeapProfile(): {
-        (dir: string): string;
-        gen(dir: string): Generator<ProtocolRequest, string, ProtocolResponse["result"]>;
+        (dir: string): RootedFilePath;
+        gen(dir: string): Generator<ProtocolRequest, RootedFilePath, ProtocolResponse["result"]>;
     } {
         const owner = this;
         return cacheGeneratorMethod(
             owner,
             "saveHeapProfile",
-            function (dir: string): string {
+            function (dir: string): RootedFilePath {
                 owner.ensureInitialized();
                 const result = owner.client.apiRequest("saveHeapProfile", { dir });
                 return result.file;
             },
-            function* (dir: string): Generator<ProtocolRequest, string, ProtocolResponse["result"]> {
+            function* (dir: string): Generator<ProtocolRequest, RootedFilePath, ProtocolResponse["result"]> {
                 yield* owner.ensureInitialized.gen();
                 const result = yield* apiRequest("saveHeapProfile", { dir });
                 return result.file;
@@ -968,8 +977,9 @@ export class InternalAPI {
 
 export class Snapshot {
     readonly id: number;
-    private projectMap: Map<Path, Project>;
-    private toPath: (fileName: string) => Path;
+    private projectMap: Map<PathKey, Project>;
+    private currentDirectory: RootedDirectoryPath;
+    private caseSensitivity: CaseSensitivity;
     private client: Client;
     private disposed: boolean = false;
     private disposePromise: void | undefined;
@@ -981,20 +991,22 @@ export class Snapshot {
         data: UpdateSnapshotResponse,
         client: Client,
         sourceFileCache: SourceFileCache,
-        toPath: (fileName: string) => Path,
+        currentDirectory: RootedDirectoryPath,
+        caseSensitivity: CaseSensitivity,
         formatDiagnosticsHost: FormatDiagnosticsHost,
         onDispose: () => void,
     ) {
         this.id = data.snapshot;
         this.client = client;
-        this.toPath = toPath;
+        this.currentDirectory = currentDirectory;
+        this.caseSensitivity = caseSensitivity;
         this.onDispose = onDispose;
         this.projectMap = new Map();
         this.snapshotRegistry = new SnapshotObjectRegistry(client, this.id, projectId => this.projectMap.get(projectId));
 
         for (const projData of data.projects) {
-            const project = new Project(projData, this.id, client, sourceFileCache, toPath, formatDiagnosticsHost, this.snapshotRegistry);
-            this.projectMap.set(toPath(projData.configFileName), project);
+            const project = new Project(projData, this.id, client, sourceFileCache, caseSensitivity, formatDiagnosticsHost, this.snapshotRegistry);
+            this.projectMap.set(projData.id, project);
         }
 
         this.internal = new SnapshotInternalAPI(this.id, client);
@@ -1005,9 +1017,16 @@ export class Snapshot {
         return [...this.projectMap.values()];
     }
 
-    getProject(configFileName: string): Project | undefined {
+    getProject(configFileName: DocumentIdentifier): Project | undefined {
         this.ensureNotDisposed();
-        return this.projectMap.get(this.toPath(configFileName));
+        const path = pathKey(toRootedPath(resolveFileName(configFileName), this.currentDirectory), this.caseSensitivity);
+        return this.projectMap.get(path);
+    }
+
+    /** @internal */
+    getProjectById(path: PathKey): Project | undefined {
+        this.ensureNotDisposed();
+        return this.projectMap.get(path);
     }
 
     get getDefaultProjectForFile(): {
@@ -1025,7 +1044,7 @@ export class Snapshot {
                     file,
                 });
                 if (!data) return undefined;
-                return owner.projectMap.get(owner.toPath(data.configFileName));
+                return owner.projectMap.get(data.id);
             },
             function* (file: DocumentIdentifier): Generator<ProtocolRequest, Project | undefined, ProtocolResponse["result"]> {
                 owner.ensureNotDisposed();
@@ -1034,7 +1053,7 @@ export class Snapshot {
                     file,
                 });
                 if (!data) return undefined;
-                return owner.projectMap.get(owner.toPath(data.configFileName));
+                return owner.projectMap.get(data.id);
             },
         );
     }
@@ -1116,16 +1135,16 @@ class SnapshotObjectRegistry {
     private readonly symbols: Map<number, Symbol> = new Map();
     private readonly client: Client;
     private readonly snapshotId: number;
-    private readonly resolveProject: (projectId: Path) => Project | undefined;
+    private readonly resolveProject: (projectId: PathKey) => Project | undefined;
 
-    constructor(client: Client, snapshotId: number, resolveProject: (projectId: Path) => Project | undefined) {
+    constructor(client: Client, snapshotId: number, resolveProject: (projectId: PathKey) => Project | undefined) {
         this.client = client;
         this.snapshotId = snapshotId;
         this.resolveProject = resolveProject;
     }
 
     /** Resolve a project id (a config file path) to its Project within this snapshot. */
-    getProject(projectId: Path): Project | undefined {
+    getProject(projectId: PathKey): Project | undefined {
         return this.resolveProject(projectId);
     }
 
@@ -1147,14 +1166,14 @@ class SnapshotObjectRegistry {
     }
 
     get fetchSymbol(): {
-        (source: Symbol | Signature | Type, method: SymbolPropertyMethod, handle: number | undefined, projectId: Path): Symbol;
-        gen(source: Symbol | Signature | Type, method: SymbolPropertyMethod, handle: number | undefined, projectId: Path): Generator<ProtocolRequest, Symbol, ProtocolResponse["result"]>;
+        (source: Symbol | Signature | Type, method: SymbolPropertyMethod, handle: number | undefined, projectId: PathKey): Symbol;
+        gen(source: Symbol | Signature | Type, method: SymbolPropertyMethod, handle: number | undefined, projectId: PathKey): Generator<ProtocolRequest, Symbol, ProtocolResponse["result"]>;
     } {
         const owner = this;
         return cacheGeneratorMethod(
             owner,
             "fetchSymbol",
-            function (source: Symbol | Signature | Type, method: SymbolPropertyMethod, handle: number | undefined, projectId: Path): Symbol {
+            function (source: Symbol | Signature | Type, method: SymbolPropertyMethod, handle: number | undefined, projectId: PathKey): Symbol {
                 if (!handle) return undefined as unknown as Symbol;
                 const cached = owner.getSymbol(handle);
                 if (cached) return cached;
@@ -1167,7 +1186,7 @@ class SnapshotObjectRegistry {
                 if (!data) throw new Error(`${method} returned null symbol for ${source.constructor.name} ${source.id}`);
                 return owner.getOrCreateSymbol(data);
             },
-            function* (source: Symbol | Signature | Type, method: SymbolPropertyMethod, handle: number | undefined, projectId: Path): Generator<ProtocolRequest, Symbol, ProtocolResponse["result"]> {
+            function* (source: Symbol | Signature | Type, method: SymbolPropertyMethod, handle: number | undefined, projectId: PathKey): Generator<ProtocolRequest, Symbol, ProtocolResponse["result"]> {
                 if (!handle) return undefined as unknown as Symbol;
                 const cached = owner.getSymbol(handle);
                 if (cached) return cached;
@@ -1184,14 +1203,14 @@ class SnapshotObjectRegistry {
     }
 
     get fetchSymbols(): {
-        (source: Symbol | Signature | Type, method: SymbolsPropertyMethod, handles: readonly number[] | undefined, projectId: Path): readonly Symbol[];
-        gen(source: Symbol | Signature | Type, method: SymbolsPropertyMethod, handles: readonly number[] | undefined, projectId: Path): Generator<ProtocolRequest, readonly Symbol[], ProtocolResponse["result"]>;
+        (source: Symbol | Signature | Type, method: SymbolsPropertyMethod, handles: readonly number[] | undefined, projectId: PathKey): readonly Symbol[];
+        gen(source: Symbol | Signature | Type, method: SymbolsPropertyMethod, handles: readonly number[] | undefined, projectId: PathKey): Generator<ProtocolRequest, readonly Symbol[], ProtocolResponse["result"]>;
     } {
         const owner = this;
         return cacheGeneratorMethod(
             owner,
             "fetchSymbols",
-            function (source: Symbol | Signature | Type, method: SymbolsPropertyMethod, handles: readonly number[] | undefined, projectId: Path): readonly Symbol[] {
+            function (source: Symbol | Signature | Type, method: SymbolsPropertyMethod, handles: readonly number[] | undefined, projectId: PathKey): readonly Symbol[] {
                 if (handles) {
                     const result = new Array<Symbol>(handles.length);
                     let allCached = true;
@@ -1213,7 +1232,7 @@ class SnapshotObjectRegistry {
                 if (symbolData == null) return [];
                 else return symbolData.map(data => owner.getOrCreateSymbol(data));
             },
-            function* (source: Symbol | Signature | Type, method: SymbolsPropertyMethod, handles: readonly number[] | undefined, projectId: Path): Generator<ProtocolRequest, readonly Symbol[], ProtocolResponse["result"]> {
+            function* (source: Symbol | Signature | Type, method: SymbolsPropertyMethod, handles: readonly number[] | undefined, projectId: PathKey): Generator<ProtocolRequest, readonly Symbol[], ProtocolResponse["result"]> {
                 if (handles) {
                     const result = new Array<Symbol>(handles.length);
                     let allCached = true;
@@ -1703,14 +1722,14 @@ class ProjectObjectRegistry {
 }
 
 export class Project {
-    readonly id: Path;
-    readonly configFileName: string;
-    readonly currentDirectory: string;
+    readonly id: PathKey;
+    readonly configFileName: RootedFilePath;
+    readonly currentDirectory: RootedDirectoryPath;
     readonly parsedCommandLine: ParsedCommandLine;
     /** @deprecated Use `parsedCommandLine.options`. */
     readonly compilerOptions: CompilerOptions;
     /** @deprecated Use `parsedCommandLine.fileNames`. */
-    readonly rootFiles: readonly string[];
+    readonly rootFiles: readonly RootedFilePath[];
 
     readonly program: Program;
     readonly checker: Checker;
@@ -1724,11 +1743,11 @@ export class Project {
         snapshotId: number,
         client: Client,
         sourceFileCache: SourceFileCache,
-        toPath: (fileName: string) => Path,
+        caseSensitivity: CaseSensitivity,
         formatDiagnosticsHost: FormatDiagnosticsHost,
         snapshotRegistry: SnapshotObjectRegistry,
     ) {
-        this.id = data.id as Path;
+        this.id = data.id;
         this.configFileName = data.configFileName;
         this.currentDirectory = data.currentDirectory;
         if (!data.parsedCommandLine?.options) {
@@ -1744,7 +1763,7 @@ export class Project {
             this,
             client,
             sourceFileCache,
-            toPath,
+            caseSensitivity,
             formatDiagnosticsHost,
         );
         const objectRegistry = new ProjectObjectRegistry(client, snapshotId, this, snapshotRegistry);
@@ -2049,10 +2068,10 @@ export class Program implements FormatDiagnosticsHost {
     private readonly project: Project;
     private readonly client: Client;
     private readonly sourceFileCache: SourceFileCache;
-    private readonly toPath: (fileName: string) => Path;
+    private readonly caseSensitivity: CaseSensitivity;
     private readonly formatDiagnosticsHost: FormatDiagnosticsHost;
     private readonly decoder = new Wtf8Decoder();
-    private readonly sourceFileMetadataCache = new Map<Path, SourceFileMetadata | undefined>();
+    private readonly sourceFileMetadataCache = new Map<PathKey, SourceFileMetadata | undefined>();
     private ownedSnapshot: Snapshot | undefined;
     private disposePromise: void | undefined;
 
@@ -2061,18 +2080,18 @@ export class Program implements FormatDiagnosticsHost {
         project: Project,
         client: Client,
         sourceFileCache: SourceFileCache,
-        toPath: (fileName: string) => Path,
+        caseSensitivity: CaseSensitivity,
         formatDiagnosticsHost: FormatDiagnosticsHost,
     ) {
         this.snapshotId = snapshotId;
         this.project = project;
         this.client = client;
         this.sourceFileCache = sourceFileCache;
-        this.toPath = toPath;
+        this.caseSensitivity = caseSensitivity;
         this.formatDiagnosticsHost = formatDiagnosticsHost;
     }
 
-    getCurrentDirectory(): string {
+    getCurrentDirectory(): RootedDirectoryPath {
         return this.project.currentDirectory;
     }
 
@@ -2145,8 +2164,52 @@ export class Program implements FormatDiagnosticsHost {
             "getSourceFile",
             function (file: DocumentIdentifier): SourceFile | undefined {
                 const fileName = resolveFileName(file);
-                const path = owner.toPath(fileName);
+                const path = owner.pathKeyForFileName(fileName);
+                return owner.getSourceFileWorker(file, path);
+            },
+            function* (file: DocumentIdentifier): Generator<ProtocolRequest, SourceFile | undefined, ProtocolResponse["result"]> {
+                const fileName = resolveFileName(file);
+                const path = owner.pathKeyForFileName(fileName);
+                return yield* owner.getSourceFileWorker.gen(file, path);
+            },
+        );
+    }
 
+    /**
+     * Returns the source file for an already-canonical path.
+     *
+     * @internal
+     */
+    get getSourceFileByPath(): {
+        (path: PathKey): SourceFile | undefined;
+        gen(path: PathKey): Generator<ProtocolRequest, SourceFile | undefined, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getSourceFileByPath",
+            function (path: PathKey): SourceFile | undefined {
+                // The wire format is a string, but the cache key remains the supplied
+                // PathKey and is never treated as a RootedPath.
+                return owner.getSourceFileWorker(path, path);
+            },
+            function* (path: PathKey): Generator<ProtocolRequest, SourceFile | undefined, ProtocolResponse["result"]> {
+                // The wire format is a string, but the cache key remains the supplied
+                // PathKey and is never treated as a RootedPath.
+                return yield* owner.getSourceFileWorker.gen(path, path);
+            },
+        );
+    }
+
+    private get getSourceFileWorker(): {
+        (file: DocumentIdentifier, path: PathKey): SourceFile | undefined;
+        gen(file: DocumentIdentifier, path: PathKey): Generator<ProtocolRequest, SourceFile | undefined, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getSourceFileWorker",
+            function (file: DocumentIdentifier, path: PathKey): SourceFile | undefined {
                 // Check if we already have a retained cache entry for this (snapshot, project) pair
                 const retained = owner.sourceFileCache.getRetained(path, owner.snapshotId, owner.project.id);
                 if (retained) {
@@ -2171,10 +2234,7 @@ export class Program implements FormatDiagnosticsHost {
                 const sourceFile = new RemoteSourceFile(binaryData, owner.decoder, owner.client.getTimingCollector()) as unknown as SourceFile;
                 return owner.sourceFileCache.set(path, sourceFile, parseOptionsKey, contentHash, owner.snapshotId, owner.project.id);
             },
-            function* (file: DocumentIdentifier): Generator<ProtocolRequest, SourceFile | undefined, ProtocolResponse["result"]> {
-                const fileName = resolveFileName(file);
-                const path = owner.toPath(fileName);
-
+            function* (file: DocumentIdentifier, path: PathKey): Generator<ProtocolRequest, SourceFile | undefined, ProtocolResponse["result"]> {
                 // Check if we already have a retained cache entry for this (snapshot, project) pair
                 const retained = owner.sourceFileCache.getRetained(path, owner.snapshotId, owner.project.id);
                 if (retained) {
@@ -2203,21 +2263,21 @@ export class Program implements FormatDiagnosticsHost {
     }
 
     get getSourceFileNames(): {
-        (): readonly string[];
-        gen(): Generator<ProtocolRequest, readonly string[], ProtocolResponse["result"]>;
+        (): readonly RootedFilePath[];
+        gen(): Generator<ProtocolRequest, readonly RootedFilePath[], ProtocolResponse["result"]>;
     } {
         const owner = this;
         return cacheGeneratorMethod(
             owner,
             "getSourceFileNames",
-            function (): readonly string[] {
+            function (): readonly RootedFilePath[] {
                 const data = owner.client.apiRequest("getSourceFileNames", {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
                 });
                 return data ?? [];
             },
-            function* (): Generator<ProtocolRequest, readonly string[], ProtocolResponse["result"]> {
+            function* (): Generator<ProtocolRequest, readonly RootedFilePath[], ProtocolResponse["result"]> {
                 const data = yield* apiRequest("getSourceFileNames", {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
@@ -2241,10 +2301,10 @@ export class Program implements FormatDiagnosticsHost {
             owner,
             "getSourceFileMetadata",
             function (file: DocumentIdentifier): SourceFileMetadata | undefined {
-                return owner.getSourceFileMetadataByPath(owner.toPath(resolveFileName(file)));
+                return owner.getSourceFileMetadataByPath(owner.pathKeyForFileName(resolveFileName(file)));
             },
             function* (file: DocumentIdentifier): Generator<ProtocolRequest, SourceFileMetadata | undefined, ProtocolResponse["result"]> {
-                return yield* owner.getSourceFileMetadataByPath.gen(owner.toPath(resolveFileName(file)));
+                return yield* owner.getSourceFileMetadataByPath.gen(owner.pathKeyForFileName(resolveFileName(file)));
             },
         );
     }
@@ -2256,14 +2316,14 @@ export class Program implements FormatDiagnosticsHost {
      * this `Program` instance.
      */
     get getSourceFileMetadataByPath(): {
-        (path: Path): SourceFileMetadata | undefined;
-        gen(path: Path): Generator<ProtocolRequest, SourceFileMetadata | undefined, ProtocolResponse["result"]>;
+        (path: PathKey): SourceFileMetadata | undefined;
+        gen(path: PathKey): Generator<ProtocolRequest, SourceFileMetadata | undefined, ProtocolResponse["result"]>;
     } {
         const owner = this;
         return cacheGeneratorMethod(
             owner,
             "getSourceFileMetadataByPath",
-            function (path: Path): SourceFileMetadata | undefined {
+            function (path: PathKey): SourceFileMetadata | undefined {
                 let metadata = owner.sourceFileMetadataCache.get(path);
                 if (metadata === undefined) {
                     metadata = owner.fetchSourceFileMetadata(path);
@@ -2271,7 +2331,7 @@ export class Program implements FormatDiagnosticsHost {
                 }
                 return metadata;
             },
-            function* (path: Path): Generator<ProtocolRequest, SourceFileMetadata | undefined, ProtocolResponse["result"]> {
+            function* (path: PathKey): Generator<ProtocolRequest, SourceFileMetadata | undefined, ProtocolResponse["result"]> {
                 let metadata = owner.sourceFileMetadataCache.get(path);
                 if (metadata === undefined) {
                     metadata = yield* owner.fetchSourceFileMetadata.gen(path);
@@ -2283,14 +2343,16 @@ export class Program implements FormatDiagnosticsHost {
     }
 
     private get fetchSourceFileMetadata(): {
-        (path: Path): SourceFileMetadata | undefined;
-        gen(path: Path): Generator<ProtocolRequest, SourceFileMetadata | undefined, ProtocolResponse["result"]>;
+        (path: PathKey): SourceFileMetadata | undefined;
+        gen(path: PathKey): Generator<ProtocolRequest, SourceFileMetadata | undefined, ProtocolResponse["result"]>;
     } {
         const owner = this;
         return cacheGeneratorMethod(
             owner,
             "fetchSourceFileMetadata",
-            function (path: Path): SourceFileMetadata | undefined {
+            function (path: PathKey): SourceFileMetadata | undefined {
+                // PathKey is serialized as a string; the server deliberately treats all
+                // client-provided path text as untrusted input.
                 const data = owner.client.apiRequest("getSourceFileMetadata", {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
@@ -2298,7 +2360,9 @@ export class Program implements FormatDiagnosticsHost {
                 });
                 return data ?? undefined;
             },
-            function* (path: Path): Generator<ProtocolRequest, SourceFileMetadata | undefined, ProtocolResponse["result"]> {
+            function* (path: PathKey): Generator<ProtocolRequest, SourceFileMetadata | undefined, ProtocolResponse["result"]> {
+                // PathKey is serialized as a string; the server deliberately treats all
+                // client-provided path text as untrusted input.
                 const data = yield* apiRequest("getSourceFileMetadata", {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
@@ -2307,6 +2371,10 @@ export class Program implements FormatDiagnosticsHost {
                 return data ?? undefined;
             },
         );
+    }
+
+    private pathKeyForFileName(fileName: string): PathKey {
+        return pathKey(toRootedPath(fileName, this.project.currentDirectory), this.caseSensitivity);
     }
 
     /**
@@ -2362,21 +2430,21 @@ export class Program implements FormatDiagnosticsHost {
      * Includes the root config file and any extended config files.
      */
     get getConfigFileNames(): {
-        (): readonly string[];
-        gen(): Generator<ProtocolRequest, readonly string[], ProtocolResponse["result"]>;
+        (): readonly RootedFilePath[];
+        gen(): Generator<ProtocolRequest, readonly RootedFilePath[], ProtocolResponse["result"]>;
     } {
         const owner = this;
         return cacheGeneratorMethod(
             owner,
             "getConfigFileNames",
-            function (): readonly string[] {
+            function (): readonly RootedFilePath[] {
                 const data = owner.client.apiRequest("getConfigFileNames", {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
                 });
                 return data ?? [];
             },
-            function* (): Generator<ProtocolRequest, readonly string[], ProtocolResponse["result"]> {
+            function* (): Generator<ProtocolRequest, readonly RootedFilePath[], ProtocolResponse["result"]> {
                 const data = yield* apiRequest("getConfigFileNames", {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
@@ -2831,7 +2899,7 @@ export class Program implements FormatDiagnosticsHost {
 }
 
 function toEmitOutput(response: ProtocolEmitOutputResponse): EmitOutput {
-    const outputFiles = new Map<string, EmitOutputFile>();
+    const outputFiles = new Map<RootedFilePath, EmitOutputFile>();
     for (const { fileName, ...outputFile } of response.outputFiles) {
         outputFiles.set(fileName, outputFile);
     }
@@ -5069,10 +5137,10 @@ export class NodeHandle<out T extends Node = Node> {
     private readonly canonicalProject: Project;
     readonly index: number;
     readonly kind: SyntaxKind;
-    readonly path: Path;
+    readonly path: PathKey;
 
     constructor(handle: string, canonicalProject: Project) {
-        const parsed = parseNodeHandle(handle);
+        const parsed = parseNodeHandleFromCompiler(handle);
         this.index = parsed.index;
         this.kind = parsed.kind;
         this.path = parsed.path;
@@ -5093,14 +5161,14 @@ export class NodeHandle<out T extends Node = Node> {
             owner,
             "resolve",
             function (project: Project = owner.canonicalProject): T | undefined {
-                const sourceFile = project.program.getSourceFile(owner.path);
+                const sourceFile = project.program.getSourceFileByPath(owner.path);
                 if (!sourceFile) {
                     return undefined;
                 }
                 return (sourceFile as unknown as RemoteSourceFile).getOrCreateNodeAtIndex(owner.index) as T | undefined;
             },
             function* (project: Project = owner.canonicalProject): Generator<ProtocolRequest, T | undefined, ProtocolResponse["result"]> {
-                const sourceFile = yield* project.program.getSourceFile.gen(owner.path);
+                const sourceFile = yield* project.program.getSourceFileByPath.gen(owner.path);
                 if (!sourceFile) {
                     return undefined;
                 }
@@ -5159,7 +5227,7 @@ export class Symbol {
         this.name = unescapeLeadingUnderscores(data.name as __String);
         this.flags = data.flags;
         this.checkFlags = data.checkFlags;
-        const canonicalProject = objectRegistry.getProject(data.project as Path);
+        const canonicalProject = objectRegistry.getProject(data.project);
         if (!canonicalProject) {
             throw new Error(`Symbol ${data.id} references unknown canonical project '${data.project}'`);
         }

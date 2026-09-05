@@ -18,7 +18,7 @@ func TestParsedCommandLine(t *testing.T) {
 		t.Parallel()
 
 		noFiles := map[string]string{}
-		noFilesFS := vfstest.FromMap(noFiles, true)
+		noFilesFS := vfstest.FromMap(noFiles, tspath.CaseSensitive)
 
 		files := map[string]string{
 			"/dev/a.ts":         "",
@@ -49,13 +49,13 @@ func TestParsedCommandLine(t *testing.T) {
 		assertMatches := func(t *testing.T, parsedCommandLine *tsoptions.ParsedCommandLine, files map[string]string, matches []string) {
 			t.Helper()
 			for fileName := range files {
-				actual := parsedCommandLine.PossiblyMatchesFileName(fileName)
+				actual := parsedCommandLine.PossiblyMatchesFileName(tspath.ToRootedFilePath(fileName, parsedCommandLine.BaseDirectory()))
 				expected := slices.Contains(matches, fileName)
 				assert.Equal(t, actual, expected, "fileName: %s", fileName)
 			}
 			for _, fileName := range matches {
 				if _, ok := files[fileName]; !ok {
-					actual := parsedCommandLine.PossiblyMatchesFileName(fileName)
+					actual := parsedCommandLine.PossiblyMatchesFileName(tspath.ToRootedFilePath(fileName, parsedCommandLine.BaseDirectory()))
 					assert.Equal(t, actual, true, "fileName: %s", fileName)
 				}
 			}
@@ -75,7 +75,7 @@ func TestParsedCommandLine(t *testing.T) {
 					}`,
 					files,
 					"/dev",
-					/*useCaseSensitiveFileNames*/ true,
+					/*caseSensitivity*/ tspath.CaseSensitive,
 				)
 
 				assertMatches(t, parsedCommandLine, files, []string{
@@ -99,7 +99,7 @@ func TestParsedCommandLine(t *testing.T) {
 					}`,
 					files,
 					"/dev",
-					/*useCaseSensitiveFileNames*/ true,
+					/*caseSensitivity*/ tspath.CaseSensitive,
 				)
 
 				assertMatches(t, parsedCommandLine, files, []string{
@@ -127,12 +127,12 @@ func TestParsedCommandLine(t *testing.T) {
 					}`,
 					files,
 					"/dev",
-					/*useCaseSensitiveFileNames*/ true,
+					/*caseSensitivity*/ tspath.CaseSensitive,
 				)
 
-				assert.DeepEqual(t, parsedCommandLine.LiteralFileNames(), []string{
-					"/dev/a.ts",
-					"/dev/b.ts",
+				assert.DeepEqual(t, parsedCommandLine.LiteralFileNames(), []tspath.RootedFilePath{
+					tspath.RootedFilePathFromNormalized("/dev/a.ts"),
+					tspath.RootedFilePathFromNormalized("/dev/b.ts"),
 				})
 			})
 		})
@@ -151,7 +151,7 @@ func TestParsedCommandLine(t *testing.T) {
 					}`,
 					files,
 					"/dev",
-					/*useCaseSensitiveFileNames*/ true,
+					/*caseSensitivity*/ tspath.CaseSensitive,
 				)
 
 				assertMatches(t, parsedCommandLine, files, []string{
@@ -172,20 +172,19 @@ func TestParsedCommandLine(t *testing.T) {
 
 			host := tsoptionstest.NewVFSParseConfigHost(map[string]string{
 				"/dev/node_modules/mapper/package.json": `{ "name": "mapper", "version": "1.0.0", "typescript": { "contentMapper": { "exec": ["mapper"] } } }`,
-			}, "/dev", true)
+			}, "/dev", tspath.CaseSensitive)
 			configFileName := "/dev/tsconfig.json"
 			jsonText := `{
 			"include": ["src"],
 			"contentMappers": [ { "package": "mapper", "extensions": [".box"] } ]
 		}`
-			tsconfigSourceFile := tsoptions.NewTsconfigSourceFileFromFilePath(configFileName, "/dev/tsconfig.json", jsonText)
+			tsconfigSourceFile := tsoptions.NewTsconfigSourceFileFromFilePath(tspath.RootedFilePath(configFileName), "/dev/tsconfig.json", jsonText)
 			parsedCommandLine := tsoptions.ParseJsonSourceFileConfigFileContent(
 				tsconfigSourceFile,
 				host,
 				"/dev",
 				&core.CompilerOptions{RunExternalCode: core.TSTrue},
 				nil,
-				configFileName,
 				nil,
 				nil,
 			)
@@ -199,39 +198,92 @@ func TestParsedCommandLine(t *testing.T) {
 
 			insensitiveHost := tsoptionstest.NewVFSParseConfigHost(map[string]string{
 				"/dev/node_modules/mapper/package.json": `{ "name": "mapper", "version": "1.0.0", "typescript": { "contentMapper": { "exec": ["mapper"] } } }`,
-			}, "/dev", false)
+			}, "/dev", tspath.CaseInsensitive)
 			insensitiveCommandLine := tsoptions.ParseJsonSourceFileConfigFileContent(
 				tsconfigSourceFile,
 				insensitiveHost,
 				"/dev",
 				&core.CompilerOptions{RunExternalCode: core.TSTrue},
 				nil,
-				configFileName,
 				nil,
 				nil,
 			)
 			assert.Assert(t, insensitiveCommandLine.PossiblyMatchesFileName("/dev/src/new.BOX"))
 		})
 
-		t.Run("WithFileNames preserves config identity", func(t *testing.T) {
+		t.Run("Config file specs are owned by the parsed command line", func(t *testing.T) {
 			t.Parallel()
 
-			configFileName := "/dev/tsconfig.json"
-			tsconfigSourceFile := tsoptions.NewTsconfigSourceFileFromFilePath(configFileName, tspath.Path(configFileName), `{}`)
-			parsedCommandLine := tsoptions.ParseJsonSourceFileConfigFileContent(
+			configFileName := tspath.RootedFilePathFromNormalized("/dev/tsconfig.json")
+			tsconfigSourceFile := tsoptions.NewTsconfigSourceFileFromFilePath(
+				configFileName,
+				tspath.CaseSensitive.PathKey(tspath.RootedPath(configFileName)),
+				`{ "files": ["SRC/a.ts"] }`,
+			)
+			sensitiveCommandLine := tsoptions.ParseJsonSourceFileConfigFileContent(
 				tsconfigSourceFile,
-				tsoptionstest.NewVFSParseConfigHost(map[string]string{}, "/dev", true),
+				tsoptionstest.NewVFSParseConfigHost(nil, "/dev", tspath.CaseSensitive),
 				"/dev",
 				nil,
 				nil,
-				configFileName,
+				nil,
+				nil,
+			)
+			_ = tsoptions.ParseJsonSourceFileConfigFileContent(
+				tsconfigSourceFile,
+				tsoptionstest.NewVFSParseConfigHost(nil, "/dev", tspath.CaseInsensitive),
+				"/dev",
+				nil,
+				nil,
 				nil,
 				nil,
 			)
 
-			withTypings := parsedCommandLine.WithFileNames([]string{"/dev/index.ts", "/cache/@types/pkg/index.d.ts"})
-			assert.Equal(t, withTypings.ConfigName(), configFileName)
-			assert.DeepEqual(t, withTypings.FileNames(), []string{"/dev/index.ts", "/cache/@types/pkg/index.d.ts"})
+			assert.Equal(t, sensitiveCommandLine.GetMatchedFileSpec(tspath.RootedFilePathFromNormalized("/dev/SRC/a.ts")), "SRC/a.ts")
+		})
+
+		t.Run("Literal files and include matches share canonical keys", func(t *testing.T) {
+			t.Parallel()
+
+			host := tsoptionstest.NewVFSParseConfigHost(map[string]string{"/dev/src/a.ts": ""}, "/dev", tspath.CaseSensitive)
+			commandLine := tsoptions.ParseJsonSourceFileConfigFileContent(
+				tsoptions.NewTsconfigSourceFileFromFilePath(
+					tspath.RootedFilePathFromNormalized("/dev/tsconfig.json"),
+					tspath.CaseSensitive.PathKey(tspath.RootedPathFromNormalized("/dev/tsconfig.json")),
+					`{ "files": ["src/a.ts"], "include": ["src/*.ts"] }`,
+				),
+				host,
+				"/dev",
+				nil,
+				nil,
+				nil,
+				nil,
+			)
+
+			assert.DeepEqual(t, commandLine.FileNames(), []tspath.RootedFilePath{tspath.RootedFilePathFromNormalized("/dev/src/a.ts")})
+		})
+
+		t.Run("WithFileNames preserves config identity", func(t *testing.T) {
+			t.Parallel()
+
+			configFileName := "/dev/tsconfig.json"
+			tsconfigSourceFile := tsoptions.NewTsconfigSourceFileFromFilePath(tspath.RootedFilePath(configFileName), tspath.PathKeyFromCanonical(configFileName), `{}`)
+			parsedCommandLine := tsoptions.ParseJsonSourceFileConfigFileContent(
+				tsconfigSourceFile,
+				tsoptionstest.NewVFSParseConfigHost(map[string]string{}, "/dev", tspath.CaseSensitive),
+				"/dev",
+				nil,
+				nil,
+				nil,
+				nil,
+			)
+
+			withTypings := parsedCommandLine.WithFileNames([]tspath.RootedFilePath{
+				tspath.ToRootedFilePath("/dev/index.ts", parsedCommandLine.BaseDirectory()),
+				tspath.ToRootedFilePath("/cache/@types/pkg/index.d.ts", parsedCommandLine.BaseDirectory()),
+			})
+			assert.Equal(t, withTypings.ConfigName().AsString(), configFileName)
+			assert.DeepEqual(t, withTypings.FileNames(), []tspath.RootedFilePath{"/dev/index.ts", "/cache/@types/pkg/index.d.ts"})
 		})
 	})
 }

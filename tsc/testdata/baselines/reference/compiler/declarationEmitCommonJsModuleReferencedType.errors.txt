@@ -7,13 +7,18 @@ r/entry.ts(3,14): error TS2883: The inferred type of 'x' cannot be named without
     export interface OtherIndexProps {}
 ==== r/node_modules/foo/other.d.ts (0 errors) ====
     export interface OtherProps {}
+==== r/node_modules/foo/subpkg/package.json (0 errors) ====
+    { "types": "main.d.ts" }
+==== r/node_modules/foo/subpkg/main.d.ts (0 errors) ====
+    export interface SubpkgProps {}
 ==== r/node_modules/foo/index.d.ts (0 errors) ====
     import { OtherProps } from "./other";
     import { OtherIndexProps } from "./other/index";
+    import { SubpkgProps } from "./subpkg/main";
     import { NestedProps } from "nested";
     export interface SomeProps {}
     
-    export function foo(): [SomeProps, OtherProps, OtherIndexProps, NestedProps];
+    export function foo(): [SomeProps, OtherProps, OtherIndexProps, SubpkgProps, NestedProps];
 ==== node_modules/root/index.d.ts (0 errors) ====
     export interface RootProps {}
     

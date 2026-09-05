@@ -16,14 +16,14 @@ func BenchmarkGetCombinedFlags(b *testing.B) {
 		b.Run(f.Name(), func(b *testing.B) {
 			f.SkipIfNotExist(b)
 
-			fileName := tspath.GetNormalizedAbsolutePath(f.Path(), "/")
-			path := tspath.ToPath(fileName, "/", osvfs.FS().UseCaseSensitiveFileNames())
+			fileName := tspath.ToRootedFilePath(f.Path(), "/")
+			path := osvfs.FS().CaseSensitivity().PathKey(tspath.RootedPath(fileName))
 			sourceText := f.ReadFile(b)
 			scriptKind := core.GetScriptKindFromFileName(fileName)
 
 			sourceFile := parser.ParseSourceFile(ast.SourceFileParseOptions{
 				FileName: fileName,
-				Path:     path,
+				PathKey:  path,
 			}, sourceText, scriptKind)
 
 			var decls []*ast.Node

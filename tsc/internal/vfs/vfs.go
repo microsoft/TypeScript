@@ -3,50 +3,54 @@ package vfs
 import (
 	"io/fs"
 	"time"
+
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 )
 
 //go:generate go tool github.com/matryer/moq -fmt goimports -out vfsmock/mock_generated.go -pkg vfsmock . FS
 //go:generate npx dprint fmt vfsmock/mock_generated.go
 
-// FS is a file system abstraction.
+// FS is a file system abstraction over rooted, normalized paths. Operations
+// declare whether they require a file, directory, or either kind of path.
 type FS interface {
-	// UseCaseSensitiveFileNames returns true if the file system is case-sensitive.
-	UseCaseSensitiveFileNames() bool
+	// CaseSensitivity returns whether path comparison is case-sensitive.
+	CaseSensitivity() tspath.CaseSensitivity
 
 	// FileExists returns true if the file exists.
-	FileExists(path string) bool
+	FileExists(path tspath.RootedFilePath) bool
 
 	// ReadFile reads the file specified by path and returns the content.
 	// If the file fails to be read, ok will be false.
-	ReadFile(path string) (contents string, ok bool)
+	ReadFile(path tspath.RootedFilePath) (contents string, ok bool)
 
-	WriteFile(path string, data string) error
+	WriteFile(path tspath.RootedFilePath, data string) error
 
 	// AppendFile appends data to the file at path, creating it if it does not exist.
-	AppendFile(path string, data string) error
+	AppendFile(path tspath.RootedFilePath, data string) error
 
 	// Removes `path` and all its contents. Will return the first error it encounters.
-	Remove(path string) error
+	Remove(path tspath.RootedPath) error
 
 	// Chtimes changes the access and modification times of the named
-	Chtimes(path string, aTime time.Time, mTime time.Time) error
+	Chtimes(path tspath.RootedPath, aTime time.Time, mTime time.Time) error
 
 	// DirectoryExists returns true if the path is a directory.
-	DirectoryExists(path string) bool
+	DirectoryExists(path tspath.RootedDirectoryPath) bool
 
 	// GetAccessibleEntries returns the files/directories in the specified directory.
 	// If any entry is a symlink, it will be followed.
-	GetAccessibleEntries(path string) Entries
+	GetAccessibleEntries(path tspath.RootedDirectoryPath) Entries
 
-	Stat(path string) FileInfo
+	Stat(path tspath.RootedPath) FileInfo
 
 	// WalkDir walks the file tree rooted at root, calling walkFn for each file or directory in the tree.
-	// It is has the same behavior as [fs.WalkDir], but with paths as [string].
-	WalkDir(root string, walkFn WalkDirFunc) error
+	// It has the same behavior as [fs.WalkDir], but reports rooted, normalized
+	// [tspath.RootedPath] paths.
+	WalkDir(root tspath.RootedDirectoryPath, walkFn WalkDirFunc) error
 
 	// Realpath returns the "real path" of the specified path,
 	// following symlinks and correcting filename casing.
-	Realpath(path string) string
+	Realpath(path tspath.RootedPath) tspath.RootedPath
 }
 
 type Entries struct {
@@ -77,7 +81,7 @@ var (
 )
 
 // WalkDirFunc is [fs.WalkDirFunc].
-type WalkDirFunc = fs.WalkDirFunc
+type WalkDirFunc func(path tspath.RootedPath, d fs.DirEntry, err error) error
 
 var (
 	// SkipAll is [fs.SkipAll].

@@ -11,25 +11,22 @@ import (
 
 func TestNewKnownSymlink(t *testing.T) {
 	t.Parallel()
-	cache := NewKnownSymlink("/test/dir", true)
+	cache := NewKnownSymlinks(tspath.CaseSensitive)
 	if cache == nil {
 		t.Fatal("Expected non-nil cache")
 	}
-	if cache.cwd != "/test/dir" {
-		t.Errorf("Expected cwd to be '/test/dir', got '%s'", cache.cwd)
-	}
-	if !cache.useCaseSensitiveFileNames {
-		t.Error("Expected useCaseSensitiveFileNames to be true")
+	if cache.caseSensitivity != tspath.CaseSensitive {
+		t.Error("expected CaseSensitivity to be CaseSensitive")
 	}
 }
 
 func TestSetDirectory(t *testing.T) {
 	t.Parallel()
-	cache := NewKnownSymlink("/test/dir", true)
-	symlinkPath := tspath.ToPath("/test/symlink", "/test/dir", true).EnsureTrailingDirectorySeparator()
+	cache := NewKnownSymlinks(tspath.CaseSensitive)
+	symlinkPath := tspath.CaseSensitive.PathKey(tspath.RootedPathFromNormalized("/test/symlink"))
 	realDirectory := &KnownDirectoryLink{
-		Real:     "/real/path/",
-		RealPath: tspath.ToPath("/real/path", "/test/dir", true).EnsureTrailingDirectorySeparator(),
+		Real:     tspath.RootedDirectoryPathFromNormalized("/real/path"),
+		RealPath: tspath.CaseSensitive.PathKey(tspath.RootedPathFromNormalized("/real/path")),
 	}
 
 	cache.SetDirectory("/test/symlink", symlinkPath, realDirectory)
@@ -45,6 +42,9 @@ func TestSetDirectory(t *testing.T) {
 	if stored.RealPath != realDirectory.RealPath {
 		t.Errorf("Expected RealPath to be '%s', got '%s'", realDirectory.RealPath, stored.RealPath)
 	}
+	if stored.Symlink != tspath.RootedDirectoryPathFromNormalized("/test/symlink") {
+		t.Errorf("Expected Symlink to preserve '/test/symlink', got '%s'", stored.Symlink)
+	}
 
 	// Check that realpath mapping was created
 	set, ok := cache.DirectoriesByRealpath().Load(realDirectory.RealPath)
@@ -56,12 +56,39 @@ func TestSetDirectory(t *testing.T) {
 	}
 }
 
+func TestKnownDirectoryLinkPreservesChildSpelling(t *testing.T) {
+	t.Parallel()
+
+	cache := NewKnownSymlinks(tspath.CaseInsensitive)
+	symlink := tspath.RootedDirectoryPathFromNormalized("/Project/Node_Modules/pkg")
+	symlinkPath := tspath.CaseInsensitive.PathKey(symlink.AsPath())
+	cache.SetDirectory(symlink, symlinkPath, &KnownDirectoryLink{
+		Real:     tspath.RootedDirectoryPathFromNormalized("/Real/Package"),
+		RealPath: tspath.PathKeyFromCanonical("/real/package"),
+	})
+
+	link, ok := cache.Directories().Load(symlinkPath)
+	if !ok {
+		t.Fatal("Expected directory link")
+	}
+	resolved, ok := link.ResolveFilePath(
+		tspath.RootedFilePathFromNormalized("/PROJECT/node_modules/pkg/Src/File.ts"),
+		tspath.CaseInsensitive,
+	)
+	if !ok {
+		t.Fatal("Expected child path to resolve through directory link")
+	}
+	if resolved != tspath.RootedFilePathFromNormalized("/Real/Package/Src/File.ts") {
+		t.Errorf("Expected child spelling to be preserved, got '%s'", resolved)
+	}
+}
+
 func TestSetFile(t *testing.T) {
 	t.Parallel()
-	cache := NewKnownSymlink("/test/dir", true)
-	symlink := "/test/symlink/file.ts"
-	symlinkPath := tspath.ToPath(symlink, "/test/dir", true)
-	realpath := "/real/path/file.ts"
+	cache := NewKnownSymlinks(tspath.CaseSensitive)
+	symlink := tspath.RootedFilePathFromNormalized("/test/symlink/file.ts")
+	symlinkPath := tspath.CaseSensitive.PathKey(tspath.RootedPath(symlink))
+	realpath := tspath.RootedFilePathFromNormalized("/real/path/file.ts")
 
 	cache.SetFile(symlink, symlinkPath, realpath)
 
@@ -76,20 +103,20 @@ func TestSetFile(t *testing.T) {
 
 func TestProcessResolution(t *testing.T) {
 	t.Parallel()
-	cache := NewKnownSymlink("/test/dir", true)
+	cache := NewKnownSymlinks(tspath.CaseSensitive)
 
 	// Test with empty paths
 	cache.ProcessResolution("", "")
-	cache.ProcessResolution("original", "")
-	cache.ProcessResolution("", "resolved")
+	cache.ProcessResolution(tspath.RootedFilePathFromNormalized("/original"), "")
+	cache.ProcessResolution("", tspath.RootedFilePathFromNormalized("/resolved"))
 
 	// Test with valid paths
-	originalPath := "/test/original/file.ts"
-	resolvedPath := "/test/resolved/file.ts"
+	originalPath := tspath.RootedFilePathFromNormalized("/test/original/file.ts")
+	resolvedPath := tspath.RootedFilePathFromNormalized("/test/resolved/file.ts")
 	cache.ProcessResolution(originalPath, resolvedPath)
 
 	// Check that file was stored
-	symlinkPath := tspath.ToPath(originalPath, "/test/dir", true)
+	symlinkPath := tspath.CaseSensitive.PathKey(tspath.RootedPath(originalPath))
 	stored, ok := cache.Files().Load(symlinkPath)
 	if !ok {
 		t.Fatal("Expected file to be stored")
@@ -101,7 +128,7 @@ func TestProcessResolution(t *testing.T) {
 
 func TestGuessDirectorySymlink(t *testing.T) {
 	t.Parallel()
-	cache := NewKnownSymlink("/test/dir", true)
+	cache := NewKnownSymlinks(tspath.CaseSensitive)
 
 	tests := []struct {
 		name     string
@@ -150,11 +177,15 @@ func TestGuessDirectorySymlink(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
-			commonResolved, commonOriginal := cache.guessDirectorySymlink(tt.a, tt.b, tt.cwd)
-			if commonResolved != tt.expected[0] {
+			currentDirectory := tspath.RootedDirectoryPathFromNormalized(tt.cwd)
+			commonResolved, commonOriginal := cache.guessDirectorySymlinkFromFilePaths(
+				tspath.ToRootedFilePath(tt.a, currentDirectory),
+				tspath.ToRootedFilePath(tt.b, currentDirectory),
+			)
+			if commonResolved.AsString() != tt.expected[0] {
 				t.Errorf("Expected commonResolved to be '%s', got '%s'", tt.expected[0], commonResolved)
 			}
-			if commonOriginal != tt.expected[1] {
+			if commonOriginal.AsString() != tt.expected[1] {
 				t.Errorf("Expected commonOriginal to be '%s', got '%s'", tt.expected[1], commonOriginal)
 			}
 		})
@@ -163,7 +194,7 @@ func TestGuessDirectorySymlink(t *testing.T) {
 
 func TestIsNodeModulesOrScopedPackageDirectory(t *testing.T) {
 	t.Parallel()
-	cache := NewKnownSymlink("/test/dir", true)
+	cache := NewKnownSymlinks(tspath.CaseSensitive)
 
 	tests := []struct {
 		name     string
@@ -191,7 +222,7 @@ func TestIsNodeModulesOrScopedPackageDirectory(t *testing.T) {
 
 func TestSetSymlinksFromResolutions(t *testing.T) {
 	t.Parallel()
-	cache := NewKnownSymlink("/test/dir", true)
+	cache := NewKnownSymlinks(tspath.CaseSensitive)
 
 	// Mock resolution data
 	resolvedModules := []struct {
@@ -199,36 +230,36 @@ func TestSetSymlinksFromResolutions(t *testing.T) {
 		resolvedPath string
 		moduleName   string
 		mode         core.ResolutionMode
-		filePath     tspath.Path
+		filePath     tspath.PathKey
 	}{
 		{
 			originalPath: "/test/original/file1.ts",
 			resolvedPath: "/test/resolved/file1.ts",
 			moduleName:   "module1",
 			mode:         core.ResolutionModeNone,
-			filePath:     tspath.ToPath("/test/source.ts", "/test/dir", true),
+			filePath:     tspath.CaseSensitive.PathKey(tspath.RootedPathFromNormalized("/test/source.ts")),
 		},
 		{
 			originalPath: "/test/original/file2.ts",
 			resolvedPath: "/test/resolved/file2.ts",
 			moduleName:   "module2",
 			mode:         core.ResolutionModeNone,
-			filePath:     tspath.ToPath("/test/source.ts", "/test/dir", true),
+			filePath:     tspath.CaseSensitive.PathKey(tspath.RootedPathFromNormalized("/test/source.ts")),
 		},
 	}
 
 	// Mock callbacks
-	forEachResolvedModule := func(callback func(resolution *module.ResolvedModule, moduleName string, mode core.ResolutionMode, filePath tspath.Path), file *ast.SourceFile) {
+	forEachResolvedModule := func(callback func(resolution *module.ResolvedModule, moduleName string, mode core.ResolutionMode, filePath tspath.PathKey), file *ast.SourceFile) {
 		for _, res := range resolvedModules {
 			resolution := &module.ResolvedModule{
-				OriginalPath:     res.originalPath,
-				ResolvedFileName: res.resolvedPath,
+				OriginalPath:     tspath.RootedFilePathFromAbsolute(res.originalPath),
+				ResolvedFileName: tspath.RootedFilePathFromAbsolute(res.resolvedPath),
 			}
 			callback(resolution, res.moduleName, res.mode, res.filePath)
 		}
 	}
 
-	forEachResolvedTypeReferenceDirective := func(callback func(resolution *module.ResolvedTypeReferenceDirective, moduleName string, mode core.ResolutionMode, filePath tspath.Path), file *ast.SourceFile) {
+	forEachResolvedTypeReferenceDirective := func(callback func(resolution *module.ResolvedTypeReferenceDirective, moduleName string, mode core.ResolutionMode, filePath tspath.PathKey), file *ast.SourceFile) {
 		// No type reference directives for this test
 	}
 
@@ -236,13 +267,13 @@ func TestSetSymlinksFromResolutions(t *testing.T) {
 
 	// Check that files were stored
 	for _, res := range resolvedModules {
-		symlinkPath := tspath.ToPath(res.originalPath, "/test/dir", true)
+		symlinkPath := tspath.CaseSensitive.PathKey(tspath.RootedPathFromNormalized(res.originalPath))
 		stored, ok := cache.Files().Load(symlinkPath)
 		if !ok {
 			t.Errorf("Expected file '%s' to be stored", res.originalPath)
 			continue
 		}
-		if stored != res.resolvedPath {
+		if stored.AsString() != res.resolvedPath {
 			t.Errorf("Expected resolved path to be '%s', got '%s'", res.resolvedPath, stored)
 		}
 	}
@@ -250,7 +281,7 @@ func TestSetSymlinksFromResolutions(t *testing.T) {
 
 func TestKnownSymlinksThreadSafety(t *testing.T) {
 	t.Parallel()
-	cache := NewKnownSymlink("/test/dir", true)
+	cache := NewKnownSymlinks(tspath.CaseSensitive)
 
 	// Test concurrent access
 	done := make(chan bool, 10)
@@ -259,13 +290,13 @@ func TestKnownSymlinksThreadSafety(t *testing.T) {
 		go func(id int) {
 			defer func() { done <- true }()
 
-			symlinkPath := tspath.ToPath("/test/symlink"+string(rune(id)), "/test/dir", true).EnsureTrailingDirectorySeparator()
+			symlinkPath := tspath.CaseSensitive.PathKey(tspath.RootedPathFromNormalized("/test/symlink" + string(rune(id))))
 			realDirectory := &KnownDirectoryLink{
-				Real:     "/real/path" + string(rune(id)) + "/",
-				RealPath: tspath.ToPath("/real/path"+string(rune(id)), "/test/dir", true).EnsureTrailingDirectorySeparator(),
+				Real:     tspath.RootedDirectoryPathFromAbsolute("/real/path" + string(rune(id))),
+				RealPath: tspath.CaseSensitive.PathKey(tspath.RootedPathFromNormalized("/real/path" + string(rune(id)))),
 			}
 
-			cache.SetDirectory("/test/symlink"+string(rune(id)), symlinkPath, realDirectory)
+			cache.SetDirectory(tspath.RootedDirectoryPathFromNormalized("/test/symlink"+string(rune(id))), symlinkPath, realDirectory)
 
 			// Read back
 			stored, ok := cache.Directories().Load(symlinkPath)

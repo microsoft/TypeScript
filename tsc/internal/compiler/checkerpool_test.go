@@ -3,7 +3,32 @@ package compiler
 import (
 	"slices"
 	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/ast"
+	"github.com/microsoft/TypeScript/tsc/internal/module"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 )
+
+func TestGetSourceFileForResolvedModuleUsesResolvedPath(t *testing.T) {
+	t.Parallel()
+	path := tspath.PathKeyFromCanonical("/resolved.ts")
+	file := &ast.SourceFile{}
+	program := &Program{
+		processedFiles: processedFiles{
+			filesByPath: map[tspath.PathKey]*ast.SourceFile{
+				path: file,
+			},
+		},
+	}
+
+	resolved := &module.ResolvedModule{
+		ResolvedFileName: tspath.RootedFilePathFromNormalized("/different.ts"),
+		ResolvedPath:     path,
+	}
+	if got := program.GetSourceFileForResolvedModule(resolved); got != file {
+		t.Fatalf("GetSourceFileForResolvedModule() = %p, want %p", got, file)
+	}
+}
 
 func TestGetCheckerAssociationBaseWeight(t *testing.T) {
 	t.Parallel()

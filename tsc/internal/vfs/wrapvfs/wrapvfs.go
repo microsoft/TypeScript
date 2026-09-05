@@ -3,22 +3,23 @@ package wrapvfs
 import (
 	"time"
 
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 )
 
 type Replacements struct {
-	UseCaseSensitiveFileNames func() bool
-	FileExists                func(string) bool
-	ReadFile                  func(string) (string, bool)
-	WriteFile                 func(string, string) error
-	AppendFile                func(string, string) error
-	Remove                    func(string) error
-	Chtimes                   func(string, time.Time, time.Time) error
-	DirectoryExists           func(string) bool
-	GetAccessibleEntries      func(string) vfs.Entries
-	Stat                      func(string) vfs.FileInfo
-	WalkDir                   func(string, vfs.WalkDirFunc) error
-	Realpath                  func(string) string
+	CaseSensitivity      func() tspath.CaseSensitivity
+	FileExists           func(tspath.RootedFilePath) bool
+	ReadFile             func(tspath.RootedFilePath) (string, bool)
+	WriteFile            func(tspath.RootedFilePath, string) error
+	AppendFile           func(tspath.RootedFilePath, string) error
+	Remove               func(tspath.RootedPath) error
+	Chtimes              func(tspath.RootedPath, time.Time, time.Time) error
+	DirectoryExists      func(tspath.RootedDirectoryPath) bool
+	GetAccessibleEntries func(tspath.RootedDirectoryPath) vfs.Entries
+	Stat                 func(tspath.RootedPath) vfs.FileInfo
+	WalkDir              func(tspath.RootedDirectoryPath, vfs.WalkDirFunc) error
+	Realpath             func(tspath.RootedPath) tspath.RootedPath
 }
 
 func Wrap(fs vfs.FS, replacements Replacements) vfs.FS {
@@ -33,16 +34,16 @@ type wrappedFS struct {
 	replacements Replacements
 }
 
-// UseCaseSensitiveFileNames implements [vfs.FS].
-func (w *wrappedFS) UseCaseSensitiveFileNames() bool {
-	if w.replacements.UseCaseSensitiveFileNames != nil {
-		return w.replacements.UseCaseSensitiveFileNames()
+// CaseSensitivity implements [vfs.FS].
+func (w *wrappedFS) CaseSensitivity() tspath.CaseSensitivity {
+	if w.replacements.CaseSensitivity != nil {
+		return w.replacements.CaseSensitivity()
 	}
-	return w.fs.UseCaseSensitiveFileNames()
+	return w.fs.CaseSensitivity()
 }
 
 // FileExists implements [vfs.FS].
-func (w *wrappedFS) FileExists(path string) bool {
+func (w *wrappedFS) FileExists(path tspath.RootedFilePath) bool {
 	if w.replacements.FileExists != nil {
 		return w.replacements.FileExists(path)
 	}
@@ -50,7 +51,7 @@ func (w *wrappedFS) FileExists(path string) bool {
 }
 
 // ReadFile implements [vfs.FS].
-func (w *wrappedFS) ReadFile(path string) (contents string, ok bool) {
+func (w *wrappedFS) ReadFile(path tspath.RootedFilePath) (contents string, ok bool) {
 	if w.replacements.ReadFile != nil {
 		return w.replacements.ReadFile(path)
 	}
@@ -58,7 +59,7 @@ func (w *wrappedFS) ReadFile(path string) (contents string, ok bool) {
 }
 
 // WriteFile implements [vfs.FS].
-func (w *wrappedFS) WriteFile(path string, data string) error {
+func (w *wrappedFS) WriteFile(path tspath.RootedFilePath, data string) error {
 	if w.replacements.WriteFile != nil {
 		return w.replacements.WriteFile(path, data)
 	}
@@ -66,7 +67,7 @@ func (w *wrappedFS) WriteFile(path string, data string) error {
 }
 
 // AppendFile implements [vfs.FS].
-func (w *wrappedFS) AppendFile(path string, data string) error {
+func (w *wrappedFS) AppendFile(path tspath.RootedFilePath, data string) error {
 	if w.replacements.AppendFile != nil {
 		return w.replacements.AppendFile(path, data)
 	}
@@ -74,7 +75,7 @@ func (w *wrappedFS) AppendFile(path string, data string) error {
 }
 
 // Remove implements [vfs.FS].
-func (w *wrappedFS) Remove(path string) error {
+func (w *wrappedFS) Remove(path tspath.RootedPath) error {
 	if w.replacements.Remove != nil {
 		return w.replacements.Remove(path)
 	}
@@ -82,7 +83,7 @@ func (w *wrappedFS) Remove(path string) error {
 }
 
 // Chtimes implements [vfs.FS].
-func (w *wrappedFS) Chtimes(path string, aTime time.Time, mTime time.Time) error {
+func (w *wrappedFS) Chtimes(path tspath.RootedPath, aTime time.Time, mTime time.Time) error {
 	if w.replacements.Chtimes != nil {
 		return w.replacements.Chtimes(path, aTime, mTime)
 	}
@@ -90,7 +91,7 @@ func (w *wrappedFS) Chtimes(path string, aTime time.Time, mTime time.Time) error
 }
 
 // DirectoryExists implements [vfs.FS].
-func (w *wrappedFS) DirectoryExists(path string) bool {
+func (w *wrappedFS) DirectoryExists(path tspath.RootedDirectoryPath) bool {
 	if w.replacements.DirectoryExists != nil {
 		return w.replacements.DirectoryExists(path)
 	}
@@ -98,7 +99,7 @@ func (w *wrappedFS) DirectoryExists(path string) bool {
 }
 
 // GetAccessibleEntries implements [vfs.FS].
-func (w *wrappedFS) GetAccessibleEntries(path string) vfs.Entries {
+func (w *wrappedFS) GetAccessibleEntries(path tspath.RootedDirectoryPath) vfs.Entries {
 	if w.replacements.GetAccessibleEntries != nil {
 		return w.replacements.GetAccessibleEntries(path)
 	}
@@ -106,7 +107,7 @@ func (w *wrappedFS) GetAccessibleEntries(path string) vfs.Entries {
 }
 
 // Stat implements [vfs.FS].
-func (w *wrappedFS) Stat(path string) vfs.FileInfo {
+func (w *wrappedFS) Stat(path tspath.RootedPath) vfs.FileInfo {
 	if w.replacements.Stat != nil {
 		return w.replacements.Stat(path)
 	}
@@ -114,7 +115,7 @@ func (w *wrappedFS) Stat(path string) vfs.FileInfo {
 }
 
 // WalkDir implements [vfs.FS].
-func (w *wrappedFS) WalkDir(root string, walkFn vfs.WalkDirFunc) error {
+func (w *wrappedFS) WalkDir(root tspath.RootedDirectoryPath, walkFn vfs.WalkDirFunc) error {
 	if w.replacements.WalkDir != nil {
 		return w.replacements.WalkDir(root, walkFn)
 	}
@@ -122,7 +123,7 @@ func (w *wrappedFS) WalkDir(root string, walkFn vfs.WalkDirFunc) error {
 }
 
 // Realpath implements [vfs.FS].
-func (w *wrappedFS) Realpath(path string) string {
+func (w *wrappedFS) Realpath(path tspath.RootedPath) tspath.RootedPath {
 	if w.replacements.Realpath != nil {
 		return w.replacements.Realpath(path)
 	}

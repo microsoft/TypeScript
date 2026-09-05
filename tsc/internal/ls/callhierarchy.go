@@ -1,6 +1,7 @@
 package ls
 
 import (
+	"cmp"
 	"context"
 	"slices"
 	"strings"
@@ -18,6 +19,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/printer"
 	"github.com/microsoft/TypeScript/tsc/internal/scanner"
 	"github.com/microsoft/TypeScript/tsc/internal/spanmap"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 )
 
 type CallHierarchyDeclaration = *ast.Node
@@ -161,7 +163,7 @@ func getSymbolOfCallHierarchyDeclaration(c *checker.Checker, node *ast.Node) *as
 func getCallHierarchyItemName(program *compiler.Program, node *ast.Node) (text string, pos int, end int) {
 	if ast.IsSourceFile(node) {
 		sourceFile := node.AsSourceFile()
-		return sourceFile.FileName(), 0, 0
+		return sourceFile.FileName().AsString(), 0, 0
 	}
 
 	if (ast.IsFunctionDeclaration(node) || ast.IsClassDeclaration(node)) && node.Name() == nil {
@@ -345,7 +347,7 @@ func findAllInitialDeclarations(c *checker.Checker, node *ast.Node) []*ast.Node 
 	}
 
 	type declKey struct {
-		file string
+		file tspath.RootedFilePath
 		pos  int
 	}
 
@@ -363,7 +365,7 @@ func findAllInitialDeclarations(c *checker.Checker, node *ast.Node) []*ast.Node 
 
 	slices.SortFunc(indices, func(a, b int) int {
 		if keys[a].file != keys[b].file {
-			return strings.Compare(keys[a].file, keys[b].file)
+			return cmp.Compare(keys[a].file, keys[b].file)
 		}
 		return keys[a].pos - keys[b].pos
 	})
@@ -518,7 +520,7 @@ func (l *LanguageService) createCallHierarchyItem(program *compiler.Program, nod
 	item := &lsproto.CallHierarchyItem{
 		Name:           nameText,
 		Kind:           kind,
-		Uri:            lsconv.FileNameToDocumentURI(sourceFile.OriginalFileName()),
+		Uri:            lsconv.FilePathToDocumentURI(sourceFile.OriginalFileName()),
 		Range:          span,
 		SelectionRange: selectionSpan,
 	}
@@ -615,7 +617,7 @@ func (d *incomingEntry) getSourceFile() *ast.SourceFile {
 
 func (d *incomingEntry) TextDocumentURI() lsproto.DocumentUri {
 	d.documentUriOnce.Do(func() {
-		d.documentUri = lsconv.FileNameToDocumentURI(d.getSourceFile().OriginalFileName())
+		d.documentUri = lsconv.FilePathToDocumentURI(d.getSourceFile().OriginalFileName())
 	})
 	return d.documentUri
 }

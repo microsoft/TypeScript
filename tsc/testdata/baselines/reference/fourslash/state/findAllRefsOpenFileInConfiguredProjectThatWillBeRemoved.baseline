@@ -1,4 +1,4 @@
-UseCaseSensitiveFileNames: true
+CaseSensitivity: true
 //// [/myproject/playground/tests.ts] *new* 
 export function foo() {}
 //// [/myproject/playground/tsconfig-json/src/src.ts] *new* 

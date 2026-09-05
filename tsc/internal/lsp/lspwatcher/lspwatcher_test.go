@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"github.com/microsoft/TypeScript/tsc/internal/bundled"
+	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/fswatch"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/project/logging"
@@ -157,6 +158,7 @@ func TestRootFromGlob(t *testing.T) {
 		{"/abs/path/", "/abs/path"},
 		{"/abs/path/?.ts", "/abs/path"},
 		{"/abs/path/{a,b}/*", "/abs/path"},
+		{"/abs/path/../shared/*", "/abs/shared"},
 	}
 	for _, c := range cases {
 		if got := rootFromGlob(c.pattern); got != c.want {
@@ -165,9 +167,36 @@ func TestRootFromGlob(t *testing.T) {
 	}
 }
 
+func TestWatchRootFromRelativePattern(t *testing.T) {
+	t.Parallel()
+	baseURI := lsproto.URI("file:///workspace/project")
+	cases := []struct {
+		pattern string
+		want    tspath.RootedDirectoryPath
+	}{
+		{"**/*", "/workspace/project"},
+		{"src/**/*", "/workspace/project/src"},
+		{"../shared/*", "/workspace/shared"},
+	}
+	for _, c := range cases {
+		watcher := &lsproto.FileSystemWatcher{
+			GlobPattern: lsproto.PatternOrRelativePattern{
+				RelativePattern: &lsproto.RelativePattern{
+					BaseUri: lsproto.WorkspaceFolderOrURI{URI: &baseURI},
+					Pattern: c.pattern,
+				},
+			},
+		}
+		got, ok := watchRoot(watcher)
+		if !ok || got != c.want {
+			t.Errorf("watchRoot(%q) = %q, %v, want %q, true", c.pattern, got, ok, c.want)
+		}
+	}
+}
+
 type fakeBackend struct {
 	mu       sync.Mutex
-	byDir    map[string]fswatch.WatchCallback
+	byDir    map[string]watchCallback
 	closed   map[string]int
 	optCount map[string]int
 	failDirs map[string]error
@@ -175,26 +204,27 @@ type fakeBackend struct {
 
 func newFakeBackend() *fakeBackend {
 	return &fakeBackend{
-		byDir:    make(map[string]fswatch.WatchCallback),
+		byDir:    make(map[string]watchCallback),
 		closed:   make(map[string]int),
 		optCount: make(map[string]int),
 		failDirs: make(map[string]error),
 	}
 }
 
-func (f *fakeBackend) WatchDirectory(dir string, fn fswatch.WatchCallback, opts ...fswatch.WatchOption) (io.Closer, error) {
+func (f *fakeBackend) WatchDirectory(dir tspath.RootedDirectoryPath, fn watchCallback, opts ...fswatch.WatchOption) (io.Closer, error) {
 	f.mu.Lock()
 	defer f.mu.Unlock()
-	if err := f.failDirs[dir]; err != nil {
+	path := dir.AsString()
+	if err := f.failDirs[path]; err != nil {
 		return nil, err
 	}
-	f.byDir[dir] = fn
-	f.optCount[dir] = len(opts)
+	f.byDir[path] = fn
+	f.optCount[path] = len(opts)
 	return fakeWatch{closeFn: func() error {
 		f.mu.Lock()
 		defer f.mu.Unlock()
-		delete(f.byDir, dir)
-		f.closed[dir]++
+		delete(f.byDir, path)
+		f.closed[path]++
 		return nil
 	}}, nil
 }
@@ -222,19 +252,23 @@ func (f *fakeBackend) emit(dir string, events []fswatch.Event, err error) {
 	cb := f.byDir[dir]
 	f.mu.Unlock()
 	if cb != nil {
-		cb(events, err)
+		cb(core.Map(events, func(event fswatch.Event) watchEvent {
+			return watchEvent{path: tspath.RootedFilePathFromAbsolute(event.Path), kind: event.Kind}
+		}), err)
 	}
 }
 
 func (f *fakeBackend) emitAll(events []fswatch.Event, err error) {
 	f.mu.Lock()
-	cbs := make([]fswatch.WatchCallback, 0, len(f.byDir))
+	cbs := make([]watchCallback, 0, len(f.byDir))
 	for _, cb := range f.byDir {
 		cbs = append(cbs, cb)
 	}
 	f.mu.Unlock()
 	for _, cb := range cbs {
-		cb(events, err)
+		cb(core.Map(events, func(event fswatch.Event) watchEvent {
+			return watchEvent{path: tspath.RootedFilePathFromAbsolute(event.Path), kind: event.Kind}
+		}), err)
 	}
 }
 
@@ -810,8 +844,8 @@ type blockingBackend struct {
 }
 
 func (b *blockingBackend) WatchDirectory(
-	_ string,
-	_ fswatch.WatchCallback,
+	_ tspath.RootedDirectoryPath,
+	_ watchCallback,
 	_ ...fswatch.WatchOption,
 ) (io.Closer, error) {
 	close(b.entered)

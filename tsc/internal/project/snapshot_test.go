@@ -19,7 +19,7 @@ func TestSnapshot(t *testing.T) {
 	}
 
 	setup := func(files map[string]any) *Session {
-		fs := bundled.WrapFS(vfstest.FromMap(files, false /*useCaseSensitiveFileNames*/))
+		fs := bundled.WrapFS(vfstest.FromMap(files, tspath.CaseInsensitive /*caseSensitivity*/))
 		session := NewSession(&SessionInit{
 			BackgroundCtx: context.Background(),
 			Options: &SessionOptions{
@@ -76,7 +76,7 @@ func TestSnapshot(t *testing.T) {
 		snapshotAfter := session.Snapshot()
 
 		// Configured project was updated by a clone
-		assert.Equal(t, snapshotAfter.ProjectCollection.ConfiguredProject(tspath.Path("/home/projects/ts/p1/tsconfig.json")).ProgramUpdateKind, ProgramUpdateKindCloned)
+		assert.Equal(t, snapshotAfter.ProjectCollection.ConfiguredProject(tspath.PathKey("/home/projects/ts/p1/tsconfig.json")).ProgramUpdateKind, ProgramUpdateKindCloned)
 		// Inferred project wasn't updated last snapshot change, so its program update kind is still NewFiles
 		assert.Equal(t, snapshotBefore.ProjectCollection.InferredProject(), snapshotAfter.ProjectCollection.InferredProject())
 		assert.Equal(t, snapshotAfter.ProjectCollection.InferredProject().ProgramUpdateKind, ProgramUpdateKindNewFiles)
@@ -261,7 +261,7 @@ func TestSnapshot(t *testing.T) {
 		t.Cleanup(session.Close)
 		ctx := context.Background()
 		uri := lsproto.DocumentUri("file:///home/projects/TS/p1/index.ts")
-		configPath := tspath.Path("/home/projects/ts/p1/tsconfig.json")
+		configPath := tspath.PathKey("/home/projects/ts/p1/tsconfig.json")
 
 		session.DidOpenFile(ctx, uri, 1, files["/home/projects/TS/p1/index.ts"].(string), lsproto.LanguageKindTypeScript)
 		_, err := session.GetLanguageService(ctx, uri)
@@ -325,7 +325,7 @@ func BenchmarkSnapshotCloneRefCost(b *testing.B) {
 				files[fmt.Sprintf("/large/file%d.ts", i)] = fmt.Sprintf("export const large%d = %d;", i, i)
 			}
 
-			fs := bundled.WrapFS(vfstest.FromMap(files, false /*useCaseSensitiveFileNames*/))
+			fs := bundled.WrapFS(vfstest.FromMap(files, tspath.CaseInsensitive /*caseSensitivity*/))
 			session := NewSession(&SessionInit{
 				BackgroundCtx: context.Background(),
 				Options: &SessionOptions{

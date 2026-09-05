@@ -1,6 +1,7 @@
 package tsoptions
 
 import (
+	"maps"
 	"reflect"
 	"strings"
 
@@ -61,6 +62,36 @@ func ParseString(value any) string {
 	return ""
 }
 
+func parseFileName(value any) tspath.RootedFilePath {
+	path := ParseString(value)
+	if path == "" {
+		return ""
+	}
+	return tspath.RootedFilePathFromNormalized(path)
+}
+
+func parseDirectoryName(value any) tspath.RootedDirectoryPath {
+	path := ParseString(value)
+	if path == "" {
+		return ""
+	}
+	return tspath.RootedDirectoryPathFromNormalized(path)
+}
+
+func parseFileOrDirectoryName(value any) tspath.RootedPath {
+	path := ParseString(value)
+	if path == "" {
+		return ""
+	}
+	return tspath.RootedPathFromNormalized(path)
+}
+
+func parseDirectoryNames(value any) []tspath.RootedDirectoryPath {
+	return core.Map(ParseStringArray(value), func(path string) tspath.RootedDirectoryPath {
+		return tspath.RootedDirectoryPathFromNormalized(path)
+	})
+}
+
 func parseNumber(value any) *int {
 	if num, ok := value.(int); ok {
 		return &num
@@ -74,6 +105,7 @@ func parseNumber(value any) *int {
 
 type projectReferenceParseResult struct {
 	reference     core.ProjectReference
+	path          string
 	hasPath       bool
 	pathValid     bool
 	hasCircular   bool
@@ -86,7 +118,7 @@ func parseProjectReference(json any) *projectReferenceParseResult {
 		if value, ok := v.Get("path"); ok {
 			result.hasPath = true
 			if path, ok := value.(string); ok {
-				result.reference.Path = path
+				result.path = path
 				result.pathValid = true
 			}
 		}
@@ -203,10 +235,42 @@ type optionParser interface {
 
 type compilerOptionsParser struct {
 	*core.CompilerOptions
+	unresolvedPaths unresolvedCompilerOptionPaths
 }
 
 func (o *compilerOptionsParser) ParseOption(key string, value any) []*ast.Diagnostic {
+	if o.unresolvedPaths != nil && compilerOptionContainsConfigDirTemplate(key, value) {
+		o.unresolvedPaths[key] = value
+		return nil
+	}
 	return ParseCompilerOptions(key, value, o.CompilerOptions)
+}
+
+type unresolvedCompilerOptionPaths map[string]any
+
+func compilerOptionContainsConfigDirTemplate(key string, value any) bool {
+	option := CommandLineCompilerOptionsMap.Get(key)
+	if option == nil {
+		return false
+	}
+	pathKind := option.PathKind
+	if option.Kind == CommandLineOptionTypeList {
+		element := option.Elements()
+		if element == nil {
+			return false
+		}
+		pathKind = element.PathKind
+	}
+	if !pathKind.IsRooted() {
+		return false
+	}
+	if option.Kind == CommandLineOptionTypeList {
+		return core.Some(ParseStringArray(value), func(path string) bool {
+			return startsWithConfigDirTemplate(path)
+		})
+	}
+	path, ok := value.(string)
+	return ok && startsWithConfigDirTemplate(path)
 }
 
 func (o *compilerOptionsParser) UnknownOptionDiagnostic() *diagnostics.Message {
@@ -303,7 +367,7 @@ func parseCompilerOptions(key string, value any, allOptions *core.CompilerOption
 	case "assumeChangesOnlyAffectDirectDependencies":
 		allOptions.AssumeChangesOnlyAffectDirectDependencies = ParseTristate(value)
 	case "baseUrl":
-		allOptions.BaseUrl = ParseString(value)
+		allOptions.BaseUrl = parseDirectoryName(value)
 	case "build":
 		allOptions.Build = ParseTristate(value)
 	case "checkJs":
@@ -313,7 +377,7 @@ func parseCompilerOptions(key string, value any, allOptions *core.CompilerOption
 	case "composite":
 		allOptions.Composite = ParseTristate(value)
 	case "declarationDir":
-		allOptions.DeclarationDir = ParseString(value)
+		allOptions.DeclarationDir = parseDirectoryName(value)
 	case "deduplicatePackages":
 		allOptions.DeduplicatePackages = ParseTristate(value)
 	case "diagnostics":
@@ -353,9 +417,9 @@ func parseCompilerOptions(key string, value any, allOptions *core.CompilerOption
 	case "forceConsistentCasingInFileNames":
 		allOptions.ForceConsistentCasingInFileNames = ParseTristate(value)
 	case "generateCpuProfile":
-		allOptions.GenerateCpuProfile = ParseString(value)
+		allOptions.GenerateCpuProfile = parseFileName(value)
 	case "generateTrace":
-		allOptions.GenerateTrace = ParseString(value)
+		allOptions.GenerateTrace = parseDirectoryName(value)
 	case "isolatedModules":
 		allOptions.IsolatedModules = ParseTristate(value)
 	case "ignoreConfig":
@@ -399,7 +463,7 @@ func parseCompilerOptions(key string, value any, allOptions *core.CompilerOption
 	case "locale":
 		allOptions.Locale = ParseString(value)
 	case "mapRoot":
-		allOptions.MapRoot = ParseString(value)
+		allOptions.MapRoot = tspath.ToSourceMapLocation(ParseString(value))
 	case "module":
 		allOptions.Module = floatOrInt32ToFlag[core.ModuleKind](value)
 	case "moduleDetectionKind":
@@ -443,7 +507,7 @@ func parseCompilerOptions(key string, value any, allOptions *core.CompilerOption
 	case "noUncheckedSideEffectImports":
 		allOptions.NoUncheckedSideEffectImports = ParseTristate(value)
 	case "outFile":
-		allOptions.OutFile = ParseString(value)
+		allOptions.OutFile = parseFileName(value)
 	case "noResolve":
 		allOptions.NoResolve = ParseTristate(value)
 	case "paths":
@@ -455,7 +519,7 @@ func parseCompilerOptions(key string, value any, allOptions *core.CompilerOption
 	case "preserveSymlinks":
 		allOptions.PreserveSymlinks = ParseTristate(value)
 	case "project":
-		allOptions.Project = ParseString(value)
+		allOptions.Project = parseFileOrDirectoryName(value)
 	case "pretty":
 		allOptions.Pretty = ParseTristate(value)
 	case "resolveJsonModule":
@@ -469,9 +533,9 @@ func parseCompilerOptions(key string, value any, allOptions *core.CompilerOption
 	case "rewriteRelativeImportExtensions":
 		allOptions.RewriteRelativeImportExtensions = ParseTristate(value)
 	case "rootDir":
-		allOptions.RootDir = ParseString(value)
+		allOptions.RootDir = parseDirectoryName(value)
 	case "rootDirs":
-		allOptions.RootDirs = ParseStringArray(value)
+		allOptions.RootDirs = parseDirectoryNames(value)
 	case "removeComments":
 		allOptions.RemoveComments = ParseTristate(value)
 	case "stableTypeOrdering":
@@ -493,7 +557,7 @@ func parseCompilerOptions(key string, value any, allOptions *core.CompilerOption
 	case "sourceMap":
 		allOptions.SourceMap = ParseTristate(value)
 	case "sourceRoot":
-		allOptions.SourceRoot = ParseString(value)
+		allOptions.SourceRoot = tspath.ToSourceMapLocation(ParseString(value))
 	case "stripInternal":
 		allOptions.StripInternal = ParseTristate(value)
 	case "suppressOutputPathCheck":
@@ -503,9 +567,9 @@ func parseCompilerOptions(key string, value any, allOptions *core.CompilerOption
 	case "traceResolution":
 		allOptions.TraceResolution = ParseTristate(value)
 	case "tsBuildInfoFile":
-		allOptions.TsBuildInfoFile = ParseString(value)
+		allOptions.TsBuildInfoFile = parseFileName(value)
 	case "typeRoots":
-		allOptions.TypeRoots = ParseStringArray(value)
+		allOptions.TypeRoots = parseDirectoryNames(value)
 	case "types":
 		allOptions.Types = ParseStringArray(value)
 	case "useDefineForClassFields":
@@ -529,19 +593,23 @@ func parseCompilerOptions(key string, value any, allOptions *core.CompilerOption
 	case "showConfig":
 		allOptions.ShowConfig = ParseTristate(value)
 	case "configFilePath":
-		allOptions.ConfigFilePath = ParseString(value)
+		if path := ParseString(value); path != "" {
+			allOptions.ConfigFilePath = tspath.RootedFilePathFromNormalized(path)
+		}
 	case "noDtsResolution":
 		allOptions.NoDtsResolution = ParseTristate(value)
 	case "pathsBasePath":
-		allOptions.PathsBasePath = ParseString(value)
+		if path := ParseString(value); path != "" {
+			allOptions.PathsBasePath = tspath.RootedDirectoryPathFromNormalized(path)
+		}
 	case "outDir":
-		allOptions.OutDir = ParseString(value)
+		allOptions.OutDir = parseDirectoryName(value)
 	case "newLine":
 		allOptions.NewLine = floatOrInt32ToFlag[core.NewLineKind](value)
 	case "watch":
 		allOptions.Watch = ParseTristate(value)
 	case "pprofDir":
-		allOptions.PprofDir = ParseString(value)
+		allOptions.PprofDir = parseDirectoryName(value)
 	case "singleThreaded":
 		allOptions.SingleThreaded = ParseTristate(value)
 	case "quiet":
@@ -693,7 +761,53 @@ func mergeCompilerOptions(targetOptions, sourceOptions *core.CompilerOptions, ra
 	return targetOptions
 }
 
-func convertToOptionsWithAbsolutePaths(optionsBase *collections.OrderedMap[string, any], optionMap CommandLineOptionNameMap, cwd string) *collections.OrderedMap[string, any] {
+func mergeParsedCompilerOptions(targetOptions, sourceOptions *parsedCompilerOptions, rawSource any) *parsedCompilerOptions {
+	if sourceOptions == nil || sourceOptions.CompilerOptions == nil {
+		return targetOptions
+	}
+	if targetOptions == nil {
+		targetOptions = &parsedCompilerOptions{
+			CompilerOptions: &core.CompilerOptions{},
+			unresolvedPaths: make(unresolvedCompilerOptionPaths),
+		}
+	}
+	mergeCompilerOptions(targetOptions.CompilerOptions, sourceOptions.CompilerOptions, rawSource)
+	maps.Copy(targetOptions.unresolvedPaths, sourceOptions.unresolvedPaths)
+
+	rawMap, ok := rawSource.(*collections.OrderedMap[string, any])
+	if !ok || rawMap == nil {
+		return targetOptions
+	}
+	rawCompilerOptions, ok := rawMap.Get("compilerOptions")
+	if !ok {
+		return targetOptions
+	}
+	compilerOptionsMap, ok := rawCompilerOptions.(*collections.OrderedMap[string, any])
+	if !ok {
+		return targetOptions
+	}
+	for key := range compilerOptionsMap.Entries() {
+		option := CommandLineCompilerOptionsMap.Get(key)
+		if option == nil {
+			continue
+		}
+		pathKind := option.PathKind
+		if option.Kind == CommandLineOptionTypeList {
+			if element := option.Elements(); element != nil {
+				pathKind = element.PathKind
+			}
+		}
+		if !pathKind.IsRooted() {
+			continue
+		}
+		if _, ok := sourceOptions.unresolvedPaths[key]; !ok {
+			delete(targetOptions.unresolvedPaths, key)
+		}
+	}
+	return targetOptions
+}
+
+func convertToOptionsWithAbsolutePaths(optionsBase *collections.OrderedMap[string, any], optionMap CommandLineOptionNameMap, cwd tspath.RootedDirectoryPath) *collections.OrderedMap[string, any] {
 	// !!! convert to options with absolute paths was previously done with `CompilerOptions` object, but for ease of implementation, we do it pre-conversion.
 	// !!! Revisit this choice if/when refactoring when conversion is done in tsconfig parsing
 	if optionsBase == nil {
@@ -708,13 +822,13 @@ func convertToOptionsWithAbsolutePaths(optionsBase *collections.OrderedMap[strin
 	return optionsBase
 }
 
-func ConvertOptionToAbsolutePath(o string, v any, optionMap CommandLineOptionNameMap, cwd string) (any, bool) {
+func ConvertOptionToAbsolutePath(o string, v any, optionMap CommandLineOptionNameMap, cwd tspath.RootedDirectoryPath) (any, bool) {
 	option := optionMap.Get(o)
 	if option == nil {
 		return nil, false
 	}
 	if option.Kind == "list" {
-		if option.Elements().IsFilePath {
+		if option.Elements().PathKind.IsRooted() {
 			if arr, ok := v.([]string); ok {
 				return core.Map(arr, func(item string) string {
 					return tspath.GetNormalizedAbsolutePath(item, cwd)
@@ -729,7 +843,7 @@ func ConvertOptionToAbsolutePath(o string, v any, optionMap CommandLineOptionNam
 				}), true
 			}
 		}
-	} else if option.IsFilePath {
+	} else if option.PathKind.IsRooted() {
 		if value, ok := v.(string); ok {
 			return tspath.GetNormalizedAbsolutePath(value, cwd), true
 		}

@@ -2,6 +2,7 @@ package lsp_test
 
 import (
 	"bufio"
+	"context"
 	"flag"
 	"os"
 	"os/exec"
@@ -16,6 +17,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/lsp"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/lsptestutil"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/osvfs"
 )
 
@@ -45,18 +47,19 @@ func TestReplay(t *testing.T) {
 	if testDir == nil || *testDir == "" {
 		t.Fatal("testDir must be specified")
 	}
-	testDirUri := lsconv.FileNameToDocumentURI(*testDir)
+	testDirUri := lsconv.FilePathToDocumentURI(tspath.RootedFilePathFromAbsolute(*testDir))
 
 	fs := bundled.WrapFS(osvfs.FS())
 	defaultLibraryPath := bundled.LibPath()
 	typingsLocation := osvfs.GetGlobalTypingsCacheLocation()
+	cwd := tspath.RootedDirectoryPathFromAbsolute(core.Must(os.Getwd()))
 	serverOpts := lsp.ServerOptions{
 		Err:                os.Stderr,
-		Cwd:                core.Must(os.Getwd()),
+		Cwd:                cwd,
 		FS:                 fs,
 		DefaultLibraryPath: defaultLibraryPath,
-		TypingsLocation:    typingsLocation,
-		NpmInstall: func(cwd string, args []string) ([]byte, error) {
+		TypingsLocation:    tspath.ToRootedDirectoryPath(typingsLocation, cwd),
+		NpmInstall: func(ctx context.Context, cwd string, args []string) ([]byte, error) {
 			cmd := exec.Command("npm", args...)
 			cmd.Dir = cwd
 			return cmd.Output()

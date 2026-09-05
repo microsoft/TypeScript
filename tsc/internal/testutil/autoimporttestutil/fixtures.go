@@ -21,9 +21,11 @@ type FileHandle struct {
 	content  string
 }
 
-func (f FileHandle) FileName() string         { return f.fileName }
-func (f FileHandle) Content() string          { return f.content }
-func (f FileHandle) URI() lsproto.DocumentUri { return lsconv.FileNameToDocumentURI(f.fileName) }
+func (f FileHandle) FileName() string { return f.fileName }
+func (f FileHandle) Content() string  { return f.content }
+func (f FileHandle) URI() lsproto.DocumentUri {
+	return lsconv.FilePathToDocumentURI(tspath.RootedFilePathFromAbsolute(f.fileName))
+}
 
 // ProjectFileHandle adds export metadata for TypeScript source files.
 type ProjectFileHandle struct {

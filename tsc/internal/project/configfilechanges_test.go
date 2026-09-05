@@ -146,7 +146,7 @@ func TestConfigFileChanges(t *testing.T) {
 		assert.NilError(t, err)
 		snapshot := session.Snapshot()
 		assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 2)
-		assert.Equal(t, snapshot.GetDefaultProject(lsproto.DocumentUri("file:///src/subfolder/foo.ts")).Name(), "/src/subfolder/tsconfig.json")
+		assert.Equal(t, snapshot.GetDefaultProject(lsproto.DocumentUri("file:///src/subfolder/foo.ts")).Name().AsString(), "/src/subfolder/tsconfig.json")
 
 		err = utils.FS().Remove("/src/subfolder/tsconfig.json")
 		assert.NilError(t, err)
@@ -160,7 +160,7 @@ func TestConfigFileChanges(t *testing.T) {
 		_, err = session.GetLanguageService(context.Background(), lsproto.DocumentUri("file:///src/subfolder/foo.ts"))
 		assert.NilError(t, err)
 		snapshot = session.Snapshot()
-		assert.Equal(t, snapshot.GetDefaultProject(lsproto.DocumentUri("file:///src/subfolder/foo.ts")).Name(), "/src/tsconfig.json")
+		assert.Equal(t, snapshot.GetDefaultProject(lsproto.DocumentUri("file:///src/subfolder/foo.ts")).Name().AsString(), "/src/tsconfig.json")
 		assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 2) // Old project will be cleaned up on next file open
 
 		session.DidOpenFile(context.Background(), "file:///src/index.ts", 1, files["/src/index.ts"].(string), lsproto.LanguageKindTypeScript)

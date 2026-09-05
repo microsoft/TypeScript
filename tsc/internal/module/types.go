@@ -13,7 +13,6 @@ import (
 
 type ResolutionHost interface {
 	FS() vfs.FS
-	GetCurrentDirectory() string
 }
 
 type ModeAwareCacheKey struct {
@@ -22,7 +21,7 @@ type ModeAwareCacheKey struct {
 }
 
 type ResolvedProjectReference interface {
-	ConfigName() string
+	ConfigName() tspath.RootedFilePath
 	CompilerOptions() *core.CompilerOptions
 }
 
@@ -64,14 +63,15 @@ func (p *PackageId) PackageName() string {
 
 type ResolvedModule struct {
 	ResolutionDiagnostics        []*ast.Diagnostic
-	ResolvedFileName             string
-	OriginalPath                 string
+	ResolvedFileName             tspath.RootedFilePath
+	ResolvedPath                 tspath.PathKey
+	OriginalPath                 tspath.RootedFilePath
 	Extension                    string
 	ResolvedUsingTsExtension     bool
 	ResolvedUsingExtraExtensions bool
 	PackageId                    PackageId
 	IsExternalLibraryImport      bool
-	AlternateResult              string
+	AlternateResult              tspath.RootedFilePath
 }
 
 func (r *ResolvedModule) IsResolved() bool {
@@ -81,8 +81,9 @@ func (r *ResolvedModule) IsResolved() bool {
 type ResolvedTypeReferenceDirective struct {
 	ResolutionDiagnostics   []*ast.Diagnostic
 	Primary                 bool
-	ResolvedFileName        string
-	OriginalPath            string
+	ResolvedFileName        tspath.RootedFilePath
+	ResolvedPath            tspath.PathKey
+	OriginalPath            tspath.RootedFilePath
 	PackageId               PackageId
 	IsExternalLibraryImport bool
 }

@@ -59,7 +59,56 @@ export * from "./ast.generated.ts";
 
 // ── Core types ──
 
-export type Path = string & { __pathBrand: any; };
+declare const rootedPathBrand: unique symbol;
+declare const rootedFilePathBrand: unique symbol;
+declare const rootedDirectoryPathBrand: unique symbol;
+declare const pathKeyBrand: unique symbol;
+
+/**
+ * A rooted, slash-normalized, lexically normalized path that may represent
+ * either a file or a directory. It preserves path casing.
+ *
+ * Rooted path types and canonical path keys are related as follows:
+ *
+ * ```text
+ *                        RootedFilePath
+ *                       /
+ * string --> RootedPath
+ *                       \
+ *                        RootedDirectoryPath
+ *
+ * RootedPath + CaseSensitivity --> PathKey
+ * ```
+ *
+ * Use `toRootedPath`, `toRootedFilePath`, or `toRootedDirectoryPath` for a
+ * path that may be relative and needs resolution against a current directory.
+ * Use `rootedPathFromNormalized` only when the input is already rooted and
+ * normalized. Use `pathKey` only when a canonical key is needed for a
+ * comparison, set, or map lookup.
+ */
+export type RootedPath = string & { readonly [rootedPathBrand]: void; };
+
+/**
+ * A {@link RootedPath} intended to be used as a file path. It does not assert
+ * that the path exists or is a file on a filesystem.
+ */
+export type RootedFilePath = RootedPath & { readonly [rootedFilePathBrand]: void; };
+
+/**
+ * A {@link RootedPath} intended to be used as a directory path. It does not
+ * assert that the path exists or is a directory on a filesystem, and does not
+ * guarantee a trailing directory separator.
+ */
+export type RootedDirectoryPath = RootedPath & { readonly [rootedDirectoryPathBrand]: void; };
+
+/**
+ * A canonical key for a rooted, normalized path under a caller-selected
+ * `CaseSensitivity`. Keys are comparable only when they use the same
+ * `CaseSensitivity`. A `PathKey` is for comparison and lookup, and must not be
+ * used as a {@link RootedPath} because canonicalization may have changed its
+ * casing. It does not assert that the path exists.
+ */
+export type PathKey = string & { readonly [pathKeyBrand]: void; };
 
 /**
  * The escaped form of a symbol/identifier name. Internal compiler names are
@@ -137,15 +186,15 @@ export interface SourceFile extends Node {
     /** Identity of the content mapper that produced this source file. */
     readonly contentMapper?: string;
     /** Filename used to determine the syntax and module semantics of the transformed content. */
-    readonly virtualFileName?: string;
+    readonly virtualFileName?: RootedFilePath;
     /** Framework-specific diagnostic directives applied to the transformed content. */
     readonly diagnosticDirectives?: readonly MappedDiagnosticDirective[];
     /** Compiler-assigned filenames of supplemental outputs associated with this canonical source file. */
-    readonly supplementalSourceFileNames?: readonly string[];
+    readonly supplementalSourceFileNames?: readonly RootedFilePath[];
     /** Canonical source filename associated with this supplemental output, if this is supplemental. */
-    readonly canonicalSourceFileName?: string;
-    readonly fileName: string;
-    readonly path: Path;
+    readonly canonicalSourceFileName?: RootedFilePath;
+    readonly fileName: RootedFilePath;
+    readonly path: PathKey;
     readonly languageVariant: LanguageVariant;
     readonly scriptKind: ScriptKind;
     readonly isDeclarationFile: boolean;

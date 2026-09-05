@@ -17,9 +17,9 @@ import (
 
 // SnapshotHost owns the services shared by a collection of immutable snapshots.
 type SnapshotHost struct {
-	options *SessionOptions
-	toPath  func(string) tspath.Path
-	fs      vfs.FS
+	options         *SessionOptions
+	caseSensitivity tspath.CaseSensitivity
+	fs              vfs.FS
 
 	parseCache              *ParseCache
 	contentMappedParseCache *ContentMappedParseCache
@@ -35,11 +35,6 @@ func (s *SnapshotHost) nextSnapshotID() uint64 {
 }
 
 func NewSnapshotHost(init *SessionInit) *SnapshotHost {
-	currentDirectory := init.Options.CurrentDirectory
-	useCaseSensitiveFileNames := init.FS.UseCaseSensitiveFileNames()
-	toPath := func(fileName string) tspath.Path {
-		return tspath.ToPath(fileName, currentDirectory, useCaseSensitiveFileNames)
-	}
 	parseCache := init.ParseCache
 	if parseCache == nil {
 		parseCache = NewParseCache(RefCountCacheOptions{})
@@ -51,7 +46,7 @@ func NewSnapshotHost(init *SessionInit) *SnapshotHost {
 
 	return &SnapshotHost{
 		options:                 init.Options,
-		toPath:                  toPath,
+		caseSensitivity:         init.FS.CaseSensitivity(),
 		fs:                      init.FS,
 		parseCache:              parseCache,
 		contentMappedParseCache: contentMappedParseCache,
@@ -107,7 +102,7 @@ func (s *SnapshotHost) CloneSnapshotWithTemporaryFile(
 func (s *SnapshotHost) CloneSnapshotForProgram(
 	ctx context.Context,
 	baseSnapshot *Snapshot,
-	rootFileNames []string,
+	rootFileNames []tspath.RootedFilePath,
 	options *core.CompilerOptions,
 	projectReferences []*core.ProjectReference,
 	configFileParsingDiagnostics []*ast.Diagnostic,
@@ -143,9 +138,9 @@ func (s *SnapshotHost) newRootSnapshot(id uint64, relativePatternSupport bool) *
 	return s.newSnapshot(
 		id,
 		&SnapshotFS{
-			toPath:   s.toPath,
-			fs:       s.fs,
-			overlays: make(map[tspath.Path]*Overlay),
+			caseSensitivity: s.caseSensitivity,
+			fs:              s.fs,
+			overlays:        make(map[tspath.PathKey]*Overlay),
 		},
 		&ConfigFileRegistry{},
 		nil,
@@ -155,7 +150,7 @@ func (s *SnapshotHost) newRootSnapshot(id uint64, relativePatternSupport bool) *
 			"auto-import",
 			lsproto.WatchKindCreate|lsproto.WatchKindChange|lsproto.WatchKindDelete,
 			relativePatternSupport,
-			func(nodeModulesDirs map[tspath.Path]string) PatternsAndIgnored {
+			func(nodeModulesDirs map[tspath.PathKey]tspath.RootedDirectoryPath) PatternsAndIgnored {
 				patterns := make([]string, 0, len(nodeModulesDirs))
 				for _, dir := range nodeModulesDirs {
 					patterns = append(patterns, getRecursiveGlobPattern(dir))
@@ -173,7 +168,7 @@ func (s *SnapshotHost) FS() vfs.FS {
 	return s.fs
 }
 
-func (s *SnapshotHost) GetCurrentDirectory() string {
+func (s *SnapshotHost) GetCurrentDirectory() tspath.RootedDirectoryPath {
 	return s.options.CurrentDirectory
 }
 

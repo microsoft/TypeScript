@@ -20,7 +20,7 @@ func fixRoot(path string) string {
 
 type VfsParseConfigHost struct {
 	Vfs              vfs.FS
-	CurrentDirectory string
+	CurrentDirectory tspath.RootedDirectoryPath
 }
 
 var _ tsoptions.ParseConfigHost = (*VfsParseConfigHost)(nil)
@@ -29,22 +29,22 @@ func (h *VfsParseConfigHost) FS() vfs.FS {
 	return h.Vfs
 }
 
-func (h *VfsParseConfigHost) GetCurrentDirectory() string {
+func (h *VfsParseConfigHost) GetCurrentDirectory() tspath.RootedDirectoryPath {
 	return h.CurrentDirectory
 }
 
-func NewVFSParseConfigHost(files map[string]string, currentDirectory string, useCaseSensitiveFileNames bool) *VfsParseConfigHost {
+func NewVFSParseConfigHost(files map[string]string, currentDirectory tspath.RootedDirectoryPath, caseSensitivity tspath.CaseSensitivity) *VfsParseConfigHost {
 	return &VfsParseConfigHost{
-		Vfs:              vfstest.FromMap(files, useCaseSensitiveFileNames),
+		Vfs:              vfstest.FromMap(files, caseSensitivity),
 		CurrentDirectory: currentDirectory,
 	}
 }
 
 // NewVFSParseConfigHostWithSymlinks builds a parse-config host whose vfs also contains the given symlinks
 // (link path -> target path), so config parsing resolves packages through symlinks as it would on disk.
-func NewVFSParseConfigHostWithSymlinks(files map[string]string, symlinks map[string]string, currentDirectory string, useCaseSensitiveFileNames bool) *VfsParseConfigHost {
+func NewVFSParseConfigHostWithSymlinks(files map[string]string, symlinks map[string]string, currentDirectory tspath.RootedDirectoryPath, caseSensitivity tspath.CaseSensitivity) *VfsParseConfigHost {
 	if len(symlinks) == 0 {
-		return NewVFSParseConfigHost(files, currentDirectory, useCaseSensitiveFileNames)
+		return NewVFSParseConfigHost(files, currentDirectory, caseSensitivity)
 	}
 	entries := make(map[string]any, len(files)+len(symlinks))
 	for name, content := range files {
@@ -54,7 +54,7 @@ func NewVFSParseConfigHostWithSymlinks(files map[string]string, symlinks map[str
 		entries[tspath.GetNormalizedAbsolutePath(link, currentDirectory)] = vfstest.Symlink(tspath.GetNormalizedAbsolutePath(target, currentDirectory))
 	}
 	return &VfsParseConfigHost{
-		Vfs:              vfstest.FromMap(entries, useCaseSensitiveFileNames),
+		Vfs:              vfstest.FromMap(entries, caseSensitivity),
 		CurrentDirectory: currentDirectory,
 	}
 }

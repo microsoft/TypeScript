@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/microsoft/TypeScript/tsc/internal/json"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"gotest.tools/v3/assert"
 )
 
@@ -767,6 +768,15 @@ func TestUnmarshalFieldOrdering(t *testing.T) {
 		assert.Assert(t, hint.Kind != nil)
 		assert.Equal(t, *hint.Kind, InlayHintKindType)
 	})
+}
+
+func TestUnmarshalCompletionItemDataFileName(t *testing.T) {
+	t.Parallel()
+
+	var data CompletionItemData
+	err := json.Unmarshal([]byte(`{"fileName":"/src/index.ts","position":1,"name":"value"}`), &data)
+	assert.NilError(t, err)
+	assert.Equal(t, data.FileName, tspath.RootedFilePathFromNormalized("/src/index.ts"))
 }
 
 func TestUnmarshalEmptyObject(t *testing.T) {

@@ -365,7 +365,7 @@ func (l *LanguageService) createOrganizeImportsAction(
 
 	lspChanges := make(map[lsproto.DocumentUri][]*lsproto.TextEdit)
 	for fileName, edits := range changes {
-		fileURI := lsconv.FileNameToDocumentURI(fileName)
+		fileURI := lsconv.FilePathToDocumentURI(fileName)
 		lspChanges[fileURI] = edits
 	}
 

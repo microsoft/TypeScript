@@ -4,6 +4,7 @@ import (
 	"slices"
 	"sync"
 
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 )
 
@@ -18,22 +19,23 @@ func NewOutputRecorderFS(fs vfs.FS) vfs.FS {
 	return &OutputRecorderFS{FS: fs}
 }
 
-func (fs *OutputRecorderFS) WriteFile(path string, data string) error {
+func (fs *OutputRecorderFS) WriteFile(path tspath.RootedFilePath, data string) error {
 	if err := fs.FS.WriteFile(path, data); err != nil {
 		return err
 	}
-	path = fs.Realpath(path)
+	realPath := fs.Realpath(path.AsPath())
+	pathString := realPath.AsString()
 	fs.outputsMut.Lock()
 	defer fs.outputsMut.Unlock()
-	if index, ok := fs.outputsMap[path]; ok {
-		fs.outputs[index] = &TestFile{UnitName: path, Content: data}
+	if index, ok := fs.outputsMap[pathString]; ok {
+		fs.outputs[index] = &TestFile{UnitName: pathString, Content: data}
 	} else {
 		index := len(fs.outputs)
 		if fs.outputsMap == nil {
 			fs.outputsMap = make(map[string]int)
 		}
-		fs.outputsMap[path] = index
-		fs.outputs = append(fs.outputs, &TestFile{UnitName: path, Content: data})
+		fs.outputsMap[pathString] = index
+		fs.outputs = append(fs.outputs, &TestFile{UnitName: pathString, Content: data})
 	}
 	return nil
 }

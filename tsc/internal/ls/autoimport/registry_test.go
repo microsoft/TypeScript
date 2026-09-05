@@ -77,9 +77,9 @@ func TestRegistryLifecycle(t *testing.T) {
 		projectBucket := singleBucket(t, stats.ProjectBuckets)
 		nodeModulesBucket := singleBucket(t, stats.NodeModulesBuckets)
 		assert.Equal(t, projectBucket.State.Dirty(), true)
-		assert.Equal(t, projectBucket.State.DirtyFile(), utils.ToPath(mainFile.FileName()))
+		assert.Equal(t, projectBucket.State.DirtyFile(), utils.PathKey(mainFile.FileName()))
 		assert.Equal(t, nodeModulesBucket.State.Dirty(), false)
-		assert.Equal(t, nodeModulesBucket.State.DirtyFile(), tspath.Path(""))
+		assert.Equal(t, nodeModulesBucket.State.DirtyFile(), tspath.PathKey(""))
 
 		// Bucket should not recompute when requesting same file changed
 		_, err = session.GetCurrentLanguageServiceWithAutoImports(context.Background(), mainFile.URI())
@@ -87,7 +87,7 @@ func TestRegistryLifecycle(t *testing.T) {
 		stats = autoImportStats(t, session)
 		projectBucket = singleBucket(t, stats.ProjectBuckets)
 		assert.Equal(t, projectBucket.State.Dirty(), true)
-		assert.Equal(t, projectBucket.State.DirtyFile(), utils.ToPath(mainFile.FileName()))
+		assert.Equal(t, projectBucket.State.DirtyFile(), utils.PathKey(mainFile.FileName()))
 
 		// Bucket should recompute when other file has changed
 		session.DidChangeFile(context.Background(), secondaryFile.URI(), 1, []lsproto.TextDocumentContentChangePartialOrWholeDocument{
@@ -164,7 +164,7 @@ export const bar = 2;`,
 
 		fs := sessionUtils.FS()
 		updatePackageJSON := func(content string) {
-			assert.NilError(t, fs.WriteFile(packageJSON.FileName(), content))
+			assert.NilError(t, fs.WriteFile(tspath.RootedFilePathFromNormalized(packageJSON.FileName()), content))
 			session.DidChangeWatchedFiles(ctx, []*lsproto.FileEvent{
 				{Type: lsproto.FileChangeTypeChanged, Uri: packageJSON.URI()},
 			})
@@ -250,17 +250,17 @@ export const bar = 2;`,
 		snapshot := session.Snapshot()
 		defaultProject := snapshot.GetDefaultProject(mainFile.URI())
 		assert.Assert(t, defaultProject != nil)
-		projectPath := defaultProject.ConfigFilePath()
-		assert.Assert(t, snapshot.AutoImportRegistry().IsPreparedForImportingFile(mainFile.FileName(), projectPath, preferences))
+		projectPath := defaultProject.ConfigFileKey()
+		assert.Assert(t, snapshot.AutoImportRegistry().IsPreparedForImportingFile(tspath.RootedFilePathFromNormalized(mainFile.FileName()), projectPath, preferences))
 		assert.Equal(t, len(autoImportStats(t, session).NodeModulesBuckets), 1)
 
 		// Simulate the user deleting node_modules: remove the directory from disk
 		// and notify the session of the deletion, which marks the node_modules
 		// bucket dirty.
 		nodeModulesDir := tspath.CombinePaths(project.Root(), "node_modules")
-		assert.NilError(t, sessionUtils.FS().Remove(nodeModulesDir))
+		assert.NilError(t, sessionUtils.FS().Remove(tspath.RootedFilePathFromNormalized(nodeModulesDir).AsPath()))
 		session.DidChangeWatchedFiles(ctx, []*lsproto.FileEvent{
-			{Type: lsproto.FileChangeTypeDeleted, Uri: lsconv.FileNameToDocumentURI(nodeModulesDir)},
+			{Type: lsproto.FileChangeTypeDeleted, Uri: lsconv.FilePathToDocumentURI(tspath.RootedFilePathFromAbsolute(nodeModulesDir))},
 		})
 
 		// Re-preparing auto-imports must succeed and leave the registry prepared.
@@ -271,7 +271,7 @@ export const bar = 2;`,
 		assert.NilError(t, err)
 
 		snapshot = session.Snapshot()
-		assert.Assert(t, snapshot.AutoImportRegistry().IsPreparedForImportingFile(mainFile.FileName(), projectPath, preferences),
+		assert.Assert(t, snapshot.AutoImportRegistry().IsPreparedForImportingFile(tspath.RootedFilePathFromNormalized(mainFile.FileName()), projectPath, preferences),
 			"registry should be prepared after node_modules is deleted")
 		// The node_modules bucket should be removed entirely, not left behind as an
 		// empty bucket.
@@ -299,25 +299,25 @@ export const bar = 2;`,
 		snapshot := session.Snapshot()
 		defaultProject := snapshot.GetDefaultProject(mainFile.URI())
 		assert.Assert(t, defaultProject != nil)
-		projectPath := defaultProject.ConfigFilePath()
+		projectPath := defaultProject.ConfigFileKey()
 		assert.Equal(t, len(autoImportStats(t, session).NodeModulesBuckets), 1)
 
 		// In a single changeset, edit package.json AND delete node_modules. The
 		// package.json change must not prevent the now-missing node_modules bucket
 		// from being removed.
-		assert.NilError(t, sessionUtils.FS().WriteFile(packageJSON.FileName(), `{"name": "app", "dependencies": {}}`))
+		assert.NilError(t, sessionUtils.FS().WriteFile(tspath.RootedFilePathFromNormalized(packageJSON.FileName()), `{"name": "app", "dependencies": {}}`))
 		nodeModulesDir := tspath.CombinePaths(project.Root(), "node_modules")
-		assert.NilError(t, sessionUtils.FS().Remove(nodeModulesDir))
+		assert.NilError(t, sessionUtils.FS().Remove(tspath.RootedFilePathFromNormalized(nodeModulesDir).AsPath()))
 		session.DidChangeWatchedFiles(ctx, []*lsproto.FileEvent{
 			{Type: lsproto.FileChangeTypeChanged, Uri: packageJSON.URI()},
-			{Type: lsproto.FileChangeTypeDeleted, Uri: lsconv.FileNameToDocumentURI(nodeModulesDir)},
+			{Type: lsproto.FileChangeTypeDeleted, Uri: lsconv.FilePathToDocumentURI(tspath.RootedFilePathFromAbsolute(nodeModulesDir))},
 		})
 
 		_, err = session.GetCurrentLanguageServiceWithAutoImports(ctx, mainFile.URI())
 		assert.NilError(t, err)
 
 		snapshot = session.Snapshot()
-		assert.Assert(t, snapshot.AutoImportRegistry().IsPreparedForImportingFile(mainFile.FileName(), projectPath, preferences))
+		assert.Assert(t, snapshot.AutoImportRegistry().IsPreparedForImportingFile(tspath.RootedFilePathFromNormalized(mainFile.FileName()), projectPath, preferences))
 		assert.Equal(t, len(autoImportStats(t, session).NodeModulesBuckets), 0)
 	})
 
@@ -340,9 +340,9 @@ export const bar = 2;`,
 		// package's files are read transiently by the registry, so they are never tracked
 		// in diskFiles/diskDirectories; only the directory deletion event is reported, and
 		// it must survive snapshotfs filtering to invalidate the bucket.
-		assert.NilError(t, sessionUtils.FS().Remove(nodePackage.Directory))
+		assert.NilError(t, sessionUtils.FS().Remove(tspath.RootedFilePathFromNormalized(nodePackage.Directory).AsPath()))
 		session.DidChangeWatchedFiles(ctx, []*lsproto.FileEvent{
-			{Type: lsproto.FileChangeTypeDeleted, Uri: lsconv.FileNameToDocumentURI(nodePackage.Directory)},
+			{Type: lsproto.FileChangeTypeDeleted, Uri: lsconv.FilePathToDocumentURI(tspath.RootedFilePathFromAbsolute(nodePackage.Directory))},
 		})
 
 		_, err = session.GetCurrentLanguageServiceWithAutoImports(ctx, mainFile.URI())
@@ -573,7 +573,7 @@ export declare const otherValue: string;`,
 		ctx := context.Background()
 
 		// Open project-a's index file and get initial auto-imports
-		projectAURI := lsconv.FileNameToDocumentURI(projectAIndex)
+		projectAURI := lsconv.FilePathToDocumentURI(tspath.RootedFilePathFromAbsolute(projectAIndex))
 		projectAContent := files[projectAIndex].(string)
 		session.DidOpenFile(ctx, projectAURI, 1, projectAContent, lsproto.LanguageKindTypeScript)
 		_, err := session.GetCurrentLanguageServiceWithAutoImports(ctx, projectAURI)
@@ -587,7 +587,7 @@ export declare const otherValue: string;`,
 		assert.Assert(t, initialFileCount > 0, "bucket should have files initially")
 
 		// Open project-b's source file
-		projectBURI := lsconv.FileNameToDocumentURI(projectBSrcIndex)
+		projectBURI := lsconv.FilePathToDocumentURI(tspath.RootedFilePathFromAbsolute(projectBSrcIndex))
 		projectBContent := files[projectBSrcIndex].(string)
 		session.DidOpenFile(ctx, projectBURI, 1, projectBContent, lsproto.LanguageKindTypeScript)
 
@@ -700,7 +700,7 @@ export declare const otherValue: string;`,
 		}
 
 		session, _ := projecttestutil.SetupWithOptions(files, &project.SessionOptions{
-			CurrentDirectory:       monorepoRoot,
+			CurrentDirectory:       tspath.RootedDirectoryPathFromNormalized(monorepoRoot),
 			DefaultLibraryPath:     bundled.LibPath(),
 			PositionEncoding:       lsproto.PositionEncodingKindUTF8,
 			WatchEnabled:           true,
@@ -711,7 +711,7 @@ export declare const otherValue: string;`,
 		ctx := context.Background()
 
 		// Open project-a's index file and build auto-imports
-		projectAURI := lsconv.FileNameToDocumentURI(projectAIndex)
+		projectAURI := lsconv.FilePathToDocumentURI(tspath.RootedFilePathFromAbsolute(projectAIndex))
 		projectAContent := files[projectAIndex].(string)
 		session.DidOpenFile(ctx, projectAURI, 1, projectAContent, lsproto.LanguageKindTypeScript)
 		_, err := session.GetCurrentLanguageServiceWithAutoImports(ctx, projectAURI)
@@ -723,7 +723,7 @@ export declare const otherValue: string;`,
 		assert.Equal(t, nodeModulesBucket.State.Dirty(), false, "bucket should be clean initially")
 
 		// Modify project-b's source file (local workspace package)
-		projectBURI := lsconv.FileNameToDocumentURI(projectBSrcIndex)
+		projectBURI := lsconv.FilePathToDocumentURI(tspath.RootedFilePathFromAbsolute(projectBSrcIndex))
 		projectBContent := files[projectBSrcIndex].(string)
 		session.DidOpenFile(ctx, projectBURI, 1, projectBContent, lsproto.LanguageKindTypeScript)
 		session.DidChangeFile(ctx, projectBURI, 2, []lsproto.TextDocumentContentChangePartialOrWholeDocument{
@@ -749,7 +749,7 @@ export declare const otherValue: string;`,
 		assert.Equal(t, nodeModulesBucket.State.Dirty(), false, "bucket should be clean after rebuild")
 
 		// Now modify other-pkg (pnpm registry package, realpath inside node_modules/.pnpm)
-		otherPkgURI := lsconv.FileNameToDocumentURI(otherPkgIndex)
+		otherPkgURI := lsconv.FilePathToDocumentURI(tspath.RootedFilePathFromAbsolute(otherPkgIndex))
 		otherPkgContent := files[otherPkgIndex].(string)
 		session.DidOpenFile(ctx, otherPkgURI, 1, otherPkgContent, lsproto.LanguageKindTypeScript)
 		session.DidChangeFile(ctx, otherPkgURI, 2, []lsproto.TextDocumentContentChangePartialOrWholeDocument{
@@ -829,7 +829,7 @@ export const b = a;
 		session, _ := projecttestutil.Setup(files)
 		t.Cleanup(session.Close)
 		ctx := context.Background()
-		consumerAURI := lsconv.FileNameToDocumentURI(consumerA)
+		consumerAURI := lsconv.FilePathToDocumentURI(tspath.RootedFilePathFromAbsolute(consumerA))
 		session.DidOpenFile(ctx, consumerAURI, 1, files[consumerA].(string), lsproto.LanguageKindTypeScript)
 
 		_, err := session.GetCurrentLanguageServiceWithAutoImports(ctx, consumerAURI)
@@ -865,11 +865,11 @@ export const b = a;
 		snapshot := session.Snapshot()
 		defaultProject := snapshot.GetDefaultProject(mainFile.URI())
 		assert.Assert(t, defaultProject != nil)
-		projectPath := defaultProject.ConfigFilePath()
+		projectPath := defaultProject.ConfigFileKey()
 		preferences := lsutil.NewDefaultUserPreferences()
 		preferences.IncludeCompletionsForModuleExports = core.TSTrue
 		preferences.IncludeCompletionsForImportStatements = core.TSTrue
-		isPrepared := snapshot.AutoImportRegistry().IsPreparedForImportingFile(mainFile.FileName(), projectPath, preferences)
+		isPrepared := snapshot.AutoImportRegistry().IsPreparedForImportingFile(tspath.RootedFilePathFromNormalized(mainFile.FileName()), projectPath, preferences)
 		assert.Assert(t, isPrepared)
 
 		// Change the file exclude patterns preference
@@ -881,7 +881,7 @@ export const b = a;
 
 		// IsPreparedForImportingFile should return false since exclude patterns changed
 		snapshot2 := session.Snapshot()
-		isPrepared2 := snapshot2.AutoImportRegistry().IsPreparedForImportingFile(mainFile.FileName(), projectPath, newPreferences)
+		isPrepared2 := snapshot2.AutoImportRegistry().IsPreparedForImportingFile(tspath.RootedFilePathFromNormalized(mainFile.FileName()), projectPath, newPreferences)
 		assert.Assert(t, !isPrepared2)
 
 		// After GetCurrentLanguageServiceWithAutoImports, buckets should be rebuilt
@@ -890,7 +890,7 @@ export const b = a;
 
 		// IsPreparedForImportingFile should return true now that buckets are rebuilt
 		snapshot3 := session.Snapshot()
-		isPrepared3 := snapshot3.AutoImportRegistry().IsPreparedForImportingFile(mainFile.FileName(), projectPath, newPreferences)
+		isPrepared3 := snapshot3.AutoImportRegistry().IsPreparedForImportingFile(tspath.RootedFilePathFromNormalized(mainFile.FileName()), projectPath, newPreferences)
 		assert.Assert(t, isPrepared3, "IsPreparedForImportingFile should return true after bucket rebuild with new fileExcludePatterns")
 	})
 
@@ -943,7 +943,7 @@ export const b = a;
 		t.Cleanup(session.Close)
 
 		ctx := context.Background()
-		appURI := lsconv.FileNameToDocumentURI(appIndex)
+		appURI := lsconv.FilePathToDocumentURI(tspath.RootedFilePathFromAbsolute(appIndex))
 		session.DidOpenFile(ctx, appURI, 1, files[appIndex].(string), lsproto.LanguageKindTypeScript)
 
 		_, err := session.GetCurrentLanguageServiceWithAutoImports(ctx, appURI)
@@ -1182,9 +1182,9 @@ func TestAutoImportEntrypointDirectorySearch(t *testing.T) {
 		snapshot := session.Snapshot()
 		defaultProject := snapshot.GetDefaultProject(indexURI)
 		assert.Assert(t, defaultProject != nil)
-		projectPath := defaultProject.ConfigFilePath()
+		projectPath := defaultProject.ConfigFileKey()
 		isPrepared := snapshot.AutoImportRegistry().IsPreparedForImportingFile(
-			projectRoot+"/index.ts", projectPath, prefs,
+			tspath.RootedFilePathFromNormalized(projectRoot+"/index.ts"), projectPath, prefs,
 		)
 		assert.Assert(t, !isPrepared, "registry should not be prepared after preference change")
 

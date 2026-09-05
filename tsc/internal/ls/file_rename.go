@@ -3,7 +3,6 @@ package ls
 import (
 	"context"
 	"slices"
-	"strings"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/checker"
@@ -19,46 +18,48 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 )
 
-type pathUpdater func(path string) (string, bool)
+type pathUpdater func(path tspath.RootedFilePath) (tspath.RootedFilePath, bool)
 
 type toImport struct {
-	newFileName string
+	newFileName tspath.RootedFilePath
 	updated     bool
 }
 
 type movedFile struct {
 	sourceFile  *ast.SourceFile
-	newFileName string
+	newFileName tspath.RootedFilePath
 }
 
 func (l *LanguageService) GetEditsForFileRename(ctx context.Context, oldURI lsproto.DocumentUri, newURI lsproto.DocumentUri) []lsproto.TextDocumentEditOrCreateFileOrRenameFileOrDeleteFile {
 	program := l.GetProgram()
-	oldPath := oldURI.FileName()
-	newPath := newURI.FileName()
+	oldPath := tspath.RootedPath(oldURI.FileName())
+	newPath := tspath.RootedPath(newURI.FileName())
 
 	oldToNew := l.createPathUpdater(oldPath, newPath)
 
 	changeTracker := change.NewTracker(ctx, program.Options(), l.FormatOptions(), l.converters)
-	l.updateTsconfigFiles(program, changeTracker, oldToNew, oldPath, newPath)
+	l.updateTsconfigFiles(program, changeTracker, oldToNew, tspath.RootedFilePathFromPath(oldPath), tspath.RootedFilePathFromPath(newPath))
 	l.updateImportsForFileRename(program, changeTracker, oldToNew)
 
 	var documentChanges []lsproto.TextDocumentEditOrCreateFileOrRenameFileOrDeleteFile
 
 	// When renaming e.g. `foo.d.css.ts` -> `bar.d.css.ts`, also rename `foo.css` -> `bar.css` if it exists.
-	if tspath.IsDeclarationFileName(oldPath) && tspath.IsDeclarationFileName(newPath) {
-		dtsExt := tspath.GetDeclarationFileExtension(oldPath)
+	oldFile := tspath.RootedFilePathFromPath(oldPath)
+	newFile := tspath.RootedFilePathFromPath(newPath)
+	if oldFile.IsDeclarationFile() && newFile.IsDeclarationFile() {
+		dtsExt := oldFile.DeclarationFileExtension()
 		originalExtensions := tspath.GetPossibleOriginalInputExtensionForExtension(dtsExt)
 		for _, ext := range originalExtensions {
-			oldOriginalPath := tspath.ChangeFullExtension(oldPath, ext)
+			oldOriginalPath := oldFile.ChangeFullExtension(ext)
 			if l.host.FileExists(oldOriginalPath) {
-				newDtsExt := tspath.GetDeclarationFileExtension(oldPath)
+				newDtsExt := newFile.DeclarationFileExtension()
 				newOriginalExtensions := tspath.GetPossibleOriginalInputExtensionForExtension(newDtsExt)
 				if slices.Contains(newOriginalExtensions, ext) {
-					newOriginalPath := tspath.ChangeFullExtension(newPath, ext)
+					newOriginalPath := newFile.ChangeFullExtension(ext)
 					documentChanges = append(documentChanges, lsproto.TextDocumentEditOrCreateFileOrRenameFileOrDeleteFile{
 						RenameFile: &lsproto.RenameFile{
-							OldUri: lsconv.FileNameToDocumentURI(oldOriginalPath),
-							NewUri: lsconv.FileNameToDocumentURI(newOriginalPath),
+							OldUri: lsconv.FilePathToDocumentURI(oldOriginalPath),
+							NewUri: lsconv.FilePathToDocumentURI(newOriginalPath),
 						},
 					})
 				}
@@ -68,7 +69,7 @@ func (l *LanguageService) GetEditsForFileRename(ctx context.Context, oldURI lspr
 
 	changes, _ := changeTracker.GetChanges()
 	for fileName, edits := range changes {
-		uri := lsconv.FileNameToDocumentURI(fileName)
+		uri := lsconv.FilePathToDocumentURI(fileName)
 		lspEdits := make([]lsproto.TextEditOrAnnotatedTextEditOrSnippetTextEdit, 0, len(edits))
 		for _, edit := range edits {
 			lspEdits = append(lspEdits, lsproto.TextEditOrAnnotatedTextEditOrSnippetTextEdit{
@@ -86,30 +87,20 @@ func (l *LanguageService) GetEditsForFileRename(ctx context.Context, oldURI lspr
 	return documentChanges
 }
 
-func (l *LanguageService) createPathUpdater(oldPath string, newPath string) pathUpdater {
-	compareOptions := tspath.ComparePathsOptions{UseCaseSensitiveFileNames: l.UseCaseSensitiveFileNames()}
-	trimmedOldPath := tspath.RemoveTrailingDirectorySeparator(oldPath)
-	return func(path string) (string, bool) {
-		if tspath.ComparePaths(path, oldPath, compareOptions) == 0 {
-			return newPath, true
+func (l *LanguageService) createPathUpdater(oldPath tspath.RootedPath, newPath tspath.RootedPath) pathUpdater {
+	caseSensitivity := l.CaseSensitivity()
+	return func(path tspath.RootedFilePath) (tspath.RootedFilePath, bool) {
+		if caseSensitivity.CompareFilePaths(path, tspath.RootedFilePathFromPath(oldPath)) == 0 {
+			return tspath.RootedFilePathFromPath(newPath), true
 		}
-		// Trim the directory prefix ourselves (rather than using
-		// tspath.StartsWithDirectory followed by a separate slice on
-		// len(oldPath)) so the containment check and the suffix we return can
-		// never disagree, and so we don't slice path by a byte count derived
-		// from a canonicalized/differently-cased string: case-folding can
-		// change a path's UTF-8 byte length without changing its rune count
-		// (e.g. the Kelvin sign '\u212A' folds to the single-byte 'k'), which
-		// could otherwise put len(oldPath) out of range of path.
-		if suffix, ok := tspath.TrimFilePathPrefix(path, trimmedOldPath, l.UseCaseSensitiveFileNames()); ok &&
-			(strings.HasPrefix(suffix, "/") || strings.HasPrefix(suffix, "\\")) {
-			return newPath + suffix, true
+		if relativePath, ok := caseSensitivity.RelativeFilePathFromDirectory(tspath.RootedDirectoryPathFromPath(oldPath), path); ok {
+			return tspath.RootedDirectoryPathFromPath(newPath).ResolveRelativeFile(relativePath), true
 		}
 		return "", false
 	}
 }
 
-func (l *LanguageService) updateTsconfigFiles(program *compiler.Program, changeTracker *change.Tracker, oldToNew pathUpdater, oldPath string, newPath string) {
+func (l *LanguageService) updateTsconfigFiles(program *compiler.Program, changeTracker *change.Tracker, oldToNew pathUpdater, oldPath tspath.RootedFilePath, newPath tspath.RootedFilePath) {
 	commandLine := program.CommandLine()
 	if commandLine == nil || commandLine.ConfigFile == nil {
 		return
@@ -119,7 +110,7 @@ func (l *LanguageService) updateTsconfigFiles(program *compiler.Program, changeT
 	if configFile == nil {
 		return
 	}
-	configDir := tspath.GetDirectoryPath(configFile.FileName())
+	configDir := configFile.FileName().Directory()
 	jsonObjectLiteral := getTsConfigObjectLiteralExpression(configFile)
 	if jsonObjectLiteral == nil {
 		return
@@ -128,7 +119,7 @@ func (l *LanguageService) updateTsconfigFiles(program *compiler.Program, changeT
 	forEachObjectProperty(jsonObjectLiteral, func(property *ast.PropertyAssignment, propertyName string) {
 		switch propertyName {
 		case "files", "include", "exclude":
-			foundExactMatch := updatePathsProperty(configFile, configDir, property, changeTracker, oldToNew, l.converters, l.UseCaseSensitiveFileNames())
+			foundExactMatch := updatePathsProperty(configFile, configDir, property, changeTracker, oldToNew, l.converters, l.CaseSensitivity())
 			if foundExactMatch || propertyName != "include" || !ast.IsArrayLiteralExpression(property.Initializer) {
 				return
 			}
@@ -136,10 +127,14 @@ func (l *LanguageService) updateTsconfigFiles(program *compiler.Program, changeT
 				if newSpec, _ := commandLine.GetMatchedIncludeSpec(newPath); newSpec == "" {
 					elements := property.Initializer.Elements()
 					if len(elements) > 0 {
+						newPathText := newPath.AsString()
+						if relativePath, ok := l.CaseSensitivity().RelativePathFromDirectory(configDir, newPath); ok {
+							newPathText = relativePath.AsString()
+						}
 						changeTracker.InsertNodeAfter(
 							configFile,
 							elements[len(elements)-1],
-							changeTracker.NodeFactory.NewStringLiteral(relativePathFromDirectory(configDir, newPath, l.UseCaseSensitiveFileNames()), ast.TokenFlagsNone),
+							changeTracker.NodeFactory.NewStringLiteral(newPathText, ast.TokenFlagsNone),
 						)
 					}
 				}
@@ -152,8 +147,8 @@ func (l *LanguageService) updateTsconfigFiles(program *compiler.Program, changeT
 				option := tsoptions.CommandLineCompilerOptionsMap.Get(propertyName)
 				if option != nil {
 					elementOption := option.Elements()
-					if option.IsFilePath || (option.Kind == tsoptions.CommandLineOptionTypeList && elementOption != nil && elementOption.IsFilePath) {
-						updatePathsProperty(configFile, configDir, property, changeTracker, oldToNew, l.converters, l.UseCaseSensitiveFileNames())
+					if option.PathKind.IsRooted() || (option.Kind == tsoptions.CommandLineOptionTypeList && elementOption != nil && elementOption.PathKind.IsRooted()) {
+						updatePathsProperty(configFile, configDir, property, changeTracker, oldToNew, l.converters, l.CaseSensitivity())
 						return
 					}
 				}
@@ -166,7 +161,7 @@ func (l *LanguageService) updateTsconfigFiles(program *compiler.Program, changeT
 						return
 					}
 					for _, element := range pathsProperty.Initializer.Elements() {
-						tryUpdateConfigString(configFile, configDir, element, changeTracker, oldToNew, l.converters, l.UseCaseSensitiveFileNames())
+						tryUpdateConfigString(configFile, configDir, element, changeTracker, oldToNew, l.converters, l.CaseSensitivity())
 					}
 				})
 			})
@@ -174,7 +169,7 @@ func (l *LanguageService) updateTsconfigFiles(program *compiler.Program, changeT
 	})
 }
 
-func updatePathsProperty(configFile *ast.SourceFile, configDir string, property *ast.PropertyAssignment, changeTracker *change.Tracker, oldToNew pathUpdater, converters *lsconv.Converters, useCaseSensitiveFileNames bool) bool {
+func updatePathsProperty(configFile *ast.SourceFile, configDir tspath.RootedDirectoryPath, property *ast.PropertyAssignment, changeTracker *change.Tracker, oldToNew pathUpdater, converters *lsconv.Converters, caseSensitivity tspath.CaseSensitivity) bool {
 	elements := []*ast.Node{property.Initializer}
 	if ast.IsArrayLiteralExpression(property.Initializer) {
 		elements = property.Initializer.Elements()
@@ -182,17 +177,17 @@ func updatePathsProperty(configFile *ast.SourceFile, configDir string, property 
 
 	foundExactMatch := false
 	for _, element := range elements {
-		foundExactMatch = tryUpdateConfigString(configFile, configDir, element, changeTracker, oldToNew, converters, useCaseSensitiveFileNames) || foundExactMatch
+		foundExactMatch = tryUpdateConfigString(configFile, configDir, element, changeTracker, oldToNew, converters, caseSensitivity) || foundExactMatch
 	}
 	return foundExactMatch
 }
 
-func tryUpdateConfigString(configFile *ast.SourceFile, configDir string, element *ast.Node, changeTracker *change.Tracker, oldToNew pathUpdater, converters *lsconv.Converters, useCaseSensitiveFileNames bool) bool {
+func tryUpdateConfigString(configFile *ast.SourceFile, configDir tspath.RootedDirectoryPath, element *ast.Node, changeTracker *change.Tracker, oldToNew pathUpdater, converters *lsconv.Converters, caseSensitivity tspath.CaseSensitivity) bool {
 	if !ast.IsStringLiteral(element) {
 		return false
 	}
 
-	elementFileName := tspath.NormalizePath(tspath.CombinePaths(configDir, element.Text()))
+	elementFileName := configDir.ResolveFile(element.Text())
 	updated, ok := oldToNew(elementFileName)
 	if !ok {
 		return false
@@ -201,17 +196,17 @@ func tryUpdateConfigString(configFile *ast.SourceFile, configDir string, element
 	textRange := core.NewTextRange(scanner.GetTokenPosOfNode(element, configFile, false)+1, element.End()-1)
 	lspRange, fidelity := converters.ToLSPRange(configFile, textRange)
 	debug.Assert(fidelity.IsExact(), "config files are not content-mapped")
-	changeTracker.ReplaceRangeWithText(configFile, lspRange, relativePathFromDirectory(configDir, updated, useCaseSensitiveFileNames))
+	changeTracker.ReplaceRangeWithText(configFile, lspRange, relativePathFromDirectory(configDir, updated, caseSensitivity))
 	return true
 }
 
-func (l *LanguageService) updateRelativePath(oldToNew pathUpdater, oldImportFromPath, newImportFromPath, relativeSpecifier string) string {
-	oldAbsolute := tspath.NormalizePath(tspath.CombinePaths(tspath.GetDirectoryPath(oldImportFromPath), relativeSpecifier))
+func (l *LanguageService) updateRelativePath(oldToNew pathUpdater, oldImportFromPath tspath.RootedFilePath, newImportFromPath tspath.RootedFilePath, relativeSpecifier tspath.ModuleSpecifier) tspath.ModuleSpecifier {
+	oldAbsolute := oldImportFromPath.Directory().ResolveFile(relativeSpecifier.AsString())
 	newAbsolute, ok := oldToNew(oldAbsolute)
 	if !ok {
 		newAbsolute = oldAbsolute
 	}
-	return relativeImportPathFromDirectory(tspath.GetDirectoryPath(newImportFromPath), newAbsolute, l.UseCaseSensitiveFileNames())
+	return relativeImportPathFromDirectory(newImportFromPath.Directory(), newAbsolute, l.CaseSensitivity())
 }
 
 func (l *LanguageService) updateImportsForFileRename(program *compiler.Program, changeTracker *change.Tracker, oldToNew pathUpdater) {
@@ -239,9 +234,9 @@ func (l *LanguageService) updateImportsForFileRename(program *compiler.Program, 
 			if !tspath.IsExternalModuleNameRelative(ref.FileName) {
 				continue
 			}
-			updated := l.updateRelativePath(oldToNew, oldFileName, newImportFromPath, ref.FileName)
-			if updated != ref.FileName {
-				changeTracker.ReplaceTextRangeWithText(sourceFile, ref.TextRange, updated)
+			updated := l.updateRelativePath(oldToNew, oldFileName, newImportFromPath, tspath.ToModuleSpecifier(ref.FileName))
+			if updated.AsString() != ref.FileName {
+				changeTracker.ReplaceTextRangeWithText(sourceFile, ref.TextRange, updated.AsString())
 			}
 		}
 
@@ -262,7 +257,7 @@ func (l *LanguageService) getUpdatedImportSpecifier(
 	importLiteral *ast.StringLiteralLike,
 	oldToNew pathUpdater,
 	movedFiles []movedFile,
-	newImportFromPath string,
+	newImportFromPath tspath.RootedFilePath,
 	importingSourceFileMoved bool,
 	userPreferences modulespecifiers.UserPreferences,
 ) string {
@@ -280,7 +275,7 @@ func (l *LanguageService) getUpdatedImportSpecifier(
 		}
 		// Fall back to a regular path update for unresolved module.
 		if tspath.IsExternalModuleNameRelative(importLiteral.Text()) {
-			return l.updateRelativePath(oldToNew, sourceFile.FileName(), newImportFromPath, importLiteral.Text())
+			return l.updateRelativePath(oldToNew, sourceFile.FileName(), newImportFromPath, tspath.ToModuleSpecifier(importLiteral.Text())).AsString()
 		}
 		return ""
 	}
@@ -295,14 +290,14 @@ func (l *LanguageService) getUpdatedImportSpecifier(
 		program,
 		sourceFile,
 		newImportFromPath,
-		importLiteral.Text(),
+		tspath.ToModuleSpecifier(importLiteral.Text()),
 		target.newFileName,
 		userPreferences,
 		modulespecifiers.ModuleSpecifierOptions{
 			OverrideImportMode: program.GetModeForUsageLocation(sourceFile, importLiteral),
 		},
 	)
-	return updated
+	return updated.AsString()
 }
 
 func getSourceFileToImport(
@@ -324,7 +319,7 @@ func getSourceFileToImport(
 
 // As a fall back for unresolved modules, we'll check every file affected by the rename to see if any of them would match
 // the import specifier, and if so, we'll obtain the updated specifier for that file.
-func getUpdatedImportSpecifierFromMovedSourceFiles(program *compiler.Program, sourceFile *ast.SourceFile, importLiteral *ast.StringLiteralLike, movedFiles []movedFile, importingSourceFileName string, userPreferences modulespecifiers.UserPreferences) string {
+func getUpdatedImportSpecifierFromMovedSourceFiles(program *compiler.Program, sourceFile *ast.SourceFile, importLiteral *ast.StringLiteralLike, movedFiles []movedFile, importingSourceFileName tspath.RootedFilePath, userPreferences modulespecifiers.UserPreferences) string {
 	resolutionMode := program.GetModeForUsageLocation(sourceFile, importLiteral)
 	for _, candidate := range movedFiles {
 		oldSpecifier := modulespecifiers.UpdateModuleSpecifier(
@@ -332,14 +327,14 @@ func getUpdatedImportSpecifierFromMovedSourceFiles(program *compiler.Program, so
 			program,
 			sourceFile,
 			importingSourceFileName,
-			importLiteral.Text(),
+			tspath.ToModuleSpecifier(importLiteral.Text()),
 			candidate.sourceFile.FileName(),
 			userPreferences,
 			modulespecifiers.ModuleSpecifierOptions{
 				OverrideImportMode: resolutionMode,
 			},
 		)
-		if oldSpecifier != importLiteral.Text() {
+		if oldSpecifier.AsString() != importLiteral.Text() {
 			continue
 		}
 
@@ -348,13 +343,13 @@ func getUpdatedImportSpecifierFromMovedSourceFiles(program *compiler.Program, so
 			program,
 			sourceFile,
 			importingSourceFileName,
-			importLiteral.Text(),
+			tspath.ToModuleSpecifier(importLiteral.Text()),
 			candidate.newFileName,
 			userPreferences,
 			modulespecifiers.ModuleSpecifierOptions{
 				OverrideImportMode: resolutionMode,
 			},
-		)
+		).AsString()
 	}
 	return ""
 }
@@ -387,12 +382,18 @@ func forEachObjectProperty(objectLiteral *ast.ObjectLiteralExpression, cb func(p
 	}
 }
 
-func relativePathFromDirectory(fromDirectory string, to string, useCaseSensitiveFileNames bool) string {
-	return tspath.GetRelativePathFromDirectory(fromDirectory, to, tspath.ComparePathsOptions{UseCaseSensitiveFileNames: useCaseSensitiveFileNames})
+func relativePathFromDirectory(fromDirectory tspath.RootedDirectoryPath, to tspath.RootedFilePath, caseSensitivity tspath.CaseSensitivity) string {
+	if relativePath, ok := caseSensitivity.RelativePathFromDirectory(fromDirectory, to); ok {
+		return relativePath.AsString()
+	}
+	return to.AsString()
 }
 
-func relativeImportPathFromDirectory(fromDirectory string, to string, useCaseSensitiveFileNames bool) string {
-	return tspath.EnsurePathIsNonModuleName(relativePathFromDirectory(fromDirectory, to, useCaseSensitiveFileNames))
+func relativeImportPathFromDirectory(fromDirectory tspath.RootedDirectoryPath, to tspath.RootedFilePath, caseSensitivity tspath.CaseSensitivity) tspath.ModuleSpecifier {
+	if relativePath, ok := caseSensitivity.RelativePathFromDirectory(fromDirectory, to); ok {
+		return relativePath.AsModuleSpecifier()
+	}
+	return to.AsModuleSpecifier()
 }
 
 func isAmbientModuleSymbol(symbol *ast.Symbol) bool {

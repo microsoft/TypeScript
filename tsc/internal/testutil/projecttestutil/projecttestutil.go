@@ -29,9 +29,9 @@ import (
 //go:generate go tool github.com/matryer/moq -stub -fmt goimports -pkg projecttestutil -out npmexecutormock_generated.go ../../project/ata NpmExecutor
 //go:generate npx dprint fmt npmexecutormock_generated.go
 
-const (
-	TestTypingsLocation = "/home/src/Library/Caches/typescript"
-)
+const TestTypingsLocation = "/home/src/Library/Caches/typescript"
+
+var TestTypingsDirectory = tspath.RootedDirectoryPathFromNormalized(TestTypingsLocation)
 
 type TypingsInstallerOptions struct {
 	TypesRegistry []string
@@ -39,7 +39,7 @@ type TypingsInstallerOptions struct {
 }
 
 type SessionUtils struct {
-	currentDirectory string
+	currentDirectory tspath.RootedDirectoryPath
 	fsFromFileMap    iovfs.FsWithSys
 	fs               vfs.FS
 	client           *ClientMock
@@ -65,17 +65,17 @@ func (h *SessionUtils) SetupNpmExecutorForTypingsInstaller() {
 		return
 	}
 
-	h.npmExecutor.NpmInstallFunc = func(cwd string, packageNames []string) ([]byte, error) {
+	h.npmExecutor.NpmInstallFunc = func(ctx context.Context, currentDirectory tspath.RootedDirectoryPath, packageNames []string) ([]byte, error) {
 		// packageNames is actually npmInstallArgs due to interface misnaming
 		npmInstallArgs := packageNames
 		lenNpmInstallArgs := len(npmInstallArgs)
 		if lenNpmInstallArgs < 3 {
-			return nil, fmt.Errorf("unexpected npm install: %s %v", cwd, npmInstallArgs)
+			return nil, fmt.Errorf("unexpected npm install: %s %v", currentDirectory, npmInstallArgs)
 		}
 
 		if lenNpmInstallArgs == 3 && npmInstallArgs[2] == "types-registry@latest" {
 			// Write typings file
-			err := h.fs.WriteFile(cwd+"/node_modules/types-registry/index.json", h.createTypesRegistryFileContent())
+			err := h.fs.WriteFile(currentDirectory.ResolveFile("node_modules/types-registry/index.json"), h.createTypesRegistryFileContent())
 			return nil, err
 		}
 
@@ -101,7 +101,7 @@ func (h *SessionUtils) SetupNpmExecutorForTypingsInstaller() {
 			if !ok {
 				return nil, fmt.Errorf("content not provided for %s", packageBaseName)
 			}
-			err := h.fs.WriteFile(cwd+"/node_modules/@types/"+packageBaseName+"/index.d.ts", content)
+			err := h.fs.WriteFile(currentDirectory.ResolveFile("node_modules/@types/"+packageBaseName+"/index.d.ts"), content)
 			if err != nil {
 				return nil, err
 			}
@@ -110,8 +110,8 @@ func (h *SessionUtils) SetupNpmExecutorForTypingsInstaller() {
 	}
 }
 
-func (h *SessionUtils) ToPath(fileName string) tspath.Path {
-	return tspath.ToPath(fileName, h.currentDirectory, h.fs.UseCaseSensitiveFileNames())
+func (h *SessionUtils) PathKey(fileName string) tspath.PathKey {
+	return h.fs.CaseSensitivity().PathKey(tspath.ToRootedPath(fileName, h.currentDirectory))
 }
 
 func (h *SessionUtils) FS() vfs.FS {
@@ -120,25 +120,32 @@ func (h *SessionUtils) FS() vfs.FS {
 
 // WatchesFile reports whether any registered file watcher would match the given
 // file path. It handles both absolute glob patterns and relative patterns with
-// a base URI. On case-insensitive file systems the paths in glob patterns are
-// lowercased, so callers should pass the lowercased path.
+// a base URI according to the test file system's case sensitivity.
 func (h *SessionUtils) WatchesFile(filePath string) bool {
+	caseSensitivity := h.fs.CaseSensitivity()
+	fileName := tspath.ToRootedFilePath(filePath, h.currentDirectory)
 	for _, call := range h.client.WatchFilesCalls() {
 		for _, watcher := range call.Watchers {
 			if watcher.GlobPattern.Pattern != nil {
-				if g, err := glob.Parse(*watcher.GlobPattern.Pattern); err == nil && g.Match(filePath) {
+				pattern := *watcher.GlobPattern.Pattern
+				path := fileName.AsString()
+				if !caseSensitivity.IsCaseSensitive() {
+					pattern = caseSensitivity.Canonicalize(pattern)
+					path = caseSensitivity.Canonicalize(path)
+				}
+				if g, err := glob.Parse(pattern); err == nil && g.Match(path) {
 					return true
 				}
 			} else if watcher.GlobPattern.RelativePattern != nil {
 				rp := watcher.GlobPattern.RelativePattern
-				baseUri := string(*rp.BaseUri.URI)
-				// Convert base URI (e.g. "file:///home/projects") to a directory path
-				// with trailing separator for proper prefix matching on path boundaries.
-				baseDir := lsproto.DocumentUri(baseUri).FileName()
-				baseDir = tspath.EnsureTrailingDirectorySeparator(baseDir)
-				if strings.HasPrefix(filePath, baseDir) {
-					relativePath := filePath[len(baseDir):]
-					if g, err := glob.Parse(rp.Pattern); err == nil && g.Match(relativePath) {
+				baseDir := tspath.RootedDirectoryPathFromPath(tspath.RootedPath(lsproto.DocumentUri(*rp.BaseUri.URI).FileName()))
+				if relativePath, ok := caseSensitivity.RelativeFilePathFromDirectory(baseDir, fileName); ok {
+					pattern := rp.Pattern
+					if !caseSensitivity.IsCaseSensitive() {
+						pattern = caseSensitivity.Canonicalize(pattern)
+						relativePath = caseSensitivity.CanonicalRelativePath(relativePath)
+					}
+					if g, err := glob.Parse(pattern); err == nil && g.Match(relativePath.AsString()) {
 						return true
 					}
 				}
@@ -238,7 +245,7 @@ func SetupWithRealFS() (*project.Session, *SessionUtils) {
 	}
 
 	sessionUtils := &SessionUtils{
-		currentDirectory: wd,
+		currentDirectory: tspath.RootedDirectoryPathFromAbsolute(wd),
 		fs:               fs,
 		client:           clientMock,
 		npmExecutor:      npmExecutorMock,
@@ -252,7 +259,7 @@ func SetupWithRealFS() (*project.Session, *SessionUtils) {
 		NpmExecutor:   npmExecutorMock,
 		Logger:        sessionUtils.logger,
 		Options: &project.SessionOptions{
-			CurrentDirectory:       wd,
+			CurrentDirectory:       tspath.RootedDirectoryPathFromAbsolute(wd),
 			DefaultLibraryPath:     bundled.LibPath(),
 			PositionEncoding:       lsproto.PositionEncodingKindUTF8,
 			WatchEnabled:           true,
@@ -282,12 +289,12 @@ func WithRequestID(ctx context.Context) context.Context {
 }
 
 func GetSessionInitOptions(files map[string]any, options *project.SessionOptions, tiOptions *TypingsInstallerOptions) (*project.SessionInit, *SessionUtils) {
-	fsFromFileMap := vfstest.FromMap(files, false /*useCaseSensitiveFileNames*/)
+	fsFromFileMap := vfstest.FromMap(files, tspath.CaseInsensitive /*caseSensitivity*/)
 	fs := bundled.WrapFS(fsFromFileMap)
 	clientMock := &ClientMock{}
 	npmExecutorMock := &NpmExecutorMock{}
 	sessionUtils := &SessionUtils{
-		currentDirectory: "/",
+		currentDirectory: tspath.RootedDirectoryPathFromNormalized("/"),
 		fsFromFileMap:    fsFromFileMap.(iovfs.FsWithSys),
 		fs:               fs,
 		client:           clientMock,
@@ -302,9 +309,9 @@ func GetSessionInitOptions(files map[string]any, options *project.SessionOptions
 	// Use provided options or create default ones
 	if options == nil {
 		options = &project.SessionOptions{
-			CurrentDirectory:       "/",
+			CurrentDirectory:       tspath.RootedDirectoryPathFromNormalized("/"),
 			DefaultLibraryPath:     bundled.LibPath(),
-			TypingsLocation:        TestTypingsLocation,
+			TypingsLocation:        TestTypingsDirectory,
 			PositionEncoding:       lsproto.PositionEncodingKindUTF8,
 			WatchEnabled:           true,
 			LoggingEnabled:         true,

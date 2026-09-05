@@ -138,7 +138,7 @@ const customStructures: Structure[] = [
         properties: [
             {
                 name: "fileName",
-                type: { kind: "base", name: "string" },
+                type: { kind: "reference", name: "RootedFilePath" },
                 documentation: "The file name where the completion was requested.",
                 omitzeroValue: true,
             },
@@ -1417,6 +1417,20 @@ function patchAndPreprocessModel() {
     // Filter out notebook type aliases
     model.typeAliases = model.typeAliases.filter(ta => !isNotebookRelatedName(ta.name));
 
+    // The meta model represents file-operation URIs as strings even though the
+    // protocol requires document URIs.
+    for (const structureName of ["FileCreate", "FileRename", "FileDelete"]) {
+        const structure = model.structures.find(s => s.name === structureName);
+        if (!structure) {
+            throw new Error(`Missing ${structureName} structure`);
+        }
+        for (const prop of structure.properties) {
+            if (prop.name === "uri" || prop.name === "oldUri" || prop.name === "newUri") {
+                prop.type = { kind: "base", name: "DocumentUri" };
+            }
+        }
+    }
+
     // Clean up type aliases that reference notebook types (e.g., DocumentFilter)
     for (const ta of model.typeAliases) {
         if (ta.type.kind === "or") {
@@ -1842,6 +1856,7 @@ function handleOrType(orType: OrType): GoType {
 }
 
 const typeAliasOverrides = new Map([
+    ["RootedFilePath", { name: "tspath.RootedFilePath", needsPointer: false }],
     ["LSPAny", { name: "any", needsPointer: false }],
     ["LSPArray", { name: "[]any", needsPointer: false }],
     ["LSPObject", { name: "map[string]any", needsPointer: false }],
@@ -2451,6 +2466,7 @@ function generateCode() {
     writeLine(`\t"strings"`);
     writeLine("");
     writeLine(`\t"github.com/microsoft/TypeScript/tsc/internal/json"`);
+    writeLine(`\t"github.com/microsoft/TypeScript/tsc/internal/tspath"`);
     writeLine(`)`);
     writeLine("");
     writeLine("// Meta model version " + model.metaData.version);
