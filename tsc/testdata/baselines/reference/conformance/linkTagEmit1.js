@@ -65,8 +65,8 @@ type D1 = {
      */
     m: 1;
 };
-type Z = number;
 /** @typedef {number} Z @see N {@link N} */
+type Z = number;
 /**
  * @param {number} integer {@link Z}
  */

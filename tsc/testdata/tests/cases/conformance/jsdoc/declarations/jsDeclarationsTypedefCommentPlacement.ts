@@ -157,3 +157,28 @@ export function noop() {}
  * @param {any} x
  */
 export function l(x) { return x; }
+
+// @filename: documentationTags.js
+
+export function noop() {}
+
+/**
+ * Prose describing S.
+ * @typedef {number} S
+ * @see noop
+ * @example
+ * const s = 1;
+ */
+
+export function m() {}
+
+// @filename: elidedImport.js
+
+export function noop() {}
+
+/**
+ * Nothing in the output uses this import.
+ * @import {Point} from "./typedef.js"
+ */
+
+export function n() {}

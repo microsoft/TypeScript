@@ -193,3 +193,30 @@ export function l(x) { return x; }
 >x : any
 >x : any
 
+=== documentationTags.js ===
+export function noop() {}
+>noop : () => void
+
+/**
+ * Prose describing S.
+ * @typedef {number} S
+ * @see noop
+ * @example
+ * const s = 1;
+ */
+
+export function m() {}
+>m : () => void
+
+=== elidedImport.js ===
+export function noop() {}
+>noop : () => void
+
+/**
+ * Nothing in the output uses this import.
+ * @import {Point} from "./typedef.js"
+ */
+
+export function n() {}
+>n : () => void
+

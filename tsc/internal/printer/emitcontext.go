@@ -628,15 +628,23 @@ func (c *EmitContext) AssignCommentRange(to *ast.Node, from *ast.Node) {
 // lets a declaration reparsed out of a JSDoc tag keep the comment that declared it instead of
 // leaving it in front of the following statement. scanFrom is where the printer starts looking for
 // leading comments and must sit before the line the comment starts on, since comment scans only
-// collect after a line break. The first claim of a comment wins.
+// collect after a line break.
+//
+// node is nil when the declaration the comment documents is elided from the output, which leaves the
+// comment with no one to emit it - it documents something the output does not contain. A claim by an
+// emitted node supersedes one made for an elided declaration from the same comment; otherwise the
+// first claim wins.
 func (c *EmitContext) ClaimComment(node *ast.Node, scanFrom int, loc core.TextRange) {
-	if _, claimed := c.claimedComments[loc.Pos()]; claimed {
+	if owner, claimed := c.claimedComments[loc.Pos()]; claimed && (owner != nil || node == nil) {
 		return
 	}
 	if c.claimedComments == nil {
 		c.claimedComments = make(map[int]*ast.Node)
 	}
 	c.claimedComments[loc.Pos()] = node
+	if node == nil {
+		return
+	}
 	c.SetCommentRange(node, core.NewTextRange(scanFrom, loc.End()))
 	c.emitNodes.Get(node).flags |= claimsComment
 }
@@ -654,7 +662,7 @@ func (c *EmitContext) ClaimsComment(node *ast.Node) bool {
 // when comments are emitted outside of any node.
 func (c *EmitContext) EmitsLeadingComment(node *ast.Node, pos int) bool {
 	if owner, claimed := c.claimedComments[pos]; claimed {
-		return owner == node
+		return owner != nil && owner == node
 	}
 	return !c.ClaimsComment(node)
 }

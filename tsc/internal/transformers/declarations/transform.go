@@ -458,35 +458,52 @@ func (tx *DeclarationTransformer) transformAndReplaceLatePaintedStatements(state
 		}
 	}
 
-	tx.claimReparsedJSDocComments(results)
+	// Claim over the statements as they went in, not over `results`, so that a comment whose
+	// declaration was just elided is claimed by nothing rather than left for the next statement.
+	tx.claimReparsedJSDocComments(statements.Nodes)
 	return tx.Factory().NewNodeList(results)
 }
 
-// Tags that reparse into a declaration of their own rather than contributing to the node the
-// containing JSDoc comment is attached to. A `@template` is one of them only next to a `@typedef` or
-// `@callback`, which take every `@template` in their comment as type parameters of the type they
-// declare and leave none for the host - see gatherTypeParameters in the parser.
-func isUnhostedJSDocTag(tag *ast.Node, declaresType bool) bool {
+// Tags that reparse into a top-level declaration the containing JSDoc comment can be claimed for.
+func declaresOwnDeclaration(tag *ast.Node) bool {
 	switch tag.Kind {
-	case ast.KindJSDocTypedefTag, ast.KindJSDocCallbackTag, ast.KindJSDocImportTag, ast.KindJSDocOverloadTag:
+	case ast.KindJSDocTypedefTag, ast.KindJSDocCallbackTag, ast.KindJSDocImportTag:
 		return true
-	case ast.KindJSDocTemplateTag:
-		return declaresType
 	}
 	return false
 }
 
-// A JSDoc comment whose every tag is unhosted documents the declarations reparsed out of it, not the
-// statement it is attached to.
+// Tags whose meaning belongs to a node other than the declarations reparsed out of the containing
+// comment: those the parser applies to the comment's host - see reparseHosted - plus `@overload`,
+// which is emitted as a signature of its own. `@template` is the exception, since alongside a
+// `@typedef` or `@callback` it declares type parameters of the type being declared and leaves the
+// host none, per gatherTypeParameters.
+func documentsAnotherNode(tag *ast.Node, declaresType bool) bool {
+	switch tag.Kind {
+	case ast.KindJSDocTypeTag, ast.KindJSDocSatisfiesTag, ast.KindJSDocParameterTag, ast.KindJSDocThisTag,
+		ast.KindJSDocReturnTag, ast.KindJSDocReadonlyTag, ast.KindJSDocPrivateTag, ast.KindJSDocPublicTag,
+		ast.KindJSDocProtectedTag, ast.KindJSDocOverrideTag, ast.KindJSDocImplementsTag,
+		ast.KindJSDocAugmentsTag, ast.KindJSDocOverloadTag:
+		return true
+	case ast.KindJSDocTemplateTag:
+		return !declaresType
+	}
+	return false
+}
+
+// A JSDoc comment documents the declarations reparsed out of it, rather than the statement it is
+// attached to, when it produces such a declaration and carries nothing that documents anything else.
+// Whatever remains - the description, `@see`, `@example` and the like - describes what the comment
+// declares.
 func documentsOnlyReparsedDeclarations(jsdoc *ast.Node) bool {
 	tags := jsdoc.AsJSDoc().Tags
-	if tags == nil || len(tags.Nodes) == 0 {
+	if tags == nil || !core.Some(tags.Nodes, declaresOwnDeclaration) {
 		return false
 	}
 	declaresType := core.Some(tags.Nodes, func(tag *ast.Node) bool {
 		return ast.IsJSDocTypedefTag(tag) || ast.IsJSDocCallbackTag(tag)
 	})
-	return core.Every(tags.Nodes, func(tag *ast.Node) bool { return isUnhostedJSDocTag(tag, declaresType) })
+	return !core.Some(tags.Nodes, func(tag *ast.Node) bool { return documentsAnotherNode(tag, declaresType) })
 }
 
 // A JSDoc node starts at the full start of the node it documents rather than at its own `/**`, so
@@ -500,10 +517,25 @@ func (tx *DeclarationTransformer) commentRangeOfJSDoc(jsdoc *ast.Node, file *ast
 	return core.TextRange{}, false
 }
 
-// Declarations reparsed from JSDoc (`@typedef`, `@callback`, `@import`, `@overload`) take the text
-// range of the tag they came from, which sits inside the comment. The printer therefore finds no
-// leading comment for them and hands the comment to the following statement instead, documenting
-// the wrong declaration. Claim each such comment for the first declaration reparsed out of it.
+// The node a statement takes in the output, or nil when it is elided.
+func (tx *DeclarationTransformer) emittedForm(statement *ast.Node) *ast.Node {
+	if !ast.IsLateVisibilityPaintedStatement(statement) {
+		return statement
+	}
+	replacement, replaced := tx.lateStatementReplacementMap[ast.GetNodeId(tx.EmitContext().MostOriginal(statement))]
+	if !replaced {
+		return statement
+	}
+	if replacement != nil && replacement.Kind == ast.KindSyntaxList {
+		return core.FirstOrNil(replacement.AsSyntaxList().Children)
+	}
+	return replacement
+}
+
+// Declarations reparsed from JSDoc (`@typedef`, `@callback`, `@import`) take the text range of the
+// tag they came from, which sits inside the comment. The printer therefore finds no leading comment
+// for them and hands the comment to the following statement instead, documenting the wrong
+// declaration. Claim each such comment for the first declaration reparsed out of it.
 func (tx *DeclarationTransformer) claimReparsedJSDocComments(statements []*ast.Node) {
 	file := tx.state.currentSourceFile
 	if file == nil || !ast.IsSourceFileJS(file) {
@@ -519,7 +551,7 @@ func (tx *DeclarationTransformer) claimReparsedJSDocComments(statements []*ast.N
 			continue
 		}
 		if loc, ok := tx.commentRangeOfJSDoc(jsdoc, file); ok {
-			tx.EmitContext().ClaimComment(statement, jsdoc.Pos(), loc)
+			tx.EmitContext().ClaimComment(tx.emittedForm(statement), jsdoc.Pos(), loc)
 		}
 	}
 }

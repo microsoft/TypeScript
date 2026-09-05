@@ -144,6 +144,29 @@ export function noop() {}
  */
 export function l(x) { return x; }
 
+//// [documentationTags.js]
+export function noop() {}
+
+/**
+ * Prose describing S.
+ * @typedef {number} S
+ * @see noop
+ * @example
+ * const s = 1;
+ */
+
+export function m() {}
+
+//// [elidedImport.js]
+export function noop() {}
+
+/**
+ * Nothing in the output uses this import.
+ * @import {Point} from "./typedef.js"
+ */
+
+export function n() {}
+
 
 //// [typedef.js]
 export function noop() { }
@@ -258,6 +281,23 @@ export function noop() { }
  * @param {any} x
  */
 export function l(x) { return x; }
+//// [documentationTags.js]
+export function noop() { }
+/**
+ * Prose describing S.
+ * @typedef {number} S
+ * @see noop
+ * @example
+ * const s = 1;
+ */
+export function m() { }
+//// [elidedImport.js]
+export function noop() { }
+/**
+ * Nothing in the output uses this import.
+ * @import {Point} from "./typedef.js"
+ */
+export function n() { }
 
 
 //// [typedef.d.ts]
@@ -375,10 +415,18 @@ import type { Point } from "./typedef.js";
 export declare const p: Point;
 //// [overload.d.ts]
 export declare function noop(): void;
-/**
- * Takes a string.
- * @overload
- * @param {string} x
- * @returns {string}
- */
 export declare function l(x: string): string;
+//// [documentationTags.d.ts]
+export declare function noop(): void;
+/**
+ * Prose describing S.
+ * @typedef {number} S
+ * @see noop
+ * @example
+ * const s = 1;
+ */
+export type S = number;
+export declare function m(): void;
+//// [elidedImport.d.ts]
+export declare function noop(): void;
+export declare function n(): void;

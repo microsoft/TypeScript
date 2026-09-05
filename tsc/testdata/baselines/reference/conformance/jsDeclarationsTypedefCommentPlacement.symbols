@@ -188,3 +188,30 @@ export function l(x) { return x; }
 >x : Symbol(x, Decl(overload.js, 12, 18))
 >x : Symbol(x, Decl(overload.js, 12, 18))
 
+=== documentationTags.js ===
+export function noop() {}
+>noop : Symbol(noop, Decl(documentationTags.js, 0, 0))
+
+/**
+ * Prose describing S.
+ * @typedef {number} S
+ * @see noop
+ * @example
+ * const s = 1;
+ */
+
+export function m() {}
+>m : Symbol(m, Decl(documentationTags.js, 0, 25))
+
+=== elidedImport.js ===
+export function noop() {}
+>noop : Symbol(noop, Decl(elidedImport.js, 0, 0))
+
+/**
+ * Nothing in the output uses this import.
+ * @import {Point} from "./typedef.js"
+ */
+
+export function n() {}
+>n : Symbol(n, Decl(elidedImport.js, 0, 25))
+
