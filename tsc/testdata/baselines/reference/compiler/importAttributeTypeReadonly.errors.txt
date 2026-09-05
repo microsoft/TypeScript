@@ -1,0 +1,25 @@
+/readonlyError.d.ts(1,31): error TS1558: An import attributes property cannot have a 'readonly' modifier.
+/readonlyError.d.ts(6,32): error TS1558: An import attributes property cannot have a 'readonly' modifier.
+
+
+==== /readonlyError.d.ts (2 errors) ====
+    declare module "*.css" with { readonly type: "css" } {
+                                  ~~~~~~~~
+!!! error TS1558: An import attributes property cannot have a 'readonly' modifier.
+        const stylesheet: CSSStyleSheet;
+        export default stylesheet;
+    }
+    
+    declare module "*.json" with { readonly type: "json", readonly kind: "data" } {
+                                   ~~~~~~~~
+!!! error TS1558: An import attributes property cannot have a 'readonly' modifier.
+        const data: any;
+        export default data;
+    }
+    
+==== /valid.d.ts (0 errors) ====
+    declare module "*.txt" with { type: "text" } {
+        const text: string;
+        export default text;
+    }
+    

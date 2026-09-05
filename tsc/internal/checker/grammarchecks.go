@@ -2207,6 +2207,9 @@ func (c *Checker) checkGrammarImportAttributesType(attributes *ast.TypeLiteralNo
 			return c.grammarErrorOnNode(member, diagnostics.An_import_attributes_type_may_only_contain_property_signatures)
 		}
 		propertySignature := member.AsPropertySignatureDeclaration()
+		if propertySignature.Modifiers() != nil {
+			return c.grammarErrorOnNode(propertySignature.Modifiers().Nodes[0], diagnostics.An_import_attributes_property_cannot_have_a_readonly_modifier)
+		}
 		if propertySignature.Type == nil {
 			return c.grammarErrorOnNode(member, diagnostics.An_import_attributes_property_must_have_a_type_annotation)
 		}
