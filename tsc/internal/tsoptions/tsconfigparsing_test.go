@@ -949,6 +949,112 @@ func TestParseJsonConfigFileContentDefaultsCompileOnSaveToFalse(t *testing.T) {
 	assert.Equal(t, *parsed.CompileOnSave, false)
 }
 
+// TestGetExactFile verifies the contract of the getExactFile helper directly: a lookup only
+// succeeds if the entry found via the (possibly case-folding) canonical key is an exact,
+// case-sensitive match for the requested file name.
+func TestGetExactFile(t *testing.T) {
+	t.Parallel()
+
+	caseInsensitiveKeyMapper := func(value string) string {
+		return tspath.GetCanonicalFileName(value, false /*useCaseSensitiveFileNames*/)
+	}
+	caseSensitiveKeyMapper := func(value string) string {
+		return tspath.GetCanonicalFileName(value, true /*useCaseSensitiveFileNames*/)
+	}
+
+	t.Run("exact match is found", func(t *testing.T) {
+		t.Parallel()
+		var m collections.OrderedMap[string, string]
+		m.Set(caseInsensitiveKeyMapper("/project/src/brand.ts"), "/project/src/brand.ts")
+		key, ok := tsoptions.GetExactFileTestWorker(&m, caseInsensitiveKeyMapper, "/project/src/brand.ts")
+		assert.Assert(t, ok)
+		assert.Equal(t, key, caseInsensitiveKeyMapper("/project/src/brand.ts"))
+	})
+
+	t.Run("canonical key collision without exact match is rejected", func(t *testing.T) {
+		t.Parallel()
+		var m collections.OrderedMap[string, string]
+		m.Set(caseInsensitiveKeyMapper("/project/src/brand.ts"), "/project/src/brand.ts")
+		_, ok := tsoptions.GetExactFileTestWorker(&m, caseInsensitiveKeyMapper, "/project/src/Brand.ts")
+		assert.Assert(t, !ok)
+	})
+
+	t.Run("no entry for canonical key", func(t *testing.T) {
+		t.Parallel()
+		var m collections.OrderedMap[string, string]
+		_, ok := tsoptions.GetExactFileTestWorker(&m, caseInsensitiveKeyMapper, "/project/src/brand.ts")
+		assert.Assert(t, !ok)
+	})
+
+	t.Run("case sensitive key mapper never collides", func(t *testing.T) {
+		t.Parallel()
+		var m collections.OrderedMap[string, string]
+		m.Set(caseSensitiveKeyMapper("/project/src/brand.ts"), "/project/src/brand.ts")
+		_, ok := tsoptions.GetExactFileTestWorker(&m, caseSensitiveKeyMapper, "/project/src/Brand.ts")
+		assert.Assert(t, !ok)
+	})
+}
+
+// TestGetFileNamesFromConfigSpecsCaseInsensitiveBaseNameMismatch verifies that wildcard "include"
+// expansion never drops a file just because its base name case-insensitively collides with another,
+// differently-cased, unrelated file's base name once its extension is changed to look for a
+// higher-priority sibling (e.g. "Brand.tsx" should not be treated as an output of "brand.ts").
+// See https://github.com/microsoft/TypeScript/issues/64098.
+func TestGetFileNamesFromConfigSpecsCaseInsensitiveBaseNameMismatch(t *testing.T) {
+	t.Parallel()
+
+	host := tsoptionstest.NewVFSParseConfigHost(map[string]string{
+		"/project/src/brand.ts":  `export const brand = "ok";`,
+		"/project/src/Brand.tsx": `export const oops: number = 1;`,
+	}, "/project", false /*useCaseSensitiveFileNames*/)
+
+	parsed := tsoptions.ParseJsonConfigFileContent(
+		map[string]any{
+			"compilerOptions": map[string]any{"jsx": "react-jsx"},
+			"include":         []any{"src/**/*"},
+		},
+		host,
+		"/project",
+		nil,
+		"/project/tsconfig.json",
+		nil, /*resolutionStack*/
+		nil, /*extendedConfigCache*/
+	)
+	assert.Equal(t, len(parsed.Errors), 0)
+	fileNames := slices.Clone(parsed.FileNames())
+	slices.Sort(fileNames)
+	assert.DeepEqual(t, fileNames, []string{"/project/src/Brand.tsx", "/project/src/brand.ts"})
+}
+
+// TestGetFileNamesFromConfigSpecsSameCaseExtensionPriorityStillApplies verifies that the fix for
+// case-insensitive base name mismatches does not regress the legitimate extension-priority
+// de-duplication for files that share the exact same base name (e.g. a ".ts" source file should
+// still win over its own ".d.ts" and ".js" compilation outputs).
+func TestGetFileNamesFromConfigSpecsSameCaseExtensionPriorityStillApplies(t *testing.T) {
+	t.Parallel()
+
+	host := tsoptionstest.NewVFSParseConfigHost(map[string]string{
+		"/project/src/foo.ts":   `export const foo = 1;`,
+		"/project/src/foo.d.ts": `export declare const foo: number;`,
+		"/project/src/foo.js":   `exports.foo = 1;`,
+	}, "/project", false /*useCaseSensitiveFileNames*/)
+
+	parsed := tsoptions.ParseJsonConfigFileContent(
+		map[string]any{
+			"compilerOptions": map[string]any{"allowJs": true},
+			"include":         []any{"src/**/*"},
+		},
+		host,
+		"/project",
+		nil,
+		"/project/tsconfig.json",
+		nil, /*resolutionStack*/
+		nil, /*extendedConfigCache*/
+	)
+	assert.Equal(t, len(parsed.Errors), 0)
+	assert.DeepEqual(t, parsed.FileNames(), []string{"/project/src/foo.ts"})
+}
+
 func getParsedWithJsonApi(config testConfig, host tsoptions.ParseConfigHost, basePath string) *tsoptions.ParsedCommandLine {
 	configFileName := tspath.GetNormalizedAbsolutePath(config.configFileName, basePath)
 	path := tspath.ToPath(config.configFileName, basePath, host.FS().UseCaseSensitiveFileNames())
