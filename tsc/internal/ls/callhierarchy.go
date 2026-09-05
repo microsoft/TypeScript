@@ -18,6 +18,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/printer"
 	"github.com/microsoft/TypeScript/tsc/internal/scanner"
 	"github.com/microsoft/TypeScript/tsc/internal/spanmap"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 )
 
 type CallHierarchyDeclaration = *ast.Node
@@ -161,7 +162,7 @@ func getSymbolOfCallHierarchyDeclaration(c *checker.Checker, node *ast.Node) *as
 func getCallHierarchyItemName(program *compiler.Program, node *ast.Node) (text string, pos int, end int) {
 	if ast.IsSourceFile(node) {
 		sourceFile := node.AsSourceFile()
-		return sourceFile.FileName(), 0, 0
+		return tspath.GetBaseFileName(sourceFile.OriginalFileName()), 0, 0
 	}
 
 	if (ast.IsFunctionDeclaration(node) || ast.IsClassDeclaration(node)) && node.Name() == nil {
@@ -502,6 +503,13 @@ func (l *LanguageService) createCallHierarchyItem(program *compiler.Program, nod
 	sourceFile := ast.GetSourceFileOfNode(node)
 	nameText, namePos, nameEnd := getCallHierarchyItemName(program, node)
 	containerName := getCallHierarchyItemContainerName(program, node)
+	if ast.IsSourceFile(node) {
+		containerName = relativePathFromDirectory(
+			program.GetCurrentDirectory(),
+			tspath.GetDirectoryPath(sourceFile.OriginalFileName()),
+			l.UseCaseSensitiveFileNames(),
+		)
+	}
 
 	kind := getSymbolKindFromNode(node)
 

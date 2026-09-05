@@ -1,26 +1,27 @@
 // === Call Hierarchy ===
 ╭ name: foo
 ├ kind: function
-├ file: /callHierarchyFile.ts
+├ file: /src/callers.ts
 ├ span:
-│ ╭ /callHierarchyFile.ts:2:1-3:2
+│ ╭ /src/callers.ts:2:1-3:2
 │ │ 2: function foo() {
 │ │    ^^^^^^^^^^^^^^^^
 │ │ 3: }
 │ │    ^
 │ ╰
 ├ selectionSpan:
-│ ╭ /callHierarchyFile.ts:2:10-2:13
+│ ╭ /src/callers.ts:2:10-2:13
 │ │ 2: function foo() {
 │ │             ^^^
 │ ╰
 ├ incoming:
 │ ╭ from:
-│ │ ╭ name: /callHierarchyFile.ts
+│ │ ╭ name: callers.ts
 │ │ ├ kind: file
-│ │ ├ file: /callHierarchyFile.ts
+│ │ ├ containerName: src
+│ │ ├ file: /src/callers.ts
 │ │ ├ span:
-│ │ │ ╭ /callHierarchyFile.ts:1:1-3:2
+│ │ │ ╭ /src/callers.ts:1:1-3:2
 │ │ │ │ 1: foo();
 │ │ │ │    ^^^^^^
 │ │ │ │ 2: function foo() {
@@ -29,13 +30,13 @@
 │ │ │ │    ^
 │ │ │ ╰
 │ │ ├ selectionSpan:
-│ │ │ ╭ /callHierarchyFile.ts:1:1-1:1
+│ │ │ ╭ /src/callers.ts:1:1-1:1
 │ │ │ │ 1: foo();
 │ │ │ │    <
 │ │ │ ╰
 │ │ ╰ incoming: none
 │ ├ fromSpans:
-│ │ ╭ /callHierarchyFile.ts:1:1-1:4
+│ │ ╭ /src/callers.ts:1:1-1:4
 │ │ │ 1: foo();
 │ │ │    ^^^
 │ ╰ ╰
