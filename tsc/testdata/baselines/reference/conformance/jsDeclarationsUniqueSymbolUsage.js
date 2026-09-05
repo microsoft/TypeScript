@@ -20,12 +20,12 @@ export function b(value) {
 
 //// [a.d.ts]
 export declare const kSymbol: unique symbol;
-export type WithSymbol = {
-    [kSymbol]: true;
-};
 /**
  * @typedef {{[kSymbol]: true}} WithSymbol
  */ 
+export type WithSymbol = {
+    [kSymbol]: true;
+};
 //// [b.d.ts]
 /**
  * @returns {import('./a').WithSymbol}

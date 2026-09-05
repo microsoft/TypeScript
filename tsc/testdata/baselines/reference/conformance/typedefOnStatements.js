@@ -159,54 +159,71 @@ function proof(a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q) {
 
 
 //// [typedefOnStatements.d.ts]
+/** @typedef {{a: string}} A */
 type A = {
     a: string;
 };
+/** @typedef {{ b: string }} B */
 type B = {
     b: string;
 };
+/** @typedef {{ c: string }} C */
 type C = {
     c: string;
 };
+/** @typedef {{ d: string }} D */
 type D = {
     d: string;
 };
+/** @typedef {{ e: string }} E */
 type E = {
     e: string;
 };
+/** @typedef {{ f: string }} F */
 type F = {
     f: string;
 };
+/** @typedef {{ g: string }} G */
 type G = {
     g: string;
 };
+/** @typedef {{ h: string }} H */
 type H = {
     h: string;
 };
+/** @typedef {{ i: string }} I */
 type I = {
     i: string;
 };
+/** @typedef {{ j: string }} J */
 type J = {
     j: string;
 };
+/** @typedef {{ k: string }} K */
 type K = {
     k: string;
 };
+/** @typedef {{ l: string }} L */
 type L = {
     l: string;
 };
+/** @typedef {{ m: string }} M */
 type M = {
     m: string;
 };
+/** @typedef {{ n: string }} N */
 type N = {
     n: string;
 };
+/** @typedef {{ o: string }} O */
 type O = {
     o: string;
 };
+/** @typedef {{ p: string }} P */
 type P = {
     p: string;
 };
+/** @typedef {{ q: string }} Q */
 type Q = {
     q: string;
 };

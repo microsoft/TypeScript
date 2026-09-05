@@ -25,6 +25,8 @@ type EmitContext struct {
 	varScopeStack core.Stack[*varScope]
 	letScopeStack core.Stack[*varScope]
 	emitHelpers   collections.OrderedSet[*EmitHelper]
+	// Comments owned by a node they do not textually precede, keyed by the comment's start position.
+	claimedComments map[int]*ast.Node
 }
 
 type environmentFlags int
@@ -523,6 +525,7 @@ type emitNodeFlags uint32
 const (
 	hasCommentRange emitNodeFlags = 1 << iota
 	hasSourceMapRange
+	claimsComment
 )
 
 type SnippetKind int
@@ -617,6 +620,51 @@ func (c *EmitContext) SetCommentRange(node *ast.Node, loc core.TextRange) {
 // Sets the range to use for a node when emitting comments.
 func (c *EmitContext) AssignCommentRange(to *ast.Node, from *ast.Node) {
 	c.SetCommentRange(to, c.CommentRange(from))
+}
+
+// Gives the comment at loc to node, which need not be the node the comment textually precedes. A
+// claimed comment is emitted by its owner and skipped by every other node whose leading comment scan
+// runs across it, and the owner in turn emits no leading comment other than the one it claimed. This
+// lets a declaration reparsed out of a JSDoc tag keep the comment that declared it instead of
+// leaving it in front of the following statement. scanFrom is where the printer starts looking for
+// leading comments and must sit before the line the comment starts on, since comment scans only
+// collect after a line break.
+//
+// node is nil when the declaration the comment documents is elided from the output, which leaves the
+// comment with no one to emit it - it documents something the output does not contain. A claim by an
+// emitted node supersedes one made for an elided declaration from the same comment; otherwise the
+// first claim wins.
+func (c *EmitContext) ClaimComment(node *ast.Node, scanFrom int, loc core.TextRange) {
+	if owner, claimed := c.claimedComments[loc.Pos()]; claimed && (owner != nil || node == nil) {
+		return
+	}
+	if c.claimedComments == nil {
+		c.claimedComments = make(map[int]*ast.Node)
+	}
+	c.claimedComments[loc.Pos()] = node
+	if node == nil {
+		return
+	}
+	c.SetCommentRange(node, core.NewTextRange(scanFrom, loc.End()))
+	c.emitNodes.Get(node).flags |= claimsComment
+}
+
+// Reports whether node was given a comment to emit by ClaimComment.
+func (c *EmitContext) ClaimsComment(node *ast.Node) bool {
+	if node == nil {
+		return false
+	}
+	emitNode := c.emitNodes.TryGet(node)
+	return emitNode != nil && emitNode.flags&claimsComment != 0
+}
+
+// Reports whether node emits the comment starting at pos as one of its leading comments. node is nil
+// when comments are emitted outside of any node.
+func (c *EmitContext) EmitsLeadingComment(node *ast.Node, pos int) bool {
+	if owner, claimed := c.claimedComments[pos]; claimed {
+		return owner != nil && owner == node
+	}
+	return !c.ClaimsComment(node)
 }
 
 // Gets the range to use for a node when emitting source maps.

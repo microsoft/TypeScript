@@ -458,7 +458,102 @@ func (tx *DeclarationTransformer) transformAndReplaceLatePaintedStatements(state
 		}
 	}
 
+	// Claim over the statements as they went in, not over `results`, so that a comment whose
+	// declaration was just elided is claimed by nothing rather than left for the next statement.
+	tx.claimReparsedJSDocComments(statements.Nodes)
 	return tx.Factory().NewNodeList(results)
+}
+
+// Tags that reparse into a top-level declaration the containing JSDoc comment can be claimed for.
+func declaresOwnDeclaration(tag *ast.Node) bool {
+	switch tag.Kind {
+	case ast.KindJSDocTypedefTag, ast.KindJSDocCallbackTag, ast.KindJSDocImportTag:
+		return true
+	}
+	return false
+}
+
+// Tags whose meaning belongs to a node other than the declarations reparsed out of the containing
+// comment: those the parser applies to the comment's host - see reparseHosted - plus `@overload`,
+// which is emitted as a signature of its own. `@template` is the exception, since alongside a
+// `@typedef` or `@callback` it declares type parameters of the type being declared and leaves the
+// host none, per gatherTypeParameters.
+func documentsAnotherNode(tag *ast.Node, declaresType bool) bool {
+	switch tag.Kind {
+	case ast.KindJSDocTypeTag, ast.KindJSDocSatisfiesTag, ast.KindJSDocParameterTag, ast.KindJSDocThisTag,
+		ast.KindJSDocReturnTag, ast.KindJSDocReadonlyTag, ast.KindJSDocPrivateTag, ast.KindJSDocPublicTag,
+		ast.KindJSDocProtectedTag, ast.KindJSDocOverrideTag, ast.KindJSDocImplementsTag,
+		ast.KindJSDocAugmentsTag, ast.KindJSDocOverloadTag:
+		return true
+	case ast.KindJSDocTemplateTag:
+		return !declaresType
+	}
+	return false
+}
+
+// A JSDoc comment documents the declarations reparsed out of it, rather than the statement it is
+// attached to, when it produces such a declaration and carries nothing that documents anything else.
+// Whatever remains - the description, `@see`, `@example` and the like - describes what the comment
+// declares.
+func documentsOnlyReparsedDeclarations(jsdoc *ast.Node) bool {
+	tags := jsdoc.AsJSDoc().Tags
+	if tags == nil || !core.Some(tags.Nodes, declaresOwnDeclaration) {
+		return false
+	}
+	declaresType := core.Some(tags.Nodes, func(tag *ast.Node) bool {
+		return ast.IsJSDocTypedefTag(tag) || ast.IsJSDocCallbackTag(tag)
+	})
+	return !core.Some(tags.Nodes, func(tag *ast.Node) bool { return documentsAnotherNode(tag, declaresType) })
+}
+
+// A JSDoc node starts at the full start of the node it documents rather than at its own `/**`, so
+// recover the range of the comment itself.
+func (tx *DeclarationTransformer) commentRangeOfJSDoc(jsdoc *ast.Node, file *ast.SourceFile) (core.TextRange, bool) {
+	for comment := range scanner.GetLeadingCommentRanges(tx.EmitContext().Factory.AsNodeFactory(), file.Text(), jsdoc.Pos()) {
+		if comment.End() == jsdoc.End() {
+			return comment.TextRange, true
+		}
+	}
+	return core.TextRange{}, false
+}
+
+// The node a statement takes in the output, or nil when it is elided.
+func (tx *DeclarationTransformer) emittedForm(statement *ast.Node) *ast.Node {
+	if !ast.IsLateVisibilityPaintedStatement(statement) {
+		return statement
+	}
+	replacement, replaced := tx.lateStatementReplacementMap[ast.GetNodeId(tx.EmitContext().MostOriginal(statement))]
+	if !replaced {
+		return statement
+	}
+	if replacement != nil && replacement.Kind == ast.KindSyntaxList {
+		return core.FirstOrNil(replacement.AsSyntaxList().Children)
+	}
+	return replacement
+}
+
+// Declarations reparsed from JSDoc (`@typedef`, `@callback`, `@import`) take the text range of the
+// tag they came from, which sits inside the comment. The printer therefore finds no leading comment
+// for them and hands the comment to the following statement instead, documenting the wrong
+// declaration. Claim each such comment for the first declaration reparsed out of it.
+func (tx *DeclarationTransformer) claimReparsedJSDocComments(statements []*ast.Node) {
+	file := tx.state.currentSourceFile
+	if file == nil || !ast.IsSourceFileJS(file) {
+		return
+	}
+	for _, statement := range statements {
+		original := tx.EmitContext().MostOriginal(statement)
+		if original.Flags&ast.NodeFlagsReparsed == 0 {
+			continue
+		}
+		jsdoc := core.FirstOrNil(original.EagerJSDoc(file))
+		if jsdoc == nil || !documentsOnlyReparsedDeclarations(jsdoc) {
+			continue
+		}
+		if loc, ok := tx.commentRangeOfJSDoc(jsdoc, file); ok {
+			tx.EmitContext().ClaimComment(tx.emittedForm(statement), jsdoc.Pos(), loc)
+		}
+	}
 }
 
 func (tx *DeclarationTransformer) getReferencedFiles(outputFilePath string) (results []*ast.FileReference) {

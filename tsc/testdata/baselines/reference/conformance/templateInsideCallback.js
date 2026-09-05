@@ -113,28 +113,35 @@ function flatMap(array, iterable = identity) {
 
 
 //// [templateInsideCallback.d.ts]
-type Oops = {
-    a: T;
-    b: T;
-};
-type Call = (x: T) => T;
 /**
  * @typedef Oops
  * @template T
  * @property {T} a
  * @property {T} b
  */
+type Oops = {
+    a: T;
+    b: T;
+};
 /**
  * @callback Call
  * @template T
  * @param {T} x
  * @returns {T}
  */
+type Call = (x: T) => T;
 /**
  * @template T
  * @type {Call<T>}
  */
 declare const identity: Call<T>;
+/**
+ * @typedef Nested
+ * @property {Object} oh
+ * @property {number} oh.no
+ * @template T
+ * @property {string} oh.noooooo
+ */
 type Nested = {
     oh: {
         no: number;
