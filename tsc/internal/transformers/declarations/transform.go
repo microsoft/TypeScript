@@ -463,11 +463,15 @@ func (tx *DeclarationTransformer) transformAndReplaceLatePaintedStatements(state
 }
 
 // Tags that reparse into a declaration of their own rather than contributing to the node the
-// containing JSDoc comment is attached to.
-func isUnhostedJSDocTag(tag *ast.Node) bool {
+// containing JSDoc comment is attached to. A `@template` is one of them only next to a `@typedef` or
+// `@callback`, which take every `@template` in their comment as type parameters of the type they
+// declare and leave none for the host - see gatherTypeParameters in the parser.
+func isUnhostedJSDocTag(tag *ast.Node, declaresType bool) bool {
 	switch tag.Kind {
 	case ast.KindJSDocTypedefTag, ast.KindJSDocCallbackTag, ast.KindJSDocImportTag, ast.KindJSDocOverloadTag:
 		return true
+	case ast.KindJSDocTemplateTag:
+		return declaresType
 	}
 	return false
 }
@@ -476,7 +480,13 @@ func isUnhostedJSDocTag(tag *ast.Node) bool {
 // statement it is attached to.
 func documentsOnlyReparsedDeclarations(jsdoc *ast.Node) bool {
 	tags := jsdoc.AsJSDoc().Tags
-	return tags != nil && len(tags.Nodes) > 0 && core.Every(tags.Nodes, isUnhostedJSDocTag)
+	if tags == nil || len(tags.Nodes) == 0 {
+		return false
+	}
+	declaresType := core.Some(tags.Nodes, func(tag *ast.Node) bool {
+		return ast.IsJSDocTypedefTag(tag) || ast.IsJSDocCallbackTag(tag)
+	})
+	return core.Every(tags.Nodes, func(tag *ast.Node) bool { return isUnhostedJSDocTag(tag, declaresType) })
 }
 
 // A JSDoc node starts at the full start of the node it documents rather than at its own `/**`, so

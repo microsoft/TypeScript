@@ -148,5 +148,19 @@ type Nested = {
         noooooo: string;
     };
 };
+/**
+ * @overload
+ * @template T
+ * @template U
+ * @param {T[]} array
+ * @param {(x: T) => U[]} iterable
+ * @returns {U[]}
+ */
 declare function flatMap(array: T[], iterable: (x: T) => U[]): U[];
+/**
+ * @overload
+ * @template T
+ * @param {T[][]} array
+ * @returns {T[]}
+ */
 declare function flatMap(array: T[][]): T[];

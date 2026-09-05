@@ -23,11 +23,11 @@ export {}
 export type Bar = string;
 export {};
 //// [x.d.ts]
+/** @import {Bar} from "./y" */
 import type { Bar } from "./y";
 /** @typedef {Bar[]} Bars */
 type Bars = Bar[];
 declare class C {
-    /** @import {Bar} from "./y" */
     /** @type {Bars} */
     foo: Bars;
     bar(/** @type {Bar} */ x: Bar): string;

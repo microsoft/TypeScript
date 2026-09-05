@@ -5740,6 +5740,13 @@ func (p *Printer) emitDetachedComments(textRange core.TextRange) (result detache
 				}
 			}
 
+			if !p.emitContext.EmitsLeadingComment(nil /*node*/, comment.Pos()) {
+				// A claimed comment is emitted by its owner, which comes after this point in the
+				// output. Detaching the rest of the run would print it ahead of the owner and put
+				// the comments out of source order.
+				break
+			}
+
 			detachedComments = append(detachedComments, comment)
 			lastComment = comment
 		}
@@ -5756,7 +5763,7 @@ func (p *Printer) emitDetachedComments(textRange core.TextRange) (result detache
 				// Filter to only comments that should be written (e.g., JSDoc-style in declaration emit)
 				var commentsToEmit []ast.CommentRange
 				for _, comment := range detachedComments {
-					if p.shouldWriteComment(comment) && p.emitContext.EmitsLeadingComment(nil /*node*/, comment.Pos()) {
+					if p.shouldWriteComment(comment) {
 						commentsToEmit = append(commentsToEmit, comment)
 					}
 				}

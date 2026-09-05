@@ -118,14 +118,13 @@ export type PropName = string | number | symbol;
  * @returns {string}
  */
 export type NumberToStringCb = (a: number) => string;
-export type MixinName<T> = T & {
-    name: string;
-};
-export type Identity<T> = (x: T) => T;
 /**
  * @template T
  * @typedef {T & {name: string}} MixinName
  */
+export type MixinName<T> = T & {
+    name: string;
+};
 /**
  * Identity function
  *
@@ -134,6 +133,7 @@ export type Identity<T> = (x: T) => T;
  * @param {T} x
  * @returns {T}
  */
+export type Identity<T> = (x: T) => T;
 //// [mixed.d.ts]
 declare const _exports: {
     doTheThing: typeof doTheThing;

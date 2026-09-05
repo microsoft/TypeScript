@@ -134,11 +134,16 @@ func (p *Parser) reparseUnhosted(tag *ast.Node, parent *ast.Node, jsDoc *ast.Nod
 			p.addDeepCloneReparse(importTag.Attributes),
 		)
 		p.finishReparsedNode(importDeclaration, tag)
+		p.jsdocInfos = append(p.jsdocInfos, JSDocInfo{parent: importDeclaration, jsDocs: []*ast.Node{jsDoc}})
+		importDeclaration.Flags |= ast.NodeFlagsHasJSDoc
 		p.reparseList = append(p.reparseList, importDeclaration)
 	case ast.KindJSDocOverloadTag:
 		// Create overload signatures only for function, method, and constructor declarations outside object literals
 		if (ast.IsFunctionDeclaration(parent) || ast.IsMethodDeclaration(parent) || ast.IsConstructorDeclaration(parent)) && p.parsingContexts&(1<<PCObjectLiteralMembers) == 0 {
-			p.reparseList = append(p.reparseList, p.reparseJSDocSignature(tag.AsJSDocOverloadTag().TypeExpression, parent, jsDoc, tag, parent.Modifiers()))
+			signature := p.reparseJSDocSignature(tag.AsJSDocOverloadTag().TypeExpression, parent, jsDoc, tag, parent.Modifiers())
+			p.jsdocInfos = append(p.jsdocInfos, JSDocInfo{parent: signature, jsDocs: []*ast.Node{jsDoc}})
+			signature.Flags |= ast.NodeFlagsHasJSDoc
+			p.reparseList = append(p.reparseList, signature)
 		}
 	}
 }

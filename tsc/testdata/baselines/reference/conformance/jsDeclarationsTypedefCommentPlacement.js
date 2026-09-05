@@ -89,6 +89,61 @@ export function noop() {}
 
 export function i() {}
 
+//// [generic.js]
+export function noop() {}
+
+/**
+ * A named mixin.
+ * @template T
+ * @typedef {T & {name: string}} MixinName
+ */
+
+/**
+ * Identity.
+ * @template T
+ * @callback Identity
+ * @param {T} x
+ * @returns {T}
+ */
+
+export function j() {}
+
+//// [templateOnHost.js]
+export function noop() {}
+
+/**
+ * Documents k, not a type.
+ * @template T
+ * @param {T} x
+ */
+export function k(x) { return x; }
+
+//// [standaloneImport.js]
+export function noop() {}
+
+/**
+ * Brings Point into scope.
+ * @import {Point} from "./typedef.js"
+ */
+
+/** @type {Point} */
+export const p = { x: 0, y: 0 };
+
+//// [overload.js]
+export function noop() {}
+
+/**
+ * Takes a string.
+ * @overload
+ * @param {string} x
+ * @returns {string}
+ */
+
+/**
+ * @param {any} x
+ */
+export function l(x) { return x; }
+
 
 //// [typedef.js]
 export function noop() { }
@@ -160,6 +215,49 @@ export function noop() { }
  * @typedef {number} Q
  */
 export function i() { }
+//// [generic.js]
+export function noop() { }
+/**
+ * A named mixin.
+ * @template T
+ * @typedef {T & {name: string}} MixinName
+ */
+/**
+ * Identity.
+ * @template T
+ * @callback Identity
+ * @param {T} x
+ * @returns {T}
+ */
+export function j() { }
+//// [templateOnHost.js]
+export function noop() { }
+/**
+ * Documents k, not a type.
+ * @template T
+ * @param {T} x
+ */
+export function k(x) { return x; }
+//// [standaloneImport.js]
+export function noop() { }
+/**
+ * Brings Point into scope.
+ * @import {Point} from "./typedef.js"
+ */
+/** @type {Point} */
+export const p = { x: 0, y: 0 };
+//// [overload.js]
+export function noop() { }
+/**
+ * Takes a string.
+ * @overload
+ * @param {string} x
+ * @returns {string}
+ */
+/**
+ * @param {any} x
+ */
+export function l(x) { return x; }
 
 
 //// [typedef.d.ts]
@@ -224,12 +322,12 @@ export type Trailing = {
 };
 //// [imported.d.ts]
 export declare function noop(): void;
-import type { Point } from "./typedef.js";
 /**
  * Imports and defines in one comment.
  * @import {Point} from "./typedef.js"
  * @typedef {Point[]} Path
  */
+import type { Point } from "./typedef.js";
 export type Path = Point[];
 export declare function h(): void;
 //// [preceded.d.ts]
@@ -239,3 +337,48 @@ export declare function noop(): void;
  */
 export type Q = number;
 export declare function i(): void;
+//// [generic.d.ts]
+export declare function noop(): void;
+/**
+ * A named mixin.
+ * @template T
+ * @typedef {T & {name: string}} MixinName
+ */
+export type MixinName<T> = T & {
+    name: string;
+};
+/**
+ * Identity.
+ * @template T
+ * @callback Identity
+ * @param {T} x
+ * @returns {T}
+ */
+export type Identity<T> = (x: T) => T;
+export declare function j(): void;
+//// [templateOnHost.d.ts]
+export declare function noop(): void;
+/**
+ * Documents k, not a type.
+ * @template T
+ * @param {T} x
+ */
+export declare function k<T>(x: T): T;
+//// [standaloneImport.d.ts]
+export declare function noop(): void;
+/**
+ * Brings Point into scope.
+ * @import {Point} from "./typedef.js"
+ */
+import type { Point } from "./typedef.js";
+/** @type {Point} */
+export declare const p: Point;
+//// [overload.d.ts]
+export declare function noop(): void;
+/**
+ * Takes a string.
+ * @overload
+ * @param {string} x
+ * @returns {string}
+ */
+export declare function l(x: string): string;

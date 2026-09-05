@@ -119,3 +119,72 @@ export function noop() {}
 export function i() {}
 >i : Symbol(i, Decl(preceded.js, 0, 25))
 
+=== generic.js ===
+export function noop() {}
+>noop : Symbol(noop, Decl(generic.js, 0, 0))
+
+/**
+ * A named mixin.
+ * @template T
+ * @typedef {T & {name: string}} MixinName
+ */
+
+/**
+ * Identity.
+ * @template T
+ * @callback Identity
+ * @param {T} x
+ * @returns {T}
+ */
+
+export function j() {}
+>j : Symbol(j, Decl(generic.js, 0, 25))
+
+=== templateOnHost.js ===
+export function noop() {}
+>noop : Symbol(noop, Decl(templateOnHost.js, 0, 0))
+
+/**
+ * Documents k, not a type.
+ * @template T
+ * @param {T} x
+ */
+export function k(x) { return x; }
+>k : Symbol(k, Decl(templateOnHost.js, 0, 25))
+>x : Symbol(x, Decl(templateOnHost.js, 7, 18))
+>x : Symbol(x, Decl(templateOnHost.js, 7, 18))
+
+=== standaloneImport.js ===
+export function noop() {}
+>noop : Symbol(noop, Decl(standaloneImport.js, 0, 0))
+
+/**
+ * Brings Point into scope.
+ * @import {Point} from "./typedef.js"
+ */
+
+/** @type {Point} */
+export const p = { x: 0, y: 0 };
+>p : Symbol(p, Decl(standaloneImport.js, 8, 12))
+>x : Symbol(x, Decl(standaloneImport.js, 8, 18))
+>y : Symbol(y, Decl(standaloneImport.js, 8, 24))
+
+=== overload.js ===
+export function noop() {}
+>noop : Symbol(noop, Decl(overload.js, 0, 0))
+
+/**
+ * Takes a string.
+ * @overload
+ * @param {string} x
+ * @returns {string}
+ */
+
+/**
+ * @param {any} x
+ */
+export function l(x) { return x; }
+>l : Symbol(l, Decl(overload.js, 4, 4), Decl(overload.js, 0, 25))
+>x : Symbol(x, Decl(overload.js, 12, 18))
+>x : Symbol(x, Decl(overload.js, 12, 18))
+

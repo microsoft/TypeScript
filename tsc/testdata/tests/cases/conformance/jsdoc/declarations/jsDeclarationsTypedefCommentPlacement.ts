@@ -98,3 +98,62 @@ export function noop() {}
  */
 
 export function i() {}
+
+// @filename: generic.js
+
+export function noop() {}
+
+/**
+ * A named mixin.
+ * @template T
+ * @typedef {T & {name: string}} MixinName
+ */
+
+/**
+ * Identity.
+ * @template T
+ * @callback Identity
+ * @param {T} x
+ * @returns {T}
+ */
+
+export function j() {}
+
+// @filename: templateOnHost.js
+
+export function noop() {}
+
+/**
+ * Documents k, not a type.
+ * @template T
+ * @param {T} x
+ */
+export function k(x) { return x; }
+
+// @filename: standaloneImport.js
+
+export function noop() {}
+
+/**
+ * Brings Point into scope.
+ * @import {Point} from "./typedef.js"
+ */
+
+/** @type {Point} */
+export const p = { x: 0, y: 0 };
+
+// @filename: overload.js
+
+export function noop() {}
+
+/**
+ * Takes a string.
+ * @overload
+ * @param {string} x
+ * @returns {string}
+ */
+
+/**
+ * @param {any} x
+ */
+export function l(x) { return x; }
