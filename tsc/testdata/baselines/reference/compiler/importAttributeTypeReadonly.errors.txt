@@ -1,3 +1,4 @@
+/otherModifierError.d.ts(1,31): error TS1070: 'public' modifier cannot appear on a type member.
 /readonlyError.d.ts(1,31): error TS1558: An import attributes property cannot have a 'readonly' modifier.
 /readonlyError.d.ts(6,32): error TS1558: An import attributes property cannot have a 'readonly' modifier.
 
@@ -15,6 +16,14 @@
 !!! error TS1558: An import attributes property cannot have a 'readonly' modifier.
         const data: any;
         export default data;
+    }
+    
+==== /otherModifierError.d.ts (1 errors) ====
+    declare module "*.svg" with { public type: "svg" } {
+                                  ~~~~~~
+!!! error TS1070: 'public' modifier cannot appear on a type member.
+        const content: string;
+        export default content;
     }
     
 ==== /valid.d.ts (0 errors) ====
