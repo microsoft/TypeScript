@@ -1905,6 +1905,18 @@ func hasFileWithHigherPriorityExtension(file string, extensions [][]string, hasF
 	return false
 }
 
+// getExactFile looks up fileName in m using keyMapper's (possibly case-folding) canonical key, but
+// only returns a match if the entry found actually has that exact (case-sensitive) file name. This
+// prevents a canonical-key collision on case-insensitive file systems from being mistaken for a
+// match between two files whose base names merely differ in case.
+func getExactFile(m *collections.OrderedMap[string, string], keyMapper func(value string) string, fileName string) (string, bool) {
+	canonicalFileName := keyMapper(fileName)
+	if existing, ok := m.Get(canonicalFileName); ok && existing == fileName {
+		return canonicalFileName, true
+	}
+	return "", false
+}
+
 // Removes files included via wildcard expansion with a lower extension priority that have already been included.
 // file is the path to the file. Only removes an entry if its exact (case-sensitive) file name matches the lower-priority
 // name derived from file, so that files whose base names differ only by case are never treated as an input/output pair.
@@ -1924,9 +1936,8 @@ func removeWildcardFilesWithLowerPriorityExtension(file string, wildcardFiles *c
 			return
 		}
 		lowerPriorityFile := tspath.ChangeExtension(file, ext)
-		lowerPriorityPath := keyMapper(lowerPriorityFile)
-		if existing, ok := wildcardFiles.Get(lowerPriorityPath); ok && existing == lowerPriorityFile {
-			wildcardFiles.Delete(lowerPriorityPath)
+		if canonicalFileName, ok := getExactFile(wildcardFiles, keyMapper, lowerPriorityFile); ok {
+			wildcardFiles.Delete(canonicalFileName)
 		}
 	}
 }
@@ -2006,14 +2017,11 @@ func getFileNamesFromConfigSpecs(
 			// only by case on a case-insensitive file system (e.g. "foo.ts" and
 			// "Foo.tsx" are different files, not an input/output pair).
 			if hasFileWithHigherPriorityExtension(file, supportedExtensions, func(fileName string) bool {
-				canonicalFileName := keyMappper(fileName)
-				if existing, ok := literalFileMap.Get(canonicalFileName); ok {
-					return existing == fileName
+				if _, ok := getExactFile(&literalFileMap, keyMappper, fileName); ok {
+					return true
 				}
-				if existing, ok := wildcardFileMap.Get(canonicalFileName); ok {
-					return existing == fileName
-				}
-				return false
+				_, ok := getExactFile(&wildcardFileMap, keyMappper, fileName)
+				return ok
 			}) {
 				continue
 			}
