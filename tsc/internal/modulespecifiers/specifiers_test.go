@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
+	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/module"
 	"github.com/microsoft/TypeScript/tsc/internal/packagejson"
@@ -342,6 +343,170 @@ func TestTryGetModuleNameFromExportsOrImports(t *testing.T) {
 					t.Errorf("tryGetModuleNameFromExportsOrImports(targetFilePath = %q) = %v, expected %v", tt.targetFilePath, result, tt.expected)
 				}
 			})
+		}
+	})
+	t.Run("with conditional fallback blocked (issue 64171)", func(t *testing.T) {
+		t.Parallel()
+
+		strExports := func(s string) packagejson.ExportsOrImports {
+			return packagejson.ExportsOrImports{
+				JSONValue: packagejson.JSONValue{
+					Type:  packagejson.JSONValueTypeString,
+					Value: s,
+				},
+			}
+		}
+		condExports := func(entries ...collections.MapEntry[string, packagejson.ExportsOrImports]) packagejson.ExportsOrImports {
+			return packagejson.ExportsOrImports{
+				JSONValue: packagejson.JSONValue{
+					Type:  packagejson.JSONValueTypeObject,
+					Value: collections.NewOrderedMapFromList(entries),
+				},
+			}
+		}
+		// "#*": { "node": "./dist/*/index.js", "default": "./dist/*.js" }
+		conditional := condExports(
+			collections.MapEntry[string, packagejson.ExportsOrImports]{Key: "node", Value: strExports("./dist/*/index.js")},
+			collections.MapEntry[string, packagejson.ExportsOrImports]{Key: "default", Value: strExports("./dist/*.js")},
+		)
+		conditions := []string{"import", "types", "node"}
+
+		tests := []struct {
+			name           string
+			targetFilePath string
+			expected       string
+		}{
+			{
+				name:           "node condition matches, valid specifier",
+				targetFilePath: "/pkg/dist/utils/summarize/index.js",
+				expected:       "#utils/summarize",
+			},
+			{
+				name:           "node condition shadows default, invalid specifier blocked",
+				targetFilePath: "/pkg/dist/utils/summarize/summarize.js",
+				expected:       "",
+			},
+		}
+		for _, tt := range tests {
+			t.Run(tt.name, func(t *testing.T) {
+				t.Parallel()
+				result := tryGetModuleNameFromExportsOrImports(
+					&core.CompilerOptions{},
+					&mockModuleSpecifierGenerationHost{currentDir: "/pkg", useCaseSensitiveFileNames: true},
+					tt.targetFilePath,
+					"/pkg",
+					"#*",
+					conditional,
+					conditions,
+					MatchingModePattern,
+					true,
+					false,
+				)
+				if result != tt.expected {
+					t.Errorf("tryGetModuleNameFromExportsOrImports(targetFilePath = %q) = %q, expected %q", tt.targetFilePath, result, tt.expected)
+				}
+			})
+		}
+	})
+	t.Run("types-only condition does not shadow runtime (issue 64171 follow-up)", func(t *testing.T) {
+		t.Parallel()
+		strExports := func(s string) packagejson.ExportsOrImports {
+			return packagejson.ExportsOrImports{
+				JSONValue: packagejson.JSONValue{
+					Type:  packagejson.JSONValueTypeString,
+					Value: s,
+				},
+			}
+		}
+		conditional := packagejson.ExportsOrImports{
+			JSONValue: packagejson.JSONValue{
+				Type: packagejson.JSONValueTypeObject,
+				Value: collections.NewOrderedMapFromList([]collections.MapEntry[string, packagejson.ExportsOrImports]{
+					{Key: "types", Value: strExports("./types/*.d.ts")},
+					{Key: "default", Value: strExports("./dist/*.js")},
+				}),
+			},
+		}
+		result := tryGetModuleNameFromExportsOrImports(
+			&core.CompilerOptions{},
+			&mockModuleSpecifierGenerationHost{currentDir: "/pkg", useCaseSensitiveFileNames: true},
+			"/pkg/dist/foo.js",
+			"/pkg",
+			"#*",
+			conditional,
+			[]string{"import", "types", "node"},
+			MatchingModePattern,
+			true,
+			false,
+		)
+		if result != "#foo" {
+			t.Errorf("expected #foo for runtime file when types misses, got %q", result)
+		}
+	})
+	t.Run("conditional edge cases (issue 64171)", func(t *testing.T) {
+		t.Parallel()
+		strExports := func(s string) packagejson.ExportsOrImports {
+			return packagejson.ExportsOrImports{
+				JSONValue: packagejson.JSONValue{
+					Type:  packagejson.JSONValueTypeString,
+					Value: s,
+				},
+			}
+		}
+		condExports := func(entries ...collections.MapEntry[string, packagejson.ExportsOrImports]) packagejson.ExportsOrImports {
+			return packagejson.ExportsOrImports{
+				JSONValue: packagejson.JSONValue{
+					Type:  packagejson.JSONValueTypeObject,
+					Value: collections.NewOrderedMapFromList(entries),
+				},
+			}
+		}
+		arrExports := func(elems ...packagejson.ExportsOrImports) packagejson.ExportsOrImports {
+			return packagejson.ExportsOrImports{
+				JSONValue: packagejson.JSONValue{
+					Type:  packagejson.JSONValueTypeArray,
+					Value: elems,
+				},
+			}
+		}
+		host := &mockModuleSpecifierGenerationHost{currentDir: "/pkg", useCaseSensitiveFileNames: true}
+		conditions := []string{"import", "types", "node"}
+
+		// Array fallback is allowed at runtime: second element match is valid.
+		arrayCond := condExports(
+			collections.MapEntry[string, packagejson.ExportsOrImports]{Key: "node", Value: arrExports(strExports("./dist/a.js"), strExports("./dist/b.js"))},
+			collections.MapEntry[string, packagejson.ExportsOrImports]{Key: "default", Value: strExports("./dist/c.js")},
+		)
+		if got := tryGetModuleNameFromExportsOrImports(&core.CompilerOptions{}, host, "/pkg/dist/b.js", "/pkg", "#a", arrayCond, conditions, MatchingModeExact, true, false); got != "#a" {
+			t.Errorf("array second-element match should be valid, got %q", got)
+		}
+		if got := tryGetModuleNameFromExportsOrImports(&core.CompilerOptions{}, host, "/pkg/dist/c.js", "/pkg", "#a", arrayCond, conditions, MatchingModeExact, true, false); got != "" {
+			t.Errorf("array miss under node should block default, got %q", got)
+		}
+
+		// Nested conditional with no active runtime key should not block outer default.
+		// Outer node -> inner { import: ... } with CJS conditions (require, no import): inner skipped, outer default valid.
+		nestedNoMatch := condExports(
+			collections.MapEntry[string, packagejson.ExportsOrImports]{Key: "node", Value: condExports(
+				collections.MapEntry[string, packagejson.ExportsOrImports]{Key: "import", Value: strExports("./dist/a.js")},
+			)},
+			collections.MapEntry[string, packagejson.ExportsOrImports]{Key: "default", Value: strExports("./dist/b.js")},
+		)
+		cjsConditions := []string{"require", "types", "node"}
+		if got := tryGetModuleNameFromExportsOrImports(&core.CompilerOptions{}, host, "/pkg/dist/b.js", "/pkg", "#a", nestedNoMatch, cjsConditions, MatchingModeExact, true, false); got != "#a" {
+			t.Errorf("nested no-active-key should fallback to outer default, got %q", got)
+		}
+
+		// Default-first is terminal: later node unreachable.
+		defaultFirst := condExports(
+			collections.MapEntry[string, packagejson.ExportsOrImports]{Key: "default", Value: strExports("./dist/a.js")},
+			collections.MapEntry[string, packagejson.ExportsOrImports]{Key: "node", Value: strExports("./dist/b.js")},
+		)
+		if got := tryGetModuleNameFromExportsOrImports(&core.CompilerOptions{}, host, "/pkg/dist/a.js", "/pkg", "#a", defaultFirst, conditions, MatchingModeExact, true, false); got != "#a" {
+			t.Errorf("default-first match should be valid, got %q", got)
+		}
+		if got := tryGetModuleNameFromExportsOrImports(&core.CompilerOptions{}, host, "/pkg/dist/b.js", "/pkg", "#a", defaultFirst, conditions, MatchingModeExact, true, false); got != "" {
+			t.Errorf("default-first miss should block later node, got %q", got)
 		}
 	})
 }

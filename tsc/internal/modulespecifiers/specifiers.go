@@ -1308,7 +1308,15 @@ func tryGetModuleNameFromExportsOrImports(
 			}
 		}
 	case packagejson.JSONValueTypeObject:
-		// conditional mapping
+		// conditional mapping.
+		// Node.js resolves conditionals by picking the first key (in object order) that
+		// matches the active conditions and stopping there: if that target fails to
+		// resolve, it throws instead of falling through to the next matching condition
+		// (except fallback arrays, which do try each element - see case Array above,
+		// which intentionally still loops).
+		// The reverse mapping below must mirror that, otherwise auto-import suggests
+		// specifiers that only resolve in TS (via fallback) but crash at runtime.
+		// See https://github.com/microsoft/TypeScript/issues/64171.
 		obj := exports.AsObject()
 		for key, value := range obj.Entries() {
 			if key == "default" || slices.Contains(conditions, key) || slices.Contains(conditions, "types") && module.IsApplicableVersionedTypesKey(key) {
@@ -1316,12 +1324,46 @@ func tryGetModuleNameFromExportsOrImports(
 				if len(result) > 0 {
 					return result
 				}
+				// If this key would be tried at runtime (i.e. it is not a types-only
+				// condition, which Node ignores) but the target file does not match
+				// its target, Node would stop here and fail. A later matching
+				// condition (e.g. "default" after "node") would never be reached,
+				// so the candidate specifier is invalid and must not be suggested.
+				// Custom conditions from tsconfig are assumed active at runtime
+				// (per GetConditions), so they also block.
+				if isRuntimeCondition(key) {
+					// If the value is itself a conditional object with no active
+					// runtime key, Node would skip it (return undefined) and try the
+					// next outer condition, so do not block in that case.
+					if value.Type == packagejson.JSONValueTypeObject && !hasActiveRuntimeCondition(value, conditions) {
+						continue
+					}
+					return ""
+				}
 			}
 		}
 	case packagejson.JSONValueTypeNull:
 		return ""
 	}
 	return ""
+}
+
+func isRuntimeCondition(key string) bool {
+	return key != "types" && !module.IsApplicableVersionedTypesKey(key)
+}
+
+func hasActiveRuntimeCondition(exports packagejson.ExportsOrImports, conditions []string) bool {
+	if exports.Type != packagejson.JSONValueTypeObject {
+		return false
+	}
+	for key := range exports.AsObject().Keys() {
+		if key == "default" || slices.Contains(conditions, key) {
+			if isRuntimeCondition(key) {
+				return true
+			}
+		}
+	}
+	return false
 }
 
 // `importingSourceFile` and `importingSourceFileName`? Why not just use `importingSourceFile.path`?
