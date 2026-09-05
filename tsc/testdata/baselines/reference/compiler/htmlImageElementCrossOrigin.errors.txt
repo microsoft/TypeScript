@@ -1,4 +1,4 @@
-htmlImageElementCrossOrigin.ts(9,7): error TS2322: Type 'string' is not assignable to type '"" | "anonymous" | "use-credentials" | null'.
+htmlImageElementCrossOrigin.ts(7,1): error TS2322: Type '"abc"' is not assignable to type '"" | "anonymous" | "use-credentials" | null'.
 
 
 ==== htmlImageElementCrossOrigin.ts (1 errors) ====
@@ -9,8 +9,8 @@ htmlImageElementCrossOrigin.ts(9,7): error TS2322: Type 'string' is not assignab
     img.crossOrigin = "";
     img.crossOrigin = null;
     img.crossOrigin = "abc";
+    ~~~~~~~~~~~~~~~
+!!! error TS2322: Type '"abc"' is not assignable to type '"" | "anonymous" | "use-credentials" | null'.
     
     const value: "anonymous" | "use-credentials" | "" | null = img.crossOrigin;
-          ~~~~~
-!!! error TS2322: Type 'string' is not assignable to type '"" | "anonymous" | "use-credentials" | null'.
     
