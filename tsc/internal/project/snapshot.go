@@ -304,23 +304,29 @@ func (s *Snapshot) GetProjectsContainingFile(uri lsproto.DocumentUri) []ls.Proje
 	return s.ProjectCollection.GetProjectsContainingFile(path)
 }
 
-// OpenProjects returns the projects that contain at least one file open in the editor.
-// ReleaseCheckingPool drops the checkers a sweep used on a project. They hold the types of every
-// file in it, which is the largest thing a pull creates, and keeping them buys nothing: a pull that
-// finds the project unchanged answers from the result ids the client already holds without checking
-// anything, and a pull that finds it changed needs new checkers regardless.
-func (s *Snapshot) ReleaseCheckingPool(project *Project) bool {
-	if project.checkerPool == nil {
-		return false
-	}
-	return project.checkerPool.releaseCheckingPool()
-}
-
 // IncrementalProgram returns a project's program together with the record of which files a change
 // since the previous program reached, so a caller checking the project can skip the files it did
 // not. Built on first use, and shared by every snapshot holding the same program.
-func (s *Snapshot) IncrementalProgram(project *Project) *incremental.Program {
-	return project.incremental.get(project.Program)
+// The returned function must be called when the caller is done with the program: only one caller
+// may check through it at a time.
+func (s *Snapshot) IncrementalProgram(project *Project) (*incremental.Program, func()) {
+	state := project.incremental
+	if state == nil {
+		return incremental.NewProgramFromPriorState(project.Program, nil, nil), func() {}
+	}
+	state.use.Lock()
+	return state.get(project.Program), state.use.Unlock
+}
+
+// ReleaseSweptCheckers lets go of the checkers a whole-project check used, for a project nothing
+// has open. They hold the types of every file in it, which is the largest thing a pull creates, and
+// nothing is going to ask about that project again until the user opens something in it. A project
+// the user is working in keeps them, so the file being edited stays warm.
+func (s *Snapshot) ReleaseSweptCheckers(project *Project) bool {
+	if project.checkerPool == nil || s.ProjectCollection.isOpen(project) {
+		return false
+	}
+	return project.checkerPool.releaseSweptCheckers()
 }
 
 func (s *Snapshot) OpenProjects() []*Project {

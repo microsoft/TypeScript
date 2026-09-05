@@ -15,6 +15,9 @@ import (
 // pointer, so the snapshots that share a program share what it has built.
 type incrementalState struct {
 	mu sync.Mutex
+	// use is held for as long as a caller is checking through the view. incremental.Program keeps
+	// what it has worked out in itself and is not safe for two callers at once.
+	use sync.Mutex
 	// What the previous program left behind, holding no program of its own.
 	previous *incremental.PriorState
 	current  *incremental.Program

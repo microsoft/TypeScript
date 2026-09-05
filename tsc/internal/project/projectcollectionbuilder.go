@@ -117,6 +117,9 @@ func (b *ProjectCollectionBuilder) Finalize(logger *logging.LogTree) (*ProjectCo
 	if configuredProjects, configuredProjectsChanged := b.configuredProjects.Finalize(); configuredProjectsChanged {
 		ensureCloned()
 		newProjectCollection.configuredProjects = configuredProjects
+		// A project has come or gone, so what was loaded before no longer says anything about
+		// whether everything a request wants is loaded now.
+		b.loadedProjectTrees = nil
 	}
 
 	if newProjectCollection.loadedProjectTrees != b.loadedProjectTrees {

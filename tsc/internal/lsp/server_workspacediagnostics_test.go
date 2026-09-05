@@ -1031,3 +1031,31 @@ func TestWorkspaceDiagnosticsReportsOpenDocumentsWithoutServerDeDuplication(t *t
 	open := findFullReport(t, reported.Items, "file:///home/projects/open.ts")
 	assert.Assert(t, open.Version.Integer != nil, "an open document reports the version it was checked at")
 }
+
+// Nothing is checked until a client asks, but the first thing it asks for is the whole scope: at
+// that point nothing has changed since the server started, and answering "unchanged" would leave
+// the client with no diagnostics at all.
+func TestWorkspaceDiagnosticsFirstPullCoversTheScope(t *testing.T) {
+	t.Parallel()
+
+	if !bundled.Embedded {
+		t.Skip("bundled files are not embedded")
+	}
+
+	const projects, filesPerProject = 4, 3
+	resp := openAndPull(t, manyProjectFiles(projects, filesPerProject), "file:///home/projects/p0/open.ts")
+
+	var want []string
+	for p := range projects {
+		for f := range filesPerProject {
+			want = append(want, fmt.Sprintf("file:///home/projects/p%d/f%d.ts", p, f))
+		}
+	}
+	assert.DeepEqual(t, reportURIs(resp.Items), want)
+
+	// Every one of them is computed, not answered from a result id the client never had.
+	for _, item := range resp.Items {
+		assert.Assert(t, item.FullDocumentDiagnosticReport != nil,
+			"the first pull must compute, got an unchanged report")
+	}
+}

@@ -2,6 +2,7 @@ package lsp
 
 import (
 	"context"
+	"sync/atomic"
 	"time"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
@@ -47,21 +48,27 @@ func registerWorkspaceDiagnosticHandler(handlers handlerMap) {
 	}
 }
 
+// workspaceDiagnosticsTrees is the set of project trees a scope needs loaded. An empty (non-nil)
+// set loads no trees beyond what already is; nil asks for all of them.
+func (s *Server) workspaceDiagnosticsTrees(scope lsutil.WorkspaceDiagnosticsScope) *collections.Set[tspath.Path] {
+	if scope == lsutil.WorkspaceDiagnosticsScopeAllProjects {
+		return nil
+	}
+	trees := &collections.Set[tspath.Path]{}
+	if scope == lsutil.WorkspaceDiagnosticsScopeOpenProjectsAndDependents {
+		for _, open := range s.session.Snapshot().OpenProjects() {
+			trees.Add(open.Id())
+		}
+	}
+	return trees
+}
+
 func (s *Server) computeWorkspaceDiagnostics(ctx context.Context, params *lsproto.WorkspaceDiagnosticParams) (lsproto.WorkspaceDiagnosticResponse, error) {
 	ctx = core.WithCheckerLifetime(ctx, core.CheckerLifetimeDiagnostics)
 	run := newWorkspaceDiagnosticsRun(s, ctx, params)
 
 	scope := s.session.Config().WorkspaceDiagnosticsScope
-	// An empty (non-nil) set loads no trees beyond what is already loaded.
-	var trees *collections.Set[tspath.Path]
-	if scope != lsutil.WorkspaceDiagnosticsScopeAllProjects {
-		trees = &collections.Set[tspath.Path]{}
-		if scope == lsutil.WorkspaceDiagnosticsScopeOpenProjectsAndDependents {
-			for _, open := range s.session.Snapshot().OpenProjects() {
-				trees.Add(open.Id())
-			}
-		}
-	}
+	trees := s.workspaceDiagnosticsTrees(scope)
 
 	s.session.WithSnapshotLoadingProjectTree(ctx, trees, func(snapshot *project.Snapshot) {
 		preferences := snapshot.UserPreferences()
@@ -77,13 +84,20 @@ func (s *Server) computeWorkspaceDiagnostics(ctx context.Context, params *lsprot
 		run.collect(snapshot, scope)
 	})
 
-	// A cancelled run covered only part of the workspace; the cleanup below would mistake the files
-	// it never reached for files that no longer have diagnostics.
+	// A cancelled run covered only part of the workspace; the cleanup below would
+	// mistake the files it never reached for files that no longer have diagnostics.
 	if err := ctx.Err(); err != nil {
 		run.endProgress()
 		return nil, err
 	}
-
+	if run.abandoned.Load() {
+		// The editor has moved on from what this pull was answering for, so the workspace is only
+		// partly covered and the same reasoning applies. ContentModified is how a client is told to
+		// ask again; the projects that did finish are cached, so the next pull carries on from
+		// there rather than starting over.
+		run.endProgress()
+		return nil, lsproto.ErrorCodeContentModified
+	}
 	// Report empty for anything the client holds that no project reported, so it clears.
 	for _, previous := range params.PreviousResultIds {
 		if !run.reported.Has(previous.Uri) {
@@ -120,6 +134,8 @@ type workspaceDiagnosticsRun struct {
 	workDoneToken      *lsproto.IntegerOrString
 	// Result ids the client already holds.
 	previous map[lsproto.DocumentUri]string
+	// abandoned records that the run stopped early, so part of the workspace was never reported.
+	abandoned atomic.Bool
 	// Documents already covered, so a file in several projects is reported once.
 	reported collections.Set[lsproto.DocumentUri]
 
@@ -134,6 +150,7 @@ type workspaceDiagnosticsRun struct {
 	begun      bool
 	// Whether a sweep actually ran, so a disabled pull does not prune the cache.
 	collected bool
+	// Set when a project was rebuilt mid-pull, so what this pull found is already out of date.
 
 	cache *workspaceDiagnosticsCache
 }
@@ -177,14 +194,26 @@ func (r *workspaceDiagnosticsRun) collect(snapshot *project.Snapshot, scope lsut
 // checkSequentially is the single threaded path: no goroutines are spawned at all, so a run can be
 // stepped through. core.NewWorkGroup's single threaded form cannot serve here because it defers
 // every task to RunAndWait, and this drains projects as they finish.
+// stale reports whether the project has been rebuilt since this pull took its snapshot. Checking it
+// further would spend the project's checkers working out diagnostics for a program the editor has
+// already moved past, while the requests the user is waiting on queue behind them.
+func (r *workspaceDiagnosticsRun) stale(pf workspaceDiagnosticsProject) bool {
+	current := r.server.session.Snapshot().ProjectCollection.GetProjectByPath(pf.project.Id())
+	return current == nil || current.Program != pf.project.Program
+}
+
 func (r *workspaceDiagnosticsRun) checkSequentially(snapshot *project.Snapshot, work []workspaceDiagnosticsProject) {
 	for _, pf := range work {
 		if pf.toCheck == 0 {
 			r.emitProject(pf)
 			continue
 		}
+		if r.stale(pf) {
+			r.abandoned.Store(true)
+			return
+		}
 		completed := r.checkProject(snapshot, pf)
-		snapshot.ReleaseCheckingPool(pf.project)
+		snapshot.ReleaseSweptCheckers(pf.project)
 		if !completed {
 			return
 		}
@@ -218,9 +247,13 @@ func (r *workspaceDiagnosticsRun) checkConcurrently(snapshot *project.Snapshot, 
 			case <-r.ctx.Done():
 				return
 			}
-			// Hand back the checkers before the next project builds its own, so a sweep holds
-			// only as many programs' worth of types as it is checking at once.
-			defer snapshot.ReleaseCheckingPool(pf.project)
+			if r.stale(pf) {
+				r.abandoned.Store(true)
+				return
+			}
+			// Handed back as soon as this project is done, so a sweep holds only as many projects'
+			// worth of types as it is checking at once.
+			defer snapshot.ReleaseSweptCheckers(pf.project)
 			completed[i] = r.checkProject(snapshot, pf)
 		})
 	}
@@ -250,7 +283,8 @@ func (r *workspaceDiagnosticsRun) checkProject(snapshot *project.Snapshot, pf wo
 	}
 	// Ask through the incremental view, so a change is re-checked where it landed rather than
 	// across the whole project.
-	program := snapshot.IncrementalProgram(pf.project)
+	program, doneWithProgram := snapshot.IncrementalProgram(pf.project)
+	defer doneWithProgram()
 	reports := pf.languageService.WorkspaceDiagnosticsForProject(r.ctx, program, files)
 	if r.ctx.Err() != nil {
 		return false

@@ -49,19 +49,22 @@ type checkerPool struct {
 	// query checkers are not disposed until the pool is GC'd.
 	discarded bool
 
-	// checkingPool is the pool the compiler would check this program with. A whole-program check
-	// goes through it so each file is checked by the same checker, out of the same number of
-	// checkers, that a build would use. Individual requests keep using the checkers below, which
-	// this pool knows nothing about. Built on first use and dropped once a sweep is done with it.
-	checkingPool compiler.CheckerPool
+	// owners is how many of the checkers below are the program's own split; the rest are spares
+	// that only queries are given.
+	owners int
+	// checkers are the checkers this program is checked with: the first owners of them are as many
+	// as a build of it would use, with each file assigned to the same one a build would assign it
+	// to. Created on demand and idle-cleaned; which slot owns a file does not change when that
+	// slot's checker goes.
+	checkers []*checker.Checker
+	heldBy   []string // heldBy[i] is the requestID holding checker i, checkerHeldAnonymous, or "" if not held
 
-	// checkers[0] is the diagnostics checker.
-	// checkers[1:] are ephemeral query checkers.
-	// All are idle-cleaned.
-	checkers            []*checker.Checker
-	heldBy              []string                // heldBy[i] is the requestID holding checker i, checkerHeldAnonymous, or "" if not held
-	fileAssociations    map[*ast.SourceFile]int // file → query checker index (1+)
-	requestAssociations map[string]int          // requestID → checker index
+	// waiting[i] counts the requests waiting for checker i. Work with a user behind it is counted;
+	// a sweep is not, so a sweep can tell when to stand aside.
+	waiting             []int
+	fileAssociations    map[*ast.SourceFile]int // the compiler's partition: file → owning checker
+	associationsOnce    sync.Once
+	requestAssociations map[string]int // requestID → checker index
 
 	// lastReleased tracks when each checker was last released.
 	lastReleased []time.Time
@@ -75,8 +78,8 @@ type checkerPool struct {
 	persistentChecker *checker.Checker
 	persistentHeld    bool
 
-	diagSem       chan struct{}
-	querySem      chan struct{}
+	// free is signalled whenever a checker is handed back, waking whoever is waiting for one.
+	free          *sync.Cond
 	persistentSem chan struct{}
 
 	log                    func(msg string)
@@ -96,22 +99,29 @@ func newCheckerPool(opts CheckerPoolOptions, program *compiler.Program, log func
 	if opts.IdleTimeout <= 0 {
 		opts.IdleTimeout = 30 * time.Second
 	}
-	querySlots := opts.MaxCheckers - 1
+	// The program's own split owns the files, so that a check of the whole project reports what a
+	// build reports. Everything else - a document pull, a hover - shares those same checkers rather
+	// than having any of its own.
+	owners := program.CheckerCount()
+	// A program is split across at most one checker per file, so a one-file project would otherwise
+	// have a single checker and serialise every request against it. On a project large enough for
+	// the split to reach the editor's limit - which is any real one - this asks for nothing extra.
+	count := max(owners, opts.MaxCheckers)
 	pool := &checkerPool{
 		program:                program,
 		opts:                   opts,
-		checkers:               make([]*checker.Checker, opts.MaxCheckers),
-		heldBy:                 make([]string, opts.MaxCheckers),
-		fileAssociations:       make(map[*ast.SourceFile]int),
+		owners:                 owners,
+		checkers:               make([]*checker.Checker, count),
+		heldBy:                 make([]string, count),
+		waiting:                make([]int, count),
 		requestAssociations:    make(map[string]int),
-		lastReleased:           make([]time.Time, opts.MaxCheckers),
-		diagSem:                make(chan struct{}, 1),
-		querySem:               make(chan struct{}, querySlots),
+		lastReleased:           make([]time.Time, count),
 		persistentSem:          make(chan struct{}, 1),
 		log:                    log,
-		globalDiagCheckerCount: make([]int, opts.MaxCheckers),
+		globalDiagCheckerCount: make([]int, count),
 	}
 
+	pool.free = sync.NewCond(&pool.mu)
 	if pool.log == nil {
 		pool.log = func(msg string) {}
 	}
@@ -138,212 +148,187 @@ func (p *checkerPool) GetChecker(ctx context.Context, file *ast.SourceFile) (*ch
 		requestID = ""
 	}
 
-	switch lifetime {
-	case core.CheckerLifetimeDiagnostics:
-		return p.getDiagnosticsChecker(ctx, requestID)
-	case core.CheckerLifetimeAPI:
+	if lifetime == core.CheckerLifetimeAPI {
 		return p.getPersistentChecker()
-	default:
-		return p.getQueryChecker(ctx, requestID, file)
 	}
+	// Prefers the checker that owns the file, so a request gets the one most likely to have already
+	// seen it, but never waits for it. Only a check of the whole program insists on owners: that is
+	// what makes a sweep report what a build reports, and it is the one caller that can afford to
+	// wait. A request with a user behind it cannot, and would otherwise sit behind whatever file
+	// the sweep is checking.
+	return p.acquire(ctx, requestID, file, false /*mustOwn*/)
 }
 
-// tryReacquireForRequest checks whether the given request already has an
-// associated checker. If so, it either returns the checker directly (still held)
-// or reacquires it by claiming a semaphore slot. The caller must provide the
-// appropriate semaphore channel and indicate whether this is a diagnostics
-// request (isDiag). If the associated checker is in the wrong category
-// (e.g. a diagnostics index for a query request), the association is deleted
-// and normal acquisition proceeds.
-//
-// Returns (checker, release, true) if the request was served (either still held
-// or reclaimed). Returns (nil, nil, false) if the caller must proceed with
-// normal acquisition — in this case, a semaphore slot has already been claimed.
-// Must NOT be called with p.mu held.
-func (p *checkerPool) tryReacquireForRequest(requestID string, sem chan<- struct{}, isDiag bool) (*checker.Checker, func(), bool) {
-	if requestID == "" {
-		sem <- struct{}{}
-		return nil, nil, false
-	}
-
+// ownerOf returns the checker a build would check this file with. Files the program does not have,
+// and every file when there is only one checker, belong to the first.
+func (p *checkerPool) ownerOf(file *ast.SourceFile) int {
 	p.mu.Lock()
-	index, ok := p.requestAssociations[requestID]
-	if !ok {
-		p.mu.Unlock()
-		sem <- struct{}{}
-		return nil, nil, false
-	}
-
-	// Validate that the associated index matches the expected category.
-	// Index 0 is for diagnostics; indices 1+ are for queries.
-	if (isDiag && index != 0) || (!isDiag && index == 0) {
-		delete(p.requestAssociations, requestID)
-		p.mu.Unlock()
-		sem <- struct{}{}
-		return nil, nil, false
-	}
-
-	c := p.checkers[index]
-	if c == nil {
-		delete(p.requestAssociations, requestID)
-		p.mu.Unlock()
-		sem <- struct{}{}
-		return nil, nil, false
-	}
-
-	held := p.heldBy[index]
-	if held == requestID {
-		// Same request, checker still held — return without claiming a slot.
-		p.mu.Unlock()
-		return c, noop, true
-	}
-
-	if held == "" {
-		// Same request reacquiring after release — need a semaphore slot.
-		p.mu.Unlock()
-		sem <- struct{}{}
-		p.mu.Lock()
-		// Re-check: checker may have been disposed while waiting for the slot.
-		if cc := p.checkers[index]; cc == c && p.heldBy[index] == "" {
-			p.heldBy[index] = requestID
-			p.mu.Unlock()
-			return c, p.createRelease(requestID, index, c), true
-		}
-		p.mu.Unlock()
-		// Checker was replaced/disposed while waiting for the slot.
-		// The slot is still claimed; the caller will use it for normal acquisition.
-		return nil, nil, false
-	}
-
-	// Checker held by another request — claim a slot normally.
-	p.mu.Unlock()
-	sem <- struct{}{}
-	return nil, nil, false
+	defer p.mu.Unlock()
+	return p.ownerOfLocked(file)
 }
 
-// getDiagnosticsChecker returns the dedicated diagnostics checker (index 0).
-// Creates it on first use. Blocks on diagSem if it's currently in use.
-func (p *checkerPool) getDiagnosticsChecker(ctx context.Context, requestID string) (*checker.Checker, func()) {
-	const diagIndex = 0
-
-	if c, release, ok := p.tryReacquireForRequest(requestID, p.diagSem, true); ok {
-		return c, release
+// ownerOfLocked is ownerOf for callers already holding p.mu.
+func (p *checkerPool) ownerOfLocked(file *ast.SourceFile) int {
+	if file == nil || p.owners == 1 {
+		return 0
 	}
+	p.associationsOnce.Do(func() {
+		files := p.program.SourceFiles()
+		indexes := p.program.CheckerAssociations(p.owners)
+		p.fileAssociations = make(map[*ast.SourceFile]int, len(files))
+		for i, file := range files {
+			if i < len(indexes) {
+				p.fileAssociations[file] = indexes[i]
+			}
+		}
+	})
+	return p.fileAssociations[file]
+}
 
-	// Token consumed — proceed with normal acquisition.
+// acquire hands out a checker for a file. Diagnostics get the one that owns it, because which
+// checker sees a file decides what it reports and a pull has to report what a build would. A query
+// does not depend on that, so if the owner is busy it takes whichever checker is free rather than
+// wait behind a check of the whole project.
+func (p *checkerPool) acquire(ctx context.Context, requestID string, file *ast.SourceFile, mustOwn bool) (*checker.Checker, func()) {
 	p.mu.Lock()
 	defer p.mu.Unlock()
 
-	if p.checkers[diagIndex] == nil {
-		p.log("checkerpool: Creating diagnostics checker")
-		c, _ := checker.NewChecker(p.program, nil)
-		p.checkers[diagIndex] = c
-	}
-
-	c := p.checkers[diagIndex]
-	p.heldBy[diagIndex] = holdTag(requestID)
-	p.log("checkerpool: Acquired diagnostics checker for request " + holdTag(requestID))
+	// A request that already holds a checker gets it back rather than waiting on itself.
 	if requestID != "" {
-		if _, alreadyRegistered := p.requestAssociations[requestID]; !alreadyRegistered {
-			p.requestAssociations[requestID] = diagIndex
-			p.registerRequestCleanup(ctx, requestID)
-		}
-	}
-	return c, p.createRelease(requestID, diagIndex, c)
-}
-
-// ForEachCheckerGroupDo implements compiler.CheckerPool, so a whole-program check runs on the
-// compiler's own checkers rather than the single diagnostics checker individual requests share.
-func (p *checkerPool) ForEachCheckerGroupDo(ctx context.Context, files []*ast.SourceFile, singleThreaded bool, cb func(c *checker.Checker, fileIndex int, file *ast.SourceFile)) {
-	p.mu.Lock()
-	if p.checkingPool == nil {
-		p.log("checkerpool: Creating checking pool")
-		p.checkingPool = compiler.NewCheckerPool(p.program)
-	}
-	pool := p.checkingPool
-	p.mu.Unlock()
-	pool.ForEachCheckerGroupDo(ctx, files, singleThreaded, cb)
-}
-
-// releaseCheckingPool drops the checkers a whole-program check used. They hold the types of every
-// file in the program, which is worth keeping only while something is likely to ask again. The
-// global diagnostics they found are kept, since nothing else collects them.
-func (p *checkerPool) releaseCheckingPool() bool {
-	p.mu.Lock()
-	defer p.mu.Unlock()
-	if p.checkingPool == nil {
-		return false
-	}
-	p.log("checkerpool: Releasing checking pool on request")
-	p.mergeGlobalDiagnosticsLocked(p.checkingPool.GetGlobalDiagnostics())
-	p.checkingPool = nil
-	return true
-}
-
-// getQueryChecker returns an ephemeral query checker from indices 1+.
-// Uses request affinity, then file affinity, then finds/creates.
-// Blocks on querySem if all query slots are in use.
-func (p *checkerPool) getQueryChecker(ctx context.Context, requestID string, file *ast.SourceFile) (*checker.Checker, func()) {
-	if c, release, ok := p.tryReacquireForRequest(requestID, p.querySem, false); ok {
-		return c, release
-	}
-
-	// Token consumed — proceed with normal acquisition.
-	p.mu.Lock()
-	defer p.mu.Unlock()
-
-	// Try file affinity.
-	if file != nil {
-		if index, ok := p.fileAssociations[file]; ok && index > 0 {
-			if c := p.checkers[index]; c != nil && p.heldBy[index] == "" {
-				p.heldBy[index] = holdTag(requestID)
-				if requestID != "" {
-					if _, alreadyRegistered := p.requestAssociations[requestID]; !alreadyRegistered {
-						p.requestAssociations[requestID] = index
-						p.registerRequestCleanup(ctx, requestID)
-					}
-				}
-				return c, p.createRelease(requestID, index, c)
+		if index, ok := p.requestAssociations[requestID]; ok && p.heldBy[index] == requestID {
+			if c := p.checkers[index]; c != nil {
+				return c, noop
 			}
 		}
 	}
 
-	// Find any available query checker or create one.
-	c, index := p.findOrCreateQueryCheckerLocked()
+	// A checker can only be used by one thing at a time. Diagnostics wait for the checker that owns
+	// the file, because which checker sees a file decides what it reports; a query does not depend
+	// on that, so it takes any free checker rather than wait behind a check of the whole project.
+	// A sweep asks with no request id.
+	background := requestID == ""
+	var index, countedAt int
+	var counted bool
+	for {
+		index = p.ownerOfLocked(file)
+		// A sweep re-takes the same checker for file after file, so without standing aside here it
+		// would starve a request that has to have that particular checker: the file the user is
+		// looking at would wait for the whole project to be checked.
+		yield := background && p.waiting[index] > 0
+		if p.heldBy[index] == "" && !yield {
+			break
+		}
+		if !mustOwn && !yield {
+			if free, ok := p.firstFreeLocked(); ok {
+				index = free
+				break
+			}
+		}
+		if !background && !counted {
+			// Counted for the whole wait, not just one turn: dropping the count between waking and
+			// re-checking would let the sweep take the checker again before this request could,
+			// over and over.
+			countedAt, counted = index, true
+			p.waiting[index]++
+		}
+		p.free.Wait()
+	}
+	if counted {
+		p.waiting[countedAt]--
+	}
+
+	// Claim the slot before building anything, so nothing else takes it while the lock is down.
 	p.heldBy[index] = holdTag(requestID)
-	p.log(fmt.Sprintf("checkerpool: Acquired query checker %d for request %s", index, holdTag(requestID)))
+	if p.checkers[index] == nil {
+		p.log(fmt.Sprintf("checkerpool: Creating checker %d", index))
+		// Built with the lock released: on a large program this is slow, and holding the pool's
+		// lock through it would stop every other request from getting a checker at all.
+		p.mu.Unlock()
+		built := func() *checker.Checker {
+			defer p.mu.Lock()
+			c, _ := checker.NewChecker(p.program, nil)
+			return c
+		}()
+		if p.checkers[index] == nil {
+			p.checkers[index] = built
+		}
+	}
+	c := p.checkers[index]
 	if requestID != "" {
 		if _, alreadyRegistered := p.requestAssociations[requestID]; !alreadyRegistered {
 			p.requestAssociations[requestID] = index
 			p.registerRequestCleanup(ctx, requestID)
 		}
 	}
-	if file != nil {
-		p.fileAssociations[file] = index
-	}
 	return c, p.createRelease(requestID, index, c)
 }
 
-// findOrCreateQueryCheckerLocked returns an idle query checker or creates one
-// in the first empty slot. The semaphore guarantees at least one slot is
-// available. Must be called with p.mu held.
-func (p *checkerPool) findOrCreateQueryCheckerLocked() (*checker.Checker, int) {
-	// Prefer an existing idle checker.
-	for i := 1; i < len(p.checkers); i++ {
+// firstFreeLocked returns a checker nothing is holding, preferring one that has already been built:
+// an existing checker has seen files before and answers faster than one built from nothing, and
+// building another costs the memory of a whole extra checker. Must be called with p.mu held.
+func (p *checkerPool) firstFreeLocked() (int, bool) {
+	empty := -1
+	for i := range p.checkers {
+		if p.heldBy[i] != "" {
+			continue
+		}
+		if p.checkers[i] != nil {
+			return i, true
+		}
+		if empty < 0 {
+			empty = i
+		}
+	}
+	if empty >= 0 {
+		return empty, true
+	}
+	return 0, false
+}
+
+// ForEachCheckerGroupDo implements compiler.CheckerPool: one task per checker, each walking the
+// files that checker owns, which is how a build checks a program.
+//
+// The checker is taken and handed back around each file rather than held for the whole group. A
+// document pull needs the checker that owns its file and cannot be given another, so holding one
+// for the length of a sweep would leave the file the user is looking at waiting for it.
+func (p *checkerPool) ForEachCheckerGroupDo(ctx context.Context, files []*ast.SourceFile, singleThreaded bool, cb func(c *checker.Checker, fileIndex int, file *ast.SourceFile)) {
+	groups := make([][]int, p.owners)
+	for i, file := range files {
+		owner := p.ownerOf(file)
+		groups[owner] = append(groups[owner], i)
+	}
+
+	wg := core.NewWorkGroup(singleThreaded)
+	for _, group := range groups {
+		wg.Queue(func() {
+			for _, i := range group {
+				if ctx.Err() != nil {
+					return
+				}
+				c, release := p.acquire(ctx, "", files[i], true /*mustOwn*/)
+				cb(c, i, files[i])
+				release()
+			}
+		})
+	}
+	wg.RunAndWait()
+}
+
+// releaseSweptCheckers lets go of the checkers that checked the whole program. They hold the types
+// of every file in it, which is the largest thing a pull creates, and a pull that finds the project
+// unchanged answers from result ids without checking anything.
+func (p *checkerPool) releaseSweptCheckers() bool {
+	p.mu.Lock()
+	defer p.mu.Unlock()
+	released := false
+	for i := range p.owners {
 		if c := p.checkers[i]; c != nil && p.heldBy[i] == "" {
-			return c, i
+			p.mergeGlobalDiagnosticsFromCheckerLocked(i, c)
+			p.disposeCheckerLocked(i, c)
+			released = true
 		}
 	}
-	// Create in the first empty slot.
-	for i := 1; i < len(p.checkers); i++ {
-		if p.checkers[i] == nil {
-			p.log(fmt.Sprintf("checkerpool: Creating query checker %d", i))
-			c, _ := checker.NewChecker(p.program, nil)
-			p.checkers[i] = c
-			return c, i
-		}
-	}
-	panic("checkerpool: no available query slot despite holding semaphore token")
+	return released
 }
 
 func (p *checkerPool) getPersistentChecker() (*checker.Checker, func()) {
@@ -384,30 +369,21 @@ func (p *checkerPool) createRelease(requestID string, index int, c *checker.Chec
 			// Canceled checkers must be disposed.
 			p.log(fmt.Sprintf("checkerpool: Checker %d for request %s was canceled, disposing", index, holdTag(requestID)))
 			p.disposeCheckerLocked(index, c)
+		} else if p.discarded {
+			// The program is gone; hand the checker's global diagnostics back and let it go rather
+			// than wait for a cleanup pass that no longer runs.
+			p.mergeGlobalDiagnosticsFromCheckerLocked(index, c)
+			p.disposeCheckerLocked(index, c)
 		} else {
 			p.mergeGlobalDiagnosticsFromCheckerLocked(index, c)
 			p.heldBy[index] = ""
 			p.lastReleased[index] = time.Now()
-			if !p.discarded {
-				p.scheduleCleanupLocked()
-			}
-			// If discarded, skip scheduling cleanup — checkers stay alive
-			// until the pool is garbage collected so that API clients can
-			// continue resolving type/symbol handles.
+			p.scheduleCleanupLocked()
 		}
 
-		// Unlock before releasing the semaphore slot. If we received from
-		// the channel while holding p.mu, a woken goroutine could immediately
-		// try to acquire p.mu, risking priority inversion or unnecessary
-		// contention.
+		// Woken before unlocking so a waiter sees the slot free; it cannot run until we unlock.
+		p.free.Broadcast()
 		p.mu.Unlock()
-
-		// Release the semaphore slot.
-		if index == 0 {
-			<-p.diagSem
-		} else {
-			<-p.querySem
-		}
 	})
 }
 
@@ -493,15 +469,15 @@ func (p *checkerPool) cleanupIdleCheckers() {
 // (file and request) that reference it. Must be called with p.mu held.
 func (p *checkerPool) disposeCheckerLocked(index int, c *checker.Checker) {
 	debug.Assert(p.checkers[index] == c)
+	// The slot is now free, so anything waiting for this checker can take it.
+	defer p.free.Broadcast()
 	p.checkers[index] = nil
 	p.heldBy[index] = ""
 	p.globalDiagCheckerCount[index] = 0
 	p.lastReleased[index] = time.Time{}
-	for file, idx := range p.fileAssociations {
-		if idx == index {
-			delete(p.fileAssociations, file)
-		}
-	}
+	// fileAssociations is the program's own split, not something this checker learned, so it
+	// outlives the checker: the slot is simply refilled the next time one of its files is asked
+	// about. Clearing it here would move every file the checker owned onto slot zero.
 	for req, idx := range p.requestAssociations {
 		if idx == index {
 			delete(p.requestAssociations, req)
@@ -564,12 +540,19 @@ func (p *checkerPool) Discard() {
 	}
 	p.log("checkerpool: Discarding pool, stopping idle cleanup")
 	p.discarded = true
-	// A discarded pool belongs to a project nothing is using, so let go of the checkers a sweep
-	// left behind rather than holding their types for the life of the snapshot.
-	p.checkingPool = nil
 	if p.cleanupTimer != nil {
 		p.cleanupTimer.Stop()
 		p.cleanupTimer = nil
+	}
+	// The program these were built for has been replaced, so nothing will ask them anything again.
+	// Idle cleanup does not run on a discarded pool, so without this they would be held until the
+	// pool itself is collected, and each one holds the types of every file it saw. Checkers still
+	// in use are let go of when they are handed back; the API checker is kept, since handles given
+	// out to API clients have to keep resolving.
+	for i, c := range p.checkers {
+		if c != nil && p.heldBy[i] == "" {
+			p.disposeCheckerLocked(i, c)
+		}
 	}
 }
 
