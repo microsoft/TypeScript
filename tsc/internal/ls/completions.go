@@ -1243,7 +1243,7 @@ func (l *LanguageService) getCompletionData(
 			}
 		}
 
-		view, err := l.getPreparedAutoImportView(file)
+		view, err := l.getPreparedAutoImportView(file, typeChecker)
 		if err != nil {
 			return err
 		}
@@ -1251,7 +1251,7 @@ func (l *LanguageService) getCompletionData(
 			return nil
 		}
 
-		autoImports = view.GetCompletions(ctx, lowerCaseTokenText, usagePosition, isRightOfOpenTag, isTypeOnlyLocation)
+		autoImports = view.GetCompletions(lowerCaseTokenText, usagePosition, isRightOfOpenTag, isTypeOnlyLocation)
 		return nil
 	}
 
@@ -2853,7 +2853,7 @@ func (l *LanguageService) createImportAdder(ctx context.Context, typeChecker *ch
 	if tspath.IsDynamicFileName(file.FileName()) {
 		return nil, nil
 	}
-	view, err := l.getPreparedAutoImportView(file)
+	view, err := l.getPreparedAutoImportView(file, typeChecker)
 	if err != nil {
 		return nil, err
 	}
@@ -6580,7 +6580,7 @@ func (l *LanguageService) getExhaustiveCaseSnippets(
 		// Tolerate a nil import adder in untitled files.
 		var importAdder autoimport.ImportAdder
 		if !tspath.IsDynamicFileName(file.FileName()) {
-			view, err := l.getPreparedAutoImportView(file)
+			view, err := l.getPreparedAutoImportView(file, c)
 			if err != nil {
 				return nil, err
 			}
