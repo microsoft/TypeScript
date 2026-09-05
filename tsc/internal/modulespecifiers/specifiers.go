@@ -1213,9 +1213,28 @@ func tryGetModuleNameFromExportsOrImports(
 	isImports bool,
 	preferTsExtension bool,
 ) string {
+	result, _ := tryGetModuleNameFromExportsOrImportsInner(options, host, targetFilePath, packageDirectory, packageName, exports, conditions, mode, isImports, preferTsExtension)
+	return result
+}
+
+// Inner returns (specifier, blocked). Blocked means a runtime-active target was
+// tried but didn't match the file, so Node would stop here and callers must not
+// fall through to later conditions or array elements.
+func tryGetModuleNameFromExportsOrImportsInner(
+	options *core.CompilerOptions,
+	host ModuleSpecifierGenerationHost,
+	targetFilePath string,
+	packageDirectory string,
+	packageName string,
+	exports packagejson.ExportsOrImports,
+	conditions []string,
+	mode MatchingMode,
+	isImports bool,
+	preferTsExtension bool,
+) (string, bool) {
 	switch exports.Type {
 	case packagejson.JSONValueTypeNotPresent:
-		return ""
+		return "", false
 	case packagejson.JSONValueTypeString:
 		strValue := exports.Value.(string)
 
@@ -1245,83 +1264,117 @@ func tryGetModuleNameFromExportsOrImports(
 				tspath.ComparePaths(targetFilePath, pathOrPattern, compareOpts) == 0 ||
 				len(outputFile) > 0 && tspath.ComparePaths(outputFile, pathOrPattern, compareOpts) == 0 ||
 				len(declarationFile) > 0 && tspath.ComparePaths(declarationFile, pathOrPattern, compareOpts) == 0 {
-				return packageName
+				return packageName, false
 			}
 		case MatchingModeDirectory:
 			if canTryTsExtension && tspath.ContainsPath(targetFilePath, pathOrPattern, compareOpts) {
 				fragment := tspath.GetRelativePathFromDirectory(pathOrPattern, targetFilePath, compareOpts)
-				return tspath.GetNormalizedAbsolutePath(tspath.CombinePaths(tspath.CombinePaths(packageName, strValue), fragment), "")
+				return tspath.GetNormalizedAbsolutePath(tspath.CombinePaths(tspath.CombinePaths(packageName, strValue), fragment), ""), false
 			}
 			if len(extensionSwappedTarget) > 0 && tspath.ContainsPath(pathOrPattern, extensionSwappedTarget, compareOpts) {
 				fragment := tspath.GetRelativePathFromDirectory(pathOrPattern, extensionSwappedTarget, compareOpts)
-				return tspath.GetNormalizedAbsolutePath(tspath.CombinePaths(tspath.CombinePaths(packageName, strValue), fragment), "")
+				return tspath.GetNormalizedAbsolutePath(tspath.CombinePaths(tspath.CombinePaths(packageName, strValue), fragment), ""), false
 			}
 			if !canTryTsExtension && tspath.ContainsPath(pathOrPattern, targetFilePath, compareOpts) {
 				fragment := tspath.GetRelativePathFromDirectory(pathOrPattern, targetFilePath, compareOpts)
-				return tspath.GetNormalizedAbsolutePath(tspath.CombinePaths(tspath.CombinePaths(packageName, strValue), fragment), "")
+				return tspath.GetNormalizedAbsolutePath(tspath.CombinePaths(tspath.CombinePaths(packageName, strValue), fragment), ""), false
 			}
 			if len(outputFile) > 0 && tspath.ContainsPath(pathOrPattern, outputFile, compareOpts) {
 				fragment := tspath.GetRelativePathFromDirectory(pathOrPattern, outputFile, compareOpts)
-				return tspath.CombinePaths(packageName, fragment)
+				return tspath.CombinePaths(packageName, fragment), false
 			}
 			if len(declarationFile) > 0 && tspath.ContainsPath(pathOrPattern, declarationFile, compareOpts) {
 				fragment := tspath.GetRelativePathFromDirectory(pathOrPattern, declarationFile, compareOpts)
 				jsExtension := getJSExtensionForFile(declarationFile, options)
 				fragmentWithJsExtension := tspath.ChangeExtension(fragment, jsExtension)
-				return tspath.CombinePaths(packageName, fragmentWithJsExtension)
+				return tspath.CombinePaths(packageName, fragmentWithJsExtension), false
 			}
 		case MatchingModePattern:
 			leadingSlice, trailingSlice, _ := strings.Cut(pathOrPattern, "*")
 			caseSensitive := host.UseCaseSensitiveFileNames()
 			if canTryTsExtension && stringutil.HasPrefixAndSuffixWithoutOverlap(targetFilePath, leadingSlice, trailingSlice, caseSensitive) {
 				starReplacement := targetFilePath[len(leadingSlice) : len(targetFilePath)-len(trailingSlice)]
-				return replaceFirstStar(packageName, starReplacement)
+				return replaceFirstStar(packageName, starReplacement), false
 			}
 			if len(extensionSwappedTarget) > 0 && stringutil.HasPrefixAndSuffixWithoutOverlap(extensionSwappedTarget, leadingSlice, trailingSlice, caseSensitive) {
 				starReplacement := extensionSwappedTarget[len(leadingSlice) : len(extensionSwappedTarget)-len(trailingSlice)]
-				return replaceFirstStar(packageName, starReplacement)
+				return replaceFirstStar(packageName, starReplacement), false
 			}
 			if !canTryTsExtension && stringutil.HasPrefixAndSuffixWithoutOverlap(targetFilePath, leadingSlice, trailingSlice, caseSensitive) {
 				starReplacement := targetFilePath[len(leadingSlice) : len(targetFilePath)-len(trailingSlice)]
-				return replaceFirstStar(packageName, starReplacement)
+				return replaceFirstStar(packageName, starReplacement), false
 			}
 			if len(outputFile) > 0 && stringutil.HasPrefixAndSuffixWithoutOverlap(outputFile, leadingSlice, trailingSlice, caseSensitive) {
 				starReplacement := outputFile[len(leadingSlice) : len(outputFile)-len(trailingSlice)]
-				return replaceFirstStar(packageName, starReplacement)
+				return replaceFirstStar(packageName, starReplacement), false
 			}
 			if len(declarationFile) > 0 && stringutil.HasPrefixAndSuffixWithoutOverlap(declarationFile, leadingSlice, trailingSlice, caseSensitive) {
 				starReplacement := declarationFile[len(leadingSlice) : len(declarationFile)-len(trailingSlice)]
 				substituted := replaceFirstStar(packageName, starReplacement)
 				jsExtension := module.TryGetJSExtensionForFile(declarationFile, options)
 				if len(jsExtension) > 0 {
-					return tspath.ChangeFullExtension(substituted, jsExtension)
+					return tspath.ChangeFullExtension(substituted, jsExtension), false
 				}
 			}
 		}
-		return ""
+		// String is an unconditional valid target: if it doesn't match the file,
+		// Node would still select it and fail, so it's terminal.
+		return "", true
 	case packagejson.JSONValueTypeArray:
+		// Arrays are ordered fallbacks for undefined/invalid entries only. A valid
+		// string target that doesn't match the file still selects that URL at
+		// runtime and throws on miss, so it blocks later elements.
 		arr := exports.AsArray()
 		for _, e := range arr {
-			result := tryGetModuleNameFromExportsOrImports(options, host, targetFilePath, packageDirectory, packageName, e, conditions, mode, isImports, preferTsExtension)
+			result, blocked := tryGetModuleNameFromExportsOrImportsInner(options, host, targetFilePath, packageDirectory, packageName, e, conditions, mode, isImports, preferTsExtension)
 			if len(result) > 0 {
-				return result
+				return result, false
+			}
+			if blocked {
+				return "", true
 			}
 		}
+		return "", false
 	case packagejson.JSONValueTypeObject:
-		// conditional mapping
+		// conditional mapping.
+		// Node.js resolves conditionals by picking the first key (in object order) that
+		// matches the active conditions and stopping there: if that target fails to
+		// resolve, it throws instead of falling through to the next matching condition
+		// (except fallback arrays, which do try each element - see case Array above,
+		// which intentionally still loops).
+		// The reverse mapping below must mirror that, otherwise auto-import suggests
+		// specifiers that only resolve in TS (via fallback) but crash at runtime.
+		// See https://github.com/microsoft/TypeScript/issues/64171.
 		obj := exports.AsObject()
 		for key, value := range obj.Entries() {
 			if key == "default" || slices.Contains(conditions, key) || slices.Contains(conditions, "types") && module.IsApplicableVersionedTypesKey(key) {
-				result := tryGetModuleNameFromExportsOrImports(options, host, targetFilePath, packageDirectory, packageName, value, conditions, mode, isImports, preferTsExtension)
+				result, blocked := tryGetModuleNameFromExportsOrImportsInner(options, host, targetFilePath, packageDirectory, packageName, value, conditions, mode, isImports, preferTsExtension)
 				if len(result) > 0 {
-					return result
+					return result, false
+				}
+				// If this key would be tried at runtime (i.e. it is not a types-only
+				// condition, which Node ignores) and its target was terminal
+				// (tried but didn't match), Node would stop here and fail. A later
+				// matching condition (e.g. "default" after "node") would never be
+				// reached, so the candidate is invalid. If the nested value was
+				// undefined (no active runtime key inside), Node proceeds to the
+				// next outer condition, so continue. Custom conditions from
+				// tsconfig are assumed active at runtime (per GetConditions).
+				if blocked && isRuntimeCondition(key) {
+					return "", true
 				}
 			}
 		}
+		return "", false
 	case packagejson.JSONValueTypeNull:
-		return ""
+		// Explicit null is terminal at runtime.
+		return "", true
 	}
-	return ""
+	return "", false
+}
+
+func isRuntimeCondition(key string) bool {
+	return key != "types" && !module.IsApplicableVersionedTypesKey(key)
 }
 
 // `importingSourceFile` and `importingSourceFileName`? Why not just use `importingSourceFile.path`?
