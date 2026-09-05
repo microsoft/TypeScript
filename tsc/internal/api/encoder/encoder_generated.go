@@ -643,6 +643,8 @@ func getNodeCommonData(node *ast.Node) uint32 {
 			phaseModifierIdx = 1
 		case ast.KindDeferKeyword:
 			phaseModifierIdx = 2
+		case ast.KindSourceKeyword:
+			phaseModifierIdx = 3
 		}
 		return phaseModifierIdx << 24
 	case ast.KindImportSpecifier:

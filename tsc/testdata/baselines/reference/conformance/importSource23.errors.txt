@@ -1,0 +1,16 @@
+b.ts(1,22): error TS100075: A declaration file cannot be imported with a source phase import.
+b.ts(3,15): error TS100075: A declaration file cannot be imported with a source phase import.
+
+
+==== a.d.wasm.ts (0 errors) ====
+    export {};
+    
+==== b.ts (2 errors) ====
+    import source a from "./a.d.wasm.ts";
+                         ~~~~~~~~~~~~~~~
+!!! error TS100075: A declaration file cannot be imported with a source phase import.
+    a;
+    import.source("./a.d.wasm.ts");
+                  ~~~~~~~~~~~~~~~
+!!! error TS100075: A declaration file cannot be imported with a source phase import.
+    

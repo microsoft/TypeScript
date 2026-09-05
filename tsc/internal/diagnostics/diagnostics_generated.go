@@ -4424,6 +4424,20 @@ var The_invalid_diagnostic_directive_is_in_supplemental_output_0_returned_by_the
 
 var Diagnostic_directive_0_returned_by_the_content_mapper_has_an_invalid_unusedExpectDirectiveIndex = &Message{code: 100068, category: CategoryMessage, key: "Diagnostic_directive_0_returned_by_the_content_mapper_has_an_invalid_unusedExpectDirectiveIndex_100068", text: "Diagnostic directive {0} returned by the content mapper has an invalid 'unusedExpectDirectiveIndex'."}
 
+var A_source_phase_import_must_specify_a_local_binding = &Message{code: 100069, category: CategoryError, key: "A_source_phase_import_must_specify_a_local_binding_100069", text: "A source phase import must specify a local binding."}
+
+var Named_and_namespace_imports_are_not_allowed_in_a_source_phase_import = &Message{code: 100070, category: CategoryError, key: "Named_and_namespace_imports_are_not_allowed_in_a_source_phase_import_100070", text: "Named and namespace imports are not allowed in a source phase import."}
+
+var Source_phase_imports_are_only_supported_when_the_module_option_is_set_to_esnext_nodenext_or_preserve = &Message{code: 100071, category: CategoryError, key: "Source_phase_imports_are_only_supported_when_the_module_option_is_set_to_esnext_nodenext_or_preserve_100071", text: "Source phase imports are only supported when the '--module' option is set to 'esnext', 'nodenext', or 'preserve'."}
+
+var Optional_chaining_cannot_be_used_with_import_source = &Message{code: 100072, category: CategoryError, key: "Optional_chaining_cannot_be_used_with_import_source_100072", text: "Optional chaining cannot be used with 'import.source'."}
+
+var X_0_is_not_a_valid_meta_property_for_keyword_import_Did_you_mean_meta_defer_or_source = &Message{code: 100073, category: CategoryError, key: "_0_is_not_a_valid_meta_property_for_keyword_import_Did_you_mean_meta_defer_or_source_100073", text: "'{0}' is not a valid meta-property for keyword 'import'. Did you mean 'meta', 'defer', or 'source'?"}
+
+var Source_phase_imports_are_not_allowed_on_statements_that_compile_to_CommonJS_require_calls = &Message{code: 100074, category: CategoryError, key: "Source_phase_imports_are_not_allowed_on_statements_that_compile_to_CommonJS_require_calls_100074", text: "Source phase imports are not allowed on statements that compile to CommonJS 'require' calls."}
+
+var A_declaration_file_cannot_be_imported_with_a_source_phase_import = &Message{code: 100075, category: CategoryError, key: "A_declaration_file_cannot_be_imported_with_a_source_phase_import_100075", text: "A declaration file cannot be imported with a source phase import."}
+
 func keyToMessage(key Key) *Message {
 	switch key {
 	case "Unterminated_string_literal_1002":
@@ -8848,6 +8862,20 @@ func keyToMessage(key Key) *Message {
 		return The_invalid_diagnostic_directive_is_in_supplemental_output_0_returned_by_the_content_mapper
 	case "Diagnostic_directive_0_returned_by_the_content_mapper_has_an_invalid_unusedExpectDirectiveIndex_100068":
 		return Diagnostic_directive_0_returned_by_the_content_mapper_has_an_invalid_unusedExpectDirectiveIndex
+	case "A_source_phase_import_must_specify_a_local_binding_100069":
+		return A_source_phase_import_must_specify_a_local_binding
+	case "Named_and_namespace_imports_are_not_allowed_in_a_source_phase_import_100070":
+		return Named_and_namespace_imports_are_not_allowed_in_a_source_phase_import
+	case "Source_phase_imports_are_only_supported_when_the_module_option_is_set_to_esnext_nodenext_or_preserve_100071":
+		return Source_phase_imports_are_only_supported_when_the_module_option_is_set_to_esnext_nodenext_or_preserve
+	case "Optional_chaining_cannot_be_used_with_import_source_100072":
+		return Optional_chaining_cannot_be_used_with_import_source
+	case "_0_is_not_a_valid_meta_property_for_keyword_import_Did_you_mean_meta_defer_or_source_100073":
+		return X_0_is_not_a_valid_meta_property_for_keyword_import_Did_you_mean_meta_defer_or_source
+	case "Source_phase_imports_are_not_allowed_on_statements_that_compile_to_CommonJS_require_calls_100074":
+		return Source_phase_imports_are_not_allowed_on_statements_that_compile_to_CommonJS_require_calls
+	case "A_declaration_file_cannot_be_imported_with_a_source_phase_import_100075":
+		return A_declaration_file_cannot_be_imported_with_a_source_phase_import
 	default:
 		return nil
 	}

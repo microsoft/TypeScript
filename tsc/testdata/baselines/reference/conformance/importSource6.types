@@ -1,0 +1,16 @@
+//// [tests/cases/conformance/importSource/importSource6.ts] ////
+
+=== a.ts ===
+
+export default 1;
+
+=== b.ts ===
+import source a from "./a.js";
+>a : any
+
+const b = import.source("./a.js");
+>b : Promise<any>
+>import.source("./a.js") : Promise<any>
+>source : any
+>"./a.js" : "./a.js"
+

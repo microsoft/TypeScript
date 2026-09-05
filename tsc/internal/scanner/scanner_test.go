@@ -91,3 +91,15 @@ func TestGetTextOfNodeFromJSDocTypePreservesAsteriskType(t *testing.T) {
 
 	assert.Equal(t, GetTextOfNodeFromSourceText(sourceText, node, false /*includeTrivia*/), "*")
 }
+
+func TestScanSourceKeyword(t *testing.T) {
+	t.Parallel()
+	s := NewScanner()
+	s.SetText("source sourceValue")
+
+	assert.Equal(t, s.Scan(), ast.KindSourceKeyword)
+	assert.Equal(t, TokenToString(ast.KindSourceKeyword), "source")
+	assert.Equal(t, StringToToken("source"), ast.KindSourceKeyword)
+	assert.Equal(t, s.Scan(), ast.KindIdentifier)
+	assert.Equal(t, s.TokenValue(), "sourceValue")
+}

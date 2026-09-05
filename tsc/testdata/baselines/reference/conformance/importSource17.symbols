@@ -1,0 +1,19 @@
+//// [tests/cases/conformance/importSource/importSource17.ts] ////
+
+=== b.js ===
+import source a from "./a.wasm";
+>a : Symbol(a, Decl(b.js, 0, 6))
+
+const b = import.source("./a.wasm");
+>b : Symbol(b, Decl(b.js, 1, 5))
+
+/** @type {WebAssembly.Module} */
+const c = a;
+>c : Symbol(c, Decl(b.js, 4, 5))
+>a : Symbol(a, Decl(b.js, 0, 6))
+
+/** @type {Promise<WebAssembly.Module>} */
+const d = b;
+>d : Symbol(d, Decl(b.js, 7, 5))
+>b : Symbol(b, Decl(b.js, 1, 5))
+

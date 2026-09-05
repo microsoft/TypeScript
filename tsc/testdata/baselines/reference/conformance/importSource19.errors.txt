@@ -1,0 +1,15 @@
+a.ts(1,22): error TS2307: Cannot find module './missing.wasm' or its corresponding type declarations.
+a.ts(2,25): error TS2307: Cannot find module './missing.wasm' or its corresponding type declarations.
+
+
+==== a.ts (2 errors) ====
+    import source a from "./missing.wasm";
+                         ~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module './missing.wasm' or its corresponding type declarations.
+    const b = import.source("./missing.wasm");
+                            ~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module './missing.wasm' or its corresponding type declarations.
+    
+    a;
+    b;
+    

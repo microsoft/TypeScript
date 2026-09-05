@@ -358,6 +358,13 @@ func getDeclarationsFromLocation(c *checker.Checker, node *ast.Node) []*ast.Node
 		}
 		if symbol.Flags&ast.SymbolFlagsAlias != 0 {
 			if resolved, ok := c.ResolveAlias(symbol); ok {
+				if len(resolved.Declarations) == 0 {
+					for _, declaration := range symbol.Declarations {
+						if ast.IsImportClause(declaration) && declaration.AsImportClause().PhaseModifier == ast.KindSourceKeyword {
+							return symbol.Declarations
+						}
+					}
+				}
 				symbol = resolved
 			}
 		}

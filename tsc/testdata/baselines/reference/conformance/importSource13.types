@@ -1,0 +1,20 @@
+//// [tests/cases/conformance/importSource/importSource13.ts] ////
+
+=== a.d.ts ===
+declare module "*.wasm";
+>"*.wasm" : any
+
+=== b.ts ===
+import source a from "./a.wasm";
+>a : any
+
+const b: any = a;
+>b : any
+>a : any
+
+const c: Promise<any> = import.source("./a.wasm");
+>c : Promise<any>
+>import.source("./a.wasm") : Promise<any>
+>source : any
+>"./a.wasm" : "./a.wasm"
+

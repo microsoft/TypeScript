@@ -749,6 +749,9 @@ func (v *View) tryAddToExistingImport(
 			continue
 		}
 		importClause := importClauseNode.AsImportClause()
+		if importClause.PhaseModifier == ast.KindSourceKeyword {
+			continue
+		}
 
 		namedBindings := importClause.NamedBindings
 		// A type-only import may not have both a default and named imports, so the only way a name can

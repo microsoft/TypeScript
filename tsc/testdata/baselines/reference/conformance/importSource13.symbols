@@ -1,0 +1,19 @@
+//// [tests/cases/conformance/importSource/importSource13.ts] ////
+
+=== a.d.ts ===
+declare module "*.wasm";
+>"*.wasm" : Symbol("*.wasm", Decl(a.d.ts, 0, 0))
+
+=== b.ts ===
+import source a from "./a.wasm";
+>a : Symbol(a, Decl(b.ts, 0, 6))
+
+const b: any = a;
+>b : Symbol(b, Decl(b.ts, 1, 5))
+>a : Symbol(a, Decl(b.ts, 0, 6))
+
+const c: Promise<any> = import.source("./a.wasm");
+>c : Symbol(c, Decl(b.ts, 2, 5))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>"./a.wasm" : Symbol("*.wasm", Decl(a.d.ts, 0, 0))
+

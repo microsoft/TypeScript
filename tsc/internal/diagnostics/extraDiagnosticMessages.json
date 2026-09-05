@@ -338,5 +338,33 @@
     "Diagnostic directive {0} returned by the content mapper has an invalid 'unusedExpectDirectiveIndex'.": {
         "category": "Message",
         "code": 100068
+    },
+    "A source phase import must specify a local binding.": {
+        "category": "Error",
+        "code": 100069
+    },
+    "Named and namespace imports are not allowed in a source phase import.": {
+        "category": "Error",
+        "code": 100070
+    },
+    "Source phase imports are only supported when the '--module' option is set to 'esnext', 'nodenext', or 'preserve'.": {
+        "category": "Error",
+        "code": 100071
+    },
+    "Optional chaining cannot be used with 'import.source'.": {
+        "category": "Error",
+        "code": 100072
+    },
+    "'{0}' is not a valid meta-property for keyword 'import'. Did you mean 'meta', 'defer', or 'source'?": {
+        "category": "Error",
+        "code": 100073
+    },
+    "Source phase imports are not allowed on statements that compile to CommonJS 'require' calls.": {
+        "category": "Error",
+        "code": 100074
+    },
+    "A declaration file cannot be imported with a source phase import.": {
+        "category": "Error",
+        "code": 100075
     }
 }
