@@ -5,6 +5,7 @@ import (
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/json"
 	"github.com/microsoft/TypeScript/tsc/internal/module"
 	"github.com/microsoft/TypeScript/tsc/internal/packagejson"
 	"github.com/microsoft/TypeScript/tsc/internal/symlinks"
@@ -344,4 +345,44 @@ func TestTryGetModuleNameFromExportsOrImports(t *testing.T) {
 			})
 		}
 	})
+}
+
+func TestTargetCapturesResolution(t *testing.T) {
+	t.Parallel()
+	conditions := []string{"import", "types", "node"}
+	tests := []struct {
+		name      string
+		target    string
+		isImports bool
+		want      bool
+	}{
+		{name: "relative string", target: `"./dist/index.js"`, want: true},
+		{name: "null blocks the specifier", target: `null`, want: true},
+		{name: "bare specifier is invalid in exports", target: `"other-pkg"`, want: false},
+		{name: "bare specifier is valid in imports", target: `"other-pkg"`, isImports: true, want: true},
+		{name: "parent-relative path is invalid in imports", target: `"../other.js"`, isImports: true, want: false},
+		{name: "empty array", target: `[]`, want: false},
+		{name: "array with a usable element", target: `["other-pkg", "./a.js"]`, want: true},
+		{name: "array with only invalid elements", target: `["other-pkg"]`, want: false},
+		{name: "object with an active runtime condition", target: `{"node": "./a.js"}`, want: true},
+		{name: "object with default", target: `{"browser": "./a.js", "default": "./b.js"}`, want: true},
+		{name: "object with only inactive conditions", target: `{"require": "./a.js", "browser": "./b.js"}`, want: false},
+		{name: "object with only a types condition", target: `{"types": "./a.d.ts"}`, want: false},
+		{name: "nested object with an active branch", target: `{"node": {"import": "./a.mjs"}}`, want: true},
+		{name: "nested object without an active branch", target: `{"node": {"require": "./a.cjs"}}`, want: false},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			var parsed struct {
+				Exports packagejson.ExportsOrImports `json:"exports"`
+			}
+			if err := json.Unmarshal([]byte(`{"exports": `+tt.target+`}`), &parsed); err != nil {
+				t.Fatal(err)
+			}
+			if got := targetCapturesResolution(parsed.Exports, conditions, tt.isImports); got != tt.want {
+				t.Errorf("targetCapturesResolution(%s, isImports=%v) = %v, want %v", tt.target, tt.isImports, got, tt.want)
+			}
+		})
+	}
 }
