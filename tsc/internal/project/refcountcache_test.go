@@ -89,6 +89,70 @@ func TestParseCacheBindsBeforePublishing(t *testing.T) {
 	assert.Assert(t, file.CommonJSModuleIndicator != nil)
 }
 
+func TestRefOrAcquireRecreatesConcurrentlyDeletedEntry(t *testing.T) {
+	t.Parallel()
+
+	cache := NewParseCache(RefCountCacheOptions{})
+	key := NewParseCacheKey(ast.SourceFileParseOptions{FileName: "/a.ts", Path: "/a.ts"}, xxh3.Hash128([]byte("a")), core.ScriptKindTS)
+	file := &ast.SourceFile{}
+
+	// A caller holding file (e.g. reused, by pointer, from an old Program while
+	// cloning a new one) can lose a benign race: some other, independent owner
+	// derefs the entry to zero and it's deleted from the map entirely before
+	// this caller gets a chance to record its own claim. Plain Ref would panic
+	// in that situation (see refcountcache.go); RefOrAcquire must instead
+	// recreate the entry from the value the caller already has.
+	assert.Assert(t, !cache.Has(key))
+	cache.RefOrAcquire(key, file)
+	assert.Assert(t, cache.Has(key))
+	entry, ok := cache.entries.Load(key)
+	assert.Assert(t, ok)
+	assert.Equal(t, entry.refCount, 1)
+	assert.Assert(t, entry.value == file)
+
+	// A second RefOrAcquire for a live entry behaves like Ref: it bumps the
+	// existing entry rather than replacing its value.
+	other := &ast.SourceFile{}
+	cache.RefOrAcquire(key, other)
+	entry, ok = cache.entries.Load(key)
+	assert.Assert(t, ok)
+	assert.Equal(t, entry.refCount, 2)
+	assert.Assert(t, entry.value == file)
+
+	cache.Deref(key)
+	cache.Deref(key)
+	assert.Assert(t, !cache.Has(key))
+}
+
+func TestRefIfPresentSkipsMissingEntry(t *testing.T) {
+	t.Parallel()
+
+	cache := NewParseCache(RefCountCacheOptions{})
+	key := NewParseCacheKey(ast.SourceFileParseOptions{FileName: "/a.ts", Path: "/a.ts"}, xxh3.Hash128([]byte("a")), core.ScriptKindTS)
+
+	// Duplicates are bookkeeping-only refs on an entry owned elsewhere: there's
+	// no value on hand to recreate it with, so a missing entry must be a no-op
+	// (never a panic) rather than fabricating a zero-value entry.
+	assert.Equal(t, cache.RefIfPresent(key), false)
+	assert.Assert(t, !cache.Has(key))
+
+	file := &ast.SourceFile{}
+	cache.RefOrAcquire(key, file)
+	assert.Equal(t, cache.RefIfPresent(key), true)
+	entry, ok := cache.entries.Load(key)
+	assert.Assert(t, ok)
+	assert.Equal(t, entry.refCount, 2)
+
+	cache.Deref(key)
+	cache.Deref(key)
+	assert.Assert(t, !cache.Has(key))
+
+	// The corresponding Deref for a duplicate whose RefIfPresent no-op'd must
+	// also no-op rather than panicking or corrupting an unrelated entry.
+	cache.Deref(key)
+	assert.Assert(t, !cache.Has(key))
+}
+
 func TestRefCountingCaches(t *testing.T) {
 	t.Parallel()
 

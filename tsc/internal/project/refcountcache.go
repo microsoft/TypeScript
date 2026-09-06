@@ -80,23 +80,51 @@ func (c *RefCountCache[K, V, AcquireArgs]) AcquireOrError(identity K, produce fu
 	return value, nil
 }
 
-// Ref increments the reference count for an existing entry.
-// Panics if the entry does not exist.
-func (c *RefCountCache[K, V, AcquireArgs]) Ref(identity K) {
+// RefOrAcquire increments the reference count for an existing entry, or
+// installs value as a fresh entry with refCount 1 if none exists.
+//
+// It never panics on a missing entry. It exists for callers that already
+// hold value from elsewhere (e.g. a *ast.SourceFile reused from
+// an old Program while cloning a new one) and are re-establishing their own
+// claim on it. Such callers can legitimately race with a concurrent Deref of
+// the last other claim on the same identity: two independent snapshot builds
+// (for example a normal edit and a speculative auto-import clone, see
+// GetLanguageServiceWithAutoImports) can each be cloning from the same
+// shared Program concurrently, and the moment the file's last other owner
+// releases it can fall between this call's initial lookup and its lock
+// acquisition. Since the caller already possesses a valid value for
+// identity, recreating the entry is always safe: it never returns a value
+// the caller didn't already have.
+func (c *RefCountCache[K, V, AcquireArgs]) RefOrAcquire(identity K, value V) {
+	entry, loaded := c.loadOrStoreNewLockedEntry(identity)
+	if !loaded {
+		entry.value = value
+	}
+	entry.mu.Unlock()
+}
+
+// RefIfPresent increments the reference count for an existing entry and
+// reports true, or does nothing and reports false if no entry exists.
+//
+// It exists for callers that are recording an additional owner of an entry
+// they do not themselves have a value for (e.g. a duplicate source file,
+// which is only ever a bookkeeping reference to a canonical entry acquired
+// elsewhere). Skipping the ref when the entry is already gone is safe: the
+// corresponding Deref for this same identity, issued later when the
+// bookkeeping owner is released, is itself a no-op against a missing entry.
+func (c *RefCountCache[K, V, AcquireArgs]) RefIfPresent(identity K) bool {
 	entry, ok := c.entries.Load(identity)
 	if !ok {
-		panic("cache entry not found")
+		return false
 	}
 	entry.mu.Lock()
 	defer entry.mu.Unlock()
 	if entry.refCount <= 0 && !c.Options.DisableDeletion {
-		// Entry was deleted while we were acquiring the lock
-		newEntry, _ := c.loadOrStoreNewLockedEntry(identity)
-		defer newEntry.mu.Unlock()
-		newEntry.value = entry.value
-		return
+		// Entry was deleted while we were acquiring the lock.
+		return false
 	}
 	entry.refCount++
+	return true
 }
 
 // Deref decrements the reference count for an entry.

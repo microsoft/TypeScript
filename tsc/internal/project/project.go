@@ -415,20 +415,33 @@ func (p *Project) CreateProgram() CreateProgramResult {
 				// Use pointer identity: dirtyFile is the exact instance UpdateProgram acquired,
 				// and it is the only file whose refcount is already accounted for.
 				if file != dirtyFile && !file.IsContentMapperFailureStub() && !file.IsContentMapperSupplemental() {
-					// UpdateProgram acquired the changed file only, so we need to ref everything else
+					// UpdateProgram acquired the changed file only, so we need to ref everything else.
+					// We already hold file itself, so RefOrAcquire (rather than Ref) tolerates losing
+					// a benign race against a concurrent, independent snapshot build that drops the
+					// last other claim on this cache entry between our lookup and our lock (e.g. a
+					// normal edit racing a speculative auto-import clone sharing this file's old
+					// Program, see GetLanguageServiceWithAutoImports): recreating the entry from a
+					// value we already possess is always correct.
 					if file.ContentMapper() != "" {
-						p.host.builder.contentMappedParseCache.Ref(contentMappedParseCacheKeyForFile(file))
+						p.host.builder.contentMappedParseCache.RefOrAcquire(
+							contentMappedParseCacheKeyForFile(file),
+							contentmapper.SourceFiles{Canonical: file, Supplemental: file.SupplementalSourceFiles()},
+						)
 					} else {
-						p.host.builder.parseCache.Ref(parseCacheKeyForFile(file))
+						p.host.builder.parseCache.RefOrAcquire(parseCacheKeyForFile(file), file)
 					}
 				}
 			}
 			for _, file := range newProgram.DuplicateSourceFiles() {
 				if !file.IsContentMapperFailureStub {
+					// Duplicates are pure bookkeeping refs on an entry acquired elsewhere: we have no
+					// value to recreate it with, so RefIfPresent no-ops if it loses the same race
+					// described above. That's safe because the matching Deref issued when this
+					// bookkeeping owner is later released already tolerates a missing entry.
 					if file.ContentMapper != "" {
-						p.host.builder.contentMappedParseCache.Ref(contentMappedParseCacheKeyForDuplicate(file))
+						p.host.builder.contentMappedParseCache.RefIfPresent(contentMappedParseCacheKeyForDuplicate(file))
 					} else {
-						p.host.builder.parseCache.Ref(parseCacheKeyForDuplicate(file))
+						p.host.builder.parseCache.RefIfPresent(parseCacheKeyForDuplicate(file))
 					}
 				}
 			}
