@@ -2109,7 +2109,7 @@ func TestFileCallbackForwardsErrAlongsideEvents(t *testing.T) {
 	var got []call
 	cb := fileCallback(target, func(events []Event, err error) {
 		got = append(got, call{events: events, err: err})
-	})
+	}, pathComparer{})
 
 	// Plain events: only target events pass through, sibling dropped.
 	cb([]Event{{Kind: EventUpdate, Path: target}, {Kind: EventUpdate, Path: other}}, nil)

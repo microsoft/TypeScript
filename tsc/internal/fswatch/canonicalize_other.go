@@ -6,3 +6,7 @@ package fswatch
 // using the same bytes the caller provided. See canonicalize_darwin.go
 // for the rationale on macOS.
 func canonicalizePath(p string) string { return p }
+
+func (w *watcher) pathComparer(dir string) (pathComparer, error) {
+	return pathComparer{}, nil
+}

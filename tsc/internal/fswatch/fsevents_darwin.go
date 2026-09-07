@@ -623,18 +623,18 @@ func fsEventsCallback(cb *streamCallback, payload *fsEventsCallbackPayload) {
 }
 
 func fseventsDisplayPath(w *dirWatch, rawPath string) (string, bool) {
-	if isInDirectoryOrSelf(w.physicalDir, rawPath) {
-		return w.displayPath(rawPath), true
+	if path, ok := w.comparer.rebase(rawPath, w.physicalDir, w.dir); ok {
+		return path, true
 	}
-	if w.physicalDir != w.dir && isInDirectoryOrSelf(w.dir, rawPath) {
-		return rawPath, true
+	if w.physicalDir != w.dir {
+		return w.comparer.rebase(rawPath, w.dir, w.dir)
 	}
 	return "", false
 }
 
 func fseventsOverflowMatches(w *dirWatch, rawPath string) bool {
-	if isInDirectoryOrSelf(w.physicalDir, rawPath) || isInDirectoryOrSelf(rawPath, w.physicalDir) {
+	if w.comparer.contains(w.physicalDir, rawPath) || w.comparer.contains(rawPath, w.physicalDir) {
 		return true
 	}
-	return w.physicalDir != w.dir && (isInDirectoryOrSelf(w.dir, rawPath) || isInDirectoryOrSelf(rawPath, w.dir))
+	return w.physicalDir != w.dir && (w.comparer.contains(w.dir, rawPath) || w.comparer.contains(rawPath, w.dir))
 }

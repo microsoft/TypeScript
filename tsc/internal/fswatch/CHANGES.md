@@ -149,6 +149,13 @@ logical root, physical root, event-ID cutoff, and termination state, so
 late-added watches don't receive older queued events and symlinked watch roots
 continue reporting caller-visible paths.
 
+FSEvents path routing and file filtering use the watched volume's case
+sensitivity, queried with `pathconf`, rather than assuming event paths have the
+same casing as the subscription. Delivered paths retain the caller's watch-root
+casing (or the entire requested path for `WatchFile`), while descendant names
+retain the casing reported by FSEvents. Overflow and logical-root deletion
+matching use the same comparison rules.
+
 ## New backends
 
 **fanotify** (Linux, kernel ≥ 5.13) is the default on Linux when available. It
