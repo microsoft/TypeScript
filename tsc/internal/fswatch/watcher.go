@@ -119,6 +119,17 @@ type WatchDirectoryRequest struct {
 type watchOptions struct {
 	ignore    func(path string) bool
 	recursive bool
+	file      string
+}
+
+// fileOption defers the file filter until the parent directory's comparer is
+// available, so WatchFile does not need a second filesystem query.
+type fileOption struct {
+	path string
+}
+
+func (o fileOption) applyWatchOption(opts *watchOptions) {
+	opts.file = o.path
 }
 
 type ignoreOption struct {
@@ -536,6 +547,9 @@ func (w *watcher) WatchDirectories(requests []WatchDirectoryRequest) ([]Watch, e
 			rollback()
 			return nil, err
 		}
+		if sopts.file != "" {
+			fn = fileCallback(sopts.file, fn, comparer)
+		}
 		dw, err := w.getOrCreateDirWatch(dir, physicalDir, sopts.recursive, comparer)
 		if err != nil {
 			rollback()
@@ -594,11 +608,7 @@ func (w *watcher) WatchFile(path string, fn WatchCallback) (Watch, error) {
 		return nil, errRootPath
 	}
 
-	comparer, err := w.pathComparer(dir)
-	if err != nil {
-		return nil, err
-	}
-	return w.WatchDirectory(dir, fileCallback(path, fn, comparer))
+	return w.WatchDirectory(dir, fn, fileOption{path: path})
 }
 
 // fileCallback wraps a WatchCallback so it only sees events for the
