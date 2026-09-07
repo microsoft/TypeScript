@@ -180,7 +180,7 @@ export interface ObjectType extends Type {
 /** Type references (ObjectFlags.Reference) — e.g. Array<string>, Map<K, V> */
 export interface TypeReference extends ObjectType {
     /** Get the generic target type (e.g. Array for Array<string>) */
-    getTarget(): Promise<Type>;
+    getTarget(): Promise<GenericType>;
 }
 
 /** References to tuple types */
@@ -198,6 +198,9 @@ export interface InterfaceType extends TypeReference {
     /** Get local type parameters declared on this interface/class */
     getLocalTypeParameters(): Promise<readonly TypeParameter[]>;
 }
+
+/** Generic types */
+export type GenericType = InterfaceType & TypeReference;
 
 /** Tuple type targets (ObjectFlags.Tuple) */
 export interface TupleType extends InterfaceType {
