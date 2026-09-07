@@ -8,7 +8,9 @@ import (
 	"os"
 	"runtime"
 	"slices"
+	"strings"
 	"syscall"
+	"unicode/utf8"
 	"unsafe"
 
 	"golang.org/x/sys/unix"
@@ -154,7 +156,7 @@ func cfArrayGetValueAtIndex(array uintptr, index int) uintptr {
 // to Unicode NFC so that:
 //   - WatchDirectory("/.../caf\u00e9") and WatchDirectory("/.../cafe\u0301")
 //     coalesce to a single dir watch;
-//   - WatchFile filters by exact-string compare in NFC always match;
+//   - WatchFile filters and directory routing compare the same normalized paths;
 //   - subscribers can compare event paths against their own NFC strings.
 //
 // All-ASCII inputs are bit-identical in NFC and NFD, so the hot path skips
@@ -181,6 +183,46 @@ var fse_CFStringNormalize_trampoline_addr uintptr
 
 func cfStringNormalize(mutStr uintptr, form uintptr) {
 	_, _, _ = syscall_syscall6(fse_CFStringNormalize_trampoline_addr, mutStr, form, 0, 0, 0, 0)
+}
+
+//go:cgo_import_dynamic fse_CFStringFold CFStringFold "/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation"
+
+var fse_CFStringFold_trampoline_addr uintptr
+
+const nativePathFolding = true
+
+// foldNativePath is a comparison form, never a displayed or opened path.
+// Case folding expands sharp s and ligatures without making diacritics,
+// dotless i, circled letters, or character widths interchangeable.
+func foldNativePath(s string) string {
+	if isASCII(s) {
+		return strings.ToLower(s)
+	}
+	if !utf8.ValidString(s) || strings.IndexByte(s, 0) >= 0 {
+		return ""
+	}
+	cstr := append([]byte(s), 0)
+	src := cfStringCreate(0, unsafe.Pointer(&cstr[0]), cfStringEncodingUTF8)
+	if src == 0 {
+		panic("fswatch: cannot create CFString for path folding")
+	}
+	defer cfRelease(src)
+	mut := cfStringCreateMutableCopy(0, 0, src)
+	if mut == 0 {
+		panic("fswatch: cannot copy CFString for path folding")
+	}
+	defer cfRelease(mut)
+	// Normalize before folding as well: a decomposed capital I with dot
+	// must have the same comparison form as precomposed dotted capital I.
+	cfStringNormalize(mut, cfStringNormalizationFormC)
+	const cfCompareCaseInsensitive = 1
+	_, _, _ = syscall_syscall6(fse_CFStringFold_trampoline_addr, mut, cfCompareCaseInsensitive, 0, 0, 0, 0)
+	cfStringNormalize(mut, cfStringNormalizationFormC)
+	folded := cfStringToGo(mut)
+	if folded == "" {
+		panic("fswatch: cannot extract folded CFString")
+	}
+	return folded
 }
 
 //go:cgo_import_dynamic fse_CFStringGetLength CFStringGetLength "/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation"

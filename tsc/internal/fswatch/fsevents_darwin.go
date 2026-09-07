@@ -507,6 +507,7 @@ func fsEventsCallback(cb *streamCallback, payload *fsEventsCallbackPayload) {
 		if path == "" {
 			continue
 		}
+		comparison := comparisonPath{path: path}
 
 		isRemoved := flag&flagItemRemoved != 0
 		isRenamed := flag&flagItemRenamed != 0
@@ -527,7 +528,7 @@ func fsEventsCallback(cb *streamCallback, payload *fsEventsCallbackPayload) {
 				if watch.state.terminated.Load() {
 					continue
 				}
-				if fseventsOverflowMatches(watch.w, path) {
+				if fseventsOverflowMatchesPrepared(watch.w, &comparison) {
 					watch.w.events.setError(overflow)
 					touched[watch.w] = struct{}{}
 				}
@@ -551,7 +552,7 @@ func fsEventsCallback(cb *streamCallback, payload *fsEventsCallbackPayload) {
 				continue
 			}
 			w := watch.w
-			displayPath, ok := fseventsDisplayPath(w, rawPath)
+			displayPath, ok := fseventsDisplayPathPrepared(w, &comparison)
 			if !ok {
 				continue
 			}
@@ -623,18 +624,42 @@ func fsEventsCallback(cb *streamCallback, payload *fsEventsCallbackPayload) {
 }
 
 func fseventsDisplayPath(w *dirWatch, rawPath string) (string, bool) {
-	if path, ok := w.comparer.rebase(rawPath, w.physicalDir, w.dir); ok {
+	path := comparisonPath{path: rawPath}
+	return fseventsDisplayPathPrepared(w, &path)
+}
+
+func fseventsDisplayPathPrepared(w *dirWatch, rawPath *comparisonPath) (string, bool) {
+	physical := comparisonPath{path: w.physicalDir, folded: w.physicalDirFold, ready: w.physicalDirFold != ""}
+	if path, ok := w.comparer.rebasePrepared(rawPath, physical, w.dir); ok {
 		return path, true
 	}
 	if w.physicalDir != w.dir {
-		return w.comparer.rebase(rawPath, w.dir, w.dir)
+		logical := comparisonPath{path: w.dir, folded: w.dirFold, ready: w.dirFold != ""}
+		return w.comparer.rebasePrepared(rawPath, logical, w.dir)
 	}
 	return "", false
 }
 
 func fseventsOverflowMatches(w *dirWatch, rawPath string) bool {
-	if w.comparer.contains(w.physicalDir, rawPath) || w.comparer.contains(rawPath, w.physicalDir) {
+	path := comparisonPath{path: rawPath}
+	return fseventsOverflowMatchesPrepared(w, &path)
+}
+
+func fseventsOverflowMatchesPrepared(w *dirWatch, rawPath *comparisonPath) bool {
+	physical := comparisonPath{path: w.physicalDir, folded: w.physicalDirFold, ready: w.physicalDirFold != ""}
+	if _, ok := w.comparer.suffixPrepared(physical, rawPath); ok {
 		return true
 	}
-	return w.physicalDir != w.dir && (w.comparer.contains(w.dir, rawPath) || w.comparer.contains(rawPath, w.dir))
+	if _, ok := w.comparer.suffixPrepared(*rawPath, &physical); ok {
+		return true
+	}
+	if w.physicalDir != w.dir {
+		logical := comparisonPath{path: w.dir, folded: w.dirFold, ready: w.dirFold != ""}
+		if _, ok := w.comparer.suffixPrepared(logical, rawPath); ok {
+			return true
+		}
+		_, ok := w.comparer.suffixPrepared(*rawPath, &logical)
+		return ok
+	}
+	return false
 }

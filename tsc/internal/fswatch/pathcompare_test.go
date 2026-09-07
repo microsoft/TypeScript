@@ -41,7 +41,7 @@ func TestPathComparer(t *testing.T) {
 		{"/k", "/\u212a/File.ts", "/File.ts", false, true},
 		{"/\u03c3", "/\u03c2/File.ts", "/File.ts", false, true},
 		{"/\u00e9", "/\u00c8/File.ts", "", false, false},
-		{"/\u00df", "/SS/File.ts", "", false, false},
+		{"/\u00df", "/SS/File.ts", "/File.ts", false, nativePathFolding},
 		{"/root/s", "/ROOT/\u017f/File.ts", "/File.ts", false, true},
 		{"/root/\u017f", "/ROOT/S", "", false, true},
 	}
@@ -95,13 +95,14 @@ func TestFileCallbackCaseSensitivity(t *testing.T) {
 	t.Parallel()
 	for _, ignoreCase := range []bool{false, true} {
 		var got []Event
-		cb := fileCallback("/root/file.ts", func(events []Event, err error) {
+		dw := newDirectWatcher(t, "/root")
+		dw.setComparer(pathComparer{ignoreCase: ignoreCase})
+		dw.addCallback("/root", "/root", false, func(events []Event, err error) {
 			got = append(got, events...)
-		}, pathComparer{ignoreCase: ignoreCase})
-		cb([]Event{
-			{Kind: EventUpdate, Path: "/root/FILE.ts"},
-			{Kind: EventUpdate, Path: "/root/other.ts"},
-		}, nil)
+		}, nil, "/root/file.ts")
+		dw.events.update("/root/FILE.ts")
+		dw.events.update("/root/other.ts")
+		dw.triggerCallbacks()
 		if ignoreCase {
 			if len(got) != 1 || got[0].Path != "/root/file.ts" {
 				t.Fatalf("case-insensitive callback: got %v", got)
