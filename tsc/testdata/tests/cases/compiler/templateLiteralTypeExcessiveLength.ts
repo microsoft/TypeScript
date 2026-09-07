@@ -21,3 +21,17 @@ type Explode = {
 type ExplodeSpans = {
     [P in Recur<5, string> as `${P}_key`]: any;
 };
+
+// Every text segment stays small, but the number of segments doubles on every iteration,
+// so the combined text length grows without bound.
+type A16 = "aaaaaaaaaaaaaaaa";
+type A64 = `${A16}${A16}${A16}${A16}`;
+type A256 = `${A64}${A64}${A64}${A64}`;
+type A1024 = `${A256}${A256}${A256}${A256}`;
+
+type RecurSegments<N extends number, S extends string> =
+    N extends 0 ? S : RecurSegments<Dec<N>, `${S}${string}${S}`>;
+
+type ExplodeSegments = {
+    [P in RecurSegments<5, A1024> as `${P}_key`]: any;
+};

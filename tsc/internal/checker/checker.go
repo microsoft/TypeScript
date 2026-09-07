@@ -29519,6 +29519,7 @@ func (c *Checker) getTemplateLiteralType(texts []string, types []*Type) *Type {
 	var newTexts []string
 	var sb strings.Builder
 	sb.WriteString(texts[0])
+	textLength := 0 // combined length of the segments already moved into newTexts
 	tooLarge := false
 	var addSpans func([]string, []*Type) bool
 	addSpans = func(texts []string, types []*Type) bool {
@@ -29536,12 +29537,13 @@ func (c *Checker) getTemplateLiteralType(texts []string, types []*Type) *Type {
 			case c.isGenericIndexType(t) || c.isPatternLiteralPlaceholderType(t):
 				newTypes = append(newTypes, t)
 				newTexts = append(newTexts, stringutil.CombineSurrogatePairs(sb.String()))
+				textLength += sb.Len()
 				sb.Reset()
 				sb.WriteString(texts[i+1])
 			default:
 				return false
 			}
-			if sb.Len() > maxTemplateLiteralTypeLength || len(newTypes) > maxTemplateLiteralTypeSpans {
+			if textLength+sb.Len() > maxTemplateLiteralTypeLength || len(newTypes) > maxTemplateLiteralTypeSpans {
 				tooLarge = true
 				return false
 			}
