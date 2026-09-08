@@ -57,7 +57,7 @@ type readableBuildInfoFileInfo struct {
 }
 
 type readableBuildInfoDiagnostic struct {
-	// incrementalBuildInfoFileId if it is for a File that's other than its stored for
+	// incrementalBuildInfoFileId if this diagnostic is for a file other than the one it is stored under
 	File               string                           `json:"file,omitzero"`
 	NoFile             bool                             `json:"noFile,omitzero"`
 	Pos                int                              `json:"pos,omitzero"`

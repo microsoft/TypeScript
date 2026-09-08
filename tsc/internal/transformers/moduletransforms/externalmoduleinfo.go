@@ -378,7 +378,7 @@ func getImportNeedsImportStarHelper(node *ast.ImportDeclaration) bool {
 			defaultRefCount++
 		}
 	}
-	// Import star is required if there's default named refs mixed with non-default refs, or if there's non-default refs and it has a default import
+	// Import star is required if there are default named refs mixed with non-default refs, or if there are non-default refs and the declaration has a default import
 	return (defaultRefCount > 0 && defaultRefCount != len(namedImports.Elements.Nodes)) || ((len(namedImports.Elements.Nodes)-defaultRefCount) != 0 && ast.IsDefaultImport(node.AsNode()))
 }
 

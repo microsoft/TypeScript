@@ -131,7 +131,7 @@ func (e *emitSignature) getNewEmitSignature(oldOptions *core.CompilerOptions, ne
 }
 
 type buildInfoDiagnosticWithFileName struct {
-	// filename if it is for a File that's other than its stored for
+	// filename if this diagnostic is for a file other than the one it is stored under
 	file               tspath.Path
 	noFile             bool
 	pos                int

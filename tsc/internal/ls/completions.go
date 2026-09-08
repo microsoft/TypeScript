@@ -766,7 +766,7 @@ func (l *LanguageService) getCompletionData(
 					case ast.KindIdentifier:
 						isJsxIdentifierExpected = true
 						// For `<div x=[|f/**/|]`, `parent` will be `x` and `previousToken.parent` will be `f` (which is its own JsxAttribute).
-						// Note for `<div someBool f>` we don't want to treat this as a jsx initializer, instead it's the attribute name.
+						// Note: for `<div someBool f>`, we don't want to treat this as a JSX initializer; instead, `f` is the attribute name.
 						if parent != previousToken.Parent &&
 							parent.Initializer() == nil &&
 							astnav.FindChildOfKind(parent, ast.KindEqualsToken, file) != nil {

@@ -489,7 +489,7 @@ func (f *FourslashTest) getBaselineContentForFile(
 							break
 						}
 					}
-					// Skip contextId on span that's surrounded by context span immediately
+					// Skip contextId on a span that's immediately surrounded by a context span
 					if !isAfterContextStart {
 						if text == "" {
 							text = fmt.Sprintf(`contextId: %v`, contextId)

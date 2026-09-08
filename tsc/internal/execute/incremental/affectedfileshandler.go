@@ -88,7 +88,7 @@ func (h *affectedFilesHandler) updateShapeSignature(file *ast.SourceFile, useFil
 	update := &updatedSignature{}
 	update.mu.Lock()
 	defer update.mu.Unlock()
-	// If we have cached the result for this file, that means hence forth we should assume file shape is up to date
+	// If we have cached the result for this file, that means henceforth we should assume the file shape is up to date
 	if existing, ok := h.updatedSignatures.LoadOrStore(file.Path(), update); ok {
 		// Ensure calculations for existing ones are complete before using the value
 		existing.mu.Lock()
