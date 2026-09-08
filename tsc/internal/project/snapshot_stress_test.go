@@ -119,10 +119,20 @@ func TestSnapshotConcurrentAutoImportCloneDoesNotPanic(t *testing.T) {
 					return
 				default:
 				}
+				// session.Snapshot() only reads the current pointer; a concurrent edit can
+				// adopt a replacement and Deref this one immediately afterward. tryRef holds
+				// it alive for the clone (mirroring how GetLanguageServiceWithAutoImports's
+				// own callerRef protects its base snapshot in production), and we simply skip
+				// this iteration if we lost that race, rather than cloning from a snapshot
+				// that may already be disposed.
 				baseSnapshot := session.Snapshot()
+				if !baseSnapshot.tryRef() {
+					continue
+				}
 				preparedSnapshot := session.SnapshotHost.CloneSnapshotWithAutoImports(ctx, baseSnapshot, uri, nil)
 				session.TryAdoptSnapshotInBackground(baseSnapshot, preparedSnapshot)
 				preparedSnapshot.Deref()
+				baseSnapshot.Deref()
 			}
 		}(i)
 	}

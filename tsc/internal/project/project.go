@@ -411,10 +411,30 @@ func (p *Project) CreateProgram() CreateProgramResult {
 		newProgram, dirtyFile, programCloned = p.Program.UpdateProgram(p.dirtyFilePath, p.host, createCheckerPool)
 		if programCloned {
 			updateKind = ProgramUpdateKindCloned
+			// canonicalByKey/canonicalContentMappedByKey let the duplicate loop below fall
+			// back to recreating an entry it can't find: every duplicate's key matches some
+			// canonical file's key by construction (that's what makes it a duplicate), and
+			// canonical files are exactly what this loop visits.
+			var canonicalByKey map[ParseCacheKey]*ast.SourceFile
+			var canonicalContentMappedByKey map[ContentMappedParseCacheKey]*ast.SourceFile
 			for _, file := range newProgram.SourceFiles() {
+				if file.IsContentMapperFailureStub() || file.IsContentMapperSupplemental() {
+					continue
+				}
+				if file.ContentMapper() != "" {
+					if canonicalContentMappedByKey == nil {
+						canonicalContentMappedByKey = make(map[ContentMappedParseCacheKey]*ast.SourceFile)
+					}
+					canonicalContentMappedByKey[contentMappedParseCacheKeyForFile(file)] = file
+				} else {
+					if canonicalByKey == nil {
+						canonicalByKey = make(map[ParseCacheKey]*ast.SourceFile)
+					}
+					canonicalByKey[parseCacheKeyForFile(file)] = file
+				}
 				// Use pointer identity: dirtyFile is the exact instance UpdateProgram acquired,
 				// and it is the only file whose refcount is already accounted for.
-				if file != dirtyFile && !file.IsContentMapperFailureStub() && !file.IsContentMapperSupplemental() {
+				if file != dirtyFile {
 					// UpdateProgram acquired the changed file only, so we need to ref everything else.
 					// We already hold file itself, so RefOrAcquire (rather than Ref) tolerates losing
 					// a benign race against a concurrent, independent snapshot build that drops the
@@ -434,14 +454,30 @@ func (p *Project) CreateProgram() CreateProgramResult {
 			}
 			for _, file := range newProgram.DuplicateSourceFiles() {
 				if !file.IsContentMapperFailureStub {
-					// Duplicates are pure bookkeeping refs on an entry acquired elsewhere: we have no
-					// value to recreate it with, so RefIfPresent no-ops if it loses the same race
-					// described above. That's safe because the matching Deref issued when this
-					// bookkeeping owner is later released already tolerates a missing entry.
+					// Duplicates are pure bookkeeping refs on an entry acquired elsewhere: we
+					// usually have no value to recreate it with, so RefIfPresent is tried first;
+					// it only fails to ref an entry if no trace of it survived even its own
+					// internal recovery, which can happen if this duplicate's canonical file was
+					// itself lost to the same benign race described above. In that case fall back
+					// to the canonical file visited by the loop above, which this duplicate's key
+					// is guaranteed to match, and recreate the entry from it directly.
 					if file.ContentMapper != "" {
-						p.host.builder.contentMappedParseCache.RefIfPresent(contentMappedParseCacheKeyForDuplicate(file))
+						key := contentMappedParseCacheKeyForDuplicate(file)
+						if !p.host.builder.contentMappedParseCache.RefIfPresent(key) {
+							if canonical, ok := canonicalContentMappedByKey[key]; ok {
+								p.host.builder.contentMappedParseCache.RefOrAcquire(
+									key,
+									contentmapper.SourceFiles{Canonical: canonical, Supplemental: canonical.SupplementalSourceFiles()},
+								)
+							}
+						}
 					} else {
-						p.host.builder.parseCache.RefIfPresent(parseCacheKeyForDuplicate(file))
+						key := parseCacheKeyForDuplicate(file)
+						if !p.host.builder.parseCache.RefIfPresent(key) {
+							if canonical, ok := canonicalByKey[key]; ok {
+								p.host.builder.parseCache.RefOrAcquire(key, canonical)
+							}
+						}
 					}
 				}
 			}

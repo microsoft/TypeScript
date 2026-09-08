@@ -104,26 +104,39 @@ func (c *RefCountCache[K, V, AcquireArgs]) RefOrAcquire(identity K, value V) {
 }
 
 // RefIfPresent increments the reference count for an existing entry and
-// reports true, or does nothing and reports false if no entry exists.
+// reports true, or reports false if no trace of the entry could be found.
 //
 // It exists for callers that are recording an additional owner of an entry
 // they do not themselves have a value for (e.g. a duplicate source file,
 // which is only ever a bookkeeping reference to a canonical entry acquired
-// elsewhere). Skipping the ref when the entry is already gone is safe: the
-// corresponding Deref for this same identity, issued later when the
-// bookkeeping owner is released, is itself a no-op against a missing entry.
+// elsewhere). If the entry is concurrently deleted between this call's
+// lookup and its lock acquisition, it is resurrected using the value it
+// already held (the same recovery loadOrStoreNewLockedEntry performs for
+// Acquire/RefOrAcquire), so the ref this call records — and the Deref its
+// caller will issue later to release it — stay balanced. A plain no-op here
+// would leave that later Deref unmatched, and it could land on an unrelated
+// entry that happens to reuse the same key by the time it runs.
+//
+// Only if the entry was never observed at all (not even a stale, about to be
+// deleted one) does this return false; there is no value to recover in that
+// case, so the caller must skip the corresponding Deref to stay balanced.
 func (c *RefCountCache[K, V, AcquireArgs]) RefIfPresent(identity K) bool {
 	entry, ok := c.entries.Load(identity)
 	if !ok {
 		return false
 	}
 	entry.mu.Lock()
-	defer entry.mu.Unlock()
 	if entry.refCount <= 0 && !c.Options.DisableDeletion {
-		// Entry was deleted while we were acquiring the lock.
-		return false
+		// Entry was deleted while we were acquiring the lock; resurrect it
+		// from the value it already held so this ref stays balanced.
+		entry.mu.Unlock()
+		newEntry, _ := c.loadOrStoreNewLockedEntry(identity)
+		newEntry.value = entry.value
+		newEntry.mu.Unlock()
+		return true
 	}
 	entry.refCount++
+	entry.mu.Unlock()
 	return true
 }
 
