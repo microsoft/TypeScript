@@ -169,6 +169,13 @@ func (vfs *wrappedFS) Realpath(path string) string {
 	return vfs.fs.Realpath(path)
 }
 
+func (fsys *wrappedFS) RealpathWithParent(path string, realpath func(string) string) string {
+	if IsBundled(path) {
+		return path
+	}
+	return vfs.RealpathWithParent(fsys.fs, path, realpath)
+}
+
 func (vfs *wrappedFS) WriteFile(path string, data string) error {
 	if _, ok := splitPath(path); ok {
 		panic("cannot write to embedded file system")

@@ -17,8 +17,14 @@ import (
 type benchmarkWatchFS struct {
 	vfs.FS
 	resolves        int
+	leafResolves    int
 	scans           int
 	comparerQueries int
+}
+
+func (f *benchmarkWatchFS) RealpathWithParent(path string, realpath func(string) string) string {
+	f.leafResolves++
+	return vfs.RealpathWithParent(f.FS, path, realpath)
 }
 
 func (f *benchmarkWatchFS) Realpath(path string) string {
@@ -117,12 +123,13 @@ func BenchmarkWatchAliasGeneration(b *testing.B) {
 					}
 					b.Run(fixture, func(b *testing.B) {
 						report := func(b *testing.B, operation func()) {
-							filesystem.resolves, filesystem.scans, filesystem.comparerQueries = 0, 0, 0
+							filesystem.resolves, filesystem.leafResolves, filesystem.scans, filesystem.comparerQueries = 0, 0, 0, 0
 							b.ReportAllocs()
 							for b.Loop() {
 								operation()
 							}
 							b.ReportMetric(float64(filesystem.resolves)/float64(b.N), "realpaths/op")
+							b.ReportMetric(float64(filesystem.leafResolves)/float64(b.N), "leaf-resolutions/op")
 							b.ReportMetric(float64(filesystem.scans)/float64(b.N), "scans/op")
 							b.ReportMetric(float64(filesystem.comparerQueries)/float64(b.N), "comparer-queries/op")
 						}

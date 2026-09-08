@@ -49,6 +49,18 @@ type FS interface {
 	Realpath(path string) string
 }
 
+// RealpathWithParent allows a filesystem to reuse the caller's cached parent
+// resolution. It has the same result and failure semantics as FS.Realpath.
+// The callback must resolve paths on this filesystem, not on the host OS.
+func RealpathWithParent(fs FS, path string, realpath func(string) string) string {
+	if resolver, ok := fs.(interface {
+		RealpathWithParent(string, func(string) string) string
+	}); ok {
+		return resolver.RealpathWithParent(path, realpath)
+	}
+	return fs.Realpath(path)
+}
+
 type Entries struct {
 	Files       []string
 	Directories []string

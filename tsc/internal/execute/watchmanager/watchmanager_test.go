@@ -50,17 +50,17 @@ func TestWatchGenerationReusesUnchangedResolution(t *testing.T) {
 	}
 	filesystem := &countingWatchFS{FS: vfstest.FromMap(files, true)}
 	cached := cachedvfs.From(filesystem)
-	for _, dir := range []string{"/", "/repo", "/repo/src"} {
-		cached.GetAccessibleEntries(dir)
+	for _, name := range names {
+		cached.Realpath(name)
 	}
-	initialScans := filesystem.entriesCalls
+	initialCalls := filesystem.realpathCalls
 	wm := NewWatchManager(io.Discard, filesystem.DirectoryExists, filesystem)
 	wm.SetResolutionFS(cached)
 	wm.SetWatchFiles(names)
 	assert.NilError(t, wm.ReconcileWatches(map[string]bool{"/repo": true}))
 	wm.SetResolutionFS(nil)
-	assert.Equal(t, filesystem.entriesCalls, initialScans, "reuse the build's directory listings")
-	assert.Assert(t, filesystem.realpathCalls < 10, "ordinary leaves should share directory resolution: %d", filesystem.realpathCalls)
+	assert.Equal(t, filesystem.entriesCalls, 0, "resolution does not require directory listings")
+	assert.Assert(t, filesystem.realpathCalls-initialCalls < 10, "reuse the build's authoritative resolutions")
 	calls, scans := filesystem.realpathCalls, filesystem.entriesCalls
 	aliases := wm.aliases
 	wm.SetWatchFiles(names)
@@ -86,6 +86,20 @@ func TestWatchGenerationReusesUnchangedResolution(t *testing.T) {
 	wm.SetWatchFiles(reordered)
 	assert.NilError(t, wm.ReconcileWatches(map[string]bool{"/repo": true}))
 	assert.Assert(t, wm.aliases != aliases, "replacing a dependency with a duplicate must rebuild the generation")
+}
+
+func TestWatchGenerationMissingLeafUpdate(t *testing.T) {
+	t.Parallel()
+	filesystem := &countingWatchFS{FS: vfstest.FromMap(map[string]string{}, true)}
+	wm := NewWatchManager(io.Discard, filesystem.DirectoryExists, filesystem)
+	wm.SetWatchFiles([]string{"/repo/missing.ts"})
+	assert.NilError(t, wm.ReconcileWatches(map[string]bool{"/repo": true}))
+	assert.Equal(t, filesystem.entriesCalls, 0, "resolution must not enumerate directories")
+	aliases := wm.aliases
+	wm.onWatchEvents([]fswatch.Event{{Path: "/repo/missing.ts", Kind: fswatch.EventUpdate}}, nil)
+	wm.DrainEvents()
+	assert.NilError(t, wm.ReconcileWatches(map[string]bool{"/repo": true}))
+	assert.Assert(t, wm.aliases == aliases, "an unchanged missing resolution must retain its index")
 }
 
 func (f *eventOnlyFS) UseCaseSensitiveFileNames() bool { return f.caseSensitive }

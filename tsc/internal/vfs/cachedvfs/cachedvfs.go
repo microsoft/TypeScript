@@ -100,13 +100,23 @@ func (fsys *FS) ReadFile(path string) (contents string, ok bool) {
 }
 
 func (fsys *FS) Realpath(path string) string {
+	return fsys.cachedRealpath(path, fsys.fs.Realpath)
+}
+
+func (fsys *FS) RealpathWithParent(path string, realpath func(string) string) string {
+	return fsys.cachedRealpath(path, func(path string) string {
+		return vfs.RealpathWithParent(fsys.fs, path, realpath)
+	})
+}
+
+func (fsys *FS) cachedRealpath(path string, resolve func(string) string) string {
 	if fsys.enabled.Load() {
 		if ret, ok := fsys.realpathCache.Load(path); ok {
 			return ret
 		}
 	}
 
-	ret := fsys.fs.Realpath(path)
+	ret := resolve(path)
 
 	if fsys.enabled.Load() {
 		fsys.realpathCache.Store(path, ret)
