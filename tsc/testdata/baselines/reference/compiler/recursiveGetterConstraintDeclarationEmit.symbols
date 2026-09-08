@@ -51,9 +51,19 @@ export const node = object({
 
 export type Output = typeof node.output;
 >Output : Symbol(Output, Decl(recursiveGetterConstraintDeclarationEmit.ts, 10, 3))
+>node.output : Symbol(Schema.output, Decl(recursiveGetterConstraintDeclarationEmit.ts, 0, 28))
 >node : Symbol(node, Decl(recursiveGetterConstraintDeclarationEmit.ts, 7, 12))
+>output : Symbol(Schema.output, Decl(recursiveGetterConstraintDeclarationEmit.ts, 0, 28))
 
 export const nestedName: string = node.output.next.next.name;
 >nestedName : Symbol(nestedName, Decl(recursiveGetterConstraintDeclarationEmit.ts, 13, 12))
+>node.output.next.next.name : Symbol(name, Decl(recursiveGetterConstraintDeclarationEmit.ts, 7, 28))
+>node.output.next.next : Symbol(next, Decl(recursiveGetterConstraintDeclarationEmit.ts, 8, 25))
+>node.output.next : Symbol(next, Decl(recursiveGetterConstraintDeclarationEmit.ts, 8, 25))
+>node.output : Symbol(Schema.output, Decl(recursiveGetterConstraintDeclarationEmit.ts, 0, 28))
 >node : Symbol(node, Decl(recursiveGetterConstraintDeclarationEmit.ts, 7, 12))
+>output : Symbol(Schema.output, Decl(recursiveGetterConstraintDeclarationEmit.ts, 0, 28))
+>next : Symbol(next, Decl(recursiveGetterConstraintDeclarationEmit.ts, 8, 25))
+>next : Symbol(next, Decl(recursiveGetterConstraintDeclarationEmit.ts, 8, 25))
+>name : Symbol(name, Decl(recursiveGetterConstraintDeclarationEmit.ts, 7, 28))
 

@@ -18,10 +18,10 @@ declare class ObjectSchema<S extends Shape> implements Schema<{ [K in keyof S]: 
 }
 
 const constructed = new ObjectSchema({
->constructed : any
->new ObjectSchema({    name: { output: "" },    get next() { return constructed; },}) : ObjectSchema<{ name: { output: string; }; readonly next: any; }>
+>constructed : ObjectSchema<{ name: { output: string; }; readonly next: ObjectSchema<any>; }>
+>new ObjectSchema({    name: { output: "" },    get next() { return constructed; },}) : ObjectSchema<{ name: { output: string; }; readonly next: ObjectSchema<any>; }>
 >ObjectSchema : typeof ObjectSchema
->{    name: { output: "" },    get next() { return constructed; },} : { name: { output: string; }; readonly next: any; }
+>{    name: { output: "" },    get next() { return constructed; },} : { name: { output: string; }; readonly next: ObjectSchema<{ name: { output: string; }; readonly next: ObjectSchema<any>; }>; }
 
     name: { output: "" },
 >name : { output: string; }
@@ -30,42 +30,42 @@ const constructed = new ObjectSchema({
 >"" : ""
 
     get next() { return constructed; },
->next : any
->constructed : any
+>next : ObjectSchema<{ name: { output: string; }; readonly next: ObjectSchema<any>; }>
+>constructed : ObjectSchema<{ name: { output: string; }; readonly next: ObjectSchema<any>; }>
 
 });
 const name: string = constructed.output.next.next.name;
 >name : string
->constructed.output.next.next.name : any
->constructed.output.next.next : any
->constructed.output.next : any
->constructed.output : any
->constructed : any
->output : any
->next : any
->next : any
->name : any
+>constructed.output.next.next.name : string
+>constructed.output.next.next : { name: string; readonly next: any; }
+>constructed.output.next : { name: string; readonly next: any; }
+>constructed.output : { name: string; readonly next: any; }
+>constructed : ObjectSchema<{ name: { output: string; }; readonly next: ObjectSchema<any>; }>
+>output : { name: string; readonly next: any; }
+>next : { name: string; readonly next: any; }
+>next : { name: string; readonly next: any; }
+>name : string
 
 constructed.output.next.next.missing;
 >constructed.output.next.next.missing : any
->constructed.output.next.next : any
->constructed.output.next : any
->constructed.output : any
->constructed : any
->output : any
->next : any
->next : any
+>constructed.output.next.next : { name: string; readonly next: any; }
+>constructed.output.next : { name: string; readonly next: any; }
+>constructed.output : { name: string; readonly next: any; }
+>constructed : ObjectSchema<{ name: { output: string; }; readonly next: ObjectSchema<any>; }>
+>output : { name: string; readonly next: any; }
+>next : { name: string; readonly next: any; }
+>next : { name: string; readonly next: any; }
 >missing : any
 
 const invalidConstructed = new ObjectSchema({
->invalidConstructed : any
->new ObjectSchema({    get next() { return invalidConstructed; },    get wrong() { return 42; },}) : ObjectSchema<Shape>
+>invalidConstructed : ObjectSchema<{ readonly next: ObjectSchema<any>; readonly wrong: number; }>
+>new ObjectSchema({    get next() { return invalidConstructed; },    get wrong() { return 42; },}) : ObjectSchema<{ readonly next: ObjectSchema<any>; readonly wrong: number; }>
 >ObjectSchema : typeof ObjectSchema
->{    get next() { return invalidConstructed; },    get wrong() { return 42; },} : { readonly next: any; readonly wrong: number; }
+>{    get next() { return invalidConstructed; },    get wrong() { return 42; },} : { readonly next: ObjectSchema<{ readonly next: ObjectSchema<any>; readonly wrong: number; }>; readonly wrong: number; }
 
     get next() { return invalidConstructed; },
->next : any
->invalidConstructed : any
+>next : ObjectSchema<{ readonly next: ObjectSchema<any>; readonly wrong: number; }>
+>invalidConstructed : ObjectSchema<{ readonly next: ObjectSchema<any>; readonly wrong: number; }>
 
     get wrong() { return 42; },
 >wrong : number
@@ -87,16 +87,16 @@ const factory = new Factory<Schema<string>>();
 >Factory : typeof Factory
 
 const invalidMethod = factory.wrap({
->invalidMethod : Schema<string>
->factory.wrap({    get next() { return invalidMethod; },    get output() { return 42; },}) : Schema<string>
+>invalidMethod : { readonly next: any; readonly output: number; }
+>factory.wrap({    get next() { return invalidMethod; },    get output() { return 42; },}) : { readonly next: any; readonly output: number; }
 >factory.wrap : <T extends Schema<string>>(value: T) => T
 >factory : Factory<Schema<string>>
 >wrap : <T extends Schema<string>>(value: T) => T
->{    get next() { return invalidMethod; },    get output() { return 42; },} : { readonly next: Schema<string>; readonly output: number; }
+>{    get next() { return invalidMethod; },    get output() { return 42; },} : { readonly next: { readonly next: any; readonly output: number; }; readonly output: number; }
 
     get next() { return invalidMethod; },
->next : Schema<string>
->invalidMethod : Schema<string>
+>next : { readonly next: any; readonly output: number; }
+>invalidMethod : { readonly next: any; readonly output: number; }
 
     get output() { return 42; },
 >output : number
@@ -110,14 +110,14 @@ declare function constrain<T, U extends T>(value: U, expected: T): U;
 >expected : T
 
 const invalidDependent = constrain({
->invalidDependent : { output: number; }
->constrain({    get next() { return invalidDependent; },    get output() { return ""; },}, { output: 0 }) : { output: number; }
+>invalidDependent : { readonly next: any; readonly output: string; }
+>constrain({    get next() { return invalidDependent; },    get output() { return ""; },}, { output: 0 }) : { readonly next: any; readonly output: string; }
 >constrain : <T, U extends T>(value: U, expected: T) => U
->{    get next() { return invalidDependent; },    get output() { return ""; },} : { readonly next: { output: number; }; readonly output: string; }
+>{    get next() { return invalidDependent; },    get output() { return ""; },} : { readonly next: { readonly next: any; readonly output: string; }; readonly output: string; }
 
     get next() { return invalidDependent; },
->next : { output: number; }
->invalidDependent : { output: number; }
+>next : { readonly next: any; readonly output: string; }
+>invalidDependent : { readonly next: any; readonly output: string; }
 
     get output() { return ""; },
 >output : string

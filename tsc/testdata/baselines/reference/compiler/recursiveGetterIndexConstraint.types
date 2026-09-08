@@ -33,20 +33,20 @@ const a = anyRecord({
 });
 
 const u = unknownRecord({
->u : any
+>u : { value: string; readonly next: any; }
 >unknownRecord({    value: "",    get next() {        return u;    },}) : { value: string; readonly next: any; }
 >unknownRecord : <T extends Record<string, unknown>>(value: T) => T
->{    value: "",    get next() {        return u;    },} : { value: string; readonly next: any; }
+>{    value: "",    get next() {        return u;    },} : { value: string; readonly next: { value: string; readonly next: any; }; }
 
     value: "",
 >value : string
 >"" : ""
 
     get next() {
->next : any
+>next : { value: string; readonly next: any; }
 
         return u;
->u : any
+>u : { value: string; readonly next: any; }
 
     },
 });
@@ -63,13 +63,13 @@ const anyValue: string = a.next.next.value;
 
 const unknownValue: string = u.next.next.value;
 >unknownValue : string
->u.next.next.value : any
->u.next.next : any
->u.next : any
->u : any
->next : any
->next : any
->value : any
+>u.next.next.value : string
+>u.next.next : { value: string; readonly next: any; }
+>u.next : { value: string; readonly next: any; }
+>u : { value: string; readonly next: any; }
+>next : { value: string; readonly next: any; }
+>next : { value: string; readonly next: any; }
+>value : string
 
 const wrongAnyValue: number = a.next.next.value;
 >wrongAnyValue : number
@@ -83,13 +83,13 @@ const wrongAnyValue: number = a.next.next.value;
 
 const wrongUnknownValue: number = u.next.next.value;
 >wrongUnknownValue : number
->u.next.next.value : any
->u.next.next : any
->u.next : any
->u : any
->next : any
->next : any
->value : any
+>u.next.next.value : string
+>u.next.next : { value: string; readonly next: any; }
+>u.next : { value: string; readonly next: any; }
+>u : { value: string; readonly next: any; }
+>next : { value: string; readonly next: any; }
+>next : { value: string; readonly next: any; }
+>value : string
 
 a.next.next.missing;
 >a.next.next.missing : any
@@ -102,15 +102,15 @@ a.next.next.missing;
 
 u.next.next.missing;
 >u.next.next.missing : any
->u.next.next : any
->u.next : any
->u : any
->next : any
->next : any
+>u.next.next : { value: string; readonly next: any; }
+>u.next : { value: string; readonly next: any; }
+>u : { value: string; readonly next: any; }
+>next : { value: string; readonly next: any; }
+>next : { value: string; readonly next: any; }
 >missing : any
 
 numberRecord({
->numberRecord({    get value() {        return "";    },}) : Record<string, number>
+>numberRecord({    get value() {        return "";    },}) : { readonly value: string; }
 >numberRecord : <T extends Record<string, number>>(value: T) => T
 >{    get value() {        return "";    },} : { readonly value: string; }
 
@@ -124,7 +124,7 @@ numberRecord({
 });
 
 const circular = unknownRecord({
->circular : any
+>circular : { readonly next: any; }
 >unknownRecord({    get next() {        return circular.next;    },}) : { readonly next: any; }
 >unknownRecord : <T extends Record<string, unknown>>(value: T) => T
 >{    get next() {        return circular.next;    },} : { readonly next: any; }
@@ -134,7 +134,7 @@ const circular = unknownRecord({
 
         return circular.next;
 >circular.next : any
->circular : any
+>circular : { readonly next: any; }
 >next : any
 
     },

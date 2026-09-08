@@ -1,13 +1,12 @@
-recursiveGetterIndexConstraint.ts(12,7): error TS7022: 'u' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
-recursiveGetterIndexConstraint.ts(14,9): error TS7023: 'next' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
 recursiveGetterIndexConstraint.ts(21,7): error TS2322: Type 'string' is not assignable to type 'number'.
+recursiveGetterIndexConstraint.ts(22,7): error TS2322: Type 'string' is not assignable to type 'number'.
 recursiveGetterIndexConstraint.ts(23,13): error TS2339: Property 'missing' does not exist on type '{ value: string; readonly next: any; }'.
+recursiveGetterIndexConstraint.ts(24,13): error TS2339: Property 'missing' does not exist on type '{ value: string; readonly next: any; }'.
 recursiveGetterIndexConstraint.ts(27,9): error TS2322: Type 'string' is not assignable to type 'number'.
-recursiveGetterIndexConstraint.ts(32,7): error TS7022: 'circular' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
 recursiveGetterIndexConstraint.ts(33,9): error TS7023: 'next' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
 
 
-==== recursiveGetterIndexConstraint.ts (7 errors) ====
+==== recursiveGetterIndexConstraint.ts (6 errors) ====
     declare function anyRecord<T extends Record<string, any>>(value: T): T;
     declare function unknownRecord<T extends Record<string, unknown>>(value: T): T;
     declare function numberRecord<T extends Record<string, number>>(value: T): T;
@@ -20,12 +19,8 @@ recursiveGetterIndexConstraint.ts(33,9): error TS7023: 'next' implicitly has ret
     });
     
     const u = unknownRecord({
-          ~
-!!! error TS7022: 'u' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
         value: "",
         get next() {
-            ~~~~
-!!! error TS7023: 'next' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
             return u;
         },
     });
@@ -36,10 +31,14 @@ recursiveGetterIndexConstraint.ts(33,9): error TS7023: 'next' implicitly has ret
           ~~~~~~~~~~~~~
 !!! error TS2322: Type 'string' is not assignable to type 'number'.
     const wrongUnknownValue: number = u.next.next.value;
+          ~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
     a.next.next.missing;
                 ~~~~~~~
 !!! error TS2339: Property 'missing' does not exist on type '{ value: string; readonly next: any; }'.
     u.next.next.missing;
+                ~~~~~~~
+!!! error TS2339: Property 'missing' does not exist on type '{ value: string; readonly next: any; }'.
     
     numberRecord({
         get value() {
@@ -50,8 +49,6 @@ recursiveGetterIndexConstraint.ts(33,9): error TS7023: 'next' implicitly has ret
     });
     
     const circular = unknownRecord({
-          ~~~~~~~~
-!!! error TS7022: 'circular' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
         get next() {
             ~~~~
 !!! error TS7023: 'next' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.

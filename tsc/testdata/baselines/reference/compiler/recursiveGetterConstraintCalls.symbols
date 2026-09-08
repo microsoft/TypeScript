@@ -49,10 +49,24 @@ const constructed = new ObjectSchema({
 });
 const name: string = constructed.output.next.next.name;
 >name : Symbol(name, Decl(recursiveGetterConstraintCalls.ts, 12, 5))
+>constructed.output.next.next.name : Symbol(name, Decl(recursiveGetterConstraintCalls.ts, 8, 38))
+>constructed.output.next.next : Symbol(next, Decl(recursiveGetterConstraintCalls.ts, 9, 25))
+>constructed.output.next : Symbol(next, Decl(recursiveGetterConstraintCalls.ts, 9, 25))
+>constructed.output : Symbol(ObjectSchema.output, Decl(recursiveGetterConstraintCalls.ts, 4, 26))
 >constructed : Symbol(constructed, Decl(recursiveGetterConstraintCalls.ts, 8, 5))
+>output : Symbol(ObjectSchema.output, Decl(recursiveGetterConstraintCalls.ts, 4, 26))
+>next : Symbol(next, Decl(recursiveGetterConstraintCalls.ts, 9, 25))
+>next : Symbol(next, Decl(recursiveGetterConstraintCalls.ts, 9, 25))
+>name : Symbol(name, Decl(recursiveGetterConstraintCalls.ts, 8, 38))
 
 constructed.output.next.next.missing;
+>constructed.output.next.next : Symbol(next, Decl(recursiveGetterConstraintCalls.ts, 9, 25))
+>constructed.output.next : Symbol(next, Decl(recursiveGetterConstraintCalls.ts, 9, 25))
+>constructed.output : Symbol(ObjectSchema.output, Decl(recursiveGetterConstraintCalls.ts, 4, 26))
 >constructed : Symbol(constructed, Decl(recursiveGetterConstraintCalls.ts, 8, 5))
+>output : Symbol(ObjectSchema.output, Decl(recursiveGetterConstraintCalls.ts, 4, 26))
+>next : Symbol(next, Decl(recursiveGetterConstraintCalls.ts, 9, 25))
+>next : Symbol(next, Decl(recursiveGetterConstraintCalls.ts, 9, 25))
 
 const invalidConstructed = new ObjectSchema({
 >invalidConstructed : Symbol(invalidConstructed, Decl(recursiveGetterConstraintCalls.ts, 15, 5))

@@ -133,15 +133,21 @@ export const output = node.output;
 
 const name: string = output.parent!.parent!.name;
 >name : Symbol(name, Decl(recursiveGetterInheritedMember.ts, 37, 5))
+>output.parent!.parent!.name : Symbol(name, Decl(recursiveGetterInheritedMember.ts, 29, 21))
+>output.parent!.parent : Symbol(parent, Decl(recursiveGetterInheritedMember.ts, 30, 17))
 >output.parent : Symbol(parent, Decl(recursiveGetterInheritedMember.ts, 30, 17))
 >output : Symbol(output, Decl(recursiveGetterInheritedMember.ts, 36, 12))
 >parent : Symbol(parent, Decl(recursiveGetterInheritedMember.ts, 30, 17))
+>parent : Symbol(parent, Decl(recursiveGetterInheritedMember.ts, 30, 17))
+>name : Symbol(name, Decl(recursiveGetterInheritedMember.ts, 29, 21))
 
 const wrong: number = output.parent!.name;
 >wrong : Symbol(wrong, Decl(recursiveGetterInheritedMember.ts, 38, 5))
+>output.parent!.name : Symbol(name, Decl(recursiveGetterInheritedMember.ts, 29, 21))
 >output.parent : Symbol(parent, Decl(recursiveGetterInheritedMember.ts, 30, 17))
 >output : Symbol(output, Decl(recursiveGetterInheritedMember.ts, 36, 12))
 >parent : Symbol(parent, Decl(recursiveGetterInheritedMember.ts, 30, 17))
+>name : Symbol(name, Decl(recursiveGetterInheritedMember.ts, 29, 21))
 
 output.parent!.missing;
 >output.parent : Symbol(parent, Decl(recursiveGetterInheritedMember.ts, 30, 17))

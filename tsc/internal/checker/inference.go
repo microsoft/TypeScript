@@ -1377,6 +1377,13 @@ func (c *Checker) getInferredType(n *InferenceContext, index int) *Type {
 		}
 		constraint := c.getConstraintOfTypeParameter(inference.typeParameter)
 		if constraint != nil {
+			if inferredType != nil && len(inference.candidates) == 1 && len(inference.contraCandidates) == 0 &&
+				inference.priority != InferencePriorityReturnType &&
+				n.flags&InferenceFlagsAllowDeferredConstraints != 0 && c.hasUnresolvedObjectLiteralAccessors(inferredType, nil) {
+				n.flags |= InferenceFlagsDeferredConstraints
+				c.clearActiveMapperCaches()
+				return inferredType
+			}
 			instantiatedConstraint := c.instantiateType(constraint, n.nonFixingMapper)
 			if inferredType != nil {
 				constraintWithThis := c.getTypeWithThisArgument(instantiatedConstraint, inferredType, false)
@@ -1401,6 +1408,30 @@ func (c *Checker) getInferredType(n *InferenceContext, index int) *Type {
 		c.clearActiveMapperCaches()
 	}
 	return inference.inferredType
+}
+
+func (c *Checker) hasUnresolvedObjectLiteralAccessors(t *Type, seen []*Type) bool {
+	if t.flags&(TypeFlagsObject|TypeFlagsUnionOrIntersection) == 0 || slices.Contains(seen, t) {
+		return false
+	}
+	seen = append(seen, t)
+	if t.flags&TypeFlagsUnionOrIntersection != 0 {
+		return core.Some(t.Types(), func(t *Type) bool { return c.hasUnresolvedObjectLiteralAccessors(t, seen) })
+	}
+	if t.objectFlags&ObjectFlagsReference != 0 {
+		// Only inspect already available types. Resolving a deferred argument here can itself force a getter.
+		return core.Some(t.AsTypeReference().resolvedTypeArguments, func(t *Type) bool {
+			return c.hasUnresolvedObjectLiteralAccessors(t, seen)
+		})
+	}
+	if t.flags&TypeFlagsObject != 0 && t.symbol != nil && t.symbol.Flags&ast.SymbolFlagsObjectLiteral != 0 {
+		return core.Some(c.getPropertiesOfObjectType(t), func(property *ast.Symbol) bool {
+			propertyType := c.valueSymbolLinks.Get(property).resolvedType
+			return property.Flags&ast.SymbolFlagsGetAccessor != 0 && propertyType == nil ||
+				propertyType != nil && c.hasUnresolvedObjectLiteralAccessors(propertyType, seen)
+		})
+	}
+	return false
 }
 
 func (c *Checker) getInferredTypes(n *InferenceContext) []*Type {

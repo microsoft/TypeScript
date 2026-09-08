@@ -265,10 +265,12 @@ type FlowLoopInfo struct {
 type InferenceFlags uint32
 
 const (
-	InferenceFlagsNone                   InferenceFlags = 0      // No special inference behaviors
-	InferenceFlagsNoDefault              InferenceFlags = 1 << 0 // Infer silentNeverType for no inferences (otherwise anyType or unknownType)
-	InferenceFlagsAnyDefault             InferenceFlags = 1 << 1 // Infer anyType (in JS files) for no inferences (otherwise unknownType)
-	InferenceFlagsSkippedGenericFunction InferenceFlags = 1 << 2 // A generic function was skipped during inference
+	InferenceFlagsNone                     InferenceFlags = 0      // No special inference behaviors
+	InferenceFlagsNoDefault                InferenceFlags = 1 << 0 // Infer silentNeverType for no inferences (otherwise anyType or unknownType)
+	InferenceFlagsAnyDefault               InferenceFlags = 1 << 1 // Infer anyType (in JS files) for no inferences (otherwise unknownType)
+	InferenceFlagsSkippedGenericFunction   InferenceFlags = 1 << 2 // A generic function was skipped during inference
+	InferenceFlagsAllowDeferredConstraints InferenceFlags = 1 << 3 // Constraints do not participate in overload selection
+	InferenceFlagsDeferredConstraints      InferenceFlags = 1 << 4 // An inferred type argument needs deferred constraint checking
 )
 
 // InferenceContext
@@ -2549,6 +2551,10 @@ func (c *Checker) checkDeferredNode(node *ast.Node) {
 	c.instantiationCount = 0
 	switch node.Kind {
 	case ast.KindCallExpression, ast.KindNewExpression, ast.KindTaggedTemplateExpression, ast.KindDecorator, ast.KindJsxOpeningElement:
+		if signature := c.getResolvedSignature(node, nil, CheckModeNormal); signature.flags&SignatureFlagsDeferredConstraints != 0 {
+			c.checkDeferredTypeArgumentConstraints(node, signature)
+			break
+		}
 		// These node kinds are deferred checked when overload resolution fails. To save on work,
 		// we ensure the arguments are checked just once in a deferred way.
 		c.resolveUntypedCall(node)
@@ -8614,7 +8620,30 @@ func (c *Checker) getResolvedSignature(node *ast.Node, candidatesOutArray *[]*Si
 			links.resolvedSignature = cached
 		}
 	}
+	if result.flags&SignatureFlagsDeferredConstraints != 0 {
+		c.checkNodeDeferred(node)
+	}
 	return result
+}
+
+func (c *Checker) checkDeferredTypeArgumentConstraints(node *ast.Node, signature *Signature) {
+	// Validate the complete constraints of the final selected call, not individual members or discarded candidates.
+	args := c.getEffectiveCallArguments(node)
+	for _, typeParameter := range signature.target.typeParameters {
+		if constraint := c.getConstraintOfTypeParameter(typeParameter); constraint != nil {
+			typeArgument := c.instantiateType(typeParameter, signature.mapper)
+			target := c.getTypeWithThisArgument(c.instantiateType(constraint, signature.mapper), typeArgument, false)
+			var argumentNode *ast.Node
+			for i, arg := range args {
+				if c.getTypeAtPosition(signature.target, i) == typeParameter {
+					argumentNode = arg
+					break
+				}
+			}
+			c.checkTypeAssignableToAndOptionallyElaborate(typeArgument, target, core.OrElse(argumentNode, node), argumentNode,
+				diagnostics.Type_0_does_not_satisfy_the_constraint_1, nil)
+		}
+	}
 }
 
 func (c *Checker) resolveSignature(node *ast.Node, candidatesOutArray *[]*Signature, checkMode CheckMode) *Signature {
@@ -9230,6 +9259,10 @@ func (c *Checker) chooseOverload(s *CallState, relation *Relation) *Signature {
 				}
 			} else {
 				inferenceContext = c.newInferenceContext(candidate.typeParameters, candidate, core.IfElse(ast.IsInJSFile(s.node), InferenceFlagsAnyDefault, InferenceFlagsNone) /*flags*/, nil)
+				if len(s.candidates) == 1 {
+					// Without an overload choice, constraint validation can wait until recursive declarations have types.
+					inferenceContext.flags |= InferenceFlagsAllowDeferredConstraints
+				}
 				typeArgumentTypes = c.inferTypeArguments(s.node, candidate, s.args, s.argCheckMode|CheckModeSkipGenericFunctions, inferenceContext)
 				if inferenceContext.flags&InferenceFlagsSkippedGenericFunction != 0 {
 					s.argCheckMode |= CheckModeSkipGenericFunctions
@@ -9274,6 +9307,13 @@ func (c *Checker) chooseOverload(s *CallState, relation *Relation) *Signature {
 				s.candidatesForArgumentError = append(s.candidatesForArgumentError, checkCandidate)
 				continue
 			}
+		}
+		if inferenceContext != nil && inferenceContext.flags&InferenceFlagsDeferredConstraints != 0 {
+			deferredCandidate := c.cloneSignature(checkCandidate)
+			deferredCandidate.resolvedReturnType = checkCandidate.resolvedReturnType
+			deferredCandidate.resolvedTypePredicate = checkCandidate.resolvedTypePredicate
+			deferredCandidate.flags |= SignatureFlagsDeferredConstraints
+			checkCandidate = deferredCandidate
 		}
 		s.candidates[candidateIndex] = checkCandidate
 		return checkCandidate
@@ -19415,12 +19455,44 @@ func (c *Checker) resolveClassOrInterfaceMembers(t *Type) {
 func (c *Checker) resolveTypeReferenceMembers(t *Type) {
 	source := t.Target()
 	typeParameters := source.AsInterfaceType().allTypeParameters
+	if t != source && source.objectFlags&ObjectFlagsInterface != 0 && c.hasComputedBaseTypeArguments(source) {
+		// Resolve inherited interface members before substituting type arguments, which can refer
+		// back to those members. Keep 'this' generic so it is substituted along with the other parameters.
+		template := c.getTypeWithThisArgument(source, source.AsInterfaceType().thisType, false)
+		if t != template {
+			resolved := c.resolveStructuredTypeMembers(template)
+			if template.objectFlags&ObjectFlagsUnresolvedMembers == 0 {
+				mapper := newDeferredTypeMapper(typeParameters, core.MapIndex(typeParameters, func(_ *Type, index int) func() *Type {
+					return func() *Type {
+						arguments := c.getTypeArguments(t)
+						if index < len(arguments) {
+							return arguments[index]
+						}
+						return t
+					}
+				}))
+				c.setStructuredTypeMembers(t, c.instantiateSymbolTable(resolved.members, mapper),
+					c.instantiateSignatures(resolved.CallSignatures(), mapper),
+					c.instantiateSignatures(resolved.ConstructSignatures(), mapper),
+					c.instantiateIndexInfos(resolved.indexInfos, mapper))
+				return
+			}
+		}
+	}
 	typeArguments := c.getTypeArguments(t)
 	paddedTypeArguments := typeArguments
 	if len(typeArguments) == len(typeParameters)-1 {
 		paddedTypeArguments = core.Concatenate(typeArguments, []*Type{t})
 	}
 	c.resolveObjectTypeMembers(t, source, typeParameters, paddedTypeArguments)
+}
+
+func (c *Checker) hasComputedBaseTypeArguments(t *Type) bool {
+	return core.Some(c.getBaseTypes(t), func(base *Type) bool {
+		return base.objectFlags&ObjectFlagsReference != 0 && core.Some(c.getTypeArguments(base), func(argument *Type) bool {
+			return argument.flags&TypeFlagsTypeParameter == 0 && c.couldContainTypeVariables(argument)
+		})
+	})
 }
 
 func (c *Checker) resolveObjectTypeMembers(t *Type, source *Type, typeParameters []*Type, typeArguments []*Type) {

@@ -30,6 +30,11 @@ export interface ObjectSchema<S extends Shape> extends Schema<{
     shape: S;
 }
 export declare function object<S extends Shape>(shape: S): ObjectSchema<S>;
-export declare const node: any;
+export declare const node: ObjectSchema<{
+    name: {
+        output: string;
+    };
+    readonly next: ObjectSchema</*elided*/ any>;
+}>;
 export type Output = typeof node.output;
 export declare const nestedName: string;

@@ -16,10 +16,10 @@ export declare function object<S extends Shape>(shape: S): ObjectSchema<S>;
 >shape : S
 
 export const node = object({
->node : any
->object({    name: { output: "" },    get next() { return node; },}) : ObjectSchema<{ name: { output: string; }; readonly next: any; }>
+>node : ObjectSchema<{ name: { output: string; }; readonly next: ObjectSchema<any>; }>
+>object({    name: { output: "" },    get next() { return node; },}) : ObjectSchema<{ name: { output: string; }; readonly next: ObjectSchema<any>; }>
 >object : <S extends Shape>(shape: S) => ObjectSchema<S>
->{    name: { output: "" },    get next() { return node; },} : { name: { output: string; }; readonly next: any; }
+>{    name: { output: "" },    get next() { return node; },} : { name: { output: string; }; readonly next: ObjectSchema<{ name: { output: string; }; readonly next: ObjectSchema<any>; }>; }
 
     name: { output: "" },
 >name : { output: string; }
@@ -28,26 +28,26 @@ export const node = object({
 >"" : ""
 
     get next() { return node; },
->next : any
->node : any
+>next : ObjectSchema<{ name: { output: string; }; readonly next: ObjectSchema<any>; }>
+>node : ObjectSchema<{ name: { output: string; }; readonly next: ObjectSchema<any>; }>
 
 });
 
 export type Output = typeof node.output;
->Output : any
->node.output : any
->node : any
->output : any
+>Output : { name: string; readonly next: any; }
+>node.output : { name: string; readonly next: any; }
+>node : ObjectSchema<{ name: { output: string; }; readonly next: ObjectSchema<any>; }>
+>output : { name: string; readonly next: any; }
 
 export const nestedName: string = node.output.next.next.name;
 >nestedName : string
->node.output.next.next.name : any
->node.output.next.next : any
->node.output.next : any
->node.output : any
->node : any
->output : any
->next : any
->next : any
->name : any
+>node.output.next.next.name : string
+>node.output.next.next : { name: string; readonly next: any; }
+>node.output.next : { name: string; readonly next: any; }
+>node.output : { name: string; readonly next: any; }
+>node : ObjectSchema<{ name: { output: string; }; readonly next: ObjectSchema<any>; }>
+>output : { name: string; readonly next: any; }
+>next : { name: string; readonly next: any; }
+>next : { name: string; readonly next: any; }
+>name : string
 

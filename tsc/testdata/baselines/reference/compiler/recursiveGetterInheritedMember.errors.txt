@@ -1,7 +1,8 @@
-recursiveGetterInheritedMember.ts(33,25): error TS2741: Property 'output' is missing in type 'ObjectSchema<{ name: TextSchema; readonly parent: OptionalSchema<Schema<any>>; }>' but required in type 'Schema<any>'.
+recursiveGetterInheritedMember.ts(39,7): error TS2322: Type 'string' is not assignable to type 'number'.
+recursiveGetterInheritedMember.ts(40,16): error TS2339: Property 'missing' does not exist on type '{ name: string; readonly parent?: any | undefined; }'.
 
 
-==== recursiveGetterInheritedMember.ts (1 errors) ====
+==== recursiveGetterInheritedMember.ts (2 errors) ====
     interface Schema<T> {
         optional: boolean;
         output: T;
@@ -35,14 +36,15 @@ recursiveGetterInheritedMember.ts(33,25): error TS2741: Property 'output' is mis
         name: text(),
         get parent() {
             return optional(node);
-                            ~~~~
-!!! error TS2741: Property 'output' is missing in type 'ObjectSchema<{ name: TextSchema; readonly parent: OptionalSchema<Schema<any>>; }>' but required in type 'Schema<any>'.
-!!! related TS2728 recursiveGetterInheritedMember.ts:3:5: 'output' is declared here.
         },
     });
     
     export const output = node.output;
     const name: string = output.parent!.parent!.name;
     const wrong: number = output.parent!.name;
+          ~~~~~
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
     output.parent!.missing;
+                   ~~~~~~~
+!!! error TS2339: Property 'missing' does not exist on type '{ name: string; readonly parent?: any | undefined; }'.
     

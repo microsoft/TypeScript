@@ -13,14 +13,14 @@ declare function object<S extends Shape>(shape: S): Schema<{ [K in keyof S]: S[K
 >shape : S
 
 const t = object({
->t : any
->object({    get rec() { return t; },    get bad() { return 42; },}) : Schema<{ [x: string]: any; }> & { shape: Shape; }
+>t : Schema<{ readonly rec: any; readonly bad: unknown; }> & { shape: { readonly rec: Schema<{ readonly rec: any; readonly bad: unknown; }> & any; readonly bad: number; }; }
+>object({    get rec() { return t; },    get bad() { return 42; },}) : Schema<{ readonly rec: any; readonly bad: unknown; }> & { shape: { readonly rec: Schema<{ readonly rec: any; readonly bad: unknown; }> & any; readonly bad: number; }; }
 >object : <S extends Shape>(shape: S) => Schema<{ [K in keyof S]: S[K]["out"]; }> & { shape: S; }
->{    get rec() { return t; },    get bad() { return 42; },} : { readonly rec: any; readonly bad: number; }
+>{    get rec() { return t; },    get bad() { return 42; },} : { readonly rec: Schema<{ readonly rec: any; readonly bad: unknown; }> & { shape: { readonly rec: Schema<{ readonly rec: any; readonly bad: unknown; }> & any; readonly bad: number; }; }; readonly bad: number; }
 
     get rec() { return t; },
->rec : any
->t : any
+>rec : Schema<{ readonly rec: any; readonly bad: unknown; }> & { shape: { readonly rec: Schema<{ readonly rec: any; readonly bad: unknown; }> & any; readonly bad: number; }; }
+>t : Schema<{ readonly rec: any; readonly bad: unknown; }> & { shape: { readonly rec: Schema<{ readonly rec: any; readonly bad: unknown; }> & any; readonly bad: number; }; }
 
     get bad() { return 42; },
 >bad : number
@@ -43,18 +43,18 @@ declare function object<S extends Shape>(shape: S): Schema<{ [K in keyof S]: S[K
 >shape : S
 
 const t = object({
->t : Schema<{ [x: string]: any; }> & { shape: Shape; }
->object({    get bad() { return 42; },    get rec() { return t; },}) : Schema<{ [x: string]: any; }> & { shape: Shape; }
+>t : Schema<{ readonly bad: unknown; readonly rec: any; }> & { shape: { readonly bad: number; readonly rec: Schema<{ readonly bad: unknown; readonly rec: any; }> & any; }; }
+>object({    get bad() { return 42; },    get rec() { return t; },}) : Schema<{ readonly bad: unknown; readonly rec: any; }> & { shape: { readonly bad: number; readonly rec: Schema<{ readonly bad: unknown; readonly rec: any; }> & any; }; }
 >object : <S extends Shape>(shape: S) => Schema<{ [K in keyof S]: S[K]["out"]; }> & { shape: S; }
->{    get bad() { return 42; },    get rec() { return t; },} : { readonly bad: number; readonly rec: Schema<{ [x: string]: any; }> & { shape: Shape; }; }
+>{    get bad() { return 42; },    get rec() { return t; },} : { readonly bad: number; readonly rec: Schema<{ readonly bad: unknown; readonly rec: any; }> & { shape: { readonly bad: number; readonly rec: Schema<{ readonly bad: unknown; readonly rec: any; }> & any; }; }; }
 
     get bad() { return 42; },
 >bad : number
 >42 : 42
 
     get rec() { return t; },
->rec : Schema<{ [x: string]: any; }> & { shape: Shape; }
->t : Schema<{ [x: string]: any; }> & { shape: Shape; }
+>rec : Schema<{ readonly bad: unknown; readonly rec: any; }> & { shape: { readonly bad: number; readonly rec: Schema<{ readonly bad: unknown; readonly rec: any; }> & any; }; }
+>t : Schema<{ readonly bad: unknown; readonly rec: any; }> & { shape: { readonly bad: number; readonly rec: Schema<{ readonly bad: unknown; readonly rec: any; }> & any; }; }
 
 });
 

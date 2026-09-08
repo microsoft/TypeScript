@@ -240,22 +240,46 @@ declare const nodeInput: Input<typeof node>;
 
 const outputName: string = nodeOutput.children[0].children[0].name;
 >outputName : Symbol(outputName, Decl(recursiveGetterSchemaConstraints.ts, 51, 5))
+>nodeOutput.children[0].children[0].name : Symbol(name, Decl(recursiveGetterSchemaConstraints.ts, 45, 21))
+>nodeOutput.children[0].children : Symbol(children, Decl(recursiveGetterSchemaConstraints.ts, 46, 17))
+>nodeOutput.children : Symbol(children, Decl(recursiveGetterSchemaConstraints.ts, 46, 17))
 >nodeOutput : Symbol(nodeOutput, Decl(recursiveGetterSchemaConstraints.ts, 49, 13))
+>children : Symbol(children, Decl(recursiveGetterSchemaConstraints.ts, 46, 17))
+>children : Symbol(children, Decl(recursiveGetterSchemaConstraints.ts, 46, 17))
+>name : Symbol(name, Decl(recursiveGetterSchemaConstraints.ts, 45, 21))
 
 const inputName: number = nodeInput.children[0].children[0].name;
 >inputName : Symbol(inputName, Decl(recursiveGetterSchemaConstraints.ts, 52, 5))
+>nodeInput.children[0].children[0].name : Symbol(name, Decl(recursiveGetterSchemaConstraints.ts, 45, 21))
+>nodeInput.children[0].children : Symbol(children, Decl(recursiveGetterSchemaConstraints.ts, 46, 17))
+>nodeInput.children : Symbol(children, Decl(recursiveGetterSchemaConstraints.ts, 46, 17))
 >nodeInput : Symbol(nodeInput, Decl(recursiveGetterSchemaConstraints.ts, 50, 13))
+>children : Symbol(children, Decl(recursiveGetterSchemaConstraints.ts, 46, 17))
+>children : Symbol(children, Decl(recursiveGetterSchemaConstraints.ts, 46, 17))
+>name : Symbol(name, Decl(recursiveGetterSchemaConstraints.ts, 45, 21))
 
 const wrongOutput: number = nodeOutput.children[0].name;
 >wrongOutput : Symbol(wrongOutput, Decl(recursiveGetterSchemaConstraints.ts, 53, 5))
+>nodeOutput.children[0].name : Symbol(name, Decl(recursiveGetterSchemaConstraints.ts, 45, 21))
+>nodeOutput.children : Symbol(children, Decl(recursiveGetterSchemaConstraints.ts, 46, 17))
 >nodeOutput : Symbol(nodeOutput, Decl(recursiveGetterSchemaConstraints.ts, 49, 13))
+>children : Symbol(children, Decl(recursiveGetterSchemaConstraints.ts, 46, 17))
+>name : Symbol(name, Decl(recursiveGetterSchemaConstraints.ts, 45, 21))
 
 const wrongInput: string = nodeInput.children[0].name;
 >wrongInput : Symbol(wrongInput, Decl(recursiveGetterSchemaConstraints.ts, 54, 5))
+>nodeInput.children[0].name : Symbol(name, Decl(recursiveGetterSchemaConstraints.ts, 45, 21))
+>nodeInput.children : Symbol(children, Decl(recursiveGetterSchemaConstraints.ts, 46, 17))
 >nodeInput : Symbol(nodeInput, Decl(recursiveGetterSchemaConstraints.ts, 50, 13))
+>children : Symbol(children, Decl(recursiveGetterSchemaConstraints.ts, 46, 17))
+>name : Symbol(name, Decl(recursiveGetterSchemaConstraints.ts, 45, 21))
 
 nodeOutput.children[0].children[0].missing;
+>nodeOutput.children[0].children : Symbol(children, Decl(recursiveGetterSchemaConstraints.ts, 46, 17))
+>nodeOutput.children : Symbol(children, Decl(recursiveGetterSchemaConstraints.ts, 46, 17))
 >nodeOutput : Symbol(nodeOutput, Decl(recursiveGetterSchemaConstraints.ts, 49, 13))
+>children : Symbol(children, Decl(recursiveGetterSchemaConstraints.ts, 46, 17))
+>children : Symbol(children, Decl(recursiveGetterSchemaConstraints.ts, 46, 17))
 
 const user = object({
 >user : Symbol(user, Decl(recursiveGetterSchemaConstraints.ts, 57, 5))
@@ -291,10 +315,26 @@ declare const userOutput: Output<typeof user>;
 
 const authorName: string = userOutput.posts[0].author.posts[0].author.name;
 >authorName : Symbol(authorName, Decl(recursiveGetterSchemaConstraints.ts, 66, 5))
+>userOutput.posts[0].author.posts[0].author.name : Symbol(name, Decl(recursiveGetterSchemaConstraints.ts, 57, 21))
+>userOutput.posts[0].author.posts[0].author : Symbol(author, Decl(recursiveGetterSchemaConstraints.ts, 62, 18))
+>userOutput.posts[0].author.posts : Symbol(posts, Decl(recursiveGetterSchemaConstraints.ts, 58, 17))
+>userOutput.posts[0].author : Symbol(author, Decl(recursiveGetterSchemaConstraints.ts, 62, 18))
+>userOutput.posts : Symbol(posts, Decl(recursiveGetterSchemaConstraints.ts, 58, 17))
 >userOutput : Symbol(userOutput, Decl(recursiveGetterSchemaConstraints.ts, 65, 13))
+>posts : Symbol(posts, Decl(recursiveGetterSchemaConstraints.ts, 58, 17))
+>author : Symbol(author, Decl(recursiveGetterSchemaConstraints.ts, 62, 18))
+>posts : Symbol(posts, Decl(recursiveGetterSchemaConstraints.ts, 58, 17))
+>author : Symbol(author, Decl(recursiveGetterSchemaConstraints.ts, 62, 18))
+>name : Symbol(name, Decl(recursiveGetterSchemaConstraints.ts, 57, 21))
 
 userOutput.posts[0].author.posts[0].missing;
+>userOutput.posts[0].author.posts : Symbol(posts, Decl(recursiveGetterSchemaConstraints.ts, 58, 17))
+>userOutput.posts[0].author : Symbol(author, Decl(recursiveGetterSchemaConstraints.ts, 62, 18))
+>userOutput.posts : Symbol(posts, Decl(recursiveGetterSchemaConstraints.ts, 58, 17))
 >userOutput : Symbol(userOutput, Decl(recursiveGetterSchemaConstraints.ts, 65, 13))
+>posts : Symbol(posts, Decl(recursiveGetterSchemaConstraints.ts, 58, 17))
+>author : Symbol(author, Decl(recursiveGetterSchemaConstraints.ts, 62, 18))
+>posts : Symbol(posts, Decl(recursiveGetterSchemaConstraints.ts, 58, 17))
 
 const activity = object({
 >activity : Symbol(activity, Decl(recursiveGetterSchemaConstraints.ts, 69, 5))
@@ -324,10 +364,20 @@ declare const activityOutput: Output<typeof activity>;
 
 const activityName: string = activityOutput.children![0].children![0].name;
 >activityName : Symbol(activityName, Decl(recursiveGetterSchemaConstraints.ts, 75, 5))
+>activityOutput.children![0].children![0].name : Symbol(name, Decl(recursiveGetterSchemaConstraints.ts, 69, 25))
+>activityOutput.children![0].children : Symbol(children, Decl(recursiveGetterSchemaConstraints.ts, 70, 17))
+>activityOutput.children : Symbol(children, Decl(recursiveGetterSchemaConstraints.ts, 70, 17))
 >activityOutput : Symbol(activityOutput, Decl(recursiveGetterSchemaConstraints.ts, 74, 13))
+>children : Symbol(children, Decl(recursiveGetterSchemaConstraints.ts, 70, 17))
+>children : Symbol(children, Decl(recursiveGetterSchemaConstraints.ts, 70, 17))
+>name : Symbol(name, Decl(recursiveGetterSchemaConstraints.ts, 69, 25))
 
 activityOutput.children![0].children![0].missing;
+>activityOutput.children![0].children : Symbol(children, Decl(recursiveGetterSchemaConstraints.ts, 70, 17))
+>activityOutput.children : Symbol(children, Decl(recursiveGetterSchemaConstraints.ts, 70, 17))
 >activityOutput : Symbol(activityOutput, Decl(recursiveGetterSchemaConstraints.ts, 74, 13))
+>children : Symbol(children, Decl(recursiveGetterSchemaConstraints.ts, 70, 17))
+>children : Symbol(children, Decl(recursiveGetterSchemaConstraints.ts, 70, 17))
 
 const linked = object({
 >linked : Symbol(linked, Decl(recursiveGetterSchemaConstraints.ts, 78, 5))
@@ -355,8 +405,18 @@ declare const linkedOutput: Output<typeof linked>;
 
 const linkedName: string = linkedOutput.children![0].children![0].name;
 >linkedName : Symbol(linkedName, Decl(recursiveGetterSchemaConstraints.ts, 84, 5))
+>linkedOutput.children![0].children![0].name : Symbol(name, Decl(recursiveGetterSchemaConstraints.ts, 78, 23))
+>linkedOutput.children![0].children : Symbol(children, Decl(recursiveGetterSchemaConstraints.ts, 79, 17))
+>linkedOutput.children : Symbol(children, Decl(recursiveGetterSchemaConstraints.ts, 79, 17))
 >linkedOutput : Symbol(linkedOutput, Decl(recursiveGetterSchemaConstraints.ts, 83, 13))
+>children : Symbol(children, Decl(recursiveGetterSchemaConstraints.ts, 79, 17))
+>children : Symbol(children, Decl(recursiveGetterSchemaConstraints.ts, 79, 17))
+>name : Symbol(name, Decl(recursiveGetterSchemaConstraints.ts, 78, 23))
 
 linkedOutput.children![0].children![0].missing;
+>linkedOutput.children![0].children : Symbol(children, Decl(recursiveGetterSchemaConstraints.ts, 79, 17))
+>linkedOutput.children : Symbol(children, Decl(recursiveGetterSchemaConstraints.ts, 79, 17))
 >linkedOutput : Symbol(linkedOutput, Decl(recursiveGetterSchemaConstraints.ts, 83, 13))
+>children : Symbol(children, Decl(recursiveGetterSchemaConstraints.ts, 79, 17))
+>children : Symbol(children, Decl(recursiveGetterSchemaConstraints.ts, 79, 17))
 

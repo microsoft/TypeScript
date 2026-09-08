@@ -101,10 +101,10 @@ declare function text(): TextSchema;
 >text : () => TextSchema
 
 const node = object({
->node : any
->object({    name: text(),    get children() { return array(node); },}) : ObjectSchema<{ name: TextSchema; readonly children: any; }>
+>node : ObjectSchema<{ name: TextSchema; readonly children: ArraySchema<ObjectSchema<any>>; }>
+>object({    name: text(),    get children() { return array(node); },}) : ObjectSchema<{ name: TextSchema; readonly children: ArraySchema<ObjectSchema<any>>; }>
 >object : <S extends Shape>(shape: S) => ObjectSchema<S>
->{    name: text(),    get children() { return array(node); },} : { name: TextSchema; readonly children: any; }
+>{    name: text(),    get children() { return array(node); },} : { name: TextSchema; readonly children: ArraySchema<ObjectSchema<{ name: TextSchema; readonly children: ArraySchema<ObjectSchema<any>>; }>>; }
 
     name: text(),
 >name : TextSchema
@@ -112,86 +112,86 @@ const node = object({
 >text : () => TextSchema
 
     get children() { return array(node); },
->children : any
->array(node) : ArraySchema<any>
+>children : ArraySchema<ObjectSchema<{ name: TextSchema; readonly children: ArraySchema<ObjectSchema<any>>; }>>
+>array(node) : ArraySchema<ObjectSchema<{ name: TextSchema; readonly children: ArraySchema<ObjectSchema<any>>; }>>
 >array : <T extends Schema>(element: T) => ArraySchema<T>
->node : any
+>node : ObjectSchema<{ name: TextSchema; readonly children: ArraySchema<ObjectSchema<any>>; }>
 
 });
 declare const nodeOutput: Output<typeof node>;
->nodeOutput : any
->node : any
+>nodeOutput : { name: string; readonly children: { name: string; readonly children: any[]; }[]; }
+>node : ObjectSchema<{ name: TextSchema; readonly children: ArraySchema<ObjectSchema<any>>; }>
 
 declare const nodeInput: Input<typeof node>;
->nodeInput : any
->node : any
+>nodeInput : { name: number; readonly children: { name: number; readonly children: any[]; }[]; }
+>node : ObjectSchema<{ name: TextSchema; readonly children: ArraySchema<ObjectSchema<any>>; }>
 
 const outputName: string = nodeOutput.children[0].children[0].name;
 >outputName : string
->nodeOutput.children[0].children[0].name : any
->nodeOutput.children[0].children[0] : any
->nodeOutput.children[0].children : any
->nodeOutput.children[0] : any
->nodeOutput.children : any
->nodeOutput : any
->children : any
+>nodeOutput.children[0].children[0].name : string
+>nodeOutput.children[0].children[0] : { name: string; readonly children: any[]; }
+>nodeOutput.children[0].children : { name: string; readonly children: any[]; }[]
+>nodeOutput.children[0] : { name: string; readonly children: any[]; }
+>nodeOutput.children : { name: string; readonly children: any[]; }[]
+>nodeOutput : { name: string; readonly children: { name: string; readonly children: any[]; }[]; }
+>children : { name: string; readonly children: any[]; }[]
 >0 : 0
->children : any
+>children : { name: string; readonly children: any[]; }[]
 >0 : 0
->name : any
+>name : string
 
 const inputName: number = nodeInput.children[0].children[0].name;
 >inputName : number
->nodeInput.children[0].children[0].name : any
->nodeInput.children[0].children[0] : any
->nodeInput.children[0].children : any
->nodeInput.children[0] : any
->nodeInput.children : any
->nodeInput : any
->children : any
+>nodeInput.children[0].children[0].name : number
+>nodeInput.children[0].children[0] : { name: number; readonly children: any[]; }
+>nodeInput.children[0].children : { name: number; readonly children: any[]; }[]
+>nodeInput.children[0] : { name: number; readonly children: any[]; }
+>nodeInput.children : { name: number; readonly children: any[]; }[]
+>nodeInput : { name: number; readonly children: { name: number; readonly children: any[]; }[]; }
+>children : { name: number; readonly children: any[]; }[]
 >0 : 0
->children : any
+>children : { name: number; readonly children: any[]; }[]
 >0 : 0
->name : any
+>name : number
 
 const wrongOutput: number = nodeOutput.children[0].name;
 >wrongOutput : number
->nodeOutput.children[0].name : any
->nodeOutput.children[0] : any
->nodeOutput.children : any
->nodeOutput : any
->children : any
+>nodeOutput.children[0].name : string
+>nodeOutput.children[0] : { name: string; readonly children: any[]; }
+>nodeOutput.children : { name: string; readonly children: any[]; }[]
+>nodeOutput : { name: string; readonly children: { name: string; readonly children: any[]; }[]; }
+>children : { name: string; readonly children: any[]; }[]
 >0 : 0
->name : any
+>name : string
 
 const wrongInput: string = nodeInput.children[0].name;
 >wrongInput : string
->nodeInput.children[0].name : any
->nodeInput.children[0] : any
->nodeInput.children : any
->nodeInput : any
->children : any
+>nodeInput.children[0].name : number
+>nodeInput.children[0] : { name: number; readonly children: any[]; }
+>nodeInput.children : { name: number; readonly children: any[]; }[]
+>nodeInput : { name: number; readonly children: { name: number; readonly children: any[]; }[]; }
+>children : { name: number; readonly children: any[]; }[]
 >0 : 0
->name : any
+>name : number
 
 nodeOutput.children[0].children[0].missing;
 >nodeOutput.children[0].children[0].missing : any
->nodeOutput.children[0].children[0] : any
->nodeOutput.children[0].children : any
->nodeOutput.children[0] : any
->nodeOutput.children : any
->nodeOutput : any
->children : any
+>nodeOutput.children[0].children[0] : { name: string; readonly children: any[]; }
+>nodeOutput.children[0].children : { name: string; readonly children: any[]; }[]
+>nodeOutput.children[0] : { name: string; readonly children: any[]; }
+>nodeOutput.children : { name: string; readonly children: any[]; }[]
+>nodeOutput : { name: string; readonly children: { name: string; readonly children: any[]; }[]; }
+>children : { name: string; readonly children: any[]; }[]
 >0 : 0
->children : any
+>children : { name: string; readonly children: any[]; }[]
 >0 : 0
 >missing : any
 
 const user = object({
->user : any
->object({    name: text(),    get posts() { return array(post); },}) : ObjectSchema<{ name: TextSchema; readonly posts: any; }>
+>user : ObjectSchema<{ name: TextSchema; readonly posts: ArraySchema<ObjectSchema<{ title: TextSchema; readonly author: ObjectSchema<any>; }>>; }>
+>object({    name: text(),    get posts() { return array(post); },}) : ObjectSchema<{ name: TextSchema; readonly posts: ArraySchema<ObjectSchema<{ title: TextSchema; readonly author: ObjectSchema<any>; }>>; }>
 >object : <S extends Shape>(shape: S) => ObjectSchema<S>
->{    name: text(),    get posts() { return array(post); },} : { name: TextSchema; readonly posts: any; }
+>{    name: text(),    get posts() { return array(post); },} : { name: TextSchema; readonly posts: ArraySchema<ObjectSchema<{ title: TextSchema; readonly author: ObjectSchema<{ name: TextSchema; readonly posts: ArraySchema<ObjectSchema<any>>; }>; }>>; }
 
     name: text(),
 >name : TextSchema
@@ -199,17 +199,17 @@ const user = object({
 >text : () => TextSchema
 
     get posts() { return array(post); },
->posts : any
->array(post) : ArraySchema<any>
+>posts : ArraySchema<ObjectSchema<{ title: TextSchema; readonly author: ObjectSchema<{ name: TextSchema; readonly posts: ArraySchema<ObjectSchema<any>>; }>; }>>
+>array(post) : ArraySchema<ObjectSchema<{ title: TextSchema; readonly author: ObjectSchema<{ name: TextSchema; readonly posts: ArraySchema<ObjectSchema<any>>; }>; }>>
 >array : <T extends Schema>(element: T) => ArraySchema<T>
->post : any
+>post : ObjectSchema<{ title: TextSchema; readonly author: ObjectSchema<{ name: TextSchema; readonly posts: ArraySchema<ObjectSchema<any>>; }>; }>
 
 });
 const post = object({
->post : any
->object({    title: text(),    get author() { return user; },}) : ObjectSchema<{ title: TextSchema; readonly author: any; }>
+>post : ObjectSchema<{ title: TextSchema; readonly author: ObjectSchema<{ name: TextSchema; readonly posts: ArraySchema<ObjectSchema<any>>; }>; }>
+>object({    title: text(),    get author() { return user; },}) : ObjectSchema<{ title: TextSchema; readonly author: ObjectSchema<{ name: TextSchema; readonly posts: ArraySchema<ObjectSchema<any>>; }>; }>
 >object : <S extends Shape>(shape: S) => ObjectSchema<S>
->{    title: text(),    get author() { return user; },} : { title: TextSchema; readonly author: any; }
+>{    title: text(),    get author() { return user; },} : { title: TextSchema; readonly author: ObjectSchema<{ name: TextSchema; readonly posts: ArraySchema<ObjectSchema<{ title: TextSchema; readonly author: ObjectSchema<any>; }>>; }>; }
 
     title: text(),
 >title : TextSchema
@@ -217,52 +217,52 @@ const post = object({
 >text : () => TextSchema
 
     get author() { return user; },
->author : any
->user : any
+>author : ObjectSchema<{ name: TextSchema; readonly posts: ArraySchema<ObjectSchema<{ title: TextSchema; readonly author: ObjectSchema<any>; }>>; }>
+>user : ObjectSchema<{ name: TextSchema; readonly posts: ArraySchema<ObjectSchema<{ title: TextSchema; readonly author: ObjectSchema<any>; }>>; }>
 
 });
 declare const userOutput: Output<typeof user>;
->userOutput : any
->user : any
+>userOutput : { name: string; readonly posts: { title: string; readonly author: any; }[]; }
+>user : ObjectSchema<{ name: TextSchema; readonly posts: ArraySchema<ObjectSchema<{ title: TextSchema; readonly author: ObjectSchema<any>; }>>; }>
 
 const authorName: string = userOutput.posts[0].author.posts[0].author.name;
 >authorName : string
->userOutput.posts[0].author.posts[0].author.name : any
->userOutput.posts[0].author.posts[0].author : any
->userOutput.posts[0].author.posts[0] : any
->userOutput.posts[0].author.posts : any
->userOutput.posts[0].author : any
->userOutput.posts[0] : any
->userOutput.posts : any
->userOutput : any
->posts : any
+>userOutput.posts[0].author.posts[0].author.name : string
+>userOutput.posts[0].author.posts[0].author : { name: string; readonly posts: { title: string; readonly author: any; }[]; }
+>userOutput.posts[0].author.posts[0] : { title: string; readonly author: { name: string; readonly posts: any[]; }; }
+>userOutput.posts[0].author.posts : { title: string; readonly author: { name: string; readonly posts: any[]; }; }[]
+>userOutput.posts[0].author : { name: string; readonly posts: { title: string; readonly author: any; }[]; }
+>userOutput.posts[0] : { title: string; readonly author: { name: string; readonly posts: any[]; }; }
+>userOutput.posts : { title: string; readonly author: { name: string; readonly posts: any[]; }; }[]
+>userOutput : { name: string; readonly posts: { title: string; readonly author: any; }[]; }
+>posts : { title: string; readonly author: { name: string; readonly posts: any[]; }; }[]
 >0 : 0
->author : any
->posts : any
+>author : { name: string; readonly posts: { title: string; readonly author: any; }[]; }
+>posts : { title: string; readonly author: { name: string; readonly posts: any[]; }; }[]
 >0 : 0
->author : any
->name : any
+>author : { name: string; readonly posts: { title: string; readonly author: any; }[]; }
+>name : string
 
 userOutput.posts[0].author.posts[0].missing;
 >userOutput.posts[0].author.posts[0].missing : any
->userOutput.posts[0].author.posts[0] : any
->userOutput.posts[0].author.posts : any
->userOutput.posts[0].author : any
->userOutput.posts[0] : any
->userOutput.posts : any
->userOutput : any
->posts : any
+>userOutput.posts[0].author.posts[0] : { title: string; readonly author: { name: string; readonly posts: any[]; }; }
+>userOutput.posts[0].author.posts : { title: string; readonly author: { name: string; readonly posts: any[]; }; }[]
+>userOutput.posts[0].author : { name: string; readonly posts: { title: string; readonly author: any; }[]; }
+>userOutput.posts[0] : { title: string; readonly author: { name: string; readonly posts: any[]; }; }
+>userOutput.posts : { title: string; readonly author: { name: string; readonly posts: any[]; }; }[]
+>userOutput : { name: string; readonly posts: { title: string; readonly author: any; }[]; }
+>posts : { title: string; readonly author: { name: string; readonly posts: any[]; }; }[]
 >0 : 0
->author : any
->posts : any
+>author : { name: string; readonly posts: { title: string; readonly author: any; }[]; }
+>posts : { title: string; readonly author: { name: string; readonly posts: any[]; }; }[]
 >0 : 0
 >missing : any
 
 const activity = object({
->activity : any
->object({    name: text(),    get children() { return optional(array(activity)); },}) : ObjectSchema<{ name: TextSchema; readonly children: any; }>
+>activity : ObjectSchema<{ name: TextSchema; readonly children: OptionalSchema<ArraySchema<ObjectSchema<any>>>; }>
+>object({    name: text(),    get children() { return optional(array(activity)); },}) : ObjectSchema<{ name: TextSchema; readonly children: OptionalSchema<ArraySchema<ObjectSchema<any>>>; }>
 >object : <S extends Shape>(shape: S) => ObjectSchema<S>
->{    name: text(),    get children() { return optional(array(activity)); },} : { name: TextSchema; readonly children: any; }
+>{    name: text(),    get children() { return optional(array(activity)); },} : { name: TextSchema; readonly children: OptionalSchema<ArraySchema<ObjectSchema<{ name: TextSchema; readonly children: OptionalSchema<ArraySchema<ObjectSchema<any>>>; }>>>; }
 
     name: text(),
 >name : TextSchema
@@ -270,61 +270,61 @@ const activity = object({
 >text : () => TextSchema
 
     get children() { return optional(array(activity)); },
->children : any
->optional(array(activity)) : OptionalSchema<ArraySchema<any>>
+>children : OptionalSchema<ArraySchema<ObjectSchema<{ name: TextSchema; readonly children: OptionalSchema<ArraySchema<ObjectSchema<any>>>; }>>>
+>optional(array(activity)) : OptionalSchema<ArraySchema<ObjectSchema<{ name: TextSchema; readonly children: OptionalSchema<ArraySchema<ObjectSchema<any>>>; }>>>
 >optional : <T extends Schema>(element: T) => OptionalSchema<T>
->array(activity) : ArraySchema<any>
+>array(activity) : ArraySchema<ObjectSchema<{ name: TextSchema; readonly children: OptionalSchema<ArraySchema<ObjectSchema<any>>>; }>>
 >array : <T extends Schema>(element: T) => ArraySchema<T>
->activity : any
+>activity : ObjectSchema<{ name: TextSchema; readonly children: OptionalSchema<ArraySchema<ObjectSchema<any>>>; }>
 
 });
 const emptyActivity: Output<typeof activity> = { name: "" };
->emptyActivity : any
->activity : any
+>emptyActivity : { name: string; readonly children?: any[] | undefined; }
+>activity : ObjectSchema<{ name: TextSchema; readonly children: OptionalSchema<ArraySchema<ObjectSchema<any>>>; }>
 >{ name: "" } : { name: string; }
 >name : string
 >"" : ""
 
 declare const activityOutput: Output<typeof activity>;
->activityOutput : any
->activity : any
+>activityOutput : { name: string; readonly children?: any[] | undefined; }
+>activity : ObjectSchema<{ name: TextSchema; readonly children: OptionalSchema<ArraySchema<ObjectSchema<any>>>; }>
 
 const activityName: string = activityOutput.children![0].children![0].name;
 >activityName : string
->activityOutput.children![0].children![0].name : any
->activityOutput.children![0].children![0] : any
->activityOutput.children![0].children! : any
->activityOutput.children![0].children : any
->activityOutput.children![0] : any
->activityOutput.children! : any
->activityOutput.children : any
->activityOutput : any
->children : any
+>activityOutput.children![0].children![0].name : string
+>activityOutput.children![0].children![0] : { name: string; readonly children?: any[] | undefined; }
+>activityOutput.children![0].children! : { name: string; readonly children?: any[] | undefined; }[]
+>activityOutput.children![0].children : { name: string; readonly children?: any[] | undefined; }[] | undefined
+>activityOutput.children![0] : { name: string; readonly children?: any[] | undefined; }
+>activityOutput.children! : { name: string; readonly children?: any[] | undefined; }[]
+>activityOutput.children : { name: string; readonly children?: any[] | undefined; }[] | undefined
+>activityOutput : { name: string; readonly children?: any[] | undefined; }
+>children : { name: string; readonly children?: any[] | undefined; }[] | undefined
 >0 : 0
->children : any
+>children : { name: string; readonly children?: any[] | undefined; }[] | undefined
 >0 : 0
->name : any
+>name : string
 
 activityOutput.children![0].children![0].missing;
 >activityOutput.children![0].children![0].missing : any
->activityOutput.children![0].children![0] : any
->activityOutput.children![0].children! : any
->activityOutput.children![0].children : any
->activityOutput.children![0] : any
->activityOutput.children! : any
->activityOutput.children : any
->activityOutput : any
->children : any
+>activityOutput.children![0].children![0] : { name: string; readonly children?: any[] | undefined; }
+>activityOutput.children![0].children! : { name: string; readonly children?: any[] | undefined; }[]
+>activityOutput.children![0].children : { name: string; readonly children?: any[] | undefined; }[] | undefined
+>activityOutput.children![0] : { name: string; readonly children?: any[] | undefined; }
+>activityOutput.children! : { name: string; readonly children?: any[] | undefined; }[]
+>activityOutput.children : { name: string; readonly children?: any[] | undefined; }[] | undefined
+>activityOutput : { name: string; readonly children?: any[] | undefined; }
+>children : { name: string; readonly children?: any[] | undefined; }[] | undefined
 >0 : 0
->children : any
+>children : { name: string; readonly children?: any[] | undefined; }[] | undefined
 >0 : 0
 >missing : any
 
 const linked = object({
->linked : any
->object({    name: text(),    get children() { return optional(linkedArray); },}) : ObjectSchema<{ name: TextSchema; readonly children: any; }>
+>linked : ObjectSchema<{ name: TextSchema; readonly children: OptionalSchema<ArraySchema<ObjectSchema<any>>>; }>
+>object({    name: text(),    get children() { return optional(linkedArray); },}) : ObjectSchema<{ name: TextSchema; readonly children: OptionalSchema<ArraySchema<ObjectSchema<any>>>; }>
 >object : <S extends Shape>(shape: S) => ObjectSchema<S>
->{    name: text(),    get children() { return optional(linkedArray); },} : { name: TextSchema; readonly children: any; }
+>{    name: text(),    get children() { return optional(linkedArray); },} : { name: TextSchema; readonly children: OptionalSchema<ArraySchema<ObjectSchema<{ name: TextSchema; readonly children: OptionalSchema<ArraySchema<ObjectSchema<any>>>; }>>>; }
 
     name: text(),
 >name : TextSchema
@@ -332,50 +332,50 @@ const linked = object({
 >text : () => TextSchema
 
     get children() { return optional(linkedArray); },
->children : any
->optional(linkedArray) : OptionalSchema<any>
+>children : OptionalSchema<ArraySchema<ObjectSchema<{ name: TextSchema; readonly children: OptionalSchema<ArraySchema<ObjectSchema<any>>>; }>>>
+>optional(linkedArray) : OptionalSchema<ArraySchema<ObjectSchema<{ name: TextSchema; readonly children: OptionalSchema<ArraySchema<ObjectSchema<any>>>; }>>>
 >optional : <T extends Schema>(element: T) => OptionalSchema<T>
->linkedArray : any
+>linkedArray : ArraySchema<ObjectSchema<{ name: TextSchema; readonly children: OptionalSchema<ArraySchema<ObjectSchema<any>>>; }>>
 
 });
 const linkedArray = array(linked);
->linkedArray : any
->array(linked) : ArraySchema<any>
+>linkedArray : ArraySchema<ObjectSchema<{ name: TextSchema; readonly children: OptionalSchema<ArraySchema<ObjectSchema<any>>>; }>>
+>array(linked) : ArraySchema<ObjectSchema<{ name: TextSchema; readonly children: OptionalSchema<ArraySchema<ObjectSchema<any>>>; }>>
 >array : <T extends Schema>(element: T) => ArraySchema<T>
->linked : any
+>linked : ObjectSchema<{ name: TextSchema; readonly children: OptionalSchema<ArraySchema<ObjectSchema<any>>>; }>
 
 declare const linkedOutput: Output<typeof linked>;
->linkedOutput : any
->linked : any
+>linkedOutput : { name: string; readonly children?: any[] | undefined; }
+>linked : ObjectSchema<{ name: TextSchema; readonly children: OptionalSchema<ArraySchema<ObjectSchema<any>>>; }>
 
 const linkedName: string = linkedOutput.children![0].children![0].name;
 >linkedName : string
->linkedOutput.children![0].children![0].name : any
->linkedOutput.children![0].children![0] : any
->linkedOutput.children![0].children! : any
->linkedOutput.children![0].children : any
->linkedOutput.children![0] : any
->linkedOutput.children! : any
->linkedOutput.children : any
->linkedOutput : any
->children : any
+>linkedOutput.children![0].children![0].name : string
+>linkedOutput.children![0].children![0] : { name: string; readonly children?: any[] | undefined; }
+>linkedOutput.children![0].children! : { name: string; readonly children?: any[] | undefined; }[]
+>linkedOutput.children![0].children : { name: string; readonly children?: any[] | undefined; }[] | undefined
+>linkedOutput.children![0] : { name: string; readonly children?: any[] | undefined; }
+>linkedOutput.children! : { name: string; readonly children?: any[] | undefined; }[]
+>linkedOutput.children : { name: string; readonly children?: any[] | undefined; }[] | undefined
+>linkedOutput : { name: string; readonly children?: any[] | undefined; }
+>children : { name: string; readonly children?: any[] | undefined; }[] | undefined
 >0 : 0
->children : any
+>children : { name: string; readonly children?: any[] | undefined; }[] | undefined
 >0 : 0
->name : any
+>name : string
 
 linkedOutput.children![0].children![0].missing;
 >linkedOutput.children![0].children![0].missing : any
->linkedOutput.children![0].children![0] : any
->linkedOutput.children![0].children! : any
->linkedOutput.children![0].children : any
->linkedOutput.children![0] : any
->linkedOutput.children! : any
->linkedOutput.children : any
->linkedOutput : any
->children : any
+>linkedOutput.children![0].children![0] : { name: string; readonly children?: any[] | undefined; }
+>linkedOutput.children![0].children! : { name: string; readonly children?: any[] | undefined; }[]
+>linkedOutput.children![0].children : { name: string; readonly children?: any[] | undefined; }[] | undefined
+>linkedOutput.children![0] : { name: string; readonly children?: any[] | undefined; }
+>linkedOutput.children! : { name: string; readonly children?: any[] | undefined; }[]
+>linkedOutput.children : { name: string; readonly children?: any[] | undefined; }[] | undefined
+>linkedOutput : { name: string; readonly children?: any[] | undefined; }
+>children : { name: string; readonly children?: any[] | undefined; }[] | undefined
 >0 : 0
->children : any
+>children : { name: string; readonly children?: any[] | undefined; }[] | undefined
 >0 : 0
 >missing : any
 
