@@ -31,6 +31,8 @@ export const title = "Profile";
 	const box = `// 💥
 // @box-expect-error: unused
 const café = 1;`
+	const missingOriginalRange = `// @box-invalid-directive: original-range-out-of-bounds
+const value = 1;`
 	files := map[string]string{
 		"/home/project/tsconfig.json": `{
 			"compilerOptions": { "target": "es2020", "module": "esnext", "moduleResolution": "bundler", "strict": true },
@@ -43,6 +45,7 @@ const café = 1;`
 		"/home/project/node_modules/box-mapper/package.json": strings.Replace(contentmappertest.PackageJSON(contentmappertest.TransformingMapper), `"name": "mapper"`, `"name": "box-mapper"`, 1),
 		"/home/project/ProfileCard.vue":                      component,
 		"/home/project/example.box":                          box,
+		"/home/project/missing-original.box":                 missingOriginalRange,
 	}
 
 	var mu sync.Mutex
@@ -249,6 +252,18 @@ const café = 1;`
 	assert.Equal(t, directive.VirtualRange.Pos, int32(utf16Length(boxVirtualFile.Text[:affectedStart])))
 	assert.Equal(t, directive.VirtualRange.End, int32(utf16Length(boxVirtualFile.Text[:affectedStart+len(affectedText)])))
 
+	missingOriginalURI := lsproto.DocumentUri("file:///home/project/missing-original.box")
+	lsptestutil.SendNotification(t, client, lsproto.TextDocumentDidOpenInfo, &lsproto.DidOpenTextDocumentParams{
+		TextDocument: &lsproto.TextDocumentItem{Uri: missingOriginalURI, LanguageId: "box", Version: 1, Text: missingOriginalRange},
+	})
+	_, missingOriginalVirtualFiles, ok := lsptestutil.SendRequest(t, client, lsproto.CustomContentMapperVirtualFilesInfo, &lsproto.ContentMapperVirtualFilesParams{
+		TextDocument: lsproto.TextDocumentIdentifier{Uri: missingOriginalURI},
+	})
+	assert.Assert(t, ok)
+	assert.Equal(t, len(missingOriginalVirtualFiles.Files), 1)
+	assert.Equal(t, len(missingOriginalVirtualFiles.Files[0].DiagnosticDirectives), 1)
+	assert.Assert(t, missingOriginalVirtualFiles.Files[0].DiagnosticDirectives[0].OriginalRange == nil)
+
 	assert.NilError(t, fs.WriteFile("/home/project/tsconfig.json", `{
 		"compilerOptions": { "target": "es2020", "module": "esnext", "moduleResolution": "bundler", "strict": true }
 	}`))
@@ -322,6 +337,9 @@ const café = 1;`
 	})
 	lsptestutil.SendNotification(t, client, lsproto.TextDocumentDidCloseInfo, &lsproto.DidCloseTextDocumentParams{
 		TextDocument: lsproto.TextDocumentIdentifier{Uri: boxURI},
+	})
+	lsptestutil.SendNotification(t, client, lsproto.TextDocumentDidCloseInfo, &lsproto.DidCloseTextDocumentParams{
+		TextDocument: lsproto.TextDocumentIdentifier{Uri: missingOriginalURI},
 	})
 }
 

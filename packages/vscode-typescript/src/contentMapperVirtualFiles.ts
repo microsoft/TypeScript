@@ -6,7 +6,7 @@ export interface ContentMapperTextRange {
 }
 
 export interface ContentMapperDiagnosticDirective {
-    readonly originalRange: ContentMapperTextRange;
+    readonly originalRange?: ContentMapperTextRange;
     readonly virtualRange: ContentMapperTextRange;
     readonly policy: number;
     readonly unusedCode: number;

@@ -1260,6 +1260,7 @@ func normalizeDiagnosticDirectives(diagnosticDirectives *DiagnosticDirectives, v
 			originalEnd, endErr := originalPositions.normalize(directive.OriginalStart + directive.OriginalLength)
 			if startErr == nil && endErr == nil {
 				normalized.OriginalRange = core.NewTextRange(originalStart, originalEnd)
+				normalized.HasOriginalRange = true
 			} else {
 				validOriginalRange = false
 			}

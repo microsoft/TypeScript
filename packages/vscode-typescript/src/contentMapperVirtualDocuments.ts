@@ -10,6 +10,7 @@ import {
     type DiagnosticDirectiveNode,
     DiagnosticDirectivesView,
 } from "./diagnosticDirectivesView";
+import { readNativePreviewConfig } from "./util";
 
 const virtualDocumentScheme = "typescript-content-mapper";
 const activeEditorIsContentMappedContext = "typescript.native-preview.activeEditorIsContentMapped";
@@ -116,6 +117,14 @@ class ContentMapperVirtualDocumentProvider implements vscode.FileSystemProvider,
                 }
             }),
             vscode.window.onDidChangeVisibleTextEditors(() => this.scheduleInspection()),
+            vscode.workspace.onDidChangeConfiguration(event => {
+                if (
+                    event.affectsConfiguration("js/ts.showDebugInfo")
+                    || event.affectsConfiguration("typescript.native-preview.showDebugInfo")
+                ) {
+                    this.updateActiveEditorContext(vscode.window.activeTextEditor);
+                }
+            }),
             provider.onDidInitializeLanguageServer(() => {
                 this.updateActiveEditorContext(vscode.window.activeTextEditor);
                 for (const source of this.sourceToVirtualUris.keys()) {
@@ -283,7 +292,7 @@ class ContentMapperVirtualDocumentProvider implements vscode.FileSystemProvider,
 
     private async updateActiveEditorContextNow(editor: vscode.TextEditor | undefined, version: number): Promise<void> {
         let isContentMapped = false;
-        if (editor?.document.uri.scheme === "file") {
+        if (readNativePreviewConfig("showDebugInfo", false) && editor?.document.uri.scheme === "file") {
             try {
                 isContentMapped = await this.provider.isContentMapped(editor.document.uri);
             }
@@ -404,13 +413,15 @@ class ContentMapperVirtualDocumentProvider implements vscode.FileSystemProvider,
             throw new Error(`Could not load virtual document "${node.output.fileName}".`);
         }
 
-        const sourceDocument = await vscode.workspace.openTextDocument(sourceUri);
-        const sourceRange = rangeFromTextRange(sourceDocument, node.directive.originalRange);
-        await vscode.window.showTextDocument(sourceDocument, {
-            preserveFocus: true,
-            preview: false,
-            selection: sourceRange,
-        });
+        if (node.directive.originalRange) {
+            const sourceDocument = await vscode.workspace.openTextDocument(sourceUri);
+            const sourceRange = rangeFromTextRange(sourceDocument, node.directive.originalRange);
+            await vscode.window.showTextDocument(sourceDocument, {
+                preserveFocus: true,
+                preview: false,
+                selection: sourceRange,
+            });
+        }
 
         let virtualDocument = await vscode.workspace.openTextDocument(virtualUri);
         virtualDocument = await vscode.languages.setTextDocumentLanguage(

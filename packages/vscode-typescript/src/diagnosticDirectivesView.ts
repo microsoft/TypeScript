@@ -79,10 +79,11 @@ export class DiagnosticDirectivesView implements vscode.TreeDataProvider<Directi
 
         const { directive, output } = node;
         const policy = diagnosticDirectivePolicyName(directive.policy);
-        const original = positionAt(output.originalText, directive.originalRange.pos);
         const virtual = positionAt(output.text, directive.virtualRange.pos);
         const item = new vscode.TreeItem(policy, vscode.TreeItemCollapsibleState.None);
-        item.description = `${formatPosition(original)} \u2192 ${formatPosition(virtual)}`;
+        item.description = directive.originalRange
+            ? `${formatPosition(positionAt(output.originalText, directive.originalRange.pos))} \u2192 ${formatPosition(virtual)}`
+            : formatPosition(virtual);
         item.iconPath = new vscode.ThemeIcon(directive.policy === 1 ? "error" : "eye");
         item.command = {
             command: revealDiagnosticDirectiveCommand,
@@ -131,7 +132,9 @@ function directiveTooltip(node: DiagnosticDirectiveNode): vscode.MarkdownString 
     const { directive, output } = node;
     const tooltip = new vscode.MarkdownString();
     tooltip.appendMarkdown(`**${diagnosticDirectivePolicyName(directive.policy)}** in \`${path.basename(output.fileName)}\``);
-    tooltip.appendMarkdown(`\n\n${vscode.l10n.t("Original range: {0}", formatRange(output.originalText, directive.originalRange))}`);
+    if (directive.originalRange) {
+        tooltip.appendMarkdown(`\n\n${vscode.l10n.t("Original range: {0}", formatRange(output.originalText, directive.originalRange))}`);
+    }
     tooltip.appendMarkdown(`\n\n${vscode.l10n.t("Virtual range: {0}", formatRange(output.text, directive.virtualRange))}`);
     if (directive.policy === 1) {
         tooltip.appendMarkdown(`\n\n${vscode.l10n.t("Unused diagnostic code: {0}", directive.unusedCode)}`);

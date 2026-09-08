@@ -9148,7 +9148,7 @@ func (s *ContentMapperVirtualSpan) UnmarshalJSONFrom(dec *json.Decoder) error {
 
 // A diagnostic directive mapped between original and generated text.
 type ContentMapperDiagnosticDirective struct {
-	OriginalRange *ContentMapperTextRange `json:"originalRange" lsp:"required"`
+	OriginalRange *ContentMapperTextRange `json:"originalRange,omitzero"`
 
 	VirtualRange *ContentMapperTextRange `json:"virtualRange" lsp:"required"`
 
