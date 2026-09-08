@@ -34,6 +34,8 @@ func TestGenerate(t *testing.T) {
 		`export interface CreateSnapshotParams extends SnapshotRequestChangesParams`,
 		`export interface LanguageServerSnapshotChanges extends SnapshotRequestChangesParams`,
 		`openProjects?: readonly DocumentIdentifier[];`,
+		`export type EnsurePrograms = true | readonly string[];`,
+		`ensurePrograms?: EnsurePrograms;`,
 		`snapshot: number;`,
 		`file: DocumentIdentifier;`,
 		`jsx?: JsxEmit;`,
@@ -65,6 +67,7 @@ export interface CompilerOptions`,
     data: string;
 }`,
 		`projects: ProjectResponse[];`,
+		`dirty: boolean;`,
 		`entries: CompletionEntryResponse[];`,
 		`outputFiles: EmitOutputFile[];`,
 		`/** Path is a normalized path on disk. */

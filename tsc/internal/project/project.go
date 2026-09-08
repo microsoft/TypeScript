@@ -283,6 +283,10 @@ func (p *Project) GetProgram() *compiler.Program {
 	return p.Program
 }
 
+func (p *Project) IsDirty() bool {
+	return p.dirty
+}
+
 // GetProjectDiagnostics returns program diagnostics combined with any global
 // diagnostics discovered during checking. These are the diagnostics reported on
 // the tsconfig.json file.

@@ -1812,6 +1812,7 @@ export class Project {
     readonly id: Path;
     readonly configFileName: string;
     readonly currentDirectory: string;
+    readonly dirty: boolean;
     readonly parsedCommandLine: ParsedCommandLine;
     /** @deprecated Use `parsedCommandLine.options`. */
     readonly compilerOptions: CompilerOptions;
@@ -1837,6 +1838,7 @@ export class Project {
         this.id = data.id as Path;
         this.configFileName = data.configFileName;
         this.currentDirectory = data.currentDirectory;
+        this.dirty = data.dirty;
         if (!data.parsedCommandLine?.options) {
             throw new Error(`Project '${data.configFileName}' has no parsed command line`);
         }

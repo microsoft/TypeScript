@@ -201,6 +201,7 @@ func (b *ProjectCollectionBuilder) HandleAPIRequest(apiRequest *APISnapshotReque
 				b.apiState.openProjects[configPath]++
 				// A project re-opened in the same request shouldn't be closed.
 				delete(projectsToClose, configPath)
+				b.updateProgram(entry, logger)
 			} else {
 				return fmt.Errorf("project not found for open: %s", configFileName)
 			}
@@ -235,14 +236,6 @@ func (b *ProjectCollectionBuilder) HandleAPIRequest(apiRequest *APISnapshotReque
 		}
 	}
 
-	for configPath := range b.apiState.openProjects {
-		if entry, ok := b.configuredProjects.Load(configPath); ok {
-			b.updateProgram(entry, logger)
-		} else {
-			return fmt.Errorf("project not found for update: %s", configPath)
-		}
-	}
-
 	for _, overlay := range b.fs.overlays {
 		if entry := b.findDefaultConfiguredProject(overlay.FileName(), b.toPath(overlay.FileName())); entry != nil {
 			delete(projectsToClose, entry.Value().configFilePath)
@@ -255,24 +248,30 @@ func (b *ProjectCollectionBuilder) HandleAPIRequest(apiRequest *APISnapshotReque
 		}
 	}
 
-	// Ensure each API-opened file is placed like LSP's textDocument/didOpen: search
-	// up ancestor directories for a configured project that contains it, and only
-	// fall back to the inferred project if none is found. This also keeps already
-	// loaded configured projects up to date. Then run the same cleanup the LSP open
-	// path uses, so configured projects auto-loaded for files that are no longer open
-	// are torn down instead of leaking.
-	if apiRequest.OpenFiles != nil || apiRequest.CloseFiles != nil {
+	// Place newly API-opened files like LSP's textDocument/didOpen, ensuring only
+	// their target projects. Existing API-opened files are retained by cleanup below
+	// without implicitly updating their programs.
+	if apiRequest.OpenFiles != nil {
 		var retain collections.Set[tspath.Path]
-		for path, file := range b.apiState.openFiles {
+		ensureInferredProject := false
+		for uri := range apiRequest.OpenFiles.Keys() {
+			fileName := uri.FileName()
+			path := b.toPath(fileName)
 			if b.fs.isOpenFile(path) {
-				// Already an LSP overlay; its project membership is handled by the
-				// overlay pass in cleanupConfiguredProjects.
 				continue
 			}
-			result := b.ensureConfiguredProjectAndAncestorsForFile(file.fileName, path, logger)
+			result := b.ensureConfiguredProjectAndAncestorsForFile(fileName, path, logger)
 			retain.Union(&result.retain)
+			if result.project == nil {
+				ensureInferredProject = true
+			}
 		}
 		b.cleanupConfiguredProjects(&retain, logger)
+		if ensureInferredProject && b.inferredProject.Value() != nil {
+			b.updateProgram(b.inferredProject, logger)
+		}
+	} else if apiRequest.CloseFiles != nil {
+		b.cleanupConfiguredProjects(nil, logger)
 	}
 	for _, programID := range apiRequest.RemovePrograms {
 		projectPath := b.toPath(syntheticProjectName(programID))
@@ -322,8 +321,14 @@ func (b *ProjectCollectionBuilder) HandleAPIRequest(apiRequest *APISnapshotReque
 	}
 	wg.Wait()
 	b.createdPrograms = createdPrograms
-	if b.inferredProject.Value() != nil {
-		b.updateProgram(b.inferredProject, logger)
+	for _, projectID := range apiRequest.EnsurePrograms {
+		b.DidRequestProject(projectID, logger)
+	}
+	if apiRequest.EnsureAllPrograms {
+		b.forEachProject(func(entry dirty.Value[*Project]) bool {
+			b.updateProgram(entry, logger)
+			return true
+		})
 	}
 	return nil
 }

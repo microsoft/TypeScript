@@ -107,3 +107,46 @@ func TestCreateSnapshotRejectsRemovingProgramFromIndependentRoot(t *testing.T) {
 	})
 	assert.ErrorContains(t, err, "synthetic program not found for removal: 1")
 }
+
+func TestUpdateSnapshotEnsuresSyntheticProgram(t *testing.T) {
+	t.Parallel()
+
+	const fileName = "/home/projects/p/index.ts"
+	projectSession, utils := projecttestutil.Setup(map[string]any{fileName: `export const value = 1;`})
+	defer projectSession.Close()
+	session := NewLSPSession(projectSession, nil)
+	defer session.Close()
+
+	created, err := session.handleCreateSnapshot(context.Background(), &CreateSnapshotParams{
+		SnapshotRequestChangesParams: SnapshotRequestChangesParams{
+			CreatePrograms: []*CreateSnapshotProgramParams{{
+				RootFiles: []DocumentIdentifier{{FileName: fileName}},
+				Options:   CreateProgramOptions{CompilerOptions: core.CompilerOptions{NoLib: core.TSTrue}},
+			}},
+		},
+	})
+	assert.NilError(t, err)
+	assert.Equal(t, created.Projects[0].Dirty, false)
+	projectID := created.Projects[0].Id
+
+	assert.NilError(t, utils.FS().WriteFile(fileName, `export const value = 2;`))
+	dirty, err := session.handleUpdateSnapshot(context.Background(), &UpdateSnapshotParams{
+		Snapshot: created.Snapshot,
+		Changes: &CreateSnapshotParams{
+			FileChanges: &APIFileChanges{Changed: []DocumentIdentifier{{FileName: fileName}}},
+		},
+	})
+	assert.NilError(t, err)
+	assert.Equal(t, dirty.Projects[0].Dirty, true)
+
+	ensured, err := session.handleUpdateSnapshot(context.Background(), &UpdateSnapshotParams{
+		Snapshot: dirty.Snapshot,
+		Changes: &CreateSnapshotParams{
+			SnapshotRequestChangesParams: SnapshotRequestChangesParams{
+				EnsurePrograms: &EnsurePrograms{Projects: []ProjectID{projectID}},
+			},
+		},
+	})
+	assert.NilError(t, err)
+	assert.Equal(t, ensured.Projects[0].Dirty, false)
+}

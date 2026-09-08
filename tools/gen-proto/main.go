@@ -492,6 +492,8 @@ func (r *typeRenderer) namedType(named *types.Named) string {
 	case r.apiPackagePath + ".DocumentIdentifier":
 		r.documentIdentifier = obj
 		return "DocumentIdentifier"
+	case r.apiPackagePath + ".EnsurePrograms":
+		return "EnsurePrograms"
 	case "github.com/microsoft/TypeScript/tsc/internal/packagejson.JSONValue":
 		return "unknown"
 	case "github.com/microsoft/TypeScript/tsc/internal/json.Value":
@@ -597,6 +599,7 @@ func (r *typeRenderer) declarations() (string, error) {
 		writeDoc(&out, "", r.docs[r.documentIdentifier])
 		out.WriteString("export type DocumentIdentifier = string | { uri: string; };\n\n")
 	}
+	out.WriteString("export type EnsurePrograms = true | readonly string[];\n\n")
 	for len(r.queued) > 0 {
 		named := r.queued[0]
 		r.queued = r.queued[1:]

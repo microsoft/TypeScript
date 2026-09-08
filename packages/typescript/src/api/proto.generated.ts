@@ -164,6 +164,8 @@ export interface APIMethodInfo {
 
 export type DocumentIdentifier = string | { uri: string; };
 
+export type EnsurePrograms = true | readonly string[];
+
 /** ReleaseParams are the parameters for the release method. */
 export interface ReleaseParams {
     snapshot: number;
@@ -288,6 +290,7 @@ export interface ProjectResponse {
     id: string;
     configFileName: string;
     currentDirectory: string;
+    dirty: boolean;
     parsedCommandLine: ConfigFileResponse;
     /** @deprecated Use parsedCommandLine.fileNames. */
     rootFiles: string[];
@@ -1201,6 +1204,11 @@ export interface SnapshotRequestChangesParams {
     createPrograms?: readonly CreateSnapshotProgramParams[];
     /** RemovePrograms lists synthetic project handles to remove from the snapshot. */
     removePrograms?: readonly string[];
+    /**
+     * EnsurePrograms identifies projects whose programs should be updated if dirty,
+     * or all contained projects when true.
+     */
+    ensurePrograms?: EnsurePrograms;
 }
 
 /**

@@ -205,3 +205,42 @@ func TestLanguageServerProgramOwnershipIsIsolatedByAPISession(t *testing.T) {
 	owner.Close()
 	assert.Equal(t, len(projectSession.Snapshot().ProjectCollection.SyntheticProjects()), 0)
 }
+
+func TestGetCurrentLanguageServerSnapshotEnsuresConfiguredProgram(t *testing.T) {
+	t.Parallel()
+
+	const configFileName = "/home/projects/p/tsconfig.json"
+	const fileName = "/home/projects/p/index.ts"
+	projectSession, _ := projecttestutil.Setup(map[string]any{
+		configFileName: `{}`,
+		fileName:       `export const value = 1;`,
+	})
+	defer projectSession.Close()
+	uri := DocumentIdentifier{FileName: fileName}.ToURI(projectSession.GetCurrentDirectory())
+	projectSession.DidOpenFile(context.Background(), uri, 1, `export const value = 1;`, lsproto.LanguageKindTypeScript)
+
+	session := NewLSPSession(projectSession, nil)
+	defer session.Close()
+	initial, err := session.handleGetCurrentLanguageServerSnapshot(context.Background(), &GetCurrentLanguageServerSnapshotParams{})
+	assert.NilError(t, err)
+	assert.Equal(t, initial.Projects[0].Dirty, false)
+	projectID := initial.Projects[0].Id
+
+	projectSession.DidChangeFile(context.Background(), uri, 2, []lsproto.TextDocumentContentChangePartialOrWholeDocument{{
+		WholeDocument: &lsproto.TextDocumentContentChangeWholeDocument{Text: `export const value = 2;`},
+	}})
+	dirty, err := session.handleGetCurrentLanguageServerSnapshot(context.Background(), &GetCurrentLanguageServerSnapshotParams{BaseSnapshot: initial.Snapshot})
+	assert.NilError(t, err)
+	assert.Equal(t, dirty.Projects[0].Dirty, true)
+
+	ensured, err := session.handleGetCurrentLanguageServerSnapshot(context.Background(), &GetCurrentLanguageServerSnapshotParams{
+		BaseSnapshot: dirty.Snapshot,
+		Changes: &LanguageServerSnapshotChanges{
+			SnapshotRequestChangesParams: SnapshotRequestChangesParams{
+				EnsurePrograms: &EnsurePrograms{Projects: []ProjectID{projectID}},
+			},
+		},
+	})
+	assert.NilError(t, err)
+	assert.Equal(t, ensured.Projects[0].Dirty, false)
+}

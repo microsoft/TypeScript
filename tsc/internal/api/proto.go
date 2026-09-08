@@ -363,6 +363,31 @@ type SnapshotRequestChangesParams struct {
 	CreatePrograms []*CreateSnapshotProgramParams `json:"createPrograms,omitempty"`
 	// RemovePrograms lists synthetic project handles to remove from the snapshot.
 	RemovePrograms []ProjectID `json:"removePrograms,omitempty"`
+	// EnsurePrograms identifies projects whose programs should be updated if dirty,
+	// or all contained projects when true.
+	EnsurePrograms *EnsurePrograms `json:"ensurePrograms,omitempty"`
+}
+
+type EnsurePrograms struct {
+	All      bool
+	Projects []ProjectID
+}
+
+var _ json.UnmarshalerFrom = (*EnsurePrograms)(nil)
+
+func (e *EnsurePrograms) UnmarshalJSONFrom(dec *json.Decoder) error {
+	value, err := dec.ReadValue()
+	if err != nil {
+		return err
+	}
+	if string(value) == "true" {
+		e.All = true
+		return nil
+	}
+	if value.Kind() != '[' {
+		return errors.New("ensurePrograms must be true or an array of project IDs")
+	}
+	return json.Unmarshal(value, &e.Projects)
 }
 
 // CreateSnapshotParams are the parameters for creating a new independent snapshot.
@@ -755,6 +780,7 @@ type ProjectResponse struct {
 	Id                ProjectID           `json:"id"`
 	ConfigFileName    string              `json:"configFileName"`
 	CurrentDirectory  string              `json:"currentDirectory"`
+	Dirty             bool                `json:"dirty"`
 	ParsedCommandLine *ConfigFileResponse `json:"parsedCommandLine" nonnil:"true"`
 	// Deprecated: Use parsedCommandLine.fileNames.
 	RootFiles []string `json:"rootFiles" nonnil:"true"`
@@ -823,6 +849,7 @@ func NewProjectResponse(p *project.Project) *ProjectResponse {
 		Id:                ProjectHandle(p),
 		ConfigFileName:    p.Name(),
 		CurrentDirectory:  p.CurrentDirectory(),
+		Dirty:             p.IsDirty(),
 		ParsedCommandLine: NewConfigFileResponse(p.CommandLine),
 		RootFiles:         p.CommandLine.FileNames(),
 		CompilerOptions:   p.CommandLine.CompilerOptions(),

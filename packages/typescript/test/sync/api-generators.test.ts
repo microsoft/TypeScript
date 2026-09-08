@@ -302,6 +302,7 @@ function assertOptionalSourceFilesEquivalent(actual: SourceFile | undefined, exp
 
 function assertProjectsEquivalent(actual: Project, expected: Project, message?: string): void {
     assert.equal(actual.configFileName, expected.configFileName, message);
+    assert.equal(actual.dirty, expected.dirty, message);
     assert.deepEqual(actual.rootFiles, expected.rootFiles, message);
 }
 

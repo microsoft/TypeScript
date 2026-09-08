@@ -1171,6 +1171,13 @@ func (s *Session) toAPISnapshotRequest(changes *SnapshotRequestChangesParams) (*
 		}
 		apiRequest.RemovePrograms[i] = programID
 	}
+	if changes.EnsurePrograms != nil {
+		apiRequest.EnsureAllPrograms = changes.EnsurePrograms.All
+		apiRequest.EnsurePrograms = make([]tspath.Path, len(changes.EnsurePrograms.Projects))
+		for i, program := range changes.EnsurePrograms.Projects {
+			apiRequest.EnsurePrograms[i] = parseProjectHandle(program)
+		}
+	}
 	return apiRequest, nil
 }
 

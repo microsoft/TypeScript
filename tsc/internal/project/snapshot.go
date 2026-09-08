@@ -288,12 +288,14 @@ type APICreateProgramRequest struct {
 }
 
 type APISnapshotRequest struct {
-	OpenProjects   *collections.Set[string]
-	CloseProjects  *collections.Set[tspath.Path]
-	OpenFiles      *collections.Set[lsproto.DocumentUri]
-	CloseFiles     *collections.Set[tspath.Path]
-	CreatePrograms []*APICreateProgramRequest
-	RemovePrograms []int
+	OpenProjects      *collections.Set[string]
+	CloseProjects     *collections.Set[tspath.Path]
+	OpenFiles         *collections.Set[lsproto.DocumentUri]
+	CloseFiles        *collections.Set[tspath.Path]
+	CreatePrograms    []*APICreateProgramRequest
+	RemovePrograms    []int
+	EnsurePrograms    []tspath.Path
+	EnsureAllPrograms bool
 }
 
 type ProjectTreeRequest struct {

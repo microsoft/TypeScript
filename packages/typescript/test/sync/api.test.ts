@@ -1416,6 +1416,40 @@ describe("Multiple snapshots", () => {
         assert.equal((updated.getProject("/first/tsconfig.json")!.program.getSourceFile("/first/index.ts"))!.text, `export const first = 2;`);
         assert.equal(baseFirst!.text, `export const first = 1;`);
     });
+
+    test("snapshot.update ensures all dirty programs", () => {
+        const { api: disposableAPI, fs } = spawnAPIWithFS({
+            "/configured/tsconfig.json": `{}`,
+            "/configured/index.ts": `export const configured = 1;`,
+            "/inferred.ts": `export const inferred = 1;`,
+            "/synthetic.ts": `export const synthetic = 1;`,
+        });
+        using api = disposableAPI;
+
+        const created = api.createSnapshot({
+            openProjects: ["/configured/tsconfig.json"],
+            openFiles: ["/inferred.ts"],
+            createPrograms: [{
+                rootFiles: ["/synthetic.ts"],
+                options: { compilerOptions: { noLib: true } },
+            }],
+        });
+        assert.equal(created.getProjects().length, 3);
+        for (const project of created.getProjects()) {
+            assert.equal(project.dirty, false, `${project.id} should be ensured when opened or created`);
+        }
+
+        fs.writeFile!("/configured/index.ts", `export const configured = 2;`);
+        fs.writeFile!("/inferred.ts", `export const inferred = 2;`);
+        fs.writeFile!("/synthetic.ts", `export const synthetic = 2;`);
+        const dirty = created.update({
+            fileChanges: { changed: ["/configured/index.ts", "/inferred.ts", "/synthetic.ts"] },
+        });
+        assert.deepEqual(dirty.getProjects().map(project => project.dirty), [true, true, true]);
+
+        const ensured = dirty.update({ ensurePrograms: true });
+        assert.deepEqual(ensured.getProjects().map(project => project.dirty), [false, false, false]);
+    });
 });
 
 describe("Source file caching", () => {
