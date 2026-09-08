@@ -329,7 +329,7 @@ func (d DocumentIdentifier) ToURI(cwd tspath.RootedDirectoryPath) lsproto.Docume
 	if d.URI != "" {
 		return d.URI
 	}
-	return lsconv.FilePathToDocumentURI(d.ToFileName(cwd))
+	return lsconv.FileNameToDocumentURI(d.ToFileName(cwd))
 }
 
 func (d DocumentIdentifier) String() string {

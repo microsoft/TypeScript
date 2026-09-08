@@ -160,7 +160,7 @@ func (l *LanguageService) getSemanticDocumentHighlights(ctx context.Context, pos
 		fileName := sf.OriginalFileName()
 		if highlights, ok := fileHighlights[fileName.AsString()]; ok {
 			result = append(result, &lsproto.MultiDocumentHighlight{
-				Uri:        lsconv.FilePathToDocumentURI(fileName),
+				Uri:        lsconv.FileNameToDocumentURI(fileName),
 				Highlights: highlights,
 			})
 		}

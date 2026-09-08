@@ -89,7 +89,7 @@ func TestFileNameToDocumentURI(t *testing.T) {
 	for _, test := range tests {
 		t.Run(test.fileName.AsString(), func(t *testing.T) {
 			t.Parallel()
-			assert.Equal(t, lsconv.FilePathToDocumentURI(test.fileName), test.uri)
+			assert.Equal(t, lsconv.FileNameToDocumentURI(test.fileName), test.uri)
 		})
 	}
 }
@@ -148,7 +148,7 @@ func TestNonFileDocumentURIRoundTripsThroughNormalizedFileName(t *testing.T) {
 
 			fileName := uri.FileName()
 			assert.Equal(t, tspath.RootedFilePathFromNormalized(fileName.AsString()), fileName)
-			assert.Equal(t, lsconv.FilePathToDocumentURI(fileName), uri)
+			assert.Equal(t, lsconv.FileNameToDocumentURI(fileName), uri)
 		})
 	}
 
@@ -193,14 +193,14 @@ func TestNonFileDocumentURIRoundTripsThroughNormalizedFileName(t *testing.T) {
 	)
 	assert.Equal(
 		t,
-		lsconv.FilePathToDocumentURI(literalDynamicFileName),
+		lsconv.FileNameToDocumentURI(literalDynamicFileName),
 		lsproto.DocumentUri("custom:~ts-uri-escape~666f6f~.ts"),
 	)
 
 	invalidUTF8FileName := tspath.RootedFilePathFromNormalized(
 		"^/~ts-uri~/custom/ts-nul-authority/~ts-uri-escape~ff~",
 	)
-	assert.Equal(t, lsconv.FilePathToDocumentURI(invalidUTF8FileName), lsproto.DocumentUri("custom:~ts-uri-escape~ff~"))
+	assert.Equal(t, lsconv.FileNameToDocumentURI(invalidUTF8FileName), lsproto.DocumentUri("custom:~ts-uri-escape~ff~"))
 
 	assert.Assert(
 		t,

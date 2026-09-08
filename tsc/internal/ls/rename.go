@@ -348,7 +348,7 @@ func tryRemoveIndexFileName(fileName tspath.RootedFilePath) tspath.RootedPath {
 	candidate := fileName.RemoveFileExtension()
 	if candidate.BaseName() == "index" {
 		root, relative := candidate.RootAndRelativePath()
-		if (root == "/" || root == "^/") && relative == "index" {
+		if (root == "/" || root.AsPath().IsDynamic()) && relative == "index" {
 			return ""
 		}
 		return candidate.Directory().AsPath()

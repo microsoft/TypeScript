@@ -145,9 +145,7 @@ func (t *Tracker) GetChanges() (map[tspath.RootedFilePath][]*lsproto.TextEdit, [
 		delete(changes, fileName)
 		unmappable = append(unmappable, fileName)
 	}
-	slices.SortFunc(unmappable, func(a, b tspath.RootedFilePath) int {
-		return a.Compare(b)
-	})
+	slices.SortFunc(unmappable, tspath.RootedFilePath.Compare)
 	return changes, unmappable
 }
 

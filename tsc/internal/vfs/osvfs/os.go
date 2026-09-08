@@ -45,15 +45,15 @@ type osFS struct {
 }
 
 // We do this right at startup to minimize the chance that executable gets moved or deleted.
-var isFileSystemCaseSensitive = func() bool {
+var fileSystemCaseSensitivity = func() tspath.CaseSensitivity {
 	// win32/win64 are case insensitive platforms
 	if runtime.GOOS == "windows" {
-		return false
+		return tspath.CaseInsensitive
 	}
 
 	if runtime.GOARCH == "wasm" {
 		// !!! Who knows; this depends on the host implementation.
-		return true
+		return tspath.CaseSensitive
 	}
 
 	// As a proxy for case-insensitivity, we check if the current executable exists under a different case.
@@ -68,11 +68,11 @@ var isFileSystemCaseSensitive = func() bool {
 	swapped := swapCase(exe)
 	if _, err := os.Stat(swapped); err != nil {
 		if os.IsNotExist(err) {
-			return true
+			return tspath.CaseSensitive
 		}
 		panic(fmt.Sprintf("vfs: failed to stat %q: %v", swapped, err))
 	}
-	return false
+	return tspath.CaseInsensitive
 }()
 
 // Convert all lowercase chars to uppercase, and vice-versa
@@ -88,10 +88,7 @@ func swapCase(str string) string {
 }
 
 func (vfs *osFS) CaseSensitivity() tspath.CaseSensitivity {
-	if isFileSystemCaseSensitive {
-		return tspath.CaseSensitive
-	}
-	return tspath.CaseInsensitive
+	return fileSystemCaseSensitivity
 }
 
 func (vfs *osFS) ReadFile(path tspath.RootedFilePath) (contents string, ok bool) {

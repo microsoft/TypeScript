@@ -573,7 +573,7 @@ func (s *SnapshotFS) expandRealpathAliases(change FileChangeSummary) FileChangeS
 		path := s.caseSensitivity.PathKey(tspath.RootedPath(uri.FileName()))
 		if aliases, ok := s.nodeModulesRealpathAliases[path]; ok {
 			for _, aliasFileName := range aliases.paths {
-				additionalChanged.Add(lsconv.FilePathToDocumentURI(aliasFileName))
+				additionalChanged.Add(lsconv.FileNameToDocumentURI(aliasFileName))
 			}
 		}
 	}
@@ -586,7 +586,7 @@ func (s *SnapshotFS) expandRealpathAliases(change FileChangeSummary) FileChangeS
 		path := s.caseSensitivity.PathKey(tspath.RootedPath(uri.FileName()))
 		if aliases, ok := s.nodeModulesRealpathAliases[path]; ok {
 			for _, aliasFileName := range aliases.paths {
-				additionalDeleted.Add(lsconv.FilePathToDocumentURI(aliasFileName))
+				additionalDeleted.Add(lsconv.FileNameToDocumentURI(aliasFileName))
 			}
 		}
 	}
@@ -683,7 +683,7 @@ func (s *snapshotFSBuilder) collectFilesRecursive(dirPath tspath.PathKey, files 
 	for childPath := range dirEntry.Value() {
 		if entry, ok := s.diskFiles.Load(childPath); ok {
 			if file := entry.Value(); file != nil {
-				files.Add(lsconv.FilePathToDocumentURI(file.FileName()))
+				files.Add(lsconv.FileNameToDocumentURI(file.FileName()))
 			}
 		}
 		s.collectFilesRecursive(childPath, files)

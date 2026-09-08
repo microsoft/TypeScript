@@ -24,7 +24,7 @@ type FileHandle struct {
 func (f FileHandle) FileName() tspath.RootedFilePath { return f.fileName }
 func (f FileHandle) Content() string                 { return f.content }
 func (f FileHandle) URI() lsproto.DocumentUri {
-	return lsconv.FilePathToDocumentURI(f.fileName)
+	return lsconv.FileNameToDocumentURI(f.fileName)
 }
 
 // ProjectFileHandle adds export metadata for TypeScript source files.

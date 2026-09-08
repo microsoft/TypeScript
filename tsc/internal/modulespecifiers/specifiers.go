@@ -254,7 +254,7 @@ func containsIgnoredPath(fileName tspath.RootedFilePath) bool {
 }
 
 func moduleSpecifierContainsNodeModules(specifier tspath.ModuleSpecifier) bool {
-	return strings.Contains(specifier.AsString(), "/node_modules/")
+	return specifier.Contains("/node_modules/")
 }
 
 // GetEachFileNameOfModule returns all possible file paths for a module, including symlink alternatives.

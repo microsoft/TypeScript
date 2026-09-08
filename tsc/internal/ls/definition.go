@@ -233,7 +233,7 @@ func (l *LanguageService) createDefinitionLocations(
 		}
 		locations = append(locations, &lsproto.LocationLink{
 			OriginSelectionRange: &originSelectionRange,
-			TargetUri:            lsconv.FilePathToDocumentURI(reference.fileName),
+			TargetUri:            lsconv.FileNameToDocumentURI(reference.fileName),
 			TargetRange:          targetRange,
 			TargetSelectionRange: targetRange,
 		})

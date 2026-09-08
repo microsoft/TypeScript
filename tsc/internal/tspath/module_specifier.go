@@ -1,5 +1,7 @@
 package tspath
 
+import "strings"
+
 // ModuleSpecifier is source text that identifies a module. It is a semantic tag,
 // not a filesystem path invariant, and is intentionally outside the typed-path
 // conversion lattice described in doc.go.
@@ -19,6 +21,10 @@ func (s ModuleSpecifier) IsAbsolute() bool {
 
 func (s ModuleSpecifier) IsRelative() bool {
 	return PathIsRelative(string(s))
+}
+
+func (s ModuleSpecifier) Contains(substring string) bool {
+	return strings.Contains(string(s), substring)
 }
 
 func (s ModuleSpecifier) Resolve(parts ...string) ModuleSpecifier {

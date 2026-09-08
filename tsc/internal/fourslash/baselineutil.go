@@ -168,7 +168,7 @@ func (f *FourslashTest) getBaselineForGroupedSpansWithFileContents(groupedRanges
 
 	baselineEntries := []string{}
 	addFileEntry := func(path tspath.RootedFilePath) {
-		fileName := lsconv.FilePathToDocumentURI(path)
+		fileName := lsconv.FileNameToDocumentURI(path)
 		ranges := groupedRanges.Get(fileName)
 		if len(ranges) == 0 {
 			return

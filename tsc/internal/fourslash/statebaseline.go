@@ -72,7 +72,7 @@ func (f *FourslashTest) baselineProjectsAfterNotification(t *testing.T, fileName
 	// Do hover so we have snapshot to check things on!!
 	_, _, resultOk := lsptestutil.SendRequest(t, f.client, lsproto.TextDocumentHoverInfo, &lsproto.HoverParams{
 		TextDocument: lsproto.TextDocumentIdentifier{
-			Uri: lsconv.FilePathToDocumentURI(fileName),
+			Uri: lsconv.FileNameToDocumentURI(fileName),
 		},
 		Position: lsproto.Position{
 			Line:      uint32(0),
@@ -156,25 +156,25 @@ func (d *diffTable) print(w io.Writer, header string) {
 	}
 }
 
-type diffTableWriter struct {
+type diffTableWriter[T ~string] struct {
 	hasChange bool
 	header    string
-	diffs     map[string]func(io.Writer)
+	diffs     map[T]func(io.Writer)
 }
 
-func newDiffTableWriter(header string) *diffTableWriter {
-	return &diffTableWriter{header: header, diffs: make(map[string]func(io.Writer))}
+func newDiffTableWriter[T ~string](header string) *diffTableWriter[T] {
+	return &diffTableWriter[T]{header: header, diffs: make(map[T]func(io.Writer))}
 }
 
-func (d *diffTableWriter) setHasChange() {
+func (d *diffTableWriter[T]) setHasChange() {
 	d.hasChange = true
 }
 
-func (d *diffTableWriter) add(key string, fn func(io.Writer)) {
+func (d *diffTableWriter[T]) add(key T, fn func(io.Writer)) {
 	d.diffs[key] = fn
 }
 
-func (d *diffTableWriter) print(w io.Writer) {
+func (d *diffTableWriter[T]) print(w io.Writer) {
 	if d.hasChange {
 		fmt.Fprintf(w, "%s::\n", d.header)
 		keys := slices.Collect(maps.Keys(d.diffs))
@@ -257,7 +257,7 @@ func (f *FourslashTest) printProjectsDiff(t *testing.T, snapshot *project.Snapsh
 
 	currentProjects := make(map[string]projectInfo)
 	options := diffTableOptions{indent: "  "}
-	projectsDiffTable := newDiffTableWriter("Projects")
+	projectsDiffTable := newDiffTableWriter[string]("Projects")
 
 	for _, project := range snapshot.ProjectCollection.Projects() {
 		program := project.GetProgram()
@@ -337,7 +337,7 @@ func (f *FourslashTest) printOpenFilesDiff(t *testing.T, snapshot *project.Snaps
 	t.Helper()
 
 	currentOpenFiles := make(map[tspath.RootedFilePath]*openFileInfo)
-	filesDiffTable := newDiffTableWriter("Open Files")
+	filesDiffTable := newDiffTableWriter[tspath.RootedFilePath]("Open Files")
 	options := diffTableOptions{indent: "  ", sortKeys: true}
 	for fileName := range f.openFiles {
 		path := f.vfs.CaseSensitivity().PathKey(tspath.RootedPath(fileName))
@@ -368,7 +368,7 @@ func (f *FourslashTest) printOpenFilesDiff(t *testing.T, snapshot *project.Snaps
 			filesDiffTable.setHasChange()
 		}
 
-		filesDiffTable.add(fileName.AsString(), func(w io.Writer) {
+		filesDiffTable.add(fileName, func(w io.Writer) {
 			fmt.Fprintf(w, "  [%s] %s\n", fileName, openFileChange)
 			printSlicesWithDiffTable(
 				w,
@@ -384,7 +384,7 @@ func (f *FourslashTest) printOpenFilesDiff(t *testing.T, snapshot *project.Snaps
 	for fileName := range f.stateBaseline.serializedOpenFiles {
 		if _, found := currentOpenFiles[fileName]; !found {
 			filesDiffTable.setHasChange()
-			filesDiffTable.add(fileName.AsString(), func(w io.Writer) {
+			filesDiffTable.add(fileName, func(w io.Writer) {
 				fmt.Fprintf(w, "  [%s] *closed*\n", fileName)
 			})
 		}
@@ -397,8 +397,8 @@ func (f *FourslashTest) printConfigFileRegistryDiff(t *testing.T, snapshot *proj
 	t.Helper()
 	configFileRegistry := snapshot.ProjectCollection.ConfigFileRegistry()
 
-	configDiffsTable := newDiffTableWriter("Config")
-	configFileNamesDiffsTable := newDiffTableWriter("Config File Names")
+	configDiffsTable := newDiffTableWriter[tspath.PathKey]("Config")
+	configFileNamesDiffsTable := newDiffTableWriter[tspath.PathKey]("Config File Names")
 
 	if f.stateBaseline.serializedConfigFileRegistry == configFileRegistry {
 		return
@@ -418,7 +418,7 @@ func (f *FourslashTest) printConfigFileRegistryDiff(t *testing.T, snapshot *proj
 				configDiffsTable.setHasChange()
 			}
 		}
-		configDiffsTable.add(string(path), func(w io.Writer) {
+		configDiffsTable.add(path, func(w io.Writer) {
 			fmt.Fprintf(w, "  [%s] %s\n", entry.FileName, configChange)
 			// Print the details of the config entry
 			var retainingProjectsModified string
@@ -451,7 +451,7 @@ func (f *FourslashTest) printConfigFileRegistryDiff(t *testing.T, snapshot *proj
 			configFileNamesChange = "*modified*"
 			configFileNamesDiffsTable.setHasChange()
 		}
-		configFileNamesDiffsTable.add(string(path), func(w io.Writer) {
+		configFileNamesDiffsTable.add(path, func(w io.Writer) {
 			fmt.Fprintf(w, "  [%s] %s\n", path, configFileNamesChange)
 			var nearestConfigFileNameModified string
 			var ancestorDiffModified string
@@ -492,7 +492,7 @@ func (f *FourslashTest) printConfigFileRegistryDiff(t *testing.T, snapshot *proj
 	f.stateBaseline.serializedConfigFileRegistry.ForEachTestConfigEntry(func(path tspath.PathKey, entry *project.TestConfigEntry) {
 		if configFileRegistry.GetTestConfigEntry(path) == nil {
 			configDiffsTable.setHasChange()
-			configDiffsTable.add(string(path), func(w io.Writer) {
+			configDiffsTable.add(path, func(w io.Writer) {
 				fmt.Fprintf(w, "  [%s] *deleted*\n", entry.FileName)
 			})
 		}
@@ -500,7 +500,7 @@ func (f *FourslashTest) printConfigFileRegistryDiff(t *testing.T, snapshot *proj
 	f.stateBaseline.serializedConfigFileRegistry.ForEachTestConfigFileNamesEntry(func(path tspath.PathKey, entry *project.TestConfigFileNamesEntry) {
 		if configFileRegistry.GetTestConfigFileNamesEntry(path) == nil {
 			configFileNamesDiffsTable.setHasChange()
-			configFileNamesDiffsTable.add(string(path), func(w io.Writer) {
+			configFileNamesDiffsTable.add(path, func(w io.Writer) {
 				fmt.Fprintf(w, "  [%s] *deleted*\n", path)
 			})
 		}

@@ -2276,7 +2276,7 @@ func (s *Session) handleGetImportAdderEdits(ctx context.Context, params *GetImpo
 	userPreferences := workingSnapshot.UserPreferences()
 	if registry := workingSnapshot.AutoImportRegistry(); registry == nil ||
 		!registry.IsPreparedForImportingFile(sourceFile.FileName(), projectPath, userPreferences) {
-		preparedSnapshot := s.snapshotHost.CloneSnapshotWithAutoImports(ctx, workingSnapshot, lsconv.FilePathToDocumentURI(sourceFile.FileName()), nil)
+		preparedSnapshot := s.snapshotHost.CloneSnapshotWithAutoImports(ctx, workingSnapshot, lsconv.FileNameToDocumentURI(sourceFile.FileName()), nil)
 		if s.projectSession != nil {
 			s.projectSession.TryAdoptSnapshotInBackground(workingSnapshot, preparedSnapshot)
 		}
@@ -4236,7 +4236,7 @@ func (s *Session) handleGetCompletionsAtPosition(ctx context.Context, params *Ge
 		if sourceFile == nil {
 			return nil, nil
 		}
-		preparedSnapshot := s.snapshotHost.CloneSnapshotWithAutoImports(ctx, sd.snapshot, lsconv.FilePathToDocumentURI(sourceFile.FileName()), nil)
+		preparedSnapshot := s.snapshotHost.CloneSnapshotWithAutoImports(ctx, sd.snapshot, lsconv.FileNameToDocumentURI(sourceFile.FileName()), nil)
 		if s.projectSession != nil {
 			s.projectSession.TryAdoptSnapshotInBackground(sd.snapshot, preparedSnapshot)
 		}

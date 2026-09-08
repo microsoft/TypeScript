@@ -40,7 +40,7 @@ func (l *LanguageService) getMappedLocation(fileName tspath.RootedFilePath, file
 	if startPos == nil {
 		lspRange, fidelity := l.createLspRangeFromRange(fileRange, l.getScript(fileName))
 		return lsproto.Location{
-			Uri:   lsconv.FilePathToDocumentURI(fileName),
+			Uri:   lsconv.FileNameToDocumentURI(fileName),
 			Range: lspRange,
 		}, fidelity
 	}
@@ -57,7 +57,7 @@ func (l *LanguageService) getMappedLocation(fileName tspath.RootedFilePath, file
 	newRange := core.NewTextRange(startPos.Pos, endPos.Pos)
 	lspRange, fidelity := l.createLspRangeFromRange(newRange, l.getScript(startPos.FileName))
 	return lsproto.Location{
-		Uri:   lsconv.FilePathToDocumentURI(startPos.FileName),
+		Uri:   lsconv.FileNameToDocumentURI(startPos.FileName),
 		Range: lspRange,
 	}, fidelity
 }

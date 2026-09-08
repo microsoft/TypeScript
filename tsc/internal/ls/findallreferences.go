@@ -520,7 +520,7 @@ func (l *LanguageService) getNonLocalDefinition(ctx context.Context, entry *Symb
 			}
 			return &nonLocalDefinition{
 				position: position{
-					uri: lsconv.FilePathToDocumentURI(fileName),
+					uri: lsconv.FileNameToDocumentURI(fileName),
 					pos: lspPosition,
 				},
 				GetSourcePosition: sync.OnceValue(func() lsproto.HasTextDocumentPosition {
@@ -531,7 +531,7 @@ func (l *LanguageService) getNonLocalDefinition(ctx context.Context, entry *Symb
 							return nil
 						}
 						return &position{
-							uri: lsconv.FilePathToDocumentURI(mapped.FileName),
+							uri: lsconv.FileNameToDocumentURI(mapped.FileName),
 							pos: mappedPosition,
 						}
 					}
@@ -545,7 +545,7 @@ func (l *LanguageService) getNonLocalDefinition(ctx context.Context, entry *Symb
 							return nil
 						}
 						return &position{
-							uri: lsconv.FilePathToDocumentURI(mapped.FileName),
+							uri: lsconv.FileNameToDocumentURI(mapped.FileName),
 							pos: mappedPosition,
 						}
 					}
@@ -618,13 +618,13 @@ func (l *LanguageService) forEachOriginalDefinitionLocation(
 			if mapped != nil {
 				lspPosition, fidelity := l.converters.ToLSPPosition(l.getScript(mapped.FileName), core.TextPos(mapped.Pos))
 				if !fidelity.IsNone() {
-					cb(lsconv.FilePathToDocumentURI(mapped.FileName), lspPosition)
+					cb(lsconv.FileNameToDocumentURI(mapped.FileName), lspPosition)
 				}
 			}
 		} else if program.IsSourceFromProjectReference(file.PathKey()) {
 			lspPosition, fidelity := l.converters.ToLSPPosition(file, startPos)
 			if !fidelity.IsNone() {
-				cb(lsconv.FilePathToDocumentURI(fileName), lspPosition)
+				cb(lsconv.FileNameToDocumentURI(fileName), lspPosition)
 			}
 		}
 	}
@@ -1145,7 +1145,7 @@ func (l *LanguageService) convertEntriesToLocationLinks(entries []*ReferenceEntr
 		}
 
 		links = append(links, &lsproto.LocationLink{
-			TargetUri:            lsconv.FilePathToDocumentURI(entry.sourceFile.OriginalFileName()),
+			TargetUri:            lsconv.FileNameToDocumentURI(entry.sourceFile.OriginalFileName()),
 			TargetRange:          targetRange,
 			TargetSelectionRange: targetSelectionRange,
 		})

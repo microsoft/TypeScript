@@ -107,7 +107,7 @@ func (c *Converters) ToLSPPositionForFeature(script Script, position core.TextPo
 func (c *Converters) ToLSPLocation(script Script, rng core.TextRange) (lsproto.Location, spanmap.Fidelity) {
 	lspRange, fidelity := c.ToLSPRange(script, rng)
 	return lsproto.Location{
-		Uri:   FilePathToDocumentURI(script.OriginalFileName()),
+		Uri:   FileNameToDocumentURI(script.OriginalFileName()),
 		Range: lspRange,
 	}, fidelity
 }
@@ -118,7 +118,7 @@ func (c *Converters) ToLSPLocation(script Script, rng core.TextRange) (lsproto.L
 // [Converters.ToLSPLocation].
 func (c *Converters) ToLSPLocationForFeature(script Script, rng core.TextRange, feature spanmap.Feature) (lsproto.Location, spanmap.Fidelity) {
 	lspRange, fidelity := c.ToLSPRangeForFeature(script, rng, feature)
-	return lsproto.Location{Uri: FilePathToDocumentURI(script.OriginalFileName()), Range: lspRange}, fidelity
+	return lsproto.Location{Uri: FileNameToDocumentURI(script.OriginalFileName()), Range: lspRange}, fidelity
 }
 
 // FromLSPRange converts an lsproto.Range to offsets in one Script. For a content-mapped script, results
@@ -331,7 +331,7 @@ var extraEscapeReplacer = strings.NewReplacer(
 	" ", "%20",
 )
 
-func FilePathToDocumentURI(fileName tspath.RootedFilePath) lsproto.DocumentUri {
+func FileNameToDocumentURI(fileName tspath.RootedFilePath) lsproto.DocumentUri {
 	return PathToDocumentURI(fileName.AsPath())
 }
 
@@ -507,7 +507,7 @@ func diagnosticToLSP(ctx context.Context, converters *Converters, diagnostic *as
 			}
 			relatedInformation = append(relatedInformation, &lsproto.DiagnosticRelatedInformation{
 				Location: lsproto.Location{
-					Uri:   FilePathToDocumentURI(related.File().OriginalFileName()),
+					Uri:   FileNameToDocumentURI(related.File().OriginalFileName()),
 					Range: relatedRange,
 				},
 				Message: related.Localize(locale),

@@ -28,7 +28,11 @@ const (
 // UnlimitedDepth can be passed as the depth argument to indicate there is no depth limit.
 const UnlimitedDepth = math.MaxInt
 
-func ReadDirectory[T ~string](host vfs.FS, path tspath.RootedDirectoryPath, extensions []string, excludes []T, includes []T, depth int) []tspath.RootedFilePath {
+type PathPatternInput interface {
+	string | tspath.PathPattern
+}
+
+func ReadDirectory[T PathPatternInput](host vfs.FS, path tspath.RootedDirectoryPath, extensions []string, excludes []T, includes []T, depth int) []tspath.RootedFilePath {
 	return matchFileNames(path, extensions, excludes, includes, depth, host)
 }
 
@@ -55,7 +59,7 @@ func getIncludeBasePath(absolute string) string {
 }
 
 // getBasePaths computes the unique non-wildcard base paths amongst the provided include patterns.
-func getBasePaths[T ~string](path tspath.RootedDirectoryPath, includes []T, caseSensitivity tspath.CaseSensitivity) []tspath.RootedDirectoryPath {
+func getBasePaths[T PathPatternInput](path tspath.RootedDirectoryPath, includes []T, caseSensitivity tspath.CaseSensitivity) []tspath.RootedDirectoryPath {
 	// Storage for our results in the form of literal paths (e.g. the paths as written by the user).
 	basePaths := []tspath.RootedDirectoryPath{path}
 
@@ -515,7 +519,7 @@ type globMatcher struct {
 	hadIncludes bool // true if include specs were provided (even if none compiled)
 }
 
-func newGlobMatcher[T ~string](includeSpecs, excludeSpecs []T, basePath tspath.RootedDirectoryPath, caseSensitivity tspath.CaseSensitivity, usage Usage) *globMatcher {
+func newGlobMatcher[T PathPatternInput](includeSpecs, excludeSpecs []T, basePath tspath.RootedDirectoryPath, caseSensitivity tspath.CaseSensitivity, usage Usage) *globMatcher {
 	m := &globMatcher{
 		hadIncludes: len(includeSpecs) > 0,
 		includes:    make([]globPattern, 0, len(includeSpecs)),
@@ -643,7 +647,7 @@ func (v *globVisitor) visit(absolutePath tspath.RootedDirectoryPath, depth int, 
 	}
 }
 
-func matchFileNames[T ~string](path tspath.RootedDirectoryPath, extensions []string, excludes, includes []T, depth int, host vfs.FS) []tspath.RootedFilePath {
+func matchFileNames[T PathPatternInput](path tspath.RootedDirectoryPath, extensions []string, excludes, includes []T, depth int, host vfs.FS) []tspath.RootedFilePath {
 	caseSensitivity := host.CaseSensitivity()
 
 	fileMatcher := newGlobMatcher(includes, excludes, path, caseSensitivity, UsageFiles)
@@ -704,7 +708,7 @@ func (m *SpecMatcher) MatchFileNameIndex(path tspath.RootedFilePath) int {
 
 // NewSpecMatcher creates a matcher for one or more glob specs.
 // It returns a matcher that can test if paths match any of the patterns.
-func NewSpecMatcher[T ~string](specs []T, basePath tspath.RootedDirectoryPath, usage Usage, caseSensitivity tspath.CaseSensitivity) *SpecMatcher {
+func NewSpecMatcher[T PathPatternInput](specs []T, basePath tspath.RootedDirectoryPath, usage Usage, caseSensitivity tspath.CaseSensitivity) *SpecMatcher {
 	if len(specs) == 0 {
 		return nil
 	}

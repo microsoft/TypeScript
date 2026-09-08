@@ -47,7 +47,7 @@ func TestReplay(t *testing.T) {
 	if testDir == nil || *testDir == "" {
 		t.Fatal("testDir must be specified")
 	}
-	testDirUri := lsconv.FilePathToDocumentURI(tspath.RootedFilePathFromAbsolute(*testDir))
+	testDirUri := lsconv.FileNameToDocumentURI(tspath.RootedFilePathFromAbsolute(*testDir))
 
 	fs := bundled.WrapFS(osvfs.FS())
 	defaultLibraryPath := bundled.LibPath()

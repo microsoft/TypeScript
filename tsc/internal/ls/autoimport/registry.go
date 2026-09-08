@@ -645,7 +645,7 @@ func (b *registryBuilder) updateBucketAndDirectoryExistence(change RegistryChang
 
 	var addedNodeModulesDirs, removedNodeModulesDirs []tspath.PathKey
 	packageJsonChanged := func(dirName tspath.RootedDirectoryPath) bool {
-		uri := lsconv.FilePathToDocumentURI(dirName.ResolveFile("package.json"))
+		uri := lsconv.FileNameToDocumentURI(dirName.ResolveFile("package.json"))
 		return change.Changed.Has(uri) || change.Deleted.Has(uri) || change.Created.Has(uri)
 	}
 	core.DiffMapsFunc(

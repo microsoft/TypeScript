@@ -520,7 +520,7 @@ func (l *LanguageService) createCallHierarchyItem(program *compiler.Program, nod
 	item := &lsproto.CallHierarchyItem{
 		Name:           nameText,
 		Kind:           kind,
-		Uri:            lsconv.FilePathToDocumentURI(sourceFile.OriginalFileName()),
+		Uri:            lsconv.FileNameToDocumentURI(sourceFile.OriginalFileName()),
 		Range:          span,
 		SelectionRange: selectionSpan,
 	}
@@ -617,7 +617,7 @@ func (d *incomingEntry) getSourceFile() *ast.SourceFile {
 
 func (d *incomingEntry) TextDocumentURI() lsproto.DocumentUri {
 	d.documentUriOnce.Do(func() {
-		d.documentUri = lsconv.FilePathToDocumentURI(d.getSourceFile().OriginalFileName())
+		d.documentUri = lsconv.FileNameToDocumentURI(d.getSourceFile().OriginalFileName())
 	})
 	return d.documentUri
 }

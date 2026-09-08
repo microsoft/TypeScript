@@ -1,8 +1,6 @@
 package autoimport
 
 import (
-	"strings"
-
 	"github.com/microsoft/TypeScript/tsc/internal/modulespecifiers"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 )
@@ -81,7 +79,7 @@ func (v *View) GetModuleSpecifier(
 	//     new node_modules code. Possibly with local symlinks, which should be
 	//     very rare.
 	for _, specifier := range specifiers {
-		if strings.Contains(specifier.AsString(), "/node_modules/") {
+		if specifier.Contains("/node_modules/") {
 			continue
 		}
 		cache.Store(export.Path, specifier)

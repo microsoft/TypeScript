@@ -58,8 +58,8 @@ func (l *LanguageService) GetEditsForFileRename(ctx context.Context, oldURI lspr
 					newOriginalPath := newFile.ChangeFullExtension(ext)
 					documentChanges = append(documentChanges, lsproto.TextDocumentEditOrCreateFileOrRenameFileOrDeleteFile{
 						RenameFile: &lsproto.RenameFile{
-							OldUri: lsconv.FilePathToDocumentURI(oldOriginalPath),
-							NewUri: lsconv.FilePathToDocumentURI(newOriginalPath),
+							OldUri: lsconv.FileNameToDocumentURI(oldOriginalPath),
+							NewUri: lsconv.FileNameToDocumentURI(newOriginalPath),
 						},
 					})
 				}
@@ -69,7 +69,7 @@ func (l *LanguageService) GetEditsForFileRename(ctx context.Context, oldURI lspr
 
 	changes, _ := changeTracker.GetChanges()
 	for fileName, edits := range changes {
-		uri := lsconv.FilePathToDocumentURI(fileName)
+		uri := lsconv.FileNameToDocumentURI(fileName)
 		lspEdits := make([]lsproto.TextEditOrAnnotatedTextEditOrSnippetTextEdit, 0, len(edits))
 		for _, edit := range edits {
 			lspEdits = append(lspEdits, lsproto.TextEditOrAnnotatedTextEditOrSnippetTextEdit{
@@ -196,7 +196,7 @@ func tryUpdateConfigString(configFile *ast.SourceFile, configDir tspath.RootedDi
 	textRange := core.NewTextRange(scanner.GetTokenPosOfNode(element, configFile, false)+1, element.End()-1)
 	lspRange, fidelity := converters.ToLSPRange(configFile, textRange)
 	debug.Assert(fidelity.IsExact(), "config files are not content-mapped")
-	changeTracker.ReplaceRangeWithText(configFile, lspRange, relativePathFromDirectory(configDir, updated, caseSensitivity))
+	changeTracker.ReplaceRangeWithText(configFile, lspRange, relativePathFromDirectory(configDir, updated, caseSensitivity).AsString())
 	return true
 }
 
@@ -382,11 +382,11 @@ func forEachObjectProperty(objectLiteral *ast.ObjectLiteralExpression, cb func(p
 	}
 }
 
-func relativePathFromDirectory(fromDirectory tspath.RootedDirectoryPath, to tspath.RootedFilePath, caseSensitivity tspath.CaseSensitivity) string {
+func relativePathFromDirectory(fromDirectory tspath.RootedDirectoryPath, to tspath.RootedFilePath, caseSensitivity tspath.CaseSensitivity) tspath.FileSpec {
 	if relativePath, ok := caseSensitivity.RelativePathFromDirectory(fromDirectory, to); ok {
-		return relativePath.AsString()
+		return tspath.ToFileSpec(relativePath.AsString())
 	}
-	return to.AsString()
+	return tspath.ToFileSpec(to.AsString())
 }
 
 func relativeImportPathFromDirectory(fromDirectory tspath.RootedDirectoryPath, to tspath.RootedFilePath, caseSensitivity tspath.CaseSensitivity) tspath.ModuleSpecifier {

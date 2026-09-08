@@ -459,7 +459,7 @@ func getRecursiveGlobPattern(directory tspath.RootedDirectoryPath) string {
 // for the given directory that would be produced by newRecursiveDirectoryWatcher.
 func recursiveDirectoryGlobPattern(directory tspath.RootedDirectoryPath, useRelativePattern bool) string {
 	if useRelativePattern {
-		return string(lsconv.FilePathToDocumentURI(tspath.RootedFilePathFromPath(directory.AsPath()))) + "/**/*"
+		return string(lsconv.FileNameToDocumentURI(tspath.RootedFilePathFromPath(directory.AsPath()))) + "/**/*"
 	}
 	return getRecursiveGlobPattern(directory)
 }
@@ -469,7 +469,7 @@ func recursiveDirectoryGlobPattern(directory tspath.RootedDirectoryPath, useRela
 // a file:// base URI is used; otherwise a plain glob Pattern is used.
 func newRecursiveDirectoryWatcher(directory tspath.RootedDirectoryPath, kind lsproto.WatchKind, useRelativePattern bool) *lsproto.FileSystemWatcher {
 	if useRelativePattern {
-		baseUri := lsproto.URI(lsconv.FilePathToDocumentURI(tspath.RootedFilePathFromPath(directory.AsPath())))
+		baseUri := lsproto.URI(lsconv.FileNameToDocumentURI(tspath.RootedFilePathFromPath(directory.AsPath())))
 		return &lsproto.FileSystemWatcher{
 			GlobPattern: lsproto.PatternOrRelativePattern{
 				RelativePattern: &lsproto.RelativePattern{

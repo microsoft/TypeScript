@@ -7,7 +7,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfsmatch"
 )
 
-func getWildcardDirectories[T ~string](include []T, exclude []T, currentDirectory tspath.RootedDirectoryPath, caseSensitivity tspath.CaseSensitivity) map[tspath.RootedDirectoryPath]bool {
+func getWildcardDirectories[T vfsmatch.PathPatternInput](include []T, exclude []T, currentDirectory tspath.RootedDirectoryPath, caseSensitivity tspath.CaseSensitivity) map[tspath.RootedDirectoryPath]bool {
 	// We watch a directory recursively if it contains a wildcard anywhere in a directory segment
 	// of the pattern:
 	//

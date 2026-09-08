@@ -2171,7 +2171,7 @@ func (s *Server) handleCompletionItemResolve(ctx context.Context, params *lsprot
 			return nil, errors.New("completion item data fileName must be a valid dynamic path")
 		}
 	} else {
-		uri = lsconv.FilePathToDocumentURI(fileName)
+		uri = lsconv.FileNameToDocumentURI(fileName)
 	}
 	languageService, err := s.session.GetLanguageService(ctx, uri)
 	if err != nil {

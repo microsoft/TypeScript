@@ -84,7 +84,7 @@ func TestReferencesAfterAncestorProjectConfigDeletion1(t *testing.T) {
 		"/root/project/src/main.ts": "export function helloWorld() {}\nhelloWorld()\n",
 	}, &lsutil.UserPreferences{})
 
-	mainURI := lsconv.FilePathToDocumentURI("/root/project/src/main.ts")
+	mainURI := lsconv.FileNameToDocumentURI("/root/project/src/main.ts")
 	lsptestutil.SendNotification(t, client, lsproto.TextDocumentDidOpenInfo, &lsproto.DidOpenTextDocumentParams{
 		TextDocument: &lsproto.TextDocumentItem{Uri: mainURI, LanguageId: "typescript", Text: "export function helloWorld() {}\nhelloWorld()\n"},
 	})
@@ -99,7 +99,7 @@ func TestReferencesAfterAncestorProjectConfigDeletion1(t *testing.T) {
 	assert.NilError(t, fs.Remove("root/tsconfig.json"))
 	lsptestutil.SendNotification(t, client, lsproto.WorkspaceDidChangeWatchedFilesInfo, &lsproto.DidChangeWatchedFilesParams{
 		Changes: []*lsproto.FileEvent{{
-			Uri:  lsconv.FilePathToDocumentURI("/root/tsconfig.json"),
+			Uri:  lsconv.FileNameToDocumentURI("/root/tsconfig.json"),
 			Type: lsproto.FileChangeTypeDeleted,
 		}},
 	})
