@@ -644,7 +644,9 @@ type TranspileOutputResponse struct {
 }
 
 type BatchRequestsParams struct {
-	Requests []BatchRequest `json:"requests"`
+	Requests                []BatchRequest `json:"requests"`
+	ContinuationToken       string         `json:"continuationToken,omitempty"`
+	MaxResponseBytesPerPage int            `json:"maxResponseBytesPerPage,omitempty"`
 }
 
 type BatchRequest struct {
@@ -653,7 +655,48 @@ type BatchRequest struct {
 }
 
 type BatchRequestsResponse struct {
-	Responses []BatchResponse `json:"responses" nonnil:"true"`
+	Responses         []BatchResponse `json:"responses" nonnil:"true"`
+	ContinuationToken string          `json:"continuationToken,omitempty"`
+	encodedResponses  []json.Value
+}
+
+var _ json.MarshalerTo = (*BatchRequestsResponse)(nil)
+
+func (r *BatchRequestsResponse) MarshalJSONTo(enc *json.Encoder) error {
+	if err := enc.WriteToken(json.BeginObject); err != nil {
+		return err
+	}
+	if err := enc.WriteValue(json.Value(`"responses"`)); err != nil {
+		return err
+	}
+	if err := enc.WriteToken(json.BeginArray); err != nil {
+		return err
+	}
+	if r.encodedResponses != nil {
+		for _, response := range r.encodedResponses {
+			if err := enc.WriteValue(response); err != nil {
+				return err
+			}
+		}
+	} else {
+		for i := range r.Responses {
+			if err := json.MarshalEncode(enc, &r.Responses[i]); err != nil {
+				return err
+			}
+		}
+	}
+	if err := enc.WriteToken(json.EndArray); err != nil {
+		return err
+	}
+	if r.ContinuationToken != "" {
+		if err := enc.WriteValue(json.Value(`"continuationToken"`)); err != nil {
+			return err
+		}
+		if err := json.MarshalEncode(enc, r.ContinuationToken); err != nil {
+			return err
+		}
+	}
+	return enc.WriteToken(json.EndObject)
 }
 
 type BatchResponse struct {

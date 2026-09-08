@@ -2,7 +2,7 @@
 // @sourcemap: true
 // @maproot: file:///folder
 // @sourceroot: file:///folder
-// @outFile: outfile.js
+// @outDir: out
 // @inlinesourcemap: true
 
 // configuration errors

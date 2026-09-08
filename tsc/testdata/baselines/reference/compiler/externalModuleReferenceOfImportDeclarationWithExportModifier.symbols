@@ -1,0 +1,9 @@
+//// [tests/cases/compiler/externalModuleReferenceOfImportDeclarationWithExportModifier.ts] ////
+
+=== externalModuleReferenceOfImportDeclarationWithExportModifier_1.ts ===
+export import file1 = require('externalModuleReferenceOfImportDeclarationWithExportModifier_0');
+>file1 : Symbol(file1, Decl(externalModuleReferenceOfImportDeclarationWithExportModifier_1.ts, 0, 0))
+
+file1.foo();
+>file1 : Symbol(file1, Decl(externalModuleReferenceOfImportDeclarationWithExportModifier_1.ts, 0, 0))
+

@@ -1,6 +1,6 @@
 // @target: es2015
 // @allowJs: true
-// @outFile: out.js
+// @outDir: out
 
 // @FileName: a.js
 function foo(a) {

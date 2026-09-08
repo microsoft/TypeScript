@@ -1,0 +1,19 @@
+privacyCheckExportAssignmentOnExportedGenericInterface2.ts(7,5): error TS2322: Type 'undefined' is not assignable to type 'Foo<T>'.
+
+
+==== privacyCheckExportAssignmentOnExportedGenericInterface2.ts (1 errors) ====
+    export = Foo;
+    
+    interface Foo<T> {
+    }
+    
+    function Foo<T>(array: T[]): Foo<T> {
+        return undefined;
+        ~~~~~~
+!!! error TS2322: Type 'undefined' is not assignable to type 'Foo<T>'.
+    }
+    
+    namespace Foo {
+        export var x = "hello";
+    }
+    

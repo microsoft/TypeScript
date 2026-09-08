@@ -1,6 +1,6 @@
 // @target: es2015
 // @allowJs: true
-// @outFile: out.js
+// @outDir: out
 // @composite: true
 // @filename: a.ts
 class c {

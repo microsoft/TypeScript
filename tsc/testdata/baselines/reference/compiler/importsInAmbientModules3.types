@@ -1,0 +1,9 @@
+//// [tests/cases/compiler/importsInAmbientModules3.ts] ////
+
+=== main.ts ===
+declare module "M" {
+>"M" : typeof import("M")
+
+    import C = require("external");
+>C : any
+}

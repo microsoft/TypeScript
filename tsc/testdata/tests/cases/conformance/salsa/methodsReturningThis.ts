@@ -1,6 +1,6 @@
 // @target: es2015
 // @filename: input.js
-// @outFile: output.js
+// @outDir: out
 // @allowJs: true
 function Class()
 {

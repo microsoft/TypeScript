@@ -430,9 +430,13 @@ func TestContentMapperLocaleChange(t *testing.T) {
 
 	session := project.NewSession(init)
 	defer session.Close()
-	session.DidOpenFile(context.Background(), "file:///home/project/main.ts", 1, files["/home/project/main.ts"].(string), lsproto.LanguageKindTypeScript)
-	_, err := session.GetLanguageService(context.Background(), "file:///home/project/main.ts")
+	ctx := locale.WithLocale(context.Background(), locale.Default)
+	localeReads := len(utils.Client().GetLocaleCalls())
+	session.DidOpenFile(ctx, "file:///home/project/main.ts", 1, files["/home/project/main.ts"].(string), lsproto.LanguageKindTypeScript)
+	_, err := session.GetLanguageService(ctx, "file:///home/project/main.ts")
 	assert.NilError(t, err)
+	// Snapshot adoption reads the current locale for its background work; project construction should not.
+	assert.Equal(t, len(utils.Client().GetLocaleCalls()), localeReads+1)
 	assert.Equal(t, spawner.spawns.Load(), int32(1))
 
 	preferences := session.Config()

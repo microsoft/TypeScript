@@ -1,0 +1,27 @@
+//// [tests/cases/compiler/moduleAliasAsFunctionArgument.ts] ////
+
+=== moduleAliasAsFunctionArgument_1.ts ===
+///<reference path='moduleAliasAsFunctionArgument_0.ts'/>
+import a = require('moduleAliasAsFunctionArgument_0');
+>a : any
+
+function fn(arg: { x: number }) {
+>fn : (arg: { x: number; }) => void
+>arg : { x: number; }
+>x : number
+}
+
+a.x; // OK
+>a.x : any
+>a : any
+>x : any
+
+fn(a); // Error: property 'x' is missing from 'a'
+>fn(a) : void
+>fn : (arg: { x: number; }) => void
+>a : any
+
+=== moduleAliasAsFunctionArgument_0.ts ===
+export var x: number;
+>x : number
+

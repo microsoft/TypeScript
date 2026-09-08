@@ -1,7 +1,7 @@
 // @allowJs: true
 // @target: es2015,es2020
 // @module: none
-// @outFile: /a.js
+// @outDir: out
 // @filename: /a.ts
 const foo = import("./b");
 
