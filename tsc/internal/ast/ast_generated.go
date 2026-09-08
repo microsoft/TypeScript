@@ -11047,11 +11047,7 @@ var nodeFlowNodeDataDispatch = [kindFlowReduceLabelData + 1]uint8{
 }
 
 func (n *Node) FlowNodeData() *FlowNodeBase {
-	kind := uint(n.Kind)
-	if kind >= uint(len(nodeFlowNodeDataDispatch)) {
-		return nil
-	}
-	switch nodeFlowNodeDataDispatch[kind] {
+	switch nodeFlowNodeDataDispatch[n.Kind] {
 	case 1:
 		return n.data.(*Identifier).FlowNodeData()
 	case 2:
@@ -11205,11 +11201,7 @@ var nodeDeclarationDataDispatch = [kindFlowReduceLabelData + 1]uint8{
 }
 
 func (n *Node) DeclarationData() *DeclarationBase {
-	kind := uint(n.Kind)
-	if kind >= uint(len(nodeDeclarationDataDispatch)) {
-		return nil
-	}
-	switch nodeDeclarationDataDispatch[kind] {
+	switch nodeDeclarationDataDispatch[n.Kind] {
 	case 1:
 		return n.data.(*VariableDeclaration).DeclarationData()
 	case 2:
@@ -11342,11 +11334,7 @@ var nodeExportableDataDispatch = [kindFlowReduceLabelData + 1]uint8{
 }
 
 func (n *Node) ExportableData() *ExportableBase {
-	kind := uint(n.Kind)
-	if kind >= uint(len(nodeExportableDataDispatch)) {
-		return nil
-	}
-	switch nodeExportableDataDispatch[kind] {
+	switch nodeExportableDataDispatch[n.Kind] {
 	case 1:
 		return n.data.(*VariableDeclaration).ExportableData()
 	case 2:
@@ -11413,11 +11401,7 @@ var nodeLocalsContainerDataDispatch = [kindFlowReduceLabelData + 1]uint8{
 }
 
 func (n *Node) LocalsContainerData() *LocalsContainerBase {
-	kind := uint(n.Kind)
-	if kind >= uint(len(nodeLocalsContainerDataDispatch)) {
-		return nil
-	}
-	switch nodeLocalsContainerDataDispatch[kind] {
+	switch nodeLocalsContainerDataDispatch[n.Kind] {
 	case 1:
 		return n.data.(*ForStatement).LocalsContainerData()
 	case 2:
@@ -11495,11 +11479,7 @@ var nodeFunctionLikeDataDispatch = [kindFlowReduceLabelData + 1]uint8{
 }
 
 func (n *Node) FunctionLikeData() *FunctionLikeBase {
-	kind := uint(n.Kind)
-	if kind >= uint(len(nodeFunctionLikeDataDispatch)) {
-		return nil
-	}
-	switch nodeFunctionLikeDataDispatch[kind] {
+	switch nodeFunctionLikeDataDispatch[n.Kind] {
 	case 1:
 		return n.data.(*FunctionDeclaration).FunctionLikeData()
 	case 2:
@@ -11556,11 +11536,7 @@ var nodeBodyDataDispatch = [kindFlowReduceLabelData + 1]uint8{
 }
 
 func (n *Node) BodyData() *BodyBase {
-	kind := uint(n.Kind)
-	if kind >= uint(len(nodeBodyDataDispatch)) {
-		return nil
-	}
-	switch nodeBodyDataDispatch[kind] {
+	switch nodeBodyDataDispatch[n.Kind] {
 	case 1:
 		return n.data.(*FunctionDeclaration).BodyData()
 	case 2:
@@ -11595,11 +11571,7 @@ var nodeLiteralLikeDataDispatch = [kindFlowReduceLabelData + 1]uint8{
 }
 
 func (n *Node) LiteralLikeData() *LiteralLikeNodeBase {
-	kind := uint(n.Kind)
-	if kind >= uint(len(nodeLiteralLikeDataDispatch)) {
-		return nil
-	}
-	switch nodeLiteralLikeDataDispatch[kind] {
+	switch nodeLiteralLikeDataDispatch[n.Kind] {
 	case 1:
 		return n.data.(*StringLiteral).LiteralLikeData()
 	case 2:
@@ -11689,11 +11661,7 @@ var nodeNameDispatch = [kindFlowReduceLabelData + 1]uint8{
 }
 
 func (n *Node) Name() *DeclarationName {
-	kind := uint(n.Kind)
-	if kind >= uint(len(nodeNameDispatch)) {
-		return nil
-	}
-	switch nodeNameDispatch[kind] {
+	switch nodeNameDispatch[n.Kind] {
 	case 1:
 		return n.data.(*VariableDeclaration).Name()
 	case 2:
@@ -11818,11 +11786,7 @@ var nodeModifiersDispatch = [kindFlowReduceLabelData + 1]uint8{
 }
 
 func (n *Node) Modifiers() *ModifierList {
-	kind := uint(n.Kind)
-	if kind >= uint(len(nodeModifiersDispatch)) {
-		return nil
-	}
-	switch nodeModifiersDispatch[kind] {
+	switch nodeModifiersDispatch[n.Kind] {
 	case 1:
 		return n.data.(*VariableStatement).Modifiers()
 	case 2:

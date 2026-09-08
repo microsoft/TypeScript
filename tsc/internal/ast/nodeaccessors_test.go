@@ -49,10 +49,17 @@ func TestNodeAccessorsSharedKinds(t *testing.T) {
 
 func TestNodeAccessorsMissing(t *testing.T) {
 	t.Parallel()
-	for _, kind := range []ast.Kind{-1, ast.KindUnknown, ast.KindCount, ast.KindCount + 1, ast.KindCount + 2, ast.KindCount + 3} {
-		t.Run(kind.String(), func(t *testing.T) {
+	factory := ast.NewNodeFactory(ast.NodeFactoryHooks{})
+	nodes := []*ast.Node{
+		factory.NewToken(ast.KindUnknown),
+		factory.NewToken(ast.KindEndOfFile),
+		factory.NewToken(ast.KindPlusToken),
+		ast.NewFlowSwitchClauseData(nil, 0, 0),
+		ast.NewFlowReduceLabelData(nil, nil),
+	}
+	for _, node := range nodes {
+		t.Run(node.Kind.String(), func(t *testing.T) {
 			t.Parallel()
-			node := &ast.Node{Kind: kind}
 			assert.Equal(t, node.Name(), (*ast.Node)(nil))
 			assert.Equal(t, node.Modifiers(), (*ast.ModifierList)(nil))
 			assert.Equal(t, node.DeclarationData(), (*ast.DeclarationBase)(nil))

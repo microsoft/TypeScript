@@ -828,13 +828,7 @@ function generateNodeAccessorDispatch(w: CodeWriter, method: string, ret: string
     w.write(`func (n *Node) ${method}() ${ret} {`);
     w.push();
     if (useDispatchTable) {
-        w.write("kind := uint(n.Kind)");
-        w.write(`if kind >= uint(len(${table})) {`);
-        w.push();
-        w.write("return nil");
-        w.pop();
-        w.write("}");
-        w.write(`switch ${table}[kind] {`);
+        w.write(`switch ${table}[n.Kind] {`);
     }
     else {
         w.write("switch n.Kind {");
