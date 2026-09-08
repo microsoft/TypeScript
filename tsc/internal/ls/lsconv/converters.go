@@ -336,18 +336,7 @@ func FileNameToDocumentURI(fileName string) lsproto.DocumentUri {
 		return lsproto.DocumentUri(fileName)
 	}
 	if tspath.IsDynamicFileName(fileName) {
-		scheme, rest, ok := strings.Cut(fileName[2:], "/")
-		if !ok {
-			panic("invalid file name: " + fileName)
-		}
-		authority, path, ok := strings.Cut(rest, "/")
-		if !ok {
-			panic("invalid file name: " + fileName)
-		}
-		if authority == "ts-nul-authority" {
-			return lsproto.DocumentUri(scheme + ":" + path)
-		}
-		return lsproto.DocumentUri(scheme + "://" + authority + "/" + path)
+		return lsproto.DynamicFileNameToDocumentUri(fileName)
 	}
 
 	volume, fileName, _ := tspath.SplitVolumePath(fileName)

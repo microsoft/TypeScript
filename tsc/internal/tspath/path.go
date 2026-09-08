@@ -201,6 +201,17 @@ func GetEncodedRootLength(path string) int {
 
 	// Untitled paths (e.g., "^/untitled/ts-nul-authority/Untitled-1")
 	if ch0 == '^' && ln > 1 && path[1] == '/' {
+		if strings.HasPrefix(path, DynamicURIFileNamePrefix) {
+			schemeEnd := strings.IndexByte(path[len(DynamicURIFileNamePrefix):], '/')
+			if schemeEnd != -1 {
+				schemeEnd += len(DynamicURIFileNamePrefix)
+				authorityEnd := strings.IndexByte(path[schemeEnd+1:], '/')
+				if authorityEnd != -1 {
+					return schemeEnd + authorityEnd + 2
+				}
+				return ln
+			}
+		}
 		return 2 // Untitled: "^/"
 	}
 
@@ -729,6 +740,9 @@ func ToPath(fileName string, basePath string, useCaseSensitiveFileNames bool) Pa
 		nonCanonicalizedPath = NormalizePath(fileName)
 	} else {
 		nonCanonicalizedPath = GetNormalizedAbsolutePath(fileName, basePath)
+	}
+	if IsEncodedDynamicFileName(nonCanonicalizedPath) {
+		return Path(canonicalDynamicURIPath(nonCanonicalizedPath))
 	}
 	return Path(GetCanonicalFileName(nonCanonicalizedPath, useCaseSensitiveFileNames))
 }
