@@ -5,6 +5,7 @@ import {
 import {
     all,
     API as SyncAPI,
+    defer,
     type Project as SyncProject,
 } from "@typescript/typescript/unstable/sync";
 import assert from "node:assert/strict";
@@ -54,6 +55,7 @@ export async function runBenchmarks(options?: { filter?: string; singleIteration
     addAsyncBenchmarks();
     addGeneratorBenchmarks();
     addExecutorBenchmarks();
+    addDeferBenchmarks();
 
     if (filter) {
         const pattern = filter.toLowerCase();
@@ -119,8 +121,17 @@ export async function runBenchmarks(options?: { filter?: string; singleIteration
         addGeneratorTask("independent parallel requests", context => {
             context.api.batch(...positions.map(position => context.project.checker.getSymbolAtPosition.gen("program.ts", position)));
         });
+        addGeneratorTask("independent parallel requests (batch defer)", context => {
+            context.api.batch(...positions.map(position => defer(context.project.checker.getSymbolAtPosition.gen("program.ts", position))));
+        });
         addGeneratorTask("multiple flights of independent requests", context => {
             context.api.batch(...Array.from({ length: requestsPerFlight }, (_, lane) => runRequestLane(context.project, lane)));
+        });
+        addGeneratorTask("multiple flights of independent requests (batch defer)", context => {
+            context.api.batch(...Array.from({ length: requestsPerFlight }, (_, lane) => defer(runRequestLane(context.project, lane))));
+        });
+        addGeneratorTask("multiple flights of independent requests (yield* defer)", context => {
+            context.api.batch(runDeferredRequestLanes(context.project));
         });
         addGeneratorTask("multiple flights of independent requests (repeated all)", context => {
             context.api.batch(runRequestFlights(context.project));
@@ -200,6 +211,86 @@ export async function runBenchmarks(options?: { filter?: string; singleIteration
         }
     }
 
+    function addDeferBenchmarks() {
+        const child = (function* () {
+            assert.fail("Lifecycle benchmark must not start the child");
+        })();
+        for (const helper of [all, defer]) {
+            let generators: APIRequestGenerator[] = [];
+            bench.add(`helper lifecycle - ${helper.name}`, () => {
+                generators = Array.from({ length: requestCount }, () => helper(child));
+                for (const generator of generators) {
+                    generator.next();
+                    generator.next();
+                }
+            }, {
+                async: false,
+                afterAll: () => {
+                    assert.equal(generators.length, requestCount);
+                    for (const generator of generators) assert.deepEqual(generator.next(), { done: true, value: undefined });
+                },
+            });
+        }
+
+        for (const rounds of [1, flightCount]) {
+            for (const mode of ["direct", "batch defer", "yield* defer"] as const) {
+                bench.add(`executor defer - ${rounds} flights (${mode})`, () => run(false), {
+                    async: false,
+                    beforeAll: () => {
+                        run(true);
+                    },
+                });
+
+                function run(verify: boolean) {
+                    let completed = 0;
+                    let checksum = 0;
+                    let executedRequests = 0;
+                    let executedRounds = 0;
+                    const generators = Array.from({ length: requestCount / rounds }, (_, lane) => runLane(lane));
+                    const results = executeRequestGenerators(
+                        mode === "direct" ? generators : mode === "batch defer" ? generators.map(generator => defer(generator)) : [schedule()],
+                        requests => {
+                            executedRequests += requests.length;
+                            executedRounds++;
+                            return requests.map(request => ({ result: request.params }));
+                        },
+                    );
+                    if (verify) {
+                        assert.equal(executedRequests, requestCount);
+                        assert.equal(executedRounds, rounds);
+                        assert.equal(completed, requestCount / rounds);
+                        assert.equal(checksum, requestCount * (requestCount - 1) / 2);
+                        if (mode === "batch defer") assert.deepEqual(results, []);
+                        else if (mode === "yield* defer") assert.deepEqual(results, [undefined]);
+                        else {
+                            assert.equal(
+                                results.reduce<number>((sum, value) => {
+                                    assert.ok(typeof value === "number");
+                                    return sum + value;
+                                }, 0),
+                                checksum,
+                            );
+                        }
+                    }
+
+                    function* runLane(lane: number): APIRequestGenerator<number> {
+                        let sum = 0;
+                        for (let flight = 0; flight < rounds; flight++) {
+                            sum += yield { method: "benchmark", params: flight * (requestCount / rounds) + lane } as unknown as APIRequest;
+                        }
+                        completed++;
+                        checksum += sum;
+                        return sum;
+                    }
+
+                    function* schedule() {
+                        for (const generator of generators) yield* defer(generator);
+                    }
+                }
+            }
+        }
+    }
+
     function* runDependentRequests(project: SyncProject) {
         let index = 0;
         for (let request = 0; request < requestCount; request++) {
@@ -218,6 +309,12 @@ export async function runBenchmarks(options?: { filter?: string; singleIteration
         for (let flight = 0; flight < flightCount; flight++) {
             const start = flight * requestsPerFlight;
             yield* all(...positions.slice(start, start + requestsPerFlight).map(position => project.checker.getSymbolAtPosition.gen("program.ts", position)));
+        }
+    }
+
+    function* runDeferredRequestLanes(project: SyncProject) {
+        for (let lane = 0; lane < requestsPerFlight; lane++) {
+            yield* defer(runRequestLane(project, lane));
         }
     }
 

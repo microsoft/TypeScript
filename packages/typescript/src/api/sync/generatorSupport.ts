@@ -23,6 +23,7 @@ export function* apiRequest(method: PropertyKey, params: unknown): Generator<{ m
     return yield { method, params };
 }
 const deferredGeneratorMarker: unique symbol = Symbol();
+const allGeneratorMarker: unique symbol = Symbol();
 interface DeferredAPIRequest {
     readonly method: "__defer";
     readonly deferred: APIRequestGenerator;
@@ -61,6 +62,7 @@ interface GeneratorGroup {
     parent: GeneratorState | undefined;
     children: GeneratorState[];
     results: unknown[];
+    wrappers?: AllRequestGenerator<unknown>[] | undefined;
     remaining: number;
     initializing: boolean;
     failed: boolean;
@@ -69,11 +71,54 @@ interface GeneratorGroup {
 
 export function all<const T extends readonly AnyAPIRequestGenerator[]>(
     ...requestGenerators: T
-): AllAPIRequestGenerator<ExecutedGeneratorsResults<T>>;
-export function* all<T extends readonly AnyAPIRequestGenerator[]>(
-    ...requestGenerators: T
 ): AllAPIRequestGenerator<ExecutedGeneratorsResults<T>> {
-    return yield { method: "__all", generators: requestGenerators };
+    return new AllRequestGenerator(requestGenerators);
+}
+
+/**
+ * This single-message iterator avoids native generator setup/resumption overhead.
+ * Keeping pending children on the instance also lets the executor collapse nested
+ * all helpers without allocating a scheduler group for each wrapper.
+ */
+class AllRequestGenerator<Return> implements AllAPIRequestGenerator<Return> {
+    readonly [allGeneratorMarker] = true;
+    generators: readonly AnyAPIRequestGenerator[] | undefined;
+    private done = false;
+
+    constructor(generators: readonly AnyAPIRequestGenerator[]) {
+        this.generators = generators;
+    }
+
+    next(value?: Return): IteratorResult<AllAPIRequest, Return> {
+        if (this.generators) {
+            const generators = this.generators;
+            this.generators = undefined;
+            return { done: false, value: { method: "__all", generators } };
+        }
+        if (this.done) return { done: true, value: undefined as Return };
+        this.done = true;
+        return { done: true, value: value as Return };
+    }
+
+    return(value: Return): IteratorResult<AllAPIRequest, Return> {
+        this.generators = undefined;
+        this.done = true;
+        return { done: true, value };
+    }
+
+    throw(error?: unknown): IteratorResult<AllAPIRequest, Return> {
+        this.generators = undefined;
+        this.done = true;
+        throw error;
+    }
+
+    [Symbol.iterator](): AllAPIRequestGenerator<Return> {
+        return this;
+    }
+
+    [Symbol.dispose](): void {
+        this.return(undefined as Return);
+    }
 }
 
 export function executeRequestGenerators<T extends readonly AnyAPIRequestGenerator[]>(
@@ -120,7 +165,7 @@ export function executeRequestGenerators<T extends readonly AnyAPIRequestGenerat
             }
         }
     }
-    return root.results as ExecutedGeneratorsResults<T>;
+    return getGroupResults(root) as ExecutedGeneratorsResults<T>;
 
     function advanceGenerator(state: GeneratorState, value?: unknown, failure?: { error: unknown; }): void {
         state.request = undefined;
@@ -143,8 +188,9 @@ export function executeRequestGenerators<T extends readonly AnyAPIRequestGenerat
                 const parent = state.parent;
                 if (parent) {
                     if (state.resultIndex !== -1) parent.results[state.resultIndex] = next.value;
-                    if (--parent.remaining === 0 && !parent.initializing && parent.parent) {
-                        advanceGenerator(parent.parent, parent.results);
+                    if (--parent.remaining === 0 && !parent.initializing) {
+                        const results = getGroupResults(parent);
+                        if (parent.parent) advanceGenerator(parent.parent, results);
                     }
                 }
                 return;
@@ -162,7 +208,7 @@ export function executeRequestGenerators<T extends readonly AnyAPIRequestGenerat
                     const group = startGroup(request.generators, state);
                     if (!group.failed && group.remaining) return;
                     state.group = undefined;
-                    value = group.results;
+                    value = group.failed ? undefined : getGroupResults(group);
                     failure = group.failed ? { error: group.error } : undefined;
                     break;
                 }
@@ -213,18 +259,59 @@ export function executeRequestGenerators<T extends readonly AnyAPIRequestGenerat
     function startGroup(generators: readonly AnyAPIRequestGenerator[], parent?: GeneratorState): GeneratorGroup {
         const group: GeneratorGroup = { parent, children: [], results: [], remaining: generators.length, initializing: true, failed: false };
         if (parent) parent.group = group;
+        while (parent && generators.length === 1) {
+            const generator = generators[0];
+            if (!(allGeneratorMarker in generator)) break;
+            const wrapper = generator as AllRequestGenerator<unknown>;
+            const pending = wrapper.generators;
+            if (!pending) break;
+            if (registeredGenerators.has(wrapper)) {
+                failGroup(group, new Error("Cannot execute the same generator instance more than once"));
+                group.initializing = false;
+                return group;
+            }
+            registeredGenerators.add(wrapper);
+            wrapper.next();
+            (group.wrappers ??= []).push(wrapper);
+            generators = pending;
+        }
+        group.remaining = generators.length;
         for (const generator of generators) {
             addGenerator(generator, group);
             if (group.failed) break;
         }
         group.initializing = false;
+        if (!group.failed && !group.remaining) getGroupResults(group);
         return group;
+    }
+
+    function getGroupResults(group: GeneratorGroup): unknown[] {
+        let results = group.results;
+        if (group.wrappers) {
+            for (let index = group.wrappers.length - 1; index >= 0; index--) {
+                results = [group.wrappers[index].next(results).value];
+            }
+            group.results = results;
+            group.wrappers = undefined;
+        }
+        return results;
     }
 
     function failGroup(group: GeneratorGroup, error: unknown): void {
         group.failed = true;
         group.error = error;
         cancelGroup(group);
+        if (group.wrappers) {
+            for (let index = group.wrappers.length - 1; index >= 0; index--) {
+                try {
+                    group.wrappers[index].throw(error);
+                }
+                catch (failure) {
+                    error = failure;
+                }
+            }
+            group.error = error;
+        }
         if (!group.initializing) {
             if (!group.parent) throw error;
             advanceGenerator(group.parent, undefined, { error });
@@ -257,9 +344,46 @@ function getRequestDeduplicationKey(request: APIRequest): string | undefined {
 }
 
 export function defer(gen: APIRequestGenerator): DeferredAPIRequestGenerator {
-    const deferred = (function* (): Generator<DeferredAPIRequest, void, unknown> {
-        yield { method: "__defer", deferred: gen };
-    })() as DeferredAPIRequestGenerator;
-    Object.defineProperty(deferred, deferredGeneratorMarker, { value: true });
-    return deferred;
+    return new DeferredRequestGenerator(gen);
+}
+
+/**
+ * The API comparison benchmarks show this single-message iterator is cheaper than
+ * wrapping and branding a native generator, even with a shared generator factory.
+ * Shared prototype methods also avoid creating a generator function per defer call.
+ */
+class DeferredRequestGenerator implements DeferredAPIRequestGenerator {
+    readonly [deferredGeneratorMarker] = true;
+    private generator: APIRequestGenerator | undefined;
+
+    constructor(generator: APIRequestGenerator) {
+        this.generator = generator;
+    }
+
+    next(): IteratorResult<DeferredAPIRequest, void> {
+        if (this.generator) {
+            const generator = this.generator;
+            this.generator = undefined;
+            return { done: false, value: { method: "__defer", deferred: generator } };
+        }
+        return { done: true, value: undefined };
+    }
+
+    return(value: void): IteratorResult<DeferredAPIRequest, void> {
+        this.generator = undefined;
+        return { done: true, value };
+    }
+
+    throw(error?: unknown): IteratorResult<DeferredAPIRequest, void> {
+        this.generator = undefined;
+        throw error;
+    }
+
+    [Symbol.iterator](): DeferredAPIRequestGenerator {
+        return this;
+    }
+
+    [Symbol.dispose](): void {
+        this.return(undefined);
+    }
 }
