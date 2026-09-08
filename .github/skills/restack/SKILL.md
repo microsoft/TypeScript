@@ -4,14 +4,14 @@ description: How to re-stack your PR commits to fit standard TypeScript PR forma
 ---
 
 You need to "re-stack" your commits to match the following format:
- * A failing testcase
- * A commit, or series of commits, that fixes the failing testcase
+ * A failing test case
+ * A commit, or series of commits, that fixes the failing test case
  * (Optional) a follow-up commit that checks in any modified baselines
 
 Since you can't force-push, start with a commit that undoes all your prior changes and gets you back to `main`.
 
-Then add your testcase(s) in a single commit.
-A testcase isn't necessarily a new file; it could be a modification to an existing test or a change in the test configuration.
+Then add your test case(s) in a single commit.
+A test case isn't necessarily a new file; it could be a modification to an existing test or a change in the test configuration.
 Ensure that at least one test in the full run fails - you might be operating on a bad PR that didn't actually introduce a failing scenario!
 If zero tests failed, abort and post a message explaining what you observed.
 Remember that baseline tests do not "fail" in the traditional sense; they are used to verify that the output matches the expected baseline.
