@@ -735,6 +735,43 @@ func TestSnapshotFS(t *testing.T) {
 	})
 }
 
+func TestSourceFSTrackedOriginalNames(t *testing.T) {
+	t.Parallel()
+
+	toPath := func(name string) tspath.Path {
+		return tspath.ToPath(name, "/src", false)
+	}
+	source := newSourceFS(true, &SnapshotFS{fs: vfstest.FromMap(map[string]string{}, false)}, toPath)
+	for _, name := range []string{"/src/K.ts", "/src/ſ.ts", "/src/s.ts"} {
+		source.Track(name)
+		original, ok := source.seenFiles.Load(toPath(name))
+		assert.Assert(t, ok)
+		assert.Equal(t, original, name)
+	}
+	source.Track("/src/k.ts")
+	original, ok := source.seenFiles.Load(toPath("/src/k.ts"))
+	assert.Assert(t, ok)
+	assert.Equal(t, original, "/src/K.ts")
+	assert.Equal(t, source.seenFiles.Size(), 3)
+
+	const missing = "/src/K/Missing"
+	assert.Assert(t, !source.DirectoryExists(missing))
+	original, ok = source.missingDirectories.Load(toPath(missing))
+	assert.Assert(t, ok)
+	assert.Equal(t, original, missing)
+	assert.Assert(t, !source.SeenFile(toPath(missing)))
+	assert.Assert(t, source.SeenFileOrMissingParentDirectory(toPath(missing+"/child/file.ts")))
+	assert.Assert(t, !source.SeenFileOrMissingParentDirectory(toPath("/src/K/Other/file.ts")))
+
+	source.DisableTracking()
+	source.Track("/src/Other.ts")
+	assert.Assert(t, !source.DirectoryExists("/src/Other"))
+	assert.Assert(t, !source.SeenFile(toPath("/src/Other.ts")))
+	assert.Assert(t, !source.SeenFileOrMissingParentDirectory(toPath("/src/Other/child.ts")))
+	assert.Equal(t, source.seenFiles.Size(), 3)
+	assert.Equal(t, source.missingDirectories.Size(), 1)
+}
+
 func TestSourceFS(t *testing.T) {
 	t.Parallel()
 

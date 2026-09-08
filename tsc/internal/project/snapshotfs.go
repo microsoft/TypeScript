@@ -64,7 +64,8 @@ type SnapshotFS struct {
 	// nodeModulesRealpathAliases maps realpath-based keys to sets of symlink-based keys,
 	// for files inside node_modules that are accessed through directory symlinks.
 	// This allows watch events (which use realpaths) to invalidate files cached under symlink paths.
-	nodeModulesRealpathAliases map[tspath.Path]*realpathAliasSet
+	nodeModulesRealpathAliases     map[tspath.Path]*realpathAliasSet
+	nodeModulesRealpathDirectories map[tspath.Path]collections.Set[tspath.Path]
 }
 
 type memoizedDiskFile func() FileHandle
@@ -275,15 +276,30 @@ func (s *snapshotFSBuilder) Finalize() (*SnapshotFS, bool) {
 	}
 
 	nodeModulesRealpathAliases, aliasesChanged := s.nodeModulesRealpathAliases.Finalize()
+	var realpathDirectories map[tspath.Path]collections.Set[tspath.Path]
+	if len(nodeModulesRealpathAliases) > 0 {
+		realpathDirectories = make(map[tspath.Path]collections.Set[tspath.Path])
+		for path := range nodeModulesRealpathAliases {
+			for parent := path.GetDirectoryPath(); parent != path; parent = path.GetDirectoryPath() {
+				children := realpathDirectories[parent]
+				if !children.AddIfAbsent(path) {
+					break
+				}
+				realpathDirectories[parent] = children
+				path = parent
+			}
+		}
+	}
 
 	return &SnapshotFS{
-		fs:                         s.fs,
-		overlays:                   s.overlays,
-		overlayDirectories:         s.overlayDirectories,
-		diskFiles:                  diskFiles,
-		diskDirectories:            core.FirstResult(s.diskDirectories.Finalize()),
-		nodeModulesRealpathAliases: nodeModulesRealpathAliases,
-		toPath:                     s.toPath,
+		fs:                             s.fs,
+		overlays:                       s.overlays,
+		overlayDirectories:             s.overlayDirectories,
+		diskFiles:                      diskFiles,
+		diskDirectories:                core.FirstResult(s.diskDirectories.Finalize()),
+		nodeModulesRealpathAliases:     nodeModulesRealpathAliases,
+		nodeModulesRealpathDirectories: realpathDirectories,
+		toPath:                         s.toPath,
 	}, changed || aliasesChanged
 }
 
@@ -364,6 +380,7 @@ func (s *snapshotFSBuilder) recordRealpathAlias(diskFileEntry *dirty.SyncMapEntr
 	if realpathPath != symlinkPath {
 		diskFileEntry.Change(func(file *diskFile) {
 			file.realpathPath = realpathPath
+			file.realpathName = realpath
 		})
 		entry, _ := s.nodeModulesRealpathAliases.LoadOrStore(realpathPath, &realpathAliasSet{})
 		entry.Change(func(aliasSet *realpathAliasSet) {
@@ -447,6 +464,9 @@ func (s *snapshotFSBuilder) watchChangesOverlapCache(change FileChangeSummary) b
 	}
 	for uri := range change.Deleted.Keys() {
 		path := s.toPath(uri.FileName())
+		if _, ok := s.diskDirectories.Get(path); ok {
+			return true
+		}
 		if _, ok := s.diskFiles.Load(path); ok {
 			return true
 		}
@@ -571,13 +591,23 @@ func (s *SnapshotFS) expandRealpathAliases(change FileChangeSummary) FileChangeS
 	}
 
 	var additionalDeleted collections.Set[lsproto.DocumentUri]
-	for uri := range change.Deleted.Keys() {
-		path := s.toPath(uri.FileName())
-		if aliases, ok := s.nodeModulesRealpathAliases[path]; ok {
+	var collectDeleted func(tspath.Path)
+	collectDeleted = func(path tspath.Path) {
+		if aliases := s.nodeModulesRealpathAliases[path]; aliases != nil {
 			for aliasPath := range aliases.paths.Keys() {
 				additionalDeleted.Add(lsconv.FileNameToDocumentURI(string(aliasPath)))
 			}
 		}
+		children := s.nodeModulesRealpathDirectories[path]
+		for child := range children.Keys() {
+			collectDeleted(child)
+		}
+	}
+	for uri := range change.Deleted.Keys() {
+		path := s.toPath(uri.FileName())
+		// A physical directory may have no diskDirectories entry: only its
+		// node_modules symlink spelling was used to load these files.
+		collectDeleted(path)
 	}
 	for uri := range additionalDeleted.Keys() {
 		change.Deleted.Add(uri)
@@ -721,8 +751,8 @@ func (s *snapshotFSBuilder) convertOpenAndCloseToChanges(change FileChangeSummar
 type sourceFS struct {
 	tracking           bool
 	toPath             func(fileName string) tspath.Path
-	missingDirectories *collections.SyncSet[tspath.Path]
-	seenFiles          *collections.SyncSet[tspath.Path]
+	missingDirectories *collections.SyncMap[tspath.Path, string]
+	seenFiles          *collections.SyncMap[tspath.Path, string]
 	source             FileSource
 }
 
@@ -733,8 +763,8 @@ func newSourceFS(tracking bool, source FileSource, toPath func(fileName string) 
 		source:   source,
 	}
 	if tracking {
-		fs.seenFiles = &collections.SyncSet[tspath.Path]{}
-		fs.missingDirectories = &collections.SyncSet[tspath.Path]{}
+		fs.seenFiles = &collections.SyncMap[tspath.Path, string]{}
+		fs.missingDirectories = &collections.SyncMap[tspath.Path, string]{}
 	}
 	return fs
 }
@@ -749,23 +779,24 @@ func (fs *sourceFS) Track(fileName string) {
 	if !fs.tracking {
 		return
 	}
-	fs.seenFiles.Add(fs.toPath(fileName))
+	fs.seenFiles.LoadOrStore(fs.toPath(fileName), fileName)
 }
 
 func (fs *sourceFS) SeenFile(path tspath.Path) bool {
 	if fs.seenFiles == nil {
 		return false
 	}
-	return fs.seenFiles.Has(path)
+	_, ok := fs.seenFiles.Load(path)
+	return ok
 }
 
 func (fs *sourceFS) SeenFileOrMissingParentDirectory(path tspath.Path) bool {
-	if fs.seenFiles != nil && fs.seenFiles.Has(path) {
+	if fs.SeenFile(path) {
 		return true
 	}
-	if fs.missingDirectories != nil && !fs.missingDirectories.IsEmpty() {
+	if fs.missingDirectories != nil {
 		for {
-			if fs.missingDirectories.Has(path) {
+			if _, ok := fs.missingDirectories.Load(path); ok {
 				return true
 			}
 
@@ -793,7 +824,7 @@ func (fs *sourceFS) GetFileByPath(fileName string, path tspath.Path) FileHandle 
 func (fs *sourceFS) DirectoryExists(path string) bool {
 	exists := fs.source.FS().DirectoryExists(path)
 	if !exists && fs.tracking {
-		fs.missingDirectories.Add(fs.toPath(path))
+		fs.missingDirectories.LoadOrStore(fs.toPath(path), path)
 	}
 	return exists
 }

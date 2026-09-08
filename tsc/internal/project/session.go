@@ -424,7 +424,16 @@ func (s *Session) DidChangeWatchedFiles(ctx context.Context, changes []*lsproto.
 	snapshot := s.Snapshot()
 	configFileRegistry := snapshot.ConfigFileRegistry
 	contentMapperExtensions, contentMapperWatchedFiles := snapshot.contentMapperWatchState()
+	var expandedChanges []*lsproto.FileEvent
 	for _, change := range changes {
+		for _, name := range snapshot.watchNames(change.Uri.FileName()) {
+			expandedChanges = append(expandedChanges, &lsproto.FileEvent{
+				Uri:  lsconv.FileNameToDocumentURI(name),
+				Type: change.Type,
+			})
+		}
+	}
+	for _, change := range expandedChanges {
 		var kind FileChangeKind
 		switch change.Type {
 		case lsproto.FileChangeTypeCreated:
@@ -440,6 +449,12 @@ func (s *Session) DidChangeWatchedFiles(ctx context.Context, changes []*lsproto.
 			Kind: kind,
 			URI:  change.Uri,
 		})
+
+		if snapshot.watchAliasesError != nil {
+			// A failed index cannot rule out aliases of source or config files.
+			hasRelevantChange = true
+			hasConfigChange = true
+		}
 
 		if !hasConfigChange && configFileRegistry.isTracked(s.toPath(change.Uri.FileName())) {
 			hasConfigChange = true
@@ -462,9 +477,9 @@ func (s *Session) DidChangeWatchedFiles(ctx context.Context, changes []*lsproto.
 					hasRelevantChange = s.fs.fs.DirectoryExists(fileName)
 				} else {
 					s.snapshotMu.RLock()
-					snapshot := s.snapshot
+					currentSnapshot := s.snapshot
 					s.snapshotMu.RUnlock()
-					if _, ok := snapshot.fs.diskDirectories[path]; ok || isNodeModulesPath(path) {
+					if _, ok := currentSnapshot.fs.diskDirectories[path]; ok || isNodeModulesPath(path) {
 						hasRelevantChange = true
 					}
 				}
@@ -623,7 +638,7 @@ func (s *Session) ScheduleSnapshotUpdate(reason UpdateReason) {
 		defer s.snapshotUpdateMu.Unlock()
 
 		fileChanges, overlays, ataChanges, newConfig := s.flushChanges(ctx)
-		if fileChanges.IsEmpty() && len(ataChanges) == 0 && newConfig == nil {
+		if fileChanges.IsEmpty() && !s.watchAliasesNeedRefresh(fileChanges) && len(ataChanges) == 0 && newConfig == nil {
 			return
 		}
 
@@ -1035,7 +1050,7 @@ func (s *Session) getSnapshot(
 	s.cancelScheduledSnapshotUpdate()
 
 	fileChanges, overlays, ataChanges, newConfig := s.flushChanges(ctx)
-	updateSnapshot := !fileChanges.IsEmpty() || len(ataChanges) > 0 || newConfig != nil
+	updateSnapshot := !fileChanges.IsEmpty() || s.watchAliasesNeedRefresh(fileChanges) || len(ataChanges) > 0 || newConfig != nil
 	if updateSnapshot {
 		// If there are pending file changes, we need to update the snapshot.
 		// Sending the requested URI ensures that the project for this URI is loaded.

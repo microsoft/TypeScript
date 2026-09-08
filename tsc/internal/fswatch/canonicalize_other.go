@@ -16,3 +16,9 @@ func canonicalizePath(p string) string { return p }
 func (w *watcher) pathComparer(dir string) (pathComparer, error) {
 	return pathComparer{}, nil
 }
+
+// PathComparerForPath returns exact comparison on platforms without native
+// Darwin watch aliases. It does not inspect the host filesystem.
+func PathComparerForPath(path string) (PathComparer, error) {
+	return PathComparer{}, nil
+}

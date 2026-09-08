@@ -49,6 +49,10 @@ type FileChangeSummary struct {
 	IncludesWatchChangeOutsideNodeModules bool
 	// InvalidateAll indicates that all cached file state should be discarded.
 	InvalidateAll bool
+
+	// Preserve events hidden by overlay coalescing and content filtering. Alias
+	// directory comparers and realpaths must be refreshed even when file text is unchanged.
+	hasFileSystemChanges bool
 }
 
 func (f FileChangeSummary) IsEmpty() bool {
@@ -65,6 +69,7 @@ func (f FileChangeSummary) HasExcessiveNonCreateWatchEvents() bool {
 
 // mergeFileChangeSummary merges src into dst, combining their change sets.
 func mergeFileChangeSummary(dst *FileChangeSummary, src FileChangeSummary) {
+	dst.hasFileSystemChanges = dst.hasFileSystemChanges || src.hasFileSystemChanges
 	if src.IsEmpty() {
 		return
 	}

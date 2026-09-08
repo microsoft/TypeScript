@@ -24,6 +24,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/sourcemap"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfsmatch"
+	"github.com/microsoft/TypeScript/tsc/internal/watchalias"
 )
 
 type Snapshot struct {
@@ -47,6 +48,9 @@ type Snapshot struct {
 	contentMapperWatchStateOnce            sync.Once
 	contentMapperExtensions                []string
 	contentMapperWatchedFiles              *collections.Set[tspath.Path]
+	watchAliases                           *watchalias.Index
+	watchRealpaths                         map[tspath.Path]string
+	watchAliasesError                      error
 
 	builderLogs *logging.LogTree
 	apiError    error
@@ -126,6 +130,7 @@ func (s *Snapshot) cloneForProgram(
 	}
 
 	start := time.Now()
+	reuseWatchAliases := s.watchAliasChangesAreContentOnly(fileChanges, s.fs.overlays)
 	fs := newSnapshotFSBuilder(store.fs, s.fs.overlays, s.fs.overlays, s.fs.diskFiles, s.fs.diskDirectories, s.fs.nodeModulesRealpathAliases, store.options.PositionEncoding, store.toPath)
 	fileChanges = s.processFileChanges(fs, fileChanges, logger, nil)
 
@@ -232,6 +237,7 @@ func (s *Snapshot) cloneForProgram(
 	if logger != nil {
 		logger.Logf("Finished cloning snapshot %d into snapshot %d for program in %v", s.id, newSnapshot.id, time.Since(start))
 	}
+	newSnapshot.initializeWatchAliasesFrom(s, reuseWatchAliases, sessionLogger)
 	return newSnapshot
 }
 
@@ -260,12 +266,13 @@ func (s *Snapshot) cloneWithTemporaryFile(
 	}
 	overlays[path] = newOverlay(uri.FileName(), newText, version, scriptKind)
 
-	return s.Clone(ctx, SnapshotChange{
+	snapshot := s.Clone(ctx, SnapshotChange{
 		fileChanges: fileChanges,
 		ResourceRequest: ResourceRequest{
 			Documents: []lsproto.DocumentUri{uri},
 		},
-	}, overlays, nil), nil
+	}, overlays, nil)
+	return snapshot, snapshot.apiError
 }
 
 func (s *Snapshot) processFileChanges(
@@ -274,6 +281,8 @@ func (s *Snapshot) processFileChanges(
 	logger *logging.LogTree,
 	contentMapperContributions *ContentMapperContributions,
 ) FileChangeSummary {
+	fileChanges = s.expandWatchAliases(fileChanges)
+	fileChanges = s.fs.expandRealpathAliases(fileChanges)
 	if fileChanges.HasExcessiveWatchEvents() {
 		invalidateStart := time.Now()
 		if fileChanges.InvalidateAll {
@@ -281,7 +290,7 @@ func (s *Snapshot) processFileChanges(
 			if logger != nil {
 				logger.Logf("InvalidateAll: invalidated file cache in %v", time.Since(invalidateStart))
 			}
-		} else if !fs.watchChangesOverlapCache(fileChanges) {
+		} else if !fs.watchChangesOverlapCache(fileChanges) && !s.watchChangesOverlapProjectState(fileChanges) {
 			// All watch changes/deletes are files we haven't seen; should be irrelevant to us (probably an external tool's build or something)
 			fileChanges.Changed = collections.Set[lsproto.DocumentUri]{}
 			fileChanges.Deleted = collections.Set[lsproto.DocumentUri]{}
@@ -308,7 +317,6 @@ func (s *Snapshot) processFileChanges(
 		}
 		_, contentMapperWatchedFiles := s.contentMapperWatchState()
 		fileChanges = fs.expandAndFilterWatchEvents(fileChanges, contentMapperExtensions, contentMapperWatchedFiles)
-		fileChanges = s.fs.expandRealpathAliases(fileChanges)
 		fileChanges = fs.markDirtyFiles(fileChanges)
 		fileChanges = fs.convertOpenAndCloseToChanges(fileChanges)
 	}
@@ -538,6 +546,7 @@ func (s *Snapshot) Clone(
 	}
 
 	start := time.Now()
+	reuseWatchAliases := s.watchAliasChangesAreContentOnly(change.fileChanges, overlays)
 	inferredContentMappers := s.inferredProjectContentMappers
 	inferredContentMapperExtensions := s.inferredProjectContentMapperExtensions
 	if change.contentMapperContributions != nil {
@@ -750,6 +759,7 @@ func (s *Snapshot) Clone(
 	autoImportHost.Dispose()
 
 	logger.Logf("Finished cloning snapshot %d into snapshot %d in %v", s.id, newSnapshot.id, time.Since(start))
+	newSnapshot.initializeWatchAliasesFrom(s, reuseWatchAliases, sessionLogger)
 	return newSnapshot
 }
 

@@ -5,7 +5,9 @@ import (
 	"time"
 
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
+	"github.com/microsoft/TypeScript/tsc/internal/fswatch"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
+	"github.com/microsoft/TypeScript/tsc/internal/watchalias"
 )
 
 type FS struct {
@@ -139,6 +141,19 @@ func (fsys *FS) Stat(path string) vfs.FileInfo {
 
 func (fsys *FS) UseCaseSensitiveFileNames() bool {
 	return fsys.fs.UseCaseSensitiveFileNames()
+}
+
+func (fsys *FS) WatchPathComparer(directory string) (fswatch.PathComparer, error) {
+	if provider, ok := fsys.fs.(interface {
+		WatchPathComparer(directory string) (fswatch.PathComparer, error)
+	}); ok {
+		return provider.WatchPathComparer(directory)
+	}
+	return fswatch.PathComparer{}, nil
+}
+
+func (fsys *FS) WatchPathComparisonEnabled() bool {
+	return watchalias.Enabled(fsys.fs)
 }
 
 func (fsys *FS) WalkDir(root string, walkFn vfs.WalkDirFunc) error {

@@ -74,6 +74,7 @@ type diskFile struct {
 	fileBase
 	needsReload  bool
 	realpathPath tspath.Path
+	realpathName string
 }
 
 func newDiskFile(fileName string, content string) *diskFile {
@@ -107,6 +108,7 @@ func (f *diskFile) Kind() core.ScriptKind {
 func (f *diskFile) Clone() *diskFile {
 	return &diskFile{
 		realpathPath: f.realpathPath,
+		realpathName: f.realpathName,
 		fileBase: fileBase{
 			fileName: f.fileName,
 			content:  f.content,
@@ -240,6 +242,9 @@ func (fs *overlayFS) processChanges(changes []FileChange) (FileChangeSummary, ma
 	fileEventMap := make(map[lsproto.DocumentUri]*fileEvents)
 
 	for _, change := range changes {
+		if change.Kind.IsWatchKind() || change.Kind == FileChangeKindSave {
+			result.hasFileSystemChanges = true
+		}
 		uri := change.URI
 		events, exists := fileEventMap[uri]
 		if exists {

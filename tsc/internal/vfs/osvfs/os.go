@@ -12,6 +12,7 @@ import (
 	"unicode"
 
 	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/fswatch"
 	"github.com/microsoft/TypeScript/tsc/internal/nativepath"
 	"github.com/microsoft/TypeScript/tsc/internal/osutil"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
@@ -89,6 +90,15 @@ func swapCase(str string) string {
 
 func (vfs *osFS) UseCaseSensitiveFileNames() bool {
 	return isFileSystemCaseSensitive
+}
+
+func (vfs *osFS) WatchPathComparer(directory string) (fswatch.PathComparer, error) {
+	defer blockingOpSema.Acquire()()
+	return fswatch.PathComparerForPath(directory)
+}
+
+func (vfs *osFS) WatchPathComparisonEnabled() bool {
+	return fswatch.NativePathComparisonAvailable
 }
 
 func (vfs *osFS) ReadFile(path string) (contents string, ok bool) {

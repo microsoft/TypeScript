@@ -18,12 +18,19 @@ func (w *watcher) pathComparer(dir string) (pathComparer, error) {
 	if w.name != "fsevents" && w.name != "kqueue" {
 		return pathComparer{}, nil
 	}
+	c, err := PathComparerForPath(dir)
+	return c.comparer, err
+}
+
+// PathComparerForPath queries an existing path's volume. Errors are returned to
+// the caller; a failed query must not silently enable or disable native folding.
+func PathComparerForPath(path string) (PathComparer, error) {
 	// _PC_CASE_SENSITIVE from sys/unistd.h. Query the watched volume rather
 	// than assuming every volume mounted on macOS is case-insensitive.
 	const pcCaseSensitive = 11
-	sensitive, err := unix.Pathconf(dir, pcCaseSensitive)
+	sensitive, err := unix.Pathconf(path, pcCaseSensitive)
 	if err != nil {
-		return pathComparer{}, &os.PathError{Op: "pathconf", Path: dir, Err: err}
+		return PathComparer{}, &os.PathError{Op: "pathconf", Path: path, Err: err}
 	}
-	return pathComparer{ignoreCase: sensitive == 0}, nil
+	return PathComparer{comparer: pathComparer{ignoreCase: sensitive == 0}}, nil
 }

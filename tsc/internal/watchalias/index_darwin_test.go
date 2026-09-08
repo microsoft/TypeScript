@@ -1,0 +1,173 @@
+//go:build darwin && (amd64 || arm64)
+
+package watchalias
+
+import (
+	"fmt"
+	"reflect"
+	"slices"
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fswatch"
+)
+
+func nativeComparer(t testing.TB) fswatch.PathComparer {
+	t.Helper()
+	c, err := fswatch.PathComparerForPath(".")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if c.Key("A") == "A" {
+		t.Skip("test requires a case-insensitive volume")
+	}
+	return c
+}
+
+func TestNativeAliasesAndAncestors(t *testing.T) {
+	t.Parallel()
+	c := nativeComparer(t)
+	f := &comparerFS{get: func(string) (fswatch.PathComparer, error) { return c, nil }}
+	index := New(f)
+	for _, path := range []string{"/work/straße/İ.ts", "/work/STRASSE/i\u0307.ts", "/work/straße/İ.ts"} {
+		if err := index.Add(path); err != nil {
+			t.Fatal(err)
+		}
+	}
+	before := len(f.calls)
+	for _, test := range []struct {
+		event string
+		want  []string
+	}{
+		{"/work/strasse/i\u0307.ts", []string{"/work/straße/İ.ts", "/work/STRASSE/i\u0307.ts"}},
+		{"/work/strasse/new/tsconfig.json", []string{"/work/straße/new/tsconfig.json", "/work/STRASSE/new/tsconfig.json"}},
+		{"/work/strasse/new/generated.ts", []string{"/work/straße/new/generated.ts", "/work/STRASSE/new/generated.ts"}},
+	} {
+		got := index.Expand(test.event)
+		if got[0] != test.event {
+			t.Fatalf("original event lost: %q", got)
+		}
+		for _, want := range test.want {
+			if !slices.Contains(got, want) {
+				t.Errorf("Expand(%q) = %q, missing %q", test.event, got, want)
+			}
+		}
+		unique := make(map[string]bool)
+		for _, name := range got {
+			if unique[name] {
+				t.Errorf("duplicate expansion: %q", got)
+			}
+			unique[name] = true
+		}
+	}
+	for _, event := range []string{"/work/strasse2/new.ts", "/work/strasse/\u0131.ts"} {
+		if got := index.Expand(event); slices.Contains(got, "/work/straße/İ.ts") {
+			t.Errorf("unrelated file matched: %q", got)
+		}
+	}
+	if len(f.calls) != before {
+		t.Fatal("Expand probed filesystem")
+	}
+}
+
+func TestVolumeComparersAreIndependent(t *testing.T) {
+	t.Parallel()
+	native := nativeComparer(t)
+	f := &comparerFS{get: func(path string) (fswatch.PathComparer, error) {
+		if path == "/sensitive" {
+			return fswatch.PathComparer{}, nil
+		}
+		return native, nil
+	}}
+	index := New(f)
+	for _, path := range []string{"/sensitive/straße.ts", "/insensitive/straße.ts"} {
+		if err := index.Add(path); err != nil {
+			t.Fatal(err)
+		}
+	}
+	if got := index.Expand("/sensitive/STRASSE.ts"); !reflect.DeepEqual(got, []string{"/sensitive/STRASSE.ts"}) {
+		t.Fatalf("sensitive volume aliased: %q", got)
+	}
+	if got := index.Expand("/insensitive/STRASSE.ts"); !slices.Contains(got, "/insensitive/straße.ts") {
+		t.Fatalf("insensitive volume did not alias: %q", got)
+	}
+}
+
+func TestNativeVolumeDoesNotFoldSensitiveAncestors(t *testing.T) {
+	t.Parallel()
+	native := nativeComparer(t)
+	f := &comparerFS{get: func(path string) (fswatch.PathComparer, error) {
+		if path == "/" {
+			return fswatch.PathComparer{}, nil
+		}
+		return native, nil
+	}}
+	index := New(f)
+	if err := index.Add("/CaseMount/straße.ts"); err != nil {
+		t.Fatal(err)
+	}
+	event := "/casemount/STRASSE.ts"
+	if got := index.Expand(event); !reflect.DeepEqual(got, []string{event}) {
+		t.Fatalf("native volume folded its sensitive mount name: %q", got)
+	}
+	if got := index.Expand("/CaseMount/STRASSE.ts"); !slices.Contains(got, "/CaseMount/straße.ts") {
+		t.Fatalf("native leaf alias lost: %q", got)
+	}
+}
+
+func BenchmarkIndex(b *testing.B) {
+	c := nativeComparer(b)
+	for _, count := range []int{1000, 10000, 50000} {
+		for _, spelling := range []string{"ascii", "unicode"} {
+			names := make([]string, count)
+			for i := range names {
+				dir := "Package"
+				if spelling == "unicode" {
+					dir = "Straße"
+				}
+				names[i] = fmt.Sprintf("/work/%s%d/File%d.ts", dir, i/10, i)
+			}
+			makeIndex := func() *Index {
+				f := &comparerFS{get: func(string) (fswatch.PathComparer, error) { return c, nil }}
+				index := New(f)
+				for _, name := range names {
+					if err := index.Add(name); err != nil {
+						b.Fatal(err)
+					}
+				}
+				return index
+			}
+			b.Run(fmt.Sprintf("%s/%d/construct", spelling, count), func(b *testing.B) {
+				b.ReportAllocs()
+				for b.Loop() {
+					makeIndex()
+				}
+			})
+			index := makeIndex()
+			event := fmt.Sprintf("/work/package%d/file%d.ts", (count-1)/10, count-1)
+			if spelling == "unicode" {
+				event = fmt.Sprintf("/work/STRASSE%d/file%d.ts", (count-1)/10, count-1)
+			}
+			b.Run(fmt.Sprintf("%s/%d/match", spelling, count), func(b *testing.B) {
+				b.ReportAllocs()
+				for b.Loop() {
+					index.Expand(event)
+				}
+			})
+			if spelling == "unicode" {
+				unicodeEvent := fmt.Sprintf("/work/straße%d/file%d.ts", (count-1)/10, count-1)
+				b.Run(fmt.Sprintf("%s/%d/match-native", spelling, count), func(b *testing.B) {
+					b.ReportAllocs()
+					for b.Loop() {
+						index.Expand(unicodeEvent)
+					}
+				})
+			}
+			b.Run(fmt.Sprintf("%s/%d/unknown", spelling, count), func(b *testing.B) {
+				b.ReportAllocs()
+				for b.Loop() {
+					index.Expand(event + "/new/generated.ts")
+				}
+			})
+		}
+	}
+}
