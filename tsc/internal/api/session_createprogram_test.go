@@ -23,12 +23,14 @@ func TestCreateSnapshotUsesIndependentRoots(t *testing.T) {
 	defer session.Close()
 
 	firstResponse, err := session.handleCreateSnapshot(context.Background(), &CreateSnapshotParams{
-		CreatePrograms: []*CreateSnapshotProgramParams{{
-			RootFiles: []DocumentIdentifier{{FileName: "/home/projects/p/src/index.ts"}},
-			Options: CreateProgramOptions{
-				CompilerOptions: core.CompilerOptions{NoLib: core.TSTrue},
-			},
-		}},
+		SnapshotRequestChangesParams: SnapshotRequestChangesParams{
+			CreatePrograms: []*CreateSnapshotProgramParams{{
+				RootFiles: []DocumentIdentifier{{FileName: "/home/projects/p/src/index.ts"}},
+				Options: CreateProgramOptions{
+					CompilerOptions: core.CompilerOptions{NoLib: core.TSTrue},
+				},
+			}},
+		},
 	})
 	assert.NilError(t, err)
 	assert.Equal(t, firstResponse.Snapshot, SnapshotID(1))
@@ -58,17 +60,19 @@ func TestCreateSnapshotCreatesPrograms(t *testing.T) {
 	defer session.Close()
 
 	response, err := session.handleCreateSnapshot(context.Background(), &CreateSnapshotParams{
-		CreatePrograms: []*CreateSnapshotProgramParams{
-			{
-				RootFiles: []DocumentIdentifier{{FileName: fileA}, {FileName: fileB}},
-				Options: CreateProgramOptions{
-					CompilerOptions: core.CompilerOptions{NoLib: core.TSTrue, Strict: core.TSTrue},
+		SnapshotRequestChangesParams: SnapshotRequestChangesParams{
+			CreatePrograms: []*CreateSnapshotProgramParams{
+				{
+					RootFiles: []DocumentIdentifier{{FileName: fileA}, {FileName: fileB}},
+					Options: CreateProgramOptions{
+						CompilerOptions: core.CompilerOptions{NoLib: core.TSTrue, Strict: core.TSTrue},
+					},
 				},
-			},
-			{
-				RootFiles: []DocumentIdentifier{{FileName: fileB}},
-				Options: CreateProgramOptions{
-					CompilerOptions: core.CompilerOptions{NoLib: core.TSTrue},
+				{
+					RootFiles: []DocumentIdentifier{{FileName: fileB}},
+					Options: CreateProgramOptions{
+						CompilerOptions: core.CompilerOptions{NoLib: core.TSTrue},
+					},
 				},
 			},
 		},
@@ -97,7 +101,9 @@ func TestCreateSnapshotRejectsRemovingProgramFromIndependentRoot(t *testing.T) {
 	defer session.Close()
 
 	_, err := session.handleCreateSnapshot(context.Background(), &CreateSnapshotParams{
-		RemovePrograms: []ProjectID{"/dev/null/synthetic/1"},
+		SnapshotRequestChangesParams: SnapshotRequestChangesParams{
+			RemovePrograms: []ProjectID{"/dev/null/synthetic/1"},
+		},
 	})
 	assert.ErrorContains(t, err, "synthetic program not found for removal: 1")
 }

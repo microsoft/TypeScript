@@ -36,7 +36,9 @@ func TestUpdateTemporarySnapshot(t *testing.T) {
 	ctx := context.Background()
 
 	baseResp, err := session.handleCreateSnapshot(ctx, &CreateSnapshotParams{
-		OpenFiles: []DocumentIdentifier{{FileName: fileName}},
+		SnapshotRequestChangesParams: SnapshotRequestChangesParams{
+			OpenFiles: []DocumentIdentifier{{FileName: fileName}},
+		},
 	})
 	assert.NilError(t, err)
 	assert.Assert(t, len(baseResp.Projects) > 0, "expected at least one project")
@@ -117,7 +119,9 @@ func TestUpdateTemporarySnapshotAddsUnopenedFile(t *testing.T) {
 
 	ctx := context.Background()
 	baseResp, err := session.handleCreateSnapshot(ctx, &CreateSnapshotParams{
-		OpenFiles: []DocumentIdentifier{{FileName: existingFileName}},
+		SnapshotRequestChangesParams: SnapshotRequestChangesParams{
+			OpenFiles: []DocumentIdentifier{{FileName: existingFileName}},
+		},
 	})
 	assert.NilError(t, err)
 	assert.Equal(t, len(baseResp.Projects), 1)
@@ -179,7 +183,9 @@ func TestUpdateTemporarySnapshotUsesClientSnapshotAsBase(t *testing.T) {
 
 	ctx := context.Background()
 	baseResp, err := session.handleCreateSnapshot(ctx, &CreateSnapshotParams{
-		OpenFiles: []DocumentIdentifier{{FileName: fileName}},
+		SnapshotRequestChangesParams: SnapshotRequestChangesParams{
+			OpenFiles: []DocumentIdentifier{{FileName: fileName}},
+		},
 	})
 	assert.NilError(t, err)
 
@@ -197,4 +203,83 @@ func TestUpdateTemporarySnapshotUsesClientSnapshotAsBase(t *testing.T) {
 
 	_, err = session.handleRelease(ctx, &ReleaseParams{Snapshot: tempResp.Snapshot})
 	assert.NilError(t, err)
+}
+
+func TestUpdateTemporarySnapshotOmitsUnchangedProjects(t *testing.T) {
+	t.Parallel()
+	if !bundled.Embedded {
+		t.Skip("bundled files are not embedded")
+	}
+
+	const firstConfig = "/home/projects/first/tsconfig.json"
+	const firstFile = "/home/projects/first/index.ts"
+	const secondConfig = "/home/projects/second/tsconfig.json"
+	const secondFile = "/home/projects/second/index.ts"
+	projectSession, _ := projecttestutil.Setup(map[string]any{
+		firstConfig:  `{}`,
+		firstFile:    `export const first = 1;`,
+		secondConfig: `{}`,
+		secondFile:   `export const second = 1;`,
+	})
+	defer projectSession.Close()
+	session := NewLSPSession(projectSession, nil)
+	defer session.Close()
+
+	ctx := context.Background()
+	baseResp, err := session.handleCreateSnapshot(ctx, &CreateSnapshotParams{
+		SnapshotRequestChangesParams: SnapshotRequestChangesParams{
+			OpenProjects: []DocumentIdentifier{{FileName: firstConfig}, {FileName: secondConfig}},
+		},
+	})
+	assert.NilError(t, err)
+	assert.Equal(t, len(baseResp.Projects), 2)
+
+	tempResp, err := session.handleUpdateTemporarySnapshot(ctx, &UpdateTemporarySnapshotParams{
+		Snapshot: baseResp.Snapshot,
+		File:     DocumentIdentifier{FileName: firstFile},
+		NewText:  `export const first = 2;`,
+	})
+	assert.NilError(t, err)
+	assert.Equal(t, len(tempResp.Projects), 1)
+	assert.Equal(t, tempResp.Projects[0].ConfigFileName, firstConfig)
+}
+
+func TestUpdateSnapshotDerivesFromExplicitBase(t *testing.T) {
+	t.Parallel()
+	if !bundled.Embedded {
+		t.Skip("bundled files are not embedded")
+	}
+
+	const firstConfig = "/home/projects/first/tsconfig.json"
+	const firstFile = "/home/projects/first/index.ts"
+	const secondConfig = "/home/projects/second/tsconfig.json"
+	projectSession, utils := projecttestutil.Setup(map[string]any{
+		firstConfig:                      `{}`,
+		firstFile:                        `export const first = 1;`,
+		secondConfig:                     `{}`,
+		"/home/projects/second/index.ts": `export const second = 1;`,
+	})
+	defer projectSession.Close()
+	session := NewLSPSession(projectSession, nil)
+	defer session.Close()
+
+	ctx := context.Background()
+	baseResp, err := session.handleCreateSnapshot(ctx, &CreateSnapshotParams{
+		SnapshotRequestChangesParams: SnapshotRequestChangesParams{
+			OpenProjects: []DocumentIdentifier{{FileName: firstConfig}, {FileName: secondConfig}},
+		},
+	})
+	assert.NilError(t, err)
+	assert.NilError(t, utils.FS().WriteFile(firstFile, `export const first = 2;`))
+
+	updated, err := session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{
+		Snapshot: baseResp.Snapshot,
+		Changes: &CreateSnapshotParams{
+			FileChanges: &APIFileChanges{Changed: []DocumentIdentifier{{FileName: firstFile}}},
+		},
+	})
+	assert.NilError(t, err)
+	assert.Equal(t, len(updated.Projects), 1)
+	assert.Equal(t, updated.Projects[0].ConfigFileName, firstConfig)
+	assert.Equal(t, len(baseResp.Projects), 2)
 }

@@ -26,11 +26,13 @@ func TestGenerate(t *testing.T) {
 
 	for _, expected := range []string{
 		`release: APIMethod<ReleaseParams, void>;`,
-		`updateSnapshot: APIMethod<UpdateSnapshotParams, UpdateSnapshotResponse>;`,
+		`updateSnapshot: APIMethod<UpdateSnapshotParams, CreateSnapshotResponse>;`,
 		`initialize: APIMethod<null, InitializeResponse>;`,
 		`export type DocumentIdentifier = string | { uri: string; };`,
 		`export interface ReleaseParams`,
 		`export interface UpdateSnapshotParams`,
+		`export interface CreateSnapshotParams extends SnapshotRequestChangesParams`,
+		`export interface LanguageServerSnapshotChanges extends SnapshotRequestChangesParams`,
 		`openProjects?: readonly DocumentIdentifier[];`,
 		`snapshot: number;`,
 		`file: DocumentIdentifier;`,

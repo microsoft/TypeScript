@@ -369,23 +369,25 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
                 this.activeSnapshots.delete(snapshot);
                 this.sourceFileCache.releaseSnapshot(snapshot.id);
             },
+            this.createSnapshotUpdater(() => snapshot),
+            undefined,
         );
         this.activeSnapshots.add(snapshot);
 
         return snapshot;
     }
 
-    /**
-     * Returns the language server's current canonical snapshot after atomically
-     * adopting any supplied API-driven changes. Only available on LSP-connected APIs.
-     */
-    async getCurrentLanguageServerSnapshot(
-        ...args: FromLSP extends true ? [changes?: LanguageServerSnapshotChanges] : [changes: never]
-    ): Promise<Snapshot> {
+    private async updateSnapshot(baseSnapshot: Snapshot, params?: CreateSnapshotParams): Promise<Snapshot> {
         await this.ensureInitialized();
+        if (!this.activeSnapshots.has(baseSnapshot) || baseSnapshot.isDisposed()) {
+            throw new Error("Cannot update an inactive snapshot");
+        }
 
-        const changes = args[0] as LanguageServerSnapshotChanges | undefined;
-        const data = await this.client.apiRequest("getCurrentLanguageServerSnapshot", changes ? { changes } : {});
+        const data = await this.client.apiRequest("updateSnapshot", {
+            snapshot: baseSnapshot.id,
+            changes: toCreateSnapshotRequest(params),
+        });
+        this.sourceFileCache.retainForSnapshot(data.snapshot, baseSnapshot.id, data.changes);
         const snapshot = new Snapshot(
             data,
             this.client,
@@ -396,6 +398,55 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
                 this.activeSnapshots.delete(snapshot);
                 this.sourceFileCache.releaseSnapshot(snapshot.id);
             },
+            this.createSnapshotUpdater(() => snapshot),
+            baseSnapshot,
+        );
+        this.activeSnapshots.add(snapshot);
+        return snapshot;
+    }
+
+    private createSnapshotUpdater(getSnapshot: () => Snapshot): SnapshotUpdater {
+        const update: SnapshotUpdater = params => this.updateSnapshot(getSnapshot(), params); // @sync: const update = ((params?: CreateSnapshotParams) => this.updateSnapshot(getSnapshot(), params)) as SnapshotUpdater;
+        // @sync-only-start
+        // const owner = this;
+        // update.gen = function* (params?: CreateSnapshotParams) { return yield* owner.updateSnapshot.gen(getSnapshot(), params); };
+        // @sync-only-end
+        return update;
+    }
+
+    /**
+     * Returns the language server's current canonical snapshot after atomically
+     * adopting any supplied API-driven changes. Only available on LSP-connected APIs.
+     */
+    async getCurrentLanguageServerSnapshot(
+        ...args: FromLSP extends true ? [changes?: LanguageServerSnapshotChanges, baseSnapshot?: Snapshot] : [changes: never, baseSnapshot?: never]
+    ): Promise<Snapshot> {
+        await this.ensureInitialized();
+
+        const changes = args[0] as LanguageServerSnapshotChanges | undefined;
+        const baseSnapshot = args[1] as Snapshot | undefined;
+        if (baseSnapshot && (!this.activeSnapshots.has(baseSnapshot) || baseSnapshot.isDisposed())) {
+            throw new Error("Cannot use an inactive snapshot as a response base");
+        }
+        const data = await this.client.apiRequest("getCurrentLanguageServerSnapshot", {
+            ...(baseSnapshot ? { baseSnapshot: baseSnapshot.id } : {}),
+            ...(changes ? { changes } : {}),
+        });
+        if (baseSnapshot) {
+            this.sourceFileCache.retainForSnapshot(data.snapshot, baseSnapshot.id, data.changes);
+        }
+        const snapshot = new Snapshot(
+            data,
+            this.client,
+            this.sourceFileCache,
+            this.toPath!,
+            this,
+            () => {
+                this.activeSnapshots.delete(snapshot);
+                this.sourceFileCache.releaseSnapshot(snapshot.id);
+            },
+            this.createSnapshotUpdater(() => snapshot),
+            baseSnapshot,
         );
         this.activeSnapshots.add(snapshot);
         return snapshot;
@@ -446,6 +497,8 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
                 this.activeSnapshots.delete(snapshot);
                 this.sourceFileCache.releaseSnapshot(snapshot.id);
             },
+            this.createSnapshotUpdater(() => snapshot),
+            baseSnapshot,
         );
         this.activeSnapshots.add(snapshot);
 
@@ -527,6 +580,8 @@ export class InternalAPI {
     }
 }
 
+type SnapshotUpdater = (params?: CreateSnapshotParams) => Promise<Snapshot>; // @sync: type SnapshotUpdater = ((params?: CreateSnapshotParams) => Snapshot) & { gen(params?: CreateSnapshotParams): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]>; };
+
 export class Snapshot {
     readonly id: number;
     private projectMap: Map<Path, Project>;
@@ -536,6 +591,8 @@ export class Snapshot {
     private disposePromise: Promise<void> | undefined;
     private onDispose: () => void;
     private snapshotRegistry: SnapshotObjectRegistry;
+    private projectDataMap: Map<Path, ProjectResponse>;
+    private updateSnapshot: SnapshotUpdater;
     readonly internal: SnapshotInternalAPI;
 
     constructor(
@@ -545,15 +602,25 @@ export class Snapshot {
         toPath: (fileName: string) => Path,
         formatDiagnosticsHost: FormatDiagnosticsHost,
         onDispose: () => void,
+        updateSnapshot: SnapshotUpdater,
+        baseSnapshot?: Snapshot,
     ) {
         this.id = data.snapshot;
         this.client = client;
         this.toPath = toPath;
         this.onDispose = onDispose;
+        this.updateSnapshot = updateSnapshot;
         this.projectMap = new Map();
+        this.projectDataMap = new Map(baseSnapshot?.projectDataMap);
+        for (const projectId of data.changes?.removedProjects ?? []) {
+            this.projectDataMap.delete(toPath(projectId));
+        }
+        for (const projectData of data.projects) {
+            this.projectDataMap.set(toPath(projectData.configFileName), projectData);
+        }
         this.snapshotRegistry = new SnapshotObjectRegistry(client, this.id, projectId => this.projectMap.get(projectId));
 
-        for (const projData of data.projects) {
+        for (const projData of this.projectDataMap.values()) {
             const project = new Project(projData, this.id, client, sourceFileCache, toPath, formatDiagnosticsHost, this.snapshotRegistry);
             this.projectMap.set(toPath(projData.configFileName), project);
         }
@@ -569,6 +636,11 @@ export class Snapshot {
     getProject(configFileName: string): Project | undefined {
         this.ensureNotDisposed();
         return this.projectMap.get(this.toPath(configFileName));
+    }
+
+    update(params?: CreateSnapshotParams): Promise<Snapshot> {
+        this.ensureNotDisposed();
+        return this.updateSnapshot(params);
     }
 
     async getDefaultProjectForFile(file: DocumentIdentifier): Promise<Project | undefined> {

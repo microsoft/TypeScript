@@ -42,7 +42,9 @@ func TestCompletionSymbolTypeIsResolvable(t *testing.T) {
 	defer session.Close()
 
 	snapshotResp, err := session.handleCreateSnapshot(t.Context(), &CreateSnapshotParams{
-		OpenFiles: []DocumentIdentifier{{FileName: fileName}},
+		SnapshotRequestChangesParams: SnapshotRequestChangesParams{
+			OpenFiles: []DocumentIdentifier{{FileName: fileName}},
+		},
 	})
 	assert.NilError(t, err)
 
@@ -114,7 +116,9 @@ func TestCompletionOnInferredProject(t *testing.T) {
 	defer session.Close()
 
 	snapshotResp, err := session.handleCreateSnapshot(t.Context(), &CreateSnapshotParams{
-		OpenFiles: []DocumentIdentifier{{FileName: fileName}},
+		SnapshotRequestChangesParams: SnapshotRequestChangesParams{
+			OpenFiles: []DocumentIdentifier{{FileName: fileName}},
+		},
 	})
 	assert.NilError(t, err)
 
@@ -160,7 +164,9 @@ func TestCompletionRetriesWithAutoImports(t *testing.T) {
 	defer session.Close()
 
 	snapshotResp, err := session.handleCreateSnapshot(t.Context(), &CreateSnapshotParams{
-		OpenFiles: []DocumentIdentifier{{FileName: fileName}},
+		SnapshotRequestChangesParams: SnapshotRequestChangesParams{
+			OpenFiles: []DocumentIdentifier{{FileName: fileName}},
+		},
 	})
 	assert.NilError(t, err)
 	proj, err := session.handleGetDefaultProjectForFile(t.Context(), &GetDefaultProjectForFileParams{

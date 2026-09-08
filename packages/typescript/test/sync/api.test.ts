@@ -79,6 +79,7 @@ import {
     ObjectFlags,
     type Signature,
     SignatureKind,
+    type Snapshot,
     type StringMappingType,
     SymbolFlags,
     type TemplateLiteralType,
@@ -110,10 +111,12 @@ describe("API", () => {
         if (false) {
             const standalone = new API();
             // @ts-expect-error The standalone API has no canonical language server state.
-            standalone.getCurrentLanguageServerSnapshot();
+            void standalone.getCurrentLanguageServerSnapshot();
 
             const lsp = undefined! as API<true>;
-            lsp.getCurrentLanguageServerSnapshot({ openProjects: ["/tsconfig.json"] });
+            void lsp.getCurrentLanguageServerSnapshot({ openProjects: ["/tsconfig.json"] });
+            const baseSnapshot = undefined! as Snapshot;
+            void lsp.getCurrentLanguageServerSnapshot(undefined, baseSnapshot);
         }
     });
 
@@ -1386,6 +1389,32 @@ describe("Multiple snapshots", () => {
             assert.ok(sf);
             assert.equal(sf.text, version);
         }
+    });
+
+    test("snapshot.update derives from its receiver and reconstructs unchanged projects", () => {
+        const { api: disposableAPI, fs } = spawnAPIWithFS({
+            "/first/tsconfig.json": `{}`,
+            "/first/index.ts": `export const first = 1;`,
+            "/second/tsconfig.json": `{}`,
+            "/second/index.ts": `export const second = 1;`,
+        });
+        using api = disposableAPI;
+
+        const base = api.createSnapshot({
+            openProjects: ["/first/tsconfig.json", "/second/tsconfig.json"],
+        });
+        const baseFirst = base.getProject("/first/tsconfig.json")!.program.getSourceFile("/first/index.ts");
+        const baseSecondProject = base.getProject("/second/tsconfig.json")!;
+
+        fs.writeFile!("/first/index.ts", `export const first = 2;`);
+        const updated = base.update({
+            fileChanges: { changed: ["/first/index.ts"] },
+        });
+
+        assert.equal(updated.getProjects().length, 2);
+        assert.notStrictEqual(updated.getProject("/second/tsconfig.json"), baseSecondProject);
+        assert.equal((updated.getProject("/first/tsconfig.json")!.program.getSourceFile("/first/index.ts"))!.text, `export const first = 2;`);
+        assert.equal(baseFirst!.text, `export const first = 1;`);
     });
 });
 
@@ -6270,6 +6299,29 @@ describe("runWithTemporaryFileUpdate", () => {
         const project2 = snapshot2.getProject("/tsconfig.json")!;
         const diags2 = project2.program.getSemanticDiagnostics("/src/index.ts");
         assert.equal(diags2.length, 0);
+    });
+
+    test("reconstructs projects omitted from the response diff", () => {
+        using api = spawnAPI({
+            "/first/tsconfig.json": `{}`,
+            "/first/index.ts": `export const first = 1;`,
+            "/second/tsconfig.json": `{}`,
+            "/second/index.ts": `export const second = 1;`,
+        });
+
+        const snapshot = api.createSnapshot({
+            openProjects: ["/first/tsconfig.json", "/second/tsconfig.json"],
+        });
+        const originalSecondProject = snapshot.getProject("/second/tsconfig.json")!;
+
+        api.runWithTemporaryFileUpdate(snapshot, "/first/index.ts", `export const first = 2;`, tempSnapshot => {
+            assert.equal(tempSnapshot.getProjects().length, 2);
+            assert.ok(tempSnapshot.getProject("/first/tsconfig.json"));
+            const secondProject = tempSnapshot.getProject("/second/tsconfig.json");
+            assert.ok(secondProject);
+            assert.notStrictEqual(secondProject, originalSecondProject);
+            assert.equal((secondProject.program.getSourceFileNames()).includes("/second/index.ts"), true);
+        });
     });
 });
 

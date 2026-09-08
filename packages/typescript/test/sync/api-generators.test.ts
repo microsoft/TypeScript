@@ -141,6 +141,7 @@ const publicGeneratorExemptions = new Map<string, string>([
 const privateGeneratorGetters = new Set([
     "API.ensureInitialized",
     "API.initializeWorker",
+    "API.updateSnapshot",
     "Checker.getIntrinsicType",
     "Checker.getWellKnownSignatures",
     "Checker.getWellKnownSymbols",
@@ -778,6 +779,7 @@ describe("API - generator batching", () => {
                     temporaryProjects.push(temporarySnapshot.getProjects()[0].configFileName);
                 }),
                 parityCase("Snapshot", "getDefaultProjectForFile", snapshot.getDefaultProjectForFile, assertOptionalProjectsEquivalent, "/src/index.ts"),
+                parityCase("Snapshot", "update", snapshot.update, assertSnapshotsEquivalent),
 
                 parityCase("Project", "getImportAdderEdits", project.getImportAdderEdits, assertDeepEquivalent, "/src/index.ts", [{ kind: "importSymbol", symbol: unimportedSymbol }]),
                 parityCase("Project", "getImportEditsForSymbols", project.getImportEditsForSymbols, assertDeepEquivalent, "/src/index.ts", [unimportedSymbol]),

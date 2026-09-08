@@ -603,8 +603,21 @@ func (r *typeRenderer) declarations() (string, error) {
 		structType := named.Underlying().(*types.Struct)
 		isParams := strings.HasSuffix(named.Obj().Name(), "Params")
 		writeDoc(&out, "", r.docs[named.Obj()])
-		fmt.Fprintf(&out, "export interface %s {\n", exportedName(named.Obj().Name()))
+		var embedded []string
+		for field := range structType.Fields() {
+			if field.Embedded() {
+				embedded = append(embedded, r.typeString(field.Type(), false))
+			}
+		}
+		fmt.Fprintf(&out, "export interface %s", exportedName(named.Obj().Name()))
+		if len(embedded) > 0 {
+			fmt.Fprintf(&out, " extends %s", strings.Join(embedded, ", "))
+		}
+		out.WriteString(" {\n")
 		for i := range structType.NumFields() {
+			if structType.Field(i).Embedded() {
+				continue
+			}
 			field, include, optional, nonnil, deprecated, internal := jsonField(structType, i)
 			if !include || deprecated || internal {
 				continue
