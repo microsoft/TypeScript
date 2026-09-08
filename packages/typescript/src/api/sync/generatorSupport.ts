@@ -42,7 +42,6 @@ interface GeneratorResponse {
 
 interface RequestRunnerOptions {
     executeDeferred?: boolean;
-    getDeduplicationKey?: (request: APIRequest) => string | undefined;
 }
 
 function createRequestRunner<T extends readonly AnyAPIRequestGenerator[]>(requestGenerators: T, options: RequestRunnerOptions = {}) {
@@ -93,7 +92,7 @@ function createRequestRunner<T extends readonly AnyAPIRequestGenerator[]>(reques
             const requests: APIRequest[] = [];
             const responseIndexByDeduplicationKey = new Map<string, number>();
             const addRequest = (request: APIRequest): number => {
-                const deduplicationKey = options.getDeduplicationKey?.(request);
+                const deduplicationKey = getRequestDeduplicationKey(request);
                 let responseIndex = deduplicationKey === undefined ? undefined : responseIndexByDeduplicationKey.get(deduplicationKey);
                 if (responseIndex === undefined) {
                     responseIndex = requests.length;
@@ -146,7 +145,7 @@ export function executeRequestGenerators<T extends readonly AnyAPIRequestGenerat
     requestGenerators: T,
     executeRequests: (requests: APIRequest[]) => readonly GeneratorResponse[],
 ): ExecutedGeneratorsResults<T> {
-    const { requestRounds, getResults } = createRequestRunner(requestGenerators, { executeDeferred: true, getDeduplicationKey: getRequestDeduplicationKey });
+    const { requestRounds, getResults } = createRequestRunner(requestGenerators, { executeDeferred: true });
     let state = requestRounds.next();
     while (!state.done) {
         if (isDeferredAPIRequest(state.value)) throw new Error("Unexpected deferred request");

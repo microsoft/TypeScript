@@ -423,7 +423,7 @@ describe("API - generator batching", () => {
             assert.deepEqual([...config.fileNames].sort(), ["/src/bind.ts", "/src/index.ts", "/src/models.ts", "/src/suggestions.ts", "/src/syntax.ts"]);
             assert.match(outputText, /const value = ['"]ok['"]/);
             assert.deepEqual(requestBatches, [
-                ["initialize", "initialize"],
+                ["initialize"],
                 ["parseCommandLine", "readConfigFile"],
                 ["readConfigFile", "parseJsonConfigFileContent"],
                 ["parseJsonConfigFileContent", "transpileModule"],
@@ -553,7 +553,7 @@ describe("API - generator batching", () => {
             assert.equal(commandLine.options.target, 99);
             assert.deepEqual(config.config, {});
             assert.deepEqual(requestBatches, [
-                ["initialize", "initialize"],
+                ["initialize"],
                 ["parseCommandLine", "readConfigFile"],
             ]);
 
