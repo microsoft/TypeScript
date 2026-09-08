@@ -90,35 +90,61 @@ func canonicalDynamicFileName(fileName string) string {
 }
 
 func DynamicFileNameToDocumentUri(fileName string) DocumentUri {
+	uri, ok := dynamicFileNameToDocumentUri(fileName, false)
+	if !ok {
+		panic("invalid file name: " + fileName)
+	}
+	return uri
+}
+
+func TryDynamicFileNameToDocumentUri(fileName string) (DocumentUri, bool) {
+	return dynamicFileNameToDocumentUri(fileName, true)
+}
+
+func dynamicFileNameToDocumentUri(fileName string, strict bool) (DocumentUri, bool) {
 	encoded := tspath.IsEncodedDynamicFileName(fileName)
 	start := 2
 	if encoded {
 		start = len(tspath.DynamicURIFileNamePrefix)
 	}
 	scheme, rest, ok := strings.Cut(fileName[start:], "/")
-	if !ok {
-		panic("invalid file name: " + fileName)
+	if !ok || strict && scheme == "" {
+		return "", false
 	}
 	authority, uriPath, ok := strings.Cut(rest, "/")
 	if !ok {
-		panic("invalid file name: " + fileName)
+		return "", false
 	}
 	hasAuthority := authority != "ts-nul-authority"
 	if encoded {
-		authority = tspath.DecodeDynamicURIPathSegment(authority)
+		if strict {
+			authority, ok = tspath.TryDecodeDynamicURIPathSegment(authority)
+			if !ok {
+				return "", false
+			}
+		} else {
+			authority = tspath.DecodeDynamicURIPathSegment(authority)
+		}
 	}
 	if encoded && hasAuthority {
-		if suffix, ok := tspath.DecodeDynamicURINoPath(uriPath); ok {
-			return DocumentUri(scheme + "://" + authority + suffix)
+		if suffix, decodedNoPath := tspath.DecodeDynamicURINoPath(uriPath); decodedNoPath {
+			return DocumentUri(scheme + "://" + authority + suffix), true
 		}
 	}
 	if encoded {
-		uriPath = tspath.DecodeDynamicURIPath(uriPath)
+		if strict {
+			uriPath, ok = tspath.TryDecodeDynamicURIPath(uriPath)
+			if !ok {
+				return "", false
+			}
+		} else {
+			uriPath = tspath.DecodeDynamicURIPath(uriPath)
+		}
 	}
 	if !hasAuthority {
-		return DocumentUri(scheme + ":" + uriPath)
+		return DocumentUri(scheme + ":" + uriPath), true
 	}
-	return DocumentUri(scheme + "://" + authority + "/" + uriPath)
+	return DocumentUri(scheme + "://" + authority + "/" + uriPath), true
 }
 
 func fixWindowsURIPath(path string) string {
