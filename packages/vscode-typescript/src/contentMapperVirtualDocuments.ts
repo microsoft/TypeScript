@@ -413,15 +413,13 @@ class ContentMapperVirtualDocumentProvider implements vscode.FileSystemProvider,
             throw new Error(`Could not load virtual document "${node.output.fileName}".`);
         }
 
-        if (node.directive.originalRange) {
-            const sourceDocument = await vscode.workspace.openTextDocument(sourceUri);
-            const sourceRange = rangeFromTextRange(sourceDocument, node.directive.originalRange);
-            await vscode.window.showTextDocument(sourceDocument, {
-                preserveFocus: true,
-                preview: false,
-                selection: sourceRange,
-            });
-        }
+        const sourceDocument = await vscode.workspace.openTextDocument(sourceUri);
+        const sourceRange = rangeFromTextRange(sourceDocument, node.directive.originalRange);
+        await vscode.window.showTextDocument(sourceDocument, {
+            preserveFocus: true,
+            preview: false,
+            selection: sourceRange.isEmpty ? undefined : sourceRange,
+        });
 
         let virtualDocument = await vscode.workspace.openTextDocument(virtualUri);
         virtualDocument = await vscode.languages.setTextDocumentLanguage(
@@ -524,8 +522,12 @@ class ContentMapperVirtualDocumentProvider implements vscode.FileSystemProvider,
             const virtualRanges: vscode.Range[][] = [[], [], []];
             for (const mapping of mappings) {
                 const kind = normalizedMappingKind(mapping.kind);
-                sourceRanges[kind]!.push(rangeFromOffsets(sourceEditor.document, mapping.originalStart, mapping.originalLength));
-                virtualRanges[kind]!.push(rangeFromOffsets(virtualEditor.document, mapping.generatedStart, mapping.generatedLength));
+                if (mapping.originalLength !== 0) {
+                    sourceRanges[kind]!.push(rangeFromOffsets(sourceEditor.document, mapping.originalStart, mapping.originalLength));
+                }
+                if (mapping.generatedLength !== 0) {
+                    virtualRanges[kind]!.push(rangeFromOffsets(virtualEditor.document, mapping.generatedStart, mapping.generatedLength));
+                }
             }
             for (let kind = 0; kind < this.mappingDecorations.length; kind++) {
                 virtualEditor.setDecorations(this.mappingDecorations[kind]!, virtualRanges[kind]!);
@@ -554,8 +556,12 @@ class ContentMapperVirtualDocumentProvider implements vscode.FileSystemProvider,
         const virtualRanges: vscode.Range[][] = [[], [], []];
         for (const mapping of mappings) {
             const kind = normalizedMappingKind(mapping.kind);
-            sourceRanges[kind]!.push(rangeFromOffsets(sourceEditor.document, mapping.originalStart, mapping.originalLength));
-            virtualRanges[kind]!.push(rangeFromOffsets(virtualEditor.document, mapping.generatedStart, mapping.generatedLength));
+            if (mapping.originalLength !== 0) {
+                sourceRanges[kind]!.push(rangeFromOffsets(sourceEditor.document, mapping.originalStart, mapping.originalLength));
+            }
+            if (mapping.generatedLength !== 0) {
+                virtualRanges[kind]!.push(rangeFromOffsets(virtualEditor.document, mapping.generatedStart, mapping.generatedLength));
+            }
         }
         for (let kind = 0; kind < this.mappingDecorations.length; kind++) {
             sourceEditor.setDecorations(this.mappingDecorations[kind]!, sourceRanges[kind]!);

@@ -262,7 +262,8 @@ const value = 1;`
 	assert.Assert(t, ok)
 	assert.Equal(t, len(missingOriginalVirtualFiles.Files), 1)
 	assert.Equal(t, len(missingOriginalVirtualFiles.Files[0].DiagnosticDirectives), 1)
-	assert.Assert(t, missingOriginalVirtualFiles.Files[0].DiagnosticDirectives[0].OriginalRange == nil)
+	assert.Equal(t, missingOriginalVirtualFiles.Files[0].DiagnosticDirectives[0].OriginalRange.Pos, int32(0))
+	assert.Equal(t, missingOriginalVirtualFiles.Files[0].DiagnosticDirectives[0].OriginalRange.End, int32(0))
 
 	assert.NilError(t, fs.WriteFile("/home/project/tsconfig.json", `{
 		"compilerOptions": { "target": "es2020", "module": "esnext", "moduleResolution": "bundler", "strict": true }

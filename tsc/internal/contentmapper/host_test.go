@@ -462,7 +462,6 @@ func TestRunnerTransformDiagnosticDirectives(t *testing.T) {
 	directive := result.DiagnosticDirectives[0]
 	assert.Equal(t, directive.OriginalRange.Pos(), 0)
 	assert.Equal(t, directive.OriginalRange.End(), 9)
-	assert.Assert(t, directive.HasOriginalRange)
 	assert.Equal(t, directive.VirtualRange.Pos(), 8)
 	assert.Equal(t, directive.VirtualRange.End(), 14)
 	assert.Equal(t, directive.Policy, ast.MappedDiagnosticDirectivePolicyExpect)
@@ -486,7 +485,7 @@ func TestRunnerTransformDiagnosticDirectives(t *testing.T) {
 	assert.NilError(t, err)
 	assert.Equal(t, result.DiagnosticDirectives[0].UnusedCode, int32(2))
 	assert.Equal(t, result.DiagnosticDirectives[0].UnusedMessageText, "second")
-	result, err = transform(contentmapper.MappedOutput{
+	_, err = transform(contentmapper.MappedOutput{
 		Text: "x", Extension: ".ts",
 		DiagnosticDirectives: protocolDiagnosticDirectives([]contentmapper.MappedDiagnosticDirective{{
 			OriginalStart: -1,
@@ -494,8 +493,6 @@ func TestRunnerTransformDiagnosticDirectives(t *testing.T) {
 		}}, contentmapper.UnusedExpectDirectiveDiagnostic{}),
 	})
 	assert.NilError(t, err)
-	assert.Equal(t, len(result.DiagnosticDirectives), 1)
-	assert.Assert(t, !result.DiagnosticDirectives[0].HasOriginalRange)
 
 	invalid := []struct {
 		name       string

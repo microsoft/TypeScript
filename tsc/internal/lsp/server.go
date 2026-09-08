@@ -2518,15 +2518,11 @@ func contentMapperVirtualFile(file *ast.SourceFile) *lsproto.ContentMapperVirtua
 	sourceDirectives := file.DiagnosticDirectives()
 	directives := make([]*lsproto.ContentMapperDiagnosticDirective, len(sourceDirectives))
 	for i, directive := range sourceDirectives {
-		var originalRange *lsproto.ContentMapperTextRange
-		if directive.HasOriginalRange {
-			originalRange = &lsproto.ContentMapperTextRange{
+		directives[i] = &lsproto.ContentMapperDiagnosticDirective{
+			OriginalRange: &lsproto.ContentMapperTextRange{
 				Pos: int32(originalPositions.UTF8ToUTF16(directive.OriginalRange.Pos())),
 				End: int32(originalPositions.UTF8ToUTF16(directive.OriginalRange.End())),
-			}
-		}
-		directives[i] = &lsproto.ContentMapperDiagnosticDirective{
-			OriginalRange: originalRange,
+			},
 			VirtualRange: &lsproto.ContentMapperTextRange{
 				Pos: int32(virtualPositions.UTF8ToUTF16(directive.VirtualRange.Pos())),
 				End: int32(virtualPositions.UTF8ToUTF16(directive.VirtualRange.End())),

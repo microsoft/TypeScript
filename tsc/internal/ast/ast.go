@@ -2608,7 +2608,6 @@ const (
 
 type MappedDiagnosticDirective struct {
 	OriginalRange     core.TextRange
-	HasOriginalRange  bool
 	VirtualRange      core.TextRange
 	Policy            MappedDiagnosticDirectivePolicy
 	UnusedCode        int32

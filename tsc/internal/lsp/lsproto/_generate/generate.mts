@@ -467,7 +467,7 @@ const customStructures: Structure[] = [
     {
         name: "ContentMapperDiagnosticDirective",
         properties: [
-            { name: "originalRange", type: { kind: "reference", name: "ContentMapperTextRange" }, optional: true },
+            { name: "originalRange", type: { kind: "reference", name: "ContentMapperTextRange" } },
             { name: "virtualRange", type: { kind: "reference", name: "ContentMapperTextRange" } },
             { name: "policy", type: { kind: "base", name: "integer" } },
             { name: "unusedCode", type: { kind: "base", name: "integer" } },
