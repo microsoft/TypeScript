@@ -1306,6 +1306,13 @@ func tryGetModuleNameFromExportsOrImports(
 			if len(result) > 0 {
 				return result
 			}
+			// Node's algorithm commits to the first array element that captures resolution
+			// (a valid target string, null, or a nested object/array with an active branch),
+			// whether or not the file it names exists. Stop here so we don't fall through
+			// to a later element that would never be reached at runtime.
+			if targetCapturesResolution(e, conditions, isImports) {
+				break
+			}
 		}
 	case packagejson.JSONValueTypeObject:
 		// Conditional mapping. A runtime resolver walks the keys in order and commits to the first one
@@ -1383,6 +1390,16 @@ func targetCapturesResolution(target packagejson.ExportsOrImports, conditions []
 // rather than committed to, so it can't shadow a later condition.
 func isValidRuntimeTarget(target string, isImports bool) bool {
 	if strings.HasPrefix(target, "./") {
+		// The resolver rejects targets whose components after the first equal "..", ".", or
+		// "node_modules" (resolver.go:789). Such strings are skipped rather than committed
+		// to, so they must NOT be treated as capturing resolution.
+		parts := tspath.GetPathComponents(target, "")[1:]
+		if len(parts) > 1 {
+			partsAfterFirst := parts[1:]
+			if slices.Contains(partsAfterFirst, "..") || slices.Contains(partsAfterFirst, ".") || slices.Contains(partsAfterFirst, "node_modules") {
+				return false
+			}
+		}
 		return true
 	}
 	// An "imports" target may also be a bare specifier, which resolves like any other module name.
