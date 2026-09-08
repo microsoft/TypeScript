@@ -1,6 +1,7 @@
 package testrunner
 
 import (
+	"fmt"
 	"regexp"
 	"slices"
 	"strings"
@@ -188,8 +189,7 @@ func ParseTestFilesAndSymlinksWithOptions[T any](
 				} else {
 					// Global option
 					if existingValue, ok := globalOptions[metaDataName]; ok && existingValue != metaDataValue {
-						// !!! This would break existing baseline tests
-						// panic("Duplicate global option: " + metaDataName)
+						panic(fmt.Sprintf("Duplicate global option '%s': %q conflicts with previously set value %q", metaDataName, metaDataValue, existingValue))
 					}
 					globalOptions[metaDataName] = metaDataValue
 				}
