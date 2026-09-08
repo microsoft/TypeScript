@@ -5,6 +5,7 @@ import (
 	"encoding/binary"
 	"fmt"
 	"os/exec"
+	"strings"
 	"testing"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
@@ -14,6 +15,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/parser"
 	"github.com/microsoft/TypeScript/tsc/internal/spanmap"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"gotest.tools/v3/assert"
 )
 
@@ -40,11 +42,11 @@ func TestDocumentURIToFileName(t *testing.T) {
 		{"file://localhost/c%24/GitDevelopment/express", "//localhost/c$/GitDevelopment/express"},
 		{"file:///c%3A/test%20with%20%2525/c%23code", "c:/test with %25/c#code"},
 
-		{"untitled:Untitled-1", "^/untitled/ts-nul-authority/Untitled-1"},
-		{"untitled:Untitled-1#fragment", "^/untitled/ts-nul-authority/Untitled-1#fragment"},
-		{"untitled:c:/Users/jrieken/Code/abc.txt", "^/untitled/ts-nul-authority/c:/Users/jrieken/Code/abc.txt"},
-		{"untitled:C:/Users/jrieken/Code/abc.txt", "^/untitled/ts-nul-authority/C:/Users/jrieken/Code/abc.txt"},
-		{"untitled://wsl%2Bubuntu/home/jabaile/work/TypeScript/newfile.ts", "^/untitled/wsl%2Bubuntu/home/jabaile/work/TypeScript/newfile.ts"},
+		{"untitled:Untitled-1", "^/~ts-uri~/untitled/ts-nul-authority/Untitled-1"},
+		{"untitled:Untitled-1#fragment", "^/~ts-uri~/untitled/ts-nul-authority/~ts-uri-escape~556e7469746c65642d310023667261676d656e74~"},
+		{"untitled:c:/Users/jrieken/Code/abc.txt", "^/~ts-uri~/untitled/ts-nul-authority/~ts-uri-escape~633a~/Users/jrieken/Code/abc.txt"},
+		{"untitled:C:/Users/jrieken/Code/abc.txt", "^/~ts-uri~/untitled/ts-nul-authority/~ts-uri-escape~433a~/Users/jrieken/Code/abc.txt"},
+		{"untitled://wsl%2Bubuntu/home/jabaile/work/TypeScript/newfile.ts", "^/~ts-uri~/untitled/wsl%2Bubuntu/home/jabaile/work/TypeScript/newfile.ts"},
 	}
 
 	for _, test := range tests {
@@ -89,6 +91,75 @@ func TestFileNameToDocumentURI(t *testing.T) {
 			assert.Equal(t, lsconv.FileNameToDocumentURI(test.fileName), test.uri)
 		})
 	}
+}
+
+func TestNonFileDocumentURIRoundTripsThroughNormalizedFileName(t *testing.T) {
+	t.Parallel()
+
+	assert.Equal(
+		t,
+		lsproto.DocumentUri(`custom:folder/../~ts-uri~/café\file.ts`).FileName(),
+		`^/~ts-uri~/custom/ts-nul-authority/folder/~ts-uri-escape~2e2e~/~ts-uri~/~ts-uri-escape~636166c3a95c66696c65~.ts`,
+	)
+	assert.Equal(
+		t,
+		lsproto.DocumentUri("custom:~ts-uri-escape~dir.js/file.ts?x=1").FileName(),
+		"^/~ts-uri~/custom/ts-nul-authority/~ts-uri-escape~7e74732d7572692d6573636170657e6469722e6a73~/~ts-uri-escape~66696c65003f783d31~.ts",
+	)
+
+	for _, uri := range []lsproto.DocumentUri{
+		"untitled:folder/../file.ts",
+		"vscode-vfs://github/path//file.ts",
+		"custom:/path/./file.ts/",
+		"custom:",
+		"custom:///path",
+		"custom://authority",
+		"custom://authority/",
+		"custom:path/file.ts?rev=a/b#frag/c",
+		"custom://authority/path/file.ts#frag/a",
+		`custom:path\file.ts`,
+		"custom:.git/file.ts",
+		"custom:..hidden/file.ts",
+		"custom://~ts-uri~/path",
+		"custom://ts-nul-authority/path",
+		"custom:~ts-uri-escape~file.ts",
+		"custom:~ts-uri-escape~no-path",
+		"custom://authority/~ts-uri-no-path~~",
+		"custom:~ts-uri-spec~666f6f~/file.ts?x=1",
+		`custom:folder/../~ts-uri~/café\file.ts`,
+		`custom:name.ts\`,
+		"custom:name..ts",
+	} {
+		t.Run(string(uri), func(t *testing.T) {
+			t.Parallel()
+			fileName := uri.FileName()
+			assert.Equal(t, lsconv.FileNameToDocumentURI(fileName), uri)
+		})
+	}
+
+	for _, uri := range []lsproto.DocumentUri{
+		`custom:path\file.ts`,
+		"custom:~ts-uri~file.ts",
+		"custom:~ts-uri-escape~file.ts",
+	} {
+		assert.Equal(t, tspath.TryGetExtensionFromPath(uri.FileName()), tspath.ExtensionTs)
+	}
+
+	literalDynamicFileName := "^/custom/ts-nul-authority/~ts-uri-escape~666f6f~.ts"
+	assert.Equal(
+		t,
+		lsconv.FileNameToDocumentURI(literalDynamicFileName),
+		lsproto.DocumentUri("custom:~ts-uri-escape~666f6f~.ts"),
+	)
+
+	invalidUTF8FileName := "^/~ts-uri~/custom/ts-nul-authority/~ts-uri-escape~ff~"
+	assert.Equal(t, lsconv.FileNameToDocumentURI(invalidUTF8FileName), lsproto.DocumentUri("custom:~ts-uri-escape~ff~"))
+
+	assert.Assert(
+		t,
+		lsproto.DocumentUri(`custom:name.ts\`).FileName() != lsproto.DocumentUri("custom:name..ts").FileName(),
+	)
+	assert.Assert(t, strings.HasSuffix(lsproto.DocumentUri("custom:~ts-uri-escape~types.d.css.ts").FileName(), ".d.css.ts"))
 }
 
 type testScript struct {
