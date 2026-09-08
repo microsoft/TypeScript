@@ -2120,7 +2120,20 @@ func (s *Server) handleCompletionItemResolve(ctx context.Context, params *lsprot
 	if data == nil {
 		return nil, errors.New("completion item data is nil")
 	}
-	languageService, err := s.session.GetLanguageService(ctx, lsconv.FileNameToDocumentURI(data.FileName))
+	if !tspath.PathIsAbsolute(data.FileName) {
+		return nil, errors.New("completion item data fileName must be absolute")
+	}
+	var uri lsproto.DocumentUri
+	if tspath.IsDynamicFileName(data.FileName) {
+		var ok bool
+		uri, ok = lsproto.TryDynamicFileNameToDocumentUri(data.FileName)
+		if !ok {
+			return nil, errors.New("completion item data fileName must be a valid dynamic path")
+		}
+	} else {
+		uri = lsconv.FileNameToDocumentURI(data.FileName)
+	}
+	languageService, err := s.session.GetLanguageService(ctx, uri)
 	if err != nil {
 		return nil, err
 	}

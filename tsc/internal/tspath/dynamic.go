@@ -250,6 +250,18 @@ func DecodeDynamicURIPath(path string) string {
 	return strings.Join(segments, "/")
 }
 
+func TryDecodeDynamicURIPath(path string) (string, bool) {
+	segments := strings.Split(path, "/")
+	for i, segment := range segments {
+		decoded, ok := TryDecodeDynamicURIPathSegment(segment)
+		if !ok {
+			return "", false
+		}
+		segments[i] = decoded
+	}
+	return strings.Join(segments, "/"), true
+}
+
 func DecodeDynamicURIPathForDisk(path string) (string, bool) {
 	decoded := DecodeDynamicURIPath(path)
 	if PathIsAbsolute(decoded) {
@@ -275,20 +287,31 @@ func DecodeDynamicURIPathForDisk(path string) (string, bool) {
 }
 
 func DecodeDynamicURIPathSegment(segment string) string {
-	encoded, ok := strings.CutPrefix(segment, dynamicURIPathSegmentEscapePrefix)
+	decoded, ok := TryDecodeDynamicURIPathSegment(segment)
 	if !ok {
 		return segment
+	}
+	return decoded
+}
+
+func TryDecodeDynamicURIPathSegment(segment string) (string, bool) {
+	encoded, ok := strings.CutPrefix(segment, dynamicURIPathSegmentEscapePrefix)
+	if !ok {
+		if dynamicURIPathSegmentNeedsEncoding(segment) {
+			return "", false
+		}
+		return segment, true
 	}
 	encoded, extension, ok := strings.Cut(encoded, "~")
 	if !ok {
-		return segment
+		return "", false
 	}
 	decoded, err := hex.DecodeString(encoded)
 	if err != nil || !utf8.Valid(decoded) {
-		return segment
+		return "", false
 	}
 	if base, suffix, ok := strings.Cut(string(decoded), "\x00"); ok {
-		return base + extension + suffix
+		return base + extension + suffix, true
 	}
-	return string(decoded) + extension
+	return string(decoded) + extension, true
 }
