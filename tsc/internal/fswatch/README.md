@@ -93,15 +93,17 @@ if errors.Is(err, fswatch.ErrWatchTerminated) {
 - Paths in events are absolute. Subscribing through a directory symlink follows
   its target while preserving the caller-visible root in delivered paths.
 
-On macOS, paths are normalized to NFC. On volumes reporting case-insensitive
-lookup, FSEvents matches paths using CoreFoundation's case-insensitive fold,
-including expansions such as sharp s / `SS` and ligatures / letter sequences.
-This is not width- or diacritic-insensitive comparison. Folded forms are only
-comparison keys: directory events retain the caller's root casing and the
-event's NFC suffix; file events use the subscribed filename. Symlink-root
-subscriptions likewise retain the caller-visible root.
+On macOS, watch roots and subscribed filenames are normalized to NFC. On volumes
+reporting case-insensitive lookup, FSEvents and kqueue match paths using
+CoreFoundation's case-insensitive fold, including expansions such as sharp s /
+`SS` and ligatures / letter sequences. This is not width- or
+diacritic-insensitive comparison. Folded forms are only comparison keys:
+directory events retain the caller's root casing, with an NFC suffix for
+FSEvents and the on-disk child spelling for kqueue; file events use the
+subscribed NFC filename. Symlink-root subscriptions likewise retain the
+caller-visible root.
 
 The fold has been compared with actual aliases and distinct names on
 case-insensitive APFS. It is not a guarantee of identical Unicode lookup
 tables on every filesystem or macOS version. Case-sensitive volumes and
-other watcher backends retain exact comparison.
+watcher backends on other platforms retain exact comparison.

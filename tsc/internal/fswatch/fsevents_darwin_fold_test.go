@@ -190,29 +190,6 @@ func TestFSEventsLazyPathFolding(t *testing.T) {
 	}
 }
 
-// Check identity independently of the comparer, including exclusive creation.
-// Filesystems that do not support a particular alias cannot exercise its watch.
-func requireFSEventsAlias(t *testing.T, a, b string) {
-	t.Helper()
-	first, err := os.Stat(a)
-	if err != nil {
-		t.Fatal(err)
-	}
-	second, err := os.Stat(b)
-	if errors.Is(err, os.ErrNotExist) {
-		t.Skip("filesystem does not alias these spellings")
-	}
-	if err != nil {
-		t.Fatal(err)
-	}
-	if !os.SameFile(first, second) {
-		t.Fatal("alternate spelling resolved to a different inode")
-	}
-	if err := os.Mkdir(b, 0o755); !errors.Is(err, os.ErrExist) {
-		t.Fatalf("exclusive alternate creation: %v", err)
-	}
-}
-
 func TestFSEventsExpansionAliases(t *testing.T) {
 	t.Parallel()
 	for _, pair := range fseventsFoldPairs {
@@ -231,7 +208,7 @@ func TestFSEventsExpansionAliases(t *testing.T) {
 				if err := os.Mkdir(disk, 0o755); err != nil {
 					t.Fatal(err)
 				}
-				requireFSEventsAlias(t, disk, root)
+				requireDarwinAlias(t, disk, root)
 				nested := filepath.Join(disk, "Nested")
 				if err := os.Mkdir(nested, 0o755); err != nil {
 					t.Fatal(err)

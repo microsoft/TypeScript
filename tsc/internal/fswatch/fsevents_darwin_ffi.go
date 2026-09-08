@@ -152,12 +152,15 @@ func cfArrayGetValueAtIndex(array uintptr, index int) uintptr {
 // FSEvents reports paths using whatever bytes are stored on disk. APFS is
 // normalization-insensitive for lookups (a file created as NFD opens fine
 // under the NFC form, and vice versa) but it stores and reports the original
-// bytes. The library normalizes every path that crosses the darwin boundary
-// to Unicode NFC so that:
+// bytes. The library normalizes watch paths and incoming FSEvents paths to
+// Unicode NFC so that:
 //   - WatchDirectory("/.../caf\u00e9") and WatchDirectory("/.../cafe\u0301")
 //     coalesce to a single dir watch;
 //   - WatchFile filters and directory routing compare the same normalized paths;
 //   - subscribers can compare event paths against their own NFC strings.
+//
+// kqueue retains on-disk child spellings; its WatchFile comparisons also use
+// the native fold below on volumes reporting case-insensitive lookup.
 //
 // All-ASCII inputs are bit-identical in NFC and NFD, so the hot path skips
 // the FFI entirely. The rare non-ASCII case round-trips through CoreFoundation
