@@ -1429,6 +1429,13 @@ export const checkVsceVersion = task({
                 throw new Error(`${workflow} must contain exactly ${expectedCount} active stable version validator(s).`);
             }
         }
+        const tagWorkflow = fs.readFileSync("./.github/workflows/tag-vscode-typescript.yml", "utf8");
+        if (!tagWorkflow.includes('if [ "$version" = "0.0.0" ]; then')) {
+            throw new Error("tag-vscode-typescript.yml must not create a tag for the unreleased 0.0.0 version.");
+        }
+        if (!tagWorkflow.includes('if [ "$previousVersion" = "0.0.0" ] && [ "$version" != "1.0.0" ]; then')) {
+            throw new Error("tag-vscode-typescript.yml must require 1.0.0 for the first release.");
+        }
 
         const packageJson = JSON.parse(fs.readFileSync("./packages/vscode-typescript/package.json", "utf8"));
         const packageLock = JSON.parse(fs.readFileSync("./package-lock.json", "utf8"));

@@ -47,10 +47,21 @@ jobs:
           previousVersion="$(git show "HEAD^:$packagePath" | jq -r '.version')"
           version="$(jq -r '.version' "$packagePath")"
 
+          if [ "$version" = "0.0.0" ]; then
+            echo "$packagePath is still at the unreleased initialization version."
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
           if [ "$previousVersion" = "$version" ]; then
             echo "$packagePath changed without changing its version."
             echo "changed=false" >> "$GITHUB_OUTPUT"
             exit 0
+          fi
+
+          if [ "$previousVersion" = "0.0.0" ] && [ "$version" != "1.0.0" ]; then
+            echo "The first extension release must change 0.0.0 to 1.0.0." >&2
+            exit 1
           fi
 
           if ! [[ "$version" =~ ^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$ ]]; then
