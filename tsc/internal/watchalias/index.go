@@ -56,6 +56,13 @@ func Enabled(filesystem vfs.FS) bool {
 	return true
 }
 
+// Contains reports whether an original spelling is already registered, either
+// directly or as an ancestor. It does not query or mutate the index.
+func (i *Index) Contains(original string) bool {
+	_, ok := i.added[original]
+	return ok
+}
+
 // Add registers a spelling and its ancestors. Volume queries are cached per
 // directory in this index, and only missing directories inherit their nearest
 // existing ancestor's comparer. Other errors are returned, with no partial alias

@@ -77,6 +77,37 @@ func TestWatchAliasSnapshotReuse(t *testing.T) {
 		t.Fatal("new import was not loaded")
 	}
 	calls, aliases = fs.calls, snapshot.watchAliases
+	next, err = host.CloneSnapshotWithTemporaryFile(context.Background(), snapshot, "file:///src/main.ts", "export const value = 4;")
+	if err != nil {
+		t.Fatal(err)
+	}
+	snapshot.Deref()
+	snapshot = next
+	if fs.calls != calls || aliases != snapshot.watchAliases {
+		t.Fatal("removing an import needlessly rebuilt immutable alias coverage")
+	}
+	if snapshot.ProjectCollection.ConfiguredProject(host.toPath("/src/tsconfig.json")).Program.GetSourceFile("/src/other.ts") != nil {
+		t.Fatal("alias reuse retained a removed import in the program")
+	}
+	if err := disk.WriteFile("/src/other.ts", "export const other = 2;"); err != nil {
+		t.Fatal(err)
+	}
+	var removedDependencyChange FileChangeSummary
+	removedDependencyChange.Changed.Add("file:///src/other.ts")
+	next, err = host.CloneSnapshot(context.Background(), snapshot, removedDependencyChange, nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	snapshot.Deref()
+	snapshot = next
+	program := snapshot.ProjectCollection.ConfiguredProject(host.toPath("/src/tsconfig.json")).Program
+	if program.GetSourceFile("/src/other.ts") != nil || program.GetSourceFile("/src/main.ts").Text() != "export const value = 4;" {
+		t.Fatal("notification for surplus alias coverage changed live sources")
+	}
+	if snapshot.watchAliases == aliases {
+		t.Fatal("filesystem notification did not rebuild alias coverage")
+	}
+	calls, aliases = fs.calls, snapshot.watchAliases
 	if err = disk.WriteFile("/src/tsconfig.json", `{"compilerOptions":{"noLib":true,"types":[]},"include":["*.ts"]}`); err != nil {
 		t.Fatal(err)
 	}

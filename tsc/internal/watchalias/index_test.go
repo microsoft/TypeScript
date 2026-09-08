@@ -57,6 +57,14 @@ func TestExistingAncestorComparer(t *testing.T) {
 		t.Fatalf("probes = %q, want %q", f.calls, want)
 	}
 	before := len(f.calls)
+	for _, name := range []string{"/", "/project", "/project/new", "/project/new/a.ts"} {
+		if !index.Contains(name) {
+			t.Fatalf("missing original registration %q", name)
+		}
+	}
+	if index.Contains("/project/new/c.ts") || index.Contains("/project/NEW/a.ts") {
+		t.Fatal("unregistered original spelling was considered covered")
+	}
 	index.Expand("/project/new/deleted.ts")
 	if len(f.calls) != before {
 		t.Fatal("event expansion must not access the filesystem")

@@ -3,8 +3,7 @@ package project
 import (
 	"errors"
 	"fmt"
-	"maps"
-	"slices"
+	"iter"
 
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/lsconv"
@@ -24,22 +23,15 @@ func (s *Snapshot) initializeWatchAliases(logger logging.Logger) {
 	if watchalias.Enabled(s.host.fs) {
 		index = watchalias.New(s.host.fs)
 	}
-	add := func(name string) {
-		if s.watchAliasesError != nil || name == "" || tspath.IsDynamicFileName(name) {
-			return
-		}
-		name = tspath.GetNormalizedAbsolutePath(name, s.host.options.CurrentDirectory)
-		if !tspath.IsRootedDiskPath(name) {
-			return
-		}
-		if err := index.Add(name); err != nil {
-			s.watchAliasesError = fmt.Errorf("indexing project watch path %q: %w", name, err)
-		}
-	}
 	if index != nil {
-		for _, file := range s.fs.diskFiles {
-			add(file.FileName())
-			add(file.realpathName)
+		for name := range s.watchAliasNames(nil) {
+			if name = s.normalizeWatchAliasName(name); name == "" {
+				continue
+			}
+			if err := index.Add(name); err != nil {
+				s.watchAliasesError = fmt.Errorf("indexing project watch path %q: %w", name, err)
+				break
+			}
 		}
 	}
 	// Watchers preserve requested roots, which can themselves be symlinks
@@ -66,47 +58,6 @@ func (s *Snapshot) initializeWatchAliases(logger logging.Logger) {
 			}
 		}
 	}
-	if index != nil {
-		for _, file := range s.fs.overlays {
-			add(file.FileName())
-		}
-		for _, config := range s.ConfigFileRegistry.configs {
-			add(config.fileName)
-			if config.commandLine != nil {
-				for directory := range config.commandLine.WildcardDirectories() {
-					add(directory)
-				}
-			}
-		}
-		for _, search := range s.ConfigFileRegistry.configFileNames {
-			add(search.fileName)
-		}
-		for _, project := range s.ProjectCollection.Projects() {
-			if project.host != nil {
-				for _, names := range []*collections.SyncMap[tspath.Path, string]{
-					project.host.sourceFS.seenFiles,
-					project.host.sourceFS.missingDirectories,
-				} {
-					if names != nil {
-						names.Range(func(_ tspath.Path, name string) bool {
-							add(name)
-							return true
-						})
-					}
-				}
-			}
-			if project.contentMapperWatch != nil {
-				for _, name := range project.contentMapperWatch.input {
-					add(name)
-				}
-			}
-		}
-		if s.autoImportsWatch != nil {
-			for _, directory := range s.autoImportsWatch.input {
-				add(directory)
-			}
-		}
-	}
 	if s.watchAliasesError != nil {
 		if logger != nil {
 			logger.Warnf("Watch aliases unavailable; watch events will invalidate all cached project state until a later snapshot retries: %v", s.watchAliasesError)
@@ -117,6 +68,91 @@ func (s *Snapshot) initializeWatchAliases(logger logging.Logger) {
 	}
 	s.watchAliases = index
 	s.watchRealpaths = realpaths
+}
+
+func (s *Snapshot) normalizeWatchAliasName(name string) string {
+	if name == "" || tspath.IsDynamicFileName(name) {
+		return ""
+	}
+	name = tspath.GetNormalizedAbsolutePath(name, s.host.options.CurrentDirectory)
+	if !tspath.IsRootedDiskPath(name) {
+		return ""
+	}
+	return name
+}
+
+// Registration and reuse must observe the same original names. Keeping this
+// traversal in one place avoids a second model of each project's cache inputs.
+// A previous snapshot allows immutable, shared lookup sets to be skipped.
+func (s *Snapshot) watchAliasNames(previous *Snapshot) iter.Seq[string] {
+	return func(yield func(string) bool) {
+		for _, file := range s.fs.diskFiles {
+			if !yield(file.FileName()) || !yield(file.realpathName) {
+				return
+			}
+		}
+		for _, file := range s.fs.overlays {
+			if !yield(file.FileName()) {
+				return
+			}
+		}
+		for _, config := range s.ConfigFileRegistry.configs {
+			if !yield(config.fileName) {
+				return
+			}
+			if config.commandLine != nil {
+				for directory := range config.commandLine.WildcardDirectories() {
+					if !yield(directory) {
+						return
+					}
+				}
+			}
+		}
+		for _, search := range s.ConfigFileRegistry.configFileNames {
+			if !yield(search.fileName) {
+				return
+			}
+		}
+		for _, project := range s.ProjectCollection.Projects() {
+			var old *sourceFS
+			if previous != nil {
+				if p := previous.ProjectCollection.GetProjectByPath(project.configFilePath); p != nil && p.host != nil {
+					old = p.host.sourceFS
+				}
+			}
+			if project.host != nil {
+				for _, names := range []*collections.SyncMap[tspath.Path, string]{
+					project.host.sourceFS.seenFiles,
+					project.host.sourceFS.missingDirectories,
+				} {
+					if names != nil && (old == nil || names != old.seenFiles && names != old.missingDirectories) {
+						more := true
+						names.Range(func(_ tspath.Path, name string) bool {
+							more = yield(name)
+							return more
+						})
+						if !more {
+							return
+						}
+					}
+				}
+			}
+			if project.contentMapperWatch != nil {
+				for _, name := range project.contentMapperWatch.input {
+					if !yield(name) {
+						return
+					}
+				}
+			}
+		}
+		if s.autoImportsWatch != nil {
+			for _, directory := range s.autoImportsWatch.input {
+				if !yield(directory) {
+					return
+				}
+			}
+		}
+	}
 }
 
 func (s *Session) watchAliasesNeedRefresh(change FileChangeSummary) bool {
@@ -152,7 +188,7 @@ func (s *Snapshot) initializeWatchAliasesFrom(previous *Snapshot, contentOnly bo
 	if !enabled && len(s.fs.nodeModulesRealpathAliases) == 0 {
 		return
 	}
-	if contentOnly && previous.watchAliasesError == nil && enabled == (previous.watchAliases != nil) && s.sameWatchAliasInputs(previous) {
+	if contentOnly && previous.watchAliasesError == nil && enabled == (previous.watchAliases != nil) && s.canReuseWatchAliases(previous) {
 		s.watchAliases = previous.watchAliases
 		s.watchRealpaths = previous.watchRealpaths
 		return
@@ -160,66 +196,31 @@ func (s *Snapshot) initializeWatchAliasesFrom(previous *Snapshot, contentOnly bo
 	s.initializeWatchAliases(logger)
 }
 
-// Compare original spellings, not compiler path keys or file contents. The
-// previous generation is immutable; reuse never adds to its published index.
-func (s *Snapshot) sameWatchAliasInputs(previous *Snapshot) bool {
-	if !maps.EqualFunc(s.fs.diskFiles, previous.fs.diskFiles, func(a, b *diskFile) bool {
-		return a.FileName() == b.FileName() && a.realpathName == b.realpathName
-	}) || !maps.EqualFunc(s.fs.overlays, previous.fs.overlays, func(a, b *Overlay) bool {
-		return a.FileName() == b.FileName()
-	}) || !maps.EqualFunc(s.ConfigFileRegistry.configs, previous.ConfigFileRegistry.configs, func(a, b *configFileEntry) bool {
-		return a.fileName == b.fileName && a.commandLine == b.commandLine
-	}) || !maps.EqualFunc(s.ConfigFileRegistry.configFileNames, previous.ConfigFileRegistry.configFileNames, func(a, b *configFileNames) bool {
-		return a.fileName == b.fileName
-	}) {
-		return false
-	}
-	sameWatch := func(a, b *WatchedFiles[map[tspath.Path]string]) bool {
-		if a == nil || b == nil {
-			return a == b
-		}
-		return maps.Equal(a.input, b.input)
-	}
-	if !sameWatch(s.autoImportsWatch, previous.autoImportsWatch) {
-		return false
-	}
-	sameTracked := func(a, b *collections.SyncMap[tspath.Path, string]) bool {
-		if a == b {
-			return true
-		}
-		if a == nil || b == nil {
-			return false
-		}
-		count, equal := 0, true
-		a.Range(func(path tspath.Path, name string) bool {
-			count++
-			other, ok := b.Load(path)
-			equal = ok && name == other
-			return equal
-		})
-		return equal && count == b.Size()
-	}
-	sameProject := func(a, b *Project) bool {
-		if a == b {
-			return true
-		}
-		if a == nil || b == nil {
-			return false
-		}
-		if a.contentMapperWatch != b.contentMapperWatch {
-			if a.contentMapperWatch == nil || b.contentMapperWatch == nil ||
-				!slices.Equal(a.contentMapperWatch.input, b.contentMapperWatch.input) {
-				return false
+// Content-only snapshots may retain surplus registrations: expansion only
+// supplies candidates to the existing dependency checks. Reuse never grows or
+// mutates an index; new names and filesystem changes build a fresh generation.
+func (s *Snapshot) canReuseWatchAliases(previous *Snapshot) bool {
+	if previous.watchAliases != nil {
+		for name := range s.watchAliasNames(previous) {
+			if !previous.watchAliases.Contains(name) {
+				name = s.normalizeWatchAliasName(name)
+				if name != "" && !previous.watchAliases.Contains(name) {
+					return false
+				}
 			}
 		}
-		if a.host == nil || b.host == nil {
-			return a.host == b.host
-		}
-		return sameTracked(a.host.sourceFS.seenFiles, b.host.sourceFS.seenFiles) &&
-			sameTracked(a.host.sourceFS.missingDirectories, b.host.sourceFS.missingDirectories)
 	}
-	return sameProject(s.ProjectCollection.inferredProject, previous.ProjectCollection.inferredProject) &&
-		maps.EqualFunc(s.ProjectCollection.configuredProjects, previous.ProjectCollection.configuredProjects, sameProject)
+	if len(s.fs.nodeModulesRealpathAliases) != 0 {
+		for path, file := range s.fs.diskFiles {
+			if file.realpathName != "" {
+				old := previous.fs.diskFiles[path]
+				if old == nil || old.FileName() != file.FileName() || old.realpathName != file.realpathName {
+					return false
+				}
+			}
+		}
+	}
+	return true
 }
 
 func (s *Snapshot) watchNames(name string) []string {
