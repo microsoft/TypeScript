@@ -97,7 +97,7 @@ func (sd *snapshotData) getProgram(projectHandle ProjectID) (*compiler.Program, 
 
 // getProject looks up a project from a project handle within this snapshot.
 func (sd *snapshotData) getProject(projectHandle ProjectID) (*project.Project, error) {
-	projectName := parseProjectHandle(projectHandle)
+	projectName := tspath.Path(projectHandle)
 	proj := sd.snapshot.ProjectCollection.GetProjectByPath(projectName)
 	if proj == nil {
 		return nil, fmt.Errorf("%w: project %s not found", ErrClientError, projectName)
@@ -1190,7 +1190,7 @@ func (s *Session) toAPISnapshotRequest(changes *SnapshotRequestChangesParams) (*
 		apiRequest.RemovePrograms = collections.NewSetWithSizeHint[int](len(changes.RemovePrograms))
 	}
 	for _, program := range changes.RemovePrograms {
-		programID, ok := project.SyntheticProgramID(parseProjectHandle(program))
+		programID, ok := project.SyntheticProgramID(tspath.Path(program))
 		if !ok {
 			return nil, fmt.Errorf("%w: invalid synthetic project handle: %s", ErrClientError, program)
 		}

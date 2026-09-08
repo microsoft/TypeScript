@@ -184,7 +184,7 @@ func TestGetCurrentLanguageServerSnapshotCreatesAndRemovesPrograms(t *testing.T)
 
 	removed, err := session.handleGetCurrentLanguageServerSnapshot(context.Background(), &GetCurrentLanguageServerSnapshotParams{
 		Changes: &LanguageServerSnapshotChanges{
-			SnapshotRequestChangesParams: SnapshotRequestChangesParams{RemovePrograms: []ProjectID{created.Projects[0].Id, created.Projects[0].Id}},
+			SnapshotRequestChangesParams: SnapshotRequestChangesParams{RemovePrograms: []SyntheticProjectID{SyntheticProjectID(created.Projects[0].Id), SyntheticProjectID(created.Projects[0].Id)}},
 		},
 	})
 	assert.NilError(t, err)
@@ -244,7 +244,7 @@ func TestLanguageServerProgramOwnershipIsIsolatedByAPISession(t *testing.T) {
 	other := NewLSPSession(projectSession, nil)
 	_, err = other.handleGetCurrentLanguageServerSnapshot(context.Background(), &GetCurrentLanguageServerSnapshotParams{
 		Changes: &LanguageServerSnapshotChanges{
-			SnapshotRequestChangesParams: SnapshotRequestChangesParams{RemovePrograms: []ProjectID{created.Projects[0].Id}},
+			SnapshotRequestChangesParams: SnapshotRequestChangesParams{RemovePrograms: []SyntheticProjectID{SyntheticProjectID(created.Projects[0].Id)}},
 		},
 	})
 	assert.NilError(t, err)

@@ -8,6 +8,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/json"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/projecttestutil"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"gotest.tools/v3/assert"
 )
 
@@ -89,7 +90,7 @@ func TestCreateSnapshotCreatesPrograms(t *testing.T) {
 	assert.NilError(t, err)
 	assert.Equal(t, len(snapshot.snapshot.ProjectCollection.SyntheticProjects()), 2)
 	for _, projectResponse := range response.Projects {
-		assert.Assert(t, snapshot.snapshot.ProjectCollection.GetProjectByPath(parseProjectHandle(projectResponse.Id)) != nil)
+		assert.Assert(t, snapshot.snapshot.ProjectCollection.GetProjectByPath(tspath.Path(projectResponse.Id)) != nil)
 	}
 }
 
@@ -130,7 +131,7 @@ func TestCreateSnapshotRejectsRemovingProgramFromIndependentRoot(t *testing.T) {
 
 	_, err := session.handleCreateSnapshot(context.Background(), &CreateSnapshotParams{
 		SnapshotRequestChangesParams: SnapshotRequestChangesParams{
-			RemovePrograms: []ProjectID{"/dev/null/synthetic/1"},
+			RemovePrograms: []SyntheticProjectID{"/dev/null/synthetic/1"},
 		},
 	})
 	assert.ErrorContains(t, err, "synthetic program not found for removal: 1")

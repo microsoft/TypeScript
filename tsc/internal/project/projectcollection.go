@@ -235,11 +235,6 @@ func (c *ProjectCollection) GetDefaultProject(path tspath.Path) *Project {
 		return containingProjects[0]
 	}
 	if len(containingProjects) == 0 {
-		for _, project := range c.SyntheticProjects() {
-			if project.containsFile(path) {
-				return project
-			}
-		}
 		if c.inferredProject != nil && c.inferredProject.containsFile(path) {
 			return c.inferredProject
 		}

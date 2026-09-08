@@ -133,22 +133,8 @@ func (s *Snapshot) cloneWithTemporaryFile(
 
 	return s.Clone(ctx, SnapshotChange{
 		fileChanges:     fileChanges,
-		ResourceRequest: s.resourceRequestForDocument(uri),
+		ResourceRequest: ResourceRequest{Documents: []lsproto.DocumentUri{uri}},
 	}, overlays, nil, nil), nil
-}
-
-func (s *Snapshot) resourceRequestForDocument(uri lsproto.DocumentUri) ResourceRequest {
-	path := uri.Path(s.UseCaseSensitiveFileNames())
-	var projects []tspath.Path
-	for _, project := range s.ProjectCollection.SyntheticProjects() {
-		if project.containsFile(path) {
-			projects = append(projects, project.configFilePath)
-		}
-	}
-	if len(projects) != 0 {
-		return ResourceRequest{Projects: projects}
-	}
-	return ResourceRequest{Documents: []lsproto.DocumentUri{uri}}
 }
 
 func (s *Snapshot) processFileChanges(

@@ -102,7 +102,21 @@ func TestSnapshot(t *testing.T) {
 		assert.DeepEqual(t, secondProject.CommandLine.FileNames(), []string{"/b.ts"})
 		assert.Assert(t, createdSnapshot.ProjectCollection.InferredProject() == nil)
 		assert.Equal(t, len(createdSnapshot.ProjectCollection.SyntheticProjects()), 2)
-		assert.Equal(t, createdSnapshot.ProjectCollection.GetDefaultProject(createdSnapshot.toPath("/a.ts")), firstProject)
+		assert.Assert(t, createdSnapshot.ProjectCollection.GetDefaultProject(createdSnapshot.toPath("/a.ts")) == nil)
+		assert.Equal(t, createdSnapshot.ProjectCollection.GetProjectByPath(firstProject.ID()), firstProject)
+
+		openedSnapshot, err := session.CloneSnapshot(
+			ctx,
+			createdSnapshot,
+			FileChangeSummary{},
+			&APISnapshotRequest{OpenFiles: collections.NewSetFromItems(lsproto.DocumentUri("file:///a.ts"))},
+		)
+		assert.NilError(t, err)
+		defer openedSnapshot.Deref()
+		assert.Assert(t, openedSnapshot.ProjectCollection.InferredProject() != nil)
+		assert.Equal(t, openedSnapshot.ProjectCollection.GetDefaultProject(openedSnapshot.toPath("/a.ts")), openedSnapshot.ProjectCollection.InferredProject())
+		assert.Equal(t, openedSnapshot.ProjectCollection.GetProjectByPath(firstProject.ID()), firstProject)
+
 		assert.Assert(t, removedSnapshot.ProjectCollection.GetProjectByPath(firstProject.ID()) == nil)
 		assert.Equal(t, removedSnapshot.ProjectCollection.GetProjectByPath(secondProject.ID()), secondProject)
 		assert.Equal(t, len(removedSnapshot.ProjectCollection.SyntheticProjects()), 1)
