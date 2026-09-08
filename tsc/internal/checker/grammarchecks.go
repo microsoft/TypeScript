@@ -2168,7 +2168,7 @@ func (c *Checker) checkGrammarImportCallExpression(node *ast.Node) bool {
 	}
 
 	nodeAsCall := node.AsCallExpression()
-	if nodeAsCall.TypeArguments != nil {
+	if nodeAsCall.TypeArguments != nil || nodeAsCall.QuestionDotToken != nil {
 		return c.grammarErrorOnNode(node, diagnostics.This_use_of_import_is_invalid_import_calls_can_be_written_but_they_must_have_parentheses_and_cannot_have_type_arguments)
 	}
 
