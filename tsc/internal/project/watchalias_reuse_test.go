@@ -89,7 +89,7 @@ func TestWatchAliasSnapshotReuse(t *testing.T) {
 	if snapshot.ProjectCollection.ConfiguredProject(host.toPath("/src/tsconfig.json")).Program.GetSourceFile("/src/other.ts") != nil {
 		t.Fatal("alias reuse retained a removed import in the program")
 	}
-	if err := disk.WriteFile("/src/other.ts", "export const other = 2;"); err != nil {
+	if err = disk.WriteFile("/src/other.ts", "export const other = 2;"); err != nil {
 		t.Fatal(err)
 	}
 	var removedDependencyChange FileChangeSummary

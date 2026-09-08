@@ -23,7 +23,7 @@ func TestRealpathWithParent(t *testing.T) {
 	assert.NilError(t, os.Mkdir(dir+"/target/denied", 0o755))
 	assert.NilError(t, os.WriteFile(dir+"/target/denied/file.ts", nil, 0o600))
 	assert.NilError(t, os.Chmod(dir+"/target/denied", 0))
-	defer os.Chmod(dir+"/target/denied", 0o755)
+	defer func() { assert.NilError(t, os.Chmod(dir+"/target/denied", 0o755)) }()
 
 	fs := FS()
 	for _, suffix := range []string{
@@ -38,8 +38,11 @@ func TestRealpathWithParent(t *testing.T) {
 		}
 	}
 	for _, pair := range [][2]string{
-		{"s", "\u017f"}, {"SS", "\u00df"}, {"i\u0307", "\u0130"},
-		{"ff", "\ufb00"}, {"\u00e9", "e\u0301"},
+		{"s", "\u017f"},
+		{"SS", "\u00df"},
+		{"i\u0307", "\u0130"},
+		{"ff", "\ufb00"},
+		{"\u00e9", "e\u0301"},
 	} {
 		assert.NilError(t, os.Symlink("file.ts", dir+"/target/"+pair[0]))
 		name := dir + "/link/" + pair[1]

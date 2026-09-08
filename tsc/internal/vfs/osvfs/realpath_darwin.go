@@ -1,11 +1,11 @@
 package osvfs
 
 import (
-	"os"
 	"path/filepath"
 
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/internal"
+	"golang.org/x/sys/unix"
 )
 
 // Darwin's Realpath preserves non-symlink component spellings. An authoritative
@@ -18,14 +18,15 @@ func (vfs *osFS) RealpathWithParent(path string, realpath func(string) string) s
 		return vfs.Realpath(path)
 	}
 	release := blockingOpSema.Acquire()
-	info, err := os.Lstat(path)
+	var info unix.Stat_t
+	err := unix.Lstat(path, &info)
 	release()
 	if err != nil {
 		// FS.Realpath returns the entire original name on failure, including
 		// missing leaves beneath a symlinked parent.
 		return path
 	}
-	if info.Mode()&os.ModeSymlink != 0 {
+	if info.Mode&unix.S_IFMT == unix.S_IFLNK {
 		return vfs.Realpath(path)
 	}
 	parent := tspath.GetDirectoryPath(path)

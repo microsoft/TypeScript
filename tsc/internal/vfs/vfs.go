@@ -54,7 +54,7 @@ type FS interface {
 // The callback must resolve paths on this filesystem, not on the host OS.
 func RealpathWithParent(fs FS, path string, realpath func(string) string) string {
 	if resolver, ok := fs.(interface {
-		RealpathWithParent(string, func(string) string) string
+		RealpathWithParent(path string, realpath func(string) string) string
 	}); ok {
 		return resolver.RealpathWithParent(path, realpath)
 	}
