@@ -445,6 +445,15 @@ func (s *snapshotFSBuilder) watchChangesOverlapCache(change FileChangeSummary) b
 			return true
 		}
 	}
+	for uri := range change.Created.Keys() {
+		path := s.toPath(uri.FileName())
+		if _, ok := s.diskFiles.Load(path); ok {
+			return true
+		}
+		if _, ok := s.nodeModulesRealpathAliases.Load(path); ok {
+			return true
+		}
+	}
 	for uri := range change.Deleted.Keys() {
 		path := s.toPath(uri.FileName())
 		if _, ok := s.diskFiles.Load(path); ok {
@@ -478,33 +487,40 @@ func (s *snapshotFSBuilder) invalidateNodeModulesCache() {
 }
 
 func (s *snapshotFSBuilder) markDirtyFiles(change FileChangeSummary) FileChangeSummary {
-	if change.Changed.Len() > 0 {
-		var filteredChanged collections.SyncSet[lsproto.DocumentUri]
+	filterChanges := func(set collections.Set[lsproto.DocumentUri]) collections.Set[lsproto.DocumentUri] {
+		if set.Len() == 0 {
+			return set
+		}
+		var filtered collections.SyncSet[lsproto.DocumentUri]
 		wg := core.NewWorkGroup(false)
-		for uri := range change.Changed.Keys() {
+		for uri := range set.Keys() {
 			path := s.toPath(uri.FileName())
 			if _, ok := s.overlays[path]; ok {
-				filteredChanged.Add(uri)
+				filtered.Add(uri)
 				continue
 			}
 			entry, ok := s.diskFiles.Load(path)
 			if !ok {
-				filteredChanged.Add(uri)
+				filtered.Add(uri)
 				continue
 			}
 			wg.Queue(func() {
 				if s.reloadEntryIfContentChanged(entry) {
-					filteredChanged.Add(uri)
+					filtered.Add(uri)
 				}
 			})
 		}
 		wg.RunAndWait()
-		newChanged := collections.NewSetWithSizeHint[lsproto.DocumentUri](filteredChanged.Size())
-		for uri := range filteredChanged.Keys() {
-			newChanged.Add(uri)
+		newSet := collections.NewSetWithSizeHint[lsproto.DocumentUri](filtered.Size())
+		for uri := range filtered.Keys() {
+			newSet.Add(uri)
 		}
-		change.Changed = *newChanged
+		return *newSet
 	}
+
+	change.Changed = filterChanges(change.Changed)
+	change.Created = filterChanges(change.Created)
+
 	for uri := range change.Deleted.Keys() {
 		path := s.toPath(uri.FileName())
 		if entry, ok := s.diskFiles.Load(path); ok {
@@ -548,7 +564,7 @@ func (s *snapshotFSBuilder) reloadEntryIfContentChanged(entry *dirty.SyncMapEntr
 	return changed
 }
 
-// expandRealpathAliases adds synthetic URIs to the Changed and Deleted sets for
+// expandRealpathAliases adds synthetic URIs to the Changed, Created, and Deleted sets for
 // files that were accessed through node_modules symlinks. When a watch event arrives
 // using a realpath, this expands it to include the symlink-based path so that
 // downstream consumers (markDirtyFiles, markFilesChanged) can find cached entries.
@@ -557,31 +573,27 @@ func (s *SnapshotFS) expandRealpathAliases(change FileChangeSummary) FileChangeS
 		return change
 	}
 
-	var additionalChanged collections.Set[lsproto.DocumentUri]
-	for uri := range change.Changed.Keys() {
-		path := s.toPath(uri.FileName())
-		if aliases, ok := s.nodeModulesRealpathAliases[path]; ok {
-			for aliasPath := range aliases.paths.Keys() {
-				additionalChanged.Add(lsconv.FileNameToDocumentURI(string(aliasPath)))
+	expandSet := func(set *collections.Set[lsproto.DocumentUri]) {
+		if set.Len() == 0 {
+			return
+		}
+		var additional collections.Set[lsproto.DocumentUri]
+		for uri := range set.Keys() {
+			path := s.toPath(uri.FileName())
+			if aliases, ok := s.nodeModulesRealpathAliases[path]; ok {
+				for aliasPath := range aliases.paths.Keys() {
+					additional.Add(lsconv.FileNameToDocumentURI(string(aliasPath)))
+				}
 			}
 		}
-	}
-	for uri := range additionalChanged.Keys() {
-		change.Changed.Add(uri)
+		for uri := range additional.Keys() {
+			set.Add(uri)
+		}
 	}
 
-	var additionalDeleted collections.Set[lsproto.DocumentUri]
-	for uri := range change.Deleted.Keys() {
-		path := s.toPath(uri.FileName())
-		if aliases, ok := s.nodeModulesRealpathAliases[path]; ok {
-			for aliasPath := range aliases.paths.Keys() {
-				additionalDeleted.Add(lsconv.FileNameToDocumentURI(string(aliasPath)))
-			}
-		}
-	}
-	for uri := range additionalDeleted.Keys() {
-		change.Deleted.Add(uri)
-	}
+	expandSet(&change.Changed)
+	expandSet(&change.Created)
+	expandSet(&change.Deleted)
 
 	return change
 }
