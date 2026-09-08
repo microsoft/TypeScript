@@ -2,8 +2,6 @@
 
 import AdmZip from "adm-zip";
 import chokidar from "chokidar";
-import { $ as _$ } from "execa";
-import { glob } from "glob";
 import { task } from "hereby";
 import assert from "node:assert";
 import crypto from "node:crypto";
@@ -11,12 +9,15 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import url from "node:url";
-import { parseArgs } from "node:util";
-import pLimit from "p-limit";
-import pc from "picocolors";
+import {
+    parseArgs,
+    styleText,
+} from "node:util";
 import * as tar from "tar";
-import tmp from "tmp";
-import which from "which";
+import {
+    x,
+    xSync,
+} from "tinyexec";
 
 if (process.platform === "win32") {
     process.chdir(fs.realpathSync.native(process.cwd()));
@@ -27,8 +28,48 @@ const __dirname = path.dirname(__filename);
 
 const isCI = !!process.env.CI || !!process.env.TF_BUILD;
 
-const $pipe = _$({ verbose: "short" });
-const $ = _$({ verbose: "short", stdio: "inherit" });
+/**
+ * @typedef {{
+ *   captureOutput?: boolean;
+ *   cwd?: string;
+ *   env?: NodeJS.ProcessEnv;
+ *   signal?: AbortSignal;
+ * }} RunOptions
+ */
+
+/**
+ * @param {string} arg
+ */
+function formatCommandArg(arg) {
+    return arg && /^[\w@%+=:,./-]+$/.test(arg) ? arg : JSON.stringify(arg);
+}
+
+/**
+ * @param {string} command
+ * @param {readonly string[]} [args]
+ * @param {RunOptions} [options]
+ */
+function run(command, args = [], options = {}) {
+    console.log("$ " + [command, ...args].map(formatCommandArg).join(" "));
+    return x(command, args, {
+        throwOnError: true,
+        ...(options.signal ? { signal: options.signal } : {}),
+        nodeOptions: {
+            cwd: options.cwd,
+            env: options.env ? { ...process.env, ...options.env } : undefined,
+            stdio: options.captureOutput ? "pipe" : "inherit",
+        },
+    });
+}
+
+/**
+ * @param {string} command
+ * @param {readonly string[]} [args]
+ * @param {Omit<RunOptions, "captureOutput">} [options]
+ */
+function runOutput(command, args, options) {
+    return run(command, args, { ...options, captureOutput: true });
+}
 
 /**
  * @param {string} name
@@ -142,16 +183,63 @@ function memoize(fn) {
     };
 }
 
+/**
+ * @param {string} pattern
+ * @param {string[]} [exclude]
+ */
+async function globFiles(pattern, exclude) {
+    const files = [];
+    const absolute = path.isAbsolute(pattern);
+    for await (const entry of fs.promises.glob(pattern, { exclude, withFileTypes: true })) {
+        if (entry.isFile()) {
+            const file = path.join(entry.parentPath, entry.name);
+            files.push(absolute ? file : path.relative(process.cwd(), file));
+        }
+    }
+    return files;
+}
+
+/**
+ * @param {(() => Promise<void>)[]} tasks
+ * @param {number} concurrency
+ */
+async function runWithConcurrencyLimit(tasks, concurrency) {
+    const queue = tasks.values();
+    /** @type {unknown[]} */
+    const errors = [];
+    const workers = Array.from({ length: Math.min(concurrency, tasks.length) }, async () => {
+        for (const task of queue) {
+            try {
+                await task();
+            }
+            catch (error) {
+                errors.push(error);
+            }
+        }
+    });
+    await Promise.all(workers);
+    if (errors.length === 1) {
+        throw errors[0];
+    }
+    if (errors.length > 1) {
+        throw new AggregateError(errors, `${errors.length} concurrent tasks failed`);
+    }
+}
+
 const tools = new Map([
     ["gotest.tools/gotestsum", "latest"],
 ]);
 
-/**
- * @param {string} tool
- */
-function isInstalled(tool) {
-    return !!which.sync(tool, { nothrow: true });
-}
+const hasGotestsum = memoize(() => {
+    try {
+        return xSync("gotestsum", ["--version"], {
+            nodeOptions: { stdio: "ignore" },
+        }).exitCode === 0;
+    }
+    catch {
+        return false;
+    }
+});
 
 const builtLocal = "./built/local";
 
@@ -201,7 +289,11 @@ function buildTsc(opts) {
     opts ||= {};
     const out = opts.out ?? path.resolve("./built/local/tsc" + (process.platform === "win32" ? ".exe" : ""));
     const env = { ...goBuildEnv, ...opts.env };
-    return $({ cancelSignal: opts.abortSignal, env, cwd: "./tsc" })`go build ${goBuildFlags} ${opts.extraFlags ?? []} ${goBuildTags("noembed")} -o ${out} ./cmd/tsc`;
+    return run("go", ["build", ...goBuildFlags, ...(opts.extraFlags ?? []), ...goBuildTags("noembed"), "-o", out, "./cmd/tsc"], {
+        signal: opts.abortSignal,
+        env,
+        cwd: "./tsc",
+    });
 }
 
 export const tscBuild = task({
@@ -279,7 +371,7 @@ export const generate = task({
     name: "generate",
     description: "Runs go generate on the project.",
     run: async () => {
-        await $({ cwd: "./tsc" })`go generate -v ./...`;
+        await run("go", ["generate", "-v", "./..."], { cwd: "./tsc" });
     },
 });
 
@@ -287,7 +379,7 @@ export const generateExtension = task({
     name: "generate:extension",
     description: "Generates files in the extension",
     run: async () => {
-        await $`npm run -w native-preview generateLocBundle`;
+        await run("npm", ["run", "-w", "native-preview", "generateLocBundle"]);
     },
 });
 
@@ -752,9 +844,9 @@ func toInt32[T ~int8 | ~int16 | ~int32 | ~int | ~uint8 | ~uint16 | ~uint32](v T)
 `;
 
     fs.writeFileSync(enumValuesGeneratedGoPath, goSource);
-    await $`dprint fmt ${enumValuesGeneratedGoPath}`;
+    await run("dprint", ["fmt", enumValuesGeneratedGoPath]);
 
-    const { stdout } = await $pipe`go run ${enumValuesGeneratedGoPath}`;
+    const { stdout } = await runOutput("go", ["run", enumValuesGeneratedGoPath]);
     /** @type {Record<string, Record<string, number>>} */
     const parsed = JSON.parse(stdout);
     return parsed;
@@ -859,7 +951,7 @@ async function runGenerateEnums() {
     }
     console.log("All generated values match Go.");
 
-    await $`dprint fmt ${generatedEnums.flatMap(e => e.fileNames)}`;
+    await run("dprint", ["fmt", ...generatedEnums.flatMap(e => e.fileNames)]);
     console.log("Done.");
 }
 
@@ -872,15 +964,15 @@ export const generateEnums = task({
 export const generateAST = task({
     name: "generate:ast",
     description: "Generates AST and encoder files from ast.json.",
-    run: () => $`node --experimental-strip-types --no-warnings ./tools/scripts/tsc/generate.ts`,
+    run: () => run("node", ["./tools/scripts/tsc/generate.ts"]),
 });
 
 export const generateAPI = task({
     name: "generate:api",
     description: "Generates API files from internal/api/proto.go and internal/api/session.go.",
     run: async () => {
-        await $`go -C ./tools run ./gen-proto ../tsc/internal/api/proto.go ../packages/typescript/src/api/proto.generated.ts`;
-        await $`npx dprint fmt packages/typescript/src/api/proto.generated.ts`;
+        await run("go", ["-C", "./tools", "run", "./gen-proto", "../tsc/internal/api/proto.go", "../packages/typescript/src/api/proto.generated.ts"]);
+        await run("npx", ["dprint", "fmt", "packages/typescript/src/api/proto.generated.ts"]);
     },
 });
 
@@ -1001,7 +1093,7 @@ async function checkUnusedBaselines(trackingDir) {
         return [];
     }
 
-    const allBaselines = await glob(`${refBaseline}/**`, { nodir: true });
+    const allBaselines = await globFiles(`${refBaseline}/**`);
     const unusedBaselines = allBaselines
         .map(p => path.relative(refBaseline, p))
         .filter(p => !usedBaselines.has(p));
@@ -1009,13 +1101,11 @@ async function checkUnusedBaselines(trackingDir) {
     return unusedBaselines;
 }
 
-const $test = $({ env: goTestEnv, cwd: "./tsc" });
-
 /**
  * @param {string} taskName
  */
 function gotestsum(taskName) {
-    const args = isInstalled("gotestsum") ? ["gotestsum", ...goTestSumFlags, "--"] : ["go", "test"];
+    const args = hasGotestsum() ? ["gotestsum", ...goTestSumFlags, "--"] : ["go", "test"];
     return args.concat(goTestFlags(taskName));
 }
 
@@ -1035,13 +1125,13 @@ async function runTests() {
     // Create a tmp directory for baseline tracking if enabled
     /** @type {string | undefined} */
     let trackingDir;
-    /** @type {(() => void) | undefined} */
+    /** @type {(() => Promise<void>) | undefined} */
     let cleanupTracking;
 
     if (baselineTrackingEnabled) {
-        const tmpDir = tmp.dirSync({ prefix: "tsgo-baseline-tracking-", unsafeCleanup: true });
-        trackingDir = tmpDir.name;
-        cleanupTracking = tmpDir.removeCallback;
+        const tempTrackingDir = fs.mkdtempSync(path.join(os.tmpdir(), "tsgo-baseline-tracking-"));
+        trackingDir = tempTrackingDir;
+        cleanupTracking = () => rimraf(tempTrackingDir);
     }
 
     try {
@@ -1049,19 +1139,22 @@ async function runTests() {
             ...goTestEnv,
             ...(trackingDir ? { TSGO_BASELINE_TRACKING_DIR: trackingDir } : {}),
         };
-        const $testWithTracking = $({ env: testEnv, cwd: "./tsc" });
-        await $testWithTracking`${gotestsum("tests")} ./... ${isCI ? ["--timeout=45m"] : []}`;
+        const command = gotestsum("tests");
+        await run(command[0], [...command.slice(1), "./...", ...(isCI ? ["--timeout=45m"] : [])], {
+            env: testEnv,
+            cwd: "./tsc",
+        });
 
         // Check for unused baselines after tests complete
         if (trackingDir) {
             const unusedBaselines = await checkUnusedBaselines(trackingDir);
             if (unusedBaselines.length > 0) {
-                console.error(pc.red(`\nFound ${unusedBaselines.length} unused baseline file(s):`));
+                console.error(styleText("red", `\nFound ${unusedBaselines.length} unused baseline file(s):`));
                 for (const baseline of unusedBaselines.slice(0, 20)) {
-                    console.error(pc.red(`  ${baseline}`));
+                    console.error(styleText("red", `  ${baseline}`));
                 }
                 if (unusedBaselines.length > 20) {
-                    console.error(pc.red(`  ... and ${unusedBaselines.length - 20} more`));
+                    console.error(styleText("red", `  ... and ${unusedBaselines.length - 20} more`));
                 }
 
                 // Create .delete files for each unused baseline so baseline-accept can remove them
@@ -1070,7 +1163,7 @@ async function runTests() {
                     await fs.promises.mkdir(path.dirname(deleteFilePath), { recursive: true });
                     await fs.promises.writeFile(deleteFilePath, "");
                 }
-                console.error(pc.red(`\nRun 'hereby baseline-accept' to delete them.`));
+                console.error(styleText("red", `\nRun 'hereby baseline-accept' to delete them.`));
 
                 throw new Error(`Found ${unusedBaselines.length} unused baseline file(s). Run 'hereby baseline-accept' to delete them.`);
             }
@@ -1078,13 +1171,13 @@ async function runTests() {
     }
     finally {
         if (cleanupTracking) {
-            cleanupTracking();
+            await cleanupTracking();
         }
     }
 }
 
 async function runTestExtension() {
-    await $`npm test -w native-preview`;
+    await run("npm", ["test", "-w", "native-preview"]);
 }
 
 export const testTsc = task({
@@ -1104,7 +1197,8 @@ export const test = task({
 
 async function runTestBenchmarks() {
     // Run the benchmarks once to ensure they compile and run without errors.
-    await $test`${goTest("benchmarks")} -run=- -bench=. -benchtime=1x ./...`;
+    const command = goTest("benchmarks");
+    await run(command[0], [...command.slice(1), "-run=-", "-bench=.", "-benchtime=1x", "./..."], { env: goTestEnv, cwd: "./tsc" });
 }
 
 export const testBenchmarks = task({
@@ -1114,12 +1208,13 @@ export const testBenchmarks = task({
 });
 
 async function runTestTools() {
-    await $test({ cwd: path.join(__dirname, "tools") })`${gotestsum("tools")} ./...`;
+    const command = gotestsum("tools");
+    await run(command[0], [...command.slice(1), "./..."], { env: goTestEnv, cwd: path.join(__dirname, "tools") });
 }
 
 async function runTestAPI() {
-    // await $`npm run -w @typescript/typescript test:only`; // doesn't work on windows - some path escaping isn't done correctly, test runner runs no tests
-    await _$({ verbose: "short", stdio: "inherit", cwd: "./packages/typescript" })`node --experimental-strip-types --no-warnings --conditions @typescript/source --test ./test/**/*.test.ts`;
+    // Running the package script doesn't work on Windows; some path escaping isn't done correctly and the test runner runs no tests.
+    await run("node", ["--conditions", "@typescript/source", "--test", "./test/**/*.test.ts"], { cwd: "./packages/typescript" });
 }
 
 export const testTools = task({
@@ -1138,7 +1233,7 @@ export const buildAPI = task({
     name: "build:api",
     description: "Builds @typescript/typescript JS API.",
     run: async () => {
-        await $`npm run -w @typescript/typescript build`;
+        await run("npm", ["run", "-w", "@typescript/typescript", "build"]);
     },
 });
 
@@ -1147,7 +1242,7 @@ export const buildAPITests = task({
     description: "Builds the @typescript/typescript JS API tests.",
     dependencies: [generateEnums, generateAPI],
     run: async () => {
-        await $`npm run -w @typescript/typescript build:test`;
+        await run("npm", ["run", "-w", "@typescript/typescript", "build:test"]);
     },
 });
 
@@ -1172,7 +1267,7 @@ export const testAll = task({
     },
 });
 
-const customLinterPath = "./tools/custom-gcl";
+const customLinterPath = `./tools/custom-gcl${process.platform === "win32" ? ".exe" : ""}`;
 const customLinterHashPath = customLinterPath + ".hash";
 
 const golangciLintPackage = memoize(() => {
@@ -1190,15 +1285,13 @@ const golangciLintPackage = memoize(() => {
 });
 
 const customlintHash = memoize(() => {
-    const files = glob.sync([
+    const files = fs.globSync([
         "./tools/go.mod",
         "./tools/customlint/**/*",
         "./.custom-gcl.yml",
     ], {
-        ignore: "**/testdata/**",
-        nodir: true,
-        absolute: true,
-    });
+        exclude: ["**/testdata/**"],
+    }).filter(file => fs.statSync(file).isFile()).map(file => path.resolve(file));
     files.sort();
 
     const hash = crypto.createHash("sha256");
@@ -1214,15 +1307,15 @@ const customlintHash = memoize(() => {
 const buildCustomLinter = memoize(async () => {
     const hash = customlintHash();
     if (
-        isInstalled(customLinterPath)
+        fs.existsSync(customLinterPath)
         && fs.existsSync(customLinterHashPath)
         && fs.readFileSync(customLinterHashPath, "utf8") === hash
     ) {
         return;
     }
 
-    await $`go run ${golangciLintPackage()} custom`;
-    await $`${customLinterPath} cache clean`;
+    await run("go", ["run", golangciLintPackage(), "custom"]);
+    await run(customLinterPath, ["cache", "clean"]);
 
     fs.writeFileSync(customLinterHashPath, hash);
 });
@@ -1245,9 +1338,9 @@ async function runLint() {
     }
 
     const resolvedCustomLinterPath = path.resolve(customLinterPath);
-    await $({ cwd: "./tsc" })`${resolvedCustomLinterPath} ${lintArgs} --config ../.golangci.yml`;
+    await run(resolvedCustomLinterPath, [...lintArgs, "--config", "../.golangci.yml"], { cwd: "./tsc" });
     console.log("Linting tools");
-    await $({ cwd: "./tools" })`${resolvedCustomLinterPath} ${lintArgs} --config ../.golangci.yml`;
+    await run(resolvedCustomLinterPath, [...lintArgs, "--config", "../.golangci.yml"], { cwd: "./tools" });
 }
 
 export const installTools = task({
@@ -1255,7 +1348,7 @@ export const installTools = task({
     description: "Installs optional tools for developing within the repo.",
     run: async () => {
         await Promise.all([
-            ...[...tools].map(([tool, version]) => $`go install ${tool}${version ? `@${version}` : ""}`),
+            ...[...tools].map(([tool, version]) => run("go", ["install", tool + (version ? `@${version}` : "")])),
             buildCustomLinter(),
         ]);
     },
@@ -1268,15 +1361,41 @@ export const format = task({
 });
 
 async function runFormat() {
-    await $`dprint fmt`;
+    await run("dprint", ["fmt"]);
 }
 
 export const checkFormat = task({
     name: "check:format",
     description: "Checks that the repo is formatted.",
     run: async () => {
-        await $`dprint check`;
+        await run("dprint", ["check"]);
     },
+});
+
+export const checkHerebyfile = task({
+    name: "check:herebyfile",
+    description: "Type-checks Herebyfile.mjs.",
+    run: () =>
+        run("node", [
+            "./node_modules/typescript/bin/tsc",
+            "--noEmit",
+            "--allowJs",
+            "--checkJs",
+            "--target",
+            "es2022",
+            "--lib",
+            "es2024,esnext.array,esnext.collection,esnext.iterator",
+            "--module",
+            "nodenext",
+            "--moduleResolution",
+            "nodenext",
+            "--types",
+            "node",
+            "--strict",
+            "--esModuleInterop",
+            "--skipLibCheck",
+            "Herebyfile.mjs",
+        ]),
 });
 
 const scriptTsconfigs = [
@@ -1290,7 +1409,7 @@ export const checkScripts = task({
     run: async () => {
         for (const tsconfig of scriptTsconfigs) {
             console.log(`Type-checking ${tsconfig}`);
-            await $`tsc -p ${tsconfig}`;
+            await run("tsc", ["-p", tsconfig]);
         }
     },
 });
@@ -1309,13 +1428,13 @@ function baselineAcceptTask(localBaseline, refBaseline) {
     }
 
     return async () => {
-        const toCopy = await glob(`${localBaseline}/**`, { nodir: true, ignore: `${localBaseline}/**/*.delete` });
+        const toCopy = await globFiles(`${localBaseline}/**`, [`${localBaseline}/**/*.delete`]);
         for (const p of toCopy) {
             const out = localPathToRefPath(p);
             await fs.promises.mkdir(path.dirname(out), { recursive: true });
             await fs.promises.copyFile(p, out);
         }
-        const toDelete = await glob(`${localBaseline}/**/*.delete`, { nodir: true });
+        const toDelete = await globFiles(`${localBaseline}/**/*.delete`);
         for (const p of toDelete) {
             const out = localPathToRefPath(p).replace(/\.delete$/, "");
             await rimraf(out);
@@ -1345,7 +1464,7 @@ function getDiffTool() {
 export const diff = task({
     name: "diff",
     description: "Diffs baselines using the diff tool specified by the 'DIFF' environment variable",
-    run: () => $`${getDiffTool()} ${refBaseline} ${localBaseline}`,
+    run: () => run(getDiffTool(), [refBaseline, localBaseline]),
 });
 
 /**
@@ -1409,7 +1528,7 @@ async function watchDebounced(name, run, options) {
             running = false;
         }
         if (watching) {
-            console.log(pc.yellowBright(`[${name}] run complete, waiting for changes...`));
+            console.log(styleText("yellowBright", `[${name}] run complete, waiting for changes...`));
             await promise;
         }
     }
@@ -1443,9 +1562,9 @@ async function watchDebounced(name, run, options) {
      */
     function beginRun(path) {
         if (debouncer.empty) {
-            console.log(pc.yellowBright(`[${name}] changed due to '${path}', restarting...`));
+            console.log(styleText("yellowBright", `[${name}] changed due to '${path}', restarting...`));
             if (running) {
-                console.log(pc.yellowBright(`[${name}] aborting in-progress run...`));
+                console.log(styleText("yellowBright", `[${name}] aborting in-progress run...`));
             }
             abortController.abort();
             abortController = new AbortController();
@@ -1465,7 +1584,7 @@ async function watchDebounced(name, run, options) {
     function endWatchMode() {
         if (watching) {
             watching = false;
-            console.log(pc.yellowBright(`[${name}] exiting watch mode...`));
+            console.log(styleText("yellowBright", `[${name}] exiting watch mode...`));
             abortController.abort();
             watcher.close();
         }
@@ -1616,7 +1735,7 @@ async function sign(filelist, unchangedOutputOkay = false) {
     console.log("filelist:", data);
 
     if (!process.env.MBSIGN_APPFOLDER) {
-        console.log(pc.yellow("Faking signing because MBSIGN_APPFOLDER is not set."));
+        console.log(styleText("yellow", "Faking signing because MBSIGN_APPFOLDER is not set."));
 
         // Fake signing for testing.
 
@@ -1727,7 +1846,7 @@ async function sign(filelist, unchangedOutputOkay = false) {
     try {
         const dll = path.join(process.env.MBSIGN_APPFOLDER, "DDSignFiles.dll");
         const filelistFlag = `/filelist:${filelistPath}`;
-        await $`dotnet ${dll} -- ${filelistFlag}`;
+        await run("dotnet", [dll, "--", filelistFlag]);
     }
     finally {
         await fs.promises.unlink(filelistPath);
@@ -2083,7 +2202,7 @@ function goDistTargetToPlatform(target) {
 }
 
 async function runCheckPlatforms() {
-    const { stdout } = await $pipe`go tool dist list -json`;
+    const { stdout } = await runOutput("go", ["tool", "dist", "list", "-json"]);
     /** @type {GoDistTarget[]} */
     const goTargets = JSON.parse(stdout);
     const goTargetSet = new Set(goTargets.map(({ GOOS, GOARCH }) => `${GOOS}/${GOARCH}`));
@@ -2200,8 +2319,8 @@ async function runBuildNativePreviewPackages() {
     }
     stripSourceConditions(inputPackageJson);
 
-    const { stdout: gitHead } = await $pipe`git rev-parse HEAD`;
-    inputPackageJson.gitHead = gitHead;
+    const { stdout: gitHead } = await runOutput("git", ["rev-parse", "HEAD"]);
+    inputPackageJson.gitHead = gitHead.trim();
     inputPackageJson.publishConfig = {
         access: "public",
         tag: getPublishTag(),
@@ -2231,11 +2350,11 @@ async function runBuildNativePreviewPackages() {
     await fs.promises.copyFile("NOTICE.txt", path.join(mainPackageDir, "NOTICE.txt"));
 
     // Build JS API and copy dist into the package.
-    await $`npm run -w @typescript/typescript build`;
+    await run("npm", ["run", "-w", "@typescript/typescript", "build"]);
     await cpRecursive(path.join(inputDir, "dist"), path.join(mainPackageDir, "dist"));
 
     // Validate that .d.ts files contain no external imports (all imports must start with "." or "#").
-    const dtsFiles = await glob(`${mainPackageDir}/dist/**/*.d.ts`);
+    const dtsFiles = await globFiles(`${mainPackageDir}/dist/**/*.d.ts`);
     const importErrors = [];
     for (const dtsFile of dtsFiles) {
         const content = await fs.promises.readFile(dtsFile, "utf-8");
@@ -2304,12 +2423,11 @@ async function runBuildNativePreviewPackages() {
             await build();
             // Build machines have too little space.
             // Clear the Go build cache between platforms.
-            await $`go clean -cache`;
+            await run("go", ["clean", "-cache"]);
         }
     }
     else {
-        const buildLimit = pLimit(os.availableParallelism());
-        await Promise.all(platformBuilders.map(f => buildLimit(f)));
+        await runWithConcurrencyLimit(platformBuilders, os.availableParallelism());
     }
 }
 
@@ -2387,7 +2505,7 @@ async function runSignNativePreviewPackages() {
                 // along with a notarization step.
                 for (const p of filelistPaths) {
                     // ESRP preserves entitlements from an existing ad-hoc signature.
-                    await $pipe`go -C ./tools run ./cmd/machotool sign ${typescriptMacEntitlementsPath} ${p.path}`;
+                    await runOutput("go", ["-C", "./tools", "run", "./cmd/machotool", "sign", typescriptMacEntitlementsPath, p.path]);
 
                     const unsignedZipPath = path.join(tmp, `${p.tmpName}.unsigned.zip`);
                     const signedZipPath = path.join(tmp, `${p.tmpName}.signed.zip`);
@@ -2448,7 +2566,7 @@ async function runSignNativePreviewPackages() {
 
         for (const p of macZips) {
             await fs.promises.chmod(p.path, 0o755);
-            await $pipe`go -C ./tools run ./cmd/machotool verify ${typescriptMacEntitlementsPath} ${p.path}`;
+            await runOutput("go", ["-C", "./tools", "run", "./cmd/machotool", "verify", typescriptMacEntitlementsPath, p.path]);
         }
     }
 }
@@ -2470,7 +2588,7 @@ async function runPackNativePreviewPackages() {
 
     const platforms = getPlatforms();
     await Promise.all([mainNativePreviewPackage, ...platforms].map(async ({ npmDir, npmTarball }) => {
-        const { stdout } = await $pipe`npm pack --json ${npmDir}`;
+        const { stdout } = await runOutput("npm", ["pack", "--json", npmDir]);
         const filename = JSON.parse(stdout)[0].filename.replace("@", "").replace("/", "-");
         await fs.promises.rename(filename, npmTarball);
     }));
@@ -2591,7 +2709,10 @@ async function getPublishedPlatformPackageLibDirWorker(npmPackageName) {
     }
 
     console.log(`Fetching ${npmPackageName}@${version} with npm.`);
-    const { stdout } = await $pipe({ cwd: tarballDestination, env: releasePackageEnv })`npm pack --json ${npmPackageName}@${version}`;
+    const { stdout } = await runOutput("npm", ["pack", "--json", `${npmPackageName}@${version}`], {
+        cwd: tarballDestination,
+        env: releasePackageEnv,
+    });
     const [packed] = JSON.parse(stdout);
     if (!packed.filename || typeof packed.filename !== "string") {
         throw new Error(`npm pack ${npmPackageName}@${version} did not return a filename.`);
@@ -2622,7 +2743,7 @@ async function runPackVsixExtensions() {
     }
 
     // We don't use vscode:prepublish, as that would run the build for each package below.
-    await $({ cwd: extensionDir, env: releasePackageEnv })`npm run bundle:release`;
+    await run("npm", ["run", "bundle:release"], { cwd: extensionDir, env: releasePackageEnv });
 
     let version = "0.0.0";
     if (options.forRelease) {
@@ -2661,10 +2782,16 @@ async function runPackVsixExtensions() {
 
         await fs.promises.copyFile("NOTICE.txt", path.join(thisExtensionDir, "NOTICE.txt"));
 
-        await $({ cwd: thisExtensionDir, env: releasePackageEnv })`vsce package ${version} --no-update-package-json --no-dependencies --out ${vsixPath} --target ${vscodeTarget}`;
+        await run("vsce", ["package", version, "--no-update-package-json", "--no-dependencies", "--out", vsixPath, "--target", vscodeTarget], {
+            cwd: thisExtensionDir,
+            env: releasePackageEnv,
+        });
 
         if (options.forRelease) {
-            await $({ cwd: thisExtensionDir, env: releasePackageEnv })`vsce generate-manifest --packagePath ${vsixPath} --out ${vsixManifestPath}`;
+            await run("vsce", ["generate-manifest", "--packagePath", vsixPath, "--out", vsixManifestPath], {
+                cwd: thisExtensionDir,
+                env: releasePackageEnv,
+            });
             await fs.promises.cp(vsixManifestPath, vsixSignaturePath);
         }
     }));
@@ -2739,8 +2866,8 @@ export const tidy = task({
     name: "tidy",
     description: "Tidies both Go modules and synchronizes the workspace.",
     run: async () => {
-        await $({ cwd: "./tsc" })`go mod tidy`;
-        await $({ cwd: "./tools" })`go mod tidy`;
-        await $`go work sync`;
+        await run("go", ["mod", "tidy"], { cwd: "./tsc" });
+        await run("go", ["mod", "tidy"], { cwd: "./tools" });
+        await run("go", ["work", "sync"]);
     },
 });

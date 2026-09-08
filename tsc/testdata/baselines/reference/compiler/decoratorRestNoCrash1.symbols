@@ -1,0 +1,21 @@
+//// [tests/cases/compiler/decoratorRestNoCrash1.ts] ////
+
+=== decoratorRestNoCrash1.ts ===
+class Greeter {
+>Greeter : Symbol(Greeter, Decl(decoratorRestNoCrash1.ts, 0, 0))
+
+  @deco
+>deco : Symbol(deco, Decl(decoratorRestNoCrash1.ts, 5, 1))
+
+  greet1() {
+>greet1 : Symbol(Greeter.greet1, Decl(decoratorRestNoCrash1.ts, 0, 15))
+
+    return "Hello, " + this.greeting;
+>this : Symbol(Greeter, Decl(decoratorRestNoCrash1.ts, 0, 0))
+  }
+}
+
+declare function deco(...args: [any, any, any]): any;
+>deco : Symbol(deco, Decl(decoratorRestNoCrash1.ts, 5, 1))
+>args : Symbol(args, Decl(decoratorRestNoCrash1.ts, 7, 22))
+

@@ -3372,7 +3372,9 @@ func (c *Checker) checkTemplateLiteralType(node *ast.Node) {
 func (c *Checker) checkImportType(node *ast.Node) {
 	c.checkSourceElement(node.AsImportTypeNode().Argument)
 	if attributes := node.AsImportTypeNode().Attributes; attributes != nil {
-		c.getResolutionModeOverride(attributes.AsImportAttributes(), true /*reportErrors*/)
+		importAttributes := attributes.AsImportAttributes()
+		c.checkGrammarImportAttributeValues(importAttributes)
+		c.getResolutionModeOverride(importAttributes, true /*reportErrors*/)
 	}
 	c.checkTypeReferenceOrImport(node)
 	c.checkImportAttributes(node)
@@ -4534,14 +4536,9 @@ func (c *Checker) areTypeParametersIdentical(declarations []*ast.Node, targetPar
 
 func (c *Checker) checkBaseTypeAccessibility(t *Type, node *ast.Node) {
 	signatures := c.getSignaturesOfType(t, SignatureKindConstruct)
-	if len(signatures) != 0 {
-		declaration := signatures[0].declaration
-		if declaration != nil && ast.HasModifier(declaration, ast.ModifierFlagsPrivate) {
-			typeClassDeclaration := ast.GetClassLikeDeclarationOfSymbol(t.symbol)
-			if !c.isNodeWithinClass(node, typeClassDeclaration) {
-				c.error(node, diagnostics.Cannot_extend_a_class_0_Class_constructor_is_marked_as_private, c.getFullyQualifiedName(t.symbol, nil))
-			}
-		}
+	accessibilityError := c.getConstructorAccessibilityError(node, signatures, ast.ModifierFlagsPrivate)
+	if accessibilityError != nil {
+		c.error(node, diagnostics.Cannot_extend_a_class_0_Class_constructor_is_marked_as_private, c.getFullyQualifiedName(accessibilityError.declaringClass.symbol, nil))
 	}
 }
 
@@ -5496,14 +5493,9 @@ func (c *Checker) checkExternalImportOrExportDeclaration(node *ast.Node) bool {
 	if !ast.IsImportEqualsDeclaration(node) {
 		attributes := ast.GetImportAttributes(node)
 		if attributes != nil {
-			hasError := false
-			for _, attr := range attributes.AsImportAttributes().Attributes.Nodes {
-				if !ast.IsStringLiteral(attr.AsImportAttribute().Value) {
-					hasError = true
-					c.error(attr.AsImportAttribute().Value, diagnostics.Import_attribute_values_must_be_string_literal_expressions)
-				}
+			if c.checkGrammarImportAttributeValues(attributes.AsImportAttributes()) {
+				return false
 			}
-			return !hasError
 		}
 	}
 	return true
@@ -5982,6 +5974,11 @@ func (c *Checker) checkVariableLikeDeclaration(node *ast.Node) {
 	}
 	if ast.IsBindingElement(node) {
 		propName := node.PropertyName()
+
+		if propName != nil && ast.IsPrivateIdentifier(propName) {
+			c.grammarErrorOnNode(propName, diagnostics.Private_identifiers_cannot_be_used_in_destructuring_patterns)
+		}
+
 		if propName != nil && ast.IsIdentifier(node.Name()) && ast.IsPartOfParameterDeclaration(node) && ast.NodeIsMissing(ast.GetContainingFunction(node).Body()) {
 			// type F = ({a: string}) => void;
 			//               ^^^^^^
@@ -8786,7 +8783,14 @@ func (c *Checker) resolveNewExpression(node *ast.Node, candidatesOutArray *[]*Si
 	// that the user will not add any.
 	constructSignatures := c.getSignaturesOfType(expressionType, SignatureKindConstruct)
 	if len(constructSignatures) != 0 {
-		if !c.isConstructorAccessible(node, constructSignatures[0]) {
+		accessibilityError := c.getConstructorAccessibilityError(node, constructSignatures, ast.ModifierFlagsNonPublicAccessibilityModifier)
+		if accessibilityError != nil {
+			if accessibilityError.kind&ast.ModifierFlagsPrivate != 0 {
+				c.error(node, diagnostics.Constructor_of_class_0_is_private_and_only_accessible_within_the_class_declaration, c.TypeToString(accessibilityError.declaringClass))
+			}
+			if accessibilityError.kind&ast.ModifierFlagsProtected != 0 {
+				c.error(node, diagnostics.Constructor_of_class_0_is_protected_and_only_accessible_within_the_class_declaration, c.TypeToString(accessibilityError.declaringClass))
+			}
 			return c.resolveErrorCall(node)
 		}
 		// If the expression is a class of abstract type, or an abstract construct signature,
@@ -8829,36 +8833,39 @@ func (c *Checker) resolveNewExpression(node *ast.Node, candidatesOutArray *[]*Si
 	return c.resolveErrorCall(node)
 }
 
-func (c *Checker) isConstructorAccessible(node *ast.Node, signature *Signature) bool {
-	if signature == nil || signature.declaration == nil {
-		return true
-	}
-	declaration := signature.declaration
-	modifiers := getSelectedModifierFlags(declaration, ast.ModifierFlagsNonPublicAccessibilityModifier)
-	// (1) Public constructors and (2) constructor functions are always accessible.
-	if modifiers == 0 || !ast.IsConstructorDeclaration(declaration) {
-		return true
-	}
-	declaringClassDeclaration := ast.GetClassLikeDeclarationOfSymbol(declaration.Parent.Symbol())
-	declaringClass := c.getDeclaredTypeOfSymbol(declaration.Parent.Symbol())
-	// A private or protected constructor can only be instantiated within its own class (or a subclass, for protected)
-	if !c.isNodeWithinClass(node, declaringClassDeclaration) {
-		containingClass := ast.GetContainingClass(node)
-		if containingClass != nil && modifiers&ast.ModifierFlagsProtected != 0 {
-			containingType := c.getDeclaredTypeOfSymbol(containingClass.Symbol())
-			if c.typeHasProtectedAccessibleBase(declaration.Parent.Symbol(), containingType) {
-				return true
+type constructorAccessibilityError struct {
+	kind           ast.ModifierFlags
+	declaringClass *Type
+}
+
+func (c *Checker) getConstructorAccessibilityError(node *ast.Node, signatures []*Signature, modifiersMask ast.ModifierFlags) *constructorAccessibilityError {
+	for _, signature := range signatures {
+		if signature.declaration == nil {
+			continue
+		}
+		declaration := signature.declaration
+		modifiers := getSelectedModifierFlags(declaration, modifiersMask)
+		// (1) Public constructors and (2) constructor functions are always accessible.
+		if modifiers == 0 || !ast.IsConstructorDeclaration(declaration) {
+			continue
+		}
+		declaringClassDeclaration := ast.GetClassLikeDeclarationOfSymbol(declaration.Parent.Symbol())
+		// A private or protected constructor can only be instantiated within its own class (or a subclass, for protected)
+		if !c.isNodeWithinClass(node, declaringClassDeclaration) {
+			containingClass := ast.GetContainingClass(node)
+			if containingClass != nil && modifiers&ast.ModifierFlagsProtected != 0 {
+				containingType := c.getTypeOfNode(containingClass)
+				if c.typeHasProtectedAccessibleBase(declaration.Parent.Symbol(), containingType) {
+					continue
+				}
+			}
+			return &constructorAccessibilityError{
+				kind:           modifiers,
+				declaringClass: c.getDeclaredTypeOfSymbol(declaration.Parent.Symbol()),
 			}
 		}
-		if modifiers&ast.ModifierFlagsPrivate != 0 {
-			c.error(node, diagnostics.Constructor_of_class_0_is_private_and_only_accessible_within_the_class_declaration, c.TypeToString(declaringClass))
-		}
-		if modifiers&ast.ModifierFlagsProtected != 0 {
-			c.error(node, diagnostics.Constructor_of_class_0_is_protected_and_only_accessible_within_the_class_declaration, c.TypeToString(declaringClass))
-		}
-		return false
 	}
-	return true
+	return nil
 }
 
 func (c *Checker) typeHasProtectedAccessibleBase(target *ast.Symbol, t *Type) bool {
@@ -9385,7 +9392,7 @@ func (c *Checker) getLegacyDecoratorArgumentCount(node *ast.Node, signature *Sig
 		return 2
 	case ast.KindMethodDeclaration, ast.KindGetAccessor, ast.KindSetAccessor:
 		// For decorators with only two parameters we supply only two arguments
-		if len(signature.parameters) <= 2 {
+		if c.getParameterCount(signature) <= 2 {
 			return 2
 		}
 		return 3
@@ -10377,7 +10384,9 @@ func (c *Checker) contextuallyCheckFunctionExpressionOrObjectLiteralMethod(node 
 				}
 			}
 			if contextualSignature != nil && c.getReturnTypeFromAnnotation(node) == nil && signature.resolvedReturnType == nil {
-				returnType := c.getReturnTypeFromBody(node, checkMode)
+				// resolvedReturnType is cached indefinitely, so the return type here has to be computed without CheckModeSkipContextSensitive;
+				// otherwise anyFunctionType could leak as part of the computed (and cached) return type.
+				returnType := c.getReturnTypeFromBody(node, checkMode&^CheckModeSkipContextSensitive)
 				if signature.resolvedReturnType == nil {
 					signature.resolvedReturnType = returnType
 				}
@@ -10877,7 +10886,10 @@ func (c *Checker) getInstantiationExpressionType(exprType *Type, node *ast.Node)
 				hasSignatures = hasSignatures || len(resolved.CallSignatures()) != 0 || len(resolved.ConstructSignatures()) != 0
 				hasApplicableSignature = hasApplicableSignature || len(callSignatures) != 0 || len(constructSignatures) != 0
 				if !core.Same(callSignatures, resolved.CallSignatures()) || !core.Same(constructSignatures, resolved.ConstructSignatures()) {
-					result := c.newObjectType(ObjectFlagsAnonymous|ObjectFlagsInstantiationExpressionType, t.symbol)
+					symbol := c.newSymbol(ast.SymbolFlagsNone, ast.InternalSymbolNameInstantiationExpression)
+					debug.Assert(t.symbol != nil, "Instantiation expression source type must have a symbol")
+					symbol.Declarations = t.symbol.Declarations
+					result := c.newObjectType(ObjectFlagsAnonymous|ObjectFlagsInstantiationExpressionType, symbol)
 					c.setStructuredTypeMembers(result, resolved.members, callSignatures, constructSignatures, resolved.indexInfos)
 					result.AsInstantiationExpressionType().node = node
 					return result
@@ -12787,6 +12799,11 @@ func (c *Checker) checkObjectLiteralDestructuringPropertyAssignment(node *ast.No
 	property := properties[propertyIndex]
 	if ast.IsPropertyAssignment(property) || ast.IsShorthandPropertyAssignment(property) {
 		name := property.Name()
+
+		if name != nil && ast.IsPrivateIdentifier(name) {
+			c.grammarErrorOnNode(name, diagnostics.Private_identifiers_cannot_be_used_in_destructuring_patterns)
+		}
+
 		exprType := c.getLiteralTypeFromPropertyName(name)
 		if isTypeUsableAsPropertyName(exprType) {
 			text := getPropertyNameFromType(exprType)

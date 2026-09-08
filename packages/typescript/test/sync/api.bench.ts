@@ -173,6 +173,7 @@ export function runBenchmarks(options?: { filter?: string; singleIteration?: boo
     }
 
     bench.runSync();
+    teardown();
 
     if (session) {
         session.post("Profiler.stop", (err, { profile }) => {

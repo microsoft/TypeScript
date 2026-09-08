@@ -11,7 +11,7 @@ export namespace App {
 }
 
 // @Filename: file2.ts
-// @module: amd
+// @module: commonjs
 import appJs = require("file1");
 import Services = appJs.App.Services;
 var x = new Services.UserServices().getUserName();

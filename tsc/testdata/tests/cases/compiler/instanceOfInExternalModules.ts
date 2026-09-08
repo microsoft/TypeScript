@@ -1,5 +1,5 @@
 // @target: es2015
-// @module: amd
+// @module: commonjs
 // @Filename: instanceOfInExternalModules_require.ts
 export class Foo { foo: string; }
 

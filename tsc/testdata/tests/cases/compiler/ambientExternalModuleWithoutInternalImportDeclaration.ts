@@ -1,5 +1,5 @@
 // @target: es2015
-//@module: amd
+//@module: commonjs
 // @Filename: ambientExternalModuleWithoutInternalImportDeclaration_0.ts
 declare module 'M' {
     namespace C {

@@ -1,5 +1,5 @@
 // @target: es2015
-//@module: amd
+//@module: commonjs
 export declare namespace TypeScript {
   class PullSymbol { }
   class PullSignatureSymbol <A,B,C> extends PullSymbol {

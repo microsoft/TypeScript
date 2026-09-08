@@ -1,0 +1,89 @@
+//// [tests/cases/compiler/classExtendsInstantiationExpressionType.ts] ////
+
+=== classExtendsInstantiationExpressionType.ts ===
+// Regression test for https://github.com/microsoft/TypeScript/issues/64116
+declare function createComponent<Props extends {}, Events extends {}>(
+>createComponent : <Props extends {}, Events extends {}>(render: { props: Props; events: Events; }) => typeof Component<Events>
+
+    render: { props: Props, events: Events }
+>render : { props: Props; events: Events; }
+>props : Props
+>events : Events
+
+): typeof Component<Events>;
+>Component : typeof Component
+
+declare class Component<Events extends {} = Record<string, any>> {
+>Component : Component<Events>
+
+    $on<K extends keyof Events>(event: K, handler: (e: Events[K]) => void): void;
+>$on : <K extends keyof Events>(event: K, handler: (e: Events[K]) => void) => void
+>event : K
+>handler : (e: Events[K]) => void
+>e : Events[K]
+}
+
+const B = createComponent({
+>B : { new (): Component<{ foo: string; foo2: string; }>; prototype: Component<any>; }
+>createComponent({    props: {},    events: { foo: "", foo2: "2" }}) : { new (): Component<{ foo: string; foo2: string; }>; prototype: Component<any>; }
+>createComponent : <Props extends {}, Events extends {}>(render: { props: Props; events: Events; }) => typeof Component<Events>
+>{    props: {},    events: { foo: "", foo2: "2" }} : { props: {}; events: { foo: string; foo2: string; }; }
+
+    props: {},
+>props : {}
+>{} : {}
+
+    events: { foo: "", foo2: "2" }
+>events : { foo: string; foo2: string; }
+>{ foo: "", foo2: "2" } : { foo: string; foo2: string; }
+>foo : string
+>"" : ""
+>foo2 : string
+>"2" : "2"
+
+});
+
+new B().$on("foo", e => {});
+>new B().$on("foo", e => {}) : void
+>new B().$on : <K extends "foo" | "foo2">(event: K, handler: (e: { foo: string; foo2: string; }[K]) => void) => void
+>new B() : Component<{ foo: string; foo2: string; }>
+>B : { new (): Component<{ foo: string; foo2: string; }>; prototype: Component<any>; }
+>$on : <K extends "foo" | "foo2">(event: K, handler: (e: { foo: string; foo2: string; }[K]) => void) => void
+>"foo" : "foo"
+>e => {} : (e: string) => void
+>e : string
+
+new B().$on("foo3", e => {});
+>new B().$on("foo3", e => {}) : void
+>new B().$on : <K extends "foo" | "foo2">(event: K, handler: (e: { foo: string; foo2: string; }[K]) => void) => void
+>new B() : Component<{ foo: string; foo2: string; }>
+>B : { new (): Component<{ foo: string; foo2: string; }>; prototype: Component<any>; }
+>$on : <K extends "foo" | "foo2">(event: K, handler: (e: { foo: string; foo2: string; }[K]) => void) => void
+>"foo3" : "foo3"
+>e => {} : (e: string) => void
+>e : string
+
+class C extends B {}
+>C : C
+>B : Component<{ foo: string; foo2: string; }>
+
+new C().$on("foo", e => {});
+>new C().$on("foo", e => {}) : void
+>new C().$on : <K extends "foo" | "foo2">(event: K, handler: (e: { foo: string; foo2: string; }[K]) => void) => void
+>new C() : C
+>C : typeof C
+>$on : <K extends "foo" | "foo2">(event: K, handler: (e: { foo: string; foo2: string; }[K]) => void) => void
+>"foo" : "foo"
+>e => {} : (e: string) => void
+>e : string
+
+new C().$on("foo3", e => {});
+>new C().$on("foo3", e => {}) : void
+>new C().$on : <K extends "foo" | "foo2">(event: K, handler: (e: { foo: string; foo2: string; }[K]) => void) => void
+>new C() : C
+>C : typeof C
+>$on : <K extends "foo" | "foo2">(event: K, handler: (e: { foo: string; foo2: string; }[K]) => void) => void
+>"foo3" : "foo3"
+>e => {} : (e: string) => void
+>e : string
+
