@@ -539,4 +539,96 @@ func TestTryGetModuleNameFromExportsOrImports(t *testing.T) {
 			t.Errorf("default-first miss should block later node, got %q", got)
 		}
 	})
+	t.Run("copilot review follow-up: invalid vs valid, types arrays, empty/all-invalid (issue 64171)", func(t *testing.T) {
+		t.Parallel()
+		strExports := func(s string) packagejson.ExportsOrImports {
+			return packagejson.ExportsOrImports{
+				JSONValue: packagejson.JSONValue{
+					Type:  packagejson.JSONValueTypeString,
+					Value: s,
+				},
+			}
+		}
+		condExports := func(entries ...collections.MapEntry[string, packagejson.ExportsOrImports]) packagejson.ExportsOrImports {
+			return packagejson.ExportsOrImports{
+				JSONValue: packagejson.JSONValue{
+					Type:  packagejson.JSONValueTypeObject,
+					Value: collections.NewOrderedMapFromList(entries),
+				},
+			}
+		}
+		arrExports := func(elems ...packagejson.ExportsOrImports) packagejson.ExportsOrImports {
+			return packagejson.ExportsOrImports{
+				JSONValue: packagejson.JSONValue{
+					Type:  packagejson.JSONValueTypeArray,
+					Value: elems,
+				},
+			}
+		}
+		nullExports := packagejson.ExportsOrImports{
+			JSONValue: packagejson.JSONValue{Type: packagejson.JSONValueTypeNull},
+		}
+		host := &mockModuleSpecifierGenerationHost{currentDir: "/pkg", useCaseSensitiveFileNames: true}
+		conditions := []string{"import", "types", "node"}
+
+		// Invalid strings are skipped inside arrays (exports context: no "./" prefix).
+		// ["invalid", "./dist/b.js"] targeting b.js must match via the second element.
+		invalidSkipped := condExports(
+			collections.MapEntry[string, packagejson.ExportsOrImports]{Key: "node", Value: arrExports(strExports("invalid"), strExports("./dist/b.js"))},
+			collections.MapEntry[string, packagejson.ExportsOrImports]{Key: "default", Value: strExports("./dist/c.js")},
+		)
+		if got := tryGetModuleNameFromExportsOrImports(&core.CompilerOptions{}, host, "/pkg/dist/b.js", "/pkg", "#a", invalidSkipped, conditions, MatchingModeExact, false, false); got != "#a" {
+			t.Errorf("array invalid first entry should fallback to valid second element, got %q", got)
+		}
+		// Same array targeting c.js: second element is a valid miss, so it blocks default.
+		if got := tryGetModuleNameFromExportsOrImports(&core.CompilerOptions{}, host, "/pkg/dist/c.js", "/pkg", "#a", invalidSkipped, conditions, MatchingModeExact, false, false); got != "" {
+			t.Errorf("array valid miss should block default even after invalid skip, got %q", got)
+		}
+
+		// Types-only arrays preserve TS fallback: first declaration miss falls through.
+		typesArray := condExports(
+			collections.MapEntry[string, packagejson.ExportsOrImports]{Key: "types", Value: arrExports(strExports("./missing.d.ts"), strExports("./index.d.ts"))},
+			collections.MapEntry[string, packagejson.ExportsOrImports]{Key: "default", Value: strExports("./dist/index.js")},
+		)
+		if got := tryGetModuleNameFromExportsOrImports(&core.CompilerOptions{}, host, "/pkg/index.d.ts", "/pkg", "#a", typesArray, conditions, MatchingModeExact, true, false); got != "#a" {
+			t.Errorf("types array second-element match should be valid, got %q", got)
+		}
+		if got := tryGetModuleNameFromExportsOrImports(&core.CompilerOptions{}, host, "/pkg/dist/index.js", "/pkg", "#a", typesArray, conditions, MatchingModeExact, true, false); got != "#a" {
+			t.Errorf("types miss should not block default, got %q", got)
+		}
+
+		// Empty array is terminal at runtime (like null), so default is unreachable.
+		emptyArray := condExports(
+			collections.MapEntry[string, packagejson.ExportsOrImports]{Key: "node", Value: arrExports()},
+			collections.MapEntry[string, packagejson.ExportsOrImports]{Key: "default", Value: strExports("./dist/index.js")},
+		)
+		if got := tryGetModuleNameFromExportsOrImports(&core.CompilerOptions{}, host, "/pkg/dist/index.js", "/pkg", "#a", emptyArray, conditions, MatchingModeExact, false, false); got != "" {
+			t.Errorf("empty array under node should block default, got %q", got)
+		}
+
+		// All-invalid array is terminal at runtime: Node throws last invalid-target error.
+		allInvalid := condExports(
+			collections.MapEntry[string, packagejson.ExportsOrImports]{Key: "node", Value: arrExports(strExports("../evil"), strExports("not-relative"))},
+			collections.MapEntry[string, packagejson.ExportsOrImports]{Key: "default", Value: strExports("./dist/index.js")},
+		)
+		if got := tryGetModuleNameFromExportsOrImports(&core.CompilerOptions{}, host, "/pkg/dist/index.js", "/pkg", "#a", allInvalid, conditions, MatchingModeExact, false, false); got != "" {
+			t.Errorf("all-invalid array under node should block default, got %q", got)
+		}
+
+		// Explicit null is terminal at runtime but swallowed under types-only.
+		nullBlocked := condExports(
+			collections.MapEntry[string, packagejson.ExportsOrImports]{Key: "node", Value: nullExports},
+			collections.MapEntry[string, packagejson.ExportsOrImports]{Key: "default", Value: strExports("./dist/b.js")},
+		)
+		if got := tryGetModuleNameFromExportsOrImports(&core.CompilerOptions{}, host, "/pkg/dist/b.js", "/pkg", "#a", nullBlocked, conditions, MatchingModeExact, false, false); got != "" {
+			t.Errorf("null under node should block default, got %q", got)
+		}
+		nullUnderTypes := condExports(
+			collections.MapEntry[string, packagejson.ExportsOrImports]{Key: "types", Value: nullExports},
+			collections.MapEntry[string, packagejson.ExportsOrImports]{Key: "default", Value: strExports("./dist/b.js")},
+		)
+		if got := tryGetModuleNameFromExportsOrImports(&core.CompilerOptions{}, host, "/pkg/dist/b.js", "/pkg", "#a", nullUnderTypes, conditions, MatchingModeExact, false, false); got != "#a" {
+			t.Errorf("null under types should not block default, got %q", got)
+		}
+	})
 }
