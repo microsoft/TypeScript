@@ -184,9 +184,8 @@ const x: RawJSON = w;
 >RawJSON : Symbol(RawJSON, Decl(lib.es2026.json.d.ts, --, --))
 >w : Symbol(w, Decl(jsonRawJSON2.ts, 47, 5))
 
-// These generic signatures preserve the input type, not the runtime brand.
 const y: RawJSON = Object.assign({}, a);
->y : Symbol(y, Decl(jsonRawJSON2.ts, 51, 5))
+>y : Symbol(y, Decl(jsonRawJSON2.ts, 50, 5))
 >RawJSON : Symbol(RawJSON, Decl(lib.es2026.json.d.ts, --, --))
 >Object.assign : Symbol(ObjectConstructor.assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
@@ -194,7 +193,7 @@ const y: RawJSON = Object.assign({}, a);
 >a : Symbol(a, Decl(jsonRawJSON2.ts, 0, 5))
 
 const z: RawJSON = new Proxy(a, {});
->z : Symbol(z, Decl(jsonRawJSON2.ts, 52, 5))
+>z : Symbol(z, Decl(jsonRawJSON2.ts, 51, 5))
 >RawJSON : Symbol(RawJSON, Decl(lib.es2026.json.d.ts, --, --))
 >Proxy : Symbol(Proxy, Decl(lib.es2015.proxy.d.ts, --, --))
 >a : Symbol(a, Decl(jsonRawJSON2.ts, 0, 5))

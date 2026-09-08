@@ -116,7 +116,6 @@ jsonRawJSON2.ts(49,7): error TS2741: Property 'RawJSON_typekey' is missing in ty
 !!! error TS2741: Property 'RawJSON_typekey' is missing in type 'Pick<RawJSON, "rawJSON">' but required in type 'RawJSON'.
 !!! related TS2728 lib.es2026.json.d.ts:--:--: 'RawJSON_typekey' is declared here.
     
-    // These generic signatures preserve the input type, not the runtime brand.
     const y: RawJSON = Object.assign({}, a);
     const z: RawJSON = new Proxy(a, {});
     

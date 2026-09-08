@@ -188,7 +188,6 @@ const x: RawJSON = w;
 >x : RawJSON
 >w : Pick<RawJSON, "rawJSON">
 
-// These generic signatures preserve the input type, not the runtime brand.
 const y: RawJSON = Object.assign({}, a);
 >y : RawJSON
 >Object.assign({}, a) : RawJSON
