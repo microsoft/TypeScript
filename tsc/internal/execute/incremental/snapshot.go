@@ -113,7 +113,7 @@ type emitSignature struct {
 	signatureWithDifferentOptions []string
 }
 
-// Covert to Emit signature based on oldOptions and EmitSignature format
+// Convert to Emit signature based on oldOptions and EmitSignature format
 // If d.ts map options differ then swap the format, otherwise use as is
 func (e *emitSignature) getNewEmitSignature(oldOptions *core.CompilerOptions, newOptions *core.CompilerOptions) *emitSignature {
 	if oldOptions.DeclarationMap.IsTrue() == newOptions.DeclarationMap.IsTrue() {
@@ -131,7 +131,7 @@ func (e *emitSignature) getNewEmitSignature(oldOptions *core.CompilerOptions, ne
 }
 
 type buildInfoDiagnosticWithFileName struct {
-	// filename if it is for a File thats other than its stored for
+	// filename if it is for a File that's other than its stored for
 	file               tspath.Path
 	noFile             bool
 	pos                int

@@ -31,7 +31,7 @@ func GetExternalModuleIndicatorOptions(fileName string, options *core.CompilerOp
 	case core.ModuleDetectionKindAuto:
 		// If module is nodenext or node16, all esm format files are modules
 		// If jsx is react-jsx or react-jsxdev then jsx tags force module-ness
-		// otherwise, the presence of import or export statments (or import.meta) implies module-ness
+		// otherwise, the presence of import or export statements (or import.meta) implies module-ness
 		return ExternalModuleIndicatorOptions{
 			JSX:   options.Jsx == core.JsxEmitReactJSX || options.Jsx == core.JsxEmitReactJSXDev,
 			Force: isFileForcedToBeModuleByFormat(fileName, options, metadata),

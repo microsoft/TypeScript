@@ -79,7 +79,7 @@ func (b *NodeBuilderImpl) walkNodeForExpandability(node *ast.Node) {
 	if b.ctx.canIncreaseExpansionDepth || node == nil {
 		return
 	}
-	// Check these explicitly so we look into type arguments wehther or not they are in the tree or not.
+	// Check these explicitly so we look into type arguments whether they are in the tree or not.
 	if ast.IsTypeReferenceNode(node) || ast.IsExpressionWithTypeArguments(node) || ast.IsTypePredicateNode(node) || ast.IsImportTypeNode(node) {
 		t := b.getTypeFromTypeNode(node, false)
 		if t != nil {
@@ -364,7 +364,7 @@ func getExistingNodeTreeVisitor(b *NodeBuilderImpl, bound *recoveryBoundary) *as
 		}
 
 		if sym != nil {
-			// If a parameter is resolvable in the current context it is also visible, so no need to go to symbol accesibility
+			// If a parameter is resolvable in the current context it is also visible, so no need to go to symbol accessibility
 			if sym.Flags&ast.SymbolFlagsFunctionScopedVariable != 0 && sym.ValueDeclaration != nil {
 				if ast.IsPartOfParameterDeclaration(sym.ValueDeclaration) || ast.IsJSDocParameterTag(sym.ValueDeclaration) {
 					return introducesError, attachSymbolToLeftmostIdentifier(leftmost, node, sym), nil
@@ -480,7 +480,7 @@ func getExistingNodeTreeVisitor(b *NodeBuilderImpl, bound *recoveryBoundary) *as
 		if node.Kind == ast.KindJSDocAllType /* || node.Kind == ast.JSDocNamepathType */ {
 			return factory.NewKeywordTypeNode(ast.KindAnyKeyword)
 		}
-		// !!! TODO: verify JSDocUnknwonType is hopefully just parsed into `unknown` upfront; the kind no longer exists
+		// !!! TODO: verify JSDocUnknownType is hopefully just parsed into `unknown` upfront; the kind no longer exists
 		// if node.Kind == ast.KindJSDocUnknownType {
 		// 	return factory.NewKeywordTypeNode(ast.KindUnknownKeyword)
 		// }
@@ -524,13 +524,13 @@ func getExistingNodeTreeVisitor(b *NodeBuilderImpl, bound *recoveryBoundary) *as
 				if shouldBeOptional {
 					question = factory.NewToken(ast.KindQuestionToken)
 				}
-				ty := visitor.VisitNode(t.TypeExpression()) // !!! TODO: alternate lookup locations for the type? serialize on demand if it doesn't serialze? strada does something funky here.
+				ty := visitor.VisitNode(t.TypeExpression()) // !!! TODO: alternate lookup locations for the type? serialize on demand if it doesn't serialize? strada does something funky here.
 
 				members = append(members, factory.NewPropertySignatureDeclaration(nil, name, question, ty, nil))
 			}
 			return factory.NewTypeLiteralNode(factory.NewNodeList(members))
 		}
-		// if (ast.IsExpressionWithTypeArguments(node) || ast.IsTypeReferenceNode(node)) && ast.IsJSDocIndexSignature(node) { /// !!! TODO: JSDocIndexSignature handling hasn't been ported - readd if it's readded
+		// if (ast.IsExpressionWithTypeArguments(node) || ast.IsTypeReferenceNode(node)) && ast.IsJSDocIndexSignature(node) { /// !!! TODO: JSDocIndexSignature handling hasn't been ported - re-add if it's re-added
 		// 	args := node.TypeArguments()
 		// 	if len(args) != 2 {
 		// 		return factory.NewKeywordTypeNode(ast.KindAnyKeyword) // shouldn't be flagged as a jsdoc index signature in the first place
@@ -860,7 +860,7 @@ func getExistingNodeTreeVisitor(b *NodeBuilderImpl, bound *recoveryBoundary) *as
 		//  the position information if the node comes from a different file than the one the node builder
 		//  is set to build for (even though we are reusing the node structure, the position information
 		//  would make the printer print invalid spans for literals and identifiers, and the formatter would
-		//  choke on the mismatched positonal spans between a parent and an injected child from another file).
+		//  choke on the mismatched positional spans between a parent and an injected child from another file).
 		result = b.setTextRange(result, node)
 
 		if bound.hadError {

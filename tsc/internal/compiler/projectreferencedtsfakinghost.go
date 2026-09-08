@@ -70,7 +70,7 @@ func (fs *projectReferenceDtsFakingVfs) FileExists(path string) bool {
 
 // ReadFile implements vfs.FS.
 func (fs *projectReferenceDtsFakingVfs) ReadFile(path string) (contents string, ok bool) {
-	// Dont need to override as we cannot mimick read file
+	// Dont need to override as we cannot mimic read file
 	return fs.projectReferenceFileMapper.opts.Host.FS().ReadFile(path)
 }
 

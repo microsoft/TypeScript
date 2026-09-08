@@ -900,7 +900,7 @@ func (r *resolutionState) tryLoadInputFileForPath(finalPath string, entry string
 		)) {
 
 		// Note: this differs from Strada's tryLoadInputFileForPath in that it
-		// does not attempt to perform "guesses", instead requring a clear root indicator.
+		// does not attempt to perform "guesses", instead requiring a clear root indicator.
 
 		var rootDir string
 		if r.compilerOptions.RootDir != "" {

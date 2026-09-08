@@ -194,8 +194,8 @@ func generateSectionOptionsOutput(
 func generateGroupOptionOutput(sys System, locale locale.Locale, optionsList []*tsoptions.CommandLineOption) []string {
 	var maxLength int
 	for _, option := range optionsList {
-		curLenght := len(getDisplayNameTextOfOption(option))
-		maxLength = max(curLenght, maxLength)
+		curLength := len(getDisplayNameTextOfOption(option))
+		maxLength = max(curLength, maxLength)
 	}
 
 	// left part should be right align, right part should be left align

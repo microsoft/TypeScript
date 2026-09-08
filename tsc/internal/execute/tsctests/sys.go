@@ -269,7 +269,7 @@ func (s *TestSys) OnEmittedFiles(result *compiler.EmitResult, mTimesCache *colle
 			if err := s.fsFromFileMap().Chtimes(file, time.Time{}, now); err != nil {
 				panic("Failed to change time for emitted file: " + file + ": " + err.Error())
 			}
-			// Update the mTime cache in --b mode to store the updated timestamp so tests will behave deteministically when finding newest output
+			// Update the mTime cache in --b mode to store the updated timestamp so tests will behave deterministically when finding newest output
 			if mTimesCache != nil {
 				path := tspath.ToPath(file, s.GetCurrentDirectory(), s.FS().UseCaseSensitiveFileNames())
 				if _, found := mTimesCache.Load(path); found {

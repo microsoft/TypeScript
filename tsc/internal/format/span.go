@@ -793,16 +793,16 @@ func (w *formatSpanWorker) processTrivia(trivia []TextRangeWithKind, parent *ast
 * Trimming will be done for lines after the previous range.
 * Exclude comments as they had been previously processed.
  */
-func (w *formatSpanWorker) trimTrailingWhitespacesForRemainingRange(trivias []TextRangeWithKind) {
+func (w *formatSpanWorker) trimTrailingWhitespacesForRemainingRange(triviaList []TextRangeWithKind) {
 	startPos := w.originalRange.Pos()
 	if w.previousRange != NewTextRangeWithKind(0, 0, 0) {
 		startPos = w.previousRange.Loc.End()
 	}
 
-	for _, trivia := range trivias {
+	for _, trivia := range triviaList {
 		if isComment(trivia.Kind) {
 			if startPos < trivia.Loc.Pos() {
-				w.trimTrailingWitespacesForPositions(startPos, trivia.Loc.Pos()-1, w.previousRange)
+				w.trimTrailingWhitespacesForPositions(startPos, trivia.Loc.Pos()-1, w.previousRange)
 			}
 
 			startPos = trivia.Loc.End() + 1
@@ -810,11 +810,11 @@ func (w *formatSpanWorker) trimTrailingWhitespacesForRemainingRange(trivias []Te
 	}
 
 	if startPos < w.originalRange.End() {
-		w.trimTrailingWitespacesForPositions(startPos, w.originalRange.End(), w.previousRange)
+		w.trimTrailingWhitespacesForPositions(startPos, w.originalRange.End(), w.previousRange)
 	}
 }
 
-func (w *formatSpanWorker) trimTrailingWitespacesForPositions(startPos int, endPos int, previousRange TextRangeWithKind) {
+func (w *formatSpanWorker) trimTrailingWhitespacesForPositions(startPos int, endPos int, previousRange TextRangeWithKind) {
 	startLine := scanner.GetECMALineOfPosition(w.sourceFile, startPos)
 	endLine := scanner.GetECMALineOfPosition(w.sourceFile, endPos)
 
@@ -1039,13 +1039,13 @@ func (w *formatSpanWorker) recordInsert(start int, text string) {
 	}
 }
 
-func (w *formatSpanWorker) consumeTokenAndAdvanceScanner(currentTokenInfo tokenInfo, parent *ast.Node, dynamicIndenation *dynamicIndenter, container *ast.Node, isListEndToken bool) {
+func (w *formatSpanWorker) consumeTokenAndAdvanceScanner(currentTokenInfo tokenInfo, parent *ast.Node, dynamicIndentation *dynamicIndenter, container *ast.Node, isListEndToken bool) {
 	// assert(currentTokenInfo.token.Loc.ContainedBy(parent.Loc)) // !!!
 	lastTriviaWasNewLine := w.formattingScanner.lastTrailingTriviaWasNewLine()
 	indentToken := false
 
 	if len(currentTokenInfo.leadingTrivia) > 0 {
-		w.processTrivia(currentTokenInfo.leadingTrivia, parent, w.childContextNode, dynamicIndenation)
+		w.processTrivia(currentTokenInfo.leadingTrivia, parent, w.childContextNode, dynamicIndentation)
 	}
 
 	lineAction := LineActionNone
@@ -1057,7 +1057,7 @@ func (w *formatSpanWorker) consumeTokenAndAdvanceScanner(currentTokenInfo tokenI
 		rangeHasError := w.rangeContainsError(currentTokenInfo.token.Loc)
 		// save previousRange since processRange will overwrite this value with current one
 		savePreviousRange := w.previousRange
-		lineAction = w.processRange(currentTokenInfo.token, tokenStartLine, tokenStartChar, parent, w.childContextNode, dynamicIndenation)
+		lineAction = w.processRange(currentTokenInfo.token, tokenStartLine, tokenStartChar, parent, w.childContextNode, dynamicIndentation)
 		// do not indent comments\token if token range overlaps with some error
 		if !rangeHasError {
 			if lineAction == LineActionNone {
@@ -1088,17 +1088,17 @@ func (w *formatSpanWorker) consumeTokenAndAdvanceScanner(currentTokenInfo tokenI
 				break
 			}
 		}
-		w.processTrivia(currentTokenInfo.trailingTrivia, parent, w.childContextNode, dynamicIndenation)
+		w.processTrivia(currentTokenInfo.trailingTrivia, parent, w.childContextNode, dynamicIndentation)
 	}
 
 	if indentToken {
 		tokenIndentation := -1
 		if isTokenInRange && !w.rangeContainsError(currentTokenInfo.token.Loc) {
-			tokenIndentation = dynamicIndenation.getIndentationForToken(tokenStartLine, currentTokenInfo.token.Kind, container, !!isListEndToken)
+			tokenIndentation = dynamicIndentation.getIndentationForToken(tokenStartLine, currentTokenInfo.token.Kind, container, !!isListEndToken)
 		}
 		indentNextTokenOrTrivia := true
 		if len(currentTokenInfo.leadingTrivia) > 0 {
-			commentIndentation := dynamicIndenation.getIndentationForComment(currentTokenInfo.token.Kind, tokenIndentation, container)
+			commentIndentation := dynamicIndentation.getIndentationForComment(currentTokenInfo.token.Kind, tokenIndentation, container)
 			indentNextTokenOrTrivia = w.indentTriviaItems(currentTokenInfo.leadingTrivia, commentIndentation, indentNextTokenOrTrivia, func(item TextRangeWithKind) {
 				w.insertIndentation(item.Loc.Pos(), commentIndentation, false)
 			})

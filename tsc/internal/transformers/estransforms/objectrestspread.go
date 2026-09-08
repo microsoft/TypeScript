@@ -50,7 +50,7 @@ func (ch *objectRestSpreadTransformer) visit(node *ast.Node) *ast.Node {
 	case ast.KindParameter:
 		return ch.visitParameter(node.AsParameterDeclaration())
 	case ast.KindConstructor:
-		return ch.visitContructorDeclaration(node.AsConstructorDeclaration())
+		return ch.visitConstructorDeclaration(node.AsConstructorDeclaration())
 	case ast.KindGetAccessor:
 		return ch.visitGetAccessorDeclaration(node.AsGetAccessorDeclaration())
 	case ast.KindSetAccessor:
@@ -132,7 +132,7 @@ func (ch *objectRestSpreadTransformer) exitParameterListContext(scope oldParamSc
 	ch.parametersWithPrecedingObjectRestOrSpread = map[*ast.Node]struct{}(scope)
 }
 
-func (ch *objectRestSpreadTransformer) visitContructorDeclaration(node *ast.ConstructorDeclaration) *ast.Node {
+func (ch *objectRestSpreadTransformer) visitConstructorDeclaration(node *ast.ConstructorDeclaration) *ast.Node {
 	old := ch.enterParameterListContext(node.AsNode())
 	defer ch.exitParameterListContext(old)
 	return ch.Factory().UpdateConstructorDeclaration(

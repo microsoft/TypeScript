@@ -890,7 +890,7 @@ func (b *NodeBuilderImpl) createExpressionFromSymbolChain(chain []*ast.Symbol, i
 		b.ctx.approximateLength += len(literalText) + 2
 		expression = b.newStringLiteralEx(literalText, symbolName[0] == '\'')
 	} else if jsnum.FromString(symbolName).String() == symbolName {
-		// TODO: the follwing in strada would assert if the number is negative, but no such assertion exists here
+		// TODO: the following in strada would assert if the number is negative, but no such assertion exists here
 		// Moreover, what's even guaranteeing the name *isn't* -1 here anyway? Needs double-checking.
 		b.ctx.approximateLength += len(symbolName)
 		expression = b.f.NewNumericLiteral(symbolName, ast.TokenFlagsNone)

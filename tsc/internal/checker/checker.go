@@ -873,7 +873,6 @@ type Checker struct {
 	getGlobalClassMethodDecoratorContextType    func() *Type
 	getGlobalClassGetterDecoratorContextType    func() *Type
 	getGlobalClassSetterDecoratorContextType    func() *Type
-	getGlobalClassAccessorDecoratorContxtType   func() *Type
 	getGlobalClassAccessorDecoratorContextType  func() *Type
 	getGlobalClassAccessorDecoratorTargetType   func() *Type
 	getGlobalClassAccessorDecoratorResultType   func() *Type
@@ -8585,7 +8584,7 @@ func (c *Checker) getResolvedSignature(node *ast.Node, candidatesOutArray *[]*Si
 	if cached == nil {
 		// If we haven't already done so, temporarily reset the resolution stack. This allows us to
 		// handle "inverted" situations where, for example, an API client asks for the type of a symbol
-		// containined in a function call argument whose contextual type depends on the symbol itself
+		// contained in a function call argument whose contextual type depends on the symbol itself
 		// through resolution of the containing function call. By resetting the resolution stack we'll
 		// retry the symbol type resolution with the resolvingSignature marker in place to suppress
 		// the contextual type circularity.
@@ -15429,8 +15428,8 @@ func (c *Checker) resolveExternalModule(
 		if ancestor == nil {
 			ancestor = ast.FindAncestor(location, ast.IsImportEqualsDeclaration)
 			if ancestor != nil {
-				if moduleRefrence := ancestor.AsImportEqualsDeclaration().ModuleReference; moduleRefrence.Kind == ast.KindExternalModuleReference {
-					contextSpecifier = moduleRefrence.Expression()
+				if moduleReference := ancestor.AsImportEqualsDeclaration().ModuleReference; moduleReference.Kind == ast.KindExternalModuleReference {
+					contextSpecifier = moduleReference.Expression()
 				}
 			}
 		}
@@ -16386,7 +16385,7 @@ func (c *Checker) lateBindIndexSignature(parent *ast.Symbol, earlySymbols ast.Sy
 	}
 }
 
-func isNotReplacableByMethod(decl *ast.Node) bool {
+func isNotReplaceableByMethod(decl *ast.Node) bool {
 	return decl.Symbol().Flags&ast.SymbolFlagsReplaceableByMethod == 0
 }
 
@@ -16400,8 +16399,8 @@ func (c *Checker) addDeclarationToLateBoundSymbol(symbol *ast.Symbol, member *as
 		symbol.Flags |= symbolFlags
 		symbol.Declarations = append(symbol.Declarations, member)
 	} else if symbol.Flags&ast.SymbolFlagsReplaceableByMethod != 0 && member.Symbol().Flags&ast.SymbolFlagsMethod != 0 {
-		// Remove all replacable-by-method members, along with their flags.
-		symbol.Declarations = append(core.Filter(symbol.Declarations, isNotReplacableByMethod), member)
+		// Remove all replaceable-by-method members, along with their flags.
+		symbol.Declarations = append(core.Filter(symbol.Declarations, isNotReplaceableByMethod), member)
 		oldFlags := symbol.Flags
 		symbol.Flags = ast.SymbolFlagsNone
 		for _, d := range symbol.Declarations {

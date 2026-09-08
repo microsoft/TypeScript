@@ -1360,7 +1360,7 @@ func (f *FourslashTest) verifyCompletionsResult(
 		if len(actual.Items) == 0 {
 			return
 		}
-		// !!! cmp.Diff(actual, nil) should probably be a .String() call here and elswhere
+		// !!! cmp.Diff(actual, nil) should probably be a .String() call here and elsewhere
 		t.Fatalf(prefix+"Expected nil completion list but got non-nil: %s", cmp.Diff(actual, nil))
 	}
 	assert.Equal(t, actual.IsIncomplete, expected.IsIncomplete, prefix+"IsIncomplete mismatch")
@@ -3930,7 +3930,7 @@ func (f *FourslashTest) Paste(t *testing.T, text string) {
 	f.baselineState(t)
 	f.editScriptAndUpdateMarkers(t, f.activeFilename, start, start, text)
 
-	// post-paste fomatting
+	// post-paste formatting
 	if f.stateEnableFormatting {
 		result := sendRequestAndBaselineWorker(t, f, lsproto.TextDocumentRangeFormattingInfo, &lsproto.DocumentRangeFormattingParams{
 			TextDocument: lsproto.TextDocumentIdentifier{
@@ -4037,7 +4037,7 @@ func (f *FourslashTest) replaceWorker(t *testing.T, start int, length int, text 
 
 // Inserts the text currently at the caret position character by character, as if the user typed it.
 func (f *FourslashTest) typeText(t *testing.T, text string) {
-	// temprorary -- this disables tests failing if format crashes; this unblocks unrelated tests such as codefixes
+	// temporary -- this disables tests failing if format crashes; this unblocks unrelated tests such as codefixes
 	f.reportFormatOnTypeCrash = false
 	defer func() {
 		f.reportFormatOnTypeCrash = true

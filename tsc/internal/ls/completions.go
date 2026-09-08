@@ -766,7 +766,7 @@ func (l *LanguageService) getCompletionData(
 					case ast.KindIdentifier:
 						isJsxIdentifierExpected = true
 						// For `<div x=[|f/**/|]`, `parent` will be `x` and `previousToken.parent` will be `f` (which is its own JsxAttribute).
-						// Note for `<div someBool f>` we don't want to treat this as a jsx inializer, instead it's the attribute name.
+						// Note for `<div someBool f>` we don't want to treat this as a jsx initializer, instead it's the attribute name.
 						if parent != previousToken.Parent &&
 							parent.Initializer() == nil &&
 							astnav.FindChildOfKind(parent, ast.KindEqualsToken, file) != nil {
@@ -940,7 +940,7 @@ func (l *LanguageService) getCompletionData(
 					exportedSymbols := typeChecker.GetExportsOfModule(symbol)
 					for _, exportedSymbol := range exportedSymbols {
 						if exportedSymbol == nil {
-							panic("getExporsOfModule() should all be defined")
+							panic("getExportsOfModule() should all be defined")
 						}
 						isValidValueAccess := func(s *ast.Symbol) bool {
 							return typeChecker.IsValidPropertyAccess(valueAccessNode, s.Name)
@@ -998,7 +998,7 @@ func (l *LanguageService) getCompletionData(
 
 		if !isTypeLocation || checker.IsInTypeQuery(node) {
 			// microsoft/TypeScript#39946. Pulling on the type of a node inside of a function with a contextual `this` parameter can result in a circularity
-			// if the `node` is part of the exprssion of a `yield` or `return`. This circularity doesn't exist at compile time because
+			// if the `node` is part of the expression of a `yield` or `return`. This circularity doesn't exist at compile time because
 			// we will check (and cache) the type of `this` *before* checking the type of the node.
 			typeChecker.TryGetThisTypeAtEx(node, false /*includeGlobalThis*/, nil)
 			t := typeChecker.GetNonOptionalType(typeChecker.GetTypeAtLocation(node))
@@ -3261,7 +3261,7 @@ func getSourceFromOrigin(origin *symbolOriginInfo) string {
 	return ""
 }
 
-// In a scenarion such as `const x = 1 * |`, the context and previous tokens are both `*`.
+// In a scenario such as `const x = 1 * |`, the context and previous tokens are both `*`.
 // In `const x = 1 * o|`, the context token is *, and the previous token is `o`.
 // `contextToken` and `previousToken` can both be nil if we are at the beginning of the file.
 func getRelevantTokens(position int, file *ast.SourceFile) (contextToken *ast.Node, previousToken *ast.Node) {
@@ -5068,7 +5068,7 @@ func (l *LanguageService) createLSPCompletionItem(
 		filterText = getFilterText(file, position, insertText, name, wordStart, dotAccessor)
 	}
 
-	// Adjustements based on kind modifiers.
+	// Adjustments based on kind modifiers.
 	var tags *[]lsproto.CompletionItemTag
 	// Copied from vscode ts extension: `MyCompletionItem.constructor`.
 	if isMemberCompletion && kindModifiers&lsutil.ScriptElementKindModifierOptional != 0 {

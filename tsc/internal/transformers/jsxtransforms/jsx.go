@@ -320,9 +320,9 @@ func (tx *JSXTransformer) transformJsxChildToExpression(node *ast.Node) *ast.Nod
 }
 
 func (tx *JSXTransformer) convertJsxChildrenToChildrenPropAssignment(children []*ast.JsxChild) *ast.Node {
-	nonWhitespceChildren := ast.GetSemanticJsxChildren(children)
-	if len(nonWhitespceChildren) == 1 && (nonWhitespceChildren[0].Kind != ast.KindJsxExpression || nonWhitespceChildren[0].AsJsxExpression().DotDotDotToken == nil) {
-		result := tx.transformJsxChildToExpression(nonWhitespceChildren[0])
+	nonWhitespaceChildren := ast.GetSemanticJsxChildren(children)
+	if len(nonWhitespaceChildren) == 1 && (nonWhitespaceChildren[0].Kind != ast.KindJsxExpression || nonWhitespaceChildren[0].AsJsxExpression().DotDotDotToken == nil) {
+		result := tx.transformJsxChildToExpression(nonWhitespaceChildren[0])
 		if result == nil {
 			return nil
 		}
@@ -330,8 +330,8 @@ func (tx *JSXTransformer) convertJsxChildrenToChildrenPropAssignment(children []
 	}
 	// For multiple children in the children property array, don't set StartOnNewLine
 	// on child elements — the array literal is single-line.
-	results := make([]*ast.Node, 0, len(nonWhitespceChildren))
-	for _, child := range nonWhitespceChildren {
+	results := make([]*ast.Node, 0, len(nonWhitespaceChildren))
+	for _, child := range nonWhitespaceChildren {
 		res := tx.transformJsxChildToExpression(child)
 		if res == nil {
 			continue

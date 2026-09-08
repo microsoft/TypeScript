@@ -222,7 +222,7 @@ const declarationEmitNodeBuilderFlags = nodebuilder.FlagsMultilineObjectLiterals
 
 const declarationEmitInternalNodeBuilderFlags = nodebuilder.InternalFlagsAllowUnresolvedNames
 
-// functions as both `visitDeclarationStatements` and `transformRoot`, utilitzing SyntaxList nodes
+// functions as both `visitDeclarationStatements` and `transformRoot`, utilizing SyntaxList nodes
 func (tx *DeclarationTransformer) visit(node *ast.Node) *ast.Node {
 	if node == nil {
 		return nil
@@ -418,7 +418,7 @@ func (tx *DeclarationTransformer) transformAndReplaceLatePaintedStatements(state
 	}
 
 	// And lastly, we need to get the final form of all those indetermine import declarations from before and add them to the output list
-	// (and remove them from the set to examine for outter declarations)
+	// (and remove them from the set to examine for outer declarations)
 	results := make([]*ast.Node, 0, len(statements.Nodes))
 	for _, statement := range statements.Nodes {
 		if !ast.IsLateVisibilityPaintedStatement(statement) {
@@ -635,7 +635,7 @@ func (tx *DeclarationTransformer) visitDeclarationSubtree(input *ast.Node) *ast.
 	case ast.KindConstructor:
 		result = tx.transformConstructorDeclaration(input.AsConstructorDeclaration())
 	case ast.KindGetAccessor:
-		result = tx.transformGetAccesorDeclaration(input.AsGetAccessorDeclaration())
+		result = tx.transformGetAccessorDeclaration(input.AsGetAccessorDeclaration())
 	case ast.KindSetAccessor:
 		result = tx.transformSetAccessorDeclaration(input.AsSetAccessorDeclaration())
 	case ast.KindPropertyDeclaration:
@@ -1018,7 +1018,7 @@ func (tx *DeclarationTransformer) transformSetAccessorDeclaration(input *ast.Set
 	)
 }
 
-func (tx *DeclarationTransformer) transformGetAccesorDeclaration(input *ast.GetAccessorDeclaration) *ast.Node {
+func (tx *DeclarationTransformer) transformGetAccessorDeclaration(input *ast.GetAccessorDeclaration) *ast.Node {
 	if ast.IsPrivateIdentifier(input.Name()) {
 		return nil
 	}

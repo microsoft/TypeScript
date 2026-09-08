@@ -5737,7 +5737,7 @@ func (p *Parser) parseFunctionExpression() *ast.Expression {
 	//
 	// FunctionExpression:
 	//      function BindingIdentifier[opt](FormalParameters){ FunctionBody }
-	saveContexFlags := p.contextFlags
+	saveContextFlags := p.contextFlags
 	p.setContextFlags(ast.NodeFlagsDecoratorContext, false)
 	pos := p.nodePos()
 	jsdoc := p.jsdocScannerInfo()
@@ -5762,7 +5762,7 @@ func (p *Parser) parseFunctionExpression() *ast.Expression {
 	parameters := p.parseParameters(signatureFlags)
 	returnType := p.parseReturnType(ast.KindColonToken, false /*isType*/)
 	body := p.parseFunctionBlock(signatureFlags, nil /*diagnosticMessage*/)
-	p.contextFlags = saveContexFlags
+	p.contextFlags = saveContextFlags
 	result := p.factory.NewFunctionExpression(modifiers, asteriskToken, name, typeParameters, parameters, returnType, nil /*fullSignature*/, body)
 	p.finishNode(result, pos)
 	p.withJSDoc(result, jsdoc)

@@ -196,7 +196,7 @@ func (b *BuildInfoReferenceMapEntry) UnmarshalJSON(data []byte) error {
 }
 
 type BuildInfoDiagnostic struct {
-	// BuildInfoFileId if it is for a File thats other than its stored for
+	// BuildInfoFileId if it is for a File that's other than its stored for
 	File               BuildInfoFileId          `json:"file,omitzero"`
 	NoFile             bool                     `json:"noFile,omitzero"`
 	Pos                int                      `json:"pos,omitzero"`

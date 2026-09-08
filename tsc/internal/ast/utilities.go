@@ -1924,7 +1924,7 @@ func IsImportNode(node *Node) bool {
 	return IsAnyImportSyntax(node) || NodeKindIs(node, KindJSImportDeclaration)
 }
 
-// Checks if the node is a genuine import declation. In particular the re-parsed KindJSImportDeclaration
+// Checks if the node is a genuine import declaration. In particular the re-parsed KindJSImportDeclaration
 // is explicitly excluded because the callers of this function are typically not prepared to handle it properly.
 // For more permissive check, use IsImportNode.
 func IsAnyImportSyntax(node *Node) bool {

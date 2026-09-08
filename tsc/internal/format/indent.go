@@ -375,7 +375,7 @@ func getIndentationForNodeWorker(
 /*
 * Function returns -1 if actual indentation for node should not be used (i.e because node is nested expression)
  */
-func getActualIndentationForNode(current *ast.Node, parent *ast.Node, cuurentLine int, currentChar int, parentAndChildShareLine bool, sourceFile *ast.SourceFile, options lsutil.FormatCodeSettings) int {
+func getActualIndentationForNode(current *ast.Node, parent *ast.Node, currentLine int, currentChar int, parentAndChildShareLine bool, sourceFile *ast.SourceFile, options lsutil.FormatCodeSettings) int {
 	// actual indentation is used for statements\declarations if one of cases below is true:
 	// - parent is SourceFile - by default immediate children of SourceFile are not indented except when user indents them manually
 	// - parent and child are not on the same line
@@ -385,7 +385,7 @@ func getActualIndentationForNode(current *ast.Node, parent *ast.Node, cuurentLin
 		return -1
 	}
 
-	return findColumnForFirstNonWhitespaceCharacterInLine(cuurentLine, currentChar, sourceFile, options)
+	return findColumnForFirstNonWhitespaceCharacterInLine(currentLine, currentChar, sourceFile, options)
 }
 
 func isArgumentAndStartLineOverlapsExpressionBeingCalled(parent *ast.Node, child *ast.Node, childStartLine int, sourceFile *ast.SourceFile) bool {

@@ -1939,7 +1939,7 @@ func getFileNamesFromConfigSpecs(
 	extraExtensions []string,
 ) ([]string, int) {
 	basePath = tspath.NormalizePath(basePath)
-	keyMappper := func(value string) string { return tspath.GetCanonicalFileName(value, host.UseCaseSensitiveFileNames()) }
+	keyMapper := func(value string) string { return tspath.GetCanonicalFileName(value, host.UseCaseSensitiveFileNames()) }
 	// Literal file names (provided via the "files" array in tsconfig.json) are stored in a
 	// file map with a possibly case insensitive key. We use this map later when when including
 	// wildcard paths.
@@ -1963,7 +1963,7 @@ func getFileNamesFromConfigSpecs(
 	// remove a literal file.
 	for _, fileName := range validatedFilesSpec {
 		file := tspath.GetNormalizedAbsolutePath(fileName, basePath)
-		literalFileMap.Set(keyMappper(fileName), file)
+		literalFileMap.Set(keyMapper(fileName), file)
 	}
 
 	var jsonOnlyIncludeMatchers *vfsmatch.SpecMatcher
@@ -1980,7 +1980,7 @@ func getFileNamesFromConfigSpecs(
 					includeIndex = jsonOnlyIncludeMatchers.MatchIndex(file)
 				}
 				if includeIndex != -1 {
-					key := keyMappper(file)
+					key := keyMapper(file)
 					if !literalFileMap.Has(key) && !wildCardJsonFileMap.Has(key) {
 						wildCardJsonFileMap.Set(key, file)
 					}
@@ -1994,7 +1994,7 @@ func getFileNamesFromConfigSpecs(
 			// <file>.d.ts (or <file>.js if "allowJs" is enabled) in the same
 			// directory when they are compilation outputs.
 			if hasFileWithHigherPriorityExtension(file, supportedExtensions, func(fileName string) bool {
-				canonicalFileName := keyMappper(fileName)
+				canonicalFileName := keyMapper(fileName)
 				return literalFileMap.Has(canonicalFileName) || wildcardFileMap.Has(canonicalFileName)
 			}) {
 				continue
@@ -2003,8 +2003,8 @@ func getFileNamesFromConfigSpecs(
 			// extension due to the user-defined order of entries in the
 			// "include" array. If there is a lower priority extension in the
 			// same directory, we should remove it.
-			removeWildcardFilesWithLowerPriorityExtension(file, &wildcardFileMap, supportedExtensions, keyMappper)
-			key := keyMappper(file)
+			removeWildcardFilesWithLowerPriorityExtension(file, &wildcardFileMap, supportedExtensions, keyMapper)
+			key := keyMapper(file)
 			if !literalFileMap.Has(key) && !wildcardFileMap.Has(key) {
 				wildcardFileMap.Set(key, file)
 			}

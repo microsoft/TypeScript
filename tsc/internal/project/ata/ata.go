@@ -393,12 +393,12 @@ type npmConfig struct {
 	DevDependencies map[string]any `json:"devDependencies"`
 }
 
-type npmDependecyEntry struct {
+type npmDependencyEntry struct {
 	Version string `json:"version"`
 }
 type npmLock struct {
-	Dependencies map[string]npmDependecyEntry `json:"dependencies"`
-	Packages     map[string]npmDependecyEntry `json:"packages"`
+	Dependencies map[string]npmDependencyEntry `json:"dependencies"`
+	Packages     map[string]npmDependencyEntry `json:"packages"`
 }
 
 func (ti *TypingsInstaller) processCacheLocation(projectID string, fs vfs.FS, logger logging.Logger) {

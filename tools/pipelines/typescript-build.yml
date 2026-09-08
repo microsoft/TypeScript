@@ -78,7 +78,7 @@ extends:
                 condition: eq(variables['Build.Reason'], 'Schedule')
 
               # This is copied from https://dev.azure.com/devdiv/1ESPipelineTemplates/_git/MicroBuildTemplate?path=/azure-pipelines/Jobs/Job.yml
-              # With the difference that we install .NET Core becuase DDSignFiles needs it.
+              # With the difference that we install .NET Core because DDSignFiles needs it.
               - task: NuGetAuthenticate@1
                 displayName: '🔩 NuGet Authenticate'
               - task: UsePythonVersion@0

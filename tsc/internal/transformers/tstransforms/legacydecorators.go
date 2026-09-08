@@ -56,7 +56,7 @@ func (tx *LegacyDecoratorsTransformer) visit(node *ast.Node) *ast.Node {
 	case ast.KindPropertyDeclaration:
 		return tx.visitPropertyDeclaration(node.AsPropertyDeclaration())
 	case ast.KindParameter:
-		return tx.visitParamerDeclaration(node.AsParameterDeclaration())
+		return tx.visitParameterDeclaration(node.AsParameterDeclaration())
 	case ast.KindSourceFile:
 		tx.classAliases = make(map[*ast.Node]*ast.Node)
 		tx.enclosingClasses = nil
@@ -125,7 +125,7 @@ func (tx *LegacyDecoratorsTransformer) finishClassElement(updated *ast.Node, ori
 	return updated
 }
 
-func (tx *LegacyDecoratorsTransformer) visitParamerDeclaration(node *ast.ParameterDeclaration) *ast.Node {
+func (tx *LegacyDecoratorsTransformer) visitParameterDeclaration(node *ast.ParameterDeclaration) *ast.Node {
 	updated := tx.Factory().UpdateParameterDeclaration(
 		node,
 		elideModifiers(tx.Factory(), node.Modifiers()),
