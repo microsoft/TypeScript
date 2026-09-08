@@ -427,8 +427,8 @@ type APISnapshotRequest struct {
 	OpenFiles     *collections.Set[lsproto.DocumentUri]
 	CloseFiles    *collections.Set[tspath.Path]
 	FileSystem    vfs.FS
-	// ReplaceFileSystem indicates that FileSystem is a new source rather than the
-	// unchanged filesystem carried forward from the base snapshot.
+	// ReplaceFileSystem indicates a total filesystem replacement. Layers use
+	// per-path file changes instead of invalidating all inherited state.
 	ReplaceFileSystem bool
 }
 
@@ -582,10 +582,10 @@ func (s *Snapshot) Clone(
 	if change.fs != nil {
 		baseFS = change.fs
 	}
-	// A supplied filesystem must take precedence over disk files inherited from
-	// the previous snapshot. Likewise, returning to the session host must not retain
-	// files from a previous total memory filesystem.
-	if change.replaceFileSystem || s.fileSystemOverride != change.fileSystemOverride {
+	// Total replacements and returning to the session host must not retain files
+	// from the previous filesystem. Layers invalidate only their per-path changes,
+	// including the first layer over a host-backed snapshot.
+	if change.replaceFileSystem || s.fileSystemOverride && !change.fileSystemOverride {
 		change.fileChanges.InvalidateAll = true
 	}
 	fs := newSnapshotFSBuilder(baseFS, s.fs.overlays, overlays, s.fs.diskFiles, s.fs.diskDirectories, s.fs.nodeModulesRealpathAliases, store.options.PositionEncoding, store.toPath)

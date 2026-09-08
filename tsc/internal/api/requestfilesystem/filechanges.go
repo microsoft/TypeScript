@@ -15,7 +15,7 @@ func addFileChanges(summary *project.FileChangeSummary, request *RequestFileSyst
 	addChange := func(fileName string, deleted bool) {
 		uri := lsconv.FileNameToDocumentURI(fileName)
 		if deleted {
-			if baseFS.FileExists(fileName) {
+			if baseFS.FileExists(fileName) || baseFS.DirectoryExists(fileName) {
 				summary.Deleted.Add(uri)
 			}
 			return
@@ -46,6 +46,25 @@ func addFileChanges(summary *project.FileChangeSummary, request *RequestFileSyst
 			continue
 		}
 		addChangeAndAliases(absoluteFileName, true)
+	}
+	// Replacing a listing or a symlink can change every cached descendant.
+	// Delete events expand through the snapshot's cached directory tree and create
+	// events that refresh wildcard roots and previously missing module resolutions.
+	addReplacement := func(path string) {
+		absolutePath := tspath.GetNormalizedAbsolutePath(path, currentDirectory)
+		addChangeAndAliases(absolutePath, true)
+		summary.Created.Add(lsconv.FileNameToDocumentURI(absolutePath))
+		if baseRequestFS != nil {
+			for _, alias := range baseRequestFS.load().aliasesForPath(absolutePath) {
+				summary.Created.Add(lsconv.FileNameToDocumentURI(alias))
+			}
+		}
+	}
+	for directoryName := range request.Directories {
+		addReplacement(directoryName)
+	}
+	for linkName := range request.Symlinks {
+		addReplacement(linkName)
 	}
 	if summary.Changed.Len()+summary.Created.Len()+summary.Deleted.Len() > 0 {
 		summary.IncludesWatchChangeOutsideNodeModules = true

@@ -44,9 +44,9 @@ func TestInitializeForUpdate(t *testing.T) {
 
 	t.Run("filesystem layers over a host-backed snapshot", func(t *testing.T) {
 		t.Parallel()
-		host := vfstest.FromMap(map[string]string{
+		host := &trackingvfs.FS{Inner: vfstest.FromMap(map[string]string{
 			"/dir/host.ts": "host",
-		}, true)
+		}, true)}
 		var handle Handle
 		var fileChanges project.FileChangeSummary
 		err := handle.InitializeForUpdate(&RequestFileSystem{
@@ -57,7 +57,11 @@ func TestInitializeForUpdate(t *testing.T) {
 			},
 		}, nil, host, "/", &fileChanges, true)
 		assert.NilError(t, err)
-		assert.DeepEqual(t, handle.GetAccessibleEntries("/dir").Files, []string{"cached.ts", "host.ts"})
+		// Change generation may inspect the old directory; reading the supplied
+		// complete listing itself must not fall back to the host.
+		host.SeenFiles.Delete("/dir")
+		assert.DeepEqual(t, handle.GetAccessibleEntries("/dir").Files, []string{"cached.ts"})
+		assert.Assert(t, !host.SeenFiles.Has("/dir"))
 	})
 
 	t.Run("memory starts a new chain", func(t *testing.T) {
@@ -81,6 +85,82 @@ func TestInitializeForUpdate(t *testing.T) {
 		assert.Assert(t, handle.baseFileSystem() == host)
 		assert.Assert(t, getRequestFileSystem(handle.baseFileSystem()) == nil)
 	})
+}
+
+func TestRequestFileSystemCompleteDirectoryListings(t *testing.T) {
+	t.Parallel()
+
+	for _, kind := range []Kind{KindFull, KindLayer} {
+		for _, baseListing := range []string{"explicit", "derived"} {
+			for _, test := range []struct {
+				name    string
+				entries RequestDirectoryEntries
+			}{
+				{name: "replacement", entries: RequestDirectoryEntries{Files: []string{"replacement.ts"}, Directories: []string{"replacement-dir"}}},
+				{name: "empty", entries: RequestDirectoryEntries{Files: []string{}, Directories: []string{}}},
+			} {
+				t.Run(string(kind)+"/"+baseListing+"/"+test.name, func(t *testing.T) {
+					t.Parallel()
+					host := &trackingvfs.FS{Inner: vfstest.FromMap(map[string]string{
+						"/dir/host.ts":           "host",
+						"/dir/host-dir/index.ts": "host child",
+					}, true)}
+					params := &RequestFileSystem{
+						Kind: kind,
+						Files: map[string]string{
+							"/dir/base.ts":           "base",
+							"/dir/base-dir/index.ts": "base child",
+						},
+					}
+					if baseListing == "explicit" {
+						params.Directories = map[string]RequestDirectoryEntries{
+							"/dir": {Files: []string{"base.ts"}, Directories: []string{"base-dir"}},
+						}
+					}
+					base, err := newRequestFileSystem(params, host, "/")
+					assert.NilError(t, err)
+					defer base.Release()
+					layered, err := newLayeredRequestFileSystem(&RequestFileSystem{
+						Kind: KindLayer,
+						Directories: map[string]RequestDirectoryEntries{
+							"/dir": test.entries,
+						},
+					}, base, "/")
+					assert.NilError(t, err)
+					defer layered.Release()
+
+					// Omitting a listing in a later update still merges its derived
+					// entries with the complete listing, without reopening host fallback.
+					next, err := newLayeredRequestFileSystem(&RequestFileSystem{
+						Kind: KindLayer,
+						Files: map[string]string{
+							"/dir/added.ts":           "added",
+							"/dir/added-dir/index.ts": "added child",
+						},
+					}, layered, "/")
+					assert.NilError(t, err)
+					defer next.Release()
+
+					verify := func() {
+						t.Helper()
+						entries := layered.GetAccessibleEntries("/dir")
+						assert.Assert(t, host.SeenFiles.IsEmpty())
+						assert.DeepEqual(t, entries.Files, test.entries.Files)
+						assert.DeepEqual(t, entries.Directories, test.entries.Directories)
+						entries = next.GetAccessibleEntries("/dir")
+						assert.Assert(t, host.SeenFiles.IsEmpty())
+						assert.DeepEqual(t, entries.Files, append([]string{"added.ts"}, test.entries.Files...))
+						assert.DeepEqual(t, entries.Directories, append([]string{"added-dir"}, test.entries.Directories...))
+					}
+					verify()
+					base.Release()
+					assert.Assert(t, layered.baseFileSystem() == host)
+					assert.Assert(t, next.baseFileSystem() == host)
+					verify()
+				})
+			}
+		}
+	}
 }
 
 func TestConcurrentCloneAndRelease(t *testing.T) {
@@ -381,7 +461,7 @@ func TestRequestFileSystem(t *testing.T) {
 		assert.Assert(t, !layered.DirectoryExists("/becomes-file"))
 		assert.Assert(t, !layered.FileExists("/becomes-directory.ts"))
 		assert.Assert(t, layered.DirectoryExists("/becomes-directory.ts"))
-		assert.DeepEqual(t, layered.GetAccessibleEntries("/").Files, []string{"added.ts", "becomes-file", "change.ts", "keep.ts", "remove.ts"})
+		assert.DeepEqual(t, layered.GetAccessibleEntries("/").Files, []string{"added.ts", "becomes-file", "change.ts", "remove.ts"})
 		assert.DeepEqual(t, layered.GetAccessibleEntries("/").Directories, []string{"becomes-directory.ts", "removed-dir"})
 	})
 
@@ -724,7 +804,7 @@ func TestRequestFileSystem(t *testing.T) {
 		_, ok := layered.ReadFile("/removed.ts")
 		assert.Assert(t, !ok)
 		assert.DeepEqual(t, layered.GetAccessibleEntries("/sealed").Files, []string{"added.ts", "inherited.ts"})
-		assert.DeepEqual(t, layered.GetAccessibleEntries("/open").Files, []string{"host.ts", "layer-listed.ts"})
+		assert.DeepEqual(t, layered.GetAccessibleEntries("/open").Files, []string{"layer-listed.ts"})
 	})
 
 	t.Run("compacting a filesystem layer over a full filesystem produces a full filesystem", func(t *testing.T) {

@@ -65,13 +65,15 @@ func (h *Handle) InitializeForUpdate(params *RequestFileSystem, base *Handle, ho
 		}
 		return nil
 	}
-	if params.Kind == KindLayer && hasBaseSnapshot {
+	if params.Kind == KindLayer {
 		baseFS := host
-		if base != nil {
+		if hasBaseSnapshot && base != nil {
 			baseFS = base
 		}
 		addFileChanges(fileChanges, params, baseFS, currentDirectory)
-		return h.initializeLayered(params, baseFS, currentDirectory)
+		if hasBaseSnapshot {
+			return h.initializeLayered(params, baseFS, currentDirectory)
+		}
 	}
 	return h.initializeFromRequest(params, host, currentDirectory)
 }

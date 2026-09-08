@@ -164,9 +164,7 @@ func newRequestFileSystemWorker(params *RequestFileSystem, base vfs.FS, currentD
 			Files:       slices.Clone(entries.Files),
 			Directories: slices.Clone(entries.Directories),
 		}
-		if !layered {
-			result.sealedListings[path] = struct{}{}
-		}
+		result.sealedListings[path] = struct{}{}
 	}
 	for linkName, symlink := range params.Symlinks {
 		absoluteLinkName := result.toAbsolutePath(linkName)
@@ -273,11 +271,10 @@ func (s requestFileSystem) applyTo(base requestFileSystem) requestFileSystem {
 		symlinks[path] = symlink
 	}
 	for path, entries := range s.directoryListings {
-		if baseEntries, ok := directoryListings[path]; ok {
-			directoryListings[path] = mergeEntries(baseEntries, entries, s.equalEntryNames)
-		} else {
-			directoryListings[path] = cloneEntries(entries)
-		}
+		// Supplied listings are complete, even when this layer has already been
+		// compacted. Only omitted listings merge entries from the base.
+		directoryListings[path] = cloneEntries(entries)
+		sealedListings[path] = struct{}{}
 	}
 	for path, builder := range s.derivedListings {
 		entries, ok := directoryListings[path]

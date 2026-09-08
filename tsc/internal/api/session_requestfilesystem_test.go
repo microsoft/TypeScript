@@ -9,6 +9,7 @@ import (
 	"testing"
 
 	"github.com/microsoft/TypeScript/tsc/internal/api/requestfilesystem"
+	"github.com/microsoft/TypeScript/tsc/internal/project"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/projecttestutil"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"gotest.tools/v3/assert"
@@ -181,6 +182,133 @@ func TestSnapshotUpdateCarriesHostFileSystemWithoutOverride(t *testing.T) {
 	assert.NilError(t, err)
 	updatedSnapshot := session.snapshots[updated.Snapshot].snapshot
 	assert.Assert(t, updatedSnapshot.ProjectCollection.GetProjectByPath(tspath.Path("/tsconfig.json")).GetProgram() == program)
+}
+
+func TestSnapshotFileSystemLayersPreserveIncrementalState(t *testing.T) {
+	t.Parallel()
+
+	for _, baseKind := range []requestfilesystem.Kind{"host", requestfilesystem.KindFull, requestfilesystem.KindLayer} {
+		t.Run(string(baseKind), func(t *testing.T) {
+			t.Parallel()
+			files := map[string]string{
+				"/a/tsconfig.json":        `{ "compilerOptions": { "noLib": true }, "include": ["**/*.ts"] }`,
+				"/a/index.ts":             `export const value = 1;`,
+				"/a/removed/nested.ts":    `export const nested = true;`,
+				"/a/removed/deep/file.ts": `export const deep = true;`,
+				"/b/tsconfig.json":        `{ "compilerOptions": { "noLib": true }, "files": ["index.ts"] }`,
+				"/b/index.ts":             `export const unrelated = true;`,
+			}
+			hostFiles := make(map[string]any, len(files))
+			for path, content := range files {
+				hostFiles[path] = content
+			}
+			projectSession, _ := projecttestutil.Setup(hostFiles)
+			defer projectSession.Close()
+			session := NewLSPSession(projectSession, nil)
+			defer session.Close()
+			ctx := context.Background()
+			params := &UpdateSnapshotParams{
+				OpenProjects: []DocumentIdentifier{{FileName: "/a/tsconfig.json"}, {FileName: "/b/tsconfig.json"}},
+			}
+			if baseKind != "host" {
+				params.FileSystem = &requestfilesystem.RequestFileSystem{Kind: baseKind, Files: files}
+			}
+			base, err := session.handleUpdateSnapshot(ctx, params)
+			assert.NilError(t, err)
+			baseSnapshot := session.snapshots[base.Snapshot].snapshot
+			baseProgram := baseSnapshot.ProjectCollection.GetProjectByPath("/a/tsconfig.json").GetProgram()
+			unrelatedProgram := baseSnapshot.ProjectCollection.GetProjectByPath("/b/tsconfig.json").GetProgram()
+			unrelatedFile := baseSnapshot.GetFile("/b/index.ts")
+
+			unchanged, err := session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{
+				Snapshot: base.Snapshot,
+				FileSystem: &requestfilesystem.RequestFileSystem{
+					Kind:  requestfilesystem.KindLayer,
+					Files: map[string]string{"/a/index.ts": files["/a/index.ts"]},
+				},
+			})
+			assert.NilError(t, err)
+			unchangedSnapshot := session.snapshots[unchanged.Snapshot].snapshot
+			assert.Assert(t, unchangedSnapshot.ProjectCollection.GetProjectByPath("/a/tsconfig.json").GetProgram() == baseProgram)
+			assert.Assert(t, unchangedSnapshot.ProjectCollection.GetProjectByPath("/b/tsconfig.json").GetProgram() == unrelatedProgram)
+			assert.Assert(t, unchangedSnapshot.GetFile("/b/index.ts") == unrelatedFile)
+
+			const updatedText = `export const value = 2;`
+			updated, err := session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{
+				Snapshot: unchanged.Snapshot,
+				FileSystem: &requestfilesystem.RequestFileSystem{
+					Kind:  requestfilesystem.KindLayer,
+					Files: map[string]string{"/a/index.ts": updatedText},
+				},
+			})
+			assert.NilError(t, err)
+			updatedSnapshot := session.snapshots[updated.Snapshot].snapshot
+			updatedProject := updatedSnapshot.ProjectCollection.GetProjectByPath("/a/tsconfig.json")
+			assert.Assert(t, updatedProject.GetProgram() != baseProgram)
+			assert.Equal(t, updatedProject.ProgramUpdateKind, project.ProgramUpdateKindCloned)
+			assert.Equal(t, updatedProject.GetProgram().GetSourceFile("/a/index.ts").Text(), updatedText)
+			assert.Assert(t, updatedSnapshot.ProjectCollection.GetProjectByPath("/b/tsconfig.json").GetProgram() == unrelatedProgram)
+			assert.Assert(t, updatedSnapshot.GetFile("/b/index.ts") == unrelatedFile)
+
+			removed, err := session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{
+				Snapshot: updated.Snapshot,
+				FileSystem: &requestfilesystem.RequestFileSystem{
+					Kind:         requestfilesystem.KindLayer,
+					RemovedPaths: []string{"/a/removed"},
+				},
+			})
+			assert.NilError(t, err)
+			removedSnapshot := session.snapshots[removed.Snapshot].snapshot
+			removedProgram := removedSnapshot.ProjectCollection.GetProjectByPath("/a/tsconfig.json").GetProgram()
+			for _, path := range []string{"/a/removed/nested.ts", "/a/removed/deep/file.ts"} {
+				assert.Assert(t, removedProgram.GetSourceFile(path) == nil, path)
+				assert.Assert(t, removedSnapshot.GetFile(path) == nil, path)
+				assert.Assert(t, baseProgram.GetSourceFile(path) != nil, path)
+			}
+			assert.Assert(t, removedSnapshot.ProjectCollection.GetProjectByPath("/b/tsconfig.json").GetProgram() == unrelatedProgram)
+			assert.Assert(t, removedSnapshot.GetFile("/b/index.ts") == unrelatedFile)
+
+			// A request without a base snapshot returns to the host, so the old
+			// layer's changed contents and directory tombstones must not survive.
+			restored, err := session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{})
+			assert.NilError(t, err)
+			restoredSnapshot := session.snapshots[restored.Snapshot].snapshot
+			assert.Assert(t, !restoredSnapshot.HasFileSystemOverride())
+			restoredProgram := restoredSnapshot.ProjectCollection.GetProjectByPath("/a/tsconfig.json").GetProgram()
+			assert.Equal(t, restoredProgram.GetSourceFile("/a/index.ts").Text(), files["/a/index.ts"])
+			assert.Assert(t, restoredProgram.GetSourceFile("/a/removed/deep/file.ts") != nil)
+		})
+	}
+}
+
+func TestSnapshotFileSystemLayerWithoutBaseUpdatesHostState(t *testing.T) {
+	t.Parallel()
+
+	projectSession, _ := projecttestutil.Setup(map[string]any{
+		"/tsconfig.json": `{ "compilerOptions": { "noLib": true }, "files": ["index.ts"] }`,
+		"/index.ts":      `export const value = 1;`,
+	})
+	defer projectSession.Close()
+	session := NewLSPSession(projectSession, nil)
+	defer session.Close()
+	ctx := context.Background()
+	_, err := session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{
+		OpenProjects: []DocumentIdentifier{{FileName: "/tsconfig.json"}},
+	})
+	assert.NilError(t, err)
+
+	const updatedText = `export const value = 2;`
+	updated, err := session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{
+		FileSystem: &requestfilesystem.RequestFileSystem{
+			Kind:  requestfilesystem.KindLayer,
+			Files: map[string]string{"/index.ts": updatedText},
+		},
+	})
+	assert.NilError(t, err)
+	snapshot := session.snapshots[updated.Snapshot].snapshot
+	updatedProject := snapshot.ProjectCollection.GetProjectByPath("/tsconfig.json")
+	assert.Equal(t, updatedProject.GetProgram().GetSourceFile("/index.ts").Text(), updatedText)
+	assert.Equal(t, updatedProject.ProgramUpdateKind, project.ProgramUpdateKindCloned)
 }
 
 func TestEmitFromLayerOverFullFileSystemReturnsFileContents(t *testing.T) {

@@ -1118,7 +1118,7 @@ func (s *Session) handleUpdateSnapshot(ctx context.Context, params *UpdateSnapsh
 		return nil, fmt.Errorf("%w: %w", ErrClientError, err)
 	}
 	apiRequest.FileSystem = sd.fileSystem.FS()
-	apiRequest.ReplaceFileSystem = params.FileSystem != nil
+	apiRequest.ReplaceFileSystem = params.FileSystem != nil && params.FileSystem.Kind == requestfilesystem.KindFull
 
 	// Open projects: only take a new ref for projects we aren't already holding open.
 	var openedProjects []tspath.Path
