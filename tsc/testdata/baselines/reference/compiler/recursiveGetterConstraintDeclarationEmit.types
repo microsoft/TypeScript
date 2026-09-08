@@ -1,0 +1,53 @@
+//// [tests/cases/compiler/recursiveGetterConstraintDeclarationEmit.ts] ////
+
+=== recursiveGetterConstraintDeclarationEmit.ts ===
+export interface Schema<O> { output: O; }
+>output : O
+
+export type Shape = Record<string, Schema<unknown>>;
+>Shape : Shape
+
+export interface ObjectSchema<S extends Shape> extends Schema<{ [K in keyof S]: S[K]["output"] }> {
+    shape: S;
+>shape : S
+}
+export declare function object<S extends Shape>(shape: S): ObjectSchema<S>;
+>object : <S extends Shape>(shape: S) => ObjectSchema<S>
+>shape : S
+
+export const node = object({
+>node : any
+>object({    name: { output: "" },    get next() { return node; },}) : ObjectSchema<{ name: { output: string; }; readonly next: any; }>
+>object : <S extends Shape>(shape: S) => ObjectSchema<S>
+>{    name: { output: "" },    get next() { return node; },} : { name: { output: string; }; readonly next: any; }
+
+    name: { output: "" },
+>name : { output: string; }
+>{ output: "" } : { output: string; }
+>output : string
+>"" : ""
+
+    get next() { return node; },
+>next : any
+>node : any
+
+});
+
+export type Output = typeof node.output;
+>Output : any
+>node.output : any
+>node : any
+>output : any
+
+export const nestedName: string = node.output.next.next.name;
+>nestedName : string
+>node.output.next.next.name : any
+>node.output.next.next : any
+>node.output.next : any
+>node.output : any
+>node : any
+>output : any
+>next : any
+>next : any
+>name : any
+

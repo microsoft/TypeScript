@@ -1,0 +1,73 @@
+//// [tests/cases/compiler/recursiveGetterConstraintRejectedOverload.ts] ////
+
+=== recursiveGetterConstraintRejectedOverload.ts ===
+// https://github.com/microsoft/TypeScript/pull/64172#issuecomment-5591499161
+
+interface Schema<O> { readonly out: O; }
+>Schema : Symbol(Schema, Decl(recursiveGetterConstraintRejectedOverload.ts, 0, 0))
+>O : Symbol(O, Decl(recursiveGetterConstraintRejectedOverload.ts, 2, 17))
+>out : Symbol(Schema.out, Decl(recursiveGetterConstraintRejectedOverload.ts, 2, 21))
+>O : Symbol(O, Decl(recursiveGetterConstraintRejectedOverload.ts, 2, 17))
+
+type Shape = Record<string, Schema<any>>;
+>Shape : Symbol(Shape, Decl(recursiveGetterConstraintRejectedOverload.ts, 2, 40))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Schema : Symbol(Schema, Decl(recursiveGetterConstraintRejectedOverload.ts, 0, 0))
+
+declare function object<S extends Shape>(shape: S, mode: "strict"): Schema<{ [K in keyof S]: S[K]["out"] }> & { shape: S };
+>object : Symbol(object, Decl(recursiveGetterConstraintRejectedOverload.ts, 3, 41), Decl(recursiveGetterConstraintRejectedOverload.ts, 5, 123))
+>S : Symbol(S, Decl(recursiveGetterConstraintRejectedOverload.ts, 5, 24))
+>Shape : Symbol(Shape, Decl(recursiveGetterConstraintRejectedOverload.ts, 2, 40))
+>shape : Symbol(shape, Decl(recursiveGetterConstraintRejectedOverload.ts, 5, 41))
+>S : Symbol(S, Decl(recursiveGetterConstraintRejectedOverload.ts, 5, 24))
+>mode : Symbol(mode, Decl(recursiveGetterConstraintRejectedOverload.ts, 5, 50))
+>Schema : Symbol(Schema, Decl(recursiveGetterConstraintRejectedOverload.ts, 0, 0))
+>K : Symbol(K, Decl(recursiveGetterConstraintRejectedOverload.ts, 5, 78))
+>S : Symbol(S, Decl(recursiveGetterConstraintRejectedOverload.ts, 5, 24))
+>S : Symbol(S, Decl(recursiveGetterConstraintRejectedOverload.ts, 5, 24))
+>K : Symbol(K, Decl(recursiveGetterConstraintRejectedOverload.ts, 5, 78))
+>shape : Symbol(shape, Decl(recursiveGetterConstraintRejectedOverload.ts, 5, 111))
+>S : Symbol(S, Decl(recursiveGetterConstraintRejectedOverload.ts, 5, 24))
+
+declare function object(shape: object, mode: "loose"): { out: unknown; shape: object };
+>object : Symbol(object, Decl(recursiveGetterConstraintRejectedOverload.ts, 3, 41), Decl(recursiveGetterConstraintRejectedOverload.ts, 5, 123))
+>shape : Symbol(shape, Decl(recursiveGetterConstraintRejectedOverload.ts, 6, 24))
+>mode : Symbol(mode, Decl(recursiveGetterConstraintRejectedOverload.ts, 6, 38))
+>out : Symbol(out, Decl(recursiveGetterConstraintRejectedOverload.ts, 6, 56))
+>shape : Symbol(shape, Decl(recursiveGetterConstraintRejectedOverload.ts, 6, 70))
+
+const tree = object({
+>tree : Symbol(tree, Decl(recursiveGetterConstraintRejectedOverload.ts, 8, 5))
+>object : Symbol(object, Decl(recursiveGetterConstraintRejectedOverload.ts, 3, 41), Decl(recursiveGetterConstraintRejectedOverload.ts, 5, 123))
+
+    get bad() { return [tree]; },
+>bad : Symbol(bad, Decl(recursiveGetterConstraintRejectedOverload.ts, 8, 21))
+>tree : Symbol(tree, Decl(recursiveGetterConstraintRejectedOverload.ts, 8, 5))
+
+}, "loose");
+
+const wrongTree: number = tree;
+>wrongTree : Symbol(wrongTree, Decl(recursiveGetterConstraintRejectedOverload.ts, 12, 5))
+>tree : Symbol(tree, Decl(recursiveGetterConstraintRejectedOverload.ts, 8, 5))
+
+declare const value: { out: unknown; shape: object }[];
+>value : Symbol(value, Decl(recursiveGetterConstraintRejectedOverload.ts, 14, 13))
+>out : Symbol(out, Decl(recursiveGetterConstraintRejectedOverload.ts, 14, 22))
+>shape : Symbol(shape, Decl(recursiveGetterConstraintRejectedOverload.ts, 14, 36))
+
+const nonrecursive = object({
+>nonrecursive : Symbol(nonrecursive, Decl(recursiveGetterConstraintRejectedOverload.ts, 15, 5))
+>object : Symbol(object, Decl(recursiveGetterConstraintRejectedOverload.ts, 3, 41), Decl(recursiveGetterConstraintRejectedOverload.ts, 5, 123))
+
+    get bad() { return value; },
+>bad : Symbol(bad, Decl(recursiveGetterConstraintRejectedOverload.ts, 15, 29))
+>value : Symbol(value, Decl(recursiveGetterConstraintRejectedOverload.ts, 14, 13))
+
+}, "loose");
+
+const wrongNonrecursive: number = nonrecursive;
+>wrongNonrecursive : Symbol(wrongNonrecursive, Decl(recursiveGetterConstraintRejectedOverload.ts, 19, 5))
+>nonrecursive : Symbol(nonrecursive, Decl(recursiveGetterConstraintRejectedOverload.ts, 15, 5))
+
+export {};
+

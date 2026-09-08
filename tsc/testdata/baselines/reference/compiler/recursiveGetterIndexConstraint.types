@@ -1,0 +1,142 @@
+//// [tests/cases/compiler/recursiveGetterIndexConstraint.ts] ////
+
+=== recursiveGetterIndexConstraint.ts ===
+declare function anyRecord<T extends Record<string, any>>(value: T): T;
+>anyRecord : <T extends Record<string, any>>(value: T) => T
+>value : T
+
+declare function unknownRecord<T extends Record<string, unknown>>(value: T): T;
+>unknownRecord : <T extends Record<string, unknown>>(value: T) => T
+>value : T
+
+declare function numberRecord<T extends Record<string, number>>(value: T): T;
+>numberRecord : <T extends Record<string, number>>(value: T) => T
+>value : T
+
+const a = anyRecord({
+>a : { value: string; readonly next: any; }
+>anyRecord({    value: "",    get next() {        return a;    },}) : { value: string; readonly next: any; }
+>anyRecord : <T extends Record<string, any>>(value: T) => T
+>{    value: "",    get next() {        return a;    },} : { value: string; readonly next: { value: string; readonly next: any; }; }
+
+    value: "",
+>value : string
+>"" : ""
+
+    get next() {
+>next : { value: string; readonly next: any; }
+
+        return a;
+>a : { value: string; readonly next: any; }
+
+    },
+});
+
+const u = unknownRecord({
+>u : any
+>unknownRecord({    value: "",    get next() {        return u;    },}) : { value: string; readonly next: any; }
+>unknownRecord : <T extends Record<string, unknown>>(value: T) => T
+>{    value: "",    get next() {        return u;    },} : { value: string; readonly next: any; }
+
+    value: "",
+>value : string
+>"" : ""
+
+    get next() {
+>next : any
+
+        return u;
+>u : any
+
+    },
+});
+
+const anyValue: string = a.next.next.value;
+>anyValue : string
+>a.next.next.value : string
+>a.next.next : { value: string; readonly next: any; }
+>a.next : { value: string; readonly next: any; }
+>a : { value: string; readonly next: any; }
+>next : { value: string; readonly next: any; }
+>next : { value: string; readonly next: any; }
+>value : string
+
+const unknownValue: string = u.next.next.value;
+>unknownValue : string
+>u.next.next.value : any
+>u.next.next : any
+>u.next : any
+>u : any
+>next : any
+>next : any
+>value : any
+
+const wrongAnyValue: number = a.next.next.value;
+>wrongAnyValue : number
+>a.next.next.value : string
+>a.next.next : { value: string; readonly next: any; }
+>a.next : { value: string; readonly next: any; }
+>a : { value: string; readonly next: any; }
+>next : { value: string; readonly next: any; }
+>next : { value: string; readonly next: any; }
+>value : string
+
+const wrongUnknownValue: number = u.next.next.value;
+>wrongUnknownValue : number
+>u.next.next.value : any
+>u.next.next : any
+>u.next : any
+>u : any
+>next : any
+>next : any
+>value : any
+
+a.next.next.missing;
+>a.next.next.missing : any
+>a.next.next : { value: string; readonly next: any; }
+>a.next : { value: string; readonly next: any; }
+>a : { value: string; readonly next: any; }
+>next : { value: string; readonly next: any; }
+>next : { value: string; readonly next: any; }
+>missing : any
+
+u.next.next.missing;
+>u.next.next.missing : any
+>u.next.next : any
+>u.next : any
+>u : any
+>next : any
+>next : any
+>missing : any
+
+numberRecord({
+>numberRecord({    get value() {        return "";    },}) : Record<string, number>
+>numberRecord : <T extends Record<string, number>>(value: T) => T
+>{    get value() {        return "";    },} : { readonly value: string; }
+
+    get value() {
+>value : string
+
+        return "";
+>"" : ""
+
+    },
+});
+
+const circular = unknownRecord({
+>circular : any
+>unknownRecord({    get next() {        return circular.next;    },}) : { readonly next: any; }
+>unknownRecord : <T extends Record<string, unknown>>(value: T) => T
+>{    get next() {        return circular.next;    },} : { readonly next: any; }
+
+    get next() {
+>next : any
+
+        return circular.next;
+>circular.next : any
+>circular : any
+>next : any
+
+    },
+});
+

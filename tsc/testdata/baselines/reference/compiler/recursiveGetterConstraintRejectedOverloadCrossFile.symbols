@@ -1,0 +1,50 @@
+//// [tests/cases/compiler/recursiveGetterConstraintRejectedOverloadCrossFile.ts] ////
+
+=== lib.d.ts ===
+export interface Schema<O> { readonly out: O; }
+>Schema : Symbol(Schema, Decl(lib.d.ts, --, --))
+>O : Symbol(O, Decl(lib.d.ts, --, --))
+>out : Symbol(Schema.out, Decl(lib.d.ts, --, --))
+>O : Symbol(O, Decl(lib.d.ts, --, --))
+
+export type Shape = Record<string, Schema<any>>;
+>Shape : Symbol(Shape, Decl(lib.d.ts, --, --))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Schema : Symbol(Schema, Decl(lib.d.ts, --, --))
+
+export declare function object<S extends Shape>(shape: S, mode: "strict"): Schema<{ [K in keyof S]: S[K]["out"] }> & { shape: S };
+>object : Symbol(object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>S : Symbol(S, Decl(lib.d.ts, --, --))
+>Shape : Symbol(Shape, Decl(lib.d.ts, --, --))
+>shape : Symbol(shape, Decl(lib.d.ts, --, --))
+>S : Symbol(S, Decl(lib.d.ts, --, --))
+>mode : Symbol(mode, Decl(lib.d.ts, --, --))
+>Schema : Symbol(Schema, Decl(lib.d.ts, --, --))
+>K : Symbol(K, Decl(lib.d.ts, --, --))
+>S : Symbol(S, Decl(lib.d.ts, --, --))
+>S : Symbol(S, Decl(lib.d.ts, --, --))
+>K : Symbol(K, Decl(lib.d.ts, --, --))
+>shape : Symbol(shape, Decl(lib.d.ts, --, --))
+>S : Symbol(S, Decl(lib.d.ts, --, --))
+
+export declare function object(shape: object, mode: "loose"): { out: unknown; shape: object };
+>object : Symbol(object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>shape : Symbol(shape, Decl(lib.d.ts, --, --))
+>mode : Symbol(mode, Decl(lib.d.ts, --, --))
+>out : Symbol(out, Decl(lib.d.ts, --, --))
+>shape : Symbol(shape, Decl(lib.d.ts, --, --))
+
+=== app.ts ===
+import { object } from "./lib.js";
+>object : Symbol(object, Decl(app.ts, 0, 8))
+
+export const tree = object({
+>tree : Symbol(tree, Decl(app.ts, 2, 12))
+>object : Symbol(object, Decl(app.ts, 0, 8))
+
+    get bad() { return [tree]; },
+>bad : Symbol(bad, Decl(app.ts, 2, 28))
+>tree : Symbol(tree, Decl(app.ts, 2, 12))
+
+}, "loose");
+

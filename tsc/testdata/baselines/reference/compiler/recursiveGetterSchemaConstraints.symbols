@@ -1,0 +1,362 @@
+//// [tests/cases/compiler/recursiveGetterSchemaConstraints.ts] ////
+
+=== recursiveGetterSchemaConstraints.ts ===
+interface Internals<out O, out I> {
+>Internals : Symbol(Internals, Decl(recursiveGetterSchemaConstraints.ts, 0, 0))
+>O : Symbol(O, Decl(recursiveGetterSchemaConstraints.ts, 0, 20))
+>I : Symbol(I, Decl(recursiveGetterSchemaConstraints.ts, 0, 26))
+
+    output: O;
+>output : Symbol(Internals.output, Decl(recursiveGetterSchemaConstraints.ts, 0, 35))
+>O : Symbol(O, Decl(recursiveGetterSchemaConstraints.ts, 0, 20))
+
+    input: I;
+>input : Symbol(Internals.input, Decl(recursiveGetterSchemaConstraints.ts, 1, 14))
+>I : Symbol(I, Decl(recursiveGetterSchemaConstraints.ts, 0, 26))
+
+    optionalOutput?: true;
+>optionalOutput : Symbol(Internals.optionalOutput, Decl(recursiveGetterSchemaConstraints.ts, 2, 13))
+
+    optionalInput?: true;
+>optionalInput : Symbol(Internals.optionalInput, Decl(recursiveGetterSchemaConstraints.ts, 3, 26))
+}
+
+interface Schema<out O = unknown, out I = unknown> {
+>Schema : Symbol(Schema, Decl(recursiveGetterSchemaConstraints.ts, 5, 1))
+>O : Symbol(O, Decl(recursiveGetterSchemaConstraints.ts, 7, 17))
+>I : Symbol(I, Decl(recursiveGetterSchemaConstraints.ts, 7, 33))
+
+    internals: Internals<O, I>;
+>internals : Symbol(Schema.internals, Decl(recursiveGetterSchemaConstraints.ts, 7, 52))
+>Internals : Symbol(Internals, Decl(recursiveGetterSchemaConstraints.ts, 0, 0))
+>O : Symbol(O, Decl(recursiveGetterSchemaConstraints.ts, 7, 17))
+>I : Symbol(I, Decl(recursiveGetterSchemaConstraints.ts, 7, 33))
+}
+
+type Output<T extends Schema> = T["internals"]["output"];
+>Output : Symbol(Output, Decl(recursiveGetterSchemaConstraints.ts, 9, 1))
+>T : Symbol(T, Decl(recursiveGetterSchemaConstraints.ts, 11, 12))
+>Schema : Symbol(Schema, Decl(recursiveGetterSchemaConstraints.ts, 5, 1))
+>T : Symbol(T, Decl(recursiveGetterSchemaConstraints.ts, 11, 12))
+
+type Input<T extends Schema> = T["internals"]["input"];
+>Input : Symbol(Input, Decl(recursiveGetterSchemaConstraints.ts, 11, 57))
+>T : Symbol(T, Decl(recursiveGetterSchemaConstraints.ts, 12, 11))
+>Schema : Symbol(Schema, Decl(recursiveGetterSchemaConstraints.ts, 5, 1))
+>T : Symbol(T, Decl(recursiveGetterSchemaConstraints.ts, 12, 11))
+
+interface TextSchema extends Schema<string, number> {}
+>TextSchema : Symbol(TextSchema, Decl(recursiveGetterSchemaConstraints.ts, 12, 55))
+>Schema : Symbol(Schema, Decl(recursiveGetterSchemaConstraints.ts, 5, 1))
+
+interface ArraySchema<T extends Schema> extends Schema<Output<T>[], Input<T>[]> {}
+>ArraySchema : Symbol(ArraySchema, Decl(recursiveGetterSchemaConstraints.ts, 14, 54))
+>T : Symbol(T, Decl(recursiveGetterSchemaConstraints.ts, 15, 22))
+>Schema : Symbol(Schema, Decl(recursiveGetterSchemaConstraints.ts, 5, 1))
+>Schema : Symbol(Schema, Decl(recursiveGetterSchemaConstraints.ts, 5, 1))
+>Output : Symbol(Output, Decl(recursiveGetterSchemaConstraints.ts, 9, 1))
+>T : Symbol(T, Decl(recursiveGetterSchemaConstraints.ts, 15, 22))
+>Input : Symbol(Input, Decl(recursiveGetterSchemaConstraints.ts, 11, 57))
+>T : Symbol(T, Decl(recursiveGetterSchemaConstraints.ts, 15, 22))
+
+interface OptionalInternals<T extends Schema> extends Internals<Output<T> | undefined, Input<T> | undefined> {
+>OptionalInternals : Symbol(OptionalInternals, Decl(recursiveGetterSchemaConstraints.ts, 15, 82))
+>T : Symbol(T, Decl(recursiveGetterSchemaConstraints.ts, 16, 28))
+>Schema : Symbol(Schema, Decl(recursiveGetterSchemaConstraints.ts, 5, 1))
+>Internals : Symbol(Internals, Decl(recursiveGetterSchemaConstraints.ts, 0, 0))
+>Output : Symbol(Output, Decl(recursiveGetterSchemaConstraints.ts, 9, 1))
+>T : Symbol(T, Decl(recursiveGetterSchemaConstraints.ts, 16, 28))
+>Input : Symbol(Input, Decl(recursiveGetterSchemaConstraints.ts, 11, 57))
+>T : Symbol(T, Decl(recursiveGetterSchemaConstraints.ts, 16, 28))
+
+    optionalOutput: true;
+>optionalOutput : Symbol(OptionalInternals.optionalOutput, Decl(recursiveGetterSchemaConstraints.ts, 16, 110))
+
+    optionalInput: true;
+>optionalInput : Symbol(OptionalInternals.optionalInput, Decl(recursiveGetterSchemaConstraints.ts, 17, 25))
+}
+interface OptionalSchema<T extends Schema> extends Schema<Output<T> | undefined, Input<T> | undefined> {
+>OptionalSchema : Symbol(OptionalSchema, Decl(recursiveGetterSchemaConstraints.ts, 19, 1))
+>T : Symbol(T, Decl(recursiveGetterSchemaConstraints.ts, 20, 25))
+>Schema : Symbol(Schema, Decl(recursiveGetterSchemaConstraints.ts, 5, 1))
+>Schema : Symbol(Schema, Decl(recursiveGetterSchemaConstraints.ts, 5, 1))
+>Output : Symbol(Output, Decl(recursiveGetterSchemaConstraints.ts, 9, 1))
+>T : Symbol(T, Decl(recursiveGetterSchemaConstraints.ts, 20, 25))
+>Input : Symbol(Input, Decl(recursiveGetterSchemaConstraints.ts, 11, 57))
+>T : Symbol(T, Decl(recursiveGetterSchemaConstraints.ts, 20, 25))
+
+    internals: OptionalInternals<T>;
+>internals : Symbol(OptionalSchema.internals, Decl(recursiveGetterSchemaConstraints.ts, 20, 104))
+>OptionalInternals : Symbol(OptionalInternals, Decl(recursiveGetterSchemaConstraints.ts, 15, 82))
+>T : Symbol(T, Decl(recursiveGetterSchemaConstraints.ts, 20, 25))
+}
+
+type Shape = Record<string, Schema>;
+>Shape : Symbol(Shape, Decl(recursiveGetterSchemaConstraints.ts, 22, 1))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Schema : Symbol(Schema, Decl(recursiveGetterSchemaConstraints.ts, 5, 1))
+
+type Prettify<T> = { [K in keyof T]: T[K] } & {};
+>Prettify : Symbol(Prettify, Decl(recursiveGetterSchemaConstraints.ts, 24, 36))
+>T : Symbol(T, Decl(recursiveGetterSchemaConstraints.ts, 25, 14))
+>K : Symbol(K, Decl(recursiveGetterSchemaConstraints.ts, 25, 22))
+>T : Symbol(T, Decl(recursiveGetterSchemaConstraints.ts, 25, 14))
+>T : Symbol(T, Decl(recursiveGetterSchemaConstraints.ts, 25, 14))
+>K : Symbol(K, Decl(recursiveGetterSchemaConstraints.ts, 25, 22))
+
+type ObjectOutput<S extends Shape> = Prettify<{
+>ObjectOutput : Symbol(ObjectOutput, Decl(recursiveGetterSchemaConstraints.ts, 25, 49))
+>S : Symbol(S, Decl(recursiveGetterSchemaConstraints.ts, 26, 18))
+>Shape : Symbol(Shape, Decl(recursiveGetterSchemaConstraints.ts, 22, 1))
+>Prettify : Symbol(Prettify, Decl(recursiveGetterSchemaConstraints.ts, 24, 36))
+
+    [K in keyof S as S[K] extends { internals: { optionalOutput: true } } ? never : K]: Output<S[K]>;
+>K : Symbol(K, Decl(recursiveGetterSchemaConstraints.ts, 27, 5))
+>S : Symbol(S, Decl(recursiveGetterSchemaConstraints.ts, 26, 18))
+>S : Symbol(S, Decl(recursiveGetterSchemaConstraints.ts, 26, 18))
+>K : Symbol(K, Decl(recursiveGetterSchemaConstraints.ts, 27, 5))
+>internals : Symbol(internals, Decl(recursiveGetterSchemaConstraints.ts, 27, 35))
+>optionalOutput : Symbol(optionalOutput, Decl(recursiveGetterSchemaConstraints.ts, 27, 48))
+>K : Symbol(K, Decl(recursiveGetterSchemaConstraints.ts, 27, 5))
+>Output : Symbol(Output, Decl(recursiveGetterSchemaConstraints.ts, 9, 1))
+>S : Symbol(S, Decl(recursiveGetterSchemaConstraints.ts, 26, 18))
+>K : Symbol(K, Decl(recursiveGetterSchemaConstraints.ts, 27, 5))
+
+} & {
+    [K in keyof S as S[K] extends { internals: { optionalOutput: true } } ? K : never]?: Output<S[K]>;
+>K : Symbol(K, Decl(recursiveGetterSchemaConstraints.ts, 29, 5))
+>S : Symbol(S, Decl(recursiveGetterSchemaConstraints.ts, 26, 18))
+>S : Symbol(S, Decl(recursiveGetterSchemaConstraints.ts, 26, 18))
+>K : Symbol(K, Decl(recursiveGetterSchemaConstraints.ts, 29, 5))
+>internals : Symbol(internals, Decl(recursiveGetterSchemaConstraints.ts, 29, 35))
+>optionalOutput : Symbol(optionalOutput, Decl(recursiveGetterSchemaConstraints.ts, 29, 48))
+>K : Symbol(K, Decl(recursiveGetterSchemaConstraints.ts, 29, 5))
+>Output : Symbol(Output, Decl(recursiveGetterSchemaConstraints.ts, 9, 1))
+>S : Symbol(S, Decl(recursiveGetterSchemaConstraints.ts, 26, 18))
+>K : Symbol(K, Decl(recursiveGetterSchemaConstraints.ts, 29, 5))
+
+}>;
+type ObjectInput<S extends Shape> = Prettify<{
+>ObjectInput : Symbol(ObjectInput, Decl(recursiveGetterSchemaConstraints.ts, 30, 3))
+>S : Symbol(S, Decl(recursiveGetterSchemaConstraints.ts, 31, 17))
+>Shape : Symbol(Shape, Decl(recursiveGetterSchemaConstraints.ts, 22, 1))
+>Prettify : Symbol(Prettify, Decl(recursiveGetterSchemaConstraints.ts, 24, 36))
+
+    [K in keyof S as S[K] extends { internals: { optionalInput: true } } ? never : K]: Input<S[K]>;
+>K : Symbol(K, Decl(recursiveGetterSchemaConstraints.ts, 32, 5))
+>S : Symbol(S, Decl(recursiveGetterSchemaConstraints.ts, 31, 17))
+>S : Symbol(S, Decl(recursiveGetterSchemaConstraints.ts, 31, 17))
+>K : Symbol(K, Decl(recursiveGetterSchemaConstraints.ts, 32, 5))
+>internals : Symbol(internals, Decl(recursiveGetterSchemaConstraints.ts, 32, 35))
+>optionalInput : Symbol(optionalInput, Decl(recursiveGetterSchemaConstraints.ts, 32, 48))
+>K : Symbol(K, Decl(recursiveGetterSchemaConstraints.ts, 32, 5))
+>Input : Symbol(Input, Decl(recursiveGetterSchemaConstraints.ts, 11, 57))
+>S : Symbol(S, Decl(recursiveGetterSchemaConstraints.ts, 31, 17))
+>K : Symbol(K, Decl(recursiveGetterSchemaConstraints.ts, 32, 5))
+
+} & {
+    [K in keyof S as S[K] extends { internals: { optionalInput: true } } ? K : never]?: Input<S[K]>;
+>K : Symbol(K, Decl(recursiveGetterSchemaConstraints.ts, 34, 5))
+>S : Symbol(S, Decl(recursiveGetterSchemaConstraints.ts, 31, 17))
+>S : Symbol(S, Decl(recursiveGetterSchemaConstraints.ts, 31, 17))
+>K : Symbol(K, Decl(recursiveGetterSchemaConstraints.ts, 34, 5))
+>internals : Symbol(internals, Decl(recursiveGetterSchemaConstraints.ts, 34, 35))
+>optionalInput : Symbol(optionalInput, Decl(recursiveGetterSchemaConstraints.ts, 34, 48))
+>K : Symbol(K, Decl(recursiveGetterSchemaConstraints.ts, 34, 5))
+>Input : Symbol(Input, Decl(recursiveGetterSchemaConstraints.ts, 11, 57))
+>S : Symbol(S, Decl(recursiveGetterSchemaConstraints.ts, 31, 17))
+>K : Symbol(K, Decl(recursiveGetterSchemaConstraints.ts, 34, 5))
+
+}>;
+interface ObjectSchema<S extends Shape> extends Schema<ObjectOutput<S>, ObjectInput<S>> {
+>ObjectSchema : Symbol(ObjectSchema, Decl(recursiveGetterSchemaConstraints.ts, 35, 3))
+>S : Symbol(S, Decl(recursiveGetterSchemaConstraints.ts, 36, 23))
+>Shape : Symbol(Shape, Decl(recursiveGetterSchemaConstraints.ts, 22, 1))
+>Schema : Symbol(Schema, Decl(recursiveGetterSchemaConstraints.ts, 5, 1))
+>ObjectOutput : Symbol(ObjectOutput, Decl(recursiveGetterSchemaConstraints.ts, 25, 49))
+>S : Symbol(S, Decl(recursiveGetterSchemaConstraints.ts, 36, 23))
+>ObjectInput : Symbol(ObjectInput, Decl(recursiveGetterSchemaConstraints.ts, 30, 3))
+>S : Symbol(S, Decl(recursiveGetterSchemaConstraints.ts, 36, 23))
+
+    shape: S;
+>shape : Symbol(ObjectSchema.shape, Decl(recursiveGetterSchemaConstraints.ts, 36, 89))
+>S : Symbol(S, Decl(recursiveGetterSchemaConstraints.ts, 36, 23))
+}
+
+declare function object<S extends Shape>(shape: S): ObjectSchema<S>;
+>object : Symbol(object, Decl(recursiveGetterSchemaConstraints.ts, 38, 1))
+>S : Symbol(S, Decl(recursiveGetterSchemaConstraints.ts, 40, 24))
+>Shape : Symbol(Shape, Decl(recursiveGetterSchemaConstraints.ts, 22, 1))
+>shape : Symbol(shape, Decl(recursiveGetterSchemaConstraints.ts, 40, 41))
+>S : Symbol(S, Decl(recursiveGetterSchemaConstraints.ts, 40, 24))
+>ObjectSchema : Symbol(ObjectSchema, Decl(recursiveGetterSchemaConstraints.ts, 35, 3))
+>S : Symbol(S, Decl(recursiveGetterSchemaConstraints.ts, 40, 24))
+
+declare function array<T extends Schema>(element: T): ArraySchema<T>;
+>array : Symbol(array, Decl(recursiveGetterSchemaConstraints.ts, 40, 68))
+>T : Symbol(T, Decl(recursiveGetterSchemaConstraints.ts, 41, 23))
+>Schema : Symbol(Schema, Decl(recursiveGetterSchemaConstraints.ts, 5, 1))
+>element : Symbol(element, Decl(recursiveGetterSchemaConstraints.ts, 41, 41))
+>T : Symbol(T, Decl(recursiveGetterSchemaConstraints.ts, 41, 23))
+>ArraySchema : Symbol(ArraySchema, Decl(recursiveGetterSchemaConstraints.ts, 14, 54))
+>T : Symbol(T, Decl(recursiveGetterSchemaConstraints.ts, 41, 23))
+
+declare function optional<T extends Schema>(element: T): OptionalSchema<T>;
+>optional : Symbol(optional, Decl(recursiveGetterSchemaConstraints.ts, 41, 69))
+>T : Symbol(T, Decl(recursiveGetterSchemaConstraints.ts, 42, 26))
+>Schema : Symbol(Schema, Decl(recursiveGetterSchemaConstraints.ts, 5, 1))
+>element : Symbol(element, Decl(recursiveGetterSchemaConstraints.ts, 42, 44))
+>T : Symbol(T, Decl(recursiveGetterSchemaConstraints.ts, 42, 26))
+>OptionalSchema : Symbol(OptionalSchema, Decl(recursiveGetterSchemaConstraints.ts, 19, 1))
+>T : Symbol(T, Decl(recursiveGetterSchemaConstraints.ts, 42, 26))
+
+declare function text(): TextSchema;
+>text : Symbol(text, Decl(recursiveGetterSchemaConstraints.ts, 42, 75))
+>TextSchema : Symbol(TextSchema, Decl(recursiveGetterSchemaConstraints.ts, 12, 55))
+
+const node = object({
+>node : Symbol(node, Decl(recursiveGetterSchemaConstraints.ts, 45, 5))
+>object : Symbol(object, Decl(recursiveGetterSchemaConstraints.ts, 38, 1))
+
+    name: text(),
+>name : Symbol(name, Decl(recursiveGetterSchemaConstraints.ts, 45, 21))
+>text : Symbol(text, Decl(recursiveGetterSchemaConstraints.ts, 42, 75))
+
+    get children() { return array(node); },
+>children : Symbol(children, Decl(recursiveGetterSchemaConstraints.ts, 46, 17))
+>array : Symbol(array, Decl(recursiveGetterSchemaConstraints.ts, 40, 68))
+>node : Symbol(node, Decl(recursiveGetterSchemaConstraints.ts, 45, 5))
+
+});
+declare const nodeOutput: Output<typeof node>;
+>nodeOutput : Symbol(nodeOutput, Decl(recursiveGetterSchemaConstraints.ts, 49, 13))
+>Output : Symbol(Output, Decl(recursiveGetterSchemaConstraints.ts, 9, 1))
+>node : Symbol(node, Decl(recursiveGetterSchemaConstraints.ts, 45, 5))
+
+declare const nodeInput: Input<typeof node>;
+>nodeInput : Symbol(nodeInput, Decl(recursiveGetterSchemaConstraints.ts, 50, 13))
+>Input : Symbol(Input, Decl(recursiveGetterSchemaConstraints.ts, 11, 57))
+>node : Symbol(node, Decl(recursiveGetterSchemaConstraints.ts, 45, 5))
+
+const outputName: string = nodeOutput.children[0].children[0].name;
+>outputName : Symbol(outputName, Decl(recursiveGetterSchemaConstraints.ts, 51, 5))
+>nodeOutput : Symbol(nodeOutput, Decl(recursiveGetterSchemaConstraints.ts, 49, 13))
+
+const inputName: number = nodeInput.children[0].children[0].name;
+>inputName : Symbol(inputName, Decl(recursiveGetterSchemaConstraints.ts, 52, 5))
+>nodeInput : Symbol(nodeInput, Decl(recursiveGetterSchemaConstraints.ts, 50, 13))
+
+const wrongOutput: number = nodeOutput.children[0].name;
+>wrongOutput : Symbol(wrongOutput, Decl(recursiveGetterSchemaConstraints.ts, 53, 5))
+>nodeOutput : Symbol(nodeOutput, Decl(recursiveGetterSchemaConstraints.ts, 49, 13))
+
+const wrongInput: string = nodeInput.children[0].name;
+>wrongInput : Symbol(wrongInput, Decl(recursiveGetterSchemaConstraints.ts, 54, 5))
+>nodeInput : Symbol(nodeInput, Decl(recursiveGetterSchemaConstraints.ts, 50, 13))
+
+nodeOutput.children[0].children[0].missing;
+>nodeOutput : Symbol(nodeOutput, Decl(recursiveGetterSchemaConstraints.ts, 49, 13))
+
+const user = object({
+>user : Symbol(user, Decl(recursiveGetterSchemaConstraints.ts, 57, 5))
+>object : Symbol(object, Decl(recursiveGetterSchemaConstraints.ts, 38, 1))
+
+    name: text(),
+>name : Symbol(name, Decl(recursiveGetterSchemaConstraints.ts, 57, 21))
+>text : Symbol(text, Decl(recursiveGetterSchemaConstraints.ts, 42, 75))
+
+    get posts() { return array(post); },
+>posts : Symbol(posts, Decl(recursiveGetterSchemaConstraints.ts, 58, 17))
+>array : Symbol(array, Decl(recursiveGetterSchemaConstraints.ts, 40, 68))
+>post : Symbol(post, Decl(recursiveGetterSchemaConstraints.ts, 61, 5))
+
+});
+const post = object({
+>post : Symbol(post, Decl(recursiveGetterSchemaConstraints.ts, 61, 5))
+>object : Symbol(object, Decl(recursiveGetterSchemaConstraints.ts, 38, 1))
+
+    title: text(),
+>title : Symbol(title, Decl(recursiveGetterSchemaConstraints.ts, 61, 21))
+>text : Symbol(text, Decl(recursiveGetterSchemaConstraints.ts, 42, 75))
+
+    get author() { return user; },
+>author : Symbol(author, Decl(recursiveGetterSchemaConstraints.ts, 62, 18))
+>user : Symbol(user, Decl(recursiveGetterSchemaConstraints.ts, 57, 5))
+
+});
+declare const userOutput: Output<typeof user>;
+>userOutput : Symbol(userOutput, Decl(recursiveGetterSchemaConstraints.ts, 65, 13))
+>Output : Symbol(Output, Decl(recursiveGetterSchemaConstraints.ts, 9, 1))
+>user : Symbol(user, Decl(recursiveGetterSchemaConstraints.ts, 57, 5))
+
+const authorName: string = userOutput.posts[0].author.posts[0].author.name;
+>authorName : Symbol(authorName, Decl(recursiveGetterSchemaConstraints.ts, 66, 5))
+>userOutput : Symbol(userOutput, Decl(recursiveGetterSchemaConstraints.ts, 65, 13))
+
+userOutput.posts[0].author.posts[0].missing;
+>userOutput : Symbol(userOutput, Decl(recursiveGetterSchemaConstraints.ts, 65, 13))
+
+const activity = object({
+>activity : Symbol(activity, Decl(recursiveGetterSchemaConstraints.ts, 69, 5))
+>object : Symbol(object, Decl(recursiveGetterSchemaConstraints.ts, 38, 1))
+
+    name: text(),
+>name : Symbol(name, Decl(recursiveGetterSchemaConstraints.ts, 69, 25))
+>text : Symbol(text, Decl(recursiveGetterSchemaConstraints.ts, 42, 75))
+
+    get children() { return optional(array(activity)); },
+>children : Symbol(children, Decl(recursiveGetterSchemaConstraints.ts, 70, 17))
+>optional : Symbol(optional, Decl(recursiveGetterSchemaConstraints.ts, 41, 69))
+>array : Symbol(array, Decl(recursiveGetterSchemaConstraints.ts, 40, 68))
+>activity : Symbol(activity, Decl(recursiveGetterSchemaConstraints.ts, 69, 5))
+
+});
+const emptyActivity: Output<typeof activity> = { name: "" };
+>emptyActivity : Symbol(emptyActivity, Decl(recursiveGetterSchemaConstraints.ts, 73, 5))
+>Output : Symbol(Output, Decl(recursiveGetterSchemaConstraints.ts, 9, 1))
+>activity : Symbol(activity, Decl(recursiveGetterSchemaConstraints.ts, 69, 5))
+>name : Symbol(name, Decl(recursiveGetterSchemaConstraints.ts, 73, 48))
+
+declare const activityOutput: Output<typeof activity>;
+>activityOutput : Symbol(activityOutput, Decl(recursiveGetterSchemaConstraints.ts, 74, 13))
+>Output : Symbol(Output, Decl(recursiveGetterSchemaConstraints.ts, 9, 1))
+>activity : Symbol(activity, Decl(recursiveGetterSchemaConstraints.ts, 69, 5))
+
+const activityName: string = activityOutput.children![0].children![0].name;
+>activityName : Symbol(activityName, Decl(recursiveGetterSchemaConstraints.ts, 75, 5))
+>activityOutput : Symbol(activityOutput, Decl(recursiveGetterSchemaConstraints.ts, 74, 13))
+
+activityOutput.children![0].children![0].missing;
+>activityOutput : Symbol(activityOutput, Decl(recursiveGetterSchemaConstraints.ts, 74, 13))
+
+const linked = object({
+>linked : Symbol(linked, Decl(recursiveGetterSchemaConstraints.ts, 78, 5))
+>object : Symbol(object, Decl(recursiveGetterSchemaConstraints.ts, 38, 1))
+
+    name: text(),
+>name : Symbol(name, Decl(recursiveGetterSchemaConstraints.ts, 78, 23))
+>text : Symbol(text, Decl(recursiveGetterSchemaConstraints.ts, 42, 75))
+
+    get children() { return optional(linkedArray); },
+>children : Symbol(children, Decl(recursiveGetterSchemaConstraints.ts, 79, 17))
+>optional : Symbol(optional, Decl(recursiveGetterSchemaConstraints.ts, 41, 69))
+>linkedArray : Symbol(linkedArray, Decl(recursiveGetterSchemaConstraints.ts, 82, 5))
+
+});
+const linkedArray = array(linked);
+>linkedArray : Symbol(linkedArray, Decl(recursiveGetterSchemaConstraints.ts, 82, 5))
+>array : Symbol(array, Decl(recursiveGetterSchemaConstraints.ts, 40, 68))
+>linked : Symbol(linked, Decl(recursiveGetterSchemaConstraints.ts, 78, 5))
+
+declare const linkedOutput: Output<typeof linked>;
+>linkedOutput : Symbol(linkedOutput, Decl(recursiveGetterSchemaConstraints.ts, 83, 13))
+>Output : Symbol(Output, Decl(recursiveGetterSchemaConstraints.ts, 9, 1))
+>linked : Symbol(linked, Decl(recursiveGetterSchemaConstraints.ts, 78, 5))
+
+const linkedName: string = linkedOutput.children![0].children![0].name;
+>linkedName : Symbol(linkedName, Decl(recursiveGetterSchemaConstraints.ts, 84, 5))
+>linkedOutput : Symbol(linkedOutput, Decl(recursiveGetterSchemaConstraints.ts, 83, 13))
+
+linkedOutput.children![0].children![0].missing;
+>linkedOutput : Symbol(linkedOutput, Decl(recursiveGetterSchemaConstraints.ts, 83, 13))
+

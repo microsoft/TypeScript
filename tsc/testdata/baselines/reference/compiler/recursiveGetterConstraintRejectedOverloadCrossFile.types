@@ -1,0 +1,40 @@
+//// [tests/cases/compiler/recursiveGetterConstraintRejectedOverloadCrossFile.ts] ////
+
+=== lib.d.ts ===
+export interface Schema<O> { readonly out: O; }
+>out : O
+
+export type Shape = Record<string, Schema<any>>;
+>Shape : Shape
+
+export declare function object<S extends Shape>(shape: S, mode: "strict"): Schema<{ [K in keyof S]: S[K]["out"] }> & { shape: S };
+>object : { <S extends Shape>(shape: S, mode: "strict"): Schema<{ [K in keyof S]: S[K]["out"]; }> & { shape: S; }; (shape: object, mode: "loose"): { out: unknown; shape: object; }; }
+>shape : S
+>mode : "strict"
+>shape : S
+
+export declare function object(shape: object, mode: "loose"): { out: unknown; shape: object };
+>object : { <S extends Shape>(shape: S, mode: "strict"): Schema<{ [K in keyof S]: S[K]["out"]; }> & { shape: S; }; (shape: object, mode: "loose"): { out: unknown; shape: object; }; }
+>shape : object
+>mode : "loose"
+>out : unknown
+>shape : object
+
+=== app.ts ===
+import { object } from "./lib.js";
+>object : { <S extends import("./lib.js").Shape>(shape: S, mode: "strict"): import("./lib.js").Schema<{ [K in keyof S]: S[K]["out"]; }> & { shape: S; }; (shape: object, mode: "loose"): { out: unknown; shape: object; }; }
+
+export const tree = object({
+>tree : any
+>object({    get bad() { return [tree]; },}, "loose") : { out: unknown; shape: object; }
+>object : { <S extends import("./lib.js").Shape>(shape: S, mode: "strict"): import("./lib.js").Schema<{ [K in keyof S]: S[K]["out"]; }> & { shape: S; }; (shape: object, mode: "loose"): { out: unknown; shape: object; }; }
+>{    get bad() { return [tree]; },} : { readonly bad: any; }
+
+    get bad() { return [tree]; },
+>bad : any
+>[tree] : any[]
+>tree : any
+
+}, "loose");
+>"loose" : "loose"
+

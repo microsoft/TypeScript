@@ -1,0 +1,205 @@
+//// [tests/cases/compiler/recursiveGetterConstraintCalls.ts] ////
+
+=== recursiveGetterConstraintCalls.ts ===
+interface Schema<O> { output: O; }
+>output : O
+
+type Shape = Record<string, Schema<unknown>>;
+>Shape : Shape
+
+declare class ObjectSchema<S extends Shape> implements Schema<{ [K in keyof S]: S[K]["output"] }> {
+>ObjectSchema : ObjectSchema<S>
+
+    constructor(shape: S);
+>shape : S
+
+    output: { [K in keyof S]: S[K]["output"] };
+>output : { [K in keyof S]: S[K]["output"]; }
+}
+
+const constructed = new ObjectSchema({
+>constructed : any
+>new ObjectSchema({    name: { output: "" },    get next() { return constructed; },}) : ObjectSchema<{ name: { output: string; }; readonly next: any; }>
+>ObjectSchema : typeof ObjectSchema
+>{    name: { output: "" },    get next() { return constructed; },} : { name: { output: string; }; readonly next: any; }
+
+    name: { output: "" },
+>name : { output: string; }
+>{ output: "" } : { output: string; }
+>output : string
+>"" : ""
+
+    get next() { return constructed; },
+>next : any
+>constructed : any
+
+});
+const name: string = constructed.output.next.next.name;
+>name : string
+>constructed.output.next.next.name : any
+>constructed.output.next.next : any
+>constructed.output.next : any
+>constructed.output : any
+>constructed : any
+>output : any
+>next : any
+>next : any
+>name : any
+
+constructed.output.next.next.missing;
+>constructed.output.next.next.missing : any
+>constructed.output.next.next : any
+>constructed.output.next : any
+>constructed.output : any
+>constructed : any
+>output : any
+>next : any
+>next : any
+>missing : any
+
+const invalidConstructed = new ObjectSchema({
+>invalidConstructed : any
+>new ObjectSchema({    get next() { return invalidConstructed; },    get wrong() { return 42; },}) : ObjectSchema<Shape>
+>ObjectSchema : typeof ObjectSchema
+>{    get next() { return invalidConstructed; },    get wrong() { return 42; },} : { readonly next: any; readonly wrong: number; }
+
+    get next() { return invalidConstructed; },
+>next : any
+>invalidConstructed : any
+
+    get wrong() { return 42; },
+>wrong : number
+>42 : 42
+
+});
+
+class Factory<B extends Schema<unknown>> {
+>Factory : Factory<B>
+
+    wrap<T extends B>(value: T): T { return value; }
+>wrap : <T extends B>(value: T) => T
+>value : T
+>value : T
+}
+const factory = new Factory<Schema<string>>();
+>factory : Factory<Schema<string>>
+>new Factory<Schema<string>>() : Factory<Schema<string>>
+>Factory : typeof Factory
+
+const invalidMethod = factory.wrap({
+>invalidMethod : Schema<string>
+>factory.wrap({    get next() { return invalidMethod; },    get output() { return 42; },}) : Schema<string>
+>factory.wrap : <T extends Schema<string>>(value: T) => T
+>factory : Factory<Schema<string>>
+>wrap : <T extends Schema<string>>(value: T) => T
+>{    get next() { return invalidMethod; },    get output() { return 42; },} : { readonly next: Schema<string>; readonly output: number; }
+
+    get next() { return invalidMethod; },
+>next : Schema<string>
+>invalidMethod : Schema<string>
+
+    get output() { return 42; },
+>output : number
+>42 : 42
+
+});
+
+declare function constrain<T, U extends T>(value: U, expected: T): U;
+>constrain : <T, U extends T>(value: U, expected: T) => U
+>value : U
+>expected : T
+
+const invalidDependent = constrain({
+>invalidDependent : { output: number; }
+>constrain({    get next() { return invalidDependent; },    get output() { return ""; },}, { output: 0 }) : { output: number; }
+>constrain : <T, U extends T>(value: U, expected: T) => U
+>{    get next() { return invalidDependent; },    get output() { return ""; },} : { readonly next: { output: number; }; readonly output: string; }
+
+    get next() { return invalidDependent; },
+>next : { output: number; }
+>invalidDependent : { output: number; }
+
+    get output() { return ""; },
+>output : string
+>"" : ""
+
+}, { output: 0 });
+>{ output: 0 } : { output: number; }
+>output : number
+>0 : 0
+
+declare function withSchema<S extends Shape, A, B>(schema: S, fn: (value: A) => B): (value: A) => B;
+>withSchema : <S extends Shape, A, B>(schema: S, fn: (value: A) => B) => (value: A) => B
+>schema : S
+>fn : (value: A) => B
+>value : A
+>value : A
+
+declare function identity<T>(value: T): T;
+>identity : <T>(value: T) => T
+>value : T
+
+const generic = withSchema({
+>generic : <T>(value: T) => T
+>withSchema({    get name() { return { output: "" }; },}, identity) : <T>(value: T) => T
+>withSchema : <S extends Shape, A, B>(schema: S, fn: (value: A) => B) => (value: A) => B
+>{    get name() { return { output: "" }; },} : { readonly name: { output: string; }; }
+
+    get name() { return { output: "" }; },
+>name : { output: string; }
+>{ output: "" } : { output: string; }
+>output : string
+>"" : ""
+
+}, identity);
+>identity : <T>(value: T) => T
+
+const n: number = generic(1);
+>n : number
+>generic(1) : 1
+>generic : <T>(value: T) => T
+>1 : 1
+
+const s: string = generic("");
+>s : string
+>generic("") : ""
+>generic : <T>(value: T) => T
+>"" : ""
+
+const b: boolean = generic<boolean>(true);
+>b : boolean
+>generic<boolean>(true) : boolean
+>generic : <T>(value: T) => T
+>true : true
+
+declare function inner<U, T extends U>(value: T): U;
+>inner : <U, T extends U>(value: T) => U
+>value : T
+
+declare function outer(value: { value: number }, mode: "strict"): void;
+>outer : { (value: { value: number; }, mode: "strict"): void; (value: unknown, mode: "loose"): void; }
+>value : { value: number; }
+>value : number
+>mode : "strict"
+
+declare function outer(value: unknown, mode: "loose"): void;
+>outer : { (value: { value: number; }, mode: "strict"): void; (value: unknown, mode: "loose"): void; }
+>value : unknown
+>mode : "loose"
+
+outer(inner({
+>outer(inner({    get value() { return ""; },}), "loose") : void
+>outer : { (value: { value: number; }, mode: "strict"): void; (value: unknown, mode: "loose"): void; }
+>inner({    get value() { return ""; },}) : { value: number; }
+>inner : <U, T extends U>(value: T) => U
+>{    get value() { return ""; },} : { readonly value: string; }
+
+    get value() { return ""; },
+>value : string
+>"" : ""
+
+}), "loose");
+>"loose" : "loose"
+
+export {};
+

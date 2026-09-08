@@ -1,0 +1,33 @@
+recursiveGetterConstraint.ts(12,7): error TS7022: 'node' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+recursiveGetterConstraint.ts(14,9): error TS7023: 'children' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+
+
+==== recursiveGetterConstraint.ts (2 errors) ====
+    interface Schema<T = unknown> {
+        output: T;
+    }
+    
+    type Shape = Record<string, Schema>;
+    type Output<S extends Shape> = { [K in keyof S]: S[K]["output"] };
+    
+    declare function object<S extends Shape>(shape: S): Schema<Output<S>>;
+    declare function array<S extends Schema>(schema: S): Schema<S["output"][]>;
+    declare function text(): Schema<string>;
+    
+    const node = object({
+          ~~~~
+!!! error TS7022: 'node' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+        name: text(),
+        get children() {
+            ~~~~~~~~
+!!! error TS7023: 'children' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+            return array(node);
+        },
+    });
+    
+    const name: string = node.output.children[0].children[0].name;
+    const wrong: number = node.output.children[0].name;
+    node.output.children[0].missing;
+    
+    export {};
+    

@@ -1,0 +1,24 @@
+recursiveGetterConstraintDeclarationEmit.ts(8,14): error TS7022: 'node' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+recursiveGetterConstraintDeclarationEmit.ts(10,9): error TS7023: 'next' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+
+
+==== recursiveGetterConstraintDeclarationEmit.ts (2 errors) ====
+    export interface Schema<O> { output: O; }
+    export type Shape = Record<string, Schema<unknown>>;
+    export interface ObjectSchema<S extends Shape> extends Schema<{ [K in keyof S]: S[K]["output"] }> {
+        shape: S;
+    }
+    export declare function object<S extends Shape>(shape: S): ObjectSchema<S>;
+    
+    export const node = object({
+                 ~~~~
+!!! error TS7022: 'node' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+        name: { output: "" },
+        get next() { return node; },
+            ~~~~
+!!! error TS7023: 'next' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+    });
+    
+    export type Output = typeof node.output;
+    export const nestedName: string = node.output.next.next.name;
+    

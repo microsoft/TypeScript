@@ -1,0 +1,62 @@
+//// [tests/cases/compiler/recursiveGetterConstraintMemberOrder.ts] ////
+
+=== recursiveFirst.ts ===
+interface Schema<O> { readonly out: O; }
+>out : O
+
+type Shape = Record<string, Schema<any>>;
+>Shape : Shape
+
+declare function object<S extends Shape>(shape: S): Schema<{ [K in keyof S]: S[K]["out"] }> & { shape: S };
+>object : <S extends Shape>(shape: S) => Schema<{ [K in keyof S]: S[K]["out"]; }> & { shape: S; }
+>shape : S
+>shape : S
+
+const t = object({
+>t : any
+>object({    get rec() { return t; },    get bad() { return 42; },}) : Schema<{ [x: string]: any; }> & { shape: Shape; }
+>object : <S extends Shape>(shape: S) => Schema<{ [K in keyof S]: S[K]["out"]; }> & { shape: S; }
+>{    get rec() { return t; },    get bad() { return 42; },} : { readonly rec: any; readonly bad: number; }
+
+    get rec() { return t; },
+>rec : any
+>t : any
+
+    get bad() { return 42; },
+>bad : number
+>42 : 42
+
+});
+
+export {};
+
+=== invalidFirst.ts ===
+interface Schema<O> { readonly out: O; }
+>out : O
+
+type Shape = Record<string, Schema<any>>;
+>Shape : Shape
+
+declare function object<S extends Shape>(shape: S): Schema<{ [K in keyof S]: S[K]["out"] }> & { shape: S };
+>object : <S extends Shape>(shape: S) => Schema<{ [K in keyof S]: S[K]["out"]; }> & { shape: S; }
+>shape : S
+>shape : S
+
+const t = object({
+>t : Schema<{ [x: string]: any; }> & { shape: Shape; }
+>object({    get bad() { return 42; },    get rec() { return t; },}) : Schema<{ [x: string]: any; }> & { shape: Shape; }
+>object : <S extends Shape>(shape: S) => Schema<{ [K in keyof S]: S[K]["out"]; }> & { shape: S; }
+>{    get bad() { return 42; },    get rec() { return t; },} : { readonly bad: number; readonly rec: Schema<{ [x: string]: any; }> & { shape: Shape; }; }
+
+    get bad() { return 42; },
+>bad : number
+>42 : 42
+
+    get rec() { return t; },
+>rec : Schema<{ [x: string]: any; }> & { shape: Shape; }
+>t : Schema<{ [x: string]: any; }> & { shape: Shape; }
+
+});
+
+export {};
+

@@ -1,0 +1,59 @@
+//// [tests/cases/compiler/recursiveGetterConstraintDeclarationEmit.ts] ////
+
+=== recursiveGetterConstraintDeclarationEmit.ts ===
+export interface Schema<O> { output: O; }
+>Schema : Symbol(Schema, Decl(recursiveGetterConstraintDeclarationEmit.ts, 0, 0))
+>O : Symbol(O, Decl(recursiveGetterConstraintDeclarationEmit.ts, 0, 24))
+>output : Symbol(Schema.output, Decl(recursiveGetterConstraintDeclarationEmit.ts, 0, 28))
+>O : Symbol(O, Decl(recursiveGetterConstraintDeclarationEmit.ts, 0, 24))
+
+export type Shape = Record<string, Schema<unknown>>;
+>Shape : Symbol(Shape, Decl(recursiveGetterConstraintDeclarationEmit.ts, 0, 41))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Schema : Symbol(Schema, Decl(recursiveGetterConstraintDeclarationEmit.ts, 0, 0))
+
+export interface ObjectSchema<S extends Shape> extends Schema<{ [K in keyof S]: S[K]["output"] }> {
+>ObjectSchema : Symbol(ObjectSchema, Decl(recursiveGetterConstraintDeclarationEmit.ts, 1, 52))
+>S : Symbol(S, Decl(recursiveGetterConstraintDeclarationEmit.ts, 2, 30))
+>Shape : Symbol(Shape, Decl(recursiveGetterConstraintDeclarationEmit.ts, 0, 41))
+>Schema : Symbol(Schema, Decl(recursiveGetterConstraintDeclarationEmit.ts, 0, 0))
+>K : Symbol(K, Decl(recursiveGetterConstraintDeclarationEmit.ts, 2, 65))
+>S : Symbol(S, Decl(recursiveGetterConstraintDeclarationEmit.ts, 2, 30))
+>S : Symbol(S, Decl(recursiveGetterConstraintDeclarationEmit.ts, 2, 30))
+>K : Symbol(K, Decl(recursiveGetterConstraintDeclarationEmit.ts, 2, 65))
+
+    shape: S;
+>shape : Symbol(ObjectSchema.shape, Decl(recursiveGetterConstraintDeclarationEmit.ts, 2, 99))
+>S : Symbol(S, Decl(recursiveGetterConstraintDeclarationEmit.ts, 2, 30))
+}
+export declare function object<S extends Shape>(shape: S): ObjectSchema<S>;
+>object : Symbol(object, Decl(recursiveGetterConstraintDeclarationEmit.ts, 4, 1))
+>S : Symbol(S, Decl(recursiveGetterConstraintDeclarationEmit.ts, 5, 31))
+>Shape : Symbol(Shape, Decl(recursiveGetterConstraintDeclarationEmit.ts, 0, 41))
+>shape : Symbol(shape, Decl(recursiveGetterConstraintDeclarationEmit.ts, 5, 48))
+>S : Symbol(S, Decl(recursiveGetterConstraintDeclarationEmit.ts, 5, 31))
+>ObjectSchema : Symbol(ObjectSchema, Decl(recursiveGetterConstraintDeclarationEmit.ts, 1, 52))
+>S : Symbol(S, Decl(recursiveGetterConstraintDeclarationEmit.ts, 5, 31))
+
+export const node = object({
+>node : Symbol(node, Decl(recursiveGetterConstraintDeclarationEmit.ts, 7, 12))
+>object : Symbol(object, Decl(recursiveGetterConstraintDeclarationEmit.ts, 4, 1))
+
+    name: { output: "" },
+>name : Symbol(name, Decl(recursiveGetterConstraintDeclarationEmit.ts, 7, 28))
+>output : Symbol(output, Decl(recursiveGetterConstraintDeclarationEmit.ts, 8, 11))
+
+    get next() { return node; },
+>next : Symbol(next, Decl(recursiveGetterConstraintDeclarationEmit.ts, 8, 25))
+>node : Symbol(node, Decl(recursiveGetterConstraintDeclarationEmit.ts, 7, 12))
+
+});
+
+export type Output = typeof node.output;
+>Output : Symbol(Output, Decl(recursiveGetterConstraintDeclarationEmit.ts, 10, 3))
+>node : Symbol(node, Decl(recursiveGetterConstraintDeclarationEmit.ts, 7, 12))
+
+export const nestedName: string = node.output.next.next.name;
+>nestedName : Symbol(nestedName, Decl(recursiveGetterConstraintDeclarationEmit.ts, 13, 12))
+>node : Symbol(node, Decl(recursiveGetterConstraintDeclarationEmit.ts, 7, 12))
+

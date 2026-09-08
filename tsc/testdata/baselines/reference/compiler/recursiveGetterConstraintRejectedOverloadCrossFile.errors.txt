@@ -1,0 +1,21 @@
+app.ts(3,14): error TS7022: 'tree' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+app.ts(4,9): error TS7023: 'bad' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+
+
+==== lib.d.ts (0 errors) ====
+    export interface Schema<O> { readonly out: O; }
+    export type Shape = Record<string, Schema<any>>;
+    export declare function object<S extends Shape>(shape: S, mode: "strict"): Schema<{ [K in keyof S]: S[K]["out"] }> & { shape: S };
+    export declare function object(shape: object, mode: "loose"): { out: unknown; shape: object };
+    
+==== app.ts (2 errors) ====
+    import { object } from "./lib.js";
+    
+    export const tree = object({
+                 ~~~~
+!!! error TS7022: 'tree' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+        get bad() { return [tree]; },
+            ~~~
+!!! error TS7023: 'bad' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+    }, "loose");
+    

@@ -1,0 +1,205 @@
+//// [tests/cases/compiler/recursiveGetterConstraintCalls.ts] ////
+
+=== recursiveGetterConstraintCalls.ts ===
+interface Schema<O> { output: O; }
+>Schema : Symbol(Schema, Decl(recursiveGetterConstraintCalls.ts, 0, 0))
+>O : Symbol(O, Decl(recursiveGetterConstraintCalls.ts, 0, 17))
+>output : Symbol(Schema.output, Decl(recursiveGetterConstraintCalls.ts, 0, 21))
+>O : Symbol(O, Decl(recursiveGetterConstraintCalls.ts, 0, 17))
+
+type Shape = Record<string, Schema<unknown>>;
+>Shape : Symbol(Shape, Decl(recursiveGetterConstraintCalls.ts, 0, 34))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Schema : Symbol(Schema, Decl(recursiveGetterConstraintCalls.ts, 0, 0))
+
+declare class ObjectSchema<S extends Shape> implements Schema<{ [K in keyof S]: S[K]["output"] }> {
+>ObjectSchema : Symbol(ObjectSchema, Decl(recursiveGetterConstraintCalls.ts, 1, 45))
+>S : Symbol(S, Decl(recursiveGetterConstraintCalls.ts, 3, 27))
+>Shape : Symbol(Shape, Decl(recursiveGetterConstraintCalls.ts, 0, 34))
+>Schema : Symbol(Schema, Decl(recursiveGetterConstraintCalls.ts, 0, 0))
+>K : Symbol(K, Decl(recursiveGetterConstraintCalls.ts, 3, 65))
+>S : Symbol(S, Decl(recursiveGetterConstraintCalls.ts, 3, 27))
+>S : Symbol(S, Decl(recursiveGetterConstraintCalls.ts, 3, 27))
+>K : Symbol(K, Decl(recursiveGetterConstraintCalls.ts, 3, 65))
+
+    constructor(shape: S);
+>shape : Symbol(shape, Decl(recursiveGetterConstraintCalls.ts, 4, 16))
+>S : Symbol(S, Decl(recursiveGetterConstraintCalls.ts, 3, 27))
+
+    output: { [K in keyof S]: S[K]["output"] };
+>output : Symbol(ObjectSchema.output, Decl(recursiveGetterConstraintCalls.ts, 4, 26))
+>K : Symbol(K, Decl(recursiveGetterConstraintCalls.ts, 5, 15))
+>S : Symbol(S, Decl(recursiveGetterConstraintCalls.ts, 3, 27))
+>S : Symbol(S, Decl(recursiveGetterConstraintCalls.ts, 3, 27))
+>K : Symbol(K, Decl(recursiveGetterConstraintCalls.ts, 5, 15))
+}
+
+const constructed = new ObjectSchema({
+>constructed : Symbol(constructed, Decl(recursiveGetterConstraintCalls.ts, 8, 5))
+>ObjectSchema : Symbol(ObjectSchema, Decl(recursiveGetterConstraintCalls.ts, 1, 45))
+
+    name: { output: "" },
+>name : Symbol(name, Decl(recursiveGetterConstraintCalls.ts, 8, 38))
+>output : Symbol(output, Decl(recursiveGetterConstraintCalls.ts, 9, 11))
+
+    get next() { return constructed; },
+>next : Symbol(next, Decl(recursiveGetterConstraintCalls.ts, 9, 25))
+>constructed : Symbol(constructed, Decl(recursiveGetterConstraintCalls.ts, 8, 5))
+
+});
+const name: string = constructed.output.next.next.name;
+>name : Symbol(name, Decl(recursiveGetterConstraintCalls.ts, 12, 5))
+>constructed : Symbol(constructed, Decl(recursiveGetterConstraintCalls.ts, 8, 5))
+
+constructed.output.next.next.missing;
+>constructed : Symbol(constructed, Decl(recursiveGetterConstraintCalls.ts, 8, 5))
+
+const invalidConstructed = new ObjectSchema({
+>invalidConstructed : Symbol(invalidConstructed, Decl(recursiveGetterConstraintCalls.ts, 15, 5))
+>ObjectSchema : Symbol(ObjectSchema, Decl(recursiveGetterConstraintCalls.ts, 1, 45))
+
+    get next() { return invalidConstructed; },
+>next : Symbol(next, Decl(recursiveGetterConstraintCalls.ts, 15, 45))
+>invalidConstructed : Symbol(invalidConstructed, Decl(recursiveGetterConstraintCalls.ts, 15, 5))
+
+    get wrong() { return 42; },
+>wrong : Symbol(wrong, Decl(recursiveGetterConstraintCalls.ts, 16, 46))
+
+});
+
+class Factory<B extends Schema<unknown>> {
+>Factory : Symbol(Factory, Decl(recursiveGetterConstraintCalls.ts, 18, 3))
+>B : Symbol(B, Decl(recursiveGetterConstraintCalls.ts, 20, 14))
+>Schema : Symbol(Schema, Decl(recursiveGetterConstraintCalls.ts, 0, 0))
+
+    wrap<T extends B>(value: T): T { return value; }
+>wrap : Symbol(Factory.wrap, Decl(recursiveGetterConstraintCalls.ts, 20, 42))
+>T : Symbol(T, Decl(recursiveGetterConstraintCalls.ts, 21, 9))
+>B : Symbol(B, Decl(recursiveGetterConstraintCalls.ts, 20, 14))
+>value : Symbol(value, Decl(recursiveGetterConstraintCalls.ts, 21, 22))
+>T : Symbol(T, Decl(recursiveGetterConstraintCalls.ts, 21, 9))
+>T : Symbol(T, Decl(recursiveGetterConstraintCalls.ts, 21, 9))
+>value : Symbol(value, Decl(recursiveGetterConstraintCalls.ts, 21, 22))
+}
+const factory = new Factory<Schema<string>>();
+>factory : Symbol(factory, Decl(recursiveGetterConstraintCalls.ts, 23, 5))
+>Factory : Symbol(Factory, Decl(recursiveGetterConstraintCalls.ts, 18, 3))
+>Schema : Symbol(Schema, Decl(recursiveGetterConstraintCalls.ts, 0, 0))
+
+const invalidMethod = factory.wrap({
+>invalidMethod : Symbol(invalidMethod, Decl(recursiveGetterConstraintCalls.ts, 24, 5))
+>factory.wrap : Symbol(Factory.wrap, Decl(recursiveGetterConstraintCalls.ts, 20, 42))
+>factory : Symbol(factory, Decl(recursiveGetterConstraintCalls.ts, 23, 5))
+>wrap : Symbol(Factory.wrap, Decl(recursiveGetterConstraintCalls.ts, 20, 42))
+
+    get next() { return invalidMethod; },
+>next : Symbol(next, Decl(recursiveGetterConstraintCalls.ts, 24, 36))
+>invalidMethod : Symbol(invalidMethod, Decl(recursiveGetterConstraintCalls.ts, 24, 5))
+
+    get output() { return 42; },
+>output : Symbol(output, Decl(recursiveGetterConstraintCalls.ts, 25, 41))
+
+});
+
+declare function constrain<T, U extends T>(value: U, expected: T): U;
+>constrain : Symbol(constrain, Decl(recursiveGetterConstraintCalls.ts, 27, 3))
+>T : Symbol(T, Decl(recursiveGetterConstraintCalls.ts, 29, 27))
+>U : Symbol(U, Decl(recursiveGetterConstraintCalls.ts, 29, 29))
+>T : Symbol(T, Decl(recursiveGetterConstraintCalls.ts, 29, 27))
+>value : Symbol(value, Decl(recursiveGetterConstraintCalls.ts, 29, 43))
+>U : Symbol(U, Decl(recursiveGetterConstraintCalls.ts, 29, 29))
+>expected : Symbol(expected, Decl(recursiveGetterConstraintCalls.ts, 29, 52))
+>T : Symbol(T, Decl(recursiveGetterConstraintCalls.ts, 29, 27))
+>U : Symbol(U, Decl(recursiveGetterConstraintCalls.ts, 29, 29))
+
+const invalidDependent = constrain({
+>invalidDependent : Symbol(invalidDependent, Decl(recursiveGetterConstraintCalls.ts, 30, 5))
+>constrain : Symbol(constrain, Decl(recursiveGetterConstraintCalls.ts, 27, 3))
+
+    get next() { return invalidDependent; },
+>next : Symbol(next, Decl(recursiveGetterConstraintCalls.ts, 30, 36))
+>invalidDependent : Symbol(invalidDependent, Decl(recursiveGetterConstraintCalls.ts, 30, 5))
+
+    get output() { return ""; },
+>output : Symbol(output, Decl(recursiveGetterConstraintCalls.ts, 31, 44))
+
+}, { output: 0 });
+>output : Symbol(output, Decl(recursiveGetterConstraintCalls.ts, 33, 4))
+
+declare function withSchema<S extends Shape, A, B>(schema: S, fn: (value: A) => B): (value: A) => B;
+>withSchema : Symbol(withSchema, Decl(recursiveGetterConstraintCalls.ts, 33, 18))
+>S : Symbol(S, Decl(recursiveGetterConstraintCalls.ts, 35, 28))
+>Shape : Symbol(Shape, Decl(recursiveGetterConstraintCalls.ts, 0, 34))
+>A : Symbol(A, Decl(recursiveGetterConstraintCalls.ts, 35, 44))
+>B : Symbol(B, Decl(recursiveGetterConstraintCalls.ts, 35, 47))
+>schema : Symbol(schema, Decl(recursiveGetterConstraintCalls.ts, 35, 51))
+>S : Symbol(S, Decl(recursiveGetterConstraintCalls.ts, 35, 28))
+>fn : Symbol(fn, Decl(recursiveGetterConstraintCalls.ts, 35, 61))
+>value : Symbol(value, Decl(recursiveGetterConstraintCalls.ts, 35, 67))
+>A : Symbol(A, Decl(recursiveGetterConstraintCalls.ts, 35, 44))
+>B : Symbol(B, Decl(recursiveGetterConstraintCalls.ts, 35, 47))
+>value : Symbol(value, Decl(recursiveGetterConstraintCalls.ts, 35, 85))
+>A : Symbol(A, Decl(recursiveGetterConstraintCalls.ts, 35, 44))
+>B : Symbol(B, Decl(recursiveGetterConstraintCalls.ts, 35, 47))
+
+declare function identity<T>(value: T): T;
+>identity : Symbol(identity, Decl(recursiveGetterConstraintCalls.ts, 35, 100))
+>T : Symbol(T, Decl(recursiveGetterConstraintCalls.ts, 36, 26))
+>value : Symbol(value, Decl(recursiveGetterConstraintCalls.ts, 36, 29))
+>T : Symbol(T, Decl(recursiveGetterConstraintCalls.ts, 36, 26))
+>T : Symbol(T, Decl(recursiveGetterConstraintCalls.ts, 36, 26))
+
+const generic = withSchema({
+>generic : Symbol(generic, Decl(recursiveGetterConstraintCalls.ts, 37, 5))
+>withSchema : Symbol(withSchema, Decl(recursiveGetterConstraintCalls.ts, 33, 18))
+
+    get name() { return { output: "" }; },
+>name : Symbol(name, Decl(recursiveGetterConstraintCalls.ts, 37, 28))
+>output : Symbol(output, Decl(recursiveGetterConstraintCalls.ts, 38, 25))
+
+}, identity);
+>identity : Symbol(identity, Decl(recursiveGetterConstraintCalls.ts, 35, 100))
+
+const n: number = generic(1);
+>n : Symbol(n, Decl(recursiveGetterConstraintCalls.ts, 40, 5))
+>generic : Symbol(generic, Decl(recursiveGetterConstraintCalls.ts, 37, 5))
+
+const s: string = generic("");
+>s : Symbol(s, Decl(recursiveGetterConstraintCalls.ts, 41, 5))
+>generic : Symbol(generic, Decl(recursiveGetterConstraintCalls.ts, 37, 5))
+
+const b: boolean = generic<boolean>(true);
+>b : Symbol(b, Decl(recursiveGetterConstraintCalls.ts, 42, 5))
+>generic : Symbol(generic, Decl(recursiveGetterConstraintCalls.ts, 37, 5))
+
+declare function inner<U, T extends U>(value: T): U;
+>inner : Symbol(inner, Decl(recursiveGetterConstraintCalls.ts, 42, 42))
+>U : Symbol(U, Decl(recursiveGetterConstraintCalls.ts, 44, 23))
+>T : Symbol(T, Decl(recursiveGetterConstraintCalls.ts, 44, 25))
+>U : Symbol(U, Decl(recursiveGetterConstraintCalls.ts, 44, 23))
+>value : Symbol(value, Decl(recursiveGetterConstraintCalls.ts, 44, 39))
+>T : Symbol(T, Decl(recursiveGetterConstraintCalls.ts, 44, 25))
+>U : Symbol(U, Decl(recursiveGetterConstraintCalls.ts, 44, 23))
+
+declare function outer(value: { value: number }, mode: "strict"): void;
+>outer : Symbol(outer, Decl(recursiveGetterConstraintCalls.ts, 44, 52), Decl(recursiveGetterConstraintCalls.ts, 45, 71))
+>value : Symbol(value, Decl(recursiveGetterConstraintCalls.ts, 45, 23))
+>value : Symbol(value, Decl(recursiveGetterConstraintCalls.ts, 45, 31))
+>mode : Symbol(mode, Decl(recursiveGetterConstraintCalls.ts, 45, 48))
+
+declare function outer(value: unknown, mode: "loose"): void;
+>outer : Symbol(outer, Decl(recursiveGetterConstraintCalls.ts, 44, 52), Decl(recursiveGetterConstraintCalls.ts, 45, 71))
+>value : Symbol(value, Decl(recursiveGetterConstraintCalls.ts, 46, 23))
+>mode : Symbol(mode, Decl(recursiveGetterConstraintCalls.ts, 46, 38))
+
+outer(inner({
+>outer : Symbol(outer, Decl(recursiveGetterConstraintCalls.ts, 44, 52), Decl(recursiveGetterConstraintCalls.ts, 45, 71))
+>inner : Symbol(inner, Decl(recursiveGetterConstraintCalls.ts, 42, 42))
+
+    get value() { return ""; },
+>value : Symbol(value, Decl(recursiveGetterConstraintCalls.ts, 47, 13))
+
+}), "loose");
+
+export {};
+

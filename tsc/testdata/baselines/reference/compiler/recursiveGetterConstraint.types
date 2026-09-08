@@ -1,0 +1,88 @@
+//// [tests/cases/compiler/recursiveGetterConstraint.ts] ////
+
+=== recursiveGetterConstraint.ts ===
+interface Schema<T = unknown> {
+    output: T;
+>output : T
+}
+
+type Shape = Record<string, Schema>;
+>Shape : Shape
+
+type Output<S extends Shape> = { [K in keyof S]: S[K]["output"] };
+>Output : Output<S>
+
+declare function object<S extends Shape>(shape: S): Schema<Output<S>>;
+>object : <S extends Shape>(shape: S) => Schema<Output<S>>
+>shape : S
+
+declare function array<S extends Schema>(schema: S): Schema<S["output"][]>;
+>array : <S extends Schema>(schema: S) => Schema<S["output"][]>
+>schema : S
+
+declare function text(): Schema<string>;
+>text : () => Schema<string>
+
+const node = object({
+>node : any
+>object({    name: text(),    get children() {        return array(node);    },}) : Schema<Output<{ name: Schema<string>; readonly children: any; }>>
+>object : <S extends Shape>(shape: S) => Schema<Output<S>>
+>{    name: text(),    get children() {        return array(node);    },} : { name: Schema<string>; readonly children: any; }
+
+    name: text(),
+>name : Schema<string>
+>text() : Schema<string>
+>text : () => Schema<string>
+
+    get children() {
+>children : any
+
+        return array(node);
+>array(node) : Schema<any[]>
+>array : <S extends Schema>(schema: S) => Schema<S["output"][]>
+>node : any
+
+    },
+});
+
+const name: string = node.output.children[0].children[0].name;
+>name : string
+>node.output.children[0].children[0].name : any
+>node.output.children[0].children[0] : any
+>node.output.children[0].children : any
+>node.output.children[0] : any
+>node.output.children : any
+>node.output : any
+>node : any
+>output : any
+>children : any
+>0 : 0
+>children : any
+>0 : 0
+>name : any
+
+const wrong: number = node.output.children[0].name;
+>wrong : number
+>node.output.children[0].name : any
+>node.output.children[0] : any
+>node.output.children : any
+>node.output : any
+>node : any
+>output : any
+>children : any
+>0 : 0
+>name : any
+
+node.output.children[0].missing;
+>node.output.children[0].missing : any
+>node.output.children[0] : any
+>node.output.children : any
+>node.output : any
+>node : any
+>output : any
+>children : any
+>0 : 0
+>missing : any
+
+export {};
+

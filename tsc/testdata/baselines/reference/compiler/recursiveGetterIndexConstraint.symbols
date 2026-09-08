@@ -1,0 +1,120 @@
+//// [tests/cases/compiler/recursiveGetterIndexConstraint.ts] ////
+
+=== recursiveGetterIndexConstraint.ts ===
+declare function anyRecord<T extends Record<string, any>>(value: T): T;
+>anyRecord : Symbol(anyRecord, Decl(recursiveGetterIndexConstraint.ts, 0, 0))
+>T : Symbol(T, Decl(recursiveGetterIndexConstraint.ts, 0, 27))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>value : Symbol(value, Decl(recursiveGetterIndexConstraint.ts, 0, 58))
+>T : Symbol(T, Decl(recursiveGetterIndexConstraint.ts, 0, 27))
+>T : Symbol(T, Decl(recursiveGetterIndexConstraint.ts, 0, 27))
+
+declare function unknownRecord<T extends Record<string, unknown>>(value: T): T;
+>unknownRecord : Symbol(unknownRecord, Decl(recursiveGetterIndexConstraint.ts, 0, 71))
+>T : Symbol(T, Decl(recursiveGetterIndexConstraint.ts, 1, 31))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>value : Symbol(value, Decl(recursiveGetterIndexConstraint.ts, 1, 66))
+>T : Symbol(T, Decl(recursiveGetterIndexConstraint.ts, 1, 31))
+>T : Symbol(T, Decl(recursiveGetterIndexConstraint.ts, 1, 31))
+
+declare function numberRecord<T extends Record<string, number>>(value: T): T;
+>numberRecord : Symbol(numberRecord, Decl(recursiveGetterIndexConstraint.ts, 1, 79))
+>T : Symbol(T, Decl(recursiveGetterIndexConstraint.ts, 2, 30))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>value : Symbol(value, Decl(recursiveGetterIndexConstraint.ts, 2, 64))
+>T : Symbol(T, Decl(recursiveGetterIndexConstraint.ts, 2, 30))
+>T : Symbol(T, Decl(recursiveGetterIndexConstraint.ts, 2, 30))
+
+const a = anyRecord({
+>a : Symbol(a, Decl(recursiveGetterIndexConstraint.ts, 4, 5))
+>anyRecord : Symbol(anyRecord, Decl(recursiveGetterIndexConstraint.ts, 0, 0))
+
+    value: "",
+>value : Symbol(value, Decl(recursiveGetterIndexConstraint.ts, 4, 21))
+
+    get next() {
+>next : Symbol(next, Decl(recursiveGetterIndexConstraint.ts, 5, 14))
+
+        return a;
+>a : Symbol(a, Decl(recursiveGetterIndexConstraint.ts, 4, 5))
+
+    },
+});
+
+const u = unknownRecord({
+>u : Symbol(u, Decl(recursiveGetterIndexConstraint.ts, 11, 5))
+>unknownRecord : Symbol(unknownRecord, Decl(recursiveGetterIndexConstraint.ts, 0, 71))
+
+    value: "",
+>value : Symbol(value, Decl(recursiveGetterIndexConstraint.ts, 11, 25))
+
+    get next() {
+>next : Symbol(next, Decl(recursiveGetterIndexConstraint.ts, 12, 14))
+
+        return u;
+>u : Symbol(u, Decl(recursiveGetterIndexConstraint.ts, 11, 5))
+
+    },
+});
+
+const anyValue: string = a.next.next.value;
+>anyValue : Symbol(anyValue, Decl(recursiveGetterIndexConstraint.ts, 18, 5))
+>a.next.next.value : Symbol(value, Decl(recursiveGetterIndexConstraint.ts, 4, 21))
+>a.next.next : Symbol(next, Decl(recursiveGetterIndexConstraint.ts, 5, 14))
+>a.next : Symbol(next, Decl(recursiveGetterIndexConstraint.ts, 5, 14))
+>a : Symbol(a, Decl(recursiveGetterIndexConstraint.ts, 4, 5))
+>next : Symbol(next, Decl(recursiveGetterIndexConstraint.ts, 5, 14))
+>next : Symbol(next, Decl(recursiveGetterIndexConstraint.ts, 5, 14))
+>value : Symbol(value, Decl(recursiveGetterIndexConstraint.ts, 4, 21))
+
+const unknownValue: string = u.next.next.value;
+>unknownValue : Symbol(unknownValue, Decl(recursiveGetterIndexConstraint.ts, 19, 5))
+>u : Symbol(u, Decl(recursiveGetterIndexConstraint.ts, 11, 5))
+
+const wrongAnyValue: number = a.next.next.value;
+>wrongAnyValue : Symbol(wrongAnyValue, Decl(recursiveGetterIndexConstraint.ts, 20, 5))
+>a.next.next.value : Symbol(value, Decl(recursiveGetterIndexConstraint.ts, 4, 21))
+>a.next.next : Symbol(next, Decl(recursiveGetterIndexConstraint.ts, 5, 14))
+>a.next : Symbol(next, Decl(recursiveGetterIndexConstraint.ts, 5, 14))
+>a : Symbol(a, Decl(recursiveGetterIndexConstraint.ts, 4, 5))
+>next : Symbol(next, Decl(recursiveGetterIndexConstraint.ts, 5, 14))
+>next : Symbol(next, Decl(recursiveGetterIndexConstraint.ts, 5, 14))
+>value : Symbol(value, Decl(recursiveGetterIndexConstraint.ts, 4, 21))
+
+const wrongUnknownValue: number = u.next.next.value;
+>wrongUnknownValue : Symbol(wrongUnknownValue, Decl(recursiveGetterIndexConstraint.ts, 21, 5))
+>u : Symbol(u, Decl(recursiveGetterIndexConstraint.ts, 11, 5))
+
+a.next.next.missing;
+>a.next.next : Symbol(next, Decl(recursiveGetterIndexConstraint.ts, 5, 14))
+>a.next : Symbol(next, Decl(recursiveGetterIndexConstraint.ts, 5, 14))
+>a : Symbol(a, Decl(recursiveGetterIndexConstraint.ts, 4, 5))
+>next : Symbol(next, Decl(recursiveGetterIndexConstraint.ts, 5, 14))
+>next : Symbol(next, Decl(recursiveGetterIndexConstraint.ts, 5, 14))
+
+u.next.next.missing;
+>u : Symbol(u, Decl(recursiveGetterIndexConstraint.ts, 11, 5))
+
+numberRecord({
+>numberRecord : Symbol(numberRecord, Decl(recursiveGetterIndexConstraint.ts, 1, 79))
+
+    get value() {
+>value : Symbol(value, Decl(recursiveGetterIndexConstraint.ts, 25, 14))
+
+        return "";
+    },
+});
+
+const circular = unknownRecord({
+>circular : Symbol(circular, Decl(recursiveGetterIndexConstraint.ts, 31, 5))
+>unknownRecord : Symbol(unknownRecord, Decl(recursiveGetterIndexConstraint.ts, 0, 71))
+
+    get next() {
+>next : Symbol(next, Decl(recursiveGetterIndexConstraint.ts, 31, 32))
+
+        return circular.next;
+>circular : Symbol(circular, Decl(recursiveGetterIndexConstraint.ts, 31, 5))
+
+    },
+});
+

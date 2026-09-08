@@ -1,0 +1,83 @@
+recursiveGetterConstraintCalls.ts(9,7): error TS7022: 'constructed' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+recursiveGetterConstraintCalls.ts(11,9): error TS7023: 'next' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+recursiveGetterConstraintCalls.ts(16,7): error TS7022: 'invalidConstructed' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+recursiveGetterConstraintCalls.ts(17,9): error TS7023: 'next' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+recursiveGetterConstraintCalls.ts(18,9): error TS2322: Type 'number' is not assignable to type 'Schema<unknown>'.
+recursiveGetterConstraintCalls.ts(27,9): error TS2322: Type 'number' is not assignable to type 'string'.
+recursiveGetterConstraintCalls.ts(33,9): error TS2322: Type 'string' is not assignable to type 'number'.
+recursiveGetterConstraintCalls.ts(49,9): error TS2322: Type 'string' is not assignable to type 'number'.
+
+
+==== recursiveGetterConstraintCalls.ts (8 errors) ====
+    interface Schema<O> { output: O; }
+    type Shape = Record<string, Schema<unknown>>;
+    
+    declare class ObjectSchema<S extends Shape> implements Schema<{ [K in keyof S]: S[K]["output"] }> {
+        constructor(shape: S);
+        output: { [K in keyof S]: S[K]["output"] };
+    }
+    
+    const constructed = new ObjectSchema({
+          ~~~~~~~~~~~
+!!! error TS7022: 'constructed' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+        name: { output: "" },
+        get next() { return constructed; },
+            ~~~~
+!!! error TS7023: 'next' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+    });
+    const name: string = constructed.output.next.next.name;
+    constructed.output.next.next.missing;
+    
+    const invalidConstructed = new ObjectSchema({
+          ~~~~~~~~~~~~~~~~~~
+!!! error TS7022: 'invalidConstructed' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+        get next() { return invalidConstructed; },
+            ~~~~
+!!! error TS7023: 'next' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+        get wrong() { return 42; },
+            ~~~~~
+!!! error TS2322: Type 'number' is not assignable to type 'Schema<unknown>'.
+    });
+    
+    class Factory<B extends Schema<unknown>> {
+        wrap<T extends B>(value: T): T { return value; }
+    }
+    const factory = new Factory<Schema<string>>();
+    const invalidMethod = factory.wrap({
+        get next() { return invalidMethod; },
+        get output() { return 42; },
+            ~~~~~~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+!!! related TS6500 recursiveGetterConstraintCalls.ts:1:23: The expected type comes from property 'output' which is declared here on type 'Schema<string>'
+    });
+    
+    declare function constrain<T, U extends T>(value: U, expected: T): U;
+    const invalidDependent = constrain({
+        get next() { return invalidDependent; },
+        get output() { return ""; },
+            ~~~~~~
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
+!!! related TS6500 recursiveGetterConstraintCalls.ts:34:6: The expected type comes from property 'output' which is declared here on type '{ output: number; }'
+    }, { output: 0 });
+    
+    declare function withSchema<S extends Shape, A, B>(schema: S, fn: (value: A) => B): (value: A) => B;
+    declare function identity<T>(value: T): T;
+    const generic = withSchema({
+        get name() { return { output: "" }; },
+    }, identity);
+    const n: number = generic(1);
+    const s: string = generic("");
+    const b: boolean = generic<boolean>(true);
+    
+    declare function inner<U, T extends U>(value: T): U;
+    declare function outer(value: { value: number }, mode: "strict"): void;
+    declare function outer(value: unknown, mode: "loose"): void;
+    outer(inner({
+        get value() { return ""; },
+            ~~~~~
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
+!!! related TS6500 recursiveGetterConstraintCalls.ts:46:33: The expected type comes from property 'value' which is declared here on type '{ value: number; }'
+    }), "loose");
+    
+    export {};
+    

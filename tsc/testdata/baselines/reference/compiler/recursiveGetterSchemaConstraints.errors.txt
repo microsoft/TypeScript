@@ -1,0 +1,123 @@
+recursiveGetterSchemaConstraints.ts(46,7): error TS7022: 'node' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+recursiveGetterSchemaConstraints.ts(48,9): error TS7023: 'children' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+recursiveGetterSchemaConstraints.ts(58,7): error TS7022: 'user' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+recursiveGetterSchemaConstraints.ts(60,9): error TS7023: 'posts' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+recursiveGetterSchemaConstraints.ts(62,7): error TS7022: 'post' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+recursiveGetterSchemaConstraints.ts(64,9): error TS7023: 'author' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+recursiveGetterSchemaConstraints.ts(70,7): error TS7022: 'activity' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+recursiveGetterSchemaConstraints.ts(72,9): error TS7023: 'children' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+recursiveGetterSchemaConstraints.ts(79,7): error TS7022: 'linked' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+recursiveGetterSchemaConstraints.ts(81,9): error TS7023: 'children' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+recursiveGetterSchemaConstraints.ts(83,7): error TS7022: 'linkedArray' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+
+
+==== recursiveGetterSchemaConstraints.ts (11 errors) ====
+    interface Internals<out O, out I> {
+        output: O;
+        input: I;
+        optionalOutput?: true;
+        optionalInput?: true;
+    }
+    
+    interface Schema<out O = unknown, out I = unknown> {
+        internals: Internals<O, I>;
+    }
+    
+    type Output<T extends Schema> = T["internals"]["output"];
+    type Input<T extends Schema> = T["internals"]["input"];
+    
+    interface TextSchema extends Schema<string, number> {}
+    interface ArraySchema<T extends Schema> extends Schema<Output<T>[], Input<T>[]> {}
+    interface OptionalInternals<T extends Schema> extends Internals<Output<T> | undefined, Input<T> | undefined> {
+        optionalOutput: true;
+        optionalInput: true;
+    }
+    interface OptionalSchema<T extends Schema> extends Schema<Output<T> | undefined, Input<T> | undefined> {
+        internals: OptionalInternals<T>;
+    }
+    
+    type Shape = Record<string, Schema>;
+    type Prettify<T> = { [K in keyof T]: T[K] } & {};
+    type ObjectOutput<S extends Shape> = Prettify<{
+        [K in keyof S as S[K] extends { internals: { optionalOutput: true } } ? never : K]: Output<S[K]>;
+    } & {
+        [K in keyof S as S[K] extends { internals: { optionalOutput: true } } ? K : never]?: Output<S[K]>;
+    }>;
+    type ObjectInput<S extends Shape> = Prettify<{
+        [K in keyof S as S[K] extends { internals: { optionalInput: true } } ? never : K]: Input<S[K]>;
+    } & {
+        [K in keyof S as S[K] extends { internals: { optionalInput: true } } ? K : never]?: Input<S[K]>;
+    }>;
+    interface ObjectSchema<S extends Shape> extends Schema<ObjectOutput<S>, ObjectInput<S>> {
+        shape: S;
+    }
+    
+    declare function object<S extends Shape>(shape: S): ObjectSchema<S>;
+    declare function array<T extends Schema>(element: T): ArraySchema<T>;
+    declare function optional<T extends Schema>(element: T): OptionalSchema<T>;
+    declare function text(): TextSchema;
+    
+    const node = object({
+          ~~~~
+!!! error TS7022: 'node' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+        name: text(),
+        get children() { return array(node); },
+            ~~~~~~~~
+!!! error TS7023: 'children' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+    });
+    declare const nodeOutput: Output<typeof node>;
+    declare const nodeInput: Input<typeof node>;
+    const outputName: string = nodeOutput.children[0].children[0].name;
+    const inputName: number = nodeInput.children[0].children[0].name;
+    const wrongOutput: number = nodeOutput.children[0].name;
+    const wrongInput: string = nodeInput.children[0].name;
+    nodeOutput.children[0].children[0].missing;
+    
+    const user = object({
+          ~~~~
+!!! error TS7022: 'user' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+        name: text(),
+        get posts() { return array(post); },
+            ~~~~~
+!!! error TS7023: 'posts' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+    });
+    const post = object({
+          ~~~~
+!!! error TS7022: 'post' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+        title: text(),
+        get author() { return user; },
+            ~~~~~~
+!!! error TS7023: 'author' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+    });
+    declare const userOutput: Output<typeof user>;
+    const authorName: string = userOutput.posts[0].author.posts[0].author.name;
+    userOutput.posts[0].author.posts[0].missing;
+    
+    const activity = object({
+          ~~~~~~~~
+!!! error TS7022: 'activity' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+        name: text(),
+        get children() { return optional(array(activity)); },
+            ~~~~~~~~
+!!! error TS7023: 'children' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+    });
+    const emptyActivity: Output<typeof activity> = { name: "" };
+    declare const activityOutput: Output<typeof activity>;
+    const activityName: string = activityOutput.children![0].children![0].name;
+    activityOutput.children![0].children![0].missing;
+    
+    const linked = object({
+          ~~~~~~
+!!! error TS7022: 'linked' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+        name: text(),
+        get children() { return optional(linkedArray); },
+            ~~~~~~~~
+!!! error TS7023: 'children' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+    });
+    const linkedArray = array(linked);
+          ~~~~~~~~~~~
+!!! error TS7022: 'linkedArray' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+    declare const linkedOutput: Output<typeof linked>;
+    const linkedName: string = linkedOutput.children![0].children![0].name;
+    linkedOutput.children![0].children![0].missing;
+    
