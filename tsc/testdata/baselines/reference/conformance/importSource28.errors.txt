@@ -1,0 +1,67 @@
+index.ts(1,22): error TS100075: A declaration file cannot be imported with a source phase import.
+index.ts(2,22): error TS100075: A declaration file cannot be imported with a source phase import.
+index.ts(3,22): error TS100075: A declaration file cannot be imported with a source phase import.
+index.ts(4,22): error TS100075: A declaration file cannot be imported with a source phase import.
+index.ts(7,15): error TS100075: A declaration file cannot be imported with a source phase import.
+index.ts(8,15): error TS100075: A declaration file cannot be imported with a source phase import.
+index.ts(9,15): error TS100075: A declaration file cannot be imported with a source phase import.
+index.ts(10,15): error TS100075: A declaration file cannot be imported with a source phase import.
+index.ts(14,7): error TS2322: Type 'Module' is not assignable to type 'string'.
+
+
+==== index.ts (9 errors) ====
+    import source a from "./a.d.ts";
+                         ~~~~~~~~~~
+!!! error TS100075: A declaration file cannot be imported with a source phase import.
+    import source b from "./b.d.mts";
+                         ~~~~~~~~~~~
+!!! error TS100075: A declaration file cannot be imported with a source phase import.
+    import source c from "./c.d.cts";
+                         ~~~~~~~~~~~
+!!! error TS100075: A declaration file cannot be imported with a source phase import.
+    import source d from "./d.d.wasm.ts";
+                         ~~~~~~~~~~~~~~~
+!!! error TS100075: A declaration file cannot be imported with a source phase import.
+    export { a, b, c, d };
+    
+    import.source("./a.d.ts");
+                  ~~~~~~~~~~
+!!! error TS100075: A declaration file cannot be imported with a source phase import.
+    import.source("./b.d.mts");
+                  ~~~~~~~~~~~
+!!! error TS100075: A declaration file cannot be imported with a source phase import.
+    import.source("./c.d.cts");
+                  ~~~~~~~~~~~
+!!! error TS100075: A declaration file cannot be imported with a source phase import.
+    import.source("./d.d.wasm.ts");
+                  ~~~~~~~~~~~~~~~
+!!! error TS100075: A declaration file cannot be imported with a source phase import.
+    
+    import source valid from "./d.wasm";
+    const module: WebAssembly.Module = valid;
+    const wrong: string = valid;
+          ~~~~~
+!!! error TS2322: Type 'Module' is not assignable to type 'string'.
+    const promise: Promise<WebAssembly.Module> = import.source("./d.wasm");
+    
+==== a.d.ts (0 errors) ====
+    export {};
+    
+==== a.js (0 errors) ====
+    export {};
+    
+==== b.d.mts (0 errors) ====
+    export {};
+    
+==== b.mjs (0 errors) ====
+    export {};
+    
+==== c.d.cts (0 errors) ====
+    export {};
+    
+==== c.cjs (0 errors) ====
+    exports.value = 1;
+    
+==== d.d.wasm.ts (0 errors) ====
+    export {};
+    

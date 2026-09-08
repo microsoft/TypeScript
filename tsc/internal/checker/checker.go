@@ -14738,6 +14738,9 @@ func (c *Checker) getTargetOfImportClause(node *ast.Node) *ast.Symbol {
 	if node.AsImportClause().PhaseModifier == ast.KindSourceKeyword {
 		resolvedModule, sourceType := c.getResolvedSourcePhaseImport(specifier)
 		if resolvedModule != nil {
+			if sourceType == c.errorType {
+				return c.unknownSymbol
+			}
 			return c.getSourcePhaseImportTarget(specifier, nil /*moduleSymbol*/, resolvedModule.ResolvedFileName, sourceType)
 		}
 	}
@@ -14818,10 +14821,11 @@ func (c *Checker) getResolvedSourcePhaseImport(moduleSpecifier *ast.Node) (*modu
 		sourceFile := ast.GetSourceFileOfNode(moduleSpecifier)
 		resolvedModule := c.program.GetResolvedModuleFromModuleSpecifier(sourceFile, moduleSpecifier)
 		if resolvedModule.IsResolved() {
+			if tspath.IsDeclarationFileName(moduleSpecifier.Text()) {
+				c.error(moduleSpecifier, diagnostics.A_declaration_file_cannot_be_imported_with_a_source_phase_import)
+				return resolvedModule, c.errorType
+			}
 			if module.IsResolvedModuleForArbitraryExtension(resolvedModule, tspath.ExtensionWasm) {
-				if resolvedModule.ResolvedUsingTsExtension && tspath.IsDeclarationFileName(moduleSpecifier.Text()) {
-					return nil, nil
-				}
 				return resolvedModule, c.getGlobalWebAssemblyModuleType()
 			}
 			switch resolvedModule.Extension {
@@ -14850,10 +14854,14 @@ func (c *Checker) getGlobalWebAssemblyModuleTypeWorker() *Type {
 		return c.anyType
 	}
 	moduleTypeSymbol := c.getSymbol(c.getExportsOfSymbol(webAssemblySymbol), "Module", ast.SymbolFlagsType)
-	if moduleTypeSymbol == nil {
+	if moduleTypeSymbol == nil || moduleTypeSymbol.Flags&(ast.SymbolFlagsClass|ast.SymbolFlagsInterface) == 0 {
 		return c.anyType
 	}
-	return c.getDeclaredTypeOfSymbol(moduleTypeSymbol)
+	moduleType := c.getDeclaredTypeOfSymbol(moduleTypeSymbol)
+	if len(moduleType.AsInterfaceType().TypeParameters()) != 0 {
+		return c.anyType
+	}
+	return moduleType
 }
 
 func (c *Checker) getTargetOfModuleDefault(moduleSymbol *ast.Symbol, node *ast.Node, dontResolveAlias bool) *ast.Symbol {

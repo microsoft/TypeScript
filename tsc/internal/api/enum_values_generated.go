@@ -489,6 +489,7 @@ func main() {
 			"OverrideKeyword":                              toInt32(ast.KindOverrideKeyword),
 			"OfKeyword":                                    toInt32(ast.KindOfKeyword),
 			"DeferKeyword":                                 toInt32(ast.KindDeferKeyword),
+			"SourceKeyword":                                toInt32(ast.KindSourceKeyword),
 			"QualifiedName":                                toInt32(ast.KindQualifiedName),
 			"ComputedPropertyName":                         toInt32(ast.KindComputedPropertyName),
 			"TypeParameter":                                toInt32(ast.KindTypeParameter),

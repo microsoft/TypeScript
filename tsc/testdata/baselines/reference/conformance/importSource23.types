@@ -6,13 +6,13 @@ export {};
 
 === b.ts ===
 import source a from "./a.d.wasm.ts";
->a : WebAssembly.Module
+>a : any
 
 a;
->a : WebAssembly.Module
+>a : any
 
 import.source("./a.d.wasm.ts");
->import.source("./a.d.wasm.ts") : Promise<WebAssembly.Module>
+>import.source("./a.d.wasm.ts") : Promise<any>
 >source : any
 >"./a.d.wasm.ts" : "./a.d.wasm.ts"
 
