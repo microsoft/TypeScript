@@ -25,7 +25,8 @@ export type TypePropertyMethod = Exclude<APIMethodsReturning<TypeResponse>, Intr
 export type TypesPropertyMethod = APIMethodsReturning<TypeResponse[]>;
 export type IntrinsicTypeMethod = "getAnyType" | "getBigIntType" | "getBooleanType" | "getESSymbolType" | "getNeverType" | "getNonPrimitiveType" | "getNullType" | "getNumberType" | "getStringType" | "getUndefinedType" | "getUnknownType" | "getVoidType";
 
-export type APIRequest = { [K in keyof APIMethodInfo]: { method: K; params: APIMethodInfo[K]["params"]; }; }[keyof APIMethodInfo];
+type BatchableAPIMethod = Exclude<keyof APIMethodInfo, "batchRequests">;
+export type APIRequest = { [K in BatchableAPIMethod]: { method: K; params: APIMethodInfo[K]["params"]; }; }[BatchableAPIMethod];
 export type APIResponse<Request extends APIRequest = APIRequest> = Request extends APIRequest ?
         & {
             method: Request["method"];
