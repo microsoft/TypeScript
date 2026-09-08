@@ -1,0 +1,201 @@
+//// [tests/cases/conformance/es2026/jsonRawJSON2.ts] ////
+
+=== jsonRawJSON2.ts ===
+const a: RawJSON = JSON.rawJSON("1");
+>a : Symbol(a, Decl(jsonRawJSON2.ts, 0, 5))
+>RawJSON : Symbol(RawJSON, Decl(lib.es2026.json.d.ts, --, --))
+>JSON.rawJSON : Symbol(JSON.rawJSON, Decl(lib.es2026.json.d.ts, --, --))
+>JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2026.json.d.ts, --, --))
+>rawJSON : Symbol(JSON.rawJSON, Decl(lib.es2026.json.d.ts, --, --))
+
+const b: string = a.rawJSON;
+>b : Symbol(b, Decl(jsonRawJSON2.ts, 1, 5))
+>a.rawJSON : Symbol(RawJSON.rawJSON, Decl(lib.es2026.json.d.ts, --, --))
+>a : Symbol(a, Decl(jsonRawJSON2.ts, 0, 5))
+>rawJSON : Symbol(RawJSON.rawJSON, Decl(lib.es2026.json.d.ts, --, --))
+
+const c: object = a;
+>c : Symbol(c, Decl(jsonRawJSON2.ts, 2, 5))
+>a : Symbol(a, Decl(jsonRawJSON2.ts, 0, 5))
+
+const d: { readonly rawJSON: string } = a;
+>d : Symbol(d, Decl(jsonRawJSON2.ts, 3, 5))
+>rawJSON : Symbol(rawJSON, Decl(jsonRawJSON2.ts, 3, 10))
+>a : Symbol(a, Decl(jsonRawJSON2.ts, 0, 5))
+
+const e: RawJSON = a;
+>e : Symbol(e, Decl(jsonRawJSON2.ts, 4, 5))
+>RawJSON : Symbol(RawJSON, Decl(lib.es2026.json.d.ts, --, --))
+>a : Symbol(a, Decl(jsonRawJSON2.ts, 0, 5))
+
+const f: RawJSON = { rawJSON: "1" };
+>f : Symbol(f, Decl(jsonRawJSON2.ts, 6, 5))
+>RawJSON : Symbol(RawJSON, Decl(lib.es2026.json.d.ts, --, --))
+>rawJSON : Symbol(rawJSON, Decl(jsonRawJSON2.ts, 6, 20))
+
+const g = { rawJSON: "1" };
+>g : Symbol(g, Decl(jsonRawJSON2.ts, 7, 5))
+>rawJSON : Symbol(rawJSON, Decl(jsonRawJSON2.ts, 7, 11))
+
+const h: RawJSON = g;
+>h : Symbol(h, Decl(jsonRawJSON2.ts, 8, 5))
+>RawJSON : Symbol(RawJSON, Decl(lib.es2026.json.d.ts, --, --))
+>g : Symbol(g, Decl(jsonRawJSON2.ts, 7, 5))
+
+const i: RawJSON = Object.freeze(g);
+>i : Symbol(i, Decl(jsonRawJSON2.ts, 9, 5))
+>RawJSON : Symbol(RawJSON, Decl(lib.es2026.json.d.ts, --, --))
+>Object.freeze : Symbol(ObjectConstructor.freeze, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>freeze : Symbol(ObjectConstructor.freeze, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>g : Symbol(g, Decl(jsonRawJSON2.ts, 7, 5))
+
+const j: RawJSON = { ...a };
+>j : Symbol(j, Decl(jsonRawJSON2.ts, 10, 5))
+>RawJSON : Symbol(RawJSON, Decl(lib.es2026.json.d.ts, --, --))
+>a : Symbol(a, Decl(jsonRawJSON2.ts, 0, 5))
+
+const k: RawJSON = { rawJSON: "1", RawJSON_typekey: a };
+>k : Symbol(k, Decl(jsonRawJSON2.ts, 11, 5))
+>RawJSON : Symbol(RawJSON, Decl(lib.es2026.json.d.ts, --, --))
+>rawJSON : Symbol(rawJSON, Decl(jsonRawJSON2.ts, 11, 20))
+>RawJSON_typekey : Symbol(RawJSON_typekey, Decl(jsonRawJSON2.ts, 11, 34))
+>a : Symbol(a, Decl(jsonRawJSON2.ts, 0, 5))
+
+class A {
+>A : Symbol(A, Decl(jsonRawJSON2.ts, 11, 56))
+
+    private RawJSON_typekey!: RawJSON;
+>RawJSON_typekey : Symbol(A.RawJSON_typekey, Decl(jsonRawJSON2.ts, 13, 9))
+>RawJSON : Symbol(RawJSON, Decl(lib.es2026.json.d.ts, --, --))
+
+    readonly rawJSON = "1";
+>rawJSON : Symbol(A.rawJSON, Decl(jsonRawJSON2.ts, 14, 38))
+}
+const l: RawJSON = new A();
+>l : Symbol(l, Decl(jsonRawJSON2.ts, 17, 5))
+>RawJSON : Symbol(RawJSON, Decl(lib.es2026.json.d.ts, --, --))
+>A : Symbol(A, Decl(jsonRawJSON2.ts, 11, 56))
+
+class B implements RawJSON {
+>B : Symbol(B, Decl(jsonRawJSON2.ts, 17, 27))
+>RawJSON : Symbol(RawJSON, Decl(lib.es2026.json.d.ts, --, --))
+
+    readonly rawJSON = "1";
+>rawJSON : Symbol(B.rawJSON, Decl(jsonRawJSON2.ts, 18, 28))
+}
+
+a.rawJSON = "2";
+>a.rawJSON : Symbol(RawJSON.rawJSON, Decl(lib.es2026.json.d.ts, --, --))
+>a : Symbol(a, Decl(jsonRawJSON2.ts, 0, 5))
+>rawJSON : Symbol(RawJSON.rawJSON, Decl(lib.es2026.json.d.ts, --, --))
+
+a.RawJSON_typekey;
+>a.RawJSON_typekey : Symbol(RawJSONBase.RawJSON_typekey, Decl(lib.es2026.json.d.ts, --, --))
+>a : Symbol(a, Decl(jsonRawJSON2.ts, 0, 5))
+>RawJSON_typekey : Symbol(RawJSONBase.RawJSON_typekey, Decl(lib.es2026.json.d.ts, --, --))
+
+declare const m: keyof RawJSON;
+>m : Symbol(m, Decl(jsonRawJSON2.ts, 24, 13))
+>RawJSON : Symbol(RawJSON, Decl(lib.es2026.json.d.ts, --, --))
+
+const n: "rawJSON" = m;
+>n : Symbol(n, Decl(jsonRawJSON2.ts, 25, 5))
+>m : Symbol(m, Decl(jsonRawJSON2.ts, 24, 13))
+
+const o = RawJSON;
+>o : Symbol(o, Decl(jsonRawJSON2.ts, 27, 5))
+
+new RawJSON();
+RawJSONBase;
+declare const p: RawJSONBase;
+>p : Symbol(p, Decl(jsonRawJSON2.ts, 30, 13))
+>RawJSONBase : Symbol(RawJSONBase)
+
+class C extends RawJSON {}
+>C : Symbol(C, Decl(jsonRawJSON2.ts, 30, 29))
+
+declare const q: unknown;
+>q : Symbol(q, Decl(jsonRawJSON2.ts, 33, 13))
+
+if (JSON.isRawJSON(q)) {
+>JSON.isRawJSON : Symbol(JSON.isRawJSON, Decl(lib.es2026.json.d.ts, --, --))
+>JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2026.json.d.ts, --, --))
+>isRawJSON : Symbol(JSON.isRawJSON, Decl(lib.es2026.json.d.ts, --, --))
+>q : Symbol(q, Decl(jsonRawJSON2.ts, 33, 13))
+
+    const r: RawJSON = q;
+>r : Symbol(r, Decl(jsonRawJSON2.ts, 35, 9))
+>RawJSON : Symbol(RawJSON, Decl(lib.es2026.json.d.ts, --, --))
+>q : Symbol(q, Decl(jsonRawJSON2.ts, 33, 13))
+
+    const s: string = q.rawJSON;
+>s : Symbol(s, Decl(jsonRawJSON2.ts, 36, 9))
+>q.rawJSON : Symbol(RawJSON.rawJSON, Decl(lib.es2026.json.d.ts, --, --))
+>q : Symbol(q, Decl(jsonRawJSON2.ts, 33, 13))
+>rawJSON : Symbol(RawJSON.rawJSON, Decl(lib.es2026.json.d.ts, --, --))
+}
+if (JSON.isRawJSON(g)) {
+>JSON.isRawJSON : Symbol(JSON.isRawJSON, Decl(lib.es2026.json.d.ts, --, --))
+>JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2026.json.d.ts, --, --))
+>isRawJSON : Symbol(JSON.isRawJSON, Decl(lib.es2026.json.d.ts, --, --))
+>g : Symbol(g, Decl(jsonRawJSON2.ts, 7, 5))
+
+    const r: RawJSON = g;
+>r : Symbol(r, Decl(jsonRawJSON2.ts, 39, 9))
+>RawJSON : Symbol(RawJSON, Decl(lib.es2026.json.d.ts, --, --))
+>g : Symbol(g, Decl(jsonRawJSON2.ts, 7, 5))
+
+} else {
+    const s: string = g.rawJSON;
+>s : Symbol(s, Decl(jsonRawJSON2.ts, 41, 9))
+>g.rawJSON : Symbol(rawJSON, Decl(jsonRawJSON2.ts, 7, 11))
+>g : Symbol(g, Decl(jsonRawJSON2.ts, 7, 5))
+>rawJSON : Symbol(rawJSON, Decl(jsonRawJSON2.ts, 7, 11))
+}
+
+const t: Readonly<RawJSON> = a;
+>t : Symbol(t, Decl(jsonRawJSON2.ts, 44, 5))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>RawJSON : Symbol(RawJSON, Decl(lib.es2026.json.d.ts, --, --))
+>a : Symbol(a, Decl(jsonRawJSON2.ts, 0, 5))
+
+const u: RawJSON = t;
+>u : Symbol(u, Decl(jsonRawJSON2.ts, 45, 5))
+>RawJSON : Symbol(RawJSON, Decl(lib.es2026.json.d.ts, --, --))
+>t : Symbol(t, Decl(jsonRawJSON2.ts, 44, 5))
+
+const v: RawJSON = Object.freeze(a);
+>v : Symbol(v, Decl(jsonRawJSON2.ts, 46, 5))
+>RawJSON : Symbol(RawJSON, Decl(lib.es2026.json.d.ts, --, --))
+>Object.freeze : Symbol(ObjectConstructor.freeze, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>freeze : Symbol(ObjectConstructor.freeze, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(jsonRawJSON2.ts, 0, 5))
+
+const w: Pick<RawJSON, "rawJSON"> = a;
+>w : Symbol(w, Decl(jsonRawJSON2.ts, 47, 5))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>RawJSON : Symbol(RawJSON, Decl(lib.es2026.json.d.ts, --, --))
+>a : Symbol(a, Decl(jsonRawJSON2.ts, 0, 5))
+
+const x: RawJSON = w;
+>x : Symbol(x, Decl(jsonRawJSON2.ts, 48, 5))
+>RawJSON : Symbol(RawJSON, Decl(lib.es2026.json.d.ts, --, --))
+>w : Symbol(w, Decl(jsonRawJSON2.ts, 47, 5))
+
+// These generic signatures preserve the input type, not the runtime brand.
+const y: RawJSON = Object.assign({}, a);
+>y : Symbol(y, Decl(jsonRawJSON2.ts, 51, 5))
+>RawJSON : Symbol(RawJSON, Decl(lib.es2026.json.d.ts, --, --))
+>Object.assign : Symbol(ObjectConstructor.assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>assign : Symbol(ObjectConstructor.assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>a : Symbol(a, Decl(jsonRawJSON2.ts, 0, 5))
+
+const z: RawJSON = new Proxy(a, {});
+>z : Symbol(z, Decl(jsonRawJSON2.ts, 52, 5))
+>RawJSON : Symbol(RawJSON, Decl(lib.es2026.json.d.ts, --, --))
+>Proxy : Symbol(Proxy, Decl(lib.es2015.proxy.d.ts, --, --))
+>a : Symbol(a, Decl(jsonRawJSON2.ts, 0, 5))
+

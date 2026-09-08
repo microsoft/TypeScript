@@ -14,34 +14,43 @@ and limitations under the License.
 ***************************************************************************** */
 
 
-/**
- * A frozen object containing JSON text for a primitive value, created by `JSON.rawJSON()`.
- */
-interface RawJSON {
-    readonly rawJSON: string;
+export {};
+
+declare class RawJSONBase {
+    private constructor();
+    private RawJSON_typekey: RawJSONBase;
 }
 
-interface JSON {
+declare global {
     /**
-     * Converts a JavaScript Object Notation (JSON) string into an object.
-     * @param text A valid JSON string.
-     * @param reviver A function that transforms the results. This function is called for each member of the object.
-     * If a member contains nested objects, the nested objects are transformed before the parent object is.
-     * The context object has a `source` property when the property is unmodified and its value is primitive.
-     * @throws {SyntaxError} If `text` is not valid JSON.
+     * A frozen object containing JSON text for a primitive value, created by `JSON.rawJSON()`.
      */
-    parse(text: string, reviver: (this: any, key: string, value: any, context: { source?: string }) => any): any;
+    interface RawJSON extends RawJSONBase {
+        readonly rawJSON: string;
+    }
 
-    /**
-     * Creates a frozen object containing JSON text for a primitive value.
-     * @param text Valid JSON text representing a string, number, boolean, or null value.
-     * @throws {SyntaxError} If `text` is not valid JSON text for a primitive value.
-     */
-    rawJSON(text: string): RawJSON;
+    interface JSON {
+        /**
+         * Converts a JavaScript Object Notation (JSON) string into an object.
+         * @param text A valid JSON string.
+         * @param reviver A function that transforms the results. This function is called for each member of the object.
+         * If a member contains nested objects, the nested objects are transformed before the parent object is.
+         * The context object has a `source` property when the property is unmodified and its value is primitive.
+         * @throws {SyntaxError} If `text` is not valid JSON.
+         */
+        parse(text: string, reviver: (this: any, key: string, value: any, context: { source?: string }) => any): any;
 
-    /**
-     * Indicates whether the provided value is an object returned by `JSON.rawJSON()`.
-     * @param value The value to test.
-     */
-    isRawJSON(value: unknown): value is RawJSON;
+        /**
+         * Creates a frozen object containing JSON text for a primitive value.
+         * @param text Valid JSON text representing a string, number, boolean, or null value.
+         * @throws {SyntaxError} If `text` is not valid JSON text for a primitive value.
+         */
+        rawJSON(text: string): RawJSON;
+
+        /**
+         * Indicates whether the provided value is an object returned by `JSON.rawJSON()`.
+         * @param value The value to test.
+         */
+        isRawJSON(value: unknown): value is RawJSON;
+    }
 }

@@ -1,0 +1,122 @@
+jsonRawJSON2.ts(7,7): error TS2741: Property 'RawJSON_typekey' is missing in type '{ rawJSON: string; }' but required in type 'RawJSON'.
+jsonRawJSON2.ts(9,7): error TS2741: Property 'RawJSON_typekey' is missing in type '{ rawJSON: string; }' but required in type 'RawJSON'.
+jsonRawJSON2.ts(10,7): error TS2741: Property 'RawJSON_typekey' is missing in type 'Readonly<{ rawJSON: string; }>' but required in type 'RawJSON'.
+jsonRawJSON2.ts(11,7): error TS2741: Property 'RawJSON_typekey' is missing in type '{ rawJSON: string; }' but required in type 'RawJSON'.
+jsonRawJSON2.ts(12,7): error TS2322: Type '{ rawJSON: string; RawJSON_typekey: RawJSON; }' is not assignable to type 'RawJSON'.
+  Property 'RawJSON_typekey' is private in type 'RawJSON' but not in type '{ rawJSON: string; RawJSON_typekey: RawJSON; }'.
+jsonRawJSON2.ts(18,7): error TS2322: Type 'A' is not assignable to type 'RawJSON'.
+  Types have separate declarations of a private property 'RawJSON_typekey'.
+jsonRawJSON2.ts(19,7): error TS2420: Class 'B' incorrectly implements interface 'RawJSON'.
+  Property 'RawJSON_typekey' is missing in type 'B' but required in type 'RawJSON'.
+jsonRawJSON2.ts(23,3): error TS2540: Cannot assign to 'rawJSON' because it is a read-only property.
+jsonRawJSON2.ts(24,3): error TS2341: Property 'RawJSON_typekey' is private and only accessible within class 'RawJSONBase'.
+jsonRawJSON2.ts(28,11): error TS2693: 'RawJSON' only refers to a type, but is being used as a value here.
+jsonRawJSON2.ts(29,5): error TS2693: 'RawJSON' only refers to a type, but is being used as a value here.
+jsonRawJSON2.ts(30,1): error TS2304: Cannot find name 'RawJSONBase'.
+jsonRawJSON2.ts(31,18): error TS2304: Cannot find name 'RawJSONBase'.
+jsonRawJSON2.ts(32,17): error TS2689: Cannot extend an interface 'RawJSON'. Did you mean 'implements'?
+jsonRawJSON2.ts(46,7): error TS2741: Property 'RawJSON_typekey' is missing in type 'Readonly<RawJSON>' but required in type 'RawJSON'.
+jsonRawJSON2.ts(47,7): error TS2741: Property 'RawJSON_typekey' is missing in type 'Readonly<RawJSON>' but required in type 'RawJSON'.
+jsonRawJSON2.ts(49,7): error TS2741: Property 'RawJSON_typekey' is missing in type 'Pick<RawJSON, "rawJSON">' but required in type 'RawJSON'.
+
+
+==== jsonRawJSON2.ts (17 errors) ====
+    const a: RawJSON = JSON.rawJSON("1");
+    const b: string = a.rawJSON;
+    const c: object = a;
+    const d: { readonly rawJSON: string } = a;
+    const e: RawJSON = a;
+    
+    const f: RawJSON = { rawJSON: "1" };
+          ~
+!!! error TS2741: Property 'RawJSON_typekey' is missing in type '{ rawJSON: string; }' but required in type 'RawJSON'.
+!!! related TS2728 lib.es2026.json.d.ts:--:--: 'RawJSON_typekey' is declared here.
+    const g = { rawJSON: "1" };
+    const h: RawJSON = g;
+          ~
+!!! error TS2741: Property 'RawJSON_typekey' is missing in type '{ rawJSON: string; }' but required in type 'RawJSON'.
+!!! related TS2728 lib.es2026.json.d.ts:--:--: 'RawJSON_typekey' is declared here.
+    const i: RawJSON = Object.freeze(g);
+          ~
+!!! error TS2741: Property 'RawJSON_typekey' is missing in type 'Readonly<{ rawJSON: string; }>' but required in type 'RawJSON'.
+!!! related TS2728 lib.es2026.json.d.ts:--:--: 'RawJSON_typekey' is declared here.
+    const j: RawJSON = { ...a };
+          ~
+!!! error TS2741: Property 'RawJSON_typekey' is missing in type '{ rawJSON: string; }' but required in type 'RawJSON'.
+!!! related TS2728 lib.es2026.json.d.ts:--:--: 'RawJSON_typekey' is declared here.
+    const k: RawJSON = { rawJSON: "1", RawJSON_typekey: a };
+          ~
+!!! error TS2322: Type '{ rawJSON: string; RawJSON_typekey: RawJSON; }' is not assignable to type 'RawJSON'.
+!!! error TS2322:   Property 'RawJSON_typekey' is private in type 'RawJSON' but not in type '{ rawJSON: string; RawJSON_typekey: RawJSON; }'.
+    
+    class A {
+        private RawJSON_typekey!: RawJSON;
+        readonly rawJSON = "1";
+    }
+    const l: RawJSON = new A();
+          ~
+!!! error TS2322: Type 'A' is not assignable to type 'RawJSON'.
+!!! error TS2322:   Types have separate declarations of a private property 'RawJSON_typekey'.
+    class B implements RawJSON {
+          ~
+!!! error TS2420: Class 'B' incorrectly implements interface 'RawJSON'.
+!!! error TS2420:   Property 'RawJSON_typekey' is missing in type 'B' but required in type 'RawJSON'.
+!!! related TS2728 lib.es2026.json.d.ts:--:--: 'RawJSON_typekey' is declared here.
+        readonly rawJSON = "1";
+    }
+    
+    a.rawJSON = "2";
+      ~~~~~~~
+!!! error TS2540: Cannot assign to 'rawJSON' because it is a read-only property.
+    a.RawJSON_typekey;
+      ~~~~~~~~~~~~~~~
+!!! error TS2341: Property 'RawJSON_typekey' is private and only accessible within class 'RawJSONBase'.
+    declare const m: keyof RawJSON;
+    const n: "rawJSON" = m;
+    
+    const o = RawJSON;
+              ~~~~~~~
+!!! error TS2693: 'RawJSON' only refers to a type, but is being used as a value here.
+    new RawJSON();
+        ~~~~~~~
+!!! error TS2693: 'RawJSON' only refers to a type, but is being used as a value here.
+    RawJSONBase;
+    ~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'RawJSONBase'.
+    declare const p: RawJSONBase;
+                     ~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'RawJSONBase'.
+    class C extends RawJSON {}
+                    ~~~~~~~
+!!! error TS2689: Cannot extend an interface 'RawJSON'. Did you mean 'implements'?
+    
+    declare const q: unknown;
+    if (JSON.isRawJSON(q)) {
+        const r: RawJSON = q;
+        const s: string = q.rawJSON;
+    }
+    if (JSON.isRawJSON(g)) {
+        const r: RawJSON = g;
+    } else {
+        const s: string = g.rawJSON;
+    }
+    
+    const t: Readonly<RawJSON> = a;
+    const u: RawJSON = t;
+          ~
+!!! error TS2741: Property 'RawJSON_typekey' is missing in type 'Readonly<RawJSON>' but required in type 'RawJSON'.
+!!! related TS2728 lib.es2026.json.d.ts:--:--: 'RawJSON_typekey' is declared here.
+    const v: RawJSON = Object.freeze(a);
+          ~
+!!! error TS2741: Property 'RawJSON_typekey' is missing in type 'Readonly<RawJSON>' but required in type 'RawJSON'.
+!!! related TS2728 lib.es2026.json.d.ts:--:--: 'RawJSON_typekey' is declared here.
+    const w: Pick<RawJSON, "rawJSON"> = a;
+    const x: RawJSON = w;
+          ~
+!!! error TS2741: Property 'RawJSON_typekey' is missing in type 'Pick<RawJSON, "rawJSON">' but required in type 'RawJSON'.
+!!! related TS2728 lib.es2026.json.d.ts:--:--: 'RawJSON_typekey' is declared here.
+    
+    // These generic signatures preserve the input type, not the runtime brand.
+    const y: RawJSON = Object.assign({}, a);
+    const z: RawJSON = new Proxy(a, {});
+    

@@ -1,0 +1,69 @@
+//// [tests/cases/conformance/es2026/jsonRawJSON3.ts] ////
+
+=== jsonRawJSON3.ts ===
+export const a = JSON.rawJSON("1");
+>a : RawJSON
+>JSON.rawJSON("1") : RawJSON
+>JSON.rawJSON : (text: string) => RawJSON
+>JSON : JSON
+>rawJSON : (text: string) => RawJSON
+>"1" : "1"
+
+export const b = { a };
+>b : { a: RawJSON; }
+>{ a } : { a: RawJSON; }
+>a : RawJSON
+
+export const c = [a];
+>c : RawJSON[]
+>[a] : RawJSON[]
+>a : RawJSON
+
+export function f1() {
+>f1 : () => RawJSON
+
+    return JSON.rawJSON("null");
+>JSON.rawJSON("null") : RawJSON
+>JSON.rawJSON : (text: string) => RawJSON
+>JSON : JSON
+>rawJSON : (text: string) => RawJSON
+>"null" : "null"
+}
+
+export function f2(x: unknown) {
+>f2 : (x: unknown) => RawJSON | undefined
+>x : unknown
+
+    return JSON.isRawJSON(x) ? x : undefined;
+>JSON.isRawJSON(x) ? x : undefined : RawJSON | undefined
+>JSON.isRawJSON(x) : boolean
+>JSON.isRawJSON : (value: unknown) => value is RawJSON
+>JSON : JSON
+>isRawJSON : (value: unknown) => value is RawJSON
+>x : unknown
+>x : RawJSON
+>undefined : undefined
+}
+
+export function f3(x: RawJSON): string {
+>f3 : (x: RawJSON) => string
+>x : RawJSON
+
+    return x.rawJSON;
+>x.rawJSON : string
+>x : RawJSON
+>rawJSON : string
+}
+
+export class C {
+>C : C
+
+    readonly a = JSON.rawJSON("true");
+>a : RawJSON
+>JSON.rawJSON("true") : RawJSON
+>JSON.rawJSON : (text: string) => RawJSON
+>JSON : JSON
+>rawJSON : (text: string) => RawJSON
+>"true" : "true"
+}
+
