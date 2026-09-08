@@ -4,7 +4,7 @@ import type {
     APIResponse,
 } from "../proto.ts";
 
-export function cacheGeneratorMethod<Sync extends (...args: any[]) => any, Gen extends (...args: any[]) => APIRequestGenerator>(
+export function cacheGeneratorMethod<Sync extends (...args: any[]) => any, Gen extends (...args: any[]) => AnyAPIRequestGenerator>(
     owner: object,
     name: PropertyKey,
     sync: Sync,
@@ -24,15 +24,15 @@ export function* apiRequest(method: PropertyKey, params: unknown): Generator<{ m
 }
 const deferredGeneratorMarker: unique symbol = Symbol();
 interface DeferredAPIRequest {
-    readonly deferred: UndeferredAPIRequestGenerator;
+    readonly deferred: APIRequestGenerator;
 }
 type APIRequestGeneratorYield = APIRequest | readonly APIRequest[] | DeferredAPIRequest;
-export type UndeferredAPIRequestGenerator<Return = any> = Generator<APIRequestGeneratorYield, Return, any>;
+export type APIRequestGenerator<Return = any> = Generator<APIRequestGeneratorYield, Return, any>;
 export type DeferredAPIRequestGenerator = Generator<DeferredAPIRequest, void, unknown> & { readonly [deferredGeneratorMarker]: true; };
-export type APIRequestGenerator<Return = any> = UndeferredAPIRequestGenerator<Return> | DeferredAPIRequestGenerator;
+export type AnyAPIRequestGenerator<Return = any> = APIRequestGenerator<Return> | DeferredAPIRequestGenerator;
 type GeneratorReturn<T> = T extends Generator<any, infer R, any> ? R : never;
-export type ExecutedGeneratorsResults<T extends readonly APIRequestGenerator[]> = number extends T["length"] ? GeneratorReturn<Exclude<T[number], DeferredAPIRequestGenerator>>[]
-    : T extends readonly [infer Head extends APIRequestGenerator, ...infer Tail extends readonly APIRequestGenerator[]] ? Head extends DeferredAPIRequestGenerator ? ExecutedGeneratorsResults<Tail> : [GeneratorReturn<Head>, ...ExecutedGeneratorsResults<Tail>]
+export type ExecutedGeneratorsResults<T extends readonly AnyAPIRequestGenerator[]> = number extends T["length"] ? GeneratorReturn<Exclude<T[number], DeferredAPIRequestGenerator>>[]
+    : T extends readonly [infer Head extends AnyAPIRequestGenerator, ...infer Tail extends readonly AnyAPIRequestGenerator[]] ? Head extends DeferredAPIRequestGenerator ? ExecutedGeneratorsResults<Tail> : [GeneratorReturn<Head>, ...ExecutedGeneratorsResults<Tail>]
     : [];
 
 interface GeneratorResponse {
@@ -45,17 +45,17 @@ interface RequestRunnerOptions {
     getDeduplicationKey?: (request: APIRequest) => string | undefined;
 }
 
-function createRequestRunner<T extends readonly APIRequestGenerator[]>(requestGenerators: T, options: RequestRunnerOptions = {}) {
-    const registeredGenerators = new Set<APIRequestGenerator>();
-    const requestsByGenerator = new Map<APIRequestGenerator, APIRequestGeneratorYield>();
-    const resultsByGenerator = new Map<APIRequestGenerator, unknown>();
+function createRequestRunner<T extends readonly AnyAPIRequestGenerator[]>(requestGenerators: T, options: RequestRunnerOptions = {}) {
+    const registeredGenerators = new Set<AnyAPIRequestGenerator>();
+    const requestsByGenerator = new Map<AnyAPIRequestGenerator, APIRequestGeneratorYield>();
+    const resultsByGenerator = new Map<AnyAPIRequestGenerator, unknown>();
     for (const generator of requestGenerators) {
         addGenerator(generator);
     }
     const requestRounds = runRequestRounds();
     return { requestRounds, getResults };
 
-    function advanceGenerator(generator: APIRequestGenerator, value?: unknown, error?: string): void {
+    function advanceGenerator(generator: AnyAPIRequestGenerator, value?: unknown, error?: string): void {
         let state = error === undefined
             ? generator.next(value)
             : generator.throw(new Error(error));
@@ -72,7 +72,7 @@ function createRequestRunner<T extends readonly APIRequestGenerator[]>(requestGe
         }
     }
 
-    function addGenerator(generator: APIRequestGenerator): void {
+    function addGenerator(generator: AnyAPIRequestGenerator): void {
         if (registeredGenerators.has(generator)) throw new Error("Cannot execute the same generator instance more than once");
         registeredGenerators.add(generator);
         advanceGenerator(generator);
@@ -104,7 +104,7 @@ function createRequestRunner<T extends readonly APIRequestGenerator[]>(requestGe
             };
             // TODO: Use Iterator.prototype.filter when target >= ES2025
             const roundGenerators = [...registeredGenerators].filter(generator => requestsByGenerator.has(generator));
-            const responseIndices = new Map<APIRequestGenerator, number | readonly number[]>();
+            const responseIndices = new Map<AnyAPIRequestGenerator, number | readonly number[]>();
             for (const generator of roundGenerators) {
                 const request = requestsByGenerator.get(generator) as APIRequest | readonly APIRequest[];
                 responseIndices.set(generator, isRequestGroup(request) ? request.map(addRequest) : addRequest(request));
@@ -131,18 +131,18 @@ function createRequestRunner<T extends readonly APIRequestGenerator[]>(requestGe
     }
 }
 
-export function all<const T extends readonly APIRequestGenerator[]>(
+export function all<const T extends readonly AnyAPIRequestGenerator[]>(
     ...requestGenerators: T
-): UndeferredAPIRequestGenerator<ExecutedGeneratorsResults<T>>;
-export function* all<T extends readonly APIRequestGenerator[]>(
+): APIRequestGenerator<ExecutedGeneratorsResults<T>>;
+export function* all<T extends readonly AnyAPIRequestGenerator[]>(
     ...requestGenerators: T
-): UndeferredAPIRequestGenerator<ExecutedGeneratorsResults<T>> {
+): APIRequestGenerator<ExecutedGeneratorsResults<T>> {
     const { requestRounds, getResults } = createRequestRunner(requestGenerators);
     yield* requestRounds;
     return getResults();
 }
 
-export function executeRequestGenerators<T extends readonly APIRequestGenerator[]>(
+export function executeRequestGenerators<T extends readonly AnyAPIRequestGenerator[]>(
     requestGenerators: T,
     executeRequests: (requests: APIRequest[]) => readonly GeneratorResponse[],
 ): ExecutedGeneratorsResults<T> {
@@ -159,7 +159,7 @@ function isDeferredAPIRequest(request: APIRequestGeneratorYield): request is Def
     return !Array.isArray(request) && "deferred" in request;
 }
 
-function isDeferredGenerator(generator: APIRequestGenerator): generator is DeferredAPIRequestGenerator {
+function isDeferredGenerator(generator: AnyAPIRequestGenerator): generator is DeferredAPIRequestGenerator {
     return deferredGeneratorMarker in generator;
 }
 
@@ -176,7 +176,7 @@ function getRequestDeduplicationKey(request: APIRequest): string | undefined {
     }
 }
 
-export function defer(gen: UndeferredAPIRequestGenerator): DeferredAPIRequestGenerator {
+export function defer(gen: APIRequestGenerator): DeferredAPIRequestGenerator {
     const deferred = (function* (): Generator<DeferredAPIRequest, void, unknown> {
         yield { deferred: gen };
     })() as DeferredAPIRequestGenerator;

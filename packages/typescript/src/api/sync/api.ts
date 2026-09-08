@@ -237,9 +237,9 @@ export interface TranspileOutput {
     sourceMapText?: string;
 }
 
-export { all, defer } from "./generatorSupport.ts";
+export { all, type AnyAPIRequestGenerator, type APIRequestGenerator, defer, type DeferredAPIRequestGenerator, type ExecutedGeneratorsResults } from "./generatorSupport.ts";
 import {
-    type APIRequestGenerator,
+    type AnyAPIRequestGenerator,
     type ExecutedGeneratorsResults,
     executeRequestGenerators,
 } from "./generatorSupport.ts";
@@ -287,7 +287,7 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         );
     }
 
-    batch<T extends readonly APIRequestGenerator[]>(...requestGenerators: T): ExecutedGeneratorsResults<T> {
+    batch<T extends readonly AnyAPIRequestGenerator[]>(...requestGenerators: T): ExecutedGeneratorsResults<T> {
         return executeRequestGenerators(requestGenerators, requests => this.client.batchRequests(requests).responses);
     }
 
