@@ -8,6 +8,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/bundled"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/projecttestutil"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"gotest.tools/v3/assert"
 )
 
@@ -282,4 +283,72 @@ func TestUpdateSnapshotDerivesFromExplicitBase(t *testing.T) {
 	assert.Equal(t, len(updated.Projects), 1)
 	assert.Equal(t, updated.Projects[0].ConfigFileName, firstConfig)
 	assert.Equal(t, len(baseResp.Projects), 2)
+}
+
+func TestUpdateSnapshotProjectOpensAreIdempotent(t *testing.T) {
+	t.Parallel()
+
+	const configFileName = "/home/projects/p/tsconfig.json"
+	projectSession, _ := projecttestutil.Setup(map[string]any{
+		configFileName:              `{}`,
+		"/home/projects/p/index.ts": `export const value = 1;`,
+	})
+	defer projectSession.Close()
+	session := NewLSPSession(projectSession, nil)
+	defer session.Close()
+	ctx := context.Background()
+	open := SnapshotRequestChangesParams{OpenProjects: []DocumentIdentifier{{FileName: configFileName}}}
+
+	created, err := session.handleCreateSnapshot(ctx, &CreateSnapshotParams{SnapshotRequestChangesParams: open})
+	assert.NilError(t, err)
+	reopened, err := session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{
+		Snapshot: created.Snapshot,
+		Changes:  &CreateSnapshotParams{SnapshotRequestChangesParams: open},
+	})
+	assert.NilError(t, err)
+	closed, err := session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{
+		Snapshot: reopened.Snapshot,
+		Changes: &CreateSnapshotParams{SnapshotRequestChangesParams: SnapshotRequestChangesParams{
+			CloseProjects: []DocumentIdentifier{{FileName: configFileName}},
+		}},
+	})
+	assert.NilError(t, err)
+	closedSnapshot, err := session.getSnapshotData(closed.Snapshot)
+	assert.NilError(t, err)
+	assert.Assert(t, closedSnapshot.snapshot.ProjectCollection.ConfiguredProject(tspath.Path(configFileName)) == nil)
+	assert.DeepEqual(t, closed.Changes.RemovedProjects, []ProjectID{ProjectID(configFileName)})
+}
+
+func TestUpdateSnapshotFileOpensAreIdempotent(t *testing.T) {
+	t.Parallel()
+
+	const fileName = "/home/projects/p/index.ts"
+	projectSession, _ := projecttestutil.Setup(map[string]any{
+		"/home/projects/p/tsconfig.json": `{}`,
+		fileName:                         `export const value = 1;`,
+	})
+	defer projectSession.Close()
+	session := NewLSPSession(projectSession, nil)
+	defer session.Close()
+	ctx := context.Background()
+	open := SnapshotRequestChangesParams{OpenFiles: []DocumentIdentifier{{FileName: fileName}}}
+
+	created, err := session.handleCreateSnapshot(ctx, &CreateSnapshotParams{SnapshotRequestChangesParams: open})
+	assert.NilError(t, err)
+	reopened, err := session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{
+		Snapshot: created.Snapshot,
+		Changes:  &CreateSnapshotParams{SnapshotRequestChangesParams: open},
+	})
+	assert.NilError(t, err)
+	closed, err := session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{
+		Snapshot: reopened.Snapshot,
+		Changes: &CreateSnapshotParams{SnapshotRequestChangesParams: SnapshotRequestChangesParams{
+			CloseFiles: []DocumentIdentifier{{FileName: fileName}},
+		}},
+	})
+	assert.NilError(t, err)
+	closedSnapshot, err := session.getSnapshotData(closed.Snapshot)
+	assert.NilError(t, err)
+	assert.Equal(t, len(closedSnapshot.snapshot.ProjectCollection.Projects()), 0)
+	assert.DeepEqual(t, closed.Changes.RemovedProjects, []ProjectID{ProjectID("/home/projects/p/tsconfig.json")})
 }

@@ -45,8 +45,7 @@ type ProjectCollection struct {
 // other, and it is carried across snapshots so API-opened resources stay loaded.
 type APIState struct {
 	// openProjects is the ref-counted set of projects to keep open for API
-	// clients, keyed by config file path. The value is the number of outstanding
-	// API opens.
+	// clients, keyed by config file path.
 	openProjects map[tspath.Path]int
 	// openFiles is the ref-counted set of files to keep open for API clients,
 	// keyed by file path. Files with no configured project are loaded into the

@@ -46,6 +46,9 @@ type snapshotData struct {
 	snapshot *project.Snapshot
 	refCount int
 
+	openProjects collections.Set[tspath.Path]
+	openFiles    collections.Set[tspath.Path]
+
 	// Symbol IDs come from ast.GetSymbolId, a global atomic counter, so the same
 	// *ast.Symbol pointer always has the same unique ID across all projects in the
 	// snapshot. Symbols are registered snapshot-wide to ensure identity semantics:
@@ -1078,6 +1081,7 @@ func (s *Session) handleCreateSnapshot(ctx context.Context, params *CreateSnapsh
 		return nil, err
 	}
 
+	openState := s.reconcileSnapshotOpens(apiRequest, snapshotOpenState{})
 	root := s.snapshotHost.NewRootSnapshot()
 	snapshot, err := s.snapshotHost.CloneSnapshot(ctx, root, s.toFileChangeSummary(params.FileChanges), apiRequest)
 	root.Deref()
@@ -1091,7 +1095,7 @@ func (s *Session) handleCreateSnapshot(ctx context.Context, params *CreateSnapsh
 		snapshot.Deref()
 		return nil, err
 	}
-	s.registerSnapshot(snapshot)
+	s.registerSnapshot(snapshot, openState)
 	return response, nil
 }
 
@@ -1110,6 +1114,7 @@ func (s *Session) handleUpdateSnapshot(ctx context.Context, params *UpdateSnapsh
 	if err != nil {
 		return nil, err
 	}
+	openState := s.reconcileSnapshotOpens(apiRequest, snapshotOpenState{openProjects: baseSD.openProjects, openFiles: baseSD.openFiles})
 	snapshot, err := s.snapshotHost.CloneSnapshot(ctx, baseSD.snapshot, s.toFileChangeSummary(changes.FileChanges), apiRequest)
 	if err != nil {
 		snapshot.Deref()
@@ -1121,7 +1126,7 @@ func (s *Session) handleUpdateSnapshot(ctx context.Context, params *UpdateSnapsh
 		snapshot.Deref()
 		return nil, err
 	}
-	s.registerSnapshot(snapshot)
+	s.registerSnapshot(snapshot, openState)
 	return response, nil
 }
 
@@ -1130,6 +1135,10 @@ func (s *Session) toAPISnapshotRequest(changes *SnapshotRequestChangesParams) (*
 
 	for _, p := range changes.OpenProjects {
 		configFileName := p.ToAbsoluteFileName(s.currentDirectory())
+		if apiRequest.EnsurePrograms == nil {
+			apiRequest.EnsurePrograms = collections.NewSetWithSizeHint[tspath.Path](len(changes.OpenProjects))
+		}
+		apiRequest.EnsurePrograms.Add(s.toPath(configFileName))
 		if apiRequest.OpenProjects == nil {
 			apiRequest.OpenProjects = collections.NewSetWithSizeHint[string](len(changes.OpenProjects))
 		}
@@ -1146,6 +1155,10 @@ func (s *Session) toAPISnapshotRequest(changes *SnapshotRequestChangesParams) (*
 
 	for _, f := range changes.OpenFiles {
 		uri := f.ToURI(s.currentDirectory())
+		if apiRequest.EnsureFiles == nil {
+			apiRequest.EnsureFiles = collections.NewSetWithSizeHint[lsproto.DocumentUri](len(changes.OpenFiles))
+		}
+		apiRequest.EnsureFiles.Add(uri)
 		if apiRequest.OpenFiles == nil {
 			apiRequest.OpenFiles = collections.NewSetWithSizeHint[lsproto.DocumentUri](len(changes.OpenFiles))
 		}
@@ -1173,19 +1186,23 @@ func (s *Session) toAPISnapshotRequest(changes *SnapshotRequestChangesParams) (*
 			ConfigFileParsingDiagnostics: core.Map(programParams.Options.ConfigFileParsingDiagnostics, func(d *DiagnosticResponse) *ast.Diagnostic { return d.ToDiagnostic() }),
 		}
 	}
-	apiRequest.RemovePrograms = make([]int, len(changes.RemovePrograms))
-	for i, program := range changes.RemovePrograms {
+	if len(changes.RemovePrograms) > 0 {
+		apiRequest.RemovePrograms = collections.NewSetWithSizeHint[int](len(changes.RemovePrograms))
+	}
+	for _, program := range changes.RemovePrograms {
 		programID, ok := project.SyntheticProgramID(parseProjectHandle(program))
 		if !ok {
 			return nil, fmt.Errorf("%w: invalid synthetic project handle: %s", ErrClientError, program)
 		}
-		apiRequest.RemovePrograms[i] = programID
+		apiRequest.RemovePrograms.Add(programID)
 	}
 	if changes.EnsurePrograms != nil {
 		apiRequest.EnsureAllPrograms = changes.EnsurePrograms.All
-		apiRequest.EnsurePrograms = make([]tspath.Path, len(changes.EnsurePrograms.Projects))
-		for i, program := range changes.EnsurePrograms.Projects {
-			apiRequest.EnsurePrograms[i] = parseProjectHandle(program)
+		if len(changes.EnsurePrograms.Projects) > 0 && apiRequest.EnsurePrograms == nil {
+			apiRequest.EnsurePrograms = collections.NewSetWithSizeHint[tspath.Path](len(changes.EnsurePrograms.Projects))
+		}
+		for _, program := range changes.EnsurePrograms.Projects {
+			apiRequest.EnsurePrograms.Add(parseProjectHandle(program))
 		}
 	}
 	return apiRequest, nil
@@ -1237,13 +1254,11 @@ func (s *Session) toLanguageServerSnapshotUpdate(changes *SnapshotRequestChanges
 		}
 	}
 
-	removePrograms := apiRequest.RemovePrograms[:0]
-	for _, programID := range apiRequest.RemovePrograms {
-		if s.createdPrograms.Has(programID) {
-			removePrograms = append(removePrograms, programID)
+	for programID := range apiRequest.RemovePrograms.Keys() {
+		if !s.createdPrograms.Has(programID) {
+			apiRequest.RemovePrograms.Delete(programID)
 		}
 	}
-	apiRequest.RemovePrograms = removePrograms
 	return update, nil
 }
 
@@ -1260,7 +1275,7 @@ func (u *languageServerSnapshotUpdate) commit(s *Session, snapshot *project.Snap
 	for _, path := range u.closedFiles {
 		s.openFiles.Delete(path)
 	}
-	for _, programID := range u.request.RemovePrograms {
+	for programID := range u.request.RemovePrograms.Keys() {
 		s.createdPrograms.Delete(programID)
 	}
 	for _, program := range snapshot.CreatedPrograms() {
@@ -1272,7 +1287,50 @@ func (u *languageServerSnapshotUpdate) commit(s *Session, snapshot *project.Snap
 	}
 }
 
-func (s *Session) registerSnapshot(snapshot *project.Snapshot) {
+type snapshotOpenState struct {
+	openProjects collections.Set[tspath.Path]
+	openFiles    collections.Set[tspath.Path]
+}
+
+func (s *Session) reconcileSnapshotOpens(apiRequest *project.APISnapshotRequest, base snapshotOpenState) snapshotOpenState {
+	state := snapshotOpenState{
+		openProjects: *base.openProjects.Clone(),
+		openFiles:    *base.openFiles.Clone(),
+	}
+	for path := range apiRequest.CloseProjects.Keys() {
+		if state.openProjects.Has(path) {
+			state.openProjects.Delete(path)
+		} else {
+			apiRequest.CloseProjects.Delete(path)
+		}
+	}
+	for configFileName := range apiRequest.OpenProjects.Keys() {
+		path := s.toPath(configFileName)
+		if state.openProjects.Has(path) {
+			apiRequest.OpenProjects.Delete(configFileName)
+		} else {
+			state.openProjects.Add(path)
+		}
+	}
+	for path := range apiRequest.CloseFiles.Keys() {
+		if state.openFiles.Has(path) {
+			state.openFiles.Delete(path)
+		} else {
+			apiRequest.CloseFiles.Delete(path)
+		}
+	}
+	for uri := range apiRequest.OpenFiles.Keys() {
+		path := s.toPath(uri.FileName())
+		if state.openFiles.Has(path) {
+			apiRequest.OpenFiles.Delete(uri)
+		} else {
+			state.openFiles.Add(path)
+		}
+	}
+	return state
+}
+
+func (s *Session) registerSnapshot(snapshot *project.Snapshot, openState snapshotOpenState) {
 	// If the same snapshot ID is returned (no changes), we increment the ref count
 	// so each client-side Snapshot can be disposed independently.
 	handle := snapshotHandle(snapshot)
@@ -1287,6 +1345,8 @@ func (s *Session) registerSnapshot(snapshot *project.Snapshot) {
 		sd = &snapshotData{
 			snapshot:                snapshot,
 			refCount:                1,
+			openProjects:            *openState.openProjects.Clone(),
+			openFiles:               *openState.openFiles.Clone(),
 			symbolRegistry:          make(map[SymbolID]*ast.Symbol),
 			symbolCanonicalProjects: make(map[SymbolID]ProjectID),
 			projectRegistries:       make(map[ProjectID]*projectRegistryData),
@@ -1334,7 +1394,7 @@ func (s *Session) handleGetCurrentLanguageServerSnapshot(ctx context.Context, pa
 		snapshot.Deref()
 		return nil, err
 	}
-	s.registerSnapshot(snapshot)
+	s.registerSnapshot(snapshot, snapshotOpenState{openProjects: s.openProjects, openFiles: s.openFiles})
 	return response, nil
 }
 
@@ -1355,29 +1415,12 @@ func (s *Session) handleUpdateTemporarySnapshot(ctx context.Context, params *Upd
 		return nil, fmt.Errorf("%w: failed to update temporary snapshot: %w", ErrClientError, err)
 	}
 
-	handle := snapshotHandle(snapshot)
-	s.snapshotsMu.Lock()
-	sd, exists := s.snapshots[handle]
-	if exists {
-		snapshot.Deref()
-		sd.refCount++
-	} else {
-		sd = &snapshotData{
-			snapshot:                snapshot,
-			refCount:                1,
-			symbolRegistry:          make(map[SymbolID]*ast.Symbol),
-			symbolCanonicalProjects: make(map[SymbolID]ProjectID),
-			projectRegistries:       make(map[ProjectID]*projectRegistryData),
-		}
-		s.snapshots[handle] = sd
-	}
-	s.snapshotsMu.Unlock()
-
 	response, err := s.createSnapshotResponse(snapshot, baseSD.snapshot, nil)
 	if err != nil {
 		snapshot.Deref()
 		return nil, err
 	}
+	s.registerSnapshot(snapshot, snapshotOpenState{openProjects: baseSD.openProjects, openFiles: baseSD.openFiles})
 	return response, nil
 }
 
@@ -3965,9 +4008,9 @@ func (s *Session) releaseLanguageServerRefs() {
 		apiRequest.CloseFiles = s.openFiles.Clone()
 	}
 	if s.createdPrograms.Len() > 0 {
-		apiRequest.RemovePrograms = make([]int, 0, s.createdPrograms.Len())
+		apiRequest.RemovePrograms = collections.NewSetWithSizeHint[int](s.createdPrograms.Len())
 		for programID := range s.createdPrograms.Keys() {
-			apiRequest.RemovePrograms = append(apiRequest.RemovePrograms, programID)
+			apiRequest.RemovePrograms.Add(programID)
 		}
 	}
 	snapshot, err := s.projectSession.APIUpdate(s.withLocale(context.Background()), project.FileChangeSummary{}, apiRequest)

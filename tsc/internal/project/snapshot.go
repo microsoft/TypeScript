@@ -280,7 +280,6 @@ func (s *Snapshot) ReadDirectory(currentDir string, path string, extensions []st
 }
 
 type APICreateProgramRequest struct {
-	ProgramID                    int
 	RootFileNames                []string
 	CompilerOptions              *core.CompilerOptions
 	ProjectReferences            []*core.ProjectReference
@@ -293,9 +292,10 @@ type APISnapshotRequest struct {
 	OpenFiles         *collections.Set[lsproto.DocumentUri]
 	CloseFiles        *collections.Set[tspath.Path]
 	CreatePrograms    []*APICreateProgramRequest
-	RemovePrograms    []int
-	EnsurePrograms    []tspath.Path
+	RemovePrograms    *collections.Set[int]
+	EnsurePrograms    *collections.Set[tspath.Path]
 	EnsureAllPrograms bool
+	EnsureFiles       *collections.Set[lsproto.DocumentUri]
 }
 
 type ProjectTreeRequest struct {

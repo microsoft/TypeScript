@@ -177,8 +177,6 @@ func (b *ProjectCollectionBuilder) HandleAPIRequest(apiRequest *APISnapshotReque
 	var projectsToClose map[tspath.Path]struct{}
 	if apiRequest.CloseProjects != nil {
 		for projectPath := range apiRequest.CloseProjects.Keys() {
-			// Ref-counted close: only actually close the project once the last
-			// API client that opened it releases it.
 			if count := b.apiState.openProjects[projectPath]; count > 1 {
 				b.apiState.openProjects[projectPath] = count - 1
 			} else if count == 1 {
@@ -210,7 +208,6 @@ func (b *ProjectCollectionBuilder) HandleAPIRequest(apiRequest *APISnapshotReque
 
 	if apiRequest.CloseFiles != nil {
 		for path := range apiRequest.CloseFiles.Keys() {
-			// Ref-counted close mirroring projects above.
 			if entry, ok := b.apiState.openFiles[path]; ok {
 				if entry.refCount > 1 {
 					entry.refCount--
@@ -273,7 +270,7 @@ func (b *ProjectCollectionBuilder) HandleAPIRequest(apiRequest *APISnapshotReque
 	} else if apiRequest.CloseFiles != nil {
 		b.cleanupConfiguredProjects(nil, logger)
 	}
-	for _, programID := range apiRequest.RemovePrograms {
+	for programID := range apiRequest.RemovePrograms.Keys() {
 		projectPath := b.toPath(syntheticProjectName(programID))
 		project, ok := b.syntheticProjects.Load(projectPath)
 		if !ok {
@@ -283,24 +280,9 @@ func (b *ProjectCollectionBuilder) HandleAPIRequest(apiRequest *APISnapshotReque
 	}
 	createdPrograms := make([]*Project, len(apiRequest.CreatePrograms))
 	entries := make([]*dirty.SyncMapEntry[tspath.Path, *Project], len(apiRequest.CreatePrograms))
-	updatedPrograms := make(map[int]struct{}, len(apiRequest.CreatePrograms))
 	for i, request := range apiRequest.CreatePrograms {
-		projectName := ""
-		if request.ProgramID != 0 {
-			if _, duplicate := updatedPrograms[request.ProgramID]; duplicate {
-				return fmt.Errorf("synthetic program updated more than once: %d", request.ProgramID)
-			}
-			updatedPrograms[request.ProgramID] = struct{}{}
-			projectName = syntheticProjectName(request.ProgramID)
-			if _, ok := b.syntheticProjects.Load(b.toPath(projectName)); !ok {
-				return fmt.Errorf("synthetic program not found for update: %d", request.ProgramID)
-			}
-		}
-		if projectName == "" {
-			projectName = b.nextSyntheticProjectName()
-		}
 		entry := b.updateOrCreateSyntheticProject(
-			projectName,
+			b.nextSyntheticProjectName(),
 			slices.Clone(request.RootFileNames),
 			request.CompilerOptions,
 			request.ProjectReferences,
@@ -321,7 +303,10 @@ func (b *ProjectCollectionBuilder) HandleAPIRequest(apiRequest *APISnapshotReque
 	}
 	wg.Wait()
 	b.createdPrograms = createdPrograms
-	for _, projectID := range apiRequest.EnsurePrograms {
+	for uri := range apiRequest.EnsureFiles.Keys() {
+		b.DidRequestFile(uri, false /*configuredProjectsOnly*/, logger)
+	}
+	for projectID := range apiRequest.EnsurePrograms.Keys() {
 		b.DidRequestProject(projectID, logger)
 	}
 	if apiRequest.EnsureAllPrograms {

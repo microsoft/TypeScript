@@ -553,15 +553,7 @@ func TestRefCountingCaches(t *testing.T) {
 			assert.NilError(t, session.fs.fs.WriteFile(libBaseConfigPath, `{"compilerOptions":{"composite":true,"noLib":true,"strict":true}}`))
 			var fileChanges FileChangeSummary
 			fileChanges.Changed.Add(lsproto.DocumentUri("file://" + libBaseConfigPath))
-			programID, ok := SyntheticProgramID(programProject.ID())
-			assert.Assert(t, ok)
-			updateRequest := &APISnapshotRequest{CreatePrograms: []*APICreateProgramRequest{{
-				ProgramID:                    programID,
-				RootFileNames:                programProject.CommandLine.FileNames(),
-				CompilerOptions:              programProject.CommandLine.CompilerOptions(),
-				ProjectReferences:            programProject.CommandLine.ProjectReferences(),
-				ConfigFileParsingDiagnostics: programProject.CommandLine.Errors,
-			}}}
+			updateRequest := &APISnapshotRequest{EnsurePrograms: collections.NewSetFromItems(programProject.ID())}
 			updatedProgramSnapshot, err := session.CloneSnapshot(
 				ctx,
 				programSnapshot,
@@ -570,7 +562,7 @@ func TestRefCountingCaches(t *testing.T) {
 			)
 			assert.NilError(t, err)
 			defer updatedProgramSnapshot.Deref()
-			updatedProgramProject := updatedProgramSnapshot.CreatedPrograms()[0]
+			updatedProgramProject := updatedProgramSnapshot.ProjectCollection.GetProjectByPath(programProject.ID())
 			assert.Assert(t, updatedProgramProject != nil)
 			assert.Assert(t, updatedProgramProject.Program != programProject.Program)
 			updatedReferences := updatedProgramProject.Program.GetResolvedProjectReferences()

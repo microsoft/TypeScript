@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/microsoft/TypeScript/tsc/internal/bundled"
+	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
@@ -84,7 +85,7 @@ func TestSnapshot(t *testing.T) {
 
 		firstProgramID, ok := SyntheticProgramID(firstProject.ID())
 		assert.Assert(t, ok)
-		removeRequest := &APISnapshotRequest{RemovePrograms: []int{firstProgramID}}
+		removeRequest := &APISnapshotRequest{RemovePrograms: collections.NewSetFromItems(firstProgramID)}
 		removedSnapshot, err := session.CloneSnapshot(
 			ctx,
 			createdSnapshot,
