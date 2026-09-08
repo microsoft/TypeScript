@@ -40,6 +40,9 @@ npx hereby validate --api # Also run the TypeScript API tests
 ```
 instead. API tests are not run by `npx hereby validate` without `--api`.
 
+If as part of your change you edit tools, benchmarks, or other ancillary parts of the repository, you should instead run `npx hereby validate --all` to ensure *everything* is working correctly. This will
+most accurately approximate the results of a full CI run.
+
 ## Compiler Features, Fixes, and Tests
 
 When fixing a bug or implementing a new feature, at least one minimal test case should always be added in advance to verify the fix.

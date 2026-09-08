@@ -104,6 +104,7 @@ const { values: rawOptions } = parseArgs({
         tests: { type: "string", short: "t" },
         fix: { type: "boolean" },
         api: { type: "boolean" },
+        all: { type: "boolean" },
         debug: { type: "boolean" },
         dirty: { type: "boolean" },
         release: { type: "boolean" },
@@ -968,13 +969,15 @@ export const generateAST = task({
     run: () => run("node", ["./tools/scripts/tsc/generate.ts"]),
 });
 
+async function runGenerateAPI() {
+    await run("go", ["-C", "./tools", "run", "./gen-proto", "../tsc/internal/api/proto.go", "../packages/typescript/src/api/proto.generated.ts"]);
+    await run("npx", ["dprint", "fmt", "packages/typescript/src/api/proto.generated.ts"]);
+}
+
 export const generateAPI = task({
     name: "generate:api",
     description: "Generates API files from internal/api/proto.go and internal/api/session.go.",
-    run: async () => {
-        await run("go", ["-C", "./tools", "run", "./gen-proto", "../tsc/internal/api/proto.go", "../packages/typescript/src/api/proto.generated.ts"]);
-        await run("npx", ["dprint", "fmt", "packages/typescript/src/api/proto.generated.ts"]);
-    },
+    run: runGenerateAPI,
 });
 
 // ── Vendored npm dependencies ───────────────────────────────────
@@ -1187,13 +1190,16 @@ export const testTsc = task({
     run: runTests,
 });
 
+export const testExtension = task({
+    name: "test:extension",
+    description: "Runs the VS Code extension tests.",
+    run: runTestExtension,
+});
+
 export const test = task({
     name: "test",
-    description: "Runs all tests. This is the most typical test task to need.",
-    run: async () => {
-        await runTests();
-        await runTestExtension();
-    },
+    description: "Alias for test:tsc.",
+    dependencies: [testTsc],
 });
 
 async function runTestBenchmarks() {
@@ -1224,12 +1230,6 @@ export const testTools = task({
     run: runTestTools,
 });
 
-export const testExtension = task({
-    name: "test:extension",
-    description: "Runs the VS Code extension tests.",
-    run: runTestExtension,
-});
-
 export const buildAPI = task({
     name: "build:api",
     description: "Builds @typescript/typescript JS API.",
@@ -1238,13 +1238,15 @@ export const buildAPI = task({
     },
 });
 
+async function runBuildAPITests() {
+    await run("npm", ["run", "-w", "@typescript/typescript", "build:test"]);
+}
+
 export const buildAPITests = task({
     name: "build:api:test",
     description: "Builds the @typescript/typescript JS API tests.",
     dependencies: [generateEnums, generateAPI],
-    run: async () => {
-        await run("npm", ["run", "-w", "@typescript/typescript", "build:test"]);
-    },
+    run: runBuildAPITests,
 });
 
 export const testAPI = task({
@@ -1367,7 +1369,7 @@ async function runFormat() {
 
 export const validate = task({
     name: "validate",
-    description: "Builds, tests, lints, and formats the repo. Pass --api to include API tests.",
+    description: "Builds, tests, lints, and formats the repo. Pass --api to include API tests, or --all to include all ancilliary repository tests.",
     dependencies: [build],
     run: async () => {
         /** @type {{ name: string; error: unknown }[]} */
@@ -1383,12 +1385,18 @@ export const validate = task({
             }
         };
 
-        await runValidation("test", async () => {
-            await runTests();
-            await runTestExtension();
-        });
-        if (options.api) {
+        await runValidation("test:tsc", runTests);
+        await runValidation("test:extension", runTestExtension);
+        if (options.api || options.all) {
+            await runGenerateEnums(); // prereqs for test:api not included in `validate` deps
+            await runGenerateAPI();
+            await runBuildAPITests();
             await runValidation("test:api", runTestAPI);
+        }
+        if (options.all) {
+            await runValidation("test:benchmarks", runTestBenchmarks);
+            await runValidation("test:tools", runTestTools);
+            await runValidation("test:smoke", runSmokeTest); // in CI this is run with `--race`
         }
         await runValidation("lint", runLint);
         await runValidation("format", runFormat);
@@ -1400,6 +1408,18 @@ export const validate = task({
             );
         }
     },
+});
+
+async function runSmokeTest() {
+    await run("./built/local/tsc", ["-p", "./tsc/testdata/fixtures/compiler", "--noEmit", "--singleThreaded"]);
+    await run("./built/local/tsc", ["-p", "./tsc/testdata/fixtures/compiler", "--noEmit"]);
+}
+
+export const smokeTest = task({
+    name: "test:smoke",
+    description: "Runs the smoke tests.",
+    dependencies: [build],
+    run: runSmokeTest,
 });
 
 export const checkFormat = task({
