@@ -22,7 +22,6 @@ func TestFileChangesIncludeDirectoryTombstones(t *testing.T) {
 		},
 	}, vfstest.FromMap(map[string]string{}, true), "/")
 	assert.NilError(t, err)
-	defer base.Release()
 
 	var summary project.FileChangeSummary
 	addFileChanges(&summary, &RequestFileSystem{

@@ -9,6 +9,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/microsoft/TypeScript/tsc/internal/project"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 )
@@ -113,8 +114,8 @@ type requestDirectoryBuilder struct {
 	directories map[tspath.Path]string
 }
 
-func getRequestFileSystem(fileSystem vfs.FS) *Handle {
-	requestFileSystem, _ := fileSystem.(*Handle)
+func getRequestFileSystem(fileSystem vfs.FS) *requestFileSystem {
+	requestFileSystem, _ := fileSystem.(*requestFileSystem)
 	return requestFileSystem
 }
 
@@ -126,6 +127,38 @@ func getHostFileSystem(fileSystem vfs.FS) vfs.FS {
 		}
 		fileSystem = requestFileSystem.baseFileSystem()
 	}
+}
+
+// NewForUpdate creates a request filesystem for a snapshot update. Layers over
+// request filesystems are compacted eagerly so the result does not retain its
+// base snapshot's filesystem.
+func NewForUpdate(params *RequestFileSystem, base vfs.FS, currentDirectory string, fileChanges *project.FileChangeSummary, hasBaseSnapshot bool) (vfs.FS, error) {
+	if params == nil {
+		return base, nil
+	}
+	baseFileSystem := base
+	if params.Kind == KindFull {
+		baseFileSystem = getHostFileSystem(base)
+	}
+	if params.Kind == KindLayer {
+		addFileChanges(fileChanges, params, baseFileSystem, currentDirectory)
+	}
+	fileSystem, err := newRequestFileSystemWorker(params, baseFileSystem, currentDirectory, hasBaseSnapshot && params.Kind == KindLayer)
+	if err != nil {
+		return nil, err
+	}
+	baseRequestFileSystem := getRequestFileSystem(baseFileSystem)
+	if baseRequestFileSystem != nil {
+		compacted := fileSystem.applyTo(*baseRequestFileSystem)
+		return &compacted, nil
+	}
+	return fileSystem, nil
+}
+
+// HasFullFileSystem reports whether fileSystem contains a complete request filesystem.
+func HasFullFileSystem(fileSystem vfs.FS) bool {
+	requestFileSystem := getRequestFileSystem(fileSystem)
+	return requestFileSystem != nil && requestFileSystem.kind == KindFull
 }
 
 func newRequestFileSystemWorker(params *RequestFileSystem, base vfs.FS, currentDirectory string, layered bool) (*requestFileSystem, error) {
@@ -476,7 +509,7 @@ func (s requestFileSystem) resolvePathForOverlay(path string) resolvedRequestPat
 
 func (s requestFileSystem) resolveBasePath(path string) resolvedRequestPath {
 	if base := getRequestFileSystem(s.baseFileSystem()); base != nil {
-		return base.load().resolvePathForOverlay(path)
+		return base.resolvePathForOverlay(path)
 	}
 	return resolvedRequestPath{path: path, ok: true}
 }
@@ -505,7 +538,7 @@ func (s requestFileSystem) aliasesForPath(path string) []string {
 		if base == nil {
 			break
 		}
-		current = *base.load()
+		current = *base
 	}
 
 	seen := map[tspath.Path]struct{}{s.toPath(path): {}}
@@ -684,6 +717,11 @@ func (s requestFileSystem) GetAccessibleEntries(directoryName string) vfs.Entrie
 	}
 
 	localEntries, hasExplicitListing, hasLocalEntries := s.getLocalEntries(resolved.path)
+	if resolved.host {
+		localEntries = vfs.Entries{}
+		hasExplicitListing = false
+		hasLocalEntries = false
+	}
 	sealedListing := s.hasSealedListing(resolved.path)
 	if !resolved.followedSymlink && s.isRemoved(directoryName) && !hasLocalEntries {
 		return vfs.Entries{Symlinks: map[string]struct{}{}}

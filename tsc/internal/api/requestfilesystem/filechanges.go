@@ -29,7 +29,7 @@ func addFileChanges(summary *project.FileChangeSummary, request *RequestFileSyst
 	addChangeAndAliases := func(fileName string, deleted bool) {
 		addChange(fileName, deleted)
 		if baseRequestFS != nil {
-			for _, alias := range baseRequestFS.load().aliasesForPath(fileName) {
+			for _, alias := range baseRequestFS.aliasesForPath(fileName) {
 				addChange(alias, deleted)
 			}
 		}
@@ -55,7 +55,7 @@ func addFileChanges(summary *project.FileChangeSummary, request *RequestFileSyst
 		addChangeAndAliases(absolutePath, true)
 		summary.Created.Add(lsconv.FileNameToDocumentURI(absolutePath))
 		if baseRequestFS != nil {
-			for _, alias := range baseRequestFS.load().aliasesForPath(absolutePath) {
+			for _, alias := range baseRequestFS.aliasesForPath(absolutePath) {
 				summary.Created.Add(lsconv.FileNameToDocumentURI(alias))
 			}
 		}
