@@ -15,7 +15,7 @@ A test case isn't necessarily a new file; it could be a modification to an exist
 Ensure that at least one test in the full run fails - you might be operating on a bad PR that didn't actually introduce a failing scenario!
 If zero tests failed, abort and post a message explaining what you observed.
 Remember that baseline tests do not "fail" in the traditional sense; they are used to verify that the output matches the expected baseline.
-You should examine the PR description to determine what a passing and failing baseline would look like.
+You should examine the PR description to determine what the desired passing baseline should look like.
 
 Then, add your fix.
 You can break this apart into multiple commits if it's more logical to review that way; use your judgment.
