@@ -607,19 +607,15 @@ export interface SnapshotOpenedFileOperation {
     readonly project: Project;
 }
 
-type CreatedProgramsFor<Programs extends readonly unknown[]> = {
-    readonly [Index in keyof Programs]: Program<SyntheticProjectId>;
-};
-
-type OpenedFilesFor<Files extends readonly unknown[]> = {
-    readonly [Index in keyof Files]: SnapshotOpenedFileOperation;
+type MapTupleTo<Tuple extends readonly unknown[], Result> = {
+    readonly [Index in keyof Tuple]: Result;
 };
 
 export type SnapshotForOperation<Params extends CreateSnapshotParams> = Snapshot & {
     readonly operation:
         & SnapshotOperation
-        & (Params extends { createPrograms: infer Programs extends readonly unknown[]; } ? { readonly createdPrograms: CreatedProgramsFor<Programs>; } : unknown)
-        & (Params extends { openFiles: infer Files extends readonly unknown[]; } ? { readonly openedFiles: OpenedFilesFor<Files>; } : unknown);
+        & (Params extends { createPrograms: infer Programs extends readonly unknown[]; } ? { readonly createdPrograms: MapTupleTo<Programs, Program<SyntheticProjectId>>; } : unknown)
+        & (Params extends { openFiles: infer Files extends readonly unknown[]; } ? { readonly openedFiles: MapTupleTo<Files, SnapshotOpenedFileOperation>; } : unknown);
 };
 
 export class Snapshot {
