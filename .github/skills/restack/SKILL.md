@@ -1,6 +1,6 @@
 ---
 name: restack
-description: How to re-stack your PR commits to fit standard TypeScript PR format. Only do this when instructed to.
+description: Only invoke when explicitly instructed to
 ---
 
 You need to "re-stack" your commits to match the following format:
