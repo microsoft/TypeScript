@@ -226,21 +226,6 @@ async function runWithConcurrencyLimit(tasks, concurrency) {
     }
 }
 
-const tools = new Map([
-    ["gotest.tools/gotestsum", "latest"],
-]);
-
-const hasGotestsum = memoize(() => {
-    try {
-        return xSync("gotestsum", ["--version"], {
-            nodeOptions: { stdio: "ignore" },
-        }).exitCode === 0;
-    }
-    catch {
-        return false;
-    }
-});
-
 const builtLocal = "./built/local";
 
 const libsDir = "./tsc/internal/bundled/libs";
@@ -1014,14 +999,15 @@ const ensureCoverageDirExists = memoize(() => {
 
 /**
  * @param {string} taskName
+ * @param {string} packagePattern
  */
-function goTestFlags(taskName) {
+function goTestFlags(taskName, packagePattern = "./...") {
     ensureCoverageDirExists();
     return [
         ...goBuildFlags,
         ...goBuildTags(),
         ...(options.tests ? [`-run=${options.tests}`] : []),
-        ...(options.coverage ? [`-coverprofile=${path.join(coverageDir, "coverage." + taskName + ".out")}`, "-coverpkg=./..."] : []),
+        ...(options.coverage ? [`-coverprofile=${path.join(coverageDir, "coverage." + taskName + ".out")}`, `-coverpkg=${packagePattern}`] : []),
     ];
 }
 
@@ -1103,10 +1089,20 @@ async function checkUnusedBaselines(trackingDir) {
 
 /**
  * @param {string} taskName
+ * @param {string} packagePattern
+ * @param {string} [toolModfile]
  */
-function gotestsum(taskName) {
-    const args = hasGotestsum() ? ["gotestsum", ...goTestSumFlags, "--"] : ["go", "test"];
-    return args.concat(goTestFlags(taskName));
+function gotestsum(taskName, packagePattern, toolModfile) {
+    return [
+        "go",
+        "tool",
+        ...(toolModfile ? [`-modfile=${toolModfile}`] : []),
+        "gotestsum",
+        ...goTestSumFlags,
+        "--",
+        ...goTestFlags(taskName, packagePattern),
+        packagePattern,
+    ];
 }
 
 /**
@@ -1137,10 +1133,11 @@ async function runTests() {
     try {
         const testEnv = {
             ...goTestEnv,
+            GOWORK: "off",
             ...(trackingDir ? { TSGO_BASELINE_TRACKING_DIR: trackingDir } : {}),
         };
-        const command = gotestsum("tests");
-        await run(command[0], [...command.slice(1), "./...", ...(isCI ? ["--timeout=45m"] : [])], {
+        const command = gotestsum("tests", "./...", "../tools/go.mod");
+        await run(command[0], [...command.slice(1), ...(isCI ? ["--timeout=45m"] : [])], {
             env: testEnv,
             cwd: "./tsc",
         });
@@ -1208,8 +1205,8 @@ export const testBenchmarks = task({
 });
 
 async function runTestTools() {
-    const command = gotestsum("tools");
-    await run(command[0], [...command.slice(1), "./..."], { env: goTestEnv, cwd: path.join(__dirname, "tools") });
+    const command = gotestsum("tools", "./...");
+    await run(command[0], command.slice(1), { env: goTestEnv, cwd: path.join(__dirname, "tools") });
 }
 
 async function runTestAPI() {
@@ -1346,12 +1343,7 @@ async function runLint() {
 export const installTools = task({
     name: "install-tools",
     description: "Installs optional tools for developing within the repo.",
-    run: async () => {
-        await Promise.all([
-            ...[...tools].map(([tool, version]) => run("go", ["install", tool + (version ? `@${version}` : "")])),
-            buildCustomLinter(),
-        ]);
-    },
+    run: buildCustomLinter,
 });
 
 export const format = task({
