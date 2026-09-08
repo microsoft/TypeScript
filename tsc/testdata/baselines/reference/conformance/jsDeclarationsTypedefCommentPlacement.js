@@ -415,6 +415,12 @@ import type { Point } from "./typedef.js";
 export declare const p: Point;
 //// [overload.d.ts]
 export declare function noop(): void;
+/**
+ * Takes a string.
+ * @overload
+ * @param {string} x
+ * @returns {string}
+ */
 export declare function l(x: string): string;
 //// [documentationTags.d.ts]
 export declare function noop(): void;

@@ -464,26 +464,27 @@ func (tx *DeclarationTransformer) transformAndReplaceLatePaintedStatements(state
 	return tx.Factory().NewNodeList(results)
 }
 
-// Tags that reparse into a top-level declaration the containing JSDoc comment can be claimed for.
+// Tags that reparse into a top-level declaration the containing JSDoc comment can be claimed for. An
+// overload signature sees a comment synthesized from its own `@overload` tag alone, see
+// reparseOverloadJSDoc, so the host's `@param` tags never reach this predicate through it.
 func declaresOwnDeclaration(tag *ast.Node) bool {
 	switch tag.Kind {
-	case ast.KindJSDocTypedefTag, ast.KindJSDocCallbackTag, ast.KindJSDocImportTag:
+	case ast.KindJSDocTypedefTag, ast.KindJSDocCallbackTag, ast.KindJSDocImportTag, ast.KindJSDocOverloadTag:
 		return true
 	}
 	return false
 }
 
-// Tags whose meaning belongs to a node other than the declarations reparsed out of the containing
-// comment: those the parser applies to the comment's host - see reparseHosted - plus `@overload`,
-// which is emitted as a signature of its own. `@template` is the exception, since alongside a
-// `@typedef` or `@callback` it declares type parameters of the type being declared and leaves the
-// host none, per gatherTypeParameters.
+// Tags whose meaning belongs to the node the containing comment is attached to - the ones the parser
+// applies to it, see reparseHosted. `@template` is the exception, since alongside a `@typedef` or
+// `@callback` it declares type parameters of the type being declared and leaves the host none, per
+// gatherTypeParameters.
 func documentsAnotherNode(tag *ast.Node, declaresType bool) bool {
 	switch tag.Kind {
 	case ast.KindJSDocTypeTag, ast.KindJSDocSatisfiesTag, ast.KindJSDocParameterTag, ast.KindJSDocThisTag,
 		ast.KindJSDocReturnTag, ast.KindJSDocReadonlyTag, ast.KindJSDocPrivateTag, ast.KindJSDocPublicTag,
 		ast.KindJSDocProtectedTag, ast.KindJSDocOverrideTag, ast.KindJSDocImplementsTag,
-		ast.KindJSDocAugmentsTag, ast.KindJSDocOverloadTag:
+		ast.KindJSDocAugmentsTag:
 		return true
 	case ast.KindJSDocTemplateTag:
 		return !declaresType
@@ -532,8 +533,8 @@ func (tx *DeclarationTransformer) emittedForm(statement *ast.Node) *ast.Node {
 	return replacement
 }
 
-// Declarations reparsed from JSDoc (`@typedef`, `@callback`, `@import`) take the text range of the
-// tag they came from, which sits inside the comment. The printer therefore finds no leading comment
+// Declarations reparsed from JSDoc (`@typedef`, `@callback`, `@import`, `@overload`) take the text
+// range of the tag they came from, which sits inside the comment. The printer therefore finds no leading comment
 // for them and hands the comment to the following statement instead, documenting the wrong
 // declaration. Claim each such comment for the first declaration reparsed out of it.
 func (tx *DeclarationTransformer) claimReparsedJSDocComments(statements []*ast.Node) {
