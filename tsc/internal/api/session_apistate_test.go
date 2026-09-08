@@ -107,6 +107,37 @@ func TestGetCurrentLanguageServerSnapshotFlushesPendingLSPChanges(t *testing.T) 
 	assert.Equal(t, snapshot.snapshot.GetFile(fileName).Content(), `export const value: string = "ok";`)
 }
 
+func TestGetCurrentLanguageServerSnapshotReportsOpenedFilesInRequestOrder(t *testing.T) {
+	t.Parallel()
+
+	const configuredFile = "/home/projects/p/index.ts"
+	const inferredFile = "/home/projects/loose.ts"
+	projectSession, _ := projecttestutil.Setup(map[string]any{
+		"/home/projects/p/tsconfig.json": `{}`,
+		configuredFile:                   `export const configured = 1;`,
+		inferredFile:                     `export const inferred = 1;`,
+	})
+	defer projectSession.Close()
+	session := NewLSPSession(projectSession, nil)
+	defer session.Close()
+
+	changes := &LanguageServerSnapshotChanges{SnapshotRequestChangesParams: SnapshotRequestChangesParams{
+		OpenFiles: []DocumentIdentifier{{FileName: inferredFile}, {FileName: configuredFile}},
+	}}
+	first, err := session.handleGetCurrentLanguageServerSnapshot(context.Background(), &GetCurrentLanguageServerSnapshotParams{Changes: changes})
+	assert.NilError(t, err)
+	assert.Equal(t, len(*first.Operation.OpenedFiles), 2)
+	assert.Equal(t, (*first.Operation.OpenedFiles)[0].Project, ProjectID("/dev/null/inferred"))
+	assert.Equal(t, (*first.Operation.OpenedFiles)[1].Project, ProjectID("/home/projects/p/tsconfig.json"))
+
+	reopened, err := session.handleGetCurrentLanguageServerSnapshot(context.Background(), &GetCurrentLanguageServerSnapshotParams{
+		BaseSnapshot: first.Snapshot,
+		Changes:      changes,
+	})
+	assert.NilError(t, err)
+	assert.DeepEqual(t, *reopened.Operation.OpenedFiles, *first.Operation.OpenedFiles)
+}
+
 func TestGetCurrentLanguageServerSnapshotCreatesAndRemovesPrograms(t *testing.T) {
 	t.Parallel()
 

@@ -350,6 +350,7 @@ type typeRenderer struct {
 	seen               map[*types.TypeName]bool
 	names              map[string]*types.TypeName
 	imports            map[string][]string
+	typeImports        map[string][]string
 	docs               map[types.Object]string
 	packages           map[string]*packages.Package
 	documentIdentifier *types.TypeName
@@ -361,6 +362,7 @@ func newTypeRenderer(apiPackage *packages.Package) *typeRenderer {
 		seen:           make(map[*types.TypeName]bool),
 		names:          make(map[string]*types.TypeName),
 		imports:        make(map[string][]string),
+		typeImports:    make(map[string][]string),
 		docs:           make(map[types.Object]string),
 		packages:       make(map[string]*packages.Package),
 	}
@@ -494,6 +496,11 @@ func (r *typeRenderer) namedType(named *types.Named) string {
 		return "DocumentIdentifier"
 	case r.apiPackagePath + ".EnsurePrograms":
 		return "EnsurePrograms"
+	case r.apiPackagePath + ".ProjectID":
+		r.importTypeOnly("Path", "../ast/index.ts")
+		return "ProjectId"
+	case r.apiPackagePath + ".SyntheticProjectID":
+		return "SyntheticProjectId"
 	case "github.com/microsoft/TypeScript/tsc/internal/packagejson.JSONValue":
 		return "unknown"
 	case "github.com/microsoft/TypeScript/tsc/internal/json.Value":
@@ -599,7 +606,11 @@ func (r *typeRenderer) declarations() (string, error) {
 		writeDoc(&out, "", r.docs[r.documentIdentifier])
 		out.WriteString("export type DocumentIdentifier = string | { uri: string; };\n\n")
 	}
-	out.WriteString("export type EnsurePrograms = true | readonly string[];\n\n")
+	out.WriteString("export type EnsurePrograms = true | readonly ProjectId[];\n\n")
+	out.WriteString("export type InferredProjectId = string & { __inferredProjectIdBrand: any; };\n")
+	out.WriteString("export type ConfiguredProjectId = Path & { __configuredProjectIdBrand: any; };\n")
+	out.WriteString("export type SyntheticProjectId = string & { __syntheticProjectIdBrand: any; };\n")
+	out.WriteString("export type ProjectId = InferredProjectId | ConfiguredProjectId | SyntheticProjectId;\n\n")
 	for len(r.queued) > 0 {
 		named := r.queued[0]
 		r.queued = r.queued[1:]
@@ -663,6 +674,16 @@ func jsDocLine(line string) string {
 
 func (r *typeRenderer) importDeclarations() string {
 	var out bytes.Buffer
+	typePaths := make([]string, 0, len(r.typeImports))
+	for path := range r.typeImports {
+		typePaths = append(typePaths, path)
+	}
+	sort.Strings(typePaths)
+	for _, path := range typePaths {
+		names := r.typeImports[path]
+		sort.Strings(names)
+		fmt.Fprintf(&out, "import type { %s } from %q;\n", strings.Join(names, ", "), path)
+	}
 	paths := make([]string, 0, len(r.imports))
 	for path := range r.imports {
 		paths = append(paths, path)
@@ -678,6 +699,13 @@ func (r *typeRenderer) importDeclarations() string {
 		fmt.Fprintf(&out, "export { %s } from %q;\n", strings.Join(r.imports[path], ", "), path)
 	}
 	return out.String()
+}
+
+func (r *typeRenderer) importTypeOnly(name string, path string) string {
+	if !slices.Contains(r.typeImports[path], name) {
+		r.typeImports[path] = append(r.typeImports[path], name)
+	}
+	return name
 }
 
 func (r *typeRenderer) importType(name string, path string) string {

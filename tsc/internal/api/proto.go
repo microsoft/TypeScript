@@ -32,16 +32,21 @@ var (
 type Method string
 
 type (
-	SnapshotID  uint64
-	ProjectID   string
-	SymbolID    uint64
-	TypeID      uint32
-	SignatureID uint64
-	NodeHandle  string
+	SnapshotID         uint64
+	ProjectID          string
+	SyntheticProjectID string
+	SymbolID           uint64
+	TypeID             uint32
+	SignatureID        uint64
+	NodeHandle         string
 )
 
 func ProjectHandle(p *project.Project) ProjectID {
 	return ProjectID(p.ID())
+}
+
+func SyntheticProjectHandle(p *project.Project) SyntheticProjectID {
+	return SyntheticProjectID(p.ID())
 }
 
 func SymbolHandle(symbol *ast.Symbol) SymbolID {
@@ -464,6 +469,17 @@ type CreateSnapshotResponse struct {
 	Projects []*ProjectResponse `json:"projects" nonnil:"true"`
 	// Changes describes source file differences from the response base.
 	Changes *SnapshotChanges `json:"changes,omitempty"`
+	// Operation describes results correlated with the request that produced the snapshot.
+	Operation *SnapshotOperationResponse `json:"operation" nonnil:"true"`
+}
+
+type SnapshotOperationResponse struct {
+	CreatedPrograms *[]SyntheticProjectID         `json:"createdPrograms,omitzero"`
+	OpenedFiles     *[]*OpenedFileOperationResult `json:"openedFiles,omitzero"`
+}
+
+type OpenedFileOperationResult struct {
+	Project ProjectID `json:"project"`
 }
 
 var unmarshalers = map[Method]func([]byte) (any, error){

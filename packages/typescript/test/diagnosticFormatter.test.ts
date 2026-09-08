@@ -19,7 +19,7 @@ describe("diagnosticFormatter", () => {
         });
         try {
             const snapshot = await api.createSnapshot({ openProject: "/project/tsconfig.json" });
-            const program = snapshot.getProject("/project/tsconfig.json")!.program;
+            const program = snapshot.getConfiguredProject("/project/tsconfig.json")!.program;
             const diagnostics = await program.getSemanticDiagnostics("/project/index.ts");
             assert.equal(diagnostics.length, 1);
             assert.equal(api.getCurrentDirectory(), "/workspace");
@@ -88,7 +88,7 @@ describe("diagnosticFormatter", () => {
         });
         try {
             const snapshot = await api.createSnapshot({ openProject: "/workspace/tsconfig.json" });
-            const program = snapshot.getProject("/workspace/tsconfig.json")!.program;
+            const program = snapshot.getConfiguredProject("/workspace/tsconfig.json")!.program;
             const diagnostics = await program.getSemanticDiagnostics("/workspace/index.ts");
             const configDiagnostics = (await api.parseConfigFile("/workspace/tsconfig.json")).errors;
             const clonedDiagnostics = [

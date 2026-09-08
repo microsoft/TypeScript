@@ -36,6 +36,7 @@ import {
     type Node,
     type NodeArray,
     NodeFlags,
+    type Path,
     SyntaxKind,
     tryGetAmbientModuleNameFromSymbolName,
     unescapeLeadingUnderscores,
@@ -63,6 +64,7 @@ import {
     type BigIntLiteralType,
     CheckFlags,
     type ConditionalType,
+    type ConfiguredProjectId,
     DiagnosticCategory,
     type DocumentIdentifier,
     EmitOnly,
@@ -70,6 +72,7 @@ import {
     type ImportAdderAction,
     type IndexedAccessType,
     type IndexType,
+    type InferredProjectId,
     type InterfaceType,
     type IntrinsicType,
     isErrorType,
@@ -77,11 +80,15 @@ import {
     ModifierFlags,
     ModuleKind,
     ObjectFlags,
+    type Program,
+    type Project,
+    type ProjectId,
     type Signature,
     SignatureKind,
     type Snapshot,
     type StringMappingType,
     SymbolFlags,
+    type SyntheticProjectId,
     type TemplateLiteralType,
     type TextEdit,
     TypeFlags,
@@ -108,7 +115,7 @@ import {
 
 describe("API", () => {
     test("getCurrentLanguageServerSnapshot is LSP-only", () => {
-        if (false) {
+        if (!!false) {
             const standalone = new API();
             // @ts-expect-error The standalone API has no canonical language server state.
             void standalone.getCurrentLanguageServerSnapshot();
@@ -117,6 +124,17 @@ describe("API", () => {
             void lsp.getCurrentLanguageServerSnapshot({ openProjects: ["/tsconfig.json"] });
             const baseSnapshot = undefined! as Snapshot;
             void lsp.getCurrentLanguageServerSnapshot(undefined, baseSnapshot);
+
+            const configured = undefined! as ConfiguredProjectId;
+            const inferred = undefined! as InferredProjectId;
+            const synthetic = undefined! as SyntheticProjectId;
+            const path: Path = configured;
+            const projectIds: ProjectId[] = [configured, inferred, synthetic];
+            void path;
+            void projectIds;
+            // @ts-expect-error Project ID brands are not interchangeable.
+            const invalid: ConfiguredProjectId = synthetic;
+            void invalid;
         }
     });
 
@@ -338,9 +356,18 @@ describe("API", () => {
         });
         assert.equal(snapshot.getProjects().length, 2);
         assert.deepEqual(snapshot.getProjects().map(project => project.rootFiles), [["/src/a.ts"], ["/src/b.ts"]]);
+        assert.equal(snapshot.operation.createdPrograms!.length, 2);
+        for (const program of snapshot.operation.createdPrograms!) {
+            const syntheticProjectId: SyntheticProjectId = program.id;
+            void syntheticProjectId;
+            assert.strictEqual(snapshot.getProgram(program.id), program);
+            assert.strictEqual(snapshot.getProject(program.id), program.getProject());
+        }
 
         const empty = api.createSnapshot();
         assert.deepEqual(empty.getProjects(), []);
+        assert.equal("createdPrograms" in empty.operation, false);
+        assert.equal("openedFiles" in empty.operation, false);
     });
 
     test("createProgram ignores an on-disk tsconfig", () => {
@@ -487,7 +514,7 @@ describe("Checker - getImmediateAliasedSymbol", () => {
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const pos = `import { foo } from "./foo";`.indexOf("foo }");
         const aliasSymbol = project.checker.getSymbolAtPosition("/src/main.ts", pos);
         assert.ok(aliasSymbol);
@@ -515,7 +542,7 @@ test<Bravo>();
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const sourceFile = project.program.getSourceFile("/src/main.ts");
         assert.ok(sourceFile);
         const nodes: Array<Node> = [];
@@ -543,7 +570,7 @@ describe("Snapshot", () => {
         assert.ok(snapshot);
         assert.ok(snapshot.id);
         assert.ok(snapshot.getProjects().length > 0);
-        assert.ok(snapshot.getProject("/tsconfig.json"));
+        assert.ok(snapshot.getConfiguredProject("/tsconfig.json"));
     });
 
     test("project exposes parsedCommandLine", () => {
@@ -553,7 +580,7 @@ describe("Snapshot", () => {
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         assert.deepEqual(project.parsedCommandLine.fileNames, ["/src/index.ts", "/src/foo.ts"]);
         assert.deepEqual(project.parsedCommandLine.options, { configFilePath: "/tsconfig.json" });
         assert.equal(project.parsedCommandLine.compileOnSave, true);
@@ -565,7 +592,7 @@ describe("Snapshot", () => {
         using api = spawnAPI();
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const symbol = project.checker.getSymbolAtPosition("/src/index.ts", 9);
         assert.ok(symbol);
         assert.equal(symbol.name, "foo");
@@ -576,7 +603,7 @@ describe("Snapshot", () => {
         using api = spawnAPI();
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const sourceFile = project.program.getSourceFile("/src/index.ts");
         assert.ok(sourceFile);
         const node = cast(
@@ -594,7 +621,7 @@ describe("Snapshot", () => {
         using api = spawnAPI();
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const moduleSymbol = project.checker.getSymbolOfSourceFile("/src/foo.ts");
         assert.ok(moduleSymbol);
         const exports = moduleSymbol.getExports();
@@ -608,7 +635,7 @@ describe("Snapshot", () => {
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const symbol = project.checker.getSymbolOfSourceFile("/src/script.ts");
         assert.equal(symbol, undefined);
     });
@@ -617,7 +644,7 @@ describe("Snapshot", () => {
         using api = spawnAPI();
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const symbols = project.checker.getSymbolOfSourceFile(["/src/index.ts", "/src/foo.ts"]);
         assert.equal(symbols.length, 2);
         assert.ok(symbols[0]);
@@ -629,7 +656,7 @@ describe("Snapshot", () => {
         using api = spawnAPI();
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const symbol = project.checker.getSymbolAtPosition("/src/index.ts", 9);
         assert.ok(symbol);
         const type = project.checker.getTypeOfSymbol(symbol);
@@ -656,7 +683,7 @@ describe("Snapshot", () => {
 
         // when `"exactOptionalPropertyTypes": true`
         const snapshot1 = api.createSnapshot({ openProject: "/tsconfig-one.json" });
-        const project1 = snapshot1.getProject("/tsconfig-one.json")!;
+        const project1 = snapshot1.getConfiguredProject("/tsconfig-one.json")!;
         const type1 = project1.checker.getTypeAtPosition("/src/index.ts", 7);
         assert.ok(type1);
         const symbol1 = project1.checker.getPropertyOfType(type1, "a");
@@ -673,7 +700,7 @@ describe("Snapshot", () => {
 
         // when `"exactOptionalPropertyTypes": false`
         const snapshot2 = api.createSnapshot({ openProject: "/tsconfig-two.json" });
-        const project2 = snapshot2.getProject("/tsconfig-two.json")!;
+        const project2 = snapshot2.getConfiguredProject("/tsconfig-two.json")!;
         const type2 = project2.checker.getTypeAtPosition("/src/index.ts", 7);
         assert.ok(type2);
         const symbol2 = project2.checker.getPropertyOfType(type2, "a");
@@ -699,7 +726,7 @@ describe("LanguageService - imports", () => {
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const symbol = project.checker.getSymbolAtPosition("/src/foo.ts", "export const ".length);
         assert.ok(symbol);
 
@@ -717,7 +744,7 @@ describe("LanguageService - imports", () => {
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const foo = project.checker.getSymbolAtPosition("/src/foo.ts", "export const ".length);
         const bar = project.checker.getSymbolAtPosition("/src/foo.ts", "export const foo = 1;\nexport const ".length);
         assert.ok(foo);
@@ -740,7 +767,7 @@ describe("LanguageService - imports", () => {
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const bar = project.checker.getSymbolAtPosition("/src/foo.ts", "export const foo = 1;\nexport const ".length);
         assert.ok(bar);
 
@@ -760,7 +787,7 @@ describe("LanguageService - imports", () => {
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const symbol = project.checker.getSymbolAtPosition("/src/foo.ts", "const ".length);
         assert.ok(symbol);
 
@@ -775,7 +802,7 @@ describe("LanguageService - imports", () => {
         using api = spawnAPI();
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const symbol = project.checker.getSymbolAtPosition("/src/foo.ts", 13);
         assert.ok(symbol);
 
@@ -799,7 +826,7 @@ describe("LanguageService - getCompletionsAtPosition", () => {
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         // Position right after "obj." — member completion trigger
         const pos = src.indexOf("obj.") + "obj.".length;
         const completions = project.languageService.getCompletionsAtPosition("/src/main.ts", pos, { triggerCharacter: "." });
@@ -818,7 +845,7 @@ describe("LanguageService - getCompletionsAtPosition", () => {
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const pos = src.indexOf("obj.") + "obj.".length;
         const completions = project.languageService.getCompletionsAtPosition("/src/main.ts", pos, { triggerCharacter: "." });
         assert.ok(completions);
@@ -833,7 +860,7 @@ describe("LanguageService - getCompletionsAtPosition", () => {
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const completions = project.languageService.getCompletionsAtPosition("/src/does-not-exist.ts", 0);
         assert.equal(completions, undefined, "Expected undefined for non-existent file");
     });
@@ -846,7 +873,7 @@ describe("LanguageService - getCompletionsAtPosition", () => {
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const pos = src.indexOf("obj.") + "obj.".length;
         const completions = project.languageService.getCompletionsAtPosition("/src/main.ts", pos, { triggerCharacter: ".", includeSymbol: true });
         assert.ok(completions, "Expected completions");
@@ -865,7 +892,7 @@ describe("LanguageService - getReferencedSymbolsForNode", () => {
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const sourceFile = project.program.getSourceFile("/src/index.ts");
         assert.ok(sourceFile);
         const funcDecl = cast(sourceFile.statements[0], isFunctionDeclaration);
@@ -887,7 +914,7 @@ describe("LanguageService - getSignatureUsage", () => {
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const sourceFile = project.program.getSourceFile("/src/index.ts");
         assert.ok(sourceFile);
         const funcDecl = cast(sourceFile.statements[0], isFunctionDeclaration);
@@ -907,7 +934,7 @@ describe("Checker - getApparentType", () => {
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const pos = `export const x = "hello" as const;`.indexOf("x =");
         const symbol = project.checker.getSymbolAtPosition("/src/main.ts", pos);
         assert.ok(symbol);
@@ -945,7 +972,7 @@ export type Result = RateLimitError | (RateLimitError & QuotaExceededError);`,
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const sourceFile = project.program.getSourceFile("/src/main.ts");
         assert.ok(sourceFile);
         const typeAlias = sourceFile.statements.find(isTypeAliasDeclaration);
@@ -967,7 +994,7 @@ describe("Checker - getMemberInModuleExports", () => {
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const sourceFile = project.program.getSourceFile("/src/index.ts");
         assert.ok(sourceFile);
         const moduleSymbol = project.checker.getSymbolAtLocation(sourceFile);
@@ -985,7 +1012,7 @@ describe("SourceFile", () => {
         using api = spawnAPI();
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const program = snapshot.getProject("/tsconfig.json")!.program;
+        const program = snapshot.getConfiguredProject("/tsconfig.json")!.program;
         const document = { fileName: "/src/index.ts" } as unknown as DocumentIdentifier;
 
         assert.throws(
@@ -1012,7 +1039,7 @@ describe("SourceFile", () => {
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const fileNames = project.program.getSourceFileNames();
         assert.deepEqual(fileNames, [
             "/src/foo.ts",
@@ -1034,7 +1061,7 @@ describe("SourceFile", () => {
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const program = project.program;
 
         const index = program.getSourceFile("/src/index.ts");
@@ -1071,7 +1098,7 @@ describe("SourceFile", () => {
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const program = snapshot.getProject("/tsconfig.json")!.program;
+        const program = snapshot.getConfiguredProject("/tsconfig.json")!.program;
 
         const mts = program.getSourceFile("/src/esm.mts");
         assert.ok(mts);
@@ -1097,7 +1124,7 @@ describe("SourceFile", () => {
         using api = spawnAPI();
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const sourceFile = project.program.getSourceFile("/src/index.ts");
 
         assert.ok(sourceFile);
@@ -1109,7 +1136,7 @@ describe("SourceFile", () => {
         using api = spawnAPI();
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const sourceFile = project.program.getSourceFile("/src/index.ts");
 
         assert.ok(sourceFile);
@@ -1143,7 +1170,7 @@ describe("SourceFile", () => {
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const sourceFile = project.program.getSourceFile("/input.ts");
 
         assert.ok(sourceFile);
@@ -1178,7 +1205,7 @@ describe("NodeArray", () => {
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const sourceFile = project.program.getSourceFile("/src/main.ts");
         assert.ok(sourceFile);
         const statements = sourceFile.statements.filter(isExpressionStatement);
@@ -1198,7 +1225,7 @@ test("unicode escapes", () => {
     });
 
     const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-    const project = snapshot.getProject("/tsconfig.json")!;
+    const project = snapshot.getConfiguredProject("/tsconfig.json")!;
     const expectedTexts = new Map([
         ["/src/1.ts", "😃"],
         ["/src/2.ts", "😃"],
@@ -1225,7 +1252,7 @@ test("template unicode escapes", () => {
     });
 
     const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-    const project = snapshot.getProject("/tsconfig.json")!;
+    const project = snapshot.getConfiguredProject("/tsconfig.json")!;
     const sourceFile = project.program.getSourceFile("/src/index.ts");
     assert.ok(sourceFile);
 
@@ -1250,7 +1277,7 @@ test("Object equality", () => {
     using api = spawnAPI();
 
     const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-    const project = snapshot.getProject("/tsconfig.json")!;
+    const project = snapshot.getConfiguredProject("/tsconfig.json")!;
     // Same symbol returned from same snapshot's checker
     assert.strictEqual(
         project.checker.getSymbolAtPosition("/src/index.ts", 9),
@@ -1262,7 +1289,7 @@ test("Snapshot dispose", () => {
     using api = spawnAPI();
 
     const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-    const project = snapshot.getProject("/tsconfig.json")!;
+    const project = snapshot.getConfiguredProject("/tsconfig.json")!;
     const symbol = project.checker.getSymbolAtPosition("/src/index.ts", 9);
     assert.ok(symbol);
 
@@ -1273,7 +1300,7 @@ test("Snapshot dispose", () => {
 
     // After dispose, snapshot methods should throw
     assert.throws(() => {
-        snapshot.getProject("/tsconfig.json");
+        snapshot.getConfiguredProject("/tsconfig.json");
     }, {
         name: "Error",
         message: "Snapshot is disposed",
@@ -1288,8 +1315,8 @@ describe("Multiple snapshots", () => {
         const snap2 = api.createSnapshot({ openProject: "/tsconfig.json" });
 
         // Both can fetch source files
-        const sf1 = snap1.getProject("/tsconfig.json")!.program.getSourceFile("/src/index.ts");
-        const sf2 = snap2.getProject("/tsconfig.json")!.program.getSourceFile("/src/index.ts");
+        const sf1 = snap1.getConfiguredProject("/tsconfig.json")!.program.getSourceFile("/src/index.ts");
+        const sf2 = snap2.getConfiguredProject("/tsconfig.json")!.program.getSourceFile("/src/index.ts");
         assert.ok(sf1);
         assert.ok(sf2);
 
@@ -1299,7 +1326,7 @@ describe("Multiple snapshots", () => {
         assert.ok(!snap2.isDisposed());
 
         // snap2 still works after snap1 is disposed
-        const symbol = snap2.getProject("/tsconfig.json")!.checker.getSymbolAtPosition("/src/index.ts", 9);
+        const symbol = snap2.getConfiguredProject("/tsconfig.json")!.checker.getSymbolAtPosition("/src/index.ts", 9);
         assert.ok(symbol);
         assert.equal(symbol.name, "foo");
     });
@@ -1311,7 +1338,7 @@ describe("Multiple snapshots", () => {
         const snap1 = api.createSnapshot({ openProject: "/tsconfig.json" });
 
         // Verify initial state
-        const sf1 = snap1.getProject("/tsconfig.json")!.program.getSourceFile("/src/foo.ts");
+        const sf1 = snap1.getConfiguredProject("/tsconfig.json")!.program.getSourceFile("/src/foo.ts");
         assert.ok(sf1);
         assert.equal(sf1.text, `export const foo = 42;`);
 
@@ -1323,7 +1350,7 @@ describe("Multiple snapshots", () => {
         });
 
         // snap2 should reflect the updated content
-        const sf2 = snap2.getProject("/tsconfig.json")!.program.getSourceFile("/src/foo.ts");
+        const sf2 = snap2.getConfiguredProject("/tsconfig.json")!.program.getSourceFile("/src/foo.ts");
         assert.ok(sf2);
         assert.equal(sf2.text, `export const foo = "changed";`);
 
@@ -1333,14 +1360,14 @@ describe("Multiple snapshots", () => {
         snap1.dispose();
 
         // snap2 still works independently after snap1 is disposed
-        const symbol = snap2.getProject("/tsconfig.json")!.checker.getSymbolAtPosition("/src/index.ts", 9);
+        const symbol = snap2.getConfiguredProject("/tsconfig.json")!.checker.getSymbolAtPosition("/src/index.ts", 9);
         assert.ok(symbol);
 
         snap2.dispose();
 
         // Both are disposed, new snapshot works fine with latest content
         const snap3 = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const sf3 = snap3.getProject("/tsconfig.json")!.program.getSourceFile("/src/foo.ts");
+        const sf3 = snap3.getConfiguredProject("/tsconfig.json")!.program.getSourceFile("/src/foo.ts");
         assert.ok(sf3);
         assert.equal(sf3.text, `export const foo = "changed";`);
     });
@@ -1358,12 +1385,12 @@ describe("Multiple snapshots", () => {
             fileChanges: { created: ["/src/bar.ts"] },
         });
 
-        const sf = snap2.getProject("/tsconfig.json")!.program.getSourceFile("/src/bar.ts");
+        const sf = snap2.getConfiguredProject("/tsconfig.json")!.program.getSourceFile("/src/bar.ts");
         assert.ok(sf);
         assert.equal(sf.text, `export const bar = true;`);
 
         // Original snapshot shouldn't have the new file
-        const sfOld = snap1.getProject("/tsconfig.json")!.program.getSourceFile("/src/bar.ts");
+        const sfOld = snap1.getConfiguredProject("/tsconfig.json")!.program.getSourceFile("/src/bar.ts");
         assert.equal(sfOld, undefined);
     });
 
@@ -1385,7 +1412,7 @@ describe("Multiple snapshots", () => {
                 openProject: "/tsconfig.json",
                 fileChanges: { changed: ["/src/foo.ts"] },
             });
-            const sf = snap.getProject("/tsconfig.json")!.program.getSourceFile("/src/foo.ts");
+            const sf = snap.getConfiguredProject("/tsconfig.json")!.program.getSourceFile("/src/foo.ts");
             assert.ok(sf);
             assert.equal(sf.text, version);
         }
@@ -1403,17 +1430,18 @@ describe("Multiple snapshots", () => {
         const base = api.createSnapshot({
             openProjects: ["/first/tsconfig.json", "/second/tsconfig.json"],
         });
-        const baseFirst = base.getProject("/first/tsconfig.json")!.program.getSourceFile("/first/index.ts");
-        const baseSecondProject = base.getProject("/second/tsconfig.json")!;
+        const baseFirst = base.getConfiguredProject("/first/tsconfig.json")!.program.getSourceFile("/first/index.ts");
+        const baseSecondProject = base.getConfiguredProject("/second/tsconfig.json")!;
 
         fs.writeFile!("/first/index.ts", `export const first = 2;`);
         const updated = base.update({
             fileChanges: { changed: ["/first/index.ts"] },
+            ensurePrograms: [base.getConfiguredProject("/first/tsconfig.json")!.id],
         });
 
         assert.equal(updated.getProjects().length, 2);
-        assert.notStrictEqual(updated.getProject("/second/tsconfig.json"), baseSecondProject);
-        assert.equal((updated.getProject("/first/tsconfig.json")!.program.getSourceFile("/first/index.ts"))!.text, `export const first = 2;`);
+        assert.notStrictEqual(updated.getConfiguredProject("/second/tsconfig.json"), baseSecondProject);
+        assert.equal((updated.getConfiguredProject("/first/tsconfig.json")!.program.getSourceFile("/first/index.ts"))!.text, `export const first = 2;`);
         assert.equal(baseFirst!.text, `export const first = 1;`);
     });
 
@@ -1428,13 +1456,17 @@ describe("Multiple snapshots", () => {
 
         const created = api.createSnapshot({
             openProjects: ["/configured/tsconfig.json"],
-            openFiles: ["/inferred.ts"],
+            openFiles: ["/inferred.ts", "/configured/index.ts"],
             createPrograms: [{
                 rootFiles: ["/synthetic.ts"],
                 options: { compilerOptions: { noLib: true } },
             }],
         });
         assert.equal(created.getProjects().length, 3);
+        const configuredProjectId: ConfiguredProjectId = created.getConfiguredProject("/configured/tsconfig.json")!.id;
+        void configuredProjectId;
+        assert.strictEqual(created.operation.openedFiles![0].project, created.getProject(created.operation.openedFiles![0].project.id));
+        assert.strictEqual(created.operation.openedFiles![1].project, created.getConfiguredProject("/configured/tsconfig.json"));
         for (const project of created.getProjects()) {
             assert.equal(project.dirty, false, `${project.id} should be ensured when opened or created`);
         }
@@ -1449,6 +1481,22 @@ describe("Multiple snapshots", () => {
 
         const ensured = dirty.update({ ensurePrograms: true });
         assert.deepEqual(ensured.getProjects().map(project => project.dirty), [false, false, false]);
+
+        const withOperationResults = ensured.update({
+            openFiles: ["/inferred.ts"],
+            createPrograms: [{
+                rootFiles: ["/synthetic.ts"],
+                options: { compilerOptions: { noLib: true } },
+            }],
+        });
+        const openedProject: Project = withOperationResults.operation.openedFiles[0].project;
+        const createdProgram: Program<SyntheticProjectId> = withOperationResults.operation.createdPrograms[0];
+        const openedFilesTuple: readonly [{ readonly project: Project; }] = withOperationResults.operation.openedFiles;
+        const createdProgramsTuple: readonly [Program<SyntheticProjectId>] = withOperationResults.operation.createdPrograms;
+        void openedFilesTuple;
+        void createdProgramsTuple;
+        assert.strictEqual(withOperationResults.getProject(openedProject.id), openedProject);
+        assert.strictEqual(withOperationResults.getProgram(createdProgram.id), createdProgram);
     });
 });
 
@@ -1457,7 +1505,7 @@ describe("Source file caching", () => {
         using api = spawnAPI();
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const sf1 = project.program.getSourceFile("/src/index.ts");
         const sf2 = project.program.getSourceFile("/src/index.ts");
         assert.ok(sf1);
@@ -1470,8 +1518,8 @@ describe("Source file caching", () => {
         const snap1 = api.createSnapshot({ openProject: "/tsconfig.json" });
         const snap2 = api.createSnapshot({ openProject: "/tsconfig.json" });
         // Fetch from snap1 first (populates cache), then snap2 (cache hit via hash)
-        const sf1 = snap1.getProject("/tsconfig.json")!.program.getSourceFile("/src/index.ts");
-        const sf2 = snap2.getProject("/tsconfig.json")!.program.getSourceFile("/src/index.ts");
+        const sf1 = snap1.getConfiguredProject("/tsconfig.json")!.program.getSourceFile("/src/index.ts");
+        const sf2 = snap2.getConfiguredProject("/tsconfig.json")!.program.getSourceFile("/src/index.ts");
         assert.ok(sf1);
         assert.ok(sf2);
         // Same content hash → cache hit → same object
@@ -1483,7 +1531,7 @@ describe("Source file caching", () => {
         using api = disposableAPI;
 
         const snap1 = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const sf1 = snap1.getProject("/tsconfig.json")!.program.getSourceFile("/src/foo.ts");
+        const sf1 = snap1.getConfiguredProject("/tsconfig.json")!.program.getSourceFile("/src/foo.ts");
         assert.ok(sf1);
         assert.equal(sf1.text, `export const foo = 42;`);
 
@@ -1495,7 +1543,7 @@ describe("Source file caching", () => {
             openProject: "/tsconfig.json",
             fileChanges: { changed: ["/src/foo.ts"] },
         });
-        const sf2 = snap2.getProject("/tsconfig.json")!.program.getSourceFile("/src/foo.ts");
+        const sf2 = snap2.getConfiguredProject("/tsconfig.json")!.program.getSourceFile("/src/foo.ts");
         assert.ok(sf2);
         assert.equal(sf2.text, `export const foo = 100;`);
 
@@ -1508,7 +1556,7 @@ describe("Source file caching", () => {
         using api = disposableAPI;
 
         const snap1 = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const sf1 = snap1.getProject("/tsconfig.json")!.program.getSourceFile("/src/index.ts");
+        const sf1 = snap1.getConfiguredProject("/tsconfig.json")!.program.getSourceFile("/src/index.ts");
         assert.ok(sf1);
 
         // Mutate a different file
@@ -1519,7 +1567,7 @@ describe("Source file caching", () => {
             openProject: "/tsconfig.json",
             fileChanges: { changed: ["/src/foo.ts"] },
         });
-        const sf2 = snap2.getProject("/tsconfig.json")!.program.getSourceFile("/src/index.ts");
+        const sf2 = snap2.getConfiguredProject("/tsconfig.json")!.program.getSourceFile("/src/index.ts");
         assert.ok(sf2);
 
         // index.ts wasn't changed — should still get cached object
@@ -1531,14 +1579,14 @@ describe("Source file caching", () => {
 
         const snap1 = api.createSnapshot({ openProject: "/tsconfig.json" });
         // Fetch from snap1 to populate cache
-        const sf1 = snap1.getProject("/tsconfig.json")!.program.getSourceFile("/src/index.ts");
+        const sf1 = snap1.getConfiguredProject("/tsconfig.json")!.program.getSourceFile("/src/index.ts");
         assert.ok(sf1);
 
         const snap2 = api.createSnapshot({ openProject: "/tsconfig.json" });
 
         snap1.dispose();
 
-        const sf2 = snap2.getProject("/tsconfig.json")!.program.getSourceFile("/src/index.ts");
+        const sf2 = snap2.getConfiguredProject("/tsconfig.json")!.program.getSourceFile("/src/index.ts");
         assert.ok(sf2);
         assert.notStrictEqual(sf1, sf2, "independent snapshots do not implicitly retain each other's cache entries");
     });
@@ -1548,7 +1596,7 @@ describe("Source file caching", () => {
         using api = disposableAPI;
 
         const snap1 = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const sf1 = snap1.getProject("/tsconfig.json")!.program.getSourceFile("/src/foo.ts");
+        const sf1 = snap1.getConfiguredProject("/tsconfig.json")!.program.getSourceFile("/src/foo.ts");
         assert.ok(sf1);
         assert.equal(sf1.text, `export const foo = 42;`);
 
@@ -1560,7 +1608,7 @@ describe("Source file caching", () => {
             openProject: "/tsconfig.json",
             fileChanges: { invalidateAll: true },
         });
-        const sf2 = snap2.getProject("/tsconfig.json")!.program.getSourceFile("/src/foo.ts");
+        const sf2 = snap2.getConfiguredProject("/tsconfig.json")!.program.getSourceFile("/src/foo.ts");
         assert.ok(sf2);
         assert.equal(sf2.text, `export const foo = "hello";`);
         assert.notStrictEqual(sf1, sf2, "invalidateAll should produce new source file objects");
@@ -1576,7 +1624,7 @@ describe("Source file caching", () => {
 
         // Snapshot 1: get a node and verify getContextualType works
         const snap1 = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const proj1 = snap1.getProject("/tsconfig.json")!;
+        const proj1 = snap1.getConfiguredProject("/tsconfig.json")!;
 
         const sf1 = proj1.program.getSourceFile("/src/main.ts");
         assert.ok(sf1);
@@ -1598,7 +1646,7 @@ describe("Source file caching", () => {
             openProject: "/tsconfig.json",
             fileChanges: { changed: ["/src/other.ts"] },
         });
-        const proj2 = snap2.getProject("/tsconfig.json")!;
+        const proj2 = snap2.getConfiguredProject("/tsconfig.json")!;
 
         // Active snapshots may share a content-addressed source file.
         const sf2 = proj2.program.getSourceFile("/src/main.ts");
@@ -1699,9 +1747,9 @@ describe("Source file cache keying across projects", () => {
             openProjects: ["/projectA/tsconfig.json", "/projectB/tsconfig.json", "/projectC/tsconfig.json"],
         });
 
-        const projectA = snapshot.getProject("/projectA/tsconfig.json")!;
-        const projectB = snapshot.getProject("/projectB/tsconfig.json")!;
-        const projectC = snapshot.getProject("/projectC/tsconfig.json")!;
+        const projectA = snapshot.getConfiguredProject("/projectA/tsconfig.json")!;
+        const projectB = snapshot.getConfiguredProject("/projectB/tsconfig.json")!;
+        const projectC = snapshot.getConfiguredProject("/projectC/tsconfig.json")!;
         assert.ok(projectA, "projectA should exist");
         assert.ok(projectB, "projectB should exist");
         assert.ok(projectC, "projectC should exist");
@@ -1737,8 +1785,8 @@ describe("Checker - symbol identity across projects", () => {
             openProjects: ["/projectA/tsconfig.json", "/projectB/tsconfig.json"],
         });
 
-        const projectA = snapshot.getProject("/projectA/tsconfig.json")!;
-        const projectB = snapshot.getProject("/projectB/tsconfig.json")!;
+        const projectA = snapshot.getConfiguredProject("/projectA/tsconfig.json")!;
+        const projectB = snapshot.getConfiguredProject("/projectB/tsconfig.json")!;
         assert.ok(projectA, "projectA should exist");
         assert.ok(projectB, "projectB should exist");
 
@@ -1774,7 +1822,7 @@ export class MyClass {
         using api = spawnAPI(checkerFiles);
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const src = checkerFiles["/src/main.ts"];
         const xPos = src.indexOf("x = 42");
         const type = project.checker.getTypeAtPosition("/src/main.ts", xPos);
@@ -1786,7 +1834,7 @@ export class MyClass {
         using api = spawnAPI(checkerFiles);
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const src = checkerFiles["/src/main.ts"];
         const xPos = src.indexOf("x = 42");
         const addPos = src.indexOf("add(");
@@ -1800,7 +1848,7 @@ export class MyClass {
         using api = spawnAPI(checkerFiles);
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const sourceFile = project.program.getSourceFile("/src/main.ts");
         assert.ok(sourceFile);
         const firstVarDecl = sourceFile.statements[2]; // "export const x"
@@ -1827,7 +1875,7 @@ const c = obj.b.c;
         using api = spawnAPI(files);
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const sourceFile = project.program.getSourceFile("/src/main.ts");
         assert.ok(sourceFile);
 
@@ -1873,7 +1921,7 @@ export class Cache {
         using api = spawnAPI(files);
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const sourceFile = project.program.getSourceFile("/src/main.ts");
         assert.ok(sourceFile);
 
@@ -1910,7 +1958,7 @@ export class Cache {
         using api = spawnAPI(checkerFiles);
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const src = checkerFiles["/src/main.ts"];
         const addPos = src.indexOf("add(");
         const symbol = project.checker.getSymbolAtPosition("/src/main.ts", addPos);
@@ -1935,7 +1983,7 @@ export class Cache {
         using api = spawnAPI(checkerFiles);
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const src = checkerFiles["/src/main.ts"];
         const symbol = project.checker.getSymbolAtPosition("/src/main.ts", src.indexOf("add("));
         assert.ok(symbol);
@@ -1954,7 +2002,7 @@ export class Cache {
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const src = checkerFiles["/src/main.ts"];
         const symbol = project.checker.getSymbolAtPosition("/src/main.ts", src.indexOf("add("));
         assert.ok(symbol);
@@ -1999,7 +2047,7 @@ export class Cache {
         using api = spawnAPI(checkerFiles);
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const src = checkerFiles["/src/main.ts"];
         const classPos = src.indexOf("MyClass");
         const symbol = project.checker.getSymbolAtPosition("/src/main.ts", classPos);
@@ -2016,7 +2064,7 @@ export class Cache {
         using api = spawnAPI(checkerFiles);
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const src = checkerFiles["/src/main.ts"];
         const addPos = src.indexOf("add(");
         const symbol = project.checker.getSymbolAtPosition("/src/main.ts", addPos);
@@ -2067,7 +2115,7 @@ export class Cache {
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const liftPos = mainFile.indexOf("lift");
         const type = project.checker.getTypeAtPosition("/src/main.ts", liftPos);
         assert.ok(type);
@@ -2087,7 +2135,7 @@ export class Cache {
         using api = spawnAPI(checkerFiles);
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const src = checkerFiles["/src/main.ts"];
         const symbol = project.checker.getSymbolAtPosition("/src/main.ts", src.indexOf("add("));
         assert.ok(symbol);
@@ -2107,7 +2155,7 @@ export class Cache {
         using api = spawnAPI(checkerFiles);
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const src = checkerFiles["/src/main.ts"];
         const symbol = project.checker.getSymbolAtPosition("/src/main.ts", src.indexOf("add("));
         assert.ok(symbol);
@@ -2127,7 +2175,7 @@ export class Cache {
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const symbol = project.checker.getSymbolAtPosition("/src/main.ts", src.indexOf("foo("));
         assert.ok(symbol);
         const type = project.checker.getTypeOfSymbol(symbol);
@@ -2144,7 +2192,7 @@ export class Cache {
         using api = spawnAPI(checkerFiles);
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const src = checkerFiles["/src/main.ts"];
         const symbol = project.checker.getSymbolAtPosition("/src/main.ts", src.indexOf("add("));
         assert.ok(symbol);
@@ -2167,7 +2215,7 @@ export class Cache {
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const sourceFile = project.program.getSourceFile("/src/main.ts");
         assert.ok(sourceFile);
         let callNode: Node | undefined;
@@ -2201,7 +2249,7 @@ export const value = 1;
         using api = spawnAPI(symbolFiles);
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const src = symbolFiles["/src/mod.ts"];
         const animalPos = src.indexOf("Animal");
         const symbol = project.checker.getSymbolAtPosition("/src/mod.ts", animalPos);
@@ -2217,7 +2265,7 @@ export const value = 1;
         using api = spawnAPI(symbolFiles);
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const sourceFile = project.program.getSourceFile("/src/mod.ts");
         assert.ok(sourceFile);
         const moduleSymbol = project.checker.getSymbolAtLocation(sourceFile);
@@ -2233,7 +2281,7 @@ export const value = 1;
         using api = spawnAPI(symbolFiles);
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const src = symbolFiles["/src/mod.ts"];
         const namePos = src.indexOf("name:");
         const nameSymbol = project.checker.getSymbolAtPosition("/src/mod.ts", namePos);
@@ -2248,7 +2296,7 @@ export const value = 1;
         using api = spawnAPI(symbolFiles);
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const symbol = project.checker.getSymbolAtPosition("/src/mod.ts", symbolFiles["/src/mod.ts"].indexOf("Animal"));
         assert.ok(symbol);
         const checkFlags: CheckFlags = symbol.checkFlags;
@@ -2269,7 +2317,7 @@ export const instance: Foo = new Foo();
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const src = `\nexport class Foo {\n    x: number = 0;\n}\nexport const instance: Foo = new Foo();\n`;
         const instancePos = src.indexOf("instance");
         const symbol = project.checker.getSymbolAtPosition("/src/types.ts", instancePos);
@@ -2300,7 +2348,7 @@ export const tuple: readonly [number, string?, ...boolean[]] = [1];
 
     function getTypeAtName(api: API, name: string) {
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const src = typeFiles["/src/types.ts"];
         const pos = src.indexOf(name);
         assert.ok(pos >= 0, `Could not find "${name}" in source`);
@@ -2361,7 +2409,7 @@ export const tuple: readonly [number, string?, ...boolean[]] = [1];
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
 
         // `string` is neither a union/intersection nor a template literal type,
         // so it has no constituent types. The client guards on the type's flags
@@ -2384,7 +2432,7 @@ export const tuple: readonly [number, string?, ...boolean[]] = [1];
         using api = spawnAPI(typeFiles);
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const symbol = project.checker.resolveName("KeyOf", SymbolFlags.TypeAlias, { document: "/src/types.ts", position: 0 });
         assert.ok(symbol);
         const type = project.checker.getDeclaredTypeOfSymbol(symbol);
@@ -2400,7 +2448,7 @@ export const tuple: readonly [number, string?, ...boolean[]] = [1];
         using api = spawnAPI(typeFiles);
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const symbol = project.checker.resolveName("Lookup", SymbolFlags.TypeAlias, { document: "/src/types.ts", position: 0 });
         assert.ok(symbol);
         const type = project.checker.getDeclaredTypeOfSymbol(symbol);
@@ -2418,7 +2466,7 @@ export const tuple: readonly [number, string?, ...boolean[]] = [1];
         using api = spawnAPI(typeFiles);
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const symbol = project.checker.resolveName("Cond", SymbolFlags.TypeAlias, { document: "/src/types.ts", position: 0 });
         assert.ok(symbol);
         const type = project.checker.getDeclaredTypeOfSymbol(symbol);
@@ -2436,7 +2484,7 @@ export const tuple: readonly [number, string?, ...boolean[]] = [1];
         using api = spawnAPI(typeFiles);
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const symbol = project.checker.resolveName("Cond", SymbolFlags.TypeAlias, { document: "/src/types.ts", position: 0 });
         assert.ok(symbol);
         const type = project.checker.getDeclaredTypeOfSymbol(symbol);
@@ -2471,7 +2519,7 @@ export const tuple: readonly [number, string?, ...boolean[]] = [1];
         using api = spawnAPI(typeFiles);
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const src = typeFiles["/src/types.ts"];
         const pos = src.indexOf("Upper");
         const symbol = project.checker.getSymbolAtPosition("/src/types.ts", pos);
@@ -2501,7 +2549,7 @@ array([]);
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const sourceFile = project.program.getSourceFile("/src/main.ts");
         assert.ok(sourceFile);
 
@@ -2553,7 +2601,7 @@ export function gh1449<T extends [foo: any, bar?: any]>(a: T): T {
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const sourceFile = project.program.getSourceFile("/src/main.ts");
         assert.ok(sourceFile);
         const functionDeclaration = sourceFile.statements.find(isFunctionDeclaration);
@@ -2591,7 +2639,7 @@ describe("Checker - intrinsic type getters", () => {
         using api = spawnAPI(intrinsicFiles);
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const type = project.checker.getAnyType();
         assert.ok(type);
         assert.ok(type.flags & TypeFlags.Any);
@@ -2601,7 +2649,7 @@ describe("Checker - intrinsic type getters", () => {
         using api = spawnAPI(intrinsicFiles);
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const type = project.checker.getStringType();
         assert.ok(type);
         assert.ok(type.flags & TypeFlags.String);
@@ -2611,7 +2659,7 @@ describe("Checker - intrinsic type getters", () => {
         using api = spawnAPI(intrinsicFiles);
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const type = project.checker.getNumberType();
         assert.ok(type);
         assert.ok(type.flags & TypeFlags.Number);
@@ -2621,7 +2669,7 @@ describe("Checker - intrinsic type getters", () => {
         using api = spawnAPI(intrinsicFiles);
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const type = project.checker.getBooleanType();
         assert.ok(type);
         assert.ok(type.flags & TypeFlags.Boolean);
@@ -2631,7 +2679,7 @@ describe("Checker - intrinsic type getters", () => {
         using api = spawnAPI(intrinsicFiles);
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const type = project.checker.getVoidType();
         assert.ok(type);
         assert.ok(type.flags & TypeFlags.Void);
@@ -2641,7 +2689,7 @@ describe("Checker - intrinsic type getters", () => {
         using api = spawnAPI(intrinsicFiles);
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const type = project.checker.getUndefinedType();
         assert.ok(type);
         assert.ok(type.flags & TypeFlags.Undefined);
@@ -2651,7 +2699,7 @@ describe("Checker - intrinsic type getters", () => {
         using api = spawnAPI(intrinsicFiles);
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const type = project.checker.getNullType();
         assert.ok(type);
         assert.ok(type.flags & TypeFlags.Null);
@@ -2661,7 +2709,7 @@ describe("Checker - intrinsic type getters", () => {
         using api = spawnAPI(intrinsicFiles);
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const type = project.checker.getNeverType();
         assert.ok(type);
         assert.ok(type.flags & TypeFlags.Never);
@@ -2671,7 +2719,7 @@ describe("Checker - intrinsic type getters", () => {
         using api = spawnAPI(intrinsicFiles);
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const type = project.checker.getUnknownType();
         assert.ok(type);
         assert.ok(type.flags & TypeFlags.Unknown);
@@ -2681,7 +2729,7 @@ describe("Checker - intrinsic type getters", () => {
         using api = spawnAPI(intrinsicFiles);
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const type = project.checker.getBigIntType();
         assert.ok(type);
         assert.ok(type.flags & TypeFlags.BigInt);
@@ -2691,7 +2739,7 @@ describe("Checker - intrinsic type getters", () => {
         using api = spawnAPI(intrinsicFiles);
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const type = project.checker.getESSymbolType();
         assert.ok(type);
         assert.ok(type.flags & TypeFlags.ESSymbol);
@@ -2701,7 +2749,7 @@ describe("Checker - intrinsic type getters", () => {
         using api = spawnAPI(intrinsicFiles);
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const type = project.checker.getNonPrimitiveType();
         assert.ok(type);
         assert.ok(type.flags & TypeFlags.NonPrimitive);
@@ -2723,9 +2771,9 @@ describe("Checker - multi-project type ID uniqueness", () => {
             openProjects: ["/proj1/tsconfig.json", "/proj2/tsconfig.json", "/proj3/tsconfig.json"],
         });
 
-        const proj1 = snapshot.getProject("/proj1/tsconfig.json")!;
-        const proj2 = snapshot.getProject("/proj2/tsconfig.json")!;
-        const proj3 = snapshot.getProject("/proj3/tsconfig.json")!;
+        const proj1 = snapshot.getConfiguredProject("/proj1/tsconfig.json")!;
+        const proj2 = snapshot.getConfiguredProject("/proj2/tsconfig.json")!;
+        const proj3 = snapshot.getConfiguredProject("/proj3/tsconfig.json")!;
         assert.ok(proj1, "proj1 should be in final snapshot");
         assert.ok(proj2, "proj2 should be in final snapshot");
         assert.ok(proj3, "proj3 should be in final snapshot");
@@ -2775,9 +2823,9 @@ describe("Checker - multi-project type ID uniqueness", () => {
             openProjects: ["/proj1/tsconfig.json", "/proj2/tsconfig.json", "/proj3/tsconfig.json"],
         });
 
-        const proj1 = snapshot.getProject("/proj1/tsconfig.json")!;
-        const proj2 = snapshot.getProject("/proj2/tsconfig.json")!;
-        const proj3 = snapshot.getProject("/proj3/tsconfig.json")!;
+        const proj1 = snapshot.getConfiguredProject("/proj1/tsconfig.json")!;
+        const proj2 = snapshot.getConfiguredProject("/proj2/tsconfig.json")!;
+        const proj3 = snapshot.getConfiguredProject("/proj3/tsconfig.json")!;
 
         // Get a symbol from each project (exercises symbol registry)
         const src1 = `export function add(a: number, b: number): number { return a + b; }`;
@@ -2822,7 +2870,7 @@ describe("Checker - getBaseTypeOfLiteralType", () => {
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const src = `export const x = 42;`;
         const pos = src.indexOf("x =");
         const symbol = project.checker.getSymbolAtPosition("/src/main.ts", pos);
@@ -2842,7 +2890,7 @@ describe("Checker - getBaseTypeOfLiteralType", () => {
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const src = `export const s = "hello";`;
         const pos = src.indexOf("s ");
         const symbol = project.checker.getSymbolAtPosition("/src/main.ts", pos);
@@ -2867,7 +2915,7 @@ foo(42);
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
 
         const sourceFile = project.program.getSourceFile("/src/main.ts");
         assert.ok(sourceFile);
@@ -2906,7 +2954,7 @@ export function check(x: string | number) {
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const src = `\nexport function check(x: string | number) {\n    if (typeof x === "string") {\n        return x;\n    }\n    return x;\n}\n`;
 
         // Get the symbol for parameter "x"
@@ -2957,7 +3005,7 @@ export const obj = { name };
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
 
         const sourceFile = project.program.getSourceFile("/src/main.ts");
         assert.ok(sourceFile);
@@ -3006,7 +3054,7 @@ describe("readFile callback semantics", () => {
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
 
         // 1. String content: virtual file is found
         const sf = project.program.getSourceFile("/src/index.ts");
@@ -3036,7 +3084,7 @@ describe("Checker - isArrayType / isTupleType", () => {
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const src = `export const xs: number[] = [];`;
         const pos = src.indexOf("xs");
         const symbol = project.checker.getSymbolAtPosition("/src/main.ts", pos);
@@ -3054,7 +3102,7 @@ describe("Checker - isArrayType / isTupleType", () => {
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const src = `export const xs: readonly number[] = [];`;
         const pos = src.indexOf("xs");
         const symbol = project.checker.getSymbolAtPosition("/src/main.ts", pos);
@@ -3072,7 +3120,7 @@ describe("Checker - isArrayType / isTupleType", () => {
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const src = `export const xs: Array<number> = [];`;
         const pos = src.indexOf("xs");
         const symbol = project.checker.getSymbolAtPosition("/src/main.ts", pos);
@@ -3090,7 +3138,7 @@ describe("Checker - isArrayType / isTupleType", () => {
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const src = `export const tup: [number, string] = [1, "a"];`;
         const pos = src.indexOf("tup");
         const symbol = project.checker.getSymbolAtPosition("/src/main.ts", pos);
@@ -3108,7 +3156,7 @@ describe("Checker - isArrayType / isTupleType", () => {
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const src = `export const tup: readonly [number, string] = [1, "a"];`;
         const pos = src.indexOf("tup");
         const symbol = project.checker.getSymbolAtPosition("/src/main.ts", pos);
@@ -3126,7 +3174,7 @@ describe("Checker - isArrayType / isTupleType", () => {
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const src = `export const str: string = "";`;
         const pos = src.indexOf("str");
         const symbol = project.checker.getSymbolAtPosition("/src/main.ts", pos);
@@ -3153,7 +3201,7 @@ export type ReadonlyUser = Readonly<User>;
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const sourceFile = project.program.getSourceFile("/src/main.ts");
         assert.ok(sourceFile);
         const user = sourceFile.statements.find(isInterfaceDeclaration);
@@ -3179,7 +3227,7 @@ export type ReadonlyUser = Readonly<User>;
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const { checker } = snapshot.getProject("/tsconfig.json")!;
+        const { checker } = snapshot.getConfiguredProject("/tsconfig.json")!;
         const a = checker.getSymbolAtPosition("/src/main.ts", "export const ".length);
         const b = checker.getSymbolAtPosition("/src/main.ts", "export const a = 1; export let ".length);
         assert.ok(a);
@@ -3213,7 +3261,7 @@ export type B = InstanceType<typeof Bravo>;
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const sourceFile = project.program.getSourceFile("/src/main.ts");
         assert.ok(sourceFile);
         const typeAliases = sourceFile.statements.filter(isTypeAliasDeclaration);
@@ -3237,7 +3285,7 @@ describe("Checker - getReturnTypeOfSignature", () => {
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const src = `export function add(a: number, b: number): number { return a + b; }`;
         const pos = src.indexOf("add(");
         const symbol = project.checker.getSymbolAtPosition("/src/main.ts", pos);
@@ -3260,7 +3308,7 @@ describe("Checker - getRestTypeOfSignature", () => {
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const src = `export function sum(...nums: number[]): number { return nums.reduce((a, b) => a + b, 0); }`;
         const pos = src.indexOf("sum(");
         const symbol = project.checker.getSymbolAtPosition("/src/main.ts", pos);
@@ -3283,7 +3331,7 @@ describe("Checker - getTypePredicateOfSignature", () => {
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const src = `export function isString(x: unknown): x is string { return typeof x === "string"; }`;
         const pos = src.indexOf("isString(");
         const symbol = project.checker.getSymbolAtPosition("/src/main.ts", pos);
@@ -3315,7 +3363,7 @@ export class Dog extends Animal {
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const src = `\nexport class Animal {\n    isdog(): this is Dog { return this instanceof Dog; }\n}\nexport class Dog extends Animal {\n    bark() {}\n}\n`;
         const pos = src.indexOf("isdog(");
         const symbol = project.checker.getSymbolAtPosition("/src/main.ts", pos);
@@ -3336,7 +3384,7 @@ export class Dog extends Animal {
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const src = `export function assertIsString(x: unknown): asserts x is string { if (typeof x !== "string") throw new Error(); }`;
         const pos = src.indexOf("assertIsString(");
         const symbol = project.checker.getSymbolAtPosition("/src/main.ts", pos);
@@ -3361,7 +3409,7 @@ export class Dog extends Animal {
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const src = `export function add(a: number, b: number): number { return a + b; }`;
         const pos = src.indexOf("add(");
         const symbol = project.checker.getSymbolAtPosition("/src/main.ts", pos);
@@ -3390,7 +3438,7 @@ export class Derived extends Base {
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const src = `\nexport class Base {\n    x: number = 0;\n}\nexport class Derived extends Base {\n    y: string = "";\n}\n`;
         const pos = src.indexOf("Derived");
         const symbol = project.checker.getSymbolAtPosition("/src/main.ts", pos);
@@ -3418,7 +3466,7 @@ export interface Dog extends Animal {
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const src = `\nexport interface Animal {\n    name: string;\n}\nexport interface Dog extends Animal {\n    bark(): void;\n}\n`;
         const pos = src.indexOf("Dog");
         const symbol = project.checker.getSymbolAtPosition("/src/main.ts", pos);
@@ -3444,7 +3492,7 @@ export type BoxOfString = Box<string>;
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const sourceFile = project.program.getSourceFile("/src/main.ts");
         assert.ok(sourceFile);
         const typeAlias = sourceFile.statements.find(isTypeAliasDeclaration);
@@ -3474,7 +3522,7 @@ export const n: number = 0;
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const src = `\nexport class Base {\n    x: number = 0;\n}\nexport class Derived extends Base {\n    y: string = "";\n}\nexport const n: number = 0;\n`;
 
         const derivedSymbol = project.checker.getSymbolAtPosition("/src/main.ts", src.indexOf("Derived"));
@@ -3507,7 +3555,7 @@ declare const bad: ThisTypeDoesNotExist;
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const src = `\ndeclare const good: string;\ndeclare const bad: ThisTypeDoesNotExist;\n`;
 
         const badSymbol = project.checker.getSymbolAtPosition("/src/main.ts", src.indexOf("bad"));
@@ -3537,7 +3585,7 @@ export type Alias = typeof value;
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const src = `\nexport const value = 1;\nexport type Alias = typeof value;\n`;
 
         // A real symbol is not the unknown/undefined symbol.
@@ -3562,7 +3610,7 @@ notCallable();
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const sourceFile = project.program.getSourceFile("/src/main.ts");
         assert.ok(sourceFile);
         const calls: Node[] = [];
@@ -3596,7 +3644,7 @@ export const value = 1;
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const sourceFile = project.program.getSourceFile("/src/main.ts");
         assert.ok(sourceFile);
         const moduleSymbol = project.checker.getSymbolAtLocation(sourceFile);
@@ -3624,7 +3672,7 @@ export const obj: { a: number } = { a: 1 };
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const src = `\nexport const obj: { a: number } = { a: 1 };\n`;
         const objSymbol = project.checker.getSymbolAtPosition("/src/main.ts", src.indexOf("obj"));
         assert.ok(objSymbol);
@@ -3657,7 +3705,7 @@ export { x as '${maliciousName}' };
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
 
         const typesFile = project.program.getSourceFile("/src/types.d.ts");
         assert.ok(typesFile);
@@ -3731,7 +3779,7 @@ export const total = add(1, 2);
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const sourceFile = project.program.getSourceFile("/src/main.ts");
         assert.ok(sourceFile);
         const functions = [...sourceFile.statements].filter(isFunctionDeclaration);
@@ -3793,7 +3841,7 @@ var measure = function (name) {
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const sourceFile = project.program.getSourceFile("/src/main.js");
         assert.ok(sourceFile);
         const variable = sourceFile.statements.find(isVariableStatement);
@@ -3828,7 +3876,7 @@ const cast = /** @type {number} */ (someValue);
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const sourceFile = project.program.getSourceFile("/src/main.js");
         assert.ok(sourceFile);
         const statements = [...sourceFile.statements].filter(isVariableStatement);
@@ -3859,7 +3907,7 @@ export declare const p: Person;
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const src = `\nexport interface Person {\n    name: string;\n    age: number;\n    greet(): void;\n}\nexport declare const p: Person;\n`;
         const pos = src.indexOf("p: Person");
         const symbol = project.checker.getSymbolAtPosition("/src/main.ts", pos);
@@ -3888,7 +3936,7 @@ export declare const m: StringMap;
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const src = `\nexport interface StringMap {\n    [key: string]: number;\n}\nexport declare const m: StringMap;\n`;
         const pos = src.indexOf("m: StringMap");
         const symbol = project.checker.getSymbolAtPosition("/src/main.ts", pos);
@@ -3917,7 +3965,7 @@ export declare const m: ReadonlyMap;
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const src = `\nexport interface ReadonlyMap {\n    readonly [key: string]: number;\n}\nexport declare const m: ReadonlyMap;\n`;
         const pos = src.indexOf("m: ReadonlyMap");
         const symbol = project.checker.getSymbolAtPosition("/src/main.ts", pos);
@@ -3938,7 +3986,7 @@ describe("Checker - getConstraintOfTypeParameter", () => {
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const src = `export function identity<T extends string>(x: T): T { return x; }`;
         const pos = src.indexOf("identity<");
         const symbol = project.checker.getSymbolAtPosition("/src/main.ts", pos);
@@ -3963,7 +4011,7 @@ describe("Checker - TypeParameter getters", () => {
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const src = `export function f<T extends string = "hello">(x: T): T { return x; }`;
         const pos = src.indexOf("f<");
         const symbol = project.checker.getSymbolAtPosition("/src/main.ts", pos);
@@ -3992,7 +4040,7 @@ describe("Checker - TypeParameter getters", () => {
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const src = `export function f<T>(x: T): T { return x; }`;
         const pos = src.indexOf("f<");
         const symbol = project.checker.getSymbolAtPosition("/src/main.ts", pos);
@@ -4018,7 +4066,7 @@ describe("Checker - getTypeArguments", () => {
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const src = `export const arr: Array<number> = [1, 2, 3];`;
         const pos = src.indexOf("arr:");
         const symbol = project.checker.getSymbolAtPosition("/src/main.ts", pos);
@@ -4038,7 +4086,7 @@ describe("Checker - getTypeArguments", () => {
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
 
         // `string` is not a type reference. When getTypeArguments is reached
         // with one, the server panics, but the per-request panic recovery
@@ -4067,7 +4115,7 @@ describe("Checker - getBaseConstraintOfType", () => {
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const src = `export function identity<T extends string>(x: T): T { return x; }`;
         const pos = src.indexOf("identity<");
         const symbol = project.checker.getSymbolAtPosition("/src/main.ts", pos);
@@ -4089,7 +4137,7 @@ describe("Checker - getBaseConstraintOfType", () => {
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const pos = `export const x: number = 1;`.indexOf("x:");
         const symbol = project.checker.getSymbolAtPosition("/src/main.ts", pos);
         assert.ok(symbol);
@@ -4114,7 +4162,7 @@ export declare const p: Person;
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const src = `\nexport interface Person {\n    name: string;\n    age: number;\n}\nexport declare const p: Person;\n`;
         const pos = src.indexOf("p: Person");
         const symbol = project.checker.getSymbolAtPosition("/src/main.ts", pos);
@@ -4137,7 +4185,7 @@ describe("Checker - getConstantValue", () => {
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const sourceFile = project.program.getSourceFile("/src/main.ts");
         assert.ok(sourceFile);
         let memberB: Node | undefined;
@@ -4160,7 +4208,7 @@ describe("Checker - getConstantValue", () => {
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const sourceFile = project.program.getSourceFile("/src/main.ts");
         assert.ok(sourceFile);
         let member: Node | undefined;
@@ -4182,7 +4230,7 @@ describe("Checker - getSignatureFromDeclaration", () => {
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const sourceFile = project.program.getSourceFile("/src/main.ts");
         assert.ok(sourceFile);
         let funcDecl: Node | undefined;
@@ -4211,7 +4259,7 @@ export { value as renamed };
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const sourceFile = project.program.getSourceFile("/src/main.ts");
         assert.ok(sourceFile);
         let exportSpecifier: Node | undefined;
@@ -4235,7 +4283,7 @@ describe("Checker - getAliasedSymbol", () => {
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const pos = `import { foo } from "./foo";`.indexOf("foo }");
         const aliasSymbol = project.checker.getSymbolAtPosition("/src/main.ts", pos);
         assert.ok(aliasSymbol);
@@ -4260,7 +4308,7 @@ export class Standalone {}
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const sourceFile = project.program.getSourceFile("/src/index.ts");
         assert.ok(sourceFile);
         const moduleSymbol = project.checker.getSymbolAtLocation(sourceFile);
@@ -4289,7 +4337,7 @@ export * from "./inner";
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const sourceFile = project.program.getSourceFile("/src/index.ts");
         assert.ok(sourceFile);
         const moduleSymbol = project.checker.getSymbolAtLocation(sourceFile);
@@ -4318,7 +4366,7 @@ function f() {
         using api = spawnAPI(scopeFiles);
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const pos = scopeFiles["/src/main.ts"].indexOf("return innerValue");
         const symbols = project.checker.getSymbolsInScope(
             { document: "/src/main.ts", position: pos },
@@ -4335,7 +4383,7 @@ function f() {
         using api = spawnAPI(scopeFiles);
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const sourceFile = project.program.getSourceFile("/src/main.ts");
         assert.ok(sourceFile);
         const symbols = project.checker.getSymbolsInScope(sourceFile, SymbolFlags.Type);
@@ -4350,7 +4398,7 @@ function f() {
         using api = spawnAPI(scopeFiles);
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const pos = scopeFiles["/src/main.ts"].indexOf("return innerValue");
         const symbols = project.checker.getSymbolsInScope(
             { document: "/src/main.ts", position: pos },
@@ -4379,7 +4427,7 @@ export function add(a: number, b: number): number { return a + b; }
         using api = spawnAPI(docFiles);
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const pos = docFiles["/src/main.ts"].indexOf("add(a");
         const symbol = project.checker.getSymbolAtPosition("/src/main.ts", pos);
         assert.ok(symbol);
@@ -4392,7 +4440,7 @@ export function add(a: number, b: number): number { return a + b; }
         using api = spawnAPI(docFiles);
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const pos = docFiles["/src/main.ts"].indexOf("add(a");
         const symbol = project.checker.getSymbolAtPosition("/src/main.ts", pos);
         assert.ok(symbol);
@@ -4415,7 +4463,7 @@ describe("TypeParameter - isThisType", () => {
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         // ": this {" — offset 2 past ': ' lands on 't' in the return-type 'this'
         const pos = src.indexOf(": this {") + 2;
         const type = project.checker.getTypeAtPosition("/src/main.ts", pos);
@@ -4433,7 +4481,7 @@ describe("TypeParameter - isThisType", () => {
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         // Point to 'T' in the type parameter declaration '<T>' — getTypeAtPosition
         // on a type annotation reference doesn't resolve to TypeParameter, but
         // the declaration position does.
@@ -4455,7 +4503,7 @@ describe("Type - getAliasTypeArguments", () => {
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const pos = src.indexOf("x:");
         const symbol = project.checker.getSymbolAtPosition("/src/main.ts", pos);
         assert.ok(symbol);
@@ -4474,7 +4522,7 @@ describe("Type - getAliasTypeArguments", () => {
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const pos = src.indexOf("p:");
         const symbol = project.checker.getSymbolAtPosition("/src/main.ts", pos);
         assert.ok(symbol);
@@ -4494,7 +4542,7 @@ describe("Type - getAliasTypeArguments", () => {
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const pos = src.indexOf("arr:");
         const symbol = project.checker.getSymbolAtPosition("/src/main.ts", pos);
         assert.ok(symbol);
@@ -4515,7 +4563,7 @@ describe("Type - getAliasSymbol", () => {
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const pos = src.indexOf("p:");
         const symbol = project.checker.getSymbolAtPosition("/src/main.ts", pos);
         assert.ok(symbol);
@@ -4534,7 +4582,7 @@ describe("Type - getAliasSymbol", () => {
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const pos = src.indexOf("c:");
         const symbol = project.checker.getSymbolAtPosition("/src/main.ts", pos);
         assert.ok(symbol);
@@ -4553,7 +4601,7 @@ describe("Type - getAliasSymbol", () => {
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const pos = src.indexOf("str:");
         const symbol = project.checker.getSymbolAtPosition("/src/main.ts", pos);
         assert.ok(symbol);
@@ -4573,7 +4621,7 @@ describe("IntrinsicType - intrinsicName", () => {
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const stringType = project.checker.getStringType();
         assert.equal((stringType as IntrinsicType).intrinsicName, "string");
         const anyType = project.checker.getAnyType();
@@ -4599,7 +4647,7 @@ describe("FreshableType - getFreshType and getRegularType", () => {
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const symbol = project.checker.getSymbolAtPosition("/src/main.ts", src.indexOf("empty:"));
         assert.ok(symbol);
         const type = project.checker.getTypeOfSymbol(symbol);
@@ -4617,7 +4665,7 @@ describe("FreshableType - getFreshType and getRegularType", () => {
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const pos = src.indexOf("greeting:");
         const symbol = project.checker.getSymbolAtPosition("/src/main.ts", pos);
         assert.ok(symbol);
@@ -4636,7 +4684,7 @@ describe("FreshableType - getFreshType and getRegularType", () => {
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
 
         const posSymbol = project.checker.getSymbolAtPosition("/src/main.ts", src.indexOf("pos ="));
         assert.ok(posSymbol);
@@ -4665,7 +4713,7 @@ describe("FreshableType - getFreshType and getRegularType", () => {
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const pos = src.indexOf("greeting:");
         const symbol = project.checker.getSymbolAtPosition("/src/main.ts", pos);
         assert.ok(symbol);
@@ -4693,7 +4741,7 @@ describe("FreshableType - getFreshType and getRegularType", () => {
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const pos = src.indexOf("greeting:");
         const symbol = project.checker.getSymbolAtPosition("/src/main.ts", pos);
         assert.ok(symbol);
@@ -4720,7 +4768,7 @@ describe("FreshableType - getFreshType and getRegularType", () => {
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const pos = src.indexOf("Pending");
         const symbol = project.checker.getSymbolAtPosition("/src/main.ts", pos);
         assert.ok(symbol);
@@ -4752,7 +4800,7 @@ describe("Checker - isContextSensitive", () => {
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const sourceFile = project.program.getSourceFile("/src/main.ts");
         assert.ok(sourceFile);
         // Find the arrow function node
@@ -4777,7 +4825,7 @@ describe("Checker - isTypeAssignableTo", () => {
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const stringType = project.checker.getStringType();
         const anyType = project.checker.getAnyType();
         const neverType = project.checker.getNeverType();
@@ -4793,7 +4841,7 @@ describe("Checker - isTypeAssignableTo", () => {
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const stringType = project.checker.getStringType();
         const numberType = project.checker.getNumberType();
         assert.ok(!project.checker.isTypeAssignableTo(numberType, stringType), "number not assignable to string");
@@ -4808,7 +4856,7 @@ describe("Checker - isTypeAssignableTo", () => {
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const pos = src.indexOf("x:");
         const sym = project.checker.getSymbolAtPosition("/src/main.ts", pos);
         assert.ok(sym);
@@ -4837,7 +4885,7 @@ export const obj = { m: 1, s: "hi", b: true };
         using api = spawnAPI(emitterFiles);
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const node = createKeywordTypeNode(SyntaxKind.StringKeyword);
         const text = project.emitter.printNode(node);
         assert.strictEqual(text, "string");
@@ -4847,7 +4895,7 @@ export const obj = { m: 1, s: "hi", b: true };
         using api = spawnAPI(emitterFiles);
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const node = createUnionTypeNode([
             createKeywordTypeNode(SyntaxKind.StringKeyword),
             createKeywordTypeNode(SyntaxKind.NumberKeyword),
@@ -4860,7 +4908,7 @@ export const obj = { m: 1, s: "hi", b: true };
         using api = spawnAPI(emitterFiles);
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const param = createParameterDeclaration(
             undefined,
             undefined,
@@ -4882,7 +4930,7 @@ export const obj = { m: 1, s: "hi", b: true };
         using api = spawnAPI(emitterFiles);
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const node = createTypeReferenceNode(createIdentifier("Array"), [
             createKeywordTypeNode(SyntaxKind.StringKeyword),
         ]);
@@ -4894,7 +4942,7 @@ export const obj = { m: 1, s: "hi", b: true };
         using api = spawnAPI(emitterFiles);
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const node = createArrayTypeNode(createKeywordTypeNode(SyntaxKind.NumberKeyword));
         const text = project.emitter.printNode(node);
         assert.strictEqual(text, "number[]");
@@ -4904,7 +4952,7 @@ export const obj = { m: 1, s: "hi", b: true };
         using api = spawnAPI(emitterFiles);
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const { checker, emitter } = snapshot.getProject("/tsconfig.json")!;
+        const { checker, emitter } = snapshot.getConfiguredProject("/tsconfig.json")!;
         const src = emitterFiles["/src/main.ts"];
 
         const greetPos = src.indexOf("greet(");
@@ -4923,7 +4971,7 @@ export const obj = { m: 1, s: "hi", b: true };
         using api = spawnAPI(emitterFiles);
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const { checker } = snapshot.getProject("/tsconfig.json")!;
+        const { checker } = snapshot.getConfiguredProject("/tsconfig.json")!;
         const src = emitterFiles["/src/main.ts"];
         const objPos = src.indexOf("obj");
         const symbol = checker.getSymbolAtPosition("/src/main.ts", objPos);
@@ -4971,7 +5019,7 @@ export const obj = { m: 1, s: "hi", b: true };
         using api = spawnAPI(emitterFiles);
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const { checker } = snapshot.getProject("/tsconfig.json")!;
+        const { checker } = snapshot.getConfiguredProject("/tsconfig.json")!;
         const src = emitterFiles["/src/main.ts"];
 
         const greetPos = src.indexOf("greet(");
@@ -4990,7 +5038,7 @@ export const obj = { m: 1, s: "hi", b: true };
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const { checker } = snapshot.getProject("/tsconfig.json")!;
+        const { checker } = snapshot.getConfiguredProject("/tsconfig.json")!;
         const greetPos = "export function greet".indexOf("greet");
         const symbol = checker.getSymbolAtPosition("/src/main.ts", greetPos);
         assert.ok(symbol);
@@ -5007,7 +5055,7 @@ export const obj = { m: 1, s: "hi", b: true };
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const sourceFile = project.program.getSourceFile("/src/main.ts");
         assert.ok(sourceFile);
 
@@ -5052,7 +5100,7 @@ describe("Program - selected file emit", () => {
         using api = disposableAPI;
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const result = project.program.getJavaScriptEmit(["/src/a.ts", "/src/b.ts"]);
         assert.equal(result.emitSkipped, false);
         assert.deepEqual([...result.outputFiles.keys()], [
@@ -5071,7 +5119,7 @@ describe("Program - selected file emit", () => {
         using api = disposableAPI;
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const result = project.program.getDeclarationEmit(["/src/a.ts", "/src/b.ts"]);
         assert.equal(result.emitSkipped, false);
         assert.deepEqual([...result.outputFiles.keys()], [
@@ -5088,7 +5136,7 @@ describe("Program - selected file emit", () => {
         using api = spawnAPI({ ...files });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         assert.deepEqual((project.program.getJavaScriptEmit([])).outputFiles, new Map());
         assert.deepEqual((project.program.getDeclarationEmit([])).outputFiles, new Map());
     });
@@ -5180,7 +5228,7 @@ describe("modifierFlags", () => {
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const sourceFile = project.program.getSourceFile("/src/index.ts");
         assert.ok(sourceFile);
 
@@ -5204,7 +5252,7 @@ describe("modifierFlags", () => {
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const sourceFile = project.program.getSourceFile("/src/index.ts");
         assert.ok(sourceFile);
 
@@ -5228,7 +5276,7 @@ describe("Checker - getResolvedSymbol", () => {
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const sourceFile = project.program.getSourceFile("/src/index.ts");
         assert.ok(sourceFile);
 
@@ -5257,7 +5305,7 @@ describe("VariableDeclarationList - BlockScoped flags", () => {
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const sourceFile = project.program.getSourceFile("/src/index.ts");
         assert.ok(sourceFile);
 
@@ -5279,7 +5327,7 @@ describe("VariableDeclarationList - BlockScoped flags", () => {
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const sourceFile = project.program.getSourceFile("/src/index.ts");
         assert.ok(sourceFile);
 
@@ -5302,7 +5350,7 @@ test("TypeOperator operator kind", () => {
     });
 
     const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-    const project = snapshot.getProject("/tsconfig.json")!;
+    const project = snapshot.getConfiguredProject("/tsconfig.json")!;
     const sourceFile = project.program.getSourceFile("/src/index.ts");
     assert(sourceFile);
     const param = (sourceFile.statements[0] as import("@typescript/typescript/unstable/ast").FunctionDeclaration).parameters[0];
@@ -5322,7 +5370,7 @@ test("SpreadAssignment roundtrip", () => {
     });
 
     const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-    const project = snapshot.getProject("/tsconfig.json")!;
+    const project = snapshot.getConfiguredProject("/tsconfig.json")!;
     const sourceFile = project.program.getSourceFile("/src/index.ts");
     assert(sourceFile);
     const stmt = sourceFile.statements[0] as import("@typescript/typescript/unstable/ast").VariableStatement;
@@ -5344,7 +5392,7 @@ test("VariableDeclarationList const flag clone", () => {
     });
 
     const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-    const project = snapshot.getProject("/tsconfig.json")!;
+    const project = snapshot.getConfiguredProject("/tsconfig.json")!;
     const sourceFile = project.program.getSourceFile("/src/index.ts");
     assert(sourceFile);
     {
@@ -5374,7 +5422,7 @@ doThing();
     });
 
     const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-    const project = snapshot.getProject("/tsconfig.json")!;
+    const project = snapshot.getConfiguredProject("/tsconfig.json")!;
     const sourceFile = project.program.getSourceFile("/src/index.ts");
     assert(sourceFile);
     const printed = project.emitter.printNode(sourceFile);
@@ -5385,7 +5433,7 @@ test("Factory ModifierList auto-conversion", () => {
     using api = spawnAPI();
 
     const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-    const project = snapshot.getProject("/tsconfig.json")!;
+    const project = snapshot.getConfiguredProject("/tsconfig.json")!;
     const node = createTypeAliasDeclaration(
         [createToken(SyntaxKind.ExportKeyword)],
         createIdentifier("Test"),
@@ -5413,7 +5461,7 @@ test("Parse-clone-emit roundtrip", () => {
 
     for (const tsconfig of globSync("**/tsconfig.json", { cwd: tsSource })) {
         const snapshot = api.createSnapshot({ openProject: resolve(tsSource, tsconfig) });
-        const project = snapshot.getProject(tsconfig);
+        const project = snapshot.getConfiguredProject(tsconfig);
         assert(project);
         for (const file of project.rootFiles) {
             const source = project.program.getSourceFile(file);
@@ -5458,7 +5506,7 @@ describe("Program - diagnostics", () => {
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const diags = project.program.getSyntacticDiagnostics("/src/index.ts");
         assert.deepEqual(diags[0].startPosition, { line: 0, character: 9 });
         assert.deepEqual(diags[0].endPosition, { line: 0, character: 10 });
@@ -5480,7 +5528,7 @@ describe("Program - diagnostics", () => {
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const diags = project.program.getSemanticDiagnostics("/src/index.ts");
         const declRange = rangeOf(source, "callback", 0);
         const assignRange = rangeOf(source, "callback", 1);
@@ -5522,7 +5570,7 @@ describe("Program - diagnostics", () => {
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const diags = project.program.getSuggestionDiagnostics("/src/index.ts");
         assert.deepEqual(withoutFormattingContext(diags), [{
             fileName: "/src/index.ts",
@@ -5542,7 +5590,7 @@ describe("Program - diagnostics", () => {
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const diags = project.program.getConfigFileParsingDiagnostics();
         assert.deepEqual(withoutFormattingContext(diags), [{
             fileName: "/tsconfig.json",
@@ -5563,7 +5611,7 @@ describe("Program - diagnostics", () => {
         using api = disposableAPI;
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const names = project.program.getConfigFileNames();
         assert.deepEqual(names, ["/tsconfig.json", "/tsconfig.base.json"]);
 
@@ -5589,7 +5637,7 @@ describe("Program - diagnostics", () => {
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const diags = project.program.getDeclarationDiagnostics("/src/index.ts");
         assert.deepEqual(diags, []);
     });
@@ -5602,7 +5650,7 @@ describe("Program - diagnostics", () => {
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const diags = project.program.getBindDiagnostics("/src/index.ts");
         assert.deepEqual(withoutFormattingContext(diags), [
             {
@@ -5630,7 +5678,7 @@ describe("Program - diagnostics", () => {
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const diags = project.program.getProgramDiagnostics();
         assert.deepEqual(withoutFormattingContext(diags), [
             {
@@ -5657,7 +5705,7 @@ describe("Program - diagnostics", () => {
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const diags = project.program.getGlobalDiagnostics();
         assert.deepEqual(diags, []);
     });
@@ -5669,7 +5717,7 @@ describe("Program - diagnostics", () => {
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const diags = project.program.getGlobalDiagnostics();
         // With noLib, the checker reports "Cannot find global type" diagnostics that
         // are not associated with any source file.
@@ -5696,7 +5744,7 @@ describe("Program - diagnostics", () => {
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const diags = project.program.getSyntacticDiagnostics(["/src/a.ts", "/src/b.ts"]);
         assert.deepEqual(withoutFormattingContext(diags), [
             {
@@ -5726,7 +5774,7 @@ describe("Program - diagnostics", () => {
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const diags = project.program.getSemanticDiagnostics(["/src/a.ts", "/src/b.ts"]);
         assert.equal(diags.length, 2);
         assert.equal(diags[0].fileName, "/src/a.ts");
@@ -5745,7 +5793,7 @@ describe("Program - diagnostics", () => {
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const diags = project.program.getBindDiagnostics(["/src/a.ts", "/src/b.ts"]);
         assert.equal(diags.length, 4);
         assert.equal(diags.filter(d => d.fileName === "/src/a.ts").length, 2);
@@ -5760,7 +5808,7 @@ describe("Program - diagnostics", () => {
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const diags = project.program.getSyntacticDiagnostics();
         assert.equal(diags.length, 2);
     });
@@ -5773,7 +5821,7 @@ describe("Program - diagnostics", () => {
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const diags = project.program.getSyntacticDiagnostics([]);
         assert.deepEqual(diags, []);
     });
@@ -5789,7 +5837,7 @@ describe("getDefaultProjectForFile", () => {
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
 
         // The d.ts is not imported, so it is not in the project's program
         const dtsSf = project.program.getSourceFile("/node_modules/my-lib/index.d.ts");
@@ -5886,11 +5934,11 @@ describe("getDefaultProjectForFile", () => {
         });
 
         const opened = api.createSnapshot({ openProjects: ["/tsconfig.json"] });
-        assert.ok(opened.getProject("/tsconfig.json"), "project should be open after openProjects");
+        assert.ok(opened.getConfiguredProject("/tsconfig.json"), "project should be open after openProjects");
 
         const closed = api.createSnapshot({ closeProjects: ["/tsconfig.json"] });
         assert.equal(
-            closed.getProject("/tsconfig.json"),
+            closed.getConfiguredProject("/tsconfig.json"),
             undefined,
             "project should be unloaded after closeProjects",
         );
@@ -5941,7 +5989,7 @@ describe("Program - emit", () => {
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const result = project.program.emit();
         assert.deepEqual(result, {
             diagnostics: [],
@@ -5973,7 +6021,7 @@ describe("Program - emit", () => {
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const result = project.program.emit(EmitOnly.OnlyDts);
         assert.deepEqual(result, {
             diagnostics: [],
@@ -6003,7 +6051,7 @@ describe("Program - emit", () => {
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const result = project.program.emit(EmitOnly.OnlyJs);
         assert.deepEqual(result, {
             diagnostics: [],
@@ -6029,7 +6077,7 @@ describe("Program - emit", () => {
         using api = disposableAPI;
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const result = project.program.emitToString(EmitOnly.OnlyDts);
         assert.deepEqual([...result.outputFiles.keys()], [
             "/dist/src/index.d.ts",
@@ -6053,7 +6101,7 @@ describe("Program - emit", () => {
         using api = disposableAPI;
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
 
         const result = project.program.emit();
         assert.deepEqual(
@@ -6095,7 +6143,7 @@ describe("Program - emit", () => {
         using api = disposableAPI;
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const result = project.program.emit();
         assert.equal(result.emitSkipped, true);
         assert.ok(result.diagnostics.some(d => d.code === 1109));
@@ -6117,7 +6165,7 @@ describe("Program - emit", () => {
         using api = disposableAPI;
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         assert.deepEqual(project.program.emit(), {
             diagnostics: [],
             emitSkipped: false,
@@ -6135,7 +6183,7 @@ describe("Program - emit", () => {
         using api = spawnAPI({ ...files });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
 
         let error: unknown;
         try {
@@ -6177,7 +6225,7 @@ describe("Timing", () => {
 
         // Exercise a JSON request and a binary source-file request.
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const sourceFile = project.program.getSourceFile("/src/index.ts");
         assert.ok(sourceFile);
 
@@ -6236,7 +6284,7 @@ describe("Timing", () => {
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const sourceFile = project.program.getSourceFile("/src/index.ts");
         assert.ok(sourceFile);
 
@@ -6305,7 +6353,7 @@ describe("runWithTemporaryFileUpdate", () => {
         });
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getProject("/tsconfig.json")!;
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
 
         // The original content type-checks cleanly.
         const baseDiags = project.program.getSemanticDiagnostics("/src/index.ts");
@@ -6318,7 +6366,7 @@ describe("runWithTemporaryFileUpdate", () => {
         // Inside the callback, the file has the temporary (erroneous) content.
         let errorCount = -1;
         api.runWithTemporaryFileUpdate(snapshot, "/src/index.ts", `export const x: string = 1;`, tempSnapshot => {
-            const tempProject = tempSnapshot.getProject("/tsconfig.json")!;
+            const tempProject = tempSnapshot.getConfiguredProject("/tsconfig.json")!;
             const diags = tempProject.program.getSemanticDiagnostics("/src/index.ts");
             errorCount = diags.length;
         });
@@ -6330,7 +6378,7 @@ describe("runWithTemporaryFileUpdate", () => {
 
         // A subsequent independent snapshot can request the project again.
         const snapshot2 = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project2 = snapshot2.getProject("/tsconfig.json")!;
+        const project2 = snapshot2.getConfiguredProject("/tsconfig.json")!;
         const diags2 = project2.program.getSemanticDiagnostics("/src/index.ts");
         assert.equal(diags2.length, 0);
     });
@@ -6346,12 +6394,12 @@ describe("runWithTemporaryFileUpdate", () => {
         const snapshot = api.createSnapshot({
             openProjects: ["/first/tsconfig.json", "/second/tsconfig.json"],
         });
-        const originalSecondProject = snapshot.getProject("/second/tsconfig.json")!;
+        const originalSecondProject = snapshot.getConfiguredProject("/second/tsconfig.json")!;
 
         api.runWithTemporaryFileUpdate(snapshot, "/first/index.ts", `export const first = 2;`, tempSnapshot => {
             assert.equal(tempSnapshot.getProjects().length, 2);
-            assert.ok(tempSnapshot.getProject("/first/tsconfig.json"));
-            const secondProject = tempSnapshot.getProject("/second/tsconfig.json");
+            assert.ok(tempSnapshot.getConfiguredProject("/first/tsconfig.json"));
+            const secondProject = tempSnapshot.getConfiguredProject("/second/tsconfig.json");
             assert.ok(secondProject);
             assert.notStrictEqual(secondProject, originalSecondProject);
             assert.equal((secondProject.program.getSourceFileNames()).includes("/second/index.ts"), true);

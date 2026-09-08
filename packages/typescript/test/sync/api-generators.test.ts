@@ -301,6 +301,7 @@ function assertOptionalSourceFilesEquivalent(actual: SourceFile | undefined, exp
 }
 
 function assertProjectsEquivalent(actual: Project, expected: Project, message?: string): void {
+    assert.equal(actual.id, expected.id, message);
     assert.equal(actual.configFileName, expected.configFileName, message);
     assert.equal(actual.dirty, expected.dirty, message);
     assert.deepEqual(actual.rootFiles, expected.rootFiles, message);
@@ -318,6 +319,8 @@ function assertSnapshotsEquivalent(actual: Snapshot, expected: Snapshot, message
     const actualProjects = actual.getProjects();
     const expectedProjects = expected.getProjects();
     assertArrayElementsEquivalent(actualProjects, expectedProjects, assertProjectsEquivalent, message);
+    assert.deepEqual(actual.operation.createdPrograms?.map(program => program.id), expected.operation.createdPrograms?.map(program => program.id), message);
+    assert.deepEqual(actual.operation.openedFiles?.map(result => result.project.id), expected.operation.openedFiles?.map(result => result.project.id), message);
 }
 
 function assertSymbolMapsEquivalent(actual: ReadonlyMap<string, Symbol>, expected: ReadonlyMap<string, Symbol>, message?: string): void {
@@ -564,7 +567,7 @@ describe("API - generator batching", () => {
         const api = spawnAPI();
         try {
             using snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-            const program = snapshot.getProject("/tsconfig.json")!.program;
+            const program = snapshot.getConfiguredProject("/tsconfig.json")!.program;
             const sourceFile = program.getSourceFile("/src/index.ts")!;
             const state = program.getSourceFileMetadataByPath.gen(sourceFile.path).next();
 
@@ -580,7 +583,7 @@ describe("API - generator batching", () => {
         const api = spawnAPI();
         try {
             using snapshot = api.batch(api.createSnapshot.gen({ openProject: "/tsconfig.json" }))[0];
-            const project = snapshot.getProject("/tsconfig.json")!;
+            const project = snapshot.getConfiguredProject("/tsconfig.json")!;
             const sourceFile = project.program.getSourceFile("/src/index.ts");
             assert.ok(sourceFile);
             const node = cast(
@@ -632,7 +635,7 @@ describe("API - generator batching", () => {
         const api = spawnAPI(parityFiles);
         try {
             using snapshot = api.batch(api.createSnapshot.gen({ openProject: "/tsconfig.json" }))[0];
-            const project = snapshot.getProject("/tsconfig.json")!;
+            const project = snapshot.getConfiguredProject("/tsconfig.json")!;
             const { checker, emitter, languageService, program } = project;
             const indexFile = program.getSourceFile("/src/index.ts")!;
             const modelsFile = program.getSourceFile("/src/models.ts")!;
@@ -774,7 +777,7 @@ describe("API - generator batching", () => {
                 parityCase("API", "transpileModuleFromFile", api.transpileModuleFromFile, assertDeepEquivalent, "/src/index.ts"),
                 parityCase("API", "transpileDeclaration", api.transpileDeclaration, assertDeepEquivalent, "export function declared(value: string): number { return value.length; }"),
                 parityCase("API", "transpileDeclarationFromFile", api.transpileDeclarationFromFile, assertDeepEquivalent, "/src/index.ts"),
-                parityCase("API", "createSnapshot", api.createSnapshot, assertSnapshotsEquivalent, { openProject: "/tsconfig.json" }),
+                parityCase("API", "createSnapshot", api.createSnapshot as GeneratorMethod<[params: { openProject: string; }], Snapshot>, assertSnapshotsEquivalent, { openProject: "/tsconfig.json" }),
                 parityCase("API", "createProgram", api.createProgram, assertProgramsEquivalent, ["/src/index.ts"], { compilerOptions: { noLib: true } }),
                 parityCase("API", "runWithTemporaryFileUpdate", api.runWithTemporaryFileUpdate, assertDeepEquivalent, snapshot, "/src/index.ts", parityFiles["/src/index.ts"].replace("123", '"fixed"'), (temporarySnapshot: Snapshot) => {
                     temporaryProjects.push(temporarySnapshot.getProjects()[0].configFileName);

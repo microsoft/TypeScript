@@ -6,6 +6,7 @@ import (
 
 	"github.com/microsoft/TypeScript/tsc/internal/bundled"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/json"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/projecttestutil"
 	"gotest.tools/v3/assert"
 )
@@ -79,6 +80,7 @@ func TestCreateSnapshotCreatesPrograms(t *testing.T) {
 	})
 	assert.NilError(t, err)
 	assert.Equal(t, len(response.Projects), 2)
+	assert.DeepEqual(t, *response.Operation.CreatedPrograms, []SyntheticProjectID{"/dev/null/synthetic/1", "/dev/null/synthetic/2"})
 	assert.DeepEqual(t, response.Projects[0].RootFiles, []string{fileA, fileB})
 	assert.Equal(t, response.Projects[0].CompilerOptions.Strict, core.TSTrue)
 	assert.DeepEqual(t, response.Projects[1].RootFiles, []string{fileB})
@@ -89,6 +91,32 @@ func TestCreateSnapshotCreatesPrograms(t *testing.T) {
 	for _, projectResponse := range response.Projects {
 		assert.Assert(t, snapshot.snapshot.ProjectCollection.GetProjectByPath(parseProjectHandle(projectResponse.Id)) != nil)
 	}
+}
+
+func TestSnapshotOperationResponseOmitsUnrequestedFields(t *testing.T) {
+	t.Parallel()
+
+	projectSession, _ := projecttestutil.Setup(map[string]any{})
+	defer projectSession.Close()
+	session := NewLSPSession(projectSession, nil)
+	defer session.Close()
+
+	response, err := session.handleCreateSnapshot(context.Background(), &CreateSnapshotParams{})
+	assert.NilError(t, err)
+	encoded, err := json.Marshal(response.Operation)
+	assert.NilError(t, err)
+	assert.Equal(t, string(encoded), `{}`)
+
+	response, err = session.handleCreateSnapshot(context.Background(), &CreateSnapshotParams{
+		SnapshotRequestChangesParams: SnapshotRequestChangesParams{
+			CreatePrograms: []*CreateSnapshotProgramParams{},
+			OpenFiles:      []DocumentIdentifier{},
+		},
+	})
+	assert.NilError(t, err)
+	encoded, err = json.Marshal(response.Operation)
+	assert.NilError(t, err)
+	assert.Equal(t, string(encoded), `{"createdPrograms":[],"openedFiles":[]}`)
 }
 
 func TestCreateSnapshotRejectsRemovingProgramFromIndependentRoot(t *testing.T) {
