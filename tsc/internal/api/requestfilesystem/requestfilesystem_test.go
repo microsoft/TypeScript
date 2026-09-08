@@ -453,6 +453,34 @@ func TestRequestFileSystem(t *testing.T) {
 		assert.Equal(t, len(layered.GetAccessibleEntries("/link").Files), 0)
 	})
 
+	t.Run("alias tombstones take precedence over same-layer symlink targets", func(t *testing.T) {
+		t.Parallel()
+		host := vfstest.FromMap(map[string]string{
+			"/host-target/file.ts": "host",
+		}, true)
+		fileSystem, err := newRequestFileSystem(&RequestFileSystem{
+			Kind: KindFull,
+			Files: map[string]string{
+				"/target/file.ts": "memory",
+			},
+			Symlinks: map[string]RequestSymlink{
+				"/link":      {Target: "/target"},
+				"/host-link": {Target: "/host-target", Host: true},
+			},
+			RemovedPaths: []string{"/link/file.ts", "/host-link/file.ts"},
+		}, host, "/")
+		assert.NilError(t, err)
+
+		for _, path := range []string{"/link/file.ts", "/host-link/file.ts"} {
+			_, ok := fileSystem.ReadFile(path)
+			assert.Assert(t, !ok, path)
+			assert.Assert(t, !fileSystem.FileExists(path), path)
+			assert.Assert(t, fileSystem.Stat(path) == nil, path)
+		}
+		assert.Equal(t, len(fileSystem.GetAccessibleEntries("/link").Files), 0)
+		assert.Equal(t, len(fileSystem.GetAccessibleEntries("/host-link").Files), 0)
+	})
+
 	t.Run("compaction preserves overlays addressed through inherited symlinks", func(t *testing.T) {
 		t.Parallel()
 		host := vfstest.FromMap(map[string]string{}, true)

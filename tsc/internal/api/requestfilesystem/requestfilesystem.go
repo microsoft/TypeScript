@@ -560,7 +560,7 @@ func (s requestFileSystem) lookupPath(path string) requestPathLookup {
 	if kind := s.pathKind(absolutePath); kind != requestPathKindMissing {
 		return requestPathLookup{path: absolutePath, kind: kind, ok: true}
 	}
-	if s.isPreSymlinkRemoved(path) {
+	if s.isPreSymlinkRemoved(path) || s.isRemoved(path) {
 		return requestPathLookup{}
 	}
 	resolved := s.resolvePath(path)
@@ -583,9 +583,6 @@ func (s requestFileSystem) lookupPath(path string) requestPathLookup {
 	if kind := s.pathKind(resolved.path); kind != requestPathKindMissing {
 		result.kind = kind
 		return result
-	}
-	if !resolved.followedSymlink && s.isRemoved(path) {
-		return requestPathLookup{}
 	}
 	if s.fallsBack() {
 		fallback := s.resolveBasePath(resolved.path)
@@ -758,11 +755,11 @@ func (s requestFileSystem) GetAccessibleEntries(directoryName string) vfs.Entrie
 	if !fallbackHost && s.toPath(fallbackPath) != s.toPath(resolved.path) {
 		result = s.addSymlinkEntries(fallbackPath, result)
 	}
-	result = s.removePreSymlinkEntries(directoryName, result)
+	result = s.removeTombstonedEntries(directoryName, result)
 	return result
 }
 
-func (s requestFileSystem) removePreSymlinkEntries(directoryName string, entries vfs.Entries) vfs.Entries {
+func (s requestFileSystem) removeTombstonedEntries(directoryName string, entries vfs.Entries) vfs.Entries {
 	result := cloneEntries(entries)
 	filter := func(values []string) []string {
 		return slices.DeleteFunc(values, func(name string) bool {
@@ -772,6 +769,9 @@ func (s requestFileSystem) removePreSymlinkEntries(directoryName string, entries
 			}
 			if _, ok := s.directoryAt(fileName); ok {
 				return false
+			}
+			if s.isRemoved(fileName) {
+				return true
 			}
 			path := s.toPath(fileName)
 			for removedPath := range s.preSymlinkRemovedPaths {
