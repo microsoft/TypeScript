@@ -119,11 +119,11 @@ const node = object({
 
 });
 declare const nodeOutput: Output<typeof node>;
->nodeOutput : { name: string; readonly children: { name: string; readonly children: any[]; }[]; }
+>nodeOutput : { name: string; readonly children: any[]; }
 >node : ObjectSchema<{ name: TextSchema; readonly children: ArraySchema<ObjectSchema<any>>; }>
 
 declare const nodeInput: Input<typeof node>;
->nodeInput : { name: number; readonly children: { name: number; readonly children: any[]; }[]; }
+>nodeInput : { name: number; readonly children: any[]; }
 >node : ObjectSchema<{ name: TextSchema; readonly children: ArraySchema<ObjectSchema<any>>; }>
 
 const outputName: string = nodeOutput.children[0].children[0].name;
@@ -133,7 +133,7 @@ const outputName: string = nodeOutput.children[0].children[0].name;
 >nodeOutput.children[0].children : { name: string; readonly children: any[]; }[]
 >nodeOutput.children[0] : { name: string; readonly children: any[]; }
 >nodeOutput.children : { name: string; readonly children: any[]; }[]
->nodeOutput : { name: string; readonly children: { name: string; readonly children: any[]; }[]; }
+>nodeOutput : { name: string; readonly children: any[]; }
 >children : { name: string; readonly children: any[]; }[]
 >0 : 0
 >children : { name: string; readonly children: any[]; }[]
@@ -147,7 +147,7 @@ const inputName: number = nodeInput.children[0].children[0].name;
 >nodeInput.children[0].children : { name: number; readonly children: any[]; }[]
 >nodeInput.children[0] : { name: number; readonly children: any[]; }
 >nodeInput.children : { name: number; readonly children: any[]; }[]
->nodeInput : { name: number; readonly children: { name: number; readonly children: any[]; }[]; }
+>nodeInput : { name: number; readonly children: any[]; }
 >children : { name: number; readonly children: any[]; }[]
 >0 : 0
 >children : { name: number; readonly children: any[]; }[]
@@ -159,7 +159,7 @@ const wrongOutput: number = nodeOutput.children[0].name;
 >nodeOutput.children[0].name : string
 >nodeOutput.children[0] : { name: string; readonly children: any[]; }
 >nodeOutput.children : { name: string; readonly children: any[]; }[]
->nodeOutput : { name: string; readonly children: { name: string; readonly children: any[]; }[]; }
+>nodeOutput : { name: string; readonly children: any[]; }
 >children : { name: string; readonly children: any[]; }[]
 >0 : 0
 >name : string
@@ -169,7 +169,7 @@ const wrongInput: string = nodeInput.children[0].name;
 >nodeInput.children[0].name : number
 >nodeInput.children[0] : { name: number; readonly children: any[]; }
 >nodeInput.children : { name: number; readonly children: any[]; }[]
->nodeInput : { name: number; readonly children: { name: number; readonly children: any[]; }[]; }
+>nodeInput : { name: number; readonly children: any[]; }
 >children : { name: number; readonly children: any[]; }[]
 >0 : 0
 >name : number
@@ -180,7 +180,7 @@ nodeOutput.children[0].children[0].missing;
 >nodeOutput.children[0].children : { name: string; readonly children: any[]; }[]
 >nodeOutput.children[0] : { name: string; readonly children: any[]; }
 >nodeOutput.children : { name: string; readonly children: any[]; }[]
->nodeOutput : { name: string; readonly children: { name: string; readonly children: any[]; }[]; }
+>nodeOutput : { name: string; readonly children: any[]; }
 >children : { name: string; readonly children: any[]; }[]
 >0 : 0
 >children : { name: string; readonly children: any[]; }[]

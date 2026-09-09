@@ -560,11 +560,27 @@ export function checkExtendedOutput() {
     const deep: ExtendedOutput = value.children.children.children.children;
 >deep : Symbol(deep, Decl(recursiveGetterCovariantMetadata.ts, 109, 9))
 >ExtendedOutput : Symbol(ExtendedOutput, Decl(recursiveGetterCovariantMetadata.ts, 106, 39))
+>value.children.children.children.children : Symbol(children, Decl(recursiveGetterCovariantMetadata.ts, 102, 44))
+>value.children.children.children : Symbol(children, Decl(recursiveGetterCovariantMetadata.ts, 101, 40))
+>value.children.children : Symbol(children, Decl(recursiveGetterCovariantMetadata.ts, 102, 44))
+>value.children : Symbol(children, Decl(recursiveGetterCovariantMetadata.ts, 101, 40))
 >value : Symbol(value, Decl(recursiveGetterCovariantMetadata.ts, 108, 9))
+>children : Symbol(children, Decl(recursiveGetterCovariantMetadata.ts, 101, 40))
+>children : Symbol(children, Decl(recursiveGetterCovariantMetadata.ts, 102, 44))
+>children : Symbol(children, Decl(recursiveGetterCovariantMetadata.ts, 101, 40))
+>children : Symbol(children, Decl(recursiveGetterCovariantMetadata.ts, 102, 44))
 
     type Deep = typeof value.children.children.children.children;
 >Deep : Symbol(Deep, Decl(recursiveGetterCovariantMetadata.ts, 109, 75))
+>value.children.children.children.children : Symbol(children, Decl(recursiveGetterCovariantMetadata.ts, 102, 44))
+>value.children.children.children : Symbol(children, Decl(recursiveGetterCovariantMetadata.ts, 101, 40))
+>value.children.children : Symbol(children, Decl(recursiveGetterCovariantMetadata.ts, 102, 44))
+>value.children : Symbol(children, Decl(recursiveGetterCovariantMetadata.ts, 101, 40))
 >value : Symbol(value, Decl(recursiveGetterCovariantMetadata.ts, 108, 9))
+>children : Symbol(children, Decl(recursiveGetterCovariantMetadata.ts, 101, 40))
+>children : Symbol(children, Decl(recursiveGetterCovariantMetadata.ts, 102, 44))
+>children : Symbol(children, Decl(recursiveGetterCovariantMetadata.ts, 101, 40))
+>children : Symbol(children, Decl(recursiveGetterCovariantMetadata.ts, 102, 44))
 
     type DeepIsNotAny = Assert<IsAny<Deep> extends false ? true : false>;
 >DeepIsNotAny : Symbol(DeepIsNotAny, Decl(recursiveGetterCovariantMetadata.ts, 110, 65))
@@ -574,6 +590,14 @@ export function checkExtendedOutput() {
 
     // @ts-expect-error Recursive output objects have no "missing" property.
     value.children.children.children.children.missing;
+>value.children.children.children.children : Symbol(children, Decl(recursiveGetterCovariantMetadata.ts, 102, 44))
+>value.children.children.children : Symbol(children, Decl(recursiveGetterCovariantMetadata.ts, 101, 40))
+>value.children.children : Symbol(children, Decl(recursiveGetterCovariantMetadata.ts, 102, 44))
+>value.children : Symbol(children, Decl(recursiveGetterCovariantMetadata.ts, 101, 40))
 >value : Symbol(value, Decl(recursiveGetterCovariantMetadata.ts, 108, 9))
+>children : Symbol(children, Decl(recursiveGetterCovariantMetadata.ts, 101, 40))
+>children : Symbol(children, Decl(recursiveGetterCovariantMetadata.ts, 102, 44))
+>children : Symbol(children, Decl(recursiveGetterCovariantMetadata.ts, 101, 40))
+>children : Symbol(children, Decl(recursiveGetterCovariantMetadata.ts, 102, 44))
 }
 

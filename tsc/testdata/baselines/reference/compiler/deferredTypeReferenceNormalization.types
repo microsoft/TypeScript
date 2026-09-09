@@ -1,0 +1,154 @@
+//// [tests/cases/compiler/deferredTypeReferenceNormalization.ts] ////
+
+=== deferredTypeReferenceNormalization.ts ===
+interface Holder<T extends { value: unknown }> {
+>value : unknown
+
+    leading: [...[T["value"], T["value"]], boolean];
+>leading : [T["value"], T["value"], boolean]
+
+    trailing: [boolean, ...[T["value"], T["value"]]];
+>trailing : [boolean, T["value"], T["value"]]
+
+    singleton: [...[T["value"]]];
+>singleton : [T["value"]]
+
+    empty: [...[], T["value"]];
+>empty : [T["value"]]
+
+    rest: [...T["value"][]];
+>rest : T["value"][]
+
+    readonly: readonly [...[T["value"], T["value"]]];
+>readonly : readonly [T["value"], T["value"]]
+
+    optional: [value?: T["value"]];
+>optional : [value?: T["value"] | undefined]
+
+    union: [...([T["value"]] | [T["value"], boolean])];
+>union : [T["value"]] | [T["value"], boolean]
+}
+
+declare const holder: Holder<{ value: string }>;
+>holder : Holder<{ value: string; }>
+>value : string
+
+const leading: [string, string, boolean] = holder.leading;
+>leading : [string, string, boolean]
+>holder.leading : [string, string, boolean]
+>holder : Holder<{ value: string; }>
+>leading : [string, string, boolean]
+
+const trailing: [boolean, string, string] = holder.trailing;
+>trailing : [boolean, string, string]
+>holder.trailing : [boolean, string, string]
+>holder : Holder<{ value: string; }>
+>trailing : [boolean, string, string]
+
+const singleton: [string] = holder.singleton;
+>singleton : [string]
+>holder.singleton : [string]
+>holder : Holder<{ value: string; }>
+>singleton : [string]
+
+const empty: [string] = holder.empty;
+>empty : [string]
+>holder.empty : [string]
+>holder : Holder<{ value: string; }>
+>empty : [string]
+
+const rest: string[] = holder.rest;
+>rest : string[]
+>holder.rest : string[]
+>holder : Holder<{ value: string; }>
+>rest : string[]
+
+const readonly: readonly [string, string] = holder.readonly;
+>readonly : readonly [string, string]
+>holder.readonly : readonly [string, string]
+>holder : Holder<{ value: string; }>
+>readonly : readonly [string, string]
+
+const optional: [value?: string] = holder.optional;
+>optional : [value?: string | undefined]
+>holder.optional : [value?: string | undefined]
+>holder : Holder<{ value: string; }>
+>optional : [value?: string | undefined]
+
+const union: [string] | [string, boolean] = holder.union;
+>union : [string] | [string, boolean]
+>holder.union : [string] | [string, boolean]
+>holder : Holder<{ value: string; }>
+>union : [string] | [string, boolean]
+
+// @ts-expect-error
+const wrongLeading: number = holder.leading[0];
+>wrongLeading : number
+>holder.leading[0] : string
+>holder.leading : [string, string, boolean]
+>holder : Holder<{ value: string; }>
+>leading : [string, string, boolean]
+>0 : 0
+
+// @ts-expect-error
+const wrongTrailing: number = holder.trailing[2];
+>wrongTrailing : number
+>holder.trailing[2] : string
+>holder.trailing : [boolean, string, string]
+>holder : Holder<{ value: string; }>
+>trailing : [boolean, string, string]
+>2 : 2
+
+// @ts-expect-error
+holder.singleton[1];
+>holder.singleton[1] : undefined
+>holder.singleton : [string]
+>holder : Holder<{ value: string; }>
+>singleton : [string]
+>1 : 1
+
+// @ts-expect-error
+holder.empty[1];
+>holder.empty[1] : undefined
+>holder.empty : [string]
+>holder : Holder<{ value: string; }>
+>empty : [string]
+>1 : 1
+
+// @ts-expect-error
+const wrongRest: number = holder.rest[0];
+>wrongRest : number
+>holder.rest[0] : string
+>holder.rest : string[]
+>holder : Holder<{ value: string; }>
+>rest : string[]
+>0 : 0
+
+// @ts-expect-error
+holder.readonly[0] = "changed";
+>holder.readonly[0] = "changed" : "changed"
+>holder.readonly[0] : error
+>holder.readonly : readonly [string, string]
+>holder : Holder<{ value: string; }>
+>readonly : readonly [string, string]
+>0 : 0
+>"changed" : "changed"
+
+// @ts-expect-error
+const wrongOptional: string = holder.optional[0];
+>wrongOptional : string
+>holder.optional[0] : string | undefined
+>holder.optional : [value?: string | undefined]
+>holder : Holder<{ value: string; }>
+>optional : [value?: string | undefined]
+>0 : 0
+
+// @ts-expect-error
+const wrongUnion: number = holder.union[0];
+>wrongUnion : number
+>holder.union[0] : string
+>holder.union : [string] | [string, boolean]
+>holder : Holder<{ value: string; }>
+>union : [string] | [string, boolean]
+>0 : 0
+

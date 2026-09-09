@@ -245,7 +245,7 @@ export function checkOutput() {
 
     // @ts-expect-error Recursive output objects have no "missing" property.
     value.children.children.children.children.missing;
->value.children.children.children.children.missing : any
+>value.children.children.children.children.missing : error
 >value.children.children.children.children : { children: { children: any; }; }
 >value.children.children.children : { children: { children: any; }; }
 >value.children.children : { children: { children: any; }; }
@@ -287,81 +287,81 @@ declare function extendedObject<T extends $ZodShape>(shape: T): ExtendedObject<W
 >shape : T
 
 export const extended = extendedObject({
->extended : ExtendedObject<{ readonly children: any; } extends infer T ? { -readonly [P in keyof T]: T[P]; } : never>
->extendedObject({    get children() { return extendedObject({ children: extended }); },}) : ExtendedObject<{ readonly children: any; } extends infer T ? { -readonly [P in keyof T]: T[P]; } : never>
+>extended : ExtendedObject<{ children: ExtendedObject<{ children: ExtendedObject<any>; }>; }>
+>extendedObject({    get children() { return extendedObject({ children: extended }); },}) : ExtendedObject<{ children: ExtendedObject<{ children: ExtendedObject<any>; }>; }>
 >extendedObject : <T extends $ZodShape>(shape: T) => ExtendedObject<Writeable<T>>
->{    get children() { return extendedObject({ children: extended }); },} : { readonly children: any; }
+>{    get children() { return extendedObject({ children: extended }); },} : { readonly children: ExtendedObject<{ children: ExtendedObject<{ children: ExtendedObject<any>; }>; }>; }
 
     get children() { return extendedObject({ children: extended }); },
->children : any
->extendedObject({ children: extended }) : ExtendedObject<{ children: ExtendedObject<{ readonly children: any; } extends infer T ? { -readonly [P in keyof T]: T[P]; } : never>; }>
+>children : ExtendedObject<{ children: ExtendedObject<{ children: ExtendedObject<any>; }>; }>
+>extendedObject({ children: extended }) : ExtendedObject<{ children: ExtendedObject<{ children: ExtendedObject<any>; }>; }>
 >extendedObject : <T extends $ZodShape>(shape: T) => ExtendedObject<Writeable<T>>
->{ children: extended } : { children: ExtendedObject<{ readonly children: any; } extends infer T ? { -readonly [P in keyof T]: T[P]; } : never>; }
->children : ExtendedObject<{ readonly children: any; } extends infer T ? { -readonly [P in keyof T]: T[P]; } : never>
->extended : ExtendedObject<{ readonly children: any; } extends infer T ? { -readonly [P in keyof T]: T[P]; } : never>
+>{ children: extended } : { children: ExtendedObject<{ children: ExtendedObject<{ children: ExtendedObject<any>; }>; }>; }
+>children : ExtendedObject<{ children: ExtendedObject<{ children: ExtendedObject<any>; }>; }>
+>extended : ExtendedObject<{ children: ExtendedObject<{ children: ExtendedObject<any>; }>; }>
 
 });
 extended.shape.children;
->extended.shape.children : any
->extended.shape : { readonly children: any; } extends infer T ? { -readonly [P in keyof T]: T[P]; } : never
->extended : ExtendedObject<{ readonly children: any; } extends infer T ? { -readonly [P in keyof T]: T[P]; } : never>
->shape : { readonly children: any; } extends infer T ? { -readonly [P in keyof T]: T[P]; } : never
->children : any
+>extended.shape.children : ExtendedObject<{ children: ExtendedObject<{ children: ExtendedObject<any>; }>; }>
+>extended.shape : { children: ExtendedObject<{ children: ExtendedObject<any>; }>; }
+>extended : ExtendedObject<{ children: ExtendedObject<{ children: ExtendedObject<any>; }>; }>
+>shape : { children: ExtendedObject<{ children: ExtendedObject<any>; }>; }
+>children : ExtendedObject<{ children: ExtendedObject<{ children: ExtendedObject<any>; }>; }>
 
 export function checkExtendedOutput() {
 >checkExtendedOutput : () => void
 
     type ExtendedOutput = output<typeof extended>;
->ExtendedOutput : { [x: string]: any; }
->extended : ExtendedObject<{ readonly children: any; } extends infer T ? { -readonly [P in keyof T]: T[P]; } : never>
+>ExtendedOutput : { children: { children: any; }; }
+>extended : ExtendedObject<{ children: ExtendedObject<{ children: ExtendedObject<any>; }>; }>
 
     const value = null! as ExtendedOutput;
->value : { [x: string]: any; }
->null! as ExtendedOutput : { [x: string]: any; }
+>value : { children: { children: any; }; }
+>null! as ExtendedOutput : { children: { children: any; }; }
 >null! : never
 
     const deep: ExtendedOutput = value.children.children.children.children;
->deep : { [x: string]: any; }
->value.children.children.children.children : any
->value.children.children.children : any
->value.children.children : any
->value.children : any
->value : { [x: string]: any; }
->children : any
->children : any
->children : any
->children : any
+>deep : { children: { children: any; }; }
+>value.children.children.children.children : { children: { children: any; }; }
+>value.children.children.children : { children: { children: any; }; }
+>value.children.children : { children: { children: any; }; }
+>value.children : { children: { children: any; }; }
+>value : { children: { children: any; }; }
+>children : { children: { children: any; }; }
+>children : { children: { children: any; }; }
+>children : { children: { children: any; }; }
+>children : { children: { children: any; }; }
 
     type Deep = typeof value.children.children.children.children;
->Deep : any
->value.children.children.children.children : any
->value.children.children.children : any
->value.children.children : any
->value.children : any
->value : { [x: string]: any; }
->children : any
->children : any
->children : any
->children : any
+>Deep : { children: { children: any; }; }
+>value.children.children.children.children : { children: { children: any; }; }
+>value.children.children.children : { children: { children: any; }; }
+>value.children.children : { children: { children: any; }; }
+>value.children : { children: { children: any; }; }
+>value : { children: { children: any; }; }
+>children : { children: { children: any; }; }
+>children : { children: { children: any; }; }
+>children : { children: { children: any; }; }
+>children : { children: { children: any; }; }
 
     type DeepIsNotAny = Assert<IsAny<Deep> extends false ? true : false>;
->DeepIsNotAny : any
+>DeepIsNotAny : true
 >false : false
 >true : true
 >false : false
 
     // @ts-expect-error Recursive output objects have no "missing" property.
     value.children.children.children.children.missing;
->value.children.children.children.children.missing : any
->value.children.children.children.children : any
->value.children.children.children : any
->value.children.children : any
->value.children : any
->value : { [x: string]: any; }
->children : any
->children : any
->children : any
->children : any
+>value.children.children.children.children.missing : error
+>value.children.children.children.children : { children: { children: any; }; }
+>value.children.children.children : { children: { children: any; }; }
+>value.children.children : { children: { children: any; }; }
+>value.children : { children: { children: any; }; }
+>value : { children: { children: any; }; }
+>children : { children: { children: any; }; }
+>children : { children: { children: any; }; }
+>children : { children: { children: any; }; }
+>children : { children: { children: any; }; }
 >missing : any
 }
 

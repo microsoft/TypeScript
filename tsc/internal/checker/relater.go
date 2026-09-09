@@ -2630,23 +2630,91 @@ func (r *Relater) isRelatedTo(source *Type, target *Type, recursionFlags Recursi
 	return r.isRelatedToEx(source, target, recursionFlags, reportErrors, nil, IntersectionStateNone)
 }
 
+// Deferred references capture outer type arguments in fixed mappers. Compare their
+// argument expressions in those environments without reducing conditionals or indexed accesses.
+func (c *Checker) hasIdenticalDeferredTypeArguments(source *Type, target *Type) bool {
+	s, t := source.AsTypeReference(), target.AsTypeReference()
+	if s.node == nil || t.node == nil || s.node.Kind != ast.KindTypeReference || t.node.Kind != ast.KindTypeReference {
+		return false
+	}
+	sourceParameters := s.target.AsInterfaceType().TypeParameters()
+	targetParameters := t.target.AsInterfaceType().TypeParameters()
+	if len(sourceParameters) != len(targetParameters) ||
+		len(s.node.TypeArguments()) != len(sourceParameters) || len(t.node.TypeArguments()) != len(targetParameters) ||
+		len(s.target.AsInterfaceType().OuterTypeParameters()) != 0 || len(t.target.AsInterfaceType().OuterTypeParameters()) != 0 {
+		return false
+	}
+	for i, argument := range s.node.TypeArguments() {
+		if !c.areTypeInstantiationsIdentical(c.getTypeFromTypeNode(argument), s.mapper, c.getTypeFromTypeNode(t.node.TypeArguments()[i]), t.mapper) {
+			return false
+		}
+	}
+	return true
+}
+
+func (c *Checker) areTypeInstantiationsIdentical(source *Type, sourceMapper *TypeMapper, target *Type, targetMapper *TypeMapper) bool {
+	if source == target && (sourceMapper == targetMapper || !c.couldContainTypeVariables(source)) {
+		return true
+	}
+	if source.flags&TypeFlagsTypeParameter != 0 && target.flags&TypeFlagsTypeParameter != 0 {
+		return c.instantiateType(source, sourceMapper) == c.instantiateType(target, targetMapper)
+	}
+	if source.flags&TypeFlagsConditional != 0 && target.flags&TypeFlagsConditional != 0 {
+		s, t := source.AsConditionalType(), target.AsConditionalType()
+		if s.root != t.root {
+			return false
+		}
+		return core.Every(s.root.outerTypeParameters, func(p *Type) bool {
+			return c.instantiateType(c.instantiateType(p, s.mapper), sourceMapper) ==
+				c.instantiateType(c.instantiateType(p, t.mapper), targetMapper)
+		})
+	}
+	if source.flags&TypeFlagsIndexedAccess != 0 && target.flags&TypeFlagsIndexedAccess != 0 {
+		s, t := source.AsIndexedAccessType(), target.AsIndexedAccessType()
+		return s.accessFlags == t.accessFlags &&
+			c.areTypeInstantiationsIdentical(s.objectType, sourceMapper, t.objectType, targetMapper) &&
+			c.areTypeInstantiationsIdentical(s.indexType, sourceMapper, t.indexType, targetMapper)
+	}
+	return false
+}
+
+// A false result leaves the relation to ordinary normalization and structural checking.
+func (c *Checker) isDeferredTypeReferenceAssignableTo(source *Type, target *Type) bool {
+	if c.hasIdenticalDeferredTypeArguments(source, target) {
+		if source.Target() == target.Target() {
+			return true
+		}
+		// Don't manufacture a target instantiation that violates its parameter constraints.
+		targetParameters := target.Target().AsInterfaceType().TypeParameters()
+		if core.Every(targetParameters, func(p *Type) bool { return c.getConstraintOfTypeParameter(p) == nil }) {
+			targetTemplate := c.createTypeReference(target.Target(), source.Target().AsInterfaceType().TypeParameters())
+			if c.isTypeAssignableTo(source.Target(), targetTemplate) {
+				return true
+			}
+		}
+	}
+	// Covariance proves F<T> assignable to F<unknown> without evaluating T. For other
+	// generic sources, prove that their declaration is assignable regardless of its arguments.
+	if target.Target().objectFlags&ObjectFlagsTuple == 0 {
+		targetArguments := c.getTypeArguments(target)
+		if len(targetArguments) != 0 && core.Every(targetArguments, func(t *Type) bool { return t.flags&TypeFlagsAnyOrUnknown != 0 }) {
+			variances := c.getVariances(target.Target())
+			if len(variances) == len(targetArguments) && core.Every(variances, func(v VarianceFlags) bool { return v == VarianceFlagsCovariant }) {
+				return source.Target() == target.Target() || c.isTypeAssignableTo(source.Target(), target)
+			}
+		}
+	}
+	return false
+}
+
 func (r *Relater) isRelatedToEx(originalSource *Type, originalTarget *Type, recursionFlags RecursionFlags, reportErrors bool, headMessage *diagnostics.Message, intersectionState IntersectionState) Ternary {
 	if originalSource == originalTarget {
 		return TernaryTrue
 	}
-	// Covariance proves F<T> assignable to F<unknown> without evaluating T, which may
-	// depend recursively on this comparison. Unreliable or unmeasurable variance is excluded.
 	if r.relation == r.c.assignableRelation &&
 		originalSource.objectFlags&ObjectFlagsReference != 0 && originalSource.AsTypeReference().node != nil &&
-		originalTarget.objectFlags&ObjectFlagsReference != 0 &&
-		originalSource.Target() == originalTarget.Target() && originalTarget.Target().objectFlags&ObjectFlagsTuple == 0 {
-		targetArguments := r.c.getTypeArguments(originalTarget)
-		if len(targetArguments) != 0 && core.Every(targetArguments, func(t *Type) bool { return t.flags&TypeFlagsAnyOrUnknown != 0 }) {
-			variances := r.c.getVariances(originalTarget.Target())
-			if len(variances) == len(targetArguments) && core.Every(variances, func(v VarianceFlags) bool { return v == VarianceFlagsCovariant }) {
-				return TernaryTrue
-			}
-		}
+		originalTarget.objectFlags&ObjectFlagsReference != 0 && r.c.isDeferredTypeReferenceAssignableTo(originalSource, originalTarget) {
+		return TernaryTrue
 	}
 	// Before normalization: if `source` is type an object type, and `target` is primitive,
 	// skip all the checks we don't need and just return `isSimpleTypeRelatedTo` result

@@ -1,10 +1,7 @@
 // === Syntax and Semantic Diagnostics ===
-/schema.ts(74,9): error TS7023: 'children' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
-/schema.ts(74,29): error TS2615: Type of property 'children' circularly references itself in mapped type '{ -readonly [P in keyof { readonly children: any; }]: { readonly children: any; }[P]; }'.
-/schema.ts(83,5): error TS2578: Unused '@ts-expect-error' directive.
 
 
-==== /schema.ts (3 errors) ====
+==== /schema.ts (0 errors) ====
     type input<T> = T extends { _zod: { input: any } } ? T["_zod"]["input"] : unknown;
     type output<T> = T extends { _zod: { output: any } } ? T["_zod"]["output"] : unknown;
     type Writeable<T> = { -readonly [P in keyof T]: T[P] } & {};
@@ -79,10 +76,6 @@
     declare function object<T extends Shape>(shape: T): ExtendedObject<Writeable<T>>;
     export const schema = object({
         get children() { return object({ children: schema }); },
-            ~~~~~~~~
-!!! error TS7023: 'children' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
-                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2615: Type of property 'children' circularly references itself in mapped type '{ -readonly [P in keyof { readonly children: any; }]: { readonly children: any; }[P]; }'.
     });
     schema.shape.children;
     type Assert<T extends true> = T;
@@ -92,8 +85,6 @@
         type NotAny = Assert<IsAny<typeof deep> extends false ? true : false>;
         const recursive: typeof deep = value;
         // @ts-expect-error The recursively inferred object has no missing property.
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2578: Unused '@ts-expect-error' directive.
         deep.missing;
     }
     

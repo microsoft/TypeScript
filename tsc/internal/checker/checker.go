@@ -23618,7 +23618,11 @@ func (c *Checker) getTypeFromClassOrInterfaceReference(node *ast.Node, symbol *a
 		// of the class or interface.
 		localTypeArguments := c.fillMissingTypeArguments(c.getTypeArgumentsFromNode(node), typeParameters, minTypeArgumentCount, isJs)
 		typeArguments := append(d.OuterTypeParameters(), localTypeArguments...)
-		return c.createTypeReferenceEx(t, typeArguments, ObjectFlagsFromTypeNode)
+		result := c.createTypeReferenceEx(t, typeArguments, ObjectFlagsFromTypeNode)
+		if node.Kind == ast.KindTypeReference {
+			result = c.prepareTypeReferenceInstantiation(result, node)
+		}
+		return result
 	}
 	if c.checkNoTypeArguments(node, symbol) {
 		return t
@@ -24558,9 +24562,38 @@ func (c *Checker) getTypeFromArrayOrTupleTypeNode(node *ast.Node) *Type {
 			} else {
 				links.resolvedType = c.createTypeReferenceEx(target, elementTypes, ObjectFlagsFromTypeNode)
 			}
+			links.resolvedType = c.prepareTypeReferenceInstantiation(links.resolvedType, node)
 		}
 	}
 	return links.resolvedType
+}
+
+func (c *Checker) prepareTypeReferenceInstantiation(t *Type, node *ast.Node) *Type {
+	// Tuple normalization can expand elements, so the original syntax may no
+	// longer describe the target's arguments, even when the target is fixed-length.
+	if node.Kind == ast.KindTupleType && core.Some(node.Elements(), func(element *ast.Node) bool {
+		return c.getTupleElementFlags(element)&ElementFlagsVariable != 0
+	}) {
+		return t
+	}
+	if t.objectFlags&ObjectFlagsReference != 0 &&
+		core.Some(t.AsTypeReference().resolvedTypeArguments, c.needsDeferredTypeArgumentInstantiation) {
+		// Preserve declaration-time checking, but keep the expressions available for
+		// later substitution. Evaluating an indexed argument while constructing its
+		// enclosing type can otherwise turn a guarded recursive type into a cycle.
+		result := c.createDeferredTypeReference(t.Target(), node, nil, nil)
+		result.objectFlags |= ObjectFlagsFromTypeNode | t.objectFlags&ObjectFlagsPropagatingFlags
+		result.AsTypeReference().resolvedTypeArguments = t.AsTypeReference().resolvedTypeArguments
+		return result
+	}
+	return t
+}
+
+func (c *Checker) needsDeferredTypeArgumentInstantiation(t *Type) bool {
+	if t.flags&(TypeFlagsInstantiable&^TypeFlagsTypeParameter) != 0 {
+		return c.couldContainTypeVariables(t)
+	}
+	return t.flags&TypeFlagsUnionOrIntersection != 0 && core.Some(t.Types(), c.needsDeferredTypeArgumentInstantiation)
 }
 
 func (c *Checker) isVariadicTupleElement(node *ast.Node) bool {
