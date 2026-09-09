@@ -2,6 +2,7 @@ import {
     type FileReference,
     ModifierFlags,
     type Node,
+    type ScriptKind,
     SyntaxKind,
 } from "../../ast/index.ts";
 import type { TimingCollector } from "../timing.ts";
@@ -45,6 +46,11 @@ export interface TextDecoder {
 }
 
 export interface SourceFileInfo {
+    readonly contentHash: string;
+    readonly parseOptionsKey: string;
+    readonly scriptKind: ScriptKind;
+    readonly isDeclarationFile: boolean;
+    readonly hasProgramIdentity: boolean;
     readonly _offsetNodes: number;
     readonly _offsetStringTableOffsets: number;
     readonly _offsetStringTable: number;

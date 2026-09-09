@@ -7,7 +7,6 @@ import (
 	"strconv"
 	"strings"
 	"unicode"
-	"unicode/utf16"
 	"unicode/utf8"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
@@ -449,13 +448,13 @@ func (s *Scanner) charAt(offset int) rune {
 func (s *Scanner) charAndSize() (rune, int) {
 	// Fast path: a single ASCII byte. The vast majority of source bytes are
 	// ASCII; handling them here avoids constructing a string slice header and
-	// calling the non-inlined utf8.DecodeRuneInString on every byte.
+	// calling the non-inlined decoder on every byte.
 	if s.pos < s.end {
 		if b := s.text[s.pos]; b < utf8.RuneSelf {
 			return rune(b), 1
 		}
 	}
-	return utf8.DecodeRuneInString(s.text[s.pos:])
+	return stringutil.DecodeJSStringRune(s.text[s.pos:])
 }
 
 // scanASCIIWhile advances s.pos over the longest run of ASCII bytes for which
@@ -1836,7 +1835,7 @@ func (s *Scanner) scanEscapeSequence(flags EscapeSequenceScanningFlags) string {
 		if ch >= utf8.RuneSelf {
 			s.pos-- // back up past the single-byte advance
 			var size int
-			ch, size = utf8.DecodeRuneInString(s.text[s.pos:])
+			ch, size = stringutil.DecodeJSStringRune(s.text[s.pos:])
 			s.pos += size
 		}
 		// LineContinuation: a backslash followed by a line terminator is "the empty code unit sequence".
@@ -1846,7 +1845,7 @@ func (s *Scanner) scanEscapeSequence(flags EscapeSequenceScanningFlags) string {
 		if flags&EscapeSequenceScanningFlagsAnyUnicodeMode != 0 || flags&EscapeSequenceScanningFlagsRegularExpression != 0 && flags&EscapeSequenceScanningFlagsAnnexB == 0 && IsIdentifierPart(ch) {
 			s.errorAt(diagnostics.This_character_cannot_be_escaped_in_a_regular_expression, start, s.pos-start)
 		}
-		return string(ch)
+		return stringutil.EncodeJSStringRune(ch)
 	}
 }
 
@@ -2766,8 +2765,12 @@ func ComputePositionOfLineAndUTF16Character(lineStarts []core.TextPos, line int,
 			if utf16Count >= character {
 				break
 			}
-			r, size := utf8.DecodeRuneInString(text[pos:])
-			utf16Count += core.UTF16Offset(utf16.RuneLen(r))
+			r, size := stringutil.DecodeJSStringRune(text[pos:])
+			if r >= 0x10000 {
+				utf16Count += 2
+			} else {
+				utf16Count++
+			}
 			pos += size
 		}
 		if !allowEdits {

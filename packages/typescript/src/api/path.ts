@@ -466,6 +466,46 @@ function extraEscape(s: string): string {
     return result;
 }
 
+function encodeURIComponentWtf8(text: string): string {
+    let result = "";
+    let start = 0;
+    for (let i = 0; i < text.length; i++) {
+        const codeUnit = text.charCodeAt(i);
+        if (codeUnit >= 0xD800 && codeUnit <= 0xDBFF) {
+            const low = text.charCodeAt(i + 1);
+            if (low >= 0xDC00 && low <= 0xDFFF) {
+                i++;
+                continue;
+            }
+        }
+        else if (codeUnit < 0xDC00 || codeUnit > 0xDFFF) {
+            continue;
+        }
+
+        result += encodeURIComponent(text.slice(start, i));
+        const b1 = 0xE0 | (codeUnit >> 12);
+        const b2 = 0x80 | ((codeUnit >> 6) & 0x3F);
+        const b3 = 0x80 | (codeUnit & 0x3F);
+        result += `%${b1.toString(16).toUpperCase()}%${b2.toString(16).toUpperCase()}%${b3.toString(16).toUpperCase()}`;
+        start = i + 1;
+    }
+    return result + encodeURIComponent(text.slice(start));
+}
+
+function decodeURIComponentWtf8(text: string): string {
+    const surrogatePattern = /%ED%([AB][0-9A-F])%([89AB][0-9A-F])/ig;
+    let result = "";
+    let start = 0;
+    for (let match = surrogatePattern.exec(text); match; match = surrogatePattern.exec(text)) {
+        result += decodeURIComponent(text.slice(start, match.index));
+        const secondByte = Number.parseInt(match[1], 16);
+        const thirdByte = Number.parseInt(match[2], 16);
+        result += String.fromCharCode(0xD000 | ((secondByte & 0x3F) << 6) | (thirdByte & 0x3F));
+        start = match.index + match[0].length;
+    }
+    return result + decodeURIComponent(text.slice(start));
+}
+
 /**
  * Converts a file name to a document URI.
  *
@@ -518,7 +558,7 @@ export function fileNameToDocumentURI(fileName: string): string {
     }
 
     const parts = rest.split("/");
-    const encodedParts = parts.map(part => extraEscape(encodeURIComponent(part)));
+    const encodedParts = parts.map(part => extraEscape(encodeURIComponentWtf8(part)));
 
     return "file://" + volume + encodedParts.join("/");
 }
@@ -550,11 +590,11 @@ export function documentURIToFileName(uri: string): string {
 
         // UNC path: file://server/share/...
         if (parsed.host !== "") {
-            return "//" + parsed.host + parsed.pathname;
+            return "//" + parsed.host + decodeURIComponentWtf8(parsed.pathname);
         }
 
         // Local file - fix Windows path by removing leading slash before volume
-        const path = decodeURIComponent(parsed.pathname);
+        const path = decodeURIComponentWtf8(parsed.pathname);
         if (path.length >= 3 && path.charCodeAt(0) === CharacterCodesSlash) {
             const [volume, rest, ok] = splitVolumePath(path.substring(1));
             if (ok) {

@@ -13,6 +13,11 @@ import {
     type FileSystem,
     fsCallbackNames,
 } from "../fs.ts";
+import { uint8ArrayToBase64 } from "../node/encoder.ts";
+import {
+    encodeWtf8,
+    Wtf8Decoder,
+} from "../node/wtf8.ts";
 import {
     type ClientOptions,
     type ClientSocketOptions,
@@ -132,14 +137,19 @@ export class Client {
 
     private registerFSCallbacks(connection: MessageConnection, fs: FileSystem | undefined): void {
         if (!fs) return;
+        const decoder = new Wtf8Decoder();
+        const decodePath = (arg: unknown): string => {
+            const { pathBase64 } = arg as { pathBase64: string; };
+            return decoder.decode(Buffer.from(pathBase64, "base64"));
+        };
         for (const name of fsCallbackNames) {
             if (name === "writeFile") {
                 if (!fs.writeFile) continue;
                 const callback = fs.writeFile;
 
-                const requestType = new RequestType<{ path: string; data: string; }, unknown, void>(name);
-                connection.onRequest(requestType, (arg: { path: string; data: string; }) => {
-                    callback(arg.path, arg.data);
+                const requestType = new RequestType<{ pathBase64: string; dataBase64: string; }, unknown, void>(name);
+                connection.onRequest(requestType, (arg: { pathBase64: string; dataBase64: string; }) => {
+                    callback(decodePath(arg), decoder.decode(Buffer.from(arg.dataBase64, "base64")));
                     return null;
                 });
 
@@ -150,12 +160,23 @@ export class Client {
             if (callback) {
                 const requestType = new RequestType<unknown, unknown, void>(name);
                 connection.onRequest(requestType, (arg: unknown) => {
-                    const result = callback(arg as any);
+                    const result = callback(decodePath(arg) as any);
                     if (name === "readFile") {
                         // readFile has 3 returns: string (content), null (not found), undefined (fall back).
                         // JSON-RPC can't distinguish null from undefined, so wrap in object.
                         if (result === undefined) return null;
-                        return { content: result };
+                        return result === null ? { contentBase64: null } : { contentBase64: uint8ArrayToBase64(encodeWtf8(result as string)) };
+                    }
+                    if (name === "realpath") {
+                        return result === undefined ? null : { pathBase64: uint8ArrayToBase64(encodeWtf8(result as string)) };
+                    }
+                    if (name === "getAccessibleEntries") {
+                        if (result === undefined) return null;
+                        const entries = result as { files: string[]; directories: string[]; };
+                        return {
+                            filesBase64: entries.files.map(file => uint8ArrayToBase64(encodeWtf8(file))),
+                            directoriesBase64: entries.directories.map(directory => uint8ArrayToBase64(encodeWtf8(directory))),
+                        };
                     }
                     return result ?? null;
                 });

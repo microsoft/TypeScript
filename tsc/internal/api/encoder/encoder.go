@@ -306,6 +306,11 @@ func SourceFileHash(sourceFile *ast.SourceFile) string {
 	return fmt.Sprintf("%016x%016x", h.Hi, h.Lo)
 }
 
+// SourceFileParseOptionsKey returns the encoded parse options used in the binary header.
+func SourceFileParseOptionsKey(sourceFile *ast.SourceFile) uint32 {
+	return encodeParseOptions(sourceFile.ParseOptions().ExternalModuleIndicatorOptions)
+}
+
 // encodeParseOptions encodes the per-file ExternalModuleIndicatorOptions as a uint32 bitmask.
 func encodeParseOptions(opts ast.ExternalModuleIndicatorOptions) uint32 {
 	var bits uint32
@@ -412,7 +417,16 @@ func GetNodeIndexTable(sourceFile *ast.SourceFile) *NodeIndexTable {
 // EncodeSourceFile encodes an entire source file AST into the binary format.
 // Returns the encoded bytes and a NodeIndexTable mapping encoder indices to AST nodes.
 func EncodeSourceFile(sourceFile *ast.SourceFile) ([]byte, *NodeIndexTable, error) {
-	data, nodeTable, err := encodeTree(sourceFile.AsNode(), sourceFile)
+	return encodeSourceFile(sourceFile, nil)
+}
+
+// EncodeSourceFileWithFileName encodes a source file while overriding the serialized file name.
+func EncodeSourceFileWithFileName(sourceFile *ast.SourceFile, fileName string) ([]byte, *NodeIndexTable, error) {
+	return encodeSourceFile(sourceFile, &fileName)
+}
+
+func encodeSourceFile(sourceFile *ast.SourceFile, fileName *string) ([]byte, *NodeIndexTable, error) {
+	data, nodeTable, err := encodeTree(sourceFile.AsNode(), sourceFile, fileName)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -427,10 +441,10 @@ func EncodeSourceFile(sourceFile *ast.SourceFile) ([]byte, *NodeIndexTable, erro
 // When encoding a non-SourceFile node, the header hash and parse options fields will be zero.
 // Returns the encoded bytes and a NodeIndexTable mapping encoder indices to AST nodes.
 func EncodeNode(node *ast.Node, sourceFile *ast.SourceFile) ([]byte, *NodeIndexTable, error) {
-	return encodeTree(node, sourceFile)
+	return encodeTree(node, sourceFile, nil)
 }
 
-func encodeTree(rootNode *ast.Node, sourceFile *ast.SourceFile) ([]byte, *NodeIndexTable, error) {
+func encodeTree(rootNode *ast.Node, sourceFile *ast.SourceFile, fileName *string) ([]byte, *NodeIndexTable, error) {
 	var parentIndex, nodeCount, prevIndex uint32
 	var extendedData []byte
 	var structuredData []byte
@@ -438,6 +452,7 @@ func encodeTree(rootNode *ast.Node, sourceFile *ast.SourceFile) ([]byte, *NodeIn
 	var positionMap *ast.PositionMap
 	if rootNode.Kind == ast.KindSourceFile {
 		strs = newStringTable(sourceFile.Text(), sourceFile.TextCount)
+		strs.sourceFileNameOverride = fileName
 		positionMap = sourceFile.GetPositionMap()
 	} else {
 		strs = newStringTable("", 0)
@@ -666,7 +681,11 @@ func recordExtendedData_SourceFile(node *ast.Node, strs *stringTable, positionMa
 	if sf.OriginalText() != sf.Text() {
 		originalTextIndex = strs.add(sf.OriginalText(), 0, 0, 0)
 	}
-	fileNameIndex := strs.add(sf.FileName(), 0, 0, 0)
+	fileName := sf.FileName()
+	if strs.sourceFileNameOverride != nil {
+		fileName = *strs.sourceFileNameOverride
+	}
+	fileNameIndex := strs.add(fileName, 0, 0, 0)
 	pathIndex := strs.add(string(sf.Path()), 0, 0, 0)
 	referencedFilesOffset := encodeFileReferences(sf.ReferencedFiles, positionMap, structuredData)
 	typeRefDirectivesOffset := encodeFileReferences(sf.TypeReferenceDirectives, positionMap, structuredData)

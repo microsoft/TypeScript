@@ -34,6 +34,89 @@ function toUint8Array(input: NodeJS.AllowSharedBufferSource): Uint8Array {
     return new Uint8Array(input);
 }
 
+function hasLoneSurrogate(text: string): boolean {
+    for (let i = 0; i < text.length; i++) {
+        const codeUnit = text.charCodeAt(i);
+        if (codeUnit >= 0xD800 && codeUnit <= 0xDBFF) {
+            const low = text.charCodeAt(i + 1);
+            if (low >= 0xDC00 && low <= 0xDFFF) {
+                i++;
+            }
+            else {
+                return true;
+            }
+        }
+        else if (codeUnit >= 0xDC00 && codeUnit <= 0xDFFF) {
+            return true;
+        }
+    }
+    return false;
+}
+
+export function encodeWtf8(text: string): Uint8Array {
+    if (!hasLoneSurrogate(text)) {
+        return new TextEncoder().encode(text);
+    }
+
+    let byteLength = 0;
+    for (let i = 0; i < text.length; i++) {
+        const codeUnit = text.charCodeAt(i);
+        if (codeUnit < 0x80) {
+            byteLength++;
+        }
+        else if (codeUnit < 0x800) {
+            byteLength += 2;
+        }
+        else if (codeUnit >= 0xD800 && codeUnit <= 0xDBFF && i + 1 < text.length) {
+            const low = text.charCodeAt(i + 1);
+            if (low >= 0xDC00 && low <= 0xDFFF) {
+                byteLength += 4;
+                i++;
+            }
+            else {
+                byteLength += 3;
+            }
+        }
+        else {
+            byteLength += 3;
+        }
+    }
+
+    const bytes = new Uint8Array(byteLength);
+    let offset = 0;
+    for (let i = 0; i < text.length; i++) {
+        const codeUnit = text.charCodeAt(i);
+        if (codeUnit < 0x80) {
+            bytes[offset++] = codeUnit;
+        }
+        else if (codeUnit < 0x800) {
+            bytes[offset++] = 0xC0 | (codeUnit >> 6);
+            bytes[offset++] = 0x80 | (codeUnit & 0x3F);
+        }
+        else if (codeUnit >= 0xD800 && codeUnit <= 0xDBFF && i + 1 < text.length) {
+            const low = text.charCodeAt(i + 1);
+            if (low >= 0xDC00 && low <= 0xDFFF) {
+                const codePoint = 0x10000 + ((codeUnit - 0xD800) << 10) + (low - 0xDC00);
+                bytes[offset++] = 0xF0 | (codePoint >> 18);
+                bytes[offset++] = 0x80 | ((codePoint >> 12) & 0x3F);
+                bytes[offset++] = 0x80 | ((codePoint >> 6) & 0x3F);
+                bytes[offset++] = 0x80 | (codePoint & 0x3F);
+                i++;
+                continue;
+            }
+            bytes[offset++] = 0xE0 | (codeUnit >> 12);
+            bytes[offset++] = 0x80 | ((codeUnit >> 6) & 0x3F);
+            bytes[offset++] = 0x80 | (codeUnit & 0x3F);
+        }
+        else {
+            bytes[offset++] = 0xE0 | (codeUnit >> 12);
+            bytes[offset++] = 0x80 | ((codeUnit >> 6) & 0x3F);
+            bytes[offset++] = 0x80 | (codeUnit & 0x3F);
+        }
+    }
+    return bytes;
+}
+
 export class Wtf8Decoder extends TextDecoder {
     override decode(input?: NodeJS.AllowSharedBufferSource, options?: DecodeOptions): string {
         if (input === undefined) {

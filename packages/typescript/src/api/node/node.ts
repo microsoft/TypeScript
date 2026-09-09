@@ -6,6 +6,7 @@ import {
     type Node,
     NodeFlags,
     type Path,
+    ScriptKind,
     SpanMap,
     SpanMapFeature,
     SpanMapKind,
@@ -20,6 +21,8 @@ import {
 } from "./node.generated.ts";
 import {
     NODE_EXTENDED_DATA_MASK,
+    readParseOptionsKey,
+    readSourceFileHash,
     type SourceFileInfo,
     type TextDecoder,
 } from "./node.infrastructure.ts";
@@ -75,6 +78,9 @@ for (const [index, offset] of Object.values(sourceFileExtendedDataOffsets).entri
 const NO_STRUCTURED_DATA = 0xFFFFFFFF;
 
 export class RemoteSourceFile extends RemoteNode implements SourceFileInfo {
+    readonly contentHash: string;
+    readonly parseOptionsKey: string;
+    readonly hasProgramIdentity: boolean;
     readonly nodes: (RemoteNode | RemoteNodeList)[];
     readonly _offsetNodes: number;
     readonly _offsetStringTableOffsets: number;
@@ -97,7 +103,7 @@ export class RemoteSourceFile extends RemoteNode implements SourceFileInfo {
     private _cachedDiagnosticDirectives: readonly MappedDiagnosticDirective[] | undefined;
     private _diagnosticDirectivesRead = false;
 
-    constructor(data: Uint8Array, decoder: TextDecoder, timing?: TimingCollector) {
+    constructor(data: Uint8Array, decoder: TextDecoder, timing?: TimingCollector, hasProgramIdentity = false) {
         const view = new DataView(data.buffer, data.byteOffset, data.byteLength);
         const offsetNodes = view.getUint32(HEADER_OFFSET_NODES, true);
         super(view, 1, undefined!, undefined!, offsetNodes);
@@ -109,6 +115,9 @@ export class RemoteSourceFile extends RemoteNode implements SourceFileInfo {
         this._offsetStructuredData = view.getUint32(HEADER_OFFSET_STRUCTURED_DATA, true);
         this._decoder = decoder;
         this._timing = timing;
+        this.contentHash = readSourceFileHash(view);
+        this.parseOptionsKey = readParseOptionsKey(view);
+        this.hasProgramIdentity = hasProgramIdentity;
         this.nodes = Array((view.byteLength - offsetNodes) / NODE_LEN);
         this.nodes[1] = this;
         // Every node slot is materializable on demand except the nil sentinel at
@@ -435,12 +444,16 @@ export function findDescendant(root: Node, pos: number, end: number, kind: Synta
 export interface ParsedNodeHandle {
     index: number;
     kind: SyntaxKind;
+    contentHash: string;
+    parseOptionsKey: string;
+    scriptKind: ScriptKind;
+    isDeclarationFile: boolean;
     path: Path;
 }
 
 /**
  * Parse a node handle string into its components.
- * Handle format: "index.kind.path" where path may contain dots.
+ * Handle format: "index.kind.contentHash.parseOptionsKey.scriptKind.isDeclarationFile.path".
  */
 export function parseNodeHandle(handle: string): ParsedNodeHandle {
     const firstDot = handle.indexOf(".");
@@ -451,11 +464,44 @@ export function parseNodeHandle(handle: string): ParsedNodeHandle {
     if (secondDot === -1) {
         throw new Error(`Invalid node handle: ${handle}`);
     }
+    const thirdDot = handle.indexOf(".", secondDot + 1);
+    if (thirdDot === -1) {
+        throw new Error(`Invalid node handle: ${handle}`);
+    }
+    const fourthDot = handle.indexOf(".", thirdDot + 1);
+    const fifthDot = handle.indexOf(".", fourthDot + 1);
+    const sixthDot = handle.indexOf(".", fifthDot + 1);
+    if (fourthDot === -1 || fifthDot === -1 || sixthDot === -1) {
+        throw new Error(`Invalid node handle: ${handle}`);
+    }
+
+    const index = Number(handle.slice(0, firstDot));
+    const kind = Number(handle.slice(firstDot + 1, secondDot));
+    const contentHash = handle.slice(secondDot + 1, thirdDot);
+    const parseOptionsKey = handle.slice(thirdDot + 1, fourthDot);
+    const scriptKind = Number(handle.slice(fourthDot + 1, fifthDot));
+    const isDeclarationFile = handle.slice(fifthDot + 1, sixthDot);
+    const path = handle.slice(sixthDot + 1);
+    if (
+        !Number.isSafeInteger(index) || index < 0
+        || !Number.isSafeInteger(kind) || kind < SyntaxKind.FirstToken || kind >= SyntaxKind.Count
+        || !/^[0-9a-f]{32}$/.test(contentHash)
+        || !/^\d+$/.test(parseOptionsKey)
+        || !Number.isSafeInteger(scriptKind) || scriptKind < ScriptKind.Unknown || scriptKind > ScriptKind.JSON
+        || (isDeclarationFile !== "0" && isDeclarationFile !== "1")
+        || path.length === 0
+    ) {
+        throw new Error(`Invalid node handle: ${handle}`);
+    }
 
     return {
-        index: parseInt(handle.slice(0, firstDot), 10),
-        kind: parseInt(handle.slice(firstDot + 1, secondDot), 10) as SyntaxKind,
-        path: handle.slice(secondDot + 1) as Path,
+        index,
+        kind: kind as SyntaxKind,
+        contentHash,
+        parseOptionsKey,
+        scriptKind: scriptKind as ScriptKind,
+        isDeclarationFile: isDeclarationFile === "1",
+        path: path as Path,
     };
 }
 

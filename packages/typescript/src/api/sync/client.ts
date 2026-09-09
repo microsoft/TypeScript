@@ -1,4 +1,10 @@
+import { Buffer } from "node:buffer";
 import { fsCallbackNames } from "../fs.ts";
+import { uint8ArrayToBase64 } from "../node/encoder.ts";
+import {
+    encodeWtf8,
+    Wtf8Decoder,
+} from "../node/wtf8.ts";
 import {
     type ClientOptions,
     type ClientSocketOptions,
@@ -58,14 +64,19 @@ export class Client {
         this.channel = channel;
 
         if (options.fs) {
+            const decoder = new Wtf8Decoder();
+            const decodePath = (arg: string): string => {
+                const { pathBase64 } = JSON.parse(arg) as { pathBase64: string; };
+                return decoder.decode(Buffer.from(pathBase64, "base64"));
+            };
             for (const name of enabledCallbacks) {
                 if (name === "writeFile") {
                     if (!options.fs.writeFile) continue;
                     const callback = options.fs.writeFile;
 
                     channel.registerCallback(name, (_, arg) => {
-                        const { path, data } = JSON.parse(arg);
-                        callback(path, data);
+                        const { dataBase64 } = JSON.parse(arg);
+                        callback(decodePath(arg), decoder.decode(Buffer.from(dataBase64, "base64")));
                         return "";
                     });
 
@@ -74,12 +85,29 @@ export class Client {
 
                 const callback = options.fs[name]!;
                 channel.registerCallback(name, (_, arg) => {
-                    const result = callback(JSON.parse(arg));
+                    const result = callback(decodePath(arg) as any);
                     if (name === "readFile") {
                         // readFile has 3 returns: string (content), null (not found), undefined (fall back).
                         // Wrap in object to preserve null vs undefined distinction.
                         if (result === undefined) return "";
-                        return JSON.stringify({ content: result });
+                        return JSON.stringify(
+                            result === null
+                                ? { contentBase64: null }
+                                : { contentBase64: uint8ArrayToBase64(encodeWtf8(result as string)) },
+                        );
+                    }
+                    if (name === "realpath") {
+                        return result === undefined
+                            ? ""
+                            : JSON.stringify({ pathBase64: uint8ArrayToBase64(encodeWtf8(result as string)) });
+                    }
+                    if (name === "getAccessibleEntries") {
+                        if (result === undefined) return "";
+                        const entries = result as { files: string[]; directories: string[]; };
+                        return JSON.stringify({
+                            filesBase64: entries.files.map(file => uint8ArrayToBase64(encodeWtf8(file))),
+                            directoriesBase64: entries.directories.map(directory => uint8ArrayToBase64(encodeWtf8(directory))),
+                        });
                     }
                     return JSON.stringify(result) ?? "";
                 });

@@ -26,6 +26,7 @@ import { ModuleResolutionKind } from "#enums/moduleResolutionKind";
 import { NewLineKind } from "#enums/newLineKind";
 import { NodeBuilderFlags } from "#enums/nodeBuilderFlags";
 import { ObjectFlags } from "#enums/objectFlags";
+import { ScriptKind } from "#enums/scriptKind";
 import { SignatureFlags } from "#enums/signatureFlags";
 import { SignatureKind } from "#enums/signatureKind";
 import { SymbolFlags } from "#enums/symbolFlags";
@@ -61,7 +62,10 @@ import {
     readSourceFileHash,
     RemoteSourceFile,
 } from "../node/node.ts";
-import { Wtf8Decoder } from "../node/wtf8.ts";
+import {
+    encodeWtf8,
+    Wtf8Decoder,
+} from "../node/wtf8.ts";
 import type {
     APIOptions,
     LSPConnectionOptions,
@@ -75,6 +79,7 @@ import type {
     CompilerOptions,
     CreateProgramOptions,
     CreateProgramResponse,
+    CreateSourceFileOptions,
     Diagnostic,
     DocumentIdentifier,
     DocumentPosition,
@@ -161,7 +166,7 @@ import type {
 
 export { formatDiagnostics, formatDiagnosticsWithColorAndContext } from "../diagnosticFormatter.ts";
 export { documentURIToFileName, fileNameToDocumentURI } from "../path.ts";
-export { CheckFlags, CompletionItemKind, DiagnosticCategory, ElementFlags, EmitOnly, JsxEmit, ModifierFlags, ModuleKind, ModuleResolutionKind, NodeBuilderFlags, ObjectFlags, SignatureFlags, SignatureKind, SymbolFlags, TypeFlags, TypeFormatFlags, TypePredicateKind };
+export { CheckFlags, CompletionItemKind, DiagnosticCategory, ElementFlags, EmitOnly, JsxEmit, ModifierFlags, ModuleKind, ModuleResolutionKind, NodeBuilderFlags, ObjectFlags, ScriptKind, SignatureFlags, SignatureKind, SymbolFlags, TypeFlags, TypeFormatFlags, TypePredicateKind };
 export type {
     APIFileChanges,
     APIImportAdderAction as ImportAdderAction,
@@ -178,6 +183,7 @@ export type {
     CompletionOptions,
     ConditionalType,
     CreateProgramOptions,
+    CreateSourceFileOptions,
     Diagnostic,
     DocumentIdentifier,
     DocumentPosition,
@@ -238,6 +244,7 @@ export interface TranspileOutput {
 }
 
 export { all } from "./generatorSupport.ts";
+import { sourceFileResponseToUint8Array } from "../node/encoder.ts";
 import {
     all,
     type APIRequestGenerator,
@@ -249,6 +256,7 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
     private sourceFileCache: SourceFileCache;
     private toPath: ((fileName: string) => Path) | undefined;
     private currentDirectory: string | undefined;
+    private readonly decoder = new Wtf8Decoder();
     private getCanonicalFileNameWorker: ((fileName: string) => string) | undefined;
     private initialized: boolean = false;
     private activeSnapshots: Set<Snapshot> = new Set();
@@ -438,6 +446,66 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
             ): Generator<ProtocolRequest, ParsedCommandLine, ProtocolResponse["result"]> {
                 yield* owner.ensureInitialized.gen();
                 return yield* apiRequest("parseJsonConfigFileContent", { json, ...options });
+            },
+        );
+    }
+
+    get createSourceFile(): {
+        (fileName: string, sourceText: string, options?: CreateSourceFileOptions): SourceFile;
+        gen(fileName: string, sourceText: string, options?: CreateSourceFileOptions): Generator<ProtocolRequest, SourceFile, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "createSourceFile",
+            function (fileName: string, sourceText: string, options: CreateSourceFileOptions = {}): SourceFile {
+                owner.ensureInitialized();
+                const fileNameBase64 = uint8ArrayToBase64(encodeWtf8(fileName));
+                const sourceTextBase64 = uint8ArrayToBase64(encodeWtf8(sourceText));
+                const data = owner.client.apiRequestBinary("createSourceFile", { fileNameBase64, sourceTextBase64, options });
+                if (!data) {
+                    throw new Error("createSourceFile returned no source file");
+                }
+                return new RemoteSourceFile(data, owner.decoder, owner.client.getTimingCollector()) as unknown as SourceFile;
+            },
+            function* (fileName: string, sourceText: string, options: CreateSourceFileOptions = {}): Generator<ProtocolRequest, SourceFile, ProtocolResponse["result"]> {
+                yield* owner.ensureInitialized.gen();
+                const fileNameBase64 = uint8ArrayToBase64(encodeWtf8(fileName));
+                const sourceTextBase64 = uint8ArrayToBase64(encodeWtf8(sourceText));
+                const data = sourceFileResponseToUint8Array(yield* apiRequest("createSourceFile", { fileNameBase64, sourceTextBase64, options }));
+                if (!data) {
+                    throw new Error("createSourceFile returned no source file");
+                }
+                return new RemoteSourceFile(data, owner.decoder, owner.client.getTimingCollector()) as unknown as SourceFile;
+            },
+        );
+    }
+
+    get createSourceFileFromFile(): {
+        (file: DocumentIdentifier, options?: CreateSourceFileOptions): SourceFile;
+        gen(file: DocumentIdentifier, options?: CreateSourceFileOptions): Generator<ProtocolRequest, SourceFile, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "createSourceFileFromFile",
+            function (file: DocumentIdentifier, options: CreateSourceFileOptions = {}): SourceFile {
+                owner.ensureInitialized();
+                const fileNameBase64 = uint8ArrayToBase64(encodeWtf8(resolveFileName(file)));
+                const data = owner.client.apiRequestBinary("createSourceFileFromFile", { fileNameBase64, options });
+                if (!data) {
+                    throw new Error("createSourceFileFromFile returned no source file");
+                }
+                return new RemoteSourceFile(data, owner.decoder, owner.client.getTimingCollector()) as unknown as SourceFile;
+            },
+            function* (file: DocumentIdentifier, options: CreateSourceFileOptions = {}): Generator<ProtocolRequest, SourceFile, ProtocolResponse["result"]> {
+                yield* owner.ensureInitialized.gen();
+                const fileNameBase64 = uint8ArrayToBase64(encodeWtf8(resolveFileName(file)));
+                const data = sourceFileResponseToUint8Array(yield* apiRequest("createSourceFileFromFile", { fileNameBase64, options }));
+                if (!data) {
+                    throw new Error("createSourceFileFromFile returned no source file");
+                }
+                return new RemoteSourceFile(data, owner.decoder, owner.client.getTimingCollector()) as unknown as SourceFile;
             },
         );
     }
@@ -2084,7 +2152,7 @@ export class Program implements FormatDiagnosticsHost {
                 const parseOptionsKey = readParseOptionsKey(view);
 
                 // Create a new RemoteSourceFile and cache it (set returns existing if hash matches)
-                const sourceFile = new RemoteSourceFile(binaryData, owner.decoder, owner.client.getTimingCollector()) as unknown as SourceFile;
+                const sourceFile = new RemoteSourceFile(binaryData, owner.decoder, owner.client.getTimingCollector(), true) as unknown as SourceFile;
                 return owner.sourceFileCache.set(path, sourceFile, parseOptionsKey, contentHash, owner.snapshotId, owner.project.id);
             },
             function* (file: DocumentIdentifier): Generator<ProtocolRequest, SourceFile | undefined, ProtocolResponse["result"]> {
@@ -2098,11 +2166,13 @@ export class Program implements FormatDiagnosticsHost {
                 }
 
                 // Fetch from server
-                const binaryData = owner.client.apiRequestBinary("getSourceFile", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.id,
-                    file,
-                });
+                const binaryData = sourceFileResponseToUint8Array(
+                    yield* apiRequest("getSourceFile", {
+                        snapshot: owner.snapshotId,
+                        project: owner.project.id,
+                        file,
+                    }),
+                );
                 if (!binaryData) {
                     return undefined;
                 }
@@ -2112,7 +2182,7 @@ export class Program implements FormatDiagnosticsHost {
                 const parseOptionsKey = readParseOptionsKey(view);
 
                 // Create a new RemoteSourceFile and cache it (set returns existing if hash matches)
-                const sourceFile = new RemoteSourceFile(binaryData, owner.decoder, owner.client.getTimingCollector()) as unknown as SourceFile;
+                const sourceFile = new RemoteSourceFile(binaryData, owner.decoder, owner.client.getTimingCollector(), true) as unknown as SourceFile;
                 return owner.sourceFileCache.set(path, sourceFile, parseOptionsKey, contentHash, owner.snapshotId, owner.project.id);
             },
         );
@@ -2239,10 +2309,18 @@ export class Program implements FormatDiagnosticsHost {
             owner,
             "isSourceFileFromExternalLibrary",
             function (file: SourceFile): boolean {
+                const remote = file as unknown as RemoteSourceFile;
+                if (!(remote instanceof RemoteSourceFile) || !remote.hasProgramIdentity || owner.getSourceFile(file.path) !== file) {
+                    throw new Error("Source file does not belong to this program");
+                }
                 const metadata = owner.getSourceFileMetadataByPath(file.path);
                 return metadata?.isFromExternalLibrary ?? false;
             },
             function* (file: SourceFile): Generator<ProtocolRequest, boolean, ProtocolResponse["result"]> {
+                const remote = file as unknown as RemoteSourceFile;
+                if (!(remote instanceof RemoteSourceFile) || !remote.hasProgramIdentity || (yield* owner.getSourceFile.gen(file.path)) !== file) {
+                    throw new Error("Source file does not belong to this program");
+                }
                 const metadata = yield* owner.getSourceFileMetadataByPath.gen(file.path);
                 return metadata?.isFromExternalLibrary ?? false;
             },
@@ -2263,10 +2341,18 @@ export class Program implements FormatDiagnosticsHost {
             owner,
             "isSourceFileDefaultLibrary",
             function (file: SourceFile): boolean {
+                const remote = file as unknown as RemoteSourceFile;
+                if (!(remote instanceof RemoteSourceFile) || !remote.hasProgramIdentity || owner.getSourceFile(file.path) !== file) {
+                    throw new Error("Source file does not belong to this program");
+                }
                 const metadata = owner.getSourceFileMetadataByPath(file.path);
                 return metadata?.isDefaultLibrary ?? false;
             },
             function* (file: SourceFile): Generator<ProtocolRequest, boolean, ProtocolResponse["result"]> {
+                const remote = file as unknown as RemoteSourceFile;
+                if (!(remote instanceof RemoteSourceFile) || !remote.hasProgramIdentity || (yield* owner.getSourceFile.gen(file.path)) !== file) {
+                    throw new Error("Source file does not belong to this program");
+                }
                 const metadata = yield* owner.getSourceFileMetadataByPath.gen(file.path);
                 return metadata?.isDefaultLibrary ?? false;
             },
@@ -2327,11 +2413,13 @@ export class Program implements FormatDiagnosticsHost {
                 return new RemoteSourceFile(binaryData, owner.decoder) as unknown as SourceFile;
             },
             function* (file: DocumentIdentifier): Generator<ProtocolRequest, SourceFile | undefined, ProtocolResponse["result"]> {
-                const binaryData = owner.client.apiRequestBinary("getConfigSourceFile", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.id,
-                    file,
-                });
+                const binaryData = sourceFileResponseToUint8Array(
+                    yield* apiRequest("getConfigSourceFile", {
+                        snapshot: owner.snapshotId,
+                        project: owner.project.id,
+                        file,
+                    }),
+                );
                 if (!binaryData) {
                     return undefined;
                 }
@@ -3906,13 +3994,15 @@ export class Checker {
                 return decodeNode(binaryData) as TypeNode;
             },
             function* (type: Type, enclosingDeclaration?: Node, flags?: number): Generator<ProtocolRequest, TypeNode | undefined, ProtocolResponse["result"]> {
-                const binaryData = owner.client.apiRequestBinary("typeToTypeNode", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.id,
-                    type: type.id,
-                    ...(enclosingDeclaration ? { location: getNodeId(enclosingDeclaration) } : {}),
-                    ...(flags !== undefined ? { flags } : {}),
-                });
+                const binaryData = sourceFileResponseToUint8Array(
+                    yield* apiRequest("typeToTypeNode", {
+                        snapshot: owner.snapshotId,
+                        project: owner.project.id,
+                        type: type.id,
+                        ...(enclosingDeclaration ? { location: getNodeId(enclosingDeclaration) } : {}),
+                        ...(flags !== undefined ? { flags } : {}),
+                    }),
+                );
                 if (!binaryData) return undefined;
                 return decodeNode(binaryData) as TypeNode;
             },
@@ -3940,14 +4030,16 @@ export class Checker {
                 return decodeNode(binaryData) as Node;
             },
             function* (signature: Signature, kind: SyntaxKind, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): Generator<ProtocolRequest, Node | undefined, ProtocolResponse["result"]> {
-                const binaryData = owner.client.apiRequestBinary("signatureToSignatureDeclaration", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.id,
-                    signature: signature.id,
-                    kind,
-                    ...(enclosingDeclaration ? { location: getNodeId(enclosingDeclaration) } : {}),
-                    ...(flags !== undefined ? { flags } : {}),
-                });
+                const binaryData = sourceFileResponseToUint8Array(
+                    yield* apiRequest("signatureToSignatureDeclaration", {
+                        snapshot: owner.snapshotId,
+                        project: owner.project.id,
+                        signature: signature.id,
+                        kind,
+                        ...(enclosingDeclaration ? { location: getNodeId(enclosingDeclaration) } : {}),
+                        ...(flags !== undefined ? { flags } : {}),
+                    }),
+                );
                 if (!binaryData) return undefined;
                 return decodeNode(binaryData) as Node;
             },
@@ -4985,12 +5077,20 @@ export class NodeHandle<out T extends Node = Node> {
     private readonly canonicalProject: Project;
     readonly index: number;
     readonly kind: SyntaxKind;
+    readonly contentHash: string;
+    readonly parseOptionsKey: string;
+    readonly scriptKind: ScriptKind;
+    readonly isDeclarationFile: boolean;
     readonly path: Path;
 
     constructor(handle: string, canonicalProject: Project) {
         const parsed = parseNodeHandle(handle);
         this.index = parsed.index;
         this.kind = parsed.kind;
+        this.contentHash = parsed.contentHash;
+        this.parseOptionsKey = parsed.parseOptionsKey;
+        this.scriptKind = parsed.scriptKind;
+        this.isDeclarationFile = parsed.isDeclarationFile;
         this.path = parsed.path;
         this.canonicalProject = canonicalProject;
     }
@@ -5013,14 +5113,40 @@ export class NodeHandle<out T extends Node = Node> {
                 if (!sourceFile) {
                     return undefined;
                 }
-                return (sourceFile as unknown as RemoteSourceFile).getOrCreateNodeAtIndex(owner.index) as T | undefined;
+                const remote = sourceFile as unknown as RemoteSourceFile;
+                if (
+                    remote.contentHash !== owner.contentHash
+                    || remote.parseOptionsKey !== owner.parseOptionsKey
+                    || remote.scriptKind !== owner.scriptKind
+                    || remote.isDeclarationFile !== owner.isDeclarationFile
+                ) {
+                    return undefined;
+                }
+                if (owner.index >= remote.nodes.length) {
+                    return undefined;
+                }
+                const node = remote.getOrCreateNodeAtIndex(owner.index);
+                return node?.kind === owner.kind ? node as T : undefined;
             },
             function* (project: Project = owner.canonicalProject): Generator<ProtocolRequest, T | undefined, ProtocolResponse["result"]> {
                 const sourceFile = yield* project.program.getSourceFile.gen(owner.path);
                 if (!sourceFile) {
                     return undefined;
                 }
-                return (sourceFile as unknown as RemoteSourceFile).getOrCreateNodeAtIndex(owner.index) as T | undefined;
+                const remote = sourceFile as unknown as RemoteSourceFile;
+                if (
+                    remote.contentHash !== owner.contentHash
+                    || remote.parseOptionsKey !== owner.parseOptionsKey
+                    || remote.scriptKind !== owner.scriptKind
+                    || remote.isDeclarationFile !== owner.isDeclarationFile
+                ) {
+                    return undefined;
+                }
+                if (owner.index >= remote.nodes.length) {
+                    return undefined;
+                }
+                const node = remote.getOrCreateNodeAtIndex(owner.index);
+                return node?.kind === owner.kind ? node as T : undefined;
             },
         );
     }
