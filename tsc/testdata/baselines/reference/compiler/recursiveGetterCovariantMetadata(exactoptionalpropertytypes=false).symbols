@@ -1,0 +1,462 @@
+//// [tests/cases/compiler/recursiveGetterCovariantMetadata.ts] ////
+
+=== recursiveGetterCovariantMetadata.ts ===
+type input<T> = T extends { _zod: { input: any } } ? T["_zod"]["input"] : unknown;
+>input : Symbol(input, Decl(recursiveGetterCovariantMetadata.ts, 0, 0))
+>T : Symbol(T, Decl(recursiveGetterCovariantMetadata.ts, 0, 11))
+>T : Symbol(T, Decl(recursiveGetterCovariantMetadata.ts, 0, 11))
+>_zod : Symbol(_zod, Decl(recursiveGetterCovariantMetadata.ts, 0, 27))
+>input : Symbol(input, Decl(recursiveGetterCovariantMetadata.ts, 0, 35))
+>T : Symbol(T, Decl(recursiveGetterCovariantMetadata.ts, 0, 11))
+
+type output<T> = T extends { _zod: { output: any } } ? T["_zod"]["output"] : unknown;
+>output : Symbol(output, Decl(recursiveGetterCovariantMetadata.ts, 0, 82))
+>T : Symbol(T, Decl(recursiveGetterCovariantMetadata.ts, 1, 12))
+>T : Symbol(T, Decl(recursiveGetterCovariantMetadata.ts, 1, 12))
+>_zod : Symbol(_zod, Decl(recursiveGetterCovariantMetadata.ts, 1, 28))
+>output : Symbol(output, Decl(recursiveGetterCovariantMetadata.ts, 1, 36))
+>T : Symbol(T, Decl(recursiveGetterCovariantMetadata.ts, 1, 12))
+
+type Writeable<T> = { -readonly [P in keyof T]: T[P] } & {};
+>Writeable : Symbol(Writeable, Decl(recursiveGetterCovariantMetadata.ts, 1, 85))
+>T : Symbol(T, Decl(recursiveGetterCovariantMetadata.ts, 2, 15))
+>P : Symbol(P, Decl(recursiveGetterCovariantMetadata.ts, 2, 33))
+>T : Symbol(T, Decl(recursiveGetterCovariantMetadata.ts, 2, 15))
+>T : Symbol(T, Decl(recursiveGetterCovariantMetadata.ts, 2, 15))
+>P : Symbol(P, Decl(recursiveGetterCovariantMetadata.ts, 2, 33))
+
+type Prettify<T> = { [K in keyof T]: T[K] } & {};
+>Prettify : Symbol(Prettify, Decl(recursiveGetterCovariantMetadata.ts, 2, 60))
+>T : Symbol(T, Decl(recursiveGetterCovariantMetadata.ts, 3, 14))
+>K : Symbol(K, Decl(recursiveGetterCovariantMetadata.ts, 3, 22))
+>T : Symbol(T, Decl(recursiveGetterCovariantMetadata.ts, 3, 14))
+>T : Symbol(T, Decl(recursiveGetterCovariantMetadata.ts, 3, 14))
+>K : Symbol(K, Decl(recursiveGetterCovariantMetadata.ts, 3, 22))
+
+type IsAny<T> = 0 extends 1 & T ? true : false;
+>IsAny : Symbol(IsAny, Decl(recursiveGetterCovariantMetadata.ts, 3, 49))
+>T : Symbol(T, Decl(recursiveGetterCovariantMetadata.ts, 4, 11))
+>T : Symbol(T, Decl(recursiveGetterCovariantMetadata.ts, 4, 11))
+
+interface StandardTypes<Input, Output> {
+>StandardTypes : Symbol(StandardTypes, Decl(recursiveGetterCovariantMetadata.ts, 4, 47))
+>Input : Symbol(Input, Decl(recursiveGetterCovariantMetadata.ts, 6, 24))
+>Output : Symbol(Output, Decl(recursiveGetterCovariantMetadata.ts, 6, 30))
+
+    readonly input: Input;
+>input : Symbol(StandardTypes.input, Decl(recursiveGetterCovariantMetadata.ts, 6, 40))
+>Input : Symbol(Input, Decl(recursiveGetterCovariantMetadata.ts, 6, 24))
+
+    readonly output: Output;
+>output : Symbol(StandardTypes.output, Decl(recursiveGetterCovariantMetadata.ts, 7, 26))
+>Output : Symbol(Output, Decl(recursiveGetterCovariantMetadata.ts, 6, 30))
+}
+interface StandardTypedProps<Input, Output> {
+>StandardTypedProps : Symbol(StandardTypedProps, Decl(recursiveGetterCovariantMetadata.ts, 9, 1))
+>Input : Symbol(Input, Decl(recursiveGetterCovariantMetadata.ts, 10, 29))
+>Output : Symbol(Output, Decl(recursiveGetterCovariantMetadata.ts, 10, 35))
+
+    readonly version: 1;
+>version : Symbol(StandardTypedProps.version, Decl(recursiveGetterCovariantMetadata.ts, 10, 45))
+
+    readonly vendor: string;
+>vendor : Symbol(StandardTypedProps.vendor, Decl(recursiveGetterCovariantMetadata.ts, 11, 24))
+
+    readonly types?: StandardTypes<Input, Output> | undefined;
+>types : Symbol(StandardTypedProps.types, Decl(recursiveGetterCovariantMetadata.ts, 12, 28))
+>StandardTypes : Symbol(StandardTypes, Decl(recursiveGetterCovariantMetadata.ts, 4, 47))
+>Input : Symbol(Input, Decl(recursiveGetterCovariantMetadata.ts, 10, 29))
+>Output : Symbol(Output, Decl(recursiveGetterCovariantMetadata.ts, 10, 35))
+}
+interface StandardSchemaProps<Input, Output> extends StandardTypedProps<Input, Output> {
+>StandardSchemaProps : Symbol(StandardSchemaProps, Decl(recursiveGetterCovariantMetadata.ts, 14, 1))
+>Input : Symbol(Input, Decl(recursiveGetterCovariantMetadata.ts, 15, 30))
+>Output : Symbol(Output, Decl(recursiveGetterCovariantMetadata.ts, 15, 36))
+>StandardTypedProps : Symbol(StandardTypedProps, Decl(recursiveGetterCovariantMetadata.ts, 9, 1))
+>Input : Symbol(Input, Decl(recursiveGetterCovariantMetadata.ts, 15, 30))
+>Output : Symbol(Output, Decl(recursiveGetterCovariantMetadata.ts, 15, 36))
+
+    readonly validate: (value: unknown) => { readonly value: Output } | Promise<{ readonly value: Output }>;
+>validate : Symbol(StandardSchemaProps.validate, Decl(recursiveGetterCovariantMetadata.ts, 15, 88))
+>value : Symbol(value, Decl(recursiveGetterCovariantMetadata.ts, 16, 24))
+>value : Symbol(value, Decl(recursiveGetterCovariantMetadata.ts, 16, 44))
+>Output : Symbol(Output, Decl(recursiveGetterCovariantMetadata.ts, 15, 36))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>value : Symbol(value, Decl(recursiveGetterCovariantMetadata.ts, 16, 81))
+>Output : Symbol(Output, Decl(recursiveGetterCovariantMetadata.ts, 15, 36))
+}
+type $ZodStandardSchema<T> = StandardSchemaProps<input<T>, output<T>>;
+>$ZodStandardSchema : Symbol($ZodStandardSchema, Decl(recursiveGetterCovariantMetadata.ts, 17, 1))
+>T : Symbol(T, Decl(recursiveGetterCovariantMetadata.ts, 18, 24))
+>StandardSchemaProps : Symbol(StandardSchemaProps, Decl(recursiveGetterCovariantMetadata.ts, 14, 1))
+>input : Symbol(input, Decl(recursiveGetterCovariantMetadata.ts, 0, 0))
+>T : Symbol(T, Decl(recursiveGetterCovariantMetadata.ts, 18, 24))
+>output : Symbol(output, Decl(recursiveGetterCovariantMetadata.ts, 0, 82))
+>T : Symbol(T, Decl(recursiveGetterCovariantMetadata.ts, 18, 24))
+
+interface $ZodTypeInternals<out O = unknown, out I = unknown> {
+>$ZodTypeInternals : Symbol($ZodTypeInternals, Decl(recursiveGetterCovariantMetadata.ts, 18, 70))
+>O : Symbol(O, Decl(recursiveGetterCovariantMetadata.ts, 19, 28))
+>I : Symbol(I, Decl(recursiveGetterCovariantMetadata.ts, 19, 44))
+
+    def: { type: string };
+>def : Symbol($ZodTypeInternals.def, Decl(recursiveGetterCovariantMetadata.ts, 19, 63))
+>type : Symbol(type, Decl(recursiveGetterCovariantMetadata.ts, 20, 10))
+
+    optin?: "optional" | "defaulted" | undefined;
+>optin : Symbol($ZodTypeInternals.optin, Decl(recursiveGetterCovariantMetadata.ts, 20, 26))
+
+    optout?: "optional" | undefined;
+>optout : Symbol($ZodTypeInternals.optout, Decl(recursiveGetterCovariantMetadata.ts, 21, 49))
+
+    output: O;
+>output : Symbol($ZodTypeInternals.output, Decl(recursiveGetterCovariantMetadata.ts, 22, 36))
+>O : Symbol(O, Decl(recursiveGetterCovariantMetadata.ts, 19, 28))
+
+    input: I;
+>input : Symbol($ZodTypeInternals.input, Decl(recursiveGetterCovariantMetadata.ts, 23, 14))
+>I : Symbol(I, Decl(recursiveGetterCovariantMetadata.ts, 19, 44))
+}
+interface $ZodType<O = unknown, I = unknown, Internals extends $ZodTypeInternals<O, I> = $ZodTypeInternals<O, I>> {
+>$ZodType : Symbol($ZodType, Decl(recursiveGetterCovariantMetadata.ts, 25, 1))
+>O : Symbol(O, Decl(recursiveGetterCovariantMetadata.ts, 26, 19))
+>I : Symbol(I, Decl(recursiveGetterCovariantMetadata.ts, 26, 31))
+>Internals : Symbol(Internals, Decl(recursiveGetterCovariantMetadata.ts, 26, 44))
+>$ZodTypeInternals : Symbol($ZodTypeInternals, Decl(recursiveGetterCovariantMetadata.ts, 18, 70))
+>O : Symbol(O, Decl(recursiveGetterCovariantMetadata.ts, 26, 19))
+>I : Symbol(I, Decl(recursiveGetterCovariantMetadata.ts, 26, 31))
+>$ZodTypeInternals : Symbol($ZodTypeInternals, Decl(recursiveGetterCovariantMetadata.ts, 18, 70))
+>O : Symbol(O, Decl(recursiveGetterCovariantMetadata.ts, 26, 19))
+>I : Symbol(I, Decl(recursiveGetterCovariantMetadata.ts, 26, 31))
+
+    _zod: Internals;
+>_zod : Symbol($ZodType._zod, Decl(recursiveGetterCovariantMetadata.ts, 26, 115))
+>Internals : Symbol(Internals, Decl(recursiveGetterCovariantMetadata.ts, 26, 44))
+
+    "~standard": $ZodStandardSchema<this>;
+>"~standard" : Symbol($ZodType["~standard"], Decl(recursiveGetterCovariantMetadata.ts, 27, 20))
+>$ZodStandardSchema : Symbol($ZodStandardSchema, Decl(recursiveGetterCovariantMetadata.ts, 17, 1))
+}
+interface ZodMiniType<out Output = unknown, out Input = unknown,
+>ZodMiniType : Symbol(ZodMiniType, Decl(recursiveGetterCovariantMetadata.ts, 29, 1))
+>Output : Symbol(Output, Decl(recursiveGetterCovariantMetadata.ts, 30, 22))
+>Input : Symbol(Input, Decl(recursiveGetterCovariantMetadata.ts, 30, 43))
+
+    out Internals extends $ZodTypeInternals<Output, Input> = $ZodTypeInternals<Output, Input>>
+>Internals : Symbol(Internals, Decl(recursiveGetterCovariantMetadata.ts, 30, 64))
+>$ZodTypeInternals : Symbol($ZodTypeInternals, Decl(recursiveGetterCovariantMetadata.ts, 18, 70))
+>Output : Symbol(Output, Decl(recursiveGetterCovariantMetadata.ts, 30, 22))
+>Input : Symbol(Input, Decl(recursiveGetterCovariantMetadata.ts, 30, 43))
+>$ZodTypeInternals : Symbol($ZodTypeInternals, Decl(recursiveGetterCovariantMetadata.ts, 18, 70))
+>Output : Symbol(Output, Decl(recursiveGetterCovariantMetadata.ts, 30, 22))
+>Input : Symbol(Input, Decl(recursiveGetterCovariantMetadata.ts, 30, 43))
+
+    extends $ZodType<Output, Input, Internals> {
+>$ZodType : Symbol($ZodType, Decl(recursiveGetterCovariantMetadata.ts, 25, 1))
+>Output : Symbol(Output, Decl(recursiveGetterCovariantMetadata.ts, 30, 22))
+>Input : Symbol(Input, Decl(recursiveGetterCovariantMetadata.ts, 30, 43))
+>Internals : Symbol(Internals, Decl(recursiveGetterCovariantMetadata.ts, 30, 64))
+
+    type: Internals["def"]["type"];
+>type : Symbol(ZodMiniType.type, Decl(recursiveGetterCovariantMetadata.ts, 32, 48))
+>Internals : Symbol(Internals, Decl(recursiveGetterCovariantMetadata.ts, 30, 64))
+
+    def: Internals["def"];
+>def : Symbol(ZodMiniType.def, Decl(recursiveGetterCovariantMetadata.ts, 33, 35))
+>Internals : Symbol(Internals, Decl(recursiveGetterCovariantMetadata.ts, 30, 64))
+
+    parse(data: unknown): output<this>;
+>parse : Symbol(ZodMiniType.parse, Decl(recursiveGetterCovariantMetadata.ts, 34, 26))
+>data : Symbol(data, Decl(recursiveGetterCovariantMetadata.ts, 35, 10))
+>output : Symbol(output, Decl(recursiveGetterCovariantMetadata.ts, 0, 82))
+}
+type $ZodShape = Readonly<{ [k: string]: $ZodType }>;
+>$ZodShape : Symbol($ZodShape, Decl(recursiveGetterCovariantMetadata.ts, 36, 1))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>k : Symbol(k, Decl(recursiveGetterCovariantMetadata.ts, 37, 29))
+>$ZodType : Symbol($ZodType, Decl(recursiveGetterCovariantMetadata.ts, 25, 1))
+
+type $ZodObjectConfig = { out: Record<string, unknown>; in: Record<string, unknown> };
+>$ZodObjectConfig : Symbol($ZodObjectConfig, Decl(recursiveGetterCovariantMetadata.ts, 37, 53))
+>out : Symbol(out, Decl(recursiveGetterCovariantMetadata.ts, 38, 25))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>in : Symbol(in, Decl(recursiveGetterCovariantMetadata.ts, 38, 55))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+type $strip = { out: {}; in: {} };
+>$strip : Symbol($strip, Decl(recursiveGetterCovariantMetadata.ts, 38, 86))
+>out : Symbol(out, Decl(recursiveGetterCovariantMetadata.ts, 39, 15))
+>in : Symbol(in, Decl(recursiveGetterCovariantMetadata.ts, 39, 24))
+
+type OptionalOutSchema = { _zod: { optout: "optional" } };
+>OptionalOutSchema : Symbol(OptionalOutSchema, Decl(recursiveGetterCovariantMetadata.ts, 39, 34))
+>_zod : Symbol(_zod, Decl(recursiveGetterCovariantMetadata.ts, 40, 26))
+>optout : Symbol(optout, Decl(recursiveGetterCovariantMetadata.ts, 40, 34))
+
+type OptionalInSchema = { _zod: { optin: "optional" | "defaulted" } };
+>OptionalInSchema : Symbol(OptionalInSchema, Decl(recursiveGetterCovariantMetadata.ts, 40, 58))
+>_zod : Symbol(_zod, Decl(recursiveGetterCovariantMetadata.ts, 41, 25))
+>optin : Symbol(optin, Decl(recursiveGetterCovariantMetadata.ts, 41, 33))
+
+type $InferObjectOutput<T extends $ZodShape, Extra extends Record<string, unknown>> = string extends keyof T
+>$InferObjectOutput : Symbol($InferObjectOutput, Decl(recursiveGetterCovariantMetadata.ts, 41, 70))
+>T : Symbol(T, Decl(recursiveGetterCovariantMetadata.ts, 42, 24))
+>$ZodShape : Symbol($ZodShape, Decl(recursiveGetterCovariantMetadata.ts, 36, 1))
+>Extra : Symbol(Extra, Decl(recursiveGetterCovariantMetadata.ts, 42, 44))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(recursiveGetterCovariantMetadata.ts, 42, 24))
+
+    ? IsAny<T[keyof T]> extends true ? Record<string, unknown> : Record<string, output<T[keyof T]>>
+>IsAny : Symbol(IsAny, Decl(recursiveGetterCovariantMetadata.ts, 3, 49))
+>T : Symbol(T, Decl(recursiveGetterCovariantMetadata.ts, 42, 24))
+>T : Symbol(T, Decl(recursiveGetterCovariantMetadata.ts, 42, 24))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>output : Symbol(output, Decl(recursiveGetterCovariantMetadata.ts, 0, 82))
+>T : Symbol(T, Decl(recursiveGetterCovariantMetadata.ts, 42, 24))
+>T : Symbol(T, Decl(recursiveGetterCovariantMetadata.ts, 42, 24))
+
+    : keyof (T & Extra) extends never ? Record<string, never> : Prettify<
+>T : Symbol(T, Decl(recursiveGetterCovariantMetadata.ts, 42, 24))
+>Extra : Symbol(Extra, Decl(recursiveGetterCovariantMetadata.ts, 42, 44))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Prettify : Symbol(Prettify, Decl(recursiveGetterCovariantMetadata.ts, 2, 60))
+
+        { -readonly [k in keyof T as T[k] extends OptionalOutSchema ? never : k]: T[k]["_zod"]["output"] } &
+>k : Symbol(k, Decl(recursiveGetterCovariantMetadata.ts, 45, 21))
+>T : Symbol(T, Decl(recursiveGetterCovariantMetadata.ts, 42, 24))
+>T : Symbol(T, Decl(recursiveGetterCovariantMetadata.ts, 42, 24))
+>k : Symbol(k, Decl(recursiveGetterCovariantMetadata.ts, 45, 21))
+>OptionalOutSchema : Symbol(OptionalOutSchema, Decl(recursiveGetterCovariantMetadata.ts, 39, 34))
+>k : Symbol(k, Decl(recursiveGetterCovariantMetadata.ts, 45, 21))
+>T : Symbol(T, Decl(recursiveGetterCovariantMetadata.ts, 42, 24))
+>k : Symbol(k, Decl(recursiveGetterCovariantMetadata.ts, 45, 21))
+
+        { -readonly [k in keyof T as T[k] extends OptionalOutSchema ? k : never]?: T[k]["_zod"]["output"] } & Extra>;
+>k : Symbol(k, Decl(recursiveGetterCovariantMetadata.ts, 46, 21))
+>T : Symbol(T, Decl(recursiveGetterCovariantMetadata.ts, 42, 24))
+>T : Symbol(T, Decl(recursiveGetterCovariantMetadata.ts, 42, 24))
+>k : Symbol(k, Decl(recursiveGetterCovariantMetadata.ts, 46, 21))
+>OptionalOutSchema : Symbol(OptionalOutSchema, Decl(recursiveGetterCovariantMetadata.ts, 39, 34))
+>k : Symbol(k, Decl(recursiveGetterCovariantMetadata.ts, 46, 21))
+>T : Symbol(T, Decl(recursiveGetterCovariantMetadata.ts, 42, 24))
+>k : Symbol(k, Decl(recursiveGetterCovariantMetadata.ts, 46, 21))
+>Extra : Symbol(Extra, Decl(recursiveGetterCovariantMetadata.ts, 42, 44))
+
+type $InferObjectInput<T extends $ZodShape, Extra extends Record<string, unknown>> = string extends keyof T
+>$InferObjectInput : Symbol($InferObjectInput, Decl(recursiveGetterCovariantMetadata.ts, 46, 117))
+>T : Symbol(T, Decl(recursiveGetterCovariantMetadata.ts, 47, 23))
+>$ZodShape : Symbol($ZodShape, Decl(recursiveGetterCovariantMetadata.ts, 36, 1))
+>Extra : Symbol(Extra, Decl(recursiveGetterCovariantMetadata.ts, 47, 43))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(recursiveGetterCovariantMetadata.ts, 47, 23))
+
+    ? IsAny<T[keyof T]> extends true ? Record<string, unknown> : Record<string, input<T[keyof T]>>
+>IsAny : Symbol(IsAny, Decl(recursiveGetterCovariantMetadata.ts, 3, 49))
+>T : Symbol(T, Decl(recursiveGetterCovariantMetadata.ts, 47, 23))
+>T : Symbol(T, Decl(recursiveGetterCovariantMetadata.ts, 47, 23))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>input : Symbol(input, Decl(recursiveGetterCovariantMetadata.ts, 0, 0))
+>T : Symbol(T, Decl(recursiveGetterCovariantMetadata.ts, 47, 23))
+>T : Symbol(T, Decl(recursiveGetterCovariantMetadata.ts, 47, 23))
+
+    : keyof (T & Extra) extends never ? Record<string, never> : Prettify<
+>T : Symbol(T, Decl(recursiveGetterCovariantMetadata.ts, 47, 23))
+>Extra : Symbol(Extra, Decl(recursiveGetterCovariantMetadata.ts, 47, 43))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Prettify : Symbol(Prettify, Decl(recursiveGetterCovariantMetadata.ts, 2, 60))
+
+        { -readonly [k in keyof T as T[k] extends OptionalInSchema ? never : k]: T[k]["_zod"]["input"] } &
+>k : Symbol(k, Decl(recursiveGetterCovariantMetadata.ts, 50, 21))
+>T : Symbol(T, Decl(recursiveGetterCovariantMetadata.ts, 47, 23))
+>T : Symbol(T, Decl(recursiveGetterCovariantMetadata.ts, 47, 23))
+>k : Symbol(k, Decl(recursiveGetterCovariantMetadata.ts, 50, 21))
+>OptionalInSchema : Symbol(OptionalInSchema, Decl(recursiveGetterCovariantMetadata.ts, 40, 58))
+>k : Symbol(k, Decl(recursiveGetterCovariantMetadata.ts, 50, 21))
+>T : Symbol(T, Decl(recursiveGetterCovariantMetadata.ts, 47, 23))
+>k : Symbol(k, Decl(recursiveGetterCovariantMetadata.ts, 50, 21))
+
+        { -readonly [k in keyof T as T[k] extends OptionalInSchema ? k : never]?: T[k]["_zod"]["input"] } & Extra>;
+>k : Symbol(k, Decl(recursiveGetterCovariantMetadata.ts, 51, 21))
+>T : Symbol(T, Decl(recursiveGetterCovariantMetadata.ts, 47, 23))
+>T : Symbol(T, Decl(recursiveGetterCovariantMetadata.ts, 47, 23))
+>k : Symbol(k, Decl(recursiveGetterCovariantMetadata.ts, 51, 21))
+>OptionalInSchema : Symbol(OptionalInSchema, Decl(recursiveGetterCovariantMetadata.ts, 40, 58))
+>k : Symbol(k, Decl(recursiveGetterCovariantMetadata.ts, 51, 21))
+>T : Symbol(T, Decl(recursiveGetterCovariantMetadata.ts, 47, 23))
+>k : Symbol(k, Decl(recursiveGetterCovariantMetadata.ts, 51, 21))
+>Extra : Symbol(Extra, Decl(recursiveGetterCovariantMetadata.ts, 47, 43))
+
+interface $ZodObjectInternals<Shape extends $ZodShape = $ZodShape,
+>$ZodObjectInternals : Symbol($ZodObjectInternals, Decl(recursiveGetterCovariantMetadata.ts, 51, 115))
+>Shape : Symbol(Shape, Decl(recursiveGetterCovariantMetadata.ts, 52, 30))
+>$ZodShape : Symbol($ZodShape, Decl(recursiveGetterCovariantMetadata.ts, 36, 1))
+>$ZodShape : Symbol($ZodShape, Decl(recursiveGetterCovariantMetadata.ts, 36, 1))
+
+    out Config extends $ZodObjectConfig = $ZodObjectConfig> extends $ZodTypeInternals {
+>Config : Symbol(Config, Decl(recursiveGetterCovariantMetadata.ts, 52, 66))
+>$ZodObjectConfig : Symbol($ZodObjectConfig, Decl(recursiveGetterCovariantMetadata.ts, 37, 53))
+>$ZodObjectConfig : Symbol($ZodObjectConfig, Decl(recursiveGetterCovariantMetadata.ts, 37, 53))
+>$ZodTypeInternals : Symbol($ZodTypeInternals, Decl(recursiveGetterCovariantMetadata.ts, 18, 70))
+
+    def: { type: "object"; shape: Shape; catchall?: $ZodType | undefined };
+>def : Symbol($ZodObjectInternals.def, Decl(recursiveGetterCovariantMetadata.ts, 53, 87))
+>type : Symbol(type, Decl(recursiveGetterCovariantMetadata.ts, 54, 10))
+>shape : Symbol(shape, Decl(recursiveGetterCovariantMetadata.ts, 54, 26))
+>Shape : Symbol(Shape, Decl(recursiveGetterCovariantMetadata.ts, 52, 30))
+>catchall : Symbol(catchall, Decl(recursiveGetterCovariantMetadata.ts, 54, 40))
+>$ZodType : Symbol($ZodType, Decl(recursiveGetterCovariantMetadata.ts, 25, 1))
+
+    config: Config;
+>config : Symbol($ZodObjectInternals.config, Decl(recursiveGetterCovariantMetadata.ts, 54, 75))
+>Config : Symbol(Config, Decl(recursiveGetterCovariantMetadata.ts, 52, 66))
+
+    output: $InferObjectOutput<Shape, Config["out"]>;
+>output : Symbol($ZodObjectInternals.output, Decl(recursiveGetterCovariantMetadata.ts, 55, 19))
+>$InferObjectOutput : Symbol($InferObjectOutput, Decl(recursiveGetterCovariantMetadata.ts, 41, 70))
+>Shape : Symbol(Shape, Decl(recursiveGetterCovariantMetadata.ts, 52, 30))
+>Config : Symbol(Config, Decl(recursiveGetterCovariantMetadata.ts, 52, 66))
+
+    input: $InferObjectInput<Shape, Config["in"]>;
+>input : Symbol($ZodObjectInternals.input, Decl(recursiveGetterCovariantMetadata.ts, 56, 53))
+>$InferObjectInput : Symbol($InferObjectInput, Decl(recursiveGetterCovariantMetadata.ts, 46, 117))
+>Shape : Symbol(Shape, Decl(recursiveGetterCovariantMetadata.ts, 52, 30))
+>Config : Symbol(Config, Decl(recursiveGetterCovariantMetadata.ts, 52, 66))
+
+    optin?: "optional" | undefined;
+>optin : Symbol($ZodObjectInternals.optin, Decl(recursiveGetterCovariantMetadata.ts, 57, 50))
+
+    optout?: "optional" | undefined;
+>optout : Symbol($ZodObjectInternals.optout, Decl(recursiveGetterCovariantMetadata.ts, 58, 35))
+}
+interface $ZodObject<Shape extends Readonly<$ZodShape> = Readonly<$ZodShape>,
+>$ZodObject : Symbol($ZodObject, Decl(recursiveGetterCovariantMetadata.ts, 60, 1))
+>Shape : Symbol(Shape, Decl(recursiveGetterCovariantMetadata.ts, 61, 21))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>$ZodShape : Symbol($ZodShape, Decl(recursiveGetterCovariantMetadata.ts, 36, 1))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>$ZodShape : Symbol($ZodShape, Decl(recursiveGetterCovariantMetadata.ts, 36, 1))
+
+    out Params extends $ZodObjectConfig = $ZodObjectConfig>
+>Params : Symbol(Params, Decl(recursiveGetterCovariantMetadata.ts, 61, 77))
+>$ZodObjectConfig : Symbol($ZodObjectConfig, Decl(recursiveGetterCovariantMetadata.ts, 37, 53))
+>$ZodObjectConfig : Symbol($ZodObjectConfig, Decl(recursiveGetterCovariantMetadata.ts, 37, 53))
+
+    extends $ZodType<any, any, $ZodObjectInternals<Shape, Params>> {}
+>$ZodType : Symbol($ZodType, Decl(recursiveGetterCovariantMetadata.ts, 25, 1))
+>$ZodObjectInternals : Symbol($ZodObjectInternals, Decl(recursiveGetterCovariantMetadata.ts, 51, 115))
+>Shape : Symbol(Shape, Decl(recursiveGetterCovariantMetadata.ts, 61, 21))
+>Params : Symbol(Params, Decl(recursiveGetterCovariantMetadata.ts, 61, 77))
+
+interface ZodMiniObject<Shape extends $ZodShape = $ZodShape, out Config extends $ZodObjectConfig = $strip>
+>ZodMiniObject : Symbol(ZodMiniObject, Decl(recursiveGetterCovariantMetadata.ts, 63, 69))
+>Shape : Symbol(Shape, Decl(recursiveGetterCovariantMetadata.ts, 64, 24))
+>$ZodShape : Symbol($ZodShape, Decl(recursiveGetterCovariantMetadata.ts, 36, 1))
+>$ZodShape : Symbol($ZodShape, Decl(recursiveGetterCovariantMetadata.ts, 36, 1))
+>Config : Symbol(Config, Decl(recursiveGetterCovariantMetadata.ts, 64, 60))
+>$ZodObjectConfig : Symbol($ZodObjectConfig, Decl(recursiveGetterCovariantMetadata.ts, 37, 53))
+>$strip : Symbol($strip, Decl(recursiveGetterCovariantMetadata.ts, 38, 86))
+
+    extends ZodMiniType<any, any, $ZodObjectInternals<Shape, Config>>, $ZodObject<Shape, Config> {
+>ZodMiniType : Symbol(ZodMiniType, Decl(recursiveGetterCovariantMetadata.ts, 29, 1))
+>$ZodObjectInternals : Symbol($ZodObjectInternals, Decl(recursiveGetterCovariantMetadata.ts, 51, 115))
+>Shape : Symbol(Shape, Decl(recursiveGetterCovariantMetadata.ts, 64, 24))
+>Config : Symbol(Config, Decl(recursiveGetterCovariantMetadata.ts, 64, 60))
+>$ZodObject : Symbol($ZodObject, Decl(recursiveGetterCovariantMetadata.ts, 60, 1))
+>Shape : Symbol(Shape, Decl(recursiveGetterCovariantMetadata.ts, 64, 24))
+>Config : Symbol(Config, Decl(recursiveGetterCovariantMetadata.ts, 64, 60))
+
+    shape: Shape;
+>shape : Symbol(ZodMiniObject.shape, Decl(recursiveGetterCovariantMetadata.ts, 65, 98))
+>Shape : Symbol(Shape, Decl(recursiveGetterCovariantMetadata.ts, 64, 24))
+}
+declare function object<T extends $ZodShape = Record<never, $ZodType>>(shape?: T): ZodMiniObject<Writeable<T>, $strip>;
+>object : Symbol(object, Decl(recursiveGetterCovariantMetadata.ts, 67, 1))
+>T : Symbol(T, Decl(recursiveGetterCovariantMetadata.ts, 68, 24))
+>$ZodShape : Symbol($ZodShape, Decl(recursiveGetterCovariantMetadata.ts, 36, 1))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>$ZodType : Symbol($ZodType, Decl(recursiveGetterCovariantMetadata.ts, 25, 1))
+>shape : Symbol(shape, Decl(recursiveGetterCovariantMetadata.ts, 68, 71))
+>T : Symbol(T, Decl(recursiveGetterCovariantMetadata.ts, 68, 24))
+>ZodMiniObject : Symbol(ZodMiniObject, Decl(recursiveGetterCovariantMetadata.ts, 63, 69))
+>Writeable : Symbol(Writeable, Decl(recursiveGetterCovariantMetadata.ts, 1, 85))
+>T : Symbol(T, Decl(recursiveGetterCovariantMetadata.ts, 68, 24))
+>$strip : Symbol($strip, Decl(recursiveGetterCovariantMetadata.ts, 38, 86))
+
+export const nested = object({
+>nested : Symbol(nested, Decl(recursiveGetterCovariantMetadata.ts, 70, 12))
+>object : Symbol(object, Decl(recursiveGetterCovariantMetadata.ts, 67, 1))
+
+    get children() { return object({ children: nested }); },
+>children : Symbol(children, Decl(recursiveGetterCovariantMetadata.ts, 70, 30))
+>object : Symbol(object, Decl(recursiveGetterCovariantMetadata.ts, 67, 1))
+>children : Symbol(children, Decl(recursiveGetterCovariantMetadata.ts, 71, 36))
+>nested : Symbol(nested, Decl(recursiveGetterCovariantMetadata.ts, 70, 12))
+
+});
+
+// Inspecting output first would mask the mapped getter's resolution cycle.
+nested.shape.children;
+>nested.shape.children : Symbol(children, Decl(recursiveGetterCovariantMetadata.ts, 70, 30))
+>nested.shape : Symbol(ZodMiniObject.shape, Decl(recursiveGetterCovariantMetadata.ts, 65, 98))
+>nested : Symbol(nested, Decl(recursiveGetterCovariantMetadata.ts, 70, 12))
+>shape : Symbol(ZodMiniObject.shape, Decl(recursiveGetterCovariantMetadata.ts, 65, 98))
+>children : Symbol(children, Decl(recursiveGetterCovariantMetadata.ts, 70, 30))
+
+type Assert<T extends true> = T;
+>Assert : Symbol(Assert, Decl(recursiveGetterCovariantMetadata.ts, 75, 22))
+>T : Symbol(T, Decl(recursiveGetterCovariantMetadata.ts, 77, 12))
+>T : Symbol(T, Decl(recursiveGetterCovariantMetadata.ts, 77, 12))
+
+export function checkOutput() {
+>checkOutput : Symbol(checkOutput, Decl(recursiveGetterCovariantMetadata.ts, 77, 32))
+
+    type NestedOutput = output<typeof nested>;
+>NestedOutput : Symbol(NestedOutput, Decl(recursiveGetterCovariantMetadata.ts, 78, 31))
+>output : Symbol(output, Decl(recursiveGetterCovariantMetadata.ts, 0, 82))
+>nested : Symbol(nested, Decl(recursiveGetterCovariantMetadata.ts, 70, 12))
+
+    const value = null! as NestedOutput;
+>value : Symbol(value, Decl(recursiveGetterCovariantMetadata.ts, 80, 9))
+>NestedOutput : Symbol(NestedOutput, Decl(recursiveGetterCovariantMetadata.ts, 78, 31))
+
+    const deep: NestedOutput = value.children.children.children.children;
+>deep : Symbol(deep, Decl(recursiveGetterCovariantMetadata.ts, 81, 9))
+>NestedOutput : Symbol(NestedOutput, Decl(recursiveGetterCovariantMetadata.ts, 78, 31))
+>value : Symbol(value, Decl(recursiveGetterCovariantMetadata.ts, 80, 9))
+
+    type Deep = typeof value.children.children.children.children;
+>Deep : Symbol(Deep, Decl(recursiveGetterCovariantMetadata.ts, 81, 73))
+>value : Symbol(value, Decl(recursiveGetterCovariantMetadata.ts, 80, 9))
+
+    const recursive: Deep = value;
+>recursive : Symbol(recursive, Decl(recursiveGetterCovariantMetadata.ts, 83, 9))
+>Deep : Symbol(Deep, Decl(recursiveGetterCovariantMetadata.ts, 81, 73))
+>value : Symbol(value, Decl(recursiveGetterCovariantMetadata.ts, 80, 9))
+
+    type DeepIsNotAny = Assert<IsAny<Deep> extends false ? true : false>;
+>DeepIsNotAny : Symbol(DeepIsNotAny, Decl(recursiveGetterCovariantMetadata.ts, 83, 34))
+>Assert : Symbol(Assert, Decl(recursiveGetterCovariantMetadata.ts, 75, 22))
+>IsAny : Symbol(IsAny, Decl(recursiveGetterCovariantMetadata.ts, 3, 49))
+>Deep : Symbol(Deep, Decl(recursiveGetterCovariantMetadata.ts, 81, 73))
+
+    type DeepKeys = Assert<keyof Deep extends "children" ? "children" extends keyof Deep ? true : false : false>;
+>DeepKeys : Symbol(DeepKeys, Decl(recursiveGetterCovariantMetadata.ts, 84, 73))
+>Assert : Symbol(Assert, Decl(recursiveGetterCovariantMetadata.ts, 75, 22))
+>Deep : Symbol(Deep, Decl(recursiveGetterCovariantMetadata.ts, 81, 73))
+>Deep : Symbol(Deep, Decl(recursiveGetterCovariantMetadata.ts, 81, 73))
+
+    // @ts-expect-error Recursive output objects have no "missing" property.
+    value.children.children.children.children.missing;
+>value : Symbol(value, Decl(recursiveGetterCovariantMetadata.ts, 80, 9))
+
+    // @ts-expect-error Every children property must contain another recursive object.
+    const invalid: NestedOutput = { children: { children: { children: 123 } } };
+>invalid : Symbol(invalid, Decl(recursiveGetterCovariantMetadata.ts, 89, 9))
+>NestedOutput : Symbol(NestedOutput, Decl(recursiveGetterCovariantMetadata.ts, 78, 31))
+>children : Symbol(children, Decl(recursiveGetterCovariantMetadata.ts, 89, 35))
+>children : Symbol(children, Decl(recursiveGetterCovariantMetadata.ts, 89, 47))
+>children : Symbol(children, Decl(recursiveGetterCovariantMetadata.ts, 89, 59))
+}
+

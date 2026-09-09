@@ -1,0 +1,271 @@
+//// [tests/cases/compiler/recursiveGetterCovariantMetadata.ts] ////
+
+=== recursiveGetterCovariantMetadata.ts ===
+type input<T> = T extends { _zod: { input: any } } ? T["_zod"]["input"] : unknown;
+>input : input<T>
+>_zod : { input: any; }
+>input : any
+
+type output<T> = T extends { _zod: { output: any } } ? T["_zod"]["output"] : unknown;
+>output : output<T>
+>_zod : { output: any; }
+>output : any
+
+type Writeable<T> = { -readonly [P in keyof T]: T[P] } & {};
+>Writeable : { -readonly [P in keyof T]: T[P]; }
+
+type Prettify<T> = { [K in keyof T]: T[K] } & {};
+>Prettify : { [K in keyof T]: T[K]; }
+
+type IsAny<T> = 0 extends 1 & T ? true : false;
+>IsAny : IsAny<T>
+>true : true
+>false : false
+
+interface StandardTypes<Input, Output> {
+    readonly input: Input;
+>input : Input
+
+    readonly output: Output;
+>output : Output
+}
+interface StandardTypedProps<Input, Output> {
+    readonly version: 1;
+>version : 1
+
+    readonly vendor: string;
+>vendor : string
+
+    readonly types?: StandardTypes<Input, Output> | undefined;
+>types : StandardTypes<Input, Output> | undefined
+}
+interface StandardSchemaProps<Input, Output> extends StandardTypedProps<Input, Output> {
+    readonly validate: (value: unknown) => { readonly value: Output } | Promise<{ readonly value: Output }>;
+>validate : (value: unknown) => { readonly value: Output; } | Promise<{ readonly value: Output; }>
+>value : unknown
+>value : Output
+>value : Output
+}
+type $ZodStandardSchema<T> = StandardSchemaProps<input<T>, output<T>>;
+>$ZodStandardSchema : $ZodStandardSchema<T>
+
+interface $ZodTypeInternals<out O = unknown, out I = unknown> {
+    def: { type: string };
+>def : { type: string; }
+>type : string
+
+    optin?: "optional" | "defaulted" | undefined;
+>optin : "defaulted" | "optional" | undefined
+
+    optout?: "optional" | undefined;
+>optout : "optional" | undefined
+
+    output: O;
+>output : O
+
+    input: I;
+>input : I
+}
+interface $ZodType<O = unknown, I = unknown, Internals extends $ZodTypeInternals<O, I> = $ZodTypeInternals<O, I>> {
+    _zod: Internals;
+>_zod : Internals
+
+    "~standard": $ZodStandardSchema<this>;
+>"~standard" : $ZodStandardSchema<this>
+}
+interface ZodMiniType<out Output = unknown, out Input = unknown,
+    out Internals extends $ZodTypeInternals<Output, Input> = $ZodTypeInternals<Output, Input>>
+    extends $ZodType<Output, Input, Internals> {
+    type: Internals["def"]["type"];
+>type : Internals["def"]["type"]
+
+    def: Internals["def"];
+>def : Internals["def"]
+
+    parse(data: unknown): output<this>;
+>parse : (data: unknown) => output<this>
+>data : unknown
+}
+type $ZodShape = Readonly<{ [k: string]: $ZodType }>;
+>$ZodShape : Readonly<{ [k: string]: $ZodType<unknown, unknown, $ZodTypeInternals<unknown, unknown>>; }>
+>k : string
+
+type $ZodObjectConfig = { out: Record<string, unknown>; in: Record<string, unknown> };
+>$ZodObjectConfig : $ZodObjectConfig
+>out : Record<string, unknown>
+>in : Record<string, unknown>
+
+type $strip = { out: {}; in: {} };
+>$strip : $strip
+>out : {}
+>in : {}
+
+type OptionalOutSchema = { _zod: { optout: "optional" } };
+>OptionalOutSchema : OptionalOutSchema
+>_zod : { optout: "optional"; }
+>optout : "optional"
+
+type OptionalInSchema = { _zod: { optin: "optional" | "defaulted" } };
+>OptionalInSchema : OptionalInSchema
+>_zod : { optin: "optional" | "defaulted"; }
+>optin : "defaulted" | "optional"
+
+type $InferObjectOutput<T extends $ZodShape, Extra extends Record<string, unknown>> = string extends keyof T
+>$InferObjectOutput : $InferObjectOutput<T, Extra>
+
+    ? IsAny<T[keyof T]> extends true ? Record<string, unknown> : Record<string, output<T[keyof T]>>
+>true : true
+
+    : keyof (T & Extra) extends never ? Record<string, never> : Prettify<
+        { -readonly [k in keyof T as T[k] extends OptionalOutSchema ? never : k]: T[k]["_zod"]["output"] } &
+        { -readonly [k in keyof T as T[k] extends OptionalOutSchema ? k : never]?: T[k]["_zod"]["output"] } & Extra>;
+type $InferObjectInput<T extends $ZodShape, Extra extends Record<string, unknown>> = string extends keyof T
+>$InferObjectInput : $InferObjectInput<T, Extra>
+
+    ? IsAny<T[keyof T]> extends true ? Record<string, unknown> : Record<string, input<T[keyof T]>>
+>true : true
+
+    : keyof (T & Extra) extends never ? Record<string, never> : Prettify<
+        { -readonly [k in keyof T as T[k] extends OptionalInSchema ? never : k]: T[k]["_zod"]["input"] } &
+        { -readonly [k in keyof T as T[k] extends OptionalInSchema ? k : never]?: T[k]["_zod"]["input"] } & Extra>;
+interface $ZodObjectInternals<Shape extends $ZodShape = $ZodShape,
+    out Config extends $ZodObjectConfig = $ZodObjectConfig> extends $ZodTypeInternals {
+    def: { type: "object"; shape: Shape; catchall?: $ZodType | undefined };
+>def : { type: "object"; shape: Shape; catchall?: $ZodType | undefined; }
+>type : "object"
+>shape : Shape
+>catchall : $ZodType<unknown, unknown, $ZodTypeInternals<unknown, unknown>> | undefined
+
+    config: Config;
+>config : Config
+
+    output: $InferObjectOutput<Shape, Config["out"]>;
+>output : $InferObjectOutput<Shape, Config["out"]>
+
+    input: $InferObjectInput<Shape, Config["in"]>;
+>input : $InferObjectInput<Shape, Config["in"]>
+
+    optin?: "optional" | undefined;
+>optin : "optional" | undefined
+
+    optout?: "optional" | undefined;
+>optout : "optional" | undefined
+}
+interface $ZodObject<Shape extends Readonly<$ZodShape> = Readonly<$ZodShape>,
+    out Params extends $ZodObjectConfig = $ZodObjectConfig>
+    extends $ZodType<any, any, $ZodObjectInternals<Shape, Params>> {}
+interface ZodMiniObject<Shape extends $ZodShape = $ZodShape, out Config extends $ZodObjectConfig = $strip>
+    extends ZodMiniType<any, any, $ZodObjectInternals<Shape, Config>>, $ZodObject<Shape, Config> {
+    shape: Shape;
+>shape : Shape
+}
+declare function object<T extends $ZodShape = Record<never, $ZodType>>(shape?: T): ZodMiniObject<Writeable<T>, $strip>;
+>object : <T extends $ZodShape = Record<never, $ZodType<unknown, unknown, $ZodTypeInternals<unknown, unknown>>>>(shape?: T) => ZodMiniObject<Writeable<T>, $strip>
+>shape : T | undefined
+
+export const nested = object({
+>nested : ZodMiniObject<{ readonly children: any; } extends infer T ? { -readonly [P in keyof T]: T[P]; } : never, $strip>
+>object({    get children() { return object({ children: nested }); },}) : ZodMiniObject<{ readonly children: any; } extends infer T ? { -readonly [P in keyof T]: T[P]; } : never, $strip>
+>object : <T extends $ZodShape = Record<never, $ZodType<unknown, unknown, $ZodTypeInternals<unknown, unknown>>>>(shape?: T) => ZodMiniObject<Writeable<T>, $strip>
+>{    get children() { return object({ children: nested }); },} : { readonly children: any; }
+
+    get children() { return object({ children: nested }); },
+>children : any
+>object({ children: nested }) : ZodMiniObject<{ children: ZodMiniObject<{ readonly children: any; } extends infer T ? { -readonly [P in keyof T]: T[P]; } : never, $strip>; }, $strip>
+>object : <T extends $ZodShape = Record<never, $ZodType<unknown, unknown, $ZodTypeInternals<unknown, unknown>>>>(shape?: T) => ZodMiniObject<Writeable<T>, $strip>
+>{ children: nested } : { children: ZodMiniObject<{ readonly children: any; } extends infer T ? { -readonly [P in keyof T]: T[P]; } : never, $strip>; }
+>children : ZodMiniObject<{ readonly children: any; } extends infer T ? { -readonly [P in keyof T]: T[P]; } : never, $strip>
+>nested : ZodMiniObject<{ readonly children: any; } extends infer T ? { -readonly [P in keyof T]: T[P]; } : never, $strip>
+
+});
+
+// Inspecting output first would mask the mapped getter's resolution cycle.
+nested.shape.children;
+>nested.shape.children : any
+>nested.shape : { readonly children: any; } extends infer T ? { -readonly [P in keyof T]: T[P]; } : never
+>nested : ZodMiniObject<{ readonly children: any; } extends infer T ? { -readonly [P in keyof T]: T[P]; } : never, $strip>
+>shape : { readonly children: any; } extends infer T ? { -readonly [P in keyof T]: T[P]; } : never
+>children : any
+
+type Assert<T extends true> = T;
+>Assert : T
+>true : true
+
+export function checkOutput() {
+>checkOutput : () => void
+
+    type NestedOutput = output<typeof nested>;
+>NestedOutput : { [x: string]: any; }
+>nested : ZodMiniObject<{ readonly children: any; } extends infer T ? { -readonly [P in keyof T]: T[P]; } : never, $strip>
+
+    const value = null! as NestedOutput;
+>value : { [x: string]: any; }
+>null! as NestedOutput : { [x: string]: any; }
+>null! : never
+
+    const deep: NestedOutput = value.children.children.children.children;
+>deep : { [x: string]: any; }
+>value.children.children.children.children : any
+>value.children.children.children : any
+>value.children.children : any
+>value.children : any
+>value : { [x: string]: any; }
+>children : any
+>children : any
+>children : any
+>children : any
+
+    type Deep = typeof value.children.children.children.children;
+>Deep : any
+>value.children.children.children.children : any
+>value.children.children.children : any
+>value.children.children : any
+>value.children : any
+>value : { [x: string]: any; }
+>children : any
+>children : any
+>children : any
+>children : any
+
+    const recursive: Deep = value;
+>recursive : any
+>value : { [x: string]: any; }
+
+    type DeepIsNotAny = Assert<IsAny<Deep> extends false ? true : false>;
+>DeepIsNotAny : any
+>false : false
+>true : true
+>false : false
+
+    type DeepKeys = Assert<keyof Deep extends "children" ? "children" extends keyof Deep ? true : false : false>;
+>DeepKeys : false
+>true : true
+>false : false
+>false : false
+
+    // @ts-expect-error Recursive output objects have no "missing" property.
+    value.children.children.children.children.missing;
+>value.children.children.children.children.missing : any
+>value.children.children.children.children : any
+>value.children.children.children : any
+>value.children.children : any
+>value.children : any
+>value : { [x: string]: any; }
+>children : any
+>children : any
+>children : any
+>children : any
+>missing : any
+
+    // @ts-expect-error Every children property must contain another recursive object.
+    const invalid: NestedOutput = { children: { children: { children: 123 } } };
+>invalid : { [x: string]: any; }
+>{ children: { children: { children: 123 } } } : { children: { children: { children: number; }; }; }
+>children : { children: { children: number; }; }
+>{ children: { children: 123 } } : { children: { children: number; }; }
+>children : { children: number; }
+>{ children: 123 } : { children: number; }
+>children : number
+>123 : 123
+}
+

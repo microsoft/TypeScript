@@ -1,0 +1,107 @@
+//// [tests/cases/compiler/covariantReferenceNormalization.ts] ////
+
+=== covariantReferenceNormalization.ts ===
+interface Producer<out T> {
+    readonly value: T;
+>value : T
+}
+interface Consumer<in T> {
+    consume: (value: T) => void;
+>consume : (value: T) => void
+>value : T
+}
+interface Invariant<in out T> {
+    value: T;
+>value : T
+
+    consume: (value: T) => void;
+>consume : (value: T) => void
+>value : T
+}
+interface Conditional<T> {
+    value: unknown extends T ? "top" : "other";
+>value : unknown extends T ? "top" : "other"
+}
+interface OtherProducer<out T> {
+    readonly value: T;
+>value : T
+
+    readonly other: true;
+>other : true
+>true : true
+}
+interface SelfProducer<out T> {
+    readonly value: T;
+>value : T
+
+    readonly self: this;
+>self : this
+}
+
+declare function producer<T>(): Producer<T>;
+>producer : <T>() => Producer<T>
+
+declare function consumer<T>(): Consumer<T>;
+>consumer : <T>() => Consumer<T>
+
+declare function invariant<T>(): Invariant<T>;
+>invariant : <T>() => Invariant<T>
+
+declare function conditional<T>(): Conditional<T>;
+>conditional : <T>() => Conditional<T>
+
+declare function selfProducer<T>(): SelfProducer<T>;
+>selfProducer : <T>() => SelfProducer<T>
+
+const numberProducer: Producer<unknown> = producer<number>();
+>numberProducer : Producer<unknown>
+>producer<number>() : Producer<number>
+>producer : <T>() => Producer<T>
+
+const neverProducer: Producer<unknown> = producer<never>();
+>neverProducer : Producer<unknown>
+>producer<never>() : Producer<never>
+>producer : <T>() => Producer<T>
+
+const anyProducer: Producer<unknown> = producer<any>();
+>anyProducer : Producer<unknown>
+>producer<any>() : Producer<any>
+>producer : <T>() => Producer<T>
+
+const anyTarget: Producer<any> = producer<number>();
+>anyTarget : Producer<any>
+>producer<number>() : Producer<number>
+>producer : <T>() => Producer<T>
+
+const self: SelfProducer<unknown> = selfProducer<number>();
+>self : SelfProducer<unknown>
+>selfProducer<number>() : SelfProducer<number>
+>selfProducer : <T>() => SelfProducer<T>
+
+const wrongConsumer: Consumer<unknown> = consumer<number>();
+>wrongConsumer : Consumer<unknown>
+>consumer<number>() : Consumer<number>
+>consumer : <T>() => Consumer<T>
+
+const wrongInvariant: Invariant<unknown> = invariant<number>();
+>wrongInvariant : Invariant<unknown>
+>invariant<number>() : Invariant<number>
+>invariant : <T>() => Invariant<T>
+
+const wrongConditional: Conditional<unknown> = conditional<number>();
+>wrongConditional : Conditional<unknown>
+>conditional<number>() : Conditional<number>
+>conditional : <T>() => Conditional<T>
+
+const wrongProducer: Producer<string> = producer<number>();
+>wrongProducer : Producer<string>
+>producer<number>() : Producer<number>
+>producer : <T>() => Producer<T>
+
+const wrongTarget: OtherProducer<unknown> = producer<number>();
+>wrongTarget : OtherProducer<unknown>
+>producer<number>() : Producer<number>
+>producer : <T>() => Producer<T>
+
+export {};
+

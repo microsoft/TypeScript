@@ -1,0 +1,77 @@
+covariantReferenceNormalization.ts(35,7): error TS2322: Type 'Consumer<number>' is not assignable to type 'Consumer<unknown>'.
+  Type 'unknown' is not assignable to type 'number'.
+covariantReferenceNormalization.ts(36,7): error TS2322: Type 'Invariant<number>' is not assignable to type 'Invariant<unknown>'.
+  Types of property 'consume' are incompatible.
+    Type '(value: number) => void' is not assignable to type '(value: unknown) => void'.
+      Types of parameters 'value' and 'value' are incompatible.
+        Type 'unknown' is not assignable to type 'number'.
+covariantReferenceNormalization.ts(37,7): error TS2322: Type 'Conditional<number>' is not assignable to type 'Conditional<unknown>'.
+  Types of property 'value' are incompatible.
+    Type '"other"' is not assignable to type '"top"'.
+covariantReferenceNormalization.ts(38,7): error TS2322: Type 'Producer<number>' is not assignable to type 'Producer<string>'.
+  Type 'number' is not assignable to type 'string'.
+covariantReferenceNormalization.ts(39,7): error TS2741: Property 'other' is missing in type 'Producer<number>' but required in type 'OtherProducer<unknown>'.
+
+
+==== covariantReferenceNormalization.ts (5 errors) ====
+    interface Producer<out T> {
+        readonly value: T;
+    }
+    interface Consumer<in T> {
+        consume: (value: T) => void;
+    }
+    interface Invariant<in out T> {
+        value: T;
+        consume: (value: T) => void;
+    }
+    interface Conditional<T> {
+        value: unknown extends T ? "top" : "other";
+    }
+    interface OtherProducer<out T> {
+        readonly value: T;
+        readonly other: true;
+    }
+    interface SelfProducer<out T> {
+        readonly value: T;
+        readonly self: this;
+    }
+    
+    declare function producer<T>(): Producer<T>;
+    declare function consumer<T>(): Consumer<T>;
+    declare function invariant<T>(): Invariant<T>;
+    declare function conditional<T>(): Conditional<T>;
+    declare function selfProducer<T>(): SelfProducer<T>;
+    
+    const numberProducer: Producer<unknown> = producer<number>();
+    const neverProducer: Producer<unknown> = producer<never>();
+    const anyProducer: Producer<unknown> = producer<any>();
+    const anyTarget: Producer<any> = producer<number>();
+    const self: SelfProducer<unknown> = selfProducer<number>();
+    
+    const wrongConsumer: Consumer<unknown> = consumer<number>();
+          ~~~~~~~~~~~~~
+!!! error TS2322: Type 'Consumer<number>' is not assignable to type 'Consumer<unknown>'.
+!!! error TS2322:   Type 'unknown' is not assignable to type 'number'.
+    const wrongInvariant: Invariant<unknown> = invariant<number>();
+          ~~~~~~~~~~~~~~
+!!! error TS2322: Type 'Invariant<number>' is not assignable to type 'Invariant<unknown>'.
+!!! error TS2322:   Types of property 'consume' are incompatible.
+!!! error TS2322:     Type '(value: number) => void' is not assignable to type '(value: unknown) => void'.
+!!! error TS2322:       Types of parameters 'value' and 'value' are incompatible.
+!!! error TS2322:         Type 'unknown' is not assignable to type 'number'.
+    const wrongConditional: Conditional<unknown> = conditional<number>();
+          ~~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'Conditional<number>' is not assignable to type 'Conditional<unknown>'.
+!!! error TS2322:   Types of property 'value' are incompatible.
+!!! error TS2322:     Type '"other"' is not assignable to type '"top"'.
+    const wrongProducer: Producer<string> = producer<number>();
+          ~~~~~~~~~~~~~
+!!! error TS2322: Type 'Producer<number>' is not assignable to type 'Producer<string>'.
+!!! error TS2322:   Type 'number' is not assignable to type 'string'.
+    const wrongTarget: OtherProducer<unknown> = producer<number>();
+          ~~~~~~~~~~~
+!!! error TS2741: Property 'other' is missing in type 'Producer<number>' but required in type 'OtherProducer<unknown>'.
+!!! related TS2728 covariantReferenceNormalization.ts:16:14: 'other' is declared here.
+    
+    export {};
+    
