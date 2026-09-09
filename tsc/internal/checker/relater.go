@@ -2679,17 +2679,21 @@ func (c *Checker) areTypeInstantiationsIdentical(source *Type, sourceMapper *Typ
 }
 
 // A false result leaves the relation to ordinary normalization and structural checking.
-func (c *Checker) isDeferredTypeReferenceAssignableTo(source *Type, target *Type) bool {
+func (r *Relater) deferredTypeReferenceRelatedTo(source *Type, target *Type) Ternary {
+	c := r.c
 	if c.hasIdenticalDeferredTypeArguments(source, target) {
 		if source.Target() == target.Target() {
-			return true
+			return TernaryTrue
 		}
 		// Don't manufacture a target instantiation that violates its parameter constraints.
 		targetParameters := target.Target().AsInterfaceType().TypeParameters()
 		if core.Every(targetParameters, func(p *Type) bool { return c.getConstraintOfTypeParameter(p) == nil }) {
 			targetTemplate := c.createTypeReference(target.Target(), source.Target().AsInterfaceType().TypeParameters())
-			if c.isTypeAssignableTo(source.Target(), targetTemplate) {
-				return true
+			// The declaration proof may recurse through these same members. Keep its
+			// assumptions in this relation and propagate them, rather than promoting
+			// a provisional comparison to an unconditional success.
+			if result := r.isRelatedToSimple(source.Target(), targetTemplate); result != TernaryFalse {
+				return result
 			}
 		}
 	}
@@ -2700,11 +2704,14 @@ func (c *Checker) isDeferredTypeReferenceAssignableTo(source *Type, target *Type
 		if len(targetArguments) != 0 && core.Every(targetArguments, func(t *Type) bool { return t.flags&TypeFlagsAnyOrUnknown != 0 }) {
 			variances := c.getVariances(target.Target())
 			if len(variances) == len(targetArguments) && core.Every(variances, func(v VarianceFlags) bool { return v == VarianceFlagsCovariant }) {
-				return source.Target() == target.Target() || c.isTypeAssignableTo(source.Target(), target)
+				if source.Target() == target.Target() {
+					return TernaryTrue
+				}
+				return r.isRelatedToSimple(source.Target(), target)
 			}
 		}
 	}
-	return false
+	return TernaryFalse
 }
 
 func (r *Relater) isRelatedToEx(originalSource *Type, originalTarget *Type, recursionFlags RecursionFlags, reportErrors bool, headMessage *diagnostics.Message, intersectionState IntersectionState) Ternary {
@@ -2713,8 +2720,10 @@ func (r *Relater) isRelatedToEx(originalSource *Type, originalTarget *Type, recu
 	}
 	if r.relation == r.c.assignableRelation &&
 		originalSource.objectFlags&ObjectFlagsReference != 0 && originalSource.AsTypeReference().node != nil &&
-		originalTarget.objectFlags&ObjectFlagsReference != 0 && r.c.isDeferredTypeReferenceAssignableTo(originalSource, originalTarget) {
-		return TernaryTrue
+		originalTarget.objectFlags&ObjectFlagsReference != 0 {
+		if result := r.deferredTypeReferenceRelatedTo(originalSource, originalTarget); result != TernaryFalse {
+			return result
+		}
 	}
 	// Before normalization: if `source` is type an object type, and `target` is primitive,
 	// skip all the checks we don't need and just return `isSimpleTypeRelatedTo` result

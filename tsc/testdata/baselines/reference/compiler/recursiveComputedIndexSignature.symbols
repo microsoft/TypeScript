@@ -1,0 +1,123 @@
+//// [tests/cases/compiler/recursiveComputedIndexSignature.ts] ////
+
+=== recursiveComputedIndexSignature.ts ===
+interface Value<T> { output: T; }
+>Value : Symbol(Value, Decl(recursiveComputedIndexSignature.ts, 0, 0))
+>T : Symbol(T, Decl(recursiveComputedIndexSignature.ts, 0, 16))
+>output : Symbol(Value.output, Decl(recursiveComputedIndexSignature.ts, 0, 20))
+>T : Symbol(T, Decl(recursiveComputedIndexSignature.ts, 0, 16))
+
+interface Dictionary<T> { [key: string]: T; }
+>Dictionary : Symbol(Dictionary, Decl(recursiveComputedIndexSignature.ts, 0, 33))
+>T : Symbol(T, Decl(recursiveComputedIndexSignature.ts, 1, 21))
+>key : Symbol(key, Decl(recursiveComputedIndexSignature.ts, 1, 27))
+>T : Symbol(T, Decl(recursiveComputedIndexSignature.ts, 1, 21))
+
+interface ComputedDictionary<T extends Value<unknown>> extends Dictionary<T["output"]> {}
+>ComputedDictionary : Symbol(ComputedDictionary, Decl(recursiveComputedIndexSignature.ts, 1, 45))
+>T : Symbol(T, Decl(recursiveComputedIndexSignature.ts, 2, 29))
+>Value : Symbol(Value, Decl(recursiveComputedIndexSignature.ts, 0, 0))
+>Dictionary : Symbol(Dictionary, Decl(recursiveComputedIndexSignature.ts, 0, 33))
+>T : Symbol(T, Decl(recursiveComputedIndexSignature.ts, 2, 29))
+
+interface DictionarySchema<T extends Value<unknown>> extends Value<ComputedDictionary<T>> {}
+>DictionarySchema : Symbol(DictionarySchema, Decl(recursiveComputedIndexSignature.ts, 2, 89))
+>T : Symbol(T, Decl(recursiveComputedIndexSignature.ts, 3, 27))
+>Value : Symbol(Value, Decl(recursiveComputedIndexSignature.ts, 0, 0))
+>Value : Symbol(Value, Decl(recursiveComputedIndexSignature.ts, 0, 0))
+>ComputedDictionary : Symbol(ComputedDictionary, Decl(recursiveComputedIndexSignature.ts, 1, 45))
+>T : Symbol(T, Decl(recursiveComputedIndexSignature.ts, 3, 27))
+
+interface Root extends DictionarySchema<Root> {}
+>Root : Symbol(Root, Decl(recursiveComputedIndexSignature.ts, 3, 92))
+>DictionarySchema : Symbol(DictionarySchema, Decl(recursiveComputedIndexSignature.ts, 2, 89))
+>Root : Symbol(Root, Decl(recursiveComputedIndexSignature.ts, 3, 92))
+
+declare const root: Root["output"];
+>root : Symbol(root, Decl(recursiveComputedIndexSignature.ts, 6, 13))
+>Root : Symbol(Root, Decl(recursiveComputedIndexSignature.ts, 3, 92))
+
+const childToRoot: typeof root = root.first.second.third;
+>childToRoot : Symbol(childToRoot, Decl(recursiveComputedIndexSignature.ts, 7, 5))
+>root : Symbol(root, Decl(recursiveComputedIndexSignature.ts, 6, 13))
+>root.first.second.third : Symbol(ComputedDictionary.__index, Decl(recursiveComputedIndexSignature.ts, 1, 25))
+>root.first.second : Symbol(ComputedDictionary.__index, Decl(recursiveComputedIndexSignature.ts, 1, 25))
+>root.first : Symbol(ComputedDictionary.__index, Decl(recursiveComputedIndexSignature.ts, 1, 25))
+>root : Symbol(root, Decl(recursiveComputedIndexSignature.ts, 6, 13))
+>first : Symbol(ComputedDictionary.__index, Decl(recursiveComputedIndexSignature.ts, 1, 25))
+>second : Symbol(ComputedDictionary.__index, Decl(recursiveComputedIndexSignature.ts, 1, 25))
+>third : Symbol(ComputedDictionary.__index, Decl(recursiveComputedIndexSignature.ts, 1, 25))
+
+const rootToChild: typeof root.first = root;
+>rootToChild : Symbol(rootToChild, Decl(recursiveComputedIndexSignature.ts, 8, 5))
+>root : Symbol(root, Decl(recursiveComputedIndexSignature.ts, 6, 13))
+>root : Symbol(root, Decl(recursiveComputedIndexSignature.ts, 6, 13))
+
+const wrong: number = root.first.second.third;
+>wrong : Symbol(wrong, Decl(recursiveComputedIndexSignature.ts, 9, 5))
+>root.first.second.third : Symbol(ComputedDictionary.__index, Decl(recursiveComputedIndexSignature.ts, 1, 25))
+>root.first.second : Symbol(ComputedDictionary.__index, Decl(recursiveComputedIndexSignature.ts, 1, 25))
+>root.first : Symbol(ComputedDictionary.__index, Decl(recursiveComputedIndexSignature.ts, 1, 25))
+>root : Symbol(root, Decl(recursiveComputedIndexSignature.ts, 6, 13))
+>first : Symbol(ComputedDictionary.__index, Decl(recursiveComputedIndexSignature.ts, 1, 25))
+>second : Symbol(ComputedDictionary.__index, Decl(recursiveComputedIndexSignature.ts, 1, 25))
+>third : Symbol(ComputedDictionary.__index, Decl(recursiveComputedIndexSignature.ts, 1, 25))
+
+interface ReadonlyDictionary<T> { readonly [key: string]: T; }
+>ReadonlyDictionary : Symbol(ReadonlyDictionary, Decl(recursiveComputedIndexSignature.ts, 9, 46))
+>T : Symbol(T, Decl(recursiveComputedIndexSignature.ts, 11, 29))
+>key : Symbol(key, Decl(recursiveComputedIndexSignature.ts, 11, 44))
+>T : Symbol(T, Decl(recursiveComputedIndexSignature.ts, 11, 29))
+
+interface ComputedReadonly<T extends Value<unknown>> extends ReadonlyDictionary<T["output"]> {}
+>ComputedReadonly : Symbol(ComputedReadonly, Decl(recursiveComputedIndexSignature.ts, 11, 62))
+>T : Symbol(T, Decl(recursiveComputedIndexSignature.ts, 12, 27))
+>Value : Symbol(Value, Decl(recursiveComputedIndexSignature.ts, 0, 0))
+>ReadonlyDictionary : Symbol(ReadonlyDictionary, Decl(recursiveComputedIndexSignature.ts, 9, 46))
+>T : Symbol(T, Decl(recursiveComputedIndexSignature.ts, 12, 27))
+
+interface ReadonlySchema<T extends Value<unknown>> extends Value<ComputedReadonly<T>> {}
+>ReadonlySchema : Symbol(ReadonlySchema, Decl(recursiveComputedIndexSignature.ts, 12, 95))
+>T : Symbol(T, Decl(recursiveComputedIndexSignature.ts, 13, 25))
+>Value : Symbol(Value, Decl(recursiveComputedIndexSignature.ts, 0, 0))
+>Value : Symbol(Value, Decl(recursiveComputedIndexSignature.ts, 0, 0))
+>ComputedReadonly : Symbol(ComputedReadonly, Decl(recursiveComputedIndexSignature.ts, 11, 62))
+>T : Symbol(T, Decl(recursiveComputedIndexSignature.ts, 13, 25))
+
+interface ReadonlyRoot extends ReadonlySchema<ReadonlyRoot> {}
+>ReadonlyRoot : Symbol(ReadonlyRoot, Decl(recursiveComputedIndexSignature.ts, 13, 88))
+>ReadonlySchema : Symbol(ReadonlySchema, Decl(recursiveComputedIndexSignature.ts, 12, 95))
+>ReadonlyRoot : Symbol(ReadonlyRoot, Decl(recursiveComputedIndexSignature.ts, 13, 88))
+
+declare const readonlyRoot: ReadonlyRoot["output"];
+>readonlyRoot : Symbol(readonlyRoot, Decl(recursiveComputedIndexSignature.ts, 16, 13))
+>ReadonlyRoot : Symbol(ReadonlyRoot, Decl(recursiveComputedIndexSignature.ts, 13, 88))
+
+const readonlyChildToRoot: typeof readonlyRoot = readonlyRoot.first.second;
+>readonlyChildToRoot : Symbol(readonlyChildToRoot, Decl(recursiveComputedIndexSignature.ts, 17, 5))
+>readonlyRoot : Symbol(readonlyRoot, Decl(recursiveComputedIndexSignature.ts, 16, 13))
+>readonlyRoot.first.second : Symbol(ComputedReadonly.__index, Decl(recursiveComputedIndexSignature.ts, 11, 33))
+>readonlyRoot.first : Symbol(ComputedReadonly.__index, Decl(recursiveComputedIndexSignature.ts, 11, 33))
+>readonlyRoot : Symbol(readonlyRoot, Decl(recursiveComputedIndexSignature.ts, 16, 13))
+>first : Symbol(ComputedReadonly.__index, Decl(recursiveComputedIndexSignature.ts, 11, 33))
+>second : Symbol(ComputedReadonly.__index, Decl(recursiveComputedIndexSignature.ts, 11, 33))
+
+const readonlyRootToChild: typeof readonlyRoot.first = readonlyRoot;
+>readonlyRootToChild : Symbol(readonlyRootToChild, Decl(recursiveComputedIndexSignature.ts, 18, 5))
+>readonlyRoot : Symbol(readonlyRoot, Decl(recursiveComputedIndexSignature.ts, 16, 13))
+>readonlyRoot : Symbol(readonlyRoot, Decl(recursiveComputedIndexSignature.ts, 16, 13))
+
+readonlyRoot.first = readonlyRoot;
+>readonlyRoot.first : Symbol(ComputedReadonly.__index, Decl(recursiveComputedIndexSignature.ts, 11, 33))
+>readonlyRoot : Symbol(readonlyRoot, Decl(recursiveComputedIndexSignature.ts, 16, 13))
+>first : Symbol(ComputedReadonly.__index, Decl(recursiveComputedIndexSignature.ts, 11, 33))
+>readonlyRoot : Symbol(readonlyRoot, Decl(recursiveComputedIndexSignature.ts, 16, 13))
+
+const wrongReadonly: number = readonlyRoot.first.second;
+>wrongReadonly : Symbol(wrongReadonly, Decl(recursiveComputedIndexSignature.ts, 20, 5))
+>readonlyRoot.first.second : Symbol(ComputedReadonly.__index, Decl(recursiveComputedIndexSignature.ts, 11, 33))
+>readonlyRoot.first : Symbol(ComputedReadonly.__index, Decl(recursiveComputedIndexSignature.ts, 11, 33))
+>readonlyRoot : Symbol(readonlyRoot, Decl(recursiveComputedIndexSignature.ts, 16, 13))
+>first : Symbol(ComputedReadonly.__index, Decl(recursiveComputedIndexSignature.ts, 11, 33))
+>second : Symbol(ComputedReadonly.__index, Decl(recursiveComputedIndexSignature.ts, 11, 33))
+

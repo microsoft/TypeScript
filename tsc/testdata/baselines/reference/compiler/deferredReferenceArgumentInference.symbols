@@ -1,0 +1,201 @@
+//// [tests/cases/compiler/deferredReferenceArgumentInference.ts] ////
+
+=== deferredReferenceArgumentInference.ts ===
+interface Box<T> {
+>Box : Symbol(Box, Decl(deferredReferenceArgumentInference.ts, 0, 0))
+>T : Symbol(T, Decl(deferredReferenceArgumentInference.ts, 0, 14))
+
+    value: T;
+>value : Symbol(Box.value, Decl(deferredReferenceArgumentInference.ts, 0, 18))
+>T : Symbol(T, Decl(deferredReferenceArgumentInference.ts, 0, 14))
+}
+interface Transform<T> {
+>Transform : Symbol(Transform, Decl(deferredReferenceArgumentInference.ts, 2, 1))
+>T : Symbol(T, Decl(deferredReferenceArgumentInference.ts, 3, 20))
+
+    (value: T): T;
+>value : Symbol(value, Decl(deferredReferenceArgumentInference.ts, 4, 5))
+>T : Symbol(T, Decl(deferredReferenceArgumentInference.ts, 3, 20))
+>T : Symbol(T, Decl(deferredReferenceArgumentInference.ts, 3, 20))
+
+    value: T;
+>value : Symbol(Transform.value, Decl(deferredReferenceArgumentInference.ts, 4, 18))
+>T : Symbol(T, Decl(deferredReferenceArgumentInference.ts, 3, 20))
+}
+type Wrapped<T> = Box<T>;
+>Wrapped : Symbol(Wrapped, Decl(deferredReferenceArgumentInference.ts, 6, 1))
+>T : Symbol(T, Decl(deferredReferenceArgumentInference.ts, 7, 13))
+>Box : Symbol(Box, Decl(deferredReferenceArgumentInference.ts, 0, 0))
+>T : Symbol(T, Decl(deferredReferenceArgumentInference.ts, 7, 13))
+
+type WrappedTransform<T> = Transform<T>;
+>WrappedTransform : Symbol(WrappedTransform, Decl(deferredReferenceArgumentInference.ts, 7, 25))
+>T : Symbol(T, Decl(deferredReferenceArgumentInference.ts, 8, 22))
+>Transform : Symbol(Transform, Decl(deferredReferenceArgumentInference.ts, 2, 1))
+>T : Symbol(T, Decl(deferredReferenceArgumentInference.ts, 8, 22))
+
+declare function unbox<T>(box: Wrapped<T>): T;
+>unbox : Symbol(unbox, Decl(deferredReferenceArgumentInference.ts, 8, 40))
+>T : Symbol(T, Decl(deferredReferenceArgumentInference.ts, 9, 23))
+>box : Symbol(box, Decl(deferredReferenceArgumentInference.ts, 9, 26))
+>Wrapped : Symbol(Wrapped, Decl(deferredReferenceArgumentInference.ts, 6, 1))
+>T : Symbol(T, Decl(deferredReferenceArgumentInference.ts, 9, 23))
+>T : Symbol(T, Decl(deferredReferenceArgumentInference.ts, 9, 23))
+
+declare function unwrapTransform<T>(transform: WrappedTransform<T>): T;
+>unwrapTransform : Symbol(unwrapTransform, Decl(deferredReferenceArgumentInference.ts, 9, 46))
+>T : Symbol(T, Decl(deferredReferenceArgumentInference.ts, 10, 33))
+>transform : Symbol(transform, Decl(deferredReferenceArgumentInference.ts, 10, 36))
+>WrappedTransform : Symbol(WrappedTransform, Decl(deferredReferenceArgumentInference.ts, 7, 25))
+>T : Symbol(T, Decl(deferredReferenceArgumentInference.ts, 10, 33))
+>T : Symbol(T, Decl(deferredReferenceArgumentInference.ts, 10, 33))
+
+function indexed<T extends { value: unknown }>(box: Box<T["value"]>, transform: Transform<T["value"]>) {
+>indexed : Symbol(indexed, Decl(deferredReferenceArgumentInference.ts, 10, 71))
+>T : Symbol(T, Decl(deferredReferenceArgumentInference.ts, 12, 17))
+>value : Symbol(value, Decl(deferredReferenceArgumentInference.ts, 12, 28))
+>box : Symbol(box, Decl(deferredReferenceArgumentInference.ts, 12, 47))
+>Box : Symbol(Box, Decl(deferredReferenceArgumentInference.ts, 0, 0))
+>T : Symbol(T, Decl(deferredReferenceArgumentInference.ts, 12, 17))
+>transform : Symbol(transform, Decl(deferredReferenceArgumentInference.ts, 12, 68))
+>Transform : Symbol(Transform, Decl(deferredReferenceArgumentInference.ts, 2, 1))
+>T : Symbol(T, Decl(deferredReferenceArgumentInference.ts, 12, 17))
+
+    const value = unbox(box);
+>value : Symbol(value, Decl(deferredReferenceArgumentInference.ts, 13, 9))
+>unbox : Symbol(unbox, Decl(deferredReferenceArgumentInference.ts, 8, 40))
+>box : Symbol(box, Decl(deferredReferenceArgumentInference.ts, 12, 47))
+
+    const transformed = unwrapTransform(transform);
+>transformed : Symbol(transformed, Decl(deferredReferenceArgumentInference.ts, 14, 9))
+>unwrapTransform : Symbol(unwrapTransform, Decl(deferredReferenceArgumentInference.ts, 9, 46))
+>transform : Symbol(transform, Decl(deferredReferenceArgumentInference.ts, 12, 68))
+
+    const expectedValue: T["value"] = value;
+>expectedValue : Symbol(expectedValue, Decl(deferredReferenceArgumentInference.ts, 15, 9))
+>T : Symbol(T, Decl(deferredReferenceArgumentInference.ts, 12, 17))
+>value : Symbol(value, Decl(deferredReferenceArgumentInference.ts, 13, 9))
+
+    const expectedTransform: T["value"] = transformed;
+>expectedTransform : Symbol(expectedTransform, Decl(deferredReferenceArgumentInference.ts, 16, 9))
+>T : Symbol(T, Decl(deferredReferenceArgumentInference.ts, 12, 17))
+>transformed : Symbol(transformed, Decl(deferredReferenceArgumentInference.ts, 14, 9))
+
+    const wrongValue: number = value;
+>wrongValue : Symbol(wrongValue, Decl(deferredReferenceArgumentInference.ts, 17, 9))
+>value : Symbol(value, Decl(deferredReferenceArgumentInference.ts, 13, 9))
+
+    const wrongTransform: number = transformed;
+>wrongTransform : Symbol(wrongTransform, Decl(deferredReferenceArgumentInference.ts, 18, 9))
+>transformed : Symbol(transformed, Decl(deferredReferenceArgumentInference.ts, 14, 9))
+
+    return { value, transformed };
+>value : Symbol(value, Decl(deferredReferenceArgumentInference.ts, 19, 12))
+>transformed : Symbol(transformed, Decl(deferredReferenceArgumentInference.ts, 19, 19))
+}
+
+type Element<T> = T extends readonly (infer E)[] ? E : never;
+>Element : Symbol(Element, Decl(deferredReferenceArgumentInference.ts, 20, 1))
+>T : Symbol(T, Decl(deferredReferenceArgumentInference.ts, 22, 13))
+>T : Symbol(T, Decl(deferredReferenceArgumentInference.ts, 22, 13))
+>E : Symbol(E, Decl(deferredReferenceArgumentInference.ts, 22, 43))
+>E : Symbol(E, Decl(deferredReferenceArgumentInference.ts, 22, 43))
+
+function conditional<T>(box: Box<Element<T>>, transform: Transform<Element<T>>) {
+>conditional : Symbol(conditional, Decl(deferredReferenceArgumentInference.ts, 22, 61))
+>T : Symbol(T, Decl(deferredReferenceArgumentInference.ts, 23, 21))
+>box : Symbol(box, Decl(deferredReferenceArgumentInference.ts, 23, 24))
+>Box : Symbol(Box, Decl(deferredReferenceArgumentInference.ts, 0, 0))
+>Element : Symbol(Element, Decl(deferredReferenceArgumentInference.ts, 20, 1))
+>T : Symbol(T, Decl(deferredReferenceArgumentInference.ts, 23, 21))
+>transform : Symbol(transform, Decl(deferredReferenceArgumentInference.ts, 23, 45))
+>Transform : Symbol(Transform, Decl(deferredReferenceArgumentInference.ts, 2, 1))
+>Element : Symbol(Element, Decl(deferredReferenceArgumentInference.ts, 20, 1))
+>T : Symbol(T, Decl(deferredReferenceArgumentInference.ts, 23, 21))
+
+    const value = unbox(box);
+>value : Symbol(value, Decl(deferredReferenceArgumentInference.ts, 24, 9))
+>unbox : Symbol(unbox, Decl(deferredReferenceArgumentInference.ts, 8, 40))
+>box : Symbol(box, Decl(deferredReferenceArgumentInference.ts, 23, 24))
+
+    const transformed = unwrapTransform(transform);
+>transformed : Symbol(transformed, Decl(deferredReferenceArgumentInference.ts, 25, 9))
+>unwrapTransform : Symbol(unwrapTransform, Decl(deferredReferenceArgumentInference.ts, 9, 46))
+>transform : Symbol(transform, Decl(deferredReferenceArgumentInference.ts, 23, 45))
+
+    const expectedValue: Element<T> = value;
+>expectedValue : Symbol(expectedValue, Decl(deferredReferenceArgumentInference.ts, 26, 9))
+>Element : Symbol(Element, Decl(deferredReferenceArgumentInference.ts, 20, 1))
+>T : Symbol(T, Decl(deferredReferenceArgumentInference.ts, 23, 21))
+>value : Symbol(value, Decl(deferredReferenceArgumentInference.ts, 24, 9))
+
+    const expectedTransform: Element<T> = transformed;
+>expectedTransform : Symbol(expectedTransform, Decl(deferredReferenceArgumentInference.ts, 27, 9))
+>Element : Symbol(Element, Decl(deferredReferenceArgumentInference.ts, 20, 1))
+>T : Symbol(T, Decl(deferredReferenceArgumentInference.ts, 23, 21))
+>transformed : Symbol(transformed, Decl(deferredReferenceArgumentInference.ts, 25, 9))
+
+    return { value, transformed };
+>value : Symbol(value, Decl(deferredReferenceArgumentInference.ts, 28, 12))
+>transformed : Symbol(transformed, Decl(deferredReferenceArgumentInference.ts, 28, 19))
+}
+
+declare const stringBox: Box<string>;
+>stringBox : Symbol(stringBox, Decl(deferredReferenceArgumentInference.ts, 31, 13))
+>Box : Symbol(Box, Decl(deferredReferenceArgumentInference.ts, 0, 0))
+
+declare const stringTransform: Transform<string>;
+>stringTransform : Symbol(stringTransform, Decl(deferredReferenceArgumentInference.ts, 32, 13))
+>Transform : Symbol(Transform, Decl(deferredReferenceArgumentInference.ts, 2, 1))
+
+const fromIndex = indexed<{ value: string }>(stringBox, stringTransform);
+>fromIndex : Symbol(fromIndex, Decl(deferredReferenceArgumentInference.ts, 33, 5))
+>indexed : Symbol(indexed, Decl(deferredReferenceArgumentInference.ts, 10, 71))
+>value : Symbol(value, Decl(deferredReferenceArgumentInference.ts, 33, 27))
+>stringBox : Symbol(stringBox, Decl(deferredReferenceArgumentInference.ts, 31, 13))
+>stringTransform : Symbol(stringTransform, Decl(deferredReferenceArgumentInference.ts, 32, 13))
+
+const fromConditional = conditional<string[]>(stringBox, stringTransform);
+>fromConditional : Symbol(fromConditional, Decl(deferredReferenceArgumentInference.ts, 34, 5))
+>conditional : Symbol(conditional, Decl(deferredReferenceArgumentInference.ts, 22, 61))
+>stringBox : Symbol(stringBox, Decl(deferredReferenceArgumentInference.ts, 31, 13))
+>stringTransform : Symbol(stringTransform, Decl(deferredReferenceArgumentInference.ts, 32, 13))
+
+const indexedValue: string = fromIndex.value;
+>indexedValue : Symbol(indexedValue, Decl(deferredReferenceArgumentInference.ts, 35, 5))
+>fromIndex.value : Symbol(value, Decl(deferredReferenceArgumentInference.ts, 19, 12))
+>fromIndex : Symbol(fromIndex, Decl(deferredReferenceArgumentInference.ts, 33, 5))
+>value : Symbol(value, Decl(deferredReferenceArgumentInference.ts, 19, 12))
+
+const indexedTransform: string = fromIndex.transformed;
+>indexedTransform : Symbol(indexedTransform, Decl(deferredReferenceArgumentInference.ts, 36, 5))
+>fromIndex.transformed : Symbol(transformed, Decl(deferredReferenceArgumentInference.ts, 19, 19))
+>fromIndex : Symbol(fromIndex, Decl(deferredReferenceArgumentInference.ts, 33, 5))
+>transformed : Symbol(transformed, Decl(deferredReferenceArgumentInference.ts, 19, 19))
+
+const conditionalValue: string = fromConditional.value;
+>conditionalValue : Symbol(conditionalValue, Decl(deferredReferenceArgumentInference.ts, 37, 5))
+>fromConditional.value : Symbol(value, Decl(deferredReferenceArgumentInference.ts, 28, 12))
+>fromConditional : Symbol(fromConditional, Decl(deferredReferenceArgumentInference.ts, 34, 5))
+>value : Symbol(value, Decl(deferredReferenceArgumentInference.ts, 28, 12))
+
+const conditionalTransform: string = fromConditional.transformed;
+>conditionalTransform : Symbol(conditionalTransform, Decl(deferredReferenceArgumentInference.ts, 38, 5))
+>fromConditional.transformed : Symbol(transformed, Decl(deferredReferenceArgumentInference.ts, 28, 19))
+>fromConditional : Symbol(fromConditional, Decl(deferredReferenceArgumentInference.ts, 34, 5))
+>transformed : Symbol(transformed, Decl(deferredReferenceArgumentInference.ts, 28, 19))
+
+const wrongIndex: number = fromIndex.value;
+>wrongIndex : Symbol(wrongIndex, Decl(deferredReferenceArgumentInference.ts, 39, 5))
+>fromIndex.value : Symbol(value, Decl(deferredReferenceArgumentInference.ts, 19, 12))
+>fromIndex : Symbol(fromIndex, Decl(deferredReferenceArgumentInference.ts, 33, 5))
+>value : Symbol(value, Decl(deferredReferenceArgumentInference.ts, 19, 12))
+
+const wrongConditional: number = fromConditional.transformed;
+>wrongConditional : Symbol(wrongConditional, Decl(deferredReferenceArgumentInference.ts, 40, 5))
+>fromConditional.transformed : Symbol(transformed, Decl(deferredReferenceArgumentInference.ts, 28, 19))
+>fromConditional : Symbol(fromConditional, Decl(deferredReferenceArgumentInference.ts, 34, 5))
+>transformed : Symbol(transformed, Decl(deferredReferenceArgumentInference.ts, 28, 19))
+
+export {};
+

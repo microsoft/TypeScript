@@ -1,0 +1,85 @@
+//// [tests/cases/compiler/recursiveComputedIndexSignature.ts] ////
+
+=== recursiveComputedIndexSignature.ts ===
+interface Value<T> { output: T; }
+>output : T
+
+interface Dictionary<T> { [key: string]: T; }
+>key : string
+
+interface ComputedDictionary<T extends Value<unknown>> extends Dictionary<T["output"]> {}
+interface DictionarySchema<T extends Value<unknown>> extends Value<ComputedDictionary<T>> {}
+interface Root extends DictionarySchema<Root> {}
+
+declare const root: Root["output"];
+>root : ComputedDictionary<Root>
+
+const childToRoot: typeof root = root.first.second.third;
+>childToRoot : ComputedDictionary<Root>
+>root : ComputedDictionary<Root>
+>root.first.second.third : ComputedDictionary<Root>
+>root.first.second : ComputedDictionary<Root>
+>root.first : ComputedDictionary<Root>
+>root : ComputedDictionary<Root>
+>first : ComputedDictionary<Root>
+>second : ComputedDictionary<Root>
+>third : ComputedDictionary<Root>
+
+const rootToChild: typeof root.first = root;
+>rootToChild : ComputedDictionary<Root>
+>root.first : ComputedDictionary<Root>
+>root : ComputedDictionary<Root>
+>first : ComputedDictionary<Root>
+>root : ComputedDictionary<Root>
+
+const wrong: number = root.first.second.third;
+>wrong : number
+>root.first.second.third : ComputedDictionary<Root>
+>root.first.second : ComputedDictionary<Root>
+>root.first : ComputedDictionary<Root>
+>root : ComputedDictionary<Root>
+>first : ComputedDictionary<Root>
+>second : ComputedDictionary<Root>
+>third : ComputedDictionary<Root>
+
+interface ReadonlyDictionary<T> { readonly [key: string]: T; }
+>key : string
+
+interface ComputedReadonly<T extends Value<unknown>> extends ReadonlyDictionary<T["output"]> {}
+interface ReadonlySchema<T extends Value<unknown>> extends Value<ComputedReadonly<T>> {}
+interface ReadonlyRoot extends ReadonlySchema<ReadonlyRoot> {}
+
+declare const readonlyRoot: ReadonlyRoot["output"];
+>readonlyRoot : ComputedReadonly<ReadonlyRoot>
+
+const readonlyChildToRoot: typeof readonlyRoot = readonlyRoot.first.second;
+>readonlyChildToRoot : ComputedReadonly<ReadonlyRoot>
+>readonlyRoot : ComputedReadonly<ReadonlyRoot>
+>readonlyRoot.first.second : ComputedReadonly<ReadonlyRoot>
+>readonlyRoot.first : ComputedReadonly<ReadonlyRoot>
+>readonlyRoot : ComputedReadonly<ReadonlyRoot>
+>first : ComputedReadonly<ReadonlyRoot>
+>second : ComputedReadonly<ReadonlyRoot>
+
+const readonlyRootToChild: typeof readonlyRoot.first = readonlyRoot;
+>readonlyRootToChild : ComputedReadonly<ReadonlyRoot>
+>readonlyRoot.first : ComputedReadonly<ReadonlyRoot>
+>readonlyRoot : ComputedReadonly<ReadonlyRoot>
+>first : ComputedReadonly<ReadonlyRoot>
+>readonlyRoot : ComputedReadonly<ReadonlyRoot>
+
+readonlyRoot.first = readonlyRoot;
+>readonlyRoot.first = readonlyRoot : ComputedReadonly<ReadonlyRoot>
+>readonlyRoot.first : ComputedReadonly<ReadonlyRoot>
+>readonlyRoot : ComputedReadonly<ReadonlyRoot>
+>first : ComputedReadonly<ReadonlyRoot>
+>readonlyRoot : ComputedReadonly<ReadonlyRoot>
+
+const wrongReadonly: number = readonlyRoot.first.second;
+>wrongReadonly : number
+>readonlyRoot.first.second : ComputedReadonly<ReadonlyRoot>
+>readonlyRoot.first : ComputedReadonly<ReadonlyRoot>
+>readonlyRoot : ComputedReadonly<ReadonlyRoot>
+>first : ComputedReadonly<ReadonlyRoot>
+>second : ComputedReadonly<ReadonlyRoot>
+

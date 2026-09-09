@@ -5,9 +5,14 @@ instantiatedInterfaceMembers.ts(37,10): error TS2345: Argument of type 'number' 
 instantiatedInterfaceMembers.ts(38,14): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
 instantiatedInterfaceMembers.ts(44,17): error TS4060: Return type of exported function has or is using private name 'Result'.
 instantiatedInterfaceMembers.ts(52,14): error TS4025: Exported variable 'mixed' has or is using private name 'Result'.
+instantiatedInterfaceMembers.ts(66,7): error TS2322: Type 'string' is not assignable to type 'number'.
+instantiatedInterfaceMembers.ts(67,10): error TS2445: Property 'hidden' is protected and only accessible within class 'Base<T>' and its subclasses.
+instantiatedInterfaceMembers.ts(68,10): error TS2339: Property 'missing' does not exist on type 'ComputedFurther<{ value: string; }>'.
+instantiatedInterfaceMembers.ts(77,18): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+instantiatedInterfaceMembers.ts(78,22): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
 
 
-==== instantiatedInterfaceMembers.ts (7 errors) ====
+==== instantiatedInterfaceMembers.ts (12 errors) ====
     class Base<T> {
         value!: T;
         protected hidden!: T;
@@ -77,4 +82,37 @@ instantiatedInterfaceMembers.ts(52,14): error TS4025: Exported variable 'mixed' 
     export const inherited: string = mixed.value;
     export const added: number = mixed.added;
     export const mixedFluent: typeof mixed = mixed.fluent();
+    
+    interface Computed<T extends { value: unknown }> extends Base<T["value"]> {
+        extra: T["value"];
+    }
+    interface ComputedFurther<T extends { value: unknown }> extends Computed<T> {
+        another: T["value"];
+    }
+    declare const computed: ComputedFurther<{ value: string }>;
+    export const computedFluent: typeof computed = computed.fluent();
+    export const computedValue: string = computed.value;
+    const wrongComputedValue: number = computed.value;
+          ~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
+    computed.hidden;
+             ~~~~~~
+!!! error TS2445: Property 'hidden' is protected and only accessible within class 'Base<T>' and its subclasses.
+    computed.missing;
+             ~~~~~~~
+!!! error TS2339: Property 'missing' does not exist on type 'ComputedFurther<{ value: string; }>'.
+    
+    interface ComputedCallable<T extends { value: unknown }> extends Callable<T["value"]> {
+        value: T["value"];
+    }
+    declare const computedCallable: ComputedCallable<{ value: string }>;
+    export const computedCall: string = computedCallable("");
+    export const computedConstruct: Base<string> = new computedCallable("");
+    export const computedIndex: string = computedCallable["other"];
+    computedCallable(0);
+                     ~
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+    new computedCallable(0);
+                         ~
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
     

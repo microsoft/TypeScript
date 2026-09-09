@@ -181,3 +181,92 @@ export const mixedFluent: typeof mixed = mixed.fluent();
 >mixed : Symbol(mixed, Decl(instantiatedInterfaceMembers.ts, 51, 12))
 >fluent : Symbol(Base.fluent, Decl(instantiatedInterfaceMembers.ts, 2, 25))
 
+interface Computed<T extends { value: unknown }> extends Base<T["value"]> {
+>Computed : Symbol(Computed, Decl(instantiatedInterfaceMembers.ts, 54, 56))
+>T : Symbol(T, Decl(instantiatedInterfaceMembers.ts, 56, 19))
+>value : Symbol(value, Decl(instantiatedInterfaceMembers.ts, 56, 30))
+>Base : Symbol(Base, Decl(instantiatedInterfaceMembers.ts, 0, 0))
+>T : Symbol(T, Decl(instantiatedInterfaceMembers.ts, 56, 19))
+
+    extra: T["value"];
+>extra : Symbol(Computed.extra, Decl(instantiatedInterfaceMembers.ts, 56, 75))
+>T : Symbol(T, Decl(instantiatedInterfaceMembers.ts, 56, 19))
+}
+interface ComputedFurther<T extends { value: unknown }> extends Computed<T> {
+>ComputedFurther : Symbol(ComputedFurther, Decl(instantiatedInterfaceMembers.ts, 58, 1))
+>T : Symbol(T, Decl(instantiatedInterfaceMembers.ts, 59, 26))
+>value : Symbol(value, Decl(instantiatedInterfaceMembers.ts, 59, 37))
+>Computed : Symbol(Computed, Decl(instantiatedInterfaceMembers.ts, 54, 56))
+>T : Symbol(T, Decl(instantiatedInterfaceMembers.ts, 59, 26))
+
+    another: T["value"];
+>another : Symbol(ComputedFurther.another, Decl(instantiatedInterfaceMembers.ts, 59, 77))
+>T : Symbol(T, Decl(instantiatedInterfaceMembers.ts, 59, 26))
+}
+declare const computed: ComputedFurther<{ value: string }>;
+>computed : Symbol(computed, Decl(instantiatedInterfaceMembers.ts, 62, 13))
+>ComputedFurther : Symbol(ComputedFurther, Decl(instantiatedInterfaceMembers.ts, 58, 1))
+>value : Symbol(value, Decl(instantiatedInterfaceMembers.ts, 62, 41))
+
+export const computedFluent: typeof computed = computed.fluent();
+>computedFluent : Symbol(computedFluent, Decl(instantiatedInterfaceMembers.ts, 63, 12))
+>computed : Symbol(computed, Decl(instantiatedInterfaceMembers.ts, 62, 13))
+>computed.fluent : Symbol(Base.fluent, Decl(instantiatedInterfaceMembers.ts, 2, 25))
+>computed : Symbol(computed, Decl(instantiatedInterfaceMembers.ts, 62, 13))
+>fluent : Symbol(Base.fluent, Decl(instantiatedInterfaceMembers.ts, 2, 25))
+
+export const computedValue: string = computed.value;
+>computedValue : Symbol(computedValue, Decl(instantiatedInterfaceMembers.ts, 64, 12))
+>computed.value : Symbol(Base.value, Decl(instantiatedInterfaceMembers.ts, 0, 15))
+>computed : Symbol(computed, Decl(instantiatedInterfaceMembers.ts, 62, 13))
+>value : Symbol(Base.value, Decl(instantiatedInterfaceMembers.ts, 0, 15))
+
+const wrongComputedValue: number = computed.value;
+>wrongComputedValue : Symbol(wrongComputedValue, Decl(instantiatedInterfaceMembers.ts, 65, 5))
+>computed.value : Symbol(Base.value, Decl(instantiatedInterfaceMembers.ts, 0, 15))
+>computed : Symbol(computed, Decl(instantiatedInterfaceMembers.ts, 62, 13))
+>value : Symbol(Base.value, Decl(instantiatedInterfaceMembers.ts, 0, 15))
+
+computed.hidden;
+>computed.hidden : Symbol(Base.hidden, Decl(instantiatedInterfaceMembers.ts, 1, 14))
+>computed : Symbol(computed, Decl(instantiatedInterfaceMembers.ts, 62, 13))
+>hidden : Symbol(Base.hidden, Decl(instantiatedInterfaceMembers.ts, 1, 14))
+
+computed.missing;
+>computed : Symbol(computed, Decl(instantiatedInterfaceMembers.ts, 62, 13))
+
+interface ComputedCallable<T extends { value: unknown }> extends Callable<T["value"]> {
+>ComputedCallable : Symbol(ComputedCallable, Decl(instantiatedInterfaceMembers.ts, 67, 17))
+>T : Symbol(T, Decl(instantiatedInterfaceMembers.ts, 69, 27))
+>value : Symbol(value, Decl(instantiatedInterfaceMembers.ts, 69, 38))
+>Callable : Symbol(Callable, Decl(instantiatedInterfaceMembers.ts, 20, 16))
+>T : Symbol(T, Decl(instantiatedInterfaceMembers.ts, 69, 27))
+
+    value: T["value"];
+>value : Symbol(ComputedCallable.value, Decl(instantiatedInterfaceMembers.ts, 69, 87))
+>T : Symbol(T, Decl(instantiatedInterfaceMembers.ts, 69, 27))
+}
+declare const computedCallable: ComputedCallable<{ value: string }>;
+>computedCallable : Symbol(computedCallable, Decl(instantiatedInterfaceMembers.ts, 72, 13))
+>ComputedCallable : Symbol(ComputedCallable, Decl(instantiatedInterfaceMembers.ts, 67, 17))
+>value : Symbol(value, Decl(instantiatedInterfaceMembers.ts, 72, 50))
+
+export const computedCall: string = computedCallable("");
+>computedCall : Symbol(computedCall, Decl(instantiatedInterfaceMembers.ts, 73, 12))
+>computedCallable : Symbol(computedCallable, Decl(instantiatedInterfaceMembers.ts, 72, 13))
+
+export const computedConstruct: Base<string> = new computedCallable("");
+>computedConstruct : Symbol(computedConstruct, Decl(instantiatedInterfaceMembers.ts, 74, 12))
+>Base : Symbol(Base, Decl(instantiatedInterfaceMembers.ts, 0, 0))
+>computedCallable : Symbol(computedCallable, Decl(instantiatedInterfaceMembers.ts, 72, 13))
+
+export const computedIndex: string = computedCallable["other"];
+>computedIndex : Symbol(computedIndex, Decl(instantiatedInterfaceMembers.ts, 75, 12))
+>computedCallable : Symbol(computedCallable, Decl(instantiatedInterfaceMembers.ts, 72, 13))
+
+computedCallable(0);
+>computedCallable : Symbol(computedCallable, Decl(instantiatedInterfaceMembers.ts, 72, 13))
+
+new computedCallable(0);
+>computedCallable : Symbol(computedCallable, Decl(instantiatedInterfaceMembers.ts, 72, 13))
+

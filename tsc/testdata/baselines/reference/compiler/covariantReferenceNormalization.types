@@ -103,5 +103,87 @@ const wrongTarget: OtherProducer<unknown> = producer<number>();
 >producer<number>() : Producer<number>
 >producer : <T>() => Producer<T>
 
+type Value<T> = T extends { value: infer V } ? V : never;
+>Value : Value<T>
+>value : V
+
+type DeferredProducer<T> = Producer<Value<T>>;
+>DeferredProducer : DeferredProducer<T>
+
+type DeferredConsumer<T> = Consumer<Value<T>>;
+>DeferredConsumer : DeferredConsumer<T>
+
+type DeferredInvariant<T> = Invariant<Value<T>>;
+>DeferredInvariant : DeferredInvariant<T>
+
+type DeferredConditional<T> = Conditional<Value<T>>;
+>DeferredConditional : DeferredConditional<T>
+
+type DeferredOtherProducer<T> = OtherProducer<Value<T>>;
+>DeferredOtherProducer : DeferredOtherProducer<T>
+
+declare function deferredProducer<T>(): DeferredProducer<T>;
+>deferredProducer : <T>() => DeferredProducer<T>
+
+declare function deferredConsumer<T>(): DeferredConsumer<T>;
+>deferredConsumer : <T>() => DeferredConsumer<T>
+
+declare function deferredInvariant<T>(): DeferredInvariant<T>;
+>deferredInvariant : <T>() => DeferredInvariant<T>
+
+declare function deferredConditional<T>(): DeferredConditional<T>;
+>deferredConditional : <T>() => DeferredConditional<T>
+
+declare function deferredOtherProducer<T>(): DeferredOtherProducer<T>;
+>deferredOtherProducer : <T>() => DeferredOtherProducer<T>
+
+const deferredTop: Producer<unknown> = deferredProducer<{ value: number }>();
+>deferredTop : Producer<unknown>
+>deferredProducer<{ value: number }>() : DeferredProducer<{ value: number; }>
+>deferredProducer : <T>() => DeferredProducer<T>
+>value : number
+
+const deferredAny: Producer<any> = deferredProducer<{ value: number }>();
+>deferredAny : Producer<any>
+>deferredProducer<{ value: number }>() : DeferredProducer<{ value: number; }>
+>deferredProducer : <T>() => DeferredProducer<T>
+>value : number
+
+const deferredDerived: Producer<unknown> = deferredOtherProducer<{ value: number }>();
+>deferredDerived : Producer<unknown>
+>deferredOtherProducer<{ value: number }>() : DeferredOtherProducer<{ value: number; }>
+>deferredOtherProducer : <T>() => DeferredOtherProducer<T>
+>value : number
+
+const wrongDeferredConsumer: Consumer<unknown> = deferredConsumer<{ value: number }>();
+>wrongDeferredConsumer : Consumer<unknown>
+>deferredConsumer<{ value: number }>() : DeferredConsumer<{ value: number; }>
+>deferredConsumer : <T>() => DeferredConsumer<T>
+>value : number
+
+const wrongDeferredInvariant: Invariant<unknown> = deferredInvariant<{ value: number }>();
+>wrongDeferredInvariant : Invariant<unknown>
+>deferredInvariant<{ value: number }>() : DeferredInvariant<{ value: number; }>
+>deferredInvariant : <T>() => DeferredInvariant<T>
+>value : number
+
+const wrongDeferredConditional: Conditional<unknown> = deferredConditional<{ value: number }>();
+>wrongDeferredConditional : Conditional<unknown>
+>deferredConditional<{ value: number }>() : DeferredConditional<{ value: number; }>
+>deferredConditional : <T>() => DeferredConditional<T>
+>value : number
+
+const wrongDeferredArgument: Producer<string> = deferredProducer<{ value: number }>();
+>wrongDeferredArgument : Producer<string>
+>deferredProducer<{ value: number }>() : DeferredProducer<{ value: number; }>
+>deferredProducer : <T>() => DeferredProducer<T>
+>value : number
+
+const wrongDeferredMember: OtherProducer<unknown> = deferredProducer<{ value: number }>();
+>wrongDeferredMember : OtherProducer<unknown>
+>deferredProducer<{ value: number }>() : DeferredProducer<{ value: number; }>
+>deferredProducer : <T>() => DeferredProducer<T>
+>value : number
+
 export {};
 

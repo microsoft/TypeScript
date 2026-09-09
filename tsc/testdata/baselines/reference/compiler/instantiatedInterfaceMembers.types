@@ -156,3 +156,87 @@ export const mixedFluent: typeof mixed = mixed.fluent();
 >mixed : factory.Result
 >fluent : () => factory.Result
 
+interface Computed<T extends { value: unknown }> extends Base<T["value"]> {
+>value : unknown
+
+    extra: T["value"];
+>extra : T["value"]
+}
+interface ComputedFurther<T extends { value: unknown }> extends Computed<T> {
+>value : unknown
+
+    another: T["value"];
+>another : T["value"]
+}
+declare const computed: ComputedFurther<{ value: string }>;
+>computed : ComputedFurther<{ value: string; }>
+>value : string
+
+export const computedFluent: typeof computed = computed.fluent();
+>computedFluent : ComputedFurther<{ value: string; }>
+>computed : ComputedFurther<{ value: string; }>
+>computed.fluent() : ComputedFurther<{ value: string; }>
+>computed.fluent : () => ComputedFurther<{ value: string; }>
+>computed : ComputedFurther<{ value: string; }>
+>fluent : () => ComputedFurther<{ value: string; }>
+
+export const computedValue: string = computed.value;
+>computedValue : string
+>computed.value : string
+>computed : ComputedFurther<{ value: string; }>
+>value : string
+
+const wrongComputedValue: number = computed.value;
+>wrongComputedValue : number
+>computed.value : string
+>computed : ComputedFurther<{ value: string; }>
+>value : string
+
+computed.hidden;
+>computed.hidden : string
+>computed : ComputedFurther<{ value: string; }>
+>hidden : string
+
+computed.missing;
+>computed.missing : any
+>computed : ComputedFurther<{ value: string; }>
+>missing : any
+
+interface ComputedCallable<T extends { value: unknown }> extends Callable<T["value"]> {
+>value : unknown
+
+    value: T["value"];
+>value : T["value"]
+}
+declare const computedCallable: ComputedCallable<{ value: string }>;
+>computedCallable : ComputedCallable<{ value: string; }>
+>value : string
+
+export const computedCall: string = computedCallable("");
+>computedCall : string
+>computedCallable("") : string
+>computedCallable : ComputedCallable<{ value: string; }>
+>"" : ""
+
+export const computedConstruct: Base<string> = new computedCallable("");
+>computedConstruct : Base<string>
+>new computedCallable("") : Base<string>
+>computedCallable : ComputedCallable<{ value: string; }>
+>"" : ""
+
+export const computedIndex: string = computedCallable["other"];
+>computedIndex : string
+>computedCallable["other"] : string
+>computedCallable : ComputedCallable<{ value: string; }>
+>"other" : "other"
+
+computedCallable(0);
+>computedCallable(0) : string
+>computedCallable : ComputedCallable<{ value: string; }>
+>0 : 0
+
+new computedCallable(0);
+>new computedCallable(0) : Base<string>
+>computedCallable : ComputedCallable<{ value: string; }>
+>0 : 0
+

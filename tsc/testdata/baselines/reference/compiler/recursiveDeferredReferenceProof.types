@@ -1,0 +1,124 @@
+//// [tests/cases/compiler/recursiveDeferredReferenceProof.ts] ////
+
+=== recursiveDeferredReferenceProof.ts ===
+type Step<T> = T extends string ? string : number;
+>Step : Step<T>
+
+interface Left<T> {
+    next: Left<Step<T>>;
+>next : Left<Step<T>>
+}
+interface Right<T> {
+    next: Right<Step<T>>;
+>next : Right<Step<T>>
+}
+declare const left: Left<string>;
+>left : Left<string>
+
+const right: Right<string> = left;
+>right : Right<string>
+>left : Left<string>
+
+const back: Left<string> = right;
+>back : Left<string>
+>right : Right<string>
+
+interface LeftValue<T> {
+    next: LeftValue<Step<T>>;
+>next : LeftValue<Step<T>>
+
+    value: T;
+>value : T
+}
+interface RightValue<T> {
+    next: RightValue<Step<T>>;
+>next : RightValue<Step<T>>
+
+    value: T;
+>value : T
+}
+interface NumericValue<T> {
+    next: NumericValue<Step<T>>;
+>next : NumericValue<Step<T>>
+
+    value: number;
+>value : number
+}
+declare const text: LeftValue<string>;
+>text : LeftValue<string>
+
+const same: RightValue<string> = text;
+>same : RightValue<string>
+>text : LeftValue<string>
+
+const wrong: NumericValue<string> = text;
+>wrong : NumericValue<string>
+>text : LeftValue<string>
+
+const wrongAgain: NumericValue<string> = text;
+>wrongAgain : NumericValue<string>
+>text : LeftValue<string>
+
+declare const numeric: LeftValue<number>;
+>numeric : LeftValue<number>
+
+const specialized: NumericValue<number> = numeric;
+>specialized : NumericValue<number>
+>numeric : LeftValue<number>
+
+const specializedBack: LeftValue<number> = specialized;
+>specializedBack : LeftValue<number>
+>specialized : NumericValue<number>
+
+type Value<T> = T extends { value: infer V } ? V : never;
+>Value : Value<T>
+>value : V
+
+type DeferredLeft<T> = LeftValue<Value<T>>;
+>DeferredLeft : DeferredLeft<T>
+
+declare function deferred<T>(): DeferredLeft<T>;
+>deferred : <T>() => DeferredLeft<T>
+
+const incompatibleStep: RightValue<unknown> = deferred<{ value: string }>();
+>incompatibleStep : RightValue<unknown>
+>deferred<{ value: string }>() : DeferredLeft<{ value: string; }>
+>deferred : <T>() => DeferredLeft<T>
+>value : string
+
+const incompatible: NumericValue<unknown> = deferred<{ value: string }>();
+>incompatible : NumericValue<unknown>
+>deferred<{ value: string }>() : DeferredLeft<{ value: string; }>
+>deferred : <T>() => DeferredLeft<T>
+>value : string
+
+interface Producer<T> {
+    next: Producer<T>;
+>next : Producer<T>
+
+    value: T;
+>value : T
+}
+interface OtherProducer<T> {
+    next: OtherProducer<T>;
+>next : OtherProducer<T>
+
+    value: T;
+>value : T
+}
+type DeferredProducer<T> = Producer<Value<T>>;
+>DeferredProducer : DeferredProducer<T>
+
+declare function producer<T>(): DeferredProducer<T>;
+>producer : <T>() => DeferredProducer<T>
+
+const covariant: OtherProducer<unknown> = producer<{ value: string }>();
+>covariant : OtherProducer<unknown>
+>producer<{ value: string }>() : DeferredProducer<{ value: string; }>
+>producer : <T>() => DeferredProducer<T>
+>value : string
+
+const covariantBack: Producer<unknown> = covariant;
+>covariantBack : Producer<unknown>
+>covariant : OtherProducer<unknown>
+
