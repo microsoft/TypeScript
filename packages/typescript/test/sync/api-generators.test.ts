@@ -144,7 +144,6 @@ const privateGeneratorGetters = new Set([
     "API.initializeWorker",
     "API.updateSnapshotFrom",
     "API.updateSnapshotWorker",
-    "API.createProgramWorker",
     "Checker.getIntrinsicType",
     "Checker.getWellKnownSignatures",
     "Checker.getWellKnownSymbols",

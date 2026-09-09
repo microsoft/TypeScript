@@ -865,23 +865,6 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
             owner,
             "createProgram",
             function (rootFiles: readonly DocumentIdentifier[], createProgramOptions: CreateProgramOptions, oldProgram?: Program, fileChanges?: APIFileChanges): Program {
-                return owner.createProgramWorker(rootFiles, createProgramOptions, oldProgram, fileChanges);
-            },
-            function* (rootFiles: readonly DocumentIdentifier[], createProgramOptions: CreateProgramOptions, oldProgram?: Program, fileChanges?: APIFileChanges): Generator<ProtocolRequest, Program, ProtocolResponse["result"]> {
-                return yield* owner.createProgramWorker.gen(rootFiles, createProgramOptions, oldProgram, fileChanges);
-            },
-        );
-    }
-
-    private get createProgramWorker(): {
-        (rootFiles: readonly DocumentIdentifier[], createProgramOptions: CreateProgramOptions, oldProgram?: Program, fileChanges?: APIFileChanges): Program;
-        gen(rootFiles: readonly DocumentIdentifier[], createProgramOptions: CreateProgramOptions, oldProgram?: Program, fileChanges?: APIFileChanges): Generator<ProtocolRequest, Program, ProtocolResponse["result"]>;
-    } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "createProgramWorker",
-            function (rootFiles: readonly DocumentIdentifier[], createProgramOptions: CreateProgramOptions, oldProgram?: Program, fileChanges?: APIFileChanges): Program {
                 owner.ensureInitialized();
 
                 if (fileChanges && !oldProgram) {

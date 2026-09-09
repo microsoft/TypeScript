@@ -15,12 +15,12 @@ import (
 )
 
 func newRequestFileSystem(params *RequestFileSystem, base vfs.FS, currentDirectory string) (*requestFileSystem, error) {
-	return newRequestFileSystemWorker(params, base, currentDirectory, false)
+	return newLayeredRequestFileSystem(params, base, currentDirectory)
 }
 
 func newLayeredRequestFileSystem(params *RequestFileSystem, base vfs.FS, currentDirectory string) (*requestFileSystem, error) {
 	var fileChanges project.FileChangeSummary
-	fileSystem, err := NewForUpdate(params, base, currentDirectory, &fileChanges, true)
+	fileSystem, err := NewForUpdate(params, base, currentDirectory, &fileChanges)
 	if err != nil {
 		return nil, err
 	}
@@ -29,9 +29,8 @@ func newLayeredRequestFileSystem(params *RequestFileSystem, base vfs.FS, current
 
 func verifyCompactionWithoutHostReads(t *testing.T, layer *requestFileSystem, host *trackingvfs.FS, paths []string) {
 	t.Helper()
-	empty, err := newRequestFileSystem(&RequestFileSystem{Kind: KindFull}, host, layer.currentDirectory)
+	compacted, err := newRequestFileSystem(&RequestFileSystem{Kind: KindLayer}, layer, layer.currentDirectory)
 	assert.NilError(t, err)
-	compacted := layer.applyTo(*empty)
 	verify := func(name string, run func(vfs.FS, string) any) {
 		t.Helper()
 		for _, path := range paths {
@@ -42,7 +41,7 @@ func verifyCompactionWithoutHostReads(t *testing.T, layer *requestFileSystem, ho
 			if !host.SeenFiles.IsEmpty() {
 				continue
 			}
-			actual := run(&compacted, path)
+			actual := run(compacted, path)
 			assert.Assert(t, host.SeenFiles.IsEmpty(), name, path)
 			t.Logf("Comparing %s(%q) after compaction", name, path)
 			assert.DeepEqual(t, actual, expected)
@@ -107,13 +106,13 @@ func TestInitializeForUpdate(t *testing.T) {
 		base, err := NewForUpdate(&RequestFileSystem{
 			Kind:  KindFull,
 			Files: map[string]string{"/base.ts": "base"},
-		}, host, "/", &fileChanges, false)
+		}, host, "/", &fileChanges)
 		assert.NilError(t, err)
 
 		layered, err := NewForUpdate(&RequestFileSystem{
 			Kind:  KindLayer,
 			Files: map[string]string{"/layered.ts": "layered"},
-		}, base, "/", &fileChanges, true)
+		}, base, "/", &fileChanges)
 		assert.NilError(t, err)
 		requestFileSystem, ok := layered.(*requestFileSystem)
 		assert.Assert(t, ok)
@@ -135,7 +134,7 @@ func TestInitializeForUpdate(t *testing.T) {
 			Directories: map[string]RequestDirectoryEntries{
 				"/dir": {Files: []string{"cached.ts"}, Directories: []string{}},
 			},
-		}, host, "/", &fileChanges, true)
+		}, host, "/", &fileChanges)
 		assert.NilError(t, err)
 		// Change generation may inspect the old directory; reading the supplied
 		// complete listing itself must not fall back to the host.
@@ -159,7 +158,7 @@ func TestInitializeForUpdate(t *testing.T) {
 		fileSystem, err := NewForUpdate(&RequestFileSystem{
 			Kind:  KindFull,
 			Files: map[string]string{"/replacement.ts": "replacement"},
-		}, base, "/", &fileChanges, true)
+		}, base, "/", &fileChanges)
 		assert.NilError(t, err)
 		requestFileSystem := getRequestFileSystem(fileSystem)
 		assert.Assert(t, requestFileSystem.baseFileSystem() == host)
@@ -960,8 +959,7 @@ func testSameLayerRemoval(t *testing.T, hostTarget bool, removedPath string, for
 		case "recompacted":
 			fileSystem, err = newLayeredRequestFileSystem(&RequestFileSystem{Kind: KindLayer}, fileSystem, "/")
 		case "compacted-input":
-			compacted := fileSystem.applyTo(*base)
-			fileSystem = &compacted
+			fileSystem, err = newRequestFileSystem(params, fileSystem, "/")
 		}
 	}
 	assert.NilError(t, err)
@@ -1027,8 +1025,10 @@ func testRemovalExceptions(t *testing.T, hostTarget bool, removeAgain bool) {
 	}
 	layered, err := newRequestFileSystem(params, removed, "/")
 	assert.NilError(t, err)
-	compacted := layered.applyTo(*removed)
-	input := compacted.applyTo(*base)
+	compacted, err := newRequestFileSystem(&RequestFileSystem{Kind: KindLayer}, layered, "/")
+	assert.NilError(t, err)
+	input, err := newRequestFileSystem(&RequestFileSystem{Kind: KindLayer}, compacted, "/")
+	assert.NilError(t, err)
 	verify := func(fileSystem *requestFileSystem) {
 		t.Helper()
 		if removeAgain {
@@ -1051,8 +1051,8 @@ func testRemovalExceptions(t *testing.T, hostTarget bool, removeAgain bool) {
 		}
 	}
 	verify(layered)
-	verify(&compacted)
-	verify(&input)
+	verify(compacted)
+	verify(input)
 	assert.Assert(t, !removed.DirectoryExists("/dir/pkg"))
 	assert.Assert(t, compacted.FileExists("/dir/pkg/a.ts"))
 }
@@ -1134,6 +1134,9 @@ func TestRequestFileSystem(t *testing.T) {
 			},
 		}, base, "/")
 		assert.NilError(t, err)
+		for seen := range base.SeenFiles.Keys() {
+			base.SeenFiles.Delete(seen)
+		}
 
 		contents, ok := fileSystem.ReadFile("/cached/index.ts")
 		assert.Assert(t, ok)
@@ -1220,6 +1223,9 @@ func TestRequestFileSystem(t *testing.T) {
 			},
 		}, base, "/")
 		assert.NilError(t, err)
+		for seen := range base.SeenFiles.Keys() {
+			base.SeenFiles.Delete(seen)
+		}
 
 		contents, ok := fileSystem.ReadFile("/project/node_modules/pkg/index.d.ts")
 		assert.Assert(t, ok)
@@ -1570,6 +1576,9 @@ func TestRequestFileSystem(t *testing.T) {
 			RemovedPaths: []string{"/remove.ts", "/removed-dir"},
 		}, base, "/")
 		assert.NilError(t, err)
+		for seen := range base.SeenFiles.Keys() {
+			base.SeenFiles.Delete(seen)
+		}
 
 		assert.Assert(t, !fileSystem.FileExists("/remove.ts"))
 		assert.Assert(t, !fileSystem.DirectoryExists("/removed-dir"))

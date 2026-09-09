@@ -501,15 +501,6 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         oldProgram?: Program,
         fileChanges?: APIFileChanges,
     ): Promise<Program> {
-        return this.createProgramWorker(rootFiles, createProgramOptions, oldProgram, fileChanges);
-    }
-
-    private async createProgramWorker(
-        rootFiles: readonly DocumentIdentifier[],
-        createProgramOptions: CreateProgramOptions,
-        oldProgram?: Program,
-        fileChanges?: APIFileChanges,
-    ): Promise<Program> {
         await this.ensureInitialized();
 
         if (fileChanges && !oldProgram) {

@@ -65,3 +65,52 @@ func TestFileChangesIncludeListingsAndSymlinks(t *testing.T) {
 	assert.Assert(t, summary.Created.Has("file:///link"))
 	assert.Assert(t, summary.Created.Has("file:///new"))
 }
+
+func TestFileChangesIncludeRecursiveSymlinkAliases(t *testing.T) {
+	t.Parallel()
+
+	base, err := newRequestFileSystem(&RequestFileSystem{
+		Kind:  KindFull,
+		Files: map[string]string{"/dir/file.ts": "old"},
+		Symlinks: map[string]RequestSymlink{
+			"/dir/link": {Target: "/dir"},
+		},
+	}, vfstest.FromMap(map[string]string{}, true), "/")
+	assert.NilError(t, err)
+
+	var summary project.FileChangeSummary
+	addFileChanges(&summary, &RequestFileSystem{
+		Kind:  KindLayer,
+		Files: map[string]string{"/dir/file.ts": "new"},
+	}, base, "/")
+	assert.Equal(t, summary.Changed.Len(), 2)
+	assert.Assert(t, summary.Changed.Has("file:///dir/file.ts"))
+	assert.Assert(t, summary.Changed.Has("file:///dir/link/file.ts"))
+	assert.Equal(t, summary.Created.Len(), 0)
+}
+
+func TestFileChangesIncludeRootSymlinkAliases(t *testing.T) {
+	t.Parallel()
+
+	base, err := newRequestFileSystem(&RequestFileSystem{
+		Kind:  KindFull,
+		Files: map[string]string{"/file.ts": "old"},
+		Symlinks: map[string]RequestSymlink{
+			"/link": {Target: "/"},
+		},
+	}, vfstest.FromMap(map[string]string{}, true), "/")
+	assert.NilError(t, err)
+	content, ok := base.ReadFile("/link/file.ts")
+	assert.Assert(t, ok)
+	assert.Equal(t, content, "old")
+
+	var summary project.FileChangeSummary
+	addFileChanges(&summary, &RequestFileSystem{
+		Kind:  KindLayer,
+		Files: map[string]string{"/file.ts": "new"},
+	}, base, "/")
+	assert.Equal(t, summary.Changed.Len(), 2)
+	assert.Assert(t, summary.Changed.Has("file:///file.ts"))
+	assert.Assert(t, summary.Changed.Has("file:///link/file.ts"))
+	assert.Equal(t, summary.Created.Len(), 0)
+}

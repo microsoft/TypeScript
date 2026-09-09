@@ -1204,7 +1204,7 @@ func (s *Session) handleUpdateSnapshot(ctx context.Context, params *UpdateSnapsh
 	}
 	sd := newSnapshotData()
 	var err error
-	sd.fileSystem, err = requestfilesystem.NewForUpdate(params.FileSystem, baseRequestFileSystem, s.currentDirectory(), &fileChanges, baseSD != nil)
+	sd.fileSystem, err = requestfilesystem.NewForUpdate(params.FileSystem, baseRequestFileSystem, s.currentDirectory(), &fileChanges)
 	if err != nil {
 		return nil, fmt.Errorf("%w: %w", ErrClientError, err)
 	}
