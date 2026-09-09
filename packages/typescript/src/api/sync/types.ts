@@ -279,7 +279,8 @@ export interface InterfaceType extends TypeReference {
 }
 
 /** Generic types */
-export type GenericType = InterfaceType & TypeReference;
+export interface GenericType extends InterfaceType, TypeReference {
+}
 
 /** Tuple type targets (ObjectFlags.Tuple) */
 export interface TupleType extends InterfaceType {
