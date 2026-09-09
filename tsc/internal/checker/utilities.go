@@ -402,13 +402,45 @@ func (c *Checker) compareNodes(n1, n2 *ast.Node) int {
 	s1 := ast.GetSourceFileOfNode(n1)
 	s2 := ast.GetSourceFileOfNode(n2)
 	if s1 != s2 {
-		f1 := c.fileIndexMap[s1]
-		f2 := c.fileIndexMap[s2]
-		// Order by index of file in the containing program
-		return f1 - f2
+		if c := compareFileIndices(c.fileIndexMap, s1, s2); c != 0 {
+			return c
+		}
 	}
 	// In the same file, order by source position
 	return n1.Pos() - n2.Pos()
+}
+
+// compareFileIndices orders s1 and s2 by their index in fileIndexMap (the containing
+// program's file list). A source file missing from fileIndexMap - e.g. a synthetic file
+// from a custom host, or a content-mapper-produced supplemental file that was parsed
+// outside the program - is not present as a key, and a plain map lookup would silently
+// return the zero value, indistinguishable from genuine file index 0. That would make an
+// unindexed file compare as equal to whichever file actually occupies index 0, and would
+// make any two unindexed files compare as equal to each other. Both are wrong: an
+// unindexed file must consistently sort relative to indexed ones, and two different
+// unindexed files must not collapse to the same sort position. So a missing entry is
+// tracked explicitly and unindexed files are ordered after all indexed ones, tiebroken by
+// file name for a deterministic (if arbitrary) order between two unindexed files.
+func compareFileIndices(fileIndexMap map[*ast.SourceFile]int, s1, s2 *ast.SourceFile) int {
+	f1, ok1 := fileIndexMap[s1]
+	f2, ok2 := fileIndexMap[s2]
+	if ok1 && ok2 {
+		return f1 - f2
+	}
+	if ok1 != ok2 {
+		if ok1 {
+			return -1
+		}
+		return 1
+	}
+	return strings.Compare(sourceFileName(s1), sourceFileName(s2))
+}
+
+func sourceFileName(s *ast.SourceFile) string {
+	if s == nil {
+		return ""
+	}
+	return s.FileName()
 }
 
 func CompareTypes(t1, t2 *Type) int {
