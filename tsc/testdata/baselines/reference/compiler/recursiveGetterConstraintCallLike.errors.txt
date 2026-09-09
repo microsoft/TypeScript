@@ -1,0 +1,68 @@
+recursiveGetterConstraintCallLike.tsx(8,28): error TS2344: Type '{ readonly value: number; }' does not satisfy the constraint '{ value: string; }'.
+  Types of property 'value' are incompatible.
+    Type 'number' is not assignable to type 'string'.
+recursiveGetterConstraintCallLike.tsx(9,23): error TS2344: Type '{ readonly value: number; }' does not satisfy the constraint '{ value: string; }'.
+  Types of property 'value' are incompatible.
+    Type 'number' is not assignable to type 'string'.
+recursiveGetterConstraintCallLike.tsx(12,24): error TS2344: Type '{ readonly value: number; }' does not satisfy the constraint '{ value: string; }'.
+  Types of property 'value' are incompatible.
+    Type 'number' is not assignable to type 'string'.
+recursiveGetterConstraintCallLike.tsx(12,25): error TS2786: 'InvalidComponent' cannot be used as a JSX component.
+  Its return type 'number' is not a valid JSX element.
+recursiveGetterConstraintCallLike.tsx(16,35): error TS2322: Type 'number' is not assignable to type 'string'.
+recursiveGetterConstraintCallLike.tsx(20,32): error TS2322: Type 'number' is not assignable to type 'string'.
+recursiveGetterConstraintCallLike.tsx(26,31): error TS2322: Type 'number' is not assignable to type 'string'.
+
+
+==== recursiveGetterConstraintCallLike.tsx (7 errors) ====
+    declare namespace JSX {
+        interface Element { element: true; }
+    }
+    
+    declare function Component<T extends { value: string }>(props: { data: T }): JSX.Element;
+    const validSelfClosing = <Component data={{ get value() { return ""; } }} />;
+    const validPaired = <Component data={{ get value() { return ""; } }}></Component>;
+    const invalidSelfClosing = <Component data={{ get value() { return 42; } }} />;
+                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2344: Type '{ readonly value: number; }' does not satisfy the constraint '{ value: string; }'.
+!!! error TS2344:   Types of property 'value' are incompatible.
+!!! error TS2344:     Type 'number' is not assignable to type 'string'.
+    const invalidPaired = <Component data={{ get value() { return 42; } }}></Component>;
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2344: Type '{ readonly value: number; }' does not satisfy the constraint '{ value: string; }'.
+!!! error TS2344:   Types of property 'value' are incompatible.
+!!! error TS2344:     Type 'number' is not assignable to type 'string'.
+    
+    declare function InvalidComponent<T extends { value: string }>(props: { data: T }): number;
+    const invalidElement = <InvalidComponent data={{ get value() { return 42; } }} />;
+                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2344: Type '{ readonly value: number; }' does not satisfy the constraint '{ value: string; }'.
+!!! error TS2344:   Types of property 'value' are incompatible.
+!!! error TS2344:     Type 'number' is not assignable to type 'string'.
+                            ~~~~~~~~~~~~~~~~
+!!! error TS2786: 'InvalidComponent' cannot be used as a JSX component.
+!!! error TS2786:   Its return type 'number' is not a valid JSX element.
+    
+    declare function tag<T extends { value: string }>(strings: TemplateStringsArray, value: T): T;
+    const validTagged = tag`${{ get value() { return ""; } }}`;
+    const invalidTagged = tag`${{ get value() { return 42; } }}`;
+                                      ~~~~~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+!!! related TS6500 recursiveGetterConstraintCallLike.tsx:14:34: The expected type comes from property 'value' which is declared here on type '{ value: string; }'
+    
+    declare function rest<T extends { value: string }>(...values: T[]): T;
+    const validRest = rest({ get value() { return ""; } });
+    const invalidRest = rest({ get value() { return 42; } });
+                                   ~~~~~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+!!! related TS6500 recursiveGetterConstraintCallLike.tsx:18:35: The expected type comes from property 'value' which is declared here on type '{ value: string; }'
+    
+    const matcher = {
+        [Symbol.hasInstance]<T extends { value: string }>(value: T) { return true; },
+    };
+    const validInstance = { get value() { return ""; } } instanceof matcher;
+    const invalidInstance = { get value() { return 42; } } instanceof matcher;
+                                  ~~~~~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+!!! related TS6500 recursiveGetterConstraintCallLike.tsx:23:38: The expected type comes from property 'value' which is declared here on type '{ value: string; }'
+    

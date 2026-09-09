@@ -2552,7 +2552,6 @@ func (c *Checker) checkDeferredNode(node *ast.Node) {
 	switch node.Kind {
 	case ast.KindCallExpression, ast.KindNewExpression, ast.KindTaggedTemplateExpression, ast.KindDecorator, ast.KindJsxOpeningElement:
 		if signature := c.getResolvedSignature(node, nil, CheckModeNormal); signature.flags&SignatureFlagsDeferredConstraints != 0 {
-			c.checkDeferredTypeArgumentConstraints(node, signature)
 			break
 		}
 		// These node kinds are deferred checked when overload resolution fails. To save on work,
@@ -2576,10 +2575,17 @@ func (c *Checker) checkDeferredNode(node *ast.Node) {
 		c.checkExpression(node.Expression())
 	case ast.KindBinaryExpression:
 		if ast.IsInstanceOfExpression(node) {
-			c.resolveUntypedCall(node)
+			if signature := c.getResolvedSignature(node, nil, CheckModeNormal); signature.flags&SignatureFlagsDeferredConstraints == 0 {
+				c.resolveUntypedCall(node)
+			}
 		}
 	case ast.KindObjectLiteralExpression, ast.KindJsxAttributes:
 		c.checkContextualDeprecations(node)
+	}
+	if ast.IsCallLikeExpression(node) {
+		if signature := c.getResolvedSignature(node, nil, CheckModeNormal); signature.flags&SignatureFlagsDeferredConstraints != 0 {
+			c.checkDeferredTypeArgumentConstraints(node, signature)
+		}
 	}
 	c.currentNode = saveCurrentNode
 }
