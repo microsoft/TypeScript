@@ -150,6 +150,8 @@ const publicGeneratorExemptions = new Map<string, string>([
 const privateGeneratorGetters = new Set([
     "API.ensureInitialized",
     "API.initializeWorker",
+    "API.updateSnapshotFrom",
+    "API.updateSnapshotWorker",
     "Checker.getIntrinsicType",
     "Checker.getWellKnownSignatures",
     "Checker.getWellKnownSymbols",
@@ -1676,6 +1678,21 @@ describe("API - generator batching", () => {
 
             runParityBatch(api, cases);
             assert.deepEqual(temporaryProjects, ["/tsconfig.json", "/tsconfig.json"]);
+
+            const snapshotGeneratorAPI = spawnAPI(parityFiles);
+            const snapshotSyncAPI = spawnAPI(parityFiles);
+            try {
+                const generatorBase = snapshotGeneratorAPI.batch(snapshotGeneratorAPI.updateSnapshot.gen({ openProject: "/tsconfig.json" }))[0];
+                const syncBase = snapshotSyncAPI.updateSnapshot({ openProject: "/tsconfig.json" });
+                const generatorUpdated = snapshotGeneratorAPI.batch(generatorBase.update.gen())[0];
+                const syncUpdated = syncBase.update();
+                assertSnapshotsEquivalent(generatorUpdated, syncUpdated, "Snapshot.update");
+                exercisedMethods.add("Snapshot.update");
+            }
+            finally {
+                snapshotGeneratorAPI.close();
+                snapshotSyncAPI.close();
+            }
 
             const destructiveAPI = spawnAPI(parityFiles);
             const disposableSnapshot = destructiveAPI.batch(destructiveAPI.updateSnapshot.gen({ openProject: "/tsconfig.json" }))[0];
