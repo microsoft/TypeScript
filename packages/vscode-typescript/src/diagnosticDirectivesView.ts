@@ -70,6 +70,17 @@ export class DiagnosticDirectivesView implements vscode.TreeDataProvider<Directi
         this.changeEmitter.fire(undefined);
     }
 
+    clear(sourceUri?: vscode.Uri): void {
+        if (sourceUri && sourceUri.toString() !== this.sourceUri?.toString()) {
+            return;
+        }
+        this.sourceUri = undefined;
+        this.setOutputs([]);
+        this.treeView.description = undefined;
+        this.treeView.message = vscode.l10n.t("Open virtual documents to inspect diagnostic directives.");
+        this.changeEmitter.fire(undefined);
+    }
+
     getTreeItem(node: DirectiveTreeNode): vscode.TreeItem {
         if (node.kind === "output") {
             const count = node.output.diagnosticDirectives.length;

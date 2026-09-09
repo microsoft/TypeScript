@@ -41,6 +41,7 @@ class ContentMapperVirtualDocumentProvider implements vscode.FileSystemProvider,
     private readonly entries = new Map<string, VirtualDocumentEntry>();
     private readonly sourceToVirtualUris = new Map<string, readonly vscode.Uri[]>();
     private readonly refreshTimers = new Map<string, NodeJS.Timeout>();
+    private readonly evictionTimers = new Map<string, NodeJS.Timeout>();
     private inspectionTimer: NodeJS.Timeout | undefined;
     private activeEditorContextVersion = 0;
     private readonly mappingDecorations = [
@@ -96,6 +97,11 @@ class ContentMapperVirtualDocumentProvider implements vscode.FileSystemProvider,
                 }
             }),
             vscode.workspace.onDidSaveTextDocument(document => this.scheduleRefresh(document.uri)),
+            vscode.workspace.onDidCloseTextDocument(document => {
+                if (document.uri.scheme === virtualDocumentScheme) {
+                    this.scheduleSourceEviction(document.uri);
+                }
+            }),
             vscode.languages.onDidChangeDiagnostics(event => {
                 for (const uri of event.uris) {
                     this.scheduleRefresh(uri);
@@ -103,11 +109,9 @@ class ContentMapperVirtualDocumentProvider implements vscode.FileSystemProvider,
             }),
             vscode.window.onDidChangeActiveTextEditor(editor => {
                 this.updateActiveEditorContext(editor);
-                if (editor?.document.uri.scheme === virtualDocumentScheme) {
-                    const entry = this.entries.get(editor.document.uri.toString());
-                    if (entry) {
-                        this.refreshSource(entry.sourceUri);
-                    }
+                const inspectedSource = this.showDiagnosticDirectivesForEditor(editor);
+                if (inspectedSource) {
+                    this.refreshSource(inspectedSource);
                 }
                 this.scheduleInspection();
             }),
@@ -191,6 +195,10 @@ class ContentMapperVirtualDocumentProvider implements vscode.FileSystemProvider,
             clearTimeout(timer);
         }
         this.refreshTimers.clear();
+        for (const timer of this.evictionTimers.values()) {
+            clearTimeout(timer);
+        }
+        this.evictionTimers.clear();
         if (this.inspectionTimer) {
             clearTimeout(this.inspectionTimer);
             this.inspectionTimer = undefined;
@@ -331,6 +339,72 @@ class ContentMapperVirtualDocumentProvider implements vscode.FileSystemProvider,
         return nextUris;
     }
 
+    private showDiagnosticDirectivesForEditor(editor: vscode.TextEditor | undefined): vscode.Uri | undefined {
+        if (!editor) {
+            this.diagnosticDirectivesView.clear();
+            return undefined;
+        }
+        const sourceUri = editor.document.uri.scheme === virtualDocumentScheme
+            ? this.entries.get(editor.document.uri.toString())?.sourceUri
+            : this.sourceToVirtualUris.has(editor.document.uri.toString()) ? editor.document.uri : undefined;
+        if (!sourceUri) {
+            this.diagnosticDirectivesView.clear();
+            return undefined;
+        }
+        const outputs = (this.sourceToVirtualUris.get(sourceUri.toString()) ?? [])
+            .map(uri => this.entries.get(uri.toString())?.output)
+            .filter(output => output !== undefined);
+        this.diagnosticDirectivesView.show(sourceUri, outputs);
+        return sourceUri;
+    }
+
+    private scheduleSourceEviction(closedVirtualUri: vscode.Uri): void {
+        const entry = this.entries.get(closedVirtualUri.toString());
+        const parsed = entry ? undefined : parseVirtualUri(closedVirtualUri);
+        const sourceUri = entry?.sourceUri ?? parsed?.sourceUri;
+        if (!sourceUri) {
+            return;
+        }
+        const sourceKey = sourceUri.toString();
+        const existing = this.evictionTimers.get(sourceKey);
+        if (existing) {
+            clearTimeout(existing);
+        }
+        this.evictionTimers.set(
+            sourceKey,
+            setTimeout(() => {
+                this.evictionTimers.delete(sourceKey);
+                this.evictSourceIfUnused(sourceUri);
+            }, 0),
+        );
+    }
+
+    private evictSourceIfUnused(sourceUri: vscode.Uri): void {
+        const sourceKey = sourceUri.toString();
+        const virtualUris = this.sourceToVirtualUris.get(sourceKey);
+        if (!virtualUris) {
+            return;
+        }
+        const virtualKeys = new Set(virtualUris.map(uri => uri.toString()));
+        const hasOpenVirtualDocument = vscode.workspace.textDocuments.some(document => virtualKeys.has(document.uri.toString()));
+        if (hasOpenVirtualDocument) {
+            return;
+        }
+        const refreshTimer = this.refreshTimers.get(sourceKey);
+        if (refreshTimer) {
+            clearTimeout(refreshTimer);
+            this.refreshTimers.delete(sourceKey);
+        }
+        this.sourceToVirtualUris.delete(sourceKey);
+        for (const uri of virtualUris) {
+            const key = uri.toString();
+            this.entries.delete(key);
+            this.highlightedMappings.delete(key);
+        }
+        this.diagnosticDirectivesView.clear(sourceUri);
+        this.scheduleInspection();
+    }
+
     private scheduleRefresh(sourceUri: vscode.Uri): void {
         const sourceKey = sourceUri.toString();
         if (!this.sourceToVirtualUris.has(sourceKey)) {
@@ -363,8 +437,10 @@ class ContentMapperVirtualDocumentProvider implements vscode.FileSystemProvider,
         }
 
         const outputs = await this.loadOutputs(sourceUri);
+        if (this.sourceToVirtualUris.get(sourceKey) !== previousUris) {
+            return;
+        }
         if (outputs.length === 0) {
-            this.clearInspection();
             this.diagnosticDirectivesView.refresh(sourceUri, undefined);
             this.sourceToVirtualUris.delete(sourceKey);
             const changes = previousUris.map(uri => ({ type: vscode.FileChangeType.Deleted, uri }));
@@ -372,6 +448,7 @@ class ContentMapperVirtualDocumentProvider implements vscode.FileSystemProvider,
                 this.entries.delete(uri.toString());
             }
             this.changeEmitter.fire(changes);
+            this.scheduleInspection();
             return;
         }
 
