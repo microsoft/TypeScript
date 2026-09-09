@@ -27,6 +27,8 @@ const __filename = url.fileURLToPath(new URL(import.meta.url));
 const __dirname = path.dirname(__filename);
 
 const isCI = !!process.env.CI || !!process.env.TF_BUILD;
+const stableThreeComponentVersionPatternSource = String.raw`^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$`;
+const stableThreeComponentVersionPattern = new RegExp(stableThreeComponentVersionPatternSource);
 
 /**
  * @typedef {{
@@ -103,12 +105,15 @@ const { values: rawOptions } = parseArgs({
     options: {
         tests: { type: "string", short: "t" },
         fix: { type: "boolean" },
+        api: { type: "boolean" },
+        all: { type: "boolean" },
         debug: { type: "boolean" },
         dirty: { type: "boolean" },
         release: { type: "boolean" },
 
         setPrerelease: { type: "string" },
         forRelease: { type: "boolean" },
+        vscodeTypescriptRelease: { type: "boolean" },
 
         race: { type: "boolean", default: parseEnvBoolean("RACE") },
         noembed: { type: "boolean", default: parseEnvBoolean("NOEMBED") },
@@ -130,17 +135,21 @@ const options = /** @type {Options} */ (rawOptions);
 // Main publishes prerelease builds of the TypeScript package.
 const nativePreviewReleaseProfile = /** @type {"native-preview" | "typescript"} */ ("typescript");
 const nativePreviewReleaseVersion = /** @type {string | undefined} */ (undefined);
-const produceNativePreviewVsix = /** @type {boolean} */ (false);
-const produceTypeScriptNightlyVsix = /** @type {boolean} */ (true);
-const usePublishedPlatformPackagesForVsix = /** @type {boolean} */ (false);
+const releaseVscodeTypescript = !!options.vscodeTypescriptRelease;
+const produceNativePreviewVsix = releaseVscodeTypescript;
+const produceTypeScriptNightlyVsix = !releaseVscodeTypescript;
+const usePublishedPlatformPackagesForVsix = releaseVscodeTypescript;
 const produceAnyVsix = produceNativePreviewVsix || produceTypeScriptNightlyVsix;
 const publishAsTypescript = nativePreviewReleaseProfile === "typescript";
 
-if (options.forRelease && !options.setPrerelease && (!nativePreviewReleaseVersion || produceAnyVsix)) {
+if (releaseVscodeTypescript && options.setPrerelease) {
+    throw new Error("vscode-typescript releases use the extension's package.json version and do not accept setPrerelease");
+}
+if (!releaseVscodeTypescript && options.forRelease && !options.setPrerelease && (!nativePreviewReleaseVersion || produceAnyVsix)) {
     throw new Error("forRelease requires setPrerelease unless nativePreviewReleaseVersion is hardcoded and VSIX production is disabled");
 }
-if (usePublishedPlatformPackagesForVsix && !publishAsTypescript) {
-    throw new Error("usePublishedPlatformPackagesForVsix requires nativePreviewReleaseProfile to be 'typescript'");
+if (releaseVscodeTypescript && !publishAsTypescript) {
+    throw new Error("vscode-typescript releases require nativePreviewReleaseProfile to be 'typescript'");
 }
 
 const defaultGoBuildTags = [
@@ -967,13 +976,15 @@ export const generateAST = task({
     run: () => run("node", ["./tools/scripts/tsc/generate.ts"]),
 });
 
+async function runGenerateAPI() {
+    await run("go", ["-C", "./tools", "run", "./gen-proto", "../tsc/internal/api/proto.go", "../packages/typescript/src/api/proto.generated.ts"]);
+    await run("npx", ["dprint", "fmt", "packages/typescript/src/api/proto.generated.ts"]);
+}
+
 export const generateAPI = task({
     name: "generate:api",
     description: "Generates API files from internal/api/proto.go and internal/api/session.go.",
-    run: async () => {
-        await run("go", ["-C", "./tools", "run", "./gen-proto", "../tsc/internal/api/proto.go", "../packages/typescript/src/api/proto.generated.ts"]);
-        await run("npx", ["dprint", "fmt", "packages/typescript/src/api/proto.generated.ts"]);
-    },
+    run: runGenerateAPI,
 });
 
 // ── Vendored npm dependencies ───────────────────────────────────
@@ -1186,13 +1197,16 @@ export const testTsc = task({
     run: runTests,
 });
 
+export const testExtension = task({
+    name: "test:extension",
+    description: "Runs the VS Code extension tests.",
+    run: runTestExtension,
+});
+
 export const test = task({
     name: "test",
-    description: "Runs all tests. This is the most typical test task to need.",
-    run: async () => {
-        await runTests();
-        await runTestExtension();
-    },
+    description: "Alias for test:tsc.",
+    dependencies: [testTsc],
 });
 
 async function runTestBenchmarks() {
@@ -1223,12 +1237,6 @@ export const testTools = task({
     run: runTestTools,
 });
 
-export const testExtension = task({
-    name: "test:extension",
-    description: "Runs the VS Code extension tests.",
-    run: runTestExtension,
-});
-
 export const buildAPI = task({
     name: "build:api",
     description: "Builds @typescript/typescript JS API.",
@@ -1237,13 +1245,15 @@ export const buildAPI = task({
     },
 });
 
+async function runBuildAPITests() {
+    await run("npm", ["run", "-w", "@typescript/typescript", "build:test"]);
+}
+
 export const buildAPITests = task({
     name: "build:api:test",
     description: "Builds the @typescript/typescript JS API tests.",
     dependencies: [generateEnums, generateAPI],
-    run: async () => {
-        await run("npm", ["run", "-w", "@typescript/typescript", "build:test"]);
-    },
+    run: runBuildAPITests,
 });
 
 export const testAPI = task({
@@ -1364,6 +1374,61 @@ async function runFormat() {
     await run("dprint", ["fmt"]);
 }
 
+export const validate = task({
+    name: "validate",
+    description: "Builds, tests, lints, and formats the repo. Pass --api to include API tests, or --all to include all ancilliary repository tests.",
+    dependencies: [build],
+    run: async () => {
+        /** @type {{ name: string; error: unknown }[]} */
+        const failures = [];
+        /** @param {string} name @param {() => Promise<void>} action */
+        const runValidation = async (name, action) => {
+            try {
+                await action();
+            }
+            catch (error) {
+                failures.push({ name, error });
+                console.error(styleText("red", `${name} failed; continuing validation.`));
+            }
+        };
+
+        await runValidation("test:tsc", runTests);
+        await runValidation("test:extension", runTestExtension);
+        if (options.api || options.all) {
+            await runGenerateEnums(); // prereqs for test:api not included in `validate` deps
+            await runGenerateAPI();
+            await runBuildAPITests();
+            await runValidation("test:api", runTestAPI);
+        }
+        if (options.all) {
+            await runValidation("test:benchmarks", runTestBenchmarks);
+            await runValidation("test:tools", runTestTools);
+            await runValidation("test:smoke", runSmokeTest); // in CI this is run with `--race`
+        }
+        await runValidation("lint", runLint);
+        await runValidation("format", runFormat);
+
+        if (failures.length) {
+            throw new AggregateError(
+                failures.map(failure => failure.error),
+                `Validation failed: ${failures.map(failure => failure.name).join(", ")}`,
+            );
+        }
+    },
+});
+
+async function runSmokeTest() {
+    await run("./built/local/tsc", ["-p", "./tsc/testdata/fixtures/compiler", "--noEmit", "--singleThreaded"]);
+    await run("./built/local/tsc", ["-p", "./tsc/testdata/fixtures/compiler", "--noEmit"]);
+}
+
+export const smokeTest = task({
+    name: "test:smoke",
+    description: "Runs the smoke tests.",
+    dependencies: [build],
+    run: runSmokeTest,
+});
+
 export const checkFormat = task({
     name: "check:format",
     description: "Checks that the repo is formatted.",
@@ -1396,6 +1461,41 @@ export const checkHerebyfile = task({
             "--skipLibCheck",
             "Herebyfile.mjs",
         ]),
+});
+
+export const checkVsceVersion = task({
+    name: "check:vsce-version",
+    description: "Checks that Azure release jobs use the repository's pinned vsce version.",
+    run: () => {
+        for (const validVersion of ["0.0.0", "1.2.3", "10.20.30"]) {
+            assert(stableThreeComponentVersionPattern.test(validVersion), `${validVersion} should be a valid stable version.`);
+        }
+        for (const invalidVersion of ["01.0.0", "1.02.0", "1.2.03", "1.2", "1.2.3-beta"]) {
+            assert(!stableThreeComponentVersionPattern.test(invalidVersion), `${invalidVersion} should not be a valid stable version.`);
+        }
+
+        const packageJson = JSON.parse(fs.readFileSync("./packages/vscode-typescript/package.json", "utf8"));
+        const packageLock = JSON.parse(fs.readFileSync("./package-lock.json", "utf8"));
+        const version = packageJson.devDependencies?.["@vscode/vsce"];
+        if (typeof version !== "string" || !stableThreeComponentVersionPattern.test(version)) {
+            throw new Error(`packages/vscode-typescript must pin @vscode/vsce to an exact version, got ${JSON.stringify(version)}.`);
+        }
+
+        const workspaceVersion = packageLock.packages?.["packages/vscode-typescript"]?.devDependencies?.["@vscode/vsce"];
+        const installedVersion = packageLock.packages?.["node_modules/@vscode/vsce"]?.version;
+        if (workspaceVersion !== version || installedVersion !== version) {
+            throw new Error(
+                `@vscode/vsce version mismatch: package.json=${version}, package-lock workspace=${workspaceVersion}, package-lock package=${installedVersion}.`,
+            );
+        }
+
+        const setupVsce = fs.readFileSync("./tools/pipelines/steps/setup-vsce.yml", "utf8");
+        const activeSetupLines = setupVsce.split(/\r?\n/).filter(line => !line.trimStart().startsWith("#"));
+        const installCommand = `- bash: npm install --no-save @vscode/vsce@${version}`;
+        if (activeSetupLines.filter(line => line.trim() === installCommand).length !== 1) {
+            throw new Error(`tools/pipelines/steps/setup-vsce.yml must install exactly @vscode/vsce@${version}.`);
+        }
+    },
 });
 
 const scriptTsconfigs = [
@@ -1699,6 +1799,20 @@ const builtPublishedPlatformPackages = path.resolve("./built/published-platform-
 const builtSignTmp = path.resolve("./built/sign-tmp");
 const publishedTypeScriptAliasPackageName = "@typescript/bundled-typescript";
 const releasePackageEnv = { COREPACK_ENABLE_STRICT: "0" };
+const getReleasePackageRegistry = memoize(async () => {
+    const { stdout } = await runOutput("npm", ["config", "get", "registry"], { env: releasePackageEnv });
+    return stdout.trim();
+});
+
+const getVscodeTypeScriptExtensionPackageJson = memoize(() => JSON.parse(fs.readFileSync(path.join(extensionDir, "package.json"), "utf8")));
+
+function getVscodeTypeScriptExtensionVersion() {
+    const version = getVscodeTypeScriptExtensionPackageJson().version;
+    if (typeof version !== "string" || !stableThreeComponentVersionPattern.test(version)) {
+        throw new Error(`packages/vscode-typescript/package.json must contain a stable three-component version, got ${JSON.stringify(version)}.`);
+    }
+    return version;
+}
 
 const getSignTempDir = memoize(async () => {
     const dir = path.resolve(builtSignTmp);
@@ -2072,8 +2186,8 @@ function nodeToGOARCH(arch, os) {
 }
 
 const getPlatforms = memoize(() => {
-    const publishTag = getPublishTag();
-    let supportedPlatforms = publishAsTypescript && publishTag !== "next"
+    const publishTag = releaseVscodeTypescript ? undefined : getPublishTag();
+    let supportedPlatforms = !releaseVscodeTypescript && publishAsTypescript && publishTag !== "next"
         ? platforms
         : platforms.filter(({ vsix }) => vsix);
 
@@ -2649,9 +2763,8 @@ const getPublishedTypeScriptPackageJson = memoize(() => {
 
 function getPublishedTypeScriptVersion() {
     const version = getPublishedTypeScriptPackageJson().version;
-    const expectedVersion = getVersion();
-    if (usePublishedPlatformPackagesForVsix && version !== expectedVersion) {
-        throw new Error(`usePublishedPlatformPackagesForVsix requires ${publishedTypeScriptAliasPackageName}'s installed version (${version}) to match release version ${expectedVersion}.`);
+    if (releaseVscodeTypescript && !stableThreeComponentVersionPattern.test(version)) {
+        throw new Error(`vscode-typescript releases require a stable three-component TypeScript version, got ${version}.`);
     }
     return version;
 }
@@ -2707,17 +2820,36 @@ async function getPublishedPlatformPackageLibDirWorker(npmPackageName) {
     if (!lockEntry.resolved || typeof lockEntry.resolved !== "string") {
         throw new Error(`package-lock.json entry for ${npmPackageName}@${version} does not contain a tarball URL.`);
     }
-
-    console.log(`Fetching ${npmPackageName}@${version} with npm.`);
-    const { stdout } = await runOutput("npm", ["pack", "--json", `${npmPackageName}@${version}`], {
-        cwd: tarballDestination,
-        env: releasePackageEnv,
-    });
-    const [packed] = JSON.parse(stdout);
-    if (!packed.filename || typeof packed.filename !== "string") {
-        throw new Error(`npm pack ${npmPackageName}@${version} did not return a filename.`);
+    if (!lockEntry.integrity || typeof lockEntry.integrity !== "string") {
+        throw new Error(`package-lock.json entry for ${npmPackageName}@${version} does not contain an integrity hash.`);
     }
-    await tar.x({ file: path.join(tarballDestination, packed.filename), cwd: dest, strip: 1 });
+
+    const resolved = new URL(lockEntry.resolved);
+    if (resolved.origin === "https://registry.npmjs.org") {
+        const registry = new URL(await getReleasePackageRegistry());
+        resolved.protocol = registry.protocol;
+        resolved.host = registry.host;
+        resolved.pathname = path.posix.join(registry.pathname, resolved.pathname);
+    }
+
+    console.log(`Fetching locked ${npmPackageName}@${version} tarball from ${resolved}.`);
+    const response = await fetch(resolved);
+    if (!response.ok) {
+        throw new Error(`Failed to fetch ${npmPackageName}@${version}: ${response.status} ${response.statusText}.`);
+    }
+    const tarball = Buffer.from(await response.arrayBuffer());
+    const integrityMatch = /^sha512-(.+)$/.exec(lockEntry.integrity);
+    if (!integrityMatch) {
+        throw new Error(`Unsupported integrity hash for ${npmPackageName}@${version}: ${lockEntry.integrity}.`);
+    }
+    const expectedIntegrity = Buffer.from(integrityMatch[1], "base64");
+    const actualIntegrity = crypto.createHash("sha512").update(tarball).digest();
+    if (expectedIntegrity.length !== actualIntegrity.length || !crypto.timingSafeEqual(expectedIntegrity, actualIntegrity)) {
+        throw new Error(`Integrity check failed for ${npmPackageName}@${version}.`);
+    }
+    const tarballPath = path.join(tarballDestination, path.basename(resolved.pathname));
+    await fs.promises.writeFile(tarballPath, tarball);
+    await tar.x({ file: tarballPath, cwd: dest, strip: 1 });
 
     if (!fs.existsSync(lib)) {
         throw new Error(`Published platform package ${npmPackageName}@${version} did not contain a lib directory.`);
@@ -2747,18 +2879,23 @@ async function runPackVsixExtensions() {
 
     let version = "0.0.0";
     if (options.forRelease) {
-        // No real semver prerelease versioning.
-        // https://code.visualstudio.com/api/working-with-extensions/publishing-extension#prerelease-extensions
-        assert(options.setPrerelease, "forRelease is true but setPrerelease is not set");
-        const prerelease = options.setPrerelease;
-        assert(typeof prerelease === "string", "setPrerelease is not a string");
-        // parse `dev.<number>.<number>`.
-        const match = prerelease.match(/dev\.(\d+)\.(\d+)/);
-        if (!match) {
-            throw new Error(`Prerelease version should be in the form of dev.<number>.<number>, but got ${prerelease}`);
+        if (releaseVscodeTypescript) {
+            version = getVscodeTypeScriptExtensionVersion();
         }
-        // Set version to `0.<number>.<number>`.
-        version = `0.${match[1]}.${match[2]}`;
+        else {
+            // No real semver prerelease versioning.
+            // https://code.visualstudio.com/api/working-with-extensions/publishing-extension#prerelease-extensions
+            assert(options.setPrerelease, "forRelease is true but setPrerelease is not set");
+            const prerelease = options.setPrerelease;
+            assert(typeof prerelease === "string", "setPrerelease is not a string");
+            // parse `dev.<number>.<number>`.
+            const match = prerelease.match(/dev\.(\d+)\.(\d+)/);
+            if (!match) {
+                throw new Error(`Prerelease version should be in the form of dev.<number>.<number>, but got ${prerelease}`);
+            }
+            // Set version to `0.<number>.<number>`.
+            version = `0.${match[1]}.${match[2]}`;
+        }
     }
 
     console.log("Version:", version);
@@ -2826,10 +2963,55 @@ async function runSignVsixExtensions() {
     });
 }
 
+async function runWriteVscodeTypeScriptReleaseManifest() {
+    const platforms = getPlatforms();
+    const extensions = platforms.flatMap(({ extensions }) => extensions);
+    /** @type {Record<string, { sha256: string }>} */
+    const artifacts = {};
+    for (const extension of extensions) {
+        for (const artifactPath of [extension.vsixPath, extension.vsixManifestPath, extension.vsixSignaturePath]) {
+            const filename = path.basename(artifactPath);
+            artifacts[filename] = {
+                sha256: crypto.createHash("sha256").update(await fs.promises.readFile(artifactPath)).digest("hex"),
+            };
+        }
+    }
+
+    const packageJson = getVscodeTypeScriptExtensionPackageJson();
+    const manifest = {
+        extension: `${packageJson.publisher}.${packageJson.name}`,
+        extensionVersion: getVscodeTypeScriptExtensionVersion(),
+        bundledTypeScriptVersion: getPublishedTypeScriptVersion(),
+        signType: process.env.VSCODE_TYPESCRIPT_SIGN_TYPE,
+        sourceRef: process.env.BUILD_SOURCEBRANCH || process.env.GITHUB_REF || undefined,
+        sourceCommit: process.env.BUILD_SOURCEVERSION || process.env.GITHUB_SHA || undefined,
+        targets: extensions.map(({ vscodeTarget }) => vscodeTarget),
+        artifacts,
+    };
+    await fs.promises.writeFile(path.join(builtVsix, "release-manifest.json"), JSON.stringify(manifest, undefined, 4) + "\n");
+}
+
+export const vscodeTypescriptRelease = task({
+    name: "vscode-typescript:release",
+    hiddenFromTaskList: true,
+    run: async () => {
+        if (!options.forRelease || !releaseVscodeTypescript) {
+            throw new Error("vscode-typescript:release requires --forRelease and --vscodeTypescriptRelease");
+        }
+        await runPackVsixExtensions();
+        await runSignVsixExtensions();
+        await runWriteVscodeTypeScriptReleaseManifest();
+        await runCleanSignTempDirectory();
+    },
+});
+
 export const nativePreviewRelease = task({
     name: "typescript:release",
     hiddenFromTaskList: true,
     run: async () => {
+        if (releaseVscodeTypescript) {
+            throw new Error("typescript:release cannot be used with --vscodeTypescriptRelease; use vscode-typescript:release");
+        }
         if (!options.forRelease || !options.setPrerelease && (!nativePreviewReleaseVersion || produceAnyVsix)) {
             throw new Error("typescript:release requires --forRelease and --setPrerelease flags, unless nativePreviewReleaseVersion is hardcoded and VSIX production is disabled. Example: npx hereby typescript:release --forRelease --setPrerelease=dev.1.0");
         }
