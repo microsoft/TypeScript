@@ -14,10 +14,9 @@ const g = { rawJSON: "1" };
 const h: RawJSON = g;
 const i: RawJSON = Object.freeze(g);
 const j: RawJSON = { ...a };
-const k: RawJSON = { rawJSON: "1", RawJSON_typekey: a };
+const k: RawJSON = { rawJSON: 1 };
 
 class A {
-    private RawJSON_typekey!: RawJSON;
     readonly rawJSON = "1";
 }
 const l: RawJSON = new A();
@@ -26,14 +25,11 @@ class B implements RawJSON {
 }
 
 a.rawJSON = "2";
-a.RawJSON_typekey;
 declare const m: keyof RawJSON;
 const n: "rawJSON" = m;
 
 const o = RawJSON;
 new RawJSON();
-RawJSONBase;
-declare const p: RawJSONBase;
 class C extends RawJSON {}
 
 declare const q: unknown;
@@ -55,3 +51,7 @@ const x: RawJSON = w;
 
 const y: RawJSON = Object.assign({}, a);
 const z: RawJSON = new Proxy(a, {});
+
+interface RawJSON {
+    readonly rawJSON: string;
+}

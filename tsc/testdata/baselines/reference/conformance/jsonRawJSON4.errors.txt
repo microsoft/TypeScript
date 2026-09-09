@@ -1,11 +1,8 @@
-raw.js(7,7): error TS2741: Property 'RawJSON_typekey' is missing in type '{ rawJSON: string; }' but required in type 'RawJSON'.
-raw.js(9,7): error TS2741: Property 'RawJSON_typekey' is missing in type '{ rawJSON: string; }' but required in type 'RawJSON'.
 raw.js(10,3): error TS2540: Cannot assign to 'rawJSON' because it is a read-only property.
 raw.js(17,1): error TS2693: 'RawJSON' only refers to a type, but is being used as a value here.
-raw.js(18,1): error TS2304: Cannot find name 'RawJSONBase'.
 
 
-==== raw.js (5 errors) ====
+==== raw.js (2 errors) ====
     /** @type {RawJSON} */
     const a = JSON.rawJSON("1");
     /** @type {string} */
@@ -13,14 +10,8 @@ raw.js(18,1): error TS2304: Cannot find name 'RawJSONBase'.
     
     /** @type {RawJSON} */
     const c = { rawJSON: "1" };
-          ~
-!!! error TS2741: Property 'RawJSON_typekey' is missing in type '{ rawJSON: string; }' but required in type 'RawJSON'.
-!!! related TS2728 lib.es2026.json.d.ts:--:--: 'RawJSON_typekey' is declared here.
     /** @type {RawJSON} */
     const d = { ...a };
-          ~
-!!! error TS2741: Property 'RawJSON_typekey' is missing in type '{ rawJSON: string; }' but required in type 'RawJSON'.
-!!! related TS2728 lib.es2026.json.d.ts:--:--: 'RawJSON_typekey' is declared here.
     a.rawJSON = "2";
       ~~~~~~~
 !!! error TS2540: Cannot assign to 'rawJSON' because it is a read-only property.
@@ -33,7 +24,4 @@ raw.js(18,1): error TS2304: Cannot find name 'RawJSONBase'.
     RawJSON;
     ~~~~~~~
 !!! error TS2693: 'RawJSON' only refers to a type, but is being used as a value here.
-    RawJSONBase;
-    ~~~~~~~~~~~
-!!! error TS2304: Cannot find name 'RawJSONBase'.
     

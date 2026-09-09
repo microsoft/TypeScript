@@ -58,6 +58,3 @@ function f(x) {
 RawJSON;
 >RawJSON : any
 
-RawJSONBase;
->RawJSONBase : any
-

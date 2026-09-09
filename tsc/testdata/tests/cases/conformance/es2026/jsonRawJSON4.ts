@@ -23,4 +23,3 @@ function f(x) {
 }
 
 RawJSON;
-RawJSONBase;

@@ -57,19 +57,14 @@ const j: RawJSON = { ...a };
 >{ ...a } : { rawJSON: string; }
 >a : RawJSON
 
-const k: RawJSON = { rawJSON: "1", RawJSON_typekey: a };
+const k: RawJSON = { rawJSON: 1 };
 >k : RawJSON
->{ rawJSON: "1", RawJSON_typekey: a } : { rawJSON: string; RawJSON_typekey: RawJSON; }
->rawJSON : string
->"1" : "1"
->RawJSON_typekey : RawJSON
->a : RawJSON
+>{ rawJSON: 1 } : { rawJSON: number; }
+>rawJSON : number
+>1 : 1
 
 class A {
 >A : A
-
-    private RawJSON_typekey!: RawJSON;
->RawJSON_typekey : RawJSON
 
     readonly rawJSON = "1";
 >rawJSON : "1"
@@ -95,11 +90,6 @@ a.rawJSON = "2";
 >rawJSON : any
 >"2" : "2"
 
-a.RawJSON_typekey;
->a.RawJSON_typekey : RawJSONBase
->a : RawJSON
->RawJSON_typekey : RawJSONBase
-
 declare const m: keyof RawJSON;
 >m : "rawJSON"
 
@@ -114,12 +104,6 @@ const o = RawJSON;
 new RawJSON();
 >new RawJSON() : any
 >RawJSON : any
-
-RawJSONBase;
->RawJSONBase : any
-
-declare const p: RawJSONBase;
->p : RawJSONBase
 
 class C extends RawJSON {}
 >C : C
@@ -154,14 +138,14 @@ if (JSON.isRawJSON(g)) {
 
     const r: RawJSON = g;
 >r : RawJSON
->g : RawJSON
+>g : { rawJSON: string; }
 
 } else {
     const s: string = g.rawJSON;
 >s : string
->g.rawJSON : string
->g : { rawJSON: string; }
->rawJSON : string
+>g.rawJSON : any
+>g : never
+>rawJSON : any
 }
 
 const t: Readonly<RawJSON> = a;
@@ -203,4 +187,9 @@ const z: RawJSON = new Proxy(a, {});
 >Proxy : ProxyConstructor
 >a : RawJSON
 >{} : {}
+
+interface RawJSON {
+    readonly rawJSON: string;
+>rawJSON : string
+}
 
