@@ -35,6 +35,19 @@ export interface MappedOutput extends ContentMapperVirtualFile {
     readonly identity: string;
 }
 
+export function containsNonEmptyTextRange(range: ContentMapperTextRange, offset: number): boolean {
+    return range.pos < range.end && range.pos <= offset && offset < range.end;
+}
+
+export function textRangePreview(text: string, range: ContentMapperTextRange, maxLength = 80): string {
+    const preview = text.slice(range.pos, range.end).trim().replace(/\s+/g, " ");
+    const characters = [...preview];
+    if (characters.length <= maxLength) {
+        return preview;
+    }
+    return `${characters.slice(0, Math.max(0, maxLength - 3)).join("")}...`;
+}
+
 export function toMappedOutputs(files: readonly ContentMapperVirtualFile[]): readonly MappedOutput[] {
     return files.map((file, index) => ({
         ...file,

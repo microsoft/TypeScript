@@ -72,6 +72,7 @@
   "The current content-mapped file has no diagnostic directives.": "The current content-mapped file has no diagnostic directives.",
   "Original range: {0}": "Original range: {0}",
   "Virtual range: {0}": "Virtual range: {0}",
+  "Preview:": "Preview:",
   "Unused diagnostic code: {0}": "Unused diagnostic code: {0}",
   "Expect": "Expect",
   "Unknown ({0})": "Unknown ({0})",

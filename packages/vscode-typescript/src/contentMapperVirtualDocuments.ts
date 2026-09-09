@@ -211,6 +211,7 @@ class ContentMapperVirtualDocumentProvider implements vscode.FileSystemProvider,
         }
         const outputs = await this.loadOutputs(parsed.sourceUri);
         this.remember(parsed.sourceUri, outputs);
+        this.diagnosticDirectivesView.show(parsed.sourceUri, outputs);
         return this.entries.get(uri.toString());
     }
 
@@ -413,12 +414,28 @@ class ContentMapperVirtualDocumentProvider implements vscode.FileSystemProvider,
             throw new Error(`Could not load virtual document "${node.output.fileName}".`);
         }
 
+        const sourceEditor = vscode.window.visibleTextEditors.find(
+            editor => editor.document.uri.toString() === sourceUri.toString(),
+        );
+        const virtualEditor = vscode.window.visibleTextEditors.find(
+            editor => editor.document.uri.toString() === virtualUri.toString(),
+        );
+        const inspectorEditor = virtualEditor ?? vscode.window.visibleTextEditors.find(editor => {
+            if (editor.document.uri.scheme !== virtualDocumentScheme) {
+                return false;
+            }
+            return parseVirtualUri(editor.document.uri)?.sourceUri.toString() === sourceUri.toString();
+        });
+        const targetColumn = inspectorEditor?.viewColumn
+            ?? (sourceEditor?.viewColumn === undefined ? vscode.ViewColumn.Beside : sourceEditor.viewColumn + 1);
+
         const sourceDocument = await vscode.workspace.openTextDocument(sourceUri);
         const sourceRange = rangeFromTextRange(sourceDocument, node.directive.originalRange);
         await vscode.window.showTextDocument(sourceDocument, {
             preserveFocus: true,
             preview: false,
             selection: sourceRange.isEmpty ? undefined : sourceRange,
+            viewColumn: sourceEditor?.viewColumn,
         });
 
         let virtualDocument = await vscode.workspace.openTextDocument(virtualUri);
@@ -427,14 +444,19 @@ class ContentMapperVirtualDocumentProvider implements vscode.FileSystemProvider,
             languageIdForScriptKind(entry.output.scriptKind),
         );
         const virtualRange = rangeFromTextRange(virtualDocument, node.directive.virtualRange);
-        const virtualEditor = await vscode.window.showTextDocument(virtualDocument, {
+        const revealedVirtualEditor = await vscode.window.showTextDocument(virtualDocument, {
             preserveFocus: false,
             preview: false,
-            selection: virtualRange,
-            viewColumn: vscode.ViewColumn.Beside,
+            selection: virtualRange.isEmpty ? undefined : virtualRange,
+            viewColumn: targetColumn,
         });
-        virtualEditor.revealRange(virtualRange, vscode.TextEditorRevealType.InCenterIfOutsideViewport);
-        this.scheduleInspection();
+        if (virtualRange.isEmpty) {
+            this.clearInspection();
+        }
+        else {
+            revealedVirtualEditor.revealRange(virtualRange, vscode.TextEditorRevealType.InCenterIfOutsideViewport);
+            this.scheduleInspection();
+        }
     }
 
     private sourceUriForOutput(output: MappedOutput): vscode.Uri | undefined {
@@ -481,6 +503,10 @@ class ContentMapperVirtualDocumentProvider implements vscode.FileSystemProvider,
             this.clearInspection();
             return;
         }
+        const offset = virtualEditor.document.offsetAt(virtualEditor.selection.active);
+        void this.diagnosticDirectivesView.revealVirtualRange(entry.sourceUri, entry.output, offset).catch(error => {
+            this.output.debug(`Could not reveal the selected virtual diagnostic directive: ${String(error)}`);
+        });
         const sourceEditor = vscode.window.visibleTextEditors.find(
             candidate => candidate.document.uri.toString() === entry.sourceUri.toString(),
         );
@@ -488,7 +514,6 @@ class ContentMapperVirtualDocumentProvider implements vscode.FileSystemProvider,
             this.clearInspection();
             return;
         }
-        const offset = virtualEditor.document.offsetAt(virtualEditor.selection.active);
         const mappings = entry.output.mappings.filter(
             mapping => containsOffset(mapping.generatedStart, mapping.generatedLength, offset),
         );
@@ -503,6 +528,9 @@ class ContentMapperVirtualDocumentProvider implements vscode.FileSystemProvider,
             return;
         }
         const offset = sourceEditor.document.offsetAt(sourceEditor.selection.active);
+        void this.diagnosticDirectivesView.revealOriginalRange(sourceEditor.document.uri, offset).catch(error => {
+            this.output.debug(`Could not reveal the selected original diagnostic directive: ${String(error)}`);
+        });
         this.clearInspection();
         const sourceRanges: vscode.Range[][] = [[], [], []];
         for (const virtualUri of virtualUris) {

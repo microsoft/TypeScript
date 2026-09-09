@@ -121,8 +121,9 @@ export class SessionManager implements vscode.Disposable {
         return result.pipe;
     }
 
-    getContentMapperVirtualFiles(uri: vscode.Uri): Promise<readonly MappedOutput[]> {
-        if (!this.currentSession) {
+    async getContentMapperVirtualFiles(uri: vscode.Uri): Promise<readonly MappedOutput[]> {
+        await this.lifecycleOperation;
+        if (!this.currentSession?.client.isInitialized) {
             throw new Error(vscode.l10n.t("Language server is not running."));
         }
         return this.currentSession.client.getContentMapperVirtualFiles(uri);

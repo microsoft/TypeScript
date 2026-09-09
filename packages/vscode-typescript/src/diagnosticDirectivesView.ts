@@ -6,6 +6,10 @@ import type {
     ContentMapperTextRange,
     MappedOutput,
 } from "./contentMapperVirtualFiles";
+import {
+    containsNonEmptyTextRange,
+    textRangePreview,
+} from "./contentMapperVirtualFiles";
 
 const revealDiagnosticDirectiveCommand = "typescript.native-preview.revealContentMapperDiagnosticDirective";
 const diagnosticDirectivesViewId = "typescript.native-preview.contentMapperDiagnosticDirectives";
@@ -29,6 +33,9 @@ export class DiagnosticDirectivesView implements vscode.TreeDataProvider<Directi
     private readonly disposables: vscode.Disposable[] = [];
     private sourceUri: vscode.Uri | undefined;
     private outputs: readonly MappedOutput[] = [];
+    private outputNodes: readonly OutputNode[] = [];
+    private directiveNodes = new Map<MappedOutput, readonly DiagnosticDirectiveNode[]>();
+    private selectedDirective: DiagnosticDirectiveNode | undefined;
 
     readonly onDidChangeTreeData = this.changeEmitter.event;
 
@@ -49,7 +56,7 @@ export class DiagnosticDirectivesView implements vscode.TreeDataProvider<Directi
 
     show(sourceUri: vscode.Uri, outputs: readonly MappedOutput[]): void {
         this.sourceUri = sourceUri;
-        this.outputs = outputs;
+        this.setOutputs(outputs);
         this.updateMessage();
         this.changeEmitter.fire(undefined);
     }
@@ -58,7 +65,7 @@ export class DiagnosticDirectivesView implements vscode.TreeDataProvider<Directi
         if (sourceUri.toString() !== this.sourceUri?.toString()) {
             return;
         }
-        this.outputs = outputs ?? [];
+        this.setOutputs(outputs ?? []);
         this.updateMessage();
         this.changeEmitter.fire(undefined);
     }
@@ -79,11 +86,14 @@ export class DiagnosticDirectivesView implements vscode.TreeDataProvider<Directi
 
         const { directive, output } = node;
         const policy = diagnosticDirectivePolicyName(directive.policy);
-        const original = positionAt(output.originalText, directive.originalRange.pos);
-        const virtual = positionAt(output.text, directive.virtualRange.pos);
+        const preview = textRangePreview(output.text, directive.virtualRange);
         const item = new vscode.TreeItem(policy, vscode.TreeItemCollapsibleState.None);
-        item.description = `${formatPosition(original)} \u2192 ${formatPosition(virtual)}`;
-        item.iconPath = new vscode.ThemeIcon(directive.policy === 1 ? "error" : "eye");
+        const positions = [];
+        if (!isEmptyRange(directive.originalRange)) {
+            positions.push(formatPosition(positionAt(output.originalText, directive.originalRange.pos)));
+        }
+        positions.push(formatPosition(positionAt(output.text, directive.virtualRange.pos)));
+        item.description = [positions.join(" \u2192 "), preview].filter(Boolean).join("  ");
         item.command = {
             command: revealDiagnosticDirectiveCommand,
             title: vscode.l10n.t("Reveal Diagnostic Directive"),
@@ -95,18 +105,39 @@ export class DiagnosticDirectivesView implements vscode.TreeDataProvider<Directi
 
     getChildren(node?: DirectiveTreeNode): DirectiveTreeNode[] {
         if (!node) {
-            return this.outputs
-                .filter(output => output.diagnosticDirectives.length !== 0)
-                .map(output => ({ kind: "output", output }));
+            return [...this.outputNodes];
         }
         if (node.kind === "output") {
-            return node.output.diagnosticDirectives.map(directive => ({
-                kind: "directive",
-                output: node.output,
-                directive,
-            }));
+            return [...(this.directiveNodes.get(node.output) ?? [])];
         }
         return [];
+    }
+
+    getParent(node: DirectiveTreeNode): OutputNode | undefined {
+        if (node.kind === "directive") {
+            return this.outputNodes.find(outputNode => outputNode.output === node.output);
+        }
+        return undefined;
+    }
+
+    revealOriginalRange(sourceUri: vscode.Uri, offset: number): Promise<void> {
+        if (sourceUri.toString() !== this.sourceUri?.toString()) {
+            return Promise.resolve();
+        }
+        return this.revealMatchingDirective(
+            this.outputNodes.flatMap(node => this.directiveNodes.get(node.output) ?? []),
+            node => containsNonEmptyTextRange(node.directive.originalRange, offset),
+        );
+    }
+
+    revealVirtualRange(sourceUri: vscode.Uri, output: MappedOutput, offset: number): Promise<void> {
+        if (sourceUri.toString() !== this.sourceUri?.toString()) {
+            return Promise.resolve();
+        }
+        return this.revealMatchingDirective(
+            this.directiveNodes.get(output) ?? [],
+            node => containsNonEmptyTextRange(node.directive.virtualRange, offset),
+        );
     }
 
     dispose(): void {
@@ -125,14 +156,54 @@ export class DiagnosticDirectivesView implements vscode.TreeDataProvider<Directi
             ? vscode.l10n.t("The current content-mapped file has no diagnostic directives.")
             : undefined;
     }
+
+    private setOutputs(outputs: readonly MappedOutput[]): void {
+        this.outputs = outputs;
+        this.outputNodes = outputs
+            .filter(output => output.diagnosticDirectives.length !== 0)
+            .map(output => ({ kind: "output", output }));
+        this.directiveNodes = new Map(this.outputNodes.map(({ output }) => [
+            output,
+            output.diagnosticDirectives.map(directive => ({
+                kind: "directive",
+                output,
+                directive,
+            })),
+        ]));
+        this.selectedDirective = undefined;
+    }
+
+    private revealMatchingDirective(
+        nodes: readonly DiagnosticDirectiveNode[],
+        matches: (node: DiagnosticDirectiveNode) => boolean,
+    ): Promise<void> {
+        const node = nodes.find(matches);
+        if (!node || node === this.selectedDirective) {
+            this.selectedDirective = node;
+            return Promise.resolve();
+        }
+        this.selectedDirective = node;
+        return Promise.resolve(this.treeView.reveal(node, {
+            select: true,
+            focus: false,
+            expand: true,
+        }));
+    }
 }
 
 function directiveTooltip(node: DiagnosticDirectiveNode): vscode.MarkdownString {
     const { directive, output } = node;
     const tooltip = new vscode.MarkdownString();
     tooltip.appendMarkdown(`**${diagnosticDirectivePolicyName(directive.policy)}** in \`${path.basename(output.fileName)}\``);
-    tooltip.appendMarkdown(`\n\n${vscode.l10n.t("Original range: {0}", formatRange(output.originalText, directive.originalRange))}`);
+    if (!isEmptyRange(directive.originalRange)) {
+        tooltip.appendMarkdown(`\n\n${vscode.l10n.t("Original range: {0}", formatRange(output.originalText, directive.originalRange))}`);
+    }
     tooltip.appendMarkdown(`\n\n${vscode.l10n.t("Virtual range: {0}", formatRange(output.text, directive.virtualRange))}`);
+    const preview = textRangePreview(output.text, directive.virtualRange);
+    if (preview) {
+        tooltip.appendMarkdown(`\n\n${vscode.l10n.t("Preview:")}`);
+        tooltip.appendCodeblock(preview);
+    }
     if (directive.policy === 1) {
         tooltip.appendMarkdown(`\n\n${vscode.l10n.t("Unused diagnostic code: {0}", directive.unusedCode)}`);
     }
@@ -152,6 +223,10 @@ function diagnosticDirectivePolicyName(policy: number): string {
 
 function formatRange(text: string, range: ContentMapperTextRange): string {
     return `${formatPosition(positionAt(text, range.pos))}\u2013${formatPosition(positionAt(text, range.end))}`;
+}
+
+function isEmptyRange(range: ContentMapperTextRange): boolean {
+    return range.pos === range.end;
 }
 
 function formatPosition(position: vscode.Position): string {

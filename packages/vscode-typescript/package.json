@@ -32,7 +32,8 @@
         "onLanguage:javascript",
         "onLanguage:javascriptreact",
         "onLanguage:typescript",
-        "onLanguage:typescriptreact"
+        "onLanguage:typescriptreact",
+        "onFileSystem:typescript-content-mapper"
     ],
     "contributes": {
         "configuration": [
