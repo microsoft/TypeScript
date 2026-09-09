@@ -10,19 +10,24 @@ import (
 func TestRecursiveGetterDeferredReferenceOrder(t *testing.T) {
 	t.Parallel()
 	for _, test := range []struct {
-		name   string
-		marker string
+		name           string
+		marker         string
+		consumerFirst  bool
+		signatureFirst bool
 	}{
 		{name: "recursiveMetadataDiagnosticsFirst"},
 		{name: "recursiveMetadataGetterFirst", marker: "getter"},
-		{name: "recursiveMetadataOutputFirst", marker: "output"},
+		{name: "recursiveMetadataCallFirst", marker: "call"},
+		{name: "recursiveMetadataOutputFirst", marker: "output", consumerFirst: true},
+		{name: "recursiveMetadataConsumerDiagnosticsFirst", consumerFirst: true},
+		{name: "recursiveMetadataSignatureHelpFirst", signatureFirst: true},
 	} {
 		t.Run(test.name, func(t *testing.T) {
 			t.Parallel()
 			defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 			const content = `
 // @Filename: /tsconfig.json
-{ "compilerOptions": { "strict": true, "target": "es2020", "exactOptionalPropertyTypes": true } }
+{ "compilerOptions": { "strict": true, "target": "es2020", "exactOptionalPropertyTypes": true, "module": "nodenext", "moduleResolution": "nodenext" } }
 // @Filename: /schema.ts
 type input<T> = T extends { _zod: { input: any } } ? T["_zod"]["input"] : unknown;
 type output<T> = T extends { _zod: { output: any } } ? T["_zod"]["output"] : unknown;
@@ -96,25 +101,63 @@ interface ExtendedObject<S extends Shape> extends MiniObject<S> {
     "~standard": ExtendedSchema<this>;
 }
 declare function object<T extends Shape>(shape: T): ExtendedObject<Writeable<T>>;
-export const schema = object({
+export const schema/*call*/ = object(/*signature*/{
     get children/*getter*/() { return object({ children: schema }); },
 });
 schema.shape.children;
 type Assert<T extends true> = T;
 export function consume() {
     const value = null! as output<typeof schema>;
-    const deep/*output*/ = value.children.children.children.children;
+    const deep = value.children.children.children.children;
     type NotAny = Assert<IsAny<typeof deep> extends false ? true : false>;
+    type Keys = Assert<keyof typeof deep extends "children" ? "children" extends keyof typeof deep ? true : false : false>;
     const recursive: typeof deep = value;
     // @ts-expect-error The recursively inferred object has no missing property.
     deep.missing;
+    // @ts-expect-error Every children property must contain another recursive object.
+    const wrong: typeof deep = { children: { children: 42 } };
 }
+// @Filename: /consumer.ts
+import { schema } from "./schema.js";
+type IsAny<T> = 0 extends 1 & T ? true : false;
+type Assert<T extends true> = T;
+const value = schema._zod.output;
+export const deep = value.children.children.children.children;
+type DeepIsAny/*output*/ = IsAny<typeof deep>;
+type NotAny = Assert<DeepIsAny extends false ? true : false>;
+type Keys = Assert<keyof typeof deep extends "children" ? "children" extends keyof typeof deep ? true : false : false>;
+const recursive: typeof deep = value;
+// @ts-expect-error Imported recursive objects have no missing property.
+deep.missing;
+// @ts-expect-error Every children property must contain another recursive object.
+const wrong: typeof deep = { children: { children: 42 } };
 `
 			f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 			defer done()
-			if test.marker != "" {
+			// Keep the project unchanged throughout the ordered semantic requests.
+			f.GoToFile(t, "/schema.ts")
+			f.GoToFile(t, "/consumer.ts")
+			if test.signatureFirst {
+				f.GoToMarker(t, "signature")
+				f.VerifySignatureHelp(t, fourslash.VerifySignatureHelpOptions{
+					ParameterName:  "shape",
+					ParameterCount: 1,
+					OverloadsCount: 1,
+				})
+			} else if test.marker == "output" {
+				f.VerifyQuickInfoAt(t, "output", "type DeepIsAny = false", "")
+			} else if test.marker != "" {
 				f.GoToMarker(t, test.marker)
-				f.VerifyQuickInfoExists(t)
+				// Capture the first recursive hover, not just a later cache-stable response.
+				f.VerifyBaselineHover(t, test.marker)
+			}
+			markers := []string{"call", "output"}
+			if test.consumerFirst {
+				markers = []string{"output", "call"}
+			}
+			for _, marker := range markers {
+				f.GoToMarker(t, marker)
+				f.VerifyNonSuggestionDiagnostics(t, nil)
 			}
 			f.VerifyBaselineNonSuggestionDiagnostics(t)
 			f.VerifyBaselineHover(t)

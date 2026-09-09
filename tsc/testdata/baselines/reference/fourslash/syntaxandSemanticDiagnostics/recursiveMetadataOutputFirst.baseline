@@ -1,6 +1,21 @@
 // === Syntax and Semantic Diagnostics ===
 
 
+==== /consumer.ts (0 errors) ====
+    import { schema } from "./schema.js";
+    type IsAny<T> = 0 extends 1 & T ? true : false;
+    type Assert<T extends true> = T;
+    const value = schema._zod.output;
+    export const deep = value.children.children.children.children;
+    type DeepIsAny = IsAny<typeof deep>;
+    type NotAny = Assert<DeepIsAny extends false ? true : false>;
+    type Keys = Assert<keyof typeof deep extends "children" ? "children" extends keyof typeof deep ? true : false : false>;
+    const recursive: typeof deep = value;
+    // @ts-expect-error Imported recursive objects have no missing property.
+    deep.missing;
+    // @ts-expect-error Every children property must contain another recursive object.
+    const wrong: typeof deep = { children: { children: 42 } };
+    
 ==== /schema.ts (0 errors) ====
     type input<T> = T extends { _zod: { input: any } } ? T["_zod"]["input"] : unknown;
     type output<T> = T extends { _zod: { output: any } } ? T["_zod"]["output"] : unknown;
@@ -83,8 +98,10 @@
         const value = null! as output<typeof schema>;
         const deep = value.children.children.children.children;
         type NotAny = Assert<IsAny<typeof deep> extends false ? true : false>;
+        type Keys = Assert<keyof typeof deep extends "children" ? "children" extends keyof typeof deep ? true : false : false>;
         const recursive: typeof deep = value;
         // @ts-expect-error The recursively inferred object has no missing property.
         deep.missing;
+        // @ts-expect-error Every children property must contain another recursive object.
+        const wrong: typeof deep = { children: { children: 42 } };
     }
-    

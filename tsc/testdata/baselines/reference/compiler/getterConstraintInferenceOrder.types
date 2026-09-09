@@ -1,0 +1,185 @@
+//// [tests/cases/compiler/getterConstraintInferenceOrder.ts] ////
+
+=== getterConstraintInferenceOrder.ts ===
+interface Schema<O> { readonly output: O; }
+>output : O
+
+declare function wrap<T extends Schema<string>>(value: T): T;
+>wrap : <T extends Schema<string>>(value: T) => T
+>value : T
+
+function cold() {
+>cold : () => { readonly output: number; }
+
+    const argument = { get output() { return 42; } };
+>argument : { readonly output: number; }
+>{ get output() { return 42; } } : { readonly output: number; }
+>output : number
+>42 : 42
+
+    return wrap(argument);
+>wrap(argument) : { readonly output: number; }
+>wrap : <T extends Schema<string>>(value: T) => T
+>argument : { readonly output: number; }
+}
+
+function warm() {
+>warm : () => { readonly output: number; }
+
+    const argument = { get output() { return 42; } };
+>argument : { readonly output: number; }
+>{ get output() { return 42; } } : { readonly output: number; }
+>output : number
+>42 : 42
+
+    argument.output;
+>argument.output : number
+>argument : { readonly output: number; }
+>output : number
+
+    return wrap(argument);
+>wrap(argument) : { readonly output: number; }
+>wrap : <T extends Schema<string>>(value: T) => T
+>argument : { readonly output: number; }
+}
+
+declare const coldResult: ReturnType<typeof cold>;
+>coldResult : { readonly output: number; }
+>cold : () => { readonly output: number; }
+
+declare const warmResult: ReturnType<typeof warm>;
+>warmResult : { readonly output: number; }
+>warm : () => { readonly output: number; }
+
+const coldToWarm: typeof warmResult = coldResult;
+>coldToWarm : { readonly output: number; }
+>warmResult : { readonly output: number; }
+>coldResult : { readonly output: number; }
+
+const warmToCold: typeof coldResult = warmResult;
+>warmToCold : { readonly output: number; }
+>coldResult : { readonly output: number; }
+>warmResult : { readonly output: number; }
+
+function validCold() {
+>validCold : () => { readonly output: string; }
+
+    const argument = { get output() { return ""; } };
+>argument : { readonly output: string; }
+>{ get output() { return ""; } } : { readonly output: string; }
+>output : string
+>"" : ""
+
+    return wrap(argument);
+>wrap(argument) : { readonly output: string; }
+>wrap : <T extends Schema<string>>(value: T) => T
+>argument : { readonly output: string; }
+}
+
+function validWarm() {
+>validWarm : () => { readonly output: string; }
+
+    const argument = { get output() { return ""; } };
+>argument : { readonly output: string; }
+>{ get output() { return ""; } } : { readonly output: string; }
+>output : string
+>"" : ""
+
+    argument.output;
+>argument.output : string
+>argument : { readonly output: string; }
+>output : string
+
+    return wrap(argument);
+>wrap(argument) : { readonly output: string; }
+>wrap : <T extends Schema<string>>(value: T) => T
+>argument : { readonly output: string; }
+}
+
+const coldValue: string = validCold().output;
+>coldValue : string
+>validCold().output : string
+>validCold() : { readonly output: string; }
+>validCold : () => { readonly output: string; }
+>output : string
+
+const warmValue: string = validWarm().output;
+>warmValue : string
+>validWarm().output : string
+>validWarm() : { readonly output: string; }
+>validWarm : () => { readonly output: string; }
+>output : string
+
+interface Box<T> { value: T; }
+>value : T
+
+type DeferredBox<T> = Box<T>;
+>DeferredBox : DeferredBox<T>
+
+declare function box<T>(value: T): DeferredBox<T>;
+>box : <T>(value: T) => DeferredBox<T>
+>value : T
+
+declare function wrapBox<T extends Box<Schema<string>>>(value: T): T;
+>wrapBox : <T extends Box<Schema<string>>>(value: T) => T
+>value : T
+
+function coldBox() {
+>coldBox : () => Box<Schema<string>>
+
+    const argument = box({ get output() { return 42; } });
+>argument : DeferredBox<{ readonly output: number; }>
+>box({ get output() { return 42; } }) : DeferredBox<{ readonly output: number; }>
+>box : <T>(value: T) => DeferredBox<T>
+>{ get output() { return 42; } } : { readonly output: number; }
+>output : number
+>42 : 42
+
+    return wrapBox(argument);
+>wrapBox(argument) : Box<Schema<string>>
+>wrapBox : <T extends Box<Schema<string>>>(value: T) => T
+>argument : DeferredBox<{ readonly output: number; }>
+}
+
+function warmBox() {
+>warmBox : () => Box<Schema<string>>
+
+    const argument = box({ get output() { return 42; } });
+>argument : DeferredBox<{ readonly output: number; }>
+>box({ get output() { return 42; } }) : DeferredBox<{ readonly output: number; }>
+>box : <T>(value: T) => DeferredBox<T>
+>{ get output() { return 42; } } : { readonly output: number; }
+>output : number
+>42 : 42
+
+    argument.value.output;
+>argument.value.output : number
+>argument.value : { readonly output: number; }
+>argument : DeferredBox<{ readonly output: number; }>
+>value : { readonly output: number; }
+>output : number
+
+    return wrapBox(argument);
+>wrapBox(argument) : Box<Schema<string>>
+>wrapBox : <T extends Box<Schema<string>>>(value: T) => T
+>argument : DeferredBox<{ readonly output: number; }>
+}
+
+declare const coldBoxResult: ReturnType<typeof coldBox>;
+>coldBoxResult : Box<Schema<string>>
+>coldBox : () => Box<Schema<string>>
+
+declare const warmBoxResult: ReturnType<typeof warmBox>;
+>warmBoxResult : Box<Schema<string>>
+>warmBox : () => Box<Schema<string>>
+
+const coldBoxToWarm: typeof warmBoxResult = coldBoxResult;
+>coldBoxToWarm : Box<Schema<string>>
+>warmBoxResult : Box<Schema<string>>
+>coldBoxResult : Box<Schema<string>>
+
+const warmBoxToCold: typeof coldBoxResult = warmBoxResult;
+>warmBoxToCold : Box<Schema<string>>
+>coldBoxResult : Box<Schema<string>>
+>warmBoxResult : Box<Schema<string>>
+

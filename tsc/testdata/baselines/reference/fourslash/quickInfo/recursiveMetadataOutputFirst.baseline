@@ -1,4 +1,26 @@
 // === QuickInfo ===
+=== /consumer.ts ===
+// import { schema } from "./schema.js";
+// type IsAny<T> = 0 extends 1 & T ? true : false;
+// type Assert<T extends true> = T;
+// const value = schema._zod.output;
+// export const deep = value.children.children.children.children;
+// type DeepIsAny = IsAny<typeof deep>;
+//      ^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | type DeepIsAny = false
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// type NotAny = Assert<DeepIsAny extends false ? true : false>;
+// type Keys = Assert<keyof typeof deep extends "children" ? "children" extends keyof typeof deep ? true : false : false>;
+// const recursive: typeof deep = value;
+// // @ts-expect-error Imported recursive objects have no missing property.
+// deep.missing;
+// // @ts-expect-error Every children property must contain another recursive object.
+// const wrong: typeof deep = { children: { children: 42 } };
+// 
 === /schema.ts ===
 // type input<T> = T extends { _zod: { input: any } } ? T["_zod"]["input"] : unknown;
 // type output<T> = T extends { _zod: { output: any } } ? T["_zod"]["output"] : unknown;
@@ -73,6 +95,21 @@
 // }
 // declare function object<T extends Shape>(shape: T): ExtendedObject<Writeable<T>>;
 // export const schema = object({
+//              ^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const schema: ExtendedObject<{
+// |     children: ExtendedObject<{
+// |         children: ExtendedObject<...>;
+// |     }>;
+// | }>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                              ^
+// | ----------------------------------------------------------------------
+// | No quickinfo at /*signature*/.
+// | ----------------------------------------------------------------------
 //     get children() { return object({ children: schema }); },
 //         ^^^^^^^^
 // | ----------------------------------------------------------------------
@@ -91,24 +128,57 @@
 // export function consume() {
 //     const value = null! as output<typeof schema>;
 //     const deep = value.children.children.children.children;
-//           ^^^^
-// | ----------------------------------------------------------------------
-// | ```typescript
-// | const deep: {
-// |     children: {
-// |         children: ...;
-// |     };
-// | }
-// | ```
-// | 
-// | ----------------------------------------------------------------------
 //     type NotAny = Assert<IsAny<typeof deep> extends false ? true : false>;
+//     type Keys = Assert<keyof typeof deep extends "children" ? "children" extends keyof typeof deep ? true : false : false>;
 //     const recursive: typeof deep = value;
 //     // @ts-expect-error The recursively inferred object has no missing property.
 //     deep.missing;
+//     // @ts-expect-error Every children property must contain another recursive object.
+//     const wrong: typeof deep = { children: { children: 42 } };
 // }
-// 
+
+
 [
+  {
+    "marker": {
+      "Position": 3768,
+      "LSPosition": {
+        "line": 72,
+        "character": 19
+      },
+      "Name": "call",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nconst schema: ExtendedObject<{\n    children: ExtendedObject<{\n        children: ExtendedObject<...>;\n    }>;\n}>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 72,
+          "character": 13
+        },
+        "end": {
+          "line": 72,
+          "character": 19
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 3778,
+      "LSPosition": {
+        "line": 72,
+        "character": 29
+      },
+      "Name": "signature",
+      "Data": {}
+    },
+    "item": null
+  },
   {
     "marker": {
       "Position": 3796,
@@ -139,9 +209,9 @@
   },
   {
     "marker": {
-      "Position": 3993,
+      "Position": 230,
       "LSPosition": {
-        "line": 79,
+        "line": 5,
         "character": 14
       },
       "Name": "output",
@@ -150,15 +220,15 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```typescript\nconst deep: {\n    children: {\n        children: ...;\n    };\n}\n```\n"
+        "value": "```typescript\ntype DeepIsAny = false\n```\n"
       },
       "range": {
         "start": {
-          "line": 79,
-          "character": 10
+          "line": 5,
+          "character": 5
         },
         "end": {
-          "line": 79,
+          "line": 5,
           "character": 14
         }
       }

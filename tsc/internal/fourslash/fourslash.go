@@ -2924,8 +2924,20 @@ func (f *FourslashTest) VerifyFoldingRangeLines(t *testing.T, expected []Folding
 	}
 }
 
-func (f *FourslashTest) VerifyBaselineHover(t *testing.T) {
-	markersAndItems := core.MapFiltered(f.Markers(), func(marker *Marker) (markerAndItem[*lsproto.Hover], bool) {
+// VerifyBaselineHover requests named markers in source order, or only the supplied markers in order.
+func (f *FourslashTest) VerifyBaselineHover(t *testing.T, markerNames ...string) {
+	markers := f.Markers()
+	if len(markerNames) > 0 {
+		markers = make([]*Marker, len(markerNames))
+		for i, name := range markerNames {
+			marker := f.MarkerByName(t, name)
+			if marker == nil {
+				t.Fatalf("Marker '%s' not found", name)
+			}
+			markers[i] = marker
+		}
+	}
+	markersAndItems := core.MapFiltered(markers, func(marker *Marker) (markerAndItem[*lsproto.Hover], bool) {
 		if marker.Name == nil {
 			return markerAndItem[*lsproto.Hover]{}, false
 		}

@@ -1,0 +1,63 @@
+// === QuickInfo ===
+=== /schema.ts ===
+// interface Schema<O> { readonly out: O; }
+// type Shape = Record<string, Schema<any>>;
+// declare function object<S extends Shape>(shape: S): Schema<{ [K in keyof S]: S[K]["out"] }>;
+// 
+// export const valid = object({
+//     get next() { return valid; },
+//         ^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (accessor) next: Schema<{
+// |     readonly next: ...;
+// | }>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// });
+// 
+// type IsAny<T> = 0 extends 1 & T ? true : false;
+// type Assert<T extends true> = T;
+// const deep = valid.out.next.next.next.next;
+// type NotAny = Assert<IsAny<typeof deep> extends false ? true : false>;
+// const recursive: typeof deep = valid.out;
+// // @ts-expect-error Recursive objects have no missing property.
+// deep.missing;
+// // @ts-expect-error Every next property must contain another recursive object.
+// const wrong: typeof deep = { next: { next: 42 } };
+// 
+// export const invalid = object({
+//     get next() { return invalid; },
+//     get bad() { return 42; },
+// });
+[
+  {
+    "marker": {
+      "Position": 219,
+      "LSPosition": {
+        "line": 5,
+        "character": 12
+      },
+      "Name": "next",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(accessor) next: Schema<{\n    readonly next: ...;\n}>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 5,
+          "character": 8
+        },
+        "end": {
+          "line": 5,
+          "character": 12
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  }
+]
