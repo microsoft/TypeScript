@@ -43,6 +43,7 @@ class ContentMapperVirtualDocumentProvider implements vscode.FileSystemProvider,
     private readonly refreshTimers = new Map<string, NodeJS.Timeout>();
     private readonly evictionTimers = new Map<string, NodeJS.Timeout>();
     private inspectionTimer: NodeJS.Timeout | undefined;
+    private activeEditorContextTimer: NodeJS.Timeout | undefined;
     private activeEditorContextVersion = 0;
     private readonly mappingDecorations = [
         vscode.window.createTextEditorDecorationType({
@@ -94,6 +95,9 @@ class ContentMapperVirtualDocumentProvider implements vscode.FileSystemProvider,
                 }
                 else {
                     this.scheduleRefresh(event.document.uri);
+                    if (event.document === vscode.window.activeTextEditor?.document) {
+                        this.scheduleActiveEditorContextUpdate(event.document);
+                    }
                 }
             }),
             vscode.workspace.onDidSaveTextDocument(document => this.scheduleRefresh(document.uri)),
@@ -203,6 +207,10 @@ class ContentMapperVirtualDocumentProvider implements vscode.FileSystemProvider,
             clearTimeout(this.inspectionTimer);
             this.inspectionTimer = undefined;
         }
+        if (this.activeEditorContextTimer) {
+            clearTimeout(this.activeEditorContextTimer);
+            this.activeEditorContextTimer = undefined;
+        }
         for (const disposable of this.disposables.splice(0)) {
             disposable.dispose();
         }
@@ -293,10 +301,27 @@ class ContentMapperVirtualDocumentProvider implements vscode.FileSystemProvider,
     }
 
     private updateActiveEditorContext(editor: vscode.TextEditor | undefined): void {
+        if (this.activeEditorContextTimer) {
+            clearTimeout(this.activeEditorContextTimer);
+            this.activeEditorContextTimer = undefined;
+        }
         const version = ++this.activeEditorContextVersion;
         void this.updateActiveEditorContextNow(editor, version).catch(error => {
             this.output.error(`Could not update the active content mapper context: ${String(error)}`);
         });
+    }
+
+    private scheduleActiveEditorContextUpdate(document: vscode.TextDocument): void {
+        if (this.activeEditorContextTimer) {
+            clearTimeout(this.activeEditorContextTimer);
+        }
+        this.activeEditorContextTimer = setTimeout(() => {
+            this.activeEditorContextTimer = undefined;
+            const editor = vscode.window.activeTextEditor;
+            if (editor?.document === document) {
+                this.updateActiveEditorContext(editor);
+            }
+        }, 100);
     }
 
     private async updateActiveEditorContextNow(editor: vscode.TextEditor | undefined, version: number): Promise<void> {
