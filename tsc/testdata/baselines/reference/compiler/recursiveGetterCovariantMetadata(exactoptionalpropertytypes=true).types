@@ -164,28 +164,28 @@ declare function object<T extends $ZodShape = Record<never, $ZodType>>(shape?: T
 >shape : T | undefined
 
 export const nested = object({
->nested : ZodMiniObject<{ readonly children: any; } extends infer T ? { -readonly [P in keyof T]: T[P]; } : never, $strip>
->object({    get children() { return object({ children: nested }); },}) : ZodMiniObject<{ readonly children: any; } extends infer T ? { -readonly [P in keyof T]: T[P]; } : never, $strip>
+>nested : ZodMiniObject<{ children: ZodMiniObject<{ children: ZodMiniObject<any, $strip>; }, $strip>; }, $strip>
+>object({    get children() { return object({ children: nested }); },}) : ZodMiniObject<{ children: ZodMiniObject<{ children: ZodMiniObject<any, $strip>; }, $strip>; }, $strip>
 >object : <T extends $ZodShape = Record<never, $ZodType<unknown, unknown, $ZodTypeInternals<unknown, unknown>>>>(shape?: T) => ZodMiniObject<Writeable<T>, $strip>
->{    get children() { return object({ children: nested }); },} : { readonly children: any; }
+>{    get children() { return object({ children: nested }); },} : { readonly children: ZodMiniObject<{ children: ZodMiniObject<{ children: ZodMiniObject<any, $strip>; }, $strip>; }, $strip>; }
 
     get children() { return object({ children: nested }); },
->children : any
->object({ children: nested }) : ZodMiniObject<{ children: ZodMiniObject<{ readonly children: any; } extends infer T ? { -readonly [P in keyof T]: T[P]; } : never, $strip>; }, $strip>
+>children : ZodMiniObject<{ children: ZodMiniObject<{ children: ZodMiniObject<any, $strip>; }, $strip>; }, $strip>
+>object({ children: nested }) : ZodMiniObject<{ children: ZodMiniObject<{ children: ZodMiniObject<any, $strip>; }, $strip>; }, $strip>
 >object : <T extends $ZodShape = Record<never, $ZodType<unknown, unknown, $ZodTypeInternals<unknown, unknown>>>>(shape?: T) => ZodMiniObject<Writeable<T>, $strip>
->{ children: nested } : { children: ZodMiniObject<{ readonly children: any; } extends infer T ? { -readonly [P in keyof T]: T[P]; } : never, $strip>; }
->children : ZodMiniObject<{ readonly children: any; } extends infer T ? { -readonly [P in keyof T]: T[P]; } : never, $strip>
->nested : ZodMiniObject<{ readonly children: any; } extends infer T ? { -readonly [P in keyof T]: T[P]; } : never, $strip>
+>{ children: nested } : { children: ZodMiniObject<{ children: ZodMiniObject<{ children: ZodMiniObject<any, $strip>; }, $strip>; }, $strip>; }
+>children : ZodMiniObject<{ children: ZodMiniObject<{ children: ZodMiniObject<any, $strip>; }, $strip>; }, $strip>
+>nested : ZodMiniObject<{ children: ZodMiniObject<{ children: ZodMiniObject<any, $strip>; }, $strip>; }, $strip>
 
 });
 
 // Inspecting output first would mask the mapped getter's resolution cycle.
 nested.shape.children;
->nested.shape.children : any
->nested.shape : { readonly children: any; } extends infer T ? { -readonly [P in keyof T]: T[P]; } : never
->nested : ZodMiniObject<{ readonly children: any; } extends infer T ? { -readonly [P in keyof T]: T[P]; } : never, $strip>
->shape : { readonly children: any; } extends infer T ? { -readonly [P in keyof T]: T[P]; } : never
->children : any
+>nested.shape.children : ZodMiniObject<{ children: ZodMiniObject<{ children: ZodMiniObject<any, $strip>; }, $strip>; }, $strip>
+>nested.shape : { children: ZodMiniObject<{ children: ZodMiniObject<any, $strip>; }, $strip>; }
+>nested : ZodMiniObject<{ children: ZodMiniObject<{ children: ZodMiniObject<any, $strip>; }, $strip>; }, $strip>
+>shape : { children: ZodMiniObject<{ children: ZodMiniObject<any, $strip>; }, $strip>; }
+>children : ZodMiniObject<{ children: ZodMiniObject<{ children: ZodMiniObject<any, $strip>; }, $strip>; }, $strip>
 
 type Assert<T extends true> = T;
 >Assert : T
@@ -195,71 +195,71 @@ export function checkOutput() {
 >checkOutput : () => void
 
     type NestedOutput = output<typeof nested>;
->NestedOutput : { [x: string]: any; }
->nested : ZodMiniObject<{ readonly children: any; } extends infer T ? { -readonly [P in keyof T]: T[P]; } : never, $strip>
+>NestedOutput : { children: { children: any; }; }
+>nested : ZodMiniObject<{ children: ZodMiniObject<{ children: ZodMiniObject<any, $strip>; }, $strip>; }, $strip>
 
     const value = null! as NestedOutput;
->value : { [x: string]: any; }
->null! as NestedOutput : { [x: string]: any; }
+>value : { children: { children: any; }; }
+>null! as NestedOutput : { children: { children: any; }; }
 >null! : never
 
     const deep: NestedOutput = value.children.children.children.children;
->deep : { [x: string]: any; }
->value.children.children.children.children : any
->value.children.children.children : any
->value.children.children : any
->value.children : any
->value : { [x: string]: any; }
->children : any
->children : any
->children : any
->children : any
+>deep : { children: { children: any; }; }
+>value.children.children.children.children : { children: { children: any; }; }
+>value.children.children.children : { children: { children: any; }; }
+>value.children.children : { children: { children: any; }; }
+>value.children : { children: { children: any; }; }
+>value : { children: { children: any; }; }
+>children : { children: { children: any; }; }
+>children : { children: { children: any; }; }
+>children : { children: { children: any; }; }
+>children : { children: { children: any; }; }
 
     type Deep = typeof value.children.children.children.children;
->Deep : any
->value.children.children.children.children : any
->value.children.children.children : any
->value.children.children : any
->value.children : any
->value : { [x: string]: any; }
->children : any
->children : any
->children : any
->children : any
+>Deep : { children: { children: any; }; }
+>value.children.children.children.children : { children: { children: any; }; }
+>value.children.children.children : { children: { children: any; }; }
+>value.children.children : { children: { children: any; }; }
+>value.children : { children: { children: any; }; }
+>value : { children: { children: any; }; }
+>children : { children: { children: any; }; }
+>children : { children: { children: any; }; }
+>children : { children: { children: any; }; }
+>children : { children: { children: any; }; }
 
     const recursive: Deep = value;
->recursive : any
->value : { [x: string]: any; }
+>recursive : { children: { children: any; }; }
+>value : { children: { children: any; }; }
 
     type DeepIsNotAny = Assert<IsAny<Deep> extends false ? true : false>;
->DeepIsNotAny : any
+>DeepIsNotAny : true
 >false : false
 >true : true
 >false : false
 
     type DeepKeys = Assert<keyof Deep extends "children" ? "children" extends keyof Deep ? true : false : false>;
->DeepKeys : false
+>DeepKeys : true
 >true : true
 >false : false
 >false : false
 
     // @ts-expect-error Recursive output objects have no "missing" property.
     value.children.children.children.children.missing;
->value.children.children.children.children.missing : any
->value.children.children.children.children : any
->value.children.children.children : any
->value.children.children : any
->value.children : any
->value : { [x: string]: any; }
->children : any
->children : any
->children : any
->children : any
+>value.children.children.children.children.missing : error
+>value.children.children.children.children : { children: { children: any; }; }
+>value.children.children.children : { children: { children: any; }; }
+>value.children.children : { children: { children: any; }; }
+>value.children : { children: { children: any; }; }
+>value : { children: { children: any; }; }
+>children : { children: { children: any; }; }
+>children : { children: { children: any; }; }
+>children : { children: { children: any; }; }
+>children : { children: { children: any; }; }
 >missing : any
 
     // @ts-expect-error Every children property must contain another recursive object.
     const invalid: NestedOutput = { children: { children: { children: 123 } } };
->invalid : { [x: string]: any; }
+>invalid : { children: { children: any; }; }
 >{ children: { children: { children: 123 } } } : { children: { children: { children: number; }; }; }
 >children : { children: { children: number; }; }
 >{ children: { children: 123 } } : { children: { children: number; }; }

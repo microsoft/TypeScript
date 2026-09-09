@@ -2634,6 +2634,20 @@ func (r *Relater) isRelatedToEx(originalSource *Type, originalTarget *Type, recu
 	if originalSource == originalTarget {
 		return TernaryTrue
 	}
+	// Covariance proves F<T> assignable to F<unknown> without evaluating T, which may
+	// depend recursively on this comparison. Unreliable or unmeasurable variance is excluded.
+	if r.relation == r.c.assignableRelation &&
+		originalSource.objectFlags&ObjectFlagsReference != 0 && originalSource.AsTypeReference().node != nil &&
+		originalTarget.objectFlags&ObjectFlagsReference != 0 &&
+		originalSource.Target() == originalTarget.Target() && originalTarget.Target().objectFlags&ObjectFlagsTuple == 0 {
+		targetArguments := r.c.getTypeArguments(originalTarget)
+		if len(targetArguments) != 0 && core.Every(targetArguments, func(t *Type) bool { return t.flags&TypeFlagsAnyOrUnknown != 0 }) {
+			variances := r.c.getVariances(originalTarget.Target())
+			if len(variances) == len(targetArguments) && core.Every(variances, func(v VarianceFlags) bool { return v == VarianceFlagsCovariant }) {
+				return TernaryTrue
+			}
+		}
+	}
 	// Before normalization: if `source` is type an object type, and `target` is primitive,
 	// skip all the checks we don't need and just return `isSimpleTypeRelatedTo` result
 	if originalSource.flags&TypeFlagsObject != 0 && originalTarget.flags&TypeFlagsPrimitive != 0 {

@@ -424,11 +424,27 @@ export function checkOutput() {
     const deep: NestedOutput = value.children.children.children.children;
 >deep : Symbol(deep, Decl(recursiveGetterCovariantMetadata.ts, 81, 9))
 >NestedOutput : Symbol(NestedOutput, Decl(recursiveGetterCovariantMetadata.ts, 78, 31))
+>value.children.children.children.children : Symbol(children, Decl(recursiveGetterCovariantMetadata.ts, 71, 36))
+>value.children.children.children : Symbol(children, Decl(recursiveGetterCovariantMetadata.ts, 70, 30))
+>value.children.children : Symbol(children, Decl(recursiveGetterCovariantMetadata.ts, 71, 36))
+>value.children : Symbol(children, Decl(recursiveGetterCovariantMetadata.ts, 70, 30))
 >value : Symbol(value, Decl(recursiveGetterCovariantMetadata.ts, 80, 9))
+>children : Symbol(children, Decl(recursiveGetterCovariantMetadata.ts, 70, 30))
+>children : Symbol(children, Decl(recursiveGetterCovariantMetadata.ts, 71, 36))
+>children : Symbol(children, Decl(recursiveGetterCovariantMetadata.ts, 70, 30))
+>children : Symbol(children, Decl(recursiveGetterCovariantMetadata.ts, 71, 36))
 
     type Deep = typeof value.children.children.children.children;
 >Deep : Symbol(Deep, Decl(recursiveGetterCovariantMetadata.ts, 81, 73))
+>value.children.children.children.children : Symbol(children, Decl(recursiveGetterCovariantMetadata.ts, 71, 36))
+>value.children.children.children : Symbol(children, Decl(recursiveGetterCovariantMetadata.ts, 70, 30))
+>value.children.children : Symbol(children, Decl(recursiveGetterCovariantMetadata.ts, 71, 36))
+>value.children : Symbol(children, Decl(recursiveGetterCovariantMetadata.ts, 70, 30))
 >value : Symbol(value, Decl(recursiveGetterCovariantMetadata.ts, 80, 9))
+>children : Symbol(children, Decl(recursiveGetterCovariantMetadata.ts, 70, 30))
+>children : Symbol(children, Decl(recursiveGetterCovariantMetadata.ts, 71, 36))
+>children : Symbol(children, Decl(recursiveGetterCovariantMetadata.ts, 70, 30))
+>children : Symbol(children, Decl(recursiveGetterCovariantMetadata.ts, 71, 36))
 
     const recursive: Deep = value;
 >recursive : Symbol(recursive, Decl(recursiveGetterCovariantMetadata.ts, 83, 9))
@@ -449,7 +465,15 @@ export function checkOutput() {
 
     // @ts-expect-error Recursive output objects have no "missing" property.
     value.children.children.children.children.missing;
+>value.children.children.children.children : Symbol(children, Decl(recursiveGetterCovariantMetadata.ts, 71, 36))
+>value.children.children.children : Symbol(children, Decl(recursiveGetterCovariantMetadata.ts, 70, 30))
+>value.children.children : Symbol(children, Decl(recursiveGetterCovariantMetadata.ts, 71, 36))
+>value.children : Symbol(children, Decl(recursiveGetterCovariantMetadata.ts, 70, 30))
 >value : Symbol(value, Decl(recursiveGetterCovariantMetadata.ts, 80, 9))
+>children : Symbol(children, Decl(recursiveGetterCovariantMetadata.ts, 70, 30))
+>children : Symbol(children, Decl(recursiveGetterCovariantMetadata.ts, 71, 36))
+>children : Symbol(children, Decl(recursiveGetterCovariantMetadata.ts, 70, 30))
+>children : Symbol(children, Decl(recursiveGetterCovariantMetadata.ts, 71, 36))
 
     // @ts-expect-error Every children property must contain another recursive object.
     const invalid: NestedOutput = { children: { children: { children: 123 } } };
