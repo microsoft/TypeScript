@@ -1488,6 +1488,9 @@ export const checkVsceVersion = task({
             }
         }
         const tagWorkflow = fs.readFileSync("./.github/workflows/tag-vscode-typescript.yml", "utf8");
+        if (!tagWorkflow.includes("  push:\n    branches: [main]") || tagWorkflow.includes("pull_request_target") || tagWorkflow.includes("allow-unsafe-pr-checkout")) {
+            throw new Error("tag-vscode-typescript.yml must run as a trusted push workflow on main.");
+        }
         if (!tagWorkflow.includes('if [ "$version" = "0.0.0" ]; then')) {
             throw new Error("tag-vscode-typescript.yml must not create a tag for the unreleased 0.0.0 version.");
         }
