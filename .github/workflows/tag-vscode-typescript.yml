@@ -1,8 +1,7 @@
 name: Tag vscode-typescript release
 
 on:
-  pull_request_target:
-    types: [closed]
+  push:
     branches: [main]
     paths:
       - packages/vscode-typescript/package.json
@@ -10,7 +9,7 @@ on:
 run-name: Tag vscode-typescript release
 
 concurrency:
-  group: tag-vscode-typescript-${{ github.event.pull_request.merge_commit_sha }}
+  group: tag-vscode-typescript-${{ github.sha }}
   cancel-in-progress: false
 
 permissions:
@@ -23,9 +22,7 @@ defaults:
 
 jobs:
   tag:
-    if: >-
-      github.repository == 'microsoft/TypeScript' &&
-      github.event.pull_request.merged == true
+    if: github.repository == 'microsoft/TypeScript'
     runs-on: ubuntu-latest
     environment:
       name: azure
@@ -34,7 +31,6 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          ref: ${{ github.event.pull_request.merge_commit_sha }}
           filter: blob:none
           fetch-depth: 2
           persist-credentials: false
