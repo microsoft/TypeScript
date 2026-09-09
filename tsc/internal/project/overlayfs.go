@@ -73,7 +73,7 @@ func (f *fileBase) ECMALineInfo() *sourcemap.ECMALineInfo {
 type diskFile struct {
 	fileBase
 	needsReload  bool
-	realpathPath tspath.Path
+	realpathName string
 }
 
 func newDiskFile(fileName string, content string) *diskFile {
@@ -106,7 +106,7 @@ func (f *diskFile) Kind() core.ScriptKind {
 
 func (f *diskFile) Clone() *diskFile {
 	return &diskFile{
-		realpathPath: f.realpathPath,
+		realpathName: f.realpathName,
 		fileBase: fileBase{
 			fileName: f.fileName,
 			content:  f.content,
@@ -228,6 +228,7 @@ func (fs *overlayFS) processChanges(changes []FileChange) (FileChangeSummary, ma
 
 	// Reduced collection of changes that occurred on a single file
 	type fileEvents struct {
+		uri          lsproto.DocumentUri
 		openChange   *FileChange
 		closeChange  *FileChange
 		watchChanged bool
@@ -237,19 +238,25 @@ func (fs *overlayFS) processChanges(changes []FileChange) (FileChangeSummary, ma
 		deleted      bool
 	}
 
-	fileEventMap := make(map[lsproto.DocumentUri]*fileEvents)
+	fileEventMap := make(map[tspath.Path]*fileEvents)
 
 	for _, change := range changes {
+		if change.Kind.IsWatchKind() || change.Kind == FileChangeKindSave {
+			result.hasFileSystemChanges = true
+		}
 		uri := change.URI
-		events, exists := fileEventMap[uri]
+		path := uri.Path(fs.fs.UseCaseSensitiveFileNames())
+		events, exists := fileEventMap[path]
 		if exists {
 			if events.openChange != nil {
 				panic("should see no changes after open")
 			}
 		} else {
 			events = &fileEvents{}
-			fileEventMap[uri] = events
+			fileEventMap[path] = events
 		}
+		// Coalesce compiler-equivalent paths while retaining notification spelling.
+		events.uri = uri
 
 		if !result.IncludesWatchChangeOutsideNodeModules && change.Kind.IsWatchKind() && !strings.Contains(string(uri), "/node_modules/") {
 			result.IncludesWatchChangeOutsideNodeModules = true
@@ -306,8 +313,8 @@ func (fs *overlayFS) processChanges(changes []FileChange) (FileChangeSummary, ma
 	}
 
 	// Process deduplicated events per file
-	for uri, events := range fileEventMap {
-		path := uri.Path(fs.fs.UseCaseSensitiveFileNames())
+	for path, events := range fileEventMap {
+		uri := events.uri
 		o := newOverlays[path]
 
 		if events.openChange != nil {

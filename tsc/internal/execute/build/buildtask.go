@@ -20,6 +20,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/execute/tsc"
 	"github.com/microsoft/TypeScript/tsc/internal/tsoptions"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
+	"github.com/microsoft/TypeScript/tsc/internal/vfs/trackingvfs"
 )
 
 type buildKind uint
@@ -37,8 +38,16 @@ type upstreamTask struct {
 type buildInfoEntry struct {
 	buildInfo *incremental.BuildInfo
 	path      tspath.Path
+	fileName  string
 	mTime     time.Time
 	dtsTime   *time.Time
+}
+
+func (b *buildInfoEntry) directory() string {
+	if b.fileName != "" {
+		return tspath.GetDirectoryPath(b.fileName)
+	}
+	return tspath.GetDirectoryPath(string(b.path))
 }
 
 type taskResult struct {
@@ -68,6 +77,7 @@ type BuildTask struct {
 	buildInfoEntry   *buildInfoEntry
 	buildInfoEntryMu sync.Mutex
 	packageJsons     []string
+	seenFiles        []string
 
 	errors             []*ast.Diagnostic
 	pending            atomic.Bool
@@ -147,11 +157,11 @@ func (t *BuildTask) report(orchestrator *Orchestrator, configPath tspath.Path, b
 	close(t.reportDone)
 }
 
-func (t *BuildTask) buildProject(orchestrator *Orchestrator, path tspath.Path) {
+func (t *BuildTask) buildProject(orchestrator *Orchestrator, path tspath.Path, force bool) {
 	// Wait on upstream tasks to complete
 	t.waitOnUpstream()
 	if t.pending.Load() {
-		t.status = t.getUpToDateStatus(orchestrator, path)
+		t.status = t.getUpToDateStatus(orchestrator, path, force)
 		t.reportUpToDateStatus(orchestrator)
 		if !t.handleStatusThatDoesntRequireBuild(orchestrator) {
 			t.compileAndEmit(orchestrator, path)
@@ -247,6 +257,9 @@ func (t *BuildTask) compileAndEmit(orchestrator *Orchestrator, path tspath.Path)
 		trace:                tsc.GetTraceWithWriterFromSys(&t.result.builder, orchestrator.opts.Command.Locale(), orchestrator.opts.Testing),
 		contentMapperProject: contentMapperProject,
 	}
+	if orchestrator.opts.Command.CompilerOptions.Watch.IsTrue() {
+		compilerHost.tracked = &trackingvfs.FS{Inner: orchestrator.host.FS()}
+	}
 	if !orchestrator.opts.Command.BuildOptions.Force.IsTrue() {
 		oldProgram = incremental.ReadBuildInfoProgram(t.resolved, orchestrator.host, compilerHost)
 	}
@@ -256,6 +269,9 @@ func (t *BuildTask) compileAndEmit(orchestrator *Orchestrator, path tspath.Path)
 		Config: t.resolved,
 		Host:   compilerHost,
 	})
+	if compilerHost.tracked != nil {
+		t.seenFiles = compilerHost.tracked.SeenFiles.ToSlice()
+	}
 	compileTimes.ParseTime = orchestrator.opts.Sys.Now().Sub(parseStart)
 	changesComputeStart := orchestrator.opts.Sys.Now()
 	t.result.program = incremental.NewProgram(program, oldProgram, orchestrator.host, orchestrator.opts.Sys.Now, orchestrator.opts.Testing != nil)
@@ -348,7 +364,7 @@ func (t *BuildTask) handleStatusThatDoesntRequireBuild(orchestrator *Orchestrato
 	return false
 }
 
-func (t *BuildTask) getUpToDateStatus(orchestrator *Orchestrator, configPath tspath.Path) *upToDateStatus {
+func (t *BuildTask) getUpToDateStatus(orchestrator *Orchestrator, configPath tspath.Path, force bool) *upToDateStatus {
 	if t.status != nil {
 		return t.status
 	}
@@ -369,7 +385,7 @@ func (t *BuildTask) getUpToDateStatus(orchestrator *Orchestrator, configPath tsp
 		}
 	}
 
-	if orchestrator.opts.Command.BuildOptions.Force.IsTrue() {
+	if orchestrator.opts.Command.BuildOptions.Force.IsTrue() || force {
 		return &upToDateStatus{kind: upToDateStatusTypeForceBuild}
 	}
 
@@ -854,6 +870,7 @@ func (t *BuildTask) loadOrStoreBuildInfo(orchestrator *Orchestrator, configPath 
 	t.buildInfoEntry = &buildInfoEntry{
 		buildInfo: incremental.NewBuildInfoReader(orchestrator.host).ReadBuildInfo(t.resolved),
 		path:      path,
+		fileName:  buildInfoFileName,
 	}
 	var mTime time.Time
 	if t.buildInfoEntry.buildInfo != nil {
@@ -876,6 +893,7 @@ func (t *BuildTask) onBuildInfoEmit(orchestrator *Orchestrator, buildInfoFileNam
 	t.buildInfoEntry = &buildInfoEntry{
 		buildInfo: buildInfo,
 		path:      orchestrator.toPath(buildInfoFileName),
+		fileName:  buildInfoFileName,
 		mTime:     mTime,
 		dtsTime:   dtsTime,
 	}

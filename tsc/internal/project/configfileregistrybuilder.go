@@ -409,11 +409,16 @@ func (c *configFileRegistryBuilder) DidChangeCustomConfigFileName(logger *loggin
 	return true
 }
 
-func (c *configFileRegistryBuilder) invalidateCache(logger *logging.LogTree) changeFileResult {
+func (c *configFileRegistryBuilder) invalidateCache(logger *logging.LogTree, forceFullReload bool) changeFileResult {
 	var affectedProjects map[tspath.Path]struct{}
 	var affectedFiles map[tspath.Path]struct{}
 
-	logger.Log("Too many files changed; marking all configs for reload")
+	if forceFullReload {
+		logger.Log("Invalidating all config state; marking all configs for full reload")
+		c.invalidateContentMappers()
+	} else {
+		logger.Log("Too many files changed; marking all configs for reload")
+	}
 	c.configFileNames.Range(func(entry *dirty.MapEntry[tspath.Path, *configFileNames]) bool {
 		if affectedFiles == nil {
 			affectedFiles = make(map[tspath.Path]struct{})
@@ -426,7 +431,11 @@ func (c *configFileRegistryBuilder) invalidateCache(logger *logging.LogTree) cha
 	c.configs.Range(func(entry *dirty.SyncMapEntry[tspath.Path, *configFileEntry]) bool {
 		entry.Change(func(entry *configFileEntry) {
 			affectedProjects = core.CopyMapInto(affectedProjects, entry.retainingProjects)
-			if entry.pendingReload != PendingReloadFull {
+			if forceFullReload {
+				// An unrecognized alias may have changed an extended config or mapper
+				// manifest even when this config's own text is unchanged.
+				entry.pendingReload = PendingReloadFull
+			} else if entry.pendingReload != PendingReloadFull {
 				text, ok := c.FS().ReadFile(entry.fileName)
 				if !ok || entry.commandLine == nil || text != entry.commandLine.ConfigFile.SourceFile.Text() {
 					entry.pendingReload = PendingReloadFull
@@ -508,12 +517,16 @@ func (c *configFileRegistryBuilder) DidChangeFiles(summary FileChangeSummary, lo
 		c.didCloseFile(path)
 	}
 
+	if summary.InvalidateAll {
+		return c.invalidateCache(logger, true /*forceFullReload*/)
+	}
+
 	// Handle changes to stored config files and their content mapper package manifests.
 	logger.Log("Checking if any changed files are configuration files")
 	for path := range createdOrChangedOrDeletedFiles {
 		if entry, ok := c.configs.Load(path); ok {
 			if hasExcessiveChanges {
-				return c.invalidateCache(logger)
+				return c.invalidateCache(logger, false /*forceFullReload*/)
 			}
 
 			affectedProjects = core.CopyMapInto(affectedProjects, c.handleConfigChange(entry, logger))
@@ -542,7 +555,7 @@ func (c *configFileRegistryBuilder) DidChangeFiles(summary FileChangeSummary, lo
 	// Handle created/deleted files named "tsconfig.json" or "jsconfig.json"
 	for path := range createdOrDeletedConfigFiles {
 		if hasExcessiveChanges {
-			return c.invalidateCache(logger)
+			return c.invalidateCache(logger, false /*forceFullReload*/)
 		}
 		directoryPath := path.GetDirectoryPath()
 		c.configFileNames.Range(func(entry *dirty.MapEntry[tspath.Path, *configFileNames]) bool {
@@ -587,7 +600,7 @@ func (c *configFileRegistryBuilder) DidChangeFiles(summary FileChangeSummary, lo
 			return !shouldInvalidateCache
 		})
 		if shouldInvalidateCache {
-			return c.invalidateCache(logger)
+			return c.invalidateCache(logger, false /*forceFullReload*/)
 		}
 	}
 
@@ -625,7 +638,7 @@ func (c *configFileRegistryBuilder) DidChangeFiles(summary FileChangeSummary, lo
 			return !shouldInvalidateCache
 		})
 		if shouldInvalidateCache {
-			return c.invalidateCache(logger)
+			return c.invalidateCache(logger, false /*forceFullReload*/)
 		}
 	}
 
@@ -727,6 +740,7 @@ func (c *configFileRegistryBuilder) getConfigFileNameForFile(fileName string, pa
 	configName := c.computeConfigFileName(fileName, false, logger)
 	if c.isOpenFile(path) {
 		c.configFileNames.Add(path, &configFileNames{
+			fileName:              fileName,
 			nearestConfigFileName: configName,
 		})
 	}

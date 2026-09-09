@@ -691,7 +691,7 @@ func TestSession(t *testing.T) {
 					programBefore := lsBefore.GetProgram()
 					session.WaitForBackgroundTasks()
 
-					assert.Check(t, utils.WatchesFile("/home/projects/ts/x.ts"))
+					assert.Check(t, utils.WatchesFile("/home/projects/TS/x.ts"))
 
 					err = utils.FS().WriteFile("/home/projects/TS/x.ts", `export const x = 2;`)
 					assert.NilError(t, err)
