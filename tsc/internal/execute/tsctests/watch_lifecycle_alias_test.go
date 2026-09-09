@@ -126,7 +126,6 @@ func TestWatchRetargetConfigErrorRecovery(t *testing.T) {
 			assert.Assert(t, strings.Contains(base.currentWrite.String(), "Found 0 errors"), base.currentWrite.String())
 		})
 	}
-
 }
 
 func TestWatchRetargetConfigReadFailureRecovery(t *testing.T) {

@@ -17,6 +17,9 @@ func (s *Session) APIUpdate(ctx context.Context, apiFileChanges FileChangeSummar
 	s.cancelScheduledSnapshotUpdate()
 
 	fileChanges, overlays, ataChanges, _ := s.flushChanges(ctx)
+	snapshot := s.Snapshot()
+	fileChanges = snapshot.prepareWatchSummary(fileChanges)
+	apiFileChanges = snapshot.prepareWatchSummary(apiFileChanges)
 	mergeFileChangeSummary(&fileChanges, apiFileChanges)
 
 	newSnapshot := s.updateSnapshotRef(ctx, overlays, SnapshotChange{

@@ -424,16 +424,7 @@ func (s *Session) DidChangeWatchedFiles(ctx context.Context, changes []*lsproto.
 	snapshot := s.Snapshot()
 	configFileRegistry := snapshot.ConfigFileRegistry
 	contentMapperExtensions, contentMapperWatchedFiles := snapshot.contentMapperWatchState()
-	var expandedChanges []*lsproto.FileEvent
 	for _, change := range changes {
-		for _, name := range snapshot.watchNames(change.Uri.FileName()) {
-			expandedChanges = append(expandedChanges, &lsproto.FileEvent{
-				Uri:  lsconv.FileNameToDocumentURI(name),
-				Type: change.Type,
-			})
-		}
-	}
-	for _, change := range expandedChanges {
 		var kind FileChangeKind
 		switch change.Type {
 		case lsproto.FileChangeTypeCreated:
@@ -449,19 +440,23 @@ func (s *Session) DidChangeWatchedFiles(ctx context.Context, changes []*lsproto.
 			Kind: kind,
 			URI:  change.Uri,
 		})
+	}
+	preview, _, invalidateAll := snapshot.prepareWatchNotifications(fileChanges)
+	for _, change := range preview {
+		kind := change.Kind
 
-		if snapshot.watchAliasesError != nil {
+		if invalidateAll {
 			// A failed index cannot rule out aliases of source or config files.
 			hasRelevantChange = true
 			hasConfigChange = true
 		}
 
-		if !hasConfigChange && configFileRegistry.isTracked(s.toPath(change.Uri.FileName())) {
+		if !hasConfigChange && configFileRegistry.isTracked(s.toPath(change.URI.FileName())) {
 			hasConfigChange = true
 		}
 
 		if !hasRelevantChange {
-			fileName := change.Uri.FileName()
+			fileName := change.URI.FileName()
 			path := s.toPath(fileName).RemoveTrailingDirectorySeparator()
 			pathStr := string(path)
 			if contentMapperWatchedFiles.Has(path) {
@@ -476,10 +471,7 @@ func (s *Session) DidChangeWatchedFiles(ctx context.Context, changes []*lsproto.
 				if kind != FileChangeKindWatchDelete {
 					hasRelevantChange = s.fs.fs.DirectoryExists(fileName)
 				} else {
-					s.snapshotMu.RLock()
-					currentSnapshot := s.snapshot
-					s.snapshotMu.RUnlock()
-					if _, ok := currentSnapshot.fs.diskDirectories[path]; ok || isNodeModulesPath(path) {
+					if _, ok := snapshot.fs.diskDirectories[path]; ok || isNodeModulesPath(path) {
 						hasRelevantChange = true
 					}
 				}
@@ -512,6 +504,8 @@ func (s *Session) DidChangeWatchedFiles(ctx context.Context, changes []*lsproto.
 }
 
 func (s *Session) DidChangeCompilerOptionsForInferredProjects(ctx context.Context, options *core.CompilerOptions) {
+	s.snapshotUpdateMu.Lock()
+	defer s.snapshotUpdateMu.Unlock()
 	s.compilerOptionsForInferredProjects = options
 	s.UpdateSnapshot(ctx, s.fs.Overlays(), SnapshotChange{
 		reason:                             UpdateReasonDidChangeCompilerOptionsForInferredProjects,
@@ -1321,6 +1315,8 @@ func (s *Session) tryAdoptSnapshotChangeInBackground(baseSnapshot, newSnapshot *
 // session has moved on, the snapshot is discarded; the next request needing
 // auto-imports will redo the work on the latest snapshot.
 func (s *Session) adoptSnapshotChange(baseSnapshot, newSnapshot *Snapshot) {
+	s.snapshotUpdateMu.Lock()
+	defer s.snapshotUpdateMu.Unlock()
 	s.snapshotMu.Lock()
 	oldSnapshot := s.snapshot
 	if oldSnapshot == baseSnapshot {
@@ -1356,6 +1352,7 @@ func (s *Session) adoptSnapshotChange(baseSnapshot, newSnapshot *Snapshot) {
 	}
 }
 
+// The caller holds snapshotUpdateMu from notification preparation through publication.
 func (s *Session) UpdateSnapshot(ctx context.Context, overlays map[tspath.Path]*Overlay, change SnapshotChange) {
 	s.updateSnapshot(ctx, overlays, change, false)
 }
@@ -1726,7 +1723,10 @@ func (s *Session) flushChangesLocked(ctx context.Context) (FileChangeSummary, ma
 	}
 
 	start := time.Now()
-	changes, overlays := s.fs.processChanges(s.pendingFileChanges)
+	notifications, prepared, invalidateAll := s.Snapshot().prepareWatchNotifications(s.pendingFileChanges)
+	changes, overlays := s.fs.processChanges(notifications)
+	changes.preparedWatchChanges = prepared
+	changes.InvalidateAll = invalidateAll
 	if s.options.LoggingEnabled {
 		s.logger.Log(fmt.Sprintf("Processed %d file changes in %v", len(s.pendingFileChanges), time.Since(start)))
 	}

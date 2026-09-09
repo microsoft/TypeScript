@@ -332,6 +332,7 @@ func (s *Snapshot) processFileChanges(
 		fileChanges = fs.markDirtyFiles(fileChanges)
 		fileChanges = fs.convertOpenAndCloseToChanges(fileChanges)
 	}
+	fileChanges.preparedWatchChanges = nil
 	return fileChanges
 }
 

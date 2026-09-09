@@ -233,6 +233,12 @@ func (s *Snapshot) expandWatchAliases(change FileChangeSummary) FileChangeSummar
 }
 
 func (s *Snapshot) matchWatchChanges(change FileChangeSummary) (FileChangeSummary, []string) {
+	if prepared := change.preparedWatchChanges; prepared != nil {
+		if prepared.snapshotID != s.id {
+			panic("watch changes must be prepared for the snapshot being cloned")
+		}
+		return change, prepared.affected
+	}
 	if s.watchAliasesError != nil && change.Created.Len()+change.Changed.Len()+change.Deleted.Len() != 0 {
 		change.InvalidateAll = true
 	}
