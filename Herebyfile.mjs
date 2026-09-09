@@ -846,7 +846,7 @@ ${entries.join("\n")}
 // A generic function call (unlike a constant conversion) forces Go to evaluate the conversion at
 // runtime, truncating uint32-backed flags with a leading bitwise-not the same way JS's 32-bit
 // bitwise operators would, instead of rejecting "constant overflows int32" at compile time.
-func toInt32[T ~int8 | ~int16 | ~int32 | ~int | ~uint8 | ~uint16 | ~uint32](v T) int32 {
+func toInt32[T ~int8 | ~int16 | ~int32 | ~int | ~uint8 | ~uint16 | ~uint32 | ~uint64](v T) int32 {
 \treturn int32(v)
 }
 
