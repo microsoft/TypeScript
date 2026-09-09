@@ -231,7 +231,7 @@
                     "id": "typescript.native-preview.contentMapperDiagnosticDirectives",
                     "name": "%native-preview.contentMapperDiagnosticDirectives.name%",
                     "icon": "$(list-tree)",
-                    "when": "typescript.native-preview.serverRunning && config.js/ts.showDebugInfo"
+                    "when": "typescript.native-preview.serverRunning && typescript.native-preview.contentMapperInspectorEnabled"
                 }
             ]
         },
@@ -281,7 +281,7 @@
             {
                 "command": "typescript.native-preview.showContentMapperVirtualDocuments",
                 "title": "%native-preview.showContentMapperVirtualDocuments.title%",
-                "enablement": "typescript.native-preview.serverRunning && config.js/ts.showDebugInfo && typescript.native-preview.activeEditorIsContentMapped",
+                "enablement": "typescript.native-preview.serverRunning && typescript.native-preview.activeEditorIsContentMapped",
                 "category": "TypeScript"
             },
             {
@@ -358,7 +358,7 @@
                 },
                 {
                     "command": "typescript.native-preview.showContentMapperVirtualDocuments",
-                    "when": "typescript.native-preview.serverRunning && config.js/ts.showDebugInfo && typescript.native-preview.activeEditorIsContentMapped"
+                    "when": "typescript.native-preview.serverRunning && typescript.native-preview.activeEditorIsContentMapped"
                 },
                 {
                     "command": "typescript.native-preview.sortImports",
@@ -379,7 +379,7 @@
             "editor/title/context": [
                 {
                     "command": "typescript.native-preview.showContentMapperVirtualDocuments",
-                    "when": "typescript.native-preview.serverRunning && config.js/ts.showDebugInfo && typescript.native-preview.activeEditorIsContentMapped",
+                    "when": "typescript.native-preview.serverRunning && typescript.native-preview.activeEditorIsContentMapped",
                     "group": "navigation@1.5"
                 }
             ]

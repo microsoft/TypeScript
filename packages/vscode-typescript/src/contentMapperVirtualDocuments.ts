@@ -14,6 +14,7 @@ import { readNativePreviewConfig } from "./util";
 
 const virtualDocumentScheme = "typescript-content-mapper";
 const activeEditorIsContentMappedContext = "typescript.native-preview.activeEditorIsContentMapped";
+const contentMapperInspectorEnabledContext = "typescript.native-preview.contentMapperInspectorEnabled";
 export const showVirtualDocumentsCommand = "typescript.native-preview.showContentMapperVirtualDocuments";
 
 export interface ContentMapperVirtualFilesProvider {
@@ -130,6 +131,7 @@ class ContentMapperVirtualDocumentProvider implements vscode.FileSystemProvider,
                     event.affectsConfiguration("js/ts.showDebugInfo")
                     || event.affectsConfiguration("typescript.native-preview.showDebugInfo")
                 ) {
+                    this.updateInspectorEnabledContext();
                     this.updateActiveEditorContext(vscode.window.activeTextEditor);
                 }
             }),
@@ -143,6 +145,7 @@ class ContentMapperVirtualDocumentProvider implements vscode.FileSystemProvider,
                 this.updateActiveEditorContext(vscode.window.activeTextEditor);
             }),
         ];
+        this.updateInspectorEnabledContext();
         this.updateActiveEditorContext(vscode.window.activeTextEditor);
     }
 
@@ -195,6 +198,7 @@ class ContentMapperVirtualDocumentProvider implements vscode.FileSystemProvider,
     dispose(): void {
         this.activeEditorContextVersion++;
         void vscode.commands.executeCommand("setContext", activeEditorIsContentMappedContext, false);
+        void vscode.commands.executeCommand("setContext", contentMapperInspectorEnabledContext, false);
         for (const timer of this.refreshTimers.values()) {
             clearTimeout(timer);
         }
@@ -298,6 +302,14 @@ class ContentMapperVirtualDocumentProvider implements vscode.FileSystemProvider,
 
     private loadOutputs(sourceUri: vscode.Uri): Promise<readonly MappedOutput[]> {
         return this.provider.getContentMapperVirtualFiles(sourceUri);
+    }
+
+    private updateInspectorEnabledContext(): void {
+        void vscode.commands.executeCommand(
+            "setContext",
+            contentMapperInspectorEnabledContext,
+            readNativePreviewConfig("showDebugInfo", false),
+        );
     }
 
     private updateActiveEditorContext(editor: vscode.TextEditor | undefined): void {
