@@ -41322,7 +41322,7 @@ interface Window extends EventTarget, AnimationFrameProvider, GlobalEventHandler
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/opener)
      */
-    opener: any;
+    opener: WindowProxy | null;
     /**
      * Returns the **`orientation`** in degrees (in 90-degree increments) of the viewport relative to the device's natural orientation.
      * @deprecated
@@ -43507,7 +43507,7 @@ declare var onorientationchange: ((this: Window, ev: Event) => any) | null;
  *
  * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/opener)
  */
-declare var opener: any;
+declare var opener: WindowProxy | null;
 /**
  * Returns the **`orientation`** in degrees (in 90-degree increments) of the viewport relative to the device's natural orientation.
  * @deprecated
