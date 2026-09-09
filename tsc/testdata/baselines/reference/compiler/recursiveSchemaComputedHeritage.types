@@ -1,0 +1,196 @@
+//// [tests/cases/compiler/recursiveSchemaComputedHeritage.ts] ////
+
+=== recursiveSchemaComputedHeritage.ts ===
+interface Internals<O> { output: O; }
+>output : O
+
+interface Base<O = unknown, I extends Internals<O> = Internals<O>> { _zod: I; }
+>_zod : I
+
+interface Derived<T extends Internals<unknown>> extends Base<T["output"], T> {}
+
+interface StringInternals extends Internals<string> {}
+interface StringSchema extends Derived<StringInternals> {}
+interface ArrayInternals<T extends Base> extends Internals<T["_zod"]["output"][]> {}
+interface UnionInternals<T extends readonly Base[]> extends Internals<T[number]["_zod"]["output"]> {}
+
+interface LazyArray<T extends Base> extends Base<any, ArrayInternals<T>> {}
+interface LazyUnion<T extends readonly Base[]> extends Base<any, UnionInternals<T>> {}
+interface LazyJSON extends LazyUnion<[StringSchema, LazyArray<LazyJSON>]> {}
+declare const a: LazyJSON["_zod"]["output"];
+>a : string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | any[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[]
+
+interface DerivedArray<T extends Base> extends Derived<ArrayInternals<T>> {}
+interface DerivedUnion<T extends readonly Base[]> extends Derived<UnionInternals<T>> {}
+interface DerivedJSON extends DerivedUnion<[StringSchema, DerivedArray<DerivedJSON>]> {}
+declare const b: DerivedJSON["_zod"]["output"];
+>b : string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | any[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[]
+
+const lazy: typeof a = ["", [""]];
+>lazy : string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | any[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[]
+>a : string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | any[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[]
+>["", [""]] : (string | string[])[]
+>"" : ""
+>[""] : string[]
+>"" : ""
+
+const derived: typeof b = ["", [""]];
+>derived : string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | any[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[]
+>b : string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | any[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[]
+>["", [""]] : (string | string[])[]
+>"" : ""
+>[""] : string[]
+>"" : ""
+
+const invalidLazy: typeof a = 42;
+>invalidLazy : string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | any[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[]
+>a : string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | any[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[]
+>42 : 42
+
+const invalidDerived: typeof b = 42;
+>invalidDerived : string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | any[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[]
+>b : string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | any[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[]
+>42 : 42
+
+const invalidNestedLazy: typeof a = [42];
+>invalidNestedLazy : string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | any[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[]
+>a : string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | any[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[]
+>[42] : number[]
+>42 : 42
+
+const invalidNestedDerived: typeof b = [42];
+>invalidNestedDerived : string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | any[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[]
+>b : string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | any[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[]
+>[42] : number[]
+>42 : 42
+
+declare const lazyElement: Extract<typeof a, unknown[]>[number];
+>lazyElement : string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | any[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[]
+>a : string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | any[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[]
+
+declare const derivedElement: Extract<typeof b, unknown[]>[number];
+>derivedElement : string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | any[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[]
+>b : string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | any[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[]
+
+const lazyElementToValue: typeof a = lazyElement;
+>lazyElementToValue : string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | any[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[]
+>a : string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | any[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[]
+>lazyElement : string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | any[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[]
+
+const lazyValueToElement: typeof lazyElement = a;
+>lazyValueToElement : string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | any[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[]
+>lazyElement : string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | any[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[]
+>a : string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | any[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[]
+
+const derivedElementToValue: typeof b = derivedElement;
+>derivedElementToValue : string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | any[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[]
+>b : string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | any[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[]
+>derivedElement : string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | any[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[]
+
+const derivedValueToElement: typeof derivedElement = b;
+>derivedValueToElement : string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | any[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[]
+>derivedElement : string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | any[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[]
+>b : string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | any[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[]
+
+interface NamedArrayInternals<T extends Base> extends Internals<Array<T["_zod"]["output"]>> {}
+interface NamedArray<T extends Base> extends Derived<NamedArrayInternals<T>> {}
+interface NamedJSON extends LazyUnion<[StringSchema, NamedArray<NamedJSON>]> {}
+declare const named: NamedJSON["_zod"]["output"];
+>named : string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | any[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[]
+
+const validNamed: typeof named = ["", [""]];
+>validNamed : string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | any[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[]
+>named : string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | any[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[]
+>["", [""]] : (string | string[])[]
+>"" : ""
+>[""] : string[]
+>"" : ""
+
+const invalidNamed: typeof named = [42];
+>invalidNamed : string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | any[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[]
+>named : string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | any[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[]
+>[42] : number[]
+>42 : 42
+
+interface ReadonlyArrayInternals<T extends Base> extends Internals<ReadonlyArray<T["_zod"]["output"]>> {}
+interface ReadonlySchemaArray<T extends Base> extends Derived<ReadonlyArrayInternals<T>> {}
+interface ReadonlyJSON extends LazyUnion<[StringSchema, ReadonlySchemaArray<ReadonlyJSON>]> {}
+declare const readonlyJSON: ReadonlyJSON["_zod"]["output"];
+>readonlyJSON : string | readonly (string | readonly (string | readonly (string | readonly (string | readonly (string | readonly (string | readonly (string | readonly (string | readonly (string | readonly (string | readonly (string | readonly (string | readonly (string | readonly (string | readonly (string | readonly (string | readonly (string | readonly (string | readonly (string | readonly any[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[]
+
+const validReadonly: typeof readonlyJSON = ["", [""]];
+>validReadonly : string | readonly (string | readonly (string | readonly (string | readonly (string | readonly (string | readonly (string | readonly (string | readonly (string | readonly (string | readonly (string | readonly (string | readonly (string | readonly (string | readonly (string | readonly (string | readonly (string | readonly (string | readonly (string | readonly (string | readonly any[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[]
+>readonlyJSON : string | readonly (string | readonly (string | readonly (string | readonly (string | readonly (string | readonly (string | readonly (string | readonly (string | readonly (string | readonly (string | readonly (string | readonly (string | readonly (string | readonly (string | readonly (string | readonly (string | readonly (string | readonly (string | readonly (string | readonly any[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[]
+>["", [""]] : (string | string[])[]
+>"" : ""
+>[""] : string[]
+>"" : ""
+
+const invalidReadonly: typeof readonlyJSON = [42];
+>invalidReadonly : string | readonly (string | readonly (string | readonly (string | readonly (string | readonly (string | readonly (string | readonly (string | readonly (string | readonly (string | readonly (string | readonly (string | readonly (string | readonly (string | readonly (string | readonly (string | readonly (string | readonly (string | readonly (string | readonly (string | readonly any[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[]
+>readonlyJSON : string | readonly (string | readonly (string | readonly (string | readonly (string | readonly (string | readonly (string | readonly (string | readonly (string | readonly (string | readonly (string | readonly (string | readonly (string | readonly (string | readonly (string | readonly (string | readonly (string | readonly (string | readonly (string | readonly (string | readonly any[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[]
+>[42] : number[]
+>42 : 42
+
+interface NullableArrayInternals<T extends Base> extends Internals<(T["_zod"]["output"] | null)[]> {}
+interface NullableArray<T extends Base> extends Derived<NullableArrayInternals<T>> {}
+interface NullableJSON extends LazyUnion<[StringSchema, NullableArray<NullableJSON>]> {}
+declare const nullable: NullableJSON["_zod"]["output"];
+>nullable : string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | any[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[]
+
+const validNullable: typeof nullable = [null, [""]];
+>validNullable : string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | any[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[]
+>nullable : string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | any[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[]
+>[null, [""]] : (string[] | null)[]
+>[""] : string[]
+>"" : ""
+
+const invalidNullable: typeof nullable = [42];
+>invalidNullable : string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | any[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[]
+>nullable : string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | any[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[] | null)[]
+>[42] : number[]
+>42 : 42
+
+type Output<T extends Base> = T["_zod"]["output"];
+>Output : Output<T>
+
+interface AliasedArrayInternals<T extends Base> extends Internals<Output<T>[]> {}
+interface AliasedArray<T extends Base> extends Derived<AliasedArrayInternals<T>> {}
+interface AliasedJSON extends LazyUnion<[StringSchema, AliasedArray<AliasedJSON>]> {}
+declare const aliased: AliasedJSON["_zod"]["output"];
+>aliased : string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | any[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[]
+
+const validAliased: typeof aliased = ["", [""]];
+>validAliased : string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | any[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[]
+>aliased : string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | any[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[]
+>["", [""]] : (string | string[])[]
+>"" : ""
+>[""] : string[]
+>"" : ""
+
+const invalidAliased: typeof aliased = [42];
+>invalidAliased : string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | any[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[]
+>aliased : string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | (string | any[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[])[]
+>[42] : number[]
+>42 : 42
+
+interface TupleInternals<T extends Base> extends Internals<[value: T["_zod"]["output"]]> {}
+interface SchemaTuple<T extends Base> extends Derived<TupleInternals<T>> {}
+interface TupleJSON extends LazyUnion<[StringSchema, SchemaTuple<TupleJSON>]> {}
+declare const tuple: TupleJSON["_zod"]["output"];
+>tuple : string | [value: string | [value: string | [value: string | [value: string | [value: string | [value: string | [value: string | [value: string | [value: string | [value: string | [value: string | [value: string | [value: string | [value: string | [value: string | [value: string | [value: string | [value: string | [value: string | [value: any]]]]]]]]]]]]]]]]]]]]
+
+const validTuple: typeof tuple = [[[""]]];
+>validTuple : string | [value: string | [value: string | [value: string | [value: string | [value: string | [value: string | [value: string | [value: string | [value: string | [value: string | [value: string | [value: string | [value: string | [value: string | [value: string | [value: string | [value: string | [value: string | [value: string | [value: any]]]]]]]]]]]]]]]]]]]]
+>tuple : string | [value: string | [value: string | [value: string | [value: string | [value: string | [value: string | [value: string | [value: string | [value: string | [value: string | [value: string | [value: string | [value: string | [value: string | [value: string | [value: string | [value: string | [value: string | [value: string | [value: any]]]]]]]]]]]]]]]]]]]]
+>[[[""]]] : [[[string]]]
+>[[""]] : [[string]]
+>[""] : [string]
+>"" : ""
+
+const invalidTuple: typeof tuple = [42];
+>invalidTuple : string | [value: string | [value: string | [value: string | [value: string | [value: string | [value: string | [value: string | [value: string | [value: string | [value: string | [value: string | [value: string | [value: string | [value: string | [value: string | [value: string | [value: string | [value: string | [value: string | [value: any]]]]]]]]]]]]]]]]]]]]
+>tuple : string | [value: string | [value: string | [value: string | [value: string | [value: string | [value: string | [value: string | [value: string | [value: string | [value: string | [value: string | [value: string | [value: string | [value: string | [value: string | [value: string | [value: string | [value: string | [value: string | [value: any]]]]]]]]]]]]]]]]]]]]
+>[42] : [number]
+>42 : 42
+

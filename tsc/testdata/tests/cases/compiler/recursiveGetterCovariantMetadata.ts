@@ -94,3 +94,27 @@ export function checkOutput() {
     // @ts-expect-error Every children property must contain another recursive object.
     const invalid: NestedOutput = { children: { children: { children: 123 } } };
 }
+
+interface ExtendedStandardSchemaProps<Input, Output> extends StandardSchemaProps<Input, Output> {
+    readonly jsonSchema: { input(): object; output(): object };
+}
+type ExtendedStandardSchema<T> = ExtendedStandardSchemaProps<input<T>, output<T>>;
+interface ExtendedObject<Shape extends $ZodShape> extends ZodMiniObject<Shape> {
+    "~standard": ExtendedStandardSchema<this>;
+}
+declare function extendedObject<T extends $ZodShape>(shape: T): ExtendedObject<Writeable<T>>;
+
+export const extended = extendedObject({
+    get children() { return extendedObject({ children: extended }); },
+});
+extended.shape.children;
+
+export function checkExtendedOutput() {
+    type ExtendedOutput = output<typeof extended>;
+    const value = null! as ExtendedOutput;
+    const deep: ExtendedOutput = value.children.children.children.children;
+    type Deep = typeof value.children.children.children.children;
+    type DeepIsNotAny = Assert<IsAny<Deep> extends false ? true : false>;
+    // @ts-expect-error Recursive output objects have no "missing" property.
+    value.children.children.children.children.missing;
+}

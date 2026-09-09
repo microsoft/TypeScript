@@ -1,0 +1,106 @@
+deferredReferenceIdentity.ts(17,7): error TS2322: Type 'Wrapped<StringValue>' is not assignable to type 'Wrapped<NumberValue>'.
+  Type 'string' is not assignable to type 'number'.
+deferredReferenceIdentity.ts(18,7): error TS2322: Type 'Derived<StringValue>' is not assignable to type 'Wrapped<NumberValue>'.
+  Types of property 'value' are incompatible.
+    Type 'string' is not assignable to type 'number'.
+deferredReferenceIdentity.ts(19,7): error TS2322: Type 'Wrapped<NumberValue>' is not assignable to type 'Derived<NumberValue>'.
+  Property 'extra' is missing in type 'Box<number>' but required in type 'DerivedBox<number>'.
+deferredReferenceIdentity.ts(20,7): error TS2322: Type 'Wrong<NumberValue>' is not assignable to type 'Derived<NumberValue>'.
+  Types of property 'extra' are incompatible.
+    Type 'false' is not assignable to type 'true'.
+deferredReferenceIdentity.ts(28,7): error TS2322: Type 'Right<Pair>' is not assignable to type 'Left<Pair>'.
+  Type 'string' is not assignable to type 'number'.
+deferredReferenceIdentity.ts(36,7): error TS2322: Type 'NumberField<StringField>' is not assignable to type 'Field<StringField>'.
+  Types of property 'value' are incompatible.
+    Type 'number' is not assignable to type 'string'.
+deferredReferenceIdentity.ts(43,7): error TS2719: Type 'Deferred<number>' is not assignable to type 'Deferred<number>'. Two different types with this name exist, but they are unrelated.
+  Type 'number' is not assignable to type 'string'.
+deferredReferenceIdentity.ts(46,9): error TS2502: 'direct' is referenced directly or indirectly in its own type annotation.
+deferredReferenceIdentity.ts(47,9): error TS2502: 'withIndex' is referenced directly or indirectly in its own type annotation.
+deferredReferenceIdentity.ts(48,9): error TS2502: 'tuple' is referenced directly or indirectly in its own type annotation.
+
+
+==== deferredReferenceIdentity.ts (10 errors) ====
+    interface Box<T> { value: T; }
+    interface DerivedBox<T> extends Box<T> { extra: true; }
+    interface WrongBox<T> { value: T; extra: false; }
+    type Value<T> = T extends { value: unknown } ? T["value"] : never;
+    type Wrapped<T> = Box<Value<T>>;
+    type Derived<T> = DerivedBox<Value<T>>;
+    type Wrong<T> = WrongBox<Value<T>>;
+    interface NumberValue { value: number; }
+    interface StringValue { value: string; }
+    
+    declare function wrapped<T>(): Wrapped<T>;
+    declare function derived<T>(): Derived<T>;
+    declare function wrong<T>(): Wrong<T>;
+    
+    const same: Wrapped<NumberValue> = wrapped<NumberValue>();
+    const inherited: Wrapped<NumberValue> = derived<NumberValue>();
+    const different: Wrapped<NumberValue> = wrapped<StringValue>();
+          ~~~~~~~~~
+!!! error TS2322: Type 'Wrapped<StringValue>' is not assignable to type 'Wrapped<NumberValue>'.
+!!! error TS2322:   Type 'string' is not assignable to type 'number'.
+    const differentInherited: Wrapped<NumberValue> = derived<StringValue>();
+          ~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'Derived<StringValue>' is not assignable to type 'Wrapped<NumberValue>'.
+!!! error TS2322:   Types of property 'value' are incompatible.
+!!! error TS2322:     Type 'string' is not assignable to type 'number'.
+    const missing: Derived<NumberValue> = wrapped<NumberValue>();
+          ~~~~~~~
+!!! error TS2322: Type 'Wrapped<NumberValue>' is not assignable to type 'Derived<NumberValue>'.
+!!! error TS2322:   Property 'extra' is missing in type 'Box<number>' but required in type 'DerivedBox<number>'.
+!!! related TS2728 deferredReferenceIdentity.ts:2:42: 'extra' is declared here.
+    const wrongMember: Derived<NumberValue> = wrong<NumberValue>();
+          ~~~~~~~~~~~
+!!! error TS2322: Type 'Wrong<NumberValue>' is not assignable to type 'Derived<NumberValue>'.
+!!! error TS2322:   Types of property 'extra' are incompatible.
+!!! error TS2322:     Type 'false' is not assignable to type 'true'.
+    
+    interface Pair { left: number; right: string; }
+    type Left<T extends Pair> = Box<T["left"]>;
+    type Right<T extends Pair> = Box<T["right"]>;
+    declare function left<T extends Pair>(): Left<T>;
+    declare function right<T extends Pair>(): Right<T>;
+    const sameIndex: Left<Pair> = left<Pair>();
+    const differentIndex: Left<Pair> = right<Pair>();
+          ~~~~~~~~~~~~~~
+!!! error TS2322: Type 'Right<Pair>' is not assignable to type 'Left<Pair>'.
+!!! error TS2322:   Type 'string' is not assignable to type 'number'.
+    
+    interface FieldBox<T extends { field: unknown }> { value: T["field"]; }
+    interface NumberBox<T> { value: number; tag?: T; }
+    interface StringField { field: string; }
+    type Field<T extends { field: unknown }> = FieldBox<T>;
+    type NumberField<T> = NumberBox<T>;
+    declare function numberField<T>(): NumberField<T>;
+    const incompatibleConstraint: Field<StringField> = numberField<StringField>();
+          ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'NumberField<StringField>' is not assignable to type 'Field<StringField>'.
+!!! error TS2322:   Types of property 'value' are incompatible.
+!!! error TS2322:     Type 'number' is not assignable to type 'string'.
+    
+    function outer<T>(value: T) {
+        interface Inner<U> { outer: T; inner: U; }
+        type Deferred<U> = Inner<U>;
+        return null! as Deferred<number>;
+    }
+    const differentOuter: ReturnType<typeof outer<string>> = outer(123);
+          ~~~~~~~~~~~~~~
+!!! error TS2719: Type 'Deferred<number>' is not assignable to type 'Deferred<number>'. Two different types with this name exist, but they are unrelated.
+!!! error TS2719:   Type 'number' is not assignable to type 'string'.
+    
+    function annotationCycles<T extends { value: unknown }>() {
+        let direct: Array<typeof direct>;
+            ~~~~~~
+!!! error TS2502: 'direct' is referenced directly or indirectly in its own type annotation.
+        let withIndex: Array<T["value"] | typeof withIndex>;
+            ~~~~~~~~~
+!!! error TS2502: 'withIndex' is referenced directly or indirectly in its own type annotation.
+        let tuple: [typeof tuple, T["value"]];
+            ~~~~~
+!!! error TS2502: 'tuple' is referenced directly or indirectly in its own type annotation.
+    }
+    
+    export {};
+    

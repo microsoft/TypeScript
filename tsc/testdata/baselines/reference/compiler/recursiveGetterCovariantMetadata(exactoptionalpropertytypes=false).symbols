@@ -484,3 +484,96 @@ export function checkOutput() {
 >children : Symbol(children, Decl(recursiveGetterCovariantMetadata.ts, 89, 59))
 }
 
+interface ExtendedStandardSchemaProps<Input, Output> extends StandardSchemaProps<Input, Output> {
+>ExtendedStandardSchemaProps : Symbol(ExtendedStandardSchemaProps, Decl(recursiveGetterCovariantMetadata.ts, 90, 1))
+>Input : Symbol(Input, Decl(recursiveGetterCovariantMetadata.ts, 92, 38))
+>Output : Symbol(Output, Decl(recursiveGetterCovariantMetadata.ts, 92, 44))
+>StandardSchemaProps : Symbol(StandardSchemaProps, Decl(recursiveGetterCovariantMetadata.ts, 14, 1))
+>Input : Symbol(Input, Decl(recursiveGetterCovariantMetadata.ts, 92, 38))
+>Output : Symbol(Output, Decl(recursiveGetterCovariantMetadata.ts, 92, 44))
+
+    readonly jsonSchema: { input(): object; output(): object };
+>jsonSchema : Symbol(ExtendedStandardSchemaProps.jsonSchema, Decl(recursiveGetterCovariantMetadata.ts, 92, 97))
+>input : Symbol(input, Decl(recursiveGetterCovariantMetadata.ts, 93, 26))
+>output : Symbol(output, Decl(recursiveGetterCovariantMetadata.ts, 93, 43))
+}
+type ExtendedStandardSchema<T> = ExtendedStandardSchemaProps<input<T>, output<T>>;
+>ExtendedStandardSchema : Symbol(ExtendedStandardSchema, Decl(recursiveGetterCovariantMetadata.ts, 94, 1))
+>T : Symbol(T, Decl(recursiveGetterCovariantMetadata.ts, 95, 28))
+>ExtendedStandardSchemaProps : Symbol(ExtendedStandardSchemaProps, Decl(recursiveGetterCovariantMetadata.ts, 90, 1))
+>input : Symbol(input, Decl(recursiveGetterCovariantMetadata.ts, 0, 0))
+>T : Symbol(T, Decl(recursiveGetterCovariantMetadata.ts, 95, 28))
+>output : Symbol(output, Decl(recursiveGetterCovariantMetadata.ts, 0, 82))
+>T : Symbol(T, Decl(recursiveGetterCovariantMetadata.ts, 95, 28))
+
+interface ExtendedObject<Shape extends $ZodShape> extends ZodMiniObject<Shape> {
+>ExtendedObject : Symbol(ExtendedObject, Decl(recursiveGetterCovariantMetadata.ts, 95, 82))
+>Shape : Symbol(Shape, Decl(recursiveGetterCovariantMetadata.ts, 96, 25))
+>$ZodShape : Symbol($ZodShape, Decl(recursiveGetterCovariantMetadata.ts, 36, 1))
+>ZodMiniObject : Symbol(ZodMiniObject, Decl(recursiveGetterCovariantMetadata.ts, 63, 69))
+>Shape : Symbol(Shape, Decl(recursiveGetterCovariantMetadata.ts, 96, 25))
+
+    "~standard": ExtendedStandardSchema<this>;
+>"~standard" : Symbol(ExtendedObject["~standard"], Decl(recursiveGetterCovariantMetadata.ts, 96, 80))
+>ExtendedStandardSchema : Symbol(ExtendedStandardSchema, Decl(recursiveGetterCovariantMetadata.ts, 94, 1))
+}
+declare function extendedObject<T extends $ZodShape>(shape: T): ExtendedObject<Writeable<T>>;
+>extendedObject : Symbol(extendedObject, Decl(recursiveGetterCovariantMetadata.ts, 98, 1))
+>T : Symbol(T, Decl(recursiveGetterCovariantMetadata.ts, 99, 32))
+>$ZodShape : Symbol($ZodShape, Decl(recursiveGetterCovariantMetadata.ts, 36, 1))
+>shape : Symbol(shape, Decl(recursiveGetterCovariantMetadata.ts, 99, 53))
+>T : Symbol(T, Decl(recursiveGetterCovariantMetadata.ts, 99, 32))
+>ExtendedObject : Symbol(ExtendedObject, Decl(recursiveGetterCovariantMetadata.ts, 95, 82))
+>Writeable : Symbol(Writeable, Decl(recursiveGetterCovariantMetadata.ts, 1, 85))
+>T : Symbol(T, Decl(recursiveGetterCovariantMetadata.ts, 99, 32))
+
+export const extended = extendedObject({
+>extended : Symbol(extended, Decl(recursiveGetterCovariantMetadata.ts, 101, 12))
+>extendedObject : Symbol(extendedObject, Decl(recursiveGetterCovariantMetadata.ts, 98, 1))
+
+    get children() { return extendedObject({ children: extended }); },
+>children : Symbol(children, Decl(recursiveGetterCovariantMetadata.ts, 101, 40))
+>extendedObject : Symbol(extendedObject, Decl(recursiveGetterCovariantMetadata.ts, 98, 1))
+>children : Symbol(children, Decl(recursiveGetterCovariantMetadata.ts, 102, 44))
+>extended : Symbol(extended, Decl(recursiveGetterCovariantMetadata.ts, 101, 12))
+
+});
+extended.shape.children;
+>extended.shape.children : Symbol(children, Decl(recursiveGetterCovariantMetadata.ts, 101, 40))
+>extended.shape : Symbol(ZodMiniObject.shape, Decl(recursiveGetterCovariantMetadata.ts, 65, 98))
+>extended : Symbol(extended, Decl(recursiveGetterCovariantMetadata.ts, 101, 12))
+>shape : Symbol(ZodMiniObject.shape, Decl(recursiveGetterCovariantMetadata.ts, 65, 98))
+>children : Symbol(children, Decl(recursiveGetterCovariantMetadata.ts, 101, 40))
+
+export function checkExtendedOutput() {
+>checkExtendedOutput : Symbol(checkExtendedOutput, Decl(recursiveGetterCovariantMetadata.ts, 104, 24))
+
+    type ExtendedOutput = output<typeof extended>;
+>ExtendedOutput : Symbol(ExtendedOutput, Decl(recursiveGetterCovariantMetadata.ts, 106, 39))
+>output : Symbol(output, Decl(recursiveGetterCovariantMetadata.ts, 0, 82))
+>extended : Symbol(extended, Decl(recursiveGetterCovariantMetadata.ts, 101, 12))
+
+    const value = null! as ExtendedOutput;
+>value : Symbol(value, Decl(recursiveGetterCovariantMetadata.ts, 108, 9))
+>ExtendedOutput : Symbol(ExtendedOutput, Decl(recursiveGetterCovariantMetadata.ts, 106, 39))
+
+    const deep: ExtendedOutput = value.children.children.children.children;
+>deep : Symbol(deep, Decl(recursiveGetterCovariantMetadata.ts, 109, 9))
+>ExtendedOutput : Symbol(ExtendedOutput, Decl(recursiveGetterCovariantMetadata.ts, 106, 39))
+>value : Symbol(value, Decl(recursiveGetterCovariantMetadata.ts, 108, 9))
+
+    type Deep = typeof value.children.children.children.children;
+>Deep : Symbol(Deep, Decl(recursiveGetterCovariantMetadata.ts, 109, 75))
+>value : Symbol(value, Decl(recursiveGetterCovariantMetadata.ts, 108, 9))
+
+    type DeepIsNotAny = Assert<IsAny<Deep> extends false ? true : false>;
+>DeepIsNotAny : Symbol(DeepIsNotAny, Decl(recursiveGetterCovariantMetadata.ts, 110, 65))
+>Assert : Symbol(Assert, Decl(recursiveGetterCovariantMetadata.ts, 75, 22))
+>IsAny : Symbol(IsAny, Decl(recursiveGetterCovariantMetadata.ts, 3, 49))
+>Deep : Symbol(Deep, Decl(recursiveGetterCovariantMetadata.ts, 109, 75))
+
+    // @ts-expect-error Recursive output objects have no "missing" property.
+    value.children.children.children.children.missing;
+>value : Symbol(value, Decl(recursiveGetterCovariantMetadata.ts, 108, 9))
+}
+

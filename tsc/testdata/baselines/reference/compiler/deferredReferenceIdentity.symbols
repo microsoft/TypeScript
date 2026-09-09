@@ -1,0 +1,263 @@
+//// [tests/cases/compiler/deferredReferenceIdentity.ts] ////
+
+=== deferredReferenceIdentity.ts ===
+interface Box<T> { value: T; }
+>Box : Symbol(Box, Decl(deferredReferenceIdentity.ts, 0, 0))
+>T : Symbol(T, Decl(deferredReferenceIdentity.ts, 0, 14))
+>value : Symbol(Box.value, Decl(deferredReferenceIdentity.ts, 0, 18))
+>T : Symbol(T, Decl(deferredReferenceIdentity.ts, 0, 14))
+
+interface DerivedBox<T> extends Box<T> { extra: true; }
+>DerivedBox : Symbol(DerivedBox, Decl(deferredReferenceIdentity.ts, 0, 30))
+>T : Symbol(T, Decl(deferredReferenceIdentity.ts, 1, 21))
+>Box : Symbol(Box, Decl(deferredReferenceIdentity.ts, 0, 0))
+>T : Symbol(T, Decl(deferredReferenceIdentity.ts, 1, 21))
+>extra : Symbol(DerivedBox.extra, Decl(deferredReferenceIdentity.ts, 1, 40))
+
+interface WrongBox<T> { value: T; extra: false; }
+>WrongBox : Symbol(WrongBox, Decl(deferredReferenceIdentity.ts, 1, 55))
+>T : Symbol(T, Decl(deferredReferenceIdentity.ts, 2, 19))
+>value : Symbol(WrongBox.value, Decl(deferredReferenceIdentity.ts, 2, 23))
+>T : Symbol(T, Decl(deferredReferenceIdentity.ts, 2, 19))
+>extra : Symbol(WrongBox.extra, Decl(deferredReferenceIdentity.ts, 2, 33))
+
+type Value<T> = T extends { value: unknown } ? T["value"] : never;
+>Value : Symbol(Value, Decl(deferredReferenceIdentity.ts, 2, 49))
+>T : Symbol(T, Decl(deferredReferenceIdentity.ts, 3, 11))
+>T : Symbol(T, Decl(deferredReferenceIdentity.ts, 3, 11))
+>value : Symbol(value, Decl(deferredReferenceIdentity.ts, 3, 27))
+>T : Symbol(T, Decl(deferredReferenceIdentity.ts, 3, 11))
+
+type Wrapped<T> = Box<Value<T>>;
+>Wrapped : Symbol(Wrapped, Decl(deferredReferenceIdentity.ts, 3, 66))
+>T : Symbol(T, Decl(deferredReferenceIdentity.ts, 4, 13))
+>Box : Symbol(Box, Decl(deferredReferenceIdentity.ts, 0, 0))
+>Value : Symbol(Value, Decl(deferredReferenceIdentity.ts, 2, 49))
+>T : Symbol(T, Decl(deferredReferenceIdentity.ts, 4, 13))
+
+type Derived<T> = DerivedBox<Value<T>>;
+>Derived : Symbol(Derived, Decl(deferredReferenceIdentity.ts, 4, 32))
+>T : Symbol(T, Decl(deferredReferenceIdentity.ts, 5, 13))
+>DerivedBox : Symbol(DerivedBox, Decl(deferredReferenceIdentity.ts, 0, 30))
+>Value : Symbol(Value, Decl(deferredReferenceIdentity.ts, 2, 49))
+>T : Symbol(T, Decl(deferredReferenceIdentity.ts, 5, 13))
+
+type Wrong<T> = WrongBox<Value<T>>;
+>Wrong : Symbol(Wrong, Decl(deferredReferenceIdentity.ts, 5, 39))
+>T : Symbol(T, Decl(deferredReferenceIdentity.ts, 6, 11))
+>WrongBox : Symbol(WrongBox, Decl(deferredReferenceIdentity.ts, 1, 55))
+>Value : Symbol(Value, Decl(deferredReferenceIdentity.ts, 2, 49))
+>T : Symbol(T, Decl(deferredReferenceIdentity.ts, 6, 11))
+
+interface NumberValue { value: number; }
+>NumberValue : Symbol(NumberValue, Decl(deferredReferenceIdentity.ts, 6, 35))
+>value : Symbol(NumberValue.value, Decl(deferredReferenceIdentity.ts, 7, 23))
+
+interface StringValue { value: string; }
+>StringValue : Symbol(StringValue, Decl(deferredReferenceIdentity.ts, 7, 40))
+>value : Symbol(StringValue.value, Decl(deferredReferenceIdentity.ts, 8, 23))
+
+declare function wrapped<T>(): Wrapped<T>;
+>wrapped : Symbol(wrapped, Decl(deferredReferenceIdentity.ts, 8, 40))
+>T : Symbol(T, Decl(deferredReferenceIdentity.ts, 10, 25))
+>Wrapped : Symbol(Wrapped, Decl(deferredReferenceIdentity.ts, 3, 66))
+>T : Symbol(T, Decl(deferredReferenceIdentity.ts, 10, 25))
+
+declare function derived<T>(): Derived<T>;
+>derived : Symbol(derived, Decl(deferredReferenceIdentity.ts, 10, 42))
+>T : Symbol(T, Decl(deferredReferenceIdentity.ts, 11, 25))
+>Derived : Symbol(Derived, Decl(deferredReferenceIdentity.ts, 4, 32))
+>T : Symbol(T, Decl(deferredReferenceIdentity.ts, 11, 25))
+
+declare function wrong<T>(): Wrong<T>;
+>wrong : Symbol(wrong, Decl(deferredReferenceIdentity.ts, 11, 42))
+>T : Symbol(T, Decl(deferredReferenceIdentity.ts, 12, 23))
+>Wrong : Symbol(Wrong, Decl(deferredReferenceIdentity.ts, 5, 39))
+>T : Symbol(T, Decl(deferredReferenceIdentity.ts, 12, 23))
+
+const same: Wrapped<NumberValue> = wrapped<NumberValue>();
+>same : Symbol(same, Decl(deferredReferenceIdentity.ts, 14, 5))
+>Wrapped : Symbol(Wrapped, Decl(deferredReferenceIdentity.ts, 3, 66))
+>NumberValue : Symbol(NumberValue, Decl(deferredReferenceIdentity.ts, 6, 35))
+>wrapped : Symbol(wrapped, Decl(deferredReferenceIdentity.ts, 8, 40))
+>NumberValue : Symbol(NumberValue, Decl(deferredReferenceIdentity.ts, 6, 35))
+
+const inherited: Wrapped<NumberValue> = derived<NumberValue>();
+>inherited : Symbol(inherited, Decl(deferredReferenceIdentity.ts, 15, 5))
+>Wrapped : Symbol(Wrapped, Decl(deferredReferenceIdentity.ts, 3, 66))
+>NumberValue : Symbol(NumberValue, Decl(deferredReferenceIdentity.ts, 6, 35))
+>derived : Symbol(derived, Decl(deferredReferenceIdentity.ts, 10, 42))
+>NumberValue : Symbol(NumberValue, Decl(deferredReferenceIdentity.ts, 6, 35))
+
+const different: Wrapped<NumberValue> = wrapped<StringValue>();
+>different : Symbol(different, Decl(deferredReferenceIdentity.ts, 16, 5))
+>Wrapped : Symbol(Wrapped, Decl(deferredReferenceIdentity.ts, 3, 66))
+>NumberValue : Symbol(NumberValue, Decl(deferredReferenceIdentity.ts, 6, 35))
+>wrapped : Symbol(wrapped, Decl(deferredReferenceIdentity.ts, 8, 40))
+>StringValue : Symbol(StringValue, Decl(deferredReferenceIdentity.ts, 7, 40))
+
+const differentInherited: Wrapped<NumberValue> = derived<StringValue>();
+>differentInherited : Symbol(differentInherited, Decl(deferredReferenceIdentity.ts, 17, 5))
+>Wrapped : Symbol(Wrapped, Decl(deferredReferenceIdentity.ts, 3, 66))
+>NumberValue : Symbol(NumberValue, Decl(deferredReferenceIdentity.ts, 6, 35))
+>derived : Symbol(derived, Decl(deferredReferenceIdentity.ts, 10, 42))
+>StringValue : Symbol(StringValue, Decl(deferredReferenceIdentity.ts, 7, 40))
+
+const missing: Derived<NumberValue> = wrapped<NumberValue>();
+>missing : Symbol(missing, Decl(deferredReferenceIdentity.ts, 18, 5))
+>Derived : Symbol(Derived, Decl(deferredReferenceIdentity.ts, 4, 32))
+>NumberValue : Symbol(NumberValue, Decl(deferredReferenceIdentity.ts, 6, 35))
+>wrapped : Symbol(wrapped, Decl(deferredReferenceIdentity.ts, 8, 40))
+>NumberValue : Symbol(NumberValue, Decl(deferredReferenceIdentity.ts, 6, 35))
+
+const wrongMember: Derived<NumberValue> = wrong<NumberValue>();
+>wrongMember : Symbol(wrongMember, Decl(deferredReferenceIdentity.ts, 19, 5))
+>Derived : Symbol(Derived, Decl(deferredReferenceIdentity.ts, 4, 32))
+>NumberValue : Symbol(NumberValue, Decl(deferredReferenceIdentity.ts, 6, 35))
+>wrong : Symbol(wrong, Decl(deferredReferenceIdentity.ts, 11, 42))
+>NumberValue : Symbol(NumberValue, Decl(deferredReferenceIdentity.ts, 6, 35))
+
+interface Pair { left: number; right: string; }
+>Pair : Symbol(Pair, Decl(deferredReferenceIdentity.ts, 19, 63))
+>left : Symbol(Pair.left, Decl(deferredReferenceIdentity.ts, 21, 16))
+>right : Symbol(Pair.right, Decl(deferredReferenceIdentity.ts, 21, 30))
+
+type Left<T extends Pair> = Box<T["left"]>;
+>Left : Symbol(Left, Decl(deferredReferenceIdentity.ts, 21, 47))
+>T : Symbol(T, Decl(deferredReferenceIdentity.ts, 22, 10))
+>Pair : Symbol(Pair, Decl(deferredReferenceIdentity.ts, 19, 63))
+>Box : Symbol(Box, Decl(deferredReferenceIdentity.ts, 0, 0))
+>T : Symbol(T, Decl(deferredReferenceIdentity.ts, 22, 10))
+
+type Right<T extends Pair> = Box<T["right"]>;
+>Right : Symbol(Right, Decl(deferredReferenceIdentity.ts, 22, 43))
+>T : Symbol(T, Decl(deferredReferenceIdentity.ts, 23, 11))
+>Pair : Symbol(Pair, Decl(deferredReferenceIdentity.ts, 19, 63))
+>Box : Symbol(Box, Decl(deferredReferenceIdentity.ts, 0, 0))
+>T : Symbol(T, Decl(deferredReferenceIdentity.ts, 23, 11))
+
+declare function left<T extends Pair>(): Left<T>;
+>left : Symbol(left, Decl(deferredReferenceIdentity.ts, 23, 45))
+>T : Symbol(T, Decl(deferredReferenceIdentity.ts, 24, 22))
+>Pair : Symbol(Pair, Decl(deferredReferenceIdentity.ts, 19, 63))
+>Left : Symbol(Left, Decl(deferredReferenceIdentity.ts, 21, 47))
+>T : Symbol(T, Decl(deferredReferenceIdentity.ts, 24, 22))
+
+declare function right<T extends Pair>(): Right<T>;
+>right : Symbol(right, Decl(deferredReferenceIdentity.ts, 24, 49))
+>T : Symbol(T, Decl(deferredReferenceIdentity.ts, 25, 23))
+>Pair : Symbol(Pair, Decl(deferredReferenceIdentity.ts, 19, 63))
+>Right : Symbol(Right, Decl(deferredReferenceIdentity.ts, 22, 43))
+>T : Symbol(T, Decl(deferredReferenceIdentity.ts, 25, 23))
+
+const sameIndex: Left<Pair> = left<Pair>();
+>sameIndex : Symbol(sameIndex, Decl(deferredReferenceIdentity.ts, 26, 5))
+>Left : Symbol(Left, Decl(deferredReferenceIdentity.ts, 21, 47))
+>Pair : Symbol(Pair, Decl(deferredReferenceIdentity.ts, 19, 63))
+>left : Symbol(left, Decl(deferredReferenceIdentity.ts, 23, 45))
+>Pair : Symbol(Pair, Decl(deferredReferenceIdentity.ts, 19, 63))
+
+const differentIndex: Left<Pair> = right<Pair>();
+>differentIndex : Symbol(differentIndex, Decl(deferredReferenceIdentity.ts, 27, 5))
+>Left : Symbol(Left, Decl(deferredReferenceIdentity.ts, 21, 47))
+>Pair : Symbol(Pair, Decl(deferredReferenceIdentity.ts, 19, 63))
+>right : Symbol(right, Decl(deferredReferenceIdentity.ts, 24, 49))
+>Pair : Symbol(Pair, Decl(deferredReferenceIdentity.ts, 19, 63))
+
+interface FieldBox<T extends { field: unknown }> { value: T["field"]; }
+>FieldBox : Symbol(FieldBox, Decl(deferredReferenceIdentity.ts, 27, 49))
+>T : Symbol(T, Decl(deferredReferenceIdentity.ts, 29, 19))
+>field : Symbol(field, Decl(deferredReferenceIdentity.ts, 29, 30))
+>value : Symbol(FieldBox.value, Decl(deferredReferenceIdentity.ts, 29, 50))
+>T : Symbol(T, Decl(deferredReferenceIdentity.ts, 29, 19))
+
+interface NumberBox<T> { value: number; tag?: T; }
+>NumberBox : Symbol(NumberBox, Decl(deferredReferenceIdentity.ts, 29, 71))
+>T : Symbol(T, Decl(deferredReferenceIdentity.ts, 30, 20))
+>value : Symbol(NumberBox.value, Decl(deferredReferenceIdentity.ts, 30, 24))
+>tag : Symbol(NumberBox.tag, Decl(deferredReferenceIdentity.ts, 30, 39))
+>T : Symbol(T, Decl(deferredReferenceIdentity.ts, 30, 20))
+
+interface StringField { field: string; }
+>StringField : Symbol(StringField, Decl(deferredReferenceIdentity.ts, 30, 50))
+>field : Symbol(StringField.field, Decl(deferredReferenceIdentity.ts, 31, 23))
+
+type Field<T extends { field: unknown }> = FieldBox<T>;
+>Field : Symbol(Field, Decl(deferredReferenceIdentity.ts, 31, 40))
+>T : Symbol(T, Decl(deferredReferenceIdentity.ts, 32, 11))
+>field : Symbol(field, Decl(deferredReferenceIdentity.ts, 32, 22))
+>FieldBox : Symbol(FieldBox, Decl(deferredReferenceIdentity.ts, 27, 49))
+>T : Symbol(T, Decl(deferredReferenceIdentity.ts, 32, 11))
+
+type NumberField<T> = NumberBox<T>;
+>NumberField : Symbol(NumberField, Decl(deferredReferenceIdentity.ts, 32, 55))
+>T : Symbol(T, Decl(deferredReferenceIdentity.ts, 33, 17))
+>NumberBox : Symbol(NumberBox, Decl(deferredReferenceIdentity.ts, 29, 71))
+>T : Symbol(T, Decl(deferredReferenceIdentity.ts, 33, 17))
+
+declare function numberField<T>(): NumberField<T>;
+>numberField : Symbol(numberField, Decl(deferredReferenceIdentity.ts, 33, 35))
+>T : Symbol(T, Decl(deferredReferenceIdentity.ts, 34, 29))
+>NumberField : Symbol(NumberField, Decl(deferredReferenceIdentity.ts, 32, 55))
+>T : Symbol(T, Decl(deferredReferenceIdentity.ts, 34, 29))
+
+const incompatibleConstraint: Field<StringField> = numberField<StringField>();
+>incompatibleConstraint : Symbol(incompatibleConstraint, Decl(deferredReferenceIdentity.ts, 35, 5))
+>Field : Symbol(Field, Decl(deferredReferenceIdentity.ts, 31, 40))
+>StringField : Symbol(StringField, Decl(deferredReferenceIdentity.ts, 30, 50))
+>numberField : Symbol(numberField, Decl(deferredReferenceIdentity.ts, 33, 35))
+>StringField : Symbol(StringField, Decl(deferredReferenceIdentity.ts, 30, 50))
+
+function outer<T>(value: T) {
+>outer : Symbol(outer, Decl(deferredReferenceIdentity.ts, 35, 78))
+>T : Symbol(T, Decl(deferredReferenceIdentity.ts, 37, 15))
+>value : Symbol(value, Decl(deferredReferenceIdentity.ts, 37, 18))
+>T : Symbol(T, Decl(deferredReferenceIdentity.ts, 37, 15))
+
+    interface Inner<U> { outer: T; inner: U; }
+>Inner : Symbol(Inner, Decl(deferredReferenceIdentity.ts, 37, 29))
+>U : Symbol(U, Decl(deferredReferenceIdentity.ts, 38, 20))
+>outer : Symbol(Inner.outer, Decl(deferredReferenceIdentity.ts, 38, 24))
+>T : Symbol(T, Decl(deferredReferenceIdentity.ts, 37, 15))
+>inner : Symbol(Inner.inner, Decl(deferredReferenceIdentity.ts, 38, 34))
+>U : Symbol(U, Decl(deferredReferenceIdentity.ts, 38, 20))
+
+    type Deferred<U> = Inner<U>;
+>Deferred : Symbol(Deferred, Decl(deferredReferenceIdentity.ts, 38, 46))
+>U : Symbol(U, Decl(deferredReferenceIdentity.ts, 39, 18))
+>Inner : Symbol(Inner, Decl(deferredReferenceIdentity.ts, 37, 29))
+>U : Symbol(U, Decl(deferredReferenceIdentity.ts, 39, 18))
+
+    return null! as Deferred<number>;
+>Deferred : Symbol(Deferred, Decl(deferredReferenceIdentity.ts, 38, 46))
+}
+const differentOuter: ReturnType<typeof outer<string>> = outer(123);
+>differentOuter : Symbol(differentOuter, Decl(deferredReferenceIdentity.ts, 42, 5))
+>ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
+>outer : Symbol(outer, Decl(deferredReferenceIdentity.ts, 35, 78))
+>outer : Symbol(outer, Decl(deferredReferenceIdentity.ts, 35, 78))
+
+function annotationCycles<T extends { value: unknown }>() {
+>annotationCycles : Symbol(annotationCycles, Decl(deferredReferenceIdentity.ts, 42, 68))
+>T : Symbol(T, Decl(deferredReferenceIdentity.ts, 44, 26))
+>value : Symbol(value, Decl(deferredReferenceIdentity.ts, 44, 37))
+
+    let direct: Array<typeof direct>;
+>direct : Symbol(direct, Decl(deferredReferenceIdentity.ts, 45, 7))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>direct : Symbol(direct, Decl(deferredReferenceIdentity.ts, 45, 7))
+
+    let withIndex: Array<T["value"] | typeof withIndex>;
+>withIndex : Symbol(withIndex, Decl(deferredReferenceIdentity.ts, 46, 7))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>T : Symbol(T, Decl(deferredReferenceIdentity.ts, 44, 26))
+>withIndex : Symbol(withIndex, Decl(deferredReferenceIdentity.ts, 46, 7))
+
+    let tuple: [typeof tuple, T["value"]];
+>tuple : Symbol(tuple, Decl(deferredReferenceIdentity.ts, 47, 7))
+>tuple : Symbol(tuple, Decl(deferredReferenceIdentity.ts, 47, 7))
+>T : Symbol(T, Decl(deferredReferenceIdentity.ts, 44, 26))
+}
+
+export {};
+
