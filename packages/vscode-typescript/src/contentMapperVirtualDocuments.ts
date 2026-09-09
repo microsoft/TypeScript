@@ -520,14 +520,19 @@ class ContentMapperVirtualDocumentProvider implements vscode.FileSystemProvider,
         const targetColumn = inspectorEditor?.viewColumn
             ?? (sourceEditor?.viewColumn === undefined ? vscode.ViewColumn.Beside : sourceEditor.viewColumn + 1);
 
-        const sourceDocument = await vscode.workspace.openTextDocument(sourceUri);
-        const sourceRange = rangeFromTextRange(sourceDocument, node.directive.originalRange);
-        await vscode.window.showTextDocument(sourceDocument, {
-            preserveFocus: true,
-            preview: false,
-            selection: sourceRange.isEmpty ? undefined : sourceRange,
-            viewColumn: sourceEditor?.viewColumn,
-        });
+        try {
+            const sourceDocument = sourceEditor?.document ?? await vscode.workspace.openTextDocument(sourceUri);
+            const sourceRange = rangeFromTextRange(sourceDocument, node.directive.originalRange);
+            await vscode.window.showTextDocument(sourceDocument, {
+                preserveFocus: true,
+                preview: false,
+                selection: sourceRange.isEmpty ? undefined : sourceRange,
+                viewColumn: sourceEditor?.viewColumn,
+            });
+        }
+        catch (error) {
+            this.output.debug(`Could not reveal the diagnostic directive in ${sourceUri.toString()}: ${String(error)}`);
+        }
 
         let virtualDocument = await vscode.workspace.openTextDocument(virtualUri);
         virtualDocument = await vscode.languages.setTextDocumentLanguage(
