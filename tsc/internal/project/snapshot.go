@@ -23,6 +23,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/project/logging"
 	"github.com/microsoft/TypeScript/tsc/internal/sourcemap"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
+	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfsmatch"
 )
 
@@ -50,6 +51,9 @@ type Snapshot struct {
 
 	builderLogs *logging.LogTree
 	apiError    error
+	// fileSystemOverride indicates that this snapshot was built from a filesystem
+	// supplied by an API update rather than the session host filesystem.
+	fileSystemOverride bool
 
 	createdPrograms []*Project
 }
@@ -132,8 +136,10 @@ func (s *Snapshot) cloneWithTemporaryFile(
 	overlays[path] = newOverlay(uri.FileName(), newText, version, scriptKind)
 
 	return s.Clone(ctx, SnapshotChange{
-		fileChanges:     fileChanges,
-		ResourceRequest: s.resourceRequestForDocument(uri),
+		fs:                 s.fs.fs,
+		fileSystemOverride: s.fileSystemOverride,
+		fileChanges:        fileChanges,
+		ResourceRequest:    s.resourceRequestForDocument(uri),
 	}, overlays, nil, nil), nil
 }
 
@@ -254,6 +260,12 @@ func (s *Snapshot) UseCaseSensitiveFileNames() bool {
 	return s.fs.fs.UseCaseSensitiveFileNames()
 }
 
+// HasFileSystemOverride reports whether this snapshot uses an API-supplied
+// filesystem instead of the session host filesystem.
+func (s *Snapshot) HasFileSystemOverride() bool {
+	return s.fileSystemOverride
+}
+
 func (s *Snapshot) ReadFile(fileName string) (string, bool) {
 	handle := s.GetFile(fileName)
 	if handle == nil {
@@ -295,6 +307,10 @@ type APISnapshotRequest struct {
 	EnsurePrograms    *collections.Set[tspath.Path]
 	EnsureAllPrograms bool
 	EnsureFiles       *collections.Set[lsproto.DocumentUri]
+	FileSystem        vfs.FS
+	// ReplaceFileSystem indicates a total filesystem replacement. Layers use
+	// per-path file changes instead of invalidating all inherited state.
+	ReplaceFileSystem bool
 }
 
 type ProjectTreeRequest struct {
@@ -340,6 +356,11 @@ type ResourceRequest struct {
 type SnapshotChange struct {
 	ResourceRequest
 	reason UpdateReason
+	// fs overrides the session filesystem for this snapshot. It is used by API
+	// snapshots that supply their own memory or cache filesystem.
+	fs                 vfs.FS
+	fileSystemOverride bool
+	replaceFileSystem  bool
 	// fileChanges are the changes that have occurred since the last snapshot.
 	fileChanges FileChangeSummary
 	// compilerOptionsForInferredProjects is the compiler options to use for inferred projects.
@@ -438,7 +459,17 @@ func (s *Snapshot) Clone(
 		inferredContentMappers = change.contentMapperContributions.Mappers
 		inferredContentMapperExtensions = change.contentMapperContributions.Extensions
 	}
-	fs := newSnapshotFSBuilder(store.fs, s.fs.overlays, overlays, s.fs.diskFiles, s.fs.diskDirectories, s.fs.nodeModulesRealpathAliases, store.options.PositionEncoding, store.toPath)
+	baseFS := store.fs
+	if change.fs != nil {
+		baseFS = change.fs
+	}
+	// Total replacements and returning to the session host must not retain files
+	// from the previous filesystem. Layers invalidate only their per-path changes,
+	// including the first layer over a host-backed snapshot.
+	if change.replaceFileSystem || s.fileSystemOverride && !change.fileSystemOverride {
+		change.fileChanges.InvalidateAll = true
+	}
+	fs := newSnapshotFSBuilder(baseFS, s.fs.overlays, overlays, s.fs.diskFiles, s.fs.diskDirectories, s.fs.nodeModulesRealpathAliases, store.options.PositionEncoding, store.toPath)
 	change.fileChanges = s.processFileChanges(fs, change.fileChanges, logger, change.contentMapperContributions)
 
 	compilerOptionsForInferredProjects := s.compilerOptionsForInferredProjects
@@ -612,6 +643,7 @@ func (s *Snapshot) Clone(
 	newSnapshot.inferredProjectContentMapperExtensions = inferredContentMapperExtensions
 	newSnapshot.builderLogs = logger
 	newSnapshot.apiError = apiError
+	newSnapshot.fileSystemOverride = change.fileSystemOverride
 	newSnapshot.createdPrograms = projectCollectionBuilder.createdPrograms
 
 	for _, project := range newSnapshot.ProjectCollection.Projects() {

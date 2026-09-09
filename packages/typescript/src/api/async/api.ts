@@ -115,6 +115,7 @@ import type {
     EmitResult,
     FormatDiagnosticsHost,
     FreshableType,
+    GenericType,
     GetImportEditsForSymbolsOptions,
     IdentifierTypePredicate,
     ImportAdderAction as APIImportAdderAction,
@@ -174,6 +175,7 @@ export type {
     EmitResult,
     FormatDiagnosticsHost,
     FreshableType,
+    GenericType,
     GetImportEditsForSymbolsOptions,
     IdentifierTypePredicate,
     IndexedAccessType,
@@ -710,7 +712,6 @@ export class Snapshot {
     [globalThis.Symbol.dispose](): void {
         void this.dispose();
     }
-
     dispose(): Promise<void> {
         return this.disposePromise ??= this.disposeWorker();
     }
@@ -1509,10 +1510,9 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
     }
 
     /**
-     * Emits files to the configured filesystem.
-     *
-     * When the API has a virtual filesystem with a `writeFile` callback, output
-     * is written there. Otherwise, the server writes directly to the host filesystem.
+     * Emits files to the configured filesystem. Layer and host filesystems are
+     * written through; full filesystems remain immutable and return emitted
+     * files in {@link EmitResult.fileSystem}.
      */
     async emit(emitOnly?: EmitOnly): Promise<EmitResult> {
         const response = await this.client.apiRequest("emit", {
@@ -1520,10 +1520,17 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
             project: this.project.id,
             ...(emitOnly !== undefined ? { emitOnly } : {}),
         });
+        const fileSystem = response.emittedFilesContents.length
+            ? {
+                kind: "layer" as const,
+                files: Object.fromEntries(response.emittedFiles.map((fileName, index) => [fileName, response.emittedFilesContents[index]])),
+            }
+            : undefined;
         return {
             emitSkipped: response.emitSkipped,
             diagnostics: response.diagnostics,
             emittedFiles: response.emittedFiles,
+            ...(fileSystem ? { fileSystem } : {}),
         };
     }
 

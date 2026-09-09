@@ -13,6 +13,7 @@ import (
 	"sync/atomic"
 
 	"github.com/microsoft/TypeScript/tsc/internal/api/encoder"
+	"github.com/microsoft/TypeScript/tsc/internal/api/requestfilesystem"
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/astnav"
 	"github.com/microsoft/TypeScript/tsc/internal/checker"
@@ -34,6 +35,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/transpile"
 	"github.com/microsoft/TypeScript/tsc/internal/tsoptions"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
+	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 )
 
 var sessionIDCounter atomic.Uint64
@@ -43,8 +45,9 @@ var sessionIDCounter atomic.Uint64
 // Multiple clients may hold references to the same snapshot via ref counting;
 // the registries are cleaned up when refCount reaches zero.
 type snapshotData struct {
-	snapshot *project.Snapshot
-	refCount int
+	snapshot   *project.Snapshot
+	fileSystem vfs.FS
+	refCount   int
 
 	openProjects collections.Set[tspath.Path]
 	openFiles    collections.Set[tspath.Path]
@@ -475,6 +478,13 @@ func (s *Session) ID() string {
 
 func (s *Session) currentDirectory() string {
 	return s.snapshotHost.GetCurrentDirectory()
+}
+
+func (s *Session) fileSystem() vfs.FS {
+	if s.projectSession != nil {
+		return s.projectSession.FS()
+	}
+	return s.snapshotHost.FS()
 }
 
 func (s *Session) useCaseSensitiveFileNames() bool {
@@ -1082,8 +1092,19 @@ func (s *Session) handleCreateSnapshot(ctx context.Context, params *CreateSnapsh
 	}
 
 	openState := s.reconcileSnapshotOpens(apiRequest, snapshotOpenState{})
+	fileChanges := s.toFileChangeSummary(params.FileChanges)
+	var snapshotFileSystem vfs.FS
+	if params.FileSystem != nil {
+		fileSystem, fileSystemErr := requestfilesystem.NewForUpdate(params.FileSystem, s.fileSystem(), s.currentDirectory(), &fileChanges)
+		if fileSystemErr != nil {
+			return nil, fmt.Errorf("%w: %w", ErrClientError, fileSystemErr)
+		}
+		snapshotFileSystem = fileSystem
+		apiRequest.FileSystem = fileSystem
+		apiRequest.ReplaceFileSystem = params.FileSystem.Kind == requestfilesystem.KindFull
+	}
 	root := s.snapshotHost.NewRootSnapshot()
-	snapshot, err := s.snapshotHost.CloneSnapshot(ctx, root, s.toFileChangeSummary(params.FileChanges), apiRequest)
+	snapshot, err := s.snapshotHost.CloneSnapshot(ctx, root, fileChanges, apiRequest)
 	root.Deref()
 	if err != nil {
 		snapshot.Deref()
@@ -1095,7 +1116,7 @@ func (s *Session) handleCreateSnapshot(ctx context.Context, params *CreateSnapsh
 		snapshot.Deref()
 		return nil, err
 	}
-	s.registerSnapshot(snapshot, openState)
+	s.registerSnapshot(snapshot, openState, snapshotFileSystem)
 	return response, nil
 }
 
@@ -1115,7 +1136,24 @@ func (s *Session) handleUpdateSnapshot(ctx context.Context, params *UpdateSnapsh
 		return nil, err
 	}
 	openState := s.reconcileSnapshotOpens(apiRequest, snapshotOpenState{openProjects: baseSD.openProjects, openFiles: baseSD.openFiles})
-	snapshot, err := s.snapshotHost.CloneSnapshot(ctx, baseSD.snapshot, s.toFileChangeSummary(changes.FileChanges), apiRequest)
+	fileChanges := s.toFileChangeSummary(changes.FileChanges)
+	snapshotFileSystem := baseSD.fileSystem
+	if changes.FileSystem != nil {
+		baseFileSystem := snapshotFileSystem
+		if baseFileSystem == nil {
+			baseFileSystem = s.fileSystem()
+		}
+		fileSystem, fileSystemErr := requestfilesystem.NewForUpdate(changes.FileSystem, baseFileSystem, s.currentDirectory(), &fileChanges)
+		if fileSystemErr != nil {
+			return nil, fmt.Errorf("%w: %w", ErrClientError, fileSystemErr)
+		}
+		snapshotFileSystem = fileSystem
+	}
+	if snapshotFileSystem != nil {
+		apiRequest.FileSystem = snapshotFileSystem
+		apiRequest.ReplaceFileSystem = changes.FileSystem != nil && changes.FileSystem.Kind == requestfilesystem.KindFull
+	}
+	snapshot, err := s.snapshotHost.CloneSnapshot(ctx, baseSD.snapshot, fileChanges, apiRequest)
 	if err != nil {
 		snapshot.Deref()
 		return nil, fmt.Errorf("%w: failed to update snapshot: %w", ErrClientError, err)
@@ -1126,7 +1164,7 @@ func (s *Session) handleUpdateSnapshot(ctx context.Context, params *UpdateSnapsh
 		snapshot.Deref()
 		return nil, err
 	}
-	s.registerSnapshot(snapshot, openState)
+	s.registerSnapshot(snapshot, openState, snapshotFileSystem)
 	return response, nil
 }
 
@@ -1292,7 +1330,7 @@ func (s *Session) reconcileSnapshotOpens(apiRequest *project.APISnapshotRequest,
 	return state
 }
 
-func (s *Session) registerSnapshot(snapshot *project.Snapshot, openState snapshotOpenState) {
+func (s *Session) registerSnapshot(snapshot *project.Snapshot, openState snapshotOpenState, fileSystem vfs.FS) {
 	// If the same snapshot ID is returned (no changes), we increment the ref count
 	// so each client-side Snapshot can be disposed independently.
 	handle := snapshotHandle(snapshot)
@@ -1306,6 +1344,7 @@ func (s *Session) registerSnapshot(snapshot *project.Snapshot, openState snapsho
 	} else {
 		sd = &snapshotData{
 			snapshot:                snapshot,
+			fileSystem:              fileSystem,
 			refCount:                1,
 			openProjects:            *openState.openProjects.Clone(),
 			openFiles:               *openState.openFiles.Clone(),
@@ -1356,7 +1395,7 @@ func (s *Session) handleGetCurrentLanguageServerSnapshot(ctx context.Context, pa
 		snapshot.Deref()
 		return nil, err
 	}
-	s.registerSnapshot(snapshot, snapshotOpenState{openProjects: s.openProjects, openFiles: s.openFiles})
+	s.registerSnapshot(snapshot, snapshotOpenState{openProjects: s.openProjects, openFiles: s.openFiles}, nil)
 	return response, nil
 }
 
@@ -1382,7 +1421,7 @@ func (s *Session) handleUpdateTemporarySnapshot(ctx context.Context, params *Upd
 		snapshot.Deref()
 		return nil, err
 	}
-	s.registerSnapshot(snapshot, snapshotOpenState{openProjects: baseSD.openProjects, openFiles: baseSD.openFiles})
+	s.registerSnapshot(snapshot, snapshotOpenState{openProjects: baseSD.openProjects, openFiles: baseSD.openFiles}, baseSD.fileSystem)
 	return response, nil
 }
 
@@ -2281,6 +2320,7 @@ func (s *Session) handleGetImportAdderEdits(ctx context.Context, params *GetImpo
 		sourceFile,
 		projectPath,
 		program,
+		ch,
 		userPreferences.ModuleSpecifierPreferences(),
 	)
 	importAdder := autoimport.NewImportAdder(
@@ -2906,8 +2946,24 @@ func (s *Session) handleEmit(ctx context.Context, params *EmitParams) (*EmitResp
 	if err != nil {
 		return nil, err
 	}
-	options.WriteFile = func(fileName string, text string, _ *compiler.WriteFileData) error {
-		return s.snapshotHost.FS().WriteFile(fileName, text)
+	var outputFiles map[string]string
+	sd, err := s.getSnapshotData(params.Snapshot)
+	if err != nil {
+		return nil, err
+	}
+	if requestfilesystem.HasFullFileSystem(sd.fileSystem) {
+		outputFiles = make(map[string]string)
+		var outputMu sync.Mutex
+		options.WriteFile = func(fileName string, text string, _ *compiler.WriteFileData) error {
+			outputMu.Lock()
+			outputFiles[fileName] = text
+			outputMu.Unlock()
+			return nil
+		}
+	} else {
+		options.WriteFile = func(fileName string, text string, _ *compiler.WriteFileData) error {
+			return s.snapshotHost.FS().WriteFile(fileName, text)
+		}
 	}
 	result, err := emitProgram(ctx, program, options)
 	if err != nil {
@@ -2917,10 +2973,18 @@ func (s *Session) handleEmit(ctx context.Context, params *EmitParams) (*EmitResp
 	if emittedFiles == nil {
 		emittedFiles = []string{}
 	}
+	emittedFilesContents := []string{}
+	if outputFiles != nil {
+		emittedFilesContents = make([]string, len(emittedFiles))
+		for i, fileName := range emittedFiles {
+			emittedFilesContents[i] = outputFiles[fileName]
+		}
+	}
 	return &EmitResponse{
-		EmitSkipped:  result.EmitSkipped,
-		Diagnostics:  nonNilDiagnostics(result.Diagnostics),
-		EmittedFiles: emittedFiles,
+		EmitSkipped:          result.EmitSkipped,
+		Diagnostics:          nonNilDiagnostics(result.Diagnostics),
+		EmittedFiles:         emittedFiles,
+		EmittedFilesContents: emittedFilesContents,
 	}, nil
 }
 

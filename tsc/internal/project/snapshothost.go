@@ -77,10 +77,16 @@ func (s *SnapshotHost) CloneSnapshot(
 	fileChanges FileChangeSummary,
 	apiRequest *APISnapshotRequest,
 ) (*Snapshot, error) {
-	snapshot := s.update(ctx, baseSnapshot, SnapshotChange{
+	change := SnapshotChange{
 		apiRequest:  apiRequest,
 		fileChanges: fileChanges,
-	})
+	}
+	if apiRequest != nil {
+		change.fs = apiRequest.FileSystem
+		change.fileSystemOverride = apiRequest.FileSystem != nil
+		change.replaceFileSystem = apiRequest.ReplaceFileSystem
+	}
+	snapshot := s.update(ctx, baseSnapshot, change)
 	return snapshot, snapshot.apiError
 }
 

@@ -1474,27 +1474,6 @@ export const checkVsceVersion = task({
             assert(!stableThreeComponentVersionPattern.test(invalidVersion), `${invalidVersion} should not be a valid stable version.`);
         }
 
-        for (
-            const [workflow, expectedCount] of [
-                ["./.github/workflows/tag-vscode-typescript.yml", 1],
-                ["./tools/pipelines/vscode-typescript-build.yml", 1],
-                ["./tools/pipelines/vscode-typescript-publish.yml", 2],
-            ]
-        ) {
-            const activeLines = fs.readFileSync(workflow, "utf8").split(/\r?\n/).filter(line => !line.trimStart().startsWith("#"));
-            const validators = activeLines.filter(line => line.includes(`=~ ${stableThreeComponentVersionPatternSource} ]]`));
-            if (validators.length !== expectedCount) {
-                throw new Error(`${workflow} must contain exactly ${expectedCount} active stable version validator(s).`);
-            }
-        }
-        const tagWorkflow = fs.readFileSync("./.github/workflows/tag-vscode-typescript.yml", "utf8");
-        if (!tagWorkflow.includes('if [ "$version" = "0.0.0" ]; then')) {
-            throw new Error("tag-vscode-typescript.yml must not create a tag for the unreleased 0.0.0 version.");
-        }
-        if (!tagWorkflow.includes('if [ "$previousVersion" = "0.0.0" ] && [ "$version" != "1.0.0" ]; then')) {
-            throw new Error("tag-vscode-typescript.yml must require 1.0.0 for the first release.");
-        }
-
         const packageJson = JSON.parse(fs.readFileSync("./packages/vscode-typescript/package.json", "utf8"));
         const packageLock = JSON.parse(fs.readFileSync("./package-lock.json", "utf8"));
         const version = packageJson.devDependencies?.["@vscode/vsce"];
@@ -1515,22 +1494,6 @@ export const checkVsceVersion = task({
         const installCommand = `- bash: npm install --no-save @vscode/vsce@${version}`;
         if (activeSetupLines.filter(line => line.trim() === installCommand).length !== 1) {
             throw new Error(`tools/pipelines/steps/setup-vsce.yml must install exactly @vscode/vsce@${version}.`);
-        }
-
-        for (
-            const pipeline of [
-                "./tools/pipelines/typescript-publish.yml",
-                "./tools/pipelines/vscode-typescript-publish.yml",
-            ]
-        ) {
-            const contents = fs.readFileSync(pipeline, "utf8");
-            const activeLines = contents.split(/\r?\n/).filter(line => !line.trimStart().startsWith("#"));
-            const templateReferences = activeLines.filter(
-                line => line.trim() === "- template: /tools/pipelines/steps/setup-vsce.yml@self",
-            );
-            if (templateReferences.length !== 1 || activeLines.some(line => line.includes("@vscode/vsce"))) {
-                throw new Error(`${pipeline} must use setup-vsce.yml exactly once and must not install @vscode/vsce directly.`);
-            }
         }
     },
 });

@@ -1684,6 +1684,21 @@ describe("API - generator batching", () => {
             runParityBatch(api, cases);
             assert.deepEqual(temporaryProjects, ["/tsconfig.json", "/tsconfig.json"]);
 
+            const snapshotGeneratorAPI = spawnAPI(parityFiles);
+            const snapshotSyncAPI = spawnAPI(parityFiles);
+            try {
+                const generatorBase = snapshotGeneratorAPI.batch(snapshotGeneratorAPI.createSnapshot.gen({ openProject: "/tsconfig.json" }))[0];
+                const syncBase = snapshotSyncAPI.createSnapshot({ openProject: "/tsconfig.json" });
+                const generatorUpdated = snapshotGeneratorAPI.batch(generatorBase.update.gen())[0];
+                const syncUpdated = syncBase.update();
+                assertSnapshotsEquivalent(generatorUpdated, syncUpdated, "Snapshot.update");
+                exercisedMethods.add("Snapshot.update");
+            }
+            finally {
+                snapshotGeneratorAPI.close();
+                snapshotSyncAPI.close();
+            }
+
             const destructiveAPI = spawnAPI(parityFiles);
             const disposableSnapshot = destructiveAPI.batch(destructiveAPI.createSnapshot.gen({ openProject: "/tsconfig.json" }))[0];
             destructiveAPI.batch(disposableSnapshot.dispose.gen());
