@@ -105,7 +105,7 @@ func (s *SnapshotHost) CloneSnapshotWithTemporaryFile(
 func (s *SnapshotHost) CloneSnapshotWithAutoImports(ctx context.Context, baseSnapshot *Snapshot, uri lsproto.DocumentUri, logger logging.Logger) *Snapshot {
 	change := SnapshotChange{
 		reason:          UpdateReasonRequestedLanguageServiceWithAutoImports,
-		ResourceRequest: ResourceRequest{Documents: []lsproto.DocumentUri{uri}},
+		ResourceRequest: baseSnapshot.resourceRequestForDocument(uri),
 	}
 	change.AutoImports = uri
 	return baseSnapshot.Clone(ctx, change, baseSnapshot.fs.overlays, logger, nil)

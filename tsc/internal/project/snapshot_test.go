@@ -122,6 +122,61 @@ func TestSnapshot(t *testing.T) {
 		assert.Equal(t, len(removedSnapshot.ProjectCollection.SyntheticProjects()), 1)
 	})
 
+	t.Run("document snapshots refresh default and synthetic programs", func(t *testing.T) {
+		t.Parallel()
+		const fileName = "/project/index.ts"
+		session := setup(map[string]any{
+			"/project/tsconfig.json": `{}`,
+			fileName:                 "export const value = 1;",
+		})
+		defer session.Close()
+
+		ctx := context.Background()
+		uri := lsproto.DocumentUri("file://" + fileName)
+		baseSnapshot, err := session.CloneSnapshot(
+			ctx,
+			session.Snapshot(),
+			FileChangeSummary{},
+			&APISnapshotRequest{
+				OpenFiles: collections.NewSetFromItems(uri),
+				CreatePrograms: []*APICreateProgramRequest{{
+					RootFileNames:   []string{fileName},
+					CompilerOptions: &core.CompilerOptions{NoLib: core.TSTrue},
+				}},
+			},
+		)
+		assert.NilError(t, err)
+		defer baseSnapshot.Deref()
+
+		temporaryText := "export const value = 2;"
+		temporarySnapshot, err := session.CloneSnapshotWithTemporaryFile(ctx, baseSnapshot, uri, temporaryText)
+		assert.NilError(t, err)
+		defer temporarySnapshot.Deref()
+
+		defaultProject := temporarySnapshot.GetDefaultProject(uri)
+		assert.Assert(t, defaultProject != nil)
+		assert.Equal(t, defaultProject.Program.GetSourceFile(fileName).Text(), temporaryText)
+		syntheticProject := temporarySnapshot.ProjectCollection.SyntheticProjects()[0]
+		assert.Equal(t, syntheticProject.Program.GetSourceFile(fileName).Text(), temporaryText)
+
+		diskText := "export const value = 3;"
+		assert.NilError(t, session.fs.fs.WriteFile(fileName, diskText))
+		var fileChanges FileChangeSummary
+		fileChanges.Changed.Add(uri)
+		dirtySnapshot, err := session.CloneSnapshot(ctx, baseSnapshot, fileChanges, nil)
+		assert.NilError(t, err)
+		defer dirtySnapshot.Deref()
+		assert.Assert(t, dirtySnapshot.GetDefaultProject(uri).IsDirty())
+		assert.Assert(t, dirtySnapshot.ProjectCollection.SyntheticProjects()[0].IsDirty())
+
+		preparedSnapshot := session.SnapshotHost.CloneSnapshotWithAutoImports(ctx, dirtySnapshot, uri, nil)
+		defer preparedSnapshot.Deref()
+		defaultProject = preparedSnapshot.GetDefaultProject(uri)
+		assert.Equal(t, defaultProject.Program.GetSourceFile(fileName).Text(), diskText)
+		syntheticProject = preparedSnapshot.ProjectCollection.SyntheticProjects()[0]
+		assert.Equal(t, syntheticProject.Program.GetSourceFile(fileName).Text(), diskText)
+	})
+
 	t.Run("compilerHost gets frozen with snapshot's FS only once", func(t *testing.T) {
 		t.Parallel()
 		files := map[string]any{

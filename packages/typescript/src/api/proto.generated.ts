@@ -1211,7 +1211,7 @@ export interface SnapshotRequestChangesParams {
     /** CreatePrograms describes synthetic programs to create in the snapshot. */
     createPrograms?: readonly CreateSnapshotProgramParams[];
     /** RemovePrograms lists synthetic project handles to remove from the snapshot. */
-    removePrograms?: readonly ProjectId[];
+    removePrograms?: readonly SyntheticProjectId[];
     /**
      * EnsurePrograms identifies projects whose programs should be updated if dirty,
      * or all contained projects when true.
