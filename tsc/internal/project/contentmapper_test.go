@@ -50,6 +50,88 @@ func (p *recordingContentMapperProcess) Close() error {
 	return p.ReadWriteCloser.Close()
 }
 
+func TestContentMapperProjectWithoutMappedFiles(t *testing.T) {
+	t.Parallel()
+	for _, hasMapper := range []bool{false, true} {
+		t.Run(fmt.Sprintf("hasMapper=%t", hasMapper), func(t *testing.T) {
+			t.Parallel()
+			config := `{"compilerOptions": {"noLib": true}}`
+			if hasMapper {
+				config = `{
+					"compilerOptions": { "noLib": true },
+					"contentMappers": [ { "package": "mapper", "extensions": [".box"] } ]
+				}`
+			}
+			files := map[string]any{
+				"/home/project/tsconfig.json":                    config,
+				"/home/project/node_modules/mapper/package.json": contentmappertest.PackageJSON(contentmappertest.TransformingMapper),
+				"/home/project/main.ts":                          "export {};",
+			}
+			init, _ := projecttestutil.GetSessionInitOptions(files, &project.SessionOptions{
+				CurrentDirectory:   "/home/project",
+				DefaultLibraryPath: bundled.LibPath(),
+				PositionEncoding:   lsproto.PositionEncodingKindUTF8,
+				RunExternalCode:    true,
+			}, nil)
+			spawner := &recordingContentMapperSpawner{inner: contentmappertest.NewSpawner()}
+			init.Spawner = spawner
+			session := project.NewSession(init)
+			defer session.Close()
+
+			ctx := context.Background()
+			session.DidOpenFile(ctx, "file:///home/project/main.ts", 1, files["/home/project/main.ts"].(string), lsproto.LanguageKindTypeScript)
+			languageService, err := session.GetLanguageService(ctx, "file:///home/project/main.ts")
+			assert.NilError(t, err)
+			// Access after freezing must not try to initialize using the cleared builder.
+			program := languageService.GetProgram()
+			mapperProject := program.ContentMapperProject()
+			assert.Equal(t, mapperProject != nil, hasMapper)
+			assert.Equal(t, program.ContentMapperProject(), mapperProject)
+			assert.Equal(t, spawner.spawns.Load(), int32(0))
+		})
+	}
+}
+
+func TestContentMapperParallelFileLoading(t *testing.T) {
+	t.Parallel()
+	files := map[string]any{
+		"/home/project/tsconfig.json": `{
+			"compilerOptions": { "target": "es2020", "noLib": true },
+			"contentMappers": [ { "package": "mapper", "extensions": [".box"] } ]
+		}`,
+		"/home/project/node_modules/mapper/package.json": contentmappertest.PackageJSON(contentmappertest.TransformingMapper),
+		"/home/project/main.ts":                          "export {};",
+	}
+	// Parallel parsing reads the mapper project identity while another file initializes it.
+	const fileCount = 32
+	for i := range fileCount {
+		files[fmt.Sprintf("/home/project/file%d.box", i)] = "export const version = #{target};\n"
+	}
+	init, _ := projecttestutil.GetSessionInitOptions(files, &project.SessionOptions{
+		CurrentDirectory:   "/home/project",
+		DefaultLibraryPath: bundled.LibPath(),
+		PositionEncoding:   lsproto.PositionEncodingKindUTF8,
+		RunExternalCode:    true,
+	}, nil)
+	init.Spawner = contentmappertest.NewSpawner()
+	session := project.NewSession(init)
+	defer session.Close()
+
+	ctx := context.Background()
+	session.DidOpenFile(ctx, "file:///home/project/main.ts", 1, files["/home/project/main.ts"].(string), lsproto.LanguageKindTypeScript)
+	languageService, err := session.GetLanguageService(ctx, "file:///home/project/main.ts")
+	assert.NilError(t, err)
+	mapperProject := languageService.GetProgram().ContentMapperProject()
+	assert.Assert(t, mapperProject != nil)
+	assert.Equal(t, languageService.GetProgram().ContentMapperProject(), mapperProject)
+	for i := range fileCount {
+		fileName := fmt.Sprintf("/home/project/file%d.box", i)
+		file := languageService.GetProgram().GetSourceFile(fileName)
+		assert.Assert(t, file != nil, "expected %s to be loaded", fileName)
+		assert.Equal(t, file.Text(), "const __VERSION = \"1.0.0\";\nexport const version = 7;\n")
+	}
+}
+
 func TestContentMapperInProject(t *testing.T) {
 	t.Parallel()
 	files := map[string]any{
