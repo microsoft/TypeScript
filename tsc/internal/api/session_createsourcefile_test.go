@@ -18,7 +18,7 @@ func TestCreateSourceFile(t *testing.T) {
 	})
 	t.Cleanup(projectSession.Close)
 
-	session := NewSession(projectSession, nil)
+	session := NewLSPSession(projectSession, nil)
 	t.Cleanup(session.Close)
 
 	t.Run("text", func(t *testing.T) {

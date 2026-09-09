@@ -4,7 +4,7 @@
     "version": "0.0.0",
     "license": "Apache-2.0",
     "engines": {
-        "node": ">=20.19"
+        "node": ">=22.18"
     },
     "workspaces": [
         "packages/*"
@@ -24,23 +24,19 @@
         "setup-hooks": "node tools/scripts/link-hooks.mjs"
     },
     "devDependencies": {
-        "@types/adm-zip": "^0.5.8",
-        "@types/node": "latest",
-        "@types/tmp": "^0.2.6",
-        "@types/which": "^3.0.4",
+        "@dprint/json": "^0.22.0",
+        "@dprint/typescript": "^0.96.1",
+        "@jakebailey/dprint-plugin-gofumpt": "^0.0.13",
+        "@types/node": "^22.20.1",
         "@unicode/unicode-15.1.0": "^1.6.17",
-        "adm-zip": "^0.5.17",
+        "adm-zip": "^0.6.0",
         "chokidar": "^5.0.0",
-        "dprint": "^0.55.1",
-        "execa": "^9.6.1",
-        "glob": "^13.0.6",
-        "hereby": "^1.15.1",
-        "p-limit": "^7.3.0",
-        "picocolors": "^1.1.1",
-        "tar": "^7.5.19",
-        "tmp": "^0.2.7",
-        "typescript": "^6.0.3",
-        "which": "^6.0.1"
+        "dprint": "^0.56.1",
+        "dprint-plugin-yaml": "^0.6.0",
+        "hereby": "^1.15.2",
+        "tar": "^7.5.22",
+        "tinyexec": "^1.3.0",
+        "typescript": "^6.0.3"
     },
     "overrides": {
         "@microsoft/applicationinsights-web-basic": "3.3.11",
@@ -53,11 +49,9 @@
         "npm": "11.17.0"
     },
     "allowScripts": {
-        "dprint@0.55.1": true,
-        "esbuild@0.28.1": true,
-        "@vscode/vsce-sign@2.0.9": true,
+        "@vscode/vsce-sign@2.1.0": true,
         "keytar@7.9.0": true,
-        "dprint@0.55.2": true,
+        "dprint@0.56.1": true,
         "esbuild@0.28.2": true
     }
 }

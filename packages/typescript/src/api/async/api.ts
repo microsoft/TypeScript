@@ -117,6 +117,7 @@ import type {
     EmitResult,
     FormatDiagnosticsHost,
     FreshableType,
+    GenericType,
     GetImportEditsForSymbolsOptions,
     IdentifierTypePredicate,
     ImportAdderAction as APIImportAdderAction,
@@ -175,6 +176,7 @@ export type {
     EmitResult,
     FormatDiagnosticsHost,
     FreshableType,
+    GenericType,
     GetImportEditsForSymbolsOptions,
     IdentifierTypePredicate,
     IndexedAccessType,
@@ -227,8 +229,8 @@ export interface TranspileOutput {
 }
 
 // @sync-only-start
-// export { all } from "./generatorSupport.ts";
-// import {all, type ExecutedGeneratorsResults, type APIRequestGenerator} from "./generatorSupport.ts";
+// export { all, defer, type APIRequestGenerator, type AnyAPIRequestGenerator, type AllAPIRequestGenerator, type DeferredAPIRequestGenerator, type ExecutedGeneratorsResults } from "./generatorSupport.ts";
+// import {executeRequestGenerators, type ExecutedGeneratorsResults, type AnyAPIRequestGenerator} from "./generatorSupport.ts";
 // import { sourceFileResponseToUint8Array } from "../node/encoder.ts";
 // @sync-only-end
 
@@ -240,6 +242,7 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
     private readonly decoder = new Wtf8Decoder();
     private getCanonicalFileNameWorker: ((fileName: string) => string) | undefined;
     private initialized: boolean = false;
+    private initializing: Promise<void> | undefined;
     private activeSnapshots: Set<Snapshot> = new Set();
     private latestSnapshot: Snapshot | undefined;
     readonly internal: InternalAPI;
@@ -266,18 +269,18 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
     }
     // @sync-skip-block-end
     // @sync-only-start
-    // batch<T extends readonly APIRequestGenerator[]>(...requestGenerators: T): ExecutedGeneratorsResults<T> {
-    //     const batches = all(...requestGenerators);
-    //     let state = batches.next();
-    //     while (!state.done) {
-    //         state = batches.next(this.client.batchRequests(state.value).responses);
-    //     }
-    //     return state.value;
+    // batch<T extends readonly AnyAPIRequestGenerator[]>(...requestGenerators: T): ExecutedGeneratorsResults<T> {
+    //     return executeRequestGenerators(requestGenerators, requests => this.client.batchRequests(requests).responses);
     // }
     // @sync-only-end
 
     private async ensureInitialized(): Promise<void> {
-        if (!this.initialized) {
+        if (this.initialized) return;
+        return this.initializing ??= this.initializeWorker();
+    }
+
+    private async initializeWorker(): Promise<void> {
+        try {
             const response = await this.client.apiRequest("initialize", null);
             const getCanonicalFileName = createGetCanonicalFileName(response.useCaseSensitiveFileNames);
             const currentDirectory = response.currentDirectory;
@@ -285,6 +288,10 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
             this.currentDirectory = currentDirectory;
             this.toPath = (fileName: string) => toPath(fileName, currentDirectory, getCanonicalFileName) as Path;
             this.initialized = true;
+        }
+        catch (error) {
+            this.initializing = undefined;
+            throw error;
         }
     }
 
@@ -405,18 +412,27 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         return snapshot;
     }
 
+    async [globalThis.Symbol.asyncDispose](): Promise<void> { // @sync: [globalThis.Symbol.dispose](): void {
+        await this.close(); // @sync: this.close();
+    }
+
     async close(): Promise<void> {
+        await this.initializing?.catch(() => {}); // @sync-skip
         // Dispose all active snapshots
-        for (const snapshot of [...this.activeSnapshots]) {
-            await snapshot.dispose();
+        try {
+            for (const snapshot of [...this.activeSnapshots]) {
+                await snapshot.dispose();
+            }
+            // Release the latest snapshot's cache refs if still held
+            if (this.latestSnapshot) {
+                this.sourceFileCache.releaseSnapshot(this.latestSnapshot.id);
+                this.latestSnapshot = undefined;
+            }
+            this.sourceFileCache.clear();
         }
-        // Release the latest snapshot's cache refs if still held
-        if (this.latestSnapshot) {
-            this.sourceFileCache.releaseSnapshot(this.latestSnapshot.id);
-            this.latestSnapshot = undefined;
+        finally {
+            await this.client.close(); // always close the underlying connection
         }
-        await this.client.close();
-        this.sourceFileCache.clear();
     }
 
     clearSourceFileCache(): void {
@@ -568,6 +584,7 @@ export class Snapshot {
     private toPath: (fileName: string) => Path;
     private client: Client;
     private disposed: boolean = false;
+    private disposePromise: Promise<void> | undefined;
     private onDispose: () => void;
     private snapshotRegistry: SnapshotObjectRegistry;
     readonly internal: SnapshotInternalAPI;
@@ -616,10 +633,14 @@ export class Snapshot {
     }
 
     [globalThis.Symbol.dispose](): void {
-        this.dispose();
+        void this.dispose();
     }
 
-    async dispose(): Promise<void> {
+    dispose(): Promise<void> {
+        return this.disposePromise ??= this.disposeWorker();
+    }
+
+    private async disposeWorker(): Promise<void> {
         if (this.disposed) return;
         this.disposed = true;
         for (const project of this.projectMap.values()) {
@@ -627,8 +648,12 @@ export class Snapshot {
         }
         this.projectMap.clear();
         this.snapshotRegistry.clear();
-        this.onDispose();
-        await this.client.apiRequest("release", { snapshot: this.id });
+        try {
+            await this.client.apiRequest("release", { snapshot: this.id });
+        }
+        finally {
+            this.onDispose();
+        }
     }
 
     isDisposed(): boolean {
@@ -1111,6 +1136,7 @@ export class Program implements FormatDiagnosticsHost {
     private readonly decoder = new Wtf8Decoder();
     private readonly sourceFileMetadataCache = new Map<Path, Promise<SourceFileMetadata | undefined>>();
     private ownedSnapshot: Snapshot | undefined;
+    private disposePromise: Promise<void> | undefined;
 
     constructor(
         snapshotId: number,
@@ -1146,10 +1172,14 @@ export class Program implements FormatDiagnosticsHost {
     }
 
     [globalThis.Symbol.dispose](): void {
-        this.dispose();
+        void this.dispose();
     }
 
-    async dispose(): Promise<void> {
+    dispose(): Promise<void> {
+        return this.disposePromise ??= this.disposeWorker();
+    }
+
+    private async disposeWorker(): Promise<void> {
         const snapshot = this.ownedSnapshot;
         this.ownedSnapshot = undefined;
         if (snapshot) await snapshot.dispose();

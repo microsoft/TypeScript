@@ -2270,6 +2270,44 @@ func TestTscIncremental(t *testing.T) {
 			},
 			commandLineArgs: []string{"--noEmit"},
 		},
+		{
+			subScenario: "json module diagnostics are cleared after fixing the json file",
+			files: FileMap{
+				"/home/src/workspaces/project/tsconfig.json": stringtestutil.Dedent(`
+					{
+						"compilerOptions": {
+							"strict": true,
+							"noEmit": true,
+							"incremental": true,
+							"resolveJsonModule": true,
+							"esModuleInterop": true
+						}
+					}`),
+				"/home/src/workspaces/project/data.json": `{ "title": "hello" }`,
+				"/home/src/workspaces/project/check.ts": stringtestutil.Dedent(`
+					import type data from "./data.json";
+
+					type Shape = { title: string };
+					type Covers<T extends Shape> = T;
+
+					export type Check = Covers<typeof data>;
+				`),
+			},
+			edits: []*tscEdit{
+				{
+					caption: "remove required property",
+					edit: func(sys *TestSys) {
+						sys.writeFileNoError("/home/src/workspaces/project/data.json", `{}`)
+					},
+				},
+				{
+					caption: "restore required property",
+					edit: func(sys *TestSys) {
+						sys.writeFileNoError("/home/src/workspaces/project/data.json", `{ "title": "fixed" }`)
+					},
+				},
+			},
+		},
 	}
 
 	for _, test := range testCases {

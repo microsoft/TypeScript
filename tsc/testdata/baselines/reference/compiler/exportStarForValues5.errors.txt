@@ -1,0 +1,11 @@
+file2.ts(1,15): error TS2307: Cannot find module 'file1' or its corresponding type declarations.
+
+
+==== file1.ts (0 errors) ====
+    export interface Foo { x }
+    
+==== file2.ts (1 errors) ====
+    export * from "file1"
+                  ~~~~~~~
+!!! error TS2307: Cannot find module 'file1' or its corresponding type declarations.
+    export var x;

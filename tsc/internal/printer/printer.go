@@ -2181,9 +2181,11 @@ func (p *Printer) emitMappedType(node *ast.MappedTypeNode) {
 			p.writePunctuation("?")
 		}
 	}
-	p.writePunctuation(":")
-	p.writeSpace()
-	p.emitTypeNodeOutsideExtends(node.Type)
+	if node.Type != nil {
+		p.writePunctuation(":")
+		p.writeSpace()
+		p.emitTypeNodeOutsideExtends(node.Type)
+	}
 	p.writeTrailingSemicolon()
 	if node.Members != nil {
 		if len(node.Members.Nodes) > 0 {

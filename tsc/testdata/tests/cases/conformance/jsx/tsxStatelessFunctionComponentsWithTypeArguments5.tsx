@@ -1,7 +1,7 @@
 ﻿// @target: es2015
 // @filename: file.tsx
 // @jsx: preserve
-// @module: amd
+// @module: commonjs
 // @skipLibCheck: true
 /// <reference path="/.lib/react.d.ts" />
 

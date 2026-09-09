@@ -18,7 +18,7 @@ func TestAutoImportsWithRootDirsAndRootedPath01(t *testing.T) {
 // @Filename: /dir/tsconfig.json
 {
     "compilerOptions": {
-        "module": "amd",
+        "module": "commonjs",
         "moduleResolution": "classic",
         "rootDirs": ["D:/"]
     }

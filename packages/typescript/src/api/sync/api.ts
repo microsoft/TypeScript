@@ -134,6 +134,7 @@ import type {
     EmitResult,
     FormatDiagnosticsHost,
     FreshableType,
+    GenericType,
     GetImportEditsForSymbolsOptions,
     IdentifierTypePredicate,
     ImportAdderAction as APIImportAdderAction,
@@ -192,6 +193,7 @@ export type {
     EmitResult,
     FormatDiagnosticsHost,
     FreshableType,
+    GenericType,
     GetImportEditsForSymbolsOptions,
     IdentifierTypePredicate,
     IndexedAccessType,
@@ -243,12 +245,12 @@ export interface TranspileOutput {
     sourceMapText?: string;
 }
 
-export { all } from "./generatorSupport.ts";
+export { all, type AllAPIRequestGenerator, type AnyAPIRequestGenerator, type APIRequestGenerator, defer, type DeferredAPIRequestGenerator, type ExecutedGeneratorsResults } from "./generatorSupport.ts";
 import { sourceFileResponseToUint8Array } from "../node/encoder.ts";
 import {
-    all,
-    type APIRequestGenerator,
+    type AnyAPIRequestGenerator,
     type ExecutedGeneratorsResults,
+    executeRequestGenerators,
 } from "./generatorSupport.ts";
 
 export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHost {
@@ -259,6 +261,7 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
     private readonly decoder = new Wtf8Decoder();
     private getCanonicalFileNameWorker: ((fileName: string) => string) | undefined;
     private initialized: boolean = false;
+    private initializing: void | undefined;
     private activeSnapshots: Set<Snapshot> = new Set();
     private latestSnapshot: Snapshot | undefined;
     readonly internal: InternalAPI;
@@ -294,13 +297,8 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         );
     }
 
-    batch<T extends readonly APIRequestGenerator[]>(...requestGenerators: T): ExecutedGeneratorsResults<T> {
-        const batches = all(...requestGenerators);
-        let state = batches.next();
-        while (!state.done) {
-            state = batches.next(this.client.batchRequests(state.value).responses);
-        }
-        return state.value;
+    batch<T extends readonly AnyAPIRequestGenerator[]>(...requestGenerators: T): ExecutedGeneratorsResults<T> {
+        return executeRequestGenerators(requestGenerators, requests => this.client.batchRequests(requests).responses);
     }
 
     private get ensureInitialized(): {
@@ -312,7 +310,26 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
             owner,
             "ensureInitialized",
             function (): void {
-                if (!owner.initialized) {
+                if (owner.initialized) return;
+                return owner.initializing ??= owner.initializeWorker();
+            },
+            function* (): Generator<ProtocolRequest, void, ProtocolResponse["result"]> {
+                if (owner.initialized) return;
+                return owner.initializing ??= yield* owner.initializeWorker.gen();
+            },
+        );
+    }
+
+    private get initializeWorker(): {
+        (): void;
+        gen(): Generator<ProtocolRequest, void, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "initializeWorker",
+            function (): void {
+                try {
                     const response = owner.client.apiRequest("initialize", null);
                     const getCanonicalFileName = createGetCanonicalFileName(response.useCaseSensitiveFileNames);
                     const currentDirectory = response.currentDirectory;
@@ -321,9 +338,13 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
                     owner.toPath = (fileName: string) => toPath(fileName, currentDirectory, getCanonicalFileName) as Path;
                     owner.initialized = true;
                 }
+                catch (error) {
+                    owner.initializing = undefined;
+                    throw error;
+                }
             },
             function* (): Generator<ProtocolRequest, void, ProtocolResponse["result"]> {
-                if (!owner.initialized) {
+                try {
                     const response = yield* apiRequest("initialize", null);
                     const getCanonicalFileName = createGetCanonicalFileName(response.useCaseSensitiveFileNames);
                     const currentDirectory = response.currentDirectory;
@@ -331,6 +352,10 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
                     owner.currentDirectory = currentDirectory;
                     owner.toPath = (fileName: string) => toPath(fileName, currentDirectory, getCanonicalFileName) as Path;
                     owner.initialized = true;
+                }
+                catch (error) {
+                    owner.initializing = undefined;
+                    throw error;
                 }
             },
         );
@@ -661,6 +686,10 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         );
     }
 
+    [globalThis.Symbol.dispose](): void {
+        this.close();
+    }
+
     get close(): {
         (): void;
         gen(): Generator<ProtocolRequest, void, ProtocolResponse["result"]>;
@@ -671,29 +700,37 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
             "close",
             function (): void {
                 // Dispose all active snapshots
-                for (const snapshot of [...owner.activeSnapshots]) {
-                    snapshot.dispose();
+                try {
+                    for (const snapshot of [...owner.activeSnapshots]) {
+                        snapshot.dispose();
+                    }
+                    // Release the latest snapshot's cache refs if still held
+                    if (owner.latestSnapshot) {
+                        owner.sourceFileCache.releaseSnapshot(owner.latestSnapshot.id);
+                        owner.latestSnapshot = undefined;
+                    }
+                    owner.sourceFileCache.clear();
                 }
-                // Release the latest snapshot's cache refs if still held
-                if (owner.latestSnapshot) {
-                    owner.sourceFileCache.releaseSnapshot(owner.latestSnapshot.id);
-                    owner.latestSnapshot = undefined;
+                finally {
+                    owner.client.close(); // always close the underlying connection
                 }
-                owner.client.close();
-                owner.sourceFileCache.clear();
             },
             function* (): Generator<ProtocolRequest, void, ProtocolResponse["result"]> {
                 // Dispose all active snapshots
-                for (const snapshot of [...owner.activeSnapshots]) {
-                    yield* snapshot.dispose.gen();
+                try {
+                    for (const snapshot of [...owner.activeSnapshots]) {
+                        yield* snapshot.dispose.gen();
+                    }
+                    // Release the latest snapshot's cache refs if still held
+                    if (owner.latestSnapshot) {
+                        owner.sourceFileCache.releaseSnapshot(owner.latestSnapshot.id);
+                        owner.latestSnapshot = undefined;
+                    }
+                    owner.sourceFileCache.clear();
                 }
-                // Release the latest snapshot's cache refs if still held
-                if (owner.latestSnapshot) {
-                    owner.sourceFileCache.releaseSnapshot(owner.latestSnapshot.id);
-                    owner.latestSnapshot = undefined;
+                finally {
+                    owner.client.close(); // always close the underlying connection
                 }
-                owner.client.close();
-                owner.sourceFileCache.clear();
             },
         );
     }
@@ -1000,6 +1037,7 @@ export class Snapshot {
     private toPath: (fileName: string) => Path;
     private client: Client;
     private disposed: boolean = false;
+    private disposePromise: void | undefined;
     private onDispose: () => void;
     private snapshotRegistry: SnapshotObjectRegistry;
     readonly internal: SnapshotInternalAPI;
@@ -1067,7 +1105,7 @@ export class Snapshot {
     }
 
     [globalThis.Symbol.dispose](): void {
-        this.dispose();
+        void this.dispose();
     }
 
     get dispose(): {
@@ -1079,6 +1117,23 @@ export class Snapshot {
             owner,
             "dispose",
             function (): void {
+                return owner.disposePromise ??= owner.disposeWorker();
+            },
+            function* (): Generator<ProtocolRequest, void, ProtocolResponse["result"]> {
+                return owner.disposePromise ??= yield* owner.disposeWorker.gen();
+            },
+        );
+    }
+
+    private get disposeWorker(): {
+        (): void;
+        gen(): Generator<ProtocolRequest, void, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "disposeWorker",
+            function (): void {
                 if (owner.disposed) return;
                 owner.disposed = true;
                 for (const project of owner.projectMap.values()) {
@@ -1086,8 +1141,12 @@ export class Snapshot {
                 }
                 owner.projectMap.clear();
                 owner.snapshotRegistry.clear();
-                owner.onDispose();
-                owner.client.apiRequest("release", { snapshot: owner.id });
+                try {
+                    owner.client.apiRequest("release", { snapshot: owner.id });
+                }
+                finally {
+                    owner.onDispose();
+                }
             },
             function* (): Generator<ProtocolRequest, void, ProtocolResponse["result"]> {
                 if (owner.disposed) return;
@@ -1097,8 +1156,12 @@ export class Snapshot {
                 }
                 owner.projectMap.clear();
                 owner.snapshotRegistry.clear();
-                owner.onDispose();
-                yield* apiRequest("release", { snapshot: owner.id });
+                try {
+                    yield* apiRequest("release", { snapshot: owner.id });
+                }
+                finally {
+                    owner.onDispose();
+                }
             },
         );
     }
@@ -2056,6 +2119,7 @@ export class Program implements FormatDiagnosticsHost {
     private readonly decoder = new Wtf8Decoder();
     private readonly sourceFileMetadataCache = new Map<Path, SourceFileMetadata | undefined>();
     private ownedSnapshot: Snapshot | undefined;
+    private disposePromise: void | undefined;
 
     constructor(
         snapshotId: number,
@@ -2091,7 +2155,7 @@ export class Program implements FormatDiagnosticsHost {
     }
 
     [globalThis.Symbol.dispose](): void {
-        this.dispose();
+        void this.dispose();
     }
 
     get dispose(): {
@@ -2102,6 +2166,23 @@ export class Program implements FormatDiagnosticsHost {
         return cacheGeneratorMethod(
             owner,
             "dispose",
+            function (): void {
+                return owner.disposePromise ??= owner.disposeWorker();
+            },
+            function* (): Generator<ProtocolRequest, void, ProtocolResponse["result"]> {
+                return owner.disposePromise ??= yield* owner.disposeWorker.gen();
+            },
+        );
+    }
+
+    private get disposeWorker(): {
+        (): void;
+        gen(): Generator<ProtocolRequest, void, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "disposeWorker",
             function (): void {
                 const snapshot = owner.ownedSnapshot;
                 owner.ownedSnapshot = undefined;

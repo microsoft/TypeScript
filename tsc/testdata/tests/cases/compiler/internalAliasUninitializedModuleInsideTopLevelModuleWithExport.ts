@@ -1,6 +1,6 @@
 // @target: es2015
 // @strict: false
-//@module: amd
+//@module: commonjs
 // @declaration: true
 export namespace a {
     export namespace b {

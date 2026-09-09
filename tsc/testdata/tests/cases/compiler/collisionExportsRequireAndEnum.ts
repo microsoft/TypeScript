@@ -1,5 +1,5 @@
 // @target: es2015
-//@module: amd
+//@module: commonjs
 //@filename: collisionExportsRequireAndEnum_externalmodule.ts
 export enum require { // Error
     _thisVal1,

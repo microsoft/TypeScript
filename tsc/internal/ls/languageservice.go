@@ -2,6 +2,7 @@ package ls
 
 import (
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
+	"github.com/microsoft/TypeScript/tsc/internal/checker"
 	"github.com/microsoft/TypeScript/tsc/internal/compiler"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/autoimport"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/lsconv"
@@ -91,7 +92,7 @@ func (l *LanguageService) GetECMALineInfo(fileName string) *sourcemap.ECMALineIn
 
 // getPreparedAutoImportView returns an auto-import view for the given file if the registry is prepared
 // to provide up-to-date auto-imports for it. If not, it returns ErrNeedsAutoImports.
-func (l *LanguageService) getPreparedAutoImportView(fromFile *ast.SourceFile) (*autoimport.View, error) {
+func (l *LanguageService) getPreparedAutoImportView(fromFile *ast.SourceFile, typeChecker *checker.Checker) (*autoimport.View, error) {
 	registry := l.host.AutoImportRegistry()
 	registryFile := fromFile
 	if canonical := fromFile.CanonicalSourceFile(); canonical != nil {
@@ -101,18 +102,19 @@ func (l *LanguageService) getPreparedAutoImportView(fromFile *ast.SourceFile) (*
 		return nil, ErrNeedsAutoImports
 	}
 
-	view := autoimport.NewView(registry, fromFile, l.projectPath, l.program, l.UserPreferences().ModuleSpecifierPreferences())
+	view := autoimport.NewView(registry, fromFile, l.projectPath, l.program, typeChecker, l.UserPreferences().ModuleSpecifierPreferences())
 	return view, nil
 }
 
 // getCurrentAutoImportView returns an auto-import view for the given file, based on the current state
 // of the auto-import registry, which may or may not be up-to-date.
-func (l *LanguageService) getCurrentAutoImportView(fromFile *ast.SourceFile) *autoimport.View {
+func (l *LanguageService) getCurrentAutoImportView(fromFile *ast.SourceFile, typeChecker *checker.Checker) *autoimport.View {
 	return autoimport.NewView(
 		l.host.AutoImportRegistry(),
 		fromFile,
 		l.projectPath,
 		l.program,
+		typeChecker,
 		l.UserPreferences().ModuleSpecifierPreferences(),
 	)
 }

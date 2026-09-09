@@ -54,6 +54,8 @@ export class Client {
     private connection: MessageConnection | undefined;
     private options: ClientOptions;
     private connected = false;
+    private closed = false;
+    private connecting: Promise<void> | undefined;
     private timing: TimingCollector | undefined;
     private batchedRequests: { method: APIRequest["method"]; params: APIRequest["params"]; resolve: (value: unknown) => void; reject: (reason?: any) => void; }[] = [];
     private nextBatch: NodeJS.Immediate | "manual" | undefined;
@@ -65,9 +67,15 @@ export class Client {
         }
     }
 
-    async connect(): Promise<void> {
-        if (this.connected) return;
+    connect(): Promise<void> {
+        if (this.closed) return Promise.reject(new Error("Client is closed"));
+        if (this.connected) return Promise.resolve();
+        return this.connecting ??= this.connectWorker().finally(() => {
+            this.connecting = undefined;
+        });
+    }
 
+    private async connectWorker(): Promise<void> {
         if (isSpawnOptions(this.options)) {
             await this.connectViaSpawn(this.options);
         }
@@ -235,10 +243,27 @@ export class Client {
 
             const requestType = new RequestType<unknown, BatchRequestsResponse, void>("batchRequests");
             const params: BatchRequestsParams = { requests: requests.map(request => ({ method: request.method, params: request.params })) };
+            if (this.options.maxResponseBytesPerPage !== undefined) {
+                params.maxResponseBytesPerPage = this.options.maxResponseBytesPerPage;
+            }
             const response = await this.sendRequestWithTiming(requestType, params);
+            let responses = response.responses;
+            let continuationToken = response.continuationToken;
+            while (continuationToken) {
+                const pageParams: BatchRequestsParams = {
+                    requests: [],
+                    continuationToken,
+                };
+                if (this.options.maxResponseBytesPerPage !== undefined) {
+                    pageParams.maxResponseBytesPerPage = this.options.maxResponseBytesPerPage;
+                }
+                const page = await this.sendRequestWithTiming(requestType, pageParams);
+                responses = responses.concat(page.responses);
+                continuationToken = page.continuationToken;
+            }
             for (let i = 0; i < requests.length; i++) {
                 const { resolve, reject } = requests[i];
-                const item = response.responses[i];
+                const item = responses[i];
                 if (item.error !== undefined) {
                     reject(new Error(item.error));
                 }
@@ -274,7 +299,8 @@ export class Client {
         };
     }
 
-    async apiRequest<K extends keyof APIMethodInfo>(method: K, params: APIMethodInfo[K]["params"]): Promise<APIMethodInfo[K]["result"]> {
+    async apiRequest<K extends APIRequest["method"]>(method: K, params: APIMethodInfo[K]["params"]): Promise<APIMethodInfo[K]["result"]> {
+        if (this.closed) throw new Error("Client is closed");
         if (!this.connected) {
             await this.connect();
         }
@@ -344,6 +370,8 @@ export class Client {
     }
 
     async close(): Promise<void> {
+        await this.connecting?.catch(() => {}); // if connection is still in-progress, wait for it to finish before closing the connection
+        this.closed = true;
         if (this.connection) {
             this.connection.dispose();
             this.connection = undefined;
