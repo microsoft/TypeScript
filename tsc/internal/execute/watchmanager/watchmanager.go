@@ -25,9 +25,19 @@ type dirWatchUpdate struct {
 	recursive bool
 }
 
-type trackedPath struct {
-	names    []string
-	children []*trackedPath
+type resolution struct {
+	path  string
+	stale bool
+}
+
+type watchRequest struct {
+	dependency bool
+	directory  bool
+}
+
+type Changes struct {
+	watchalias.Matches
+	Overflow bool
 }
 
 // WatchManager manages fswatch directory watches, event accumulation,
@@ -39,23 +49,14 @@ type trackedPath struct {
 //   - ReconcileWatches must be called under Lock.
 //   - CloseAllWatches and handleWatchTerminated manage their own locking.
 type WatchManager struct {
-	mu               sync.Mutex
-	backend          WatchBackend
-	watchedDirs      map[string]*watchedDir
-	doCycleCh        chan struct{}
-	filesystem       vfs.FS
-	resolutionFS     vfs.FS
-	watchFiles       []string
-	aliases          *watchalias.Index
-	tracked          map[tspath.Path]*trackedPath
-	realpaths        map[tspath.Path][]string
-	resolvedPaths    map[string]string
-	staleResolutions map[string]string
-	generationFiles  map[string]bool
-	fileMark         bool
-	generationDirs   map[string]bool
-	generationDirty  bool
-	realpathsChanged bool
+	mu            sync.Mutex
+	backend       WatchBackend
+	watchedDirs   map[string]*watchedDir
+	doCycleCh     chan struct{}
+	filesystem    vfs.FS
+	aliases       *watchalias.Index
+	resolvedPaths map[string]*resolution
+	registrations map[string]watchRequest
 
 	// DebugLog receives verbose watch diagnostics when non-nil
 	DebugLog io.Writer
@@ -81,13 +82,15 @@ func NewWatchManager(warnWriter io.Writer, dirExists func(string) bool, filesyst
 	return wm
 }
 
-// SetWatchFiles supplies original dependency spellings for the next watch
-// generation. Like ReconcileWatches, it must be called under Lock.
-func (wm *WatchManager) SetWatchFiles(files []string) { wm.watchFiles = files }
-
-// SetResolutionFS borrows the current build's filesystem caches. Call under
-// Lock and reset to nil before those caches can outlive the build.
-func (wm *WatchManager) SetResolutionFS(filesystem vfs.FS) { wm.resolutionFS = filesystem }
+func (wm *WatchManager) WatchFiles() []string {
+	files := make([]string, 0, len(wm.registrations))
+	for name, request := range wm.registrations {
+		if request.dependency {
+			files = append(files, name)
+		}
+	}
+	return files
+}
 
 func (wm *WatchManager) SetBackend(b WatchBackend) { wm.backend = b }
 
@@ -109,186 +112,75 @@ func (wm *WatchManager) Unlock() { wm.mu.Unlock() }
 
 func (wm *WatchManager) DoCycleCh() <-chan struct{} { return wm.doCycleCh }
 
-func (wm *WatchManager) DrainEvents() (changed map[string]fswatch.EventKind, overflow bool) {
+func (wm *WatchManager) DrainEvents() Changes {
 	wm.changedMu.Lock()
-	changed = wm.changedPaths
-	overflow = wm.changedOverflow
+	changed := wm.changedPaths
+	overflow := wm.changedOverflow
 	wm.changedPaths = nil
 	wm.changedOverflow = false
 	wm.changedMu.Unlock()
 	if wm.aliases != nil && len(changed) != 0 {
-		expanded := make(map[string]fswatch.EventKind, len(changed))
-		add := func(alias string, kind fswatch.EventKind) {
-			// Deletion is conservative when multiple spellings coalesce.
-			if previous, ok := expanded[alias]; !ok || previous != fswatch.EventDelete {
-				expanded[alias] = kind
-			}
-		}
-		for path, kind := range changed {
-			knownLeaf := false
-			for _, alias := range wm.aliases.Expand(path) {
-				if node := wm.tracked[wm.toPath(alias)]; node != nil {
-					if len(node.children) == 0 {
-						knownLeaf = true
-					} else {
-						wm.generationDirty = true
-					}
-				}
-				add(alias, kind)
-				for ancestor := alias; ; {
-					for _, original := range wm.realpaths[wm.toPath(ancestor)] {
-						add(original+alias[len(ancestor):], kind)
-					}
-					parent := tspath.GetDirectoryPath(ancestor)
-					if parent == ancestor || parent == "" {
-						break
-					}
-					ancestor = parent
-				}
-			}
-			if kind != fswatch.EventUpdate || !knownLeaf {
-				wm.generationDirty = true
-			}
-		}
-		// Each matched subtree is visited at most once per batch, even when
-		// overlapping directory deletions or multiple aliases are reported.
-		visited := make(map[*trackedPath]struct{})
-		var expandDelete func(*trackedPath)
-		expandDelete = func(node *trackedPath) {
-			if node == nil {
-				return
-			}
-			if _, ok := visited[node]; ok {
-				return
-			}
-			visited[node] = struct{}{}
-			for _, name := range node.names {
-				expanded[name] = fswatch.EventDelete
-			}
-			for _, child := range node.children {
-				expandDelete(child)
-			}
-		}
-		for path, kind := range expanded {
-			if kind == fswatch.EventDelete {
-				expandDelete(wm.tracked[wm.toPath(path)])
-			}
-		}
-		changed = expanded
+		return Changes{Matches: wm.aliases.Match(changed), Overflow: overflow}
 	}
-	if overflow {
-		wm.resolvedPaths = nil
-		wm.staleResolutions = nil
-		wm.generationDirty = true
-	} else if len(changed) != 0 {
-		wm.invalidateResolutions(changed)
-	}
-	return changed, overflow
+	return Changes{Matches: watchalias.Matches{Changes: changed}, Overflow: overflow || wm.aliases == nil && wm.registrations != nil}
 }
 
 // Realpath shares watch resolution between computing subscription directories
 // and registering aliases. Filesystems may authoritatively resolve a leaf using
 // its cached parent; others retain their full resolver.
-func (wm *WatchManager) Realpath(name string) string {
-	if wm.filesystem == nil {
-		return name
-	}
-	filesystem := wm.resolutionFS
+func (wm *WatchManager) Realpath(name string, filesystem vfs.FS) string {
+	return wm.realpath(name, filesystem, nil)
+}
+
+func (wm *WatchManager) realpath(name string, filesystem vfs.FS, retargeted *bool) string {
 	if filesystem == nil {
 		filesystem = wm.filesystem
 	}
-	if resolved, ok := wm.resolvedPaths[name]; ok {
-		return resolved
+	if filesystem == nil {
+		return name
+	}
+	previous := wm.resolvedPaths[name]
+	if previous != nil && !previous.stale {
+		return previous.path
 	}
 	if wm.resolvedPaths == nil {
-		wm.resolvedPaths = make(map[string]string)
+		wm.resolvedPaths = make(map[string]*resolution)
 	}
-	resolved := vfs.RealpathWithParent(filesystem, name, wm.Realpath)
-	wm.resolvedPaths[name] = resolved
-	if previous, ok := wm.staleResolutions[name]; ok {
-		if previous != resolved {
-			wm.generationDirty = true
-			wm.realpathsChanged = true
+	resolved := vfs.RealpathWithParent(filesystem, name, func(parent string) string {
+		return wm.realpath(parent, filesystem, retargeted)
+	})
+	if previous == nil {
+		wm.resolvedPaths[name] = &resolution{path: resolved}
+	} else {
+		if retargeted != nil && previous.path != resolved {
+			*retargeted = true
 		}
-		delete(wm.staleResolutions, name)
+		previous.path, previous.stale = resolved, false
 	}
 	return resolved
 }
 
-func (wm *WatchManager) invalidateResolutions(changed map[string]fswatch.EventKind) {
-	invalidate := func(name string) {
-		if previous, ok := wm.resolvedPaths[name]; ok {
-			if wm.staleResolutions == nil {
-				wm.staleResolutions = make(map[string]string)
+// RefreshResolutions runs once under the cycle lock, after matching with the
+// old index and before any build decision. Publishing here also handles cycles
+// that subsequently return early without compiling or reconciling subscriptions.
+func (wm *WatchManager) RefreshResolutions(changes Changes) (bool, error) {
+	retargeted := false
+	if changes.Overflow {
+		wm.resolvedPaths = nil
+	} else {
+		for _, name := range changes.Affected {
+			if entry := wm.resolvedPaths[name]; entry != nil {
+				entry.stale = true
 			}
-			wm.staleResolutions[name] = previous
-			delete(wm.resolvedPaths, name)
+		}
+		for _, name := range changes.Affected {
+			wm.realpath(name, wm.filesystem, &retargeted)
 		}
 	}
-	if !wm.generationDirty {
-		// A registered leaf (including a missing lookup) cannot change its
-		// siblings' resolution. Re-resolving it detects file symlink retargets.
-		for name := range changed {
-			invalidate(name)
-		}
-		return
+	if changes.Overflow || changes.NamespaceChanged || retargeted {
+		return retargeted, wm.rebuildAliases(wm.registrations, wm.filesystem)
 	}
-	paths := make(map[tspath.Path]struct{}, len(changed))
-	for name := range changed {
-		paths[wm.toPath(name)] = struct{}{}
-	}
-	affected := func(name string) bool {
-		for path := wm.toPath(name); ; {
-			if _, ok := paths[path]; ok {
-				return true
-			}
-			parent := tspath.Path(tspath.GetDirectoryPath(string(path)))
-			if parent == path || parent == "" {
-				return false
-			}
-			path = parent
-		}
-	}
-	// Expansion above must use the old mappings, particularly after a deleted
-	// directory or retargeted symlink. Only then discard affected resolutions.
-	for name := range wm.resolvedPaths {
-		if affected(name) {
-			invalidate(name)
-		}
-	}
-}
-
-func (wm *WatchManager) toPath(name string) tspath.Path {
-	return tspath.ToPath(name, "", wm.filesystem == nil || wm.filesystem.UseCaseSensitiveFileNames())
-}
-
-func (wm *WatchManager) track(pathName, original string) {
-	path := wm.toPath(pathName)
-	node, exists := wm.tracked[path]
-	if !exists {
-		node = &trackedPath{}
-		wm.tracked[path] = node
-	}
-	node.names = append(node.names, original)
-	if exists {
-		return
-	}
-	for {
-		parent := tspath.Path(tspath.GetDirectoryPath(string(path)))
-		if parent == path || parent == "" {
-			break
-		}
-		parentNode, exists := wm.tracked[parent]
-		if !exists {
-			parentNode = &trackedPath{}
-			wm.tracked[parent] = parentNode
-		}
-		parentNode.children = append(parentNode.children, node)
-		if exists {
-			break
-		}
-		path, node = parent, parentNode
-	}
+	return retargeted, nil
 }
 
 func (wm *WatchManager) ForceOverflow() {
@@ -428,19 +320,20 @@ func (wm *WatchManager) ResolveDesiredDirs(desiredDirs map[string]bool) map[stri
 	return resolved
 }
 
-func (wm *WatchManager) ReconcileWatches(desiredDirs map[string]bool) error {
-	wm.RefreshRealpaths()
-	if wm.aliases == nil || wm.generationDirty || !wm.sameWatchFiles() || !maps.Equal(wm.generationDirs, desiredDirs) {
-		if err := wm.rebuildAliases(desiredDirs); err != nil {
+func (wm *WatchManager) ReconcileWatches(files []string, desiredDirs map[string]bool, filesystem vfs.FS) error {
+	registrations := make(map[string]watchRequest, len(files)+len(desiredDirs))
+	for _, name := range files {
+		registrations[name] = watchRequest{dependency: true}
+	}
+	for name := range desiredDirs {
+		request := registrations[name]
+		request.directory = true
+		registrations[name] = request
+	}
+	if wm.aliases == nil || !maps.Equal(wm.registrations, registrations) {
+		if err := wm.rebuildAliases(registrations, filesystem); err != nil {
 			return err
 		}
-		wm.generationFiles = make(map[string]bool, len(wm.watchFiles))
-		for _, name := range wm.watchFiles {
-			wm.generationFiles[name] = wm.fileMark
-		}
-		wm.generationDirs = maps.Clone(desiredDirs)
-		wm.generationDirty = false
-		wm.realpathsChanged = false
 	}
 	if wm.backend == nil {
 		return nil
@@ -479,89 +372,39 @@ func (wm *WatchManager) ReconcileWatches(desiredDirs map[string]bool) error {
 	return wm.createDirWatches(additions)
 }
 
-// RefreshRealpaths runs during a build, never in the event callback. A changed
-// symlink target requires recomputing subscriptions even if a source-file-only
-// incremental update could otherwise reuse the compiler program.
-func (wm *WatchManager) RefreshRealpaths() bool {
-	for name := range wm.staleResolutions {
-		wm.Realpath(name)
-	}
-	return wm.realpathsChanged
-}
-
-func (wm *WatchManager) sameWatchFiles() bool {
-	// Dependency traversal order and duplicate observations do not change the
-	// watch set. Toggle visitation marks instead of allocating another set.
-	wm.fileMark = !wm.fileMark
-	count := 0
-	for _, name := range wm.watchFiles {
-		mark, ok := wm.generationFiles[name]
-		if !ok {
-			return false
-		}
-		if mark != wm.fileMark {
-			wm.generationFiles[name] = wm.fileMark
-			count++
-		}
-	}
-	return count == len(wm.generationFiles)
-}
-
-func (wm *WatchManager) rebuildAliases(desiredDirs map[string]bool) error {
+func (wm *WatchManager) rebuildAliases(registrations map[string]watchRequest, filesystem vfs.FS) error {
 	aliases := watchalias.New(wm.filesystem)
-	wm.tracked = make(map[tspath.Path]*trackedPath)
-	wm.realpaths = make(map[tspath.Path][]string)
-	// Resolve explicit symlinks only while registering the generation. Events
-	// may arrive after deletion, when querying their realpath is too late.
-	registered := make(map[string]string)
-	register := func(name string) error {
-		if err := aliases.Add(name); err != nil {
-			return err
-		}
-		if wm.filesystem == nil {
-			return nil
-		}
+	wm.registrations = registrations
+	register := func(name string, request watchRequest) error {
 		for {
-			if _, ok := registered[name]; ok {
+			registration := watchalias.Registration{
+				Name: name, Realpath: wm.Realpath(name, filesystem),
+				Dependency: request.dependency, Directory: request.directory,
+			}
+			if aliases.Covers(registration) {
 				break
 			}
-			realPath := wm.Realpath(name)
-			registered[name] = realPath
-			if realPath != name {
-				if err := aliases.Add(realPath); err != nil {
-					return err
-				}
-				key := wm.toPath(realPath)
-				wm.realpaths[key] = append(wm.realpaths[key], name)
+			if err := aliases.Register(registration); err != nil {
+				return err
 			}
 			parent := tspath.GetDirectoryPath(name)
 			if parent == name || parent == "" {
 				break
 			}
 			name = parent
+			request = watchRequest{directory: true}
 		}
 		return nil
 	}
-	for _, file := range wm.watchFiles {
-		if err := register(file); err != nil {
-			wm.aliases = nil
-			wm.ForceOverflow()
-			return err
-		}
-		wm.track(file, file)
-		if realPath := registered[file]; realPath != "" && realPath != file {
-			wm.track(realPath, file)
-		}
-	}
-	for dir := range desiredDirs {
-		if err := register(dir); err != nil {
+	for name, request := range registrations {
+		if err := register(name, request); err != nil {
 			wm.aliases = nil
 			wm.ForceOverflow()
 			return err
 		}
 	}
-	for name := range wm.resolvedPaths {
-		if _, ok := registered[name]; !ok {
+	for name, entry := range wm.resolvedPaths {
+		if !aliases.Covers(watchalias.Registration{Name: name, Realpath: entry.path}) {
 			delete(wm.resolvedPaths, name)
 		}
 	}
@@ -651,15 +494,9 @@ func (s *DirWatchSet) Dirs() map[string]bool {
 }
 
 func (wm *WatchManager) IsPathUnderWatch(path string, opts tspath.ComparePathsOptions) bool {
-	paths := []string{path}
-	if wm.aliases != nil {
-		paths = wm.aliases.Expand(path)
-	}
 	for dir := range wm.watchedDirs {
-		for _, path := range paths {
-			if tspath.ContainsPath(dir, path, opts) {
-				return true
-			}
+		if tspath.ContainsPath(dir, path, opts) {
+			return true
 		}
 	}
 	return false

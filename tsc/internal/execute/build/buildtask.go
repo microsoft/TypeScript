@@ -157,11 +157,11 @@ func (t *BuildTask) report(orchestrator *Orchestrator, configPath tspath.Path, b
 	close(t.reportDone)
 }
 
-func (t *BuildTask) buildProject(orchestrator *Orchestrator, path tspath.Path) {
+func (t *BuildTask) buildProject(orchestrator *Orchestrator, path tspath.Path, force bool) {
 	// Wait on upstream tasks to complete
 	t.waitOnUpstream()
 	if t.pending.Load() {
-		t.status = t.getUpToDateStatus(orchestrator, path)
+		t.status = t.getUpToDateStatus(orchestrator, path, force)
 		t.reportUpToDateStatus(orchestrator)
 		if !t.handleStatusThatDoesntRequireBuild(orchestrator) {
 			t.compileAndEmit(orchestrator, path)
@@ -364,7 +364,7 @@ func (t *BuildTask) handleStatusThatDoesntRequireBuild(orchestrator *Orchestrato
 	return false
 }
 
-func (t *BuildTask) getUpToDateStatus(orchestrator *Orchestrator, configPath tspath.Path) *upToDateStatus {
+func (t *BuildTask) getUpToDateStatus(orchestrator *Orchestrator, configPath tspath.Path, force bool) *upToDateStatus {
 	if t.status != nil {
 		return t.status
 	}
@@ -385,7 +385,7 @@ func (t *BuildTask) getUpToDateStatus(orchestrator *Orchestrator, configPath tsp
 		}
 	}
 
-	if orchestrator.opts.Command.BuildOptions.Force.IsTrue() || orchestrator.watchPathsChanged {
+	if orchestrator.opts.Command.BuildOptions.Force.IsTrue() || force {
 		return &upToDateStatus{kind: upToDateStatusTypeForceBuild}
 	}
 

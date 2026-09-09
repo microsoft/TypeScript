@@ -47,7 +47,7 @@ func TestWatchAliasNativeContainment(t *testing.T) { //nolint:paralleltest // Ke
 				wm := NewWatchManager(io.Discard, filesystem.DirectoryExists, filesystem)
 				wm.SetBackend(&FSWatchBackend{Inner: backend})
 				wm.Lock()
-				err = wm.ReconcileWatches(map[string]bool{requested: false})
+				err = wm.ReconcileWatches(nil, map[string]bool{requested: false}, nil)
 				wm.Unlock()
 				if err != nil {
 					t.Fatal(err)
@@ -62,21 +62,25 @@ func TestWatchAliasNativeContainment(t *testing.T) { //nolint:paralleltest // Ke
 					select {
 					case <-wm.DoCycleCh():
 						wm.Lock()
-						events, overflow := wm.DrainEvents()
+						changes := wm.DrainEvents()
 						found := false
-						for event := range events {
+						covered := false
+						for event := range changes.Changes {
 							if strings.HasSuffix(event, "/child") {
 								found = true
-								if !wm.IsPathUnderWatch(event, caseInsensitiveOpts) {
-									t.Errorf("event %q is outside its requested root %q", event, requested)
+								if wm.IsPathUnderWatch(event, caseInsensitiveOpts) {
+									covered = true
 								}
 							}
 						}
 						wm.Unlock()
-						if overflow {
+						if changes.Overflow {
 							t.Fatal("unexpected overflow")
 						}
 						if found {
+							if !covered {
+								t.Errorf("child events %v are outside their requested root %q", changes.Changes, requested)
+							}
 							return
 						}
 					case <-deadline.C:

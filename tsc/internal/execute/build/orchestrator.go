@@ -79,8 +79,7 @@ type Orchestrator struct {
 	watchStatusReporter  tsc.DiagnosticReporter
 
 	// fswatch event-based watching
-	wm                *watchmanager.WatchManager
-	watchPathsChanged bool
+	wm *watchmanager.WatchManager
 }
 
 var _ tsc.Watcher = (*Orchestrator)(nil)
@@ -254,7 +253,7 @@ func (o *Orchestrator) Start(ctx context.Context) tsc.CommandLineResult {
 		o.watchStatusReporter(ast.NewCompilerDiagnostic(diagnostics.Starting_compilation_in_watch_mode))
 	}
 	o.GenerateGraph(nil)
-	result := o.buildOrClean()
+	result := o.buildOrClean(false)
 	if o.opts.Command.CompilerOptions.Watch.IsTrue() {
 		o.Watch(ctx)
 		result.Watcher = o
@@ -273,8 +272,8 @@ func (o *Orchestrator) Watch(ctx context.Context) {
 	}
 
 	o.updateWatch()
-	desiredDirs := o.computeDesiredWatches()
-	if err := o.wm.ReconcileWatches(desiredDirs); err != nil {
+	watchFiles, desiredDirs := o.computeDesiredWatches()
+	if err := o.wm.ReconcileWatches(watchFiles, desiredDirs, o.host.FS()); err != nil {
 		fmt.Fprintf(o.opts.Sys.Writer(), "%v\n", err)
 		o.wm.ForceOverflow()
 	}
@@ -460,26 +459,12 @@ func (o *Orchestrator) checkTasksForEventChanges(changedPaths map[string]fswatch
 }
 
 func (o *Orchestrator) watchFileChanged(fileName string, changedPaths map[tspath.Path]fswatch.EventKind) bool {
-	path := o.toPath(fileName)
-	if _, changed := changedPaths[path]; changed {
-		return true
-	}
-	for {
-		parent := tspath.Path(tspath.GetDirectoryPath(string(path)))
-		if parent == path || parent == "" {
-			break
-		}
-		if changedPaths[parent] == fswatch.EventDelete {
-			return true
-		}
-		path = parent
-	}
-	return false
+	_, changed := changedPaths[o.toPath(fileName)]
+	return changed
 }
 
-func (o *Orchestrator) computeDesiredWatches() map[string]bool {
-	o.wm.SetResolutionFS(o.host.FS())
-	defer o.wm.SetResolutionFS(nil)
+func (o *Orchestrator) computeDesiredWatches() ([]string, map[string]bool) {
+	realpath := func(name string) string { return o.wm.Realpath(name, o.host.FS()) }
 	desiredDirs := watchmanager.NewDirWatchSet(o.comparePathsOptions)
 	var watchFiles []string
 
@@ -505,8 +490,9 @@ func (o *Orchestrator) computeDesiredWatches() map[string]bool {
 
 		// Watch config file directory
 		configDir := tspath.GetDirectoryPath(task.config)
-		realConfigDir := o.wm.Realpath(configDir)
+		realConfigDir := realpath(configDir)
 		desiredDirs.Set(realConfigDir, false)
+		desiredDirs.Set(tspath.GetDirectoryPath(realpath(task.config)), false)
 
 		if task.resolved == nil {
 			continue
@@ -515,7 +501,7 @@ func (o *Orchestrator) computeDesiredWatches() map[string]bool {
 		// Extended config file directories
 		for _, cfgPath := range task.resolved.ExtendedSourceFiles() {
 			watchFiles = append(watchFiles, cfgPath)
-			realPath := o.wm.Realpath(cfgPath)
+			realPath := realpath(cfgPath)
 			dir := tspath.GetDirectoryPath(realPath)
 			desiredDirs.Set(dir, false)
 		}
@@ -523,7 +509,7 @@ func (o *Orchestrator) computeDesiredWatches() map[string]bool {
 		// Wildcard directories from tsconfig
 		for dir, recursive := range task.resolved.WildcardDirectories() {
 			watchFiles = append(watchFiles, dir)
-			realDir := o.wm.Realpath(dir)
+			realDir := realpath(dir)
 			desiredDirs.Set(realDir, recursive)
 		}
 
@@ -554,7 +540,7 @@ func (o *Orchestrator) computeDesiredWatches() map[string]bool {
 			}
 			for _, fileName := range watchedFiles {
 				watchFiles = append(watchFiles, fileName)
-				absPath := o.wm.Realpath(fileName)
+				absPath := realpath(fileName)
 				dir := tspath.GetDirectoryPath(absPath)
 				if !desiredDirs.Covered(dir) && watchmanager.CanWatchDirectory(dir) {
 					desiredDirs.Set(dir, false)
@@ -572,7 +558,7 @@ func (o *Orchestrator) computeDesiredWatches() map[string]bool {
 			for _, fileName := range bi.buildInfo.FileNames {
 				for _, original := range originalNames(o.resolveBuildInfoFileName(fileName, buildInfoDir)) {
 					watchFiles = append(watchFiles, original)
-					absPath := o.wm.Realpath(original)
+					absPath := realpath(original)
 					fp := o.toPath(absPath)
 					if roots.Has(fp) {
 						continue
@@ -604,8 +590,7 @@ func (o *Orchestrator) computeDesiredWatches() map[string]bool {
 		}
 	}
 
-	o.wm.SetWatchFiles(watchFiles)
-	return o.wm.ResolveDesiredDirs(desiredDirs.Dirs())
+	return watchFiles, o.wm.ResolveDesiredDirs(desiredDirs.Dirs())
 }
 
 func (o *Orchestrator) addWatchDir(desiredDirs *watchmanager.DirWatchSet, dir string) {
@@ -647,7 +632,13 @@ func (o *Orchestrator) DoCycle() {
 	o.wm.Lock()
 	defer o.wm.Unlock()
 
-	changedPaths, overflow := o.wm.DrainEvents()
+	changes := o.wm.DrainEvents()
+	realpathsChanged, err := o.wm.RefreshResolutions(changes)
+	changedPaths, overflow := changes.Changes, changes.Overflow
+	if err != nil {
+		fmt.Fprintf(o.opts.Sys.Writer(), "%v\n", err)
+		overflow = true
+	}
 	hasEvents := len(changedPaths) > 0 || overflow
 
 	if !hasEvents {
@@ -660,12 +651,10 @@ func (o *Orchestrator) DoCycle() {
 	var needsConfigUpdate atomic.Bool
 	var needsUpdate atomic.Bool
 
-	o.watchPathsChanged = o.wm.RefreshRealpaths()
-	defer func() { o.watchPathsChanged = false }()
-	if o.watchPathsChanged {
+	if realpathsChanged || overflow {
 		o.resetCaches()
 	}
-	if overflow || o.watchPathsChanged {
+	if overflow || realpathsChanged {
 		// A new namespace can replace inputs without changing their timestamps.
 		o.rangeTask(func(path tspath.Path, task *BuildTask) {
 			task.resetConfig(o, path)
@@ -690,10 +679,10 @@ func (o *Orchestrator) DoCycle() {
 		o.GenerateGraphReusingOldTasks()
 	}
 
-	o.buildOrClean()
+	o.buildOrClean(realpathsChanged || overflow)
 	o.updateWatch()
-	desiredDirs := o.computeDesiredWatches()
-	if err := o.wm.ReconcileWatches(desiredDirs); err != nil {
+	watchFiles, desiredDirs := o.computeDesiredWatches()
+	if err := o.wm.ReconcileWatches(watchFiles, desiredDirs, o.host.FS()); err != nil {
 		fmt.Fprintf(o.opts.Sys.Writer(), "%v\n", err)
 		// Mark overflow so the next event triggers a full rebuild
 		o.wm.ForceOverflow()
@@ -701,7 +690,7 @@ func (o *Orchestrator) DoCycle() {
 	o.resetCaches()
 }
 
-func (o *Orchestrator) buildOrClean() tsc.CommandLineResult {
+func (o *Orchestrator) buildOrClean(force bool) tsc.CommandLineResult {
 	if !o.opts.Command.BuildOptions.Clean.IsTrue() && o.opts.Command.BuildOptions.Verbose.IsTrue() {
 		o.createBuilderStatusReporter(nil)(ast.NewCompilerDiagnostic(
 			diagnostics.Projects_in_this_build_Colon_0,
@@ -714,7 +703,7 @@ func (o *Orchestrator) buildOrClean() tsc.CommandLineResult {
 	if len(o.errors) == 0 {
 		buildResult.statistics.Projects = len(o.Order())
 		o.rangeTask(func(path tspath.Path, task *BuildTask) {
-			o.buildOrCleanProject(task, path, &buildResult)
+			o.buildOrCleanProject(task, path, &buildResult, force)
 		})
 	} else {
 		// Circularity errors prevent any project from being built
@@ -765,12 +754,12 @@ func (o *Orchestrator) rangeTask(f func(path tspath.Path, task *BuildTask)) {
 	}
 }
 
-func (o *Orchestrator) buildOrCleanProject(task *BuildTask, path tspath.Path, buildResult *orchestratorResult) {
+func (o *Orchestrator) buildOrCleanProject(task *BuildTask, path tspath.Path, buildResult *orchestratorResult, force bool) {
 	task.result = &taskResult{}
 	task.result.reportStatus = o.createBuilderStatusReporter(task)
 	task.result.diagnosticReporter = o.createDiagnosticReporter(task)
 	if !o.opts.Command.BuildOptions.Clean.IsTrue() {
-		task.buildProject(o, path)
+		task.buildProject(o, path, force)
 	} else {
 		task.cleanProject(o, path)
 	}

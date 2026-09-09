@@ -6,6 +6,8 @@ import (
 
 	"github.com/microsoft/TypeScript/tsc/internal/fswatch"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
+	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfstest"
+	"github.com/microsoft/TypeScript/tsc/internal/watchalias"
 	"gotest.tools/v3/assert"
 )
 
@@ -15,16 +17,16 @@ func TestWatchFileChangedAncestors(t *testing.T) {
 		o := &Orchestrator{comparePathsOptions: tspath.ComparePathsOptions{
 			CurrentDirectory: "/repo", UseCaseSensitiveFileNames: caseSensitive,
 		}}
-		events := map[tspath.Path]fswatch.EventKind{
-			o.toPath("/repo/src"):      fswatch.EventDelete,
-			o.toPath("/repo/lib"):      fswatch.EventUpdate,
-			o.toPath("/repo/lib/a.ts"): fswatch.EventUpdate,
-			o.toPath("/repo/s"):        fswatch.EventDelete,
+		raw := map[string]fswatch.EventKind{
+			"/repo/src":      fswatch.EventDelete,
+			"/repo/lib":      fswatch.EventUpdate,
+			"/repo/lib/a.ts": fswatch.EventUpdate,
+			"/repo/s":        fswatch.EventDelete,
 		}
 		for i := range 10000 {
-			events[o.toPath(fmt.Sprintf("/unrelated/%d", i))] = fswatch.EventDelete
+			raw[fmt.Sprintf("/unrelated/%d", i)] = fswatch.EventDelete
 		}
-		for _, test := range []struct {
+		tests := []struct {
 			name string
 			want bool
 		}{
@@ -35,7 +37,17 @@ func TestWatchFileChangedAncestors(t *testing.T) {
 			{"lib/b.ts", false},
 			{"ſ/a.ts", false},
 			{"unknown/a.ts", false},
-		} {
+		}
+		index := watchalias.New(vfstest.FromMap(map[string]string{}, caseSensitive))
+		for _, test := range tests {
+			name := tspath.GetNormalizedAbsolutePath(test.name, "/repo")
+			assert.NilError(t, index.Register(watchalias.Registration{Name: name, Realpath: name, Dependency: true}))
+		}
+		events := make(map[tspath.Path]fswatch.EventKind)
+		for name, kind := range index.Match(raw).Changes {
+			events[o.toPath(name)] = kind
+		}
+		for _, test := range tests {
 			assert.Equal(t, o.watchFileChanged(test.name, events), test.want, "%s (caseSensitive=%v)", test.name, caseSensitive)
 		}
 	}

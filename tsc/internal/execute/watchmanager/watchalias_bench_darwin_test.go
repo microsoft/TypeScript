@@ -87,22 +87,19 @@ func BenchmarkWatchAliasGeneration(b *testing.B) {
 					names[i] = fmt.Sprintf("%s/%s%d/file%d.ts", dir, prefix, i/10, i)
 					desired[fmt.Sprintf("%s/%s%d", dir, prefix, i/10)] = false
 				}
+				var resolutionFS vfs.FS
 				reconcile := func(wm *WatchManager) {
 					// Include the caller's dependency-directory computation.
 					for _, name := range names {
-						wm.Realpath(name)
+						wm.Realpath(name, resolutionFS)
 					}
-					wm.SetWatchFiles(names)
-					if err := wm.ReconcileWatches(desired); err != nil {
+					if err := wm.ReconcileWatches(names, desired, resolutionFS); err != nil {
 						b.Fatal(err)
 					}
 				}
-				var resolutionFS vfs.FS
 				create := func() *WatchManager {
 					wm := NewWatchManager(io.Discard, filesystem.DirectoryExists, filesystem)
-					wm.SetResolutionFS(resolutionFS)
 					reconcile(wm)
-					wm.SetResolutionFS(nil)
 					return wm
 				}
 				for _, fixture := range []string{"missing", "existing"} {
@@ -160,7 +157,10 @@ func BenchmarkWatchAliasGeneration(b *testing.B) {
 						b.Run("incremental", func(b *testing.B) {
 							report(b, func() {
 								wm.onWatchEvents(event, nil)
-								wm.DrainEvents()
+								changes := wm.DrainEvents()
+								if _, err := wm.RefreshResolutions(changes); err != nil {
+									b.Fatal(err)
+								}
 								reconcile(wm)
 							})
 						})

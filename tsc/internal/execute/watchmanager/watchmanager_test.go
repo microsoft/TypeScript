@@ -55,50 +55,72 @@ func TestWatchGenerationReusesUnchangedResolution(t *testing.T) {
 	}
 	initialCalls := filesystem.realpathCalls
 	wm := NewWatchManager(io.Discard, filesystem.DirectoryExists, filesystem)
-	wm.SetResolutionFS(cached)
-	wm.SetWatchFiles(names)
-	assert.NilError(t, wm.ReconcileWatches(map[string]bool{"/repo": true}))
-	wm.SetResolutionFS(nil)
+	assert.NilError(t, wm.ReconcileWatches(names, map[string]bool{"/repo": true}, cached))
 	assert.Equal(t, filesystem.entriesCalls, 0, "resolution does not require directory listings")
 	assert.Assert(t, filesystem.realpathCalls-initialCalls < 10, "reuse the build's authoritative resolutions")
 	calls, scans := filesystem.realpathCalls, filesystem.entriesCalls
 	aliases := wm.aliases
-	wm.SetWatchFiles(names)
-	assert.NilError(t, wm.ReconcileWatches(map[string]bool{"/repo": true}))
+	assert.NilError(t, wm.ReconcileWatches(names, map[string]bool{"/repo": true}, nil))
 	assert.Equal(t, filesystem.realpathCalls, calls)
 	assert.Equal(t, filesystem.entriesCalls, scans)
 	assert.Assert(t, wm.aliases == aliases, "unchanged generation must retain its alias index")
+	resolved := *wm.resolvedPaths[names[0]]
 	wm.onWatchEvents([]fswatch.Event{{Path: names[0], Kind: fswatch.EventUpdate}}, nil)
-	wm.DrainEvents()
+	changes := wm.DrainEvents()
 	assert.Equal(t, filesystem.realpathCalls, calls, "events must not resolve paths")
 	assert.Equal(t, filesystem.entriesCalls, scans, "events must not scan directories")
-	assert.NilError(t, wm.ReconcileWatches(map[string]bool{"/repo": true}))
+	assert.Equal(t, *wm.resolvedPaths[names[0]], resolved, "draining must not mutate cached resolutions")
+	assert.Assert(t, wm.aliases == aliases, "draining must not replace the alias index")
+	retargeted, err := wm.RefreshResolutions(changes)
+	assert.NilError(t, err)
+	assert.Assert(t, !retargeted)
+	assert.NilError(t, wm.ReconcileWatches(names, map[string]bool{"/repo": true}, nil))
 	assert.Assert(t, filesystem.realpathCalls-calls < 10, "one changed leaf must not resolve all unchanged leaves")
 	assert.Assert(t, filesystem.entriesCalls-scans < 10, "one changed leaf must not scan all directories")
 	assert.Assert(t, wm.aliases == aliases, "ordinary file updates must retain their alias index")
 	reordered := slices.Clone(names)
 	slices.Reverse(reordered)
 	reordered = append(reordered, names[0])
-	wm.SetWatchFiles(reordered)
-	assert.NilError(t, wm.ReconcileWatches(map[string]bool{"/repo": true}))
+	assert.NilError(t, wm.ReconcileWatches(reordered, map[string]bool{"/repo": true}, nil))
 	assert.Assert(t, wm.aliases == aliases, "order and duplicate observations do not change the generation")
 	reordered[0] = names[0]
-	wm.SetWatchFiles(reordered)
-	assert.NilError(t, wm.ReconcileWatches(map[string]bool{"/repo": true}))
+	assert.NilError(t, wm.ReconcileWatches(reordered, map[string]bool{"/repo": true}, nil))
 	assert.Assert(t, wm.aliases != aliases, "replacing a dependency with a duplicate must rebuild the generation")
+}
+
+func TestWatchGenerationReusesRegistrationsWhenRecursionChanges(t *testing.T) {
+	t.Parallel()
+	filesystem := &countingWatchFS{FS: vfstest.FromMap(map[string]string{"/repo/src/file.ts": ""}, true)}
+	wm := NewWatchManager(io.Discard, filesystem.DirectoryExists, filesystem)
+	names := []string{"/repo/src/file.ts"}
+	assert.NilError(t, wm.ReconcileWatches(names, map[string]bool{"/repo/src": false}, nil))
+	aliases := wm.aliases
+	calls, scans := filesystem.realpathCalls, filesystem.entriesCalls
+	for _, recursive := range []bool{true, false} {
+		assert.NilError(t, wm.ReconcileWatches(names, map[string]bool{"/repo/src": recursive}, nil))
+		assert.Equal(t, len(wm.registrations), 2)
+		assert.Equal(t, wm.registrations["/repo/src"], watchRequest{directory: true})
+		assert.Equal(t, wm.registrations["/repo/src/file.ts"], watchRequest{dependency: true})
+		assert.Assert(t, wm.aliases == aliases, "subscription recursion does not change the alias generation")
+		assert.Equal(t, filesystem.realpathCalls, calls)
+		assert.Equal(t, filesystem.entriesCalls, scans)
+	}
 }
 
 func TestWatchGenerationMissingLeafUpdate(t *testing.T) {
 	t.Parallel()
 	filesystem := &countingWatchFS{FS: vfstest.FromMap(map[string]string{}, true)}
 	wm := NewWatchManager(io.Discard, filesystem.DirectoryExists, filesystem)
-	wm.SetWatchFiles([]string{"/repo/missing.ts"})
-	assert.NilError(t, wm.ReconcileWatches(map[string]bool{"/repo": true}))
+	names := []string{"/repo/missing.ts"}
+	assert.NilError(t, wm.ReconcileWatches(names, map[string]bool{"/repo": true}, nil))
 	assert.Equal(t, filesystem.entriesCalls, 0, "resolution must not enumerate directories")
 	aliases := wm.aliases
 	wm.onWatchEvents([]fswatch.Event{{Path: "/repo/missing.ts", Kind: fswatch.EventUpdate}}, nil)
-	wm.DrainEvents()
-	assert.NilError(t, wm.ReconcileWatches(map[string]bool{"/repo": true}))
+	changes := wm.DrainEvents()
+	retargeted, err := wm.RefreshResolutions(changes)
+	assert.NilError(t, err)
+	assert.Assert(t, !retargeted)
+	assert.NilError(t, wm.ReconcileWatches(names, map[string]bool{"/repo": true}, nil))
 	assert.Assert(t, wm.aliases == aliases, "an unchanged missing resolution must retain its index")
 }
 
@@ -117,8 +139,7 @@ func TestWatchDirectoryDeletionExpandsTrackedSubtree(t *testing.T) {
 			for i := range 10000 {
 				files = append(files, fmt.Sprintf("/unrelated/%d/file.ts", i))
 			}
-			wm.SetWatchFiles(files)
-			assert.NilError(t, wm.ReconcileWatches(map[string]bool{"/repo": true}))
+			assert.NilError(t, wm.ReconcileWatches(files, map[string]bool{"/repo": true}, nil))
 			// Event processing must not query the filesystem after deletion.
 			wm.filesystem = &eventOnlyFS{caseSensitive: caseSensitive}
 			wm.onWatchEvents([]fswatch.Event{
@@ -128,8 +149,8 @@ func TestWatchDirectoryDeletionExpandsTrackedSubtree(t *testing.T) {
 				{Path: "/repo/s", Kind: fswatch.EventDelete},
 				{Path: "/unknown", Kind: fswatch.EventDelete},
 			}, nil)
-			events, overflow := wm.DrainEvents()
-			assert.Assert(t, !overflow)
+			changes := wm.DrainEvents()
+			assert.Assert(t, !changes.Overflow)
 			expected := map[string]fswatch.EventKind{
 				"/repo/src":             fswatch.EventDelete,
 				"/repo/src/nested":      fswatch.EventDelete,
@@ -141,14 +162,15 @@ func TestWatchDirectoryDeletionExpandsTrackedSubtree(t *testing.T) {
 			if !caseSensitive {
 				expected["/repo/SRC/other.ts"] = fswatch.EventDelete
 			}
-			assert.DeepEqual(t, events, expected)
+			assert.DeepEqual(t, changes.Changes, expected)
 			wm.filesystem = filesystem
-			wm.SetWatchFiles([]string{"/repo/new.ts"})
-			assert.NilError(t, wm.ReconcileWatches(map[string]bool{"/repo": true}))
+			_, err := wm.RefreshResolutions(changes)
+			assert.NilError(t, err)
+			assert.NilError(t, wm.ReconcileWatches([]string{"/repo/new.ts"}, map[string]bool{"/repo": true}, nil))
 			wm.onWatchEvents([]fswatch.Event{{Path: "/repo/src", Kind: fswatch.EventDelete}}, nil)
-			events, overflow = wm.DrainEvents()
-			assert.Assert(t, !overflow)
-			assert.DeepEqual(t, events, map[string]fswatch.EventKind{"/repo/src": fswatch.EventDelete})
+			changes = wm.DrainEvents()
+			assert.Assert(t, !changes.Overflow)
+			assert.DeepEqual(t, changes.Changes, map[string]fswatch.EventKind{"/repo/src": fswatch.EventDelete})
 		})
 	}
 }
@@ -159,17 +181,16 @@ func TestWatchAliasesDoNotFoldMockPaths(t *testing.T) {
 		filesystem := vfstest.FromMap(map[string]string{}, caseSensitive)
 		wm := NewWatchManager(io.Discard, filesystem.DirectoryExists, filesystem)
 		wm.Lock()
-		wm.SetWatchFiles([]string{"/repo/ſ.ts", "/repo/e\u0301.ts"})
-		assert.NilError(t, wm.ReconcileWatches(map[string]bool{"/repo": true}))
+		assert.NilError(t, wm.ReconcileWatches([]string{"/repo/ſ.ts", "/repo/e\u0301.ts"}, map[string]bool{"/repo": true}, nil))
 		wm.onWatchEvents([]fswatch.Event{
 			{Path: "/repo/s.ts", Kind: fswatch.EventUpdate},
 			{Path: "/repo/é.ts", Kind: fswatch.EventDelete},
 			{Path: "/repo/new.ts", Kind: fswatch.EventUpdate},
 		}, nil)
-		events, overflow := wm.DrainEvents()
+		changes := wm.DrainEvents()
 		wm.Unlock()
-		assert.Assert(t, !overflow)
-		assert.DeepEqual(t, events, map[string]fswatch.EventKind{
+		assert.Assert(t, !changes.Overflow)
+		assert.DeepEqual(t, changes.Changes, map[string]fswatch.EventKind{
 			"/repo/s.ts":   fswatch.EventUpdate,
 			"/repo/é.ts":   fswatch.EventDelete,
 			"/repo/new.ts": fswatch.EventUpdate,
