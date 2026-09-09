@@ -1,10 +1,13 @@
 package requestfilesystem
 
 import (
+	"slices"
+	"strings"
 	"testing"
 	"time"
 
 	"github.com/microsoft/TypeScript/tsc/internal/project"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/trackingvfs"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfstest"
@@ -22,6 +25,76 @@ func newLayeredRequestFileSystem(params *RequestFileSystem, base vfs.FS, current
 		return nil, err
 	}
 	return fileSystem.(*requestFileSystem), nil
+}
+
+func verifyCompactionWithoutHostReads(t *testing.T, layer *requestFileSystem, host *trackingvfs.FS, paths []string) {
+	t.Helper()
+	empty, err := newRequestFileSystem(&RequestFileSystem{Kind: KindFull}, host, layer.currentDirectory)
+	assert.NilError(t, err)
+	compacted := layer.applyTo(*empty)
+	verify := func(name string, run func(vfs.FS, string) any) {
+		t.Helper()
+		for _, path := range paths {
+			for seen := range host.SeenFiles.Keys() {
+				host.SeenFiles.Delete(seen)
+			}
+			expected := run(layer, path)
+			if !host.SeenFiles.IsEmpty() {
+				continue
+			}
+			actual := run(&compacted, path)
+			assert.Assert(t, host.SeenFiles.IsEmpty(), name, path)
+			t.Logf("Comparing %s(%q) after compaction", name, path)
+			assert.DeepEqual(t, actual, expected)
+		}
+	}
+	verify("FileExists", func(fileSystem vfs.FS, path string) any { return fileSystem.FileExists(path) })
+	verify("DirectoryExists", func(fileSystem vfs.FS, path string) any { return fileSystem.DirectoryExists(path) })
+	verify("ReadFile", func(fileSystem vfs.FS, path string) any {
+		content, ok := fileSystem.ReadFile(path)
+		return struct {
+			Content string
+			OK      bool
+		}{content, ok}
+	})
+	verify("Realpath", func(fileSystem vfs.FS, path string) any { return fileSystem.Realpath(path) })
+	verify("GetAccessibleEntries", func(fileSystem vfs.FS, path string) any { return fileSystem.GetAccessibleEntries(path) })
+	verify("Stat", func(fileSystem vfs.FS, path string) any {
+		info := fileSystem.Stat(path)
+		if info == nil {
+			return nil
+		}
+		return struct {
+			Name      string
+			Size      int64
+			Mode      uint32
+			ModTime   time.Time
+			Directory bool
+			Sys       any
+		}{info.Name(), info.Size(), uint32(info.Mode()), info.ModTime(), info.IsDir(), info.Sys()}
+	})
+	verify("WalkDir", func(fileSystem vfs.FS, path string) any {
+		var result struct {
+			Paths       []string
+			Directories []bool
+			Errors      []string
+			Error       string
+		}
+		walkResult := fileSystem.WalkDir(path, func(child string, entry vfs.DirEntry, walkErr error) error {
+			result.Paths = append(result.Paths, child)
+			result.Directories = append(result.Directories, entry != nil && entry.IsDir())
+			message := ""
+			if walkErr != nil {
+				message = walkErr.Error()
+			}
+			result.Errors = append(result.Errors, message)
+			return nil
+		})
+		if walkResult != nil {
+			result.Error = walkResult.Error()
+		}
+		return result
+	})
 }
 
 func TestInitializeForUpdate(t *testing.T) {
@@ -94,79 +167,894 @@ func TestInitializeForUpdate(t *testing.T) {
 	})
 }
 
-func TestRequestFileSystemCompleteDirectoryListings(t *testing.T) {
+func TestRequestFileSystemCompleteDirectoryListingsFullExplicitReplacement(t *testing.T) {
 	t.Parallel()
+	testCompleteDirectoryListing(t, KindFull, true, RequestDirectoryEntries{Files: []string{"replacement.ts"}, Directories: []string{"replacement-dir"}})
+}
 
-	for _, kind := range []Kind{KindFull, KindLayer} {
-		for _, baseListing := range []string{"explicit", "derived"} {
-			for _, test := range []struct {
-				name    string
-				entries RequestDirectoryEntries
-			}{
-				{name: "replacement", entries: RequestDirectoryEntries{Files: []string{"replacement.ts"}, Directories: []string{"replacement-dir"}}},
-				{name: "empty", entries: RequestDirectoryEntries{Files: []string{}, Directories: []string{}}},
-			} {
-				t.Run(string(kind)+"/"+baseListing+"/"+test.name, func(t *testing.T) {
-					t.Parallel()
-					host := &trackingvfs.FS{Inner: vfstest.FromMap(map[string]string{
-						"/dir/host.ts":           "host",
-						"/dir/host-dir/index.ts": "host child",
-					}, true)}
-					params := &RequestFileSystem{
-						Kind: kind,
-						Files: map[string]string{
-							"/dir/base.ts":           "base",
-							"/dir/base-dir/index.ts": "base child",
-						},
-					}
-					if baseListing == "explicit" {
-						params.Directories = map[string]RequestDirectoryEntries{
-							"/dir": {Files: []string{"base.ts"}, Directories: []string{"base-dir"}},
-						}
-					}
-					base, err := newRequestFileSystem(params, host, "/")
-					assert.NilError(t, err)
-					layered, err := newLayeredRequestFileSystem(&RequestFileSystem{
-						Kind: KindLayer,
-						Directories: map[string]RequestDirectoryEntries{
-							"/dir": test.entries,
-						},
-					}, base, "/")
-					assert.NilError(t, err)
+func TestRequestFileSystemCompleteDirectoryListingsFullExplicitEmpty(t *testing.T) {
+	t.Parallel()
+	testCompleteDirectoryListing(t, KindFull, true, RequestDirectoryEntries{Files: []string{}, Directories: []string{}})
+}
 
-					// Omitting a listing in a later update still merges its derived
-					// entries with the complete listing, without reopening host fallback.
-					next, err := newLayeredRequestFileSystem(&RequestFileSystem{
-						Kind: KindLayer,
-						Files: map[string]string{
-							"/dir/added.ts":           "added",
-							"/dir/added-dir/index.ts": "added child",
-						},
-					}, layered, "/")
-					assert.NilError(t, err)
-					for path := range host.SeenFiles.Keys() {
-						host.SeenFiles.Delete(path)
-					}
+func TestRequestFileSystemCompleteDirectoryListingsFullDerivedReplacement(t *testing.T) {
+	t.Parallel()
+	testCompleteDirectoryListing(t, KindFull, false, RequestDirectoryEntries{Files: []string{"replacement.ts"}, Directories: []string{"replacement-dir"}})
+}
 
-					verify := func() {
-						t.Helper()
-						entries := layered.GetAccessibleEntries("/dir")
-						assert.Assert(t, host.SeenFiles.IsEmpty())
-						assert.DeepEqual(t, entries.Files, test.entries.Files)
-						assert.DeepEqual(t, entries.Directories, test.entries.Directories)
-						entries = next.GetAccessibleEntries("/dir")
-						assert.Assert(t, host.SeenFiles.IsEmpty())
-						assert.DeepEqual(t, entries.Files, append([]string{"added.ts"}, test.entries.Files...))
-						assert.DeepEqual(t, entries.Directories, append([]string{"added-dir"}, test.entries.Directories...))
-					}
-					verify()
-					assert.Assert(t, layered.baseFileSystem() == host)
-					assert.Assert(t, next.baseFileSystem() == host)
-					verify()
-				})
-			}
+func TestRequestFileSystemCompleteDirectoryListingsFullDerivedEmpty(t *testing.T) {
+	t.Parallel()
+	testCompleteDirectoryListing(t, KindFull, false, RequestDirectoryEntries{Files: []string{}, Directories: []string{}})
+}
+
+func TestRequestFileSystemCompleteDirectoryListingsLayerExplicitReplacement(t *testing.T) {
+	t.Parallel()
+	testCompleteDirectoryListing(t, KindLayer, true, RequestDirectoryEntries{Files: []string{"replacement.ts"}, Directories: []string{"replacement-dir"}})
+}
+
+func TestRequestFileSystemCompleteDirectoryListingsLayerExplicitEmpty(t *testing.T) {
+	t.Parallel()
+	testCompleteDirectoryListing(t, KindLayer, true, RequestDirectoryEntries{Files: []string{}, Directories: []string{}})
+}
+
+func TestRequestFileSystemCompleteDirectoryListingsLayerDerivedReplacement(t *testing.T) {
+	t.Parallel()
+	testCompleteDirectoryListing(t, KindLayer, false, RequestDirectoryEntries{Files: []string{"replacement.ts"}, Directories: []string{"replacement-dir"}})
+}
+
+func TestRequestFileSystemCompleteDirectoryListingsLayerDerivedEmpty(t *testing.T) {
+	t.Parallel()
+	testCompleteDirectoryListing(t, KindLayer, false, RequestDirectoryEntries{Files: []string{}, Directories: []string{}})
+}
+
+func testCompleteDirectoryListing(t *testing.T, kind Kind, explicit bool, replacement RequestDirectoryEntries) {
+	t.Helper()
+	host := &trackingvfs.FS{Inner: vfstest.FromMap(map[string]string{
+		"/dir/host.ts":           "host",
+		"/dir/host-dir/index.ts": "host child",
+	}, true)}
+	params := &RequestFileSystem{
+		Kind: kind,
+		Files: map[string]string{
+			"/dir/base.ts":           "base",
+			"/dir/base-dir/index.ts": "base child",
+		},
+	}
+	if explicit {
+		params.Directories = map[string]RequestDirectoryEntries{
+			"/dir": {Files: []string{"base.ts"}, Directories: []string{"base-dir"}},
 		}
 	}
+	base, err := newRequestFileSystem(params, host, "/")
+	assert.NilError(t, err)
+	layered, err := newLayeredRequestFileSystem(&RequestFileSystem{
+		Kind: KindLayer,
+		Directories: map[string]RequestDirectoryEntries{
+			"/dir": replacement,
+		},
+	}, base, "/")
+	assert.NilError(t, err)
+
+	// Omitting a listing in a later update still merges its derived
+	// entries with the complete listing, without reopening host fallback.
+	next, err := newLayeredRequestFileSystem(&RequestFileSystem{
+		Kind: KindLayer,
+		Files: map[string]string{
+			"/dir/added.ts":           "added",
+			"/dir/added-dir/index.ts": "added child",
+		},
+	}, layered, "/")
+	assert.NilError(t, err)
+	for path := range host.SeenFiles.Keys() {
+		host.SeenFiles.Delete(path)
+	}
+
+	verify := func() {
+		t.Helper()
+		entries := layered.GetAccessibleEntries("/dir")
+		assert.Assert(t, host.SeenFiles.IsEmpty())
+		assert.DeepEqual(t, entries.Files, replacement.Files)
+		assert.DeepEqual(t, entries.Directories, replacement.Directories)
+		entries = next.GetAccessibleEntries("/dir")
+		assert.Assert(t, host.SeenFiles.IsEmpty())
+		assert.DeepEqual(t, entries.Files, append([]string{"added.ts"}, replacement.Files...))
+		assert.DeepEqual(t, entries.Directories, append([]string{"added-dir"}, replacement.Directories...))
+	}
+	verify()
+	assert.Assert(t, layered.baseFileSystem() == host)
+	assert.Assert(t, next.baseFileSystem() == host)
+	verify()
+}
+
+func TestRequestFileSystemSymlinkReplacesDirectoryFullRequestSealedSame(t *testing.T) {
+	t.Parallel()
+	testSymlinkReplacesDirectory(t, symlinkReplacementOptions{kind: KindFull, caseSensitive: true, linkPath: "/dir/removed"})
+}
+
+func TestRequestFileSystemSymlinkReplacesDirectoryFullRequestSealedParent(t *testing.T) {
+	t.Parallel()
+	testSymlinkReplacesDirectory(t, symlinkReplacementOptions{kind: KindFull, caseSensitive: true, linkPath: "/dir"})
+}
+
+func TestRequestFileSystemSymlinkReplacesDirectoryFullRequestSealedChild(t *testing.T) {
+	t.Parallel()
+	testSymlinkReplacesDirectory(t, symlinkReplacementOptions{kind: KindFull, caseSensitive: true, linkPath: "/dir/removed/child"})
+}
+
+func TestRequestFileSystemSymlinkReplacesDirectoryFullRequestRemovedSame(t *testing.T) {
+	t.Parallel()
+	testSymlinkReplacesDirectory(t, symlinkReplacementOptions{kind: KindFull, caseSensitive: true, remove: true, linkPath: "/dir/removed"})
+}
+
+func TestRequestFileSystemSymlinkReplacesDirectoryFullRequestRemovedParent(t *testing.T) {
+	t.Parallel()
+	testSymlinkReplacesDirectory(t, symlinkReplacementOptions{kind: KindFull, caseSensitive: true, remove: true, linkPath: "/dir"})
+}
+
+func TestRequestFileSystemSymlinkReplacesDirectoryFullRequestRemovedChild(t *testing.T) {
+	t.Parallel()
+	testSymlinkReplacesDirectory(t, symlinkReplacementOptions{kind: KindFull, caseSensitive: true, remove: true, linkPath: "/dir/removed/child"})
+}
+
+func TestRequestFileSystemSymlinkReplacesDirectoryFullHostSealedSame(t *testing.T) {
+	t.Parallel()
+	testSymlinkReplacesDirectory(t, symlinkReplacementOptions{kind: KindFull, hostTarget: true, caseSensitive: true, linkPath: "/dir/removed"})
+}
+
+func TestRequestFileSystemSymlinkReplacesDirectoryFullHostSealedParent(t *testing.T) {
+	t.Parallel()
+	testSymlinkReplacesDirectory(t, symlinkReplacementOptions{kind: KindFull, hostTarget: true, caseSensitive: true, linkPath: "/dir"})
+}
+
+func TestRequestFileSystemSymlinkReplacesDirectoryFullHostSealedChild(t *testing.T) {
+	t.Parallel()
+	testSymlinkReplacesDirectory(t, symlinkReplacementOptions{kind: KindFull, hostTarget: true, caseSensitive: true, linkPath: "/dir/removed/child"})
+}
+
+func TestRequestFileSystemSymlinkReplacesDirectoryFullHostRemovedSame(t *testing.T) {
+	t.Parallel()
+	testSymlinkReplacesDirectory(t, symlinkReplacementOptions{kind: KindFull, hostTarget: true, caseSensitive: true, remove: true, linkPath: "/dir/removed"})
+}
+
+func TestRequestFileSystemSymlinkReplacesDirectoryFullHostRemovedParent(t *testing.T) {
+	t.Parallel()
+	testSymlinkReplacesDirectory(t, symlinkReplacementOptions{kind: KindFull, hostTarget: true, caseSensitive: true, remove: true, linkPath: "/dir"})
+}
+
+func TestRequestFileSystemSymlinkReplacesDirectoryFullHostRemovedChild(t *testing.T) {
+	t.Parallel()
+	testSymlinkReplacesDirectory(t, symlinkReplacementOptions{kind: KindFull, hostTarget: true, caseSensitive: true, remove: true, linkPath: "/dir/removed/child"})
+}
+
+func TestRequestFileSystemSymlinkReplacesDirectoryLayerFallbackSealedSame(t *testing.T) {
+	t.Parallel()
+	testSymlinkReplacesDirectory(t, symlinkReplacementOptions{kind: KindLayer, caseSensitive: true, linkPath: "/dir/removed"})
+}
+
+func TestRequestFileSystemSymlinkReplacesDirectoryLayerFallbackSealedParent(t *testing.T) {
+	t.Parallel()
+	testSymlinkReplacesDirectory(t, symlinkReplacementOptions{kind: KindLayer, caseSensitive: true, linkPath: "/dir"})
+}
+
+func TestRequestFileSystemSymlinkReplacesDirectoryLayerFallbackSealedChild(t *testing.T) {
+	t.Parallel()
+	testSymlinkReplacesDirectory(t, symlinkReplacementOptions{kind: KindLayer, caseSensitive: true, linkPath: "/dir/removed/child"})
+}
+
+func TestRequestFileSystemSymlinkReplacesDirectoryLayerFallbackRemovedSame(t *testing.T) {
+	t.Parallel()
+	testSymlinkReplacesDirectory(t, symlinkReplacementOptions{kind: KindLayer, caseSensitive: true, remove: true, linkPath: "/dir/removed"})
+}
+
+func TestRequestFileSystemSymlinkReplacesDirectoryLayerFallbackRemovedParent(t *testing.T) {
+	t.Parallel()
+	testSymlinkReplacesDirectory(t, symlinkReplacementOptions{kind: KindLayer, caseSensitive: true, remove: true, linkPath: "/dir"})
+}
+
+func TestRequestFileSystemSymlinkReplacesDirectoryLayerFallbackRemovedChild(t *testing.T) {
+	t.Parallel()
+	testSymlinkReplacesDirectory(t, symlinkReplacementOptions{kind: KindLayer, caseSensitive: true, remove: true, linkPath: "/dir/removed/child"})
+}
+
+func TestRequestFileSystemSymlinkReplacesDirectoryLayerHostInsensitiveSealedSame(t *testing.T) {
+	t.Parallel()
+	testSymlinkReplacesDirectory(t, symlinkReplacementOptions{kind: KindLayer, hostTarget: true, linkPath: "/dir/removed"})
+}
+
+func TestRequestFileSystemSymlinkReplacesDirectoryLayerHostInsensitiveSealedParent(t *testing.T) {
+	t.Parallel()
+	testSymlinkReplacesDirectory(t, symlinkReplacementOptions{kind: KindLayer, hostTarget: true, linkPath: "/dir"})
+}
+
+func TestRequestFileSystemSymlinkReplacesDirectoryLayerHostInsensitiveSealedChild(t *testing.T) {
+	t.Parallel()
+	testSymlinkReplacesDirectory(t, symlinkReplacementOptions{kind: KindLayer, hostTarget: true, linkPath: "/dir/removed/child"})
+}
+
+func TestRequestFileSystemSymlinkReplacesDirectoryLayerHostInsensitiveRemovedSame(t *testing.T) {
+	t.Parallel()
+	testSymlinkReplacesDirectory(t, symlinkReplacementOptions{kind: KindLayer, hostTarget: true, remove: true, linkPath: "/dir/removed"})
+}
+
+func TestRequestFileSystemSymlinkReplacesDirectoryLayerHostInsensitiveRemovedParent(t *testing.T) {
+	t.Parallel()
+	testSymlinkReplacesDirectory(t, symlinkReplacementOptions{kind: KindLayer, hostTarget: true, remove: true, linkPath: "/dir"})
+}
+
+func TestRequestFileSystemSymlinkReplacesDirectoryLayerHostInsensitiveRemovedChild(t *testing.T) {
+	t.Parallel()
+	testSymlinkReplacesDirectory(t, symlinkReplacementOptions{kind: KindLayer, hostTarget: true, remove: true, linkPath: "/dir/removed/child"})
+}
+
+type symlinkReplacementOptions struct {
+	kind          Kind
+	hostTarget    bool
+	caseSensitive bool
+	remove        bool
+	linkPath      string
+}
+
+func testSymlinkReplacesDirectory(t *testing.T, options symlinkReplacementOptions) {
+	t.Helper()
+	linkPath := options.linkPath
+	remove := options.remove
+	host := vfstest.FromMap(map[string]string{
+		"/dir/removed/old.ts":       "old host",
+		"/dir/removed/child/old.ts": "old host child",
+		"/dir/removed/sibling.ts":   "old sibling",
+		"/dir/removed-other/old.ts": "unrelated",
+		"/target/new.ts":            "host target",
+		"/target/removed/new.ts":    "host target",
+	}, options.caseSensitive)
+	params := &RequestFileSystem{
+		Kind: options.kind,
+		Files: map[string]string{
+			"/dir/removed/cached.ts":       "cached",
+			"/dir/removed/child/cached.ts": "cached child",
+			"/dir/removed-other/old.ts":    "unrelated",
+		},
+		Directories: map[string]RequestDirectoryEntries{
+			"/dir":               {Directories: []string{"removed", "removed-other"}},
+			"/dir/removed":       {Files: []string{"cached.ts"}, Directories: []string{"child"}},
+			"/dir/removed/child": {Files: []string{"cached.ts"}},
+		},
+	}
+	expectedContent := "host target"
+	if options.kind == KindFull {
+		params.Files["/target/new.ts"] = "request target"
+		params.Files["/target/removed/new.ts"] = "request target"
+		if !options.hostTarget {
+			expectedContent = "request target"
+		}
+	}
+	base, err := newRequestFileSystem(params, host, "/")
+	assert.NilError(t, err)
+	previous := base
+	if remove {
+		removedPath := "/dir/removed"
+		if !options.caseSensitive {
+			removedPath = strings.ToUpper(removedPath)
+		}
+		previous, err = newLayeredRequestFileSystem(&RequestFileSystem{
+			Kind:         KindLayer,
+			RemovedPaths: []string{removedPath},
+		}, base, "/")
+		assert.NilError(t, err)
+	}
+	verifyPrevious := func() {
+		t.Helper()
+		assert.Equal(t, previous.DirectoryExists("/dir/removed"), !remove)
+		assert.Equal(t, previous.FileExists("/dir/removed/cached.ts"), !remove)
+		if remove {
+			assert.Assert(t, !previous.FileExists("/dir/removed/old.ts"))
+			assert.Equal(t, len(previous.GetAccessibleEntries("/dir/removed").Files), 0)
+			assert.Equal(t, len(previous.GetAccessibleEntries("/dir/removed").Directories), 0)
+		} else {
+			assert.DeepEqual(t, previous.GetAccessibleEntries("/dir/removed").Files, []string{"cached.ts"})
+			assert.DeepEqual(t, previous.GetAccessibleEntries("/dir/removed").Directories, []string{"child"})
+		}
+	}
+	verifyPrevious()
+	linked, err := newLayeredRequestFileSystem(&RequestFileSystem{
+		Kind: KindLayer,
+		Symlinks: map[string]RequestSymlink{
+			linkPath: {Target: "/target", Host: options.hostTarget},
+		},
+	}, previous, "/")
+	assert.NilError(t, err)
+	verifyLinked := func(fileSystem *requestFileSystem) {
+		t.Helper()
+		assert.Assert(t, fileSystem.baseFileSystem() == host)
+		assert.Equal(t, fileSystem.kind, options.kind)
+		assert.Assert(t, fileSystem.DirectoryExists(linkPath))
+		assert.Assert(t, !fileSystem.FileExists(linkPath))
+		for _, suffix := range []string{"/new.ts", "/removed/new.ts"} {
+			fileName := linkPath + suffix
+			assert.Assert(t, fileSystem.FileExists(fileName), fileName)
+			content, ok := fileSystem.ReadFile(fileName)
+			assert.Assert(t, ok)
+			assert.Equal(t, content, expectedContent)
+			info := fileSystem.Stat(fileName)
+			assert.Assert(t, info != nil)
+			assert.Assert(t, !info.IsDir())
+			assert.Equal(t, info.Size(), int64(len(expectedContent)))
+			assert.Equal(t, fileSystem.Realpath(fileName), "/target"+suffix)
+		}
+		info := fileSystem.Stat(linkPath)
+		assert.Assert(t, info != nil)
+		assert.Assert(t, info.IsDir())
+		assert.Equal(t, fileSystem.Realpath(linkPath), "/target")
+		assert.DeepEqual(t, fileSystem.GetAccessibleEntries(linkPath).Files, []string{"new.ts"})
+		assert.DeepEqual(t, fileSystem.GetAccessibleEntries(linkPath).Directories, []string{"removed"})
+		parentEntries := fileSystem.GetAccessibleEntries(tspath.GetDirectoryPath(linkPath))
+		linkName := tspath.GetBaseFileName(linkPath)
+		assert.Assert(t, slices.Contains(parentEntries.Directories, linkName))
+		_, isSymlink := parentEntries.Symlinks[linkName]
+		assert.Assert(t, isSymlink)
+		assert.Assert(t, !fileSystem.FileExists(linkPath+"/old.ts"))
+		assert.Assert(t, !fileSystem.FileExists(linkPath+"/cached.ts"))
+		if linkPath != "/dir" {
+			assert.Assert(t, fileSystem.FileExists("/dir/removed-other/old.ts"))
+		}
+		if remove {
+			assert.Assert(t, !fileSystem.FileExists("/dir/removed/sibling.ts"))
+		}
+		var walked []string
+		assert.NilError(t, fileSystem.WalkDir(linkPath, func(path string, entry vfs.DirEntry, err error) error {
+			assert.NilError(t, err)
+			walked = append(walked, path)
+			return nil
+		}))
+		assert.DeepEqual(t, walked, []string{linkPath, linkPath + "/new.ts", linkPath + "/removed", linkPath + "/removed/new.ts"})
+	}
+	verifyLinked(linked)
+	next, err := newLayeredRequestFileSystem(&RequestFileSystem{Kind: KindLayer}, linked, "/")
+	assert.NilError(t, err)
+	verifyLinked(next)
+	deleted, err := newLayeredRequestFileSystem(&RequestFileSystem{
+		Kind:         KindLayer,
+		RemovedPaths: []string{linkPath + "/new.ts"},
+	}, next, "/")
+	assert.NilError(t, err)
+	assert.Assert(t, !deleted.FileExists(linkPath+"/new.ts"))
+	assert.Assert(t, deleted.FileExists(linkPath+"/removed/new.ts"))
+	assert.Equal(t, len(deleted.GetAccessibleEntries(linkPath).Files), 0)
+	verifyLinked(linked)
+	assert.Assert(t, base.FileExists("/dir/removed/cached.ts"))
+	verifyPrevious()
+}
+
+func TestRequestFileSystemFileOverridesParentTombstone(t *testing.T) {
+	t.Parallel()
+	testObjectOverridesTombstone(t, "file", false, "/dir")
+}
+
+func TestRequestFileSystemFileOverridesSameTombstone(t *testing.T) {
+	t.Parallel()
+	testObjectOverridesTombstone(t, "file", false, "/dir/removed")
+}
+
+func TestRequestFileSystemFileOverridesChildTombstone(t *testing.T) {
+	t.Parallel()
+	testObjectOverridesTombstone(t, "file", false, "/dir/removed/child")
+}
+
+func TestRequestFileSystemFileOverridesParentTombstoneInheritedLink(t *testing.T) {
+	t.Parallel()
+	testObjectOverridesTombstone(t, "file", true, "/dir")
+}
+
+func TestRequestFileSystemFileOverridesSameTombstoneInheritedLink(t *testing.T) {
+	t.Parallel()
+	testObjectOverridesTombstone(t, "file", true, "/dir/removed")
+}
+
+func TestRequestFileSystemFileOverridesChildTombstoneInheritedLink(t *testing.T) {
+	t.Parallel()
+	testObjectOverridesTombstone(t, "file", true, "/dir/removed/child")
+}
+
+func TestRequestFileSystemDirectoryOverridesParentTombstone(t *testing.T) {
+	t.Parallel()
+	testObjectOverridesTombstone(t, "directory", false, "/dir")
+}
+
+func TestRequestFileSystemDirectoryOverridesSameTombstone(t *testing.T) {
+	t.Parallel()
+	testObjectOverridesTombstone(t, "directory", false, "/dir/removed")
+}
+
+func TestRequestFileSystemDirectoryOverridesChildTombstone(t *testing.T) {
+	t.Parallel()
+	testObjectOverridesTombstone(t, "directory", false, "/dir/removed/child")
+}
+
+func TestRequestFileSystemDirectoryOverridesParentTombstoneInheritedLink(t *testing.T) {
+	t.Parallel()
+	testObjectOverridesTombstone(t, "directory", true, "/dir")
+}
+
+func TestRequestFileSystemDirectoryOverridesSameTombstoneInheritedLink(t *testing.T) {
+	t.Parallel()
+	testObjectOverridesTombstone(t, "directory", true, "/dir/removed")
+}
+
+func TestRequestFileSystemDirectoryOverridesChildTombstoneInheritedLink(t *testing.T) {
+	t.Parallel()
+	testObjectOverridesTombstone(t, "directory", true, "/dir/removed/child")
+}
+
+func TestRequestFileSystemSymlinkOverridesParentTombstone(t *testing.T) {
+	t.Parallel()
+	testObjectOverridesTombstone(t, "symlink", false, "/dir")
+}
+
+func TestRequestFileSystemSymlinkOverridesSameTombstone(t *testing.T) {
+	t.Parallel()
+	testObjectOverridesTombstone(t, "symlink", false, "/dir/removed")
+}
+
+func TestRequestFileSystemSymlinkOverridesChildTombstone(t *testing.T) {
+	t.Parallel()
+	testObjectOverridesTombstone(t, "symlink", false, "/dir/removed/child")
+}
+
+func TestRequestFileSystemSymlinkOverridesParentTombstoneInheritedLink(t *testing.T) {
+	t.Parallel()
+	testObjectOverridesTombstone(t, "symlink", true, "/dir")
+}
+
+func TestRequestFileSystemSymlinkOverridesSameTombstoneInheritedLink(t *testing.T) {
+	t.Parallel()
+	testObjectOverridesTombstone(t, "symlink", true, "/dir/removed")
+}
+
+func TestRequestFileSystemSymlinkOverridesChildTombstoneInheritedLink(t *testing.T) {
+	t.Parallel()
+	testObjectOverridesTombstone(t, "symlink", true, "/dir/removed/child")
+}
+
+func TestRequestFileSystemFileSymlinkOverridesParentTombstone(t *testing.T) {
+	t.Parallel()
+	testObjectOverridesTombstone(t, "file-symlink", false, "/dir")
+}
+
+func TestRequestFileSystemFileSymlinkOverridesSameTombstone(t *testing.T) {
+	t.Parallel()
+	testObjectOverridesTombstone(t, "file-symlink", false, "/dir/removed")
+}
+
+func TestRequestFileSystemFileSymlinkOverridesChildTombstone(t *testing.T) {
+	t.Parallel()
+	testObjectOverridesTombstone(t, "file-symlink", false, "/dir/removed/child")
+}
+
+func TestRequestFileSystemFileSymlinkOverridesParentTombstoneInheritedLink(t *testing.T) {
+	t.Parallel()
+	testObjectOverridesTombstone(t, "file-symlink", true, "/dir")
+}
+
+func TestRequestFileSystemFileSymlinkOverridesSameTombstoneInheritedLink(t *testing.T) {
+	t.Parallel()
+	testObjectOverridesTombstone(t, "file-symlink", true, "/dir/removed")
+}
+
+func TestRequestFileSystemFileSymlinkOverridesChildTombstoneInheritedLink(t *testing.T) {
+	t.Parallel()
+	testObjectOverridesTombstone(t, "file-symlink", true, "/dir/removed/child")
+}
+
+func testObjectOverridesTombstone(t *testing.T, object string, inheritedLink bool, path string) {
+	t.Helper()
+	host := &trackingvfs.FS{Inner: vfstest.FromMap(map[string]string{
+		"/dir/removed/old.ts":   "old",
+		"/dir/removed/child.ts": "old child",
+		"/old/removed/old.ts":   "old target",
+		"/target/file.ts":       "target",
+	}, true)}
+	baseParams := &RequestFileSystem{Kind: KindLayer}
+	if inheritedLink {
+		baseParams.Symlinks = map[string]RequestSymlink{"/dir": {Target: "/old"}}
+	}
+	base, err := newRequestFileSystem(baseParams, host, "/")
+	assert.NilError(t, err)
+	removed, err := newLayeredRequestFileSystem(&RequestFileSystem{
+		Kind:         KindLayer,
+		RemovedPaths: []string{"/dir/removed"},
+	}, base, "/")
+	assert.NilError(t, err)
+	params := &RequestFileSystem{Kind: KindLayer}
+	switch object {
+	case "file":
+		params.Files = map[string]string{path: "new"}
+	case "directory":
+		params.Directories = map[string]RequestDirectoryEntries{path: {}}
+	case "symlink":
+		params.Symlinks = map[string]RequestSymlink{path: {Target: "/target"}}
+	case "file-symlink":
+		params.Symlinks = map[string]RequestSymlink{path: {Target: "/target/file.ts"}}
+	}
+	replaced, err := newLayeredRequestFileSystem(params, removed, "/")
+	assert.NilError(t, err)
+	isFile := object == "file" || object == "file-symlink"
+	assert.Equal(t, replaced.FileExists(path), isFile)
+	assert.Equal(t, replaced.DirectoryExists(path), !isFile)
+	assert.Assert(t, replaced.Stat(path) != nil)
+	entries := replaced.GetAccessibleEntries(tspath.GetDirectoryPath(path))
+	entryName := tspath.GetBaseFileName(path)
+	assert.Equal(t, slices.Contains(entries.Files, entryName), isFile)
+	assert.Equal(t, slices.Contains(entries.Directories, entryName), !isFile)
+	_, isSymlink := entries.Symlinks[entryName]
+	assert.Equal(t, isSymlink, object == "symlink" || object == "file-symlink")
+	assert.Assert(t, !replaced.FileExists("/dir/removed/old.ts"))
+	_, ok := replaced.ReadFile("/dir/removed/old.ts")
+	assert.Assert(t, !ok)
+	assert.Assert(t, replaced.Stat("/dir/removed/old.ts") == nil)
+	if isFile {
+		assert.Equal(t, len(replaced.GetAccessibleEntries(path+"/removed").Files), 0)
+		assert.Equal(t, len(replaced.GetAccessibleEntries(path).Directories), 0)
+	}
+	assert.Assert(t, !removed.DirectoryExists("/dir/removed"))
+	verifyCompactionWithoutHostReads(t, replaced, host, []string{
+		path, path + "/file.ts", "/dir", "/dir/removed", "/dir/removed/old.ts", "/target/file.ts",
+	})
+}
+
+func TestRequestFileSystemReplacementPreservesCurrentFullAliasDirectoryRemoval(t *testing.T) {
+	t.Parallel()
+	testReplacementPreservesCurrentRemoval(t, KindFull, "/dir/blocked")
+}
+
+func TestRequestFileSystemReplacementPreservesCurrentFullAliasFileRemoval(t *testing.T) {
+	t.Parallel()
+	testReplacementPreservesCurrentRemoval(t, KindFull, "/dir/blocked/gone.ts")
+}
+
+func TestRequestFileSystemReplacementPreservesCurrentFullTargetDirectoryRemoval(t *testing.T) {
+	t.Parallel()
+	testReplacementPreservesCurrentRemoval(t, KindFull, "/target/blocked")
+}
+
+func TestRequestFileSystemReplacementPreservesCurrentFullTargetFileRemoval(t *testing.T) {
+	t.Parallel()
+	testReplacementPreservesCurrentRemoval(t, KindFull, "/target/blocked/gone.ts")
+}
+
+func TestRequestFileSystemReplacementPreservesCurrentLayerAliasDirectoryRemoval(t *testing.T) {
+	t.Parallel()
+	testReplacementPreservesCurrentRemoval(t, KindLayer, "/dir/blocked")
+}
+
+func TestRequestFileSystemReplacementPreservesCurrentLayerAliasFileRemoval(t *testing.T) {
+	t.Parallel()
+	testReplacementPreservesCurrentRemoval(t, KindLayer, "/dir/blocked/gone.ts")
+}
+
+func TestRequestFileSystemReplacementPreservesCurrentLayerTargetDirectoryRemoval(t *testing.T) {
+	t.Parallel()
+	testReplacementPreservesCurrentRemoval(t, KindLayer, "/target/blocked")
+}
+
+func TestRequestFileSystemReplacementPreservesCurrentLayerTargetFileRemoval(t *testing.T) {
+	t.Parallel()
+	testReplacementPreservesCurrentRemoval(t, KindLayer, "/target/blocked/gone.ts")
+}
+
+func testReplacementPreservesCurrentRemoval(t *testing.T, kind Kind, removedPath string) {
+	t.Helper()
+	files := map[string]string{
+		"/dir/old.ts":             "old host",
+		"/target/keep.ts":         "keep",
+		"/target/blocked/gone.ts": "gone",
+	}
+	host := vfstest.FromMap(files, true)
+	params := &RequestFileSystem{Kind: kind}
+	if kind == KindFull {
+		params.Files = files
+	}
+	base, err := newRequestFileSystem(params, host, "/")
+	assert.NilError(t, err)
+	removed, err := newLayeredRequestFileSystem(&RequestFileSystem{
+		Kind:         KindLayer,
+		RemovedPaths: []string{"/dir", "/dir/blocked"},
+	}, base, "/")
+	assert.NilError(t, err)
+	linked, err := newLayeredRequestFileSystem(&RequestFileSystem{
+		Kind:         KindLayer,
+		Symlinks:     map[string]RequestSymlink{"/dir": {Target: "/target", Host: kind == KindLayer}},
+		RemovedPaths: []string{removedPath},
+	}, removed, "/")
+	assert.NilError(t, err)
+	assert.Assert(t, linked.FileExists("/dir/keep.ts"))
+	assert.Assert(t, !linked.FileExists("/dir/old.ts"))
+	assert.Assert(t, !linked.FileExists("/dir/blocked/gone.ts"))
+	_, ok := linked.ReadFile("/dir/blocked/gone.ts")
+	assert.Assert(t, !ok)
+	assert.Assert(t, linked.Stat("/dir/blocked/gone.ts") == nil)
+	assert.Equal(t, len(linked.GetAccessibleEntries("/dir/blocked").Files), 0)
+	deleted, err := newLayeredRequestFileSystem(&RequestFileSystem{
+		Kind:         KindLayer,
+		RemovedPaths: []string{"/dir"},
+	}, linked, "/")
+	assert.NilError(t, err)
+	assert.Assert(t, !deleted.DirectoryExists("/dir"))
+	assert.Assert(t, !deleted.FileExists("/dir/keep.ts"))
+	assert.Equal(t, len(deleted.GetAccessibleEntries("/dir").Files), 0)
+	assert.Assert(t, deleted.FileExists("/target/keep.ts"))
+	assert.Assert(t, linked.FileExists("/dir/keep.ts"))
+}
+
+func TestRequestFileSystemSameLayerRemovalRequestAncestorStandalone(t *testing.T) {
+	t.Parallel()
+	testSameLayerRemoval(t, false, "/links", "standalone")
+}
+
+func TestRequestFileSystemSameLayerRemovalRequestAncestorLayered(t *testing.T) {
+	t.Parallel()
+	testSameLayerRemoval(t, false, "/links", "layered")
+}
+
+func TestRequestFileSystemSameLayerRemovalRequestAncestorCompacted(t *testing.T) {
+	t.Parallel()
+	testSameLayerRemoval(t, false, "/links", "compacted")
+}
+
+func TestRequestFileSystemSameLayerRemovalRequestAncestorRecompacted(t *testing.T) {
+	t.Parallel()
+	testSameLayerRemoval(t, false, "/links", "recompacted")
+}
+
+func TestRequestFileSystemSameLayerRemovalRequestAncestorCompactedInput(t *testing.T) {
+	t.Parallel()
+	testSameLayerRemoval(t, false, "/links", "compacted-input")
+}
+
+func TestRequestFileSystemSameLayerRemovalRequestLinkStandalone(t *testing.T) {
+	t.Parallel()
+	testSameLayerRemoval(t, false, "/links/pkg", "standalone")
+}
+
+func TestRequestFileSystemSameLayerRemovalRequestLinkLayered(t *testing.T) {
+	t.Parallel()
+	testSameLayerRemoval(t, false, "/links/pkg", "layered")
+}
+
+func TestRequestFileSystemSameLayerRemovalRequestLinkCompacted(t *testing.T) {
+	t.Parallel()
+	testSameLayerRemoval(t, false, "/links/pkg", "compacted")
+}
+
+func TestRequestFileSystemSameLayerRemovalRequestLinkRecompacted(t *testing.T) {
+	t.Parallel()
+	testSameLayerRemoval(t, false, "/links/pkg", "recompacted")
+}
+
+func TestRequestFileSystemSameLayerRemovalRequestLinkCompactedInput(t *testing.T) {
+	t.Parallel()
+	testSameLayerRemoval(t, false, "/links/pkg", "compacted-input")
+}
+
+func TestRequestFileSystemSameLayerRemovalRequestDescendantStandalone(t *testing.T) {
+	t.Parallel()
+	testSameLayerRemoval(t, false, "/links/pkg/file.ts", "standalone")
+}
+
+func TestRequestFileSystemSameLayerRemovalRequestDescendantLayered(t *testing.T) {
+	t.Parallel()
+	testSameLayerRemoval(t, false, "/links/pkg/file.ts", "layered")
+}
+
+func TestRequestFileSystemSameLayerRemovalRequestDescendantCompacted(t *testing.T) {
+	t.Parallel()
+	testSameLayerRemoval(t, false, "/links/pkg/file.ts", "compacted")
+}
+
+func TestRequestFileSystemSameLayerRemovalRequestDescendantRecompacted(t *testing.T) {
+	t.Parallel()
+	testSameLayerRemoval(t, false, "/links/pkg/file.ts", "recompacted")
+}
+
+func TestRequestFileSystemSameLayerRemovalRequestDescendantCompactedInput(t *testing.T) {
+	t.Parallel()
+	testSameLayerRemoval(t, false, "/links/pkg/file.ts", "compacted-input")
+}
+
+func TestRequestFileSystemSameLayerRemovalHostAncestorStandalone(t *testing.T) {
+	t.Parallel()
+	testSameLayerRemoval(t, true, "/links", "standalone")
+}
+
+func TestRequestFileSystemSameLayerRemovalHostAncestorLayered(t *testing.T) {
+	t.Parallel()
+	testSameLayerRemoval(t, true, "/links", "layered")
+}
+
+func TestRequestFileSystemSameLayerRemovalHostAncestorCompacted(t *testing.T) {
+	t.Parallel()
+	testSameLayerRemoval(t, true, "/links", "compacted")
+}
+
+func TestRequestFileSystemSameLayerRemovalHostAncestorRecompacted(t *testing.T) {
+	t.Parallel()
+	testSameLayerRemoval(t, true, "/links", "recompacted")
+}
+
+func TestRequestFileSystemSameLayerRemovalHostAncestorCompactedInput(t *testing.T) {
+	t.Parallel()
+	testSameLayerRemoval(t, true, "/links", "compacted-input")
+}
+
+func TestRequestFileSystemSameLayerRemovalHostLinkStandalone(t *testing.T) {
+	t.Parallel()
+	testSameLayerRemoval(t, true, "/links/pkg", "standalone")
+}
+
+func TestRequestFileSystemSameLayerRemovalHostLinkLayered(t *testing.T) {
+	t.Parallel()
+	testSameLayerRemoval(t, true, "/links/pkg", "layered")
+}
+
+func TestRequestFileSystemSameLayerRemovalHostLinkCompacted(t *testing.T) {
+	t.Parallel()
+	testSameLayerRemoval(t, true, "/links/pkg", "compacted")
+}
+
+func TestRequestFileSystemSameLayerRemovalHostLinkRecompacted(t *testing.T) {
+	t.Parallel()
+	testSameLayerRemoval(t, true, "/links/pkg", "recompacted")
+}
+
+func TestRequestFileSystemSameLayerRemovalHostLinkCompactedInput(t *testing.T) {
+	t.Parallel()
+	testSameLayerRemoval(t, true, "/links/pkg", "compacted-input")
+}
+
+func TestRequestFileSystemSameLayerRemovalHostDescendantStandalone(t *testing.T) {
+	t.Parallel()
+	testSameLayerRemoval(t, true, "/links/pkg/file.ts", "standalone")
+}
+
+func TestRequestFileSystemSameLayerRemovalHostDescendantLayered(t *testing.T) {
+	t.Parallel()
+	testSameLayerRemoval(t, true, "/links/pkg/file.ts", "layered")
+}
+
+func TestRequestFileSystemSameLayerRemovalHostDescendantCompacted(t *testing.T) {
+	t.Parallel()
+	testSameLayerRemoval(t, true, "/links/pkg/file.ts", "compacted")
+}
+
+func TestRequestFileSystemSameLayerRemovalHostDescendantRecompacted(t *testing.T) {
+	t.Parallel()
+	testSameLayerRemoval(t, true, "/links/pkg/file.ts", "recompacted")
+}
+
+func TestRequestFileSystemSameLayerRemovalHostDescendantCompactedInput(t *testing.T) {
+	t.Parallel()
+	testSameLayerRemoval(t, true, "/links/pkg/file.ts", "compacted-input")
+}
+
+func testSameLayerRemoval(t *testing.T, hostTarget bool, removedPath string, form string) {
+	t.Helper()
+	host := &trackingvfs.FS{Inner: vfstest.FromMap(map[string]string{"/target/file.ts": "host"}, true)}
+	base, err := newRequestFileSystem(&RequestFileSystem{
+		Kind: KindFull,
+	}, host, "/")
+	assert.NilError(t, err)
+	params := &RequestFileSystem{
+		Kind:         KindLayer,
+		Files:        map[string]string{"/target/file.ts": "request"},
+		Symlinks:     map[string]RequestSymlink{"/links/pkg": {Target: "/target", Host: hostTarget}},
+		RemovedPaths: []string{removedPath},
+	}
+	var fileSystem *requestFileSystem
+	switch form {
+	case "standalone":
+		fileSystem, err = newRequestFileSystem(params, host, "/")
+	case "layered":
+		fileSystem, err = newRequestFileSystem(params, base, "/")
+	default:
+		fileSystem, err = newLayeredRequestFileSystem(params, base, "/")
+		assert.NilError(t, err)
+		switch form {
+		case "recompacted":
+			fileSystem, err = newLayeredRequestFileSystem(&RequestFileSystem{Kind: KindLayer}, fileSystem, "/")
+		case "compacted-input":
+			compacted := fileSystem.applyTo(*base)
+			fileSystem = &compacted
+		}
+	}
+	assert.NilError(t, err)
+	assert.Assert(t, !fileSystem.FileExists("/links/pkg/file.ts"))
+	_, ok := fileSystem.ReadFile("/links/pkg/file.ts")
+	assert.Assert(t, !ok)
+	assert.Assert(t, fileSystem.Stat("/links/pkg/file.ts") == nil)
+	assert.Equal(t, fileSystem.Realpath("/links/pkg/file.ts"), "/links/pkg/file.ts")
+	assert.Equal(t, len(fileSystem.GetAccessibleEntries("/links/pkg").Files), 0)
+	linkExists := removedPath == "/links/pkg/file.ts"
+	assert.Equal(t, fileSystem.DirectoryExists("/links/pkg"), linkExists)
+	entries := fileSystem.GetAccessibleEntries("/links")
+	assert.Equal(t, slices.Contains(entries.Directories, "pkg"), linkExists)
+	_, isSymlink := entries.Symlinks["pkg"]
+	assert.Equal(t, isSymlink, linkExists)
+	assert.Assert(t, fileSystem.FileExists("/target/file.ts"))
+	verifyCompactionWithoutHostReads(t, fileSystem, host, []string{
+		"/", "/links", "/links/pkg", "/links/pkg/file.ts", "/target", "/target/file.ts", "/missing",
+	})
+}
+
+func TestRequestFileSystemRemovalExceptionsRequest(t *testing.T) {
+	t.Parallel()
+	testRemovalExceptions(t, false, false)
+}
+
+func TestRequestFileSystemRemovalExceptionsRequestRemovedAgain(t *testing.T) {
+	t.Parallel()
+	testRemovalExceptions(t, false, true)
+}
+
+func TestRequestFileSystemRemovalExceptionsHost(t *testing.T) {
+	t.Parallel()
+	testRemovalExceptions(t, true, false)
+}
+
+func TestRequestFileSystemRemovalExceptionsHostRemovedAgain(t *testing.T) {
+	t.Parallel()
+	testRemovalExceptions(t, true, true)
+}
+
+func testRemovalExceptions(t *testing.T, hostTarget bool, removeAgain bool) {
+	t.Helper()
+	host := vfstest.FromMap(map[string]string{
+		"/dir/old.ts":      "old",
+		"/target/a.ts":     "a",
+		"/target/b.ts":     "b",
+		"/target/sub/c.ts": "c",
+	}, true)
+	base, err := newRequestFileSystem(&RequestFileSystem{Kind: KindLayer}, host, "/")
+	assert.NilError(t, err)
+	removed, err := newLayeredRequestFileSystem(&RequestFileSystem{
+		Kind:         KindLayer,
+		RemovedPaths: []string{"/dir"},
+	}, base, "/")
+	assert.NilError(t, err)
+	params := &RequestFileSystem{
+		Kind: KindLayer,
+		Symlinks: map[string]RequestSymlink{
+			"/dir/pkg": {Target: "/target", Host: hostTarget},
+		},
+		RemovedPaths: []string{"/dir/pkg/b.ts"},
+	}
+	layered, err := newRequestFileSystem(params, removed, "/")
+	assert.NilError(t, err)
+	compacted := layered.applyTo(*removed)
+	input := compacted.applyTo(*base)
+	verify := func(fileSystem *requestFileSystem) {
+		t.Helper()
+		if removeAgain {
+			fileSystem, err = newLayeredRequestFileSystem(&RequestFileSystem{
+				Kind:         KindLayer,
+				RemovedPaths: []string{"/dir"},
+			}, fileSystem, "/")
+			assert.NilError(t, err)
+		}
+		assert.Equal(t, fileSystem.FileExists("/dir/pkg/a.ts"), !removeAgain)
+		assert.Assert(t, !fileSystem.FileExists("/dir/pkg/b.ts"))
+		assert.Assert(t, !fileSystem.FileExists("/dir/old.ts"))
+		entries := fileSystem.GetAccessibleEntries("/dir/pkg")
+		if removeAgain {
+			assert.Equal(t, len(entries.Files), 0)
+			assert.Equal(t, len(entries.Directories), 0)
+		} else {
+			assert.DeepEqual(t, entries.Files, []string{"a.ts"})
+			assert.DeepEqual(t, entries.Directories, []string{"sub"})
+		}
+	}
+	verify(layered)
+	verify(&compacted)
+	verify(&input)
+	assert.Assert(t, !removed.DirectoryExists("/dir/pkg"))
+	assert.Assert(t, compacted.FileExists("/dir/pkg/a.ts"))
 }
 
 func TestRequestFileSystem(t *testing.T) {
