@@ -108,7 +108,7 @@ func (adder *importAdder) AddImportFromExportedSymbol(exportedSymbol *ast.Symbol
 		// debug.Assert(len(adder.ls.UserPreferences().AutoImportFileExcludePatterns) > 0)
 		return
 	}
-	fix := adder.getImportFixForSymbol(adder.view, adder.view.importingFile, exportInfos, isValidTypeOnlyUseSite)
+	fix := adder.getImportFixForSymbol(adder.view, exportInfos, isValidTypeOnlyUseSite)
 	if fix != nil {
 		// !!! referenceImport -> propertyName
 		adder.AddImportFix(fix)
@@ -488,9 +488,9 @@ func replaceFirstIdentifierOfEntityName(factory *ast.NodeFactory, name *ast.Enti
 	)
 }
 
-func (adder *importAdder) getImportFixForSymbol(view *View, file *ast.SourceFile, exports []*Export, isValidTypeOnlyUseSite bool) *Fix {
+func (adder *importAdder) getImportFixForSymbol(view *View, exports []*Export, isValidTypeOnlyUseSite bool) *Fix {
 	fixes := core.FlatMap(exports, func(export *Export) []*Fix {
-		return view.GetFixes(adder.ctx, export, false /*forJSX*/, isValidTypeOnlyUseSite, nil /*usagePosition*/)
+		return view.GetFixes(export, false /*forJSX*/, isValidTypeOnlyUseSite, nil /*usagePosition*/)
 	})
 	slices.SortFunc(fixes, func(a, b *Fix) int {
 		return view.CompareFixesForRanking(a, b)

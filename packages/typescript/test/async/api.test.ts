@@ -606,6 +606,28 @@ describe("API - automatic batching", () => {
 });
 
 describe("API - batchContext", () => {
+    test("transparently paginates batch responses", async () => {
+        const api = spawnAPI({ ...defaultFiles }, { maxResponseBytesPerPage: 1 });
+        try {
+            const requests = await (async () => {
+                using _ = api.batchContext();
+                return [
+                    api.parseCommandLine(["--strict"]),
+                    api.readConfigFile("/tsconfig.json"),
+                    api.parseCommandLine(["--noImplicitAny"]),
+                ] as const;
+            })();
+
+            const [strict, config, noImplicitAny] = await Promise.all(requests);
+            assert.equal(strict.options.strict, true);
+            assert.deepEqual(config.config, {});
+            assert.equal(noImplicitAny.options.noImplicitAny, true);
+        }
+        finally {
+            await api.close();
+        }
+    });
+
     test("holds requests until disposal", async () => {
         await using api = spawnAPI();
 
@@ -2442,6 +2464,9 @@ export const tuple: readonly [number, string?, ...boolean[]] = [1];
         const target = await ref.getTarget();
         assert.ok(target);
         assert.ok(target.flags & TypeFlags.Object);
+        const typeParameters = await target.getTypeParameters();
+        assert.ok(typeParameters);
+        assert.equal(typeParameters.length, 1);
         const properties = await type.getProperties();
         assert.ok(properties.some(property => property.name === "length"));
         assert.equal((await type.getProperty("length"))?.name, "length");
