@@ -15,6 +15,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/locale"
 	"github.com/microsoft/TypeScript/tsc/internal/spanmap"
 	"github.com/microsoft/TypeScript/tsc/internal/tsoptions"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfstest"
 	"gotest.tools/v3/assert"
 )
@@ -26,14 +27,14 @@ type fakeContentMapperHost struct {
 func (r fakeContentMapperHost) Refresh() error                                 { return nil }
 func (r fakeContentMapperHost) Identities() ([]string, error)                  { return nil, nil }
 func (r fakeContentMapperHost) Identity(*contentmapper.Mapper) (string, error) { return "test", nil }
-func (r fakeContentMapperHost) WatchedFiles() ([]string, error)                { return nil, nil }
+func (r fakeContentMapperHost) WatchedFiles() ([]tspath.RootedFilePath, error) { return nil, nil }
 func (r fakeContentMapperHost) Diagnostics() []contentmapper.OptionDiagnostic {
 	return nil
 }
 func (r fakeContentMapperHost) Close() error { return nil }
 
 func (r fakeContentMapperHost) Transform(mapper *contentmapper.Mapper, request contentmapper.Request) (contentmapper.Result, error) {
-	return r.transform(request.FileName, request.Content)
+	return r.transform(request.FileName.AsString(), request.Content)
 }
 
 func newContentMapperProgram(t *testing.T, contentMapperProject contentmapper.Project, files map[string]string, rootFiles []string) *compiler.Program {
@@ -49,22 +50,17 @@ func newContentMapperProgramWithOptions(t *testing.T, contentMapperProject conte
 	if !bundled.Embedded {
 		t.Skip("bundled files are not embedded")
 	}
-	fs := vfstest.FromMap[any](nil, false /*useCaseSensitiveFileNames*/)
+	fs := vfstest.FromMap[any](nil, tspath.CaseInsensitive /*caseSensitivity*/)
 	fs = bundled.WrapFS(fs)
 	for name, content := range files {
-		_ = fs.WriteFile(name, content)
+		_ = fs.WriteFile(tspath.RootedFilePathFromNormalized(name), content)
 	}
 
-	config := &tsoptions.ParsedCommandLine{
-		ParsedConfig: &tsoptions.ParsedOptions{
-			FileNames:       rootFiles,
-			CompilerOptions: options,
-			ContentMappers:  []*contentmapper.Mapper{{Definition: contentmapper.Definition{Package: "vue", Extensions: []string{".vue"}}, Manifest: contentmapper.Manifest{Name: "vue-mapper", Version: "1.0.0"}}},
-		},
-	}
+	config := tsoptions.NewParsedCommandLine(options, testFileNames(rootFiles...), nil, "/", fs.CaseSensitivity())
+	config.ParsedConfig.ContentMappers = []*contentmapper.Mapper{{Definition: contentmapper.Definition{Package: "vue", Extensions: []string{".vue"}}, Manifest: contentmapper.Manifest{Name: "vue-mapper", Version: "1.0.0"}}}
 	return compiler.NewProgram(compiler.ProgramOptions{
 		Config: config,
-		Host:   compiler.NewCompilerHost("/src", fs, bundled.LibPath(), nil, nil, contentMapperProject),
+		Host:   compiler.NewCompilerHost(fs, bundled.LibPath(), nil, nil, contentMapperProject),
 		// Load files on the calling goroutine for deterministic diagnostics ordering.
 		SingleThreaded: core.TSTrue,
 	})
@@ -88,7 +84,7 @@ func TestContentMapperVirtualExtensionSetsImpliedNodeFormat(t *testing.T) {
 
 	file := program.GetSourceFile("/src/Component.vue")
 	assert.Assert(t, file != nil)
-	assert.Equal(t, program.GetSourceFileMetaData(file.Path()).ImpliedNodeFormat, core.ResolutionModeESM)
+	assert.Equal(t, program.GetSourceFileMetaData(file.PathKey()).ImpliedNodeFormat, core.ResolutionModeESM)
 }
 
 func collectContentMapperDiagnostics(program *compiler.Program) []*ast.Diagnostic {

@@ -4187,6 +4187,34 @@ func TestTscProjectReferences(t *testing.T) {
 			commandLineArgs: []string{"--p", "project"},
 		},
 		{
+			subScenario: "incremental nested triple-slash reference to composite project source",
+			files: FileMap{
+				"/home/src/workspaces/solution/utils/index.ts":   "interface ReferencedType {}",
+				"/home/src/workspaces/solution/utils/index.d.ts": "interface ReferencedType {}",
+				"/home/src/workspaces/solution/utils/tsconfig.json": stringtestutil.Dedent(`
+				{
+					"compilerOptions": {
+						"composite": true
+					}
+				}`),
+				"/home/src/workspaces/solution/project/src/index.ts": `/// <reference path="../../utils/index.ts" />
+let value: ReferencedType;`,
+				"/home/src/workspaces/solution/project/tsconfig.json": stringtestutil.Dedent(`
+				{
+					"compilerOptions": {
+						"disableSourceOfProjectReferenceRedirect": true,
+						"incremental": true
+					},
+					"files": ["src/index.ts"],
+					"references": [
+						{ "path": "../utils" }
+					]
+				}`),
+			},
+			cwd:             "/home/src/workspaces/solution",
+			commandLineArgs: []string{"--p", "project"},
+		},
+		{
 			subScenario: "when project reference is not built",
 			files: FileMap{
 				"/home/src/workspaces/solution/utils/index.ts": "export const x = 10;",

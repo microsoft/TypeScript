@@ -13,10 +13,10 @@ import (
 
 // Simplifies parsing an input string into a SourceFile for testing purposes.
 func ParseTypeScript(text string, jsx bool) *ast.SourceFile {
-	fileName := core.IfElse(jsx, "/main.tsx", "/main.ts")
+	fileName := tspath.RootedFilePathFromNormalized(core.IfElse(jsx, "/main.tsx", "/main.ts"))
 	file := parser.ParseSourceFile(ast.SourceFileParseOptions{
 		FileName: fileName,
-		Path:     tspath.Path(fileName),
+		PathKey:  tspath.CaseSensitive.PathKey(tspath.RootedPath(fileName)),
 	}, text, core.GetScriptKindFromFileName(fileName))
 	return file
 }

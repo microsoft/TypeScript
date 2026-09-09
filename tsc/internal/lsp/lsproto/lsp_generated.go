@@ -4010,7 +4010,7 @@ func (s *LinkedEditingRangeOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 // Since: 3.16.0
 type FileCreate struct {
 	// A file:// URI for the location of the file/folder being created.
-	Uri string `json:"uri" lsp:"required"`
+	Uri DocumentUri `json:"uri" lsp:"required"`
 }
 
 var _ json.UnmarshalerFrom = (*FileCreate)(nil)
@@ -4161,10 +4161,10 @@ func (s *FileOperationFilter) UnmarshalJSONFrom(dec *json.Decoder) error {
 // Since: 3.16.0
 type FileRename struct {
 	// A file:// URI for the original location of the file/folder being renamed.
-	OldUri string `json:"oldUri" lsp:"required"`
+	OldUri DocumentUri `json:"oldUri" lsp:"required"`
 
 	// A file:// URI for the new location of the file/folder being renamed.
-	NewUri string `json:"newUri" lsp:"required"`
+	NewUri DocumentUri `json:"newUri" lsp:"required"`
 }
 
 var _ json.UnmarshalerFrom = (*FileRename)(nil)
@@ -4178,7 +4178,7 @@ func (s *FileRename) UnmarshalJSONFrom(dec *json.Decoder) error {
 // Since: 3.16.0
 type FileDelete struct {
 	// A file:// URI for the location of the file/folder being deleted.
-	Uri string `json:"uri" lsp:"required"`
+	Uri DocumentUri `json:"uri" lsp:"required"`
 }
 
 var _ json.UnmarshalerFrom = (*FileDelete)(nil)

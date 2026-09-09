@@ -7,6 +7,7 @@ import (
 
 	"github.com/microsoft/TypeScript/tsc/internal/ls/lsconv"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 )
 
 type SemanticToken struct {
@@ -58,7 +59,7 @@ func decodeSemanticTokens(f *FourslashTest, data []uint32, tokenTypes, tokenModi
 	}
 
 	scriptInfo := f.scriptInfos[f.activeFilename]
-	converters := newTestConverters(lsconv.NewConverters(lsproto.PositionEncodingKindUTF8, func(_ string) *lsconv.LSPLineMap {
+	converters := newTestConverters(lsconv.NewConverters(lsproto.PositionEncodingKindUTF8, func(_ tspath.RootedFilePath) *lsconv.LSPLineMap {
 		return scriptInfo.lineMap
 	}))
 

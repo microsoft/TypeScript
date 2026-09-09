@@ -7,6 +7,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 )
 
@@ -42,35 +43,35 @@ func wrapFS(fs vfs.FS) vfs.FS {
 	return &wrappedFS{fs: fs}
 }
 
-func (vfs *wrappedFS) UseCaseSensitiveFileNames() bool {
-	return vfs.fs.UseCaseSensitiveFileNames()
+func (vfs *wrappedFS) CaseSensitivity() tspath.CaseSensitivity {
+	return vfs.fs.CaseSensitivity()
 }
 
-func (vfs *wrappedFS) FileExists(path string) bool {
-	if rest, ok := splitPath(path); ok {
+func (vfs *wrappedFS) FileExists(path tspath.RootedFilePath) bool {
+	if rest, ok := splitPath(path.AsString()); ok {
 		_, ok := embeddedContents[rest]
 		return ok
 	}
 	return vfs.fs.FileExists(path)
 }
 
-func (vfs *wrappedFS) ReadFile(path string) (contents string, ok bool) {
-	if rest, ok := splitPath(path); ok {
+func (vfs *wrappedFS) ReadFile(path tspath.RootedFilePath) (contents string, ok bool) {
+	if rest, ok := splitPath(path.AsString()); ok {
 		contents, ok = embeddedContents[rest]
 		return contents, ok
 	}
 	return vfs.fs.ReadFile(path)
 }
 
-func (vfs *wrappedFS) DirectoryExists(path string) bool {
-	if rest, ok := splitPath(path); ok {
+func (vfs *wrappedFS) DirectoryExists(path tspath.RootedDirectoryPath) bool {
+	if rest, ok := splitPath(path.AsString()); ok {
 		return rest == "libs"
 	}
 	return vfs.fs.DirectoryExists(path)
 }
 
-func (vfs *wrappedFS) GetAccessibleEntries(path string) (result vfs.Entries) {
-	if rest, ok := splitPath(path); ok {
+func (vfs *wrappedFS) GetAccessibleEntries(path tspath.RootedDirectoryPath) (result vfs.Entries) {
+	if rest, ok := splitPath(path.AsString()); ok {
 		if rest == "" {
 			result.Directories = []string{"libs"}
 		} else if rest == "libs" {
@@ -85,8 +86,8 @@ var rootEntries = []fs.DirEntry{
 	fs.FileInfoToDirEntry(&fileInfo{name: "libs", mode: fs.ModeDir}),
 }
 
-func (vfs *wrappedFS) Stat(path string) vfs.FileInfo {
-	if rest, ok := splitPath(path); ok {
+func (vfs *wrappedFS) Stat(path tspath.RootedPath) vfs.FileInfo {
+	if rest, ok := splitPath(path.AsString()); ok {
 		if rest == "" || rest == "libs" {
 			return &fileInfo{name: rest, mode: fs.ModeDir}
 		}
@@ -99,8 +100,8 @@ func (vfs *wrappedFS) Stat(path string) vfs.FileInfo {
 	return vfs.fs.Stat(path)
 }
 
-func (vfs *wrappedFS) WalkDir(root string, walkFn vfs.WalkDirFunc) error {
-	if rest, ok := splitPath(root); ok {
+func (vfs *wrappedFS) WalkDir(root tspath.RootedDirectoryPath, walkFn vfs.WalkDirFunc) error {
+	if rest, ok := splitPath(root.AsString()); ok {
 		if err := vfs.walkDir(rest, walkFn); err != nil {
 			if err == fs.SkipAll { //nolint:errorlint
 				return nil
@@ -123,10 +124,14 @@ func (vfs *wrappedFS) walkDir(rest string, walkFn vfs.WalkDirFunc) error {
 		return nil
 	}
 
+	root := tspath.RootedDirectoryPathFromNormalized(scheme)
 	for _, entry := range entries {
-		name := rest + "/" + entry.Name()
+		name := entry.Name()
+		if rest != "" {
+			name = rest + "/" + name
+		}
 
-		if err := walkFn(scheme+name, entry, nil); err != nil {
+		if err := walkFn(root.ResolveFile(name).AsPath(), entry, nil); err != nil {
 			if err == fs.SkipAll { //nolint:errorlint
 				return fs.SkipAll
 			}
@@ -145,36 +150,36 @@ func (vfs *wrappedFS) walkDir(rest string, walkFn vfs.WalkDirFunc) error {
 	return nil
 }
 
-func (vfs *wrappedFS) Realpath(path string) string {
-	if _, ok := splitPath(path); ok {
+func (vfs *wrappedFS) Realpath(path tspath.RootedPath) tspath.RootedPath {
+	if _, ok := splitPath(path.AsString()); ok {
 		return path
 	}
 	return vfs.fs.Realpath(path)
 }
 
-func (vfs *wrappedFS) WriteFile(path string, data string) error {
-	if _, ok := splitPath(path); ok {
+func (vfs *wrappedFS) WriteFile(path tspath.RootedFilePath, data string) error {
+	if _, ok := splitPath(path.AsString()); ok {
 		panic("cannot write to embedded file system")
 	}
 	return vfs.fs.WriteFile(path, data)
 }
 
-func (vfs *wrappedFS) AppendFile(path string, data string) error {
-	if _, ok := splitPath(path); ok {
+func (vfs *wrappedFS) AppendFile(path tspath.RootedFilePath, data string) error {
+	if _, ok := splitPath(path.AsString()); ok {
 		panic("cannot write to embedded file system")
 	}
 	return vfs.fs.AppendFile(path, data)
 }
 
-func (vfs *wrappedFS) Remove(path string) error {
-	if _, ok := splitPath(path); ok {
+func (vfs *wrappedFS) Remove(path tspath.RootedPath) error {
+	if _, ok := splitPath(path.AsString()); ok {
 		panic("cannot remove from embedded file system")
 	}
 	return vfs.fs.Remove(path)
 }
 
-func (vfs *wrappedFS) Chtimes(path string, aTime time.Time, mTime time.Time) error {
-	if _, ok := splitPath(path); ok {
+func (vfs *wrappedFS) Chtimes(path tspath.RootedPath, aTime time.Time, mTime time.Time) error {
+	if _, ok := splitPath(path.AsString()); ok {
 		panic("cannot change times on embedded file system")
 	}
 	return vfs.fs.Chtimes(path, aTime, mTime)

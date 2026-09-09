@@ -1417,6 +1417,20 @@ function patchAndPreprocessModel() {
     // Filter out notebook type aliases
     model.typeAliases = model.typeAliases.filter(ta => !isNotebookRelatedName(ta.name));
 
+    // The meta model represents file-operation URIs as strings even though the
+    // protocol requires document URIs.
+    for (const structureName of ["FileCreate", "FileRename", "FileDelete"]) {
+        const structure = model.structures.find(s => s.name === structureName);
+        if (!structure) {
+            throw new Error(`Missing ${structureName} structure`);
+        }
+        for (const prop of structure.properties) {
+            if (prop.name === "uri" || prop.name === "oldUri" || prop.name === "newUri") {
+                prop.type = { kind: "base", name: "DocumentUri" };
+            }
+        }
+    }
+
     // Clean up type aliases that reference notebook types (e.g., DocumentFilter)
     for (const ta of model.typeAliases) {
         if (ta.type.kind === "or") {

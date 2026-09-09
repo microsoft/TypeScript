@@ -22,7 +22,7 @@ func TestOS(t *testing.T) {
 		t.Parallel()
 
 		goMod := filepath.Join(repo.RootPath(), "go.mod")
-		goModPath := tspath.NormalizePath(goMod)
+		goModPath := tspath.RootedFilePathFromAbsolute(goMod)
 
 		expectedRaw, err := os.ReadFile(goMod)
 		assert.NilError(t, err)
@@ -40,28 +40,28 @@ func TestOS(t *testing.T) {
 		if err != nil {
 			t.Skip(err)
 		}
-		home = tspath.NormalizePath(home)
+		homePath := tspath.RootedDirectoryPathFromAbsolute(home)
 
-		expected := home
+		expected := homePath.AsString()
 		if runtime.GOOS == "windows" {
 			// Windows drive letters can be lowercase, but realpath will always return uppercase.
 			expected = strings.ToUpper(expected[:1]) + expected[1:]
 		}
-		realpath := fs.Realpath(home)
-		assert.Equal(t, realpath, expected)
+		realpath := fs.Realpath(homePath.AsPath())
+		assert.Equal(t, realpath.AsString(), expected)
 	})
 
-	t.Run("UseCaseSensitiveFileNames", func(t *testing.T) {
+	t.Run("CaseSensitivity", func(t *testing.T) {
 		t.Parallel()
 
 		// Just check that it works.
-		fs.UseCaseSensitiveFileNames()
+		fs.CaseSensitivity()
 
 		switch runtime.GOOS {
 		case "windows":
-			assert.Assert(t, !fs.UseCaseSensitiveFileNames())
+			assert.Assert(t, fs.CaseSensitivity().IsCaseInsensitive())
 		case "linux":
-			assert.Assert(t, fs.UseCaseSensitiveFileNames())
+			assert.Assert(t, fs.CaseSensitivity().IsCaseSensitive())
 		}
 	})
 }

@@ -183,7 +183,7 @@ func TestBulkCacheInvalidation(t *testing.T) {
 		// Initially, the file should use the root project (strict mode)
 		snapshot := session.Snapshot()
 		initialProject := snapshot.GetDefaultProject("file:///project/src/utils/lib.ts")
-		assert.Equal(t, initialProject.Name(), "/project/tsconfig.json", "Should initially use root tsconfig")
+		assert.Equal(t, initialProject.Name().AsString(), "/project/tsconfig.json", "Should initially use root tsconfig")
 
 		// Get language service to verify initial strict mode
 		ls, err := session.GetLanguageService(context.Background(), "file:///project/src/utils/lib.ts")
@@ -213,7 +213,7 @@ func TestBulkCacheInvalidation(t *testing.T) {
 		newProject := snapshot.GetDefaultProject("file:///project/src/utils/lib.ts")
 
 		// The file should now use the nested tsconfig
-		assert.Equal(t, newProject.Name(), "/project/src/utils/tsconfig.json", "Should now use nested tsconfig after bulk invalidation")
+		assert.Equal(t, newProject.Name().AsString(), "/project/src/utils/tsconfig.json", "Should now use nested tsconfig after bulk invalidation")
 		assert.Equal(t, ls.GetProgram().Options().Strict, core.TSFalse, "Should now use non-strict mode from nested config")
 		assert.Equal(t, ls.GetProgram().Options().Target, core.ScriptTargetESNext, "Should use esnext target from nested config")
 	})
@@ -256,7 +256,7 @@ func TestBulkCacheInvalidation(t *testing.T) {
 			if expectConfigDiscovery {
 				// Should now use configured project instead of inferred
 				assert.Equal(t, newProject.Kind, project.KindConfigured, "Should now use configured project after cache invalidation")
-				assert.Equal(t, newProject.Name(), "/project/tsconfig.json", "Should use the newly discovered tsconfig")
+				assert.Equal(t, newProject.Name().AsString(), "/project/tsconfig.json", "Should use the newly discovered tsconfig")
 			} else {
 				// Should still use inferred project (config file names cache not cleared)
 				assert.Assert(t, newProject == snapshot.ProjectCollection.InferredProject(), "Should still use inferred project after node_modules-only changes")

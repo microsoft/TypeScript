@@ -10,6 +10,15 @@ import (
 	"gotest.tools/v3/assert"
 )
 
+func channelClosed(ch <-chan struct{}) bool {
+	select {
+	case <-ch:
+		return true
+	default:
+		return false
+	}
+}
+
 func TestQueue(t *testing.T) {
 	t.Parallel()
 	t.Run("BasicEnqueue", func(t *testing.T) {
@@ -87,5 +96,29 @@ func TestQueue(t *testing.T) {
 		q.Wait()
 
 		assert.Check(t, !executed, "Task should not execute after queue is closed")
+	})
+
+	t.Run("CloseWaitsForActiveTasks", func(t *testing.T) {
+		t.Parallel()
+		q := background.NewQueue()
+		started := make(chan struct{})
+		finish := make(chan struct{})
+		closed := make(chan struct{})
+
+		q.Enqueue(context.Background(), func(ctx context.Context) {
+			close(started)
+			<-finish
+		})
+		<-started
+
+		go func() {
+			q.Close()
+			close(closed)
+		}()
+
+		assert.Check(t, !channelClosed(closed), "Close returned before the active task completed")
+
+		close(finish)
+		<-closed
 	})
 }

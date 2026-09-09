@@ -10,6 +10,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/jsonrpc"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/project"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfstest"
 )
 
@@ -33,7 +34,7 @@ func TestServerShutdownNoDeadlock(t *testing.T) {
 	fs := bundled.WrapFS(vfstest.FromMap(map[string]string{
 		"/test/tsconfig.json": "{}",
 		"/test/index.ts":      "const x = 1;",
-	}, false))
+	}, tspath.CaseInsensitive))
 
 	server := NewServer(&ServerOptions{
 		In:                 shutdownTestReader{},

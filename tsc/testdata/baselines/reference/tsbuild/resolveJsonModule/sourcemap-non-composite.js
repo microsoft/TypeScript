@@ -91,7 +91,7 @@ const hello_json_1 = __importDefault(require("./hello.json"));
 exports.default = hello_json_1.default.hello;
 //# sourceMappingURL=index.js.map
 //// [/home/src/workspaces/solution/project/dist/src/index.js.map] *new* 
-{"version":3,"file":"index.js","sourceRoot":"","sources":["../../src/index.ts"],"names":[],"mappings":";;;;;AAAA,8DAAgC;kBACjB,oBAAK,CAAC,KAAK"}
+{"version":3,"file":"index.js","sources":["../../src/index.ts"],"names":[],"mappings":";;;;;AAAA,8DAAgC;kBACjB,oBAAK,CAAC,KAAK"}
 //// [/home/src/workspaces/solution/project/dist/tsconfig.tsbuildinfo] *new* 
 {"version":"FakeTSVersion","errors":true,"root":["../src/index.ts","../src/hello.json"]}
 //// [/home/src/workspaces/solution/project/dist/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 

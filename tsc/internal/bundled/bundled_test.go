@@ -33,12 +33,12 @@ func TestEmbeddedLibs(t *testing.T) {
 
 	var files []string
 
-	err := fs.WalkDir(bundled.LibPath(), func(path string, d vfs.DirEntry, err error) error {
+	err := fs.WalkDir(bundled.LibPath(), func(path tspath.RootedPath, d vfs.DirEntry, err error) error {
 		if err != nil {
 			return err
 		}
 		if !d.IsDir() {
-			files = append(files, tspath.GetBaseFileName(path))
+			files = append(files, tspath.GetBaseFileName(path.AsString()))
 		}
 		return nil
 	})

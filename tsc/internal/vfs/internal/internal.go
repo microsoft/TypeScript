@@ -35,15 +35,16 @@ func SplitPath(p string) (rootName, rest string) {
 	return rootName, rest
 }
 
-func (vfs *Common) RootAndPath(path string) (fsys fs.FS, rootName string, rest string) {
-	rootName, rest = SplitPath(path)
+func (vfs *Common) RootAndPath(path tspath.RootedPath) (fsys fs.FS, root tspath.RootedDirectoryPath, rest string) {
+	_ = RootLength(path.AsString())
+	root, rest = path.RootAndRelativePath()
 	if rest == "" {
 		rest = "."
 	}
-	return vfs.RootFor(rootName), rootName, rest
+	return vfs.RootFor(root.AsString()), root, rest
 }
 
-func (vfs *Common) Stat(path string) vfs.FileInfo {
+func (vfs *Common) Stat(path tspath.RootedPath) vfs.FileInfo {
 	fsys, _, rest := vfs.RootAndPath(path)
 	if fsys == nil {
 		return nil
@@ -55,17 +56,17 @@ func (vfs *Common) Stat(path string) vfs.FileInfo {
 	return stat
 }
 
-func (vfs *Common) FileExists(path string) bool {
-	stat := vfs.Stat(path)
+func (vfs *Common) FileExists(path tspath.RootedFilePath) bool {
+	stat := vfs.Stat(path.AsPath())
 	return stat != nil && !stat.IsDir()
 }
 
-func (vfs *Common) DirectoryExists(path string) bool {
-	stat := vfs.Stat(path)
+func (vfs *Common) DirectoryExists(path tspath.RootedDirectoryPath) bool {
+	stat := vfs.Stat(path.AsPath())
 	return stat != nil && stat.IsDir()
 }
 
-func (vfs *Common) GetAccessibleEntries(path string) (result vfs.Entries) {
+func (vfs *Common) GetAccessibleEntries(path tspath.RootedDirectoryPath) (result vfs.Entries) {
 	result.Symlinks = map[string]struct{}{}
 
 	addToResult := func(name string, mode fs.FileMode, isLink bool) (added bool) {
@@ -92,7 +93,7 @@ func (vfs *Common) GetAccessibleEntries(path string) (result vfs.Entries) {
 
 		if entryType&fs.ModeSymlink != 0 {
 			// Easy case; UNIX-like system will clearly mark symlinks.
-			if stat := vfs.Stat(path + "/" + entry.Name()); stat != nil {
+			if stat := vfs.Stat(path.ResolveFile(entry.Name()).AsPath()); stat != nil {
 				addToResult(entry.Name(), stat.Mode(), true)
 			}
 			continue
@@ -101,9 +102,9 @@ func (vfs *Common) GetAccessibleEntries(path string) (result vfs.Entries) {
 		if entryType&fs.ModeIrregular != 0 && vfs.IsReparsePoint != nil {
 			// Could be a Windows junction or other reparse point.
 			// Check using the OS-specific helper.
-			fullPath := path + "/" + entry.Name()
-			if vfs.IsReparsePoint(fullPath) {
-				if stat := vfs.Stat(fullPath); stat != nil {
+			fullPath := path.ResolveFile(entry.Name())
+			if vfs.IsReparsePoint(fullPath.AsString()) {
+				if stat := vfs.Stat(fullPath.AsPath()); stat != nil {
 					addToResult(entry.Name(), stat.Mode(), true)
 				}
 			}
@@ -114,8 +115,8 @@ func (vfs *Common) GetAccessibleEntries(path string) (result vfs.Entries) {
 	return result
 }
 
-func (vfs *Common) getEntries(path string) []vfs.DirEntry {
-	fsys, _, rest := vfs.RootAndPath(path)
+func (vfs *Common) getEntries(path tspath.RootedDirectoryPath) []vfs.DirEntry {
+	fsys, _, rest := vfs.RootAndPath(path.AsPath())
 	if fsys == nil {
 		return nil
 	}
@@ -128,21 +129,21 @@ func (vfs *Common) getEntries(path string) []vfs.DirEntry {
 	return entries
 }
 
-func (vfs *Common) WalkDir(root string, walkFn fs.WalkDirFunc) error {
-	fsys, rootName, rest := vfs.RootAndPath(root)
+func (vfs *Common) WalkDir(root tspath.RootedDirectoryPath, walkFn vfs.WalkDirFunc) error {
+	fsys, rootPrefix, rest := vfs.RootAndPath(root.AsPath())
 	if fsys == nil {
 		return nil
 	}
 	return fs.WalkDir(fsys, rest, func(path string, d fs.DirEntry, err error) error {
 		if path == "." {
-			path = ""
+			return walkFn(rootPrefix.AsPath(), d, err)
 		}
-		return walkFn(rootName+path, d, err)
+		return walkFn(rootPrefix.ResolveFileFromNormalizedRelative(path).AsPath(), d, err)
 	})
 }
 
-func (vfs *Common) ReadFile(path string) (contents string, ok bool) {
-	fsys, _, rest := vfs.RootAndPath(path)
+func (vfs *Common) ReadFile(path tspath.RootedFilePath) (contents string, ok bool) {
+	fsys, _, rest := vfs.RootAndPath(path.AsPath())
 	if fsys == nil {
 		return "", false
 	}

@@ -10,6 +10,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/compiler"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/debug"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 )
 
 type ImpExpKind int32
@@ -71,7 +72,7 @@ type ModuleReference struct {
 }
 
 // Creates the imports map and returns an ImportTracker that uses it. Call this lazily to avoid calling `getDirectImportsMap` unnecessarily.
-func createImportTracker(ctx context.Context, program *compiler.Program, sourceFiles []*ast.SourceFile, sourceFilesSet *collections.Set[string], checker *checker.Checker) ImportTracker {
+func createImportTracker(ctx context.Context, program *compiler.Program, sourceFiles []*ast.SourceFile, sourceFilesSet *collections.Set[tspath.RootedFilePath], checker *checker.Checker) ImportTracker {
 	allDirectImports := getDirectImportsMap(ctx, program, sourceFiles, checker)
 	return func(exportSymbol *ast.Symbol, exportInfo *ExportInfo, isForRename bool) *ImportsResult {
 		directImports, indirectUsers := getImportersForExport(sourceFiles, sourceFilesSet, allDirectImports, exportInfo, checker)
@@ -99,11 +100,11 @@ func getDirectImportsMap(ctx context.Context, program *compiler.Program, sourceF
 // Calls `action` for each import, re-export, or require() in a file
 func forEachImport(program *compiler.Program, sourceFile *ast.SourceFile, action func(importStatement *ast.Node, imported *ast.Node)) {
 	var implicitImports []*ast.LiteralLikeNode
-	_, jsxSpecifier := program.GetJSXRuntimeImportSpecifier(sourceFile.Path())
+	_, jsxSpecifier := program.GetJSXRuntimeImportSpecifier(sourceFile.PathKey())
 	if jsxSpecifier != nil {
 		implicitImports = append(implicitImports, jsxSpecifier)
 	}
-	importHelpersSpecifier := program.GetImportHelpersImportSpecifier(sourceFile.Path())
+	importHelpersSpecifier := program.GetImportHelpersImportSpecifier(sourceFile.PathKey())
 	if importHelpersSpecifier != nil {
 		implicitImports = append(implicitImports, importHelpersSpecifier)
 	}
@@ -168,7 +169,7 @@ func getStatementsOfSourceFileLike(node *ast.Node) []*ast.Node {
 
 func getImportersForExport(
 	sourceFiles []*ast.SourceFile,
-	sourceFilesSet *collections.Set[string],
+	sourceFilesSet *collections.Set[tspath.RootedFilePath],
 	allDirectImports map[*ast.Symbol][]*ast.Node,
 	exportInfo *ExportInfo,
 	checker *checker.Checker,

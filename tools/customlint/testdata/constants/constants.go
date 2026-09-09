@@ -1,0 +1,3 @@
+package constants
+
+const Path = "/imported/path"

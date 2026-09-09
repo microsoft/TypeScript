@@ -1,0 +1,6 @@
+======== Resolving type reference directive 'package/', containing file '/__inferred type names__.ts', root directory '/typings'. ========
+Resolving with primary search path '/typings'.
+File '/typings/package/package.json' does not exist.
+File '/typings/package/index.d.ts' exists - use it as a name resolution result.
+Resolving real path for '/typings/package/index.d.ts', result '/typings/package/index.d.ts'.
+======== Type reference directive 'package/' was successfully resolved to '/typings/package/index.d.ts', primary: true. ========

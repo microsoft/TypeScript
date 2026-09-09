@@ -23,7 +23,7 @@ type FileContent interface {
 
 type FileHandle interface {
 	FileContent
-	FileName() string
+	FileName() tspath.RootedFilePath
 	Version() int32
 	MatchesDiskText() bool
 	IsOverlay() bool
@@ -33,7 +33,7 @@ type FileHandle interface {
 }
 
 type fileBase struct {
-	fileName string
+	fileName tspath.RootedFilePath
 	content  string
 	hash     xxh3.Uint128
 
@@ -43,7 +43,7 @@ type fileBase struct {
 	lineInfo     *sourcemap.ECMALineInfo
 }
 
-func (f *fileBase) FileName() string {
+func (f *fileBase) FileName() tspath.RootedFilePath {
 	return f.fileName
 }
 
@@ -73,10 +73,10 @@ func (f *fileBase) ECMALineInfo() *sourcemap.ECMALineInfo {
 type diskFile struct {
 	fileBase
 	needsReload  bool
-	realpathPath tspath.Path
+	realpathPath tspath.PathKey
 }
 
-func newDiskFile(fileName string, content string) *diskFile {
+func newDiskFile(fileName tspath.RootedFilePath, content string) *diskFile {
 	return &diskFile{
 		fileBase: fileBase{
 			fileName: fileName,
@@ -124,7 +124,7 @@ type Overlay struct {
 	matchesDiskText bool
 }
 
-func newOverlay(fileName string, content string, version int32, kind core.ScriptKind) *Overlay {
+func newOverlay(fileName tspath.RootedFilePath, content string, version int32, kind core.ScriptKind) *Overlay {
 	return &Overlay{
 		fileBase: fileBase{
 			fileName: fileName,
@@ -144,7 +144,7 @@ func (o *Overlay) Text() string {
 	return o.content
 }
 
-func (o *Overlay) OriginalFileName() string { return o.FileName() }
+func (o *Overlay) OriginalFileName() tspath.RootedFilePath { return o.FileName() }
 
 // SpanMap and OriginalText satisfy lsconv.Script. An overlay holds the editor's raw text (for a
 // content-mapped file, that is the original foreign text, not the transformed output), so it never
@@ -160,7 +160,7 @@ func (o *Overlay) MatchesDiskText() bool {
 
 // !!! optimization: incorporate mtime
 func (o *Overlay) computeMatchesDiskText(fs vfs.FS) (matchesDiskText bool, exists bool) {
-	if tspath.IsDynamicFileName(o.fileName) {
+	if o.fileName.IsDynamic() {
 		return false, false
 	}
 	diskContent, ok := fs.ReadFile(o.fileName)
@@ -179,35 +179,35 @@ func (o *Overlay) Kind() core.ScriptKind {
 }
 
 type overlayFS struct {
-	toPath           func(string) tspath.Path
+	caseSensitivity  tspath.CaseSensitivity
 	fs               vfs.FS
 	positionEncoding lsproto.PositionEncodingKind
 
 	mu       sync.RWMutex
-	overlays map[tspath.Path]*Overlay
+	overlays map[tspath.PathKey]*Overlay
 }
 
-func newOverlayFS(fs vfs.FS, overlays map[tspath.Path]*Overlay, positionEncoding lsproto.PositionEncodingKind, toPath func(string) tspath.Path) *overlayFS {
+func newOverlayFS(fs vfs.FS, overlays map[tspath.PathKey]*Overlay, positionEncoding lsproto.PositionEncodingKind) *overlayFS {
 	return &overlayFS{
 		fs:               fs,
 		positionEncoding: positionEncoding,
 		overlays:         overlays,
-		toPath:           toPath,
+		caseSensitivity:  fs.CaseSensitivity(),
 	}
 }
 
-func (fs *overlayFS) Overlays() map[tspath.Path]*Overlay {
+func (fs *overlayFS) Overlays() map[tspath.PathKey]*Overlay {
 	fs.mu.RLock()
 	defer fs.mu.RUnlock()
 	return fs.overlays
 }
 
-func (fs *overlayFS) getFile(fileName string) FileHandle {
+func (fs *overlayFS) getFile(fileName tspath.RootedFilePath) FileHandle {
 	fs.mu.RLock()
 	overlays := fs.overlays
 	fs.mu.RUnlock()
 
-	path := fs.toPath(fileName)
+	path := fs.caseSensitivity.PathKey(tspath.RootedPath(fileName))
 	if overlay, ok := overlays[path]; ok {
 		return overlay
 	}
@@ -219,7 +219,7 @@ func (fs *overlayFS) getFile(fileName string) FileHandle {
 	return newDiskFile(fileName, content)
 }
 
-func (fs *overlayFS) processChanges(changes []FileChange) (FileChangeSummary, map[tspath.Path]*Overlay) {
+func (fs *overlayFS) processChanges(changes []FileChange) (FileChangeSummary, map[tspath.PathKey]*Overlay) {
 	fs.mu.Lock()
 	defer fs.mu.Unlock()
 
@@ -307,7 +307,7 @@ func (fs *overlayFS) processChanges(changes []FileChange) (FileChangeSummary, ma
 
 	// Process deduplicated events per file
 	for uri, events := range fileEventMap {
-		path := uri.Path(fs.fs.UseCaseSensitiveFileNames())
+		path := uri.PathKey(fs.fs.CaseSensitivity())
 		o := newOverlays[path]
 
 		if events.openChange != nil {
@@ -355,7 +355,7 @@ func (fs *overlayFS) processChanges(changes []FileChange) (FileChangeSummary, ma
 		if len(events.changes) > 0 && o != nil {
 			result.Changed.Add(uri)
 			for _, change := range events.changes {
-				converters := lsconv.NewConverters(fs.positionEncoding, func(fileName string) *lsconv.LSPLineMap {
+				converters := lsconv.NewConverters(fs.positionEncoding, func(fileName tspath.RootedFilePath) *lsconv.LSPLineMap {
 					return o.LSPLineMap()
 				})
 				for _, textChange := range change.Changes {

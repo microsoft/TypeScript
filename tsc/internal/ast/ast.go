@@ -2377,7 +2377,7 @@ type CommentDirective struct {
 
 type SourceFileMetaData struct {
 	PackageJsonType      string
-	PackageJsonDirectory string
+	PackageJsonDirectory tspath.RootedDirectoryPath
 	ImpliedNodeFormat    core.ResolutionMode
 }
 
@@ -2434,8 +2434,8 @@ type CheckJsDirective struct {
 }
 
 type HasFileName interface {
-	FileName() string
-	Path() tspath.Path
+	FileName() tspath.RootedFilePath
+	PathKey() tspath.PathKey
 }
 
 type TokenCacheKey struct {
@@ -2450,7 +2450,7 @@ type SourceFile struct {
 	CompositeBase
 
 	// Fields set by NewSourceFile
-	fileName          string // For debugging convenience
+	fileName          tspath.RootedFilePath // For debugging convenience
 	parseOptions      SourceFileParseOptions
 	text              string
 	contentMapperInfo *ContentMapperSourceFileInfo
@@ -2524,9 +2524,6 @@ type SourceFile struct {
 }
 
 func (f *NodeFactory) NewSourceFile(opts SourceFileParseOptions, text string, statements *NodeList, endOfFileToken *TokenNode) *Node {
-	if tspath.GetEncodedRootLength(opts.FileName) == 0 || opts.FileName != tspath.NormalizePath(opts.FileName) {
-		panic(fmt.Sprintf("fileName should be normalized and absolute: %q", opts.FileName))
-	}
 	data := &SourceFile{}
 	data.fileName = opts.FileName
 	data.parseOptions = opts
@@ -2553,7 +2550,7 @@ func (node *SourceFile) OriginalText() string {
 }
 
 // OriginalFileName returns the canonical filename associated with a supplemental source file, or FileName() otherwise.
-func (node *SourceFile) OriginalFileName() string {
+func (node *SourceFile) OriginalFileName() tspath.RootedFilePath {
 	if canonical := node.CanonicalSourceFile(); canonical != nil {
 		return canonical.FileName()
 	}
@@ -2592,7 +2589,7 @@ func (node *SourceFile) ContentMapperTransformIdentity() string {
 	return node.contentMapperInfo.TransformIdentity
 }
 
-func (node *SourceFile) VirtualFileName() string {
+func (node *SourceFile) VirtualFileName() tspath.RootedFilePath {
 	if node.contentMapperInfo == nil {
 		return ""
 	}
@@ -2619,7 +2616,7 @@ type ContentMapperSourceFileInfo struct {
 	ContentMapper           string
 	TransformIdentity       string
 	ParseOptions            SourceFileParseOptions
-	VirtualFileName         string
+	VirtualFileName         tspath.RootedFilePath
 	OriginalText            string
 	SpanMap                 *spanmap.SpanMap
 	DiagnosticDirectives    []MappedDiagnosticDirective
@@ -2698,12 +2695,12 @@ func collectIdentifiersForSourceFile(sourceFile *SourceFile) collections.Set[str
 	return identifiers
 }
 
-func (node *SourceFile) FileName() string {
+func (node *SourceFile) FileName() tspath.RootedFilePath {
 	return node.parseOptions.FileName
 }
 
-func (node *SourceFile) Path() tspath.Path {
-	return node.parseOptions.Path
+func (node *SourceFile) PathKey() tspath.PathKey {
+	return node.parseOptions.PathKey
 }
 
 func (node *SourceFile) Imports() []*LiteralLikeNode {

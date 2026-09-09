@@ -1,4 +1,4 @@
-UseCaseSensitiveFileNames: true
+CaseSensitivity: true
 //// [/myproject/decls/FnS.d.ts] *new* 
 export declare function fn1(): void;
 export declare function fn2(): void;
@@ -7,7 +7,7 @@ export declare function fn4(): void;
 export declare function fn5(): void;
 //# sourceMappingURL=FnS.d.ts.map
 //// [/myproject/decls/FnS.d.ts.map] *new* 
-{"version":3,"file":"FnS.d.ts","sourceRoot":"","sources":["../dependency/FnS.ts"],"names":[],"mappings":"AAAA,wBAAgB,GAAG,SAAM;AACzB,wBAAgB,GAAG,SAAM;AACzB,wBAAgB,GAAG,SAAM;AACzB,wBAAgB,GAAG,SAAM;AACzB,wBAAgB,GAAG,SAAM"}
+{"version":3,"file":"FnS.d.ts","sources":["../dependency/FnS.ts"],"names":[],"mappings":"AAAA,wBAAgB,GAAG,SAAM;AACzB,wBAAgB,GAAG,SAAM;AACzB,wBAAgB,GAAG,SAAM;AACzB,wBAAgB,GAAG,SAAM;AACzB,wBAAgB,GAAG,SAAM"}
 //// [/myproject/dependency/FnS.js] *new* 
 export function fn1() { }
 export function fn2() { }
@@ -84,7 +84,7 @@ export function fn5() { }
 export {};
 //# sourceMappingURL=main.d.ts.map
 //// [/myproject/main/main.d.ts.map] *new* 
-{"version":3,"file":"main.d.ts","sourceRoot":"","sources":["main.ts"],"names":[],"mappings":""}
+{"version":3,"file":"main.d.ts","sources":["main.ts"],"names":[],"mappings":""}
 //// [/myproject/main/main.js] *new* 
 import { fn1, fn2, fn3, fn4, fn5 } from "../decls/FnS";
 fn1();

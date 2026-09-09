@@ -11,8 +11,8 @@ import (
 
 // Program errors validate that `noEmit` or `emitDeclarationOnly` is also set,
 // so this function doesn't check them to avoid propagating errors.
-func shouldAllowImportingTsExtension(compilerOptions *core.CompilerOptions, fromFileName string) bool {
-	return compilerOptions.GetAllowImportingTsExtensions() || len(fromFileName) > 0 && tspath.IsDeclarationFileName(fromFileName)
+func shouldAllowImportingTsExtension(compilerOptions *core.CompilerOptions, fromFileName tspath.RootedFilePath) bool {
+	return compilerOptions.GetAllowImportingTsExtensions() || fromFileName.IsDeclarationFile()
 }
 
 func usesExtensionsOnImports(file SourceFileForSpecifierGeneration) bool {

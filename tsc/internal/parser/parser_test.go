@@ -26,14 +26,14 @@ func BenchmarkParse(b *testing.B) {
 		b.Run(f.Name(), func(b *testing.B) {
 			f.SkipIfNotExist(b)
 
-			fileName := tspath.GetNormalizedAbsolutePath(f.Path(), "/")
-			path := tspath.ToPath(fileName, "/", osvfs.FS().UseCaseSensitiveFileNames())
+			fileName := tspath.ToRootedFilePath(f.Path(), "/")
+			path := osvfs.FS().CaseSensitivity().PathKey(tspath.RootedPath(fileName))
 			sourceText := f.ReadFile(b)
 			scriptKind := core.GetScriptKindFromFileName(fileName)
 
 			opts := ast.SourceFileParseOptions{
 				FileName: fileName,
-				Path:     path,
+				PathKey:  path,
 			}
 
 			for b.Loop() {
@@ -139,12 +139,12 @@ func FuzzParser(f *testing.F) {
 			t.Skip()
 		}
 
-		fileName := "/index" + extension
-		path := tspath.Path(fileName)
+		fileName := tspath.RootedFilePathFromNormalized("/index" + extension)
+		path := tspath.PathKeyFromCanonical(fileName.AsString())
 
 		opts := ast.SourceFileParseOptions{
 			FileName: fileName,
-			Path:     path,
+			PathKey:  path,
 			ExternalModuleIndicatorOptions: ast.ExternalModuleIndicatorOptions{
 				JSX:   externalModuleIndicatorOptionsJSX,
 				Force: externalModuleIndicatorOptionsForce,
@@ -166,7 +166,7 @@ class MissingImplements implements B. {}
 `
 	file := parser.ParseSourceFile(ast.SourceFileParseOptions{
 		FileName: "/index.ts",
-		Path:     "/index.ts",
+		PathKey:  "/index.ts",
 	}, sourceText, core.ScriptKindTS)
 
 	classDecl := file.Statements.Nodes[0].AsClassDeclaration()
@@ -213,7 +213,7 @@ test("", async function () {
 `
 	opts := ast.SourceFileParseOptions{
 		FileName: "/index.js",
-		Path:     "/index.js",
+		PathKey:  "/index.js",
 	}
 
 	file := parser.ParseSourceFile(opts, sourceText, core.ScriptKindJS)
@@ -244,7 +244,7 @@ func TestJSDocTypeSourceSurvivesReparse(t *testing.T) {
 const value = 0;`
 	opts := ast.SourceFileParseOptions{
 		FileName: "/index.js",
-		Path:     "/index.js",
+		PathKey:  "/index.js",
 	}
 
 	file := parser.ParseSourceFile(opts, sourceText, core.ScriptKindJS)
@@ -291,7 +291,7 @@ func TestJSDocTypeSourcePropagatesToConstructedReparse(t *testing.T) {
 function foo(options) {}`
 	opts := ast.SourceFileParseOptions{
 		FileName: "/index.js",
-		Path:     "/index.js",
+		PathKey:  "/index.js",
 	}
 
 	file := parser.ParseSourceFile(opts, sourceText, core.ScriptKindJS)
@@ -318,7 +318,7 @@ namespace N {
 `
 	opts := ast.SourceFileParseOptions{
 		FileName: "/index.ts",
-		Path:     "/index.ts",
+		PathKey:  "/index.ts",
 	}
 
 	file := parser.ParseSourceFile(opts, sourceText, core.ScriptKindTS)

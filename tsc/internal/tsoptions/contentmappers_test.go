@@ -8,14 +8,9 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
-	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfstest"
 	"gotest.tools/v3/assert"
 )
-
-type resolveContentMapperHost struct {
-	fs vfs.FS
-}
 
 func TestGetContentMapperForFileNameUsesLongestExtension(t *testing.T) {
 	t.Parallel()
@@ -31,12 +26,12 @@ func TestGetContentMapperForFileNameUsesHostCaseSensitivity(t *testing.T) {
 	t.Parallel()
 	mapper := &contentmapper.Mapper{Definition: contentmapper.Definition{Extensions: []string{".vue"}}}
 	insensitive := &ParsedCommandLine{
-		ParsedConfig:        &ParsedOptions{ContentMappers: []*contentmapper.Mapper{mapper}},
-		comparePathsOptions: tspath.ComparePathsOptions{UseCaseSensitiveFileNames: false},
+		ParsedConfig:    &ParsedOptions{ContentMappers: []*contentmapper.Mapper{mapper}},
+		caseSensitivity: tspath.CaseInsensitive,
 	}
 	sensitive := &ParsedCommandLine{
-		ParsedConfig:        &ParsedOptions{ContentMappers: []*contentmapper.Mapper{mapper}},
-		comparePathsOptions: tspath.ComparePathsOptions{UseCaseSensitiveFileNames: true},
+		ParsedConfig:    &ParsedOptions{ContentMappers: []*contentmapper.Mapper{mapper}},
+		caseSensitivity: tspath.CaseSensitive,
 	}
 
 	assert.Equal(t, insensitive.GetContentMapperForFileName("/src/Component.VUE"), mapper)
@@ -46,6 +41,7 @@ func TestGetContentMapperForFileNameUsesHostCaseSensitivity(t *testing.T) {
 func TestGetOutputFileNamesExcludesMapperOwnedOutputs(t *testing.T) {
 	t.Parallel()
 	mapper := &contentmapper.Mapper{Definition: contentmapper.Definition{Extensions: []string{".vue"}}}
+	currentDirectory := tspath.RootedDirectoryPath("/")
 	commandLine := NewParsedCommandLine(
 		&core.CompilerOptions{
 			OutDir:         "/dist",
@@ -53,22 +49,20 @@ func TestGetOutputFileNamesExcludesMapperOwnedOutputs(t *testing.T) {
 			DeclarationMap: core.TSTrue,
 			SourceMap:      core.TSTrue,
 		},
-		[]string{"/src/Component.vue"},
+		[]tspath.RootedFilePath{tspath.ToRootedFilePath("/src/Component.vue", currentDirectory)},
 		nil,
-		tspath.ComparePathsOptions{CurrentDirectory: "/", UseCaseSensitiveFileNames: true},
+		currentDirectory,
+		tspath.CaseSensitive,
 	)
 	commandLine.ParsedConfig.ContentMappers = []*contentmapper.Mapper{mapper}
 
-	assert.DeepEqual(t, slices.Collect(commandLine.GetOutputFileNames()), []string{"/dist/Component.d.vue.ts"})
+	assert.DeepEqual(t, slices.Collect(commandLine.GetOutputFileNames()), []tspath.RootedFilePath{"/dist/Component.d.vue.ts"})
 }
-
-func (h resolveContentMapperHost) FS() vfs.FS                  { return h.fs }
-func (h resolveContentMapperHost) GetCurrentDirectory() string { return "/home/project" }
 
 func TestResolveContentMapperManifest(t *testing.T) {
 	t.Parallel()
 
-	host := resolveContentMapperHost{fs: vfstest.FromMap(map[string]string{
+	fs := vfstest.FromMap(map[string]string{
 		"/home/project/node_modules/vue-ts-mapper/package.json": `{
 			"name": "vue-ts-mapper",
 			"version": "1.2.3",
@@ -92,42 +86,42 @@ func TestResolveContentMapperManifest(t *testing.T) {
 			"name": "bad-exec",
 			"typescript": { "contentMapper": { "exec": "node ./mapper.js" } }
 		}`,
-	}, true /*useCaseSensitiveFileNames*/)}
+	}, tspath.CaseSensitive /*caseSensitivity*/)
 
 	// Name, version, and the verbatim exec argv are preserved.
-	manifest, packageDirectory, diagnostic := resolveContentMapperManifest(host, "/home/project/tsconfig.json", "vue-ts-mapper")
+	manifest, packageDirectory, diagnostic := resolveContentMapperManifest(fs, "/home/project/tsconfig.json", "vue-ts-mapper")
 	assert.Assert(t, diagnostic == nil)
 	assert.Equal(t, manifest.Name, "vue-ts-mapper")
 	assert.Equal(t, manifest.Version, "1.2.3")
-	assert.Equal(t, packageDirectory, "/home/project/node_modules/vue-ts-mapper")
+	assert.Equal(t, packageDirectory, tspath.RootedDirectoryPath("/home/project/node_modules/vue-ts-mapper"))
 	assert.DeepEqual(t, manifest.Exec, []string{"node", "./dist/mapper.js"})
 	assert.DeepEqual(t, manifest.CompilerOptions, []string{"target", "jsx"})
 
 	// Resolution walks up node_modules; a package with no version resolves to a name and empty version.
-	manifest, _, diagnostic = resolveContentMapperManifest(host, "/home/project/src/tsconfig.json", "@scope/noversion")
+	manifest, _, diagnostic = resolveContentMapperManifest(fs, "/home/project/src/tsconfig.json", "@scope/noversion")
 	assert.Assert(t, diagnostic == nil)
 	assert.Equal(t, manifest.Name, "@scope/noversion")
 	assert.Equal(t, manifest.Version, "")
 
 	// A package that is not installed reports a resolution diagnostic.
-	_, _, diagnostic = resolveContentMapperManifest(host, "/home/project/tsconfig.json", "missing-mapper")
+	_, _, diagnostic = resolveContentMapperManifest(fs, "/home/project/tsconfig.json", "missing-mapper")
 	assert.Assert(t, diagnostic != nil)
 	assert.Equal(t, diagnostic.Code(), diagnostics.The_content_mapper_package_0_could_not_be_resolved.Code())
 
 	// A package whose package.json has no name reports a diagnostic.
-	_, packageDirectory, diagnostic = resolveContentMapperManifest(host, "/home/project/tsconfig.json", "no-name")
+	_, packageDirectory, diagnostic = resolveContentMapperManifest(fs, "/home/project/tsconfig.json", "no-name")
 	assert.Assert(t, diagnostic != nil)
-	assert.Equal(t, packageDirectory, "/home/project/node_modules/no-name")
+	assert.Equal(t, packageDirectory, tspath.RootedDirectoryPath("/home/project/node_modules/no-name"))
 	assert.Equal(t, diagnostic.Code(), diagnostics.The_package_json_of_the_content_mapper_package_0_does_not_specify_a_name.Code())
 
 	// A package that does not declare a "typescript.contentMapper" object reports a diagnostic.
-	_, _, diagnostic = resolveContentMapperManifest(host, "/home/project/tsconfig.json", "no-manifest")
+	_, _, diagnostic = resolveContentMapperManifest(fs, "/home/project/tsconfig.json", "no-manifest")
 	assert.Assert(t, diagnostic != nil)
 	assert.Equal(t, diagnostic.Code(), diagnostics.The_package_json_of_the_content_mapper_package_0_does_not_declare_a_typescript_contentMapper_object.Code())
 
 	// A "typescript.contentMapper" with no "exec", or an "exec" of the wrong type, reports a diagnostic.
 	for _, pkg := range []string{"no-exec", "bad-exec"} {
-		_, _, diagnostic = resolveContentMapperManifest(host, "/home/project/tsconfig.json", pkg)
+		_, _, diagnostic = resolveContentMapperManifest(fs, "/home/project/tsconfig.json", pkg)
 		assert.Assert(t, diagnostic != nil, "expected a diagnostic for %s", pkg)
 		assert.Equal(t, diagnostic.Code(), diagnostics.The_typescript_contentMapper_exec_of_the_content_mapper_package_0_must_be_a_non_empty_array_of_strings.Code())
 	}

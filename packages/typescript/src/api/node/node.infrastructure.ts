@@ -2,6 +2,7 @@ import {
     type FileReference,
     ModifierFlags,
     type Node,
+    type PathKey,
     SyntaxKind,
 } from "../../ast/index.ts";
 import type { TimingCollector } from "../timing.ts";
@@ -52,7 +53,7 @@ export interface SourceFileInfo {
     readonly _offsetStructuredData: number;
     readonly _decoder: TextDecoder;
     nodes: any[];
-    readonly path?: string;
+    readonly path?: PathKey;
     /**
      * The timing collector that per-node materialization is reported into, and
      * that this source file registered itself with when fetched. Present only
