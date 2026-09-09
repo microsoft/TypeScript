@@ -141,7 +141,7 @@ func (s *Snapshot) resourceRequestForDocument(uri lsproto.DocumentUri) ResourceR
 	path := uri.Path(s.UseCaseSensitiveFileNames())
 	request := ResourceRequest{Documents: []lsproto.DocumentUri{uri}}
 	for _, project := range s.ProjectCollection.SyntheticProjects() {
-		if project.containsFile(path) {
+		if project.containsFile(path) || project.host != nil && project.host.sourceFS.SeenFileOrMissingParentDirectory(path) {
 			request.Projects = append(request.Projects, project.ID())
 		}
 	}
