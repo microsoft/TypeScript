@@ -16,7 +16,4 @@ export const foo = { ...({} as Type) };
 
 
 //// [type.d.ts]
-declare namespace Foo {
-    const sym: unique symbol;
-}
 export {};
