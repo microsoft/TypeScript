@@ -22,6 +22,15 @@ func TestScanStringPreservesLoneSurrogates(t *testing.T) {
 		"🦀")
 }
 
+func TestScanIdentityEscapePreservesLoneSurrogate(t *testing.T) {
+	t.Parallel()
+	surrogate := stringutil.EncodeJSStringRune(0xD800)
+	s := NewScanner()
+	s.SetText(`"\` + surrogate + `x"`)
+	assert.Equal(t, s.Scan(), ast.KindStringLiteral)
+	assert.Equal(t, s.TokenValue(), surrogate+"x")
+}
+
 func TestNormalizeJSDocTypeSourceText(t *testing.T) {
 	t.Parallel()
 

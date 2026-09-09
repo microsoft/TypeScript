@@ -277,6 +277,10 @@ function assertSignatureArraysEquivalent(actual: readonly Signature[], expected:
 function assertNodeHandlesEquivalent(actual: NodeHandle, expected: NodeHandle, message?: string): void {
     assert.equal(actual.index, expected.index, message);
     assert.equal(actual.kind, expected.kind, message);
+    assert.equal(actual.contentHash, expected.contentHash, message);
+    assert.equal(actual.parseOptionsKey, expected.parseOptionsKey, message);
+    assert.equal(actual.scriptKind, expected.scriptKind, message);
+    assert.equal(actual.isDeclarationFile, expected.isDeclarationFile, message);
     assert.equal(actual.path, expected.path, message);
 }
 
@@ -404,6 +408,23 @@ function assertPublicGeneratorCoverage(owners: readonly { readonly name: string;
 }
 
 describe("API - generator batching", () => {
+    test("batches source file requests", context => {
+        const api = spawnAPI(parityFiles);
+        context.after(() => api.close());
+        const requestBatches: string[][] = [];
+        observeRequestBatches(api, requestBatches, context);
+        const [[fromText, fromFile]] = api.batch(all(
+            api.createSourceFile.gen("/generated.ts", "export const generated = true;"),
+            api.createSourceFileFromFile.gen("/src/index.ts"),
+        ));
+        assert.equal(fromText.text, "export const generated = true;");
+        assert.equal(fromFile.text, parityFiles["/src/index.ts"]);
+        assert.deepEqual(requestBatches, [
+            ["initialize"],
+            ["createSourceFile", "createSourceFileFromFile"],
+        ]);
+    });
+
     test("all and defer yield discriminated host messages without starting children", () => {
         let started = false;
         function* child() {
@@ -1493,6 +1514,8 @@ describe("API - generator batching", () => {
                 parityCase("API", "readConfigFile", api.readConfigFile, assertDeepEquivalent, "/tsconfig.json"),
                 parityCase("API", "parseJsonConfigFileContent", api.parseJsonConfigFileContent, assertDeepEquivalent, { compilerOptions: { strict: true } }, { configDirectory: "/" }),
                 parityCase("API", "parseJsonConfigFileContent", api.parseJsonConfigFileContent, assertDeepEquivalent, { extends: "./base.json" }, { configFileName: "/tsconfig.json" }),
+                parityCase("API", "createSourceFile", api.createSourceFile, assertSourceFilesEquivalent, "/generated.ts", "export const generated = true;"),
+                parityCase("API", "createSourceFileFromFile", api.createSourceFileFromFile, assertSourceFilesEquivalent, "/src/index.ts"),
                 parityCase("API", "transpileModule", api.transpileModule, assertDeepEquivalent, "export const value: number = 1;", { compilerOptions: { module: 99 } }),
                 parityCase("API", "transpileModuleFromFile", api.transpileModuleFromFile, assertDeepEquivalent, "/src/index.ts"),
                 parityCase("API", "transpileDeclaration", api.transpileDeclaration, assertDeepEquivalent, "export function declared(value: string): number { return value.length; }"),

@@ -412,7 +412,10 @@ function transformAsyncSource(source: string, fileName: string, attachGenerators
         const [method, params] = call.arguments;
         const methodText = getTextWithOwner(method);
         const paramsText = params ? getTextWithOwner(params) : "undefined";
-        return `yield* apiRequest(${methodText}, ${paramsText})`;
+        const request = `yield* apiRequest(${methodText}, ${paramsText})`;
+        return ts.isPropertyAccessExpression(call.expression) && call.expression.name.text === "apiRequestBinary"
+            ? `sourceFileResponseToUint8Array((${request}))`
+            : request;
     }
 
     function getGeneratorCallText(call: ts.CallExpression): string {
@@ -462,7 +465,9 @@ function transformAsyncSource(source: string, fileName: string, attachGenerators
     }
 
     function isAPIRequestCall(node: ts.Expression): node is ts.CallExpression & { expression: ts.PropertyAccessExpression; } {
-        return ts.isCallExpression(node) && ts.isPropertyAccessExpression(node.expression) && node.expression.name.text === "apiRequest";
+        return ts.isCallExpression(node)
+            && ts.isPropertyAccessExpression(node.expression)
+            && (node.expression.name.text === "apiRequest" || node.expression.name.text === "apiRequestBinary");
     }
 
     function getCallExpression(node: ts.Expression): ts.CallExpression | undefined {

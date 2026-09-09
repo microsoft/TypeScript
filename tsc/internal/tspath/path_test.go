@@ -6,6 +6,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/microsoft/TypeScript/tsc/internal/stringutil"
 	"gotest.tools/v3/assert"
 )
 
@@ -543,6 +544,8 @@ func TestToFileNameLowerCase(t *testing.T) {
 	assert.Equal(t, ToFileNameLowerCase("/user/UserName/projects/projectß/file.ts"), "/user/username/projects/projectß/file.ts")
 	assert.Equal(t, ToFileNameLowerCase("/user/UserName/projects/İproject/file.ts"), "/user/username/projects/İproject/file.ts")
 	assert.Equal(t, ToFileNameLowerCase("/user/UserName/projects/ı/file.ts"), "/user/username/projects/ı/file.ts")
+	surrogate := stringutil.EncodeJSStringRune(0xD800)
+	assert.Equal(t, ToFileNameLowerCase("/User/"+surrogate+"/File.TS"), "/user/"+surrogate+"/file.ts")
 }
 
 var toFileNameLowerCaseTests = []string{

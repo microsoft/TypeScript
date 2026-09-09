@@ -65,7 +65,9 @@ import {
     type ConditionalType,
     DiagnosticCategory,
     type DocumentIdentifier,
+    documentURIToFileName,
     EmitOnly,
+    fileNameToDocumentURI,
     type FreshableType,
     type ImportAdderAction,
     type IndexedAccessType,
@@ -76,7 +78,9 @@ import {
     type LiteralType,
     ModifierFlags,
     ModuleKind,
+    NodeHandle,
     ObjectFlags,
+    ScriptKind,
     type Signature,
     SignatureKind,
     type StringMappingType,
@@ -295,16 +299,138 @@ describe("API", () => {
         assert.equal(declarationFileOutput.outputText, "export declare const x: number;\n");
     });
 
+    test("createSourceFile", () => {
+        using api = spawnAPI();
+        const sourceText = "export const element = <div />;";
+        const sourceFile = api.createSourceFile("component.tsx", sourceText);
+        assert.equal(sourceFile.fileName, "component.tsx");
+        assert.match(sourceFile.path, /\/component\.tsx$/);
+        assert.equal(sourceFile.text, sourceText);
+        assert.equal(sourceFile.scriptKind, ScriptKind.TSX);
+        assert.equal(sourceFile.statements.length, 1);
+        assert.strictEqual(sourceFile.statements[0].parent, sourceFile);
+
+        assert.equal((api.createSourceFile("", "")).scriptKind, ScriptKind.TS);
+        assert.equal((api.createSourceFile(".", "")).scriptKind, ScriptKind.TS);
+
+        const overridden = api.createSourceFile("/component.txt", sourceText, { scriptKind: ScriptKind.TSX });
+        assert.equal(overridden.scriptKind, ScriptKind.TSX);
+        assert.equal(overridden.statements.length, 1);
+
+        assert.throws(() => api.createSourceFile("/invalid.ts", "", { scriptKind: 999 as ScriptKind }), /invalid scriptKind 999/);
+    });
+
+    test("createSourceFile preserves lone surrogates", () => {
+        const loneSurrogate = String.fromCharCode(0xD800);
+        using api = spawnAPI({
+            "/input.ts": "export const input = 1;",
+        });
+        const sourceText = `const before = 1;\n${loneSurrogate}\nconst after = 2;`;
+        const sourceFile = api.createSourceFile("surrogate.ts", sourceText);
+        assert.equal(sourceFile.text, sourceText);
+        assert.equal(sourceFile.statements.length, 2);
+
+        const surrogateFileName = `surrogate-${loneSurrogate}.ts`;
+        assert.equal((api.createSourceFile(surrogateFileName, "")).fileName, surrogateFileName);
+
+        const snapshot = api.updateSnapshot({ openFiles: ["/input.ts"] });
+        const emitter = snapshot.getProjects()[0].emitter;
+        const surrogateLiteralText = `const value = "${loneSurrogate}";`;
+        const surrogateLiteralFile = api.createSourceFile("relative.ts", surrogateLiteralText);
+        const escapedSurrogateLiteralText = `const value = "\\uD800";`;
+        assert.equal(emitter.printNode(surrogateLiteralFile).trimEnd(), escapedSurrogateLiteralText);
+        assert.equal(emitter.printNode(surrogateLiteralFile.statements[0]).trimEnd(), escapedSurrogateLiteralText);
+        snapshot.dispose();
+    });
+
+    test("createSourceFile returns standalone source files", () => {
+        using api = spawnAPI({
+            "/input.ts": "export const input = 1;",
+        });
+        const sourceText = "export const element = <div />;";
+        const sourceFile = api.createSourceFile("component.tsx", sourceText);
+        const snapshot = api.updateSnapshot({ openFiles: ["/input.ts"] });
+        const project = snapshot.getProjects()[0];
+        assert.equal(project.emitter.printNode(sourceFile).trimEnd(), sourceText);
+        assert.throws(() => project.checker.getTypeAtLocation(sourceFile.statements[0]), /without program identity/);
+        assert.throws(() => project.program.isSourceFileDefaultLibrary(sourceFile), /does not belong to this program/);
+        snapshot.dispose();
+    });
+
+    test("createSourceFileFromFile", () => {
+        using api = spawnAPI({
+            "/input.ts": "export const fromFile = 1;",
+        });
+        const fromFile = api.createSourceFileFromFile({ uri: "file:///input.ts" });
+        assert.equal(fromFile.fileName, "/input.ts");
+        assert.equal(fromFile.text, "export const fromFile = 1;");
+        assert.equal(fromFile.scriptKind, ScriptKind.TS);
+
+        assert.throws(() => api.createSourceFileFromFile("/missing.ts"), /could not read file "\/missing\.ts"/);
+    });
+
+    test("createSourceFileFromFile preserves lone surrogates", () => {
+        const loneSurrogate = String.fromCharCode(0xD800);
+        const sourceText = `const before = 1;\n${loneSurrogate}\nconst after = 2;`;
+        const surrogateFileName = `/surrogate-${loneSurrogate}.ts`;
+        using api = spawnAPI({
+            "/surrogate.ts": sourceText,
+            [surrogateFileName]: "export const surrogateFileName = 1;",
+        });
+        const surrogateFromFile = api.createSourceFileFromFile("/surrogate.ts");
+        assert.equal(surrogateFromFile.text, sourceText);
+        assert.equal(surrogateFromFile.statements.length, 2);
+
+        const surrogateNameFromFile = api.createSourceFileFromFile(surrogateFileName);
+        assert.equal(surrogateNameFromFile.fileName, surrogateFileName);
+        assert.equal(surrogateNameFromFile.text, "export const surrogateFileName = 1;");
+        const surrogateURI = `file:///surrogate-%ED%A0%80.ts`;
+        assert.equal((api.createSourceFileFromFile({ uri: surrogateURI })).fileName, surrogateFileName);
+    });
+
+    test("document URI conversion preserves lone surrogates", () => {
+        const loneSurrogate = String.fromCharCode(0xD800);
+        const surrogateFileName = `/surrogate-${loneSurrogate}.ts`;
+        const surrogateURI = `file:///surrogate-%ED%A0%80.ts`;
+        assert.equal(fileNameToDocumentURI(surrogateFileName), surrogateURI);
+        assert.equal(documentURIToFileName(surrogateURI), surrogateFileName);
+
+        const loneLowSurrogate = String.fromCharCode(0xDC00);
+        assert.equal(
+            documentURIToFileName(fileNameToDocumentURI(`/surrogate-${loneLowSurrogate}.ts`)),
+            `/surrogate-${loneLowSurrogate}.ts`,
+        );
+        const uncFileName = `//server/share/a b-${loneSurrogate}.ts`;
+        assert.equal(documentURIToFileName(fileNameToDocumentURI(uncFileName)), uncFileName);
+    });
+
+    test("NodeHandle rejects malformed handles", () => {
+        using api = spawnAPI({
+            "/input.ts": "export const input = 1;",
+        });
+        const snapshot = api.updateSnapshot({ openFiles: ["/input.ts"] });
+        const project = snapshot.getProjects()[0];
+        assert.throws(() => new NodeHandle("x.0.00000000000000000000000000000000.0.3.0./input.ts", project), /Invalid node handle/);
+        assert.throws(() => new NodeHandle("1.0./input.ts", project), /Invalid node handle/);
+        snapshot.dispose();
+    });
+
     test("createProgram", () => {
         using api = spawnAPI({
-            "/src/index.ts": `export const value: string = 1;`,
+            "/src/index.ts": `const preceding = "${String.fromCharCode(0xD800)}"; export const value: string = 1;`,
         });
 
         const program = api.createProgram(["/src/index.ts"], { compilerOptions: { noLib: true, strict: true } });
 
         assert.deepEqual(program.getCompilerOptions(), { noLib: true, strict: true });
         assert.deepEqual(program.getSourceFileNames(), ["/src/index.ts"]);
-        assert.equal((program.getSemanticDiagnostics("/src/index.ts")).length, 1);
+        const diagnostics = program.getSemanticDiagnostics("/src/index.ts");
+        assert.equal(diagnostics.length, 1);
+        const diagnostic = diagnostics[0];
+        assert(diagnostic);
+        const startPosition = diagnostic.startPosition;
+        assert(startPosition);
+        assert.equal(diagnostic.pos, startPosition.character);
 
         program.dispose();
         assert.throws(() => program.getSourceFileNames(), /snapshot .* not found/);
@@ -1511,9 +1637,24 @@ describe("Source file caching", () => {
         using api = disposableAPI;
 
         const snap1 = api.updateSnapshot({ openProject: "/tsconfig.json" });
-        const sf1 = snap1.getProject("/tsconfig.json")!.program.getSourceFile("/src/foo.ts");
+        const project1 = snap1.getProject("/tsconfig.json")!;
+        const sf1 = project1.program.getSourceFile("/src/foo.ts");
         assert.ok(sf1);
         assert.equal(sf1.text, `export const foo = 42;`);
+        const symbol1 = project1.checker.getSymbolAtPosition("/src/foo.ts", sf1.text.indexOf("foo"));
+        assert.ok(symbol1?.valueDeclaration);
+        const declaration = symbol1.valueDeclaration;
+        const wrongKind = declaration.kind === SyntaxKind.Identifier ? SyntaxKind.StringLiteral : SyntaxKind.Identifier;
+        const forgedHandle = new NodeHandle(
+            `${declaration.index}.${wrongKind}.${declaration.contentHash}.${declaration.parseOptionsKey}.${declaration.scriptKind}.${+declaration.isDeclarationFile}.${declaration.path}`,
+            project1,
+        );
+        assert.equal(forgedHandle.resolve(), undefined);
+        const outOfRangeHandle = new NodeHandle(
+            `999999.${declaration.kind}.${declaration.contentHash}.${declaration.parseOptionsKey}.${declaration.scriptKind}.${+declaration.isDeclarationFile}.${declaration.path}`,
+            project1,
+        );
+        assert.equal(outOfRangeHandle.resolve(), undefined);
 
         // Mutate the file in the VFS
         fs.writeFile!("/src/foo.ts", `export const foo = 100;`);
@@ -1528,6 +1669,10 @@ describe("Source file caching", () => {
 
         // Different content → different object
         assert.notStrictEqual(sf1, sf2, "Modified file should return a new source file object");
+        const project2 = snap2.getProject("/tsconfig.json")!;
+        assert.throws(() => project2.checker.getTypeAtLocation(sf1.statements[0]), /file may have changed/);
+        assert.throws(() => project2.program.isSourceFileDefaultLibrary(sf1), /does not belong to this program/);
+        assert.equal(symbol1.valueDeclaration.resolve(project2), undefined);
     });
 
     test("unmodified file retains cached object across file change notification", () => {

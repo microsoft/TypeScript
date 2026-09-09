@@ -9,6 +9,7 @@ import { ModuleResolutionKind } from "#enums/moduleResolutionKind";
 import { NewLineKind } from "#enums/newLineKind";
 import { NodeBuilderFlags } from "#enums/nodeBuilderFlags";
 import { ObjectFlags } from "#enums/objectFlags";
+import { ScriptKind } from "#enums/scriptKind";
 import { SignatureFlags } from "#enums/signatureFlags";
 import { SignatureKind } from "#enums/signatureKind";
 import { SymbolFlags } from "#enums/symbolFlags";
@@ -44,7 +45,10 @@ import {
     readSourceFileHash,
     RemoteSourceFile,
 } from "../node/node.ts";
-import { Wtf8Decoder } from "../node/wtf8.ts";
+import {
+    encodeWtf8,
+    Wtf8Decoder,
+} from "../node/wtf8.ts";
 import type {
     APIOptions,
     LSPConnectionOptions,
@@ -58,6 +62,7 @@ import type {
     CompilerOptions,
     CreateProgramOptions,
     CreateProgramResponse,
+    CreateSourceFileOptions,
     Diagnostic,
     DocumentIdentifier,
     DocumentPosition,
@@ -145,7 +150,7 @@ import type {
 
 export { formatDiagnostics, formatDiagnosticsWithColorAndContext } from "../diagnosticFormatter.ts";
 export { documentURIToFileName, fileNameToDocumentURI } from "../path.ts";
-export { CheckFlags, CompletionItemKind, DiagnosticCategory, ElementFlags, EmitOnly, JsxEmit, ModifierFlags, ModuleKind, ModuleResolutionKind, NodeBuilderFlags, ObjectFlags, SignatureFlags, SignatureKind, SymbolFlags, TypeFlags, TypeFormatFlags, TypePredicateKind };
+export { CheckFlags, CompletionItemKind, DiagnosticCategory, ElementFlags, EmitOnly, JsxEmit, ModifierFlags, ModuleKind, ModuleResolutionKind, NodeBuilderFlags, ObjectFlags, ScriptKind, SignatureFlags, SignatureKind, SymbolFlags, TypeFlags, TypeFormatFlags, TypePredicateKind };
 export type {
     APIFileChanges,
     APIImportAdderAction as ImportAdderAction,
@@ -162,6 +167,7 @@ export type {
     CompletionOptions,
     ConditionalType,
     CreateProgramOptions,
+    CreateSourceFileOptions,
     Diagnostic,
     DocumentIdentifier,
     DocumentPosition,
@@ -225,6 +231,7 @@ export interface TranspileOutput {
 // @sync-only-start
 // export { all, defer, type APIRequestGenerator, type AnyAPIRequestGenerator, type AllAPIRequestGenerator, type DeferredAPIRequestGenerator, type ExecutedGeneratorsResults } from "./generatorSupport.ts";
 // import {executeRequestGenerators, type ExecutedGeneratorsResults, type AnyAPIRequestGenerator} from "./generatorSupport.ts";
+// import { sourceFileResponseToUint8Array } from "../node/encoder.ts";
 // @sync-only-end
 
 export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHost {
@@ -232,6 +239,7 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
     private sourceFileCache: SourceFileCache;
     private toPath: ((fileName: string) => Path) | undefined;
     private currentDirectory: string | undefined;
+    private readonly decoder = new Wtf8Decoder();
     private getCanonicalFileNameWorker: ((fileName: string) => string) | undefined;
     private initialized: boolean = false;
     private initializing: Promise<void> | undefined;
@@ -328,6 +336,27 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
     ): Promise<ParsedCommandLine> {
         await this.ensureInitialized();
         return this.client.apiRequest("parseJsonConfigFileContent", { json, ...options });
+    }
+
+    async createSourceFile(fileName: string, sourceText: string, options: CreateSourceFileOptions = {}): Promise<SourceFile> {
+        await this.ensureInitialized();
+        const fileNameBase64 = uint8ArrayToBase64(encodeWtf8(fileName));
+        const sourceTextBase64 = uint8ArrayToBase64(encodeWtf8(sourceText));
+        const data = await this.client.apiRequestBinary("createSourceFile", { fileNameBase64, sourceTextBase64, options });
+        if (!data) {
+            throw new Error("createSourceFile returned no source file");
+        }
+        return new RemoteSourceFile(data, this.decoder, this.client.getTimingCollector()) as unknown as SourceFile;
+    }
+
+    async createSourceFileFromFile(file: DocumentIdentifier, options: CreateSourceFileOptions = {}): Promise<SourceFile> {
+        await this.ensureInitialized();
+        const fileNameBase64 = uint8ArrayToBase64(encodeWtf8(resolveFileName(file)));
+        const data = await this.client.apiRequestBinary("createSourceFileFromFile", { fileNameBase64, options });
+        if (!data) {
+            throw new Error("createSourceFileFromFile returned no source file");
+        }
+        return new RemoteSourceFile(data, this.decoder, this.client.getTimingCollector()) as unknown as SourceFile;
     }
 
     async transpileModule(input: string, options: TranspileOptions = {}): Promise<TranspileOutput> {
@@ -1185,7 +1214,7 @@ export class Program implements FormatDiagnosticsHost {
         const parseOptionsKey = readParseOptionsKey(view);
 
         // Create a new RemoteSourceFile and cache it (set returns existing if hash matches)
-        const sourceFile = new RemoteSourceFile(binaryData, this.decoder, this.client.getTimingCollector()) as unknown as SourceFile;
+        const sourceFile = new RemoteSourceFile(binaryData, this.decoder, this.client.getTimingCollector(), true) as unknown as SourceFile;
         return this.sourceFileCache.set(path, sourceFile, parseOptionsKey, contentHash, this.snapshotId, this.project.id);
     }
 
@@ -1236,6 +1265,10 @@ export class Program implements FormatDiagnosticsHost {
      * fetched lazily per file and cached on this `Program` instance.
      */
     async isSourceFileFromExternalLibrary(file: SourceFile): Promise<boolean> {
+        const remote = file as unknown as RemoteSourceFile;
+        if (!(remote instanceof RemoteSourceFile) || !remote.hasProgramIdentity || await this.getSourceFile(file.path) !== file) {
+            throw new Error("Source file does not belong to this program");
+        }
         const metadata = await this.getSourceFileMetadataByPath(file.path);
         return metadata?.isFromExternalLibrary ?? false;
     }
@@ -1246,6 +1279,10 @@ export class Program implements FormatDiagnosticsHost {
      * `Program` instance.
      */
     async isSourceFileDefaultLibrary(file: SourceFile): Promise<boolean> {
+        const remote = file as unknown as RemoteSourceFile;
+        if (!(remote instanceof RemoteSourceFile) || !remote.hasProgramIdentity || await this.getSourceFile(file.path) !== file) {
+            throw new Error("Source file does not belong to this program");
+        }
         const metadata = await this.getSourceFileMetadataByPath(file.path);
         return metadata?.isDefaultLibrary ?? false;
     }
@@ -2311,12 +2348,20 @@ export class NodeHandle<out T extends Node = Node> {
     private readonly canonicalProject: Project;
     readonly index: number;
     readonly kind: SyntaxKind;
+    readonly contentHash: string;
+    readonly parseOptionsKey: string;
+    readonly scriptKind: ScriptKind;
+    readonly isDeclarationFile: boolean;
     readonly path: Path;
 
     constructor(handle: string, canonicalProject: Project) {
         const parsed = parseNodeHandle(handle);
         this.index = parsed.index;
         this.kind = parsed.kind;
+        this.contentHash = parsed.contentHash;
+        this.parseOptionsKey = parsed.parseOptionsKey;
+        this.scriptKind = parsed.scriptKind;
+        this.isDeclarationFile = parsed.isDeclarationFile;
         this.path = parsed.path;
         this.canonicalProject = canonicalProject;
     }
@@ -2331,7 +2376,20 @@ export class NodeHandle<out T extends Node = Node> {
         if (!sourceFile) {
             return undefined;
         }
-        return (sourceFile as unknown as RemoteSourceFile).getOrCreateNodeAtIndex(this.index) as T | undefined;
+        const remote = sourceFile as unknown as RemoteSourceFile;
+        if (
+            remote.contentHash !== this.contentHash
+            || remote.parseOptionsKey !== this.parseOptionsKey
+            || remote.scriptKind !== this.scriptKind
+            || remote.isDeclarationFile !== this.isDeclarationFile
+        ) {
+            return undefined;
+        }
+        if (this.index >= remote.nodes.length) {
+            return undefined;
+        }
+        const node = remote.getOrCreateNodeAtIndex(this.index);
+        return node?.kind === this.kind ? node as T : undefined;
     }
 }
 

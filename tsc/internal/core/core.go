@@ -12,7 +12,6 @@ import (
 	"strings"
 	"sync"
 	"unicode"
-	"unicode/utf16"
 	"unicode/utf8"
 
 	"github.com/microsoft/TypeScript/tsc/internal/debug"
@@ -490,8 +489,14 @@ func UTF16Len(s string) UTF16Offset {
 		if s[i] >= utf8.RuneSelf {
 			// Found non-ASCII; count the ASCII prefix, then decode the rest.
 			n := UTF16Offset(i)
-			for _, r := range s[i:] {
-				n += UTF16Offset(utf16.RuneLen(r))
+			for pos := i; pos < len(s); {
+				r, size := stringutil.DecodeJSStringRune(s[pos:])
+				if r >= 0x10000 {
+					n += 2
+				} else {
+					n++
+				}
+				pos += size
 			}
 			return n
 		}

@@ -1669,7 +1669,10 @@ function emitRemoteNodeClassOpen(w: CodeWriter) {
     w.write(`    }`);
     w.write(`    protected _sourceFile: SourceFileInfo;`);
     w.write(`    get id(): string {`);
-    w.write(`        return \`\${this.index}.\${this.kind}.\${this.sourceFile.path}\`;`);
+    w.write(`        if (!this.sourceFile.hasProgramIdentity) {`);
+    w.write(`            throw new Error("Cannot use a node without program identity with a program API");`);
+    w.write(`        }`);
+    w.write(`        return \`\${this.index}.\${this.kind}.\${this.sourceFile.contentHash}.\${this.sourceFile.parseOptionsKey}.\${this.sourceFile.scriptKind}.\${+this.sourceFile.isDeclarationFile}.\${this.sourceFile.path}\`;`);
     w.write(`    }`);
     w.write(``);
     w.write(`    constructor(view: DataView, index: number, parent: RemoteNode, sourceFile: SourceFileInfo, offsetNodes: number) {`);
