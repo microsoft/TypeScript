@@ -10,6 +10,8 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/internal/json"
 	"github.com/microsoft/TypeScript/tsc/internal/parser"
+	"github.com/microsoft/TypeScript/tsc/internal/project"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"gotest.tools/v3/assert"
 )
 
@@ -73,7 +75,10 @@ func TestEnsureProgramsUnmarshalJSON(t *testing.T) {
 
 	var projects api.EnsurePrograms
 	assert.NilError(t, json.Unmarshal([]byte(`["/tsconfig.json","/dev/null/synthetic/1"]`), &projects))
-	assert.DeepEqual(t, projects.Projects, []api.ProjectID{"/tsconfig.json", "/dev/null/synthetic/1"})
+	assert.DeepEqual(t, projects.Projects, []project.ID{
+		project.ID(project.ConfiguredProjectID(tspath.Path("/tsconfig.json"))),
+		project.ID(project.NewSyntheticProjectID(1)),
+	})
 
 	var invalid api.EnsurePrograms
 	assert.ErrorContains(t, json.Unmarshal([]byte(`false`), &invalid), "must be true or an array")

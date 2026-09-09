@@ -13,6 +13,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/compiler"
 	"github.com/microsoft/TypeScript/tsc/internal/contentmapper"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/json"
 	"github.com/microsoft/TypeScript/tsc/internal/ls"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/project/ata"
@@ -27,17 +28,66 @@ const (
 	hr                     = "-----------------------------------------------"
 )
 
-func syntheticProjectName(id int) string {
-	return fmt.Sprintf("%s%d", syntheticProjectPrefix, id)
+type ID string
+
+type ConfiguredProjectID tspath.Path
+
+type InferredProjectID string
+
+const inferredProjectID InferredProjectID = inferredProjectName
+
+type SyntheticProjectID string
+
+func NewSyntheticProjectID(id int) SyntheticProjectID {
+	if id <= 0 {
+		panic(fmt.Sprintf("invalid synthetic project ID: %d", id))
+	}
+	return SyntheticProjectID(fmt.Sprintf("%s%d", syntheticProjectPrefix, id))
 }
 
-func SyntheticProgramID(path tspath.Path) (int, bool) {
-	value, ok := strings.CutPrefix(string(path), syntheticProjectPrefix)
-	if !ok {
-		return 0, false
+func (id ID) String() string { return string(id) }
+
+func (id ID) Configured() (ConfiguredProjectID, bool) {
+	if id == "" {
+		return "", false
 	}
-	id, err := strconv.Atoi(value)
-	return id, err == nil && id > 0
+	if _, ok := id.Inferred(); ok {
+		return "", false
+	}
+	if strings.HasPrefix(string(id), syntheticProjectPrefix) {
+		return "", false
+	}
+	return ConfiguredProjectID(id), true
+}
+
+func (id ID) Inferred() (InferredProjectID, bool) {
+	return inferredProjectID, id == ID(inferredProjectID)
+}
+
+func (id ID) Synthetic() (SyntheticProjectID, bool) {
+	return ParseSyntheticProjectID(string(id))
+}
+
+func (id *SyntheticProjectID) UnmarshalJSONFrom(dec *json.Decoder) error {
+	var value string
+	if err := json.UnmarshalDecode(dec, &value); err != nil {
+		return err
+	}
+	parsed, ok := ParseSyntheticProjectID(value)
+	if !ok {
+		return fmt.Errorf("invalid synthetic project ID: %s", value)
+	}
+	*id = parsed
+	return nil
+}
+
+func ParseSyntheticProjectID(value string) (SyntheticProjectID, bool) {
+	suffix, ok := strings.CutPrefix(value, syntheticProjectPrefix)
+	if !ok {
+		return "", false
+	}
+	id, err := strconv.Atoi(suffix)
+	return SyntheticProjectID(value), err == nil && id > 0
 }
 
 //go:generate go tool golang.org/x/tools/cmd/stringer -type=Kind -trimprefix=Kind -output=project_stringer_generated.go
@@ -72,6 +122,7 @@ const (
 // If changing struct fields, also update the Clone method.
 type Project struct {
 	Kind             Kind
+	id               ID
 	currentDirectory string
 	configFileName   string
 	configFilePath   tspath.Path
@@ -114,7 +165,10 @@ func NewConfiguredProject(
 	builder *ProjectCollectionBuilder,
 	logger *logging.LogTree,
 ) *Project {
-	return NewProject(configFileName, KindConfigured, tspath.GetDirectoryPath(configFileName), builder, logger)
+	project := NewProject(ID(configFilePath), KindConfigured, tspath.GetDirectoryPath(configFileName), builder, logger)
+	project.configFileName = configFileName
+	project.configFilePath = configFilePath
+	return project
 }
 
 func NewInferredProject(
@@ -126,7 +180,7 @@ func NewInferredProject(
 	builder *ProjectCollectionBuilder,
 	logger *logging.LogTree,
 ) *Project {
-	p := NewProject(inferredProjectName, KindInferred, currentDirectory, builder, logger)
+	p := NewProject(ID(inferredProjectID), KindInferred, currentDirectory, builder, logger)
 	if compilerOptions == nil {
 		compilerOptions = &core.CompilerOptions{
 			AllowJs:                    core.TSTrue,
@@ -156,7 +210,7 @@ func NewInferredProject(
 }
 
 func newSyntheticProject(
-	name string,
+	id SyntheticProjectID,
 	currentDirectory string,
 	compilerOptions *core.CompilerOptions,
 	rootFileNames []string,
@@ -165,7 +219,7 @@ func newSyntheticProject(
 	builder *ProjectCollectionBuilder,
 	logger *logging.LogTree,
 ) *Project {
-	project := NewProject(name, KindSynthetic, currentDirectory, builder, logger)
+	project := NewProject(ID(id), KindSynthetic, currentDirectory, builder, logger)
 	project.CommandLine = newInferredProjectCommandLine(
 		compilerOptions,
 		rootFileNames,
@@ -192,25 +246,24 @@ func newInferredProjectCommandLine(
 }
 
 func NewProject(
-	configFileName string,
+	id ID,
 	kind Kind,
 	currentDirectory string,
 	builder *ProjectCollectionBuilder,
 	logger *logging.LogTree,
 ) *Project {
 	if logger != nil {
-		logger.Log(fmt.Sprintf("Creating %sProject: %s, currentDirectory: %s", kind.String(), configFileName, currentDirectory))
+		logger.Log(fmt.Sprintf("Creating %sProject: %s, currentDirectory: %s", kind.String(), id, currentDirectory))
 	}
 	project := &Project{
-		configFileName:   configFileName,
 		Kind:             kind,
+		id:               id,
 		currentDirectory: currentDirectory,
 		dirty:            true,
 	}
 
-	project.configFilePath = tspath.ToPath(configFileName, currentDirectory, builder.fs.fs.UseCaseSensitiveFileNames())
 	project.programFilesWatch = NewWatchedFiles(
-		"program files for "+configFileName,
+		"program files for "+string(id),
 		lsproto.WatchKindCreate|lsproto.WatchKindChange|lsproto.WatchKindDelete,
 		lsproto.GetClientCapabilities(builder.ctx).Workspace.DidChangeWatchedFiles.RelativePatternSupport,
 		createResolutionLookupGlobMapper(builder.sessionOptions.CurrentDirectory, builder.sessionOptions.DefaultLibraryPath, project.currentDirectory, builder.fs.fs.UseCaseSensitiveFileNames()),
@@ -224,7 +277,7 @@ func NewProject(
 		)
 	}
 	project.contentMapperWatch = NewWatchedFilesForPaths(
-		"content mapper configuration files for "+configFileName,
+		"content mapper configuration files for "+string(id),
 		lsproto.WatchKindCreate|lsproto.WatchKindChange|lsproto.WatchKindDelete,
 		lsproto.GetClientCapabilities(builder.ctx).Workspace.DidChangeWatchedFiles.RelativePatternSupport,
 		builder.sessionOptions.CurrentDirectory,
@@ -232,10 +285,6 @@ func NewProject(
 		builder.fs.fs.UseCaseSensitiveFileNames(),
 	)
 	return project
-}
-
-func (p *Project) Name() string {
-	return p.configFileName
 }
 
 func (p *Project) CurrentDirectory() string {
@@ -250,13 +299,13 @@ func (p *Project) DisplayName(cwd string) string {
 	if p.Kind == KindInferred {
 		return tspath.GetBaseFileName(p.currentDirectory)
 	}
-	return tspath.ConvertToRelativePath(p.configFileName, tspath.ComparePathsOptions{
+	return tspath.ConvertToRelativePath(string(p.ID()), tspath.ComparePathsOptions{
 		CurrentDirectory: cwd,
 	})
 }
 
-func (p *Project) ID() tspath.Path {
-	return p.configFilePath
+func (p *Project) ID() ID {
+	return p.id
 }
 
 // ConfigFileName panics if Kind() is not KindConfigured.
@@ -275,8 +324,8 @@ func (p *Project) ConfigFilePath() tspath.Path {
 	return p.configFilePath
 }
 
-func (p *Project) Id() tspath.Path {
-	return p.configFilePath
+func (p *Project) Id() string {
+	return string(p.ID())
 }
 
 func (p *Project) GetProgram() *compiler.Program {
@@ -317,6 +366,7 @@ func (p *Project) IsSourceFromProjectReference(path tspath.Path) bool {
 func (p *Project) Clone() *Project {
 	return &Project{
 		Kind:             p.Kind,
+		id:               p.id,
 		currentDirectory: p.currentDirectory,
 		configFileName:   p.configFileName,
 		configFilePath:   p.configFilePath,
@@ -509,7 +559,7 @@ func (p *Project) toPath(fileName string) tspath.Path {
 }
 
 func (p *Project) print(writeFileNames bool, writeFileExplanation bool, builder *strings.Builder) string {
-	builder.WriteString(fmt.Sprintf("\nProject '%s'\n", p.Name()))
+	builder.WriteString(fmt.Sprintf("\nProject '%s'\n", p.ID()))
 	if p.Program == nil {
 		builder.WriteString("\tFiles (0) NoProgram\n")
 	} else {
