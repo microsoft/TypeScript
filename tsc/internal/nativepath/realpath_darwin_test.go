@@ -57,6 +57,10 @@ func TestRealpathHardlinkedFile(t *testing.T) {
 		got, err := Realpath(alias)
 		assert.NilError(t, err)
 		assert.Equal(t, got, want)
+
+		got, err = RealpathDirectory(alias)
+		assert.NilError(t, err)
+		assert.Equal(t, got, want)
 	}
 
 	stopWorker()

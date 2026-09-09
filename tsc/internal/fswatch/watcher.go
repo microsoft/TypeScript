@@ -72,6 +72,9 @@ type Watcher interface {
 	// dir must be an absolute path to an existing directory. If dir is a
 	// symlink or reparse point to a directory, the OS subscription follows
 	// the target directory but delivered event paths remain rooted at dir.
+	// On case-insensitive filesystems, dir may use different casing from the
+	// filesystem; the watch-root prefix in delivered paths retains the casing
+	// supplied by the caller.
 	// Userspace recursive traversal does not follow symlinked descendant
 	// directories.
 	// Returns [ErrUnavailable] if the watcher is not supported on
@@ -822,12 +825,13 @@ func newDirWatch(dir string, physicalDir string, db *debounce) *dirWatch {
 	return dw
 }
 
-// physicalDirFor returns the physical path to watch for dir. If dir, or an
-// ancestor of dir, is a symlink or reparse point, events are subscribed on its
-// realpath while callbacks still use dir.
+// physicalDirFor returns the physical path to watch for dir. It resolves
+// symlinks and reparse points in dir and its ancestors, and returns the
+// filesystem's path spelling where supported so it matches backend event paths.
+// Callbacks still use dir.
 func physicalDirFor(dir string) string {
-	realpath, err := nativepath.Realpath(dir)
-	if err != nil {
+	realpath, err := nativepath.RealpathDirectory(dir)
+	if err != nil || realpath == "" || !filepath.IsAbs(realpath) {
 		return dir
 	}
 	if realpath == dir {
