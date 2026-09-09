@@ -31,18 +31,26 @@ type comparerResult struct {
 // the index when rebuilding that state, so directory comparers and aliases cannot
 // outlive the state they describe. Callers synchronize mutations with reads.
 type Index struct {
+	filesystem         vfs.FS
 	provider           ComparerProvider
 	directoryComparers map[string]comparerResult
 	added              map[string]struct{}
 	aliases            map[fswatch.PathComparer]map[string][]string
+	registrations      map[string]*Registration
+	paths              map[tspath.Path]*registeredPath
 }
 
 func New(filesystem vfs.FS) *Index {
-	if !Enabled(filesystem) {
-		return &Index{}
+	index := NewExact(filesystem)
+	if Enabled(filesystem) {
+		index.provider, _ = filesystem.(ComparerProvider)
 	}
-	provider, _ := filesystem.(ComparerProvider)
-	return &Index{provider: provider}
+	return index
+}
+
+// NewExact retains physical correspondence without enabling native comparison.
+func NewExact(filesystem vfs.FS) *Index {
+	return &Index{filesystem: filesystem}
 }
 
 // Enabled checks the host capability without querying any filesystem paths.
@@ -68,9 +76,6 @@ func (i *Index) Contains(original string) bool {
 // existing ancestor's comparer. Other errors are returned, with no partial alias
 // registration. Retrying Add after an error requires a new index.
 func (i *Index) Add(original string) error {
-	if i.provider == nil {
-		return nil
-	}
 	if _, ok := i.added[original]; ok {
 		return nil
 	}
@@ -85,9 +90,13 @@ func (i *Index) Add(original string) error {
 			break
 		}
 		parent := tspath.GetDirectoryPath(name)
-		c, err := i.comparer(parent)
-		if err != nil {
-			return err
+		var c fswatch.PathComparer
+		if i.provider != nil {
+			var err error
+			c, err = i.comparer(parent)
+			if err != nil {
+				return err
+			}
 		}
 		entries = append(entries, entry{name, c})
 		if parent == name || parent == "" {
@@ -134,11 +143,7 @@ func (i *Index) comparer(directory string) (fswatch.PathComparer, error) {
 	return c, err
 }
 
-// Expand returns the event first, followed by distinct registered spellings and
-// rebases through registered ancestors. Unknown descendants (including newly
-// created configs and files) retain their event suffix. There is no filesystem
-// access, and work depends on event depth and matching aliases, not file count.
-func (i *Index) Expand(event string) []string {
+func (i *Index) expandNative(event string) []string {
 	result := []string{event}
 	var seen map[string]struct{}
 	for comparer, aliases := range i.aliases {

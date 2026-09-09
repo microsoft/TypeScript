@@ -1783,7 +1783,7 @@ func (s *Session) logCacheStats(snapshot *Snapshot) {
 	s.logger.Log("\n======== Cache Statistics ========")
 	s.logger.Logf("Open file count:   %6d", len(snapshot.fs.overlays))
 	s.logger.Logf("Cached disk files: %6d", len(snapshot.fs.diskFiles))
-	s.logger.Logf("Realpath aliases:  %6d", len(snapshot.fs.nodeModulesRealpathAliases))
+	s.logger.Logf("Realpath files:    %6d", snapshot.fs.realpathFiles)
 	s.logger.Logf("Project count:     %6d", len(snapshot.ProjectCollection.Projects()))
 	s.logger.Logf("Config count:      %6d", len(snapshot.ConfigFileRegistry.configs))
 	if s.logger.IsVerbose() {

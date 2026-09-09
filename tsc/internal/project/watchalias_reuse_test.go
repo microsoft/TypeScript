@@ -237,8 +237,8 @@ func TestWatchAliasRealpathStateReuseAndRefresh(t *testing.T) {
 		t.Fatal(err)
 	}
 	defer snapshot.Deref()
-	if snapshot.watchAliases != nil || fs.comparerQueries.Load() != 0 {
-		t.Fatal("mock queried native comparer")
+	if snapshot.watchAliases == nil || fs.comparerQueries.Load() != 0 {
+		t.Fatal("mock must retain physical aliases without querying native comparer")
 	}
 	if !slices.Contains(snapshot.watchNames("/var/project"), "/private/project") {
 		t.Fatal("disabled native comparison lost requested realpath root")
@@ -257,7 +257,10 @@ func TestWatchAliasRealpathStateReuseAndRefresh(t *testing.T) {
 	if calls != fs.realpaths.Load() {
 		t.Fatalf("content edit repeated realpath queries: %d -> %d", calls, fs.realpaths.Load())
 	}
-	if edited.watchRealpaths["/var/project/node_modules/pkg"] != "/packages/one" {
+	if edited.watchAliases != opened.watchAliases {
+		t.Fatal("content edit rebuilt immutable physical aliases")
+	}
+	if !slices.Contains(edited.watchNames("/var/project/node_modules/pkg"), "/packages/one") {
 		t.Fatal("edit lost known package realpath")
 	}
 	fs.FS = vfstest.FromMap(files(""), true)
@@ -267,7 +270,7 @@ func TestWatchAliasRealpathStateReuseAndRefresh(t *testing.T) {
 		fileChanges: changes, ResourceRequest: ResourceRequest{Projects: []tspath.Path{"/var/project/tsconfig.json"}},
 	})
 	defer removed.Deref()
-	if removed.watchRealpaths["/var/project/node_modules/pkg"] != "" {
+	if slices.Contains(removed.watchNames("/var/project/node_modules/pkg"), "/packages/one") {
 		t.Fatal("deleted symlink retained old realpath")
 	}
 	fs.FS = vfstest.FromMap(files("two"), true)
@@ -285,11 +288,11 @@ func TestWatchAliasRealpathStateReuseAndRefresh(t *testing.T) {
 	if source == nil || source.Text() != `export const value: "two";` {
 		t.Fatal("symlink retarget retained old source contents")
 	}
-	if retargeted.watchRealpaths["/var/project/node_modules/pkg"] != "/packages/two" {
-		t.Fatalf("symlink retarget retained old realpath: %v", retargeted.watchRealpaths)
+	if names := retargeted.watchNames("/var/project/node_modules/pkg"); !slices.Contains(names, "/packages/two") || slices.Contains(names, "/packages/one") {
+		t.Fatalf("symlink retarget retained old realpath: %v", names)
 	}
-	if edited.watchRealpaths["/var/project/node_modules/pkg"] != "/packages/one" {
-		t.Fatal("refresh mutated a published realpath map")
+	if names := edited.watchNames("/var/project/node_modules/pkg"); !slices.Contains(names, "/packages/one") || slices.Contains(names, "/packages/two") {
+		t.Fatal("refresh mutated published physical aliases")
 	}
 	fs.FS = vfstest.FromMap(files(""), true)
 	changes = FileChangeSummary{}
@@ -301,7 +304,10 @@ func TestWatchAliasRealpathStateReuseAndRefresh(t *testing.T) {
 		t.Fatal(deleted.apiError)
 	}
 	defer deleted.Deref()
-	if deleted.watchRealpaths["/var/project/node_modules/pkg"] != "" {
+	if slices.Contains(deleted.watchNames("/var/project/node_modules/pkg"), "/packages/two") {
 		t.Fatal("symlink deletion retained old realpath")
+	}
+	if fs.comparerQueries.Load() != 0 {
+		t.Fatal("mock queried native comparer while refreshing physical aliases")
 	}
 }

@@ -9,6 +9,7 @@ import (
 	"testing"
 
 	"github.com/microsoft/TypeScript/tsc/internal/fswatch"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 )
 
 func nativeComparer(t testing.TB) fswatch.PathComparer {
@@ -111,6 +112,64 @@ func TestNativeVolumeDoesNotFoldSensitiveAncestors(t *testing.T) {
 	}
 	if got := index.Expand("/CaseMount/STRASSE.ts"); !slices.Contains(got, "/CaseMount/straße.ts") {
 		t.Fatalf("native leaf alias lost: %q", got)
+	}
+}
+
+func TestNativeIndexKeysMatchWholePaths(t *testing.T) {
+	t.Parallel()
+	native := nativeComparer(t)
+	comparer := func(directory string) fswatch.PathComparer {
+		if directory == "/" || directory == "/Sensitive" {
+			return fswatch.PathComparer{}
+		}
+		return native
+	}
+	index := New(&comparerFS{get: func(directory string) (fswatch.PathComparer, error) {
+		return comparer(directory), nil
+	}})
+	names := []string{
+		"/Sensitive/Stra\u00dfe/FILE.ts",
+		"/Sensitive/Stra\u00dfe/other.ts",
+		"/Sensitive/STRASSE/\u0130.ts",
+		"/Sensitive/STRASSE/i\u0307.ts",
+		"/Sensitive/e\u0301/\ufb03.ts",
+		"/Sensitive/\u00e9/FFI.ts",
+		"/Sensitive/I\u0307/\u0301.ts",
+		"/Sensitive/plain/lower.ts",
+		"/Sensitive/invalid\xff/FILE.ts",
+		"/Sensitive/Stra\u00dfe/invalid\xff.ts",
+		"/Sensitive/nul\x00/FILE.ts",
+		"/Sensitive/Stra\u00dfe/nul\x00.ts",
+	}
+	for _, name := range names {
+		if err := index.Add(name); err != nil {
+			t.Fatal(err)
+		}
+	}
+	expected := make(map[fswatch.PathComparer]map[string][]string)
+	for name := range index.added {
+		c := comparer(tspath.GetDirectoryPath(name))
+		if c == (fswatch.PathComparer{}) {
+			continue
+		}
+		if expected[c] == nil {
+			expected[c] = make(map[string][]string)
+		}
+		key := c.Key(name)
+		expected[c][key] = append(expected[c][key], name)
+	}
+	for c, aliases := range expected {
+		if len(index.aliases[c]) != len(aliases) {
+			t.Fatalf("comparison key count = %d, want %d", len(index.aliases[c]), len(aliases))
+		}
+		for key, names := range aliases {
+			got := slices.Clone(index.aliases[c][key])
+			slices.Sort(got)
+			slices.Sort(names)
+			if !slices.Equal(got, names) {
+				t.Errorf("aliases for %q = %q, want %q", key, got, names)
+			}
+		}
 	}
 }
 

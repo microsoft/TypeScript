@@ -49,7 +49,6 @@ type Snapshot struct {
 	contentMapperExtensions                []string
 	contentMapperWatchedFiles              *collections.Set[tspath.Path]
 	watchAliases                           *watchalias.Index
-	watchRealpaths                         map[tspath.Path]string
 	watchAliasesError                      error
 
 	builderLogs *logging.LogTree
@@ -131,7 +130,7 @@ func (s *Snapshot) cloneForProgram(
 
 	start := time.Now()
 	reuseWatchAliases := s.watchAliasChangesAreContentOnly(fileChanges, s.fs.overlays)
-	fs := newSnapshotFSBuilder(store.fs, s.fs.overlays, s.fs.overlays, s.fs.diskFiles, s.fs.diskDirectories, s.fs.nodeModulesRealpathAliases, store.options.PositionEncoding, store.toPath)
+	fs := newSnapshotFSBuilder(store.fs, s.fs.overlays, s.fs.overlays, s.fs.diskFiles, s.fs.diskDirectories, s.fs.realpathFiles, store.options.PositionEncoding, store.toPath)
 	fileChanges = s.processFileChanges(fs, fileChanges, logger, nil)
 
 	newSnapshotID := store.nextSnapshotID()
@@ -281,8 +280,21 @@ func (s *Snapshot) processFileChanges(
 	logger *logging.LogTree,
 	contentMapperContributions *ContentMapperContributions,
 ) FileChangeSummary {
-	fileChanges = s.expandWatchAliases(fileChanges)
-	fileChanges = s.fs.expandRealpathAliases(fileChanges)
+	contentOnly := s.watchAliasChangesAreContentOnly(fileChanges, fs.overlays)
+	var affected []string
+	fileChanges, affected = s.matchWatchChanges(fileChanges)
+	if !contentOnly {
+		for _, name := range affected {
+			path := s.host.toPath(name)
+			if entry, ok := fs.diskFiles.Load(path); ok && entry.Value() != nil {
+				if fs.recordRealpathAlias(entry, name, path) {
+					// A new target may contain identical text but resolve its
+					// imports or configuration differently.
+					fileChanges.InvalidateAll = true
+				}
+			}
+		}
+	}
 	if fileChanges.HasExcessiveWatchEvents() {
 		invalidateStart := time.Now()
 		if fileChanges.InvalidateAll {
@@ -553,7 +565,7 @@ func (s *Snapshot) Clone(
 		inferredContentMappers = change.contentMapperContributions.Mappers
 		inferredContentMapperExtensions = change.contentMapperContributions.Extensions
 	}
-	fs := newSnapshotFSBuilder(store.fs, s.fs.overlays, overlays, s.fs.diskFiles, s.fs.diskDirectories, s.fs.nodeModulesRealpathAliases, store.options.PositionEncoding, store.toPath)
+	fs := newSnapshotFSBuilder(store.fs, s.fs.overlays, overlays, s.fs.diskFiles, s.fs.diskDirectories, s.fs.realpathFiles, store.options.PositionEncoding, store.toPath)
 	change.fileChanges = s.processFileChanges(fs, change.fileChanges, logger, change.contentMapperContributions)
 
 	compilerOptionsForInferredProjects := s.compilerOptionsForInferredProjects

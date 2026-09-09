@@ -73,7 +73,6 @@ func (f *fileBase) ECMALineInfo() *sourcemap.ECMALineInfo {
 type diskFile struct {
 	fileBase
 	needsReload  bool
-	realpathPath tspath.Path
 	realpathName string
 }
 
@@ -107,7 +106,6 @@ func (f *diskFile) Kind() core.ScriptKind {
 
 func (f *diskFile) Clone() *diskFile {
 	return &diskFile{
-		realpathPath: f.realpathPath,
 		realpathName: f.realpathName,
 		fileBase: fileBase{
 			fileName: f.fileName,

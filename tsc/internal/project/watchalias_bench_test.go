@@ -112,13 +112,7 @@ func benchmarkSnapshotWatchAliases(b *testing.B, symlink bool) {
 							file := newDiskFile(name, "export const value = 1;")
 							if symlink {
 								file.realpathName = physicalRoot + strings.TrimPrefix(name, logicalRoot)
-								file.realpathPath = host.toPath(file.realpathName)
-								if snapshot.fs.nodeModulesRealpathAliases == nil {
-									snapshot.fs.nodeModulesRealpathAliases = make(map[tspath.Path]*realpathAliasSet, size)
-								}
-								snapshot.fs.nodeModulesRealpathAliases[file.realpathPath] = &realpathAliasSet{
-									paths: *collections.NewSetFromItems(host.toPath(name)),
-								}
+								snapshot.fs.realpathFiles++
 							}
 							snapshot.fs.diskFiles[host.toPath(name)] = file
 						}
