@@ -2,6 +2,7 @@ package watchalias
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/microsoft/TypeScript/tsc/internal/fswatch"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
@@ -100,7 +101,7 @@ func (i *Index) rebase(name string, physical bool, add func(string)) {
 				if !physical {
 					target = registration.Name
 				}
-				add(target + name[len(ancestor):])
+				add(tspath.CombinePaths(target, strings.TrimPrefix(name[len(ancestor):], "/")))
 			}
 		}
 		parent := tspath.GetDirectoryPath(ancestor)
@@ -168,8 +169,13 @@ func (i *Index) Match(events map[string]fswatch.EventKind) Matches {
 			if node := i.paths[i.toPath(expanded)]; node != nil {
 				if len(node.children) != 0 {
 					result.NamespaceChanged = true
-				} else if len(node.logical)+len(node.physical) != 0 {
-					knownLeaf = true
+				} else {
+					for _, registrations := range [][]*Registration{node.logical, node.physical} {
+						for _, registration := range registrations {
+							result.NamespaceChanged = result.NamespaceChanged || registration.Directory
+							knownLeaf = knownLeaf || !registration.Directory
+						}
+					}
 				}
 			}
 		}

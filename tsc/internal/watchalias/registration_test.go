@@ -61,3 +61,31 @@ func TestPhysicalRegistrationExpansionIsFinite(t *testing.T) {
 	result := index.Expand("/a/link/link/file.ts")
 	assert.Assert(t, len(result) < 10, "explicit endpoint matching must not recursively rewrite directory links")
 }
+
+func TestPhysicalRegistrationRootEndpoints(t *testing.T) {
+	t.Parallel()
+	for _, test := range []struct {
+		logical, physical, event, expected string
+	}{
+		{"/link", "/", "/new.ts", "/link/new.ts"},
+		{"/", "/physical", "/physical/new.ts", "/new.ts"},
+		{"C:/link", "D:/", "D:/new.ts", "C:/link/new.ts"},
+		{"C:/", "D:/physical", "D:/physical/new.ts", "C:/new.ts"},
+	} {
+		t.Run(test.logical+"->"+test.physical, func(t *testing.T) {
+			t.Parallel()
+			index := New(vfstest.FromMap(map[string]string{}, true))
+			assert.NilError(t, index.Register(Registration{Name: test.logical, Realpath: test.physical, Directory: true}))
+			assert.Assert(t, slices.Contains(index.Expand(test.event), test.expected))
+		})
+	}
+}
+
+func TestPhysicalRegistrationEmptyDirectoryUpdate(t *testing.T) {
+	t.Parallel()
+	index := New(vfstest.FromMap(map[string]string{}, true))
+	assert.NilError(t, index.Register(Registration{Name: "/logical", Realpath: "/physical", Directory: true}))
+	result := index.Match(map[string]fswatch.EventKind{"/physical": fswatch.EventUpdate})
+	assert.Assert(t, result.NamespaceChanged)
+	assert.DeepEqual(t, result.Affected, []string{"/logical"})
+}
