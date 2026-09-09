@@ -245,8 +245,8 @@ export interface ObjectType extends Type {
 export interface TypeReference extends ObjectType {
     /** Get the generic target type (e.g. Array for Array<string>) */
     getTarget: {
-        (): Type;
-        gen(): Generator<ProtocolRequest, Type, ProtocolResponse["result"]>;
+        (): GenericType;
+        gen(): Generator<ProtocolRequest, GenericType, ProtocolResponse["result"]>;
     };
 }
 
@@ -278,8 +278,12 @@ export interface InterfaceType extends TypeReference {
     };
 }
 
+/** Generic types */
+export interface GenericType extends InterfaceType, TypeReference {
+}
+
 /** Tuple type targets (ObjectFlags.Tuple) */
-export interface TupleType extends InterfaceType {
+export interface TupleType extends GenericType {
     /** Get this tuple target */
     getTarget: {
         (): TupleType;
