@@ -122,6 +122,7 @@ export class SessionManager implements vscode.Disposable {
     }
 
     async getContentMapperVirtualFiles(uri: vscode.Uri): Promise<readonly MappedOutput[]> {
+        // Restored virtual documents can be requested while extension activation is still starting the server.
         await this.lifecycleOperation;
         if (!this.currentSession?.client.isInitialized) {
             throw new Error(vscode.l10n.t("Language server is not running."));

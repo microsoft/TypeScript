@@ -15,6 +15,7 @@ import (
 	"time"
 
 	"github.com/microsoft/TypeScript/tsc/internal/api"
+	apiencoder "github.com/microsoft/TypeScript/tsc/internal/api/encoder"
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/compiler"
@@ -2497,6 +2498,7 @@ func contentMapperVirtualFile(file *ast.SourceFile) *lsproto.ContentMapperVirtua
 	if fileName == "" {
 		fileName = file.FileName()
 	}
+	// Compiler offsets are UTF-8 bytes; VS Code consumes JavaScript UTF-16 offsets.
 	virtualPositions := file.GetPositionMap()
 	originalPositions := ast.ComputePositionMap(file.OriginalText())
 	segments := file.SpanMap().Segments()
@@ -2533,9 +2535,10 @@ func contentMapperVirtualFile(file *ast.SourceFile) *lsproto.ContentMapperVirtua
 	}
 	return &lsproto.ContentMapperVirtualFile{
 		FileName:             fileName,
+		Hash:                 apiencoder.SourceFileHash(file),
 		Text:                 file.Text(),
 		OriginalText:         file.OriginalText(),
-		ScriptKind:           int32(core.EnsureScriptKindFromFileName(fileName)),
+		ScriptKind:           int32(file.ScriptKind),
 		Mappings:             mappings,
 		DiagnosticDirectives: directives,
 	}

@@ -30,9 +30,10 @@ test("computes positions for LF, CRLF, and lone CR line endings", () => {
     assert.deepEqual(textPositionAt(text, 7), { line: 3, character: 0 });
 });
 
-test("adds stable output keys and identities to content mapper virtual files", () => {
+test("adds stable output keys to content mapper virtual files", () => {
     const files = [{
         fileName: "/component.vue.ts",
+        hash: "1234",
         text: "export {}",
         originalText: "<script />",
         scriptKind: 3,
@@ -44,5 +45,5 @@ test("adds stable output keys and identities to content mapper virtual files", (
     const second = toMappedOutputs(files);
 
     assert.equal(first[0]?.key, "0");
-    assert.equal(first[0]?.identity, second[0]?.identity);
+    assert.equal(first[0]?.hash, second[0]?.hash);
 });

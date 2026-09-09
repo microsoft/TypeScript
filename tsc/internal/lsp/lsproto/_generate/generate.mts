@@ -478,6 +478,7 @@ const customStructures: Structure[] = [
         name: "ContentMapperVirtualFile",
         properties: [
             { name: "fileName", type: { kind: "base", name: "string" } },
+            { name: "hash", type: { kind: "base", name: "string" } },
             { name: "text", type: { kind: "base", name: "string" } },
             { name: "originalText", type: { kind: "base", name: "string" } },
             { name: "scriptKind", type: { kind: "base", name: "integer" } },

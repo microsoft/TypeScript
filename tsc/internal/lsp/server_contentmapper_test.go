@@ -218,6 +218,7 @@ const value = 1;`
 	assert.Assert(t, ok && virtualFilesMsg.AsResponse().Error == nil)
 	assert.Equal(t, len(virtualFiles.Files), 1)
 	assert.Equal(t, virtualFiles.Files[0].FileName, "/home/project/ProfileCard.vue.ts")
+	assert.Assert(t, virtualFiles.Files[0].Hash != "")
 	assert.Equal(t, virtualFiles.Files[0].ScriptKind, int32(3))
 	assert.Assert(t, strings.Contains(virtualFiles.Files[0].Text, `export const title = "Profile";`))
 	assert.Assert(t, len(virtualFiles.Files[0].Mappings) > 0)

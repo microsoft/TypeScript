@@ -9167,6 +9167,8 @@ func (s *ContentMapperDiagnosticDirective) UnmarshalJSONFrom(dec *json.Decoder) 
 type ContentMapperVirtualFile struct {
 	FileName string `json:"fileName" lsp:"required"`
 
+	Hash string `json:"hash" lsp:"required"`
+
 	Text string `json:"text" lsp:"required"`
 
 	OriginalText string `json:"originalText" lsp:"required"`

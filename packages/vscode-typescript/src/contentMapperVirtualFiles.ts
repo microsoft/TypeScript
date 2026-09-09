@@ -1,5 +1,3 @@
-import { createHash } from "node:crypto";
-
 export interface ContentMapperTextRange {
     readonly pos: number;
     readonly end: number;
@@ -23,6 +21,7 @@ export interface ContentMapperVirtualSpan {
 
 export interface ContentMapperVirtualFile {
     readonly fileName: string;
+    readonly hash: string;
     readonly text: string;
     readonly originalText: string;
     readonly scriptKind: number;
@@ -32,7 +31,6 @@ export interface ContentMapperVirtualFile {
 
 export interface MappedOutput extends ContentMapperVirtualFile {
     readonly key: string;
-    readonly identity: string;
 }
 
 export function containsNonEmptyTextRange(range: ContentMapperTextRange, offset: number): boolean {
@@ -73,6 +71,5 @@ export function toMappedOutputs(files: readonly ContentMapperVirtualFile[]): rea
     return files.map((file, index) => ({
         ...file,
         key: String(index),
-        identity: createHash("sha256").update(JSON.stringify(file)).digest("hex"),
     }));
 }

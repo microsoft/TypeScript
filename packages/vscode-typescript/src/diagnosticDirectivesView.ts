@@ -18,10 +18,12 @@ const diagnosticDirectivesViewId = "typescript.native-preview.contentMapperDiagn
 interface OutputNode {
     readonly kind: "output";
     readonly output: MappedOutput;
+    readonly directives: readonly DiagnosticDirectiveNode[];
 }
 
 export interface DiagnosticDirectiveNode {
     readonly kind: "directive";
+    readonly sourceUri: vscode.Uri;
     readonly output: MappedOutput;
     readonly directive: ContentMapperDiagnosticDirective;
 }
@@ -33,9 +35,7 @@ export class DiagnosticDirectivesView implements vscode.TreeDataProvider<Directi
     private readonly treeView: vscode.TreeView<DirectiveTreeNode>;
     private readonly disposables: vscode.Disposable[] = [];
     private sourceUri: vscode.Uri | undefined;
-    private outputs: readonly MappedOutput[] = [];
     private outputNodes: readonly OutputNode[] = [];
-    private directiveNodes = new Map<MappedOutput, readonly DiagnosticDirectiveNode[]>();
     private selectedDirective: DiagnosticDirectiveNode | undefined;
 
     readonly onDidChangeTreeData = this.changeEmitter.event;
@@ -57,7 +57,7 @@ export class DiagnosticDirectivesView implements vscode.TreeDataProvider<Directi
 
     show(sourceUri: vscode.Uri, outputs: readonly MappedOutput[]): void {
         this.sourceUri = sourceUri;
-        this.setOutputs(outputs);
+        this.setOutputs(sourceUri, outputs);
         this.updateMessage();
         this.changeEmitter.fire(undefined);
     }
@@ -66,7 +66,7 @@ export class DiagnosticDirectivesView implements vscode.TreeDataProvider<Directi
         if (sourceUri.toString() !== this.sourceUri?.toString()) {
             return;
         }
-        this.setOutputs(outputs ?? []);
+        this.setOutputs(sourceUri, outputs ?? []);
         this.updateMessage();
         this.changeEmitter.fire(undefined);
     }
@@ -76,7 +76,8 @@ export class DiagnosticDirectivesView implements vscode.TreeDataProvider<Directi
             return;
         }
         this.sourceUri = undefined;
-        this.setOutputs([]);
+        this.outputNodes = [];
+        this.selectedDirective = undefined;
         this.treeView.description = undefined;
         this.treeView.message = vscode.l10n.t("Open virtual documents to inspect diagnostic directives.");
         this.changeEmitter.fire(undefined);
@@ -120,7 +121,7 @@ export class DiagnosticDirectivesView implements vscode.TreeDataProvider<Directi
             return [...this.outputNodes];
         }
         if (node.kind === "output") {
-            return [...(this.directiveNodes.get(node.output) ?? [])];
+            return [...node.directives];
         }
         return [];
     }
@@ -137,7 +138,7 @@ export class DiagnosticDirectivesView implements vscode.TreeDataProvider<Directi
             return Promise.resolve();
         }
         return this.revealMatchingDirective(
-            this.outputNodes.flatMap(node => this.directiveNodes.get(node.output) ?? []),
+            this.outputNodes.flatMap(node => node.directives),
             node => containsNonEmptyTextRange(node.directive.originalRange, offset),
         );
     }
@@ -147,7 +148,7 @@ export class DiagnosticDirectivesView implements vscode.TreeDataProvider<Directi
             return Promise.resolve();
         }
         return this.revealMatchingDirective(
-            this.directiveNodes.get(output) ?? [],
+            this.outputNodes.find(node => node.output === output)?.directives ?? [],
             node => containsNonEmptyTextRange(node.directive.virtualRange, offset),
         );
     }
@@ -159,8 +160,8 @@ export class DiagnosticDirectivesView implements vscode.TreeDataProvider<Directi
     }
 
     private updateMessage(): void {
-        const directiveCount = this.outputs.reduce(
-            (count, output) => count + output.diagnosticDirectives.length,
+        const directiveCount = this.outputNodes.reduce(
+            (count, output) => count + output.directives.length,
             0,
         );
         this.treeView.description = directiveCount === 0 ? undefined : String(directiveCount);
@@ -169,19 +170,20 @@ export class DiagnosticDirectivesView implements vscode.TreeDataProvider<Directi
             : undefined;
     }
 
-    private setOutputs(outputs: readonly MappedOutput[]): void {
-        this.outputs = outputs;
+    private setOutputs(sourceUri: vscode.Uri, outputs: readonly MappedOutput[]): void {
+        // TreeView.reveal requires stable element instances and parent links.
         this.outputNodes = outputs
             .filter(output => output.diagnosticDirectives.length !== 0)
-            .map(output => ({ kind: "output", output }));
-        this.directiveNodes = new Map(this.outputNodes.map(({ output }) => [
-            output,
-            output.diagnosticDirectives.map(directive => ({
-                kind: "directive",
+            .map(output => ({
+                kind: "output",
                 output,
-                directive,
-            })),
-        ]));
+                directives: output.diagnosticDirectives.map(directive => ({
+                    kind: "directive",
+                    sourceUri,
+                    output,
+                    directive,
+                })),
+            }));
         this.selectedDirective = undefined;
     }
 

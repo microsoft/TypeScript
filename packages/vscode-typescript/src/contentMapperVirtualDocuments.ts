@@ -211,10 +211,7 @@ class ContentMapperVirtualDocumentProvider implements vscode.FileSystemProvider,
             clearTimeout(this.inspectionTimer);
             this.inspectionTimer = undefined;
         }
-        if (this.activeEditorContextTimer) {
-            clearTimeout(this.activeEditorContextTimer);
-            this.activeEditorContextTimer = undefined;
-        }
+        this.clearActiveEditorContextTimer();
         for (const disposable of this.disposables.splice(0)) {
             disposable.dispose();
         }
@@ -230,7 +227,7 @@ class ContentMapperVirtualDocumentProvider implements vscode.FileSystemProvider,
             return undefined;
         }
         const outputs = await this.loadOutputs(parsed.sourceUri);
-        this.remember(parsed.sourceUri, outputs);
+        this.storeOutputs(parsed.sourceUri, outputs);
         this.diagnosticDirectivesView.show(parsed.sourceUri, outputs);
         return this.entries.get(uri.toString());
     }
@@ -250,30 +247,8 @@ class ContentMapperVirtualDocumentProvider implements vscode.FileSystemProvider,
                 void vscode.window.showInformationMessage(vscode.l10n.t("The active file is not transformed by a TypeScript content mapper."));
                 return;
             }
-            const previousUris = this.sourceToVirtualUris.get(sourceUri.toString()) ?? [];
-            const previousEntries = new Map(previousUris.map(
-                uri => [uri.toString(), this.entries.get(uri.toString())] as const,
-            ));
-            const virtualUris = this.remember(sourceUri, outputs);
+            const { virtualUris, changes } = this.storeOutputs(sourceUri, outputs);
             this.diagnosticDirectivesView.show(sourceUri, outputs);
-            const nextKeys = new Set(virtualUris.map(uri => uri.toString()));
-            const changes: vscode.FileChangeEvent[] = [];
-            for (const uri of previousUris) {
-                if (!nextKeys.has(uri.toString())) {
-                    changes.push({ type: vscode.FileChangeType.Deleted, uri });
-                }
-            }
-            for (const uri of virtualUris) {
-                const previous = previousEntries.get(uri.toString());
-                const entry = this.entries.get(uri.toString())!;
-                if (!previous) {
-                    changes.push({ type: vscode.FileChangeType.Created, uri });
-                }
-                else if (previous.output.identity !== entry.output.identity) {
-                    entry.mtime = Math.max(Date.now(), previous.mtime + 1);
-                    changes.push({ type: vscode.FileChangeType.Changed, uri });
-                }
-            }
             if (changes.length !== 0) {
                 this.changeEmitter.fire(changes);
             }
@@ -313,10 +288,7 @@ class ContentMapperVirtualDocumentProvider implements vscode.FileSystemProvider,
     }
 
     private updateActiveEditorContext(editor: vscode.TextEditor | undefined): void {
-        if (this.activeEditorContextTimer) {
-            clearTimeout(this.activeEditorContextTimer);
-            this.activeEditorContextTimer = undefined;
-        }
+        this.clearActiveEditorContextTimer();
         const version = ++this.activeEditorContextVersion;
         void this.updateActiveEditorContextNow(editor, version).catch(error => {
             this.output.error(`Could not update the active content mapper context: ${String(error)}`);
@@ -324,9 +296,7 @@ class ContentMapperVirtualDocumentProvider implements vscode.FileSystemProvider,
     }
 
     private scheduleActiveEditorContextUpdate(document: vscode.TextDocument): void {
-        if (this.activeEditorContextTimer) {
-            clearTimeout(this.activeEditorContextTimer);
-        }
+        this.clearActiveEditorContextTimer();
         this.activeEditorContextTimer = setTimeout(() => {
             this.activeEditorContextTimer = undefined;
             const editor = vscode.window.activeTextEditor;
@@ -334,6 +304,13 @@ class ContentMapperVirtualDocumentProvider implements vscode.FileSystemProvider,
                 this.updateActiveEditorContext(editor);
             }
         }, 100);
+    }
+
+    private clearActiveEditorContextTimer(): void {
+        if (this.activeEditorContextTimer) {
+            clearTimeout(this.activeEditorContextTimer);
+            this.activeEditorContextTimer = undefined;
+        }
     }
 
     private async updateActiveEditorContextNow(editor: vscode.TextEditor | undefined, version: number): Promise<void> {
@@ -351,39 +328,49 @@ class ContentMapperVirtualDocumentProvider implements vscode.FileSystemProvider,
         }
     }
 
-    private remember(sourceUri: vscode.Uri, outputs: readonly MappedOutput[]): readonly vscode.Uri[] {
+    private storeOutputs(
+        sourceUri: vscode.Uri,
+        outputs: readonly MappedOutput[],
+    ): { readonly virtualUris: readonly vscode.Uri[]; readonly changes: vscode.FileChangeEvent[]; } {
         const sourceKey = sourceUri.toString();
         const previousUris = this.sourceToVirtualUris.get(sourceKey) ?? [];
         const nextUris = outputs.map(output => virtualUriForOutput(sourceUri, output));
         const nextKeys = new Set(nextUris.map(uri => uri.toString()));
+        const changes: vscode.FileChangeEvent[] = [];
 
         for (const previousUri of previousUris) {
             if (!nextKeys.has(previousUri.toString())) {
                 this.entries.delete(previousUri.toString());
+                this.highlightedMappings.delete(previousUri.toString());
+                changes.push({ type: vscode.FileChangeType.Deleted, uri: previousUri });
             }
         }
 
         outputs.forEach((mappedOutput, index) => {
             const uri = nextUris[index]!;
             const existing = this.entries.get(uri.toString());
+            let mtime = existing?.mtime ?? Date.now();
+            if (existing && existing.output.hash !== mappedOutput.hash) {
+                mtime = Math.max(Date.now(), existing.mtime + 1);
+            }
             this.entries.set(uri.toString(), {
                 sourceUri,
                 output: mappedOutput,
-                mtime: existing?.mtime ?? Date.now(),
+                mtime,
             });
+            if (!existing) {
+                changes.push({ type: vscode.FileChangeType.Created, uri });
+            }
+            else if (existing.output.hash !== mappedOutput.hash) {
+                changes.push({ type: vscode.FileChangeType.Changed, uri });
+            }
         });
         this.sourceToVirtualUris.set(sourceKey, nextUris);
-        return nextUris;
+        return { virtualUris: nextUris, changes };
     }
 
     private showDiagnosticDirectivesForEditor(editor: vscode.TextEditor | undefined): vscode.Uri | undefined {
-        if (!editor) {
-            this.diagnosticDirectivesView.clear();
-            return undefined;
-        }
-        const sourceUri = editor.document.uri.scheme === virtualDocumentScheme
-            ? this.entries.get(editor.document.uri.toString())?.sourceUri
-            : this.sourceToVirtualUris.has(editor.document.uri.toString()) ? editor.document.uri : undefined;
+        const sourceUri = editor && this.inspectedSourceUri(editor);
         if (!sourceUri) {
             this.diagnosticDirectivesView.clear();
             return undefined;
@@ -393,6 +380,13 @@ class ContentMapperVirtualDocumentProvider implements vscode.FileSystemProvider,
             .filter(output => output !== undefined);
         this.diagnosticDirectivesView.show(sourceUri, outputs);
         return sourceUri;
+    }
+
+    private inspectedSourceUri(editor: vscode.TextEditor): vscode.Uri | undefined {
+        if (editor.document.uri.scheme === virtualDocumentScheme) {
+            return this.entries.get(editor.document.uri.toString())?.sourceUri;
+        }
+        return this.sourceToVirtualUris.has(editor.document.uri.toString()) ? editor.document.uri : undefined;
     }
 
     private scheduleSourceEviction(closedVirtualUri: vscode.Uri): void {
@@ -407,6 +401,7 @@ class ContentMapperVirtualDocumentProvider implements vscode.FileSystemProvider,
         if (existing) {
             clearTimeout(existing);
         }
+        // setTextDocumentLanguage emits a close/open pair, so wait a turn before deciding the URI is unused.
         this.evictionTimers.set(
             sourceKey,
             setTimeout(() => {
@@ -432,14 +427,21 @@ class ContentMapperVirtualDocumentProvider implements vscode.FileSystemProvider,
             clearTimeout(refreshTimer);
             this.refreshTimers.delete(sourceKey);
         }
+        this.deleteCachedSource(sourceUri);
+        this.diagnosticDirectivesView.clear(sourceUri);
+        this.scheduleInspection();
+    }
+
+    private deleteCachedSource(sourceUri: vscode.Uri): readonly vscode.Uri[] {
+        const sourceKey = sourceUri.toString();
+        const virtualUris = this.sourceToVirtualUris.get(sourceKey) ?? [];
         this.sourceToVirtualUris.delete(sourceKey);
         for (const uri of virtualUris) {
             const key = uri.toString();
             this.entries.delete(key);
             this.highlightedMappings.delete(key);
         }
-        this.diagnosticDirectivesView.clear(sourceUri);
-        this.scheduleInspection();
+        return virtualUris;
     }
 
     private scheduleRefresh(sourceUri: vscode.Uri): void {
@@ -474,43 +476,21 @@ class ContentMapperVirtualDocumentProvider implements vscode.FileSystemProvider,
         }
 
         const outputs = await this.loadOutputs(sourceUri);
+        // Ignore a response if the source was evicted or replaced while the request was in flight.
         if (this.sourceToVirtualUris.get(sourceKey) !== previousUris) {
             return;
         }
         if (outputs.length === 0) {
             this.diagnosticDirectivesView.refresh(sourceUri, undefined);
-            this.sourceToVirtualUris.delete(sourceKey);
-            const changes = previousUris.map(uri => ({ type: vscode.FileChangeType.Deleted, uri }));
-            for (const uri of previousUris) {
-                this.entries.delete(uri.toString());
-            }
+            const changes = this.deleteCachedSource(sourceUri)
+                .map(uri => ({ type: vscode.FileChangeType.Deleted, uri }));
             this.changeEmitter.fire(changes);
             this.scheduleInspection();
             return;
         }
 
-        const previousEntries = new Map(previousUris.map(uri => [uri.toString(), this.entries.get(uri.toString())]));
-        const nextUris = this.remember(sourceUri, outputs);
+        const { changes } = this.storeOutputs(sourceUri, outputs);
         this.diagnosticDirectivesView.refresh(sourceUri, outputs);
-        const nextKeys = new Set(nextUris.map(uri => uri.toString()));
-        const changes: vscode.FileChangeEvent[] = [];
-
-        for (const uri of previousUris) {
-            if (!nextKeys.has(uri.toString())) {
-                changes.push({ type: vscode.FileChangeType.Deleted, uri });
-            }
-        }
-        for (const uri of nextUris) {
-            const entry = this.entries.get(uri.toString())!;
-            const previous = previousEntries.get(uri.toString());
-            if (!previous) {
-                changes.push({ type: vscode.FileChangeType.Created, uri });
-            }
-            else if (previous.output.identity !== entry.output.identity) {
-                entry.mtime = Math.max(Date.now(), previous.mtime + 1);
-                changes.push({ type: vscode.FileChangeType.Changed, uri });
-            }
-        }
         if (changes.length !== 0) {
             this.changeEmitter.fire(changes);
         }
@@ -518,10 +498,7 @@ class ContentMapperVirtualDocumentProvider implements vscode.FileSystemProvider,
     }
 
     private async revealDiagnosticDirective(node: DiagnosticDirectiveNode): Promise<void> {
-        const sourceUri = this.sourceUriForOutput(node.output);
-        if (!sourceUri) {
-            return;
-        }
+        const sourceUri = node.sourceUri;
         const virtualUri = virtualUriForOutput(sourceUri, node.output);
         const entry = await this.getOrCreateEntry(virtualUri);
         if (!entry) {
@@ -571,15 +548,6 @@ class ContentMapperVirtualDocumentProvider implements vscode.FileSystemProvider,
             revealedVirtualEditor.revealRange(virtualRange, vscode.TextEditorRevealType.InCenterIfOutsideViewport);
             this.scheduleInspection();
         }
-    }
-
-    private sourceUriForOutput(output: MappedOutput): vscode.Uri | undefined {
-        for (const entry of this.entries.values()) {
-            if (entry.output === output) {
-                return entry.sourceUri;
-            }
-        }
-        return undefined;
     }
 
     private scheduleInspection(): void {
@@ -661,18 +629,10 @@ class ContentMapperVirtualDocumentProvider implements vscode.FileSystemProvider,
             if (mappings.length === 0) {
                 continue;
             }
-            const virtualRanges: vscode.Range[][] = [[], [], []];
-            for (const mapping of mappings) {
-                const kind = normalizedMappingKind(mapping.kind);
-                if (mapping.originalLength !== 0) {
-                    sourceRanges[kind]!.push(rangeFromOffsets(sourceEditor.document, mapping.originalStart, mapping.originalLength));
-                }
-                if (mapping.generatedLength !== 0) {
-                    virtualRanges[kind]!.push(rangeFromOffsets(virtualEditor.document, mapping.generatedStart, mapping.generatedLength));
-                }
-            }
+            const ranges = mappingDecorationRanges(sourceEditor.document, virtualEditor.document, mappings);
             for (let kind = 0; kind < this.mappingDecorations.length; kind++) {
-                virtualEditor.setDecorations(this.mappingDecorations[kind]!, virtualRanges[kind]!);
+                sourceRanges[kind]!.push(...ranges.source[kind]!);
+                virtualEditor.setDecorations(this.mappingDecorations[kind]!, ranges.virtual[kind]!);
             }
             this.decoratedEditors.add(virtualEditor);
             this.highlightedMappings.set(virtualEditor.document.uri.toString(), mappings);
@@ -694,20 +654,10 @@ class ContentMapperVirtualDocumentProvider implements vscode.FileSystemProvider,
             return;
         }
 
-        const sourceRanges: vscode.Range[][] = [[], [], []];
-        const virtualRanges: vscode.Range[][] = [[], [], []];
-        for (const mapping of mappings) {
-            const kind = normalizedMappingKind(mapping.kind);
-            if (mapping.originalLength !== 0) {
-                sourceRanges[kind]!.push(rangeFromOffsets(sourceEditor.document, mapping.originalStart, mapping.originalLength));
-            }
-            if (mapping.generatedLength !== 0) {
-                virtualRanges[kind]!.push(rangeFromOffsets(virtualEditor.document, mapping.generatedStart, mapping.generatedLength));
-            }
-        }
+        const ranges = mappingDecorationRanges(sourceEditor.document, virtualEditor.document, mappings);
         for (let kind = 0; kind < this.mappingDecorations.length; kind++) {
-            sourceEditor.setDecorations(this.mappingDecorations[kind]!, sourceRanges[kind]!);
-            virtualEditor.setDecorations(this.mappingDecorations[kind]!, virtualRanges[kind]!);
+            sourceEditor.setDecorations(this.mappingDecorations[kind]!, ranges.source[kind]!);
+            virtualEditor.setDecorations(this.mappingDecorations[kind]!, ranges.virtual[kind]!);
         }
         this.decoratedEditors.add(sourceEditor);
         this.decoratedEditors.add(virtualEditor);
@@ -761,6 +711,27 @@ function rangeFromTextRange(document: vscode.TextDocument, range: ContentMapperT
     return new vscode.Range(document.positionAt(range.pos), document.positionAt(range.end));
 }
 
+function mappingDecorationRanges(
+    source: vscode.TextDocument,
+    virtual: vscode.TextDocument,
+    mappings: readonly ContentMapperVirtualSpan[],
+): { readonly source: vscode.Range[][]; readonly virtual: vscode.Range[][]; } {
+    const ranges = {
+        source: [[], [], []] as vscode.Range[][],
+        virtual: [[], [], []] as vscode.Range[][],
+    };
+    for (const mapping of mappings) {
+        const kind = normalizedMappingKind(mapping.kind);
+        if (mapping.originalLength !== 0) {
+            ranges.source[kind]!.push(rangeFromOffsets(source, mapping.originalStart, mapping.originalLength));
+        }
+        if (mapping.generatedLength !== 0) {
+            ranges.virtual[kind]!.push(rangeFromOffsets(virtual, mapping.generatedStart, mapping.generatedLength));
+        }
+    }
+    return ranges;
+}
+
 function normalizedMappingKind(kind: number): number {
     return kind >= 0 && kind <= 2 ? kind : 1;
 }
@@ -778,6 +749,7 @@ function mappingKindName(kind: number): string {
     }
 }
 
+// Keep this in the same bit order as spanmap.Feature in the server.
 const featureLabels = [
     () => vscode.l10n.t("Hover"),
     () => vscode.l10n.t("Signature Help"),
