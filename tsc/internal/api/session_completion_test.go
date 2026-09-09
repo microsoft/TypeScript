@@ -230,14 +230,14 @@ func TestCompletionWithSymbolsAndExistingImportDoesNotDeadlock(t *testing.T) {
 	}
 	result := make(chan completionResult, 1)
 	go func() {
-		completions, err := session.handleGetCompletionsAtPosition(t.Context(), &GetCompletionsAtPositionParams{
+		completions, e := session.handleGetCompletionsAtPosition(t.Context(), &GetCompletionsAtPositionParams{
 			Snapshot:      snapshotResp.Snapshot,
 			Project:       proj.Id,
 			File:          DocumentIdentifier{FileName: fileName},
 			Position:      uint32(len(content)),
 			IncludeSymbol: true,
 		})
-		result <- completionResult{completions: completions, err: err}
+		result <- completionResult{completions: completions, err: e}
 	}()
 
 	select {
