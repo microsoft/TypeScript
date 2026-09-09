@@ -2285,6 +2285,7 @@ func (s *Session) handleGetImportAdderEdits(ctx context.Context, params *GetImpo
 		sourceFile,
 		projectPath,
 		program,
+		ch,
 		userPreferences.ModuleSpecifierPreferences(),
 	)
 	importAdder := autoimport.NewImportAdder(
