@@ -822,6 +822,16 @@ func TestWatchRealpathAliases(t *testing.T) {
 				}
 				base.currentWrite.Reset()
 				writeAliasWatchFile(t, dependency, `export const value = "changed";`)
+				if build && (shape == "file" || shape == "directory") {
+					buildInfo, err := os.Stat(root + "/tsconfig.tsbuildinfo")
+					if err != nil {
+						t.Fatal(err)
+					}
+					// Build mode requires a newer input timestamp. Consecutive writes
+					// can share a filesystem timestamp even after compilation completes.
+					modified := buildInfo.ModTime().Add(time.Second)
+					assert.NilError(t, os.Chtimes(dependency, modified, modified))
+				}
 				event := fswatch.Event{Path: dependency, Kind: fswatch.EventUpdate}
 				want := "TS2322"
 				if strings.HasPrefix(shape, "retarget-") {
