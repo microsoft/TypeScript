@@ -39,6 +39,7 @@ jobs:
       - uses: ./.github/actions/setup-go
       - run: npm ci
       - run: npx hereby typescript:release --forRelease --setPrerelease dev.0.0
+      - run: npx hereby vscode-typescript:release --forRelease --vscodeTypescriptRelease
 
   extension:
     runs-on: ubuntu-latest
@@ -331,6 +332,7 @@ jobs:
       - run: npm ci
       - run: go -C ./tools run ./cmd/checkmodpaths "$PWD"
       - run: npx hereby check:herebyfile
+      - run: npx hereby check:vsce-version
       - run: npx hereby check:scripts
       - run: npx hereby typescript:check-platforms
 
