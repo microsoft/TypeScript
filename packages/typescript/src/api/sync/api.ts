@@ -237,7 +237,7 @@ export interface TranspileOutput {
     sourceMapText?: string;
 }
 
-export { all, type AnyAPIRequestGenerator, type APIRequestGenerator, defer, type DeferredAPIRequestGenerator, type ExecutedGeneratorsResults } from "./generatorSupport.ts";
+export { all, type AllAPIRequestGenerator, type AnyAPIRequestGenerator, type APIRequestGenerator, defer, type DeferredAPIRequestGenerator, type ExecutedGeneratorsResults } from "./generatorSupport.ts";
 import {
     type AnyAPIRequestGenerator,
     type ExecutedGeneratorsResults,

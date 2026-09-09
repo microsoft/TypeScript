@@ -221,7 +221,7 @@ export interface TranspileOutput {
 }
 
 // @sync-only-start
-// export { all, defer, type APIRequestGenerator, type AnyAPIRequestGenerator, type DeferredAPIRequestGenerator, type ExecutedGeneratorsResults } from "./generatorSupport.ts";
+// export { all, defer, type APIRequestGenerator, type AnyAPIRequestGenerator, type AllAPIRequestGenerator, type DeferredAPIRequestGenerator, type ExecutedGeneratorsResults } from "./generatorSupport.ts";
 // import {executeRequestGenerators, type ExecutedGeneratorsResults, type AnyAPIRequestGenerator} from "./generatorSupport.ts";
 // @sync-only-end
 
