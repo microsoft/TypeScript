@@ -1209,11 +1209,8 @@ func (s *Session) toAPISnapshotRequest(changes *SnapshotRequestChangesParams) (*
 }
 
 type languageServerSnapshotUpdate struct {
-	request        *project.APISnapshotRequest
-	openedProjects []tspath.Path
-	closedProjects []tspath.Path
-	openedFiles    []tspath.Path
-	closedFiles    []tspath.Path
+	request   *project.APISnapshotRequest
+	openState snapshotOpenState
 }
 
 func (s *Session) toLanguageServerSnapshotUpdate(changes *SnapshotRequestChangesParams) (*languageServerSnapshotUpdate, error) {
@@ -1221,37 +1218,12 @@ func (s *Session) toLanguageServerSnapshotUpdate(changes *SnapshotRequestChanges
 	if err != nil {
 		return nil, err
 	}
-	update := &languageServerSnapshotUpdate{request: apiRequest}
-
-	for configFileName := range apiRequest.OpenProjects.Keys() {
-		configPath := s.toPath(configFileName)
-		if s.openProjects.Has(configPath) {
-			apiRequest.OpenProjects.Delete(configFileName)
-		} else {
-			update.openedProjects = append(update.openedProjects, configPath)
-		}
-	}
-	for configPath := range apiRequest.CloseProjects.Keys() {
-		if !s.openProjects.Has(configPath) {
-			apiRequest.CloseProjects.Delete(configPath)
-		} else {
-			update.closedProjects = append(update.closedProjects, configPath)
-		}
-	}
-	for uri := range apiRequest.OpenFiles.Keys() {
-		path := s.toPath(uri.FileName())
-		if s.openFiles.Has(path) {
-			apiRequest.OpenFiles.Delete(uri)
-		} else {
-			update.openedFiles = append(update.openedFiles, path)
-		}
-	}
-	for path := range apiRequest.CloseFiles.Keys() {
-		if !s.openFiles.Has(path) {
-			apiRequest.CloseFiles.Delete(path)
-		} else {
-			update.closedFiles = append(update.closedFiles, path)
-		}
+	update := &languageServerSnapshotUpdate{
+		request: apiRequest,
+		openState: s.reconcileSnapshotOpens(apiRequest, snapshotOpenState{
+			openProjects: s.openProjects,
+			openFiles:    s.openFiles,
+		}),
 	}
 
 	for programID := range apiRequest.RemovePrograms.Keys() {
@@ -1263,18 +1235,8 @@ func (s *Session) toLanguageServerSnapshotUpdate(changes *SnapshotRequestChanges
 }
 
 func (u *languageServerSnapshotUpdate) commit(s *Session, snapshot *project.Snapshot) {
-	for _, path := range u.openedProjects {
-		s.openProjects.Add(path)
-	}
-	for _, path := range u.closedProjects {
-		s.openProjects.Delete(path)
-	}
-	for _, path := range u.openedFiles {
-		s.openFiles.Add(path)
-	}
-	for _, path := range u.closedFiles {
-		s.openFiles.Delete(path)
-	}
+	s.openProjects = *u.openState.openProjects.Clone()
+	s.openFiles = *u.openState.openFiles.Clone()
 	for programID := range u.request.RemovePrograms.Keys() {
 		s.createdPrograms.Delete(programID)
 	}

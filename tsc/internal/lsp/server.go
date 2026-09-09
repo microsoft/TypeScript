@@ -1458,7 +1458,7 @@ func (c *crossProjectOrchestrator) GetProjectsForFile(ctx context.Context, uri l
 func (c *crossProjectOrchestrator) GetProjectsLoadingProjectTree(ctx context.Context, requestedProjectTrees *collections.Set[tspath.Path]) iter.Seq[ls.Project] {
 	return func(yield func(ls.Project) bool) {
 		c.server.session.WithSnapshotLoadingProjectTree(ctx, requestedProjectTrees, func(snapshot *project.Snapshot) {
-			for _, p := range snapshot.ProjectCollection.Projects() {
+			for _, p := range snapshot.ProjectCollection.LanguageServiceProjects() {
 				if !yield(p) {
 					return
 				}
@@ -2171,12 +2171,12 @@ func (s *Server) handleWorkspaceSymbol(ctx context.Context, params *lsproto.Work
 	if params.TextDocument != nil && s.session.Config().WorkspaceSymbolsScope == lsutil.WorkspaceSymbolsScopeCurrentProject {
 		uri := params.TextDocument.Uri
 		s.session.WithSnapshotForDocument(ctx, uri, func(snapshot *project.Snapshot) {
-			programs := core.Map(snapshot.GetProjectsContainingFile(uri), ls.Project.GetProgram)
+			programs := core.Map(snapshot.GetLanguageServiceProjectsContainingFile(uri), ls.Project.GetProgram)
 			provideSymbols(snapshot, programs)
 		})
 	} else {
 		s.session.WithSnapshotLoadingProjectTree(ctx, nil, func(snapshot *project.Snapshot) {
-			programs := core.Map(snapshot.ProjectCollection.Projects(), (*project.Project).GetProgram)
+			programs := core.Map(snapshot.ProjectCollection.LanguageServiceProjects(), (*project.Project).GetProgram)
 			provideSymbols(snapshot, programs)
 		})
 	}

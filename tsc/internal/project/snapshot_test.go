@@ -102,6 +102,8 @@ func TestSnapshot(t *testing.T) {
 		assert.DeepEqual(t, secondProject.CommandLine.FileNames(), []string{"/b.ts"})
 		assert.Assert(t, createdSnapshot.ProjectCollection.InferredProject() == nil)
 		assert.Equal(t, len(createdSnapshot.ProjectCollection.SyntheticProjects()), 2)
+		assert.Equal(t, len(createdSnapshot.ProjectCollection.LanguageServiceProjects()), 0)
+		assert.Equal(t, len(createdSnapshot.GetLanguageServiceProjectsContainingFile(lsproto.DocumentUri("file:///a.ts"))), 0)
 		assert.Assert(t, createdSnapshot.ProjectCollection.GetDefaultProject(createdSnapshot.toPath("/a.ts")) == nil)
 		assert.Equal(t, createdSnapshot.ProjectCollection.GetProjectByPath(firstProject.ID()), firstProject)
 
@@ -114,6 +116,8 @@ func TestSnapshot(t *testing.T) {
 		assert.NilError(t, err)
 		defer openedSnapshot.Deref()
 		assert.Assert(t, openedSnapshot.ProjectCollection.InferredProject() != nil)
+		assert.Equal(t, len(openedSnapshot.ProjectCollection.LanguageServiceProjects()), 1)
+		assert.Equal(t, len(openedSnapshot.GetLanguageServiceProjectsContainingFile(lsproto.DocumentUri("file:///a.ts"))), 1)
 		assert.Equal(t, openedSnapshot.ProjectCollection.GetDefaultProject(openedSnapshot.toPath("/a.ts")), openedSnapshot.ProjectCollection.InferredProject())
 		assert.Equal(t, openedSnapshot.ProjectCollection.GetProjectByPath(firstProject.ID()), firstProject)
 

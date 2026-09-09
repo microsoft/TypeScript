@@ -1129,7 +1129,7 @@ func (s *Session) GetLanguageServiceAndProjectsForFile(ctx context.Context, uri 
 		return nil, nil, nil, err
 	}
 	// !!! TODO: sheetal:  Get other projects that contain the file with symlink
-	allProjects := snapshot.GetProjectsContainingFile(uri)
+	allProjects := snapshot.GetLanguageServiceProjectsContainingFile(uri)
 	return project, defaultLs, allProjects, nil
 }
 
@@ -1141,7 +1141,7 @@ func (s *Session) GetProjectsForFile(ctx context.Context, uri lsproto.DocumentUr
 	)
 
 	// !!! TODO: sheetal:  Get other projects that contain the file with symlink
-	allProjects := snapshot.GetProjectsContainingFile(uri)
+	allProjects := snapshot.GetLanguageServiceProjectsContainingFile(uri)
 	return allProjects, nil
 }
 
@@ -1165,7 +1165,7 @@ func (s *Session) GetLanguageServicesForDocumentsLoadingProjectTree(ctx context.
 		activeFile = uris[0].FileName()
 	}
 
-	projects := snapshot.ProjectCollection.Projects()
+	projects := snapshot.ProjectCollection.LanguageServiceProjects()
 	services := make([]*ls.LanguageService, 0, len(projects))
 	for _, project := range projects {
 		program := project.GetProgram()

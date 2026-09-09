@@ -88,6 +88,76 @@ func TestGetCurrentLanguageServerSnapshotRejectsStandaloneSession(t *testing.T) 
 	assert.ErrorContains(t, err, "requires an LSP-connected API session")
 }
 
+func TestGetCurrentLanguageServerSnapshotCloseAndReopenProject(t *testing.T) {
+	t.Parallel()
+
+	const configFileName = "/home/projects/p/tsconfig.json"
+	projectSession, _ := projecttestutil.Setup(map[string]any{
+		configFileName: `{}`,
+	})
+	defer projectSession.Close()
+	ctx := context.Background()
+
+	session := NewLSPSession(projectSession, nil)
+	defer session.Close()
+	open := DocumentIdentifier{FileName: configFileName}
+	_, err := session.handleGetCurrentLanguageServerSnapshot(ctx, &GetCurrentLanguageServerSnapshotParams{Changes: &LanguageServerSnapshotChanges{
+		SnapshotRequestChangesParams: SnapshotRequestChangesParams{OpenProjects: []DocumentIdentifier{open}},
+	}})
+	assert.NilError(t, err)
+
+	_, err = session.handleGetCurrentLanguageServerSnapshot(ctx, &GetCurrentLanguageServerSnapshotParams{Changes: &LanguageServerSnapshotChanges{
+		SnapshotRequestChangesParams: SnapshotRequestChangesParams{
+			CloseProjects: []DocumentIdentifier{open},
+			OpenProjects:  []DocumentIdentifier{open},
+		},
+	}})
+	assert.NilError(t, err)
+	assert.Equal(t, session.openProjects.Len(), 1)
+	assert.Assert(t, projectSession.Snapshot().ProjectCollection.ConfiguredProject(tspath.Path(configFileName)) != nil)
+
+	_, err = session.handleGetCurrentLanguageServerSnapshot(ctx, &GetCurrentLanguageServerSnapshotParams{Changes: &LanguageServerSnapshotChanges{
+		SnapshotRequestChangesParams: SnapshotRequestChangesParams{CloseProjects: []DocumentIdentifier{open}},
+	}})
+	assert.NilError(t, err)
+	assert.Equal(t, session.openProjects.Len(), 0)
+}
+
+func TestGetCurrentLanguageServerSnapshotCloseAndReopenFile(t *testing.T) {
+	t.Parallel()
+
+	const fileName = "/home/projects/p/index.ts"
+	projectSession, _ := projecttestutil.Setup(map[string]any{
+		"/home/projects/p/tsconfig.json": `{}`,
+		fileName:                         `export const value = 1;`,
+	})
+	defer projectSession.Close()
+	ctx := context.Background()
+	session := NewLSPSession(projectSession, nil)
+	defer session.Close()
+	open := DocumentIdentifier{FileName: fileName}
+	_, err := session.handleGetCurrentLanguageServerSnapshot(ctx, &GetCurrentLanguageServerSnapshotParams{Changes: &LanguageServerSnapshotChanges{
+		SnapshotRequestChangesParams: SnapshotRequestChangesParams{OpenFiles: []DocumentIdentifier{open}},
+	}})
+	assert.NilError(t, err)
+
+	_, err = session.handleGetCurrentLanguageServerSnapshot(ctx, &GetCurrentLanguageServerSnapshotParams{Changes: &LanguageServerSnapshotChanges{
+		SnapshotRequestChangesParams: SnapshotRequestChangesParams{
+			CloseFiles: []DocumentIdentifier{open},
+			OpenFiles:  []DocumentIdentifier{open},
+		},
+	}})
+	assert.NilError(t, err)
+	assert.Equal(t, session.openFiles.Len(), 1)
+	assert.Assert(t, projectSession.Snapshot().GetDefaultProject(open.ToURI(projectSession.GetCurrentDirectory())) != nil)
+
+	_, err = session.handleGetCurrentLanguageServerSnapshot(ctx, &GetCurrentLanguageServerSnapshotParams{Changes: &LanguageServerSnapshotChanges{
+		SnapshotRequestChangesParams: SnapshotRequestChangesParams{CloseFiles: []DocumentIdentifier{open}},
+	}})
+	assert.NilError(t, err)
+	assert.Equal(t, session.openFiles.Len(), 0)
+}
+
 func TestGetCurrentLanguageServerSnapshotFlushesPendingLSPChanges(t *testing.T) {
 	t.Parallel()
 

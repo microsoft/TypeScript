@@ -199,11 +199,13 @@ func (s *Snapshot) GetDefaultProject(uri lsproto.DocumentUri) *Project {
 	return s.ProjectCollection.GetDefaultProject(uri.Path(s.UseCaseSensitiveFileNames()))
 }
 
-func (s *Snapshot) GetProjectsContainingFile(uri lsproto.DocumentUri) []ls.Project {
+// GetLanguageServiceProjectsContainingFile does not consider synthetic projects
+// (ones created by API via createProgram)
+func (s *Snapshot) GetLanguageServiceProjectsContainingFile(uri lsproto.DocumentUri) []ls.Project {
 	fileName := uri.FileName()
 	path := s.host.toPath(fileName)
 	// TODO!! sheetal may be change this to handle symlinks!!
-	return s.ProjectCollection.GetProjectsContainingFile(path)
+	return s.ProjectCollection.GetLanguageServiceProjectsContainingFile(path)
 }
 
 func (s *Snapshot) GetFile(fileName string) FileHandle {

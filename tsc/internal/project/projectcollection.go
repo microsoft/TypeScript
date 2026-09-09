@@ -148,18 +148,27 @@ func (c *ProjectCollection) Projects() []*Project {
 	return projects
 }
 
+// LanguageServiceProjects returns configured and inferred projects in stable order.
+// Synthetic projects are accessed explicitly through the API and do not participate
+// in cross-project language service operations.
+func (c *ProjectCollection) LanguageServiceProjects() []*Project {
+	projects := make([]*Project, 0, len(c.configuredProjects)+core.IfElse(c.inferredProject != nil, 1, 0))
+	c.fillConfiguredProjects(&projects)
+	if c.inferredProject != nil {
+		projects = append(projects, c.inferredProject)
+	}
+	return projects
+}
+
 func (c *ProjectCollection) InferredProject() *Project {
 	return c.inferredProject
 }
 
-func (c *ProjectCollection) GetProjectsContainingFile(path tspath.Path) []ls.Project {
+// GetLanguageServiceProjectsContainingFile does not consider synthetic projects
+// (ones created by API via createProgram)
+func (c *ProjectCollection) GetLanguageServiceProjectsContainingFile(path tspath.Path) []ls.Project {
 	var projects []ls.Project
 	for _, project := range c.ConfiguredProjects() {
-		if project.containsFile(path) {
-			projects = append(projects, project)
-		}
-	}
-	for _, project := range c.SyntheticProjects() {
 		if project.containsFile(path) {
 			projects = append(projects, project)
 		}
