@@ -89,3 +89,22 @@ func TestPhysicalRegistrationEmptyDirectoryUpdate(t *testing.T) {
 	assert.Assert(t, result.NamespaceChanged)
 	assert.DeepEqual(t, result.Affected, []string{"/logical"})
 }
+
+func TestPhysicalRegistrationMatchExpanded(t *testing.T) {
+	t.Parallel()
+	index := New(vfstest.FromMap(map[string]string{}, true))
+	assert.NilError(t, index.Register(Registration{Name: "/a/link", Realpath: "/a", Directory: true}))
+	assert.NilError(t, index.Register(Registration{Name: "/a/link/file.ts", Realpath: "/a/file.ts", Dependency: true}))
+	events := make(map[string]fswatch.EventKind)
+	for _, name := range index.Expand("/a/file.ts") {
+		events[name] = fswatch.EventUpdate
+	}
+	result := index.MatchExpanded(events)
+	assert.DeepEqual(t, result.Changes, events)
+	assert.Assert(t, slices.Contains(result.Affected, "/a/link/file.ts"))
+
+	events = map[string]fswatch.EventKind{"/a": fswatch.EventDelete}
+	result = index.MatchExpanded(events)
+	assert.Equal(t, result.Changes["/a/link/file.ts"], fswatch.EventDelete)
+	assert.Equal(t, len(events), 1, "matching must not mutate its input")
+}

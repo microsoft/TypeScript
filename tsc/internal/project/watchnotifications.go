@@ -1,15 +1,16 @@
 package project
 
 import (
-	"maps"
 	"slices"
 
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
+	"github.com/microsoft/TypeScript/tsc/internal/fswatch"
+	"github.com/microsoft/TypeScript/tsc/internal/ls/lsconv"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 )
 
-// This is transient input to one clone, not snapshot state. Resolution effects
-// must survive overlay coalescing even when all visible notifications disappear.
+// Spellings are expanded, but subtree effects wait until after coalescing.
+// Affected observations survive even when all visible notifications disappear.
 type preparedWatchChanges struct {
 	snapshotID uint64
 	affected   []string
@@ -27,58 +28,54 @@ func (s *Snapshot) prepareWatchNotifications(changes []FileChange) ([]FileChange
 		return changes, nil, false
 	}
 	result := make([]FileChange, 0, len(changes))
-	var affected collections.Set[string]
-	invalidateAll := false
-	for start := 0; start < len(changes); {
-		kind := changes[start].Kind
+	observations := make(map[string]fswatch.EventKind)
+	for _, change := range changes {
+		kind := change.Kind
 		if !kind.IsWatchKind() && kind != FileChangeKindSave {
-			result = append(result, changes[start])
-			start++
+			result = append(result, change)
 			continue
 		}
-		// Same-kind runs can share subtree traversal. Do not reorder across
-		// creates/deletes or editor operations: the overlay coalescer uses order.
-		end := start + 1
-		for end < len(changes) && changes[end].Kind == kind {
-			end++
-		}
-		var summary FileChangeSummary
-		for _, change := range changes[start:end] {
-			switch kind {
-			case FileChangeKindWatchCreate:
-				summary.Created.Add(change.URI)
-			case FileChangeKindWatchDelete:
-				summary.Deleted.Add(change.URI)
-			default:
-				summary.Changed.Add(change.URI)
-			}
-		}
-		summary, names := s.matchWatchChanges(summary)
-		invalidateAll = invalidateAll || summary.InvalidateAll
-		for _, name := range names {
-			affected.Add(name)
-		}
 		if kind == FileChangeKindSave {
+			kind = FileChangeKindWatchChange
+		}
+		for _, name := range s.watchNames(change.URI.FileName()) {
+			result = append(result, FileChange{Kind: kind, URI: lsconv.FileNameToDocumentURI(name)})
+			// Observe raw filesystem activity without deriving deletions that
+			// could outlive a canceled directory lifecycle.
+			observations[name] = fswatch.EventUpdate
+		}
+		if change.Kind == FileChangeKindSave {
 			// Only the original document is saved. Alias notifications still
 			// invalidate disk entries when the saved document has no overlay.
-			for uri := range summary.Changed.Keys() {
-				result = append(result, FileChange{Kind: FileChangeKindWatchChange, URI: uri})
-			}
-			result = append(result, changes[start:end]...)
-		} else {
-			for _, uris := range []collections.Set[lsproto.DocumentUri]{summary.Created, summary.Changed, summary.Deleted} {
-				for uri := range uris.Keys() {
-					result = append(result, FileChange{Kind: kind, URI: uri})
-				}
-			}
+			result = append(result, change)
 		}
-		start = end
 	}
-	return result, &preparedWatchChanges{snapshotID: s.id, affected: slices.Collect(maps.Keys(affected.Keys()))}, invalidateAll
+	prepared := &preparedWatchChanges{snapshotID: s.id}
+	if s.watchAliases != nil {
+		prepared.affected = s.watchAliases.MatchExpanded(observations).Affected
+	}
+	return result, prepared, s.watchAliasesError != nil
 }
 
 func (s *Snapshot) prepareWatchSummary(change FileChangeSummary) FileChangeSummary {
-	change, affected := s.matchWatchChanges(change)
-	change.preparedWatchChanges = &preparedWatchChanges{snapshotID: s.id, affected: affected}
+	if change.preparedWatchChanges != nil {
+		return change
+	}
+	expand := func(uris collections.Set[lsproto.DocumentUri]) collections.Set[lsproto.DocumentUri] {
+		if s.watchAliases == nil || uris.Len() == 0 {
+			return uris
+		}
+		var result collections.Set[lsproto.DocumentUri]
+		for uri := range uris.Keys() {
+			for _, name := range s.watchNames(uri.FileName()) {
+				result.Add(lsconv.FileNameToDocumentURI(name))
+			}
+		}
+		return result
+	}
+	change.Created = expand(change.Created)
+	change.Changed = expand(change.Changed)
+	change.Deleted = expand(change.Deleted)
+	change.preparedWatchChanges = &preparedWatchChanges{snapshotID: s.id}
 	return change
 }

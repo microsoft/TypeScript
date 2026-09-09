@@ -233,11 +233,14 @@ func (s *Snapshot) expandWatchAliases(change FileChangeSummary) FileChangeSummar
 }
 
 func (s *Snapshot) matchWatchChanges(change FileChangeSummary) (FileChangeSummary, []string) {
+	var affected collections.Set[string]
 	if prepared := change.preparedWatchChanges; prepared != nil {
 		if prepared.snapshotID != s.id {
 			panic("watch changes must be prepared for the snapshot being cloned")
 		}
-		return change, prepared.affected
+		for _, name := range prepared.affected {
+			affected.Add(name)
+		}
 	}
 	if s.watchAliasesError != nil && change.Created.Len()+change.Changed.Len()+change.Deleted.Len() != 0 {
 		change.InvalidateAll = true
@@ -245,7 +248,6 @@ func (s *Snapshot) matchWatchChanges(change FileChangeSummary) (FileChangeSummar
 	if s.watchAliases == nil {
 		return change, nil
 	}
-	var affected collections.Set[string]
 	expand := func(uris collections.Set[lsproto.DocumentUri], kind fswatch.EventKind) collections.Set[lsproto.DocumentUri] {
 		if uris.Len() == 0 {
 			return uris
@@ -254,7 +256,12 @@ func (s *Snapshot) matchWatchChanges(change FileChangeSummary) (FileChangeSummar
 		for uri := range uris.Keys() {
 			events[uri.FileName()] = kind
 		}
-		matches := s.watchAliases.Match(events)
+		var matches watchalias.Matches
+		if change.preparedWatchChanges != nil {
+			matches = s.watchAliases.MatchExpanded(events)
+		} else {
+			matches = s.watchAliases.Match(events)
+		}
 		var result collections.Set[lsproto.DocumentUri]
 		for name := range matches.Changes {
 			result.Add(lsconv.FileNameToDocumentURI(name))

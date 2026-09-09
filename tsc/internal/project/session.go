@@ -441,7 +441,12 @@ func (s *Session) DidChangeWatchedFiles(ctx context.Context, changes []*lsproto.
 			URI:  change.Uri,
 		})
 	}
-	preview, _, invalidateAll := snapshot.prepareWatchNotifications(fileChanges)
+	preview, prepared, invalidateAll := snapshot.prepareWatchNotifications(fileChanges)
+	if prepared != nil {
+		for _, name := range prepared.affected {
+			preview = append(preview, FileChange{Kind: FileChangeKindWatchChange, URI: lsconv.FileNameToDocumentURI(name)})
+		}
+	}
 	for _, change := range preview {
 		kind := change.Kind
 

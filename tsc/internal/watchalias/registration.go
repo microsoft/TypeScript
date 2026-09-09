@@ -2,6 +2,7 @@ package watchalias
 
 import (
 	"fmt"
+	"maps"
 	"strings"
 
 	"github.com/microsoft/TypeScript/tsc/internal/fswatch"
@@ -157,29 +158,53 @@ type Matches struct {
 // it registers only spellings, rather than resolved dependencies.
 func (i *Index) Match(events map[string]fswatch.EventKind) Matches {
 	result := Matches{Changes: make(map[string]fswatch.EventKind, len(events))}
+	for name, kind := range events {
+		knownLeaf := false
+		for _, name := range i.Expand(name) {
+			if previous, ok := result.Changes[name]; !ok || previous != fswatch.EventDelete {
+				result.Changes[name] = kind
+			}
+			leaf, directory := i.classifyPath(name)
+			knownLeaf = knownLeaf || leaf
+			result.NamespaceChanged = result.NamespaceChanged || directory
+		}
+		result.NamespaceChanged = result.NamespaceChanged || kind != fswatch.EventUpdate || !knownLeaf
+	}
+	return i.matchSubtrees(result)
+}
+
+// MatchExpanded applies subtree effects to already-expanded event spellings.
+// Ordered callers can coalesce directory lifecycles before deriving deletions,
+// without expanding aliases again and reviving canceled notifications.
+func (i *Index) MatchExpanded(events map[string]fswatch.EventKind) Matches {
+	result := Matches{Changes: maps.Clone(events)}
+	for name, kind := range events {
+		leaf, directory := i.classifyPath(name)
+		result.NamespaceChanged = result.NamespaceChanged || directory || kind != fswatch.EventUpdate || !leaf
+	}
+	return i.matchSubtrees(result)
+}
+
+func (i *Index) classifyPath(name string) (leaf, directory bool) {
+	if node := i.paths[i.toPath(name)]; node != nil {
+		if len(node.children) != 0 {
+			return false, true
+		}
+		for _, registrations := range [][]*Registration{node.logical, node.physical} {
+			for _, registration := range registrations {
+				directory = directory || registration.Directory
+				leaf = leaf || !registration.Directory
+			}
+		}
+	}
+	return leaf, directory
+}
+
+func (i *Index) matchSubtrees(result Matches) Matches {
 	add := func(name string, kind fswatch.EventKind) {
 		if previous, ok := result.Changes[name]; !ok || previous != fswatch.EventDelete {
 			result.Changes[name] = kind
 		}
-	}
-	for name, kind := range events {
-		knownLeaf := false
-		for _, expanded := range i.Expand(name) {
-			add(expanded, kind)
-			if node := i.paths[i.toPath(expanded)]; node != nil {
-				if len(node.children) != 0 {
-					result.NamespaceChanged = true
-				} else {
-					for _, registrations := range [][]*Registration{node.logical, node.physical} {
-						for _, registration := range registrations {
-							result.NamespaceChanged = result.NamespaceChanged || registration.Directory
-							knownLeaf = knownLeaf || !registration.Directory
-						}
-					}
-				}
-			}
-		}
-		result.NamespaceChanged = result.NamespaceChanged || kind != fswatch.EventUpdate || !knownLeaf
 	}
 	affected := make(map[*Registration]struct{})
 	visited := make(map[*registeredPath]struct{})
