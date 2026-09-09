@@ -237,11 +237,11 @@ export interface TranspileOutput {
     sourceMapText?: string;
 }
 
-export { all } from "./generatorSupport.ts";
+export { all, type AllAPIRequestGenerator, type AnyAPIRequestGenerator, type APIRequestGenerator, defer, type DeferredAPIRequestGenerator, type ExecutedGeneratorsResults } from "./generatorSupport.ts";
 import {
-    all,
-    type APIRequestGenerator,
+    type AnyAPIRequestGenerator,
     type ExecutedGeneratorsResults,
+    executeRequestGenerators,
 } from "./generatorSupport.ts";
 
 export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHost {
@@ -287,13 +287,8 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         );
     }
 
-    batch<T extends readonly APIRequestGenerator[]>(...requestGenerators: T): ExecutedGeneratorsResults<T> {
-        const batches = all(...requestGenerators);
-        let state = batches.next();
-        while (!state.done) {
-            state = batches.next(this.client.batchRequests(state.value).responses);
-        }
-        return state.value;
+    batch<T extends readonly AnyAPIRequestGenerator[]>(...requestGenerators: T): ExecutedGeneratorsResults<T> {
+        return executeRequestGenerators(requestGenerators, requests => this.client.batchRequests(requests).responses);
     }
 
     private get ensureInitialized(): {
