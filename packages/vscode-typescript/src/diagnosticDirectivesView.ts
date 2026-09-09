@@ -8,6 +8,7 @@ import type {
 } from "./contentMapperVirtualFiles";
 import {
     containsNonEmptyTextRange,
+    textPositionAt,
     textRangePreview,
 } from "./contentMapperVirtualFiles";
 
@@ -245,14 +246,6 @@ function formatPosition(position: vscode.Position): string {
 }
 
 function positionAt(text: string, offset: number): vscode.Position {
-    const limit = Math.min(Math.max(offset, 0), text.length);
-    let line = 0;
-    let lineStart = 0;
-    for (let index = 0; index < limit; index++) {
-        if (text.charCodeAt(index) === 10) {
-            line++;
-            lineStart = index + 1;
-        }
-    }
-    return new vscode.Position(line, limit - lineStart);
+    const position = textPositionAt(text, offset);
+    return new vscode.Position(position.line, position.character);
 }

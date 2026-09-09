@@ -3,6 +3,7 @@ import test from "node:test";
 
 import {
     containsNonEmptyTextRange,
+    textPositionAt,
     textRangePreview,
     toMappedOutputs,
 } from "../src/contentMapperVirtualFiles";
@@ -20,6 +21,13 @@ test("previews virtual ranges with normalized whitespace and safe truncation", (
         "first second",
     );
     assert.equal(textRangePreview("A😀BCDE", { pos: 0, end: 7 }, 5), "A😀...");
+});
+
+test("computes positions for LF, CRLF, and lone CR line endings", () => {
+    const text = "a\rb\r\nc\nd";
+    assert.deepEqual(textPositionAt(text, 2), { line: 1, character: 0 });
+    assert.deepEqual(textPositionAt(text, 5), { line: 2, character: 0 });
+    assert.deepEqual(textPositionAt(text, 7), { line: 3, character: 0 });
 });
 
 test("adds stable output keys and identities to content mapper virtual files", () => {
