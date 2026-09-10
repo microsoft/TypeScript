@@ -537,6 +537,10 @@ func CompareTypes(t1, t2 *Type) int {
 		if c := cmp.Compare(t1.AsLiteralType().value.(jsnum.Number), t2.AsLiteralType().value.(jsnum.Number)); c != 0 {
 			return c
 		}
+	case t1.flags&TypeFlagsBigIntLiteral != 0:
+		if c := getBigIntLiteralValue(t1).Compare(getBigIntLiteralValue(t2)); c != 0 {
+			return c
+		}
 	case t1.flags&TypeFlagsBooleanLiteral != 0:
 		b1 := t1.AsLiteralType().value.(bool)
 		b2 := t2.AsLiteralType().value.(bool)

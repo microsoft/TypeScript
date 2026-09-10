@@ -15,4 +15,4 @@ export const values = [...descending, ...ascending];
 //// [comparisonBigIntLiterals.d.ts]
 export declare const descending: readonly [100000000000000000000n, 100n, 10n, 2n, 1n, 0n, -1n, -2n, -10n, -100n, -100000000000000000000n];
 export declare const ascending: readonly [-100000000000000000000n, -100n, -10n, -2n, -1n, 0n, 1n, 2n, 10n, 100n, 100000000000000000000n];
-export declare const values: (0n | 100000000000000000000n | 100n | 10n | 2n | 1n | -1n | -2n | -10n | -100n | -100000000000000000000n)[];
+export declare const values: (-100000000000000000000n | -100n | -10n | -2n | -1n | 0n | 1n | 2n | 10n | 100n | 100000000000000000000n)[];
