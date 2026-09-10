@@ -43,9 +43,9 @@ export const reversedHomomorphicValues = [
 
 //// [comparisonAnonymousMappedTypes.d.ts]
 export declare const mappedValues: ({
-    value: number;
-} | {
     value: string;
+} | {
+    value: number;
 } | {
     value: boolean;
 })[];
@@ -57,23 +57,23 @@ export declare const objectValues: ({
     value: boolean;
 })[];
 export declare const reversedMappedValues: ({
-    value: number;
-} | {
     value: string;
+} | {
+    value: number;
 } | {
     value: boolean;
 })[];
 export declare const homomorphicValues: ({
+    value: boolean;
+} | {
     value: number;
 } | {
     value: string;
-} | {
-    value: boolean;
 })[];
 export declare const reversedHomomorphicValues: ({
+    value: boolean;
+} | {
     value: number;
 } | {
     value: string;
-} | {
-    value: boolean;
 })[];

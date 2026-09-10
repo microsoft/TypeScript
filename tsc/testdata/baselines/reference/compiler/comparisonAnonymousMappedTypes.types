@@ -12,8 +12,8 @@ declare function homomorphic<T>(): { [K in keyof T]: T[K] };
 >homomorphic : <T>() => { [K in keyof T]: T[K]; }
 
 export const mappedValues = [mapped<number>(), mapped<string>(), mapped<boolean>()];
->mappedValues : ({ value: number; } | { value: string; } | { value: boolean; })[]
->[mapped<number>(), mapped<string>(), mapped<boolean>()] : ({ value: number; } | { value: string; } | { value: boolean; })[]
+>mappedValues : ({ value: string; } | { value: number; } | { value: boolean; })[]
+>[mapped<number>(), mapped<string>(), mapped<boolean>()] : ({ value: string; } | { value: number; } | { value: boolean; })[]
 >mapped<number>() : { value: number; }
 >mapped : <T>() => { [K in "value"]: T; }
 >mapped<string>() : { value: string; }
@@ -32,8 +32,8 @@ export const objectValues = [object<number>(), object<string>(), object<boolean>
 >object : <T>() => { value: T; }
 
 export const reversedMappedValues = [mapped<boolean>(), mapped<string>(), mapped<number>()];
->reversedMappedValues : ({ value: number; } | { value: string; } | { value: boolean; })[]
->[mapped<boolean>(), mapped<string>(), mapped<number>()] : ({ value: number; } | { value: string; } | { value: boolean; })[]
+>reversedMappedValues : ({ value: string; } | { value: number; } | { value: boolean; })[]
+>[mapped<boolean>(), mapped<string>(), mapped<number>()] : ({ value: string; } | { value: number; } | { value: boolean; })[]
 >mapped<boolean>() : { value: boolean; }
 >mapped : <T>() => { [K in "value"]: T; }
 >mapped<string>() : { value: string; }
@@ -51,8 +51,8 @@ interface BooleanValue { value: boolean }
 >value : boolean
 
 export const homomorphicValues = [
->homomorphicValues : ({ value: number; } | { value: string; } | { value: boolean; })[]
->[    homomorphic<NumberValue>(),    homomorphic<StringValue>(),    homomorphic<BooleanValue>()] : ({ value: number; } | { value: string; } | { value: boolean; })[]
+>homomorphicValues : ({ value: boolean; } | { value: number; } | { value: string; })[]
+>[    homomorphic<NumberValue>(),    homomorphic<StringValue>(),    homomorphic<BooleanValue>()] : ({ value: boolean; } | { value: number; } | { value: string; })[]
 
     homomorphic<NumberValue>(),
 >homomorphic<NumberValue>() : { value: number; }
@@ -68,8 +68,8 @@ export const homomorphicValues = [
 
 ];
 export const reversedHomomorphicValues = [
->reversedHomomorphicValues : ({ value: number; } | { value: string; } | { value: boolean; })[]
->[    homomorphic<BooleanValue>(),    homomorphic<StringValue>(),    homomorphic<NumberValue>()] : ({ value: number; } | { value: string; } | { value: boolean; })[]
+>reversedHomomorphicValues : ({ value: boolean; } | { value: number; } | { value: string; })[]
+>[    homomorphic<BooleanValue>(),    homomorphic<StringValue>(),    homomorphic<NumberValue>()] : ({ value: boolean; } | { value: number; } | { value: string; })[]
 
     homomorphic<BooleanValue>(),
 >homomorphic<BooleanValue>() : { value: boolean; }

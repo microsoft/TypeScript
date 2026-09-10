@@ -496,7 +496,19 @@ func CompareTypes(t1, t2 *Type) int {
 			if c := int(t1.objectFlags&ObjectFlagsObjectTypeKindMask) - int(t2.objectFlags&ObjectFlagsObjectTypeKindMask); c != 0 {
 				return c
 			}
-			if c := compareTypeMappers(t1.AsObjectType().mapper, t2.AsObjectType().mapper); c != 0 {
+			m1 := t1.AsObjectType().mapper
+			m2 := t2.AsObjectType().mapper
+			if t1.objectFlags&ObjectFlagsMapped != 0 {
+				// instantiateAnonymousType prepends a fresh type parameter mapping.
+				// Compare the effective instantiation, not the identity of that fresh parameter.
+				if m1 != nil {
+					m1 = m1.data.(*CompositeTypeMapper).m2
+				}
+				if m2 != nil {
+					m2 = m2.data.(*CompositeTypeMapper).m2
+				}
+			}
+			if c := compareTypeMappers(m1, m2); c != 0 {
 				return c
 			}
 		}
