@@ -28526,7 +28526,7 @@ func (c *Checker) getModifiersTypeFromMappedType(t *Type) *Type {
 			constraint := c.getConstraintTypeFromMappedType(declaredType)
 			extendedConstraint := constraint
 			if constraint != nil && constraint.flags&TypeFlagsTypeParameter != 0 {
-				extendedConstraint = c.getConstraintOfTypeParameter(constraint)
+				extendedConstraint = c.getConstraintOfTypeParameter(getNonDistributedTypeParameter(constraint))
 			}
 			if extendedConstraint != nil && extendedConstraint.flags&TypeFlagsIndex != 0 {
 				m.modifiersType = c.instantiateType(extendedConstraint.AsIndexType().target, m.mapper)
