@@ -65,7 +65,7 @@ Routine compilations of normal code can legitimately take multiple minutes and g
 
 Callers operating on untrusted input should enforce resource limits externally (e.g., `ulimit`, cgroups, process timeouts).
 You should not assume that an adverserially-constructed program will successfully typecheck in any bounded amount of time.
-"Local DOS" is thus not a *security* report; if you encounter a performance problem, you can report this through the normal issue tracker.
+"Local Denial of Service (DoS)" is thus not a *security* report; if you encounter a performance problem, you can report this through the normal issue tracker.
 
 **Crashes**
 `tsc` may gracefully crash, hang, or produce unexpected diagnostics when given adversarial input.
