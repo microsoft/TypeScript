@@ -38,7 +38,8 @@ Certain adversarial inputs may cause crashes, but these crashes will unwind the 
 
 ## Non-Guarantees
 
-**Arbitrary file writes.**
+### Arbitrary file writes
+
 `tsc` writes compiler output to paths derived from its configuration (`outDir`, `outFile`, `declarationDir`, etc.) and the structure of the input project.
 A malicious `tsconfig.json` can direct output to any path writable by the calling user.
 This is by design: writing files to disk *is the point* of a compiler.
