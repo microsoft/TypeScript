@@ -25,9 +25,9 @@ This is the core security property of `tsc`.
 *Exception*: If content mappers are enabled, this *does* enable execution of third-party code.
 Only pass the `--runExternalCode` flag if you have validated which content mappers are available and that you are OK with running them.
 
-**Deterministic side effects.**
-The only side effect of a successful `tsc` invocation is writing output files (`.js`, `.d.ts`, `.map`, `.tsbuildinfo`) to disk.
-It does not make HTTP requests, spawn child processes (except via content mappers, see above), or interact with the system beyond file I/O.
+**Limited default side effects.**
+Outside of explicitly enabled external code, compiler invocations interact with the system through file-system operations and process I/O. Depending on the options, `tsc` may write compiler, build-info, trace, or profile files, update output timestamps, or delete build outputs (for example, with `--build --clean`).
+The compiler does not make HTTP requests or spawn child processes except through content mappers.
 
 **Safe exit.**
 Certain adversarial inputs may cause crashes, but these crashes will unwind the process normally, and will not be a source of buffer overrun or other memory safety exploit vectors.
