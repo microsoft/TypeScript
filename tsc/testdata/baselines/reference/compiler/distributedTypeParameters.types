@@ -91,3 +91,56 @@ type T5<A extends number, B extends A> =
     Show<A, B> :
     never;
 
+// Ensure mapped type modifiers are computed correctly, example from type-fest
+
+type IsReadonlyKeyOf<Type extends object, Key extends keyof Type> =
+>IsReadonlyKeyOf : IsReadonlyKeyOf<Type, Key>
+
+	IsAny<Type | Key> extends true ? never
+>true : true
+
+		: Key extends unknown // For distributing `Key`
+			? Type extends unknown // For distributing `Type`
+				? IsEqual<
+					{[K in Key]: Type[Key]},
+					{readonly [K in Key]: Type[Key]}
+				>
+				: never // Should never happen
+			: never; // Should never happen
+
+type IsAny<T> = 0 extends 1 & NoInfer<T> ? true : false;
+>IsAny : IsAny<T>
+>true : true
+>false : false
+
+type IsEqual<A, B> =
+>IsEqual : IsEqual<A, B>
+
+	[A] extends [B]
+		? [B] extends [A]
+			? _IsEqual<A, B>
+			: false
+>false : false
+
+		: false;
+>false : false
+
+type _IsEqual<A, B> =
+>_IsEqual : _IsEqual<A, B>
+
+	(<G>() => G extends A & G | G ? 1 : 2) extends
+	(<G>() => G extends B & G | G ? 1 : 2)
+		? true
+>true : true
+
+		: false;
+>false : false
+
+type T10 = IsReadonlyKeyOf<{ a: string }, 'a'>;  // false
+>T10 : false
+>a : string
+
+type T11 = IsReadonlyKeyOf<{ readonly b: string }, 'b'>;  // true
+>T11 : true
+>b : string
+

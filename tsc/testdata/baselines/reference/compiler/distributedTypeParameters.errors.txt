@@ -105,3 +105,34 @@ distributedTypeParameters.ts(57,15): error TS2344: Type 'C' does not satisfy the
         Show<A, B> :
         never;
     
+    // Ensure mapped type modifiers are computed correctly, example from type-fest
+    
+    type IsReadonlyKeyOf<Type extends object, Key extends keyof Type> =
+    	IsAny<Type | Key> extends true ? never
+    		: Key extends unknown // For distributing `Key`
+    			? Type extends unknown // For distributing `Type`
+    				? IsEqual<
+    					{[K in Key]: Type[Key]},
+    					{readonly [K in Key]: Type[Key]}
+    				>
+    				: never // Should never happen
+    			: never; // Should never happen
+    
+    type IsAny<T> = 0 extends 1 & NoInfer<T> ? true : false;
+    
+    type IsEqual<A, B> =
+    	[A] extends [B]
+    		? [B] extends [A]
+    			? _IsEqual<A, B>
+    			: false
+    		: false;
+    
+    type _IsEqual<A, B> =
+    	(<G>() => G extends A & G | G ? 1 : 2) extends
+    	(<G>() => G extends B & G | G ? 1 : 2)
+    		? true
+    		: false;
+    
+    type T10 = IsReadonlyKeyOf<{ a: string }, 'a'>;  // false
+    type T11 = IsReadonlyKeyOf<{ readonly b: string }, 'b'>;  // true
+    

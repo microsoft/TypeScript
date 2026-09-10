@@ -206,3 +206,100 @@ type T5<A extends number, B extends A> =
 
     never;
 
+// Ensure mapped type modifiers are computed correctly, example from type-fest
+
+type IsReadonlyKeyOf<Type extends object, Key extends keyof Type> =
+>IsReadonlyKeyOf : Symbol(IsReadonlyKeyOf, Decl(distributedTypeParameters.ts, 62, 10))
+>Type : Symbol(Type, Decl(distributedTypeParameters.ts, 66, 21))
+>Key : Symbol(Key, Decl(distributedTypeParameters.ts, 66, 41))
+>Type : Symbol(Type, Decl(distributedTypeParameters.ts, 66, 21))
+
+	IsAny<Type | Key> extends true ? never
+>IsAny : Symbol(IsAny, Decl(distributedTypeParameters.ts, 75, 11))
+>Type : Symbol(Type, Decl(distributedTypeParameters.ts, 66, 21))
+>Key : Symbol(Key, Decl(distributedTypeParameters.ts, 66, 41))
+
+		: Key extends unknown // For distributing `Key`
+>Key : Symbol(Key, Decl(distributedTypeParameters.ts, 66, 41))
+
+			? Type extends unknown // For distributing `Type`
+>Type : Symbol(Type, Decl(distributedTypeParameters.ts, 66, 21))
+
+				? IsEqual<
+>IsEqual : Symbol(IsEqual, Decl(distributedTypeParameters.ts, 77, 56))
+
+					{[K in Key]: Type[Key]},
+>K : Symbol(K, Decl(distributedTypeParameters.ts, 71, 7))
+>Key : Symbol(Key, Decl(distributedTypeParameters.ts, 66, 41))
+>Type : Symbol(Type, Decl(distributedTypeParameters.ts, 66, 21))
+>Key : Symbol(Key, Decl(distributedTypeParameters.ts, 66, 41))
+
+					{readonly [K in Key]: Type[Key]}
+>K : Symbol(K, Decl(distributedTypeParameters.ts, 72, 16))
+>Key : Symbol(Key, Decl(distributedTypeParameters.ts, 66, 41))
+>Type : Symbol(Type, Decl(distributedTypeParameters.ts, 66, 21))
+>Key : Symbol(Key, Decl(distributedTypeParameters.ts, 66, 41))
+
+				>
+				: never // Should never happen
+			: never; // Should never happen
+
+type IsAny<T> = 0 extends 1 & NoInfer<T> ? true : false;
+>IsAny : Symbol(IsAny, Decl(distributedTypeParameters.ts, 75, 11))
+>T : Symbol(T, Decl(distributedTypeParameters.ts, 77, 11))
+>NoInfer : Symbol(NoInfer, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(distributedTypeParameters.ts, 77, 11))
+
+type IsEqual<A, B> =
+>IsEqual : Symbol(IsEqual, Decl(distributedTypeParameters.ts, 77, 56))
+>A : Symbol(A, Decl(distributedTypeParameters.ts, 79, 13))
+>B : Symbol(B, Decl(distributedTypeParameters.ts, 79, 15))
+
+	[A] extends [B]
+>A : Symbol(A, Decl(distributedTypeParameters.ts, 79, 13))
+>B : Symbol(B, Decl(distributedTypeParameters.ts, 79, 15))
+
+		? [B] extends [A]
+>B : Symbol(B, Decl(distributedTypeParameters.ts, 79, 15))
+>A : Symbol(A, Decl(distributedTypeParameters.ts, 79, 13))
+
+			? _IsEqual<A, B>
+>_IsEqual : Symbol(_IsEqual, Decl(distributedTypeParameters.ts, 84, 10))
+>A : Symbol(A, Decl(distributedTypeParameters.ts, 79, 13))
+>B : Symbol(B, Decl(distributedTypeParameters.ts, 79, 15))
+
+			: false
+		: false;
+
+type _IsEqual<A, B> =
+>_IsEqual : Symbol(_IsEqual, Decl(distributedTypeParameters.ts, 84, 10))
+>A : Symbol(A, Decl(distributedTypeParameters.ts, 86, 14))
+>B : Symbol(B, Decl(distributedTypeParameters.ts, 86, 16))
+
+	(<G>() => G extends A & G | G ? 1 : 2) extends
+>G : Symbol(G, Decl(distributedTypeParameters.ts, 87, 3))
+>G : Symbol(G, Decl(distributedTypeParameters.ts, 87, 3))
+>A : Symbol(A, Decl(distributedTypeParameters.ts, 86, 14))
+>G : Symbol(G, Decl(distributedTypeParameters.ts, 87, 3))
+>G : Symbol(G, Decl(distributedTypeParameters.ts, 87, 3))
+
+	(<G>() => G extends B & G | G ? 1 : 2)
+>G : Symbol(G, Decl(distributedTypeParameters.ts, 88, 3))
+>G : Symbol(G, Decl(distributedTypeParameters.ts, 88, 3))
+>B : Symbol(B, Decl(distributedTypeParameters.ts, 86, 16))
+>G : Symbol(G, Decl(distributedTypeParameters.ts, 88, 3))
+>G : Symbol(G, Decl(distributedTypeParameters.ts, 88, 3))
+
+		? true
+		: false;
+
+type T10 = IsReadonlyKeyOf<{ a: string }, 'a'>;  // false
+>T10 : Symbol(T10, Decl(distributedTypeParameters.ts, 90, 10))
+>IsReadonlyKeyOf : Symbol(IsReadonlyKeyOf, Decl(distributedTypeParameters.ts, 62, 10))
+>a : Symbol(a, Decl(distributedTypeParameters.ts, 92, 28))
+
+type T11 = IsReadonlyKeyOf<{ readonly b: string }, 'b'>;  // true
+>T11 : Symbol(T11, Decl(distributedTypeParameters.ts, 92, 47))
+>IsReadonlyKeyOf : Symbol(IsReadonlyKeyOf, Decl(distributedTypeParameters.ts, 62, 10))
+>b : Symbol(b, Decl(distributedTypeParameters.ts, 93, 28))
+
