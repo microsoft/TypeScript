@@ -67,7 +67,8 @@ Callers operating on untrusted input should enforce resource limits externally (
 You should not assume that an adverserially-constructed program will successfully typecheck in any bounded amount of time.
 "Local Denial of Service (DoS)" is thus not a *security* report; if you encounter a performance problem, you can report this through the normal issue tracker.
 
-**Crashes**
+### Crashes
+
 `tsc` may gracefully crash, hang, or produce unexpected diagnostics when given adversarial input.
 While crashes in "normal" code are treated as bugs and fixed when reported, the compiler does *not* guarantee non-crashing in the presence of all possible malformed inputs (e.g. an unbounded series of `f(f(f(f(...`).
 
