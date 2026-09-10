@@ -11,7 +11,7 @@ description: >
 ## Overview
 
 The TypeScript compiler (`tsc`) is a **build tool**, not a sandbox.
-It transforms TypeScript source files into JavaScript output files.
+It transforms TypeScript source files into JavaScript output files and reports potential errors.
 This document describes what `tsc` guarantees and does not guarantee when invoked on untrusted input.
 
 ## Security Guarantees
@@ -25,9 +25,12 @@ This is the core security property of `tsc`.
 *Exception*: If content mappers are enabled, this *does* enable execution of third-party code.
 Only pass the `--runExternalCode` flag if you have validated which content mappers are available and that you are OK with running them.
 
-**Limited default side effects.**
-Outside of explicitly enabled external code, compiler invocations interact with the system through file-system operations and process I/O. Depending on the options, `tsc` may write compiler, build-info, trace, or profile files, update output timestamps, or delete build outputs (for example, with `--build --clean`).
-The compiler does not make HTTP requests or spawn child processes except through content mappers.
+**Limited default side effects.**
+
+Outside of explicitly enabled external code, compiler invocations interact with the system through file-system operations and process I/O. Depending on the options, `tsc` may write compiler, build-info, trace, or profile files, update output timestamps, or delete build outputs (for example, with `--build --clean`).
+
+The compiler does not make HTTP requests or spawn child processes except through content mappers.
+
 
 **Safe exit.**
 Certain adversarial inputs may cause crashes, but these crashes will unwind the process normally, and will not be a source of buffer overrun or other memory safety exploit vectors.
