@@ -16,7 +16,8 @@ This document describes what `tsc` guarantees and does not guarantee when invoke
 
 ## Security Guarantees
 
-**No arbitrary code execution.**
+### No arbitrary code execution
+
 Running `tsc` on a malicious `.ts` or `tsconfig.json` file will never cause the input code to be executed.
 The compiler parses, type-checks, and emits; it does not evaluate the programs it compiles.
 There is no `eval`-at-compile-time, no macro system, and no plugin mechanism that runs author-supplied code during compilation.
