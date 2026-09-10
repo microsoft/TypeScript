@@ -1,0 +1,61 @@
+//// [tests/cases/compiler/dependentReturnType10.ts] ////
+
+=== dependentReturnType10.ts ===
+interface Animal {
+>Animal : Symbol(Animal, Decl(dependentReturnType10.ts, 0, 0))
+
+    name: string;
+>name : Symbol(Animal.name, Decl(dependentReturnType10.ts, 0, 18))
+
+    species: string;
+>species : Symbol(Animal.species, Decl(dependentReturnType10.ts, 1, 17))
+}
+
+interface Dog extends Animal {
+>Dog : Symbol(Dog, Decl(dependentReturnType10.ts, 3, 1))
+>Animal : Symbol(Animal, Decl(dependentReturnType10.ts, 0, 0))
+
+    breed: string;
+>breed : Symbol(Dog.breed, Decl(dependentReturnType10.ts, 5, 30))
+}
+
+type GreetRet<T> =
+>GreetRet : Symbol(GreetRet, Decl(dependentReturnType10.ts, 7, 1))
+>T : Symbol(T, Decl(dependentReturnType10.ts, 9, 14))
+
+    T extends string ? string :
+>T : Symbol(T, Decl(dependentReturnType10.ts, 9, 14))
+
+    T extends { name: string } ? { greeting: string, breed: string } :
+>T : Symbol(T, Decl(dependentReturnType10.ts, 9, 14))
+>name : Symbol(name, Decl(dependentReturnType10.ts, 11, 15))
+>greeting : Symbol(greeting, Decl(dependentReturnType10.ts, 11, 34))
+>breed : Symbol(breed, Decl(dependentReturnType10.ts, 11, 52))
+
+    never;
+
+function greet<T extends string | Dog>(animal: T): GreetRet<T> {
+>greet : Symbol(greet, Decl(dependentReturnType10.ts, 12, 10))
+>T : Symbol(T, Decl(dependentReturnType10.ts, 14, 15))
+>Dog : Symbol(Dog, Decl(dependentReturnType10.ts, 3, 1))
+>animal : Symbol(animal, Decl(dependentReturnType10.ts, 14, 39))
+>T : Symbol(T, Decl(dependentReturnType10.ts, 14, 15))
+>GreetRet : Symbol(GreetRet, Decl(dependentReturnType10.ts, 7, 1))
+>T : Symbol(T, Decl(dependentReturnType10.ts, 14, 15))
+
+    if (typeof animal === "string") {
+>animal : Symbol(animal, Decl(dependentReturnType10.ts, 14, 39))
+
+        return `hello, ${animal}`
+>animal : Symbol(animal, Decl(dependentReturnType10.ts, 14, 39))
+    }
+    return { greeting: `woof, ${animal.name}`, breed: animal.breed }
+>greeting : Symbol(greeting, Decl(dependentReturnType10.ts, 18, 12))
+>animal.name : Symbol(Animal.name, Decl(dependentReturnType10.ts, 0, 18))
+>animal : Symbol(animal, Decl(dependentReturnType10.ts, 14, 39))
+>name : Symbol(Animal.name, Decl(dependentReturnType10.ts, 0, 18))
+>breed : Symbol(breed, Decl(dependentReturnType10.ts, 18, 46))
+>animal.breed : Symbol(Dog.breed, Decl(dependentReturnType10.ts, 5, 30))
+>animal : Symbol(animal, Decl(dependentReturnType10.ts, 14, 39))
+>breed : Symbol(Dog.breed, Decl(dependentReturnType10.ts, 5, 30))
+}
