@@ -217,3 +217,28 @@ function testFalsyBranch() {
     }
 }
 
+function testAssignmentWithSatisfies() {
+>testAssignmentWithSatisfies : () => void
+
+    let option: Option | undefined;
+>option : Option | undefined
+
+    if ((option = someOptionalOption() satisfies Option | undefined)?.type === "Some") {
+>(option = someOptionalOption() satisfies Option | undefined)?.type === "Some" : boolean
+>(option = someOptionalOption() satisfies Option | undefined)?.type : "None" | "Some" | undefined
+>(option = someOptionalOption() satisfies Option | undefined) : Option | undefined
+>option = someOptionalOption() satisfies Option | undefined : Option | undefined
+>option : Option | undefined
+>someOptionalOption() satisfies Option | undefined : Option | undefined
+>someOptionalOption() : Option | undefined
+>someOptionalOption : () => Option | undefined
+>type : "None" | "Some" | undefined
+>"Some" : "Some"
+
+        option.value;
+>option.value : number
+>option : { type: "Some"; value: number; }
+>value : number
+    }
+}
+

@@ -73,3 +73,11 @@ function testFalsyBranch() {
         option.type;
     }
 }
+
+function testAssignmentWithSatisfies() {
+    let option: Option | undefined;
+
+    if ((option = someOptionalOption() satisfies Option | undefined)?.type === "Some") {
+        option.value;
+    }
+}

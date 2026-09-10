@@ -83,3 +83,11 @@ controlFlowOptionalChain4.ts(70,9): error TS18048: 'option' is possibly 'undefin
         }
     }
     
+    function testAssignmentWithSatisfies() {
+        let option: Option | undefined;
+    
+        if ((option = someOptionalOption() satisfies Option | undefined)?.type === "Some") {
+            option.value;
+        }
+    }
+    

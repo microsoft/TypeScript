@@ -196,3 +196,24 @@ function testFalsyBranch() {
     }
 }
 
+function testAssignmentWithSatisfies() {
+>testAssignmentWithSatisfies : Symbol(testAssignmentWithSatisfies, Decl(controlFlowOptionalChain4.ts, 71, 1))
+
+    let option: Option | undefined;
+>option : Symbol(option, Decl(controlFlowOptionalChain4.ts, 74, 7))
+>Option : Symbol(Option, Decl(lib.dom.d.ts, --, --), Decl(controlFlowOptionalChain4.ts, 31, 1))
+
+    if ((option = someOptionalOption() satisfies Option | undefined)?.type === "Some") {
+>(option = someOptionalOption() satisfies Option | undefined)?.type : Symbol(type, Decl(controlFlowOptionalChain4.ts, 35, 15), Decl(controlFlowOptionalChain4.ts, 35, 50))
+>option : Symbol(option, Decl(controlFlowOptionalChain4.ts, 74, 7))
+>someOptionalOption : Symbol(someOptionalOption, Decl(controlFlowOptionalChain4.ts, 35, 67))
+>Option : Symbol(Option, Decl(lib.dom.d.ts, --, --), Decl(controlFlowOptionalChain4.ts, 31, 1))
+>type : Symbol(type, Decl(controlFlowOptionalChain4.ts, 35, 15), Decl(controlFlowOptionalChain4.ts, 35, 50))
+
+        option.value;
+>option.value : Symbol(value, Decl(controlFlowOptionalChain4.ts, 35, 29))
+>option : Symbol(option, Decl(controlFlowOptionalChain4.ts, 74, 7))
+>value : Symbol(value, Decl(controlFlowOptionalChain4.ts, 35, 29))
+    }
+}
+
