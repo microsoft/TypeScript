@@ -344,6 +344,8 @@ func parseCompilerOptions(key string, value any, allOptions *core.CompilerOption
 		allOptions.EmitBOM = ParseTristate(value)
 	case "esModuleInterop":
 		allOptions.ESModuleInterop = ParseTristate(value)
+	case "enforceReadonly":
+		allOptions.EnforceReadonly = ParseTristate(value)
 	case "exactOptionalPropertyTypes":
 		allOptions.ExactOptionalPropertyTypes = ParseTristate(value)
 	case "explainFiles":

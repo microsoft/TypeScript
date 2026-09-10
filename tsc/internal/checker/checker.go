@@ -615,6 +615,7 @@ type Checker struct {
 	noImplicitAny                               bool
 	noImplicitThis                              bool
 	useUnknownInCatchVariables                  bool
+	enforceReadonly                             bool
 	exactOptionalPropertyTypes                  bool
 	canCollectSymbolAliasAccessibilityData      bool
 	wasCanceled                                 bool
@@ -932,6 +933,7 @@ func NewChecker(program Program, tracer *Tracer) (*Checker, *sync.Mutex) {
 	c.noImplicitAny = c.compilerOptions.GetStrictOptionValue(c.compilerOptions.NoImplicitAny)
 	c.noImplicitThis = c.compilerOptions.GetStrictOptionValue(c.compilerOptions.NoImplicitThis)
 	c.useUnknownInCatchVariables = c.compilerOptions.GetStrictOptionValue(c.compilerOptions.UseUnknownInCatchVariables)
+	c.enforceReadonly = c.compilerOptions.EnforceReadonly == core.TSTrue
 	c.exactOptionalPropertyTypes = c.compilerOptions.ExactOptionalPropertyTypes == core.TSTrue
 	c.canCollectSymbolAliasAccessibilityData = c.compilerOptions.VerbatimModuleSyntax.IsFalseOrUnknown()
 	c.arrayVariances = []VarianceFlags{VarianceFlagsCovariant}
@@ -13361,10 +13363,6 @@ func (c *Checker) checkObjectLiteral(node *ast.Node, checkMode CheckMode) *Type 
 		}
 	}
 	inConstContext := c.isConstContext(node)
-	var checkFlags ast.CheckFlags
-	if inConstContext {
-		checkFlags = ast.CheckFlagsReadonly
-	}
 	objectFlags := ObjectFlagsFreshLiteral
 	patternWithComputedProperties := false
 	hasComputedStringProperty := false
@@ -13424,6 +13422,10 @@ func (c *Checker) checkObjectLiteral(node *ast.Node, checkMode CheckMode) *Type 
 			var nameType *Type
 			if computedNameType != nil && isTypeUsableAsPropertyName(computedNameType) {
 				nameType = computedNameType
+			}
+			checkFlags := ast.CheckFlags(0)
+			if inConstContext && !(c.enforceReadonly && contextualType != nil && c.isContextualPropertyMutable(contextualType, member.Name, nameType)) {
+				checkFlags = ast.CheckFlagsReadonly
 			}
 			var prop *ast.Symbol
 			if nameType != nil {
@@ -29371,38 +29373,37 @@ func getMappedTypeModifiers(t *Type) MappedTypeModifiers {
 	return modifiers
 }
 
-// Return -1, 0, or 1, where -1 means optionality is stripped (i.e. -?), 0 means optionality is unchanged, and 1 means
-// optionality is added (i.e. +?).
-func getMappedTypeOptionality(t *Type) int {
-	modifiers := getMappedTypeModifiers(t)
-	switch {
-	case modifiers&MappedTypeModifiersExcludeOptional != 0:
-		return -1
-	case modifiers&MappedTypeModifiersIncludeOptional != 0:
-		return 1
+// Return the effective modifiers of a mapped type. When a homomorphic mapped type doesn't include modifiers, instead
+// recursively obtain the effective modifiers of the type being mapped over. For intersections, return 0 if the effective
+// modifiers differ between constituent types.
+func (c *Checker) getEffectiveMappedTypeModifiers(t *Type, mask MappedTypeModifiers) MappedTypeModifiers {
+	if t.objectFlags&ObjectFlagsMapped != 0 {
+		modifiers := getMappedTypeModifiers(t) & mask
+		if modifiers != 0 {
+			return modifiers
+		}
+		return c.getEffectiveMappedTypeModifiers(c.getModifiersTypeFromMappedType(t), mask)
+	}
+	if t.flags&TypeFlagsIntersection != 0 {
+		modifiers := c.getEffectiveMappedTypeModifiers(t.Types()[0], mask)
+		for _, t := range t.Types()[1:] {
+			if c.getEffectiveMappedTypeModifiers(t, mask) != modifiers {
+				return 0
+			}
+		}
+		return modifiers
 	}
 	return 0
 }
 
-// Return -1, 0, or 1, for stripped, unchanged, or added optionality respectively. When a homomorphic mapped type doesn't
-// modify optionality, recursively consult the optionality of the type being mapped over to see if it strips or adds optionality.
-// For intersections, return -1 or 1 when all constituents strip or add optionality, otherwise return 0.
-func (c *Checker) getCombinedMappedTypeOptionality(t *Type) int {
-	if t.objectFlags&ObjectFlagsMapped != 0 {
-		optionality := getMappedTypeOptionality(t)
-		if optionality != 0 {
-			return optionality
-		}
-		return c.getCombinedMappedTypeOptionality(c.getModifiersTypeFromMappedType(t))
+// Return -1, 0, or 1, where -1 means modifier is stripped, 0 means modifier is unchanged, and 1 means modifier is added.
+func (c *Checker) getMappedTypeModifiersRank(t *Type, mask MappedTypeModifiers) int {
+	modifiers := c.getEffectiveMappedTypeModifiers(t, mask)
+	if modifiers&(MappedTypeModifiersExcludeReadonly|MappedTypeModifiersExcludeOptional) != 0 {
+		return -1
 	}
-	if t.flags&TypeFlagsIntersection != 0 {
-		optionality := c.getCombinedMappedTypeOptionality(t.Types()[0])
-		for _, t := range t.Types()[1:] {
-			if c.getCombinedMappedTypeOptionality(t) != optionality {
-				return 0
-			}
-		}
-		return optionality
+	if modifiers&(MappedTypeModifiersIncludeReadonly|MappedTypeModifiersIncludeOptional) != 0 {
+		return 1
 	}
 	return 0
 }
@@ -29642,10 +29643,10 @@ func (c *Checker) substituteIndexedMappedType(objectType *Type, index *Type) *Ty
 	mapper := newSimpleTypeMapper(c.getTypeParameterFromMappedType(objectType), index)
 	templateMapper := c.combineTypeMappers(objectType.AsMappedType().mapper, mapper)
 	instantiatedTemplateType := c.instantiateType(c.getTemplateTypeFromMappedType(core.OrElse(objectType.AsMappedType().target, objectType)), templateMapper)
-	isOptional := getMappedTypeOptionality(objectType) > 0
+	isOptional := getMappedTypeModifiers(objectType)&MappedTypeModifiersIncludeOptional != 0
 	if !isOptional {
 		if c.isGenericType(objectType) {
-			isOptional = c.getCombinedMappedTypeOptionality(c.getModifiersTypeFromMappedType(objectType)) > 0
+			isOptional = c.getEffectiveMappedTypeModifiers(c.getModifiersTypeFromMappedType(objectType), MappedTypeModifiersIncludeOptional|MappedTypeModifiersExcludeOptional)&MappedTypeModifiersIncludeOptional != 0
 		} else {
 			isOptional = c.couldAccessOptionalProperty(objectType, index)
 		}
@@ -30952,6 +30953,28 @@ func (c *Checker) getTypeOfPropertyOfContextualTypeEx(t *Type, name string, name
 		}
 		return c.getTypeFromIndexInfosOfContextualType(t, name, nameType)
 	}, true /*noReductions*/)
+}
+
+func (c *Checker) isContextualPropertyMutable(t *Type, name string, nameType *Type) bool {
+	return someType(t, func(t *Type) bool {
+		propertyName := name
+		if nameType != nil {
+			if !isTypeUsableAsPropertyName(nameType) {
+				return false
+			}
+			propertyName = getPropertyNameFromType(nameType)
+		}
+		if prop := c.getPropertyOfType(t, propertyName); prop != nil {
+			return !c.isReadonlySymbol(prop)
+		}
+		if nameType == nil {
+			nameType = c.getStringLiteralType(name)
+		}
+		if indexInfo := c.findApplicableIndexInfo(c.getIndexInfosOfStructuredType(t), nameType); indexInfo != nil {
+			return !indexInfo.isReadonly
+		}
+		return false
+	})
 }
 
 func (c *Checker) getIndexedMappedTypeSubstitutedTypeOfContextualType(t *Type, name string, nameType *Type) *Type {

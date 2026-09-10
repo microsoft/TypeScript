@@ -3455,7 +3455,8 @@ func (r *Relater) structuredTypeRelatedToWorker(source *Type, target *Type, repo
 	case target.flags&TypeFlagsTypeParameter != 0:
 		// A source type { [P in Q]: X } is related to a target type T if keyof T is related to Q and X is related to T[Q].
 		if source.objectFlags&ObjectFlagsMapped != 0 && source.AsMappedType().declaration.NameType == nil && r.isRelatedTo(r.c.getIndexType(target), r.c.getConstraintTypeFromMappedType(source), RecursionFlagsBoth, false) != TernaryFalse {
-			if getMappedTypeModifiers(source)&MappedTypeModifiersIncludeOptional == 0 {
+			if getMappedTypeModifiers(source)&MappedTypeModifiersIncludeOptional == 0 &&
+				!(r.c.enforceReadonly && r.relation != r.c.comparableRelation && getMappedTypeModifiers(source)&MappedTypeModifiersIncludeReadonly != 0) {
 				templateType := r.c.getTemplateTypeFromMappedType(source)
 				indexedAccessType := r.c.getIndexedAccessType(target, r.c.getTypeParameterFromMappedType(source))
 				result = r.isRelatedTo(templateType, indexedAccessType, RecursionFlagsBoth, reportErrors)
@@ -3627,7 +3628,8 @@ func (r *Relater) structuredTypeRelatedToWorker(source *Type, target *Type, repo
 		keysRemapped := target.AsMappedType().declaration.NameType != nil
 		templateType := r.c.getTemplateTypeFromMappedType(target)
 		modifiers := getMappedTypeModifiers(target)
-		if modifiers&MappedTypeModifiersExcludeOptional == 0 {
+		if modifiers&MappedTypeModifiersExcludeOptional == 0 &&
+			!(r.c.enforceReadonly && r.relation != r.c.comparableRelation && modifiers&MappedTypeModifiersExcludeReadonly != 0) {
 			// If the mapped type has shape `{ [P in Q]: T[P] }`,
 			// source `S` is related to target if `T` = `S`, i.e. `S` is related to `{ [P in Q]: S[P] }`.
 			if !keysRemapped && templateType.flags&TypeFlagsIndexedAccess != 0 && templateType.AsIndexedAccessType().objectType == source && templateType.AsIndexedAccessType().indexType == r.c.getTypeParameterFromMappedType(target) {
@@ -4004,10 +4006,12 @@ func (r *Relater) typeArgumentsRelatedTo(sources []*Type, targets []*Type, varia
 func (r *Relater) mappedTypeRelatedTo(source *Type, target *Type, reportErrors bool) Ternary {
 	modifiersRelated := r.relation == r.c.comparableRelation ||
 		r.relation == r.c.identityRelation && getMappedTypeModifiers(source) == getMappedTypeModifiers(target) ||
-		r.relation != r.c.identityRelation && r.c.getCombinedMappedTypeOptionality(source) <= r.c.getCombinedMappedTypeOptionality(target)
+		r.relation != r.c.identityRelation &&
+			r.c.getMappedTypeModifiersRank(source, MappedTypeModifiersIncludeOptional|MappedTypeModifiersExcludeOptional) <= r.c.getMappedTypeModifiersRank(target, MappedTypeModifiersIncludeOptional|MappedTypeModifiersExcludeOptional) &&
+			(!r.c.enforceReadonly || r.c.getMappedTypeModifiersRank(source, MappedTypeModifiersIncludeReadonly|MappedTypeModifiersExcludeReadonly) <= r.c.getMappedTypeModifiersRank(target, MappedTypeModifiersIncludeReadonly|MappedTypeModifiersExcludeReadonly))
 	if modifiersRelated {
 		targetConstraint := r.c.getConstraintTypeFromMappedType(target)
-		sourceConstraint := r.c.instantiateType(r.c.getConstraintTypeFromMappedType(source), core.IfElse(r.c.getCombinedMappedTypeOptionality(source) < 0, r.c.reportUnmeasurableMapper, r.c.reportUnreliableMapper))
+		sourceConstraint := r.c.instantiateType(r.c.getConstraintTypeFromMappedType(source), core.IfElse(r.c.getEffectiveMappedTypeModifiers(source, MappedTypeModifiersIncludeOptional|MappedTypeModifiersExcludeOptional)&MappedTypeModifiersExcludeOptional != 0, r.c.reportUnmeasurableMapper, r.c.reportUnreliableMapper))
 		if result := r.isRelatedTo(targetConstraint, sourceConstraint, RecursionFlagsBoth, reportErrors); result != TernaryFalse {
 			mapper := newSimpleTypeMapper(r.c.getTypeParameterFromMappedType(source), r.c.getTypeParameterFromMappedType(target))
 			if r.c.instantiateType(r.c.getNameTypeFromMappedType(source), mapper) == r.c.instantiateType(r.c.getNameTypeFromMappedType(target), mapper) {
@@ -4335,7 +4339,11 @@ func (r *Relater) propertyRelatedTo(source *Type, target *Type, sourceProp *ast.
 	// from deciding which type "wins" in union subtype reduction.
 	// They're still assignable to one another, since `readonly` doesn't affect assignability.
 	// This is only applied during the strictSubtypeRelation -- currently used in subtype reduction
-	if r.relation == r.c.strictSubtypeRelation && r.c.isReadonlySymbol(sourceProp) && !r.c.isReadonlySymbol(targetProp) {
+	if (r.relation == r.c.strictSubtypeRelation || r.c.enforceReadonly && r.relation != r.c.comparableRelation) &&
+		r.c.isReadonlySymbol(sourceProp) && !r.c.isReadonlySymbol(targetProp) && targetProp.Flags&ast.SymbolFlagsMethod == 0 {
+		if reportErrors {
+			r.reportError(diagnostics.Property_0_is_readonly_in_the_source_but_not_in_the_target, r.c.symbolToString(targetProp))
+		}
 		return TernaryFalse
 	}
 	// If the target comes from a partial union prop, allow `undefined` in the target type
@@ -4709,12 +4717,21 @@ func (r *Relater) membersRelatedToIndexInfo(source *Type, targetInfo *IndexInfo,
 
 func (r *Relater) indexInfoRelatedTo(sourceInfo *IndexInfo, targetInfo *IndexInfo, reportErrors bool, intersectionState IntersectionState) Ternary {
 	related := r.isRelatedToEx(sourceInfo.valueType, targetInfo.valueType, RecursionFlagsBoth, reportErrors, nil /*headMessage*/, intersectionState)
-	if related == TernaryFalse && reportErrors {
-		if sourceInfo.keyType == targetInfo.keyType {
-			r.reportError(diagnostics.X_0_index_signatures_are_incompatible, r.c.TypeToString(sourceInfo.keyType))
-		} else {
-			r.reportError(diagnostics.X_0_and_1_index_signatures_are_incompatible, r.c.TypeToString(sourceInfo.keyType), r.c.TypeToString(targetInfo.keyType))
+	if related == TernaryFalse {
+		if reportErrors {
+			if sourceInfo.keyType == targetInfo.keyType {
+				r.reportError(diagnostics.X_0_index_signatures_are_incompatible, r.c.TypeToString(sourceInfo.keyType))
+			} else {
+				r.reportError(diagnostics.X_0_and_1_index_signatures_are_incompatible, r.c.TypeToString(sourceInfo.keyType), r.c.TypeToString(targetInfo.keyType))
+			}
 		}
+		return TernaryFalse
+	}
+	if r.c.enforceReadonly && r.relation != r.c.comparableRelation && sourceInfo.isReadonly && !targetInfo.isReadonly {
+		if reportErrors {
+			r.reportError(diagnostics.X_0_index_signature_is_readonly_in_the_source_but_not_in_the_target, r.c.TypeToString(sourceInfo.keyType))
+		}
+		return TernaryFalse
 	}
 	return related
 }

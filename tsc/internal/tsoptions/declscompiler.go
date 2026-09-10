@@ -669,6 +669,15 @@ var optionsForCompiler = []*CommandLineOption{
 		DefaultValueDescription:    false,
 	},
 	{
+		Name:                       "enforceReadonly",
+		Kind:                       CommandLineOptionTypeBoolean,
+		AffectsSemanticDiagnostics: true,
+		AffectsBuildInfo:           true,
+		Category:                   diagnostics.Type_Checking,
+		Description:                diagnostics.Ensure_that_readonly_properties_remain_read_only_in_type_relationships,
+		DefaultValueDescription:    false,
+	},
+	{
 		Name:                       "exactOptionalPropertyTypes",
 		Kind:                       CommandLineOptionTypeBoolean,
 		AffectsSemanticDiagnostics: true,
