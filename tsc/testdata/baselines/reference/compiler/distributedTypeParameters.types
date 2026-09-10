@@ -1,0 +1,93 @@
+//// [tests/cases/compiler/distributedTypeParameters.ts] ////
+
+=== distributedTypeParameters.ts ===
+// https://github.com/microsoft/TypeScript/issues/63708
+
+type Show<A, B extends A> = [A, B] & {};
+>Show : [A, B]
+
+type Issue1<A, B extends A> =
+>Issue1 : Issue1<A, B>
+
+  A extends unknown ?
+    B extends unknown ?
+        Show<A, B> :  // Error
+        never :
+    never;
+
+type Issue2<A, B extends A> =
+>Issue2 : Issue2<A, B>
+
+  B extends unknown ?
+    A extends unknown ?
+        Show<A, B> :  // Error
+        never :
+    never;
+
+type Issue3<A, B> =
+>Issue3 : Issue3<A, B>
+
+  A extends B ?
+    B extends A ?
+        Show<A, B> :
+        never :
+    never;
+
+type Issue4<A, B> =
+>Issue4 : Issue4<A, B>
+
+  B extends A ?
+    A extends B ?
+        Show<A, B> :  // Error
+        never :
+    never;
+
+type X1 = Issue1<0 | 1, 0 | 1>;
+>X1 : X1
+
+type X2 = Issue2<0 | 1, 0 | 1>;
+>X2 : X2
+
+type X3 = Issue3<0 | 1, 0 | 1>;
+>X3 : X3
+
+type X4 = Issue4<0 | 1, 0 | 1>;
+>X4 : X4
+
+type T1<A extends number, B extends A> =
+>T1 : T1<A, B>
+
+  A extends B ?
+    never :
+    Show<A, B>;  // Error
+
+type T2<A extends number, B extends A> =
+>T2 : T2<A, B>
+
+  A extends B ?
+    Show<A, B> :  // Error
+    never;
+
+type T3<A, B extends A, C extends B> =
+>T3 : T3<A, B, C>
+
+  A extends unknown ?
+    Show<A, C> :  // Error
+    Show<B, C>;
+
+type T4<A, B extends A, C extends B> =
+>T4 : T4<A, B, C>
+
+  A extends unknown ?
+    B extends unknown ?
+      Show<A, C> :  // Error
+      Show<B, C> :  // Error
+    never;
+
+type T5<A extends number, B extends A> =
+>T5 : T5<A, B>
+
+  [A] extends [B] ?
+    Show<A, B> :
+    never;
+

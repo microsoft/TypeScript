@@ -1,0 +1,208 @@
+//// [tests/cases/compiler/distributedTypeParameters.ts] ////
+
+=== distributedTypeParameters.ts ===
+// https://github.com/microsoft/TypeScript/issues/63708
+
+type Show<A, B extends A> = [A, B] & {};
+>Show : Symbol(Show, Decl(distributedTypeParameters.ts, 0, 0))
+>A : Symbol(A, Decl(distributedTypeParameters.ts, 2, 10))
+>B : Symbol(B, Decl(distributedTypeParameters.ts, 2, 12))
+>A : Symbol(A, Decl(distributedTypeParameters.ts, 2, 10))
+>A : Symbol(A, Decl(distributedTypeParameters.ts, 2, 10))
+>B : Symbol(B, Decl(distributedTypeParameters.ts, 2, 12))
+
+type Issue1<A, B extends A> =
+>Issue1 : Symbol(Issue1, Decl(distributedTypeParameters.ts, 2, 40))
+>A : Symbol(A, Decl(distributedTypeParameters.ts, 4, 12))
+>B : Symbol(B, Decl(distributedTypeParameters.ts, 4, 14))
+>A : Symbol(A, Decl(distributedTypeParameters.ts, 4, 12))
+
+  A extends unknown ?
+>A : Symbol(A, Decl(distributedTypeParameters.ts, 4, 12))
+
+    B extends unknown ?
+>B : Symbol(B, Decl(distributedTypeParameters.ts, 4, 14))
+
+        Show<A, B> :  // Error
+>Show : Symbol(Show, Decl(distributedTypeParameters.ts, 0, 0))
+>A : Symbol(A, Decl(distributedTypeParameters.ts, 4, 12))
+>B : Symbol(B, Decl(distributedTypeParameters.ts, 4, 14))
+
+        never :
+    never;
+
+type Issue2<A, B extends A> =
+>Issue2 : Symbol(Issue2, Decl(distributedTypeParameters.ts, 9, 10))
+>A : Symbol(A, Decl(distributedTypeParameters.ts, 11, 12))
+>B : Symbol(B, Decl(distributedTypeParameters.ts, 11, 14))
+>A : Symbol(A, Decl(distributedTypeParameters.ts, 11, 12))
+
+  B extends unknown ?
+>B : Symbol(B, Decl(distributedTypeParameters.ts, 11, 14))
+
+    A extends unknown ?
+>A : Symbol(A, Decl(distributedTypeParameters.ts, 11, 12))
+
+        Show<A, B> :  // Error
+>Show : Symbol(Show, Decl(distributedTypeParameters.ts, 0, 0))
+>A : Symbol(A, Decl(distributedTypeParameters.ts, 11, 12))
+>B : Symbol(B, Decl(distributedTypeParameters.ts, 11, 14))
+
+        never :
+    never;
+
+type Issue3<A, B> =
+>Issue3 : Symbol(Issue3, Decl(distributedTypeParameters.ts, 16, 10))
+>A : Symbol(A, Decl(distributedTypeParameters.ts, 18, 12))
+>B : Symbol(B, Decl(distributedTypeParameters.ts, 18, 14))
+
+  A extends B ?
+>A : Symbol(A, Decl(distributedTypeParameters.ts, 18, 12))
+>B : Symbol(B, Decl(distributedTypeParameters.ts, 18, 14))
+
+    B extends A ?
+>B : Symbol(B, Decl(distributedTypeParameters.ts, 18, 14))
+>A : Symbol(A, Decl(distributedTypeParameters.ts, 18, 12))
+
+        Show<A, B> :
+>Show : Symbol(Show, Decl(distributedTypeParameters.ts, 0, 0))
+>A : Symbol(A, Decl(distributedTypeParameters.ts, 18, 12))
+>B : Symbol(B, Decl(distributedTypeParameters.ts, 18, 14))
+
+        never :
+    never;
+
+type Issue4<A, B> =
+>Issue4 : Symbol(Issue4, Decl(distributedTypeParameters.ts, 23, 10))
+>A : Symbol(A, Decl(distributedTypeParameters.ts, 25, 12))
+>B : Symbol(B, Decl(distributedTypeParameters.ts, 25, 14))
+
+  B extends A ?
+>B : Symbol(B, Decl(distributedTypeParameters.ts, 25, 14))
+>A : Symbol(A, Decl(distributedTypeParameters.ts, 25, 12))
+
+    A extends B ?
+>A : Symbol(A, Decl(distributedTypeParameters.ts, 25, 12))
+>B : Symbol(B, Decl(distributedTypeParameters.ts, 25, 14))
+
+        Show<A, B> :  // Error
+>Show : Symbol(Show, Decl(distributedTypeParameters.ts, 0, 0))
+>A : Symbol(A, Decl(distributedTypeParameters.ts, 25, 12))
+>B : Symbol(B, Decl(distributedTypeParameters.ts, 25, 14))
+
+        never :
+    never;
+
+type X1 = Issue1<0 | 1, 0 | 1>;
+>X1 : Symbol(X1, Decl(distributedTypeParameters.ts, 30, 10))
+>Issue1 : Symbol(Issue1, Decl(distributedTypeParameters.ts, 2, 40))
+
+type X2 = Issue2<0 | 1, 0 | 1>;
+>X2 : Symbol(X2, Decl(distributedTypeParameters.ts, 32, 31))
+>Issue2 : Symbol(Issue2, Decl(distributedTypeParameters.ts, 9, 10))
+
+type X3 = Issue3<0 | 1, 0 | 1>;
+>X3 : Symbol(X3, Decl(distributedTypeParameters.ts, 33, 31))
+>Issue3 : Symbol(Issue3, Decl(distributedTypeParameters.ts, 16, 10))
+
+type X4 = Issue4<0 | 1, 0 | 1>;
+>X4 : Symbol(X4, Decl(distributedTypeParameters.ts, 34, 31))
+>Issue4 : Symbol(Issue4, Decl(distributedTypeParameters.ts, 23, 10))
+
+type T1<A extends number, B extends A> =
+>T1 : Symbol(T1, Decl(distributedTypeParameters.ts, 35, 31))
+>A : Symbol(A, Decl(distributedTypeParameters.ts, 37, 8))
+>B : Symbol(B, Decl(distributedTypeParameters.ts, 37, 25))
+>A : Symbol(A, Decl(distributedTypeParameters.ts, 37, 8))
+
+  A extends B ?
+>A : Symbol(A, Decl(distributedTypeParameters.ts, 37, 8))
+>B : Symbol(B, Decl(distributedTypeParameters.ts, 37, 25))
+
+    never :
+    Show<A, B>;  // Error
+>Show : Symbol(Show, Decl(distributedTypeParameters.ts, 0, 0))
+>A : Symbol(A, Decl(distributedTypeParameters.ts, 37, 8))
+>B : Symbol(B, Decl(distributedTypeParameters.ts, 37, 25))
+
+type T2<A extends number, B extends A> =
+>T2 : Symbol(T2, Decl(distributedTypeParameters.ts, 40, 15))
+>A : Symbol(A, Decl(distributedTypeParameters.ts, 42, 8))
+>B : Symbol(B, Decl(distributedTypeParameters.ts, 42, 25))
+>A : Symbol(A, Decl(distributedTypeParameters.ts, 42, 8))
+
+  A extends B ?
+>A : Symbol(A, Decl(distributedTypeParameters.ts, 42, 8))
+>B : Symbol(B, Decl(distributedTypeParameters.ts, 42, 25))
+
+    Show<A, B> :  // Error
+>Show : Symbol(Show, Decl(distributedTypeParameters.ts, 0, 0))
+>A : Symbol(A, Decl(distributedTypeParameters.ts, 42, 8))
+>B : Symbol(B, Decl(distributedTypeParameters.ts, 42, 25))
+
+    never;
+
+type T3<A, B extends A, C extends B> =
+>T3 : Symbol(T3, Decl(distributedTypeParameters.ts, 45, 10))
+>A : Symbol(A, Decl(distributedTypeParameters.ts, 47, 8))
+>B : Symbol(B, Decl(distributedTypeParameters.ts, 47, 10))
+>A : Symbol(A, Decl(distributedTypeParameters.ts, 47, 8))
+>C : Symbol(C, Decl(distributedTypeParameters.ts, 47, 23))
+>B : Symbol(B, Decl(distributedTypeParameters.ts, 47, 10))
+
+  A extends unknown ?
+>A : Symbol(A, Decl(distributedTypeParameters.ts, 47, 8))
+
+    Show<A, C> :  // Error
+>Show : Symbol(Show, Decl(distributedTypeParameters.ts, 0, 0))
+>A : Symbol(A, Decl(distributedTypeParameters.ts, 47, 8))
+>C : Symbol(C, Decl(distributedTypeParameters.ts, 47, 23))
+
+    Show<B, C>;
+>Show : Symbol(Show, Decl(distributedTypeParameters.ts, 0, 0))
+>B : Symbol(B, Decl(distributedTypeParameters.ts, 47, 10))
+>C : Symbol(C, Decl(distributedTypeParameters.ts, 47, 23))
+
+type T4<A, B extends A, C extends B> =
+>T4 : Symbol(T4, Decl(distributedTypeParameters.ts, 50, 15))
+>A : Symbol(A, Decl(distributedTypeParameters.ts, 52, 8))
+>B : Symbol(B, Decl(distributedTypeParameters.ts, 52, 10))
+>A : Symbol(A, Decl(distributedTypeParameters.ts, 52, 8))
+>C : Symbol(C, Decl(distributedTypeParameters.ts, 52, 23))
+>B : Symbol(B, Decl(distributedTypeParameters.ts, 52, 10))
+
+  A extends unknown ?
+>A : Symbol(A, Decl(distributedTypeParameters.ts, 52, 8))
+
+    B extends unknown ?
+>B : Symbol(B, Decl(distributedTypeParameters.ts, 52, 10))
+
+      Show<A, C> :  // Error
+>Show : Symbol(Show, Decl(distributedTypeParameters.ts, 0, 0))
+>A : Symbol(A, Decl(distributedTypeParameters.ts, 52, 8))
+>C : Symbol(C, Decl(distributedTypeParameters.ts, 52, 23))
+
+      Show<B, C> :  // Error
+>Show : Symbol(Show, Decl(distributedTypeParameters.ts, 0, 0))
+>B : Symbol(B, Decl(distributedTypeParameters.ts, 52, 10))
+>C : Symbol(C, Decl(distributedTypeParameters.ts, 52, 23))
+
+    never;
+
+type T5<A extends number, B extends A> =
+>T5 : Symbol(T5, Decl(distributedTypeParameters.ts, 57, 10))
+>A : Symbol(A, Decl(distributedTypeParameters.ts, 59, 8))
+>B : Symbol(B, Decl(distributedTypeParameters.ts, 59, 25))
+>A : Symbol(A, Decl(distributedTypeParameters.ts, 59, 8))
+
+  [A] extends [B] ?
+>A : Symbol(A, Decl(distributedTypeParameters.ts, 59, 8))
+>B : Symbol(B, Decl(distributedTypeParameters.ts, 59, 25))
+
+    Show<A, B> :
+>Show : Symbol(Show, Decl(distributedTypeParameters.ts, 0, 0))
+>A : Symbol(A, Decl(distributedTypeParameters.ts, 59, 8))
+>B : Symbol(B, Decl(distributedTypeParameters.ts, 59, 25))
+
+    never;
+
