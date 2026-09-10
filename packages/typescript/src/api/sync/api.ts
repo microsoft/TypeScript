@@ -73,16 +73,20 @@ import {
 import type {
     APIFileChanges,
     CompilerOptions,
+    ConfiguredProjectId,
     CreateProgramOptions,
-    CreateProgramResponse,
+    CreateSnapshotParams,
+    CreateSnapshotResponse,
     Diagnostic,
     DocumentIdentifier,
     DocumentPosition,
     EmitOutputResponse as ProtocolEmitOutputResponse,
     ImportAdderAction,
+    InferredProjectId,
     IntrinsicTypeMethod,
-    LSPUpdateSnapshotParams,
+    LanguageServerSnapshotChanges,
     ParsedCommandLine,
+    ProjectId,
     ProjectReference,
     ProjectResponse,
     ReadConfigFileResponse,
@@ -92,17 +96,16 @@ import type {
     SymbolPropertyMethod,
     SymbolResponse,
     SymbolsPropertyMethod,
+    SyntheticProjectId,
     TextEdit,
     TypeAcquisition,
     TypePropertyMethod,
     TypeResponse,
     TypesPropertyMethod,
-    UpdateSnapshotParams,
-    UpdateSnapshotResponse,
 } from "../proto.ts";
 import {
     resolveFileName,
-    toUpdateSnapshotRequest,
+    toCreateSnapshotRequest,
 } from "../proto.ts";
 import { SourceFileCache } from "../sourceFileCache.ts";
 import type {
@@ -178,7 +181,9 @@ export type {
     CompletionInfo,
     CompletionOptions,
     ConditionalType,
+    ConfiguredProjectId,
     CreateProgramOptions,
+    CreateSnapshotParams,
     Diagnostic,
     DocumentIdentifier,
     DocumentPosition,
@@ -193,15 +198,18 @@ export type {
     IndexedAccessType,
     IndexInfo,
     IndexType,
+    InferredProjectId,
     InterfaceType,
     IntersectionType,
     IntrinsicType,
     JSDocTagInfo,
+    LanguageServerSnapshotChanges,
     LiteralType,
     LSPConnectionOptions,
     NumberLiteralType,
     ObjectType,
     ParsedCommandLine,
+    ProjectId,
     ProjectReference,
     ReadConfigFileResponse,
     RequestTiming,
@@ -210,6 +218,7 @@ export type {
     StringMappingType,
     StructuredType,
     SubstitutionType,
+    SyntheticProjectId,
     TemplateLiteralType,
     TextEdit,
     ThisTypePredicate,
@@ -255,7 +264,6 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
     private initialized: boolean = false;
     private initializing: void | undefined;
     private activeSnapshots: Set<Snapshot> = new Set();
-    private latestSnapshot: Snapshot | undefined;
     readonly internal: InternalAPI;
 
     constructor(options: APIOptions | LSPConnectionOptions = {}) {
@@ -543,79 +551,85 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         );
     }
 
-    get updateSnapshot(): {
-        (params?: FromLSP extends true ? LSPUpdateSnapshotParams : UpdateSnapshotParams): Snapshot;
-        gen(params?: FromLSP extends true ? LSPUpdateSnapshotParams : UpdateSnapshotParams): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]>;
+    get createSnapshot(): {
+        <const Params extends CreateSnapshotParams>(params: Params): SnapshotForOperation<Params>;
+        (): Snapshot;
+        gen<const Params extends CreateSnapshotParams>(params: Params): Generator<ProtocolRequest, SnapshotForOperation<Params>, ProtocolResponse["result"]>;
+        gen(): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        function createSnapshot<const Params extends CreateSnapshotParams>(params: Params): SnapshotForOperation<Params>;
+        function createSnapshot(): Snapshot;
+        function createSnapshot(params?: CreateSnapshotParams): Snapshot {
+            owner.ensureInitialized();
+
+            const requestParams = toCreateSnapshotRequest(params);
+            const data = owner.client.apiRequest("createSnapshot", requestParams);
+
+            const snapshot = new Snapshot(
+                data,
+                owner.client,
+                owner.sourceFileCache,
+                owner.toPath!,
+                owner,
+                () => {
+                    owner.activeSnapshots.delete(snapshot);
+                    owner.sourceFileCache.releaseSnapshot(snapshot.id);
+                },
+                owner.createSnapshotUpdater(() => snapshot),
+                undefined,
+            );
+            owner.activeSnapshots.add(snapshot);
+
+            return snapshot;
+        }
+        function gen<const Params extends CreateSnapshotParams>(params: Params): Generator<ProtocolRequest, SnapshotForOperation<Params>, ProtocolResponse["result"]>;
+        function gen(): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]>;
+        function* gen(params?: CreateSnapshotParams): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]> {
+            yield* owner.ensureInitialized.gen();
+
+            const requestParams = toCreateSnapshotRequest(params);
+            const data = yield* apiRequest("createSnapshot", requestParams);
+
+            const snapshot = new Snapshot(
+                data,
+                owner.client,
+                owner.sourceFileCache,
+                owner.toPath!,
+                owner,
+                () => {
+                    owner.activeSnapshots.delete(snapshot);
+                    owner.sourceFileCache.releaseSnapshot(snapshot.id);
+                },
+                owner.createSnapshotUpdater(() => snapshot),
+                undefined,
+            );
+            owner.activeSnapshots.add(snapshot);
+
+            return snapshot;
+        }
+        return cacheGeneratorMethod(owner, "createSnapshot", createSnapshot, gen);
+    }
+
+    private get updateSnapshot(): {
+        (baseSnapshot: Snapshot, params?: CreateSnapshotParams): Snapshot;
+        gen(baseSnapshot: Snapshot, params?: CreateSnapshotParams): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]>;
     } {
         const owner = this;
         return cacheGeneratorMethod(
             owner,
             "updateSnapshot",
-            function (params?: FromLSP extends true ? LSPUpdateSnapshotParams : UpdateSnapshotParams): Snapshot {
-                return owner.updateSnapshotWorker(params);
-            },
-            function* (params?: FromLSP extends true ? LSPUpdateSnapshotParams : UpdateSnapshotParams): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]> {
-                return yield* owner.updateSnapshotWorker.gen(params);
-            },
-        );
-    }
-
-    /** @internal */
-    get updateSnapshotFrom(): {
-        (baseSnapshot: Snapshot, params?: UpdateSnapshotParams): Snapshot;
-        gen(baseSnapshot: Snapshot, params?: UpdateSnapshotParams): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]>;
-    } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "updateSnapshotFrom",
-            function (baseSnapshot: Snapshot, params?: UpdateSnapshotParams): Snapshot {
-                if (!owner.activeSnapshots.has(baseSnapshot) || baseSnapshot.isDisposed()) {
-                    throw new Error("Cannot update an inactive snapshot");
-                }
-                if (baseSnapshot !== owner.latestSnapshot) {
-                    // TODO: Support forking active memory/cache snapshots once the server-side
-                    // ownership, project state, and cache semantics have been worked out.
-                    throw new Error("Snapshot.update can only update the latest snapshot");
-                }
-                return owner.updateSnapshotWorker(params, baseSnapshot);
-            },
-            function* (baseSnapshot: Snapshot, params?: UpdateSnapshotParams): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]> {
-                if (!owner.activeSnapshots.has(baseSnapshot) || baseSnapshot.isDisposed()) {
-                    throw new Error("Cannot update an inactive snapshot");
-                }
-                if (baseSnapshot !== owner.latestSnapshot) {
-                    // TODO: Support forking active memory/cache snapshots once the server-side
-                    // ownership, project state, and cache semantics have been worked out.
-                    throw new Error("Snapshot.update can only update the latest snapshot");
-                }
-                return yield* owner.updateSnapshotWorker.gen(params, baseSnapshot);
-            },
-        );
-    }
-
-    private get updateSnapshotWorker(): {
-        (params?: LSPUpdateSnapshotParams | UpdateSnapshotParams, baseSnapshot?: Snapshot): Snapshot;
-        gen(params?: LSPUpdateSnapshotParams | UpdateSnapshotParams, baseSnapshot?: Snapshot): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]>;
-    } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "updateSnapshotWorker",
-            function (params?: LSPUpdateSnapshotParams | UpdateSnapshotParams, baseSnapshot?: Snapshot): Snapshot {
+            function (baseSnapshot: Snapshot, params?: CreateSnapshotParams): Snapshot {
                 owner.ensureInitialized();
-
-                const requestParams = toUpdateSnapshotRequest(params, baseSnapshot?.id);
-                const data = owner.client.apiRequest("updateSnapshot", requestParams);
-
-                // Retain cached source files from previous snapshot for unchanged files
-                if (owner.latestSnapshot) {
-                    owner.sourceFileCache.retainForSnapshot(data.snapshot, owner.latestSnapshot.id, data.changes);
-                    if (owner.latestSnapshot.isDisposed()) {
-                        owner.sourceFileCache.releaseSnapshot(owner.latestSnapshot.id);
-                    }
+                if (!owner.activeSnapshots.has(baseSnapshot) || baseSnapshot.isDisposed()) {
+                    throw new Error("Cannot update an inactive snapshot");
                 }
 
+                const data = owner.client.apiRequest("updateSnapshot", {
+                    snapshot: baseSnapshot.id,
+                    changes: toCreateSnapshotRequest(params),
+                });
+                owner.sourceFileCache.retainForSnapshot(data.snapshot, baseSnapshot.id, data.changes);
                 const snapshot = new Snapshot(
                     data,
                     owner.client,
@@ -624,30 +638,25 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
                     owner,
                     () => {
                         owner.activeSnapshots.delete(snapshot);
-                        if (snapshot !== owner.latestSnapshot) {
-                            owner.sourceFileCache.releaseSnapshot(snapshot.id);
-                        }
+                        owner.sourceFileCache.releaseSnapshot(snapshot.id);
                     },
+                    owner.createSnapshotUpdater(() => snapshot),
+                    baseSnapshot,
                 );
-                owner.latestSnapshot = snapshot;
                 owner.activeSnapshots.add(snapshot);
-
                 return snapshot;
             },
-            function* (params?: LSPUpdateSnapshotParams | UpdateSnapshotParams, baseSnapshot?: Snapshot): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]> {
+            function* (baseSnapshot: Snapshot, params?: CreateSnapshotParams): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]> {
                 yield* owner.ensureInitialized.gen();
-
-                const requestParams = toUpdateSnapshotRequest(params, baseSnapshot?.id);
-                const data = yield* apiRequest("updateSnapshot", requestParams);
-
-                // Retain cached source files from previous snapshot for unchanged files
-                if (owner.latestSnapshot) {
-                    owner.sourceFileCache.retainForSnapshot(data.snapshot, owner.latestSnapshot.id, data.changes);
-                    if (owner.latestSnapshot.isDisposed()) {
-                        owner.sourceFileCache.releaseSnapshot(owner.latestSnapshot.id);
-                    }
+                if (!owner.activeSnapshots.has(baseSnapshot) || baseSnapshot.isDisposed()) {
+                    throw new Error("Cannot update an inactive snapshot");
                 }
 
+                const data = yield* apiRequest("updateSnapshot", {
+                    snapshot: baseSnapshot.id,
+                    changes: toCreateSnapshotRequest(params),
+                });
+                owner.sourceFileCache.retainForSnapshot(data.snapshot, baseSnapshot.id, data.changes);
                 const snapshot = new Snapshot(
                     data,
                     owner.client,
@@ -656,17 +665,104 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
                     owner,
                     () => {
                         owner.activeSnapshots.delete(snapshot);
-                        if (snapshot !== owner.latestSnapshot) {
-                            owner.sourceFileCache.releaseSnapshot(snapshot.id);
-                        }
+                        owner.sourceFileCache.releaseSnapshot(snapshot.id);
                     },
+                    owner.createSnapshotUpdater(() => snapshot),
+                    baseSnapshot,
                 );
-                owner.latestSnapshot = snapshot;
                 owner.activeSnapshots.add(snapshot);
-
                 return snapshot;
             },
         );
+    }
+
+    private createSnapshotUpdater(getSnapshot: () => Snapshot): SnapshotUpdater {
+        const update = ((params?: CreateSnapshotParams) => this.updateSnapshot(getSnapshot(), params)) as SnapshotUpdater;
+        const owner = this;
+        update.gen = function* (params?: CreateSnapshotParams) {
+            return yield* owner.updateSnapshot.gen(getSnapshot(), params);
+        };
+        return update;
+    }
+
+    /**
+     * Returns the language server's current canonical snapshot after atomically
+     * adopting any supplied API-driven changes. Only available on LSP-connected APIs.
+     */
+    get getCurrentLanguageServerSnapshot(): {
+        <const Params extends LanguageServerSnapshotChanges>(...args: FromLSP extends true ? [changes: Params, baseSnapshot?: Snapshot] : [changes: never, baseSnapshot?: never]): SnapshotForOperation<Params>;
+        (...args: FromLSP extends true ? [changes?: LanguageServerSnapshotChanges, baseSnapshot?: Snapshot] : [changes: never, baseSnapshot?: never]): Snapshot;
+        gen<const Params extends LanguageServerSnapshotChanges>(...args: FromLSP extends true ? [changes: Params, baseSnapshot?: Snapshot] : [changes: never, baseSnapshot?: never]): Generator<ProtocolRequest, SnapshotForOperation<Params>, ProtocolResponse["result"]>;
+        gen(...args: FromLSP extends true ? [changes?: LanguageServerSnapshotChanges, baseSnapshot?: Snapshot] : [changes: never, baseSnapshot?: never]): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        function getCurrentLanguageServerSnapshot<const Params extends LanguageServerSnapshotChanges>(...args: FromLSP extends true ? [changes: Params, baseSnapshot?: Snapshot] : [changes: never, baseSnapshot?: never]): SnapshotForOperation<Params>;
+        function getCurrentLanguageServerSnapshot(...args: FromLSP extends true ? [changes?: LanguageServerSnapshotChanges, baseSnapshot?: Snapshot] : [changes: never, baseSnapshot?: never]): Snapshot;
+        function getCurrentLanguageServerSnapshot(...args: FromLSP extends true ? [changes?: LanguageServerSnapshotChanges, baseSnapshot?: Snapshot] : [changes: never, baseSnapshot?: never]): Snapshot {
+            owner.ensureInitialized();
+
+            const changes = args[0] as LanguageServerSnapshotChanges | undefined;
+            const baseSnapshot = args[1] as Snapshot | undefined;
+            if (baseSnapshot && (!owner.activeSnapshots.has(baseSnapshot) || baseSnapshot.isDisposed())) {
+                throw new Error("Cannot use an inactive snapshot as a response base");
+            }
+            const data = owner.client.apiRequest("getCurrentLanguageServerSnapshot", {
+                ...(baseSnapshot ? { baseSnapshot: baseSnapshot.id } : {}),
+                ...(changes ? { changes } : {}),
+            });
+            if (baseSnapshot) {
+                owner.sourceFileCache.retainForSnapshot(data.snapshot, baseSnapshot.id, data.changes);
+            }
+            const snapshot = new Snapshot(
+                data,
+                owner.client,
+                owner.sourceFileCache,
+                owner.toPath!,
+                owner,
+                () => {
+                    owner.activeSnapshots.delete(snapshot);
+                    owner.sourceFileCache.releaseSnapshot(snapshot.id);
+                },
+                owner.createSnapshotUpdater(() => snapshot),
+                baseSnapshot,
+            );
+            owner.activeSnapshots.add(snapshot);
+            return snapshot;
+        }
+        function gen<const Params extends LanguageServerSnapshotChanges>(...args: FromLSP extends true ? [changes: Params, baseSnapshot?: Snapshot] : [changes: never, baseSnapshot?: never]): Generator<ProtocolRequest, SnapshotForOperation<Params>, ProtocolResponse["result"]>;
+        function gen(...args: FromLSP extends true ? [changes?: LanguageServerSnapshotChanges, baseSnapshot?: Snapshot] : [changes: never, baseSnapshot?: never]): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]>;
+        function* gen(...args: FromLSP extends true ? [changes?: LanguageServerSnapshotChanges, baseSnapshot?: Snapshot] : [changes: never, baseSnapshot?: never]): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]> {
+            yield* owner.ensureInitialized.gen();
+
+            const changes = args[0] as LanguageServerSnapshotChanges | undefined;
+            const baseSnapshot = args[1] as Snapshot | undefined;
+            if (baseSnapshot && (!owner.activeSnapshots.has(baseSnapshot) || baseSnapshot.isDisposed())) {
+                throw new Error("Cannot use an inactive snapshot as a response base");
+            }
+            const data = yield* apiRequest("getCurrentLanguageServerSnapshot", {
+                ...(baseSnapshot ? { baseSnapshot: baseSnapshot.id } : {}),
+                ...(changes ? { changes } : {}),
+            });
+            if (baseSnapshot) {
+                owner.sourceFileCache.retainForSnapshot(data.snapshot, baseSnapshot.id, data.changes);
+            }
+            const snapshot = new Snapshot(
+                data,
+                owner.client,
+                owner.sourceFileCache,
+                owner.toPath!,
+                owner,
+                () => {
+                    owner.activeSnapshots.delete(snapshot);
+                    owner.sourceFileCache.releaseSnapshot(snapshot.id);
+                },
+                owner.createSnapshotUpdater(() => snapshot),
+                baseSnapshot,
+            );
+            owner.activeSnapshots.add(snapshot);
+            return snapshot;
+        }
+        return cacheGeneratorMethod(owner, "getCurrentLanguageServerSnapshot", getCurrentLanguageServerSnapshot, gen);
     }
 
     [globalThis.Symbol.dispose](): void {
@@ -687,11 +783,6 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
                     for (const snapshot of [...owner.activeSnapshots]) {
                         snapshot.dispose();
                     }
-                    // Release the latest snapshot's cache refs if still held
-                    if (owner.latestSnapshot) {
-                        owner.sourceFileCache.releaseSnapshot(owner.latestSnapshot.id);
-                        owner.latestSnapshot = undefined;
-                    }
                     owner.sourceFileCache.clear();
                 }
                 finally {
@@ -703,11 +794,6 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
                 try {
                     for (const snapshot of [...owner.activeSnapshots]) {
                         yield* snapshot.dispose.gen();
-                    }
-                    // Release the latest snapshot's cache refs if still held
-                    if (owner.latestSnapshot) {
-                        owner.sourceFileCache.releaseSnapshot(owner.latestSnapshot.id);
-                        owner.latestSnapshot = undefined;
                     }
                     owner.sourceFileCache.clear();
                 }
@@ -753,6 +839,8 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
                         owner.activeSnapshots.delete(snapshot);
                         owner.sourceFileCache.releaseSnapshot(snapshot.id);
                     },
+                    owner.createSnapshotUpdater(() => snapshot),
+                    baseSnapshot,
                 );
                 owner.activeSnapshots.add(snapshot);
 
@@ -786,6 +874,8 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
                         owner.activeSnapshots.delete(snapshot);
                         owner.sourceFileCache.releaseSnapshot(snapshot.id);
                     },
+                    owner.createSnapshotUpdater(() => snapshot),
+                    baseSnapshot,
                 );
                 owner.activeSnapshots.add(snapshot);
 
@@ -845,95 +935,41 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         );
     }
 
-    private isProgramActive(program: Program): boolean {
-        const project = program.getProject();
-        for (const snapshot of this.activeSnapshots) {
-            if (!snapshot.isDisposed() && snapshot.getProject(project.configFileName)?.program === program) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Creates a program from current filesystem state, or derives one from oldProgram after applying fileChanges.
-     */
+    /** Creates a program from current filesystem state. */
     get createProgram(): {
-        (rootFiles: readonly DocumentIdentifier[], createProgramOptions: CreateProgramOptions, oldProgram?: Program, fileChanges?: APIFileChanges): Program;
-        gen(rootFiles: readonly DocumentIdentifier[], createProgramOptions: CreateProgramOptions, oldProgram?: Program, fileChanges?: APIFileChanges): Generator<ProtocolRequest, Program, ProtocolResponse["result"]>;
+        (rootFiles: readonly DocumentIdentifier[], createProgramOptions: CreateProgramOptions): Program;
+        gen(rootFiles: readonly DocumentIdentifier[], createProgramOptions: CreateProgramOptions): Generator<ProtocolRequest, Program, ProtocolResponse["result"]>;
     } {
         const owner = this;
         return cacheGeneratorMethod(
             owner,
             "createProgram",
-            function (rootFiles: readonly DocumentIdentifier[], createProgramOptions: CreateProgramOptions, oldProgram?: Program, fileChanges?: APIFileChanges): Program {
+            function (rootFiles: readonly DocumentIdentifier[], createProgramOptions: CreateProgramOptions): Program {
                 owner.ensureInitialized();
 
-                if (fileChanges && !oldProgram) {
-                    throw new Error("fileChanges requires an oldProgram");
-                }
-                if (oldProgram && !owner.isProgramActive(oldProgram)) {
-                    throw new Error("oldProgram must belong to this API instance and reference an active snapshot");
-                }
-
-                const data: CreateProgramResponse = owner.client.apiRequest("createProgram", {
-                    rootFiles,
-                    createProgramOptions,
-                    ...(oldProgram ? { oldProgram: { snapshot: oldProgram.snapshotId, project: oldProgram.getProject().id } } : {}),
-                    ...(fileChanges ? { fileChanges } : {}),
+                const snapshot = owner.createSnapshot({
+                    createPrograms: [{ rootFiles, options: createProgramOptions }],
                 });
-                if (!data.project) {
+                const program = snapshot.operation.createdPrograms[0];
+                if (!program) {
+                    snapshot.dispose();
                     throw new Error("createProgram did not return a project");
                 }
-                const snapshot = new Snapshot(
-                    { snapshot: data.snapshot, projects: [data.project] },
-                    owner.client,
-                    owner.sourceFileCache,
-                    owner.toPath!,
-                    owner,
-                    () => {
-                        owner.activeSnapshots.delete(snapshot);
-                        owner.sourceFileCache.releaseSnapshot(snapshot.id);
-                    },
-                );
-                const program = snapshot.getProjects()[0].program;
                 program.setOwnedSnapshot(snapshot);
-                owner.activeSnapshots.add(snapshot);
                 return program;
             },
-            function* (rootFiles: readonly DocumentIdentifier[], createProgramOptions: CreateProgramOptions, oldProgram?: Program, fileChanges?: APIFileChanges): Generator<ProtocolRequest, Program, ProtocolResponse["result"]> {
+            function* (rootFiles: readonly DocumentIdentifier[], createProgramOptions: CreateProgramOptions): Generator<ProtocolRequest, Program, ProtocolResponse["result"]> {
                 yield* owner.ensureInitialized.gen();
 
-                if (fileChanges && !oldProgram) {
-                    throw new Error("fileChanges requires an oldProgram");
-                }
-                if (oldProgram && !owner.isProgramActive(oldProgram)) {
-                    throw new Error("oldProgram must belong to this API instance and reference an active snapshot");
-                }
-
-                const data: CreateProgramResponse = yield* apiRequest("createProgram", {
-                    rootFiles,
-                    createProgramOptions,
-                    ...(oldProgram ? { oldProgram: { snapshot: oldProgram.snapshotId, project: oldProgram.getProject().id } } : {}),
-                    ...(fileChanges ? { fileChanges } : {}),
+                const snapshot = yield* owner.createSnapshot.gen({
+                    createPrograms: [{ rootFiles, options: createProgramOptions }],
                 });
-                if (!data.project) {
+                const program = snapshot.operation.createdPrograms[0];
+                if (!program) {
+                    yield* snapshot.dispose.gen();
                     throw new Error("createProgram did not return a project");
                 }
-                const snapshot = new Snapshot(
-                    { snapshot: data.snapshot, projects: [data.project] },
-                    owner.client,
-                    owner.sourceFileCache,
-                    owner.toPath!,
-                    owner,
-                    () => {
-                        owner.activeSnapshots.delete(snapshot);
-                        owner.sourceFileCache.releaseSnapshot(snapshot.id);
-                    },
-                );
-                const program = snapshot.getProjects()[0].program;
                 program.setOwnedSnapshot(snapshot);
-                owner.activeSnapshots.add(snapshot);
                 return program;
             },
         );
@@ -941,13 +977,6 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
 }
 
 type EnsureInitialized = (() => void) & { gen(): Generator<ProtocolRequest, void, ProtocolResponse["result"]>; };
-
-interface SnapshotOwner extends FormatDiagnosticsHost {
-    updateSnapshotFrom: {
-        (baseSnapshot: Snapshot, params?: UpdateSnapshotParams): Snapshot;
-        gen(baseSnapshot: Snapshot, params?: UpdateSnapshotParams): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]>;
-    };
-}
 
 export class InternalAPI {
     private client: Client;
@@ -1021,38 +1050,76 @@ export class InternalAPI {
     }
 }
 
+type SnapshotUpdater = ((params?: CreateSnapshotParams) => Snapshot) & { gen(params?: CreateSnapshotParams): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]>; };
+
+export interface SnapshotOperation {
+    readonly createdPrograms?: readonly Program<SyntheticProjectId>[];
+    readonly openedFiles?: readonly SnapshotOpenedFileOperation[];
+}
+
+export interface SnapshotOpenedFileOperation {
+    readonly project: Project;
+}
+
+type MapTupleTo<Tuple extends readonly unknown[], Result> = {
+    readonly [Index in keyof Tuple]: Result;
+};
+
+export type SnapshotForOperation<Params extends CreateSnapshotParams> = Snapshot & {
+    readonly operation:
+        & SnapshotOperation
+        & (Params extends { createPrograms: infer Programs extends readonly unknown[]; } ? { readonly createdPrograms: MapTupleTo<Programs, Program<SyntheticProjectId>>; } : unknown)
+        & (Params extends { openFiles: infer Files extends readonly unknown[]; } ? { readonly openedFiles: MapTupleTo<Files, SnapshotOpenedFileOperation>; } : unknown);
+};
+
 export class Snapshot {
     readonly id: number;
-    private projectMap: Map<Path, Project>;
+    readonly operation: SnapshotOperation;
+    private projectMap: Map<ProjectId, Project>;
     private toPath: (fileName: string) => Path;
     private client: Client;
     private disposed: boolean = false;
     private disposePromise: void | undefined;
     private onDispose: () => void;
-    private api: SnapshotOwner;
     private snapshotRegistry: SnapshotObjectRegistry;
+    private projectDataMap: Map<ProjectId, ProjectResponse>;
+    private updateSnapshot: SnapshotUpdater;
     readonly internal: SnapshotInternalAPI;
 
     constructor(
-        data: UpdateSnapshotResponse,
+        data: CreateSnapshotResponse,
         client: Client,
         sourceFileCache: SourceFileCache,
         toPath: (fileName: string) => Path,
-        api: SnapshotOwner,
+        formatDiagnosticsHost: FormatDiagnosticsHost,
         onDispose: () => void,
+        updateSnapshot: SnapshotUpdater,
+        baseSnapshot?: Snapshot,
     ) {
         this.id = data.snapshot;
         this.client = client;
         this.toPath = toPath;
-        this.api = api;
         this.onDispose = onDispose;
+        this.updateSnapshot = updateSnapshot;
         this.projectMap = new Map();
+        this.projectDataMap = new Map(baseSnapshot?.projectDataMap);
+        for (const projectId of data.changes?.removedProjects ?? []) {
+            this.projectDataMap.delete(projectId);
+        }
+        for (const projectData of data.projects) {
+            this.projectDataMap.set(projectData.id, projectData);
+        }
         this.snapshotRegistry = new SnapshotObjectRegistry(client, this.id, projectId => this.projectMap.get(projectId));
 
-        for (const projData of data.projects) {
-            const project = new Project(projData, this.id, client, sourceFileCache, toPath, api, this.snapshotRegistry);
-            this.projectMap.set(toPath(projData.configFileName), project);
+        for (const projData of this.projectDataMap.values()) {
+            const project = new Project(projData, this.id, client, sourceFileCache, toPath, formatDiagnosticsHost, this.snapshotRegistry);
+            this.projectMap.set(projData.id, project);
         }
+
+        this.operation = {
+            ...(data.operation.createdPrograms ? { createdPrograms: data.operation.createdPrograms.map(projectId => this.requireProject(projectId).program) } : {}),
+            ...(data.operation.openedFiles ? { openedFiles: data.operation.openedFiles.map(result => ({ project: this.requireProject(result.project) })) } : {}),
+        };
 
         this.internal = new SnapshotInternalAPI(this.id, client);
     }
@@ -1062,11 +1129,48 @@ export class Snapshot {
         return [...this.projectMap.values()];
     }
 
-    getProject(configFileName: string): Project | undefined {
+    getConfiguredProject(configFileName: string): Project<ConfiguredProjectId> | undefined {
         this.ensureNotDisposed();
-        return this.projectMap.get(this.toPath(configFileName));
+        return this.projectMap.get(this.toPath(configFileName) as ConfiguredProjectId) as Project<ConfiguredProjectId> | undefined;
     }
 
+    getProject<Id extends ProjectId>(projectId: Id): Project<Id> | undefined {
+        this.ensureNotDisposed();
+        return this.projectMap.get(projectId) as Project<Id> | undefined;
+    }
+
+    getProgram<Id extends ProjectId>(projectId: Id): Program<Id> | undefined {
+        return this.getProject(projectId)?.program;
+    }
+
+    get update(): {
+        <const Params extends CreateSnapshotParams>(params: Params): SnapshotForOperation<Params>;
+        (): Snapshot;
+        gen<const Params extends CreateSnapshotParams>(params: Params): Generator<ProtocolRequest, SnapshotForOperation<Params>, ProtocolResponse["result"]>;
+        gen(): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        function update<const Params extends CreateSnapshotParams>(params: Params): SnapshotForOperation<Params>;
+        function update(): Snapshot;
+        function update(params?: CreateSnapshotParams): Snapshot {
+            owner.ensureNotDisposed();
+            return owner.updateSnapshot(params);
+        }
+        function gen<const Params extends CreateSnapshotParams>(params: Params): Generator<ProtocolRequest, SnapshotForOperation<Params>, ProtocolResponse["result"]>;
+        function gen(): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]>;
+        function* gen(params?: CreateSnapshotParams): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]> {
+            owner.ensureNotDisposed();
+            return yield* owner.updateSnapshot.gen(params);
+        }
+        return cacheGeneratorMethod(owner, "update", update, gen);
+    }
+
+    /**
+     * Gets the default project for a given file from the configured projects and
+     * inferred project already loaded in the snapshot. Synthetic projects are not
+     * considered. Files that have been opened with `openFiles` are guaranteed to
+     * have a result.
+     */
     get getDefaultProjectForFile(): {
         (file: DocumentIdentifier): Project | undefined;
         gen(file: DocumentIdentifier): Generator<ProtocolRequest, Project | undefined, ProtocolResponse["result"]>;
@@ -1082,7 +1186,7 @@ export class Snapshot {
                     file,
                 });
                 if (!data) return undefined;
-                return owner.projectMap.get(owner.toPath(data.configFileName));
+                return owner.projectMap.get(data.id);
             },
             function* (file: DocumentIdentifier): Generator<ProtocolRequest, Project | undefined, ProtocolResponse["result"]> {
                 owner.ensureNotDisposed();
@@ -1091,30 +1195,7 @@ export class Snapshot {
                     file,
                 });
                 if (!data) return undefined;
-                return owner.projectMap.get(owner.toPath(data.configFileName));
-            },
-        );
-    }
-
-    /**
-     * Creates the next snapshot, layering its filesystem over this snapshot's
-     * filesystem. This snapshot must still be active and be the latest snapshot.
-     */
-    get update(): {
-        (params?: UpdateSnapshotParams): Snapshot;
-        gen(params?: UpdateSnapshotParams): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]>;
-    } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "update",
-            function (params?: UpdateSnapshotParams): Snapshot {
-                owner.ensureNotDisposed();
-                return owner.api.updateSnapshotFrom(owner, params);
-            },
-            function* (params?: UpdateSnapshotParams): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]> {
-                owner.ensureNotDisposed();
-                return yield* owner.api.updateSnapshotFrom.gen(owner, params);
+                return owner.projectMap.get(data.id);
             },
         );
     }
@@ -1189,22 +1270,30 @@ export class Snapshot {
             throw new Error("Snapshot is disposed");
         }
     }
+
+    private requireProject<Id extends ProjectId>(projectId: Id): Project<Id> {
+        const project = this.projectMap.get(projectId);
+        if (!project) {
+            throw new Error(`Snapshot operation returned unknown project '${projectId}'`);
+        }
+        return project as Project<Id>;
+    }
 }
 
 class SnapshotObjectRegistry {
     private readonly symbols: Map<number, Symbol> = new Map();
     private readonly client: Client;
     private readonly snapshotId: number;
-    private readonly resolveProject: (projectId: Path) => Project | undefined;
+    private readonly resolveProject: (projectId: ProjectId) => Project | undefined;
 
-    constructor(client: Client, snapshotId: number, resolveProject: (projectId: Path) => Project | undefined) {
+    constructor(client: Client, snapshotId: number, resolveProject: (projectId: ProjectId) => Project | undefined) {
         this.client = client;
         this.snapshotId = snapshotId;
         this.resolveProject = resolveProject;
     }
 
-    /** Resolve a project id (a config file path) to its Project within this snapshot. */
-    getProject(projectId: Path): Project | undefined {
+    /** Resolve a project ID to its Project within this snapshot. */
+    getProject(projectId: ProjectId): Project | undefined {
         return this.resolveProject(projectId);
     }
 
@@ -1226,14 +1315,14 @@ class SnapshotObjectRegistry {
     }
 
     get fetchSymbol(): {
-        (source: Symbol | Signature | Type, method: SymbolPropertyMethod, handle: number | undefined, projectId: Path): Symbol;
-        gen(source: Symbol | Signature | Type, method: SymbolPropertyMethod, handle: number | undefined, projectId: Path): Generator<ProtocolRequest, Symbol, ProtocolResponse["result"]>;
+        (source: Symbol | Signature | Type, method: SymbolPropertyMethod, handle: number | undefined, projectId: ProjectId): Symbol;
+        gen(source: Symbol | Signature | Type, method: SymbolPropertyMethod, handle: number | undefined, projectId: ProjectId): Generator<ProtocolRequest, Symbol, ProtocolResponse["result"]>;
     } {
         const owner = this;
         return cacheGeneratorMethod(
             owner,
             "fetchSymbol",
-            function (source: Symbol | Signature | Type, method: SymbolPropertyMethod, handle: number | undefined, projectId: Path): Symbol {
+            function (source: Symbol | Signature | Type, method: SymbolPropertyMethod, handle: number | undefined, projectId: ProjectId): Symbol {
                 if (!handle) return undefined as unknown as Symbol;
                 const cached = owner.getSymbol(handle);
                 if (cached) return cached;
@@ -1246,7 +1335,7 @@ class SnapshotObjectRegistry {
                 if (!data) throw new Error(`${method} returned null symbol for ${source.constructor.name} ${source.id}`);
                 return owner.getOrCreateSymbol(data);
             },
-            function* (source: Symbol | Signature | Type, method: SymbolPropertyMethod, handle: number | undefined, projectId: Path): Generator<ProtocolRequest, Symbol, ProtocolResponse["result"]> {
+            function* (source: Symbol | Signature | Type, method: SymbolPropertyMethod, handle: number | undefined, projectId: ProjectId): Generator<ProtocolRequest, Symbol, ProtocolResponse["result"]> {
                 if (!handle) return undefined as unknown as Symbol;
                 const cached = owner.getSymbol(handle);
                 if (cached) return cached;
@@ -1263,14 +1352,14 @@ class SnapshotObjectRegistry {
     }
 
     get fetchSymbols(): {
-        (source: Symbol | Signature | Type, method: SymbolsPropertyMethod, handles: readonly number[] | undefined, projectId: Path): readonly Symbol[];
-        gen(source: Symbol | Signature | Type, method: SymbolsPropertyMethod, handles: readonly number[] | undefined, projectId: Path): Generator<ProtocolRequest, readonly Symbol[], ProtocolResponse["result"]>;
+        (source: Symbol | Signature | Type, method: SymbolsPropertyMethod, handles: readonly number[] | undefined, projectId: ProjectId): readonly Symbol[];
+        gen(source: Symbol | Signature | Type, method: SymbolsPropertyMethod, handles: readonly number[] | undefined, projectId: ProjectId): Generator<ProtocolRequest, readonly Symbol[], ProtocolResponse["result"]>;
     } {
         const owner = this;
         return cacheGeneratorMethod(
             owner,
             "fetchSymbols",
-            function (source: Symbol | Signature | Type, method: SymbolsPropertyMethod, handles: readonly number[] | undefined, projectId: Path): readonly Symbol[] {
+            function (source: Symbol | Signature | Type, method: SymbolsPropertyMethod, handles: readonly number[] | undefined, projectId: ProjectId): readonly Symbol[] {
                 if (handles) {
                     const result = new Array<Symbol>(handles.length);
                     let allCached = true;
@@ -1292,7 +1381,7 @@ class SnapshotObjectRegistry {
                 if (symbolData == null) return [];
                 else return symbolData.map(data => owner.getOrCreateSymbol(data));
             },
-            function* (source: Symbol | Signature | Type, method: SymbolsPropertyMethod, handles: readonly number[] | undefined, projectId: Path): Generator<ProtocolRequest, readonly Symbol[], ProtocolResponse["result"]> {
+            function* (source: Symbol | Signature | Type, method: SymbolsPropertyMethod, handles: readonly number[] | undefined, projectId: ProjectId): Generator<ProtocolRequest, readonly Symbol[], ProtocolResponse["result"]> {
                 if (handles) {
                     const result = new Array<Symbol>(handles.length);
                     let allCached = true;
@@ -1781,17 +1870,18 @@ class ProjectObjectRegistry {
     }
 }
 
-export class Project {
-    readonly id: Path;
+export class Project<Id extends ProjectId = ProjectId> {
+    readonly id: Id;
     readonly configFileName: string;
     readonly currentDirectory: string;
+    readonly dirty: boolean;
     readonly parsedCommandLine: ParsedCommandLine;
     /** @deprecated Use `parsedCommandLine.options`. */
     readonly compilerOptions: CompilerOptions;
     /** @deprecated Use `parsedCommandLine.fileNames`. */
     readonly rootFiles: readonly string[];
 
-    readonly program: Program;
+    readonly program: Program<Id>;
     readonly checker: Checker;
     readonly emitter: Emitter;
     readonly languageService: LanguageService;
@@ -1807,9 +1897,10 @@ export class Project {
         formatDiagnosticsHost: FormatDiagnosticsHost,
         snapshotRegistry: SnapshotObjectRegistry,
     ) {
-        this.id = data.id as Path;
+        this.id = data.id as Id;
         this.configFileName = data.configFileName;
         this.currentDirectory = data.currentDirectory;
+        this.dirty = data.dirty;
         if (!data.parsedCommandLine?.options) {
             throw new Error(`Project '${data.configFileName}' has no parsed command line`);
         }
@@ -2122,10 +2213,11 @@ export class LanguageService {
     }
 }
 
-export class Program implements FormatDiagnosticsHost {
+export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnosticsHost {
     /** @internal */
     readonly snapshotId: number;
-    private readonly project: Project;
+    readonly id: Id;
+    private readonly project: Project<Id>;
     private readonly client: Client;
     private readonly sourceFileCache: SourceFileCache;
     private readonly toPath: (fileName: string) => Path;
@@ -2137,13 +2229,14 @@ export class Program implements FormatDiagnosticsHost {
 
     constructor(
         snapshotId: number,
-        project: Project,
+        project: Project<Id>,
         client: Client,
         sourceFileCache: SourceFileCache,
         toPath: (fileName: string) => Path,
         formatDiagnosticsHost: FormatDiagnosticsHost,
     ) {
         this.snapshotId = snapshotId;
+        this.id = project.id;
         this.project = project;
         this.client = client;
         this.sourceFileCache = sourceFileCache;
@@ -2917,7 +3010,7 @@ export class Program implements FormatDiagnosticsHost {
         );
     }
 
-    getProject(): Project {
+    getProject(): Project<Id> {
         return this.project;
     }
 }
@@ -5251,7 +5344,7 @@ export class Symbol {
         this.name = unescapeLeadingUnderscores(data.name as __String);
         this.flags = data.flags;
         this.checkFlags = data.checkFlags;
-        const canonicalProject = objectRegistry.getProject(data.project as Path);
+        const canonicalProject = objectRegistry.getProject(data.project);
         if (!canonicalProject) {
             throw new Error(`Symbol ${data.id} references unknown canonical project '${data.project}'`);
         }

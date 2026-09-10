@@ -200,7 +200,7 @@ export function runBenchmarks(options?: { filter?: string; singleIteration?: boo
     }
 
     function loadSnapshot() {
-        [snapshot] = api.batch(api.updateSnapshot.gen({ openProject: "tsc/testdata/fixtures/compiler/tsconfig.json" }));
+        [snapshot] = api.batch(api.createSnapshot.gen({ openProject: "tsc/testdata/fixtures/compiler/tsconfig.json" }));
         project = snapshot.getProjects()[0];
     }
 

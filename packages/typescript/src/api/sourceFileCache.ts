@@ -97,7 +97,7 @@ export class SourceFileCache {
         const prevProjectMap = this.snapshotProjectPaths.get(previousSnapshotId);
         if (!prevProjectMap) return;
 
-        const removedProjects = new Set(changes?.removedProjects ?? []);
+        const removedProjects = new Set<string>(changes?.removedProjects ?? []);
         const changedProjects = changes?.changedProjects ?? {};
 
         for (const [projectId, paths] of prevProjectMap) {
