@@ -72,7 +72,8 @@ You should not assume that an adverserially-constructed program will successfull
 `tsc` may gracefully crash, hang, or produce unexpected diagnostics when given adversarial input.
 While crashes in "normal" code are treated as bugs and fixed when reported, the compiler does *not* guarantee non-crashing in the presence of all possible malformed inputs (e.g. an unbounded series of `f(f(f(f(...`).
 
-**tsbuildinfo**
+### tsbuildinfo
+
 The `.tsbuildinfo` file is a cache of compiler state that is used to speed up incremental compilation.
 If this file is modified, it can cause `tsc` to e.g. fail to build a file because it thinks the file is up-to-date, or to recompile a file that has not changed.
 .`tsbuildinfo` files should be considered as sensitive as `tsconfig.json` files in terms of security; an attacker who can modify them can cause arbitrary file reads and writes.
