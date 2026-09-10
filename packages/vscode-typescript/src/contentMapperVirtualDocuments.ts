@@ -137,12 +137,11 @@ class ContentMapperVirtualDocumentProvider implements vscode.FileSystemProvider,
             }),
             provider.onDidInitializeLanguageServer(() => {
                 this.updateActiveEditorContext(vscode.window.activeTextEditor);
-                for (const source of this.sourceToVirtualUris.keys()) {
-                    this.refreshSource(vscode.Uri.parse(source));
-                }
+                this.refreshCachedSources();
             }),
             provider.onDidSynchronizeContentMapperContributions(() => {
                 this.updateActiveEditorContext(vscode.window.activeTextEditor);
+                this.refreshCachedSources();
             }),
         ];
         this.updateInspectorEnabledContext();
@@ -466,6 +465,12 @@ class ContentMapperVirtualDocumentProvider implements vscode.FileSystemProvider,
         void this.refresh(sourceUri).catch(error => {
             this.output.warn(`Could not refresh ${sourceUri.toString()}: ${String(error)}`);
         });
+    }
+
+    private refreshCachedSources(): void {
+        for (const source of this.sourceToVirtualUris.keys()) {
+            this.refreshSource(vscode.Uri.parse(source));
+        }
     }
 
     private async refresh(sourceUri: vscode.Uri): Promise<void> {

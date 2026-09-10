@@ -9110,12 +9110,12 @@ func (s *ProjectInfoResult) UnmarshalJSONFrom(dec *json.Decoder) error {
 	return unmarshalStruct(s, dec)
 }
 
-// An offset-based range in a content-mapped document.
+// A UTF-16 code-unit range in a content-mapped document.
 type ContentMapperTextRange struct {
-	// The zero-based start offset.
+	// The zero-based start offset in UTF-16 code units.
 	Pos int32 `json:"pos" lsp:"required"`
 
-	// The zero-based exclusive end offset.
+	// The zero-based exclusive end offset in UTF-16 code units.
 	End int32 `json:"end" lsp:"required"`
 }
 
@@ -9127,12 +9127,16 @@ func (s *ContentMapperTextRange) UnmarshalJSONFrom(dec *json.Decoder) error {
 
 // One span mapping between a generated output and its original source.
 type ContentMapperVirtualSpan struct {
+	// The zero-based start offset in generated text, in UTF-16 code units.
 	GeneratedStart int32 `json:"generatedStart" lsp:"required"`
 
+	// The generated span length in UTF-16 code units.
 	GeneratedLength int32 `json:"generatedLength" lsp:"required"`
 
+	// The zero-based start offset in original text, in UTF-16 code units.
 	OriginalStart int32 `json:"originalStart" lsp:"required"`
 
+	// The original span length in UTF-16 code units.
 	OriginalLength int32 `json:"originalLength" lsp:"required"`
 
 	Kind int32 `json:"kind" lsp:"required"`

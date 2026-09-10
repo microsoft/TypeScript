@@ -33,19 +33,23 @@ export const title = "Profile";
 const café = 1;`
 	const missingOriginalRange = `// @box-invalid-directive: original-range-out-of-bounds
 const value = 1;`
+	const supplemental = "const supplemental = 1;"
 	files := map[string]string{
 		"/home/project/tsconfig.json": `{
 			"compilerOptions": { "target": "es2020", "module": "esnext", "moduleResolution": "bundler", "strict": true },
 			"contentMappers": [
 				{ "package": "mapper", "extensions": [".vue"] },
-				{ "package": "box-mapper", "extensions": [".box"] }
+				{ "package": "box-mapper", "extensions": [".box"] },
+				{ "package": "supplemental-mapper", "extensions": [".astro"] }
 			]
 		}`,
-		"/home/project/node_modules/mapper/package.json":     contentmappertest.PackageJSON(contentmappertest.ComponentMapper),
-		"/home/project/node_modules/box-mapper/package.json": strings.Replace(contentmappertest.PackageJSON(contentmappertest.TransformingMapper), `"name": "mapper"`, `"name": "box-mapper"`, 1),
-		"/home/project/ProfileCard.vue":                      component,
-		"/home/project/example.box":                          box,
-		"/home/project/missing-original.box":                 missingOriginalRange,
+		"/home/project/node_modules/mapper/package.json":              contentmappertest.PackageJSON(contentmappertest.ComponentMapper),
+		"/home/project/node_modules/box-mapper/package.json":          strings.Replace(contentmappertest.PackageJSON(contentmappertest.TransformingMapper), `"name": "mapper"`, `"name": "box-mapper"`, 1),
+		"/home/project/node_modules/supplemental-mapper/package.json": strings.Replace(contentmappertest.PackageJSON(contentmappertest.SupplementalMapper), `"name": "mapper"`, `"name": "supplemental-mapper"`, 1),
+		"/home/project/ProfileCard.vue":                               component,
+		"/home/project/example.box":                                   box,
+		"/home/project/missing-original.box":                          missingOriginalRange,
+		"/home/project/component.astro":                               supplemental,
 	}
 
 	var mu sync.Mutex
@@ -168,24 +172,26 @@ const value = 1;`
 		if registration.Id == "content-mapper-did-open" {
 			assert.Assert(t, registration.RegisterOptions != nil && registration.RegisterOptions.TextDocumentDidOpen != nil)
 			selector := registration.RegisterOptions.TextDocumentDidOpen.DocumentSelector.DocumentSelector
-			assert.Assert(t, selector != nil && len(*selector) == 2)
+			assert.Assert(t, selector != nil && len(*selector) == 3)
 			patterns := map[string]bool{}
 			for _, filter := range *selector {
 				patterns[*filter.Pattern.Pattern.Pattern] = true
 			}
 			assert.Assert(t, patterns["**/*.vue"])
 			assert.Assert(t, patterns["**/*.box"])
+			assert.Assert(t, patterns["**/*.astro"])
 		}
 		if registration.Id == "content-mapper-semantic-tokens" {
 			assert.Assert(t, registration.RegisterOptions != nil && registration.RegisterOptions.TextDocumentSemanticTokens != nil)
 			selector := registration.RegisterOptions.TextDocumentSemanticTokens.DocumentSelector.DocumentSelector
-			assert.Assert(t, selector != nil && len(*selector) == 2)
+			assert.Assert(t, selector != nil && len(*selector) == 3)
 			patterns := map[string]bool{}
 			for _, filter := range *selector {
 				patterns[*filter.Pattern.Pattern.Pattern] = true
 			}
 			assert.Assert(t, patterns["**/*.vue"])
 			assert.Assert(t, patterns["**/*.box"])
+			assert.Assert(t, patterns["**/*.astro"])
 		}
 		if registration.Id == "content-mapper-code-action" {
 			assert.Assert(t, registration.RegisterOptions != nil && registration.RegisterOptions.TextDocumentCodeAction != nil)
@@ -252,6 +258,36 @@ const value = 1;`
 	assert.Assert(t, affectedStart >= 0)
 	assert.Equal(t, directive.VirtualRange.Pos, int32(utf16Length(boxVirtualFile.Text[:affectedStart])))
 	assert.Equal(t, directive.VirtualRange.End, int32(utf16Length(boxVirtualFile.Text[:affectedStart+len(affectedText)])))
+
+	supplementalURI := lsproto.DocumentUri("file:///home/project/component.astro")
+	lsptestutil.SendNotification(t, client, lsproto.TextDocumentDidOpenInfo, &lsproto.DidOpenTextDocumentParams{
+		TextDocument: &lsproto.TextDocumentItem{Uri: supplementalURI, LanguageId: "astro", Version: 1, Text: supplemental},
+	})
+	_, supplementalVirtualFiles, ok := lsptestutil.SendRequest(t, client, lsproto.CustomContentMapperVirtualFilesInfo, &lsproto.ContentMapperVirtualFilesParams{
+		TextDocument: lsproto.TextDocumentIdentifier{Uri: supplementalURI},
+	})
+	assert.Assert(t, ok)
+	assert.Equal(t, len(supplementalVirtualFiles.Files), 2)
+	canonical := supplementalVirtualFiles.Files[0]
+	assert.Equal(t, canonical.FileName, "/home/project/component.astro.ts")
+	assert.Equal(t, canonical.ScriptKind, int32(3))
+	assert.Equal(t, canonical.Text, "export {};")
+	assert.Equal(t, len(canonical.Mappings), 0)
+	assert.Equal(t, len(canonical.DiagnosticDirectives), 0)
+	supplementalFile := supplementalVirtualFiles.Files[1]
+	assert.Equal(t, supplementalFile.FileName, "/home/project/component.astro.0.ts")
+	assert.Equal(t, supplementalFile.ScriptKind, int32(3))
+	assert.Equal(t, supplementalFile.Text, supplemental)
+	assert.Equal(t, supplementalFile.OriginalText, supplemental)
+	assert.Equal(t, supplementalFile.Hash, canonical.Hash)
+	assert.Equal(t, len(supplementalFile.Mappings), 1)
+	assert.Equal(t, supplementalFile.Mappings[0].GeneratedStart, int32(0))
+	assert.Equal(t, supplementalFile.Mappings[0].GeneratedLength, int32(len(supplemental)))
+	assert.Equal(t, supplementalFile.Mappings[0].OriginalStart, int32(0))
+	assert.Equal(t, supplementalFile.Mappings[0].OriginalLength, int32(len(supplemental)))
+	assert.Equal(t, supplementalFile.Mappings[0].Kind, int32(0))
+	assert.Equal(t, supplementalFile.Mappings[0].Features, int32((1<<20)-1))
+	assert.Equal(t, len(supplementalFile.DiagnosticDirectives), 0)
 
 	missingOriginalURI := lsproto.DocumentUri("file:///home/project/missing-original.box")
 	lsptestutil.SendNotification(t, client, lsproto.TextDocumentDidOpenInfo, &lsproto.DidOpenTextDocumentParams{
@@ -339,6 +375,9 @@ const value = 1;`
 	})
 	lsptestutil.SendNotification(t, client, lsproto.TextDocumentDidCloseInfo, &lsproto.DidCloseTextDocumentParams{
 		TextDocument: lsproto.TextDocumentIdentifier{Uri: boxURI},
+	})
+	lsptestutil.SendNotification(t, client, lsproto.TextDocumentDidCloseInfo, &lsproto.DidCloseTextDocumentParams{
+		TextDocument: lsproto.TextDocumentIdentifier{Uri: supplementalURI},
 	})
 	lsptestutil.SendNotification(t, client, lsproto.TextDocumentDidCloseInfo, &lsproto.DidCloseTextDocumentParams{
 		TextDocument: lsproto.TextDocumentIdentifier{Uri: missingOriginalURI},

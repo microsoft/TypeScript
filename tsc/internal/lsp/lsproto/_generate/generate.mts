@@ -447,18 +447,18 @@ const customStructures: Structure[] = [
     {
         name: "ContentMapperTextRange",
         properties: [
-            { name: "pos", type: { kind: "base", name: "integer" }, documentation: "The zero-based start offset." },
-            { name: "end", type: { kind: "base", name: "integer" }, documentation: "The zero-based exclusive end offset." },
+            { name: "pos", type: { kind: "base", name: "integer" }, documentation: "The zero-based start offset in UTF-16 code units." },
+            { name: "end", type: { kind: "base", name: "integer" }, documentation: "The zero-based exclusive end offset in UTF-16 code units." },
         ],
-        documentation: "An offset-based range in a content-mapped document.",
+        documentation: "A UTF-16 code-unit range in a content-mapped document.",
     },
     {
         name: "ContentMapperVirtualSpan",
         properties: [
-            { name: "generatedStart", type: { kind: "base", name: "integer" } },
-            { name: "generatedLength", type: { kind: "base", name: "integer" } },
-            { name: "originalStart", type: { kind: "base", name: "integer" } },
-            { name: "originalLength", type: { kind: "base", name: "integer" } },
+            { name: "generatedStart", type: { kind: "base", name: "integer" }, documentation: "The zero-based start offset in generated text, in UTF-16 code units." },
+            { name: "generatedLength", type: { kind: "base", name: "integer" }, documentation: "The generated span length in UTF-16 code units." },
+            { name: "originalStart", type: { kind: "base", name: "integer" }, documentation: "The zero-based start offset in original text, in UTF-16 code units." },
+            { name: "originalLength", type: { kind: "base", name: "integer" }, documentation: "The original span length in UTF-16 code units." },
             { name: "kind", type: { kind: "base", name: "integer" } },
             { name: "features", type: { kind: "base", name: "integer" } },
         ],
