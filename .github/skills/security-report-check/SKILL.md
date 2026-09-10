@@ -51,7 +51,8 @@ Similarly, running `tsc --build --clean` may delete files from disk; crafted `.t
 If an attacker has control of an input TS file, they can of course control the contents of the output JS file.
 Attacks that depend on control of the input file and execution of the output file are not considered compiler security issues, because the attacker already has control of the input file.
 
-**File read sandboxing.**
+### File read sandboxing
+
 `tsc` will read files from paths specified in input files, and transitive references from there, including import paths and reference directives.
 An attacker in control of these files may therefore cause a *read* of any file path the `tsc` process has privileges to read, and `tsc` may reprint certain file contents in its output messages.
 In other words, for example, it is not generally safe to run `tsc` on untrusted code and print back the error message contents to an untrusted party, as this could expose local filesystem contents to the attacker.
