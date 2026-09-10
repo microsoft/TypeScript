@@ -56,7 +56,8 @@ An attacker in control of these files may therefore cause a *read* of any file p
 In other words, for example, it is not generally safe to run `tsc` on untrusted code and print back the error message contents to an untrusted party, as this could expose local filesystem contents to the attacker.
 Use of standard sandboxing strategies is recommended to secure scenarios similar to this.
 
-**Resource consumption.**
+### Resource consumption
+
 TypeScript's type system is Turing-complete.
 A crafted input file can cause `tsc` to consume unbounded CPU time or memory during type-checking, and in fact small type constructs that can consume a large amount of time are common and intentional.
 Routine compilations of normal code can legitimately take multiple minutes and gigabytes of memory, so there is no reliable way to distinguish between a "normal" long-running compilation and an adversarially-constructed one.
