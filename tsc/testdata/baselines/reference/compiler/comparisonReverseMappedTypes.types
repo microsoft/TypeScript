@@ -22,8 +22,8 @@ declare const booleans: { value: { value: boolean } };
 >value : boolean
 
 export const values = [unbox(numbers), unbox(strings), unbox(booleans)];
->values : ({ value: number; } | { value: string; } | { value: boolean; })[]
->[unbox(numbers), unbox(strings), unbox(booleans)] : ({ value: number; } | { value: string; } | { value: boolean; })[]
+>values : ({ value: string; } | { value: number; } | { value: boolean; })[]
+>[unbox(numbers), unbox(strings), unbox(booleans)] : ({ value: string; } | { value: number; } | { value: boolean; })[]
 >unbox(numbers) : { value: number; }
 >unbox : <T>(value: { [K in keyof T]: { value: T[K]; }; }) => T
 >numbers : { value: { value: number; }; }
@@ -35,8 +35,8 @@ export const values = [unbox(numbers), unbox(strings), unbox(booleans)];
 >booleans : { value: { value: boolean; }; }
 
 export const reversed = [unbox(booleans), unbox(strings), unbox(numbers)];
->reversed : ({ value: number; } | { value: string; } | { value: boolean; })[]
->[unbox(booleans), unbox(strings), unbox(numbers)] : ({ value: number; } | { value: string; } | { value: boolean; })[]
+>reversed : ({ value: string; } | { value: number; } | { value: boolean; })[]
+>[unbox(booleans), unbox(strings), unbox(numbers)] : ({ value: string; } | { value: number; } | { value: boolean; })[]
 >unbox(booleans) : { value: boolean; }
 >unbox : <T>(value: { [K in keyof T]: { value: T[K]; }; }) => T
 >booleans : { value: { value: boolean; }; }
@@ -57,8 +57,8 @@ declare const nested: { value: { value: string } };
 >value : string
 
 export const sameSource = [identity(nested), unbox(nested)];
->sameSource : ({ value: { value: string; }; } | { value: string; })[]
->[identity(nested), unbox(nested)] : ({ value: { value: string; }; } | { value: string; })[]
+>sameSource : ({ value: string; } | { value: { value: string; }; })[]
+>[identity(nested), unbox(nested)] : ({ value: string; } | { value: { value: string; }; })[]
 >identity(nested) : { value: { value: string; }; }
 >identity : <T>(value: { [K in keyof T]: T[K]; }) => T
 >nested : { value: { value: string; }; }

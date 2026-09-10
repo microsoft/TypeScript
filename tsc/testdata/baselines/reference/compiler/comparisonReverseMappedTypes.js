@@ -23,23 +23,23 @@ export const sameSource = [identity(nested), unbox(nested)];
 
 //// [comparisonReverseMappedTypes.d.ts]
 export declare const values: ({
-    value: number;
-} | {
     value: string;
+} | {
+    value: number;
 } | {
     value: boolean;
 })[];
 export declare const reversed: ({
-    value: number;
-} | {
     value: string;
+} | {
+    value: number;
 } | {
     value: boolean;
 })[];
 export declare const sameSource: ({
+    value: string;
+} | {
     value: {
         value: string;
     };
-} | {
-    value: string;
 })[];

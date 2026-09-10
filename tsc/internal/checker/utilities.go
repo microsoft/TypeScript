@@ -490,11 +490,22 @@ func CompareTypes(t1, t2 *Type) int {
 		} else if t2.objectFlags&ObjectFlagsReference != 0 {
 			return 1
 		} else {
-			// Order unnamed non-reference object types by kind associated type mappers. Reverse mapped types have
-			// neither symbols nor mappers so they're ultimately ordered by unstable type IDs, but given their rarity
-			// this should be fine.
+			// Order unnamed non-reference object types by kind and instantiation data.
 			if c := int(t1.objectFlags&ObjectFlagsObjectTypeKindMask) - int(t2.objectFlags&ObjectFlagsObjectTypeKindMask); c != 0 {
 				return c
+			}
+			if t1.objectFlags&ObjectFlagsReverseMapped != 0 {
+				r1 := t1.AsReverseMappedType()
+				r2 := t2.AsReverseMappedType()
+				if c := CompareTypes(r1.source, r2.source); c != 0 {
+					return c
+				}
+				if c := CompareTypes(r1.mappedType, r2.mappedType); c != 0 {
+					return c
+				}
+				if c := CompareTypes(r1.constraintType, r2.constraintType); c != 0 {
+					return c
+				}
 			}
 			m1 := t1.AsObjectType().mapper
 			m2 := t2.AsObjectType().mapper
