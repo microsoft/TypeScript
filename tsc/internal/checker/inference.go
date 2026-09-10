@@ -1433,7 +1433,7 @@ func (c *Checker) hasObjectLiteralAccessors(t *Type, seen []*Type) bool {
 	if t.flags&TypeFlagsObject != 0 && t.symbol != nil && t.symbol.Flags&ast.SymbolFlagsObjectLiteral != 0 {
 		return core.Some(c.getPropertiesOfObjectType(t), func(property *ast.Symbol) bool {
 			propertyType := c.valueSymbolLinks.Get(property).resolvedType
-			return property.Flags&ast.SymbolFlagsGetAccessor != 0 ||
+			return property.Flags&ast.SymbolFlagsGetAccessor != 0 || c.getSpreadAccessorOrigin(property) != nil ||
 				propertyType != nil && c.hasObjectLiteralAccessors(propertyType, seen)
 		})
 	}

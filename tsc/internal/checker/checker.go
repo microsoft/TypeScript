@@ -224,6 +224,11 @@ type ReverseMappedTypeKey struct {
 	constraintId TypeId
 }
 
+type SpreadAccessorKey struct {
+	origin   *ast.Symbol
+	readonly bool
+}
+
 // IterationTypesKey
 
 type IterationTypesKey struct {
@@ -647,6 +652,7 @@ type Checker struct {
 	reverseMappedCache                          map[ReverseMappedTypeKey]*Type
 	reverseHomomorphicMappedCache               map[ReverseMappedTypeKey]*Type
 	iterationTypesCache                         map[IterationTypesKey]IterationTypes
+	spreadAccessorSymbols                       map[SpreadAccessorKey]*ast.Symbol
 	markerTypes                                 collections.Set[*Type]
 	resolvingExplicitTypeOfSymbol               collections.Set[*ast.Symbol]
 	undefinedSymbol                             *ast.Symbol
@@ -962,6 +968,7 @@ func NewChecker(program Program, tracer *Tracer) (*Checker, *sync.Mutex) {
 	c.reverseMappedCache = make(map[ReverseMappedTypeKey]*Type)
 	c.reverseHomomorphicMappedCache = make(map[ReverseMappedTypeKey]*Type)
 	c.iterationTypesCache = make(map[IterationTypesKey]IterationTypes)
+	c.spreadAccessorSymbols = make(map[SpreadAccessorKey]*ast.Symbol)
 	c.undefinedSymbol = c.newSymbol(ast.SymbolFlagsProperty, "undefined")
 	c.argumentsSymbol = c.newSymbol(ast.SymbolFlagsProperty, "arguments")
 	c.requireSymbol = c.newSymbol(ast.SymbolFlagsProperty, "require")
@@ -13703,8 +13710,8 @@ func (c *Checker) getSpreadType(left *Type, right *Type, symbol *ast.Symbol, obj
 		}
 		if members[leftProp.Name] != nil {
 			rightProp := members[leftProp.Name]
-			rightType := c.getTypeOfSymbol(rightProp)
 			if rightProp.Flags&ast.SymbolFlagsOptional != 0 {
+				rightType := c.getTypeOfSymbol(rightProp)
 				declarations := core.Concatenate(leftProp.Declarations, rightProp.Declarations)
 				flags := ast.SymbolFlagsProperty | (leftProp.Flags & ast.SymbolFlagsOptional)
 				result := c.newSymbol(flags, leftProp.Name)
@@ -13832,18 +13839,41 @@ func (c *Checker) getSpreadSymbol(prop *ast.Symbol, readonly bool) *ast.Symbol {
 	if !isSetonlyAccessor && readonly == c.isReadonlySymbol(prop) {
 		return prop
 	}
+	// A getter's type may depend on the object literal being spread into (a recursive
+	// getter in a generic call argument), so its spread copy resolves lazily through the
+	// origin accessor and is shared by every check of the same literal.
+	isGetter := prop.Flags&ast.SymbolFlagsGetAccessor != 0
+	key := SpreadAccessorKey{origin: prop, readonly: readonly}
+	if isGetter {
+		if cached := c.spreadAccessorSymbols[key]; cached != nil {
+			return cached
+		}
+	}
 	flags := ast.SymbolFlagsProperty | (prop.Flags & ast.SymbolFlagsOptional)
 	result := c.newSymbolEx(flags, prop.Name, prop.CheckFlags&ast.CheckFlagsLate|core.IfElse(readonly, ast.CheckFlagsReadonly, 0))
 	links := c.valueSymbolLinks.Get(result)
 	if isSetonlyAccessor {
 		links.resolvedType = c.undefinedType
-	} else {
+	} else if !isGetter {
 		links.resolvedType = c.getTypeOfSymbol(prop)
 	}
 	result.Declarations = prop.Declarations
 	links.nameType = c.valueSymbolLinks.Get(prop).nameType
 	c.mappedSymbolLinks.Get(result).syntheticOrigin = prop
+	if isGetter {
+		c.spreadAccessorSymbols[key] = result
+	}
 	return result
+}
+
+// getSpreadAccessorOrigin returns the get accessor a spread property was copied from, or nil.
+func (c *Checker) getSpreadAccessorOrigin(prop *ast.Symbol) *ast.Symbol {
+	if prop.Flags&ast.SymbolFlagsProperty != 0 && prop.ValueDeclaration == nil && prop.CheckFlags&ast.CheckFlagsMapped == 0 {
+		if links := c.mappedSymbolLinks.TryGet(prop); links != nil && links.syntheticOrigin != nil && links.syntheticOrigin.Flags&ast.SymbolFlagsGetAccessor != 0 {
+			return links.syntheticOrigin
+		}
+	}
+	return nil
 }
 
 func (c *Checker) isEmptyObjectTypeOrSpreadsIntoEmptyObject(t *Type) bool {
@@ -16930,6 +16960,9 @@ func (c *Checker) getTypeOfVariableOrParameterOrPropertyWorker(symbol *ast.Symbo
 	if symbol == c.requireSymbol {
 		return c.anyType
 	}
+	if origin := c.getSpreadAccessorOrigin(symbol); origin != nil {
+		return c.getTypeOfSymbol(origin)
+	}
 	debug.Assert(symbol.ValueDeclaration != nil)
 	declaration := symbol.ValueDeclaration
 	if ast.IsSourceFile(declaration) && ast.IsJsonSourceFile(declaration.AsSourceFile()) {
@@ -18796,7 +18829,7 @@ func (c *Checker) getWidenedTypeOfObjectLiteral(t *Type, context *WideningContex
 }
 
 func (c *Checker) getWidenedProperty(prop *ast.Symbol, context *WideningContext) *ast.Symbol {
-	if prop.Flags&ast.SymbolFlagsProperty == 0 {
+	if prop.Flags&ast.SymbolFlagsProperty == 0 || c.getSpreadAccessorOrigin(prop) != nil {
 		// Since get accessors already widen their return value there is no need to
 		// widen accessor based properties here.
 		return prop

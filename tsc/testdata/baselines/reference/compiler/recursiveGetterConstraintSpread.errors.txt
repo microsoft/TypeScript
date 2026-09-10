@@ -1,0 +1,105 @@
+recursiveGetterConstraintSpread.ts(22,7): error TS2322: Type 'string' is not assignable to type 'number'.
+recursiveGetterConstraintSpread.ts(23,25): error TS2339: Property 'missing' does not exist on type 'Output<{ name: Schema<string>; children: Schema<Output<any>[]>; }>'.
+recursiveGetterConstraintSpread.ts(72,9): error TS2322: Type 'number' is not assignable to type 'Schema<unknown>'.
+recursiveGetterConstraintSpread.ts(79,7): error TS7022: 'inlineOverridden' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+recursiveGetterConstraintSpread.ts(81,9): error TS7023: 'children' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+
+
+==== recursiveGetterConstraintSpread.ts (5 errors) ====
+    interface Schema<T = unknown> {
+        output: T;
+    }
+    
+    type Shape = Record<string, Schema>;
+    type Output<S extends Shape> = { [K in keyof S]: S[K]["output"] };
+    
+    declare function object<S extends Shape>(shape: S): Schema<Output<S>>;
+    declare function array<S extends Schema>(schema: S): Schema<S["output"][]>;
+    declare function text(): Schema<string>;
+    
+    const base = { name: text() };
+    
+    const node = object({
+        ...base,
+        get children() {
+            return array(node);
+        },
+    });
+    
+    const name: string = node.output.children[0].children[0].name;
+    const wrong: number = node.output.children[0].name;
+          ~~~~~
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
+    node.output.children[0].missing;
+                            ~~~~~~~
+!!! error TS2339: Property 'missing' does not exist on type 'Output<{ name: Schema<string>; children: Schema<Output<any>[]>; }>'.
+    
+    const leading = object({
+        get children() {
+            return array(leading);
+        },
+        ...base,
+    });
+    
+    const leadingName: string = leading.output.children[0].name;
+    
+    const withChildren = { name: text(), children: text() };
+    const overridden = object({
+        ...withChildren,
+        get children() {
+            return array(overridden);
+        },
+    });
+    
+    const overriddenName: string = overridden.output.children[0].children[0].name;
+    
+    const nested = object({
+        ...base,
+        ...{
+            get children() {
+                return array(nested);
+            },
+        },
+    });
+    
+    const nestedName: string = nested.output.children[0].children[0].name;
+    
+    const user = object({
+        ...base,
+        get posts() {
+            return array(post);
+        },
+    });
+    const post = object({
+        ...base,
+        get author() {
+            return user;
+        },
+    });
+    
+    const authorName: string = user.output.posts[0].author.name;
+    
+    const rejected = object({
+        ...base,
+        get count() {
+            ~~~~~
+!!! error TS2322: Type 'number' is not assignable to type 'Schema<unknown>'.
+            return 1;
+        },
+    });
+    
+    // An inline literal's overridden property is contextually typed by the inferred
+    // shape, which needs the getter's type before the declaration has one.
+    const inlineOverridden = object({
+          ~~~~~~~~~~~~~~~~
+!!! error TS7022: 'inlineOverridden' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+        ...{ children: text() },
+        get children() {
+            ~~~~~~~~
+!!! error TS7023: 'children' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+            return array(inlineOverridden);
+        },
+    });
+    
+    export {};
+    
