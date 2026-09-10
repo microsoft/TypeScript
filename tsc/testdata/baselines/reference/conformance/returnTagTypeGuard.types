@@ -64,7 +64,7 @@ function f(chunk) {
 >chunk : Entry
 >c : number
 >chunk.d : string
->chunk : Group & not Entry
+>chunk : Group
 >d : string
 
     return x

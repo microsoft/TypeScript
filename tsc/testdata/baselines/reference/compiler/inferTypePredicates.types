@@ -548,7 +548,7 @@ if (isDate(maybeDate)) {
 } else {
   let t: object = maybeDate;  // should ok
 >t : object
->maybeDate : object & not Date
+>maybeDate : object
 }
 
 if (flakyIsDate(maybeDate)) {

@@ -1,8 +1,8 @@
 //// [tests/cases/conformance/types/negated/negatedNarrowingTypePredicate.ts] ////
 
 === negatedNarrowingTypePredicate.ts ===
-// Control flow narrowing by a user-defined type guard `x is T`. In the false branch a fresh
-// `not T` is intersected in and survives where the base type overlaps T.
+// User-defined guards do not introduce negations in the false branch because they may
+// only recognize a subset of the declared predicate type.
 
 interface Cat {
     meow(): void;
@@ -30,13 +30,13 @@ if (isCat(a)) {
 >a : Cat
 
 } else {
-    a; // {} & not Cat
->a : {} & not Cat
+    a; // {}
+>a : {}
 
     wantsNotCat(a);
 >wantsNotCat(a) : void
 >wantsNotCat : (x: not Cat) => void
->a : {} & not Cat
+>a : {}
 }
 
 // A bare type parameter.
@@ -53,12 +53,12 @@ function generic<T>(x: T) {
 >x : T & Cat
 
     } else {
-        x; // T & not Cat
->x : T & not Cat
+        x; // T
+>x : T
     }
 }
 
-// A disjoint union: `not Cat` reduces away against the non-Cat constituent.
+// Existing false-branch union constituent filtering is preserved.
 interface Dog {
     bark(): void;
 >bark : () => void
@@ -104,7 +104,7 @@ if (isNotCat(c)) {
 >c : {} & not Cat
 
 } else {
-    c; // {} & Cat
->c : Cat
+    c; // {}
+>c : {}
 }
 

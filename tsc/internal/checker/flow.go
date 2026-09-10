@@ -947,9 +947,9 @@ func (c *Checker) getNarrowedTypeWorker(t *Type, candidate *Type, assumeTrue boo
 			t = c.unknownUnionType
 		}
 		trueType := c.getNarrowedType(t, candidate, true /*assumeTrue*/, false /*checkDerived*/)
-		return c.introduceNegationIntoNarrowedType(c.recombineUnknownType(c.filterType(t, func(t *Type) bool {
+		return c.recombineUnknownType(c.filterType(t, func(t *Type) bool {
 			return !c.isTypeSubsetOf(t, trueType)
-		})), candidate)
+		}))
 	}
 	if t.flags&TypeFlagsAnyOrUnknown != 0 {
 		return candidate

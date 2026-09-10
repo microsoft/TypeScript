@@ -18693,6 +18693,7 @@ func (c *Checker) getWidenedType(t *Type) *Type {
 }
 
 func (c *Checker) getWidenedTypeWithContext(t *Type, context *WideningContext) *Type {
+	t = c.removeFreshNegatedTypes(t)
 	if t.objectFlags&ObjectFlagsRequiresWidening != 0 {
 		if context == nil {
 			if cached := c.cachedTypes[CachedTypeKey{kind: CachedTypeKindWidened, typeId: t.id}]; cached != nil {
@@ -20536,7 +20537,7 @@ func (c *Checker) getReturnTypeFromBody(fn *ast.Node, checkMode CheckMode) *Type
 		if nextType != nil {
 			c.reportErrorsFromWidening(fn, nextType, WideningKindGeneratorNext)
 		}
-		if returnType != nil && isUnitType(returnType) || yieldType != nil && isUnitType(yieldType) || nextType != nil && isUnitType(nextType) {
+		if needsContextualWidening(returnType) || needsContextualWidening(yieldType) || needsContextualWidening(nextType) {
 			contextualSignature := c.getContextualSignatureForFunctionLikeDeclaration(fn)
 			var contextualType *Type
 			switch {
@@ -20740,8 +20741,12 @@ func (c *Checker) unwrapReturnType(returnType *Type, functionFlags ast.FunctionF
 	return returnType
 }
 
+func needsContextualWidening(t *Type) bool {
+	return t != nil && (isUnitType(t) || containsFreshNegatedType(t))
+}
+
 func (c *Checker) getWidenedLiteralLikeTypeForContextualReturnTypeIfNeeded(t *Type, contextualSignatureReturnType *Type, isAsync bool) *Type {
-	if t != nil && isUnitType(t) {
+	if needsContextualWidening(t) {
 		var contextualType *Type
 		switch {
 		case contextualSignatureReturnType == nil:
@@ -20757,7 +20762,7 @@ func (c *Checker) getWidenedLiteralLikeTypeForContextualReturnTypeIfNeeded(t *Ty
 }
 
 func (c *Checker) getWidenedLiteralLikeTypeForContextualIterationTypeIfNeeded(t *Type, contextualSignatureReturnType *Type, kind IterationTypeKind, isAsyncGenerator bool) *Type {
-	if t != nil && isUnitType(t) {
+	if needsContextualWidening(t) {
 		var contextualType *Type
 		if contextualSignatureReturnType != nil {
 			contextualType = c.getIterationTypeOfGeneratorFunctionReturnType(kind, contextualSignatureReturnType, isAsyncGenerator)
@@ -20927,7 +20932,7 @@ func (c *Checker) checkIfExpressionRefinesParameter(fn *ast.Node, expr *ast.Node
 		antecedent = &ast.FlowNode{Flags: ast.FlowFlagsStart}
 	}
 	trueCondition := &ast.FlowNode{Flags: ast.FlowFlagsTrueCondition, Node: expr, Antecedent: antecedent}
-	trueType := c.getFlowTypeOfReferenceEx(param.Name(), initType, initType, fn, trueCondition)
+	trueType := c.removeFreshNegatedTypes(c.getFlowTypeOfReferenceEx(param.Name(), initType, initType, fn, trueCondition))
 	if trueType == initType {
 		return nil
 	}
@@ -20936,9 +20941,7 @@ func (c *Checker) checkIfExpressionRefinesParameter(fn *ast.Node, expr *ast.Node
 	falseCondition := &ast.FlowNode{Flags: ast.FlowFlagsFalseCondition, Node: expr, Antecedent: antecedent}
 	falseSubtype := c.getReducedType(c.getFlowTypeOfReferenceEx(param.Name(), initType, trueType, fn, falseCondition))
 	if falseSubtype.flags&TypeFlagsNever != 0 {
-		// Strip any fresh negated types introduced by control flow narrowing so a CFA-introduced
-		// 'not X' does not leak into the inferred type predicate (and thus into emitted declarations).
-		return c.removeOrRegularizeNegatedTypes(trueType, true /*removeNegatedTypes*/)
+		return trueType
 	}
 	return nil
 }
@@ -27241,7 +27244,7 @@ func (c *Checker) getSubstitutionIntersection(t *Type) *Type {
 }
 
 func (c *Checker) shouldDeferIndexType(t *Type, indexFlags IndexFlags) bool {
-	return t.flags&TypeFlagsInstantiableNonPrimitive != 0 ||
+	return t.flags&TypeFlagsInstantiableNonPrimitive != 0 && (t.flags&TypeFlagsNegated == 0 || c.isGenericType(t)) ||
 		c.isGenericTupleType(t) ||
 		c.isGenericMappedType(t) && c.getNameTypeFromMappedType(t) != nil ||
 		t.flags&TypeFlagsUnion != 0 && indexFlags&IndexFlagsNoReducibleCheck == 0 && c.isGenericReducibleType(t) ||

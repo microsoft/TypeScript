@@ -53,6 +53,9 @@ func (c *Checker) getNegatedType(t *Type) *Type {
 // when a narrowed type escapes into an inferred declaration, so they never leak into emitted
 // declaration files.
 func (c *Checker) getFreshNegatedType(t *Type) *Type {
+	if t.flags&TypeFlagsUnion != 0 {
+		return c.getIntersectionType(core.Map(t.Types(), c.getFreshNegatedType))
+	}
 	negated := c.getNegatedType(t)
 	if negated.flags&TypeFlagsNegated == 0 {
 		return negated

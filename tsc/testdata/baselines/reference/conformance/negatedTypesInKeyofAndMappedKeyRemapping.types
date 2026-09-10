@@ -24,7 +24,7 @@ type NotKeyof = not keyof Obj; // not ("id" | "name" | "method")
 
 // keyof applied to a negated object type.
 type KeyofNot = keyof (not Obj);
->KeyofNot : keyof not Obj
+>KeyofNot : never
 
 // Key remapping that filters out a specific key via `as (K & not "id")`.
 type WithoutId = {

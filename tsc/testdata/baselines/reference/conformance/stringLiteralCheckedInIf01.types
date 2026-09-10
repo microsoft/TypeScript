@@ -8,7 +8,7 @@ type T = S[] | S;
 >T : T
 
 function f(foo: T) {
->f : (foo: T) => S | (S[] & not "a")
+>f : (foo: T) => S[] | S
 >foo : T
 
     if (foo === "a") {

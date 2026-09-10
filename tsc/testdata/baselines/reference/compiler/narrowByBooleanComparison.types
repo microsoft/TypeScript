@@ -241,7 +241,7 @@ function test5(bin: Entity) {
 >false : false
 
         bin;
->bin : Entity & not Actor
+>bin : Entity
 
     } else {
         bin;
@@ -260,7 +260,7 @@ function test6(bin: Entity) {
 >false : false
 
         bin;
->bin : Entity & not Actor
+>bin : Entity
 
     } else {
         bin;

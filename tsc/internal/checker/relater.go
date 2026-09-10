@@ -3508,7 +3508,7 @@ func (r *Relater) structuredTypeRelatedToWorker(source *Type, target *Type, repo
 		// (permissive) constraint of the negated type and incorrectly report relatedness. For instantiable
 		// sources we do fall through, so that constraint-based reasoning can still apply.
 		if source.flags&TypeFlagsInstantiable == 0 {
-			if r.relation == r.c.comparableRelation && !r.c.isTypeAssignableTo(source, target.AsNegatedType().baseType) {
+			if r.relation == r.c.comparableRelation && !r.c.isTypeSubtypeOf(source, target.AsNegatedType().baseType) {
 				return TernaryTrue
 			}
 			return TernaryFalse

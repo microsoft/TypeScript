@@ -1,8 +1,8 @@
 // @strict: true
 // @noEmit: true
 
-// Control flow narrowing by a user-defined type guard `x is T`. In the false branch a fresh
-// `not T` is intersected in and survives where the base type overlaps T.
+// User-defined guards do not introduce negations in the false branch because they may
+// only recognize a subset of the declared predicate type.
 
 interface Cat {
     meow(): void;
@@ -16,7 +16,7 @@ declare const a: {};
 if (isCat(a)) {
     a; // {} & Cat
 } else {
-    a; // {} & not Cat
+    a; // {}
     wantsNotCat(a);
 }
 
@@ -25,11 +25,11 @@ function generic<T>(x: T) {
     if (isCat(x)) {
         x; // T & Cat
     } else {
-        x; // T & not Cat
+        x; // T
     }
 }
 
-// A disjoint union: `not Cat` reduces away against the non-Cat constituent.
+// Existing false-branch union constituent filtering is preserved.
 interface Dog {
     bark(): void;
     meow?: undefined;
@@ -48,5 +48,5 @@ if (isNotCat(c)) {
     c; // {} & not Cat
     wantsNotCat(c);
 } else {
-    c; // {} & Cat
+    c; // {}
 }

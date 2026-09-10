@@ -1,0 +1,71 @@
+//// [tests/cases/compiler/negatedGenericForIn.ts] ////
+
+=== negatedGenericForIn.ts ===
+interface NodeBase {
+    kind: number;
+>kind : number
+}
+
+interface NamedNode extends NodeBase {
+    name: string;
+>name : string
+}
+
+declare function isNamedNode(node: NodeBase): node is NamedNode;
+>isNamedNode : (node: NodeBase) => node is NamedNode
+>node : NodeBase
+
+function copyNodeProperties<NodeType extends NodeBase>(node: NodeType, clone: NodeType) {
+>copyNodeProperties : <NodeType extends NodeBase>(node: NodeType, clone: NodeType) => void
+>node : NodeType
+>clone : NodeType
+
+    if (isNamedNode(node)) {
+>isNamedNode(node) : boolean
+>isNamedNode : (node: NodeBase) => node is NamedNode
+>node : NodeType
+
+        return;
+    }
+    for (const key in node) {
+>key : Extract<keyof NodeType, string>
+>node : NodeType
+
+        clone[key] = node[key];
+>clone[key] = node[key] : NodeType[Extract<keyof NodeType, string>]
+>clone[key] : NodeType[Extract<keyof NodeType, string>]
+>clone : NodeType
+>key : Extract<keyof NodeType, string>
+>node[key] : NodeType[Extract<keyof NodeType, string>]
+>node : NodeType
+>key : Extract<keyof NodeType, string>
+    }
+}
+
+function copyNonCallableProperties<NodeType extends NodeBase>(node: NodeType, clone: NodeType) {
+>copyNonCallableProperties : <NodeType extends NodeBase>(node: NodeType, clone: NodeType) => void
+>node : NodeType
+>clone : NodeType
+
+    if (typeof node === "function") {
+>typeof node === "function" : boolean
+>typeof node : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>node : NodeType
+>"function" : "function"
+
+        return;
+    }
+    for (const key in node) {
+>key : Extract<keyof NodeType, string>
+>node : NodeType
+
+        clone[key] = node[key];
+>clone[key] = node[key] : NodeType[Extract<keyof NodeType, string>]
+>clone[key] : NodeType[Extract<keyof NodeType, string>]
+>clone : NodeType
+>key : Extract<keyof NodeType, string>
+>node[key] : NodeType[Extract<keyof NodeType, string>]
+>node : NodeType
+>key : Extract<keyof NodeType, string>
+    }
+}

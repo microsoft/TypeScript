@@ -131,7 +131,7 @@ function testFunc() {
 >console.log : (...data: any[]) => void
 >console : Console
 >log : (...data: any[]) => void
->val1 : (string | number | readonly (string | number)[]) & not any[]
+>val1 : string | number | readonly (string | number)[]
       }
       console.log(val2);
 >console.log(val2) : void

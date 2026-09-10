@@ -1418,8 +1418,8 @@ export const validate = task({
 });
 
 async function runSmokeTest() {
-    await run("./built/local/tsc", ["-p", "./tsc/testdata/fixtures/compiler", "--noEmit", "--singleThreaded"]);
-    await run("./built/local/tsc", ["-p", "./tsc/testdata/fixtures/compiler", "--noEmit"]);
+    await run("./built/local/tsc", ["-p", "./tsc/testdata/fixtures/compiler", "--noEmit", "--composite", "false", "--incremental", "false", "--singleThreaded"]);
+    await run("./built/local/tsc", ["-p", "./tsc/testdata/fixtures/compiler", "--noEmit", "--composite", "false", "--incremental", "false"]);
 }
 
 export const smokeTest = task({

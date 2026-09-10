@@ -20,9 +20,9 @@ function foo() {
 
         // Trigger non-simple-loop emit
         (() => {
->(() => {            return i;        })() : number & not 0
->(() => {            return i;        }) : () => number & not 0
->() => {            return i;        } : () => number & not 0
+>(() => {            return i;        })() : number
+>(() => {            return i;        }) : () => number
+>() => {            return i;        } : () => number
 
             return i;
 >i : number & not 0

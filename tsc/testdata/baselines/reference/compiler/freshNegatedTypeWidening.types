@@ -1,0 +1,211 @@
+//// [tests/cases/compiler/freshNegatedTypeWidening.ts] ////
+
+=== freshNegatedTypeWidening.ts ===
+interface BaseNode {
+    kind: number;
+>kind : number
+}
+
+interface WrappedNode extends BaseNode {
+    expression: BaseNode;
+>expression : BaseNode
+}
+
+declare function isWrappedNode(node: BaseNode): node is WrappedNode;
+>isWrappedNode : (node: BaseNode) => node is WrappedNode
+>node : BaseNode
+
+function assertWrappedNode(node: BaseNode) {
+>assertWrappedNode : (node: BaseNode) => WrappedNode
+>node : BaseNode
+
+    if (!isWrappedNode(node)) {
+>!isWrappedNode(node) : boolean
+>isWrappedNode(node) : boolean
+>isWrappedNode : (node: BaseNode) => node is WrappedNode
+>node : BaseNode
+
+        return node as WrappedNode;
+>node as WrappedNode : WrappedNode
+>node : BaseNode
+    }
+    return node;
+>node : WrappedNode
+}
+
+declare const explicitlyUnwrapped: BaseNode & not WrappedNode;
+>explicitlyUnwrapped : BaseNode & not WrappedNode
+
+explicitlyUnwrapped as WrappedNode;
+>explicitlyUnwrapped as WrappedNode : WrappedNode
+>explicitlyUnwrapped : BaseNode & not WrappedNode
+
+function skipWrappers(node: WrappedNode): WrappedNode;
+>skipWrappers : { (node: WrappedNode): WrappedNode; (node: BaseNode): BaseNode; }
+>node : WrappedNode
+
+function skipWrappers(node: BaseNode): BaseNode;
+>skipWrappers : { (node: WrappedNode): WrappedNode; (node: BaseNode): BaseNode; }
+>node : BaseNode
+
+function skipWrappers(node: BaseNode) {
+>skipWrappers : { (node: WrappedNode): WrappedNode; (node: BaseNode): BaseNode; }
+>node : BaseNode
+
+    while (isWrappedNode(node)) {
+>isWrappedNode(node) : boolean
+>isWrappedNode : (node: BaseNode) => node is WrappedNode
+>node : BaseNode
+
+        node = node.expression;
+>node = node.expression : BaseNode
+>node : BaseNode
+>node.expression : BaseNode
+>node : WrappedNode
+>expression : BaseNode
+    }
+    return node;
+>node : BaseNode
+}
+
+interface NamedNode extends BaseNode {
+    name: string;
+>name : string
+}
+
+declare function isSpecialNode(node: BaseNode): node is WrappedNode | NamedNode;
+>isSpecialNode : (node: BaseNode) => node is WrappedNode | NamedNode
+>node : BaseNode
+
+function skipSpecialNodes(node: WrappedNode): WrappedNode;
+>skipSpecialNodes : { (node: WrappedNode): WrappedNode; (node: BaseNode): BaseNode; }
+>node : WrappedNode
+
+function skipSpecialNodes(node: BaseNode): BaseNode;
+>skipSpecialNodes : { (node: WrappedNode): WrappedNode; (node: BaseNode): BaseNode; }
+>node : BaseNode
+
+function skipSpecialNodes(node: BaseNode) {
+>skipSpecialNodes : { (node: WrappedNode): WrappedNode; (node: BaseNode): BaseNode; }
+>node : BaseNode
+
+    while (isSpecialNode(node)) {
+>isSpecialNode(node) : boolean
+>isSpecialNode : (node: BaseNode) => node is WrappedNode | NamedNode
+>node : BaseNode
+
+        node = { kind: 0 };
+>node = { kind: 0 } : { kind: number; }
+>node : BaseNode
+>{ kind: 0 } : { kind: number; }
+>kind : number
+>0 : 0
+    }
+    return node;
+>node : BaseNode
+}
+
+function isOrdinaryNode(node: BaseNode) {
+>isOrdinaryNode : (node: BaseNode) => boolean
+>node : BaseNode
+
+    return !isSpecialNode(node);
+>!isSpecialNode(node) : boolean
+>isSpecialNode(node) : boolean
+>isSpecialNode : (node: BaseNode) => node is WrappedNode | NamedNode
+>node : BaseNode
+}
+
+declare const candidate: BaseNode;
+>candidate : BaseNode
+
+if (!isOrdinaryNode(candidate)) {
+>!isOrdinaryNode(candidate) : boolean
+>isOrdinaryNode(candidate) : boolean
+>isOrdinaryNode : (node: BaseNode) => boolean
+>candidate : BaseNode
+
+    candidate.kind;
+>candidate.kind : number
+>candidate : BaseNode
+>kind : number
+}
+
+function assertString(value: {}) {
+>assertString : (value: {}) => string
+>value : {}
+
+    if (typeof value !== "string") {
+>typeof value !== "string" : boolean
+>typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>value : {}
+>"string" : "string"
+
+        return value as string;
+>value as string : string
+>value : {} & not string
+    }
+    return value;
+>value : string
+}
+
+declare const explicitlyNotString: {} & not string;
+>explicitlyNotString : {} & not string
+
+explicitlyNotString as string;
+>explicitlyNotString as string : string
+>explicitlyNotString : {} & not string
+
+function skipStrings(value: string): string;
+>skipStrings : { (value: string): string; (value: {}): {}; }
+>value : string
+
+function skipStrings(value: {}): {};
+>skipStrings : { (value: string): string; (value: {}): {}; }
+>value : {}
+
+function skipStrings(value: {}) {
+>skipStrings : { (value: string): string; (value: {}): {}; }
+>value : {}
+
+    while (typeof value === "string") {
+>typeof value === "string" : boolean
+>typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>value : {}
+>"string" : "string"
+
+        value = {};
+>value = {} : {}
+>value : {}
+>{} : {}
+    }
+    return value;
+>value : {} & not string
+}
+
+function isNotString(value: {}) {
+>isNotString : (value: {}) => boolean
+>value : {}
+
+    return typeof value !== "string";
+>typeof value !== "string" : boolean
+>typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>value : {}
+>"string" : "string"
+}
+
+declare const nonNullValue: {};
+>nonNullValue : {}
+
+if (!isNotString(nonNullValue)) {
+>!isNotString(nonNullValue) : boolean
+>isNotString(nonNullValue) : boolean
+>isNotString : (value: {}) => boolean
+>nonNullValue : {}
+
+    nonNullValue.toString();
+>nonNullValue.toString() : string
+>nonNullValue.toString : () => string
+>nonNullValue : {}
+>toString : () => string
+}

@@ -229,7 +229,7 @@ const TEST_CASES = [
         }
         else {
             value;  // string
->value : string & not ""
+>value : string
         }
         if (isMaybeEmptyString(value)) {
 >isMaybeEmptyString(value) : boolean
@@ -241,7 +241,7 @@ const TEST_CASES = [
         }
         else {
             value;  // string
->value : string & not ""
+>value : string
         }
     },
     (value?: string) => {
@@ -258,7 +258,7 @@ const TEST_CASES = [
         }
         else {
             value;  // string
->value : string & not ""
+>value : string
         }
     },
     (value: number) => {
@@ -275,7 +275,7 @@ const TEST_CASES = [
         }
         else {
             value;  // number
->value : number & not 0
+>value : number
         }
         if (isMaybeZero(value)) {
 >isMaybeZero(value) : boolean
@@ -287,7 +287,7 @@ const TEST_CASES = [
         }
         else {
             value;  // number
->value : number & not 0
+>value : number
         }
     },
     (value?: number) => {
@@ -304,7 +304,7 @@ const TEST_CASES = [
         }
         else {
             value;  // number
->value : number & not 0
+>value : number
         }
     },
     (value: string[]) => {
@@ -321,7 +321,7 @@ const TEST_CASES = [
         }
         else {
             value;  // string[]
->value : string[] & not []
+>value : string[]
         }
         if (isMaybeEmptyArray(value)) {
 >isMaybeEmptyArray(value) : boolean
@@ -333,7 +333,7 @@ const TEST_CASES = [
         }
         else {
             value;  // string[]
->value : string[] & not []
+>value : string[]
         }
     },
     (value?: string[]) => {
@@ -350,7 +350,7 @@ const TEST_CASES = [
         }
         else {
             value;  // string[]
->value : string[] & not []
+>value : string[]
         }
     },
 ];

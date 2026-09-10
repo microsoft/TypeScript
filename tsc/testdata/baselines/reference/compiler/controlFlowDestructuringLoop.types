@@ -52,7 +52,7 @@ function foo(things: Val[]): void {
         else {
             const { val } = thing;
 >val : string
->thing : StrVal & not NumVal
+>thing : StrVal
 
             val.length;
 >val.length : number
