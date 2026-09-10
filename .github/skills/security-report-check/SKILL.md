@@ -46,7 +46,8 @@ This is by design: writing files to disk *is the point* of a compiler.
 Callers who need to constrain output locations must do so externally (e.g., filesystem permissions, containers, sandboxing).
 Similarly, running `tsc --build --clean` may delete files from disk; crafted `.tsbuildinfo` or `tsconfig.json`s may cause any file to be deleted.
 
-**Input code is output code.**
+### Input code is output code
+
 If an attacker has control of an input TS file, they can of course control the contents of the output JS file.
 Attacks that depend on control of the input file and execution of the output file are not considered compiler security issues, because the attacker already has control of the input file.
 
