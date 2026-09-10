@@ -3290,15 +3290,6 @@ func (b *NodeBuilderImpl) visitAndTransformType(t *Type, transform func(b *NodeB
 }
 
 func (b *NodeBuilderImpl) typeToTypeNode(t *Type) *ast.TypeNode {
-	t = getNonDistributedTypeParameter(t)
-	// Push type onto typeStack for expansion depth tracking
-	if b.ctx.maxExpansionDepth >= 0 && t != nil {
-		b.ctx.typeStack = append(b.ctx.typeStack, t)
-		defer func() {
-			b.ctx.typeStack = b.ctx.typeStack[:len(b.ctx.typeStack)-1]
-		}()
-	}
-
 	inTypeAlias := b.ctx.flags & nodebuilder.FlagsInTypeAlias
 	b.ctx.flags &^= nodebuilder.FlagsInTypeAlias
 
@@ -3310,6 +3301,16 @@ func (b *NodeBuilderImpl) typeToTypeNode(t *Type) *ast.TypeNode {
 		}
 		b.ctx.approximateLength += 3
 		return b.f.NewKeywordTypeNode(ast.KindAnyKeyword)
+	}
+
+	t = getNonDistributedTypeParameter(t)
+
+	// Push type onto typeStack for expansion depth tracking
+	if b.ctx.maxExpansionDepth >= 0 {
+		b.ctx.typeStack = append(b.ctx.typeStack, t)
+		defer func() {
+			b.ctx.typeStack = b.ctx.typeStack[:len(b.ctx.typeStack)-1]
+		}()
 	}
 
 	if b.ctx.flags&nodebuilder.FlagsNoTypeReduction == 0 {
