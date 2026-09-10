@@ -1851,7 +1851,7 @@ func (c *Checker) containsMatchingReference(source *ast.Node, target *ast.Node) 
 func (c *Checker) optionalChainContainsReference(source *ast.Node, target *ast.Node) bool {
 	for ast.IsOptionalChain(source) {
 		source = source.Expression()
-		if c.isMatchingReference(source, target) {
+		if c.isMatchingReference(target, source) {
 			return true
 		}
 	}
