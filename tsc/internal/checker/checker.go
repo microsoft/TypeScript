@@ -6749,9 +6749,9 @@ func (c *Checker) getIterationTypesOfMethod(t *Type, resolver *IterationTypesRes
 			mapper := methodType.Mapper()
 			var nextType *Type
 			if methodName == "next" {
-				nextType = mapper.Map(typeParameters[2])
+				nextType = getMappedType(typeParameters[2], mapper)
 			}
-			return IterationTypes{mapper.Map(typeParameters[0]), mapper.Map(typeParameters[1]), nextType}
+			return IterationTypes{getMappedType(typeParameters[0], mapper), getMappedType(typeParameters[1], mapper), nextType}
 		}
 	}
 	// Extract the first parameter and return type of each signature.
@@ -21403,7 +21403,7 @@ func (c *Checker) getArrayMemberCallSignatures(t *Type) []*Signature {
 	}
 	// Transform the type from `(A[] | B[])["member"]` to `(A | B)[]["member"]` (since we pretend array is covariant anyway).
 	arrayArg := c.mapType(t, func(t *Type) *Type {
-		return t.Mapper().Map(core.IfElse(c.isReadonlyArraySymbol(t.symbol.Parent), c.globalReadonlyArrayType, c.globalArrayType).AsInterfaceType().TypeParameters()[0])
+		return getMappedType(core.IfElse(c.isReadonlyArraySymbol(t.symbol.Parent), c.globalReadonlyArrayType, c.globalArrayType).AsInterfaceType().TypeParameters()[0], t.Mapper())
 	})
 	arrayType := c.createArrayTypeEx(arrayArg, someType(t, func(t *Type) bool {
 		return c.isReadonlyArraySymbol(t.symbol.Parent)
@@ -22562,7 +22562,7 @@ func (c *Checker) instantiateTypeWorker(t *Type, m *TypeMapper, alias *TypeAlias
 	flags := t.flags
 	switch {
 	case flags&TypeFlagsTypeParameter != 0:
-		return m.Map(t)
+		return getMappedType(t, m)
 	case flags&TypeFlagsObject != 0:
 		objectFlags := t.objectFlags
 		if objectFlags&(ObjectFlagsReference|ObjectFlagsAnonymous|ObjectFlagsMapped) != 0 {
@@ -22837,7 +22837,7 @@ func (c *Checker) getConditionalTypeInstantiation(t *Type, mapper *TypeMapper, f
 			checkType := root.checkType
 			var distributionType *Type
 			if root.isDistributive {
-				distributionType = c.getReducedType(newMapper.Map(checkType))
+				distributionType = c.getReducedType(getMappedType(checkType, newMapper))
 			}
 			// Distributive conditional types are distributed over union types. For example, when the
 			// distributive conditional type T extends U ? X : Y is instantiated with A | B for T, the
@@ -23352,10 +23352,46 @@ func (c *Checker) getTypeFromTypeReference(node *ast.Node) *Type {
 		} else if t := c.getIntendedTypeFromJSDocTypeReference(node); t != nil {
 			links.resolvedType = t
 		} else {
-			links.resolvedType = c.getTypeReferenceType(node, c.getSymbolFromTypeReference(node))
+			links.resolvedType = c.getDistributedTypeParameter(node, c.getTypeReferenceType(node, c.getSymbolFromTypeReference(node)))
 		}
 	}
 	return links.resolvedType
+}
+
+func (c *Checker) getDistributedTypeParameter(node *ast.Node, t *Type) *Type {
+	if t.flags&TypeFlagsTypeParameter != 0 && !t.AsTypeParameter().isDistributed {
+		for n := node.Parent; n != nil && !ast.IsStatement(n); n = n.Parent {
+			if ast.IsConditionalTypeNode(n) {
+				if checkTypeNode := n.AsConditionalTypeNode().CheckType; isSimpleIdentifierTypeReference(checkTypeNode) && c.getSymbolFromTypeReference(checkTypeNode) == t.symbol {
+					// If node is contained in a distributive conditional type for the given type parameter,
+					// return the distributed form of the type parameter.
+					return c.getDistributedTypeFromTypeParameter(t)
+				}
+			}
+		}
+	}
+	return t
+}
+
+func (c *Checker) getDistributedTypeFromTypeParameter(t *Type) *Type {
+	tp := t.AsTypeParameter()
+	if tp.distributedType == nil {
+		tp.distributedType = c.newTypeParameter(t.symbol)
+		tp.distributedType.AsTypeParameter().isDistributed = true
+		tp.distributedType.AsTypeParameter().constraint = t
+	}
+	return tp.distributedType
+}
+
+func getNonDistributedTypeParameter(t *Type) *Type {
+	if t.flags&TypeFlagsTypeParameter != 0 && t.AsTypeParameter().isDistributed {
+		return t.AsTypeParameter().constraint
+	}
+	return t
+}
+
+func isSimpleIdentifierTypeReference(node *ast.Node) bool {
+	return ast.IsTypeReferenceNode(node) && ast.IsIdentifier(node.AsTypeReferenceNode().TypeName) && node.TypeArgumentList() == nil
 }
 
 func (c *Checker) getIntendedTypeFromJSDocTypeReference(node *ast.Node) *Type {
@@ -24802,11 +24838,11 @@ func (c *Checker) getTailRecursionRoot(newType *Type, newMapper *TypeMapper) (*C
 		newRoot := newType.AsConditionalType().root
 		if len(newRoot.outerTypeParameters) != 0 {
 			typeParamMapper := c.combineTypeMappers(newType.AsConditionalType().mapper, newMapper)
-			typeArguments := core.Map(newRoot.outerTypeParameters, func(t *Type) *Type { return typeParamMapper.Map(t) })
+			typeArguments := core.Map(newRoot.outerTypeParameters, typeParamMapper.Map)
 			newRootMapper := newTypeMapper(newRoot.outerTypeParameters, typeArguments)
 			var newCheckType *Type
 			if newRoot.isDistributive {
-				newCheckType = newRootMapper.Map(newRoot.checkType)
+				newCheckType = getMappedType(newRoot.checkType, newRootMapper)
 			}
 			if newCheckType == nil || newCheckType == newRoot.checkType || newCheckType.flags&(TypeFlagsUnion|TypeFlagsNever) == 0 {
 				return newRoot, newRootMapper

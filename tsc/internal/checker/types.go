@@ -1170,7 +1170,9 @@ type TypeParameter struct {
 	target              *Type
 	mapper              *TypeMapper
 	isThisType          bool
+	isDistributed       bool
 	resolvedDefaultType *Type
+	distributedType     *Type
 }
 
 func (t *TypeParameter) IsThisType() bool { return t.isThisType }

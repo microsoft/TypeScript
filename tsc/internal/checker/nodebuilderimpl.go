@@ -3290,6 +3290,7 @@ func (b *NodeBuilderImpl) visitAndTransformType(t *Type, transform func(b *NodeB
 }
 
 func (b *NodeBuilderImpl) typeToTypeNode(t *Type) *ast.TypeNode {
+	t = getNonDistributedTypeParameter(t)
 	// Push type onto typeStack for expansion depth tracking
 	if b.ctx.maxExpansionDepth >= 0 && t != nil {
 		b.ctx.typeStack = append(b.ctx.typeStack, t)
