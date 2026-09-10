@@ -1,15 +1,12 @@
-/index.ts(2,45): error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'node18', 'node20', 'nodenext', or 'preserve'.
 /index.ts(2,71): error TS1453: `resolution-mode` should be either `require` or `import`.
 /index.ts(4,10): error TS2305: Module '"pkg"' has no exported member 'ImportInterface'.
 /index.ts(4,39): error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'node18', 'node20', 'nodenext', or 'preserve'.
 /index.ts(6,76): error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'node18', 'node20', 'nodenext', or 'preserve'.
 
 
-==== /index.ts (5 errors) ====
+==== /index.ts (4 errors) ====
     // incorrect mode
     import type { RequireInterface } from "pkg" with { "resolution-mode": "foobar" };
-                                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'node18', 'node20', 'nodenext', or 'preserve'.
                                                                           ~~~~~~~~
 !!! error TS1453: `resolution-mode` should be either `require` or `import`.
     // not type-only

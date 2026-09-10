@@ -1,0 +1,148 @@
+// === QuickInfo ===
+=== /index.ts ===
+// import * as css from "./style.asset" with { type: "css" };
+//                       ^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | module "*.asset" with { type: "css"; }
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// import * as text from "./copy.asset" with { type: "text" };
+//                        ^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | module "*.asset" with { type: "text"; }
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// css.shared;
+//     ^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const shared: css.CssPayload
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// text.shared;
+//      ^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const shared: text.TextPayload
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 21,
+      "LSPosition": {
+        "line": 0,
+        "character": 21
+      },
+      "Name": "cssModule",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nmodule \"*.asset\" with { type: \"css\"; }\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 0,
+          "character": 22
+        },
+        "end": {
+          "line": 0,
+          "character": 35
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 81,
+      "LSPosition": {
+        "line": 1,
+        "character": 22
+      },
+      "Name": "textModule",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nmodule \"*.asset\" with { type: \"text\"; }\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 1,
+          "character": 23
+        },
+        "end": {
+          "line": 1,
+          "character": 35
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 123,
+      "LSPosition": {
+        "line": 2,
+        "character": 4
+      },
+      "Name": "cssUse",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nconst shared: css.CssPayload\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 2,
+          "character": 4
+        },
+        "end": {
+          "line": 2,
+          "character": 10
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 136,
+      "LSPosition": {
+        "line": 3,
+        "character": 5
+      },
+      "Name": "textUse",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nconst shared: text.TextPayload\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 3,
+          "character": 5
+        },
+        "end": {
+          "line": 3,
+          "character": 11
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  }
+]

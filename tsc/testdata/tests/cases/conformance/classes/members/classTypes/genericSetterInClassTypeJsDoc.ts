@@ -4,7 +4,7 @@
 // @allowJs: true
 // @checkJs: true
 // @filename: genericSetterInClassTypeJsDoc.js
-// @outFile: genericSetterInClassTypeJsDoc-out.js
+// @outDir: out
 
 /**
  * @template T

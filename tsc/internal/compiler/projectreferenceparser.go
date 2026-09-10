@@ -73,7 +73,7 @@ func (p *projectReferenceParser) initMapper(tasks []*projectReferenceParseTask) 
 	p.loader.projectReferenceFileMapper.referencesInConfigFile = make(map[tspath.Path][]tspath.Path, totalReferences)
 	p.loader.projectReferenceFileMapper.sourceToProjectReference = make(map[tspath.Path]*tsoptions.SourceOutputAndProjectReference)
 	p.loader.projectReferenceFileMapper.outputDtsToProjectReference = make(map[tspath.Path]*tsoptions.SourceOutputAndProjectReference)
-	p.loader.projectReferenceFileMapper.referencesInConfigFile[p.loader.opts.Config.ConfigFile.SourceFile.Path()] = p.initMapperWorker(tasks, &collections.Set[*projectReferenceParseTask]{})
+	p.loader.projectReferenceFileMapper.referencesInConfigFile[p.loader.projectReferenceFileMapper.rootConfigPath()] = p.initMapperWorker(tasks, &collections.Set[*projectReferenceParseTask]{})
 	if p.loader.projectReferenceFileMapper.opts.canUseProjectReferenceSource() && len(p.loader.projectReferenceFileMapper.outputDtsToProjectReference) != 0 {
 		p.loader.projectReferenceFileMapper.host = newProjectReferenceDtsFakingHost(p.loader)
 	}

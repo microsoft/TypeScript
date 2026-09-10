@@ -21,7 +21,7 @@ type Symbol struct {
 }
 
 func (s *Symbol) IsExternalModule() bool {
-	return s.Flags&SymbolFlagsModule != 0 && len(s.Name) > 0 && s.Name[0] == '"'
+	return s.Flags&SymbolFlagsModule != 0 && IsAmbientModuleSymbolName(s.Name)
 }
 
 func (s *Symbol) IsStatic() bool {

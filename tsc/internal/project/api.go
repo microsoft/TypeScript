@@ -2,11 +2,8 @@ package project
 
 import (
 	"context"
-	"fmt"
-	"maps"
 
-	"github.com/microsoft/TypeScript/tsc/internal/core"
-	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
+	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 )
 
 // APIUpdate creates a new snapshot incorporating the given file changes and the
@@ -23,47 +20,27 @@ func (s *Session) APIUpdate(ctx context.Context, apiFileChanges FileChangeSummar
 
 	fileChanges, overlays, ataChanges, _ := s.flushChanges(ctx)
 	mergeFileChangeSummary(&fileChanges, apiFileChanges)
+	var fs vfs.FS
+	var replaceFileSystem bool
+	if apiRequest != nil {
+		fs = apiRequest.FileSystem
+		replaceFileSystem = apiRequest.ReplaceFileSystem
+	}
 
 	newSnapshot := s.updateSnapshotRef(ctx, overlays, SnapshotChange{
-		apiRequest:  apiRequest,
-		fileChanges: fileChanges,
-		ataChanges:  ataChanges,
+		apiRequest:         apiRequest,
+		fs:                 fs,
+		fileSystemOverride: fs != nil,
+		replaceFileSystem:  replaceFileSystem,
+		fileChanges:        fileChanges,
+		ataChanges:         ataChanges,
 	})
 	return newSnapshot, newSnapshot.apiError
 }
 
-// APIUpdateTemporary creates a snapshot that layers a temporary in-memory content
-// override for a file on top of baseSnapshot.
-// The caller must retain baseSnapshot for the duration of this call.
-// An error is returned if the file name does not have a recognized script extension.
-// On success, the returned snapshot carries a single reference (the clone ref);
-// the caller must call snapshot.Deref(s) when done.
-func (s *Session) APIUpdateTemporary(ctx context.Context, baseSnapshot *Snapshot, uri lsproto.DocumentUri, newText string) (*Snapshot, error) {
-	path := uri.Path(baseSnapshot.UseCaseSensitiveFileNames())
-
-	overlays := maps.Clone(baseSnapshot.fs.overlays)
-	version := int32(0)
-	var fileChanges FileChangeSummary
-	existing := overlays[path]
-	var scriptKind core.ScriptKind
-	if existing != nil {
-		version = existing.Version() + 1
-		scriptKind = existing.Kind()
-		fileChanges.Changed.Add(uri)
-	} else {
-		scriptKind = core.GetScriptKindFromFileName(uri.FileName())
-		if scriptKind == core.ScriptKindUnknown {
-			return nil, fmt.Errorf("unsupported file extension: %s", uri.FileName())
-		}
-		fileChanges.Opened = uri
-	}
-	overlays[path] = newOverlay(uri.FileName(), newText, version, scriptKind)
-
-	newSnapshot := baseSnapshot.Clone(ctx, SnapshotChange{
-		fileChanges: fileChanges,
-		ResourceRequest: ResourceRequest{
-			Documents: []lsproto.DocumentUri{uri},
-		},
-	}, overlays, s)
-	return newSnapshot, nil
+// TryAdoptSnapshotInBackground retains a derived snapshot and attempts to adopt it
+// as the session's current snapshot without blocking the caller.
+func (s *Session) TryAdoptSnapshotInBackground(baseSnapshot, newSnapshot *Snapshot) {
+	s.RetainSnapshot(newSnapshot)
+	s.tryAdoptSnapshotChangeInBackground(baseSnapshot, newSnapshot)
 }

@@ -73,22 +73,22 @@ const b = import('./0', { with: { type: "json" } })
 >b : Promise<typeof import("./0")>
 >import('./0', { with: { type: "json" } }) : Promise<typeof import("./0")>
 >'./0' : "./0"
->{ with: { type: "json" } } : { with: { type: string; }; }
->with : { type: string; }
->{ type: "json" } : { type: string; }
->type : string
+>{ with: { type: "json" } } : { with: { readonly type: "json"; }; }
+>with : { readonly type: "json"; }
+>{ type: "json" } : { readonly type: "json"; }
+>type : "json"
 >"json" : "json"
 
 const c = import('./0', { with: { type: "json", ttype: "typo" } })
 >c : Promise<typeof import("./0")>
 >import('./0', { with: { type: "json", ttype: "typo" } }) : Promise<typeof import("./0")>
 >'./0' : "./0"
->{ with: { type: "json", ttype: "typo" } } : { with: { type: string; ttype: string; }; }
->with : { type: string; ttype: string; }
->{ type: "json", ttype: "typo" } : { type: string; ttype: string; }
->type : string
+>{ with: { type: "json", ttype: "typo" } } : { with: { readonly type: "json"; readonly ttype: "typo"; }; }
+>with : { readonly type: "json"; readonly ttype: "typo"; }
+>{ type: "json", ttype: "typo" } : { readonly type: "json"; readonly ttype: "typo"; }
+>type : "json"
 >"json" : "json"
->ttype : string
+>ttype : "typo"
 >"typo" : "typo"
 
 const d = import('./0', { with: {} })
@@ -130,9 +130,9 @@ const h = import('./0', { with: { type: "json" }},)
 >h : Promise<typeof import("./0")>
 >import('./0', { with: { type: "json" }},) : Promise<typeof import("./0")>
 >'./0' : "./0"
->{ with: { type: "json" }} : { with: { type: string; }; }
->with : { type: string; }
->{ type: "json" } : { type: string; }
->type : string
+>{ with: { type: "json" }} : { with: { readonly type: "json"; }; }
+>with : { readonly type: "json"; }
+>{ type: "json" } : { readonly type: "json"; }
+>type : "json"
 >"json" : "json"
 

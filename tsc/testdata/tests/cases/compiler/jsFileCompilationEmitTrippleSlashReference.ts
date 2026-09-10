@@ -1,6 +1,6 @@
 // @target: es2015
 // @allowJs: true
-// @outFile: out.js
+// @outDir: out
 // @declaration: true
 // @filename: a.ts
 class c {

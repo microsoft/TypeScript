@@ -2,7 +2,7 @@
 // @filename: /foo/tsconfig.json
 {
     "compilerOptions": {
-        "module": "amd",
+        "module": "commonjs",
         "target": "ES3",
         "noImplicitUseStrict": true,
         "keyofStringsOnly": true,

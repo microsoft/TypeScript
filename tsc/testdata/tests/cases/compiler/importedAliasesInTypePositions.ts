@@ -1,5 +1,5 @@
 // @target: es2015
-// @module:amd
+// @module:commonjs
 // @Filename: file1.ts
 export namespace elaborate.nested.mod.name {
     export class ReferredTo {
@@ -9,7 +9,7 @@ export namespace elaborate.nested.mod.name {
 }
 
 // @Filename: file2.ts
-// @module: amd
+// @module: commonjs
 import RT_ALIAS = require("file1");
 import ReferredTo = RT_ALIAS.elaborate.nested.mod.name.ReferredTo;
 

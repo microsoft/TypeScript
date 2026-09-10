@@ -1,0 +1,33 @@
+// === findAllReferences ===
+// === /index.ts ===
+// import * as css from "./style.asset" with { type: "css" };
+// import * as text from "./copy.asset" with { type: "text" };
+// css./*FIND ALL REFS*/[|shared|];
+// text.shared;
+
+// === /types.d.ts ===
+// declare module "*.asset" with { type: "css" } {
+//     export interface CssPayload { kind: "css" }
+//     export const [|shared|]: CssPayload;
+// }
+// declare module "*.asset" with { type: "text" } {
+//     export interface TextPayload { kind: "text" }
+// --- (line: 7) skipped ---
+
+
+
+// === findAllReferences ===
+// === /index.ts ===
+// import * as css from "./style.asset" with { type: "css" };
+// import * as text from "./copy.asset" with { type: "text" };
+// css.shared;
+// text./*FIND ALL REFS*/[|shared|];
+
+// === /types.d.ts ===
+// --- (line: 3) skipped ---
+// }
+// declare module "*.asset" with { type: "text" } {
+//     export interface TextPayload { kind: "text" }
+//     export const [|shared|]: TextPayload;
+// }
+// 

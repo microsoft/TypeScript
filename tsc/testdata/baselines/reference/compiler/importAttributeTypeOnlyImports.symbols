@@ -1,0 +1,104 @@
+//// [tests/cases/compiler/importAttributeTypeOnlyImports.ts] ////
+
+=== /types.d.ts ===
+declare module "*.style" with { type: "css" } {
+>"*.style" : Symbol("*.style", Decl(types.d.ts, 0, 0))
+>type : Symbol(type, Decl(types.d.ts, 0, 31))
+
+    export interface Style {
+>Style : Symbol(Style, Decl(types.d.ts, 0, 47))
+
+        kind: "css";
+>kind : Symbol(Style.kind, Decl(types.d.ts, 1, 28))
+    }
+}
+
+declare module "require/*.style" with { type: "css", "resolution-mode": "require" } {
+>"require/*.style" : Symbol("require/*.style", Decl(types.d.ts, 4, 1))
+>type : Symbol(type, Decl(types.d.ts, 6, 39))
+>"resolution-mode" : Symbol("resolution-mode", Decl(types.d.ts, 6, 52))
+
+    export interface RequireStyle {
+>RequireStyle : Symbol(RequireStyle, Decl(types.d.ts, 6, 85))
+
+        kind: "require-css";
+>kind : Symbol(RequireStyle.kind, Decl(types.d.ts, 7, 35))
+    }
+}
+
+=== /reexports.ts ===
+export type { Style } from "plain.style" with { type: "css" };
+>Style : Symbol(Style, Decl(reexports.ts, 0, 13))
+
+export type { RequireStyle } from "require/reexport.style" with { type: "css", "resolution-mode": "require" };
+>RequireStyle : Symbol(RequireStyle, Decl(reexports.ts, 1, 13))
+
+=== /jsdoc.js ===
+/** @import { Style } from "jsdoc.style" with { type: "css" } */
+
+/** @type {Style} */
+const jsdocStyle = { kind: "css" };
+>jsdocStyle : Symbol(jsdocStyle, Decl(jsdoc.js, 3, 5))
+>kind : Symbol(kind, Decl(jsdoc.js, 3, 20))
+
+const jsdocCssKind = jsdocStyle.kind;
+>jsdocCssKind : Symbol(jsdocCssKind, Decl(jsdoc.js, 4, 5))
+>jsdocStyle.kind : Symbol(Style.kind, Decl(types.d.ts, 1, 28))
+>jsdocStyle : Symbol(jsdocStyle, Decl(jsdoc.js, 3, 5))
+>kind : Symbol(Style.kind, Decl(types.d.ts, 1, 28))
+
+=== /index.ts ===
+import type { Style } from "plain.style" with { type: "css" };
+>Style : Symbol(Style, Decl(index.ts, 0, 13))
+
+import type { RequireStyle } from "require/import.style" with { type: "css", "resolution-mode": "require" };
+>RequireStyle : Symbol(RequireStyle, Decl(index.ts, 1, 13))
+
+type ImportTypeStyle = import("inline.style", { with: { type: "css" } }).Style;
+>ImportTypeStyle : Symbol(ImportTypeStyle, Decl(index.ts, 1, 108))
+>Style : Symbol(Style, Decl(types.d.ts, 0, 47))
+
+type ImportTypeRequireStyle = import("require/inline.style", { with: { type: "css", "resolution-mode": "require" } }).RequireStyle;
+>ImportTypeRequireStyle : Symbol(ImportTypeRequireStyle, Decl(index.ts, 3, 79))
+>RequireStyle : Symbol(RequireStyle, Decl(types.d.ts, 6, 85))
+
+declare const importedStyle: Style;
+>importedStyle : Symbol(importedStyle, Decl(index.ts, 6, 13))
+>Style : Symbol(Style, Decl(index.ts, 0, 13))
+
+declare const importedRequireStyle: RequireStyle;
+>importedRequireStyle : Symbol(importedRequireStyle, Decl(index.ts, 7, 13))
+>RequireStyle : Symbol(RequireStyle, Decl(index.ts, 1, 13))
+
+declare const importTypeStyle: ImportTypeStyle;
+>importTypeStyle : Symbol(importTypeStyle, Decl(index.ts, 8, 13))
+>ImportTypeStyle : Symbol(ImportTypeStyle, Decl(index.ts, 1, 108))
+
+declare const importTypeRequireStyle: ImportTypeRequireStyle;
+>importTypeRequireStyle : Symbol(importTypeRequireStyle, Decl(index.ts, 9, 13))
+>ImportTypeRequireStyle : Symbol(ImportTypeRequireStyle, Decl(index.ts, 3, 79))
+
+const cssKind: "css" = importedStyle.kind;
+>cssKind : Symbol(cssKind, Decl(index.ts, 11, 5))
+>importedStyle.kind : Symbol(Style.kind, Decl(types.d.ts, 1, 28))
+>importedStyle : Symbol(importedStyle, Decl(index.ts, 6, 13))
+>kind : Symbol(Style.kind, Decl(types.d.ts, 1, 28))
+
+const requireCssKind: "require-css" = importedRequireStyle.kind;
+>requireCssKind : Symbol(requireCssKind, Decl(index.ts, 12, 5))
+>importedRequireStyle.kind : Symbol(RequireStyle.kind, Decl(types.d.ts, 7, 35))
+>importedRequireStyle : Symbol(importedRequireStyle, Decl(index.ts, 7, 13))
+>kind : Symbol(RequireStyle.kind, Decl(types.d.ts, 7, 35))
+
+const importTypeCssKind: "css" = importTypeStyle.kind;
+>importTypeCssKind : Symbol(importTypeCssKind, Decl(index.ts, 13, 5))
+>importTypeStyle.kind : Symbol(Style.kind, Decl(types.d.ts, 1, 28))
+>importTypeStyle : Symbol(importTypeStyle, Decl(index.ts, 8, 13))
+>kind : Symbol(Style.kind, Decl(types.d.ts, 1, 28))
+
+const importTypeRequireCssKind: "require-css" = importTypeRequireStyle.kind;
+>importTypeRequireCssKind : Symbol(importTypeRequireCssKind, Decl(index.ts, 14, 5))
+>importTypeRequireStyle.kind : Symbol(RequireStyle.kind, Decl(types.d.ts, 7, 35))
+>importTypeRequireStyle : Symbol(importTypeRequireStyle, Decl(index.ts, 9, 13))
+>kind : Symbol(RequireStyle.kind, Decl(types.d.ts, 7, 35))
+

@@ -364,6 +364,7 @@ func TestProjectLifetime(t *testing.T) {
 				"include": ["src"]
 			}`,
 			"/home/projects/TS/p1/src/index.ts": `export const x = 1;`,
+			"/home/projects/TS/p1/src/other.ts": `export const y = 2;`,
 		}
 		session, utils := projecttestutil.Setup(files)
 
@@ -398,10 +399,19 @@ func TestProjectLifetime(t *testing.T) {
 				Type: lsproto.FileChangeTypeDeleted,
 			},
 		})
+		session.WaitForBackgroundTasks()
 
-		// Should now have one configured project only (tsconfig.json now includes src/index.ts)
+		// The background update should route index.ts to the new configured project,
+		// but project cleanup is deferred until the next file open.
 		_, err = session.GetLanguageService(context.Background(), indexUri)
 		assert.NilError(t, err)
+		snapshot = session.Snapshot()
+		assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 2)
+		assert.Assert(t, snapshot.ProjectCollection.InferredProject() != nil)
+		assert.Equal(t, snapshot.GetDefaultProject(indexUri).Name(), "/home/projects/TS/p1/tsconfig.json")
+
+		otherUri := lsproto.DocumentUri("file:///home/projects/TS/p1/src/other.ts")
+		session.DidOpenFile(context.Background(), otherUri, 1, files["/home/projects/TS/p1/src/other.ts"].(string), lsproto.LanguageKindTypeScript)
 		snapshot = session.Snapshot()
 		assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 1)
 		assert.Assert(t, snapshot.ProjectCollection.InferredProject() == nil)

@@ -16,12 +16,12 @@ export type LocalInterface =
 >import("pkg", { with: {1234, "resolution-mode": "import"} }).ImportInterface : any
 >import("pkg", { with: {1234, "resolution-mode": "import"} }) : Promise<{ default: typeof import("./node_modules/pkg/import"); }>
 >"pkg" : "pkg"
->{ with: {1234, "resolution-mode": "import"} } : { with: { 1234: any; "resolution-mode": string; }; }
->with : { 1234: any; "resolution-mode": string; }
->{1234, "resolution-mode": "import"} : { 1234: any; "resolution-mode": string; }
+>{ with: {1234, "resolution-mode": "import"} } : { with: { readonly 1234: any; readonly "resolution-mode": "import"; }; }
+>with : { readonly 1234: any; readonly "resolution-mode": "import"; }
+>{1234, "resolution-mode": "import"} : { readonly 1234: any; readonly "resolution-mode": "import"; }
 >1234 : any
 > : any
->"resolution-mode" : string
+>"resolution-mode" : "import"
 >"import" : "import"
 >ImportInterface : any
 

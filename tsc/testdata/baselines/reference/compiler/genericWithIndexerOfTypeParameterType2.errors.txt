@@ -1,0 +1,23 @@
+genericWithIndexerOfTypeParameterType2.ts(2,5): error TS2564: Property '_itemsByKey' has no initializer and is not definitely assigned in the constructor.
+genericWithIndexerOfTypeParameterType2.ts(12,5): error TS2564: Property '__isNew' has no initializer and is not definitely assigned in the constructor.
+
+
+==== genericWithIndexerOfTypeParameterType2.ts (2 errors) ====
+    export class Collection<TItem extends CollectionItem> {
+        _itemsByKey: { [key: string]: TItem; };
+        ~~~~~~~~~~~
+!!! error TS2564: Property '_itemsByKey' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+    export class List extends Collection<ListItem>{
+        Bar() {}
+    }
+    
+    export class CollectionItem {}
+    
+    export class ListItem extends CollectionItem {
+        __isNew: boolean;
+        ~~~~~~~
+!!! error TS2564: Property '__isNew' has no initializer and is not definitely assigned in the constructor.
+    }
+    

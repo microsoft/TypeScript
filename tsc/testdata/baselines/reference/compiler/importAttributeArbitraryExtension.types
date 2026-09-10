@@ -1,0 +1,76 @@
+//// [tests/cases/compiler/importAttributeArbitraryExtension.ts] ////
+
+=== /types.d.ts ===
+declare module "*.ext" with { type: "custom" } {
+>"*.ext" : typeof import("*.ext", { with: { type: "custom" } })
+>type : "custom"
+
+    export const ambient: "ambient";
+>ambient : "ambient"
+}
+
+declare module "*" with { type: "text" } {
+>"*" : typeof import("*", { with: { type: "text" } })
+>type : "text"
+
+    const content: string;
+>content : string
+
+    export default content;
+>content : string
+}
+
+=== /file.d.ext.ts ===
+export const physical: "physical";
+>physical : "physical"
+
+=== /index.ts ===
+import * as value from "./file.ext";
+>value : typeof value
+
+import * as valueAttr from "./file.ext" with { type: "custom" };
+>valueAttr : typeof valueAttr
+>type : any
+
+value.physical;
+>value.physical : "physical"
+>value : typeof value
+>physical : "physical"
+
+value.ambient;
+>value.ambient : any
+>value : typeof value
+>ambient : any
+
+valueAttr.physical;
+>valueAttr.physical : any
+>valueAttr : typeof valueAttr
+>physical : any
+
+valueAttr.ambient;
+>valueAttr.ambient : "ambient"
+>valueAttr : typeof valueAttr
+>ambient : "ambient"
+
+=== /foo.ts ===
+const someConstant: number = 42;
+>someConstant : number
+>42 : 42
+
+export default someConstant;
+>someConstant : number
+
+=== /bar.ts ===
+import someConstant from "./foo.ts";
+>someConstant : number
+
+import someText from "./foo.ts" with { type: "text" };
+>someText : string
+>type : any
+
+someConstant;
+>someConstant : number
+
+someText;
+>someText : string
+

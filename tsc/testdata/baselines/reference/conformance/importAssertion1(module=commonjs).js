@@ -143,7 +143,7 @@ const h = Promise.resolve().then(() => __importStar(require('./0')));
 export declare const a = 1;
 export declare const b = 2;
 //// [1.d.ts]
-import './0';
+import './0' with { type: "json" };
 //// [2.d.ts]
 export {};
 //// [3.d.ts]

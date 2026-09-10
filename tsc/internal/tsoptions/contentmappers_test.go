@@ -54,6 +54,7 @@ func TestGetOutputFileNamesExcludesMapperOwnedOutputs(t *testing.T) {
 			SourceMap:      core.TSTrue,
 		},
 		[]string{"/src/Component.vue"},
+		nil,
 		tspath.ComparePathsOptions{CurrentDirectory: "/", UseCaseSensitiveFileNames: true},
 	)
 	commandLine.ParsedConfig.ContentMappers = []*contentmapper.Mapper{mapper}

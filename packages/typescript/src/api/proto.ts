@@ -25,7 +25,8 @@ export type TypePropertyMethod = Exclude<APIMethodsReturning<TypeResponse>, Intr
 export type TypesPropertyMethod = APIMethodsReturning<TypeResponse[]>;
 export type IntrinsicTypeMethod = "getAnyType" | "getBigIntType" | "getBooleanType" | "getESSymbolType" | "getNeverType" | "getNonPrimitiveType" | "getNullType" | "getNumberType" | "getStringType" | "getUndefinedType" | "getUnknownType" | "getVoidType";
 
-export type APIRequest = { [K in keyof APIMethodInfo]: { method: K; params: APIMethodInfo[K]["params"]; }; }[keyof APIMethodInfo];
+type BatchableAPIMethod = Exclude<keyof APIMethodInfo, "batchRequests">;
+export type APIRequest = { [K in BatchableAPIMethod]: { method: K; params: APIMethodInfo[K]["params"]; }; }[BatchableAPIMethod];
 export type APIResponse<Request extends APIRequest = APIRequest> = Request extends APIRequest ?
         & {
             method: Request["method"];
@@ -60,6 +61,12 @@ export function resolveFileName(identifier: DocumentIdentifier): string {
     if (typeof identifier === "string") {
         return identifier;
     }
+    if (typeof identifier !== "object" || identifier === null || typeof identifier.uri !== "string") {
+        const received = typeof identifier === "object" && identifier !== null
+            ? `an object with keys: ${Object.keys(identifier).join(", ")}`
+            : String(identifier);
+        throw new TypeError(`Expected a string or { uri } for the document, received ${received}`);
+    }
     return documentURIToFileName(identifier.uri);
 }
 
@@ -74,7 +81,7 @@ export function resolveDocumentURI(identifier: DocumentIdentifier): string {
     return identifier.uri;
 }
 
-export interface LSPUpdateSnapshotParams extends CoreUpdateSnapshotParams {
+export interface LSPUpdateSnapshotParams extends Omit<CoreUpdateSnapshotParams, "snapshot"> {
     /**
      * @deprecated Use {@link openProjects} instead.
      * Path to a tsconfig.json file to open in the new snapshot.
@@ -88,7 +95,7 @@ export interface LSPUpdateSnapshotParams extends CoreUpdateSnapshotParams {
 /**
  * Parameters for updateSnapshot, including deprecated members handled by `toUpdateSnapshotRequest`
  */
-export interface UpdateSnapshotParams extends CoreUpdateSnapshotParams {
+export interface UpdateSnapshotParams extends Omit<CoreUpdateSnapshotParams, "snapshot"> {
     /**
      * @deprecated Use {@link openProjects} instead.
      * Path to a tsconfig.json file to open in the new snapshot.
@@ -101,13 +108,14 @@ export interface UpdateSnapshotParams extends CoreUpdateSnapshotParams {
  * compatibility shim: a single `openProject` is folded into `openProjects` and is
  * never sent on the wire.
  */
-export function toUpdateSnapshotRequest(params?: UpdateSnapshotParams): UpdateSnapshotParams {
+export function toUpdateSnapshotRequest(params?: UpdateSnapshotParams, snapshot?: number): CoreUpdateSnapshotParams {
     const { openProject, openProjects, ...rest } = params ?? {};
     const mergedOpenProjects = openProject !== undefined
         ? [resolveFileName(openProject), ...(openProjects ?? [])]
         : openProjects;
     return {
         ...rest,
+        ...(snapshot !== undefined ? { snapshot } : {}),
         ...(mergedOpenProjects !== undefined ? { openProjects: mergedOpenProjects } : {}),
     };
 }

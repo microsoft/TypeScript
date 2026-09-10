@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/microsoft/TypeScript/tsc/internal/api/requestfilesystem"
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/checker"
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
@@ -68,6 +69,7 @@ const (
 	MethodInitialize                   Method = "initialize"
 	MethodUpdateSnapshot               Method = "updateSnapshot"
 	MethodUpdateTemporarySnapshot      Method = "updateTemporarySnapshot"
+	MethodCreateProgram                Method = "createProgram"
 	MethodParseCommandLine             Method = "parseCommandLine"
 	MethodReadConfigFile               Method = "readConfigFile"
 	MethodParseJsonConfigFile          Method = "parseJsonConfigFileContent"
@@ -176,7 +178,6 @@ const (
 	MethodGetJSDocTags                      Method = "getJsDocTags"
 	MethodGetDocumentationComment           Method = "getDocumentationComment"
 	MethodIsArrayType                       Method = "isArrayType"
-	MethodIsTupleType                       Method = "isTupleType"
 	MethodIsReadonlySymbol                  Method = "isReadonlySymbol"
 
 	// Reference methods
@@ -344,6 +345,9 @@ type APIFileChanges struct {
 // UpdateSnapshotParams are the parameters for creating a new snapshot.
 // All fields are optional. With no fields set, the server adopts the latest LSP state.
 type UpdateSnapshotParams struct {
+	// Snapshot, when set, requires this to be the latest active snapshot and layers
+	// FileSystem over that snapshot's filesystem. Used by Snapshot.update.
+	Snapshot SnapshotID `json:"snapshot,omitempty"`
 	// OpenProjects lists tsconfig.json files to open/load in the new snapshot.
 	// Opens are ref-counted and persist across snapshots until closed.
 	OpenProjects []DocumentIdentifier `json:"openProjects,omitempty"`
@@ -352,6 +356,10 @@ type UpdateSnapshotParams struct {
 	CloseProjects []DocumentIdentifier `json:"closeProjects,omitempty"`
 	// FileChanges describes file system changes since the last snapshot.
 	FileChanges *APIFileChanges `json:"fileChanges,omitempty"`
+	// FileSystem supplies file contents and directory listings for the new snapshot.
+	// A full filesystem is canonical and total. A filesystem layer is checked
+	// before falling back to the host filesystem.
+	FileSystem *requestfilesystem.RequestFileSystem `json:"fileSystem,omitempty"`
 	// OpenFiles lists files to keep open for the API client, mirroring LSP's
 	// textDocument/didOpen. For each file, ancestor directories are searched for a
 	// tsconfig that contains it; if found, that configured project is loaded and
@@ -373,6 +381,29 @@ type UpdateTemporarySnapshotParams struct {
 	File DocumentIdentifier `json:"file"`
 	// NewText is the temporary content for the file.
 	NewText string `json:"newText"`
+}
+
+type CreateProgramParams struct {
+	RootFiles            []DocumentIdentifier           `json:"rootFiles"`
+	CreateProgramOptions CreateProgramOptions           `json:"createProgramOptions"`
+	OldProgram           *CreateProgramOldProgramParams `json:"oldProgram,omitempty"`
+	FileChanges          *APIFileChanges                `json:"fileChanges,omitempty"`
+}
+
+type CreateProgramOptions struct {
+	CompilerOptions              core.CompilerOptions     `json:"compilerOptions"`
+	ProjectReferences            []*core.ProjectReference `json:"projectReferences,omitempty"`
+	ConfigFileParsingDiagnostics []*DiagnosticResponse    `json:"configFileParsingDiagnostics,omitempty"`
+}
+
+type CreateProgramOldProgramParams struct {
+	Snapshot SnapshotID `json:"snapshot,omitempty"`
+	Project  ProjectID  `json:"project,omitempty"`
+}
+
+type CreateProgramResponse struct {
+	Snapshot SnapshotID       `json:"snapshot"`
+	Project  *ProjectResponse `json:"project"`
 }
 
 // ProjectFileChanges describes what source files changed within a single project.
@@ -412,6 +443,7 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodInitialize:                   noParams,
 	MethodUpdateSnapshot:               unmarshallerFor[UpdateSnapshotParams],
 	MethodUpdateTemporarySnapshot:      unmarshallerFor[UpdateTemporarySnapshotParams],
+	MethodCreateProgram:                unmarshallerFor[CreateProgramParams],
 	MethodParseCommandLine:             unmarshallerFor[ParseCommandLineParams],
 	MethodReadConfigFile:               unmarshallerFor[ReadConfigFileParams],
 	MethodParseJsonConfigFile:          unmarshallerFor[ParseJsonConfigFileContentParams],
@@ -516,7 +548,6 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodGetJSDocTags:                      unmarshallerFor[CheckerSymbolParams],
 	MethodGetDocumentationComment:           unmarshallerFor[CheckerSymbolParams],
 	MethodIsArrayType:                       unmarshallerFor[CheckerTypeParams],
-	MethodIsTupleType:                       unmarshallerFor[CheckerTypeParams],
 	MethodIsReadonlySymbol:                  unmarshallerFor[CheckerSymbolParams],
 	MethodGetReferencesToSymbolInFile:       unmarshallerFor[GetReferencesToSymbolInFileParams],
 	MethodGetReferencedSymbolsForNode:       unmarshallerFor[GetReferencedSymbolsForNodeParams],
@@ -621,7 +652,9 @@ type TranspileOutputResponse struct {
 }
 
 type BatchRequestsParams struct {
-	Requests []BatchRequest `json:"requests"`
+	Requests                []BatchRequest `json:"requests"`
+	ContinuationToken       string         `json:"continuationToken,omitempty"`
+	MaxResponseBytesPerPage int            `json:"maxResponseBytesPerPage,omitempty"`
 }
 
 type BatchRequest struct {
@@ -630,7 +663,48 @@ type BatchRequest struct {
 }
 
 type BatchRequestsResponse struct {
-	Responses []BatchResponse `json:"responses" nonnil:"true"`
+	Responses         []BatchResponse `json:"responses" nonnil:"true"`
+	ContinuationToken string          `json:"continuationToken,omitempty"`
+	encodedResponses  []json.Value
+}
+
+var _ json.MarshalerTo = (*BatchRequestsResponse)(nil)
+
+func (r *BatchRequestsResponse) MarshalJSONTo(enc *json.Encoder) error {
+	if err := enc.WriteToken(json.BeginObject); err != nil {
+		return err
+	}
+	if err := enc.WriteValue(json.Value(`"responses"`)); err != nil {
+		return err
+	}
+	if err := enc.WriteToken(json.BeginArray); err != nil {
+		return err
+	}
+	if r.encodedResponses != nil {
+		for _, response := range r.encodedResponses {
+			if err := enc.WriteValue(response); err != nil {
+				return err
+			}
+		}
+	} else {
+		for i := range r.Responses {
+			if err := json.MarshalEncode(enc, &r.Responses[i]); err != nil {
+				return err
+			}
+		}
+	}
+	if err := enc.WriteToken(json.EndArray); err != nil {
+		return err
+	}
+	if r.ContinuationToken != "" {
+		if err := enc.WriteValue(json.Value(`"continuationToken"`)); err != nil {
+			return err
+		}
+		if err := json.MarshalEncode(enc, r.ContinuationToken); err != nil {
+			return err
+		}
+	}
+	return enc.WriteToken(json.EndObject)
 }
 
 type BatchResponse struct {
@@ -829,6 +903,7 @@ type TypeResponse struct {
 	Id          TypeID `json:"id"`
 	Flags       uint32 `json:"flags"`
 	ObjectFlags uint32 `json:"objectFlags,omitempty"`
+	IsTupleType bool   `json:"isTupleType,omitempty"`
 
 	// Value is literal type data. BigInt literals are encoded as signed decimal
 	// strings because JSON cannot represent bigint; absent values are null.
@@ -843,9 +918,10 @@ type TypeResponse struct {
 	LocalTypeParameters []TypeID `json:"localTypeParameters,omitempty"`
 
 	// TupleType data
-	ElementFlags  []checker.ElementFlags `json:"elementFlags,omitempty"`
-	FixedLength   *int                   `json:"fixedLength,omitempty"`
-	TupleReadonly *bool                  `json:"readonly,omitempty"`
+	ElementFlags               []checker.ElementFlags `json:"elementFlags,omitempty"`
+	FixedLength                *int                   `json:"fixedLength,omitempty"`
+	TupleReadonly              *bool                  `json:"readonly,omitempty"`
+	LabeledElementDeclarations []NodeHandle           `json:"labeledElementDeclarations,omitempty"`
 
 	// IndexedAccessType data
 	ObjectType TypeID `json:"objectType,omitzero"`
@@ -911,19 +987,17 @@ func newTypeResponse(t *checker.Type, id TypeID) *TypeResponse {
 		}
 	case flags&checker.TypeFlagsObject != 0:
 		resp.ObjectFlags = uint32(t.ObjectFlags())
+		resp.IsTupleType = checker.IsTupleType(t)
 		objectFlags := t.ObjectFlags()
 		if objectFlags&checker.ObjectFlagsReference != 0 {
-			var ref *checker.TypeReference
-			if objectFlags&checker.ObjectFlagsTuple != 0 {
+			ref := t.AsTypeReference()
+			if checker.IsTupleTypeTarget(t) {
 				tuple := t.AsTupleType()
-				ref = tuple.AsTypeReference()
 				resp.ElementFlags = tuple.ElementFlags()
 				fixedLen := tuple.FixedLength()
 				resp.FixedLength = &fixedLen
 				isReadonly := tuple.IsReadonly()
 				resp.TupleReadonly = &isReadonly
-			} else {
-				ref = t.AsTypeReference()
 			}
 			if ref.Target() != nil {
 				resp.Target = TypeHandle(ref.Target())
@@ -1332,6 +1406,9 @@ type EmitResponse struct {
 	EmitSkipped  bool                  `json:"emitSkipped"`
 	Diagnostics  []*DiagnosticResponse `json:"diagnostics" nonnil:"true"`
 	EmittedFiles []string              `json:"emittedFiles" nonnil:"true"`
+	// EmittedFilesContents contains contents parallel to EmittedFiles when the
+	// source snapshot uses a full filesystem. It is empty for write-through emits.
+	EmittedFilesContents []string `json:"emittedFilesContents" nonnil:"true"`
 }
 
 type EmitOutputFile struct {
@@ -1567,6 +1644,20 @@ func newDiagnosticResponse(d *diagnosticwriter.ASTDiagnostic) *DiagnosticRespons
 	}
 
 	return resp
+}
+
+func (d *DiagnosticResponse) ToDiagnostic() *ast.Diagnostic {
+	return ast.NewDiagnosticFromText(
+		nil,
+		core.NewTextRange(d.Pos, d.End),
+		d.Code,
+		d.Category,
+		d.Text,
+		core.Map(d.MessageChain, func(d *DiagnosticResponse) *ast.Diagnostic { return d.ToDiagnostic() }),
+		core.Map(d.RelatedInformation, func(d *DiagnosticResponse) *ast.Diagnostic { return d.ToDiagnostic() }),
+		d.ReportsUnnecessary,
+		d.ReportsDeprecated,
+	)
 }
 
 // NewDiagnosticResponses converts a slice of ast.Diagnostics to DiagnosticResponses.

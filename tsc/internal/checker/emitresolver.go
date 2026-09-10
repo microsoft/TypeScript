@@ -1155,13 +1155,6 @@ func (r *EmitResolver) GetEffectiveDeclarationFlags(node *ast.Node, flags ast.Mo
 	return r.checker.GetEffectiveDeclarationFlags(node, flags)
 }
 
-func (r *EmitResolver) GetResolutionModeOverride(node *ast.Node) core.ResolutionMode {
-	// node = emitContext.ParseNode(node)
-	r.checkerMu.Lock()
-	defer r.checkerMu.Unlock()
-	return r.checker.GetResolutionModeOverride(node.AsImportAttributes(), false)
-}
-
 func (r *EmitResolver) GetConstantValue(node *ast.Node) any {
 	// node = emitContext.ParseNode(node)
 	r.checkerMu.Lock()

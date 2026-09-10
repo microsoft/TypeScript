@@ -1,5 +1,5 @@
 // @target: es2015
-//@module: amd
+//@module: commonjs
 //@declaration: true
 
 // @Filename: declFileExportImportChain2_a.ts

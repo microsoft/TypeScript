@@ -4818,6 +4818,11 @@
                         "private": true
                     },
                     {
+                        "name": "Attributes",
+                        "type": "TypeLiteralNode",
+                        "optional": true
+                    },
+                    {
                         "name": "Body",
                         "inherited": true,
                         "type": "ModuleBody"
