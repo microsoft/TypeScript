@@ -75,7 +75,7 @@ While crashes in "normal" code are treated as bugs and fixed when reported, the 
 **tsbuildinfo**
 The `.tsbuildinfo` file is a cache of compiler state that is used to speed up incremental compilation.
 If this file is modified, it can cause `tsc` to e.g. fail to build a file because it thinks the file is up-to-date, or to recompile a file that has not changed.
-tsbuildinfo files should be considered as sensitive as tsconfig.json files in terms of security; an attacker who can modify them can cause arbitrary file reads and writes.
+.`tsbuildinfo` files should be considered as sensitive as `tsconfig.json` files in terms of security; an attacker who can modify them can cause arbitrary file reads and writes.
 
 ## Language Service
 
