@@ -146,3 +146,74 @@ function test60855(): number | undefined {
 >undefined : undefined
 }
 
+function testEqualityWithUndefined() {
+>testEqualityWithUndefined : () => void
+
+    let option: Option | undefined;
+>option : Option | undefined
+
+    if ((option = someOptionalOption())?.type === undefined) {
+>(option = someOptionalOption())?.type === undefined : boolean
+>(option = someOptionalOption())?.type : "None" | "Some" | undefined
+>(option = someOptionalOption()) : Option | undefined
+>option = someOptionalOption() : Option | undefined
+>option : Option | undefined
+>someOptionalOption() : Option | undefined
+>someOptionalOption : () => Option | undefined
+>type : "None" | "Some" | undefined
+>undefined : undefined
+
+        option.type;
+>option.type : any
+>option : undefined
+>type : any
+    }
+}
+
+function testNegativeEquality() {
+>testNegativeEquality : () => void
+
+    let option: Option | undefined;
+>option : Option | undefined
+
+    if ((option = someOptionalOption())?.type !== "Some") {
+>(option = someOptionalOption())?.type !== "Some" : boolean
+>(option = someOptionalOption())?.type : "None" | "Some" | undefined
+>(option = someOptionalOption()) : Option | undefined
+>option = someOptionalOption() : Option | undefined
+>option : Option | undefined
+>someOptionalOption() : Option | undefined
+>someOptionalOption : () => Option | undefined
+>type : "None" | "Some" | undefined
+>"Some" : "Some"
+
+        option.type;
+>option.type : "None"
+>option : { type: "None"; } | undefined
+>type : "None"
+    }
+}
+
+function testFalsyBranch() {
+>testFalsyBranch : () => void
+
+    let option: Option | undefined;
+>option : Option | undefined
+
+    if (!(option = someOptionalOption())?.type) {
+>!(option = someOptionalOption())?.type : boolean
+>(option = someOptionalOption())?.type : "None" | "Some" | undefined
+>(option = someOptionalOption()) : Option | undefined
+>option = someOptionalOption() : Option | undefined
+>option : Option | undefined
+>someOptionalOption() : Option | undefined
+>someOptionalOption : () => Option | undefined
+>type : "None" | "Some" | undefined
+
+        option.type;
+>option.type : any
+>option : undefined
+>type : any
+    }
+}
+

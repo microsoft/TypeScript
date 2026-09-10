@@ -139,3 +139,60 @@ function test60855(): number | undefined {
 >undefined : Symbol(undefined)
 }
 
+function testEqualityWithUndefined() {
+>testEqualityWithUndefined : Symbol(testEqualityWithUndefined, Decl(controlFlowOptionalChain4.ts, 47, 1))
+
+    let option: Option | undefined;
+>option : Symbol(option, Decl(controlFlowOptionalChain4.ts, 50, 7))
+>Option : Symbol(Option, Decl(lib.dom.d.ts, --, --), Decl(controlFlowOptionalChain4.ts, 31, 1))
+
+    if ((option = someOptionalOption())?.type === undefined) {
+>(option = someOptionalOption())?.type : Symbol(type, Decl(controlFlowOptionalChain4.ts, 35, 15), Decl(controlFlowOptionalChain4.ts, 35, 50))
+>option : Symbol(option, Decl(controlFlowOptionalChain4.ts, 50, 7))
+>someOptionalOption : Symbol(someOptionalOption, Decl(controlFlowOptionalChain4.ts, 35, 67))
+>type : Symbol(type, Decl(controlFlowOptionalChain4.ts, 35, 15), Decl(controlFlowOptionalChain4.ts, 35, 50))
+>undefined : Symbol(undefined)
+
+        option.type;
+>option : Symbol(option, Decl(controlFlowOptionalChain4.ts, 50, 7))
+    }
+}
+
+function testNegativeEquality() {
+>testNegativeEquality : Symbol(testNegativeEquality, Decl(controlFlowOptionalChain4.ts, 55, 1))
+
+    let option: Option | undefined;
+>option : Symbol(option, Decl(controlFlowOptionalChain4.ts, 58, 7))
+>Option : Symbol(Option, Decl(lib.dom.d.ts, --, --), Decl(controlFlowOptionalChain4.ts, 31, 1))
+
+    if ((option = someOptionalOption())?.type !== "Some") {
+>(option = someOptionalOption())?.type : Symbol(type, Decl(controlFlowOptionalChain4.ts, 35, 15), Decl(controlFlowOptionalChain4.ts, 35, 50))
+>option : Symbol(option, Decl(controlFlowOptionalChain4.ts, 58, 7))
+>someOptionalOption : Symbol(someOptionalOption, Decl(controlFlowOptionalChain4.ts, 35, 67))
+>type : Symbol(type, Decl(controlFlowOptionalChain4.ts, 35, 15), Decl(controlFlowOptionalChain4.ts, 35, 50))
+
+        option.type;
+>option.type : Symbol(type, Decl(controlFlowOptionalChain4.ts, 35, 50))
+>option : Symbol(option, Decl(controlFlowOptionalChain4.ts, 58, 7))
+>type : Symbol(type, Decl(controlFlowOptionalChain4.ts, 35, 50))
+    }
+}
+
+function testFalsyBranch() {
+>testFalsyBranch : Symbol(testFalsyBranch, Decl(controlFlowOptionalChain4.ts, 63, 1))
+
+    let option: Option | undefined;
+>option : Symbol(option, Decl(controlFlowOptionalChain4.ts, 66, 7))
+>Option : Symbol(Option, Decl(lib.dom.d.ts, --, --), Decl(controlFlowOptionalChain4.ts, 31, 1))
+
+    if (!(option = someOptionalOption())?.type) {
+>(option = someOptionalOption())?.type : Symbol(type, Decl(controlFlowOptionalChain4.ts, 35, 15), Decl(controlFlowOptionalChain4.ts, 35, 50))
+>option : Symbol(option, Decl(controlFlowOptionalChain4.ts, 66, 7))
+>someOptionalOption : Symbol(someOptionalOption, Decl(controlFlowOptionalChain4.ts, 35, 67))
+>type : Symbol(type, Decl(controlFlowOptionalChain4.ts, 35, 15), Decl(controlFlowOptionalChain4.ts, 35, 50))
+
+        option.type;
+>option : Symbol(option, Decl(controlFlowOptionalChain4.ts, 66, 7))
+    }
+}
+

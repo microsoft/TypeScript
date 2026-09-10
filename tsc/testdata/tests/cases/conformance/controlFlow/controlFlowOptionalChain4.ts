@@ -49,3 +49,27 @@ function test60855(): number | undefined {
 
     return undefined;
 }
+
+function testEqualityWithUndefined() {
+    let option: Option | undefined;
+
+    if ((option = someOptionalOption())?.type === undefined) {
+        option.type;
+    }
+}
+
+function testNegativeEquality() {
+    let option: Option | undefined;
+
+    if ((option = someOptionalOption())?.type !== "Some") {
+        option.type;
+    }
+}
+
+function testFalsyBranch() {
+    let option: Option | undefined;
+
+    if (!(option = someOptionalOption())?.type) {
+        option.type;
+    }
+}
