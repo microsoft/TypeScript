@@ -1434,7 +1434,7 @@ func (c *Checker) hasObjectLiteralAccessors(t *Type, seen []*Type) bool {
 		return core.Some(c.getPropertiesOfObjectType(t), func(property *ast.Symbol) bool {
 			propertyType := c.valueSymbolLinks.Get(property).resolvedType
 			return property.Flags&ast.SymbolFlagsGetAccessor != 0 || c.getSpreadAccessorOrigin(property) != nil ||
-				c.isDeferredPropertyAssignment(property) ||
+				c.isDeferredPropertyAssignment(property) || c.isRecursiveCallbackProperty(property) ||
 				propertyType != nil && c.hasObjectLiteralAccessors(propertyType, seen)
 		})
 	}
@@ -1494,6 +1494,73 @@ func (c *Checker) referenceResolvesToSymbol(reference *ast.Node, target *ast.Sym
 // A property that checkObjectLiteral typed lazily. Keyed by declaration so the answer does not depend on query order.
 func (c *Checker) isDeferredPropertyAssignment(symbol *ast.Symbol) bool {
 	return symbol.ValueDeclaration != nil && symbol.ValueDeclaration.Kind == ast.KindPropertyAssignment && c.deferredPropertyAssignments.Has(symbol.ValueDeclaration)
+}
+
+// A function-valued property whose un-annotated body refers to a declaration whose type is still
+// being resolved. Checking the constraint would force the function's return type, which re-enters
+// that resolution, so the property is deferred like a getter. Other callbacks keep the ordinary
+// constraint check, so their contextual typing and constraint-failure recovery are unchanged.
+func (c *Checker) isRecursiveCallbackProperty(property *ast.Symbol) bool {
+	decl := property.ValueDeclaration
+	if decl == nil {
+		return false
+	}
+	var fn *ast.Node
+	switch decl.Kind {
+	case ast.KindPropertyAssignment:
+		if init := decl.Initializer(); init != nil && ast.IsFunctionExpressionOrArrowFunction(init) {
+			fn = init
+		}
+	case ast.KindMethodDeclaration:
+		fn = decl
+	}
+	if fn == nil || fn.Type() != nil || fn.Body() == nil {
+		return false
+	}
+	return c.bodyReferencesResolvingDeclaration(fn.Body())
+}
+
+func (c *Checker) bodyReferencesResolvingDeclaration(body *ast.Node) bool {
+	var targets []*ast.Symbol
+	for i := range c.typeResolutions {
+		resolution := &c.typeResolutions[i]
+		if resolution.propertyName != TypeSystemPropertyNameType {
+			continue
+		}
+		if symbol, ok := resolution.target.(*ast.Symbol); ok && symbol.Flags&(ast.SymbolFlagsVariable|ast.SymbolFlagsProperty) != 0 {
+			targets = append(targets, symbol)
+		}
+	}
+	if len(targets) == 0 {
+		return false
+	}
+	var visit func(node *ast.Node) bool
+	visit = func(node *ast.Node) bool {
+		switch node.Kind {
+		case ast.KindIdentifier:
+			if ast.IsDeclarationName(node) && !ast.IsShorthandPropertyAssignment(node.Parent) {
+				return false
+			}
+			for _, symbol := range targets {
+				if symbol.Flags&ast.SymbolFlagsVariable != 0 && node.Text() == symbol.Name {
+					resolved := c.resolveName(node, symbol.Name, ast.SymbolFlagsValue|ast.SymbolFlagsExportValue, nil /*nameNotFoundMessage*/, false /*isUse*/, false /*excludeGlobals*/)
+					if c.getExportSymbolOfValueSymbolIfExported(resolved) == symbol {
+						return true
+					}
+				}
+			}
+			return false
+		case ast.KindPropertyAccessExpression:
+			for _, symbol := range targets {
+				if symbol.Flags&ast.SymbolFlagsProperty != 0 && node.Name().Text() == symbol.Name {
+					return true
+				}
+			}
+			return visit(node.Expression())
+		}
+		return node.ForEachChild(visit)
+	}
+	return visit(body)
 }
 
 func (c *Checker) getInferredTypes(n *InferenceContext) []*Type {
