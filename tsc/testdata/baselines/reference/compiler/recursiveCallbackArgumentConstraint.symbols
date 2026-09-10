@@ -1,0 +1,310 @@
+//// [tests/cases/compiler/recursiveCallbackArgumentConstraint.ts] ////
+
+=== recursiveCallbackArgumentConstraint.ts ===
+interface Schema<O> { readonly out: O; optional(): Schema<O | undefined> }
+>Schema : Symbol(Schema, Decl(recursiveCallbackArgumentConstraint.ts, 0, 0))
+>O : Symbol(O, Decl(recursiveCallbackArgumentConstraint.ts, 0, 17))
+>out : Symbol(Schema.out, Decl(recursiveCallbackArgumentConstraint.ts, 0, 21))
+>O : Symbol(O, Decl(recursiveCallbackArgumentConstraint.ts, 0, 17))
+>optional : Symbol(Schema.optional, Decl(recursiveCallbackArgumentConstraint.ts, 0, 38))
+>Schema : Symbol(Schema, Decl(recursiveCallbackArgumentConstraint.ts, 0, 0))
+>O : Symbol(O, Decl(recursiveCallbackArgumentConstraint.ts, 0, 17))
+
+type Shape = Record<string, Schema<any> | (() => Schema<any>)>;
+>Shape : Symbol(Shape, Decl(recursiveCallbackArgumentConstraint.ts, 0, 74))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Schema : Symbol(Schema, Decl(recursiveCallbackArgumentConstraint.ts, 0, 0))
+>Schema : Symbol(Schema, Decl(recursiveCallbackArgumentConstraint.ts, 0, 0))
+
+type Resolve<T> = T extends () => infer R ? R : T;
+>Resolve : Symbol(Resolve, Decl(recursiveCallbackArgumentConstraint.ts, 1, 63))
+>T : Symbol(T, Decl(recursiveCallbackArgumentConstraint.ts, 2, 13))
+>T : Symbol(T, Decl(recursiveCallbackArgumentConstraint.ts, 2, 13))
+>R : Symbol(R, Decl(recursiveCallbackArgumentConstraint.ts, 2, 39))
+>R : Symbol(R, Decl(recursiveCallbackArgumentConstraint.ts, 2, 39))
+>T : Symbol(T, Decl(recursiveCallbackArgumentConstraint.ts, 2, 13))
+
+type Infer<S extends Shape> = { [K in keyof S]: Resolve<S[K]> extends Schema<infer O> ? O : never };
+>Infer : Symbol(Infer, Decl(recursiveCallbackArgumentConstraint.ts, 2, 50))
+>S : Symbol(S, Decl(recursiveCallbackArgumentConstraint.ts, 3, 11))
+>Shape : Symbol(Shape, Decl(recursiveCallbackArgumentConstraint.ts, 0, 74))
+>K : Symbol(K, Decl(recursiveCallbackArgumentConstraint.ts, 3, 33))
+>S : Symbol(S, Decl(recursiveCallbackArgumentConstraint.ts, 3, 11))
+>Resolve : Symbol(Resolve, Decl(recursiveCallbackArgumentConstraint.ts, 1, 63))
+>S : Symbol(S, Decl(recursiveCallbackArgumentConstraint.ts, 3, 11))
+>K : Symbol(K, Decl(recursiveCallbackArgumentConstraint.ts, 3, 33))
+>Schema : Symbol(Schema, Decl(recursiveCallbackArgumentConstraint.ts, 0, 0))
+>O : Symbol(O, Decl(recursiveCallbackArgumentConstraint.ts, 3, 82))
+>O : Symbol(O, Decl(recursiveCallbackArgumentConstraint.ts, 3, 82))
+
+declare function object<S extends Shape>(shape: S): Schema<Infer<S>>;
+>object : Symbol(object, Decl(recursiveCallbackArgumentConstraint.ts, 3, 100))
+>S : Symbol(S, Decl(recursiveCallbackArgumentConstraint.ts, 5, 24))
+>Shape : Symbol(Shape, Decl(recursiveCallbackArgumentConstraint.ts, 0, 74))
+>shape : Symbol(shape, Decl(recursiveCallbackArgumentConstraint.ts, 5, 41))
+>S : Symbol(S, Decl(recursiveCallbackArgumentConstraint.ts, 5, 24))
+>Schema : Symbol(Schema, Decl(recursiveCallbackArgumentConstraint.ts, 0, 0))
+>Infer : Symbol(Infer, Decl(recursiveCallbackArgumentConstraint.ts, 2, 50))
+>S : Symbol(S, Decl(recursiveCallbackArgumentConstraint.ts, 5, 24))
+
+declare function array<T extends Schema<any>>(el: T): Schema<T["out"][]>;
+>array : Symbol(array, Decl(recursiveCallbackArgumentConstraint.ts, 5, 69))
+>T : Symbol(T, Decl(recursiveCallbackArgumentConstraint.ts, 6, 23))
+>Schema : Symbol(Schema, Decl(recursiveCallbackArgumentConstraint.ts, 0, 0))
+>el : Symbol(el, Decl(recursiveCallbackArgumentConstraint.ts, 6, 46))
+>T : Symbol(T, Decl(recursiveCallbackArgumentConstraint.ts, 6, 23))
+>Schema : Symbol(Schema, Decl(recursiveCallbackArgumentConstraint.ts, 0, 0))
+>T : Symbol(T, Decl(recursiveCallbackArgumentConstraint.ts, 6, 23))
+
+declare function string(): Schema<string>;
+>string : Symbol(string, Decl(recursiveCallbackArgumentConstraint.ts, 6, 73))
+>Schema : Symbol(Schema, Decl(recursiveCallbackArgumentConstraint.ts, 0, 0))
+
+declare function lazy<T extends Schema<any>>(fn: () => T): T;
+>lazy : Symbol(lazy, Decl(recursiveCallbackArgumentConstraint.ts, 7, 42))
+>T : Symbol(T, Decl(recursiveCallbackArgumentConstraint.ts, 8, 22))
+>Schema : Symbol(Schema, Decl(recursiveCallbackArgumentConstraint.ts, 0, 0))
+>fn : Symbol(fn, Decl(recursiveCallbackArgumentConstraint.ts, 8, 45))
+>T : Symbol(T, Decl(recursiveCallbackArgumentConstraint.ts, 8, 22))
+>T : Symbol(T, Decl(recursiveCallbackArgumentConstraint.ts, 8, 22))
+
+declare function map<T>(cb: (v: number) => T): T;
+>map : Symbol(map, Decl(recursiveCallbackArgumentConstraint.ts, 8, 61))
+>T : Symbol(T, Decl(recursiveCallbackArgumentConstraint.ts, 9, 21))
+>cb : Symbol(cb, Decl(recursiveCallbackArgumentConstraint.ts, 9, 24))
+>v : Symbol(v, Decl(recursiveCallbackArgumentConstraint.ts, 9, 29))
+>T : Symbol(T, Decl(recursiveCallbackArgumentConstraint.ts, 9, 21))
+>T : Symbol(T, Decl(recursiveCallbackArgumentConstraint.ts, 9, 21))
+
+// A callback passed as the whole argument of a call that initializes a property.
+const Category = object({
+>Category : Symbol(Category, Decl(recursiveCallbackArgumentConstraint.ts, 12, 5))
+>object : Symbol(object, Decl(recursiveCallbackArgumentConstraint.ts, 3, 100))
+
+    name: string(),
+>name : Symbol(name, Decl(recursiveCallbackArgumentConstraint.ts, 12, 25))
+>string : Symbol(string, Decl(recursiveCallbackArgumentConstraint.ts, 6, 73))
+
+    subcategories: lazy(() => array(Category)),
+>subcategories : Symbol(subcategories, Decl(recursiveCallbackArgumentConstraint.ts, 13, 19))
+>lazy : Symbol(lazy, Decl(recursiveCallbackArgumentConstraint.ts, 7, 42))
+>array : Symbol(array, Decl(recursiveCallbackArgumentConstraint.ts, 5, 69))
+>Category : Symbol(Category, Decl(recursiveCallbackArgumentConstraint.ts, 12, 5))
+
+});
+const ok: (typeof Category)["out"] = { name: "x", subcategories: [{ name: "y", subcategories: [] }] };
+>ok : Symbol(ok, Decl(recursiveCallbackArgumentConstraint.ts, 16, 5))
+>Category : Symbol(Category, Decl(recursiveCallbackArgumentConstraint.ts, 12, 5))
+>name : Symbol(name, Decl(recursiveCallbackArgumentConstraint.ts, 16, 38))
+>subcategories : Symbol(subcategories, Decl(recursiveCallbackArgumentConstraint.ts, 16, 49))
+>name : Symbol(name, Decl(recursiveCallbackArgumentConstraint.ts, 16, 67))
+>subcategories : Symbol(subcategories, Decl(recursiveCallbackArgumentConstraint.ts, 16, 78))
+
+const bad: (typeof Category)["out"] = { name: "x", subcategories: [{ name: 1, subcategories: [] }] };
+>bad : Symbol(bad, Decl(recursiveCallbackArgumentConstraint.ts, 17, 5))
+>Category : Symbol(Category, Decl(recursiveCallbackArgumentConstraint.ts, 12, 5))
+>name : Symbol(name, Decl(recursiveCallbackArgumentConstraint.ts, 17, 39))
+>subcategories : Symbol(subcategories, Decl(recursiveCallbackArgumentConstraint.ts, 17, 50))
+>name : Symbol(name, Decl(recursiveCallbackArgumentConstraint.ts, 17, 68))
+>subcategories : Symbol(subcategories, Decl(recursiveCallbackArgumentConstraint.ts, 17, 77))
+
+// Nested call and a chained call.
+const Tree = object({
+>Tree : Symbol(Tree, Decl(recursiveCallbackArgumentConstraint.ts, 20, 5))
+>object : Symbol(object, Decl(recursiveCallbackArgumentConstraint.ts, 3, 100))
+
+    id: string(),
+>id : Symbol(id, Decl(recursiveCallbackArgumentConstraint.ts, 20, 21))
+>string : Symbol(string, Decl(recursiveCallbackArgumentConstraint.ts, 6, 73))
+
+    children: array(lazy(() => Tree)),
+>children : Symbol(children, Decl(recursiveCallbackArgumentConstraint.ts, 21, 17))
+>array : Symbol(array, Decl(recursiveCallbackArgumentConstraint.ts, 5, 69))
+>lazy : Symbol(lazy, Decl(recursiveCallbackArgumentConstraint.ts, 7, 42))
+>Tree : Symbol(Tree, Decl(recursiveCallbackArgumentConstraint.ts, 20, 5))
+
+    parent: lazy(() => Tree).optional(),
+>parent : Symbol(parent, Decl(recursiveCallbackArgumentConstraint.ts, 22, 38))
+>lazy(() => Tree).optional : Symbol(Schema.optional, Decl(recursiveCallbackArgumentConstraint.ts, 0, 38))
+>lazy : Symbol(lazy, Decl(recursiveCallbackArgumentConstraint.ts, 7, 42))
+>Tree : Symbol(Tree, Decl(recursiveCallbackArgumentConstraint.ts, 20, 5))
+>optional : Symbol(Schema.optional, Decl(recursiveCallbackArgumentConstraint.ts, 0, 38))
+
+});
+const tree: (typeof Tree)["out"] = { id: "a", children: [], parent: { id: "b", children: [], parent: undefined } };
+>tree : Symbol(tree, Decl(recursiveCallbackArgumentConstraint.ts, 25, 5))
+>Tree : Symbol(Tree, Decl(recursiveCallbackArgumentConstraint.ts, 20, 5))
+>id : Symbol(id, Decl(recursiveCallbackArgumentConstraint.ts, 25, 36))
+>children : Symbol(children, Decl(recursiveCallbackArgumentConstraint.ts, 25, 45))
+>parent : Symbol(parent, Decl(recursiveCallbackArgumentConstraint.ts, 25, 59))
+>id : Symbol(id, Decl(recursiveCallbackArgumentConstraint.ts, 25, 69))
+>children : Symbol(children, Decl(recursiveCallbackArgumentConstraint.ts, 25, 78))
+>parent : Symbol(parent, Decl(recursiveCallbackArgumentConstraint.ts, 25, 92))
+>undefined : Symbol(undefined)
+
+const wrongTree: (typeof Tree)["out"] = { id: "a", children: [{ id: 1, children: [], parent: undefined }], parent: undefined };
+>wrongTree : Symbol(wrongTree, Decl(recursiveCallbackArgumentConstraint.ts, 26, 5))
+>Tree : Symbol(Tree, Decl(recursiveCallbackArgumentConstraint.ts, 20, 5))
+>id : Symbol(id, Decl(recursiveCallbackArgumentConstraint.ts, 26, 41))
+>children : Symbol(children, Decl(recursiveCallbackArgumentConstraint.ts, 26, 50))
+>id : Symbol(id, Decl(recursiveCallbackArgumentConstraint.ts, 26, 63))
+>children : Symbol(children, Decl(recursiveCallbackArgumentConstraint.ts, 26, 70))
+>parent : Symbol(parent, Decl(recursiveCallbackArgumentConstraint.ts, 26, 84))
+>undefined : Symbol(undefined)
+>parent : Symbol(parent, Decl(recursiveCallbackArgumentConstraint.ts, 26, 106))
+>undefined : Symbol(undefined)
+
+// Mutual recursion.
+const User = object({ name: string(), posts: lazy(() => array(Post)) });
+>User : Symbol(User, Decl(recursiveCallbackArgumentConstraint.ts, 29, 5))
+>object : Symbol(object, Decl(recursiveCallbackArgumentConstraint.ts, 3, 100))
+>name : Symbol(name, Decl(recursiveCallbackArgumentConstraint.ts, 29, 21))
+>string : Symbol(string, Decl(recursiveCallbackArgumentConstraint.ts, 6, 73))
+>posts : Symbol(posts, Decl(recursiveCallbackArgumentConstraint.ts, 29, 37))
+>lazy : Symbol(lazy, Decl(recursiveCallbackArgumentConstraint.ts, 7, 42))
+>array : Symbol(array, Decl(recursiveCallbackArgumentConstraint.ts, 5, 69))
+>Post : Symbol(Post, Decl(recursiveCallbackArgumentConstraint.ts, 30, 5))
+
+const Post = object({ title: string(), author: lazy(() => User) });
+>Post : Symbol(Post, Decl(recursiveCallbackArgumentConstraint.ts, 30, 5))
+>object : Symbol(object, Decl(recursiveCallbackArgumentConstraint.ts, 3, 100))
+>title : Symbol(title, Decl(recursiveCallbackArgumentConstraint.ts, 30, 21))
+>string : Symbol(string, Decl(recursiveCallbackArgumentConstraint.ts, 6, 73))
+>author : Symbol(author, Decl(recursiveCallbackArgumentConstraint.ts, 30, 38))
+>lazy : Symbol(lazy, Decl(recursiveCallbackArgumentConstraint.ts, 7, 42))
+>User : Symbol(User, Decl(recursiveCallbackArgumentConstraint.ts, 29, 5))
+
+const user: (typeof User)["out"] = { name: "u", posts: [{ title: "t", author: { name: 1, posts: [] } }] };
+>user : Symbol(user, Decl(recursiveCallbackArgumentConstraint.ts, 31, 5))
+>User : Symbol(User, Decl(recursiveCallbackArgumentConstraint.ts, 29, 5))
+>name : Symbol(name, Decl(recursiveCallbackArgumentConstraint.ts, 31, 36))
+>posts : Symbol(posts, Decl(recursiveCallbackArgumentConstraint.ts, 31, 47))
+>title : Symbol(title, Decl(recursiveCallbackArgumentConstraint.ts, 31, 57))
+>author : Symbol(author, Decl(recursiveCallbackArgumentConstraint.ts, 31, 69))
+>name : Symbol(name, Decl(recursiveCallbackArgumentConstraint.ts, 31, 79))
+>posts : Symbol(posts, Decl(recursiveCallbackArgumentConstraint.ts, 31, 88))
+
+// A context-sensitive callback inside the call keeps its parameter type.
+const Self = object({
+>Self : Symbol(Self, Decl(recursiveCallbackArgumentConstraint.ts, 34, 5))
+>object : Symbol(object, Decl(recursiveCallbackArgumentConstraint.ts, 3, 100))
+
+    name: string(),
+>name : Symbol(name, Decl(recursiveCallbackArgumentConstraint.ts, 34, 21))
+>string : Symbol(string, Decl(recursiveCallbackArgumentConstraint.ts, 6, 73))
+
+    child: map((v) => (v.toFixed(), array(Self))),
+>child : Symbol(child, Decl(recursiveCallbackArgumentConstraint.ts, 35, 19))
+>map : Symbol(map, Decl(recursiveCallbackArgumentConstraint.ts, 8, 61))
+>v : Symbol(v, Decl(recursiveCallbackArgumentConstraint.ts, 36, 16))
+>v.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>v : Symbol(v, Decl(recursiveCallbackArgumentConstraint.ts, 36, 16))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>array : Symbol(array, Decl(recursiveCallbackArgumentConstraint.ts, 5, 69))
+>Self : Symbol(Self, Decl(recursiveCallbackArgumentConstraint.ts, 34, 5))
+
+});
+
+// Errors inside a lazily typed property are still reported.
+const Errors = object({
+>Errors : Symbol(Errors, Decl(recursiveCallbackArgumentConstraint.ts, 40, 5))
+>object : Symbol(object, Decl(recursiveCallbackArgumentConstraint.ts, 3, 100))
+
+    name: string(),
+>name : Symbol(name, Decl(recursiveCallbackArgumentConstraint.ts, 40, 23))
+>string : Symbol(string, Decl(recursiveCallbackArgumentConstraint.ts, 6, 73))
+
+    a: lazy(() => { const n: number = "x"; return array(Errors); }),
+>a : Symbol(a, Decl(recursiveCallbackArgumentConstraint.ts, 41, 19))
+>lazy : Symbol(lazy, Decl(recursiveCallbackArgumentConstraint.ts, 7, 42))
+>n : Symbol(n, Decl(recursiveCallbackArgumentConstraint.ts, 42, 25))
+>array : Symbol(array, Decl(recursiveCallbackArgumentConstraint.ts, 5, 69))
+>Errors : Symbol(Errors, Decl(recursiveCallbackArgumentConstraint.ts, 40, 5))
+
+    b: lazy(() => array(Errors), 42),
+>b : Symbol(b, Decl(recursiveCallbackArgumentConstraint.ts, 42, 68))
+>lazy : Symbol(lazy, Decl(recursiveCallbackArgumentConstraint.ts, 7, 42))
+>array : Symbol(array, Decl(recursiveCallbackArgumentConstraint.ts, 5, 69))
+>Errors : Symbol(Errors, Decl(recursiveCallbackArgumentConstraint.ts, 40, 5))
+
+    c: lazy((v) => array(Errors)),
+>c : Symbol(c, Decl(recursiveCallbackArgumentConstraint.ts, 43, 37))
+>lazy : Symbol(lazy, Decl(recursiveCallbackArgumentConstraint.ts, 7, 42))
+>v : Symbol(v, Decl(recursiveCallbackArgumentConstraint.ts, 44, 13))
+>array : Symbol(array, Decl(recursiveCallbackArgumentConstraint.ts, 5, 69))
+>Errors : Symbol(Errors, Decl(recursiveCallbackArgumentConstraint.ts, 40, 5))
+
+});
+
+// The outer constraint is still enforced.
+type Infer2<S> = { [K in keyof S]: S[K] extends Schema<infer O> ? O : never };
+>Infer2 : Symbol(Infer2, Decl(recursiveCallbackArgumentConstraint.ts, 45, 3))
+>S : Symbol(S, Decl(recursiveCallbackArgumentConstraint.ts, 48, 12))
+>K : Symbol(K, Decl(recursiveCallbackArgumentConstraint.ts, 48, 20))
+>S : Symbol(S, Decl(recursiveCallbackArgumentConstraint.ts, 48, 12))
+>S : Symbol(S, Decl(recursiveCallbackArgumentConstraint.ts, 48, 12))
+>K : Symbol(K, Decl(recursiveCallbackArgumentConstraint.ts, 48, 20))
+>Schema : Symbol(Schema, Decl(recursiveCallbackArgumentConstraint.ts, 0, 0))
+>O : Symbol(O, Decl(recursiveCallbackArgumentConstraint.ts, 48, 60))
+>O : Symbol(O, Decl(recursiveCallbackArgumentConstraint.ts, 48, 60))
+
+declare function strictObject<S extends Record<string, Schema<any>>>(shape: S): Schema<Infer2<S>>;
+>strictObject : Symbol(strictObject, Decl(recursiveCallbackArgumentConstraint.ts, 48, 78))
+>S : Symbol(S, Decl(recursiveCallbackArgumentConstraint.ts, 49, 30))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Schema : Symbol(Schema, Decl(recursiveCallbackArgumentConstraint.ts, 0, 0))
+>shape : Symbol(shape, Decl(recursiveCallbackArgumentConstraint.ts, 49, 69))
+>S : Symbol(S, Decl(recursiveCallbackArgumentConstraint.ts, 49, 30))
+>Schema : Symbol(Schema, Decl(recursiveCallbackArgumentConstraint.ts, 0, 0))
+>Infer2 : Symbol(Infer2, Decl(recursiveCallbackArgumentConstraint.ts, 45, 3))
+>S : Symbol(S, Decl(recursiveCallbackArgumentConstraint.ts, 49, 30))
+
+declare function identity<T>(x: T): T;
+>identity : Symbol(identity, Decl(recursiveCallbackArgumentConstraint.ts, 49, 98))
+>T : Symbol(T, Decl(recursiveCallbackArgumentConstraint.ts, 50, 26))
+>x : Symbol(x, Decl(recursiveCallbackArgumentConstraint.ts, 50, 29))
+>T : Symbol(T, Decl(recursiveCallbackArgumentConstraint.ts, 50, 26))
+>T : Symbol(T, Decl(recursiveCallbackArgumentConstraint.ts, 50, 26))
+
+const Failing = strictObject({
+>Failing : Symbol(Failing, Decl(recursiveCallbackArgumentConstraint.ts, 51, 5))
+>strictObject : Symbol(strictObject, Decl(recursiveCallbackArgumentConstraint.ts, 48, 78))
+
+    name: string(),
+>name : Symbol(name, Decl(recursiveCallbackArgumentConstraint.ts, 51, 30))
+>string : Symbol(string, Decl(recursiveCallbackArgumentConstraint.ts, 6, 73))
+
+    subcategories: identity(() => array(Failing)),
+>subcategories : Symbol(subcategories, Decl(recursiveCallbackArgumentConstraint.ts, 52, 19))
+>identity : Symbol(identity, Decl(recursiveCallbackArgumentConstraint.ts, 49, 98))
+>array : Symbol(array, Decl(recursiveCallbackArgumentConstraint.ts, 5, 69))
+>Failing : Symbol(Failing, Decl(recursiveCallbackArgumentConstraint.ts, 51, 5))
+
+});
+
+// A reference outside any callback is still a use before declaration.
+declare function first<T>(x: T, fn: () => T): T;
+>first : Symbol(first, Decl(recursiveCallbackArgumentConstraint.ts, 54, 3))
+>T : Symbol(T, Decl(recursiveCallbackArgumentConstraint.ts, 57, 23))
+>x : Symbol(x, Decl(recursiveCallbackArgumentConstraint.ts, 57, 26))
+>T : Symbol(T, Decl(recursiveCallbackArgumentConstraint.ts, 57, 23))
+>fn : Symbol(fn, Decl(recursiveCallbackArgumentConstraint.ts, 57, 31))
+>T : Symbol(T, Decl(recursiveCallbackArgumentConstraint.ts, 57, 23))
+>T : Symbol(T, Decl(recursiveCallbackArgumentConstraint.ts, 57, 23))
+
+const Eager = object({
+>Eager : Symbol(Eager, Decl(recursiveCallbackArgumentConstraint.ts, 58, 5))
+>object : Symbol(object, Decl(recursiveCallbackArgumentConstraint.ts, 3, 100))
+
+    name: string(),
+>name : Symbol(name, Decl(recursiveCallbackArgumentConstraint.ts, 58, 22))
+>string : Symbol(string, Decl(recursiveCallbackArgumentConstraint.ts, 6, 73))
+
+    self: first(Eager, () => Eager),
+>self : Symbol(self, Decl(recursiveCallbackArgumentConstraint.ts, 59, 19))
+>first : Symbol(first, Decl(recursiveCallbackArgumentConstraint.ts, 54, 3))
+>Eager : Symbol(Eager, Decl(recursiveCallbackArgumentConstraint.ts, 58, 5))
+>Eager : Symbol(Eager, Decl(recursiveCallbackArgumentConstraint.ts, 58, 5))
+
+});
+

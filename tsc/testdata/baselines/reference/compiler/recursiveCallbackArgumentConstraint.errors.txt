@@ -1,0 +1,103 @@
+recursiveCallbackArgumentConstraint.ts(18,70): error TS2322: Type 'number' is not assignable to type 'string'.
+recursiveCallbackArgumentConstraint.ts(27,65): error TS2322: Type 'number' is not assignable to type 'string'.
+recursiveCallbackArgumentConstraint.ts(32,81): error TS2322: Type 'number' is not assignable to type 'string'.
+recursiveCallbackArgumentConstraint.ts(43,27): error TS2322: Type 'string' is not assignable to type 'number'.
+recursiveCallbackArgumentConstraint.ts(44,34): error TS2554: Expected 1 arguments, but got 2.
+recursiveCallbackArgumentConstraint.ts(45,13): error TS2345: Argument of type '(v: any) => Schema<Infer<{ name: Schema<string>; a: Schema<Infer<any>[]>; b: Schema<Infer<any>[]>; c: Schema<any>; }>[]>' is not assignable to parameter of type '() => Schema<Infer<{ name: Schema<string>; a: Schema<Infer<any>[]>; b: Schema<Infer<any>[]>; c: Schema<any>; }>[]>'.
+  Target signature provides too few arguments. Expected 1 or more, but got 0.
+recursiveCallbackArgumentConstraint.ts(45,14): error TS7006: Parameter 'v' implicitly has an 'any' type.
+recursiveCallbackArgumentConstraint.ts(54,20): error TS2322: Type '() => Schema<Infer2<{ name: Schema<string>; subcategories: any; }>[]>' is not assignable to type 'Schema<any>'.
+recursiveCallbackArgumentConstraint.ts(61,17): error TS2448: Block-scoped variable 'Eager' used before its declaration.
+recursiveCallbackArgumentConstraint.ts(61,17): error TS2454: Variable 'Eager' is used before being assigned.
+
+
+==== recursiveCallbackArgumentConstraint.ts (10 errors) ====
+    interface Schema<O> { readonly out: O; optional(): Schema<O | undefined> }
+    type Shape = Record<string, Schema<any> | (() => Schema<any>)>;
+    type Resolve<T> = T extends () => infer R ? R : T;
+    type Infer<S extends Shape> = { [K in keyof S]: Resolve<S[K]> extends Schema<infer O> ? O : never };
+    
+    declare function object<S extends Shape>(shape: S): Schema<Infer<S>>;
+    declare function array<T extends Schema<any>>(el: T): Schema<T["out"][]>;
+    declare function string(): Schema<string>;
+    declare function lazy<T extends Schema<any>>(fn: () => T): T;
+    declare function map<T>(cb: (v: number) => T): T;
+    
+    // A callback passed as the whole argument of a call that initializes a property.
+    const Category = object({
+        name: string(),
+        subcategories: lazy(() => array(Category)),
+    });
+    const ok: (typeof Category)["out"] = { name: "x", subcategories: [{ name: "y", subcategories: [] }] };
+    const bad: (typeof Category)["out"] = { name: "x", subcategories: [{ name: 1, subcategories: [] }] };
+                                                                         ~~~~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+!!! related TS6500 recursiveCallbackArgumentConstraint.ts:14:5: The expected type comes from property 'name' which is declared here on type 'Infer<{ name: Schema<string>; subcategories: Schema<Infer<any>[]>; }>'
+    
+    // Nested call and a chained call.
+    const Tree = object({
+        id: string(),
+        children: array(lazy(() => Tree)),
+        parent: lazy(() => Tree).optional(),
+    });
+    const tree: (typeof Tree)["out"] = { id: "a", children: [], parent: { id: "b", children: [], parent: undefined } };
+    const wrongTree: (typeof Tree)["out"] = { id: "a", children: [{ id: 1, children: [], parent: undefined }], parent: undefined };
+                                                                    ~~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+!!! related TS6500 recursiveCallbackArgumentConstraint.ts:22:5: The expected type comes from property 'id' which is declared here on type 'Infer<{ id: Schema<string>; children: Schema<Infer<any>[]>; parent: Schema<Infer<any> | undefined>; }>'
+    
+    // Mutual recursion.
+    const User = object({ name: string(), posts: lazy(() => array(Post)) });
+    const Post = object({ title: string(), author: lazy(() => User) });
+    const user: (typeof User)["out"] = { name: "u", posts: [{ title: "t", author: { name: 1, posts: [] } }] };
+                                                                                    ~~~~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+!!! related TS6500 recursiveCallbackArgumentConstraint.ts:30:23: The expected type comes from property 'name' which is declared here on type 'Infer<{ name: Schema<string>; posts: Schema<Infer<{ title: Schema<string>; author: Schema<Infer<any>>; }>[]>; }>'
+    
+    // A context-sensitive callback inside the call keeps its parameter type.
+    const Self = object({
+        name: string(),
+        child: map((v) => (v.toFixed(), array(Self))),
+    });
+    
+    // Errors inside a lazily typed property are still reported.
+    const Errors = object({
+        name: string(),
+        a: lazy(() => { const n: number = "x"; return array(Errors); }),
+                              ~
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
+        b: lazy(() => array(Errors), 42),
+                                     ~~
+!!! error TS2554: Expected 1 arguments, but got 2.
+        c: lazy((v) => array(Errors)),
+                ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type '(v: any) => Schema<Infer<{ name: Schema<string>; a: Schema<Infer<any>[]>; b: Schema<Infer<any>[]>; c: Schema<any>; }>[]>' is not assignable to parameter of type '() => Schema<Infer<{ name: Schema<string>; a: Schema<Infer<any>[]>; b: Schema<Infer<any>[]>; c: Schema<any>; }>[]>'.
+!!! error TS2345:   Target signature provides too few arguments. Expected 1 or more, but got 0.
+                 ~
+!!! error TS7006: Parameter 'v' implicitly has an 'any' type.
+    });
+    
+    // The outer constraint is still enforced.
+    type Infer2<S> = { [K in keyof S]: S[K] extends Schema<infer O> ? O : never };
+    declare function strictObject<S extends Record<string, Schema<any>>>(shape: S): Schema<Infer2<S>>;
+    declare function identity<T>(x: T): T;
+    const Failing = strictObject({
+        name: string(),
+        subcategories: identity(() => array(Failing)),
+                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '() => Schema<Infer2<{ name: Schema<string>; subcategories: any; }>[]>' is not assignable to type 'Schema<any>'.
+!!! related TS6212 recursiveCallbackArgumentConstraint.ts:54:20: Did you mean to call this expression?
+    });
+    
+    // A reference outside any callback is still a use before declaration.
+    declare function first<T>(x: T, fn: () => T): T;
+    const Eager = object({
+        name: string(),
+        self: first(Eager, () => Eager),
+                    ~~~~~
+!!! error TS2448: Block-scoped variable 'Eager' used before its declaration.
+!!! related TS2728 recursiveCallbackArgumentConstraint.ts:59:7: 'Eager' is declared here.
+                    ~~~~~
+!!! error TS2454: Variable 'Eager' is used before being assigned.
+    });
+    

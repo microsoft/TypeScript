@@ -1,0 +1,83 @@
+//// [tests/cases/compiler/recursiveCallbackArgumentDeclarationEmit.ts] ////
+
+=== recursiveCallbackArgumentDeclarationEmit.ts ===
+export interface Schema<O> { readonly out: O }
+>Schema : Symbol(Schema, Decl(recursiveCallbackArgumentDeclarationEmit.ts, 0, 0))
+>O : Symbol(O, Decl(recursiveCallbackArgumentDeclarationEmit.ts, 0, 24))
+>out : Symbol(Schema.out, Decl(recursiveCallbackArgumentDeclarationEmit.ts, 0, 28))
+>O : Symbol(O, Decl(recursiveCallbackArgumentDeclarationEmit.ts, 0, 24))
+
+export type Shape = Record<string, Schema<any> | (() => Schema<any>)>;
+>Shape : Symbol(Shape, Decl(recursiveCallbackArgumentDeclarationEmit.ts, 0, 46))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Schema : Symbol(Schema, Decl(recursiveCallbackArgumentDeclarationEmit.ts, 0, 0))
+>Schema : Symbol(Schema, Decl(recursiveCallbackArgumentDeclarationEmit.ts, 0, 0))
+
+type Resolve<T> = T extends () => infer R ? R : T;
+>Resolve : Symbol(Resolve, Decl(recursiveCallbackArgumentDeclarationEmit.ts, 1, 70))
+>T : Symbol(T, Decl(recursiveCallbackArgumentDeclarationEmit.ts, 2, 13))
+>T : Symbol(T, Decl(recursiveCallbackArgumentDeclarationEmit.ts, 2, 13))
+>R : Symbol(R, Decl(recursiveCallbackArgumentDeclarationEmit.ts, 2, 39))
+>R : Symbol(R, Decl(recursiveCallbackArgumentDeclarationEmit.ts, 2, 39))
+>T : Symbol(T, Decl(recursiveCallbackArgumentDeclarationEmit.ts, 2, 13))
+
+export type Infer<S extends Shape> = { [K in keyof S]: Resolve<S[K]> extends Schema<infer O> ? O : never };
+>Infer : Symbol(Infer, Decl(recursiveCallbackArgumentDeclarationEmit.ts, 2, 50))
+>S : Symbol(S, Decl(recursiveCallbackArgumentDeclarationEmit.ts, 3, 18))
+>Shape : Symbol(Shape, Decl(recursiveCallbackArgumentDeclarationEmit.ts, 0, 46))
+>K : Symbol(K, Decl(recursiveCallbackArgumentDeclarationEmit.ts, 3, 40))
+>S : Symbol(S, Decl(recursiveCallbackArgumentDeclarationEmit.ts, 3, 18))
+>Resolve : Symbol(Resolve, Decl(recursiveCallbackArgumentDeclarationEmit.ts, 1, 70))
+>S : Symbol(S, Decl(recursiveCallbackArgumentDeclarationEmit.ts, 3, 18))
+>K : Symbol(K, Decl(recursiveCallbackArgumentDeclarationEmit.ts, 3, 40))
+>Schema : Symbol(Schema, Decl(recursiveCallbackArgumentDeclarationEmit.ts, 0, 0))
+>O : Symbol(O, Decl(recursiveCallbackArgumentDeclarationEmit.ts, 3, 89))
+>O : Symbol(O, Decl(recursiveCallbackArgumentDeclarationEmit.ts, 3, 89))
+
+export declare function object<S extends Shape>(shape: S): Schema<Infer<S>>;
+>object : Symbol(object, Decl(recursiveCallbackArgumentDeclarationEmit.ts, 3, 107))
+>S : Symbol(S, Decl(recursiveCallbackArgumentDeclarationEmit.ts, 5, 31))
+>Shape : Symbol(Shape, Decl(recursiveCallbackArgumentDeclarationEmit.ts, 0, 46))
+>shape : Symbol(shape, Decl(recursiveCallbackArgumentDeclarationEmit.ts, 5, 48))
+>S : Symbol(S, Decl(recursiveCallbackArgumentDeclarationEmit.ts, 5, 31))
+>Schema : Symbol(Schema, Decl(recursiveCallbackArgumentDeclarationEmit.ts, 0, 0))
+>Infer : Symbol(Infer, Decl(recursiveCallbackArgumentDeclarationEmit.ts, 2, 50))
+>S : Symbol(S, Decl(recursiveCallbackArgumentDeclarationEmit.ts, 5, 31))
+
+export declare function array<T extends Schema<any>>(el: T): Schema<T["out"][]>;
+>array : Symbol(array, Decl(recursiveCallbackArgumentDeclarationEmit.ts, 5, 76))
+>T : Symbol(T, Decl(recursiveCallbackArgumentDeclarationEmit.ts, 6, 30))
+>Schema : Symbol(Schema, Decl(recursiveCallbackArgumentDeclarationEmit.ts, 0, 0))
+>el : Symbol(el, Decl(recursiveCallbackArgumentDeclarationEmit.ts, 6, 53))
+>T : Symbol(T, Decl(recursiveCallbackArgumentDeclarationEmit.ts, 6, 30))
+>Schema : Symbol(Schema, Decl(recursiveCallbackArgumentDeclarationEmit.ts, 0, 0))
+>T : Symbol(T, Decl(recursiveCallbackArgumentDeclarationEmit.ts, 6, 30))
+
+export declare function string(): Schema<string>;
+>string : Symbol(string, Decl(recursiveCallbackArgumentDeclarationEmit.ts, 6, 80))
+>Schema : Symbol(Schema, Decl(recursiveCallbackArgumentDeclarationEmit.ts, 0, 0))
+
+export declare function lazy<T extends Schema<any>>(fn: () => T): T;
+>lazy : Symbol(lazy, Decl(recursiveCallbackArgumentDeclarationEmit.ts, 7, 49))
+>T : Symbol(T, Decl(recursiveCallbackArgumentDeclarationEmit.ts, 8, 29))
+>Schema : Symbol(Schema, Decl(recursiveCallbackArgumentDeclarationEmit.ts, 0, 0))
+>fn : Symbol(fn, Decl(recursiveCallbackArgumentDeclarationEmit.ts, 8, 52))
+>T : Symbol(T, Decl(recursiveCallbackArgumentDeclarationEmit.ts, 8, 29))
+>T : Symbol(T, Decl(recursiveCallbackArgumentDeclarationEmit.ts, 8, 29))
+
+export const Category = object({
+>Category : Symbol(Category, Decl(recursiveCallbackArgumentDeclarationEmit.ts, 10, 12))
+>object : Symbol(object, Decl(recursiveCallbackArgumentDeclarationEmit.ts, 3, 107))
+
+    name: string(),
+>name : Symbol(name, Decl(recursiveCallbackArgumentDeclarationEmit.ts, 10, 32))
+>string : Symbol(string, Decl(recursiveCallbackArgumentDeclarationEmit.ts, 6, 80))
+
+    subcategories: lazy(() => array(Category)),
+>subcategories : Symbol(subcategories, Decl(recursiveCallbackArgumentDeclarationEmit.ts, 11, 19))
+>lazy : Symbol(lazy, Decl(recursiveCallbackArgumentDeclarationEmit.ts, 7, 49))
+>array : Symbol(array, Decl(recursiveCallbackArgumentDeclarationEmit.ts, 5, 76))
+>Category : Symbol(Category, Decl(recursiveCallbackArgumentDeclarationEmit.ts, 10, 12))
+
+});
+

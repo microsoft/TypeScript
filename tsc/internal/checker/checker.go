@@ -899,6 +899,7 @@ type Checker struct {
 	_jsxNamespace                               string
 	_jsxFactoryEntity                           *ast.Node
 	skipDirectInferenceNodes                    collections.Set[*ast.Node]
+	deferredPropertyAssignments                 collections.Set[*ast.Node]
 	ctx                                         context.Context
 	packagesMap                                 map[string]bool
 	activeMappers                               []*TypeMapper
@@ -2568,6 +2569,8 @@ func (c *Checker) checkDeferredNode(node *ast.Node) {
 		c.checkFunctionExpressionOrObjectLiteralMethodDeferred(node)
 	case ast.KindGetAccessor, ast.KindSetAccessor:
 		c.checkAccessorDeclaration(node)
+	case ast.KindPropertyAssignment:
+		c.getTypeOfSymbol(c.getSymbolOfDeclaration(node))
 	case ast.KindClassExpression:
 		c.checkClassExpressionDeferred(node)
 	case ast.KindTypeParameter:
@@ -13463,7 +13466,14 @@ func (c *Checker) checkObjectLiteral(node *ast.Node, checkMode CheckMode) *Type 
 		if memberDecl.Name() != nil && memberDecl.Name().Kind == ast.KindComputedPropertyName {
 			computedNameType = c.checkComputedPropertyName(memberDecl.Name())
 		}
-		if ast.IsPropertyAssignment(memberDecl) || ast.IsShorthandPropertyAssignment(memberDecl) || ast.IsObjectLiteralMethod(memberDecl) {
+		if memberDecl.Kind == ast.KindPropertyAssignment && computedNameType == nil && !inDestructuringPattern && !inConstContext &&
+			(ast.IsCallExpression(memberDecl.Initializer()) || ast.IsNewExpression(memberDecl.Initializer())) &&
+			c.hasDeferredReferenceToResolvingSymbol(memberDecl.Initializer()) {
+			// The initializer names a declaration still being typed from inside a body that runs later.
+			// Type the property lazily through its own symbol, as for an accessor, so the declaration can finish first.
+			c.deferredPropertyAssignments.Add(memberDecl)
+			c.checkNodeDeferred(memberDecl)
+		} else if ast.IsPropertyAssignment(memberDecl) || ast.IsShorthandPropertyAssignment(memberDecl) || ast.IsObjectLiteralMethod(memberDecl) {
 			var t *Type
 			switch memberDecl.Kind {
 			case ast.KindPropertyAssignment:
@@ -18829,7 +18839,7 @@ func (c *Checker) getWidenedTypeOfObjectLiteral(t *Type, context *WideningContex
 }
 
 func (c *Checker) getWidenedProperty(prop *ast.Symbol, context *WideningContext) *ast.Symbol {
-	if prop.Flags&ast.SymbolFlagsProperty == 0 || c.getSpreadAccessorOrigin(prop) != nil {
+	if prop.Flags&ast.SymbolFlagsProperty == 0 || c.getSpreadAccessorOrigin(prop) != nil || c.isDeferredPropertyAssignment(prop) {
 		// Since get accessors already widen their return value there is no need to
 		// widen accessor based properties here.
 		return prop
@@ -31132,6 +31142,10 @@ func (c *Checker) isExcludedMappedPropertyName(t *Type, propertyNameType *Type) 
 func (c *Checker) getTypeOfConcretePropertyOfContextualType(t *Type, name string) *Type {
 	prop := c.getPropertyOfType(t, name)
 	if prop == nil || c.isCircularMappedProperty(prop) {
+		return nil
+	}
+	// A lazily typed property cannot be contextually typed by itself, which is what the inferred literal type offers.
+	if c.isDeferredPropertyAssignment(prop) && c.valueSymbolLinks.Get(prop).resolvedType == nil {
 		return nil
 	}
 	return c.removeMissingType(c.getTypeOfSymbol(prop), prop.Flags&ast.SymbolFlagsOptional != 0)
