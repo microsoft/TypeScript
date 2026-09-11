@@ -1,0 +1,14 @@
+b.ts(2,19): error TS2307: Cannot find module './a.wasm' or its corresponding type declarations.
+
+
+==== b.ts (1 errors) ====
+    import source a from "./a.wasm";
+    import { b } from "./a.wasm";
+                      ~~~~~~~~~~
+!!! error TS2307: Cannot find module './a.wasm' or its corresponding type declarations.
+    
+    const c: WebAssembly.Module = a;
+    b;
+    
+==== a.wasm (0 errors) ====
+    

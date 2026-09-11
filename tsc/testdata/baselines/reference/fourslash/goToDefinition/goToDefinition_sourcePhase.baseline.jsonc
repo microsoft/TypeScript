@@ -1,0 +1,12 @@
+// === goToDefinition ===
+// === /b.ts ===
+// <|import source [|b|] from "./a.wasm";|>
+// /*GOTO DEF*/b;
+// 
+
+
+
+// === goToDefinition ===
+// === /c.ts ===
+// <|import source [|c|] from "./a.wasm";|>
+// /*GOTO DEF*/c;

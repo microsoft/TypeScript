@@ -11,11 +11,13 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/internal/parser"
 	"github.com/microsoft/TypeScript/tsc/internal/repo"
 	"github.com/microsoft/TypeScript/tsc/internal/scanner"
 	"github.com/microsoft/TypeScript/tsc/internal/testrunner"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/fixtures"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil/parsetestutil"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/osvfs"
 	"gotest.tools/v3/assert"
@@ -184,6 +186,198 @@ class MissingImplements implements B. {}
 
 	missingImplementsDecl := file.Statements.Nodes[4].AsClassDeclaration()
 	assert.Equal(t, missingImplementsDecl.HeritageClauses.Nodes[0].AsHeritageClause().Types.Nodes[0].Kind, ast.KindExpressionWithTypeArguments)
+}
+
+func TestParseStaticSourcePhaseImport(t *testing.T) {
+	t.Parallel()
+	tests := []struct {
+		name          string
+		source        string
+		phaseModifier ast.Kind
+		bindingName   string
+		hasAttributes bool
+	}{
+		{
+			name:          "source phase",
+			source:        `import source a from "./a.wasm";`,
+			phaseModifier: ast.KindSourceKeyword,
+			bindingName:   "a",
+		},
+		{
+			name:          "source phase with import attributes",
+			source:        `import source a from "./a.wasm" with { type: "webassembly" };`,
+			phaseModifier: ast.KindSourceKeyword,
+			bindingName:   "a",
+			hasAttributes: true,
+		},
+		{
+			name:          "from as source phase binding",
+			source:        `import source from from "./module.js";`,
+			phaseModifier: ast.KindSourceKeyword,
+			bindingName:   "from",
+		},
+		{
+			name:          "source as ordinary default binding",
+			source:        `import source from "./module.js";`,
+			phaseModifier: ast.KindUnknown,
+			bindingName:   "source",
+		},
+		{
+			name:          "source as ordinary default binding with named imports",
+			source:        `import source, { value } from "./module.js";`,
+			phaseModifier: ast.KindUnknown,
+			bindingName:   "source",
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
+			file := parsetestutil.ParseTypeScript(test.source, false)
+			parsetestutil.CheckDiagnostics(t, file)
+			assert.Equal(t, len(file.Statements.Nodes), 1)
+
+			statement := file.Statements.Nodes[0]
+			assert.Assert(t, ast.IsImportDeclaration(statement))
+
+			declaration := statement.AsImportDeclaration()
+			assert.Assert(t, declaration.ImportClause != nil)
+
+			clause := declaration.ImportClause.AsImportClause()
+			assert.Equal(t, clause.PhaseModifier, test.phaseModifier)
+			assert.Assert(t, clause.Name() != nil)
+			assert.Equal(t, clause.Name().Text(), test.bindingName)
+			assert.Equal(t, declaration.Attributes != nil, test.hasAttributes)
+		})
+	}
+}
+
+func TestParseEscapedImportPhaseAsDefaultBinding(t *testing.T) {
+	t.Parallel()
+	tests := []struct {
+		source      string
+		bindingName string
+	}{
+		{source: `import d\u0065fer from "./module.js";`, bindingName: "defer"},
+		{source: `import s\u006furce from "./module.js";`, bindingName: "source"},
+	}
+
+	for _, test := range tests {
+		t.Run(test.bindingName, func(t *testing.T) {
+			t.Parallel()
+			file := parsetestutil.ParseTypeScript(test.source, false)
+			parsetestutil.CheckDiagnostics(t, file)
+			assert.Equal(t, len(file.Statements.Nodes), 1)
+
+			statement := file.Statements.Nodes[0]
+			assert.Assert(t, ast.IsImportDeclaration(statement))
+
+			clause := statement.AsImportDeclaration().ImportClause.AsImportClause()
+			assert.Equal(t, clause.PhaseModifier, ast.KindUnknown)
+			assert.Equal(t, clause.Name().Text(), test.bindingName)
+		})
+	}
+}
+
+func TestParseSourceAsImportEqualsBinding(t *testing.T) {
+	t.Parallel()
+	file := parsetestutil.ParseTypeScript(`import source = require("./module.js");`, false)
+	parsetestutil.CheckDiagnostics(t, file)
+	assert.Equal(t, len(file.Statements.Nodes), 1)
+
+	statement := file.Statements.Nodes[0]
+	assert.Assert(t, ast.IsImportEqualsDeclaration(statement))
+
+	assert.Equal(t, statement.Name().Text(), "source")
+}
+
+func TestParseInvalidStaticSourcePhaseImports(t *testing.T) {
+	t.Parallel()
+	tests := []struct {
+		source           string
+		hasName          bool
+		hasNamedBindings bool
+	}{
+		{source: `import source "./a.js";`},
+		{source: `import source * as a from "./a.js";`, hasNamedBindings: true},
+		{source: `import source { a } from "./a.js";`, hasNamedBindings: true},
+		{source: `import source a, { b } from "./a.js";`, hasName: true, hasNamedBindings: true},
+	}
+
+	for _, test := range tests {
+		file := parsetestutil.ParseTypeScript(test.source, false)
+		parsetestutil.CheckDiagnostics(t, file)
+		assert.Equal(t, len(file.Statements.Nodes), 1)
+
+		statement := file.Statements.Nodes[0]
+		assert.Assert(t, ast.IsImportDeclaration(statement))
+
+		declaration := statement.AsImportDeclaration()
+		assert.Assert(t, declaration.ImportClause != nil)
+
+		clause := declaration.ImportClause.AsImportClause()
+		assert.Equal(t, clause.PhaseModifier, ast.KindSourceKeyword)
+		assert.Equal(t, clause.Name() != nil, test.hasName)
+		assert.Equal(t, clause.NamedBindings != nil, test.hasNamedBindings)
+	}
+}
+
+func TestParseDynamicSourcePhaseImport(t *testing.T) {
+	t.Parallel()
+	file := parsetestutil.ParseTypeScript(`import.source("./a.wasm", { with: { type: "webassembly" } });`, false)
+	parsetestutil.CheckDiagnostics(t, file)
+	assert.Equal(t, len(file.Statements.Nodes), 1)
+
+	statement := file.Statements.Nodes[0]
+	assert.Assert(t, ast.IsExpressionStatement(statement))
+
+	call := statement.AsExpressionStatement().Expression
+	assert.Assert(t, ast.IsCallExpression(call))
+	assert.Assert(t, ast.IsImportCall(call))
+	assert.Assert(t, call.SubtreeFacts()&ast.SubtreeContainsDynamicImport != 0)
+
+	metaProperty := call.Expression()
+	assert.Assert(t, ast.IsMetaProperty(metaProperty))
+	assert.Equal(t, metaProperty.AsMetaProperty().KeywordToken, ast.KindImportKeyword)
+	assert.Equal(t, metaProperty.Text(), "source")
+	assert.Equal(t, len(call.Arguments()), 2)
+	assert.Equal(t, file.Flags&ast.NodeFlagsPossiblyContainsDynamicImport != 0, true)
+	assert.Equal(t, file.Flags&ast.NodeFlagsPossiblyContainsImportMeta != 0, false)
+	assert.Equal(t, file.ExternalModuleIndicator == nil, true)
+}
+
+func TestParseEscapedDynamicImportPhase(t *testing.T) {
+	t.Parallel()
+	tests := []struct {
+		source    string
+		phaseName string
+	}{
+		{source: `import.d\u0065fer("./a.js");`, phaseName: "defer"},
+		{source: `import.s\u006furce("./a.wasm");`, phaseName: "source"},
+	}
+
+	for _, test := range tests {
+		t.Run(test.phaseName, func(t *testing.T) {
+			t.Parallel()
+			file := parsetestutil.ParseTypeScript(test.source, false)
+			assert.Equal(t, len(file.Diagnostics()), 1)
+			assert.Equal(t, file.Diagnostics()[0].Code(), diagnostics.Keywords_cannot_contain_escape_characters.Code())
+			assert.Equal(t, len(file.Statements.Nodes), 1)
+
+			statement := file.Statements.Nodes[0]
+			assert.Assert(t, ast.IsExpressionStatement(statement))
+
+			call := statement.AsExpressionStatement().Expression
+			assert.Assert(t, ast.IsCallExpression(call))
+			assert.Assert(t, ast.IsImportCall(call))
+
+			metaProperty := call.Expression()
+			assert.Assert(t, ast.IsMetaProperty(metaProperty))
+			assert.Equal(t, metaProperty.Text(), test.phaseName)
+			assert.Equal(t, file.Flags&ast.NodeFlagsPossiblyContainsDynamicImport != 0, true)
+			assert.Equal(t, file.Flags&ast.NodeFlagsPossiblyContainsImportMeta != 0, false)
+		})
+	}
 }
 
 func TestJSDocImportTypeParentChain(t *testing.T) {

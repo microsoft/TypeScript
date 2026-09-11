@@ -1,0 +1,64 @@
+//// [tests/cases/conformance/importSource/importSource28.ts] ////
+
+=== index.ts ===
+import source a from "./a.d.ts";
+>a : any
+
+import source b from "./b.d.mts";
+>b : any
+
+import source c from "./c.d.cts";
+>c : any
+
+import source d from "./d.d.wasm.ts";
+>d : any
+
+export { a, b, c, d };
+>a : any
+>b : any
+>c : any
+>d : any
+
+import.source("./a.d.ts");
+>import.source("./a.d.ts") : Promise<any>
+>source : any
+>"./a.d.ts" : "./a.d.ts"
+
+import.source("./b.d.mts");
+>import.source("./b.d.mts") : Promise<any>
+>source : any
+>"./b.d.mts" : "./b.d.mts"
+
+import.source("./c.d.cts");
+>import.source("./c.d.cts") : Promise<any>
+>source : any
+>"./c.d.cts" : "./c.d.cts"
+
+import.source("./d.d.wasm.ts");
+>import.source("./d.d.wasm.ts") : Promise<any>
+>source : any
+>"./d.d.wasm.ts" : "./d.d.wasm.ts"
+
+import source valid from "./d.wasm";
+>valid : WebAssembly.Module
+
+const module: WebAssembly.Module = valid;
+>module : WebAssembly.Module
+>WebAssembly : any
+>valid : WebAssembly.Module
+
+const wrong: string = valid;
+>wrong : string
+>valid : WebAssembly.Module
+
+const promise: Promise<WebAssembly.Module> = import.source("./d.wasm");
+>promise : Promise<WebAssembly.Module>
+>WebAssembly : any
+>import.source("./d.wasm") : Promise<WebAssembly.Module>
+>source : any
+>"./d.wasm" : "./d.wasm"
+
+=== d.d.wasm.ts ===
+
+export {};
+

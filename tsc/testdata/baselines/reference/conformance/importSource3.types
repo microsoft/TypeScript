@@ -1,0 +1,88 @@
+//// [tests/cases/conformance/importSource/importSource3.ts] ////
+
+=== a.ts ===
+export default 1;
+export const a = 2;
+>a : 2
+>2 : 2
+
+=== b.ts ===
+import source from "./a.js";
+>source : 1
+
+const a: number = source;
+>a : number
+>source : 1
+
+=== c.ts ===
+import source, { a } from "./a.js";
+>source : 1
+>a : 2
+
+const b: number = source + a;
+>b : number
+>source + a : number
+>source : 1
+>a : 2
+
+=== d.ts ===
+import source = require("./a");
+>source : typeof source
+
+const a: typeof source = source;
+>a : typeof source
+>source : typeof source
+>source : typeof source
+
+=== e.ts ===
+const source = 1;
+>source : 1
+>1 : 1
+
+const a: number = source;
+>a : number
+>source : 1
+
+=== f.d.wasm.ts ===
+
+export {};
+
+=== g.ts ===
+import source from from "./f.wasm";
+>from : WebAssembly.Module
+
+const a: WebAssembly.Module = from;
+>a : WebAssembly.Module
+>WebAssembly : any
+>from : WebAssembly.Module
+
+=== h.ts ===
+import source type from "./f.wasm";
+>type : WebAssembly.Module
+
+const a: WebAssembly.Module = type;
+>a : WebAssembly.Module
+>WebAssembly : any
+>type : WebAssembly.Module
+
+=== i.ts ===
+import source source from "./f.wasm";
+>source : WebAssembly.Module
+
+const a: WebAssembly.Module = source;
+>a : WebAssembly.Module
+>WebAssembly : any
+>source : WebAssembly.Module
+
+=== j.ts ===
+import
+source
+a
+>a : WebAssembly.Module
+
+from "./f.wasm";
+const b: WebAssembly.Module = a;
+>b : WebAssembly.Module
+>WebAssembly : any
+>a : WebAssembly.Module
+

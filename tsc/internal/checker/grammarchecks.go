@@ -1822,13 +1822,13 @@ func (c *Checker) checkGrammarMetaProperty(node *ast.MetaProperty) bool {
 	case ast.KindImportKeyword:
 		if nameText != "meta" {
 			isCallee := ast.IsCallExpression(node.Parent) && node.Parent.Expression() == node.AsNode()
-			if nameText == "defer" {
+			if ast.IsImportPhaseMetaProperty(node.AsNode()) {
 				if !isCallee {
 					return c.grammarErrorAtPos(node.AsNode(), node.AsNode().End(), 0, diagnostics.X_0_expected, "(")
 				}
 			} else {
 				if isCallee {
-					return c.grammarErrorOnNode(nodeName, diagnostics.X_0_is_not_a_valid_meta_property_for_keyword_import_Did_you_mean_meta_or_defer, nameText)
+					return c.grammarErrorOnNode(nodeName, diagnostics.X_0_is_not_a_valid_meta_property_for_keyword_import_Did_you_mean_meta_defer_or_source, nameText)
 				}
 				return c.grammarErrorOnNode(nodeName, diagnostics.X_0_is_not_a_valid_meta_property_for_keyword_1_Did_you_mean_2, nameText, scanner.TokenToString(node.KeywordToken), "meta")
 			}
@@ -2113,9 +2113,25 @@ func (c *Checker) checkGrammarImportClause(node *ast.ImportClause) bool {
 		if node.NamedBindings != nil && node.NamedBindings.Kind == ast.KindNamedImports {
 			return c.grammarErrorOnNode(&node.Node, diagnostics.Named_imports_are_not_allowed_in_a_deferred_import)
 		}
-		if c.moduleKind != core.ModuleKindESNext && c.moduleKind != core.ModuleKindPreserve {
-			return c.grammarErrorOnNode(&node.Node, diagnostics.Deferred_imports_are_only_supported_when_the_module_flag_is_set_to_esnext_or_preserve)
+		if c.moduleKind.SupportsDeferredImports() {
+			break
 		}
+		return c.grammarErrorOnNode(&node.Node, diagnostics.Deferred_imports_are_only_supported_when_the_module_flag_is_set_to_esnext_or_preserve)
+	case ast.KindSourceKeyword:
+		if node.NamedBindings != nil {
+			return c.grammarErrorOnNode(&node.Node, diagnostics.Named_and_namespace_imports_are_not_allowed_in_a_source_phase_import)
+		}
+		if node.Name() == nil {
+			return c.grammarErrorOnNode(&node.Node, diagnostics.A_source_phase_import_must_specify_a_local_binding)
+		}
+		if c.moduleKind.SupportsSourcePhaseImports() {
+			moduleSpecifier := getModuleSpecifierFromNode(node.Parent)
+			if c.getEmitSyntaxForModuleSpecifierExpression(moduleSpecifier) == core.ModuleKindCommonJS {
+				return c.grammarErrorOnNode(&node.Node, diagnostics.Source_phase_imports_are_not_allowed_on_statements_that_compile_to_CommonJS_require_calls)
+			}
+			break
+		}
+		return c.grammarErrorOnNode(&node.Node, diagnostics.Source_phase_imports_are_only_supported_when_the_module_option_is_set_to_esnext_nodenext_or_preserve)
 	}
 	return false
 }
@@ -2159,8 +2175,12 @@ func (c *Checker) checkGrammarImportCallExpression(node *ast.Node) bool {
 		return c.grammarErrorOnNode(node, getVerbatimModuleSyntaxErrorMessage(node))
 	}
 
-	if node.Expression().Kind == ast.KindMetaProperty {
-		if c.moduleKind != core.ModuleKindESNext && c.moduleKind != core.ModuleKindPreserve {
+	if ast.IsImportSourceMetaProperty(node.Expression()) {
+		if !c.moduleKind.SupportsSourcePhaseImports() {
+			return c.grammarErrorOnNode(node, diagnostics.Source_phase_imports_are_only_supported_when_the_module_option_is_set_to_esnext_nodenext_or_preserve)
+		}
+	} else if ast.IsImportDeferMetaProperty(node.Expression()) {
+		if !c.moduleKind.SupportsDeferredImports() {
 			return c.grammarErrorOnNode(node, diagnostics.Deferred_imports_are_only_supported_when_the_module_flag_is_set_to_esnext_or_preserve)
 		}
 	} else if c.moduleKind == core.ModuleKindES2015 {
@@ -2168,6 +2188,9 @@ func (c *Checker) checkGrammarImportCallExpression(node *ast.Node) bool {
 	}
 
 	nodeAsCall := node.AsCallExpression()
+	if ast.IsSourcePhaseImportCall(node) && nodeAsCall.QuestionDotToken != nil {
+		return c.grammarErrorOnNode(nodeAsCall.QuestionDotToken, diagnostics.Optional_chaining_cannot_be_used_with_import_source)
+	}
 	if nodeAsCall.TypeArguments != nil {
 		return c.grammarErrorOnNode(node, diagnostics.This_use_of_import_is_invalid_import_calls_can_be_written_but_they_must_have_parentheses_and_cannot_have_type_arguments)
 	}

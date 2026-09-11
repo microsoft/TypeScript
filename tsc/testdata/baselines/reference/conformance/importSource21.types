@@ -1,0 +1,57 @@
+//// [tests/cases/conformance/importSource/importSource21.ts] ////
+
+=== i.ts ===
+import { a } from "./d.js";
+>a : WebAssembly.Module
+
+import { e } from "./h.js";
+>e : WebAssembly.Module
+
+const b: WebAssembly.Module = a;
+>b : WebAssembly.Module
+>WebAssembly : any
+>a : WebAssembly.Module
+
+const c: WebAssembly.Module = e;
+>c : WebAssembly.Module
+>WebAssembly : any
+>e : WebAssembly.Module
+
+=== b.ts ===
+import source a from "./a.wasm";
+>a : WebAssembly.Module
+
+export { a };
+>a : WebAssembly.Module
+
+=== c.ts ===
+import source a from "././a.wasm";
+>a : WebAssembly.Module
+
+export { a };
+>a : WebAssembly.Module
+
+=== d.ts ===
+
+export * from "./b.js";
+export * from "./c.js";
+
+=== f.ts ===
+import source e from "./e.wasm";
+>e : WebAssembly.Module
+
+export { e };
+>e : WebAssembly.Module
+
+=== g.ts ===
+import source e from "././e.wasm";
+>e : WebAssembly.Module
+
+export { e };
+>e : WebAssembly.Module
+
+=== h.ts ===
+
+export * from "./f.js";
+export * from "./g.js";
+

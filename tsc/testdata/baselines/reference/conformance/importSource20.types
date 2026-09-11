@@ -1,0 +1,36 @@
+//// [tests/cases/conformance/importSource/importSource20.ts] ////
+
+=== b.ts ===
+import a from "a";
+>a : string
+
+import source b from "a";
+>b : WebAssembly.Module
+
+const c: string = a;
+>c : string
+>a : string
+
+const d: WebAssembly.Module = b;
+>d : WebAssembly.Module
+>WebAssembly : any
+>b : WebAssembly.Module
+
+const e = import.source("a");
+>e : Promise<WebAssembly.Module>
+>import.source("a") : Promise<WebAssembly.Module>
+>source : any
+>"a" : "a"
+
+const f: Promise<WebAssembly.Module> = e;
+>f : Promise<WebAssembly.Module>
+>WebAssembly : any
+>e : Promise<WebAssembly.Module>
+
+=== node_modules/a/index.d.ts ===
+declare const a: string;
+>a : string
+
+export default a;
+>a : string
+

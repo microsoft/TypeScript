@@ -1,6 +1,7 @@
 package module
 
 import (
+	"slices"
 	"strings"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
@@ -13,6 +14,48 @@ import (
 var typeScriptVersion = semver.MustParse(core.Version())
 
 const InferredTypesContainingFile = "__inferred type names__.ts"
+
+func GetImportPhaseForUsage(usage *ast.StringLiteralLike) ImportPhase {
+	parent := usage.Parent
+	if parent == nil {
+		return ImportPhaseEvaluation
+	}
+	if ast.IsImportDeclaration(parent) {
+		importClause := parent.AsImportDeclaration().ImportClause
+		if importClause != nil && importClause.AsImportClause().PhaseModifier == ast.KindSourceKeyword {
+			return ImportPhaseSource
+		}
+	} else if ast.IsSourcePhaseImportCall(parent) {
+		arguments := parent.Arguments()
+		if len(arguments) > 0 && arguments[0] == usage {
+			return ImportPhaseSource
+		}
+	}
+	return ImportPhaseEvaluation
+}
+
+func IsModuleForArbitraryExtension(moduleSymbol *ast.Symbol, extension string) bool {
+	file := ast.GetSourceFileOfModule(moduleSymbol)
+	if file == nil {
+		return false
+	}
+	return isFileForArbitraryExtension(file.FileName(), extension)
+}
+
+func IsResolvedModuleForArbitraryExtension(resolvedModule *ResolvedModule, extension string) bool {
+	if resolvedModule.IsResolved() {
+		return isFileForArbitraryExtension(resolvedModule.ResolvedFileName, extension)
+	}
+	return false
+}
+
+func IsResolvedModuleForExtension(resolvedModule *ResolvedModule, extension string) bool {
+	return resolvedModule.IsResolved() && tspath.FileExtensionIs(resolvedModule.ResolvedFileName, extension)
+}
+
+func isFileForArbitraryExtension(fileName string, extension string) bool {
+	return tspath.FileExtensionIs(fileName, extension) || slices.Contains(tspath.GetPossibleOriginalInputExtensionForExtension(fileName), extension)
+}
 
 func IsApplicableVersionedTypesKey(key string) bool {
 	if !strings.HasPrefix(key, "types@") {

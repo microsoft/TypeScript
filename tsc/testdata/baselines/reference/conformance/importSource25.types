@@ -1,0 +1,85 @@
+//// [tests/cases/conformance/importSource/importSource25.ts] ////
+
+=== a.d.ts ===
+declare module "*.txt";
+>"*.txt" : any
+
+declare module "*.asset" with { type: "css" } {}
+>"*.asset" : typeof import("*.asset", { with: { type: "css" } })
+>type : "css"
+
+declare module "*.asset" with { type: "text" } {}
+>"*.asset" : typeof import("*.asset", { with: { type: "text" } })
+>type : "text"
+
+=== b.ts ===
+import source a from "./a.txt";
+>a : any
+
+export { a as value };
+>a : any
+>value : any
+
+=== c.ts ===
+import source a from "././a.txt";
+>a : any
+
+export { a as value };
+>a : any
+>value : any
+
+=== d.ts ===
+
+export * from "./b.js";
+export * from "./c.js";
+
+=== e.ts ===
+import { value } from "./d.js";
+>value : any
+
+value;
+>value : any
+
+=== f.ts ===
+import source a from "./b.txt";
+>a : any
+
+export { a as value };
+>a : any
+>value : any
+
+=== g.ts ===
+
+export * from "./b.js";
+export * from "./f.js";
+
+=== h.ts ===
+import { value } from "./g.js";
+>value : any
+
+value;
+>value : any
+
+=== i.ts ===
+import source a from "./file.asset" with { type: "css" };
+>a : any
+>type : any
+
+export { a as value };
+>a : any
+>value : any
+
+=== j.ts ===
+import source a from "./file.asset" with { type: "text" };
+>a : any
+>type : any
+
+export { a as value };
+>a : any
+>value : any
+
+=== k.ts ===
+
+export * from "./i.js";
+export * from "./j.js";
+

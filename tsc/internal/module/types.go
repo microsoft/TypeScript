@@ -17,9 +17,17 @@ type ResolutionHost interface {
 }
 
 type ModeAwareCacheKey struct {
-	Name string
-	Mode core.ResolutionMode
+	Name  string
+	Mode  core.ResolutionMode
+	Phase ImportPhase
 }
+
+type ImportPhase int32
+
+const (
+	ImportPhaseEvaluation ImportPhase = iota
+	ImportPhaseSource
+)
 
 type ResolvedProjectReference interface {
 	ConfigName() string

@@ -1,0 +1,17 @@
+//// [tests/cases/conformance/importSource/importSource18.ts] ////
+
+=== b.ts ===
+import source a from "./a.wasm";
+>a : WebAssembly.Module
+
+import { b } from "./a.wasm";
+>b : any
+
+const c: WebAssembly.Module = a;
+>c : WebAssembly.Module
+>WebAssembly : any
+>a : WebAssembly.Module
+
+b;
+>b : any
+

@@ -1,0 +1,45 @@
+b.ts(1,8): error TS100070: Named and namespace imports are not allowed in a source phase import.
+c.ts(1,8): error TS100070: Named and namespace imports are not allowed in a source phase import.
+d.ts(1,8): error TS100070: Named and namespace imports are not allowed in a source phase import.
+e.ts(1,8): error TS100069: A source phase import must specify a local binding.
+f.ts(1,20): error TS1005: 'from' expected.
+f.ts(1,20): error TS1141: String literal expected.
+f.ts(1,22): error TS1005: ';' expected.
+f.ts(1,22): error TS2304: Cannot find name 'from'.
+
+
+==== a.ts (0 errors) ====
+    export default 1;
+    export const a = 2;
+    
+==== b.ts (1 errors) ====
+    import source * as a from "./a.js";
+           ~~~~~~~~~~~~~
+!!! error TS100070: Named and namespace imports are not allowed in a source phase import.
+    
+==== c.ts (1 errors) ====
+    import source { a } from "./a.js";
+           ~~~~~~~~~~~~
+!!! error TS100070: Named and namespace imports are not allowed in a source phase import.
+    
+==== d.ts (1 errors) ====
+    import source a, { a as b } from "./a.js";
+           ~~~~~~~~~~~~~~~~~~~~
+!!! error TS100070: Named and namespace imports are not allowed in a source phase import.
+    
+==== e.ts (1 errors) ====
+    import source "./a.js";
+           ~~~~~~
+!!! error TS100069: A source phase import must specify a local binding.
+    
+==== f.ts (4 errors) ====
+    import source type a from "./a.js";
+                       ~
+!!! error TS1005: 'from' expected.
+                       ~
+!!! error TS1141: String literal expected.
+                         ~~~~
+!!! error TS1005: ';' expected.
+                         ~~~~
+!!! error TS2304: Cannot find name 'from'.
+    

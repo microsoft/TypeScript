@@ -1,0 +1,30 @@
+//// [tests/cases/conformance/importSource/importSource8.ts] ////
+
+=== a.d.wasm.ts ===
+export const a: number;
+>a : Symbol(a, Decl(a.d.wasm.ts, 0, 12))
+
+=== b.ts ===
+import { a } from "./a.wasm";
+>a : Symbol(a, Decl(b.ts, 0, 8))
+
+import source b from "./a.wasm";
+>b : Symbol(b, Decl(b.ts, 1, 6))
+
+const c: number = a;
+>c : Symbol(c, Decl(b.ts, 3, 5))
+>a : Symbol(a, Decl(b.ts, 0, 8))
+
+const d: WebAssembly.Module = b;
+>d : Symbol(d, Decl(b.ts, 4, 5))
+>WebAssembly : Symbol(WebAssembly, Decl(lib.dom.d.ts, --, --))
+>Module : Symbol(WebAssembly.Module, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>b : Symbol(b, Decl(b.ts, 1, 6))
+
+const e: Promise<WebAssembly.Module> = import.source("./a.wasm");
+>e : Symbol(e, Decl(b.ts, 5, 5))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>WebAssembly : Symbol(WebAssembly, Decl(lib.dom.d.ts, --, --))
+>Module : Symbol(WebAssembly.Module, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>"./a.wasm" : Symbol("./a.wasm", Decl(a.d.wasm.ts, 0, 0))
+

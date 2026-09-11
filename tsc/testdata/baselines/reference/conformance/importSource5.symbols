@@ -1,0 +1,42 @@
+//// [tests/cases/conformance/importSource/importSource5.ts] ////
+
+=== a.ts ===
+
+export default 1;
+
+=== b.ts ===
+import.source;
+(import.source)("./a.js");
+Function(import.source);
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.decorators.d.ts, --, --))
+
+import.source.unknown;
+
+import.source();
+import.source("./a.js", {}, {});
+>"./a.js" : Symbol("./a.js", Decl(a.ts, 0, 0))
+
+import.source?.("./a.js");
+>"./a.js" : Symbol("./a.js", Decl(a.ts, 0, 0))
+
+import.source<string>("./a.js");
+>"./a.js" : Symbol("./a.js", Decl(a.ts, 0, 0))
+
+import.source(...["./a.js"]);
+
+=== c.ts ===
+new import.source("./a.js");
+>"./a.js" : Symbol("./a.js", Decl(a.ts, 0, 0))
+
+=== d.ts ===
+new import.source("./a.js").a;
+>"./a.js" : Symbol("./a.js", Decl(a.ts, 0, 0))
+
+=== e.ts ===
+
+typeof import.source;
+
+=== f.ts ===
+
+import.a("./a.js");
+

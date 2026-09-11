@@ -1,0 +1,33 @@
+//// [tests/cases/conformance/importSource/importSource10.ts] ////
+
+=== a.d.wasm.ts ===
+
+export {};
+
+=== b.ts ===
+import source a from "./a.wasm";
+>a : WebAssembly.Module
+
+export { a };
+>a : WebAssembly.Module
+
+=== c.ts ===
+import { a } from "./b.js";
+>a : WebAssembly.Module
+
+const b: WebAssembly.Module = a;
+>b : WebAssembly.Module
+>WebAssembly : any
+>a : WebAssembly.Module
+
+=== d.ts ===
+import * as a from "./b.js";
+>a : typeof a
+
+const b: WebAssembly.Module = a.a;
+>b : WebAssembly.Module
+>WebAssembly : any
+>a.a : WebAssembly.Module
+>a : typeof a
+>a : WebAssembly.Module
+

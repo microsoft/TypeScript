@@ -1,0 +1,22 @@
+//// [tests/cases/conformance/importSource/importSource14.ts] ////
+
+=== a.d.txt.ts ===
+
+export {};
+
+=== b.ts ===
+import source a from "./a.txt";
+>a : any
+
+const b = import.source("./a.txt");
+>b : Promise<any>
+>import.source("./a.txt") : Promise<any>
+>source : any
+>"./a.txt" : "./a.txt"
+
+a;
+>a : any
+
+b;
+>b : Promise<any>
+

@@ -1,0 +1,12 @@
+// === findAllReferences ===
+// === /b.ts ===
+// import source [|b|] from "./a.wasm";
+// /*FIND ALL REFS*/[|b|];
+// 
+
+
+
+// === findAllReferences ===
+// === /c.ts ===
+// import source [|c|] from "./a.wasm";
+// /*FIND ALL REFS*/[|c|];
