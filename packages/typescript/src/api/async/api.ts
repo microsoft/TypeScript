@@ -218,8 +218,8 @@ export interface TranspileOptions {
 
 export interface TranspileOutput {
     outputText: string;
-    diagnostics?: readonly Diagnostic[];
-    sourceMapText?: string;
+    diagnostics?: readonly Diagnostic[] | undefined;
+    sourceMapText?: string | undefined;
 }
 
 // @sync-only-start

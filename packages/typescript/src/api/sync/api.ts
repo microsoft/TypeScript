@@ -235,8 +235,8 @@ export interface TranspileOptions {
 
 export interface TranspileOutput {
     outputText: string;
-    diagnostics?: readonly Diagnostic[];
-    sourceMapText?: string;
+    diagnostics?: readonly Diagnostic[] | undefined;
+    sourceMapText?: string | undefined;
 }
 
 export { all, type AllAPIRequestGenerator, type AnyAPIRequestGenerator, type APIRequestGenerator, defer, type DeferredAPIRequestGenerator, type ExecutedGeneratorsResults } from "./generatorSupport.ts";
