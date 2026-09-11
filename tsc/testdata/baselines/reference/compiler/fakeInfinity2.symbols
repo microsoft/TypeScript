@@ -35,3 +35,13 @@ export const m = X.f();
 >X : Symbol(X, Decl(fakeInfinity2.ts, 3, 1))
 >f : Symbol(X.f, Decl(fakeInfinity2.ts, 7, 19))
 
+const Infinity = 0;
+>Infinity : Symbol(Infinity, Decl(fakeInfinity2.ts, 16, 5))
+
+export enum Bar {
+>Bar : Symbol(Bar, Decl(fakeInfinity2.ts, 16, 19))
+
+    A = 1e999,
+>A : Symbol(Bar.A, Decl(fakeInfinity2.ts, 17, 17))
+}
+

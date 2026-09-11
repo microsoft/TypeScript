@@ -13,9 +13,9 @@ func constantExpression(value any, factory *printer.NodeFactory) *ast.Expression
 	case jsnum.Number:
 		if value.IsInf() {
 			if value > 0 {
-				return factory.NewIdentifier("Infinity")
+				return factory.NewNumericLiteral(jsnum.InfinityLiteralText, ast.TokenFlagsNone)
 			}
-			return factory.NewPrefixUnaryExpression(ast.KindMinusToken, factory.NewIdentifier("Infinity"))
+			return factory.NewPrefixUnaryExpression(ast.KindMinusToken, factory.NewNumericLiteral(jsnum.InfinityLiteralText, ast.TokenFlagsNone))
 		}
 		if value.IsNaN() {
 			return factory.NewIdentifier("NaN")

@@ -2280,9 +2280,9 @@ func (tx *DeclarationTransformer) transformEnumDeclaration(input *ast.EnumDeclar
 			case jsnum.Number:
 				if value.IsInf() {
 					if value > 0 {
-						newInitializer = tx.Factory().NewIdentifier("Infinity")
+						newInitializer = tx.Factory().NewNumericLiteral(jsnum.InfinityLiteralText, ast.TokenFlagsNone)
 					} else {
-						newInitializer = tx.Factory().NewPrefixUnaryExpression(ast.KindMinusToken, tx.Factory().NewIdentifier("Infinity"))
+						newInitializer = tx.Factory().NewPrefixUnaryExpression(ast.KindMinusToken, tx.Factory().NewNumericLiteral(jsnum.InfinityLiteralText, ast.TokenFlagsNone))
 					}
 				} else if value.IsNaN() {
 					newInitializer = tx.Factory().NewIdentifier("NaN")
