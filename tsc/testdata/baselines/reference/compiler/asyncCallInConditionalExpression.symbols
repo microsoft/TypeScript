@@ -1,0 +1,79 @@
+//// [tests/cases/compiler/asyncCallInConditionalExpression.ts] ////
+
+=== a.ts ===
+declare const a: boolean;
+>a : Symbol(a, Decl(a.ts, 0, 13))
+
+declare function async(...args: any[]): number;
+>async : Symbol(async, Decl(a.ts, 0, 25))
+>args : Symbol(args, Decl(a.ts, 1, 23))
+
+const c1 = a ? async() : 0;
+>c1 : Symbol(c1, Decl(a.ts, 3, 5))
+>a : Symbol(a, Decl(a.ts, 0, 13))
+>async : Symbol(async, Decl(a.ts, 0, 25))
+
+const c2 = a ? async() : (x: number) => x;
+>c2 : Symbol(c2, Decl(a.ts, 4, 5))
+>a : Symbol(a, Decl(a.ts, 0, 13))
+>async : Symbol(async, Decl(a.ts, 0, 25))
+>x : Symbol(x, Decl(a.ts, 4, 26))
+>x : Symbol(x, Decl(a.ts, 4, 26))
+
+const c3 = a ? async(1) : 0;
+>c3 : Symbol(c3, Decl(a.ts, 5, 5))
+>a : Symbol(a, Decl(a.ts, 0, 13))
+>async : Symbol(async, Decl(a.ts, 0, 25))
+
+const c4 = a ? async() : a ? async() : 0;
+>c4 : Symbol(c4, Decl(a.ts, 6, 5))
+>a : Symbol(a, Decl(a.ts, 0, 13))
+>async : Symbol(async, Decl(a.ts, 0, 25))
+>a : Symbol(a, Decl(a.ts, 0, 13))
+>async : Symbol(async, Decl(a.ts, 0, 25))
+
+const f1 = async(): Promise<number> => 1;
+>f1 : Symbol(f1, Decl(a.ts, 8, 5))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+
+const f2 = async (): Promise<number> => 1;
+>f2 : Symbol(f2, Decl(a.ts, 9, 5))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+
+const f3 = a ? async(): Promise<number> => 1 : 2;
+>f3 : Symbol(f3, Decl(a.ts, 10, 5))
+>a : Symbol(a, Decl(a.ts, 0, 13))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+
+const f4 = a ? async () => 1 : 2;
+>f4 : Symbol(f4, Decl(a.ts, 11, 5))
+>a : Symbol(a, Decl(a.ts, 0, 13))
+
+const f5 = a ? 1 : async(): Promise<number> => 1;
+>f5 : Symbol(f5, Decl(a.ts, 12, 5))
+>a : Symbol(a, Decl(a.ts, 0, 13))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+
+export {};
+
+=== b.js ===
+const t = true;
+>t : Symbol(t, Decl(b.js, 0, 5))
+
+function async() { return 1; }
+>async : Symbol(async, Decl(b.js, 0, 15))
+
+const j1 = t ? async() : 0;
+>j1 : Symbol(j1, Decl(b.js, 2, 5))
+>t : Symbol(t, Decl(b.js, 0, 5))
+>async : Symbol(async, Decl(b.js, 0, 15))
+
+const j2 = t ? async() : x => x;
+>j2 : Symbol(j2, Decl(b.js, 3, 5))
+>t : Symbol(t, Decl(b.js, 0, 5))
+>async : Symbol(async, Decl(b.js, 0, 15))
+>x : Symbol(x, Decl(b.js, 3, 24))
+>x : Symbol(x, Decl(b.js, 3, 24))
+
+export {};
+

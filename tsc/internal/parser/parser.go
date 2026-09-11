@@ -4263,7 +4263,8 @@ func (p *Parser) isParenthesizedArrowFunctionExpression() core.Tristate {
 }
 
 func (p *Parser) nextIsParenthesizedArrowFunctionExpression() core.Tristate {
-	if p.token == ast.KindAsyncKeyword {
+	isAsync := p.token == ast.KindAsyncKeyword
+	if isAsync {
 		p.nextToken()
 		if p.hasPrecedingLineBreak() {
 			return core.TSFalse
@@ -4282,7 +4283,12 @@ func (p *Parser) nextIsParenthesizedArrowFunctionExpression() core.Tristate {
 			// but this is probably what the user intended.
 			third := p.nextToken()
 			switch third {
-			case ast.KindEqualsGreaterThanToken, ast.KindColonToken, ast.KindOpenBraceToken:
+			case ast.KindEqualsGreaterThanToken, ast.KindOpenBraceToken:
+				return core.TSTrue
+			case ast.KindColonToken:
+				if isAsync {
+					return core.TSUnknown
+				}
 				return core.TSTrue
 			}
 			return core.TSFalse

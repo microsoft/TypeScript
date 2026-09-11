@@ -1,0 +1,114 @@
+//// [tests/cases/compiler/asyncCallInConditionalExpression.ts] ////
+
+=== a.ts ===
+declare const a: boolean;
+>a : boolean
+
+declare function async(...args: any[]): number;
+>async : (...args: any[]) => number
+>args : any[]
+
+const c1 = a ? async() : 0;
+>c1 : number
+>a ? async() : 0 : number
+>a : boolean
+>async() : number
+>async : (...args: any[]) => number
+>0 : 0
+
+const c2 = a ? async() : (x: number) => x;
+>c2 : number | ((x: number) => number)
+>a ? async() : (x: number) => x : number | ((x: number) => number)
+>a : boolean
+>async() : number
+>async : (...args: any[]) => number
+>(x: number) => x : (x: number) => number
+>x : number
+>x : number
+
+const c3 = a ? async(1) : 0;
+>c3 : number
+>a ? async(1) : 0 : number
+>a : boolean
+>async(1) : number
+>async : (...args: any[]) => number
+>1 : 1
+>0 : 0
+
+const c4 = a ? async() : a ? async() : 0;
+>c4 : number
+>a ? async() : a ? async() : 0 : number
+>a : boolean
+>async() : number
+>async : (...args: any[]) => number
+>a ? async() : 0 : number
+>a : false
+>async() : number
+>async : (...args: any[]) => number
+>0 : 0
+
+const f1 = async(): Promise<number> => 1;
+>f1 : () => Promise<number>
+>async(): Promise<number> => 1 : () => Promise<number>
+>1 : 1
+
+const f2 = async (): Promise<number> => 1;
+>f2 : () => Promise<number>
+>async (): Promise<number> => 1 : () => Promise<number>
+>1 : 1
+
+const f3 = a ? async(): Promise<number> => 1 : 2;
+>f3 : 2 | (() => Promise<number>)
+>a ? async(): Promise<number> => 1 : 2 : 2 | (() => Promise<number>)
+>a : boolean
+>async(): Promise<number> => 1 : () => Promise<number>
+>1 : 1
+>2 : 2
+
+const f4 = a ? async () => 1 : 2;
+>f4 : 2 | (() => Promise<number>)
+>a ? async () => 1 : 2 : 2 | (() => Promise<number>)
+>a : boolean
+>async () => 1 : () => Promise<number>
+>1 : 1
+>2 : 2
+
+const f5 = a ? 1 : async(): Promise<number> => 1;
+>f5 : 1 | (() => Promise<number>)
+>a ? 1 : async(): Promise<number> => 1 : 1 | (() => Promise<number>)
+>a : boolean
+>1 : 1
+>async(): Promise<number> => 1 : () => Promise<number>
+>1 : 1
+
+export {};
+
+=== b.js ===
+const t = true;
+>t : true
+>true : true
+
+function async() { return 1; }
+>async : () => number
+>1 : 1
+
+const j1 = t ? async() : 0;
+>j1 : number
+>t ? async() : 0 : number
+>t : true
+>async() : number
+>async : () => number
+>0 : 0
+
+const j2 = t ? async() : x => x;
+>j2 : number | ((x: any) => any)
+>t ? async() : x => x : number | ((x: any) => any)
+>t : true
+>async() : number
+>async : () => number
+>x => x : (x: any) => any
+>x : any
+>x : any
+
+export {};
+
