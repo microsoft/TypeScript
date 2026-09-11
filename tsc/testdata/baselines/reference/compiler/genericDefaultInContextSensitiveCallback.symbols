@@ -1,0 +1,36 @@
+//// [tests/cases/compiler/genericDefaultInContextSensitiveCallback.ts] ////
+
+=== genericDefaultInContextSensitiveCallback.ts ===
+declare function request<T = { input: { value: number }; output: string }>(
+>request : Symbol(request, Decl(genericDefaultInContextSensitiveCallback.ts, 0, 0))
+>T : Symbol(T, Decl(genericDefaultInContextSensitiveCallback.ts, 0, 25))
+>input : Symbol(input, Decl(genericDefaultInContextSensitiveCallback.ts, 0, 30))
+>value : Symbol(value, Decl(genericDefaultInContextSensitiveCallback.ts, 0, 39))
+>output : Symbol(output, Decl(genericDefaultInContextSensitiveCallback.ts, 0, 56))
+
+    body?: T extends { input: unknown } ? T["input"] : never,
+>body : Symbol(body, Decl(genericDefaultInContextSensitiveCallback.ts, 0, 75))
+>T : Symbol(T, Decl(genericDefaultInContextSensitiveCallback.ts, 0, 25))
+>input : Symbol(input, Decl(genericDefaultInContextSensitiveCallback.ts, 1, 22))
+>T : Symbol(T, Decl(genericDefaultInContextSensitiveCallback.ts, 0, 25))
+
+): T extends { output: unknown } ? T["output"] : T;
+>T : Symbol(T, Decl(genericDefaultInContextSensitiveCallback.ts, 0, 25))
+>output : Symbol(output, Decl(genericDefaultInContextSensitiveCallback.ts, 2, 14))
+>T : Symbol(T, Decl(genericDefaultInContextSensitiveCallback.ts, 0, 25))
+>T : Symbol(T, Decl(genericDefaultInContextSensitiveCallback.ts, 0, 25))
+
+declare function identity<T>(callback: T): T;
+>identity : Symbol(identity, Decl(genericDefaultInContextSensitiveCallback.ts, 2, 51))
+>T : Symbol(T, Decl(genericDefaultInContextSensitiveCallback.ts, 4, 26))
+>callback : Symbol(callback, Decl(genericDefaultInContextSensitiveCallback.ts, 4, 29))
+>T : Symbol(T, Decl(genericDefaultInContextSensitiveCallback.ts, 4, 26))
+>T : Symbol(T, Decl(genericDefaultInContextSensitiveCallback.ts, 4, 26))
+
+identity((data: { value: number }) => request(data));
+>identity : Symbol(identity, Decl(genericDefaultInContextSensitiveCallback.ts, 2, 51))
+>data : Symbol(data, Decl(genericDefaultInContextSensitiveCallback.ts, 6, 10))
+>value : Symbol(value, Decl(genericDefaultInContextSensitiveCallback.ts, 6, 17))
+>request : Symbol(request, Decl(genericDefaultInContextSensitiveCallback.ts, 0, 0))
+>data : Symbol(data, Decl(genericDefaultInContextSensitiveCallback.ts, 6, 10))
+
