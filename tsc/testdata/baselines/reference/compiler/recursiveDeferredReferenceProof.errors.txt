@@ -1,0 +1,83 @@
+recursiveDeferredReferenceProof.ts(27,7): error TS2322: Type 'LeftValue<string>' is not assignable to type 'NumericValue<string>'.
+  Types of property 'value' are incompatible.
+    Type 'string' is not assignable to type 'number'.
+recursiveDeferredReferenceProof.ts(28,7): error TS2322: Type 'LeftValue<string>' is not assignable to type 'NumericValue<string>'.
+  Types of property 'value' are incompatible.
+    Type 'string' is not assignable to type 'number'.
+recursiveDeferredReferenceProof.ts(37,7): error TS2322: Type 'DeferredLeft<{ value: string; }>' is not assignable to type 'RightValue<unknown>'.
+  The types of 'next.value' are incompatible between these types.
+    Type 'string' is not assignable to type 'number'.
+recursiveDeferredReferenceProof.ts(38,7): error TS2322: Type 'DeferredLeft<{ value: string; }>' is not assignable to type 'NumericValue<unknown>'.
+  The types of 'next.value' are incompatible between these types.
+    Type 'string' is not assignable to type 'number'.
+
+
+==== recursiveDeferredReferenceProof.ts (4 errors) ====
+    type Step<T> = T extends string ? string : number;
+    
+    interface Left<T> {
+        next: Left<Step<T>>;
+    }
+    interface Right<T> {
+        next: Right<Step<T>>;
+    }
+    declare const left: Left<string>;
+    const right: Right<string> = left;
+    const back: Left<string> = right;
+    
+    interface LeftValue<T> {
+        next: LeftValue<Step<T>>;
+        value: T;
+    }
+    interface RightValue<T> {
+        next: RightValue<Step<T>>;
+        value: T;
+    }
+    interface NumericValue<T> {
+        next: NumericValue<Step<T>>;
+        value: number;
+    }
+    declare const text: LeftValue<string>;
+    const same: RightValue<string> = text;
+    const wrong: NumericValue<string> = text;
+          ~~~~~
+!!! error TS2322: Type 'LeftValue<string>' is not assignable to type 'NumericValue<string>'.
+!!! error TS2322:   Types of property 'value' are incompatible.
+!!! error TS2322:     Type 'string' is not assignable to type 'number'.
+    const wrongAgain: NumericValue<string> = text;
+          ~~~~~~~~~~
+!!! error TS2322: Type 'LeftValue<string>' is not assignable to type 'NumericValue<string>'.
+!!! error TS2322:   Types of property 'value' are incompatible.
+!!! error TS2322:     Type 'string' is not assignable to type 'number'.
+    
+    declare const numeric: LeftValue<number>;
+    const specialized: NumericValue<number> = numeric;
+    const specializedBack: LeftValue<number> = specialized;
+    
+    type Value<T> = T extends { value: infer V } ? V : never;
+    type DeferredLeft<T> = LeftValue<Value<T>>;
+    declare function deferred<T>(): DeferredLeft<T>;
+    const incompatibleStep: RightValue<unknown> = deferred<{ value: string }>();
+          ~~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'DeferredLeft<{ value: string; }>' is not assignable to type 'RightValue<unknown>'.
+!!! error TS2322:   The types of 'next.value' are incompatible between these types.
+!!! error TS2322:     Type 'string' is not assignable to type 'number'.
+    const incompatible: NumericValue<unknown> = deferred<{ value: string }>();
+          ~~~~~~~~~~~~
+!!! error TS2322: Type 'DeferredLeft<{ value: string; }>' is not assignable to type 'NumericValue<unknown>'.
+!!! error TS2322:   The types of 'next.value' are incompatible between these types.
+!!! error TS2322:     Type 'string' is not assignable to type 'number'.
+    
+    interface Producer<T> {
+        next: Producer<T>;
+        value: T;
+    }
+    interface OtherProducer<T> {
+        next: OtherProducer<T>;
+        value: T;
+    }
+    type DeferredProducer<T> = Producer<Value<T>>;
+    declare function producer<T>(): DeferredProducer<T>;
+    const covariant: OtherProducer<unknown> = producer<{ value: string }>();
+    const covariantBack: Producer<unknown> = covariant;
+    

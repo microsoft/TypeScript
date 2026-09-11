@@ -1,0 +1,46 @@
+// === QuickInfo ===
+=== /schema.ts ===
+// interface Schema<O> { readonly output: O; }
+// declare function wrap<T extends Schema<string>>(value: T): T;
+// const argument = {
+//     get output() { return 42; },
+// };
+// export const invalid = wrap(argument);
+//              ^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const invalid: {
+// |     readonly output: number;
+// | }
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 181,
+      "LSPosition": {
+        "line": 5,
+        "character": 20
+      },
+      "Name": "call",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nconst invalid: {\n    readonly output: number;\n}\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 5,
+          "character": 13
+        },
+        "end": {
+          "line": 5,
+          "character": 20
+        }
+      }
+    }
+  }
+]

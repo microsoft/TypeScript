@@ -1,0 +1,161 @@
+//// [tests/cases/compiler/deferredReferenceArgumentInference.ts] ////
+
+=== deferredReferenceArgumentInference.ts ===
+interface Box<T> {
+    value: T;
+>value : T
+}
+interface Transform<T> {
+    (value: T): T;
+>value : T
+
+    value: T;
+>value : T
+}
+type Wrapped<T> = Box<T>;
+>Wrapped : Wrapped<T>
+
+type WrappedTransform<T> = Transform<T>;
+>WrappedTransform : WrappedTransform<T>
+
+declare function unbox<T>(box: Wrapped<T>): T;
+>unbox : <T>(box: Wrapped<T>) => T
+>box : Wrapped<T>
+
+declare function unwrapTransform<T>(transform: WrappedTransform<T>): T;
+>unwrapTransform : <T>(transform: WrappedTransform<T>) => T
+>transform : WrappedTransform<T>
+
+function indexed<T extends { value: unknown }>(box: Box<T["value"]>, transform: Transform<T["value"]>) {
+>indexed : <T extends { value: unknown; }>(box: Box<T["value"]>, transform: Transform<T["value"]>) => { value: T["value"]; transformed: T["value"]; }
+>value : unknown
+>box : Box<T["value"]>
+>transform : Transform<T["value"]>
+
+    const value = unbox(box);
+>value : T["value"]
+>unbox(box) : T["value"]
+>unbox : <T_1>(box: Wrapped<T_1>) => T_1
+>box : Box<T["value"]>
+
+    const transformed = unwrapTransform(transform);
+>transformed : T["value"]
+>unwrapTransform(transform) : T["value"]
+>unwrapTransform : <T_1>(transform: WrappedTransform<T_1>) => T_1
+>transform : Transform<T["value"]>
+
+    const expectedValue: T["value"] = value;
+>expectedValue : T["value"]
+>value : T["value"]
+
+    const expectedTransform: T["value"] = transformed;
+>expectedTransform : T["value"]
+>transformed : T["value"]
+
+    const wrongValue: number = value;
+>wrongValue : number
+>value : T["value"]
+
+    const wrongTransform: number = transformed;
+>wrongTransform : number
+>transformed : T["value"]
+
+    return { value, transformed };
+>{ value, transformed } : { value: T["value"]; transformed: T["value"]; }
+>value : T["value"]
+>transformed : T["value"]
+}
+
+type Element<T> = T extends readonly (infer E)[] ? E : never;
+>Element : Element<T>
+
+function conditional<T>(box: Box<Element<T>>, transform: Transform<Element<T>>) {
+>conditional : <T>(box: Box<Element<T>>, transform: Transform<Element<T>>) => { value: Element<T>; transformed: Element<T>; }
+>box : Box<Element<T>>
+>transform : Transform<Element<T>>
+
+    const value = unbox(box);
+>value : Element<T>
+>unbox(box) : Element<T>
+>unbox : <T_1>(box: Wrapped<T_1>) => T_1
+>box : Box<Element<T>>
+
+    const transformed = unwrapTransform(transform);
+>transformed : Element<T>
+>unwrapTransform(transform) : Element<T>
+>unwrapTransform : <T_1>(transform: WrappedTransform<T_1>) => T_1
+>transform : Transform<Element<T>>
+
+    const expectedValue: Element<T> = value;
+>expectedValue : Element<T>
+>value : Element<T>
+
+    const expectedTransform: Element<T> = transformed;
+>expectedTransform : Element<T>
+>transformed : Element<T>
+
+    return { value, transformed };
+>{ value, transformed } : { value: Element<T>; transformed: Element<T>; }
+>value : Element<T>
+>transformed : Element<T>
+}
+
+declare const stringBox: Box<string>;
+>stringBox : Box<string>
+
+declare const stringTransform: Transform<string>;
+>stringTransform : Transform<string>
+
+const fromIndex = indexed<{ value: string }>(stringBox, stringTransform);
+>fromIndex : { value: string; transformed: string; }
+>indexed<{ value: string }>(stringBox, stringTransform) : { value: string; transformed: string; }
+>indexed : <T extends { value: unknown; }>(box: Box<T["value"]>, transform: Transform<T["value"]>) => { value: T["value"]; transformed: T["value"]; }
+>value : string
+>stringBox : Box<string>
+>stringTransform : Transform<string>
+
+const fromConditional = conditional<string[]>(stringBox, stringTransform);
+>fromConditional : { value: string; transformed: string; }
+>conditional<string[]>(stringBox, stringTransform) : { value: string; transformed: string; }
+>conditional : <T>(box: Box<Element<T>>, transform: Transform<Element<T>>) => { value: Element<T>; transformed: Element<T>; }
+>stringBox : Box<string>
+>stringTransform : Transform<string>
+
+const indexedValue: string = fromIndex.value;
+>indexedValue : string
+>fromIndex.value : string
+>fromIndex : { value: string; transformed: string; }
+>value : string
+
+const indexedTransform: string = fromIndex.transformed;
+>indexedTransform : string
+>fromIndex.transformed : string
+>fromIndex : { value: string; transformed: string; }
+>transformed : string
+
+const conditionalValue: string = fromConditional.value;
+>conditionalValue : string
+>fromConditional.value : string
+>fromConditional : { value: string; transformed: string; }
+>value : string
+
+const conditionalTransform: string = fromConditional.transformed;
+>conditionalTransform : string
+>fromConditional.transformed : string
+>fromConditional : { value: string; transformed: string; }
+>transformed : string
+
+const wrongIndex: number = fromIndex.value;
+>wrongIndex : number
+>fromIndex.value : string
+>fromIndex : { value: string; transformed: string; }
+>value : string
+
+const wrongConditional: number = fromConditional.transformed;
+>wrongConditional : number
+>fromConditional.transformed : string
+>fromConditional : { value: string; transformed: string; }
+>transformed : string
+
+export {};
+

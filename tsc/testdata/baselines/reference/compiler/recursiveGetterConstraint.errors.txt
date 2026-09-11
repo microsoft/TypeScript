@@ -1,0 +1,33 @@
+recursiveGetterConstraint.ts(20,7): error TS2322: Type 'string' is not assignable to type 'number'.
+recursiveGetterConstraint.ts(21,25): error TS2339: Property 'missing' does not exist on type 'Output<{ name: Schema<string>; readonly children: Schema<Output<any>[]>; }>'.
+
+
+==== recursiveGetterConstraint.ts (2 errors) ====
+    interface Schema<T = unknown> {
+        output: T;
+    }
+    
+    type Shape = Record<string, Schema>;
+    type Output<S extends Shape> = { [K in keyof S]: S[K]["output"] };
+    
+    declare function object<S extends Shape>(shape: S): Schema<Output<S>>;
+    declare function array<S extends Schema>(schema: S): Schema<S["output"][]>;
+    declare function text(): Schema<string>;
+    
+    const node = object({
+        name: text(),
+        get children() {
+            return array(node);
+        },
+    });
+    
+    const name: string = node.output.children[0].children[0].name;
+    const wrong: number = node.output.children[0].name;
+          ~~~~~
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
+    node.output.children[0].missing;
+                            ~~~~~~~
+!!! error TS2339: Property 'missing' does not exist on type 'Output<{ name: Schema<string>; readonly children: Schema<Output<any>[]>; }>'.
+    
+    export {};
+    

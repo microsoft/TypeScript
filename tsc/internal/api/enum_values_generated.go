@@ -263,6 +263,7 @@ func main() {
 			"IsUntypedSignatureInJSFile":             toInt32(checker.SignatureFlagsIsUntypedSignatureInJSFile),
 			"IsNonInferrable":                        toInt32(checker.SignatureFlagsIsNonInferrable),
 			"IsSignatureCandidateForOverloadFailure": toInt32(checker.SignatureFlagsIsSignatureCandidateForOverloadFailure),
+			"DeferredConstraints":                    toInt32(checker.SignatureFlagsDeferredConstraints),
 			"PropagatingFlags":                       toInt32(checker.SignatureFlagsPropagatingFlags),
 			"CallChainFlags":                         toInt32(checker.SignatureFlagsCallChainFlags),
 		},

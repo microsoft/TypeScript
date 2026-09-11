@@ -1,0 +1,117 @@
+//// [tests/cases/compiler/recursiveGetterInheritedMember.ts] ////
+
+=== recursiveGetterInheritedMember.ts ===
+interface Schema<T> {
+    optional: boolean;
+>optional : boolean
+
+    output: T;
+>output : T
+}
+
+interface TextSchema extends Schema<string> {
+    optional: false;
+>optional : false
+>false : false
+}
+
+type Shape = Record<string, any>;
+>Shape : Shape
+
+type Prettify<T> = { [K in keyof T]: T[K] } & {};
+>Prettify : { [K in keyof T]: T[K]; }
+
+type Output<S extends Shape> = Prettify<{
+>Output : { [K in keyof S as S[K] extends { optional: true; } ? K : never]?: S[K]["output"] | undefined; } & { [K in keyof S as S[K] extends { optional: true; } ? never : K]: S[K]["output"]; } extends infer T ? { [K in keyof T]: T[K]; } : never
+
+    [K in keyof S as S[K] extends { optional: true } ? K : never]?: S[K]["output"];
+>optional : true
+>true : true
+
+} & {
+    [K in keyof S as S[K] extends { optional: true } ? never : K]: S[K]["output"];
+>optional : true
+>true : true
+
+}>;
+
+interface ObjectSchema<S extends Shape> extends Schema<Output<S>> {
+    optional: false;
+>optional : false
+>false : false
+}
+
+interface OptionalSchema<S extends Schema<any>> extends Schema<S["output"] | undefined> {
+    optional: true;
+>optional : true
+>true : true
+}
+
+declare function object<S extends Shape>(shape: S): ObjectSchema<S>;
+>object : <S extends Shape>(shape: S) => ObjectSchema<S>
+>shape : S
+
+declare function text(): TextSchema;
+>text : () => TextSchema
+
+declare function optional<S extends Schema<any>>(schema: S): OptionalSchema<S>;
+>optional : <S extends Schema<any>>(schema: S) => OptionalSchema<S>
+>schema : S
+
+const node = object({
+>node : ObjectSchema<{ name: TextSchema; readonly parent: OptionalSchema<ObjectSchema<any>>; }>
+>object({    name: text(),    get parent() {        return optional(node);    },}) : ObjectSchema<{ name: TextSchema; readonly parent: OptionalSchema<ObjectSchema<any>>; }>
+>object : <S extends Shape>(shape: S) => ObjectSchema<S>
+>{    name: text(),    get parent() {        return optional(node);    },} : { name: TextSchema; readonly parent: OptionalSchema<ObjectSchema<{ name: TextSchema; readonly parent: OptionalSchema<ObjectSchema<any>>; }>>; }
+
+    name: text(),
+>name : TextSchema
+>text() : TextSchema
+>text : () => TextSchema
+
+    get parent() {
+>parent : OptionalSchema<ObjectSchema<{ name: TextSchema; readonly parent: OptionalSchema<ObjectSchema<any>>; }>>
+
+        return optional(node);
+>optional(node) : OptionalSchema<ObjectSchema<{ name: TextSchema; readonly parent: OptionalSchema<ObjectSchema<any>>; }>>
+>optional : <S extends Schema<any>>(schema: S) => OptionalSchema<S>
+>node : ObjectSchema<{ name: TextSchema; readonly parent: OptionalSchema<ObjectSchema<any>>; }>
+
+    },
+});
+
+export const output = node.output;
+>output : { name: string; readonly parent?: any | undefined; }
+>node.output : { name: string; readonly parent?: any | undefined; }
+>node : ObjectSchema<{ name: TextSchema; readonly parent: OptionalSchema<ObjectSchema<any>>; }>
+>output : { name: string; readonly parent?: any | undefined; }
+
+const name: string = output.parent!.parent!.name;
+>name : string
+>output.parent!.parent!.name : string
+>output.parent!.parent! : { name: string; readonly parent?: any | undefined; }
+>output.parent!.parent : { name: string; readonly parent?: any | undefined; } | undefined
+>output.parent! : { name: string; readonly parent?: any | undefined; }
+>output.parent : { name: string; readonly parent?: any | undefined; } | undefined
+>output : { name: string; readonly parent?: any | undefined; }
+>parent : { name: string; readonly parent?: any | undefined; } | undefined
+>parent : { name: string; readonly parent?: any | undefined; } | undefined
+>name : string
+
+const wrong: number = output.parent!.name;
+>wrong : number
+>output.parent!.name : string
+>output.parent! : { name: string; readonly parent?: any | undefined; }
+>output.parent : { name: string; readonly parent?: any | undefined; } | undefined
+>output : { name: string; readonly parent?: any | undefined; }
+>parent : { name: string; readonly parent?: any | undefined; } | undefined
+>name : string
+
+output.parent!.missing;
+>output.parent!.missing : any
+>output.parent! : { name: string; readonly parent?: any | undefined; }
+>output.parent : { name: string; readonly parent?: any | undefined; } | undefined
+>output : { name: string; readonly parent?: any | undefined; }
+>parent : { name: string; readonly parent?: any | undefined; } | undefined
+>missing : any
+

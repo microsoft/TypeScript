@@ -1,0 +1,156 @@
+//// [tests/cases/compiler/recursiveGetterInheritedMember.ts] ////
+
+=== recursiveGetterInheritedMember.ts ===
+interface Schema<T> {
+>Schema : Symbol(Schema, Decl(recursiveGetterInheritedMember.ts, 0, 0))
+>T : Symbol(T, Decl(recursiveGetterInheritedMember.ts, 0, 17))
+
+    optional: boolean;
+>optional : Symbol(Schema.optional, Decl(recursiveGetterInheritedMember.ts, 0, 21))
+
+    output: T;
+>output : Symbol(Schema.output, Decl(recursiveGetterInheritedMember.ts, 1, 22))
+>T : Symbol(T, Decl(recursiveGetterInheritedMember.ts, 0, 17))
+}
+
+interface TextSchema extends Schema<string> {
+>TextSchema : Symbol(TextSchema, Decl(recursiveGetterInheritedMember.ts, 3, 1))
+>Schema : Symbol(Schema, Decl(recursiveGetterInheritedMember.ts, 0, 0))
+
+    optional: false;
+>optional : Symbol(TextSchema.optional, Decl(recursiveGetterInheritedMember.ts, 5, 45))
+}
+
+type Shape = Record<string, any>;
+>Shape : Symbol(Shape, Decl(recursiveGetterInheritedMember.ts, 7, 1))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+type Prettify<T> = { [K in keyof T]: T[K] } & {};
+>Prettify : Symbol(Prettify, Decl(recursiveGetterInheritedMember.ts, 9, 33))
+>T : Symbol(T, Decl(recursiveGetterInheritedMember.ts, 10, 14))
+>K : Symbol(K, Decl(recursiveGetterInheritedMember.ts, 10, 22))
+>T : Symbol(T, Decl(recursiveGetterInheritedMember.ts, 10, 14))
+>T : Symbol(T, Decl(recursiveGetterInheritedMember.ts, 10, 14))
+>K : Symbol(K, Decl(recursiveGetterInheritedMember.ts, 10, 22))
+
+type Output<S extends Shape> = Prettify<{
+>Output : Symbol(Output, Decl(recursiveGetterInheritedMember.ts, 10, 49))
+>S : Symbol(S, Decl(recursiveGetterInheritedMember.ts, 11, 12))
+>Shape : Symbol(Shape, Decl(recursiveGetterInheritedMember.ts, 7, 1))
+>Prettify : Symbol(Prettify, Decl(recursiveGetterInheritedMember.ts, 9, 33))
+
+    [K in keyof S as S[K] extends { optional: true } ? K : never]?: S[K]["output"];
+>K : Symbol(K, Decl(recursiveGetterInheritedMember.ts, 12, 5))
+>S : Symbol(S, Decl(recursiveGetterInheritedMember.ts, 11, 12))
+>S : Symbol(S, Decl(recursiveGetterInheritedMember.ts, 11, 12))
+>K : Symbol(K, Decl(recursiveGetterInheritedMember.ts, 12, 5))
+>optional : Symbol(optional, Decl(recursiveGetterInheritedMember.ts, 12, 35))
+>K : Symbol(K, Decl(recursiveGetterInheritedMember.ts, 12, 5))
+>S : Symbol(S, Decl(recursiveGetterInheritedMember.ts, 11, 12))
+>K : Symbol(K, Decl(recursiveGetterInheritedMember.ts, 12, 5))
+
+} & {
+    [K in keyof S as S[K] extends { optional: true } ? never : K]: S[K]["output"];
+>K : Symbol(K, Decl(recursiveGetterInheritedMember.ts, 14, 5))
+>S : Symbol(S, Decl(recursiveGetterInheritedMember.ts, 11, 12))
+>S : Symbol(S, Decl(recursiveGetterInheritedMember.ts, 11, 12))
+>K : Symbol(K, Decl(recursiveGetterInheritedMember.ts, 14, 5))
+>optional : Symbol(optional, Decl(recursiveGetterInheritedMember.ts, 14, 35))
+>K : Symbol(K, Decl(recursiveGetterInheritedMember.ts, 14, 5))
+>S : Symbol(S, Decl(recursiveGetterInheritedMember.ts, 11, 12))
+>K : Symbol(K, Decl(recursiveGetterInheritedMember.ts, 14, 5))
+
+}>;
+
+interface ObjectSchema<S extends Shape> extends Schema<Output<S>> {
+>ObjectSchema : Symbol(ObjectSchema, Decl(recursiveGetterInheritedMember.ts, 15, 3))
+>S : Symbol(S, Decl(recursiveGetterInheritedMember.ts, 17, 23))
+>Shape : Symbol(Shape, Decl(recursiveGetterInheritedMember.ts, 7, 1))
+>Schema : Symbol(Schema, Decl(recursiveGetterInheritedMember.ts, 0, 0))
+>Output : Symbol(Output, Decl(recursiveGetterInheritedMember.ts, 10, 49))
+>S : Symbol(S, Decl(recursiveGetterInheritedMember.ts, 17, 23))
+
+    optional: false;
+>optional : Symbol(ObjectSchema.optional, Decl(recursiveGetterInheritedMember.ts, 17, 67))
+}
+
+interface OptionalSchema<S extends Schema<any>> extends Schema<S["output"] | undefined> {
+>OptionalSchema : Symbol(OptionalSchema, Decl(recursiveGetterInheritedMember.ts, 19, 1))
+>S : Symbol(S, Decl(recursiveGetterInheritedMember.ts, 21, 25))
+>Schema : Symbol(Schema, Decl(recursiveGetterInheritedMember.ts, 0, 0))
+>Schema : Symbol(Schema, Decl(recursiveGetterInheritedMember.ts, 0, 0))
+>S : Symbol(S, Decl(recursiveGetterInheritedMember.ts, 21, 25))
+
+    optional: true;
+>optional : Symbol(OptionalSchema.optional, Decl(recursiveGetterInheritedMember.ts, 21, 89))
+}
+
+declare function object<S extends Shape>(shape: S): ObjectSchema<S>;
+>object : Symbol(object, Decl(recursiveGetterInheritedMember.ts, 23, 1))
+>S : Symbol(S, Decl(recursiveGetterInheritedMember.ts, 25, 24))
+>Shape : Symbol(Shape, Decl(recursiveGetterInheritedMember.ts, 7, 1))
+>shape : Symbol(shape, Decl(recursiveGetterInheritedMember.ts, 25, 41))
+>S : Symbol(S, Decl(recursiveGetterInheritedMember.ts, 25, 24))
+>ObjectSchema : Symbol(ObjectSchema, Decl(recursiveGetterInheritedMember.ts, 15, 3))
+>S : Symbol(S, Decl(recursiveGetterInheritedMember.ts, 25, 24))
+
+declare function text(): TextSchema;
+>text : Symbol(text, Decl(recursiveGetterInheritedMember.ts, 25, 68))
+>TextSchema : Symbol(TextSchema, Decl(recursiveGetterInheritedMember.ts, 3, 1))
+
+declare function optional<S extends Schema<any>>(schema: S): OptionalSchema<S>;
+>optional : Symbol(optional, Decl(recursiveGetterInheritedMember.ts, 26, 36))
+>S : Symbol(S, Decl(recursiveGetterInheritedMember.ts, 27, 26))
+>Schema : Symbol(Schema, Decl(recursiveGetterInheritedMember.ts, 0, 0))
+>schema : Symbol(schema, Decl(recursiveGetterInheritedMember.ts, 27, 49))
+>S : Symbol(S, Decl(recursiveGetterInheritedMember.ts, 27, 26))
+>OptionalSchema : Symbol(OptionalSchema, Decl(recursiveGetterInheritedMember.ts, 19, 1))
+>S : Symbol(S, Decl(recursiveGetterInheritedMember.ts, 27, 26))
+
+const node = object({
+>node : Symbol(node, Decl(recursiveGetterInheritedMember.ts, 29, 5))
+>object : Symbol(object, Decl(recursiveGetterInheritedMember.ts, 23, 1))
+
+    name: text(),
+>name : Symbol(name, Decl(recursiveGetterInheritedMember.ts, 29, 21))
+>text : Symbol(text, Decl(recursiveGetterInheritedMember.ts, 25, 68))
+
+    get parent() {
+>parent : Symbol(parent, Decl(recursiveGetterInheritedMember.ts, 30, 17))
+
+        return optional(node);
+>optional : Symbol(optional, Decl(recursiveGetterInheritedMember.ts, 26, 36))
+>node : Symbol(node, Decl(recursiveGetterInheritedMember.ts, 29, 5))
+
+    },
+});
+
+export const output = node.output;
+>output : Symbol(output, Decl(recursiveGetterInheritedMember.ts, 36, 12))
+>node.output : Symbol(Schema.output, Decl(recursiveGetterInheritedMember.ts, 1, 22))
+>node : Symbol(node, Decl(recursiveGetterInheritedMember.ts, 29, 5))
+>output : Symbol(Schema.output, Decl(recursiveGetterInheritedMember.ts, 1, 22))
+
+const name: string = output.parent!.parent!.name;
+>name : Symbol(name, Decl(recursiveGetterInheritedMember.ts, 37, 5))
+>output.parent!.parent!.name : Symbol(name, Decl(recursiveGetterInheritedMember.ts, 29, 21))
+>output.parent!.parent : Symbol(parent, Decl(recursiveGetterInheritedMember.ts, 30, 17))
+>output.parent : Symbol(parent, Decl(recursiveGetterInheritedMember.ts, 30, 17))
+>output : Symbol(output, Decl(recursiveGetterInheritedMember.ts, 36, 12))
+>parent : Symbol(parent, Decl(recursiveGetterInheritedMember.ts, 30, 17))
+>parent : Symbol(parent, Decl(recursiveGetterInheritedMember.ts, 30, 17))
+>name : Symbol(name, Decl(recursiveGetterInheritedMember.ts, 29, 21))
+
+const wrong: number = output.parent!.name;
+>wrong : Symbol(wrong, Decl(recursiveGetterInheritedMember.ts, 38, 5))
+>output.parent!.name : Symbol(name, Decl(recursiveGetterInheritedMember.ts, 29, 21))
+>output.parent : Symbol(parent, Decl(recursiveGetterInheritedMember.ts, 30, 17))
+>output : Symbol(output, Decl(recursiveGetterInheritedMember.ts, 36, 12))
+>parent : Symbol(parent, Decl(recursiveGetterInheritedMember.ts, 30, 17))
+>name : Symbol(name, Decl(recursiveGetterInheritedMember.ts, 29, 21))
+
+output.parent!.missing;
+>output.parent : Symbol(parent, Decl(recursiveGetterInheritedMember.ts, 30, 17))
+>output : Symbol(output, Decl(recursiveGetterInheritedMember.ts, 36, 12))
+>parent : Symbol(parent, Decl(recursiveGetterInheritedMember.ts, 30, 17))
+

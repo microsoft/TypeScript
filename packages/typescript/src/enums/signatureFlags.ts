@@ -11,6 +11,7 @@ export var SignatureFlags: any;
     SignatureFlags[SignatureFlags["IsUntypedSignatureInJSFile"] = 64] = "IsUntypedSignatureInJSFile";
     SignatureFlags[SignatureFlags["IsNonInferrable"] = 128] = "IsNonInferrable";
     SignatureFlags[SignatureFlags["IsSignatureCandidateForOverloadFailure"] = 256] = "IsSignatureCandidateForOverloadFailure";
+    SignatureFlags[SignatureFlags["DeferredConstraints"] = 512] = "DeferredConstraints";
     SignatureFlags[SignatureFlags["PropagatingFlags"] = 335] = "PropagatingFlags";
     SignatureFlags[SignatureFlags["CallChainFlags"] = 48] = "CallChainFlags";
 })(SignatureFlags || (SignatureFlags = {}));

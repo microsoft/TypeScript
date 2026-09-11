@@ -1,0 +1,272 @@
+//// [tests/cases/compiler/recursiveCallbackPropertyConstraint.ts] ////
+
+=== recursiveCallbackPropertyConstraint.ts ===
+interface Schema<T = unknown> {
+>Schema : Symbol(Schema, Decl(recursiveCallbackPropertyConstraint.ts, 0, 0))
+>T : Symbol(T, Decl(recursiveCallbackPropertyConstraint.ts, 0, 17))
+
+    output: T;
+>output : Symbol(Schema.output, Decl(recursiveCallbackPropertyConstraint.ts, 0, 31))
+>T : Symbol(T, Decl(recursiveCallbackPropertyConstraint.ts, 0, 17))
+}
+
+type Shape = Record<string, Schema | (() => Schema)>;
+>Shape : Symbol(Shape, Decl(recursiveCallbackPropertyConstraint.ts, 2, 1))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Schema : Symbol(Schema, Decl(recursiveCallbackPropertyConstraint.ts, 0, 0))
+>Schema : Symbol(Schema, Decl(recursiveCallbackPropertyConstraint.ts, 0, 0))
+
+type Resolve<T> = T extends () => infer R ? R : T;
+>Resolve : Symbol(Resolve, Decl(recursiveCallbackPropertyConstraint.ts, 4, 53))
+>T : Symbol(T, Decl(recursiveCallbackPropertyConstraint.ts, 5, 13))
+>T : Symbol(T, Decl(recursiveCallbackPropertyConstraint.ts, 5, 13))
+>R : Symbol(R, Decl(recursiveCallbackPropertyConstraint.ts, 5, 39))
+>R : Symbol(R, Decl(recursiveCallbackPropertyConstraint.ts, 5, 39))
+>T : Symbol(T, Decl(recursiveCallbackPropertyConstraint.ts, 5, 13))
+
+type Output<S extends Shape> = { [K in keyof S]: Resolve<S[K]> extends Schema<infer O> ? O : never };
+>Output : Symbol(Output, Decl(recursiveCallbackPropertyConstraint.ts, 5, 50))
+>S : Symbol(S, Decl(recursiveCallbackPropertyConstraint.ts, 6, 12))
+>Shape : Symbol(Shape, Decl(recursiveCallbackPropertyConstraint.ts, 2, 1))
+>K : Symbol(K, Decl(recursiveCallbackPropertyConstraint.ts, 6, 34))
+>S : Symbol(S, Decl(recursiveCallbackPropertyConstraint.ts, 6, 12))
+>Resolve : Symbol(Resolve, Decl(recursiveCallbackPropertyConstraint.ts, 4, 53))
+>S : Symbol(S, Decl(recursiveCallbackPropertyConstraint.ts, 6, 12))
+>K : Symbol(K, Decl(recursiveCallbackPropertyConstraint.ts, 6, 34))
+>Schema : Symbol(Schema, Decl(recursiveCallbackPropertyConstraint.ts, 0, 0))
+>O : Symbol(O, Decl(recursiveCallbackPropertyConstraint.ts, 6, 83))
+>O : Symbol(O, Decl(recursiveCallbackPropertyConstraint.ts, 6, 83))
+
+declare function object<S extends Shape>(shape: S): Schema<Output<S>>;
+>object : Symbol(object, Decl(recursiveCallbackPropertyConstraint.ts, 6, 101))
+>S : Symbol(S, Decl(recursiveCallbackPropertyConstraint.ts, 8, 24))
+>Shape : Symbol(Shape, Decl(recursiveCallbackPropertyConstraint.ts, 2, 1))
+>shape : Symbol(shape, Decl(recursiveCallbackPropertyConstraint.ts, 8, 41))
+>S : Symbol(S, Decl(recursiveCallbackPropertyConstraint.ts, 8, 24))
+>Schema : Symbol(Schema, Decl(recursiveCallbackPropertyConstraint.ts, 0, 0))
+>Output : Symbol(Output, Decl(recursiveCallbackPropertyConstraint.ts, 5, 50))
+>S : Symbol(S, Decl(recursiveCallbackPropertyConstraint.ts, 8, 24))
+
+declare function array<S extends Schema>(schema: S): Schema<S["output"][]>;
+>array : Symbol(array, Decl(recursiveCallbackPropertyConstraint.ts, 8, 70))
+>S : Symbol(S, Decl(recursiveCallbackPropertyConstraint.ts, 9, 23))
+>Schema : Symbol(Schema, Decl(recursiveCallbackPropertyConstraint.ts, 0, 0))
+>schema : Symbol(schema, Decl(recursiveCallbackPropertyConstraint.ts, 9, 41))
+>S : Symbol(S, Decl(recursiveCallbackPropertyConstraint.ts, 9, 23))
+>Schema : Symbol(Schema, Decl(recursiveCallbackPropertyConstraint.ts, 0, 0))
+>S : Symbol(S, Decl(recursiveCallbackPropertyConstraint.ts, 9, 23))
+
+declare function text(): Schema<string>;
+>text : Symbol(text, Decl(recursiveCallbackPropertyConstraint.ts, 9, 75))
+>Schema : Symbol(Schema, Decl(recursiveCallbackPropertyConstraint.ts, 0, 0))
+
+const node = object({
+>node : Symbol(node, Decl(recursiveCallbackPropertyConstraint.ts, 12, 5))
+>object : Symbol(object, Decl(recursiveCallbackPropertyConstraint.ts, 6, 101))
+
+    name: text(),
+>name : Symbol(name, Decl(recursiveCallbackPropertyConstraint.ts, 12, 21))
+>text : Symbol(text, Decl(recursiveCallbackPropertyConstraint.ts, 9, 75))
+
+    children: () => array(node),
+>children : Symbol(children, Decl(recursiveCallbackPropertyConstraint.ts, 13, 17))
+>array : Symbol(array, Decl(recursiveCallbackPropertyConstraint.ts, 8, 70))
+>node : Symbol(node, Decl(recursiveCallbackPropertyConstraint.ts, 12, 5))
+
+});
+
+const name: string = node.output.children[0].children[0].name;
+>name : Symbol(name, Decl(recursiveCallbackPropertyConstraint.ts, 17, 5))
+>node.output.children[0].children[0].name : Symbol(name, Decl(recursiveCallbackPropertyConstraint.ts, 12, 21))
+>node.output.children[0].children : Symbol(children, Decl(recursiveCallbackPropertyConstraint.ts, 13, 17))
+>node.output.children : Symbol(children, Decl(recursiveCallbackPropertyConstraint.ts, 13, 17))
+>node.output : Symbol(Schema.output, Decl(recursiveCallbackPropertyConstraint.ts, 0, 31))
+>node : Symbol(node, Decl(recursiveCallbackPropertyConstraint.ts, 12, 5))
+>output : Symbol(Schema.output, Decl(recursiveCallbackPropertyConstraint.ts, 0, 31))
+>children : Symbol(children, Decl(recursiveCallbackPropertyConstraint.ts, 13, 17))
+>children : Symbol(children, Decl(recursiveCallbackPropertyConstraint.ts, 13, 17))
+>name : Symbol(name, Decl(recursiveCallbackPropertyConstraint.ts, 12, 21))
+
+const wrong: number = node.output.children[0].name;
+>wrong : Symbol(wrong, Decl(recursiveCallbackPropertyConstraint.ts, 18, 5))
+>node.output.children[0].name : Symbol(name, Decl(recursiveCallbackPropertyConstraint.ts, 12, 21))
+>node.output.children : Symbol(children, Decl(recursiveCallbackPropertyConstraint.ts, 13, 17))
+>node.output : Symbol(Schema.output, Decl(recursiveCallbackPropertyConstraint.ts, 0, 31))
+>node : Symbol(node, Decl(recursiveCallbackPropertyConstraint.ts, 12, 5))
+>output : Symbol(Schema.output, Decl(recursiveCallbackPropertyConstraint.ts, 0, 31))
+>children : Symbol(children, Decl(recursiveCallbackPropertyConstraint.ts, 13, 17))
+>name : Symbol(name, Decl(recursiveCallbackPropertyConstraint.ts, 12, 21))
+
+node.output.children[0].missing;
+>node.output.children : Symbol(children, Decl(recursiveCallbackPropertyConstraint.ts, 13, 17))
+>node.output : Symbol(Schema.output, Decl(recursiveCallbackPropertyConstraint.ts, 0, 31))
+>node : Symbol(node, Decl(recursiveCallbackPropertyConstraint.ts, 12, 5))
+>output : Symbol(Schema.output, Decl(recursiveCallbackPropertyConstraint.ts, 0, 31))
+>children : Symbol(children, Decl(recursiveCallbackPropertyConstraint.ts, 13, 17))
+
+const tree = object({
+>tree : Symbol(tree, Decl(recursiveCallbackPropertyConstraint.ts, 21, 5))
+>object : Symbol(object, Decl(recursiveCallbackPropertyConstraint.ts, 6, 101))
+
+    name: text(),
+>name : Symbol(name, Decl(recursiveCallbackPropertyConstraint.ts, 21, 21))
+>text : Symbol(text, Decl(recursiveCallbackPropertyConstraint.ts, 9, 75))
+
+    children() {
+>children : Symbol(children, Decl(recursiveCallbackPropertyConstraint.ts, 22, 17))
+
+        return array(tree);
+>array : Symbol(array, Decl(recursiveCallbackPropertyConstraint.ts, 8, 70))
+>tree : Symbol(tree, Decl(recursiveCallbackPropertyConstraint.ts, 21, 5))
+
+    },
+});
+
+const treeName: string = tree.output.children[0].children[0].name;
+>treeName : Symbol(treeName, Decl(recursiveCallbackPropertyConstraint.ts, 28, 5))
+>tree.output.children[0].children[0].name : Symbol(name, Decl(recursiveCallbackPropertyConstraint.ts, 21, 21))
+>tree.output.children[0].children : Symbol(children, Decl(recursiveCallbackPropertyConstraint.ts, 22, 17))
+>tree.output.children : Symbol(children, Decl(recursiveCallbackPropertyConstraint.ts, 22, 17))
+>tree.output : Symbol(Schema.output, Decl(recursiveCallbackPropertyConstraint.ts, 0, 31))
+>tree : Symbol(tree, Decl(recursiveCallbackPropertyConstraint.ts, 21, 5))
+>output : Symbol(Schema.output, Decl(recursiveCallbackPropertyConstraint.ts, 0, 31))
+>children : Symbol(children, Decl(recursiveCallbackPropertyConstraint.ts, 22, 17))
+>children : Symbol(children, Decl(recursiveCallbackPropertyConstraint.ts, 22, 17))
+>name : Symbol(name, Decl(recursiveCallbackPropertyConstraint.ts, 21, 21))
+
+tree.output.children[0].missing;
+>tree.output.children : Symbol(children, Decl(recursiveCallbackPropertyConstraint.ts, 22, 17))
+>tree.output : Symbol(Schema.output, Decl(recursiveCallbackPropertyConstraint.ts, 0, 31))
+>tree : Symbol(tree, Decl(recursiveCallbackPropertyConstraint.ts, 21, 5))
+>output : Symbol(Schema.output, Decl(recursiveCallbackPropertyConstraint.ts, 0, 31))
+>children : Symbol(children, Decl(recursiveCallbackPropertyConstraint.ts, 22, 17))
+
+export const user = object({ name: text(), posts: () => array(post) });
+>user : Symbol(user, Decl(recursiveCallbackPropertyConstraint.ts, 31, 12))
+>object : Symbol(object, Decl(recursiveCallbackPropertyConstraint.ts, 6, 101))
+>name : Symbol(name, Decl(recursiveCallbackPropertyConstraint.ts, 31, 28))
+>text : Symbol(text, Decl(recursiveCallbackPropertyConstraint.ts, 9, 75))
+>posts : Symbol(posts, Decl(recursiveCallbackPropertyConstraint.ts, 31, 42))
+>array : Symbol(array, Decl(recursiveCallbackPropertyConstraint.ts, 8, 70))
+>post : Symbol(post, Decl(recursiveCallbackPropertyConstraint.ts, 32, 5))
+
+const post = object({ title: text(), author: () => user });
+>post : Symbol(post, Decl(recursiveCallbackPropertyConstraint.ts, 32, 5))
+>object : Symbol(object, Decl(recursiveCallbackPropertyConstraint.ts, 6, 101))
+>title : Symbol(title, Decl(recursiveCallbackPropertyConstraint.ts, 32, 21))
+>text : Symbol(text, Decl(recursiveCallbackPropertyConstraint.ts, 9, 75))
+>author : Symbol(author, Decl(recursiveCallbackPropertyConstraint.ts, 32, 36))
+>user : Symbol(user, Decl(recursiveCallbackPropertyConstraint.ts, 31, 12))
+
+const authorName: string = user.output.posts[0].author.posts[0].author.name;
+>authorName : Symbol(authorName, Decl(recursiveCallbackPropertyConstraint.ts, 34, 5))
+>user.output.posts[0].author.posts[0].author.name : Symbol(name, Decl(recursiveCallbackPropertyConstraint.ts, 31, 28))
+>user.output.posts[0].author.posts[0].author : Symbol(author, Decl(recursiveCallbackPropertyConstraint.ts, 32, 36))
+>user.output.posts[0].author.posts : Symbol(posts, Decl(recursiveCallbackPropertyConstraint.ts, 31, 42))
+>user.output.posts[0].author : Symbol(author, Decl(recursiveCallbackPropertyConstraint.ts, 32, 36))
+>user.output.posts : Symbol(posts, Decl(recursiveCallbackPropertyConstraint.ts, 31, 42))
+>user.output : Symbol(Schema.output, Decl(recursiveCallbackPropertyConstraint.ts, 0, 31))
+>user : Symbol(user, Decl(recursiveCallbackPropertyConstraint.ts, 31, 12))
+>output : Symbol(Schema.output, Decl(recursiveCallbackPropertyConstraint.ts, 0, 31))
+>posts : Symbol(posts, Decl(recursiveCallbackPropertyConstraint.ts, 31, 42))
+>author : Symbol(author, Decl(recursiveCallbackPropertyConstraint.ts, 32, 36))
+>posts : Symbol(posts, Decl(recursiveCallbackPropertyConstraint.ts, 31, 42))
+>author : Symbol(author, Decl(recursiveCallbackPropertyConstraint.ts, 32, 36))
+>name : Symbol(name, Decl(recursiveCallbackPropertyConstraint.ts, 31, 28))
+
+user.output.posts[0].author.missing;
+>user.output.posts[0].author : Symbol(author, Decl(recursiveCallbackPropertyConstraint.ts, 32, 36))
+>user.output.posts : Symbol(posts, Decl(recursiveCallbackPropertyConstraint.ts, 31, 42))
+>user.output : Symbol(Schema.output, Decl(recursiveCallbackPropertyConstraint.ts, 0, 31))
+>user : Symbol(user, Decl(recursiveCallbackPropertyConstraint.ts, 31, 12))
+>output : Symbol(Schema.output, Decl(recursiveCallbackPropertyConstraint.ts, 0, 31))
+>posts : Symbol(posts, Decl(recursiveCallbackPropertyConstraint.ts, 31, 42))
+>author : Symbol(author, Decl(recursiveCallbackPropertyConstraint.ts, 32, 36))
+
+const mixed = object({ name: text(), self: () => array(mixed), other: () => text() });
+>mixed : Symbol(mixed, Decl(recursiveCallbackPropertyConstraint.ts, 37, 5))
+>object : Symbol(object, Decl(recursiveCallbackPropertyConstraint.ts, 6, 101))
+>name : Symbol(name, Decl(recursiveCallbackPropertyConstraint.ts, 37, 22))
+>text : Symbol(text, Decl(recursiveCallbackPropertyConstraint.ts, 9, 75))
+>self : Symbol(self, Decl(recursiveCallbackPropertyConstraint.ts, 37, 36))
+>array : Symbol(array, Decl(recursiveCallbackPropertyConstraint.ts, 8, 70))
+>mixed : Symbol(mixed, Decl(recursiveCallbackPropertyConstraint.ts, 37, 5))
+>other : Symbol(other, Decl(recursiveCallbackPropertyConstraint.ts, 37, 62))
+>text : Symbol(text, Decl(recursiveCallbackPropertyConstraint.ts, 9, 75))
+
+const otherName: string = mixed.output.self[0].other;
+>otherName : Symbol(otherName, Decl(recursiveCallbackPropertyConstraint.ts, 38, 5))
+>mixed.output.self[0].other : Symbol(other, Decl(recursiveCallbackPropertyConstraint.ts, 37, 62))
+>mixed.output.self : Symbol(self, Decl(recursiveCallbackPropertyConstraint.ts, 37, 36))
+>mixed.output : Symbol(Schema.output, Decl(recursiveCallbackPropertyConstraint.ts, 0, 31))
+>mixed : Symbol(mixed, Decl(recursiveCallbackPropertyConstraint.ts, 37, 5))
+>output : Symbol(Schema.output, Decl(recursiveCallbackPropertyConstraint.ts, 0, 31))
+>self : Symbol(self, Decl(recursiveCallbackPropertyConstraint.ts, 37, 36))
+>other : Symbol(other, Decl(recursiveCallbackPropertyConstraint.ts, 37, 62))
+
+const invalid = object({ name: text(), bad: 42, self: () => array(invalid) });
+>invalid : Symbol(invalid, Decl(recursiveCallbackPropertyConstraint.ts, 40, 5))
+>object : Symbol(object, Decl(recursiveCallbackPropertyConstraint.ts, 6, 101))
+>name : Symbol(name, Decl(recursiveCallbackPropertyConstraint.ts, 40, 24))
+>text : Symbol(text, Decl(recursiveCallbackPropertyConstraint.ts, 9, 75))
+>bad : Symbol(bad, Decl(recursiveCallbackPropertyConstraint.ts, 40, 38))
+>self : Symbol(self, Decl(recursiveCallbackPropertyConstraint.ts, 40, 47))
+>array : Symbol(array, Decl(recursiveCallbackPropertyConstraint.ts, 8, 70))
+>invalid : Symbol(invalid, Decl(recursiveCallbackPropertyConstraint.ts, 40, 5))
+
+const invalidName: string = invalid.output.self[0].name;
+>invalidName : Symbol(invalidName, Decl(recursiveCallbackPropertyConstraint.ts, 41, 5))
+>invalid.output.self[0].name : Symbol(name, Decl(recursiveCallbackPropertyConstraint.ts, 40, 24))
+>invalid.output.self : Symbol(self, Decl(recursiveCallbackPropertyConstraint.ts, 40, 47))
+>invalid.output : Symbol(Schema.output, Decl(recursiveCallbackPropertyConstraint.ts, 0, 31))
+>invalid : Symbol(invalid, Decl(recursiveCallbackPropertyConstraint.ts, 40, 5))
+>output : Symbol(Schema.output, Decl(recursiveCallbackPropertyConstraint.ts, 0, 31))
+>self : Symbol(self, Decl(recursiveCallbackPropertyConstraint.ts, 40, 47))
+>name : Symbol(name, Decl(recursiveCallbackPropertyConstraint.ts, 40, 24))
+
+declare function wrap<T extends Schema<string>>(value: T): T;
+>wrap : Symbol(wrap, Decl(recursiveCallbackPropertyConstraint.ts, 41, 56))
+>T : Symbol(T, Decl(recursiveCallbackPropertyConstraint.ts, 43, 22))
+>Schema : Symbol(Schema, Decl(recursiveCallbackPropertyConstraint.ts, 0, 0))
+>value : Symbol(value, Decl(recursiveCallbackPropertyConstraint.ts, 43, 48))
+>T : Symbol(T, Decl(recursiveCallbackPropertyConstraint.ts, 43, 22))
+>T : Symbol(T, Decl(recursiveCallbackPropertyConstraint.ts, 43, 22))
+
+const plain = wrap({ output: () => 42 });
+>plain : Symbol(plain, Decl(recursiveCallbackPropertyConstraint.ts, 44, 5))
+>wrap : Symbol(wrap, Decl(recursiveCallbackPropertyConstraint.ts, 41, 56))
+>output : Symbol(output, Decl(recursiveCallbackPropertyConstraint.ts, 44, 20))
+
+const plainOutput: string = plain.output;
+>plainOutput : Symbol(plainOutput, Decl(recursiveCallbackPropertyConstraint.ts, 45, 5))
+>plain.output : Symbol(Schema.output, Decl(recursiveCallbackPropertyConstraint.ts, 0, 31))
+>plain : Symbol(plain, Decl(recursiveCallbackPropertyConstraint.ts, 44, 5))
+>output : Symbol(Schema.output, Decl(recursiveCallbackPropertyConstraint.ts, 0, 31))
+
+type LeafOutput = { name: string; children: LeafOutput[] };
+>LeafOutput : Symbol(LeafOutput, Decl(recursiveCallbackPropertyConstraint.ts, 45, 41))
+>name : Symbol(name, Decl(recursiveCallbackPropertyConstraint.ts, 47, 19))
+>children : Symbol(children, Decl(recursiveCallbackPropertyConstraint.ts, 47, 33))
+>LeafOutput : Symbol(LeafOutput, Decl(recursiveCallbackPropertyConstraint.ts, 45, 41))
+
+const leaf = object({ name: text(), children: (): Schema<LeafOutput[]> => array(leaf) });
+>leaf : Symbol(leaf, Decl(recursiveCallbackPropertyConstraint.ts, 48, 5))
+>object : Symbol(object, Decl(recursiveCallbackPropertyConstraint.ts, 6, 101))
+>name : Symbol(name, Decl(recursiveCallbackPropertyConstraint.ts, 48, 21))
+>text : Symbol(text, Decl(recursiveCallbackPropertyConstraint.ts, 9, 75))
+>children : Symbol(children, Decl(recursiveCallbackPropertyConstraint.ts, 48, 35))
+>Schema : Symbol(Schema, Decl(recursiveCallbackPropertyConstraint.ts, 0, 0))
+>LeafOutput : Symbol(LeafOutput, Decl(recursiveCallbackPropertyConstraint.ts, 45, 41))
+>array : Symbol(array, Decl(recursiveCallbackPropertyConstraint.ts, 8, 70))
+>leaf : Symbol(leaf, Decl(recursiveCallbackPropertyConstraint.ts, 48, 5))
+
+const leafName: string = leaf.output.children[0].name;
+>leafName : Symbol(leafName, Decl(recursiveCallbackPropertyConstraint.ts, 49, 5))
+>leaf.output.children[0].name : Symbol(name, Decl(recursiveCallbackPropertyConstraint.ts, 47, 19))
+>leaf.output.children : Symbol(children, Decl(recursiveCallbackPropertyConstraint.ts, 48, 35))
+>leaf.output : Symbol(Schema.output, Decl(recursiveCallbackPropertyConstraint.ts, 0, 31))
+>leaf : Symbol(leaf, Decl(recursiveCallbackPropertyConstraint.ts, 48, 5))
+>output : Symbol(Schema.output, Decl(recursiveCallbackPropertyConstraint.ts, 0, 31))
+>children : Symbol(children, Decl(recursiveCallbackPropertyConstraint.ts, 48, 35))
+>name : Symbol(name, Decl(recursiveCallbackPropertyConstraint.ts, 47, 19))
+

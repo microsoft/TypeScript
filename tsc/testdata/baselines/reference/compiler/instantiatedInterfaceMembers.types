@@ -1,0 +1,242 @@
+//// [tests/cases/compiler/instantiatedInterfaceMembers.ts] ////
+
+=== instantiatedInterfaceMembers.ts ===
+class Base<T> {
+>Base : Base<T>
+
+    value!: T;
+>value : T
+
+    protected hidden!: T;
+>hidden : T
+
+    fluent(): this {
+>fluent : () => this
+
+        return this;
+>this : this
+    }
+}
+
+interface Derived<T> extends Base<T> {
+    extra: T;
+>extra : T
+}
+
+interface Further<T> extends Derived<T> {
+    another: T;
+>another : T
+}
+
+declare const further: Further<string>;
+>further : Further<string>
+
+export const fluent: Further<string> = further.fluent();
+>fluent : Further<string>
+>further.fluent() : Further<string>
+>further.fluent : () => Further<string>
+>further : Further<string>
+>fluent : () => Further<string>
+
+const wrongValue: number = further.value;
+>wrongValue : number
+>further.value : string
+>further : Further<string>
+>value : string
+
+further.hidden;
+>further.hidden : string
+>further : Further<string>
+>hidden : string
+
+further.missing;
+>further.missing : any
+>further : Further<string>
+>missing : any
+
+interface Callable<T> {
+    (value: T): T;
+>value : T
+
+    new (value: T): Base<T>;
+>value : T
+
+    [key: string]: T;
+>key : string
+}
+
+interface CallableDerived<T> extends Callable<T> {
+    value: T;
+>value : T
+}
+
+declare const callable: CallableDerived<string>;
+>callable : CallableDerived<string>
+
+export const call: string = callable("");
+>call : string
+>callable("") : string
+>callable : CallableDerived<string>
+>"" : ""
+
+export const construct: Base<string> = new callable("");
+>construct : Base<string>
+>new callable("") : Base<string>
+>callable : CallableDerived<string>
+>"" : ""
+
+export const index: string = callable["other"];
+>index : string
+>callable["other"] : string
+>callable : CallableDerived<string>
+>"other" : "other"
+
+callable(0);
+>callable(0) : string
+>callable : CallableDerived<string>
+>0 : 0
+
+new callable(0);
+>new callable(0) : Base<string>
+>callable : CallableDerived<string>
+>0 : 0
+
+declare function mixin<C extends new (...args: any[]) => any>(base: C): C & {
+>mixin : <C extends new (...args: any[]) => any>(base: C) => C & { new (...args: any[]): { added: number; }; }
+>args : any[]
+>base : C
+
+    new (...args: any[]): { added: number };
+>args : any[]
+>added : number
+
+};
+
+export function factory<T>() {
+>factory : <T>() => Result
+
+    class Mixed extends mixin(Base<T>) {}
+>Mixed : Mixed
+>mixin(Base<T>) : Base<T> & { added: number; }
+>mixin : <C extends new (...args: any[]) => any>(base: C) => C & { new (...args: any[]): { added: number; }; }
+>Base<T> : { new (): Base<T>; prototype: Base<any>; }
+>Base : typeof Base
+
+    interface Result extends Mixed {
+        extra: T;
+>extra : T
+    }
+    return null! as Result;
+>null! as Result : Result
+>null! : never
+}
+
+export const mixed = factory<string>();
+>mixed : factory.Result
+>factory<string>() : factory.Result
+>factory : <T>() => Result
+
+export const inherited: string = mixed.value;
+>inherited : string
+>mixed.value : string
+>mixed : factory.Result
+>value : string
+
+export const added: number = mixed.added;
+>added : number
+>mixed.added : number
+>mixed : factory.Result
+>added : number
+
+export const mixedFluent: typeof mixed = mixed.fluent();
+>mixedFluent : factory.Result
+>mixed : factory.Result
+>mixed.fluent() : factory.Result
+>mixed.fluent : () => factory.Result
+>mixed : factory.Result
+>fluent : () => factory.Result
+
+interface Computed<T extends { value: unknown }> extends Base<T["value"]> {
+>value : unknown
+
+    extra: T["value"];
+>extra : T["value"]
+}
+interface ComputedFurther<T extends { value: unknown }> extends Computed<T> {
+>value : unknown
+
+    another: T["value"];
+>another : T["value"]
+}
+declare const computed: ComputedFurther<{ value: string }>;
+>computed : ComputedFurther<{ value: string; }>
+>value : string
+
+export const computedFluent: typeof computed = computed.fluent();
+>computedFluent : ComputedFurther<{ value: string; }>
+>computed : ComputedFurther<{ value: string; }>
+>computed.fluent() : ComputedFurther<{ value: string; }>
+>computed.fluent : () => ComputedFurther<{ value: string; }>
+>computed : ComputedFurther<{ value: string; }>
+>fluent : () => ComputedFurther<{ value: string; }>
+
+export const computedValue: string = computed.value;
+>computedValue : string
+>computed.value : string
+>computed : ComputedFurther<{ value: string; }>
+>value : string
+
+const wrongComputedValue: number = computed.value;
+>wrongComputedValue : number
+>computed.value : string
+>computed : ComputedFurther<{ value: string; }>
+>value : string
+
+computed.hidden;
+>computed.hidden : string
+>computed : ComputedFurther<{ value: string; }>
+>hidden : string
+
+computed.missing;
+>computed.missing : any
+>computed : ComputedFurther<{ value: string; }>
+>missing : any
+
+interface ComputedCallable<T extends { value: unknown }> extends Callable<T["value"]> {
+>value : unknown
+
+    value: T["value"];
+>value : T["value"]
+}
+declare const computedCallable: ComputedCallable<{ value: string }>;
+>computedCallable : ComputedCallable<{ value: string; }>
+>value : string
+
+export const computedCall: string = computedCallable("");
+>computedCall : string
+>computedCallable("") : string
+>computedCallable : ComputedCallable<{ value: string; }>
+>"" : ""
+
+export const computedConstruct: Base<string> = new computedCallable("");
+>computedConstruct : Base<string>
+>new computedCallable("") : Base<string>
+>computedCallable : ComputedCallable<{ value: string; }>
+>"" : ""
+
+export const computedIndex: string = computedCallable["other"];
+>computedIndex : string
+>computedCallable["other"] : string
+>computedCallable : ComputedCallable<{ value: string; }>
+>"other" : "other"
+
+computedCallable(0);
+>computedCallable(0) : string
+>computedCallable : ComputedCallable<{ value: string; }>
+>0 : 0
+
+new computedCallable(0);
+>new computedCallable(0) : Base<string>
+>computedCallable : ComputedCallable<{ value: string; }>
+>0 : 0
+
