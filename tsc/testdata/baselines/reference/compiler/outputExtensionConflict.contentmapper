@@ -1,0 +1,10 @@
+//// [/app.y.z] (ScriptKind: ScriptKindTS, ContentMapper: [.y.z])
+--- Original ---
+export declare const mapped: string;
+--- Transformed ---
+const __VERSION = "1.0.0";
+export declare const mapped: string;
+
+=== Diagnostics ===
+
+<no content>

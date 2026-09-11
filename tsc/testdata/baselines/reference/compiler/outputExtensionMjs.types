@@ -1,0 +1,21 @@
+//// [tests/cases/compiler/outputExtensionMjs.ts] ////
+
+=== /a.ts ===
+export declare const a: string;
+>a : string
+
+=== /b.tsx ===
+export declare const b: number;
+>b : number
+
+=== /main.ts ===
+export { a } from "./a.ts";
+>a : string
+
+export { b } from "./b.tsx";
+>b : number
+
+export type A = typeof import("./a.ts").a;
+>A : string
+>a : error
+

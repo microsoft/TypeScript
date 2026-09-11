@@ -1130,6 +1130,15 @@ var optionsForCompiler = []*CommandLineOption{
 		Description:            diagnostics.Specify_the_output_directory_for_generated_declaration_files,
 	},
 	{
+		Name:                   "outputExtension",
+		Kind:                   CommandLineOptionTypeEnum, // outputExtensionOptionMap,
+		AffectsEmit:            true,
+		AffectsBuildInfo:       true,
+		AffectsDeclarationPath: true,
+		Category:               diagnostics.Emit,
+		Description:            diagnostics.Specify_the_file_extension_that_an_external_build_gives_every_source_file_so_that_declaration_file_names_and_their_relative_imports_match_the_build_output,
+	},
+	{
 		Name: "skipLibCheck",
 		Kind: CommandLineOptionTypeBoolean,
 		// We need to store these to determine whether `lib` files need to be rechecked

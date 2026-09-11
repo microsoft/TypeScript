@@ -1,0 +1,63 @@
+//// [tests/cases/compiler/outputExtension.ts] ////
+
+=== /helper.ts ===
+export declare const helper: string;
+>helper : Symbol(helper, Decl(helper.ts, 0, 20))
+
+=== /other.p ===
+const __VERSION = "1.0.0";
+>__VERSION : Symbol(__VERSION, Decl(other.p, 0, 5))
+
+export declare const other: number;
+>other : Symbol(other, Decl(other.p, 1, 20))
+
+=== /component.y.z ===
+const __VERSION = "1.0.0";
+>__VERSION : Symbol(__VERSION, Decl(component.y.z, 0, 5))
+
+import { helper } from "./helper.ts";
+>helper : Symbol(helper, Decl(component.y.z, 1, 8))
+
+import { other } from "./other.p";
+>other : Symbol(other, Decl(component.y.z, 2, 8))
+
+export interface ComponentProps {
+>ComponentProps : Symbol(ComponentProps, Decl(component.y.z, 2, 34))
+
+    label: typeof helper;
+>label : Symbol(ComponentProps.label, Decl(component.y.z, 3, 33))
+>helper : Symbol(helper, Decl(component.y.z, 1, 8))
+
+    count: typeof other;
+>count : Symbol(ComponentProps.count, Decl(component.y.z, 4, 25))
+>other : Symbol(other, Decl(component.y.z, 2, 8))
+}
+export declare const component: ComponentProps;
+>component : Symbol(component, Decl(component.y.z, 7, 20))
+>ComponentProps : Symbol(ComponentProps, Decl(component.y.z, 2, 34))
+
+=== /main.ts ===
+export { component } from "./component.y.z";
+>component : Symbol(component, Decl(main.ts, 0, 8))
+
+export type { ComponentProps } from "./component.y.z";
+>ComponentProps : Symbol(ComponentProps, Decl(main.ts, 1, 13))
+
+export type Props = import("./component.y.z").ComponentProps;
+>Props : Symbol(Props, Decl(main.ts, 1, 54))
+>ComponentProps : Symbol(ComponentProps, Decl(component.y.z, 2, 34))
+
+export * as other from "./other.p";
+>other : Symbol(other, Decl(main.ts, 3, 6))
+
+export { helper } from "./helper.ts";
+>helper : Symbol(helper, Decl(main.ts, 4, 8))
+
+export { helper as helperJs } from "./helper.js";
+>helper : Symbol(helper, Decl(helper.ts, 0, 20))
+>helperJs : Symbol(helperJs, Decl(main.ts, 5, 8))
+
+export { helper as helperBare } from "./helper";
+>helper : Symbol(helper, Decl(helper.ts, 0, 20))
+>helperBare : Symbol(helperBare, Decl(main.ts, 6, 8))
+

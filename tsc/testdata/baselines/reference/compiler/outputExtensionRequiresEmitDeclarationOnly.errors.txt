@@ -1,0 +1,16 @@
+/tsconfig.json(4,9): error TS5069: Option 'outputExtension' cannot be specified without specifying option 'noEmit' or option 'emitDeclarationOnly'.
+
+
+==== /tsconfig.json (1 errors) ====
+    {
+        "compilerOptions": {
+            "declaration": true,
+            "outputExtension": ".js"
+            ~~~~~~~~~~~~~~~~~
+!!! error TS5069: Option 'outputExtension' cannot be specified without specifying option 'noEmit' or option 'emitDeclarationOnly'.
+        }
+    }
+    
+==== /main.ts (0 errors) ====
+    export declare const main: string;
+    

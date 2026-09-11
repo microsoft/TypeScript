@@ -1592,7 +1592,32 @@ func (tx *DeclarationTransformer) rewriteModuleSpecifier(parent *ast.Node, input
 		return nil
 	}
 	tx.resultHasExternalModuleIndicator = tx.resultHasExternalModuleIndicator || (parent.Kind != ast.KindModuleDeclaration && parent.Kind != ast.KindImportType)
-	return input
+	return tx.rewriteSpecifierToOutputExtension(input)
+}
+
+// rewriteSpecifierToOutputExtension rewrites a relative specifier that resolved to a source file by its
+// source extension (`./a.ts`, `./b.vue`) to the extension the external build gives that file, so the
+// specifier resolves against the declaration file emitted next to the build output.
+func (tx *DeclarationTransformer) rewriteSpecifierToOutputExtension(input *ast.Node) *ast.Node {
+	outputExtension := tx.compilerOptions.OutputExtension
+	if outputExtension == "" || !ast.IsStringLiteral(input) || !tspath.PathIsRelative(input.Text()) {
+		return input
+	}
+	resolved := tx.host.GetResolvedModuleFromModuleSpecifier(tx.state.currentSourceFile, input)
+	if resolved == nil || !resolved.IsResolved() || !(resolved.ResolvedUsingTsExtension || resolved.ResolvedUsingExtraExtensions) {
+		return input
+	}
+	extension := tspath.GetLongestExtensionFromPath(input.Text(), tx.host.ContentMapperExtensions(), !tx.host.UseCaseSensitiveFileNames())
+	if extension == "" {
+		extension = tspath.TryExtractTSExtension(input.Text())
+	}
+	if extension == "" {
+		return input
+	}
+	updated := tx.Factory().NewStringLiteral(tspath.RemoveExtension(input.Text(), extension)+outputExtension, input.AsStringLiteral().TokenFlags)
+	tx.EmitContext().SetOriginal(updated, input)
+	tx.EmitContext().AssignCommentAndSourceMapRanges(updated, input)
+	return updated
 }
 
 func (tx *DeclarationTransformer) preserveJsDoc(updated *ast.Node, original *ast.Node) {

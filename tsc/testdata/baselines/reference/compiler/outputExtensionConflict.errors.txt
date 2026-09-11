@@ -1,0 +1,32 @@
+error TS5056: Cannot write file '/app.d.ts' because it would be overwritten by multiple input files.
+
+
+!!! error TS5056: Cannot write file '/app.d.ts' because it would be overwritten by multiple input files.
+==== /tsconfig.json (0 errors) ====
+    {
+        "compilerOptions": {
+            "module": "esnext",
+            "moduleResolution": "bundler",
+            "declaration": true,
+            "emitDeclarationOnly": true,
+            "outputExtension": ".js"
+        },
+        "contentMappers": [
+            { "package": "mapper", "extensions": [".y.z"] }
+        ]
+    }
+    
+==== /app.ts (0 errors) ====
+    export declare const source: string;
+    
+==== /main.ts (0 errors) ====
+    export { mapped } from "./app.y.z";
+    export { source } from "./app";
+    
+==== /node_modules/mapper/package.json (0 errors) ====
+    {
+        "name": "mapper",
+        "version": "1.0.0",
+        "typescript": { "contentMapper": { "exec": ["compiler-test-mapper"] } }
+    }
+    
