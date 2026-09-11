@@ -1,0 +1,11 @@
+// === Document Symbols ===
+// === /documentSymbolTopLevelImports.ts ===
+// import DefaultComponent from "./component";
+// import * as utils from "./utils";
+// import { value, original as renamed } from "./values";
+// import type { Options } from "./types";
+// 
+// const <|[|{| name: local, kind: Variable |}local|] = 1|>;
+
+// === Details ===
+(Variable) local
