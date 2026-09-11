@@ -66,6 +66,7 @@ import {
     type LiteralType,
     ModifierFlags,
     ModuleKind,
+    type NumberLiteralType,
     ObjectFlags,
     type Signature,
     SignatureKind,
@@ -5449,6 +5450,35 @@ describe("FreshableType - getFreshType and getRegularType", () => {
         const negLiteral = negType as BigIntLiteralType;
         assert.equal(typeof negLiteral.value, "bigint");
         assert.equal(negLiteral.value, -123n);
+    });
+
+    test("NumberLiteralType.value is infinity (positive and negative)", async () => {
+        const src = `\nexport const pos = 1e999;\nexport const neg = -1e999;\n`;
+        await using api = spawnAPI({
+            "/tsconfig.json": "{}",
+            "/src/main.ts": src,
+        });
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+
+        const posSymbol = await project.checker.getSymbolAtPosition("/src/main.ts", src.indexOf("pos ="));
+        assert.ok(posSymbol);
+        const posType = await project.checker.getTypeOfSymbol(posSymbol);
+        assert.ok(posType);
+        assert.ok(posType.flags & TypeFlags.NumberLiteral, "Expected NumberLiteral");
+        const posLiteral = posType as NumberLiteralType;
+        assert.equal(typeof posLiteral.value, "number");
+        assert.equal(posLiteral.value, Infinity);
+
+        const negSymbol = await project.checker.getSymbolAtPosition("/src/main.ts", src.indexOf("neg ="));
+        assert.ok(negSymbol);
+        const negType = await project.checker.getTypeOfSymbol(negSymbol);
+        assert.ok(negType);
+        assert.ok(negType.flags & TypeFlags.NumberLiteral, "Expected NumberLiteral");
+        const negLiteral = negType as NumberLiteralType;
+        assert.equal(typeof negLiteral.value, "number");
+        assert.equal(negLiteral.value, -Infinity);
     });
 
     test("getFreshType() returns a fresh twin with matching value", async () => {

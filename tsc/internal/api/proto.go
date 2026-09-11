@@ -1056,6 +1056,12 @@ func literalValueToJSON(value any) any {
 	case string:
 		return v
 	case jsnum.Number:
+		if v.IsInf() {
+			if v > 0 {
+				return "+Infinity"
+			}
+			return "-Infinity"
+		}
 		return float64(v)
 	case bool:
 		return v
