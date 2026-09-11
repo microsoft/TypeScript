@@ -1,0 +1,263 @@
+//// [tests/cases/conformance/types/literal/stringMappingNarrowing.ts] ////
+
+=== stringMappingNarrowing.ts ===
+// === Basic narrowing: Uppercase<string> === literal ===
+
+function testUppercaseNarrowing(x: Uppercase<string>) {
+>testUppercaseNarrowing : (x: Uppercase<string>) => void
+>x : Uppercase<string>
+
+    if (x === "BE") {
+>x === "BE" : boolean
+>x : Uppercase<string>
+>"BE" : "BE"
+
+        const r: "BE" = x; // ok — narrowed to "BE"
+>r : "BE"
+>x : "BE"
+    }
+    if (x === "be") {
+>x === "be" : boolean
+>x : Uppercase<string>
+>"be" : "be"
+
+        const r: "be" = x; // error — "be" is never Uppercase<string>
+>r : "be"
+>x : never
+    }
+}
+
+// === Basic narrowing: Lowercase<string> === literal ===
+
+function testLowercaseNarrowing(x: Lowercase<string>) {
+>testLowercaseNarrowing : (x: Lowercase<string>) => void
+>x : Lowercase<string>
+
+    if (x === "be") {
+>x === "be" : boolean
+>x : Lowercase<string>
+>"be" : "be"
+
+        const r: "be" = x; // ok — narrowed to "be"
+>r : "be"
+>x : "be"
+    }
+    if (x === "BE") {
+>x === "BE" : boolean
+>x : Lowercase<string>
+>"BE" : "BE"
+
+        const r: "BE" = x; // error — "BE" is never Lowercase<string>
+>r : "BE"
+>x : never
+    }
+}
+
+// === Union narrowing and assignment (original issue) ===
+
+function testUnionAssignment() {
+>testUnionAssignment : () => void
+
+    let countryCode: "BE" | "LU" | "NL";
+>countryCode : "BE" | "LU" | "NL"
+
+    const prefix = "be".toUpperCase() as Uppercase<string>;
+>prefix : Uppercase<string>
+>"be".toUpperCase() as Uppercase<string> : Uppercase<string>
+>"be".toUpperCase() : string
+>"be".toUpperCase : () => string
+>"be" : "be"
+>toUpperCase : () => string
+
+    if (prefix === "BE" || prefix === "LU" || prefix === "NL") {
+>prefix === "BE" || prefix === "LU" || prefix === "NL" : boolean
+>prefix === "BE" || prefix === "LU" : boolean
+>prefix === "BE" : boolean
+>prefix : Uppercase<string>
+>"BE" : "BE"
+>prefix === "LU" : boolean
+>prefix : Uppercase<string>
+>"LU" : "LU"
+>prefix === "NL" : boolean
+>prefix : Uppercase<string>
+>"NL" : "NL"
+
+        countryCode = prefix; // ok — narrowed to "BE" | "LU" | "NL"
+>countryCode = prefix : "BE" | "LU" | "NL"
+>countryCode : "BE" | "LU" | "NL"
+>prefix : "BE" | "LU" | "NL"
+    }
+}
+
+// === Narrowing in else branch ===
+
+function testUppercaseElseBranch(x: Uppercase<string>) {
+>testUppercaseElseBranch : (x: Uppercase<string>) => void
+>x : Uppercase<string>
+
+    if (x === "BE") {
+>x === "BE" : boolean
+>x : Uppercase<string>
+>"BE" : "BE"
+
+        x; // type is "BE"
+>x : "BE"
+
+    } else {
+        x; // type is Uppercase<string>
+>x : Uppercase<string>
+    }
+}
+
+// === Switch statement narrowing ===
+
+function testUppercaseSwitch(x: Uppercase<string>): string {
+>testUppercaseSwitch : (x: Uppercase<string>) => string
+>x : Uppercase<string>
+
+    switch (x) {
+>x : Uppercase<string>
+
+        case "BE": return "Belgium";
+>"BE" : "BE"
+>"Belgium" : "Belgium"
+
+        case "LU": return "Luxembourg";
+>"LU" : "LU"
+>"Luxembourg" : "Luxembourg"
+
+        case "NL": return "Netherlands";
+>"NL" : "NL"
+>"Netherlands" : "Netherlands"
+
+        default: return "Unknown";
+>"Unknown" : "Unknown"
+    }
+}
+
+// === Capitalize<string> narrowing ===
+
+function testCapitalizeNarrowing(x: Capitalize<string>) {
+>testCapitalizeNarrowing : (x: Capitalize<string>) => void
+>x : Capitalize<string>
+
+    if (x === "Hello") {
+>x === "Hello" : boolean
+>x : Capitalize<string>
+>"Hello" : "Hello"
+
+        const r: "Hello" = x; // ok
+>r : "Hello"
+>x : "Hello"
+    }
+    if (x === "hello") {
+>x === "hello" : boolean
+>x : Capitalize<string>
+>"hello" : "hello"
+
+        const r: "hello" = x; // error
+>r : "hello"
+>x : never
+    }
+}
+
+// === Uncapitalize<string> narrowing ===
+
+function testUncapitalizeNarrowing(x: Uncapitalize<string>) {
+>testUncapitalizeNarrowing : (x: Uncapitalize<string>) => void
+>x : Uncapitalize<string>
+
+    if (x === "hello") {
+>x === "hello" : boolean
+>x : Uncapitalize<string>
+>"hello" : "hello"
+
+        const r: "hello" = x; // ok
+>r : "hello"
+>x : "hello"
+    }
+    if (x === "Hello") {
+>x === "Hello" : boolean
+>x : Uncapitalize<string>
+>"Hello" : "Hello"
+
+        const r: "Hello" = x; // error
+>r : "Hello"
+>x : never
+    }
+}
+
+// === Always-false comparisons (comparability) ===
+
+function testAlwaysFalseUppercase(foo: Uppercase<string>) {
+>testAlwaysFalseUppercase : (foo: Uppercase<string>) => void
+>foo : Uppercase<string>
+
+    if (foo === "ba") {} // error — "ba" is not Uppercase<string>
+>foo === "ba" : boolean
+>foo : Uppercase<string>
+>"ba" : "ba"
+
+    if (foo === "BA") {} // ok
+>foo === "BA" : boolean
+>foo : Uppercase<string>
+>"BA" : "BA"
+}
+
+function testAlwaysFalseLowercase(foo: Lowercase<string>) {
+>testAlwaysFalseLowercase : (foo: Lowercase<string>) => void
+>foo : Lowercase<string>
+
+    if (foo === "BA") {} // error — "BA" is not Lowercase<string>
+>foo === "BA" : boolean
+>foo : Lowercase<string>
+>"BA" : "BA"
+
+    if (foo === "ba") {} // ok
+>foo === "ba" : boolean
+>foo : Lowercase<string>
+>"ba" : "ba"
+}
+
+// === Narrowing does not broaden the type ===
+
+function testNoFalseNarrowing(x: Uppercase<string>) {
+>testNoFalseNarrowing : (x: Uppercase<string>) => void
+>x : Uppercase<string>
+
+    if (x === "BE") {
+>x === "BE" : boolean
+>x : Uppercase<string>
+>"BE" : "BE"
+
+        const r1: Uppercase<string> = x; // ok
+>r1 : Uppercase<string>
+>x : "BE"
+
+        const r2: string = x;            // ok
+>r2 : string
+>x : "BE"
+    }
+}
+
+// === Multiple literal union narrowing ===
+
+function testUppercaseUnionAssign2(x: Uppercase<string>) {
+>testUppercaseUnionAssign2 : (x: Uppercase<string>) => void
+>x : Uppercase<string>
+
+    if (x === "FOO" || x === "BAR") {
+>x === "FOO" || x === "BAR" : boolean
+>x === "FOO" : boolean
+>x : Uppercase<string>
+>"FOO" : "FOO"
+>x === "BAR" : boolean
+>x : Uppercase<string>
+>"BAR" : "BAR"
+
+        const r: "FOO" | "BAR" = x; // ok
+>r : "BAR" | "FOO"
+>x : "BAR" | "FOO"
+    }
+}
+

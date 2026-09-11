@@ -3821,6 +3821,17 @@ func (r *Relater) structuredTypeRelatedToWorker(source *Type, target *Type, repo
 				return result
 			}
 		} else {
+			// When comparing a StringMapping (e.g. Uppercase<string>) against a concrete string
+			// literal in the comparable relation, the literal must actually be a member of the
+			// mapping (i.e. Uppercase("ba") == "ba" must hold). Using the base-constraint
+			// (string) here would make every string literal comparable to Uppercase<string>,
+			// suppressing correct "this condition is always false" warnings.
+			if r.relation == r.c.comparableRelation && target.flags&TypeFlagsStringLiteral != 0 {
+				if r.c.isMemberOfStringMapping(target, source) {
+					return TernaryTrue
+				}
+				return TernaryFalse
+			}
 			constraint := r.c.getBaseConstraintOfType(source)
 			if constraint != nil {
 				result = r.isRelatedTo(constraint, target, RecursionFlagsSource, reportErrors)
@@ -3829,6 +3840,7 @@ func (r *Relater) structuredTypeRelatedToWorker(source *Type, target *Type, repo
 				}
 			}
 		}
+
 	default:
 		// An empty object type is related to any mapped type that includes a '?' modifier.
 		if r.relation != r.c.subtypeRelation && r.relation != r.c.strictSubtypeRelation && isPartialMappedType(target) && r.c.isEmptyObjectType(source) {
