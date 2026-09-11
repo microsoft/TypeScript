@@ -51,3 +51,58 @@ f(async () => {
 >0 : 0
 
 })
+
+const g = true;
+>g : true
+>true : true
+
+function async() {
+>async : () => number
+
+    return 1;
+>1 : 1
+}
+
+const f1 = g ? async() : 0;
+>f1 : number
+>g ? async() : 0 : number
+>g : true
+>async() : number
+>async : () => number
+>0 : 0
+
+/** @type {number | ((x: number) => number)} */
+const f2 = g ? async() : x => x;
+>f2 : number | ((x: number) => number)
+>g ? async() : x => x : number | ((x: number) => number)
+>g : true
+>async() : number
+>async : () => number
+>x => x : (x: number) => number
+>x : number
+>x : number
+
+const f3 = g ? g ? async() : 0 : 1;
+>f3 : number
+>g ? g ? async() : 0 : 1 : number
+>g : true
+>g ? async() : 0 : number
+>g : true
+>async() : number
+>async : () => number
+>0 : 0
+>1 : 1
+
+/** @type {(x: number) => number} */
+const f4 = g ? x => async() : x => x;
+>f4 : (x: number) => number
+>g ? x => async() : x => x : (x: number) => number
+>g : true
+>x => async() : (x: number) => number
+>x : number
+>async() : number
+>async : () => number
+>x => x : (x: number) => number
+>x : number
+>x : number
+

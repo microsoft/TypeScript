@@ -10,3 +10,99 @@ let foo = (async bar => bar);
 >bar : any
 >bar : any
 
+const a = true;
+>a : true
+>true : true
+
+const b = 1;
+>b : 1
+>1 : 1
+
+function async(): number {
+>async : () => number
+
+    return b;
+>b : 1
+}
+
+const f1 = a ? async() : 0;
+>f1 : number
+>a ? async() : 0 : number
+>a : true
+>async() : number
+>async : () => number
+>0 : 0
+
+const f2 = a ? async() : x => x;
+>f2 : number | ((x: any) => any)
+>a ? async() : x => x : number | ((x: any) => any)
+>a : true
+>async() : number
+>async : () => number
+>x => x : (x: any) => any
+>x : any
+>x : any
+
+const f3 = a ? a ? async() : 0 : b;
+>f3 : number
+>a ? a ? async() : 0 : b : number
+>a : true
+>a ? async() : 0 : number
+>a : true
+>async() : number
+>async : () => number
+>0 : 0
+>b : 1
+
+const f4 = a ? x => async() : x => x;
+>f4 : (x: any) => any
+>a ? x => async() : x => x : (x: any) => any
+>a : true
+>x => async() : (x: any) => number
+>x : any
+>async() : number
+>async : () => number
+>x => x : (x: any) => any
+>x : any
+>x : any
+
+const f5 = a ? async (): Promise<number> => b : () => b;
+>f5 : (() => Promise<number>) | (() => number)
+>a ? async (): Promise<number> => b : () => b : (() => Promise<number>) | (() => number)
+>a : true
+>async (): Promise<number> => b : () => Promise<number>
+>b : 1
+>() => b : () => number
+>b : 1
+
+const f6 = a ? async (): Promise<number> => { return b; } : () => b;
+>f6 : (() => Promise<number>) | (() => number)
+>a ? async (): Promise<number> => { return b; } : () => b : (() => Promise<number>) | (() => number)
+>a : true
+>async (): Promise<number> => { return b; } : () => Promise<number>
+>b : 1
+>() => b : () => number
+>b : 1
+
+const f7 = a ? async (): Promise<number> => a ? async() : 0 : () => b;
+>f7 : (() => Promise<number>) | (() => number)
+>a ? async (): Promise<number> => a ? async() : 0 : () => b : (() => Promise<number>) | (() => number)
+>a : true
+>async (): Promise<number> => a ? async() : 0 : () => Promise<number>
+>a ? async() : 0 : number
+>a : true
+>async() : number
+>async : () => number
+>0 : 0
+>() => b : () => number
+>b : 1
+
+const f8 = a ? (): number => b : () => b;
+>f8 : () => number
+>a ? (): number => b : () => b : () => number
+>a : true
+>(): number => b : () => number
+>b : 1
+>() => b : () => number
+>b : 1
+

@@ -31,3 +31,16 @@ const f = (p) => {}
 f(async () => {
 	return 0
 })
+
+const g = true;
+
+function async() {
+    return 1;
+}
+
+const f1 = g ? async() : 0;
+/** @type {number | ((x: number) => number)} */
+const f2 = g ? async() : x => x;
+const f3 = g ? g ? async() : 0 : 1;
+/** @type {(x: number) => number} */
+const f4 = g ? x => async() : x => x;
