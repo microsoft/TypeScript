@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/microsoft/TypeScript/tsc/internal/api/requestfilesystem"
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/checker"
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
@@ -344,6 +345,9 @@ type APIFileChanges struct {
 // UpdateSnapshotParams are the parameters for creating a new snapshot.
 // All fields are optional. With no fields set, the server adopts the latest LSP state.
 type UpdateSnapshotParams struct {
+	// Snapshot, when set, requires this to be the latest active snapshot and layers
+	// FileSystem over that snapshot's filesystem. Used by Snapshot.update.
+	Snapshot SnapshotID `json:"snapshot,omitempty"`
 	// OpenProjects lists tsconfig.json files to open/load in the new snapshot.
 	// Opens are ref-counted and persist across snapshots until closed.
 	OpenProjects []DocumentIdentifier `json:"openProjects,omitempty"`
@@ -352,6 +356,10 @@ type UpdateSnapshotParams struct {
 	CloseProjects []DocumentIdentifier `json:"closeProjects,omitempty"`
 	// FileChanges describes file system changes since the last snapshot.
 	FileChanges *APIFileChanges `json:"fileChanges,omitempty"`
+	// FileSystem supplies file contents and directory listings for the new snapshot.
+	// A full filesystem is canonical and total. A filesystem layer is checked
+	// before falling back to the host filesystem.
+	FileSystem *requestfilesystem.RequestFileSystem `json:"fileSystem,omitempty"`
 	// OpenFiles lists files to keep open for the API client, mirroring LSP's
 	// textDocument/didOpen. For each file, ancestor directories are searched for a
 	// tsconfig that contains it; if found, that configured project is loaded and
@@ -1398,6 +1406,9 @@ type EmitResponse struct {
 	EmitSkipped  bool                  `json:"emitSkipped"`
 	Diagnostics  []*DiagnosticResponse `json:"diagnostics" nonnil:"true"`
 	EmittedFiles []string              `json:"emittedFiles" nonnil:"true"`
+	// EmittedFilesContents contains contents parallel to EmittedFiles when the
+	// source snapshot uses a full filesystem. It is empty for write-through emits.
+	EmittedFilesContents []string `json:"emittedFilesContents" nonnil:"true"`
 }
 
 type EmitOutputFile struct {

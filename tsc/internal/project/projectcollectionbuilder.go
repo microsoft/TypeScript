@@ -1297,12 +1297,10 @@ func (b *ProjectCollectionBuilder) updateProgram(entry dirty.Value[*Project], lo
 				if slices.ContainsFunc(result.Program.SourceFiles(), func(file *ast.SourceFile) bool {
 					return file.ContentMapper() != ""
 				}) {
-					project.host.ensureContentMapperProject()
-				}
-				contentMapperProject := project.host.ContentMapperProject()
-				if contentMapperProject != nil {
-					dynamicWatchedFiles, _ := contentMapperProject.WatchedFiles()
-					watchedFiles = append(watchedFiles, dynamicWatchedFiles...)
+					if contentMapperProject := project.host.ContentMapperProject(); contentMapperProject != nil {
+						dynamicWatchedFiles, _ := contentMapperProject.WatchedFiles()
+						watchedFiles = append(watchedFiles, dynamicWatchedFiles...)
+					}
 				}
 				slices.Sort(watchedFiles)
 				watchedFiles = slices.Compact(watchedFiles)
