@@ -1324,6 +1324,61 @@ func TestRealpathAliasLifecycle(t *testing.T) {
 		assert.Equal(t, file.Content(), `{"name": "mylib"}`, "content should be updated")
 	})
 
+	t.Run("markDirtyFiles invalidates existing cached file on created event", func(t *testing.T) {
+		t.Parallel()
+		testFS := vfstest.FromMap(map[string]any{
+			"/project/src/helper.ts": `export const other = 1;`,
+		}, false)
+
+		// Build first snapshot — read the file.
+		builder1 := newSnapshotFSBuilder(
+			testFS,
+			make(map[tspath.Path]*Overlay),
+			make(map[tspath.Path]*Overlay),
+			make(map[tspath.Path]*diskFile),
+			make(map[tspath.Path]dirty.CloneableMap[tspath.Path, string]),
+			nil,
+			lsproto.PositionEncodingKindUTF16,
+			toPath,
+		)
+		fh := builder1.GetFile("/project/src/helper.ts")
+		assert.Assert(t, fh != nil)
+		assert.Equal(t, fh.Content(), `export const other = 1;`)
+		snapshot1, _ := builder1.Finalize()
+
+		// Modify the file on disk (e.g. via atomic save rename).
+		err := testFS.WriteFile("/project/src/helper.ts", `export const thing = 1;`)
+		assert.NilError(t, err)
+
+		// Build second snapshot — simulate Created event.
+		builder2 := newSnapshotFSBuilder(
+			testFS,
+			make(map[tspath.Path]*Overlay),
+			make(map[tspath.Path]*Overlay),
+			snapshot1.diskFiles,
+			snapshot1.diskDirectories,
+			snapshot1.nodeModulesRealpathAliases,
+			lsproto.PositionEncodingKindUTF16,
+			toPath,
+		)
+
+		change := FileChangeSummary{}
+		change.Created.Add("file:///project/src/helper.ts")
+
+		change = builder2.markDirtyFiles(change)
+		assert.Assert(t, change.Created.Has("file:///project/src/helper.ts"))
+
+		// Reading the file should return the updated content.
+		fh = builder2.GetFile("/project/src/helper.ts")
+		assert.Assert(t, fh != nil)
+		assert.Equal(t, fh.Content(), `export const thing = 1;`)
+
+		snapshot2, _ := builder2.Finalize()
+		file, ok := snapshot2.diskFiles[tspath.Path("/project/src/helper.ts")]
+		assert.Assert(t, ok)
+		assert.Equal(t, file.Content(), `export const thing = 1;`)
+	})
+
 	t.Run("alias clone isolation between snapshots", func(t *testing.T) {
 		t.Parallel()
 		testFS := vfstest.FromMap(map[string]any{

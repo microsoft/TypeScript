@@ -659,6 +659,74 @@ func TestSession(t *testing.T) {
 			assert.Check(t, lsAfter.GetProgram() != programBefore)
 		})
 
+		t.Run("create closed program file reloads content (atomic save)", func(t *testing.T) {
+			t.Parallel()
+			files := maps.Clone(defaultFiles)
+			session, utils := projecttestutil.Setup(files)
+
+			session.DidOpenFile(context.Background(), "file:///home/projects/TS/p1/src/index.ts", 1, files["/home/projects/TS/p1/src/index.ts"].(string), lsproto.LanguageKindTypeScript)
+
+			lsBefore, err := session.GetLanguageService(context.Background(), "file:///home/projects/TS/p1/src/index.ts")
+			assert.NilError(t, err)
+			programBefore := lsBefore.GetProgram()
+
+			err = utils.FS().WriteFile("/home/projects/TS/p1/src/x.ts", `export const x = 2;`)
+			assert.NilError(t, err)
+
+			// Simulate atomic save / rename where watcher reports Created (type 1)
+			session.DidChangeWatchedFiles(context.Background(), []*lsproto.FileEvent{
+				{
+					Type: lsproto.FileChangeTypeCreated,
+					Uri:  "file:///home/projects/TS/p1/src/x.ts",
+				},
+			})
+
+			lsAfter, err := session.GetLanguageService(context.Background(), "file:///home/projects/TS/p1/src/index.ts")
+			assert.NilError(t, err)
+			assert.Check(t, lsAfter.GetProgram() != programBefore)
+			srcX := lsAfter.GetProgram().GetSourceFile("/home/projects/TS/p1/src/x.ts")
+			assert.Assert(t, srcX != nil)
+			assert.Equal(t, srcX.Text(), "export const x = 2;")
+		})
+
+		t.Run("atomic save sequence with temp file reloads content", func(t *testing.T) {
+			t.Parallel()
+			files := maps.Clone(defaultFiles)
+			session, utils := projecttestutil.Setup(files)
+
+			session.DidOpenFile(context.Background(), "file:///home/projects/TS/p1/src/index.ts", 1, files["/home/projects/TS/p1/src/index.ts"].(string), lsproto.LanguageKindTypeScript)
+
+			lsBefore, err := session.GetLanguageService(context.Background(), "file:///home/projects/TS/p1/src/index.ts")
+			assert.NilError(t, err)
+			programBefore := lsBefore.GetProgram()
+
+			err = utils.FS().WriteFile("/home/projects/TS/p1/src/x.ts", `export const x = 42;`)
+			assert.NilError(t, err)
+
+			// Sequence sent by editors like VS Code on atomic save: tmp create -> target create -> tmp delete
+			session.DidChangeWatchedFiles(context.Background(), []*lsproto.FileEvent{
+				{
+					Type: lsproto.FileChangeTypeCreated,
+					Uri:  "file:///home/projects/TS/p1/src/x.ts.tmp",
+				},
+				{
+					Type: lsproto.FileChangeTypeCreated,
+					Uri:  "file:///home/projects/TS/p1/src/x.ts",
+				},
+				{
+					Type: lsproto.FileChangeTypeDeleted,
+					Uri:  "file:///home/projects/TS/p1/src/x.ts.tmp",
+				},
+			})
+
+			lsAfter, err := session.GetLanguageService(context.Background(), "file:///home/projects/TS/p1/src/index.ts")
+			assert.NilError(t, err)
+			assert.Check(t, lsAfter.GetProgram() != programBefore)
+			srcX := lsAfter.GetProgram().GetSourceFile("/home/projects/TS/p1/src/x.ts")
+			assert.Assert(t, srcX != nil)
+			assert.Equal(t, srcX.Text(), "export const x = 42;")
+		})
+
 		t.Run("change program file not in tsconfig root files", func(t *testing.T) {
 			t.Parallel()
 			for _, workspaceDir := range []string{"/", "/home/projects/TS/p1", "/somewhere/else/entirely"} {
