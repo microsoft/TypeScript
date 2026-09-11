@@ -548,13 +548,14 @@ export function documentURIToFileName(uri: string): string {
             throw new Error("invalid file URI: " + uri);
         }
 
+        const path = decodeURIComponent(parsed.pathname);
+
         // UNC path: file://server/share/...
         if (parsed.host !== "") {
-            return "//" + parsed.host + parsed.pathname;
+            return "//" + parsed.host + path;
         }
 
         // Local file - fix Windows path by removing leading slash before volume
-        const path = decodeURIComponent(parsed.pathname);
         if (path.length >= 3 && path.charCodeAt(0) === CharacterCodesSlash) {
             const [volume, rest, ok] = splitVolumePath(path.substring(1));
             if (ok) {

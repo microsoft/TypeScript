@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/microsoft/TypeScript/tsc/internal/api/requestfilesystem"
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/checker"
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
@@ -344,6 +345,9 @@ type APIFileChanges struct {
 // UpdateSnapshotParams are the parameters for creating a new snapshot.
 // All fields are optional. With no fields set, the server adopts the latest LSP state.
 type UpdateSnapshotParams struct {
+	// Snapshot, when set, requires this to be the latest active snapshot and layers
+	// FileSystem over that snapshot's filesystem. Used by Snapshot.update.
+	Snapshot SnapshotID `json:"snapshot,omitempty"`
 	// OpenProjects lists tsconfig.json files to open/load in the new snapshot.
 	// Opens are ref-counted and persist across snapshots until closed.
 	OpenProjects []DocumentIdentifier `json:"openProjects,omitempty"`
@@ -352,6 +356,10 @@ type UpdateSnapshotParams struct {
 	CloseProjects []DocumentIdentifier `json:"closeProjects,omitempty"`
 	// FileChanges describes file system changes since the last snapshot.
 	FileChanges *APIFileChanges `json:"fileChanges,omitempty"`
+	// FileSystem supplies file contents and directory listings for the new snapshot.
+	// A full filesystem is canonical and total. A filesystem layer is checked
+	// before falling back to the host filesystem.
+	FileSystem *requestfilesystem.RequestFileSystem `json:"fileSystem,omitempty"`
 	// OpenFiles lists files to keep open for the API client, mirroring LSP's
 	// textDocument/didOpen. For each file, ancestor directories are searched for a
 	// tsconfig that contains it; if found, that configured project is loaded and
@@ -644,7 +652,9 @@ type TranspileOutputResponse struct {
 }
 
 type BatchRequestsParams struct {
-	Requests []BatchRequest `json:"requests"`
+	Requests                []BatchRequest `json:"requests"`
+	ContinuationToken       string         `json:"continuationToken,omitempty"`
+	MaxResponseBytesPerPage int            `json:"maxResponseBytesPerPage,omitempty"`
 }
 
 type BatchRequest struct {
@@ -653,7 +663,48 @@ type BatchRequest struct {
 }
 
 type BatchRequestsResponse struct {
-	Responses []BatchResponse `json:"responses" nonnil:"true"`
+	Responses         []BatchResponse `json:"responses" nonnil:"true"`
+	ContinuationToken string          `json:"continuationToken,omitempty"`
+	encodedResponses  []json.Value
+}
+
+var _ json.MarshalerTo = (*BatchRequestsResponse)(nil)
+
+func (r *BatchRequestsResponse) MarshalJSONTo(enc *json.Encoder) error {
+	if err := enc.WriteToken(json.BeginObject); err != nil {
+		return err
+	}
+	if err := enc.WriteValue(json.Value(`"responses"`)); err != nil {
+		return err
+	}
+	if err := enc.WriteToken(json.BeginArray); err != nil {
+		return err
+	}
+	if r.encodedResponses != nil {
+		for _, response := range r.encodedResponses {
+			if err := enc.WriteValue(response); err != nil {
+				return err
+			}
+		}
+	} else {
+		for i := range r.Responses {
+			if err := json.MarshalEncode(enc, &r.Responses[i]); err != nil {
+				return err
+			}
+		}
+	}
+	if err := enc.WriteToken(json.EndArray); err != nil {
+		return err
+	}
+	if r.ContinuationToken != "" {
+		if err := enc.WriteValue(json.Value(`"continuationToken"`)); err != nil {
+			return err
+		}
+		if err := json.MarshalEncode(enc, r.ContinuationToken); err != nil {
+			return err
+		}
+	}
+	return enc.WriteToken(json.EndObject)
 }
 
 type BatchResponse struct {
@@ -1355,6 +1406,9 @@ type EmitResponse struct {
 	EmitSkipped  bool                  `json:"emitSkipped"`
 	Diagnostics  []*DiagnosticResponse `json:"diagnostics" nonnil:"true"`
 	EmittedFiles []string              `json:"emittedFiles" nonnil:"true"`
+	// EmittedFilesContents contains contents parallel to EmittedFiles when the
+	// source snapshot uses a full filesystem. It is empty for write-through emits.
+	EmittedFilesContents []string `json:"emittedFilesContents" nonnil:"true"`
 }
 
 type EmitOutputFile struct {
