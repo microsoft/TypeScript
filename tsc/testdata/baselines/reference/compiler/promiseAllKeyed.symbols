@@ -1,0 +1,193 @@
+//// [tests/cases/compiler/promiseAllKeyed.ts] ////
+
+=== promiseAllKeyed.ts ===
+declare const key: unique symbol;
+>key : Symbol(key, Decl(promiseAllKeyed.ts, 0, 13))
+
+const values = {
+>values : Symbol(values, Decl(promiseAllKeyed.ts, 2, 5))
+
+    a: 1 as number,
+>a : Symbol(a, Decl(promiseAllKeyed.ts, 2, 16))
+
+    b: Promise.resolve("value"),
+>b : Symbol(b, Decl(promiseAllKeyed.ts, 3, 19))
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+
+    c: { then(resolve: (value: boolean) => void) { resolve(true); } },
+>c : Symbol(c, Decl(promiseAllKeyed.ts, 4, 32))
+>then : Symbol(then, Decl(promiseAllKeyed.ts, 5, 8))
+>resolve : Symbol(resolve, Decl(promiseAllKeyed.ts, 5, 14))
+>value : Symbol(value, Decl(promiseAllKeyed.ts, 5, 24))
+>resolve : Symbol(resolve, Decl(promiseAllKeyed.ts, 5, 14))
+
+    [key]: Promise.resolve(42),
+>[key] : Symbol([key], Decl(promiseAllKeyed.ts, 5, 70))
+>key : Symbol(key, Decl(promiseAllKeyed.ts, 0, 13))
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+
+} as const;
+>const : Symbol(const)
+
+async function testAllKeyed() {
+>testAllKeyed : Symbol(testAllKeyed, Decl(promiseAllKeyed.ts, 7, 11))
+
+    const result = await Promise.allKeyed(values);
+>result : Symbol(result, Decl(promiseAllKeyed.ts, 10, 9))
+>Promise.allKeyed : Symbol(PromiseConstructor.allKeyed, Decl(lib.esnext.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>allKeyed : Symbol(PromiseConstructor.allKeyed, Decl(lib.esnext.promise.d.ts, --, --))
+>values : Symbol(values, Decl(promiseAllKeyed.ts, 2, 5))
+
+    const a: number = result.a;
+>a : Symbol(a, Decl(promiseAllKeyed.ts, 11, 9))
+>result.a : Symbol(a, Decl(promiseAllKeyed.ts, 2, 16))
+>result : Symbol(result, Decl(promiseAllKeyed.ts, 10, 9))
+>a : Symbol(a, Decl(promiseAllKeyed.ts, 2, 16))
+
+    const b: string = result.b;
+>b : Symbol(b, Decl(promiseAllKeyed.ts, 12, 9))
+>result.b : Symbol(b, Decl(promiseAllKeyed.ts, 3, 19))
+>result : Symbol(result, Decl(promiseAllKeyed.ts, 10, 9))
+>b : Symbol(b, Decl(promiseAllKeyed.ts, 3, 19))
+
+    const c: boolean = result.c;
+>c : Symbol(c, Decl(promiseAllKeyed.ts, 13, 9))
+>result.c : Symbol(c, Decl(promiseAllKeyed.ts, 4, 32))
+>result : Symbol(result, Decl(promiseAllKeyed.ts, 10, 9))
+>c : Symbol(c, Decl(promiseAllKeyed.ts, 4, 32))
+
+    const d: number = result[key];
+>d : Symbol(d, Decl(promiseAllKeyed.ts, 14, 9))
+>result : Symbol(result, Decl(promiseAllKeyed.ts, 10, 9))
+>key : Symbol(key, Decl(promiseAllKeyed.ts, 0, 13))
+
+    result.a = 2;
+>result.a : Symbol(a, Decl(promiseAllKeyed.ts, 2, 16))
+>result : Symbol(result, Decl(promiseAllKeyed.ts, 10, 9))
+>a : Symbol(a, Decl(promiseAllKeyed.ts, 2, 16))
+}
+
+async function testAllSettledKeyed() {
+>testAllSettledKeyed : Symbol(testAllSettledKeyed, Decl(promiseAllKeyed.ts, 17, 1))
+
+    const result = await Promise.allSettledKeyed(values);
+>result : Symbol(result, Decl(promiseAllKeyed.ts, 20, 9))
+>Promise.allSettledKeyed : Symbol(PromiseConstructor.allSettledKeyed, Decl(lib.esnext.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>allSettledKeyed : Symbol(PromiseConstructor.allSettledKeyed, Decl(lib.esnext.promise.d.ts, --, --))
+>values : Symbol(values, Decl(promiseAllKeyed.ts, 2, 5))
+
+    if (result.b.status === "fulfilled") {
+>result.b.status : Symbol(status, Decl(lib.es2020.promise.d.ts, --, --), Decl(lib.es2020.promise.d.ts, --, --))
+>result.b : Symbol(b, Decl(promiseAllKeyed.ts, 3, 19))
+>result : Symbol(result, Decl(promiseAllKeyed.ts, 20, 9))
+>b : Symbol(b, Decl(promiseAllKeyed.ts, 3, 19))
+>status : Symbol(status, Decl(lib.es2020.promise.d.ts, --, --), Decl(lib.es2020.promise.d.ts, --, --))
+
+        const value: string = result.b.value;
+>value : Symbol(value, Decl(promiseAllKeyed.ts, 23, 13))
+>result.b.value : Symbol(PromiseFulfilledResult.value, Decl(lib.es2020.promise.d.ts, --, --))
+>result.b : Symbol(b, Decl(promiseAllKeyed.ts, 3, 19))
+>result : Symbol(result, Decl(promiseAllKeyed.ts, 20, 9))
+>b : Symbol(b, Decl(promiseAllKeyed.ts, 3, 19))
+>value : Symbol(PromiseFulfilledResult.value, Decl(lib.es2020.promise.d.ts, --, --))
+    }
+    else {
+        const reason: any = result.b.reason;
+>reason : Symbol(reason, Decl(promiseAllKeyed.ts, 26, 13))
+>result.b.reason : Symbol(PromiseRejectedResult.reason, Decl(lib.es2020.promise.d.ts, --, --))
+>result.b : Symbol(b, Decl(promiseAllKeyed.ts, 3, 19))
+>result : Symbol(result, Decl(promiseAllKeyed.ts, 20, 9))
+>b : Symbol(b, Decl(promiseAllKeyed.ts, 3, 19))
+>reason : Symbol(PromiseRejectedResult.reason, Decl(lib.es2020.promise.d.ts, --, --))
+    }
+
+    if (result[key].status === "fulfilled") {
+>result[key].status : Symbol(status, Decl(lib.es2020.promise.d.ts, --, --), Decl(lib.es2020.promise.d.ts, --, --))
+>result : Symbol(result, Decl(promiseAllKeyed.ts, 20, 9))
+>key : Symbol(key, Decl(promiseAllKeyed.ts, 0, 13))
+>status : Symbol(status, Decl(lib.es2020.promise.d.ts, --, --), Decl(lib.es2020.promise.d.ts, --, --))
+
+        const value: number = result[key].value;
+>value : Symbol(value, Decl(promiseAllKeyed.ts, 30, 13))
+>result[key].value : Symbol(PromiseFulfilledResult.value, Decl(lib.es2020.promise.d.ts, --, --))
+>result : Symbol(result, Decl(promiseAllKeyed.ts, 20, 9))
+>key : Symbol(key, Decl(promiseAllKeyed.ts, 0, 13))
+>value : Symbol(PromiseFulfilledResult.value, Decl(lib.es2020.promise.d.ts, --, --))
+    }
+}
+
+interface Input {
+>Input : Symbol(Input, Decl(promiseAllKeyed.ts, 32, 1))
+
+    a: Promise<number>;
+>a : Symbol(Input.a, Decl(promiseAllKeyed.ts, 34, 17))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+    b: string;
+>b : Symbol(Input.b, Decl(promiseAllKeyed.ts, 35, 23))
+}
+
+declare const input: Input;
+>input : Symbol(input, Decl(promiseAllKeyed.ts, 39, 13))
+>Input : Symbol(Input, Decl(promiseAllKeyed.ts, 32, 1))
+
+const allResult: Promise<{ a: number; b: string; }> = Promise.allKeyed(input);
+>allResult : Symbol(allResult, Decl(promiseAllKeyed.ts, 41, 5))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>a : Symbol(a, Decl(promiseAllKeyed.ts, 41, 26))
+>b : Symbol(b, Decl(promiseAllKeyed.ts, 41, 37))
+>Promise.allKeyed : Symbol(PromiseConstructor.allKeyed, Decl(lib.esnext.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>allKeyed : Symbol(PromiseConstructor.allKeyed, Decl(lib.esnext.promise.d.ts, --, --))
+>input : Symbol(input, Decl(promiseAllKeyed.ts, 39, 13))
+
+const allSettledResult: Promise<{
+>allSettledResult : Symbol(allSettledResult, Decl(promiseAllKeyed.ts, 42, 5))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+    a: PromiseSettledResult<number>;
+>a : Symbol(a, Decl(promiseAllKeyed.ts, 42, 33))
+>PromiseSettledResult : Symbol(PromiseSettledResult, Decl(lib.es2020.promise.d.ts, --, --))
+
+    b: PromiseSettledResult<string>;
+>b : Symbol(b, Decl(promiseAllKeyed.ts, 43, 36))
+>PromiseSettledResult : Symbol(PromiseSettledResult, Decl(lib.es2020.promise.d.ts, --, --))
+
+}> = Promise.allSettledKeyed(input);
+>Promise.allSettledKeyed : Symbol(PromiseConstructor.allSettledKeyed, Decl(lib.esnext.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>allSettledKeyed : Symbol(PromiseConstructor.allSettledKeyed, Decl(lib.esnext.promise.d.ts, --, --))
+>input : Symbol(input, Decl(promiseAllKeyed.ts, 39, 13))
+
+Promise.try(() => 1);
+>Promise.try : Symbol(PromiseConstructor.try, Decl(lib.es2025.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>try : Symbol(PromiseConstructor.try, Decl(lib.es2025.promise.d.ts, --, --))
+
+Promise.allKeyed(0);
+>Promise.allKeyed : Symbol(PromiseConstructor.allKeyed, Decl(lib.esnext.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>allKeyed : Symbol(PromiseConstructor.allKeyed, Decl(lib.esnext.promise.d.ts, --, --))
+
+Promise.allSettledKeyed("value");
+>Promise.allSettledKeyed : Symbol(PromiseConstructor.allSettledKeyed, Decl(lib.esnext.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>allSettledKeyed : Symbol(PromiseConstructor.allSettledKeyed, Decl(lib.esnext.promise.d.ts, --, --))
+
+Promise.allKeyed(null);
+>Promise.allKeyed : Symbol(PromiseConstructor.allKeyed, Decl(lib.esnext.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>allKeyed : Symbol(PromiseConstructor.allKeyed, Decl(lib.esnext.promise.d.ts, --, --))
+
+Promise.allSettledKeyed(undefined);
+>Promise.allSettledKeyed : Symbol(PromiseConstructor.allSettledKeyed, Decl(lib.esnext.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>allSettledKeyed : Symbol(PromiseConstructor.allSettledKeyed, Decl(lib.esnext.promise.d.ts, --, --))
+>undefined : Symbol(undefined)
+
