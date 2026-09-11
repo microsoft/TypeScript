@@ -1159,26 +1159,12 @@ type ResolvedModule struct {
 	AlternateResult              string     `json:"alternateResult,omitempty"`
 }
 
-type ResolvedModuleWithFailedLookupLocations struct {
-	ResolvedModule        *ResolvedModule       `json:"resolvedModule,omitempty"`
-	FailedLookupLocations []string              `json:"failedLookupLocations" nonnil:"true"`
-	AffectingLocations    []string              `json:"affectingLocations" nonnil:"true"`
-	ResolutionDiagnostics []*DiagnosticResponse `json:"resolutionDiagnostics,omitempty"`
-}
-
 type ResolvedTypeReferenceDirective struct {
 	Primary                 bool       `json:"primary"`
 	ResolvedFileName        string     `json:"resolvedFileName"`
 	OriginalPath            string     `json:"originalPath,omitempty"`
 	PackageId               *PackageId `json:"packageId,omitempty"`
 	IsExternalLibraryImport bool       `json:"isExternalLibraryImport,omitempty"`
-}
-
-type ResolvedTypeReferenceDirectiveWithFailedLookupLocations struct {
-	ResolvedTypeReferenceDirective *ResolvedTypeReferenceDirective `json:"resolvedTypeReferenceDirective,omitempty"`
-	FailedLookupLocations          []string                        `json:"failedLookupLocations" nonnil:"true"`
-	AffectingLocations             []string                        `json:"affectingLocations" nonnil:"true"`
-	ResolutionDiagnostics          []*DiagnosticResponse           `json:"resolutionDiagnostics,omitempty"`
 }
 
 // SourceFileMetadata carries program-stored metadata about a single source file.

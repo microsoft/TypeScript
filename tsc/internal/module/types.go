@@ -62,13 +62,7 @@ func (p *PackageId) PackageName() string {
 	return p.Name
 }
 
-type LookupLocations struct {
-	FailedLookupLocations []string
-	AffectingLocations    []string
-}
-
 type ResolvedModule struct {
-	LookupLocations
 	ResolutionDiagnostics        []*ast.Diagnostic
 	ResolvedFileName             string
 	OriginalPath                 string
@@ -85,7 +79,6 @@ func (r *ResolvedModule) IsResolved() bool {
 }
 
 type ResolvedTypeReferenceDirective struct {
-	LookupLocations
 	ResolutionDiagnostics   []*ast.Diagnostic
 	Primary                 bool
 	ResolvedFileName        string

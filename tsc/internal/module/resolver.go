@@ -73,7 +73,6 @@ type resolutionState struct {
 	name                        string
 	containingDirectory         string
 	isConfigLookup              bool
-	includeLookupLocations      bool
 	features                    NodeResolutionFeatures
 	esmMode                     bool
 	conditions                  []string
@@ -88,8 +87,6 @@ type resolutionState struct {
 	// is suppressed so the checker does not attempt to extract a TS extension from the original specifier.
 	candidateEndingIsFromConfig bool
 	resolvedPackageDirectory    bool
-	failedLookupLocations       []string
-	affectingLocations          []string
 	diagnostics                 []*ast.Diagnostic
 }
 
@@ -228,25 +225,6 @@ func (r *Resolver) ResolveTypeReferenceDirective(
 	resolutionMode core.ResolutionMode,
 	redirectedReference ResolvedProjectReference,
 ) (*ResolvedTypeReferenceDirective, []DiagAndArgs) {
-	return r.resolveTypeReferenceDirective(typeReferenceDirectiveName, containingFile, resolutionMode, redirectedReference, false)
-}
-
-func (r *Resolver) ResolveTypeReferenceDirectiveWithLookupLocations(
-	typeReferenceDirectiveName string,
-	containingFile string,
-	resolutionMode core.ResolutionMode,
-	redirectedReference ResolvedProjectReference,
-) (*ResolvedTypeReferenceDirective, []DiagAndArgs) {
-	return r.resolveTypeReferenceDirective(typeReferenceDirectiveName, containingFile, resolutionMode, redirectedReference, true)
-}
-
-func (r *Resolver) resolveTypeReferenceDirective(
-	typeReferenceDirectiveName string,
-	containingFile string,
-	resolutionMode core.ResolutionMode,
-	redirectedReference ResolvedProjectReference,
-	includeLookupLocations bool,
-) (*ResolvedTypeReferenceDirective, []DiagAndArgs) {
 	containingDirectory := tspath.GetDirectoryPath(containingFile)
 	traceBuilder := r.newTraceBuilder()
 
@@ -260,7 +238,7 @@ func (r *Resolver) resolveTypeReferenceDirective(
 		fromInferredTypesContainingFile: fromInferredTypesContainingFile,
 	}
 
-	if traceBuilder == nil && !includeLookupLocations {
+	if traceBuilder == nil {
 		if cached, ok := r.typeRefDirectiveResolutionCache.Get(cacheKey); ok {
 			return cached, nil
 		}
@@ -275,29 +253,18 @@ func (r *Resolver) resolveTypeReferenceDirective(
 	}
 
 	state := newResolutionState(typeReferenceDirectiveName, containingDirectory, true /*isTypeReferenceDirective*/, resolutionMode, compilerOptions, redirectedReference, r, traceBuilder)
-	state.includeLookupLocations = includeLookupLocations
 	result := state.resolveTypeReferenceDirective(typeRoots, fromConfig, fromInferredTypesContainingFile)
 
 	if traceBuilder != nil {
 		traceBuilder.traceTypeReferenceDirectiveResult(typeReferenceDirectiveName, result)
 	}
 
-	if !includeLookupLocations {
-		r.typeRefDirectiveResolutionCache.Set(cacheKey, result)
-	}
+	r.typeRefDirectiveResolutionCache.Set(cacheKey, result)
 
 	return result, traceBuilder.getTraces()
 }
 
 func (r *Resolver) ResolveModuleName(moduleName string, containingFile string, resolutionMode core.ResolutionMode, redirectedReference ResolvedProjectReference) (*ResolvedModule, []DiagAndArgs) {
-	return r.resolveModuleName(moduleName, containingFile, resolutionMode, redirectedReference, false)
-}
-
-func (r *Resolver) ResolveModuleNameWithLookupLocations(moduleName string, containingFile string, resolutionMode core.ResolutionMode, redirectedReference ResolvedProjectReference) (*ResolvedModule, []DiagAndArgs) {
-	return r.resolveModuleName(moduleName, containingFile, resolutionMode, redirectedReference, true)
-}
-
-func (r *Resolver) resolveModuleName(moduleName string, containingFile string, resolutionMode core.ResolutionMode, redirectedReference ResolvedProjectReference, includeLookupLocations bool) (*ResolvedModule, []DiagAndArgs) {
 	containingDirectory := tspath.GetDirectoryPath(containingFile)
 	traceBuilder := r.newTraceBuilder()
 
@@ -308,7 +275,7 @@ func (r *Resolver) resolveModuleName(moduleName string, containingFile string, r
 		redirectConfigName:  getRedirectConfigName(redirectedReference),
 	}
 
-	if traceBuilder == nil && !includeLookupLocations {
+	if traceBuilder == nil {
 		if cached, ok := r.moduleResolutionCache.Get(cacheKey); ok {
 			return cached, nil
 		}
@@ -335,7 +302,6 @@ func (r *Resolver) resolveModuleName(moduleName string, containingFile string, r
 	switch moduleResolution {
 	case core.ModuleResolutionKindNode16, core.ModuleResolutionKindNodeNext, core.ModuleResolutionKindBundler:
 		state := newResolutionState(moduleName, containingDirectory, false /*isTypeReferenceDirective*/, resolutionMode, compilerOptions, redirectedReference, r, traceBuilder)
-		state.includeLookupLocations = includeLookupLocations
 		result = state.resolveNodeLike()
 	default:
 		panic(fmt.Sprintf("Unexpected moduleResolution: %d", moduleResolution))
@@ -353,10 +319,8 @@ func (r *Resolver) resolveModuleName(moduleName string, containingFile string, r
 		}
 	}
 
-	finalResult := r.tryResolveFromTypingsLocation(moduleName, containingDirectory, result, traceBuilder, includeLookupLocations)
-	if !includeLookupLocations {
-		r.moduleResolutionCache.Set(cacheKey, finalResult)
-	}
+	finalResult := r.tryResolveFromTypingsLocation(moduleName, containingDirectory, result, traceBuilder)
+	r.moduleResolutionCache.Set(cacheKey, finalResult)
 
 	return finalResult, traceBuilder.getTraces()
 }
@@ -372,7 +336,7 @@ func (r *Resolver) ResolvePackageDirectory(moduleName string, containingFile str
 	return nil
 }
 
-func (r *Resolver) tryResolveFromTypingsLocation(moduleName string, containingDirectory string, originalResult *ResolvedModule, traceBuilder *tracer, includeLookupLocations bool) *ResolvedModule {
+func (r *Resolver) tryResolveFromTypingsLocation(moduleName string, containingDirectory string, originalResult *ResolvedModule, traceBuilder *tracer) *ResolvedModule {
 	if r.typingsLocation == "" ||
 		tspath.IsExternalModuleNameRelative(moduleName) ||
 		(originalResult.ResolvedFileName != "" && tspath.ExtensionIsOneOf(originalResult.Extension, tspath.SupportedTSExtensionsWithJsonFlat)) {
@@ -389,7 +353,6 @@ func (r *Resolver) tryResolveFromTypingsLocation(moduleName string, containingDi
 		r,
 		traceBuilder,
 	)
-	state.includeLookupLocations = includeLookupLocations
 	if traceBuilder != nil {
 		traceBuilder.write(diagnostics.Auto_discovery_for_typings_is_enabled_in_project_0_Running_extra_resolution_pass_for_module_1_using_cache_location_2, r.projectName, moduleName, r.typingsLocation)
 	}
@@ -398,8 +361,6 @@ func (r *Resolver) tryResolveFromTypingsLocation(moduleName string, containingDi
 		return originalResult
 	}
 	result := state.createResolvedModule(globalResolved, true)
-	result.FailedLookupLocations = append(originalResult.FailedLookupLocations, result.FailedLookupLocations...)
-	result.AffectingLocations = append(originalResult.AffectingLocations, result.AffectingLocations...)
 	result.ResolutionDiagnostics = append(originalResult.ResolutionDiagnostics, result.ResolutionDiagnostics...)
 	return result
 }
@@ -1207,8 +1168,6 @@ func (r *resolutionState) createResolvedModuleHandlingSymlink(resolved *resolved
 
 func (r *resolutionState) createResolvedModule(resolved *resolved, isExternalLibraryImport bool) *ResolvedModule {
 	var resolvedModule ResolvedModule
-	resolvedModule.FailedLookupLocations = r.failedLookupLocations
-	resolvedModule.AffectingLocations = r.affectingLocations
 	resolvedModule.ResolutionDiagnostics = r.diagnostics
 
 	if resolved != nil {
@@ -1225,8 +1184,6 @@ func (r *resolutionState) createResolvedModule(resolved *resolved, isExternalLib
 
 func (r *resolutionState) createResolvedTypeReferenceDirective(resolved *resolved, primary bool) *ResolvedTypeReferenceDirective {
 	var resolvedTypeReferenceDirective ResolvedTypeReferenceDirective
-	resolvedTypeReferenceDirective.FailedLookupLocations = r.failedLookupLocations
-	resolvedTypeReferenceDirective.AffectingLocations = r.affectingLocations
 	resolvedTypeReferenceDirective.ResolutionDiagnostics = r.diagnostics
 
 	if resolved.isResolved() {
@@ -1650,9 +1607,6 @@ func (r *resolutionState) tryFileLookup(fileName string) bool {
 	} else if r.tracer != nil {
 		r.tracer.write(diagnostics.File_0_does_not_exist, fileName)
 	}
-	if r.includeLookupLocations {
-		r.failedLookupLocations = append(r.failedLookupLocations, fileName)
-	}
 	return false
 }
 
@@ -1815,16 +1769,10 @@ func (r *resolutionState) getPackageJsonInfo(packageDirectory string) *packagejs
 			if r.tracer != nil {
 				r.tracer.write(diagnostics.File_0_exists_according_to_earlier_cached_lookups, packageJsonPath)
 			}
-			if r.includeLookupLocations {
-				r.affectingLocations = append(r.affectingLocations, packageJsonPath)
-			}
 			return existing.WithPackageDirectory(packageDirectory)
 		} else {
 			if existing.DirectoryExists && r.tracer != nil {
 				r.tracer.write(diagnostics.File_0_does_not_exist_according_to_earlier_cached_lookups, packageJsonPath)
-			}
-			if r.includeLookupLocations {
-				r.failedLookupLocations = append(r.failedLookupLocations, packageJsonPath)
 			}
 			return nil
 		}
@@ -1847,9 +1795,6 @@ func (r *resolutionState) getPackageJsonInfo(packageDirectory string) *packagejs
 			},
 		}
 		result = r.resolver.packageJsonInfoCache.Set(packageJsonPath, result)
-		if r.includeLookupLocations {
-			r.affectingLocations = append(r.affectingLocations, packageJsonPath)
-		}
 		return result.WithPackageDirectory(packageDirectory)
 	} else {
 		if directoryExists && r.tracer != nil {
@@ -1859,9 +1804,6 @@ func (r *resolutionState) getPackageJsonInfo(packageDirectory string) *packagejs
 			PackageDirectory: packageDirectory,
 			DirectoryExists:  directoryExists,
 		})
-		if r.includeLookupLocations {
-			r.failedLookupLocations = append(r.failedLookupLocations, packageJsonPath)
-		}
 	}
 	return nil
 }

@@ -90,9 +90,7 @@ import type {
     ProjectResponse,
     ReadConfigFileResponse,
     ResolvedModule,
-    ResolvedModuleWithFailedLookupLocations,
     ResolvedTypeReferenceDirective,
-    ResolvedTypeReferenceDirectiveWithFailedLookupLocations,
     SignaturePropertyMethod,
     SignatureResponse,
     SourceFileMetadata,
@@ -214,9 +212,7 @@ export type {
     ReadConfigFileResponse,
     RequestTiming,
     ResolvedModule,
-    ResolvedModuleWithFailedLookupLocations,
     ResolvedTypeReferenceDirective,
-    ResolvedTypeReferenceDirectiveWithFailedLookupLocations,
     SourceFileMetadata,
     StringLiteralType,
     StringMappingType,
@@ -2294,14 +2290,14 @@ export class Program implements FormatDiagnosticsHost {
     }
 
     get getResolvedModule(): {
-        (file: DocumentIdentifier, moduleName: string, mode: ModuleKind): ResolvedModuleWithFailedLookupLocations | undefined;
-        gen(file: DocumentIdentifier, moduleName: string, mode: ModuleKind): Generator<ProtocolRequest, ResolvedModuleWithFailedLookupLocations | undefined, ProtocolResponse["result"]>;
+        (file: DocumentIdentifier, moduleName: string, mode: ModuleKind): ResolvedModule | undefined;
+        gen(file: DocumentIdentifier, moduleName: string, mode: ModuleKind): Generator<ProtocolRequest, ResolvedModule | undefined, ProtocolResponse["result"]>;
     } {
         const owner = this;
         return cacheGeneratorMethod(
             owner,
             "getResolvedModule",
-            function (file: DocumentIdentifier, moduleName: string, mode: ModuleKind): ResolvedModuleWithFailedLookupLocations | undefined {
+            function (file: DocumentIdentifier, moduleName: string, mode: ModuleKind): ResolvedModule | undefined {
                 const result = owner.client.apiRequest("getResolvedModule", {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
@@ -2311,7 +2307,7 @@ export class Program implements FormatDiagnosticsHost {
                 });
                 return result ?? undefined;
             },
-            function* (file: DocumentIdentifier, moduleName: string, mode: ModuleKind): Generator<ProtocolRequest, ResolvedModuleWithFailedLookupLocations | undefined, ProtocolResponse["result"]> {
+            function* (file: DocumentIdentifier, moduleName: string, mode: ModuleKind): Generator<ProtocolRequest, ResolvedModule | undefined, ProtocolResponse["result"]> {
                 const result = yield* apiRequest("getResolvedModule", {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
@@ -2325,14 +2321,14 @@ export class Program implements FormatDiagnosticsHost {
     }
 
     get getResolvedModuleFromModuleSpecifier(): {
-        (moduleSpecifier: StringLiteralLikeNode, sourceFile?: DocumentIdentifier): ResolvedModuleWithFailedLookupLocations | undefined;
-        gen(moduleSpecifier: StringLiteralLikeNode, sourceFile?: DocumentIdentifier): Generator<ProtocolRequest, ResolvedModuleWithFailedLookupLocations | undefined, ProtocolResponse["result"]>;
+        (moduleSpecifier: StringLiteralLikeNode, sourceFile?: DocumentIdentifier): ResolvedModule | undefined;
+        gen(moduleSpecifier: StringLiteralLikeNode, sourceFile?: DocumentIdentifier): Generator<ProtocolRequest, ResolvedModule | undefined, ProtocolResponse["result"]>;
     } {
         const owner = this;
         return cacheGeneratorMethod(
             owner,
             "getResolvedModuleFromModuleSpecifier",
-            function (moduleSpecifier: StringLiteralLikeNode, sourceFile?: DocumentIdentifier): ResolvedModuleWithFailedLookupLocations | undefined {
+            function (moduleSpecifier: StringLiteralLikeNode, sourceFile?: DocumentIdentifier): ResolvedModule | undefined {
                 const result = owner.client.apiRequest("getResolvedModuleFromModuleSpecifier", {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
@@ -2341,7 +2337,7 @@ export class Program implements FormatDiagnosticsHost {
                 });
                 return result ?? undefined;
             },
-            function* (moduleSpecifier: StringLiteralLikeNode, sourceFile?: DocumentIdentifier): Generator<ProtocolRequest, ResolvedModuleWithFailedLookupLocations | undefined, ProtocolResponse["result"]> {
+            function* (moduleSpecifier: StringLiteralLikeNode, sourceFile?: DocumentIdentifier): Generator<ProtocolRequest, ResolvedModule | undefined, ProtocolResponse["result"]> {
                 const result = yield* apiRequest("getResolvedModuleFromModuleSpecifier", {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
@@ -2354,14 +2350,14 @@ export class Program implements FormatDiagnosticsHost {
     }
 
     get getResolvedTypeReferenceDirective(): {
-        (file: DocumentIdentifier, typeDirectiveName: string, mode: ModuleKind): ResolvedTypeReferenceDirectiveWithFailedLookupLocations | undefined;
-        gen(file: DocumentIdentifier, typeDirectiveName: string, mode: ModuleKind): Generator<ProtocolRequest, ResolvedTypeReferenceDirectiveWithFailedLookupLocations | undefined, ProtocolResponse["result"]>;
+        (file: DocumentIdentifier, typeDirectiveName: string, mode: ModuleKind): ResolvedTypeReferenceDirective | undefined;
+        gen(file: DocumentIdentifier, typeDirectiveName: string, mode: ModuleKind): Generator<ProtocolRequest, ResolvedTypeReferenceDirective | undefined, ProtocolResponse["result"]>;
     } {
         const owner = this;
         return cacheGeneratorMethod(
             owner,
             "getResolvedTypeReferenceDirective",
-            function (file: DocumentIdentifier, typeDirectiveName: string, mode: ModuleKind): ResolvedTypeReferenceDirectiveWithFailedLookupLocations | undefined {
+            function (file: DocumentIdentifier, typeDirectiveName: string, mode: ModuleKind): ResolvedTypeReferenceDirective | undefined {
                 const result = owner.client.apiRequest("getResolvedTypeReferenceDirective", {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
@@ -2371,7 +2367,7 @@ export class Program implements FormatDiagnosticsHost {
                 });
                 return result ?? undefined;
             },
-            function* (file: DocumentIdentifier, typeDirectiveName: string, mode: ModuleKind): Generator<ProtocolRequest, ResolvedTypeReferenceDirectiveWithFailedLookupLocations | undefined, ProtocolResponse["result"]> {
+            function* (file: DocumentIdentifier, typeDirectiveName: string, mode: ModuleKind): Generator<ProtocolRequest, ResolvedTypeReferenceDirective | undefined, ProtocolResponse["result"]> {
                 const result = yield* apiRequest("getResolvedTypeReferenceDirective", {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
@@ -2385,14 +2381,14 @@ export class Program implements FormatDiagnosticsHost {
     }
 
     get getResolvedTypeReferenceDirectiveFromTypeReferenceDirective(): {
-        (typeReferenceDirective: FileReference, sourceFile: DocumentIdentifier): ResolvedTypeReferenceDirectiveWithFailedLookupLocations | undefined;
-        gen(typeReferenceDirective: FileReference, sourceFile: DocumentIdentifier): Generator<ProtocolRequest, ResolvedTypeReferenceDirectiveWithFailedLookupLocations | undefined, ProtocolResponse["result"]>;
+        (typeReferenceDirective: FileReference, sourceFile: DocumentIdentifier): ResolvedTypeReferenceDirective | undefined;
+        gen(typeReferenceDirective: FileReference, sourceFile: DocumentIdentifier): Generator<ProtocolRequest, ResolvedTypeReferenceDirective | undefined, ProtocolResponse["result"]>;
     } {
         const owner = this;
         return cacheGeneratorMethod(
             owner,
             "getResolvedTypeReferenceDirectiveFromTypeReferenceDirective",
-            function (typeReferenceDirective: FileReference, sourceFile: DocumentIdentifier): ResolvedTypeReferenceDirectiveWithFailedLookupLocations | undefined {
+            function (typeReferenceDirective: FileReference, sourceFile: DocumentIdentifier): ResolvedTypeReferenceDirective | undefined {
                 const result = owner.client.apiRequest("getResolvedTypeReferenceDirectiveFromTypeReferenceDirective", {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
@@ -2402,7 +2398,7 @@ export class Program implements FormatDiagnosticsHost {
                 });
                 return result ?? undefined;
             },
-            function* (typeReferenceDirective: FileReference, sourceFile: DocumentIdentifier): Generator<ProtocolRequest, ResolvedTypeReferenceDirectiveWithFailedLookupLocations | undefined, ProtocolResponse["result"]> {
+            function* (typeReferenceDirective: FileReference, sourceFile: DocumentIdentifier): Generator<ProtocolRequest, ResolvedTypeReferenceDirective | undefined, ProtocolResponse["result"]> {
                 const result = yield* apiRequest("getResolvedTypeReferenceDirectiveFromTypeReferenceDirective", {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,

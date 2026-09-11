@@ -1751,53 +1751,37 @@ func (s *Session) handleGetSourceFileMetadata(ctx context.Context, params *GetSo
 	}, nil
 }
 
-func newResolvedModuleResponse(resolution *module.ResolvedModule) *ResolvedModuleWithFailedLookupLocations {
-	if resolution == nil {
+func newResolvedModuleResponse(resolution *module.ResolvedModule) *ResolvedModule {
+	if !resolution.IsResolved() {
 		return nil
 	}
-	result := &ResolvedModuleWithFailedLookupLocations{
-		FailedLookupLocations: append([]string{}, resolution.FailedLookupLocations...),
-		AffectingLocations:    append([]string{}, resolution.AffectingLocations...),
-		ResolutionDiagnostics: NewDiagnosticResponses(resolution.ResolutionDiagnostics),
+	return &ResolvedModule{
+		ResolvedFileName:             resolution.ResolvedFileName,
+		OriginalPath:                 resolution.OriginalPath,
+		Extension:                    resolution.Extension,
+		ResolvedUsingTsExtension:     resolution.ResolvedUsingTsExtension,
+		ResolvedUsingExtraExtensions: resolution.ResolvedUsingExtraExtensions,
+		PackageId:                    NewPackageId(resolution.PackageId),
+		IsExternalLibraryImport:      resolution.IsExternalLibraryImport,
+		AlternateResult:              resolution.AlternateResult,
 	}
-	if resolution.IsResolved() {
-		result.ResolvedModule = &ResolvedModule{
-			ResolvedFileName:             resolution.ResolvedFileName,
-			OriginalPath:                 resolution.OriginalPath,
-			Extension:                    resolution.Extension,
-			ResolvedUsingTsExtension:     resolution.ResolvedUsingTsExtension,
-			ResolvedUsingExtraExtensions: resolution.ResolvedUsingExtraExtensions,
-			PackageId:                    NewPackageId(resolution.PackageId),
-			IsExternalLibraryImport:      resolution.IsExternalLibraryImport,
-			AlternateResult:              resolution.AlternateResult,
-		}
-	}
-	return result
 }
 
-func newResolvedTypeReferenceDirectiveResponse(resolution *module.ResolvedTypeReferenceDirective) *ResolvedTypeReferenceDirectiveWithFailedLookupLocations {
-	if resolution == nil {
+func newResolvedTypeReferenceDirectiveResponse(resolution *module.ResolvedTypeReferenceDirective) *ResolvedTypeReferenceDirective {
+	if resolution == nil || !resolution.IsResolved() {
 		return nil
 	}
-	result := &ResolvedTypeReferenceDirectiveWithFailedLookupLocations{
-		FailedLookupLocations: append([]string{}, resolution.FailedLookupLocations...),
-		AffectingLocations:    append([]string{}, resolution.AffectingLocations...),
-		ResolutionDiagnostics: NewDiagnosticResponses(resolution.ResolutionDiagnostics),
+	return &ResolvedTypeReferenceDirective{
+		Primary:                 resolution.Primary,
+		ResolvedFileName:        resolution.ResolvedFileName,
+		OriginalPath:            resolution.OriginalPath,
+		PackageId:               NewPackageId(resolution.PackageId),
+		IsExternalLibraryImport: resolution.IsExternalLibraryImport,
 	}
-	if resolution.IsResolved() {
-		result.ResolvedTypeReferenceDirective = &ResolvedTypeReferenceDirective{
-			Primary:                 resolution.Primary,
-			ResolvedFileName:        resolution.ResolvedFileName,
-			OriginalPath:            resolution.OriginalPath,
-			PackageId:               NewPackageId(resolution.PackageId),
-			IsExternalLibraryImport: resolution.IsExternalLibraryImport,
-		}
-	}
-	return result
 }
 
 // @gen-proto-nullable
-func (s *Session) handleGetResolvedModule(ctx context.Context, params *GetResolvedModuleParams) (*ResolvedModuleWithFailedLookupLocations, error) {
+func (s *Session) handleGetResolvedModule(ctx context.Context, params *GetResolvedModuleParams) (*ResolvedModule, error) {
 	sd, err := s.getSnapshotData(params.Snapshot)
 	if err != nil {
 		return nil, err
@@ -1810,11 +1794,11 @@ func (s *Session) handleGetResolvedModule(ctx context.Context, params *GetResolv
 	if err != nil {
 		return nil, err
 	}
-	return newResolvedModuleResponse(program.GetResolvedModuleWithLookupLocations(sourceFile, params.ModuleName, params.Mode)), nil
+	return newResolvedModuleResponse(program.GetResolvedModule(sourceFile, params.ModuleName, params.Mode)), nil
 }
 
 // @gen-proto-nullable
-func (s *Session) handleGetResolvedModuleFromModuleSpecifier(ctx context.Context, params *GetResolvedModuleFromModuleSpecifierParams) (*ResolvedModuleWithFailedLookupLocations, error) {
+func (s *Session) handleGetResolvedModuleFromModuleSpecifier(ctx context.Context, params *GetResolvedModuleFromModuleSpecifierParams) (*ResolvedModule, error) {
 	sd, err := s.getSnapshotData(params.Snapshot)
 	if err != nil {
 		return nil, err
@@ -1841,11 +1825,11 @@ func (s *Session) handleGetResolvedModuleFromModuleSpecifier(ctx context.Context
 		return nil, fmt.Errorf("%w: moduleSpecifier must have a SourceFile ancestor or sourceFile must be provided", ErrClientError)
 	}
 	mode := program.GetModeForUsageLocation(sourceFile, node)
-	return newResolvedModuleResponse(program.GetResolvedModuleWithLookupLocations(sourceFile, node.Text(), mode)), nil
+	return newResolvedModuleResponse(program.GetResolvedModule(sourceFile, node.Text(), mode)), nil
 }
 
 // @gen-proto-nullable
-func (s *Session) handleGetResolvedTypeReferenceDirective(ctx context.Context, params *GetResolvedTypeReferenceDirectiveParams) (*ResolvedTypeReferenceDirectiveWithFailedLookupLocations, error) {
+func (s *Session) handleGetResolvedTypeReferenceDirective(ctx context.Context, params *GetResolvedTypeReferenceDirectiveParams) (*ResolvedTypeReferenceDirective, error) {
 	sd, err := s.getSnapshotData(params.Snapshot)
 	if err != nil {
 		return nil, err
@@ -1858,11 +1842,11 @@ func (s *Session) handleGetResolvedTypeReferenceDirective(ctx context.Context, p
 	if err != nil {
 		return nil, err
 	}
-	return newResolvedTypeReferenceDirectiveResponse(program.GetResolvedTypeReferenceDirectiveWithLookupLocations(sourceFile, params.TypeDirectiveName, params.Mode)), nil
+	return newResolvedTypeReferenceDirectiveResponse(program.GetResolvedTypeReferenceDirective(sourceFile, params.TypeDirectiveName, params.Mode)), nil
 }
 
 // @gen-proto-nullable
-func (s *Session) handleGetResolvedTypeReferenceDirectiveFromReference(ctx context.Context, params *GetResolvedTypeReferenceDirectiveFromReferenceParams) (*ResolvedTypeReferenceDirectiveWithFailedLookupLocations, error) {
+func (s *Session) handleGetResolvedTypeReferenceDirectiveFromReference(ctx context.Context, params *GetResolvedTypeReferenceDirectiveFromReferenceParams) (*ResolvedTypeReferenceDirective, error) {
 	sd, err := s.getSnapshotData(params.Snapshot)
 	if err != nil {
 		return nil, err
@@ -1879,7 +1863,7 @@ func (s *Session) handleGetResolvedTypeReferenceDirectiveFromReference(ctx conte
 	if mode == core.ResolutionModeNone {
 		mode = program.GetDefaultResolutionModeForFile(sourceFile)
 	}
-	return newResolvedTypeReferenceDirectiveResponse(program.GetResolvedTypeReferenceDirectiveWithLookupLocations(sourceFile, params.TypeDirectiveName, mode)), nil
+	return newResolvedTypeReferenceDirectiveResponse(program.GetResolvedTypeReferenceDirective(sourceFile, params.TypeDirectiveName, mode)), nil
 }
 
 // handleGetSymbolAtPosition returns the symbol at a position in a file.

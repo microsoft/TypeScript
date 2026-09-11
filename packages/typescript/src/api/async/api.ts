@@ -73,9 +73,7 @@ import type {
     ProjectResponse,
     ReadConfigFileResponse,
     ResolvedModule,
-    ResolvedModuleWithFailedLookupLocations,
     ResolvedTypeReferenceDirective,
-    ResolvedTypeReferenceDirectiveWithFailedLookupLocations,
     SignaturePropertyMethod,
     SignatureResponse,
     SourceFileMetadata,
@@ -197,9 +195,7 @@ export type {
     ReadConfigFileResponse,
     RequestTiming,
     ResolvedModule,
-    ResolvedModuleWithFailedLookupLocations,
     ResolvedTypeReferenceDirective,
-    ResolvedTypeReferenceDirectiveWithFailedLookupLocations,
     SourceFileMetadata,
     StringLiteralType,
     StringMappingType,
@@ -1239,7 +1235,7 @@ export class Program implements FormatDiagnosticsHost {
         file: DocumentIdentifier,
         moduleName: string,
         mode: ModuleKind,
-    ): Promise<ResolvedModuleWithFailedLookupLocations | undefined> {
+    ): Promise<ResolvedModule | undefined> {
         const result = await this.client.apiRequest("getResolvedModule", {
             snapshot: this.snapshotId,
             project: this.project.id,
@@ -1253,7 +1249,7 @@ export class Program implements FormatDiagnosticsHost {
     async getResolvedModuleFromModuleSpecifier(
         moduleSpecifier: StringLiteralLikeNode,
         sourceFile?: DocumentIdentifier,
-    ): Promise<ResolvedModuleWithFailedLookupLocations | undefined> {
+    ): Promise<ResolvedModule | undefined> {
         const result = await this.client.apiRequest("getResolvedModuleFromModuleSpecifier", {
             snapshot: this.snapshotId,
             project: this.project.id,
@@ -1267,7 +1263,7 @@ export class Program implements FormatDiagnosticsHost {
         file: DocumentIdentifier,
         typeDirectiveName: string,
         mode: ModuleKind,
-    ): Promise<ResolvedTypeReferenceDirectiveWithFailedLookupLocations | undefined> {
+    ): Promise<ResolvedTypeReferenceDirective | undefined> {
         const result = await this.client.apiRequest("getResolvedTypeReferenceDirective", {
             snapshot: this.snapshotId,
             project: this.project.id,
@@ -1281,7 +1277,7 @@ export class Program implements FormatDiagnosticsHost {
     async getResolvedTypeReferenceDirectiveFromTypeReferenceDirective(
         typeReferenceDirective: FileReference,
         sourceFile: DocumentIdentifier,
-    ): Promise<ResolvedTypeReferenceDirectiveWithFailedLookupLocations | undefined> {
+    ): Promise<ResolvedTypeReferenceDirective | undefined> {
         const result = await this.client.apiRequest("getResolvedTypeReferenceDirectiveFromTypeReferenceDirective", {
             snapshot: this.snapshotId,
             project: this.project.id,

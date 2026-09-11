@@ -348,22 +348,18 @@ import "missing";`,
 
         const resolvedModule = await program.getResolvedModule("/src/index.ts", "pkg", ModuleKind.ESNext);
         assert.ok(resolvedModule);
-        assert.equal(resolvedModule.resolvedModule?.resolvedFileName, "/node_modules/pkg/index.d.ts");
-        assert.ok(resolvedModule.affectingLocations.includes("/node_modules/pkg/package.json"));
+        assert.equal(resolvedModule.resolvedFileName, "/node_modules/pkg/index.d.ts");
 
         const resolvedModuleWithLocations = await program.getResolvedModuleFromModuleSpecifier(pkgSpecifier);
         assert.ok(resolvedModuleWithLocations);
-        assert.equal(resolvedModuleWithLocations.resolvedModule?.packageId?.name, "pkg");
-        assert.ok(resolvedModuleWithLocations.affectingLocations.includes("/node_modules/pkg/package.json"));
+        assert.equal(resolvedModuleWithLocations.packageId?.name, "pkg");
 
         const missingModule = await program.getResolvedModule(
             "/src/index.ts",
             "missing",
             ModuleKind.ESNext,
         );
-        assert.ok(missingModule);
-        assert.equal(missingModule.resolvedModule, undefined);
-        assert.ok(missingModule.failedLookupLocations.length);
+        assert.equal(missingModule, undefined);
 
         const typeReference = sourceFile.typeReferenceDirectives[0];
         const resolvedTypeReference = await program.getResolvedTypeReferenceDirective(
@@ -371,15 +367,14 @@ import "missing";`,
             "pkg-types",
             ModuleKind.None,
         );
-        assert.equal(resolvedTypeReference?.resolvedTypeReferenceDirective?.resolvedFileName, "/node_modules/@types/pkg-types/index.d.ts");
-        assert.ok(resolvedTypeReference?.affectingLocations.includes("/node_modules/@types/pkg-types/package.json"));
+        assert.equal(resolvedTypeReference?.resolvedFileName, "/node_modules/@types/pkg-types/index.d.ts");
 
         const resolvedTypeReferenceWithLocations = await program.getResolvedTypeReferenceDirectiveFromTypeReferenceDirective(
             typeReference,
             "/src/index.ts",
         );
         assert.ok(resolvedTypeReferenceWithLocations);
-        assert.ok(resolvedTypeReferenceWithLocations.affectingLocations.includes("/node_modules/@types/pkg-types/package.json"));
+        assert.equal(resolvedTypeReferenceWithLocations.resolvedFileName, "/node_modules/@types/pkg-types/index.d.ts");
 
         await program.dispose();
     });

@@ -45,10 +45,10 @@ export interface APIMethodInfo {
     getSourceFile: APIMethod<GetSourceFileParams, SourceFileResponse | null>;
     getSourceFileNames: APIMethod<GetSourceFileNamesParams, string[]>;
     getSourceFileMetadata: APIMethod<GetSourceFileParams, SourceFileMetadata | null>;
-    getResolvedModule: APIMethod<GetResolvedModuleParams, ResolvedModuleWithFailedLookupLocations | null>;
-    getResolvedModuleFromModuleSpecifier: APIMethod<GetResolvedModuleFromModuleSpecifierParams, ResolvedModuleWithFailedLookupLocations | null>;
-    getResolvedTypeReferenceDirective: APIMethod<GetResolvedTypeReferenceDirectiveParams, ResolvedTypeReferenceDirectiveWithFailedLookupLocations | null>;
-    getResolvedTypeReferenceDirectiveFromTypeReferenceDirective: APIMethod<GetResolvedTypeReferenceDirectiveFromReferenceParams, ResolvedTypeReferenceDirectiveWithFailedLookupLocations | null>;
+    getResolvedModule: APIMethod<GetResolvedModuleParams, ResolvedModule | null>;
+    getResolvedModuleFromModuleSpecifier: APIMethod<GetResolvedModuleFromModuleSpecifierParams, ResolvedModule | null>;
+    getResolvedTypeReferenceDirective: APIMethod<GetResolvedTypeReferenceDirectiveParams, ResolvedTypeReferenceDirective | null>;
+    getResolvedTypeReferenceDirectiveFromTypeReferenceDirective: APIMethod<GetResolvedTypeReferenceDirectiveFromReferenceParams, ResolvedTypeReferenceDirective | null>;
     getConfigFileNames: APIMethod<GetProjectDiagnosticsParams, string[] | null>;
     getConfigSourceFile: APIMethod<GetSourceFileParams, SourceFileResponse | null>;
     resolveName: APIMethod<ResolveNameParams, SymbolResponse | null>;
@@ -487,11 +487,15 @@ export interface GetResolvedModuleParams {
     mode: ModuleKind;
 }
 
-export interface ResolvedModuleWithFailedLookupLocations {
-    resolvedModule?: ResolvedModule | undefined;
-    failedLookupLocations: string[];
-    affectingLocations: string[];
-    resolutionDiagnostics?: DiagnosticResponse[] | undefined;
+export interface ResolvedModule {
+    resolvedFileName: string;
+    originalPath?: string | undefined;
+    extension: string;
+    resolvedUsingTsExtension?: boolean | undefined;
+    resolvedUsingExtraExtensions?: boolean | undefined;
+    packageId?: PackageId | undefined;
+    isExternalLibraryImport?: boolean | undefined;
+    alternateResult?: string | undefined;
 }
 
 export interface GetResolvedModuleFromModuleSpecifierParams {
@@ -509,11 +513,12 @@ export interface GetResolvedTypeReferenceDirectiveParams {
     mode: ModuleKind;
 }
 
-export interface ResolvedTypeReferenceDirectiveWithFailedLookupLocations {
-    resolvedTypeReferenceDirective?: ResolvedTypeReferenceDirective | undefined;
-    failedLookupLocations: string[];
-    affectingLocations: string[];
-    resolutionDiagnostics?: DiagnosticResponse[] | undefined;
+export interface ResolvedTypeReferenceDirective {
+    primary: boolean;
+    resolvedFileName: string;
+    originalPath?: string | undefined;
+    packageId?: PackageId | undefined;
+    isExternalLibraryImport?: boolean | undefined;
 }
 
 export interface GetResolvedTypeReferenceDirectiveFromReferenceParams {
@@ -1459,23 +1464,11 @@ export interface TranspileOptions {
     reportDiagnostics?: boolean | undefined;
 }
 
-export interface ResolvedModule {
-    resolvedFileName: string;
-    originalPath?: string | undefined;
-    extension: string;
-    resolvedUsingTsExtension?: boolean | undefined;
-    resolvedUsingExtraExtensions?: boolean | undefined;
-    packageId?: PackageId | undefined;
-    isExternalLibraryImport?: boolean | undefined;
-    alternateResult?: string | undefined;
-}
-
-export interface ResolvedTypeReferenceDirective {
-    primary: boolean;
-    resolvedFileName: string;
-    originalPath?: string | undefined;
-    packageId?: PackageId | undefined;
-    isExternalLibraryImport?: boolean | undefined;
+export interface PackageId {
+    name: string;
+    subModuleName: string;
+    version: string;
+    peerDependencies: string;
 }
 
 export interface ImportAdderAction {
@@ -1541,13 +1534,6 @@ export interface ProjectFileChanges {
     changedFiles?: string[] | undefined;
     /** DeletedFiles lists source file paths removed from the project's program. */
     deletedFiles?: string[] | undefined;
-}
-
-export interface PackageId {
-    name: string;
-    subModuleName: string;
-    version: string;
-    peerDependencies: string;
 }
 
 /** CompletionEntryLabelDetailsResponse holds additional label display text for a completion entry. */

@@ -612,12 +612,6 @@ func (p *Program) GetResolvedModule(file ast.HasFileName, moduleReference string
 	return nil
 }
 
-func (p *Program) GetResolvedModuleWithLookupLocations(file ast.HasFileName, moduleReference string, mode core.ResolutionMode) *module.ResolvedModule {
-	redirect, fileName := p.projectReferenceFileMapper.getRedirectForResolution(file)
-	resolved, _ := p.resolver.ResolveModuleNameWithLookupLocations(moduleReference, fileName, mode, redirect)
-	return resolved
-}
-
 func (p *Program) GetResolvedModuleFromModuleSpecifier(file ast.HasFileName, moduleSpecifier *ast.StringLiteralLike) *module.ResolvedModule {
 	if !ast.IsStringLiteralLike(moduleSpecifier) {
 		panic("moduleSpecifier must be a StringLiteralLike")
@@ -2114,12 +2108,6 @@ func (p *Program) GetResolvedTypeReferenceDirective(file ast.HasFileName, typeDi
 		}
 	}
 	return nil
-}
-
-func (p *Program) GetResolvedTypeReferenceDirectiveWithLookupLocations(file ast.HasFileName, typeDirectiveName string, mode core.ResolutionMode) *module.ResolvedTypeReferenceDirective {
-	redirect, fileName := p.projectReferenceFileMapper.getRedirectForResolution(file)
-	resolved, _ := p.resolver.ResolveTypeReferenceDirectiveWithLookupLocations(typeDirectiveName, fileName, mode, redirect)
-	return resolved
 }
 
 func (p *Program) GetResolvedTypeReferenceDirectives() map[tspath.Path]module.ModeAwareCache[*module.ResolvedTypeReferenceDirective] {
