@@ -709,8 +709,12 @@ function addSyntheticNodes(children: Node[], pos: number, end: number, parent: N
     scanner.resetTokenState(pos);
     scanner.scan();
     while (pos < end) {
-        const token = scanner.getToken();
-        const tokenEnd = scanner.getTokenEnd();
+        let token = scanner.getToken();
+        let tokenEnd = scanner.getTokenEnd();
+        if (tokenEnd > end && token === SyntaxKind.LessThanLessThanToken) {
+            token = scanner.reScanLessThanToken();
+            tokenEnd = scanner.getTokenEnd();
+        }
         if (tokenEnd <= end) {
             // An identifier should never appear as trivia between AST children; skip defensively.
             if (token !== SyntaxKind.Identifier) {
