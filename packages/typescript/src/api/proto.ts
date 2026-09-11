@@ -115,7 +115,7 @@ export function toUpdateSnapshotRequest(params?: UpdateSnapshotParams, snapshot?
         : openProjects;
     return {
         ...rest,
-        ...(snapshot !== undefined ? { snapshot } : {}),
-        ...(mergedOpenProjects !== undefined ? { openProjects: mergedOpenProjects } : {}),
+        snapshot,
+        openProjects: mergedOpenProjects,
     };
 }

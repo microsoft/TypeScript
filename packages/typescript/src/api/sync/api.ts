@@ -235,8 +235,8 @@ export interface TranspileOptions {
 
 export interface TranspileOutput {
     outputText: string;
-    diagnostics?: readonly Diagnostic[];
-    sourceMapText?: string;
+    diagnostics?: readonly Diagnostic[] | undefined;
+    sourceMapText?: string | undefined;
 }
 
 export { all, type AllAPIRequestGenerator, type AnyAPIRequestGenerator, type APIRequestGenerator, defer, type DeferredAPIRequestGenerator, type ExecutedGeneratorsResults } from "./generatorSupport.ts";
@@ -879,8 +879,8 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
                 const data: CreateProgramResponse = owner.client.apiRequest("createProgram", {
                     rootFiles,
                     createProgramOptions,
-                    ...(oldProgram ? { oldProgram: { snapshot: oldProgram.snapshotId, project: oldProgram.getProject().id } } : {}),
-                    ...(fileChanges ? { fileChanges } : {}),
+                    oldProgram: oldProgram ? { snapshot: oldProgram.snapshotId, project: oldProgram.getProject().id } : undefined,
+                    fileChanges,
                 });
                 if (!data.project) {
                     throw new Error("createProgram did not return a project");
@@ -914,8 +914,8 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
                 const data: CreateProgramResponse = yield* apiRequest("createProgram", {
                     rootFiles,
                     createProgramOptions,
-                    ...(oldProgram ? { oldProgram: { snapshot: oldProgram.snapshotId, project: oldProgram.getProject().id } } : {}),
-                    ...(fileChanges ? { fileChanges } : {}),
+                    oldProgram: oldProgram ? { snapshot: oldProgram.snapshotId, project: oldProgram.getProject().id } : undefined,
+                    fileChanges,
                 });
                 if (!data.project) {
                     throw new Error("createProgram did not return a project");
@@ -2088,8 +2088,8 @@ export class LanguageService {
                     project: owner.project.id,
                     file: document,
                     position,
-                    ...(options?.triggerCharacter !== undefined ? { triggerCharacter: options.triggerCharacter } : {}),
-                    ...(options?.includeSymbol !== undefined ? { includeSymbol: options.includeSymbol } : {}),
+                    triggerCharacter: options?.triggerCharacter,
+                    includeSymbol: options?.includeSymbol,
                 });
                 if (!data) return undefined;
                 return {
@@ -2106,8 +2106,8 @@ export class LanguageService {
                     project: owner.project.id,
                     file: document,
                     position,
-                    ...(options?.triggerCharacter !== undefined ? { triggerCharacter: options.triggerCharacter } : {}),
-                    ...(options?.includeSymbol !== undefined ? { includeSymbol: options.includeSymbol } : {}),
+                    triggerCharacter: options?.triggerCharacter,
+                    includeSymbol: options?.includeSymbol,
                 });
                 if (!data) return undefined;
                 return {
@@ -2523,7 +2523,7 @@ export class Program implements FormatDiagnosticsHost {
                 const data = owner.client.apiRequest("getSyntacticDiagnostics", {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
-                    ...(files !== undefined ? { files } : {}),
+                    files,
                 });
                 return data ?? [];
             },
@@ -2534,7 +2534,7 @@ export class Program implements FormatDiagnosticsHost {
                 const data = yield* apiRequest("getSyntacticDiagnostics", {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
-                    ...(files !== undefined ? { files } : {}),
+                    files,
                 });
                 return data ?? [];
             },
@@ -2560,7 +2560,7 @@ export class Program implements FormatDiagnosticsHost {
                 const data = owner.client.apiRequest("getBindDiagnostics", {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
-                    ...(files !== undefined ? { files } : {}),
+                    files,
                 });
                 return data ?? [];
             },
@@ -2571,7 +2571,7 @@ export class Program implements FormatDiagnosticsHost {
                 const data = yield* apiRequest("getBindDiagnostics", {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
-                    ...(files !== undefined ? { files } : {}),
+                    files,
                 });
                 return data ?? [];
             },
@@ -2597,7 +2597,7 @@ export class Program implements FormatDiagnosticsHost {
                 const data = owner.client.apiRequest("getSemanticDiagnostics", {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
-                    ...(files !== undefined ? { files } : {}),
+                    files,
                 });
                 return data ?? [];
             },
@@ -2608,7 +2608,7 @@ export class Program implements FormatDiagnosticsHost {
                 const data = yield* apiRequest("getSemanticDiagnostics", {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
-                    ...(files !== undefined ? { files } : {}),
+                    files,
                 });
                 return data ?? [];
             },
@@ -2634,7 +2634,7 @@ export class Program implements FormatDiagnosticsHost {
                 const data = owner.client.apiRequest("getSuggestionDiagnostics", {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
-                    ...(files !== undefined ? { files } : {}),
+                    files,
                 });
                 return data ?? [];
             },
@@ -2645,7 +2645,7 @@ export class Program implements FormatDiagnosticsHost {
                 const data = yield* apiRequest("getSuggestionDiagnostics", {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
-                    ...(files !== undefined ? { files } : {}),
+                    files,
                 });
                 return data ?? [];
             },
@@ -2671,7 +2671,7 @@ export class Program implements FormatDiagnosticsHost {
                 const data = owner.client.apiRequest("getDeclarationDiagnostics", {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
-                    ...(files !== undefined ? { files } : {}),
+                    files,
                 });
                 return data ?? [];
             },
@@ -2682,7 +2682,7 @@ export class Program implements FormatDiagnosticsHost {
                 const data = yield* apiRequest("getDeclarationDiagnostics", {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
-                    ...(files !== undefined ? { files } : {}),
+                    files,
                 });
                 return data ?? [];
             },
@@ -2790,7 +2790,7 @@ export class Program implements FormatDiagnosticsHost {
                 const response = owner.client.apiRequest("emit", {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
-                    ...(emitOnly !== undefined ? { emitOnly } : {}),
+                    emitOnly,
                 });
                 const fileSystem = response.emittedFilesContents.length
                     ? {
@@ -2809,7 +2809,7 @@ export class Program implements FormatDiagnosticsHost {
                 const response = yield* apiRequest("emit", {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
-                    ...(emitOnly !== undefined ? { emitOnly } : {}),
+                    emitOnly,
                 });
                 const fileSystem = response.emittedFilesContents.length
                     ? {
@@ -2842,7 +2842,7 @@ export class Program implements FormatDiagnosticsHost {
                 const response = owner.client.apiRequest("emitToString", {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
-                    ...(emitOnly !== undefined ? { emitOnly } : {}),
+                    emitOnly,
                 });
                 return toEmitOutput(response);
             },
@@ -2850,7 +2850,7 @@ export class Program implements FormatDiagnosticsHost {
                 const response = yield* apiRequest("emitToString", {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
-                    ...(emitOnly !== undefined ? { emitOnly } : {}),
+                    emitOnly,
                 });
                 return toEmitOutput(response);
             },
@@ -3465,14 +3465,10 @@ export class Checker {
                     project: owner.project.id,
                     name,
                     meaning,
-                    ...(isNode ? { location: getNodeId(location as Node) } : {}),
-                    ...(!isNode && location
-                        ? {
-                            file: (location as DocumentPosition).document,
-                            position: (location as DocumentPosition).position,
-                        }
-                        : {}),
-                    ...(excludeGlobals !== undefined ? { excludeGlobals } : {}),
+                    location: isNode ? getNodeId(location as Node) : undefined,
+                    file: !isNode && location ? (location as DocumentPosition).document : undefined,
+                    position: !isNode && location ? (location as DocumentPosition).position : undefined,
+                    excludeGlobals,
                 });
                 return data ? owner.objectRegistry.getOrCreateSymbol(data) : undefined;
             },
@@ -3484,14 +3480,10 @@ export class Checker {
                     project: owner.project.id,
                     name,
                     meaning,
-                    ...(isNode ? { location: getNodeId(location as Node) } : {}),
-                    ...(!isNode && location
-                        ? {
-                            file: (location as DocumentPosition).document,
-                            position: (location as DocumentPosition).position,
-                        }
-                        : {}),
-                    ...(excludeGlobals !== undefined ? { excludeGlobals } : {}),
+                    location: isNode ? getNodeId(location as Node) : undefined,
+                    file: !isNode && location ? (location as DocumentPosition).document : undefined,
+                    position: !isNode && location ? (location as DocumentPosition).position : undefined,
+                    excludeGlobals,
                 });
                 return data ? owner.objectRegistry.getOrCreateSymbol(data) : undefined;
             },
@@ -3516,12 +3508,9 @@ export class Checker {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
                     meaning,
-                    ...(isNode
-                        ? { location: getNodeId(location as Node) }
-                        : {
-                            file: (location as DocumentPosition).document,
-                            position: (location as DocumentPosition).position,
-                        }),
+                    location: isNode ? getNodeId(location as Node) : undefined,
+                    file: isNode ? undefined : (location as DocumentPosition).document,
+                    position: isNode ? undefined : (location as DocumentPosition).position,
                 });
                 return data ? data.map(d => owner.objectRegistry.getOrCreateSymbol(d)) : [];
             },
@@ -3532,12 +3521,9 @@ export class Checker {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
                     meaning,
-                    ...(isNode
-                        ? { location: getNodeId(location as Node) }
-                        : {
-                            file: (location as DocumentPosition).document,
-                            position: (location as DocumentPosition).position,
-                        }),
+                    location: isNode ? getNodeId(location as Node) : undefined,
+                    file: isNode ? undefined : (location as DocumentPosition).document,
+                    position: isNode ? undefined : (location as DocumentPosition).position,
                 });
                 return data ? data.map(d => owner.objectRegistry.getOrCreateSymbol(d)) : [];
             },
@@ -4075,8 +4061,8 @@ export class Checker {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
                     type: type.id,
-                    ...(enclosingDeclaration ? { location: getNodeId(enclosingDeclaration) } : {}),
-                    ...(flags !== undefined ? { flags } : {}),
+                    location: enclosingDeclaration ? getNodeId(enclosingDeclaration) : undefined,
+                    flags,
                 });
                 if (!binaryData) return undefined;
                 return decodeNode(binaryData) as TypeNode;
@@ -4086,8 +4072,8 @@ export class Checker {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
                     type: type.id,
-                    ...(enclosingDeclaration ? { location: getNodeId(enclosingDeclaration) } : {}),
-                    ...(flags !== undefined ? { flags } : {}),
+                    location: enclosingDeclaration ? getNodeId(enclosingDeclaration) : undefined,
+                    flags,
                 });
                 if (!binaryData) return undefined;
                 return decodeNode(binaryData) as TypeNode;
@@ -4109,8 +4095,8 @@ export class Checker {
                     project: owner.project.id,
                     signature: signature.id,
                     kind,
-                    ...(enclosingDeclaration ? { location: getNodeId(enclosingDeclaration) } : {}),
-                    ...(flags !== undefined ? { flags } : {}),
+                    location: enclosingDeclaration ? getNodeId(enclosingDeclaration) : undefined,
+                    flags,
                 });
                 if (!binaryData) return undefined;
                 return decodeNode(binaryData) as Node;
@@ -4121,8 +4107,8 @@ export class Checker {
                     project: owner.project.id,
                     signature: signature.id,
                     kind,
-                    ...(enclosingDeclaration ? { location: getNodeId(enclosingDeclaration) } : {}),
-                    ...(flags !== undefined ? { flags } : {}),
+                    location: enclosingDeclaration ? getNodeId(enclosingDeclaration) : undefined,
+                    flags,
                 });
                 if (!binaryData) return undefined;
                 return decodeNode(binaryData) as Node;
@@ -4143,8 +4129,8 @@ export class Checker {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
                     type: type.id,
-                    ...(enclosingDeclaration ? { location: getNodeId(enclosingDeclaration) } : {}),
-                    ...(flags !== undefined ? { flags } : {}),
+                    location: enclosingDeclaration ? getNodeId(enclosingDeclaration) : undefined,
+                    flags,
                 });
                 if (typeof result !== "string") throw new TypeError("typeToString returned a non-string result");
                 return result;
@@ -4154,8 +4140,8 @@ export class Checker {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
                     type: type.id,
-                    ...(enclosingDeclaration ? { location: getNodeId(enclosingDeclaration) } : {}),
-                    ...(flags !== undefined ? { flags } : {}),
+                    location: enclosingDeclaration ? getNodeId(enclosingDeclaration) : undefined,
+                    flags,
                 });
                 if (typeof result !== "string") throw new TypeError("typeToString returned a non-string result");
                 return result;
@@ -5065,9 +5051,9 @@ export class Emitter {
                 const base64 = uint8ArrayToBase64(encoded);
                 return owner.client.apiRequest("printNode", {
                     data: base64,
-                    ...(options.preserveSourceNewlines !== undefined ? { preserveSourceNewlines: options.preserveSourceNewlines } : {}),
-                    ...(options.neverAsciiEscape !== undefined ? { neverAsciiEscape: options.neverAsciiEscape } : {}),
-                    ...(options.terminateUnterminatedLiterals !== undefined ? { terminateUnterminatedLiterals: options.terminateUnterminatedLiterals } : {}),
+                    preserveSourceNewlines: options.preserveSourceNewlines,
+                    neverAsciiEscape: options.neverAsciiEscape,
+                    terminateUnterminatedLiterals: options.terminateUnterminatedLiterals,
                 });
             },
             function* (node: Node, options: PrintNodeOptions = {}): Generator<ProtocolRequest, string, ProtocolResponse["result"]> {
@@ -5075,9 +5061,9 @@ export class Emitter {
                 const base64 = uint8ArrayToBase64(encoded);
                 return yield* apiRequest("printNode", {
                     data: base64,
-                    ...(options.preserveSourceNewlines !== undefined ? { preserveSourceNewlines: options.preserveSourceNewlines } : {}),
-                    ...(options.neverAsciiEscape !== undefined ? { neverAsciiEscape: options.neverAsciiEscape } : {}),
-                    ...(options.terminateUnterminatedLiterals !== undefined ? { terminateUnterminatedLiterals: options.terminateUnterminatedLiterals } : {}),
+                    preserveSourceNewlines: options.preserveSourceNewlines,
+                    neverAsciiEscape: options.neverAsciiEscape,
+                    terminateUnterminatedLiterals: options.terminateUnterminatedLiterals,
                 });
             },
         );
