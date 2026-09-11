@@ -34,6 +34,7 @@ data.version.toFixed();
 // @filename: /checkErrors.d.ts
 declare module "*.numberValue" with { type: number } {}
 declare module "*.objectValue" with { type: { name: string } } {}
+declare module "*.css" with { type: `css` } {}
 declare module "*" with { type: "md" | "markdown" } {}
 // @filename: /augmentation.ts
 export {};

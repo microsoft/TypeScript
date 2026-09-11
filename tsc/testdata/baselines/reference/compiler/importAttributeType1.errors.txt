@@ -7,7 +7,8 @@
   Property 'type' is incompatible with index signature.
     Type '{ name: string; }' is not assignable to type 'string'.
 /checkErrors.d.ts(2,45): error TS1555: An import attributes property must have a string literal type annotation.
-/checkErrors.d.ts(3,33): error TS1555: An import attributes property must have a string literal type annotation.
+/checkErrors.d.ts(3,37): error TS1555: An import attributes property must have a string literal type annotation.
+/checkErrors.d.ts(4,33): error TS1555: An import attributes property must have a string literal type annotation.
 /valid.d.ts(11,38): error TS1555: An import attributes property must have a string literal type annotation.
 
 
@@ -41,7 +42,7 @@
     text.toUpperCase();
     data.version.toFixed();
     
-==== /checkErrors.d.ts (5 errors) ====
+==== /checkErrors.d.ts (6 errors) ====
     declare module "*.numberValue" with { type: number } {}
                                         ~~~~~~~~~~~~~~~~
 !!! error TS2322: Type '{ type: number; }' is not assignable to type 'ImportAttributes'.
@@ -55,6 +56,9 @@
 !!! error TS2322:   Property 'type' is incompatible with index signature.
 !!! error TS2322:     Type '{ name: string; }' is not assignable to type 'string'.
                                                 ~~~~~~~~~~~~~~~~
+!!! error TS1555: An import attributes property must have a string literal type annotation.
+    declare module "*.css" with { type: `css` } {}
+                                        ~~~~~
 !!! error TS1555: An import attributes property must have a string literal type annotation.
     declare module "*" with { type: "md" | "markdown" } {}
                                     ~~~~~~~~~~~~~~~~~
