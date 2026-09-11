@@ -553,10 +553,10 @@ func (c *Checker) inferToMultipleTypesWithPriority(n *InferenceState, source *Ty
 
 func (c *Checker) inferToConditionalType(n *InferenceState, source *Type, target *Type) {
 	if source.flags&TypeFlagsConditional != 0 {
-		c.inferFromTypes(n, source.AsConditionalType().checkType, target.AsConditionalType().checkType)
-		c.inferFromTypes(n, source.AsConditionalType().extendsType, target.AsConditionalType().extendsType)
-		c.inferFromTypes(n, c.getTrueTypeFromConditionalType(source), c.getTrueTypeFromConditionalType(target))
-		c.inferFromTypes(n, c.getFalseTypeFromConditionalType(source), c.getFalseTypeFromConditionalType(target))
+		c.inferFromTypes(n, getNonDistributedTypeParameter(source.AsConditionalType().checkType), target.AsConditionalType().checkType)
+		c.inferFromTypes(n, getNonDistributedTypeParameter(source.AsConditionalType().extendsType), target.AsConditionalType().extendsType)
+		c.inferFromTypes(n, getNonDistributedTypeParameter(c.getTrueTypeFromConditionalType(source)), c.getTrueTypeFromConditionalType(target))
+		c.inferFromTypes(n, getNonDistributedTypeParameter(c.getFalseTypeFromConditionalType(source)), c.getFalseTypeFromConditionalType(target))
 	} else {
 		targetTypes := []*Type{c.getTrueTypeFromConditionalType(target), c.getFalseTypeFromConditionalType(target)}
 		c.inferToMultipleTypesWithPriority(n, source, targetTypes, target.flags, core.IfElse(n.contravariant, InferencePriorityContravariantConditional, 0))
