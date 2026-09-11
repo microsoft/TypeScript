@@ -485,13 +485,12 @@ export interface GetResolvedModuleParams {
     file: DocumentIdentifier;
     moduleName: string;
     mode: ModuleKind;
-    includeLookupLocations?: boolean | undefined;
 }
 
 export interface ResolvedModuleWithFailedLookupLocations {
     resolvedModule?: ResolvedModule | undefined;
-    failedLookupLocations?: string[] | undefined;
-    affectingLocations?: string[] | undefined;
+    failedLookupLocations: string[];
+    affectingLocations: string[];
     resolutionDiagnostics?: DiagnosticResponse[] | undefined;
 }
 
@@ -500,7 +499,6 @@ export interface GetResolvedModuleFromModuleSpecifierParams {
     project: string;
     moduleSpecifier: string;
     sourceFile?: DocumentIdentifier | undefined;
-    includeLookupLocations?: boolean | undefined;
 }
 
 export interface GetResolvedTypeReferenceDirectiveParams {
@@ -509,13 +507,12 @@ export interface GetResolvedTypeReferenceDirectiveParams {
     file: DocumentIdentifier;
     typeDirectiveName: string;
     mode: ModuleKind;
-    includeLookupLocations?: boolean | undefined;
 }
 
 export interface ResolvedTypeReferenceDirectiveWithFailedLookupLocations {
     resolvedTypeReferenceDirective?: ResolvedTypeReferenceDirective | undefined;
-    failedLookupLocations?: string[] | undefined;
-    affectingLocations?: string[] | undefined;
+    failedLookupLocations: string[];
+    affectingLocations: string[];
     resolutionDiagnostics?: DiagnosticResponse[] | undefined;
 }
 
@@ -525,7 +522,6 @@ export interface GetResolvedTypeReferenceDirectiveFromReferenceParams {
     sourceFile: DocumentIdentifier;
     typeDirectiveName: string;
     resolutionMode: ModuleKind;
-    includeLookupLocations?: boolean | undefined;
 }
 
 /** GetProjectDiagnosticsParams are parameters for project-wide diagnostic methods. */

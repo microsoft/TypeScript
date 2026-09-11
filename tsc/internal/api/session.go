@@ -1751,16 +1751,14 @@ func (s *Session) handleGetSourceFileMetadata(ctx context.Context, params *GetSo
 	}, nil
 }
 
-func newResolvedModuleResponse(resolution *module.ResolvedModule, includeLookupLocations bool) *ResolvedModuleWithFailedLookupLocations {
+func newResolvedModuleResponse(resolution *module.ResolvedModule) *ResolvedModuleWithFailedLookupLocations {
 	if resolution == nil {
 		return nil
 	}
 	result := &ResolvedModuleWithFailedLookupLocations{
+		FailedLookupLocations: append([]string{}, resolution.FailedLookupLocations...),
+		AffectingLocations:    append([]string{}, resolution.AffectingLocations...),
 		ResolutionDiagnostics: NewDiagnosticResponses(resolution.ResolutionDiagnostics),
-	}
-	if includeLookupLocations {
-		result.FailedLookupLocations = &resolution.FailedLookupLocations
-		result.AffectingLocations = &resolution.AffectingLocations
 	}
 	if resolution.IsResolved() {
 		result.ResolvedModule = &ResolvedModule{
@@ -1777,16 +1775,14 @@ func newResolvedModuleResponse(resolution *module.ResolvedModule, includeLookupL
 	return result
 }
 
-func newResolvedTypeReferenceDirectiveResponse(resolution *module.ResolvedTypeReferenceDirective, includeLookupLocations bool) *ResolvedTypeReferenceDirectiveWithFailedLookupLocations {
+func newResolvedTypeReferenceDirectiveResponse(resolution *module.ResolvedTypeReferenceDirective) *ResolvedTypeReferenceDirectiveWithFailedLookupLocations {
 	if resolution == nil {
 		return nil
 	}
 	result := &ResolvedTypeReferenceDirectiveWithFailedLookupLocations{
+		FailedLookupLocations: append([]string{}, resolution.FailedLookupLocations...),
+		AffectingLocations:    append([]string{}, resolution.AffectingLocations...),
 		ResolutionDiagnostics: NewDiagnosticResponses(resolution.ResolutionDiagnostics),
-	}
-	if includeLookupLocations {
-		result.FailedLookupLocations = &resolution.FailedLookupLocations
-		result.AffectingLocations = &resolution.AffectingLocations
 	}
 	if resolution.IsResolved() {
 		result.ResolvedTypeReferenceDirective = &ResolvedTypeReferenceDirective{
@@ -1814,7 +1810,7 @@ func (s *Session) handleGetResolvedModule(ctx context.Context, params *GetResolv
 	if err != nil {
 		return nil, err
 	}
-	return newResolvedModuleResponse(program.GetResolvedModuleWithOptions(sourceFile, params.ModuleName, params.Mode, params.IncludeLookupLocations), params.IncludeLookupLocations), nil
+	return newResolvedModuleResponse(program.GetResolvedModuleWithLookupLocations(sourceFile, params.ModuleName, params.Mode)), nil
 }
 
 // @gen-proto-nullable
@@ -1845,7 +1841,7 @@ func (s *Session) handleGetResolvedModuleFromModuleSpecifier(ctx context.Context
 		return nil, fmt.Errorf("%w: moduleSpecifier must have a SourceFile ancestor or sourceFile must be provided", ErrClientError)
 	}
 	mode := program.GetModeForUsageLocation(sourceFile, node)
-	return newResolvedModuleResponse(program.GetResolvedModuleWithOptions(sourceFile, node.Text(), mode, params.IncludeLookupLocations), params.IncludeLookupLocations), nil
+	return newResolvedModuleResponse(program.GetResolvedModuleWithLookupLocations(sourceFile, node.Text(), mode)), nil
 }
 
 // @gen-proto-nullable
@@ -1862,7 +1858,7 @@ func (s *Session) handleGetResolvedTypeReferenceDirective(ctx context.Context, p
 	if err != nil {
 		return nil, err
 	}
-	return newResolvedTypeReferenceDirectiveResponse(program.GetResolvedTypeReferenceDirectiveWithOptions(sourceFile, params.TypeDirectiveName, params.Mode, params.IncludeLookupLocations), params.IncludeLookupLocations), nil
+	return newResolvedTypeReferenceDirectiveResponse(program.GetResolvedTypeReferenceDirectiveWithLookupLocations(sourceFile, params.TypeDirectiveName, params.Mode)), nil
 }
 
 // @gen-proto-nullable
@@ -1883,7 +1879,7 @@ func (s *Session) handleGetResolvedTypeReferenceDirectiveFromReference(ctx conte
 	if mode == core.ResolutionModeNone {
 		mode = program.GetDefaultResolutionModeForFile(sourceFile)
 	}
-	return newResolvedTypeReferenceDirectiveResponse(program.GetResolvedTypeReferenceDirectiveWithOptions(sourceFile, params.TypeDirectiveName, mode, params.IncludeLookupLocations), params.IncludeLookupLocations), nil
+	return newResolvedTypeReferenceDirectiveResponse(program.GetResolvedTypeReferenceDirectiveWithLookupLocations(sourceFile, params.TypeDirectiveName, mode)), nil
 }
 
 // handleGetSymbolAtPosition returns the symbol at a position in a file.

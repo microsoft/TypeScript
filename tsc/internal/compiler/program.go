@@ -612,12 +612,9 @@ func (p *Program) GetResolvedModule(file ast.HasFileName, moduleReference string
 	return nil
 }
 
-func (p *Program) GetResolvedModuleWithOptions(file ast.HasFileName, moduleReference string, mode core.ResolutionMode, includeLookupLocations bool) *module.ResolvedModule {
-	if !includeLookupLocations {
-		return p.GetResolvedModule(file, moduleReference, mode)
-	}
+func (p *Program) GetResolvedModuleWithLookupLocations(file ast.HasFileName, moduleReference string, mode core.ResolutionMode) *module.ResolvedModule {
 	redirect, fileName := p.projectReferenceFileMapper.getRedirectForResolution(file)
-	resolved, _ := p.resolver.ResolveModuleNameWithOptions(moduleReference, fileName, mode, redirect, true)
+	resolved, _ := p.resolver.ResolveModuleNameWithLookupLocations(moduleReference, fileName, mode, redirect)
 	return resolved
 }
 
@@ -2119,12 +2116,9 @@ func (p *Program) GetResolvedTypeReferenceDirective(file ast.HasFileName, typeDi
 	return nil
 }
 
-func (p *Program) GetResolvedTypeReferenceDirectiveWithOptions(file ast.HasFileName, typeDirectiveName string, mode core.ResolutionMode, includeLookupLocations bool) *module.ResolvedTypeReferenceDirective {
-	if !includeLookupLocations {
-		return p.GetResolvedTypeReferenceDirective(file, typeDirectiveName, mode)
-	}
+func (p *Program) GetResolvedTypeReferenceDirectiveWithLookupLocations(file ast.HasFileName, typeDirectiveName string, mode core.ResolutionMode) *module.ResolvedTypeReferenceDirective {
 	redirect, fileName := p.projectReferenceFileMapper.getRedirectForResolution(file)
-	resolved, _ := p.resolver.ResolveTypeReferenceDirectiveWithOptions(typeDirectiveName, fileName, mode, redirect, true)
+	resolved, _ := p.resolver.ResolveTypeReferenceDirectiveWithLookupLocations(typeDirectiveName, fileName, mode, redirect)
 	return resolved
 }
 

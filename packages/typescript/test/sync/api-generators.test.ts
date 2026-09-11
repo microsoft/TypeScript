@@ -1522,10 +1522,10 @@ describe("API - generator batching", () => {
                 parityCase("LanguageService", "getCompletionsAtPosition", languageService.getCompletionsAtPosition, assertDeepEquivalent, "/src/index.ts", completionPosition, { includeSymbol: true }),
 
                 parityCase("Program", "getSourceFile", program.getSourceFile, assertOptionalSourceFilesEquivalent, "/src/index.ts"),
-                parityCase("Program", "getResolvedModule", program.getResolvedModule, assertDeepEquivalent, "/src/index.ts", "./models.js", ModuleKind.CommonJS, { includeLookupLocations: true }),
+                parityCase("Program", "getResolvedModule", program.getResolvedModule, assertDeepEquivalent, "/src/index.ts", "./models.js", ModuleKind.CommonJS),
                 parityCase("Program", "getResolvedModuleFromModuleSpecifier", program.getResolvedModuleFromModuleSpecifier, assertDeepEquivalent, importSpecifier),
                 parityCase("Program", "getResolvedTypeReferenceDirective", program.getResolvedTypeReferenceDirective, assertDeepEquivalent, "/src/index.ts", "parity", ModuleKind.CommonJS),
-                parityCase("Program", "getResolvedTypeReferenceDirectiveFromTypeReferenceDirective", program.getResolvedTypeReferenceDirectiveFromTypeReferenceDirective, assertDeepEquivalent, typeReferenceDirective, "/src/index.ts", { includeLookupLocations: true }),
+                parityCase("Program", "getResolvedTypeReferenceDirectiveFromTypeReferenceDirective", program.getResolvedTypeReferenceDirectiveFromTypeReferenceDirective, assertDeepEquivalent, typeReferenceDirective, "/src/index.ts"),
                 parityCase("Program", "getSourceFileNames", program.getSourceFileNames, assertDeepEquivalent),
                 parityCase("Program", "getSourceFileMetadata", program.getSourceFileMetadata, assertDeepEquivalent, "/src/index.ts"),
                 parityCase("Program", "getSourceFileMetadataByPath", program.getSourceFileMetadataByPath, assertDeepEquivalent, indexFile.path),

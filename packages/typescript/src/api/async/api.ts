@@ -228,29 +228,6 @@ export interface TranspileOptions {
     reportDiagnostics?: boolean;
 }
 
-export interface ResolutionOptions {
-    /** Include failed and resolution-affecting file lookup locations in the result. */
-    includeLookupLocations?: boolean | undefined;
-}
-
-export interface ResolutionOptionsWithLookupLocations {
-    includeLookupLocations: true;
-}
-
-export type ResolvedModuleWithLookupLocations =
-    & Omit<ResolvedModuleWithFailedLookupLocations, "failedLookupLocations" | "affectingLocations">
-    & {
-        failedLookupLocations: string[];
-        affectingLocations: string[];
-    };
-
-export type ResolvedTypeReferenceDirectiveWithLookupLocations =
-    & Omit<ResolvedTypeReferenceDirectiveWithFailedLookupLocations, "failedLookupLocations" | "affectingLocations">
-    & {
-        failedLookupLocations: string[];
-        affectingLocations: string[];
-    };
-
 export interface TranspileOutput {
     outputText: string;
     diagnostics?: readonly Diagnostic[] | undefined;
@@ -1258,23 +1235,10 @@ export class Program implements FormatDiagnosticsHost {
         return this.sourceFileCache.set(path, sourceFile, parseOptionsKey, contentHash, this.snapshotId, this.project.id);
     }
 
-    getResolvedModule(
-        file: DocumentIdentifier,
-        moduleName: string,
-        mode: ModuleKind,
-        options: ResolutionOptionsWithLookupLocations,
-    ): Promise<ResolvedModuleWithLookupLocations | undefined>;
-    getResolvedModule(
-        file: DocumentIdentifier,
-        moduleName: string,
-        mode: ModuleKind,
-        options?: ResolutionOptions,
-    ): Promise<ResolvedModuleWithFailedLookupLocations | undefined>;
     async getResolvedModule(
         file: DocumentIdentifier,
         moduleName: string,
         mode: ModuleKind,
-        options?: ResolutionOptions,
     ): Promise<ResolvedModuleWithFailedLookupLocations | undefined> {
         const result = await this.client.apiRequest("getResolvedModule", {
             snapshot: this.snapshotId,
@@ -1282,53 +1246,27 @@ export class Program implements FormatDiagnosticsHost {
             file,
             moduleName,
             mode,
-            includeLookupLocations: options?.includeLookupLocations,
         });
         return result ?? undefined;
     }
 
-    getResolvedModuleFromModuleSpecifier(
-        moduleSpecifier: StringLiteralLikeNode,
-        sourceFile: DocumentIdentifier | undefined,
-        options: ResolutionOptionsWithLookupLocations,
-    ): Promise<ResolvedModuleWithLookupLocations | undefined>;
-    getResolvedModuleFromModuleSpecifier(
-        moduleSpecifier: StringLiteralLikeNode,
-        sourceFile?: DocumentIdentifier,
-        options?: ResolutionOptions,
-    ): Promise<ResolvedModuleWithFailedLookupLocations | undefined>;
     async getResolvedModuleFromModuleSpecifier(
         moduleSpecifier: StringLiteralLikeNode,
         sourceFile?: DocumentIdentifier,
-        options?: ResolutionOptions,
     ): Promise<ResolvedModuleWithFailedLookupLocations | undefined> {
         const result = await this.client.apiRequest("getResolvedModuleFromModuleSpecifier", {
             snapshot: this.snapshotId,
             project: this.project.id,
             moduleSpecifier: getNodeId(moduleSpecifier),
             sourceFile,
-            includeLookupLocations: options?.includeLookupLocations,
         });
         return result ?? undefined;
     }
 
-    getResolvedTypeReferenceDirective(
-        file: DocumentIdentifier,
-        typeDirectiveName: string,
-        mode: ModuleKind,
-        options: ResolutionOptionsWithLookupLocations,
-    ): Promise<ResolvedTypeReferenceDirectiveWithLookupLocations | undefined>;
-    getResolvedTypeReferenceDirective(
-        file: DocumentIdentifier,
-        typeDirectiveName: string,
-        mode: ModuleKind,
-        options?: ResolutionOptions,
-    ): Promise<ResolvedTypeReferenceDirectiveWithFailedLookupLocations | undefined>;
     async getResolvedTypeReferenceDirective(
         file: DocumentIdentifier,
         typeDirectiveName: string,
         mode: ModuleKind,
-        options?: ResolutionOptions,
     ): Promise<ResolvedTypeReferenceDirectiveWithFailedLookupLocations | undefined> {
         const result = await this.client.apiRequest("getResolvedTypeReferenceDirective", {
             snapshot: this.snapshotId,
@@ -1336,25 +1274,13 @@ export class Program implements FormatDiagnosticsHost {
             file,
             typeDirectiveName,
             mode,
-            includeLookupLocations: options?.includeLookupLocations,
         });
         return result ?? undefined;
     }
 
-    getResolvedTypeReferenceDirectiveFromTypeReferenceDirective(
-        typeReferenceDirective: FileReference,
-        sourceFile: DocumentIdentifier,
-        options: ResolutionOptionsWithLookupLocations,
-    ): Promise<ResolvedTypeReferenceDirectiveWithLookupLocations | undefined>;
-    getResolvedTypeReferenceDirectiveFromTypeReferenceDirective(
-        typeReferenceDirective: FileReference,
-        sourceFile: DocumentIdentifier,
-        options?: ResolutionOptions,
-    ): Promise<ResolvedTypeReferenceDirectiveWithFailedLookupLocations | undefined>;
     async getResolvedTypeReferenceDirectiveFromTypeReferenceDirective(
         typeReferenceDirective: FileReference,
         sourceFile: DocumentIdentifier,
-        options?: ResolutionOptions,
     ): Promise<ResolvedTypeReferenceDirectiveWithFailedLookupLocations | undefined> {
         const result = await this.client.apiRequest("getResolvedTypeReferenceDirectiveFromTypeReferenceDirective", {
             snapshot: this.snapshotId,
@@ -1362,7 +1288,6 @@ export class Program implements FormatDiagnosticsHost {
             sourceFile,
             typeDirectiveName: typeReferenceDirective.fileName,
             resolutionMode: typeReferenceDirective.resolutionMode,
-            includeLookupLocations: options?.includeLookupLocations,
         });
         return result ?? undefined;
     }

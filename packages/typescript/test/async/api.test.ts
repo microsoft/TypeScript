@@ -347,15 +347,11 @@ import "missing";`,
         const pkgSpecifier = cast(cast(sourceFile.statements[0], isImportDeclaration).moduleSpecifier, isStringLiteral);
 
         const resolvedModule = await program.getResolvedModule("/src/index.ts", "pkg", ModuleKind.ESNext);
-        assert.equal(resolvedModule?.resolvedModule?.resolvedFileName, "/node_modules/pkg/index.d.ts");
-        assert.equal(resolvedModule?.failedLookupLocations, undefined);
-        assert.equal(resolvedModule?.affectingLocations, undefined);
+        assert.ok(resolvedModule);
+        assert.equal(resolvedModule.resolvedModule?.resolvedFileName, "/node_modules/pkg/index.d.ts");
+        assert.ok(resolvedModule.affectingLocations.includes("/node_modules/pkg/package.json"));
 
-        const resolvedModuleWithLocations = await program.getResolvedModuleFromModuleSpecifier(
-            pkgSpecifier,
-            undefined,
-            { includeLookupLocations: true },
-        );
+        const resolvedModuleWithLocations = await program.getResolvedModuleFromModuleSpecifier(pkgSpecifier);
         assert.ok(resolvedModuleWithLocations);
         assert.equal(resolvedModuleWithLocations.resolvedModule?.packageId?.name, "pkg");
         assert.ok(resolvedModuleWithLocations.affectingLocations.includes("/node_modules/pkg/package.json"));
@@ -364,7 +360,6 @@ import "missing";`,
             "/src/index.ts",
             "missing",
             ModuleKind.ESNext,
-            { includeLookupLocations: true },
         );
         assert.ok(missingModule);
         assert.equal(missingModule.resolvedModule, undefined);
@@ -377,12 +372,11 @@ import "missing";`,
             ModuleKind.None,
         );
         assert.equal(resolvedTypeReference?.resolvedTypeReferenceDirective?.resolvedFileName, "/node_modules/@types/pkg-types/index.d.ts");
-        assert.equal(resolvedTypeReference?.failedLookupLocations, undefined);
+        assert.ok(resolvedTypeReference?.affectingLocations.includes("/node_modules/@types/pkg-types/package.json"));
 
         const resolvedTypeReferenceWithLocations = await program.getResolvedTypeReferenceDirectiveFromTypeReferenceDirective(
             typeReference,
             "/src/index.ts",
-            { includeLookupLocations: true },
         );
         assert.ok(resolvedTypeReferenceWithLocations);
         assert.ok(resolvedTypeReferenceWithLocations.affectingLocations.includes("/node_modules/@types/pkg-types/package.json"));

@@ -228,10 +228,19 @@ func (r *Resolver) ResolveTypeReferenceDirective(
 	resolutionMode core.ResolutionMode,
 	redirectedReference ResolvedProjectReference,
 ) (*ResolvedTypeReferenceDirective, []DiagAndArgs) {
-	return r.ResolveTypeReferenceDirectiveWithOptions(typeReferenceDirectiveName, containingFile, resolutionMode, redirectedReference, false)
+	return r.resolveTypeReferenceDirective(typeReferenceDirectiveName, containingFile, resolutionMode, redirectedReference, false)
 }
 
-func (r *Resolver) ResolveTypeReferenceDirectiveWithOptions(
+func (r *Resolver) ResolveTypeReferenceDirectiveWithLookupLocations(
+	typeReferenceDirectiveName string,
+	containingFile string,
+	resolutionMode core.ResolutionMode,
+	redirectedReference ResolvedProjectReference,
+) (*ResolvedTypeReferenceDirective, []DiagAndArgs) {
+	return r.resolveTypeReferenceDirective(typeReferenceDirectiveName, containingFile, resolutionMode, redirectedReference, true)
+}
+
+func (r *Resolver) resolveTypeReferenceDirective(
 	typeReferenceDirectiveName string,
 	containingFile string,
 	resolutionMode core.ResolutionMode,
@@ -281,10 +290,14 @@ func (r *Resolver) ResolveTypeReferenceDirectiveWithOptions(
 }
 
 func (r *Resolver) ResolveModuleName(moduleName string, containingFile string, resolutionMode core.ResolutionMode, redirectedReference ResolvedProjectReference) (*ResolvedModule, []DiagAndArgs) {
-	return r.ResolveModuleNameWithOptions(moduleName, containingFile, resolutionMode, redirectedReference, false)
+	return r.resolveModuleName(moduleName, containingFile, resolutionMode, redirectedReference, false)
 }
 
-func (r *Resolver) ResolveModuleNameWithOptions(moduleName string, containingFile string, resolutionMode core.ResolutionMode, redirectedReference ResolvedProjectReference, includeLookupLocations bool) (*ResolvedModule, []DiagAndArgs) {
+func (r *Resolver) ResolveModuleNameWithLookupLocations(moduleName string, containingFile string, resolutionMode core.ResolutionMode, redirectedReference ResolvedProjectReference) (*ResolvedModule, []DiagAndArgs) {
+	return r.resolveModuleName(moduleName, containingFile, resolutionMode, redirectedReference, true)
+}
+
+func (r *Resolver) resolveModuleName(moduleName string, containingFile string, resolutionMode core.ResolutionMode, redirectedReference ResolvedProjectReference, includeLookupLocations bool) (*ResolvedModule, []DiagAndArgs) {
 	containingDirectory := tspath.GetDirectoryPath(containingFile)
 	traceBuilder := r.newTraceBuilder()
 

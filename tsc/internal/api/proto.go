@@ -1099,38 +1099,34 @@ type GetSourceFileNamesParams struct {
 }
 
 type GetResolvedModuleParams struct {
-	Snapshot               SnapshotID          `json:"snapshot"`
-	Project                ProjectID           `json:"project"`
-	File                   DocumentIdentifier  `json:"file"`
-	ModuleName             string              `json:"moduleName"`
-	Mode                   core.ResolutionMode `json:"mode"`
-	IncludeLookupLocations bool                `json:"includeLookupLocations,omitempty"`
+	Snapshot   SnapshotID          `json:"snapshot"`
+	Project    ProjectID           `json:"project"`
+	File       DocumentIdentifier  `json:"file"`
+	ModuleName string              `json:"moduleName"`
+	Mode       core.ResolutionMode `json:"mode"`
 }
 
 type GetResolvedModuleFromModuleSpecifierParams struct {
-	Snapshot               SnapshotID          `json:"snapshot"`
-	Project                ProjectID           `json:"project"`
-	ModuleSpecifier        NodeHandle          `json:"moduleSpecifier"`
-	SourceFile             *DocumentIdentifier `json:"sourceFile,omitempty"`
-	IncludeLookupLocations bool                `json:"includeLookupLocations,omitempty"`
+	Snapshot        SnapshotID          `json:"snapshot"`
+	Project         ProjectID           `json:"project"`
+	ModuleSpecifier NodeHandle          `json:"moduleSpecifier"`
+	SourceFile      *DocumentIdentifier `json:"sourceFile,omitempty"`
 }
 
 type GetResolvedTypeReferenceDirectiveParams struct {
-	Snapshot               SnapshotID          `json:"snapshot"`
-	Project                ProjectID           `json:"project"`
-	File                   DocumentIdentifier  `json:"file"`
-	TypeDirectiveName      string              `json:"typeDirectiveName"`
-	Mode                   core.ResolutionMode `json:"mode"`
-	IncludeLookupLocations bool                `json:"includeLookupLocations,omitempty"`
+	Snapshot          SnapshotID          `json:"snapshot"`
+	Project           ProjectID           `json:"project"`
+	File              DocumentIdentifier  `json:"file"`
+	TypeDirectiveName string              `json:"typeDirectiveName"`
+	Mode              core.ResolutionMode `json:"mode"`
 }
 
 type GetResolvedTypeReferenceDirectiveFromReferenceParams struct {
-	Snapshot               SnapshotID          `json:"snapshot"`
-	Project                ProjectID           `json:"project"`
-	SourceFile             DocumentIdentifier  `json:"sourceFile"`
-	TypeDirectiveName      string              `json:"typeDirectiveName"`
-	ResolutionMode         core.ResolutionMode `json:"resolutionMode"`
-	IncludeLookupLocations bool                `json:"includeLookupLocations,omitempty"`
+	Snapshot          SnapshotID          `json:"snapshot"`
+	Project           ProjectID           `json:"project"`
+	SourceFile        DocumentIdentifier  `json:"sourceFile"`
+	TypeDirectiveName string              `json:"typeDirectiveName"`
+	ResolutionMode    core.ResolutionMode `json:"resolutionMode"`
 }
 
 type PackageId struct {
@@ -1165,8 +1161,8 @@ type ResolvedModule struct {
 
 type ResolvedModuleWithFailedLookupLocations struct {
 	ResolvedModule        *ResolvedModule       `json:"resolvedModule,omitempty"`
-	FailedLookupLocations *[]string             `json:"failedLookupLocations,omitempty"`
-	AffectingLocations    *[]string             `json:"affectingLocations,omitempty"`
+	FailedLookupLocations []string              `json:"failedLookupLocations" nonnil:"true"`
+	AffectingLocations    []string              `json:"affectingLocations" nonnil:"true"`
 	ResolutionDiagnostics []*DiagnosticResponse `json:"resolutionDiagnostics,omitempty"`
 }
 
@@ -1180,8 +1176,8 @@ type ResolvedTypeReferenceDirective struct {
 
 type ResolvedTypeReferenceDirectiveWithFailedLookupLocations struct {
 	ResolvedTypeReferenceDirective *ResolvedTypeReferenceDirective `json:"resolvedTypeReferenceDirective,omitempty"`
-	FailedLookupLocations          *[]string                       `json:"failedLookupLocations,omitempty"`
-	AffectingLocations             *[]string                       `json:"affectingLocations,omitempty"`
+	FailedLookupLocations          []string                        `json:"failedLookupLocations" nonnil:"true"`
+	AffectingLocations             []string                        `json:"affectingLocations" nonnil:"true"`
 	ResolutionDiagnostics          []*DiagnosticResponse           `json:"resolutionDiagnostics,omitempty"`
 }
 
