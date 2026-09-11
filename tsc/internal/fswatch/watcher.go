@@ -119,6 +119,17 @@ type WatchDirectoryRequest struct {
 type watchOptions struct {
 	ignore    func(path string) bool
 	recursive bool
+	file      string
+}
+
+// fileOption defers the file filter until the parent directory's comparer is
+// available, so WatchFile does not need a second filesystem query.
+type fileOption struct {
+	path string
+}
+
+func (o fileOption) applyWatchOption(opts *watchOptions) {
+	opts.file = o.path
 }
 
 type ignoreOption struct {
@@ -371,10 +382,10 @@ func (w *watcher) keyForDirWatch(dir string, recursive bool) string {
 	return dir
 }
 
-func (w *watcher) findCoveringRecursiveWatchLocked(dir string, physicalDir string) *dirWatch {
+func (w *watcher) findCoveringRecursiveWatchLocked(dir string, physicalDir string, comparer pathComparer) *dirWatch {
 	var best *dirWatch
 	for _, dw := range w.dirWatches {
-		if !dw.recursive || !isInDirectoryOrSelf(dw.dir, dir) || !isInDirectoryOrSelf(dw.physicalDir, physicalDir) {
+		if !dw.recursive || dw.comparer != comparer || !isInDirectoryOrSelf(dw.dir, dir) || !isInDirectoryOrSelf(dw.physicalDir, physicalDir) {
 			continue
 		}
 		if best == nil || len(dw.dir) > len(best.dir) {
@@ -416,7 +427,7 @@ func (w *watcher) findConsolidationDirLocked(dir string, physicalDir string) str
 	return ""
 }
 
-func (w *watcher) getOrCreateDirWatch(dir string, physicalDir string, recursive bool) *dirWatch {
+func (w *watcher) getOrCreateDirWatch(dir string, physicalDir string, recursive bool, comparer pathComparer) (*dirWatch, error) {
 	w.mu.Lock()
 	defer w.mu.Unlock()
 	if w.dirWatches == nil {
@@ -427,28 +438,35 @@ func (w *watcher) getOrCreateDirWatch(dir string, physicalDir string, recursive 
 	}
 
 	if w.canShareRecursiveDirWatches() {
-		if dw := w.findCoveringRecursiveWatchLocked(dir, physicalDir); dw != nil {
-			return dw
+		if dw := w.findCoveringRecursiveWatchLocked(dir, physicalDir, comparer); dw != nil {
+			return dw, nil
 		}
 		if consolidationDir := w.findConsolidationDirLocked(dir, physicalDir); consolidationDir != "" {
-			dir = consolidationDir
-			physicalDir = physicalDirFor(dir)
-			recursive = true
-			if dw := w.findCoveringRecursiveWatchLocked(dir, physicalDir); dw != nil {
-				return dw
+			parentComparer, err := w.pathComparer(consolidationDir)
+			if err != nil {
+				return nil, err
+			}
+			if parentComparer == comparer {
+				dir = consolidationDir
+				physicalDir = physicalDirFor(dir)
+				recursive = true
+				if dw := w.findCoveringRecursiveWatchLocked(dir, physicalDir, comparer); dw != nil {
+					return dw, nil
+				}
 			}
 		}
 	}
 
 	key := w.keyForDirWatch(dir, recursive)
 	if dw, ok := w.dirWatches[key]; ok {
-		return dw
+		return dw, nil
 	}
 	dw := newDirWatch(dir, physicalDir, w.debounce)
+	dw.setComparer(comparer)
 	dw.sequence = w.sequence
 	dw.recursive = recursive
 	w.dirWatches[key] = dw
-	return dw
+	return dw, nil
 }
 
 func (w *watcher) removeDirWatch(dw *dirWatch) {
@@ -524,8 +542,17 @@ func (w *watcher) WatchDirectories(requests []WatchDirectoryRequest) ([]Watch, e
 			o.applyWatchOption(&sopts)
 		}
 
-		dw := w.getOrCreateDirWatch(dir, physicalDir, sopts.recursive)
-		id, _ := dw.watch(dir, physicalDir, sopts.recursive, fn, sopts.ignore)
+		comparer, err := w.pathComparer(dir)
+		if err != nil {
+			rollback()
+			return nil, err
+		}
+		dw, err := w.getOrCreateDirWatch(dir, physicalDir, sopts.recursive, comparer)
+		if err != nil {
+			rollback()
+			return nil, err
+		}
+		id, _ := dw.addCallback(dir, physicalDir, sopts.recursive, fn, sopts.ignore, sopts.file)
 		prepared = append(prepared, preparedWatch{dw: dw, id: id, recursive: sopts.recursive, dir: dir})
 		if _, ok := seenDirWatches[dw]; !ok {
 			seenDirWatches[dw] = struct{}{}
@@ -578,25 +605,7 @@ func (w *watcher) WatchFile(path string, fn WatchCallback) (Watch, error) {
 		return nil, errRootPath
 	}
 
-	return w.WatchDirectory(dir, fileCallback(path, fn))
-}
-
-// fileCallback wraps a WatchCallback so it only sees events for the
-// specific target path. Errors are always forwarded (with any matching
-// events delivered alongside) so callers don't lose overflow signals
-// just because their target wasn't in the same batch.
-func fileCallback(target string, fn WatchCallback) WatchCallback {
-	return func(events []Event, err error) {
-		var filtered []Event
-		for _, e := range events {
-			if e.Path == target {
-				filtered = append(filtered, e)
-			}
-		}
-		if len(filtered) > 0 || err != nil {
-			fn(filtered, err)
-		}
-	}
+	return w.WatchDirectory(dir, fn, fileOption{path: path})
 }
 
 type watch struct {
@@ -771,17 +780,21 @@ func (b *watcherBase) handleWatcherError(werr *dirWatchError) {
 // ----- dirWatch: per-directory watch state -------------------------
 
 type callback struct {
-	id               uint64
-	dir              string
-	physicalDir      string
-	watchDir         string
-	watchPhysicalDir string
-	recursive        bool
-	fn               WatchCallback
-	ignore           func(path string) bool
-	sinceSeq         uint64
-	terminal         error
-	delivered        bool
+	id                 uint64
+	dir                string
+	physicalDir        string
+	watchDir           string
+	watchPhysicalDir   string
+	recursive          bool
+	fn                 WatchCallback
+	ignore             func(path string) bool
+	sinceSeq           uint64
+	terminal           error
+	delivered          bool
+	comparer           pathComparer
+	dirComparison      comparisonPath
+	physicalComparison comparisonPath
+	fileComparison     comparisonPath
 }
 
 // dirWatchError associates an error with a specific directory watch.
@@ -800,9 +813,12 @@ type dirWatch struct {
 	dir string
 	// physicalDir is the path passed to OS watcher APIs. It differs from dir
 	// when dir or an ancestor is a symlink or reparse point to a directory.
-	physicalDir string
-	recursive   bool
-	events      eventList
+	physicalDir     string
+	recursive       bool
+	events          eventList
+	comparer        pathComparer
+	dirFold         string
+	physicalDirFold string
 
 	// state stores per-directory platform-specific bookkeeping (fsevents, windows).
 	state any
@@ -820,6 +836,16 @@ func newDirWatch(dir string, physicalDir string, db *debounce) *dirWatch {
 	dw.debounce = db
 	dw.debounce.add(dw, func() { dw.triggerCallbacks() })
 	return dw
+}
+
+func (dw *dirWatch) setComparer(comparer pathComparer) {
+	dw.comparer = comparer
+	dw.dirFold = comparer.prepare(dw.dir).folded
+	if dw.physicalDir == dw.dir {
+		dw.physicalDirFold = dw.dirFold
+	} else {
+		dw.physicalDirFold = comparer.prepare(dw.physicalDir).folded
+	}
 }
 
 // physicalDirFor returns the physical path to watch for dir. If dir, or an
@@ -968,12 +994,20 @@ func (dw *dirWatch) triggerCallbacks() {
 	}
 	dw.mu.Unlock()
 
+	var comparisons comparisonCache
 	for i, cb := range cbs {
 		cbEvents := eventsByCallback[i]
-		if cb.ignore != nil || !cb.recursive || cb.dir != dw.dir {
+		if cb.ignore != nil || !cb.recursive || cb.dir != dw.dir || cb.fileComparison.path != "" {
 			filtered := make([]Event, 0, len(cbEvents))
 			for _, e := range cbEvents {
-				e = cb.mapEvent(e)
+				e = cb.mapEventCached(e, &comparisons)
+				if cb.fileComparison.path != "" {
+					path := comparisonPath{path: e.Path, cache: &comparisons}
+					if suffix, ok := cb.comparer.suffixPrepared(cb.fileComparison, &path); !ok || suffix != "" {
+						continue
+					}
+					e.Path = cb.fileComparison.path
+				}
 				if cb.ignore != nil && cb.ignore(e.Path) {
 					continue
 				}
@@ -1002,10 +1036,18 @@ func (dw *dirWatch) triggerCallbacks() {
 }
 
 func (cb callback) mapEvent(e Event) Event {
-	if cb.physicalDir != "" && cb.physicalDir != cb.dir {
-		physicalPath := cb.eventPhysicalPath(e.Path)
-		if isInDirectoryOrSelf(cb.physicalDir, physicalPath) {
-			e.Path = rebasePath(physicalPath, cb.physicalDir, cb.dir)
+	return cb.mapEventCached(e, nil)
+}
+
+func (cb callback) mapEventCached(e Event, cache *comparisonCache) Event {
+	if cb.physicalDir != "" && (cb.physicalDir != cb.dir || cb.comparer.ignoreCase) {
+		physicalPath := comparisonPath{path: cb.eventPhysicalPath(e.Path), cache: cache}
+		root := cb.physicalComparison
+		if root.path == "" {
+			root.path = cb.physicalDir
+		}
+		if path, ok := cb.comparer.rebasePrepared(&physicalPath, root, cb.dir); ok {
+			e.Path = path
 		}
 	}
 	return e
@@ -1022,13 +1064,18 @@ func (dw *dirWatch) terminateCallbacksForDeletedRoot(path string, seq uint64, er
 	dw.mu.Lock()
 	defer dw.mu.Unlock()
 	changed := false
+	var comparisons comparisonCache
+	deleted := comparisonPath{path: path, cache: &comparisons}
 	for i := range dw.callbacks {
 		cb := &dw.callbacks[i]
 		if cb.delivered || cb.terminal != nil || cb.sinceSeq >= seq {
 			continue
 		}
-		physicalPath := cb.eventPhysicalPath(path)
-		if isInDirectoryOrSelf(path, cb.dir) || (cb.physicalDir != cb.dir && isInDirectoryOrSelf(physicalPath, cb.physicalDir)) {
+		physicalPath := comparisonPath{path: cb.eventPhysicalPath(path), cache: &comparisons}
+		dir, physical := cb.dirComparison, cb.physicalComparison
+		_, logicalMatch := cb.comparer.suffixPrepared(deleted, &dir)
+		_, physicalMatch := cb.comparer.suffixPrepared(physicalPath, &physical)
+		if logicalMatch || physicalMatch {
 			cb.terminal = err
 			changed = true
 		}
@@ -1074,6 +1121,10 @@ func isDirectChild(dir, path string) bool {
 }
 
 func (dw *dirWatch) watch(dir string, physicalDir string, recursive bool, fn WatchCallback, ignore func(path string) bool) (uint64, bool) {
+	return dw.addCallback(dir, physicalDir, recursive, fn, ignore, "")
+}
+
+func (dw *dirWatch) addCallback(dir string, physicalDir string, recursive bool, fn WatchCallback, ignore func(path string) bool, file string) (uint64, bool) {
 	dw.mu.Lock()
 	defer dw.mu.Unlock()
 	dw.nextCBID++
@@ -1082,7 +1133,12 @@ func (dw *dirWatch) watch(dir string, physicalDir string, recursive bool, fn Wat
 	if dw.sequence != nil {
 		sinceSeq = dw.sequence()
 	}
-	dw.callbacks = append(dw.callbacks, callback{id: id, dir: dir, physicalDir: physicalDir, watchDir: dw.dir, watchPhysicalDir: dw.physicalDir, recursive: recursive, fn: fn, ignore: ignore, sinceSeq: sinceSeq})
+	dw.callbacks = append(dw.callbacks, callback{
+		id: id, dir: dir, physicalDir: physicalDir, watchDir: dw.dir, watchPhysicalDir: dw.physicalDir,
+		recursive: recursive, fn: fn, ignore: ignore, sinceSeq: sinceSeq, comparer: dw.comparer,
+		dirComparison: dw.comparer.prepare(dir), physicalComparison: dw.comparer.prepare(physicalDir),
+		fileComparison: dw.comparer.prepare(file),
+	})
 	return id, true
 }
 

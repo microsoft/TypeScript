@@ -62,6 +62,12 @@ TEXT fse_CFStringNormalize_trampoline<>(SB), NOSPLIT, $0-0
 GLOBL ·fse_CFStringNormalize_trampoline_addr(SB), RODATA, $8
 DATA ·fse_CFStringNormalize_trampoline_addr(SB)/8, $fse_CFStringNormalize_trampoline<>(SB)
 
+TEXT fse_CFStringFold_trampoline<>(SB), NOSPLIT, $0-0
+	JMP fse_CFStringFold(SB)
+
+GLOBL ·fse_CFStringFold_trampoline_addr(SB), RODATA, $8
+DATA ·fse_CFStringFold_trampoline_addr(SB)/8, $fse_CFStringFold_trampoline<>(SB)
+
 TEXT fse_CFStringGetLength_trampoline<>(SB), NOSPLIT, $0-0
 	JMP fse_CFStringGetLength(SB)
 
