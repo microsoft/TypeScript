@@ -3574,8 +3574,15 @@ func (r *Relater) structuredTypeRelatedToWorker(source *Type, target *Type, repo
 				// false positives. For example, given 'T extends { [K in keyof T]: string }',
 				// 'keyof T' has itself as its constraint and produces a Ternary.Maybe when
 				// related to other types.
-				if r.isRelatedTo(source, r.c.getIndexTypeEx(constraint, target.AsIndexType().indexFlags|IndexFlagsNoReducibleCheck), RecursionFlagsTarget, reportErrors) == TernaryTrue {
+				constraintIndexType := r.c.getIndexTypeEx(constraint, target.AsIndexType().indexFlags|IndexFlagsNoReducibleCheck)
+				saveErrorState := r.getErrorState()
+				if r.isRelatedTo(source, constraintIndexType, RecursionFlagsTarget, reportErrors) == TernaryTrue {
 					return TernaryTrue
+				}
+				if constraintIndexType.flags&TypeFlagsIndex != 0 &&
+					IsDistributedTypeParameter(constraintIndexType.AsIndexType().target) &&
+					getNonDistributedTypeParameter(constraintIndexType.AsIndexType().target) == targetType {
+					r.restoreErrorState(saveErrorState)
 				}
 			} else if r.c.isGenericMappedType(targetType) {
 				// generic mapped types that don't simplify or have a constraint still have a very simple set of keys we can compare against
@@ -3661,7 +3668,7 @@ func (r *Relater) structuredTypeRelatedToWorker(source *Type, target *Type, repo
 		if modifiers&MappedTypeModifiersExcludeOptional == 0 {
 			// If the mapped type has shape `{ [P in Q]: T[P] }`,
 			// source `S` is related to target if `T` = `S`, i.e. `S` is related to `{ [P in Q]: S[P] }`.
-			if !keysRemapped && templateType.flags&TypeFlagsIndexedAccess != 0 && templateType.AsIndexedAccessType().objectType == source && templateType.AsIndexedAccessType().indexType == r.c.getTypeParameterFromMappedType(target) {
+			if !keysRemapped && templateType.flags&TypeFlagsIndexedAccess != 0 && getNonDistributedTypeParameter(templateType.AsIndexedAccessType().objectType) == source && templateType.AsIndexedAccessType().indexType == r.c.getTypeParameterFromMappedType(target) {
 				return TernaryTrue
 			}
 			if !r.c.isGenericMappedType(source) {
@@ -4042,12 +4049,12 @@ func (r *Relater) mappedTypeRelatedTo(source *Type, target *Type, reportErrors b
 		r.relation == r.c.identityRelation && getMappedTypeModifiers(source) == getMappedTypeModifiers(target) ||
 		r.relation != r.c.identityRelation && r.c.getCombinedMappedTypeOptionality(source) <= r.c.getCombinedMappedTypeOptionality(target)
 	if modifiersRelated {
-		targetConstraint := r.c.getConstraintTypeFromMappedType(target)
+		mapper := newSimpleTypeMapper(r.c.getTypeParameterFromMappedType(source), r.c.getTypeParameterFromMappedType(target))
+		targetConstraint := r.c.instantiateType(r.c.getConstraintTypeFromMappedType(target), mapper)
 		sourceConstraint := r.c.instantiateType(r.c.getConstraintTypeFromMappedType(source), core.IfElse(r.c.getCombinedMappedTypeOptionality(source) < 0, r.c.reportUnmeasurableMapper, r.c.reportUnreliableMapper))
 		if result := r.isRelatedTo(targetConstraint, sourceConstraint, RecursionFlagsBoth, reportErrors); result != TernaryFalse {
-			mapper := newSimpleTypeMapper(r.c.getTypeParameterFromMappedType(source), r.c.getTypeParameterFromMappedType(target))
 			if r.c.instantiateType(r.c.getNameTypeFromMappedType(source), mapper) == r.c.instantiateType(r.c.getNameTypeFromMappedType(target), mapper) {
-				return result & r.isRelatedTo(r.c.instantiateType(r.c.getTemplateTypeFromMappedType(source), mapper), r.c.getTemplateTypeFromMappedType(target), RecursionFlagsBoth, reportErrors)
+				return result & r.isRelatedTo(r.c.instantiateType(r.c.getTemplateTypeFromMappedType(source), mapper), r.c.instantiateType(r.c.getTemplateTypeFromMappedType(target), mapper), RecursionFlagsBoth, reportErrors)
 			}
 		}
 	}

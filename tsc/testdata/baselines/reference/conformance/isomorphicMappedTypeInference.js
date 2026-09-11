@@ -180,6 +180,15 @@ const o1 = getProps(myAny, ['foo', 'bar']);
 
 const o2: { foo: any; bar: any } = getProps(myAny, ['foo', 'bar']);
 
+// Inference between homomorphic mapped types should infer the original type
+// parameter, not its distributed representation.
+declare function inferFromMapped<T>(value: { [P in keyof T]: T[P] }): T;
+
+function f30<U>(value: { [P in keyof U]: U[P] }, ordinary: U) {
+    const inferred = inferFromMapped(value);
+    const accept: typeof inferred = ordinary;
+}
+
 
 //// [isomorphicMappedTypeInference.js]
 "use strict";
@@ -298,6 +307,10 @@ function getProps(obj, list) {
 const myAny = {};
 const o1 = getProps(myAny, ['foo', 'bar']);
 const o2 = getProps(myAny, ['foo', 'bar']);
+function f30(value, ordinary) {
+    const inferred = inferFromMapped(value);
+    const accept = ordinary;
+}
 
 
 //// [isomorphicMappedTypeInference.d.ts]
@@ -400,3 +413,9 @@ declare const o2: {
     foo: any;
     bar: any;
 };
+declare function inferFromMapped<T>(value: {
+    [P in keyof T]: T[P];
+}): T;
+declare function f30<U>(value: {
+    [P in keyof U]: U[P];
+}, ordinary: U): void;

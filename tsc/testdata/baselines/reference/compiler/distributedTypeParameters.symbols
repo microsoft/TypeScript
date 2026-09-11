@@ -206,100 +206,260 @@ type T5<A extends number, B extends A> =
 
     never;
 
+type M1<A, B extends A> = {
+>M1 : Symbol(M1, Decl(distributedTypeParameters.ts, 62, 10))
+>A : Symbol(A, Decl(distributedTypeParameters.ts, 64, 8))
+>B : Symbol(B, Decl(distributedTypeParameters.ts, 64, 10))
+>A : Symbol(A, Decl(distributedTypeParameters.ts, 64, 8))
+
+  [K in keyof A]: Show<A, B>;  // Error
+>K : Symbol(K, Decl(distributedTypeParameters.ts, 65, 3))
+>A : Symbol(A, Decl(distributedTypeParameters.ts, 64, 8))
+>Show : Symbol(Show, Decl(distributedTypeParameters.ts, 0, 0))
+>A : Symbol(A, Decl(distributedTypeParameters.ts, 64, 8))
+>B : Symbol(B, Decl(distributedTypeParameters.ts, 64, 10))
+
+};
+
+type M2<A, B extends A> = {
+>M2 : Symbol(M2, Decl(distributedTypeParameters.ts, 66, 2))
+>A : Symbol(A, Decl(distributedTypeParameters.ts, 68, 8))
+>B : Symbol(B, Decl(distributedTypeParameters.ts, 68, 10))
+>A : Symbol(A, Decl(distributedTypeParameters.ts, 68, 8))
+
+  [K in keyof A as K]: Show<A, B>;  // Error
+>K : Symbol(K, Decl(distributedTypeParameters.ts, 69, 3))
+>A : Symbol(A, Decl(distributedTypeParameters.ts, 68, 8))
+>K : Symbol(K, Decl(distributedTypeParameters.ts, 69, 3))
+>Show : Symbol(Show, Decl(distributedTypeParameters.ts, 0, 0))
+>A : Symbol(A, Decl(distributedTypeParameters.ts, 68, 8))
+>B : Symbol(B, Decl(distributedTypeParameters.ts, 68, 10))
+
+};
+
+type M3<A, B extends A> = {
+>M3 : Symbol(M3, Decl(distributedTypeParameters.ts, 70, 2))
+>A : Symbol(A, Decl(distributedTypeParameters.ts, 72, 8))
+>B : Symbol(B, Decl(distributedTypeParameters.ts, 72, 10))
+>A : Symbol(A, Decl(distributedTypeParameters.ts, 72, 8))
+
+  [K in keyof A & string]: Show<A, B>;
+>K : Symbol(K, Decl(distributedTypeParameters.ts, 73, 3))
+>A : Symbol(A, Decl(distributedTypeParameters.ts, 72, 8))
+>Show : Symbol(Show, Decl(distributedTypeParameters.ts, 0, 0))
+>A : Symbol(A, Decl(distributedTypeParameters.ts, 72, 8))
+>B : Symbol(B, Decl(distributedTypeParameters.ts, 72, 10))
+
+};
+
+type X5 = M1<{ a: 0 } | { b: 1 }, { a: 0 }>;
+>X5 : Symbol(X5, Decl(distributedTypeParameters.ts, 74, 2))
+>M1 : Symbol(M1, Decl(distributedTypeParameters.ts, 62, 10))
+>a : Symbol(a, Decl(distributedTypeParameters.ts, 76, 14))
+>b : Symbol(b, Decl(distributedTypeParameters.ts, 76, 25))
+>a : Symbol(a, Decl(distributedTypeParameters.ts, 76, 35))
+
+type X6 = M2<{ a: 0 } | { b: 1 }, { a: 0 }>;
+>X6 : Symbol(X6, Decl(distributedTypeParameters.ts, 76, 44))
+>M2 : Symbol(M2, Decl(distributedTypeParameters.ts, 66, 2))
+>a : Symbol(a, Decl(distributedTypeParameters.ts, 77, 14))
+>b : Symbol(b, Decl(distributedTypeParameters.ts, 77, 25))
+>a : Symbol(a, Decl(distributedTypeParameters.ts, 77, 35))
+
+type ShowResult<T, U extends T> = U extends T ? true : false;
+>ShowResult : Symbol(ShowResult, Decl(distributedTypeParameters.ts, 77, 44))
+>T : Symbol(T, Decl(distributedTypeParameters.ts, 79, 16))
+>U : Symbol(U, Decl(distributedTypeParameters.ts, 79, 18))
+>T : Symbol(T, Decl(distributedTypeParameters.ts, 79, 16))
+>U : Symbol(U, Decl(distributedTypeParameters.ts, 79, 18))
+>T : Symbol(T, Decl(distributedTypeParameters.ts, 79, 16))
+
+declare function conditionalIndexedAccess<T, U extends T>(y: U):
+>conditionalIndexedAccess : Symbol(conditionalIndexedAccess, Decl(distributedTypeParameters.ts, 79, 61))
+>T : Symbol(T, Decl(distributedTypeParameters.ts, 81, 42))
+>U : Symbol(U, Decl(distributedTypeParameters.ts, 81, 44))
+>T : Symbol(T, Decl(distributedTypeParameters.ts, 81, 42))
+>y : Symbol(y, Decl(distributedTypeParameters.ts, 81, 58))
+>U : Symbol(U, Decl(distributedTypeParameters.ts, 81, 44))
+
+  T extends unknown ? ShowResult<T[keyof T], U[keyof T]> : never;  // Error
+>T : Symbol(T, Decl(distributedTypeParameters.ts, 81, 42))
+>ShowResult : Symbol(ShowResult, Decl(distributedTypeParameters.ts, 77, 44))
+>T : Symbol(T, Decl(distributedTypeParameters.ts, 81, 42))
+>T : Symbol(T, Decl(distributedTypeParameters.ts, 81, 42))
+>U : Symbol(U, Decl(distributedTypeParameters.ts, 81, 44))
+>T : Symbol(T, Decl(distributedTypeParameters.ts, 81, 42))
+
+const conditionalIndexedAccessResult = conditionalIndexedAccess<
+>conditionalIndexedAccessResult : Symbol(conditionalIndexedAccessResult, Decl(distributedTypeParameters.ts, 84, 5))
+>conditionalIndexedAccess : Symbol(conditionalIndexedAccess, Decl(distributedTypeParameters.ts, 79, 61))
+
+  { a: 1 } | { b: 2 },
+>a : Symbol(a, Decl(distributedTypeParameters.ts, 85, 3))
+>b : Symbol(b, Decl(distributedTypeParameters.ts, 85, 14))
+
+  { a: 1 }
+>a : Symbol(a, Decl(distributedTypeParameters.ts, 86, 3))
+
+>({ a: 1 });
+>a : Symbol(a, Decl(distributedTypeParameters.ts, 87, 3))
+
+declare function mappedIndexedAccess<T, U extends T>(y: U): {
+>mappedIndexedAccess : Symbol(mappedIndexedAccess, Decl(distributedTypeParameters.ts, 87, 12))
+>T : Symbol(T, Decl(distributedTypeParameters.ts, 89, 37))
+>U : Symbol(U, Decl(distributedTypeParameters.ts, 89, 39))
+>T : Symbol(T, Decl(distributedTypeParameters.ts, 89, 37))
+>y : Symbol(y, Decl(distributedTypeParameters.ts, 89, 53))
+>U : Symbol(U, Decl(distributedTypeParameters.ts, 89, 39))
+
+  [P in keyof T]: ShowResult<T[P], U[P]>;  // Error
+>P : Symbol(P, Decl(distributedTypeParameters.ts, 90, 3))
+>T : Symbol(T, Decl(distributedTypeParameters.ts, 89, 37))
+>ShowResult : Symbol(ShowResult, Decl(distributedTypeParameters.ts, 77, 44))
+>T : Symbol(T, Decl(distributedTypeParameters.ts, 89, 37))
+>P : Symbol(P, Decl(distributedTypeParameters.ts, 90, 3))
+>U : Symbol(U, Decl(distributedTypeParameters.ts, 89, 39))
+>P : Symbol(P, Decl(distributedTypeParameters.ts, 90, 3))
+
+};
+
+const mappedIndexedAccessResult = mappedIndexedAccess<
+>mappedIndexedAccessResult : Symbol(mappedIndexedAccessResult, Decl(distributedTypeParameters.ts, 93, 5))
+>mappedIndexedAccess : Symbol(mappedIndexedAccess, Decl(distributedTypeParameters.ts, 87, 12))
+
+  { a: 1 } | { b: 2 },
+>a : Symbol(a, Decl(distributedTypeParameters.ts, 94, 3))
+>b : Symbol(b, Decl(distributedTypeParameters.ts, 94, 14))
+
+  { a: 1 }
+>a : Symbol(a, Decl(distributedTypeParameters.ts, 95, 3))
+
+>({ a: 1 });
+>a : Symbol(a, Decl(distributedTypeParameters.ts, 96, 3))
+
 // Ensure mapped type modifiers are computed correctly, example from type-fest
 
 type IsReadonlyKeyOf<Type extends object, Key extends keyof Type> =
->IsReadonlyKeyOf : Symbol(IsReadonlyKeyOf, Decl(distributedTypeParameters.ts, 62, 10))
->Type : Symbol(Type, Decl(distributedTypeParameters.ts, 66, 21))
->Key : Symbol(Key, Decl(distributedTypeParameters.ts, 66, 41))
->Type : Symbol(Type, Decl(distributedTypeParameters.ts, 66, 21))
+>IsReadonlyKeyOf : Symbol(IsReadonlyKeyOf, Decl(distributedTypeParameters.ts, 96, 12))
+>Type : Symbol(Type, Decl(distributedTypeParameters.ts, 100, 21))
+>Key : Symbol(Key, Decl(distributedTypeParameters.ts, 100, 41))
+>Type : Symbol(Type, Decl(distributedTypeParameters.ts, 100, 21))
 
 	IsAny<Type | Key> extends true ? never
->IsAny : Symbol(IsAny, Decl(distributedTypeParameters.ts, 75, 11))
->Type : Symbol(Type, Decl(distributedTypeParameters.ts, 66, 21))
->Key : Symbol(Key, Decl(distributedTypeParameters.ts, 66, 41))
+>IsAny : Symbol(IsAny, Decl(distributedTypeParameters.ts, 109, 11))
+>Type : Symbol(Type, Decl(distributedTypeParameters.ts, 100, 21))
+>Key : Symbol(Key, Decl(distributedTypeParameters.ts, 100, 41))
 
 		: Key extends unknown // For distributing `Key`
->Key : Symbol(Key, Decl(distributedTypeParameters.ts, 66, 41))
+>Key : Symbol(Key, Decl(distributedTypeParameters.ts, 100, 41))
 
 			? Type extends unknown // For distributing `Type`
->Type : Symbol(Type, Decl(distributedTypeParameters.ts, 66, 21))
+>Type : Symbol(Type, Decl(distributedTypeParameters.ts, 100, 21))
 
 				? IsEqual<
->IsEqual : Symbol(IsEqual, Decl(distributedTypeParameters.ts, 77, 56))
+>IsEqual : Symbol(IsEqual, Decl(distributedTypeParameters.ts, 111, 56))
 
 					{[K in Key]: Type[Key]},
->K : Symbol(K, Decl(distributedTypeParameters.ts, 71, 7))
->Key : Symbol(Key, Decl(distributedTypeParameters.ts, 66, 41))
->Type : Symbol(Type, Decl(distributedTypeParameters.ts, 66, 21))
->Key : Symbol(Key, Decl(distributedTypeParameters.ts, 66, 41))
+>K : Symbol(K, Decl(distributedTypeParameters.ts, 105, 7))
+>Key : Symbol(Key, Decl(distributedTypeParameters.ts, 100, 41))
+>Type : Symbol(Type, Decl(distributedTypeParameters.ts, 100, 21))
+>Key : Symbol(Key, Decl(distributedTypeParameters.ts, 100, 41))
 
 					{readonly [K in Key]: Type[Key]}
->K : Symbol(K, Decl(distributedTypeParameters.ts, 72, 16))
->Key : Symbol(Key, Decl(distributedTypeParameters.ts, 66, 41))
->Type : Symbol(Type, Decl(distributedTypeParameters.ts, 66, 21))
->Key : Symbol(Key, Decl(distributedTypeParameters.ts, 66, 41))
+>K : Symbol(K, Decl(distributedTypeParameters.ts, 106, 16))
+>Key : Symbol(Key, Decl(distributedTypeParameters.ts, 100, 41))
+>Type : Symbol(Type, Decl(distributedTypeParameters.ts, 100, 21))
+>Key : Symbol(Key, Decl(distributedTypeParameters.ts, 100, 41))
 
 				>
 				: never // Should never happen
 			: never; // Should never happen
 
 type IsAny<T> = 0 extends 1 & NoInfer<T> ? true : false;
->IsAny : Symbol(IsAny, Decl(distributedTypeParameters.ts, 75, 11))
->T : Symbol(T, Decl(distributedTypeParameters.ts, 77, 11))
+>IsAny : Symbol(IsAny, Decl(distributedTypeParameters.ts, 109, 11))
+>T : Symbol(T, Decl(distributedTypeParameters.ts, 111, 11))
 >NoInfer : Symbol(NoInfer, Decl(lib.es5.d.ts, --, --))
->T : Symbol(T, Decl(distributedTypeParameters.ts, 77, 11))
+>T : Symbol(T, Decl(distributedTypeParameters.ts, 111, 11))
 
 type IsEqual<A, B> =
->IsEqual : Symbol(IsEqual, Decl(distributedTypeParameters.ts, 77, 56))
->A : Symbol(A, Decl(distributedTypeParameters.ts, 79, 13))
->B : Symbol(B, Decl(distributedTypeParameters.ts, 79, 15))
+>IsEqual : Symbol(IsEqual, Decl(distributedTypeParameters.ts, 111, 56))
+>A : Symbol(A, Decl(distributedTypeParameters.ts, 113, 13))
+>B : Symbol(B, Decl(distributedTypeParameters.ts, 113, 15))
 
 	[A] extends [B]
->A : Symbol(A, Decl(distributedTypeParameters.ts, 79, 13))
->B : Symbol(B, Decl(distributedTypeParameters.ts, 79, 15))
+>A : Symbol(A, Decl(distributedTypeParameters.ts, 113, 13))
+>B : Symbol(B, Decl(distributedTypeParameters.ts, 113, 15))
 
 		? [B] extends [A]
->B : Symbol(B, Decl(distributedTypeParameters.ts, 79, 15))
->A : Symbol(A, Decl(distributedTypeParameters.ts, 79, 13))
+>B : Symbol(B, Decl(distributedTypeParameters.ts, 113, 15))
+>A : Symbol(A, Decl(distributedTypeParameters.ts, 113, 13))
 
 			? _IsEqual<A, B>
->_IsEqual : Symbol(_IsEqual, Decl(distributedTypeParameters.ts, 84, 10))
->A : Symbol(A, Decl(distributedTypeParameters.ts, 79, 13))
->B : Symbol(B, Decl(distributedTypeParameters.ts, 79, 15))
+>_IsEqual : Symbol(_IsEqual, Decl(distributedTypeParameters.ts, 118, 10))
+>A : Symbol(A, Decl(distributedTypeParameters.ts, 113, 13))
+>B : Symbol(B, Decl(distributedTypeParameters.ts, 113, 15))
 
 			: false
 		: false;
 
 type _IsEqual<A, B> =
->_IsEqual : Symbol(_IsEqual, Decl(distributedTypeParameters.ts, 84, 10))
->A : Symbol(A, Decl(distributedTypeParameters.ts, 86, 14))
->B : Symbol(B, Decl(distributedTypeParameters.ts, 86, 16))
+>_IsEqual : Symbol(_IsEqual, Decl(distributedTypeParameters.ts, 118, 10))
+>A : Symbol(A, Decl(distributedTypeParameters.ts, 120, 14))
+>B : Symbol(B, Decl(distributedTypeParameters.ts, 120, 16))
 
 	(<G>() => G extends A & G | G ? 1 : 2) extends
->G : Symbol(G, Decl(distributedTypeParameters.ts, 87, 3))
->G : Symbol(G, Decl(distributedTypeParameters.ts, 87, 3))
->A : Symbol(A, Decl(distributedTypeParameters.ts, 86, 14))
->G : Symbol(G, Decl(distributedTypeParameters.ts, 87, 3))
->G : Symbol(G, Decl(distributedTypeParameters.ts, 87, 3))
+>G : Symbol(G, Decl(distributedTypeParameters.ts, 121, 3))
+>G : Symbol(G, Decl(distributedTypeParameters.ts, 121, 3))
+>A : Symbol(A, Decl(distributedTypeParameters.ts, 120, 14))
+>G : Symbol(G, Decl(distributedTypeParameters.ts, 121, 3))
+>G : Symbol(G, Decl(distributedTypeParameters.ts, 121, 3))
 
 	(<G>() => G extends B & G | G ? 1 : 2)
->G : Symbol(G, Decl(distributedTypeParameters.ts, 88, 3))
->G : Symbol(G, Decl(distributedTypeParameters.ts, 88, 3))
->B : Symbol(B, Decl(distributedTypeParameters.ts, 86, 16))
->G : Symbol(G, Decl(distributedTypeParameters.ts, 88, 3))
->G : Symbol(G, Decl(distributedTypeParameters.ts, 88, 3))
+>G : Symbol(G, Decl(distributedTypeParameters.ts, 122, 3))
+>G : Symbol(G, Decl(distributedTypeParameters.ts, 122, 3))
+>B : Symbol(B, Decl(distributedTypeParameters.ts, 120, 16))
+>G : Symbol(G, Decl(distributedTypeParameters.ts, 122, 3))
+>G : Symbol(G, Decl(distributedTypeParameters.ts, 122, 3))
 
 		? true
 		: false;
 
 type T10 = IsReadonlyKeyOf<{ a: string }, 'a'>;  // false
->T10 : Symbol(T10, Decl(distributedTypeParameters.ts, 90, 10))
->IsReadonlyKeyOf : Symbol(IsReadonlyKeyOf, Decl(distributedTypeParameters.ts, 62, 10))
->a : Symbol(a, Decl(distributedTypeParameters.ts, 92, 28))
+>T10 : Symbol(T10, Decl(distributedTypeParameters.ts, 124, 10))
+>IsReadonlyKeyOf : Symbol(IsReadonlyKeyOf, Decl(distributedTypeParameters.ts, 96, 12))
+>a : Symbol(a, Decl(distributedTypeParameters.ts, 126, 28))
 
 type T11 = IsReadonlyKeyOf<{ readonly b: string }, 'b'>;  // true
->T11 : Symbol(T11, Decl(distributedTypeParameters.ts, 92, 47))
->IsReadonlyKeyOf : Symbol(IsReadonlyKeyOf, Decl(distributedTypeParameters.ts, 62, 10))
->b : Symbol(b, Decl(distributedTypeParameters.ts, 93, 28))
+>T11 : Symbol(T11, Decl(distributedTypeParameters.ts, 126, 47))
+>IsReadonlyKeyOf : Symbol(IsReadonlyKeyOf, Decl(distributedTypeParameters.ts, 96, 12))
+>b : Symbol(b, Decl(distributedTypeParameters.ts, 127, 28))
+
+// Repro from triggerdotdev/trigger.dev
+
+type Exact<P, I extends P> =
+>Exact : Symbol(Exact, Decl(distributedTypeParameters.ts, 127, 56))
+>P : Symbol(P, Decl(distributedTypeParameters.ts, 131, 11))
+>I : Symbol(I, Decl(distributedTypeParameters.ts, 131, 13))
+>P : Symbol(P, Decl(distributedTypeParameters.ts, 131, 11))
+
+  P extends unknown ?
+>P : Symbol(P, Decl(distributedTypeParameters.ts, 131, 11))
+
+    { [K in keyof P]: Exact<P[K], I[K]> } :  // Error
+>K : Symbol(K, Decl(distributedTypeParameters.ts, 133, 7))
+>P : Symbol(P, Decl(distributedTypeParameters.ts, 131, 11))
+>Exact : Symbol(Exact, Decl(distributedTypeParameters.ts, 127, 56))
+>P : Symbol(P, Decl(distributedTypeParameters.ts, 131, 11))
+>K : Symbol(K, Decl(distributedTypeParameters.ts, 133, 7))
+>I : Symbol(I, Decl(distributedTypeParameters.ts, 131, 13))
+>K : Symbol(K, Decl(distributedTypeParameters.ts, 133, 7))
+
+    never;
+
+type X7 = Exact<{ a: 0 } | { b: 1 }, { a: 0 }>;
+>X7 : Symbol(X7, Decl(distributedTypeParameters.ts, 134, 10))
+>Exact : Symbol(Exact, Decl(distributedTypeParameters.ts, 127, 56))
+>a : Symbol(a, Decl(distributedTypeParameters.ts, 136, 17))
+>b : Symbol(b, Decl(distributedTypeParameters.ts, 136, 28))
+>a : Symbol(a, Decl(distributedTypeParameters.ts, 136, 38))
 

@@ -622,3 +622,26 @@ const o2: { foo: any; bar: any } = getProps(myAny, ['foo', 'bar']);
 >'foo' : "foo"
 >'bar' : "bar"
 
+// Inference between homomorphic mapped types should infer the original type
+// parameter, not its distributed representation.
+declare function inferFromMapped<T>(value: { [P in keyof T]: T[P] }): T;
+>inferFromMapped : <T>(value: { [P in keyof T]: T[P]; }) => T
+>value : { [P in keyof T]: T[P]; }
+
+function f30<U>(value: { [P in keyof U]: U[P] }, ordinary: U) {
+>f30 : <U>(value: { [P in keyof U]: U[P]; }, ordinary: U) => void
+>value : { [P in keyof U]: U[P]; }
+>ordinary : U
+
+    const inferred = inferFromMapped(value);
+>inferred : U
+>inferFromMapped(value) : U
+>inferFromMapped : <T>(value: { [P in keyof T]: T[P]; }) => T
+>value : { [P in keyof U]: U[P]; }
+
+    const accept: typeof inferred = ordinary;
+>accept : U
+>inferred : U
+>ordinary : U
+}
+

@@ -14,9 +14,25 @@ distributedTypeParameters.ts(56,15): error TS2344: Type 'C' does not satisfy the
   'C' is only assignable to the non-distributed 'A', but 'A' has been distributed here.
 distributedTypeParameters.ts(57,15): error TS2344: Type 'C' does not satisfy the constraint 'B'.
   'C' is only assignable to the non-distributed 'B', but 'B' has been distributed here.
+distributedTypeParameters.ts(66,27): error TS2344: Type 'B' does not satisfy the constraint 'A'.
+  'B' is only assignable to the non-distributed 'A', but 'A' has been distributed here.
+distributedTypeParameters.ts(70,32): error TS2344: Type 'B' does not satisfy the constraint 'A'.
+  'B' is only assignable to the non-distributed 'A', but 'A' has been distributed here.
+distributedTypeParameters.ts(83,46): error TS2344: Type 'U[keyof T]' does not satisfy the constraint 'T[keyof T]'.
+  Type 'U' is not assignable to type 'T'.
+    'U' is only assignable to the non-distributed 'T', but 'T' has been distributed here.
+distributedTypeParameters.ts(83,46): error TS2536: Type 'keyof T' cannot be used to index type 'U'.
+distributedTypeParameters.ts(91,36): error TS2344: Type 'U[P]' does not satisfy the constraint 'T[P]'.
+  Type 'U' is not assignable to type 'T'.
+    'U' is only assignable to the non-distributed 'T', but 'T' has been distributed here.
+distributedTypeParameters.ts(91,36): error TS2536: Type 'P' cannot be used to index type 'U'.
+distributedTypeParameters.ts(134,35): error TS2344: Type 'I[K]' does not satisfy the constraint 'P[K]'.
+  Type 'I' is not assignable to type 'P'.
+    'I' is only assignable to the non-distributed 'P', but 'P' has been distributed here.
+distributedTypeParameters.ts(134,35): error TS2536: Type 'K' cannot be used to index type 'I'.
 
 
-==== distributedTypeParameters.ts (8 errors) ====
+==== distributedTypeParameters.ts (16 errors) ====
     // https://github.com/microsoft/TypeScript/issues/63708
     
     type Show<A, B extends A> = [A, B] & {};
@@ -105,6 +121,58 @@ distributedTypeParameters.ts(57,15): error TS2344: Type 'C' does not satisfy the
         Show<A, B> :
         never;
     
+    type M1<A, B extends A> = {
+      [K in keyof A]: Show<A, B>;  // Error
+                              ~
+!!! error TS2344: Type 'B' does not satisfy the constraint 'A'.
+!!! error TS2344:   'B' is only assignable to the non-distributed 'A', but 'A' has been distributed here.
+    };
+    
+    type M2<A, B extends A> = {
+      [K in keyof A as K]: Show<A, B>;  // Error
+                                   ~
+!!! error TS2344: Type 'B' does not satisfy the constraint 'A'.
+!!! error TS2344:   'B' is only assignable to the non-distributed 'A', but 'A' has been distributed here.
+    };
+    
+    type M3<A, B extends A> = {
+      [K in keyof A & string]: Show<A, B>;
+    };
+    
+    type X5 = M1<{ a: 0 } | { b: 1 }, { a: 0 }>;
+    type X6 = M2<{ a: 0 } | { b: 1 }, { a: 0 }>;
+    
+    type ShowResult<T, U extends T> = U extends T ? true : false;
+    
+    declare function conditionalIndexedAccess<T, U extends T>(y: U):
+      T extends unknown ? ShowResult<T[keyof T], U[keyof T]> : never;  // Error
+                                                 ~~~~~~~~~~
+!!! error TS2344: Type 'U[keyof T]' does not satisfy the constraint 'T[keyof T]'.
+!!! error TS2344:   Type 'U' is not assignable to type 'T'.
+!!! error TS2344:     'U' is only assignable to the non-distributed 'T', but 'T' has been distributed here.
+                                                 ~~~~~~~~~~
+!!! error TS2536: Type 'keyof T' cannot be used to index type 'U'.
+    
+    const conditionalIndexedAccessResult = conditionalIndexedAccess<
+      { a: 1 } | { b: 2 },
+      { a: 1 }
+    >({ a: 1 });
+    
+    declare function mappedIndexedAccess<T, U extends T>(y: U): {
+      [P in keyof T]: ShowResult<T[P], U[P]>;  // Error
+                                       ~~~~
+!!! error TS2344: Type 'U[P]' does not satisfy the constraint 'T[P]'.
+!!! error TS2344:   Type 'U' is not assignable to type 'T'.
+!!! error TS2344:     'U' is only assignable to the non-distributed 'T', but 'T' has been distributed here.
+                                       ~~~~
+!!! error TS2536: Type 'P' cannot be used to index type 'U'.
+    };
+    
+    const mappedIndexedAccessResult = mappedIndexedAccess<
+      { a: 1 } | { b: 2 },
+      { a: 1 }
+    >({ a: 1 });
+    
     // Ensure mapped type modifiers are computed correctly, example from type-fest
     
     type IsReadonlyKeyOf<Type extends object, Key extends keyof Type> =
@@ -135,4 +203,19 @@ distributedTypeParameters.ts(57,15): error TS2344: Type 'C' does not satisfy the
     
     type T10 = IsReadonlyKeyOf<{ a: string }, 'a'>;  // false
     type T11 = IsReadonlyKeyOf<{ readonly b: string }, 'b'>;  // true
+    
+    // Repro from triggerdotdev/trigger.dev
+    
+    type Exact<P, I extends P> =
+      P extends unknown ?
+        { [K in keyof P]: Exact<P[K], I[K]> } :  // Error
+                                      ~~~~
+!!! error TS2344: Type 'I[K]' does not satisfy the constraint 'P[K]'.
+!!! error TS2344:   Type 'I' is not assignable to type 'P'.
+!!! error TS2344:     'I' is only assignable to the non-distributed 'P', but 'P' has been distributed here.
+                                      ~~~~
+!!! error TS2536: Type 'K' cannot be used to index type 'I'.
+        never;
+    
+    type X7 = Exact<{ a: 0 } | { b: 1 }, { a: 0 }>;
     

@@ -91,6 +91,88 @@ type T5<A extends number, B extends A> =
     Show<A, B> :
     never;
 
+type M1<A, B extends A> = {
+>M1 : M1<A, B>
+
+  [K in keyof A]: Show<A, B>;  // Error
+};
+
+type M2<A, B extends A> = {
+>M2 : M2<A, B>
+
+  [K in keyof A as K]: Show<A, B>;  // Error
+};
+
+type M3<A, B extends A> = {
+>M3 : M3<A, B>
+
+  [K in keyof A & string]: Show<A, B>;
+};
+
+type X5 = M1<{ a: 0 } | { b: 1 }, { a: 0 }>;
+>X5 : X5
+>a : 0
+>b : 1
+>a : 0
+
+type X6 = M2<{ a: 0 } | { b: 1 }, { a: 0 }>;
+>X6 : X6
+>a : 0
+>b : 1
+>a : 0
+
+type ShowResult<T, U extends T> = U extends T ? true : false;
+>ShowResult : ShowResult<T, U>
+>true : true
+>false : false
+
+declare function conditionalIndexedAccess<T, U extends T>(y: U):
+>conditionalIndexedAccess : <T, U extends T>(y: U) => T extends unknown ? ShowResult<T[keyof T], U[keyof T]> : never
+>y : U
+
+  T extends unknown ? ShowResult<T[keyof T], U[keyof T]> : never;  // Error
+
+const conditionalIndexedAccessResult = conditionalIndexedAccess<
+>conditionalIndexedAccessResult : boolean
+>conditionalIndexedAccess<  { a: 1 } | { b: 2 },  { a: 1 }>({ a: 1 }) : boolean
+>conditionalIndexedAccess : <T, U extends T>(y: U) => T extends unknown ? ShowResult<T[keyof T], U[keyof T]> : never
+
+  { a: 1 } | { b: 2 },
+>a : 1
+>b : 2
+
+  { a: 1 }
+>a : 1
+
+>({ a: 1 });
+>{ a: 1 } : { a: 1; }
+>a : 1
+>1 : 1
+
+declare function mappedIndexedAccess<T, U extends T>(y: U): {
+>mappedIndexedAccess : <T, U extends T>(y: U) => { [P in keyof T]: ShowResult<T[P], U[P]>; }
+>y : U
+
+  [P in keyof T]: ShowResult<T[P], U[P]>;  // Error
+};
+
+const mappedIndexedAccessResult = mappedIndexedAccess<
+>mappedIndexedAccessResult : { a: true; } | { b: false; }
+>mappedIndexedAccess<  { a: 1 } | { b: 2 },  { a: 1 }>({ a: 1 }) : { a: true; } | { b: false; }
+>mappedIndexedAccess : <T, U extends T>(y: U) => { [P in keyof T]: ShowResult<T[P], U[P]>; }
+
+  { a: 1 } | { b: 2 },
+>a : 1
+>b : 2
+
+  { a: 1 }
+>a : 1
+
+>({ a: 1 });
+>{ a: 1 } : { a: 1; }
+>a : 1
+>1 : 1
+
 // Ensure mapped type modifiers are computed correctly, example from type-fest
 
 type IsReadonlyKeyOf<Type extends object, Key extends keyof Type> =
@@ -143,4 +225,19 @@ type T10 = IsReadonlyKeyOf<{ a: string }, 'a'>;  // false
 type T11 = IsReadonlyKeyOf<{ readonly b: string }, 'b'>;  // true
 >T11 : true
 >b : string
+
+// Repro from triggerdotdev/trigger.dev
+
+type Exact<P, I extends P> =
+>Exact : Exact<P, I>
+
+  P extends unknown ?
+    { [K in keyof P]: Exact<P[K], I[K]> } :  // Error
+    never;
+
+type X7 = Exact<{ a: 0 } | { b: 1 }, { a: 0 }>;
+>X7 : X7
+>a : 0
+>b : 1
+>a : 0
 

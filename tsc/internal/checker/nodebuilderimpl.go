@@ -1575,7 +1575,7 @@ func (b *NodeBuilderImpl) createMappedTypeNodeFromType(t *Type) *ast.TypeNode {
 			name := b.typeParameterToName(newConstraintParam)
 			target := t.Target()
 			newTypeVariable = b.f.NewTypeReferenceNode(name.AsNode(), nil)
-			templateType = b.ch.instantiateType(b.ch.getTemplateTypeFromMappedType(target), newTypeMapper([]*Type{b.ch.getTypeParameterFromMappedType(target), b.ch.getModifiersTypeFromMappedType(target)}, []*Type{typeParameter, newConstraintParam}))
+			templateType = b.ch.instantiateType(b.ch.getTemplateTypeFromMappedType(target), newTypeMapper([]*Type{b.ch.getTypeParameterFromMappedType(target), getNonDistributedTypeParameter(b.ch.getModifiersTypeFromMappedType(target))}, []*Type{typeParameter, newConstraintParam}))
 		}
 		indexTarget := newTypeVariable
 		if indexTarget == nil {
@@ -1625,7 +1625,7 @@ func (b *NodeBuilderImpl) createMappedTypeNodeFromType(t *Type) *ast.TypeNode {
 
 		rawConstraintTypeFromDeclaration := b.getTypeFromTypeNode(mapped.declaration.TypeParameter.AsTypeParameterDeclaration().Constraint.Type(), false)
 		if rawConstraintTypeFromDeclaration != nil {
-			rawConstraintTypeFromDeclaration = b.ch.getConstraintOfTypeParameter(rawConstraintTypeFromDeclaration)
+			rawConstraintTypeFromDeclaration = b.ch.getConstraintOfTypeParameter(getNonDistributedTypeParameter(rawConstraintTypeFromDeclaration))
 		}
 		if rawConstraintTypeFromDeclaration == nil {
 			rawConstraintTypeFromDeclaration = b.ch.unknownType

@@ -699,12 +699,25 @@ func (c *Checker) inferToTemplateLiteralType(n *InferenceState, source *Type, ta
 func (c *Checker) inferFromGenericMappedTypes(n *InferenceState, source *Type, target *Type) {
 	// The source and target types are generic types { [P in S]: X } and { [P in T]: Y }, so we infer
 	// from S to T and from X to Y.
-	c.inferFromTypes(n, c.getConstraintTypeFromMappedType(source), c.getConstraintTypeFromMappedType(target))
-	c.inferFromTypes(n, c.getTemplateTypeFromMappedType(source), c.getTemplateTypeFromMappedType(target))
+	sourceConstraint := c.getConstraintTypeFromMappedType(source)
+	var mapper *TypeMapper
+	if sourceConstraint.flags&TypeFlagsIndex != 0 {
+		sourceTypeParameter := sourceConstraint.AsIndexType().target
+		nonDistributedTypeParameter := getNonDistributedTypeParameter(sourceTypeParameter)
+		if nonDistributedTypeParameter != sourceTypeParameter {
+			// getNonDistributedTypeParameter only unwraps a top-level occurrence, but the
+			// distributed parameter can be nested in a source (for example, Box<T>).
+			// An identity mapper makes instantiateType traverse that source so getMappedType can
+			// unwrap each distributed occurrence without otherwise changing the type.
+			mapper = newSimpleTypeMapper(nonDistributedTypeParameter, nonDistributedTypeParameter)
+		}
+	}
+	c.inferFromTypes(n, c.instantiateType(sourceConstraint, mapper), c.getConstraintTypeFromMappedType(target))
+	c.inferFromTypes(n, c.instantiateType(c.getTemplateTypeFromMappedType(source), mapper), c.getTemplateTypeFromMappedType(target))
 	sourceNameType := c.getNameTypeFromMappedType(source)
 	targetNameType := c.getNameTypeFromMappedType(target)
 	if sourceNameType != nil && targetNameType != nil {
-		c.inferFromTypes(n, sourceNameType, targetNameType)
+		c.inferFromTypes(n, c.instantiateType(sourceNameType, mapper), targetNameType)
 	}
 }
 
@@ -970,7 +983,7 @@ func (c *Checker) inferToMappedType(n *InferenceState, source *Type, target *Typ
 		// where T is a type variable. Use inferTypeForHomomorphicMappedType to infer a suitable source
 		// type and then make a secondary inference from that type to T. We make a secondary inference
 		// such that direct inferences to T get priority over inferences to Partial<T>, for example.
-		inference := getInferenceInfoForType(n, constraintType.AsIndexType().target)
+		inference := getInferenceInfoForType(n, c.getActualTypeVariable(constraintType.AsIndexType().target))
 		if inference != nil && !inference.isFixed && !c.isFromInferenceBlockedSource(source) {
 			inferredType := c.inferTypeForHomomorphicMappedType(source, target, constraintType)
 			if inferredType != nil {
@@ -1101,7 +1114,7 @@ func (c *Checker) inferReverseMappedType(source *Type, target *Type, constraint 
 }
 
 func (c *Checker) inferReverseMappedTypeWorker(source *Type, target *Type, constraint *Type) *Type {
-	typeParameter := c.getIndexedAccessType(constraint.AsIndexType().target, c.getTypeParameterFromMappedType(target))
+	typeParameter := c.getIndexedAccessType(c.getActualTypeVariable(constraint.AsIndexType().target), c.getTypeParameterFromMappedType(target))
 	templateType := c.getTemplateTypeFromMappedType(target)
 	inference := newInferenceInfo(typeParameter)
 	c.inferTypes([]*InferenceInfo{inference}, source, templateType, InferencePriorityNone, false)

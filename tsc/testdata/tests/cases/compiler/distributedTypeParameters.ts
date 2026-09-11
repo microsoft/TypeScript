@@ -64,6 +64,40 @@ type T5<A extends number, B extends A> =
     Show<A, B> :
     never;
 
+type M1<A, B extends A> = {
+  [K in keyof A]: Show<A, B>;  // Error
+};
+
+type M2<A, B extends A> = {
+  [K in keyof A as K]: Show<A, B>;  // Error
+};
+
+type M3<A, B extends A> = {
+  [K in keyof A & string]: Show<A, B>;
+};
+
+type X5 = M1<{ a: 0 } | { b: 1 }, { a: 0 }>;
+type X6 = M2<{ a: 0 } | { b: 1 }, { a: 0 }>;
+
+type ShowResult<T, U extends T> = U extends T ? true : false;
+
+declare function conditionalIndexedAccess<T, U extends T>(y: U):
+  T extends unknown ? ShowResult<T[keyof T], U[keyof T]> : never;  // Error
+
+const conditionalIndexedAccessResult = conditionalIndexedAccess<
+  { a: 1 } | { b: 2 },
+  { a: 1 }
+>({ a: 1 });
+
+declare function mappedIndexedAccess<T, U extends T>(y: U): {
+  [P in keyof T]: ShowResult<T[P], U[P]>;  // Error
+};
+
+const mappedIndexedAccessResult = mappedIndexedAccess<
+  { a: 1 } | { b: 2 },
+  { a: 1 }
+>({ a: 1 });
+
 // Ensure mapped type modifiers are computed correctly, example from type-fest
 
 type IsReadonlyKeyOf<Type extends object, Key extends keyof Type> =
@@ -94,3 +128,12 @@ type _IsEqual<A, B> =
 
 type T10 = IsReadonlyKeyOf<{ a: string }, 'a'>;  // false
 type T11 = IsReadonlyKeyOf<{ readonly b: string }, 'b'>;  // true
+
+// Repro from triggerdotdev/trigger.dev
+
+type Exact<P, I extends P> =
+  P extends unknown ?
+    { [K in keyof P]: Exact<P[K], I[K]> } :  // Error
+    never;
+
+type X7 = Exact<{ a: 0 } | { b: 1 }, { a: 0 }>;
