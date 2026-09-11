@@ -121,7 +121,7 @@ function indexedComp<T extends number | string>(x: T): Comp[T] {
 >Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2025.float16.d.ts, --, --))
 >random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
 
-            return 3; // Error
+            return 3; // Should be error, but already allowed
         }
         return 2; // Ok
     }
@@ -135,7 +135,7 @@ function indexedComp<T extends number | string>(x: T): Comp[T] {
 
             return 2; // Error
         }
-        return 3; // Ok
+        return 3; // // Should be error, but already allowed
     }
     return 4; // Ok
 }

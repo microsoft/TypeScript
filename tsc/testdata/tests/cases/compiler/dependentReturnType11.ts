@@ -278,3 +278,9 @@ function fn6<T extends boolean | undefined>(param: { prop1?: { prop?: T } }): Re
     }
     return 2;
 }
+
+type Not<T extends boolean> = T extends true ? false : true;
+
+function transformedTypeArgument<T extends boolean>(param: Type5<Not<T>>): Ret<T> { // Bad.
+    return param.prop ? 1 : 2;
+}

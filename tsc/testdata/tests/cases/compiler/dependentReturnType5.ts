@@ -48,7 +48,7 @@ interface Comp {
 function indexedComp<T extends number | string>(x: T): Comp[T] {
     if (x === "foo") {
         if (Math.random()) {
-            return 3; // Error
+            return 3; // Should be error, but already allowed
         }
         return 2; // Ok
     }
@@ -56,7 +56,7 @@ function indexedComp<T extends number | string>(x: T): Comp[T] {
         if (Math.random()) {
             return 2; // Error
         }
-        return 3; // Ok
+        return 3; // // Should be error, but already allowed
     }
     return 4; // Ok
 }

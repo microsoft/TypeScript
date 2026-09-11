@@ -4361,7 +4361,7 @@ func (c *Checker) getValidTypeParameterReference(typeNode *ast.Node, typeParamet
 			return validNoReference
 		}
 		t := c.getTypeFromTypeReference(typeNode)
-		if !ast.IsTypeReferenceNode(referencedTypeArgument) && c.getTypeFromTypeNode(referencedTypeArgument) != typeParameter || t.symbol == nil || len(t.symbol.Declarations) != 1 {
+		if !ast.IsTypeReferenceNode(referencedTypeArgument) || c.getTypeFromTypeNode(referencedTypeArgument) != typeParameter || t.symbol == nil || len(t.symbol.Declarations) != 1 {
 			return invalid
 		}
 		typeDeclaration := t.symbol.Declarations[0]

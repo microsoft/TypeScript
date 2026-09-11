@@ -52,7 +52,7 @@ dependentReturnType5.ts(65,5): error TS2322: Type '2' is not assignable to type 
     function indexedComp<T extends number | string>(x: T): Comp[T] {
         if (x === "foo") {
             if (Math.random()) {
-                return 3; // Error
+                return 3; // Should be error, but already allowed
             }
             return 2; // Ok
         }
@@ -63,7 +63,7 @@ dependentReturnType5.ts(65,5): error TS2322: Type '2' is not assignable to type 
 !!! error TS2322: Type '2' is not assignable to type 'Comp[T]'.
 !!! error TS2322:   Type '2' is not assignable to type '3'.
             }
-            return 3; // Ok
+            return 3; // // Should be error, but already allowed
         }
         return 4; // Ok
     }

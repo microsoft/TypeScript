@@ -121,7 +121,7 @@ function indexedComp<T extends number | string>(x: T): Comp[T] {
 >Math : Math
 >random : () => number
 
-            return 3; // Error
+            return 3; // Should be error, but already allowed
 >3 : 3
         }
         return 2; // Ok
@@ -142,7 +142,7 @@ function indexedComp<T extends number | string>(x: T): Comp[T] {
             return 2; // Error
 >2 : 2
         }
-        return 3; // Ok
+        return 3; // // Should be error, but already allowed
 >3 : 3
     }
     return 4; // Ok

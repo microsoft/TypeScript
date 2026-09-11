@@ -795,3 +795,24 @@ function fn6<T extends boolean | undefined>(param: { prop1?: { prop?: T } }): Re
     }
     return 2;
 }
+
+type Not<T extends boolean> = T extends true ? false : true;
+>Not : Symbol(Not, Decl(dependentReturnType11.ts, 276, 1))
+>T : Symbol(T, Decl(dependentReturnType11.ts, 278, 9))
+>T : Symbol(T, Decl(dependentReturnType11.ts, 278, 9))
+
+function transformedTypeArgument<T extends boolean>(param: Type5<Not<T>>): Ret<T> { // Bad.
+>transformedTypeArgument : Symbol(transformedTypeArgument, Decl(dependentReturnType11.ts, 278, 60))
+>T : Symbol(T, Decl(dependentReturnType11.ts, 280, 33))
+>param : Symbol(param, Decl(dependentReturnType11.ts, 280, 52))
+>Type5 : Symbol(Type5, Decl(dependentReturnType11.ts, 118, 1))
+>Not : Symbol(Not, Decl(dependentReturnType11.ts, 276, 1))
+>T : Symbol(T, Decl(dependentReturnType11.ts, 280, 33))
+>Ret : Symbol(Ret, Decl(dependentReturnType11.ts, 0, 0))
+>T : Symbol(T, Decl(dependentReturnType11.ts, 280, 33))
+
+    return param.prop ? 1 : 2;
+>param.prop : Symbol(prop, Decl(dependentReturnType11.ts, 120, 17))
+>param : Symbol(param, Decl(dependentReturnType11.ts, 280, 52))
+>prop : Symbol(prop, Decl(dependentReturnType11.ts, 120, 17))
+}

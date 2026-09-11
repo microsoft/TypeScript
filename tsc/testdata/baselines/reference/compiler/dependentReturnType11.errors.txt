@@ -15,6 +15,8 @@ dependentReturnType11.ts(136,25): error TS2322: Type '1' is not assignable to ty
 dependentReturnType11.ts(136,29): error TS2322: Type '2' is not assignable to type 'Ret<T>'.
 dependentReturnType11.ts(144,25): error TS2322: Type '1' is not assignable to type 'Ret<T>'.
 dependentReturnType11.ts(144,29): error TS2322: Type '2' is not assignable to type 'Ret<T>'.
+dependentReturnType11.ts(164,25): error TS2322: Type '1' is not assignable to type 'Ret<T>'.
+dependentReturnType11.ts(164,29): error TS2322: Type '2' is not assignable to type 'Ret<T>'.
 dependentReturnType11.ts(205,13): error TS2322: Type '1' is not assignable to type 'Ret<T>'.
 dependentReturnType11.ts(207,9): error TS2322: Type '2' is not assignable to type 'Ret<T>'.
 dependentReturnType11.ts(221,9): error TS2322: Type '3' is not assignable to type 'RetU<T>'.
@@ -30,9 +32,11 @@ dependentReturnType11.ts(271,9): error TS2322: Type '3' is not assignable to typ
 dependentReturnType11.ts(273,9): error TS18048: 'param.prop1' is possibly 'undefined'.
 dependentReturnType11.ts(274,9): error TS2322: Type '1' is not assignable to type 'RetU<T>'.
 dependentReturnType11.ts(276,5): error TS2322: Type '2' is not assignable to type 'RetU<T>'.
+dependentReturnType11.ts(282,25): error TS2322: Type '1' is not assignable to type 'Ret<T>'.
+dependentReturnType11.ts(282,29): error TS2322: Type '2' is not assignable to type 'Ret<T>'.
 
 
-==== dependentReturnType11.ts (32 errors) ====
+==== dependentReturnType11.ts (36 errors) ====
     type Ret<T extends boolean> =
         T extends true ? 1 :
         T extends false ? 2 :
@@ -231,6 +235,10 @@ dependentReturnType11.ts(276,5): error TS2322: Type '2' is not assignable to typ
     
     function g16<T extends boolean>(param: Type8<Type9<T>["prop2"]>): Ret<T> { // Unsupported.
         return param.prop ? 1 : 2;
+                            ~
+!!! error TS2322: Type '1' is not assignable to type 'Ret<T>'.
+                                ~
+!!! error TS2322: Type '2' is not assignable to type 'Ret<T>'.
     }
     
     // Tests for shadowing and resolving the constructed narrowable reference.
@@ -373,4 +381,14 @@ dependentReturnType11.ts(276,5): error TS2322: Type '2' is not assignable to typ
         return 2;
         ~~~~~~
 !!! error TS2322: Type '2' is not assignable to type 'RetU<T>'.
+    }
+    
+    type Not<T extends boolean> = T extends true ? false : true;
+    
+    function transformedTypeArgument<T extends boolean>(param: Type5<Not<T>>): Ret<T> { // Bad.
+        return param.prop ? 1 : 2;
+                            ~
+!!! error TS2322: Type '1' is not assignable to type 'Ret<T>'.
+                                ~
+!!! error TS2322: Type '2' is not assignable to type 'Ret<T>'.
     }
