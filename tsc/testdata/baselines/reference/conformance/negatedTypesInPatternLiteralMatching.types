@@ -1,0 +1,109 @@
+//// [tests/cases/conformance/types/negated/negatedTypesInPatternLiteralMatching.ts] ////
+
+=== negatedTypesInPatternLiteralMatching.ts ===
+// Matching actual string literal types against pattern literal types that
+// contain negated holes. `"foobaz"` should match `foo${string & not "bar"}`
+// but `"foobar"` should not, because the hole excludes exactly "bar".
+
+type Pattern = `foo${string & not "bar"}`;
+>Pattern : `foo${string & not "bar"}`
+
+// Direct assignment of literals to the pattern type.
+declare let pat: Pattern;
+>pat : `foo${string & not "bar"}`
+
+pat = "foobaz"; // should be ok
+>pat = "foobaz" : "foobaz"
+>pat : `foo${string & not "bar"}`
+>"foobaz" : "foobaz"
+
+pat = "foobar"; // should error
+>pat = "foobar" : "foobar"
+>pat : `foo${string & not "bar"}`
+>"foobar" : "foobar"
+
+pat = "foo";    // should be ok (the hole can match the empty string)
+>pat = "foo" : "foo"
+>pat : `foo${string & not "bar"}`
+>"foo" : "foo"
+
+pat = "baz";    // should error (missing "foo" prefix)
+>pat = "baz" : "baz"
+>pat : `foo${string & not "bar"}`
+>"baz" : "baz"
+
+// Assignability from a literal-typed value.
+declare const foobaz: "foobaz";
+>foobaz : "foobaz"
+
+declare const foobar: "foobar";
+>foobar : "foobar"
+
+pat = foobaz; // should be ok
+>pat = foobaz : "foobaz"
+>pat : `foo${string & not "bar"}`
+>foobaz : "foobaz"
+
+pat = foobar; // should error
+>pat = foobar : "foobar"
+>pat : `foo${string & not "bar"}`
+>foobar : "foobar"
+
+// Matching via a conditional type (extends check).
+type MatchFoobaz = "foobaz" extends Pattern ? true : false; // should be true
+>MatchFoobaz : true
+>true : true
+>false : false
+
+type MatchFoobar = "foobar" extends Pattern ? true : false; // should be false
+>MatchFoobar : false
+>true : true
+>false : false
+
+// Matching a union of literals: only the members that don't collapse the hole
+// to never should be retained.
+type FilterMatches<T> = T extends Pattern ? T : never;
+>FilterMatches : FilterMatches<T>
+
+type Filtered = FilterMatches<"foobaz" | "foobar" | "fooqux">; // should be "foobaz" | "fooqux"
+>Filtered : Filtered
+
+// Inference through a generic function whose parameter is the pattern.
+declare function take<T extends string>(s: `foo${T & not "bar"}`): T;
+>take : <T extends string>(s: `foo${T & not "bar"}`) => T
+>s : `foo${T & not "bar"}`
+
+const okBaz = take("foobaz"); // should be ok, T = "baz"
+>okBaz : "baz"
+>take("foobaz") : "baz"
+>take : <T extends string>(s: `foo${T & not "bar"}`) => T
+>"foobaz" : "foobaz"
+
+const errBar = take("foobar"); // should error, "bar" is excluded
+>errBar : "bar"
+>take("foobar") : "bar"
+>take : <T extends string>(s: `foo${T & not "bar"}`) => T
+>"foobar" : "foobar"
+
+// Excluding a union of holes.
+type Pattern2 = `foo${string & not ("bar" | "qux")}`;
+>Pattern2 : `foo${string & not "bar" & not "qux"}`
+
+declare let pat2: Pattern2;
+>pat2 : `foo${string & not "bar" & not "qux"}`
+
+pat2 = "foobaz"; // should be ok
+>pat2 = "foobaz" : "foobaz"
+>pat2 : `foo${string & not "bar" & not "qux"}`
+>"foobaz" : "foobaz"
+
+pat2 = "foobar"; // should error
+>pat2 = "foobar" : "foobar"
+>pat2 : `foo${string & not "bar" & not "qux"}`
+>"foobar" : "foobar"
+
+pat2 = "fooqux"; // should error
+>pat2 = "fooqux" : "fooqux"
+>pat2 : `foo${string & not "bar" & not "qux"}`
+>"fooqux" : "fooqux"
+

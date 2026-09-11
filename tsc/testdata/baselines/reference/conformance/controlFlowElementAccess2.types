@@ -21,16 +21,16 @@ if (typeof config['works'] !== 'boolean') {
     config.works.prop = 'test'; // ok
 >config.works.prop = 'test' : "test"
 >config.works.prop : string
->config.works : { prop: string; }
+>config.works : { prop: string; } & not false & not true
 >config : { [key: string]: boolean | { prop: string; }; }
->works : { prop: string; }
+>works : { prop: string; } & not false & not true
 >prop : string
 >'test' : "test"
 
     config['works'].prop = 'test'; // error, config['works']: boolean | { 'prop': string }
 >config['works'].prop = 'test' : "test"
 >config['works'].prop : string
->config['works'] : { prop: string; }
+>config['works'] : { prop: string; } & not false & not true
 >config : { [key: string]: boolean | { prop: string; }; }
 >'works' : "works"
 >prop : string
@@ -39,15 +39,15 @@ if (typeof config['works'] !== 'boolean') {
 if (typeof config.works !== 'boolean') {
 >typeof config.works !== 'boolean' : boolean
 >typeof config.works : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
->config.works : boolean | { prop: string; }
+>config.works : boolean | ({ prop: string; } & not false & not true)
 >config : { [key: string]: boolean | { prop: string; }; }
->works : boolean | { prop: string; }
+>works : boolean | ({ prop: string; } & not false & not true)
 >'boolean' : "boolean"
 
     config['works'].prop = 'test'; // error, config['works']: boolean | { 'prop': string }
 >config['works'].prop = 'test' : "test"
 >config['works'].prop : string
->config['works'] : { prop: string; }
+>config['works'] : { prop: string; } & not false & not true
 >config : { [key: string]: boolean | { prop: string; }; }
 >'works' : "works"
 >prop : string
@@ -56,9 +56,9 @@ if (typeof config.works !== 'boolean') {
     config.works.prop = 'test'; // ok
 >config.works.prop = 'test' : "test"
 >config.works.prop : string
->config.works : { prop: string; }
+>config.works : { prop: string; } & not false & not true
 >config : { [key: string]: boolean | { prop: string; }; }
->works : { prop: string; }
+>works : { prop: string; } & not false & not true
 >prop : string
 >'test' : "test"
 }

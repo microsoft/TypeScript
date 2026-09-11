@@ -1,0 +1,20 @@
+negatedTypesComparability.ts(10,1): error TS2367: This comparison appears to be unintentional because the types '0' and 'number & not 0' have no overlap.
+negatedTypesComparability.ts(11,1): error TS2367: This comparison appears to be unintentional because the types 'number & not 0' and '0' have no overlap.
+
+
+==== negatedTypesComparability.ts (2 errors) ====
+    declare const stringValue: string;
+    declare const excludedStringValue: string & not "excluded";
+    
+    stringValue === excludedStringValue;
+    excludedStringValue === stringValue;
+    
+    declare const zero: 0;
+    declare const nonzeroNumber: number & not 0;
+    
+    zero === nonzeroNumber; // error
+    ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types '0' and 'number & not 0' have no overlap.
+    nonzeroNumber === zero; // error
+    ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types 'number & not 0' and '0' have no overlap.

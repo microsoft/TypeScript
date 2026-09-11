@@ -1,0 +1,182 @@
+//// [tests/cases/conformance/types/negated/negatedPromiseRepr.ts] ////
+
+=== negatedPromiseRepr.ts ===
+// inspired by a comment in https://github.com/Microsoft/TypeScript/issues/4196
+
+type AnyPromiseLikeObject = object & MyPromiseLike<any, any>;
+>AnyPromiseLikeObject : AnyPromiseLikeObject
+
+interface MyPromiseLike<T extends not AnyPromiseLikeObject, E = Error> {
+    then(onResolve: (value: T) => any, onReject: (error: E) => any): any;
+>then : (onResolve: (value: T) => any, onReject: (error: E) => any) => any
+>onResolve : (value: T) => any
+>value : T
+>onReject : (error: E) => any
+>error : E
+}
+
+type AwaitValue<T, E = any> = T extends MyPromiseLike<infer U, E> ? U : T; 
+>AwaitValue : AwaitValue<T, E>
+
+type CoercePromiseLike<T> = MyPromise<T extends MyPromiseLike<any, any> ? AwaitValue<T> : T, never>;
+>CoercePromiseLike : CoercePromiseLike<T>
+
+interface MyPromiseConstructor {
+    resolve<T>(value: T): CoercePromiseLike<T>;
+>resolve : <T>(value: T) => CoercePromiseLike<T>
+>value : T
+
+    reject<E = Error>(value: E): MyPromise<never, E>;
+>reject : <E = Error>(value: E) => MyPromise<never, E>
+>value : E
+
+    all<T, E = Error>(values: Iterable<T>): MyPromise<AwaitValue<T>[] & not AnyPromiseLikeObject, E>;
+>all : <T, E = Error>(values: Iterable<T>) => MyPromise<AwaitValue<T>[] & not AnyPromiseLikeObject, E>
+>values : Iterable<T>
+
+    race<T, E = Error>(values: Iterable<T>): MyPromise<AwaitValue<T>, E>;
+>race : <T, E = Error>(values: Iterable<T>) => MyPromise<AwaitValue<T>, E>
+>values : Iterable<T>
+}
+declare var MyPromise: MyPromiseConstructor;
+>MyPromise : MyPromiseConstructor
+
+interface MyPromise<T extends not AnyPromiseLikeObject, E = Error> {
+    then(onResolve?: not Function, onReject?: not Function): MyPromise<T, E>;
+>then : { (onResolve?: not Function, onReject?: not Function): MyPromise<T, E>; <U, F = E>(onResolve: (value: AwaitValue<T>) => U, onReject?: not Function): MyPromise<AwaitValue<U, F>, E | F>; <U, F = E>(onResolve: not Function, onReject: (error: E) => U): MyPromise<T | AwaitValue<U, F>, F>; <U, F = E>(onResolve: (value: AwaitValue<T>) => U, onReject: (error: E) => AwaitValue<U, F>): MyPromise<AwaitValue<U, F>, F>; }
+>onResolve : not Function | undefined
+>onReject : not Function | undefined
+
+    catch(onReject?: not Function): MyPromise<T, E>;
+>catch : { (onReject?: not Function): MyPromise<T, E>; <U, F = E>(onReject: (error: E) => U): MyPromise<T | AwaitValue<U, F>, F>; }
+>onReject : not Function | undefined
+
+    then<U, F = E>(
+>then : { (onResolve?: not Function, onReject?: not Function): MyPromise<T, E>; <U, F = E>(onResolve: (value: AwaitValue<T>) => U, onReject?: not Function): MyPromise<AwaitValue<U, F>, E | F>; <U_1, F_1 = E>(onResolve: not Function, onReject: (error: E) => U_1): MyPromise<T | AwaitValue<U_1, F_1>, F_1>; <U_1, F_1 = E>(onResolve: (value: AwaitValue<T>) => U_1, onReject: (error: E) => AwaitValue<U_1, F_1>): MyPromise<AwaitValue<U_1, F_1>, F_1>; }
+
+        onResolve: (value: AwaitValue<T>) => U,
+>onResolve : (value: AwaitValue<T>) => U
+>value : AwaitValue<T, any>
+
+        onReject?: not Function,
+>onReject : not Function | undefined
+
+    ): MyPromise<AwaitValue<U, F>, E | F>;
+    then<U, F = E>(
+>then : { (onResolve?: not Function, onReject?: not Function): MyPromise<T, E>; <U_1, F_1 = E>(onResolve: (value: AwaitValue<T>) => U_1, onReject?: not Function): MyPromise<AwaitValue<U_1, F_1>, E | F_1>; <U, F = E>(onResolve: not Function, onReject: (error: E) => U): MyPromise<T | AwaitValue<U, F>, F>; <U_1, F_1 = E>(onResolve: (value: AwaitValue<T>) => U_1, onReject: (error: E) => AwaitValue<U_1, F_1>): MyPromise<AwaitValue<U_1, F_1>, F_1>; }
+
+        onResolve: not Function,
+>onResolve : not Function
+
+        onReject: (error: E) => U,
+>onReject : (error: E) => U
+>error : E
+
+    ): MyPromise<T | AwaitValue<U, F>, F>;
+    then<U, F = E>(
+>then : { (onResolve?: not Function, onReject?: not Function): MyPromise<T, E>; <U_1, F_1 = E>(onResolve: (value: AwaitValue<T>) => U_1, onReject?: not Function): MyPromise<AwaitValue<U_1, F_1>, E | F_1>; <U_1, F_1 = E>(onResolve: not Function, onReject: (error: E) => U_1): MyPromise<T | AwaitValue<U_1, F_1>, F_1>; <U, F = E>(onResolve: (value: AwaitValue<T>) => U, onReject: (error: E) => AwaitValue<U, F>): MyPromise<AwaitValue<U, F>, F>; }
+
+        onResolve: (value: AwaitValue<T>) => U,
+>onResolve : (value: AwaitValue<T>) => U
+>value : AwaitValue<T, any>
+
+        onReject: (error: E) => AwaitValue<U, F>,
+>onReject : (error: E) => AwaitValue<U, F>
+>error : E
+
+    ): MyPromise<AwaitValue<U, F>, F>;
+    catch<U, F = E>(
+>catch : { (onReject?: not Function): MyPromise<T, E>; <U, F = E>(onReject: (error: E) => U): MyPromise<T | AwaitValue<U, F>, F>; }
+
+        onReject: (error: E) => U,
+>onReject : (error: E) => U
+>error : E
+
+    ): MyPromise<T | AwaitValue<U, F>, F>;
+    finally(onSettled: () => AnyPromiseLikeObject): MyPromise<T, E>;
+>finally : (onSettled: () => AnyPromiseLikeObject) => MyPromise<T, E>
+>onSettled : () => AnyPromiseLikeObject
+}
+
+const a = MyPromise.resolve(0);
+>a : CoercePromiseLike<number>
+>MyPromise.resolve(0) : CoercePromiseLike<number>
+>MyPromise.resolve : <T>(value: T) => CoercePromiseLike<T>
+>MyPromise : MyPromiseConstructor
+>resolve : <T>(value: T) => CoercePromiseLike<T>
+>0 : 0
+
+const b = MyPromise.resolve(MyPromise.resolve(0));
+>b : CoercePromiseLike<CoercePromiseLike<number>>
+>MyPromise.resolve(MyPromise.resolve(0)) : CoercePromiseLike<CoercePromiseLike<number>>
+>MyPromise.resolve : <T>(value: T) => CoercePromiseLike<T>
+>MyPromise : MyPromiseConstructor
+>resolve : <T>(value: T) => CoercePromiseLike<T>
+>MyPromise.resolve(0) : CoercePromiseLike<number>
+>MyPromise.resolve : <T>(value: T) => CoercePromiseLike<T>
+>MyPromise : MyPromiseConstructor
+>resolve : <T>(value: T) => CoercePromiseLike<T>
+>0 : 0
+
+const d = MyPromise.resolve(MyPromise.resolve(MyPromise.resolve(0)));
+>d : CoercePromiseLike<CoercePromiseLike<CoercePromiseLike<number>>>
+>MyPromise.resolve(MyPromise.resolve(MyPromise.resolve(0))) : CoercePromiseLike<CoercePromiseLike<CoercePromiseLike<number>>>
+>MyPromise.resolve : <T>(value: T) => CoercePromiseLike<T>
+>MyPromise : MyPromiseConstructor
+>resolve : <T>(value: T) => CoercePromiseLike<T>
+>MyPromise.resolve(MyPromise.resolve(0)) : CoercePromiseLike<CoercePromiseLike<number>>
+>MyPromise.resolve : <T>(value: T) => CoercePromiseLike<T>
+>MyPromise : MyPromiseConstructor
+>resolve : <T>(value: T) => CoercePromiseLike<T>
+>MyPromise.resolve(0) : CoercePromiseLike<number>
+>MyPromise.resolve : <T>(value: T) => CoercePromiseLike<T>
+>MyPromise : MyPromiseConstructor
+>resolve : <T>(value: T) => CoercePromiseLike<T>
+>0 : 0
+
+const e = MyPromise.resolve(0).then(x => "ok");
+>e : MyPromise<string, never>
+>MyPromise.resolve(0).then(x => "ok") : MyPromise<string, never>
+>MyPromise.resolve(0).then : { (onResolve?: not Function, onReject?: not Function): MyPromise<number, never>; <U, F = never>(onResolve: (value: number) => U, onReject?: not Function): MyPromise<AwaitValue<U, F>, F>; <U, F = never>(onResolve: not Function, onReject: (error: never) => U): MyPromise<number | AwaitValue<U, F>, F>; <U, F = never>(onResolve: (value: number) => U, onReject: (error: never) => AwaitValue<U, F>): MyPromise<AwaitValue<U, F>, F>; }
+>MyPromise.resolve(0) : CoercePromiseLike<number>
+>MyPromise.resolve : <T>(value: T) => CoercePromiseLike<T>
+>MyPromise : MyPromiseConstructor
+>resolve : <T>(value: T) => CoercePromiseLike<T>
+>0 : 0
+>then : { (onResolve?: not Function, onReject?: not Function): MyPromise<number, never>; <U, F = never>(onResolve: (value: number) => U, onReject?: not Function): MyPromise<AwaitValue<U, F>, F>; <U, F = never>(onResolve: not Function, onReject: (error: never) => U): MyPromise<number | AwaitValue<U, F>, F>; <U, F = never>(onResolve: (value: number) => U, onReject: (error: never) => AwaitValue<U, F>): MyPromise<AwaitValue<U, F>, F>; }
+>x => "ok" : (x: number) => string
+>x : number
+>"ok" : "ok"
+
+const f = MyPromise.all([1, 2, 3, Promise.resolve("ok")]);
+>f : MyPromise<(string | number)[] & not AnyPromiseLikeObject, Error>
+>MyPromise.all([1, 2, 3, Promise.resolve("ok")]) : MyPromise<(string | number)[] & not AnyPromiseLikeObject, Error>
+>MyPromise.all : <T, E = Error>(values: Iterable<T>) => MyPromise<AwaitValue<T>[] & not AnyPromiseLikeObject, E>
+>MyPromise : MyPromiseConstructor
+>all : <T, E = Error>(values: Iterable<T>) => MyPromise<AwaitValue<T>[] & not AnyPromiseLikeObject, E>
+>[1, 2, 3, Promise.resolve("ok")] : (number | Promise<string>)[]
+>1 : 1
+>2 : 2
+>3 : 3
+>Promise.resolve("ok") : Promise<string>
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>Promise : PromiseConstructor
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>"ok" : "ok"
+
+const g = MyPromise.race([1, 2, 3, Promise.resolve("ok")]);
+>g : MyPromise<string | number, Error>
+>MyPromise.race([1, 2, 3, Promise.resolve("ok")]) : MyPromise<string | number, Error>
+>MyPromise.race : <T, E = Error>(values: Iterable<T>) => MyPromise<AwaitValue<T>, E>
+>MyPromise : MyPromiseConstructor
+>race : <T, E = Error>(values: Iterable<T>) => MyPromise<AwaitValue<T>, E>
+>[1, 2, 3, Promise.resolve("ok")] : (number | Promise<string>)[]
+>1 : 1
+>2 : 2
+>3 : 3
+>Promise.resolve("ok") : Promise<string>
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>Promise : PromiseConstructor
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>"ok" : "ok"
+

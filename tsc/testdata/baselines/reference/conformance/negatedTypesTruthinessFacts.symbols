@@ -1,0 +1,91 @@
+//// [tests/cases/conformance/types/negated/negatedTypesTruthinessFacts.ts] ////
+
+=== negatedTypesTruthinessFacts.ts ===
+// Type facts for negated types drive control-flow narrowing. An intersection of negated
+// falsy values excludes every falsy value, so a truthiness guard on such a type makes the
+// falsy branch unreachable (never). This relies on the per-falsy-value "could be" facts,
+// which getIntersectionTypeFacts AND-combines and then uses to clear a spurious Falsy fact.
+
+// A fully-truthy type: excludes every falsy value ("", 0, 0n, null, undefined, false).
+type Truthy = not "" & not 0 & not 0n & not null & not undefined & not false;
+>Truthy : Symbol(Truthy, Decl(negatedTypesTruthinessFacts.ts, 0, 0))
+
+declare const t: Truthy;
+>t : Symbol(t, Decl(negatedTypesTruthinessFacts.ts, 8, 13))
+>Truthy : Symbol(Truthy, Decl(negatedTypesTruthinessFacts.ts, 0, 0))
+
+if (t) {
+>t : Symbol(t, Decl(negatedTypesTruthinessFacts.ts, 8, 13))
+
+    t; // Truthy
+>t : Symbol(t, Decl(negatedTypesTruthinessFacts.ts, 8, 13))
+
+} else {
+    t; // never
+>t : Symbol(t, Decl(negatedTypesTruthinessFacts.ts, 8, 13))
+}
+
+// `string & not ""` is exactly the non-empty strings: truthy, and the falsy branch is unreachable.
+declare const s: string & not "";
+>s : Symbol(s, Decl(negatedTypesTruthinessFacts.ts, 16, 13))
+
+if (s) {
+>s : Symbol(s, Decl(negatedTypesTruthinessFacts.ts, 16, 13))
+
+    s; // string & not ""
+>s : Symbol(s, Decl(negatedTypesTruthinessFacts.ts, 16, 13))
+
+} else {
+    s; // never
+>s : Symbol(s, Decl(negatedTypesTruthinessFacts.ts, 16, 13))
+}
+
+// `number & not 0` is truthy (only falsy number is 0, ignoring NaN like the checker does).
+declare const n: number & not 0;
+>n : Symbol(n, Decl(negatedTypesTruthinessFacts.ts, 24, 13))
+
+if (n) {
+>n : Symbol(n, Decl(negatedTypesTruthinessFacts.ts, 24, 13))
+
+    n; // number & not 0
+>n : Symbol(n, Decl(negatedTypesTruthinessFacts.ts, 24, 13))
+
+} else {
+    n; // never
+>n : Symbol(n, Decl(negatedTypesTruthinessFacts.ts, 24, 13))
+}
+
+// A single negation still leaves the falsy branch reachable: `not null` can be 0/""/false/undefined.
+declare const u: not null;
+>u : Symbol(u, Decl(negatedTypesTruthinessFacts.ts, 32, 13))
+
+if (u) {
+>u : Symbol(u, Decl(negatedTypesTruthinessFacts.ts, 32, 13))
+
+    u; // not null
+>u : Symbol(u, Decl(negatedTypesTruthinessFacts.ts, 32, 13))
+
+} else {
+    u; // not null (still falsy-capable, so not never)
+>u : Symbol(u, Decl(negatedTypesTruthinessFacts.ts, 32, 13))
+}
+
+// Omitting `not 0n` leaves 0n as a reachable falsy value, so the falsy branch is not never.
+type AlmostTruthy = not "" & not 0 & not null & not undefined & not false;
+>AlmostTruthy : Symbol(AlmostTruthy, Decl(negatedTypesTruthinessFacts.ts, 37, 1))
+
+declare const a: AlmostTruthy;
+>a : Symbol(a, Decl(negatedTypesTruthinessFacts.ts, 41, 13))
+>AlmostTruthy : Symbol(AlmostTruthy, Decl(negatedTypesTruthinessFacts.ts, 37, 1))
+
+if (a) {
+>a : Symbol(a, Decl(negatedTypesTruthinessFacts.ts, 41, 13))
+
+    a; // AlmostTruthy
+>a : Symbol(a, Decl(negatedTypesTruthinessFacts.ts, 41, 13))
+
+} else {
+    a; // still falsy-capable via 0n, so not never
+>a : Symbol(a, Decl(negatedTypesTruthinessFacts.ts, 41, 13))
+}
+

@@ -1,0 +1,61 @@
+//// [tests/cases/conformance/types/negated/negatedTypesInPatternLiteralsAndStringMapping.ts] ////
+
+=== negatedTypesInPatternLiteralsAndStringMapping.ts ===
+// Combination: negated types with BOTH pattern literal types and string mapping types.
+
+// String mapping wrapping a template literal that contains a negated placeholder.
+type UpperTemplate = Uppercase<`foo${string & not "bar"}`>;
+>UpperTemplate : `FOO${Uppercase<`${string & not "bar"}`>}`
+
+// Template literal whose placeholder is a string mapping of a negated type.
+type TemplateUpper = `foo${Uppercase<string & not "bar">}`;
+>TemplateUpper : `foo${Uppercase<`${string & not "bar"}`>}`
+
+// Template literal whose placeholder is a negation of a string mapping type.
+type TemplateNotUpper = `foo${not Uppercase<"BAR">}`;
+>TemplateNotUpper : `foo${not "BAR"}`
+
+// Negation of a template literal that contains a string mapping placeholder.
+type NotTemplateUpper = not `foo${Uppercase<string>}`;
+>NotTemplateUpper : not `foo${Uppercase<string>}`
+
+// Generic composition.
+type Compose<T extends string> = Uppercase<`foo${T & not "bar"}`>;
+>Compose : `FOO${Uppercase<T & not "bar">}`
+
+type ComposeString = Compose<string>;
+>ComposeString : `FOO${Uppercase<`${string & not "bar"}`>}`
+
+type ComposeLiteral = Compose<"baz">;
+>ComposeLiteral : "FOOBAZ"
+
+type ComposeBar = Compose<"bar">;
+>ComposeBar : never
+
+// Assignability probes.
+declare let upperTemplate: UpperTemplate;
+>upperTemplate : `FOO${Uppercase<`${string & not "bar"}`>}`
+
+declare let templateUpper: TemplateUpper;
+>templateUpper : `foo${Uppercase<`${string & not "bar"}`>}`
+
+upperTemplate = "FOOBAZ"; // depends on representation
+>upperTemplate = "FOOBAZ" : "FOOBAZ"
+>upperTemplate : `FOO${Uppercase<`${string & not "bar"}`>}`
+>"FOOBAZ" : "FOOBAZ"
+
+upperTemplate = "foobaz"; // depends on representation
+>upperTemplate = "foobaz" : "foobaz"
+>upperTemplate : `FOO${Uppercase<`${string & not "bar"}`>}`
+>"foobaz" : "foobaz"
+
+templateUpper = "fooBAZ"; // depends on representation
+>templateUpper = "fooBAZ" : "fooBAZ"
+>templateUpper : `foo${Uppercase<`${string & not "bar"}`>}`
+>"fooBAZ" : "fooBAZ"
+
+templateUpper = "foobar"; // depends on representation
+>templateUpper = "foobar" : "foobar"
+>templateUpper : `foo${Uppercase<`${string & not "bar"}`>}`
+>"foobar" : "foobar"
+

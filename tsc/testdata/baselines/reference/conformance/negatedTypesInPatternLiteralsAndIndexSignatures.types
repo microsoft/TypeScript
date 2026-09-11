@@ -1,0 +1,68 @@
+//// [tests/cases/conformance/types/negated/negatedTypesInPatternLiteralsAndIndexSignatures.ts] ////
+
+=== negatedTypesInPatternLiteralsAndIndexSignatures.ts ===
+// Combination: negated types with BOTH pattern literal types and index signatures.
+
+// Index signature whose key is a template literal containing a negated placeholder.
+type TemplateKey = {
+>TemplateKey : TemplateKey
+
+    [idx: `foo${string & not "bar"}`]: number;
+>idx : `foo${string & not "bar"}`
+
+};
+
+declare let templateKey: TemplateKey;
+>templateKey : TemplateKey
+
+templateKey["foobaz"] = 1; // matches pattern
+>templateKey["foobaz"] = 1 : 1
+>templateKey["foobaz"] : number
+>templateKey : TemplateKey
+>"foobaz" : "foobaz"
+>1 : 1
+
+templateKey["foobar"] = 1; // excluded by negation
+>templateKey["foobar"] = 1 : 1
+>templateKey["foobar"] : any
+>templateKey : TemplateKey
+>"foobar" : "foobar"
+>1 : 1
+
+templateKey["baz"] = 1;    // does not match pattern
+>templateKey["baz"] = 1 : 1
+>templateKey["baz"] : any
+>templateKey : TemplateKey
+>"baz" : "baz"
+>1 : 1
+
+// Index signature whose key is a bare negated template literal.
+type NotTemplateKey = {
+>NotTemplateKey : NotTemplateKey
+
+    [idx: not `foo${string}`]: number;
+>idx : not `foo${string}`
+
+};
+
+// Mapped type over a template literal key type that uses a negated placeholder.
+type MappedTemplate = {
+>MappedTemplate : MappedTemplate
+
+    [k in `foo${string & not "bar"}`]: number;
+};
+
+// Generic index signature combination.
+type WrapKey<T extends string> = {
+>WrapKey : WrapKey<T>
+
+    [idx: `foo${T & not "bar"}`]: number;
+>idx : `foo${T & not "bar"}`
+
+};
+type WrapKeyString = WrapKey<string>;
+>WrapKeyString : WrapKeyString
+
+type WrapKeyLiteral = WrapKey<"baz">;
+>WrapKeyLiteral : WrapKeyLiteral
+

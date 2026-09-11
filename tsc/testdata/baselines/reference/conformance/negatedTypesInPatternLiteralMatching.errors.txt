@@ -1,0 +1,61 @@
+negatedTypesInPatternLiteralMatching.ts(10,1): error TS2322: Type '"foobar"' is not assignable to type '`foo${string & not "bar"}`'.
+negatedTypesInPatternLiteralMatching.ts(12,1): error TS2322: Type '"baz"' is not assignable to type '`foo${string & not "bar"}`'.
+negatedTypesInPatternLiteralMatching.ts(18,1): error TS2322: Type '"foobar"' is not assignable to type '`foo${string & not "bar"}`'.
+negatedTypesInPatternLiteralMatching.ts(32,21): error TS2345: Argument of type '"foobar"' is not assignable to parameter of type 'never'.
+negatedTypesInPatternLiteralMatching.ts(38,1): error TS2322: Type '"foobar"' is not assignable to type '`foo${string & not "bar" & not "qux"}`'.
+negatedTypesInPatternLiteralMatching.ts(39,1): error TS2322: Type '"fooqux"' is not assignable to type '`foo${string & not "bar" & not "qux"}`'.
+
+
+==== negatedTypesInPatternLiteralMatching.ts (6 errors) ====
+    // Matching actual string literal types against pattern literal types that
+    // contain negated holes. `"foobaz"` should match `foo${string & not "bar"}`
+    // but `"foobar"` should not, because the hole excludes exactly "bar".
+    
+    type Pattern = `foo${string & not "bar"}`;
+    
+    // Direct assignment of literals to the pattern type.
+    declare let pat: Pattern;
+    pat = "foobaz"; // should be ok
+    pat = "foobar"; // should error
+    ~~~
+!!! error TS2322: Type '"foobar"' is not assignable to type '`foo${string & not "bar"}`'.
+    pat = "foo";    // should be ok (the hole can match the empty string)
+    pat = "baz";    // should error (missing "foo" prefix)
+    ~~~
+!!! error TS2322: Type '"baz"' is not assignable to type '`foo${string & not "bar"}`'.
+    
+    // Assignability from a literal-typed value.
+    declare const foobaz: "foobaz";
+    declare const foobar: "foobar";
+    pat = foobaz; // should be ok
+    pat = foobar; // should error
+    ~~~
+!!! error TS2322: Type '"foobar"' is not assignable to type '`foo${string & not "bar"}`'.
+    
+    // Matching via a conditional type (extends check).
+    type MatchFoobaz = "foobaz" extends Pattern ? true : false; // should be true
+    type MatchFoobar = "foobar" extends Pattern ? true : false; // should be false
+    
+    // Matching a union of literals: only the members that don't collapse the hole
+    // to never should be retained.
+    type FilterMatches<T> = T extends Pattern ? T : never;
+    type Filtered = FilterMatches<"foobaz" | "foobar" | "fooqux">; // should be "foobaz" | "fooqux"
+    
+    // Inference through a generic function whose parameter is the pattern.
+    declare function take<T extends string>(s: `foo${T & not "bar"}`): T;
+    const okBaz = take("foobaz"); // should be ok, T = "baz"
+    const errBar = take("foobar"); // should error, "bar" is excluded
+                        ~~~~~~~~
+!!! error TS2345: Argument of type '"foobar"' is not assignable to parameter of type 'never'.
+    
+    // Excluding a union of holes.
+    type Pattern2 = `foo${string & not ("bar" | "qux")}`;
+    declare let pat2: Pattern2;
+    pat2 = "foobaz"; // should be ok
+    pat2 = "foobar"; // should error
+    ~~~~
+!!! error TS2322: Type '"foobar"' is not assignable to type '`foo${string & not "bar" & not "qux"}`'.
+    pat2 = "fooqux"; // should error
+    ~~~~
+!!! error TS2322: Type '"fooqux"' is not assignable to type '`foo${string & not "bar" & not "qux"}`'.
+    

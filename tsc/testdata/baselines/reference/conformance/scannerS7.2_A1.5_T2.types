@@ -46,8 +46,8 @@ if (x !== 1) {
 >$ERROR : any
 >'#2:  var x = 1 ; x === 1. Actual: ' + (x) : string
 >'#2:  var x = 1 ; x === 1. Actual: ' : "#2:  var x = 1 ; x === 1. Actual: "
->(x) : number
->x : number
+>(x) : number & not 1
+>x : number & not 1
 }
 
 

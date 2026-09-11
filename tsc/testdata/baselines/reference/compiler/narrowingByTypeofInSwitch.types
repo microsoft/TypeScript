@@ -866,7 +866,7 @@ function narrowingNarrows(x: {} | undefined) {
 
         default: const _y: {} = x; return;
 >_y : {}
->x : {}
+>x : {} & not number & not false & not true & not symbol & not string
     }
 }
 

@@ -1,0 +1,85 @@
+//// [tests/cases/conformance/types/negated/negatedTypesNormalizationIdentities.ts] ////
+
+=== negatedTypesNormalizationIdentities.ts ===
+// Normalization / identity rules for the `not` type operator.
+
+// not any => any
+type NotAny = not any;
+>NotAny : any
+
+// not unknown => never
+type NotUnknown = not unknown;
+>NotUnknown : never
+
+// not never => unknown
+type NotNever = not never;
+>NotNever : unknown
+
+// Negated nullish / void.
+type NotVoid = not void;
+>NotVoid : not void
+
+type NotNull = not null;
+>NotNull : not null
+
+type NotUndefined = not undefined;
+>NotUndefined : not undefined
+
+// Double negation collapses: not not T => T.
+type DoubleNegString = not not string;
+>DoubleNegString : string
+
+type DoubleNegLiteral = not not "a";
+>DoubleNegLiteral : "a"
+
+type TripleNegString = not not not string; // => not string
+>TripleNegString : not string
+
+// Double negation on a generic type parameter.
+type DoubleNeg<T> = not not T;
+>DoubleNeg : T
+
+type DoubleNegApplied = DoubleNeg<number>;
+>DoubleNegApplied : number
+
+// Assignability probes confirming the identities.
+declare let notNever: NotNever;   // unknown
+>notNever : unknown
+
+declare let anyVal: any;
+>anyVal : any
+
+declare let str: string;
+>str : string
+
+notNever = str;      // ok (unknown accepts anything)
+>notNever = str : string
+>notNever : unknown
+>str : string
+
+anyVal = notNever;   // ok
+>anyVal = notNever : unknown
+>anyVal : any
+>notNever : unknown
+
+declare let notUnknown: NotUnknown; // never
+>notUnknown : never
+
+notUnknown = str;    // error (nothing is assignable to never)
+>notUnknown = str : string
+>notUnknown : never
+>str : string
+
+declare let dnStr: DoubleNegString; // string
+>dnStr : string
+
+dnStr = "hello";     // ok
+>dnStr = "hello" : "hello"
+>dnStr : string
+>"hello" : "hello"
+
+dnStr = 0;           // error
+>dnStr = 0 : 0
+>dnStr : string
+>0 : 0
+

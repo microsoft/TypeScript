@@ -663,14 +663,14 @@ function deepEquals<T>(a: T, b: T): boolean {
 >Object.keys : { (o: object): string[]; (o: {}): string[]; }
 >Object : ObjectConstructor
 >keys : { (o: object): string[]; (o: {}): string[]; }
->a : T & object
+>a : T & object & not any[]
 >length : number
 >Object.keys(b).length : number
 >Object.keys(b) : string[]
 >Object.keys : { (o: object): string[]; (o: {}): string[]; }
 >Object : ObjectConstructor
 >keys : { (o: object): string[]; (o: {}): string[]; }
->b : T & object
+>b : T & object & not any[]
 >length : number
 
         return false;
@@ -795,7 +795,7 @@ function fx0<T>(value: T & ({} | null)) {
     }
     else {
         value;  // T & ({} | null)
->value : T & ({} | null)
+>value : (T & ({} | null)) & not 42
     }
 }
 
@@ -813,7 +813,7 @@ function fx1<T extends unknown>(value: T & ({} | null)) {
     }
     else {
         value;  // T & ({} | null)
->value : T & ({} | null)
+>value : (T & ({} | null)) & not 42
     }
 }
 
@@ -831,7 +831,7 @@ function fx2<T extends {}>(value: T & ({} | null)) {
     }
     else {
         value;  // T & ({} | null)
->value : T
+>value : T & not 42
     }
 }
 
@@ -849,7 +849,7 @@ function fx3<T extends {} | undefined>(value: T & ({} | null)) {
     }
     else {
         value;  // T & ({} | null)
->value : T & {}
+>value : T & {} & not 42
     }
 }
 
@@ -867,7 +867,7 @@ function fx4<T extends {} | null>(value: T & ({} | null)) {
     }
     else {
         value;  // T & ({} | null)
->value : T
+>value : T & not 42
     }
 }
 
@@ -885,7 +885,7 @@ function fx5<T extends {} | null | undefined>(value: T & ({} | null)) {
     }
     else {
         value;  // T & ({} | null)
->value : T & ({} | null)
+>value : (T & ({} | null)) & not 42
     }
 }
 
@@ -970,7 +970,7 @@ function doSomething1<T extends unknown>(value: T): T {
 >'Meaning of life value' : "Meaning of life value"
     }
     return value;
->value : T & ({} | null)
+>value : (T & ({} | null)) & not 42
 }
 
 function doSomething2(value: unknown): void {
@@ -1082,12 +1082,12 @@ function fx20(value: Either) {
     }
     else if (value === 'right') {
 >value === 'right' : boolean
->value : Right
+>value : "right" & { right: 'right'; }
 >'right' : "right"
 
         const bar: 'right' = value;
 >bar : "right"
->value : Right
+>value : "right" & { right: 'right'; }
     }
     else {
         assertNever(value);

@@ -1,0 +1,106 @@
+//// [tests/cases/conformance/types/negated/negatedNarrowingEqualityLiteral.ts] ////
+
+=== negatedNarrowingEqualityLiteral.ts ===
+// The false branch of a literal equality comparison introduces a negated type, so a base type that
+// overlaps the compared value records the exclusion (e.g. 'number & not 0').
+
+declare function wantsNonZero(x: number & not 0): void;
+>wantsNonZero : Symbol(wantsNonZero, Decl(negatedNarrowingEqualityLiteral.ts, 0, 0))
+>x : Symbol(x, Decl(negatedNarrowingEqualityLiteral.ts, 3, 30))
+
+declare function wantsZero(x: 0): void;
+>wantsZero : Symbol(wantsZero, Decl(negatedNarrowingEqualityLiteral.ts, 3, 55))
+>x : Symbol(x, Decl(negatedNarrowingEqualityLiteral.ts, 4, 27))
+
+declare const n: number;
+>n : Symbol(n, Decl(negatedNarrowingEqualityLiteral.ts, 6, 13))
+
+if (n === 0) {
+>n : Symbol(n, Decl(negatedNarrowingEqualityLiteral.ts, 6, 13))
+
+    wantsZero(n); // 0
+>wantsZero : Symbol(wantsZero, Decl(negatedNarrowingEqualityLiteral.ts, 3, 55))
+>n : Symbol(n, Decl(negatedNarrowingEqualityLiteral.ts, 6, 13))
+
+} else {
+    n; // number & not 0
+>n : Symbol(n, Decl(negatedNarrowingEqualityLiteral.ts, 6, 13))
+
+    wantsNonZero(n);
+>wantsNonZero : Symbol(wantsNonZero, Decl(negatedNarrowingEqualityLiteral.ts, 0, 0))
+>n : Symbol(n, Decl(negatedNarrowingEqualityLiteral.ts, 6, 13))
+}
+
+// `!==` flips the branches.
+declare const m: number;
+>m : Symbol(m, Decl(negatedNarrowingEqualityLiteral.ts, 15, 13))
+
+if (m !== 0) {
+>m : Symbol(m, Decl(negatedNarrowingEqualityLiteral.ts, 15, 13))
+
+    m; // number & not 0
+>m : Symbol(m, Decl(negatedNarrowingEqualityLiteral.ts, 15, 13))
+
+    wantsNonZero(m);
+>wantsNonZero : Symbol(wantsNonZero, Decl(negatedNarrowingEqualityLiteral.ts, 0, 0))
+>m : Symbol(m, Decl(negatedNarrowingEqualityLiteral.ts, 15, 13))
+
+} else {
+    wantsZero(m); // 0
+>wantsZero : Symbol(wantsZero, Decl(negatedNarrowingEqualityLiteral.ts, 3, 55))
+>m : Symbol(m, Decl(negatedNarrowingEqualityLiteral.ts, 15, 13))
+}
+
+// A disjoint union member: 'not 0' is redundant against non-overlapping constituents.
+declare const u: 0 | 1 | 2;
+>u : Symbol(u, Decl(negatedNarrowingEqualityLiteral.ts, 24, 13))
+
+if (u === 0) {
+>u : Symbol(u, Decl(negatedNarrowingEqualityLiteral.ts, 24, 13))
+
+    u; // 0
+>u : Symbol(u, Decl(negatedNarrowingEqualityLiteral.ts, 24, 13))
+
+} else {
+    u; // 1 | 2
+>u : Symbol(u, Decl(negatedNarrowingEqualityLiteral.ts, 24, 13))
+}
+
+// A string base is disjoint from the numeric literal, so the negation reduces away.
+declare const s: string;
+>s : Symbol(s, Decl(negatedNarrowingEqualityLiteral.ts, 32, 13))
+
+if ((s as unknown) === 0) {
+>s : Symbol(s, Decl(negatedNarrowingEqualityLiteral.ts, 32, 13))
+
+    s; // string
+>s : Symbol(s, Decl(negatedNarrowingEqualityLiteral.ts, 32, 13))
+
+} else {
+    s; // string
+>s : Symbol(s, Decl(negatedNarrowingEqualityLiteral.ts, 32, 13))
+}
+
+// String literal comparison on a broad base.
+declare function wantsNotFoo(x: string & not "foo"): void;
+>wantsNotFoo : Symbol(wantsNotFoo, Decl(negatedNarrowingEqualityLiteral.ts, 37, 1))
+>x : Symbol(x, Decl(negatedNarrowingEqualityLiteral.ts, 40, 29))
+
+declare const str: string;
+>str : Symbol(str, Decl(negatedNarrowingEqualityLiteral.ts, 41, 13))
+
+if (str === "foo") {
+>str : Symbol(str, Decl(negatedNarrowingEqualityLiteral.ts, 41, 13))
+
+    str; // "foo"
+>str : Symbol(str, Decl(negatedNarrowingEqualityLiteral.ts, 41, 13))
+
+} else {
+    str; // string & not "foo"
+>str : Symbol(str, Decl(negatedNarrowingEqualityLiteral.ts, 41, 13))
+
+    wantsNotFoo(str);
+>wantsNotFoo : Symbol(wantsNotFoo, Decl(negatedNarrowingEqualityLiteral.ts, 37, 1))
+>str : Symbol(str, Decl(negatedNarrowingEqualityLiteral.ts, 41, 13))
+}
+

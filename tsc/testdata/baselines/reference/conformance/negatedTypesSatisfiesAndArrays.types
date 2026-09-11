@@ -1,0 +1,117 @@
+//// [tests/cases/conformance/types/negated/negatedTypesSatisfiesAndArrays.ts] ////
+
+=== negatedTypesSatisfiesAndArrays.ts ===
+// Negated types with the `satisfies` operator and with array/tuple element types.
+
+// satisfies against a negated type.
+declare const n: number;
+>n : number
+
+const s1 = n satisfies not string; // should be ok (number is not a string)
+>s1 : number
+>n satisfies not string : number
+>n : number
+
+declare const str: string;
+>str : string
+
+const s2 = str satisfies not string; // should error (string is a string)
+>s2 : string
+>str satisfies not string : string
+>str : string
+
+const s3 = 42 satisfies not "reserved"; // ok
+>s3 : 42
+>42 satisfies not "reserved" : 42
+>42 : 42
+
+const s4 = "reserved" satisfies not "reserved"; // should error
+>s4 : "reserved"
+>"reserved" satisfies not "reserved" : "reserved"
+>"reserved" : "reserved"
+
+// Array of a negated element type.
+type NotStringArray = (not string)[];
+>NotStringArray : NotStringArray
+
+declare let arr: NotStringArray;
+>arr : NotStringArray
+
+arr = [1, 2, 3];       // ok
+>arr = [1, 2, 3] : number[]
+>arr : NotStringArray
+>[1, 2, 3] : number[]
+>1 : 1
+>2 : 2
+>3 : 3
+
+arr = [{}, true, 0];   // ok: a fresh `{}` literal is treated as a closed empty object, disjoint from `string`
+>arr = [{}, true, 0] : (number | boolean | {})[]
+>arr : NotStringArray
+>[{}, true, 0] : (number | boolean | {})[]
+>{} : {}
+>true : true
+>0 : 0
+
+arr = ["a"];           // should error (element is a string)
+>arr = ["a"] : string[]
+>arr : NotStringArray
+>["a"] : string[]
+>"a" : "a"
+
+arr = [1, "a"];        // should error (one element is a string)
+>arr = [1, "a"] : (string | number)[]
+>arr : NotStringArray
+>[1, "a"] : (string | number)[]
+>1 : 1
+>"a" : "a"
+
+// Tuple with a negated element type.
+type Pair = [not string, string];
+>Pair : Pair
+
+declare let pair: Pair;
+>pair : Pair
+
+pair = [1, "ok"];      // ok
+>pair = [1, "ok"] : [number, string]
+>pair : Pair
+>[1, "ok"] : [number, string]
+>1 : 1
+>"ok" : "ok"
+
+pair = ["no", "ok"];   // should error (first element is a string)
+>pair = ["no", "ok"] : [string, string]
+>pair : Pair
+>["no", "ok"] : [string, string]
+>"no" : "no"
+>"ok" : "ok"
+
+// Readonly array of negated element type, element access.
+declare const ra: readonly (not number)[];
+>ra : readonly (not number)[]
+
+const elem = ra[0]; // element type probe
+>elem : not number
+>ra[0] : not number
+>ra : readonly (not number)[]
+>0 : 0
+
+// Spread / iteration of a negated element array.
+function sum(...args: (not string)[]) {}
+>sum : (...args: (not string)[]) => void
+>args : (not string)[]
+
+sum(1, 2, {}); // ok: a fresh `{}` literal is treated as a closed empty object, disjoint from `string`
+>sum(1, 2, {}) : void
+>sum : (...args: (not string)[]) => void
+>1 : 1
+>2 : 2
+>{} : {}
+
+sum(1, "x");   // should error
+>sum(1, "x") : void
+>sum : (...args: (not string)[]) => void
+>1 : 1
+>"x" : "x"
+

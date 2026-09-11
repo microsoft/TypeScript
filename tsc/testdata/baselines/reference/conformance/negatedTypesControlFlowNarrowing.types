@@ -1,0 +1,117 @@
+//// [tests/cases/conformance/types/negated/negatedTypesControlFlowNarrowing.ts] ////
+
+=== negatedTypesControlFlowNarrowing.ts ===
+// Control flow narrowing introduces negated types in the false branch of a narrowing check.
+// The negation is only retained where it is non-redundant (i.e. the narrowed base type overlaps
+// the removed candidate, such as `{}` / `unknown`); for ordinary disjoint unions it reduces away.
+
+declare function wantsStr(x: string): void;
+>wantsStr : (x: string) => void
+>x : string
+
+declare function wantsNotStr(x: not string): void;
+>wantsNotStr : (x: not string) => void
+>x : not string
+
+declare function wantsNegatedCallbackResult(cb: () => not string): void;
+>wantsNegatedCallbackResult : (cb: () => not string) => void
+>cb : () => not string
+
+const item = {};
+>item : {}
+>{} : {}
+
+if (typeof item === "string") {
+>typeof item === "string" : boolean
+>typeof item : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>item : {}
+>"string" : "string"
+
+    wantsStr(item); // item: string
+>wantsStr(item) : void
+>wantsStr : (x: string) => void
+>item : string
+
+} else {
+    wantsNotStr(item); // item: {} & not string
+>wantsNotStr(item) : void
+>wantsNotStr : (x: not string) => void
+>item : {} & not string
+
+    // The negation also flows through an arrow function body (a position a syntactic check misses).
+    wantsNegatedCallbackResult(() => item); // item: {} & not string
+>wantsNegatedCallbackResult(() => item) : void
+>wantsNegatedCallbackResult : (cb: () => not string) => void
+>() => item : () => {} & not string
+>item : {} & not string
+}
+
+// No negation is introduced against a disjoint union: 'not number' reduces away.
+declare const value: string | number;
+>value : string | number
+
+if (typeof value === "string") {
+>typeof value === "string" : boolean
+>typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>value : string | number
+>"string" : "string"
+
+    value; // string
+>value : string
+
+} else {
+    value; // number
+>value : number
+}
+
+// Union base where the negation is redundant against every constituent.
+declare function wantsNotNum(x: not number): void;
+>wantsNotNum : (x: not number) => void
+>x : not number
+
+declare const u: string | number | boolean;
+>u : string | number | boolean
+
+if (typeof u === "number") {
+>typeof u === "number" : boolean
+>typeof u : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>u : string | number | boolean
+>"number" : "number"
+
+    u; // number
+>u : number
+
+} else {
+    wantsNotNum(u); // string | boolean
+>wantsNotNum(u) : void
+>wantsNotNum : (x: not number) => void
+>u : string | boolean
+}
+
+// The value flows into a negated position nested inside an object literal argument.
+declare function wantsNestedNegated(x: { member: not string }): void;
+>wantsNestedNegated : (x: { member: not string; }) => void
+>x : { member: not string; }
+>member : not string
+
+declare const nested: {};
+>nested : {}
+
+if (typeof nested === "string") {
+>typeof nested === "string" : boolean
+>typeof nested : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>nested : {}
+>"string" : "string"
+
+    nested; // string
+>nested : string
+
+} else {
+    wantsNestedNegated({ member: nested }); // nested: {} & not string
+>wantsNestedNegated({ member: nested }) : void
+>wantsNestedNegated : (x: { member: not string; }) => void
+>{ member: nested } : { member: {} & not string; }
+>member : {} & not string
+>nested : {} & not string
+}
+

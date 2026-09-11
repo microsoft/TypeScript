@@ -1,0 +1,85 @@
+//// [tests/cases/conformance/types/negated/negatedTypesInStringMapping.ts] ////
+
+=== negatedTypesInStringMapping.ts ===
+// Negated types used with intrinsic string mapping types.
+
+// Uppercase applied to a negated type: `Uppercase<not T>`.
+type U1 = Uppercase<not "bar">;
+>U1 : Symbol(U1, Decl(negatedTypesInStringMapping.ts, 0, 0))
+>Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
+
+type U2 = Uppercase<not string>;
+>U2 : Symbol(U2, Decl(negatedTypesInStringMapping.ts, 3, 31))
+>Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
+
+type U3 = Uppercase<not ("a" | "b")>;
+>U3 : Symbol(U3, Decl(negatedTypesInStringMapping.ts, 4, 32))
+>Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
+
+type U4 = Uppercase<string & not "bar">;
+>U4 : Symbol(U4, Decl(negatedTypesInStringMapping.ts, 5, 37))
+>Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
+
+// Negation applied to a string mapping type: `not Uppercase<T>`.
+type N1 = not Uppercase<"bar">;
+>N1 : Symbol(N1, Decl(negatedTypesInStringMapping.ts, 6, 40))
+>Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
+
+type N2 = not Uppercase<string>;
+>N2 : Symbol(N2, Decl(negatedTypesInStringMapping.ts, 9, 31))
+>Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
+
+type N3 = not Lowercase<"ABC">;
+>N3 : Symbol(N3, Decl(negatedTypesInStringMapping.ts, 10, 32))
+>Lowercase : Symbol(Lowercase, Decl(lib.es5.d.ts, --, --))
+
+// Generic forms.
+type MapUpper<T extends string> = Uppercase<T & not "bar">;
+>MapUpper : Symbol(MapUpper, Decl(negatedTypesInStringMapping.ts, 11, 31))
+>T : Symbol(T, Decl(negatedTypesInStringMapping.ts, 14, 14))
+>Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(negatedTypesInStringMapping.ts, 14, 14))
+
+type MapUpperString = MapUpper<string>;
+>MapUpperString : Symbol(MapUpperString, Decl(negatedTypesInStringMapping.ts, 14, 59))
+>MapUpper : Symbol(MapUpper, Decl(negatedTypesInStringMapping.ts, 11, 31))
+
+type MapUpperLiteral = MapUpper<"baz">;
+>MapUpperLiteral : Symbol(MapUpperLiteral, Decl(negatedTypesInStringMapping.ts, 15, 39))
+>MapUpper : Symbol(MapUpper, Decl(negatedTypesInStringMapping.ts, 11, 31))
+
+type NegUpper<T extends string> = not Uppercase<T>;
+>NegUpper : Symbol(NegUpper, Decl(negatedTypesInStringMapping.ts, 16, 39))
+>T : Symbol(T, Decl(negatedTypesInStringMapping.ts, 18, 14))
+>Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(negatedTypesInStringMapping.ts, 18, 14))
+
+type NegUpperString = NegUpper<string>;
+>NegUpperString : Symbol(NegUpperString, Decl(negatedTypesInStringMapping.ts, 18, 51))
+>NegUpper : Symbol(NegUpper, Decl(negatedTypesInStringMapping.ts, 16, 39))
+
+type NegUpperLiteral = NegUpper<"baz">;
+>NegUpperLiteral : Symbol(NegUpperLiteral, Decl(negatedTypesInStringMapping.ts, 19, 39))
+>NegUpper : Symbol(NegUpper, Decl(negatedTypesInStringMapping.ts, 16, 39))
+
+// Assignability probes.
+declare let u1: U1;
+>u1 : Symbol(u1, Decl(negatedTypesInStringMapping.ts, 23, 11))
+>U1 : Symbol(U1, Decl(negatedTypesInStringMapping.ts, 0, 0))
+
+declare let n1: N1;
+>n1 : Symbol(n1, Decl(negatedTypesInStringMapping.ts, 24, 11))
+>N1 : Symbol(N1, Decl(negatedTypesInStringMapping.ts, 6, 40))
+
+u1 = "BAZ"; // depends on representation
+>u1 : Symbol(u1, Decl(negatedTypesInStringMapping.ts, 23, 11))
+
+u1 = "baz"; // depends on representation
+>u1 : Symbol(u1, Decl(negatedTypesInStringMapping.ts, 23, 11))
+
+n1 = "baz"; // depends on representation
+>n1 : Symbol(n1, Decl(negatedTypesInStringMapping.ts, 24, 11))
+
+n1 = "BAR"; // depends on representation
+>n1 : Symbol(n1, Decl(negatedTypesInStringMapping.ts, 24, 11))
+

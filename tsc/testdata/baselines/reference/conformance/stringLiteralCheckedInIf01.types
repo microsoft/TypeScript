@@ -8,7 +8,7 @@ type T = S[] | S;
 >T : T
 
 function f(foo: T) {
->f : (foo: T) => S
+>f : (foo: T) => S | (S[] & not "a")
 >foo : T
 
     if (foo === "a") {
@@ -21,18 +21,18 @@ function f(foo: T) {
     }
     else if (foo === "b") {
 >foo === "b" : boolean
->foo : "b" | S[]
+>foo : "b" | (S[] & not "a")
 >"b" : "b"
 
         return foo;
->foo : "b"
+>foo : "b" | (S[] & not "a")
     }
     else { 
         return (foo as S[])[0];
 >(foo as S[])[0] : S
 >(foo as S[]) : S[]
 >foo as S[] : S[]
->foo : S[]
+>foo : S[] & not "a" & not "b"
 >0 : 0
     }
 }

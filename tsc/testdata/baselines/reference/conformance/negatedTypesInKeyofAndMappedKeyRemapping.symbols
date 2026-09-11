@@ -1,0 +1,125 @@
+//// [tests/cases/conformance/types/negated/negatedTypesInKeyofAndMappedKeyRemapping.ts] ////
+
+=== negatedTypesInKeyofAndMappedKeyRemapping.ts ===
+// Negated types combined with keyof and mapped-type key remapping (`as`).
+
+interface Obj {
+>Obj : Symbol(Obj, Decl(negatedTypesInKeyofAndMappedKeyRemapping.ts, 0, 0))
+
+    id: number;
+>id : Symbol(Obj.id, Decl(negatedTypesInKeyofAndMappedKeyRemapping.ts, 2, 15))
+
+    name: string;
+>name : Symbol(Obj.name, Decl(negatedTypesInKeyofAndMappedKeyRemapping.ts, 3, 15))
+
+    method(): void;
+>method : Symbol(Obj.method, Decl(negatedTypesInKeyofAndMappedKeyRemapping.ts, 4, 17))
+}
+
+// keyof over the object.
+type K = keyof Obj; // "id" | "name" | "method"
+>K : Symbol(K, Decl(negatedTypesInKeyofAndMappedKeyRemapping.ts, 6, 1))
+>Obj : Symbol(Obj, Decl(negatedTypesInKeyofAndMappedKeyRemapping.ts, 0, 0))
+
+// Negation of a keyof union.
+type NotKeyof = not keyof Obj; // not ("id" | "name" | "method")
+>NotKeyof : Symbol(NotKeyof, Decl(negatedTypesInKeyofAndMappedKeyRemapping.ts, 9, 19))
+>Obj : Symbol(Obj, Decl(negatedTypesInKeyofAndMappedKeyRemapping.ts, 0, 0))
+
+// keyof applied to a negated object type.
+type KeyofNot = keyof (not Obj);
+>KeyofNot : Symbol(KeyofNot, Decl(negatedTypesInKeyofAndMappedKeyRemapping.ts, 12, 30))
+>Obj : Symbol(Obj, Decl(negatedTypesInKeyofAndMappedKeyRemapping.ts, 0, 0))
+
+// Key remapping that filters out a specific key via `as (K & not "id")`.
+type WithoutId = {
+>WithoutId : Symbol(WithoutId, Decl(negatedTypesInKeyofAndMappedKeyRemapping.ts, 15, 32))
+
+    [P in keyof Obj as (P & not "id")]: Obj[P];
+>P : Symbol(P, Decl(negatedTypesInKeyofAndMappedKeyRemapping.ts, 19, 5))
+>Obj : Symbol(Obj, Decl(negatedTypesInKeyofAndMappedKeyRemapping.ts, 0, 0))
+>P : Symbol(P, Decl(negatedTypesInKeyofAndMappedKeyRemapping.ts, 19, 5))
+>Obj : Symbol(Obj, Decl(negatedTypesInKeyofAndMappedKeyRemapping.ts, 0, 0))
+>P : Symbol(P, Decl(negatedTypesInKeyofAndMappedKeyRemapping.ts, 19, 5))
+
+};
+
+// Key remapping that filters out several keys.
+type OnlyData = {
+>OnlyData : Symbol(OnlyData, Decl(negatedTypesInKeyofAndMappedKeyRemapping.ts, 20, 2))
+
+    [P in keyof Obj as (P & not ("id" | "method"))]: Obj[P];
+>P : Symbol(P, Decl(negatedTypesInKeyofAndMappedKeyRemapping.ts, 24, 5))
+>Obj : Symbol(Obj, Decl(negatedTypesInKeyofAndMappedKeyRemapping.ts, 0, 0))
+>P : Symbol(P, Decl(negatedTypesInKeyofAndMappedKeyRemapping.ts, 24, 5))
+>Obj : Symbol(Obj, Decl(negatedTypesInKeyofAndMappedKeyRemapping.ts, 0, 0))
+>P : Symbol(P, Decl(negatedTypesInKeyofAndMappedKeyRemapping.ts, 24, 5))
+
+};
+
+// Probes against the remapped types.
+declare let withoutId: WithoutId;
+>withoutId : Symbol(withoutId, Decl(negatedTypesInKeyofAndMappedKeyRemapping.ts, 28, 11))
+>WithoutId : Symbol(WithoutId, Decl(negatedTypesInKeyofAndMappedKeyRemapping.ts, 15, 32))
+
+withoutId.name;   // should exist
+>withoutId.name : Symbol(name, Decl(negatedTypesInKeyofAndMappedKeyRemapping.ts, 3, 15))
+>withoutId : Symbol(withoutId, Decl(negatedTypesInKeyofAndMappedKeyRemapping.ts, 28, 11))
+>name : Symbol(name, Decl(negatedTypesInKeyofAndMappedKeyRemapping.ts, 3, 15))
+
+withoutId.method; // should exist
+>withoutId.method : Symbol(method, Decl(negatedTypesInKeyofAndMappedKeyRemapping.ts, 4, 17))
+>withoutId : Symbol(withoutId, Decl(negatedTypesInKeyofAndMappedKeyRemapping.ts, 28, 11))
+>method : Symbol(method, Decl(negatedTypesInKeyofAndMappedKeyRemapping.ts, 4, 17))
+
+withoutId.id;     // should be removed
+>withoutId : Symbol(withoutId, Decl(negatedTypesInKeyofAndMappedKeyRemapping.ts, 28, 11))
+
+declare let onlyData: OnlyData;
+>onlyData : Symbol(onlyData, Decl(negatedTypesInKeyofAndMappedKeyRemapping.ts, 33, 11))
+>OnlyData : Symbol(OnlyData, Decl(negatedTypesInKeyofAndMappedKeyRemapping.ts, 20, 2))
+
+onlyData.name;   // should exist
+>onlyData.name : Symbol(name, Decl(negatedTypesInKeyofAndMappedKeyRemapping.ts, 3, 15))
+>onlyData : Symbol(onlyData, Decl(negatedTypesInKeyofAndMappedKeyRemapping.ts, 33, 11))
+>name : Symbol(name, Decl(negatedTypesInKeyofAndMappedKeyRemapping.ts, 3, 15))
+
+onlyData.id;     // should be removed
+>onlyData : Symbol(onlyData, Decl(negatedTypesInKeyofAndMappedKeyRemapping.ts, 33, 11))
+
+onlyData.method; // should be removed
+>onlyData : Symbol(onlyData, Decl(negatedTypesInKeyofAndMappedKeyRemapping.ts, 33, 11))
+
+// Generic key filtering.
+type Omit2<T, K extends keyof T> = {
+>Omit2 : Symbol(Omit2, Decl(negatedTypesInKeyofAndMappedKeyRemapping.ts, 36, 16))
+>T : Symbol(T, Decl(negatedTypesInKeyofAndMappedKeyRemapping.ts, 39, 11))
+>K : Symbol(K, Decl(negatedTypesInKeyofAndMappedKeyRemapping.ts, 39, 13))
+>T : Symbol(T, Decl(negatedTypesInKeyofAndMappedKeyRemapping.ts, 39, 11))
+
+    [P in keyof T as (P & not K)]: T[P];
+>P : Symbol(P, Decl(negatedTypesInKeyofAndMappedKeyRemapping.ts, 40, 5))
+>T : Symbol(T, Decl(negatedTypesInKeyofAndMappedKeyRemapping.ts, 39, 11))
+>P : Symbol(P, Decl(negatedTypesInKeyofAndMappedKeyRemapping.ts, 40, 5))
+>K : Symbol(K, Decl(negatedTypesInKeyofAndMappedKeyRemapping.ts, 39, 13))
+>T : Symbol(T, Decl(negatedTypesInKeyofAndMappedKeyRemapping.ts, 39, 11))
+>P : Symbol(P, Decl(negatedTypesInKeyofAndMappedKeyRemapping.ts, 40, 5))
+
+};
+type ObjNoName = Omit2<Obj, "name">;
+>ObjNoName : Symbol(ObjNoName, Decl(negatedTypesInKeyofAndMappedKeyRemapping.ts, 41, 2))
+>Omit2 : Symbol(Omit2, Decl(negatedTypesInKeyofAndMappedKeyRemapping.ts, 36, 16))
+>Obj : Symbol(Obj, Decl(negatedTypesInKeyofAndMappedKeyRemapping.ts, 0, 0))
+
+declare let objNoName: ObjNoName;
+>objNoName : Symbol(objNoName, Decl(negatedTypesInKeyofAndMappedKeyRemapping.ts, 43, 11))
+>ObjNoName : Symbol(ObjNoName, Decl(negatedTypesInKeyofAndMappedKeyRemapping.ts, 41, 2))
+
+objNoName.id;   // should exist
+>objNoName.id : Symbol(id, Decl(negatedTypesInKeyofAndMappedKeyRemapping.ts, 2, 15))
+>objNoName : Symbol(objNoName, Decl(negatedTypesInKeyofAndMappedKeyRemapping.ts, 43, 11))
+>id : Symbol(id, Decl(negatedTypesInKeyofAndMappedKeyRemapping.ts, 2, 15))
+
+objNoName.name; // should be removed
+>objNoName : Symbol(objNoName, Decl(negatedTypesInKeyofAndMappedKeyRemapping.ts, 43, 11))
+

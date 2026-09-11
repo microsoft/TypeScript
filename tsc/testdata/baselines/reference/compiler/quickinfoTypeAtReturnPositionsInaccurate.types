@@ -99,7 +99,7 @@ class SimpleStore<Entries extends { [index: string]: NumClass<number> | StrClass
         }
 
         return entry; // type is Entries[EntryId] - all fine
->entry : Entries[EntryId]
+>entry : Entries[EntryId] & not Extract<Entries[EntryId], NumClass<any>>
     }
 }
 
@@ -159,7 +159,7 @@ class ComplexStore<Slices extends { [index: string]: Slice }> {
         item.get();
 >item.get() : string | number
 >item.get : (() => number) | (() => string)
->item : NumClass<number> | StrClass<string>
+>item : NumClass<number> | (StrClass<string> & not Extract<Slices[SliceId][SliceKey], NumClass<any>>)
 >get : (() => number) | (() => string)
 
         // unfortunately, doesn't work completely.
@@ -201,11 +201,11 @@ class ComplexStore<Slices extends { [index: string]: Slice }> {
         item.get();
 >item.get() : string | number
 >item.get : (() => number) | (() => string)
->item : NumClass<number> | StrClass<string>
+>item : (NumClass<number> | StrClass<string>) & not Extract<Slices[SliceId][SliceKey], NumClass<any>>
 >get : (() => number) | (() => string)
 
         return item; // type is never
->item : Slices[SliceId][SliceKey]
+>item : Slices[SliceId][SliceKey] & not Extract<Slices[SliceId][SliceKey], NumClass<any>>
     }
 }
 
@@ -236,5 +236,5 @@ export function listFiles<T extends BuilderProgram>(program: Program | T) {
 >program.getProgram : () => Program
 >program : T
 >getProgram : () => Program
->program : Program
+>program : Program & not T
 }

@@ -27,9 +27,9 @@ namespace TypeScript {
 >items[items.length - 1] : any
 >items : any[]
 >items.length - 1 : number
->items.length : number
+>items.length : number & not 0
 >items : any[]
->length : number
+>length : number & not 0
 >1 : 1
     }
 

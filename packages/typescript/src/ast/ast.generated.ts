@@ -140,6 +140,7 @@ export type KeywordSyntaxKind =
     | SyntaxKind.ModuleKeyword
     | SyntaxKind.NamespaceKeyword
     | SyntaxKind.NeverKeyword
+    | SyntaxKind.NotKeyword
     | SyntaxKind.OutKeyword
     | SyntaxKind.ReadonlyKeyword
     | SyntaxKind.RequireKeyword
@@ -311,6 +312,7 @@ export type TokenSyntaxKind =
     | SyntaxKind.ModuleKeyword
     | SyntaxKind.NamespaceKeyword
     | SyntaxKind.NeverKeyword
+    | SyntaxKind.NotKeyword
     | SyntaxKind.OutKeyword
     | SyntaxKind.ReadonlyKeyword
     | SyntaxKind.RequireKeyword
@@ -962,7 +964,7 @@ export interface ConditionalTypeNode extends TypeNodeBase {
 }
 export interface TypeOperatorNode extends TypeNodeBase {
     readonly kind: SyntaxKind.TypeOperator;
-    readonly operator: SyntaxKind.KeyOfKeyword | SyntaxKind.ReadonlyKeyword | SyntaxKind.UniqueKeyword;
+    readonly operator: SyntaxKind.KeyOfKeyword | SyntaxKind.ReadonlyKeyword | SyntaxKind.UniqueKeyword | SyntaxKind.NotKeyword;
     readonly type: TypeNode;
 }
 export interface InferTypeNode extends TypeNodeBase {

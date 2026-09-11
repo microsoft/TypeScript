@@ -67,7 +67,7 @@ function f2(x: Color | string | string[]) {
     else {
         var w = x;
 >w : string | string[]
->x : string | string[]
+>x : string | (string[] & not number)
 
         var w: string | string[];
 >w : string | string[]
@@ -75,7 +75,7 @@ function f2(x: Color | string | string[]) {
     if (typeof x === "string") {
 >typeof x === "string" : boolean
 >typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
->x : string | string[] | Color
+>x : string | Color | (string[] & not number)
 >"string" : "string"
 
         var a = x;
@@ -87,11 +87,11 @@ function f2(x: Color | string | string[]) {
     }
     else {
         var b = x;
->b : string[] | Color
->x : string[] | Color
+>b : Color | string[]
+>x : (Color | (string[] & not number)) & not string
 
         var b: Color | string[];
->b : string[] | Color
+>b : Color | string[]
     }
 }
 

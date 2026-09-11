@@ -43,7 +43,7 @@ function getFalsyPrimitive(x: string): string | number | boolean {
     }
     if (x === "number") {
 >x === "number" : boolean
->x : string
+>x : string & not "string"
 >"number" : "number"
 
         return 0;
@@ -51,7 +51,7 @@ function getFalsyPrimitive(x: string): string | number | boolean {
     }
     if (x === "boolean") {
 >x === "boolean" : boolean
->x : string
+>x : string & not "string" & not "number"
 >"boolean" : "boolean"
 
         return false;

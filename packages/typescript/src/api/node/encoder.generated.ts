@@ -77,7 +77,7 @@ export function getNodeCommonData(node: Node): number {
         case SyntaxKind.ObjectLiteralExpression:
             return ((node as ObjectLiteralExpression).multiLine ? 1 : 0) << 24;
         case SyntaxKind.TypeOperator:
-            return ((node as TypeOperatorNode).operator === SyntaxKind.ReadonlyKeyword ? 1 : (node as TypeOperatorNode).operator === SyntaxKind.UniqueKeyword ? 2 : 0) << 24;
+            return ((node as TypeOperatorNode).operator === SyntaxKind.ReadonlyKeyword ? 1 : (node as TypeOperatorNode).operator === SyntaxKind.UniqueKeyword ? 2 : (node as TypeOperatorNode).operator === SyntaxKind.NotKeyword ? 3 : 0) << 24;
         case SyntaxKind.ImportAttributes:
             return ((node as ImportAttributes).multiLine ? 1 : 0) << 24 | ((node as ImportAttributes).token === SyntaxKind.AssertKeyword ? 1 : 0) << 25;
         case SyntaxKind.JsxText:

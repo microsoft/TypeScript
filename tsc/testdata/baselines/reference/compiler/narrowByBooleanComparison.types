@@ -153,7 +153,7 @@ function test3(foo: unknown) {
 >Array.isArray : (arg: any) => arg is any[]
 >Array : ArrayConstructor
 >isArray : (arg: any) => arg is any[]
->foo : unknown
+>foo : not string
 >false : false
 
         throw new Error('Not a string or an array');
@@ -162,7 +162,7 @@ function test3(foo: unknown) {
 >'Not a string or an array' : "Not a string or an array"
     }
     foo;
->foo : string | any[]
+>foo : string | (not string & any[])
 }
 
 // https://github.com/microsoft/TypeScript/issues/55395
@@ -241,7 +241,7 @@ function test5(bin: Entity) {
 >false : false
 
         bin;
->bin : Entity
+>bin : Entity & not Actor
 
     } else {
         bin;
@@ -260,7 +260,7 @@ function test6(bin: Entity) {
 >false : false
 
         bin;
->bin : Entity
+>bin : Entity & not Actor
 
     } else {
         bin;

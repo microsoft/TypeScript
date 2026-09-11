@@ -1,0 +1,48 @@
+negatedTypesInPatternLiteralsAndIndexSignatures.ts(10,1): error TS7053: Element implicitly has an 'any' type because expression of type '"foobar"' can't be used to index type 'TemplateKey'.
+  Property 'foobar' does not exist on type 'TemplateKey'.
+negatedTypesInPatternLiteralsAndIndexSignatures.ts(11,1): error TS7053: Element implicitly has an 'any' type because expression of type '"baz"' can't be used to index type 'TemplateKey'.
+  Property 'baz' does not exist on type 'TemplateKey'.
+negatedTypesInPatternLiteralsAndIndexSignatures.ts(15,6): error TS1268: An index signature parameter type must be 'string', 'number', 'symbol', or a template literal type.
+negatedTypesInPatternLiteralsAndIndexSignatures.ts(25,6): error TS1337: An index signature parameter type cannot be a literal type or generic type. Consider using a mapped object type instead.
+
+
+==== negatedTypesInPatternLiteralsAndIndexSignatures.ts (4 errors) ====
+    // Combination: negated types with BOTH pattern literal types and index signatures.
+    
+    // Index signature whose key is a template literal containing a negated placeholder.
+    type TemplateKey = {
+        [idx: `foo${string & not "bar"}`]: number;
+    };
+    
+    declare let templateKey: TemplateKey;
+    templateKey["foobaz"] = 1; // matches pattern
+    templateKey["foobar"] = 1; // excluded by negation
+    ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS7053: Element implicitly has an 'any' type because expression of type '"foobar"' can't be used to index type 'TemplateKey'.
+!!! error TS7053:   Property 'foobar' does not exist on type 'TemplateKey'.
+    templateKey["baz"] = 1;    // does not match pattern
+    ~~~~~~~~~~~~~~~~~~
+!!! error TS7053: Element implicitly has an 'any' type because expression of type '"baz"' can't be used to index type 'TemplateKey'.
+!!! error TS7053:   Property 'baz' does not exist on type 'TemplateKey'.
+    
+    // Index signature whose key is a bare negated template literal.
+    type NotTemplateKey = {
+        [idx: not `foo${string}`]: number;
+         ~~~
+!!! error TS1268: An index signature parameter type must be 'string', 'number', 'symbol', or a template literal type.
+    };
+    
+    // Mapped type over a template literal key type that uses a negated placeholder.
+    type MappedTemplate = {
+        [k in `foo${string & not "bar"}`]: number;
+    };
+    
+    // Generic index signature combination.
+    type WrapKey<T extends string> = {
+        [idx: `foo${T & not "bar"}`]: number;
+         ~~~
+!!! error TS1337: An index signature parameter type cannot be a literal type or generic type. Consider using a mapped object type instead.
+    };
+    type WrapKeyString = WrapKey<string>;
+    type WrapKeyLiteral = WrapKey<"baz">;
+    
