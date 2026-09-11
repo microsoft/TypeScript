@@ -17,3 +17,8 @@ func newPipeListener(path string) (net.Listener, error) {
 func GeneratePipePath(name string) string {
 	return `\\.\pipe\` + name
 }
+
+// NewSyncTransport creates a Windows named pipe transport.
+func NewSyncTransport(path string) (Transport, error) {
+	return NewPipeTransport(path)
+}
