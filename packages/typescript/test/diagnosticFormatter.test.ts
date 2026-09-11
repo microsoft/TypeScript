@@ -1,5 +1,7 @@
 import {
     API,
+    flattenDiagnosticMessageText,
+    formatDiagnostic,
     formatDiagnostics,
     formatDiagnosticsWithColorAndContext,
 } from "@typescript/typescript/unstable/async";
@@ -102,6 +104,57 @@ describe("diagnosticFormatter", () => {
             }
             assert.ok(formatDiagnostics(configDiagnostics, api).includes("tsconfig.json(1,34): error TS6046: "));
             assert.ok(formatDiagnosticsWithColorAndContext(configDiagnostics, api).includes(configText));
+        }
+        finally {
+            await api.close();
+        }
+    });
+
+    test("formatDiagnostic formats a single diagnostic and composes formatDiagnostics", async () => {
+        const api = spawnAPI({
+            "/workspace/tsconfig.json": `{ "compilerOptions": { "strict": true } }`,
+            "/workspace/index.ts": `const x: number = "oops";\nconst y: string = 1;\n`,
+        });
+        try {
+            const snapshot = await api.updateSnapshot({ openProject: "/workspace/tsconfig.json" });
+            const program = snapshot.getProject("/workspace/tsconfig.json")!.program;
+            const diagnostics = await program.getSemanticDiagnostics("/workspace/index.ts");
+            assert.equal(diagnostics.length, 2);
+
+            const first = formatDiagnostic(diagnostics[0], program);
+            assert.equal(first, "index.ts(1,7): error TS2322: Type 'string' is not assignable to type 'number'.\n");
+            assert.equal(first + formatDiagnostic(diagnostics[1], program), formatDiagnostics(diagnostics, program));
+
+            const { fileName: _, ...fileless } = diagnostics[0];
+            assert.equal(formatDiagnostic(fileless, program), "error TS2322: Type 'string' is not assignable to type 'number'.\n");
+        }
+        finally {
+            await api.close();
+        }
+    });
+
+    test("flattenDiagnosticMessageText flattens a message chain with indentation", async () => {
+        const api = spawnAPI({
+            "/workspace/index.ts": `const x: number = "oops";`,
+        });
+        try {
+            const snapshot = await api.updateSnapshot({ openFiles: ["/workspace/index.ts"] });
+            const project = await snapshot.getDefaultProjectForFile("/workspace/index.ts");
+            const [diagnostic] = await project!.program.getSemanticDiagnostics("/workspace/index.ts");
+
+            const chained = {
+                ...diagnostic,
+                text: "Top",
+                messageChain: [
+                    { ...diagnostic, text: "Mid", messageChain: [{ ...diagnostic, text: "Leaf", messageChain: [] }] },
+                ],
+            };
+            assert.equal(flattenDiagnosticMessageText(chained, "\n"), "Top\n  Mid\n    Leaf");
+            assert.equal(flattenDiagnosticMessageText(chained, "\r\n"), "Top\r\n  Mid\r\n    Leaf");
+            assert.equal(flattenDiagnosticMessageText({ ...diagnostic, text: "Solo", messageChain: [] }, "\n", 1), "\n  Solo");
+
+            const [formatted] = formatDiagnostics([chained], project!.program).split("\n").slice(0, 3);
+            assert.ok(formatted.includes("Top"), formatted);
         }
         finally {
             await api.close();

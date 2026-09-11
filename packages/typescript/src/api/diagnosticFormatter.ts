@@ -58,14 +58,18 @@ function diagnosticPrefix(diagnostic: Diagnostic): string {
     return diagnostic.source || "TS";
 }
 
-function flattenDiagnosticMessage(diagnostic: Diagnostic, newLine: string, indentLevel = 0): string {
+/**
+ * Flattens a diagnostic's message text and its message chain into a single string,
+ * with each level of the chain on its own indented line.
+ */
+export function flattenDiagnosticMessageText(diagnostic: Diagnostic, newLine: string, indent = 0): string {
     let result = "";
-    if (indentLevel) {
-        result += newLine + "  ".repeat(indentLevel);
+    if (indent) {
+        result += newLine + "  ".repeat(indent);
     }
     result += diagnostic.text;
     for (const child of diagnostic.messageChain ?? []) {
-        result += flattenDiagnosticMessage(child, newLine, indentLevel + 1);
+        result += flattenDiagnosticMessageText(child, newLine, indent + 1);
     }
     return result;
 }
@@ -149,17 +153,19 @@ function formatCodeSpan(
     return context;
 }
 
+export function formatDiagnostic(diagnostic: Diagnostic, host: FormatDiagnosticsHost): string {
+    const errorMessage = `${diagnosticCategoryName(diagnostic.category)} ${diagnosticPrefix(diagnostic)}${diagnostic.code}: ${flattenDiagnosticMessageText(diagnostic, host.getNewLine())}${host.getNewLine()}`;
+    if (diagnostic.fileName && diagnostic.startPosition) {
+        const { line, character } = diagnostic.startPosition;
+        return `${relativeFileName(diagnostic.fileName, host)}(${line + 1},${character + 1}): ${errorMessage}`;
+    }
+    return errorMessage;
+}
+
 export function formatDiagnostics(diagnostics: readonly Diagnostic[], host: FormatDiagnosticsHost): string {
     let output = "";
     for (const diagnostic of diagnostics) {
-        const errorMessage = `${diagnosticCategoryName(diagnostic.category)} ${diagnosticPrefix(diagnostic)}${diagnostic.code}: ${flattenDiagnosticMessage(diagnostic, host.getNewLine())}${host.getNewLine()}`;
-        if (diagnostic.fileName && diagnostic.startPosition) {
-            const { line, character } = diagnostic.startPosition;
-            output += `${relativeFileName(diagnostic.fileName, host)}(${line + 1},${character + 1}): ${errorMessage}`;
-        }
-        else {
-            output += errorMessage;
-        }
+        output += formatDiagnostic(diagnostic, host);
     }
     return output;
 }
@@ -179,7 +185,7 @@ export function formatDiagnosticsWithColorAndContext(
         }
         output += formatColorAndReset(diagnosticCategoryName(diagnostic.category), getCategoryFormat(diagnostic.category));
         output += formatColorAndReset(` ${diagnosticPrefix(diagnostic)}${diagnostic.code}: `, foregroundColorEscapeGrey);
-        output += flattenDiagnosticMessage(diagnostic, host.getNewLine());
+        output += flattenDiagnosticMessageText(diagnostic, host.getNewLine());
 
         if (diagnostic.fileName && diagnostic.code !== fileAppearsToBeBinaryCode) {
             output += host.getNewLine();
@@ -192,7 +198,7 @@ export function formatDiagnosticsWithColorAndContext(
                 if (related.fileName && related.startPosition) {
                     output += host.getNewLine();
                     output += halfIndent + formatLocation(related, host);
-                    output += " - " + flattenDiagnosticMessage(related, host.getNewLine());
+                    output += " - " + flattenDiagnosticMessageText(related, host.getNewLine());
                     output += formatCodeSpan(related, indent, foregroundColorEscapeCyan, host);
                 }
                 output += host.getNewLine();
