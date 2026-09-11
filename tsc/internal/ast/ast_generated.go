@@ -4095,11 +4095,13 @@ func IsSatisfiesExpression(node *Node) bool {
 type ConditionalExpression struct {
 	ExpressionBase
 	CompositeBase
-	Condition     *Expression
-	QuestionToken *QuestionToken
-	WhenTrue      *Expression
-	ColonToken    *ColonToken
-	WhenFalse     *Expression
+	Condition         *Expression
+	QuestionToken     *QuestionToken
+	WhenTrue          *Expression
+	ColonToken        *ColonToken
+	WhenFalse         *Expression
+	FlowNodeWhenTrue  *FlowNode
+	FlowNodeWhenFalse *FlowNode
 }
 
 func (f *NodeFactory) NewConditionalExpression(condition *Expression, questionToken *QuestionToken, whenTrue *Expression, colonToken *ColonToken, whenFalse *Expression) *Node {
