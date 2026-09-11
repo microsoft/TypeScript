@@ -1,0 +1,213 @@
+//// [tests/cases/compiler/controlFlowGenericThis.ts] ////
+
+=== controlFlowGenericThis.ts ===
+type Type = I32 | Str;
+>Type : Symbol(Type, Decl(controlFlowGenericThis.ts, 0, 0))
+>I32 : Symbol(I32, Decl(controlFlowGenericThis.ts, 1, 45))
+>Str : Symbol(Str, Decl(controlFlowGenericThis.ts, 0, 22))
+
+interface Str { group: "none"; kind: "str"; }
+>Str : Symbol(Str, Decl(controlFlowGenericThis.ts, 0, 22))
+>group : Symbol(Str.group, Decl(controlFlowGenericThis.ts, 1, 15))
+>kind : Symbol(Str.kind, Decl(controlFlowGenericThis.ts, 1, 30))
+
+interface I32 { group: "scalar"; kind: "i32"; }
+>I32 : Symbol(I32, Decl(controlFlowGenericThis.ts, 1, 45))
+>group : Symbol(I32.group, Decl(controlFlowGenericThis.ts, 2, 15))
+>kind : Symbol(I32.kind, Decl(controlFlowGenericThis.ts, 2, 32))
+
+function testThis<T extends Type>(this: T) {
+>testThis : Symbol(testThis, Decl(controlFlowGenericThis.ts, 2, 47))
+>T : Symbol(T, Decl(controlFlowGenericThis.ts, 4, 18))
+>Type : Symbol(Type, Decl(controlFlowGenericThis.ts, 0, 0))
+>this : Symbol(this, Decl(controlFlowGenericThis.ts, 4, 34))
+>T : Symbol(T, Decl(controlFlowGenericThis.ts, 4, 18))
+
+    switch (this.group) {
+>this.group : Symbol(group, Decl(controlFlowGenericThis.ts, 2, 15), Decl(controlFlowGenericThis.ts, 1, 15))
+>this : Symbol(this, Decl(controlFlowGenericThis.ts, 4, 34))
+>group : Symbol(group, Decl(controlFlowGenericThis.ts, 2, 15), Decl(controlFlowGenericThis.ts, 1, 15))
+
+        case "none": return;
+        case "scalar":
+            switch (this.kind) {
+>this.kind : Symbol(I32.kind, Decl(controlFlowGenericThis.ts, 2, 32))
+>this : Symbol(this, Decl(controlFlowGenericThis.ts, 4, 34))
+>kind : Symbol(I32.kind, Decl(controlFlowGenericThis.ts, 2, 32))
+
+                case "str": // Error, just as for an ordinary parameter.
+                case "i32":
+            }
+    }
+}
+
+function testParameter<T extends Type>(o: T) {
+>testParameter : Symbol(testParameter, Decl(controlFlowGenericThis.ts, 13, 1))
+>T : Symbol(T, Decl(controlFlowGenericThis.ts, 15, 23))
+>Type : Symbol(Type, Decl(controlFlowGenericThis.ts, 0, 0))
+>o : Symbol(o, Decl(controlFlowGenericThis.ts, 15, 39))
+>T : Symbol(T, Decl(controlFlowGenericThis.ts, 15, 23))
+
+    switch (o.group) {
+>o.group : Symbol(group, Decl(controlFlowGenericThis.ts, 2, 15), Decl(controlFlowGenericThis.ts, 1, 15))
+>o : Symbol(o, Decl(controlFlowGenericThis.ts, 15, 39))
+>group : Symbol(group, Decl(controlFlowGenericThis.ts, 2, 15), Decl(controlFlowGenericThis.ts, 1, 15))
+
+        case "none": return;
+        case "scalar":
+            switch (o.kind) {
+>o.kind : Symbol(I32.kind, Decl(controlFlowGenericThis.ts, 2, 32))
+>o : Symbol(o, Decl(controlFlowGenericThis.ts, 15, 39))
+>kind : Symbol(I32.kind, Decl(controlFlowGenericThis.ts, 2, 32))
+
+                case "str":
+                case "i32":
+            }
+    }
+}
+
+function testAliasedThis<T extends Type>(this: T) {
+>testAliasedThis : Symbol(testAliasedThis, Decl(controlFlowGenericThis.ts, 24, 1))
+>T : Symbol(T, Decl(controlFlowGenericThis.ts, 26, 25))
+>Type : Symbol(Type, Decl(controlFlowGenericThis.ts, 0, 0))
+>this : Symbol(this, Decl(controlFlowGenericThis.ts, 26, 41))
+>T : Symbol(T, Decl(controlFlowGenericThis.ts, 26, 25))
+
+    const o = this;
+>o : Symbol(o, Decl(controlFlowGenericThis.ts, 27, 9))
+>this : Symbol(this, Decl(controlFlowGenericThis.ts, 26, 41))
+
+    switch (o.group) {
+>o.group : Symbol(group, Decl(controlFlowGenericThis.ts, 2, 15), Decl(controlFlowGenericThis.ts, 1, 15))
+>o : Symbol(o, Decl(controlFlowGenericThis.ts, 27, 9))
+>group : Symbol(group, Decl(controlFlowGenericThis.ts, 2, 15), Decl(controlFlowGenericThis.ts, 1, 15))
+
+        case "none": return;
+        case "scalar":
+            switch (o.kind) {
+>o.kind : Symbol(I32.kind, Decl(controlFlowGenericThis.ts, 2, 32))
+>o : Symbol(o, Decl(controlFlowGenericThis.ts, 27, 9))
+>kind : Symbol(I32.kind, Decl(controlFlowGenericThis.ts, 2, 32))
+
+                case "str":
+                case "i32":
+            }
+    }
+}
+
+function testAccess<T extends Type>(this: T): T {
+>testAccess : Symbol(testAccess, Decl(controlFlowGenericThis.ts, 36, 1))
+>T : Symbol(T, Decl(controlFlowGenericThis.ts, 38, 20))
+>Type : Symbol(Type, Decl(controlFlowGenericThis.ts, 0, 0))
+>this : Symbol(this, Decl(controlFlowGenericThis.ts, 38, 36))
+>T : Symbol(T, Decl(controlFlowGenericThis.ts, 38, 20))
+>T : Symbol(T, Decl(controlFlowGenericThis.ts, 38, 20))
+
+    if (this.group === "scalar") {
+>this.group : Symbol(group, Decl(controlFlowGenericThis.ts, 2, 15), Decl(controlFlowGenericThis.ts, 1, 15))
+>this : Symbol(this, Decl(controlFlowGenericThis.ts, 38, 36))
+>group : Symbol(group, Decl(controlFlowGenericThis.ts, 2, 15), Decl(controlFlowGenericThis.ts, 1, 15))
+
+        const kind: "i32" = this.kind;
+>kind : Symbol(kind, Decl(controlFlowGenericThis.ts, 40, 13))
+>this.kind : Symbol(I32.kind, Decl(controlFlowGenericThis.ts, 2, 32))
+>this : Symbol(this, Decl(controlFlowGenericThis.ts, 38, 36))
+>kind : Symbol(I32.kind, Decl(controlFlowGenericThis.ts, 2, 32))
+
+        const indexedKind: "i32" = this["kind"];
+>indexedKind : Symbol(indexedKind, Decl(controlFlowGenericThis.ts, 41, 13))
+>this : Symbol(this, Decl(controlFlowGenericThis.ts, 38, 36))
+>"kind" : Symbol(I32.kind, Decl(controlFlowGenericThis.ts, 2, 32))
+
+        const arrow = () => {
+>arrow : Symbol(arrow, Decl(controlFlowGenericThis.ts, 42, 13))
+
+            const kind: "i32" = this.kind;
+>kind : Symbol(kind, Decl(controlFlowGenericThis.ts, 43, 17))
+>this.kind : Symbol(I32.kind, Decl(controlFlowGenericThis.ts, 2, 32))
+>this : Symbol(this, Decl(controlFlowGenericThis.ts, 38, 36))
+>kind : Symbol(I32.kind, Decl(controlFlowGenericThis.ts, 2, 32))
+
+        };
+        return this;
+>this : Symbol(this, Decl(controlFlowGenericThis.ts, 38, 36))
+    }
+    const kind: "str" = this.kind;
+>kind : Symbol(kind, Decl(controlFlowGenericThis.ts, 47, 9))
+>this.kind : Symbol(Str.kind, Decl(controlFlowGenericThis.ts, 1, 30))
+>this : Symbol(this, Decl(controlFlowGenericThis.ts, 38, 36))
+>kind : Symbol(Str.kind, Decl(controlFlowGenericThis.ts, 1, 30))
+
+    return this;
+>this : Symbol(this, Decl(controlFlowGenericThis.ts, 38, 36))
+}
+
+function testAliasedAccess<T extends Type>(this: T): T {
+>testAliasedAccess : Symbol(testAliasedAccess, Decl(controlFlowGenericThis.ts, 49, 1))
+>T : Symbol(T, Decl(controlFlowGenericThis.ts, 51, 27))
+>Type : Symbol(Type, Decl(controlFlowGenericThis.ts, 0, 0))
+>this : Symbol(this, Decl(controlFlowGenericThis.ts, 51, 43))
+>T : Symbol(T, Decl(controlFlowGenericThis.ts, 51, 27))
+>T : Symbol(T, Decl(controlFlowGenericThis.ts, 51, 27))
+
+    const o = this;
+>o : Symbol(o, Decl(controlFlowGenericThis.ts, 52, 9))
+>this : Symbol(this, Decl(controlFlowGenericThis.ts, 51, 43))
+
+    if (o.group === "scalar") {
+>o.group : Symbol(group, Decl(controlFlowGenericThis.ts, 2, 15), Decl(controlFlowGenericThis.ts, 1, 15))
+>o : Symbol(o, Decl(controlFlowGenericThis.ts, 52, 9))
+>group : Symbol(group, Decl(controlFlowGenericThis.ts, 2, 15), Decl(controlFlowGenericThis.ts, 1, 15))
+
+        const kind: "i32" = o.kind;
+>kind : Symbol(kind, Decl(controlFlowGenericThis.ts, 54, 13))
+>o.kind : Symbol(I32.kind, Decl(controlFlowGenericThis.ts, 2, 32))
+>o : Symbol(o, Decl(controlFlowGenericThis.ts, 52, 9))
+>kind : Symbol(I32.kind, Decl(controlFlowGenericThis.ts, 2, 32))
+
+        const indexedKind: "i32" = o["kind"];
+>indexedKind : Symbol(indexedKind, Decl(controlFlowGenericThis.ts, 55, 13))
+>o : Symbol(o, Decl(controlFlowGenericThis.ts, 52, 9))
+>"kind" : Symbol(I32.kind, Decl(controlFlowGenericThis.ts, 2, 32))
+
+        const arrow = () => {
+>arrow : Symbol(arrow, Decl(controlFlowGenericThis.ts, 56, 13))
+
+            const kind: "i32" = o.kind;
+>kind : Symbol(kind, Decl(controlFlowGenericThis.ts, 57, 17))
+>o.kind : Symbol(I32.kind, Decl(controlFlowGenericThis.ts, 2, 32))
+>o : Symbol(o, Decl(controlFlowGenericThis.ts, 52, 9))
+>kind : Symbol(I32.kind, Decl(controlFlowGenericThis.ts, 2, 32))
+
+        };
+        return o;
+>o : Symbol(o, Decl(controlFlowGenericThis.ts, 52, 9))
+    }
+    const kind: "str" = o.kind;
+>kind : Symbol(kind, Decl(controlFlowGenericThis.ts, 61, 9))
+>o.kind : Symbol(Str.kind, Decl(controlFlowGenericThis.ts, 1, 30))
+>o : Symbol(o, Decl(controlFlowGenericThis.ts, 52, 9))
+>kind : Symbol(Str.kind, Decl(controlFlowGenericThis.ts, 1, 30))
+
+    return o;
+>o : Symbol(o, Decl(controlFlowGenericThis.ts, 52, 9))
+}
+
+function testGenericIndex<T extends Type, K extends keyof T>(this: T, key: K): T[K] {
+>testGenericIndex : Symbol(testGenericIndex, Decl(controlFlowGenericThis.ts, 63, 1))
+>T : Symbol(T, Decl(controlFlowGenericThis.ts, 65, 26))
+>Type : Symbol(Type, Decl(controlFlowGenericThis.ts, 0, 0))
+>K : Symbol(K, Decl(controlFlowGenericThis.ts, 65, 41))
+>T : Symbol(T, Decl(controlFlowGenericThis.ts, 65, 26))
+>this : Symbol(this, Decl(controlFlowGenericThis.ts, 65, 61))
+>T : Symbol(T, Decl(controlFlowGenericThis.ts, 65, 26))
+>key : Symbol(key, Decl(controlFlowGenericThis.ts, 65, 69))
+>K : Symbol(K, Decl(controlFlowGenericThis.ts, 65, 41))
+>T : Symbol(T, Decl(controlFlowGenericThis.ts, 65, 26))
+>K : Symbol(K, Decl(controlFlowGenericThis.ts, 65, 41))
+
+    return this[key];
+>this : Symbol(this, Decl(controlFlowGenericThis.ts, 65, 61))
+>key : Symbol(key, Decl(controlFlowGenericThis.ts, 65, 69))
+}
+
