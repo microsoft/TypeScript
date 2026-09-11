@@ -1,0 +1,31 @@
+//// [tests/cases/compiler/jsdocOptionalMethodFullSignature.ts] ////
+
+=== /a.js ===
+/** @typedef {{ method?: (s: string) => number }} Example */
+
+const example = {
+>example : { method(s: string): number; }
+>{  /** @type {Example['method']} */  method(s) {    return s.length;  }} : { method(s: string): number; }
+
+  /** @type {Example['method']} */
+  method(s) {
+>method : (s: string) => number
+>s : string
+
+    return s.length;
+>s.length : number
+>s : string
+>length : number
+  }
+};
+
+/** @type {Example['method']} */
+function tooManyParams(s, extra) {
+>tooManyParams : (s: string) => number
+>s : string
+>extra : any
+
+  return 0;
+>0 : 0
+}
+

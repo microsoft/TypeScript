@@ -3462,7 +3462,7 @@ func (c *Checker) checkFunctionOrMethodDeclaration(node *ast.Node) {
 	c.checkSourceElement(body)
 	c.checkAllCodePathsInNonVoidFunctionReturnOrThrow(node, c.getReturnTypeFromAnnotation(node))
 	if node.FunctionLikeData().FullSignature != nil {
-		if c.getContextualCallSignature(c.getTypeFromTypeNode(node.FunctionLikeData().FullSignature), node) == nil {
+		if c.getContextualCallSignature(c.removeMissingOrUndefinedType(c.getTypeFromTypeNode(node.FunctionLikeData().FullSignature)), node) == nil {
 			c.error(node.FunctionLikeData().FullSignature, diagnostics.A_JSDoc_type_tag_on_a_function_must_have_a_signature_with_the_correct_number_of_arguments)
 		}
 	}
@@ -10318,7 +10318,7 @@ func (c *Checker) checkFunctionExpressionOrObjectLiteralMethod(node *ast.Node, c
 		c.checkGrammarForGenerator(node)
 	}
 	if node.FunctionLikeData().FullSignature != nil {
-		if c.getContextualCallSignature(c.getTypeFromTypeNode(node.FunctionLikeData().FullSignature), node) == nil {
+		if c.getContextualCallSignature(c.removeMissingOrUndefinedType(c.getTypeFromTypeNode(node.FunctionLikeData().FullSignature)), node) == nil {
 			c.error(node.FunctionLikeData().FullSignature, diagnostics.A_JSDoc_type_tag_on_a_function_must_have_a_signature_with_the_correct_number_of_arguments)
 		}
 	}
@@ -20391,7 +20391,7 @@ func (c *Checker) getReturnTypeFromAnnotation(declaration *ast.Node) *Type {
 
 func (c *Checker) getSignatureOfFullSignatureType(node *ast.Node) *Signature {
 	if ast.IsInJSFile(node) && (ast.IsFunctionDeclaration(node) || ast.IsMethodDeclaration(node) || ast.IsFunctionExpressionOrArrowFunction(node)) && node.FunctionLikeData().FullSignature != nil {
-		return c.getSingleCallSignature(c.getTypeFromTypeNode(node.FunctionLikeData().FullSignature))
+		return c.getSingleCallSignature(c.removeMissingOrUndefinedType(c.getTypeFromTypeNode(node.FunctionLikeData().FullSignature)))
 	}
 	return nil
 }
