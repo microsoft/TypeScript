@@ -1,0 +1,49 @@
+a.js(18,7): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+a.js(23,15): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+a.js(36,22): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+
+
+==== a.js (3 errors) ====
+    /** @template T */
+    class A {
+        /** @param {T} value */
+        constructor(value) {
+            this.value = value;
+        }
+    
+        /** @returns {typeof A} */
+        static extend() {
+            return this;
+        }
+    }
+    
+    /** @extends {A<string>} */
+    class B extends A.extend() {}
+    
+    new B("ok");
+    new B(1);
+          ~
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+    
+    /** @extends {A<string>} */
+    class C extends A.extend() {
+        constructor() {
+            super(1);
+                  ~
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+        }
+    }
+    
+    /**
+     * @param {number} required
+     * @returns {typeof A}
+     */
+    function getA(required) {
+        return A;
+    }
+    
+    /** @extends {A<string>} */
+    class D extends getA("wrong") {}
+                         ~~~~~~~
+!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+    

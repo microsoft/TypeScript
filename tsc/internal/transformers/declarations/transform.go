@@ -1996,9 +1996,14 @@ func (tx *DeclarationTransformer) transformClassDeclaration(input *ast.ClassDecl
 
 	members := tx.buildClassMembers(input.AsNode(), extraMembers...)
 
-	extendsClause := getEffectiveBaseTypeNode(input.AsNode())
+	extendsClause := ast.GetClassExtendsHeritageElement(input.AsNode())
 
 	if extendsClause != nil && !ast.IsEntityNameExpression(extendsClause.AsExpressionWithTypeArguments().Expression) && extendsClause.AsExpressionWithTypeArguments().Expression.Kind != ast.KindNullKeyword {
+		effectiveBaseType := tx.resolver.GetEffectiveBaseTypeNode(input.AsNode())
+		typeArguments := extendsClause.AsExpressionWithTypeArguments().TypeArguments
+		if effectiveBaseType != nil {
+			typeArguments = effectiveBaseType.AsExpressionWithTypeArguments().TypeArguments
+		}
 		tx.tracker.ReportInferenceFallback(extendsClause.AsExpressionWithTypeArguments().Expression) // Add an isolated declarations error on this extends clause
 		oldId := "default"
 		if ast.NodeIsPresent(input.Name()) && ast.IsIdentifier(input.Name()) && len(input.Name().Text()) > 0 {
@@ -2034,7 +2039,7 @@ func (tx *DeclarationTransformer) transformClassDeclaration(input *ast.ClassDecl
 				tx.Factory().UpdateExpressionWithTypeArguments(
 					extendsClause.AsExpressionWithTypeArguments(),
 					newId,
-					tx.Visitor().VisitNodes(extendsClause.AsExpressionWithTypeArguments().TypeArguments),
+					tx.Visitor().VisitNodes(typeArguments),
 				),
 			}),
 		)

@@ -1,0 +1,23 @@
+a.js(12,15): error TS8023: JSDoc '@extends C' does not match the 'extends A' clause.
+a.js(13,17): error TS8026: Expected A<T> type arguments; provide these with an '@extends' tag.
+
+
+==== a.js (2 errors) ====
+    /** @template T */
+    class A {
+        /** @returns {typeof A} */
+        static extend() {
+            return this;
+        }
+    }
+    
+    /** @template T */
+    class C {}
+    
+    /** @extends {C<string>} */
+                  ~
+!!! error TS8023: JSDoc '@extends C' does not match the 'extends A' clause.
+    class B extends A.extend() {}
+                    ~~~~~~~~~~
+!!! error TS8026: Expected A<T> type arguments; provide these with an '@extends' tag.
+    
