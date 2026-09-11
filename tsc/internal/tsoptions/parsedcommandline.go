@@ -10,7 +10,6 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/contentmapper"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
-	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/internal/glob"
 	"github.com/microsoft/TypeScript/tsc/internal/locale"
 	"github.com/microsoft/TypeScript/tsc/internal/module"
@@ -167,24 +166,12 @@ func (p *ParsedCommandLine) CommonSourceDirectory() string {
 			files,
 			p.GetCurrentDirectory(),
 			p.UseCaseSensitiveFileNames(),
-			p.checkSourceFilesBelongToPath,
+			nil,
 		)
 	})
 	return p.commonSourceDirectory
 }
 
-func (p *ParsedCommandLine) checkSourceFilesBelongToPath(sourceFiles []string, rootDirectory string) bool {
-	allFilesBelongToPath := true
-	for _, file := range sourceFiles {
-		absoluteSourceFilePath := tspath.GetCanonicalFileName(tspath.GetNormalizedAbsolutePath(file, p.GetCurrentDirectory()), p.UseCaseSensitiveFileNames())
-		if !tspath.ContainsPath(rootDirectory, file, p.comparePathsOptions) {
-			p.Errors = append(p.Errors, ast.NewCompilerDiagnostic(diagnostics.File_0_is_not_under_rootDir_1_rootDir_is_expected_to_contain_all_source_files, absoluteSourceFilePath, rootDirectory))
-			allFilesBelongToPath = false
-		}
-	}
-
-	return allFilesBelongToPath
-}
 
 func (p *ParsedCommandLine) GetCurrentDirectory() string {
 	return p.comparePathsOptions.CurrentDirectory
