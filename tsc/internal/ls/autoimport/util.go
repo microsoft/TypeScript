@@ -207,7 +207,7 @@ func createCheckerPool(program checker.Program) (getChecker func() (*checker.Che
 			case ch := <-pool:
 				return ch, func() { pool <- ch }
 			default:
-				break
+				// pool is empty; fall through to try creating a new checker
 			}
 			// Try to create a new one if under limit
 			for {
