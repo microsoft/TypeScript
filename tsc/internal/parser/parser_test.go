@@ -186,6 +186,31 @@ class MissingImplements implements B. {}
 	assert.Equal(t, missingImplementsDecl.HeritageClauses.Nodes[0].AsHeritageClause().Types.Nodes[0].Kind, ast.KindExpressionWithTypeArguments)
 }
 
+func TestImportDeferOptionalCallsCollectExternalModuleReferences(t *testing.T) {
+	t.Parallel()
+
+	tests := []struct {
+		name       string
+		sourceText string
+	}{
+		{"optional call", `import.defer?.("./x");`},
+		{"generic optional call", `import.defer?.<string>("./x");`},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
+			file := parser.ParseSourceFile(ast.SourceFileParseOptions{
+				FileName: "/index.ts",
+				Path:     "/index.ts",
+			}, test.sourceText, core.ScriptKindTS)
+
+			assert.Equal(t, len(file.Imports()), 1)
+			assert.Equal(t, file.Imports()[0].Text(), "./x")
+		})
+	}
+}
+
 func TestJSDocImportTypeParentChain(t *testing.T) {
 	t.Parallel()
 	sourceText := `test("", async function () {
