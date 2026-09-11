@@ -1,0 +1,63 @@
+//// [tests/cases/compiler/iteratorIncludes.ts] ////
+
+=== iteratorIncludes.ts ===
+const includes: boolean = Iterator.from([1, 2, 3]).includes(2);
+>includes : boolean
+>Iterator.from([1, 2, 3]).includes(2) : boolean
+>Iterator.from([1, 2, 3]).includes : (searchElement: number, skippedElements?: number) => boolean
+>Iterator.from([1, 2, 3]) : IteratorObject<number, undefined, unknown>
+>Iterator.from : <T>(value: Iterable<T, unknown, undefined> | Iterator<T, unknown, undefined>) => IteratorObject<T, undefined, unknown>
+>Iterator : IteratorConstructor
+>from : <T>(value: Iterable<T, unknown, undefined> | Iterator<T, unknown, undefined>) => IteratorObject<T, undefined, unknown>
+>[1, 2, 3] : number[]
+>1 : 1
+>2 : 2
+>3 : 3
+>includes : (searchElement: number, skippedElements?: number) => boolean
+>2 : 2
+
+const includesAfterSkipping: boolean = Iterator.from([1, 2, 3]).includes(2, 1);
+>includesAfterSkipping : boolean
+>Iterator.from([1, 2, 3]).includes(2, 1) : boolean
+>Iterator.from([1, 2, 3]).includes : (searchElement: number, skippedElements?: number) => boolean
+>Iterator.from([1, 2, 3]) : IteratorObject<number, undefined, unknown>
+>Iterator.from : <T>(value: Iterable<T, unknown, undefined> | Iterator<T, unknown, undefined>) => IteratorObject<T, undefined, unknown>
+>Iterator : IteratorConstructor
+>from : <T>(value: Iterable<T, unknown, undefined> | Iterator<T, unknown, undefined>) => IteratorObject<T, undefined, unknown>
+>[1, 2, 3] : number[]
+>1 : 1
+>2 : 2
+>3 : 3
+>includes : (searchElement: number, skippedElements?: number) => boolean
+>2 : 2
+>1 : 1
+
+Iterator.from([1, 2, 3]).includes("1");
+>Iterator.from([1, 2, 3]).includes("1") : boolean
+>Iterator.from([1, 2, 3]).includes : (searchElement: number, skippedElements?: number) => boolean
+>Iterator.from([1, 2, 3]) : IteratorObject<number, undefined, unknown>
+>Iterator.from : <T>(value: Iterable<T, unknown, undefined> | Iterator<T, unknown, undefined>) => IteratorObject<T, undefined, unknown>
+>Iterator : IteratorConstructor
+>from : <T>(value: Iterable<T, unknown, undefined> | Iterator<T, unknown, undefined>) => IteratorObject<T, undefined, unknown>
+>[1, 2, 3] : number[]
+>1 : 1
+>2 : 2
+>3 : 3
+>includes : (searchElement: number, skippedElements?: number) => boolean
+>"1" : "1"
+
+Iterator.from([1, 2, 3]).includes(2, "1");
+>Iterator.from([1, 2, 3]).includes(2, "1") : boolean
+>Iterator.from([1, 2, 3]).includes : (searchElement: number, skippedElements?: number) => boolean
+>Iterator.from([1, 2, 3]) : IteratorObject<number, undefined, unknown>
+>Iterator.from : <T>(value: Iterable<T, unknown, undefined> | Iterator<T, unknown, undefined>) => IteratorObject<T, undefined, unknown>
+>Iterator : IteratorConstructor
+>from : <T>(value: Iterable<T, unknown, undefined> | Iterator<T, unknown, undefined>) => IteratorObject<T, undefined, unknown>
+>[1, 2, 3] : number[]
+>1 : 1
+>2 : 2
+>3 : 3
+>includes : (searchElement: number, skippedElements?: number) => boolean
+>2 : 2
+>"1" : "1"
+

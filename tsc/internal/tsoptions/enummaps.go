@@ -106,9 +106,9 @@ var LibMap = collections.NewOrderedMapFromList([]collections.MapEntry[string, an
 	{Key: "esnext.regexp", Value: "lib.es2024.regexp.d.ts"},
 	{Key: "esnext.string", Value: "lib.es2024.string.d.ts"},
 	{Key: "esnext.float16", Value: "lib.es2025.float16.d.ts"},
-	{Key: "esnext.iterator", Value: "lib.es2025.iterator.d.ts"},
 	{Key: "esnext.promise", Value: "lib.es2025.promise.d.ts"},
 	// ESNext By-feature options
+	{Key: "esnext.iterator", Value: "lib.esnext.iterator.d.ts"},
 	{Key: "esnext.array", Value: "lib.esnext.array.d.ts"},
 	{Key: "esnext.collection", Value: "lib.esnext.collection.d.ts"},
 	{Key: "esnext.date", Value: "lib.esnext.date.d.ts"},

@@ -1,0 +1,33 @@
+//// [tests/cases/compiler/iteratorIncludes.ts] ////
+
+=== iteratorIncludes.ts ===
+const includes: boolean = Iterator.from([1, 2, 3]).includes(2);
+>includes : Symbol(includes, Decl(iteratorIncludes.ts, 0, 5))
+>Iterator.from([1, 2, 3]).includes : Symbol(IteratorObject.includes, Decl(lib.esnext.iterator.d.ts, --, --))
+>Iterator.from : Symbol(IteratorConstructor.from, Decl(lib.es2025.iterator.d.ts, --, --))
+>Iterator : Symbol(Iterator, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2025.iterator.d.ts, --, --))
+>from : Symbol(IteratorConstructor.from, Decl(lib.es2025.iterator.d.ts, --, --))
+>includes : Symbol(IteratorObject.includes, Decl(lib.esnext.iterator.d.ts, --, --))
+
+const includesAfterSkipping: boolean = Iterator.from([1, 2, 3]).includes(2, 1);
+>includesAfterSkipping : Symbol(includesAfterSkipping, Decl(iteratorIncludes.ts, 1, 5))
+>Iterator.from([1, 2, 3]).includes : Symbol(IteratorObject.includes, Decl(lib.esnext.iterator.d.ts, --, --))
+>Iterator.from : Symbol(IteratorConstructor.from, Decl(lib.es2025.iterator.d.ts, --, --))
+>Iterator : Symbol(Iterator, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2025.iterator.d.ts, --, --))
+>from : Symbol(IteratorConstructor.from, Decl(lib.es2025.iterator.d.ts, --, --))
+>includes : Symbol(IteratorObject.includes, Decl(lib.esnext.iterator.d.ts, --, --))
+
+Iterator.from([1, 2, 3]).includes("1");
+>Iterator.from([1, 2, 3]).includes : Symbol(IteratorObject.includes, Decl(lib.esnext.iterator.d.ts, --, --))
+>Iterator.from : Symbol(IteratorConstructor.from, Decl(lib.es2025.iterator.d.ts, --, --))
+>Iterator : Symbol(Iterator, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2025.iterator.d.ts, --, --))
+>from : Symbol(IteratorConstructor.from, Decl(lib.es2025.iterator.d.ts, --, --))
+>includes : Symbol(IteratorObject.includes, Decl(lib.esnext.iterator.d.ts, --, --))
+
+Iterator.from([1, 2, 3]).includes(2, "1");
+>Iterator.from([1, 2, 3]).includes : Symbol(IteratorObject.includes, Decl(lib.esnext.iterator.d.ts, --, --))
+>Iterator.from : Symbol(IteratorConstructor.from, Decl(lib.es2025.iterator.d.ts, --, --))
+>Iterator : Symbol(Iterator, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2025.iterator.d.ts, --, --))
+>from : Symbol(IteratorConstructor.from, Decl(lib.es2025.iterator.d.ts, --, --))
+>includes : Symbol(IteratorObject.includes, Decl(lib.esnext.iterator.d.ts, --, --))
+
