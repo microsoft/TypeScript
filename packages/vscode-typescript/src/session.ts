@@ -24,9 +24,13 @@ import {
     resolveTsdkPath,
     resolveTsdkPathToExe,
     updateWorkspaceTsdkConfig,
-    useWorkspaceTsdkStorageKey,
     workspaceConfigBase,
 } from "./util";
+import {
+    shouldUseWorkspaceTsdk,
+    suppressPromptWorkspaceTsdkStorageKey,
+    useWorkspaceTsdkStorageKey,
+} from "./workspaceTsdk";
 
 /**
  * SessionManager's lifetime is equal to that of the extension. It is responsible
@@ -661,13 +665,12 @@ async function promptSelectVersion(context: vscode.ExtensionContext, client: Cli
 export async function promptUseWorkspaceVersion(context: vscode.ExtensionContext): Promise<void> {
     if (!vscode.workspace.isTrusted) return;
 
-    const useWorkspaceTsdk = context.workspaceState.get<boolean>(useWorkspaceTsdkStorageKey, false);
-    if (useWorkspaceTsdk) return; // already opted in
-
-    const suppressKey = "typescript.native-preview.suppressPromptWorkspaceTsdk";
-    if (context.workspaceState.get<boolean>(suppressKey, false)) return;
-
     const workspaceTsdk = await getWorkspaceTsdkForPrompt();
+    const preference = context.workspaceState.get<boolean>(useWorkspaceTsdkStorageKey);
+    const promptSuppressed = context.workspaceState.get<boolean>(suppressPromptWorkspaceTsdkStorageKey, false);
+    if (preference === true || workspaceTsdk !== undefined && shouldUseWorkspaceTsdk(true, preference, promptSuppressed)) return;
+    if (promptSuppressed) return;
+
     if (workspaceTsdk !== undefined) {
         // The workspace config already specifies a tsdk location, but the
         // user hasn't consented to using it. Just need their approval.
@@ -690,7 +693,7 @@ export async function promptUseWorkspaceVersion(context: vscode.ExtensionContext
             await vscode.commands.executeCommand("typescript.native-preview.restart");
         }
         else if (result === suppress) {
-            await context.workspaceState.update(suppressKey, true);
+            await context.workspaceState.update(suppressPromptWorkspaceTsdkStorageKey, true);
         }
     }
     else {
@@ -718,7 +721,7 @@ export async function promptUseWorkspaceVersion(context: vscode.ExtensionContext
             await vscode.commands.executeCommand("typescript.native-preview.restart");
         }
         else if (result === suppress) {
-            await context.workspaceState.update(suppressKey, true);
+            await context.workspaceState.update(suppressPromptWorkspaceTsdkStorageKey, true);
         }
     }
 }
