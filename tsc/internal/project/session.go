@@ -1053,7 +1053,8 @@ func (s *Session) getSnapshot(
 	var updateReason UpdateReason
 	if len(request.Projects) > 0 {
 		updateReason = UpdateReasonRequestedLanguageServiceProjectDirty
-	} else if request.ProjectTree != nil {
+	} else if request.ProjectTree != nil && !snapshot.ProjectCollection.loadedProjectTrees.covers(request.ProjectTree) {
+		// Only worth a new snapshot if there is something the loaded trees do not already cover.
 		updateReason = UpdateReasonRequestedLoadProjectTree
 	} else if request.AutoImports != "" {
 		updateReason = UpdateReasonRequestedLanguageServiceWithAutoImports
@@ -1837,7 +1838,8 @@ func (s *Session) refreshCodeLensIfNeeded(oldPrefs lsutil.UserPreferences, newPr
 func (s *Session) refreshDiagnosticsIfNeeded(oldPrefs lsutil.UserPreferences, newPrefs lsutil.UserPreferences) {
 	if oldPrefs.CustomConfigFileName != newPrefs.CustomConfigFileName ||
 		oldPrefs.ReportStyleChecksAsWarnings != newPrefs.ReportStyleChecksAsWarnings ||
-		oldPrefs.EnableValidation != newPrefs.EnableValidation {
+		oldPrefs.EnableValidation != newPrefs.EnableValidation ||
+		oldPrefs.WorkspaceDiagnosticsScope != newPrefs.WorkspaceDiagnosticsScope {
 		s.ScheduleDiagnosticsRefresh()
 	}
 }

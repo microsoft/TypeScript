@@ -324,6 +324,8 @@ func parseCompilerOptions(key string, value any, allOptions *core.CompilerOption
 		allOptions.DisableSourceOfProjectReferenceRedirect = ParseTristate(value)
 	case "disableSolutionSearching":
 		allOptions.DisableSolutionSearching = ParseTristate(value)
+	case "experimentalWorkspaceDiagnosticsExclude":
+		allOptions.ExperimentalWorkspaceDiagnosticsExclude = ParseStringArray(value)
 	case "disableReferencedProjectLoad":
 		allOptions.DisableReferencedProjectLoad = ParseTristate(value)
 	case "declarationMap":

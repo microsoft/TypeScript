@@ -82,6 +82,8 @@ type Project struct {
 	contentMapperWatchedFiles *collections.Set[tspath.Path]
 
 	checkerPool *checkerPool
+	// incremental carries what a change reaches from one program to the next; see incrementalState.
+	incremental *incrementalState
 
 	// installedTypingsInfo is the value of `project.ComputeTypingsInfo()` that was
 	// used during the most recently completed typings installation.
@@ -184,6 +186,7 @@ func NewProject(
 		Kind:             kind,
 		currentDirectory: currentDirectory,
 		dirty:            true,
+		incremental:      &incrementalState{},
 	}
 
 	project.configFilePath = tspath.ToPath(configFileName, currentDirectory, builder.fs.fs.UseCaseSensitiveFileNames())
@@ -312,6 +315,7 @@ func (p *Project) Clone() *Project {
 		contentMapperWatchedFiles: p.contentMapperWatchedFiles,
 
 		checkerPool: p.checkerPool,
+		incremental: p.incremental,
 
 		installedTypingsInfo: p.installedTypingsInfo,
 		typingsFiles:         p.typingsFiles,
@@ -367,6 +371,19 @@ func (p *Project) setPotentialProjectReference(configFilePath tspath.Path) {
 		p.potentialProjectReferences = p.potentialProjectReferences.Clone()
 	}
 	p.potentialProjectReferences.Add(configFilePath)
+}
+
+// ReferencedProjectPaths returns the config paths of the projects this project references.
+func (p *Project) ReferencedProjectPaths() []tspath.Path {
+	if p.CommandLine == nil {
+		return nil
+	}
+	referenced := p.CommandLine.ResolvedProjectReferencePaths()
+	paths := make([]tspath.Path, 0, len(referenced))
+	for _, path := range referenced {
+		paths = append(paths, p.toPath(path))
+	}
+	return paths
 }
 
 func (p *Project) hasPotentialProjectReference(projectTreeRequest *ProjectTreeRequest) bool {

@@ -698,24 +698,11 @@ func filterAndSortDiagnostics(diags []*ast.Diagnostic) []*ast.Diagnostic {
 // collectCheckerDiagnosticsFromFiles collects checker diagnostics for a list of files.
 func (p *Program) collectCheckerDiagnosticsFromFiles(ctx context.Context, sourceFiles []*ast.SourceFile, collect func(context.Context, *checker.Checker, *ast.SourceFile) []*ast.Diagnostic) [][]*ast.Diagnostic {
 	diagnostics := make([][]*ast.Diagnostic, len(sourceFiles))
-	if p.compilerCheckerPool != nil {
-		p.compilerCheckerPool.forEachCheckerGroupDo(ctx, sourceFiles, p.SingleThreaded(), func(c *checker.Checker, fileIndex int, file *ast.SourceFile) {
-			diagnostics[fileIndex] = collect(ctx, c, file)
-		})
-	} else {
-		wg := core.NewWorkGroup(p.SingleThreaded())
-		for i, file := range sourceFiles {
-			if p.SkipTypeChecking(file, false) {
-				continue
-			}
-			wg.Queue(func() {
-				c, done := p.checkerPool.GetChecker(ctx, file)
-				diagnostics[i] = collect(ctx, c, file)
-				done()
-			})
-		}
-		wg.RunAndWait()
-	}
+	// A file is checked by the checker its pool assigned it, and each checker is taken once for its
+	// whole group rather than once per file.
+	p.checkerPool.ForEachCheckerGroupDo(ctx, sourceFiles, p.SingleThreaded(), func(c *checker.Checker, fileIndex int, file *ast.SourceFile) {
+		diagnostics[fileIndex] = collect(ctx, c, file)
+	})
 	return diagnostics
 }
 

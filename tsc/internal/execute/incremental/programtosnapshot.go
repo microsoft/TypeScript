@@ -17,15 +17,24 @@ func programToSnapshot(program *compiler.Program, oldProgram *Program, hashWithT
 	if oldProgram != nil && oldProgram.program == program {
 		return oldProgram.snapshot
 	}
+	var oldSnapshot *snapshot
+	if oldProgram != nil {
+		oldSnapshot = oldProgram.snapshot
+	}
+	return buildSnapshot(program, oldSnapshot, hashWithText)
+}
+
+// buildSnapshot works out what a program changed against what the one before it left behind.
+func buildSnapshot(program *compiler.Program, oldSnapshot *snapshot, hashWithText bool) *snapshot {
 	snapshot := &snapshot{
 		options:      program.Options(),
 		hashWithText: hashWithText,
 		checkPending: program.Options().NoCheck.IsTrue(),
 	}
 	to := &toProgramSnapshot{
-		program:    program,
-		oldProgram: oldProgram,
-		snapshot:   snapshot,
+		program:     program,
+		oldSnapshot: oldSnapshot,
+		snapshot:    snapshot,
 	}
 
 	if to.snapshot.canUseIncrementalState() {
@@ -41,38 +50,38 @@ func programToSnapshot(program *compiler.Program, oldProgram *Program, hashWithT
 
 type toProgramSnapshot struct {
 	program           *compiler.Program
-	oldProgram        *Program
+	oldSnapshot       *snapshot
 	snapshot          *snapshot
 	globalFileRemoved bool
 }
 
 func (t *toProgramSnapshot) reuseFromOldProgram() {
-	if t.oldProgram != nil {
+	if t.oldSnapshot != nil {
 		if t.snapshot.options.Composite.IsTrue() {
-			t.snapshot.latestChangedDtsFile = t.oldProgram.snapshot.latestChangedDtsFile
+			t.snapshot.latestChangedDtsFile = t.oldSnapshot.latestChangedDtsFile
 		}
 		// Copy old snapshot's changed files set
-		t.oldProgram.snapshot.changedFilesSet.Range(func(key tspath.Path) bool {
+		t.oldSnapshot.changedFilesSet.Range(func(key tspath.Path) bool {
 			t.snapshot.changedFilesSet.Add(key)
 			return true
 		})
-		t.oldProgram.snapshot.affectedFilesPendingEmit.Range(func(key tspath.Path, emitKind FileEmitKind) bool {
+		t.oldSnapshot.affectedFilesPendingEmit.Range(func(key tspath.Path, emitKind FileEmitKind) bool {
 			t.snapshot.affectedFilesPendingEmit.Store(key, emitKind)
 			return true
 		})
-		t.snapshot.buildInfoEmitPending.Store(t.oldProgram.snapshot.buildInfoEmitPending.Load())
-		t.snapshot.hasErrorsFromOldState = t.oldProgram.snapshot.hasErrors
-		t.snapshot.hasSemanticErrorsFromOldState = t.oldProgram.snapshot.hasSemanticErrors
-		t.snapshot.packageJsonsFromOldState = t.oldProgram.snapshot.packageJsons
-		t.snapshot.missingPackageJsonsFromOldState = t.oldProgram.snapshot.missingPackageJsons
+		t.snapshot.buildInfoEmitPending.Store(t.oldSnapshot.buildInfoEmitPending.Load())
+		t.snapshot.hasErrorsFromOldState = t.oldSnapshot.hasErrors
+		t.snapshot.hasSemanticErrorsFromOldState = t.oldSnapshot.hasSemanticErrors
+		t.snapshot.packageJsonsFromOldState = t.oldSnapshot.packageJsons
+		t.snapshot.missingPackageJsonsFromOldState = t.oldSnapshot.missingPackageJsons
 	} else {
 		t.snapshot.buildInfoEmitPending.Store(t.snapshot.options.IsIncremental())
 	}
 }
 
 func (t *toProgramSnapshot) computeProgramFileChanges() {
-	canCopySemanticDiagnostics := t.oldProgram != nil &&
-		!tsoptions.CompilerOptionsAffectSemanticDiagnostics(t.oldProgram.snapshot.options, t.program.Options())
+	canCopySemanticDiagnostics := t.oldSnapshot != nil &&
+		!tsoptions.CompilerOptionsAffectSemanticDiagnostics(t.oldSnapshot.options, t.program.Options())
 	// We can only reuse emit signatures (i.e. .d.ts signatures) if the .d.ts file is unchanged,
 	// which will eg be depedent on change in options like declarationDir and outDir options are unchanged.
 	// We need to look in oldState.compilerOptions, rather than oldCompilerOptions (i.e.we need to disregard useOldState) because
@@ -80,12 +89,12 @@ func (t *toProgramSnapshot) computeProgramFileChanges() {
 	// which would make useOldState as false since we can now use reference maps that are needed to track what to emit, what to check etc
 	// but that option change does not affect d.ts file name so emitSignatures should still be reused.
 	canCopyEmitSignatures := t.snapshot.options.Composite.IsTrue() &&
-		t.oldProgram != nil &&
-		!tsoptions.CompilerOptionsAffectDeclarationPath(t.oldProgram.snapshot.options, t.program.Options())
+		t.oldSnapshot != nil &&
+		!tsoptions.CompilerOptionsAffectDeclarationPath(t.oldSnapshot.options, t.program.Options())
 	copyDeclarationFileDiagnostics := canCopySemanticDiagnostics &&
-		t.snapshot.options.SkipLibCheck.IsTrue() == t.oldProgram.snapshot.options.SkipLibCheck.IsTrue()
+		t.snapshot.options.SkipLibCheck.IsTrue() == t.oldSnapshot.options.SkipLibCheck.IsTrue()
 	copyLibFileDiagnostics := copyDeclarationFileDiagnostics &&
-		t.snapshot.options.SkipDefaultLibCheck.IsTrue() == t.oldProgram.snapshot.options.SkipDefaultLibCheck.IsTrue()
+		t.snapshot.options.SkipDefaultLibCheck.IsTrue() == t.oldSnapshot.options.SkipDefaultLibCheck.IsTrue()
 
 	files := t.program.GetSourceFiles()
 	wg := core.NewWorkGroup(t.program.SingleThreaded())
@@ -103,18 +112,18 @@ func (t *toProgramSnapshot) computeProgramFileChanges() {
 			if newReferences != nil {
 				t.snapshot.referencedMap.storeReferences(file.Path(), newReferences)
 			}
-			if t.oldProgram != nil {
-				if oldFileInfo, ok := t.oldProgram.snapshot.fileInfos.Load(file.Path()); ok {
+			if t.oldSnapshot != nil {
+				if oldFileInfo, ok := t.oldSnapshot.fileInfos.Load(file.Path()); ok {
 					signature = oldFileInfo.signature
 					if oldFileInfo.version != version || oldFileInfo.affectsGlobalScope != affectsGlobalScope || oldFileInfo.impliedNodeFormat != impliedNodeFormat {
 						t.snapshot.addFileToChangeSet(file.Path())
-					} else if oldReferences, _ := t.oldProgram.snapshot.referencedMap.getReferences(file.Path()); !newReferences.Equals(oldReferences) {
+					} else if oldReferences, _ := t.oldSnapshot.referencedMap.getReferences(file.Path()); !newReferences.Equals(oldReferences) {
 						// Referenced files changed
 						t.snapshot.addFileToChangeSet(file.Path())
 					} else if newReferences != nil {
 						for refPath := range newReferences.Keys() {
 							if t.program.GetSourceFileByPath(refPath) == nil {
-								if _, ok := t.oldProgram.snapshot.fileInfos.Load(refPath); ok {
+								if _, ok := t.oldSnapshot.fileInfos.Load(refPath); ok {
 									// Referenced file was deleted in the new program
 									t.snapshot.addFileToChangeSet(file.Path())
 									break
@@ -126,22 +135,22 @@ func (t *toProgramSnapshot) computeProgramFileChanges() {
 					t.snapshot.addFileToChangeSet(file.Path())
 				}
 				if !t.snapshot.changedFilesSet.Has(file.Path()) {
-					if emitDiagnostics, ok := t.oldProgram.snapshot.emitDiagnosticsPerFile.Load(file.Path()); ok {
+					if emitDiagnostics, ok := t.oldSnapshot.emitDiagnosticsPerFile.Load(file.Path()); ok {
 						t.snapshot.emitDiagnosticsPerFile.Store(file.Path(), repopulateDiagnosticsOfFile(emitDiagnostics, t.program, file))
 					}
 					if canCopySemanticDiagnostics {
 						if (!file.IsDeclarationFile || copyDeclarationFileDiagnostics) &&
 							(!t.program.IsSourceFileDefaultLibrary(file.Path()) || copyLibFileDiagnostics) {
 							// Unchanged file copy diagnostics
-							if diagnostics, ok := t.oldProgram.snapshot.semanticDiagnosticsPerFile.Load(file.Path()); ok {
+							if diagnostics, ok := t.oldSnapshot.semanticDiagnosticsPerFile.Load(file.Path()); ok {
 								t.snapshot.semanticDiagnosticsPerFile.Store(file.Path(), repopulateDiagnosticsOfFile(diagnostics, t.program, file))
 							}
 						}
 					}
 				}
 				if canCopyEmitSignatures {
-					if oldEmitSignature, ok := t.oldProgram.snapshot.emitSignatures.Load(file.Path()); ok {
-						t.snapshot.emitSignatures.Store(file.Path(), oldEmitSignature.getNewEmitSignature(t.oldProgram.snapshot.options, t.snapshot.options))
+					if oldEmitSignature, ok := t.oldSnapshot.emitSignatures.Load(file.Path()); ok {
+						t.snapshot.emitSignatures.Store(file.Path(), oldEmitSignature.getNewEmitSignature(t.oldSnapshot.options, t.snapshot.options))
 					}
 				}
 			} else {
@@ -160,9 +169,9 @@ func (t *toProgramSnapshot) computeProgramFileChanges() {
 }
 
 func (t *toProgramSnapshot) handleFileDelete() {
-	if t.oldProgram != nil {
+	if t.oldSnapshot != nil {
 		// If the global file is removed, add all files as changed
-		t.oldProgram.snapshot.fileInfos.Range(func(filePath tspath.Path, oldInfo *FileInfo) bool {
+		t.oldSnapshot.fileInfos.Range(func(filePath tspath.Path, oldInfo *FileInfo) bool {
 			if _, ok := t.snapshot.fileInfos.Load(filePath); !ok {
 				if oldInfo.affectsGlobalScope {
 					for _, file := range t.snapshot.getAllFilesExcludingDefaultLibraryFile(t.program, nil) {
@@ -180,11 +189,11 @@ func (t *toProgramSnapshot) handleFileDelete() {
 }
 
 func (t *toProgramSnapshot) handleGlobalScopeChange() {
-	if t.oldProgram == nil || t.globalFileRemoved {
+	if t.oldSnapshot == nil || t.globalFileRemoved {
 		return
 	}
 	globalScopeLost := false
-	t.oldProgram.snapshot.fileInfos.Range(func(filePath tspath.Path, oldInfo *FileInfo) bool {
+	t.oldSnapshot.fileInfos.Range(func(filePath tspath.Path, oldInfo *FileInfo) bool {
 		if !oldInfo.affectsGlobalScope {
 			return true
 		}
@@ -202,14 +211,14 @@ func (t *toProgramSnapshot) handleGlobalScopeChange() {
 }
 
 func (t *toProgramSnapshot) handlePendingEmit() {
-	if t.oldProgram != nil && !t.globalFileRemoved {
+	if t.oldSnapshot != nil && !t.globalFileRemoved {
 		// If options affect emit, then we need to do complete emit per compiler options
 		// otherwise only the js or dts that needs to emitted because its different from previously emitted options
 		var pendingEmitKind FileEmitKind
-		if tsoptions.CompilerOptionsAffectEmit(t.oldProgram.snapshot.options, t.snapshot.options) {
+		if tsoptions.CompilerOptionsAffectEmit(t.oldSnapshot.options, t.snapshot.options) {
 			pendingEmitKind = GetFileEmitKind(t.snapshot.options)
 		} else {
-			pendingEmitKind = getPendingEmitKindWithOptions(t.snapshot.options, t.oldProgram.snapshot.options)
+			pendingEmitKind = getPendingEmitKindWithOptions(t.snapshot.options, t.oldSnapshot.options)
 		}
 		if pendingEmitKind != FileEmitKindNone {
 			// Add all files to affectedFilesPendingEmit since emit changed
@@ -225,9 +234,9 @@ func (t *toProgramSnapshot) handlePendingEmit() {
 }
 
 func (t *toProgramSnapshot) handlePendingCheck() {
-	if t.oldProgram != nil &&
+	if t.oldSnapshot != nil &&
 		t.snapshot.semanticDiagnosticsPerFile.Size() != len(t.program.GetSourceFiles()) &&
-		t.oldProgram.snapshot.checkPending != t.snapshot.checkPending {
+		t.oldSnapshot.checkPending != t.snapshot.checkPending {
 		t.snapshot.buildInfoEmitPending.Store(true)
 	}
 }
