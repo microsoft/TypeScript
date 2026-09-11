@@ -1074,6 +1074,11 @@ func literalValueToJSON(value any) any {
 	}
 }
 
+type ConstantValueResponse struct {
+	IsNumber bool `json:"isNumber"`
+	Value    any  `json:"value"`
+}
+
 type SignatureResponse struct {
 	Id             SignatureID `json:"id"`
 	Flags          uint32      `json:"flags"`

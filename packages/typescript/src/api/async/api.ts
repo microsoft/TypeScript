@@ -2101,7 +2101,16 @@ export class Checker {
             project: this.project.id,
             location: getNodeId(node),
         });
-        return typeof data === "string" || typeof data === "number" ? data : undefined;
+        if (!data || (typeof data.value !== "string" && typeof data.value !== "number")) {
+            return undefined;
+        }
+        if (data.isNumber && typeof data.value === "string") {
+            if (data.value === "+Infinity") {
+                return Infinity;
+            }
+            return -Infinity;
+        }
+        return data.value;
     }
 
     /** Get the signature of a function-like declaration. Always returns a signature. */
