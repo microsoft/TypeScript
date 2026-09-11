@@ -13,6 +13,7 @@ import {
     isNamedImports,
     isObjectLiteralExpression,
     isShorthandPropertyAssignment,
+    isStringLiteral,
     isTypeAliasDeclaration,
     isVariableDeclaration,
     isVariableStatement,
@@ -36,6 +37,7 @@ import {
     type IndexInfo,
     type InterfaceType,
     type LiteralType,
+    ModuleKind,
     type NodeHandle,
     type Program,
     type Project,
@@ -102,6 +104,7 @@ export enum Choice { First = 1, Second = "second" }
 export class Unimported { value = "extra"; }
 `,
     "/src/index.ts": `
+/// <reference types="parity" />
 import { Base, Box, Choice, Derived } from "./models.js";
 export { Derived as RenamedDerived } from "./models.js";
 
@@ -122,6 +125,7 @@ export function getArguments() { return arguments; }
 import { absent } from "./absent.js";
 export const missingValue = absent;
 `,
+    "/node_modules/@types/parity/index.d.ts": `export {};`,
     "/src/syntax.ts": `export const broken: = 1;`,
     "/src/bind.ts": `let duplicate = 1; let duplicate = 2;`,
     "/src/suggestions.ts": `export function suggestion() { const unused = 1; return 1; }`,
@@ -1363,6 +1367,8 @@ describe("API - generator batching", () => {
             const modelsFile = program.getSourceFile("/src/models.ts")!;
 
             const importDeclaration = cast(indexFile.statements[0], isImportDeclaration);
+            const importSpecifier = cast(importDeclaration.moduleSpecifier, isStringLiteral);
+            const typeReferenceDirective = indexFile.typeReferenceDirectives[0];
             const importedNames = cast(importDeclaration.importClause?.namedBindings, isNamedImports);
             const importedDerived = importedNames.elements.find(element => element.name.text === "Derived")!.name;
             const exportDeclaration = cast(indexFile.statements[1], isExportDeclaration);
@@ -1516,6 +1522,10 @@ describe("API - generator batching", () => {
                 parityCase("LanguageService", "getCompletionsAtPosition", languageService.getCompletionsAtPosition, assertDeepEquivalent, "/src/index.ts", completionPosition, { includeSymbol: true }),
 
                 parityCase("Program", "getSourceFile", program.getSourceFile, assertOptionalSourceFilesEquivalent, "/src/index.ts"),
+                parityCase("Program", "getResolvedModule", program.getResolvedModule, assertDeepEquivalent, "/src/index.ts", "./models.js", ModuleKind.CommonJS, { includeLookupLocations: true }),
+                parityCase("Program", "getResolvedModuleFromModuleSpecifier", program.getResolvedModuleFromModuleSpecifier, assertDeepEquivalent, importSpecifier),
+                parityCase("Program", "getResolvedTypeReferenceDirective", program.getResolvedTypeReferenceDirective, assertDeepEquivalent, "/src/index.ts", "parity", ModuleKind.CommonJS),
+                parityCase("Program", "getResolvedTypeReferenceDirectiveFromTypeReferenceDirective", program.getResolvedTypeReferenceDirectiveFromTypeReferenceDirective, assertDeepEquivalent, typeReferenceDirective, "/src/index.ts", { includeLookupLocations: true }),
                 parityCase("Program", "getSourceFileNames", program.getSourceFileNames, assertDeepEquivalent),
                 parityCase("Program", "getSourceFileMetadata", program.getSourceFileMetadata, assertDeepEquivalent, "/src/index.ts"),
                 parityCase("Program", "getSourceFileMetadataByPath", program.getSourceFileMetadataByPath, assertDeepEquivalent, indexFile.path),

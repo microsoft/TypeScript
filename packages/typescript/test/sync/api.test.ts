@@ -81,6 +81,7 @@ import {
     type LiteralType,
     ModifierFlags,
     ModuleKind,
+    ModuleResolutionKind,
     ObjectFlags,
     type Signature,
     SignatureKind,
@@ -314,6 +315,68 @@ describe("API", () => {
 
         program.dispose();
         assert.throws(() => program.getSourceFileNames(), /snapshot .* not found/);
+    });
+
+    test("Program resolved modules and type reference directives", () => {
+        using api = spawnAPI({
+            "/src/index.ts": `/// <reference types="pkg-types" />
+import "pkg";
+import "missing";`,
+            "/node_modules/pkg/package.json": JSON.stringify({ name: "pkg", version: "1.0.0", types: "index.d.ts" }),
+            "/node_modules/pkg/index.d.ts": `export {};`,
+            "/node_modules/@types/pkg-types/package.json": JSON.stringify({ name: "@types/pkg-types", version: "1.0.0", types: "index.d.ts" }),
+            "/node_modules/@types/pkg-types/index.d.ts": `export {};`,
+        });
+
+        const program = api.createProgram(["/src/index.ts"], {
+            compilerOptions: { module: ModuleKind.ESNext, moduleResolution: ModuleResolutionKind.Bundler, noLib: true },
+        });
+        const sourceFile = program.getSourceFile("/src/index.ts");
+        assert.ok(sourceFile);
+        const pkgSpecifier = cast(cast(sourceFile.statements[0], isImportDeclaration).moduleSpecifier, isStringLiteral);
+
+        const resolvedModule = program.getResolvedModule("/src/index.ts", "pkg", ModuleKind.ESNext);
+        assert.equal(resolvedModule?.resolvedModule?.resolvedFileName, "/node_modules/pkg/index.d.ts");
+        assert.equal(resolvedModule?.failedLookupLocations, undefined);
+        assert.equal(resolvedModule?.affectingLocations, undefined);
+
+        const resolvedModuleWithLocations = program.getResolvedModuleFromModuleSpecifier(
+            pkgSpecifier,
+            undefined,
+            { includeLookupLocations: true },
+        );
+        assert.ok(resolvedModuleWithLocations);
+        assert.equal(resolvedModuleWithLocations.resolvedModule?.packageId?.name, "pkg");
+        assert.ok(resolvedModuleWithLocations.affectingLocations.includes("/node_modules/pkg/package.json"));
+
+        const missingModule = program.getResolvedModule(
+            "/src/index.ts",
+            "missing",
+            ModuleKind.ESNext,
+            { includeLookupLocations: true },
+        );
+        assert.ok(missingModule);
+        assert.equal(missingModule.resolvedModule, undefined);
+        assert.ok(missingModule.failedLookupLocations.length);
+
+        const typeReference = sourceFile.typeReferenceDirectives[0];
+        const resolvedTypeReference = program.getResolvedTypeReferenceDirective(
+            "/src/index.ts",
+            "pkg-types",
+            ModuleKind.None,
+        );
+        assert.equal(resolvedTypeReference?.resolvedTypeReferenceDirective?.resolvedFileName, "/node_modules/@types/pkg-types/index.d.ts");
+        assert.equal(resolvedTypeReference?.failedLookupLocations, undefined);
+
+        const resolvedTypeReferenceWithLocations = program.getResolvedTypeReferenceDirectiveFromTypeReferenceDirective(
+            typeReference,
+            "/src/index.ts",
+            { includeLookupLocations: true },
+        );
+        assert.ok(resolvedTypeReferenceWithLocations);
+        assert.ok(resolvedTypeReferenceWithLocations.affectingLocations.includes("/node_modules/@types/pkg-types/package.json"));
+
+        program.dispose();
     });
 
     test("createProgram ignores an on-disk tsconfig", () => {

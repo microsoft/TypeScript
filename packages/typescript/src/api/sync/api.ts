@@ -36,6 +36,7 @@ import {
     type __String,
     type Declaration,
     type Expression,
+    type FileReference,
     type Identifier,
     type IndexSignatureDeclaration,
     ModifierFlags,
@@ -44,6 +45,7 @@ import {
     type ParameterDeclaration,
     type Path,
     type SourceFile,
+    type StringLiteralLikeNode,
     type SyntaxKind,
     type TypeNode,
     unescapeLeadingUnderscores,
@@ -82,10 +84,15 @@ import type {
     ImportAdderAction,
     IntrinsicTypeMethod,
     LSPUpdateSnapshotParams,
+    PackageId,
     ParsedCommandLine,
     ProjectReference,
     ProjectResponse,
     ReadConfigFileResponse,
+    ResolvedModule,
+    ResolvedModuleWithFailedLookupLocations,
+    ResolvedTypeReferenceDirective,
+    ResolvedTypeReferenceDirectiveWithFailedLookupLocations,
     SignaturePropertyMethod,
     SignatureResponse,
     SourceFileMetadata,
@@ -201,10 +208,15 @@ export type {
     LSPConnectionOptions,
     NumberLiteralType,
     ObjectType,
+    PackageId,
     ParsedCommandLine,
     ProjectReference,
     ReadConfigFileResponse,
     RequestTiming,
+    ResolvedModule,
+    ResolvedModuleWithFailedLookupLocations,
+    ResolvedTypeReferenceDirective,
+    ResolvedTypeReferenceDirectiveWithFailedLookupLocations,
     SourceFileMetadata,
     StringLiteralType,
     StringMappingType,
@@ -232,6 +244,29 @@ export interface TranspileOptions {
     fileName?: string;
     reportDiagnostics?: boolean;
 }
+
+export interface ResolutionOptions {
+    /** Include failed and resolution-affecting file lookup locations in the result. */
+    includeLookupLocations?: boolean | undefined;
+}
+
+export interface ResolutionOptionsWithLookupLocations {
+    includeLookupLocations: true;
+}
+
+export type ResolvedModuleWithLookupLocations =
+    & Omit<ResolvedModuleWithFailedLookupLocations, "failedLookupLocations" | "affectingLocations">
+    & {
+        failedLookupLocations: string[];
+        affectingLocations: string[];
+    };
+
+export type ResolvedTypeReferenceDirectiveWithLookupLocations =
+    & Omit<ResolvedTypeReferenceDirectiveWithFailedLookupLocations, "failedLookupLocations" | "affectingLocations">
+    & {
+        failedLookupLocations: string[];
+        affectingLocations: string[];
+    };
 
 export interface TranspileOutput {
     outputText: string;
@@ -2279,6 +2314,148 @@ export class Program implements FormatDiagnosticsHost {
                 return owner.sourceFileCache.set(path, sourceFile, parseOptionsKey, contentHash, owner.snapshotId, owner.project.id);
             },
         );
+    }
+
+    get getResolvedModule(): {
+        (file: DocumentIdentifier, moduleName: string, mode: ModuleKind, options: ResolutionOptionsWithLookupLocations): ResolvedModuleWithLookupLocations | undefined;
+        (file: DocumentIdentifier, moduleName: string, mode: ModuleKind, options?: ResolutionOptions): ResolvedModuleWithFailedLookupLocations | undefined;
+        gen(file: DocumentIdentifier, moduleName: string, mode: ModuleKind, options: ResolutionOptionsWithLookupLocations): Generator<ProtocolRequest, ResolvedModuleWithLookupLocations | undefined, ProtocolResponse["result"]>;
+        gen(file: DocumentIdentifier, moduleName: string, mode: ModuleKind, options?: ResolutionOptions): Generator<ProtocolRequest, ResolvedModuleWithFailedLookupLocations | undefined, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        function getResolvedModule(file: DocumentIdentifier, moduleName: string, mode: ModuleKind, options: ResolutionOptionsWithLookupLocations): ResolvedModuleWithLookupLocations | undefined;
+        function getResolvedModule(file: DocumentIdentifier, moduleName: string, mode: ModuleKind, options?: ResolutionOptions): ResolvedModuleWithFailedLookupLocations | undefined;
+        function getResolvedModule(file: DocumentIdentifier, moduleName: string, mode: ModuleKind, options?: ResolutionOptions): ResolvedModuleWithFailedLookupLocations | undefined {
+            const result = owner.client.apiRequest("getResolvedModule", {
+                snapshot: owner.snapshotId,
+                project: owner.project.id,
+                file,
+                moduleName,
+                mode,
+                includeLookupLocations: options?.includeLookupLocations,
+            });
+            return result ?? undefined;
+        }
+        function gen(file: DocumentIdentifier, moduleName: string, mode: ModuleKind, options: ResolutionOptionsWithLookupLocations): Generator<ProtocolRequest, ResolvedModuleWithLookupLocations | undefined, ProtocolResponse["result"]>;
+        function gen(file: DocumentIdentifier, moduleName: string, mode: ModuleKind, options?: ResolutionOptions): Generator<ProtocolRequest, ResolvedModuleWithFailedLookupLocations | undefined, ProtocolResponse["result"]>;
+        function* gen(file: DocumentIdentifier, moduleName: string, mode: ModuleKind, options?: ResolutionOptions): Generator<ProtocolRequest, ResolvedModuleWithFailedLookupLocations | undefined, ProtocolResponse["result"]> {
+            const result = yield* apiRequest("getResolvedModule", {
+                snapshot: owner.snapshotId,
+                project: owner.project.id,
+                file,
+                moduleName,
+                mode,
+                includeLookupLocations: options?.includeLookupLocations,
+            });
+            return result ?? undefined;
+        }
+        return cacheGeneratorMethod(owner, "getResolvedModule", getResolvedModule, gen);
+    }
+
+    get getResolvedModuleFromModuleSpecifier(): {
+        (moduleSpecifier: StringLiteralLikeNode, sourceFile: DocumentIdentifier | undefined, options: ResolutionOptionsWithLookupLocations): ResolvedModuleWithLookupLocations | undefined;
+        (moduleSpecifier: StringLiteralLikeNode, sourceFile?: DocumentIdentifier, options?: ResolutionOptions): ResolvedModuleWithFailedLookupLocations | undefined;
+        gen(moduleSpecifier: StringLiteralLikeNode, sourceFile: DocumentIdentifier | undefined, options: ResolutionOptionsWithLookupLocations): Generator<ProtocolRequest, ResolvedModuleWithLookupLocations | undefined, ProtocolResponse["result"]>;
+        gen(moduleSpecifier: StringLiteralLikeNode, sourceFile?: DocumentIdentifier, options?: ResolutionOptions): Generator<ProtocolRequest, ResolvedModuleWithFailedLookupLocations | undefined, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        function getResolvedModuleFromModuleSpecifier(moduleSpecifier: StringLiteralLikeNode, sourceFile: DocumentIdentifier | undefined, options: ResolutionOptionsWithLookupLocations): ResolvedModuleWithLookupLocations | undefined;
+        function getResolvedModuleFromModuleSpecifier(moduleSpecifier: StringLiteralLikeNode, sourceFile?: DocumentIdentifier, options?: ResolutionOptions): ResolvedModuleWithFailedLookupLocations | undefined;
+        function getResolvedModuleFromModuleSpecifier(moduleSpecifier: StringLiteralLikeNode, sourceFile?: DocumentIdentifier, options?: ResolutionOptions): ResolvedModuleWithFailedLookupLocations | undefined {
+            const result = owner.client.apiRequest("getResolvedModuleFromModuleSpecifier", {
+                snapshot: owner.snapshotId,
+                project: owner.project.id,
+                moduleSpecifier: getNodeId(moduleSpecifier),
+                sourceFile,
+                includeLookupLocations: options?.includeLookupLocations,
+            });
+            return result ?? undefined;
+        }
+        function gen(moduleSpecifier: StringLiteralLikeNode, sourceFile: DocumentIdentifier | undefined, options: ResolutionOptionsWithLookupLocations): Generator<ProtocolRequest, ResolvedModuleWithLookupLocations | undefined, ProtocolResponse["result"]>;
+        function gen(moduleSpecifier: StringLiteralLikeNode, sourceFile?: DocumentIdentifier, options?: ResolutionOptions): Generator<ProtocolRequest, ResolvedModuleWithFailedLookupLocations | undefined, ProtocolResponse["result"]>;
+        function* gen(moduleSpecifier: StringLiteralLikeNode, sourceFile?: DocumentIdentifier, options?: ResolutionOptions): Generator<ProtocolRequest, ResolvedModuleWithFailedLookupLocations | undefined, ProtocolResponse["result"]> {
+            const result = yield* apiRequest("getResolvedModuleFromModuleSpecifier", {
+                snapshot: owner.snapshotId,
+                project: owner.project.id,
+                moduleSpecifier: getNodeId(moduleSpecifier),
+                sourceFile,
+                includeLookupLocations: options?.includeLookupLocations,
+            });
+            return result ?? undefined;
+        }
+        return cacheGeneratorMethod(owner, "getResolvedModuleFromModuleSpecifier", getResolvedModuleFromModuleSpecifier, gen);
+    }
+
+    get getResolvedTypeReferenceDirective(): {
+        (file: DocumentIdentifier, typeDirectiveName: string, mode: ModuleKind, options: ResolutionOptionsWithLookupLocations): ResolvedTypeReferenceDirectiveWithLookupLocations | undefined;
+        (file: DocumentIdentifier, typeDirectiveName: string, mode: ModuleKind, options?: ResolutionOptions): ResolvedTypeReferenceDirectiveWithFailedLookupLocations | undefined;
+        gen(file: DocumentIdentifier, typeDirectiveName: string, mode: ModuleKind, options: ResolutionOptionsWithLookupLocations): Generator<ProtocolRequest, ResolvedTypeReferenceDirectiveWithLookupLocations | undefined, ProtocolResponse["result"]>;
+        gen(file: DocumentIdentifier, typeDirectiveName: string, mode: ModuleKind, options?: ResolutionOptions): Generator<ProtocolRequest, ResolvedTypeReferenceDirectiveWithFailedLookupLocations | undefined, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        function getResolvedTypeReferenceDirective(file: DocumentIdentifier, typeDirectiveName: string, mode: ModuleKind, options: ResolutionOptionsWithLookupLocations): ResolvedTypeReferenceDirectiveWithLookupLocations | undefined;
+        function getResolvedTypeReferenceDirective(file: DocumentIdentifier, typeDirectiveName: string, mode: ModuleKind, options?: ResolutionOptions): ResolvedTypeReferenceDirectiveWithFailedLookupLocations | undefined;
+        function getResolvedTypeReferenceDirective(file: DocumentIdentifier, typeDirectiveName: string, mode: ModuleKind, options?: ResolutionOptions): ResolvedTypeReferenceDirectiveWithFailedLookupLocations | undefined {
+            const result = owner.client.apiRequest("getResolvedTypeReferenceDirective", {
+                snapshot: owner.snapshotId,
+                project: owner.project.id,
+                file,
+                typeDirectiveName,
+                mode,
+                includeLookupLocations: options?.includeLookupLocations,
+            });
+            return result ?? undefined;
+        }
+        function gen(file: DocumentIdentifier, typeDirectiveName: string, mode: ModuleKind, options: ResolutionOptionsWithLookupLocations): Generator<ProtocolRequest, ResolvedTypeReferenceDirectiveWithLookupLocations | undefined, ProtocolResponse["result"]>;
+        function gen(file: DocumentIdentifier, typeDirectiveName: string, mode: ModuleKind, options?: ResolutionOptions): Generator<ProtocolRequest, ResolvedTypeReferenceDirectiveWithFailedLookupLocations | undefined, ProtocolResponse["result"]>;
+        function* gen(file: DocumentIdentifier, typeDirectiveName: string, mode: ModuleKind, options?: ResolutionOptions): Generator<ProtocolRequest, ResolvedTypeReferenceDirectiveWithFailedLookupLocations | undefined, ProtocolResponse["result"]> {
+            const result = yield* apiRequest("getResolvedTypeReferenceDirective", {
+                snapshot: owner.snapshotId,
+                project: owner.project.id,
+                file,
+                typeDirectiveName,
+                mode,
+                includeLookupLocations: options?.includeLookupLocations,
+            });
+            return result ?? undefined;
+        }
+        return cacheGeneratorMethod(owner, "getResolvedTypeReferenceDirective", getResolvedTypeReferenceDirective, gen);
+    }
+
+    get getResolvedTypeReferenceDirectiveFromTypeReferenceDirective(): {
+        (typeReferenceDirective: FileReference, sourceFile: DocumentIdentifier, options: ResolutionOptionsWithLookupLocations): ResolvedTypeReferenceDirectiveWithLookupLocations | undefined;
+        (typeReferenceDirective: FileReference, sourceFile: DocumentIdentifier, options?: ResolutionOptions): ResolvedTypeReferenceDirectiveWithFailedLookupLocations | undefined;
+        gen(typeReferenceDirective: FileReference, sourceFile: DocumentIdentifier, options: ResolutionOptionsWithLookupLocations): Generator<ProtocolRequest, ResolvedTypeReferenceDirectiveWithLookupLocations | undefined, ProtocolResponse["result"]>;
+        gen(typeReferenceDirective: FileReference, sourceFile: DocumentIdentifier, options?: ResolutionOptions): Generator<ProtocolRequest, ResolvedTypeReferenceDirectiveWithFailedLookupLocations | undefined, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        function getResolvedTypeReferenceDirectiveFromTypeReferenceDirective(typeReferenceDirective: FileReference, sourceFile: DocumentIdentifier, options: ResolutionOptionsWithLookupLocations): ResolvedTypeReferenceDirectiveWithLookupLocations | undefined;
+        function getResolvedTypeReferenceDirectiveFromTypeReferenceDirective(typeReferenceDirective: FileReference, sourceFile: DocumentIdentifier, options?: ResolutionOptions): ResolvedTypeReferenceDirectiveWithFailedLookupLocations | undefined;
+        function getResolvedTypeReferenceDirectiveFromTypeReferenceDirective(typeReferenceDirective: FileReference, sourceFile: DocumentIdentifier, options?: ResolutionOptions): ResolvedTypeReferenceDirectiveWithFailedLookupLocations | undefined {
+            const result = owner.client.apiRequest("getResolvedTypeReferenceDirectiveFromTypeReferenceDirective", {
+                snapshot: owner.snapshotId,
+                project: owner.project.id,
+                sourceFile,
+                typeDirectiveName: typeReferenceDirective.fileName,
+                resolutionMode: typeReferenceDirective.resolutionMode,
+                includeLookupLocations: options?.includeLookupLocations,
+            });
+            return result ?? undefined;
+        }
+        function gen(typeReferenceDirective: FileReference, sourceFile: DocumentIdentifier, options: ResolutionOptionsWithLookupLocations): Generator<ProtocolRequest, ResolvedTypeReferenceDirectiveWithLookupLocations | undefined, ProtocolResponse["result"]>;
+        function gen(typeReferenceDirective: FileReference, sourceFile: DocumentIdentifier, options?: ResolutionOptions): Generator<ProtocolRequest, ResolvedTypeReferenceDirectiveWithFailedLookupLocations | undefined, ProtocolResponse["result"]>;
+        function* gen(typeReferenceDirective: FileReference, sourceFile: DocumentIdentifier, options?: ResolutionOptions): Generator<ProtocolRequest, ResolvedTypeReferenceDirectiveWithFailedLookupLocations | undefined, ProtocolResponse["result"]> {
+            const result = yield* apiRequest("getResolvedTypeReferenceDirectiveFromTypeReferenceDirective", {
+                snapshot: owner.snapshotId,
+                project: owner.project.id,
+                sourceFile,
+                typeDirectiveName: typeReferenceDirective.fileName,
+                resolutionMode: typeReferenceDirective.resolutionMode,
+                includeLookupLocations: options?.includeLookupLocations,
+            });
+            return result ?? undefined;
+        }
+        return cacheGeneratorMethod(owner, "getResolvedTypeReferenceDirectiveFromTypeReferenceDirective", getResolvedTypeReferenceDirectiveFromTypeReferenceDirective, gen);
     }
 
     get getSourceFileNames(): {

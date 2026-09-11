@@ -45,6 +45,10 @@ export interface APIMethodInfo {
     getSourceFile: APIMethod<GetSourceFileParams, SourceFileResponse | null>;
     getSourceFileNames: APIMethod<GetSourceFileNamesParams, string[]>;
     getSourceFileMetadata: APIMethod<GetSourceFileParams, SourceFileMetadata | null>;
+    getResolvedModule: APIMethod<GetResolvedModuleParams, ResolvedModuleWithFailedLookupLocations | null>;
+    getResolvedModuleFromModuleSpecifier: APIMethod<GetResolvedModuleFromModuleSpecifierParams, ResolvedModuleWithFailedLookupLocations | null>;
+    getResolvedTypeReferenceDirective: APIMethod<GetResolvedTypeReferenceDirectiveParams, ResolvedTypeReferenceDirectiveWithFailedLookupLocations | null>;
+    getResolvedTypeReferenceDirectiveFromTypeReferenceDirective: APIMethod<GetResolvedTypeReferenceDirectiveFromReferenceParams, ResolvedTypeReferenceDirectiveWithFailedLookupLocations | null>;
     getConfigFileNames: APIMethod<GetProjectDiagnosticsParams, string[] | null>;
     getConfigSourceFile: APIMethod<GetSourceFileParams, SourceFileResponse | null>;
     resolveName: APIMethod<ResolveNameParams, SymbolResponse | null>;
@@ -473,6 +477,55 @@ export interface SourceFileMetadata {
     packageJsonType: string;
     packageJsonDirectory: string;
     impliedNodeFormat: ModuleKind;
+}
+
+export interface GetResolvedModuleParams {
+    snapshot: number;
+    project: string;
+    file: DocumentIdentifier;
+    moduleName: string;
+    mode: ModuleKind;
+    includeLookupLocations?: boolean | undefined;
+}
+
+export interface ResolvedModuleWithFailedLookupLocations {
+    resolvedModule?: ResolvedModule | undefined;
+    failedLookupLocations?: string[] | undefined;
+    affectingLocations?: string[] | undefined;
+    resolutionDiagnostics?: DiagnosticResponse[] | undefined;
+}
+
+export interface GetResolvedModuleFromModuleSpecifierParams {
+    snapshot: number;
+    project: string;
+    moduleSpecifier: string;
+    sourceFile?: DocumentIdentifier | undefined;
+    includeLookupLocations?: boolean | undefined;
+}
+
+export interface GetResolvedTypeReferenceDirectiveParams {
+    snapshot: number;
+    project: string;
+    file: DocumentIdentifier;
+    typeDirectiveName: string;
+    mode: ModuleKind;
+    includeLookupLocations?: boolean | undefined;
+}
+
+export interface ResolvedTypeReferenceDirectiveWithFailedLookupLocations {
+    resolvedTypeReferenceDirective?: ResolvedTypeReferenceDirective | undefined;
+    failedLookupLocations?: string[] | undefined;
+    affectingLocations?: string[] | undefined;
+    resolutionDiagnostics?: DiagnosticResponse[] | undefined;
+}
+
+export interface GetResolvedTypeReferenceDirectiveFromReferenceParams {
+    snapshot: number;
+    project: string;
+    sourceFile: DocumentIdentifier;
+    typeDirectiveName: string;
+    resolutionMode: ModuleKind;
+    includeLookupLocations?: boolean | undefined;
 }
 
 /** GetProjectDiagnosticsParams are parameters for project-wide diagnostic methods. */
@@ -991,7 +1044,11 @@ export interface BatchRequest {
         | "getReferencedSymbolsForNode"
         | "getReferencesToSymbolInFile"
         | "getRegularTypeOfType"
+        | "getResolvedModule"
+        | "getResolvedModuleFromModuleSpecifier"
         | "getResolvedSignature"
+        | "getResolvedTypeReferenceDirective"
+        | "getResolvedTypeReferenceDirectiveFromTypeReferenceDirective"
         | "getRestTypeOfSignature"
         | "getReturnTypeOfSignature"
         | "getSemanticDiagnostics"
@@ -1138,7 +1195,11 @@ export interface BatchResponse {
         | "getReferencedSymbolsForNode"
         | "getReferencesToSymbolInFile"
         | "getRegularTypeOfType"
+        | "getResolvedModule"
+        | "getResolvedModuleFromModuleSpecifier"
         | "getResolvedSignature"
+        | "getResolvedTypeReferenceDirective"
+        | "getResolvedTypeReferenceDirectiveFromTypeReferenceDirective"
         | "getRestTypeOfSignature"
         | "getReturnTypeOfSignature"
         | "getSemanticDiagnostics"
@@ -1402,6 +1463,25 @@ export interface TranspileOptions {
     reportDiagnostics?: boolean | undefined;
 }
 
+export interface ResolvedModule {
+    resolvedFileName: string;
+    originalPath?: string | undefined;
+    extension: string;
+    resolvedUsingTsExtension?: boolean | undefined;
+    resolvedUsingExtraExtensions?: boolean | undefined;
+    packageId?: PackageId | undefined;
+    isExternalLibraryImport?: boolean | undefined;
+    alternateResult?: string | undefined;
+}
+
+export interface ResolvedTypeReferenceDirective {
+    primary: boolean;
+    resolvedFileName: string;
+    originalPath?: string | undefined;
+    packageId?: PackageId | undefined;
+    isExternalLibraryImport?: boolean | undefined;
+}
+
 export interface ImportAdderAction {
     kind: "importSymbol";
     symbol?: number | undefined;
@@ -1465,6 +1545,13 @@ export interface ProjectFileChanges {
     changedFiles?: string[] | undefined;
     /** DeletedFiles lists source file paths removed from the project's program. */
     deletedFiles?: string[] | undefined;
+}
+
+export interface PackageId {
+    name: string;
+    subModuleName: string;
+    version: string;
+    peerDependencies: string;
 }
 
 /** CompletionEntryLabelDetailsResponse holds additional label display text for a completion entry. */

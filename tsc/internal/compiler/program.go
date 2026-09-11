@@ -612,6 +612,15 @@ func (p *Program) GetResolvedModule(file ast.HasFileName, moduleReference string
 	return nil
 }
 
+func (p *Program) GetResolvedModuleWithOptions(file ast.HasFileName, moduleReference string, mode core.ResolutionMode, includeLookupLocations bool) *module.ResolvedModule {
+	if !includeLookupLocations {
+		return p.GetResolvedModule(file, moduleReference, mode)
+	}
+	redirect, fileName := p.projectReferenceFileMapper.getRedirectForResolution(file)
+	resolved, _ := p.resolver.ResolveModuleNameWithOptions(moduleReference, fileName, mode, redirect, true)
+	return resolved
+}
+
 func (p *Program) GetResolvedModuleFromModuleSpecifier(file ast.HasFileName, moduleSpecifier *ast.StringLiteralLike) *module.ResolvedModule {
 	if !ast.IsStringLiteralLike(moduleSpecifier) {
 		panic("moduleSpecifier must be a StringLiteralLike")
@@ -2098,12 +2107,25 @@ func (p *Program) GetLibFileFromReference(ref *ast.FileReference) *ast.SourceFil
 }
 
 func (p *Program) GetResolvedTypeReferenceDirectiveFromTypeReferenceDirective(typeRef *ast.FileReference, sourceFile *ast.SourceFile) *module.ResolvedTypeReferenceDirective {
-	if resolutions, ok := p.typeResolutionsInFile[sourceFile.Path()]; ok {
-		if resolved, ok := resolutions[module.ModeAwareCacheKey{Name: typeRef.FileName, Mode: p.getModeForTypeReferenceDirectiveInFile(typeRef, sourceFile)}]; ok {
+	return p.GetResolvedTypeReferenceDirective(sourceFile, typeRef.FileName, p.getModeForTypeReferenceDirectiveInFile(typeRef, sourceFile))
+}
+
+func (p *Program) GetResolvedTypeReferenceDirective(file ast.HasFileName, typeDirectiveName string, mode core.ResolutionMode) *module.ResolvedTypeReferenceDirective {
+	if resolutions, ok := p.typeResolutionsInFile[file.Path()]; ok {
+		if resolved, ok := resolutions[module.ModeAwareCacheKey{Name: typeDirectiveName, Mode: mode}]; ok {
 			return resolved
 		}
 	}
 	return nil
+}
+
+func (p *Program) GetResolvedTypeReferenceDirectiveWithOptions(file ast.HasFileName, typeDirectiveName string, mode core.ResolutionMode, includeLookupLocations bool) *module.ResolvedTypeReferenceDirective {
+	if !includeLookupLocations {
+		return p.GetResolvedTypeReferenceDirective(file, typeDirectiveName, mode)
+	}
+	redirect, fileName := p.projectReferenceFileMapper.getRedirectForResolution(file)
+	resolved, _ := p.resolver.ResolveTypeReferenceDirectiveWithOptions(typeDirectiveName, fileName, mode, redirect, true)
+	return resolved
 }
 
 func (p *Program) GetResolvedTypeReferenceDirectives() map[tspath.Path]module.ModeAwareCache[*module.ResolvedTypeReferenceDirective] {
