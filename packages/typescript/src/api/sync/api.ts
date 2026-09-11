@@ -129,6 +129,7 @@ import type {
     EmitResult,
     FormatDiagnosticsHost,
     FreshableType,
+    GenericType,
     GetImportEditsForSymbolsOptions,
     IdentifierTypePredicate,
     ImportAdderAction as APIImportAdderAction,
@@ -186,6 +187,7 @@ export type {
     EmitResult,
     FormatDiagnosticsHost,
     FreshableType,
+    GenericType,
     GetImportEditsForSymbolsOptions,
     IdentifierTypePredicate,
     IndexedAccessType,
@@ -237,11 +239,11 @@ export interface TranspileOutput {
     sourceMapText?: string;
 }
 
-export { all } from "./generatorSupport.ts";
+export { all, type AllAPIRequestGenerator, type AnyAPIRequestGenerator, type APIRequestGenerator, defer, type DeferredAPIRequestGenerator, type ExecutedGeneratorsResults } from "./generatorSupport.ts";
 import {
-    all,
-    type APIRequestGenerator,
+    type AnyAPIRequestGenerator,
     type ExecutedGeneratorsResults,
+    executeRequestGenerators,
 } from "./generatorSupport.ts";
 
 export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHost {
@@ -287,13 +289,8 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         );
     }
 
-    batch<T extends readonly APIRequestGenerator[]>(...requestGenerators: T): ExecutedGeneratorsResults<T> {
-        const batches = all(...requestGenerators);
-        let state = batches.next();
-        while (!state.done) {
-            state = batches.next(this.client.batchRequests(state.value).responses);
-        }
-        return state.value;
+    batch<T extends readonly AnyAPIRequestGenerator[]>(...requestGenerators: T): ExecutedGeneratorsResults<T> {
+        return executeRequestGenerators(requestGenerators, requests => this.client.batchRequests(requests).responses);
     }
 
     private get ensureInitialized(): {
@@ -555,9 +552,60 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
             owner,
             "updateSnapshot",
             function (params?: FromLSP extends true ? LSPUpdateSnapshotParams : UpdateSnapshotParams): Snapshot {
+                return owner.updateSnapshotWorker(params);
+            },
+            function* (params?: FromLSP extends true ? LSPUpdateSnapshotParams : UpdateSnapshotParams): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]> {
+                return yield* owner.updateSnapshotWorker.gen(params);
+            },
+        );
+    }
+
+    /** @internal */
+    get updateSnapshotFrom(): {
+        (baseSnapshot: Snapshot, params?: UpdateSnapshotParams): Snapshot;
+        gen(baseSnapshot: Snapshot, params?: UpdateSnapshotParams): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "updateSnapshotFrom",
+            function (baseSnapshot: Snapshot, params?: UpdateSnapshotParams): Snapshot {
+                if (!owner.activeSnapshots.has(baseSnapshot) || baseSnapshot.isDisposed()) {
+                    throw new Error("Cannot update an inactive snapshot");
+                }
+                if (baseSnapshot !== owner.latestSnapshot) {
+                    // TODO: Support forking active memory/cache snapshots once the server-side
+                    // ownership, project state, and cache semantics have been worked out.
+                    throw new Error("Snapshot.update can only update the latest snapshot");
+                }
+                return owner.updateSnapshotWorker(params, baseSnapshot);
+            },
+            function* (baseSnapshot: Snapshot, params?: UpdateSnapshotParams): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]> {
+                if (!owner.activeSnapshots.has(baseSnapshot) || baseSnapshot.isDisposed()) {
+                    throw new Error("Cannot update an inactive snapshot");
+                }
+                if (baseSnapshot !== owner.latestSnapshot) {
+                    // TODO: Support forking active memory/cache snapshots once the server-side
+                    // ownership, project state, and cache semantics have been worked out.
+                    throw new Error("Snapshot.update can only update the latest snapshot");
+                }
+                return yield* owner.updateSnapshotWorker.gen(params, baseSnapshot);
+            },
+        );
+    }
+
+    private get updateSnapshotWorker(): {
+        (params?: LSPUpdateSnapshotParams | UpdateSnapshotParams, baseSnapshot?: Snapshot): Snapshot;
+        gen(params?: LSPUpdateSnapshotParams | UpdateSnapshotParams, baseSnapshot?: Snapshot): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "updateSnapshotWorker",
+            function (params?: LSPUpdateSnapshotParams | UpdateSnapshotParams, baseSnapshot?: Snapshot): Snapshot {
                 owner.ensureInitialized();
 
-                const requestParams = toUpdateSnapshotRequest(params);
+                const requestParams = toUpdateSnapshotRequest(params, baseSnapshot?.id);
                 const data = owner.client.apiRequest("updateSnapshot", requestParams);
 
                 // Retain cached source files from previous snapshot for unchanged files
@@ -586,10 +634,10 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
 
                 return snapshot;
             },
-            function* (params?: FromLSP extends true ? LSPUpdateSnapshotParams : UpdateSnapshotParams): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]> {
+            function* (params?: LSPUpdateSnapshotParams | UpdateSnapshotParams, baseSnapshot?: Snapshot): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]> {
                 yield* owner.ensureInitialized.gen();
 
-                const requestParams = toUpdateSnapshotRequest(params);
+                const requestParams = toUpdateSnapshotRequest(params, baseSnapshot?.id);
                 const data = yield* apiRequest("updateSnapshot", requestParams);
 
                 // Retain cached source files from previous snapshot for unchanged files
@@ -894,6 +942,13 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
 
 type EnsureInitialized = (() => void) & { gen(): Generator<ProtocolRequest, void, ProtocolResponse["result"]>; };
 
+interface SnapshotOwner extends FormatDiagnosticsHost {
+    updateSnapshotFrom: {
+        (baseSnapshot: Snapshot, params?: UpdateSnapshotParams): Snapshot;
+        gen(baseSnapshot: Snapshot, params?: UpdateSnapshotParams): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]>;
+    };
+}
+
 export class InternalAPI {
     private client: Client;
     private ensureInitialized: EnsureInitialized;
@@ -974,6 +1029,7 @@ export class Snapshot {
     private disposed: boolean = false;
     private disposePromise: void | undefined;
     private onDispose: () => void;
+    private api: SnapshotOwner;
     private snapshotRegistry: SnapshotObjectRegistry;
     readonly internal: SnapshotInternalAPI;
 
@@ -982,18 +1038,19 @@ export class Snapshot {
         client: Client,
         sourceFileCache: SourceFileCache,
         toPath: (fileName: string) => Path,
-        formatDiagnosticsHost: FormatDiagnosticsHost,
+        api: SnapshotOwner,
         onDispose: () => void,
     ) {
         this.id = data.snapshot;
         this.client = client;
         this.toPath = toPath;
+        this.api = api;
         this.onDispose = onDispose;
         this.projectMap = new Map();
         this.snapshotRegistry = new SnapshotObjectRegistry(client, this.id, projectId => this.projectMap.get(projectId));
 
         for (const projData of data.projects) {
-            const project = new Project(projData, this.id, client, sourceFileCache, toPath, formatDiagnosticsHost, this.snapshotRegistry);
+            const project = new Project(projData, this.id, client, sourceFileCache, toPath, api, this.snapshotRegistry);
             this.projectMap.set(toPath(projData.configFileName), project);
         }
 
@@ -1039,10 +1096,32 @@ export class Snapshot {
         );
     }
 
+    /**
+     * Creates the next snapshot, layering its filesystem over this snapshot's
+     * filesystem. This snapshot must still be active and be the latest snapshot.
+     */
+    get update(): {
+        (params?: UpdateSnapshotParams): Snapshot;
+        gen(params?: UpdateSnapshotParams): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "update",
+            function (params?: UpdateSnapshotParams): Snapshot {
+                owner.ensureNotDisposed();
+                return owner.api.updateSnapshotFrom(owner, params);
+            },
+            function* (params?: UpdateSnapshotParams): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]> {
+                owner.ensureNotDisposed();
+                return yield* owner.api.updateSnapshotFrom.gen(owner, params);
+            },
+        );
+    }
+
     [globalThis.Symbol.dispose](): void {
         void this.dispose();
     }
-
     get dispose(): {
         (): void;
         gen(): Generator<ProtocolRequest, void, ProtocolResponse["result"]>;
@@ -2695,10 +2774,9 @@ export class Program implements FormatDiagnosticsHost {
     }
 
     /**
-     * Emits files to the configured filesystem.
-     *
-     * When the API has a virtual filesystem with a `writeFile` callback, output
-     * is written there. Otherwise, the server writes directly to the host filesystem.
+     * Emits files to the configured filesystem. Layer and host filesystems are
+     * written through; full filesystems remain immutable and return emitted
+     * files in {@link EmitResult.fileSystem}.
      */
     get emit(): {
         (emitOnly?: EmitOnly): EmitResult;
@@ -2714,10 +2792,17 @@ export class Program implements FormatDiagnosticsHost {
                     project: owner.project.id,
                     ...(emitOnly !== undefined ? { emitOnly } : {}),
                 });
+                const fileSystem = response.emittedFilesContents.length
+                    ? {
+                        kind: "layer" as const,
+                        files: Object.fromEntries(response.emittedFiles.map((fileName, index) => [fileName, response.emittedFilesContents[index]])),
+                    }
+                    : undefined;
                 return {
                     emitSkipped: response.emitSkipped,
                     diagnostics: response.diagnostics,
                     emittedFiles: response.emittedFiles,
+                    ...(fileSystem ? { fileSystem } : {}),
                 };
             },
             function* (emitOnly?: EmitOnly): Generator<ProtocolRequest, EmitResult, ProtocolResponse["result"]> {
@@ -2726,10 +2811,17 @@ export class Program implements FormatDiagnosticsHost {
                     project: owner.project.id,
                     ...(emitOnly !== undefined ? { emitOnly } : {}),
                 });
+                const fileSystem = response.emittedFilesContents.length
+                    ? {
+                        kind: "layer" as const,
+                        files: Object.fromEntries(response.emittedFiles.map((fileName, index) => [fileName, response.emittedFilesContents[index]])),
+                    }
+                    : undefined;
                 return {
                     emitSkipped: response.emitSkipped,
                     diagnostics: response.diagnostics,
                     emittedFiles: response.emittedFiles,
+                    ...(fileSystem ? { fileSystem } : {}),
                 };
             },
         );
