@@ -1,0 +1,219 @@
+//// [tests/cases/conformance/controlFlow/controlFlowOptionalChain4.ts] ////
+
+=== controlFlowOptionalChain4.ts ===
+// https://github.com/microsoft/TypeScript/issues/56998
+
+type Type = {
+>Type : Symbol(Type, Decl(controlFlowOptionalChain4.ts, 0, 0))
+
+    id: number;
+>id : Symbol(id, Decl(controlFlowOptionalChain4.ts, 2, 13))
+
+};
+
+type InferenceInfo = {
+>InferenceInfo : Symbol(InferenceInfo, Decl(controlFlowOptionalChain4.ts, 4, 2))
+
+    typeParameter: Type;
+>typeParameter : Symbol(typeParameter, Decl(controlFlowOptionalChain4.ts, 6, 22))
+>Type : Symbol(Type, Decl(controlFlowOptionalChain4.ts, 0, 0))
+
+    impliedArity?: number;
+>impliedArity : Symbol(impliedArity, Decl(controlFlowOptionalChain4.ts, 7, 24))
+
+};
+
+declare function getInferenceInfoForType(type: Type): InferenceInfo | undefined;
+>getInferenceInfoForType : Symbol(getInferenceInfoForType, Decl(controlFlowOptionalChain4.ts, 9, 2))
+>type : Symbol(type, Decl(controlFlowOptionalChain4.ts, 11, 41))
+>Type : Symbol(Type, Decl(controlFlowOptionalChain4.ts, 0, 0))
+>InferenceInfo : Symbol(InferenceInfo, Decl(controlFlowOptionalChain4.ts, 4, 2))
+
+function fn1(t1: Type, t2: Type) {
+>fn1 : Symbol(fn1, Decl(controlFlowOptionalChain4.ts, 11, 80))
+>t1 : Symbol(t1, Decl(controlFlowOptionalChain4.ts, 13, 13))
+>Type : Symbol(Type, Decl(controlFlowOptionalChain4.ts, 0, 0))
+>t2 : Symbol(t2, Decl(controlFlowOptionalChain4.ts, 13, 22))
+>Type : Symbol(Type, Decl(controlFlowOptionalChain4.ts, 0, 0))
+
+    let info = getInferenceInfoForType(t1);
+>info : Symbol(info, Decl(controlFlowOptionalChain4.ts, 14, 7))
+>getInferenceInfoForType : Symbol(getInferenceInfoForType, Decl(controlFlowOptionalChain4.ts, 9, 2))
+>t1 : Symbol(t1, Decl(controlFlowOptionalChain4.ts, 13, 13))
+
+    if (info?.impliedArity !== undefined) {
+>info?.impliedArity : Symbol(impliedArity, Decl(controlFlowOptionalChain4.ts, 7, 24))
+>info : Symbol(info, Decl(controlFlowOptionalChain4.ts, 14, 7))
+>impliedArity : Symbol(impliedArity, Decl(controlFlowOptionalChain4.ts, 7, 24))
+>undefined : Symbol(undefined)
+
+        info.impliedArity;
+>info.impliedArity : Symbol(impliedArity, Decl(controlFlowOptionalChain4.ts, 7, 24))
+>info : Symbol(info, Decl(controlFlowOptionalChain4.ts, 14, 7))
+>impliedArity : Symbol(impliedArity, Decl(controlFlowOptionalChain4.ts, 7, 24))
+    }
+    else if ((info = getInferenceInfoForType(t2))?.impliedArity !== undefined) {
+>(info = getInferenceInfoForType(t2))?.impliedArity : Symbol(impliedArity, Decl(controlFlowOptionalChain4.ts, 7, 24))
+>info : Symbol(info, Decl(controlFlowOptionalChain4.ts, 14, 7))
+>getInferenceInfoForType : Symbol(getInferenceInfoForType, Decl(controlFlowOptionalChain4.ts, 9, 2))
+>t2 : Symbol(t2, Decl(controlFlowOptionalChain4.ts, 13, 22))
+>impliedArity : Symbol(impliedArity, Decl(controlFlowOptionalChain4.ts, 7, 24))
+>undefined : Symbol(undefined)
+
+        info.impliedArity;
+>info.impliedArity : Symbol(impliedArity, Decl(controlFlowOptionalChain4.ts, 7, 24))
+>info : Symbol(info, Decl(controlFlowOptionalChain4.ts, 14, 7))
+>impliedArity : Symbol(impliedArity, Decl(controlFlowOptionalChain4.ts, 7, 24))
+    }
+}
+
+function fn2(t1: Type, t2: Type) {
+>fn2 : Symbol(fn2, Decl(controlFlowOptionalChain4.ts, 21, 1))
+>t1 : Symbol(t1, Decl(controlFlowOptionalChain4.ts, 23, 13))
+>Type : Symbol(Type, Decl(controlFlowOptionalChain4.ts, 0, 0))
+>t2 : Symbol(t2, Decl(controlFlowOptionalChain4.ts, 23, 22))
+>Type : Symbol(Type, Decl(controlFlowOptionalChain4.ts, 0, 0))
+
+    let info = getInferenceInfoForType(t1);
+>info : Symbol(info, Decl(controlFlowOptionalChain4.ts, 24, 7))
+>getInferenceInfoForType : Symbol(getInferenceInfoForType, Decl(controlFlowOptionalChain4.ts, 9, 2))
+>t1 : Symbol(t1, Decl(controlFlowOptionalChain4.ts, 23, 13))
+
+    if (info?.impliedArity !== undefined) {
+>info?.impliedArity : Symbol(impliedArity, Decl(controlFlowOptionalChain4.ts, 7, 24))
+>info : Symbol(info, Decl(controlFlowOptionalChain4.ts, 24, 7))
+>impliedArity : Symbol(impliedArity, Decl(controlFlowOptionalChain4.ts, 7, 24))
+>undefined : Symbol(undefined)
+
+        info.impliedArity;
+>info.impliedArity : Symbol(impliedArity, Decl(controlFlowOptionalChain4.ts, 7, 24))
+>info : Symbol(info, Decl(controlFlowOptionalChain4.ts, 24, 7))
+>impliedArity : Symbol(impliedArity, Decl(controlFlowOptionalChain4.ts, 7, 24))
+    }
+    else if ((info = getInferenceInfoForType(t2))?.impliedArity) {
+>(info = getInferenceInfoForType(t2))?.impliedArity : Symbol(impliedArity, Decl(controlFlowOptionalChain4.ts, 7, 24))
+>info : Symbol(info, Decl(controlFlowOptionalChain4.ts, 24, 7))
+>getInferenceInfoForType : Symbol(getInferenceInfoForType, Decl(controlFlowOptionalChain4.ts, 9, 2))
+>t2 : Symbol(t2, Decl(controlFlowOptionalChain4.ts, 23, 22))
+>impliedArity : Symbol(impliedArity, Decl(controlFlowOptionalChain4.ts, 7, 24))
+
+        info.impliedArity;
+>info.impliedArity : Symbol(impliedArity, Decl(controlFlowOptionalChain4.ts, 7, 24))
+>info : Symbol(info, Decl(controlFlowOptionalChain4.ts, 24, 7))
+>impliedArity : Symbol(impliedArity, Decl(controlFlowOptionalChain4.ts, 7, 24))
+    }
+}
+
+// https://github.com/microsoft/TypeScript/issues/60855
+
+type Option = { type: "Some"; value: number; } | { type: "None"; };
+>Option : Symbol(Option, Decl(lib.dom.d.ts, --, --), Decl(controlFlowOptionalChain4.ts, 31, 1))
+>type : Symbol(type, Decl(controlFlowOptionalChain4.ts, 35, 15))
+>value : Symbol(value, Decl(controlFlowOptionalChain4.ts, 35, 29))
+>type : Symbol(type, Decl(controlFlowOptionalChain4.ts, 35, 50))
+
+declare function someOptionalOption(): Option | undefined;
+>someOptionalOption : Symbol(someOptionalOption, Decl(controlFlowOptionalChain4.ts, 35, 67))
+>Option : Symbol(Option, Decl(lib.dom.d.ts, --, --), Decl(controlFlowOptionalChain4.ts, 31, 1))
+
+function test60855(): number | undefined {
+>test60855 : Symbol(test60855, Decl(controlFlowOptionalChain4.ts, 37, 58))
+
+    let option: Option | undefined;
+>option : Symbol(option, Decl(controlFlowOptionalChain4.ts, 40, 7))
+>Option : Symbol(Option, Decl(lib.dom.d.ts, --, --), Decl(controlFlowOptionalChain4.ts, 31, 1))
+
+    if ((option = someOptionalOption())?.type === "Some") {
+>(option = someOptionalOption())?.type : Symbol(type, Decl(controlFlowOptionalChain4.ts, 35, 15), Decl(controlFlowOptionalChain4.ts, 35, 50))
+>option : Symbol(option, Decl(controlFlowOptionalChain4.ts, 40, 7))
+>someOptionalOption : Symbol(someOptionalOption, Decl(controlFlowOptionalChain4.ts, 35, 67))
+>type : Symbol(type, Decl(controlFlowOptionalChain4.ts, 35, 15), Decl(controlFlowOptionalChain4.ts, 35, 50))
+
+        return option.value;
+>option.value : Symbol(value, Decl(controlFlowOptionalChain4.ts, 35, 29))
+>option : Symbol(option, Decl(controlFlowOptionalChain4.ts, 40, 7))
+>value : Symbol(value, Decl(controlFlowOptionalChain4.ts, 35, 29))
+    }
+
+    return undefined;
+>undefined : Symbol(undefined)
+}
+
+function testEqualityWithUndefined() {
+>testEqualityWithUndefined : Symbol(testEqualityWithUndefined, Decl(controlFlowOptionalChain4.ts, 47, 1))
+
+    let option: Option | undefined;
+>option : Symbol(option, Decl(controlFlowOptionalChain4.ts, 50, 7))
+>Option : Symbol(Option, Decl(lib.dom.d.ts, --, --), Decl(controlFlowOptionalChain4.ts, 31, 1))
+
+    if ((option = someOptionalOption())?.type === undefined) {
+>(option = someOptionalOption())?.type : Symbol(type, Decl(controlFlowOptionalChain4.ts, 35, 15), Decl(controlFlowOptionalChain4.ts, 35, 50))
+>option : Symbol(option, Decl(controlFlowOptionalChain4.ts, 50, 7))
+>someOptionalOption : Symbol(someOptionalOption, Decl(controlFlowOptionalChain4.ts, 35, 67))
+>type : Symbol(type, Decl(controlFlowOptionalChain4.ts, 35, 15), Decl(controlFlowOptionalChain4.ts, 35, 50))
+>undefined : Symbol(undefined)
+
+        option.type;
+>option : Symbol(option, Decl(controlFlowOptionalChain4.ts, 50, 7))
+    }
+}
+
+function testNegativeEquality() {
+>testNegativeEquality : Symbol(testNegativeEquality, Decl(controlFlowOptionalChain4.ts, 55, 1))
+
+    let option: Option | undefined;
+>option : Symbol(option, Decl(controlFlowOptionalChain4.ts, 58, 7))
+>Option : Symbol(Option, Decl(lib.dom.d.ts, --, --), Decl(controlFlowOptionalChain4.ts, 31, 1))
+
+    if ((option = someOptionalOption())?.type !== "Some") {
+>(option = someOptionalOption())?.type : Symbol(type, Decl(controlFlowOptionalChain4.ts, 35, 15), Decl(controlFlowOptionalChain4.ts, 35, 50))
+>option : Symbol(option, Decl(controlFlowOptionalChain4.ts, 58, 7))
+>someOptionalOption : Symbol(someOptionalOption, Decl(controlFlowOptionalChain4.ts, 35, 67))
+>type : Symbol(type, Decl(controlFlowOptionalChain4.ts, 35, 15), Decl(controlFlowOptionalChain4.ts, 35, 50))
+
+        option.type;
+>option.type : Symbol(type, Decl(controlFlowOptionalChain4.ts, 35, 50))
+>option : Symbol(option, Decl(controlFlowOptionalChain4.ts, 58, 7))
+>type : Symbol(type, Decl(controlFlowOptionalChain4.ts, 35, 50))
+    }
+}
+
+function testFalsyBranch() {
+>testFalsyBranch : Symbol(testFalsyBranch, Decl(controlFlowOptionalChain4.ts, 63, 1))
+
+    let option: Option | undefined;
+>option : Symbol(option, Decl(controlFlowOptionalChain4.ts, 66, 7))
+>Option : Symbol(Option, Decl(lib.dom.d.ts, --, --), Decl(controlFlowOptionalChain4.ts, 31, 1))
+
+    if (!(option = someOptionalOption())?.type) {
+>(option = someOptionalOption())?.type : Symbol(type, Decl(controlFlowOptionalChain4.ts, 35, 15), Decl(controlFlowOptionalChain4.ts, 35, 50))
+>option : Symbol(option, Decl(controlFlowOptionalChain4.ts, 66, 7))
+>someOptionalOption : Symbol(someOptionalOption, Decl(controlFlowOptionalChain4.ts, 35, 67))
+>type : Symbol(type, Decl(controlFlowOptionalChain4.ts, 35, 15), Decl(controlFlowOptionalChain4.ts, 35, 50))
+
+        option.type;
+>option : Symbol(option, Decl(controlFlowOptionalChain4.ts, 66, 7))
+    }
+}
+
+function testAssignmentWithSatisfies() {
+>testAssignmentWithSatisfies : Symbol(testAssignmentWithSatisfies, Decl(controlFlowOptionalChain4.ts, 71, 1))
+
+    let option: Option | undefined;
+>option : Symbol(option, Decl(controlFlowOptionalChain4.ts, 74, 7))
+>Option : Symbol(Option, Decl(lib.dom.d.ts, --, --), Decl(controlFlowOptionalChain4.ts, 31, 1))
+
+    if ((option = someOptionalOption() satisfies Option | undefined)?.type === "Some") {
+>(option = someOptionalOption() satisfies Option | undefined)?.type : Symbol(type, Decl(controlFlowOptionalChain4.ts, 35, 15), Decl(controlFlowOptionalChain4.ts, 35, 50))
+>option : Symbol(option, Decl(controlFlowOptionalChain4.ts, 74, 7))
+>someOptionalOption : Symbol(someOptionalOption, Decl(controlFlowOptionalChain4.ts, 35, 67))
+>Option : Symbol(Option, Decl(lib.dom.d.ts, --, --), Decl(controlFlowOptionalChain4.ts, 31, 1))
+>type : Symbol(type, Decl(controlFlowOptionalChain4.ts, 35, 15), Decl(controlFlowOptionalChain4.ts, 35, 50))
+
+        option.value;
+>option.value : Symbol(value, Decl(controlFlowOptionalChain4.ts, 35, 29))
+>option : Symbol(option, Decl(controlFlowOptionalChain4.ts, 74, 7))
+>value : Symbol(value, Decl(controlFlowOptionalChain4.ts, 35, 29))
+    }
+}
+
