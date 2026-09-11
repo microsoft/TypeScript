@@ -158,6 +158,7 @@ const (
 	MethodGetApparentType                   Method = "getApparentType"
 	MethodGetReducedType                    Method = "getReducedType"
 	MethodGetPropertyOfType                 Method = "getPropertyOfType"
+	MethodGetIndexInfoOfType                Method = "getIndexInfoOfType"
 	MethodGetIndexInfosOfType               Method = "getIndexInfosOfType"
 	MethodGetConstraintOfTypeParameter      Method = "getConstraintOfTypeParameter"
 	MethodGetDefaultFromTypeParameter       Method = "getDefaultFromTypeParameter"
@@ -530,6 +531,7 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodGetApparentType:                   unmarshallerFor[GetTypePropertyParams],
 	MethodGetReducedType:                    unmarshallerFor[GetTypePropertyParams],
 	MethodGetPropertyOfType:                 unmarshallerFor[GetPropertyOfTypeParams],
+	MethodGetIndexInfoOfType:                unmarshallerFor[GetIndexInfoOfTypeParams],
 	MethodGetIndexInfosOfType:               unmarshallerFor[CheckerTypeParams],
 	MethodGetConstraintOfTypeParameter:      unmarshallerFor[GetTypePropertyParams],
 	MethodGetBaseConstraintOfType:           unmarshallerFor[CheckerTypeParams],
@@ -1445,6 +1447,14 @@ type GetPropertyOfTypeParams struct {
 	Project  ProjectID  `json:"project"`
 	Type     TypeID     `json:"type"`
 	Name     string     `json:"name"`
+}
+
+// GetIndexInfoOfTypeParams are parameters for getIndexInfoOfType.
+type GetIndexInfoOfTypeParams struct {
+	Snapshot SnapshotID `json:"snapshot"`
+	Project  ProjectID  `json:"project"`
+	Type     TypeID     `json:"type"`
+	KeyType  TypeID     `json:"keyType"`
 }
 
 // GetMemberInModuleExportsParams are parameters for getMemberInModuleExports.
