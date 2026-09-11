@@ -1871,7 +1871,10 @@ func handleOptionConfigDirTemplateSubstitution(compilerOptions *core.CompilerOpt
 }
 
 // hasFileWithHigherPriorityExtension determines whether a literal or wildcard file has already been included that has a higher extension priority.
-// file is the path to the file.
+// file is the path to the file. hasFile is called with the exact (case-sensitive) file name that would need to exist to take priority over
+// file; it should only return true if a file with that precise name has already been included. This ensures that the extension-priority
+// de-duplication (e.g. preferring foo.ts over foo.d.ts or foo.js) never fires across files whose base names differ only by case, since
+// those are genuinely distinct files, not an input/output pair, even on a case-insensitive file system.
 func hasFileWithHigherPriorityExtension(file string, extensions [][]string, hasFile func(fileName string) bool) bool {
 	var extensionGroup []string
 	for _, group := range extensions {
@@ -1902,8 +1905,21 @@ func hasFileWithHigherPriorityExtension(file string, extensions [][]string, hasF
 	return false
 }
 
+// getExactFile looks up fileName in m using keyMapper's (possibly case-folding) canonical key, but
+// only returns a match if the entry found actually has that exact (case-sensitive) file name. This
+// prevents a canonical-key collision on case-insensitive file systems from being mistaken for a
+// match between two files whose base names merely differ in case.
+func getExactFile(m *collections.OrderedMap[string, string], keyMapper func(value string) string, fileName string) (string, bool) {
+	canonicalFileName := keyMapper(fileName)
+	if existing, ok := m.Get(canonicalFileName); ok && existing == fileName {
+		return canonicalFileName, true
+	}
+	return "", false
+}
+
 // Removes files included via wildcard expansion with a lower extension priority that have already been included.
-// file is the path to the file.
+// file is the path to the file. Only removes an entry if its exact (case-sensitive) file name matches the lower-priority
+// name derived from file, so that files whose base names differ only by case are never treated as an input/output pair.
 func removeWildcardFilesWithLowerPriorityExtension(file string, wildcardFiles *collections.OrderedMap[string, string], extensions [][]string, keyMapper func(value string) string) {
 	var extensionGroup []string
 	for _, group := range extensions {
@@ -1919,8 +1935,10 @@ func removeWildcardFilesWithLowerPriorityExtension(file string, wildcardFiles *c
 		if tspath.FileExtensionIs(file, ext) {
 			return
 		}
-		lowerPriorityPath := keyMapper(tspath.ChangeExtension(file, ext))
-		wildcardFiles.Delete(lowerPriorityPath)
+		lowerPriorityFile := tspath.ChangeExtension(file, ext)
+		if canonicalFileName, ok := getExactFile(wildcardFiles, keyMapper, lowerPriorityFile); ok {
+			wildcardFiles.Delete(canonicalFileName)
+		}
 	}
 }
 
@@ -1993,9 +2011,17 @@ func getFileNamesFromConfigSpecs(
 			// This handles cases where we may encounter both <file>.ts and
 			// <file>.d.ts (or <file>.js if "allowJs" is enabled) in the same
 			// directory when they are compilation outputs.
+			//
+			// The candidate file name must match exactly (case-sensitively) so that
+			// this de-duplication never conflates two files whose base names differ
+			// only by case on a case-insensitive file system (e.g. "foo.ts" and
+			// "Foo.tsx" are different files, not an input/output pair).
 			if hasFileWithHigherPriorityExtension(file, supportedExtensions, func(fileName string) bool {
-				canonicalFileName := keyMappper(fileName)
-				return literalFileMap.Has(canonicalFileName) || wildcardFileMap.Has(canonicalFileName)
+				if _, ok := getExactFile(&literalFileMap, keyMappper, fileName); ok {
+					return true
+				}
+				_, ok := getExactFile(&wildcardFileMap, keyMappper, fileName)
+				return ok
 			}) {
 				continue
 			}

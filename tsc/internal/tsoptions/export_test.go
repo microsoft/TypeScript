@@ -6,6 +6,11 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 )
 
+// GetExactFileTestWorker exposes getExactFile for direct unit testing.
+func GetExactFileTestWorker(m *collections.OrderedMap[string, string], keyMapper func(value string) string, fileName string) (string, bool) {
+	return getExactFile(m, keyMapper, fileName)
+}
+
 func getTestParseCommandLineWorkerDiagnostics(decls []*CommandLineOption) *ParseCommandLineWorkerDiagnostics {
 	if len(decls) == 0 {
 		return CompilerOptionsDidYouMeanDiagnostics
