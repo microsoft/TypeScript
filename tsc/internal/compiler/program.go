@@ -2087,12 +2087,14 @@ func (p *Program) ExplainFiles(w io.Writer, locale locale.Locale) {
 }
 
 func (p *Program) GetLibFileFromReference(ref *ast.FileReference) *ast.SourceFile {
-	path, ok := tsoptions.GetLibFileName(ref.FileName)
+	name, ok := tsoptions.GetLibFileName(ref.FileName)
 	if !ok {
 		return nil
 	}
-	if sourceFile, ok := p.filesByPath[tspath.Path(path)]; ok {
-		return sourceFile
+	for path, libFile := range p.libFiles {
+		if libFile.Name == name {
+			return p.filesByPath[path]
+		}
 	}
 	return nil
 }
