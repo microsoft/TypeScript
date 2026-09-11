@@ -85,8 +85,8 @@ export function fn7(uuid) { }
 //// [a.d.ts]
 /** @satisfies {(uuid: string) => void} */
 export declare const fn1: (uuid: string) => void;
-export type Foo = Parameters<typeof fn1>;
 /** @typedef {Parameters<typeof fn1>} Foo */
+export type Foo = Parameters<typeof fn1>;
 /** @type Foo */
 export declare const v1: Foo;
 /** @type Foo */

@@ -134,13 +134,37 @@ func (p *Parser) reparseUnhosted(tag *ast.Node, parent *ast.Node, jsDoc *ast.Nod
 			p.addDeepCloneReparse(importTag.Attributes),
 		)
 		p.finishReparsedNode(importDeclaration, tag)
+		p.jsdocInfos = append(p.jsdocInfos, JSDocInfo{parent: importDeclaration, jsDocs: []*ast.Node{jsDoc}})
+		importDeclaration.Flags |= ast.NodeFlagsHasJSDoc
 		p.reparseList = append(p.reparseList, importDeclaration)
 	case ast.KindJSDocOverloadTag:
 		// Create overload signatures only for function, method, and constructor declarations outside object literals
 		if (ast.IsFunctionDeclaration(parent) || ast.IsMethodDeclaration(parent) || ast.IsConstructorDeclaration(parent)) && p.parsingContexts&(1<<PCObjectLiteralMembers) == 0 {
-			p.reparseList = append(p.reparseList, p.reparseJSDocSignature(tag.AsJSDocOverloadTag().TypeExpression, parent, jsDoc, tag, parent.Modifiers()))
+			signature := p.reparseJSDocSignature(tag.AsJSDocOverloadTag().TypeExpression, parent, jsDoc, tag, parent.Modifiers())
+			p.reparseOverloadJSDoc(signature, tag, jsDoc)
+			p.reparseList = append(p.reparseList, signature)
 		}
 	}
+}
+
+// Gives an overload signature the part of its JSDoc comment that is about it: the description and
+// its own `@overload` tag. The comment as a whole is the host's and may carry `@param` or
+// `@template` tags for the implementation, which must not be checked against the signature. The
+// synthesized comment keeps the original's text range so declaration emit can find the comment it
+// stands for.
+func (p *Parser) reparseOverloadJSDoc(signature *ast.Node, tag *ast.Node, jsDoc *ast.Node) {
+	var comment *ast.NodeList
+	if original := jsDoc.AsJSDoc().Comment; original != nil {
+		comment = p.factory.NewNodeList(core.Map(original.Nodes, p.factory.DeepCloneReparse))
+		comment.Loc = original.Loc
+	}
+	tags := p.factory.NewNodeList([]*ast.Node{p.factory.DeepCloneReparse(tag)})
+	tags.Loc = tag.Loc
+	overloadJSDoc := p.factory.NewJSDoc(comment, tags)
+	p.finishReparsedNode(overloadJSDoc, jsDoc)
+	overloadJSDoc.Parent = signature
+	p.jsdocInfos = append(p.jsdocInfos, JSDocInfo{parent: signature, jsDocs: []*ast.Node{overloadJSDoc}})
+	signature.Flags |= ast.NodeFlagsHasJSDoc
 }
 
 func (p *Parser) reparseJSDocSignature(jsSignature *ast.Node, fun *ast.Node, jsDoc *ast.Node, tag *ast.Node, modifiers *ast.ModifierList) *ast.Node {

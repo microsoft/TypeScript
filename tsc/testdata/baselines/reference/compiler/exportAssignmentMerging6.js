@@ -33,12 +33,12 @@ let v1 = { x: "test" };
 
 
 //// [a.d.ts]
-export type Foo = {
-    x: string;
-};
 /**
  * @typedef {{x: string}} Foo
  */
+export type Foo = {
+    x: string;
+};
 export declare const x = 1;
 //// [b.d.ts]
 export {};

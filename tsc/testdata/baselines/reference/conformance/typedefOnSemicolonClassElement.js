@@ -21,6 +21,7 @@ export class Preferences {
 
 
 //// [typedefOnSemicolonClassElement.d.ts]
+/** @typedef {string} A */
 export type A = string;
 export declare class Preferences {
     /** @type {A} */

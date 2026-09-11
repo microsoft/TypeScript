@@ -51,9 +51,9 @@ export type ButtonProps = {
  * @returns {ButtonProps}
  */
 export declare function Button(props: ButtonProps): ButtonProps;
-export type ButtonPropsCallback = (props_like?: ButtonProps) => ButtonProps;
 /**
  * @callback ButtonPropsCallback
  * @param {ButtonProps} [props-like]
  * @returns {ButtonProps}
  */
+export type ButtonPropsCallback = (props_like?: ButtonProps) => ButtonProps;

@@ -36,13 +36,13 @@ declare namespace ModuleGraphConnection {
     const _exported: typeof T;
     export { _exported as T };
 }
-export type T = typeof T;
 /** @typedef {typeof T} T */
+export type T = typeof T;
 declare const T: unique symbol;
 //// [repro.d.ts]
 export = Repro;
-/** @typedef {import('./local-lib/ModuleGraphConnection')} ImportedType */
 /** @type {ImportedType} */
 declare class Repro {
 }
+/** @typedef {import('./local-lib/ModuleGraphConnection')} ImportedType */
 export type ImportedType = import('./local-lib/ModuleGraphConnection');

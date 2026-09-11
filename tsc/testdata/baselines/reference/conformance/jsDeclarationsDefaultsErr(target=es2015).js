@@ -70,21 +70,21 @@ declare class Cls {
     static y: string;
 }
 export default Cls;
-export type default = string | number;
 /**
  * @typedef {string | number} default
  */
+export type default = string | number;
 //// [index2.d.ts]
 export default class C {
 }
-export type default = string | number;
 /**
  * @typedef {string | number} default
  */
+export type default = string | number;
 //// [index3.d.ts]
 declare const x = 12;
 export { x as default };
-export type default = string | number;
 /**
  * @typedef {string | number} default
  */
+export type default = string | number;

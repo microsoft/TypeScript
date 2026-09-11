@@ -43,13 +43,13 @@ class C3 extends C1 {
 type A = {
     a: string;
 };
-type B = {
-    b: number;
-};
 /**
  * @typedef B
  * @property {number} b
  */
+type B = {
+    b: number;
+};
 declare class C1 {
     /**
      * @type {A}

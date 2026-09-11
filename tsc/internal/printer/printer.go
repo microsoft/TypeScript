@@ -5435,7 +5435,7 @@ func (p *Printer) emitLeadingCommentsOfNode(node *ast.Node, emitFlags EmitFlags,
 		// Emit leading comments if the position is not synthesized and the node
 		// has not opted out from emitting leading comments.
 		if !skipLeadingComments {
-			p.emitLeadingComments(pos, node.Kind == ast.KindNotEmittedStatement /*elided*/)
+			p.emitLeadingCommentsWorker(pos, node, node.Kind == ast.KindNotEmittedStatement /*elided*/)
 		}
 
 		if !skipLeadingComments || (pos >= 0 && (emitFlags&EFNoLeadingComments) != 0) {
@@ -5533,6 +5533,12 @@ func (p *Printer) writeSynthesizedComment(comment SynthesizedComment) {
 }
 
 func (p *Printer) emitLeadingComments(pos int, elided bool) bool {
+	return p.emitLeadingCommentsWorker(pos, nil /*node*/, elided)
+}
+
+// node decides ownership of comments claimed by way of EmitContext.ClaimComment, and is nil when
+// comments are emitted outside of any node.
+func (p *Printer) emitLeadingCommentsWorker(pos int, node *ast.Node, elided bool) bool {
 	// Emit the leading comments only if the container's pos doesn't match because the container should take care of emitting these comments
 	if p.commentsDisabled || p.currentSourceFile == nil || ast.PositionIsSynthesized(pos) || pos == p.containerPos {
 		return false
@@ -5557,8 +5563,11 @@ func (p *Printer) emitLeadingComments(pos int, elided bool) bool {
 		return false
 	}
 
-	// skip detached comments
-	if p.detachedCommentsInfo.Len() > 0 {
+	// skip detached comments - a node claiming a comment has to keep scanning across them, since the
+	// comment it claims may be one the detached pass left behind for it, and the node the comments
+	// were detached from still needs to consume them
+	claimsComment := p.emitContext.ClaimsComment(node)
+	if p.detachedCommentsInfo.Len() > 0 && !claimsComment {
 		if info := p.detachedCommentsInfo.Peek(); info.nodePos == pos {
 			pos = p.detachedCommentsInfo.Pop().detachedCommentEndPos
 		}
@@ -5566,6 +5575,9 @@ func (p *Printer) emitLeadingComments(pos int, elided bool) bool {
 
 	var comments []ast.CommentRange
 	for comment := range scanner.GetLeadingCommentRanges(p.emitContext.Factory.AsNodeFactory(), p.currentSourceFile.Text(), pos) {
+		if !p.emitContext.EmitsLeadingComment(node, comment.Pos()) {
+			continue
+		}
 		if p.shouldWriteComment(comment) && p.shouldEmitCommentIfTripleSlash(comment, tripleSlash) {
 			comments = append(comments, comment)
 		}
@@ -5576,7 +5588,13 @@ func (p *Printer) emitLeadingComments(pos int, elided bool) bool {
 	}
 
 	// Leading comments are emitted as /*leading comment1*/space/*leading comment*/space
-	return p.emitComments(comments, commentSeparatorAfter)
+	hasWrittenComment := p.emitComments(comments, commentSeparatorAfter)
+	if hasWrittenComment && claimsComment && !p.writer.IsAtStartOfLine() {
+		// A claimed comment no longer precedes the text it did in the source, so it cannot borrow
+		// that text's line break.
+		p.writeLine()
+	}
+	return hasWrittenComment
 }
 
 func (p *Printer) shouldEmitCommentIfTripleSlash(comment ast.CommentRange, tripleSlash core.Tristate) bool {
@@ -5720,6 +5738,13 @@ func (p *Printer) emitDetachedComments(textRange core.TextRange) (result detache
 					// far.
 					break
 				}
+			}
+
+			if !p.emitContext.EmitsLeadingComment(nil /*node*/, comment.Pos()) {
+				// A claimed comment is emitted by its owner, which comes after this point in the
+				// output. Detaching the rest of the run would print it ahead of the owner and put
+				// the comments out of source order.
+				break
 			}
 
 			detachedComments = append(detachedComments, comment)

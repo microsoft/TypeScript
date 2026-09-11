@@ -147,6 +147,7 @@ export = Timer;
  */
 declare function Timer(timeout: number): void;
 //// [context.d.ts]
+export = Context;
 /**
  * Imports
  *
@@ -154,18 +155,9 @@ declare function Timer(timeout: number): void;
  * @typedef {import("./hook")} Hook
  * @typedef {import("./hook").HookHandler} HookHandler
  */
-export = Context;
 export type Timer = import("./timer");
 export type Hook = import("./hook");
 export type HookHandler = import("./hook").HookHandler;
-export type Input = {
-    timer: Timer;
-    hook: Hook;
-};
-export type State = {
-    timer: Timer;
-    hook: Hook;
-};
 /**
  * Input type definition
  *
@@ -173,6 +165,10 @@ export type State = {
  * @prop {Timer} timer
  * @prop {Hook} hook
  */
+export type Input = {
+    timer: Timer;
+    hook: Hook;
+};
 /**
  * State type definition
  *
@@ -180,6 +176,10 @@ export type State = {
  * @prop {Timer} timer
  * @prop {Hook} hook
  */
+export type State = {
+    timer: Timer;
+    hook: Hook;
+};
 /**
  * New `Context`
  *
@@ -199,10 +199,10 @@ declare namespace Context {
 }
 //// [hook.d.ts]
 export = Hook;
-export type HookHandler = (arg: import("./context")) => void;
 /**
  * @typedef {(arg: import("./context")) => void} HookHandler
  */
+export type HookHandler = (arg: import("./context")) => void;
 /**
  * @param {HookHandler} handle
  */

@@ -138,34 +138,34 @@ type A<T extends string | number = string> = [T];
 /** @type {A} */ declare const aDefault2: A;
 /** @type {A<string>} */ declare const aString: A<string>;
 /** @type {A<number>} */ declare const aNumber: A<number>;
-type B<T, U = T> = [T, U];
-type C<T extends string | number = > = [T];
-type D<T extends string | number = > = [T];
-type E<T extends string | number = string, U> = [T, U];
-type G<T = U, U = T> = [T, U];
 /**
  * @template T
  * @template [U=T] - ok: default can reference earlier type parameter
  * @typedef {[T, U]} B
  */
+type B<T, U = T> = [T, U];
 /**
  * @template {string | number} [T] - error: default requires an `=type`
  * @typedef {[T]} C
  */
+type C<T extends string | number = > = [T];
 /**
  * @template {string | number} [T=] - error: default requires a `type`
  * @typedef {[T]} D
  */
+type D<T extends string | number = > = [T];
 /**
  * @template {string | number} [T=string]
  * @template U - error: Required type parameters cannot follow optional type parameters
  * @typedef {[T, U]} E
  */
+type E<T extends string | number = string, U> = [T, U];
 /**
  * @template [T=U] - error: Type parameter defaults can only reference previously declared type parameters.
  * @template [U=T]
  * @typedef {[T, U]} G
  */
+type G<T = U, U = T> = [T, U];
 /**
  * @template T
  * @template [U=T] - ok: default can reference earlier type parameter
