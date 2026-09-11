@@ -31407,16 +31407,17 @@ func (c *Checker) getTypeFactsWorker(t *Type, callerOnlyNeeds TypeFacts) TypeFac
 		}
 		return TypeFactsTrueFacts
 	case flags&TypeFlagsObject != 0:
-		var possibleFacts TypeFacts
+		var possibleFacts, commonFacts TypeFacts
 		if c.strictNullChecks {
 			possibleFacts = TypeFactsEmptyObjectStrictFacts | TypeFactsFunctionStrictFacts | TypeFactsObjectStrictFacts
+			commonFacts = TypeFactsEmptyObjectStrictFacts & TypeFactsFunctionStrictFacts & TypeFactsObjectStrictFacts
 		} else {
 			possibleFacts = TypeFactsEmptyObjectFacts | TypeFactsFunctionFacts | TypeFactsObjectFacts
+			commonFacts = TypeFactsEmptyObjectFacts & TypeFactsFunctionFacts & TypeFactsObjectFacts
 		}
-		if (callerOnlyNeeds & possibleFacts) == 0 {
-			// If the caller doesn't care about any of the facts that we could possibly produce,
-			// return zero so we can skip resolving members.
-			return TypeFactsNone
+		if callerOnlyNeeds&(possibleFacts&^commonFacts) == 0 {
+			// If the requested facts don't distinguish between object kinds, skip classifying the object.
+			return commonFacts
 		}
 		switch {
 		case t.objectFlags&ObjectFlagsAnonymous != 0 && c.isEmptyObjectType(t):
