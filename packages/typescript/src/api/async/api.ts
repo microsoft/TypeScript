@@ -19,6 +19,7 @@ import {
     type __String,
     type Declaration,
     type Expression,
+    type FileReference,
     type Identifier,
     type IndexSignatureDeclaration,
     ModifierFlags,
@@ -27,6 +28,7 @@ import {
     type ParameterDeclaration,
     type Path,
     type SourceFile,
+    type StringLiteralLikeNode,
     type SyntaxKind,
     type TypeNode,
     unescapeLeadingUnderscores,
@@ -65,10 +67,13 @@ import type {
     ImportAdderAction,
     IntrinsicTypeMethod,
     LSPUpdateSnapshotParams,
+    PackageId,
     ParsedCommandLine,
     ProjectReference,
     ProjectResponse,
     ReadConfigFileResponse,
+    ResolvedModule,
+    ResolvedTypeReferenceDirective,
     SignaturePropertyMethod,
     SignatureResponse,
     SourceFileMetadata,
@@ -184,10 +189,13 @@ export type {
     LSPConnectionOptions,
     NumberLiteralType,
     ObjectType,
+    PackageId,
     ParsedCommandLine,
     ProjectReference,
     ReadConfigFileResponse,
     RequestTiming,
+    ResolvedModule,
+    ResolvedTypeReferenceDirective,
     SourceFileMetadata,
     StringLiteralType,
     StringMappingType,
@@ -1221,6 +1229,63 @@ export class Program implements FormatDiagnosticsHost {
         // Create a new RemoteSourceFile and cache it (set returns existing if hash matches)
         const sourceFile = new RemoteSourceFile(binaryData, this.decoder, this.client.getTimingCollector()) as unknown as SourceFile;
         return this.sourceFileCache.set(path, sourceFile, parseOptionsKey, contentHash, this.snapshotId, this.project.id);
+    }
+
+    async getResolvedModule(
+        file: DocumentIdentifier,
+        moduleName: string,
+        mode: ModuleKind,
+    ): Promise<ResolvedModule | undefined> {
+        const result = await this.client.apiRequest("getResolvedModule", {
+            snapshot: this.snapshotId,
+            project: this.project.id,
+            file,
+            moduleName,
+            mode,
+        });
+        return result ?? undefined;
+    }
+
+    async getResolvedModuleFromModuleSpecifier(
+        moduleSpecifier: StringLiteralLikeNode,
+        sourceFile?: DocumentIdentifier,
+    ): Promise<ResolvedModule | undefined> {
+        const result = await this.client.apiRequest("getResolvedModuleFromModuleSpecifier", {
+            snapshot: this.snapshotId,
+            project: this.project.id,
+            moduleSpecifier: getNodeId(moduleSpecifier),
+            sourceFile,
+        });
+        return result ?? undefined;
+    }
+
+    async getResolvedTypeReferenceDirective(
+        file: DocumentIdentifier,
+        typeDirectiveName: string,
+        mode: ModuleKind,
+    ): Promise<ResolvedTypeReferenceDirective | undefined> {
+        const result = await this.client.apiRequest("getResolvedTypeReferenceDirective", {
+            snapshot: this.snapshotId,
+            project: this.project.id,
+            file,
+            typeDirectiveName,
+            mode,
+        });
+        return result ?? undefined;
+    }
+
+    async getResolvedTypeReferenceDirectiveFromTypeReferenceDirective(
+        typeReferenceDirective: FileReference,
+        sourceFile: DocumentIdentifier,
+    ): Promise<ResolvedTypeReferenceDirective | undefined> {
+        const result = await this.client.apiRequest("getResolvedTypeReferenceDirectiveFromTypeReferenceDirective", {
+            snapshot: this.snapshotId,
+            project: this.project.id,
+            sourceFile,
+            typeDirectiveName: typeReferenceDirective.fileName,
+            resolutionMode: typeReferenceDirective.resolutionMode,
+        });
+        return result ?? undefined;
     }
 
     async getSourceFileNames(): Promise<readonly string[]> {

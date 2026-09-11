@@ -66,6 +66,7 @@ import {
     type LiteralType,
     ModifierFlags,
     ModuleKind,
+    ModuleResolutionKind,
     ObjectFlags,
     type Signature,
     SignatureKind,
@@ -325,6 +326,57 @@ describe("API", () => {
 
         await program.dispose();
         await assert.rejects(program.getSourceFileNames(), /snapshot .* not found/); // @sync: assert.throws(() => program.getSourceFileNames(), /snapshot .* not found/);
+    });
+
+    test("Program resolved modules and type reference directives", async () => {
+        await using api = spawnAPI({
+            "/src/index.ts": `/// <reference types="pkg-types" />
+import "pkg";
+import "missing";`,
+            "/node_modules/pkg/package.json": JSON.stringify({ name: "pkg", version: "1.0.0", types: "index.d.ts" }),
+            "/node_modules/pkg/index.d.ts": `export {};`,
+            "/node_modules/@types/pkg-types/package.json": JSON.stringify({ name: "@types/pkg-types", version: "1.0.0", types: "index.d.ts" }),
+            "/node_modules/@types/pkg-types/index.d.ts": `export {};`,
+        });
+
+        const program = await api.createProgram(["/src/index.ts"], {
+            compilerOptions: { module: ModuleKind.ESNext, moduleResolution: ModuleResolutionKind.Bundler, noLib: true },
+        });
+        const sourceFile = await program.getSourceFile("/src/index.ts");
+        assert.ok(sourceFile);
+        const pkgSpecifier = cast(cast(sourceFile.statements[0], isImportDeclaration).moduleSpecifier, isStringLiteral);
+
+        const resolvedModule = await program.getResolvedModule("/src/index.ts", "pkg", ModuleKind.ESNext);
+        assert.ok(resolvedModule);
+        assert.equal(resolvedModule.resolvedFileName, "/node_modules/pkg/index.d.ts");
+
+        const resolvedModuleWithLocations = await program.getResolvedModuleFromModuleSpecifier(pkgSpecifier);
+        assert.ok(resolvedModuleWithLocations);
+        assert.equal(resolvedModuleWithLocations.packageId?.name, "pkg");
+
+        const missingModule = await program.getResolvedModule(
+            "/src/index.ts",
+            "missing",
+            ModuleKind.ESNext,
+        );
+        assert.equal(missingModule, undefined);
+
+        const typeReference = sourceFile.typeReferenceDirectives[0];
+        const resolvedTypeReference = await program.getResolvedTypeReferenceDirective(
+            "/src/index.ts",
+            "pkg-types",
+            ModuleKind.None,
+        );
+        assert.equal(resolvedTypeReference?.resolvedFileName, "/node_modules/@types/pkg-types/index.d.ts");
+
+        const resolvedTypeReferenceWithLocations = await program.getResolvedTypeReferenceDirectiveFromTypeReferenceDirective(
+            typeReference,
+            "/src/index.ts",
+        );
+        assert.ok(resolvedTypeReferenceWithLocations);
+        assert.equal(resolvedTypeReferenceWithLocations.resolvedFileName, "/node_modules/@types/pkg-types/index.d.ts");
+
+        await program.dispose();
     });
 
     test("createProgram ignores an on-disk tsconfig", async () => {
