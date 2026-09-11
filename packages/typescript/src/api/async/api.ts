@@ -515,8 +515,8 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         const data: CreateProgramResponse = await this.client.apiRequest("createProgram", {
             rootFiles,
             createProgramOptions,
-            ...(oldProgram ? { oldProgram: { snapshot: oldProgram.snapshotId, project: oldProgram.getProject().id } } : {}),
-            ...(fileChanges ? { fileChanges } : {}),
+            oldProgram: oldProgram ? { snapshot: oldProgram.snapshotId, project: oldProgram.getProject().id } : undefined,
+            fileChanges,
         });
         if (!data.project) {
             throw new Error("createProgram did not return a project");
@@ -1116,8 +1116,8 @@ export class LanguageService {
             project: this.project.id,
             file: document,
             position,
-            ...(options?.triggerCharacter !== undefined ? { triggerCharacter: options.triggerCharacter } : {}),
-            ...(options?.includeSymbol !== undefined ? { includeSymbol: options.includeSymbol } : {}),
+            triggerCharacter: options?.triggerCharacter,
+            includeSymbol: options?.includeSymbol,
         });
         if (!data) return undefined;
         return {
@@ -1324,7 +1324,7 @@ export class Program implements FormatDiagnosticsHost {
         const data = await this.client.apiRequest("getSyntacticDiagnostics", {
             snapshot: this.snapshotId,
             project: this.project.id,
-            ...(files !== undefined ? { files } : {}),
+            files,
         });
         return data ?? [];
     }
@@ -1340,7 +1340,7 @@ export class Program implements FormatDiagnosticsHost {
         const data = await this.client.apiRequest("getBindDiagnostics", {
             snapshot: this.snapshotId,
             project: this.project.id,
-            ...(files !== undefined ? { files } : {}),
+            files,
         });
         return data ?? [];
     }
@@ -1356,7 +1356,7 @@ export class Program implements FormatDiagnosticsHost {
         const data = await this.client.apiRequest("getSemanticDiagnostics", {
             snapshot: this.snapshotId,
             project: this.project.id,
-            ...(files !== undefined ? { files } : {}),
+            files,
         });
         return data ?? [];
     }
@@ -1372,7 +1372,7 @@ export class Program implements FormatDiagnosticsHost {
         const data = await this.client.apiRequest("getSuggestionDiagnostics", {
             snapshot: this.snapshotId,
             project: this.project.id,
-            ...(files !== undefined ? { files } : {}),
+            files,
         });
         return data ?? [];
     }
@@ -1388,7 +1388,7 @@ export class Program implements FormatDiagnosticsHost {
         const data = await this.client.apiRequest("getDeclarationDiagnostics", {
             snapshot: this.snapshotId,
             project: this.project.id,
-            ...(files !== undefined ? { files } : {}),
+            files,
         });
         return data ?? [];
     }
@@ -1435,7 +1435,7 @@ export class Program implements FormatDiagnosticsHost {
         const response = await this.client.apiRequest("emit", {
             snapshot: this.snapshotId,
             project: this.project.id,
-            ...(emitOnly !== undefined ? { emitOnly } : {}),
+            emitOnly,
         });
         const fileSystem = response.emittedFilesContents.length
             ? {
@@ -1458,7 +1458,7 @@ export class Program implements FormatDiagnosticsHost {
         const response = await this.client.apiRequest("emitToString", {
             snapshot: this.snapshotId,
             project: this.project.id,
-            ...(emitOnly !== undefined ? { emitOnly } : {}),
+            emitOnly,
         });
         return toEmitOutput(response);
     }
@@ -1741,14 +1741,10 @@ export class Checker {
             project: this.project.id,
             name,
             meaning,
-            ...(isNode ? { location: getNodeId(location as Node) } : {}),
-            ...(!isNode && location
-                ? {
-                    file: (location as DocumentPosition).document,
-                    position: (location as DocumentPosition).position,
-                }
-                : {}),
-            ...(excludeGlobals !== undefined ? { excludeGlobals } : {}),
+            location: isNode ? getNodeId(location as Node) : undefined,
+            file: !isNode && location ? (location as DocumentPosition).document : undefined,
+            position: !isNode && location ? (location as DocumentPosition).position : undefined,
+            excludeGlobals,
         });
         return data ? this.objectRegistry.getOrCreateSymbol(data) : undefined;
     }
@@ -1763,12 +1759,9 @@ export class Checker {
             snapshot: this.snapshotId,
             project: this.project.id,
             meaning,
-            ...(isNode
-                ? { location: getNodeId(location as Node) }
-                : {
-                    file: (location as DocumentPosition).document,
-                    position: (location as DocumentPosition).position,
-                }),
+            location: isNode ? getNodeId(location as Node) : undefined,
+            file: isNode ? undefined : (location as DocumentPosition).document,
+            position: isNode ? undefined : (location as DocumentPosition).position,
         });
         return data ? data.map(d => this.objectRegistry.getOrCreateSymbol(d)) : [];
     }
@@ -1932,8 +1925,8 @@ export class Checker {
             snapshot: this.snapshotId,
             project: this.project.id,
             type: type.id,
-            ...(enclosingDeclaration ? { location: getNodeId(enclosingDeclaration) } : {}),
-            ...(flags !== undefined ? { flags } : {}),
+            location: enclosingDeclaration ? getNodeId(enclosingDeclaration) : undefined,
+            flags,
         });
         if (!binaryData) return undefined;
         return decodeNode(binaryData) as TypeNode;
@@ -1945,8 +1938,8 @@ export class Checker {
             project: this.project.id,
             signature: signature.id,
             kind,
-            ...(enclosingDeclaration ? { location: getNodeId(enclosingDeclaration) } : {}),
-            ...(flags !== undefined ? { flags } : {}),
+            location: enclosingDeclaration ? getNodeId(enclosingDeclaration) : undefined,
+            flags,
         });
         if (!binaryData) return undefined;
         return decodeNode(binaryData) as Node;
@@ -1957,8 +1950,8 @@ export class Checker {
             snapshot: this.snapshotId,
             project: this.project.id,
             type: type.id,
-            ...(enclosingDeclaration ? { location: getNodeId(enclosingDeclaration) } : {}),
-            ...(flags !== undefined ? { flags } : {}),
+            location: enclosingDeclaration ? getNodeId(enclosingDeclaration) : undefined,
+            flags,
         });
         if (typeof result !== "string") throw new TypeError("typeToString returned a non-string result");
         return result;
@@ -2296,9 +2289,9 @@ export class Emitter {
         const base64 = uint8ArrayToBase64(encoded);
         return this.client.apiRequest("printNode", {
             data: base64,
-            ...(options.preserveSourceNewlines !== undefined ? { preserveSourceNewlines: options.preserveSourceNewlines } : {}),
-            ...(options.neverAsciiEscape !== undefined ? { neverAsciiEscape: options.neverAsciiEscape } : {}),
-            ...(options.terminateUnterminatedLiterals !== undefined ? { terminateUnterminatedLiterals: options.terminateUnterminatedLiterals } : {}),
+            preserveSourceNewlines: options.preserveSourceNewlines,
+            neverAsciiEscape: options.neverAsciiEscape,
+            terminateUnterminatedLiterals: options.terminateUnterminatedLiterals,
         });
     }
 }
