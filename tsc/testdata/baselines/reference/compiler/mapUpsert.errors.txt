@@ -31,7 +31,7 @@ mapUpsert.ts(29,6): error TS2339: Property 'getOrInsertComputed' does not exist 
     map.getOrInsert("key");
         ~~~~~~~~~~~
 !!! error TS2554: Expected 2 arguments, but got 1.
-!!! related TS6210 lib.esnext.collection.d.ts:--:--: An argument for 'defaultValue' was not provided.
+!!! related TS6210 lib.es2026.collection.d.ts:--:--: An argument for 'defaultValue' was not provided.
     map.getOrInsert("key", "value");
                            ~~~~~~~
 !!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
@@ -42,18 +42,18 @@ mapUpsert.ts(29,6): error TS2339: Property 'getOrInsertComputed' does not exist 
     map.getOrInsertComputed("key");
         ~~~~~~~~~~~~~~~~~~~
 !!! error TS2554: Expected 2 arguments, but got 1.
-!!! related TS6210 lib.esnext.collection.d.ts:--:--: An argument for 'callback' was not provided.
+!!! related TS6210 lib.es2026.collection.d.ts:--:--: An argument for 'callback' was not provided.
     map.getOrInsertComputed("key", 123);
                                    ~~~
 !!! error TS2345: Argument of type 'number' is not assignable to parameter of type '(key: string) => number'.
     map.getOrInsertComputed("key", () => "value");
                                          ~~~~~~~
 !!! error TS2322: Type 'string' is not assignable to type 'number'.
-!!! related TS6502 lib.esnext.collection.d.ts:--:--: The expected type comes from the return type of this signature.
+!!! related TS6502 lib.es2026.collection.d.ts:--:--: The expected type comes from the return type of this signature.
     mapW.getOrInsert({});
          ~~~~~~~~~~~
 !!! error TS2554: Expected 2 arguments, but got 1.
-!!! related TS6210 lib.esnext.collection.d.ts:--:--: An argument for 'defaultValue' was not provided.
+!!! related TS6210 lib.es2026.collection.d.ts:--:--: An argument for 'defaultValue' was not provided.
     mapW.getOrInsert({}, "value");
                          ~~~~~~~
 !!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
@@ -64,14 +64,14 @@ mapUpsert.ts(29,6): error TS2339: Property 'getOrInsertComputed' does not exist 
     mapW.getOrInsertComputed({});
          ~~~~~~~~~~~~~~~~~~~
 !!! error TS2554: Expected 2 arguments, but got 1.
-!!! related TS6210 lib.esnext.collection.d.ts:--:--: An argument for 'callback' was not provided.
+!!! related TS6210 lib.es2026.collection.d.ts:--:--: An argument for 'callback' was not provided.
     mapW.getOrInsertComputed({}, 123);
                                  ~~~
 !!! error TS2345: Argument of type 'number' is not assignable to parameter of type '(key: object) => number'.
     mapW.getOrInsertComputed({}, () => "value");
                                        ~~~~~~~
 !!! error TS2322: Type 'string' is not assignable to type 'number'.
-!!! related TS6502 lib.esnext.collection.d.ts:--:--: The expected type comes from the return type of this signature.
+!!! related TS6502 lib.es2026.collection.d.ts:--:--: The expected type comes from the return type of this signature.
     
     // Not present on readonly interface
     mapR.getOrInsert("key", 123);

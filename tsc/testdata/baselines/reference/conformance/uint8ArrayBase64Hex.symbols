@@ -1,0 +1,53 @@
+//// [tests/cases/conformance/es2026/uint8ArrayBase64Hex.ts] ////
+
+=== uint8ArrayBase64Hex.ts ===
+const bytes = Uint8Array.fromBase64("AQID", { alphabet: "base64" });
+>bytes : Symbol(bytes, Decl(uint8ArrayBase64Hex.ts, 0, 5))
+>Uint8Array.fromBase64 : Symbol(Uint8ArrayConstructor.fromBase64, Decl(lib.es2026.typedarrays.d.ts, --, --))
+>Uint8Array : Symbol(Uint8Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>fromBase64 : Symbol(Uint8ArrayConstructor.fromBase64, Decl(lib.es2026.typedarrays.d.ts, --, --))
+>alphabet : Symbol(alphabet, Decl(uint8ArrayBase64Hex.ts, 0, 45))
+
+const base64: string = bytes.toBase64({ alphabet: "base64url", omitPadding: true });
+>base64 : Symbol(base64, Decl(uint8ArrayBase64Hex.ts, 1, 5))
+>bytes.toBase64 : Symbol(Uint8Array.toBase64, Decl(lib.es2026.typedarrays.d.ts, --, --))
+>bytes : Symbol(bytes, Decl(uint8ArrayBase64Hex.ts, 0, 5))
+>toBase64 : Symbol(Uint8Array.toBase64, Decl(lib.es2026.typedarrays.d.ts, --, --))
+>alphabet : Symbol(alphabet, Decl(uint8ArrayBase64Hex.ts, 1, 39))
+>omitPadding : Symbol(omitPadding, Decl(uint8ArrayBase64Hex.ts, 1, 62))
+
+const base64Result: { read: number; written: number } = bytes.setFromBase64("BAUG", {
+>base64Result : Symbol(base64Result, Decl(uint8ArrayBase64Hex.ts, 2, 5))
+>read : Symbol(read, Decl(uint8ArrayBase64Hex.ts, 2, 21))
+>written : Symbol(written, Decl(uint8ArrayBase64Hex.ts, 2, 35))
+>bytes.setFromBase64 : Symbol(Uint8Array.setFromBase64, Decl(lib.es2026.typedarrays.d.ts, --, --))
+>bytes : Symbol(bytes, Decl(uint8ArrayBase64Hex.ts, 0, 5))
+>setFromBase64 : Symbol(Uint8Array.setFromBase64, Decl(lib.es2026.typedarrays.d.ts, --, --))
+
+    lastChunkHandling: "strict",
+>lastChunkHandling : Symbol(lastChunkHandling, Decl(uint8ArrayBase64Hex.ts, 2, 85))
+
+});
+
+const hexBytes: Uint8Array<ArrayBuffer> = Uint8Array.fromHex("010203");
+>hexBytes : Symbol(hexBytes, Decl(uint8ArrayBase64Hex.ts, 6, 5))
+>Uint8Array : Symbol(Uint8Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>ArrayBuffer : Symbol(ArrayBuffer, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2024.arraybuffer.d.ts, --, --))
+>Uint8Array.fromHex : Symbol(Uint8ArrayConstructor.fromHex, Decl(lib.es2026.typedarrays.d.ts, --, --))
+>Uint8Array : Symbol(Uint8Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>fromHex : Symbol(Uint8ArrayConstructor.fromHex, Decl(lib.es2026.typedarrays.d.ts, --, --))
+
+const hex: string = hexBytes.toHex();
+>hex : Symbol(hex, Decl(uint8ArrayBase64Hex.ts, 7, 5))
+>hexBytes.toHex : Symbol(Uint8Array.toHex, Decl(lib.es2026.typedarrays.d.ts, --, --))
+>hexBytes : Symbol(hexBytes, Decl(uint8ArrayBase64Hex.ts, 6, 5))
+>toHex : Symbol(Uint8Array.toHex, Decl(lib.es2026.typedarrays.d.ts, --, --))
+
+const hexResult: { read: number; written: number } = hexBytes.setFromHex("040506");
+>hexResult : Symbol(hexResult, Decl(uint8ArrayBase64Hex.ts, 8, 5))
+>read : Symbol(read, Decl(uint8ArrayBase64Hex.ts, 8, 18))
+>written : Symbol(written, Decl(uint8ArrayBase64Hex.ts, 8, 32))
+>hexBytes.setFromHex : Symbol(Uint8Array.setFromHex, Decl(lib.es2026.typedarrays.d.ts, --, --))
+>hexBytes : Symbol(hexBytes, Decl(uint8ArrayBase64Hex.ts, 6, 5))
+>setFromHex : Symbol(Uint8Array.setFromHex, Decl(lib.es2026.typedarrays.d.ts, --, --))
+

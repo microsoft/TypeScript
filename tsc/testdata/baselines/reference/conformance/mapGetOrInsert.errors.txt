@@ -1,0 +1,18 @@
+mapGetOrInsert.ts(11,13): error TS2339: Property 'getOrInsert' does not exist on type 'ReadonlyMap<string, number>'.
+
+
+==== mapGetOrInsert.ts (1 errors) ====
+    const map = new Map<string, number>();
+    const inserted: number = map.getOrInsert("a", 1);
+    const computed: number = map.getOrInsertComputed("b", key => key.length);
+    
+    const weakMap = new WeakMap<object, number>();
+    const key = {};
+    const weakInserted: number = weakMap.getOrInsert(key, 1);
+    const weakComputed: number = weakMap.getOrInsertComputed(key, value => value === key ? 1 : 0);
+    
+    declare const readonlyMap: ReadonlyMap<string, number>;
+    readonlyMap.getOrInsert("a", 1);
+                ~~~~~~~~~~~
+!!! error TS2339: Property 'getOrInsert' does not exist on type 'ReadonlyMap<string, number>'.
+    

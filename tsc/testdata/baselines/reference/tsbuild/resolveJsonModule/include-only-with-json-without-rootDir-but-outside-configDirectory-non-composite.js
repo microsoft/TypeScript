@@ -41,8 +41,8 @@ Output::
 
 TSFILE: /home/src/workspaces/solution/project/dist/src/index.js
 TSFILE: /home/src/workspaces/solution/project/dist/tsconfig.tsbuildinfo
-../../tslibs/TS/Lib/lib.es2025.full.d.ts
-   Default library for target 'ES2025'
+../../tslibs/TS/Lib/lib.es2026.full.d.ts
+   Default library for target 'ES2026'
 hello.json
    Imported via "../../hello.json" from file 'project/src/index.ts'
 project/src/index.ts
@@ -50,7 +50,7 @@ project/src/index.ts
 
 Found 1 error in project/tsconfig.json[90m:8[0m
 
-//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2026.full.d.ts] *Lib*
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -101,7 +101,7 @@ exports.default = hello_json_1.default.hello;
 
 project/tsconfig.json::
 SemanticDiagnostics::
-*not cached* /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+*not cached* /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts
 *not cached* /home/src/workspaces/solution/hello.json
 *not cached* /home/src/workspaces/solution/project/src/index.ts
 Signatures::

@@ -19,7 +19,7 @@ base.json(2,17): error TS5024: Compiler option 'exclude' requires a value of typ
 //// [/home/src/projects/project/main.js] *new* 
 export const x = 1;
 
-//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2026.full.d.ts] *Lib*
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}

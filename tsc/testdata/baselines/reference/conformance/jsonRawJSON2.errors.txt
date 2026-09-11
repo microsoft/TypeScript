@@ -1,0 +1,74 @@
+jsonRawJSON2.ts(12,22): error TS2322: Type 'number' is not assignable to type 'string'.
+jsonRawJSON2.ts(22,3): error TS2540: Cannot assign to 'rawJSON' because it is a read-only property.
+jsonRawJSON2.ts(26,11): error TS2693: 'RawJSON' only refers to a type, but is being used as a value here.
+jsonRawJSON2.ts(27,5): error TS2693: 'RawJSON' only refers to a type, but is being used as a value here.
+jsonRawJSON2.ts(28,17): error TS2689: Cannot extend an interface 'RawJSON'. Did you mean 'implements'?
+jsonRawJSON2.ts(38,25): error TS2339: Property 'rawJSON' does not exist on type 'never'.
+
+
+==== jsonRawJSON2.ts (6 errors) ====
+    const a: RawJSON = JSON.rawJSON("1");
+    const b: string = a.rawJSON;
+    const c: object = a;
+    const d: { readonly rawJSON: string } = a;
+    const e: RawJSON = a;
+    
+    const f: RawJSON = { rawJSON: "1" };
+    const g = { rawJSON: "1" };
+    const h: RawJSON = g;
+    const i: RawJSON = Object.freeze(g);
+    const j: RawJSON = { ...a };
+    const k: RawJSON = { rawJSON: 1 };
+                         ~~~~~~~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+    
+    class A {
+        readonly rawJSON = "1";
+    }
+    const l: RawJSON = new A();
+    class B implements RawJSON {
+        readonly rawJSON = "1";
+    }
+    
+    a.rawJSON = "2";
+      ~~~~~~~
+!!! error TS2540: Cannot assign to 'rawJSON' because it is a read-only property.
+    declare const m: keyof RawJSON;
+    const n: "rawJSON" = m;
+    
+    const o = RawJSON;
+              ~~~~~~~
+!!! error TS2693: 'RawJSON' only refers to a type, but is being used as a value here.
+    new RawJSON();
+        ~~~~~~~
+!!! error TS2693: 'RawJSON' only refers to a type, but is being used as a value here.
+    class C extends RawJSON {}
+                    ~~~~~~~
+!!! error TS2689: Cannot extend an interface 'RawJSON'. Did you mean 'implements'?
+    
+    declare const q: unknown;
+    if (JSON.isRawJSON(q)) {
+        const r: RawJSON = q;
+        const s: string = q.rawJSON;
+    }
+    if (JSON.isRawJSON(g)) {
+        const r: RawJSON = g;
+    } else {
+        const s: string = g.rawJSON;
+                            ~~~~~~~
+!!! error TS2339: Property 'rawJSON' does not exist on type 'never'.
+    }
+    
+    const t: Readonly<RawJSON> = a;
+    const u: RawJSON = t;
+    const v: RawJSON = Object.freeze(a);
+    const w: Pick<RawJSON, "rawJSON"> = a;
+    const x: RawJSON = w;
+    
+    const y: RawJSON = Object.assign({}, a);
+    const z: RawJSON = new Proxy(a, {});
+    
+    interface RawJSON {
+        readonly rawJSON: string;
+    }
+    

@@ -108,10 +108,10 @@ tsc: The TypeScript Compiler - Version FakeTSVersion                            
 [94m           --target, -t  [39mSet the JavaScript language version for emitted JavaScript and include compatible library decla
                          rations.
 
-                one of:  es6/es2015, es2016, es2017, es2018, es2019, es2020, es2021, es2022, es2023, es2024, es2025, esn
-                         ext
+                one of:  es6/es2015, es2016, es2017, es2018, es2019, es2020, es2021, es2022, es2023, es2024, es2025, es2
+                         026, esnext
 
-               default:  es2025
+               default:  es2026
 
 
 [94m           --module, -m  [39mSpecify what module code is generated.
@@ -125,22 +125,24 @@ tsc: The TypeScript Compiler - Version FakeTSVersion                            
                          .
 
            one or more:  es5, es6/es2015, es7/es2016, es2017, es2018, es2019, es2020, es2021, es2022, es2023, es2024, es
-                         2025, esnext, dom, dom.iterable, dom.asynciterable, webworker, webworker.importscripts, webwork
-                         er.iterable, webworker.asynciterable, scripthost, es2015.core, es2015.collection, es2015.genera
-                         tor, es2015.iterable, es2015.promise, es2015.proxy, es2015.reflect, es2015.symbol, es2015.symbo
-                         l.wellknown, es2016.array.include, es2016.intl, es2017.arraybuffer, es2017.date, es2017.object,
-                          es2017.sharedmemory, es2017.string, es2017.intl, es2017.typedarrays, es2018.asyncgenerator, es
-                         2018.asynciterable/esnext.asynciterable, es2018.intl, es2018.promise, es2018.regexp, es2019.arr
-                         ay, es2019.object, es2019.string, es2019.symbol/esnext.symbol, es2019.intl, es2020.bigint/esnex
-                         t.bigint, es2020.date, es2020.promise, es2020.sharedmemory, es2020.string, es2020.symbol.wellkn
-                         own, es2020.intl, es2020.number, es2021.promise, es2021.string, es2021.weakref/esnext.weakref, 
-                         es2021.intl, es2022.array, es2022.error, es2022.intl, es2022.object, es2022.string, es2022.rege
-                         xp, es2023.array, es2023.collection, es2023.intl, es2024.arraybuffer, es2024.collection, es2024
-                         .object/esnext.object, es2024.promise, es2024.regexp/esnext.regexp, es2024.sharedmemory, es2024
-                         .string/esnext.string, es2025.collection, es2025.float16/esnext.float16, es2025.intl, es2025.it
-                         erator/esnext.iterator, es2025.promise/esnext.promise, es2025.regexp, esnext.array, esnext.coll
-                         ection, esnext.date, esnext.decorators, esnext.disposable, esnext.error, esnext.intl, esnext.sh
-                         aredmemory, esnext.temporal, esnext.typedarrays, decorators, decorators.legacy
+                         2025, es2026, esnext, dom, dom.iterable, dom.asynciterable, webworker, webworker.importscripts,
+                          webworker.iterable, webworker.asynciterable, scripthost, es2015.core, es2015.collection, es201
+                         5.generator, es2015.iterable, es2015.promise, es2015.proxy, es2015.reflect, es2015.symbol, es20
+                         15.symbol.wellknown, es2016.array.include, es2016.intl, es2017.arraybuffer, es2017.date, es2017
+                         .object, es2017.sharedmemory, es2017.string, es2017.intl, es2017.typedarrays, es2018.asyncgener
+                         ator, es2018.asynciterable/esnext.asynciterable, es2018.intl, es2018.promise, es2018.regexp, es
+                         2019.array, es2019.object, es2019.string, es2019.symbol/esnext.symbol, es2019.intl, es2020.bigi
+                         nt/esnext.bigint, es2020.date, es2020.promise, es2020.sharedmemory, es2020.string, es2020.symbo
+                         l.wellknown, es2020.intl, es2020.number, es2021.promise, es2021.string, es2021.weakref/esnext.w
+                         eakref, es2021.intl, es2022.array, es2022.error, es2022.intl, es2022.object, es2022.string, es2
+                         022.regexp, es2023.array, es2023.collection, es2023.intl, es2024.arraybuffer, es2024.collection
+                         , es2024.object/esnext.object, es2024.promise, es2024.regexp/esnext.regexp, es2024.sharedmemory
+                         , es2024.string/esnext.string, es2025.collection, es2025.float16/esnext.float16, es2025.intl, e
+                         s2025.iterator, es2025.promise/esnext.promise, es2025.regexp, es2026.array/esnext.array, es2026
+                         .collection/esnext.collection, es2026.error/esnext.error, es2026.iterator/esnext.iterator, es20
+                         26.json, es2026.math, es2026.typedarrays/esnext.typedarrays, esnext.date, esnext.decorators, es
+                         next.disposable, esnext.intl, esnext.sharedmemory, esnext.temporal, decorators, decorators.lega
+                         cy
 
                default:  undefined
 

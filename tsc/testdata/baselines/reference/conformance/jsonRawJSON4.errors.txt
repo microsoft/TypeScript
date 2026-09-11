@@ -1,0 +1,27 @@
+raw.js(10,3): error TS2540: Cannot assign to 'rawJSON' because it is a read-only property.
+raw.js(17,1): error TS2693: 'RawJSON' only refers to a type, but is being used as a value here.
+
+
+==== raw.js (2 errors) ====
+    /** @type {RawJSON} */
+    const a = JSON.rawJSON("1");
+    /** @type {string} */
+    const b = a.rawJSON;
+    
+    /** @type {RawJSON} */
+    const c = { rawJSON: "1" };
+    /** @type {RawJSON} */
+    const d = { ...a };
+    a.rawJSON = "2";
+      ~~~~~~~
+!!! error TS2540: Cannot assign to 'rawJSON' because it is a read-only property.
+    
+    /** @param {unknown} x */
+    function f(x) {
+        return JSON.isRawJSON(x) ? x.rawJSON : undefined;
+    }
+    
+    RawJSON;
+    ~~~~~~~
+!!! error TS2693: 'RawJSON' only refers to a type, but is being used as a value here.
+    
