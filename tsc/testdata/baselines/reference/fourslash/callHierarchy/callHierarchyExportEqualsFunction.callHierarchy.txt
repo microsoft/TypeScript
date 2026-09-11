@@ -1,5 +1,5 @@
 // === Call Hierarchy ===
-╭ name: /other.ts
+╭ name: other.ts
 ├ kind: module
 ├ file: /other.ts
 ├ span:
