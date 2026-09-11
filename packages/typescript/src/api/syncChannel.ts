@@ -256,9 +256,15 @@ export class SyncRpcChannel {
             // and no longer prevent the event loop from draining.
             this.child.stdout?.destroy();
             this.child.stdin?.destroy();
-            this.child.kill();
             this.readFd = -1;
             this.writeFd = -1;
+
+            for (let i = 0; i < 50 && this.child.exitCode === null && this.child.signalCode === null; i++) {
+                Atomics.wait(sleepBuf, 0, 0, 1);
+            }
+            if (this.child.exitCode === null && this.child.signalCode === null) {
+                this.child.kill();
+            }
         }
         catch {
             // swallow – process may already be dead
