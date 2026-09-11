@@ -97,6 +97,7 @@ var LibMap = collections.NewOrderedMapFromList([]collections.MapEntry[string, an
 	{Key: "es2025.iterator", Value: "lib.es2025.iterator.d.ts"},
 	{Key: "es2025.promise", Value: "lib.es2025.promise.d.ts"},
 	{Key: "es2025.regexp", Value: "lib.es2025.regexp.d.ts"},
+	{Key: "es2025.json", Value: "lib.es2025.json.d.ts"},
 	// Fallback for backward compatibility
 	{Key: "esnext.asynciterable", Value: "lib.es2018.asynciterable.d.ts"},
 	{Key: "esnext.symbol", Value: "lib.es2019.symbol.d.ts"},
