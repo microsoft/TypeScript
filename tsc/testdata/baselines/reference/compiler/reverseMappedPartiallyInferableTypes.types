@@ -208,8 +208,8 @@ const obj2 = id({
 // No properties have inferable types
 
 const obj3 = id({
->obj3 : Mapped<unknown>
->id({    foo: {        contains(k) {            return k.length > 0;        }    }}) : Mapped<unknown>
+>obj3 : Mapped<{ foo: unknown; }>
+>id({    foo: {        contains(k) {            return k.length > 0;        }    }}) : Mapped<{ foo: unknown; }>
 >id : <T>(arg: Mapped<T>) => Mapped<T>
 >{    foo: {        contains(k) {            return k.length > 0;        }    }} : { foo: { contains(k: unknown): boolean; }; }
 
