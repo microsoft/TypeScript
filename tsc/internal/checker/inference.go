@@ -1053,14 +1053,11 @@ func (c *Checker) createReverseMappedType(source *Type, target *Type, constraint
 	return reversed
 }
 
-// We consider a type to be partially inferable if it isn't marked non-inferable or if it is
-// an object literal type with at least one property of an inferable type. For example, an object
-// literal { a: 123, b: x => true } is marked non-inferable because it contains a context sensitive
-// arrow function, but is considered partially inferable because property 'a' has an inferable type.
+// We consider a type to be partially inferable if it isn't marked non-inferable or if it is a
+// non-empty object literal. Even when every property is context sensitive, reverse mapped types can
+// still infer the object's keys and defer inference from its property values.
 func (c *Checker) isPartiallyInferableType(t *Type) bool {
-	return t.objectFlags&ObjectFlagsNonInferrableType == 0 || isObjectLiteralType(t) && core.Some(c.getPropertiesOfType(t), func(prop *ast.Symbol) bool {
-		return c.isPartiallyInferableType(c.getTypeOfSymbol(prop))
-	}) || isTupleType(t) && core.Some(c.getElementTypes(t), c.isPartiallyInferableType)
+	return t.objectFlags&ObjectFlagsNonInferrableType == 0 || isObjectLiteralType(t) && len(c.getPropertiesOfType(t)) != 0 || isTupleType(t) && core.Some(c.getElementTypes(t), c.isPartiallyInferableType)
 }
 
 func (c *Checker) inferReverseMappedType(source *Type, target *Type, constraint *Type) *Type {
