@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"strings"
 	"time"
+
+	"github.com/microsoft/TypeScript/tsc/internal/typeutil"
 )
 
 type LogCollector interface {
@@ -11,16 +13,20 @@ type LogCollector interface {
 	Logger
 }
 
+type DefLogCollector = LogCollector /* ref: nonnil */
+
 type logCollector struct {
 	logger
-	builder *strings.Builder
+	builder typeutil.DefPtr[strings.Builder]
 }
 
-func (lc *logCollector) String() string {
+type defLogCollectorImpl = *logCollector /* ref: nonnil */
+
+func (lc defLogCollectorImpl) String() string {
 	return lc.builder.String()
 }
 
-func NewTestLogger() LogCollector {
+func NewTestLogger() DefLogCollector {
 	var builder strings.Builder
 	return &logCollector{
 		logger: logger{

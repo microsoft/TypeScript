@@ -9,6 +9,8 @@ import (
 	"fmt"
 	"strings"
 	"unicode/utf8"
+
+	"github.com/microsoft/TypeScript/tsc/internal/typeutil"
 )
 
 // A Glob is an LSP-compliant glob pattern, as defined by the spec:
@@ -42,6 +44,10 @@ type Glob struct {
 	elems []element // pattern elements
 }
 
+var _ typeutil.UnusedAny = nil
+
+type DefGlob = *Glob /* ref: nonnil */
+
 // Parse builds a Glob for the given pattern, returning an error if the pattern
 // is invalid.
 func Parse(pattern string) (*Glob, error) {
@@ -49,7 +55,7 @@ func Parse(pattern string) (*Glob, error) {
 	return g, err
 }
 
-func parse(pattern string, nested bool) (*Glob, string, error) {
+func parse(pattern string, nested bool) (*Glob, string, error) /* ref: (DefGlob, string, nil) | (nil, string, typeutil.DefError) */ {
 	g := new(Glob)
 	for len(pattern) > 0 {
 		switch pattern[0] {
@@ -150,11 +156,11 @@ func readRangeRune(input string) (rune, int, error) {
 }
 
 var (
-	errBadRange    = errors.New("'[' patterns must be of the form [x-y]")
-	errInvalidUTF8 = errors.New("invalid UTF-8 encoding")
+	errBadRange    typeutil.DefError = errors.New("'[' patterns must be of the form [x-y]")
+	errInvalidUTF8 typeutil.DefError = errors.New("invalid UTF-8 encoding")
 )
 
-func (g *Glob) parseLiteral(pattern string, nested bool) string {
+func (g DefGlob) parseLiteral(pattern string, nested bool) string {
 	var specialChars string
 	if nested {
 		specialChars = "*?{[/},"
@@ -169,7 +175,7 @@ func (g *Glob) parseLiteral(pattern string, nested bool) string {
 	return pattern[end:]
 }
 
-func (g *Glob) String() string {
+func (g DefGlob) String() string {
 	var b strings.Builder
 	for _, e := range g.elems {
 		fmt.Fprint(&b, e)
@@ -182,13 +188,13 @@ type element fmt.Stringer
 
 // element types.
 type (
-	slash     struct{} // One or more '/' separators
-	literal   string   // string literal, not containing /, *, ?, {}, or []
-	star      struct{} // *
-	anyChar   struct{} // ?
-	starStar  struct{} // **
-	group     []*Glob  // {foo, bar, ...} grouping
-	charRange struct { // [a-z] character range
+	slash     struct{}  // One or more '/' separators
+	literal   string    // string literal, not containing /, *, ?, {}, or []
+	star      struct{}  // *
+	anyChar   struct{}  // ?
+	starStar  struct{}  // **
+	group     []DefGlob // {foo, bar, ...} grouping
+	charRange struct {  // [a-z] character range
 		negate    bool
 		low, high rune
 	}
@@ -212,7 +218,7 @@ func (r charRange) String() string {
 }
 
 // Match reports whether the input string matches the glob pattern.
-func (g *Glob) Match(input string) bool {
+func (g DefGlob) Match(input string) bool {
 	return match(g.elems, input)
 }
 

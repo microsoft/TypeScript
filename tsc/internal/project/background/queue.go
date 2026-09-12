@@ -12,12 +12,17 @@ type Queue struct {
 	closed bool
 }
 
+type (
+	DefQueue   = *Queue          /* ref: nonnil */
+	DefContext = context.Context /* ref: nonnil */
+)
+
 // NewQueue creates a new background queue for managing background tasks execution.
-func NewQueue() *Queue {
+func NewQueue() DefQueue {
 	return &Queue{}
 }
 
-func (q *Queue) Enqueue(ctx context.Context, fn func(context.Context)) {
+func (q DefQueue) Enqueue(ctx DefContext, fn func(DefContext) /* ref: nonnil */) {
 	q.mu.RLock()
 	if q.closed {
 		q.mu.RUnlock()
@@ -41,11 +46,11 @@ func (q *Queue) Enqueue(ctx context.Context, fn func(context.Context)) {
 
 // Wait waits for all active tasks to complete.
 // It does not prevent new tasks from being enqueued while waiting.
-func (q *Queue) Wait() {
+func (q DefQueue) Wait() {
 	q.wg.Wait()
 }
 
-func (q *Queue) Close() {
+func (q DefQueue) Close() {
 	q.mu.Lock()
 	q.closed = true
 	q.mu.Unlock()

@@ -2,6 +2,8 @@ package debug
 
 import (
 	"fmt"
+
+	"github.com/microsoft/TypeScript/tsc/internal/typeutil"
 )
 
 func Fail(reason string) {
@@ -14,7 +16,7 @@ func Fail(reason string) {
 	panic(reason)
 }
 
-func FailBadSyntaxKind(node interface{ KindString() string }, message ...any) {
+func FailBadSyntaxKind(node interface{ KindString() string } /*ref:nonnil*/, message ...any) {
 	var msg string
 	if len(message) == 0 {
 		msg = "Unexpected node."
@@ -40,6 +42,25 @@ func AssertNever(member any, message ...any) {
 		detail = fmt.Sprintf("%v", member)
 	}
 	Fail(fmt.Sprintf("%s %s", msg, detail))
+}
+
+func AssertNeverR[T any](member typeutil.Never, message ...any) T {
+	var msg string
+	if len(message) == 0 {
+		msg = "Illegal value:"
+	} else {
+		msg = fmt.Sprint(message...)
+	}
+	var detail string
+	if m, ok := member.(interface{ KindString() string }); ok {
+		detail = m.KindString()
+	} else if m, ok := member.(fmt.Stringer); ok {
+		detail = m.String()
+	} else {
+		detail = fmt.Sprintf("%v", member)
+	}
+	Fail(fmt.Sprintf("%s %s", msg, detail))
+	panic("unreachable")
 }
 
 func Assert(value bool, message ...any) {

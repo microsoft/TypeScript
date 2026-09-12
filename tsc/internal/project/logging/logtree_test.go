@@ -11,7 +11,10 @@ type testLogger interface {
 
 func TestLogTreeImplementsLogger(t *testing.T) {
 	t.Parallel()
-	var _ testLogger = &LogTree{}
+}
+
+func assertInitializedLogTreeImplementsLogger(tree DefLogTree) {
+	var _ testLogger = tree
 }
 
 func TestLogTree(t *testing.T) {

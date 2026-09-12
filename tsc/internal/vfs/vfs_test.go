@@ -15,7 +15,7 @@ import (
 func BenchmarkReadFile(b *testing.B) {
 	type bench struct {
 		name string
-		fs   vfs.FS
+		fs   vfs.DefFS
 		path string
 	}
 

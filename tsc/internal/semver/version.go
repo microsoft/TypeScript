@@ -49,24 +49,26 @@ type Version struct {
 	build      []string
 }
 
+type DefVersion = *Version /* ref: nonnil */
+
 var versionZero = Version{
 	prerelease: []string{"0"},
 }
 
-func (v *Version) incrementMajor() Version {
+func (v DefVersion) incrementMajor() Version {
 	return Version{
 		major: v.major + 1,
 	}
 }
 
-func (v *Version) incrementMinor() Version {
+func (v DefVersion) incrementMinor() Version {
 	return Version{
 		major: v.major,
 		minor: v.minor + 1,
 	}
 }
 
-func (v *Version) incrementPatch() Version {
+func (v DefVersion) incrementPatch() Version {
 	return Version{
 		major: v.major,
 		minor: v.minor,
@@ -187,7 +189,7 @@ func comparePreReleaseIdentifier(left, right string) int {
 	return compareResult
 }
 
-func (v *Version) String() string {
+func (v DefVersion) String() string {
 	var sb strings.Builder
 	fmt.Fprintf(&sb, "%d.%d.%d", v.major, v.minor, v.patch)
 	if len(v.prerelease) > 0 {
@@ -203,7 +205,9 @@ type SemverParseError struct {
 	origInput string
 }
 
-func (e *SemverParseError) Error() string {
+type DefSemverParseError = *SemverParseError /* ref: nonnil */
+
+func (e DefSemverParseError) Error() string {
 	return fmt.Sprintf("Could not parse version string from %q", e.origInput)
 }
 

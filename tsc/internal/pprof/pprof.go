@@ -19,8 +19,10 @@ type ProfileSession struct {
 	logWriter   io.Writer
 }
 
+type DefProfileSession = *ProfileSession /* ref: nonnil */
+
 // BeginProfiling starts CPU and memory profiling, writing the profiles to the specified directory.
-func BeginProfiling(profileDir string, logWriter io.Writer) *ProfileSession {
+func BeginProfiling(profileDir string, logWriter io.Writer) DefProfileSession {
 	if err := os.MkdirAll(profileDir, 0o755); err != nil {
 		panic(err)
 	}
@@ -46,7 +48,7 @@ func BeginProfiling(profileDir string, logWriter io.Writer) *ProfileSession {
 	}
 }
 
-func (p *ProfileSession) Stop() {
+func (p DefProfileSession) Stop() {
 	pprof.StopCPUProfile()
 	p.cpuFile.Close()
 
@@ -71,8 +73,10 @@ type CPUProfiler struct {
 	session *ProfileSession
 }
 
+type DefCPUProfiler = *CPUProfiler /* ref: nonnil */
+
 // StartCPUProfile starts CPU profiling, writing to the specified directory when stopped.
-func (c *CPUProfiler) StartCPUProfile(profileDir string) error {
+func (c DefCPUProfiler) StartCPUProfile(profileDir string) error {
 	c.mu.Lock()
 	defer c.mu.Unlock()
 
@@ -105,7 +109,7 @@ func (c *CPUProfiler) StartCPUProfile(profileDir string) error {
 }
 
 // StopCPUProfile stops CPU profiling and returns the path to the profile file.
-func (c *CPUProfiler) StopCPUProfile() (string, error) {
+func (c DefCPUProfiler) StopCPUProfile() (string, error) {
 	c.mu.Lock()
 	defer c.mu.Unlock()
 

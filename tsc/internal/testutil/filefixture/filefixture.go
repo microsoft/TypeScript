@@ -13,13 +13,17 @@ type Fixture interface {
 	ReadFile(t testing.TB) string
 }
 
+type DefFixture = Fixture /* ref: nonnil */
+
 type fromFile struct {
 	name     string
 	path     string
-	contents func() (string, error)
+	contents func() (string, error) /* ref: nonnil */
 }
 
-func FromFile(name string, path string) Fixture {
+type defFromFile = *fromFile /* ref: nonnil */
+
+func FromFile(name string, path string) DefFixture {
 	return &fromFile{
 		name: name,
 		path: path,
@@ -31,10 +35,10 @@ func FromFile(name string, path string) Fixture {
 	}
 }
 
-func (f *fromFile) Name() string { return f.name }
-func (f *fromFile) Path() string { return f.path }
+func (f defFromFile) Name() string { return f.name }
+func (f defFromFile) Path() string { return f.path }
 
-func (f *fromFile) SkipIfNotExist(tb testing.TB) {
+func (f defFromFile) SkipIfNotExist(tb testing.TB) {
 	tb.Helper()
 
 	if _, err := os.Stat(f.path); err != nil {
@@ -42,7 +46,7 @@ func (f *fromFile) SkipIfNotExist(tb testing.TB) {
 	}
 }
 
-func (f *fromFile) ReadFile(tb testing.TB) string {
+func (f defFromFile) ReadFile(tb testing.TB) string {
 	tb.Helper()
 
 	contents, err := f.contents()
@@ -58,7 +62,9 @@ type fromString struct {
 	contents string
 }
 
-func FromString(name string, path string, contents string) Fixture {
+type defFromString = *fromString /* ref: nonnil */
+
+func FromString(name string, path string, contents string) DefFixture {
 	return &fromString{
 		name:     name,
 		path:     path,
@@ -66,9 +72,9 @@ func FromString(name string, path string, contents string) Fixture {
 	}
 }
 
-func (f *fromString) Name() string { return f.name }
-func (f *fromString) Path() string { return f.path }
+func (f defFromString) Name() string { return f.name }
+func (f defFromString) Path() string { return f.path }
 
-func (f *fromString) SkipIfNotExist(tb testing.TB) {}
+func (f defFromString) SkipIfNotExist(tb testing.TB) {}
 
-func (f *fromString) ReadFile(tb testing.TB) string { return f.contents }
+func (f defFromString) ReadFile(tb testing.TB) string { return f.contents }

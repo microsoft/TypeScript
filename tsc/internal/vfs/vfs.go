@@ -49,6 +49,8 @@ type FS interface {
 	Realpath(path string) string
 }
 
+type DefFS = FS /* ref: nonnil */
+
 type Entries struct {
 	Files       []string
 	Directories []string

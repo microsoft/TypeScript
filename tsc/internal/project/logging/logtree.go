@@ -6,6 +6,8 @@ import (
 	"sync"
 	"sync/atomic"
 	"time"
+
+	"github.com/microsoft/TypeScript/tsc/internal/typeutil"
 )
 
 var seq atomic.Uint64
@@ -14,10 +16,16 @@ type logEntry struct {
 	seq     uint64
 	time    time.Time
 	message string
-	child   *LogTree
+	child   *InitializedLogTree
 }
 
-func newLogEntry(child *LogTree, message string) *logEntry {
+type (
+	defLogEntry        = *logEntry           /* ref: nonnil */
+	InitializedLogTree = LogTree             /* ref: struct { root typeutil.DefPtr[LogTree] } */
+	DefLogTree         = *InitializedLogTree /* ref: nonnil */
+)
+
+func newLogEntry(child *InitializedLogTree, message string) defLogEntry {
 	return &logEntry{
 		seq:     seq.Add(1),
 		time:    time.Now(),
@@ -26,12 +34,14 @@ func newLogEntry(child *LogTree, message string) *logEntry {
 	}
 }
 
-var _ LogCollector = (*LogTree)(nil)
+func assertDefLogTreeImplementsLogCollector(tree DefLogTree) {
+	var _ LogCollector = tree
+}
 
 type LogTree struct {
 	name    string
 	mu      sync.Mutex
-	logs    []*logEntry
+	logs    []defLogEntry
 	root    *LogTree
 	level   int
 	verbose bool
@@ -41,15 +51,13 @@ type LogTree struct {
 	stringLength atomic.Int32
 }
 
-func NewLogTree(name string) *LogTree {
-	lc := &LogTree{
-		name: name,
-	}
+func NewLogTree(name string) DefLogTree {
+	lc := &LogTree{name: name}
 	lc.root = lc
-	return lc
+	return lc //ref:ignore
 }
 
-func (c *LogTree) add(log *logEntry) {
+func (c DefLogTree) add(log defLogEntry) {
 	// indent + header + message + newline
 	c.root.stringLength.Add(int32(c.level + 15 + len(log.message) + 1))
 	c.root.count.Add(1)
@@ -58,7 +66,7 @@ func (c *LogTree) add(log *logEntry) {
 	c.logs = append(c.logs, log)
 }
 
-func (c *LogTree) Log(message ...any) {
+func (c *InitializedLogTree) Log(message ...any) {
 	if c == nil {
 		return
 	}
@@ -66,7 +74,7 @@ func (c *LogTree) Log(message ...any) {
 	c.add(log)
 }
 
-func (c *LogTree) Logf(format string, args ...any) {
+func (c *InitializedLogTree) Logf(format string, args ...any) {
 	if c == nil {
 		return
 	}
@@ -74,49 +82,49 @@ func (c *LogTree) Logf(format string, args ...any) {
 	c.add(log)
 }
 
-func (c *LogTree) IsVerbose() bool {
+func (c DefLogTree) IsVerbose() bool {
 	return c.verbose
 }
 
-func (c *LogTree) SetVerbose(verbose bool) {
+func (c *InitializedLogTree) SetVerbose(verbose bool) {
 	if c == nil {
 		return
 	}
 	c.verbose = verbose
 }
 
-func (c *LogTree) Verbose() Logger {
+func (c *InitializedLogTree) Verbose() Logger {
 	if c == nil || !c.verbose {
 		return nil
 	}
 	return c
 }
 
-func (c *LogTree) Error(msg ...any) {
+func (c *InitializedLogTree) Error(msg ...any) {
 	c.Log(msg...)
 }
 
-func (c *LogTree) Errorf(format string, args ...any) {
+func (c *InitializedLogTree) Errorf(format string, args ...any) {
 	c.Logf(format, args...)
 }
 
-func (c *LogTree) Warn(msg ...any) {
+func (c *InitializedLogTree) Warn(msg ...any) {
 	c.Log(msg...)
 }
 
-func (c *LogTree) Warnf(format string, args ...any) {
+func (c *InitializedLogTree) Warnf(format string, args ...any) {
 	c.Logf(format, args...)
 }
 
-func (c *LogTree) Info(msg ...any) {
+func (c *InitializedLogTree) Info(msg ...any) {
 	c.Log(msg...)
 }
 
-func (c *LogTree) Infof(format string, args ...any) {
+func (c *InitializedLogTree) Infof(format string, args ...any) {
 	c.Logf(format, args...)
 }
 
-func (c *LogTree) Embed(logs *LogTree) {
+func (c *InitializedLogTree) Embed(logs DefLogTree) {
 	if c == nil {
 		return
 	}
@@ -127,17 +135,17 @@ func (c *LogTree) Embed(logs *LogTree) {
 	c.add(log)
 }
 
-func (c *LogTree) Fork(message string) *LogTree {
+func (c *InitializedLogTree) Fork(message string) *InitializedLogTree {
 	if c == nil {
 		return nil
 	}
-	child := &LogTree{level: c.level + 1, root: c.root, verbose: c.verbose}
+	child := &InitializedLogTree{level: c.level + 1, root: c.root, verbose: c.verbose}
 	log := newLogEntry(child, message)
 	c.add(log)
 	return child
 }
 
-func (c *LogTree) String() string {
+func (c DefLogTree) String() string {
 	if c.root != c {
 		panic("can only call String on root LogTree")
 	}
@@ -149,7 +157,7 @@ func (c *LogTree) String() string {
 	return builder.String()
 }
 
-func (c *LogTree) writeLogsRecursive(builder *strings.Builder, indent string) {
+func (c DefLogTree) writeLogsRecursive(builder typeutil.DefPtr[strings.Builder], indent string) {
 	for _, log := range c.logs {
 		builder.WriteString(indent)
 		builder.WriteString(formatTime(log.time))

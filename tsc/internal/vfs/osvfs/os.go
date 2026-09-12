@@ -29,11 +29,11 @@ var (
 )
 
 // FS creates a new FS from the OS file system.
-func FS() vfs.FS {
+func FS() vfs.DefFS {
 	return osVFS
 }
 
-var osVFS vfs.FS = &osFS{
+var osVFS vfs.DefFS = &osFS{
 	common: internal.Common{
 		RootFor:        os.DirFS,
 		IsReparsePoint: isReparsePoint,

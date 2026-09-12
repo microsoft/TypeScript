@@ -7,6 +7,7 @@ import (
 
 	"github.com/go-json-experiment/json"
 	"github.com/go-json-experiment/json/jsontext"
+	"github.com/microsoft/TypeScript/tsc/internal/typeutil"
 )
 
 var allowInvalid []json.Options = slices.Clip([]json.Options{jsontext.AllowInvalidUTF8(true)})
@@ -20,7 +21,7 @@ func Marshal(in any, opts ...json.Options) (out []byte, err error) {
 	return json.Marshal(in, opts...)
 }
 
-func MarshalEncode(out *jsontext.Encoder, in any, opts ...json.Options) (err error) {
+func MarshalEncode(out typeutil.DefPtr[jsontext.Encoder], in any, opts ...json.Options) (err error) {
 	if len(opts) == 0 {
 		opts = allowInvalid
 	} else {
@@ -29,7 +30,7 @@ func MarshalEncode(out *jsontext.Encoder, in any, opts ...json.Options) (err err
 	return json.MarshalEncode(out, in, opts...)
 }
 
-func MarshalWrite(out io.Writer, in any, opts ...json.Options) (err error) {
+func MarshalWrite(out io.Writer /* ref: nonnil */, in any, opts ...json.Options) (err error) {
 	if len(opts) == 0 {
 		opts = allowInvalid
 	} else {
@@ -46,7 +47,7 @@ func MarshalIndent(in any, prefix, indent string) (out []byte, err error) {
 	return Marshal(in, jsontext.WithIndentPrefix(prefix), jsontext.WithIndent(indent))
 }
 
-func MarshalIndentWrite(out io.Writer, in any, prefix, indent string) (err error) {
+func MarshalIndentWrite(out io.Writer /* ref: nonnil */, in any, prefix, indent string) (err error) {
 	if prefix == "" && indent == "" {
 		// WithIndentPrefix and WithIndent imply multiline output, so skip them.
 		return MarshalWrite(out, in)
@@ -54,15 +55,15 @@ func MarshalIndentWrite(out io.Writer, in any, prefix, indent string) (err error
 	return MarshalWrite(out, in, jsontext.WithIndentPrefix(prefix), jsontext.WithIndent(indent))
 }
 
-func Unmarshal(in []byte, out any, opts ...json.Options) (err error) {
+func Unmarshal(in []byte, out typeutil.DefAny, opts ...json.Options) (err error) {
 	return json.Unmarshal(in, out, opts...)
 }
 
-func UnmarshalDecode(in *jsontext.Decoder, out any, opts ...json.Options) (err error) {
+func UnmarshalDecode(in typeutil.DefPtr[jsontext.Decoder], out typeutil.DefAny, opts ...json.Options) (err error) {
 	return json.UnmarshalDecode(in, out, opts...)
 }
 
-func UnmarshalRead(in io.Reader, out any, opts ...json.Options) (err error) {
+func UnmarshalRead(in io.Reader /* ref: nonnil */, out typeutil.DefAny, opts ...json.Options) (err error) {
 	return json.UnmarshalRead(in, out, opts...)
 }
 
@@ -78,8 +79,8 @@ func WithIndent(indent string) json.Options {
 	return jsontext.WithIndent(indent)
 }
 
-func NewDecoder(r io.Reader) *jsontext.Decoder {
-	return jsontext.NewDecoder(r)
+func NewDecoder(r io.Reader /* ref: nonnil */) typeutil.DefPtr[jsontext.Decoder] {
+	return typeutil.NonNil(jsontext.NewDecoder(r))
 }
 
 type (

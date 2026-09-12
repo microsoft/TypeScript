@@ -67,7 +67,7 @@ type sys struct {
 // The paths must be normalized absolute paths according to the tspath package,
 // without trailing directory separators.
 // The paths must be all POSIX-style or all Windows-style, but not both.
-func FromMap[File any](m map[string]File, useCaseSensitiveFileNames bool) vfs.FS {
+func FromMap[File any](m map[string]File, useCaseSensitiveFileNames bool) vfs.DefFS {
 	return FromMapWithClock(m, useCaseSensitiveFileNames, &clockImpl{start: time.Now()})
 }
 
@@ -77,7 +77,7 @@ func FromMap[File any](m map[string]File, useCaseSensitiveFileNames bool) vfs.FS
 // The paths must be normalized absolute paths according to the tspath package,
 // without trailing directory separators.
 // The paths must be all POSIX-style or all Windows-style, but not both.
-func FromMapWithClock[File any](m map[string]File, useCaseSensitiveFileNames bool, clock Clock) vfs.FS {
+func FromMapWithClock[File any](m map[string]File, useCaseSensitiveFileNames bool, clock Clock) vfs.DefFS {
 	posix := false
 	windows := false
 

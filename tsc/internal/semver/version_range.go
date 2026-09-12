@@ -44,6 +44,8 @@ type VersionRange struct {
 	alternatives [][]versionComparator
 }
 
+type DefVersionRange = *VersionRange /* ref: nonnil */
+
 type versionComparator struct {
 	operator comparatorOperator
 	operand  Version
@@ -59,7 +61,7 @@ const (
 	rangeGreaterThan      comparatorOperator = ">"
 )
 
-func (v *VersionRange) String() string {
+func (v DefVersionRange) String() string {
 	var sb strings.Builder
 	formatDisjunction(&sb, v.alternatives)
 	return sb.String()
@@ -94,7 +96,7 @@ func formatComparator(sb *strings.Builder, comparator versionComparator) {
 	sb.WriteString(comparator.operand.String())
 }
 
-func (v *VersionRange) Test(version *Version) bool {
+func (v DefVersionRange) Test(version *Version) bool {
 	return testDisjunction(v.alternatives, version)
 }
 

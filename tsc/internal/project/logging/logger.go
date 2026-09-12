@@ -34,13 +34,18 @@ type Logger interface {
 	SetVerbose(verbose bool)
 }
 
+type (
+	DefLogger = Logger    /* ref: nonnil */
+	DefWriter = io.Writer /* ref: nonnil */
+)
+
 var _ Logger = (*logger)(nil)
 
 type logger struct {
 	mu      sync.Mutex
 	verbose bool
-	writer  io.Writer
-	prefix  func() string
+	writer  DefWriter
+	prefix  func() string /* ref: nonnil */
 }
 
 func (l *logger) Log(msg ...any) {
@@ -115,7 +120,7 @@ func (l *logger) Infof(format string, args ...any) {
 	l.Logf(format, args...)
 }
 
-func NewLogger(output io.Writer) Logger {
+func NewLogger(output DefWriter) DefLogger {
 	return &logger{
 		writer: output,
 		prefix: func() string {
@@ -126,7 +131,7 @@ func NewLogger(output io.Writer) Logger {
 
 // NewNopLogger returns a no-op Logger that discards all log messages.
 // It is safe to call any method on the returned Logger.
-func NewNopLogger() Logger {
+func NewNopLogger() DefLogger {
 	return (*logger)(nil)
 }
 
