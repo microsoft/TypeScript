@@ -31958,10 +31958,14 @@ func (c *Checker) getActualTypeVariable(t *Type) *Type {
 	if t.flags&TypeFlagsSubstitution != 0 {
 		return c.getActualTypeVariable(t.AsSubstitutionType().baseType)
 	}
-	if t.flags&TypeFlagsIndexedAccess != 0 && (t.AsIndexedAccessType().objectType.flags&TypeFlagsSubstitution != 0 || t.AsIndexedAccessType().indexType.flags&TypeFlagsSubstitution != 0) {
-		return c.getIndexedAccessType(c.getActualTypeVariable(t.AsIndexedAccessType().objectType), c.getActualTypeVariable(t.AsIndexedAccessType().indexType))
+	if t.flags&TypeFlagsIndexedAccess != 0 {
+		objectType := c.getActualTypeVariable(t.AsIndexedAccessType().objectType)
+		indexType := c.getActualTypeVariable(t.AsIndexedAccessType().indexType)
+		if objectType != t.AsIndexedAccessType().objectType || indexType != t.AsIndexedAccessType().indexType {
+			return c.getIndexedAccessType(objectType, indexType)
+		}
 	}
-	return t
+	return getNonDistributedTypeParameter(t)
 }
 
 func (c *Checker) GetSymbolAtLocation(node *ast.Node) *ast.Symbol {
