@@ -1,0 +1,54 @@
+//// [tests/cases/compiler/reverseMappedTypeConditionalTemplateInference.ts] ////
+
+=== reverseMappedTypeConditionalTemplateInference.ts ===
+// Repro from https://github.com/Dokploy/dokploy/blob/853ca33659853093ee6a91af3719abdc4e1bae72/packages/server/src/db/schema/network.ts#L128
+
+declare function createSchema<
+>createSchema : Symbol(createSchema, Decl(reverseMappedTypeConditionalTemplateInference.ts, 0, 0))
+
+    Columns,
+>Columns : Symbol(Columns, Decl(reverseMappedTypeConditionalTemplateInference.ts, 2, 30))
+
+    Refinements = { [K in keyof Columns]?: unknown },
+>Refinements : Symbol(Refinements, Decl(reverseMappedTypeConditionalTemplateInference.ts, 3, 12))
+>K : Symbol(K, Decl(reverseMappedTypeConditionalTemplateInference.ts, 4, 21))
+>Columns : Symbol(Columns, Decl(reverseMappedTypeConditionalTemplateInference.ts, 2, 30))
+
+>(
+    columns: Columns,
+>columns : Symbol(columns, Decl(reverseMappedTypeConditionalTemplateInference.ts, 5, 2))
+>Columns : Symbol(Columns, Decl(reverseMappedTypeConditionalTemplateInference.ts, 2, 30))
+
+    refinements: {
+>refinements : Symbol(refinements, Decl(reverseMappedTypeConditionalTemplateInference.ts, 6, 21))
+
+        [K in keyof Refinements]: K extends keyof Columns ? Refinements[K] : never;
+>K : Symbol(K, Decl(reverseMappedTypeConditionalTemplateInference.ts, 8, 9))
+>Refinements : Symbol(Refinements, Decl(reverseMappedTypeConditionalTemplateInference.ts, 3, 12))
+>K : Symbol(K, Decl(reverseMappedTypeConditionalTemplateInference.ts, 8, 9))
+>Columns : Symbol(Columns, Decl(reverseMappedTypeConditionalTemplateInference.ts, 2, 30))
+>Refinements : Symbol(Refinements, Decl(reverseMappedTypeConditionalTemplateInference.ts, 3, 12))
+>K : Symbol(K, Decl(reverseMappedTypeConditionalTemplateInference.ts, 8, 9))
+
+    },
+): Refinements;
+>Refinements : Symbol(Refinements, Decl(reverseMappedTypeConditionalTemplateInference.ts, 3, 12))
+
+const schema = createSchema(
+>schema : Symbol(schema, Decl(reverseMappedTypeConditionalTemplateInference.ts, 12, 5))
+>createSchema : Symbol(createSchema, Decl(reverseMappedTypeConditionalTemplateInference.ts, 0, 0))
+
+    { value: 0 },
+>value : Symbol(value, Decl(reverseMappedTypeConditionalTemplateInference.ts, 13, 5))
+
+    { value: "refined" },
+>value : Symbol(value, Decl(reverseMappedTypeConditionalTemplateInference.ts, 14, 5))
+
+);
+
+const refined: string = schema.value;
+>refined : Symbol(refined, Decl(reverseMappedTypeConditionalTemplateInference.ts, 17, 5))
+>schema.value : Symbol(value, Decl(reverseMappedTypeConditionalTemplateInference.ts, 14, 5))
+>schema : Symbol(schema, Decl(reverseMappedTypeConditionalTemplateInference.ts, 12, 5))
+>value : Symbol(value, Decl(reverseMappedTypeConditionalTemplateInference.ts, 14, 5))
+
