@@ -2,7 +2,7 @@
 
 === dependentContextualInferenceXState.ts ===
 declare const runMachine:
->runMachine : <TDefinition extends { initial: { state: keyof TDefinition["transitions"]; context: object; }; transitions: { [TState in keyof TDefinition["transitions"]]: (current: { context: Context<TDefinition, TState>; }) => void | { state: keyof TDefinition["transitions"]; context: object; }; }; }>(definition: TDefinition) => { [S in keyof TDefinition["transitions"]]: { state: S; context: Context<TDefinition, S>; }; }[keyof TDefinition["transitions"]]
+>runMachine : <TDefinition extends { initial: { state: keyof TDefinition["transitions"]; context: object; }; transitions: { [TState in keyof TDefinition["transitions"]]: (current: { context: MapNeverToAny<Context<TDefinition, TState>>; }) => void | { state: keyof TDefinition["transitions"]; context: object; }; }; }>(definition: TDefinition) => { [S in keyof TDefinition["transitions"]]: { state: S; context: Context<TDefinition, S>; }; }[keyof TDefinition["transitions"]]
 
   <TDefinition extends {
     initial: {
@@ -16,12 +16,12 @@ declare const runMachine:
 
     },
     transitions: {
->transitions : { [TState in keyof TDefinition["transitions"]]: (current: { context: Context<TDefinition, TState>; }) => void | { state: keyof TDefinition["transitions"]; context: object; }; }
+>transitions : { [TState in keyof TDefinition["transitions"]]: (current: { context: MapNeverToAny<Context<TDefinition, TState>>; }) => void | { state: keyof TDefinition["transitions"]; context: object; }; }
 
       [TState in keyof TDefinition["transitions"]]:
-        (current: { context: Context<TDefinition, TState> }) =>
->current : { context: Context<TDefinition, TState>; }
->context : Context<TDefinition, TState>
+        (current: { context: MapNeverToAny<Context<TDefinition, TState>> }) =>
+>current : { context: MapNeverToAny<Context<TDefinition, TState>>; }
+>context : MapNeverToAny<Context<TDefinition, TState>>
 
           | void
           | { state: keyof TDefinition["transitions"], context: object }
@@ -47,7 +47,11 @@ type Context<TDefinition extends Definition, TState> =
 >state : TState
 >context : C
 
-                  ? C
+                  ? IsAny<C> extends true ? never : C
+>true : true
+
+                    // if it's any it usually means the transition hasn't got it's parameter types yet so we ignore it
+                    // this is needed to make the `cyclicResult` case work
                   : never
               : never
           : never
@@ -67,10 +71,22 @@ type Definition =
 >transitions : Record<string | number | symbol, (...a: never) => unknown>
 >a : never
 
+type MapNeverToAny<T> =
+>MapNeverToAny : MapNeverToAny<T>
+
+  [T] extends [never] ? any : T
+
+type IsAny<T> =
+>IsAny : IsAny<T>
+
+  0 extends (1 & T) ? true : false
+>true : true
+>false : false
+
 const result = runMachine({
 >result : { state: "loggedIn"; context: { username: string; password: string; accessToken: string; failedOnce?: undefined; }; } | { state: "loggedOut"; context: Context<{ initial: { state: "loggedOut"; context: {}; }; transitions: { loggedOut: ({ context }: { context: Context<{ initial: { state: "loggedOut"; context: {}; }; transitions: { loggedOut: any; loggingIn: ({ context }: { context: { username: string; password: string; }; }) => { state: "loggedIn"; context: { username: string; password: string; accessToken: string; failedOnce?: undefined; }; } | { state: "loggedOut"; context: { failedOnce: boolean; }; }; loggedIn: ({ context }: { context: { username: string; password: string; accessToken: string; failedOnce?: undefined; }; }) => void; }; }, "loggedOut">; }) => { state: "loggingIn"; context: { username: string; password: string; }; }; loggingIn: ({ context }: { context: { username: string; password: string; }; }) => { state: "loggedIn"; context: { username: string; password: string; accessToken: string; failedOnce?: undefined; }; } | { state: "loggedOut"; context: { failedOnce: boolean; }; }; loggedIn: ({ context }: { context: { username: string; password: string; accessToken: string; failedOnce?: undefined; }; }) => void; }; }, "loggedOut">; } | { state: "loggingIn"; context: { username: string; password: string; }; }
 >runMachine({  initial: {    state: "loggedOut",    context: {}  },  transitions: {    loggedOut: ({ context }) => {      return { state: "loggingIn", context: { username: "devanshj", password: "1234" } }    },    loggingIn: ({ context }) => {      if (context.username === "devanshj" && context.password === "1234") {        return { state: "loggedIn", context: { ...context, accessToken: "whatever" } }      } else {        return { state: "loggedOut", context: { failedOnce: true } }      }    },    loggedIn: ({ context }) => {      console.log(context.accessToken)    }  }}) : { state: "loggedIn"; context: { username: string; password: string; accessToken: string; failedOnce?: undefined; }; } | { state: "loggedOut"; context: Context<{ initial: { state: "loggedOut"; context: {}; }; transitions: { loggedOut: ({ context }: { context: Context<{ initial: { state: "loggedOut"; context: {}; }; transitions: { loggedOut: any; loggingIn: ({ context }: { context: { username: string; password: string; }; }) => { state: "loggedIn"; context: { username: string; password: string; accessToken: string; failedOnce?: undefined; }; } | { state: "loggedOut"; context: { failedOnce: boolean; }; }; loggedIn: ({ context }: { context: { username: string; password: string; accessToken: string; failedOnce?: undefined; }; }) => void; }; }, "loggedOut">; }) => { state: "loggingIn"; context: { username: string; password: string; }; }; loggingIn: ({ context }: { context: { username: string; password: string; }; }) => { state: "loggedIn"; context: { username: string; password: string; accessToken: string; failedOnce?: undefined; }; } | { state: "loggedOut"; context: { failedOnce: boolean; }; }; loggedIn: ({ context }: { context: { username: string; password: string; accessToken: string; failedOnce?: undefined; }; }) => void; }; }, "loggedOut">; } | { state: "loggingIn"; context: { username: string; password: string; }; }
->runMachine : <TDefinition extends { initial: { state: keyof TDefinition["transitions"]; context: object; }; transitions: { [TState in keyof TDefinition["transitions"]]: (current: { context: Context<TDefinition, TState>; }) => void | { state: keyof TDefinition["transitions"]; context: object; }; }; }>(definition: TDefinition) => { [S in keyof TDefinition["transitions"]]: { state: S; context: Context<TDefinition, S>; }; }[keyof TDefinition["transitions"]]
+>runMachine : <TDefinition extends { initial: { state: keyof TDefinition["transitions"]; context: object; }; transitions: { [TState in keyof TDefinition["transitions"]]: (current: { context: MapNeverToAny<Context<TDefinition, TState>>; }) => void | { state: keyof TDefinition["transitions"]; context: object; }; }; }>(definition: TDefinition) => { [S in keyof TDefinition["transitions"]]: { state: S; context: Context<TDefinition, S>; }; }[keyof TDefinition["transitions"]]
 >{  initial: {    state: "loggedOut",    context: {}  },  transitions: {    loggedOut: ({ context }) => {      return { state: "loggingIn", context: { username: "devanshj", password: "1234" } }    },    loggingIn: ({ context }) => {      if (context.username === "devanshj" && context.password === "1234") {        return { state: "loggedIn", context: { ...context, accessToken: "whatever" } }      } else {        return { state: "loggedOut", context: { failedOnce: true } }      }    },    loggedIn: ({ context }) => {      console.log(context.accessToken)    }  }} : { initial: { state: "loggedOut"; context: {}; }; transitions: { loggedOut: ({ context }: { context: Context<{ initial: { state: "loggedOut"; context: {}; }; transitions: { loggedOut: ({ context }: any) => { state: "loggingIn"; context: { username: string; password: string; }; }; loggingIn: ({ context }: { context: { username: string; password: string; }; }) => { state: "loggedIn"; context: { username: string; password: string; accessToken: string; failedOnce?: undefined; }; } | { state: "loggedOut"; context: { failedOnce: boolean; }; }; loggedIn: ({ context }: { context: { username: string; password: string; accessToken: string; failedOnce?: undefined; }; }) => void; }; }, "loggedOut">; }) => { state: "loggingIn"; context: { username: string; password: string; }; }; loggingIn: ({ context }: { context: { username: string; password: string; }; }) => { state: "loggedIn"; context: { username: string; password: string; accessToken: string; failedOnce?: undefined; }; } | { state: "loggedOut"; context: { failedOnce: boolean; }; }; loggedIn: ({ context }: { context: { username: string; password: string; accessToken: string; failedOnce?: undefined; }; }) => void; }; }
 
   initial: {
@@ -159,6 +175,63 @@ const result = runMachine({
 >context.accessToken : string
 >context : { username: string; password: string; accessToken: string; failedOnce?: undefined; }
 >accessToken : string
+    }
+  }
+})
+
+const cyclicResult = runMachine({
+>cyclicResult : { state: "a"; context: Context<{ initial: { state: "a"; context: {}; }; transitions: { a: ({ context }: { context: Context<{ initial: { state: "a"; context: {}; }; transitions: { a: any; b: ({ context }: { context: { a: string; b?: string | undefined; }; }) => { state: "a"; context: { a: string; b: string; }; }; }; }, "a">; }) => { state: "b"; context: { a: string; b?: string | undefined; }; }; b: ({ context }: { context: { a: string; b?: string | undefined; }; }) => { state: "a"; context: { a: string; b: string; }; }; }; }, "a">; } | { state: "b"; context: { a: string; b?: string | undefined; }; }
+>runMachine({  initial: {    state: "a",    context: {}  },  transitions: {    a: ({ context }) => {      return { state: "b", context: { ...context, a: ""} }    },    b: ({ context }) => {      return { state: "a", context:  { ...context, b: "" } }    }  }}) : { state: "a"; context: Context<{ initial: { state: "a"; context: {}; }; transitions: { a: ({ context }: { context: Context<{ initial: { state: "a"; context: {}; }; transitions: { a: any; b: ({ context }: { context: { a: string; b?: string | undefined; }; }) => { state: "a"; context: { a: string; b: string; }; }; }; }, "a">; }) => { state: "b"; context: { a: string; b?: string | undefined; }; }; b: ({ context }: { context: { a: string; b?: string | undefined; }; }) => { state: "a"; context: { a: string; b: string; }; }; }; }, "a">; } | { state: "b"; context: { a: string; b?: string | undefined; }; }
+>runMachine : <TDefinition extends { initial: { state: keyof TDefinition["transitions"]; context: object; }; transitions: { [TState in keyof TDefinition["transitions"]]: (current: { context: MapNeverToAny<Context<TDefinition, TState>>; }) => void | { state: keyof TDefinition["transitions"]; context: object; }; }; }>(definition: TDefinition) => { [S in keyof TDefinition["transitions"]]: { state: S; context: Context<TDefinition, S>; }; }[keyof TDefinition["transitions"]]
+>{  initial: {    state: "a",    context: {}  },  transitions: {    a: ({ context }) => {      return { state: "b", context: { ...context, a: ""} }    },    b: ({ context }) => {      return { state: "a", context:  { ...context, b: "" } }    }  }} : { initial: { state: "a"; context: {}; }; transitions: { a: ({ context }: { context: Context<{ initial: { state: "a"; context: {}; }; transitions: { a: ({ context }: any) => { state: "b"; context: { a: string; b?: string | undefined; }; }; b: ({ context }: { context: { a: string; b?: string | undefined; }; }) => { state: "a"; context: { a: string; b: string; }; }; }; }, "a">; }) => { state: "b"; context: { a: string; b?: string | undefined; }; }; b: ({ context }: { context: { a: string; b?: string | undefined; }; }) => { state: "a"; context: { a: string; b: string; }; }; }; }
+
+  initial: {
+>initial : { state: "a"; context: {}; }
+>{    state: "a",    context: {}  } : { state: "a"; context: {}; }
+
+    state: "a",
+>state : "a"
+>"a" : "a"
+
+    context: {}
+>context : {}
+>{} : {}
+
+  },
+  transitions: {
+>transitions : { a: ({ context }: { context: Context<{ initial: { state: "a"; context: {}; }; transitions: { a: ({ context }: any) => { state: "b"; context: { a: string; b?: string | undefined; }; }; b: ({ context }: { context: { a: string; b?: string | undefined; }; }) => { state: "a"; context: { a: string; b: string; }; }; }; }, "a">; }) => { state: "b"; context: { a: string; b?: string | undefined; }; }; b: ({ context }: { context: { a: string; b?: string | undefined; }; }) => { state: "a"; context: { a: string; b: string; }; }; }
+>{    a: ({ context }) => {      return { state: "b", context: { ...context, a: ""} }    },    b: ({ context }) => {      return { state: "a", context:  { ...context, b: "" } }    }  } : { a: ({ context }: { context: Context<{ initial: { state: "a"; context: {}; }; transitions: { a: ({ context }: any) => { state: "b"; context: { a: string; b?: string | undefined; }; }; b: ({ context }: { context: { a: string; b?: string | undefined; }; }) => { state: "a"; context: { a: string; b: string; }; }; }; }, "a">; }) => { state: "b"; context: { a: string; b?: string | undefined; }; }; b: ({ context }: { context: { a: string; b?: string | undefined; }; }) => { state: "a"; context: { a: string; b: string; }; }; }
+
+    a: ({ context }) => {
+>a : ({ context }: { context: Context<{ initial: { state: "a"; context: {}; }; transitions: { a: ({ context }: any) => { state: "b"; context: { a: string; b?: string | undefined; }; }; b: ({ context }: { context: { a: string; b?: string | undefined; }; }) => { state: "a"; context: { a: string; b: string; }; }; }; }, "a">; }) => { state: "b"; context: { a: string; b?: string | undefined; }; }
+>({ context }) => {      return { state: "b", context: { ...context, a: ""} }    } : ({ context }: { context: Context<{ initial: { state: "a"; context: {}; }; transitions: { a: ({ context }: any) => { state: "b"; context: { a: string; b?: string | undefined; }; }; b: ({ context }: { context: { a: string; b?: string | undefined; }; }) => { state: "a"; context: { a: string; b: string; }; }; }; }, "a">; }) => { state: "b"; context: { a: string; b?: string | undefined; }; }
+>context : Context<{ initial: { state: "a"; context: {}; }; transitions: { a: ({ context }: { context: Context<any, "a">; }) => { state: "b"; context: { a: string; b?: string | undefined; }; }; b: ({ context }: { context: { a: string; b?: string | undefined; }; }) => { state: "a"; context: { a: string; b: string; }; }; }; }, "a">
+
+      return { state: "b", context: { ...context, a: ""} }
+>{ state: "b", context: { ...context, a: ""} } : { state: "b"; context: { a: string; b?: string | undefined; }; }
+>state : "b"
+>"b" : "b"
+>context : { a: string; b?: string | undefined; }
+>{ ...context, a: ""} : { a: string; b?: string | undefined; }
+>context : Context<{ initial: { state: "a"; context: {}; }; transitions: { a: ({ context }: { context: Context<any, "a">; }) => { state: "b"; context: { a: string; b?: string | undefined; }; }; b: ({ context }: { context: { a: string; b?: string | undefined; }; }) => { state: "a"; context: { a: string; b: string; }; }; }; }, "a">
+>a : string
+>"" : ""
+
+    },
+    b: ({ context }) => {
+>b : ({ context }: { context: { a: string; b?: string | undefined; }; }) => { state: "a"; context: { a: string; b: string; }; }
+>({ context }) => {      return { state: "a", context:  { ...context, b: "" } }    } : ({ context }: { context: { a: string; b?: string | undefined; }; }) => { state: "a"; context: { a: string; b: string; }; }
+>context : { a: string; b?: string | undefined; }
+
+      return { state: "a", context:  { ...context, b: "" } }
+>{ state: "a", context:  { ...context, b: "" } } : { state: "a"; context: { a: string; b: string; }; }
+>state : "a"
+>"a" : "a"
+>context : { a: string; b: string; }
+>{ ...context, b: "" } : { a: string; b: string; }
+>context : { a: string; b?: string | undefined; }
+>b : string
+>"" : ""
     }
   }
 })
