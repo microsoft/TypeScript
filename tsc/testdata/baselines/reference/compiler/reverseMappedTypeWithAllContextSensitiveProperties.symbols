@@ -47,11 +47,13 @@ declare const createMachine:
 >initial : Symbol(initial, Decl(reverseMappedTypeWithAllContextSensitiveProperties.ts, 14, 14))
 >D : Symbol(D, Decl(reverseMappedTypeWithAllContextSensitiveProperties.ts, 14, 3))
 
-    context: object,
+    context: D["context"] extends object ? D["context"] : object,
 >context : Symbol(context, Decl(reverseMappedTypeWithAllContextSensitiveProperties.ts, 15, 31))
+>D : Symbol(D, Decl(reverseMappedTypeWithAllContextSensitiveProperties.ts, 14, 3))
+>D : Symbol(D, Decl(reverseMappedTypeWithAllContextSensitiveProperties.ts, 14, 3))
 
     states: {
->states : Symbol(states, Decl(reverseMappedTypeWithAllContextSensitiveProperties.ts, 16, 20))
+>states : Symbol(states, Decl(reverseMappedTypeWithAllContextSensitiveProperties.ts, 16, 65))
 
       [S in keyof D["states"]]: {
 >S : Symbol(S, Decl(reverseMappedTypeWithAllContextSensitiveProperties.ts, 18, 7))

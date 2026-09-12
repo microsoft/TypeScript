@@ -2,8 +2,8 @@
 
 === reverseMappedTypeWithAllContextSensitiveProperties.ts ===
 createMachine({
->createMachine({  initial: "a",  context: { foo: 1 },  states: {    a: {      entry: (context, state) => {        context.foo.toFixed();        const currentState: "a" = state;      }    }  }}) : { initial: "a"; context: object; states: { a: { entry?: ((context: { foo: number; }, state: "a") => void) | undefined; }; }; }
->createMachine : <D extends { initial: keyof D["states"]; context: object; states: { [S in keyof D["states"]]: { entry?: (context: D["context"], state: S) => void; }; }; }>(definition: IdentityObject<D>) => D
+>createMachine({  initial: "a",  context: { foo: 1 },  states: {    a: {      entry: (context, state) => {        context.foo.toFixed();        const currentState: "a" = state;      }    }  }}) : { initial: "a"; context: { foo: number; }; states: { a: { entry?: ((context: { foo: number; }, state: "a") => void) | undefined; }; }; }
+>createMachine : <D extends { initial: keyof D["states"]; context: D["context"] extends object ? D["context"] : object; states: { [S in keyof D["states"]]: { entry?: (context: D["context"], state: S) => void; }; }; }>(definition: IdentityObject<D>) => D
 >{  initial: "a",  context: { foo: 1 },  states: {    a: {      entry: (context, state) => {        context.foo.toFixed();        const currentState: "a" = state;      }    }  }} : { initial: "a"; context: { foo: number; }; states: { a: { entry: (context: { foo: number; }, state: "a") => void; }; }; }
 
   initial: "a",
@@ -47,14 +47,14 @@ createMachine({
 })
 
 declare const createMachine:
->createMachine : <D extends { initial: keyof D["states"]; context: object; states: { [S in keyof D["states"]]: { entry?: (context: D["context"], state: S) => void; }; }; }>(definition: IdentityObject<D>) => D
+>createMachine : <D extends { initial: keyof D["states"]; context: D["context"] extends object ? D["context"] : object; states: { [S in keyof D["states"]]: { entry?: (context: D["context"], state: S) => void; }; }; }>(definition: IdentityObject<D>) => D
 
   <D extends {
     initial: keyof D["states"],
 >initial : keyof D["states"]
 
-    context: object,
->context : object
+    context: D["context"] extends object ? D["context"] : object,
+>context : D["context"] extends object ? D["context"] : object
 
     states: {
 >states : { [S in keyof D["states"]]: { entry?: (context: D["context"], state: S) => void; }; }

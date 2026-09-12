@@ -17,7 +17,7 @@ createMachine({
 declare const createMachine:
   <D extends {
     initial: keyof D["states"],
-    context: object,
+    context: D["context"] extends object ? D["context"] : object,
     states: {
       [S in keyof D["states"]]: {
         entry?: (context: D["context"], state: S) => void
