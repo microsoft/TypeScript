@@ -67,6 +67,7 @@ import {
     ModifierFlags,
     ModuleKind,
     ModuleResolutionKind,
+    type NumberLiteralType,
     ObjectFlags,
     type Signature,
     SignatureKind,
@@ -4999,6 +5000,29 @@ describe("Checker - getConstantValue", () => {
         assert.equal(value, 2);
     });
 
+    test("returns infinite numeric enum values without changing equivalent strings", async () => {
+        await using api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/main.ts": `export enum E { Positive = 1e999, Negative = -1e999, PositiveString = "+Infinity", NegativeString = "-Infinity" }`,
+        });
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const sourceFile = await project.program.getSourceFile("/src/main.ts");
+        assert.ok(sourceFile);
+        const members: Node[] = [];
+        sourceFile.forEachChild(function visit(node) {
+            if (node.kind === SyntaxKind.EnumMember) members.push(node);
+            node.forEachChild(visit);
+        });
+        assert.equal(members.length, 4);
+
+        assert.equal(await project.checker.getConstantValue(members[0]), Infinity);
+        assert.equal(await project.checker.getConstantValue(members[1]), -Infinity);
+        assert.equal(await project.checker.getConstantValue(members[2]), "+Infinity");
+        assert.equal(await project.checker.getConstantValue(members[3]), "-Infinity");
+    });
+
     test("returns string value of a string-initialized enum member", async () => {
         await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
@@ -5501,6 +5525,35 @@ describe("FreshableType - getFreshType and getRegularType", () => {
         const negLiteral = negType as BigIntLiteralType;
         assert.equal(typeof negLiteral.value, "bigint");
         assert.equal(negLiteral.value, -123n);
+    });
+
+    test("NumberLiteralType.value is infinity (positive and negative)", async () => {
+        const src = `\nexport const pos = 1e999;\nexport const neg = -1e999;\n`;
+        await using api = spawnAPI({
+            "/tsconfig.json": "{}",
+            "/src/main.ts": src,
+        });
+
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+
+        const posSymbol = await project.checker.getSymbolAtPosition("/src/main.ts", src.indexOf("pos ="));
+        assert.ok(posSymbol);
+        const posType = await project.checker.getTypeOfSymbol(posSymbol);
+        assert.ok(posType);
+        assert.ok(posType.flags & TypeFlags.NumberLiteral, "Expected NumberLiteral");
+        const posLiteral = posType as NumberLiteralType;
+        assert.equal(typeof posLiteral.value, "number");
+        assert.equal(posLiteral.value, Infinity);
+
+        const negSymbol = await project.checker.getSymbolAtPosition("/src/main.ts", src.indexOf("neg ="));
+        assert.ok(negSymbol);
+        const negType = await project.checker.getTypeOfSymbol(negSymbol);
+        assert.ok(negType);
+        assert.ok(negType.flags & TypeFlags.NumberLiteral, "Expected NumberLiteral");
+        const negLiteral = negType as NumberLiteralType;
+        assert.equal(typeof negLiteral.value, "number");
+        assert.equal(negLiteral.value, -Infinity);
     });
 
     test("getFreshType() returns a fresh twin with matching value", async () => {

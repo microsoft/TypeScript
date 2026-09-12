@@ -4684,7 +4684,16 @@ export class Checker {
                     project: owner.project.id,
                     location: getNodeId(node),
                 });
-                return typeof data === "string" || typeof data === "number" ? data : undefined;
+                if (!data || (typeof data.value !== "string" && typeof data.value !== "number")) {
+                    return undefined;
+                }
+                if (data.isNumber && typeof data.value === "string") {
+                    if (data.value === "+Infinity") {
+                        return Infinity;
+                    }
+                    return -Infinity;
+                }
+                return data.value;
             },
             function* (node: Node): Generator<ProtocolRequest, string | number | undefined, ProtocolResponse["result"]> {
                 const data = yield* apiRequest("getConstantValue", {
@@ -4692,7 +4701,16 @@ export class Checker {
                     project: owner.project.id,
                     location: getNodeId(node),
                 });
-                return typeof data === "string" || typeof data === "number" ? data : undefined;
+                if (!data || (typeof data.value !== "string" && typeof data.value !== "number")) {
+                    return undefined;
+                }
+                if (data.isNumber && typeof data.value === "string") {
+                    if (data.value === "+Infinity") {
+                        return Infinity;
+                    }
+                    return -Infinity;
+                }
+                return data.value;
             },
         );
     }
@@ -5584,7 +5602,21 @@ class TypeObject implements Type {
             // BigInt literal values are serialized as decimal strings (e.g. "-123") because
             // JSON cannot represent bigint. Decode them back into a real bigint here.
             const value = data.value as string | number | boolean;
-            this.value = (data.flags & TypeFlags.BigIntLiteral) ? BigInt(value as string) : value;
+            if (data.flags & TypeFlags.BigIntLiteral) {
+                this.value = BigInt(value as string);
+            }
+            // JSON cannot represent infinities, so the API serializes them as strings.
+            else if (data.flags & TypeFlags.NumberLiteral && typeof value === "string") {
+                if (value === "+Infinity") {
+                    this.value = Infinity;
+                }
+                else {
+                    this.value = -Infinity;
+                }
+            }
+            else {
+                this.value = value;
+            }
         }
         if (data.intrinsicName !== undefined) this.intrinsicName = data.intrinsicName;
         if (data.isThisType !== undefined) this.isThisType = data.isThisType;

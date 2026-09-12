@@ -115,7 +115,7 @@ export interface APIMethodInfo {
     getImportAdderEdits: APIMethod<GetImportAdderEditsParams, TextEdit[]>;
     getTrueTypeOfConditionalType: APIMethod<GetTypePropertyParams, TypeResponse>;
     getFalseTypeOfConditionalType: APIMethod<GetTypePropertyParams, TypeResponse>;
-    getConstantValue: APIMethod<CheckerNodeParams, unknown | null>;
+    getConstantValue: APIMethod<CheckerNodeParams, ConstantValueResponse | null>;
     getSignatureFromDeclaration: APIMethod<CheckerNodeParams, SignatureResponse>;
     getExportSpecifierLocalTargetSymbol: APIMethod<CheckerNodeParams, SymbolResponse | null>;
     getAliasedSymbol: APIMethod<CheckerSymbolParams, SymbolResponse>;
@@ -772,6 +772,11 @@ export interface CheckerNodeParams {
     snapshot: number;
     project: string;
     location: string;
+}
+
+export interface ConstantValueResponse {
+    isNumber: boolean;
+    value: unknown;
 }
 
 /** CheckerSymbolParams are parameters for checker methods that operate on a symbol. */
