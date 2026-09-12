@@ -571,6 +571,12 @@ func (e *emitNode) copyFrom(source *emitNode) {
 		snippetElement := *source.snippetElement
 		e.snippetElement = &snippetElement
 	}
+	if len(source.leadingComments) > 0 {
+		e.leadingComments = append(slices.Clone(source.leadingComments), e.leadingComments...)
+	}
+	if len(source.trailingComments) > 0 {
+		e.trailingComments = append(slices.Clone(source.trailingComments), e.trailingComments...)
+	}
 }
 
 func (c *EmitContext) EmitFlags(node *ast.Node) EmitFlags {
