@@ -1,11 +1,20 @@
 anyInferenceAnonymousFunctions.ts(3,1): error TS2454: Variable 'paired' is used before being assigned.
+anyInferenceAnonymousFunctions.ts(5,22): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Type '{}' is missing the following properties from type 'ConcatArray<never>': length, join, slice
 anyInferenceAnonymousFunctions.ts(9,1): error TS2454: Variable 'paired' is used before being assigned.
+anyInferenceAnonymousFunctions.ts(11,22): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Type '{}' is missing the following properties from type 'ConcatArray<never>': length, join, slice
 anyInferenceAnonymousFunctions.ts(14,1): error TS2454: Variable 'paired' is used before being assigned.
+anyInferenceAnonymousFunctions.ts(14,37): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Type '{}' is missing the following properties from type 'ConcatArray<never>': length, join, slice
 anyInferenceAnonymousFunctions.ts(16,1): error TS2454: Variable 'paired' is used before being assigned.
 anyInferenceAnonymousFunctions.ts(17,1): error TS2454: Variable 'paired' is used before being assigned.
 
 
-==== anyInferenceAnonymousFunctions.ts (5 errors) ====
+==== anyInferenceAnonymousFunctions.ts (8 errors) ====
     var paired: any[];
     
     paired.reduce(function (a1, a2) {
@@ -13,6 +22,11 @@ anyInferenceAnonymousFunctions.ts(17,1): error TS2454: Variable 'paired' is used
 !!! error TS2454: Variable 'paired' is used before being assigned.
     
         return a1.concat({});
+                         ~~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   The last overload gave the following error.
+!!! error TS2769:     Type '{}' is missing the following properties from type 'ConcatArray<never>': length, join, slice
+!!! related TS2771 lib.es5.d.ts:--:--: The last overload is declared here.
     
     } , []);
     
@@ -21,11 +35,21 @@ anyInferenceAnonymousFunctions.ts(17,1): error TS2454: Variable 'paired' is used
 !!! error TS2454: Variable 'paired' is used before being assigned.
     
         return b1.concat({});
+                         ~~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   The last overload gave the following error.
+!!! error TS2769:     Type '{}' is missing the following properties from type 'ConcatArray<never>': length, join, slice
+!!! related TS2771 lib.es5.d.ts:--:--: The last overload is declared here.
     } , []);
     
     paired.reduce((b3, b4) => b3.concat({}), []);
     ~~~~~~
 !!! error TS2454: Variable 'paired' is used before being assigned.
+                                        ~~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   The last overload gave the following error.
+!!! error TS2769:     Type '{}' is missing the following properties from type 'ConcatArray<never>': length, join, slice
+!!! related TS2771 lib.es5.d.ts:--:--: The last overload is declared here.
     
     paired.map((c1) => c1.count);
     ~~~~~~
