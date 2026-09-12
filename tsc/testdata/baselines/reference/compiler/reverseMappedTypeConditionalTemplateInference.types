@@ -1,0 +1,44 @@
+//// [tests/cases/compiler/reverseMappedTypeConditionalTemplateInference.ts] ////
+
+=== reverseMappedTypeConditionalTemplateInference.ts ===
+// Repro from https://github.com/Dokploy/dokploy/blob/853ca33659853093ee6a91af3719abdc4e1bae72/packages/server/src/db/schema/network.ts#L128
+
+declare function createSchema<
+>createSchema : <Columns, Refinements = { [K in keyof Columns]?: unknown; }>(columns: Columns, refinements: { [K in keyof Refinements]: K extends keyof Columns ? Refinements[K] : never; }) => Refinements
+
+    Columns,
+    Refinements = { [K in keyof Columns]?: unknown },
+>(
+    columns: Columns,
+>columns : Columns
+
+    refinements: {
+>refinements : { [K in keyof Refinements]: K extends keyof Columns ? Refinements[K] : never; }
+
+        [K in keyof Refinements]: K extends keyof Columns ? Refinements[K] : never;
+    },
+): Refinements;
+
+const schema = createSchema(
+>schema : { value: string; }
+>createSchema(    { value: 0 },    { value: "refined" },) : { value: string; }
+>createSchema : <Columns, Refinements = { [K in keyof Columns]?: unknown; }>(columns: Columns, refinements: { [K in keyof Refinements]: K extends keyof Columns ? Refinements[K] : never; }) => Refinements
+
+    { value: 0 },
+>{ value: 0 } : { value: number; }
+>value : number
+>0 : 0
+
+    { value: "refined" },
+>{ value: "refined" } : { value: string; }
+>value : string
+>"refined" : "refined"
+
+);
+
+const refined: string = schema.value;
+>refined : string
+>schema.value : string
+>schema : { value: string; }
+>value : string
+

@@ -2363,7 +2363,7 @@ func (c *Checker) templateLiteralTypesDefinitelyUnrelated(source *TemplateLitera
 }
 
 func (c *Checker) isTypeMatchedByTemplateLiteralType(source *Type, target *TemplateLiteralType, compareTypes TypeComparer) bool {
-	inferences := c.inferTypesFromTemplateLiteralType(source, target)
+	inferences := c.inferTypesFromTemplateLiteralType(source, target, compareTypes)
 	if inferences != nil {
 		for i, inference := range inferences {
 			if !c.isValidTypeForTemplateLiteralPlaceholder(inference, target.types[i], compareTypes) {
@@ -2375,14 +2375,14 @@ func (c *Checker) isTypeMatchedByTemplateLiteralType(source *Type, target *Templ
 	return false
 }
 
-func (c *Checker) inferTypesFromTemplateLiteralType(source *Type, target *TemplateLiteralType) []*Type {
+func (c *Checker) inferTypesFromTemplateLiteralType(source *Type, target *TemplateLiteralType, compareTypes TypeComparer) []*Type {
 	switch {
 	case source.flags&TypeFlagsStringLiteral != 0:
 		return c.inferFromLiteralPartsToTemplateLiteral([]string{getStringLiteralValue(source)}, nil, target)
 	case source.flags&TypeFlagsTemplateLiteral != 0:
 		if slices.Equal(source.AsTemplateLiteralType().texts, target.texts) {
 			return core.MapIndex(source.AsTemplateLiteralType().types, func(s *Type, i int) *Type {
-				if c.isTypeAssignableTo(c.getBaseConstraintOrType(s), c.getBaseConstraintOrType(target.types[i])) {
+				if compareTypes(c.getBaseConstraintOrType(s), c.getBaseConstraintOrType(target.types[i]), false /*partialMatch*/) != TernaryFalse {
 					return s
 				}
 				return c.getStringLikeTypeForType(s)
@@ -4800,6 +4800,8 @@ func (r *Relater) reportRelationError(message *diagnostics.Message, source *Type
 	if targetFlags&TypeFlagsTypeParameter != 0 && target != r.c.markerSuperTypeForCheck && target != r.c.markerSubTypeForCheck {
 		constraint := r.c.getBaseConstraintOfType(target)
 		switch {
+		case IsDistributedTypeParameter(target) && r.c.isTypeAssignableTo(generalizedSource, target.AsTypeParameter().constraint):
+			r.reportError(diagnostics.X_0_is_only_assignable_to_the_non_distributed_1_but_1_has_been_distributed_here, generalizedSourceType, targetType)
 		case constraint != nil && r.c.isTypeAssignableTo(generalizedSource, constraint):
 			r.reportError(diagnostics.X_0_is_assignable_to_the_constraint_of_type_1_but_1_could_be_instantiated_with_a_different_subtype_of_constraint_2, generalizedSourceType, targetType, r.c.TypeToString(constraint))
 		case constraint != nil && r.c.isTypeAssignableTo(source, constraint):

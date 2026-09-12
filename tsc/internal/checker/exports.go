@@ -386,3 +386,7 @@ func (c *Checker) GetWidenedType(t *Type) *Type {
 func (c *Checker) CompareSymbols(s1, s2 *ast.Symbol) int {
 	return c.compareSymbols(s1, s2)
 }
+
+func IsDistributedTypeParameter(t *Type) bool {
+	return t.flags&TypeFlagsTypeParameter != 0 && t.AsTypeParameter().isDistributed
+}

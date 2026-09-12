@@ -4768,6 +4768,10 @@
         "category": "Error",
         "code": 5112
     },
+    "'{0}' is only assignable to the non-distributed '{1}', but '{1}' has been distributed here.": {
+        "category": "Error",
+        "code": 5113
+    },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
         "category": "Message",
