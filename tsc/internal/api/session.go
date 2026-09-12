@@ -29,6 +29,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/ls/autoimport"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/lsconv"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
+	"github.com/microsoft/TypeScript/tsc/internal/module"
 	"github.com/microsoft/TypeScript/tsc/internal/nodebuilder"
 	"github.com/microsoft/TypeScript/tsc/internal/pprof"
 	"github.com/microsoft/TypeScript/tsc/internal/printer"
@@ -772,6 +773,14 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleGetSourceFileNames(ctx, parsed.(*GetSourceFileNamesParams))
 	case string(MethodGetSourceFileMetadata):
 		return s.handleGetSourceFileMetadata(ctx, parsed.(*GetSourceFileParams))
+	case string(MethodGetResolvedModule):
+		return s.handleGetResolvedModule(ctx, parsed.(*GetResolvedModuleParams))
+	case string(MethodGetResolvedModuleFromModuleSpecifier):
+		return s.handleGetResolvedModuleFromModuleSpecifier(ctx, parsed.(*GetResolvedModuleFromModuleSpecifierParams))
+	case string(MethodGetResolvedTypeReferenceDirective):
+		return s.handleGetResolvedTypeReferenceDirective(ctx, parsed.(*GetResolvedTypeReferenceDirectiveParams))
+	case string(MethodGetResolvedTypeReferenceDirectiveFromReference):
+		return s.handleGetResolvedTypeReferenceDirectiveFromReference(ctx, parsed.(*GetResolvedTypeReferenceDirectiveFromReferenceParams))
 	case string(MethodGetConfigFileNames):
 		return s.handleGetConfigFileNames(ctx, parsed.(*GetProjectDiagnosticsParams))
 	case string(MethodGetConfigSourceFile):
@@ -1741,6 +1750,121 @@ func (s *Session) handleGetSourceFileMetadata(ctx context.Context, params *GetSo
 		PackageJsonDirectory:  metaData.PackageJsonDirectory,
 		ImpliedNodeFormat:     metaData.ImpliedNodeFormat,
 	}, nil
+}
+
+func newResolvedModuleResponse(resolution *module.ResolvedModule) *ResolvedModule {
+	if !resolution.IsResolved() {
+		return nil
+	}
+	return &ResolvedModule{
+		ResolvedFileName:             resolution.ResolvedFileName,
+		OriginalPath:                 resolution.OriginalPath,
+		Extension:                    resolution.Extension,
+		ResolvedUsingTsExtension:     resolution.ResolvedUsingTsExtension,
+		ResolvedUsingExtraExtensions: resolution.ResolvedUsingExtraExtensions,
+		PackageId:                    NewPackageId(resolution.PackageId),
+		IsExternalLibraryImport:      resolution.IsExternalLibraryImport,
+		AlternateResult:              resolution.AlternateResult,
+	}
+}
+
+func newResolvedTypeReferenceDirectiveResponse(resolution *module.ResolvedTypeReferenceDirective) *ResolvedTypeReferenceDirective {
+	if resolution == nil || !resolution.IsResolved() {
+		return nil
+	}
+	return &ResolvedTypeReferenceDirective{
+		Primary:                 resolution.Primary,
+		ResolvedFileName:        resolution.ResolvedFileName,
+		OriginalPath:            resolution.OriginalPath,
+		PackageId:               NewPackageId(resolution.PackageId),
+		IsExternalLibraryImport: resolution.IsExternalLibraryImport,
+	}
+}
+
+// @gen-proto-nullable
+func (s *Session) handleGetResolvedModule(ctx context.Context, params *GetResolvedModuleParams) (*ResolvedModule, error) {
+	sd, err := s.getSnapshotData(params.Snapshot)
+	if err != nil {
+		return nil, err
+	}
+	program, err := sd.getProgram(params.Project)
+	if err != nil {
+		return nil, err
+	}
+	sourceFile, err := s.resolveOptionalSourceFile(program, &params.File)
+	if err != nil {
+		return nil, err
+	}
+	return newResolvedModuleResponse(program.GetResolvedModule(sourceFile, params.ModuleName, params.Mode)), nil
+}
+
+// @gen-proto-nullable
+func (s *Session) handleGetResolvedModuleFromModuleSpecifier(ctx context.Context, params *GetResolvedModuleFromModuleSpecifierParams) (*ResolvedModule, error) {
+	sd, err := s.getSnapshotData(params.Snapshot)
+	if err != nil {
+		return nil, err
+	}
+	program, err := sd.getProgram(params.Project)
+	if err != nil {
+		return nil, err
+	}
+	node, err := sd.resolveNodeHandle(program, params.ModuleSpecifier)
+	if err != nil {
+		return nil, err
+	}
+	if !ast.IsStringLiteralLike(node) {
+		return nil, fmt.Errorf("%w: moduleSpecifier must be a StringLiteralLike node", ErrClientError)
+	}
+	sourceFile := ast.GetSourceFileOfNode(node)
+	if params.SourceFile != nil {
+		sourceFile, err = s.resolveOptionalSourceFile(program, params.SourceFile)
+		if err != nil {
+			return nil, err
+		}
+	}
+	if sourceFile == nil {
+		return nil, fmt.Errorf("%w: moduleSpecifier must have a SourceFile ancestor or sourceFile must be provided", ErrClientError)
+	}
+	mode := program.GetModeForUsageLocation(sourceFile, node)
+	return newResolvedModuleResponse(program.GetResolvedModule(sourceFile, node.Text(), mode)), nil
+}
+
+// @gen-proto-nullable
+func (s *Session) handleGetResolvedTypeReferenceDirective(ctx context.Context, params *GetResolvedTypeReferenceDirectiveParams) (*ResolvedTypeReferenceDirective, error) {
+	sd, err := s.getSnapshotData(params.Snapshot)
+	if err != nil {
+		return nil, err
+	}
+	program, err := sd.getProgram(params.Project)
+	if err != nil {
+		return nil, err
+	}
+	sourceFile, err := s.resolveOptionalSourceFile(program, &params.File)
+	if err != nil {
+		return nil, err
+	}
+	return newResolvedTypeReferenceDirectiveResponse(program.GetResolvedTypeReferenceDirective(sourceFile, params.TypeDirectiveName, params.Mode)), nil
+}
+
+// @gen-proto-nullable
+func (s *Session) handleGetResolvedTypeReferenceDirectiveFromReference(ctx context.Context, params *GetResolvedTypeReferenceDirectiveFromReferenceParams) (*ResolvedTypeReferenceDirective, error) {
+	sd, err := s.getSnapshotData(params.Snapshot)
+	if err != nil {
+		return nil, err
+	}
+	program, err := sd.getProgram(params.Project)
+	if err != nil {
+		return nil, err
+	}
+	sourceFile, err := s.resolveOptionalSourceFile(program, &params.SourceFile)
+	if err != nil {
+		return nil, err
+	}
+	mode := params.ResolutionMode
+	if mode == core.ResolutionModeNone {
+		mode = program.GetDefaultResolutionModeForFile(sourceFile)
+	}
+	return newResolvedTypeReferenceDirectiveResponse(program.GetResolvedTypeReferenceDirective(sourceFile, params.TypeDirectiveName, mode)), nil
 }
 
 // handleGetSymbolAtPosition returns the symbol at a position in a file.
