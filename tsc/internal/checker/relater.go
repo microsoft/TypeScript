@@ -4801,7 +4801,7 @@ func (r *Relater) reportRelationError(message *diagnostics.Message, source *Type
 		constraint := r.c.getBaseConstraintOfType(target)
 		switch {
 		case IsDistributedTypeParameter(target) && r.c.isTypeAssignableTo(generalizedSource, target.AsTypeParameter().constraint):
-			r.reportError(diagnostics.X_0_is_only_assignable_to_the_non_distributed_1_and_1_has_been_distributed_here, generalizedSourceType, targetType)
+			r.reportError(diagnostics.X_0_is_only_assignable_to_the_non_distributed_1_but_1_has_been_distributed_here, generalizedSourceType, targetType)
 		case constraint != nil && r.c.isTypeAssignableTo(generalizedSource, constraint):
 			r.reportError(diagnostics.X_0_is_assignable_to_the_constraint_of_type_1_but_1_could_be_instantiated_with_a_different_subtype_of_constraint_2, generalizedSourceType, targetType, r.c.TypeToString(constraint))
 		case constraint != nil && r.c.isTypeAssignableTo(source, constraint):
