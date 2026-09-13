@@ -5245,7 +5245,7 @@ func (p *Parser) parseLeftHandSideExpressionOrHigher() *ast.Expression {
 			p.nextToken() // advance past the dot
 			expression = p.finishNode(p.factory.NewMetaProperty(ast.KindImportKeyword, p.parseIdentifierName()), pos)
 			if expression.Text() == "defer" {
-				if p.token == ast.KindOpenParenToken || p.token == ast.KindLessThanToken {
+				if p.token == ast.KindOpenParenToken || p.token == ast.KindLessThanToken || p.token == ast.KindQuestionDotToken {
 					p.sourceFlags |= ast.NodeFlagsPossiblyContainsDynamicImport
 				}
 			} else {

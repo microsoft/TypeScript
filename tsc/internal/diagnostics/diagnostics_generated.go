@@ -4426,6 +4426,8 @@ var The_invalid_diagnostic_directive_is_in_supplemental_output_0_returned_by_the
 
 var Diagnostic_directive_0_returned_by_the_content_mapper_has_an_invalid_unusedExpectDirectiveIndex = &Message{code: 100068, category: CategoryMessage, key: "Diagnostic_directive_0_returned_by_the_content_mapper_has_an_invalid_unusedExpectDirectiveIndex_100068", text: "Diagnostic directive {0} returned by the content mapper has an invalid 'unusedExpectDirectiveIndex'."}
 
+var Calls_to_import_are_not_permitted_in_an_optional_chain = &Message{code: 100069, category: CategoryError, key: "Calls_to_import_are_not_permitted_in_an_optional_chain_100069", text: "Calls to 'import()' are not permitted in an optional chain."}
+
 func keyToMessage(key Key) *Message {
 	switch key {
 	case "Unterminated_string_literal_1002":
@@ -8852,6 +8854,8 @@ func keyToMessage(key Key) *Message {
 		return The_invalid_diagnostic_directive_is_in_supplemental_output_0_returned_by_the_content_mapper
 	case "Diagnostic_directive_0_returned_by_the_content_mapper_has_an_invalid_unusedExpectDirectiveIndex_100068":
 		return Diagnostic_directive_0_returned_by_the_content_mapper_has_an_invalid_unusedExpectDirectiveIndex
+	case "Calls_to_import_are_not_permitted_in_an_optional_chain_100069":
+		return Calls_to_import_are_not_permitted_in_an_optional_chain
 	default:
 		return nil
 	}

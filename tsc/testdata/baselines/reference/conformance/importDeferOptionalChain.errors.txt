@@ -1,0 +1,11 @@
+importDeferOptionalChain.ts(1,1): error TS100069: Calls to 'import()' are not permitted in an optional chain.
+importDeferOptionalChain.ts(1,16): error TS2307: Cannot find module './a' or its corresponding type declarations.
+
+
+==== importDeferOptionalChain.ts (2 errors) ====
+    import.defer?.("./a");
+    ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS100069: Calls to 'import()' are not permitted in an optional chain.
+                   ~~~~~
+!!! error TS2307: Cannot find module './a' or its corresponding type declarations.
+    

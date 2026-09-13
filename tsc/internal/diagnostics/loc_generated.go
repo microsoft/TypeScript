@@ -5,11 +5,10 @@ package diagnostics
 import (
 	"compress/gzip"
 	_ "embed"
-	"strings"
-	"sync"
-
 	"github.com/microsoft/TypeScript/tsc/internal/json"
 	"golang.org/x/text/language"
+	"strings"
+	"sync"
 )
 
 var matcher = language.NewMatcher([]language.Tag{
