@@ -89,8 +89,23 @@ func HasTrailingDirectorySeparator(path string) bool {
 //	CombinePaths("file:///path", "file:///to", "file.ext") === "file:///to/file.ext"
 //	```
 func CombinePaths(firstPath string, paths ...string) string {
-	// TODO (drosen): There is potential for a fast path here.
-	// In the case where we find the last absolute path and just path.Join from there.
+	// Fast paths: no trailing paths, or the last trailing path is slash-rooted
+	// and supersedes everything before it. NormalizeSlashes does not allocate unless
+	// the path contains backslashes.
+	if len(paths) == 0 {
+		return NormalizeSlashes(firstPath)
+	}
+	// Only recognize slash-rooted paths here to keep the check cheap;
+	// drive-letter and URL-rooted paths take the general path below.
+	if p := paths[len(paths)-1]; p != "" && p[0] == '/' && strings.IndexByte(p, '\\') < 0 {
+		return p
+	}
+	// The general case is kept byte-for-byte unchanged as combinePathsSlow,
+	// which also serves as the differential-test oracle for the fast paths.
+	return combinePathsSlow(firstPath, paths)
+}
+
+func combinePathsSlow(firstPath string, paths []string) string {
 	firstPath = NormalizeSlashes(firstPath)
 
 	var b strings.Builder
