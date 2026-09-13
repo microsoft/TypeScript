@@ -506,8 +506,12 @@ func getTypeOfSymbolAtLocation(c *checker.Checker, symbol *ast.Symbol, node *ast
 func getDeclarationsFromType(t *checker.Type) []*ast.Node {
 	var result []*ast.Node
 	for _, t := range t.Distributed() {
-		if t.Symbol() != nil {
-			for _, decl := range t.Symbol().Declarations {
+		symbol := t.Symbol()
+		if symbol == nil {
+			symbol = t.Alias().Symbol()
+		}
+		if symbol != nil {
+			for _, decl := range symbol.Declarations {
 				result = core.AppendIfUnique(result, decl)
 			}
 		}
