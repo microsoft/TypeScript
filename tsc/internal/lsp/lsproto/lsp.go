@@ -125,36 +125,6 @@ func jsonKeyCheck(name []byte, key string) bool {
 	return len(name) == len(key)+2 && name[0] == '"' && string(name[1:len(name)-1]) == key
 }
 
-// jsonObjectRawField scans the top-level keys of a JSON object looking for the
-// given field name, and returns its raw JSON value (e.g. `"full"` with quotes).
-// Returns nil if the field is not found.
-func jsonObjectRawField(data []byte, field string) json.Value {
-	dec := json.NewDecoder(bytes.NewBuffer(data))
-	if dec.PeekKind() != '{' {
-		return nil
-	}
-	if _, err := dec.ReadToken(); err != nil {
-		return nil
-	}
-	for dec.PeekKind() != '}' {
-		name, err := dec.ReadValue()
-		if err != nil {
-			return nil
-		}
-		if jsonKeyCheck(name, field) {
-			val, err := dec.ReadValue()
-			if err != nil {
-				return nil
-			}
-			return val
-		}
-		if err := dec.SkipValue(); err != nil {
-			return nil
-		}
-	}
-	return nil
-}
-
 // jsonObjectHasKey scans the top-level keys of a JSON object looking for any of the
 // given keys. Returns the index of the first key found, or -1 if none match.
 // Bails early on first match without decoding any values.
