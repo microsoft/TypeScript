@@ -263,7 +263,7 @@ func TestImportElision(t *testing.T) {
 				},
 			}, nil)
 
-			emitResolver := c.GetEmitResolver()
+			emitResolver := c.NewEmitResolver()
 
 			opts := &transformers.TransformOptions{CompilerOptions: compilerOptions, Context: printer.NewEmitContext(), EmitResolver: emitResolver, Resolver: emitResolver}
 			file = tstransforms.NewTypeEraserTransformer(opts).TransformSourceFile(file)

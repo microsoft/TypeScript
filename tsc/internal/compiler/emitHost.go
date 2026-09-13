@@ -39,7 +39,7 @@ func newEmitHost(ctx context.Context, program *Program, file *ast.SourceFile) (*
 	checker, done := program.GetTypeCheckerForFile(ctx, file)
 	return &emitHost{
 		program:      program,
-		emitResolver: checker.GetEmitResolver(),
+		emitResolver: checker.NewEmitResolver(),
 	}, done
 }
 

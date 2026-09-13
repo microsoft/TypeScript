@@ -372,7 +372,7 @@ func (c *Checker) RequiresAddingImplicitUndefined(node *ast.Node) bool {
 	if symbol == nil {
 		return false
 	}
-	return c.GetEmitResolver().RequiresAddingImplicitUndefined(node, symbol, enclosingDeclaration)
+	return c.NewEmitResolver().RequiresAddingImplicitUndefined(node, symbol, enclosingDeclaration)
 }
 
 func (c *Checker) RemoveMissingOrUndefinedType(t *Type) *Type {
