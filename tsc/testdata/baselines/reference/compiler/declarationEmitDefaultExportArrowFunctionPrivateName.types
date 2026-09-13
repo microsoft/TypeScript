@@ -1,0 +1,32 @@
+//// [tests/cases/compiler/declarationEmitDefaultExportArrowFunctionPrivateName.ts] ////
+
+=== helper.ts ===
+declare const brand: unique symbol;
+>brand : unique symbol
+
+class Foo {
+>Foo : Foo
+
+  [brand]: number = 1;
+>[brand] : number
+>brand : unique symbol
+>1 : 1
+}
+
+export function makeFoo() {
+>makeFoo : () => Foo
+
+  return new Foo();
+>new Foo() : Foo
+>Foo : typeof Foo
+}
+
+=== repro.ts ===
+import { makeFoo } from './helper';
+>makeFoo : () => Foo
+
+export default () => makeFoo();
+>() => makeFoo() : () => Foo
+>makeFoo() : Foo
+>makeFoo : () => Foo
+
