@@ -31,12 +31,6 @@ type CheckerPool interface {
 	GetGlobalDiagnostics() []*ast.Diagnostic
 }
 
-// NewCheckerPool returns the pool the compiler would check this program with. A Program builds its
-// own, so this is for callers that supply a pool of their own and need the compiler's for checking.
-func NewCheckerPool(program *Program) CheckerPool {
-	return newCheckerPool(program)
-}
-
 type checkerPool struct {
 	program *Program
 	tracing *tracing.Tracing
@@ -322,10 +316,6 @@ func GetCheckerCount(program *Program) int {
 		checkerCount = *c
 	}
 	return max(min(checkerCount, len(program.files), 256), 1)
-}
-
-func newCheckerPool(program *Program) *checkerPool {
-	return newCheckerPoolWithTracing(program, nil)
 }
 
 func newCheckerPoolWithTracing(program *Program, tr *tracing.Tracing) *checkerPool {

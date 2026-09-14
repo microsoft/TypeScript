@@ -305,15 +305,15 @@ func (s *Snapshot) GetProjectsContainingFile(uri lsproto.DocumentUri) []ls.Proje
 }
 
 // OpenProjects returns the projects that contain at least one file open in the editor.
-// ReleaseCheckingPool drops the checkers a sweep used on a project. They hold the types of every
-// file in it, which is the largest thing a pull creates, and keeping them buys nothing: a pull that
-// finds the project unchanged answers from the result ids the client already holds without checking
-// anything, and a pull that finds it changed needs new checkers regardless.
-func (s *Snapshot) ReleaseCheckingPool(project *Project) bool {
+// ReleaseDiagnosticsCheckers drops the checkers a sweep used on a project. They hold the types of
+// every file in it, which is the largest thing a pull creates, and keeping them buys nothing: a
+// pull that finds the project unchanged answers from the result ids the client already holds
+// without checking anything, and a pull that finds it changed needs new checkers regardless.
+func (s *Snapshot) ReleaseDiagnosticsCheckers(project *Project) bool {
 	if project.checkerPool == nil {
 		return false
 	}
-	return project.checkerPool.releaseCheckingPool()
+	return project.checkerPool.releaseDiagnosticsCheckers()
 }
 
 // IncrementalProgram returns a project's program together with the record of which files a change

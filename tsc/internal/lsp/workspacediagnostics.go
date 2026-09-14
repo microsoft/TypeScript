@@ -154,9 +154,10 @@ func newWorkspaceDiagnosticsRun(server *Server, ctx context.Context, params *lsp
 	}
 }
 
-// collect reports every file owned by every project in scope. Files within a project are checked
-// one at a time because they share its single diagnostics checker, which exists to keep the walk
-// order consistent; checker pools are per project, so whole projects run concurrently.
+// collect reports every file owned by every project in scope. A project's files are split across
+// its diagnostics checkers the way a build splits them, so checking one project already uses
+// several checkers; projects run concurrently on top of that, bounded so the two together do not
+// take the machine.
 func (r *workspaceDiagnosticsRun) collect(snapshot *project.Snapshot, scope lsutil.WorkspaceDiagnosticsScope) {
 	r.collected = true
 	work := r.assignFilesToProjects(snapshot, projectsInScope(snapshot, scope))
@@ -184,7 +185,7 @@ func (r *workspaceDiagnosticsRun) checkSequentially(snapshot *project.Snapshot, 
 			continue
 		}
 		completed := r.checkProject(snapshot, pf)
-		snapshot.ReleaseCheckingPool(pf.project)
+		snapshot.ReleaseDiagnosticsCheckers(pf.project)
 		if !completed {
 			return
 		}
@@ -220,7 +221,7 @@ func (r *workspaceDiagnosticsRun) checkConcurrently(snapshot *project.Snapshot, 
 			}
 			// Hand back the checkers before the next project builds its own, so a sweep holds
 			// only as many programs' worth of types as it is checking at once.
-			defer snapshot.ReleaseCheckingPool(pf.project)
+			defer snapshot.ReleaseDiagnosticsCheckers(pf.project)
 			completed[i] = r.checkProject(snapshot, pf)
 		})
 	}
@@ -237,10 +238,10 @@ func (r *workspaceDiagnosticsRun) checkConcurrently(snapshot *project.Snapshot, 
 
 // checkProject fills in the reports for the files of one project, reporting whether it got through
 // them all. A cancelled project must not be emitted: its remaining reports are still zero values.
-// checkProject checks a project's files and builds their reports. The program checks them all in
-// one call, so the work is split across the checkers a build would use rather than being driven a
-// file at a time from here; the trade is that a project reports once it is done rather than
-// streaming as each of its files finishes.
+//
+// The program checks them all in one call, so the work is split across the checkers a build would
+// use rather than being driven a file at a time from here; the trade is that a project reports
+// once it is done rather than streaming as each of its files finishes.
 func (r *workspaceDiagnosticsRun) checkProject(snapshot *project.Snapshot, pf workspaceDiagnosticsProject) bool {
 	files := make([]*ast.SourceFile, 0, len(pf.files))
 	for _, file := range pf.files {

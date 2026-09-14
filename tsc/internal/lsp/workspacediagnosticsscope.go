@@ -14,7 +14,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 )
 
-// Each concurrent project holds its own diagnostics checker, so this bounds peak memory.
+// Each concurrent project holds a build's worth of diagnostics checkers, so this bounds peak memory.
 const workspaceDiagnosticsMaxProjects = 4
 
 // workspaceDiagnosticsConcurrency returns how many projects to check at once, mirroring the default
