@@ -2213,6 +2213,11 @@ export class Cache {
             assert.strictEqual(await type.getNonNullableType(), nonNullable);
         });
         await assertOneRequest(async () => {
+            const negatedType = await type.getNegatedType();
+            assert.ok(negatedType.flags & TypeFlags.Negated);
+            assert.strictEqual(await project.checker.getNegatedType(type), negatedType);
+        });
+        await assertOneRequest(async () => {
             const apparentType = await type.getApparentType();
             assert.strictEqual(await project.checker.getApparentType(type), apparentType);
         });

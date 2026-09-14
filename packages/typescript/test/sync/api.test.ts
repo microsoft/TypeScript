@@ -2081,6 +2081,11 @@ export class Cache {
             assert.strictEqual(type.getNonNullableType(), nonNullable);
         });
         assertOneRequest(() => {
+            const negatedType = type.getNegatedType();
+            assert.ok(negatedType.flags & TypeFlags.Negated);
+            assert.strictEqual(project.checker.getNegatedType(type), negatedType);
+        });
+        assertOneRequest(() => {
             const apparentType = type.getApparentType();
             assert.strictEqual(project.checker.getApparentType(type), apparentType);
         });
