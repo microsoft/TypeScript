@@ -8,7 +8,15 @@ import (
 	"gotest.tools/v3/assert"
 )
 
-func TestFileChangesIncludeDirectoryTombstones(t *testing.T) {
+func changeMap(changes []project.FileSourceLayerChange) map[string]bool {
+	result := make(map[string]bool, len(changes))
+	for _, change := range changes {
+		result[change.Path] = change.Recursive
+	}
+	return result
+}
+
+func TestFileSourceLayerChangesIncludeDirectoryTombstones(t *testing.T) {
 	t.Parallel()
 
 	base, err := newRequestFileSystem(&RequestFileSystem{
@@ -23,52 +31,35 @@ func TestFileChangesIncludeDirectoryTombstones(t *testing.T) {
 	}, vfstest.FromMap(map[string]string{}, true), "/")
 	assert.NilError(t, err)
 
-	var summary project.FileChangeSummary
-	addFileChanges(&summary, &RequestFileSystem{
+	changes := changeMap(getFileSourceLayerChanges(&RequestFileSystem{
 		Kind:         KindLayer,
 		Files:        map[string]string{"/replaced.ts": "new"},
 		RemovedPaths: []string{"removed", "/missing", "/replaced.ts"},
-	}, base, "/")
-	assert.Assert(t, !summary.InvalidateAll)
-	assert.Assert(t, summary.IncludesWatchChangeOutsideNodeModules)
-	assert.Equal(t, summary.Deleted.Len(), 4)
-	assert.Assert(t, summary.Deleted.Has("file:///removed"))
-	assert.Assert(t, summary.Deleted.Has("file:///alias"))
-	assert.Assert(t, summary.Deleted.Has("file:///removed/nested/file.ts"))
-	assert.Assert(t, summary.Deleted.Has("file:///alias/nested/file.ts"))
-	assert.Equal(t, summary.Changed.Len(), 1)
-	assert.Assert(t, summary.Changed.Has("file:///replaced.ts"))
+	}, base, "/", true))
+	assert.DeepEqual(t, changes, map[string]bool{
+		"/alias":                  true,
+		"/alias/nested/file.ts":   false,
+		"/missing":                true,
+		"/removed":                true,
+		"/removed/nested/file.ts": false,
+		"/replaced.ts":            false,
+	})
 }
 
-func TestFileChangesIncludeDirectoryReplacedByFile(t *testing.T) {
+func TestFileSourceLayerChangesIncludeDirectoryReplacedByFile(t *testing.T) {
 	t.Parallel()
 
-	base := vfstest.FromMap(map[string]string{
-		"/replaced/child.ts": "old",
-	}, true)
-	var summary project.FileChangeSummary
-	addFileChanges(&summary, &RequestFileSystem{
+	changes := getFileSourceLayerChanges(&RequestFileSystem{
 		Kind:  KindLayer,
 		Files: map[string]string{"/replaced": "new"},
-	}, base, "/")
-
-	assert.Assert(t, summary.Deleted.Has("file:///replaced"))
-	// replaced/child.ts not included here because it's owned by the host file system.
-	// If it were owned by the request filesystem, it would be included in the directory expansion.
-	// Instead, it will be expanded by snapshotFSBuilder at a later step.
-	assert.Assert(t, summary.Created.Has("file:///replaced"))
-	assert.Assert(t, !summary.Changed.Has("file:///replaced"))
+	}, nil, "/", true)
+	assert.DeepEqual(t, changes, []project.FileSourceLayerChange{{Path: "/replaced"}})
 }
 
-func TestFileChangesIncludeListingsAndSymlinks(t *testing.T) {
+func TestFileSourceLayerChangesIncludeListingsAndSymlinks(t *testing.T) {
 	t.Parallel()
 
-	base := vfstest.FromMap(map[string]string{
-		"/dir/old.ts":  "old listing",
-		"/link/old.ts": "old target",
-	}, true)
-	var summary project.FileChangeSummary
-	addFileChanges(&summary, &RequestFileSystem{
+	changes := changeMap(getFileSourceLayerChanges(&RequestFileSystem{
 		Kind: KindLayer,
 		Directories: map[string]RequestDirectoryEntries{
 			"/dir": {},
@@ -77,18 +68,15 @@ func TestFileChangesIncludeListingsAndSymlinks(t *testing.T) {
 			"/link": {Target: "/target"},
 			"/new":  {Target: "/host", Host: true},
 		},
-	}, base, "/")
-	assert.Assert(t, !summary.InvalidateAll)
-	assert.Equal(t, summary.Deleted.Len(), 2)
-	assert.Assert(t, summary.Deleted.Has("file:///dir"))
-	assert.Assert(t, summary.Deleted.Has("file:///link"))
-	assert.Equal(t, summary.Created.Len(), 3)
-	assert.Assert(t, summary.Created.Has("file:///dir"))
-	assert.Assert(t, summary.Created.Has("file:///link"))
-	assert.Assert(t, summary.Created.Has("file:///new"))
+	}, nil, "/", true))
+	assert.DeepEqual(t, changes, map[string]bool{
+		"/dir":  true,
+		"/link": true,
+		"/new":  true,
+	})
 }
 
-func TestFileChangesIncludeRecursiveSymlinkAliases(t *testing.T) {
+func TestFileSourceLayerChangesIncludeRecursiveSymlinkAliases(t *testing.T) {
 	t.Parallel()
 
 	base, err := newRequestFileSystem(&RequestFileSystem{
@@ -100,18 +88,17 @@ func TestFileChangesIncludeRecursiveSymlinkAliases(t *testing.T) {
 	}, vfstest.FromMap(map[string]string{}, true), "/")
 	assert.NilError(t, err)
 
-	var summary project.FileChangeSummary
-	addFileChanges(&summary, &RequestFileSystem{
+	changes := getFileSourceLayerChanges(&RequestFileSystem{
 		Kind:  KindLayer,
 		Files: map[string]string{"/dir/file.ts": "new"},
-	}, base, "/")
-	assert.Equal(t, summary.Changed.Len(), 2)
-	assert.Assert(t, summary.Changed.Has("file:///dir/file.ts"))
-	assert.Assert(t, summary.Changed.Has("file:///dir/link/file.ts"))
-	assert.Equal(t, summary.Created.Len(), 0)
+	}, base, "/", true)
+	assert.DeepEqual(t, changes, []project.FileSourceLayerChange{
+		{Path: "/dir/file.ts"},
+		{Path: "/dir/link/file.ts"},
+	})
 }
 
-func TestFileChangesIncludeRootSymlinkAliases(t *testing.T) {
+func TestFileSourceLayerChangesIncludeRootSymlinkAliases(t *testing.T) {
 	t.Parallel()
 
 	base, err := newRequestFileSystem(&RequestFileSystem{
@@ -122,17 +109,13 @@ func TestFileChangesIncludeRootSymlinkAliases(t *testing.T) {
 		},
 	}, vfstest.FromMap(map[string]string{}, true), "/")
 	assert.NilError(t, err)
-	content, ok := base.ReadFile("/link/file.ts")
-	assert.Assert(t, ok)
-	assert.Equal(t, content, "old")
 
-	var summary project.FileChangeSummary
-	addFileChanges(&summary, &RequestFileSystem{
+	changes := getFileSourceLayerChanges(&RequestFileSystem{
 		Kind:  KindLayer,
 		Files: map[string]string{"/file.ts": "new"},
-	}, base, "/")
-	assert.Equal(t, summary.Changed.Len(), 2)
-	assert.Assert(t, summary.Changed.Has("file:///file.ts"))
-	assert.Assert(t, summary.Changed.Has("file:///link/file.ts"))
-	assert.Equal(t, summary.Created.Len(), 0)
+	}, base, "/", true)
+	assert.DeepEqual(t, changes, []project.FileSourceLayerChange{
+		{Path: "/file.ts"},
+		{Path: "/link/file.ts"},
+	})
 }

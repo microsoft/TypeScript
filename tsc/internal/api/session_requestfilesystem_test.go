@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"io/fs"
 	"strconv"
 	"sync"
 	"testing"
@@ -60,6 +61,71 @@ func TestRequestLayerRemainsAboveCapturedEditorOverlays(t *testing.T) {
 	content, ok = snapshot.ReadFile("/overlayOnly.ts")
 	assert.Assert(t, ok)
 	assert.Equal(t, content, "inherited request")
+}
+
+func TestRequestFileChangeComparedAgainstEditorOverlay(t *testing.T) {
+	t.Parallel()
+
+	ctx := context.Background()
+	projectSession, _ := projecttestutil.Setup(map[string]any{
+		"/tsconfig.json": `{ "compilerOptions": { "noLib": true }, "files": ["value.ts"] }`,
+		"/value.ts":      "host",
+	})
+	defer projectSession.Close()
+	projectSession.DidOpenFile(ctx, "file:///value.ts", 1, "overlay", lsproto.LanguageKindTypeScript)
+	session := NewLSPSession(projectSession, nil)
+	defer session.Close()
+
+	base, err := session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{
+		OpenProjects: []DocumentIdentifier{{FileName: "/tsconfig.json"}},
+	})
+	assert.NilError(t, err)
+	baseProgram := session.snapshots[base.Snapshot].snapshot.ProjectCollection.GetProjectByPath("/tsconfig.json").GetProgram()
+	assert.Equal(t, baseProgram.GetSourceFile("/value.ts").Text(), "overlay")
+
+	updated, err := session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{
+		Snapshot: base.Snapshot,
+		FileSystem: &requestfilesystem.RequestFileSystem{
+			Kind:  requestfilesystem.KindLayer,
+			Files: map[string]string{"/value.ts": "host"},
+		},
+	})
+	assert.NilError(t, err)
+	program := session.snapshots[updated.Snapshot].snapshot.ProjectCollection.GetProjectByPath("/tsconfig.json").GetProgram()
+	assert.Assert(t, program != baseProgram)
+	assert.Equal(t, program.GetSourceFile("/value.ts").Text(), "host")
+}
+
+func TestRequestTombstoneComparedAgainstEditorOverlay(t *testing.T) {
+	t.Parallel()
+
+	ctx := context.Background()
+	projectSession, _ := projecttestutil.Setup(map[string]any{
+		"/tsconfig.json": `{ "compilerOptions": { "noLib": true }, "files": ["overlay.ts"] }`,
+	})
+	defer projectSession.Close()
+	projectSession.DidOpenFile(ctx, "file:///overlay.ts", 1, "overlay", lsproto.LanguageKindTypeScript)
+	session := NewLSPSession(projectSession, nil)
+	defer session.Close()
+
+	base, err := session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{
+		OpenProjects: []DocumentIdentifier{{FileName: "/tsconfig.json"}},
+	})
+	assert.NilError(t, err)
+	baseProgram := session.snapshots[base.Snapshot].snapshot.ProjectCollection.GetProjectByPath("/tsconfig.json").GetProgram()
+	assert.Assert(t, baseProgram.GetSourceFile("/overlay.ts") != nil)
+
+	updated, err := session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{
+		Snapshot: base.Snapshot,
+		FileSystem: &requestfilesystem.RequestFileSystem{
+			Kind:         requestfilesystem.KindLayer,
+			RemovedPaths: []string{"/overlay.ts"},
+		},
+	})
+	assert.NilError(t, err)
+	snapshot := session.snapshots[updated.Snapshot].snapshot
+	assert.Assert(t, snapshot.ProjectCollection.GetProjectByPath("/tsconfig.json").GetProgram().GetSourceFile("/overlay.ts") == nil)
+	assert.Assert(t, snapshot.GetFile("/overlay.ts") == nil)
 }
 
 func TestFullRequestLayerOmitsCapturedEditorOverlay(t *testing.T) {
@@ -159,6 +225,38 @@ func TestRequestSymlinkFileHandlesAreStable(t *testing.T) {
 		assert.Assert(t, first == second, path)
 		assert.Equal(t, first.FileName(), path)
 	}
+}
+
+func TestRequestFileSystemWalkDirStopsSiblingsOnFileSkipDir(t *testing.T) {
+	t.Parallel()
+
+	projectSession, _ := projecttestutil.Setup(map[string]any{})
+	defer projectSession.Close()
+	session := NewLSPSession(projectSession, nil)
+	defer session.Close()
+
+	response, err := session.handleUpdateSnapshot(context.Background(), &UpdateSnapshotParams{
+		FileSystem: &requestfilesystem.RequestFileSystem{
+			Kind: requestfilesystem.KindFull,
+			Files: map[string]string{
+				"/a.ts": "a",
+				"/b.ts": "b",
+			},
+		},
+	})
+	assert.NilError(t, err)
+
+	var paths []string
+	err = session.snapshots[response.Snapshot].snapshot.FileSystem().WalkDir("/", func(path string, entry fs.DirEntry, err error) error {
+		assert.NilError(t, err)
+		paths = append(paths, path)
+		if path == "/a.ts" {
+			return fs.SkipDir
+		}
+		return nil
+	})
+	assert.NilError(t, err)
+	assert.DeepEqual(t, paths, []string{"/", "/a.ts"})
 }
 
 func TestUpdateSnapshotUsesFullFileSystem(t *testing.T) {

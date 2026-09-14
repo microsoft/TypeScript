@@ -1,89 +1,81 @@
 package requestfilesystem
 
 import (
-	"github.com/microsoft/TypeScript/tsc/internal/ls/lsconv"
+	"cmp"
+	"slices"
+
 	"github.com/microsoft/TypeScript/tsc/internal/project"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
-	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 )
 
-func addFileChanges(summary *project.FileChangeSummary, request *RequestFileSystem, baseFS vfs.FS, currentDirectory string) {
+func getFileSourceLayerChanges(
+	request *RequestFileSystem,
+	base *requestFileSystem,
+	currentDirectory string,
+	useCaseSensitiveNames bool,
+) []project.FileSourceLayerChange {
+	if base != nil {
+		useCaseSensitiveNames = base.useCaseSensitiveNames
+	}
 	toPath := func(fileName string) tspath.Path {
-		return tspath.ToPath(fileName, currentDirectory, baseFS.UseCaseSensitiveFileNames())
+		return tspath.ToPath(fileName, currentDirectory, useCaseSensitiveNames)
 	}
-	baseRequestFS := getRequestFileSystem(baseFS)
-	addChange := func(fileName string, deleted bool) {
-		uri := lsconv.FileNameToDocumentURI(fileName)
-		if deleted {
-			if baseFS.FileExists(fileName) || baseFS.DirectoryExists(fileName) {
-				summary.Deleted.Add(uri)
-			}
-			return
-		}
-		if baseFS.FileExists(fileName) {
-			summary.Changed.Add(uri)
-		} else {
-			summary.Created.Add(uri)
+	changes := make(map[tspath.Path]project.FileSourceLayerChange)
+	add := func(fileName string, recursive bool) {
+		absolutePath := tspath.GetNormalizedAbsolutePath(fileName, currentDirectory)
+		path := toPath(absolutePath)
+		if existing, ok := changes[path]; !ok || recursive && !existing.Recursive {
+			changes[path] = project.FileSourceLayerChange{Path: absolutePath, Recursive: recursive}
 		}
 	}
-	addChangeAndAliases := func(fileName string, deleted bool) {
-		addChange(fileName, deleted)
-		if baseRequestFS != nil {
-			for _, alias := range baseRequestFS.aliasesForPath(fileName) {
-				addChange(alias, deleted)
+	addWithAliases := func(fileName string, recursive bool) {
+		add(fileName, recursive)
+		if base != nil {
+			for _, alias := range base.aliasesForPath(fileName) {
+				add(alias, recursive)
 			}
 		}
 	}
 	addRequestDescendants := func(fileName string) {
-		if baseRequestFS == nil {
+		if base == nil {
 			return
 		}
-		node, _ := baseRequestFS.paths.lookup(baseRequestFS.toPath(fileName))
+		node, _ := base.paths.lookup(base.toPath(fileName))
 		node.walkFiles(func(file *requestFile) {
-			addChangeAndAliases(file.fileName, true)
+			addWithAliases(file.fileName, false)
 		})
 	}
-	// Replacing a path's type, a listing, or a symlink can change every cached
-	// descendant. Delete events expand through the snapshot's cached directory
-	// tree and create events refresh wildcard roots and missing resolutions.
-	addReplacement := func(path string) {
-		absolutePath := tspath.GetNormalizedAbsolutePath(path, currentDirectory)
+
+	files := make(map[tspath.Path]struct{}, len(request.Files))
+	for fileName := range request.Files {
+		absolutePath := tspath.GetNormalizedAbsolutePath(fileName, currentDirectory)
+		files[toPath(absolutePath)] = struct{}{}
 		addRequestDescendants(absolutePath)
-		addChangeAndAliases(absolutePath, true)
-		summary.Created.Add(lsconv.FileNameToDocumentURI(absolutePath))
-		if baseRequestFS != nil {
-			for _, alias := range baseRequestFS.aliasesForPath(absolutePath) {
-				summary.Created.Add(lsconv.FileNameToDocumentURI(alias))
-			}
-		}
-	}
-	overlayFiles := make(map[tspath.Path]struct{}, len(request.Files))
-	for fileName, content := range request.Files {
-		absoluteFileName := tspath.GetNormalizedAbsolutePath(fileName, currentDirectory)
-		overlayFiles[toPath(absoluteFileName)] = struct{}{}
-		if baseFS.DirectoryExists(absoluteFileName) {
-			addReplacement(absoluteFileName)
-		} else if baseContent, ok := baseFS.ReadFile(absoluteFileName); ok && baseContent == content {
-			continue
-		} else {
-			addChangeAndAliases(absoluteFileName, false)
-		}
+		addWithAliases(absolutePath, false)
 	}
 	for _, removedPath := range request.RemovedPaths {
-		absoluteFileName := tspath.GetNormalizedAbsolutePath(removedPath, currentDirectory)
-		if _, replaced := overlayFiles[toPath(absoluteFileName)]; replaced {
+		absolutePath := tspath.GetNormalizedAbsolutePath(removedPath, currentDirectory)
+		if _, replaced := files[toPath(absolutePath)]; replaced {
 			continue
 		}
-		addRequestDescendants(absoluteFileName)
-		addChangeAndAliases(absoluteFileName, true)
+		addRequestDescendants(absolutePath)
+		addWithAliases(absolutePath, true)
 	}
 	for directoryName := range request.Directories {
-		addReplacement(directoryName)
+		addRequestDescendants(directoryName)
+		addWithAliases(directoryName, true)
 	}
 	for linkName := range request.Symlinks {
-		addReplacement(linkName)
+		addRequestDescendants(linkName)
+		addWithAliases(linkName, true)
 	}
-	if summary.Changed.Len()+summary.Created.Len()+summary.Deleted.Len() > 0 {
-		summary.IncludesWatchChangeOutsideNodeModules = true
+
+	result := make([]project.FileSourceLayerChange, 0, len(changes))
+	for _, change := range changes {
+		result = append(result, change)
 	}
+	slices.SortFunc(result, func(left project.FileSourceLayerChange, right project.FileSourceLayerChange) int {
+		return cmp.Compare(left.Path, right.Path)
+	})
+	return result
 }

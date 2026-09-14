@@ -19,14 +19,13 @@ func newRequestFileSystem(params *RequestFileSystem, base vfs.FS, currentDirecto
 }
 
 func newLayeredRequestFileSystem(params *RequestFileSystem, base vfs.FS, currentDirectory string) (*requestFileSystem, error) {
-	var fileChanges project.FileChangeSummary
 	var baseLayer project.FileSourceLayer
 	host := base
 	if requestBase := getRequestFileSystem(base); requestBase != nil {
 		baseLayer = requestBase
 		host = requestBase.host
 	}
-	fileSystem, err := NewForUpdate(params, baseLayer, baseLayer == nil, host, currentDirectory, &fileChanges)
+	fileSystem, _, err := NewForUpdate(params, baseLayer, baseLayer == nil, host, currentDirectory)
 	if err != nil {
 		return nil, err
 	}
@@ -108,17 +107,16 @@ func TestInitializeForUpdate(t *testing.T) {
 	t.Run("filesystem layers eagerly compact a request filesystem base", func(t *testing.T) {
 		t.Parallel()
 		host := vfstest.FromMap(map[string]string{}, true)
-		var fileChanges project.FileChangeSummary
-		base, err := NewForUpdate(&RequestFileSystem{
+		base, _, err := NewForUpdate(&RequestFileSystem{
 			Kind:  KindFull,
 			Files: map[string]string{"/base.ts": "base"},
-		}, nil, true, host, "/", &fileChanges)
+		}, nil, true, host, "/")
 		assert.NilError(t, err)
 
-		layered, err := NewForUpdate(&RequestFileSystem{
+		layered, _, err := NewForUpdate(&RequestFileSystem{
 			Kind:  KindLayer,
 			Files: map[string]string{"/layered.ts": "layered"},
-		}, base, false, host, "/", &fileChanges)
+		}, base, false, host, "/")
 		assert.NilError(t, err)
 		requestFileSystem, ok := layered.(*requestFileSystem)
 		assert.Assert(t, ok)
@@ -133,14 +131,13 @@ func TestInitializeForUpdate(t *testing.T) {
 		host := &trackingvfs.FS{Inner: vfstest.FromMap(map[string]string{
 			"/dir/host.ts": "host",
 		}, true)}
-		var fileChanges project.FileChangeSummary
-		fileSystem, err := NewForUpdate(&RequestFileSystem{
+		fileSystem, _, err := NewForUpdate(&RequestFileSystem{
 			Kind:  KindLayer,
 			Files: map[string]string{"/dir/cached.ts": "cached"},
 			Directories: map[string]RequestDirectoryEntries{
 				"/dir": {Files: []string{"cached.ts"}, Directories: []string{}},
 			},
-		}, nil, true, host, "/", &fileChanges)
+		}, nil, true, host, "/")
 		assert.NilError(t, err)
 		requestFileSystem, ok := fileSystem.(*requestFileSystem)
 		assert.Assert(t, ok)
@@ -162,11 +159,10 @@ func TestInitializeForUpdate(t *testing.T) {
 		}, host, "/")
 		assert.NilError(t, err)
 
-		var fileChanges project.FileChangeSummary
-		fileSystem, err := NewForUpdate(&RequestFileSystem{
+		fileSystem, _, err := NewForUpdate(&RequestFileSystem{
 			Kind:  KindFull,
 			Files: map[string]string{"/replacement.ts": "replacement"},
-		}, base, false, host, "/", &fileChanges)
+		}, base, false, host, "/")
 		assert.NilError(t, err)
 		requestFileSystem, ok := fileSystem.(*requestFileSystem)
 		assert.Assert(t, ok)
@@ -181,22 +177,21 @@ func TestFileSourceLayerLookup(t *testing.T) {
 	host := &trackingvfs.FS{Inner: vfstest.FromMap(map[string]string{
 		"/host.ts": "host",
 	}, true)}
-	var fileChanges project.FileChangeSummary
-	base, err := NewForUpdate(&RequestFileSystem{
+	base, _, err := NewForUpdate(&RequestFileSystem{
 		Kind:  KindFull,
 		Files: map[string]string{"/request.ts": "request"},
-	}, nil, false, host, "/", &fileChanges)
+	}, nil, false, host, "/")
 	assert.NilError(t, err)
 	baseFile := base.Lookup("/request.ts").File
 	assert.Assert(t, baseFile != nil)
 
-	layered, err := NewForUpdate(&RequestFileSystem{
+	layered, _, err := NewForUpdate(&RequestFileSystem{
 		Kind: KindLayer,
 		Files: map[string]string{
 			"/request.ts": "request",
 			"/new.ts":     "new",
 		},
-	}, base, false, host, "/", &fileChanges)
+	}, base, false, host, "/")
 	assert.NilError(t, err)
 	for path := range host.SeenFiles.Keys() {
 		host.SeenFiles.Delete(path)
@@ -206,12 +201,12 @@ func TestFileSourceLayerLookup(t *testing.T) {
 	assert.Assert(t, host.SeenFiles.IsEmpty())
 
 	for _, kind := range []Kind{KindFull, KindLayer} {
-		layer, err := NewForUpdate(&RequestFileSystem{
+		layer, _, err := NewForUpdate(&RequestFileSystem{
 			Kind: kind,
 			Directories: map[string]RequestDirectoryEntries{
 				"/dir": {Files: []string{}, Directories: []string{}},
 			},
-		}, nil, false, host, "/", &fileChanges)
+		}, nil, false, host, "/")
 		assert.NilError(t, err)
 		lookup := layer.Lookup("/dir")
 		assert.Equal(t, lookup.Kind, project.FileSourceLayerLookupDirectory)

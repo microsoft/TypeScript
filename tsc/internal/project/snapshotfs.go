@@ -56,6 +56,55 @@ type FileSourceLayer interface {
 	MergeDirectoryEntries(path string, lookup FileSourceLayerLookup, base vfs.Entries) vfs.Entries
 }
 
+type FileSourceLayerChange struct {
+	Path      string
+	Recursive bool
+}
+
+type FileSourceLayerChanges struct {
+	InvalidateAll bool
+	Changes       []FileSourceLayerChange
+}
+
+func addFileSourceLayerChanges(
+	old *SnapshotFS,
+	next *snapshotFSBuilder,
+	layerChanges FileSourceLayerChanges,
+	fileChanges *FileChangeSummary,
+) {
+	if layerChanges.InvalidateAll {
+		fileChanges.InvalidateAll = true
+		return
+	}
+	changedCount := fileChanges.Changed.Len() + fileChanges.Created.Len() + fileChanges.Deleted.Len()
+	for _, change := range layerChanges.Changes {
+		path := next.toPath(change.Path)
+		oldFile := old.GetFileByPath(change.Path, path)
+		newFile := next.GetFileByPath(change.Path, path)
+		oldDirectory := old.DirectoryExists(change.Path)
+		newDirectory := next.DirectoryExists(change.Path)
+		oldExists := oldFile != nil || oldDirectory
+		newExists := newFile != nil || newDirectory
+		uri := lsconv.FileNameToDocumentURI(change.Path)
+
+		if change.Recursive || oldDirectory != newDirectory || oldFile == nil != (newFile == nil) {
+			if oldExists {
+				fileChanges.Deleted.Add(uri)
+			}
+			if newExists {
+				fileChanges.Created.Add(uri)
+			}
+			continue
+		}
+		if oldFile != nil && newFile != nil && oldFile.Hash() != newFile.Hash() {
+			fileChanges.Changed.Add(uri)
+		}
+	}
+	if fileChanges.Changed.Len()+fileChanges.Created.Len()+fileChanges.Deleted.Len() > changedCount {
+		fileChanges.IncludesWatchChangeOutsideNodeModules = true
+	}
+}
+
 func fileSourceLayerShadows(lookup FileSourceLayerLookup) bool {
 	return lookup.Kind != FileSourceLayerLookupFallback || lookup.Redirected
 }
@@ -216,7 +265,7 @@ func walkFileSourceWorker(source FileSource, path string, entry vfs.DirEntry, wa
 		}
 		if err := walkFileSourceWorker(source, childPath, fs.FileInfoToDirEntry(childInfo), walkFn, visited); err != nil {
 			if errors.Is(err, fs.SkipDir) {
-				continue
+				return nil
 			}
 			return err
 		}

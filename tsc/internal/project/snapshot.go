@@ -423,8 +423,9 @@ const (
 // FileSystemChange replaces or removes the snapshot's top filesystem layer.
 // Adding a nil layer inherits the base snapshot's layer.
 type FileSystemChange struct {
-	Kind  FileSystemChangeKind
-	Layer FileSourceLayer
+	Kind    FileSystemChangeKind
+	Layer   FileSourceLayer
+	Changes FileSourceLayerChanges
 }
 
 type ProjectTreeRequest struct {
@@ -580,6 +581,9 @@ func (s *Snapshot) Clone(
 		}
 	}
 	fs := newSnapshotFSBuilder(host.fs, s.fs.overlays, overlays, s.fs.diskFiles, s.fs.diskDirectories, s.fs.nodeModulesRealpathAliases, host.options.PositionEncoding, host.toPath, fileSystemLayer)
+	if change.apiRequest != nil {
+		addFileSourceLayerChanges(s.fs, fs, change.apiRequest.FileSystem.Changes, &change.fileChanges)
+	}
 	change.fileChanges = s.processFileChanges(fs, change.fileChanges, logger, change.contentMapperContributions)
 
 	compilerOptionsForInferredProjects := s.compilerOptionsForInferredProjects

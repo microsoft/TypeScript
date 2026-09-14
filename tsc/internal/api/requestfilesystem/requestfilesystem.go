@@ -98,33 +98,30 @@ func getRequestFileSystem(fileSystem vfs.FS) *requestFileSystem {
 // host-backed snapshot also has no request layer. This distinction is a
 // compatibility workaround for the legacy updateSnapshot API and should be
 // removed with the snapshot state redesign in #64154.
-func NewForUpdate(params *RequestFileSystem, base project.FileSourceLayer, startsFromHost bool, host vfs.FS, currentDirectory string, fileChanges *project.FileChangeSummary) (project.FileSourceLayer, error) {
-	if startsFromHost {
-		fileChanges.InvalidateAll = true
-	}
+func NewForUpdate(params *RequestFileSystem, base project.FileSourceLayer, startsFromHost bool, host vfs.FS, currentDirectory string) (project.FileSourceLayer, project.FileSourceLayerChanges, error) {
+	changes := project.FileSourceLayerChanges{InvalidateAll: startsFromHost}
 	if params == nil {
-		return base, nil
+		return base, changes, nil
 	}
-	baseRequestFileSystem, _ := base.(*requestFileSystem)
-	baseFileSystem := host
-	if baseRequestFileSystem != nil {
-		baseFileSystem = baseRequestFileSystem
+	baseRequestFileSystem, ok := base.(*requestFileSystem)
+	if base != nil && !ok {
+		return nil, project.FileSourceLayerChanges{}, fmt.Errorf("unsupported request filesystem base layer %T", base)
 	}
 	if params.Kind == KindFull {
-		fileChanges.InvalidateAll = true
+		changes.InvalidateAll = true
 	}
 	if params.Kind == KindLayer {
-		addFileChanges(fileChanges, params, baseFileSystem, currentDirectory)
+		changes.Changes = getFileSourceLayerChanges(params, baseRequestFileSystem, currentDirectory, host.UseCaseSensitiveFileNames())
 	}
 	fileSystem, err := newRequestFileSystemWorker(params, host, currentDirectory)
 	if err != nil {
-		return nil, err
+		return nil, project.FileSourceLayerChanges{}, err
 	}
 	if baseRequestFileSystem != nil && params.Kind == KindLayer {
 		compacted := fileSystem.applyTo(*baseRequestFileSystem)
-		return &compacted, nil
+		return &compacted, changes, nil
 	}
-	return fileSystem, nil
+	return fileSystem, changes, nil
 }
 
 // IsFullLayer reports whether layer contains a complete request filesystem.
