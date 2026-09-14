@@ -19,11 +19,6 @@ type autoImportBuilderFS struct {
 
 var _ FileSource = (*autoImportBuilderFS)(nil)
 
-// FS implements FileSource.
-func (a *autoImportBuilderFS) FS() vfs.FS {
-	return a.snapshotFSBuilder.FS()
-}
-
 // GetFile implements FileSource.
 func (a *autoImportBuilderFS) GetFile(fileName string) FileHandle {
 	path := a.snapshotFSBuilder.toPath(fileName)
@@ -37,8 +32,11 @@ func (a *autoImportBuilderFS) GetFileByPath(fileName string, path tspath.Path) F
 	// diskFiles. (Note the reason we can't just use the finalized SnapshotFS is that changed
 	// files not read during other parts of the snapshot clone will be marked as dirty, but
 	// not yet refreshed from disk.)
-	if a.snapshotFSBuilder.topLayer != nil && a.snapshotFSBuilder.topLayer.Shadows(fileName) {
-		return a.snapshotFSBuilder.topSource.GetFileByPath(fileName, path)
+	if a.snapshotFSBuilder.requestLayer != nil {
+		lookup := a.snapshotFSBuilder.requestLayer.Lookup(fileName)
+		if fileSourceLayerShadows(lookup) {
+			return a.snapshotFSBuilder.getFileByPathWithLookup(fileName, path, lookup)
+		}
 	}
 	if overlay, ok := a.snapshotFSBuilder.overlays[path]; ok {
 		return overlay
@@ -60,6 +58,26 @@ func (a *autoImportBuilderFS) GetFileByPath(fileName string, path tspath.Path) F
 
 func (a *autoImportBuilderFS) GetAccessibleEntries(path string) vfs.Entries {
 	return a.snapshotFSBuilder.GetAccessibleEntries(path)
+}
+
+func (a *autoImportBuilderFS) DirectoryExists(path string) bool {
+	return a.snapshotFSBuilder.DirectoryExists(path)
+}
+
+func (a *autoImportBuilderFS) Realpath(path string) string {
+	return a.snapshotFSBuilder.Realpath(path)
+}
+
+func (a *autoImportBuilderFS) Stat(path string) vfs.FileInfo {
+	return a.snapshotFSBuilder.Stat(path)
+}
+
+func (a *autoImportBuilderFS) UseCaseSensitiveFileNames() bool {
+	return a.snapshotFSBuilder.UseCaseSensitiveFileNames()
+}
+
+func (a *autoImportBuilderFS) WalkDir(root string, walkFn vfs.WalkDirFunc) error {
+	return a.snapshotFSBuilder.WalkDir(root, walkFn)
 }
 
 // FileExists implements FileSource.

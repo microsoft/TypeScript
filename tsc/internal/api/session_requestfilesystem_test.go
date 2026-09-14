@@ -131,6 +131,36 @@ func TestRequestFileReplacesCachedDirectory(t *testing.T) {
 	assert.Assert(t, !ok)
 }
 
+func TestRequestSymlinkFileHandlesAreStable(t *testing.T) {
+	t.Parallel()
+
+	projectSession, _ := projecttestutil.Setup(map[string]any{
+		"/target.ts": "target",
+	})
+	defer projectSession.Close()
+	session := NewLSPSession(projectSession, nil)
+	defer session.Close()
+
+	response, err := session.handleUpdateSnapshot(context.Background(), &UpdateSnapshotParams{
+		FileSystem: &requestfilesystem.RequestFileSystem{
+			Kind: requestfilesystem.KindLayer,
+			Symlinks: map[string]requestfilesystem.RequestSymlink{
+				"/alias.ts":     {Target: "/target.ts"},
+				"/hostAlias.ts": {Target: "/target.ts", Host: true},
+			},
+		},
+	})
+	assert.NilError(t, err)
+	snapshot := session.snapshots[response.Snapshot].snapshot
+	for _, path := range []string{"/alias.ts", "/hostAlias.ts"} {
+		first := snapshot.GetFile(path)
+		second := snapshot.GetFile(path)
+		assert.Assert(t, first != nil, path)
+		assert.Assert(t, first == second, path)
+		assert.Equal(t, first.FileName(), path)
+	}
+}
+
 func TestUpdateSnapshotUsesFullFileSystem(t *testing.T) {
 	t.Parallel()
 

@@ -127,7 +127,7 @@ func (s *Snapshot) cloneForProgram(
 	}
 
 	start := time.Now()
-	fs := newSnapshotFSBuilder(store.fs, s.fs.overlays, s.fs.overlays, s.fs.diskFiles, s.fs.diskDirectories, s.fs.nodeModulesRealpathAliases, store.options.PositionEncoding, store.toPath, s.fs.topLayer)
+	fs := newSnapshotFSBuilder(store.fs, s.fs.overlays, s.fs.overlays, s.fs.diskFiles, s.fs.diskDirectories, s.fs.nodeModulesRealpathAliases, store.options.PositionEncoding, store.toPath, s.fs.requestLayer)
 	fileChanges = s.processFileChanges(fs, fileChanges, logger, nil)
 
 	newSnapshotID := store.nextSnapshotID()
@@ -378,7 +378,7 @@ func (s *Snapshot) FileSystem() vfs.FS {
 }
 
 func (s *Snapshot) FileSystemLayer() FileSourceLayer {
-	return s.fs.topLayer
+	return s.fs.requestLayer
 }
 
 func (s *Snapshot) ReadFile(fileName string) (string, bool) {
@@ -568,7 +568,7 @@ func (s *Snapshot) Clone(
 		inferredContentMappers = change.contentMapperContributions.Mappers
 		inferredContentMapperExtensions = change.contentMapperContributions.Extensions
 	}
-	fileSystemLayer := s.fs.topLayer
+	fileSystemLayer := s.fs.requestLayer
 	if change.apiRequest != nil {
 		if change.apiRequest.FileSystem.Kind == FileSystemChangeKindRemove {
 			if change.apiRequest.FileSystem.Layer != nil {

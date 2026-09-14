@@ -122,7 +122,7 @@ func TestInitializeForUpdate(t *testing.T) {
 		assert.NilError(t, err)
 		requestFileSystem, ok := layered.(*requestFileSystem)
 		assert.Assert(t, ok)
-		assert.Assert(t, requestFileSystem.baseFileSystem() == host)
+		assert.Assert(t, requestFileSystem.host == host)
 		assert.Equal(t, requestFileSystem.kind, KindFull)
 		assert.Assert(t, requestFileSystem.FileExists("/base.ts"))
 		assert.Assert(t, requestFileSystem.FileExists("/layered.ts"))
@@ -144,11 +144,10 @@ func TestInitializeForUpdate(t *testing.T) {
 		assert.NilError(t, err)
 		requestFileSystem, ok := fileSystem.(*requestFileSystem)
 		assert.Assert(t, ok)
-		mounted := requestFileSystem.mountFS(host)
 		// Change generation may inspect the old directory; reading the supplied
 		// complete listing itself must not fall back to the host.
 		host.SeenFiles.Delete("/dir")
-		assert.DeepEqual(t, mounted.GetAccessibleEntries("/dir").Files, []string{"cached.ts"})
+		assert.DeepEqual(t, requestFileSystem.GetAccessibleEntries("/dir").Files, []string{"cached.ts"})
 		assert.Assert(t, !host.SeenFiles.Has("/dir"))
 	})
 
@@ -171,9 +170,53 @@ func TestInitializeForUpdate(t *testing.T) {
 		assert.NilError(t, err)
 		requestFileSystem, ok := fileSystem.(*requestFileSystem)
 		assert.Assert(t, ok)
-		assert.Assert(t, requestFileSystem.baseFileSystem() == host)
-		assert.Assert(t, getRequestFileSystem(requestFileSystem.baseFileSystem()) == nil)
+		assert.Assert(t, requestFileSystem.host == host)
+		assert.Assert(t, getRequestFileSystem(requestFileSystem.host) == nil)
 	})
+}
+
+func TestFileSourceLayerLookup(t *testing.T) {
+	t.Parallel()
+
+	host := &trackingvfs.FS{Inner: vfstest.FromMap(map[string]string{
+		"/host.ts": "host",
+	}, true)}
+	var fileChanges project.FileChangeSummary
+	base, err := NewForUpdate(&RequestFileSystem{
+		Kind:  KindFull,
+		Files: map[string]string{"/request.ts": "request"},
+	}, nil, false, host, "/", &fileChanges)
+	assert.NilError(t, err)
+	baseFile := base.Lookup("/request.ts").File
+	assert.Assert(t, baseFile != nil)
+
+	layered, err := NewForUpdate(&RequestFileSystem{
+		Kind: KindLayer,
+		Files: map[string]string{
+			"/request.ts": "request",
+			"/new.ts":     "new",
+		},
+	}, base, false, host, "/", &fileChanges)
+	assert.NilError(t, err)
+	for path := range host.SeenFiles.Keys() {
+		host.SeenFiles.Delete(path)
+	}
+	assert.Assert(t, layered.Lookup("/request.ts").File == baseFile)
+	assert.Equal(t, layered.Lookup("/host.ts").Kind, project.FileSourceLayerLookupMissing)
+	assert.Assert(t, host.SeenFiles.IsEmpty())
+
+	for _, kind := range []Kind{KindFull, KindLayer} {
+		layer, err := NewForUpdate(&RequestFileSystem{
+			Kind: kind,
+			Directories: map[string]RequestDirectoryEntries{
+				"/dir": {Files: []string{}, Directories: []string{}},
+			},
+		}, nil, false, host, "/", &fileChanges)
+		assert.NilError(t, err)
+		lookup := layer.Lookup("/dir")
+		assert.Equal(t, lookup.Kind, project.FileSourceLayerLookupDirectory)
+		assert.Assert(t, !lookup.NeedsFallback)
+	}
 }
 
 func TestRequestFileSystemCompleteDirectoryListingsFullExplicitReplacement(t *testing.T) {
@@ -270,8 +313,8 @@ func testCompleteDirectoryListing(t *testing.T, kind Kind, explicit bool, replac
 		assert.DeepEqual(t, entries.Directories, append([]string{"added-dir"}, replacement.Directories...))
 	}
 	verify()
-	assert.Assert(t, layered.baseFileSystem() == host)
-	assert.Assert(t, next.baseFileSystem() == host)
+	assert.Assert(t, layered.host == host)
+	assert.Assert(t, next.host == host)
 	verify()
 }
 
@@ -473,7 +516,7 @@ func testSymlinkReplacesDirectory(t *testing.T, options symlinkReplacementOption
 	assert.NilError(t, err)
 	verifyLinked := func(fileSystem *requestFileSystem) {
 		t.Helper()
-		assert.Assert(t, fileSystem.baseFileSystem() == host)
+		assert.Assert(t, fileSystem.host == host)
 		assert.Equal(t, fileSystem.kind, options.kind)
 		assert.Assert(t, fileSystem.DirectoryExists(linkPath))
 		assert.Assert(t, !fileSystem.FileExists(linkPath))
@@ -1081,7 +1124,7 @@ func TestRequestFileSystem(t *testing.T) {
 		assert.NilError(t, err)
 		base := getRequestFileSystem(baseFS)
 		assert.Assert(t, base != nil)
-		assert.Assert(t, base.baseFileSystem() == host)
+		assert.Assert(t, base.host == host)
 		assert.Assert(t, !base.FileExists("/created-after-base.ts"))
 		assert.NilError(t, host.WriteFile("/created-after-base.ts", "created"))
 
@@ -1092,11 +1135,11 @@ func TestRequestFileSystem(t *testing.T) {
 		assert.NilError(t, err)
 		layered := getRequestFileSystem(layeredFS)
 		assert.Assert(t, layered != nil)
-		assert.Assert(t, layered.baseFileSystem() == host)
+		assert.Assert(t, layered.host == host)
 		assert.Assert(t, layered.FileExists("/created-after-base.ts"))
 		assert.NilError(t, host.Remove("/created-after-base.ts"))
 
-		assert.Assert(t, layered.baseFileSystem() == host)
+		assert.Assert(t, layered.host == host)
 		assert.Assert(t, !layered.FileExists("/created-after-base.ts"))
 		contents, ok := layered.ReadFile("/host.ts")
 		assert.Assert(t, ok)
@@ -1630,7 +1673,7 @@ func TestRequestFileSystem(t *testing.T) {
 		}, baseFS, "/")
 		assert.NilError(t, err)
 		layered := getRequestFileSystem(layeredFS)
-		assert.Assert(t, layered.baseFileSystem() == host)
+		assert.Assert(t, layered.host == host)
 		assert.Equal(t, layered.kind, KindLayer)
 
 		for path, expected := range map[string]string{
@@ -1676,7 +1719,7 @@ func TestRequestFileSystem(t *testing.T) {
 		assert.NilError(t, err)
 		layered := getRequestFileSystem(layeredFS)
 		assert.Equal(t, layered.kind, KindFull)
-		assert.Assert(t, layered.baseFileSystem() == host)
+		assert.Assert(t, layered.host == host)
 
 		for path, expected := range map[string]string{
 			"/link/inherited.ts": "inherited",

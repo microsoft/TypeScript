@@ -56,29 +56,19 @@ type RequestFileSystem struct {
 	RemovedPaths []string `json:"removedPaths,omitempty"`
 }
 
-// requestFileSystem stores one compacted request layer. When mounted, base is
-// the FileSource view below the request layer; host remains the session host
-// used by explicit host symlinks.
+// requestFileSystem stores one compacted request layer.
 type requestFileSystem struct {
 	kind Kind
-	// base is the mounted FileSource projected as a vfs.FS.
-	base vfs.FS
-	// host is the original session filesystem used by explicit host symlinks.
+	// host is the fallback for its standalone vfs.FS view and the target of
+	// explicit host symlinks. Pure FileSourceLayer lookups do not access it.
 	host                  vfs.FS
 	currentDirectory      string
 	useCaseSensitiveNames bool
 	paths                 *requestPathNode
+	handles               *collections.SyncMap[tspath.Path, project.FileHandle]
 }
 
 var _ project.FileSourceLayer = (*requestFileSystem)(nil)
-
-type requestFileSource struct {
-	request *requestFileSystem
-	base    project.FileSource
-	handles collections.SyncMap[tspath.Path, project.FileHandle]
-}
-
-var _ project.FileSource = (*requestFileSource)(nil)
 
 type resolvedRequestPath struct {
 	path            string
@@ -118,7 +108,7 @@ func NewForUpdate(params *RequestFileSystem, base project.FileSourceLayer, start
 	baseRequestFileSystem, _ := base.(*requestFileSystem)
 	baseFileSystem := host
 	if baseRequestFileSystem != nil {
-		baseFileSystem = baseRequestFileSystem.mountFS(host)
+		baseFileSystem = baseRequestFileSystem
 	}
 	if params.Kind == KindFull {
 		fileChanges.InvalidateAll = true
@@ -150,11 +140,11 @@ func newRequestFileSystemWorker(params *RequestFileSystem, host vfs.FS, currentD
 
 	result := requestFileSystem{
 		kind:                  params.Kind,
-		base:                  host,
 		host:                  host,
 		currentDirectory:      currentDirectory,
 		useCaseSensitiveNames: host.UseCaseSensitiveFileNames(),
 		paths:                 &requestPathNode{},
+		handles:               &collections.SyncMap[tspath.Path, project.FileHandle]{},
 	}
 	result.registerDirectory(currentDirectory)
 	for fileName, content := range params.Files {
@@ -223,76 +213,81 @@ func newRequestFileSystemWorker(params *RequestFileSystem, host vfs.FS, currentD
 	return &result, nil
 }
 
-func (s requestFileSystem) baseFileSystem() vfs.FS {
-	return s.base
+func (s *requestFileSystem) Lookup(path string) project.FileSourceLayerLookup {
+	absolutePath := s.toAbsolutePath(path)
+	if info, fallback := s.localPathInfo(absolutePath); info != nil {
+		return s.localLookup(info, absolutePath, absolutePath, false)
+	} else if fallback == requestFallbackMissing {
+		return project.FileSourceLayerLookup{Kind: project.FileSourceLayerLookupMissing, Path: absolutePath}
+	}
+	resolved := s.resolvePath(path)
+	if !resolved.ok {
+		return project.FileSourceLayerLookup{Kind: project.FileSourceLayerLookupMissing, Path: absolutePath}
+	}
+	if info, fallback := s.localPathInfo(resolved.path); !resolved.host && info != nil {
+		return s.localLookup(info, resolved.path, absolutePath, resolved.followedSymlink)
+	} else if fallback == requestFallbackMissing {
+		return project.FileSourceLayerLookup{Kind: project.FileSourceLayerLookupMissing, Path: resolved.path, Redirected: resolved.followedSymlink}
+	}
+	if resolved.host {
+		return project.FileSourceLayerLookup{Kind: project.FileSourceLayerLookupHost, Path: resolved.path, Redirected: resolved.followedSymlink}
+	}
+	if s.kind == KindLayer {
+		return project.FileSourceLayerLookup{Kind: project.FileSourceLayerLookupFallback, Path: resolved.path, Redirected: resolved.followedSymlink}
+	}
+	return project.FileSourceLayerLookup{Kind: project.FileSourceLayerLookupMissing, Path: resolved.path, Redirected: resolved.followedSymlink}
 }
 
-func (s *requestFileSystem) mountFS(base vfs.FS) *requestFileSystem {
-	mounted := *s
-	mounted.base = base
-	return &mounted
-}
-
-func (s *requestFileSystem) Mount(base project.FileSource, baseFS vfs.FS) project.FileSource {
-	return &requestFileSource{
-		request: s.mountFS(baseFS),
-		base:    base,
+func (s *requestFileSystem) localLookup(info vfs.FileInfo, path string, requestedPath string, redirected bool) project.FileSourceLayerLookup {
+	if info.IsDir() {
+		directory := info.(*requestDirectory)
+		return project.FileSourceLayerLookup{
+			Kind:          project.FileSourceLayerLookupDirectory,
+			Path:          path,
+			Info:          info,
+			Redirected:    redirected,
+			NeedsFallback: s.kind == KindLayer && directory.listing == nil && !s.blocksFallback(requestedPath) && !s.blocksFallback(path),
+		}
 	}
-}
-
-func (s *requestFileSystem) Shadows(path string) bool {
-	if s.kind == KindFull {
-		return true
-	}
-	lookup := s.lookupPath(path)
-	return !lookup.ok || lookup.info != nil || lookup.followedSymlink
-}
-
-func (s *requestFileSource) FS() vfs.FS {
-	return s.request
-}
-
-func (s *requestFileSource) GetFile(fileName string) project.FileHandle {
-	return s.GetFileByPath(fileName, s.request.toPath(fileName))
-}
-
-func (s *requestFileSource) GetFileByPath(fileName string, path tspath.Path) project.FileHandle {
-	if !s.request.Shadows(fileName) {
-		return s.base.GetFileByPath(fileName, path)
-	}
-	lookup := s.request.lookupPath(fileName)
-	if !lookup.ok || lookup.info != nil && lookup.info.IsDir() {
-		return nil
-	}
-	if file, ok := lookup.info.(*requestFile); ok && !lookup.followedSymlink {
-		return file.fileHandle()
-	}
-	if handle, ok := s.handles.Load(path); ok {
-		return handle
-	}
-	content, ok := s.request.ReadFile(fileName)
+	file, ok := info.(*requestFile)
 	if !ok {
-		return nil
+		return project.FileSourceLayerLookup{Kind: project.FileSourceLayerLookupMissing, Path: path, Redirected: redirected}
 	}
-	handle, _ := s.handles.LoadOrStore(path, project.NewFileHandle(fileName, content))
-	return handle
+	if !redirected {
+		return project.FileSourceLayerLookup{
+			Kind: project.FileSourceLayerLookupFile,
+			Path: path,
+			File: file.fileHandle(),
+			Info: file,
+		}
+	}
+	handlePath := s.toPath(requestedPath)
+	if handle, ok := s.handles.Load(handlePath); ok {
+		return project.FileSourceLayerLookup{Kind: project.FileSourceLayerLookupFile, Path: path, File: handle, Info: file, Redirected: true}
+	}
+	handle, _ := s.handles.LoadOrStore(handlePath, project.NewFileHandle(requestedPath, file.content))
+	return project.FileSourceLayerLookup{Kind: project.FileSourceLayerLookupFile, Path: path, File: handle, Info: file, Redirected: true}
 }
 
-func (s *requestFileSource) FileExists(fileName string, path tspath.Path) bool {
-	if s.request.Shadows(fileName) {
-		return s.request.FileExists(fileName)
+func (s *requestFileSystem) MergeDirectoryEntries(path string, lookup project.FileSourceLayerLookup, base vfs.Entries) vfs.Entries {
+	if lookup.Kind == project.FileSourceLayerLookupFallback || lookup.Kind == project.FileSourceLayerLookupHost {
+		return s.filterLocalEntries(path, s.removeEntries(lookup.Path, base))
 	}
-	return s.base.FileExists(fileName, path)
-}
-
-func (s *requestFileSource) GetAccessibleEntries(path string) vfs.Entries {
-	return s.request.GetAccessibleEntries(path)
+	localEntries, _, _ := s.getLocalEntries(lookup.Path)
+	var result vfs.Entries
+	if lookup.NeedsFallback {
+		result = s.removeEntries(lookup.Path, base)
+		result = mergeEntries(result, localEntries, s.equalEntryNames)
+	} else {
+		result = localEntries
+	}
+	result = s.addUnclassifiedSymlinkEntries(lookup.Path, result)
+	return s.filterLocalEntries(path, result)
 }
 
 func (s requestFileSystem) applyTo(base requestFileSystem) requestFileSystem {
 	s.paths = composeRequestPaths(base.paths, s.paths, requestFallbackAllowed, s.useCaseSensitiveNames)
 	s.kind = base.kind
-	s.base = base.base
 	s.host = base.host
 	return s
 }
@@ -449,7 +444,7 @@ func (s requestFileSystem) lookupPath(path string) requestPathLookup {
 		if resolved.host {
 			result.fileSystem = s.host
 		} else {
-			result.fileSystem = s.base
+			result.fileSystem = s.host
 		}
 		result.ok = result.fileSystem != nil
 	}
@@ -464,7 +459,7 @@ func (s requestFileSystem) mutationPath(path string) (vfs.FS, string, bool) {
 	if !resolved.ok {
 		return nil, "", false
 	}
-	return s.base, resolved.path, s.base != nil
+	return s.host, resolved.path, s.host != nil
 }
 
 func cloneEntries(entries vfs.Entries) vfs.Entries {
@@ -527,7 +522,7 @@ func (s requestFileSystem) GetAccessibleEntries(directoryName string) vfs.Entrie
 		localEntries, explicit, _ := s.getLocalEntries(lookup.path)
 		result = localEntries
 		if s.kind == KindLayer && !explicit && !s.blocksFallback(directoryName) && !s.blocksFallback(lookup.path) {
-			result = s.removeEntries(lookup.path, s.baseFileSystem().GetAccessibleEntries(lookup.path))
+			result = s.removeEntries(lookup.path, s.host.GetAccessibleEntries(lookup.path))
 			result = mergeEntries(result, localEntries, s.equalEntryNames)
 		}
 		result = s.addSymlinkEntries(lookup.path, result)
@@ -659,6 +654,27 @@ func (s requestFileSystem) addSymlinkEntries(directoryName string, entries vfs.E
 	}
 	slices.Sort(result.Files)
 	slices.Sort(result.Directories)
+	return result
+}
+
+func (s requestFileSystem) addUnclassifiedSymlinkEntries(directoryName string, entries vfs.Entries) vfs.Entries {
+	result := cloneEntries(entries)
+	if result.Symlinks == nil {
+		result.Symlinks = map[string]struct{}{}
+	}
+	directoryPath := s.toPath(directoryName)
+	if node, _ := s.paths.lookup(directoryPath); node != nil {
+		for _, child := range node.children {
+			symlink, ok := child.entry.(*requestSymlink)
+			if !ok {
+				continue
+			}
+			name := tspath.GetBaseFileName(symlink.linkName)
+			result.Files = s.deleteEntryName(result.Files, name)
+			result.Directories = s.deleteEntryName(result.Directories, name)
+			result.Symlinks[name] = struct{}{}
+		}
+	}
 	return result
 }
 
