@@ -700,6 +700,9 @@ func (c *Checker) narrowTypeByTypeFacts(t *Type, impliedType *Type, facts TypeFa
 }
 
 func (c *Checker) narrowTypeByDiscriminantProperty(t *Type, access *ast.Node, operator ast.Kind, value *ast.Node, assumeTrue bool) *Type {
+	if c.strictNullChecks && isNonNullAccess(access) && c.maybeTypeOfKind(t, TypeFlagsNullable) {
+		t = c.getTypeWithFacts(t, TypeFactsNEUndefinedOrNull)
+	}
 	if (operator == ast.KindEqualsEqualsEqualsToken || operator == ast.KindExclamationEqualsEqualsToken) && t.flags&TypeFlagsUnion != 0 {
 		keyPropertyName := c.getKeyPropertyName(t)
 		if keyPropertyName != "" {
