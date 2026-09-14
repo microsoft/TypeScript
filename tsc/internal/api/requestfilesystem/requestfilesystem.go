@@ -24,8 +24,9 @@ const (
 	KindLayer Kind = "layer"
 )
 
-// RequestDirectoryEntries is a cached directory listing. Entry names are
-// relative to the directory, matching vfs.GetAccessibleEntries.
+// RequestDirectoryEntries is a complete cached result for GetAccessibleEntries.
+// Entry names are relative to the directory. Listings do not constrain direct
+// descendant lookups, which may still fall back in a layered filesystem.
 type RequestDirectoryEntries struct {
 	Files       []string `json:"files" nonnil:"true"`
 	Directories []string `json:"directories" nonnil:"true"`

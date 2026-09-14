@@ -57,8 +57,14 @@ type FileSourceLayer interface {
 }
 
 type FileSourceLayerChange struct {
-	Path      string
-	Recursive bool
+	Path string
+	// Structural emits delete-plus-create for Path so directory/config discovery
+	// is recomputed even when the path's file/directory kind is unchanged.
+	Structural bool
+	// ShadowsDescendants compares overlay descendants individually because they
+	// are not present in the disk directory cache used for deletion expansion.
+	// Complete directory listings are structural but do not shadow direct reads.
+	ShadowsDescendants bool
 }
 
 type FileSourceLayerChanges struct {
@@ -77,28 +83,57 @@ func addFileSourceLayerChanges(
 		return
 	}
 	changedCount := fileChanges.Changed.Len() + fileChanges.Created.Len() + fileChanges.Deleted.Len()
-	for _, change := range layerChanges.Changes {
-		path := next.toPath(change.Path)
-		oldFile := old.GetFileByPath(change.Path, path)
-		newFile := next.GetFileByPath(change.Path, path)
-		oldDirectory := old.DirectoryExists(change.Path)
-		newDirectory := next.DirectoryExists(change.Path)
+	processed := make(map[tspath.Path]struct{})
+	expandedOverlayDirectories := make(map[tspath.Path]struct{})
+	addChange := func(fileName string, structural bool) (replacesDirectoryWithFile bool) {
+		path := next.toPath(fileName)
+		if _, ok := processed[path]; ok {
+			return false
+		}
+		processed[path] = struct{}{}
+		oldFile := old.GetFileByPath(fileName, path)
+		newFile := next.GetFileByPath(fileName, path)
+		oldDirectory := old.DirectoryExists(fileName)
+		newDirectory := next.DirectoryExists(fileName)
 		oldExists := oldFile != nil || oldDirectory
 		newExists := newFile != nil || newDirectory
-		uri := lsconv.FileNameToDocumentURI(change.Path)
+		uri := lsconv.FileNameToDocumentURI(fileName)
 
-		if change.Recursive || oldDirectory != newDirectory || oldFile == nil != (newFile == nil) {
+		if structural || oldDirectory != newDirectory || (oldFile == nil) != (newFile == nil) {
 			if oldExists {
 				fileChanges.Deleted.Add(uri)
 			}
 			if newExists {
 				fileChanges.Created.Add(uri)
 			}
-			continue
+			return oldDirectory && newFile != nil
 		}
 		if oldFile != nil && newFile != nil && oldFile.Hash() != newFile.Hash() {
 			fileChanges.Changed.Add(uri)
 		}
+		return false
+	}
+	var addOverlayDescendants func(tspath.Path)
+	addOverlayDescendants = func(directoryPath tspath.Path) {
+		if _, ok := expandedOverlayDirectories[directoryPath]; ok {
+			return
+		}
+		expandedOverlayDirectories[directoryPath] = struct{}{}
+		for childPath := range old.overlayDirectories[directoryPath] {
+			if overlay, ok := old.overlays[childPath]; ok {
+				addChange(overlay.FileName(), false)
+			} else {
+				addOverlayDescendants(childPath)
+			}
+		}
+	}
+	for _, change := range layerChanges.Changes {
+		replacesDirectoryWithFile := addChange(change.Path, change.Structural)
+		shadowsDescendants := change.ShadowsDescendants || replacesDirectoryWithFile
+		if !shadowsDescendants {
+			continue
+		}
+		addOverlayDescendants(next.toPath(change.Path))
 	}
 	if fileChanges.Changed.Len()+fileChanges.Created.Len()+fileChanges.Deleted.Len() > changedCount {
 		fileChanges.IncludesWatchChangeOutsideNodeModules = true

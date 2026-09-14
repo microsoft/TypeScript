@@ -1437,8 +1437,9 @@ export interface EmitOutputFile {
 }
 
 /**
- * RequestDirectoryEntries is a cached directory listing. Entry names are
- * relative to the directory, matching vfs.GetAccessibleEntries.
+ * RequestDirectoryEntries is a complete cached result for GetAccessibleEntries.
+ * Entry names are relative to the directory. Listings do not constrain direct
+ * descendant lookups, which may still fall back in a layered filesystem.
  */
 export interface RequestDirectoryEntries {
     files: string[];

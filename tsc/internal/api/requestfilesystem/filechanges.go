@@ -21,18 +21,20 @@ func getFileSourceLayerChanges(
 		return tspath.ToPath(fileName, currentDirectory, useCaseSensitiveNames)
 	}
 	changes := make(map[tspath.Path]project.FileSourceLayerChange)
-	add := func(fileName string, recursive bool) {
+	add := func(fileName string, structural bool, shadowsDescendants bool) {
 		absolutePath := tspath.GetNormalizedAbsolutePath(fileName, currentDirectory)
 		path := toPath(absolutePath)
-		if existing, ok := changes[path]; !ok || recursive && !existing.Recursive {
-			changes[path] = project.FileSourceLayerChange{Path: absolutePath, Recursive: recursive}
-		}
+		existing := changes[path]
+		existing.Path = absolutePath
+		existing.Structural = existing.Structural || structural
+		existing.ShadowsDescendants = existing.ShadowsDescendants || shadowsDescendants
+		changes[path] = existing
 	}
-	addWithAliases := func(fileName string, recursive bool) {
-		add(fileName, recursive)
+	addWithAliases := func(fileName string, structural bool, shadowsDescendants bool) {
+		add(fileName, structural, shadowsDescendants)
 		if base != nil {
 			for _, alias := range base.aliasesForPath(fileName) {
-				add(alias, recursive)
+				add(alias, structural, shadowsDescendants)
 			}
 		}
 	}
@@ -42,7 +44,7 @@ func getFileSourceLayerChanges(
 		}
 		node, _ := base.paths.lookup(base.toPath(fileName))
 		node.walkFiles(func(file *requestFile) {
-			addWithAliases(file.fileName, false)
+			addWithAliases(file.fileName, false, false)
 		})
 	}
 
@@ -51,7 +53,7 @@ func getFileSourceLayerChanges(
 		absolutePath := tspath.GetNormalizedAbsolutePath(fileName, currentDirectory)
 		files[toPath(absolutePath)] = struct{}{}
 		addRequestDescendants(absolutePath)
-		addWithAliases(absolutePath, false)
+		addWithAliases(absolutePath, false, false)
 	}
 	for _, removedPath := range request.RemovedPaths {
 		absolutePath := tspath.GetNormalizedAbsolutePath(removedPath, currentDirectory)
@@ -59,15 +61,15 @@ func getFileSourceLayerChanges(
 			continue
 		}
 		addRequestDescendants(absolutePath)
-		addWithAliases(absolutePath, true)
+		addWithAliases(absolutePath, true, true)
 	}
 	for directoryName := range request.Directories {
 		addRequestDescendants(directoryName)
-		addWithAliases(directoryName, true)
+		addWithAliases(directoryName, true, false)
 	}
 	for linkName := range request.Symlinks {
 		addRequestDescendants(linkName)
-		addWithAliases(linkName, true)
+		addWithAliases(linkName, true, true)
 	}
 
 	result := make([]project.FileSourceLayerChange, 0, len(changes))

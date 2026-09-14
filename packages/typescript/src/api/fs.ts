@@ -39,7 +39,10 @@ export interface FileSystem {
 export const fsCallbackNames = ["readFile", "fileExists", "directoryExists", "getAccessibleEntries", "realpath", "writeFile"] as const;
 
 export interface CreateFileSystemOptions {
-    /** Complete directory listings. Full filesystems derive these from `files` when omitted. */
+    /**
+     * Complete `getAccessibleEntries` results. These do not constrain direct descendant lookups.
+     * Full filesystems derive listings from `files` when omitted.
+     */
     directories?: Record<string, RequestDirectoryEntries>;
     symlinks?: Record<string, RequestSymlink>;
     /** Files or directory trees hidden from an underlying snapshot or host filesystem. */

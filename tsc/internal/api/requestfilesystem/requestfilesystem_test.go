@@ -244,6 +244,26 @@ func TestRequestFileSystemCompleteDirectoryListingsLayerExplicitEmpty(t *testing
 	testCompleteDirectoryListing(t, KindLayer, true, RequestDirectoryEntries{Files: []string{}, Directories: []string{}})
 }
 
+func TestRequestFileSystemCompleteDirectoryListingPreservesChildFallback(t *testing.T) {
+	t.Parallel()
+
+	host := vfstest.FromMap(map[string]string{
+		"/dir/included.ts": "included",
+		"/dir/omitted.ts":  "omitted",
+	}, true)
+	layer, err := newRequestFileSystem(&RequestFileSystem{
+		Kind: KindLayer,
+		Directories: map[string]RequestDirectoryEntries{
+			"/dir": {Files: []string{"included.ts"}, Directories: []string{}},
+		},
+	}, host, "/")
+	assert.NilError(t, err)
+
+	assert.Assert(t, layer.FileExists("/dir/included.ts"))
+	assert.Assert(t, layer.FileExists("/dir/omitted.ts"))
+	assert.Equal(t, layer.Lookup("/dir/omitted.ts").Kind, project.FileSourceLayerLookupFallback)
+}
+
 func TestRequestFileSystemCompleteDirectoryListingsLayerDerivedReplacement(t *testing.T) {
 	t.Parallel()
 	testCompleteDirectoryListing(t, KindLayer, false, RequestDirectoryEntries{Files: []string{"replacement.ts"}, Directories: []string{"replacement-dir"}})

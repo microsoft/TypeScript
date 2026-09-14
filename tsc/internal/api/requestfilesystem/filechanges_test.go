@@ -8,10 +8,10 @@ import (
 	"gotest.tools/v3/assert"
 )
 
-func changeMap(changes []project.FileSourceLayerChange) map[string]bool {
-	result := make(map[string]bool, len(changes))
+func changeMap(changes []project.FileSourceLayerChange) map[string][2]bool {
+	result := make(map[string][2]bool, len(changes))
 	for _, change := range changes {
-		result[change.Path] = change.Recursive
+		result[change.Path] = [2]bool{change.Structural, change.ShadowsDescendants}
 	}
 	return result
 }
@@ -36,13 +36,13 @@ func TestFileSourceLayerChangesIncludeDirectoryTombstones(t *testing.T) {
 		Files:        map[string]string{"/replaced.ts": "new"},
 		RemovedPaths: []string{"removed", "/missing", "/replaced.ts"},
 	}, base, "/", true))
-	assert.DeepEqual(t, changes, map[string]bool{
-		"/alias":                  true,
-		"/alias/nested/file.ts":   false,
-		"/missing":                true,
-		"/removed":                true,
-		"/removed/nested/file.ts": false,
-		"/replaced.ts":            false,
+	assert.DeepEqual(t, changes, map[string][2]bool{
+		"/alias":                  {true, true},
+		"/alias/nested/file.ts":   {},
+		"/missing":                {true, true},
+		"/removed":                {true, true},
+		"/removed/nested/file.ts": {},
+		"/replaced.ts":            {},
 	})
 }
 
@@ -69,10 +69,10 @@ func TestFileSourceLayerChangesIncludeListingsAndSymlinks(t *testing.T) {
 			"/new":  {Target: "/host", Host: true},
 		},
 	}, nil, "/", true))
-	assert.DeepEqual(t, changes, map[string]bool{
-		"/dir":  true,
-		"/link": true,
-		"/new":  true,
+	assert.DeepEqual(t, changes, map[string][2]bool{
+		"/dir":  {true, false},
+		"/link": {true, true},
+		"/new":  {true, true},
 	})
 }
 

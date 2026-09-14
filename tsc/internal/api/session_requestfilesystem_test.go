@@ -128,6 +128,40 @@ func TestRequestTombstoneComparedAgainstEditorOverlay(t *testing.T) {
 	assert.Assert(t, snapshot.GetFile("/overlay.ts") == nil)
 }
 
+func TestRequestDirectoryListingExcludesEditorOverlayDescendantFromWildcard(t *testing.T) {
+	t.Parallel()
+
+	ctx := context.Background()
+	projectSession, _ := projecttestutil.Setup(map[string]any{
+		"/tsconfig.json": `{ "compilerOptions": { "noLib": true }, "include": ["dir/**/*.ts"] }`,
+	})
+	defer projectSession.Close()
+	projectSession.DidOpenFile(ctx, "file:///dir/file.ts", 1, "overlay", lsproto.LanguageKindTypeScript)
+	session := NewLSPSession(projectSession, nil)
+	defer session.Close()
+
+	base, err := session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{
+		OpenProjects: []DocumentIdentifier{{FileName: "/tsconfig.json"}},
+	})
+	assert.NilError(t, err)
+	baseProgram := session.snapshots[base.Snapshot].snapshot.ProjectCollection.GetProjectByPath("/tsconfig.json").GetProgram()
+	assert.Assert(t, baseProgram.GetSourceFile("/dir/file.ts") != nil)
+
+	updated, err := session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{
+		Snapshot: base.Snapshot,
+		FileSystem: &requestfilesystem.RequestFileSystem{
+			Kind: requestfilesystem.KindLayer,
+			Directories: map[string]requestfilesystem.RequestDirectoryEntries{
+				"/dir": {Files: []string{}, Directories: []string{}},
+			},
+		},
+	})
+	assert.NilError(t, err)
+	snapshot := session.snapshots[updated.Snapshot].snapshot
+	assert.Assert(t, snapshot.ProjectCollection.GetProjectByPath("/tsconfig.json").GetProgram().GetSourceFile("/dir/file.ts") == nil)
+	assert.Assert(t, snapshot.GetFile("/dir/file.ts") != nil)
+}
+
 func TestFullRequestLayerOmitsCapturedEditorOverlay(t *testing.T) {
 	t.Parallel()
 
@@ -195,6 +229,37 @@ func TestRequestFileReplacesCachedDirectory(t *testing.T) {
 	assert.Equal(t, content, "replacement file")
 	_, ok = snapshot.ReadFile("/replaced/child.ts")
 	assert.Assert(t, !ok)
+}
+
+func TestRequestFileReplacesDirectoryWithEditorOverlayDescendant(t *testing.T) {
+	t.Parallel()
+
+	ctx := context.Background()
+	projectSession, _ := projecttestutil.Setup(map[string]any{
+		"/tsconfig.json": `{ "compilerOptions": { "noLib": true }, "include": ["dir/**/*.ts"] }`,
+	})
+	defer projectSession.Close()
+	projectSession.DidOpenFile(ctx, "file:///dir/file.ts", 1, "overlay", lsproto.LanguageKindTypeScript)
+	session := NewLSPSession(projectSession, nil)
+	defer session.Close()
+
+	base, err := session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{
+		OpenProjects: []DocumentIdentifier{{FileName: "/tsconfig.json"}},
+	})
+	assert.NilError(t, err)
+	assert.Assert(t, session.snapshots[base.Snapshot].snapshot.ProjectCollection.GetProjectByPath("/tsconfig.json").GetProgram().GetSourceFile("/dir/file.ts") != nil)
+
+	updated, err := session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{
+		Snapshot: base.Snapshot,
+		FileSystem: &requestfilesystem.RequestFileSystem{
+			Kind:  requestfilesystem.KindLayer,
+			Files: map[string]string{"/dir": "replacement"},
+		},
+	})
+	assert.NilError(t, err)
+	snapshot := session.snapshots[updated.Snapshot].snapshot
+	assert.Assert(t, snapshot.ProjectCollection.GetProjectByPath("/tsconfig.json").GetProgram().GetSourceFile("/dir/file.ts") == nil)
+	assert.Assert(t, snapshot.GetFile("/dir/file.ts") == nil)
 }
 
 func TestRequestSymlinkFileHandlesAreStable(t *testing.T) {
