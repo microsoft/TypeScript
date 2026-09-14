@@ -35,6 +35,7 @@ import {
     type DeferredAPIRequestGenerator,
     type IndexedAccessType,
     type IndexInfo,
+    IndexKind,
     type InterfaceType,
     type LiteralType,
     ModuleKind,
@@ -1408,6 +1409,7 @@ describe("API - generator batching", () => {
 
             const importedDerivedSymbol = checker.getSymbolAtLocation(importedDerived)!;
             const combineSymbol = checker.getSymbolAtLocation(combineDeclaration.name!)!;
+            const localCombineSymbol = checker.getSymbolsInScope(combineDeclaration, SymbolFlags.Function).find(symbol => symbol.name === "combine")!;
             const derivedSymbol = checker.getSymbolAtLocation(cast(derivedDeclaration.name, isIdentifier))!;
             const interfaceSymbol = checker.getSymbolAtLocation(interfaceDeclaration.name)!;
             const derivedClassSymbol = checker.getSymbolAtLocation(derivedClassDeclaration.name!)!;
@@ -1575,6 +1577,8 @@ describe("API - generator batching", () => {
                 parityCase("Checker", "getSymbolsInScope", checker.getSymbolsInScope, assertUnorderedSymbolArraysEquivalent, { document: "/src/index.ts", position: combineDeclaration.pos }, SymbolFlags.Value),
                 parityCase("Checker", "getResolvedSymbol", checker.getResolvedSymbol, assertOptionalSymbolsEquivalent, importedDerived),
                 parityCase("Checker", "getContextualType", checker.getContextualType, assertOptionalTypesEquivalent, boxDeclaration.initializer!),
+                parityCase("Checker", "getContextualTypeForArgumentAtIndex", checker.getContextualTypeForArgumentAtIndex, assertOptionalTypesEquivalent, callExpression, 0),
+                parityCase("Checker", "getAwaitedType", checker.getAwaitedType, assertOptionalTypesEquivalent, interfaceType),
                 parityCase("Checker", "getBaseTypeOfLiteralType", checker.getBaseTypeOfLiteralType, assertTypesEquivalent, literalType),
                 parityCase("Checker", "getNonNullableType", checker.getNonNullableType, assertTypesEquivalent, interfaceType),
                 parityCase("Checker", "getTypeFromTypeNode", checker.getTypeFromTypeNode, assertTypesEquivalent, boxedAlias.type),
@@ -1611,10 +1615,13 @@ describe("API - generator batching", () => {
                 parityCase("Checker", "getReducedType", checker.getReducedType, assertTypesEquivalent, unionType),
                 parityCase("Checker", "getPropertiesOfType", checker.getPropertiesOfType, assertSymbolArraysEquivalent, interfaceType),
                 parityCase("Checker", "getIndexInfosOfType", checker.getIndexInfosOfType, assertIndexInfosEquivalent, interfaceType),
+                parityCase("Checker", "getIndexInfoOfType", checker.getIndexInfoOfType, assertDeepEquivalent, interfaceType, IndexKind.String),
+                parityCase("Checker", "getIndexTypeOfType", checker.getIndexTypeOfType, assertOptionalTypesEquivalent, interfaceType, IndexKind.Number),
                 parityCase("Checker", "getConstraintOfTypeParameter", checker.getConstraintOfTypeParameter, assertOptionalTypesEquivalent, typeParameter),
                 parityCase("Checker", "getDefaultFromTypeParameter", checker.getDefaultFromTypeParameter, assertOptionalTypesEquivalent, typeParameter),
                 parityCase("Checker", "getBaseConstraintOfType", checker.getBaseConstraintOfType, assertOptionalTypesEquivalent, typeParameter),
                 parityCase("Checker", "getPropertyOfType", checker.getPropertyOfType, assertOptionalSymbolsEquivalent, interfaceType, "value"),
+                parityCase("Checker", "getTypeOfPropertyOfType", checker.getTypeOfPropertyOfType, assertOptionalTypesEquivalent, interfaceType, "value"),
                 parityCase("Checker", "getConstantValue", checker.getConstantValue, assertDeepEquivalent, enumDeclaration.members[0]),
                 parityCase("Checker", "getSignatureFromDeclaration", checker.getSignatureFromDeclaration, assertOptionalSignaturesEquivalent, combineDeclaration),
                 parityCase("Checker", "getExportSpecifierLocalTargetSymbol", checker.getExportSpecifierLocalTargetSymbol, assertOptionalSymbolsEquivalent, exportSpecifier),
@@ -1633,6 +1640,7 @@ describe("API - generator batching", () => {
                 parityCase("Checker", "getNonMissingTypeOfSymbol", checker.getNonMissingTypeOfSymbol, assertTypesEquivalent, boxedOptSymbol),
                 parityCase("Checker", "isReadonlySymbol", checker.isReadonlySymbol, assertDeepEquivalent, boxedOptSymbol),
                 parityCase("Checker", "getTargetSymbol", checker.getTargetSymbol, assertOptionalSymbolsEquivalent, boxedOptSymbol),
+                parityCase("Checker", "getExportSymbolOfSymbol", checker.getExportSymbolOfSymbol, assertSymbolsEquivalent, localCombineSymbol),
 
                 parityCase("Emitter", "printNode", emitter.printNode, assertDeepEquivalent, combineDeclaration, { preserveSourceNewlines: true }),
                 parityCase("SnapshotInternalAPI", "formatNodeForInsertion", snapshot.internal.formatNodeForInsertion, assertDeepEquivalent, combineDeclaration, "/src/index.ts", combineDeclaration.pos),
@@ -1666,6 +1674,7 @@ describe("API - generator batching", () => {
                 parityCase("Type", "getTypeParameters", interfaceType.getTypeParameters, assertTypeArraysEquivalent),
                 parityCase("Type", "getOuterTypeParameters", interfaceType.getOuterTypeParameters, assertTypeArraysEquivalent),
                 parityCase("Type", "getLocalTypeParameters", interfaceType.getLocalTypeParameters, assertTypeArraysEquivalent),
+                parityCase("Type", "getThisType", interfaceType.getThisType, assertOptionalTypesEquivalent),
                 parityCase("Type", "getAliasTypeArguments", boxedType.getAliasTypeArguments, assertTypeArraysEquivalent),
                 parityCase("Type", "getObjectType", indexedType.getObjectType, assertTypesEquivalent),
                 parityCase("Type", "getIndexType", indexedType.getIndexType, assertTypesEquivalent),

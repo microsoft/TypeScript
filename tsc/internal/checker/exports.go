@@ -269,6 +269,10 @@ func (c *Checker) GetContextualTypeForArgumentAtIndex(node *ast.Node, argIndex i
 	return c.getContextualTypeForArgumentAtIndex(node, argIndex)
 }
 
+func (c *Checker) GetAwaitedType(t *Type) *Type {
+	return c.getAwaitedType(t)
+}
+
 func (c *Checker) GetIndexSignaturesAtLocation(node *ast.Node) []*ast.Node {
 	return c.getIndexSignaturesAtLocation(node)
 }
@@ -333,6 +337,10 @@ func (c *Checker) GetTypeArguments(t *Type) []*Type {
 
 func (c *Checker) GetIndexInfoOfType(t *Type, keyType *Type) *IndexInfo {
 	return c.getIndexInfoOfType(t, keyType)
+}
+
+func (c *Checker) GetIndexTypeOfType(t *Type, keyType *Type) *Type {
+	return c.getIndexTypeOfType(t, keyType)
 }
 
 func (c *Checker) GetIndexInfosOfType(t *Type) []*IndexInfo {

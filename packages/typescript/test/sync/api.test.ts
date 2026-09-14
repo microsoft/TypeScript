@@ -74,10 +74,12 @@ import {
     type FreshableType,
     type ImportAdderAction,
     type IndexedAccessType,
+    IndexKind,
     type IndexType,
     type InterfaceType,
     type IntrinsicType,
     isErrorType,
+    JsxEmit,
     type LiteralType,
     ModifierFlags,
     ModuleKind,
@@ -4641,6 +4643,95 @@ export declare const m: ReadonlyMap;
         const indexInfos = project.checker.getIndexInfosOfType(type);
         assert.ok(indexInfos.length > 0);
         assert.equal(indexInfos[0].isReadonly, true);
+    });
+});
+
+describe("Checker - TypeScript API parity", () => {
+    const files = {
+        "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+        "/src/main.ts": `
+export interface Box<T> {
+    value: T;
+    chain(): this;
+    [key: string]: T | ((...args: never[]) => unknown);
+    [index: number]: T;
+}
+
+/** Returns the input value.
+ * @deprecated Use identity instead.
+ */
+export function legacy<T>(value: T): Promise<T> {
+    return Promise.resolve(value);
+}
+
+declare function consume(value: string | number): void;
+consume(1);
+
+export type Exported = number;
+`,
+    };
+
+    test("exposes interface this types and checker operations", () => {
+        using api = spawnAPI(files);
+        const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const sourceFile = project.program.getSourceFile("/src/main.ts");
+        assert.ok(sourceFile);
+
+        const boxSymbol = project.checker.getSymbolAtPosition("/src/main.ts", sourceFile.text.indexOf("Box<T>"));
+        assert.ok(boxSymbol);
+        const boxType = project.checker.getDeclaredTypeOfSymbol(boxSymbol) as InterfaceType;
+        assert.ok(boxType.isClassOrInterface());
+        const thisType = boxType.getThisType();
+        assert.ok(thisType);
+        assert.equal(thisType.isThisType, true);
+        assert.equal(project.checker.typeToString(thisType), "this");
+
+        const stringInfo = project.checker.getIndexInfoOfType(boxType, IndexKind.String);
+        assert.ok(stringInfo);
+        assert.ok(stringInfo.keyType.flags & TypeFlags.String);
+        const numberInfo = project.checker.getIndexInfoOfType(boxType, IndexKind.Number);
+        assert.ok(numberInfo);
+        assert.ok(numberInfo.keyType.flags & TypeFlags.Number);
+        assert.strictEqual(project.checker.getIndexTypeOfType(boxType, IndexKind.String), stringInfo.valueType);
+        assert.strictEqual(project.checker.getIndexTypeOfType(boxType, IndexKind.Number), numberInfo.valueType);
+        const valueType = project.checker.getTypeOfPropertyOfType(boxType, "value");
+        assert.ok(valueType);
+        assert.equal(project.checker.typeToString(valueType), "T");
+        assert.equal(project.checker.getTypeOfPropertyOfType(boxType, "missing"), undefined);
+
+        const legacySymbol = project.checker.getSymbolAtPosition("/src/main.ts", sourceFile.text.indexOf("legacy<T>"));
+        assert.ok(legacySymbol);
+        const legacyType = project.checker.getTypeOfSymbol(legacySymbol);
+        const signature = (project.checker.getSignaturesOfType(legacyType, SignatureKind.Call))[0];
+        assert.ok(signature);
+        const awaitedType = project.checker.getAwaitedType(signature.getReturnType());
+        assert.ok(awaitedType);
+        assert.equal(project.checker.typeToString(awaitedType), "Awaited<T>");
+
+        const exportedSymbol = project.checker.getSymbolAtPosition("/src/main.ts", sourceFile.text.indexOf("Exported ="));
+        assert.ok(exportedSymbol);
+        const localSymbol = (project.checker.getSymbolsInScope(sourceFile, SymbolFlags.TypeAlias)).find(symbol => symbol.name === "Exported");
+        assert.ok(localSymbol);
+        assert.notEqual(localSymbol.id, exportedSymbol.id);
+        assert.strictEqual(project.checker.getExportSymbolOfSymbol(localSymbol), exportedSymbol);
+
+        let call: import("@typescript/typescript/unstable/ast").CallExpression | undefined;
+        sourceFile.forEachChild(function visit(node) {
+            if (isCallExpression(node) && sourceFile.text.slice(node.expression.pos, node.expression.end).trim() === "consume") {
+                call = node;
+            }
+            node.forEachChild(visit);
+        });
+        assert.ok(call);
+        const contextualType = project.checker.getContextualTypeForArgumentAtIndex(call, 0);
+        assert.ok(contextualType);
+        assert.equal(project.checker.typeToString(contextualType), "string | number");
+    });
+
+    test("uses Strada-compatible JsxEmit values", () => {
+        assert.equal(JsxEmit.React, 2);
+        assert.equal(JsxEmit.ReactNative, 3);
     });
 });
 

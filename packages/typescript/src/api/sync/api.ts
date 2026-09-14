@@ -20,6 +20,7 @@ import { CompletionItemKind } from "#enums/completionItemKind";
 import { DiagnosticCategory } from "#enums/diagnosticCategory";
 import { ElementFlags } from "#enums/elementFlags";
 import { EmitOnly } from "#enums/emitOnly";
+import { IndexKind } from "#enums/indexKind";
 import { JsxEmit } from "#enums/jsxEmit";
 import { ModuleKind } from "#enums/moduleKind";
 import { ModuleResolutionKind } from "#enums/moduleResolutionKind";
@@ -34,6 +35,7 @@ import { TypeFormatFlags } from "#enums/typeFormatFlags";
 import { TypePredicateKind } from "#enums/typePredicateKind";
 import {
     type __String,
+    type CallLikeExpression,
     type Declaration,
     type Expression,
     type FileReference,
@@ -167,7 +169,7 @@ import type {
 
 export { formatDiagnostics, formatDiagnosticsWithColorAndContext } from "../diagnosticFormatter.ts";
 export { documentURIToFileName, fileNameToDocumentURI } from "../path.ts";
-export { CheckFlags, CompletionItemKind, DiagnosticCategory, ElementFlags, EmitOnly, JsxEmit, ModifierFlags, ModuleKind, ModuleResolutionKind, NodeBuilderFlags, ObjectFlags, SignatureFlags, SignatureKind, SymbolFlags, TypeFlags, TypeFormatFlags, TypePredicateKind };
+export { CheckFlags, CompletionItemKind, DiagnosticCategory, ElementFlags, EmitOnly, IndexKind, JsxEmit, ModifierFlags, ModuleKind, ModuleResolutionKind, NodeBuilderFlags, ObjectFlags, SignatureFlags, SignatureKind, SymbolFlags, TypeFlags, TypeFormatFlags, TypePredicateKind };
 export type {
     APIFileChanges,
     APIImportAdderAction as ImportAdderAction,
@@ -3708,6 +3710,62 @@ export class Checker {
         );
     }
 
+    get getContextualTypeForArgumentAtIndex(): {
+        (node: CallLikeExpression, argIndex: number): Type | undefined;
+        gen(node: CallLikeExpression, argIndex: number): Generator<ProtocolRequest, Type | undefined, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getContextualTypeForArgumentAtIndex",
+            function (node: CallLikeExpression, argIndex: number): Type | undefined {
+                const data = owner.client.apiRequest("getContextualTypeForArgument", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.id,
+                    location: getNodeId(node),
+                    index: argIndex,
+                });
+                return data ? owner.objectRegistry.getOrCreateType(data) : undefined;
+            },
+            function* (node: CallLikeExpression, argIndex: number): Generator<ProtocolRequest, Type | undefined, ProtocolResponse["result"]> {
+                const data = yield* apiRequest("getContextualTypeForArgument", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.id,
+                    location: getNodeId(node),
+                    index: argIndex,
+                });
+                return data ? owner.objectRegistry.getOrCreateType(data) : undefined;
+            },
+        );
+    }
+
+    get getAwaitedType(): {
+        (type: Type): Type | undefined;
+        gen(type: Type): Generator<ProtocolRequest, Type | undefined, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getAwaitedType",
+            function (type: Type): Type | undefined {
+                const data = owner.client.apiRequest("getAwaitedType", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.id,
+                    type: type.id,
+                });
+                return data ? owner.objectRegistry.getOrCreateType(data) : undefined;
+            },
+            function* (type: Type): Generator<ProtocolRequest, Type | undefined, ProtocolResponse["result"]> {
+                const data = yield* apiRequest("getAwaitedType", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.id,
+                    type: type.id,
+                });
+                return data ? owner.objectRegistry.getOrCreateType(data) : undefined;
+            },
+        );
+    }
+
     /** Get the base type of a literal type (e.g. `number` for `42`). Always returns a type. */
     get getBaseTypeOfLiteralType(): {
         (type: Type): Type;
@@ -4576,6 +4634,103 @@ export class Checker {
         );
     }
 
+    get getIndexInfoOfType(): {
+        (type: Type, kind: IndexKind): IndexInfo | undefined;
+        gen(type: Type, kind: IndexKind): Generator<ProtocolRequest, IndexInfo | undefined, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getIndexInfoOfType",
+            function (type: Type, kind: IndexKind): IndexInfo | undefined {
+                const data = owner.client.apiRequest("getIndexInfoOfType", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.id,
+                    type: type.id,
+                    kind,
+                });
+                return data ? {
+                    keyType: owner.objectRegistry.getOrCreateType(data.keyType),
+                    valueType: owner.objectRegistry.getOrCreateType(data.valueType),
+                    isReadonly: data.isReadonly ?? false,
+                    declaration: data.declaration ? new NodeHandle<IndexSignatureDeclaration>(data.declaration, owner.project) : undefined,
+                } : undefined;
+            },
+            function* (type: Type, kind: IndexKind): Generator<ProtocolRequest, IndexInfo | undefined, ProtocolResponse["result"]> {
+                const data = yield* apiRequest("getIndexInfoOfType", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.id,
+                    type: type.id,
+                    kind,
+                });
+                return data ? {
+                    keyType: owner.objectRegistry.getOrCreateType(data.keyType),
+                    valueType: owner.objectRegistry.getOrCreateType(data.valueType),
+                    isReadonly: data.isReadonly ?? false,
+                    declaration: data.declaration ? new NodeHandle<IndexSignatureDeclaration>(data.declaration, owner.project) : undefined,
+                } : undefined;
+            },
+        );
+    }
+
+    get getIndexTypeOfType(): {
+        (type: Type, kind: IndexKind): Type | undefined;
+        gen(type: Type, kind: IndexKind): Generator<ProtocolRequest, Type | undefined, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getIndexTypeOfType",
+            function (type: Type, kind: IndexKind): Type | undefined {
+                const data = owner.client.apiRequest("getIndexTypeOfTypeByKind", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.id,
+                    type: type.id,
+                    kind,
+                });
+                return data ? owner.objectRegistry.getOrCreateType(data) : undefined;
+            },
+            function* (type: Type, kind: IndexKind): Generator<ProtocolRequest, Type | undefined, ProtocolResponse["result"]> {
+                const data = yield* apiRequest("getIndexTypeOfTypeByKind", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.id,
+                    type: type.id,
+                    kind,
+                });
+                return data ? owner.objectRegistry.getOrCreateType(data) : undefined;
+            },
+        );
+    }
+
+    get getTypeOfPropertyOfType(): {
+        (type: Type, propertyName: string): Type | undefined;
+        gen(type: Type, propertyName: string): Generator<ProtocolRequest, Type | undefined, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getTypeOfPropertyOfType",
+            function (type: Type, propertyName: string): Type | undefined {
+                const data = owner.client.apiRequest("getTypeOfPropertyOfType", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.id,
+                    type: type.id,
+                    name: propertyName,
+                });
+                return data ? owner.objectRegistry.getOrCreateType(data) : undefined;
+            },
+            function* (type: Type, propertyName: string): Generator<ProtocolRequest, Type | undefined, ProtocolResponse["result"]> {
+                const data = yield* apiRequest("getTypeOfPropertyOfType", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.id,
+                    type: type.id,
+                    name: propertyName,
+                });
+                return data ? owner.objectRegistry.getOrCreateType(data) : undefined;
+            },
+        );
+    }
+
     /**
      * Get the constraint of a type parameter (the `T` in `<U extends T>`), or
      * undefined if it has none.
@@ -4872,6 +5027,33 @@ export class Checker {
                     return owner.objectRegistry.getOrCreateSymbol(data);
                 }
                 return symbol;
+            },
+        );
+    }
+
+    get getExportSymbolOfSymbol(): {
+        (symbol: Symbol): Symbol;
+        gen(symbol: Symbol): Generator<ProtocolRequest, Symbol, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getExportSymbolOfSymbol",
+            function (symbol: Symbol): Symbol {
+                const data = owner.client.apiRequest("getExportSymbolOfSymbolForChecker", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.id,
+                    symbol: symbol.id,
+                });
+                return owner.objectRegistry.getOrCreateSymbol(data);
+            },
+            function* (symbol: Symbol): Generator<ProtocolRequest, Symbol, ProtocolResponse["result"]> {
+                const data = yield* apiRequest("getExportSymbolOfSymbolForChecker", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.id,
+                    symbol: symbol.id,
+                });
+                return owner.objectRegistry.getOrCreateSymbol(data);
             },
         );
     }
@@ -5538,6 +5720,7 @@ class TypeObject implements Type {
     readonly typeParameters!: readonly number[];
     readonly outerTypeParameters!: readonly number[];
     readonly localTypeParameters!: readonly number[];
+    readonly thisType!: number;
     readonly aliasTypeArguments!: readonly number[];
     readonly aliasSymbol!: number;
     readonly elementFlags!: readonly ElementFlags[];
@@ -5595,6 +5778,7 @@ class TypeObject implements Type {
         this.typeParameters = data.typeParameters ?? [];
         this.outerTypeParameters = data.outerTypeParameters ?? [];
         this.localTypeParameters = data.localTypeParameters ?? [];
+        if (data.thisType !== undefined) this.thisType = data.thisType;
         this.aliasTypeArguments = data.aliasTypeArguments ?? [];
         if (data.aliasSymbol !== undefined) this.aliasSymbol = data.aliasSymbol;
         if (data.fixedLength !== undefined) {
@@ -6070,6 +6254,23 @@ class TypeObject implements Type {
             },
             function* (): Generator<ProtocolRequest, readonly TypeParameter[], ProtocolResponse["result"]> {
                 return (yield* owner.objectRegistry.fetchTypes.gen(owner, "getLocalTypeParametersOfType", owner.localTypeParameters)) as readonly TypeParameter[];
+            },
+        );
+    }
+
+    get getThisType(): {
+        (): TypeParameter | undefined;
+        gen(): Generator<ProtocolRequest, TypeParameter | undefined, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getThisType",
+            function (): TypeParameter | undefined {
+                return owner.objectRegistry.fetchOptionalType(owner, "getThisTypeOfType", owner.thisType) as TypeParameter | undefined;
+            },
+            function* (): Generator<ProtocolRequest, TypeParameter | undefined, ProtocolResponse["result"]> {
+                return (yield* owner.objectRegistry.fetchOptionalType.gen(owner, "getThisTypeOfType", owner.thisType)) as TypeParameter | undefined;
             },
         );
     }

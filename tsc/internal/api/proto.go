@@ -123,6 +123,7 @@ const (
 	MethodGetTypeParametersOfType      Method = "getTypeParametersOfType"
 	MethodGetOuterTypeParametersOfType Method = "getOuterTypeParametersOfType"
 	MethodGetLocalTypeParametersOfType Method = "getLocalTypeParametersOfType"
+	MethodGetThisTypeOfType            Method = "getThisTypeOfType"
 	MethodGetAliasTypeArgumentsOfType  Method = "getAliasTypeArgumentsOfType"
 	MethodGetAliasSymbolOfType         Method = "getAliasSymbolOfType"
 	MethodGetObjectTypeOfType          Method = "getObjectTypeOfType"
@@ -140,6 +141,8 @@ const (
 
 	// Checker methods
 	MethodGetContextualType                 Method = "getContextualType"
+	MethodGetContextualTypeForArgument      Method = "getContextualTypeForArgument"
+	MethodGetAwaitedType                    Method = "getAwaitedType"
 	MethodGetBaseTypeOfLiteralType          Method = "getBaseTypeOfLiteralType"
 	MethodGetNonNullableType                Method = "getNonNullableType"
 	MethodGetTypeFromTypeNode               Method = "getTypeFromTypeNode"
@@ -163,6 +166,9 @@ const (
 	MethodGetApparentType                   Method = "getApparentType"
 	MethodGetReducedType                    Method = "getReducedType"
 	MethodGetPropertyOfType                 Method = "getPropertyOfType"
+	MethodGetTypeOfPropertyOfType           Method = "getTypeOfPropertyOfType"
+	MethodGetIndexInfoOfType                Method = "getIndexInfoOfType"
+	MethodGetIndexTypeOfTypeByKind          Method = "getIndexTypeOfTypeByKind"
 	MethodGetIndexInfosOfType               Method = "getIndexInfosOfType"
 	MethodGetConstraintOfTypeParameter      Method = "getConstraintOfTypeParameter"
 	MethodGetDefaultFromTypeParameter       Method = "getDefaultFromTypeParameter"
@@ -177,6 +183,7 @@ const (
 	MethodGetAliasedSymbol                  Method = "getAliasedSymbol"
 	MethodGetImmediateAliasedSymbol         Method = "getImmediateAliasedSymbol"
 	MethodGetTargetSymbol                   Method = "getTargetSymbol"
+	MethodGetExportSymbolOfSymbolForChecker Method = "getExportSymbolOfSymbolForChecker"
 	MethodGetFullyQualifiedName             Method = "getFullyQualifiedName"
 	MethodGetExportsOfModule                Method = "getExportsOfModule"
 	MethodGetMemberInModuleExports          Method = "getMemberInModuleExports"
@@ -499,6 +506,7 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodGetTypeParametersOfType:       unmarshallerFor[GetTypePropertyParams],
 	MethodGetOuterTypeParametersOfType:  unmarshallerFor[GetTypePropertyParams],
 	MethodGetLocalTypeParametersOfType:  unmarshallerFor[GetTypePropertyParams],
+	MethodGetThisTypeOfType:             unmarshallerFor[GetTypePropertyParams],
 	MethodGetAliasTypeArgumentsOfType:   unmarshallerFor[GetTypePropertyParams],
 	MethodGetAliasSymbolOfType:          unmarshallerFor[GetTypePropertyParams],
 	MethodGetObjectTypeOfType:           unmarshallerFor[GetTypePropertyParams],
@@ -516,6 +524,8 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodGetTargetOfSignature:         unmarshallerFor[GetSignaturePropertyParams],
 
 	MethodGetContextualType:                 unmarshallerFor[GetContextualTypeParams],
+	MethodGetContextualTypeForArgument:      unmarshallerFor[GetContextualTypeForArgumentParams],
+	MethodGetAwaitedType:                    unmarshallerFor[CheckerTypeParams],
 	MethodGetBaseTypeOfLiteralType:          unmarshallerFor[GetBaseTypeOfLiteralTypeParams],
 	MethodGetNonNullableType:                unmarshallerFor[GetTypePropertyParams],
 	MethodGetTypeFromTypeNode:               unmarshallerFor[GetTypeFromTypeNodeParams],
@@ -539,6 +549,9 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodGetApparentType:                   unmarshallerFor[GetTypePropertyParams],
 	MethodGetReducedType:                    unmarshallerFor[GetTypePropertyParams],
 	MethodGetPropertyOfType:                 unmarshallerFor[GetPropertyOfTypeParams],
+	MethodGetTypeOfPropertyOfType:           unmarshallerFor[GetPropertyOfTypeParams],
+	MethodGetIndexInfoOfType:                unmarshallerFor[GetIndexInfoOfTypeParams],
+	MethodGetIndexTypeOfTypeByKind:          unmarshallerFor[GetIndexInfoOfTypeParams],
 	MethodGetIndexInfosOfType:               unmarshallerFor[CheckerTypeParams],
 	MethodGetConstraintOfTypeParameter:      unmarshallerFor[GetTypePropertyParams],
 	MethodGetBaseConstraintOfType:           unmarshallerFor[CheckerTypeParams],
@@ -551,6 +564,7 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodGetAliasedSymbol:                  unmarshallerFor[CheckerSymbolParams],
 	MethodGetImmediateAliasedSymbol:         unmarshallerFor[CheckerSymbolParams],
 	MethodGetTargetSymbol:                   unmarshallerFor[CheckerSymbolParams],
+	MethodGetExportSymbolOfSymbolForChecker: unmarshallerFor[CheckerSymbolParams],
 	MethodGetFullyQualifiedName:             unmarshallerFor[CheckerSymbolParams],
 	MethodGetExportsOfModule:                unmarshallerFor[CheckerSymbolParams],
 	MethodGetMemberInModuleExports:          unmarshallerFor[GetMemberInModuleExportsParams],
@@ -954,6 +968,9 @@ type TypeResponse struct {
 	// TypeParameter data
 	IsThisType bool `json:"isThisType,omitempty"`
 
+	// InterfaceType data
+	ThisType TypeID `json:"thisType,omitzero"`
+
 	// IntrinsicType data
 	IntrinsicName string `json:"intrinsicName,omitempty"`
 
@@ -1017,6 +1034,9 @@ func newTypeResponse(t *checker.Type, id TypeID) *TypeResponse {
 			resp.TypeParameters = typeHandles(iface.TypeParameters())
 			resp.OuterTypeParameters = typeHandles(iface.OuterTypeParameters())
 			resp.LocalTypeParameters = typeHandles(iface.LocalTypeParameters())
+			if iface.ThisType() != nil {
+				resp.ThisType = TypeHandle(iface.ThisType())
+			}
 		}
 	case flags&checker.TypeFlagsUnionOrIntersection != 0:
 		// types omitted; fetched via separate request
@@ -1224,6 +1244,13 @@ type GetContextualTypeParams struct {
 	Snapshot SnapshotID `json:"snapshot"`
 	Project  ProjectID  `json:"project"`
 	Location NodeHandle `json:"location"`
+}
+
+type GetContextualTypeForArgumentParams struct {
+	Snapshot SnapshotID `json:"snapshot"`
+	Project  ProjectID  `json:"project"`
+	Location NodeHandle `json:"location"`
+	Index    int32      `json:"index"`
 }
 
 // GetTypeOfSymbolAtLocationParams returns the narrowed type of a symbol at a specific location.
@@ -1523,6 +1550,13 @@ type GetPropertyOfTypeParams struct {
 	Project  ProjectID  `json:"project"`
 	Type     TypeID     `json:"type"`
 	Name     string     `json:"name"`
+}
+
+type GetIndexInfoOfTypeParams struct {
+	Snapshot SnapshotID `json:"snapshot"`
+	Project  ProjectID  `json:"project"`
+	Type     TypeID     `json:"type"`
+	Kind     int32      `json:"kind"`
 }
 
 // GetMemberInModuleExportsParams are parameters for getMemberInModuleExports.
