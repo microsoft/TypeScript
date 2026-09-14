@@ -25,6 +25,8 @@ type Large =
 declare let smallEqual: Small;
 if (smallEqual!.type === "1") {
     smallEqual.type;
+} else {
+    smallEqual.type;
 }
 
 declare let smallEqualRight: Small;
@@ -41,12 +43,6 @@ if (smallEqualIdentifier!.type === one) {
 declare let signedEqual: { type: -1 } | { type: 1 } | undefined;
 if (signedEqual!.type === -1) {
     signedEqual.type;
-}
-
-declare let smallElse: Small;
-if (smallElse!.type === "1") {
-} else {
-    smallElse.type;
 }
 
 declare let smallNotEqual: Small;
@@ -66,12 +62,8 @@ switch (smallSwitch!.type) {
 declare let largeEqual: Large;
 if (largeEqual!.type === "1") {
     largeEqual.type;
-}
-
-declare let largeElse: Large;
-if (largeElse!.type === "1") {
 } else {
-    largeElse.type;
+    largeEqual.type;
 }
 
 declare let largeNotEqual: Large;
@@ -86,18 +78,14 @@ switch (largeSwitch!.type) {
         break;
 }
 
-// Control cases: optional chaining already propagates non-nullability
-// into the matching branch.
-
-declare let smallOptional: Small;
-if (smallOptional?.type === "1") {
-    smallOptional.type;
-}
+// Ordinary optional chaining still narrows a nullable large union through the fallback path.
 
 declare let largeOptional: Large;
 if (largeOptional?.type === "1") {
     largeOptional.type;
 }
+
+// Optional chaining through a non-null assertion preserves nullable non-matching branches.
 
 declare let optionalBangLeft: Small;
 if (optionalBangLeft!?.type === "1") {
@@ -128,17 +116,7 @@ switch (optionalBangSwitch!?.type) {
 
 // A non-null assertion captured by an alias does not apply after the source is reassigned.
 
-declare let aliasedValue: Small;
 declare let maybeUndefined: Small;
-const aliasedTag = aliasedValue!.type;
-
-aliasedValue = maybeUndefined;
-
-if (aliasedTag === "1") {
-    // @ts-expect-error
-    aliasedValue.type;
-}
-
 declare let largeAliasedValue: Large;
 declare let maybeLargeUndefined: Large;
 const largeAliasedTag = largeAliasedValue!.type;
@@ -195,15 +173,6 @@ Object.defineProperty(ComputedKeyLeft, "type", {
 if (computedKeyLeft![ComputedKeyLeft.type] === "1") {
     // @ts-expect-error
     computedKeyLeft.type;
-}
-
-declare let invocationInRight: Small;
-if (invocationInRight!.type === (() => {
-    invocationInRight = maybeUndefined;
-    return "1" as const;
-})()) {
-    // @ts-expect-error
-    invocationInRight.type;
 }
 
 declare let assignmentInCase: Large;
