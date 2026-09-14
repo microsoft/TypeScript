@@ -38,6 +38,13 @@ if (smallNotEqual!.type !== "1") {
     smallNotEqual.type;
 }
 
+declare let smallSwitch: Small;
+switch (smallSwitch!.type) {
+    case "1":
+        smallSwitch.type;
+        break;
+}
+
 // Large union: optimized discriminant narrowing path.
 
 declare let largeEqual: Large;
@@ -56,6 +63,13 @@ if (largeNotEqual!.type !== "1") {
     largeNotEqual.type;
 }
 
+declare let largeSwitch: Large;
+switch (largeSwitch!.type) {
+    case "1":
+        largeSwitch.type;
+        break;
+}
+
 // Control cases: optional chaining already propagates non-nullability
 // into the matching branch.
 
@@ -67,4 +81,28 @@ if (smallOptional?.type === "1") {
 declare let largeOptional: Large;
 if (largeOptional?.type === "1") {
     largeOptional.type;
+}
+
+// A non-null assertion captured by an alias does not apply after the source is reassigned.
+
+declare let aliasedValue: Small;
+declare let maybeUndefined: Small;
+const aliasedTag = aliasedValue!.type;
+
+aliasedValue = maybeUndefined;
+
+if (aliasedTag === "1") {
+    // @ts-expect-error
+    aliasedValue.type;
+}
+
+declare let largeAliasedValue: Large;
+declare let maybeLargeUndefined: Large;
+const largeAliasedTag = largeAliasedValue!.type;
+
+largeAliasedValue = maybeLargeUndefined;
+
+if (largeAliasedTag === "1") {
+    // @ts-expect-error
+    largeAliasedValue.type;
 }
