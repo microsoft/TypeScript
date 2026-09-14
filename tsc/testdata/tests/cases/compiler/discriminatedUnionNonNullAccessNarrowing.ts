@@ -83,6 +83,33 @@ if (largeOptional?.type === "1") {
     largeOptional.type;
 }
 
+declare let optionalBangLeft: Small;
+if (optionalBangLeft!?.type === "1") {
+    optionalBangLeft.type;
+} else {
+    // @ts-expect-error
+    optionalBangLeft.type;
+}
+
+declare let optionalBangRight: Small;
+if ("1" === optionalBangRight!?.type) {
+    optionalBangRight.type;
+} else {
+    // @ts-expect-error
+    optionalBangRight.type;
+}
+
+declare let optionalBangSwitch: Small;
+switch (optionalBangSwitch!?.type) {
+    case "1":
+        optionalBangSwitch.type;
+        break;
+    default:
+        // @ts-expect-error
+        optionalBangSwitch.type;
+        break;
+}
+
 // A non-null assertion captured by an alias does not apply after the source is reassigned.
 
 declare let aliasedValue: Small;

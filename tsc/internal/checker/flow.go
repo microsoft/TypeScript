@@ -495,14 +495,14 @@ func (c *Checker) narrowTypeByBinaryExpression(f *FlowState, t *Type, expr *ast.
 		}
 		leftAccess := c.getDiscriminantPropertyAccess(f, left, t)
 		if leftAccess != nil {
-			if leftAccess == left && c.strictNullChecks && isNonNullAccess(leftAccess) && c.maybeTypeOfKind(t, TypeFlagsNullable) {
+			if leftAccess == left && c.strictNullChecks && !ast.IsOptionalChain(leftAccess) && isNonNullAccess(leftAccess) && c.maybeTypeOfKind(t, TypeFlagsNullable) {
 				t = c.getTypeWithFacts(t, TypeFactsNEUndefinedOrNull)
 			}
 			return c.narrowTypeByDiscriminantProperty(t, leftAccess, operator, right, assumeTrue)
 		}
 		rightAccess := c.getDiscriminantPropertyAccess(f, right, t)
 		if rightAccess != nil {
-			if rightAccess == right && c.strictNullChecks && isNonNullAccess(rightAccess) && c.maybeTypeOfKind(t, TypeFlagsNullable) {
+			if rightAccess == right && c.strictNullChecks && !ast.IsOptionalChain(rightAccess) && isNonNullAccess(rightAccess) && c.maybeTypeOfKind(t, TypeFlagsNullable) {
 				t = c.getTypeWithFacts(t, TypeFactsNEUndefinedOrNull)
 			}
 			return c.narrowTypeByDiscriminantProperty(t, rightAccess, operator, left, assumeTrue)
@@ -1088,7 +1088,7 @@ func (c *Checker) getTypeAtSwitchClause(f *FlowState, flow *ast.FlowNode) FlowTy
 		}
 		access := c.getDiscriminantPropertyAccess(f, expr, t)
 		if access != nil {
-			if access == expr && c.strictNullChecks && isNonNullAccess(access) && c.maybeTypeOfKind(t, TypeFlagsNullable) {
+			if access == expr && c.strictNullChecks && !ast.IsOptionalChain(access) && isNonNullAccess(access) && c.maybeTypeOfKind(t, TypeFlagsNullable) {
 				t = c.getTypeWithFacts(t, TypeFactsNEUndefinedOrNull)
 			}
 			t = c.narrowTypeBySwitchOnDiscriminantProperty(t, access, data)
