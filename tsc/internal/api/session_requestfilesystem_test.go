@@ -293,6 +293,37 @@ func TestRequestSymlinkFileHandlesAreStable(t *testing.T) {
 	}
 }
 
+func TestRequestSymlinkFallsBackToEditorOverlayTarget(t *testing.T) {
+	t.Parallel()
+
+	ctx := context.Background()
+	projectSession, _ := projecttestutil.Setup(map[string]any{})
+	defer projectSession.Close()
+	projectSession.DidOpenFile(ctx, "file:///target.ts", 1, "overlay", lsproto.LanguageKindTypeScript)
+	session := NewLSPSession(projectSession, nil)
+	defer session.Close()
+
+	base, err := session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{})
+	assert.NilError(t, err)
+	updated, err := session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{
+		Snapshot: base.Snapshot,
+		FileSystem: &requestfilesystem.RequestFileSystem{
+			Kind: requestfilesystem.KindLayer,
+			Symlinks: map[string]requestfilesystem.RequestSymlink{
+				"/alias.ts": {Target: "/target.ts"},
+			},
+		},
+	})
+	assert.NilError(t, err)
+
+	snapshot := session.snapshots[updated.Snapshot].snapshot
+	file := snapshot.GetFile("/alias.ts")
+	assert.Assert(t, file != nil)
+	assert.Equal(t, file.FileName(), "/alias.ts")
+	assert.Equal(t, file.Content(), "overlay")
+	assert.Assert(t, snapshot.FileExists("/alias.ts"))
+}
+
 func TestReplacingRequestSymlinkInvalidatesAliasedProgramFile(t *testing.T) {
 	t.Parallel()
 
