@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"io/fs"
+	"slices"
 	"strconv"
 	"sync"
 	"testing"
@@ -292,6 +293,73 @@ func TestRequestSymlinkFileHandlesAreStable(t *testing.T) {
 	}
 }
 
+func TestReplacingRequestSymlinkInvalidatesAliasedProgramFile(t *testing.T) {
+	t.Parallel()
+
+	projectSession, _ := projecttestutil.Setup(map[string]any{})
+	defer projectSession.Close()
+	session := NewLSPSession(projectSession, nil)
+	defer session.Close()
+
+	base, err := session.handleUpdateSnapshot(context.Background(), &UpdateSnapshotParams{
+		OpenProjects: []DocumentIdentifier{{FileName: "/tsconfig.json"}},
+		FileSystem: &requestfilesystem.RequestFileSystem{
+			Kind: requestfilesystem.KindFull,
+			Files: map[string]string{
+				"/tsconfig.json":  `{ "compilerOptions": { "noLib": true }, "files": ["link/file.ts"] }`,
+				"/target/file.ts": "old",
+			},
+			Symlinks: map[string]requestfilesystem.RequestSymlink{
+				"/link": {Target: "/target"},
+			},
+		},
+	})
+	assert.NilError(t, err)
+	baseProgram := session.snapshots[base.Snapshot].snapshot.ProjectCollection.GetProjectByPath("/tsconfig.json").GetProgram()
+	assert.Assert(t, baseProgram.GetSourceFile("/link/file.ts") != nil)
+
+	updated, err := session.handleUpdateSnapshot(context.Background(), &UpdateSnapshotParams{
+		Snapshot: base.Snapshot,
+		FileSystem: &requestfilesystem.RequestFileSystem{
+			Kind:         requestfilesystem.KindLayer,
+			RemovedPaths: []string{"/link"},
+		},
+	})
+	assert.NilError(t, err)
+	program := session.snapshots[updated.Snapshot].snapshot.ProjectCollection.GetProjectByPath("/tsconfig.json").GetProgram()
+	assert.Assert(t, program.GetSourceFile("/link/file.ts") == nil)
+}
+
+func TestRequestFileSystemWalkDirIncludesEditorOverlay(t *testing.T) {
+	t.Parallel()
+
+	ctx := context.Background()
+	projectSession, _ := projecttestutil.Setup(map[string]any{})
+	defer projectSession.Close()
+	projectSession.DidOpenFile(ctx, "file:///overlay.ts", 1, "overlay", lsproto.LanguageKindTypeScript)
+	session := NewLSPSession(projectSession, nil)
+	defer session.Close()
+
+	base, err := session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{})
+	assert.NilError(t, err)
+	updated, err := session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{
+		Snapshot: base.Snapshot,
+		FileSystem: &requestfilesystem.RequestFileSystem{
+			Kind: requestfilesystem.KindLayer,
+		},
+	})
+	assert.NilError(t, err)
+
+	var paths []string
+	err = session.snapshots[updated.Snapshot].snapshot.FileSystem().WalkDir("/", func(path string, entry fs.DirEntry, err error) error {
+		assert.NilError(t, err)
+		paths = append(paths, path)
+		return nil
+	})
+	assert.NilError(t, err)
+	assert.Assert(t, slices.Contains(paths, "/overlay.ts"))
+}
+
 func TestRequestFileSystemWalkDirStopsSiblingsOnFileSkipDir(t *testing.T) {
 	t.Parallel()
 
@@ -322,6 +390,15 @@ func TestRequestFileSystemWalkDirStopsSiblingsOnFileSkipDir(t *testing.T) {
 	})
 	assert.NilError(t, err)
 	assert.DeepEqual(t, paths, []string{"/", "/a.ts"})
+
+	paths = nil
+	err = session.snapshots[response.Snapshot].snapshot.FileSystem().WalkDir("/a.ts", func(path string, entry fs.DirEntry, err error) error {
+		assert.NilError(t, err)
+		paths = append(paths, path)
+		return fs.SkipDir
+	})
+	assert.NilError(t, err)
+	assert.DeepEqual(t, paths, []string{"/a.ts"})
 }
 
 func TestUpdateSnapshotUsesFullFileSystem(t *testing.T) {

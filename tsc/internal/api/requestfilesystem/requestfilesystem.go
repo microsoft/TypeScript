@@ -112,7 +112,9 @@ func NewForUpdate(params *RequestFileSystem, base project.FileSourceLayer, start
 		changes.InvalidateAll = true
 	}
 	if params.Kind == KindLayer {
-		changes.Changes = getFileSourceLayerChanges(params, baseRequestFileSystem, currentDirectory, host.UseCaseSensitiveFileNames())
+		layerChanges := getFileSourceLayerChanges(params, baseRequestFileSystem, currentDirectory, host.UseCaseSensitiveFileNames())
+		changes.InvalidateAll = changes.InvalidateAll || layerChanges.InvalidateAll
+		changes.Changes = layerChanges.Changes
 	}
 	fileSystem, err := newRequestFileSystemWorker(params, host, currentDirectory)
 	if err != nil {

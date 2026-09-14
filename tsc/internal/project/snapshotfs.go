@@ -1,6 +1,7 @@
 package project
 
 import (
+	"cmp"
 	"errors"
 	"io/fs"
 	"maps"
@@ -262,16 +263,67 @@ func fileSourceLayerGetAccessibleEntries(
 }
 
 func walkFileSource(source FileSource, root string, walkFn vfs.WalkDirFunc) error {
-	info := source.Stat(root)
+	info := fileSourceRootInfo(source, root)
 	if info == nil {
 		return walkFn(root, nil, vfs.ErrNotExist)
 	}
 	visited := make(map[string]struct{})
-	if err := walkFileSourceWorker(source, root, fs.FileInfoToDirEntry(info), walkFn, visited); errors.Is(err, fs.SkipAll) {
+	if err := walkFileSourceWorker(source, root, fs.FileInfoToDirEntry(info), walkFn, visited); errors.Is(err, fs.SkipAll) || errors.Is(err, fs.SkipDir) {
 		return nil
 	} else {
 		return err
 	}
+}
+
+type fileSourceFileInfo struct {
+	file FileHandle
+}
+
+func (i fileSourceFileInfo) Name() string       { return tspath.GetBaseFileName(i.file.FileName()) }
+func (i fileSourceFileInfo) Size() int64        { return int64(len(i.file.Content())) }
+func (i fileSourceFileInfo) Mode() fs.FileMode  { return 0o444 }
+func (i fileSourceFileInfo) ModTime() time.Time { return time.Time{} }
+func (i fileSourceFileInfo) IsDir() bool        { return false }
+func (i fileSourceFileInfo) Sys() any           { return nil }
+
+type fileSourceDirectoryInfo string
+
+func (i fileSourceDirectoryInfo) Name() string       { return string(i) }
+func (i fileSourceDirectoryInfo) Size() int64        { return 0 }
+func (i fileSourceDirectoryInfo) Mode() fs.FileMode  { return fs.ModeDir | 0o555 }
+func (i fileSourceDirectoryInfo) ModTime() time.Time { return time.Time{} }
+func (i fileSourceDirectoryInfo) IsDir() bool        { return true }
+func (i fileSourceDirectoryInfo) Sys() any           { return nil }
+
+func fileSourceRootInfo(source FileSource, path string) vfs.FileInfo {
+	info := source.Stat(path)
+	if info != nil && !info.IsDir() {
+		return info
+	}
+	if file := source.GetFile(path); file != nil {
+		return fileSourceFileInfo{file: file}
+	}
+	if info != nil && info.IsDir() {
+		return info
+	}
+	if source.DirectoryExists(path) {
+		return fileSourceDirectoryInfo(tspath.GetBaseFileName(path))
+	}
+	return nil
+}
+
+func fileSourceChildInfo(source FileSource, path string, directory bool) vfs.FileInfo {
+	info := source.Stat(path)
+	if info != nil && info.IsDir() == directory {
+		return info
+	}
+	if directory {
+		return fileSourceDirectoryInfo(tspath.GetBaseFileName(path))
+	}
+	if file := source.GetFile(path); file != nil {
+		return fileSourceFileInfo{file: file}
+	}
+	return nil
 }
 
 func walkFileSourceWorker(source FileSource, path string, entry vfs.DirEntry, walkFn vfs.WalkDirFunc, visited map[string]struct{}) error {
@@ -290,11 +342,23 @@ func walkFileSourceWorker(source FileSource, path string, entry vfs.DirEntry, wa
 		return nil
 	}
 	entries := source.GetAccessibleEntries(path)
-	names := append(slices.Clone(entries.Directories), entries.Files...)
-	slices.Sort(names)
-	for _, name := range names {
-		childPath := tspath.CombinePaths(path, name)
-		childInfo := source.Stat(childPath)
+	type childEntry struct {
+		name      string
+		directory bool
+	}
+	children := make([]childEntry, 0, len(entries.Directories)+len(entries.Files))
+	for _, name := range entries.Directories {
+		children = append(children, childEntry{name: name, directory: true})
+	}
+	for _, name := range entries.Files {
+		children = append(children, childEntry{name: name})
+	}
+	slices.SortFunc(children, func(left childEntry, right childEntry) int {
+		return cmp.Compare(left.name, right.name)
+	})
+	for _, child := range children {
+		childPath := tspath.CombinePaths(path, child.name)
+		childInfo := fileSourceChildInfo(source, childPath, child.directory)
 		if childInfo == nil {
 			continue
 		}

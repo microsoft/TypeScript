@@ -13,7 +13,7 @@ func getFileSourceLayerChanges(
 	base *requestFileSystem,
 	currentDirectory string,
 	useCaseSensitiveNames bool,
-) []project.FileSourceLayerChange {
+) project.FileSourceLayerChanges {
 	if base != nil {
 		useCaseSensitiveNames = base.useCaseSensitiveNames
 	}
@@ -47,10 +47,20 @@ func getFileSourceLayerChanges(
 			addWithAliases(file.fileName, false, false)
 		})
 	}
+	shadowsRequestSymlinks := func(fileName string) bool {
+		if base == nil {
+			return false
+		}
+		node, _ := base.paths.lookup(base.toPath(fileName))
+		return node != nil && node.hasSymlinks
+	}
 
 	files := make(map[tspath.Path]struct{}, len(request.Files))
 	for fileName := range request.Files {
 		absolutePath := tspath.GetNormalizedAbsolutePath(fileName, currentDirectory)
+		if shadowsRequestSymlinks(absolutePath) {
+			return project.FileSourceLayerChanges{InvalidateAll: true}
+		}
 		files[toPath(absolutePath)] = struct{}{}
 		addRequestDescendants(absolutePath)
 		addWithAliases(absolutePath, false, false)
@@ -60,14 +70,23 @@ func getFileSourceLayerChanges(
 		if _, replaced := files[toPath(absolutePath)]; replaced {
 			continue
 		}
+		if shadowsRequestSymlinks(absolutePath) {
+			return project.FileSourceLayerChanges{InvalidateAll: true}
+		}
 		addRequestDescendants(absolutePath)
 		addWithAliases(absolutePath, true, true)
 	}
 	for directoryName := range request.Directories {
+		if shadowsRequestSymlinks(directoryName) {
+			return project.FileSourceLayerChanges{InvalidateAll: true}
+		}
 		addRequestDescendants(directoryName)
 		addWithAliases(directoryName, true, false)
 	}
 	for linkName := range request.Symlinks {
+		if shadowsRequestSymlinks(linkName) {
+			return project.FileSourceLayerChanges{InvalidateAll: true}
+		}
 		addRequestDescendants(linkName)
 		addWithAliases(linkName, true, true)
 	}
@@ -79,5 +98,5 @@ func getFileSourceLayerChanges(
 	slices.SortFunc(result, func(left project.FileSourceLayerChange, right project.FileSourceLayerChange) int {
 		return cmp.Compare(left.Path, right.Path)
 	})
-	return result
+	return project.FileSourceLayerChanges{Changes: result}
 }

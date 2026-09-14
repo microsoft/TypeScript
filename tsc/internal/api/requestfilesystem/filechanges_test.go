@@ -35,7 +35,7 @@ func TestFileSourceLayerChangesIncludeDirectoryTombstones(t *testing.T) {
 		Kind:         KindLayer,
 		Files:        map[string]string{"/replaced.ts": "new"},
 		RemovedPaths: []string{"removed", "/missing", "/replaced.ts"},
-	}, base, "/", true))
+	}, base, "/", true).Changes)
 	assert.DeepEqual(t, changes, map[string][2]bool{
 		"/alias":                  {true, true},
 		"/alias/nested/file.ts":   {},
@@ -52,7 +52,7 @@ func TestFileSourceLayerChangesIncludeDirectoryReplacedByFile(t *testing.T) {
 	changes := getFileSourceLayerChanges(&RequestFileSystem{
 		Kind:  KindLayer,
 		Files: map[string]string{"/replaced": "new"},
-	}, nil, "/", true)
+	}, nil, "/", true).Changes
 	assert.DeepEqual(t, changes, []project.FileSourceLayerChange{{Path: "/replaced"}})
 }
 
@@ -68,7 +68,7 @@ func TestFileSourceLayerChangesIncludeListingsAndSymlinks(t *testing.T) {
 			"/link": {Target: "/target"},
 			"/new":  {Target: "/host", Host: true},
 		},
-	}, nil, "/", true))
+	}, nil, "/", true).Changes)
 	assert.DeepEqual(t, changes, map[string][2]bool{
 		"/dir":  {true, false},
 		"/link": {true, true},
@@ -91,7 +91,7 @@ func TestFileSourceLayerChangesIncludeRecursiveSymlinkAliases(t *testing.T) {
 	changes := getFileSourceLayerChanges(&RequestFileSystem{
 		Kind:  KindLayer,
 		Files: map[string]string{"/dir/file.ts": "new"},
-	}, base, "/", true)
+	}, base, "/", true).Changes
 	assert.DeepEqual(t, changes, []project.FileSourceLayerChange{
 		{Path: "/dir/file.ts"},
 		{Path: "/dir/link/file.ts"},
@@ -113,9 +113,33 @@ func TestFileSourceLayerChangesIncludeRootSymlinkAliases(t *testing.T) {
 	changes := getFileSourceLayerChanges(&RequestFileSystem{
 		Kind:  KindLayer,
 		Files: map[string]string{"/file.ts": "new"},
-	}, base, "/", true)
+	}, base, "/", true).Changes
 	assert.DeepEqual(t, changes, []project.FileSourceLayerChange{
 		{Path: "/file.ts"},
 		{Path: "/link/file.ts"},
 	})
+}
+
+func TestFileSourceLayerChangesInvalidateWhenReplacingSymlink(t *testing.T) {
+	t.Parallel()
+
+	base, err := newRequestFileSystem(&RequestFileSystem{
+		Kind:  KindFull,
+		Files: map[string]string{"/target/file.ts": "old"},
+		Symlinks: map[string]RequestSymlink{
+			"/link": {Target: "/target"},
+		},
+	}, vfstest.FromMap(map[string]string{}, true), "/")
+	assert.NilError(t, err)
+
+	for _, request := range []*RequestFileSystem{
+		{Kind: KindLayer, RemovedPaths: []string{"/link"}},
+		{Kind: KindLayer, Files: map[string]string{"/link": "replacement"}},
+		{Kind: KindLayer, Directories: map[string]RequestDirectoryEntries{"/link": {}}},
+		{Kind: KindLayer, Symlinks: map[string]RequestSymlink{"/link": {Target: "/other"}}},
+	} {
+		changes := getFileSourceLayerChanges(request, base, "/", true)
+		assert.Assert(t, changes.InvalidateAll)
+		assert.Equal(t, len(changes.Changes), 0)
+	}
 }
