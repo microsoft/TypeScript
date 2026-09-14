@@ -1,9 +1,16 @@
 negatedFreshTreatedAsClosedSet.ts(10,4): error TS2345: Argument of type '{ x: number; y: number; }' is not assignable to parameter of type 'Distinct<{ x: any; }, { y: any; }>'.
   Type '{ x: number; y: number; }' is not assignable to type '{ y: any; } & not ({ x: any; } & { y: any; })'.
     Type '{ x: number; y: number; }' is not assignable to type 'not ({ x: any; } & { y: any; })'.
+negatedFreshTreatedAsClosedSet.ts(17,7): error TS2322: Type '{ kind: "a" | "b"; }' is not assignable to type 'not A & not B'.
+  Type '{ kind: "a" | "b"; }' is not assignable to type 'not A'.
+negatedFreshTreatedAsClosedSet.ts(30,7): error TS2322: Type '{ value: string | number; }' is not assignable to type 'not { value: number; }'.
+negatedFreshTreatedAsClosedSet.ts(35,7): error TS2322: Type '{ value: string | number; }' is not assignable to type 'not NumberIndex'.
+negatedFreshTreatedAsClosedSet.ts(40,7): error TS2322: Type '{ [dynamicKey]: string | number; }' is not assignable to type 'not { value: number; }'.
+negatedFreshTreatedAsClosedSet.ts(56,7): error TS2322: Type '{ next: RecursiveAB; kind: "a" | "b"; }' is not assignable to type 'not RecursiveA & not RecursiveB'.
+  Type '{ next: RecursiveAB; kind: "a" | "b"; }' is not assignable to type 'not RecursiveA'.
 
 
-==== negatedFreshTreatedAsClosedSet.ts (1 errors) ====
+==== negatedFreshTreatedAsClosedSet.ts (6 errors) ====
     // from https://github.com/Microsoft/TypeScript/issues/4183
     type Distinct<A, B> = (A | B) & not (A & B);
     declare var o1: {x: any};
@@ -18,4 +25,62 @@ negatedFreshTreatedAsClosedSet.ts(10,4): error TS2345: Argument of type '{ x: nu
 !!! error TS2345: Argument of type '{ x: number; y: number; }' is not assignable to parameter of type 'Distinct<{ x: any; }, { y: any; }>'.
 !!! error TS2345:   Type '{ x: number; y: number; }' is not assignable to type '{ y: any; } & not ({ x: any; } & { y: any; })'.
 !!! error TS2345:     Type '{ x: number; y: number; }' is not assignable to type 'not ({ x: any; } & { y: any; })'.
+    
+    type A = { kind: "a" };
+    type B = { kind: "b" };
+    declare const ab: "a" | "b";
+    
+    const aOrB: A | B = { kind: ab }; // OK
+    const notAOrB: not (A | B) = { kind: ab }; // Should error
+          ~~~~~~~
+!!! error TS2322: Type '{ kind: "a" | "b"; }' is not assignable to type 'not A & not B'.
+!!! error TS2322:   Type '{ kind: "a" | "b"; }' is not assignable to type 'not A'.
+    
+    type KindNotAOrB = { kind: not ("a" | "b") };
+    type KindNotAAndNotB = { kind: not "a" } & { kind: not "b" };
+    declare let kindNotAOrB: KindNotAOrB;
+    declare let kindNotAAndNotB: KindNotAAndNotB;
+    
+    kindNotAOrB = kindNotAAndNotB; // OK
+    kindNotAAndNotB = kindNotAOrB; // OK
+    
+    declare const stringOrNumber: string | number;
+    
+    const notNumberProperty: not { value: number } = { value: "x" }; // OK
+    const overlappingNumberProperty: not { value: number } = { value: stringOrNumber }; // Should error
+          ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '{ value: string | number; }' is not assignable to type 'not { value: number; }'.
+    
+    type NumberIndex = { [key: string]: number };
+    
+    const notNumberIndex: not NumberIndex = { value: "x" }; // OK
+    const overlappingNumberIndex: not NumberIndex = { value: stringOrNumber }; // Should error
+          ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '{ value: string | number; }' is not assignable to type 'not NumberIndex'.
+    
+    declare const dynamicKey: string;
+    
+    const notComputedNumberProperty: not { value: number } = { [dynamicKey]: "x" }; // OK
+    const overlappingComputedNumberProperty: not { value: number } = { [dynamicKey]: stringOrNumber }; // Should error
+          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '{ [dynamicKey]: string | number; }' is not assignable to type 'not { value: number; }'.
+    
+    interface RecursiveA {
+    	next: RecursiveA;
+    	kind: "a";
+    }
+    interface RecursiveB {
+    	next: RecursiveB;
+    	kind: "b";
+    }
+    interface RecursiveAB {
+    	next: RecursiveAB;
+    	kind: "a" | "b";
+    }
+    declare const recursiveAB: RecursiveAB;
+    
+    const notRecursiveAOrB: not (RecursiveA | RecursiveB) = { ...recursiveAB }; // Should error
+          ~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '{ next: RecursiveAB; kind: "a" | "b"; }' is not assignable to type 'not RecursiveA & not RecursiveB'.
+!!! error TS2322:   Type '{ next: RecursiveAB; kind: "a" | "b"; }' is not assignable to type 'not RecursiveA'.
     

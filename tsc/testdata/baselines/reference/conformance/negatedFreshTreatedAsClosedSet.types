@@ -42,3 +42,132 @@ f1({x: 0, y: 0}); // Should error
 >y : number
 >0 : 0
 
+type A = { kind: "a" };
+>A : A
+>kind : "a"
+
+type B = { kind: "b" };
+>B : B
+>kind : "b"
+
+declare const ab: "a" | "b";
+>ab : "a" | "b"
+
+const aOrB: A | B = { kind: ab }; // OK
+>aOrB : A | B
+>{ kind: ab } : { kind: "a" | "b"; }
+>kind : "a" | "b"
+>ab : "a" | "b"
+
+const notAOrB: not (A | B) = { kind: ab }; // Should error
+>notAOrB : not A & not B
+>{ kind: ab } : { kind: "a" | "b"; }
+>kind : "a" | "b"
+>ab : "a" | "b"
+
+type KindNotAOrB = { kind: not ("a" | "b") };
+>KindNotAOrB : KindNotAOrB
+>kind : not "a" & not "b"
+
+type KindNotAAndNotB = { kind: not "a" } & { kind: not "b" };
+>KindNotAAndNotB : KindNotAAndNotB
+>kind : not "a"
+>kind : not "b"
+
+declare let kindNotAOrB: KindNotAOrB;
+>kindNotAOrB : KindNotAOrB
+
+declare let kindNotAAndNotB: KindNotAAndNotB;
+>kindNotAAndNotB : KindNotAAndNotB
+
+kindNotAOrB = kindNotAAndNotB; // OK
+>kindNotAOrB = kindNotAAndNotB : KindNotAAndNotB
+>kindNotAOrB : KindNotAOrB
+>kindNotAAndNotB : KindNotAAndNotB
+
+kindNotAAndNotB = kindNotAOrB; // OK
+>kindNotAAndNotB = kindNotAOrB : KindNotAOrB
+>kindNotAAndNotB : KindNotAAndNotB
+>kindNotAOrB : KindNotAOrB
+
+declare const stringOrNumber: string | number;
+>stringOrNumber : string | number
+
+const notNumberProperty: not { value: number } = { value: "x" }; // OK
+>notNumberProperty : not { value: number; }
+>value : number
+>{ value: "x" } : { value: string; }
+>value : string
+>"x" : "x"
+
+const overlappingNumberProperty: not { value: number } = { value: stringOrNumber }; // Should error
+>overlappingNumberProperty : not { value: number; }
+>value : number
+>{ value: stringOrNumber } : { value: string | number; }
+>value : string | number
+>stringOrNumber : string | number
+
+type NumberIndex = { [key: string]: number };
+>NumberIndex : NumberIndex
+>key : string
+
+const notNumberIndex: not NumberIndex = { value: "x" }; // OK
+>notNumberIndex : not NumberIndex
+>{ value: "x" } : { value: string; }
+>value : string
+>"x" : "x"
+
+const overlappingNumberIndex: not NumberIndex = { value: stringOrNumber }; // Should error
+>overlappingNumberIndex : not NumberIndex
+>{ value: stringOrNumber } : { value: string | number; }
+>value : string | number
+>stringOrNumber : string | number
+
+declare const dynamicKey: string;
+>dynamicKey : string
+
+const notComputedNumberProperty: not { value: number } = { [dynamicKey]: "x" }; // OK
+>notComputedNumberProperty : not { value: number; }
+>value : number
+>{ [dynamicKey]: "x" } : { [dynamicKey]: string; }
+>[dynamicKey] : string
+>dynamicKey : string
+>"x" : "x"
+
+const overlappingComputedNumberProperty: not { value: number } = { [dynamicKey]: stringOrNumber }; // Should error
+>overlappingComputedNumberProperty : not { value: number; }
+>value : number
+>{ [dynamicKey]: stringOrNumber } : { [dynamicKey]: string | number; }
+>[dynamicKey] : string | number
+>dynamicKey : string
+>stringOrNumber : string | number
+
+interface RecursiveA {
+	next: RecursiveA;
+>next : RecursiveA
+
+	kind: "a";
+>kind : "a"
+}
+interface RecursiveB {
+	next: RecursiveB;
+>next : RecursiveB
+
+	kind: "b";
+>kind : "b"
+}
+interface RecursiveAB {
+	next: RecursiveAB;
+>next : RecursiveAB
+
+	kind: "a" | "b";
+>kind : "a" | "b"
+}
+declare const recursiveAB: RecursiveAB;
+>recursiveAB : RecursiveAB
+
+const notRecursiveAOrB: not (RecursiveA | RecursiveB) = { ...recursiveAB }; // Should error
+>notRecursiveAOrB : not RecursiveA & not RecursiveB
+>{ ...recursiveAB } : { next: RecursiveAB; kind: "a" | "b"; }
+>recursiveAB : RecursiveAB
+

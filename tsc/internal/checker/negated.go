@@ -3,6 +3,7 @@ package checker
 import (
 	"slices"
 
+	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 )
 
@@ -257,7 +258,7 @@ func (c *Checker) checkForSaturatedNegatedType(typeSet []*Type) bool {
 // 'false' is a subtype of 'not true', so 'not true' is dropped, leaving just 'false'.
 //
 // A member 'not X' is also redundant when the non-negated part is mutually exclusive with X by
-// virtue of a shared discriminant property (see isDisjointByDiscriminant). For example, given
+// virtue of a shared discriminant property (see objectTypesAreDisjointByProperties). For example, given
 // discriminated types 'A = { kind: "a" }' and 'C = { kind: "c" }', the intersection 'C & not A'
 // reduces to 'C' because no value of type C can be an A.
 func (c *Checker) removeNegatedSubtypes(types []*Type) []*Type {
@@ -274,41 +275,79 @@ func (c *Checker) removeNegatedSubtypes(types []*Type) []*Type {
 			continue
 		}
 		negatedBase := types[i].AsNegatedType().baseType
-		if c.isTypeSubtypeOf(nonNegativePart, types[i]) || c.isDisjointByDiscriminant(nonNegativePart, negatedBase) {
+		if c.isTypeSubtypeOf(nonNegativePart, types[i]) || c.objectTypesAreDisjointByProperties(nonNegativePart, negatedBase, false /*sourceIsClosed*/) {
 			types = slices.Delete(types, i, i+1)
 		}
 	}
 	return types
 }
 
-// isDisjointByDiscriminant reports whether types 'a' and 'b' are provably mutually exclusive because
-// they share a discriminant property whose types in 'a' and 'b' have an empty (never) intersection.
+// objectTypesAreDisjointByProperties reports whether 'source' and 'target' are provably mutually
+// exclusive because they share a property whose types are in disjoint domains, or a discriminant
+// property whose types have an empty (never) intersection. When sourceIsClosed is true, a required
+// target property that cannot be supplied by the source also proves disjointness.
 // For example '{ kind: "c" }' and '{ kind: "a" }' are disjoint by their 'kind' property, so
 // 'C & not A' reduces to 'C'.
 //
 // Discriminant properties are located with findDiscriminantProperties over the union 'a | b' -- the
 // same mechanism used for discriminated-union narrowing -- and disjointness of a single discriminant
-// is decided by intersecting the two property types and checking for never. Deciding disjointness by
-// intersecting the property types (rather than comparing them by identity) is important: an enum
+// is decided by intersecting the two property types and checking for never. Other shared properties,
+// including properties matched by an index signature, are only compared by their primitive domains,
+// avoiding recursive intersections of object types.
+// Deciding discriminant disjointness by intersecting the property types (rather than comparing them
+// by identity) is important: an enum
 // literal such as 'E.A' (where 'enum E { A = "a" }') is a distinct type from the string literal '"a"'
 // yet is not mutually exclusive with it, so 'E.A & "a"' is not never.
 //
 // Only the (small, literal) discriminant property types are intersected here, never the full input
 // types, so this stays cheap and avoids the circularities a general 'a & b is never' computation
 // would risk during intersection construction.
-func (c *Checker) isDisjointByDiscriminant(a *Type, b *Type) bool {
-	union := c.getUnionType([]*Type{a, b})
+func (c *Checker) objectTypesAreDisjointByProperties(source *Type, target *Type, sourceIsClosed bool) bool {
+	union := c.getUnionType([]*Type{source, target})
 	if union.flags&TypeFlagsUnion == 0 {
-		// 'a' and 'b' collapsed into a single type (e.g. one is a subtype of the other), so there is
+		// 'source' and 'target' collapsed into a single type (e.g. one is a subtype of the other), so there is
 		// no discriminant to distinguish them.
 		return false
 	}
-	for _, prop := range c.findDiscriminantProperties(c.getPropertiesOfType(a), union) {
-		aPropType := c.getTypeOfPropertyOfType(a, prop.Name)
-		bPropType := c.getTypeOfPropertyOfType(b, prop.Name)
-		if aPropType != nil && bPropType != nil && c.getIntersectionType([]*Type{aPropType, bPropType}).flags&TypeFlagsNever != 0 {
+	discriminantProperties := c.findDiscriminantProperties(c.getPropertiesOfType(source), union)
+	for _, prop := range c.getPropertiesOfType(source) {
+		sourcePropType := c.getTypeOfPropertyOfType(source, prop.Name)
+		targetProp := c.getPropertyOfType(target, prop.Name)
+		var targetPropType *Type
+		if targetProp != nil {
+			targetPropType = c.getTypeOfSymbol(targetProp)
+		}
+		if targetPropType == nil {
+			if indexInfo := c.getApplicableIndexInfoForName(target, prop.Name); indexInfo != nil {
+				targetPropType = indexInfo.valueType
+			}
+		}
+		if sourcePropType == nil || targetPropType == nil {
+			continue
+		}
+		if (isRequiredProperty(prop) || isRequiredProperty(targetProp)) &&
+			(typesAreInDisjointDomains(sourcePropType, targetPropType) ||
+				slices.Contains(discriminantProperties, prop) && c.getIntersectionType([]*Type{sourcePropType, targetPropType}).flags&TypeFlagsNever != 0) {
 			return true
 		}
 	}
+	if sourceIsClosed {
+		for _, targetProp := range c.getUnmatchedProperties(source, target, false /*requireOptionalProperties*/, false /*matchDiscriminantProperties*/) {
+			sourceIndex := c.getApplicableIndexInfoForName(source, targetProp.Name)
+			if sourceIndex == nil || typesAreInDisjointDomains(sourceIndex.valueType, c.getTypeOfSymbol(targetProp)) {
+				return true
+			}
+		}
+	}
 	return false
+}
+
+func typesAreInDisjointDomains(a *Type, b *Type) bool {
+	aDomains := a.flags & TypeFlagsDisjointDomains
+	bDomains := b.flags & TypeFlagsDisjointDomains
+	return aDomains != 0 && bDomains != 0 && aDomains&bDomains == 0
+}
+
+func isRequiredProperty(prop *ast.Symbol) bool {
+	return prop != nil && prop.Flags&ast.SymbolFlagsOptional == 0 && prop.CheckFlags&ast.CheckFlagsPartial == 0
 }

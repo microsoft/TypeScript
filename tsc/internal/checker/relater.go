@@ -3484,21 +3484,22 @@ func (r *Relater) structuredTypeRelatedToWorker(source *Type, target *Type, repo
 			return TernaryTrue
 		}
 		// A fresh object literal type is treated as a closed set of values that have exactly the
-		// declared properties. Such a type is disjoint from T (and thus related to 'not T') precisely
-		// when it is not related to T, since excess property checking prevents its values from
-		// acquiring the extra properties that T might otherwise require. We compare the regular
-		// (non-fresh) form so that the excess property check itself doesn't interfere with the
-		// structural comparison.
+		// declared properties. Such a type is disjoint from T (and thus related to 'not T') when it
+		// isn't related to T and their property domains cannot overlap. The latter check is the dual
+		// of relating a property union to a discriminated union: under negation, any overlap with the
+		// negated base prevents the source from relating to the complement.
 		if isObjectLiteralType(source) {
-			switch r.isRelatedTo(r.c.getRegularTypeOfObjectLiteral(source), target.AsNegatedType().baseType, RecursionFlagsBoth, false /*reportErrors*/) {
+			regularSource := r.c.getRegularTypeOfObjectLiteral(source)
+			negatedBase := target.AsNegatedType().baseType
+			switch r.isRelatedTo(regularSource, negatedBase, RecursionFlagsBoth, false /*reportErrors*/) {
 			case TernaryFalse:
-				// The closed object literal is disjoint from T, so it is related to 'not T'.
-				return TernaryTrue
+				if r.c.objectTypesAreDisjointByProperties(regularSource, negatedBase, true /*sourceIsClosed*/) {
+					return TernaryTrue
+				}
+				return TernaryFalse
 			case TernaryMaybe:
-				// The comparison was assumed related under recursion; propagate the assumption.
 				return TernaryMaybe
 			default:
-				// The object literal is (possibly) a member of T, so it is not related to 'not T'.
 				return TernaryFalse
 			}
 		}
