@@ -177,6 +177,21 @@ if (looseEquality!.type == coercibleValue) {
     looseEquality.type;
 }
 
+declare let computedKeyLeft: Small;
+enum ComputedKeyLeft {
+    type = "type",
+}
+Object.defineProperty(ComputedKeyLeft, "type", {
+    get() {
+        computedKeyLeft = maybeUndefined;
+        return "type" as const;
+    },
+});
+if (computedKeyLeft![ComputedKeyLeft.type] === "1") {
+    // @ts-expect-error
+    computedKeyLeft.type;
+}
+
 declare let invocationInRight: Small;
 if (invocationInRight!.type === (() => {
     invocationInRight = maybeUndefined;
