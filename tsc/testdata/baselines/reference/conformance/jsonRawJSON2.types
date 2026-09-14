@@ -1,0 +1,195 @@
+//// [tests/cases/conformance/es2026/jsonRawJSON2.ts] ////
+
+=== jsonRawJSON2.ts ===
+const a: RawJSON = JSON.rawJSON("1");
+>a : RawJSON
+>JSON.rawJSON("1") : RawJSON
+>JSON.rawJSON : (text: string) => RawJSON
+>JSON : JSON
+>rawJSON : (text: string) => RawJSON
+>"1" : "1"
+
+const b: string = a.rawJSON;
+>b : string
+>a.rawJSON : string
+>a : RawJSON
+>rawJSON : string
+
+const c: object = a;
+>c : object
+>a : RawJSON
+
+const d: { readonly rawJSON: string } = a;
+>d : { readonly rawJSON: string; }
+>rawJSON : string
+>a : RawJSON
+
+const e: RawJSON = a;
+>e : RawJSON
+>a : RawJSON
+
+const f: RawJSON = { rawJSON: "1" };
+>f : RawJSON
+>{ rawJSON: "1" } : { rawJSON: string; }
+>rawJSON : string
+>"1" : "1"
+
+const g = { rawJSON: "1" };
+>g : { rawJSON: string; }
+>{ rawJSON: "1" } : { rawJSON: string; }
+>rawJSON : string
+>"1" : "1"
+
+const h: RawJSON = g;
+>h : RawJSON
+>g : { rawJSON: string; }
+
+const i: RawJSON = Object.freeze(g);
+>i : RawJSON
+>Object.freeze(g) : Readonly<{ rawJSON: string; }>
+>Object.freeze : { <T extends Function>(f: T): T; <T extends { [idx: string]: U | null | undefined | object; }, U extends string | bigint | number | boolean | symbol>(o: T): Readonly<T>; <T>(o: T): Readonly<T>; }
+>Object : ObjectConstructor
+>freeze : { <T extends Function>(f: T): T; <T extends { [idx: string]: U | null | undefined | object; }, U extends string | bigint | number | boolean | symbol>(o: T): Readonly<T>; <T>(o: T): Readonly<T>; }
+>g : { rawJSON: string; }
+
+const j: RawJSON = { ...a };
+>j : RawJSON
+>{ ...a } : { rawJSON: string; }
+>a : RawJSON
+
+const k: RawJSON = { rawJSON: 1 };
+>k : RawJSON
+>{ rawJSON: 1 } : { rawJSON: number; }
+>rawJSON : number
+>1 : 1
+
+class A {
+>A : A
+
+    readonly rawJSON = "1";
+>rawJSON : "1"
+>"1" : "1"
+}
+const l: RawJSON = new A();
+>l : RawJSON
+>new A() : A
+>A : typeof A
+
+class B implements RawJSON {
+>B : B
+
+    readonly rawJSON = "1";
+>rawJSON : "1"
+>"1" : "1"
+}
+
+a.rawJSON = "2";
+>a.rawJSON = "2" : "2"
+>a.rawJSON : any
+>a : RawJSON
+>rawJSON : any
+>"2" : "2"
+
+declare const m: keyof RawJSON;
+>m : "rawJSON"
+
+const n: "rawJSON" = m;
+>n : "rawJSON"
+>m : "rawJSON"
+
+const o = RawJSON;
+>o : any
+>RawJSON : any
+
+new RawJSON();
+>new RawJSON() : any
+>RawJSON : any
+
+class C extends RawJSON {}
+>C : C
+>RawJSON : any
+
+declare const q: unknown;
+>q : unknown
+
+if (JSON.isRawJSON(q)) {
+>JSON.isRawJSON(q) : boolean
+>JSON.isRawJSON : (value: unknown) => value is RawJSON
+>JSON : JSON
+>isRawJSON : (value: unknown) => value is RawJSON
+>q : unknown
+
+    const r: RawJSON = q;
+>r : RawJSON
+>q : RawJSON
+
+    const s: string = q.rawJSON;
+>s : string
+>q.rawJSON : string
+>q : RawJSON
+>rawJSON : string
+}
+if (JSON.isRawJSON(g)) {
+>JSON.isRawJSON(g) : boolean
+>JSON.isRawJSON : (value: unknown) => value is RawJSON
+>JSON : JSON
+>isRawJSON : (value: unknown) => value is RawJSON
+>g : { rawJSON: string; }
+
+    const r: RawJSON = g;
+>r : RawJSON
+>g : { rawJSON: string; }
+
+} else {
+    const s: string = g.rawJSON;
+>s : string
+>g.rawJSON : any
+>g : never
+>rawJSON : any
+}
+
+const t: Readonly<RawJSON> = a;
+>t : Readonly<RawJSON>
+>a : RawJSON
+
+const u: RawJSON = t;
+>u : RawJSON
+>t : Readonly<RawJSON>
+
+const v: RawJSON = Object.freeze(a);
+>v : RawJSON
+>Object.freeze(a) : Readonly<RawJSON>
+>Object.freeze : { <T extends Function>(f: T): T; <T extends { [idx: string]: U | null | undefined | object; }, U extends string | bigint | number | boolean | symbol>(o: T): Readonly<T>; <T>(o: T): Readonly<T>; }
+>Object : ObjectConstructor
+>freeze : { <T extends Function>(f: T): T; <T extends { [idx: string]: U | null | undefined | object; }, U extends string | bigint | number | boolean | symbol>(o: T): Readonly<T>; <T>(o: T): Readonly<T>; }
+>a : RawJSON
+
+const w: Pick<RawJSON, "rawJSON"> = a;
+>w : Pick<RawJSON, "rawJSON">
+>a : RawJSON
+
+const x: RawJSON = w;
+>x : RawJSON
+>w : Pick<RawJSON, "rawJSON">
+
+const y: RawJSON = Object.assign({}, a);
+>y : RawJSON
+>Object.assign({}, a) : RawJSON
+>Object.assign : { <T extends {}, U>(target: T, source: U): T & U; <T extends {}, U, V>(target: T, source1: U, source2: V): T & U & V; <T extends {}, U, V, W>(target: T, source1: U, source2: V, source3: W): T & U & V & W; (target: object, ...sources: any[]): any; }
+>Object : ObjectConstructor
+>assign : { <T extends {}, U>(target: T, source: U): T & U; <T extends {}, U, V>(target: T, source1: U, source2: V): T & U & V; <T extends {}, U, V, W>(target: T, source1: U, source2: V, source3: W): T & U & V & W; (target: object, ...sources: any[]): any; }
+>{} : {}
+>a : RawJSON
+
+const z: RawJSON = new Proxy(a, {});
+>z : RawJSON
+>new Proxy(a, {}) : RawJSON
+>Proxy : ProxyConstructor
+>a : RawJSON
+>{} : {}
+
+interface RawJSON {
+    readonly rawJSON: string;
+>rawJSON : string
+}
+

@@ -1,0 +1,50 @@
+//// [tests/cases/conformance/es2026/jsonRawJSON4.ts] ////
+
+=== raw.js ===
+/** @type {RawJSON} */
+const a = JSON.rawJSON("1");
+>a : Symbol(a, Decl(raw.js, 1, 5))
+>JSON.rawJSON : Symbol(JSON.rawJSON, Decl(lib.es2026.json.d.ts, --, --))
+>JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2026.json.d.ts, --, --))
+>rawJSON : Symbol(JSON.rawJSON, Decl(lib.es2026.json.d.ts, --, --))
+
+/** @type {string} */
+const b = a.rawJSON;
+>b : Symbol(b, Decl(raw.js, 3, 5))
+>a.rawJSON : Symbol(RawJSON.rawJSON, Decl(lib.es2026.json.d.ts, --, --))
+>a : Symbol(a, Decl(raw.js, 1, 5))
+>rawJSON : Symbol(RawJSON.rawJSON, Decl(lib.es2026.json.d.ts, --, --))
+
+/** @type {RawJSON} */
+const c = { rawJSON: "1" };
+>c : Symbol(c, Decl(raw.js, 6, 5))
+>rawJSON : Symbol(rawJSON, Decl(raw.js, 6, 11))
+
+/** @type {RawJSON} */
+const d = { ...a };
+>d : Symbol(d, Decl(raw.js, 8, 5))
+>a : Symbol(a, Decl(raw.js, 1, 5))
+
+a.rawJSON = "2";
+>a.rawJSON : Symbol(RawJSON.rawJSON, Decl(lib.es2026.json.d.ts, --, --))
+>a : Symbol(a, Decl(raw.js, 1, 5))
+>rawJSON : Symbol(RawJSON.rawJSON, Decl(lib.es2026.json.d.ts, --, --))
+
+/** @param {unknown} x */
+function f(x) {
+>f : Symbol(f, Decl(raw.js, 9, 16))
+>x : Symbol(x, Decl(raw.js, 12, 11))
+
+    return JSON.isRawJSON(x) ? x.rawJSON : undefined;
+>JSON.isRawJSON : Symbol(JSON.isRawJSON, Decl(lib.es2026.json.d.ts, --, --))
+>JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2026.json.d.ts, --, --))
+>isRawJSON : Symbol(JSON.isRawJSON, Decl(lib.es2026.json.d.ts, --, --))
+>x : Symbol(x, Decl(raw.js, 12, 11))
+>x.rawJSON : Symbol(RawJSON.rawJSON, Decl(lib.es2026.json.d.ts, --, --))
+>x : Symbol(x, Decl(raw.js, 12, 11))
+>rawJSON : Symbol(RawJSON.rawJSON, Decl(lib.es2026.json.d.ts, --, --))
+>undefined : Symbol(undefined)
+}
+
+RawJSON;
+

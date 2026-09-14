@@ -8,6 +8,7 @@ import (
 var (
 	esDecoratorAndClassFields = transformers.Chain(newESDecoratorTransformer, newClassFieldsTransformer)
 	NewESNextTransformer      = transformers.Chain(newUsingDeclarationTransformer, esDecoratorAndClassFields)
+	// 2026: no new downlevel syntax
 	// 2025: only module system syntax (import attributes, json modules), untransformed regex modifiers
 	// 2024: no new downlevel syntax
 	// 2023: no new downlevel syntax
@@ -25,7 +26,7 @@ func GetESTransformer(opts *transformers.TransformOptions) *transformers.Transfo
 	switch options.GetEmitScriptTarget() {
 	case core.ScriptTargetESNext:
 		return esDecoratorAndClassFields(opts)
-	case core.ScriptTargetES2025, core.ScriptTargetES2024, core.ScriptTargetES2023, core.ScriptTargetES2022, core.ScriptTargetES2021:
+	case core.ScriptTargetES2026, core.ScriptTargetES2025, core.ScriptTargetES2024, core.ScriptTargetES2023, core.ScriptTargetES2022, core.ScriptTargetES2021:
 		return NewESNextTransformer(opts)
 	case core.ScriptTargetES2020:
 		return NewES2021Transformer(opts)

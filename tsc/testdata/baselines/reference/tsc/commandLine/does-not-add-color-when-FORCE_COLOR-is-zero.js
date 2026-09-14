@@ -8,7 +8,7 @@ tsgo index.ts --noEmit
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 index.ts(1,7): error TS2322: Type 'number' is not assignable to type 'string'.
-//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2026.full.d.ts] *Lib*
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
