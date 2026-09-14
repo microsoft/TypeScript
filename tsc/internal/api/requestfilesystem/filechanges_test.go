@@ -53,6 +53,9 @@ func TestFileChangesIncludeDirectoryReplacedByFile(t *testing.T) {
 	}, base, "/")
 
 	assert.Assert(t, summary.Deleted.Has("file:///replaced"))
+	// replaced/child.ts not included here because it's owned by the host file system.
+	// If it were owned by the request filesystem, it would be included in the directory expansion.
+	// Instead, it will be expanded by snapshotFSBuilder at a later step.
 	assert.Assert(t, summary.Created.Has("file:///replaced"))
 	assert.Assert(t, !summary.Changed.Has("file:///replaced"))
 }
