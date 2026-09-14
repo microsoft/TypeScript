@@ -18,6 +18,7 @@ import { TypeFormatFlags } from "#enums/typeFormatFlags";
 import { TypePredicateKind } from "#enums/typePredicateKind";
 import {
     type __String,
+    type CallLikeExpression,
     type Declaration,
     type Expression,
     type FileReference,
@@ -1864,7 +1865,7 @@ export class Checker {
         return data ? this.objectRegistry.getOrCreateType(data) : undefined;
     }
 
-    async getContextualTypeForArgumentAtIndex(node: Expression, argIndex: number): Promise<Type | undefined> {
+    async getContextualTypeForArgumentAtIndex(node: CallLikeExpression, argIndex: number): Promise<Type | undefined> {
         const data = await this.client.apiRequest("getContextualTypeForArgument", {
             snapshot: this.snapshotId,
             project: this.project.id,
@@ -2180,6 +2181,16 @@ export class Checker {
             project: this.project.id,
             type: type.id,
             kind,
+        });
+        return data ? this.objectRegistry.getOrCreateType(data) : undefined;
+    }
+
+    async getTypeOfPropertyOfType(type: Type, propertyName: string): Promise<Type | undefined> {
+        const data = await this.client.apiRequest("getTypeOfPropertyOfType", {
+            snapshot: this.snapshotId,
+            project: this.project.id,
+            type: type.id,
+            name: propertyName,
         });
         return data ? this.objectRegistry.getOrCreateType(data) : undefined;
     }

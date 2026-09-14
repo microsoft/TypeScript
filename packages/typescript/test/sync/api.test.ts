@@ -4695,6 +4695,10 @@ export type Exported = number;
         assert.ok(numberInfo.keyType.flags & TypeFlags.Number);
         assert.strictEqual(project.checker.getIndexTypeOfType(boxType, IndexKind.String), stringInfo.valueType);
         assert.strictEqual(project.checker.getIndexTypeOfType(boxType, IndexKind.Number), numberInfo.valueType);
+        const valueType = project.checker.getTypeOfPropertyOfType(boxType, "value");
+        assert.ok(valueType);
+        assert.equal(project.checker.typeToString(valueType), "T");
+        assert.equal(project.checker.getTypeOfPropertyOfType(boxType, "missing"), undefined);
 
         const legacySymbol = project.checker.getSymbolAtPosition("/src/main.ts", sourceFile.text.indexOf("legacy<T>"));
         assert.ok(legacySymbol);

@@ -1621,6 +1621,7 @@ describe("API - generator batching", () => {
                 parityCase("Checker", "getDefaultFromTypeParameter", checker.getDefaultFromTypeParameter, assertOptionalTypesEquivalent, typeParameter),
                 parityCase("Checker", "getBaseConstraintOfType", checker.getBaseConstraintOfType, assertOptionalTypesEquivalent, typeParameter),
                 parityCase("Checker", "getPropertyOfType", checker.getPropertyOfType, assertOptionalSymbolsEquivalent, interfaceType, "value"),
+                parityCase("Checker", "getTypeOfPropertyOfType", checker.getTypeOfPropertyOfType, assertOptionalTypesEquivalent, interfaceType, "value"),
                 parityCase("Checker", "getConstantValue", checker.getConstantValue, assertDeepEquivalent, enumDeclaration.members[0]),
                 parityCase("Checker", "getSignatureFromDeclaration", checker.getSignatureFromDeclaration, assertOptionalSignaturesEquivalent, combineDeclaration),
                 parityCase("Checker", "getExportSpecifierLocalTargetSymbol", checker.getExportSpecifierLocalTargetSymbol, assertOptionalSymbolsEquivalent, exportSpecifier),

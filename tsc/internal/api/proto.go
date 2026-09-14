@@ -166,6 +166,7 @@ const (
 	MethodGetApparentType                    Method = "getApparentType"
 	MethodGetReducedType                     Method = "getReducedType"
 	MethodGetPropertyOfType                  Method = "getPropertyOfType"
+	MethodGetTypeOfPropertyOfType            Method = "getTypeOfPropertyOfType"
 	MethodGetIndexInfoOfType                 Method = "getIndexInfoOfType"
 	MethodGetIndexTypeOfTypeByKind           Method = "getIndexTypeOfTypeByKind"
 	MethodGetIndexInfosOfType                Method = "getIndexInfosOfType"
@@ -550,6 +551,7 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodGetApparentType:                    unmarshallerFor[GetTypePropertyParams],
 	MethodGetReducedType:                     unmarshallerFor[GetTypePropertyParams],
 	MethodGetPropertyOfType:                  unmarshallerFor[GetPropertyOfTypeParams],
+	MethodGetTypeOfPropertyOfType:            unmarshallerFor[GetPropertyOfTypeParams],
 	MethodGetIndexInfoOfType:                 unmarshallerFor[GetIndexInfoOfTypeParams],
 	MethodGetIndexTypeOfTypeByKind:           unmarshallerFor[GetIndexInfoOfTypeParams],
 	MethodGetIndexInfosOfType:                unmarshallerFor[CheckerTypeParams],
