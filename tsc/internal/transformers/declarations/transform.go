@@ -991,7 +991,7 @@ func (tx *DeclarationTransformer) transformPropertyDeclaration(input *ast.Proper
 	if postfixToken != nil && postfixToken.Kind == ast.KindExclamationToken {
 		postfixToken = nil
 	}
-	return tx.Factory().UpdatePropertyDeclaration(
+	result := tx.Factory().UpdatePropertyDeclaration(
 		input,
 		tx.ensureModifiers(input.AsNode()),
 		input.Name(),
@@ -999,6 +999,10 @@ func (tx *DeclarationTransformer) transformPropertyDeclaration(input *ast.Proper
 		tx.ensureType(input.AsNode(), false),
 		tx.ensureNoInitializer(input.AsNode()),
 	)
+	if tx.host.GetEffectiveDeclarationFlags(tx.EmitContext().ParseNode(input.AsNode()), ast.ModifierFlagsPrivate) != 0 {
+		tx.suppressJsDoc(result)
+	}
+	return result
 }
 
 func (tx *DeclarationTransformer) transformSetAccessorDeclaration(input *ast.SetAccessorDeclaration) *ast.Node {
@@ -1006,32 +1010,42 @@ func (tx *DeclarationTransformer) transformSetAccessorDeclaration(input *ast.Set
 		return nil
 	}
 
-	return tx.Factory().UpdateSetAccessorDeclaration(
+	isPrivate := tx.host.GetEffectiveDeclarationFlags(tx.EmitContext().ParseNode(input.AsNode()), ast.ModifierFlagsPrivate) != 0
+	result := tx.Factory().UpdateSetAccessorDeclaration(
 		input,
 		tx.ensureModifiers(input.AsNode()),
 		input.Name(),
 		nil, // accessors shouldn't have type params
-		tx.updateAccessorParamList(input.AsNode(), tx.host.GetEffectiveDeclarationFlags(tx.EmitContext().ParseNode(input.AsNode()), ast.ModifierFlagsPrivate) != 0),
+		tx.updateAccessorParamList(input.AsNode(), isPrivate),
 		nil,
 		nil,
 		nil,
 	)
+	if isPrivate {
+		tx.suppressJsDoc(result)
+	}
+	return result
 }
 
 func (tx *DeclarationTransformer) transformGetAccesorDeclaration(input *ast.GetAccessorDeclaration) *ast.Node {
 	if ast.IsPrivateIdentifier(input.Name()) {
 		return nil
 	}
-	return tx.Factory().UpdateGetAccessorDeclaration(
+	isPrivate := tx.host.GetEffectiveDeclarationFlags(tx.EmitContext().ParseNode(input.AsNode()), ast.ModifierFlagsPrivate) != 0
+	result := tx.Factory().UpdateGetAccessorDeclaration(
 		input,
 		tx.ensureModifiers(input.AsNode()),
 		input.Name(),
 		nil, // accessors shouldn't have type params
-		tx.updateAccessorParamList(input.AsNode(), tx.host.GetEffectiveDeclarationFlags(tx.EmitContext().ParseNode(input.AsNode()), ast.ModifierFlagsPrivate) != 0),
+		tx.updateAccessorParamList(input.AsNode(), isPrivate),
 		tx.ensureType(input.AsNode(), false),
 		nil,
 		nil,
 	)
+	if isPrivate {
+		tx.suppressJsDoc(result)
+	}
+	return result
 }
 
 func (tx *DeclarationTransformer) updateAccessorParamList(input *ast.Node, isPrivate bool) *ast.ParameterList {
@@ -1104,8 +1118,12 @@ func (tx *DeclarationTransformer) omitPrivateMethodType(input *ast.Node) *ast.No
 		nil,
 		nil,
 	)
-	tx.preserveJsDoc(result, input)
+	tx.suppressJsDoc(result)
 	return result
+}
+
+func (tx *DeclarationTransformer) suppressJsDoc(node *ast.Node) {
+	tx.EmitContext().AddEmitFlags(node, printer.EFNoComments|printer.EFNoNestedComments)
 }
 
 func (tx *DeclarationTransformer) transformMethodSignatureDeclaration(input *ast.MethodSignatureDeclaration) *ast.Node {
@@ -1934,7 +1952,11 @@ func (tx *DeclarationTransformer) buildClassMembers(classNode *ast.Node, extraMe
 					tx.ensureType(param, false),
 					tx.ensureNoInitializer(param),
 				)
-				tx.preserveJsDoc(updated, param)
+				if tx.host.GetEffectiveDeclarationFlags(tx.EmitContext().ParseNode(param), ast.ModifierFlagsPrivate) != 0 {
+					tx.suppressJsDoc(updated)
+				} else {
+					tx.preserveJsDoc(updated, param)
+				}
 				parameterProperties = append(parameterProperties, updated)
 			} else {
 				// Pattern - this is currently an error, but we emit declarations for it somewhat correctly
