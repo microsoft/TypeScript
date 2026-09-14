@@ -133,8 +133,6 @@ export interface APIMethodInfo {
     getMemberInModuleExports: APIMethod<GetMemberInModuleExportsParams, SymbolResponse | null>;
     getJsDocTags: APIMethod<CheckerSymbolParams, JSDocTagInfo[] | null>;
     getDocumentationComment: APIMethod<CheckerSymbolParams, string>;
-    getJSDocTagsOfSignature: APIMethod<CheckerSignatureParams, JSDocTagInfo[] | null>;
-    getDocumentationCommentOfSignature: APIMethod<CheckerSignatureParams, string>;
     isArrayType: APIMethod<CheckerTypeParams, boolean>;
     isReadonlySymbol: APIMethod<CheckerSymbolParams, boolean>;
     getReferencesToSymbolInFile: APIMethod<GetReferencesToSymbolInFileParams, string[]>;
@@ -1035,7 +1033,6 @@ export interface BatchRequest {
         | "getDefaultFromTypeParameter"
         | "getDefaultProjectForFile"
         | "getDocumentationComment"
-        | "getDocumentationCommentOfSignature"
         | "getESSymbolType"
         | "getExportSpecifierLocalTargetSymbol"
         | "getExportSymbolOfSymbol"
@@ -1053,7 +1050,6 @@ export interface BatchRequest {
         | "getIndexInfosOfType"
         | "getIndexTypeOfType"
         | "getIndexTypeOfTypeByKind"
-        | "getJSDocTagsOfSignature"
         | "getJavaScriptEmit"
         | "getJsDocTags"
         | "getLocalTypeParametersOfType"
@@ -1195,7 +1191,6 @@ export interface BatchResponse {
         | "getDefaultFromTypeParameter"
         | "getDefaultProjectForFile"
         | "getDocumentationComment"
-        | "getDocumentationCommentOfSignature"
         | "getESSymbolType"
         | "getExportSpecifierLocalTargetSymbol"
         | "getExportSymbolOfSymbol"
@@ -1213,7 +1208,6 @@ export interface BatchResponse {
         | "getIndexInfosOfType"
         | "getIndexTypeOfType"
         | "getIndexTypeOfTypeByKind"
-        | "getJSDocTagsOfSignature"
         | "getJavaScriptEmit"
         | "getJsDocTags"
         | "getLocalTypeParametersOfType"

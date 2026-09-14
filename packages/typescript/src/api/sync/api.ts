@@ -1789,58 +1789,6 @@ class ProjectObjectRegistry {
             },
         );
     }
-
-    get fetchJsDocTagsOfSignature(): {
-        (source: Signature): readonly JSDocTagInfo[];
-        gen(source: Signature): Generator<ProtocolRequest, readonly JSDocTagInfo[], ProtocolResponse["result"]>;
-    } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "fetchJsDocTagsOfSignature",
-            function (source: Signature): readonly JSDocTagInfo[] {
-                const data = owner.client.apiRequest("getJSDocTagsOfSignature", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.id,
-                    signature: source.id,
-                });
-                return data ?? [];
-            },
-            function* (source: Signature): Generator<ProtocolRequest, readonly JSDocTagInfo[], ProtocolResponse["result"]> {
-                const data = yield* apiRequest("getJSDocTagsOfSignature", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.id,
-                    signature: source.id,
-                });
-                return data ?? [];
-            },
-        );
-    }
-
-    get fetchDocumentationCommentOfSignature(): {
-        (source: Signature): string;
-        gen(source: Signature): Generator<ProtocolRequest, string, ProtocolResponse["result"]>;
-    } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "fetchDocumentationCommentOfSignature",
-            function (source: Signature): string {
-                return owner.client.apiRequest("getDocumentationCommentOfSignature", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.id,
-                    signature: source.id,
-                });
-            },
-            function* (source: Signature): Generator<ProtocolRequest, string, ProtocolResponse["result"]> {
-                return yield* apiRequest("getDocumentationCommentOfSignature", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.id,
-                    signature: source.id,
-                });
-            },
-        );
-    }
 }
 
 export class Project {
@@ -6840,40 +6788,6 @@ export class Signature {
                 const result = yield* owner.objectRegistry.fetchType.gen(owner, "getReturnTypeOfSignature", owner.returnType);
                 owner.returnType = result.id;
                 return result;
-            },
-        );
-    }
-
-    get getDocumentationComment(): {
-        (_typeChecker?: Checker): string;
-        gen(_typeChecker?: Checker): Generator<ProtocolRequest, string, ProtocolResponse["result"]>;
-    } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getDocumentationComment",
-            function (_typeChecker?: Checker): string {
-                return owner.objectRegistry.fetchDocumentationCommentOfSignature(owner);
-            },
-            function* (_typeChecker?: Checker): Generator<ProtocolRequest, string, ProtocolResponse["result"]> {
-                return yield* owner.objectRegistry.fetchDocumentationCommentOfSignature.gen(owner);
-            },
-        );
-    }
-
-    get getJsDocTags(): {
-        (): readonly JSDocTagInfo[];
-        gen(): Generator<ProtocolRequest, readonly JSDocTagInfo[], ProtocolResponse["result"]>;
-    } {
-        const owner = this;
-        return cacheGeneratorMethod(
-            owner,
-            "getJsDocTags",
-            function (): readonly JSDocTagInfo[] {
-                return owner.objectRegistry.fetchJsDocTagsOfSignature(owner);
-            },
-            function* (): Generator<ProtocolRequest, readonly JSDocTagInfo[], ProtocolResponse["result"]> {
-                return yield* owner.objectRegistry.fetchJsDocTagsOfSignature.gen(owner);
             },
         );
     }

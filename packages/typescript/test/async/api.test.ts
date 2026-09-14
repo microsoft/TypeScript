@@ -4840,8 +4840,6 @@ export type Exported = number;
         const awaitedType = await project.checker.getAwaitedType(await signature.getReturnType());
         assert.ok(awaitedType);
         assert.equal(await project.checker.typeToString(awaitedType), "Awaited<T>");
-        assert.equal(await signature.getDocumentationComment(project.checker), "Returns the input value.");
-        assert.deepEqual(await signature.getJsDocTags(), [{ name: "deprecated", text: "Use identity instead." }]);
 
         const exportedSymbol = await project.checker.getSymbolAtPosition("/src/main.ts", sourceFile.text.indexOf("Exported ="));
         assert.ok(exportedSymbol);

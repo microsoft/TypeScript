@@ -958,23 +958,6 @@ class ProjectObjectRegistry {
         });
         return this.getOrCreateType(data);
     }
-
-    async fetchJsDocTagsOfSignature(source: Signature): Promise<readonly JSDocTagInfo[]> {
-        const data = await this.client.apiRequest("getJSDocTagsOfSignature", {
-            snapshot: this.snapshotId,
-            project: this.project.id,
-            signature: source.id,
-        });
-        return data ?? [];
-    }
-
-    async fetchDocumentationCommentOfSignature(source: Signature): Promise<string> {
-        return this.client.apiRequest("getDocumentationCommentOfSignature", {
-            snapshot: this.snapshotId,
-            project: this.project.id,
-            signature: source.id,
-        });
-    }
 }
 
 export class Project {
@@ -3145,14 +3128,6 @@ export class Signature {
         const result = await this.objectRegistry.fetchType(this, "getReturnTypeOfSignature", this.returnType);
         this.returnType = result.id;
         return result;
-    }
-
-    async getDocumentationComment(_typeChecker?: Checker): Promise<string> {
-        return this.objectRegistry.fetchDocumentationCommentOfSignature(this);
-    }
-
-    async getJsDocTags(): Promise<readonly JSDocTagInfo[]> {
-        return this.objectRegistry.fetchJsDocTagsOfSignature(this);
     }
 
     getTypeParameterAtPosition(pos: number): Promise<Type> {

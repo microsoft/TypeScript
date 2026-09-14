@@ -1693,8 +1693,6 @@ describe("API - generator batching", () => {
                 parityCase("Signature", "getTarget", constructSignature.getTarget, assertOptionalSignaturesEquivalent),
                 parityCase("Signature", "getReturnType", signature.getReturnType, assertTypesEquivalent),
                 parityCase("Signature", "getTypeParameterAtPosition", signature.getTypeParameterAtPosition, assertTypesEquivalent, 0),
-                parityCase("Signature", "getDocumentationComment", signature.getDocumentationComment, assertDeepEquivalent, checker),
-                parityCase("Signature", "getJsDocTags", signature.getJsDocTags, assertDeepEquivalent),
             ];
 
             runParityBatch(api, cases);

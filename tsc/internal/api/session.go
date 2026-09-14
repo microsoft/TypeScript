@@ -995,10 +995,6 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleGetJSDocTags(ctx, parsed.(*CheckerSymbolParams))
 	case string(MethodGetDocumentationComment):
 		return s.handleGetDocumentationComment(ctx, parsed.(*CheckerSymbolParams))
-	case string(MethodGetJSDocTagsOfSignature):
-		return s.handleGetJSDocTagsOfSignature(ctx, parsed.(*CheckerSignatureParams))
-	case string(MethodGetDocumentationCommentOfSignature):
-		return s.handleGetDocumentationCommentOfSignature(ctx, parsed.(*CheckerSignatureParams))
 	case string(MethodIsArrayType):
 		return s.handleIsArrayType(ctx, parsed.(*CheckerTypeParams))
 	case string(MethodIsReadonlySymbol):
@@ -4048,40 +4044,6 @@ func (s *Session) handleGetDocumentationComment(ctx context.Context, params *Che
 	}
 
 	return ls.GetSymbolDocumentationComment(setup.checker, symbol), nil
-}
-
-// @gen-proto-nullable
-func (s *Session) handleGetJSDocTagsOfSignature(ctx context.Context, params *CheckerSignatureParams) ([]*JSDocTagInfo, error) {
-	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
-	if err != nil {
-		return nil, err
-	}
-	defer setup.done()
-
-	signature, err := setup.resolveSignatureHandle(params.Signature)
-	if err != nil {
-		return nil, err
-	}
-	tags := ls.GetJSDocTags([]*ast.Node{signature.Declaration()})
-	results := make([]*JSDocTagInfo, len(tags))
-	for i, tag := range tags {
-		results[i] = &JSDocTagInfo{Name: tag.Name, Text: tag.Text}
-	}
-	return results, nil
-}
-
-func (s *Session) handleGetDocumentationCommentOfSignature(ctx context.Context, params *CheckerSignatureParams) (string, error) {
-	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
-	if err != nil {
-		return "", err
-	}
-	defer setup.done()
-
-	signature, err := setup.resolveSignatureHandle(params.Signature)
-	if err != nil {
-		return "", err
-	}
-	return ls.GetDocumentationComment(setup.checker, []*ast.Node{signature.Declaration()}), nil
 }
 
 // handleGetTypeArguments returns the type arguments of a type reference.

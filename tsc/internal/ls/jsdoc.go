@@ -29,10 +29,10 @@ func GetSymbolDocumentationComment(c *checker.Checker, symbol *ast.Symbol) strin
 	if symbol == nil {
 		return ""
 	}
-	return GetDocumentationComment(c, symbol.Declarations)
+	return getDocumentationComment(c, symbol.Declarations)
 }
 
-func GetDocumentationComment(c *checker.Checker, declarations []*ast.Node) string {
+func getDocumentationComment(c *checker.Checker, declarations []*ast.Node) string {
 	var parts []string
 	var seen collections.Set[*ast.Node]
 	for _, decl := range declarations {
@@ -56,10 +56,10 @@ func GetSymbolJSDocTags(symbol *ast.Symbol) []JSDocTagInfo {
 	if symbol == nil {
 		return nil
 	}
-	return GetJSDocTags(symbol.Declarations)
+	return getJSDocTags(symbol.Declarations)
 }
 
-func GetJSDocTags(declarations []*ast.Node) []JSDocTagInfo {
+func getJSDocTags(declarations []*ast.Node) []JSDocTagInfo {
 	var infos []JSDocTagInfo
 	var seen collections.Set[*ast.Node]
 	for _, decl := range declarations {
