@@ -497,14 +497,14 @@ func (c *Checker) narrowTypeByBinaryExpression(f *FlowState, t *Type, expr *ast.
 		if leftAccess != nil {
 			// The right operand is evaluated after a left discriminant access, so only carry the
 			// non-null fact through expressions that cannot have observable side effects.
-			if leftAccess == left && c.strictNullChecks && !ast.IsOptionalChain(leftAccess) && isNonNullAccess(leftAccess) && isSideEffectFreeNonNullFactExpression(expr.Right) && c.maybeTypeOfKind(t, TypeFlagsNullable) {
+			if leftAccess == left && ast.SkipParentheses(expr.Left) == leftAccess && (operator == ast.KindEqualsEqualsEqualsToken || operator == ast.KindExclamationEqualsEqualsToken) && c.strictNullChecks && !ast.IsOptionalChain(leftAccess) && isNonNullAccess(leftAccess) && isSideEffectFreeNonNullFactExpression(expr.Right) && c.maybeTypeOfKind(t, TypeFlagsNullable) {
 				t = c.getTypeWithFacts(t, TypeFactsNEUndefinedOrNull)
 			}
 			return c.narrowTypeByDiscriminantProperty(t, leftAccess, operator, right, assumeTrue)
 		}
 		rightAccess := c.getDiscriminantPropertyAccess(f, right, t)
 		if rightAccess != nil {
-			if rightAccess == right && c.strictNullChecks && !ast.IsOptionalChain(rightAccess) && isNonNullAccess(rightAccess) && c.maybeTypeOfKind(t, TypeFlagsNullable) {
+			if rightAccess == right && ast.SkipParentheses(expr.Right) == rightAccess && (operator == ast.KindEqualsEqualsEqualsToken || operator == ast.KindExclamationEqualsEqualsToken) && c.strictNullChecks && !ast.IsOptionalChain(rightAccess) && isNonNullAccess(rightAccess) && c.maybeTypeOfKind(t, TypeFlagsNullable) {
 				t = c.getTypeWithFacts(t, TypeFactsNEUndefinedOrNull)
 			}
 			return c.narrowTypeByDiscriminantProperty(t, rightAccess, operator, left, assumeTrue)

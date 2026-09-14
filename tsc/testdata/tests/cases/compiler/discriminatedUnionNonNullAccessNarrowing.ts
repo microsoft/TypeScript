@@ -153,6 +153,30 @@ if (assignmentInRight!.type === (assignmentInRight = maybeUndefined, "1")) {
     assignmentInRight.type;
 }
 
+declare let assignmentWrappedAccessLeft: Small;
+if ((assignmentWrappedAccessLeft!.type = (assignmentWrappedAccessLeft = maybeUndefined, "1")) === "1") {
+    // @ts-expect-error
+    assignmentWrappedAccessLeft.type;
+}
+
+declare let assignmentWrappedAccessRight: Small;
+if ("1" === (assignmentWrappedAccessRight!.type = (assignmentWrappedAccessRight = maybeUndefined, "1"))) {
+    // @ts-expect-error
+    assignmentWrappedAccessRight.type;
+}
+
+declare let looseEquality: Small;
+const coercibleValue: any = {
+    valueOf() {
+        looseEquality = maybeUndefined;
+        return "1";
+    },
+};
+if (looseEquality!.type == coercibleValue) {
+    // @ts-expect-error
+    looseEquality.type;
+}
+
 declare let invocationInRight: Small;
 if (invocationInRight!.type === (() => {
     invocationInRight = maybeUndefined;
