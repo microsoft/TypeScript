@@ -1861,8 +1861,7 @@ func (c *Checker) containsMatchingReference(source *ast.Node, target *ast.Node) 
 
 func isSideEffectFreeNonNullFactExpression(node *ast.Node) bool {
 	node = ast.SkipOuterExpressions(node, ast.OEKAll)
-	return ast.IsStringLiteralLike(node) || ast.IsNumericLiteral(node) || ast.IsBigIntLiteral(node) || ast.IsBooleanLiteral(node) ||
-		node.Kind == ast.KindNullKeyword || ast.IsIdentifier(node)
+	return ast.IsPrimitiveLiteralValue(node, true) || node.Kind == ast.KindNullKeyword || ast.IsIdentifier(node)
 }
 
 func isSideEffectFreeNonNullFactAccess(node *ast.Node) bool {

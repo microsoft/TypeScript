@@ -38,6 +38,11 @@ if (smallEqualIdentifier!.type === one) {
     smallEqualIdentifier.type;
 }
 
+declare let signedEqual: { type: -1 } | { type: 1 } | undefined;
+if (signedEqual!.type === -1) {
+    signedEqual.type;
+}
+
 declare let smallElse: Small;
 if (smallElse!.type === "1") {
 } else {
