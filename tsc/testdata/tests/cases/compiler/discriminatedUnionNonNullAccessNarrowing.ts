@@ -32,6 +32,12 @@ if ("1" === smallEqualRight!.type) {
     smallEqualRight.type;
 }
 
+declare const one: "1";
+declare let smallEqualIdentifier: Small;
+if (smallEqualIdentifier!.type === one) {
+    smallEqualIdentifier.type;
+}
+
 declare let smallElse: Small;
 if (smallElse!.type === "1") {
 } else {
@@ -137,4 +143,29 @@ largeAliasedValue = maybeLargeUndefined;
 if (largeAliasedTag === "1") {
     // @ts-expect-error
     largeAliasedValue.type;
+}
+
+// Later-evaluated expressions with possible side effects do not carry the non-null fact.
+
+declare let assignmentInRight: Small;
+if (assignmentInRight!.type === (assignmentInRight = maybeUndefined, "1")) {
+    // @ts-expect-error
+    assignmentInRight.type;
+}
+
+declare let invocationInRight: Small;
+if (invocationInRight!.type === (() => {
+    invocationInRight = maybeUndefined;
+    return "1" as const;
+})()) {
+    // @ts-expect-error
+    invocationInRight.type;
+}
+
+declare let assignmentInCase: Small;
+switch (assignmentInCase!.type) {
+    case (assignmentInCase = maybeUndefined, "1"):
+        // @ts-expect-error
+        assignmentInCase.type;
+        break;
 }
