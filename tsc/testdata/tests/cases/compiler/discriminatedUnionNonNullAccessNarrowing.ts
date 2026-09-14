@@ -27,6 +27,11 @@ if (smallEqual!.type === "1") {
     smallEqual.type;
 }
 
+declare let smallEqualRight: Small;
+if ("1" === smallEqualRight!.type) {
+    smallEqualRight.type;
+}
+
 declare let smallElse: Small;
 if (smallElse!.type === "1") {
 } else {
