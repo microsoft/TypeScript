@@ -25912,6 +25912,9 @@ func (c *Checker) isLiteralOfContextualType(candidateType *Type, contextualType 
 				return c.isLiteralOfContextualType(candidateType, t)
 			})
 		}
+		if contextualType.flags&TypeFlagsNegated != 0 {
+			return c.isLiteralOfContextualType(candidateType, contextualType.AsNegatedType().baseType)
+		}
 		if contextualType.flags&TypeFlagsInstantiableNonPrimitive != 0 {
 			// If the contextual type is a type variable constrained to a primitive type, consider
 			// this a literal context for literals of that primitive type. For example, given a
