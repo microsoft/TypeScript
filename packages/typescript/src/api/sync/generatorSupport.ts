@@ -38,9 +38,9 @@ export type DeferredAPIRequestGenerator = Generator<DeferredAPIRequest, void, un
 export type AllAPIRequestGenerator<Return = any> = Generator<AllAPIRequest, Return, Return>;
 export type AnyAPIRequestGenerator<Return = any> = APIRequestGenerator<Return> | DeferredAPIRequestGenerator | AllAPIRequestGenerator<Return>;
 type GeneratorReturn<T> = T extends Generator<any, infer R, any> ? R : never;
-export type ExecutedGeneratorsResults<T extends readonly AnyAPIRequestGenerator[]> = number extends T["length"] ? GeneratorReturn<Exclude<T[number], DeferredAPIRequestGenerator>>[]
-    : T extends readonly [infer Head extends AnyAPIRequestGenerator, ...infer Tail extends readonly AnyAPIRequestGenerator[]] ? Head extends DeferredAPIRequestGenerator ? ExecutedGeneratorsResults<Tail> : [GeneratorReturn<Head>, ...ExecutedGeneratorsResults<Tail>]
-    : [];
+export type ExecutedGeneratorsResults<T extends readonly AnyAPIRequestGenerator[]> = {
+    -readonly [K in keyof T]: GeneratorReturn<T[K]>;
+};
 
 interface GeneratorResponse {
     result: unknown;
