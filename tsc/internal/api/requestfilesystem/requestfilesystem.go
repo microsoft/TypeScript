@@ -80,7 +80,7 @@ type resolvedRequestPath struct {
 type requestPathLookup struct {
 	path            string
 	info            vfs.FileInfo
-	fileSystem      vfs.FS
+	useHost         bool
 	followedSymlink bool
 	ok              bool
 }
@@ -273,7 +273,7 @@ func (s *requestFileSystem) MergeDirectoryEntries(path string, lookup project.Fi
 	if lookup.Kind == project.FileSourceLayerLookupFallback || lookup.Kind == project.FileSourceLayerLookupHost {
 		return s.filterLocalEntries(path, s.removeEntries(lookup.Path, base))
 	}
-	localEntries, _, _ := s.getLocalEntries(lookup.Path)
+	localEntries, _ := s.getLocalEntries(lookup.Path)
 	var result vfs.Entries
 	if lookup.NeedsFallback {
 		result = s.removeEntries(lookup.Path, base)
@@ -441,25 +441,20 @@ func (s requestFileSystem) lookupPath(path string) requestPathLookup {
 		if resolvedFallback == requestFallbackMissing {
 			return requestPathLookup{}
 		}
-		if resolved.host {
-			result.fileSystem = s.host
-		} else {
-			result.fileSystem = s.host
-		}
-		result.ok = result.fileSystem != nil
+		result.useHost = true
 	}
 	return result
 }
 
-func (s requestFileSystem) mutationPath(path string) (vfs.FS, string, bool) {
+func (s requestFileSystem) mutationPath(path string) (string, bool) {
 	if s.kind != KindLayer {
-		return nil, "", false
+		return "", false
 	}
 	resolved := s.resolvePath(path)
 	if !resolved.ok {
-		return nil, "", false
+		return "", false
 	}
-	return s.host, resolved.path, s.host != nil
+	return resolved.path, true
 }
 
 func cloneEntries(entries vfs.Entries) vfs.Entries {
@@ -485,8 +480,8 @@ func (s requestFileSystem) ReadFile(fileName string) (string, bool) {
 	if !lookup.ok || lookup.info != nil && lookup.info.IsDir() {
 		return "", false
 	}
-	if lookup.fileSystem != nil {
-		return lookup.fileSystem.ReadFile(lookup.path)
+	if lookup.useHost {
+		return s.host.ReadFile(lookup.path)
 	}
 	if file, ok := lookup.info.(*requestFile); ok {
 		return file.content, true
@@ -499,7 +494,7 @@ func (s requestFileSystem) FileExists(fileName string) bool {
 	if !lookup.ok || lookup.info != nil && lookup.info.IsDir() {
 		return false
 	}
-	return lookup.info != nil || lookup.fileSystem != nil && lookup.fileSystem.FileExists(lookup.path)
+	return lookup.info != nil || lookup.useHost && s.host.FileExists(lookup.path)
 }
 
 func (s requestFileSystem) DirectoryExists(directoryName string) bool {
@@ -507,7 +502,7 @@ func (s requestFileSystem) DirectoryExists(directoryName string) bool {
 	if !lookup.ok || lookup.info != nil && !lookup.info.IsDir() {
 		return false
 	}
-	return lookup.info != nil || lookup.fileSystem != nil && lookup.fileSystem.DirectoryExists(lookup.path)
+	return lookup.info != nil || lookup.useHost && s.host.DirectoryExists(lookup.path)
 }
 
 func (s requestFileSystem) GetAccessibleEntries(directoryName string) vfs.Entries {
@@ -516,10 +511,10 @@ func (s requestFileSystem) GetAccessibleEntries(directoryName string) vfs.Entrie
 		return vfs.Entries{Symlinks: map[string]struct{}{}}
 	}
 	var result vfs.Entries
-	if lookup.fileSystem != nil {
-		result = s.removeEntries(lookup.path, lookup.fileSystem.GetAccessibleEntries(lookup.path))
+	if lookup.useHost {
+		result = s.removeEntries(lookup.path, s.host.GetAccessibleEntries(lookup.path))
 	} else {
-		localEntries, explicit, _ := s.getLocalEntries(lookup.path)
+		localEntries, explicit := s.getLocalEntries(lookup.path)
 		result = localEntries
 		if s.kind == KindLayer && !explicit && !s.blocksFallback(directoryName) && !s.blocksFallback(lookup.path) {
 			result = s.removeEntries(lookup.path, s.host.GetAccessibleEntries(lookup.path))
@@ -552,15 +547,15 @@ func (s requestFileSystem) filterLocalEntries(directoryName string, entries vfs.
 	return result
 }
 
-func (s requestFileSystem) getLocalEntries(directoryName string) (entries vfs.Entries, explicit bool, ok bool) {
+func (s requestFileSystem) getLocalEntries(directoryName string) (entries vfs.Entries, explicit bool) {
 	node, _ := s.paths.lookup(s.toPath(directoryName))
-	entries, ok = node.entries()
+	entries, _ = node.entries()
 	if node != nil {
 		if directory, isDirectory := node.entry.(*requestDirectory); isDirectory {
 			explicit = directory.listing != nil
 		}
 	}
-	return entries, explicit, ok
+	return entries, explicit
 }
 
 func mergeEntries(base vfs.Entries, overlay vfs.Entries, equal func(string, string) bool) vfs.Entries {
@@ -691,8 +686,8 @@ func (s requestFileSystem) Realpath(path string) string {
 	if !lookup.ok {
 		return path
 	}
-	if lookup.fileSystem != nil {
-		return lookup.fileSystem.Realpath(lookup.path)
+	if lookup.useHost {
+		return s.host.Realpath(lookup.path)
 	}
 	if lookup.info != nil || !lookup.followedSymlink {
 		return lookup.path
@@ -701,35 +696,35 @@ func (s requestFileSystem) Realpath(path string) string {
 }
 
 func (s requestFileSystem) WriteFile(fileName string, data string) error {
-	host, path, ok := s.mutationPath(fileName)
+	path, ok := s.mutationPath(fileName)
 	if !ok {
 		return vfs.ErrInvalid
 	}
-	return host.WriteFile(path, data)
+	return s.host.WriteFile(path, data)
 }
 
 func (s requestFileSystem) AppendFile(fileName string, data string) error {
-	host, path, ok := s.mutationPath(fileName)
+	path, ok := s.mutationPath(fileName)
 	if !ok {
 		return vfs.ErrInvalid
 	}
-	return host.AppendFile(path, data)
+	return s.host.AppendFile(path, data)
 }
 
 func (s requestFileSystem) Remove(path string) error {
-	host, path, ok := s.mutationPath(path)
+	path, ok := s.mutationPath(path)
 	if !ok {
 		return vfs.ErrInvalid
 	}
-	return host.Remove(path)
+	return s.host.Remove(path)
 }
 
 func (s requestFileSystem) Chtimes(path string, aTime time.Time, mTime time.Time) error {
-	host, path, ok := s.mutationPath(path)
+	path, ok := s.mutationPath(path)
 	if !ok {
 		return vfs.ErrInvalid
 	}
-	return host.Chtimes(path, aTime, mTime)
+	return s.host.Chtimes(path, aTime, mTime)
 }
 
 func (s requestFileSystem) Stat(path string) vfs.FileInfo {
@@ -737,26 +732,19 @@ func (s requestFileSystem) Stat(path string) vfs.FileInfo {
 	if !lookup.ok {
 		return nil
 	}
-	if lookup.fileSystem != nil {
-		return statFileSystem(lookup.fileSystem, lookup.path)
-	}
-	return lookup.info
-}
-
-func statFileSystem(fileSystem vfs.FS, path string) vfs.FileInfo {
-	if fileSystem == nil {
+	if lookup.useHost {
+		if info := s.host.Stat(lookup.path); info != nil {
+			return info
+		}
+		if s.host.DirectoryExists(lookup.path) {
+			return &requestDirectory{directoryName: lookup.path}
+		}
+		if s.host.FileExists(lookup.path) {
+			return &requestFile{fileName: lookup.path}
+		}
 		return nil
 	}
-	if info := fileSystem.Stat(path); info != nil {
-		return info
-	}
-	if fileSystem.DirectoryExists(path) {
-		return &requestDirectory{directoryName: path}
-	}
-	if fileSystem.FileExists(path) {
-		return &requestFile{fileName: path}
-	}
-	return nil
+	return lookup.info
 }
 
 func (s requestFileSystem) WalkDir(root string, walkFn vfs.WalkDirFunc) error {
