@@ -29,16 +29,20 @@ func GetSymbolDocumentationComment(c *checker.Checker, symbol *ast.Symbol) strin
 	if symbol == nil {
 		return ""
 	}
+	return GetDocumentationComment(c, symbol.Declarations)
+}
+
+func GetDocumentationComment(c *checker.Checker, declarations []*ast.Node) string {
 	var parts []string
 	var seen collections.Set[*ast.Node]
-	for _, decl := range symbol.Declarations {
+	for _, decl := range declarations {
 		if decl == nil {
 			continue
 		}
 		if !seen.AddIfAbsent(decl) {
 			continue
 		}
-		if doc := getDocumentationFromDeclaration(noMappedLocation, c, symbol, decl, decl, lsproto.MarkupKindPlainText, true /*commentOnly*/); doc != "" && !slices.Contains(parts, doc) {
+		if doc := getDocumentationFromDeclaration(noMappedLocation, c, nil, decl, decl, lsproto.MarkupKindPlainText, true /*commentOnly*/); doc != "" && !slices.Contains(parts, doc) {
 			parts = append(parts, doc)
 		}
 	}
@@ -52,9 +56,13 @@ func GetSymbolJSDocTags(symbol *ast.Symbol) []JSDocTagInfo {
 	if symbol == nil {
 		return nil
 	}
+	return GetJSDocTags(symbol.Declarations)
+}
+
+func GetJSDocTags(declarations []*ast.Node) []JSDocTagInfo {
 	var infos []JSDocTagInfo
 	var seen collections.Set[*ast.Node]
-	for _, decl := range symbol.Declarations {
+	for _, decl := range declarations {
 		if decl == nil {
 			continue
 		}
