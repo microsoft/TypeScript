@@ -35,6 +35,10 @@ import {
 } from "../../ast/index.ts";
 import { assertNever } from "../../internal/utils.ts";
 import {
+    createGroupedBatchRequest,
+    getBatchResults,
+} from "../batch.ts";
+import {
     encodeNode,
     uint8ArrayToBase64,
 } from "../node/encoder.ts";
@@ -270,7 +274,7 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
     // @sync-skip-block-end
     // @sync-only-start
     // batch<T extends readonly AnyAPIRequestGenerator[]>(...requestGenerators: T): ExecutedGeneratorsResults<T> {
-    //     return executeRequestGenerators(requestGenerators, requests => this.client.batchRequests(requests).responses);
+    //     return executeRequestGenerators(requestGenerators, requests => this.client.batchRequests(requests));
     // }
     // @sync-only-end
 
@@ -1597,12 +1601,12 @@ export class Checker {
     getSymbolAtLocation(nodes: readonly Node[]): Promise<(Symbol | undefined)[]>;
     async getSymbolAtLocation(nodeOrNodes: Node | readonly Node[]): Promise<Symbol | (Symbol | undefined)[] | undefined> {
         if (Array.isArray(nodeOrNodes)) {
-            const data = await this.client.apiRequest("getSymbolsAtLocations", {
-                snapshot: this.snapshotId,
-                project: this.project.id,
-                locations: nodeOrNodes.map(node => getNodeId(node)),
-            });
-            return data.map(d => d ? this.objectRegistry.getOrCreateSymbol(d) : undefined);
+            const response = await this.client.batchRequest(createGroupedBatchRequest(
+                "getSymbolAtLocation",
+                { snapshot: this.snapshotId, project: this.project.id },
+                { location: nodeOrNodes.map(node => getNodeId(node)) },
+            ));
+            return getBatchResults<SymbolResponse | null>(response).map(data => data ? this.objectRegistry.getOrCreateSymbol(data) : undefined);
         }
         const data = await this.client.apiRequest("getSymbolAtLocation", {
             snapshot: this.snapshotId,
@@ -1624,25 +1628,24 @@ export class Checker {
             });
             return data ? this.objectRegistry.getOrCreateSymbol(data) : undefined;
         }
-        const data = await this.client.apiRequest("getSymbolsAtPositions", {
-            snapshot: this.snapshotId,
-            project: this.project.id,
-            file,
-            positions: positionOrPositions,
-        });
-        return data.map(d => d ? this.objectRegistry.getOrCreateSymbol(d) : undefined);
+        const response = await this.client.batchRequest(createGroupedBatchRequest(
+            "getSymbolAtPosition",
+            { snapshot: this.snapshotId, project: this.project.id, file },
+            { position: positionOrPositions },
+        ));
+        return getBatchResults<SymbolResponse | null>(response).map(data => data ? this.objectRegistry.getOrCreateSymbol(data) : undefined);
     }
 
     getSymbolOfSourceFile(file: DocumentIdentifier): Promise<Symbol | undefined>;
     getSymbolOfSourceFile(files: readonly DocumentIdentifier[]): Promise<(Symbol | undefined)[]>;
     async getSymbolOfSourceFile(fileOrFiles: DocumentIdentifier | readonly DocumentIdentifier[]): Promise<Symbol | (Symbol | undefined)[] | undefined> {
         if (Array.isArray(fileOrFiles)) {
-            const data = await this.client.apiRequest("getSymbolsOfSourceFiles", {
-                snapshot: this.snapshotId,
-                project: this.project.id,
-                files: fileOrFiles,
-            });
-            return data.map(d => d ? this.objectRegistry.getOrCreateSymbol(d) : undefined);
+            const response = await this.client.batchRequest(createGroupedBatchRequest(
+                "getSymbolOfSourceFile",
+                { snapshot: this.snapshotId, project: this.project.id },
+                { file: fileOrFiles },
+            ));
+            return getBatchResults<SymbolResponse | null>(response).map(data => data ? this.objectRegistry.getOrCreateSymbol(data) : undefined);
         }
         const data = await this.client.apiRequest("getSymbolOfSourceFile", {
             snapshot: this.snapshotId,
@@ -1661,12 +1664,12 @@ export class Checker {
     getTypeOfSymbol(symbols: readonly Symbol[]): Promise<Type[]>;
     async getTypeOfSymbol(symbolOrSymbols: Symbol | readonly Symbol[]): Promise<Type | Type[]> {
         if (Array.isArray(symbolOrSymbols)) {
-            const data = await this.client.apiRequest("getTypesOfSymbols", {
-                snapshot: this.snapshotId,
-                project: this.project.id,
-                symbols: symbolOrSymbols.map(s => s.id),
-            });
-            return data.map(d => this.objectRegistry.getOrCreateType(d));
+            const response = await this.client.batchRequest(createGroupedBatchRequest(
+                "getTypeOfSymbol",
+                { snapshot: this.snapshotId, project: this.project.id },
+                { symbol: symbolOrSymbols.map(symbol => symbol.id) },
+            ));
+            return getBatchResults<TypeResponse>(response).map(data => this.objectRegistry.getOrCreateType(data));
         }
         const data = await this.client.apiRequest("getTypeOfSymbol", {
             snapshot: this.snapshotId,
@@ -1739,12 +1742,12 @@ export class Checker {
     getTypeAtLocation(nodes: readonly Node[]): Promise<Type[]>;
     async getTypeAtLocation(nodeOrNodes: Node | readonly Node[]): Promise<Type | Type[]> {
         if (Array.isArray(nodeOrNodes)) {
-            const data = await this.client.apiRequest("getTypeAtLocations", {
-                snapshot: this.snapshotId,
-                project: this.project.id,
-                locations: nodeOrNodes.map(node => getNodeId(node)),
-            });
-            return data.map(d => this.objectRegistry.getOrCreateType(d));
+            const response = await this.client.batchRequest(createGroupedBatchRequest(
+                "getTypeAtLocation",
+                { snapshot: this.snapshotId, project: this.project.id },
+                { location: nodeOrNodes.map(node => getNodeId(node)) },
+            ));
+            return getBatchResults<TypeResponse>(response).map(data => this.objectRegistry.getOrCreateType(data));
         }
         const data = await this.client.apiRequest("getTypeAtLocation", {
             snapshot: this.snapshotId,
@@ -1784,13 +1787,12 @@ export class Checker {
             });
             return data ? this.objectRegistry.getOrCreateType(data) : undefined;
         }
-        const data = await this.client.apiRequest("getTypesAtPositions", {
-            snapshot: this.snapshotId,
-            project: this.project.id,
-            file,
-            positions: positionOrPositions,
-        });
-        return data.map(d => d ? this.objectRegistry.getOrCreateType(d) : undefined);
+        const response = await this.client.batchRequest(createGroupedBatchRequest(
+            "getTypeAtPosition",
+            { snapshot: this.snapshotId, project: this.project.id, file },
+            { position: positionOrPositions },
+        ));
+        return getBatchResults<TypeResponse | null>(response).map(data => data ? this.objectRegistry.getOrCreateType(data) : undefined);
     }
 
     async resolveName(

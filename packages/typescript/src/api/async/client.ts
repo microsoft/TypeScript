@@ -39,6 +39,79 @@ import {
 
 export type { ClientOptions, ClientSocketOptions, ClientSpawnOptions };
 
+interface GroupedBatchRequest {
+    method: APIRequest["method"];
+    base?: Record<string, unknown>;
+    count: number;
+    fields?: Record<string, unknown[]>;
+    requests?: unknown[];
+}
+
+function groupBatchRequests<T extends { method: APIRequest["method"]; params: APIRequest["params"]; }>(requests: readonly T[]): {
+    groups: GroupedBatchRequest[];
+    groupOrder: number[];
+} | undefined {
+    const groupIndexes = new Map<APIRequest["method"], number>();
+    const requestsByMethod: T[][] = [];
+    const groupOrder: number[] = [];
+    for (const request of requests) {
+        let groupIndex = groupIndexes.get(request.method);
+        if (groupIndex === undefined) {
+            groupIndex = requestsByMethod.length;
+            groupIndexes.set(request.method, groupIndex);
+            requestsByMethod.push([]);
+        }
+        requestsByMethod[groupIndex].push(request);
+        groupOrder.push(groupIndex);
+    }
+    if (!requestsByMethod.some(group => group.length >= 4)) return undefined;
+
+    const groups: GroupedBatchRequest[] = [];
+    for (const [method, groupIndex] of groupIndexes) {
+        const groupedRequests = requestsByMethod[groupIndex];
+        const params = groupedRequests.map(request => request.params);
+        if (params.every(param => typeof param === "object" && param !== null && !Array.isArray(param))) {
+            const records = params as Record<string, unknown>[];
+            const base = commonParams(records);
+            const commonKeys = new Set(Object.keys(base));
+            const deltas = records.map(param => Object.fromEntries(Object.entries(param).filter(([key]) => !commonKeys.has(key))));
+            const fields = parameterColumns(deltas);
+            groups.push(
+                fields
+                    ? { method, base, count: records.length, fields }
+                    : { method, base, count: records.length, requests: deltas },
+            );
+        }
+        else {
+            groups.push({ method, count: params.length, requests: params });
+        }
+    }
+    return { groups, groupOrder };
+}
+
+function parameterColumns(params: readonly Record<string, unknown>[]): Record<string, unknown[]> | undefined {
+    const keys = Object.keys(params[0]);
+    if (
+        !params.every(param => {
+            const paramKeys = Object.keys(param);
+            return paramKeys.length === keys.length
+                && keys.every(key => Object.hasOwn(param, key) && param[key] !== undefined);
+        })
+    ) return undefined;
+    return Object.fromEntries(keys.map(key => [key, params.map(param => param[key])])) as Record<string, unknown[]>;
+}
+
+function commonParams(params: readonly Record<string, unknown>[]): Record<string, unknown> {
+    const first = params[0];
+    return Object.fromEntries(
+        Object.entries(first).filter(([key, value]) => {
+            const type = typeof value;
+            return (value === null || type !== "object" && type !== "undefined")
+                && params.every(param => Object.hasOwn(param, key) && param[key] === value);
+        }),
+    );
+}
+
 /**
  * Client handles communication with the TypeScript API server
  * over STDIO (spawned process) or a Unix domain socket using JSON-RPC.
@@ -220,40 +293,53 @@ export class Client {
                 return;
             }
 
-            const requestType = new RequestType<unknown, BatchRequestsResponse, void>("batchRequests");
-            const params: BatchRequestsParams = { requests: requests.map(request => ({ method: request.method, params: request.params })) };
-            if (this.options.maxResponseBytesPerPage !== undefined) {
-                params.maxResponseBytesPerPage = this.options.maxResponseBytesPerPage;
-            }
-            const response = await this.sendRequestWithTiming(requestType, params);
-            let responses = response.responses;
-            let continuationToken = response.continuationToken;
-            while (continuationToken) {
-                const pageParams: BatchRequestsParams = {
-                    requests: [],
-                    continuationToken,
-                };
-                if (this.options.maxResponseBytesPerPage !== undefined) {
-                    pageParams.maxResponseBytesPerPage = this.options.maxResponseBytesPerPage;
-                }
-                const page = await this.sendRequestWithTiming(requestType, pageParams);
-                responses = responses.concat(page.responses);
-                continuationToken = page.continuationToken;
-            }
+            // Paired benchmarks show grouping pays for its construction cost at four requests.
+            const grouped = requests.length >= 4 ? groupBatchRequests(requests) : undefined;
+            const params: BatchRequestsParams | { groups: GroupedBatchRequest[]; groupOrder: number[]; maxResponseBytesPerPage?: number | undefined; } = grouped
+                ? { groups: grouped.groups, groupOrder: grouped.groupOrder, maxResponseBytesPerPage: this.options.maxResponseBytesPerPage }
+                : { requests: requests.map(request => ({ method: request.method, params: request.params })), maxResponseBytesPerPage: this.options.maxResponseBytesPerPage };
+            const response = await this.batchRequest(params as BatchRequestsParams);
             for (let i = 0; i < requests.length; i++) {
                 const { resolve, reject } = requests[i];
-                const item = responses[i];
-                if (item.error !== undefined) {
-                    reject(new Error(item.error));
+                const error = response.errors?.[i];
+                if (error !== undefined) {
+                    reject(new Error(error));
                 }
                 else {
-                    resolve(item.result);
+                    resolve(response.results[i]);
                 }
             }
         }
         catch (error) {
             for (const { reject } of requests) reject(error);
         }
+    }
+
+    async batchRequest(params: BatchRequestsParams): Promise<BatchRequestsResponse> {
+        if (this.closed) throw new Error("Client is closed");
+        if (!this.connected) {
+            await this.connect();
+        }
+        const requestType = new RequestType<unknown, BatchRequestsResponse, void>("batchRequests");
+        const response = await this.sendRequestWithTiming(requestType, params);
+        let results = response.results;
+        let errors = response.errors;
+        let continuationToken = response.continuationToken;
+        while (continuationToken) {
+            const page = await this.sendRequestWithTiming(requestType, {
+                requests: [],
+                continuationToken,
+                maxResponseBytesPerPage: this.options.maxResponseBytesPerPage,
+            });
+            const offset = results.length;
+            results = results.concat(page.results);
+            if (page.errors) {
+                errors ??= {};
+                for (const [index, message] of Object.entries(page.errors)) errors[Number(index) + offset] = message;
+            }
+            continuationToken = page.continuationToken;
+        }
+        return errors ? { results, errors } : { results };
     }
 
     private scheduleImmediateBatch(): void {

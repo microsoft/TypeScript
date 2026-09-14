@@ -1,6 +1,7 @@
 package api
 
 import (
+	"bytes"
 	"context"
 	"encoding/base64"
 	"errors"
@@ -439,6 +440,83 @@ type Session struct {
 
 type batchResponsePage struct {
 	encodedResponses []json.Value
+	errors           []string
+}
+
+type batchCheckerKey struct {
+	snapshot SnapshotID
+	project  ProjectID
+}
+
+type batchCheckerCache struct {
+	setups map[batchCheckerKey]checkerSetup
+	leases map[*compiler.Program]batchCheckerLease
+}
+
+type batchCheckerLease struct {
+	checker *checker.Checker
+	done    func()
+}
+
+type batchCheckerCacheContextKey struct{}
+
+type batchRequestDecoder interface {
+	request(index int) any
+}
+
+type typedBatchRequestDecoder[T any] struct {
+	base   T
+	params T
+	apply  func(params *T, index int)
+}
+
+func newTypedBatchRequestDecoder[T any](base json.Value, apply func(params *T, index int)) (batchRequestDecoder, error) {
+	var params T
+	if err := json.Unmarshal(base, &params); err != nil {
+		return nil, err
+	}
+	return &typedBatchRequestDecoder[T]{base: params, apply: apply}, nil
+}
+
+func (d *typedBatchRequestDecoder[T]) request(index int) any {
+	d.params = d.base
+	d.apply(&d.params, index)
+	return &d.params
+}
+
+func validateBatchColumn(name string, length int, count int) error {
+	if length != 0 && length != count {
+		return fmt.Errorf("parameter %q has %d values, expected %d", name, length, count)
+	}
+	return nil
+}
+
+type parsedRequestContext struct {
+	method string
+	params any
+}
+
+type parsedRequestContextKey struct{}
+
+type batchGroupState struct {
+	checkerCache  batchCheckerCache
+	parsedRequest parsedRequestContext
+	ctx           context.Context
+}
+
+func newBatchGroupState(ctx context.Context, method Method) *batchGroupState {
+	state := &batchGroupState{parsedRequest: parsedRequestContext{method: string(method)}}
+	ctx = context.WithValue(ctx, batchCheckerCacheContextKey{}, &state.checkerCache)
+	state.ctx = context.WithValue(ctx, parsedRequestContextKey{}, &state.parsedRequest)
+	return state
+}
+
+func (c *batchCheckerCache) release() {
+	for program, lease := range c.leases {
+		lease.done()
+		delete(c.leases, program)
+	}
+	clear(c.setups)
 }
 
 // Ensure Session implements Handler
@@ -673,6 +751,14 @@ func (setup checkerSetup) resolveLocation(handle NodeHandle, file *DocumentIdent
 // setupChecker resolves snapshot, program, and type checker for a project.
 // Callers must defer setup.done() to release the checker.
 func (s *Session) setupChecker(ctx context.Context, snapshot SnapshotID, projectHandle ProjectID) (checkerSetup, error) {
+	key := batchCheckerKey{snapshot: snapshot, project: projectHandle}
+	cache, _ := ctx.Value(batchCheckerCacheContextKey{}).(*batchCheckerCache)
+	if cache != nil {
+		if setup, ok := cache.setups[key]; ok {
+			return setup, nil
+		}
+	}
+
 	sd, err := s.getSnapshotData(snapshot)
 	if err != nil {
 		return checkerSetup{}, err
@@ -683,14 +769,43 @@ func (s *Session) setupChecker(ctx context.Context, snapshot SnapshotID, project
 		return checkerSetup{}, err
 	}
 
+	if cache != nil && cache.leases != nil {
+		if lease, ok := cache.leases[program]; ok {
+			setup := checkerSetup{
+				sd:        sd,
+				program:   program,
+				checker:   lease.checker,
+				done:      func() {},
+				projectID: projectHandle,
+			}
+			if cache.setups == nil {
+				cache.setups = make(map[batchCheckerKey]checkerSetup)
+			}
+			cache.setups[key] = setup
+			return setup, nil
+		}
+	}
+
 	c, done := program.GetTypeChecker(core.WithCheckerLifetime(ctx, core.CheckerLifetimeAPI))
-	return checkerSetup{
+	setup := checkerSetup{
 		sd:        sd,
 		program:   program,
 		checker:   c,
 		done:      done,
 		projectID: projectHandle,
-	}, nil
+	}
+	if cache != nil {
+		if cache.setups == nil {
+			cache.setups = make(map[batchCheckerKey]checkerSetup)
+		}
+		if cache.leases == nil {
+			cache.leases = make(map[*compiler.Program]batchCheckerLease)
+		}
+		cache.leases[program] = batchCheckerLease{checker: c, done: done}
+		setup.done = func() {}
+		cache.setups[key] = setup
+	}
+	return setup, nil
 }
 
 // setupLanguageService creates a LanguageService for the given snapshot/project.
@@ -730,9 +845,15 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return "pong", nil
 	}
 
-	parsed, err := unmarshalPayload(method, params)
-	if err != nil {
-		return nil, fmt.Errorf("%w: %w", ErrInvalidRequest, err)
+	var parsed any
+	if request, ok := ctx.Value(parsedRequestContextKey{}).(*parsedRequestContext); ok && request.method == method {
+		parsed = request.params
+	} else {
+		var err error
+		parsed, err = unmarshalPayload(method, params)
+		if err != nil {
+			return nil, fmt.Errorf("%w: %w", ErrInvalidRequest, err)
+		}
 	}
 
 	switch method {
@@ -786,20 +907,12 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleGetConfigSourceFile(ctx, parsed.(*GetSourceFileParams))
 	case string(MethodGetSymbolAtPosition):
 		return s.handleGetSymbolAtPosition(ctx, parsed.(*GetSymbolAtPositionParams))
-	case string(MethodGetSymbolsAtPositions):
-		return s.handleGetSymbolsAtPositions(ctx, parsed.(*GetSymbolsAtPositionsParams))
 	case string(MethodGetSymbolAtLocation):
 		return s.handleGetSymbolAtLocation(ctx, parsed.(*GetSymbolAtLocationParams))
-	case string(MethodGetSymbolsAtLocations):
-		return s.handleGetSymbolsAtLocations(ctx, parsed.(*GetSymbolsAtLocationsParams))
 	case string(MethodGetSymbolOfSourceFile):
 		return s.handleGetSymbolOfSourceFile(ctx, parsed.(*GetSymbolOfSourceFileParams))
-	case string(MethodGetSymbolsOfSourceFiles):
-		return s.handleGetSymbolsOfSourceFiles(ctx, parsed.(*GetSymbolsOfSourceFilesParams))
 	case string(MethodGetTypeOfSymbol):
 		return s.handleGetTypeOfSymbol(ctx, parsed.(*GetTypeOfSymbolParams))
-	case string(MethodGetTypesOfSymbols):
-		return s.handleGetTypesOfSymbols(ctx, parsed.(*GetTypesOfSymbolsParams))
 	case string(MethodGetDeclaredTypeOfSymbol):
 		return s.handleGetDeclaredTypeOfSymbol(ctx, parsed.(*GetTypeOfSymbolParams))
 	case string(MethodGetNonMissingTypeOfSymbol):
@@ -814,12 +927,8 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleGetResolvedSignature(ctx, parsed.(*GetResolvedSignatureParams))
 	case string(MethodGetTypeAtLocation):
 		return s.handleGetTypeAtLocation(ctx, parsed.(*GetTypeAtLocationParams))
-	case string(MethodGetTypeAtLocations):
-		return s.handleGetTypeAtLocations(ctx, parsed.(*GetTypeAtLocationsParams))
 	case string(MethodGetTypeAtPosition):
 		return s.handleGetTypeAtPosition(ctx, parsed.(*GetTypeAtPositionParams))
-	case string(MethodGetTypesAtPositions):
-		return s.handleGetTypesAtPositions(ctx, parsed.(*GetTypesAtPositionsParams))
 	case string(MethodGetParentOfSymbol):
 		return s.handleGetParentOfSymbol(ctx, parsed.(*GetSymbolPropertyParams))
 	case string(MethodGetMembersOfSymbol):
@@ -1043,61 +1152,200 @@ func (s *Session) handleBatchRequests(ctx context.Context, params *BatchRequests
 		return s.paginateBatchResponses(page, nil, params.MaxResponseBytesPerPage)
 	}
 
-	responses := make([]BatchResponse, len(params.Requests))
-	for i, request := range params.Requests {
-		responses[i] = s.handleBatchRequest(ctx, request)
+	var responses []BatchResponse
+	if params.Groups != nil {
+		var err error
+		responses, err = s.handleBatchRequestGroups(ctx, params.Groups, params.GroupOrder)
+		if err != nil {
+			return nil, err
+		}
+	} else {
+		responses = make([]BatchResponse, len(params.Requests))
+		for i, request := range params.Requests {
+			responses[i] = s.handleBatchRequest(ctx, request)
+		}
+	}
+	return s.finishBatchResponses(responses, params.MaxResponseBytesPerPage)
+}
+
+func (s *Session) handleBatchRequestGroups(ctx context.Context, groups []BatchRequestGroup, order []uint32) ([]BatchResponse, error) {
+	if len(order) == 0 {
+		return nil, errors.New("api: invalid request: grouped batch requires groupOrder")
+	}
+	states := core.Map(groups, func(group BatchRequestGroup) *batchGroupState {
+		return newBatchGroupState(ctx, group.Method)
+	})
+	for _, state := range states {
+		defer state.checkerCache.release()
+	}
+	cursors := make([]int, len(groups))
+	decoders := make([]batchRequestDecoder, len(groups))
+	for i, group := range groups {
+		if group.Count < 0 {
+			return nil, fmt.Errorf("%w: invalid request count for group %d", ErrInvalidRequest, i)
+		}
+		if group.Requests == nil {
+			base := group.Base
+			if len(bytes.TrimSpace(base)) == 0 {
+				base = json.Value(`{}`)
+			}
+			fields := group.Fields
+			if len(bytes.TrimSpace(fields)) == 0 {
+				fields = json.Value(`{}`)
+			}
+			decoder, err := newGeneratedBatchRequestDecoder(group.Method, base, fields, group.Count)
+			if err != nil {
+				return nil, fmt.Errorf("%w: invalid fields for group %d: %w", ErrInvalidRequest, i, err)
+			}
+			if decoder == nil {
+				return nil, fmt.Errorf("%w: method %q does not support columnar requests", ErrInvalidRequest, group.Method)
+			}
+			decoders[i] = decoder
+		}
+	}
+	responses := make([]BatchResponse, len(order))
+	previousGroupIndex := -1
+	for i, rawGroupIndex := range order {
+		groupIndex := int(rawGroupIndex)
+		if groupIndex >= len(groups) {
+			return nil, fmt.Errorf("%w: invalid group index %d", ErrInvalidRequest, groupIndex)
+		}
+		if previousGroupIndex != -1 && previousGroupIndex != groupIndex {
+			states[previousGroupIndex].checkerCache.release()
+		}
+		previousGroupIndex = groupIndex
+		group := groups[groupIndex]
+		requestIndex := cursors[groupIndex]
+		if requestIndex >= group.Count {
+			return nil, fmt.Errorf("%w: too many requests for group %d", ErrInvalidRequest, groupIndex)
+		}
+		if decoder := decoders[groupIndex]; decoder != nil {
+			state := states[groupIndex]
+			state.parsedRequest.params = decoder.request(requestIndex)
+			responses[i] = s.handleParsedBatchRequest(state.ctx, group.Method)
+		} else {
+			if requestIndex >= len(group.Requests) {
+				return nil, fmt.Errorf("%w: missing request parameters for group %d", ErrInvalidRequest, groupIndex)
+			}
+			params, err := mergeBatchRequestParams(group.Base, group.Requests[requestIndex])
+			if err != nil {
+				return nil, fmt.Errorf("%w: invalid grouped request %d for %q: %w", ErrInvalidRequest, requestIndex, group.Method, err)
+			}
+			responses[i] = s.handleBatchRequest(states[groupIndex].ctx, BatchRequest{Method: group.Method, Params: params})
+		}
+		cursors[groupIndex]++
+	}
+	for groupIndex, group := range groups {
+		if cursors[groupIndex] != group.Count {
+			return nil, fmt.Errorf("%w: unused requests in group %d", ErrInvalidRequest, groupIndex)
+		}
+	}
+	return responses, nil
+}
+
+func mergeBatchRequestParams(base, delta json.Value) (json.Value, error) {
+	base = bytes.TrimSpace(base)
+	delta = bytes.TrimSpace(delta)
+	if len(base) == 0 {
+		return delta, nil
+	}
+	if len(base) < 2 || base[0] != '{' || base[len(base)-1] != '}' {
+		return nil, errors.New("base must be an object")
+	}
+	if len(delta) < 2 || delta[0] != '{' || delta[len(delta)-1] != '}' {
+		return nil, errors.New("request parameters must be an object")
+	}
+	if len(base) == 2 {
+		return delta, nil
+	}
+	if len(delta) == 2 {
+		return base, nil
+	}
+	result := make([]byte, 0, len(base)+len(delta))
+	result = append(result, base[:len(base)-1]...)
+	result = append(result, ',')
+	result = append(result, delta[1:]...)
+	return result, nil
+}
+
+func (s *Session) finishBatchResponses(responses []BatchResponse, maxResponseBytesPerPage int) (*BatchRequestsResponse, error) {
+	results := make([]any, len(responses))
+	var errorsByIndex map[int]string
+	for i := range responses {
+		results[i] = responses[i].Result
+		if responses[i].Error != "" {
+			if errorsByIndex == nil {
+				errorsByIndex = make(map[int]string)
+			}
+			errorsByIndex[i] = responses[i].Error
+		}
+	}
+	encoded, err := json.Marshal(results)
+	if err != nil {
+		return nil, err
+	}
+	errorsLength := 0
+	if len(errorsByIndex) > 0 {
+		encodedErrors, errorsErr := json.Marshal(errorsByIndex)
+		if errorsErr != nil {
+			return nil, errorsErr
+		}
+		errorsLength = len(`,"errors":`) + len(encodedErrors)
+	}
+	pageLimit := maxResponseBytesPerPage
+	if pageLimit <= 0 {
+		pageLimit = DefaultMaxResponseBytesPerPage
+	}
+	if len(encoded)+len(`{"results":}`)+errorsLength <= pageLimit {
+		return &BatchRequestsResponse{Results: results, Errors: errorsByIndex, encodedArray: encoded}, nil
 	}
 	if s == nil {
-		return &BatchRequestsResponse{Responses: responses}, nil
+		return &BatchRequestsResponse{Results: results, Errors: errorsByIndex}, nil
 	}
 	page, err := newBatchResponsePage(responses)
 	if err != nil {
 		return nil, err
 	}
-	return s.paginateBatchResponses(page, responses, params.MaxResponseBytesPerPage)
+	return s.paginateBatchResponses(page, responses, maxResponseBytesPerPage)
 }
 
 func newBatchResponsePage(responses []BatchResponse) (batchResponsePage, error) {
 	encodedResponses := make([]json.Value, len(responses))
 	for i := range responses {
-		encoded, err := json.Marshal(&responses[i])
+		encoded, err := json.Marshal(responses[i].Result)
 		if err != nil {
 			return batchResponsePage{}, err
 		}
 		encodedResponses[i] = encoded
 	}
-	return batchResponsePage{encodedResponses: encodedResponses}, nil
+	responseErrors := make([]string, len(responses))
+	for i := range responses {
+		responseErrors[i] = responses[i].Error
+	}
+	return batchResponsePage{encodedResponses: encodedResponses, errors: responseErrors}, nil
 }
 
 func (s *Session) paginateBatchResponses(page batchResponsePage, responses []BatchResponse, maxResponseBytesPerPage int) (*BatchRequestsResponse, error) {
 	if maxResponseBytesPerPage <= 0 {
 		maxResponseBytesPerPage = DefaultMaxResponseBytesPerPage
 	}
-	encodedLength := len(`{"responses":[]}`)
-	pageLength := 0
-	for _, encoded := range page.encodedResponses {
-		additionalLength := len(encoded)
-		if pageLength > 0 {
-			additionalLength++
-		}
-		if pageLength > 0 && encodedLength+additionalLength > maxResponseBytesPerPage {
-			break
-		}
-		encodedLength += additionalLength
-		pageLength++
+	pageLength, err := batchResponsePrefixLength(page, maxResponseBytesPerPage, "")
+	if err != nil {
+		return nil, err
 	}
 
 	if pageLength == len(page.encodedResponses) {
-		return &BatchRequestsResponse{
-			Responses:        responses,
+		response := &BatchRequestsResponse{
+			Results:          responsesToResults(responses),
 			encodedResponses: page.encodedResponses,
-		}, nil
+		}
+		response.Errors = batchResponseErrors(page.errors[:pageLength])
+		return response, nil
 	}
 	continuationToken := fmt.Sprintf("%s-%d", s.id, s.nextBatchResponsePageID.Add(1))
-	continuationLength := len(`,"continuationToken":""`) + len(continuationToken)
-	for pageLength > 1 && encodedLength+continuationLength > maxResponseBytesPerPage {
-		encodedLength -= len(page.encodedResponses[pageLength-1]) + 1
-		pageLength--
+	pageLength, err = batchResponsePrefixLength(page, maxResponseBytesPerPage, continuationToken)
+	if err != nil {
+		return nil, err
 	}
 	currentResponses := page.encodedResponses[:pageLength]
 	remainingResponses := page.encodedResponses[pageLength:]
@@ -1105,17 +1353,76 @@ func (s *Session) paginateBatchResponses(page batchResponsePage, responses []Bat
 		ContinuationToken: continuationToken,
 		encodedResponses:  currentResponses,
 	}
+	response.Errors = batchResponseErrors(page.errors[:pageLength])
 	if responses != nil {
-		response.Responses = responses[:pageLength]
+		response.Results = responsesToResults(responses[:pageLength])
 	}
-	s.batchResponsePages.Store(continuationToken, batchResponsePage{
+	storedPage := batchResponsePage{
 		encodedResponses: remainingResponses,
-	})
+		errors:           page.errors[pageLength:],
+	}
+	s.batchResponsePages.Store(continuationToken, storedPage)
 	return response, nil
 }
 
+func batchResponsePrefixLength(page batchResponsePage, maxResponseBytes int, continuationToken string) (int, error) {
+	encodedLength := len(`{"results":[]}`)
+	if continuationToken != "" {
+		encodedLength += len(`,"continuationToken":""`) + len(continuationToken)
+	}
+	errorLength := 0
+	pageLength := 0
+	for i, encoded := range page.encodedResponses {
+		resultLength := len(encoded)
+		if i > 0 {
+			resultLength++
+		}
+		additionalErrorLength := 0
+		if message := page.errors[i]; message != "" {
+			encodedMessage, err := json.Marshal(message)
+			if err != nil {
+				return 0, err
+			}
+			entryLength := len(strconv.Itoa(i)) + len(encodedMessage) + len(`"":`)
+			if errorLength == 0 {
+				additionalErrorLength = len(`,"errors":{}`) + entryLength
+			} else {
+				additionalErrorLength = 1 + entryLength
+			}
+		}
+		if i > 0 && encodedLength+errorLength+resultLength+additionalErrorLength > maxResponseBytes {
+			break
+		}
+		encodedLength += resultLength
+		errorLength += additionalErrorLength
+		pageLength++
+	}
+	return pageLength, nil
+}
+
+func responsesToResults(responses []BatchResponse) []any {
+	results := make([]any, len(responses))
+	for i := range responses {
+		results[i] = responses[i].Result
+	}
+	return results
+}
+
+func batchResponseErrors(errors []string) map[int]string {
+	var result map[int]string
+	for i, message := range errors {
+		if message == "" {
+			continue
+		}
+		if result == nil {
+			result = make(map[int]string)
+		}
+		result[i] = message
+	}
+	return result
+}
+
 func (s *Session) handleBatchRequest(ctx context.Context, request BatchRequest) (response BatchResponse) {
-	response.Method = request.Method
 	if request.Method == MethodBatchRequests {
 		response.Error = fmt.Sprintf("%s: batchRequests cannot be nested", ErrInvalidRequest)
 		return response
@@ -1128,6 +1435,21 @@ func (s *Session) handleBatchRequest(ctx context.Context, request BatchRequest) 
 	}()
 	var err error
 	response.Result, err = s.HandleRequest(ctx, string(request.Method), request.Params)
+	if err != nil {
+		response.Error = err.Error()
+	}
+	return response
+}
+
+func (s *Session) handleParsedBatchRequest(ctx context.Context, method Method) (response BatchResponse) {
+	defer func() {
+		if recovered := recover(); recovered != nil {
+			response.Result = nil
+			response.Error = fmt.Sprintf("panic: %v\n%s", recovered, debug.Stack())
+		}
+	}()
+	var err error
+	response.Result, err = s.HandleRequest(ctx, string(method), nil)
 	if err != nil {
 		response.Error = err.Error()
 	}
@@ -1916,57 +2238,6 @@ func (s *Session) handleGetSymbolOfSourceFile(ctx context.Context, params *GetSy
 	return setup.newSymbolResponse(symbol), nil
 }
 
-// handleGetSymbolsOfSourceFiles returns the module symbols for multiple source files.
-func (s *Session) handleGetSymbolsOfSourceFiles(ctx context.Context, params *GetSymbolsOfSourceFilesParams) ([]*SymbolResponse, error) {
-	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
-	if err != nil {
-		return nil, err
-	}
-	defer setup.done()
-
-	results := make([]*SymbolResponse, len(params.Files))
-	for i, file := range params.Files {
-		sourceFile := setup.program.GetSourceFile(file.ToFileName())
-		if sourceFile == nil {
-			return nil, fmt.Errorf("%w: source file not found: %v", ErrClientError, file)
-		}
-		symbol := setup.checker.GetSymbolAtLocation(sourceFile.AsNode())
-		if symbol != nil {
-			results[i] = setup.newSymbolResponse(symbol)
-		}
-	}
-	return results, nil
-}
-
-// handleGetSymbolsAtPositions returns symbols at multiple positions in a file.
-func (s *Session) handleGetSymbolsAtPositions(ctx context.Context, params *GetSymbolsAtPositionsParams) ([]*SymbolResponse, error) {
-	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
-	if err != nil {
-		return nil, err
-	}
-	defer setup.done()
-
-	sourceFile := setup.program.GetSourceFile(params.File.ToFileName())
-	if sourceFile == nil {
-		return nil, fmt.Errorf("%w: source file not found: %v", ErrClientError, params.File)
-	}
-
-	positionMap := sourceFile.GetPositionMap()
-	results := make([]*SymbolResponse, len(params.Positions))
-	for i, pos := range params.Positions {
-		node := astnav.GetTouchingPropertyName(sourceFile, positionMap.UTF16ToUTF8(int(pos)))
-		if node == nil {
-			continue
-		}
-		symbol := setup.checker.GetSymbolAtLocation(node)
-		if symbol != nil {
-			results[i] = setup.newSymbolResponse(symbol)
-		}
-	}
-
-	return results, nil
-}
-
 // handleGetSymbolAtLocation returns the symbol at a node location.
 // @gen-proto-nullable
 func (s *Session) handleGetSymbolAtLocation(ctx context.Context, params *GetSymbolAtLocationParams) (*SymbolResponse, error) {
@@ -1992,32 +2263,6 @@ func (s *Session) handleGetSymbolAtLocation(ctx context.Context, params *GetSymb
 	return setup.newSymbolResponse(symbol), nil
 }
 
-// handleGetSymbolsAtLocations returns symbols at multiple node locations.
-func (s *Session) handleGetSymbolsAtLocations(ctx context.Context, params *GetSymbolsAtLocationsParams) ([]*SymbolResponse, error) {
-	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
-	if err != nil {
-		return nil, err
-	}
-	defer setup.done()
-
-	results := make([]*SymbolResponse, len(params.Locations))
-	for i, loc := range params.Locations {
-		node, err := setup.sd.resolveNodeHandle(setup.program, loc)
-		if err != nil {
-			return nil, err
-		}
-		if node == nil {
-			continue
-		}
-		symbol := setup.checker.GetSymbolAtLocation(node)
-		if symbol != nil {
-			results[i] = setup.newSymbolResponse(symbol)
-		}
-	}
-
-	return results, nil
-}
-
 // handleGetTypeOfSymbol returns the type of a symbol.
 func (s *Session) handleGetTypeOfSymbol(ctx context.Context, params *GetTypeOfSymbolParams) (*TypeResponse, error) {
 	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
@@ -2032,28 +2277,6 @@ func (s *Session) handleGetTypeOfSymbol(ctx context.Context, params *GetTypeOfSy
 	}
 
 	return setup.newTypeResponse(setup.checker.GetTypeOfSymbol(symbol)), nil
-}
-
-// handleGetTypesOfSymbols returns the types of multiple symbols.
-func (s *Session) handleGetTypesOfSymbols(ctx context.Context, params *GetTypesOfSymbolsParams) ([]*TypeResponse, error) {
-	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
-	if err != nil {
-		return nil, err
-	}
-	defer setup.done()
-
-	results := make([]*TypeResponse, len(params.Symbols))
-	for i, symHandle := range params.Symbols {
-		symbol, err := setup.resolveSymbolHandle(symHandle)
-		if err != nil {
-			return nil, err
-		}
-		// resolveSymbolHandle errors on an unresolvable handle and GetTypeOfSymbol
-		// never returns nil, so every element resolves to a type (error type at worst).
-		results[i] = setup.newTypeResponse(setup.checker.GetTypeOfSymbol(symbol))
-	}
-
-	return results, nil
 }
 
 // handleGetDeclaredTypeOfSymbol returns the declared type of a symbol (e.g. the type alias body for type alias symbols).
@@ -2190,28 +2413,6 @@ func (s *Session) handleGetTypeAtLocation(ctx context.Context, params *GetTypeAt
 	return setup.newTypeResponse(setup.checker.GetTypeAtLocation(node)), nil
 }
 
-// handleGetTypeAtLocations returns types at multiple node locations.
-func (s *Session) handleGetTypeAtLocations(ctx context.Context, params *GetTypeAtLocationsParams) ([]*TypeResponse, error) {
-	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
-	if err != nil {
-		return nil, err
-	}
-	defer setup.done()
-
-	results := make([]*TypeResponse, len(params.Locations))
-	for i, loc := range params.Locations {
-		node, err := setup.sd.resolveNodeHandle(setup.program, loc)
-		if err != nil {
-			return nil, err
-		}
-		// resolveNodeHandle errors on an unresolvable handle and GetTypeAtLocation
-		// never returns nil, so every element resolves to a type (error type at worst).
-		results[i] = setup.newTypeResponse(setup.checker.GetTypeAtLocation(node))
-	}
-
-	return results, nil
-}
-
 // handleGetTypeAtPosition returns the type at a position in a file.
 // @gen-proto-nullable
 func (s *Session) handleGetTypeAtPosition(ctx context.Context, params *GetTypeAtPositionParams) (*TypeResponse, error) {
@@ -2238,35 +2439,6 @@ func (s *Session) handleGetTypeAtPosition(ctx context.Context, params *GetTypeAt
 	}
 
 	return setup.newTypeResponse(t), nil
-}
-
-// handleGetTypesAtPositions returns types at multiple positions in a file.
-func (s *Session) handleGetTypesAtPositions(ctx context.Context, params *GetTypesAtPositionsParams) ([]*TypeResponse, error) {
-	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
-	if err != nil {
-		return nil, err
-	}
-	defer setup.done()
-
-	sourceFile := setup.program.GetSourceFile(params.File.ToFileName())
-	if sourceFile == nil {
-		return nil, fmt.Errorf("%w: source file not found: %v", ErrClientError, params.File)
-	}
-
-	positionMap := sourceFile.GetPositionMap()
-	results := make([]*TypeResponse, len(params.Positions))
-	for i, pos := range params.Positions {
-		node := astnav.GetTouchingPropertyName(sourceFile, positionMap.UTF16ToUTF8(int(pos)))
-		if node == nil {
-			continue
-		}
-		t := setup.checker.GetTypeAtLocation(node)
-		if t != nil {
-			results[i] = setup.newTypeResponse(t)
-		}
-	}
-
-	return results, nil
 }
 
 // @gen-proto-nullable

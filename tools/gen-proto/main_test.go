@@ -13,6 +13,7 @@ func TestGenerate(t *testing.T) {
 	repoRoot := filepath.Clean(filepath.Join("..", ".."))
 	input := filepath.Join(repoRoot, "tsc", "internal", "api", "proto.go")
 	output := filepath.Join(t.TempDir(), "proto.generated.ts")
+	batchOutput := filepath.Join(t.TempDir(), "batch_decoder_generated.go")
 
 	err := generate(input, output)
 	if err != nil {
@@ -49,7 +50,6 @@ export interface InitializeResponse`,
 export interface CompilerOptions`,
 		`projectReferences?: ProjectReference[] | undefined;`,
 		`errors: DiagnosticResponse[];`,
-		`getSymbolsAtPositions: APIMethod<GetSymbolsAtPositionsParams, SymbolResponse[]>;`,
 		`getContextualType: APIMethod<GetContextualTypeParams, TypeResponse | null>;`,
 		`getTypePredicateOfSignature: APIMethod<CheckerSignatureParams, TypePredicateResponse | null>;`,
 		`getTypeParametersOfType: APIMethod<GetTypePropertyParams, TypeResponse[] | null>;`,
@@ -95,5 +95,31 @@ export interface CompilerOptions`,
 	}
 	if string(first) != string(second) {
 		t.Error("generation is not deterministic")
+	}
+
+	err = generateBatchDecoders(input, batchOutput)
+	if err != nil {
+		t.Fatal(err)
+	}
+	batchFirst, err := os.ReadFile(batchOutput)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if strings.Contains(string(batchFirst), "reflect") {
+		t.Error("generated batch decoders must not use reflection")
+	}
+	if !strings.Contains(string(batchFirst), "newBatchDecoderGetSymbolAtPositionParams") {
+		t.Error("generated batch decoders do not include getSymbolAtPosition params")
+	}
+	err = generateBatchDecoders(input, batchOutput)
+	if err != nil {
+		t.Fatal(err)
+	}
+	batchSecond, err := os.ReadFile(batchOutput)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if string(batchFirst) != string(batchSecond) {
+		t.Error("batch decoder generation is not deterministic")
 	}
 }

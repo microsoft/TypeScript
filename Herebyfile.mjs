@@ -977,7 +977,7 @@ export const generateAST = task({
 });
 
 async function runGenerateAPI() {
-    await run("go", ["-C", "./tools", "run", "./gen-proto", "../tsc/internal/api/proto.go", "../packages/typescript/src/api/proto.generated.ts"]);
+    await run("go", ["-C", "./tools", "run", "./gen-proto", "../tsc/internal/api/proto.go", "../packages/typescript/src/api/proto.generated.ts", "../tsc/internal/api/batch_decoder_generated.go"]);
     await run("npx", ["dprint", "fmt", "packages/typescript/src/api/proto.generated.ts"]);
 }
 
