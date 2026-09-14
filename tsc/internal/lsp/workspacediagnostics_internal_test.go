@@ -66,3 +66,34 @@ func TestWorkspaceDiagnosticsSettingsEqual(t *testing.T) {
 	assert.Assert(t, !base.Equal(settings(lsutil.WorkspaceDiagnosticsScopeOpenProjects, "de")),
 		"a changed locale must invalidate the cache, since it changes what a diagnostic says")
 }
+
+// Only the newest pull is worth finishing: an older one reports the workspace as of a snapshot the
+// newer one has already moved past, so it is cancelled rather than left to check for minutes.
+func TestWorkspaceDiagnosticsPullSupersedesTheOneBeforeIt(t *testing.T) {
+	t.Parallel()
+
+	s := &Server{}
+	cancelled := make([]bool, 3)
+	pulls := make([]*workspaceDiagnosticsPull, len(cancelled))
+	for i := range pulls {
+		pulls[i] = &workspaceDiagnosticsPull{cancel: func() { cancelled[i] = true }}
+	}
+
+	s.supersedeWorkspaceDiagnostics(pulls[0])
+	assert.Assert(t, !cancelled[0], "the only pull running is not superseded")
+
+	s.supersedeWorkspaceDiagnostics(pulls[1])
+	assert.Assert(t, cancelled[0], "a newer pull cancels the one it replaces")
+
+	s.supersedeWorkspaceDiagnostics(pulls[2])
+	assert.Assert(t, cancelled[1], "every pull but the newest is cancelled")
+	assert.Assert(t, !cancelled[2], "the newest pull runs to completion")
+
+	// A superseded pull unwinding afterwards must not clear the pull that replaced it.
+	s.finishWorkspaceDiagnostics(pulls[0])
+	s.finishWorkspaceDiagnostics(pulls[1])
+	assert.Assert(t, s.workspaceDiagnosticsPull == pulls[2])
+
+	s.finishWorkspaceDiagnostics(pulls[2])
+	assert.Assert(t, s.workspaceDiagnosticsPull == nil, "nothing is running once the newest pull finishes")
+}

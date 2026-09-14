@@ -2,6 +2,7 @@ package lsp
 
 import (
 	"context"
+	"sync/atomic"
 	"time"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
@@ -32,10 +33,22 @@ func registerWorkspaceDiagnosticHandler(handlers handlerMap) {
 		if err != nil {
 			return nil, err
 		}
+		// Superseded here, on the dispatch loop, so pulls replace one another in the order the
+		// client sent them rather than the order their goroutines happen to start in.
+		ctx, cancel := context.WithCancel(ctx)
+		pull := &workspaceDiagnosticsPull{cancel: cancel}
+		s.supersedeWorkspaceDiagnostics(pull)
+
 		// A pull can run for minutes, so it stays off the dispatch loop.
 		return func() error {
 			defer s.recover(req)
+			defer cancel()
+			defer s.finishWorkspaceDiagnostics(pull)
+
 			resp, lsErr := s.computeWorkspaceDiagnostics(ctx, params)
+			if pull.wasSuperseded() {
+				return supersededWorkspaceDiagnosticsError
+			}
 			if lsErr != nil {
 				return lsErr
 			}
@@ -44,6 +57,49 @@ func registerWorkspaceDiagnosticHandler(handlers handlerMap) {
 			}
 			return s.sendResult(req.ID, resp)
 		}, nil
+	}
+}
+
+// supersededWorkspaceDiagnosticsError is what a pull that a newer one replaced answers with. The
+// code has to be ServerCancelled carrying DiagnosticServerCancellationData: a client that cannot
+// tell a server-cancelled pull from a failed one counts it against the handful of failures it
+// allows before it stops pulling the workspace altogether. retriggerRequest is false because the
+// pull that replaced this one is already reporting what it would have.
+var supersededWorkspaceDiagnosticsError = errorWithData{
+	code: lsproto.ErrorCodeServerCancelled,
+	data: &lsproto.DiagnosticServerCancellationData{RetriggerRequest: false},
+}
+
+// workspaceDiagnosticsPull is one running `workspace/diagnostic` request, identified by pointer so
+// a pull can tell whether it is still the current one.
+type workspaceDiagnosticsPull struct {
+	cancel     context.CancelFunc
+	superseded atomic.Bool
+}
+
+func (p *workspaceDiagnosticsPull) wasSuperseded() bool { return p.superseded.Load() }
+
+// supersedeWorkspaceDiagnostics makes pull the current one and cancels whatever was running before
+// it. A pull reports the whole workspace as of the snapshot it starts from, so an older one can
+// only answer with a program version the newer one is about to cover; finishing it would spend
+// minutes of checking to tell the client something it is already being told.
+func (s *Server) supersedeWorkspaceDiagnostics(pull *workspaceDiagnosticsPull) {
+	s.workspaceDiagnosticsMu.Lock()
+	superseded := s.workspaceDiagnosticsPull
+	s.workspaceDiagnosticsPull = pull
+	s.workspaceDiagnosticsMu.Unlock()
+	if superseded != nil {
+		superseded.superseded.Store(true)
+		superseded.cancel()
+	}
+}
+
+// finishWorkspaceDiagnostics clears the current pull, unless a newer one has already replaced it.
+func (s *Server) finishWorkspaceDiagnostics(pull *workspaceDiagnosticsPull) {
+	s.workspaceDiagnosticsMu.Lock()
+	defer s.workspaceDiagnosticsMu.Unlock()
+	if s.workspaceDiagnosticsPull == pull {
+		s.workspaceDiagnosticsPull = nil
 	}
 }
 

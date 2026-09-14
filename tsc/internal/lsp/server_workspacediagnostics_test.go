@@ -1084,3 +1084,54 @@ func TestWorkspaceDiagnosticsIdlePullReportsNothing(t *testing.T) {
 	})
 	assert.DeepEqual(t, reportURIs(forgotten.Items), reportURIs(first.Items))
 }
+
+// Pulls that overlap must not pile up behind each other: the last one answers in full, and the ones
+// it superseded end instead of checking a workspace the client is about to be told about anyway.
+func TestWorkspaceDiagnosticsSupersedesOverlappingPulls(t *testing.T) {
+	t.Parallel()
+
+	if !bundled.Embedded {
+		t.Skip("bundled files are not embedded")
+	}
+
+	files := manyProjectFiles(6, 20)
+	client, _ := initWorkspaceDiagnosticsClient(t, files)
+	const open = lsproto.DocumentUri("file:///home/projects/p0/open.ts")
+	lsptestutil.SendNotification(t, client, lsproto.TextDocumentDidOpenInfo, &lsproto.DidOpenTextDocumentParams{
+		TextDocument: &lsproto.TextDocumentItem{
+			Uri:        open,
+			LanguageId: "typescript",
+			Version:    1,
+			Text:       files[open.FileName()],
+		},
+	})
+
+	const pulls = 3
+	waiters := make([]func() (*lsproto.Message, *lsproto.WorkspaceDiagnosticReport, bool), pulls)
+	for i := range waiters {
+		waiters[i] = lsptestutil.SendRequestAsync(t, client, lsproto.WorkspaceDiagnosticInfo, &lsproto.WorkspaceDiagnosticParams{})
+	}
+
+	// The last pull is superseded by nothing, so it must report.
+	msg, report, ok := waiters[pulls-1]()
+	assert.Assert(t, ok, "expected a response to the last pull")
+	assert.Assert(t, msg.AsResponse().Error == nil, "the last pull must not be cancelled")
+	assert.Assert(t, len(report.Items) > 0, "the last pull must report the workspace")
+
+	// The earlier ones were superseded by their successor, unless one got in ahead of it. Either way
+	// they answer, rather than running on behind the pull that replaced them.
+	superseded := 0
+	for _, wait := range waiters[:pulls-1] {
+		msg, _, _ := wait()
+		if err := msg.AsResponse().Error; err != nil {
+			// ServerCancelled carrying cancellation data: a client that reads this as a failure
+			// gives up on workspace diagnostics after a handful of them.
+			assert.Equal(t, err.Code, int32(lsproto.ErrorCodeServerCancelled), "a superseded pull is server-cancelled, not failed")
+			data, ok := err.Data.(map[string]any)
+			assert.Assert(t, ok, "a superseded pull must carry cancellation data, got %#v", err.Data)
+			assert.Equal(t, data["retriggerRequest"], false, "the pull that replaced this one already reports what it would have")
+			superseded++
+		}
+	}
+	assert.Assert(t, superseded > 0, "a pull sent while another is checking this many files must supersede it")
+}

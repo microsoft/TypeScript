@@ -258,6 +258,11 @@ type Server struct {
 
 	workspaceDiagnosticsRegistrationMu sync.Mutex
 	workspaceDiagnosticsRegistered     bool
+
+	// workspaceDiagnosticsPull is the `workspace/diagnostic` request currently running, if any. A
+	// newer pull supersedes it; see supersedeWorkspaceDiagnostics.
+	workspaceDiagnosticsMu   sync.Mutex
+	workspaceDiagnosticsPull *workspaceDiagnosticsPull
 }
 
 func (s *Server) Session() *project.Session { return s.session }
@@ -1112,6 +1117,16 @@ func (s *Server) sendResult(id *jsonrpc.ID, result any) error {
 	})
 }
 
+// errorWithData is an error response whose `data` the client reads to decide what to do next, as
+// the diagnostic requests do: without it a server-cancelled pull looks like a failure.
+type errorWithData struct {
+	code lsproto.ErrorCode
+	data any
+}
+
+func (e errorWithData) Error() string { return e.code.Error() }
+func (e errorWithData) Unwrap() error { return e.code }
+
 type userFacingRequestFailedError string
 
 func (e userFacingRequestFailedError) Error() string { return string(e) }
@@ -1128,12 +1143,16 @@ func (s *Server) sendError(id *jsonrpc.ID, err error) error {
 	if errCode, ok := errors.AsType[lsproto.ErrorCode](err); ok {
 		code = errCode
 	}
-	// TODO(jakebailey): error data
+	var data any
+	if withData, ok := errors.AsType[errorWithData](err); ok {
+		data = withData.data
+	}
 	return s.sendResponse(&lsproto.ResponseMessage{
 		ID: id,
 		Error: &jsonrpc.ResponseError{
 			Code:    int32(code),
 			Message: err.Error(),
+			Data:    data,
 		},
 	})
 }
