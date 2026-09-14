@@ -147,8 +147,8 @@ if (largeAliasedTag === "1") {
 
 // Later-evaluated expressions with possible side effects do not carry the non-null fact.
 
-declare let assignmentInRight: Small;
-if (assignmentInRight!.type === (assignmentInRight = maybeUndefined, "1")) {
+declare let assignmentInRight: Large;
+if (assignmentInRight!.type === (assignmentInRight = maybeLargeUndefined, "1")) {
     // @ts-expect-error
     assignmentInRight.type;
 }
@@ -201,9 +201,9 @@ if (invocationInRight!.type === (() => {
     invocationInRight.type;
 }
 
-declare let assignmentInCase: Small;
+declare let assignmentInCase: Large;
 switch (assignmentInCase!.type) {
-    case (assignmentInCase = maybeUndefined, "1"):
+    case (assignmentInCase = maybeLargeUndefined, "1"):
         // @ts-expect-error
         assignmentInCase.type;
         break;
