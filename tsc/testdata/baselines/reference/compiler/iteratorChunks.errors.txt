@@ -1,0 +1,10 @@
+iteratorChunks.ts(3,33): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+
+
+==== iteratorChunks.ts (1 errors) ====
+    const chunks: number[][] = Iterator.from([1, 2, 3]).chunks(2).toArray();
+    
+    Iterator.from([1, 2, 3]).chunks("2");
+                                    ~~~
+!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+    

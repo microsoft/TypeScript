@@ -1,0 +1,16 @@
+iteratorIncludes.ts(4,35): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+iteratorIncludes.ts(6,38): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+
+
+==== iteratorIncludes.ts (2 errors) ====
+    const includes: boolean = Iterator.from([1, 2, 3]).includes(2);
+    const includesAfterSkipping: boolean = Iterator.from([1, 2, 3]).includes(2, 1);
+    
+    Iterator.from([1, 2, 3]).includes("1");
+                                      ~~~
+!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+    
+    Iterator.from([1, 2, 3]).includes(2, "1");
+                                         ~~~
+!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+    
