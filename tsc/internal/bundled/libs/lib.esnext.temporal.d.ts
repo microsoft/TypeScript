@@ -272,6 +272,8 @@ declare namespace Temporal {
         timeZoneName?: "auto" | "never" | "critical" | undefined;
     }
 
+    interface ZonedDateTimeToLocaleStringOptions extends Omit<Intl.DateTimeFormatOptions, "timeZone"> {}
+
     interface ZonedDateTimeFromOptions extends OverflowOptions, DisambiguationOptions {
         offset?: "use" | "ignore" | "prefer" | "reject" | undefined;
     }
@@ -317,7 +319,7 @@ declare namespace Temporal {
         round(roundTo: RoundingOptions<"day" | TimeUnit>): ZonedDateTime;
         equals(other: ZonedDateTimeLike): boolean;
         toString(options?: ZonedDateTimeToStringOptions): string;
-        toLocaleString(locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions): string;
+        toLocaleString(locales?: Intl.LocalesArgument, options?: ZonedDateTimeToLocaleStringOptions): string;
         toJSON(): string;
         valueOf(): never;
         startOfDay(): ZonedDateTime;
