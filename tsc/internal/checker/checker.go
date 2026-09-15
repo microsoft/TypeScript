@@ -3866,10 +3866,30 @@ func (c *Checker) checkTestingKnownTruthyType(condExpr *ast.Node, condType *Type
 	if location != condExpr {
 		t = c.checkExpression(location)
 	}
-	if t.flags&TypeFlagsEnumLiteral != 0 && ast.IsPropertyAccessExpression(location) && core.OrElse(c.getResolvedSymbolOrNil(location.Expression()), c.unknownSymbol).Flags&ast.SymbolFlagsEnum != 0 {
-		// EnumLiteral type at condition with known value is always truthy or always falsy, likely an error
-		c.error(location, diagnostics.This_condition_will_always_return_0, core.IfElse(evaluator.IsTruthy(t.AsLiteralType().value), "true", "false"))
-		return
+	if ast.IsPropertyAccessExpression(location) {
+		exprSym := core.OrElse(c.getResolvedSymbolOrNil(location.Expression()), c.unknownSymbol)
+		if exprSym.Flags&ast.SymbolFlagsAlias != 0 {
+			exprSym = c.resolveAlias(exprSym)
+		}
+		exprSym = c.getMergedSymbol(exprSym)
+		if exprSym.Flags&ast.SymbolFlagsEnum != 0 {
+			var val any
+			if t.flags&TypeFlagsEnumLiteral != 0 {
+				val = t.AsLiteralType().value
+			} else {
+				leftType := c.checkExpression(location.Expression())
+				propSym := c.getPropertyOfTypeEx(leftType, location.AsPropertyAccessExpression().Name().Text(), false, false)
+				if propSym != nil && len(propSym.Declarations) > 0 {
+					enumVal := c.getEnumMemberValue(propSym.Declarations[0])
+					val = enumVal.Value
+				}
+			}
+			if val != nil {
+				// EnumLiteral or Enum member with known constant value at condition is always truthy or always falsy, likely an error
+				c.error(location, diagnostics.This_condition_will_always_return_0, core.IfElse(evaluator.IsTruthy(val), "true", "false"))
+				return
+			}
+		}
 	}
 	isPropertyExpressionCast := ast.IsPropertyAccessExpression(location) && isTypeAssertion(location.Expression())
 	if !c.hasTypeFacts(t, TypeFactsTruthy) || isPropertyExpressionCast {
