@@ -456,8 +456,18 @@ func (s requestFileSystem) DirectoryExists(directoryName string) bool {
 	return lookup.info != nil || lookup.fileSystem != nil && lookup.fileSystem.DirectoryExists(lookup.path)
 }
 
+// below is whatever this filesystem resolves through for paths it does not supply
+// itself. A listing needs more than that filesystem's entries: classifying a
+// symlink means asking whether its target exists, and the answer has to come from
+// the same place the link would resolve to, not from the host underneath it.
+type below interface {
+	GetAccessibleEntries(path string) vfs.Entries
+	FileExists(path string) bool
+	DirectoryExists(path string) bool
+}
+
 func (s requestFileSystem) GetAccessibleEntries(directoryName string) vfs.Entries {
-	return s.accessibleEntries(directoryName, s.baseFileSystem().GetAccessibleEntries)
+	return s.accessibleEntries(directoryName, s.baseFileSystem())
 }
 
 // Shadows implements project.FileSystemLayer: this filesystem answers for the path
@@ -471,25 +481,25 @@ func (s requestFileSystem) Shadows(path string) bool {
 // accessibleEntries lists a directory, taking any entries this filesystem does not
 // supply itself from below. Paths routed out by an explicit host symlink always read
 // the host rather than below, since they deliberately escape this filesystem.
-func (s requestFileSystem) accessibleEntries(directoryName string, below func(string) vfs.Entries) vfs.Entries {
+func (s requestFileSystem) accessibleEntries(directoryName string, resolvesThrough below) vfs.Entries {
 	lookup := s.lookupPath(directoryName)
 	if !lookup.ok || lookup.info != nil && !lookup.info.IsDir() {
 		return vfs.Entries{Symlinks: map[string]struct{}{}}
 	}
 	if lookup.host {
-		below = s.baseFileSystem().GetAccessibleEntries
+		resolvesThrough = s.baseFileSystem()
 	}
 	var result vfs.Entries
 	if lookup.fileSystem != nil {
-		result = s.removeEntries(lookup.path, below(lookup.path))
+		result = s.removeEntries(lookup.path, resolvesThrough.GetAccessibleEntries(lookup.path))
 	} else {
 		localEntries, explicit, _ := s.getLocalEntries(lookup.path)
 		result = localEntries
 		if s.kind == KindLayer && !explicit && !s.blocksFallback(directoryName) && !s.blocksFallback(lookup.path) {
-			result = s.removeEntries(lookup.path, below(lookup.path))
+			result = s.removeEntries(lookup.path, resolvesThrough.GetAccessibleEntries(lookup.path))
 			result = mergeEntries(result, localEntries, s.equalEntryNames)
 		}
-		result = s.addSymlinkEntries(lookup.path, result)
+		result = s.addSymlinkEntries(lookup.path, result, resolvesThrough)
 	}
 	result = s.filterLocalEntries(directoryName, result)
 	return result
@@ -584,7 +594,41 @@ func (s requestFileSystem) removeEntries(directoryName string, entries vfs.Entri
 	return result
 }
 
-func (s requestFileSystem) addSymlinkEntries(directoryName string, entries vfs.Entries) vfs.Entries {
+// symlinkTargetIsDirectory and symlinkTargetIsFile classify a link for a listing.
+// The link resolves within this filesystem, but its target may only exist below,
+// so the answer for a deferred path comes from there rather than from the host.
+func (s requestFileSystem) symlinkTargetIsDirectory(symlink requestSymlink, resolvesThrough below) bool {
+	lookup := s.lookupPath(symlink.linkName)
+	if !lookup.ok || lookup.info != nil && !lookup.info.IsDir() {
+		return false
+	}
+	if lookup.info != nil {
+		return true
+	}
+	return lookup.fileSystem != nil && s.resolverFor(lookup, resolvesThrough).DirectoryExists(lookup.path)
+}
+
+func (s requestFileSystem) symlinkTargetIsFile(symlink requestSymlink, resolvesThrough below) bool {
+	lookup := s.lookupPath(symlink.linkName)
+	if !lookup.ok || lookup.info != nil && lookup.info.IsDir() {
+		return false
+	}
+	if lookup.info != nil {
+		return true
+	}
+	return lookup.fileSystem != nil && s.resolverFor(lookup, resolvesThrough).FileExists(lookup.path)
+}
+
+// resolverFor returns where a deferred lookup should be answered. An explicit host
+// symlink deliberately escapes the stack, so it reads the host rather than below.
+func (s requestFileSystem) resolverFor(lookup requestPathLookup, resolvesThrough below) below {
+	if lookup.host {
+		return s.baseFileSystem()
+	}
+	return resolvesThrough
+}
+
+func (s requestFileSystem) addSymlinkEntries(directoryName string, entries vfs.Entries, resolvesThrough below) vfs.Entries {
 	result := cloneEntries(entries)
 	if result.Symlinks == nil {
 		result.Symlinks = map[string]struct{}{}
@@ -608,10 +652,10 @@ func (s requestFileSystem) addSymlinkEntries(directoryName string, entries vfs.E
 				delete(result.Symlinks, existingName)
 			}
 		}
-		if s.DirectoryExists(symlink.linkName) {
+		if s.symlinkTargetIsDirectory(symlink, resolvesThrough) {
 			result.Directories = append(result.Directories, name)
 			result.Symlinks[name] = struct{}{}
-		} else if s.FileExists(symlink.linkName) {
+		} else if s.symlinkTargetIsFile(symlink, resolvesThrough) {
 			result.Files = append(result.Files, name)
 			result.Symlinks[name] = struct{}{}
 		}

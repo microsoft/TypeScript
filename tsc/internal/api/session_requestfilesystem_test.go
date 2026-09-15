@@ -349,6 +349,8 @@ func TestRequestSymlinkFallsBackToEditorOverlayDirectory(t *testing.T) {
 	snapshot := session.snapshots[updated.Snapshot].snapshot
 	assert.Assert(t, snapshot.DirectoryExists("/alias"))
 	assert.Assert(t, slices.Contains(snapshot.FileSource().GetAccessibleEntries("/alias").Files, "file.ts"))
+	// Enumerating the parent must agree with DirectoryExists about the link.
+	assert.Assert(t, slices.Contains(snapshot.FileSource().GetAccessibleEntries("/").Directories, "alias"))
 	file := snapshot.GetFile("/alias/file.ts")
 	assert.Assert(t, file != nil)
 	assert.Equal(t, file.Content(), "overlay")

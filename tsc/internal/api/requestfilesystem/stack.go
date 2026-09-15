@@ -106,7 +106,26 @@ func (s *stackedFileSystem) DirectoryExists(directoryName string) bool {
 
 // GetAccessibleEntries implements project.FileSource.
 func (s *stackedFileSystem) GetAccessibleEntries(directoryName string) vfs.Entries {
-	return s.layer.accessibleEntries(directoryName, s.below.GetAccessibleEntries)
+	return s.layer.accessibleEntries(directoryName, stackedBelow{s})
+}
+
+// stackedBelow presents the layers beneath this one to a listing. Entries come from
+// below, but existence is answered by the whole stack, so a listing classifies a
+// symlink the same way DirectoryExists and FileExists would.
+type stackedBelow struct {
+	stacked *stackedFileSystem
+}
+
+func (b stackedBelow) GetAccessibleEntries(path string) vfs.Entries {
+	return b.stacked.below.GetAccessibleEntries(path)
+}
+
+func (b stackedBelow) FileExists(path string) bool {
+	return b.stacked.FileExists(path, b.stacked.layer.toPath(path))
+}
+
+func (b stackedBelow) DirectoryExists(path string) bool {
+	return b.stacked.DirectoryExists(path)
 }
 
 // Realpath implements project.FileSource.
