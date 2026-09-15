@@ -2107,9 +2107,23 @@ func TestFileCallbackForwardsErrAlongsideEvents(t *testing.T) {
 		err    error
 	}
 	var got []call
-	cb := fileCallback(target, func(events []Event, err error) {
+	dw := newDirectWatcher(t, "/abs/dir")
+	dw.addCallback("/abs/dir", "/abs/dir", false, func(events []Event, err error) {
 		got = append(got, call{events: events, err: err})
-	})
+	}, nil, target)
+	cb := func(events []Event, err error) {
+		for _, e := range events {
+			if e.Kind == EventDelete {
+				dw.events.remove(e.Path)
+			} else {
+				dw.events.update(e.Path)
+			}
+		}
+		if err != nil {
+			dw.events.setError(err)
+		}
+		dw.triggerCallbacks()
+	}
 
 	// Plain events: only target events pass through, sibling dropped.
 	cb([]Event{{Kind: EventUpdate, Path: target}, {Kind: EventUpdate, Path: other}}, nil)
