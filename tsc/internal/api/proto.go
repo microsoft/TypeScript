@@ -93,7 +93,7 @@ const (
 	MethodGetSourceFile                                  Method = "getSourceFile"
 	MethodGetSourceFileNames                             Method = "getSourceFileNames"
 	MethodGetSourceFileMetadata                          Method = "getSourceFileMetadata"
-	MethodGetModeForUsageLocation                       Method = "getModeForUsageLocation"
+	MethodGetModeForUsageLocation                        Method = "getModeForUsageLocation"
 	MethodGetModeForResolutionAtIndex                    Method = "getModeForResolutionAtIndex"
 	MethodGetResolvedModule                              Method = "getResolvedModule"
 	MethodGetResolvedModuleFromModuleSpecifier           Method = "getResolvedModuleFromModuleSpecifier"
@@ -470,7 +470,7 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodGetSourceFile:                                  unmarshallerFor[GetSourceFileParams],
 	MethodGetSourceFileNames:                             unmarshallerFor[GetSourceFileNamesParams],
 	MethodGetSourceFileMetadata:                          unmarshallerFor[GetSourceFileParams],
-	MethodGetModeForUsageLocation:                       unmarshallerFor[GetModeForUsageLocationParams],
+	MethodGetModeForUsageLocation:                        unmarshallerFor[GetModeForUsageLocationParams],
 	MethodGetModeForResolutionAtIndex:                    unmarshallerFor[GetModeForResolutionAtIndexParams],
 	MethodGetResolvedModule:                              unmarshallerFor[GetResolvedModuleParams],
 	MethodGetResolvedModuleFromModuleSpecifier:           unmarshallerFor[GetResolvedModuleFromModuleSpecifierParams],
