@@ -24,11 +24,13 @@
 //   ^
 // | ----------------------------------------------------------------------
 // | f(**a: number**): void
+// | First overload
 // | ----------------------------------------------------------------------
 // f("");
 //   ^
 // | ----------------------------------------------------------------------
 // | f(**a: string**): void
+// | Second overload
 // | ----------------------------------------------------------------------
 [
   {
@@ -45,6 +47,10 @@
       "signatures": [
         {
           "label": "f(a: number): void",
+          "documentation": {
+            "kind": "markdown",
+            "value": "First overload"
+          },
           "parameters": [
             {
               "label": "a: number"
@@ -54,6 +60,10 @@
         },
         {
           "label": "f(a: string): void",
+          "documentation": {
+            "kind": "markdown",
+            "value": "Second overload"
+          },
           "parameters": [
             {
               "label": "a: string"
@@ -79,6 +89,10 @@
       "signatures": [
         {
           "label": "f(a: number): void",
+          "documentation": {
+            "kind": "markdown",
+            "value": "First overload"
+          },
           "parameters": [
             {
               "label": "a: number"
@@ -88,6 +102,10 @@
         },
         {
           "label": "f(a: string): void",
+          "documentation": {
+            "kind": "markdown",
+            "value": "Second overload"
+          },
           "parameters": [
             {
               "label": "a: string"

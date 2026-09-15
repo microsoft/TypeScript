@@ -110,6 +110,22 @@ function flatMap(array, iterable = identity) {
 
 
 //// [jsFileFunctionOverloads2.d.ts]
+/**
+ * @overload
+ * @param {number} x
+ * @returns {'number'}
+ *
+ * @overload
+ * @param {string} x
+ * @returns {'string'}
+ *
+ * @overload
+ * @param {boolean} x
+ * @returns {'boolean'}
+ *
+ * @param {unknown} x
+ * @returns {string}
+ */
 declare function getTypeName(x: number): 'number';
 declare function getTypeName(x: string): 'string';
 declare function getTypeName(x: boolean): 'boolean';
@@ -119,5 +135,21 @@ declare function getTypeName(x: boolean): 'boolean';
  * @returns {T}
  */
 declare const identity: <T>(x: T) => T;
+/**
+ * @template T
+ * @template U
+ * @overload
+ * @param {T[]} array
+ * @param {(x: T) => U[]} iterable
+ * @returns {U[]}
+ *
+ * @overload
+ * @param {T[][]} array
+ * @returns {T[]}
+ *
+ * @param {unknown[]} array
+ * @param {(x: unknown) => unknown} iterable
+ * @returns {unknown[]}
+ */
 declare function flatMap<T, U>(array: T[], iterable: (x: T) => U[]): U[];
 declare function flatMap<T, U>(array: T[][]): T[];
