@@ -1596,7 +1596,7 @@ func (c *Checker) reportFlowControlError(node *ast.Node) {
 
 func (c *Checker) isMatchingReference(source *ast.Node, target *ast.Node) bool {
 	switch target.Kind {
-	case ast.KindParenthesizedExpression, ast.KindNonNullExpression:
+	case ast.KindParenthesizedExpression, ast.KindNonNullExpression, ast.KindSatisfiesExpression:
 		return c.isMatchingReference(source, target.Expression())
 	case ast.KindBinaryExpression:
 		return ast.IsAssignmentExpression(target, false) && c.isMatchingReference(source, target.AsBinaryExpression().Left) ||
@@ -1851,7 +1851,7 @@ func (c *Checker) containsMatchingReference(source *ast.Node, target *ast.Node) 
 func (c *Checker) optionalChainContainsReference(source *ast.Node, target *ast.Node) bool {
 	for ast.IsOptionalChain(source) {
 		source = source.Expression()
-		if c.isMatchingReference(source, target) {
+		if c.isMatchingReference(target, source) {
 			return true
 		}
 	}

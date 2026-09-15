@@ -73,3 +73,8 @@ if (xUnknown != null) {
     xUnknown;
 }
 
+declare let option: { type: string } | undefined;
+
+if ((option satisfies { type: string } | undefined) !== undefined) {
+    option.type;
+}
