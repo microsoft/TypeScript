@@ -1,28 +1,54 @@
 import fs from "node:fs";
+import { pathToFileURL } from "node:url";
 
-import { isSemVer } from "./semver.mjs";
+const numericIdentifier = String.raw`(?:0|[1-9]\d*)`;
+const nonNumericIdentifier = String.raw`(?:\d*[A-Za-z-][0-9A-Za-z-]*)`;
+const prereleaseIdentifier = String.raw`(?:${numericIdentifier}|${nonNumericIdentifier})`;
+const prerelease = String.raw`${prereleaseIdentifier}(?:\.${prereleaseIdentifier})*`;
+const build = String.raw`[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*`;
+const semverPattern = new RegExp(
+    String.raw`^(${numericIdentifier})\.(${numericIdentifier})\.(${numericIdentifier})(?:-${prerelease})?(?:\+${build})?$`,
+);
+const maxUint32 = 0xffff_ffffn;
 
-const [version, expectedMajorMinor] = process.argv.slice(2);
-
-if (!version || !isSemVer(version)) {
-    throw new Error("Usage: node tools/scripts/configure-release.mjs <semver> [expected-major.minor]");
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+    configureRelease(process.argv.slice(2));
 }
 
-const majorMinor = version.split(".", 2).join(".");
-if (expectedMajorMinor && expectedMajorMinor !== majorMinor) {
-    throw new Error(`Version ${version} has major.minor ${majorMinor}, not ${expectedMajorMinor}`);
+/**
+ * @param {string} value
+ */
+export function isSemVer(value) {
+    const match = semverPattern.exec(value);
+    return match !== null && match.slice(1, 4).every(component => BigInt(component) <= maxUint32);
 }
 
-updateFile(
-    "tsc/internal/core/version.go",
-    /var version = "[^"]+"/g,
-    `var version = "${version}"`,
-);
-updateFile(
-    "Herebyfile.mjs",
-    /const nativePreviewReleaseVersion = \/\*\* @type \{string \| undefined\} \*\/ \([^)]*\);/g,
-    `const nativePreviewReleaseVersion = /** @type {string | undefined} */ ("${version}");`,
-);
+/**
+ * @param {string[]} args
+ */
+function configureRelease(args) {
+    const [version, expectedMajorMinor] = args;
+
+    if (!version || !isSemVer(version)) {
+        throw new Error("Usage: node tools/scripts/configure-release.mjs <semver> [expected-major.minor]");
+    }
+
+    const majorMinor = version.split(".", 2).join(".");
+    if (expectedMajorMinor && expectedMajorMinor !== majorMinor) {
+        throw new Error(`Version ${version} has major.minor ${majorMinor}, not ${expectedMajorMinor}`);
+    }
+
+    updateFile(
+        "tsc/internal/core/version.go",
+        /var version = "[^"]+"/g,
+        `var version = "${version}"`,
+    );
+    updateFile(
+        "Herebyfile.mjs",
+        /const nativePreviewReleaseVersion = \/\*\* @type \{string \| undefined\} \*\/ \([^)]*\);/g,
+        `const nativePreviewReleaseVersion = /** @type {string | undefined} */ ("${version}");`,
+    );
+}
 
 function updateFile(path, pattern, replacement) {
     const source = fs.readFileSync(path, "utf8");

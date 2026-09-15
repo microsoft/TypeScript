@@ -1226,7 +1226,7 @@ async function runTestTools() {
     const command = gotestsum("tools");
     await Promise.all([
         run(command[0], [...command.slice(1), "./..."], { env: goTestEnv, cwd: path.join(__dirname, "tools") }),
-        run("node", ["--test", "./scripts/semver.test.mjs"], { cwd: path.join(__dirname, "tools") }),
+        run("node", ["--test", "./scripts/configure-release.test.mjs"], { cwd: path.join(__dirname, "tools") }),
     ]);
 }
 
