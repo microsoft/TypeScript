@@ -5,6 +5,7 @@ import * as vscode from "vscode";
 import {
     type ContentMapperVirtualFilesProvider,
     registerContentMapperVirtualDocumentProvider,
+    showVirtualDocumentsCommand,
 } from "../src/contentMapperVirtualDocuments";
 import type { MappedOutput } from "../src/contentMapperVirtualFiles";
 import { mockVscode } from "./vscodeMock";
@@ -58,6 +59,27 @@ test("purges virtual files when the source is deleted", async t => {
     await mockVscode.fileSystemProvider.readFile(virtualUri);
 
     mockVscode.fireDelete(sourceUri);
+
+    assert.deepEqual(
+        mockVscode.fileChanges.map(change => [change.type, change.uri.toString()]),
+        [[vscode.FileChangeType.Deleted, virtualUri.toString()]],
+    );
+});
+
+test("purges stale outputs when the command finds no mapped files", async t => {
+    const backend = new FakeBackend();
+    const sourceUri = vscode.Uri.file("/workspace/component.vue");
+    const virtualUri = virtualUriFor(sourceUri);
+    backend.requests.push(
+        Promise.resolve([output("initial", "one")]),
+        Promise.resolve([]),
+    );
+    const disposable = registerProvider(backend);
+    t.after(() => disposable.dispose());
+    await mockVscode.fileSystemProvider.readFile(virtualUri);
+    mockVscode.setActiveEditor(sourceEditor(sourceUri));
+
+    await mockVscode.runCommand(showVirtualDocumentsCommand);
 
     assert.deepEqual(
         mockVscode.fileChanges.map(change => [change.type, change.uri.toString()]),

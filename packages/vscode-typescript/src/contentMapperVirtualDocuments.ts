@@ -146,12 +146,10 @@ class ContentMapperVirtualDocumentProvider implements vscode.FileSystemProvider,
                 }
             }),
             provider.onDidInitializeLanguageServer(() => {
-                this.updateActiveEditorContext(vscode.window.activeTextEditor);
-                this.refreshCachedSources();
+                this.refreshServerState();
             }),
             provider.onDidSynchronizeContentMapperContributions(() => {
-                this.updateActiveEditorContext(vscode.window.activeTextEditor);
-                this.refreshCachedSources();
+                this.refreshServerState();
             }),
         ];
         this.updateInspectorEnabledContext();
@@ -252,6 +250,7 @@ class ContentMapperVirtualDocumentProvider implements vscode.FileSystemProvider,
         try {
             const outputs = await this.loadOutputs(sourceUri);
             if (outputs.length === 0) {
+                this.purgeCachedSource(sourceUri);
                 this.diagnosticDirectivesView.show(sourceUri, []);
                 void vscode.window.showInformationMessage(vscode.l10n.t("The active file is not transformed by a TypeScript content mapper."));
                 return;
@@ -503,6 +502,11 @@ class ContentMapperVirtualDocumentProvider implements vscode.FileSystemProvider,
         for (const source of this.sourceToVirtualUris.keys()) {
             this.refreshSource(vscode.Uri.parse(source));
         }
+    }
+
+    private refreshServerState(): void {
+        this.updateActiveEditorContext(vscode.window.activeTextEditor);
+        this.refreshCachedSources();
     }
 
     private async refresh(sourceUri: vscode.Uri): Promise<void> {

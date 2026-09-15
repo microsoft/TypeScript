@@ -158,9 +158,11 @@ const didChangeVisibleTextEditors = new MockEvent<any>();
 export const mockVscode = {
     fileSystemProvider: undefined as any,
     fileChanges: [] as any[],
+    registeredCommands: new Map<string, (...args: any[]) => unknown>(),
     reset(): void {
         this.fileSystemProvider = undefined;
         this.fileChanges = [];
+        this.registeredCommands.clear();
         this.setTextDocuments();
         window.activeTextEditor = undefined;
         window.visibleTextEditors = [];
@@ -172,11 +174,21 @@ export const mockVscode = {
         window.activeTextEditor = editor;
         didChangeActiveTextEditor.fire(editor);
     },
+    setActiveEditor(editor: any): void {
+        window.activeTextEditor = editor;
+    },
     fireClose(document: any): void {
         didCloseTextDocument.fire(document);
     },
     fireDelete(...files: Uri[]): void {
         didDeleteFiles.fire({ files });
+    },
+    runCommand(command: string): unknown {
+        const callback = this.registeredCommands.get(command);
+        if (!callback) {
+            throw new Error(`Command not registered: ${command}`);
+        }
+        return callback();
     },
 };
 
@@ -232,7 +244,10 @@ export const languages = {
 };
 
 export const commands = {
-    registerCommand: () => new Disposable(),
+    registerCommand: (command: string, callback: (...args: any[]) => unknown) => {
+        mockVscode.registeredCommands.set(command, callback);
+        return new Disposable(() => mockVscode.registeredCommands.delete(command));
+    },
     executeCommand: async () => undefined,
 };
 
