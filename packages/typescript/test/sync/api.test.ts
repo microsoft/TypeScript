@@ -323,7 +323,8 @@ describe("API", () => {
         using api = spawnAPI({
             "/src/index.ts": `/// <reference types="pkg-types" />
 import "pkg";
-import "missing";`,
+import "missing";
+declare module "augmentation" {}`,
             "/node_modules/pkg/package.json": JSON.stringify({ name: "pkg", version: "1.0.0", types: "index.d.ts" }),
             "/node_modules/pkg/index.d.ts": `export {};`,
             "/node_modules/@types/pkg-types/package.json": JSON.stringify({ name: "@types/pkg-types", version: "1.0.0", types: "index.d.ts" }),
@@ -339,6 +340,7 @@ import "missing";`,
 
         assert.equal(program.getModeForUsageLocation("/src/index.ts", pkgSpecifier), ModuleKind.ESNext);
         assert.equal(program.getModeForResolutionAtIndex("/src/index.ts", 0), ModuleKind.ESNext);
+        assert.equal(program.getModeForResolutionAtIndex("/src/index.ts", 2), ModuleKind.ESNext);
 
         const resolvedModule = program.getResolvedModule("/src/index.ts", "pkg", ModuleKind.ESNext);
         assert.ok(resolvedModule);

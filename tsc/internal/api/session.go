@@ -1849,7 +1849,13 @@ func (s *Session) handleGetModeForResolutionAtIndex(ctx context.Context, params 
 	if err != nil {
 		return core.ResolutionModeNone, err
 	}
-	if params.Index < 0 || params.Index >= len(sourceFile.Imports()) {
+	resolutionCount := len(sourceFile.Imports())
+	for _, augmentation := range sourceFile.ModuleAugmentations {
+		if augmentation.Kind == ast.KindStringLiteral {
+			resolutionCount++
+		}
+	}
+	if params.Index < 0 || params.Index >= resolutionCount {
 		return core.ResolutionModeNone, fmt.Errorf("%w: invalid resolution index", ErrClientError)
 	}
 	return program.GetModeForResolutionAtIndex(sourceFile, params.Index), nil
