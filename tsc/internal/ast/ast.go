@@ -72,8 +72,7 @@ func NewNodeFactory(hooks NodeFactoryHooks) *NodeFactory {
 	return &NodeFactory{hooks: hooks}
 }
 
-func newNode(kind Kind, data nodeData, hooks NodeFactoryHooks) *Node {
-	n := data.AsNode()
+func newNode(kind Kind, n *Node, data any, hooks NodeFactoryHooks) *Node {
 	n.Loc = core.UndefinedTextRange()
 	n.Kind = kind
 	n.data = data
@@ -83,9 +82,9 @@ func newNode(kind Kind, data nodeData, hooks NodeFactoryHooks) *Node {
 	return n
 }
 
-func (f *NodeFactory) newNode(kind Kind, data nodeData) *Node {
+func (f *NodeFactory) newNode(kind Kind, n *Node, data any) *Node {
 	f.nodeCount++
-	return newNode(kind, data, f.hooks)
+	return newNode(kind, n, data, f.hooks)
 }
 
 func (f *NodeFactory) NodeCount() int {
@@ -183,49 +182,27 @@ type Node struct {
 	Loc    core.TextRange
 	id     atomic.Uint64
 	Parent *Node
-	data   nodeData
+	data   any
 }
 
-// Node accessors. Some accessors are implemented as methods on NodeData, others are implemented though
-// type switches. Either approach is fine. Interface methods are likely more performant, but have higher
-// code size costs because we have hundreds of implementations of the NodeData interface.
+// Shared node accessors dispatch on Kind to the concrete payload stored in data.
 
 func (n *Node) AsNode() *Node { return n }
 func (n *Node) Pos() int      { return n.Loc.Pos() }
 func (n *Node) End() int      { return n.Loc.End() }
 func (n *Node) IterChildren() iter.Seq[*Node] {
-	// Implemented directly (rather than through the nodeData interface) so that the
-	// returned iterator and the visitor closure it passes to ForEachChild do not
-	// escape: an interface call is opaque to escape analysis. `true` stops a TS
-	// visitor early, whereas `false` stops a Go iterator yield, so the result is
-	// inverted.
+	// `true` stops a TS visitor early, whereas `false` stops a Go iterator yield,
+	// so the result is inverted.
 	return func(yield func(*Node) bool) {
 		n.ForEachChild(func(child *Node) bool {
 			return !yield(child)
 		})
 	}
 }
-func (n *Node) Clone(f NodeFactoryCoercible) *Node        { return n.data.Clone(f) }
-func (n *Node) VisitEachChild(v *NodeVisitor) *Node       { return n.data.VisitEachChild(v) }
-func (n *Node) Name() *DeclarationName                    { return n.data.Name() }
-func (n *Node) Modifiers() *ModifierList                  { return n.data.Modifiers() }
-func (n *Node) FlowNodeData() *FlowNodeBase               { return n.data.FlowNodeData() }
-func (n *Node) DeclarationData() *DeclarationBase         { return n.data.DeclarationData() }
-func (n *Node) ExportableData() *ExportableBase           { return n.data.ExportableData() }
-func (n *Node) LocalsContainerData() *LocalsContainerBase { return n.data.LocalsContainerData() }
-func (n *Node) FunctionLikeData() *FunctionLikeBase       { return n.data.FunctionLikeData() }
-func (n *Node) ParameterList() *ParameterList             { return n.data.FunctionLikeData().Parameters }
-func (n *Node) Parameters() []*ParameterDeclarationNode   { return n.ParameterList().Nodes }
-func (n *Node) ClassLikeData() *ClassLikeBase             { return n.data.ClassLikeData() }
-func (n *Node) BodyData() *BodyBase                       { return n.data.BodyData() }
-func (n *Node) SubtreeFacts() SubtreeFacts                { return n.data.SubtreeFacts() }
-func (n *Node) propagateSubtreeFacts() SubtreeFacts       { return n.data.propagateSubtreeFacts() }
-func (n *Node) LiteralLikeData() *LiteralLikeNodeBase     { return n.data.LiteralLikeData() }
-func (n *Node) TemplateLiteralLikeData() *TemplateLiteralLikeNodeBase {
-	return n.data.TemplateLiteralLikeData()
-}
-func (n *Node) KindString() string { return n.Kind.String() }
-func (n *Node) KindValue() int16   { return int16(n.Kind) }
+func (n *Node) ParameterList() *ParameterList           { return n.FunctionLikeData().Parameters }
+func (n *Node) Parameters() []*ParameterDeclarationNode { return n.ParameterList().Nodes }
+func (n *Node) KindString() string                      { return n.Kind.String() }
+func (n *Node) KindValue() int16                        { return int16(n.Kind) }
 func (n *Node) Decorators() []*Node {
 	if n.Modifiers() == nil {
 		return nil
@@ -235,8 +212,7 @@ func (n *Node) Decorators() []*Node {
 
 type MutableNode Node
 
-func (n *Node) AsMutable() *MutableNode                     { return (*MutableNode)(n) }
-func (n *MutableNode) SetModifiers(modifiers *ModifierList) { n.data.setModifiers(modifiers) }
+func (n *Node) AsMutable() *MutableNode { return (*MutableNode)(n) }
 
 func (n *Node) Symbol() *Symbol {
 	data := n.DeclarationData()
@@ -1179,64 +1155,11 @@ func (n *Node) AsFlowReduceLabelData() *FlowReduceLabelData {
 	return n.data.(*FlowReduceLabelData)
 }
 
-// NodeData
-
-type nodeData interface {
-	AsNode() *Node
-	ForEachChild(v Visitor) bool
-	VisitEachChild(v *NodeVisitor) *Node
-	Clone(v NodeFactoryCoercible) *Node
-	Name() *DeclarationName
-	Modifiers() *ModifierList
-	setModifiers(modifiers *ModifierList)
-	FlowNodeData() *FlowNodeBase
-	DeclarationData() *DeclarationBase
-	ExportableData() *ExportableBase
-	LocalsContainerData() *LocalsContainerBase
-	FunctionLikeData() *FunctionLikeBase
-	ClassLikeData() *ClassLikeBase
-	BodyData() *BodyBase
-	LiteralLikeData() *LiteralLikeNodeBase
-	TemplateLiteralLikeData() *TemplateLiteralLikeNodeBase
-	SubtreeFacts() SubtreeFacts
-	computeSubtreeFacts() SubtreeFacts
-	subtreeFactsWorker(self nodeData) SubtreeFacts
-	propagateSubtreeFacts() SubtreeFacts
-}
-
-// NodeDefault
-
+// NodeDefault keeps Node methods one promotion level below fields such as Text,
+// Body, TypeParameters, and Parameters supplied by bases embedded alongside
+// NodeBase. Embedding Node directly in NodeBase makes those selectors ambiguous.
 type NodeDefault struct {
 	Node
-}
-
-func (node *NodeDefault) AsNode() *Node               { return &node.Node }
-func (node *NodeDefault) ForEachChild(v Visitor) bool { return false }
-
-func (node *NodeDefault) VisitEachChild(v *NodeVisitor) *Node                   { return node.AsNode() }
-func (node *NodeDefault) Clone(v NodeFactoryCoercible) *Node                    { return nil }
-func (node *NodeDefault) Name() *DeclarationName                                { return nil }
-func (node *NodeDefault) Modifiers() *ModifierList                              { return nil }
-func (node *NodeDefault) setModifiers(modifiers *ModifierList)                  {}
-func (node *NodeDefault) FlowNodeData() *FlowNodeBase                           { return nil }
-func (node *NodeDefault) DeclarationData() *DeclarationBase                     { return nil }
-func (node *NodeDefault) ExportableData() *ExportableBase                       { return nil }
-func (node *NodeDefault) LocalsContainerData() *LocalsContainerBase             { return nil }
-func (node *NodeDefault) FunctionLikeData() *FunctionLikeBase                   { return nil }
-func (node *NodeDefault) ClassLikeData() *ClassLikeBase                         { return nil }
-func (node *NodeDefault) BodyData() *BodyBase                                   { return nil }
-func (node *NodeDefault) LiteralLikeData() *LiteralLikeNodeBase                 { return nil }
-func (node *NodeDefault) TemplateLiteralLikeData() *TemplateLiteralLikeNodeBase { return nil }
-func (node *NodeDefault) SubtreeFacts() SubtreeFacts {
-	return node.data.subtreeFactsWorker(node.data)
-}
-
-func (node *NodeDefault) subtreeFactsWorker(self nodeData) SubtreeFacts {
-	// To avoid excessive conditional checks, the default implementation of subtreeFactsWorker directly invokes
-	// computeSubtreeFacts. More complex nodes should implement CompositeNodeBase, which overrides this
-	// method to cache the result. `self` is passed along to ensure we lookup `computeSubtreeFacts` on the
-	// correct type, as `CompositeNodeBase` does not, itself, inherit from `Node`.
-	return self.computeSubtreeFacts()
 }
 
 func (node *NodeDefault) computeSubtreeFacts() SubtreeFacts {
@@ -1244,10 +1167,8 @@ func (node *NodeDefault) computeSubtreeFacts() SubtreeFacts {
 }
 
 func (node *NodeDefault) propagateSubtreeFacts() SubtreeFacts {
-	return node.data.SubtreeFacts() & ^SubtreeExclusionsNode
+	return node.SubtreeFacts() & ^SubtreeExclusionsNode
 }
-
-// NodeBase
 
 type NodeBase struct {
 	NodeDefault
@@ -1599,7 +1520,7 @@ func (node *Node) EagerJSDoc(file *SourceFile) []*Node {
 
 // CompositeBase
 
-func (node *CompositeBase) subtreeFactsWorker(self nodeData) SubtreeFacts {
+func (node *CompositeBase) subtreeFactsWorker(self *Node) SubtreeFacts {
 	// computeSubtreeFacts() is expected to be idempotent, so races will only impact time, not correctness.
 	facts := SubtreeFacts(node.facts.Load())
 	if facts&SubtreeFactsComputed == 0 {
@@ -2533,7 +2454,7 @@ func (f *NodeFactory) NewSourceFile(opts SourceFileParseOptions, text string, st
 	data.text = text
 	data.Statements = statements
 	data.EndOfFileToken = endOfFileToken
-	return f.newNode(KindSourceFile, data)
+	return f.newNode(KindSourceFile, data.AsNode(), data)
 }
 
 func (node *SourceFile) ParseOptions() SourceFileParseOptions {
