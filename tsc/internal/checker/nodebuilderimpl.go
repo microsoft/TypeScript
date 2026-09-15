@@ -2313,11 +2313,17 @@ func (b *NodeBuilderImpl) serializeTypeForDeclaration(declaration *ast.Declarati
 			}
 		}
 		reportErrors := !b.ctx.suppressReportInferenceFallback
-		if b.pseudoTypeEquivalentToType(pt, t, !requiresAddingUndefined && (ast.IsParameterDeclaration(declaration) || ast.IsPropertySignatureDeclaration(declaration) || ast.IsPropertyDeclaration(declaration)) && isOptionalDeclaration(declaration), reportErrors) {
+		isReverseMappedProperty := symbol != nil && b.ch.ReverseMappedSymbolLinks.Has(symbol) && b.ch.ReverseMappedSymbolLinks.Get(symbol).mappedType != nil
+		isMappedProperty := symbol != nil && (symbol.CheckFlags&ast.CheckFlagsMapped != 0 || isReverseMappedProperty)
+		// Strada only applies annotation reuse to an existing annotation. For an inferred mapped property,
+		// validate the pseudo-type with the computed non-missing undefined instead.
+		addUndefinedForInferredOptional := isMappedProperty && !hasTypeAnnotation(declaration) && (ast.IsPropertySignatureDeclaration(declaration) || ast.IsPropertyDeclaration(declaration)) && isOptionalDeclaration(declaration) && containsNonMissingUndefinedType(b.ch, t)
+		requiresAddingUndefinedForReuse := requiresAddingUndefined || addUndefinedForInferredOptional
+		if b.pseudoTypeEquivalentToType(pt, t, !requiresAddingUndefinedForReuse && (ast.IsParameterDeclaration(declaration) || ast.IsPropertySignatureDeclaration(declaration) || ast.IsPropertyDeclaration(declaration)) && isOptionalDeclaration(declaration), reportErrors) {
 			// !!! TODO: If annotated type node is a reference with insufficient type arguments, we should still fall back to type serialization
 			// see: canReuseTypeNodeAnnotation in strada for context
 			ptt := b.pseudoTypeToType(pt)
-			if ptt != nil && requiresAddingUndefined && containsNonMissingUndefinedType(b.ch, t) && !containsNonMissingUndefinedType(b.ch, ptt) {
+			if ptt != nil && requiresAddingUndefinedForReuse && containsNonMissingUndefinedType(b.ch, t) && !containsNonMissingUndefinedType(b.ch, ptt) {
 				pt = pseudochecker.NewPseudoTypeUnion([]*pseudochecker.PseudoType{pt, pseudochecker.PseudoTypeUndefined})
 			}
 			result = b.pseudoTypeToNodeWithCheckerFallback(pt, t)
@@ -2328,7 +2334,7 @@ func (b *NodeBuilderImpl) serializeTypeForDeclaration(declaration *ast.Declarati
 			// pseudoTypeToNodeWithCheckerFallback provides).
 			reportedInferenceFallback = reportErrors && pt.Kind == pseudochecker.PseudoTypeKindInferred && len(pt.AsPseudoTypeInferred().ErrorNodes) > 0
 			shouldAddUndefined := false
-			if requiresAddingUndefined {
+			if requiresAddingUndefinedForReuse {
 				if ptt := b.pseudoTypeToType(pt); ptt != nil {
 					shouldAddUndefined = !containsNonMissingUndefinedType(b.ch, ptt)
 				} else {
