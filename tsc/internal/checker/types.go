@@ -34,6 +34,13 @@ const (
 	SignatureKindConstruct
 )
 
+type IndexKind int32
+
+const (
+	IndexKindString IndexKind = iota
+	IndexKindNumber
+)
+
 type MemberOverrideStatus int32
 
 const (
@@ -1043,6 +1050,10 @@ func (t *InterfaceType) TypeParameters() []*Type {
 		return nil
 	}
 	return slices.Clip(t.allTypeParameters[:len(t.allTypeParameters)-1])
+}
+
+func (t *InterfaceType) ThisType() *Type {
+	return t.thisType
 }
 
 // TupleType

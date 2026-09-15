@@ -270,6 +270,10 @@ func main() {
 			"Call":      toInt32(checker.SignatureKindCall),
 			"Construct": toInt32(checker.SignatureKindConstruct),
 		},
+		"IndexKind": {
+			"String": toInt32(checker.IndexKindString),
+			"Number": toInt32(checker.IndexKindNumber),
+		},
 		"ElementFlags": {
 			"None":        toInt32(checker.ElementFlagsNone),
 			"Required":    toInt32(checker.ElementFlagsRequired),
@@ -846,8 +850,8 @@ func main() {
 		"JsxEmit": {
 			"None":        toInt32(core.JsxEmitNone),
 			"Preserve":    toInt32(core.JsxEmitPreserve),
-			"ReactNative": toInt32(core.JsxEmitReactNative),
 			"React":       toInt32(core.JsxEmitReact),
+			"ReactNative": toInt32(core.JsxEmitReactNative),
 			"ReactJSX":    toInt32(core.JsxEmitReactJSX),
 			"ReactJSXDev": toInt32(core.JsxEmitReactJSXDev),
 		},
