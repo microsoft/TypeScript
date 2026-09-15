@@ -1,8 +1,10 @@
 import fs from "node:fs";
 
+import { isSemVer } from "./semver.mjs";
+
 const [version, expectedMajorMinor] = process.argv.slice(2);
 
-if (!version || !/^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?$/.test(version)) {
+if (!version || !isSemVer(version)) {
     throw new Error("Usage: node tools/scripts/configure-release.mjs <semver> [expected-major.minor]");
 }
 
