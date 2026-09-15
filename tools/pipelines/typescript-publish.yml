@@ -83,6 +83,17 @@ extends:
 
               - bash: |
                   set -euo pipefail
+                  if [ -z "$RELEASE_BUILD_RUN_NAME" ]; then
+                    echo "Unable to read the source build run name." >&2
+                    exit 1
+                  fi
+                  echo "##vso[build.updatebuildnumber]$RELEASE_BUILD_RUN_NAME-publish"
+                displayName: 'Set publisher run name'
+                env:
+                  RELEASE_BUILD_RUN_NAME: $(resources.pipeline.TypeScript_Release_Build.runName)
+
+              - bash: |
+                  set -euo pipefail
 
                   src="$(Pipeline.Workspace)/npm"
                   platformDst="$(Build.ArtifactStagingDirectory)/npm-platform"
