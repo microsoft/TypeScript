@@ -1071,6 +1071,9 @@ func literalValueToJSON(value any) any {
 			}
 			return "-Infinity"
 		}
+		if v.IsNaN() {
+			return "NaN"
+		}
 		return float64(v)
 	case bool:
 		return v

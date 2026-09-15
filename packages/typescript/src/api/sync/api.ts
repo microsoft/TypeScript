@@ -4691,7 +4691,10 @@ export class Checker {
                     if (data.value === "+Infinity") {
                         return Infinity;
                     }
-                    return -Infinity;
+                    else if (data.value === "-Infinity") {
+                        return -Infinity;
+                    }
+                    return NaN;
                 }
                 return data.value;
             },
@@ -4708,7 +4711,10 @@ export class Checker {
                     if (data.value === "+Infinity") {
                         return Infinity;
                     }
-                    return -Infinity;
+                    else if (data.value === "-Infinity") {
+                        return -Infinity;
+                    }
+                    return NaN;
                 }
                 return data.value;
             },
@@ -5610,8 +5616,11 @@ class TypeObject implements Type {
                 if (value === "+Infinity") {
                     this.value = Infinity;
                 }
-                else {
+                else if (value === "-Infinity") {
                     this.value = -Infinity;
+                }
+                else {
+                    this.value = NaN;
                 }
             }
             else {

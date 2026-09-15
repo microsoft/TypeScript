@@ -5003,7 +5003,15 @@ describe("Checker - getConstantValue", () => {
     test("returns infinite numeric enum values without changing equivalent strings", async () => {
         await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
-            "/src/main.ts": `export enum E { Positive = 1e999, Negative = -1e999, PositiveString = "+Infinity", NegativeString = "-Infinity" }`,
+            "/src/main.ts": `export enum E {
+                Positive = 1e999,
+                Negative = -1e999,
+                PositiveNaN = NaN,
+                NegativeNaN = -NaN,
+                PositiveString = "+Infinity",
+                NegativeString = "-Infinity",
+                NaNString = "NaN",
+            }`,
         });
 
         const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
@@ -5015,12 +5023,15 @@ describe("Checker - getConstantValue", () => {
             if (node.kind === SyntaxKind.EnumMember) members.push(node);
             node.forEachChild(visit);
         });
-        assert.equal(members.length, 4);
+        assert.equal(members.length, 7);
 
         assert.equal(await project.checker.getConstantValue(members[0]), Infinity);
         assert.equal(await project.checker.getConstantValue(members[1]), -Infinity);
-        assert.equal(await project.checker.getConstantValue(members[2]), "+Infinity");
-        assert.equal(await project.checker.getConstantValue(members[3]), "-Infinity");
+        assert.equal(await project.checker.getConstantValue(members[2]), NaN);
+        assert.equal(await project.checker.getConstantValue(members[3]), NaN);
+        assert.equal(await project.checker.getConstantValue(members[4]), "+Infinity");
+        assert.equal(await project.checker.getConstantValue(members[5]), "-Infinity");
+        assert.equal(await project.checker.getConstantValue(members[6]), "NaN");
     });
 
     test("returns string value of a string-initialized enum member", async () => {
