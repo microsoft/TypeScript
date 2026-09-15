@@ -70,6 +70,7 @@ type CombinedCodeActions struct {
 // codeFixProviders is the list of all registered code fix providers
 var codeFixProviders = []*CodeFixProvider{
 	ImportFixProvider,
+	ConvertToTypeOnlyImportProvider,
 	IsolatedDeclarationsFixProvider,
 	FixClassIncorrectlyImplementsInterfaceProvider,
 	// Add more code fix providers here as they are implemented
