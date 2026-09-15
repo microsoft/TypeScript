@@ -9,6 +9,7 @@ import {
 } from "#vscode-jsonrpc/node";
 import type { ChildProcess } from "node:child_process";
 import type { Socket } from "node:net";
+import { groupBatchRequests } from "../batch.ts";
 import {
     type FileSystem,
     fsCallbackNames,
@@ -38,81 +39,6 @@ import {
 } from "../timing.ts";
 
 export type { ClientOptions, ClientSocketOptions, ClientSpawnOptions };
-
-interface GroupedBatchRequest {
-    method: APIRequest["method"];
-    base?: Record<string, unknown>;
-    count: number;
-    fields?: Record<string, unknown[]>;
-    requests?: unknown[];
-}
-
-function groupBatchRequests<T extends { method: APIRequest["method"]; params: APIRequest["params"]; }>(requests: readonly T[]): {
-    groups: GroupedBatchRequest[];
-    groupOrder?: number[];
-} | undefined {
-    const groupIndexes = new Map<APIRequest["method"], number>();
-    const requestsByMethod: T[][] = [];
-    const groupOrder: number[] = [];
-    let hasBatchableGroup = false;
-    for (const request of requests) {
-        let groupIndex = groupIndexes.get(request.method);
-        if (groupIndex === undefined) {
-            groupIndex = requestsByMethod.length;
-            groupIndexes.set(request.method, groupIndex);
-            requestsByMethod.push([]);
-        }
-        requestsByMethod[groupIndex].push(request);
-        if (requestsByMethod[groupIndex].length === 4) hasBatchableGroup = true;
-        groupOrder.push(groupIndex);
-    }
-    if (!hasBatchableGroup) return undefined;
-
-    const groups: GroupedBatchRequest[] = [];
-    for (const [method, groupIndex] of groupIndexes) {
-        const groupedRequests = requestsByMethod[groupIndex];
-        const params = groupedRequests.map(request => request.params);
-        if (params.every(param => typeof param === "object" && param !== null && !Array.isArray(param))) {
-            const records = params as Record<string, unknown>[];
-            const base = commonParams(records);
-            const commonKeys = new Set(Object.keys(base));
-            const deltas = records.map(param => Object.fromEntries(Object.entries(param).filter(([key]) => !commonKeys.has(key))));
-            const fields = parameterColumns(deltas);
-            groups.push(
-                fields
-                    ? { method, base, count: records.length, fields }
-                    : { method, base, count: records.length, requests: deltas },
-            );
-        }
-        else {
-            groups.push({ method, count: params.length, requests: params });
-        }
-    }
-    return groups.length === 1 ? { groups } : { groups, groupOrder };
-}
-
-function parameterColumns(params: readonly Record<string, unknown>[]): Record<string, unknown[]> | undefined {
-    const keys = Object.keys(params[0]);
-    if (
-        !params.every(param => {
-            const paramKeys = Object.keys(param);
-            return paramKeys.length === keys.length
-                && keys.every(key => Object.hasOwn(param, key) && param[key] !== undefined);
-        })
-    ) return undefined;
-    return Object.fromEntries(keys.map(key => [key, params.map(param => param[key])])) as Record<string, unknown[]>;
-}
-
-function commonParams(params: readonly Record<string, unknown>[]): Record<string, unknown> {
-    const first = params[0];
-    return Object.fromEntries(
-        Object.entries(first).filter(([key, value]) => {
-            const type = typeof value;
-            return (value === null || type !== "object" && type !== "undefined")
-                && params.every(param => Object.hasOwn(param, key) && param[key] === value);
-        }),
-    );
-}
 
 /**
  * Client handles communication with the TypeScript API server
@@ -297,10 +223,10 @@ export class Client {
 
             // Paired benchmarks show grouping pays for its construction cost at four requests.
             const grouped = requests.length >= 4 ? groupBatchRequests(requests) : undefined;
-            const params: BatchRequestsParams | { groups: GroupedBatchRequest[]; groupOrder?: number[]; maxResponseBytesPerPage?: number | undefined; } = grouped
+            const params: BatchRequestsParams = grouped
                 ? { groups: grouped.groups, groupOrder: grouped.groupOrder, maxResponseBytesPerPage: this.options.maxResponseBytesPerPage }
                 : { requests: requests.map(request => ({ method: request.method, params: request.params })), maxResponseBytesPerPage: this.options.maxResponseBytesPerPage };
-            const response = await this.batchRequest(params as BatchRequestsParams);
+            const response = await this.batchRequest(params);
             for (let i = 0; i < requests.length; i++) {
                 const { resolve, reject } = requests[i];
                 const error = response.errors?.[i];

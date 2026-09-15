@@ -382,7 +382,7 @@ func discoverSessionMethods(pkg *packages.Package, methodObjects map[types.Objec
 	for _, file := range pkg.Syntax {
 		for _, decl := range file.Decls {
 			fn, isFuncDecl := decl.(*ast.FuncDecl)
-			if !isFuncDecl || fn.Name.Name != "HandleRequest" || fn.Recv == nil || fn.Body == nil {
+			if !isFuncDecl || fn.Recv == nil || fn.Body == nil || fn.Name.Name != "HandleRequest" && fn.Name.Name != "handleParsedRequest" {
 				continue
 			}
 			ast.Inspect(fn.Body, func(node ast.Node) bool {

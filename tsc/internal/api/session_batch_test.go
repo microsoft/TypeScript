@@ -63,6 +63,19 @@ func TestHandleSingleGroupedBatchRequestsInfersOrder(t *testing.T) {
 	assert.Equal(t, string(encoded), `{"results":[{"group":"a","value":1},{"group":"a","value":2},{"group":"a","value":3}]}`)
 }
 
+func TestHandleGroupedBatchRequestsDecodesRowParams(t *testing.T) {
+	t.Parallel()
+
+	response, err := (&Session{}).HandleRequest(context.Background(), string(MethodBatchRequests), json.Value(`{
+		"groups":[
+			{"method":"transpileModule","count":1,"requests":[{"input":"const value: number = 1;","options":{}}]}
+		]
+	}`))
+	assert.NilError(t, err)
+	assert.Equal(t, len(response.(*BatchRequestsResponse).Results), 1)
+	assert.Equal(t, len(response.(*BatchRequestsResponse).Errors), 0)
+}
+
 func TestHandleGroupedBatchRequestsReacquiresCheckerAfterInterleaving(t *testing.T) {
 	t.Parallel()
 

@@ -1,3 +1,4 @@
+import { groupBatchRequests } from "../batch.ts";
 import { fsCallbackNames } from "../fs.ts";
 import {
     type ClientOptions,
@@ -102,7 +103,8 @@ export class Client {
     }
 
     batchRequests(requests: readonly APIRequest[]): { result: unknown; error?: string | undefined; }[] {
-        const response = this.batchRequest({ requests });
+        const grouped = requests.length >= 4 ? groupBatchRequests(requests) : undefined;
+        const response = this.batchRequest(grouped ?? { requests });
         return response.results.map((result, index) => {
             const error = response.errors?.[index];
             return error === undefined ? { result } : { result, error };

@@ -499,24 +499,8 @@ func validateBatchColumn(name string, length int, count int) error {
 	return nil
 }
 
-type parsedRequestContext struct {
-	method string
-	params any
-}
-
-type parsedRequestContextKey struct{}
-
 type batchGroupState struct {
-	checkerCache  batchCheckerCache
-	parsedRequest parsedRequestContext
-	ctx           context.Context
-}
-
-func newBatchGroupState(ctx context.Context, method Method) *batchGroupState {
-	state := &batchGroupState{parsedRequest: parsedRequestContext{method: string(method)}}
-	ctx = context.WithValue(ctx, batchCheckerCacheContextKey{}, &state.checkerCache)
-	state.ctx = context.WithValue(ctx, parsedRequestContextKey{}, &state.parsedRequest)
-	return state
+	checkerCache batchCheckerCache
 }
 
 func (c *batchCheckerCache) release() {
@@ -879,18 +863,15 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return "pong", nil
 	}
 
-	var parsed any
-	if request, ok := ctx.Value(parsedRequestContextKey{}).(*parsedRequestContext); ok && request.method == method {
-		parsed = request.params
-	} else {
-		var err error
-		parsed, err = unmarshalPayload(method, params)
-		if err != nil {
-			return nil, fmt.Errorf("%w: %w", ErrInvalidRequest, err)
-		}
+	parsed, err := unmarshalPayload(method, params)
+	if err != nil {
+		return nil, fmt.Errorf("%w: %w", ErrInvalidRequest, err)
 	}
+	return s.handleParsedRequest(ctx, Method(method), parsed)
+}
 
-	switch method {
+func (s *Session) handleParsedRequest(ctx context.Context, method Method, parsed any) (any, error) {
+	switch string(method) {
 	case string(MethodBatchRequests):
 		return s.handleBatchRequests(ctx, parsed.(*BatchRequestsParams))
 	case string(MethodRelease):
@@ -1208,7 +1189,7 @@ func (s *Session) handleBatchRequestGroups(ctx context.Context, groups []BatchRe
 		return nil, errors.New("api: invalid request: grouped batch requires groupOrder")
 	}
 	states := core.Map(groups, func(group BatchRequestGroup) *batchGroupState {
-		return newBatchGroupState(ctx, group.Method)
+		return &batchGroupState{}
 	})
 	for _, state := range states {
 		defer state.checkerCache.release()
@@ -1242,6 +1223,10 @@ func (s *Session) handleBatchRequestGroups(ctx context.Context, groups []BatchRe
 		responseCount = groups[0].Count
 	}
 	responses := make([]BatchResponse, responseCount)
+	var singleGroupCtx context.Context
+	if implicitSingleGroupOrder {
+		singleGroupCtx = context.WithValue(ctx, batchCheckerCacheContextKey{}, &states[0].checkerCache)
+	}
 
 	cursors := make([]int, len(groups))
 	previousGroupIndex := -1
@@ -1257,15 +1242,17 @@ func (s *Session) handleBatchRequestGroups(ctx context.Context, groups []BatchRe
 			states[previousGroupIndex].checkerCache.release()
 		}
 		previousGroupIndex = groupIndex
+		groupCtx := singleGroupCtx
+		if groupCtx == nil {
+			groupCtx = context.WithValue(ctx, batchCheckerCacheContextKey{}, &states[groupIndex].checkerCache)
+		}
 		group := groups[groupIndex]
 		requestIndex := cursors[groupIndex]
 		if requestIndex >= group.Count {
 			return nil, fmt.Errorf("%w: too many requests for group %d", ErrInvalidRequest, groupIndex)
 		}
 		if decoder := decoders[groupIndex]; decoder != nil {
-			state := states[groupIndex]
-			state.parsedRequest.params = decoder.request(requestIndex)
-			responses[i] = s.handleParsedBatchRequest(state.ctx, group.Method)
+			responses[i] = s.handleParsedBatchRequest(groupCtx, group.Method, decoder.request(requestIndex))
 		} else {
 			if requestIndex >= len(group.Requests) {
 				return nil, fmt.Errorf("%w: missing request parameters for group %d", ErrInvalidRequest, groupIndex)
@@ -1274,7 +1261,7 @@ func (s *Session) handleBatchRequestGroups(ctx context.Context, groups []BatchRe
 			if err != nil {
 				return nil, fmt.Errorf("%w: invalid grouped request %d for %q: %w", ErrInvalidRequest, requestIndex, group.Method, err)
 			}
-			responses[i] = s.handleBatchRequest(states[groupIndex].ctx, BatchRequest{Method: group.Method, Params: params})
+			responses[i] = s.handleBatchRequest(groupCtx, BatchRequest{Method: group.Method, Params: params})
 		}
 		cursors[groupIndex]++
 	}
@@ -1484,7 +1471,7 @@ func (s *Session) handleBatchRequest(ctx context.Context, request BatchRequest) 
 	return response
 }
 
-func (s *Session) handleParsedBatchRequest(ctx context.Context, method Method) (response BatchResponse) {
+func (s *Session) handleParsedBatchRequest(ctx context.Context, method Method, params any) (response BatchResponse) {
 	defer func() {
 		if recovered := recover(); recovered != nil {
 			response.Result = nil
@@ -1492,7 +1479,7 @@ func (s *Session) handleParsedBatchRequest(ctx context.Context, method Method) (
 		}
 	}()
 	var err error
-	response.Result, err = s.HandleRequest(ctx, string(method), nil)
+	response.Result, err = s.handleParsedRequest(ctx, method, params)
 	if err != nil {
 		response.Error = err.Error()
 	}
