@@ -1,11 +1,14 @@
 package project
 
 import (
+	"errors"
+	"slices"
 	"testing"
 
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
+	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfstest"
 	"gotest.tools/v3/assert"
 )
@@ -159,7 +162,7 @@ func TestProcessChanges(t *testing.T) {
 		assert.Assert(t, result.IsEmpty())
 
 		// Check that the overlay is marked as matching disk text
-		fh := fs.getFile(testURI1.FileName())
+		fh := fs.GetFile(testURI1.FileName())
 		assert.Assert(t, fh != nil)
 		assert.Assert(t, fh.MatchesDiskText())
 	})
@@ -179,7 +182,7 @@ func TestProcessChanges(t *testing.T) {
 			},
 		})
 
-		fh := fs.getFile(uri.FileName())
+		fh := fs.GetFile(uri.FileName())
 		assert.Assert(t, fh != nil)
 		assert.Equal(t, fh.Kind(), core.ScriptKindTS)
 	})
@@ -199,7 +202,7 @@ func TestProcessChanges(t *testing.T) {
 			},
 		})
 
-		fh := fs.getFile(uri.FileName())
+		fh := fs.GetFile(uri.FileName())
 		assert.Assert(t, fh != nil)
 		assert.Equal(t, fh.Kind(), core.ScriptKindUnknown)
 	})
@@ -208,7 +211,7 @@ func TestProcessChanges(t *testing.T) {
 		t.Parallel()
 		fs := createOverlayFS()
 
-		fh := fs.getFile("/script")
+		fh := fs.GetFile("/script")
 		assert.Assert(t, fh != nil)
 		assert.Equal(t, fh.Kind(), core.ScriptKindUnknown)
 	})
@@ -227,7 +230,7 @@ func TestProcessChanges(t *testing.T) {
 				LanguageKind: lsproto.LanguageKindTypeScript,
 			},
 		})
-		assert.Assert(t, !fs.getFile(testURI1.FileName()).MatchesDiskText())
+		assert.Assert(t, !fs.GetFile(testURI1.FileName()).MatchesDiskText())
 
 		// Then save
 		fs.processChanges([]FileChange{
@@ -236,7 +239,7 @@ func TestProcessChanges(t *testing.T) {
 				URI:  testURI1,
 			},
 		})
-		assert.Assert(t, fs.getFile(testURI1.FileName()).MatchesDiskText())
+		assert.Assert(t, fs.GetFile(testURI1.FileName()).MatchesDiskText())
 
 		// Now process a watch change
 		fs.processChanges([]FileChange{
@@ -245,7 +248,7 @@ func TestProcessChanges(t *testing.T) {
 				URI:  testURI1,
 			},
 		})
-		assert.Assert(t, !fs.getFile(testURI1.FileName()).MatchesDiskText())
+		assert.Assert(t, !fs.GetFile(testURI1.FileName()).MatchesDiskText())
 	})
 
 	t.Run("save without overlay should not panic", func(t *testing.T) {
@@ -347,7 +350,101 @@ func TestProcessChanges(t *testing.T) {
 		// Should also be marked as changed since it was closed and reopened
 		assert.Assert(t, result.Changed.Has(testURI1), "close then open should mark as changed")
 		// Should have the new content
-		fh := fs.getFile(testURI1.FileName())
+		fh := fs.GetFile(testURI1.FileName())
 		assert.Equal(t, fh.Content(), "const x = 2;")
+	})
+}
+
+func TestOverlayFSFileSystem(t *testing.T) {
+	t.Parallel()
+	host := vfstest.FromMap(map[string]string{
+		"/virtual": "host file",
+	}, false /* useCaseSensitiveFileNames */)
+	toPath := func(fileName string) tspath.Path { return tspath.Path(fileName) }
+	overlays := map[tspath.Path]*Overlay{
+		"/virtual/nested/file.ts": newOverlay("/virtual/nested/file.ts", "overlay", 1, core.ScriptKindTS),
+	}
+	fileSystem := newOverlayFS(host, overlays, lsproto.PositionEncodingKindUTF16, toPath)
+
+	assert.Assert(t, fileSystem.DirectoryExists("/virtual"))
+	assert.Assert(t, !fileSystem.FileExists("/virtual"))
+	assert.Assert(t, fileSystem.Stat("/virtual").IsDir())
+	content, ok := fileSystem.ReadFile("/virtual/nested/file.ts")
+	assert.Assert(t, ok)
+	assert.Equal(t, content, "overlay")
+
+	rootEntries := fileSystem.GetAccessibleEntries("/")
+	assert.Assert(t, slices.Contains(rootEntries.Directories, "virtual"))
+	assert.Assert(t, !slices.Contains(rootEntries.Files, "virtual"))
+
+	var walked []string
+	err := fileSystem.WalkDir("/virtual", func(path string, _ vfs.DirEntry, err error) error {
+		assert.NilError(t, err)
+		walked = append(walked, path)
+		return nil
+	})
+	assert.NilError(t, err)
+	assert.DeepEqual(t, walked, []string{"/virtual", "/virtual/nested", "/virtual/nested/file.ts"})
+
+	t.Run("preserves entry order and walk control", func(t *testing.T) {
+		t.Parallel()
+		orderedHost := vfstest.FromMap(map[string]string{
+			"/root/host-b.ts": "host",
+		}, false /* useCaseSensitiveFileNames */)
+		orderedFS := newOverlayFS(orderedHost, map[tspath.Path]*Overlay{
+			"/root/overlay-a.ts": newOverlay("/root/overlay-a.ts", "overlay", 1, core.ScriptKindTS),
+		}, lsproto.PositionEncodingKindUTF16, toPath)
+
+		var orderedWalked []string
+		walkErr := orderedFS.WalkDir("/root", func(path string, _ vfs.DirEntry, _ error) error {
+			orderedWalked = append(orderedWalked, path)
+			return nil
+		})
+		assert.NilError(t, walkErr)
+		assert.DeepEqual(t, orderedWalked, []string{"/root", "/root/host-b.ts", "/root/overlay-a.ts"})
+
+		orderedWalked = nil
+		walkErr = orderedFS.WalkDir("/root", func(path string, _ vfs.DirEntry, _ error) error {
+			orderedWalked = append(orderedWalked, path)
+			if path == "/root/host-b.ts" {
+				return vfs.SkipAll
+			}
+			return nil
+		})
+		assert.NilError(t, walkErr)
+		assert.DeepEqual(t, orderedWalked, []string{"/root", "/root/host-b.ts"})
+
+		orderedWalked = nil
+		walkErr = orderedFS.WalkDir("/root", func(path string, _ vfs.DirEntry, _ error) error {
+			orderedWalked = append(orderedWalked, path)
+			if path == "/root/host-b.ts" {
+				return vfs.SkipDir
+			}
+			return nil
+		})
+		assert.NilError(t, walkErr)
+		assert.DeepEqual(t, orderedWalked, []string{"/root", "/root/host-b.ts"})
+	})
+
+	t.Run("does not follow symlink cycles", func(t *testing.T) {
+		t.Parallel()
+		cyclicHost := vfstest.FromMap(map[string]any{
+			"/root/a/file.ts": "host",
+			"/root/a/b":       vfstest.Symlink("/root/a"),
+		}, false /* useCaseSensitiveFileNames */)
+		cyclicFS := newOverlayFS(cyclicHost, map[tspath.Path]*Overlay{
+			"/unrelated.ts": newOverlay("/unrelated.ts", "overlay", 1, core.ScriptKindTS),
+		}, lsproto.PositionEncodingKindUTF16, toPath)
+		walkLimit := errors.New("walk limit exceeded")
+		var cyclicWalked []string
+		walkErr := cyclicFS.WalkDir("/root", func(path string, _ vfs.DirEntry, _ error) error {
+			cyclicWalked = append(cyclicWalked, path)
+			if len(cyclicWalked) > 10 {
+				return walkLimit
+			}
+			return nil
+		})
+		assert.NilError(t, walkErr)
+		assert.DeepEqual(t, cyclicWalked, []string{"/root", "/root/a", "/root/a/file.ts"})
 	})
 }

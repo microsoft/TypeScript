@@ -1,18 +1,36 @@
 package requestfilesystem
 
 import (
+	"context"
 	"slices"
 	"strings"
 	"testing"
 	"time"
 
+	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/project"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil/projecttestutil"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/trackingvfs"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfstest"
 	"gotest.tools/v3/assert"
 )
+
+type countingLayeredFileSystem struct {
+	project.LayeredFileSystem
+	getFileCalls int
+}
+
+func (fs *countingLayeredFileSystem) GetFile(fileName string) project.FileHandle {
+	fs.getFileCalls++
+	return fs.LayeredFileSystem.GetFile(fileName)
+}
+
+func (fs *countingLayeredFileSystem) GetFileByPath(fileName string, path tspath.Path) project.FileHandle {
+	fs.getFileCalls++
+	return fs.LayeredFileSystem.GetFileByPath(fileName, path)
+}
 
 func newRequestFileSystem(params *RequestFileSystem, base vfs.FS, currentDirectory string) (*requestFileSystem, error) {
 	return newLayeredRequestFileSystem(params, base, currentDirectory)
@@ -169,6 +187,41 @@ func TestInitializeForUpdate(t *testing.T) {
 func TestRequestFileSystemCompleteDirectoryListingsFullExplicitReplacement(t *testing.T) {
 	t.Parallel()
 	testCompleteDirectoryListing(t, KindFull, true, RequestDirectoryEntries{Files: []string{"replacement.ts"}, Directories: []string{"replacement-dir"}})
+}
+
+func TestRequestFileSystemPreservesExplicitDirectoryOrder(t *testing.T) {
+	t.Parallel()
+	host := vfstest.FromMap(map[string]string{}, true)
+	fileSystem, err := newRequestFileSystem(&RequestFileSystem{
+		Kind: KindFull,
+		Files: map[string]string{
+			"/src/index.ts": "",
+			"/src/foo.ts":   "",
+		},
+		Directories: map[string]RequestDirectoryEntries{
+			"/src": {Files: []string{"index.ts", "foo.ts"}},
+		},
+	}, host, "/")
+	assert.NilError(t, err)
+	assert.DeepEqual(t, fileSystem.GetAccessibleEntries("/src").Files, []string{"index.ts", "foo.ts"})
+}
+
+func TestRequestFileSystemOverlaysDoesNotReadFileHandles(t *testing.T) {
+	t.Parallel()
+	session, _ := projecttestutil.Setup(map[string]any{"/index.ts": "host"})
+	defer session.Close()
+	session.DidOpenFile(context.Background(), "file:///index.ts", 1, "overlay", lsproto.LanguageKindTypeScript)
+
+	base := &countingLayeredFileSystem{LayeredFileSystem: session.FS().(project.LayeredFileSystem)}
+	fileSystem, err := newRequestFileSystem(&RequestFileSystem{
+		Kind:         KindLayer,
+		RemovedPaths: []string{"/index.ts"},
+	}, base, "/")
+	assert.NilError(t, err)
+	base.getFileCalls = 0
+
+	assert.Equal(t, len(fileSystem.Overlays()), 0)
+	assert.Equal(t, base.getFileCalls, 0)
 }
 
 func TestRequestFileSystemCompleteDirectoryListingsFullExplicitEmpty(t *testing.T) {

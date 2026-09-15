@@ -14,6 +14,62 @@ import (
 	"gotest.tools/v3/assert"
 )
 
+func newSnapshotFSBuilder(
+	fs vfs.FS,
+	previousOverlays map[tspath.Path]*Overlay,
+	overlays map[tspath.Path]*Overlay,
+	diskFiles map[tspath.Path]*diskFile,
+	diskDirectories map[tspath.Path]dirty.CloneableMap[tspath.Path, string],
+	nodeModulesRealpathAliases map[tspath.Path]*realpathAliasSet,
+	positionEncoding lsproto.PositionEncodingKind,
+	toPath func(fileName string) tspath.Path,
+) *snapshotFSBuilder {
+	_ = previousOverlays
+	layeredFS := layerOverlayFileSystem(fs, overlays, positionEncoding, toPath)
+	return newSnapshotFSBuilderFromSource(layeredFS, diskFiles, diskDirectories, nodeModulesRealpathAliases, toPath)
+}
+
+func newTestLayeredFileSystem(fs vfs.FS, toPath func(string) tspath.Path) LayeredFileSystem {
+	return newOverlayFS(fs, nil, lsproto.PositionEncodingKindUTF16, toPath)
+}
+
+type countingHandleFileSystem struct {
+	LayeredFileSystem
+	content            string
+	getFileByPathCalls int
+	readFileCalls      int
+}
+
+func (fs *countingHandleFileSystem) GetFile(fileName string) FileHandle {
+	return fs.GetFileByPath(fileName, tspath.Path(fileName))
+}
+
+func (fs *countingHandleFileSystem) GetFileByPath(fileName string, path tspath.Path) FileHandle {
+	fs.getFileByPathCalls++
+	return NewDiskFileHandle(fileName, fs.content)
+}
+
+func (fs *countingHandleFileSystem) ReadFile(path string) (string, bool) {
+	fs.readFileCalls++
+	return fs.content, true
+}
+
+func TestSnapshotFSBuilderCachesReturnedSourceHandle(t *testing.T) {
+	t.Parallel()
+	toPath := func(fileName string) tspath.Path { return tspath.Path(fileName) }
+	fileSystem := &countingHandleFileSystem{
+		LayeredFileSystem: newTestLayeredFileSystem(vfstest.FromMap(map[string]string{}, true), toPath),
+		content:           "export const value = 1;",
+	}
+	builder := newSnapshotFSBuilderFromSource(fileSystem, nil, nil, nil, toPath)
+
+	file := builder.GetFile("/src/index.ts")
+	assert.Assert(t, file != nil)
+	assert.Equal(t, file.Content(), fileSystem.content)
+	assert.Equal(t, fileSystem.getFileByPathCalls, 1)
+	assert.Equal(t, fileSystem.readFileCalls, 0)
+}
+
 func TestSnapshotFSBuilder(t *testing.T) {
 	t.Parallel()
 
@@ -450,23 +506,15 @@ func TestSnapshotFSBuilder(t *testing.T) {
 			toPath,
 		)
 
-		// Check overlayDirectories was built correctly
-		srcDir, ok := builder.overlayDirectories[tspath.Path("/src")]
-		assert.Assert(t, ok, "/src overlay directory should exist")
-		_, hasOverlay := srcDir[tspath.Path("/src/overlay.ts")]
-		assert.Assert(t, hasOverlay, "/src should contain overlay.ts")
-		_, hasNested := srcDir[tspath.Path("/src/nested")]
-		assert.Assert(t, hasNested, "/src should contain nested/")
+		srcEntries := builder.GetAccessibleEntries("/src")
+		assert.Assert(t, slices.Contains(srcEntries.Files, "overlay.ts"), "/src should contain overlay.ts")
+		assert.Assert(t, slices.Contains(srcEntries.Directories, "nested"), "/src should contain nested/")
 
-		nestedDir, ok := builder.overlayDirectories[tspath.Path("/src/nested")]
-		assert.Assert(t, ok, "/src/nested overlay directory should exist")
-		_, hasDeep := nestedDir[tspath.Path("/src/nested/deep.ts")]
-		assert.Assert(t, hasDeep, "/src/nested should contain deep.ts")
+		nestedEntries := builder.GetAccessibleEntries("/src/nested")
+		assert.Assert(t, slices.Contains(nestedEntries.Files, "deep.ts"), "/src/nested should contain deep.ts")
 
-		rootDir, ok := builder.overlayDirectories[tspath.Path("/")]
-		assert.Assert(t, ok, "/ overlay directory should exist")
-		_, hasSrc := rootDir[tspath.Path("/src")]
-		assert.Assert(t, hasSrc, "/ should contain /src")
+		rootEntries := builder.GetAccessibleEntries("/")
+		assert.Assert(t, slices.Contains(rootEntries.Directories, "src"), "/ should contain /src")
 	})
 
 	t.Run("GetAccessibleEntries combines disk and overlay", func(t *testing.T) {
@@ -563,14 +611,13 @@ func TestSnapshotFS(t *testing.T) {
 				fileBase: fileBase{fileName: "/src/foo.ts", content: "overlay content"},
 			},
 		}
+		overlayFS := newOverlayFS(testFS, overlays, lsproto.PositionEncodingKindUTF16, toPath)
 
 		snapshot := &SnapshotFS{
-			toPath:             toPath,
-			fs:                 testFS,
-			overlays:           overlays,
-			overlayDirectories: make(map[tspath.Path]map[tspath.Path]string),
-			diskFiles:          make(map[tspath.Path]*diskFile),
-			diskDirectories:    make(map[tspath.Path]dirty.CloneableMap[tspath.Path, string]),
+			toPath:          toPath,
+			fs:              overlayFS,
+			diskFiles:       make(map[tspath.Path]*diskFile),
+			diskDirectories: make(map[tspath.Path]dirty.CloneableMap[tspath.Path, string]),
 		}
 
 		fh := snapshot.GetFile("/src/foo.ts")
@@ -589,12 +636,10 @@ func TestSnapshotFS(t *testing.T) {
 		}
 
 		snapshot := &SnapshotFS{
-			toPath:             toPath,
-			fs:                 testFS,
-			overlays:           make(map[tspath.Path]*Overlay),
-			overlayDirectories: make(map[tspath.Path]map[tspath.Path]string),
-			diskFiles:          diskFiles,
-			diskDirectories:    make(map[tspath.Path]dirty.CloneableMap[tspath.Path, string]),
+			toPath:          toPath,
+			fs:              newTestLayeredFileSystem(testFS, toPath),
+			diskFiles:       diskFiles,
+			diskDirectories: make(map[tspath.Path]dirty.CloneableMap[tspath.Path, string]),
 		}
 
 		fh := snapshot.GetFile("/src/foo.ts")
@@ -609,12 +654,10 @@ func TestSnapshotFS(t *testing.T) {
 		}, false /* useCaseSensitiveFileNames */)
 
 		snapshot := &SnapshotFS{
-			toPath:             toPath,
-			fs:                 testFS,
-			overlays:           make(map[tspath.Path]*Overlay),
-			overlayDirectories: make(map[tspath.Path]map[tspath.Path]string),
-			diskFiles:          make(map[tspath.Path]*diskFile),
-			diskDirectories:    make(map[tspath.Path]dirty.CloneableMap[tspath.Path, string]),
+			toPath:          toPath,
+			fs:              newTestLayeredFileSystem(testFS, toPath),
+			diskFiles:       make(map[tspath.Path]*diskFile),
+			diskDirectories: make(map[tspath.Path]dirty.CloneableMap[tspath.Path, string]),
 		}
 
 		fh := snapshot.GetFile("/src/foo.ts")
@@ -627,12 +670,10 @@ func TestSnapshotFS(t *testing.T) {
 		testFS := vfstest.FromMap(map[string]string{}, false /* useCaseSensitiveFileNames */)
 
 		snapshot := &SnapshotFS{
-			toPath:             toPath,
-			fs:                 testFS,
-			overlays:           make(map[tspath.Path]*Overlay),
-			overlayDirectories: make(map[tspath.Path]map[tspath.Path]string),
-			diskFiles:          make(map[tspath.Path]*diskFile),
-			diskDirectories:    make(map[tspath.Path]dirty.CloneableMap[tspath.Path, string]),
+			toPath:          toPath,
+			fs:              newTestLayeredFileSystem(testFS, toPath),
+			diskFiles:       make(map[tspath.Path]*diskFile),
+			diskDirectories: make(map[tspath.Path]dirty.CloneableMap[tspath.Path, string]),
 		}
 
 		fh := snapshot.GetFile("/src/nonexistent.ts")
@@ -649,17 +690,9 @@ func TestSnapshotFS(t *testing.T) {
 			},
 		}
 
-		snapshot := &SnapshotFS{
-			toPath:             toPath,
-			fs:                 testFS,
-			overlays:           overlays,
-			overlayDirectories: make(map[tspath.Path]map[tspath.Path]string),
-			diskFiles:          make(map[tspath.Path]*diskFile),
-			diskDirectories:    make(map[tspath.Path]dirty.CloneableMap[tspath.Path, string]),
-		}
-
-		assert.Assert(t, snapshot.isOpenFile("/src/foo.ts"), "overlay file should be open")
-		assert.Assert(t, !snapshot.isOpenFile("/src/bar.ts"), "non-overlay file should not be open")
+		overlayFS := newOverlayFS(testFS, overlays, lsproto.PositionEncodingKindUTF16, toPath)
+		assert.Assert(t, overlayFS.GetFile("/src/foo.ts").IsOverlay(), "overlay file should be open")
+		assert.Assert(t, overlayFS.GetFile("/src/bar.ts") == nil, "non-overlay file should not be open")
 	})
 
 	t.Run("GetFileByPath uses provided path", func(t *testing.T) {
@@ -673,14 +706,13 @@ func TestSnapshotFS(t *testing.T) {
 				fileBase: fileBase{fileName: "/src/foo.ts", content: "overlay content"},
 			},
 		}
+		overlayFS := newOverlayFS(testFS, overlays, lsproto.PositionEncodingKindUTF16, toPath)
 
 		snapshot := &SnapshotFS{
-			toPath:             toPath,
-			fs:                 testFS,
-			overlays:           overlays,
-			overlayDirectories: make(map[tspath.Path]map[tspath.Path]string),
-			diskFiles:          make(map[tspath.Path]*diskFile),
-			diskDirectories:    make(map[tspath.Path]dirty.CloneableMap[tspath.Path, string]),
+			toPath:          toPath,
+			fs:              overlayFS,
+			diskFiles:       make(map[tspath.Path]*diskFile),
+			diskDirectories: make(map[tspath.Path]dirty.CloneableMap[tspath.Path, string]),
 		}
 
 		// GetFileByPath should use the provided path directly
@@ -698,14 +730,7 @@ func TestSnapshotFS(t *testing.T) {
 				fileBase: fileBase{fileName: "/src/overlay.ts", content: "overlay content"},
 			},
 		}
-		overlayDirectories := map[tspath.Path]map[tspath.Path]string{
-			tspath.Path("/"): {
-				tspath.Path("/src"): "src",
-			},
-			tspath.Path("/src"): {
-				tspath.Path("/src/overlay.ts"): "overlay.ts",
-			},
-		}
+		overlayFS := newOverlayFS(testFS, overlays, lsproto.PositionEncodingKindUTF16, toPath)
 		diskFiles := map[tspath.Path]*diskFile{
 			tspath.Path("/src/disk.ts"): newDiskFile("/src/disk.ts", "disk content"),
 		}
@@ -719,12 +744,10 @@ func TestSnapshotFS(t *testing.T) {
 		}
 
 		snapshot := &SnapshotFS{
-			toPath:             toPath,
-			fs:                 testFS,
-			overlays:           overlays,
-			overlayDirectories: overlayDirectories,
-			diskFiles:          diskFiles,
-			diskDirectories:    diskDirectories,
+			toPath:          toPath,
+			fs:              overlayFS,
+			diskFiles:       diskFiles,
+			diskDirectories: diskDirectories,
 		}
 
 		entries := snapshot.GetAccessibleEntries("/src")
@@ -749,12 +772,10 @@ func TestSourceFS(t *testing.T) {
 		}, false /* useCaseSensitiveFileNames */)
 
 		snapshot := &SnapshotFS{
-			toPath:             toPath,
-			fs:                 testFS,
-			overlays:           make(map[tspath.Path]*Overlay),
-			overlayDirectories: make(map[tspath.Path]map[tspath.Path]string),
-			diskFiles:          make(map[tspath.Path]*diskFile),
-			diskDirectories:    make(map[tspath.Path]dirty.CloneableMap[tspath.Path, string]),
+			toPath:          toPath,
+			fs:              newTestLayeredFileSystem(testFS, toPath),
+			diskFiles:       make(map[tspath.Path]*diskFile),
+			diskDirectories: make(map[tspath.Path]dirty.CloneableMap[tspath.Path, string]),
 		}
 
 		sourceFS := newSourceFS(true /* tracking */, snapshot, toPath)
@@ -777,12 +798,10 @@ func TestSourceFS(t *testing.T) {
 		}, false /* useCaseSensitiveFileNames */)
 
 		snapshot := &SnapshotFS{
-			toPath:             toPath,
-			fs:                 testFS,
-			overlays:           make(map[tspath.Path]*Overlay),
-			overlayDirectories: make(map[tspath.Path]map[tspath.Path]string),
-			diskFiles:          make(map[tspath.Path]*diskFile),
-			diskDirectories:    make(map[tspath.Path]dirty.CloneableMap[tspath.Path, string]),
+			toPath:          toPath,
+			fs:              newTestLayeredFileSystem(testFS, toPath),
+			diskFiles:       make(map[tspath.Path]*diskFile),
+			diskDirectories: make(map[tspath.Path]dirty.CloneableMap[tspath.Path, string]),
 		}
 
 		sourceFS := newSourceFS(false /* tracking */, snapshot, toPath)
@@ -803,12 +822,10 @@ func TestSourceFS(t *testing.T) {
 		}, false /* useCaseSensitiveFileNames */)
 
 		snapshot := &SnapshotFS{
-			toPath:             toPath,
-			fs:                 testFS,
-			overlays:           make(map[tspath.Path]*Overlay),
-			overlayDirectories: make(map[tspath.Path]map[tspath.Path]string),
-			diskFiles:          make(map[tspath.Path]*diskFile),
-			diskDirectories:    make(map[tspath.Path]dirty.CloneableMap[tspath.Path, string]),
+			toPath:          toPath,
+			fs:              newTestLayeredFileSystem(testFS, toPath),
+			diskFiles:       make(map[tspath.Path]*diskFile),
+			diskDirectories: make(map[tspath.Path]dirty.CloneableMap[tspath.Path, string]),
 		}
 
 		sourceFS := newSourceFS(true /* tracking */, snapshot, toPath)
@@ -832,12 +849,10 @@ func TestSourceFS(t *testing.T) {
 		}, false /* useCaseSensitiveFileNames */)
 
 		snapshot := &SnapshotFS{
-			toPath:             toPath,
-			fs:                 testFS,
-			overlays:           make(map[tspath.Path]*Overlay),
-			overlayDirectories: make(map[tspath.Path]map[tspath.Path]string),
-			diskFiles:          make(map[tspath.Path]*diskFile),
-			diskDirectories:    make(map[tspath.Path]dirty.CloneableMap[tspath.Path, string]),
+			toPath:          toPath,
+			fs:              newTestLayeredFileSystem(testFS, toPath),
+			diskFiles:       make(map[tspath.Path]*diskFile),
+			diskDirectories: make(map[tspath.Path]dirty.CloneableMap[tspath.Path, string]),
 		}
 
 		sourceFS := newSourceFS(false /* tracking */, snapshot, toPath)
@@ -853,12 +868,10 @@ func TestSourceFS(t *testing.T) {
 		}, false /* useCaseSensitiveFileNames */)
 
 		snapshot := &SnapshotFS{
-			toPath:             toPath,
-			fs:                 testFS,
-			overlays:           make(map[tspath.Path]*Overlay),
-			overlayDirectories: make(map[tspath.Path]map[tspath.Path]string),
-			diskFiles:          make(map[tspath.Path]*diskFile),
-			diskDirectories:    make(map[tspath.Path]dirty.CloneableMap[tspath.Path, string]),
+			toPath:          toPath,
+			fs:              newTestLayeredFileSystem(testFS, toPath),
+			diskFiles:       make(map[tspath.Path]*diskFile),
+			diskDirectories: make(map[tspath.Path]dirty.CloneableMap[tspath.Path, string]),
 		}
 
 		sourceFS := newSourceFS(false /* tracking */, snapshot, toPath)
@@ -1464,7 +1477,7 @@ func TestExpandAndFilterWatchEvents(t *testing.T) {
 		change := FileChangeSummary{}
 		change.Deleted.Add("file:///project/node_modules")
 
-		expanded := builder.expandAndFilterWatchEvents(change, nil, nil)
+		expanded := builder.expandAndFilterWatchEvents(change, nil, nil, nil, nil)
 		assert.Assert(t, expanded.Deleted.Has("file:///project/node_modules"),
 			"bare node_modules directory deletion should be preserved")
 	})
@@ -1478,7 +1491,7 @@ func TestExpandAndFilterWatchEvents(t *testing.T) {
 		change := FileChangeSummary{}
 		change.Deleted.Add("file:///project/node_modules/@scope/pkg")
 
-		expanded := builder.expandAndFilterWatchEvents(change, nil, nil)
+		expanded := builder.expandAndFilterWatchEvents(change, nil, nil, nil, nil)
 		assert.Assert(t, expanded.Deleted.Has("file:///project/node_modules/@scope/pkg"),
 			"package directory deletion inside node_modules should be preserved")
 	})
@@ -1492,7 +1505,7 @@ func TestExpandAndFilterWatchEvents(t *testing.T) {
 		change := FileChangeSummary{}
 		change.Deleted.Add("file:///project/build")
 
-		expanded := builder.expandAndFilterWatchEvents(change, nil, nil)
+		expanded := builder.expandAndFilterWatchEvents(change, nil, nil, nil, nil)
 		assert.Equal(t, expanded.Deleted.Len(), 0,
 			"untracked non-node_modules directory deletion should be dropped")
 	})
@@ -1507,7 +1520,7 @@ func TestExpandAndFilterWatchEvents(t *testing.T) {
 		change.Changed.Add("file:///project/mapper.config")
 		change.Deleted.Add("file:///project/mapper.config")
 
-		expanded := builder.expandAndFilterWatchEvents(change, nil, watched)
+		expanded := builder.expandAndFilterWatchEvents(change, nil, watched, nil, nil)
 		assert.Assert(t, expanded.Changed.Has("file:///project/mapper.config"))
 		assert.Assert(t, expanded.Deleted.Has("file:///project/mapper.config"))
 	})
@@ -1535,7 +1548,7 @@ func TestExpandAndFilterWatchEvents(t *testing.T) {
 		change := FileChangeSummary{}
 		change.Deleted.Add("file:///src")
 
-		expanded := builder.expandAndFilterWatchEvents(change, nil, nil)
+		expanded := builder.expandAndFilterWatchEvents(change, nil, nil, nil, nil)
 		assert.Assert(t, expanded.Deleted.Has("file:///src/foo.ts"),
 			"tracked directory deletion should expand to contained file deletions")
 		assert.Assert(t, !expanded.Deleted.Has("file:///src"),

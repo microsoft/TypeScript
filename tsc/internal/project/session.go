@@ -249,7 +249,7 @@ func NewSession(init *SessionInit) *Session {
 
 // FS implements module.ResolutionHost
 func (s *Session) FS() vfs.FS {
-	return s.fs.fs
+	return s.fs
 }
 
 // GetCurrentDirectory implements module.ResolutionHost
@@ -459,12 +459,12 @@ func (s *Session) DidChangeWatchedFiles(ctx context.Context, changes []*lsproto.
 				// For creations/changes, we can check the file system.
 				// For deletions, consult the current snapshot cache to avoid treating extensionless file deletions as relevant.
 				if kind != FileChangeKindWatchDelete {
-					hasRelevantChange = s.fs.fs.DirectoryExists(fileName)
+					hasRelevantChange = s.fs.DirectoryExists(fileName)
 				} else {
 					s.snapshotMu.RLock()
 					snapshot := s.snapshot
 					s.snapshotMu.RUnlock()
-					if _, ok := snapshot.fs.diskDirectories[path]; ok || isNodeModulesPath(path) {
+					if _, ok := snapshot.fs.diskDirectories[path]; ok || snapshot.hasOverlayWithin(path) || isNodeModulesPath(path) {
 						hasRelevantChange = true
 					}
 				}
@@ -780,7 +780,7 @@ func (s *Session) sendPerformanceTelemetry(ctx context.Context) {
 	gometrics.Read(samples)
 
 	measurements := &lsproto.PerformanceStatsTelemetryMeasurements{
-		OpenFileCount:       float64(len(snapshot.fs.overlays)),
+		OpenFileCount:       float64(len(snapshot.overlays())),
 		UptimeSeconds:       time.Since(s.startTime).Seconds(),
 		ProjectCount:        float64(len(snapshot.ProjectCollection.Projects())),
 		ConfigCount:         float64(len(snapshot.ConfigFileRegistry.configs)),
@@ -1068,7 +1068,7 @@ func (s *Session) getSnapshot(
 		}
 		if updateReason == UpdateReasonUnknown {
 			for _, document := range request.ConfiguredProjectDocuments {
-				if snapshot.fs.isOpenFile(document.FileName()) {
+				if snapshot.isOpenFile(document.FileName()) {
 					project := snapshot.GetDefaultProject(document)
 					if project == nil {
 						updateReason = UpdateReasonRequestedLanguageServiceProjectNotLoaded
@@ -1766,7 +1766,7 @@ func (s *Session) logCacheStats(snapshot *Snapshot) {
 		})
 	}
 	s.logger.Log("\n======== Cache Statistics ========")
-	s.logger.Logf("Open file count:   %6d", len(snapshot.fs.overlays))
+	s.logger.Logf("Open file count:   %6d", len(snapshot.overlays()))
 	s.logger.Logf("Cached disk files: %6d", len(snapshot.fs.diskFiles))
 	s.logger.Logf("Realpath aliases:  %6d", len(snapshot.fs.nodeModulesRealpathAliases))
 	s.logger.Logf("Project count:     %6d", len(snapshot.ProjectCollection.Projects()))
@@ -1989,7 +1989,7 @@ func (s *Session) triggerATAForUpdatedProjects(newSnapshot *Snapshot) {
 					CompilerOptions:  project.CommandLine.CompilerOptions(),
 					CurrentDirectory: s.options.CurrentDirectory,
 					GetScriptKind:    core.GetScriptKindFromFileName,
-					FS:               s.fs.fs,
+					FS:               s.fs,
 					Logger:           logTree,
 				}
 
@@ -2030,7 +2030,7 @@ func (s *Session) warmAutoImportCache(ctx context.Context, change SnapshotChange
 		for uri := range change.fileChanges.Changed.Keys() {
 			changedFile = uri
 		}
-		if !newSnapshot.fs.isOpenFile(changedFile.FileName()) {
+		if !newSnapshot.isOpenFile(changedFile.FileName()) {
 			return
 		}
 		prefs := newSnapshot.UserPreferences()
@@ -2089,7 +2089,7 @@ func (s *Session) warmAutoImportCache(ctx context.Context, change SnapshotChange
 				AutoImports: changedFile,
 			},
 		}
-		clonedSnapshot := newSnapshot.Clone(warmCtx, warmChange, newSnapshot.fs.overlays, s.logger)
+		clonedSnapshot := newSnapshot.Clone(warmCtx, warmChange, newSnapshot.overlays(), s.logger)
 
 		// If cancelled during clone, discard the incomplete result.
 		if warmCtx.Err() != nil {

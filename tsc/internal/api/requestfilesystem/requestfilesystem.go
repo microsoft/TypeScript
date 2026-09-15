@@ -203,6 +203,35 @@ func (s requestFileSystem) baseFileSystem() vfs.FS {
 	return s.base
 }
 
+func (s *requestFileSystem) BaseFileSystem() vfs.FS {
+	return s.base
+}
+
+func (s *requestFileSystem) WithBaseFileSystem(base vfs.FS) project.LayeredFileSystem {
+	clone := *s
+	clone.base = base
+	return &clone
+}
+
+func (s *requestFileSystem) Overlays() map[tspath.Path]*project.Overlay {
+	base, ok := s.base.(project.LayeredFileSystem)
+	if !ok {
+		return nil
+	}
+	var result map[tspath.Path]*project.Overlay
+	for path, overlay := range base.Overlays() {
+		lookup := s.lookupPath(overlay.FileName())
+		if lookup.fileSystem == nil || s.toPath(lookup.path) != path {
+			continue
+		}
+		if result == nil {
+			result = make(map[tspath.Path]*project.Overlay)
+		}
+		result[path] = overlay
+	}
+	return result
+}
+
 func (s requestFileSystem) applyTo(base requestFileSystem) requestFileSystem {
 	s.paths = composeRequestPaths(base.paths, s.paths, requestFallbackAllowed, s.useCaseSensitiveNames)
 	s.kind = base.kind
@@ -394,6 +423,30 @@ func (s requestFileSystem) UseCaseSensitiveFileNames() bool {
 	return s.useCaseSensitiveNames
 }
 
+func (s requestFileSystem) GetFile(fileName string) project.FileHandle {
+	return s.GetFileByPath(fileName, s.toPath(fileName))
+}
+
+func (s requestFileSystem) GetFileByPath(fileName string, _ tspath.Path) project.FileHandle {
+	lookup := s.lookupPath(fileName)
+	if !lookup.ok || lookup.info != nil && lookup.info.IsDir() {
+		return nil
+	}
+	if lookup.fileSystem != nil {
+		if source, ok := lookup.fileSystem.(project.FileHandleSource); ok {
+			return source.GetFile(lookup.path)
+		}
+		if content, ok := lookup.fileSystem.ReadFile(lookup.path); ok {
+			return project.NewDiskFileHandle(fileName, content)
+		}
+		return nil
+	}
+	if file, ok := lookup.info.(*requestFile); ok {
+		return project.NewDiskFileHandle(fileName, file.content)
+	}
+	return nil
+}
+
 func (s requestFileSystem) ReadFile(fileName string) (string, bool) {
 	lookup := s.lookupPath(fileName)
 	if !lookup.ok || lookup.info != nil && lookup.info.IsDir() {
@@ -548,6 +601,9 @@ func (s requestFileSystem) addSymlinkEntries(directoryName string, entries vfs.E
 				links = append(links, *symlink)
 			}
 		}
+	}
+	if len(links) == 0 {
+		return result
 	}
 	for _, symlink := range links {
 		name := tspath.GetBaseFileName(symlink.linkName)
