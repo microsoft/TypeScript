@@ -235,8 +235,3 @@ func (fs *callbackFS) Chtimes(path string, aTime time.Time, mTime time.Time) err
 func (fs *callbackFS) Stat(path string) vfs.FileInfo {
 	return fs.base.Stat(path)
 }
-
-// WalkDir implements vfs.FS - always delegates to base (no callback support).
-func (fs *callbackFS) WalkDir(root string, walkFn vfs.WalkDirFunc) error {
-	return fs.base.WalkDir(root, walkFn)
-}

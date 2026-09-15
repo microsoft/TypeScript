@@ -376,20 +376,24 @@ export const cleanBuilt = task({
     run: () => rimraf("built"),
 });
 
+async function runGenerate() {
+    return await run("go", ["generate", "-v", "./..."], { cwd: "./tsc" });
+}
+
 export const generate = task({
     name: "generate",
     description: "Runs go generate on the project.",
-    run: async () => {
-        await run("go", ["generate", "-v", "./..."], { cwd: "./tsc" });
-    },
+    run: runGenerate,
 });
+
+async function runGenerateExtension() {
+    return await run("npm", ["run", "-w", "native-preview", "generateLocBundle"]);
+}
 
 export const generateExtension = task({
     name: "generate:extension",
     description: "Generates files in the extension",
-    run: async () => {
-        await run("npm", ["run", "-w", "native-preview", "generateLocBundle"]);
-    },
+    run: runGenerateExtension,
 });
 
 // ── Enum generation from Go source ──────────────────────────────
@@ -1393,6 +1397,7 @@ export const validate = task({
             }
         };
 
+        await runGenerate();
         await runValidation("test:tsc", runTests);
         await runValidation("test:extension", runTestExtension);
         if (options.api || options.all) {
@@ -1402,6 +1407,8 @@ export const validate = task({
             await runValidation("test:api", runTestAPI);
         }
         if (options.all) {
+            await runGenerateExtension();
+            await runGenerateVendor();
             await runValidation("test:benchmarks", runTestBenchmarks);
             await runValidation("test:tools", runTestTools);
             await runValidation("test:smoke", runSmokeTest); // in CI this is run with `--race`

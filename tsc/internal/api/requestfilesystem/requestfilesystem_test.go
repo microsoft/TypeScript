@@ -90,28 +90,6 @@ func verifyCompactionWithoutHostReads(t *testing.T, layer *requestFileSystem, ho
 			Sys       any
 		}{info.Name(), info.Size(), uint32(info.Mode()), info.ModTime(), info.IsDir(), info.Sys()}
 	})
-	verify("WalkDir", func(fileSystem vfs.FS, path string) any {
-		var result struct {
-			Paths       []string
-			Directories []bool
-			Errors      []string
-			Error       string
-		}
-		walkResult := fileSystem.WalkDir(path, func(child string, entry vfs.DirEntry, walkErr error) error {
-			result.Paths = append(result.Paths, child)
-			result.Directories = append(result.Directories, entry != nil && entry.IsDir())
-			message := ""
-			if walkErr != nil {
-				message = walkErr.Error()
-			}
-			result.Errors = append(result.Errors, message)
-			return nil
-		})
-		if walkResult != nil {
-			result.Error = walkResult.Error()
-		}
-		return result
-	})
 }
 
 func TestInitializeForUpdate(t *testing.T) {
@@ -551,13 +529,7 @@ func testSymlinkReplacesDirectory(t *testing.T, options symlinkReplacementOption
 		if remove {
 			assert.Assert(t, !fileSystem.FileExists("/dir/removed/sibling.ts"))
 		}
-		var walked []string
-		assert.NilError(t, fileSystem.WalkDir(linkPath, func(path string, entry vfs.DirEntry, err error) error {
-			assert.NilError(t, err)
-			walked = append(walked, path)
-			return nil
-		}))
-		assert.DeepEqual(t, walked, []string{linkPath, linkPath + "/new.ts", linkPath + "/removed", linkPath + "/removed/new.ts"})
+		assert.DeepEqual(t, fileSystem.GetAccessibleEntries(linkPath+"/removed").Files, []string{"new.ts"})
 	}
 	verifyLinked(linked)
 	next, err := newLayeredRequestFileSystem(&RequestFileSystem{Kind: KindLayer}, linked, "/")
