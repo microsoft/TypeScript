@@ -6,7 +6,12 @@ import getExePath from "#getExePath";
 import type { FileSystem } from "./fs.ts";
 
 export interface ClientSocketOptions {
-    /** Path to the Unix domain socket or Windows named pipe for API communication */
+    /**
+     * Path returned by custom/initializeAPISession.
+     *
+     * The async API connects to a Unix domain socket or Windows named pipe.
+     * The sync API connects to a FIFO pair on Unix or a named pipe on Windows.
+     */
     pipe: string;
     /** Maximum encoded byte size of each batch response page. Defaults to 300 million bytes. Individual responses can be larger than this size, but this controls where batch pages are cutoff. */
     maxResponseBytesPerPage?: number;
