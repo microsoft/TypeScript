@@ -7900,7 +7900,7 @@ func (c *Checker) checkExpressionWorker(node *ast.Node, checkMode CheckMode) *Ty
 	case ast.KindPrivateIdentifier:
 		return c.checkPrivateIdentifierExpression(node)
 	case ast.KindThisKeyword:
-		return c.checkThisExpression(node)
+		return c.checkThisExpression(node, checkMode)
 	case ast.KindSuperKeyword:
 		return c.checkSuperExpression(node)
 	case ast.KindNullKeyword:
@@ -8288,7 +8288,7 @@ func (c *Checker) checkQualifiedName(node *ast.Node, checkMode CheckMode) *Type 
 	left := node.AsQualifiedName().Left
 	var leftType *Type
 	if ast.IsPartOfTypeQuery(node) && ast.IsThisIdentifier(left) {
-		leftType = c.checkNonNullType(c.checkThisExpression(left), left)
+		leftType = c.checkNonNullType(c.checkThisExpression(left, CheckModeNormal), left)
 	} else {
 		leftType = c.checkNonNullExpression(left)
 	}
@@ -10828,7 +10828,7 @@ func (c *Checker) checkExpressionWithTypeArguments(node *ast.Node) *Type {
 	} else {
 		exprName := node.AsTypeQueryNode().ExprName
 		if ast.IsThisIdentifier(exprName) {
-			exprType = c.checkThisExpression(node.AsTypeQueryNode().ExprName)
+			exprType = c.checkThisExpression(node.AsTypeQueryNode().ExprName, CheckModeNormal)
 		} else {
 			exprType = c.checkExpression(node.AsTypeQueryNode().ExprName)
 		}
@@ -11223,7 +11223,7 @@ func (c *Checker) checkSyntheticExpression(node *ast.Node) *Type {
 
 func (c *Checker) checkIdentifier(node *ast.Node, checkMode CheckMode) *Type {
 	if ast.IsThisInTypeQuery(node) {
-		return c.checkThisExpression(node)
+		return c.checkThisExpression(node, checkMode)
 	}
 	symbol := c.getResolvedSymbol(node)
 	if symbol == c.unknownSymbol {
@@ -12258,7 +12258,7 @@ func (c *Checker) getContextualThisParameterType(fn *ast.Node) *Type {
 	return nil
 }
 
-func (c *Checker) checkThisExpression(node *ast.Node) *Type {
+func (c *Checker) checkThisExpression(node *ast.Node, checkMode CheckMode) *Type {
 	// Stop at the first arrow function so that we can
 	// tell whether 'this' needs to be captured.
 	container := ast.GetThisContainer(node, true /*includeArrowFunctions*/, true /*includeClassComputedPropertyName*/)
@@ -12293,7 +12293,7 @@ func (c *Checker) checkThisExpression(node *ast.Node) *Type {
 			// do not return here so in case if lexical this is captured - it will be reflected in flags on NodeLinks
 		}
 	}
-	t := c.tryGetThisTypeAtEx(node, true /*includeGlobalThis*/, container)
+	t := c.tryGetThisTypeAtEx(node, true /*includeGlobalThis*/, container, checkMode)
 	if c.noImplicitThis {
 		globalThisType := c.getTypeOfSymbol(c.globalThisSymbol)
 		if t == globalThisType && capturedByArrowFunction {
@@ -12316,7 +12316,7 @@ func (c *Checker) checkThisExpression(node *ast.Node) *Type {
 }
 
 func (c *Checker) tryGetThisTypeAt(node *ast.Node) *Type {
-	return c.tryGetThisTypeAtEx(node, true /*includeGlobalThis*/, nil /*container*/)
+	return c.tryGetThisTypeAtEx(node, true /*includeGlobalThis*/, nil /*container*/, CheckModeNormal)
 }
 
 func (c *Checker) TryGetThisTypeAtEx(node *ast.Node, includeGlobalThis bool, container *ast.Node) *Type {
@@ -12324,10 +12324,10 @@ func (c *Checker) TryGetThisTypeAtEx(node *ast.Node, includeGlobalThis bool, con
 	if reparsed.Flags&ast.NodeFlagsJSDoc != 0 && reparsed.Flags&ast.NodeFlagsReparsed == 0 {
 		return nil // Binder doesn't process non-reparsed JSDoc nodes
 	}
-	return c.tryGetThisTypeAtEx(reparsed, includeGlobalThis, ast.GetReparsedNodeForNode(container))
+	return c.tryGetThisTypeAtEx(reparsed, includeGlobalThis, ast.GetReparsedNodeForNode(container), CheckModeNormal)
 }
 
-func (c *Checker) tryGetThisTypeAtEx(node *ast.Node, includeGlobalThis bool, container *ast.Node) *Type {
+func (c *Checker) tryGetThisTypeAtEx(node *ast.Node, includeGlobalThis bool, container *ast.Node, checkMode CheckMode) *Type {
 	if container == nil {
 		container = c.getThisContainer(node, false /*includeArrowFunctions*/, false /*includeClassComputedPropertyName*/)
 	}
@@ -12343,6 +12343,7 @@ func (c *Checker) tryGetThisTypeAtEx(node *ast.Node, includeGlobalThis bool, con
 			thisType = c.getContextualThisParameterType(container)
 		}
 		if thisType != nil {
+			thisType = c.getNarrowableTypeForReference(thisType, node, checkMode)
 			return c.getFlowTypeOfReference(node, thisType)
 		}
 	}
@@ -31885,7 +31886,7 @@ func (c *Checker) hasContextualTypeWithNoGenericTypes(node *ast.Node, checkMode 
 	// element's tag name, so we exclude that here to avoid circularities.
 	// If check mode has `CheckMode.RestBindingElement`, we skip binding pattern contextual types,
 	// as we want the type of a rest element to be generic when possible.
-	if (ast.IsIdentifier(node) || ast.IsPropertyAccessExpression(node) || ast.IsElementAccessExpression(node)) &&
+	if (ast.IsIdentifier(node) || node.Kind == ast.KindThisKeyword || ast.IsPropertyAccessExpression(node) || ast.IsElementAccessExpression(node)) &&
 		!((ast.IsJsxOpeningElement(node.Parent) || ast.IsJsxSelfClosingElement(node.Parent)) && node.Parent.TagName() == node) {
 		contextualType := c.getContextualType(node, core.IfElse(checkMode&CheckModeRestBindingElement != 0, ContextFlagsSkipBindingPatterns, ContextFlagsNone))
 		if contextualType != nil {
