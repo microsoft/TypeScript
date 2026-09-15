@@ -529,6 +529,7 @@ func TestRefCountingCaches(t *testing.T) {
 				appProject.CommandLine.CompilerOptions(),
 				appProject.CommandLine.ProjectReferences(),
 				appProject.CommandLine.Errors,
+				nil,
 				appProject,
 				FileChangeSummary{},
 			)
@@ -559,6 +560,7 @@ func TestRefCountingCaches(t *testing.T) {
 				programProject.CommandLine.CompilerOptions(),
 				programProject.CommandLine.ProjectReferences(),
 				programProject.CommandLine.Errors,
+				nil,
 				programProject,
 				fileChanges,
 			)

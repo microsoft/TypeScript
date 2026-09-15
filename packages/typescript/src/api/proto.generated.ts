@@ -23,6 +23,10 @@ export interface APIMethodInfo {
     updateSnapshot: APIMethod<UpdateSnapshotParams, UpdateSnapshotResponse>;
     updateTemporarySnapshot: APIMethod<UpdateTemporarySnapshotParams, UpdateSnapshotResponse>;
     createProgram: APIMethod<CreateProgramParams, CreateProgramResponse>;
+    createModuleResolutionSet: APIMethod<CreateModuleResolutionSetParams, number>;
+    releaseModuleResolutionSet: APIMethod<ReleaseModuleResolutionSetParams, unknown>;
+    createModuleResolver: APIMethod<CreateModuleResolverParams, number>;
+    resolveModuleName: APIMethod<ResolveModuleNameParams, ModuleResolutionInvocationResult>;
     parseCommandLine: APIMethod<ParseCommandLineParams, ConfigFileResponse>;
     readConfigFile: APIMethod<ReadConfigFileParams, ReadConfigFileResponse>;
     parseJsonConfigFileContent: APIMethod<ParseJsonConfigFileContentParams, ConfigFileResponse>;
@@ -278,6 +282,33 @@ export interface CreateProgramParams {
 export interface CreateProgramResponse {
     snapshot: number;
     project: ProjectResponse | null;
+}
+
+export interface CreateModuleResolutionSetParams {
+    spec: ModuleResolutionSpec;
+}
+
+export interface ReleaseModuleResolutionSetParams {
+    set: number;
+}
+
+export interface CreateModuleResolverParams {
+    snapshot: number;
+    compilerOptions: CompilerOptions;
+    moduleResolutions?: ModuleResolutionSource | undefined;
+}
+
+export interface ResolveModuleNameParams {
+    snapshot: number;
+    resolver: number;
+    moduleName: string;
+    containingDirectory: DocumentIdentifier;
+    resolutionMode?: ModuleKind.CommonJS | ModuleKind.ESNext | undefined;
+}
+
+export interface ModuleResolutionInvocationResult {
+    result?: ResolvedModule | undefined;
+    trace?: string[] | undefined;
 }
 
 export interface ParseCommandLineParams {
@@ -999,6 +1030,8 @@ export interface ProfileResult {
 export interface BatchRequest {
     method:
         | "batchRequests"
+        | "createModuleResolutionSet"
+        | "createModuleResolver"
         | "createProgram"
         | "emit"
         | "emitToString"
@@ -1138,6 +1171,8 @@ export interface BatchRequest {
         | "printNode"
         | "readConfigFile"
         | "release"
+        | "releaseModuleResolutionSet"
+        | "resolveModuleName"
         | "resolveName"
         | "saveHeapProfile"
         | "signatureToSignatureDeclaration"
@@ -1157,6 +1192,8 @@ export interface BatchRequest {
 export interface BatchResponse {
     method:
         | "batchRequests"
+        | "createModuleResolutionSet"
+        | "createModuleResolver"
         | "createProgram"
         | "emit"
         | "emitToString"
@@ -1296,6 +1333,8 @@ export interface BatchResponse {
         | "printNode"
         | "readConfigFile"
         | "release"
+        | "releaseModuleResolutionSet"
+        | "resolveModuleName"
         | "resolveName"
         | "saveHeapProfile"
         | "signatureToSignatureDeclaration"
@@ -1366,11 +1405,17 @@ export interface CreateProgramOptions {
     compilerOptions: CompilerOptions;
     projectReferences?: ProjectReference[] | undefined;
     configFileParsingDiagnostics?: DiagnosticResponse[] | undefined;
+    moduleResolutions?: ModuleResolutionSource | undefined;
 }
 
 export interface CreateProgramOldProgramParams {
     snapshot?: number | undefined;
     project?: string | undefined;
+}
+
+export interface ModuleResolutionSpec {
+    fallback: "resolve" | "unresolved";
+    entries: ModuleResolutionEntry[];
 }
 
 /** CompilerOptions contains the compiler options exposed by the API. */
@@ -1479,6 +1524,11 @@ export interface CompilerOptions {
     configFilePath?: string | undefined;
 }
 
+export interface ModuleResolutionSource {
+    spec?: ModuleResolutionSpec | undefined;
+    set?: number | undefined;
+}
+
 export interface ProjectReference {
     /** Path is a normalized path on disk. */
     path: string;
@@ -1573,8 +1623,21 @@ export interface ProjectFileChanges {
     deletedFiles?: string[] | undefined;
 }
 
+export interface ModuleResolutionEntry {
+    moduleName: string;
+    containingDirectory?: DocumentIdentifier | undefined;
+    resolutionMode?: ModuleKind.CommonJS | ModuleKind.ESNext | undefined;
+    result: ProvidedModuleResolution;
+}
+
 /** CompletionEntryLabelDetailsResponse holds additional label display text for a completion entry. */
 export interface CompletionEntryLabelDetailsResponse {
     detail?: string | undefined;
     description?: string | undefined;
+}
+
+export interface ProvidedModuleResolution {
+    resolvedFileName?: DocumentIdentifier | undefined;
+    originalPath?: DocumentIdentifier | undefined;
+    packageId?: PackageId | undefined;
 }

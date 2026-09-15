@@ -10,6 +10,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/lsutil"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
+	"github.com/microsoft/TypeScript/tsc/internal/module"
 	"github.com/microsoft/TypeScript/tsc/internal/project/logging"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
@@ -119,6 +120,7 @@ func (s *SnapshotHost) CloneSnapshotForProgram(
 	options *core.CompilerOptions,
 	projectReferences []*core.ProjectReference,
 	configFileParsingDiagnostics []*ast.Diagnostic,
+	moduleResolutionProvider module.ResolutionProvider,
 	oldProject *Project,
 	fileChanges FileChangeSummary,
 ) *Snapshot {
@@ -129,6 +131,7 @@ func (s *SnapshotHost) CloneSnapshotForProgram(
 		options,
 		projectReferences,
 		configFileParsingDiagnostics,
+		moduleResolutionProvider,
 		oldProject,
 		fileChanges,
 		nil,

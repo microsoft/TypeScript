@@ -265,7 +265,37 @@ func (r *Resolver) ResolveTypeReferenceDirective(
 }
 
 func (r *Resolver) ResolveModuleName(moduleName string, containingFile string, resolutionMode core.ResolutionMode, redirectedReference ResolvedProjectReference) (*ResolvedModule, []DiagAndArgs) {
-	containingDirectory := tspath.GetDirectoryPath(containingFile)
+	return r.resolveModuleName(moduleName, containingFile, tspath.GetDirectoryPath(containingFile), resolutionMode, redirectedReference)
+}
+
+func (r *Resolver) ResolveModuleNameFromDirectory(moduleName string, containingDirectory string, resolutionMode core.ResolutionMode) (*ResolvedModule, []DiagAndArgs) {
+	return r.resolveModuleName(moduleName, containingDirectory, containingDirectory, resolutionMode, nil)
+}
+
+func (r *Resolver) ResolveProvidedModule(moduleName string, provided *ProvidedModuleResolution) *ResolvedModule {
+	if provided == nil {
+		return &ResolvedModule{}
+	}
+	externalPath := provided.ResolvedFileName
+	if provided.OriginalPath != "" {
+		externalPath = provided.OriginalPath
+	}
+	extension := tspath.TryGetExtensionFromPath(provided.ResolvedFileName)
+	isStandardExtension := tspath.FileExtensionIsOneOf(provided.ResolvedFileName, tspath.SupportedTSExtensionsWithJsonFlat) ||
+		tspath.FileExtensionIsOneOf(provided.ResolvedFileName, tspath.SupportedJSExtensionsFlat)
+	return &ResolvedModule{
+		ResolvedFileName: provided.ResolvedFileName,
+		OriginalPath:     provided.OriginalPath,
+		Extension:        extension,
+		ResolvedUsingTsExtension: tspath.IsExternalModuleNameRelative(moduleName) &&
+			tspath.TryExtractTSExtension(moduleName) != "",
+		ResolvedUsingExtraExtensions: !isStandardExtension,
+		PackageId:                    provided.PackageId,
+		IsExternalLibraryImport:      strings.Contains(externalPath, "/node_modules/"),
+	}
+}
+
+func (r *Resolver) resolveModuleName(moduleName string, containingFile string, containingDirectory string, resolutionMode core.ResolutionMode, redirectedReference ResolvedProjectReference) (*ResolvedModule, []DiagAndArgs) {
 	traceBuilder := r.newTraceBuilder()
 
 	cacheKey := moduleResolutionCacheKey{

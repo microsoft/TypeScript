@@ -60,7 +60,7 @@ import {
 import type {
     APIFileChanges,
     CompilerOptions,
-    CreateProgramOptions,
+    CreateProgramOptions as ProtocolCreateProgramOptions,
     CreateProgramResponse,
     Diagnostic,
     DocumentIdentifier,
@@ -70,6 +70,9 @@ import type {
     IntrinsicTypeMethod,
     LSPUpdateSnapshotParams,
     PackageId,
+    ModuleResolutionInvocationResult,
+    ModuleResolutionSource,
+    ModuleResolutionSpec,
     ParsedCommandLine,
     ProjectReference,
     ProjectResponse,
@@ -168,7 +171,6 @@ export type {
     CompletionInfo,
     CompletionOptions,
     ConditionalType,
-    CreateProgramOptions,
     Diagnostic,
     DocumentIdentifier,
     DocumentPosition,
@@ -189,6 +191,7 @@ export type {
     JSDocTagInfo,
     LiteralType,
     LSPConnectionOptions,
+    ModuleResolutionSpec,
     NumberLiteralType,
     ObjectType,
     PackageId,
@@ -230,6 +233,21 @@ export interface TranspileOutput {
     outputText: string;
     diagnostics?: readonly Diagnostic[] | undefined;
     sourceMapText?: string | undefined;
+}
+
+export interface ModuleResolverOptions {
+    moduleResolutions?: ModuleResolutionSpec | ModuleResolutionSet;
+}
+
+export type CreateProgramOptions = Omit<ProtocolCreateProgramOptions, "moduleResolutions"> & ModuleResolverOptions;
+
+function toModuleResolutionSource(input: ModuleResolutionSpec | ModuleResolutionSet | undefined): ModuleResolutionSource | undefined {
+    if (input === undefined) return undefined;
+    if (input instanceof ModuleResolutionSet) {
+        input.ensureNotDisposed();
+        return { set: input.id };
+    }
+    return { spec: input };
 }
 
 // @sync-only-start
@@ -504,6 +522,12 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         return false;
     }
 
+    async createModuleResolutionSet(spec: ModuleResolutionSpec): Promise<ModuleResolutionSet> {
+        await this.ensureInitialized();
+        const id = await this.client.apiRequest("createModuleResolutionSet", { spec });
+        return new ModuleResolutionSet(id, this.client);
+    }
+
     /**
      * Creates a program from current filesystem state, or derives one from oldProgram after applying fileChanges.
      */
@@ -522,9 +546,14 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
             throw new Error("oldProgram must belong to this API instance and reference an active snapshot");
         }
 
+        const { moduleResolutions, ...wireCreateProgramOptions } = createProgramOptions;
+        const moduleResolutionSource = toModuleResolutionSource(moduleResolutions);
         const data: CreateProgramResponse = await this.client.apiRequest("createProgram", {
             rootFiles,
-            createProgramOptions,
+            createProgramOptions: {
+                ...wireCreateProgramOptions,
+                ...(moduleResolutionSource ? { moduleResolutions: moduleResolutionSource } : {}),
+            },
             oldProgram: oldProgram ? { snapshot: oldProgram.snapshotId, project: oldProgram.getProject().id } : undefined,
             fileChanges,
         });
@@ -546,6 +575,34 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         program.setOwnedSnapshot(snapshot);
         this.activeSnapshots.add(snapshot);
         return program;
+    }
+}
+
+export class ModuleResolutionSet {
+    readonly id: number;
+    private readonly client: Client;
+    private disposed = false;
+
+    constructor(id: number, client: Client) {
+        this.id = id;
+        this.client = client;
+    }
+
+    [globalThis.Symbol.asyncDispose](): Promise<void> { // @sync: [globalThis.Symbol.dispose](): void {
+        return this.dispose();
+    }
+
+    async dispose(): Promise<void> {
+        if (this.disposed) return;
+        await this.client.apiRequest("releaseModuleResolutionSet", { set: this.id });
+        this.disposed = true;
+    }
+
+    /** @internal */
+    ensureNotDisposed(): void {
+        if (this.disposed) {
+            throw new Error("ModuleResolutionSet is disposed");
+        }
     }
 }
 
@@ -648,6 +705,17 @@ export class Snapshot {
         return this.api.updateSnapshotFrom(this, params);
     }
 
+    async createModuleResolver(compilerOptions: CompilerOptions, options?: ModuleResolverOptions): Promise<ModuleResolver> {
+        this.ensureNotDisposed();
+        const moduleResolutionSource = toModuleResolutionSource(options?.moduleResolutions);
+        const id = await this.client.apiRequest("createModuleResolver", {
+            snapshot: this.id,
+            compilerOptions,
+            ...(moduleResolutionSource ? { moduleResolutions: moduleResolutionSource } : {}),
+        });
+        return new ModuleResolver(id, this.id, this.client, () => this.ensureNotDisposed());
+    }
+
     [globalThis.Symbol.dispose](): void {
         void this.dispose();
     }
@@ -679,6 +747,35 @@ export class Snapshot {
         if (this.disposed) {
             throw new Error("Snapshot is disposed");
         }
+    }
+}
+
+export class ModuleResolver {
+    private readonly id: number;
+    private readonly snapshotId: number;
+    private readonly client: Client;
+    private readonly ensureSnapshotActive: () => void;
+
+    constructor(id: number, snapshotId: number, client: Client, ensureSnapshotActive: () => void) {
+        this.id = id;
+        this.snapshotId = snapshotId;
+        this.client = client;
+        this.ensureSnapshotActive = ensureSnapshotActive;
+    }
+
+    async resolveModuleName(
+        moduleName: string,
+        containingDirectory: DocumentIdentifier,
+        resolutionMode?: ModuleKind.CommonJS | ModuleKind.ESNext,
+    ): Promise<ModuleResolutionInvocationResult> {
+        this.ensureSnapshotActive();
+        return this.client.apiRequest("resolveModuleName", {
+            snapshot: this.snapshotId,
+            resolver: this.id,
+            moduleName,
+            containingDirectory,
+            ...(resolutionMode !== undefined ? { resolutionMode } : {}),
+        });
     }
 }
 

@@ -492,6 +492,9 @@ func (r *typeRenderer) namedType(named *types.Named) string {
 	case r.apiPackagePath + ".DocumentIdentifier":
 		r.documentIdentifier = obj
 		return "DocumentIdentifier"
+	case r.apiPackagePath + ".ResolutionMode":
+		r.importType("ModuleKind", "#enums/moduleKind")
+		return "ModuleKind.CommonJS | ModuleKind.ESNext"
 	case "github.com/microsoft/TypeScript/tsc/internal/packagejson.JSONValue":
 		return "unknown"
 	case "github.com/microsoft/TypeScript/tsc/internal/json.Value":

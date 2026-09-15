@@ -18,6 +18,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/ls/lsconv"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/lsutil"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
+	"github.com/microsoft/TypeScript/tsc/internal/module"
 	"github.com/microsoft/TypeScript/tsc/internal/project/ata"
 	"github.com/microsoft/TypeScript/tsc/internal/project/dirty"
 	"github.com/microsoft/TypeScript/tsc/internal/project/logging"
@@ -113,6 +114,7 @@ func (s *Snapshot) cloneForProgram(
 	compilerOptions *core.CompilerOptions,
 	projectReferences []*core.ProjectReference,
 	configFileParsingDiagnostics []*ast.Diagnostic,
+	moduleResolutionProvider module.ResolutionProvider,
 	oldProject *Project,
 	fileChanges FileChangeSummary,
 	sessionLogger logging.Logger,
@@ -158,6 +160,14 @@ func (s *Snapshot) cloneForProgram(
 	)
 
 	projectCollectionBuilder.seedInferredProjectForProgram(oldProject, logger)
+	if project := projectCollectionBuilder.inferredProject.Value(); project != nil &&
+		resolutionProviderIdentity(project.moduleResolutionProvider) != resolutionProviderIdentity(moduleResolutionProvider) {
+		projectCollectionBuilder.inferredProject.Change(func(project *Project) {
+			project.moduleResolutionProvider = moduleResolutionProvider
+			project.dirty = true
+			project.dirtyFilePath = ""
+		})
+	}
 	if !fileChanges.IsEmpty() {
 		changeLogger := logger
 		if changeLogger != nil {
@@ -177,11 +187,15 @@ func (s *Snapshot) cloneForProgram(
 		s.inferredProjectContentMappers,
 		updateLogger,
 	)
+	projectCollectionBuilder.inferredProject.Change(func(project *Project) {
+		project.moduleResolutionProvider = moduleResolutionProvider
+	})
 	if projectCollectionBuilder.inferredProject.Value().dirty {
 		createLogger := logger
 		if createLogger != nil {
 			createLogger = logger.Fork("CreateProgram")
 		}
+
 		projectCollectionBuilder.updateProgram(projectCollectionBuilder.inferredProject, createLogger)
 	}
 	projectCollectionBuilder.cleanupAllConfiguredProjects(logger.Fork("cleanupAllConfiguredProjects"))
@@ -282,6 +296,13 @@ func (s *Snapshot) cloneWithTemporaryFile(
 	}, overlays, nil), nil
 }
 
+func resolutionProviderIdentity(provider module.ResolutionProvider) uint64 {
+	if provider == nil {
+		return 0
+	}
+	return provider.Identity()
+}
+
 func (s *Snapshot) processFileChanges(
 	fs *snapshotFSBuilder,
 	fileChanges FileChangeSummary,
@@ -344,6 +365,14 @@ func (s *Snapshot) GetFile(fileName string) FileHandle {
 	return s.fs.GetFile(fileName)
 }
 
+func (s *Snapshot) FS() vfs.FS {
+	return newSourceFS(false, s.fs, s.toPath)
+}
+
+func (s *Snapshot) GetCurrentDirectory() string {
+	return s.host.GetCurrentDirectory()
+}
+
 func (s *Snapshot) LSPLineMap(fileName string) *lsconv.LSPLineMap {
 	if file := s.fs.GetFile(fileName); file != nil {
 		return file.LSPLineMap()
@@ -372,6 +401,11 @@ func (s *Snapshot) Converters() *lsconv.Converters {
 
 func (s *Snapshot) AutoImportRegistry() *autoimport.Registry {
 	return s.AutoImports
+}
+
+func (s *Snapshot) ContentMapperExtensions() []string {
+	extensions, _ := s.contentMapperWatchState()
+	return extensions
 }
 
 func (s *Snapshot) ID() uint64 {

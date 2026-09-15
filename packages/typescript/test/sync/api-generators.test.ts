@@ -39,6 +39,7 @@ import {
     type InterfaceType,
     type LiteralType,
     ModuleKind,
+    ModuleResolutionKind,
     type NodeHandle,
     type Program,
     type Project,
@@ -1462,6 +1463,25 @@ describe("API - generator batching", () => {
             const nodeHandle = combineSymbol.valueDeclaration ?? combineSymbol.declarations[0];
             const completionPosition = parityFiles["/src/index.ts"].indexOf("semanticIssue");
             const temporaryProjects: string[] = [];
+            const moduleResolutionSpec = {
+                fallback: "unresolved" as const,
+                entries: [{
+                    moduleName: "models",
+                    result: { resolvedFileName: "/src/models.ts" },
+                }],
+            };
+            const generatedResolutionSet = api.batch(api.createModuleResolutionSet.gen(moduleResolutionSpec))[0];
+            const directResolutionSet = api.createModuleResolutionSet(moduleResolutionSpec);
+            exercisedMethods.add("API.createModuleResolutionSet");
+            const generatedModuleResolver = api.batch(snapshot.createModuleResolver.gen(
+                { moduleResolution: ModuleResolutionKind.NodeNext },
+                { moduleResolutions: generatedResolutionSet },
+            ))[0];
+            const directModuleResolver = snapshot.createModuleResolver(
+                { moduleResolution: ModuleResolutionKind.NodeNext },
+                { moduleResolutions: directResolutionSet },
+            );
+            exercisedMethods.add("Snapshot.createModuleResolver");
 
             const orderedArguments = Array.from({ length: 128 }, (_, index) => ["--strict", `--outDir=out-${index}`] as const);
             const orderedGenerated = api.batch(...orderedArguments.map(args => api.parseCommandLine.gen(args)));
@@ -1513,6 +1533,7 @@ describe("API - generator batching", () => {
                     temporaryProjects.push(temporarySnapshot.getProjects()[0].configFileName);
                 }),
                 parityCase("Snapshot", "getDefaultProjectForFile", snapshot.getDefaultProjectForFile, assertOptionalProjectsEquivalent, "/src/index.ts"),
+                parityCase("ModuleResolver", "resolveModuleName", generatedModuleResolver.resolveModuleName, assertDeepEquivalent, "models", "/src"),
 
                 parityCase("Project", "getImportAdderEdits", project.getImportAdderEdits, assertDeepEquivalent, "/src/index.ts", [{ kind: "importSymbol", symbol: unimportedSymbol }]),
                 parityCase("Project", "getImportEditsForSymbols", project.getImportEditsForSymbols, assertDeepEquivalent, "/src/index.ts", [unimportedSymbol]),
@@ -1733,6 +1754,7 @@ describe("API - generator batching", () => {
                 { name: "API", value: api.constructor as object, own: true },
                 { name: "InternalAPI", value: api.internal },
                 { name: "Snapshot", value: snapshot },
+                { name: "ModuleResolver", value: directModuleResolver },
                 { name: "Project", value: project },
                 { name: "LanguageService", value: languageService },
                 { name: "Program", value: program },

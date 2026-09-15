@@ -872,7 +872,21 @@ func (p *fileLoader) resolveImportsAndModuleAugmentations(t *parseTask) {
 			}
 
 			mode := getModeForUsageLocation(file.FileName(), meta, entry, optionsForFile)
-			resolvedModule, trace := p.resolver.ResolveModuleName(moduleName, fileName, mode, redirect)
+			var resolvedModule *module.ResolvedModule
+			var trace []module.DiagAndArgs
+			if p.opts.ModuleResolutionProvider != nil {
+				var provided bool
+				var providedResolution *module.ProvidedModuleResolution
+				providedResolution, provided = p.opts.ModuleResolutionProvider.GetModuleResolution(moduleName, tspath.GetDirectoryPath(fileName), mode)
+				if provided {
+					resolvedModule = p.resolver.ResolveProvidedModule(moduleName, providedResolution)
+				}
+				if !provided {
+					resolvedModule, trace = p.resolver.ResolveModuleName(moduleName, fileName, mode, redirect)
+				}
+			} else {
+				resolvedModule, trace = p.resolver.ResolveModuleName(moduleName, fileName, mode, redirect)
+			}
 			resolutionsInFile[module.ModeAwareCacheKey{Name: moduleName, Mode: mode}] = resolvedModule
 			resolutionsTrace = append(resolutionsTrace, trace...)
 

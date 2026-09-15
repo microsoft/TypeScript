@@ -16,6 +16,17 @@ type ResolutionHost interface {
 	GetCurrentDirectory() string
 }
 
+type ResolutionProvider interface {
+	Identity() uint64
+	GetModuleResolution(moduleName string, containingDirectory string, resolutionMode core.ResolutionMode) (resolution *ProvidedModuleResolution, found bool)
+}
+
+type ProvidedModuleResolution struct {
+	ResolvedFileName string
+	OriginalPath     string
+	PackageId        PackageId
+}
+
 type ModeAwareCacheKey struct {
 	Name string
 	Mode core.ResolutionMode

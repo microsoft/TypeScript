@@ -470,11 +470,88 @@ import "missing";`,
             "/src/main.ts": `import { dependency } from "./dependency"; export const value = dependency;`,
             "/src/dependency.ts": `export const dependency = 1;`,
         });
-
         const program = api.createProgram(["/src/main.ts"], { compilerOptions: { noLib: true } });
         assert.deepEqual([...program.getSourceFileNames()].sort(), ["/src/dependency.ts", "/src/main.ts"]);
 
         program.dispose();
+    });
+
+    test("module resolver and provided resolution sets", () => {
+        using api = spawnAPI({
+            "/src/main.ts": `import { value } from "pkg"; export { value };`,
+            "/src/extension.ts": `import { value } from "./dep.ts"; value;`,
+            "/src/dep.ts": `export const value = 1;`,
+            "/provided.d.ts": `export declare const value: string;`,
+            "/node_modules/pkg/package.json": `{"name":"pkg","version":"1.0.0","types":"index.d.ts"}`,
+            "/node_modules/pkg/index.d.ts": `export declare const value: number;`,
+        });
+        const snapshot = api.updateSnapshot();
+        const compilerOptions = {
+            module: ModuleKind.NodeNext,
+            moduleResolution: ModuleResolutionKind.NodeNext,
+            traceResolution: true,
+        };
+        const resolver = snapshot.createModuleResolver(compilerOptions);
+        const defaultResolution = resolver.resolveModuleName("pkg", "/src");
+        assert.equal(defaultResolution.result?.resolvedFileName, "/node_modules/pkg/index.d.ts");
+        assert.ok(defaultResolution.trace?.length);
+        const fallbackResolver = snapshot.createModuleResolver(compilerOptions, {
+            moduleResolutions: { fallback: "resolve", entries: [] },
+        });
+        assert.equal(
+            (fallbackResolver.resolveModuleName("pkg", "/src")).result?.resolvedFileName,
+            "/node_modules/pkg/index.d.ts",
+        );
+
+        const set = api.createModuleResolutionSet({
+            fallback: "unresolved",
+            entries: [{
+                moduleName: "pkg",
+                result: { resolvedFileName: "/provided.d.ts" },
+            }],
+        });
+        const overriddenResolver = snapshot.createModuleResolver(compilerOptions, { moduleResolutions: set });
+        assert.equal(
+            (overriddenResolver.resolveModuleName("pkg", "/src")).result?.resolvedFileName,
+            "/provided.d.ts",
+        );
+        assert.equal((overriddenResolver.resolveModuleName("missing", "/src")).result, undefined);
+
+        const program = api.createProgram(
+            ["/src/main.ts"],
+            { compilerOptions: { ...compilerOptions, noLib: true }, moduleResolutions: set },
+        );
+        assert.deepEqual([...program.getSourceFileNames()].sort(), ["/provided.d.ts", "/src/main.ts"]);
+
+        const extensionProgram = api.createProgram(
+            ["/src/extension.ts"],
+            {
+                compilerOptions: { ...compilerOptions, noLib: true },
+                moduleResolutions: {
+                    fallback: "unresolved",
+                    entries: [{
+                        moduleName: "./dep.ts",
+                        containingDirectory: "/src",
+                        result: { resolvedFileName: "/src/dep.ts" },
+                    }],
+                },
+            },
+        );
+        assert.ok((extensionProgram.getSemanticDiagnostics("/src/extension.ts")).some(diagnostic => diagnostic.code === 5097));
+
+        set.dispose();
+        assert.equal(
+            (overriddenResolver.resolveModuleName("pkg", "/src")).result?.resolvedFileName,
+            "/provided.d.ts",
+        );
+        const createFromDisposedSet = () => snapshot.createModuleResolver(compilerOptions, { moduleResolutions: set });
+        assert.throws(createFromDisposedSet, /ModuleResolutionSet is disposed/);
+
+        program.dispose();
+        extensionProgram.dispose();
+        snapshot.dispose();
+        const resolveAfterSnapshotDisposal = () => overriddenResolver.resolveModuleName("pkg", "/src");
+        assert.throws(resolveAfterSnapshotDisposal, /Snapshot is disposed/);
     });
 
     test("createProgram updates an old program with file changes", () => {

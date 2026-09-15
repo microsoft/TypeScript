@@ -77,7 +77,7 @@ import {
 import type {
     APIFileChanges,
     CompilerOptions,
-    CreateProgramOptions,
+    CreateProgramOptions as ProtocolCreateProgramOptions,
     CreateProgramResponse,
     Diagnostic,
     DocumentIdentifier,
@@ -86,6 +86,9 @@ import type {
     ImportAdderAction,
     IntrinsicTypeMethod,
     LSPUpdateSnapshotParams,
+    ModuleResolutionInvocationResult,
+    ModuleResolutionSource,
+    ModuleResolutionSpec,
     PackageId,
     ParsedCommandLine,
     ProjectReference,
@@ -185,7 +188,6 @@ export type {
     CompletionInfo,
     CompletionOptions,
     ConditionalType,
-    CreateProgramOptions,
     Diagnostic,
     DocumentIdentifier,
     DocumentPosition,
@@ -206,6 +208,7 @@ export type {
     JSDocTagInfo,
     LiteralType,
     LSPConnectionOptions,
+    ModuleResolutionSpec,
     NumberLiteralType,
     ObjectType,
     PackageId,
@@ -247,6 +250,21 @@ export interface TranspileOutput {
     outputText: string;
     diagnostics?: readonly Diagnostic[] | undefined;
     sourceMapText?: string | undefined;
+}
+
+export interface ModuleResolverOptions {
+    moduleResolutions?: ModuleResolutionSpec | ModuleResolutionSet;
+}
+
+export type CreateProgramOptions = Omit<ProtocolCreateProgramOptions, "moduleResolutions"> & ModuleResolverOptions;
+
+function toModuleResolutionSource(input: ModuleResolutionSpec | ModuleResolutionSet | undefined): ModuleResolutionSource | undefined {
+    if (input === undefined) return undefined;
+    if (input instanceof ModuleResolutionSet) {
+        input.ensureNotDisposed();
+        return { set: input.id };
+    }
+    return { spec: input };
 }
 
 export { all, type AllAPIRequestGenerator, type AnyAPIRequestGenerator, type APIRequestGenerator, defer, type DeferredAPIRequestGenerator, type ExecutedGeneratorsResults } from "./generatorSupport.ts";
@@ -865,6 +883,27 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         return false;
     }
 
+    get createModuleResolutionSet(): {
+        (spec: ModuleResolutionSpec): ModuleResolutionSet;
+        gen(spec: ModuleResolutionSpec): Generator<ProtocolRequest, ModuleResolutionSet, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "createModuleResolutionSet",
+            function (spec: ModuleResolutionSpec): ModuleResolutionSet {
+                owner.ensureInitialized();
+                const id = owner.client.apiRequest("createModuleResolutionSet", { spec });
+                return new ModuleResolutionSet(id, owner.client);
+            },
+            function* (spec: ModuleResolutionSpec): Generator<ProtocolRequest, ModuleResolutionSet, ProtocolResponse["result"]> {
+                yield* owner.ensureInitialized.gen();
+                const id = yield* apiRequest("createModuleResolutionSet", { spec });
+                return new ModuleResolutionSet(id, owner.client);
+            },
+        );
+    }
+
     /**
      * Creates a program from current filesystem state, or derives one from oldProgram after applying fileChanges.
      */
@@ -886,9 +925,14 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
                     throw new Error("oldProgram must belong to this API instance and reference an active snapshot");
                 }
 
+                const { moduleResolutions, ...wireCreateProgramOptions } = createProgramOptions;
+                const moduleResolutionSource = toModuleResolutionSource(moduleResolutions);
                 const data: CreateProgramResponse = owner.client.apiRequest("createProgram", {
                     rootFiles,
-                    createProgramOptions,
+                    createProgramOptions: {
+                        ...wireCreateProgramOptions,
+                        ...(moduleResolutionSource ? { moduleResolutions: moduleResolutionSource } : {}),
+                    },
                     oldProgram: oldProgram ? { snapshot: oldProgram.snapshotId, project: oldProgram.getProject().id } : undefined,
                     fileChanges,
                 });
@@ -921,9 +965,14 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
                     throw new Error("oldProgram must belong to this API instance and reference an active snapshot");
                 }
 
+                const { moduleResolutions, ...wireCreateProgramOptions } = createProgramOptions;
+                const moduleResolutionSource = toModuleResolutionSource(moduleResolutions);
                 const data: CreateProgramResponse = yield* apiRequest("createProgram", {
                     rootFiles,
-                    createProgramOptions,
+                    createProgramOptions: {
+                        ...wireCreateProgramOptions,
+                        ...(moduleResolutionSource ? { moduleResolutions: moduleResolutionSource } : {}),
+                    },
                     oldProgram: oldProgram ? { snapshot: oldProgram.snapshotId, project: oldProgram.getProject().id } : undefined,
                     fileChanges,
                 });
@@ -947,6 +996,49 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
                 return program;
             },
         );
+    }
+}
+
+export class ModuleResolutionSet {
+    readonly id: number;
+    private readonly client: Client;
+    private disposed = false;
+
+    constructor(id: number, client: Client) {
+        this.id = id;
+        this.client = client;
+    }
+
+    [globalThis.Symbol.dispose](): void {
+        return this.dispose();
+    }
+
+    get dispose(): {
+        (): void;
+        gen(): Generator<ProtocolRequest, void, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "dispose",
+            function (): void {
+                if (owner.disposed) return;
+                owner.client.apiRequest("releaseModuleResolutionSet", { set: owner.id });
+                owner.disposed = true;
+            },
+            function* (): Generator<ProtocolRequest, void, ProtocolResponse["result"]> {
+                if (owner.disposed) return;
+                yield* apiRequest("releaseModuleResolutionSet", { set: owner.id });
+                owner.disposed = true;
+            },
+        );
+    }
+
+    /** @internal */
+    ensureNotDisposed(): void {
+        if (this.disposed) {
+            throw new Error("ModuleResolutionSet is disposed");
+        }
     }
 }
 
@@ -1129,6 +1221,37 @@ export class Snapshot {
         );
     }
 
+    get createModuleResolver(): {
+        (compilerOptions: CompilerOptions, options?: ModuleResolverOptions): ModuleResolver;
+        gen(compilerOptions: CompilerOptions, options?: ModuleResolverOptions): Generator<ProtocolRequest, ModuleResolver, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "createModuleResolver",
+            function (compilerOptions: CompilerOptions, options?: ModuleResolverOptions): ModuleResolver {
+                owner.ensureNotDisposed();
+                const moduleResolutionSource = toModuleResolutionSource(options?.moduleResolutions);
+                const id = owner.client.apiRequest("createModuleResolver", {
+                    snapshot: owner.id,
+                    compilerOptions,
+                    ...(moduleResolutionSource ? { moduleResolutions: moduleResolutionSource } : {}),
+                });
+                return new ModuleResolver(id, owner.id, owner.client, () => owner.ensureNotDisposed());
+            },
+            function* (compilerOptions: CompilerOptions, options?: ModuleResolverOptions): Generator<ProtocolRequest, ModuleResolver, ProtocolResponse["result"]> {
+                owner.ensureNotDisposed();
+                const moduleResolutionSource = toModuleResolutionSource(options?.moduleResolutions);
+                const id = yield* apiRequest("createModuleResolver", {
+                    snapshot: owner.id,
+                    compilerOptions,
+                    ...(moduleResolutionSource ? { moduleResolutions: moduleResolutionSource } : {}),
+                });
+                return new ModuleResolver(id, owner.id, owner.client, () => owner.ensureNotDisposed());
+            },
+        );
+    }
+
     [globalThis.Symbol.dispose](): void {
         void this.dispose();
     }
@@ -1198,6 +1321,51 @@ export class Snapshot {
         if (this.disposed) {
             throw new Error("Snapshot is disposed");
         }
+    }
+}
+
+export class ModuleResolver {
+    private readonly id: number;
+    private readonly snapshotId: number;
+    private readonly client: Client;
+    private readonly ensureSnapshotActive: () => void;
+
+    constructor(id: number, snapshotId: number, client: Client, ensureSnapshotActive: () => void) {
+        this.id = id;
+        this.snapshotId = snapshotId;
+        this.client = client;
+        this.ensureSnapshotActive = ensureSnapshotActive;
+    }
+
+    get resolveModuleName(): {
+        (moduleName: string, containingDirectory: DocumentIdentifier, resolutionMode?: ModuleKind.CommonJS | ModuleKind.ESNext): ModuleResolutionInvocationResult;
+        gen(moduleName: string, containingDirectory: DocumentIdentifier, resolutionMode?: ModuleKind.CommonJS | ModuleKind.ESNext): Generator<ProtocolRequest, ModuleResolutionInvocationResult, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "resolveModuleName",
+            function (moduleName: string, containingDirectory: DocumentIdentifier, resolutionMode?: ModuleKind.CommonJS | ModuleKind.ESNext): ModuleResolutionInvocationResult {
+                owner.ensureSnapshotActive();
+                return owner.client.apiRequest("resolveModuleName", {
+                    snapshot: owner.snapshotId,
+                    resolver: owner.id,
+                    moduleName,
+                    containingDirectory,
+                    ...(resolutionMode !== undefined ? { resolutionMode } : {}),
+                });
+            },
+            function* (moduleName: string, containingDirectory: DocumentIdentifier, resolutionMode?: ModuleKind.CommonJS | ModuleKind.ESNext): Generator<ProtocolRequest, ModuleResolutionInvocationResult, ProtocolResponse["result"]> {
+                owner.ensureSnapshotActive();
+                return yield* apiRequest("resolveModuleName", {
+                    snapshot: owner.snapshotId,
+                    resolver: owner.id,
+                    moduleName,
+                    containingDirectory,
+                    ...(resolutionMode !== undefined ? { resolutionMode } : {}),
+                });
+            },
+        );
     }
 }
 

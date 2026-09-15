@@ -50,6 +50,9 @@ type snapshotData struct {
 	fileSystem vfs.FS
 	refCount   int
 
+	moduleResolvers   map[ModuleResolverID]*moduleResolverData
+	moduleResolversMu sync.RWMutex
+
 	// Symbol IDs come from ast.GetSymbolId, a global atomic counter, so the same
 	// *ast.Symbol pointer always has the same unique ID across all projects in the
 	// snapshot. Symbols are registered snapshot-wide to ensure identity semantics:
@@ -67,6 +70,11 @@ type snapshotData struct {
 
 	projectRegistries   map[ProjectID]*projectRegistryData
 	projectRegistriesMu sync.RWMutex
+}
+
+type moduleResolverData struct {
+	resolver *module.Resolver
+	provider module.ResolutionProvider
 }
 
 // projectRegistryData holds per-project type and signature registries.
@@ -434,6 +442,12 @@ type Session struct {
 	// snapshots. Lock ordering is updateMu -> snapshotsMu (never the reverse).
 	updateMu sync.Mutex
 
+	moduleResolutionSets         map[ModuleResolutionSetID]*providedModuleResolutions
+	moduleResolutionSetsMu       sync.RWMutex
+	nextModuleResolutionSetID    atomic.Uint64
+	nextModuleResolutionIdentity atomic.Uint64
+	nextModuleResolverID         atomic.Uint64
+
 	cpuProfiler pprof.CPUProfiler
 }
 
@@ -475,10 +489,11 @@ func newSession(snapshotHost *project.SnapshotHost, withLocale func(context.Cont
 		withLocale = func(ctx context.Context) context.Context { return ctx }
 	}
 	s := &Session{
-		id:           formatSessionID(id),
-		snapshotHost: snapshotHost,
-		withLocale:   withLocale,
-		snapshots:    make(map[SnapshotID]*snapshotData),
+		id:                   formatSessionID(id),
+		snapshotHost:         snapshotHost,
+		withLocale:           withLocale,
+		snapshots:            make(map[SnapshotID]*snapshotData),
+		moduleResolutionSets: make(map[ModuleResolutionSetID]*providedModuleResolutions),
 	}
 	if options != nil {
 		s.useBinaryResponses = options.UseBinaryResponses
@@ -769,6 +784,14 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleParseJsonConfigFileContent(ctx, parsed.(*ParseJsonConfigFileContentParams))
 	case string(MethodCreateProgram):
 		return s.handleCreateProgram(ctx, parsed.(*CreateProgramParams))
+	case string(MethodCreateModuleResolutionSet):
+		return s.handleCreateModuleResolutionSet(parsed.(*CreateModuleResolutionSetParams))
+	case string(MethodReleaseModuleResolutionSet):
+		return s.handleReleaseModuleResolutionSet(parsed.(*ReleaseModuleResolutionSetParams))
+	case string(MethodCreateModuleResolver):
+		return s.handleCreateModuleResolver(parsed.(*CreateModuleResolverParams))
+	case string(MethodResolveModuleName):
+		return s.handleResolveModuleName(parsed.(*ResolveModuleNameParams))
 	case string(MethodParseConfigFile):
 		return s.handleParseConfigFile(ctx, parsed.(*ParseConfigFileParams))
 	case string(MethodTranspileModule):
@@ -1407,6 +1430,10 @@ func (s *Session) handleCreateProgram(ctx context.Context, params *CreateProgram
 	if params.FileChanges != nil && params.OldProgram == nil {
 		return nil, fmt.Errorf("%w: fileChanges requires an oldProgram", ErrClientError)
 	}
+	moduleResolutionProvider, err := s.resolveModuleResolutionSource(params.CreateProgramOptions.ModuleResolutions)
+	if err != nil {
+		return nil, err
+	}
 
 	rootFileNames := make([]string, len(params.RootFiles))
 	for i, rootFile := range params.RootFiles {
@@ -1454,6 +1481,7 @@ func (s *Session) handleCreateProgram(ctx context.Context, params *CreateProgram
 		&params.CreateProgramOptions.CompilerOptions,
 		params.CreateProgramOptions.ProjectReferences,
 		core.Map(params.CreateProgramOptions.ConfigFileParsingDiagnostics, func(d *DiagnosticResponse) *ast.Diagnostic { return d.ToDiagnostic() }),
+		moduleResolutionProvider,
 		oldProject,
 		fileChanges,
 	)
