@@ -23712,7 +23712,9 @@ func (n *TupleNormalizer) normalize(c *Checker, elementTypes []*Type, elementInf
 		if info.flags&ElementFlagsVariadic != 0 {
 			if t.flags&TypeFlagsAny != 0 {
 				n.add(t, TupleElementInfo{flags: ElementFlagsRest, labeledDeclaration: info.labeledDeclaration})
-			} else if t.flags&TypeFlagsInstantiableNonPrimitive != 0 || c.isGenericMappedType(t) {
+			} else if someContainedType(t, func(t *Type) bool {
+				return t.flags&TypeFlagsInstantiableNonPrimitive != 0 || c.isGenericMappedType(t)
+			}) {
 				// Generic variadic elements stay as they are.
 				n.add(t, info)
 			} else if isTupleType(t) {
@@ -26894,6 +26896,13 @@ func someType(t *Type, f func(*Type) bool) bool {
 func everyType(t *Type, f func(*Type) bool) bool {
 	if t.flags&TypeFlagsUnion != 0 {
 		return core.Every(t.Types(), f)
+	}
+	return f(t)
+}
+
+func someContainedType(t *Type, f func(*Type) bool) bool {
+	if t.flags&TypeFlagsUnionOrIntersection != 0 {
+		return core.Some(t.Types(), f)
 	}
 	return f(t)
 }
