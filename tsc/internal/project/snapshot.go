@@ -23,6 +23,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/project/logging"
 	"github.com/microsoft/TypeScript/tsc/internal/sourcemap"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
+	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfsmatch"
 )
 
@@ -330,12 +331,6 @@ func (s *Snapshot) GetFile(fileName string) FileHandle {
 	return s.fs.GetFile(fileName)
 }
 
-// FileSource returns this snapshot's complete view of the filesystem: any
-// API-supplied layer over the editor overlays, cached disk files, and the host.
-func (s *Snapshot) FileSource() FileSource {
-	return s.fs
-}
-
 func (s *Snapshot) LSPLineMap(fileName string) *lsconv.LSPLineMap {
 	if file := s.fs.GetFile(fileName); file != nil {
 		return file.LSPLineMap()
@@ -400,12 +395,18 @@ func (s *Snapshot) FileExists(path string) bool {
 	return s.fs.FileExists(path, s.toPath(path))
 }
 
+// GetAccessibleEntries lists a directory as this snapshot sees it: any API-supplied
+// filesystem over the editor overlays, the files cached from the host, and the host.
+func (s *Snapshot) GetAccessibleEntries(path string) vfs.Entries {
+	return s.fs.GetAccessibleEntries(path)
+}
+
 func (s *Snapshot) GetDirectories(path string) []string {
-	return s.fs.GetAccessibleEntries(path).Directories
+	return s.GetAccessibleEntries(path).Directories
 }
 
 func (s *Snapshot) ReadDirectory(currentDir string, path string, extensions []string, excludes []string, includes []string, depth int) []string {
-	return vfsmatch.ReadDirectory(newSourceFS(false, s.fs, s.toPath), currentDir, path, extensions, excludes, includes, depth)
+	return vfsmatch.ReadDirectory(s.fs, currentDir, path, extensions, excludes, includes, depth)
 }
 
 type APISnapshotRequest struct {
@@ -573,7 +574,7 @@ func (s *Snapshot) Clone(
 			} else if request.Kind == RequestFileSystemKindFull || change.apiRequest.ResetFileSystem {
 				change.fileChanges.InvalidateAll = true
 			} else {
-				addFileChanges(&change.fileChanges, request, s.FileSource(), s.fs.upperLayer, store.options.CurrentDirectory)
+				addFileChanges(&change.fileChanges, request, s.fs, s.fs.upperLayer, store.options.CurrentDirectory)
 			}
 		}
 	}

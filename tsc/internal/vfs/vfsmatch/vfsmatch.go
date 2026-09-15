@@ -28,7 +28,14 @@ const (
 // UnlimitedDepth can be passed as the depth argument to indicate there is no depth limit.
 const UnlimitedDepth = math.MaxInt
 
-func ReadDirectory(host vfs.FS, currentDir string, path string, extensions []string, excludes []string, includes []string, depth int) []string {
+
+type DirectoryLister interface {
+	UseCaseSensitiveFileNames() bool
+	GetAccessibleEntries(path string) vfs.Entries
+	Realpath(path string) string
+}
+
+func ReadDirectory(host DirectoryLister, currentDir string, path string, extensions []string, excludes []string, includes []string, depth int) []string {
 	return matchFiles(path, extensions, excludes, includes, host.UseCaseSensitiveFileNames(), currentDir, depth, host)
 }
 
@@ -578,7 +585,7 @@ func (m *globMatcher) matchesDirectoryParts(prefix, suffix string) bool {
 
 // globVisitor traverses directories matching files against glob patterns.
 type globVisitor struct {
-	host                      vfs.FS
+	host                      DirectoryLister
 	fileMatcher               *globMatcher
 	directoryMatcher          *globMatcher
 	extensions                []string
@@ -645,7 +652,7 @@ func (v *globVisitor) visit(path, absolutePath string, depth int, resolvedRealPa
 	}
 }
 
-func matchFiles(path string, extensions, excludes, includes []string, useCaseSensitiveFileNames bool, currentDirectory string, depth int, host vfs.FS) []string {
+func matchFiles(path string, extensions, excludes, includes []string, useCaseSensitiveFileNames bool, currentDirectory string, depth int, host DirectoryLister) []string {
 	path = tspath.NormalizePath(path)
 	currentDirectory = tspath.NormalizePath(currentDirectory)
 	absolutePath := tspath.CombinePaths(currentDirectory, path)

@@ -347,9 +347,9 @@ func TestRequestSymlinkFallsBackToEditorOverlayDirectory(t *testing.T) {
 
 	snapshot := session.snapshots[updated.Snapshot].snapshot
 	assert.Assert(t, snapshot.DirectoryExists("/alias"))
-	assert.Assert(t, slices.Contains(snapshot.FileSource().GetAccessibleEntries("/alias").Files, "file.ts"))
+	assert.Assert(t, slices.Contains(snapshot.GetAccessibleEntries("/alias").Files, "file.ts"))
 	// Enumerating the parent must agree with DirectoryExists about the link.
-	assert.Assert(t, slices.Contains(snapshot.FileSource().GetAccessibleEntries("/").Directories, "alias"))
+	assert.Assert(t, slices.Contains(snapshot.GetAccessibleEntries("/").Directories, "alias"))
 	file := snapshot.GetFile("/alias/file.ts")
 	assert.Assert(t, file != nil)
 	assert.Equal(t, file.Content(), "overlay")
@@ -1016,7 +1016,7 @@ func TestRequestLayerEntriesAppearInSnapshotDirectoryListings(t *testing.T) {
 
 	// Every layer contributes to a listing: the request file, the editor overlay,
 	// and the host file underneath both.
-	files := snapshot.FileSource().GetAccessibleEntries("/dir").Files
+	files := snapshot.GetAccessibleEntries("/dir").Files
 	slices.Sort(files)
 	assert.DeepEqual(t, files, []string{"host.ts", "overlay.ts", "request.ts"})
 
@@ -1101,7 +1101,7 @@ func TestRequestSymlinkToEditorOverlayDirectoryExists(t *testing.T) {
 	assert.Equal(t, file.Content(), "overlay")
 	assert.Assert(t, snapshot.DirectoryExists("/alias"))
 	assert.Assert(t, snapshot.DirectoryExists("/overlayDir"))
-	assert.DeepEqual(t, snapshot.FileSource().GetAccessibleEntries("/alias").Files, []string{"file.ts"})
+	assert.DeepEqual(t, snapshot.GetAccessibleEntries("/alias").Files, []string{"file.ts"})
 }
 
 func TestRequestLayerLineMapsMatchFileContents(t *testing.T) {
@@ -1205,4 +1205,40 @@ func TestRequestFileChangeComparedAgainstOverlayOverCachedHostFile(t *testing.T)
 	assert.NilError(t, err)
 	program := session.snapshots[updated.Snapshot].snapshot.ProjectCollection.GetProjectByPath("/tsconfig.json").GetProgram()
 	assert.Equal(t, program.GetSourceFile("/value.ts").Text(), "host")
+}
+
+// A malformed request filesystem is a client error. The layer is built during the
+// snapshot clone rather than before it, so the failure has to travel back out as
+// an API error, leaving the snapshot it was rejected from usable.
+func TestInvalidRequestFileSystemIsRejected(t *testing.T) {
+	t.Parallel()
+
+	projectSession, _ := projecttestutil.Setup(map[string]any{
+		"/tsconfig.json": `{ "compilerOptions": { "noLib": true }, "files": ["index.ts"] }`,
+		"/index.ts":      `export const value = 1;`,
+	})
+	defer projectSession.Close()
+	session := NewLSPSession(projectSession, nil)
+	defer session.Close()
+	ctx := context.Background()
+
+	base, err := session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{
+		OpenProjects: []DocumentIdentifier{{FileName: "/tsconfig.json"}},
+	})
+	assert.NilError(t, err)
+
+	_, err = session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{
+		Snapshot:   base.Snapshot,
+		FileSystem: &project.RequestFileSystem{Kind: "bogus"},
+	})
+	assert.Assert(t, errors.Is(err, ErrClientError))
+	assert.ErrorContains(t, err, "unknown request filesystem kind")
+
+	updated, err := session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{Snapshot: base.Snapshot})
+	assert.NilError(t, err)
+	snapshot := session.snapshots[updated.Snapshot].snapshot
+	assert.Assert(t, !snapshot.HasFullFileSystemLayer())
+	contents, ok := snapshot.ReadFile("/index.ts")
+	assert.Assert(t, ok)
+	assert.Equal(t, contents, `export const value = 1;`)
 }
