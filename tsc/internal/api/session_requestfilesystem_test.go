@@ -322,6 +322,80 @@ func TestRequestSymlinkFallsBackToEditorOverlayTarget(t *testing.T) {
 	assert.Assert(t, snapshot.FileExists("/alias.ts"))
 }
 
+func TestEditorChangeInvalidatesRequestSymlinkAlias(t *testing.T) {
+	t.Parallel()
+
+	ctx := context.Background()
+	projectSession, _ := projecttestutil.Setup(map[string]any{
+		"/tsconfig.json": `{ "compilerOptions": { "noLib": true }, "files": ["alias.ts"] }`,
+	})
+	defer projectSession.Close()
+	projectSession.DidOpenFile(ctx, "file:///target.ts", 1, "old", lsproto.LanguageKindTypeScript)
+	session := NewLSPSession(projectSession, nil)
+	defer session.Close()
+
+	base, err := session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{
+		OpenProjects: []DocumentIdentifier{{FileName: "/tsconfig.json"}},
+		FileSystem: &project.RequestFileSystem{
+			Kind: project.RequestFileSystemKindLayer,
+			Symlinks: map[string]project.RequestSymlink{
+				"/alias.ts": {Target: "/target.ts"},
+			},
+		},
+	})
+	assert.NilError(t, err)
+	baseProgram := session.snapshots[base.Snapshot].snapshot.ProjectCollection.GetProjectByPath("/tsconfig.json").GetProgram()
+	assert.Equal(t, baseProgram.GetSourceFile("/alias.ts").Text(), "old")
+
+	projectSession.DidChangeFile(ctx, "file:///target.ts", 2, []lsproto.TextDocumentContentChangePartialOrWholeDocument{{
+		WholeDocument: &lsproto.TextDocumentContentChangeWholeDocument{Text: "new"},
+	}})
+	updated, err := session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{Snapshot: base.Snapshot})
+	assert.NilError(t, err)
+	program := session.snapshots[updated.Snapshot].snapshot.ProjectCollection.GetProjectByPath("/tsconfig.json").GetProgram()
+	assert.Equal(t, program.GetSourceFile("/alias.ts").Text(), "new")
+}
+
+func TestRequestFileComparedWithPreviousSymlinkTarget(t *testing.T) {
+	t.Parallel()
+
+	ctx := context.Background()
+	projectSession, _ := projecttestutil.Setup(map[string]any{
+		"/tsconfig.json": `{ "compilerOptions": { "noLib": true }, "files": ["alias.ts"] }`,
+	})
+	defer projectSession.Close()
+	projectSession.DidOpenFile(ctx, "file:///target.ts", 1, "old", lsproto.LanguageKindTypeScript)
+	// This overlay is hidden by the request symlink. Its contents deliberately
+	// match the direct request file supplied by the next update.
+	projectSession.DidOpenFile(ctx, "file:///alias.ts", 1, "new", lsproto.LanguageKindTypeScript)
+	session := NewLSPSession(projectSession, nil)
+	defer session.Close()
+
+	base, err := session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{
+		OpenProjects: []DocumentIdentifier{{FileName: "/tsconfig.json"}},
+		FileSystem: &project.RequestFileSystem{
+			Kind: project.RequestFileSystemKindLayer,
+			Symlinks: map[string]project.RequestSymlink{
+				"/alias.ts": {Target: "/target.ts"},
+			},
+		},
+	})
+	assert.NilError(t, err)
+	baseProgram := session.snapshots[base.Snapshot].snapshot.ProjectCollection.GetProjectByPath("/tsconfig.json").GetProgram()
+	assert.Equal(t, baseProgram.GetSourceFile("/alias.ts").Text(), "old")
+
+	updated, err := session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{
+		Snapshot: base.Snapshot,
+		FileSystem: &project.RequestFileSystem{
+			Kind:  project.RequestFileSystemKindLayer,
+			Files: map[string]string{"/alias.ts": "new"},
+		},
+	})
+	assert.NilError(t, err)
+	program := session.snapshots[updated.Snapshot].snapshot.ProjectCollection.GetProjectByPath("/tsconfig.json").GetProgram()
+	assert.Equal(t, program.GetSourceFile("/alias.ts").Text(), "new")
+}
+
 func TestRequestSymlinkFallsBackToEditorOverlayDirectory(t *testing.T) {
 	t.Parallel()
 

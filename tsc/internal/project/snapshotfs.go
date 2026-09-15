@@ -838,19 +838,66 @@ func (s *snapshotFSBuilder) upperLayerMatchesPrevious(fileName string, path tspa
 	if file == nil {
 		return false
 	}
-	if s.prevUpperLayer != nil && s.prevUpperLayer.Shadows(fileName) {
-		previous, ok := s.prevUpperLayer.lookupPath(fileName).info.(*requestFile)
-		return ok && previous.content == file.Content()
+	previous := s.previousFile(fileName, path)
+	return previous != nil && previous.Hash() == file.Hash()
+}
+
+// previousFile resolves fileName through the previous request layer, then reads
+// the overlay or cached file that was visible beneath it. This must not look up an
+// overlay at the original path before resolving the layer: a fall-through symlink
+// can make an overlay at that path invisible.
+func (s *snapshotFSBuilder) previousFile(fileName string, path tspath.Path) FileHandle {
+	if layer := s.prevUpperLayer; layer != nil {
+		lookup := layer.lookupPath(fileName)
+		if !lookup.ok || lookup.info != nil && lookup.isDirectory() {
+			return nil
+		}
+		if file, ok := lookup.info.(*requestFile); ok {
+			return file.fileHandle()
+		}
+		if !lookup.fallback {
+			return nil
+		}
+		if lookup.host {
+			if content, ok := layer.base.ReadFile(lookup.path); ok {
+				return NewFileHandle(fileName, content)
+			}
+			return nil
+		}
+		fileName = lookup.path
+		path = layer.toPath(fileName)
 	}
 	if overlay, ok := s.prevOverlays[path]; ok {
-		return overlay.Hash() == file.Hash()
+		return overlay
 	}
 	entry, ok := s.diskFiles.Load(path)
 	if !ok {
-		return false
+		return nil
 	}
-	cached := entry.Value()
-	return cached != nil && cached.Hash() == file.Hash()
+	return entry.Original()
+}
+
+// expandRequestAliases adds synthetic events for paths that reach a changed path
+// through the active request filesystem's symlinks.
+func (s *snapshotFSBuilder) expandRequestAliases(change FileChangeSummary) FileChangeSummary {
+	if s.upperLayer == nil {
+		return change
+	}
+	expand := func(events *collections.Set[lsproto.DocumentUri]) {
+		var aliases collections.Set[lsproto.DocumentUri]
+		for uri := range events.Keys() {
+			for _, alias := range s.upperLayer.aliasesForPath(uri.FileName()) {
+				aliases.Add(lsconv.FileNameToDocumentURI(alias))
+			}
+		}
+		for alias := range aliases.Keys() {
+			events.Add(alias)
+		}
+	}
+	expand(&change.Changed)
+	expand(&change.Created)
+	expand(&change.Deleted)
+	return change
 }
 
 func (s *snapshotFSBuilder) reloadEntryIfContentChanged(entry *dirty.SyncMapEntry[tspath.Path, *diskFile]) (changed bool) {
@@ -1169,11 +1216,6 @@ func (fs *sourceFS) Stat(path string) vfs.FileInfo {
 // UseCaseSensitiveFileNames implements vfs.FS.
 func (fs *sourceFS) UseCaseSensitiveFileNames() bool {
 	return fs.source.UseCaseSensitiveFileNames()
-}
-
-// WalkDir implements vfs.FS. A snapshot cannot be walked: see FileSource.
-func (fs *sourceFS) WalkDir(root string, walkFn vfs.WalkDirFunc) error {
-	panic("unimplemented")
 }
 
 // WriteFile implements vfs.FS.

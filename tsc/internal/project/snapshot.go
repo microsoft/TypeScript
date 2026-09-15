@@ -275,6 +275,7 @@ func (s *Snapshot) processFileChanges(
 	logger *logging.LogTree,
 	contentMapperContributions *ContentMapperContributions,
 ) FileChangeSummary {
+	fileChanges = fs.expandRequestAliases(fileChanges)
 	if fileChanges.HasExcessiveWatchEvents() {
 		invalidateStart := time.Now()
 		if fileChanges.InvalidateAll {

@@ -1,0 +1,41 @@
+//// [tests/cases/compiler/declarationEmitPrivateMethodSignatures.ts] ////
+
+=== a.ts ===
+interface A<T> { private a(): boolean {} }
+>a : () => boolean
+
+interface B {
+    /** Method documentation. */
+    private a<T>(x: T): T;
+>a : <T>(x: T) => T
+>x : T
+
+    private b(x: string): string;
+>b : { (x: string): string; (x: number): number; }
+>x : string
+
+    private b(x: number): number;
+>b : { (x: string): string; (x: number): number; }
+>x : number
+
+    private c?(): boolean;
+>c : (() => boolean) | undefined
+}
+
+type C = {
+>C : C
+
+    /** Method documentation. */
+    private a(): boolean;
+>a : () => boolean
+
+    private b(x: string): string;
+>b : { (x: string): string; (x: number): number; }
+>x : string
+
+    private b(x: number): number;
+>b : { (x: string): string; (x: number): number; }
+>x : number
+
+};
+

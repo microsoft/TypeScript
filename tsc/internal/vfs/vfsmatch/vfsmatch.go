@@ -28,7 +28,6 @@ const (
 // UnlimitedDepth can be passed as the depth argument to indicate there is no depth limit.
 const UnlimitedDepth = math.MaxInt
 
-
 type DirectoryLister interface {
 	UseCaseSensitiveFileNames() bool
 	GetAccessibleEntries(path string) vfs.Entries

@@ -32,10 +32,11 @@ func addFileChanges(
 		var walked collections.Set[tspath.Path]
 		var walk func(string)
 		walk = func(directoryName string) {
-			if walked.Has(toPath(directoryName)) {
+			realpath := toPath(base.Realpath(directoryName))
+			if walked.Has(realpath) {
 				return
 			}
-			walked.Add(toPath(directoryName))
+			walked.Add(realpath)
 			entries := base.GetAccessibleEntries(directoryName)
 			for _, name := range entries.Files {
 				summary.Deleted.Add(lsconv.FileNameToDocumentURI(tspath.CombinePaths(directoryName, name)))

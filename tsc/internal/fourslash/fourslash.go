@@ -5103,17 +5103,8 @@ func (f *FourslashTest) renameFileOrDirectory(t *testing.T, oldPath string, newP
 	if _, ok := f.vfs.ReadFile(oldPath); ok {
 		oldFileNames[oldPath] = struct{}{}
 	} else {
-		walkErr := f.vfs.WalkDir(oldPath, func(path string, d vfs.DirEntry, err error) error {
-			if err != nil {
-				return err
-			}
-			if !d.IsDir() {
-				oldFileNames[path] = struct{}{}
-			}
-			return nil
-		})
-		if walkErr != nil {
-			t.Fatalf("failed to collect files for rename %s -> %s: %v", oldPath, newPath, walkErr)
+		for _, path := range getAccessibleFilePaths(f.vfs, oldPath) {
+			oldFileNames[path] = struct{}{}
 		}
 	}
 	if len(oldFileNames) == 0 {

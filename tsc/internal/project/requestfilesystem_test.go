@@ -505,6 +505,7 @@ func testSymlinkReplacesDirectory(t *testing.T, options symlinkReplacementOption
 		if remove {
 			assert.Assert(t, !fileSystem.FileExists("/dir/removed/sibling.ts"))
 		}
+		assert.DeepEqual(t, fileSystem.GetAccessibleEntries(linkPath+"/removed").Files, []string{"new.ts"})
 	}
 	verifyLinked(linked)
 	next, err := newLayeredRequestFileSystem(&RequestFileSystem{Kind: RequestFileSystemKindLayer}, linked, "/")

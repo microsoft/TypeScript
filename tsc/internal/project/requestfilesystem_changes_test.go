@@ -178,3 +178,20 @@ func TestFileChangesIncludeRootSymlinkAliases(t *testing.T) {
 	assert.Assert(t, summary.Changed.Has("file:///link/file.ts"))
 	assert.Equal(t, summary.Created.Len(), 0)
 }
+
+func TestFileChangesDoNotRecurseThroughSymlinkCycles(t *testing.T) {
+	t.Parallel()
+
+	host := vfstest.FromMap(map[string]any{
+		"/dir/file.ts": "file",
+		"/dir/link":    vfstest.Symlink("/dir"),
+	}, true)
+	var summary FileChangeSummary
+	addFileChanges(&summary, &RequestFileSystem{
+		Kind:         RequestFileSystemKindLayer,
+		RemovedPaths: []string{"/dir"},
+	}, baseFileSource(nil, host), nil, "/")
+
+	assert.Assert(t, summary.Deleted.Has("file:///dir"))
+	assert.Assert(t, summary.Deleted.Has("file:///dir/file.ts"))
+}
