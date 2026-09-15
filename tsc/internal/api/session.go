@@ -787,6 +787,10 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleGetSourceFileNames(ctx, parsed.(*GetSourceFileNamesParams))
 	case string(MethodGetSourceFileMetadata):
 		return s.handleGetSourceFileMetadata(ctx, parsed.(*GetSourceFileParams))
+	case string(MethodGetModeForUsageLocation):
+		return s.handleGetModeForUsageLocation(ctx, parsed.(*GetModeForUsageLocationParams))
+	case string(MethodGetModeForResolutionAtIndex):
+		return s.handleGetModeForResolutionAtIndex(ctx, parsed.(*GetModeForResolutionAtIndexParams))
 	case string(MethodGetResolvedModule):
 		return s.handleGetResolvedModule(ctx, parsed.(*GetResolvedModuleParams))
 	case string(MethodGetResolvedModuleFromModuleSpecifier):
@@ -1807,6 +1811,54 @@ func newResolvedTypeReferenceDirectiveResponse(resolution *module.ResolvedTypeRe
 		PackageId:               NewPackageId(resolution.PackageId),
 		IsExternalLibraryImport: resolution.IsExternalLibraryImport,
 	}
+}
+
+func (s *Session) handleGetModeForUsageLocation(ctx context.Context, params *GetModeForUsageLocationParams) (core.ResolutionMode, error) {
+	sd, err := s.getSnapshotData(params.Snapshot)
+	if err != nil {
+		return core.ResolutionModeNone, err
+	}
+	program, err := sd.getProgram(params.Project)
+	if err != nil {
+		return core.ResolutionModeNone, err
+	}
+	sourceFile, err := s.resolveOptionalSourceFile(program, &params.File)
+	if err != nil {
+		return core.ResolutionModeNone, err
+	}
+	usage, err := sd.resolveNodeHandle(program, params.Usage)
+	if err != nil {
+		return core.ResolutionModeNone, err
+	}
+	if !ast.IsStringLiteralLike(usage) {
+		return core.ResolutionModeNone, fmt.Errorf("%w: usage must be a StringLiteralLike node", ErrClientError)
+	}
+	return program.GetModeForUsageLocation(sourceFile, usage), nil
+}
+
+func (s *Session) handleGetModeForResolutionAtIndex(ctx context.Context, params *GetModeForResolutionAtIndexParams) (core.ResolutionMode, error) {
+	sd, err := s.getSnapshotData(params.Snapshot)
+	if err != nil {
+		return core.ResolutionModeNone, err
+	}
+	program, err := sd.getProgram(params.Project)
+	if err != nil {
+		return core.ResolutionModeNone, err
+	}
+	sourceFile, err := s.resolveOptionalSourceFile(program, &params.File)
+	if err != nil {
+		return core.ResolutionModeNone, err
+	}
+	resolutionCount := len(sourceFile.Imports())
+	for _, augmentation := range sourceFile.ModuleAugmentations {
+		if augmentation.Kind == ast.KindStringLiteral {
+			resolutionCount++
+		}
+	}
+	if params.Index < 0 || params.Index >= resolutionCount {
+		return core.ResolutionModeNone, fmt.Errorf("%w: invalid resolution index", ErrClientError)
+	}
+	return program.GetModeForResolutionAtIndex(sourceFile, params.Index), nil
 }
 
 // @gen-proto-nullable

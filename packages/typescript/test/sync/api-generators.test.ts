@@ -1524,6 +1524,8 @@ describe("API - generator batching", () => {
                 parityCase("LanguageService", "getCompletionsAtPosition", languageService.getCompletionsAtPosition, assertDeepEquivalent, "/src/index.ts", completionPosition, { includeSymbol: true }),
 
                 parityCase("Program", "getSourceFile", program.getSourceFile, assertOptionalSourceFilesEquivalent, "/src/index.ts"),
+                parityCase("Program", "getModeForUsageLocation", program.getModeForUsageLocation, assertDeepEquivalent, "/src/index.ts", importSpecifier),
+                parityCase("Program", "getModeForResolutionAtIndex", program.getModeForResolutionAtIndex, assertDeepEquivalent, "/src/index.ts", 0),
                 parityCase("Program", "getResolvedModule", program.getResolvedModule, assertDeepEquivalent, "/src/index.ts", "./models.js", ModuleKind.CommonJS),
                 parityCase("Program", "getResolvedModuleFromModuleSpecifier", program.getResolvedModuleFromModuleSpecifier, assertDeepEquivalent, importSpecifier),
                 parityCase("Program", "getResolvedTypeReferenceDirective", program.getResolvedTypeReferenceDirective, assertDeepEquivalent, "/src/index.ts", "parity", ModuleKind.CommonJS),
