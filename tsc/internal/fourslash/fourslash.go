@@ -4990,8 +4990,8 @@ func (f *FourslashTest) willRenameFilesWorker(t *testing.T, files ...*lsproto.Fi
 
 	if result.WorkspaceEdit == nil {
 		for _, file := range files {
-			oldPath := lsproto.DocumentUri(file.OldUri).FileName()
-			newPath := lsproto.DocumentUri(file.NewUri).FileName()
+			oldPath := file.OldUri.FileName()
+			newPath := file.NewUri.FileName()
 			f.renameFileOrDirectory(t, oldPath, newPath)
 		}
 		return
@@ -5041,8 +5041,8 @@ func (f *FourslashTest) willRenameFilesWorker(t *testing.T, files ...*lsproto.Fi
 	f.willRenameFilesWorker(t, fileRenames...)
 
 	for _, file := range files {
-		oldPath := lsproto.DocumentUri(file.OldUri).FileName()
-		newPath := lsproto.DocumentUri(file.NewUri).FileName()
+		oldPath := file.OldUri.FileName()
+		newPath := file.NewUri.FileName()
 		f.renameFileOrDirectory(t, oldPath, newPath)
 	}
 }
