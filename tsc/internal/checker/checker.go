@@ -29492,6 +29492,14 @@ func (c *Checker) getConstraintDeclaration(t *Type) *ast.Node {
 	return nil
 }
 
+// Limits on the size of a template literal type produced by getTemplateLiteralType. Recursive instantiations
+// such as `Recur<any, `${S}_${S}`>` double the text (or the number of placeholders) on every iteration and
+// exhaust memory long before the tail recursion limit in getConditionalType is reached (see #63271).
+const (
+	maxTemplateLiteralTypeLength = 50_000_000
+	maxTemplateLiteralTypeSpans  = 100_000
+)
+
 func (c *Checker) getTemplateLiteralType(texts []string, types []*Type) *Type {
 	unionIndex := core.FindIndex(types, func(t *Type) bool {
 		return t.flags&(TypeFlagsNever|TypeFlagsUnion) != 0
@@ -29511,6 +29519,8 @@ func (c *Checker) getTemplateLiteralType(texts []string, types []*Type) *Type {
 	var newTexts []string
 	var sb strings.Builder
 	sb.WriteString(texts[0])
+	textLength := 0 // combined length of the segments already moved into newTexts
+	tooLarge := false
 	var addSpans func([]string, []*Type) bool
 	addSpans = func(texts []string, types []*Type) bool {
 		for i, t := range types {
@@ -29527,15 +29537,24 @@ func (c *Checker) getTemplateLiteralType(texts []string, types []*Type) *Type {
 			case c.isGenericIndexType(t) || c.isPatternLiteralPlaceholderType(t):
 				newTypes = append(newTypes, t)
 				newTexts = append(newTexts, stringutil.CombineSurrogatePairs(sb.String()))
+				textLength += sb.Len()
 				sb.Reset()
 				sb.WriteString(texts[i+1])
 			default:
+				return false
+			}
+			if textLength+sb.Len() > maxTemplateLiteralTypeLength || len(newTypes) > maxTemplateLiteralTypeSpans {
+				tooLarge = true
 				return false
 			}
 		}
 		return true
 	}
 	if !addSpans(texts, types) {
+		if tooLarge {
+			c.error(c.currentNode, diagnostics.Type_instantiation_is_excessively_deep_and_possibly_infinite)
+			return c.errorType
+		}
 		return c.stringType
 	}
 	if len(newTypes) == 0 {
