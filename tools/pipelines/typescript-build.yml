@@ -11,16 +11,6 @@ schedules:
 name: $(date:yyyyMMdd)$(rev:.r)
 appendCommitMessageToRunName: false
 
-parameters:
-  - name: signType
-    displayName: Sign type
-    type: string
-    default: auto
-    values:
-      - auto
-      - real
-      - test
-
 variables:
   # For MicroBuild telemetry
   - name: TeamName
@@ -46,8 +36,6 @@ extends:
         fetchTags: false
         retryCount: 3
       sourceAnalysisPool: VSEngSS-MicroBuild2022-1ES
-      sourceRepositoriesToScan:
-        include:
     featureFlags:
       golang:
         internalModuleProxy:
@@ -104,18 +92,11 @@ extends:
               - task: MicroBuildSigningPlugin@4
                 displayName: '🔩 Install Signing Plugin'
                 inputs:
-                  ${{ if eq(parameters.signType, 'auto') }}:
-                    ${{ if eq(variables['Build.Reason'], 'Schedule') }}:
-                      signType: real
-                    ${{ else }}:
-                      signType: test
-                  ${{ else }}:
-                    signType: ${{ parameters.signType }}
+                  signType: real
                   # azureSubscription AKA ConnectedServiceName
                   azureSubscription: 'MicroBuild Signing Task (DevDiv)'
-                  ${{ if or(and(eq(parameters.signType, 'auto'), eq(variables['Build.Reason'], 'Schedule')), eq(parameters.signType, 'real')) }}:
-                    # From "nonwindowspmeservicename" in https://dev.azure.com/devdiv/1ESPipelineTemplates/_git/MicroBuildTemplate?path=/azure-pipelines/Stages/Stage.yml
-                    ConnectedPMEServiceName: beb8cb23-b303-4c95-ab26-9e44bc958d39
+                  # From "nonwindowspmeservicename" in https://dev.azure.com/devdiv/1ESPipelineTemplates/_git/MicroBuildTemplate?path=/azure-pipelines/Stages/Stage.yml
+                  ConnectedPMEServiceName: beb8cb23-b303-4c95-ab26-9e44bc958d39
                   # We do this ourselves.
                   zipSources: false
                 env:
@@ -129,22 +110,22 @@ extends:
               - template: /tools/pipelines/steps/setup-node-npm-ci.yml@self
               - template: /tools/pipelines/steps/setup-go.yml@self
 
-              - bash: npx hereby typescript:build --forRelease
+              - bash: npx hereby typescript:build --forRelease --setPrerelease dev.$(Build.BuildNumber)
                 displayName: 'Build packages'
 
-              - bash: npx hereby typescript:sign --forRelease
+              - bash: npx hereby typescript:sign --forRelease --setPrerelease dev.$(Build.BuildNumber)
                 displayName: 'Sign packages'
                 env:
                   # Needed for ESRP
                   SYSTEM_ACCESSTOKEN: $(System.AccessToken)
 
-              - bash: npx hereby typescript:pack --forRelease
+              - bash: npx hereby typescript:pack --forRelease --setPrerelease dev.$(Build.BuildNumber)
                 displayName: 'Pack packages'
 
-              - bash: npx hereby vscode-typescript:pack --forRelease
+              - bash: npx hereby vscode-typescript:pack --forRelease --setPrerelease dev.$(Build.BuildNumber)
                 displayName: 'Pack extensions'
 
-              - bash: npx hereby vscode-typescript:sign --forRelease
+              - bash: npx hereby vscode-typescript:sign --forRelease --setPrerelease dev.$(Build.BuildNumber)
                 displayName: 'Sign extensions'
                 env:
                   # Needed for ESRP
