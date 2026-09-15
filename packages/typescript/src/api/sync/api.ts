@@ -20,7 +20,6 @@ import { SymbolFlags } from "#enums/symbolFlags";
 import { TypeFlags } from "#enums/typeFlags";
 import { TypeFormatFlags } from "#enums/typeFormatFlags";
 import { TypePredicateKind } from "#enums/typePredicateKind";
-import type { CancellationToken } from "../../../vendor/vscode-jsonrpc/lib/common/cancellation.js";
 import {
     type __String,
     type Declaration,
@@ -58,6 +57,8 @@ import {
     toPath,
 } from "../path.ts";
 import type {
+    BuildResponse,
+    CleanBuildResponse,
     CompilerOptions,
     Diagnostic,
     DocumentIdentifier,
@@ -221,7 +222,6 @@ export class API<FromLSP extends boolean = false> {
     private initialized: boolean = false;
     private activeSnapshots: Set<Snapshot> = new Set();
     private latestSnapshot: Snapshot | undefined;
-    private buildOrchestrators: Map<number, BuildOrchestrator> = new Map();
     readonly internal: InternalAPI;
 
     constructor(options: APIOptions | LSPConnectionOptions = {}) {
@@ -1287,35 +1287,34 @@ export class BuildOrchestrator {
         this.client = client;
         this.id = id;
     }
-    build(project?: string): number { // , cancellationToken?: CancellationToken, writeFile?: WriteFileCallback, getCustomTransformers?: (project: string) => CustomTransformers): ExitStatus{
+    build(project?: string): BuildResponse { // , cancellationToken?: CancellationToken, writeFile?: WriteFileCallback, getCustomTransformers?: (project: string) => CustomTransformers): ExitStatus{
         const response = this.client.apiRequest("build", {
             buildOrchestratorID: this.id,
             ...(project !== undefined ? { project } : {}),
         });
-        return response.exitStatus;
+        return response;
     }
-    buildReferences(project: string): number {
+    buildReferences(project: string): BuildResponse {
         const response = this.client.apiRequest("buildReferences", {
             buildOrchestratorID: this.id,
             project,
         });
-        return response.exitStatus;
+        return response;
     }
-    clean(project?: string): number {
+    clean(project?: string): CleanBuildResponse {
         const response = this.client.apiRequest("cleanBuild", {
             buildOrchestratorID: this.id,
             ...(project !== undefined ? { project } : {}),
         });
-        return response.exitStatus;
+        return response;
     }
-    cleanReferences(project?: string): number {
+    cleanReferences(project?: string): CleanBuildResponse {
         const response = this.client.apiRequest("cleanReferences", {
             buildOrchestratorID: this.id,
             ...(project !== undefined ? { project } : {}),
         });
-        return response.exitStatus;
+        return response;
     }
-    // getNextInvalidatedProject(cancellationToken?: CancellationToken): InvalidatedProject<T> | undefined;
 }
 
 function toEmitOutput(response: ProtocolEmitOutputResponse): EmitOutput {

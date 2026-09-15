@@ -662,15 +662,22 @@ type BuildParams struct {
 }
 
 type BuildResponse struct {
-	tsc.ExitStatus `json:"exitStatus"`
+	Status        tsc.ExitStatus        `json:"status"`
+	Errors        []*DiagnosticResponse `json:"errors" nonnil:"true"`
+	Statistics    tsc.Statistics        `json:"statistics"`
+	FilesToDelete []string              `json:"filesToDelete" nonnil:"true"`
 }
+
 type CleanBuildParams struct {
 	BuildOrchestratorID BuildOrchestratorID `json:"buildOrchestratorID"`
 	Project             ProjectID           `json:"project,omitempty"`
 }
 
 type CleanBuildResponse struct {
-	tsc.ExitStatus `json:"exitStatus"`
+	Status        tsc.ExitStatus        `json:"status"`
+	Errors        []*DiagnosticResponse `json:"errors" nonnil:"true"`
+	Statistics    tsc.Statistics        `json:"statistics"`
+	FilesToDelete []string              `json:"filesToDelete" nonnil:"true"`
 }
 
 type BuildOrchestrator struct {
@@ -690,14 +697,6 @@ type ConfigFileResponse struct {
 	CompileOnSave     *bool                    `json:"compileOnSave,omitempty"`
 	Raw               any                      `json:"raw,omitempty"`
 	Errors            []*DiagnosticResponse    `json:"errors" nonnil:"true"`
-}
-
-func (c *ConfigFileResponse) toParsedCommandLine() *tsoptions.ParsedBuildCommandLine {
-	return &tsoptions.ParsedBuildCommandLine{
-		CompilerOptions: c.Options,
-		BuildOptions:    c.BuildOptions,
-		WatchOptions:    c.WatchOptions,
-	}
 }
 
 type ReadConfigFileResponse struct {

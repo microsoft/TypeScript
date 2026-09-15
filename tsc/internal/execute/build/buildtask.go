@@ -117,19 +117,19 @@ func (t *BuildTask) reportDiagnostic(err *ast.Diagnostic) {
 	t.result.diagnosticReporter(err)
 }
 
-func (t *BuildTask) report(orchestrator *Orchestrator, configPath tspath.Path, buildResult *orchestratorResult) {
+func (t *BuildTask) report(orchestrator *Orchestrator, configPath tspath.Path, buildResult *OrchestratorResult) {
 	if t.prevReporter != nil {
 		<-t.prevReporter.reportDone
 	}
 	if len(t.errors) > 0 {
-		buildResult.errors = append(core.IfElse(buildResult.errors != nil, buildResult.errors, []*ast.Diagnostic{}), t.errors...)
+		buildResult.Errors = append(core.IfElse(buildResult.Errors != nil, buildResult.Errors, []*ast.Diagnostic{}), t.errors...)
 	}
 	fmt.Fprint(orchestrator.opts.Sys.Writer(), t.result.builder.String())
-	if t.result.exitStatus > buildResult.result.Status {
-		buildResult.result.Status = t.result.exitStatus
+	if t.result.exitStatus > buildResult.Result.Status {
+		buildResult.Result.Status = t.result.exitStatus
 	}
 	if t.result.statistics != nil {
-		buildResult.statistics.Aggregate(t.result.statistics)
+		buildResult.Statistics.Aggregate(t.result.statistics)
 	}
 	// If we built the program, or updated timestamps, or had errors, we need to
 	// delete files that are no longer needed
@@ -138,11 +138,11 @@ func (t *BuildTask) report(orchestrator *Orchestrator, configPath tspath.Path, b
 		if orchestrator.opts.Testing != nil {
 			orchestrator.opts.Testing.OnProgram(t.result.program)
 		}
-		buildResult.statistics.ProjectsBuilt++
+		buildResult.Statistics.ProjectsBuilt++
 	case buildKindPseudo:
-		buildResult.statistics.TimestampUpdates++
+		buildResult.Statistics.TimestampUpdates++
 	}
-	buildResult.filesToDelete = append(buildResult.filesToDelete, t.result.filesToDelete...)
+	buildResult.FilesToDelete = append(buildResult.FilesToDelete, t.result.filesToDelete...)
 	t.result = nil
 	close(t.reportDone)
 }

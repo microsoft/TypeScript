@@ -49,6 +49,8 @@ import {
     toPath,
 } from "../path.ts";
 import type {
+    BuildResponse,
+    CleanBuildResponse,
     CompilerOptions,
     Diagnostic,
     DocumentIdentifier,
@@ -1277,33 +1279,33 @@ export class BuildOrchestrator {
         this.client = client;
         this.id = id;
     }
-    async build(project?: string): Promise<number> { // , cancellationToken?: CancellationToken, writeFile?: WriteFileCallback, getCustomTransformers?: (project: string) => CustomTransformers): ExitStatus{
+    async build(project?: string): Promise<BuildResponse> { 
         const response = await this.client.apiRequest("build", {
             buildOrchestratorID: this.id,
             ...(project !== undefined ? { project } : {}),
         });
-        return response.exitStatus;
+        return response;
     }
-    async buildReferences(project: string): Promise<number> {
+    async buildReferences(project: string): Promise<BuildResponse> {
         const response = await this.client.apiRequest("buildReferences", {
             buildOrchestratorID: this.id,
             project,
         });
-        return response.exitStatus;
+        return response;
     }
-    async clean(project?: string): Promise<number> {
+    async clean(project?: string): Promise<CleanBuildResponse> {
         const response = await this.client.apiRequest("cleanBuild", {
             buildOrchestratorID: this.id,
             ...(project !== undefined ? { project } : {}),
         });
-        return response.exitStatus;
+        return response;
     }
-    async cleanReferences(project?: string): Promise<number> {
+    async cleanReferences(project?: string): Promise<CleanBuildResponse> {
         const response = await this.client.apiRequest("cleanReferences", {
             buildOrchestratorID: this.id,
             ...(project !== undefined ? { project } : {}),
         });
-        return response.exitStatus;
+        return response;
     }
 }
 

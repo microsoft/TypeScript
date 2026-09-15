@@ -623,9 +623,9 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 	case string(MethodBuildReferences):
 		return s.handleBuildReferences(ctx, parsed.(*BuildParams))
 	case string(MethodCleanBuild):
-		return s.handleCleanBuild(ctx, parsed.(*CleanBuildParams))
+		return s.handleCleanBuild(parsed.(*CleanBuildParams))
 	case string(MethodCleanReferences):
-		return s.handleCleanReferences(ctx, parsed.(*CleanBuildParams))
+		return s.handleCleanReferences(parsed.(*CleanBuildParams))
 	case string(MethodParseCommandLine):
 		return s.handleParseCommandLine(ctx, parsed.(*ParseCommandLineParams))
 	case string(MethodReadConfigFile):
@@ -1217,32 +1217,50 @@ func (s *Session) getBuildSys(params *CreateBuildOrchestratorParams) tsc.System 
 func (s *Session) handleBuild(ctx context.Context, params *BuildParams) (*BuildResponse, error) {
 	s.buildMu.Lock()
 	defer s.buildMu.Unlock()
+	result := s.buildOrchestrators[params.BuildOrchestratorID].Build(ctx, string(params.Project))
+
 	return &BuildResponse{
-		ExitStatus: s.buildOrchestrators[params.BuildOrchestratorID].Build(ctx, string(params.Project)).Status,
+		Status:        result.Result.Status,
+		Errors:        NewDiagnosticResponses(result.Errors),
+		Statistics:    result.Statistics,
+		FilesToDelete: result.FilesToDelete,
 	}, nil
 }
 
 func (s *Session) handleBuildReferences(ctx context.Context, params *BuildParams) (*BuildResponse, error) {
 	s.buildMu.Lock()
 	defer s.buildMu.Unlock()
+	result := s.buildOrchestrators[params.BuildOrchestratorID].BuildReferences(ctx, string(params.Project))
+
 	return &BuildResponse{
-		ExitStatus: s.buildOrchestrators[params.BuildOrchestratorID].BuildReferences(ctx, string(params.Project)).Status,
+		Status:        result.Result.Status,
+		Errors:        NewDiagnosticResponses(result.Errors),
+		Statistics:    result.Statistics,
+		FilesToDelete: result.FilesToDelete,
 	}, nil
 }
 
-func (s *Session) handleCleanBuild(ctx context.Context, params *CleanBuildParams) (*CleanBuildResponse, error) {
+func (s *Session) handleCleanBuild(params *CleanBuildParams) (*CleanBuildResponse, error) {
 	s.buildMu.Lock()
 	defer s.buildMu.Unlock()
+	result := s.buildOrchestrators[params.BuildOrchestratorID].Clean(string(params.Project))
 	return &CleanBuildResponse{
-		ExitStatus: s.buildOrchestrators[params.BuildOrchestratorID].Clean(string(params.Project)),
+		Status:        result.Result.Status,
+		Errors:        NewDiagnosticResponses(result.Errors),
+		Statistics:    result.Statistics,
+		FilesToDelete: result.FilesToDelete,
 	}, nil
 }
 
-func (s *Session) handleCleanReferences(ctx context.Context, params *CleanBuildParams) (*CleanBuildResponse, error) {
+func (s *Session) handleCleanReferences(params *CleanBuildParams) (*CleanBuildResponse, error) {
 	s.buildMu.Lock()
 	defer s.buildMu.Unlock()
+	result := s.buildOrchestrators[params.BuildOrchestratorID].CleanReferences(string(params.Project))
 	return &CleanBuildResponse{
-		ExitStatus: s.buildOrchestrators[params.BuildOrchestratorID].CleanReferences(string(params.Project)),
+		Status:        result.Result.Status,
+		Errors:        NewDiagnosticResponses(result.Errors),
+		Statistics:    result.Statistics,
+		FilesToDelete: result.FilesToDelete,
 	}, nil
 }
 

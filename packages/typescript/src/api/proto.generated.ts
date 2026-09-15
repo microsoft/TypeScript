@@ -245,7 +245,10 @@ export interface BuildParams {
 }
 
 export interface BuildResponse {
-    exitStatus: number;
+    status: number;
+    errors: DiagnosticResponse[];
+    statistics: Statistics;
+    filesToDelete: string[];
 }
 
 export interface CleanBuildParams {
@@ -254,7 +257,10 @@ export interface CleanBuildParams {
 }
 
 export interface CleanBuildResponse {
-    exitStatus: number;
+    status: number;
+    errors: DiagnosticResponse[];
+    statistics: Statistics;
+    filesToDelete: string[];
 }
 
 export interface ParseCommandLineParams {
@@ -925,6 +931,12 @@ export interface SnapshotChanges {
 
 export interface BuildOrchestratorHostOptions {
     cwd?: string;
+}
+
+export interface Statistics {
+    Projects: number;
+    ProjectsBuilt: number;
+    TimestampUpdates: number;
 }
 
 /** CompilerOptions contains the compiler options exposed by the API. */

@@ -20,7 +20,9 @@ func TestClean(t *testing.T) {
 		sys := newCleanTestSystem()
 		orchestrator := newCleanTestOrchestrator(sys, "a", "c")
 
-		assert.Equal(t, orchestrator.Clean("a"), tsc.ExitStatusSuccess)
+		result := orchestrator.Clean("a")
+		assert.Equal(t, result.Result.Status, tsc.ExitStatusSuccess)
+		assert.Equal(t, result.Statistics.Projects, 2)
 		assert.Assert(t, !sys.FS().FileExists("/project/a/dist/index.js"))
 		assert.Assert(t, !sys.FS().FileExists("/project/b/dist/index.js"))
 		assert.Assert(t, sys.FS().FileExists("/project/c/dist/index.js"))
@@ -31,7 +33,10 @@ func TestClean(t *testing.T) {
 		sys := newCleanTestSystem()
 		orchestrator := newCleanTestOrchestrator(sys, "--dry", "a")
 
-		assert.Equal(t, orchestrator.Clean("a"), tsc.ExitStatusSuccess)
+		result := orchestrator.Clean("a")
+		assert.Equal(t, result.Result.Status, tsc.ExitStatusSuccess)
+		assert.Equal(t, result.Statistics.Projects, 2)
+		assert.Assert(t, len(result.FilesToDelete) > 0)
 		assert.Assert(t, sys.FS().FileExists("/project/a/dist/index.js"))
 		assert.Assert(t, sys.FS().FileExists("/project/b/dist/index.js"))
 	})
@@ -41,7 +46,8 @@ func TestClean(t *testing.T) {
 		sys := newCleanTestSystem()
 		orchestrator := newCleanTestOrchestrator(sys, "a")
 
-		assert.Equal(t, orchestrator.Clean("c"), tsc.ExitStatusInvalidProject_OutputsSkipped)
+		result := orchestrator.Clean("c")
+		assert.Equal(t, result.Result.Status, tsc.ExitStatusInvalidProject_OutputsSkipped)
 		assert.Assert(t, sys.FS().FileExists("/project/a/dist/index.js"))
 		assert.Assert(t, sys.FS().FileExists("/project/b/dist/index.js"))
 		assert.Assert(t, sys.FS().FileExists("/project/c/dist/index.js"))
@@ -52,7 +58,9 @@ func TestClean(t *testing.T) {
 		sys := newCleanTestSystem()
 		orchestrator := newCleanTestOrchestrator(sys, "cycle1")
 
-		assert.Equal(t, orchestrator.Clean("cycle1"), tsc.ExitStatusProjectReferenceCycle_OutputsSkipped)
+		result := orchestrator.Clean("cycle1")
+		assert.Equal(t, result.Result.Status, tsc.ExitStatusProjectReferenceCycle_OutputsSkipped)
+		assert.Assert(t, len(result.Errors) > 0)
 		assert.Assert(t, sys.FS().FileExists("/project/cycle1/dist/index.js"))
 		assert.Assert(t, sys.FS().FileExists("/project/cycle2/dist/index.js"))
 	})
