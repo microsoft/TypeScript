@@ -308,6 +308,53 @@ function foo(options) {}`
 	assert.Equal(t, scanner.GetTokenPosOfNode(typeNode, file, false /*includeJSDoc*/), strings.Index(sourceText, "{{")+1)
 }
 
+func TestJSDocDoesNotAugmentCallHeritage(t *testing.T) {
+	t.Parallel()
+	sourceText := `/** @template T */
+class A {
+  static extend() {
+    return this;
+  }
+}
+
+/** @extends {A<string>} */
+class B extends A.extend() {}`
+	opts := ast.SourceFileParseOptions{
+		FileName: "/index.js",
+		Path:     "/index.js",
+	}
+
+	file := parser.ParseSourceFile(opts, sourceText, core.ScriptKindJS)
+	statements := file.Statements.Nodes
+	assert.Equal(t, len(statements), 2)
+
+	classB := statements[1]
+	assert.Assert(t, ast.IsClassDeclaration(classB))
+
+	baseType := ast.GetClassExtendsHeritageElement(classB)
+	assert.Assert(t, baseType != nil)
+	assert.Assert(t, ast.IsCallExpression(baseType.Expression()))
+	assert.Equal(t, scanner.GetTextOfNode(baseType.Expression()), "A.extend()")
+
+	typeArguments := baseType.TypeArguments()
+	assert.Equal(t, len(typeArguments), 0)
+
+	jsDocs := classB.JSDoc(file)
+	assert.Equal(t, len(jsDocs), 1)
+
+	tags := jsDocs[0].AsJSDoc().Tags
+	assert.Assert(t, tags != nil)
+	assert.Equal(t, len(tags.Nodes), 1)
+
+	tag := tags.Nodes[0]
+	assert.Assert(t, ast.IsJSDocAugmentsTag(tag))
+
+	sourceTypeArguments := tag.ClassName().TypeArguments()
+	assert.Equal(t, len(sourceTypeArguments), 1)
+	assert.Equal(t, sourceTypeArguments[0].Kind, ast.KindStringKeyword)
+	assert.Equal(t, ast.GetReparsedNodeForNode(sourceTypeArguments[0]), sourceTypeArguments[0])
+}
+
 func TestSourceFilePositionMapWithNonASCIIStringLiteral(t *testing.T) {
 	t.Parallel()
 	sourceText := `const x = "─";

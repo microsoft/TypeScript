@@ -1,0 +1,54 @@
+//// [tests/cases/conformance/jsdoc/extendsTag10.ts] ////
+
+=== a.js ===
+/** @template T */
+class A {
+>A : A<T>
+
+    /** @returns {T} */
+    get value() {
+>value : T
+
+        throw new Error();
+>new Error() : Error
+>Error : ErrorConstructor
+    }
+}
+
+/** @param {any} Base */
+function mixin(Base) {
+>mixin : (Base: any) => typeof (Anonymous class)
+>Base : any
+
+    return class extends Base {
+>class extends Base {        extra = 1;    } : typeof (Anonymous class)
+>Base : any
+
+        extra = 1;
+>extra : number
+>1 : 1
+
+    };
+}
+
+/** @extends {A<string>} */
+class B extends mixin(A) {}
+>B : B
+>mixin(A) : (Anonymous class)
+>mixin : (Base: any) => typeof (Anonymous class)
+>A : typeof A
+
+const value = new B().value;
+>value : any
+>new B().value : any
+>new B() : B
+>B : typeof B
+>value : any
+
+const extra = new B().extra;
+>extra : number
+>new B().extra : number
+>new B() : B
+>B : typeof B
+>extra : number
+
