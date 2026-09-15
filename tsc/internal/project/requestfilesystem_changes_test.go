@@ -81,7 +81,7 @@ func TestFileChangesIncludeDirectoryTombstones(t *testing.T) {
 		Kind:         RequestFileSystemKindLayer,
 		Files:        map[string]string{"/replaced.ts": "new"},
 		RemovedPaths: []string{"removed", "/missing", "/replaced.ts"},
-	}, baseFileSource(base, vfstest.FromMap(map[string]string{}, true)), base, "/")
+	}, baseFileSource(base.requestFileSystem, vfstest.FromMap(map[string]string{}, true)), base.requestFileSystem, "/")
 	assert.Assert(t, !summary.InvalidateAll)
 	assert.Assert(t, summary.IncludesWatchChangeOutsideNodeModules)
 	// The removed directory, the symlink aliasing it, and the base layer's files
@@ -145,7 +145,7 @@ func TestFileChangesIncludeRecursiveSymlinkAliases(t *testing.T) {
 	addFileChanges(&summary, &RequestFileSystem{
 		Kind:  RequestFileSystemKindLayer,
 		Files: map[string]string{"/dir/file.ts": "new"},
-	}, baseFileSource(base, vfstest.FromMap(map[string]string{}, true)), base, "/")
+	}, baseFileSource(base.requestFileSystem, vfstest.FromMap(map[string]string{}, true)), base.requestFileSystem, "/")
 	assert.Equal(t, summary.Changed.Len(), 2)
 	assert.Assert(t, summary.Changed.Has("file:///dir/file.ts"))
 	assert.Assert(t, summary.Changed.Has("file:///dir/link/file.ts"))
@@ -163,7 +163,7 @@ func TestFileChangesIncludeRootSymlinkAliases(t *testing.T) {
 		},
 	}, vfstest.FromMap(map[string]string{}, true), "/")
 	assert.NilError(t, err)
-	source := baseFileSource(base, vfstest.FromMap(map[string]string{}, true))
+	source := baseFileSource(base.requestFileSystem, vfstest.FromMap(map[string]string{}, true))
 	file := source.GetFile("/link/file.ts")
 	assert.Assert(t, file != nil)
 	assert.Equal(t, file.Content(), "old")
@@ -172,7 +172,7 @@ func TestFileChangesIncludeRootSymlinkAliases(t *testing.T) {
 	addFileChanges(&summary, &RequestFileSystem{
 		Kind:  RequestFileSystemKindLayer,
 		Files: map[string]string{"/file.ts": "new"},
-	}, source, base, "/")
+	}, source, base.requestFileSystem, "/")
 	assert.Equal(t, summary.Changed.Len(), 2)
 	assert.Assert(t, summary.Changed.Has("file:///file.ts"))
 	assert.Assert(t, summary.Changed.Has("file:///link/file.ts"))

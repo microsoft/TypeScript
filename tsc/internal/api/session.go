@@ -3074,7 +3074,7 @@ func (s *Session) handleEmit(ctx context.Context, params *EmitParams) (*EmitResp
 	if err != nil {
 		return nil, err
 	}
-	if sd.snapshot.HasFullFileSystem() {
+	if sd.snapshot.HasFullFileSystemLayer() {
 		outputFiles = make(map[string]string)
 		var outputMu sync.Mutex
 		options.WriteFile = func(fileName string, text string, _ *compiler.WriteFileData) error {

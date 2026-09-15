@@ -793,7 +793,7 @@ func TestReleaseSnapshotCompactsSoleLayeredFileSystem(t *testing.T) {
 	assert.Assert(t, !ok)
 	_, ok = layeredSnapshot.ReadFile("/host.ts")
 	assert.Assert(t, !ok)
-	assert.Assert(t, layeredSnapshot.HasFullFileSystem())
+	assert.Assert(t, layeredSnapshot.HasFullFileSystemLayer())
 }
 
 func TestEagerSnapshotReleaseDoesNotRetainFileSystemHistory(t *testing.T) {
@@ -835,7 +835,7 @@ func TestEagerSnapshotReleaseDoesNotRetainFileSystemHistory(t *testing.T) {
 		current := session.snapshots[response.Snapshot]
 		assert.Assert(t, current != nil)
 		assert.Equal(t, current.refCount, 1)
-		assert.Assert(t, current.snapshot.HasFullFileSystem())
+		assert.Assert(t, current.snapshot.HasFullFileSystemLayer())
 		actual, ok := current.snapshot.ReadFile("/pkg/index.ts")
 		assert.Assert(t, ok)
 		assert.Equal(t, actual, content)
@@ -878,7 +878,7 @@ func TestSnapshotReleaseCompactsChainedFileSystems(t *testing.T) {
 		current := session.snapshots[responses[i].Snapshot]
 		assert.Assert(t, current != nil)
 		assert.Equal(t, current.refCount, 1)
-		assert.Assert(t, current.snapshot.HasFullFileSystem())
+		assert.Assert(t, current.snapshot.HasFullFileSystemLayer())
 		contents, ok := current.snapshot.ReadFile("/pkg/index.ts")
 		assert.Assert(t, ok)
 		assert.Equal(t, contents, strconv.Itoa(i))
@@ -922,7 +922,7 @@ func TestTemporarySnapshotRetainsLayeredFileSystemHistory(t *testing.T) {
 
 	current := session.snapshots[temporary.Snapshot]
 	assert.Assert(t, current != nil)
-	assert.Assert(t, current.snapshot.HasFullFileSystem())
+	assert.Assert(t, current.snapshot.HasFullFileSystemLayer())
 	contents, ok := current.snapshot.ReadFile("/pkg/index.ts")
 	assert.Assert(t, ok)
 	assert.Equal(t, contents, "layered")

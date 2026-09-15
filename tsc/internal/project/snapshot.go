@@ -378,8 +378,9 @@ func (s *Snapshot) UseCaseSensitiveFileNames() bool {
 	return s.fs.UseCaseSensitiveFileNames()
 }
 
-// HasFullFileSystem reports whether the snapshot uses a complete request filesystem.
-func (s *Snapshot) HasFullFileSystem() bool {
+// HasFullFileSystemLayer reports whether the request filesystem layer blocks all
+// lower snapshot layers.
+func (s *Snapshot) HasFullFileSystemLayer() bool {
 	return s.fs.upperLayer != nil && s.fs.upperLayer.kind == RequestFileSystemKindFull
 }
 
