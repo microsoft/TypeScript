@@ -348,6 +348,46 @@ func newBatchDecoderGetCompletionsAtPositionParams(base json.Value, fields json.
 	})
 }
 
+type batchColumnsGetContextualTypeForArgumentParams struct {
+	Snapshot []SnapshotID `json:"snapshot,omitempty"`
+	Project  []ProjectID  `json:"project,omitempty"`
+	Location []NodeHandle `json:"location,omitempty"`
+	Index    []int32      `json:"index,omitempty"`
+}
+
+func newBatchDecoderGetContextualTypeForArgumentParams(base json.Value, fields json.Value, count int) (batchRequestDecoder, error) {
+	var columns batchColumnsGetContextualTypeForArgumentParams
+	if err := json.Unmarshal(fields, &columns); err != nil {
+		return nil, err
+	}
+	if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
+		return nil, err
+	}
+	if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
+		return nil, err
+	}
+	if err := validateBatchColumn("location", len(columns.Location), count); err != nil {
+		return nil, err
+	}
+	if err := validateBatchColumn("index", len(columns.Index), count); err != nil {
+		return nil, err
+	}
+	return newTypedBatchRequestDecoder[GetContextualTypeForArgumentParams](base, func(params *GetContextualTypeForArgumentParams, index int) {
+		if columns.Snapshot != nil {
+			params.Snapshot = columns.Snapshot[index]
+		}
+		if columns.Project != nil {
+			params.Project = columns.Project[index]
+		}
+		if columns.Location != nil {
+			params.Location = columns.Location[index]
+		}
+		if columns.Index != nil {
+			params.Index = columns.Index[index]
+		}
+	})
+}
+
 type batchColumnsGetContextualTypeParams struct {
 	Snapshot []SnapshotID `json:"snapshot,omitempty"`
 	Project  []ProjectID  `json:"project,omitempty"`
@@ -476,6 +516,46 @@ func newBatchDecoderGetImportAdderEditsParams(base json.Value, fields json.Value
 		}
 		if columns.Actions != nil {
 			params.Actions = columns.Actions[index]
+		}
+	})
+}
+
+type batchColumnsGetIndexInfoOfTypeParams struct {
+	Snapshot []SnapshotID `json:"snapshot,omitempty"`
+	Project  []ProjectID  `json:"project,omitempty"`
+	Type     []TypeID     `json:"type,omitempty"`
+	Kind     []int32      `json:"kind,omitempty"`
+}
+
+func newBatchDecoderGetIndexInfoOfTypeParams(base json.Value, fields json.Value, count int) (batchRequestDecoder, error) {
+	var columns batchColumnsGetIndexInfoOfTypeParams
+	if err := json.Unmarshal(fields, &columns); err != nil {
+		return nil, err
+	}
+	if err := validateBatchColumn("snapshot", len(columns.Snapshot), count); err != nil {
+		return nil, err
+	}
+	if err := validateBatchColumn("project", len(columns.Project), count); err != nil {
+		return nil, err
+	}
+	if err := validateBatchColumn("type", len(columns.Type), count); err != nil {
+		return nil, err
+	}
+	if err := validateBatchColumn("kind", len(columns.Kind), count); err != nil {
+		return nil, err
+	}
+	return newTypedBatchRequestDecoder[GetIndexInfoOfTypeParams](base, func(params *GetIndexInfoOfTypeParams, index int) {
+		if columns.Snapshot != nil {
+			params.Snapshot = columns.Snapshot[index]
+		}
+		if columns.Project != nil {
+			params.Project = columns.Project[index]
+		}
+		if columns.Type != nil {
+			params.Type = columns.Type[index]
+		}
+		if columns.Kind != nil {
+			params.Kind = columns.Kind[index]
 		}
 	})
 }
@@ -2232,6 +2312,8 @@ func newGeneratedBatchRequestDecoder(method Method, base json.Value, fields json
 		return newBatchDecoderGetTypePropertyParams(base, fields, count)
 	case MethodGetLocalTypeParametersOfType:
 		return newBatchDecoderGetTypePropertyParams(base, fields, count)
+	case MethodGetThisTypeOfType:
+		return newBatchDecoderGetTypePropertyParams(base, fields, count)
 	case MethodGetAliasTypeArgumentsOfType:
 		return newBatchDecoderGetTypePropertyParams(base, fields, count)
 	case MethodGetAliasSymbolOfType:
@@ -2258,6 +2340,10 @@ func newGeneratedBatchRequestDecoder(method Method, base json.Value, fields json
 		return newBatchDecoderGetSignaturePropertyParams(base, fields, count)
 	case MethodGetContextualType:
 		return newBatchDecoderGetContextualTypeParams(base, fields, count)
+	case MethodGetContextualTypeForArgument:
+		return newBatchDecoderGetContextualTypeForArgumentParams(base, fields, count)
+	case MethodGetAwaitedType:
+		return newBatchDecoderCheckerTypeParams(base, fields, count)
 	case MethodGetBaseTypeOfLiteralType:
 		return newBatchDecoderGetBaseTypeOfLiteralTypeParams(base, fields, count)
 	case MethodGetNonNullableType:
@@ -2304,6 +2390,12 @@ func newGeneratedBatchRequestDecoder(method Method, base json.Value, fields json
 		return newBatchDecoderGetTypePropertyParams(base, fields, count)
 	case MethodGetPropertyOfType:
 		return newBatchDecoderGetPropertyOfTypeParams(base, fields, count)
+	case MethodGetTypeOfPropertyOfType:
+		return newBatchDecoderGetPropertyOfTypeParams(base, fields, count)
+	case MethodGetIndexInfoOfType:
+		return newBatchDecoderGetIndexInfoOfTypeParams(base, fields, count)
+	case MethodGetIndexTypeOfTypeByKind:
+		return newBatchDecoderGetIndexInfoOfTypeParams(base, fields, count)
 	case MethodGetIndexInfosOfType:
 		return newBatchDecoderCheckerTypeParams(base, fields, count)
 	case MethodGetConstraintOfTypeParameter:
@@ -2331,6 +2423,8 @@ func newGeneratedBatchRequestDecoder(method Method, base json.Value, fields json
 	case MethodGetImmediateAliasedSymbol:
 		return newBatchDecoderCheckerSymbolParams(base, fields, count)
 	case MethodGetTargetSymbol:
+		return newBatchDecoderCheckerSymbolParams(base, fields, count)
+	case MethodGetExportSymbolOfSymbolForChecker:
 		return newBatchDecoderCheckerSymbolParams(base, fields, count)
 	case MethodGetFullyQualifiedName:
 		return newBatchDecoderCheckerSymbolParams(base, fields, count)
