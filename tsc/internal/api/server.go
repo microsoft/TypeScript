@@ -2,6 +2,7 @@ package api
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"io"
 
@@ -127,5 +128,12 @@ func (s *StdioServer) Run(ctx context.Context) error {
 		callbackFS.SetConnection(ctx, conn)
 	}
 
-	return conn.Run(ctx)
+	return serverRunError(ctx, conn.Run(ctx))
+}
+
+func serverRunError(ctx context.Context, err error) error {
+	if ctxErr := ctx.Err(); ctxErr != nil && errors.Is(err, ctxErr) {
+		return nil
+	}
+	return err
 }
