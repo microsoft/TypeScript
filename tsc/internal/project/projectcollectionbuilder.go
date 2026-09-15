@@ -1228,7 +1228,7 @@ func (b *ProjectCollectionBuilder) isSupportedInInferredProject(fileName string)
 	if tspath.IsDynamicFileName(fileName) || core.GetScriptKindFromFileName(fileName) != core.ScriptKindUnknown {
 		return true
 	}
-	if file := b.fs.GetFile(fileName); file != nil && file.IsOverlay() && tspath.GetAnyExtensionFromPath(fileName, nil, false) == "" {
+	if file := b.fs.source.GetFile(fileName); file != nil && file.IsOverlay() && tspath.GetAnyExtensionFromPath(fileName, nil, false) == "" {
 		return true
 	}
 	return tspath.FileExtensionIsOneOf(fileName, b.inferredContentMapperExtensions)

@@ -53,7 +53,7 @@ func newConfigFileRegistryBuilder(
 ) *configFileRegistryBuilder {
 	return &configFileRegistryBuilder{
 		hasRelativePatternCapability: hasRelativePatternCapability,
-		fs:                           newSourceFS(false, fs, fs.toPath),
+		fs:                           newSourceFS(false, fs.source, fs.toPath),
 		isOpenFile:                   fs.isOpenFile,
 		base:                         oldConfigFileRegistry,
 		sessionOptions:               sessionOptions,

@@ -1506,8 +1506,16 @@ export interface EmitOutputFile {
 }
 
 /**
- * RequestDirectoryEntries is a cached directory listing. Entry names are
- * relative to the directory, matching vfs.GetAccessibleEntries.
+ * RequestDirectoryEntries is the complete result of enumerating one directory.
+ * Entry names are relative to it.
+ *
+ * Supplying a listing makes the caller responsible for keeping it consistent with
+ * the files the filesystem exposes, whether from Files or from a lower layer,
+ * because it does not affect FileExists or ReadFile for paths inside that
+ * directory. In particular, a layer filesystem should not supply a listing for a
+ * directory that exists in a lower layer: the listing replaces what enumeration
+ * returns without hiding anything that layer contains. Use RemovedPaths to hide
+ * paths.
  */
 export interface RequestDirectoryEntries {
     files: string[];

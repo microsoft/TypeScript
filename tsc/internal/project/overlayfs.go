@@ -88,6 +88,12 @@ func newDiskFile(fileName string, content string) *diskFile {
 
 var _ FileHandle = (*diskFile)(nil)
 
+// NewFileHandle creates an immutable file handle for content that does not come
+// from disk, such as a file supplied by an API request filesystem.
+func NewFileHandle(fileName string, content string) FileHandle {
+	return newDiskFile(fileName, content)
+}
+
 func (f *diskFile) Version() int32 {
 	return 0
 }

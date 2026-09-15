@@ -23,8 +23,16 @@ const (
 	KindLayer Kind = "layer"
 )
 
-// RequestDirectoryEntries is a cached directory listing. Entry names are
-// relative to the directory, matching vfs.GetAccessibleEntries.
+// RequestDirectoryEntries is the complete result of enumerating one directory.
+// Entry names are relative to it.
+//
+// Supplying a listing makes the caller responsible for keeping it consistent with
+// the files the filesystem exposes, whether from Files or from a lower layer,
+// because it does not affect FileExists or ReadFile for paths inside that
+// directory. In particular, a layer filesystem should not supply a listing for a
+// directory that exists in a lower layer: the listing replaces what enumeration
+// returns without hiding anything that layer contains. Use RemovedPaths to hide
+// paths.
 type RequestDirectoryEntries struct {
 	Files       []string `json:"files" nonnil:"true"`
 	Directories []string `json:"directories" nonnil:"true"`
@@ -55,11 +63,14 @@ type RequestFileSystem struct {
 	RemovedPaths []string `json:"removedPaths,omitempty"`
 }
 
-// requestFileSystem is either a full filesystem or a layer over the session
-// host filesystem. Its base is always the host, which may be a callback filesystem;
-// inherited request entries are compacted into paths.
+// requestFileSystem is either a full filesystem or a layer over the session host
+// filesystem; inherited request entries are compacted into paths. On its own it
+// reads its contents over the host. Stack binds it to a snapshot instead, putting
+// it above that snapshot's editor overlays and cached files.
 type requestFileSystem struct {
-	kind                  Kind
+	kind Kind
+	// base is the filesystem beneath this one: the session host, or, once stacked
+	// onto a snapshot, the host as that snapshot sees it.
 	base                  vfs.FS
 	currentDirectory      string
 	useCaseSensitiveNames bool
@@ -78,45 +89,65 @@ type requestPathLookup struct {
 	info            vfs.FileInfo
 	fileSystem      vfs.FS
 	followedSymlink bool
-	ok              bool
+	// host is set when an explicit host symlink routed the path out of this
+	// filesystem. Such paths bypass any layers stacked beneath it.
+	host bool
+	ok   bool
 }
 
-func getRequestFileSystem(fileSystem vfs.FS) *requestFileSystem {
-	requestFileSystem, _ := fileSystem.(*requestFileSystem)
+func getRequestFileSystem(layer project.FileSystemLayer) *requestFileSystem {
+	requestFileSystem, _ := layer.(*requestFileSystem)
 	return requestFileSystem
 }
 
-// NewForUpdate creates a request filesystem for a snapshot update. Layers over
-// request filesystems are compacted eagerly so the result does not retain its
-// base snapshot's filesystem.
-func NewForUpdate(params *RequestFileSystem, base vfs.FS, currentDirectory string, fileChanges *project.FileChangeSummary) (vfs.FS, error) {
+// NewForUpdate creates the request filesystem layer for a snapshot update.
+//
+// inherited is the layer the update continues from, which a new layer is compacted
+// onto so the result does not retain its base snapshot's filesystem. base is the
+// snapshot the new layer will be stacked on; its contents, including editor
+// overlays, determine which paths the layer actually changes. The two differ when
+// an update names no base snapshot: it still applies to the session's current
+// snapshot but deliberately starts its filesystem over from the host. This weirdness
+// will go away in #64204.
+func NewForUpdate(
+	params *RequestFileSystem,
+	inherited project.FileSystemLayer,
+	base project.FileSource,
+	host vfs.FS,
+	currentDirectory string,
+	fileChanges *project.FileChangeSummary,
+) (project.FileSystemLayer, error) {
 	if params == nil {
-		return base, nil
+		return inherited, nil
 	}
-	baseFileSystem := base
+	inheritedLayer := getRequestFileSystem(inherited)
 	if params.Kind == KindFull {
-		if requestBase := getRequestFileSystem(base); requestBase != nil {
-			baseFileSystem = requestBase.base
-		}
+		// A full filesystem replaces everything the snapshot could see, so no
+		// per-path comparison against it is meaningful.
+		fileChanges.InvalidateAll = true
+	} else if base != nil {
+		addFileChanges(fileChanges, params, base, inheritedLayer, currentDirectory)
 	}
-	if params.Kind == KindLayer {
-		addFileChanges(fileChanges, params, baseFileSystem, currentDirectory)
-	}
-	fileSystem, err := newRequestFileSystemWorker(params, baseFileSystem, currentDirectory)
+	return newLayer(params, inheritedLayer, host, currentDirectory)
+}
+
+// newLayer builds one request filesystem, compacting it onto the layer it replaces
+// so the result does not retain its base snapshot's filesystem.
+func newLayer(params *RequestFileSystem, base *requestFileSystem, host vfs.FS, currentDirectory string) (*requestFileSystem, error) {
+	fileSystem, err := newRequestFileSystemWorker(params, host, currentDirectory)
 	if err != nil {
 		return nil, err
 	}
-	baseRequestFileSystem := getRequestFileSystem(baseFileSystem)
-	if baseRequestFileSystem != nil {
-		compacted := fileSystem.applyTo(*baseRequestFileSystem)
+	if params.Kind == KindLayer && base != nil {
+		compacted := fileSystem.applyTo(*base)
 		return &compacted, nil
 	}
 	return fileSystem, nil
 }
 
-// HasFullFileSystem reports whether fileSystem contains a complete request filesystem.
-func HasFullFileSystem(fileSystem vfs.FS) bool {
-	requestFileSystem := getRequestFileSystem(fileSystem)
+// HasFullFileSystem reports whether layer is a complete request filesystem.
+func HasFullFileSystem(layer project.FileSystemLayer) bool {
+	requestFileSystem := getRequestFileSystem(layer)
 	return requestFileSystem != nil && requestFileSystem.kind == KindFull
 }
 
@@ -359,6 +390,7 @@ func (s requestFileSystem) lookupPath(path string) requestPathLookup {
 		if resolvedFallback == requestFallbackMissing {
 			return requestPathLookup{}
 		}
+		result.host = resolved.host
 		result.fileSystem = s.base
 		result.ok = result.fileSystem != nil
 	}
@@ -425,18 +457,36 @@ func (s requestFileSystem) DirectoryExists(directoryName string) bool {
 }
 
 func (s requestFileSystem) GetAccessibleEntries(directoryName string) vfs.Entries {
+	return s.accessibleEntries(directoryName, s.baseFileSystem().GetAccessibleEntries)
+}
+
+// Shadows implements project.FileSystemLayer: this filesystem answers for the path
+// itself rather than deferring to whatever it was stacked over. Supplying a
+// directory listing does not shadow anything beneath it, since a listing is the
+// source of truth for enumerating that directory only.
+func (s requestFileSystem) Shadows(path string) bool {
+	return s.lookupPath(path).fileSystem == nil
+}
+
+// accessibleEntries lists a directory, taking any entries this filesystem does not
+// supply itself from below. Paths routed out by an explicit host symlink always read
+// the host rather than below, since they deliberately escape this filesystem.
+func (s requestFileSystem) accessibleEntries(directoryName string, below func(string) vfs.Entries) vfs.Entries {
 	lookup := s.lookupPath(directoryName)
 	if !lookup.ok || lookup.info != nil && !lookup.info.IsDir() {
 		return vfs.Entries{Symlinks: map[string]struct{}{}}
 	}
+	if lookup.host {
+		below = s.baseFileSystem().GetAccessibleEntries
+	}
 	var result vfs.Entries
 	if lookup.fileSystem != nil {
-		result = s.removeEntries(lookup.path, lookup.fileSystem.GetAccessibleEntries(lookup.path))
+		result = s.removeEntries(lookup.path, below(lookup.path))
 	} else {
 		localEntries, explicit, _ := s.getLocalEntries(lookup.path)
 		result = localEntries
 		if s.kind == KindLayer && !explicit && !s.blocksFallback(directoryName) && !s.blocksFallback(lookup.path) {
-			result = s.removeEntries(lookup.path, s.baseFileSystem().GetAccessibleEntries(lookup.path))
+			result = s.removeEntries(lookup.path, below(lookup.path))
 			result = mergeEntries(result, localEntries, s.equalEntryNames)
 		}
 		result = s.addSymlinkEntries(lookup.path, result)

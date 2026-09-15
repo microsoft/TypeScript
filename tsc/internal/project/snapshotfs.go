@@ -17,12 +17,46 @@ import (
 	"github.com/zeebo/xxh3"
 )
 
+// FileSource is a view of the filesystem that also hands out FileHandles. It is
+// deliberately self-contained: every filesystem question is answered here, so
+// stacking one source on another composes and nothing can reach past a layer to
+// the filesystem underneath.
 type FileSource interface {
-	FS() vfs.FS
 	GetFile(fileName string) FileHandle
 	GetFileByPath(fileName string, path tspath.Path) FileHandle
 	FileExists(fileName string, path tspath.Path) bool
+	DirectoryExists(path string) bool
 	GetAccessibleEntries(path string) vfs.Entries
+	Realpath(path string) string
+	Stat(path string) vfs.FileInfo
+	UseCaseSensitiveFileNames() bool
+	// WalkDir is deliberately absent. Nothing in the project system calls it.
+}
+
+type FileSystemLayer interface {
+	vfs.FS
+	// Shadows reports whether the layer decides what is at path on its own, rather
+	// than deferring to what it was stacked over.
+	Shadows(path string) bool
+	// Stack returns a FileSource reading from this layer, resolving any path the
+	// layer does not supply itself through base.
+	Stack(base FileSource) FileSource
+}
+
+// stack returns the top of a snapshot's file source stack.
+func stack(layer FileSystemLayer, base FileSource) FileSource {
+	if layer == nil {
+		return base
+	}
+	return layer.Stack(base)
+}
+
+// withSource wires a SnapshotFS to the top of its own stack. Every SnapshotFS is
+// constructed through here so that reads cannot bypass an API-supplied layer.
+func withSource(fs *SnapshotFS) *SnapshotFS {
+	fs.source = stack(fs.layer, fs)
+	fs.sourceFS = newSourceFS(false, fs.source, fs.toPath)
+	return fs
 }
 
 var (
@@ -65,12 +99,31 @@ type SnapshotFS struct {
 	// for files inside node_modules that are accessed through directory symlinks.
 	// This allows watch events (which use realpaths) to invalidate files cached under symlink paths.
 	nodeModulesRealpathAliases map[tspath.Path]*realpathAliasSet
+	// layer is an API-supplied filesystem stacked above everything else here.
+	layer FileSystemLayer
+	// source is the top of the stack and the only view consumers outside this file
+	// should read: the layer over these overlays, cached files, and the host.
+	source FileSource
+	// sourceFS presents source as a plain vfs.FS.
+	sourceFS *sourceFS
 }
 
 type memoizedDiskFile func() FileHandle
 
-func (s *SnapshotFS) FS() vfs.FS {
-	return s.fs
+// Realpath implements FileSource. Overlays and layer contents have no path on disk,
+// so symlink resolution is the host's answer for paths that do exist there.
+func (s *SnapshotFS) Realpath(path string) string {
+	return s.fs.Realpath(path)
+}
+
+// Stat implements FileSource.
+func (s *SnapshotFS) Stat(path string) vfs.FileInfo {
+	return s.fs.Stat(path)
+}
+
+// UseCaseSensitiveFileNames implements FileSource.
+func (s *SnapshotFS) UseCaseSensitiveFileNames() bool {
+	return s.fs.UseCaseSensitiveFileNames()
 }
 
 func (s *SnapshotFS) GetFile(fileName string) FileHandle {
@@ -102,6 +155,20 @@ func (s *SnapshotFS) GetFileByPath(fileName string, path tspath.Path) FileHandle
 	}))
 	entry, _ := s.readFiles.LoadOrStore(path, newEntry)
 	return entry()
+}
+
+// DirectoryExists reports directories the snapshot knows of even when the host does
+// not, which is the case for a directory that exists only because an editor overlay
+// lives inside it.
+func (s *SnapshotFS) DirectoryExists(directoryName string) bool {
+	path := s.toPath(directoryName)
+	if _, ok := s.overlayDirectories[path]; ok {
+		return true
+	}
+	if _, ok := s.diskDirectories[path]; ok {
+		return true
+	}
+	return s.fs.DirectoryExists(directoryName)
 }
 
 func (s *SnapshotFS) GetAccessibleEntries(directoryName string) vfs.Entries {
@@ -142,10 +209,16 @@ type snapshotFSBuilder struct {
 	nodeModulesRealpathAliases *dirty.SyncMap[tspath.Path, *realpathAliasSet]
 	toPath                     func(string) tspath.Path
 	accessibleEntries          collections.SyncMap[tspath.Path, *vfs.Entries]
+	// layer is an API-supplied filesystem stacked above everything else here.
+	layer FileSystemLayer
+	// source is the top of the stack and the only view consumers outside this file
+	// should read: the layer over these overlays, cached files, and the host.
+	source FileSource
 }
 
 func newSnapshotFSBuilder(
 	fs vfs.FS,
+	layer FileSystemLayer,
 	prevOverlays map[tspath.Path]*Overlay,
 	overlays map[tspath.Path]*Overlay,
 	diskFiles map[tspath.Path]*diskFile,
@@ -180,8 +253,9 @@ func newSnapshotFSBuilder(
 		}
 	}
 
-	return &snapshotFSBuilder{
+	builder := &snapshotFSBuilder{
 		fs:                         cachedFS,
+		layer:                      layer,
 		prevOverlays:               prevOverlays,
 		overlays:                   overlays,
 		overlayDirectories:         overlayDirectories,
@@ -190,10 +264,24 @@ func newSnapshotFSBuilder(
 		nodeModulesRealpathAliases: dirty.NewSyncMap(nodeModulesRealpathAliases),
 		toPath:                     toPath,
 	}
+	builder.source = stack(layer, builder)
+	return builder
 }
 
-func (s *snapshotFSBuilder) FS() vfs.FS {
-	return s.fs
+// Realpath implements FileSource. Overlays and layer contents have no path on disk,
+// so symlink resolution is the host's answer for paths that do exist there.
+func (s *snapshotFSBuilder) Realpath(path string) string {
+	return s.fs.Realpath(path)
+}
+
+// Stat implements FileSource.
+func (s *snapshotFSBuilder) Stat(path string) vfs.FileInfo {
+	return s.fs.Stat(path)
+}
+
+// UseCaseSensitiveFileNames implements FileSource.
+func (s *snapshotFSBuilder) UseCaseSensitiveFileNames() bool {
+	return s.fs.UseCaseSensitiveFileNames()
 }
 
 func (s *snapshotFSBuilder) Finalize() (*SnapshotFS, bool) {
@@ -276,15 +364,16 @@ func (s *snapshotFSBuilder) Finalize() (*SnapshotFS, bool) {
 
 	nodeModulesRealpathAliases, aliasesChanged := s.nodeModulesRealpathAliases.Finalize()
 
-	return &SnapshotFS{
+	return withSource(&SnapshotFS{
 		fs:                         s.fs,
+		layer:                      s.layer,
 		overlays:                   s.overlays,
 		overlayDirectories:         s.overlayDirectories,
 		diskFiles:                  diskFiles,
 		diskDirectories:            core.FirstResult(s.diskDirectories.Finalize()),
 		nodeModulesRealpathAliases: nodeModulesRealpathAliases,
 		toPath:                     s.toPath,
-	}, changed || aliasesChanged
+	}), changed || aliasesChanged
 }
 
 func (s *snapshotFSBuilder) isOpenFile(path tspath.Path) bool {
@@ -318,6 +407,20 @@ func (s *snapshotFSBuilder) GetFileByPath(fileName string, path tspath.Path) Fil
 		return file
 	}
 	return s.getDiskFile(fileName, path, false)
+}
+
+// DirectoryExists reports directories the snapshot knows of even when the host does
+// not, which is the case for a directory that exists only because an editor overlay
+// lives inside it.
+func (s *snapshotFSBuilder) DirectoryExists(directoryName string) bool {
+	path := s.toPath(directoryName)
+	if _, ok := s.overlayDirectories[path]; ok {
+		return true
+	}
+	if _, ok := s.diskDirectories.Get(path); ok {
+		return true
+	}
+	return s.fs.DirectoryExists(directoryName)
 }
 
 func (s *snapshotFSBuilder) GetAccessibleEntries(path string) vfs.Entries {
@@ -482,7 +585,16 @@ func (s *snapshotFSBuilder) markDirtyFiles(change FileChangeSummary) FileChangeS
 		var filteredChanged collections.SyncSet[lsproto.DocumentUri]
 		wg := core.NewWorkGroup(false)
 		for uri := range change.Changed.Keys() {
-			path := s.toPath(uri.FileName())
+			fileName := uri.FileName()
+			path := s.toPath(fileName)
+			// A path the layer decides has nothing on disk worth re-reading, so
+			// compare what it now supplies against what the snapshot already had.
+			if s.layer != nil && s.layer.Shadows(fileName) {
+				if !s.layerFileMatchesCache(fileName, path) {
+					filteredChanged.Add(uri)
+				}
+				continue
+			}
 			if _, ok := s.overlays[path]; ok {
 				filteredChanged.Add(uri)
 				continue
@@ -512,6 +624,21 @@ func (s *snapshotFSBuilder) markDirtyFiles(change FileChangeSummary) FileChangeS
 		}
 	}
 	return change
+}
+
+// layerFileMatchesCache reports whether the layer now supplies exactly what the
+// snapshot already had at path, in which case nothing downstream needs rebuilding.
+func (s *snapshotFSBuilder) layerFileMatchesCache(fileName string, path tspath.Path) bool {
+	file := s.source.GetFileByPath(fileName, path)
+	if file == nil {
+		return false
+	}
+	entry, ok := s.diskFiles.Load(path)
+	if !ok {
+		return false
+	}
+	cached := entry.Value()
+	return cached != nil && cached.Hash() == file.Hash()
 }
 
 func (s *snapshotFSBuilder) reloadEntryIfContentChanged(entry *dirty.SyncMapEntry[tspath.Path, *diskFile]) (changed bool) {
@@ -791,7 +918,7 @@ func (fs *sourceFS) GetFileByPath(fileName string, path tspath.Path) FileHandle 
 
 // DirectoryExists implements vfs.FS.
 func (fs *sourceFS) DirectoryExists(path string) bool {
-	exists := fs.source.FS().DirectoryExists(path)
+	exists := fs.source.DirectoryExists(path)
 	if !exists && fs.tracking {
 		fs.missingDirectories.Add(fs.toPath(path))
 	}
@@ -819,22 +946,22 @@ func (fs *sourceFS) ReadFile(path string) (contents string, ok bool) {
 
 // Realpath implements vfs.FS.
 func (fs *sourceFS) Realpath(path string) string {
-	return fs.source.FS().Realpath(path)
+	return fs.source.Realpath(path)
 }
 
 // Stat implements vfs.FS.
 func (fs *sourceFS) Stat(path string) vfs.FileInfo {
-	return fs.source.FS().Stat(path)
+	return fs.source.Stat(path)
 }
 
 // UseCaseSensitiveFileNames implements vfs.FS.
 func (fs *sourceFS) UseCaseSensitiveFileNames() bool {
-	return fs.source.FS().UseCaseSensitiveFileNames()
+	return fs.source.UseCaseSensitiveFileNames()
 }
 
-// WalkDir implements vfs.FS.
+// WalkDir implements vfs.FS. A snapshot cannot be walked: see FileSource.
 func (fs *sourceFS) WalkDir(root string, walkFn vfs.WalkDirFunc) error {
-	return fs.source.FS().WalkDir(root, walkFn)
+	panic("unimplemented")
 }
 
 // WriteFile implements vfs.FS.

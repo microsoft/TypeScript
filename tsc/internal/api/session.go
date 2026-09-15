@@ -46,9 +46,8 @@ var sessionIDCounter atomic.Uint64
 // Multiple clients may hold references to the same snapshot via ref counting;
 // the registries are cleaned up when refCount reaches zero.
 type snapshotData struct {
-	snapshot   *project.Snapshot
-	fileSystem vfs.FS
-	refCount   int
+	snapshot *project.Snapshot
+	refCount int
 
 	// Symbol IDs come from ast.GetSymbolId, a global atomic counter, so the same
 	// *ast.Symbol pointer always has the same unique ID across all projects in the
@@ -504,6 +503,16 @@ func (s *Session) fileSystem() vfs.FS {
 
 func (s *Session) useCaseSensitiveFileNames() bool {
 	return s.snapshotHost.FS().UseCaseSensitiveFileNames()
+}
+
+// baseSnapshot returns the snapshot an update without an explicit base will build on.
+func (s *Session) baseSnapshot() *project.Snapshot {
+	if s.projectSession != nil {
+		return s.projectSession.Snapshot()
+	}
+	s.compatibilityMu.Lock()
+	defer s.compatibilityMu.Unlock()
+	return s.compatibilitySnapshot
 }
 
 func (s *Session) apiUpdate(
@@ -1204,21 +1213,26 @@ func (s *Session) handleUpdateSnapshot(ctx context.Context, params *UpdateSnapsh
 	fileChanges := s.toFileChangeSummary(params.FileChanges)
 
 	apiRequest := &project.APISnapshotRequest{}
-	var baseRequestFileSystem vfs.FS
+	// Without an explicit base snapshot the update still applies to the session's
+	// current snapshot, but inherits no layer from it: the legacy updateSnapshot
+	// API starts its filesystem over from the host. Removed by the snapshot state
+	// redesign in #64154.
+	var inherited project.FileSystemLayer
+	base := s.baseSnapshot()
 	if baseSD != nil {
-		baseRequestFileSystem = baseSD.fileSystem
+		inherited = baseSD.snapshot.FileSystemLayer()
+		base = baseSD.snapshot
 	}
-	if baseRequestFileSystem == nil && params.FileSystem != nil {
-		baseRequestFileSystem = s.fileSystem()
+	var baseSource project.FileSource
+	if base != nil {
+		baseSource = base.FileSource()
 	}
 	sd := newSnapshotData()
 	var err error
-	sd.fileSystem, err = requestfilesystem.NewForUpdate(params.FileSystem, baseRequestFileSystem, s.currentDirectory(), &fileChanges)
+	apiRequest.FileSystem, err = requestfilesystem.NewForUpdate(params.FileSystem, inherited, baseSource, s.fileSystem(), s.currentDirectory(), &fileChanges)
 	if err != nil {
 		return nil, fmt.Errorf("%w: %w", ErrClientError, err)
 	}
-	apiRequest.FileSystem = sd.fileSystem
-	apiRequest.ReplaceFileSystem = params.FileSystem != nil && params.FileSystem.Kind == requestfilesystem.KindFull
 
 	// Open projects: only take a new ref for projects we aren't already holding open.
 	var openedProjects []tspath.Path
@@ -1343,9 +1357,8 @@ func (s *Session) handleUpdateTemporarySnapshot(ctx context.Context, params *Upd
 
 	uri := params.File.ToURI(s.currentDirectory())
 	sd := newSnapshotData()
-	sd.fileSystem = baseSD.fileSystem
 
-	snapshot, err := s.snapshotHost.CloneSnapshotWithTemporaryFile(ctx, baseSD.snapshot, sd.fileSystem, uri, params.NewText)
+	snapshot, err := s.snapshotHost.CloneSnapshotWithTemporaryFile(ctx, baseSD.snapshot, uri, params.NewText)
 	if err != nil {
 		return nil, fmt.Errorf("%w: failed to update temporary snapshot: %w", ErrClientError, err)
 	}
@@ -1386,7 +1399,6 @@ func (s *Session) handleCreateProgram(ctx context.Context, params *CreateProgram
 
 	var oldSnapshot *project.Snapshot
 	var oldProject *project.Project
-	var oldFileSystem vfs.FS
 	if params.OldProgram != nil {
 		oldSnapshotID := params.OldProgram.Snapshot
 		oldSD, err := s.retainSnapshotData(oldSnapshotID)
@@ -1396,14 +1408,12 @@ func (s *Session) handleCreateProgram(ctx context.Context, params *CreateProgram
 		defer func() { _ = s.releaseSnapshot(oldSnapshotID) }()
 
 		oldSnapshot = oldSD.snapshot
-		oldFileSystem = oldSD.fileSystem
 		oldProject, err = oldSD.getProject(params.OldProgram.Project)
 		if err != nil {
 			return nil, err
 		}
 	}
 	sd := newSnapshotData()
-	sd.fileSystem = oldFileSystem
 
 	baseSnapshot := oldSnapshot
 	fileChanges := s.toFileChangeSummary(params.FileChanges)
@@ -1420,7 +1430,6 @@ func (s *Session) handleCreateProgram(ctx context.Context, params *CreateProgram
 	snapshot := s.snapshotHost.CloneSnapshotForProgram(
 		ctx,
 		baseSnapshot,
-		sd.fileSystem,
 		rootFileNames,
 		&params.CreateProgramOptions.CompilerOptions,
 		params.CreateProgramOptions.ProjectReferences,
@@ -3084,7 +3093,7 @@ func (s *Session) handleEmit(ctx context.Context, params *EmitParams) (*EmitResp
 	if err != nil {
 		return nil, err
 	}
-	if requestfilesystem.HasFullFileSystem(sd.fileSystem) {
+	if requestfilesystem.HasFullFileSystem(sd.snapshot.FileSystemLayer()) {
 		outputFiles = make(map[string]string)
 		var outputMu sync.Mutex
 		options.WriteFile = func(fileName string, text string, _ *compiler.WriteFileData) error {

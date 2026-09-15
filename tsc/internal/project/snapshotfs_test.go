@@ -29,6 +29,7 @@ func TestSnapshotFSBuilder(t *testing.T) {
 
 		builder := newSnapshotFSBuilder(
 			testFS,
+			nil,
 			make(map[tspath.Path]*Overlay), // prevOverlays
 			make(map[tspath.Path]*Overlay), // overlays
 			make(map[tspath.Path]*diskFile),
@@ -69,6 +70,7 @@ func TestSnapshotFSBuilder(t *testing.T) {
 
 		builder := newSnapshotFSBuilder(
 			testFS,
+			nil,
 			make(map[tspath.Path]*Overlay), // prevOverlays
 			make(map[tspath.Path]*Overlay), // overlays
 			make(map[tspath.Path]*diskFile),
@@ -117,6 +119,7 @@ func TestSnapshotFSBuilder(t *testing.T) {
 
 		builder := newSnapshotFSBuilder(
 			testFS,
+			nil,
 			make(map[tspath.Path]*Overlay), // prevOverlays
 			make(map[tspath.Path]*Overlay), // overlays
 			existingDiskFiles,
@@ -170,6 +173,7 @@ func TestSnapshotFSBuilder(t *testing.T) {
 
 		builder := newSnapshotFSBuilder(
 			testFS,
+			nil,
 			make(map[tspath.Path]*Overlay), // prevOverlays
 			make(map[tspath.Path]*Overlay), // overlays
 			existingDiskFiles,
@@ -232,6 +236,7 @@ func TestSnapshotFSBuilder(t *testing.T) {
 
 		builder := newSnapshotFSBuilder(
 			testFS,
+			nil,
 			make(map[tspath.Path]*Overlay), // prevOverlays
 			make(map[tspath.Path]*Overlay), // overlays
 			existingDiskFiles,
@@ -276,6 +281,7 @@ func TestSnapshotFSBuilder(t *testing.T) {
 
 		builder := newSnapshotFSBuilder(
 			testFS,
+			nil,
 			make(map[tspath.Path]*Overlay), // prevOverlays
 			make(map[tspath.Path]*Overlay), // overlays
 			existingDiskFiles,
@@ -309,6 +315,7 @@ func TestSnapshotFSBuilder(t *testing.T) {
 
 		builder := newSnapshotFSBuilder(
 			testFS,
+			nil,
 			make(map[tspath.Path]*Overlay), // prevOverlays
 			overlays,
 			make(map[tspath.Path]*diskFile),
@@ -354,6 +361,7 @@ func TestSnapshotFSBuilder(t *testing.T) {
 
 		builder := newSnapshotFSBuilder(
 			testFS,
+			nil,
 			make(map[tspath.Path]*Overlay), // prevOverlays
 			make(map[tspath.Path]*Overlay), // overlays
 			existingDiskFiles,
@@ -441,6 +449,7 @@ func TestSnapshotFSBuilder(t *testing.T) {
 
 		builder := newSnapshotFSBuilder(
 			testFS,
+			nil,
 			make(map[tspath.Path]*Overlay), // prevOverlays
 			overlays,
 			make(map[tspath.Path]*diskFile),
@@ -483,6 +492,7 @@ func TestSnapshotFSBuilder(t *testing.T) {
 
 		builder := newSnapshotFSBuilder(
 			testFS,
+			nil,
 			make(map[tspath.Path]*Overlay), // prevOverlays
 			overlays,
 			make(map[tspath.Path]*diskFile),
@@ -517,6 +527,7 @@ func TestSnapshotFSBuilder(t *testing.T) {
 
 		builder := newSnapshotFSBuilder(
 			testFS,
+			nil,
 			make(map[tspath.Path]*Overlay), // prevOverlays
 			overlays,
 			make(map[tspath.Path]*diskFile),
@@ -904,6 +915,7 @@ func TestAutoImportBuilderFS(t *testing.T) {
 
 		builder := newSnapshotFSBuilder(
 			testFS,
+			nil,
 			make(map[tspath.Path]*Overlay),
 			make(map[tspath.Path]*Overlay),
 			make(map[tspath.Path]*diskFile),
@@ -956,6 +968,7 @@ func TestRealpathAliasLifecycle(t *testing.T) {
 
 		builder := newSnapshotFSBuilder(
 			testFS,
+			nil,
 			make(map[tspath.Path]*Overlay),
 			make(map[tspath.Path]*Overlay),
 			make(map[tspath.Path]*diskFile),
@@ -995,6 +1008,7 @@ func TestRealpathAliasLifecycle(t *testing.T) {
 
 		builder := newSnapshotFSBuilder(
 			testFS,
+			nil,
 			make(map[tspath.Path]*Overlay),
 			make(map[tspath.Path]*Overlay),
 			make(map[tspath.Path]*diskFile),
@@ -1021,6 +1035,7 @@ func TestRealpathAliasLifecycle(t *testing.T) {
 		// Build first snapshot.
 		builder1 := newSnapshotFSBuilder(
 			testFS,
+			nil,
 			make(map[tspath.Path]*Overlay),
 			make(map[tspath.Path]*Overlay),
 			make(map[tspath.Path]*diskFile),
@@ -1035,6 +1050,7 @@ func TestRealpathAliasLifecycle(t *testing.T) {
 		// Build second snapshot from the first, without reading the file again.
 		builder2 := newSnapshotFSBuilder(
 			testFS,
+			nil,
 			make(map[tspath.Path]*Overlay),
 			make(map[tspath.Path]*Overlay),
 			snapshot1.diskFiles,
@@ -1062,6 +1078,7 @@ func TestRealpathAliasLifecycle(t *testing.T) {
 		// Build first snapshot — read both files.
 		builder1 := newSnapshotFSBuilder(
 			testFS,
+			nil,
 			make(map[tspath.Path]*Overlay),
 			make(map[tspath.Path]*Overlay),
 			make(map[tspath.Path]*diskFile),
@@ -1083,6 +1100,7 @@ func TestRealpathAliasLifecycle(t *testing.T) {
 		// Build second snapshot — delete one file via markDirtyFiles.
 		builder2 := newSnapshotFSBuilder(
 			testFS,
+			nil,
 			make(map[tspath.Path]*Overlay),
 			make(map[tspath.Path]*Overlay),
 			snapshot1.diskFiles,
@@ -1120,6 +1138,7 @@ func TestRealpathAliasLifecycle(t *testing.T) {
 
 		builder := newSnapshotFSBuilder(
 			testFS,
+			nil,
 			make(map[tspath.Path]*Overlay),
 			make(map[tspath.Path]*Overlay),
 			make(map[tspath.Path]*diskFile),
@@ -1154,6 +1173,7 @@ func TestRealpathAliasLifecycle(t *testing.T) {
 		// Build first snapshot – read via both symlinks.
 		builder1 := newSnapshotFSBuilder(
 			testFS,
+			nil,
 			make(map[tspath.Path]*Overlay),
 			make(map[tspath.Path]*Overlay),
 			make(map[tspath.Path]*diskFile),
@@ -1169,6 +1189,7 @@ func TestRealpathAliasLifecycle(t *testing.T) {
 		// Build second snapshot – delete ONE of the symlink disk entries.
 		builder2 := newSnapshotFSBuilder(
 			testFS,
+			nil,
 			make(map[tspath.Path]*Overlay),
 			make(map[tspath.Path]*Overlay),
 			snapshot1.diskFiles,
@@ -1198,6 +1219,7 @@ func TestRealpathAliasLifecycle(t *testing.T) {
 
 		builder := newSnapshotFSBuilder(
 			testFS,
+			nil,
 			make(map[tspath.Path]*Overlay),
 			make(map[tspath.Path]*Overlay),
 			make(map[tspath.Path]*diskFile),
@@ -1229,6 +1251,7 @@ func TestRealpathAliasLifecycle(t *testing.T) {
 
 		builder := newSnapshotFSBuilder(
 			testFS,
+			nil,
 			make(map[tspath.Path]*Overlay),
 			make(map[tspath.Path]*Overlay),
 			make(map[tspath.Path]*diskFile),
@@ -1274,6 +1297,7 @@ func TestRealpathAliasLifecycle(t *testing.T) {
 		// Build first snapshot — read the symlinked file.
 		builder1 := newSnapshotFSBuilder(
 			testFS,
+			nil,
 			make(map[tspath.Path]*Overlay),
 			make(map[tspath.Path]*Overlay),
 			make(map[tspath.Path]*diskFile),
@@ -1294,6 +1318,7 @@ func TestRealpathAliasLifecycle(t *testing.T) {
 		// Build second snapshot — simulate realpath change event, expanded via aliases.
 		builder2 := newSnapshotFSBuilder(
 			testFS,
+			nil,
 			make(map[tspath.Path]*Overlay),
 			make(map[tspath.Path]*Overlay),
 			snapshot1.diskFiles,
@@ -1336,6 +1361,7 @@ func TestRealpathAliasLifecycle(t *testing.T) {
 		// Build first snapshot — read only mylib.
 		builder1 := newSnapshotFSBuilder(
 			testFS,
+			nil,
 			make(map[tspath.Path]*Overlay),
 			make(map[tspath.Path]*Overlay),
 			make(map[tspath.Path]*diskFile),
@@ -1350,6 +1376,7 @@ func TestRealpathAliasLifecycle(t *testing.T) {
 		// Build second snapshot — also read other.
 		builder2 := newSnapshotFSBuilder(
 			testFS,
+			nil,
 			make(map[tspath.Path]*Overlay),
 			make(map[tspath.Path]*Overlay),
 			snapshot1.diskFiles,
@@ -1385,6 +1412,7 @@ func TestRealpathAliasLifecycle(t *testing.T) {
 		// Snapshot 1: read via one symlink only.
 		builder1 := newSnapshotFSBuilder(
 			testFS,
+			nil,
 			make(map[tspath.Path]*Overlay),
 			make(map[tspath.Path]*Overlay),
 			make(map[tspath.Path]*diskFile),
@@ -1407,6 +1435,7 @@ func TestRealpathAliasLifecycle(t *testing.T) {
 		// and must clone-on-write rather than mutating the shared set.
 		builder2 := newSnapshotFSBuilder(
 			testFS,
+			nil,
 			make(map[tspath.Path]*Overlay),
 			make(map[tspath.Path]*Overlay),
 			snapshot1.diskFiles,
@@ -1442,6 +1471,7 @@ func TestExpandAndFilterWatchEvents(t *testing.T) {
 	newBuilder := func(testFS vfs.FS) *snapshotFSBuilder {
 		return newSnapshotFSBuilder(
 			testFS,
+			nil,
 			make(map[tspath.Path]*Overlay),
 			make(map[tspath.Path]*Overlay),
 			make(map[tspath.Path]*diskFile),
@@ -1523,6 +1553,7 @@ func TestExpandAndFilterWatchEvents(t *testing.T) {
 		}
 		builder := newSnapshotFSBuilder(
 			vfstest.FromMap(map[string]string{"/src/foo.ts": "const foo = 1;"}, false),
+			nil,
 			make(map[tspath.Path]*Overlay),
 			make(map[tspath.Path]*Overlay),
 			existingDiskFiles,

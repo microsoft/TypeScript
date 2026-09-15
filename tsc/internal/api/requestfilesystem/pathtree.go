@@ -5,8 +5,10 @@ import (
 	"maps"
 	"slices"
 	"strings"
+	"sync"
 	"time"
 
+	"github.com/microsoft/TypeScript/tsc/internal/project"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 )
@@ -24,8 +26,17 @@ type requestEntry interface {
 }
 
 type requestFile struct {
-	fileName string
-	content  string
+	fileName   string
+	content    string
+	handle     project.FileHandle
+	handleOnce sync.Once
+}
+
+func (file *requestFile) fileHandle() project.FileHandle {
+	file.handleOnce.Do(func() {
+		file.handle = project.NewFileHandle(file.fileName, file.content)
+	})
+	return file.handle
 }
 
 type requestSymlink struct {
@@ -191,6 +202,13 @@ func composeRequestPaths(base *requestPathNode, overlay *requestPathNode, fallba
 	overlayDirectory, _ := overlay.entry.(*requestDirectory)
 	if overlay.entry != nil {
 		result.entry = overlay.entry
+		// Repeating a file's existing content leaves it unchanged, so keep the
+		// entry the snapshots below are already using.
+		if overlayFile, ok := overlay.entry.(*requestFile); ok && base != nil {
+			if baseFile, ok := base.entry.(*requestFile); ok && overlayFile.content == baseFile.content {
+				result.entry = baseFile
+			}
+		}
 		if overlayDirectory != nil && overlayDirectory.listing == nil && previousDirectory != nil {
 			result.entry = &requestDirectory{directoryName: overlayDirectory.directoryName, listing: previousDirectory.listing}
 		}

@@ -19,9 +19,19 @@ type autoImportBuilderFS struct {
 
 var _ FileSource = (*autoImportBuilderFS)(nil)
 
-// FS implements FileSource.
-func (a *autoImportBuilderFS) FS() vfs.FS {
-	return a.snapshotFSBuilder.fs
+// Realpath implements FileSource.
+func (a *autoImportBuilderFS) Realpath(path string) string {
+	return a.snapshotFSBuilder.Realpath(path)
+}
+
+// Stat implements FileSource.
+func (a *autoImportBuilderFS) Stat(path string) vfs.FileInfo {
+	return a.snapshotFSBuilder.Stat(path)
+}
+
+// UseCaseSensitiveFileNames implements FileSource.
+func (a *autoImportBuilderFS) UseCaseSensitiveFileNames() bool {
+	return a.snapshotFSBuilder.UseCaseSensitiveFileNames()
 }
 
 // GetFile implements FileSource.
@@ -59,6 +69,11 @@ func (a *autoImportBuilderFS) GetAccessibleEntries(path string) vfs.Entries {
 	return a.snapshotFSBuilder.GetAccessibleEntries(path)
 }
 
+// DirectoryExists implements FileSource.
+func (a *autoImportBuilderFS) DirectoryExists(path string) bool {
+	return a.snapshotFSBuilder.DirectoryExists(path)
+}
+
 // FileExists implements FileSource.
 func (a *autoImportBuilderFS) FileExists(fileName string, path tspath.Path) bool {
 	return a.snapshotFSBuilder.FileExists(fileName, path)
@@ -86,7 +101,7 @@ func newAutoImportRegistryCloneHost(
 	return &autoImportRegistryCloneHost{
 		projectCollection: projectCollection,
 		parseCache:        parseCache,
-		fs:                newSourceFS(false, &autoImportBuilderFS{snapshotFSBuilder: snapshotFSBuilder}, toPath),
+		fs:                newSourceFS(false, stack(snapshotFSBuilder.layer, &autoImportBuilderFS{snapshotFSBuilder: snapshotFSBuilder}), toPath),
 		currentDirectory:  currentDirectory,
 	}
 }
