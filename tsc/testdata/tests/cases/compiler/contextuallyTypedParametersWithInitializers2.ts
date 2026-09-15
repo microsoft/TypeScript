@@ -21,3 +21,8 @@ declare const num: number;
 const test2: (arg: 1 | 2) => void = (arg = num) => {};
 
 const test3: (arg: number) => void = (arg = 1) => {};
+
+const test4: (reader: () => number, value: 1) => void =
+  (get = () => x, x = 0) => {
+    x.toFixed();
+  };
