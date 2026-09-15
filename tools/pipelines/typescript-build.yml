@@ -46,8 +46,6 @@ extends:
         fetchTags: false
         retryCount: 3
       sourceAnalysisPool: VSEngSS-MicroBuild2022-1ES
-      sourceRepositoriesToScan:
-        include:
     featureFlags:
       golang:
         internalModuleProxy:
@@ -129,22 +127,22 @@ extends:
               - template: /tools/pipelines/steps/setup-node-npm-ci.yml@self
               - template: /tools/pipelines/steps/setup-go.yml@self
 
-              - bash: npx hereby typescript:build --forRelease
+              - bash: npx hereby typescript:build --forRelease --setPrerelease dev.$(Build.BuildNumber)
                 displayName: 'Build packages'
 
-              - bash: npx hereby typescript:sign --forRelease
+              - bash: npx hereby typescript:sign --forRelease --setPrerelease dev.$(Build.BuildNumber)
                 displayName: 'Sign packages'
                 env:
                   # Needed for ESRP
                   SYSTEM_ACCESSTOKEN: $(System.AccessToken)
 
-              - bash: npx hereby typescript:pack --forRelease
+              - bash: npx hereby typescript:pack --forRelease --setPrerelease dev.$(Build.BuildNumber)
                 displayName: 'Pack packages'
 
-              - bash: npx hereby vscode-typescript:pack --forRelease
+              - bash: npx hereby vscode-typescript:pack --forRelease --setPrerelease dev.$(Build.BuildNumber)
                 displayName: 'Pack extensions'
 
-              - bash: npx hereby vscode-typescript:sign --forRelease
+              - bash: npx hereby vscode-typescript:sign --forRelease --setPrerelease dev.$(Build.BuildNumber)
                 displayName: 'Sign extensions'
                 env:
                   # Needed for ESRP

@@ -1,0 +1,23 @@
+parameters:
+  - name: condition
+    type: string
+    default: succeeded()
+
+steps:
+  - task: NodeTool@0
+    condition: ${{ parameters.condition }}
+    inputs:
+      versionSpec: 24.x
+    displayName: 'Install Node'
+
+  - bash: |
+      cat > .npmrc << 'EOF'
+      registry=https://packagefeedproxy.microsoft.io/npm/
+      EOF
+      npm init -y
+    condition: ${{ parameters.condition }}
+    displayName: 'Set up npm'
+
+  - bash: npm install --no-save @vscode/vsce@3.9.2
+    condition: ${{ parameters.condition }}
+    displayName: 'Install vsce'
