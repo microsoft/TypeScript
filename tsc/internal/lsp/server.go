@@ -1950,8 +1950,8 @@ func (s *Server) handleRename(ctx context.Context, params *lsproto.RenameParams,
 		}
 		renameFilesParams := &lsproto.RenameFilesParams{
 			Files: []*lsproto.FileRename{{
-				OldUri: string(lsconv.FileNameToDocumentURI(info.FileToRename)),
-				NewUri: string(lsconv.FileNameToDocumentURI(info.NewFileName)),
+				OldUri: lsconv.FileNameToDocumentURI(info.FileToRename),
+				NewUri: lsconv.FileNameToDocumentURI(info.NewFileName),
 			}},
 		}
 		return s.handleWillRenameFilesWorker(ctx, renameFilesParams, req, true /*sendRenameFile*/)

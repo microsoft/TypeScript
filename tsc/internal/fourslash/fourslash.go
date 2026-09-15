@@ -4956,8 +4956,8 @@ func (f *FourslashTest) RenameAtCaret(t *testing.T, newName string) lsproto.Rena
 		var fileRenames []*lsproto.FileRename
 		for _, renameFile := range renameFiles {
 			fileRenames = append(fileRenames, &lsproto.FileRename{
-				OldUri: string(renameFile.OldUri),
-				NewUri: string(renameFile.NewUri),
+				OldUri: renameFile.OldUri,
+				NewUri: renameFile.NewUri,
 			})
 		}
 		if f.capabilities != nil &&
@@ -5034,8 +5034,8 @@ func (f *FourslashTest) willRenameFilesWorker(t *testing.T, files ...*lsproto.Fi
 	var fileRenames []*lsproto.FileRename
 	for _, renameFile := range renameFiles {
 		fileRenames = append(fileRenames, &lsproto.FileRename{
-			OldUri: string(renameFile.OldUri),
-			NewUri: string(renameFile.NewUri),
+			OldUri: renameFile.OldUri,
+			NewUri: renameFile.NewUri,
 		})
 	}
 	f.willRenameFilesWorker(t, fileRenames...)
@@ -5067,8 +5067,8 @@ func (f *FourslashTest) VerifyWillRenameFilesEdits(t *testing.T, oldPath string,
 	}
 
 	f.willRenameFilesWorker(t, &lsproto.FileRename{
-		OldUri: string(lsconv.FileNameToDocumentURI(oldPath)),
-		NewUri: string(lsconv.FileNameToDocumentURI(newPath)),
+		OldUri: lsconv.FileNameToDocumentURI(oldPath),
+		NewUri: lsconv.FileNameToDocumentURI(newPath),
 	})
 
 	for fileName, expectedContent := range expectedFileContents {
