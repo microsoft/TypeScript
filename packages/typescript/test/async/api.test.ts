@@ -59,10 +59,12 @@ import {
     type FreshableType,
     type ImportAdderAction,
     type IndexedAccessType,
+    IndexKind,
     type IndexType,
     type InterfaceType,
     type IntrinsicType,
     isErrorType,
+    JsxEmit,
     type LiteralType,
     ModifierFlags,
     ModuleKind,
@@ -4773,6 +4775,95 @@ export declare const m: ReadonlyMap;
         const indexInfos = await project.checker.getIndexInfosOfType(type);
         assert.ok(indexInfos.length > 0);
         assert.equal(indexInfos[0].isReadonly, true);
+    });
+});
+
+describe("Checker - TypeScript API parity", () => {
+    const files = {
+        "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+        "/src/main.ts": `
+export interface Box<T> {
+    value: T;
+    chain(): this;
+    [key: string]: T | ((...args: never[]) => unknown);
+    [index: number]: T;
+}
+
+/** Returns the input value.
+ * @deprecated Use identity instead.
+ */
+export function legacy<T>(value: T): Promise<T> {
+    return Promise.resolve(value);
+}
+
+declare function consume(value: string | number): void;
+consume(1);
+
+export type Exported = number;
+`,
+    };
+
+    test("exposes interface this types and checker operations", async () => {
+        await using api = spawnAPI(files);
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const sourceFile = await project.program.getSourceFile("/src/main.ts");
+        assert.ok(sourceFile);
+
+        const boxSymbol = await project.checker.getSymbolAtPosition("/src/main.ts", sourceFile.text.indexOf("Box<T>"));
+        assert.ok(boxSymbol);
+        const boxType = await project.checker.getDeclaredTypeOfSymbol(boxSymbol) as InterfaceType;
+        assert.ok(boxType.isClassOrInterface());
+        const thisType = await boxType.getThisType();
+        assert.ok(thisType);
+        assert.equal(thisType.isThisType, true);
+        assert.equal(await project.checker.typeToString(thisType), "this");
+
+        const stringInfo = await project.checker.getIndexInfoOfType(boxType, IndexKind.String);
+        assert.ok(stringInfo);
+        assert.ok(stringInfo.keyType.flags & TypeFlags.String);
+        const numberInfo = await project.checker.getIndexInfoOfType(boxType, IndexKind.Number);
+        assert.ok(numberInfo);
+        assert.ok(numberInfo.keyType.flags & TypeFlags.Number);
+        assert.strictEqual(await project.checker.getIndexTypeOfType(boxType, IndexKind.String), stringInfo.valueType);
+        assert.strictEqual(await project.checker.getIndexTypeOfType(boxType, IndexKind.Number), numberInfo.valueType);
+        const valueType = await project.checker.getTypeOfPropertyOfType(boxType, "value");
+        assert.ok(valueType);
+        assert.equal(await project.checker.typeToString(valueType), "T");
+        assert.equal(await project.checker.getTypeOfPropertyOfType(boxType, "missing"), undefined);
+
+        const legacySymbol = await project.checker.getSymbolAtPosition("/src/main.ts", sourceFile.text.indexOf("legacy<T>"));
+        assert.ok(legacySymbol);
+        const legacyType = await project.checker.getTypeOfSymbol(legacySymbol);
+        const signature = (await project.checker.getSignaturesOfType(legacyType, SignatureKind.Call))[0];
+        assert.ok(signature);
+        const awaitedType = await project.checker.getAwaitedType(await signature.getReturnType());
+        assert.ok(awaitedType);
+        assert.equal(await project.checker.typeToString(awaitedType), "Awaited<T>");
+
+        const exportedSymbol = await project.checker.getSymbolAtPosition("/src/main.ts", sourceFile.text.indexOf("Exported ="));
+        assert.ok(exportedSymbol);
+        const localSymbol = (await project.checker.getSymbolsInScope(sourceFile, SymbolFlags.TypeAlias)).find(symbol => symbol.name === "Exported");
+        assert.ok(localSymbol);
+        assert.notEqual(localSymbol.id, exportedSymbol.id);
+        assert.strictEqual(await project.checker.getExportSymbolOfSymbol(localSymbol), exportedSymbol);
+
+        let call: import("@typescript/typescript/unstable/ast").CallExpression | undefined;
+        sourceFile.forEachChild(function visit(node) {
+            if (isCallExpression(node) && sourceFile.text.slice(node.expression.pos, node.expression.end).trim() === "consume") {
+                call = node;
+            }
+            node.forEachChild(visit);
+        });
+        assert.ok(call);
+        const contextualType = await project.checker.getContextualTypeForArgumentAtIndex(call, 0);
+        assert.ok(contextualType);
+        assert.equal(await project.checker.typeToString(contextualType), "string | number");
+    });
+
+    test("uses Strada-compatible JsxEmit values", () => {
+        assert.equal(JsxEmit.React, 2);
+        assert.equal(JsxEmit.ReactNative, 3);
     });
 });
 

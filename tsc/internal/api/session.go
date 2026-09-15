@@ -642,6 +642,21 @@ func (setup checkerSetup) newSignatureResponse(sig *checker.Signature) *Signatur
 	return setup.sd.newSignatureResponse(setup.projectID, sig)
 }
 
+func (setup checkerSetup) newIndexInfoResponse(info *checker.IndexInfo) *IndexInfoResponse {
+	if info == nil {
+		return nil
+	}
+	result := &IndexInfoResponse{
+		KeyType:    *setup.newTypeResponse(info.KeyType()),
+		ValueType:  *setup.newTypeResponse(info.ValueType()),
+		IsReadonly: info.IsReadonly(),
+	}
+	if info.Declaration() != nil {
+		result.Declaration = setup.sd.nodeHandleFrom(info.Declaration())
+	}
+	return result
+}
+
 func (setup checkerSetup) resolveTypeHandle(id TypeID) (*checker.Type, error) {
 	return setup.sd.resolveTypeHandle(setup.projectID, id)
 }
@@ -844,6 +859,8 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleGetOuterTypeParametersOfType(ctx, parsed.(*GetTypePropertyParams))
 	case string(MethodGetLocalTypeParametersOfType):
 		return s.handleGetLocalTypeParametersOfType(ctx, parsed.(*GetTypePropertyParams))
+	case string(MethodGetThisTypeOfType):
+		return s.handleGetThisTypeOfType(ctx, parsed.(*GetTypePropertyParams))
 	case string(MethodGetAliasTypeArgumentsOfType):
 		return s.handleGetAliasTypeArgumentsOfType(ctx, parsed.(*GetTypePropertyParams))
 	case string(MethodGetAliasSymbolOfType):
@@ -874,6 +891,10 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleGetTargetOfSignature(ctx, parsed.(*GetSignaturePropertyParams))
 	case string(MethodGetContextualType):
 		return s.handleGetContextualType(ctx, parsed.(*GetContextualTypeParams))
+	case string(MethodGetContextualTypeForArgument):
+		return s.handleGetContextualTypeForArgument(ctx, parsed.(*GetContextualTypeForArgumentParams))
+	case string(MethodGetAwaitedType):
+		return s.handleGetAwaitedType(ctx, parsed.(*CheckerTypeParams))
 	case string(MethodGetBaseTypeOfLiteralType):
 		return s.handleGetBaseTypeOfLiteralType(ctx, parsed.(*GetBaseTypeOfLiteralTypeParams))
 	case string(MethodGetNonNullableType):
@@ -932,6 +953,12 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleGetReducedType(ctx, parsed.(*GetTypePropertyParams))
 	case string(MethodGetPropertyOfType):
 		return s.handleGetPropertyOfType(ctx, parsed.(*GetPropertyOfTypeParams))
+	case string(MethodGetTypeOfPropertyOfType):
+		return s.handleGetTypeOfPropertyOfType(ctx, parsed.(*GetPropertyOfTypeParams))
+	case string(MethodGetIndexInfoOfType):
+		return s.handleGetIndexInfoOfType(ctx, parsed.(*GetIndexInfoOfTypeParams))
+	case string(MethodGetIndexTypeOfTypeByKind):
+		return s.handleGetIndexTypeOfTypeByKind(ctx, parsed.(*GetIndexInfoOfTypeParams))
 	case string(MethodGetIndexInfosOfType):
 		return s.handleGetIndexInfosOfType(ctx, parsed.(*CheckerTypeParams))
 	case string(MethodGetConstraintOfTypeParameter):
@@ -956,6 +983,8 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleGetImmediateAliasedSymbol(ctx, parsed.(*CheckerSymbolParams))
 	case string(MethodGetTargetSymbol):
 		return s.handleMethodGetTargetSymbol(ctx, parsed.(*CheckerSymbolParams))
+	case string(MethodGetExportSymbolOfSymbolForChecker):
+		return s.handleGetExportSymbolOfSymbolForChecker(ctx, parsed.(*CheckerSymbolParams))
 	case string(MethodGetFullyQualifiedName):
 		return s.handleGetFullyQualifiedName(ctx, parsed.(*CheckerSymbolParams))
 	case string(MethodGetExportsOfModule):
@@ -2333,6 +2362,11 @@ func (s *Session) handleGetLocalTypeParametersOfType(_ context.Context, params *
 }
 
 // @gen-proto-nullable
+func (s *Session) handleGetThisTypeOfType(_ context.Context, params *GetTypePropertyParams) (*TypeResponse, error) {
+	return s.resolveTypePropertyOfType(params, func(t *checker.Type) *checker.Type { return t.AsInterfaceType().ThisType() })
+}
+
+// @gen-proto-nullable
 func (s *Session) handleGetAliasTypeArgumentsOfType(_ context.Context, params *GetTypePropertyParams) ([]*TypeResponse, error) {
 	return s.resolveTypeArrayPropertyOfType(params, func(t *checker.Type) []*checker.Type {
 		if t.Alias() == nil {
@@ -2761,6 +2795,36 @@ func (s *Session) handleGetContextualType(ctx context.Context, params *GetContex
 	}
 
 	return setup.newTypeResponse(t), nil
+}
+
+// @gen-proto-nullable
+func (s *Session) handleGetContextualTypeForArgument(ctx context.Context, params *GetContextualTypeForArgumentParams) (*TypeResponse, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	node, err := setup.sd.resolveNodeHandle(setup.program, params.Location)
+	if err != nil {
+		return nil, err
+	}
+	return setup.newTypeResponse(setup.checker.GetContextualTypeForArgumentAtIndex(node, int(params.Index))), nil
+}
+
+// @gen-proto-nullable
+func (s *Session) handleGetAwaitedType(ctx context.Context, params *CheckerTypeParams) (*TypeResponse, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	t, err := setup.resolveTypeHandle(params.Type)
+	if err != nil {
+		return nil, err
+	}
+	return setup.newTypeResponse(setup.checker.GetAwaitedType(t)), nil
 }
 
 // handleGetBaseTypeOfLiteralType returns the base type of a literal type (e.g. number for 42).
@@ -3575,17 +3639,55 @@ func (s *Session) handleGetIndexInfosOfType(ctx context.Context, params *Checker
 
 	results := make([]*IndexInfoResponse, len(infos))
 	for i, info := range infos {
-		results[i] = &IndexInfoResponse{
-			KeyType:    *setup.newTypeResponse(info.KeyType()),
-			ValueType:  *setup.newTypeResponse(info.ValueType()),
-			IsReadonly: info.IsReadonly(),
-		}
-		if info.Declaration() != nil {
-			results[i].Declaration = setup.sd.nodeHandleFrom(info.Declaration())
-		}
+		results[i] = setup.newIndexInfoResponse(info)
 	}
 
 	return results, nil
+}
+
+func (s *Session) resolveIndexInfoRequest(ctx context.Context, params *GetIndexInfoOfTypeParams) (checkerSetup, *checker.Type, *checker.Type, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return checkerSetup{}, nil, nil, err
+	}
+
+	t, err := setup.resolveTypeHandle(params.Type)
+	if err != nil {
+		setup.done()
+		return checkerSetup{}, nil, nil, err
+	}
+
+	var keyType *checker.Type
+	switch checker.IndexKind(params.Kind) {
+	case checker.IndexKindString:
+		keyType = setup.checker.GetStringType()
+	case checker.IndexKindNumber:
+		keyType = setup.checker.GetNumberType()
+	default:
+		setup.done()
+		return checkerSetup{}, nil, nil, fmt.Errorf("%w: invalid index kind %d", ErrClientError, params.Kind)
+	}
+	return setup, t, keyType, nil
+}
+
+// @gen-proto-nullable
+func (s *Session) handleGetIndexInfoOfType(ctx context.Context, params *GetIndexInfoOfTypeParams) (*IndexInfoResponse, error) {
+	setup, t, keyType, err := s.resolveIndexInfoRequest(ctx, params)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+	return setup.newIndexInfoResponse(setup.checker.GetIndexInfoOfType(t, keyType)), nil
+}
+
+// @gen-proto-nullable
+func (s *Session) handleGetIndexTypeOfTypeByKind(ctx context.Context, params *GetIndexInfoOfTypeParams) (*TypeResponse, error) {
+	setup, t, keyType, err := s.resolveIndexInfoRequest(ctx, params)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+	return setup.newTypeResponse(setup.checker.GetIndexTypeOfType(t, keyType)), nil
 }
 
 // handleGetConstraintOfTypeParameter returns the constraint of a type parameter.
@@ -3669,6 +3771,22 @@ func (s *Session) handleGetPropertyOfType(ctx context.Context, params *GetProper
 	}
 
 	return setup.newSymbolResponse(prop), nil
+}
+
+// @gen-proto-nullable
+func (s *Session) handleGetTypeOfPropertyOfType(ctx context.Context, params *GetPropertyOfTypeParams) (*TypeResponse, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	t, err := setup.resolveTypeHandle(params.Type)
+	if err != nil {
+		return nil, err
+	}
+
+	return setup.newTypeResponse(setup.checker.GetTypeOfPropertyOfType(t, params.Name)), nil
 }
 
 // handleGetConstantValue returns the constant value of an enum member or const enum access.
@@ -3808,6 +3926,20 @@ func (s *Session) handleMethodGetTargetSymbol(ctx context.Context, params *Check
 	}
 
 	return setup.newSymbolResponse(setup.checker.GetTargetSymbol(symbol)), nil
+}
+
+func (s *Session) handleGetExportSymbolOfSymbolForChecker(ctx context.Context, params *CheckerSymbolParams) (*SymbolResponse, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	symbol, err := setup.resolveSymbolHandle(params.Symbol)
+	if err != nil {
+		return nil, err
+	}
+	return setup.newSymbolResponse(setup.checker.GetExportSymbolOfSymbol(symbol)), nil
 }
 
 // handleGetExportsOfModule returns the resolved exports of a module symbol,
