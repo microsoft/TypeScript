@@ -4,9 +4,7 @@ import (
 	"slices"
 	"strings"
 	"testing"
-	"time"
 
-	"github.com/microsoft/TypeScript/tsc/internal/project"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/trackingvfs"
@@ -14,24 +12,37 @@ import (
 	"gotest.tools/v3/assert"
 )
 
-func newRequestFileSystem(params *RequestFileSystem, base vfs.FS, currentDirectory string) (*requestFileSystem, error) {
+func newRequestFileSystem(params *RequestFileSystem, base any, currentDirectory string) (*stackedView, error) {
 	return newLayeredRequestFileSystem(params, base, currentDirectory)
 }
 
-func newLayeredRequestFileSystem(params *RequestFileSystem, base vfs.FS, currentDirectory string) (*requestFileSystem, error) {
-	var fileChanges project.FileChangeSummary
-	fileSystem, err := NewForUpdate(params, base, currentDirectory, &fileChanges)
+// base is either the host filesystem or a layer already stacked over it, matching the
+// two ways a snapshot acquires a request filesystem: over the session host, or over
+// the layer the previous snapshot carried.
+func newLayeredRequestFileSystem(params *RequestFileSystem, base any, currentDirectory string) (*stackedView, error) {
+	var host vfs.FS
+	var baseLayer *requestFileSystem
+	switch typed := base.(type) {
+	case *stackedView:
+		host, baseLayer = typed.host, typed.requestFileSystem
+	case vfs.FS:
+		host = typed
+	case nil:
+	default:
+		panic("unexpected base filesystem")
+	}
+	layer, err := newLayer(params, baseLayer, host, currentDirectory)
 	if err != nil {
 		return nil, err
 	}
-	return fileSystem.(*requestFileSystem), nil
+	return stackOverHost(layer, host), nil
 }
 
-func verifyCompactionWithoutHostReads(t *testing.T, layer *requestFileSystem, host *trackingvfs.FS, paths []string) {
+func verifyCompactionWithoutHostReads(t *testing.T, layer *stackedView, host *trackingvfs.FS, paths []string) {
 	t.Helper()
 	compacted, err := newRequestFileSystem(&RequestFileSystem{Kind: KindLayer}, layer, layer.currentDirectory)
 	assert.NilError(t, err)
-	verify := func(name string, run func(vfs.FS, string) any) {
+	verify := func(name string, run func(*stackedView, string) any) {
 		t.Helper()
 		for _, path := range paths {
 			for seen := range host.SeenFiles.Keys() {
@@ -47,53 +58,17 @@ func verifyCompactionWithoutHostReads(t *testing.T, layer *requestFileSystem, ho
 			assert.DeepEqual(t, actual, expected)
 		}
 	}
-	verify("FileExists", func(fileSystem vfs.FS, path string) any { return fileSystem.FileExists(path) })
-	verify("DirectoryExists", func(fileSystem vfs.FS, path string) any { return fileSystem.DirectoryExists(path) })
-	verify("ReadFile", func(fileSystem vfs.FS, path string) any {
+	verify("FileExists", func(fileSystem *stackedView, path string) any { return fileSystem.FileExists(path) })
+	verify("DirectoryExists", func(fileSystem *stackedView, path string) any { return fileSystem.DirectoryExists(path) })
+	verify("ReadFile", func(fileSystem *stackedView, path string) any {
 		content, ok := fileSystem.ReadFile(path)
 		return struct {
 			Content string
 			OK      bool
 		}{content, ok}
 	})
-	verify("Realpath", func(fileSystem vfs.FS, path string) any { return fileSystem.Realpath(path) })
-	verify("GetAccessibleEntries", func(fileSystem vfs.FS, path string) any { return fileSystem.GetAccessibleEntries(path) })
-	verify("Stat", func(fileSystem vfs.FS, path string) any {
-		info := fileSystem.Stat(path)
-		if info == nil {
-			return nil
-		}
-		return struct {
-			Name      string
-			Size      int64
-			Mode      uint32
-			ModTime   time.Time
-			Directory bool
-			Sys       any
-		}{info.Name(), info.Size(), uint32(info.Mode()), info.ModTime(), info.IsDir(), info.Sys()}
-	})
-	verify("WalkDir", func(fileSystem vfs.FS, path string) any {
-		var result struct {
-			Paths       []string
-			Directories []bool
-			Errors      []string
-			Error       string
-		}
-		walkResult := fileSystem.WalkDir(path, func(child string, entry vfs.DirEntry, walkErr error) error {
-			result.Paths = append(result.Paths, child)
-			result.Directories = append(result.Directories, entry != nil && entry.IsDir())
-			message := ""
-			if walkErr != nil {
-				message = walkErr.Error()
-			}
-			result.Errors = append(result.Errors, message)
-			return nil
-		})
-		if walkResult != nil {
-			result.Error = walkResult.Error()
-		}
-		return result
-	})
+	verify("Realpath", func(fileSystem *stackedView, path string) any { return fileSystem.Realpath(path) })
+	verify("GetAccessibleEntries", func(fileSystem *stackedView, path string) any { return fileSystem.GetAccessibleEntries(path) })
 }
 
 func TestInitializeForUpdate(t *testing.T) {
@@ -102,24 +77,21 @@ func TestInitializeForUpdate(t *testing.T) {
 	t.Run("filesystem layers eagerly compact a request filesystem base", func(t *testing.T) {
 		t.Parallel()
 		host := vfstest.FromMap(map[string]string{}, true)
-		var fileChanges project.FileChangeSummary
-		base, err := NewForUpdate(&RequestFileSystem{
+		base, err := newRequestFileSystem(&RequestFileSystem{
 			Kind:  KindFull,
 			Files: map[string]string{"/base.ts": "base"},
-		}, host, "/", &fileChanges)
+		}, host, "/")
 		assert.NilError(t, err)
 
-		layered, err := NewForUpdate(&RequestFileSystem{
+		requestFileSystem, err := newLayeredRequestFileSystem(&RequestFileSystem{
 			Kind:  KindLayer,
 			Files: map[string]string{"/layered.ts": "layered"},
-		}, base, "/", &fileChanges)
+		}, base, "/")
 		assert.NilError(t, err)
-		requestFileSystem, ok := layered.(*requestFileSystem)
-		assert.Assert(t, ok)
 		assert.Assert(t, requestFileSystem.baseFileSystem() == host)
 		assert.Equal(t, requestFileSystem.kind, KindFull)
-		assert.Assert(t, layered.FileExists("/base.ts"))
-		assert.Assert(t, layered.FileExists("/layered.ts"))
+		assert.Assert(t, requestFileSystem.FileExists("/base.ts"))
+		assert.Assert(t, requestFileSystem.FileExists("/layered.ts"))
 	})
 
 	t.Run("filesystem layers over a host-backed snapshot", func(t *testing.T) {
@@ -127,14 +99,13 @@ func TestInitializeForUpdate(t *testing.T) {
 		host := &trackingvfs.FS{Inner: vfstest.FromMap(map[string]string{
 			"/dir/host.ts": "host",
 		}, true)}
-		var fileChanges project.FileChangeSummary
-		fileSystem, err := NewForUpdate(&RequestFileSystem{
+		fileSystem, err := newLayeredRequestFileSystem(&RequestFileSystem{
 			Kind:  KindLayer,
 			Files: map[string]string{"/dir/cached.ts": "cached"},
 			Directories: map[string]RequestDirectoryEntries{
 				"/dir": {Files: []string{"cached.ts"}, Directories: []string{}},
 			},
-		}, host, "/", &fileChanges)
+		}, host, "/")
 		assert.NilError(t, err)
 		// Change generation may inspect the old directory; reading the supplied
 		// complete listing itself must not fall back to the host.
@@ -154,15 +125,13 @@ func TestInitializeForUpdate(t *testing.T) {
 		}, host, "/")
 		assert.NilError(t, err)
 
-		var fileChanges project.FileChangeSummary
-		fileSystem, err := NewForUpdate(&RequestFileSystem{
+		requestFileSystem, err := newLayeredRequestFileSystem(&RequestFileSystem{
 			Kind:  KindFull,
 			Files: map[string]string{"/replacement.ts": "replacement"},
-		}, base, "/", &fileChanges)
+		}, base, "/")
 		assert.NilError(t, err)
-		requestFileSystem := getRequestFileSystem(fileSystem)
 		assert.Assert(t, requestFileSystem.baseFileSystem() == host)
-		assert.Assert(t, getRequestFileSystem(requestFileSystem.baseFileSystem()) == nil)
+		assert.Assert(t, !requestFileSystem.FileExists("/base.ts"))
 	})
 }
 
@@ -461,7 +430,7 @@ func testSymlinkReplacesDirectory(t *testing.T, options symlinkReplacementOption
 		},
 	}, previous, "/")
 	assert.NilError(t, err)
-	verifyLinked := func(fileSystem *requestFileSystem) {
+	verifyLinked := func(fileSystem *stackedView) {
 		t.Helper()
 		assert.Assert(t, fileSystem.baseFileSystem() == host)
 		assert.Equal(t, fileSystem.kind, options.kind)
@@ -473,15 +442,9 @@ func testSymlinkReplacesDirectory(t *testing.T, options symlinkReplacementOption
 			content, ok := fileSystem.ReadFile(fileName)
 			assert.Assert(t, ok)
 			assert.Equal(t, content, expectedContent)
-			info := fileSystem.Stat(fileName)
-			assert.Assert(t, info != nil)
-			assert.Assert(t, !info.IsDir())
-			assert.Equal(t, info.Size(), int64(len(expectedContent)))
+			assert.Assert(t, !fileSystem.DirectoryExists(fileName), fileName)
 			assert.Equal(t, fileSystem.Realpath(fileName), "/target"+suffix)
 		}
-		info := fileSystem.Stat(linkPath)
-		assert.Assert(t, info != nil)
-		assert.Assert(t, info.IsDir())
 		assert.Equal(t, fileSystem.Realpath(linkPath), "/target")
 		assert.DeepEqual(t, fileSystem.GetAccessibleEntries(linkPath).Files, []string{"new.ts"})
 		assert.DeepEqual(t, fileSystem.GetAccessibleEntries(linkPath).Directories, []string{"removed"})
@@ -498,13 +461,7 @@ func testSymlinkReplacesDirectory(t *testing.T, options symlinkReplacementOption
 		if remove {
 			assert.Assert(t, !fileSystem.FileExists("/dir/removed/sibling.ts"))
 		}
-		var walked []string
-		assert.NilError(t, fileSystem.WalkDir(linkPath, func(path string, entry vfs.DirEntry, err error) error {
-			assert.NilError(t, err)
-			walked = append(walked, path)
-			return nil
-		}))
-		assert.DeepEqual(t, walked, []string{linkPath, linkPath + "/new.ts", linkPath + "/removed", linkPath + "/removed/new.ts"})
+		assert.DeepEqual(t, walkEntries(fileSystem, linkPath), []string{linkPath, linkPath + "/new.ts", linkPath + "/removed", linkPath + "/removed/new.ts"})
 	}
 	verifyLinked(linked)
 	next, err := newLayeredRequestFileSystem(&RequestFileSystem{Kind: KindLayer}, linked, "/")
@@ -678,7 +635,6 @@ func testObjectOverridesTombstone(t *testing.T, object string, inheritedLink boo
 	isFile := object == "file" || object == "file-symlink"
 	assert.Equal(t, replaced.FileExists(path), isFile)
 	assert.Equal(t, replaced.DirectoryExists(path), !isFile)
-	assert.Assert(t, replaced.Stat(path) != nil)
 	entries := replaced.GetAccessibleEntries(tspath.GetDirectoryPath(path))
 	entryName := tspath.GetBaseFileName(path)
 	assert.Equal(t, slices.Contains(entries.Files, entryName), isFile)
@@ -688,7 +644,7 @@ func testObjectOverridesTombstone(t *testing.T, object string, inheritedLink boo
 	assert.Assert(t, !replaced.FileExists("/dir/removed/old.ts"))
 	_, ok := replaced.ReadFile("/dir/removed/old.ts")
 	assert.Assert(t, !ok)
-	assert.Assert(t, replaced.Stat("/dir/removed/old.ts") == nil)
+	assert.Assert(t, !replaced.DirectoryExists("/dir/removed/old.ts"))
 	if isFile {
 		assert.Equal(t, len(replaced.GetAccessibleEntries(path+"/removed").Files), 0)
 		assert.Equal(t, len(replaced.GetAccessibleEntries(path).Directories), 0)
@@ -769,7 +725,7 @@ func testReplacementPreservesCurrentRemoval(t *testing.T, kind Kind, removedPath
 	assert.Assert(t, !linked.FileExists("/dir/blocked/gone.ts"))
 	_, ok := linked.ReadFile("/dir/blocked/gone.ts")
 	assert.Assert(t, !ok)
-	assert.Assert(t, linked.Stat("/dir/blocked/gone.ts") == nil)
+	assert.Assert(t, !linked.DirectoryExists("/dir/blocked/gone.ts"))
 	assert.Equal(t, len(linked.GetAccessibleEntries("/dir/blocked").Files), 0)
 	deleted, err := newLayeredRequestFileSystem(&RequestFileSystem{
 		Kind:         KindLayer,
@@ -946,7 +902,7 @@ func testSameLayerRemoval(t *testing.T, hostTarget bool, removedPath string, for
 		Symlinks:     map[string]RequestSymlink{"/links/pkg": {Target: "/target", Host: hostTarget}},
 		RemovedPaths: []string{removedPath},
 	}
-	var fileSystem *requestFileSystem
+	var fileSystem *stackedView
 	switch form {
 	case "standalone":
 		fileSystem, err = newRequestFileSystem(params, host, "/")
@@ -966,7 +922,7 @@ func testSameLayerRemoval(t *testing.T, hostTarget bool, removedPath string, for
 	assert.Assert(t, !fileSystem.FileExists("/links/pkg/file.ts"))
 	_, ok := fileSystem.ReadFile("/links/pkg/file.ts")
 	assert.Assert(t, !ok)
-	assert.Assert(t, fileSystem.Stat("/links/pkg/file.ts") == nil)
+	assert.Assert(t, !fileSystem.DirectoryExists("/links/pkg/file.ts"))
 	assert.Equal(t, fileSystem.Realpath("/links/pkg/file.ts"), "/links/pkg/file.ts")
 	assert.Equal(t, len(fileSystem.GetAccessibleEntries("/links/pkg").Files), 0)
 	linkExists := removedPath == "/links/pkg/file.ts"
@@ -1029,7 +985,7 @@ func testRemovalExceptions(t *testing.T, hostTarget bool, removeAgain bool) {
 	assert.NilError(t, err)
 	input, err := newRequestFileSystem(&RequestFileSystem{Kind: KindLayer}, compacted, "/")
 	assert.NilError(t, err)
-	verify := func(fileSystem *requestFileSystem) {
+	verify := func(fileSystem *stackedView) {
 		t.Helper()
 		if removeAgain {
 			fileSystem, err = newLayeredRequestFileSystem(&RequestFileSystem{
@@ -1069,7 +1025,7 @@ func TestRequestFileSystem(t *testing.T) {
 			Kind: KindLayer,
 		}, host, "/")
 		assert.NilError(t, err)
-		base := getRequestFileSystem(baseFS)
+		base := baseFS
 		assert.Assert(t, base != nil)
 		assert.Assert(t, base.baseFileSystem() == host)
 		assert.Assert(t, !base.FileExists("/created-after-base.ts"))
@@ -1080,7 +1036,7 @@ func TestRequestFileSystem(t *testing.T) {
 			Files: map[string]string{"/layered.ts": "layered"},
 		}, baseFS, "/")
 		assert.NilError(t, err)
-		layered := getRequestFileSystem(layeredFS)
+		layered := layeredFS
 		assert.Assert(t, layered != nil)
 		assert.Assert(t, layered.baseFileSystem() == host)
 		assert.Assert(t, layered.FileExists("/created-after-base.ts"))
@@ -1311,8 +1267,7 @@ func TestRequestFileSystem(t *testing.T) {
 		assert.Assert(t, layered.FileExists("/remove.ts"))
 		assert.Assert(t, layered.DirectoryExists("/removed-dir"))
 		assert.Assert(t, !layered.FileExists("/removed-dir/gone.ts"))
-		assert.Assert(t, layered.Stat("/remove.ts") != nil)
-		assert.Assert(t, layered.Stat("/removed-dir/replacement.ts") != nil)
+		assert.Assert(t, layered.FileExists("/removed-dir/replacement.ts"))
 		assert.Equal(t, layered.Realpath("/removed-dir/replacement.ts"), "/removed-dir/replacement.ts")
 		assert.Assert(t, layered.FileExists("/becomes-file"))
 		assert.Assert(t, !layered.DirectoryExists("/becomes-file"))
@@ -1386,7 +1341,7 @@ func TestRequestFileSystem(t *testing.T) {
 		assert.Assert(t, !ok)
 		assert.Assert(t, !layered.FileExists("/link/file.ts"))
 		assert.Assert(t, !layered.DirectoryExists("/link"))
-		assert.Assert(t, layered.Stat("/link/file.ts") == nil)
+		assert.Assert(t, !layered.DirectoryExists("/link/file.ts"))
 		assert.Equal(t, len(layered.GetAccessibleEntries("/link").Files), 0)
 	})
 
@@ -1412,7 +1367,7 @@ func TestRequestFileSystem(t *testing.T) {
 			_, ok := fileSystem.ReadFile(path)
 			assert.Assert(t, !ok, path)
 			assert.Assert(t, !fileSystem.FileExists(path), path)
-			assert.Assert(t, fileSystem.Stat(path) == nil, path)
+			assert.Assert(t, !fileSystem.DirectoryExists(path), path)
 		}
 		assert.Equal(t, len(fileSystem.GetAccessibleEntries("/link").Files), 0)
 		assert.Equal(t, len(fileSystem.GetAccessibleEntries("/host-link").Files), 0)
@@ -1438,7 +1393,7 @@ func TestRequestFileSystem(t *testing.T) {
 			RemovedPaths: []string{"/link/remove.ts"},
 		}, baseFS, "/")
 		assert.NilError(t, err)
-		layered := getRequestFileSystem(layeredFS)
+		layered := layeredFS
 
 		_, ok := layered.ReadFile("/link/remove.ts")
 		assert.Assert(t, !ok)
@@ -1464,7 +1419,7 @@ func TestRequestFileSystem(t *testing.T) {
 			RemovedPaths: []string{"/dir/remove.ts"},
 		}, baseFS, "/")
 		assert.NilError(t, err)
-		layered := getRequestFileSystem(layeredFS)
+		layered := layeredFS
 		assert.Equal(t, len(layered.GetAccessibleEntries("/dir").Files), 0)
 	})
 
@@ -1495,7 +1450,7 @@ func TestRequestFileSystem(t *testing.T) {
 			},
 		}, removedFS, "/")
 		assert.NilError(t, err)
-		recreated := getRequestFileSystem(recreatedFS)
+		recreated := recreatedFS
 		contents, ok := recreated.ReadFile("/link/recreated.ts")
 		assert.Assert(t, ok)
 		assert.Equal(t, contents, "recreated")
@@ -1619,7 +1574,7 @@ func TestRequestFileSystem(t *testing.T) {
 			},
 		}, baseFS, "/")
 		assert.NilError(t, err)
-		layered := getRequestFileSystem(layeredFS)
+		layered := layeredFS
 		assert.Assert(t, layered.baseFileSystem() == host)
 		assert.Equal(t, layered.kind, KindLayer)
 
@@ -1664,7 +1619,7 @@ func TestRequestFileSystem(t *testing.T) {
 			},
 		}, baseFS, "/")
 		assert.NilError(t, err)
-		layered := getRequestFileSystem(layeredFS)
+		layered := layeredFS
 		assert.Equal(t, layered.kind, KindFull)
 		assert.Assert(t, layered.baseFileSystem() == host)
 
@@ -1742,9 +1697,7 @@ func TestRequestFileSystem(t *testing.T) {
 		assert.Assert(t, layered.DirectoryExists("/project/pkg"))
 		assert.DeepEqual(t, layered.GetAccessibleEntries("/project/pkg").Files, []string{"index.d.ts"})
 		assert.Equal(t, layered.Realpath("/project/pkg/index.d.ts"), "/host/pkg/index.d.ts")
-		info := layered.Stat("/project/pkg/index.d.ts")
-		assert.Assert(t, info != nil)
-		assert.Equal(t, info.Name(), "index.d.ts")
+		// The link is an explicit host link, so it reads the host rather than the layers below.
 		assert.Assert(t, host.SeenFiles.Has("/host/pkg/index.d.ts"))
 	})
 
@@ -1778,7 +1731,7 @@ func TestRequestFileSystem(t *testing.T) {
 		assert.Equal(t, contents, "host")
 		assert.Assert(t, !layered.FileExists("/link/cache-only.ts"))
 		assert.Assert(t, !layered.FileExists("/link/removed.ts"))
-		assert.Equal(t, layered.Stat("/link/host.ts").Size(), int64(len("host")))
+		assert.Assert(t, layered.FileExists("/link/host.ts"))
 		assert.DeepEqual(t, layered.GetAccessibleEntries("/link").Files, []string{"host.ts"})
 	})
 
@@ -1958,98 +1911,6 @@ func TestRequestFileSystem(t *testing.T) {
 		contents, ok := fileSystem.ReadFile("c:/repo/k")
 		assert.Assert(t, ok)
 		assert.Equal(t, contents, "target")
-	})
-
-	t.Run("full request filesystems are immutable after eager compaction", func(t *testing.T) {
-		t.Parallel()
-		host := vfstest.FromMap(map[string]string{
-			"/host.ts": "host",
-		}, true)
-		memory, err := newRequestFileSystem(&RequestFileSystem{
-			Kind: KindFull,
-			Files: map[string]string{
-				"/src/a.ts": "a",
-			},
-		}, host, "/")
-		assert.NilError(t, err)
-		assert.ErrorIs(t, memory.WriteFile("/src/b.ts", "b"), vfs.ErrInvalid)
-		assert.ErrorIs(t, memory.AppendFile("/src/a.ts", "b"), vfs.ErrInvalid)
-		assert.ErrorIs(t, memory.Remove("/src"), vfs.ErrInvalid)
-		contents, ok := memory.ReadFile("/src/a.ts")
-		assert.Assert(t, ok)
-		assert.Equal(t, contents, "a")
-
-		cache, err := newLayeredRequestFileSystem(&RequestFileSystem{
-			Kind:  KindLayer,
-			Files: map[string]string{},
-		}, memory, "/")
-		assert.NilError(t, err)
-		assert.Equal(t, cache.kind, KindFull)
-		assert.ErrorIs(t, cache.WriteFile("/written.ts", "written"), vfs.ErrInvalid)
-	})
-
-	t.Run("layer request filesystems write through after eager compaction", func(t *testing.T) {
-		t.Parallel()
-		host := vfstest.FromMap(map[string]string{}, true)
-		base, err := newRequestFileSystem(&RequestFileSystem{
-			Kind:  KindLayer,
-			Files: map[string]string{},
-		}, host, "/")
-		assert.NilError(t, err)
-		cache, err := newLayeredRequestFileSystem(&RequestFileSystem{
-			Kind:  KindLayer,
-			Files: map[string]string{},
-		}, base, "/")
-		assert.NilError(t, err)
-		assert.Equal(t, cache.kind, KindLayer)
-		assert.NilError(t, cache.WriteFile("/written.ts", "written"))
-		assert.NilError(t, cache.AppendFile("/written.ts", " appended"))
-		contents, ok := host.ReadFile("/written.ts")
-		assert.Assert(t, ok)
-		assert.Equal(t, contents, "written appended")
-		assert.NilError(t, cache.Remove("/written.ts"))
-		assert.Assert(t, !host.FileExists("/written.ts"))
-	})
-
-	t.Run("cache mutations follow inherited request symlinks", func(t *testing.T) {
-		t.Parallel()
-		host := vfstest.FromMap(map[string]string{
-			"/target/write.ts":  "target",
-			"/target/append.ts": "target",
-			"/target/remove.ts": "target",
-			"/target/times.ts":  "target",
-			"/link/write.ts":    "alias",
-			"/link/append.ts":   "alias",
-			"/link/remove.ts":   "alias",
-			"/link/times.ts":    "alias",
-		}, true)
-		base, err := newRequestFileSystem(&RequestFileSystem{
-			Kind:  KindLayer,
-			Files: map[string]string{},
-			Symlinks: map[string]RequestSymlink{
-				"/link": {Target: "/target"},
-			},
-		}, host, "/")
-		assert.NilError(t, err)
-		cache, err := newLayeredRequestFileSystem(&RequestFileSystem{Kind: KindLayer}, base, "/")
-		assert.NilError(t, err)
-
-		assert.NilError(t, cache.WriteFile("/link/write.ts", "written"))
-		contents, ok := host.ReadFile("/target/write.ts")
-		assert.Assert(t, ok)
-		assert.Equal(t, contents, "written")
-
-		assert.NilError(t, cache.AppendFile("/link/append.ts", " appended"))
-		contents, ok = host.ReadFile("/target/append.ts")
-		assert.Assert(t, ok)
-		assert.Equal(t, contents, "target appended")
-
-		assert.NilError(t, cache.Remove("/link/remove.ts"))
-		assert.Assert(t, !host.FileExists("/target/remove.ts"))
-
-		modified := time.Unix(123, 0)
-		assert.NilError(t, cache.Chtimes("/link/times.ts", modified, modified))
-		assert.Equal(t, host.Stat("/target/times.ts").ModTime(), modified)
 	})
 
 	t.Run("mixed windows and posix roots support cross-root and relative symlinks", func(t *testing.T) {

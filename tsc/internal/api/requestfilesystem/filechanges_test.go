@@ -28,12 +28,16 @@ func TestFileChangesIncludeDirectoryTombstones(t *testing.T) {
 		Kind:         KindLayer,
 		Files:        map[string]string{"/replaced.ts": "new"},
 		RemovedPaths: []string{"removed", "/missing", "/replaced.ts"},
-	}, base, "/")
+	}, base.source, base.requestFileSystem, "/")
 	assert.Assert(t, !summary.InvalidateAll)
 	assert.Assert(t, summary.IncludesWatchChangeOutsideNodeModules)
-	assert.Equal(t, summary.Deleted.Len(), 2)
+	// The removed directory, the symlink aliasing it, and the base layer's files
+	// under both, which the snapshot's cached directory tree does not describe.
+	assert.Equal(t, summary.Deleted.Len(), 4)
 	assert.Assert(t, summary.Deleted.Has("file:///removed"))
+	assert.Assert(t, summary.Deleted.Has("file:///removed/nested/file.ts"))
 	assert.Assert(t, summary.Deleted.Has("file:///alias"))
+	assert.Assert(t, summary.Deleted.Has("file:///alias/nested/file.ts"))
 	assert.Equal(t, summary.Changed.Len(), 1)
 	assert.Assert(t, summary.Changed.Has("file:///replaced.ts"))
 }
@@ -55,11 +59,17 @@ func TestFileChangesIncludeListingsAndSymlinks(t *testing.T) {
 			"/link": {Target: "/target"},
 			"/new":  {Target: "/host", Host: true},
 		},
-	}, base, "/")
+	}, baseFileSource(nil, base), nil, "/")
 	assert.Assert(t, !summary.InvalidateAll)
-	assert.Equal(t, summary.Deleted.Len(), 2)
+	// Retargeting "/link" drops what was visible through it, but supplying a
+	// listing for "/dir" does not touch "/dir/old.ts": a listing only decides what
+	// enumerating that directory returns. Nothing is deleted for "/new", which
+	// named a path that did not exist.
+	assert.Equal(t, summary.Deleted.Len(), 3)
 	assert.Assert(t, summary.Deleted.Has("file:///dir"))
+	assert.Assert(t, !summary.Deleted.Has("file:///dir/old.ts"))
 	assert.Assert(t, summary.Deleted.Has("file:///link"))
+	assert.Assert(t, summary.Deleted.Has("file:///link/old.ts"))
 	assert.Equal(t, summary.Created.Len(), 3)
 	assert.Assert(t, summary.Created.Has("file:///dir"))
 	assert.Assert(t, summary.Created.Has("file:///link"))
@@ -82,7 +92,7 @@ func TestFileChangesIncludeRecursiveSymlinkAliases(t *testing.T) {
 	addFileChanges(&summary, &RequestFileSystem{
 		Kind:  KindLayer,
 		Files: map[string]string{"/dir/file.ts": "new"},
-	}, base, "/")
+	}, base.source, base.requestFileSystem, "/")
 	assert.Equal(t, summary.Changed.Len(), 2)
 	assert.Assert(t, summary.Changed.Has("file:///dir/file.ts"))
 	assert.Assert(t, summary.Changed.Has("file:///dir/link/file.ts"))
@@ -108,7 +118,7 @@ func TestFileChangesIncludeRootSymlinkAliases(t *testing.T) {
 	addFileChanges(&summary, &RequestFileSystem{
 		Kind:  KindLayer,
 		Files: map[string]string{"/file.ts": "new"},
-	}, base, "/")
+	}, base.source, base.requestFileSystem, "/")
 	assert.Equal(t, summary.Changed.Len(), 2)
 	assert.Assert(t, summary.Changed.Has("file:///file.ts"))
 	assert.Assert(t, summary.Changed.Has("file:///link/file.ts"))

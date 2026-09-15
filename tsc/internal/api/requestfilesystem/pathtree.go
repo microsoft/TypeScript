@@ -1,12 +1,12 @@
 package requestfilesystem
 
 import (
-	"io/fs"
 	"maps"
 	"slices"
 	"strings"
-	"time"
+	"sync"
 
+	"github.com/microsoft/TypeScript/tsc/internal/project"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 )
@@ -19,13 +19,25 @@ const (
 	requestFallbackMissing
 )
 
+// requestEntry is a file, directory, or symlink the request supplied. A symlink is
+// never observed as an entry: lookups resolve it and report whatever it points at.
 type requestEntry interface {
 	isRequestEntry()
+	IsDir() bool
 }
 
 type requestFile struct {
-	fileName string
-	content  string
+	fileName   string
+	content    string
+	handle     project.FileHandle
+	handleOnce sync.Once
+}
+
+func (file *requestFile) fileHandle() project.FileHandle {
+	file.handleOnce.Do(func() {
+		file.handle = project.NewFileHandle(file.fileName, file.content)
+	})
+	return file.handle
 }
 
 type requestSymlink struct {
@@ -43,32 +55,9 @@ func (*requestFile) isRequestEntry()      {}
 func (*requestSymlink) isRequestEntry()   {}
 func (*requestDirectory) isRequestEntry() {}
 
-func (file *requestFile) Name() string               { return tspath.GetBaseFileName(file.fileName) }
-func (file *requestFile) Size() int64                { return int64(len(file.content)) }
-func (file *requestFile) Mode() fs.FileMode          { return 0o444 }
-func (file *requestFile) ModTime() time.Time         { return time.Time{} }
-func (file *requestFile) IsDir() bool                { return false }
-func (file *requestFile) Sys() any                   { return nil }
-func (file *requestFile) Type() fs.FileMode          { return file.Mode().Type() }
-func (file *requestFile) Info() (fs.FileInfo, error) { return file, nil }
-
-func (directory *requestDirectory) Name() string {
-	return tspath.GetBaseFileName(directory.directoryName)
-}
-func (directory *requestDirectory) Size() int64                { return 0 }
-func (directory *requestDirectory) Mode() fs.FileMode          { return fs.ModeDir | 0o555 }
-func (directory *requestDirectory) ModTime() time.Time         { return time.Time{} }
-func (directory *requestDirectory) IsDir() bool                { return true }
-func (directory *requestDirectory) Sys() any                   { return nil }
-func (directory *requestDirectory) Type() fs.FileMode          { return directory.Mode().Type() }
-func (directory *requestDirectory) Info() (fs.FileInfo, error) { return directory, nil }
-
-var (
-	_ vfs.FileInfo = (*requestFile)(nil)
-	_ vfs.DirEntry = (*requestFile)(nil)
-	_ vfs.FileInfo = (*requestDirectory)(nil)
-	_ vfs.DirEntry = (*requestDirectory)(nil)
-)
+func (*requestFile) IsDir() bool      { return false }
+func (*requestSymlink) IsDir() bool   { return false }
+func (*requestDirectory) IsDir() bool { return true }
 
 type requestPathNode struct {
 	entry       requestEntry
@@ -191,6 +180,13 @@ func composeRequestPaths(base *requestPathNode, overlay *requestPathNode, fallba
 	overlayDirectory, _ := overlay.entry.(*requestDirectory)
 	if overlay.entry != nil {
 		result.entry = overlay.entry
+		// Repeating a file's existing content leaves it unchanged, so keep the
+		// entry the snapshots below are already using.
+		if overlayFile, ok := overlay.entry.(*requestFile); ok && base != nil {
+			if baseFile, ok := base.entry.(*requestFile); ok && overlayFile.content == baseFile.content {
+				result.entry = baseFile
+			}
+		}
 		if overlayDirectory != nil && overlayDirectory.listing == nil && previousDirectory != nil {
 			result.entry = &requestDirectory{directoryName: overlayDirectory.directoryName, listing: previousDirectory.listing}
 		}
