@@ -17,7 +17,6 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/spanmap"
 	"github.com/microsoft/TypeScript/tsc/internal/stringutil"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/baseline"
-	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 )
 
@@ -233,35 +232,19 @@ func getAccessibleFilePaths(fileSystem vfs.FS, root string) []string {
 	if !fileSystem.DirectoryExists(root) {
 		return nil
 	}
-	rootPrefix := root[:tspath.GetRootLength(root)]
-	sameRoot := func(path string) bool {
-		pathRootLength := tspath.GetRootLength(path)
-		return pathRootLength == len(rootPrefix) && tspath.ComparePaths(
-			path[:pathRootLength],
-			rootPrefix,
-			tspath.ComparePathsOptions{UseCaseSensitiveFileNames: fileSystem.UseCaseSensitiveFileNames()},
-		) == 0
-	}
 	var files []string
-	directories := []string{root}
-	for len(directories) != 0 {
-		directory := directories[len(directories)-1]
-		directories = directories[:len(directories)-1]
-		entries := fileSystem.GetAccessibleEntries(directory)
-		for _, name := range entries.Files {
-			path := tspath.CombinePaths(directory, name)
-			if sameRoot(path) {
-				files = append(files, path)
-			}
+	err := vfs.WalkDir(fileSystem, root, func(path string, entry vfs.DirEntry, err error) error {
+		if err != nil {
+			return err
 		}
-		for _, name := range entries.Directories {
-			path := tspath.CombinePaths(directory, name)
-			if _, isSymlink := entries.Symlinks[name]; !isSymlink && sameRoot(path) {
-				directories = append(directories, path)
-			}
+		if entry.Type().IsRegular() {
+			files = append(files, path)
 		}
+		return nil
+	})
+	if err != nil {
+		panic("walkdir error during fourslash baseline: " + err.Error())
 	}
-	slices.Sort(files)
 	return files
 }
 

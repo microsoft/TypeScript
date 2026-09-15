@@ -1654,28 +1654,19 @@ func TestParseTypeAcquisition(t *testing.T) {
 }
 
 func printFS(output io.Writer, files vfs.FS, root string) error {
-	var visit func(string) error
-	visit = func(directory string) error {
-		entries := files.GetAccessibleEntries(directory)
-		names := append(slices.Clone(entries.Directories), entries.Files...)
-		slices.Sort(names)
-		for _, name := range names {
-			path := tspath.CombinePaths(directory, name)
-			if slices.Contains(entries.Files, name) {
-				if content, ok := files.ReadFile(path); !ok {
-					return fmt.Errorf("failed to read file %s", path)
-				} else if _, err := fmt.Fprintf(output, "//// [%s]\r\n%s\r\n\r\n", path, content); err != nil {
-					return err
-				}
-			} else if _, isSymlink := entries.Symlinks[name]; !isSymlink {
-				if err := visit(path); err != nil {
-					return err
-				}
+	return vfs.WalkDir(files, root, func(path string, entry vfs.DirEntry, err error) error {
+		if err != nil {
+			return err
+		}
+		if entry.Type().IsRegular() {
+			if content, ok := files.ReadFile(path); !ok {
+				return fmt.Errorf("failed to read file %s", path)
+			} else if _, err := fmt.Fprintf(output, "//// [%s]\r\n%s\r\n\r\n", path, content); err != nil {
+				return err
 			}
 		}
 		return nil
-	}
-	return visit(root)
+	})
 }
 
 func parseSrcCompiler(tb testing.TB) *tsoptions.ParsedCommandLine {
