@@ -489,79 +489,79 @@ import "missing";`,
 
     test("module resolver and provided resolution sets", async () => {
         await using api = spawnAPI({
-                "/src/main.ts": `import { value } from "pkg"; export { value };`,
-                "/src/extension.ts": `import { value } from "./dep.ts"; value;`,
-                "/src/dep.ts": `export const value = 1;`,
-                "/provided.d.ts": `export declare const value: string;`,
-                "/node_modules/pkg/package.json": `{"name":"pkg","version":"1.0.0","types":"index.d.ts"}`,
-                "/node_modules/pkg/index.d.ts": `export declare const value: number;`,
+            "/src/main.ts": `import { value } from "pkg"; export { value };`,
+            "/src/extension.ts": `import { value } from "./dep.ts"; value;`,
+            "/src/dep.ts": `export const value = 1;`,
+            "/provided.d.ts": `export declare const value: string;`,
+            "/node_modules/pkg/package.json": `{"name":"pkg","version":"1.0.0","types":"index.d.ts"}`,
+            "/node_modules/pkg/index.d.ts": `export declare const value: number;`,
         });
         const snapshot = await api.updateSnapshot();
-                const compilerOptions = {
-                    module: ModuleKind.NodeNext,
-                    moduleResolution: ModuleResolutionKind.NodeNext,
-                    traceResolution: true,
-                };
-                const resolver = await snapshot.createModuleResolver(compilerOptions);
-                const defaultResolution = await resolver.resolveModuleName("pkg", "/src");
-                assert.equal(defaultResolution.result?.resolvedFileName, "/node_modules/pkg/index.d.ts");
-                assert.ok(defaultResolution.trace?.length);
-                const fallbackResolver = await snapshot.createModuleResolver(compilerOptions, {
-                    moduleResolutions: { fallback: "resolve", entries: [] },
-                });
-                assert.equal(
-                    (await fallbackResolver.resolveModuleName("pkg", "/src")).result?.resolvedFileName,
-                    "/node_modules/pkg/index.d.ts",
-                );
+        const compilerOptions = {
+            module: ModuleKind.NodeNext,
+            moduleResolution: ModuleResolutionKind.NodeNext,
+            traceResolution: true,
+        };
+        const resolver = await snapshot.createModuleResolver(compilerOptions);
+        const defaultResolution = await resolver.resolveModuleName("pkg", "/src");
+        assert.equal(defaultResolution.result?.resolvedFileName, "/node_modules/pkg/index.d.ts");
+        assert.ok(defaultResolution.trace?.length);
+        const fallbackResolver = await snapshot.createModuleResolver(compilerOptions, {
+            moduleResolutions: { fallback: "resolve", entries: [] },
+        });
+        assert.equal(
+            (await fallbackResolver.resolveModuleName("pkg", "/src")).result?.resolvedFileName,
+            "/node_modules/pkg/index.d.ts",
+        );
 
-                const set = await api.createModuleResolutionSet({
+        const set = await api.createModuleResolutionSet({
+            fallback: "unresolved",
+            entries: [{
+                moduleName: "pkg",
+                result: { resolvedFileName: "/provided.d.ts" },
+            }],
+        });
+        const overriddenResolver = await snapshot.createModuleResolver(compilerOptions, { moduleResolutions: set });
+        assert.equal(
+            (await overriddenResolver.resolveModuleName("pkg", "/src")).result?.resolvedFileName,
+            "/provided.d.ts",
+        );
+        assert.equal((await overriddenResolver.resolveModuleName("missing", "/src")).result, undefined);
+
+        const program = await api.createProgram(
+            ["/src/main.ts"],
+            { compilerOptions: { ...compilerOptions, noLib: true }, moduleResolutions: set },
+        );
+        assert.deepEqual([...await program.getSourceFileNames()].sort(), ["/provided.d.ts", "/src/main.ts"]);
+
+        const extensionProgram = await api.createProgram(
+            ["/src/extension.ts"],
+            {
+                compilerOptions: { ...compilerOptions, noLib: true },
+                moduleResolutions: {
                     fallback: "unresolved",
                     entries: [{
-                        moduleName: "pkg",
-                        result: { resolvedFileName: "/provided.d.ts" },
+                        moduleName: "./dep.ts",
+                        containingDirectory: "/src",
+                        result: { resolvedFileName: "/src/dep.ts" },
                     }],
-                });
-                const overriddenResolver = await snapshot.createModuleResolver(compilerOptions, { moduleResolutions: set });
-                assert.equal(
-                    (await overriddenResolver.resolveModuleName("pkg", "/src")).result?.resolvedFileName,
-                    "/provided.d.ts",
-                );
-                assert.equal((await overriddenResolver.resolveModuleName("missing", "/src")).result, undefined);
+                },
+            },
+        );
+        assert.ok((await extensionProgram.getSemanticDiagnostics("/src/extension.ts")).some(diagnostic => diagnostic.code === 5097));
 
-                const program = await api.createProgram(
-                    ["/src/main.ts"],
-                    { compilerOptions: { ...compilerOptions, noLib: true }, moduleResolutions: set },
-                );
-                assert.deepEqual([...await program.getSourceFileNames()].sort(), ["/provided.d.ts", "/src/main.ts"]);
+        await set.dispose();
+        assert.equal(
+            (await overriddenResolver.resolveModuleName("pkg", "/src")).result?.resolvedFileName,
+            "/provided.d.ts",
+        );
+        const createFromDisposedSet = () => snapshot.createModuleResolver(compilerOptions, { moduleResolutions: set });
+        await assert.rejects(createFromDisposedSet, /ModuleResolutionSet is disposed/); // @sync: assert.throws(createFromDisposedSet, /ModuleResolutionSet is disposed/);
 
-                const extensionProgram = await api.createProgram(
-                    ["/src/extension.ts"],
-                    {
-                        compilerOptions: { ...compilerOptions, noLib: true },
-                        moduleResolutions: {
-                            fallback: "unresolved",
-                            entries: [{
-                                moduleName: "./dep.ts",
-                                containingDirectory: "/src",
-                                result: { resolvedFileName: "/src/dep.ts" },
-                            }],
-                        },
-                    },
-                );
-                assert.ok((await extensionProgram.getSemanticDiagnostics("/src/extension.ts")).some(diagnostic => diagnostic.code === 5097));
-
-                await set.dispose();
-                assert.equal(
-                    (await overriddenResolver.resolveModuleName("pkg", "/src")).result?.resolvedFileName,
-                    "/provided.d.ts",
-                );
-                const createFromDisposedSet = () => snapshot.createModuleResolver(compilerOptions, { moduleResolutions: set });
-                await assert.rejects(createFromDisposedSet, /ModuleResolutionSet is disposed/); // @sync: assert.throws(createFromDisposedSet, /ModuleResolutionSet is disposed/);
-
-                await program.dispose();
-                await extensionProgram.dispose();
-                await snapshot.dispose();
-                const resolveAfterSnapshotDisposal = () => overriddenResolver.resolveModuleName("pkg", "/src");
+        await program.dispose();
+        await extensionProgram.dispose();
+        await snapshot.dispose();
+        const resolveAfterSnapshotDisposal = () => overriddenResolver.resolveModuleName("pkg", "/src");
         await assert.rejects(resolveAfterSnapshotDisposal, /Snapshot is disposed/); // @sync: assert.throws(resolveAfterSnapshotDisposal, /Snapshot is disposed/);
     });
 
