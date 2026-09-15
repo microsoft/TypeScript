@@ -1,6 +1,7 @@
 package lsproto
 
 import (
+	"fmt"
 	"reflect"
 	"strings"
 	"sync"
@@ -29,6 +30,12 @@ type structSpec struct {
 	byName        map[string]structFieldSpec
 	requiredNames []string
 	requiredMask  uint64
+}
+
+type structDecoder struct {
+	rv   reflect.Value
+	spec *structSpec
+	seen uint64
 }
 
 var structSpecCache sync.Map // reflect.Type -> *structSpec
@@ -66,6 +73,41 @@ func specFor(t reflect.Type) *structSpec {
 	}
 	actual, _ := structSpecCache.LoadOrStore(t, spec)
 	return actual.(*structSpec)
+}
+
+func newStructDecoder(v any) *structDecoder {
+	rv := reflect.ValueOf(v).Elem()
+	return &structDecoder{
+		rv:   rv,
+		spec: specFor(rv.Type()),
+	}
+}
+
+func (d *structDecoder) field(name string, kind json.Kind, decode func(any) error) error {
+	fs, ok := d.spec.byName[name]
+	if !ok {
+		return decode(nil)
+	}
+	if fs.requiredID >= 0 {
+		d.seen |= 1 << fs.requiredID
+	}
+	if fs.rejectNull && kind == 'n' {
+		return errNull(name)
+	}
+	return decode(d.rv.Field(fs.index).Addr().Interface())
+}
+
+func (d *structDecoder) finish() error {
+	if missing := d.spec.requiredMask &^ d.seen; missing != 0 {
+		var missingProps []string
+		for id, n := range d.spec.requiredNames {
+			if missing&(1<<id) != 0 {
+				missingProps = append(missingProps, n)
+			}
+		}
+		return errMissing(missingProps)
+	}
+	return nil
 }
 
 // unmarshalStruct decodes a JSON object into the struct pointed to by v,
@@ -119,6 +161,135 @@ func unmarshalStruct(v any, dec *json.Decoder) error {
 		}
 		return errMissing(missingProps)
 	}
+	return nil
+}
+
+type deferredStructField struct {
+	name  string
+	value json.Value
+}
+
+type discriminatedStructDecoder struct {
+	dec                *json.Decoder
+	typeName           string
+	discriminator      string
+	discriminatorValue json.Value
+	hasDiscriminator   bool
+	deferred           []deferredStructField
+	closed             bool
+}
+
+// scanDiscriminatedStruct advances through an object until it finds the
+// discriminator. Only fields preceding the discriminator are retained.
+func scanDiscriminatedStruct(dec *json.Decoder, typeName string, discriminator string) (discriminatedStructDecoder, error) {
+	if k := dec.PeekKind(); k != '{' {
+		return discriminatedStructDecoder{}, errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return discriminatedStructDecoder{}, err
+	}
+
+	state := discriminatedStructDecoder{
+		dec:           dec,
+		typeName:      typeName,
+		discriminator: discriminator,
+	}
+	for dec.PeekKind() != '}' {
+		rawName, err := dec.ReadValue()
+		if err != nil {
+			return discriminatedStructDecoder{}, err
+		}
+		name := string(rawName[1 : len(rawName)-1])
+		if name == discriminator {
+			value, err := dec.ReadValue()
+			if err != nil {
+				return discriminatedStructDecoder{}, err
+			}
+			state.discriminatorValue = value
+			state.hasDiscriminator = true
+			return state, nil
+		}
+
+		value, err := dec.ReadValue()
+		if err != nil {
+			return discriminatedStructDecoder{}, err
+		}
+		state.deferred = append(state.deferred, deferredStructField{name: name, value: value.Clone()})
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return discriminatedStructDecoder{}, err
+	}
+	state.closed = true
+	return state, nil
+}
+
+func (d discriminatedStructDecoder) invalidDiscriminator() error {
+	if !d.hasDiscriminator {
+		return fmt.Errorf("invalid %s: missing discriminator %q", d.typeName, d.discriminator)
+	}
+	return fmt.Errorf("invalid %s discriminator %q: %s", d.typeName, d.discriminator, d.discriminatorValue)
+}
+
+// unmarshalDiscriminatedArm decodes the retained and remaining object fields
+// into a concrete union arm, assigning it only after the full object succeeds.
+func unmarshalDiscriminatedArm[T any](state discriminatedStructDecoder, out **T) error {
+	return unmarshalDiscriminatedArmWithOptions(state, out, false)
+}
+
+// unmarshalDiscriminatedFallbackArm decodes a fallback arm, including its raw
+// discriminator in case the fallback structure declares that field.
+func unmarshalDiscriminatedFallbackArm[T any](state discriminatedStructDecoder, out **T) error {
+	return unmarshalDiscriminatedArmWithOptions(state, out, true)
+}
+
+func unmarshalDiscriminatedArmWithOptions[T any](state discriminatedStructDecoder, out **T, decodeDiscriminator bool) error {
+	target := new(T)
+	targetDecoder := newStructDecoder(target)
+	if state.hasDiscriminator {
+		if err := targetDecoder.field(state.discriminator, state.discriminatorValue.Kind(), func(out any) error {
+			if out == nil || !decodeDiscriminator {
+				return nil
+			}
+			return json.Unmarshal(state.discriminatorValue, out)
+		}); err != nil {
+			return err
+		}
+	}
+	for _, field := range state.deferred {
+		if err := targetDecoder.field(field.name, field.value.Kind(), func(out any) error {
+			if out == nil {
+				return nil
+			}
+			return json.Unmarshal(field.value, out)
+		}); err != nil {
+			return err
+		}
+	}
+
+	if !state.closed {
+		for state.dec.PeekKind() != '}' {
+			rawName, err := state.dec.ReadValue()
+			if err != nil {
+				return err
+			}
+			name := string(rawName[1 : len(rawName)-1])
+			if err := targetDecoder.field(name, state.dec.PeekKind(), func(out any) error {
+				if out == nil {
+					return state.dec.SkipValue()
+				}
+				return json.UnmarshalDecode(state.dec, out)
+			}); err != nil {
+				return err
+			}
+		}
+		if _, err := state.dec.ReadToken(); err != nil {
+			return err
+		}
+	}
+	if err := targetDecoder.finish(); err != nil {
+		return err
+	}
+	*out = target
 	return nil
 }
 
