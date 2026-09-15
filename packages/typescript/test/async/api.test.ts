@@ -348,6 +348,9 @@ import "missing";`,
         assert.ok(sourceFile);
         const pkgSpecifier = cast(cast(sourceFile.statements[0], isImportDeclaration).moduleSpecifier, isStringLiteral);
 
+        assert.equal(await program.getModeForUsageLocation("/src/index.ts", pkgSpecifier), ModuleKind.ESNext);
+        assert.equal(await program.getModeForResolutionAtIndex("/src/index.ts", 0), ModuleKind.ESNext);
+
         const resolvedModule = await program.getResolvedModule("/src/index.ts", "pkg", ModuleKind.ESNext);
         assert.ok(resolvedModule);
         assert.equal(resolvedModule.resolvedFileName, "/node_modules/pkg/index.d.ts");
