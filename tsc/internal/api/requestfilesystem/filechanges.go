@@ -7,7 +7,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 )
 
-func addFileChanges(summary *project.FileChangeSummary, request *RequestFileSystem, baseFS vfs.FS, currentDirectory string) {
+func addFileChanges(summary *project.FileChangeSummary, request *RequestFileSystem, baseFS vfs.FS, fileSystem *requestFileSystem, currentDirectory string) {
 	toPath := func(fileName string) tspath.Path {
 		return tspath.ToPath(fileName, currentDirectory, baseFS.UseCaseSensitiveFileNames())
 	}
@@ -65,6 +65,26 @@ func addFileChanges(summary *project.FileChangeSummary, request *RequestFileSyst
 	}
 	for linkName := range request.Symlinks {
 		addReplacement(linkName)
+	}
+	if layeredBase, ok := baseFS.(project.LayeredFileSystem); ok {
+		overlays := fileSystem.Overlays()
+		for path, overlay := range layeredBase.Overlays() {
+			if _, preserved := overlays[path]; preserved {
+				continue
+			}
+			uri := lsconv.FileNameToDocumentURI(overlay.FileName())
+			if summary.Closed.Has(uri) {
+				continue
+			}
+			summary.Created.Delete(uri)
+			if fileSystem.FileExists(overlay.FileName()) {
+				summary.Deleted.Delete(uri)
+				summary.Changed.Add(uri)
+			} else {
+				summary.Changed.Delete(uri)
+				summary.Deleted.Add(uri)
+			}
+		}
 	}
 	if summary.Changed.Len()+summary.Created.Len()+summary.Deleted.Len() > 0 {
 		summary.IncludesWatchChangeOutsideNodeModules = true

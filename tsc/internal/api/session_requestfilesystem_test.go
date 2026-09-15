@@ -9,6 +9,7 @@ import (
 	"testing"
 
 	"github.com/microsoft/TypeScript/tsc/internal/api/requestfilesystem"
+	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/project"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/projecttestutil"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
@@ -89,6 +90,176 @@ func TestUpdateSnapshotUsesFullFileSystem(t *testing.T) {
 	contents, ok = temporarySnapshot.ReadFile("/src/other.ts")
 	assert.Assert(t, ok)
 	assert.Equal(t, contents, `export const other = true;`)
+}
+
+func TestUpdateSnapshotRequestFileOverridesOpenOverlay(t *testing.T) {
+	t.Parallel()
+
+	projectSession, _ := projecttestutil.Setup(map[string]any{
+		"/index.ts": "host",
+	})
+	defer projectSession.Close()
+	projectSession.DidOpenFile(context.Background(), "file:///index.ts", 1, "overlay", lsproto.LanguageKindTypeScript)
+
+	session := NewLSPSession(projectSession, nil)
+	defer session.Close()
+	response, err := session.handleUpdateSnapshot(context.Background(), &UpdateSnapshotParams{
+		FileSystem: &requestfilesystem.RequestFileSystem{
+			Kind: requestfilesystem.KindLayer,
+			Files: map[string]string{
+				"/index.ts": "request",
+			},
+		},
+	})
+	assert.NilError(t, err)
+
+	snapshot := session.snapshots[response.Snapshot].snapshot
+	contents, ok := snapshot.ReadFile("/index.ts")
+	assert.Assert(t, ok)
+	assert.Equal(t, contents, "request")
+}
+
+func TestUpdateSnapshotRequestTombstoneRemovesOpenOverlay(t *testing.T) {
+	t.Parallel()
+
+	projectSession, _ := projecttestutil.Setup(map[string]any{
+		"/index.ts": "host",
+	})
+	defer projectSession.Close()
+	projectSession.DidOpenFile(context.Background(), "file:///index.ts", 1, "overlay", lsproto.LanguageKindTypeScript)
+
+	session := NewLSPSession(projectSession, nil)
+	defer session.Close()
+	response, err := session.handleUpdateSnapshot(context.Background(), &UpdateSnapshotParams{
+		FileSystem: &requestfilesystem.RequestFileSystem{
+			Kind:         requestfilesystem.KindLayer,
+			RemovedPaths: []string{"/index.ts"},
+		},
+	})
+	assert.NilError(t, err)
+
+	snapshot := session.snapshots[response.Snapshot].snapshot
+	_, ok := snapshot.ReadFile("/index.ts")
+	assert.Assert(t, !ok)
+	assert.Assert(t, snapshot.GetDefaultProject("file:///index.ts") == nil)
+}
+
+func TestUpdateSnapshotRequestTombstoneRemovesHostlessOpenOverlay(t *testing.T) {
+	t.Parallel()
+
+	projectSession, _ := projecttestutil.Setup(map[string]any{})
+	defer projectSession.Close()
+	projectSession.DidOpenFile(context.Background(), "file:///index.ts", 1, "overlay", lsproto.LanguageKindTypeScript)
+
+	session := NewLSPSession(projectSession, nil)
+	defer session.Close()
+	response, err := session.handleUpdateSnapshot(context.Background(), &UpdateSnapshotParams{
+		FileSystem: &requestfilesystem.RequestFileSystem{
+			Kind:         requestfilesystem.KindLayer,
+			RemovedPaths: []string{"/index.ts"},
+		},
+	})
+	assert.NilError(t, err)
+
+	snapshot := session.snapshots[response.Snapshot].snapshot
+	_, ok := snapshot.ReadFile("/index.ts")
+	assert.Assert(t, !ok)
+	assert.Assert(t, snapshot.GetDefaultProject("file:///index.ts") == nil)
+}
+
+func TestUpdateSnapshotRequestFileMasksHostlessOpenOverlayDirectory(t *testing.T) {
+	t.Parallel()
+
+	projectSession, _ := projecttestutil.Setup(map[string]any{})
+	defer projectSession.Close()
+	projectSession.DidOpenFile(context.Background(), "file:///src/index.ts", 1, "overlay", lsproto.LanguageKindTypeScript)
+
+	session := NewLSPSession(projectSession, nil)
+	defer session.Close()
+	response, err := session.handleUpdateSnapshot(context.Background(), &UpdateSnapshotParams{
+		FileSystem: &requestfilesystem.RequestFileSystem{
+			Kind:  requestfilesystem.KindLayer,
+			Files: map[string]string{"/src": "request"},
+		},
+	})
+	assert.NilError(t, err)
+
+	snapshot := session.snapshots[response.Snapshot].snapshot
+	contents, ok := snapshot.ReadFile("/src")
+	assert.Assert(t, ok)
+	assert.Equal(t, contents, "request")
+	_, ok = snapshot.ReadFile("/src/index.ts")
+	assert.Assert(t, !ok)
+	assert.Assert(t, snapshot.GetDefaultProject("file:///src/index.ts") == nil)
+}
+
+func TestUpdateSnapshotRequestMaskUpdatesOpenConfiguredProjects(t *testing.T) {
+	t.Parallel()
+
+	projectSession, _ := projecttestutil.Setup(map[string]any{
+		"/tsconfig.json": `{ "compilerOptions": { "noLib": true }, "files": ["index.ts"] }`,
+		"/index.ts":      "host",
+	})
+	defer projectSession.Close()
+	projectSession.DidOpenFile(context.Background(), "file:///index.ts", 1, "overlay", lsproto.LanguageKindTypeScript)
+
+	session := NewLSPSession(projectSession, nil)
+	defer session.Close()
+	base, err := session.handleUpdateSnapshot(context.Background(), &UpdateSnapshotParams{
+		OpenProjects: []DocumentIdentifier{{FileName: "/tsconfig.json"}},
+	})
+	assert.NilError(t, err)
+	baseSnapshot := session.snapshots[base.Snapshot].snapshot
+	assert.Assert(t, baseSnapshot.ProjectCollection.GetOpenConfiguredProjects().Has("/tsconfig.json"))
+
+	masked, err := session.handleUpdateSnapshot(context.Background(), &UpdateSnapshotParams{
+		Snapshot: base.Snapshot,
+		FileSystem: &requestfilesystem.RequestFileSystem{
+			Kind: requestfilesystem.KindLayer,
+			Files: map[string]string{
+				"/index.ts": "request",
+			},
+		},
+	})
+	assert.NilError(t, err)
+	maskedSnapshot := session.snapshots[masked.Snapshot].snapshot
+	assert.Assert(t, !maskedSnapshot.ProjectCollection.GetOpenConfiguredProjects().Has("/tsconfig.json"))
+
+	unmasked, err := session.handleUpdateSnapshot(context.Background(), &UpdateSnapshotParams{})
+	assert.NilError(t, err)
+	unmaskedSnapshot := session.snapshots[unmasked.Snapshot].snapshot
+	assert.Assert(t, unmaskedSnapshot.ProjectCollection.GetOpenConfiguredProjects().Has("/tsconfig.json"))
+}
+
+func TestUpdateSnapshotConfigChangeSkipsMaskedOpenOverlay(t *testing.T) {
+	t.Parallel()
+
+	projectSession, _ := projecttestutil.Setup(map[string]any{
+		"/index.ts": "host",
+	})
+	defer projectSession.Close()
+	projectSession.DidOpenFile(context.Background(), "file:///index.ts", 1, "overlay", lsproto.LanguageKindTypeScript)
+
+	session := NewLSPSession(projectSession, nil)
+	defer session.Close()
+	base, err := session.handleUpdateSnapshot(context.Background(), &UpdateSnapshotParams{})
+	assert.NilError(t, err)
+
+	updated, err := session.handleUpdateSnapshot(context.Background(), &UpdateSnapshotParams{
+		Snapshot: base.Snapshot,
+		FileSystem: &requestfilesystem.RequestFileSystem{
+			Kind: requestfilesystem.KindLayer,
+			Files: map[string]string{
+				"/tsconfig.json": `{ "compilerOptions": { "noLib": true }, "files": ["index.ts"] }`,
+			},
+			RemovedPaths: []string{"/index.ts"},
+		},
+	})
+	assert.NilError(t, err)
+
+	snapshot := session.snapshots[updated.Snapshot].snapshot
+	_, ok := snapshot.ReadFile("/index.ts")
+	assert.Assert(t, !ok)
 }
 
 func TestCreateProgramRetainsFullFileSystem(t *testing.T) {

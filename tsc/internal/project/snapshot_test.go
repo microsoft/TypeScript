@@ -202,7 +202,7 @@ func TestSnapshot(t *testing.T) {
 		_, err := session.GetLanguageService(context.Background(), pkgURI)
 		assert.NilError(t, err)
 
-		err = session.fs.fs.WriteFile("/project/node_modules/pkg/package.json", `{ "type": "module" }`)
+		err = session.fs.WriteFile("/project/node_modules/pkg/package.json", `{ "type": "module" }`)
 		assert.NilError(t, err)
 		session.DidChangeFile(context.Background(), pkgURI, 2, []lsproto.TextDocumentContentChangePartialOrWholeDocument{
 			{
@@ -285,7 +285,7 @@ func TestSnapshot(t *testing.T) {
 
 		// A watch change that reflects an actual content change on disk must still
 		// rebuild the program.
-		err = session.fs.fs.WriteFile("/home/projects/TS/p1/a.ts", "export const a = 2;")
+		err = session.fs.WriteFile("/home/projects/TS/p1/a.ts", "export const a = 2;")
 		assert.NilError(t, err)
 		session.pendingFileChangesMu.Lock()
 		session.pendingFileChanges = append(session.pendingFileChanges, FileChange{
@@ -366,7 +366,7 @@ func BenchmarkSnapshotCloneRefCost(b *testing.B) {
 				} else {
 					tsconfigContent = `{"compilerOptions": {"strict": false}}`
 				}
-				err := session.fs.fs.WriteFile("/small/tsconfig.json", tsconfigContent)
+				err := session.fs.WriteFile("/small/tsconfig.json", tsconfigContent)
 				if err != nil {
 					b.Fatal(err)
 				}
