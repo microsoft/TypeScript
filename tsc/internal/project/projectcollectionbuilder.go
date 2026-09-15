@@ -708,7 +708,7 @@ func (b *ProjectCollectionBuilder) DidUpdateATAState(ataChanges map[tspath.Path]
 					b.sessionOptions.TypingsLocation,
 					b.sessionOptions.CurrentDirectory,
 					p.currentDirectory,
-					b.fs.fs.UseCaseSensitiveFileNames(),
+					b.fs.UseCaseSensitiveFileNames(),
 				)
 				p.typingsWatch = p.typingsWatch.Clone(typingsWatchGlobs)
 				p.dirty = true
@@ -1190,7 +1190,7 @@ func (b *ProjectCollectionBuilder) updateOrCreateInferredProject(
 		compilerOptions = project.CommandLine.CompilerOptions()
 	}
 	newCommandLine := newInferredProjectCommandLine(compilerOptions, rootFileNames, projectReferences, contentMappers, tspath.ComparePathsOptions{
-		UseCaseSensitiveFileNames: b.fs.fs.UseCaseSensitiveFileNames(),
+		UseCaseSensitiveFileNames: b.fs.UseCaseSensitiveFileNames(),
 		CurrentDirectory:          project.currentDirectory,
 	})
 	newCommandLine.Errors = configFileParsingDiagnostics

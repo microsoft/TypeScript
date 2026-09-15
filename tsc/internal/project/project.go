@@ -132,7 +132,7 @@ func NewInferredProject(
 		projectReferences,
 		contentMappers,
 		tspath.ComparePathsOptions{
-			UseCaseSensitiveFileNames: builder.fs.fs.UseCaseSensitiveFileNames(),
+			UseCaseSensitiveFileNames: builder.fs.UseCaseSensitiveFileNames(),
 			CurrentDirectory:          currentDirectory,
 		},
 	)
@@ -186,12 +186,12 @@ func NewProject(
 		dirty:            true,
 	}
 
-	project.configFilePath = tspath.ToPath(configFileName, currentDirectory, builder.fs.fs.UseCaseSensitiveFileNames())
+	project.configFilePath = tspath.ToPath(configFileName, currentDirectory, builder.fs.UseCaseSensitiveFileNames())
 	project.programFilesWatch = NewWatchedFiles(
 		"program files for "+configFileName,
 		lsproto.WatchKindCreate|lsproto.WatchKindChange|lsproto.WatchKindDelete,
 		lsproto.GetClientCapabilities(builder.ctx).Workspace.DidChangeWatchedFiles.RelativePatternSupport,
-		createResolutionLookupGlobMapper(builder.sessionOptions.CurrentDirectory, builder.sessionOptions.DefaultLibraryPath, project.currentDirectory, builder.fs.fs.UseCaseSensitiveFileNames()),
+		createResolutionLookupGlobMapper(builder.sessionOptions.CurrentDirectory, builder.sessionOptions.DefaultLibraryPath, project.currentDirectory, builder.fs.UseCaseSensitiveFileNames()),
 	)
 	if builder.sessionOptions.TypingsLocation != "" {
 		project.typingsWatch = NewWatchedFiles(
@@ -207,7 +207,7 @@ func NewProject(
 		lsproto.GetClientCapabilities(builder.ctx).Workspace.DidChangeWatchedFiles.RelativePatternSupport,
 		builder.sessionOptions.CurrentDirectory,
 		builder.sessionOptions.CurrentDirectory,
-		builder.fs.fs.UseCaseSensitiveFileNames(),
+		builder.fs.UseCaseSensitiveFileNames(),
 	)
 	return project
 }

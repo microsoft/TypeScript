@@ -83,11 +83,6 @@ func (s *SnapshotHost) CloneSnapshot(
 		apiRequest:  apiRequest,
 		fileChanges: fileChanges,
 	}
-	if apiRequest != nil {
-		change.fs = apiRequest.FileSystem
-		change.fileSystemOverride = apiRequest.FileSystem != nil
-		change.replaceFileSystem = apiRequest.ReplaceFileSystem
-	}
 	snapshot := s.update(ctx, baseSnapshot, change)
 	return snapshot, snapshot.apiError
 }
@@ -102,11 +97,10 @@ func (s *SnapshotHost) update(ctx context.Context, baseSnapshot *Snapshot, chang
 func (s *SnapshotHost) CloneSnapshotWithTemporaryFile(
 	ctx context.Context,
 	baseSnapshot *Snapshot,
-	fileSystem vfs.FS,
 	uri lsproto.DocumentUri,
 	newText string,
 ) (*Snapshot, error) {
-	return baseSnapshot.cloneWithTemporaryFile(ctx, fileSystem, uri, newText)
+	return baseSnapshot.cloneWithTemporaryFile(ctx, uri, newText)
 }
 
 // CloneSnapshotForProgram derives an isolated snapshot containing one synthetic
@@ -114,7 +108,6 @@ func (s *SnapshotHost) CloneSnapshotWithTemporaryFile(
 func (s *SnapshotHost) CloneSnapshotForProgram(
 	ctx context.Context,
 	baseSnapshot *Snapshot,
-	fileSystem vfs.FS,
 	rootFileNames []string,
 	options *core.CompilerOptions,
 	projectReferences []*core.ProjectReference,
@@ -124,7 +117,6 @@ func (s *SnapshotHost) CloneSnapshotForProgram(
 ) *Snapshot {
 	return baseSnapshot.cloneForProgram(
 		ctx,
-		fileSystem,
 		rootFileNames,
 		options,
 		projectReferences,
@@ -149,13 +141,16 @@ func (s *SnapshotHost) CloneSnapshotWithAutoImports(ctx context.Context, baseSna
 }
 
 func (s *SnapshotHost) newRootSnapshot(id uint64, relativePatternSupport bool) *Snapshot {
-	return s.newSnapshot(
-		id,
-		&SnapshotFS{
-			toPath:   s.toPath,
+	rootFS := &SnapshotFS{
+		snapshotFSBase: snapshotFSBase{
 			fs:       s.fs,
+			toPath:   s.toPath,
 			overlays: make(map[tspath.Path]*Overlay),
 		},
+	}
+	return s.newSnapshot(
+		id,
+		rootFS,
 		&ConfigFileRegistry{},
 		nil,
 		lsutil.NewDefaultUserPreferences(),

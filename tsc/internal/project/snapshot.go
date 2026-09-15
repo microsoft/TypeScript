@@ -51,9 +51,6 @@ type Snapshot struct {
 
 	builderLogs *logging.LogTree
 	apiError    error
-	// fileSystemOverride indicates that this snapshot was built from a filesystem
-	// supplied by an API update rather than the session host filesystem.
-	fileSystemOverride bool
 }
 
 func (s *Snapshot) contentMapperWatchState() ([]string, *collections.Set[tspath.Path]) {
@@ -108,7 +105,6 @@ func (host *SnapshotHost) newSnapshot(
 // project representing createProgram input.
 func (s *Snapshot) cloneForProgram(
 	ctx context.Context,
-	fileSystem vfs.FS,
 	rootFileNames []string,
 	compilerOptions *core.CompilerOptions,
 	projectReferences []*core.ProjectReference,
@@ -131,10 +127,7 @@ func (s *Snapshot) cloneForProgram(
 	}
 
 	start := time.Now()
-	if fileSystem == nil {
-		fileSystem = store.fs
-	}
-	fs := newSnapshotFSBuilder(fileSystem, s.fs.overlays, s.fs.overlays, s.fs.diskFiles, s.fs.diskDirectories, s.fs.nodeModulesRealpathAliases, store.options.PositionEncoding, store.toPath)
+	fs := newSnapshotFSBuilder(store.fs, s.fs.upperLayer, s.fs.upperLayer, s.fs.overlays, s.fs.overlays, s.fs.diskFiles, s.fs.diskDirectories, s.fs.nodeModulesRealpathAliases, store.options.PositionEncoding, store.toPath)
 	fileChanges = s.processFileChanges(fs, fileChanges, logger, nil)
 
 	newSnapshotID := store.nextSnapshotID()
@@ -245,7 +238,6 @@ func (s *Snapshot) cloneForProgram(
 
 func (s *Snapshot) cloneWithTemporaryFile(
 	ctx context.Context,
-	fileSystem vfs.FS,
 	uri lsproto.DocumentUri,
 	newText string,
 ) (*Snapshot, error) {
@@ -268,14 +260,9 @@ func (s *Snapshot) cloneWithTemporaryFile(
 		fileChanges.Opened = uri
 	}
 	overlays[path] = newOverlay(uri.FileName(), newText, version, scriptKind)
-	if fileSystem == nil {
-		fileSystem = s.fs.fs
-	}
 
 	return s.Clone(ctx, SnapshotChange{
-		fs:                 fileSystem,
-		fileSystemOverride: s.fileSystemOverride,
-		fileChanges:        fileChanges,
+		fileChanges: fileChanges,
 		ResourceRequest: ResourceRequest{
 			Documents: []lsproto.DocumentUri{uri},
 		},
@@ -288,6 +275,7 @@ func (s *Snapshot) processFileChanges(
 	logger *logging.LogTree,
 	contentMapperContributions *ContentMapperContributions,
 ) FileChangeSummary {
+	fileChanges = fs.expandRequestAliases(fileChanges)
 	if fileChanges.HasExcessiveWatchEvents() {
 		invalidateStart := time.Now()
 		if fileChanges.InvalidateAll {
@@ -383,18 +371,13 @@ func (s *Snapshot) toPath(fileName string) tspath.Path {
 }
 
 func (s *Snapshot) UseCaseSensitiveFileNames() bool {
-	return s.fs.fs.UseCaseSensitiveFileNames()
+	return s.fs.UseCaseSensitiveFileNames()
 }
 
-// FileSystem returns the filesystem backing this snapshot.
-func (s *Snapshot) FileSystem() vfs.FS {
-	return s.fs.fs
-}
-
-// HasFileSystemOverride reports whether this snapshot uses an API-supplied
-// filesystem instead of the session host filesystem.
-func (s *Snapshot) HasFileSystemOverride() bool {
-	return s.fileSystemOverride
+// HasFullFileSystemLayer reports whether the request filesystem layer blocks all
+// lower snapshot layers.
+func (s *Snapshot) HasFullFileSystemLayer() bool {
+	return s.fs.upperLayer != nil && s.fs.upperLayer.kind == RequestFileSystemKindFull
 }
 
 func (s *Snapshot) ReadFile(fileName string) (string, bool) {
@@ -406,30 +389,34 @@ func (s *Snapshot) ReadFile(fileName string) (string, bool) {
 }
 
 func (s *Snapshot) DirectoryExists(path string) bool {
-	return s.fs.fs.DirectoryExists(path)
+	return s.fs.DirectoryExists(path)
 }
 
 func (s *Snapshot) FileExists(path string) bool {
-	return s.fs.fs.FileExists(path)
+	return s.fs.FileExists(path, s.toPath(path))
+}
+
+// GetAccessibleEntries lists a directory as this snapshot sees it: any API-supplied
+// filesystem over the editor overlays, the files cached from the host, and the host.
+func (s *Snapshot) GetAccessibleEntries(path string) vfs.Entries {
+	return s.fs.GetAccessibleEntries(path)
 }
 
 func (s *Snapshot) GetDirectories(path string) []string {
-	return s.fs.fs.GetAccessibleEntries(path).Directories
+	return s.GetAccessibleEntries(path).Directories
 }
 
 func (s *Snapshot) ReadDirectory(currentDir string, path string, extensions []string, excludes []string, includes []string, depth int) []string {
-	return vfsmatch.ReadDirectory(s.fs.fs, currentDir, path, extensions, excludes, includes, depth)
+	return vfsmatch.ReadDirectory(s.fs, currentDir, path, extensions, excludes, includes, depth)
 }
 
 type APISnapshotRequest struct {
-	OpenProjects  *collections.Set[string]
-	CloseProjects *collections.Set[tspath.Path]
-	OpenFiles     *collections.Set[lsproto.DocumentUri]
-	CloseFiles    *collections.Set[tspath.Path]
-	FileSystem    vfs.FS
-	// ReplaceFileSystem indicates a total filesystem replacement. Layers use
-	// per-path file changes instead of invalidating all inherited state.
-	ReplaceFileSystem bool
+	OpenProjects    *collections.Set[string]
+	CloseProjects   *collections.Set[tspath.Path]
+	OpenFiles       *collections.Set[lsproto.DocumentUri]
+	CloseFiles      *collections.Set[tspath.Path]
+	FileSystem      *RequestFileSystem
+	ResetFileSystem bool
 }
 
 type ProjectTreeRequest struct {
@@ -475,11 +462,6 @@ type ResourceRequest struct {
 type SnapshotChange struct {
 	ResourceRequest
 	reason UpdateReason
-	// fs overrides the session filesystem for this snapshot. It is used by API
-	// snapshots that supply their own memory or cache filesystem.
-	fs                 vfs.FS
-	fileSystemOverride bool
-	replaceFileSystem  bool
 	// fileChanges are the changes that have occurred since the last snapshot.
 	fileChanges FileChangeSummary
 	// compilerOptionsForInferredProjects is the compiler options to use for inferred projects.
@@ -578,18 +560,38 @@ func (s *Snapshot) Clone(
 		inferredContentMappers = change.contentMapperContributions.Mappers
 		inferredContentMapperExtensions = change.contentMapperContributions.Extensions
 	}
-	baseFS := store.fs
-	if change.fs != nil {
-		baseFS = change.fs
+	// The filesystem layer is part of a snapshot's state, so an ordinary clone keeps
+	// it and only an API request that asks to change it does otherwise.
+	layer := s.fs.upperLayer
+	var fileSystemError error
+	var requestFileChanges FileChangeSummary
+	if change.apiRequest != nil {
+		if change.apiRequest.ResetFileSystem {
+			layer = nil
+		}
+		if request := change.apiRequest.FileSystem; request != nil {
+			layer, fileSystemError = newLayer(request, layer, store.fs, store.options.CurrentDirectory)
+			if fileSystemError != nil {
+				layer = s.fs.upperLayer
+			} else if request.Kind == RequestFileSystemKindFull || change.apiRequest.ResetFileSystem {
+				change.fileChanges.InvalidateAll = true
+			} else {
+				addFileChanges(&requestFileChanges, request, s.fs, s.fs.upperLayer, store.options.CurrentDirectory)
+				if requestFileChanges.HasExcessiveWatchEvents() {
+					requestFileChanges = FileChangeSummary{InvalidateAll: true}
+				}
+			}
+		}
 	}
-	// Total replacements and returning to the session host must not retain files
-	// from the previous filesystem. Layers invalidate only their per-path changes,
-	// including the first layer over a host-backed snapshot.
-	if change.replaceFileSystem || s.fileSystemOverride && !change.fileSystemOverride {
+	// Returning to the session host must not retain files from the layer. Replacing
+	// one layer with another invalidates only its per-path changes.
+	if s.fs.upperLayer != nil && layer == nil {
 		change.fileChanges.InvalidateAll = true
 	}
-	fs := newSnapshotFSBuilder(baseFS, s.fs.overlays, overlays, s.fs.diskFiles, s.fs.diskDirectories, s.fs.nodeModulesRealpathAliases, store.options.PositionEncoding, store.toPath)
+	fs := newSnapshotFSBuilder(store.fs, layer, s.fs.upperLayer, s.fs.overlays, overlays, s.fs.diskFiles, s.fs.diskDirectories, s.fs.nodeModulesRealpathAliases, store.options.PositionEncoding, store.toPath)
 	change.fileChanges = s.processFileChanges(fs, change.fileChanges, logger, change.contentMapperContributions)
+	requestFileChanges = s.processFileChanges(fs, requestFileChanges, logger, change.contentMapperContributions)
+	mergeFileChangeSummary(&change.fileChanges, requestFileChanges)
 
 	compilerOptionsForInferredProjects := s.compilerOptionsForInferredProjects
 	if change.compilerOptionsForInferredProjects != nil {
@@ -648,8 +650,8 @@ func (s *Snapshot) Clone(
 		projectCollectionBuilder.DidChangeFiles(change.fileChanges, logger.Fork("DidChangeFiles"))
 	}
 
-	var apiError error
-	if change.apiRequest != nil {
+	apiError := fileSystemError
+	if change.apiRequest != nil && apiError == nil {
 		apiError = projectCollectionBuilder.HandleAPIRequest(change.apiRequest, logger.Fork("HandleAPIRequest"))
 	}
 
@@ -762,7 +764,6 @@ func (s *Snapshot) Clone(
 	newSnapshot.inferredProjectContentMapperExtensions = inferredContentMapperExtensions
 	newSnapshot.builderLogs = logger
 	newSnapshot.apiError = apiError
-	newSnapshot.fileSystemOverride = change.fileSystemOverride
 
 	for _, project := range newSnapshot.ProjectCollection.Projects() {
 		if project.Program != nil {

@@ -39,7 +39,19 @@ export interface FileSystem {
 export const fsCallbackNames = ["readFile", "fileExists", "directoryExists", "getAccessibleEntries", "realpath", "writeFile"] as const;
 
 export interface CreateFileSystemOptions {
-    /** Complete directory listings. Full filesystems derive these from `files` when omitted. */
+    /**
+     * Complete directory listings. Each entry is used as the entire result of the internal
+     * `ReadDirectory` operations that enumerate that directory.
+     *
+     * Supplying a listing makes you responsible for keeping it consistent with the files the
+     * file system exposes, whether from `files` or from a lower layer, because it does not
+     * affect `fileExists` or `readFile` for paths inside that directory. In particular, a
+     * `"layer"` file system should not supply `directories` for a directory that exists in a
+     * lower layer: the listing replaces what enumeration returns without hiding anything that
+     * layer contains. Use `removedPaths` to hide paths.
+     *
+     * Full file systems derive listings from `files` when omitted.
+     */
     directories?: Record<string, RequestDirectoryEntries>;
     symlinks?: Record<string, RequestSymlink>;
     /** Files or directory trees hidden from an underlying snapshot or host filesystem. */
