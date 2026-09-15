@@ -25,8 +25,10 @@ func addFileChanges(
 	// currently see beneath it. The snapshot expands deletions through its own
 	// cached directory tree, which describes neither the layer's contents, nor a
 	// directory that exists only because an overlay lives in it, nor the paths a
-	// request symlink made visible, so the walk happens here. Listing a snapshot
-	// reports only overlay, cached, and layer state, so this never reads the host.
+	// request symlink made visible, so the walk happens here. It enumerates the base
+	// the way anything else does: a full request filesystem, or a supplied listing,
+	// is the whole truth about a directory and stops the walk there; only a path
+	// neither of those covers is enumerated from the layers below.
 	hidden := func(fileName string) {
 		var walked collections.Set[tspath.Path]
 		var walk func(string)

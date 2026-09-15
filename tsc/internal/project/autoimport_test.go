@@ -11,16 +11,19 @@ import (
 	"gotest.tools/v3/assert"
 )
 
-// testLayer is a minimal FileSystemLayer supplying a fixed set of files. Only the
-// parts the stack actually exercises are implemented.
+// testLayer is a minimal FileSystemLayer supplying a fixed set of files.
 type testLayer struct {
-	vfs.FS
 	files map[string]string
 }
 
 func (l testLayer) Shadows(path string) bool {
 	_, ok := l.files[path]
 	return ok
+}
+
+func (l testLayer) ReadFile(fileName string) (string, bool) {
+	content, ok := l.files[fileName]
+	return content, ok
 }
 
 func (l testLayer) Stack(base FileSource) FileSource {

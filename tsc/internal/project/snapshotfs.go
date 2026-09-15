@@ -34,11 +34,17 @@ type FileSource interface {
 	// on disk, so answering from the host would contradict GetFile.
 }
 
+// FileSystemLayer is a source of file contents that can be stacked above a snapshot's
+// own view of the filesystem. It is not a vfs.FS: a layer answers questions only in
+// terms of what it was stacked over, so it has no meaningful standalone behavior.
 type FileSystemLayer interface {
-	vfs.FS
 	// Shadows reports whether the layer decides what is at path on its own, rather
 	// than deferring to what it was stacked over.
 	Shadows(path string) bool
+	// ReadFile returns the content the layer itself holds for fileName. Unlike a
+	// filesystem read it never reaches past the layer: it reports false for any path
+	// the layer hides, or defers to whatever it was stacked over.
+	ReadFile(fileName string) (string, bool)
 	// Stack returns a FileSource reading from this layer, resolving any path the
 	// layer does not supply itself through base.
 	Stack(base FileSource) FileSource
@@ -223,15 +229,9 @@ func (s *lowerLayers) DirectoryExists(directoryName string) bool {
 }
 
 func (s *lowerLayers) GetAccessibleEntries(directoryName string) vfs.Entries {
-	var entries vfs.Entries
+	entries := s.host.GetAccessibleEntries(directoryName)
 	path := s.toPath(directoryName)
-	if diskDirectories, ok := s.diskDirectories[path]; ok {
-		readDirectoryIntoEntries(diskDirectories, s.isFile, &entries)
-	}
-	if overlayDirectories, ok := s.overlayDirectories[path]; ok {
-		readDirectoryIntoEntries(overlayDirectories, s.isFile, &entries)
-	}
-	return entries
+	return mergeOverlayEntries(entries, s.overlayDirectories[path], s.overlays, s.host.UseCaseSensitiveFileNames())
 }
 
 func (s *lowerLayers) isOpenFile(fileName string) bool {
@@ -500,18 +500,12 @@ func (s *builderLowerLayers) GetAccessibleEntries(path string) vfs.Entries {
 	if !ok {
 		return entries
 	}
-
 	if merged, ok := s.accessibleEntries.Load(p); ok {
 		return *merged
 	}
-	merged := &vfs.Entries{
-		Files:       slices.Clip(entries.Files),
-		Directories: slices.Clip(entries.Directories),
-		Symlinks:    entries.Symlinks,
-	}
-	readDirectoryIntoEntries(overlayDirectories, s.isOpenFile, merged)
-	merged, _ = s.accessibleEntries.LoadOrStore(p, merged)
-	return *merged
+	merged := mergeOverlayEntries(entries, overlayDirectories, s.overlays, s.host.UseCaseSensitiveFileNames())
+	stored, _ := s.accessibleEntries.LoadOrStore(p, &merged)
+	return *stored
 }
 
 func (s *builderLowerLayers) getDiskFile(fileName string, path tspath.Path, forceReload bool) FileHandle {
@@ -1065,12 +1059,28 @@ func (fs *sourceFS) Chtimes(path string, atime time.Time, mtime time.Time) error
 	panic("unimplemented")
 }
 
-func readDirectoryIntoEntries[M ~map[tspath.Path]string](directories M, isFile func(tspath.Path) bool, entries *vfs.Entries) {
-	for childPath, childName := range directories {
-		if isFile(childPath) {
-			entries.Files = append(entries.Files, childName)
-		} else {
-			entries.Directories = append(entries.Directories, childName)
+// mergeOverlayEntries adds to a host directory listing the entries contributed by open
+// files, which the host does not report if they have never been saved. A path in the
+// overlay tree that is not itself an open file is an ancestor directory of one.
+func mergeOverlayEntries(hostEntries vfs.Entries, overlayDirectory map[tspath.Path]string, overlays map[tspath.Path]*Overlay, useCaseSensitiveFileNames bool) vfs.Entries {
+	merged := vfs.Entries{
+		Files:       slices.Clip(hostEntries.Files),
+		Directories: slices.Clip(hostEntries.Directories),
+		Symlinks:    hostEntries.Symlinks,
+	}
+	contains := func(names []string, name string) bool {
+		return slices.ContainsFunc(names, func(existing string) bool {
+			return tspath.GetCanonicalFileName(existing, useCaseSensitiveFileNames) == tspath.GetCanonicalFileName(name, useCaseSensitiveFileNames)
+		})
+	}
+	for childPath, childName := range overlayDirectory {
+		if _, isOpenFile := overlays[childPath]; isOpenFile {
+			if !contains(merged.Files, childName) {
+				merged.Files = append(merged.Files, childName)
+			}
+		} else if !contains(merged.Directories, childName) {
+			merged.Directories = append(merged.Directories, childName)
 		}
 	}
+	return merged
 }

@@ -1,12 +1,9 @@
 package requestfilesystem
 
 import (
-	"errors"
 	"fmt"
-	"io/fs"
 	"slices"
 	"strings"
-	"time"
 
 	"github.com/microsoft/TypeScript/tsc/internal/project"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
@@ -86,7 +83,7 @@ type resolvedRequestPath struct {
 
 type requestPathLookup struct {
 	path            string
-	info            vfs.FileInfo
+	info            requestEntry
 	fileSystem      vfs.FS
 	followedSymlink bool
 	// host is set when an explicit host symlink routed the path out of this
@@ -356,13 +353,16 @@ func (s requestFileSystem) aliasesForPath(path string) []string {
 	return aliases
 }
 
-func (s requestFileSystem) localPathInfo(path string) (vfs.FileInfo, requestFallback) {
+func (s requestFileSystem) localPathInfo(path string) (requestEntry, requestFallback) {
 	node, fallback := s.paths.lookup(s.toPath(path))
 	if node == nil {
 		return nil, fallback
 	}
-	info, _ := node.entry.(vfs.FileInfo)
-	return info, fallback
+	if _, isSymlink := node.entry.(*requestSymlink); isSymlink {
+		// A symlink is not an entry in its own right; the caller resolves it instead.
+		return nil, fallback
+	}
+	return node.entry, fallback
 }
 
 func (s requestFileSystem) lookupPath(path string) requestPathLookup {
@@ -397,17 +397,6 @@ func (s requestFileSystem) lookupPath(path string) requestPathLookup {
 	return result
 }
 
-func (s requestFileSystem) mutationPath(path string) (vfs.FS, string, bool) {
-	if s.kind != KindLayer {
-		return nil, "", false
-	}
-	resolved := s.resolvePath(path)
-	if !resolved.ok {
-		return nil, "", false
-	}
-	return s.base, resolved.path, s.base != nil
-}
-
 func cloneEntries(entries vfs.Entries) vfs.Entries {
 	result := vfs.Entries{
 		Files:       slices.Clone(entries.Files),
@@ -422,38 +411,16 @@ func cloneEntries(entries vfs.Entries) vfs.Entries {
 	return result
 }
 
-func (s requestFileSystem) UseCaseSensitiveFileNames() bool {
-	return s.useCaseSensitiveNames
-}
-
+// ReadFile implements project.FileSystemLayer.
 func (s requestFileSystem) ReadFile(fileName string) (string, bool) {
 	lookup := s.lookupPath(fileName)
-	if !lookup.ok || lookup.info != nil && lookup.info.IsDir() {
+	if !lookup.ok || lookup.fileSystem != nil {
 		return "", false
-	}
-	if lookup.fileSystem != nil {
-		return lookup.fileSystem.ReadFile(lookup.path)
 	}
 	if file, ok := lookup.info.(*requestFile); ok {
 		return file.content, true
 	}
 	return "", false
-}
-
-func (s requestFileSystem) FileExists(fileName string) bool {
-	lookup := s.lookupPath(fileName)
-	if !lookup.ok || lookup.info != nil && lookup.info.IsDir() {
-		return false
-	}
-	return lookup.info != nil || lookup.fileSystem != nil && lookup.fileSystem.FileExists(lookup.path)
-}
-
-func (s requestFileSystem) DirectoryExists(directoryName string) bool {
-	lookup := s.lookupPath(directoryName)
-	if !lookup.ok || lookup.info != nil && !lookup.info.IsDir() {
-		return false
-	}
-	return lookup.info != nil || lookup.fileSystem != nil && lookup.fileSystem.DirectoryExists(lookup.path)
 }
 
 // below is whatever this filesystem resolves through for paths it does not supply
@@ -464,10 +431,6 @@ type below interface {
 	GetAccessibleEntries(path string) vfs.Entries
 	FileExists(path string) bool
 	DirectoryExists(path string) bool
-}
-
-func (s requestFileSystem) GetAccessibleEntries(directoryName string) vfs.Entries {
-	return s.accessibleEntries(directoryName, s.baseFileSystem())
 }
 
 // Shadows implements project.FileSystemLayer: this filesystem answers for the path
@@ -671,134 +634,4 @@ func (s requestFileSystem) deleteEntryName(values []string, value string) []stri
 
 func (s requestFileSystem) equalEntryNames(left string, right string) bool {
 	return tspath.GetCanonicalFileName(left, s.useCaseSensitiveNames) == tspath.GetCanonicalFileName(right, s.useCaseSensitiveNames)
-}
-
-func (s requestFileSystem) Realpath(path string) string {
-	lookup := s.lookupPath(path)
-	if !lookup.ok {
-		return path
-	}
-	if lookup.fileSystem != nil {
-		return lookup.fileSystem.Realpath(lookup.path)
-	}
-	if lookup.info != nil || !lookup.followedSymlink {
-		return lookup.path
-	}
-	return path
-}
-
-func (s requestFileSystem) WriteFile(fileName string, data string) error {
-	host, path, ok := s.mutationPath(fileName)
-	if !ok {
-		return vfs.ErrInvalid
-	}
-	return host.WriteFile(path, data)
-}
-
-func (s requestFileSystem) AppendFile(fileName string, data string) error {
-	host, path, ok := s.mutationPath(fileName)
-	if !ok {
-		return vfs.ErrInvalid
-	}
-	return host.AppendFile(path, data)
-}
-
-func (s requestFileSystem) Remove(path string) error {
-	host, path, ok := s.mutationPath(path)
-	if !ok {
-		return vfs.ErrInvalid
-	}
-	return host.Remove(path)
-}
-
-func (s requestFileSystem) Chtimes(path string, aTime time.Time, mTime time.Time) error {
-	host, path, ok := s.mutationPath(path)
-	if !ok {
-		return vfs.ErrInvalid
-	}
-	return host.Chtimes(path, aTime, mTime)
-}
-
-func (s requestFileSystem) Stat(path string) vfs.FileInfo {
-	lookup := s.lookupPath(path)
-	if !lookup.ok {
-		return nil
-	}
-	if lookup.fileSystem != nil {
-		return statFileSystem(lookup.fileSystem, lookup.path)
-	}
-	return lookup.info
-}
-
-func statFileSystem(fileSystem vfs.FS, path string) vfs.FileInfo {
-	if fileSystem == nil {
-		return nil
-	}
-	if info := fileSystem.Stat(path); info != nil {
-		return info
-	}
-	if fileSystem.DirectoryExists(path) {
-		return &requestDirectory{directoryName: path}
-	}
-	if fileSystem.FileExists(path) {
-		return &requestFile{fileName: path}
-	}
-	return nil
-}
-
-func (s requestFileSystem) WalkDir(root string, walkFn vfs.WalkDirFunc) error {
-	originalRoot := s.toAbsolutePath(root)
-	resolved := s.resolvePath(originalRoot)
-	if !resolved.ok {
-		return walkFn(originalRoot, nil, vfs.ErrNotExist)
-	}
-	info := s.Stat(originalRoot)
-	if info == nil {
-		return walkFn(originalRoot, nil, vfs.ErrNotExist)
-	}
-	visited := map[string]struct{}{}
-	if err := s.walkDir(originalRoot, info, walkFn, visited); errors.Is(err, fs.SkipAll) {
-		return nil
-	} else {
-		return err
-	}
-}
-
-func (s requestFileSystem) walkDir(path string, info vfs.FileInfo, walkFn vfs.WalkDirFunc, visited map[string]struct{}) error {
-	realpath := s.Realpath(path)
-	if _, ok := visited[realpath]; ok {
-		return nil
-	}
-	visited[realpath] = struct{}{}
-	entry, ok := info.(vfs.DirEntry)
-	if !ok {
-		entry = fs.FileInfoToDirEntry(info)
-	}
-	err := walkFn(path, entry, nil)
-	if err != nil {
-		if errors.Is(err, fs.SkipDir) && entry.IsDir() {
-			return nil
-		}
-		return err
-	}
-	if !entry.IsDir() {
-		return nil
-	}
-	entries := s.GetAccessibleEntries(path)
-	names := append(slices.Clone(entries.Directories), entries.Files...)
-	slices.Sort(names)
-	for _, name := range names {
-		childPath := tspath.CombinePaths(path, name)
-		childInfo := s.Stat(childPath)
-		if childInfo == nil {
-			continue
-		}
-		if err := s.walkDir(childPath, childInfo, walkFn, visited); err != nil {
-			if errors.Is(err, fs.SkipDir) {
-				return nil
-			}
-			return err
-		}
-	}
-	return nil
 }

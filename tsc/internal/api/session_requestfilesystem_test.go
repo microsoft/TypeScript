@@ -964,7 +964,7 @@ func TestSnapshotReleaseCompactionSupportsConcurrentReaders(t *testing.T) {
 		},
 	})
 	assert.NilError(t, err)
-	fileSystem := session.snapshots[layered.Snapshot].snapshot.FileSystemLayer()
+	snapshot := session.snapshots[layered.Snapshot].snapshot
 
 	started := make(chan struct{})
 	done := make(chan struct{})
@@ -977,12 +977,12 @@ func TestSnapshotReleaseCompactionSupportsConcurrentReaders(t *testing.T) {
 			case <-done:
 				return
 			default:
-				contents, ok := fileSystem.ReadFile("/pkg/file0.ts")
+				contents, ok := snapshot.ReadFile("/pkg/file0.ts")
 				if !ok || contents != "updated" {
 					readerError <- fmt.Errorf("unexpected overridden file: %q, %t", contents, ok)
 					return
 				}
-				if !fileSystem.FileExists("/pkg/file1023.ts") {
+				if !snapshot.FileExists("/pkg/file1023.ts") {
 					readerError <- errors.New("inherited file disappeared")
 					return
 				}

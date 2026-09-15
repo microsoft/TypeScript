@@ -489,13 +489,18 @@ func TestSnapshotFSBuilder(t *testing.T) {
 
 	t.Run("GetAccessibleEntries combines disk and overlay", func(t *testing.T) {
 		t.Parallel()
+		// saved.ts is open as an overlay and also present on disk, so it must be listed once.
 		testFS := vfstest.FromMap(map[string]string{
-			"/src/disk.ts": "const disk = 1;",
+			"/src/disk.ts":  "const disk = 1;",
+			"/src/saved.ts": "const saved = 1;",
 		}, false /* useCaseSensitiveFileNames */)
 
 		overlays := map[tspath.Path]*Overlay{
 			tspath.Path("/src/overlay.ts"): {
 				fileBase: fileBase{fileName: "/src/overlay.ts", content: "const overlay = 1;"},
+			},
+			tspath.Path("/src/saved.ts"): {
+				fileBase: fileBase{fileName: "/src/saved.ts", content: "const saved = 1;"},
 			},
 		}
 
@@ -514,9 +519,10 @@ func TestSnapshotFSBuilder(t *testing.T) {
 
 		entries := builder.GetAccessibleEntries("/src")
 
-		// Should contain both disk file and overlay file (both as basenames)
+		// Files on disk come from the host; overlays that were never saved come from the cache.
 		assert.Assert(t, slices.Contains(entries.Files, "disk.ts"), "should contain disk.ts")
 		assert.Assert(t, slices.Contains(entries.Files, "overlay.ts"), "should contain overlay.ts")
+		assert.Equal(t, countEntryName(entries.Files, "saved.ts"), 1, "saved.ts should be listed once")
 	})
 
 	t.Run("GetAccessibleEntries is safe under concurrent calls", func(t *testing.T) {
@@ -729,13 +735,20 @@ func TestSnapshotFS(t *testing.T) {
 		assert.Equal(t, fh.Content(), "overlay content")
 	})
 
-	t.Run("GetAccessibleEntries combines disk and overlay directories", func(t *testing.T) {
+	t.Run("GetAccessibleEntries combines host and overlay directories", func(t *testing.T) {
 		t.Parallel()
-		testFS := vfstest.FromMap(map[string]string{}, false /* useCaseSensitiveFileNames */)
+		// saved.ts is open as an overlay and also present on disk, so it must be listed once.
+		testFS := vfstest.FromMap(map[string]string{
+			"/src/disk.ts":  "disk content",
+			"/src/saved.ts": "saved content",
+		}, false /* useCaseSensitiveFileNames */)
 
 		overlays := map[tspath.Path]*Overlay{
 			tspath.Path("/src/overlay.ts"): {
 				fileBase: fileBase{fileName: "/src/overlay.ts", content: "overlay content"},
+			},
+			tspath.Path("/src/saved.ts"): {
+				fileBase: fileBase{fileName: "/src/saved.ts", content: "saved content"},
 			},
 		}
 		overlayDirectories := map[tspath.Path]map[tspath.Path]string{
@@ -744,6 +757,7 @@ func TestSnapshotFS(t *testing.T) {
 			},
 			tspath.Path("/src"): {
 				tspath.Path("/src/overlay.ts"): "overlay.ts",
+				tspath.Path("/src/saved.ts"):   "saved.ts",
 			},
 		}
 		diskFiles := map[tspath.Path]*diskFile{
@@ -772,9 +786,10 @@ func TestSnapshotFS(t *testing.T) {
 
 		entries := snapshot.GetAccessibleEntries("/src")
 
-		// Should contain both disk file and overlay file (both as basenames)
+		// Files on disk come from the host; overlays that were never saved come from the cache.
 		assert.Assert(t, slices.Contains(entries.Files, "disk.ts"), "should contain disk.ts")
 		assert.Assert(t, slices.Contains(entries.Files, "overlay.ts"), "should contain overlay.ts")
+		assert.Equal(t, countEntryName(entries.Files, "saved.ts"), 1, "saved.ts should be listed once")
 	})
 }
 
@@ -1642,4 +1657,14 @@ func TestExpandAndFilterWatchEvents(t *testing.T) {
 		assert.Assert(t, !expanded.Deleted.Has("file:///src"),
 			"the directory URI itself should be replaced by its files")
 	})
+}
+
+func countEntryName(names []string, name string) int {
+	count := 0
+	for _, candidate := range names {
+		if candidate == name {
+			count++
+		}
+	}
+	return count
 }

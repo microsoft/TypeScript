@@ -24,7 +24,6 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/project/logging"
 	"github.com/microsoft/TypeScript/tsc/internal/sourcemap"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
-	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfsmatch"
 )
 
@@ -380,17 +379,6 @@ func (s *Snapshot) UseCaseSensitiveFileNames() bool {
 	return s.fs.UseCaseSensitiveFileNames()
 }
 
-// enumerationFS returns a filesystem that lists real directories rather than only
-// what this snapshot has cached. ls.Host documents its directory enumeration as a
-// deliberate exception to snapshot-in-time semantics, for module specifier
-// completions; nothing else should read the filesystem this way.
-func (s *Snapshot) enumerationFS() vfs.FS {
-	if s.fs.upperLayer != nil {
-		return s.fs.upperLayer
-	}
-	return s.fs.host()
-}
-
 // FileSystemLayer returns the filesystem supplied by an API request, if any.
 func (s *Snapshot) FileSystemLayer() FileSystemLayer {
 	return s.fs.upperLayer
@@ -413,11 +401,11 @@ func (s *Snapshot) FileExists(path string) bool {
 }
 
 func (s *Snapshot) GetDirectories(path string) []string {
-	return s.enumerationFS().GetAccessibleEntries(path).Directories
+	return s.fs.GetAccessibleEntries(path).Directories
 }
 
 func (s *Snapshot) ReadDirectory(currentDir string, path string, extensions []string, excludes []string, includes []string, depth int) []string {
-	return vfsmatch.ReadDirectory(s.enumerationFS(), currentDir, path, extensions, excludes, includes, depth)
+	return vfsmatch.ReadDirectory(newSourceFS(false, s.fs, s.toPath), currentDir, path, extensions, excludes, includes, depth)
 }
 
 type APISnapshotRequest struct {

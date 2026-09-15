@@ -1,9 +1,8 @@
 package requestfilesystem
 
 import (
-	"io/fs"
+	"slices"
 	"testing"
-	"time"
 
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/trackingvfs"
@@ -209,7 +208,7 @@ func TestRequestPathTreeFileTakesPrecedenceOverSameLayerDirectory(t *testing.T) 
 	assert.Equal(t, len(fileSystem.GetAccessibleEntries("/item").Files), 0)
 }
 
-func TestRequestPathTreeFileProvidesStatAndDirEntry(t *testing.T) {
+func TestRequestPathTreeFileIsReportedAsAFile(t *testing.T) {
 	t.Parallel()
 	fileSystem, err := newRequestFileSystem(&RequestFileSystem{
 		Kind:  KindFull,
@@ -217,31 +216,20 @@ func TestRequestPathTreeFileProvidesStatAndDirEntry(t *testing.T) {
 	}, vfstest.FromMap(map[string]string{}, true), "/")
 	assert.NilError(t, err)
 	node, _ := fileSystem.paths.lookup("/dir/file.ts")
-	info := fileSystem.Stat("/dir/file.ts")
-	assert.Assert(t, info != nil)
-	assert.Equal(t, info.Name(), "file.ts")
-	assert.Equal(t, info.Size(), int64(len("file content")))
-	assert.Equal(t, info.Mode(), fs.FileMode(0o444))
-	assert.Assert(t, !info.IsDir())
-	assert.Equal(t, info.ModTime(), time.Time{})
-	assert.Assert(t, info.Sys() == nil)
-	assert.Assert(t, any(info) == node.entry)
-	visited := false
-	assert.NilError(t, fileSystem.WalkDir("/dir/file.ts", func(path string, entry vfs.DirEntry, walkErr error) error {
-		assert.NilError(t, walkErr)
-		assert.Equal(t, path, "/dir/file.ts")
-		assert.Assert(t, any(entry) == node.entry)
-		assert.Equal(t, entry.Type(), fs.FileMode(0))
-		entryInfo, infoErr := entry.Info()
-		assert.NilError(t, infoErr)
-		assert.Assert(t, entryInfo == info)
-		visited = true
-		return nil
-	}))
-	assert.Assert(t, visited)
+	_, isFile := node.entry.(*requestFile)
+	assert.Assert(t, isFile)
+	assert.Assert(t, !node.entry.IsDir())
+	assert.Assert(t, fileSystem.FileExists("/dir/file.ts"))
+	assert.Assert(t, !fileSystem.DirectoryExists("/dir/file.ts"))
+	content, ok := fileSystem.ReadFile("/dir/file.ts")
+	assert.Assert(t, ok)
+	assert.Equal(t, content, "file content")
+	// The file's ancestor is implied by it, and enumerating that ancestor finds it.
+	assert.Assert(t, fileSystem.DirectoryExists("/dir"))
+	assert.DeepEqual(t, fileSystem.GetAccessibleEntries("/dir").Files, []string{"file.ts"})
 }
 
-func TestRequestPathTreeDirectoryProvidesStatAndDirEntry(t *testing.T) {
+func TestRequestPathTreeDirectoryIsReportedAsADirectory(t *testing.T) {
 	t.Parallel()
 	fileSystem, err := newRequestFileSystem(&RequestFileSystem{
 		Kind:        KindFull,
@@ -249,31 +237,19 @@ func TestRequestPathTreeDirectoryProvidesStatAndDirEntry(t *testing.T) {
 	}, vfstest.FromMap(map[string]string{}, true), "/")
 	assert.NilError(t, err)
 	node, _ := fileSystem.paths.lookup("/dir")
-	info := fileSystem.Stat("/dir")
-	assert.Assert(t, info != nil)
-	assert.Equal(t, info.Name(), "dir")
-	assert.Equal(t, info.Size(), int64(0))
-	assert.Equal(t, info.Mode(), fs.ModeDir|0o555)
-	assert.Assert(t, info.IsDir())
-	assert.Equal(t, info.ModTime(), time.Time{})
-	assert.Assert(t, info.Sys() == nil)
-	assert.Assert(t, any(info) == node.entry)
-	visited := false
-	assert.NilError(t, fileSystem.WalkDir("/dir", func(path string, entry vfs.DirEntry, walkErr error) error {
-		assert.NilError(t, walkErr)
-		assert.Equal(t, path, "/dir")
-		assert.Assert(t, any(entry) == node.entry)
-		assert.Equal(t, entry.Type(), fs.ModeDir)
-		entryInfo, infoErr := entry.Info()
-		assert.NilError(t, infoErr)
-		assert.Assert(t, entryInfo == info)
-		visited = true
-		return nil
-	}))
-	assert.Assert(t, visited)
+	_, isDirectory := node.entry.(*requestDirectory)
+	assert.Assert(t, isDirectory)
+	assert.Assert(t, node.entry.IsDir())
+	assert.Assert(t, fileSystem.DirectoryExists("/dir"))
+	assert.Assert(t, !fileSystem.FileExists("/dir"))
+	_, ok := fileSystem.ReadFile("/dir")
+	assert.Assert(t, !ok)
+	entries := fileSystem.GetAccessibleEntries("/dir")
+	assert.Equal(t, len(entries.Files), 0)
+	assert.Equal(t, len(entries.Directories), 0)
 }
 
-func TestRequestPathTreeSymlinkReportsTargetMetadata(t *testing.T) {
+func TestRequestPathTreeSymlinkResolvesToItsTarget(t *testing.T) {
 	t.Parallel()
 	fileSystem, err := newRequestFileSystem(&RequestFileSystem{
 		Kind:     KindFull,
@@ -281,74 +257,34 @@ func TestRequestPathTreeSymlinkReportsTargetMetadata(t *testing.T) {
 		Symlinks: map[string]RequestSymlink{"/link.ts": {Target: "/target/file.ts"}},
 	}, vfstest.FromMap(map[string]string{}, true), "/")
 	assert.NilError(t, err)
-	info := fileSystem.Stat("/target/file.ts")
-	assert.Assert(t, fileSystem.Stat("/link.ts") == info)
-	visited := false
-	assert.NilError(t, fileSystem.WalkDir("/link.ts", func(path string, entry vfs.DirEntry, walkErr error) error {
-		assert.NilError(t, walkErr)
-		assert.Equal(t, path, "/link.ts")
-		assert.Equal(t, entry.Name(), "file.ts")
-		assert.Equal(t, entry.Type(), fs.FileMode(0))
-		entryInfo, infoErr := entry.Info()
-		assert.NilError(t, infoErr)
-		assert.Assert(t, entryInfo == info)
-		visited = true
-		return nil
-	}))
-	assert.Assert(t, visited)
+	assert.Assert(t, fileSystem.FileExists("/link.ts"))
+	assert.Assert(t, !fileSystem.DirectoryExists("/link.ts"))
+	content, ok := fileSystem.ReadFile("/link.ts")
+	assert.Assert(t, ok)
+	assert.Equal(t, content, "target content")
+	assert.Equal(t, fileSystem.Realpath("/link.ts"), "/target/file.ts")
+	// The link is listed under its own name, not the target's.
+	entries := fileSystem.GetAccessibleEntries("/")
+	assert.Assert(t, slices.Contains(entries.Files, "link.ts"))
+	_, isSymlink := entries.Symlinks["link.ts"]
+	assert.Assert(t, isSymlink)
 }
 
-type requestTestHostMetadata struct {
-	vfs.FS
-	info vfs.FileInfo
-}
-
-func (host requestTestHostMetadata) Stat(string) vfs.FileInfo { return host.info }
-
-func TestRequestPathTreeWalkPreservesHostMetadata(t *testing.T) {
+// A layer supplies nothing of its own here, so every entry it reports comes from the
+// host beneath it. The layer only has to classify those entries, which is all the
+// snapshot ever asks of it.
+func TestRequestPathTreeLayerReportsHostEntries(t *testing.T) {
 	t.Parallel()
-	hostFS := vfstest.FromMap(map[string]string{"/host.ts": "host content"}, true)
-	modified := time.Date(2026, time.September, 9, 12, 0, 0, 0, time.UTC)
-	assert.NilError(t, hostFS.Chtimes("/host.ts", modified, modified))
-	info := hostFS.Stat("/host.ts")
-	host := requestTestHostMetadata{FS: hostFS, info: info}
-	fileSystem, err := newRequestFileSystem(&RequestFileSystem{
-		Kind: KindLayer,
-	}, host, "/")
-	assert.NilError(t, err)
-	assert.Assert(t, fileSystem.Stat("/host.ts") == info)
-	visited := false
-	assert.NilError(t, fileSystem.WalkDir("/host.ts", func(path string, entry vfs.DirEntry, walkErr error) error {
-		assert.NilError(t, walkErr)
-		assert.Equal(t, path, "/host.ts")
-		assert.Equal(t, entry.Name(), info.Name())
-		assert.Equal(t, entry.Type(), info.Mode().Type())
-		entryInfo, infoErr := entry.Info()
-		assert.NilError(t, infoErr)
-		assert.Assert(t, entryInfo == info)
-		assert.Equal(t, entryInfo.ModTime(), modified)
-		assert.Equal(t, entryInfo.Size(), int64(len("host content")))
-		visited = true
-		return nil
-	}))
-	assert.Assert(t, visited)
-}
-
-func TestRequestPathTreeStatSupportsExistenceOnlyHost(t *testing.T) {
-	t.Parallel()
-	host := requestTestHostMetadata{FS: vfstest.FromMap(map[string]string{"/dir/file.ts": "host content"}, true)}
+	host := vfstest.FromMap(map[string]string{"/dir/file.ts": "host content"}, true)
 	fileSystem, err := newRequestFileSystem(&RequestFileSystem{Kind: KindLayer}, host, "/")
 	assert.NilError(t, err)
-	fileInfo := fileSystem.Stat("/dir/file.ts")
-	assert.Assert(t, fileInfo != nil)
-	assert.Equal(t, fileInfo.Name(), "file.ts")
-	assert.Equal(t, fileInfo.Size(), int64(0))
-	assert.Equal(t, fileInfo.Mode(), fs.FileMode(0o444))
-	assert.Assert(t, !fileInfo.IsDir())
-	directoryInfo := fileSystem.Stat("/dir")
-	assert.Assert(t, directoryInfo != nil)
-	assert.Equal(t, directoryInfo.Name(), "dir")
-	assert.Equal(t, directoryInfo.Mode(), fs.ModeDir|0o555)
-	assert.Assert(t, directoryInfo.IsDir())
-	assert.Assert(t, fileSystem.Stat("/missing") == nil)
+	assert.Assert(t, fileSystem.FileExists("/dir/file.ts"))
+	assert.Assert(t, !fileSystem.DirectoryExists("/dir/file.ts"))
+	content, ok := fileSystem.ReadFile("/dir/file.ts")
+	assert.Assert(t, ok)
+	assert.Equal(t, content, "host content")
+	assert.Assert(t, fileSystem.DirectoryExists("/dir"))
+	assert.Assert(t, !fileSystem.FileExists("/dir"))
+	assert.Assert(t, !fileSystem.FileExists("/missing"))
+	assert.Assert(t, !fileSystem.DirectoryExists("/missing"))
 }
