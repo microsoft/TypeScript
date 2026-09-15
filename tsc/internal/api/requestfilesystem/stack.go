@@ -124,21 +124,6 @@ func (s *stackedFileSystem) Realpath(path string) string {
 	return s.below.Realpath(lookup.path)
 }
 
-// Stat implements project.FileSource.
-func (s *stackedFileSystem) Stat(path string) vfs.FileInfo {
-	lookup := s.layer.lookupPath(path)
-	if !lookup.ok {
-		return nil
-	}
-	if lookup.info != nil {
-		return lookup.info
-	}
-	if lookup.host {
-		return s.layer.base.Stat(lookup.path)
-	}
-	return s.below.Stat(lookup.path)
-}
-
 // UseCaseSensitiveFileNames implements project.FileSource.
 func (s *stackedFileSystem) UseCaseSensitiveFileNames() bool {
 	return s.layer.useCaseSensitiveNames

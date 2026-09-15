@@ -40,8 +40,6 @@ func (s hostFileSource) GetAccessibleEntries(path string) vfs.Entries {
 
 func (s hostFileSource) Realpath(path string) string { return s.fs.Realpath(path) }
 
-func (s hostFileSource) Stat(path string) vfs.FileInfo { return s.fs.Stat(path) }
-
 func (s hostFileSource) UseCaseSensitiveFileNames() bool { return s.fs.UseCaseSensitiveFileNames() }
 
 // baseFileSource builds the view a base snapshot would present: the given request

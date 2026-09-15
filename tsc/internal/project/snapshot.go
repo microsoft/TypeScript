@@ -90,7 +90,7 @@ func (host *SnapshotHost) newSnapshot(
 
 		fs:                                 fs,
 		ConfigFileRegistry:                 configFileRegistry,
-		ProjectCollection:                  &ProjectCollection{toPath: host.toPath, openFiles: openFilePaths(fs.overlays)},
+		ProjectCollection:                  &ProjectCollection{toPath: host.toPath, openFiles: openFilePaths(fs.overlays())},
 		compilerOptionsForInferredProjects: compilerOptionsForInferredProjects,
 		userPreferences:                    userPreferences,
 		AutoImports:                        autoImports,
@@ -127,7 +127,7 @@ func (s *Snapshot) cloneForProgram(
 	}
 
 	start := time.Now()
-	fs := newSnapshotFSBuilder(store.fs, s.fs.layer, s.fs.overlays, s.fs.overlays, s.fs.diskFiles, s.fs.diskDirectories, s.fs.nodeModulesRealpathAliases, store.options.PositionEncoding, store.toPath)
+	fs := newSnapshotFSBuilder(store.fs, s.fs.upperLayer, s.fs.overlays(), s.fs.overlays(), s.fs.diskFiles(), s.fs.diskDirectories(), s.fs.nodeModulesRealpathAliases(), store.options.PositionEncoding, store.toPath)
 	fileChanges = s.processFileChanges(fs, fileChanges, logger, nil)
 
 	newSnapshotID := store.nextSnapshotID()
@@ -182,7 +182,7 @@ func (s *Snapshot) cloneForProgram(
 
 	cleanFilesStart := time.Now()
 	removedFiles := 0
-	fs.diskFiles.Range(func(entry *dirty.SyncMapEntry[tspath.Path, *diskFile]) bool {
+	fs.diskFiles().Range(func(entry *dirty.SyncMapEntry[tspath.Path, *diskFile]) bool {
 		for _, project := range newProjectCollection.Projects() {
 			if project.host != nil && project.host.sourceFS.SeenFile(entry.Key()) {
 				return true
@@ -243,7 +243,7 @@ func (s *Snapshot) cloneWithTemporaryFile(
 ) (*Snapshot, error) {
 	path := uri.Path(s.UseCaseSensitiveFileNames())
 
-	overlays := maps.Clone(s.fs.overlays)
+	overlays := maps.Clone(s.fs.overlays())
 	version := int32(0)
 	var fileChanges FileChangeSummary
 	existing := overlays[path]
@@ -328,24 +328,24 @@ func (s *Snapshot) GetProjectsContainingFile(uri lsproto.DocumentUri) []ls.Proje
 }
 
 func (s *Snapshot) GetFile(fileName string) FileHandle {
-	return s.fs.source.GetFile(fileName)
+	return s.fs.GetFile(fileName)
 }
 
 // FileSource returns this snapshot's complete view of the filesystem: any
 // API-supplied layer over the editor overlays, cached disk files, and the host.
 func (s *Snapshot) FileSource() FileSource {
-	return s.fs.source
+	return s.fs
 }
 
 func (s *Snapshot) LSPLineMap(fileName string) *lsconv.LSPLineMap {
-	if file := s.fs.source.GetFile(fileName); file != nil {
+	if file := s.fs.GetFile(fileName); file != nil {
 		return file.LSPLineMap()
 	}
 	return nil
 }
 
 func (s *Snapshot) GetECMALineInfo(fileName string) *sourcemap.ECMALineInfo {
-	if file := s.fs.source.GetFile(fileName); file != nil {
+	if file := s.fs.GetFile(fileName); file != nil {
 		return file.ECMALineInfo()
 	}
 	return nil
@@ -376,13 +376,7 @@ func (s *Snapshot) toPath(fileName string) tspath.Path {
 }
 
 func (s *Snapshot) UseCaseSensitiveFileNames() bool {
-	return s.fs.fs.UseCaseSensitiveFileNames()
-}
-
-// FileSystem returns this snapshot's filesystem: the same layered view its file
-// lookups use, so reading a path here cannot disagree with GetFile.
-func (s *Snapshot) FileSystem() vfs.FS {
-	return s.fs.sourceFS
+	return s.fs.UseCaseSensitiveFileNames()
 }
 
 // enumerationFS returns a filesystem that lists real directories rather than only
@@ -390,15 +384,15 @@ func (s *Snapshot) FileSystem() vfs.FS {
 // deliberate exception to snapshot-in-time semantics, for module specifier
 // completions; nothing else should read the filesystem this way.
 func (s *Snapshot) enumerationFS() vfs.FS {
-	if s.fs.layer != nil {
-		return s.fs.layer
+	if s.fs.upperLayer != nil {
+		return s.fs.upperLayer
 	}
-	return s.fs.fs
+	return s.fs.host()
 }
 
 // FileSystemLayer returns the filesystem supplied by an API request, if any.
 func (s *Snapshot) FileSystemLayer() FileSystemLayer {
-	return s.fs.layer
+	return s.fs.upperLayer
 }
 
 func (s *Snapshot) ReadFile(fileName string) (string, bool) {
@@ -410,11 +404,11 @@ func (s *Snapshot) ReadFile(fileName string) (string, bool) {
 }
 
 func (s *Snapshot) DirectoryExists(path string) bool {
-	return s.fs.source.DirectoryExists(path)
+	return s.fs.DirectoryExists(path)
 }
 
 func (s *Snapshot) FileExists(path string) bool {
-	return s.fs.source.FileExists(path, s.toPath(path))
+	return s.fs.FileExists(path, s.toPath(path))
 }
 
 func (s *Snapshot) GetDirectories(path string) []string {
@@ -579,16 +573,16 @@ func (s *Snapshot) Clone(
 	}
 	// The filesystem layer is part of a snapshot's state, so an ordinary clone keeps
 	// it and only an API request replaces it.
-	layer := s.fs.layer
+	layer := s.fs.upperLayer
 	if change.apiRequest != nil {
 		layer = change.apiRequest.FileSystem
 	}
 	// Returning to the session host must not retain files from the layer. Replacing
 	// one layer with another invalidates only its per-path changes.
-	if s.fs.layer != nil && layer == nil {
+	if s.fs.upperLayer != nil && layer == nil {
 		change.fileChanges.InvalidateAll = true
 	}
-	fs := newSnapshotFSBuilder(store.fs, layer, s.fs.overlays, overlays, s.fs.diskFiles, s.fs.diskDirectories, s.fs.nodeModulesRealpathAliases, store.options.PositionEncoding, store.toPath)
+	fs := newSnapshotFSBuilder(store.fs, layer, s.fs.overlays(), overlays, s.fs.diskFiles(), s.fs.diskDirectories(), s.fs.nodeModulesRealpathAliases(), store.options.PositionEncoding, store.toPath)
 	change.fileChanges = s.processFileChanges(fs, change.fileChanges, logger, change.contentMapperContributions)
 
 	compilerOptionsForInferredProjects := s.compilerOptionsForInferredProjects
@@ -691,7 +685,7 @@ func (s *Snapshot) Clone(
 		if len(projectsWithNewProgramStructure) > 0 || change.cleanDiskCache {
 			cleanFilesStart := time.Now()
 			removedFiles := 0
-			fs.diskFiles.Range(func(entry *dirty.SyncMapEntry[tspath.Path, *diskFile]) bool {
+			fs.diskFiles().Range(func(entry *dirty.SyncMapEntry[tspath.Path, *diskFile]) bool {
 				for _, project := range projectCollection.Projects() {
 					if project.host != nil && project.host.sourceFS.SeenFile(entry.Key()) {
 						return true

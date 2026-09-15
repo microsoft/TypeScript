@@ -90,7 +90,7 @@ func (s *SnapshotHost) CloneSnapshot(
 // update derives a snapshot from baseSnapshot without adopting it as any
 // canonical session state or performing session side effects.
 func (s *SnapshotHost) update(ctx context.Context, baseSnapshot *Snapshot, change SnapshotChange) *Snapshot {
-	return baseSnapshot.Clone(ctx, change, baseSnapshot.fs.overlays, nil)
+	return baseSnapshot.Clone(ctx, change, baseSnapshot.fs.overlays(), nil)
 }
 
 // CloneSnapshotWithTemporaryFile derives a snapshot with a temporary file content override.
@@ -137,17 +137,21 @@ func (s *SnapshotHost) CloneSnapshotWithAutoImports(ctx context.Context, baseSna
 			AutoImports: uri,
 		},
 	}
-	return baseSnapshot.Clone(ctx, change, baseSnapshot.fs.overlays, logger)
+	return baseSnapshot.Clone(ctx, change, baseSnapshot.fs.overlays(), logger)
 }
 
 func (s *SnapshotHost) newRootSnapshot(id uint64, relativePatternSupport bool) *Snapshot {
+	rootFS := &SnapshotFS{
+		lower: lowerLayers{
+			host:     s.fs,
+			toPath:   s.toPath,
+			overlays: make(map[tspath.Path]*Overlay),
+		},
+	}
+	rootFS.initStack()
 	return s.newSnapshot(
 		id,
-		withSource(&SnapshotFS{
-			toPath:   s.toPath,
-			fs:       s.fs,
-			overlays: make(map[tspath.Path]*Overlay),
-		}),
+		rootFS,
 		&ConfigFileRegistry{},
 		nil,
 		lsutil.NewDefaultUserPreferences(),

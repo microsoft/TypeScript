@@ -44,7 +44,7 @@ func newCompilerHost(
 		currentDirectory: currentDirectory,
 		sessionOptions:   builder.sessionOptions,
 
-		sourceFS: newSourceFS(true, builder.fs.source, builder.toPath),
+		sourceFS: newSourceFS(true, builder.fs, builder.toPath),
 
 		project: project,
 		builder: builder,
@@ -58,7 +58,7 @@ func (c *compilerHost) freeze(snapshotFS *SnapshotFS, configFileRegistry *Config
 	if c.builder == nil {
 		panic("freeze can only be called once")
 	}
-	c.sourceFS.source = snapshotFS.source
+	c.sourceFS.source = snapshotFS
 	c.sourceFS.DisableTracking()
 	c.configFileRegistry = configFileRegistry
 	c.builder = nil

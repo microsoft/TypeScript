@@ -118,7 +118,7 @@ func (b *ProjectCollectionBuilder) Finalize(logger *logging.LogTree) (*ProjectCo
 
 	if b.openFilesChanged {
 		ensureCloned()
-		newProjectCollection.openFiles = openFilePaths(b.fs.overlays)
+		newProjectCollection.openFiles = openFilePaths(b.fs.overlays())
 	}
 
 	if !maps.Equal(b.fileDefaultProjects, b.base.fileDefaultProjects) {
@@ -229,7 +229,7 @@ func (b *ProjectCollectionBuilder) HandleAPIRequest(apiRequest *APISnapshotReque
 		}
 	}
 
-	for _, overlay := range b.fs.overlays {
+	for _, overlay := range b.fs.overlays() {
 		if entry := b.findDefaultConfiguredProject(overlay.FileName(), b.toPath(overlay.FileName())); entry != nil {
 			delete(projectsToClose, entry.Value().configFilePath)
 		}
@@ -412,7 +412,7 @@ func (b *ProjectCollectionBuilder) cleanupConfiguredProjects(retain *collections
 	}
 
 	var inferredProjectFiles []string
-	for _, overlay := range b.fs.overlays {
+	for _, overlay := range b.fs.overlays() {
 		openFile := overlay.FileName()
 		openFilePath := b.toPath(openFile)
 		if p := b.findDefaultConfiguredProject(openFile, openFilePath); p != nil {
@@ -471,7 +471,7 @@ func logChangeFileResult(result changeFileResult, logger *logging.LogTree) {
 
 func (b *ProjectCollectionBuilder) collectInferredProjectRoots() []string {
 	var inferredProjectFiles []string
-	for path, overlay := range b.fs.overlays {
+	for path, overlay := range b.fs.overlays() {
 		if b.findDefaultConfiguredProject(overlay.FileName(), path) == nil {
 			inferredProjectFiles = append(inferredProjectFiles, overlay.FileName())
 		}
@@ -708,7 +708,7 @@ func (b *ProjectCollectionBuilder) DidUpdateATAState(ataChanges map[tspath.Path]
 					b.sessionOptions.TypingsLocation,
 					b.sessionOptions.CurrentDirectory,
 					p.currentDirectory,
-					b.fs.fs.UseCaseSensitiveFileNames(),
+					b.fs.UseCaseSensitiveFileNames(),
 				)
 				p.typingsWatch = p.typingsWatch.Clone(typingsWatchGlobs)
 				p.dirty = true
@@ -787,7 +787,7 @@ func (b *ProjectCollectionBuilder) markProjectsAffectedByConfigChanges(
 	// Recompute default projects for open files that now have different config file presence.
 	var hasChanges bool
 	for path := range configChangeResult.affectedFiles {
-		fileName := b.fs.overlays[path].FileName()
+		fileName := b.fs.overlays()[path].FileName()
 		_ = b.ensureConfiguredProjectAndAncestorsForFile(fileName, path, logger)
 		hasChanges = true
 	}
@@ -1190,7 +1190,7 @@ func (b *ProjectCollectionBuilder) updateOrCreateInferredProject(
 		compilerOptions = project.CommandLine.CompilerOptions()
 	}
 	newCommandLine := newInferredProjectCommandLine(compilerOptions, rootFileNames, projectReferences, contentMappers, tspath.ComparePathsOptions{
-		UseCaseSensitiveFileNames: b.fs.fs.UseCaseSensitiveFileNames(),
+		UseCaseSensitiveFileNames: b.fs.UseCaseSensitiveFileNames(),
 		CurrentDirectory:          project.currentDirectory,
 	})
 	newCommandLine.Errors = configFileParsingDiagnostics
@@ -1228,7 +1228,7 @@ func (b *ProjectCollectionBuilder) isSupportedInInferredProject(fileName string)
 	if tspath.IsDynamicFileName(fileName) || core.GetScriptKindFromFileName(fileName) != core.ScriptKindUnknown {
 		return true
 	}
-	if file := b.fs.source.GetFile(fileName); file != nil && file.IsOverlay() && tspath.GetAnyExtensionFromPath(fileName, nil, false) == "" {
+	if file := b.fs.GetFile(fileName); file != nil && file.IsOverlay() && tspath.GetAnyExtensionFromPath(fileName, nil, false) == "" {
 		return true
 	}
 	return tspath.FileExtensionIsOneOf(fileName, b.inferredContentMapperExtensions)

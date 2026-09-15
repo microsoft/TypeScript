@@ -185,7 +185,7 @@ func TestFullRequestLayerOmitsCapturedEditorOverlay(t *testing.T) {
 	})
 	assert.NilError(t, err)
 	snapshot := session.snapshots[replaced.Snapshot].snapshot
-	assert.Assert(t, !snapshot.FileSystem().FileExists("/overlay.ts"))
+	assert.Assert(t, !snapshot.FileExists("/overlay.ts"))
 	assert.Assert(t, snapshot.GetFile("/overlay.ts") == nil)
 }
 
@@ -321,10 +321,6 @@ func TestRequestSymlinkFallsBackToEditorOverlayTarget(t *testing.T) {
 	assert.Equal(t, file.FileName(), "/alias.ts")
 	assert.Equal(t, file.Content(), "overlay")
 	assert.Assert(t, snapshot.FileExists("/alias.ts"))
-	// The snapshot's filesystem is the same layered view, so it agrees.
-	content, ok := snapshot.FileSystem().ReadFile("/alias.ts")
-	assert.Assert(t, ok)
-	assert.Equal(t, content, "overlay")
 }
 
 func TestRequestSymlinkFallsBackToEditorOverlayDirectory(t *testing.T) {
