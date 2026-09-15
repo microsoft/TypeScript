@@ -3812,6 +3812,24 @@ export class Checker {
         );
     }
 
+    /** Get the negation of a type. Always returns a type. */
+    get getNegatedType(): {
+        (type: Type): Type;
+        gen(type: Type): Generator<ProtocolRequest, Type, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getNegatedType",
+            function (type: Type): Type {
+                return type.getNegatedType();
+            },
+            function* (type: Type): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
+                return yield* type.getNegatedType.gen();
+            },
+        );
+    }
+
     /**
      * Get the type for a type node. Always returns a type; for type nodes whose
      * type cannot be determined the checker yields the error type (use
@@ -5745,6 +5763,7 @@ class TypeObject implements Type {
     private constraint: number | false;
     private default: number | false;
     private nonNullableType: number | false;
+    private negatedType: number | false;
     private apparentType: number | false;
     private reducedType: number | false;
     private properties: readonly Symbol[] | false;
@@ -5802,6 +5821,7 @@ class TypeObject implements Type {
         this.constraint = false;
         this.default = false;
         this.nonNullableType = false;
+        this.negatedType = false;
         this.apparentType = false;
         this.reducedType = false;
         this.properties = false;
@@ -5956,6 +5976,27 @@ class TypeObject implements Type {
             function* (): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
                 const result = yield* owner.objectRegistry.fetchType.gen(owner, "getNonNullableType", owner.nonNullableType);
                 owner.nonNullableType = result.id;
+                return result;
+            },
+        );
+    }
+
+    get getNegatedType(): {
+        (): Type;
+        gen(): Generator<ProtocolRequest, Type, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getNegatedType",
+            function (): Type {
+                const result = owner.objectRegistry.fetchType(owner, "getNegatedType", owner.negatedType);
+                owner.negatedType = result.id;
+                return result;
+            },
+            function* (): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
+                const result = yield* owner.objectRegistry.fetchType.gen(owner, "getNegatedType", owner.negatedType);
+                owner.negatedType = result.id;
                 return result;
             },
         );

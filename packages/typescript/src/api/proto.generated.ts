@@ -109,6 +109,7 @@ export interface APIMethodInfo {
     getApparentPropertiesOfType: APIMethod<GetTypePropertyParams, SymbolResponse[]>;
     getApparentType: APIMethod<GetTypePropertyParams, TypeResponse>;
     getReducedType: APIMethod<GetTypePropertyParams, TypeResponse>;
+    getNegatedType: APIMethod<GetTypePropertyParams, TypeResponse>;
     getPropertyOfType: APIMethod<GetPropertyOfTypeParams, SymbolResponse | null>;
     getTypeOfPropertyOfType: APIMethod<GetPropertyOfTypeParams, TypeResponse | null>;
     getIndexInfoOfType: APIMethod<GetIndexInfoOfTypeParams, IndexInfoResponse | null>;
@@ -1055,6 +1056,7 @@ export interface BatchRequest {
         | "getLocalTypeParametersOfType"
         | "getMemberInModuleExports"
         | "getMembersOfSymbol"
+        | "getNegatedType"
         | "getNeverType"
         | "getNonMissingTypeOfSymbol"
         | "getNonNullableType"
@@ -1213,6 +1215,7 @@ export interface BatchResponse {
         | "getLocalTypeParametersOfType"
         | "getMemberInModuleExports"
         | "getMembersOfSymbol"
+        | "getNegatedType"
         | "getNeverType"
         | "getNonMissingTypeOfSymbol"
         | "getNonNullableType"

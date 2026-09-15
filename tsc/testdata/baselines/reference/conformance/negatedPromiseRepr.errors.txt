@@ -1,0 +1,107 @@
+negatedPromiseRepr.ts(10,39): error TS2344: Type 'T extends MyPromiseLike<any, any> ? AwaitValue<T, any> : T' does not satisfy the constraint 'not AnyPromiseLikeObject'.
+  Type 'T | AwaitValue<T, any>' is not assignable to type 'not AnyPromiseLikeObject'.
+    Type 'T' is not assignable to type 'not AnyPromiseLikeObject'.
+negatedPromiseRepr.ts(16,56): error TS2344: Type 'AwaitValue<T, any>' does not satisfy the constraint 'not AnyPromiseLikeObject'.
+  Type 'T | not AnyPromiseLikeObject' is not assignable to type 'not AnyPromiseLikeObject'.
+    Type 'T' is not assignable to type 'not AnyPromiseLikeObject'.
+negatedPromiseRepr.ts(26,18): error TS2344: Type 'AwaitValue<U, F>' does not satisfy the constraint 'not AnyPromiseLikeObject'.
+  Type 'U | not AnyPromiseLikeObject' is not assignable to type 'not AnyPromiseLikeObject'.
+    Type 'U' is not assignable to type 'not AnyPromiseLikeObject'.
+negatedPromiseRepr.ts(30,18): error TS2344: Type 'T | AwaitValue<U, F>' does not satisfy the constraint 'not AnyPromiseLikeObject'.
+  Type 'AwaitValue<U, F>' is not assignable to type 'not AnyPromiseLikeObject'.
+    Type 'U | not AnyPromiseLikeObject' is not assignable to type 'not AnyPromiseLikeObject'.
+      Type 'U' is not assignable to type 'not AnyPromiseLikeObject'.
+negatedPromiseRepr.ts(34,18): error TS2344: Type 'AwaitValue<U, F>' does not satisfy the constraint 'not AnyPromiseLikeObject'.
+  Type 'U | not AnyPromiseLikeObject' is not assignable to type 'not AnyPromiseLikeObject'.
+    Type 'U' is not assignable to type 'not AnyPromiseLikeObject'.
+negatedPromiseRepr.ts(37,18): error TS2344: Type 'T | AwaitValue<U, F>' does not satisfy the constraint 'not AnyPromiseLikeObject'.
+  Type 'AwaitValue<U, F>' is not assignable to type 'not AnyPromiseLikeObject'.
+    Type 'U | not AnyPromiseLikeObject' is not assignable to type 'not AnyPromiseLikeObject'.
+      Type 'U' is not assignable to type 'not AnyPromiseLikeObject'.
+
+
+==== negatedPromiseRepr.ts (6 errors) ====
+    // inspired by a comment in https://github.com/Microsoft/TypeScript/issues/4196
+    
+    type AnyPromiseLikeObject = object & MyPromiseLike<any, any>;
+    interface MyPromiseLike<T extends not AnyPromiseLikeObject, E = Error> {
+        then(onResolve: (value: T) => any, onReject: (error: E) => any): any;
+    }
+    
+    type AwaitValue<T, E = any> = T extends MyPromiseLike<infer U, E> ? U : T; 
+    
+    type CoercePromiseLike<T> = MyPromise<T extends MyPromiseLike<any, any> ? AwaitValue<T> : T, never>;
+                                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2344: Type 'T extends MyPromiseLike<any, any> ? AwaitValue<T, any> : T' does not satisfy the constraint 'not AnyPromiseLikeObject'.
+!!! error TS2344:   Type 'T | AwaitValue<T, any>' is not assignable to type 'not AnyPromiseLikeObject'.
+!!! error TS2344:     Type 'T' is not assignable to type 'not AnyPromiseLikeObject'.
+!!! related TS2208 negatedPromiseRepr.ts:10:24: This type parameter might need an `extends not AnyPromiseLikeObject` constraint.
+    
+    interface MyPromiseConstructor {
+        resolve<T>(value: T): CoercePromiseLike<T>;
+        reject<E = Error>(value: E): MyPromise<never, E>;
+        all<T, E = Error>(values: Iterable<T>): MyPromise<AwaitValue<T>[] & not AnyPromiseLikeObject, E>;
+        race<T, E = Error>(values: Iterable<T>): MyPromise<AwaitValue<T>, E>;
+                                                           ~~~~~~~~~~~~~
+!!! error TS2344: Type 'AwaitValue<T, any>' does not satisfy the constraint 'not AnyPromiseLikeObject'.
+!!! error TS2344:   Type 'T | not AnyPromiseLikeObject' is not assignable to type 'not AnyPromiseLikeObject'.
+!!! error TS2344:     Type 'T' is not assignable to type 'not AnyPromiseLikeObject'.
+!!! related TS2208 negatedPromiseRepr.ts:16:10: This type parameter might need an `extends not AnyPromiseLikeObject` constraint.
+    }
+    declare var MyPromise: MyPromiseConstructor;
+    
+    interface MyPromise<T extends not AnyPromiseLikeObject, E = Error> {
+        then(onResolve?: not Function, onReject?: not Function): MyPromise<T, E>;
+        catch(onReject?: not Function): MyPromise<T, E>;
+        then<U, F = E>(
+            onResolve: (value: AwaitValue<T>) => U,
+            onReject?: not Function,
+        ): MyPromise<AwaitValue<U, F>, E | F>;
+                     ~~~~~~~~~~~~~~~~
+!!! error TS2344: Type 'AwaitValue<U, F>' does not satisfy the constraint 'not AnyPromiseLikeObject'.
+!!! error TS2344:   Type 'U | not AnyPromiseLikeObject' is not assignable to type 'not AnyPromiseLikeObject'.
+!!! error TS2344:     Type 'U' is not assignable to type 'not AnyPromiseLikeObject'.
+!!! related TS2208 negatedPromiseRepr.ts:23:10: This type parameter might need an `extends not AnyPromiseLikeObject` constraint.
+        then<U, F = E>(
+            onResolve: not Function,
+            onReject: (error: E) => U,
+        ): MyPromise<T | AwaitValue<U, F>, F>;
+                     ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2344: Type 'T | AwaitValue<U, F>' does not satisfy the constraint 'not AnyPromiseLikeObject'.
+!!! error TS2344:   Type 'AwaitValue<U, F>' is not assignable to type 'not AnyPromiseLikeObject'.
+!!! error TS2344:     Type 'U | not AnyPromiseLikeObject' is not assignable to type 'not AnyPromiseLikeObject'.
+!!! error TS2344:       Type 'U' is not assignable to type 'not AnyPromiseLikeObject'.
+!!! related TS2208 negatedPromiseRepr.ts:27:10: This type parameter might need an `extends not AnyPromiseLikeObject` constraint.
+        then<U, F = E>(
+            onResolve: (value: AwaitValue<T>) => U,
+            onReject: (error: E) => AwaitValue<U, F>,
+        ): MyPromise<AwaitValue<U, F>, F>;
+                     ~~~~~~~~~~~~~~~~
+!!! error TS2344: Type 'AwaitValue<U, F>' does not satisfy the constraint 'not AnyPromiseLikeObject'.
+!!! error TS2344:   Type 'U | not AnyPromiseLikeObject' is not assignable to type 'not AnyPromiseLikeObject'.
+!!! error TS2344:     Type 'U' is not assignable to type 'not AnyPromiseLikeObject'.
+!!! related TS2208 negatedPromiseRepr.ts:31:10: This type parameter might need an `extends not AnyPromiseLikeObject` constraint.
+        catch<U, F = E>(
+            onReject: (error: E) => U,
+        ): MyPromise<T | AwaitValue<U, F>, F>;
+                     ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2344: Type 'T | AwaitValue<U, F>' does not satisfy the constraint 'not AnyPromiseLikeObject'.
+!!! error TS2344:   Type 'AwaitValue<U, F>' is not assignable to type 'not AnyPromiseLikeObject'.
+!!! error TS2344:     Type 'U | not AnyPromiseLikeObject' is not assignable to type 'not AnyPromiseLikeObject'.
+!!! error TS2344:       Type 'U' is not assignable to type 'not AnyPromiseLikeObject'.
+!!! related TS2208 negatedPromiseRepr.ts:35:11: This type parameter might need an `extends not AnyPromiseLikeObject` constraint.
+        finally(onSettled: () => AnyPromiseLikeObject): MyPromise<T, E>;
+    }
+    
+    const a = MyPromise.resolve(0);
+    
+    const b = MyPromise.resolve(MyPromise.resolve(0));
+    
+    const d = MyPromise.resolve(MyPromise.resolve(MyPromise.resolve(0)));
+    
+    const e = MyPromise.resolve(0).then(x => "ok");
+    
+    const f = MyPromise.all([1, 2, 3, Promise.resolve("ok")]);
+    
+    const g = MyPromise.race([1, 2, 3, Promise.resolve("ok")]);
+    

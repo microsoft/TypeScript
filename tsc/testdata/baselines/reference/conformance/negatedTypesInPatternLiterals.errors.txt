@@ -1,0 +1,68 @@
+negatedTypesInPatternLiterals.ts(4,21): error TS2322: Type 'not "bar"' is not assignable to type 'string | number | bigint | boolean | null | undefined'.
+  Type 'unknown' is not assignable to type 'string | number | bigint | boolean | null | undefined'.
+negatedTypesInPatternLiterals.ts(7,24): error TS2322: Type 'not string' is not assignable to type 'string | number | bigint | boolean | null | undefined'.
+  Type 'unknown' is not assignable to type 'string | number | bigint | boolean | null | undefined'.
+negatedTypesInPatternLiterals.ts(8,24): error TS2322: Type 'not 0' is not assignable to type 'string | number | bigint | boolean | null | undefined'.
+  Type 'unknown' is not assignable to type 'string | number | bigint | boolean | null | undefined'.
+negatedTypesInPatternLiterals.ts(11,19): error TS2322: Type 'not "a" & not "b"' is not assignable to type 'string | number | bigint | boolean | null | undefined'.
+negatedTypesInPatternLiterals.ts(17,22): error TS2322: Type 'T & not "bar"' is not assignable to type 'string | number | bigint | boolean | null | undefined'.
+negatedTypesInPatternLiterals.ts(27,1): error TS2322: Type 'string' is not assignable to type '`foo${not "bar"}`'.
+negatedTypesInPatternLiterals.ts(29,1): error TS2322: Type '"foobar"' is not assignable to type '`foo${string & not "bar"}`'.
+negatedTypesInPatternLiterals.ts(34,18): error TS2345: Argument of type '"foobar"' is not assignable to parameter of type 'never'.
+
+
+==== negatedTypesInPatternLiterals.ts (8 errors) ====
+    // Negated types used as placeholders inside template/pattern literal types.
+    
+    // A negated string literal as a placeholder.
+    type NotBar = `foo${not "bar"}`;
+                        ~~~~~~~~~
+!!! error TS2322: Type 'not "bar"' is not assignable to type 'string | number | bigint | boolean | null | undefined'.
+!!! error TS2322:   Type 'unknown' is not assignable to type 'string | number | bigint | boolean | null | undefined'.
+    
+    // A negated primitive as a placeholder.
+    type NotString = `foo${not string}`;
+                           ~~~~~~~~~~
+!!! error TS2322: Type 'not string' is not assignable to type 'string | number | bigint | boolean | null | undefined'.
+!!! error TS2322:   Type 'unknown' is not assignable to type 'string | number | bigint | boolean | null | undefined'.
+    type NotNumber = `id-${not 0}`;
+                           ~~~~~
+!!! error TS2322: Type 'not 0' is not assignable to type 'string | number | bigint | boolean | null | undefined'.
+!!! error TS2322:   Type 'unknown' is not assignable to type 'string | number | bigint | boolean | null | undefined'.
+    
+    // A negated union as a placeholder.
+    type NotAB = `x-${not ("a" | "b")}`;
+                      ~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'not "a" & not "b"' is not assignable to type 'string | number | bigint | boolean | null | undefined'.
+    
+    // A negated type intersected with a string, which restricts to string values.
+    type StringNotBar = `foo${string & not "bar"}`;
+    
+    // A generic negated placeholder.
+    type Wrap<T> = `foo${T & not "bar"}`;
+                         ~~~~~~~~~~~~~
+!!! error TS2322: Type 'T & not "bar"' is not assignable to type 'string | number | bigint | boolean | null | undefined'.
+    type WrapString = Wrap<string>;
+    type WrapLiteral = Wrap<"baz">;
+    type WrapBar = Wrap<"bar">;
+    
+    // Assignability against a plainly-typed string.
+    declare let notBar: NotBar;
+    declare let stringNotBar: StringNotBar;
+    
+    notBar = "foobaz";      // depends on representation
+    notBar = "foobar";      // depends on representation
+    ~~~~~~
+!!! error TS2322: Type 'string' is not assignable to type '`foo${not "bar"}`'.
+    stringNotBar = "foobaz"; // depends on representation
+    stringNotBar = "foobar"; // depends on representation
+    ~~~~~~~~~~~~
+!!! error TS2322: Type '"foobar"' is not assignable to type '`foo${string & not "bar"}`'.
+    
+    // Inference from a template literal pattern with a negated placeholder.
+    declare function parse<T extends string>(s: `foo${T & not "bar"}`): T;
+    const p1 = parse("foobaz");
+    const p2 = parse("foobar");
+                     ~~~~~~~~
+!!! error TS2345: Argument of type '"foobar"' is not assignable to parameter of type 'never'.
+    

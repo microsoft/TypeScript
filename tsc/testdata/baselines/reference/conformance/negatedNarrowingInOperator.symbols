@@ -1,0 +1,80 @@
+//// [tests/cases/conformance/types/negated/negatedNarrowingInOperator.ts] ////
+
+=== negatedNarrowingInOperator.ts ===
+// The `in` operator narrows by presence/absence of a property. It uses type facts and constituent
+// filtering (not fresh `not` negations), so the else branch keeps the property-absent constituents.
+
+declare function wantsNotHasA(x: not { a: unknown }): void;
+>wantsNotHasA : Symbol(wantsNotHasA, Decl(negatedNarrowingInOperator.ts, 0, 0))
+>x : Symbol(x, Decl(negatedNarrowingInOperator.ts, 3, 30))
+>a : Symbol(a, Decl(negatedNarrowingInOperator.ts, 3, 38))
+
+interface WithA {
+>WithA : Symbol(WithA, Decl(negatedNarrowingInOperator.ts, 3, 59))
+
+    a: number;
+>a : Symbol(WithA.a, Decl(negatedNarrowingInOperator.ts, 5, 17))
+}
+interface WithB {
+>WithB : Symbol(WithB, Decl(negatedNarrowingInOperator.ts, 7, 1))
+
+    b: string;
+>b : Symbol(WithB.b, Decl(negatedNarrowingInOperator.ts, 8, 17))
+}
+
+declare const a: WithA | WithB;
+>a : Symbol(a, Decl(negatedNarrowingInOperator.ts, 12, 13))
+>WithA : Symbol(WithA, Decl(negatedNarrowingInOperator.ts, 3, 59))
+>WithB : Symbol(WithB, Decl(negatedNarrowingInOperator.ts, 7, 1))
+
+if ("a" in a) {
+>a : Symbol(a, Decl(negatedNarrowingInOperator.ts, 12, 13))
+
+    a; // WithA
+>a : Symbol(a, Decl(negatedNarrowingInOperator.ts, 12, 13))
+
+} else {
+    a; // WithB
+>a : Symbol(a, Decl(negatedNarrowingInOperator.ts, 12, 13))
+}
+
+// `in` on a `{}` base does not synthesize a negation; the true branch records the tested member.
+declare const b: {};
+>b : Symbol(b, Decl(negatedNarrowingInOperator.ts, 20, 13))
+
+if ("a" in b) {
+>b : Symbol(b, Decl(negatedNarrowingInOperator.ts, 20, 13))
+
+    b; // Record<"a", unknown>
+>b : Symbol(b, Decl(negatedNarrowingInOperator.ts, 20, 13))
+
+} else {
+    b; // {}
+>b : Symbol(b, Decl(negatedNarrowingInOperator.ts, 20, 13))
+}
+
+// Optional property discrimination.
+interface Maybe {
+>Maybe : Symbol(Maybe, Decl(negatedNarrowingInOperator.ts, 25, 1))
+
+    kind: "maybe";
+>kind : Symbol(Maybe.kind, Decl(negatedNarrowingInOperator.ts, 28, 17))
+
+    payload?: string;
+>payload : Symbol(Maybe.payload, Decl(negatedNarrowingInOperator.ts, 29, 18))
+}
+declare const c: Maybe;
+>c : Symbol(c, Decl(negatedNarrowingInOperator.ts, 32, 13))
+>Maybe : Symbol(Maybe, Decl(negatedNarrowingInOperator.ts, 25, 1))
+
+if ("payload" in c) {
+>c : Symbol(c, Decl(negatedNarrowingInOperator.ts, 32, 13))
+
+    c; // Maybe
+>c : Symbol(c, Decl(negatedNarrowingInOperator.ts, 32, 13))
+
+} else {
+    c; // Maybe
+>c : Symbol(c, Decl(negatedNarrowingInOperator.ts, 32, 13))
+}
+
