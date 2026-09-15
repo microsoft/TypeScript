@@ -309,6 +309,24 @@ func (s *Snapshot) processFileChanges(
 ) FileChangeSummary {
 	previousOpenFiles := overlayFileHandles(previousOverlays)
 	openFiles := overlayFileHandles(overlays)
+	for path, previousOpenFile := range previousOpenFiles {
+		if _, stillOpen := openFiles[path]; stillOpen {
+			continue
+		}
+		uri := lsconv.FileNameToDocumentURI(previousOpenFile.FileName())
+		if fileChanges.Closed.Has(uri) {
+			continue
+		}
+		if fs.fs.GetFileByPath(previousOpenFile.FileName(), path) != nil {
+			fileChanges.Created.Delete(uri)
+			fileChanges.Deleted.Delete(uri)
+			fileChanges.Changed.Add(uri)
+		} else {
+			fileChanges.Created.Delete(uri)
+			fileChanges.Changed.Delete(uri)
+			fileChanges.Deleted.Add(uri)
+		}
+	}
 	if fileChanges.HasExcessiveWatchEvents() {
 		invalidateStart := time.Now()
 		if fileChanges.InvalidateAll {

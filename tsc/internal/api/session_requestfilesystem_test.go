@@ -144,6 +144,55 @@ func TestUpdateSnapshotRequestTombstoneRemovesOpenOverlay(t *testing.T) {
 	assert.Assert(t, snapshot.GetDefaultProject("file:///index.ts") == nil)
 }
 
+func TestUpdateSnapshotRequestTombstoneRemovesHostlessOpenOverlay(t *testing.T) {
+	t.Parallel()
+
+	projectSession, _ := projecttestutil.Setup(map[string]any{})
+	defer projectSession.Close()
+	projectSession.DidOpenFile(context.Background(), "file:///index.ts", 1, "overlay", lsproto.LanguageKindTypeScript)
+
+	session := NewLSPSession(projectSession, nil)
+	defer session.Close()
+	response, err := session.handleUpdateSnapshot(context.Background(), &UpdateSnapshotParams{
+		FileSystem: &requestfilesystem.RequestFileSystem{
+			Kind:         requestfilesystem.KindLayer,
+			RemovedPaths: []string{"/index.ts"},
+		},
+	})
+	assert.NilError(t, err)
+
+	snapshot := session.snapshots[response.Snapshot].snapshot
+	_, ok := snapshot.ReadFile("/index.ts")
+	assert.Assert(t, !ok)
+	assert.Assert(t, snapshot.GetDefaultProject("file:///index.ts") == nil)
+}
+
+func TestUpdateSnapshotRequestFileMasksHostlessOpenOverlayDirectory(t *testing.T) {
+	t.Parallel()
+
+	projectSession, _ := projecttestutil.Setup(map[string]any{})
+	defer projectSession.Close()
+	projectSession.DidOpenFile(context.Background(), "file:///src/index.ts", 1, "overlay", lsproto.LanguageKindTypeScript)
+
+	session := NewLSPSession(projectSession, nil)
+	defer session.Close()
+	response, err := session.handleUpdateSnapshot(context.Background(), &UpdateSnapshotParams{
+		FileSystem: &requestfilesystem.RequestFileSystem{
+			Kind:  requestfilesystem.KindLayer,
+			Files: map[string]string{"/src": "request"},
+		},
+	})
+	assert.NilError(t, err)
+
+	snapshot := session.snapshots[response.Snapshot].snapshot
+	contents, ok := snapshot.ReadFile("/src")
+	assert.Assert(t, ok)
+	assert.Equal(t, contents, "request")
+	_, ok = snapshot.ReadFile("/src/index.ts")
+	assert.Assert(t, !ok)
+	assert.Assert(t, snapshot.GetDefaultProject("file:///src/index.ts") == nil)
+}
+
 func TestUpdateSnapshotRequestMaskUpdatesOpenConfiguredProjects(t *testing.T) {
 	t.Parallel()
 
