@@ -1,0 +1,12 @@
+exportSpecifierForAGlobalAugmentation.ts(5,10): error TS2661: Cannot export 'XYZ'. Only local declarations can be exported from a module.
+
+
+==== exportSpecifierForAGlobalAugmentation.ts (1 errors) ====
+    declare global {
+        var XYZ: number;
+    }
+    
+    export { XYZ };
+             ~~~
+!!! error TS2661: Cannot export 'XYZ'. Only local declarations can be exported from a module.
+    

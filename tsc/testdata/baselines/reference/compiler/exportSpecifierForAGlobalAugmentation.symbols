@@ -1,0 +1,13 @@
+//// [tests/cases/compiler/exportSpecifierForAGlobalAugmentation.ts] ////
+
+=== exportSpecifierForAGlobalAugmentation.ts ===
+declare global {
+>global : Symbol(global, Decl(exportSpecifierForAGlobalAugmentation.ts, 0, 0))
+
+    var XYZ: number;
+>XYZ : Symbol(XYZ, Decl(exportSpecifierForAGlobalAugmentation.ts, 1, 7))
+}
+
+export { XYZ };
+>XYZ : Symbol(XYZ, Decl(exportSpecifierForAGlobalAugmentation.ts, 4, 8))
+
