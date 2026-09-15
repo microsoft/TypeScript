@@ -63,19 +63,31 @@ func (s *Server) computeWorkspaceDiagnostics(ctx context.Context, params *lsprot
 		}
 	}
 
+	repeat := false
 	s.session.WithSnapshotLoadingProjectTree(ctx, trees, func(snapshot *project.Snapshot) {
 		preferences := snapshot.UserPreferences()
+		settings := workspaceDiagnosticsSettings{preferences: preferences, locale: s.GetLocale().String()}
 		// A program generation cannot see a settings change, so the cache is keyed on them too.
-		s.workspaceDiagnostics.useSettings(workspaceDiagnosticsSettings{
-			preferences: preferences,
-			locale:      s.GetLocale().String(),
-		})
+		s.workspaceDiagnostics.useSettings(settings)
 		if !scope.Enabled() || preferences.EnableValidation.IsFalse() {
 			// Nothing is reported, and the cleanup pass below clears whatever the client holds.
 			return
 		}
-		run.collect(snapshot, scope)
+		run.fingerprint = newWorkspaceDiagnosticsFingerprint(snapshot, settings)
+		if s.workspaceDiagnostics.repeatsLastAnswer(run.fingerprint, run.previous) {
+			repeat = true
+			return
+		}
+		run.collect(snapshot, projectsInScope(snapshot, scope))
 	})
+
+	if repeat {
+		// The client pulls the workspace every couple of seconds for as long as it is open, so
+		// most pulls arrive with nothing to tell them. Saying so in full means walking every file
+		// of every project to build a report per file, and the client reconciling all of them,
+		// several times a minute for no change. Reporting nothing leaves what it holds alone.
+		return &lsproto.WorkspaceDiagnosticReport{Items: []workspaceDiagnosticReport{}}, nil
+	}
 
 	// A cancelled run covered only part of the workspace; the cleanup below would mistake the files
 	// it never reached for files that no longer have diagnostics.
@@ -97,7 +109,7 @@ func (s *Server) computeWorkspaceDiagnostics(ctx context.Context, params *lsprot
 	}
 
 	if run.collected {
-		s.workspaceDiagnostics.retain(&run.reported)
+		s.workspaceDiagnostics.retain(&run.reported, run.fingerprint)
 		if s.logger.IsVerbose() {
 			stats := s.workspaceDiagnostics.stats()
 			s.logger.Logf("workspace diagnostics: reported %d files, cached %d files across %d projects",
@@ -134,6 +146,9 @@ type workspaceDiagnosticsRun struct {
 	begun      bool
 	// Whether a sweep actually ran, so a disabled pull does not prune the cache.
 	collected bool
+	// What this answer was computed from, recorded with it so the next pull can tell whether it
+	// has anything to add.
+	fingerprint workspaceDiagnosticsFingerprint
 
 	cache *workspaceDiagnosticsCache
 }
@@ -158,11 +173,11 @@ func newWorkspaceDiagnosticsRun(server *Server, ctx context.Context, params *lsp
 // its diagnostics checkers the way a build splits them, so checking one project already uses
 // several checkers; projects run concurrently on top of that, bounded so the two together do not
 // take the machine.
-func (r *workspaceDiagnosticsRun) collect(snapshot *project.Snapshot, scope lsutil.WorkspaceDiagnosticsScope) {
+func (r *workspaceDiagnosticsRun) collect(snapshot *project.Snapshot, projects []*project.Project) {
 	r.collected = true
 	// Enumerating the files walks every one of them, which is worth standing aside for too.
 	snapshot.WaitForInteractiveIdle(r.ctx)
-	work := r.assignFilesToProjects(snapshot, projectsInScope(snapshot, scope))
+	work := r.assignFilesToProjects(snapshot, projects)
 	// Only files that still need checking count towards progress.
 	r.filesTotal = 0
 	for _, pf := range work {

@@ -245,6 +245,17 @@ func findFullReport(t *testing.T, reports []workspaceDiagnosticReport, uri lspro
 	return nil
 }
 
+func findUnchangedReport(t *testing.T, reports []workspaceDiagnosticReport, uri lsproto.DocumentUri) *lsproto.WorkspaceUnchangedDocumentDiagnosticReport {
+	t.Helper()
+	for _, report := range reports {
+		if report.UnchangedDocumentDiagnosticReport != nil && report.UnchangedDocumentDiagnosticReport.Uri == uri {
+			return report.UnchangedDocumentDiagnosticReport
+		}
+	}
+	t.Fatalf("no unchanged report for %s in %v", uri, reportURIs(reports))
+	return nil
+}
+
 func previousResultIDs(reports []workspaceDiagnosticReport) []lsproto.PreviousResultId {
 	ids := make([]lsproto.PreviousResultId, 0, len(reports))
 	for _, report := range reports {
@@ -303,15 +314,16 @@ func TestWorkspaceDiagnosticsReportsUnchangedForKnownResultIDs(t *testing.T) {
 	ids := previousResultIDs(first.Items)
 	assert.Equal(t, len(ids), 2)
 
+	// Nothing has moved and the client holds all of it, so there is nothing to say. The client
+	// pulls the workspace every couple of seconds, and repeating the answer would make it
+	// reconcile a report per file each time for no change.
 	second := pullWorkspaceDiagnostics(t, client, &lsproto.WorkspaceDiagnosticParams{
 		PreviousResultIds: ids,
 	})
-	assert.DeepEqual(t, reportURIs(second.Items), reportURIs(first.Items))
-	for _, report := range second.Items {
-		assert.Assert(t, report.UnchangedDocumentDiagnosticReport != nil, "expected an unchanged report, got %v", report)
-	}
+	assert.Equal(t, len(second.Items), 0, "a pull with nothing to add reports nothing, got %v", reportURIs(second.Items))
 
-	// Editing the open document changes what a closed file reports, so that file comes back in full.
+	// Editing the open document changes what a closed file reports, so that file comes back in
+	// full. The other file, which the edit did not reach, is acknowledged rather than re-reported.
 	lsptestutil.SendNotification(t, client, lsproto.TextDocumentDidChangeInfo, &lsproto.DidChangeTextDocumentParams{
 		TextDocument: lsproto.VersionedTextDocumentIdentifier{Uri: "file:///home/projects/open.ts", Version: 2},
 		ContentChanges: []lsproto.TextDocumentContentChangePartialOrWholeDocument{
@@ -322,8 +334,11 @@ func TestWorkspaceDiagnosticsReportsUnchangedForKnownResultIDs(t *testing.T) {
 	third := pullWorkspaceDiagnostics(t, client, &lsproto.WorkspaceDiagnosticParams{
 		PreviousResultIds: ids,
 	})
+	assert.DeepEqual(t, reportURIs(third.Items), reportURIs(first.Items))
 	fixed := findFullReport(t, third.Items, "file:///home/projects/index.ts")
 	assert.Equal(t, len(fixed.Items), 0)
+	unchanged := findUnchangedReport(t, third.Items, "file:///home/projects/other.ts")
+	assert.Equal(t, unchanged.ResultId, ids[1].Value)
 }
 
 func TestWorkspaceDiagnosticsClearsDocumentsNoLongerReported(t *testing.T) {
@@ -1030,4 +1045,42 @@ func TestWorkspaceDiagnosticsReportsOpenDocumentsWithoutServerDeDuplication(t *t
 	// It is reported with the version the client has, so the client can tell which text it is for.
 	open := findFullReport(t, reported.Items, "file:///home/projects/open.ts")
 	assert.Assert(t, open.Version.Integer != nil, "an open document reports the version it was checked at")
+}
+
+// The client pulls the workspace every couple of seconds for as long as it is open. A pull with
+// nothing to add reports nothing, which is also how it avoids the work: the reports are what
+// enumerating and checking the projects produces.
+func TestWorkspaceDiagnosticsIdlePullReportsNothing(t *testing.T) {
+	t.Parallel()
+
+	if !bundled.Embedded {
+		t.Skip("bundled files are not embedded")
+	}
+
+	files := manyProjectFiles(6, 10)
+	client, _ := initWorkspaceDiagnosticsClient(t, files)
+	const open = lsproto.DocumentUri("file:///home/projects/p0/open.ts")
+	lsptestutil.SendNotification(t, client, lsproto.TextDocumentDidOpenInfo, &lsproto.DidOpenTextDocumentParams{
+		TextDocument: &lsproto.TextDocumentItem{
+			Uri: open, LanguageId: "typescript", Version: 1, Text: files[open.FileName()],
+		},
+	})
+
+	first := pullWorkspaceDiagnostics(t, client, &lsproto.WorkspaceDiagnosticParams{
+		PreviousResultIds: []lsproto.PreviousResultId{},
+	})
+	assert.Assert(t, len(first.Items) > 0, "the first pull reports the workspace")
+	ids := previousResultIDs(first.Items)
+
+	// Whatever the client asks, an idle pull says nothing, and says it without touching a project.
+	for range 3 {
+		idle := pullWorkspaceDiagnostics(t, client, &lsproto.WorkspaceDiagnosticParams{PreviousResultIds: ids})
+		assert.Equal(t, len(idle.Items), 0, "an idle pull reports nothing, got %v", reportURIs(idle.Items))
+	}
+
+	// A client that has lost what it held is told again, rather than being left with nothing.
+	forgotten := pullWorkspaceDiagnostics(t, client, &lsproto.WorkspaceDiagnosticParams{
+		PreviousResultIds: []lsproto.PreviousResultId{},
+	})
+	assert.DeepEqual(t, reportURIs(forgotten.Items), reportURIs(first.Items))
 }
