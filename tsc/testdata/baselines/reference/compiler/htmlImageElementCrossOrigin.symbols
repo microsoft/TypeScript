@@ -1,0 +1,38 @@
+//// [tests/cases/compiler/htmlImageElementCrossOrigin.ts] ////
+
+=== htmlImageElementCrossOrigin.ts ===
+const img = new Image(10, 10);
+>img : Symbol(img, Decl(htmlImageElementCrossOrigin.ts, 0, 5))
+>Image : Symbol(Image, Decl(lib.dom.d.ts, --, --))
+
+img.crossOrigin = "anonymous";
+>img.crossOrigin : Symbol(HTMLImageElement.crossOrigin, Decl(lib.dom.d.ts, --, --))
+>img : Symbol(img, Decl(htmlImageElementCrossOrigin.ts, 0, 5))
+>crossOrigin : Symbol(HTMLImageElement.crossOrigin, Decl(lib.dom.d.ts, --, --))
+
+img.crossOrigin = "use-credentials";
+>img.crossOrigin : Symbol(HTMLImageElement.crossOrigin, Decl(lib.dom.d.ts, --, --))
+>img : Symbol(img, Decl(htmlImageElementCrossOrigin.ts, 0, 5))
+>crossOrigin : Symbol(HTMLImageElement.crossOrigin, Decl(lib.dom.d.ts, --, --))
+
+img.crossOrigin = "";
+>img.crossOrigin : Symbol(HTMLImageElement.crossOrigin, Decl(lib.dom.d.ts, --, --))
+>img : Symbol(img, Decl(htmlImageElementCrossOrigin.ts, 0, 5))
+>crossOrigin : Symbol(HTMLImageElement.crossOrigin, Decl(lib.dom.d.ts, --, --))
+
+img.crossOrigin = null;
+>img.crossOrigin : Symbol(HTMLImageElement.crossOrigin, Decl(lib.dom.d.ts, --, --))
+>img : Symbol(img, Decl(htmlImageElementCrossOrigin.ts, 0, 5))
+>crossOrigin : Symbol(HTMLImageElement.crossOrigin, Decl(lib.dom.d.ts, --, --))
+
+img.crossOrigin = "abc";
+>img.crossOrigin : Symbol(HTMLImageElement.crossOrigin, Decl(lib.dom.d.ts, --, --))
+>img : Symbol(img, Decl(htmlImageElementCrossOrigin.ts, 0, 5))
+>crossOrigin : Symbol(HTMLImageElement.crossOrigin, Decl(lib.dom.d.ts, --, --))
+
+const value: "anonymous" | "use-credentials" | "" | null = img.crossOrigin;
+>value : Symbol(value, Decl(htmlImageElementCrossOrigin.ts, 8, 5))
+>img.crossOrigin : Symbol(HTMLImageElement.crossOrigin, Decl(lib.dom.d.ts, --, --))
+>img : Symbol(img, Decl(htmlImageElementCrossOrigin.ts, 0, 5))
+>crossOrigin : Symbol(HTMLImageElement.crossOrigin, Decl(lib.dom.d.ts, --, --))
+

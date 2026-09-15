@@ -18597,7 +18597,7 @@ interface HTMLImageElement extends HTMLElement {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLImageElement/crossOrigin)
      */
-    crossOrigin: string | null;
+    crossOrigin: "anonymous" | "use-credentials" | "" | null;
     /**
      * The **`currentSrc`** read-only property of the HTMLImageElement interface indicates the URL of the image selected by the browser to load.
      *
