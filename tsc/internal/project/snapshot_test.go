@@ -100,8 +100,8 @@ func TestSnapshot(t *testing.T) {
 		snapshotBefore := session.Snapshot()
 
 		// a.ts and b.ts are cached
-		assert.Check(t, snapshotBefore.fs.diskFiles()["/home/projects/ts/p1/a.ts"] != nil)
-		assert.Check(t, snapshotBefore.fs.diskFiles()["/home/projects/ts/p2/b.ts"] != nil)
+		assert.Check(t, snapshotBefore.fs.diskFiles["/home/projects/ts/p1/a.ts"] != nil)
+		assert.Check(t, snapshotBefore.fs.diskFiles["/home/projects/ts/p2/b.ts"] != nil)
 
 		// Close p1's only open file
 		session.DidCloseFile(context.Background(), "file:///home/projects/TS/p1/index.ts")
@@ -110,8 +110,8 @@ func TestSnapshot(t *testing.T) {
 		snapshotAfter := session.Snapshot()
 
 		// a.ts is cleaned up, b.ts is still cached
-		assert.Check(t, snapshotAfter.fs.diskFiles()["/home/projects/ts/p1/a.ts"] == nil)
-		assert.Check(t, snapshotAfter.fs.diskFiles()["/home/projects/ts/p2/b.ts"] != nil)
+		assert.Check(t, snapshotAfter.fs.diskFiles["/home/projects/ts/p1/a.ts"] == nil)
+		assert.Check(t, snapshotAfter.fs.diskFiles["/home/projects/ts/p2/b.ts"] != nil)
 	})
 
 	t.Run("GetFile returns nil for non-existent files", func(t *testing.T) {

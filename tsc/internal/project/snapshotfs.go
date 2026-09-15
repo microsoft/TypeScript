@@ -17,10 +17,7 @@ import (
 	"github.com/zeebo/xxh3"
 )
 
-// FileSource is a view of the filesystem that also hands out FileHandles. It is
-// deliberately self-contained: every filesystem question is answered here, so
-// stacking one source on another composes and nothing can reach past a layer to
-// the filesystem underneath.
+// FileSource is a view of the filesystem that also hands out FileHandles.
 type FileSource interface {
 	GetFile(fileName string) FileHandle
 	GetFileByPath(fileName string, path tspath.Path) FileHandle
@@ -34,84 +31,9 @@ type FileSource interface {
 	// on disk, so answering from the host would contradict GetFile.
 }
 
-type FileSystemLayer interface {
-	vfs.FS
-	// Shadows reports whether the layer decides what is at path on its own, rather
-	// than deferring to what it was stacked over.
-	Shadows(path string) bool
-	// Stack returns a FileSource reading from this layer, resolving any path the
-	// layer does not supply itself through base.
-	Stack(base FileSource) FileSource
+func (s *SnapshotFS) isOpenFile(fileName string) bool {
+	return s.isOpenFileBelowRequest(fileName)
 }
-
-// stack returns the top of a snapshot's file source stack.
-func stack(layer FileSystemLayer, base FileSource) FileSource {
-	if layer == nil {
-		return base
-	}
-	return layer.Stack(base)
-}
-
-// The lower layers are reached through accessors so that the split between upper
-// and lower stays inside this file; everywhere else asks the filesystem itself.
-
-func (s *SnapshotFS) host() vfs.FS                         { return s.lower.host }
-func (s *SnapshotFS) toPath(fileName string) tspath.Path   { return s.lower.toPath(fileName) }
-func (s *SnapshotFS) overlays() map[tspath.Path]*Overlay   { return s.lower.overlays }
-func (s *SnapshotFS) diskFiles() map[tspath.Path]*diskFile { return s.lower.diskFiles }
-func (s *SnapshotFS) isOpenFile(fileName string) bool      { return s.lower.isOpenFile(fileName) }
-
-func (s *SnapshotFS) diskDirectories() map[tspath.Path]dirty.CloneableMap[tspath.Path, string] {
-	return s.lower.diskDirectories
-}
-
-func (s *SnapshotFS) nodeModulesRealpathAliases() map[tspath.Path]*realpathAliasSet {
-	return s.lower.nodeModulesRealpathAliases
-}
-
-func (s *SnapshotFS) expandRealpathAliases(change FileChangeSummary) FileChangeSummary {
-	return s.lower.expandRealpathAliases(change)
-}
-
-func (s *snapshotFSBuilder) toPath(fileName string) tspath.Path { return s.lower.toPath(fileName) }
-func (s *snapshotFSBuilder) overlays() map[tspath.Path]*Overlay { return s.lower.overlays }
-func (s *snapshotFSBuilder) isOpenFile(path tspath.Path) bool   { return s.lower.isOpenFile(path) }
-func (s *snapshotFSBuilder) invalidateCache()                   { s.lower.invalidateCache() }
-func (s *snapshotFSBuilder) invalidateNodeModulesCache()        { s.lower.invalidateNodeModulesCache() }
-
-func (s *snapshotFSBuilder) diskFiles() *dirty.SyncMap[tspath.Path, *diskFile] {
-	return s.lower.diskFiles
-}
-
-func (s *snapshotFSBuilder) host() vfs.FS { return s.lower.host }
-
-func (s *snapshotFSBuilder) overlayDirectories() map[tspath.Path]map[tspath.Path]string {
-	return s.lower.overlayDirectories
-}
-
-func (s *snapshotFSBuilder) watchChangesOverlapCache(change FileChangeSummary) bool {
-	return s.lower.watchChangesOverlapCache(change)
-}
-
-// initStack composes the layers into the FileSource that SnapshotFS presents. It
-// cannot be done in a struct literal because the composition refers back to the
-// SnapshotFS, so every construction site calls this before the value is read.
-func (s *SnapshotFS) initStack() {
-	s.FileSource = stack(s.upperLayer, &s.lower)
-}
-
-// lowerLayers is a FileSource over everything beneath an API-supplied upperLayer:
-// editor overlays, then files cached from disk, then the host filesystem. Stacking
-// an upperLayer above it produces the union that SnapshotFS and snapshotFSBuilder
-// present.
-//
-// These hold their owner in a field rather than embedding it so that a method left
-// undefined here fails to compile, instead of silently promoting the whole-stack
-// method and recursing back through the layer.
-var (
-	_ FileSource = (*lowerLayers)(nil)
-	_ FileSource = (*builderLowerLayers)(nil)
-)
 
 // realpathAliasSet is a thread-safe set of symlink paths that alias a single realpath.
 // It implements dirty.Cloneable so it can be used as a value in dirty.SyncMap.
@@ -136,12 +58,8 @@ func (s *realpathAliasSet) Clone() *realpathAliasSet {
 	return clone
 }
 
-// lowerLayers owns the layers beneath an API-supplied one: editor overlays, the
-// files cached from the host, and the host itself. Upper and lower are the terms a
-// union filesystem uses for this - overlayfs calls them upperdir and lowerdir -
-// rather than top and bottom, which would suggest a stack with one item on top.
-type lowerLayers struct {
-	host               vfs.FS
+type SnapshotFS struct {
+	fs                 vfs.FS
 	toPath             func(fileName string) tspath.Path
 	overlays           map[tspath.Path]*Overlay
 	overlayDirectories map[tspath.Path]map[tspath.Path]string
@@ -152,66 +70,134 @@ type lowerLayers struct {
 	// for files inside node_modules that are accessed through directory symlinks.
 	// This allows watch events (which use realpaths) to invalidate files cached under symlink paths.
 	nodeModulesRealpathAliases map[tspath.Path]*realpathAliasSet
-}
-
-type SnapshotFS struct {
-	// FileSource is the union of upperLayer over lower. It is embedded so that
-	// reading a SnapshotFS always reads through the upper layer.
-	FileSource
-	lower lowerLayers
 	// upperLayer is a filesystem supplied by an API request, layered above everything
 	// else here. It is nil when the snapshot reads the session host directly.
-	upperLayer FileSystemLayer
+	upperLayer         *requestFileSystem
+	requestFileHandles collections.SyncMap[tspath.Path, FileHandle]
 }
 
 type memoizedDiskFile func() FileHandle
 
-// Realpath implements FileSource. Overlays and layer contents have no path on disk,
-// so symlink resolution is the host's answer for paths that do exist there.
-func (s *lowerLayers) Realpath(path string) string {
-	return s.host.Realpath(path)
+func (s *SnapshotFS) Realpath(path string) string {
+	if layer := s.upperLayer; layer != nil {
+		lookup := layer.lookupPath(path)
+		if !lookup.ok {
+			return path
+		}
+		if lookup.info != nil {
+			return lookup.path
+		}
+		if lookup.host {
+			return layer.base.Realpath(lookup.path)
+		}
+		return s.fs.Realpath(lookup.path)
+	}
+	return s.fs.Realpath(path)
 }
 
-// UseCaseSensitiveFileNames implements FileSource.
-func (s *lowerLayers) UseCaseSensitiveFileNames() bool {
-	return s.host.UseCaseSensitiveFileNames()
+func (s *SnapshotFS) UseCaseSensitiveFileNames() bool {
+	return s.fs.UseCaseSensitiveFileNames()
 }
 
-func (s *lowerLayers) GetFile(fileName string) FileHandle {
+func (s *SnapshotFS) GetFile(fileName string) FileHandle {
 	return s.GetFileByPath(fileName, s.toPath(fileName))
 }
 
-func (s *lowerLayers) FileExists(fileName string, path tspath.Path) bool {
+func (s *SnapshotFS) FileExists(fileName string, path tspath.Path) bool {
+	if layer := s.upperLayer; layer != nil {
+		lookup := layer.lookupPath(fileName)
+		if !lookup.ok || lookup.info != nil && lookup.isDirectory() {
+			return false
+		}
+		if lookup.info != nil {
+			return true
+		}
+		if !lookup.fallback {
+			return false
+		}
+		if lookup.host {
+			return layer.base.FileExists(lookup.path)
+		}
+		fileName = lookup.path
+		path = layer.toPath(fileName)
+	}
 	if _, ok := s.overlays[path]; ok {
 		return true
 	}
 	if _, ok := s.diskFiles[path]; ok {
 		return true
 	}
-	return s.host.FileExists(fileName)
+	return s.fs.FileExists(fileName)
 }
 
-func (s *lowerLayers) GetFileByPath(fileName string, path tspath.Path) FileHandle {
+func (s *SnapshotFS) GetFileByPath(fileName string, path tspath.Path) FileHandle {
+	originalFileName, originalPath := fileName, path
+	if layer := s.upperLayer; layer != nil {
+		lookup := layer.lookupPath(fileName)
+		if !lookup.ok || lookup.info != nil && lookup.isDirectory() {
+			return nil
+		}
+		if file, ok := lookup.info.(*requestFile); ok {
+			if !lookup.followedSymlink {
+				return file.fileHandle()
+			}
+			return s.requestFileHandle(originalFileName, originalPath, file.content)
+		}
+		if !lookup.fallback {
+			return nil
+		}
+		if lookup.host {
+			if content, ok := layer.base.ReadFile(lookup.path); ok {
+				return s.requestFileHandle(originalFileName, originalPath, content)
+			}
+			return nil
+		}
+		fileName = lookup.path
+		path = layer.toPath(fileName)
+	}
 	if file, ok := s.overlays[path]; ok {
-		return file
+		if path == originalPath {
+			return file
+		}
+		return s.requestFileHandle(originalFileName, originalPath, file.Content())
 	}
 	if file, ok := s.diskFiles[path]; ok {
-		return file
+		if path == originalPath {
+			return file
+		}
+		return s.requestFileHandle(originalFileName, originalPath, file.Content())
 	}
 	newEntry := memoizedDiskFile(sync.OnceValue(func() FileHandle {
-		if contents, ok := s.host.ReadFile(fileName); ok {
+		if contents, ok := s.fs.ReadFile(fileName); ok {
 			return newDiskFile(fileName, contents)
 		}
 		return nil
 	}))
 	entry, _ := s.readFiles.LoadOrStore(path, newEntry)
-	return entry()
+	file := entry()
+	if file == nil || path == originalPath {
+		return file
+	}
+	return s.requestFileHandle(originalFileName, originalPath, file.Content())
 }
 
-// DirectoryExists reports directories the snapshot knows of even when the host does
-// not, which is the case for a directory that exists only because an editor overlay
-// lives inside it.
-func (s *lowerLayers) DirectoryExists(directoryName string) bool {
+func (s *SnapshotFS) DirectoryExists(directoryName string) bool {
+	if layer := s.upperLayer; layer != nil {
+		lookup := layer.lookupPath(directoryName)
+		if !lookup.ok || lookup.info != nil && !lookup.isDirectory() {
+			return false
+		}
+		if lookup.info != nil {
+			return true
+		}
+		if !lookup.fallback {
+			return false
+		}
+		if lookup.host {
+			return layer.base.DirectoryExists(lookup.path)
+		}
+		directoryName = lookup.path
+	}
 	path := s.toPath(directoryName)
 	if _, ok := s.overlayDirectories[path]; ok {
 		return true
@@ -219,28 +205,43 @@ func (s *lowerLayers) DirectoryExists(directoryName string) bool {
 	if _, ok := s.diskDirectories[path]; ok {
 		return true
 	}
-	return s.host.DirectoryExists(directoryName)
+	return s.fs.DirectoryExists(directoryName)
 }
 
-func (s *lowerLayers) GetAccessibleEntries(directoryName string) vfs.Entries {
-	var entries vfs.Entries
+func (s *SnapshotFS) GetAccessibleEntries(directoryName string) vfs.Entries {
+	if s.upperLayer != nil {
+		return s.upperLayer.accessibleEntries(directoryName, snapshotRequestBelow{s})
+	}
+	return s.getAccessibleEntriesBelowRequest(directoryName)
+}
+
+func (s *SnapshotFS) getAccessibleEntriesBelowRequest(directoryName string) vfs.Entries {
+	entries := s.fs.GetAccessibleEntries(directoryName)
 	path := s.toPath(directoryName)
 	if diskDirectories, ok := s.diskDirectories[path]; ok {
-		readDirectoryIntoEntries(diskDirectories, s.isFile, &entries)
+		var cachedEntries vfs.Entries
+		readDirectoryIntoEntries(diskDirectories, s.isFileBelowRequest, &cachedEntries)
+		entries = mergeEntries(entries, cachedEntries, func(left, right string) bool {
+			return tspath.GetCanonicalFileName(left, s.UseCaseSensitiveFileNames()) == tspath.GetCanonicalFileName(right, s.UseCaseSensitiveFileNames())
+		})
 	}
 	if overlayDirectories, ok := s.overlayDirectories[path]; ok {
-		readDirectoryIntoEntries(overlayDirectories, s.isFile, &entries)
+		var overlayEntries vfs.Entries
+		readDirectoryIntoEntries(overlayDirectories, s.isFileBelowRequest, &overlayEntries)
+		entries = mergeEntries(entries, overlayEntries, func(left, right string) bool {
+			return tspath.GetCanonicalFileName(left, s.UseCaseSensitiveFileNames()) == tspath.GetCanonicalFileName(right, s.UseCaseSensitiveFileNames())
+		})
 	}
 	return entries
 }
 
-func (s *lowerLayers) isOpenFile(fileName string) bool {
+func (s *SnapshotFS) isOpenFileBelowRequest(fileName string) bool {
 	path := s.toPath(fileName)
 	_, ok := s.overlays[path]
 	return ok
 }
 
-func (s *lowerLayers) isFile(path tspath.Path) bool {
+func (s *SnapshotFS) isFileBelowRequest(path tspath.Path) bool {
 	if _, ok := s.diskFiles[path]; ok {
 		return true
 	}
@@ -250,10 +251,46 @@ func (s *lowerLayers) isFile(path tspath.Path) bool {
 	return false
 }
 
-// builderLowerLayers owns the lower layers while a snapshot is being built - editor overlays, the cache of files read from the host, and the
-// host itself - along with the bookkeeping that keeps that cache in sync.
-type builderLowerLayers struct {
-	host                       vfs.FS
+func (s *SnapshotFS) requestFileHandle(fileName string, path tspath.Path, content string) FileHandle {
+	if handle, ok := s.requestFileHandles.Load(path); ok {
+		return handle
+	}
+	handle, _ := s.requestFileHandles.LoadOrStore(path, NewFileHandle(fileName, content))
+	return handle
+}
+
+type snapshotRequestBelow struct {
+	fs *SnapshotFS
+}
+
+func (b snapshotRequestBelow) GetAccessibleEntries(path string) vfs.Entries {
+	return b.fs.getAccessibleEntriesBelowRequest(path)
+}
+
+func (b snapshotRequestBelow) FileExists(fileName string) bool {
+	path := b.fs.toPath(fileName)
+	if _, ok := b.fs.overlays[path]; ok {
+		return true
+	}
+	if _, ok := b.fs.diskFiles[path]; ok {
+		return true
+	}
+	return b.fs.fs.FileExists(fileName)
+}
+
+func (b snapshotRequestBelow) DirectoryExists(directoryName string) bool {
+	path := b.fs.toPath(directoryName)
+	if _, ok := b.fs.overlayDirectories[path]; ok {
+		return true
+	}
+	if _, ok := b.fs.diskDirectories[path]; ok {
+		return true
+	}
+	return b.fs.fs.DirectoryExists(directoryName)
+}
+
+type snapshotFSBuilder struct {
+	fs                         vfs.FS
 	toPath                     func(string) tspath.Path
 	overlays                   map[tspath.Path]*Overlay
 	overlayDirectories         map[tspath.Path]map[tspath.Path]string
@@ -261,26 +298,20 @@ type builderLowerLayers struct {
 	diskDirectories            *dirty.Map[tspath.Path, dirty.CloneableMap[tspath.Path, string]]
 	nodeModulesRealpathAliases *dirty.SyncMap[tspath.Path, *realpathAliasSet]
 	accessibleEntries          collections.SyncMap[tspath.Path, *vfs.Entries]
-}
-
-type snapshotFSBuilder struct {
-	// FileSource is the union of upperLayer over lower. It is embedded so that
-	// reading a snapshotFSBuilder always reads through the full stack.
-	FileSource
 	// upperLayer is a filesystem supplied by an API request, layered above everything
 	// else here. It is nil when the snapshot reads the session host directly.
-	upperLayer FileSystemLayer
-	lower      builderLowerLayers
+	upperLayer *requestFileSystem
 	// prevUpperLayer and prevOverlays are what the previous snapshot had, used to
 	// tell whether a path a change was reported for really changed.
-	prevUpperLayer FileSystemLayer
-	prevOverlays   map[tspath.Path]*Overlay
+	prevUpperLayer     *requestFileSystem
+	prevOverlays       map[tspath.Path]*Overlay
+	requestFileHandles collections.SyncMap[tspath.Path, FileHandle]
 }
 
 func newSnapshotFSBuilder(
 	fs vfs.FS,
-	layer FileSystemLayer,
-	prevLayer FileSystemLayer,
+	layer *requestFileSystem,
+	prevLayer *requestFileSystem,
 	prevOverlays map[tspath.Path]*Overlay,
 	overlays map[tspath.Path]*Overlay,
 	diskFiles map[tspath.Path]*diskFile,
@@ -316,38 +347,147 @@ func newSnapshotFSBuilder(
 	}
 
 	builder := &snapshotFSBuilder{
-		upperLayer:     layer,
-		prevUpperLayer: prevLayer,
-		prevOverlays:   prevOverlays,
-		lower: builderLowerLayers{
-			host:                       cachedFS,
-			toPath:                     toPath,
-			overlays:                   overlays,
-			overlayDirectories:         overlayDirectories,
-			diskFiles:                  dirty.NewSyncMap(diskFiles),
-			diskDirectories:            dirty.NewMap(diskDirectories),
-			nodeModulesRealpathAliases: dirty.NewSyncMap(nodeModulesRealpathAliases),
-		},
+		fs:                         cachedFS,
+		toPath:                     toPath,
+		overlays:                   overlays,
+		overlayDirectories:         overlayDirectories,
+		diskFiles:                  dirty.NewSyncMap(diskFiles),
+		diskDirectories:            dirty.NewMap(diskDirectories),
+		nodeModulesRealpathAliases: dirty.NewSyncMap(nodeModulesRealpathAliases),
+		upperLayer:                 layer,
+		prevUpperLayer:             prevLayer,
+		prevOverlays:               prevOverlays,
 	}
-	builder.initStack()
 	return builder
 }
 
-// Realpath implements FileSource. Overlays and layer contents have no path on disk,
-// so symlink resolution is the host's answer for paths that do exist there.
-func (s *builderLowerLayers) Realpath(path string) string {
-	return s.host.Realpath(path)
+func (s *snapshotFSBuilder) Realpath(path string) string {
+	if layer := s.upperLayer; layer != nil {
+		lookup := layer.lookupPath(path)
+		if !lookup.ok {
+			return path
+		}
+		if lookup.info != nil {
+			return lookup.path
+		}
+		if lookup.host {
+			return layer.base.Realpath(lookup.path)
+		}
+		return s.fs.Realpath(lookup.path)
+	}
+	return s.fs.Realpath(path)
 }
 
-// UseCaseSensitiveFileNames implements FileSource.
-func (s *builderLowerLayers) UseCaseSensitiveFileNames() bool {
-	return s.host.UseCaseSensitiveFileNames()
+func (s *snapshotFSBuilder) UseCaseSensitiveFileNames() bool {
+	return s.fs.UseCaseSensitiveFileNames()
 }
 
-// initStack composes the layers into the FileSource that snapshotFSBuilder presents.
-// See SnapshotFS.initStack.
-func (s *snapshotFSBuilder) initStack() {
-	s.FileSource = stack(s.upperLayer, &s.lower)
+func (s *snapshotFSBuilder) GetFile(fileName string) FileHandle {
+	return s.GetFileByPath(fileName, s.toPath(fileName))
+}
+
+func (s *snapshotFSBuilder) GetFileByPath(fileName string, path tspath.Path) FileHandle {
+	originalFileName, originalPath := fileName, path
+	if layer := s.upperLayer; layer != nil {
+		lookup := layer.lookupPath(fileName)
+		if !lookup.ok || lookup.info != nil && lookup.isDirectory() {
+			return nil
+		}
+		if file, ok := lookup.info.(*requestFile); ok {
+			if !lookup.followedSymlink {
+				return file.fileHandle()
+			}
+			return s.requestFileHandle(originalFileName, originalPath, file.content)
+		}
+		if !lookup.fallback {
+			return nil
+		}
+		if lookup.host {
+			if content, ok := layer.base.ReadFile(lookup.path); ok {
+				return s.requestFileHandle(originalFileName, originalPath, content)
+			}
+			return nil
+		}
+		fileName = lookup.path
+		path = layer.toPath(fileName)
+	}
+	file := s.getFileByPathBelowRequest(fileName, path)
+	if file == nil || path == originalPath {
+		return file
+	}
+	return s.requestFileHandle(originalFileName, originalPath, file.Content())
+}
+
+func (s *snapshotFSBuilder) FileExists(fileName string, path tspath.Path) bool {
+	if layer := s.upperLayer; layer != nil {
+		lookup := layer.lookupPath(fileName)
+		if !lookup.ok || lookup.info != nil && lookup.isDirectory() {
+			return false
+		}
+		if lookup.info != nil {
+			return true
+		}
+		if !lookup.fallback {
+			return false
+		}
+		if lookup.host {
+			return layer.base.FileExists(lookup.path)
+		}
+		fileName = lookup.path
+		path = layer.toPath(fileName)
+	}
+	return s.fileExistsBelowRequest(fileName, path)
+}
+
+func (s *snapshotFSBuilder) DirectoryExists(directoryName string) bool {
+	if layer := s.upperLayer; layer != nil {
+		lookup := layer.lookupPath(directoryName)
+		if !lookup.ok || lookup.info != nil && !lookup.isDirectory() {
+			return false
+		}
+		if lookup.info != nil {
+			return true
+		}
+		if !lookup.fallback {
+			return false
+		}
+		if lookup.host {
+			return layer.base.DirectoryExists(lookup.path)
+		}
+		directoryName = lookup.path
+	}
+	return s.directoryExistsBelowRequest(directoryName)
+}
+
+func (s *snapshotFSBuilder) GetAccessibleEntries(directoryName string) vfs.Entries {
+	if s.upperLayer != nil {
+		return s.upperLayer.accessibleEntries(directoryName, builderRequestBelow{s})
+	}
+	return s.getAccessibleEntriesBelowRequest(directoryName)
+}
+
+func (s *snapshotFSBuilder) requestFileHandle(fileName string, path tspath.Path, content string) FileHandle {
+	if handle, ok := s.requestFileHandles.Load(path); ok {
+		return handle
+	}
+	handle, _ := s.requestFileHandles.LoadOrStore(path, NewFileHandle(fileName, content))
+	return handle
+}
+
+type builderRequestBelow struct {
+	fs *snapshotFSBuilder
+}
+
+func (b builderRequestBelow) GetAccessibleEntries(path string) vfs.Entries {
+	return b.fs.getAccessibleEntriesBelowRequest(path)
+}
+
+func (b builderRequestBelow) FileExists(fileName string) bool {
+	return b.fs.fileExistsBelowRequest(fileName, b.fs.toPath(fileName))
+}
+
+func (b builderRequestBelow) DirectoryExists(directoryName string) bool {
+	return b.fs.directoryExistsBelowRequest(directoryName)
 }
 
 func (s *snapshotFSBuilder) Finalize() (*SnapshotFS, bool) {
@@ -365,7 +505,7 @@ func (s *snapshotFSBuilder) Finalize() (*SnapshotFS, bool) {
 				break // reached root
 			}
 			baseName := tspath.GetBaseFileName(child)
-			if dirEntry, ok := s.lower.diskDirectories.Get(parentPath); ok {
+			if dirEntry, ok := s.diskDirectories.Get(parentPath); ok {
 				dirEntry.Change(func(dir dirty.CloneableMap[tspath.Path, string]) {
 					dir[childPath] = baseName
 				})
@@ -373,7 +513,7 @@ func (s *snapshotFSBuilder) Finalize() (*SnapshotFS, bool) {
 			} else {
 				dir := make(dirty.CloneableMap[tspath.Path, string])
 				dir[childPath] = baseName
-				s.lower.diskDirectories.Add(parentPath, dir)
+				s.diskDirectories.Add(parentPath, dir)
 			}
 			childPath = parentPath
 			child = parent
@@ -381,7 +521,7 @@ func (s *snapshotFSBuilder) Finalize() (*SnapshotFS, bool) {
 	}
 
 	onDeletedFileOrDirectory = func(path tspath.Path) {
-		dirEntry, ok := s.lower.diskDirectories.Get(path.GetDirectoryPath())
+		dirEntry, ok := s.diskDirectories.Get(path.GetDirectoryPath())
 		if !ok {
 			return
 		}
@@ -394,7 +534,7 @@ func (s *snapshotFSBuilder) Finalize() (*SnapshotFS, bool) {
 		})
 	}
 
-	diskFiles, changed := s.lower.diskFiles.FinalizeWith(dirty.FinalizationHooks[tspath.Path, *diskFile]{
+	diskFiles, changed := s.diskFiles.FinalizeWith(dirty.FinalizationHooks[tspath.Path, *diskFile]{
 		OnDelete: func(key tspath.Path, value *diskFile) {
 			if deleted == nil {
 				deleted = make(map[tspath.Path]*diskFile)
@@ -416,7 +556,7 @@ func (s *snapshotFSBuilder) Finalize() (*SnapshotFS, bool) {
 		if deletedFile.realpathPath == "" {
 			continue
 		}
-		if entry, ok := s.lower.nodeModulesRealpathAliases.Load(deletedFile.realpathPath); ok {
+		if entry, ok := s.nodeModulesRealpathAliases.Load(deletedFile.realpathPath); ok {
 			entry.Locked(func(e dirty.Value[*realpathAliasSet]) {
 				e.Change(func(aliasSet *realpathAliasSet) {
 					aliasSet.paths.Delete(deletedPath)
@@ -428,35 +568,27 @@ func (s *snapshotFSBuilder) Finalize() (*SnapshotFS, bool) {
 		}
 	}
 
-	nodeModulesRealpathAliases, aliasesChanged := s.lower.nodeModulesRealpathAliases.Finalize()
+	nodeModulesRealpathAliases, aliasesChanged := s.nodeModulesRealpathAliases.Finalize()
 
 	snapshotFS := &SnapshotFS{
-		upperLayer: s.upperLayer,
-		lower: lowerLayers{
-			host:                       s.lower.host,
-			toPath:                     s.lower.toPath,
-			overlays:                   s.lower.overlays,
-			overlayDirectories:         s.lower.overlayDirectories,
-			diskFiles:                  diskFiles,
-			diskDirectories:            core.FirstResult(s.lower.diskDirectories.Finalize()),
-			nodeModulesRealpathAliases: nodeModulesRealpathAliases,
-		},
+		fs:                         s.fs,
+		toPath:                     s.toPath,
+		overlays:                   s.overlays,
+		overlayDirectories:         s.overlayDirectories,
+		diskFiles:                  diskFiles,
+		diskDirectories:            core.FirstResult(s.diskDirectories.Finalize()),
+		nodeModulesRealpathAliases: nodeModulesRealpathAliases,
+		upperLayer:                 s.upperLayer,
 	}
-	snapshotFS.initStack()
 	return snapshotFS, changed || aliasesChanged
 }
 
-func (s *builderLowerLayers) isOpenFile(path tspath.Path) bool {
+func (s *snapshotFSBuilder) isOpenFile(path tspath.Path) bool {
 	_, ok := s.overlays[path]
 	return ok
 }
 
-func (s *builderLowerLayers) GetFile(fileName string) FileHandle {
-	path := s.toPath(fileName)
-	return s.GetFileByPath(fileName, path)
-}
-
-func (s *builderLowerLayers) FileExists(fileName string, path tspath.Path) bool {
+func (s *snapshotFSBuilder) fileExistsBelowRequest(fileName string, path tspath.Path) bool {
 	if _, ok := s.overlays[path]; ok {
 		return true
 	}
@@ -469,10 +601,10 @@ func (s *builderLowerLayers) FileExists(fileName string, path tspath.Path) bool 
 		return s.reloadEntryIfNeeded(entry) != nil
 	}
 	// Path never loaded into diskFiles - use cached stat (no file read).
-	return s.host.FileExists(fileName)
+	return s.fs.FileExists(fileName)
 }
 
-func (s *builderLowerLayers) GetFileByPath(fileName string, path tspath.Path) FileHandle {
+func (s *snapshotFSBuilder) getFileByPathBelowRequest(fileName string, path tspath.Path) FileHandle {
 	if file, ok := s.overlays[path]; ok {
 		return file
 	}
@@ -482,7 +614,7 @@ func (s *builderLowerLayers) GetFileByPath(fileName string, path tspath.Path) Fi
 // DirectoryExists reports directories the snapshot knows of even when the host does
 // not, which is the case for a directory that exists only because an editor overlay
 // lives inside it.
-func (s *builderLowerLayers) DirectoryExists(directoryName string) bool {
+func (s *snapshotFSBuilder) directoryExistsBelowRequest(directoryName string) bool {
 	path := s.toPath(directoryName)
 	if _, ok := s.overlayDirectories[path]; ok {
 		return true
@@ -490,11 +622,11 @@ func (s *builderLowerLayers) DirectoryExists(directoryName string) bool {
 	if _, ok := s.diskDirectories.Get(path); ok {
 		return true
 	}
-	return s.host.DirectoryExists(directoryName)
+	return s.fs.DirectoryExists(directoryName)
 }
 
-func (s *builderLowerLayers) GetAccessibleEntries(path string) vfs.Entries {
-	entries := s.host.GetAccessibleEntries(path)
+func (s *snapshotFSBuilder) getAccessibleEntriesBelowRequest(path string) vfs.Entries {
+	entries := s.fs.GetAccessibleEntries(path)
 	p := s.toPath(path)
 	overlayDirectories, ok := s.overlayDirectories[p]
 	if !ok {
@@ -514,7 +646,7 @@ func (s *builderLowerLayers) GetAccessibleEntries(path string) vfs.Entries {
 	return *merged
 }
 
-func (s *builderLowerLayers) getDiskFile(fileName string, path tspath.Path, forceReload bool) FileHandle {
+func (s *snapshotFSBuilder) getDiskFile(fileName string, path tspath.Path, forceReload bool) FileHandle {
 	entry, loaded := s.diskFiles.LoadOrStore(path, &diskFile{fileBase: fileBase{fileName: fileName}, needsReload: true})
 	if entry != nil {
 		if !loaded && strings.Contains(string(path), "/node_modules/") {
@@ -531,8 +663,8 @@ func (s *builderLowerLayers) getDiskFile(fileName string, path tspath.Path, forc
 // recordRealpathAlias checks if fileName is accessed through a symlink and, if so,
 // records a mapping from the realpath-based key to the symlink-based key.
 // This is only called for files inside node_modules where symlinks are common.
-func (s *builderLowerLayers) recordRealpathAlias(diskFileEntry *dirty.SyncMapEntry[tspath.Path, *diskFile], symlinkFileName string, symlinkPath tspath.Path) {
-	realpath := s.host.Realpath(symlinkFileName)
+func (s *snapshotFSBuilder) recordRealpathAlias(diskFileEntry *dirty.SyncMapEntry[tspath.Path, *diskFile], symlinkFileName string, symlinkPath tspath.Path) {
+	realpath := s.fs.Realpath(symlinkFileName)
 	realpathPath := s.toPath(realpath)
 	if realpathPath != symlinkPath {
 		diskFileEntry.Change(func(file *diskFile) {
@@ -545,7 +677,7 @@ func (s *builderLowerLayers) recordRealpathAlias(diskFileEntry *dirty.SyncMapEnt
 	}
 }
 
-func (s *builderLowerLayers) reloadEntry(entry *dirty.SyncMapEntry[tspath.Path, *diskFile]) FileHandle {
+func (s *snapshotFSBuilder) reloadEntry(entry *dirty.SyncMapEntry[tspath.Path, *diskFile]) FileHandle {
 	var fileName string
 	entry.Locked(func(e dirty.Value[*diskFile]) {
 		if e.Value() != nil {
@@ -556,7 +688,7 @@ func (s *builderLowerLayers) reloadEntry(entry *dirty.SyncMapEntry[tspath.Path, 
 		return nil
 	}
 	// Read file outside the lock to avoid blocking other goroutines.
-	content, ok := s.host.ReadFile(fileName)
+	content, ok := s.fs.ReadFile(fileName)
 	entry.Locked(func(e dirty.Value[*diskFile]) {
 		if e.Value() == nil {
 			return
@@ -577,7 +709,7 @@ func (s *builderLowerLayers) reloadEntry(entry *dirty.SyncMapEntry[tspath.Path, 
 	return entry.Value()
 }
 
-func (s *builderLowerLayers) reloadEntryIfNeeded(entry *dirty.SyncMapEntry[tspath.Path, *diskFile]) FileHandle {
+func (s *snapshotFSBuilder) reloadEntryIfNeeded(entry *dirty.SyncMapEntry[tspath.Path, *diskFile]) FileHandle {
 	var fileName string
 	entry.Locked(func(e dirty.Value[*diskFile]) {
 		if e.Value() != nil && !e.Value().MatchesDiskText() {
@@ -586,7 +718,7 @@ func (s *builderLowerLayers) reloadEntryIfNeeded(entry *dirty.SyncMapEntry[tspat
 	})
 	if fileName != "" {
 		// Read file outside the lock to avoid blocking other goroutines.
-		content, ok := s.host.ReadFile(fileName)
+		content, ok := s.fs.ReadFile(fileName)
 		entry.Locked(func(e dirty.Value[*diskFile]) {
 			if e.Value() == nil || e.Value().MatchesDiskText() {
 				return // another goroutine already reloaded it
@@ -608,7 +740,7 @@ func (s *builderLowerLayers) reloadEntryIfNeeded(entry *dirty.SyncMapEntry[tspat
 	return entry.Value()
 }
 
-func (s *builderLowerLayers) watchChangesOverlapCache(change FileChangeSummary) bool {
+func (s *snapshotFSBuilder) watchChangesOverlapCache(change FileChangeSummary) bool {
 	for uri := range change.Changed.Keys() {
 		path := s.toPath(uri.FileName())
 		if _, ok := s.diskFiles.Load(path); ok {
@@ -630,7 +762,7 @@ func (s *builderLowerLayers) watchChangesOverlapCache(change FileChangeSummary) 
 	return false
 }
 
-func (s *builderLowerLayers) invalidateCache() {
+func (s *snapshotFSBuilder) invalidateCache() {
 	s.diskFiles.Range(func(entry *dirty.SyncMapEntry[tspath.Path, *diskFile]) bool {
 		entry.Change(func(file *diskFile) {
 			file.needsReload = true
@@ -639,7 +771,7 @@ func (s *builderLowerLayers) invalidateCache() {
 	})
 }
 
-func (s *builderLowerLayers) invalidateNodeModulesCache() {
+func (s *snapshotFSBuilder) invalidateNodeModulesCache() {
 	s.diskFiles.Range(func(entry *dirty.SyncMapEntry[tspath.Path, *diskFile]) bool {
 		if strings.Contains(string(entry.Key()), "/node_modules/") {
 			entry.Change(func(file *diskFile) {
@@ -656,7 +788,7 @@ func (s *snapshotFSBuilder) markDirtyFiles(change FileChangeSummary) FileChangeS
 		wg := core.NewWorkGroup(false)
 		for uri := range change.Changed.Keys() {
 			fileName := uri.FileName()
-			path := s.lower.toPath(fileName)
+			path := s.toPath(fileName)
 			// A path the layer decides has nothing on disk worth re-reading, so
 			// compare what it now supplies against what the snapshot already had.
 			if s.upperLayer != nil && s.upperLayer.Shadows(fileName) {
@@ -665,17 +797,17 @@ func (s *snapshotFSBuilder) markDirtyFiles(change FileChangeSummary) FileChangeS
 				}
 				continue
 			}
-			if _, ok := s.lower.overlays[path]; ok {
+			if _, ok := s.overlays[path]; ok {
 				filteredChanged.Add(uri)
 				continue
 			}
-			entry, ok := s.lower.diskFiles.Load(path)
+			entry, ok := s.diskFiles.Load(path)
 			if !ok {
 				filteredChanged.Add(uri)
 				continue
 			}
 			wg.Queue(func() {
-				if s.lower.reloadEntryIfContentChanged(entry) {
+				if s.reloadEntryIfContentChanged(entry) {
 					filteredChanged.Add(uri)
 				}
 			})
@@ -688,8 +820,8 @@ func (s *snapshotFSBuilder) markDirtyFiles(change FileChangeSummary) FileChangeS
 		change.Changed = *newChanged
 	}
 	for uri := range change.Deleted.Keys() {
-		path := s.lower.toPath(uri.FileName())
-		if entry, ok := s.lower.diskFiles.Load(path); ok {
+		path := s.toPath(uri.FileName())
+		if entry, ok := s.diskFiles.Load(path); ok {
 			entry.Delete()
 		}
 	}
@@ -707,14 +839,13 @@ func (s *snapshotFSBuilder) upperLayerMatchesPrevious(fileName string, path tspa
 		return false
 	}
 	if s.prevUpperLayer != nil && s.prevUpperLayer.Shadows(fileName) {
-		// Shadowed paths are supplied by the layer itself, so this reads no further.
-		content, ok := s.prevUpperLayer.ReadFile(fileName)
-		return ok && content == file.Content()
+		previous, ok := s.prevUpperLayer.lookupPath(fileName).info.(*requestFile)
+		return ok && previous.content == file.Content()
 	}
 	if overlay, ok := s.prevOverlays[path]; ok {
 		return overlay.Hash() == file.Hash()
 	}
-	entry, ok := s.lower.diskFiles.Load(path)
+	entry, ok := s.diskFiles.Load(path)
 	if !ok {
 		return false
 	}
@@ -722,12 +853,12 @@ func (s *snapshotFSBuilder) upperLayerMatchesPrevious(fileName string, path tspa
 	return cached != nil && cached.Hash() == file.Hash()
 }
 
-func (s *builderLowerLayers) reloadEntryIfContentChanged(entry *dirty.SyncMapEntry[tspath.Path, *diskFile]) (changed bool) {
+func (s *snapshotFSBuilder) reloadEntryIfContentChanged(entry *dirty.SyncMapEntry[tspath.Path, *diskFile]) (changed bool) {
 	file := entry.Value()
 	if file == nil {
 		return true
 	}
-	content, ok := s.host.ReadFile(file.fileName)
+	content, ok := s.fs.ReadFile(file.fileName)
 	changed = true
 	entry.Locked(func(e dirty.Value[*diskFile]) {
 		cur := e.Value()
@@ -760,7 +891,7 @@ func (s *builderLowerLayers) reloadEntryIfContentChanged(entry *dirty.SyncMapEnt
 // files that were accessed through node_modules symlinks. When a watch event arrives
 // using a realpath, this expands it to include the symlink-based path so that
 // downstream consumers (markDirtyFiles, markFilesChanged) can find cached entries.
-func (s *lowerLayers) expandRealpathAliases(change FileChangeSummary) FileChangeSummary {
+func (s *SnapshotFS) expandRealpathAliases(change FileChangeSummary) FileChangeSummary {
 	if len(s.nodeModulesRealpathAliases) == 0 {
 		return change
 	}
@@ -799,7 +930,7 @@ func (s *lowerLayers) expandRealpathAliases(change FileChangeSummary) FileChange
 // is a dynamic (e.g. untitled) file, or is currently open as an overlay.
 func (s *snapshotFSBuilder) isRelevantFileName(uri lsproto.DocumentUri, contentMapperExtensions []string, contentMapperWatchedFiles *collections.Set[tspath.Path]) bool {
 	fileName := uri.FileName()
-	if contentMapperWatchedFiles != nil && contentMapperWatchedFiles.Has(s.lower.toPath(fileName)) {
+	if contentMapperWatchedFiles != nil && contentMapperWatchedFiles.Has(s.toPath(fileName)) {
 		return true
 	}
 	if tspath.FileExtensionIsOneOf(fileName, contentMapperExtensions) {
@@ -808,8 +939,8 @@ func (s *snapshotFSBuilder) isRelevantFileName(uri lsproto.DocumentUri, contentM
 	if tspath.IsDynamicFileName(fileName) {
 		return true
 	}
-	path := s.lower.toPath(fileName)
-	if _, ok := s.lower.overlays[path]; ok {
+	path := s.toPath(fileName)
+	if _, ok := s.overlays[path]; ok {
 		return true
 	}
 	i := strings.LastIndexByte(string(path), '.')
@@ -837,9 +968,9 @@ func (s *snapshotFSBuilder) expandAndFilterWatchEvents(change FileChangeSummary,
 	if change.Deleted.Len() > 0 {
 		var filteredDeleted collections.Set[lsproto.DocumentUri]
 		for uri := range change.Deleted.Keys() {
-			path := s.lower.toPath(uri.FileName())
-			if _, ok := s.lower.diskDirectories.Get(path); ok {
-				s.lower.collectFilesRecursive(path, &filteredDeleted)
+			path := s.toPath(uri.FileName())
+			if _, ok := s.diskDirectories.Get(path); ok {
+				s.collectFilesRecursive(path, &filteredDeleted)
 			} else if s.isRelevantFileName(uri, contentMapperExtensions, contentMapperWatchedFiles) || isNodeModulesPath(path) {
 				// node_modules deletions must always be preserved for auto-import registry change handlers.
 				// They won't be in diskDirectories since the registry doesn't use the snapshotFSBuilder for
@@ -877,7 +1008,7 @@ func isNodeModulesPath(path tspath.Path) bool {
 
 // collectFilesRecursive recursively collects all cached file URIs under the
 // given directory path using the diskDirectories and diskFiles maps.
-func (s *builderLowerLayers) collectFilesRecursive(dirPath tspath.Path, files *collections.Set[lsproto.DocumentUri]) {
+func (s *snapshotFSBuilder) collectFilesRecursive(dirPath tspath.Path, files *collections.Set[lsproto.DocumentUri]) {
 	dirEntry, ok := s.diskDirectories.Get(dirPath)
 	if !ok {
 		return
@@ -894,10 +1025,10 @@ func (s *builderLowerLayers) collectFilesRecursive(dirPath tspath.Path, files *c
 
 func (s *snapshotFSBuilder) convertOpenAndCloseToChanges(change FileChangeSummary) FileChangeSummary {
 	if change.Opened != "" && !tspath.IsDynamicFileName(change.Opened.FileName()) {
-		path := s.lower.toPath(change.Opened.FileName())
-		if entry, ok := s.lower.diskFiles.Load(path); !ok || entry.Original() == nil {
+		path := s.toPath(change.Opened.FileName())
+		if entry, ok := s.diskFiles.Load(path); !ok || entry.Original() == nil {
 			change.Created.Add(change.Opened)
-		} else if overlay, ok := s.lower.overlays[path]; ok {
+		} else if overlay, ok := s.overlays[path]; ok {
 			// The file already exists in the program, but the overlay content from
 			// didOpen may differ from what was originally read from disk (e.g. the
 			// editor normalizes line endings, or the file changed on disk since the
@@ -912,9 +1043,9 @@ func (s *snapshotFSBuilder) convertOpenAndCloseToChanges(change FileChangeSummar
 		if tspath.IsDynamicFileName(fileName) {
 			continue
 		}
-		path := s.lower.toPath(fileName)
+		path := s.toPath(fileName)
 		// We may have ignored watcher events while the file was open, so force a reload.
-		if fh := s.lower.getDiskFile(fileName, path, true /*forceReload*/); fh != nil {
+		if fh := s.getDiskFile(fileName, path, true /*forceReload*/); fh != nil {
 			if fh.Hash() != s.prevOverlays[path].Hash() {
 				change.Changed.Add(uri)
 			}

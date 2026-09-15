@@ -6,7 +6,6 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/microsoft/TypeScript/tsc/internal/api/requestfilesystem"
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/checker"
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
@@ -364,7 +363,7 @@ type UpdateSnapshotParams struct {
 	// FileSystem supplies file contents and directory listings for the new snapshot.
 	// A full filesystem is canonical and total. A filesystem layer is checked
 	// before falling back to the host filesystem.
-	FileSystem *requestfilesystem.RequestFileSystem `json:"fileSystem,omitempty"`
+	FileSystem *project.RequestFileSystem `json:"fileSystem,omitempty"`
 	// OpenFiles lists files to keep open for the API client, mirroring LSP's
 	// textDocument/didOpen. For each file, ancestor directories are searched for a
 	// tsconfig that contains it; if found, that configured project is loaded and

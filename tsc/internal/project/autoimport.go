@@ -12,20 +12,16 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 )
 
-// autoImportBuilderFS changes one behavior of the layers beneath an API-supplied
-// one: files read only for auto-imports are held here rather than added to the
-// snapshot's disk cache. Everything else is inherited, and newAutoImportRegistryCloneHost
-// layers the API filesystem back above it, so auto-imports read the union.
 type autoImportBuilderFS struct {
-	*builderLowerLayers
-	untrackedFiles collections.SyncMap[tspath.Path, FileHandle]
+	snapshotFSBuilder *snapshotFSBuilder
+	untrackedFiles    collections.SyncMap[tspath.Path, FileHandle]
 }
 
 var _ FileSource = (*autoImportBuilderFS)(nil)
 
 // GetFile implements FileSource.
 func (a *autoImportBuilderFS) GetFile(fileName string) FileHandle {
-	return a.GetFileByPath(fileName, a.toPath(fileName))
+	return a.GetFileByPath(fileName, a.snapshotFSBuilder.toPath(fileName))
 }
 
 // GetFileByPath implements FileSource.
@@ -35,22 +31,77 @@ func (a *autoImportBuilderFS) GetFileByPath(fileName string, path tspath.Path) F
 	// diskFiles. (Note the reason we can't just use the finalized SnapshotFS is that changed
 	// files not read during other parts of the snapshot clone will be marked as dirty, but
 	// not yet refreshed from disk.)
-	if overlay, ok := a.overlays[path]; ok {
+	originalFileName, originalPath := fileName, path
+	if layer := a.snapshotFSBuilder.upperLayer; layer != nil {
+		lookup := layer.lookupPath(fileName)
+		if !lookup.ok || lookup.info != nil && lookup.isDirectory() {
+			return nil
+		}
+		if file, ok := lookup.info.(*requestFile); ok {
+			if !lookup.followedSymlink {
+				return file.fileHandle()
+			}
+			return a.snapshotFSBuilder.requestFileHandle(originalFileName, originalPath, file.content)
+		}
+		if !lookup.fallback {
+			return nil
+		}
+		if lookup.host {
+			if content, ok := layer.base.ReadFile(lookup.path); ok {
+				return a.snapshotFSBuilder.requestFileHandle(originalFileName, originalPath, content)
+			}
+			return nil
+		}
+		fileName = lookup.path
+		path = layer.toPath(fileName)
+	}
+	if overlay, ok := a.snapshotFSBuilder.overlays[path]; ok {
+		if path != originalPath {
+			return a.snapshotFSBuilder.requestFileHandle(originalFileName, originalPath, overlay.Content())
+		}
 		return overlay
 	}
-	if diskFile, ok := a.diskFiles.Load(path); ok {
-		return a.reloadEntryIfNeeded(diskFile)
+	if diskFile, ok := a.snapshotFSBuilder.diskFiles.Load(path); ok {
+		file := a.snapshotFSBuilder.reloadEntryIfNeeded(diskFile)
+		if file != nil && path != originalPath {
+			return a.snapshotFSBuilder.requestFileHandle(originalFileName, originalPath, file.Content())
+		}
+		return file
 	}
-	if fh, ok := a.untrackedFiles.Load(path); ok {
+	if fh, ok := a.untrackedFiles.Load(originalPath); ok {
 		return fh
 	}
 	var fh FileHandle
-	content, ok := a.host.ReadFile(fileName)
+	content, ok := a.snapshotFSBuilder.fs.ReadFile(fileName)
 	if ok {
-		fh = newDiskFile(fileName, content)
+		if path == originalPath {
+			fh = newDiskFile(fileName, content)
+		} else {
+			fh = NewFileHandle(originalFileName, content)
+		}
 	}
-	fh, _ = a.untrackedFiles.LoadOrStore(path, fh)
+	fh, _ = a.untrackedFiles.LoadOrStore(originalPath, fh)
 	return fh
+}
+
+func (a *autoImportBuilderFS) FileExists(fileName string, path tspath.Path) bool {
+	return a.snapshotFSBuilder.FileExists(fileName, path)
+}
+
+func (a *autoImportBuilderFS) DirectoryExists(path string) bool {
+	return a.snapshotFSBuilder.DirectoryExists(path)
+}
+
+func (a *autoImportBuilderFS) GetAccessibleEntries(path string) vfs.Entries {
+	return a.snapshotFSBuilder.GetAccessibleEntries(path)
+}
+
+func (a *autoImportBuilderFS) Realpath(path string) string {
+	return a.snapshotFSBuilder.Realpath(path)
+}
+
+func (a *autoImportBuilderFS) UseCaseSensitiveFileNames() bool {
+	return a.snapshotFSBuilder.UseCaseSensitiveFileNames()
 }
 
 type autoImportRegistryCloneHost struct {
@@ -75,7 +126,7 @@ func newAutoImportRegistryCloneHost(
 	return &autoImportRegistryCloneHost{
 		projectCollection: projectCollection,
 		parseCache:        parseCache,
-		fs:                newSourceFS(false, stack(snapshotFSBuilder.upperLayer, &autoImportBuilderFS{builderLowerLayers: &snapshotFSBuilder.lower}), toPath),
+		fs:                newSourceFS(false, &autoImportBuilderFS{snapshotFSBuilder: snapshotFSBuilder}, toPath),
 		currentDirectory:  currentDirectory,
 	}
 }

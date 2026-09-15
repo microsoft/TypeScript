@@ -1,4 +1,4 @@
-package requestfilesystem
+package project
 
 import (
 	"io/fs"
@@ -76,7 +76,7 @@ func TestRequestPathTreeListingReplacementDoesNotRemoveFiles(t *testing.T) {
 	t.Parallel()
 	host := &trackingvfs.FS{Inner: vfstest.FromMap(map[string]string{}, true)}
 	base, err := newRequestFileSystem(&RequestFileSystem{
-		Kind:  KindLayer,
+		Kind:  RequestFileSystemKindLayer,
 		Files: map[string]string{"/dir/retained.ts": "retained"},
 		Directories: map[string]RequestDirectoryEntries{
 			"/dir": {Files: []string{"retained.ts"}},
@@ -84,7 +84,7 @@ func TestRequestPathTreeListingReplacementDoesNotRemoveFiles(t *testing.T) {
 	}, host, "/")
 	assert.NilError(t, err)
 	compacted, err := newLayeredRequestFileSystem(&RequestFileSystem{
-		Kind: KindLayer,
+		Kind: RequestFileSystemKindLayer,
 		Directories: map[string]RequestDirectoryEntries{
 			"/dir": {Files: []string{}, Directories: []string{}},
 		},
@@ -123,7 +123,7 @@ func TestRequestPathTreeCompositionPreservesListingSnapshots(t *testing.T) {
 func TestRequestPathTreeFileTakesPrecedenceOverSameLayerSymlink(t *testing.T) {
 	t.Parallel()
 	fileSystem, err := newRequestFileSystem(&RequestFileSystem{
-		Kind: KindFull,
+		Kind: RequestFileSystemKindFull,
 		Files: map[string]string{
 			"/item":           "file",
 			"/target/file.ts": "target",
@@ -146,7 +146,7 @@ func TestRequestPathTreeFileTakesPrecedenceOverSameLayerSymlink(t *testing.T) {
 func TestRequestPathTreeDirectoryTakesPrecedenceOverSameLayerSymlink(t *testing.T) {
 	t.Parallel()
 	fileSystem, err := newRequestFileSystem(&RequestFileSystem{
-		Kind: KindFull,
+		Kind: RequestFileSystemKindFull,
 		Files: map[string]string{
 			"/item/child.ts": "child",
 			"/target.ts":     "target",
@@ -171,7 +171,7 @@ func TestRequestPathTreeDirectoryTakesPrecedenceOverSameLayerSymlink(t *testing.
 func TestRequestPathTreeSymlinkTakesPrecedenceOverListingHint(t *testing.T) {
 	t.Parallel()
 	fileSystem, err := newRequestFileSystem(&RequestFileSystem{
-		Kind:        KindFull,
+		Kind:        RequestFileSystemKindFull,
 		Files:       map[string]string{"/target/file.ts": "target"},
 		Directories: map[string]RequestDirectoryEntries{"/links": {Directories: []string{"pkg"}}},
 		Symlinks:    map[string]RequestSymlink{"/links/pkg": {Target: "/target"}},
@@ -194,7 +194,7 @@ func TestRequestPathTreeSymlinkTakesPrecedenceOverListingHint(t *testing.T) {
 func TestRequestPathTreeFileTakesPrecedenceOverSameLayerDirectory(t *testing.T) {
 	t.Parallel()
 	fileSystem, err := newRequestFileSystem(&RequestFileSystem{
-		Kind:        KindFull,
+		Kind:        RequestFileSystemKindFull,
 		Files:       map[string]string{"/item": "file"},
 		Directories: map[string]RequestDirectoryEntries{"/item": {Files: []string{"listed.ts"}}},
 	}, vfstest.FromMap(map[string]string{}, true), "/")
@@ -212,7 +212,7 @@ func TestRequestPathTreeFileTakesPrecedenceOverSameLayerDirectory(t *testing.T) 
 func TestRequestPathTreeFileProvidesStatAndDirEntry(t *testing.T) {
 	t.Parallel()
 	fileSystem, err := newRequestFileSystem(&RequestFileSystem{
-		Kind:  KindFull,
+		Kind:  RequestFileSystemKindFull,
 		Files: map[string]string{"/dir/file.ts": "file content"},
 	}, vfstest.FromMap(map[string]string{}, true), "/")
 	assert.NilError(t, err)
@@ -244,7 +244,7 @@ func TestRequestPathTreeFileProvidesStatAndDirEntry(t *testing.T) {
 func TestRequestPathTreeDirectoryProvidesStatAndDirEntry(t *testing.T) {
 	t.Parallel()
 	fileSystem, err := newRequestFileSystem(&RequestFileSystem{
-		Kind:        KindFull,
+		Kind:        RequestFileSystemKindFull,
 		Directories: map[string]RequestDirectoryEntries{"/dir": {}},
 	}, vfstest.FromMap(map[string]string{}, true), "/")
 	assert.NilError(t, err)
@@ -276,7 +276,7 @@ func TestRequestPathTreeDirectoryProvidesStatAndDirEntry(t *testing.T) {
 func TestRequestPathTreeSymlinkReportsTargetMetadata(t *testing.T) {
 	t.Parallel()
 	fileSystem, err := newRequestFileSystem(&RequestFileSystem{
-		Kind:     KindFull,
+		Kind:     RequestFileSystemKindFull,
 		Files:    map[string]string{"/target/file.ts": "target content"},
 		Symlinks: map[string]RequestSymlink{"/link.ts": {Target: "/target/file.ts"}},
 	}, vfstest.FromMap(map[string]string{}, true), "/")
@@ -313,7 +313,7 @@ func TestRequestPathTreeWalkPreservesHostMetadata(t *testing.T) {
 	info := hostFS.Stat("/host.ts")
 	host := requestTestHostMetadata{FS: hostFS, info: info}
 	fileSystem, err := newRequestFileSystem(&RequestFileSystem{
-		Kind: KindLayer,
+		Kind: RequestFileSystemKindLayer,
 	}, host, "/")
 	assert.NilError(t, err)
 	assert.Assert(t, fileSystem.Stat("/host.ts") == info)
@@ -337,7 +337,7 @@ func TestRequestPathTreeWalkPreservesHostMetadata(t *testing.T) {
 func TestRequestPathTreeStatSupportsExistenceOnlyHost(t *testing.T) {
 	t.Parallel()
 	host := requestTestHostMetadata{FS: vfstest.FromMap(map[string]string{"/dir/file.ts": "host content"}, true)}
-	fileSystem, err := newRequestFileSystem(&RequestFileSystem{Kind: KindLayer}, host, "/")
+	fileSystem, err := newRequestFileSystem(&RequestFileSystem{Kind: RequestFileSystemKindLayer}, host, "/")
 	assert.NilError(t, err)
 	fileInfo := fileSystem.Stat("/dir/file.ts")
 	assert.Assert(t, fileInfo != nil)

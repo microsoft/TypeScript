@@ -1,9 +1,8 @@
-package requestfilesystem
+package project
 
 import (
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/lsconv"
-	"github.com/microsoft/TypeScript/tsc/internal/project"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 )
 
@@ -12,9 +11,9 @@ import (
 // compared against the snapshot's own view of it - an overlay when a file is open,
 // otherwise its cached or on-disk state - rather than against the host alone.
 func addFileChanges(
-	summary *project.FileChangeSummary,
+	summary *FileChangeSummary,
 	request *RequestFileSystem,
-	base project.FileSource,
+	base FileSource,
 	baseLayer *requestFileSystem,
 	currentDirectory string,
 ) {

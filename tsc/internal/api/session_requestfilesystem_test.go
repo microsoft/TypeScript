@@ -9,7 +9,6 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/microsoft/TypeScript/tsc/internal/api/requestfilesystem"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/project"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/projecttestutil"
@@ -27,8 +26,8 @@ func TestRequestLayerRemainsAboveCapturedEditorOverlays(t *testing.T) {
 	defer session.Close()
 
 	base, err := session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{
-		FileSystem: &requestfilesystem.RequestFileSystem{
-			Kind: requestfilesystem.KindFull,
+		FileSystem: &project.RequestFileSystem{
+			Kind: project.RequestFileSystemKindFull,
 			Files: map[string]string{
 				"/shared.ts":      "inherited request",
 				"/overlayOnly.ts": "inherited request",
@@ -48,8 +47,8 @@ func TestRequestLayerRemainsAboveCapturedEditorOverlays(t *testing.T) {
 
 	updated, err := session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{
 		Snapshot: withOverlays.Snapshot,
-		FileSystem: &requestfilesystem.RequestFileSystem{
-			Kind:  requestfilesystem.KindLayer,
+		FileSystem: &project.RequestFileSystem{
+			Kind:  project.RequestFileSystemKindLayer,
 			Files: map[string]string{"/shared.ts": "new request"},
 		},
 	})
@@ -85,8 +84,8 @@ func TestRequestFileChangeComparedAgainstEditorOverlay(t *testing.T) {
 
 	updated, err := session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{
 		Snapshot: base.Snapshot,
-		FileSystem: &requestfilesystem.RequestFileSystem{
-			Kind:  requestfilesystem.KindLayer,
+		FileSystem: &project.RequestFileSystem{
+			Kind:  project.RequestFileSystemKindLayer,
 			Files: map[string]string{"/value.ts": "host"},
 		},
 	})
@@ -117,8 +116,8 @@ func TestRequestTombstoneComparedAgainstEditorOverlay(t *testing.T) {
 
 	updated, err := session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{
 		Snapshot: base.Snapshot,
-		FileSystem: &requestfilesystem.RequestFileSystem{
-			Kind:         requestfilesystem.KindLayer,
+		FileSystem: &project.RequestFileSystem{
+			Kind:         project.RequestFileSystemKindLayer,
 			RemovedPaths: []string{"/overlay.ts"},
 		},
 	})
@@ -149,9 +148,9 @@ func TestRequestDirectoryListingExcludesEditorOverlayDescendantFromWildcard(t *t
 
 	updated, err := session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{
 		Snapshot: base.Snapshot,
-		FileSystem: &requestfilesystem.RequestFileSystem{
-			Kind: requestfilesystem.KindLayer,
-			Directories: map[string]requestfilesystem.RequestDirectoryEntries{
+		FileSystem: &project.RequestFileSystem{
+			Kind: project.RequestFileSystemKindLayer,
+			Directories: map[string]project.RequestDirectoryEntries{
 				"/dir": {Files: []string{}, Directories: []string{}},
 			},
 		},
@@ -178,8 +177,8 @@ func TestFullRequestLayerOmitsCapturedEditorOverlay(t *testing.T) {
 
 	replaced, err := session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{
 		Snapshot: withOverlay.Snapshot,
-		FileSystem: &requestfilesystem.RequestFileSystem{
-			Kind:  requestfilesystem.KindFull,
+		FileSystem: &project.RequestFileSystem{
+			Kind:  project.RequestFileSystemKindFull,
 			Files: map[string]string{"/replacement.ts": "replacement"},
 		},
 	})
@@ -200,8 +199,8 @@ func TestRequestFileReplacesCachedDirectory(t *testing.T) {
 
 	base, err := session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{
 		OpenProjects: []DocumentIdentifier{{FileName: "/tsconfig.json"}},
-		FileSystem: &requestfilesystem.RequestFileSystem{
-			Kind: requestfilesystem.KindFull,
+		FileSystem: &project.RequestFileSystem{
+			Kind: project.RequestFileSystemKindFull,
 			Files: map[string]string{
 				"/tsconfig.json":     `{ "compilerOptions": { "noLib": true }, "include": ["replaced/**/*.ts"] }`,
 				"/replaced/child.ts": `export const child = true;`,
@@ -215,8 +214,8 @@ func TestRequestFileReplacesCachedDirectory(t *testing.T) {
 
 	updated, err := session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{
 		Snapshot: base.Snapshot,
-		FileSystem: &requestfilesystem.RequestFileSystem{
-			Kind:  requestfilesystem.KindLayer,
+		FileSystem: &project.RequestFileSystem{
+			Kind:  project.RequestFileSystemKindLayer,
 			Files: map[string]string{"/replaced": "replacement file"},
 		},
 	})
@@ -251,8 +250,8 @@ func TestRequestFileReplacesDirectoryWithEditorOverlayDescendant(t *testing.T) {
 
 	updated, err := session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{
 		Snapshot: base.Snapshot,
-		FileSystem: &requestfilesystem.RequestFileSystem{
-			Kind:  requestfilesystem.KindLayer,
+		FileSystem: &project.RequestFileSystem{
+			Kind:  project.RequestFileSystemKindLayer,
 			Files: map[string]string{"/dir": "replacement"},
 		},
 	})
@@ -273,9 +272,9 @@ func TestRequestSymlinkFileHandlesAreStable(t *testing.T) {
 	defer session.Close()
 
 	response, err := session.handleUpdateSnapshot(context.Background(), &UpdateSnapshotParams{
-		FileSystem: &requestfilesystem.RequestFileSystem{
-			Kind: requestfilesystem.KindLayer,
-			Symlinks: map[string]requestfilesystem.RequestSymlink{
+		FileSystem: &project.RequestFileSystem{
+			Kind: project.RequestFileSystemKindLayer,
+			Symlinks: map[string]project.RequestSymlink{
 				"/alias.ts":     {Target: "/target.ts"},
 				"/hostAlias.ts": {Target: "/target.ts", Host: true},
 			},
@@ -306,9 +305,9 @@ func TestRequestSymlinkFallsBackToEditorOverlayTarget(t *testing.T) {
 	assert.NilError(t, err)
 	updated, err := session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{
 		Snapshot: base.Snapshot,
-		FileSystem: &requestfilesystem.RequestFileSystem{
-			Kind: requestfilesystem.KindLayer,
-			Symlinks: map[string]requestfilesystem.RequestSymlink{
+		FileSystem: &project.RequestFileSystem{
+			Kind: project.RequestFileSystemKindLayer,
+			Symlinks: map[string]project.RequestSymlink{
 				"/alias.ts": {Target: "/target.ts"},
 			},
 		},
@@ -337,9 +336,9 @@ func TestRequestSymlinkFallsBackToEditorOverlayDirectory(t *testing.T) {
 	assert.NilError(t, err)
 	updated, err := session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{
 		Snapshot: base.Snapshot,
-		FileSystem: &requestfilesystem.RequestFileSystem{
-			Kind: requestfilesystem.KindLayer,
-			Symlinks: map[string]requestfilesystem.RequestSymlink{
+		FileSystem: &project.RequestFileSystem{
+			Kind: project.RequestFileSystemKindLayer,
+			Symlinks: map[string]project.RequestSymlink{
 				"/alias": {Target: "/target"},
 			},
 		},
@@ -366,13 +365,13 @@ func TestReplacingRequestSymlinkInvalidatesAliasedProgramFile(t *testing.T) {
 
 	base, err := session.handleUpdateSnapshot(context.Background(), &UpdateSnapshotParams{
 		OpenProjects: []DocumentIdentifier{{FileName: "/tsconfig.json"}},
-		FileSystem: &requestfilesystem.RequestFileSystem{
-			Kind: requestfilesystem.KindFull,
+		FileSystem: &project.RequestFileSystem{
+			Kind: project.RequestFileSystemKindFull,
 			Files: map[string]string{
 				"/tsconfig.json":  `{ "compilerOptions": { "noLib": true }, "files": ["link/file.ts"] }`,
 				"/target/file.ts": "old",
 			},
-			Symlinks: map[string]requestfilesystem.RequestSymlink{
+			Symlinks: map[string]project.RequestSymlink{
 				"/link": {Target: "/target"},
 			},
 		},
@@ -383,8 +382,8 @@ func TestReplacingRequestSymlinkInvalidatesAliasedProgramFile(t *testing.T) {
 
 	updated, err := session.handleUpdateSnapshot(context.Background(), &UpdateSnapshotParams{
 		Snapshot: base.Snapshot,
-		FileSystem: &requestfilesystem.RequestFileSystem{
-			Kind:         requestfilesystem.KindLayer,
+		FileSystem: &project.RequestFileSystem{
+			Kind:         project.RequestFileSystemKindLayer,
 			RemovedPaths: []string{"/link"},
 		},
 	})
@@ -405,8 +404,8 @@ func TestUpdateSnapshotUsesFullFileSystem(t *testing.T) {
 
 	response, err := session.handleUpdateSnapshot(context.Background(), &UpdateSnapshotParams{
 		OpenProjects: []DocumentIdentifier{{FileName: "/tsconfig.json"}},
-		FileSystem: &requestfilesystem.RequestFileSystem{
-			Kind: requestfilesystem.KindFull,
+		FileSystem: &project.RequestFileSystem{
+			Kind: project.RequestFileSystemKindFull,
 			Files: map[string]string{
 				"/tsconfig.json": `{ "compilerOptions": { "noLib": true }, "files": ["src/index.ts"] }`,
 				"/src/index.ts":  `export const value = "memory";`,
@@ -437,8 +436,8 @@ func TestUpdateSnapshotUsesFullFileSystem(t *testing.T) {
 	// Supplying a new filesystem replaces inherited snapshot disk caches even
 	// when the caller does not redundantly list every file in FileChanges.
 	response, err = session.handleUpdateSnapshot(context.Background(), &UpdateSnapshotParams{
-		FileSystem: &requestfilesystem.RequestFileSystem{
-			Kind: requestfilesystem.KindFull,
+		FileSystem: &project.RequestFileSystem{
+			Kind: project.RequestFileSystemKindFull,
 			Files: map[string]string{
 				"/tsconfig.json": `{ "compilerOptions": { "noLib": true }, "files": ["src/index.ts", "src/other.ts"] }`,
 				"/src/index.ts":  `export const value = "updated";`,
@@ -480,8 +479,8 @@ func TestCreateProgramRetainsFullFileSystem(t *testing.T) {
 	ctx := context.Background()
 	base, err := session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{
 		OpenFiles: []DocumentIdentifier{{FileName: "/old.ts"}},
-		FileSystem: &requestfilesystem.RequestFileSystem{
-			Kind: requestfilesystem.KindFull,
+		FileSystem: &project.RequestFileSystem{
+			Kind: project.RequestFileSystemKindFull,
 			Files: map[string]string{
 				"/old.ts": `export const oldValue = 1;`,
 				"/new.ts": `export const newValue = 2;`,
@@ -521,8 +520,8 @@ func TestSnapshotUpdateFullFileSystemIsTotal(t *testing.T) {
 	assert.NilError(t, err)
 	replaced, err := session.handleUpdateSnapshot(context.Background(), &UpdateSnapshotParams{
 		Snapshot: base.Snapshot,
-		FileSystem: &requestfilesystem.RequestFileSystem{
-			Kind: requestfilesystem.KindFull,
+		FileSystem: &project.RequestFileSystem{
+			Kind: project.RequestFileSystemKindFull,
 			Files: map[string]string{
 				"/memory.ts": "memory",
 			},
@@ -565,7 +564,7 @@ func TestSnapshotUpdateCarriesHostFileSystemWithoutOverride(t *testing.T) {
 func TestSnapshotFileSystemLayersPreserveIncrementalState(t *testing.T) {
 	t.Parallel()
 
-	for _, baseKind := range []requestfilesystem.Kind{"host", requestfilesystem.KindFull, requestfilesystem.KindLayer} {
+	for _, baseKind := range []project.RequestFileSystemKind{"host", project.RequestFileSystemKindFull, project.RequestFileSystemKindLayer} {
 		t.Run(string(baseKind), func(t *testing.T) {
 			t.Parallel()
 			files := map[string]string{
@@ -589,7 +588,7 @@ func TestSnapshotFileSystemLayersPreserveIncrementalState(t *testing.T) {
 				OpenProjects: []DocumentIdentifier{{FileName: "/a/tsconfig.json"}, {FileName: "/b/tsconfig.json"}},
 			}
 			if baseKind != "host" {
-				params.FileSystem = &requestfilesystem.RequestFileSystem{Kind: baseKind, Files: files}
+				params.FileSystem = &project.RequestFileSystem{Kind: baseKind, Files: files}
 			}
 			base, err := session.handleUpdateSnapshot(ctx, params)
 			assert.NilError(t, err)
@@ -600,8 +599,8 @@ func TestSnapshotFileSystemLayersPreserveIncrementalState(t *testing.T) {
 
 			unchanged, err := session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{
 				Snapshot: base.Snapshot,
-				FileSystem: &requestfilesystem.RequestFileSystem{
-					Kind:  requestfilesystem.KindLayer,
+				FileSystem: &project.RequestFileSystem{
+					Kind:  project.RequestFileSystemKindLayer,
 					Files: map[string]string{"/a/index.ts": files["/a/index.ts"]},
 				},
 			})
@@ -614,8 +613,8 @@ func TestSnapshotFileSystemLayersPreserveIncrementalState(t *testing.T) {
 			const updatedText = `export const value = 2;`
 			updated, err := session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{
 				Snapshot: unchanged.Snapshot,
-				FileSystem: &requestfilesystem.RequestFileSystem{
-					Kind:  requestfilesystem.KindLayer,
+				FileSystem: &project.RequestFileSystem{
+					Kind:  project.RequestFileSystemKindLayer,
 					Files: map[string]string{"/a/index.ts": updatedText},
 				},
 			})
@@ -630,8 +629,8 @@ func TestSnapshotFileSystemLayersPreserveIncrementalState(t *testing.T) {
 
 			removed, err := session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{
 				Snapshot: updated.Snapshot,
-				FileSystem: &requestfilesystem.RequestFileSystem{
-					Kind:         requestfilesystem.KindLayer,
+				FileSystem: &project.RequestFileSystem{
+					Kind:         project.RequestFileSystemKindLayer,
 					RemovedPaths: []string{"/a/removed"},
 				},
 			})
@@ -651,7 +650,6 @@ func TestSnapshotFileSystemLayersPreserveIncrementalState(t *testing.T) {
 			restored, err := session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{})
 			assert.NilError(t, err)
 			restoredSnapshot := session.snapshots[restored.Snapshot].snapshot
-			assert.Assert(t, restoredSnapshot.FileSystemLayer() == nil)
 			restoredProgram := restoredSnapshot.ProjectCollection.GetProjectByPath("/a/tsconfig.json").GetProgram()
 			assert.Equal(t, restoredProgram.GetSourceFile("/a/index.ts").Text(), files["/a/index.ts"])
 			assert.Assert(t, restoredProgram.GetSourceFile("/a/removed/deep/file.ts") != nil)
@@ -677,8 +675,8 @@ func TestSnapshotFileSystemLayerWithoutBaseUpdatesHostState(t *testing.T) {
 
 	const updatedText = `export const value = 2;`
 	updated, err := session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{
-		FileSystem: &requestfilesystem.RequestFileSystem{
-			Kind:  requestfilesystem.KindLayer,
+		FileSystem: &project.RequestFileSystem{
+			Kind:  project.RequestFileSystemKindLayer,
 			Files: map[string]string{"/index.ts": updatedText},
 		},
 	})
@@ -703,8 +701,8 @@ func TestEmitFromLayerOverFullFileSystemReturnsFileContents(t *testing.T) {
 
 	base, err := session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{
 		OpenProjects: []DocumentIdentifier{{FileName: "/tsconfig.json"}},
-		FileSystem: &requestfilesystem.RequestFileSystem{
-			Kind: requestfilesystem.KindFull,
+		FileSystem: &project.RequestFileSystem{
+			Kind: project.RequestFileSystemKindFull,
 			Files: map[string]string{
 				"/tsconfig.json": `{ "compilerOptions": { "noLib": true, "outDir": "/out" }, "files": ["src/main.ts"] }`,
 				"/src/main.ts":   `export const value: number = 1;`,
@@ -714,8 +712,8 @@ func TestEmitFromLayerOverFullFileSystemReturnsFileContents(t *testing.T) {
 	assert.NilError(t, err)
 	layered, err := session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{
 		Snapshot: base.Snapshot,
-		FileSystem: &requestfilesystem.RequestFileSystem{
-			Kind:  requestfilesystem.KindLayer,
+		FileSystem: &project.RequestFileSystem{
+			Kind:  project.RequestFileSystemKindLayer,
 			Files: map[string]string{},
 		},
 	})
@@ -752,8 +750,8 @@ func TestReleaseSnapshotCompactsSoleLayeredFileSystem(t *testing.T) {
 	defer session.Close()
 
 	base, err := session.handleUpdateSnapshot(context.Background(), &UpdateSnapshotParams{
-		FileSystem: &requestfilesystem.RequestFileSystem{
-			Kind: requestfilesystem.KindFull,
+		FileSystem: &project.RequestFileSystem{
+			Kind: project.RequestFileSystemKindFull,
 			Files: map[string]string{
 				"/inherited.ts": "inherited",
 				"/changed.ts":   "old",
@@ -762,13 +760,10 @@ func TestReleaseSnapshotCompactsSoleLayeredFileSystem(t *testing.T) {
 		},
 	})
 	assert.NilError(t, err)
-	baseFileSystem := session.snapshots[base.Snapshot].snapshot.FileSystemLayer()
-	assert.Assert(t, baseFileSystem != nil)
-
 	layered, err := session.handleUpdateSnapshot(context.Background(), &UpdateSnapshotParams{
 		Snapshot: base.Snapshot,
-		FileSystem: &requestfilesystem.RequestFileSystem{
-			Kind: requestfilesystem.KindLayer,
+		FileSystem: &project.RequestFileSystem{
+			Kind: project.RequestFileSystemKindLayer,
 			Files: map[string]string{
 				"/changed.ts": "new",
 				"/added.ts":   "added",
@@ -779,8 +774,6 @@ func TestReleaseSnapshotCompactsSoleLayeredFileSystem(t *testing.T) {
 	assert.NilError(t, err)
 	layeredSnapshotData := session.snapshots[layered.Snapshot]
 	layeredSnapshot := layeredSnapshotData.snapshot
-	layeredFileSystem := layeredSnapshotData.snapshot.FileSystemLayer()
-	assert.Assert(t, layeredFileSystem != nil)
 	assert.Equal(t, session.snapshots[base.Snapshot].refCount, 1)
 
 	_, err = session.handleRelease(context.Background(), &ReleaseParams{Snapshot: base.Snapshot})
@@ -800,7 +793,7 @@ func TestReleaseSnapshotCompactsSoleLayeredFileSystem(t *testing.T) {
 	assert.Assert(t, !ok)
 	_, ok = layeredSnapshot.ReadFile("/host.ts")
 	assert.Assert(t, !ok)
-	assert.Assert(t, requestfilesystem.HasFullFileSystem(layeredFileSystem))
+	assert.Assert(t, layeredSnapshot.HasFullFileSystem())
 }
 
 func TestEagerSnapshotReleaseDoesNotRetainFileSystemHistory(t *testing.T) {
@@ -812,8 +805,8 @@ func TestEagerSnapshotReleaseDoesNotRetainFileSystemHistory(t *testing.T) {
 	defer session.Close()
 
 	response, err := session.handleUpdateSnapshot(context.Background(), &UpdateSnapshotParams{
-		FileSystem: &requestfilesystem.RequestFileSystem{
-			Kind: requestfilesystem.KindFull,
+		FileSystem: &project.RequestFileSystem{
+			Kind: project.RequestFileSystemKindFull,
 			Files: map[string]string{
 				"/pkg/index.ts": "",
 			},
@@ -827,8 +820,8 @@ func TestEagerSnapshotReleaseDoesNotRetainFileSystemHistory(t *testing.T) {
 		content += string(character)
 		response, err = session.handleUpdateSnapshot(context.Background(), &UpdateSnapshotParams{
 			Snapshot: oldSnapshot,
-			FileSystem: &requestfilesystem.RequestFileSystem{
-				Kind: requestfilesystem.KindLayer,
+			FileSystem: &project.RequestFileSystem{
+				Kind: project.RequestFileSystemKindLayer,
 				Files: map[string]string{
 					"/pkg/index.ts": content,
 				},
@@ -842,9 +835,7 @@ func TestEagerSnapshotReleaseDoesNotRetainFileSystemHistory(t *testing.T) {
 		current := session.snapshots[response.Snapshot]
 		assert.Assert(t, current != nil)
 		assert.Equal(t, current.refCount, 1)
-		fileSystem := current.snapshot.FileSystemLayer()
-		assert.Assert(t, fileSystem != nil)
-		assert.Assert(t, requestfilesystem.HasFullFileSystem(fileSystem))
+		assert.Assert(t, current.snapshot.HasFullFileSystem())
 		actual, ok := current.snapshot.ReadFile("/pkg/index.ts")
 		assert.Assert(t, ok)
 		assert.Equal(t, actual, content)
@@ -862,8 +853,8 @@ func TestSnapshotReleaseCompactsChainedFileSystems(t *testing.T) {
 	responses := make([]*UpdateSnapshotResponse, 4)
 	var err error
 	responses[0], err = session.handleUpdateSnapshot(context.Background(), &UpdateSnapshotParams{
-		FileSystem: &requestfilesystem.RequestFileSystem{
-			Kind:  requestfilesystem.KindFull,
+		FileSystem: &project.RequestFileSystem{
+			Kind:  project.RequestFileSystemKindFull,
 			Files: map[string]string{"/pkg/index.ts": "0"},
 		},
 	})
@@ -871,8 +862,8 @@ func TestSnapshotReleaseCompactsChainedFileSystems(t *testing.T) {
 	for i := 1; i < len(responses); i++ {
 		responses[i], err = session.handleUpdateSnapshot(context.Background(), &UpdateSnapshotParams{
 			Snapshot: responses[i-1].Snapshot,
-			FileSystem: &requestfilesystem.RequestFileSystem{
-				Kind:  requestfilesystem.KindLayer,
+			FileSystem: &project.RequestFileSystem{
+				Kind:  project.RequestFileSystemKindLayer,
 				Files: map[string]string{"/pkg/index.ts": strconv.Itoa(i)},
 			},
 		})
@@ -887,9 +878,7 @@ func TestSnapshotReleaseCompactsChainedFileSystems(t *testing.T) {
 		current := session.snapshots[responses[i].Snapshot]
 		assert.Assert(t, current != nil)
 		assert.Equal(t, current.refCount, 1)
-		fileSystem := current.snapshot.FileSystemLayer()
-		assert.Assert(t, fileSystem != nil)
-		assert.Assert(t, requestfilesystem.HasFullFileSystem(fileSystem))
+		assert.Assert(t, current.snapshot.HasFullFileSystem())
 		contents, ok := current.snapshot.ReadFile("/pkg/index.ts")
 		assert.Assert(t, ok)
 		assert.Equal(t, contents, strconv.Itoa(i))
@@ -905,21 +894,20 @@ func TestTemporarySnapshotRetainsLayeredFileSystemHistory(t *testing.T) {
 	defer session.Close()
 
 	base, err := session.handleUpdateSnapshot(context.Background(), &UpdateSnapshotParams{
-		FileSystem: &requestfilesystem.RequestFileSystem{
-			Kind:  requestfilesystem.KindFull,
+		FileSystem: &project.RequestFileSystem{
+			Kind:  project.RequestFileSystemKindFull,
 			Files: map[string]string{"/pkg/index.ts": "base"},
 		},
 	})
 	assert.NilError(t, err)
 	layered, err := session.handleUpdateSnapshot(context.Background(), &UpdateSnapshotParams{
 		Snapshot: base.Snapshot,
-		FileSystem: &requestfilesystem.RequestFileSystem{
-			Kind:  requestfilesystem.KindLayer,
+		FileSystem: &project.RequestFileSystem{
+			Kind:  project.RequestFileSystemKindLayer,
 			Files: map[string]string{"/pkg/index.ts": "layered"},
 		},
 	})
 	assert.NilError(t, err)
-	layeredFileSystem := session.snapshots[layered.Snapshot].snapshot.FileSystemLayer()
 	temporary, err := session.handleUpdateTemporarySnapshot(context.Background(), &UpdateTemporarySnapshotParams{
 		Snapshot: layered.Snapshot,
 		File:     DocumentIdentifier{FileName: "/pkg/index.ts"},
@@ -934,10 +922,10 @@ func TestTemporarySnapshotRetainsLayeredFileSystemHistory(t *testing.T) {
 
 	current := session.snapshots[temporary.Snapshot]
 	assert.Assert(t, current != nil)
-	fileSystem := current.snapshot.FileSystemLayer()
-	assert.Assert(t, fileSystem != nil)
-	assert.Assert(t, fileSystem == layeredFileSystem)
-	assert.Assert(t, requestfilesystem.HasFullFileSystem(fileSystem))
+	assert.Assert(t, current.snapshot.HasFullFileSystem())
+	contents, ok := current.snapshot.ReadFile("/pkg/index.ts")
+	assert.Assert(t, ok)
+	assert.Equal(t, contents, "layered")
 }
 
 func TestSnapshotReleaseCompactionSupportsConcurrentReaders(t *testing.T) {
@@ -953,18 +941,18 @@ func TestSnapshotReleaseCompactionSupportsConcurrentReaders(t *testing.T) {
 		files[fmt.Sprintf("/pkg/file%d.ts", index)] = strconv.Itoa(index)
 	}
 	base, err := session.handleUpdateSnapshot(context.Background(), &UpdateSnapshotParams{
-		FileSystem: &requestfilesystem.RequestFileSystem{Kind: requestfilesystem.KindFull, Files: files},
+		FileSystem: &project.RequestFileSystem{Kind: project.RequestFileSystemKindFull, Files: files},
 	})
 	assert.NilError(t, err)
 	layered, err := session.handleUpdateSnapshot(context.Background(), &UpdateSnapshotParams{
 		Snapshot: base.Snapshot,
-		FileSystem: &requestfilesystem.RequestFileSystem{
-			Kind:  requestfilesystem.KindLayer,
+		FileSystem: &project.RequestFileSystem{
+			Kind:  project.RequestFileSystemKindLayer,
 			Files: map[string]string{"/pkg/file0.ts": "updated"},
 		},
 	})
 	assert.NilError(t, err)
-	fileSystem := session.snapshots[layered.Snapshot].snapshot.FileSystemLayer()
+	snapshot := session.snapshots[layered.Snapshot].snapshot
 
 	started := make(chan struct{})
 	done := make(chan struct{})
@@ -977,12 +965,12 @@ func TestSnapshotReleaseCompactionSupportsConcurrentReaders(t *testing.T) {
 			case <-done:
 				return
 			default:
-				contents, ok := fileSystem.ReadFile("/pkg/file0.ts")
+				contents, ok := snapshot.ReadFile("/pkg/file0.ts")
 				if !ok || contents != "updated" {
 					readerError <- fmt.Errorf("unexpected overridden file: %q, %t", contents, ok)
 					return
 				}
-				if !fileSystem.FileExists("/pkg/file1023.ts") {
+				if !snapshot.FileExists("/pkg/file1023.ts") {
 					readerError <- errors.New("inherited file disappeared")
 					return
 				}
@@ -1018,8 +1006,8 @@ func TestRequestLayerEntriesAppearInSnapshotDirectoryListings(t *testing.T) {
 
 	updated, err := session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{
 		Snapshot: base.Snapshot,
-		FileSystem: &requestfilesystem.RequestFileSystem{
-			Kind:  requestfilesystem.KindLayer,
+		FileSystem: &project.RequestFileSystem{
+			Kind:  project.RequestFileSystemKindLayer,
 			Files: map[string]string{"/dir/request.ts": "export const request = true;"},
 		},
 	})
@@ -1049,14 +1037,14 @@ func TestRequestSymlinkAliasedFileIsNotReparsed(t *testing.T) {
 
 	base, err := session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{
 		OpenProjects: []DocumentIdentifier{{FileName: "/tsconfig.json"}},
-		FileSystem: &requestfilesystem.RequestFileSystem{
-			Kind: requestfilesystem.KindFull,
+		FileSystem: &project.RequestFileSystem{
+			Kind: project.RequestFileSystemKindFull,
 			Files: map[string]string{
 				"/tsconfig.json":  `{ "compilerOptions": { "noLib": true }, "files": ["link/file.ts", "other.ts"] }`,
 				"/target/file.ts": "export const aliased = true;",
 				"/other.ts":       "export const other = true;",
 			},
-			Symlinks: map[string]requestfilesystem.RequestSymlink{
+			Symlinks: map[string]project.RequestSymlink{
 				"/link": {Target: "/target"},
 			},
 		},
@@ -1070,8 +1058,8 @@ func TestRequestSymlinkAliasedFileIsNotReparsed(t *testing.T) {
 	// still returns the source file that was already parsed.
 	updated, err := session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{
 		Snapshot: base.Snapshot,
-		FileSystem: &requestfilesystem.RequestFileSystem{
-			Kind:  requestfilesystem.KindLayer,
+		FileSystem: &project.RequestFileSystem{
+			Kind:  project.RequestFileSystemKindLayer,
 			Files: map[string]string{"/other.ts": "export const other = false;"},
 		},
 	})
@@ -1096,9 +1084,9 @@ func TestRequestSymlinkToEditorOverlayDirectoryExists(t *testing.T) {
 	assert.NilError(t, err)
 	updated, err := session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{
 		Snapshot: base.Snapshot,
-		FileSystem: &requestfilesystem.RequestFileSystem{
-			Kind: requestfilesystem.KindLayer,
-			Symlinks: map[string]requestfilesystem.RequestSymlink{
+		FileSystem: &project.RequestFileSystem{
+			Kind: project.RequestFileSystemKindLayer,
+			Symlinks: map[string]project.RequestSymlink{
 				"/alias": {Target: "/overlayDir"},
 			},
 		},
@@ -1132,8 +1120,8 @@ func TestRequestLayerLineMapsMatchFileContents(t *testing.T) {
 
 	updated, err := session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{
 		Snapshot: base.Snapshot,
-		FileSystem: &requestfilesystem.RequestFileSystem{
-			Kind:  requestfilesystem.KindLayer,
+		FileSystem: &project.RequestFileSystem{
+			Kind:  project.RequestFileSystemKindLayer,
 			Files: map[string]string{"/file.ts": "one line"},
 		},
 	})
@@ -1170,8 +1158,8 @@ func TestRequestFileReplacingEditorOverlayDirectoryIsStructural(t *testing.T) {
 
 	updated, err := session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{
 		Snapshot: base.Snapshot,
-		FileSystem: &requestfilesystem.RequestFileSystem{
-			Kind:  requestfilesystem.KindLayer,
+		FileSystem: &project.RequestFileSystem{
+			Kind:  project.RequestFileSystemKindLayer,
 			Files: map[string]string{"/dir": "replacement"},
 		},
 	})
@@ -1209,8 +1197,8 @@ func TestRequestFileChangeComparedAgainstOverlayOverCachedHostFile(t *testing.T)
 	// using is the overlay, so this is a change and must not be filtered out.
 	updated, err := session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{
 		Snapshot: base.Snapshot,
-		FileSystem: &requestfilesystem.RequestFileSystem{
-			Kind:  requestfilesystem.KindLayer,
+		FileSystem: &project.RequestFileSystem{
+			Kind:  project.RequestFileSystemKindLayer,
 			Files: map[string]string{"/value.ts": "host"},
 		},
 	})

@@ -1,9 +1,9 @@
-package requestfilesystem
+package project
 
 import (
 	"testing"
 
-	"github.com/microsoft/TypeScript/tsc/internal/project"
+	"github.com/microsoft/TypeScript/tsc/internal/project/dirty"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfstest"
@@ -15,14 +15,14 @@ type hostFileSource struct {
 	fs vfs.FS
 }
 
-func (s hostFileSource) GetFile(fileName string) project.FileHandle {
+func (s hostFileSource) GetFile(fileName string) FileHandle {
 	if content, ok := s.fs.ReadFile(fileName); ok {
-		return project.NewFileHandle(fileName, content)
+		return NewFileHandle(fileName, content)
 	}
 	return nil
 }
 
-func (s hostFileSource) GetFileByPath(fileName string, _ tspath.Path) project.FileHandle {
+func (s hostFileSource) GetFileByPath(fileName string, _ tspath.Path) FileHandle {
 	return s.GetFile(fileName)
 }
 
@@ -44,19 +44,28 @@ func (s hostFileSource) UseCaseSensitiveFileNames() bool { return s.fs.UseCaseSe
 
 // baseFileSource builds the view a base snapshot would present: the given request
 // filesystem layer, if any, stacked over host contents.
-func baseFileSource(layer *requestFileSystem, host vfs.FS) project.FileSource {
-	source := project.FileSource(hostFileSource{fs: host})
+func baseFileSource(layer *requestFileSystem, host vfs.FS) FileSource {
 	if layer == nil {
-		return source
+		return hostFileSource{fs: host}
 	}
-	return layer.Stack(source)
+	return &SnapshotFS{
+		upperLayer: layer,
+		fs:         host,
+		toPath: func(fileName string) tspath.Path {
+			return tspath.ToPath(fileName, "/", host.UseCaseSensitiveFileNames())
+		},
+		overlays:           map[tspath.Path]*Overlay{},
+		diskFiles:          map[tspath.Path]*diskFile{},
+		diskDirectories:    map[tspath.Path]dirty.CloneableMap[tspath.Path, string]{},
+		overlayDirectories: map[tspath.Path]map[tspath.Path]string{},
+	}
 }
 
 func TestFileChangesIncludeDirectoryTombstones(t *testing.T) {
 	t.Parallel()
 
 	base, err := newRequestFileSystem(&RequestFileSystem{
-		Kind: KindFull,
+		Kind: RequestFileSystemKindFull,
 		Files: map[string]string{
 			"/removed/nested/file.ts": "removed",
 			"/replaced.ts":            "old",
@@ -67,9 +76,9 @@ func TestFileChangesIncludeDirectoryTombstones(t *testing.T) {
 	}, vfstest.FromMap(map[string]string{}, true), "/")
 	assert.NilError(t, err)
 
-	var summary project.FileChangeSummary
+	var summary FileChangeSummary
 	addFileChanges(&summary, &RequestFileSystem{
-		Kind:         KindLayer,
+		Kind:         RequestFileSystemKindLayer,
 		Files:        map[string]string{"/replaced.ts": "new"},
 		RemovedPaths: []string{"removed", "/missing", "/replaced.ts"},
 	}, baseFileSource(base, vfstest.FromMap(map[string]string{}, true)), base, "/")
@@ -93,9 +102,9 @@ func TestFileChangesIncludeListingsAndSymlinks(t *testing.T) {
 		"/dir/old.ts":  "old listing",
 		"/link/old.ts": "old target",
 	}, true)
-	var summary project.FileChangeSummary
+	var summary FileChangeSummary
 	addFileChanges(&summary, &RequestFileSystem{
-		Kind: KindLayer,
+		Kind: RequestFileSystemKindLayer,
 		Directories: map[string]RequestDirectoryEntries{
 			"/dir": {},
 		},
@@ -124,7 +133,7 @@ func TestFileChangesIncludeRecursiveSymlinkAliases(t *testing.T) {
 	t.Parallel()
 
 	base, err := newRequestFileSystem(&RequestFileSystem{
-		Kind:  KindFull,
+		Kind:  RequestFileSystemKindFull,
 		Files: map[string]string{"/dir/file.ts": "old"},
 		Symlinks: map[string]RequestSymlink{
 			"/dir/link": {Target: "/dir"},
@@ -132,9 +141,9 @@ func TestFileChangesIncludeRecursiveSymlinkAliases(t *testing.T) {
 	}, vfstest.FromMap(map[string]string{}, true), "/")
 	assert.NilError(t, err)
 
-	var summary project.FileChangeSummary
+	var summary FileChangeSummary
 	addFileChanges(&summary, &RequestFileSystem{
-		Kind:  KindLayer,
+		Kind:  RequestFileSystemKindLayer,
 		Files: map[string]string{"/dir/file.ts": "new"},
 	}, baseFileSource(base, vfstest.FromMap(map[string]string{}, true)), base, "/")
 	assert.Equal(t, summary.Changed.Len(), 2)
@@ -147,22 +156,23 @@ func TestFileChangesIncludeRootSymlinkAliases(t *testing.T) {
 	t.Parallel()
 
 	base, err := newRequestFileSystem(&RequestFileSystem{
-		Kind:  KindFull,
+		Kind:  RequestFileSystemKindFull,
 		Files: map[string]string{"/file.ts": "old"},
 		Symlinks: map[string]RequestSymlink{
 			"/link": {Target: "/"},
 		},
 	}, vfstest.FromMap(map[string]string{}, true), "/")
 	assert.NilError(t, err)
-	content, ok := base.ReadFile("/link/file.ts")
-	assert.Assert(t, ok)
-	assert.Equal(t, content, "old")
+	source := baseFileSource(base, vfstest.FromMap(map[string]string{}, true))
+	file := source.GetFile("/link/file.ts")
+	assert.Assert(t, file != nil)
+	assert.Equal(t, file.Content(), "old")
 
-	var summary project.FileChangeSummary
+	var summary FileChangeSummary
 	addFileChanges(&summary, &RequestFileSystem{
-		Kind:  KindLayer,
+		Kind:  RequestFileSystemKindLayer,
 		Files: map[string]string{"/file.ts": "new"},
-	}, baseFileSource(base, vfstest.FromMap(map[string]string{}, true)), base, "/")
+	}, source, base, "/")
 	assert.Equal(t, summary.Changed.Len(), 2)
 	assert.Assert(t, summary.Changed.Has("file:///file.ts"))
 	assert.Assert(t, summary.Changed.Has("file:///link/file.ts"))

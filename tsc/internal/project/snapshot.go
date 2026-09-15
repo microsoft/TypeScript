@@ -13,7 +13,6 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/contentmapper"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
-	"github.com/microsoft/TypeScript/tsc/internal/debug"
 	"github.com/microsoft/TypeScript/tsc/internal/ls"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/autoimport"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/lsconv"
@@ -24,7 +23,6 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/project/logging"
 	"github.com/microsoft/TypeScript/tsc/internal/sourcemap"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
-	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfsmatch"
 )
 
@@ -91,7 +89,7 @@ func (host *SnapshotHost) newSnapshot(
 
 		fs:                                 fs,
 		ConfigFileRegistry:                 configFileRegistry,
-		ProjectCollection:                  &ProjectCollection{toPath: host.toPath, openFiles: openFilePaths(fs.overlays())},
+		ProjectCollection:                  &ProjectCollection{toPath: host.toPath, openFiles: openFilePaths(fs.overlays)},
 		compilerOptionsForInferredProjects: compilerOptionsForInferredProjects,
 		userPreferences:                    userPreferences,
 		AutoImports:                        autoImports,
@@ -128,7 +126,7 @@ func (s *Snapshot) cloneForProgram(
 	}
 
 	start := time.Now()
-	fs := newSnapshotFSBuilder(store.fs, s.fs.upperLayer, s.fs.upperLayer, s.fs.overlays(), s.fs.overlays(), s.fs.diskFiles(), s.fs.diskDirectories(), s.fs.nodeModulesRealpathAliases(), store.options.PositionEncoding, store.toPath)
+	fs := newSnapshotFSBuilder(store.fs, s.fs.upperLayer, s.fs.upperLayer, s.fs.overlays, s.fs.overlays, s.fs.diskFiles, s.fs.diskDirectories, s.fs.nodeModulesRealpathAliases, store.options.PositionEncoding, store.toPath)
 	fileChanges = s.processFileChanges(fs, fileChanges, logger, nil)
 
 	newSnapshotID := store.nextSnapshotID()
@@ -183,7 +181,7 @@ func (s *Snapshot) cloneForProgram(
 
 	cleanFilesStart := time.Now()
 	removedFiles := 0
-	fs.diskFiles().Range(func(entry *dirty.SyncMapEntry[tspath.Path, *diskFile]) bool {
+	fs.diskFiles.Range(func(entry *dirty.SyncMapEntry[tspath.Path, *diskFile]) bool {
 		for _, project := range newProjectCollection.Projects() {
 			if project.host != nil && project.host.sourceFS.SeenFile(entry.Key()) {
 				return true
@@ -244,7 +242,7 @@ func (s *Snapshot) cloneWithTemporaryFile(
 ) (*Snapshot, error) {
 	path := uri.Path(s.UseCaseSensitiveFileNames())
 
-	overlays := maps.Clone(s.fs.overlays())
+	overlays := maps.Clone(s.fs.overlays)
 	version := int32(0)
 	var fileChanges FileChangeSummary
 	existing := overlays[path]
@@ -380,20 +378,9 @@ func (s *Snapshot) UseCaseSensitiveFileNames() bool {
 	return s.fs.UseCaseSensitiveFileNames()
 }
 
-// enumerationFS returns a filesystem that lists real directories rather than only
-// what this snapshot has cached. ls.Host documents its directory enumeration as a
-// deliberate exception to snapshot-in-time semantics, for module specifier
-// completions; nothing else should read the filesystem this way.
-func (s *Snapshot) enumerationFS() vfs.FS {
-	if s.fs.upperLayer != nil {
-		return s.fs.upperLayer
-	}
-	return s.fs.host()
-}
-
-// FileSystemLayer returns the filesystem supplied by an API request, if any.
-func (s *Snapshot) FileSystemLayer() FileSystemLayer {
-	return s.fs.upperLayer
+// HasFullFileSystem reports whether the snapshot uses a complete request filesystem.
+func (s *Snapshot) HasFullFileSystem() bool {
+	return s.fs.upperLayer != nil && s.fs.upperLayer.kind == RequestFileSystemKindFull
 }
 
 func (s *Snapshot) ReadFile(fileName string) (string, bool) {
@@ -413,52 +400,20 @@ func (s *Snapshot) FileExists(path string) bool {
 }
 
 func (s *Snapshot) GetDirectories(path string) []string {
-	return s.enumerationFS().GetAccessibleEntries(path).Directories
+	return s.fs.GetAccessibleEntries(path).Directories
 }
 
 func (s *Snapshot) ReadDirectory(currentDir string, path string, extensions []string, excludes []string, includes []string, depth int) []string {
-	return vfsmatch.ReadDirectory(s.enumerationFS(), currentDir, path, extensions, excludes, includes, depth)
+	return vfsmatch.ReadDirectory(newSourceFS(false, s.fs, s.toPath), currentDir, path, extensions, excludes, includes, depth)
 }
 
 type APISnapshotRequest struct {
-	OpenProjects  *collections.Set[string]
-	CloseProjects *collections.Set[tspath.Path]
-	OpenFiles     *collections.Set[lsproto.DocumentUri]
-	CloseFiles    *collections.Set[tspath.Path]
-	FileSystem    FileSystemChange
-}
-
-type FileSystemChangeKind int
-
-const (
-	// FileSystemChangeKindAdd puts Layer above the snapshot's overlays, or, with no
-	// layer, inherits the one the snapshot already has. It is the zero value, so a
-	// request that only opens or closes references says nothing about the filesystem
-	// and keeps it.
-	FileSystemChangeKindAdd FileSystemChangeKind = iota
-	// FileSystemChangeKindRemove returns the snapshot to the session host filesystem.
-	FileSystemChangeKindRemove
-)
-
-// FileSystemChange says what an API request does to the snapshot's filesystem
-// layer. Removing one is a kind rather than a nil Layer, because inheriting the
-// current layer and returning to the host are different requests that would
-// otherwise look identical.
-type FileSystemChange struct {
-	Kind  FileSystemChangeKind
-	Layer FileSystemLayer
-}
-
-// resolve returns the layer a snapshot should use, given the one it currently has.
-func (c FileSystemChange) resolve(current FileSystemLayer) FileSystemLayer {
-	if c.Kind == FileSystemChangeKindRemove {
-		debug.Assert(c.Layer == nil, "FileSystemChange cannot both remove and supply a layer")
-		return nil
-	}
-	if c.Layer == nil {
-		return current
-	}
-	return c.Layer
+	OpenProjects    *collections.Set[string]
+	CloseProjects   *collections.Set[tspath.Path]
+	OpenFiles       *collections.Set[lsproto.DocumentUri]
+	CloseFiles      *collections.Set[tspath.Path]
+	FileSystem      *RequestFileSystem
+	ResetFileSystem bool
 }
 
 type ProjectTreeRequest struct {
@@ -605,15 +560,28 @@ func (s *Snapshot) Clone(
 	// The filesystem layer is part of a snapshot's state, so an ordinary clone keeps
 	// it and only an API request that asks to change it does otherwise.
 	layer := s.fs.upperLayer
+	var fileSystemError error
 	if change.apiRequest != nil {
-		layer = change.apiRequest.FileSystem.resolve(layer)
+		if change.apiRequest.ResetFileSystem {
+			layer = nil
+		}
+		if request := change.apiRequest.FileSystem; request != nil {
+			layer, fileSystemError = newLayer(request, layer, store.fs, store.options.CurrentDirectory)
+			if fileSystemError != nil {
+				layer = s.fs.upperLayer
+			} else if request.Kind == RequestFileSystemKindFull || change.apiRequest.ResetFileSystem {
+				change.fileChanges.InvalidateAll = true
+			} else {
+				addFileChanges(&change.fileChanges, request, s.FileSource(), s.fs.upperLayer, store.options.CurrentDirectory)
+			}
+		}
 	}
 	// Returning to the session host must not retain files from the layer. Replacing
 	// one layer with another invalidates only its per-path changes.
 	if s.fs.upperLayer != nil && layer == nil {
 		change.fileChanges.InvalidateAll = true
 	}
-	fs := newSnapshotFSBuilder(store.fs, layer, s.fs.upperLayer, s.fs.overlays(), overlays, s.fs.diskFiles(), s.fs.diskDirectories(), s.fs.nodeModulesRealpathAliases(), store.options.PositionEncoding, store.toPath)
+	fs := newSnapshotFSBuilder(store.fs, layer, s.fs.upperLayer, s.fs.overlays, overlays, s.fs.diskFiles, s.fs.diskDirectories, s.fs.nodeModulesRealpathAliases, store.options.PositionEncoding, store.toPath)
 	change.fileChanges = s.processFileChanges(fs, change.fileChanges, logger, change.contentMapperContributions)
 
 	compilerOptionsForInferredProjects := s.compilerOptionsForInferredProjects
@@ -673,8 +641,8 @@ func (s *Snapshot) Clone(
 		projectCollectionBuilder.DidChangeFiles(change.fileChanges, logger.Fork("DidChangeFiles"))
 	}
 
-	var apiError error
-	if change.apiRequest != nil {
+	apiError := fileSystemError
+	if change.apiRequest != nil && apiError == nil {
 		apiError = projectCollectionBuilder.HandleAPIRequest(change.apiRequest, logger.Fork("HandleAPIRequest"))
 	}
 
@@ -716,7 +684,7 @@ func (s *Snapshot) Clone(
 		if len(projectsWithNewProgramStructure) > 0 || change.cleanDiskCache {
 			cleanFilesStart := time.Now()
 			removedFiles := 0
-			fs.diskFiles().Range(func(entry *dirty.SyncMapEntry[tspath.Path, *diskFile]) bool {
+			fs.diskFiles.Range(func(entry *dirty.SyncMapEntry[tspath.Path, *diskFile]) bool {
 				for _, project := range projectCollection.Projects() {
 					if project.host != nil && project.host.sourceFS.SeenFile(entry.Key()) {
 						return true

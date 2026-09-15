@@ -13,7 +13,6 @@ import (
 	"sync/atomic"
 
 	"github.com/microsoft/TypeScript/tsc/internal/api/encoder"
-	"github.com/microsoft/TypeScript/tsc/internal/api/requestfilesystem"
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/astnav"
 	"github.com/microsoft/TypeScript/tsc/internal/checker"
@@ -1212,24 +1211,9 @@ func (s *Session) handleUpdateSnapshot(ctx context.Context, params *UpdateSnapsh
 	// makes snapshot state explicit and removes the case entirely. Until then it
 	// also avoids reading the session's current snapshot here, which this call
 	// cannot retain against a concurrent update.
-	var inherited project.FileSystemLayer
-	var baseSource project.FileSource
-	if baseSD != nil {
-		inherited = baseSD.snapshot.FileSystemLayer()
-		baseSource = baseSD.snapshot.FileSource()
-	} else if params.FileSystem != nil {
-		fileChanges.InvalidateAll = true
-	}
 	sd := newSnapshotData()
-	layer, err := requestfilesystem.NewForUpdate(params.FileSystem, inherited, baseSource, s.fileSystem(), s.currentDirectory(), &fileChanges)
-	if err != nil {
-		return nil, fmt.Errorf("%w: %w", ErrClientError, err)
-	}
-	if layer != nil {
-		apiRequest.FileSystem = project.FileSystemChange{Layer: layer}
-	} else {
-		apiRequest.FileSystem = project.FileSystemChange{Kind: project.FileSystemChangeKindRemove}
-	}
+	apiRequest.FileSystem = params.FileSystem
+	apiRequest.ResetFileSystem = baseSD == nil
 
 	// Open projects: only take a new ref for projects we aren't already holding open.
 	var openedProjects []tspath.Path
@@ -3090,7 +3074,7 @@ func (s *Session) handleEmit(ctx context.Context, params *EmitParams) (*EmitResp
 	if err != nil {
 		return nil, err
 	}
-	if requestfilesystem.HasFullFileSystem(sd.snapshot.FileSystemLayer()) {
+	if sd.snapshot.HasFullFileSystem() {
 		outputFiles = make(map[string]string)
 		var outputMu sync.Mutex
 		options.WriteFile = func(fileName string, text string, _ *compiler.WriteFileData) error {

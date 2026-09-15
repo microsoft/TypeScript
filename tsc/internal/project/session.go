@@ -464,7 +464,7 @@ func (s *Session) DidChangeWatchedFiles(ctx context.Context, changes []*lsproto.
 					s.snapshotMu.RLock()
 					snapshot := s.snapshot
 					s.snapshotMu.RUnlock()
-					if _, ok := snapshot.fs.diskDirectories()[path]; ok || isNodeModulesPath(path) {
+					if _, ok := snapshot.fs.diskDirectories[path]; ok || isNodeModulesPath(path) {
 						hasRelevantChange = true
 					}
 				}
@@ -780,11 +780,11 @@ func (s *Session) sendPerformanceTelemetry(ctx context.Context) {
 	gometrics.Read(samples)
 
 	measurements := &lsproto.PerformanceStatsTelemetryMeasurements{
-		OpenFileCount:       float64(len(snapshot.fs.overlays())),
+		OpenFileCount:       float64(len(snapshot.fs.overlays)),
 		UptimeSeconds:       time.Since(s.startTime).Seconds(),
 		ProjectCount:        float64(len(snapshot.ProjectCollection.Projects())),
 		ConfigCount:         float64(len(snapshot.ConfigFileRegistry.configs)),
-		CachedDiskFileCount: float64(len(snapshot.fs.diskFiles())),
+		CachedDiskFileCount: float64(len(snapshot.fs.diskFiles)),
 	}
 
 	readUint64 := func(s gometrics.Sample) float64 {
@@ -1766,9 +1766,9 @@ func (s *Session) logCacheStats(snapshot *Snapshot) {
 		})
 	}
 	s.logger.Log("\n======== Cache Statistics ========")
-	s.logger.Logf("Open file count:   %6d", len(snapshot.fs.overlays()))
-	s.logger.Logf("Cached disk files: %6d", len(snapshot.fs.diskFiles()))
-	s.logger.Logf("Realpath aliases:  %6d", len(snapshot.fs.nodeModulesRealpathAliases()))
+	s.logger.Logf("Open file count:   %6d", len(snapshot.fs.overlays))
+	s.logger.Logf("Cached disk files: %6d", len(snapshot.fs.diskFiles))
+	s.logger.Logf("Realpath aliases:  %6d", len(snapshot.fs.nodeModulesRealpathAliases))
 	s.logger.Logf("Project count:     %6d", len(snapshot.ProjectCollection.Projects()))
 	s.logger.Logf("Config count:      %6d", len(snapshot.ConfigFileRegistry.configs))
 	if s.logger.IsVerbose() {
@@ -2089,7 +2089,7 @@ func (s *Session) warmAutoImportCache(ctx context.Context, change SnapshotChange
 				AutoImports: changedFile,
 			},
 		}
-		clonedSnapshot := newSnapshot.Clone(warmCtx, warmChange, newSnapshot.fs.overlays(), s.logger)
+		clonedSnapshot := newSnapshot.Clone(warmCtx, warmChange, newSnapshot.fs.overlays, s.logger)
 
 		// If cancelled during clone, discard the incomplete result.
 		if warmCtx.Err() != nil {
