@@ -14,14 +14,27 @@ require (
 require (
 	github.com/anchore/go-logger v0.0.0-20251106021608-a5b0513fa9a9 // indirect
 	github.com/anchore/go-macholibre v0.0.0-20250826193721-3cd206ca93aa // indirect
+	github.com/bitfield/gotestdox v0.2.2 // indirect
 	github.com/blacktop/go-dwarf v1.0.14 // indirect
+	github.com/dnephin/pflag v1.0.7 // indirect
+	github.com/fatih/color v1.18.0 // indirect
+	github.com/fsnotify/fsnotify v1.9.0 // indirect
 	github.com/github/smimesign v0.2.0 // indirect
 	github.com/go-restruct/restruct v1.2.0-alpha // indirect
 	github.com/google/go-cmp v0.7.0 // indirect
+	github.com/google/shlex v0.0.0-20191202100458-e7afc7fbc510 // indirect
 	github.com/google/uuid v1.6.0 // indirect
+	github.com/mattn/go-colorable v0.1.14 // indirect
+	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/scylladb/go-set v1.0.3-0.20200225121959-cc7b2070d91e // indirect
 	golang.org/x/crypto v0.53.0 // indirect
 	golang.org/x/sync v0.21.0 // indirect
+	golang.org/x/sys v0.46.0 // indirect
+	golang.org/x/term v0.44.0 // indirect
+	golang.org/x/text v0.38.0 // indirect
+	gotest.tools/gotestsum v1.13.0 // indirect
 	software.sslmate.com/src/go-pkcs12 v0.7.2 // indirect
 )
+
+tool gotest.tools/gotestsum
