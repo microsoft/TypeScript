@@ -42,8 +42,10 @@ func TestCompletionSymbolTypeIsResolvable(t *testing.T) {
 	session := NewLSPSession(projectSession, nil)
 	defer session.Close()
 
-	snapshotResp, err := session.handleUpdateSnapshot(t.Context(), &UpdateSnapshotParams{
-		OpenFiles: []DocumentIdentifier{{FileName: fileName}},
+	snapshotResp, err := session.handleCreateSnapshot(t.Context(), &CreateSnapshotParams{
+		SnapshotRequestChangesParams: SnapshotRequestChangesParams{
+			OpenFiles: []DocumentIdentifier{{FileName: fileName}},
+		},
 	})
 	assert.NilError(t, err)
 
@@ -114,8 +116,10 @@ func TestCompletionOnInferredProject(t *testing.T) {
 	session := NewLSPSession(projectSession, nil)
 	defer session.Close()
 
-	snapshotResp, err := session.handleUpdateSnapshot(t.Context(), &UpdateSnapshotParams{
-		OpenFiles: []DocumentIdentifier{{FileName: fileName}},
+	snapshotResp, err := session.handleCreateSnapshot(t.Context(), &CreateSnapshotParams{
+		SnapshotRequestChangesParams: SnapshotRequestChangesParams{
+			OpenFiles: []DocumentIdentifier{{FileName: fileName}},
+		},
 	})
 	assert.NilError(t, err)
 
@@ -160,8 +164,10 @@ func TestCompletionRetriesWithAutoImports(t *testing.T) {
 	session := NewLSPSession(projectSession, nil)
 	defer session.Close()
 
-	snapshotResp, err := session.handleUpdateSnapshot(t.Context(), &UpdateSnapshotParams{
-		OpenFiles: []DocumentIdentifier{{FileName: fileName}},
+	snapshotResp, err := session.handleCreateSnapshot(t.Context(), &CreateSnapshotParams{
+		SnapshotRequestChangesParams: SnapshotRequestChangesParams{
+			OpenFiles: []DocumentIdentifier{{FileName: fileName}},
+		},
 	})
 	assert.NilError(t, err)
 	proj, err := session.handleGetDefaultProjectForFile(t.Context(), &GetDefaultProjectForFileParams{
@@ -209,8 +215,8 @@ func TestCompletionWithSymbolsAndExistingImportDoesNotDeadlock(t *testing.T) {
 	session := NewLSPSession(projectSession, nil)
 	defer session.Close()
 
-	snapshotResp, err := session.handleUpdateSnapshot(t.Context(), &UpdateSnapshotParams{
-		OpenFiles: []DocumentIdentifier{{FileName: fileName}},
+	snapshotResp, err := session.handleCreateSnapshot(t.Context(), &CreateSnapshotParams{
+		SnapshotRequestChangesParams: SnapshotRequestChangesParams{OpenFiles: []DocumentIdentifier{{FileName: fileName}}},
 	})
 	assert.NilError(t, err)
 	proj, err := session.handleGetDefaultProjectForFile(t.Context(), &GetDefaultProjectForFileParams{

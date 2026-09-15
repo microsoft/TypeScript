@@ -5,9 +5,7 @@ import (
 	"slices"
 	"sync/atomic"
 
-	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/contentmapper"
-	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/lsutil"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/project/logging"
@@ -61,8 +59,8 @@ func NewSnapshotHost(init *SessionInit) *SnapshotHost {
 	}
 }
 
-// NewStandaloneRootSnapshot creates the compatibility root for a standalone API session.
-func (s *SnapshotHost) NewStandaloneRootSnapshot() *Snapshot {
+// NewRootSnapshot creates an independent root snapshot.
+func (s *SnapshotHost) NewRootSnapshot() *Snapshot {
 	return s.newRootSnapshot(0, false)
 }
 
@@ -95,57 +93,28 @@ func (s *SnapshotHost) CloneSnapshot(
 // update derives a snapshot from baseSnapshot without adopting it as any
 // canonical session state or performing session side effects.
 func (s *SnapshotHost) update(ctx context.Context, baseSnapshot *Snapshot, change SnapshotChange) *Snapshot {
-	return baseSnapshot.Clone(ctx, change, baseSnapshot.fs.overlays, nil)
+	return baseSnapshot.Clone(ctx, change, baseSnapshot.fs.overlays, nil, nil)
 }
 
 // CloneSnapshotWithTemporaryFile derives a snapshot with a temporary file content override.
 func (s *SnapshotHost) CloneSnapshotWithTemporaryFile(
 	ctx context.Context,
 	baseSnapshot *Snapshot,
-	fileSystem vfs.FS,
 	uri lsproto.DocumentUri,
 	newText string,
 ) (*Snapshot, error) {
-	return baseSnapshot.cloneWithTemporaryFile(ctx, fileSystem, uri, newText)
-}
-
-// CloneSnapshotForProgram derives an isolated snapshot containing one synthetic
-// project. The base snapshot is not adopted as canonical state.
-func (s *SnapshotHost) CloneSnapshotForProgram(
-	ctx context.Context,
-	baseSnapshot *Snapshot,
-	fileSystem vfs.FS,
-	rootFileNames []string,
-	options *core.CompilerOptions,
-	projectReferences []*core.ProjectReference,
-	configFileParsingDiagnostics []*ast.Diagnostic,
-	oldProject *Project,
-	fileChanges FileChangeSummary,
-) *Snapshot {
-	return baseSnapshot.cloneForProgram(
-		ctx,
-		fileSystem,
-		rootFileNames,
-		options,
-		projectReferences,
-		configFileParsingDiagnostics,
-		oldProject,
-		fileChanges,
-		nil,
-	)
+	return baseSnapshot.cloneWithTemporaryFile(ctx, uri, newText)
 }
 
 // CloneSnapshotWithAutoImports derives a snapshot with auto-import preparation without
 // adopting the clone in the background.
 func (s *SnapshotHost) CloneSnapshotWithAutoImports(ctx context.Context, baseSnapshot *Snapshot, uri lsproto.DocumentUri, logger logging.Logger) *Snapshot {
 	change := SnapshotChange{
-		reason: UpdateReasonRequestedLanguageServiceWithAutoImports,
-		ResourceRequest: ResourceRequest{
-			Documents:   []lsproto.DocumentUri{uri},
-			AutoImports: uri,
-		},
+		reason:          UpdateReasonRequestedLanguageServiceWithAutoImports,
+		ResourceRequest: baseSnapshot.resourceRequestForDocument(uri),
 	}
-	return baseSnapshot.Clone(ctx, change, baseSnapshot.fs.overlays, logger)
+	change.AutoImports = uri
+	return baseSnapshot.Clone(ctx, change, baseSnapshot.fs.overlays, logger, nil)
 }
 
 func (s *SnapshotHost) newRootSnapshot(id uint64, relativePatternSupport bool) *Snapshot {
