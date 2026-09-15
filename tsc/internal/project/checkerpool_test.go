@@ -2,6 +2,8 @@ package project
 
 import (
 	"context"
+	"fmt"
+	"slices"
 	"sync/atomic"
 	"testing"
 	"testing/synctest"
@@ -19,14 +21,18 @@ import (
 
 func setupCheckerPoolSession(t *testing.T, opts CheckerPoolOptions) (*Session, *checkerPool) {
 	t.Helper()
+	return setupCheckerPoolSessionWithFiles(t, opts, map[string]any{
+		"/src/tsconfig.json": `{ "compilerOptions": { "noLib": true } }`,
+		"/src/index.ts":      "export const x: number = 1;",
+	})
+}
+
+func setupCheckerPoolSessionWithFiles(t *testing.T, opts CheckerPoolOptions, files map[string]any) (*Session, *checkerPool) {
+	t.Helper()
 	if !bundled.Embedded {
 		t.Skip("bundled files are not embedded")
 	}
 
-	files := map[string]any{
-		"/src/tsconfig.json": `{ "compilerOptions": { "noLib": true } }`,
-		"/src/index.ts":      "export const x: number = 1;",
-	}
 	fs := bundled.WrapFS(vfstest.FromMap(files, false))
 	session := NewSession(&SessionInit{
 		BackgroundCtx: context.Background(),
@@ -69,18 +75,59 @@ func TestCheckerPoolDiagnosticsRouting(t *testing.T) {
 	release()
 }
 
+// holdEveryFreeChecker takes every checker nothing is holding, so the next request has to wait.
+func holdEveryFreeChecker(t *testing.T, pool *checkerPool) func() {
+	t.Helper()
+	var releases []func()
+	for {
+		pool.mu.Lock()
+		_, free := pool.firstFreeLocked()
+		pool.mu.Unlock()
+		if !free {
+			break
+		}
+		ctx := core.WithRequestID(context.Background(), fmt.Sprintf("fill-%d", len(releases)))
+		ctx = core.WithCheckerLifetime(ctx, core.CheckerLifetimeTemporary)
+		c, release := pool.GetChecker(ctx, nil)
+		assert.Assert(t, c != nil)
+		releases = append(releases, release)
+	}
+	return func() {
+		for _, release := range releases {
+			release()
+		}
+	}
+}
+
+// holdEveryChecker takes every checker in the pool, so the next request has to wait for one. There
+// is no longer a slot reserved per kind of request: a request waits when the pool is exhausted.
+func holdEveryChecker(t *testing.T, pool *checkerPool) func() {
+	t.Helper()
+	releases := make([]func(), 0, len(pool.checkers))
+	for i := range pool.checkers {
+		ctx := core.WithRequestID(context.Background(), fmt.Sprintf("hold-%d", i))
+		ctx = core.WithCheckerLifetime(ctx, core.CheckerLifetimeTemporary)
+		c, release := pool.GetChecker(ctx, nil)
+		assert.Assert(t, c != nil)
+		releases = append(releases, release)
+	}
+	return func() {
+		for _, release := range releases {
+			release()
+		}
+	}
+}
+
 func TestCheckerPoolQueryRouting(t *testing.T) {
 	t.Parallel()
 	_, pool := setupCheckerPoolSession(t, CheckerPoolOptions{MaxCheckers: 4, IdleTimeout: 10 * time.Second})
 
-	// Query requests should get a checker at index > 0.
+	// A query takes whichever checker is free; there is no separate region for it.
 	ctx := core.WithRequestID(context.Background(), "query-req-1")
 	ctx = core.WithCheckerLifetime(ctx, core.CheckerLifetimeTemporary)
 	c, release := pool.GetChecker(ctx, nil)
 	assert.Assert(t, c != nil)
-
-	// Verify it's not the diagnostics checker slot.
-	assert.Assert(t, pool.checkers[0] != c, "query should not use checker index 0")
+	assert.Assert(t, slices.Contains(pool.checkers, c), "the checker must come from the pool")
 	release()
 }
 
@@ -122,34 +169,30 @@ func TestCheckerPoolIdleCleanup(t *testing.T) {
 	synctest.Test(t, func(t *testing.T) {
 		pool := newTestCheckerPool(program, CheckerPoolOptions{MaxCheckers: 4, IdleTimeout: 5 * time.Second})
 
-		// Create a checker via a diagnostics request.
+		// Two requests at once, so two checkers are built rather than one being reused.
 		ctx := core.WithRequestID(context.Background(), "diag-cleanup")
 		ctx = core.WithCheckerLifetime(ctx, core.CheckerLifetimeDiagnostics)
 		c, release := pool.GetChecker(ctx, nil)
 		assert.Assert(t, c != nil)
-		release()
-		synctest.Wait()
 
-		// Create a query checker as well.
 		ctx2 := core.WithRequestID(context.Background(), "query-cleanup")
 		ctx2 = core.WithCheckerLifetime(ctx2, core.CheckerLifetimeTemporary)
 		c2, release2 := pool.GetChecker(ctx2, nil)
 		assert.Assert(t, c2 != nil)
+		assert.Assert(t, c2 != c, "a second request while the first is held gets its own checker")
+		release()
 		release2()
 		synctest.Wait()
 
-		// Both checkers should exist.
 		pool.mu.Lock()
-		assert.Assert(t, pool.checkers[0] != nil, "diagnostics checker should exist")
-		var queryIdx int
-		for i := 1; i < len(pool.checkers); i++ {
-			if pool.checkers[i] != nil {
-				queryIdx = i
-				break
+		built := 0
+		for _, existing := range pool.checkers {
+			if existing != nil {
+				built++
 			}
 		}
-		assert.Assert(t, queryIdx > 0, "query checker should exist")
 		pool.mu.Unlock()
+		assert.Equal(t, built, 2, "both checkers should exist")
 
 		// Advance past idle timeout.
 		time.Sleep(5 * time.Second)
@@ -157,8 +200,9 @@ func TestCheckerPoolIdleCleanup(t *testing.T) {
 
 		// After cleanup, both checkers should be disposed.
 		pool.mu.Lock()
-		assert.Assert(t, pool.checkers[0] == nil, "diagnostics checker should be disposed after idle timeout")
-		assert.Assert(t, pool.checkers[queryIdx] == nil, "query checker should be disposed after idle timeout")
+		for i, existing := range pool.checkers {
+			assert.Assert(t, existing == nil, "checker %d should be disposed after idle timeout", i)
+		}
 		pool.mu.Unlock()
 	})
 }
@@ -175,29 +219,27 @@ func TestCheckerPoolFileAssociationCleanup(t *testing.T) {
 	synctest.Test(t, func(t *testing.T) {
 		pool := newTestCheckerPool(program, CheckerPoolOptions{MaxCheckers: 4, IdleTimeout: 5 * time.Second})
 
-		// Create a query checker with file affinity.
+		// Which checker owns a file comes from the program's own split.
 		ctx := core.WithRequestID(context.Background(), "file-assoc-req")
-		ctx = core.WithCheckerLifetime(ctx, core.CheckerLifetimeTemporary)
+		ctx = core.WithCheckerLifetime(ctx, core.CheckerLifetimeDiagnostics)
 		c, release := pool.GetChecker(ctx, sourceFile)
 		assert.Assert(t, c != nil)
+		owner := pool.ownerOf(sourceFile)
+		assert.Equal(t, c, pool.checkers[owner], "a diagnostics request gets the file's owner")
 		release()
 		synctest.Wait()
-
-		// File association should exist.
-		pool.mu.Lock()
-		_, hasAssoc := pool.fileAssociations[sourceFile]
-		pool.mu.Unlock()
-		assert.Assert(t, hasAssoc, "file should have a checker association")
 
 		// Advance past idle timeout.
 		time.Sleep(5 * time.Second)
 		synctest.Wait()
 
-		// File association should be cleared.
+		// Which checker owns the file is a property of the program, so disposing that checker does
+		// not change it; the slot is simply refilled next time something asks.
 		pool.mu.Lock()
-		_, hasAssoc = pool.fileAssociations[sourceFile]
+		disposed := pool.checkers[owner] == nil
 		pool.mu.Unlock()
-		assert.Assert(t, !hasAssoc, "file association should be cleared after checker disposal")
+		assert.Assert(t, disposed, "the idle checker should have been disposed")
+		assert.Equal(t, pool.ownerOf(sourceFile), owner, "the file keeps its owner across disposal")
 	})
 }
 
@@ -227,13 +269,10 @@ func TestCheckerPoolQueryContention(t *testing.T) {
 	synctest.Test(t, func(t *testing.T) {
 		pool := newTestCheckerPool(program, CheckerPoolOptions{MaxCheckers: 2, IdleTimeout: 30 * time.Second})
 
-		// Acquire the only query checker slot.
-		ctx1 := core.WithRequestID(context.Background(), "query-hold")
-		ctx1 = core.WithCheckerLifetime(ctx1, core.CheckerLifetimeTemporary)
-		c1, release1 := pool.GetChecker(ctx1, nil)
-		assert.Assert(t, c1 != nil)
+		// Take every checker, so the next request has to wait for one.
+		release1 := holdEveryChecker(t, pool)
 
-		// A second query request from a different request ID should block.
+		// A further query request from a different request ID should block.
 		var c2Got atomic.Bool
 		go func() {
 			ctx2 := core.WithRequestID(context.Background(), "query-wait")
@@ -251,7 +290,7 @@ func TestCheckerPoolQueryContention(t *testing.T) {
 		// Release the first checker — second should unblock.
 		release1()
 		synctest.Wait()
-		assert.Assert(t, c2Got.Load(), "second query should have acquired the checker after release")
+		assert.Assert(t, c2Got.Load(), "second query should have acquired a checker after release")
 	})
 }
 
@@ -265,13 +304,10 @@ func TestCheckerPoolDiagnosticsContention(t *testing.T) {
 	synctest.Test(t, func(t *testing.T) {
 		pool := newTestCheckerPool(program, CheckerPoolOptions{MaxCheckers: 2, IdleTimeout: 30 * time.Second})
 
-		// Acquire the diagnostics checker.
-		ctx1 := core.WithRequestID(context.Background(), "diag-hold")
-		ctx1 = core.WithCheckerLifetime(ctx1, core.CheckerLifetimeDiagnostics)
-		c1, release1 := pool.GetChecker(ctx1, nil)
-		assert.Assert(t, c1 != nil)
+		// Take every checker, so the next request has to wait for one.
+		release1 := holdEveryChecker(t, pool)
 
-		// A second diagnostics request should block since there's only one diag checker.
+		// A further diagnostics request should block.
 		var c2Got atomic.Bool
 		go func() {
 			ctx2 := core.WithRequestID(context.Background(), "diag-wait")
@@ -285,15 +321,7 @@ func TestCheckerPoolDiagnosticsContention(t *testing.T) {
 		synctest.Wait()
 		assert.Assert(t, !c2Got.Load(), "second diagnostics request should be blocked")
 
-		// A query request should NOT be blocked (separate slot).
-		ctx3 := core.WithRequestID(context.Background(), "query-concurrent")
-		ctx3 = core.WithCheckerLifetime(ctx3, core.CheckerLifetimeTemporary)
-		c3, release3 := pool.GetChecker(ctx3, nil)
-		assert.Assert(t, c3 != nil)
-		assert.Assert(t, c3 != c1, "query checker should be different from diagnostics checker")
-		release3()
-
-		// Release the diagnostics checker — second diag request should unblock.
+		// Release the held checkers — the waiting request should unblock.
 		release1()
 		synctest.Wait()
 		assert.Assert(t, c2Got.Load(), "second diagnostics request should have acquired the checker after release")
@@ -467,11 +495,14 @@ func TestCheckerPoolCrossReleaseAffinityWithContention(t *testing.T) {
 		releaseA()
 		synctest.Wait()
 
-		// Request B takes the query slot while A is released.
+		// Request B takes a checker while A is released, and everything else is taken too, so A has
+		// nothing free to fall back to.
 		ctxB := core.WithRequestID(context.Background(), "req-B")
 		ctxB = core.WithCheckerLifetime(ctxB, core.CheckerLifetimeTemporary)
 		cB, releaseB := pool.GetChecker(ctxB, nil)
 		assert.Assert(t, cB != nil)
+		releaseRest := holdEveryFreeChecker(t, pool)
+		defer releaseRest()
 
 		// Request A reacquires — should block because B holds the slot.
 		var reacquired atomic.Bool
@@ -524,18 +555,13 @@ func TestCheckerPoolLifetimeMismatchIgnoresAssociation(t *testing.T) {
 		releaseDiag()
 		synctest.Wait()
 
-		// Now use the same request ID but with query purpose.
-		// The old association points to index 0 (diagnostics), which should
-		// be rejected — the returned checker must be a query checker (index > 0).
+		// The same request now asks as a query. Its old checker was released, so it is free to be
+		// handed back: one kind of request no longer has checkers the other cannot use.
 		ctxQuery := core.WithRequestID(reqCtx, "mixed")
 		ctxQuery = core.WithCheckerLifetime(ctxQuery, core.CheckerLifetimeTemporary)
 		cQuery, releaseQuery := pool.GetChecker(ctxQuery, nil)
 		assert.Assert(t, cQuery != nil)
-		assert.Assert(t, cQuery != cDiag, "query should not reuse the diagnostics checker")
-
-		pool.mu.Lock()
-		assert.Assert(t, pool.checkers[0] != cQuery, "query checker should not be at diagnostics index 0")
-		pool.mu.Unlock()
+		assert.Assert(t, slices.Contains(pool.checkers, cQuery), "the checker must come from the pool")
 		releaseQuery()
 	})
 }
@@ -621,15 +647,8 @@ func TestCheckerPoolDiscardKeepsIdleCheckers(t *testing.T) {
 		pool.Discard()
 
 		pool.mu.Lock()
-		assert.Assert(t, pool.checkers[0] == c1, "diagnostics checker should survive Discard")
-		hasQuery := false
-		for i := 1; i < len(pool.checkers); i++ {
-			if pool.checkers[i] == c2 {
-				hasQuery = true
-				break
-			}
-		}
-		assert.Assert(t, hasQuery, "query checker should survive Discard")
+		assert.Assert(t, pool.checkers[0] == nil, "a discarded pool lets go of the program's checkers")
+		assert.Assert(t, !slices.Contains(pool.checkers, c2), "a discarded pool lets go of them all")
 		assert.Assert(t, pool.cleanupTimer == nil, "cleanup timer should be stopped after Discard")
 		pool.mu.Unlock()
 
@@ -638,7 +657,7 @@ func TestCheckerPoolDiscardKeepsIdleCheckers(t *testing.T) {
 		synctest.Wait()
 
 		pool.mu.Lock()
-		assert.Assert(t, pool.checkers[0] == c1, "diagnostics checker should persist indefinitely on discarded pool")
+		assert.Assert(t, pool.checkers[0] == nil, "a discarded pool does not hold checkers indefinitely")
 		pool.mu.Unlock()
 	})
 }
@@ -661,15 +680,9 @@ func TestCheckerPoolDiscardHeldCheckerSurvivesRelease(t *testing.T) {
 
 		// Find which slot it's in.
 		pool.mu.Lock()
-		var heldIndex int
-		for i := 1; i < len(pool.checkers); i++ {
-			if pool.checkers[i] == c {
-				heldIndex = i
-				break
-			}
-		}
+		heldIndex := slices.Index(pool.checkers, c)
 		pool.mu.Unlock()
-		assert.Assert(t, heldIndex > 0, "should find the held checker")
+		assert.Assert(t, heldIndex >= 0, "should find the held checker")
 
 		// Discard while checker is held — should NOT dispose it.
 		pool.Discard()
@@ -683,7 +696,7 @@ func TestCheckerPoolDiscardHeldCheckerSurvivesRelease(t *testing.T) {
 		synctest.Wait()
 
 		pool.mu.Lock()
-		assert.Assert(t, pool.checkers[heldIndex] == c, "checker should persist after release on discarded pool")
+		assert.Assert(t, pool.checkers[heldIndex] == nil, "a checker handed back to a discarded pool is let go of")
 		pool.mu.Unlock()
 
 		// Even after a long wait, checker persists (no cleanup timer running).
@@ -691,7 +704,7 @@ func TestCheckerPoolDiscardHeldCheckerSurvivesRelease(t *testing.T) {
 		synctest.Wait()
 
 		pool.mu.Lock()
-		assert.Assert(t, pool.checkers[heldIndex] == c, "checker should persist indefinitely on discarded pool")
+		assert.Assert(t, pool.checkers[heldIndex] == nil, "a discarded pool does not hold checkers indefinitely")
 		pool.mu.Unlock()
 	})
 }
@@ -715,29 +728,23 @@ func TestCheckerPoolDiscardStillFunctional(t *testing.T) {
 
 		// Find the slot.
 		pool.mu.Lock()
-		var idx int
-		for i := 1; i < len(pool.checkers); i++ {
-			if pool.checkers[i] == c {
-				idx = i
-				break
-			}
-		}
+		idx := slices.Index(pool.checkers, c)
 		pool.mu.Unlock()
-		assert.Assert(t, idx > 0, "checker should be in a query slot")
+		assert.Assert(t, idx >= 0, "the checker should be in the pool")
 
 		// Release — checker should persist on discarded pool (no cleanup timer).
 		release()
 		synctest.Wait()
 
 		pool.mu.Lock()
-		assert.Assert(t, pool.checkers[idx] == c, "checker should persist after release on discarded pool")
+		assert.Assert(t, pool.checkers[idx] == nil, "a checker handed back to a discarded pool is let go of")
 		pool.mu.Unlock()
 
 		// Re-acquire — should get the same checker back.
 		ctx2 := core.WithRequestID(context.Background(), "post-obs-2")
 		ctx2 = core.WithCheckerLifetime(ctx2, core.CheckerLifetimeTemporary)
 		c2, release2 := pool.GetChecker(ctx2, nil)
-		assert.Assert(t, c2 == c, "should get the same checker on discarded pool")
+		assert.Assert(t, c2 != nil, "a discarded pool still builds a checker when asked")
 		release2()
 	})
 }
@@ -791,14 +798,14 @@ func TestCheckerPoolDiagnosticsCheckerSurvivesDiscard(t *testing.T) {
 
 		// Diagnostics checker should survive Discard.
 		pool.mu.Lock()
-		assert.Assert(t, pool.checkers[0] == c, "diagnostics checker should survive Discard")
+		assert.Assert(t, pool.checkers[0] == nil, "a discarded pool lets go of the program's checkers")
 		pool.mu.Unlock()
 
 		// Should still be acquirable and be the same instance.
 		ctx2 := core.WithRequestID(context.Background(), "diag-discard-2")
 		ctx2 = core.WithCheckerLifetime(ctx2, core.CheckerLifetimeDiagnostics)
 		c2, release2 := pool.GetChecker(ctx2, nil)
-		assert.Assert(t, c2 == c, "diagnostics checker identity should be stable after Discard")
+		assert.Assert(t, c2 != nil, "a discarded pool still answers, building a checker again if it must")
 		release2()
 	})
 }
@@ -948,7 +955,6 @@ func TestCheckerPoolFileAffinity(t *testing.T) {
 
 func TestCheckerPoolMultipleConcurrentQueryCheckers(t *testing.T) {
 	t.Parallel()
-	// maxCheckers=4: 1 diagnostics + 3 query slots.
 	session, _ := setupCheckerPoolSession(t, CheckerPoolOptions{MaxCheckers: 4, IdleTimeout: 10 * time.Second})
 	ls, err := session.GetLanguageService(context.Background(), "file:///src/index.ts")
 	assert.NilError(t, err)
@@ -957,85 +963,50 @@ func TestCheckerPoolMultipleConcurrentQueryCheckers(t *testing.T) {
 	synctest.Test(t, func(t *testing.T) {
 		pool := newTestCheckerPool(program, CheckerPoolOptions{MaxCheckers: 4, IdleTimeout: 30 * time.Second})
 
-		// Acquire 3 query checkers concurrently (all slots).
-		ctx1 := core.WithRequestID(context.Background(), "multi-q-1")
-		ctx1 = core.WithCheckerLifetime(ctx1, core.CheckerLifetimeTemporary)
-		c1, release1 := pool.GetChecker(ctx1, nil)
-		assert.Assert(t, c1 != nil)
+		// Concurrent queries each get their own checker, up to however many the pool has.
+		var held []*checker.Checker
+		var releases []func()
+		for i := range pool.checkers {
+			ctx := core.WithRequestID(context.Background(), fmt.Sprintf("multi-q-%d", i))
+			ctx = core.WithCheckerLifetime(ctx, core.CheckerLifetimeTemporary)
+			c, release := pool.GetChecker(ctx, nil)
+			assert.Assert(t, c != nil)
+			assert.Assert(t, !slices.Contains(held, c), "concurrent queries should get distinct checkers")
+			held = append(held, c)
+			releases = append(releases, release)
+		}
 
-		ctx2 := core.WithRequestID(context.Background(), "multi-q-2")
-		ctx2 = core.WithCheckerLifetime(ctx2, core.CheckerLifetimeTemporary)
-		c2, release2 := pool.GetChecker(ctx2, nil)
-		assert.Assert(t, c2 != nil)
-
-		ctx3 := core.WithRequestID(context.Background(), "multi-q-3")
-		ctx3 = core.WithCheckerLifetime(ctx3, core.CheckerLifetimeTemporary)
-		c3, release3 := pool.GetChecker(ctx3, nil)
-		assert.Assert(t, c3 != nil)
-
-		// All three should be distinct checkers.
-		assert.Assert(t, c1 != c2, "concurrent query checkers should be distinct (1 vs 2)")
-		assert.Assert(t, c1 != c3, "concurrent query checkers should be distinct (1 vs 3)")
-		assert.Assert(t, c2 != c3, "concurrent query checkers should be distinct (2 vs 3)")
-
-		// None should be the diagnostics checker at index 0.
-		pool.mu.Lock()
-		assert.Assert(t, pool.checkers[0] != c1 && pool.checkers[0] != c2 && pool.checkers[0] != c3,
-			"query checkers should not occupy the diagnostics slot")
-		pool.mu.Unlock()
-
-		// A 4th query request should block since all 3 slots are full.
-		var c4Got atomic.Bool
+		// One more blocks, since every checker is taken.
+		var extraGot atomic.Bool
 		go func() {
-			ctx4 := core.WithRequestID(context.Background(), "multi-q-4")
-			ctx4 = core.WithCheckerLifetime(ctx4, core.CheckerLifetimeTemporary)
-			c4, release4 := pool.GetChecker(ctx4, nil)
-			_ = c4 // verified via c4Got flag
-			c4Got.Store(c4 != nil)
-			release4()
+			ctx := core.WithRequestID(context.Background(), "multi-q-extra")
+			ctx = core.WithCheckerLifetime(ctx, core.CheckerLifetimeTemporary)
+			c, release := pool.GetChecker(ctx, nil)
+			extraGot.Store(c != nil)
+			release()
 		}()
 
 		synctest.Wait()
-		assert.Assert(t, !c4Got.Load(), "4th query should block when all 3 query slots are held")
+		assert.Assert(t, !extraGot.Load(), "a query should block when every checker is held")
 
-		release1()
+		releases[0]()
 		synctest.Wait()
-		assert.Assert(t, c4Got.Load(), "4th query should unblock after one slot is released")
-
-		release2()
-		release3()
+		assert.Assert(t, extraGot.Load(), "it should proceed once one is handed back")
+		for _, release := range releases[1:] {
+			release()
+		}
 	})
 }
 
-func TestCheckerPoolDoubleReleaseSafe(t *testing.T) {
+// How a program is split is the program's own property: the checkers that own its files are the
+// ones a build of it would use, whatever the editor asks for.
+func TestCheckerPoolSizedByTheProgram(t *testing.T) {
 	t.Parallel()
-	_, pool := setupCheckerPoolSession(t, CheckerPoolOptions{MaxCheckers: 4, IdleTimeout: 10 * time.Second})
-
-	ctx := core.WithRequestID(context.Background(), "double-release")
-	ctx = core.WithCheckerLifetime(ctx, core.CheckerLifetimeTemporary)
-	c, release := pool.GetChecker(ctx, nil)
-	assert.Assert(t, c != nil)
-
-	// First release should work normally.
-	release()
-	// Second release should be a no-op (sync.OnceFunc).
-	release()
-
-	// Pool should still be functional after double release.
-	ctx2 := core.WithRequestID(context.Background(), "after-double")
-	ctx2 = core.WithCheckerLifetime(ctx2, core.CheckerLifetimeTemporary)
-	c2, release2 := pool.GetChecker(ctx2, nil)
-	assert.Assert(t, c2 != nil)
-	release2()
-}
-
-func TestCheckerPoolDefaultMaxCheckers(t *testing.T) {
-	t.Parallel()
-	// Zero MaxCheckers should default to 4.
 	_, pool := setupCheckerPoolSession(t, CheckerPoolOptions{MaxCheckers: 0, IdleTimeout: 10 * time.Second})
-	assert.Equal(t, pool.opts.MaxCheckers, 4)
-	assert.Equal(t, len(pool.checkers), 4)
-	assert.Equal(t, cap(pool.querySem), 3, "querySem capacity should be MaxCheckers-1")
+	assert.Equal(t, pool.owners, pool.program.CheckerCount())
+	// A one-file program is split across one checker; the pool still holds enough for requests to
+	// run alongside each other.
+	assert.Equal(t, len(pool.checkers), max(pool.owners, pool.opts.MaxCheckers))
 }
 
 func TestCheckerPoolStaggeredIdleCleanup(t *testing.T) {
@@ -1063,18 +1034,11 @@ func TestCheckerPoolStaggeredIdleCleanup(t *testing.T) {
 
 		// Find their indices.
 		pool.mu.Lock()
-		var idxA, idxB int
-		for i := 1; i < len(pool.checkers); i++ {
-			if pool.checkers[i] == cA {
-				idxA = i
-			}
-			if pool.checkers[i] == cB {
-				idxB = i
-			}
-		}
+		idxA := slices.Index(pool.checkers, cA)
+		idxB := slices.Index(pool.checkers, cB)
 		pool.mu.Unlock()
-		assert.Assert(t, idxA > 0)
-		assert.Assert(t, idxB > 0)
+		assert.Assert(t, idxA >= 0)
+		assert.Assert(t, idxB >= 0)
 
 		// Release A first. Timer is set for t=10.
 		releaseA()
@@ -1132,7 +1096,9 @@ func TestCheckerPoolDiscardIdempotent(t *testing.T) {
 			}
 		}
 		pool.mu.Unlock()
-		assert.Assert(t, hasChecker, "first Discard should keep idle checkers alive")
+		// The program these were built for is gone, and idle cleanup does not run on a discarded
+		// pool, so they are let go of here rather than held until the pool is collected.
+		assert.Assert(t, !hasChecker, "first Discard should let go of the program's checkers")
 
 		// Second discard should be a no-op (no panic, no state corruption).
 		pool.Discard()
@@ -1289,7 +1255,102 @@ func TestCheckerPoolCleanupAfterDiscardIsNoop(t *testing.T) {
 				hasChecker = true
 			}
 		}
-		assert.Assert(t, hasChecker, "idle checkers must survive cleanup on a discarded pool")
+		// Discard already let them go; a later cleanup pass has nothing left to do.
+		assert.Assert(t, !hasChecker, "a discarded pool holds no checkers for a program that is gone")
 		pool.mu.Unlock()
 	})
+}
+
+// Everything checks a file with the checker that owns it, so a document pull, a workspace pull and
+// a build all report the same thing for that file.
+func TestCheckerPoolChecksEveryFileWithItsOwner(t *testing.T) {
+	t.Parallel()
+	files := map[string]any{"/src/tsconfig.json": `{ "compilerOptions": { "noLib": true } }`}
+	for i := range 8 {
+		files[fmt.Sprintf("/src/f%d.ts", i)] = fmt.Sprintf("export const v%d: number = %d;", i, i)
+	}
+	_, pool := setupCheckerPoolSessionWithFiles(t, CheckerPoolOptions{IdleTimeout: 10 * time.Second}, files)
+
+	ctx := core.WithCheckerLifetime(context.Background(), core.CheckerLifetimeDiagnostics)
+	for _, file := range pool.program.SourceFiles() {
+		owner := pool.ownerOf(file)
+		c, release := pool.GetChecker(ctx, file)
+		assert.Equal(t, c, pool.checkers[owner], "a diagnostics request must get the file's owner")
+		release()
+	}
+}
+
+// A whole-program check runs on those same checkers rather than a second set beside them.
+func TestCheckerPoolChecksWholeProgramOnItsOwnCheckers(t *testing.T) {
+	t.Parallel()
+	_, pool := setupCheckerPoolSessionWithFiles(t, CheckerPoolOptions{IdleTimeout: 10 * time.Second}, map[string]any{
+		"/src/tsconfig.json": `{ "compilerOptions": { "noLib": true } }`,
+		"/src/index.ts":      "export const x: number = 1;",
+		"/src/a.ts":          "export const a: string = 1;",
+		"/src/b.ts":          "export const b = 1;",
+	})
+
+	diagnostics := pool.program.GetSemanticDiagnostics(context.Background(), nil)
+	assert.Assert(t, len(diagnostics) > 0, "expected the seeded error")
+
+	built := 0
+	for _, c := range pool.checkers {
+		if c != nil {
+			built++
+		}
+	}
+	assert.Assert(t, built > 0, "the check must have used the pool's own checkers")
+}
+
+// A query does not depend on which checker sees the file, so rather than wait behind a check of the
+// whole project it takes whichever checker is free.
+func TestCheckerPoolQueryDoesNotWaitForABusyOwner(t *testing.T) {
+	t.Parallel()
+	files := map[string]any{"/src/tsconfig.json": `{ "compilerOptions": { "noLib": true } }`}
+	for i := range 8 {
+		files[fmt.Sprintf("/src/f%d.ts", i)] = fmt.Sprintf("export const v%d: number = %d;", i, i)
+	}
+	_, pool := setupCheckerPoolSessionWithFiles(t, CheckerPoolOptions{IdleTimeout: 10 * time.Second}, files)
+	if len(pool.checkers) < 2 {
+		t.Skip("needs a program the compiler splits across more than one checker")
+	}
+
+	file := pool.program.SourceFiles()[0]
+	held, release := pool.GetChecker(core.WithCheckerLifetime(context.Background(), core.CheckerLifetimeDiagnostics), file)
+	defer release()
+
+	query := core.WithCheckerLifetime(context.Background(), core.CheckerLifetimeTemporary)
+	other, releaseOther := pool.GetChecker(query, file)
+	defer releaseOther()
+	assert.Assert(t, other != held, "a query must not wait on the checker a diagnostics request holds")
+}
+
+// Which checker owns a file is the program's own split, so it has to outlive the checkers
+// themselves. Deriving it from the live checkers instead would move every file whose checker had
+// been let go onto the first slot, quietly undoing both the split and the parity it buys.
+func TestCheckerPoolOwnershipOutlivesItsCheckers(t *testing.T) {
+	t.Parallel()
+	files := map[string]any{"/src/tsconfig.json": `{ "compilerOptions": { "strict": true } }`}
+	for i := range 40 {
+		files[fmt.Sprintf("/src/f%d.ts", i)] = fmt.Sprintf("export const v%d: number = %d;", i, i)
+	}
+	_, pool := setupCheckerPoolSessionWithFiles(t, CheckerPoolOptions{IdleTimeout: time.Minute}, files)
+
+	before := make(map[string]int, len(pool.program.SourceFiles()))
+	owners := map[int]struct{}{}
+	for _, f := range pool.program.SourceFiles() {
+		owner := pool.ownerOf(f)
+		before[f.FileName()] = owner
+		owners[owner] = struct{}{}
+	}
+	if len(owners) < 2 {
+		t.Skip("needs a program the compiler splits across more than one checker")
+	}
+
+	pool.program.GetSemanticDiagnostics(context.Background(), nil)
+	assert.Assert(t, pool.releaseSweptCheckers(), "the sweep's checkers should have been let go of")
+
+	for _, f := range pool.program.SourceFiles() {
+		assert.Equal(t, pool.ownerOf(f), before[f.FileName()], "%s should keep its owner", f.FileName())
+	}
 }
