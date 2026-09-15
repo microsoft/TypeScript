@@ -11,16 +11,6 @@ schedules:
 name: $(date:yyyyMMdd)$(rev:.r)
 appendCommitMessageToRunName: false
 
-parameters:
-  - name: signType
-    displayName: Sign type
-    type: string
-    default: auto
-    values:
-      - auto
-      - real
-      - test
-
 variables:
   # For MicroBuild telemetry
   - name: TeamName
@@ -102,18 +92,11 @@ extends:
               - task: MicroBuildSigningPlugin@4
                 displayName: '🔩 Install Signing Plugin'
                 inputs:
-                  ${{ if eq(parameters.signType, 'auto') }}:
-                    ${{ if eq(variables['Build.Reason'], 'Schedule') }}:
-                      signType: real
-                    ${{ else }}:
-                      signType: test
-                  ${{ else }}:
-                    signType: ${{ parameters.signType }}
+                  signType: real
                   # azureSubscription AKA ConnectedServiceName
                   azureSubscription: 'MicroBuild Signing Task (DevDiv)'
-                  ${{ if or(and(eq(parameters.signType, 'auto'), eq(variables['Build.Reason'], 'Schedule')), eq(parameters.signType, 'real')) }}:
-                    # From "nonwindowspmeservicename" in https://dev.azure.com/devdiv/1ESPipelineTemplates/_git/MicroBuildTemplate?path=/azure-pipelines/Stages/Stage.yml
-                    ConnectedPMEServiceName: beb8cb23-b303-4c95-ab26-9e44bc958d39
+                  # From "nonwindowspmeservicename" in https://dev.azure.com/devdiv/1ESPipelineTemplates/_git/MicroBuildTemplate?path=/azure-pipelines/Stages/Stage.yml
+                  ConnectedPMEServiceName: beb8cb23-b303-4c95-ab26-9e44bc958d39
                   # We do this ourselves.
                   zipSources: false
                 env:
