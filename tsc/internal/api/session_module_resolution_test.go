@@ -39,8 +39,8 @@ func TestModuleResolverUsesSnapshotFileSystem(t *testing.T) {
 		ContainingDirectory: DocumentIdentifier{FileName: "/home/projects/p/src"},
 	})
 	assert.NilError(t, resolutionErr)
-	assert.Equal(t, result.Result.ResolvedFileName, "/home/projects/p/node_modules/pkg/index.d.ts")
-	assert.Equal(t, result.Result.PackageId.Name, "pkg")
+	assert.Equal(t, result.ResolvedModule.ResolvedFileName, "/home/projects/p/node_modules/pkg/index.d.ts")
+	assert.Equal(t, result.ResolvedModule.PackageId.Name, "pkg")
 	assert.Assert(t, len(result.Trace) > 0)
 }
 
@@ -90,7 +90,7 @@ func TestProvidedModuleResolutionSpecificityAndLifetime(t *testing.T) {
 			ResolutionMode:      &resolutionMode,
 		})
 		assert.NilError(t, resolutionErr)
-		assert.Equal(t, result.Result.ResolvedFileName, expected)
+		assert.Equal(t, result.ResolvedModule.ResolvedFileName, expected)
 		assert.Equal(t, len(result.Trace), 0)
 	}
 	assertResolution("/home/projects/p/src", core.ModuleKindESNext, "/home/projects/p/exact.d.ts")
@@ -105,7 +105,7 @@ func TestProvidedModuleResolutionSpecificityAndLifetime(t *testing.T) {
 		ContainingDirectory: DocumentIdentifier{FileName: "/home/projects/p/src"},
 	})
 	assert.NilError(t, err)
-	assert.Assert(t, unresolved.Result == nil)
+	assert.Assert(t, unresolved.ResolvedModule == nil)
 
 	_, err = session.handleReleaseModuleResolutionSet(&ReleaseModuleResolutionSetParams{Set: setID})
 	assert.NilError(t, err)
@@ -195,10 +195,10 @@ func TestProvidedModuleResolutionPreservesStaticIdentity(t *testing.T) {
 		ContainingDirectory: DocumentIdentifier{FileName: "/src"},
 	})
 	assert.NilError(t, err)
-	assert.Equal(t, result.Result.OriginalPath, "/node_modules/pkg/index.d.ts")
-	assert.Equal(t, result.Result.PackageId.Name, "pkg")
-	assert.Equal(t, result.Result.PackageId.Version, "1.2.3")
-	assert.Equal(t, result.Result.IsExternalLibraryImport, true)
+	assert.Equal(t, result.ResolvedModule.OriginalPath, "/node_modules/pkg/index.d.ts")
+	assert.Equal(t, result.ResolvedModule.PackageId.Name, "pkg")
+	assert.Equal(t, result.ResolvedModule.PackageId.Version, "1.2.3")
+	assert.Equal(t, result.ResolvedModule.IsExternalLibraryImport, true)
 }
 
 func providedResolutionEntry(moduleName string, directory string, mode *core.ModuleKind, fileName string) *ModuleResolutionEntry {

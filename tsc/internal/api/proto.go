@@ -470,9 +470,10 @@ type ResolveModuleNameParams struct {
 	ResolutionMode      *ResolutionMode    `json:"resolutionMode,omitempty"`
 }
 
-type ModuleResolutionInvocationResult struct {
-	Result *ResolvedModule `json:"result,omitempty"`
-	Trace  []string        `json:"trace,omitempty"`
+type ResolveModuleNameResult struct {
+	ResolvedModule *ResolvedModule `json:"resolvedModule,omitempty"`
+	// Trace is provided when compilerOptions.traceResolution is true.
+	Trace []string `json:"trace,omitempty"`
 }
 
 type CreateProgramOldProgramParams struct {

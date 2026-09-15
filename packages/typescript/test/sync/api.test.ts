@@ -493,13 +493,13 @@ import "missing";`,
         };
         const resolver = snapshot.createModuleResolver(compilerOptions);
         const defaultResolution = resolver.resolveModuleName("pkg", "/src");
-        assert.equal(defaultResolution.result?.resolvedFileName, "/node_modules/pkg/index.d.ts");
+        assert.equal(defaultResolution.resolvedModule?.resolvedFileName, "/node_modules/pkg/index.d.ts");
         assert.ok(defaultResolution.trace?.length);
         const fallbackResolver = snapshot.createModuleResolver(compilerOptions, {
             moduleResolutions: { fallback: "resolve", entries: [] },
         });
         assert.equal(
-            (fallbackResolver.resolveModuleName("pkg", "/src")).result?.resolvedFileName,
+            (fallbackResolver.resolveModuleName("pkg", "/src")).resolvedModule?.resolvedFileName,
             "/node_modules/pkg/index.d.ts",
         );
 
@@ -512,10 +512,10 @@ import "missing";`,
         });
         const overriddenResolver = snapshot.createModuleResolver(compilerOptions, { moduleResolutions: set });
         assert.equal(
-            (overriddenResolver.resolveModuleName("pkg", "/src")).result?.resolvedFileName,
+            (overriddenResolver.resolveModuleName("pkg", "/src")).resolvedModule?.resolvedFileName,
             "/provided.d.ts",
         );
-        assert.equal((overriddenResolver.resolveModuleName("missing", "/src")).result, undefined);
+        assert.equal((overriddenResolver.resolveModuleName("missing", "/src")).resolvedModule, undefined);
 
         const program = api.createProgram(
             ["/src/main.ts"],
@@ -541,7 +541,7 @@ import "missing";`,
 
         set.dispose();
         assert.equal(
-            (overriddenResolver.resolveModuleName("pkg", "/src")).result?.resolvedFileName,
+            (overriddenResolver.resolveModuleName("pkg", "/src")).resolvedModule?.resolvedFileName,
             "/provided.d.ts",
         );
         const createFromDisposedSet = () => snapshot.createModuleResolver(compilerOptions, { moduleResolutions: set });

@@ -86,16 +86,18 @@ import type {
     ImportAdderAction,
     IntrinsicTypeMethod,
     LSPUpdateSnapshotParams,
-    ModuleResolutionInvocationResult,
+    ModuleResolutionEntry,
     ModuleResolutionSource,
     ModuleResolutionSpec,
     PackageId,
     ParsedCommandLine,
     ProjectReference,
     ProjectResponse,
+    ProvidedModuleResolution,
     ReadConfigFileResponse,
     ResolvedModule,
     ResolvedTypeReferenceDirective,
+    ResolveModuleNameResult,
     SignaturePropertyMethod,
     SignatureResponse,
     SourceFileMetadata,
@@ -208,16 +210,19 @@ export type {
     JSDocTagInfo,
     LiteralType,
     LSPConnectionOptions,
+    ModuleResolutionEntry,
     ModuleResolutionSpec,
     NumberLiteralType,
     ObjectType,
     PackageId,
     ParsedCommandLine,
     ProjectReference,
+    ProvidedModuleResolution,
     ReadConfigFileResponse,
     RequestTiming,
     ResolvedModule,
     ResolvedTypeReferenceDirective,
+    ResolveModuleNameResult,
     SourceFileMetadata,
     StringLiteralType,
     StringMappingType,
@@ -1338,14 +1343,14 @@ export class ModuleResolver {
     }
 
     get resolveModuleName(): {
-        (moduleName: string, containingDirectory: DocumentIdentifier, resolutionMode?: ModuleKind.CommonJS | ModuleKind.ESNext): ModuleResolutionInvocationResult;
-        gen(moduleName: string, containingDirectory: DocumentIdentifier, resolutionMode?: ModuleKind.CommonJS | ModuleKind.ESNext): Generator<ProtocolRequest, ModuleResolutionInvocationResult, ProtocolResponse["result"]>;
+        (moduleName: string, containingDirectory: DocumentIdentifier, resolutionMode?: ModuleKind.CommonJS | ModuleKind.ESNext): ResolveModuleNameResult;
+        gen(moduleName: string, containingDirectory: DocumentIdentifier, resolutionMode?: ModuleKind.CommonJS | ModuleKind.ESNext): Generator<ProtocolRequest, ResolveModuleNameResult, ProtocolResponse["result"]>;
     } {
         const owner = this;
         return cacheGeneratorMethod(
             owner,
             "resolveModuleName",
-            function (moduleName: string, containingDirectory: DocumentIdentifier, resolutionMode?: ModuleKind.CommonJS | ModuleKind.ESNext): ModuleResolutionInvocationResult {
+            function (moduleName: string, containingDirectory: DocumentIdentifier, resolutionMode?: ModuleKind.CommonJS | ModuleKind.ESNext): ResolveModuleNameResult {
                 owner.ensureSnapshotActive();
                 return owner.client.apiRequest("resolveModuleName", {
                     snapshot: owner.snapshotId,
@@ -1355,7 +1360,7 @@ export class ModuleResolver {
                     ...(resolutionMode !== undefined ? { resolutionMode } : {}),
                 });
             },
-            function* (moduleName: string, containingDirectory: DocumentIdentifier, resolutionMode?: ModuleKind.CommonJS | ModuleKind.ESNext): Generator<ProtocolRequest, ModuleResolutionInvocationResult, ProtocolResponse["result"]> {
+            function* (moduleName: string, containingDirectory: DocumentIdentifier, resolutionMode?: ModuleKind.CommonJS | ModuleKind.ESNext): Generator<ProtocolRequest, ResolveModuleNameResult, ProtocolResponse["result"]> {
                 owner.ensureSnapshotActive();
                 return yield* apiRequest("resolveModuleName", {
                     snapshot: owner.snapshotId,

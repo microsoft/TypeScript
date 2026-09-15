@@ -26,7 +26,7 @@ export interface APIMethodInfo {
     createModuleResolutionSet: APIMethod<CreateModuleResolutionSetParams, number>;
     releaseModuleResolutionSet: APIMethod<ReleaseModuleResolutionSetParams, unknown>;
     createModuleResolver: APIMethod<CreateModuleResolverParams, number>;
-    resolveModuleName: APIMethod<ResolveModuleNameParams, ModuleResolutionInvocationResult>;
+    resolveModuleName: APIMethod<ResolveModuleNameParams, ResolveModuleNameResult>;
     parseCommandLine: APIMethod<ParseCommandLineParams, ConfigFileResponse>;
     readConfigFile: APIMethod<ReadConfigFileParams, ReadConfigFileResponse>;
     parseJsonConfigFileContent: APIMethod<ParseJsonConfigFileContentParams, ConfigFileResponse>;
@@ -306,8 +306,9 @@ export interface ResolveModuleNameParams {
     resolutionMode?: ModuleKind.CommonJS | ModuleKind.ESNext | undefined;
 }
 
-export interface ModuleResolutionInvocationResult {
-    result?: ResolvedModule | undefined;
+export interface ResolveModuleNameResult {
+    resolvedModule?: ResolvedModule | undefined;
+    /** Trace is provided when compilerOptions.traceResolution is true. */
     trace?: string[] | undefined;
 }
 

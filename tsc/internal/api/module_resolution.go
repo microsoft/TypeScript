@@ -2,6 +2,7 @@ package api
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/locale"
@@ -20,7 +21,7 @@ type moduleResolutionMatchKey struct {
 type providedModuleResolutions struct {
 	identity             uint64
 	fallbackToResolution bool
-	entries              map[moduleResolutionMatchKey]*module.ProvidedModuleResolution
+	entries              map[moduleResolutionMatchKey]*module.ResolvedModule
 	currentDirectory     string
 	useCaseSensitive     bool
 }
@@ -29,7 +30,7 @@ func (p *providedModuleResolutions) Identity() uint64 {
 	return p.identity
 }
 
-func (p *providedModuleResolutions) GetModuleResolution(moduleName string, containingDirectory string, resolutionMode core.ResolutionMode) (*module.ProvidedModuleResolution, bool) {
+func (p *providedModuleResolutions) GetModuleResolution(moduleName string, containingDirectory string, resolutionMode core.ResolutionMode) (*module.ResolvedModule, bool) {
 	directory := tspath.ToPath(containingDirectory, p.currentDirectory, p.useCaseSensitive)
 	keys := [...]moduleResolutionMatchKey{
 		{moduleName: moduleName, directory: directory, mode: resolutionMode, hasDirectory: true, hasMode: true},
@@ -65,7 +66,7 @@ func compileModuleResolutionSpec(spec *ModuleResolutionSpec, identity uint64, cu
 	provider := &providedModuleResolutions{
 		identity:             identity,
 		fallbackToResolution: fallbackToResolution,
-		entries:              make(map[moduleResolutionMatchKey]*module.ProvidedModuleResolution, len(spec.Entries)),
+		entries:              make(map[moduleResolutionMatchKey]*module.ResolvedModule, len(spec.Entries)),
 		currentDirectory:     currentDirectory,
 		useCaseSensitive:     useCaseSensitive,
 	}
@@ -98,9 +99,9 @@ func compileModuleResolutionSpec(spec *ModuleResolutionSpec, identity uint64, cu
 			return nil, fmt.Errorf("%w: duplicate module resolution entry for %q", ErrClientError, entry.ModuleName)
 		}
 
-		var provided *module.ProvidedModuleResolution
+		var provided *module.ResolvedModule
 		if entry.Result.ResolvedFileName != nil {
-			provided = &module.ProvidedModuleResolution{
+			provided = &module.ResolvedModule{
 				ResolvedFileName: tspath.GetNormalizedAbsolutePath(entry.Result.ResolvedFileName.ToAbsoluteFileName(currentDirectory), currentDirectory),
 			}
 			if entry.Result.OriginalPath != nil {
@@ -114,6 +115,16 @@ func compileModuleResolutionSpec(spec *ModuleResolutionSpec, identity uint64, cu
 					PeerDependencies: entry.Result.PackageID.PeerDependencies,
 				}
 			}
+			externalPath := provided.ResolvedFileName
+			if provided.OriginalPath != "" {
+				externalPath = provided.OriginalPath
+			}
+			provided.Extension = tspath.TryGetExtensionFromPath(provided.ResolvedFileName)
+			provided.ResolvedUsingTsExtension = tspath.IsExternalModuleNameRelative(entry.ModuleName) &&
+				tspath.TryExtractTSExtension(entry.ModuleName) != ""
+			provided.ResolvedUsingExtraExtensions = !tspath.FileExtensionIsOneOf(provided.ResolvedFileName, tspath.SupportedTSExtensionsWithJsonFlat) &&
+				!tspath.FileExtensionIsOneOf(provided.ResolvedFileName, tspath.SupportedJSExtensionsFlat)
+			provided.IsExternalLibraryImport = strings.Contains(externalPath, "/node_modules/")
 		}
 		provider.entries[key] = provided
 	}
@@ -210,7 +221,7 @@ func (s *Session) handleCreateModuleResolver(params *CreateModuleResolverParams)
 	return id, nil
 }
 
-func (s *Session) handleResolveModuleName(params *ResolveModuleNameParams) (*ModuleResolutionInvocationResult, error) {
+func (s *Session) handleResolveModuleName(params *ResolveModuleNameParams) (*ResolveModuleNameResult, error) {
 	if params.ModuleName == "" {
 		return nil, fmt.Errorf("%w: moduleName is empty", ErrClientError)
 	}
@@ -238,17 +249,13 @@ func (s *Session) handleResolveModuleName(params *ResolveModuleNameParams) (*Mod
 	var trace []module.DiagAndArgs
 	var provided bool
 	if data.provider != nil {
-		var providedResolution *module.ProvidedModuleResolution
-		providedResolution, provided = data.provider.GetModuleResolution(params.ModuleName, containingDirectory, mode)
-		if provided {
-			result = data.resolver.ResolveProvidedModule(params.ModuleName, providedResolution)
-		}
+		result, provided = data.provider.GetModuleResolution(params.ModuleName, containingDirectory, mode)
 	}
 	if !provided {
 		result, trace = data.resolver.ResolveModuleNameFromDirectory(params.ModuleName, containingDirectory, mode)
 	}
-	return &ModuleResolutionInvocationResult{
-		Result: newResolvedModuleResponse(result),
-		Trace:  moduleResolutionTraceToStrings(trace),
+	return &ResolveModuleNameResult{
+		ResolvedModule: newResolvedModuleResponse(result),
+		Trace:          moduleResolutionTraceToStrings(trace),
 	}, nil
 }

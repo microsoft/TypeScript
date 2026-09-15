@@ -504,13 +504,13 @@ import "missing";`,
         };
         const resolver = await snapshot.createModuleResolver(compilerOptions);
         const defaultResolution = await resolver.resolveModuleName("pkg", "/src");
-        assert.equal(defaultResolution.result?.resolvedFileName, "/node_modules/pkg/index.d.ts");
+        assert.equal(defaultResolution.resolvedModule?.resolvedFileName, "/node_modules/pkg/index.d.ts");
         assert.ok(defaultResolution.trace?.length);
         const fallbackResolver = await snapshot.createModuleResolver(compilerOptions, {
             moduleResolutions: { fallback: "resolve", entries: [] },
         });
         assert.equal(
-            (await fallbackResolver.resolveModuleName("pkg", "/src")).result?.resolvedFileName,
+            (await fallbackResolver.resolveModuleName("pkg", "/src")).resolvedModule?.resolvedFileName,
             "/node_modules/pkg/index.d.ts",
         );
 
@@ -523,10 +523,10 @@ import "missing";`,
         });
         const overriddenResolver = await snapshot.createModuleResolver(compilerOptions, { moduleResolutions: set });
         assert.equal(
-            (await overriddenResolver.resolveModuleName("pkg", "/src")).result?.resolvedFileName,
+            (await overriddenResolver.resolveModuleName("pkg", "/src")).resolvedModule?.resolvedFileName,
             "/provided.d.ts",
         );
-        assert.equal((await overriddenResolver.resolveModuleName("missing", "/src")).result, undefined);
+        assert.equal((await overriddenResolver.resolveModuleName("missing", "/src")).resolvedModule, undefined);
 
         const program = await api.createProgram(
             ["/src/main.ts"],
@@ -552,7 +552,7 @@ import "missing";`,
 
         await set.dispose();
         assert.equal(
-            (await overriddenResolver.resolveModuleName("pkg", "/src")).result?.resolvedFileName,
+            (await overriddenResolver.resolveModuleName("pkg", "/src")).resolvedModule?.resolvedFileName,
             "/provided.d.ts",
         );
         const createFromDisposedSet = () => snapshot.createModuleResolver(compilerOptions, { moduleResolutions: set });

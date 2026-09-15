@@ -876,10 +876,9 @@ func (p *fileLoader) resolveImportsAndModuleAugmentations(t *parseTask) {
 			var trace []module.DiagAndArgs
 			if p.opts.ModuleResolutionProvider != nil {
 				var provided bool
-				var providedResolution *module.ProvidedModuleResolution
-				providedResolution, provided = p.opts.ModuleResolutionProvider.GetModuleResolution(moduleName, tspath.GetDirectoryPath(fileName), mode)
-				if provided {
-					resolvedModule = p.resolver.ResolveProvidedModule(moduleName, providedResolution)
+				resolvedModule, provided = p.opts.ModuleResolutionProvider.GetModuleResolution(moduleName, tspath.GetDirectoryPath(fileName), mode)
+				if provided && resolvedModule == nil {
+					resolvedModule = &module.ResolvedModule{}
 				}
 				if !provided {
 					resolvedModule, trace = p.resolver.ResolveModuleName(moduleName, fileName, mode, redirect)
