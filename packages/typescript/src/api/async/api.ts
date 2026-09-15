@@ -3,6 +3,7 @@ import { CompletionItemKind } from "#enums/completionItemKind";
 import { DiagnosticCategory } from "#enums/diagnosticCategory";
 import { ElementFlags } from "#enums/elementFlags";
 import { EmitOnly } from "#enums/emitOnly";
+import { IndexKind } from "#enums/indexKind";
 import { JsxEmit } from "#enums/jsxEmit";
 import { ModuleKind } from "#enums/moduleKind";
 import { ModuleResolutionKind } from "#enums/moduleResolutionKind";
@@ -17,8 +18,10 @@ import { TypeFormatFlags } from "#enums/typeFormatFlags";
 import { TypePredicateKind } from "#enums/typePredicateKind";
 import {
     type __String,
+    type CallLikeExpression,
     type Declaration,
     type Expression,
+    type FileReference,
     type Identifier,
     type IndexSignatureDeclaration,
     ModifierFlags,
@@ -27,6 +30,7 @@ import {
     type ParameterDeclaration,
     type Path,
     type SourceFile,
+    type StringLiteralLikeNode,
     type SyntaxKind,
     type TypeNode,
     unescapeLeadingUnderscores,
@@ -68,11 +72,14 @@ import type {
     InferredProjectId,
     IntrinsicTypeMethod,
     LanguageServerSnapshotChanges,
+    PackageId,
     ParsedCommandLine,
     ProjectId,
     ProjectReference,
     ProjectResponse,
     ReadConfigFileResponse,
+    ResolvedModule,
+    ResolvedTypeReferenceDirective,
     SignaturePropertyMethod,
     SignatureResponse,
     SourceFileMetadata,
@@ -148,7 +155,7 @@ import type {
 
 export { formatDiagnostics, formatDiagnosticsWithColorAndContext } from "../diagnosticFormatter.ts";
 export { documentURIToFileName, fileNameToDocumentURI } from "../path.ts";
-export { CheckFlags, CompletionItemKind, DiagnosticCategory, ElementFlags, EmitOnly, JsxEmit, ModifierFlags, ModuleKind, ModuleResolutionKind, NodeBuilderFlags, ObjectFlags, SignatureFlags, SignatureKind, SymbolFlags, TypeFlags, TypeFormatFlags, TypePredicateKind };
+export { CheckFlags, CompletionItemKind, DiagnosticCategory, ElementFlags, EmitOnly, IndexKind, JsxEmit, ModifierFlags, ModuleKind, ModuleResolutionKind, NodeBuilderFlags, ObjectFlags, SignatureFlags, SignatureKind, SymbolFlags, TypeFlags, TypeFormatFlags, TypePredicateKind };
 export type {
     APIFileChanges,
     APIImportAdderAction as ImportAdderAction,
@@ -191,11 +198,14 @@ export type {
     LSPConnectionOptions,
     NumberLiteralType,
     ObjectType,
+    PackageId,
     ParsedCommandLine,
     ProjectId,
     ProjectReference,
     ReadConfigFileResponse,
     RequestTiming,
+    ResolvedModule,
+    ResolvedTypeReferenceDirective,
     SourceFileMetadata,
     StringLiteralType,
     StringMappingType,
@@ -227,8 +237,8 @@ export interface TranspileOptions {
 
 export interface TranspileOutput {
     outputText: string;
-    diagnostics?: readonly Diagnostic[];
-    sourceMapText?: string;
+    diagnostics?: readonly Diagnostic[] | undefined;
+    sourceMapText?: string | undefined;
 }
 
 // @sync-only-start
@@ -1197,8 +1207,8 @@ export class LanguageService {
             project: this.project.id,
             file: document,
             position,
-            ...(options?.triggerCharacter !== undefined ? { triggerCharacter: options.triggerCharacter } : {}),
-            ...(options?.includeSymbol !== undefined ? { includeSymbol: options.includeSymbol } : {}),
+            triggerCharacter: options?.triggerCharacter,
+            includeSymbol: options?.includeSymbol,
         });
         if (!data) return undefined;
         return {
@@ -1306,6 +1316,63 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
         return this.sourceFileCache.set(path, sourceFile, parseOptionsKey, contentHash, this.snapshotId, this.project.id);
     }
 
+    async getResolvedModule(
+        file: DocumentIdentifier,
+        moduleName: string,
+        mode: ModuleKind,
+    ): Promise<ResolvedModule | undefined> {
+        const result = await this.client.apiRequest("getResolvedModule", {
+            snapshot: this.snapshotId,
+            project: this.project.id,
+            file,
+            moduleName,
+            mode,
+        });
+        return result ?? undefined;
+    }
+
+    async getResolvedModuleFromModuleSpecifier(
+        moduleSpecifier: StringLiteralLikeNode,
+        sourceFile?: DocumentIdentifier,
+    ): Promise<ResolvedModule | undefined> {
+        const result = await this.client.apiRequest("getResolvedModuleFromModuleSpecifier", {
+            snapshot: this.snapshotId,
+            project: this.project.id,
+            moduleSpecifier: getNodeId(moduleSpecifier),
+            sourceFile,
+        });
+        return result ?? undefined;
+    }
+
+    async getResolvedTypeReferenceDirective(
+        file: DocumentIdentifier,
+        typeDirectiveName: string,
+        mode: ModuleKind,
+    ): Promise<ResolvedTypeReferenceDirective | undefined> {
+        const result = await this.client.apiRequest("getResolvedTypeReferenceDirective", {
+            snapshot: this.snapshotId,
+            project: this.project.id,
+            file,
+            typeDirectiveName,
+            mode,
+        });
+        return result ?? undefined;
+    }
+
+    async getResolvedTypeReferenceDirectiveFromTypeReferenceDirective(
+        typeReferenceDirective: FileReference,
+        sourceFile: DocumentIdentifier,
+    ): Promise<ResolvedTypeReferenceDirective | undefined> {
+        const result = await this.client.apiRequest("getResolvedTypeReferenceDirectiveFromTypeReferenceDirective", {
+            snapshot: this.snapshotId,
+            project: this.project.id,
+            sourceFile,
+            typeDirectiveName: typeReferenceDirective.fileName,
+            resolutionMode: typeReferenceDirective.resolutionMode,
+        });
+        return result ?? undefined;
+    }
+
     async getSourceFileNames(): Promise<readonly string[]> {
         const data = await this.client.apiRequest("getSourceFileNames", {
             snapshot: this.snapshotId,
@@ -1407,7 +1474,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
         const data = await this.client.apiRequest("getSyntacticDiagnostics", {
             snapshot: this.snapshotId,
             project: this.project.id,
-            ...(files !== undefined ? { files } : {}),
+            files,
         });
         return data ?? [];
     }
@@ -1423,7 +1490,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
         const data = await this.client.apiRequest("getBindDiagnostics", {
             snapshot: this.snapshotId,
             project: this.project.id,
-            ...(files !== undefined ? { files } : {}),
+            files,
         });
         return data ?? [];
     }
@@ -1439,7 +1506,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
         const data = await this.client.apiRequest("getSemanticDiagnostics", {
             snapshot: this.snapshotId,
             project: this.project.id,
-            ...(files !== undefined ? { files } : {}),
+            files,
         });
         return data ?? [];
     }
@@ -1455,7 +1522,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
         const data = await this.client.apiRequest("getSuggestionDiagnostics", {
             snapshot: this.snapshotId,
             project: this.project.id,
-            ...(files !== undefined ? { files } : {}),
+            files,
         });
         return data ?? [];
     }
@@ -1471,7 +1538,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
         const data = await this.client.apiRequest("getDeclarationDiagnostics", {
             snapshot: this.snapshotId,
             project: this.project.id,
-            ...(files !== undefined ? { files } : {}),
+            files,
         });
         return data ?? [];
     }
@@ -1518,7 +1585,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
         const response = await this.client.apiRequest("emit", {
             snapshot: this.snapshotId,
             project: this.project.id,
-            ...(emitOnly !== undefined ? { emitOnly } : {}),
+            emitOnly,
         });
         const fileSystem = response.emittedFilesContents.length
             ? {
@@ -1541,7 +1608,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
         const response = await this.client.apiRequest("emitToString", {
             snapshot: this.snapshotId,
             project: this.project.id,
-            ...(emitOnly !== undefined ? { emitOnly } : {}),
+            emitOnly,
         });
         return toEmitOutput(response);
     }
@@ -1824,14 +1891,10 @@ export class Checker {
             project: this.project.id,
             name,
             meaning,
-            ...(isNode ? { location: getNodeId(location as Node) } : {}),
-            ...(!isNode && location
-                ? {
-                    file: (location as DocumentPosition).document,
-                    position: (location as DocumentPosition).position,
-                }
-                : {}),
-            ...(excludeGlobals !== undefined ? { excludeGlobals } : {}),
+            location: isNode ? getNodeId(location as Node) : undefined,
+            file: !isNode && location ? (location as DocumentPosition).document : undefined,
+            position: !isNode && location ? (location as DocumentPosition).position : undefined,
+            excludeGlobals,
         });
         return data ? this.objectRegistry.getOrCreateSymbol(data) : undefined;
     }
@@ -1846,12 +1909,9 @@ export class Checker {
             snapshot: this.snapshotId,
             project: this.project.id,
             meaning,
-            ...(isNode
-                ? { location: getNodeId(location as Node) }
-                : {
-                    file: (location as DocumentPosition).document,
-                    position: (location as DocumentPosition).position,
-                }),
+            location: isNode ? getNodeId(location as Node) : undefined,
+            file: isNode ? undefined : (location as DocumentPosition).document,
+            position: isNode ? undefined : (location as DocumentPosition).position,
         });
         return data ? data.map(d => this.objectRegistry.getOrCreateSymbol(d)) : [];
     }
@@ -1867,6 +1927,25 @@ export class Checker {
             snapshot: this.snapshotId,
             project: this.project.id,
             location: getNodeId(node),
+        });
+        return data ? this.objectRegistry.getOrCreateType(data) : undefined;
+    }
+
+    async getContextualTypeForArgumentAtIndex(node: CallLikeExpression, argIndex: number): Promise<Type | undefined> {
+        const data = await this.client.apiRequest("getContextualTypeForArgument", {
+            snapshot: this.snapshotId,
+            project: this.project.id,
+            location: getNodeId(node),
+            index: argIndex,
+        });
+        return data ? this.objectRegistry.getOrCreateType(data) : undefined;
+    }
+
+    async getAwaitedType(type: Type): Promise<Type | undefined> {
+        const data = await this.client.apiRequest("getAwaitedType", {
+            snapshot: this.snapshotId,
+            project: this.project.id,
+            type: type.id,
         });
         return data ? this.objectRegistry.getOrCreateType(data) : undefined;
     }
@@ -2015,8 +2094,8 @@ export class Checker {
             snapshot: this.snapshotId,
             project: this.project.id,
             type: type.id,
-            ...(enclosingDeclaration ? { location: getNodeId(enclosingDeclaration) } : {}),
-            ...(flags !== undefined ? { flags } : {}),
+            location: enclosingDeclaration ? getNodeId(enclosingDeclaration) : undefined,
+            flags,
         });
         if (!binaryData) return undefined;
         return decodeNode(binaryData) as TypeNode;
@@ -2028,8 +2107,8 @@ export class Checker {
             project: this.project.id,
             signature: signature.id,
             kind,
-            ...(enclosingDeclaration ? { location: getNodeId(enclosingDeclaration) } : {}),
-            ...(flags !== undefined ? { flags } : {}),
+            location: enclosingDeclaration ? getNodeId(enclosingDeclaration) : undefined,
+            flags,
         });
         if (!binaryData) return undefined;
         return decodeNode(binaryData) as Node;
@@ -2040,8 +2119,8 @@ export class Checker {
             snapshot: this.snapshotId,
             project: this.project.id,
             type: type.id,
-            ...(enclosingDeclaration ? { location: getNodeId(enclosingDeclaration) } : {}),
-            ...(flags !== undefined ? { flags } : {}),
+            location: enclosingDeclaration ? getNodeId(enclosingDeclaration) : undefined,
+            flags,
         });
         if (typeof result !== "string") throw new TypeError("typeToString returned a non-string result");
         return result;
@@ -2145,6 +2224,41 @@ export class Checker {
 
     async getIndexInfosOfType(type: Type): Promise<readonly IndexInfo[]> {
         return type.getIndexInfos();
+    }
+
+    async getIndexInfoOfType(type: Type, kind: IndexKind): Promise<IndexInfo | undefined> {
+        const data = await this.client.apiRequest("getIndexInfoOfType", {
+            snapshot: this.snapshotId,
+            project: this.project.id,
+            type: type.id,
+            kind,
+        });
+        return data ? {
+            keyType: this.objectRegistry.getOrCreateType(data.keyType),
+            valueType: this.objectRegistry.getOrCreateType(data.valueType),
+            isReadonly: data.isReadonly ?? false,
+            declaration: data.declaration ? new NodeHandle<IndexSignatureDeclaration>(data.declaration, this.project) : undefined,
+        } : undefined;
+    }
+
+    async getIndexTypeOfType(type: Type, kind: IndexKind): Promise<Type | undefined> {
+        const data = await this.client.apiRequest("getIndexTypeOfTypeByKind", {
+            snapshot: this.snapshotId,
+            project: this.project.id,
+            type: type.id,
+            kind,
+        });
+        return data ? this.objectRegistry.getOrCreateType(data) : undefined;
+    }
+
+    async getTypeOfPropertyOfType(type: Type, propertyName: string): Promise<Type | undefined> {
+        const data = await this.client.apiRequest("getTypeOfPropertyOfType", {
+            snapshot: this.snapshotId,
+            project: this.project.id,
+            type: type.id,
+            name: propertyName,
+        });
+        return data ? this.objectRegistry.getOrCreateType(data) : undefined;
     }
 
     /**
@@ -2254,6 +2368,15 @@ export class Checker {
             return this.objectRegistry.getOrCreateSymbol(data);
         }
         return symbol;
+    }
+
+    async getExportSymbolOfSymbol(symbol: Symbol): Promise<Symbol> {
+        const data = await this.client.apiRequest("getExportSymbolOfSymbolForChecker", {
+            snapshot: this.snapshotId,
+            project: this.project.id,
+            symbol: symbol.id,
+        });
+        return this.objectRegistry.getOrCreateSymbol(data);
     }
 
     /**
@@ -2379,9 +2502,9 @@ export class Emitter {
         const base64 = uint8ArrayToBase64(encoded);
         return this.client.apiRequest("printNode", {
             data: base64,
-            ...(options.preserveSourceNewlines !== undefined ? { preserveSourceNewlines: options.preserveSourceNewlines } : {}),
-            ...(options.neverAsciiEscape !== undefined ? { neverAsciiEscape: options.neverAsciiEscape } : {}),
-            ...(options.terminateUnterminatedLiterals !== undefined ? { terminateUnterminatedLiterals: options.terminateUnterminatedLiterals } : {}),
+            preserveSourceNewlines: options.preserveSourceNewlines,
+            neverAsciiEscape: options.neverAsciiEscape,
+            terminateUnterminatedLiterals: options.terminateUnterminatedLiterals,
         });
     }
 }
@@ -2581,6 +2704,7 @@ class TypeObject implements Type {
     readonly typeParameters!: readonly number[];
     readonly outerTypeParameters!: readonly number[];
     readonly localTypeParameters!: readonly number[];
+    readonly thisType!: number;
     readonly aliasTypeArguments!: readonly number[];
     readonly aliasSymbol!: number;
     readonly elementFlags!: readonly ElementFlags[];
@@ -2638,6 +2762,7 @@ class TypeObject implements Type {
         this.typeParameters = data.typeParameters ?? [];
         this.outerTypeParameters = data.outerTypeParameters ?? [];
         this.localTypeParameters = data.localTypeParameters ?? [];
+        if (data.thisType !== undefined) this.thisType = data.thisType;
         this.aliasTypeArguments = data.aliasTypeArguments ?? [];
         if (data.aliasSymbol !== undefined) this.aliasSymbol = data.aliasSymbol;
         if (data.fixedLength !== undefined) {
@@ -2794,6 +2919,10 @@ class TypeObject implements Type {
 
     async getLocalTypeParameters(): Promise<readonly TypeParameter[]> {
         return this.objectRegistry.fetchTypes(this, "getLocalTypeParametersOfType", this.localTypeParameters) as Promise<readonly TypeParameter[]>;
+    }
+
+    async getThisType(): Promise<TypeParameter | undefined> {
+        return this.objectRegistry.fetchOptionalType(this, "getThisTypeOfType", this.thisType) as Promise<TypeParameter | undefined>;
     }
 
     async getAliasTypeArguments(): Promise<readonly Type[]> {

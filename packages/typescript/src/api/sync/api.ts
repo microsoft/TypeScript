@@ -20,6 +20,7 @@ import { CompletionItemKind } from "#enums/completionItemKind";
 import { DiagnosticCategory } from "#enums/diagnosticCategory";
 import { ElementFlags } from "#enums/elementFlags";
 import { EmitOnly } from "#enums/emitOnly";
+import { IndexKind } from "#enums/indexKind";
 import { JsxEmit } from "#enums/jsxEmit";
 import { ModuleKind } from "#enums/moduleKind";
 import { ModuleResolutionKind } from "#enums/moduleResolutionKind";
@@ -34,8 +35,10 @@ import { TypeFormatFlags } from "#enums/typeFormatFlags";
 import { TypePredicateKind } from "#enums/typePredicateKind";
 import {
     type __String,
+    type CallLikeExpression,
     type Declaration,
     type Expression,
+    type FileReference,
     type Identifier,
     type IndexSignatureDeclaration,
     ModifierFlags,
@@ -44,6 +47,7 @@ import {
     type ParameterDeclaration,
     type Path,
     type SourceFile,
+    type StringLiteralLikeNode,
     type SyntaxKind,
     type TypeNode,
     unescapeLeadingUnderscores,
@@ -85,11 +89,14 @@ import type {
     InferredProjectId,
     IntrinsicTypeMethod,
     LanguageServerSnapshotChanges,
+    PackageId,
     ParsedCommandLine,
     ProjectId,
     ProjectReference,
     ProjectResponse,
     ReadConfigFileResponse,
+    ResolvedModule,
+    ResolvedTypeReferenceDirective,
     SignaturePropertyMethod,
     SignatureResponse,
     SourceFileMetadata,
@@ -165,7 +172,7 @@ import type {
 
 export { formatDiagnostics, formatDiagnosticsWithColorAndContext } from "../diagnosticFormatter.ts";
 export { documentURIToFileName, fileNameToDocumentURI } from "../path.ts";
-export { CheckFlags, CompletionItemKind, DiagnosticCategory, ElementFlags, EmitOnly, JsxEmit, ModifierFlags, ModuleKind, ModuleResolutionKind, NodeBuilderFlags, ObjectFlags, SignatureFlags, SignatureKind, SymbolFlags, TypeFlags, TypeFormatFlags, TypePredicateKind };
+export { CheckFlags, CompletionItemKind, DiagnosticCategory, ElementFlags, EmitOnly, IndexKind, JsxEmit, ModifierFlags, ModuleKind, ModuleResolutionKind, NodeBuilderFlags, ObjectFlags, SignatureFlags, SignatureKind, SymbolFlags, TypeFlags, TypeFormatFlags, TypePredicateKind };
 export type {
     APIFileChanges,
     APIImportAdderAction as ImportAdderAction,
@@ -208,11 +215,14 @@ export type {
     LSPConnectionOptions,
     NumberLiteralType,
     ObjectType,
+    PackageId,
     ParsedCommandLine,
     ProjectId,
     ProjectReference,
     ReadConfigFileResponse,
     RequestTiming,
+    ResolvedModule,
+    ResolvedTypeReferenceDirective,
     SourceFileMetadata,
     StringLiteralType,
     StringMappingType,
@@ -244,8 +254,8 @@ export interface TranspileOptions {
 
 export interface TranspileOutput {
     outputText: string;
-    diagnostics?: readonly Diagnostic[];
-    sourceMapText?: string;
+    diagnostics?: readonly Diagnostic[] | undefined;
+    sourceMapText?: string | undefined;
 }
 
 export { all, type AllAPIRequestGenerator, type AnyAPIRequestGenerator, type APIRequestGenerator, defer, type DeferredAPIRequestGenerator, type ExecutedGeneratorsResults } from "./generatorSupport.ts";
@@ -2179,8 +2189,8 @@ export class LanguageService {
                     project: owner.project.id,
                     file: document,
                     position,
-                    ...(options?.triggerCharacter !== undefined ? { triggerCharacter: options.triggerCharacter } : {}),
-                    ...(options?.includeSymbol !== undefined ? { includeSymbol: options.includeSymbol } : {}),
+                    triggerCharacter: options?.triggerCharacter,
+                    includeSymbol: options?.includeSymbol,
                 });
                 if (!data) return undefined;
                 return {
@@ -2197,8 +2207,8 @@ export class LanguageService {
                     project: owner.project.id,
                     file: document,
                     position,
-                    ...(options?.triggerCharacter !== undefined ? { triggerCharacter: options.triggerCharacter } : {}),
-                    ...(options?.includeSymbol !== undefined ? { includeSymbol: options.includeSymbol } : {}),
+                    triggerCharacter: options?.triggerCharacter,
+                    includeSymbol: options?.includeSymbol,
                 });
                 if (!data) return undefined;
                 return {
@@ -2370,6 +2380,128 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
                 // Create a new RemoteSourceFile and cache it (set returns existing if hash matches)
                 const sourceFile = new RemoteSourceFile(binaryData, owner.decoder, owner.client.getTimingCollector()) as unknown as SourceFile;
                 return owner.sourceFileCache.set(path, sourceFile, parseOptionsKey, contentHash, owner.snapshotId, owner.project.id);
+            },
+        );
+    }
+
+    get getResolvedModule(): {
+        (file: DocumentIdentifier, moduleName: string, mode: ModuleKind): ResolvedModule | undefined;
+        gen(file: DocumentIdentifier, moduleName: string, mode: ModuleKind): Generator<ProtocolRequest, ResolvedModule | undefined, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getResolvedModule",
+            function (file: DocumentIdentifier, moduleName: string, mode: ModuleKind): ResolvedModule | undefined {
+                const result = owner.client.apiRequest("getResolvedModule", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.id,
+                    file,
+                    moduleName,
+                    mode,
+                });
+                return result ?? undefined;
+            },
+            function* (file: DocumentIdentifier, moduleName: string, mode: ModuleKind): Generator<ProtocolRequest, ResolvedModule | undefined, ProtocolResponse["result"]> {
+                const result = yield* apiRequest("getResolvedModule", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.id,
+                    file,
+                    moduleName,
+                    mode,
+                });
+                return result ?? undefined;
+            },
+        );
+    }
+
+    get getResolvedModuleFromModuleSpecifier(): {
+        (moduleSpecifier: StringLiteralLikeNode, sourceFile?: DocumentIdentifier): ResolvedModule | undefined;
+        gen(moduleSpecifier: StringLiteralLikeNode, sourceFile?: DocumentIdentifier): Generator<ProtocolRequest, ResolvedModule | undefined, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getResolvedModuleFromModuleSpecifier",
+            function (moduleSpecifier: StringLiteralLikeNode, sourceFile?: DocumentIdentifier): ResolvedModule | undefined {
+                const result = owner.client.apiRequest("getResolvedModuleFromModuleSpecifier", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.id,
+                    moduleSpecifier: getNodeId(moduleSpecifier),
+                    sourceFile,
+                });
+                return result ?? undefined;
+            },
+            function* (moduleSpecifier: StringLiteralLikeNode, sourceFile?: DocumentIdentifier): Generator<ProtocolRequest, ResolvedModule | undefined, ProtocolResponse["result"]> {
+                const result = yield* apiRequest("getResolvedModuleFromModuleSpecifier", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.id,
+                    moduleSpecifier: getNodeId(moduleSpecifier),
+                    sourceFile,
+                });
+                return result ?? undefined;
+            },
+        );
+    }
+
+    get getResolvedTypeReferenceDirective(): {
+        (file: DocumentIdentifier, typeDirectiveName: string, mode: ModuleKind): ResolvedTypeReferenceDirective | undefined;
+        gen(file: DocumentIdentifier, typeDirectiveName: string, mode: ModuleKind): Generator<ProtocolRequest, ResolvedTypeReferenceDirective | undefined, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getResolvedTypeReferenceDirective",
+            function (file: DocumentIdentifier, typeDirectiveName: string, mode: ModuleKind): ResolvedTypeReferenceDirective | undefined {
+                const result = owner.client.apiRequest("getResolvedTypeReferenceDirective", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.id,
+                    file,
+                    typeDirectiveName,
+                    mode,
+                });
+                return result ?? undefined;
+            },
+            function* (file: DocumentIdentifier, typeDirectiveName: string, mode: ModuleKind): Generator<ProtocolRequest, ResolvedTypeReferenceDirective | undefined, ProtocolResponse["result"]> {
+                const result = yield* apiRequest("getResolvedTypeReferenceDirective", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.id,
+                    file,
+                    typeDirectiveName,
+                    mode,
+                });
+                return result ?? undefined;
+            },
+        );
+    }
+
+    get getResolvedTypeReferenceDirectiveFromTypeReferenceDirective(): {
+        (typeReferenceDirective: FileReference, sourceFile: DocumentIdentifier): ResolvedTypeReferenceDirective | undefined;
+        gen(typeReferenceDirective: FileReference, sourceFile: DocumentIdentifier): Generator<ProtocolRequest, ResolvedTypeReferenceDirective | undefined, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getResolvedTypeReferenceDirectiveFromTypeReferenceDirective",
+            function (typeReferenceDirective: FileReference, sourceFile: DocumentIdentifier): ResolvedTypeReferenceDirective | undefined {
+                const result = owner.client.apiRequest("getResolvedTypeReferenceDirectiveFromTypeReferenceDirective", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.id,
+                    sourceFile,
+                    typeDirectiveName: typeReferenceDirective.fileName,
+                    resolutionMode: typeReferenceDirective.resolutionMode,
+                });
+                return result ?? undefined;
+            },
+            function* (typeReferenceDirective: FileReference, sourceFile: DocumentIdentifier): Generator<ProtocolRequest, ResolvedTypeReferenceDirective | undefined, ProtocolResponse["result"]> {
+                const result = yield* apiRequest("getResolvedTypeReferenceDirectiveFromTypeReferenceDirective", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.id,
+                    sourceFile,
+                    typeDirectiveName: typeReferenceDirective.fileName,
+                    resolutionMode: typeReferenceDirective.resolutionMode,
+                });
+                return result ?? undefined;
             },
         );
     }
@@ -2616,7 +2748,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
                 const data = owner.client.apiRequest("getSyntacticDiagnostics", {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
-                    ...(files !== undefined ? { files } : {}),
+                    files,
                 });
                 return data ?? [];
             },
@@ -2627,7 +2759,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
                 const data = yield* apiRequest("getSyntacticDiagnostics", {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
-                    ...(files !== undefined ? { files } : {}),
+                    files,
                 });
                 return data ?? [];
             },
@@ -2653,7 +2785,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
                 const data = owner.client.apiRequest("getBindDiagnostics", {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
-                    ...(files !== undefined ? { files } : {}),
+                    files,
                 });
                 return data ?? [];
             },
@@ -2664,7 +2796,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
                 const data = yield* apiRequest("getBindDiagnostics", {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
-                    ...(files !== undefined ? { files } : {}),
+                    files,
                 });
                 return data ?? [];
             },
@@ -2690,7 +2822,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
                 const data = owner.client.apiRequest("getSemanticDiagnostics", {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
-                    ...(files !== undefined ? { files } : {}),
+                    files,
                 });
                 return data ?? [];
             },
@@ -2701,7 +2833,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
                 const data = yield* apiRequest("getSemanticDiagnostics", {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
-                    ...(files !== undefined ? { files } : {}),
+                    files,
                 });
                 return data ?? [];
             },
@@ -2727,7 +2859,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
                 const data = owner.client.apiRequest("getSuggestionDiagnostics", {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
-                    ...(files !== undefined ? { files } : {}),
+                    files,
                 });
                 return data ?? [];
             },
@@ -2738,7 +2870,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
                 const data = yield* apiRequest("getSuggestionDiagnostics", {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
-                    ...(files !== undefined ? { files } : {}),
+                    files,
                 });
                 return data ?? [];
             },
@@ -2764,7 +2896,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
                 const data = owner.client.apiRequest("getDeclarationDiagnostics", {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
-                    ...(files !== undefined ? { files } : {}),
+                    files,
                 });
                 return data ?? [];
             },
@@ -2775,7 +2907,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
                 const data = yield* apiRequest("getDeclarationDiagnostics", {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
-                    ...(files !== undefined ? { files } : {}),
+                    files,
                 });
                 return data ?? [];
             },
@@ -2883,7 +3015,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
                 const response = owner.client.apiRequest("emit", {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
-                    ...(emitOnly !== undefined ? { emitOnly } : {}),
+                    emitOnly,
                 });
                 const fileSystem = response.emittedFilesContents.length
                     ? {
@@ -2902,7 +3034,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
                 const response = yield* apiRequest("emit", {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
-                    ...(emitOnly !== undefined ? { emitOnly } : {}),
+                    emitOnly,
                 });
                 const fileSystem = response.emittedFilesContents.length
                     ? {
@@ -2935,7 +3067,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
                 const response = owner.client.apiRequest("emitToString", {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
-                    ...(emitOnly !== undefined ? { emitOnly } : {}),
+                    emitOnly,
                 });
                 return toEmitOutput(response);
             },
@@ -2943,7 +3075,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
                 const response = yield* apiRequest("emitToString", {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
-                    ...(emitOnly !== undefined ? { emitOnly } : {}),
+                    emitOnly,
                 });
                 return toEmitOutput(response);
             },
@@ -3558,14 +3690,10 @@ export class Checker {
                     project: owner.project.id,
                     name,
                     meaning,
-                    ...(isNode ? { location: getNodeId(location as Node) } : {}),
-                    ...(!isNode && location
-                        ? {
-                            file: (location as DocumentPosition).document,
-                            position: (location as DocumentPosition).position,
-                        }
-                        : {}),
-                    ...(excludeGlobals !== undefined ? { excludeGlobals } : {}),
+                    location: isNode ? getNodeId(location as Node) : undefined,
+                    file: !isNode && location ? (location as DocumentPosition).document : undefined,
+                    position: !isNode && location ? (location as DocumentPosition).position : undefined,
+                    excludeGlobals,
                 });
                 return data ? owner.objectRegistry.getOrCreateSymbol(data) : undefined;
             },
@@ -3577,14 +3705,10 @@ export class Checker {
                     project: owner.project.id,
                     name,
                     meaning,
-                    ...(isNode ? { location: getNodeId(location as Node) } : {}),
-                    ...(!isNode && location
-                        ? {
-                            file: (location as DocumentPosition).document,
-                            position: (location as DocumentPosition).position,
-                        }
-                        : {}),
-                    ...(excludeGlobals !== undefined ? { excludeGlobals } : {}),
+                    location: isNode ? getNodeId(location as Node) : undefined,
+                    file: !isNode && location ? (location as DocumentPosition).document : undefined,
+                    position: !isNode && location ? (location as DocumentPosition).position : undefined,
+                    excludeGlobals,
                 });
                 return data ? owner.objectRegistry.getOrCreateSymbol(data) : undefined;
             },
@@ -3609,12 +3733,9 @@ export class Checker {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
                     meaning,
-                    ...(isNode
-                        ? { location: getNodeId(location as Node) }
-                        : {
-                            file: (location as DocumentPosition).document,
-                            position: (location as DocumentPosition).position,
-                        }),
+                    location: isNode ? getNodeId(location as Node) : undefined,
+                    file: isNode ? undefined : (location as DocumentPosition).document,
+                    position: isNode ? undefined : (location as DocumentPosition).position,
                 });
                 return data ? data.map(d => owner.objectRegistry.getOrCreateSymbol(d)) : [];
             },
@@ -3625,12 +3746,9 @@ export class Checker {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
                     meaning,
-                    ...(isNode
-                        ? { location: getNodeId(location as Node) }
-                        : {
-                            file: (location as DocumentPosition).document,
-                            position: (location as DocumentPosition).position,
-                        }),
+                    location: isNode ? getNodeId(location as Node) : undefined,
+                    file: isNode ? undefined : (location as DocumentPosition).document,
+                    position: isNode ? undefined : (location as DocumentPosition).position,
                 });
                 return data ? data.map(d => owner.objectRegistry.getOrCreateSymbol(d)) : [];
             },
@@ -3679,6 +3797,62 @@ export class Checker {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
                     location: getNodeId(node),
+                });
+                return data ? owner.objectRegistry.getOrCreateType(data) : undefined;
+            },
+        );
+    }
+
+    get getContextualTypeForArgumentAtIndex(): {
+        (node: CallLikeExpression, argIndex: number): Type | undefined;
+        gen(node: CallLikeExpression, argIndex: number): Generator<ProtocolRequest, Type | undefined, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getContextualTypeForArgumentAtIndex",
+            function (node: CallLikeExpression, argIndex: number): Type | undefined {
+                const data = owner.client.apiRequest("getContextualTypeForArgument", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.id,
+                    location: getNodeId(node),
+                    index: argIndex,
+                });
+                return data ? owner.objectRegistry.getOrCreateType(data) : undefined;
+            },
+            function* (node: CallLikeExpression, argIndex: number): Generator<ProtocolRequest, Type | undefined, ProtocolResponse["result"]> {
+                const data = yield* apiRequest("getContextualTypeForArgument", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.id,
+                    location: getNodeId(node),
+                    index: argIndex,
+                });
+                return data ? owner.objectRegistry.getOrCreateType(data) : undefined;
+            },
+        );
+    }
+
+    get getAwaitedType(): {
+        (type: Type): Type | undefined;
+        gen(type: Type): Generator<ProtocolRequest, Type | undefined, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getAwaitedType",
+            function (type: Type): Type | undefined {
+                const data = owner.client.apiRequest("getAwaitedType", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.id,
+                    type: type.id,
+                });
+                return data ? owner.objectRegistry.getOrCreateType(data) : undefined;
+            },
+            function* (type: Type): Generator<ProtocolRequest, Type | undefined, ProtocolResponse["result"]> {
+                const data = yield* apiRequest("getAwaitedType", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.id,
+                    type: type.id,
                 });
                 return data ? owner.objectRegistry.getOrCreateType(data) : undefined;
             },
@@ -4168,8 +4342,8 @@ export class Checker {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
                     type: type.id,
-                    ...(enclosingDeclaration ? { location: getNodeId(enclosingDeclaration) } : {}),
-                    ...(flags !== undefined ? { flags } : {}),
+                    location: enclosingDeclaration ? getNodeId(enclosingDeclaration) : undefined,
+                    flags,
                 });
                 if (!binaryData) return undefined;
                 return decodeNode(binaryData) as TypeNode;
@@ -4179,8 +4353,8 @@ export class Checker {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
                     type: type.id,
-                    ...(enclosingDeclaration ? { location: getNodeId(enclosingDeclaration) } : {}),
-                    ...(flags !== undefined ? { flags } : {}),
+                    location: enclosingDeclaration ? getNodeId(enclosingDeclaration) : undefined,
+                    flags,
                 });
                 if (!binaryData) return undefined;
                 return decodeNode(binaryData) as TypeNode;
@@ -4202,8 +4376,8 @@ export class Checker {
                     project: owner.project.id,
                     signature: signature.id,
                     kind,
-                    ...(enclosingDeclaration ? { location: getNodeId(enclosingDeclaration) } : {}),
-                    ...(flags !== undefined ? { flags } : {}),
+                    location: enclosingDeclaration ? getNodeId(enclosingDeclaration) : undefined,
+                    flags,
                 });
                 if (!binaryData) return undefined;
                 return decodeNode(binaryData) as Node;
@@ -4214,8 +4388,8 @@ export class Checker {
                     project: owner.project.id,
                     signature: signature.id,
                     kind,
-                    ...(enclosingDeclaration ? { location: getNodeId(enclosingDeclaration) } : {}),
-                    ...(flags !== undefined ? { flags } : {}),
+                    location: enclosingDeclaration ? getNodeId(enclosingDeclaration) : undefined,
+                    flags,
                 });
                 if (!binaryData) return undefined;
                 return decodeNode(binaryData) as Node;
@@ -4236,8 +4410,8 @@ export class Checker {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
                     type: type.id,
-                    ...(enclosingDeclaration ? { location: getNodeId(enclosingDeclaration) } : {}),
-                    ...(flags !== undefined ? { flags } : {}),
+                    location: enclosingDeclaration ? getNodeId(enclosingDeclaration) : undefined,
+                    flags,
                 });
                 if (typeof result !== "string") throw new TypeError("typeToString returned a non-string result");
                 return result;
@@ -4247,8 +4421,8 @@ export class Checker {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
                     type: type.id,
-                    ...(enclosingDeclaration ? { location: getNodeId(enclosingDeclaration) } : {}),
-                    ...(flags !== undefined ? { flags } : {}),
+                    location: enclosingDeclaration ? getNodeId(enclosingDeclaration) : undefined,
+                    flags,
                 });
                 if (typeof result !== "string") throw new TypeError("typeToString returned a non-string result");
                 return result;
@@ -4553,6 +4727,103 @@ export class Checker {
         );
     }
 
+    get getIndexInfoOfType(): {
+        (type: Type, kind: IndexKind): IndexInfo | undefined;
+        gen(type: Type, kind: IndexKind): Generator<ProtocolRequest, IndexInfo | undefined, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getIndexInfoOfType",
+            function (type: Type, kind: IndexKind): IndexInfo | undefined {
+                const data = owner.client.apiRequest("getIndexInfoOfType", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.id,
+                    type: type.id,
+                    kind,
+                });
+                return data ? {
+                    keyType: owner.objectRegistry.getOrCreateType(data.keyType),
+                    valueType: owner.objectRegistry.getOrCreateType(data.valueType),
+                    isReadonly: data.isReadonly ?? false,
+                    declaration: data.declaration ? new NodeHandle<IndexSignatureDeclaration>(data.declaration, owner.project) : undefined,
+                } : undefined;
+            },
+            function* (type: Type, kind: IndexKind): Generator<ProtocolRequest, IndexInfo | undefined, ProtocolResponse["result"]> {
+                const data = yield* apiRequest("getIndexInfoOfType", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.id,
+                    type: type.id,
+                    kind,
+                });
+                return data ? {
+                    keyType: owner.objectRegistry.getOrCreateType(data.keyType),
+                    valueType: owner.objectRegistry.getOrCreateType(data.valueType),
+                    isReadonly: data.isReadonly ?? false,
+                    declaration: data.declaration ? new NodeHandle<IndexSignatureDeclaration>(data.declaration, owner.project) : undefined,
+                } : undefined;
+            },
+        );
+    }
+
+    get getIndexTypeOfType(): {
+        (type: Type, kind: IndexKind): Type | undefined;
+        gen(type: Type, kind: IndexKind): Generator<ProtocolRequest, Type | undefined, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getIndexTypeOfType",
+            function (type: Type, kind: IndexKind): Type | undefined {
+                const data = owner.client.apiRequest("getIndexTypeOfTypeByKind", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.id,
+                    type: type.id,
+                    kind,
+                });
+                return data ? owner.objectRegistry.getOrCreateType(data) : undefined;
+            },
+            function* (type: Type, kind: IndexKind): Generator<ProtocolRequest, Type | undefined, ProtocolResponse["result"]> {
+                const data = yield* apiRequest("getIndexTypeOfTypeByKind", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.id,
+                    type: type.id,
+                    kind,
+                });
+                return data ? owner.objectRegistry.getOrCreateType(data) : undefined;
+            },
+        );
+    }
+
+    get getTypeOfPropertyOfType(): {
+        (type: Type, propertyName: string): Type | undefined;
+        gen(type: Type, propertyName: string): Generator<ProtocolRequest, Type | undefined, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getTypeOfPropertyOfType",
+            function (type: Type, propertyName: string): Type | undefined {
+                const data = owner.client.apiRequest("getTypeOfPropertyOfType", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.id,
+                    type: type.id,
+                    name: propertyName,
+                });
+                return data ? owner.objectRegistry.getOrCreateType(data) : undefined;
+            },
+            function* (type: Type, propertyName: string): Generator<ProtocolRequest, Type | undefined, ProtocolResponse["result"]> {
+                const data = yield* apiRequest("getTypeOfPropertyOfType", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.id,
+                    type: type.id,
+                    name: propertyName,
+                });
+                return data ? owner.objectRegistry.getOrCreateType(data) : undefined;
+            },
+        );
+    }
+
     /**
      * Get the constraint of a type parameter (the `T` in `<U extends T>`), or
      * undefined if it has none.
@@ -4849,6 +5120,33 @@ export class Checker {
                     return owner.objectRegistry.getOrCreateSymbol(data);
                 }
                 return symbol;
+            },
+        );
+    }
+
+    get getExportSymbolOfSymbol(): {
+        (symbol: Symbol): Symbol;
+        gen(symbol: Symbol): Generator<ProtocolRequest, Symbol, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getExportSymbolOfSymbol",
+            function (symbol: Symbol): Symbol {
+                const data = owner.client.apiRequest("getExportSymbolOfSymbolForChecker", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.id,
+                    symbol: symbol.id,
+                });
+                return owner.objectRegistry.getOrCreateSymbol(data);
+            },
+            function* (symbol: Symbol): Generator<ProtocolRequest, Symbol, ProtocolResponse["result"]> {
+                const data = yield* apiRequest("getExportSymbolOfSymbolForChecker", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.id,
+                    symbol: symbol.id,
+                });
+                return owner.objectRegistry.getOrCreateSymbol(data);
             },
         );
     }
@@ -5158,9 +5456,9 @@ export class Emitter {
                 const base64 = uint8ArrayToBase64(encoded);
                 return owner.client.apiRequest("printNode", {
                     data: base64,
-                    ...(options.preserveSourceNewlines !== undefined ? { preserveSourceNewlines: options.preserveSourceNewlines } : {}),
-                    ...(options.neverAsciiEscape !== undefined ? { neverAsciiEscape: options.neverAsciiEscape } : {}),
-                    ...(options.terminateUnterminatedLiterals !== undefined ? { terminateUnterminatedLiterals: options.terminateUnterminatedLiterals } : {}),
+                    preserveSourceNewlines: options.preserveSourceNewlines,
+                    neverAsciiEscape: options.neverAsciiEscape,
+                    terminateUnterminatedLiterals: options.terminateUnterminatedLiterals,
                 });
             },
             function* (node: Node, options: PrintNodeOptions = {}): Generator<ProtocolRequest, string, ProtocolResponse["result"]> {
@@ -5168,9 +5466,9 @@ export class Emitter {
                 const base64 = uint8ArrayToBase64(encoded);
                 return yield* apiRequest("printNode", {
                     data: base64,
-                    ...(options.preserveSourceNewlines !== undefined ? { preserveSourceNewlines: options.preserveSourceNewlines } : {}),
-                    ...(options.neverAsciiEscape !== undefined ? { neverAsciiEscape: options.neverAsciiEscape } : {}),
-                    ...(options.terminateUnterminatedLiterals !== undefined ? { terminateUnterminatedLiterals: options.terminateUnterminatedLiterals } : {}),
+                    preserveSourceNewlines: options.preserveSourceNewlines,
+                    neverAsciiEscape: options.neverAsciiEscape,
+                    terminateUnterminatedLiterals: options.terminateUnterminatedLiterals,
                 });
             },
         );
@@ -5515,6 +5813,7 @@ class TypeObject implements Type {
     readonly typeParameters!: readonly number[];
     readonly outerTypeParameters!: readonly number[];
     readonly localTypeParameters!: readonly number[];
+    readonly thisType!: number;
     readonly aliasTypeArguments!: readonly number[];
     readonly aliasSymbol!: number;
     readonly elementFlags!: readonly ElementFlags[];
@@ -5572,6 +5871,7 @@ class TypeObject implements Type {
         this.typeParameters = data.typeParameters ?? [];
         this.outerTypeParameters = data.outerTypeParameters ?? [];
         this.localTypeParameters = data.localTypeParameters ?? [];
+        if (data.thisType !== undefined) this.thisType = data.thisType;
         this.aliasTypeArguments = data.aliasTypeArguments ?? [];
         if (data.aliasSymbol !== undefined) this.aliasSymbol = data.aliasSymbol;
         if (data.fixedLength !== undefined) {
@@ -6047,6 +6347,23 @@ class TypeObject implements Type {
             },
             function* (): Generator<ProtocolRequest, readonly TypeParameter[], ProtocolResponse["result"]> {
                 return (yield* owner.objectRegistry.fetchTypes.gen(owner, "getLocalTypeParametersOfType", owner.localTypeParameters)) as readonly TypeParameter[];
+            },
+        );
+    }
+
+    get getThisType(): {
+        (): TypeParameter | undefined;
+        gen(): Generator<ProtocolRequest, TypeParameter | undefined, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getThisType",
+            function (): TypeParameter | undefined {
+                return owner.objectRegistry.fetchOptionalType(owner, "getThisTypeOfType", owner.thisType) as TypeParameter | undefined;
+            },
+            function* (): Generator<ProtocolRequest, TypeParameter | undefined, ProtocolResponse["result"]> {
+                return (yield* owner.objectRegistry.fetchOptionalType.gen(owner, "getThisTypeOfType", owner.thisType)) as TypeParameter | undefined;
             },
         );
     }
