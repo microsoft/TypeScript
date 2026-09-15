@@ -46,12 +46,12 @@
     "packageManager": "npm@11.19.1+sha512.cedb312b1b7f92421a02cfb68b4194e88f8346651dacd6acc5364a25ef5309d4a32b19616a1ff8aff865e7280c0fa5c0835a99f5cd93368991e2a80ec9da75d2",
     "volta": {
         "node": "24.20.0",
-        "npm": "11.17.0"
+        "npm": "11.19.1"
     },
     "allowScripts": {
         "@vscode/vsce-sign@2.1.0": true,
         "keytar@7.9.0": true,
-        "dprint@0.56.1": true,
+        "dprint@0.57.4": true,
         "esbuild@0.28.2": true
     }
 }
