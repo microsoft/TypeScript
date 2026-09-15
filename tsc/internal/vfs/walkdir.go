@@ -18,7 +18,7 @@ import (
 func WalkDir(fileSystem FS, root string, walkFn fs.WalkDirFunc) error {
 	rootInfo := fileSystem.Stat(root)
 	if rootInfo == nil {
-		return walkFn(root, nil, ErrNotExist)
+		return normalizeWalkDirError(walkFn(root, nil, ErrNotExist))
 	}
 
 	useCaseSensitiveFileNames := fileSystem.UseCaseSensitiveFileNames()
@@ -132,16 +132,19 @@ func WalkDir(fileSystem FS, root string, walkFn fs.WalkDirFunc) error {
 			rootEntry = &walkDirEntry{
 				fileSystem: fileSystem,
 				path:       root,
-				name:       rootEntry.Name(),
+				name:       tspath.GetBaseFileName(root),
 				mode:       fs.ModeSymlink,
 			}
 		}
 	}
-	if err := visit(root, rootEntry, rootRealpath); errors.Is(err, fs.SkipAll) {
+	return normalizeWalkDirError(visit(root, rootEntry, rootRealpath))
+}
+
+func normalizeWalkDirError(err error) error {
+	if errors.Is(err, fs.SkipDir) || errors.Is(err, fs.SkipAll) {
 		return nil
-	} else {
-		return err
 	}
+	return err
 }
 
 type walkDirEntry struct {

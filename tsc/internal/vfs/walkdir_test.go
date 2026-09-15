@@ -96,10 +96,15 @@ func TestWalkDirReportsRootFileSymlink(t *testing.T) {
 	t.Parallel()
 
 	base := vfstest.FromMap(map[string]string{
-		"/root/link.ts":   "",
 		"/target/file.ts": "",
 	}, true)
 	fileSystem := wrapvfs.Wrap(base, wrapvfs.Replacements{
+		Stat: func(path string) vfs.FileInfo {
+			if path == "/root/link.ts" {
+				return base.Stat("/target/file.ts")
+			}
+			return base.Stat(path)
+		},
 		Realpath: func(path string) string {
 			if path == "/root/link.ts" {
 				return "/target/file.ts"
@@ -111,6 +116,7 @@ func TestWalkDirReportsRootFileSymlink(t *testing.T) {
 	err := vfs.WalkDir(fileSystem, "/root/link.ts", func(path string, entry fs.DirEntry, err error) error {
 		assert.NilError(t, err)
 		assert.Equal(t, path, "/root/link.ts")
+		assert.Equal(t, entry.Name(), "link.ts")
 		assert.Equal(t, entry.Type(), fs.ModeSymlink)
 		return nil
 	})
@@ -155,6 +161,30 @@ func TestWalkDirSkipAll(t *testing.T) {
 	})
 	assert.NilError(t, err)
 	assert.DeepEqual(t, paths, []string{"/root", "/root/a.ts"})
+}
+
+func TestWalkDirConsumesSkipDirForRootFile(t *testing.T) {
+	t.Parallel()
+
+	fileSystem := vfstest.FromMap(map[string]string{"/root.ts": ""}, true)
+	err := vfs.WalkDir(fileSystem, "/root.ts", func(path string, entry fs.DirEntry, err error) error {
+		assert.NilError(t, err)
+		return fs.SkipDir
+	})
+	assert.NilError(t, err)
+}
+
+func TestWalkDirConsumesSkipForMissingRoot(t *testing.T) {
+	t.Parallel()
+
+	fileSystem := vfstest.FromMap(map[string]string{}, true)
+	for _, sentinel := range []error{fs.SkipDir, fs.SkipAll} {
+		err := vfs.WalkDir(fileSystem, "/missing", func(path string, entry fs.DirEntry, err error) error {
+			assert.ErrorIs(t, err, fs.ErrNotExist)
+			return sentinel
+		})
+		assert.NilError(t, err)
+	}
 }
 
 func TestWalkDirUsesSymlinkMetadataWithoutRealpathCalls(t *testing.T) {
