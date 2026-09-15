@@ -1,7 +1,6 @@
 package project
 
 import (
-	"errors"
 	iofs "io/fs"
 	"maps"
 	"slices"
@@ -362,64 +361,6 @@ func (fs *overlayFS) Stat(path string) vfs.FileInfo {
 		return overlayDirectoryInfo{name: tspath.GetBaseFileName(path)}
 	}
 	return fs.host.Stat(path)
-}
-
-func (fs *overlayFS) WalkDir(root string, walkFn vfs.WalkDirFunc) error {
-	fs.mu.RLock()
-	overlays := maps.Clone(fs.overlays)
-	fs.mu.RUnlock()
-	allOverlaysExistOnHost := true
-	for _, overlay := range overlays {
-		if !fs.host.FileExists(overlay.FileName()) {
-			allOverlaysExistOnHost = false
-			break
-		}
-	}
-	if allOverlaysExistOnHost {
-		return fs.host.WalkDir(root, walkFn)
-	}
-
-	visited := make(map[string]struct{})
-	var walk func(path string) error
-	walk = func(path string) error {
-		info := fs.Stat(path)
-		if info == nil {
-			return walkFn(path, nil, iofs.ErrNotExist)
-		}
-		if info.IsDir() {
-			realpath := tspath.GetCanonicalFileName(fs.Realpath(path), fs.UseCaseSensitiveFileNames())
-			if _, ok := visited[realpath]; ok {
-				return nil
-			}
-			visited[realpath] = struct{}{}
-		}
-		entry := fileInfoDirEntry{FileInfo: info}
-		if err := walkFn(path, entry, nil); err != nil {
-			if errors.Is(err, iofs.SkipDir) && info.IsDir() {
-				return nil
-			}
-			return err
-		}
-		if !info.IsDir() {
-			return nil
-		}
-		entries := fs.GetAccessibleEntries(path)
-		children := append(entries.Directories, entries.Files...)
-		for _, child := range children {
-			if err := walk(tspath.CombinePaths(path, child)); err != nil {
-				if errors.Is(err, iofs.SkipDir) {
-					break
-				}
-				return err
-			}
-		}
-		return nil
-	}
-	if err := walk(root); errors.Is(err, iofs.SkipAll) {
-		return nil
-	} else {
-		return err
-	}
 }
 
 func (fs *overlayFS) Realpath(path string) string { return fs.host.Realpath(path) }
