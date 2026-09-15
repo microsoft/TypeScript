@@ -2,8 +2,10 @@ package main
 
 import (
 	"context"
+	"errors"
 	"flag"
 	"fmt"
+	"io"
 	"os"
 	"os/signal"
 	"strings"
@@ -74,9 +76,14 @@ func runAPI(args []string) int {
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	defer stop()
 
-	if err := s.Run(ctx); err != nil {
-		fmt.Fprintln(os.Stderr, err)
-		return 1
+	return apiExitStatus(os.Stderr, ctx, s.Run(ctx))
+}
+
+func apiExitStatus(stderr io.Writer, ctx context.Context, err error) int {
+	ctxErr := ctx.Err()
+	if err == nil || ctxErr != nil && errors.Is(err, ctxErr) {
+		return 0
 	}
-	return 0
+	fmt.Fprintln(stderr, err)
+	return 1
 }
