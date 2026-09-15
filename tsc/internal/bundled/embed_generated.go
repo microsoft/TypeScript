@@ -185,6 +185,8 @@ var (
 	libs_lib_es2025_intl_d_ts string
 	//go:embed libs/lib.es2025.iterator.d.ts
 	libs_lib_es2025_iterator_d_ts string
+	//go:embed libs/lib.es2025.json.d.ts
+	libs_lib_es2025_json_d_ts string
 	//go:embed libs/lib.es2025.promise.d.ts
 	libs_lib_es2025_promise_d_ts string
 	//go:embed libs/lib.es2025.regexp.d.ts
@@ -317,6 +319,7 @@ var embeddedContents = map[string]string{
 	"libs/lib.es2025.full.d.ts":             libs_lib_es2025_full_d_ts,
 	"libs/lib.es2025.intl.d.ts":             libs_lib_es2025_intl_d_ts,
 	"libs/lib.es2025.iterator.d.ts":         libs_lib_es2025_iterator_d_ts,
+	"libs/lib.es2025.json.d.ts":             libs_lib_es2025_json_d_ts,
 	"libs/lib.es2025.promise.d.ts":          libs_lib_es2025_promise_d_ts,
 	"libs/lib.es2025.regexp.d.ts":           libs_lib_es2025_regexp_d_ts,
 	"libs/lib.es5.d.ts":                     libs_lib_es5_d_ts,
@@ -428,6 +431,7 @@ var libsEntries = []fs.DirEntry{
 	&fileInfo{name: "lib.es2025.full.d.ts", size: int64(len(libs_lib_es2025_full_d_ts))},
 	&fileInfo{name: "lib.es2025.intl.d.ts", size: int64(len(libs_lib_es2025_intl_d_ts))},
 	&fileInfo{name: "lib.es2025.iterator.d.ts", size: int64(len(libs_lib_es2025_iterator_d_ts))},
+	&fileInfo{name: "lib.es2025.json.d.ts", size: int64(len(libs_lib_es2025_json_d_ts))},
 	&fileInfo{name: "lib.es2025.promise.d.ts", size: int64(len(libs_lib_es2025_promise_d_ts))},
 	&fileInfo{name: "lib.es2025.regexp.d.ts", size: int64(len(libs_lib_es2025_regexp_d_ts))},
 	&fileInfo{name: "lib.es5.d.ts", size: int64(len(libs_lib_es5_d_ts))},
