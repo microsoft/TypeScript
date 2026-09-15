@@ -387,13 +387,6 @@ func (info overlayDirectoryInfo) ModTime() time.Time  { return time.Time{} }
 func (info overlayDirectoryInfo) IsDir() bool         { return true }
 func (info overlayDirectoryInfo) Sys() any            { return nil }
 
-type fileInfoDirEntry struct {
-	iofs.FileInfo
-}
-
-func (entry fileInfoDirEntry) Type() iofs.FileMode          { return entry.Mode().Type() }
-func (entry fileInfoDirEntry) Info() (iofs.FileInfo, error) { return entry.FileInfo, nil }
-
 func createOverlayDirectories(overlays map[tspath.Path]*Overlay) map[tspath.Path]map[tspath.Path]string {
 	overlayDirectories := make(map[tspath.Path]map[tspath.Path]string)
 	for path, overlay := range overlays {

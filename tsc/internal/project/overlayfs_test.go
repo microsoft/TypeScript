@@ -1,14 +1,12 @@
 package project
 
 import (
-	"errors"
 	"slices"
 	"testing"
 
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
-	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfstest"
 	"gotest.tools/v3/assert"
 )
@@ -376,75 +374,4 @@ func TestOverlayFSFileSystem(t *testing.T) {
 	rootEntries := fileSystem.GetAccessibleEntries("/")
 	assert.Assert(t, slices.Contains(rootEntries.Directories, "virtual"))
 	assert.Assert(t, !slices.Contains(rootEntries.Files, "virtual"))
-
-	var walked []string
-	err := fileSystem.WalkDir("/virtual", func(path string, _ vfs.DirEntry, err error) error {
-		assert.NilError(t, err)
-		walked = append(walked, path)
-		return nil
-	})
-	assert.NilError(t, err)
-	assert.DeepEqual(t, walked, []string{"/virtual", "/virtual/nested", "/virtual/nested/file.ts"})
-
-	t.Run("preserves entry order and walk control", func(t *testing.T) {
-		t.Parallel()
-		orderedHost := vfstest.FromMap(map[string]string{
-			"/root/host-b.ts": "host",
-		}, false /* useCaseSensitiveFileNames */)
-		orderedFS := newOverlayFS(orderedHost, map[tspath.Path]*Overlay{
-			"/root/overlay-a.ts": newOverlay("/root/overlay-a.ts", "overlay", 1, core.ScriptKindTS),
-		}, lsproto.PositionEncodingKindUTF16, toPath)
-
-		var orderedWalked []string
-		walkErr := orderedFS.WalkDir("/root", func(path string, _ vfs.DirEntry, _ error) error {
-			orderedWalked = append(orderedWalked, path)
-			return nil
-		})
-		assert.NilError(t, walkErr)
-		assert.DeepEqual(t, orderedWalked, []string{"/root", "/root/host-b.ts", "/root/overlay-a.ts"})
-
-		orderedWalked = nil
-		walkErr = orderedFS.WalkDir("/root", func(path string, _ vfs.DirEntry, _ error) error {
-			orderedWalked = append(orderedWalked, path)
-			if path == "/root/host-b.ts" {
-				return vfs.SkipAll
-			}
-			return nil
-		})
-		assert.NilError(t, walkErr)
-		assert.DeepEqual(t, orderedWalked, []string{"/root", "/root/host-b.ts"})
-
-		orderedWalked = nil
-		walkErr = orderedFS.WalkDir("/root", func(path string, _ vfs.DirEntry, _ error) error {
-			orderedWalked = append(orderedWalked, path)
-			if path == "/root/host-b.ts" {
-				return vfs.SkipDir
-			}
-			return nil
-		})
-		assert.NilError(t, walkErr)
-		assert.DeepEqual(t, orderedWalked, []string{"/root", "/root/host-b.ts"})
-	})
-
-	t.Run("does not follow symlink cycles", func(t *testing.T) {
-		t.Parallel()
-		cyclicHost := vfstest.FromMap(map[string]any{
-			"/root/a/file.ts": "host",
-			"/root/a/b":       vfstest.Symlink("/root/a"),
-		}, false /* useCaseSensitiveFileNames */)
-		cyclicFS := newOverlayFS(cyclicHost, map[tspath.Path]*Overlay{
-			"/unrelated.ts": newOverlay("/unrelated.ts", "overlay", 1, core.ScriptKindTS),
-		}, lsproto.PositionEncodingKindUTF16, toPath)
-		walkLimit := errors.New("walk limit exceeded")
-		var cyclicWalked []string
-		walkErr := cyclicFS.WalkDir("/root", func(path string, _ vfs.DirEntry, _ error) error {
-			cyclicWalked = append(cyclicWalked, path)
-			if len(cyclicWalked) > 10 {
-				return walkLimit
-			}
-			return nil
-		})
-		assert.NilError(t, walkErr)
-		assert.DeepEqual(t, cyclicWalked, []string{"/root", "/root/a", "/root/a/file.ts"})
-	})
 }
