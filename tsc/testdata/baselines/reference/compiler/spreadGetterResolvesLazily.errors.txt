@@ -1,0 +1,37 @@
+spreadGetterResolvesLazily.ts(19,7): error TS2322: Type '{ readonly self: any; }' is not assignable to type 'number'.
+spreadGetterResolvesLazily.ts(20,7): error TS2322: Type '{ self: any; }' is not assignable to type 'number'.
+spreadGetterResolvesLazily.ts(22,8): error TS2540: Cannot assign to 'self' because it is a read-only property.
+
+
+==== spreadGetterResolvesLazily.ts (3 errors) ====
+    // A spread copy of a getter takes its type from the getter on demand, so a getter
+    // that refers back to the spread result is well-founded, as it already is without
+    // the spread.
+    const direct = {
+        get self() {
+            return direct;
+        },
+    };
+    
+    const source = {
+        get self() {
+            return spread;
+        },
+    };
+    const spread = { ...source };
+    
+    const directSelf: typeof direct = direct.self.self;
+    const spreadSelf: typeof spread = spread.self.self;
+    const wrongDirect: number = direct.self;
+          ~~~~~~~~~~~
+!!! error TS2322: Type '{ readonly self: any; }' is not assignable to type 'number'.
+    const wrongSpread: number = spread.self;
+          ~~~~~~~~~~~
+!!! error TS2322: Type '{ self: any; }' is not assignable to type 'number'.
+    spread.self = spread;
+    direct.self = direct;
+           ~~~~
+!!! error TS2540: Cannot assign to 'self' because it is a read-only property.
+    
+    export {};
+    

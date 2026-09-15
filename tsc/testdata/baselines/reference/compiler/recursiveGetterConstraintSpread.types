@@ -1,0 +1,305 @@
+//// [tests/cases/compiler/recursiveGetterConstraintSpread.ts] ////
+
+=== recursiveGetterConstraintSpread.ts ===
+interface Schema<T = unknown> {
+    output: T;
+>output : T
+}
+
+type Shape = Record<string, Schema>;
+>Shape : Shape
+
+type Output<S extends Shape> = { [K in keyof S]: S[K]["output"] };
+>Output : Output<S>
+
+declare function object<S extends Shape>(shape: S): Schema<Output<S>>;
+>object : <S extends Shape>(shape: S) => Schema<Output<S>>
+>shape : S
+
+declare function array<S extends Schema>(schema: S): Schema<S["output"][]>;
+>array : <S extends Schema>(schema: S) => Schema<S["output"][]>
+>schema : S
+
+declare function text(): Schema<string>;
+>text : () => Schema<string>
+
+const base = { name: text() };
+>base : { name: Schema<string>; }
+>{ name: text() } : { name: Schema<string>; }
+>name : Schema<string>
+>text() : Schema<string>
+>text : () => Schema<string>
+
+const node = object({
+>node : Schema<Output<{ name: Schema<string>; children: Schema<Output<any>[]>; }>>
+>object({    ...base,    get children() {        return array(node);    },}) : Schema<Output<{ name: Schema<string>; children: Schema<Output<any>[]>; }>>
+>object : <S extends Shape>(shape: S) => Schema<Output<S>>
+>{    ...base,    get children() {        return array(node);    },} : { name: Schema<string>; children: Schema<Output<{ name: Schema<string>; children: Schema<Output<any>[]>; }>[]>; }
+
+    ...base,
+>base : { name: Schema<string>; }
+
+    get children() {
+>children : Schema<Output<{ name: Schema<string>; children: Schema<Output<any>[]>; }>[]>
+
+        return array(node);
+>array(node) : Schema<Output<{ name: Schema<string>; children: Schema<Output<any>[]>; }>[]>
+>array : <S extends Schema>(schema: S) => Schema<S["output"][]>
+>node : Schema<Output<{ name: Schema<string>; children: Schema<Output<any>[]>; }>>
+
+    },
+});
+
+const name: string = node.output.children[0].children[0].name;
+>name : string
+>node.output.children[0].children[0].name : string
+>node.output.children[0].children[0] : Output<{ name: Schema<string>; children: Schema<Output<any>[]>; }>
+>node.output.children[0].children : Output<{ name: Schema<string>; children: Schema<Output<any>[]>; }>[]
+>node.output.children[0] : Output<{ name: Schema<string>; children: Schema<Output<any>[]>; }>
+>node.output.children : Output<{ name: Schema<string>; children: Schema<Output<any>[]>; }>[]
+>node.output : Output<{ name: Schema<string>; children: Schema<Output<any>[]>; }>
+>node : Schema<Output<{ name: Schema<string>; children: Schema<Output<any>[]>; }>>
+>output : Output<{ name: Schema<string>; children: Schema<Output<any>[]>; }>
+>children : Output<{ name: Schema<string>; children: Schema<Output<any>[]>; }>[]
+>0 : 0
+>children : Output<{ name: Schema<string>; children: Schema<Output<any>[]>; }>[]
+>0 : 0
+>name : string
+
+const wrong: number = node.output.children[0].name;
+>wrong : number
+>node.output.children[0].name : string
+>node.output.children[0] : Output<{ name: Schema<string>; children: Schema<Output<any>[]>; }>
+>node.output.children : Output<{ name: Schema<string>; children: Schema<Output<any>[]>; }>[]
+>node.output : Output<{ name: Schema<string>; children: Schema<Output<any>[]>; }>
+>node : Schema<Output<{ name: Schema<string>; children: Schema<Output<any>[]>; }>>
+>output : Output<{ name: Schema<string>; children: Schema<Output<any>[]>; }>
+>children : Output<{ name: Schema<string>; children: Schema<Output<any>[]>; }>[]
+>0 : 0
+>name : string
+
+node.output.children[0].missing;
+>node.output.children[0].missing : any
+>node.output.children[0] : Output<{ name: Schema<string>; children: Schema<Output<any>[]>; }>
+>node.output.children : Output<{ name: Schema<string>; children: Schema<Output<any>[]>; }>[]
+>node.output : Output<{ name: Schema<string>; children: Schema<Output<any>[]>; }>
+>node : Schema<Output<{ name: Schema<string>; children: Schema<Output<any>[]>; }>>
+>output : Output<{ name: Schema<string>; children: Schema<Output<any>[]>; }>
+>children : Output<{ name: Schema<string>; children: Schema<Output<any>[]>; }>[]
+>0 : 0
+>missing : any
+
+const leading = object({
+>leading : Schema<Output<{ name: Schema<string>; children: Schema<Output<any>[]>; }>>
+>object({    get children() {        return array(leading);    },    ...base,}) : Schema<Output<{ name: Schema<string>; children: Schema<Output<any>[]>; }>>
+>object : <S extends Shape>(shape: S) => Schema<Output<S>>
+>{    get children() {        return array(leading);    },    ...base,} : { name: Schema<string>; children: Schema<Output<{ name: Schema<string>; children: Schema<Output<any>[]>; }>[]>; }
+
+    get children() {
+>children : Schema<Output<{ name: Schema<string>; children: Schema<Output<any>[]>; }>[]>
+
+        return array(leading);
+>array(leading) : Schema<Output<{ name: Schema<string>; children: Schema<Output<any>[]>; }>[]>
+>array : <S extends Schema>(schema: S) => Schema<S["output"][]>
+>leading : Schema<Output<{ name: Schema<string>; children: Schema<Output<any>[]>; }>>
+
+    },
+    ...base,
+>base : { name: Schema<string>; }
+
+});
+
+const leadingName: string = leading.output.children[0].name;
+>leadingName : string
+>leading.output.children[0].name : string
+>leading.output.children[0] : Output<{ name: Schema<string>; children: Schema<Output<any>[]>; }>
+>leading.output.children : Output<{ name: Schema<string>; children: Schema<Output<any>[]>; }>[]
+>leading.output : Output<{ name: Schema<string>; children: Schema<Output<any>[]>; }>
+>leading : Schema<Output<{ name: Schema<string>; children: Schema<Output<any>[]>; }>>
+>output : Output<{ name: Schema<string>; children: Schema<Output<any>[]>; }>
+>children : Output<{ name: Schema<string>; children: Schema<Output<any>[]>; }>[]
+>0 : 0
+>name : string
+
+const withChildren = { name: text(), children: text() };
+>withChildren : { name: Schema<string>; children: Schema<string>; }
+>{ name: text(), children: text() } : { name: Schema<string>; children: Schema<string>; }
+>name : Schema<string>
+>text() : Schema<string>
+>text : () => Schema<string>
+>children : Schema<string>
+>text() : Schema<string>
+>text : () => Schema<string>
+
+const overridden = object({
+>overridden : Schema<Output<{ name: Schema<string>; children: Schema<Output<any>[]>; }>>
+>object({    ...withChildren,    get children() {        return array(overridden);    },}) : Schema<Output<{ name: Schema<string>; children: Schema<Output<any>[]>; }>>
+>object : <S extends Shape>(shape: S) => Schema<Output<S>>
+>{    ...withChildren,    get children() {        return array(overridden);    },} : { name: Schema<string>; children: Schema<Output<{ name: Schema<string>; children: Schema<Output<any>[]>; }>[]>; }
+
+    ...withChildren,
+>withChildren : { name: Schema<string>; children: Schema<string>; }
+
+    get children() {
+>children : Schema<Output<{ name: Schema<string>; children: Schema<Output<any>[]>; }>[]>
+
+        return array(overridden);
+>array(overridden) : Schema<Output<{ name: Schema<string>; children: Schema<Output<any>[]>; }>[]>
+>array : <S extends Schema>(schema: S) => Schema<S["output"][]>
+>overridden : Schema<Output<{ name: Schema<string>; children: Schema<Output<any>[]>; }>>
+
+    },
+});
+
+const overriddenName: string = overridden.output.children[0].children[0].name;
+>overriddenName : string
+>overridden.output.children[0].children[0].name : string
+>overridden.output.children[0].children[0] : Output<{ name: Schema<string>; children: Schema<Output<any>[]>; }>
+>overridden.output.children[0].children : Output<{ name: Schema<string>; children: Schema<Output<any>[]>; }>[]
+>overridden.output.children[0] : Output<{ name: Schema<string>; children: Schema<Output<any>[]>; }>
+>overridden.output.children : Output<{ name: Schema<string>; children: Schema<Output<any>[]>; }>[]
+>overridden.output : Output<{ name: Schema<string>; children: Schema<Output<any>[]>; }>
+>overridden : Schema<Output<{ name: Schema<string>; children: Schema<Output<any>[]>; }>>
+>output : Output<{ name: Schema<string>; children: Schema<Output<any>[]>; }>
+>children : Output<{ name: Schema<string>; children: Schema<Output<any>[]>; }>[]
+>0 : 0
+>children : Output<{ name: Schema<string>; children: Schema<Output<any>[]>; }>[]
+>0 : 0
+>name : string
+
+const nested = object({
+>nested : Schema<Output<{ name: Schema<string>; children: Schema<Output<any>[]>; }>>
+>object({    ...base,    ...{        get children() {            return array(nested);        },    },}) : Schema<Output<{ name: Schema<string>; children: Schema<Output<any>[]>; }>>
+>object : <S extends Shape>(shape: S) => Schema<Output<S>>
+>{    ...base,    ...{        get children() {            return array(nested);        },    },} : { name: Schema<string>; children: Schema<Output<{ name: Schema<string>; children: Schema<Output<any>[]>; }>[]>; }
+
+    ...base,
+>base : { name: Schema<string>; }
+
+    ...{
+>{        get children() {            return array(nested);        },    } : { readonly children: Schema<Output<{ name: Schema<string>; children: Schema<Output<any>[]>; }>[]>; }
+
+        get children() {
+>children : Schema<Output<{ name: Schema<string>; children: Schema<Output<any>[]>; }>[]>
+
+            return array(nested);
+>array(nested) : Schema<Output<{ name: Schema<string>; children: Schema<Output<any>[]>; }>[]>
+>array : <S extends Schema>(schema: S) => Schema<S["output"][]>
+>nested : Schema<Output<{ name: Schema<string>; children: Schema<Output<any>[]>; }>>
+
+        },
+    },
+});
+
+const nestedName: string = nested.output.children[0].children[0].name;
+>nestedName : string
+>nested.output.children[0].children[0].name : string
+>nested.output.children[0].children[0] : Output<{ name: Schema<string>; children: Schema<Output<any>[]>; }>
+>nested.output.children[0].children : Output<{ name: Schema<string>; children: Schema<Output<any>[]>; }>[]
+>nested.output.children[0] : Output<{ name: Schema<string>; children: Schema<Output<any>[]>; }>
+>nested.output.children : Output<{ name: Schema<string>; children: Schema<Output<any>[]>; }>[]
+>nested.output : Output<{ name: Schema<string>; children: Schema<Output<any>[]>; }>
+>nested : Schema<Output<{ name: Schema<string>; children: Schema<Output<any>[]>; }>>
+>output : Output<{ name: Schema<string>; children: Schema<Output<any>[]>; }>
+>children : Output<{ name: Schema<string>; children: Schema<Output<any>[]>; }>[]
+>0 : 0
+>children : Output<{ name: Schema<string>; children: Schema<Output<any>[]>; }>[]
+>0 : 0
+>name : string
+
+const user = object({
+>user : Schema<Output<{ name: Schema<string>; posts: Schema<Output<{ name: Schema<string>; author: Schema<Output<any>>; }>[]>; }>>
+>object({    ...base,    get posts() {        return array(post);    },}) : Schema<Output<{ name: Schema<string>; posts: Schema<Output<{ name: Schema<string>; author: Schema<Output<any>>; }>[]>; }>>
+>object : <S extends Shape>(shape: S) => Schema<Output<S>>
+>{    ...base,    get posts() {        return array(post);    },} : { name: Schema<string>; posts: Schema<Output<{ name: Schema<string>; author: Schema<Output<{ name: Schema<string>; posts: Schema<Output<any>[]>; }>>; }>[]>; }
+
+    ...base,
+>base : { name: Schema<string>; }
+
+    get posts() {
+>posts : Schema<Output<{ name: Schema<string>; author: Schema<Output<{ name: Schema<string>; posts: Schema<Output<any>[]>; }>>; }>[]>
+
+        return array(post);
+>array(post) : Schema<Output<{ name: Schema<string>; author: Schema<Output<{ name: Schema<string>; posts: Schema<Output<any>[]>; }>>; }>[]>
+>array : <S extends Schema>(schema: S) => Schema<S["output"][]>
+>post : Schema<Output<{ name: Schema<string>; author: Schema<Output<{ name: Schema<string>; posts: Schema<Output<any>[]>; }>>; }>>
+
+    },
+});
+const post = object({
+>post : Schema<Output<{ name: Schema<string>; author: Schema<Output<{ name: Schema<string>; posts: Schema<Output<any>[]>; }>>; }>>
+>object({    ...base,    get author() {        return user;    },}) : Schema<Output<{ name: Schema<string>; author: Schema<Output<{ name: Schema<string>; posts: Schema<Output<any>[]>; }>>; }>>
+>object : <S extends Shape>(shape: S) => Schema<Output<S>>
+>{    ...base,    get author() {        return user;    },} : { name: Schema<string>; author: Schema<Output<{ name: Schema<string>; posts: Schema<Output<{ name: Schema<string>; author: Schema<Output<any>>; }>[]>; }>>; }
+
+    ...base,
+>base : { name: Schema<string>; }
+
+    get author() {
+>author : Schema<Output<{ name: Schema<string>; posts: Schema<Output<{ name: Schema<string>; author: Schema<Output<any>>; }>[]>; }>>
+
+        return user;
+>user : Schema<Output<{ name: Schema<string>; posts: Schema<Output<{ name: Schema<string>; author: Schema<Output<any>>; }>[]>; }>>
+
+    },
+});
+
+const authorName: string = user.output.posts[0].author.name;
+>authorName : string
+>user.output.posts[0].author.name : string
+>user.output.posts[0].author : Output<{ name: Schema<string>; posts: Schema<Output<{ name: Schema<string>; author: Schema<Output<any>>; }>[]>; }>
+>user.output.posts[0] : Output<{ name: Schema<string>; author: Schema<Output<{ name: Schema<string>; posts: Schema<Output<any>[]>; }>>; }>
+>user.output.posts : Output<{ name: Schema<string>; author: Schema<Output<{ name: Schema<string>; posts: Schema<Output<any>[]>; }>>; }>[]
+>user.output : Output<{ name: Schema<string>; posts: Schema<Output<{ name: Schema<string>; author: Schema<Output<any>>; }>[]>; }>
+>user : Schema<Output<{ name: Schema<string>; posts: Schema<Output<{ name: Schema<string>; author: Schema<Output<any>>; }>[]>; }>>
+>output : Output<{ name: Schema<string>; posts: Schema<Output<{ name: Schema<string>; author: Schema<Output<any>>; }>[]>; }>
+>posts : Output<{ name: Schema<string>; author: Schema<Output<{ name: Schema<string>; posts: Schema<Output<any>[]>; }>>; }>[]
+>0 : 0
+>author : Output<{ name: Schema<string>; posts: Schema<Output<{ name: Schema<string>; author: Schema<Output<any>>; }>[]>; }>
+>name : string
+
+const rejected = object({
+>rejected : Schema<Output<{ name: Schema<string>; count: number; }>>
+>object({    ...base,    get count() {        return 1;    },}) : Schema<Output<{ name: Schema<string>; count: number; }>>
+>object : <S extends Shape>(shape: S) => Schema<Output<S>>
+>{    ...base,    get count() {        return 1;    },} : { name: Schema<string>; count: number; }
+
+    ...base,
+>base : { name: Schema<string>; }
+
+    get count() {
+>count : number
+
+        return 1;
+>1 : 1
+
+    },
+});
+
+// An inline literal's overridden property is contextually typed by the inferred
+// shape, which needs the getter's type before the declaration has one.
+const inlineOverridden = object({
+>inlineOverridden : any
+>object({    ...{ children: text() },    get children() {        return array(inlineOverridden);    },}) : Schema<Output<{ children: any; }>>
+>object : <S extends Shape>(shape: S) => Schema<Output<S>>
+>{    ...{ children: text() },    get children() {        return array(inlineOverridden);    },} : { children: any; }
+
+    ...{ children: text() },
+>{ children: text() } : { children: Schema<string>; }
+>children : Schema<string>
+>text() : Schema<string>
+>text : () => Schema<string>
+
+    get children() {
+>children : any
+
+        return array(inlineOverridden);
+>array(inlineOverridden) : Schema<any[]>
+>array : <S extends Schema>(schema: S) => Schema<S["output"][]>
+>inlineOverridden : any
+
+    },
+});
+
+export {};
+

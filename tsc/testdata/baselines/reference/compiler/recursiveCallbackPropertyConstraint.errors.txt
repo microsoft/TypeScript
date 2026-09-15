@@ -1,0 +1,73 @@
+recursiveCallbackPropertyConstraint.ts(19,7): error TS2322: Type 'string' is not assignable to type 'number'.
+recursiveCallbackPropertyConstraint.ts(20,25): error TS2339: Property 'missing' does not exist on type 'Output<{ name: Schema<string>; children: () => Schema<Output<any>[]>; }>'.
+recursiveCallbackPropertyConstraint.ts(30,25): error TS2339: Property 'missing' does not exist on type 'Output<{ name: Schema<string>; children(): Schema<Output<any>[]>; }>'.
+recursiveCallbackPropertyConstraint.ts(36,29): error TS2339: Property 'missing' does not exist on type 'Output<{ name: Schema<string>; posts: () => Schema<Output<{ title: Schema<string>; author: () => Schema<Output<any>>; }>[]>; }>'.
+recursiveCallbackPropertyConstraint.ts(41,40): error TS2322: Type 'number' is not assignable to type 'Schema<unknown> | (() => Schema<unknown>)'.
+recursiveCallbackPropertyConstraint.ts(45,22): error TS2322: Type '() => number' is not assignable to type 'string'.
+
+
+==== recursiveCallbackPropertyConstraint.ts (6 errors) ====
+    interface Schema<T = unknown> {
+        output: T;
+    }
+    
+    type Shape = Record<string, Schema | (() => Schema)>;
+    type Resolve<T> = T extends () => infer R ? R : T;
+    type Output<S extends Shape> = { [K in keyof S]: Resolve<S[K]> extends Schema<infer O> ? O : never };
+    
+    declare function object<S extends Shape>(shape: S): Schema<Output<S>>;
+    declare function array<S extends Schema>(schema: S): Schema<S["output"][]>;
+    declare function text(): Schema<string>;
+    
+    const node = object({
+        name: text(),
+        children: () => array(node),
+    });
+    
+    const name: string = node.output.children[0].children[0].name;
+    const wrong: number = node.output.children[0].name;
+          ~~~~~
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
+    node.output.children[0].missing;
+                            ~~~~~~~
+!!! error TS2339: Property 'missing' does not exist on type 'Output<{ name: Schema<string>; children: () => Schema<Output<any>[]>; }>'.
+    
+    const tree = object({
+        name: text(),
+        children() {
+            return array(tree);
+        },
+    });
+    
+    const treeName: string = tree.output.children[0].children[0].name;
+    tree.output.children[0].missing;
+                            ~~~~~~~
+!!! error TS2339: Property 'missing' does not exist on type 'Output<{ name: Schema<string>; children(): Schema<Output<any>[]>; }>'.
+    
+    export const user = object({ name: text(), posts: () => array(post) });
+    const post = object({ title: text(), author: () => user });
+    
+    const authorName: string = user.output.posts[0].author.posts[0].author.name;
+    user.output.posts[0].author.missing;
+                                ~~~~~~~
+!!! error TS2339: Property 'missing' does not exist on type 'Output<{ name: Schema<string>; posts: () => Schema<Output<{ title: Schema<string>; author: () => Schema<Output<any>>; }>[]>; }>'.
+    
+    const mixed = object({ name: text(), self: () => array(mixed), other: () => text() });
+    const otherName: string = mixed.output.self[0].other;
+    
+    const invalid = object({ name: text(), bad: 42, self: () => array(invalid) });
+                                           ~~~
+!!! error TS2322: Type 'number' is not assignable to type 'Schema<unknown> | (() => Schema<unknown>)'.
+    const invalidName: string = invalid.output.self[0].name;
+    
+    declare function wrap<T extends Schema<string>>(value: T): T;
+    const plain = wrap({ output: () => 42 });
+                         ~~~~~~
+!!! error TS2322: Type '() => number' is not assignable to type 'string'.
+!!! related TS6500 recursiveCallbackPropertyConstraint.ts:2:5: The expected type comes from property 'output' which is declared here on type 'Schema<string>'
+    const plainOutput: string = plain.output;
+    
+    type LeafOutput = { name: string; children: LeafOutput[] };
+    const leaf = object({ name: text(), children: (): Schema<LeafOutput[]> => array(leaf) });
+    const leafName: string = leaf.output.children[0].name;
+    

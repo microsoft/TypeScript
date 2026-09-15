@@ -1,0 +1,82 @@
+//// [tests/cases/compiler/spreadGetterResolvesLazily.ts] ////
+
+=== spreadGetterResolvesLazily.ts ===
+// A spread copy of a getter takes its type from the getter on demand, so a getter
+// that refers back to the spread result is well-founded, as it already is without
+// the spread.
+const direct = {
+>direct : { readonly self: any; }
+>{    get self() {        return direct;    },} : { readonly self: { readonly self: any; }; }
+
+    get self() {
+>self : { readonly self: any; }
+
+        return direct;
+>direct : { readonly self: any; }
+
+    },
+};
+
+const source = {
+>source : { readonly self: { self: any; }; }
+>{    get self() {        return spread;    },} : { readonly self: { self: any; }; }
+
+    get self() {
+>self : { self: any; }
+
+        return spread;
+>spread : { self: any; }
+
+    },
+};
+const spread = { ...source };
+>spread : { self: any; }
+>{ ...source } : { self: { self: any; }; }
+>source : { readonly self: { self: any; }; }
+
+const directSelf: typeof direct = direct.self.self;
+>directSelf : { readonly self: any; }
+>direct : { readonly self: any; }
+>direct.self.self : { readonly self: any; }
+>direct.self : { readonly self: any; }
+>direct : { readonly self: any; }
+>self : { readonly self: any; }
+>self : { readonly self: any; }
+
+const spreadSelf: typeof spread = spread.self.self;
+>spreadSelf : { self: any; }
+>spread : { self: any; }
+>spread.self.self : { self: any; }
+>spread.self : { self: any; }
+>spread : { self: any; }
+>self : { self: any; }
+>self : { self: any; }
+
+const wrongDirect: number = direct.self;
+>wrongDirect : number
+>direct.self : { readonly self: any; }
+>direct : { readonly self: any; }
+>self : { readonly self: any; }
+
+const wrongSpread: number = spread.self;
+>wrongSpread : number
+>spread.self : { self: any; }
+>spread : { self: any; }
+>self : { self: any; }
+
+spread.self = spread;
+>spread.self = spread : { self: any; }
+>spread.self : { self: any; }
+>spread : { self: any; }
+>self : { self: any; }
+>spread : { self: any; }
+
+direct.self = direct;
+>direct.self = direct : { readonly self: any; }
+>direct.self : any
+>direct : { readonly self: any; }
+>self : any
+>direct : { readonly self: any; }
+
+export {};
+

@@ -1,0 +1,123 @@
+//// [tests/cases/compiler/recursiveGetterConstraintCallLike.tsx] ////
+
+=== recursiveGetterConstraintCallLike.tsx ===
+declare namespace JSX {
+>JSX : Symbol(JSX, Decl(recursiveGetterConstraintCallLike.tsx, 0, 0))
+
+    interface Element { element: true; }
+>Element : Symbol(Element, Decl(recursiveGetterConstraintCallLike.tsx, 0, 23))
+>element : Symbol(Element.element, Decl(recursiveGetterConstraintCallLike.tsx, 1, 23))
+}
+
+declare function Component<T extends { value: string }>(props: { data: T }): JSX.Element;
+>Component : Symbol(Component, Decl(recursiveGetterConstraintCallLike.tsx, 2, 1))
+>T : Symbol(T, Decl(recursiveGetterConstraintCallLike.tsx, 4, 27))
+>value : Symbol(value, Decl(recursiveGetterConstraintCallLike.tsx, 4, 38))
+>props : Symbol(props, Decl(recursiveGetterConstraintCallLike.tsx, 4, 56))
+>data : Symbol(data, Decl(recursiveGetterConstraintCallLike.tsx, 4, 64))
+>T : Symbol(T, Decl(recursiveGetterConstraintCallLike.tsx, 4, 27))
+>JSX : Symbol(JSX, Decl(recursiveGetterConstraintCallLike.tsx, 0, 0))
+>Element : Symbol(JSX.Element, Decl(recursiveGetterConstraintCallLike.tsx, 0, 23))
+
+const validSelfClosing = <Component data={{ get value() { return ""; } }} />;
+>validSelfClosing : Symbol(validSelfClosing, Decl(recursiveGetterConstraintCallLike.tsx, 5, 5))
+>Component : Symbol(Component, Decl(recursiveGetterConstraintCallLike.tsx, 2, 1))
+>data : Symbol(data, Decl(recursiveGetterConstraintCallLike.tsx, 5, 35))
+>value : Symbol(value, Decl(recursiveGetterConstraintCallLike.tsx, 5, 43))
+
+const validPaired = <Component data={{ get value() { return ""; } }}></Component>;
+>validPaired : Symbol(validPaired, Decl(recursiveGetterConstraintCallLike.tsx, 6, 5))
+>Component : Symbol(Component, Decl(recursiveGetterConstraintCallLike.tsx, 2, 1))
+>data : Symbol(data, Decl(recursiveGetterConstraintCallLike.tsx, 6, 30))
+>value : Symbol(value, Decl(recursiveGetterConstraintCallLike.tsx, 6, 38))
+>Component : Symbol(Component, Decl(recursiveGetterConstraintCallLike.tsx, 2, 1))
+
+const invalidSelfClosing = <Component data={{ get value() { return 42; } }} />;
+>invalidSelfClosing : Symbol(invalidSelfClosing, Decl(recursiveGetterConstraintCallLike.tsx, 7, 5))
+>Component : Symbol(Component, Decl(recursiveGetterConstraintCallLike.tsx, 2, 1))
+>data : Symbol(data, Decl(recursiveGetterConstraintCallLike.tsx, 7, 37))
+>value : Symbol(value, Decl(recursiveGetterConstraintCallLike.tsx, 7, 45))
+
+const invalidPaired = <Component data={{ get value() { return 42; } }}></Component>;
+>invalidPaired : Symbol(invalidPaired, Decl(recursiveGetterConstraintCallLike.tsx, 8, 5))
+>Component : Symbol(Component, Decl(recursiveGetterConstraintCallLike.tsx, 2, 1))
+>data : Symbol(data, Decl(recursiveGetterConstraintCallLike.tsx, 8, 32))
+>value : Symbol(value, Decl(recursiveGetterConstraintCallLike.tsx, 8, 40))
+>Component : Symbol(Component, Decl(recursiveGetterConstraintCallLike.tsx, 2, 1))
+
+declare function InvalidComponent<T extends { value: string }>(props: { data: T }): number;
+>InvalidComponent : Symbol(InvalidComponent, Decl(recursiveGetterConstraintCallLike.tsx, 8, 84))
+>T : Symbol(T, Decl(recursiveGetterConstraintCallLike.tsx, 10, 34))
+>value : Symbol(value, Decl(recursiveGetterConstraintCallLike.tsx, 10, 45))
+>props : Symbol(props, Decl(recursiveGetterConstraintCallLike.tsx, 10, 63))
+>data : Symbol(data, Decl(recursiveGetterConstraintCallLike.tsx, 10, 71))
+>T : Symbol(T, Decl(recursiveGetterConstraintCallLike.tsx, 10, 34))
+
+const invalidElement = <InvalidComponent data={{ get value() { return 42; } }} />;
+>invalidElement : Symbol(invalidElement, Decl(recursiveGetterConstraintCallLike.tsx, 11, 5))
+>InvalidComponent : Symbol(InvalidComponent, Decl(recursiveGetterConstraintCallLike.tsx, 8, 84))
+>data : Symbol(data, Decl(recursiveGetterConstraintCallLike.tsx, 11, 40))
+>value : Symbol(value, Decl(recursiveGetterConstraintCallLike.tsx, 11, 48))
+
+declare function tag<T extends { value: string }>(strings: TemplateStringsArray, value: T): T;
+>tag : Symbol(tag, Decl(recursiveGetterConstraintCallLike.tsx, 11, 82))
+>T : Symbol(T, Decl(recursiveGetterConstraintCallLike.tsx, 13, 21))
+>value : Symbol(value, Decl(recursiveGetterConstraintCallLike.tsx, 13, 32))
+>strings : Symbol(strings, Decl(recursiveGetterConstraintCallLike.tsx, 13, 50))
+>TemplateStringsArray : Symbol(TemplateStringsArray, Decl(lib.es5.d.ts, --, --))
+>value : Symbol(value, Decl(recursiveGetterConstraintCallLike.tsx, 13, 80))
+>T : Symbol(T, Decl(recursiveGetterConstraintCallLike.tsx, 13, 21))
+>T : Symbol(T, Decl(recursiveGetterConstraintCallLike.tsx, 13, 21))
+
+const validTagged = tag`${{ get value() { return ""; } }}`;
+>validTagged : Symbol(validTagged, Decl(recursiveGetterConstraintCallLike.tsx, 14, 5))
+>tag : Symbol(tag, Decl(recursiveGetterConstraintCallLike.tsx, 11, 82))
+>value : Symbol(value, Decl(recursiveGetterConstraintCallLike.tsx, 14, 27))
+
+const invalidTagged = tag`${{ get value() { return 42; } }}`;
+>invalidTagged : Symbol(invalidTagged, Decl(recursiveGetterConstraintCallLike.tsx, 15, 5))
+>tag : Symbol(tag, Decl(recursiveGetterConstraintCallLike.tsx, 11, 82))
+>value : Symbol(value, Decl(recursiveGetterConstraintCallLike.tsx, 15, 29))
+
+declare function rest<T extends { value: string }>(...values: T[]): T;
+>rest : Symbol(rest, Decl(recursiveGetterConstraintCallLike.tsx, 15, 61))
+>T : Symbol(T, Decl(recursiveGetterConstraintCallLike.tsx, 17, 22))
+>value : Symbol(value, Decl(recursiveGetterConstraintCallLike.tsx, 17, 33))
+>values : Symbol(values, Decl(recursiveGetterConstraintCallLike.tsx, 17, 51))
+>T : Symbol(T, Decl(recursiveGetterConstraintCallLike.tsx, 17, 22))
+>T : Symbol(T, Decl(recursiveGetterConstraintCallLike.tsx, 17, 22))
+
+const validRest = rest({ get value() { return ""; } });
+>validRest : Symbol(validRest, Decl(recursiveGetterConstraintCallLike.tsx, 18, 5))
+>rest : Symbol(rest, Decl(recursiveGetterConstraintCallLike.tsx, 15, 61))
+>value : Symbol(value, Decl(recursiveGetterConstraintCallLike.tsx, 18, 24))
+
+const invalidRest = rest({ get value() { return 42; } });
+>invalidRest : Symbol(invalidRest, Decl(recursiveGetterConstraintCallLike.tsx, 19, 5))
+>rest : Symbol(rest, Decl(recursiveGetterConstraintCallLike.tsx, 15, 61))
+>value : Symbol(value, Decl(recursiveGetterConstraintCallLike.tsx, 19, 26))
+
+const matcher = {
+>matcher : Symbol(matcher, Decl(recursiveGetterConstraintCallLike.tsx, 21, 5))
+
+    [Symbol.hasInstance]<T extends { value: string }>(value: T) { return true; },
+>[Symbol.hasInstance] : Symbol([Symbol.hasInstance], Decl(recursiveGetterConstraintCallLike.tsx, 21, 17))
+>Symbol.hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>T : Symbol(T, Decl(recursiveGetterConstraintCallLike.tsx, 22, 25))
+>value : Symbol(value, Decl(recursiveGetterConstraintCallLike.tsx, 22, 36))
+>value : Symbol(value, Decl(recursiveGetterConstraintCallLike.tsx, 22, 54))
+>T : Symbol(T, Decl(recursiveGetterConstraintCallLike.tsx, 22, 25))
+
+};
+const validInstance = { get value() { return ""; } } instanceof matcher;
+>validInstance : Symbol(validInstance, Decl(recursiveGetterConstraintCallLike.tsx, 24, 5))
+>value : Symbol(value, Decl(recursiveGetterConstraintCallLike.tsx, 24, 23))
+>matcher : Symbol(matcher, Decl(recursiveGetterConstraintCallLike.tsx, 21, 5))
+
+const invalidInstance = { get value() { return 42; } } instanceof matcher;
+>invalidInstance : Symbol(invalidInstance, Decl(recursiveGetterConstraintCallLike.tsx, 25, 5))
+>value : Symbol(value, Decl(recursiveGetterConstraintCallLike.tsx, 25, 25))
+>matcher : Symbol(matcher, Decl(recursiveGetterConstraintCallLike.tsx, 21, 5))
+

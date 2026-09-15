@@ -1,0 +1,189 @@
+//// [tests/cases/compiler/getterConstraintInferenceOrder.ts] ////
+
+=== getterConstraintInferenceOrder.ts ===
+interface Schema<O> { readonly output: O; }
+>Schema : Symbol(Schema, Decl(getterConstraintInferenceOrder.ts, 0, 0))
+>O : Symbol(O, Decl(getterConstraintInferenceOrder.ts, 0, 17))
+>output : Symbol(Schema.output, Decl(getterConstraintInferenceOrder.ts, 0, 21))
+>O : Symbol(O, Decl(getterConstraintInferenceOrder.ts, 0, 17))
+
+declare function wrap<T extends Schema<string>>(value: T): T;
+>wrap : Symbol(wrap, Decl(getterConstraintInferenceOrder.ts, 0, 43))
+>T : Symbol(T, Decl(getterConstraintInferenceOrder.ts, 1, 22))
+>Schema : Symbol(Schema, Decl(getterConstraintInferenceOrder.ts, 0, 0))
+>value : Symbol(value, Decl(getterConstraintInferenceOrder.ts, 1, 48))
+>T : Symbol(T, Decl(getterConstraintInferenceOrder.ts, 1, 22))
+>T : Symbol(T, Decl(getterConstraintInferenceOrder.ts, 1, 22))
+
+function cold() {
+>cold : Symbol(cold, Decl(getterConstraintInferenceOrder.ts, 1, 61))
+
+    const argument = { get output() { return 42; } };
+>argument : Symbol(argument, Decl(getterConstraintInferenceOrder.ts, 4, 9))
+>output : Symbol(output, Decl(getterConstraintInferenceOrder.ts, 4, 22))
+
+    return wrap(argument);
+>wrap : Symbol(wrap, Decl(getterConstraintInferenceOrder.ts, 0, 43))
+>argument : Symbol(argument, Decl(getterConstraintInferenceOrder.ts, 4, 9))
+}
+
+function warm() {
+>warm : Symbol(warm, Decl(getterConstraintInferenceOrder.ts, 6, 1))
+
+    const argument = { get output() { return 42; } };
+>argument : Symbol(argument, Decl(getterConstraintInferenceOrder.ts, 9, 9))
+>output : Symbol(output, Decl(getterConstraintInferenceOrder.ts, 9, 22))
+
+    argument.output;
+>argument.output : Symbol(output, Decl(getterConstraintInferenceOrder.ts, 9, 22))
+>argument : Symbol(argument, Decl(getterConstraintInferenceOrder.ts, 9, 9))
+>output : Symbol(output, Decl(getterConstraintInferenceOrder.ts, 9, 22))
+
+    return wrap(argument);
+>wrap : Symbol(wrap, Decl(getterConstraintInferenceOrder.ts, 0, 43))
+>argument : Symbol(argument, Decl(getterConstraintInferenceOrder.ts, 9, 9))
+}
+
+declare const coldResult: ReturnType<typeof cold>;
+>coldResult : Symbol(coldResult, Decl(getterConstraintInferenceOrder.ts, 14, 13))
+>ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
+>cold : Symbol(cold, Decl(getterConstraintInferenceOrder.ts, 1, 61))
+
+declare const warmResult: ReturnType<typeof warm>;
+>warmResult : Symbol(warmResult, Decl(getterConstraintInferenceOrder.ts, 15, 13))
+>ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
+>warm : Symbol(warm, Decl(getterConstraintInferenceOrder.ts, 6, 1))
+
+const coldToWarm: typeof warmResult = coldResult;
+>coldToWarm : Symbol(coldToWarm, Decl(getterConstraintInferenceOrder.ts, 16, 5))
+>warmResult : Symbol(warmResult, Decl(getterConstraintInferenceOrder.ts, 15, 13))
+>coldResult : Symbol(coldResult, Decl(getterConstraintInferenceOrder.ts, 14, 13))
+
+const warmToCold: typeof coldResult = warmResult;
+>warmToCold : Symbol(warmToCold, Decl(getterConstraintInferenceOrder.ts, 17, 5))
+>coldResult : Symbol(coldResult, Decl(getterConstraintInferenceOrder.ts, 14, 13))
+>warmResult : Symbol(warmResult, Decl(getterConstraintInferenceOrder.ts, 15, 13))
+
+function validCold() {
+>validCold : Symbol(validCold, Decl(getterConstraintInferenceOrder.ts, 17, 49))
+
+    const argument = { get output() { return ""; } };
+>argument : Symbol(argument, Decl(getterConstraintInferenceOrder.ts, 20, 9))
+>output : Symbol(output, Decl(getterConstraintInferenceOrder.ts, 20, 22))
+
+    return wrap(argument);
+>wrap : Symbol(wrap, Decl(getterConstraintInferenceOrder.ts, 0, 43))
+>argument : Symbol(argument, Decl(getterConstraintInferenceOrder.ts, 20, 9))
+}
+
+function validWarm() {
+>validWarm : Symbol(validWarm, Decl(getterConstraintInferenceOrder.ts, 22, 1))
+
+    const argument = { get output() { return ""; } };
+>argument : Symbol(argument, Decl(getterConstraintInferenceOrder.ts, 25, 9))
+>output : Symbol(output, Decl(getterConstraintInferenceOrder.ts, 25, 22))
+
+    argument.output;
+>argument.output : Symbol(output, Decl(getterConstraintInferenceOrder.ts, 25, 22))
+>argument : Symbol(argument, Decl(getterConstraintInferenceOrder.ts, 25, 9))
+>output : Symbol(output, Decl(getterConstraintInferenceOrder.ts, 25, 22))
+
+    return wrap(argument);
+>wrap : Symbol(wrap, Decl(getterConstraintInferenceOrder.ts, 0, 43))
+>argument : Symbol(argument, Decl(getterConstraintInferenceOrder.ts, 25, 9))
+}
+
+const coldValue: string = validCold().output;
+>coldValue : Symbol(coldValue, Decl(getterConstraintInferenceOrder.ts, 30, 5))
+>validCold().output : Symbol(output, Decl(getterConstraintInferenceOrder.ts, 20, 22))
+>validCold : Symbol(validCold, Decl(getterConstraintInferenceOrder.ts, 17, 49))
+>output : Symbol(output, Decl(getterConstraintInferenceOrder.ts, 20, 22))
+
+const warmValue: string = validWarm().output;
+>warmValue : Symbol(warmValue, Decl(getterConstraintInferenceOrder.ts, 31, 5))
+>validWarm().output : Symbol(output, Decl(getterConstraintInferenceOrder.ts, 25, 22))
+>validWarm : Symbol(validWarm, Decl(getterConstraintInferenceOrder.ts, 22, 1))
+>output : Symbol(output, Decl(getterConstraintInferenceOrder.ts, 25, 22))
+
+interface Box<T> { value: T; }
+>Box : Symbol(Box, Decl(getterConstraintInferenceOrder.ts, 31, 45))
+>T : Symbol(T, Decl(getterConstraintInferenceOrder.ts, 33, 14))
+>value : Symbol(Box.value, Decl(getterConstraintInferenceOrder.ts, 33, 18))
+>T : Symbol(T, Decl(getterConstraintInferenceOrder.ts, 33, 14))
+
+type DeferredBox<T> = Box<T>;
+>DeferredBox : Symbol(DeferredBox, Decl(getterConstraintInferenceOrder.ts, 33, 30))
+>T : Symbol(T, Decl(getterConstraintInferenceOrder.ts, 34, 17))
+>Box : Symbol(Box, Decl(getterConstraintInferenceOrder.ts, 31, 45))
+>T : Symbol(T, Decl(getterConstraintInferenceOrder.ts, 34, 17))
+
+declare function box<T>(value: T): DeferredBox<T>;
+>box : Symbol(box, Decl(getterConstraintInferenceOrder.ts, 34, 29))
+>T : Symbol(T, Decl(getterConstraintInferenceOrder.ts, 35, 21))
+>value : Symbol(value, Decl(getterConstraintInferenceOrder.ts, 35, 24))
+>T : Symbol(T, Decl(getterConstraintInferenceOrder.ts, 35, 21))
+>DeferredBox : Symbol(DeferredBox, Decl(getterConstraintInferenceOrder.ts, 33, 30))
+>T : Symbol(T, Decl(getterConstraintInferenceOrder.ts, 35, 21))
+
+declare function wrapBox<T extends Box<Schema<string>>>(value: T): T;
+>wrapBox : Symbol(wrapBox, Decl(getterConstraintInferenceOrder.ts, 35, 50))
+>T : Symbol(T, Decl(getterConstraintInferenceOrder.ts, 36, 25))
+>Box : Symbol(Box, Decl(getterConstraintInferenceOrder.ts, 31, 45))
+>Schema : Symbol(Schema, Decl(getterConstraintInferenceOrder.ts, 0, 0))
+>value : Symbol(value, Decl(getterConstraintInferenceOrder.ts, 36, 56))
+>T : Symbol(T, Decl(getterConstraintInferenceOrder.ts, 36, 25))
+>T : Symbol(T, Decl(getterConstraintInferenceOrder.ts, 36, 25))
+
+function coldBox() {
+>coldBox : Symbol(coldBox, Decl(getterConstraintInferenceOrder.ts, 36, 69))
+
+    const argument = box({ get output() { return 42; } });
+>argument : Symbol(argument, Decl(getterConstraintInferenceOrder.ts, 39, 9))
+>box : Symbol(box, Decl(getterConstraintInferenceOrder.ts, 34, 29))
+>output : Symbol(output, Decl(getterConstraintInferenceOrder.ts, 39, 26))
+
+    return wrapBox(argument);
+>wrapBox : Symbol(wrapBox, Decl(getterConstraintInferenceOrder.ts, 35, 50))
+>argument : Symbol(argument, Decl(getterConstraintInferenceOrder.ts, 39, 9))
+}
+
+function warmBox() {
+>warmBox : Symbol(warmBox, Decl(getterConstraintInferenceOrder.ts, 41, 1))
+
+    const argument = box({ get output() { return 42; } });
+>argument : Symbol(argument, Decl(getterConstraintInferenceOrder.ts, 44, 9))
+>box : Symbol(box, Decl(getterConstraintInferenceOrder.ts, 34, 29))
+>output : Symbol(output, Decl(getterConstraintInferenceOrder.ts, 44, 26))
+
+    argument.value.output;
+>argument.value.output : Symbol(output, Decl(getterConstraintInferenceOrder.ts, 44, 26))
+>argument.value : Symbol(Box.value, Decl(getterConstraintInferenceOrder.ts, 33, 18))
+>argument : Symbol(argument, Decl(getterConstraintInferenceOrder.ts, 44, 9))
+>value : Symbol(Box.value, Decl(getterConstraintInferenceOrder.ts, 33, 18))
+>output : Symbol(output, Decl(getterConstraintInferenceOrder.ts, 44, 26))
+
+    return wrapBox(argument);
+>wrapBox : Symbol(wrapBox, Decl(getterConstraintInferenceOrder.ts, 35, 50))
+>argument : Symbol(argument, Decl(getterConstraintInferenceOrder.ts, 44, 9))
+}
+
+declare const coldBoxResult: ReturnType<typeof coldBox>;
+>coldBoxResult : Symbol(coldBoxResult, Decl(getterConstraintInferenceOrder.ts, 49, 13))
+>ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
+>coldBox : Symbol(coldBox, Decl(getterConstraintInferenceOrder.ts, 36, 69))
+
+declare const warmBoxResult: ReturnType<typeof warmBox>;
+>warmBoxResult : Symbol(warmBoxResult, Decl(getterConstraintInferenceOrder.ts, 50, 13))
+>ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
+>warmBox : Symbol(warmBox, Decl(getterConstraintInferenceOrder.ts, 41, 1))
+
+const coldBoxToWarm: typeof warmBoxResult = coldBoxResult;
+>coldBoxToWarm : Symbol(coldBoxToWarm, Decl(getterConstraintInferenceOrder.ts, 51, 5))
+>warmBoxResult : Symbol(warmBoxResult, Decl(getterConstraintInferenceOrder.ts, 50, 13))
+>coldBoxResult : Symbol(coldBoxResult, Decl(getterConstraintInferenceOrder.ts, 49, 13))
+
+const warmBoxToCold: typeof coldBoxResult = warmBoxResult;
+>warmBoxToCold : Symbol(warmBoxToCold, Decl(getterConstraintInferenceOrder.ts, 52, 5))
+>coldBoxResult : Symbol(coldBoxResult, Decl(getterConstraintInferenceOrder.ts, 49, 13))
+>warmBoxResult : Symbol(warmBoxResult, Decl(getterConstraintInferenceOrder.ts, 50, 13))
+

@@ -224,6 +224,11 @@ type ReverseMappedTypeKey struct {
 	constraintId TypeId
 }
 
+type SpreadAccessorKey struct {
+	origin   *ast.Symbol
+	readonly bool
+}
+
 // IterationTypesKey
 
 type IterationTypesKey struct {
@@ -265,10 +270,12 @@ type FlowLoopInfo struct {
 type InferenceFlags uint32
 
 const (
-	InferenceFlagsNone                   InferenceFlags = 0      // No special inference behaviors
-	InferenceFlagsNoDefault              InferenceFlags = 1 << 0 // Infer silentNeverType for no inferences (otherwise anyType or unknownType)
-	InferenceFlagsAnyDefault             InferenceFlags = 1 << 1 // Infer anyType (in JS files) for no inferences (otherwise unknownType)
-	InferenceFlagsSkippedGenericFunction InferenceFlags = 1 << 2 // A generic function was skipped during inference
+	InferenceFlagsNone                     InferenceFlags = 0      // No special inference behaviors
+	InferenceFlagsNoDefault                InferenceFlags = 1 << 0 // Infer silentNeverType for no inferences (otherwise anyType or unknownType)
+	InferenceFlagsAnyDefault               InferenceFlags = 1 << 1 // Infer anyType (in JS files) for no inferences (otherwise unknownType)
+	InferenceFlagsSkippedGenericFunction   InferenceFlags = 1 << 2 // A generic function was skipped during inference
+	InferenceFlagsAllowDeferredConstraints InferenceFlags = 1 << 3 // Constraints do not participate in overload selection
+	InferenceFlagsDeferredConstraints      InferenceFlags = 1 << 4 // An inferred type argument needs deferred constraint checking
 )
 
 // InferenceContext
@@ -645,6 +652,7 @@ type Checker struct {
 	reverseMappedCache                          map[ReverseMappedTypeKey]*Type
 	reverseHomomorphicMappedCache               map[ReverseMappedTypeKey]*Type
 	iterationTypesCache                         map[IterationTypesKey]IterationTypes
+	spreadAccessorSymbols                       map[SpreadAccessorKey]*ast.Symbol
 	markerTypes                                 collections.Set[*Type]
 	resolvingExplicitTypeOfSymbol               collections.Set[*ast.Symbol]
 	undefinedSymbol                             *ast.Symbol
@@ -891,6 +899,7 @@ type Checker struct {
 	_jsxNamespace                               string
 	_jsxFactoryEntity                           *ast.Node
 	skipDirectInferenceNodes                    collections.Set[*ast.Node]
+	deferredPropertyAssignments                 collections.Set[*ast.Node]
 	ctx                                         context.Context
 	packagesMap                                 map[string]bool
 	activeMappers                               []*TypeMapper
@@ -960,6 +969,7 @@ func NewChecker(program Program, tracer *Tracer) (*Checker, *sync.Mutex) {
 	c.reverseMappedCache = make(map[ReverseMappedTypeKey]*Type)
 	c.reverseHomomorphicMappedCache = make(map[ReverseMappedTypeKey]*Type)
 	c.iterationTypesCache = make(map[IterationTypesKey]IterationTypes)
+	c.spreadAccessorSymbols = make(map[SpreadAccessorKey]*ast.Symbol)
 	c.undefinedSymbol = c.newSymbol(ast.SymbolFlagsProperty, "undefined")
 	c.argumentsSymbol = c.newSymbol(ast.SymbolFlagsProperty, "arguments")
 	c.requireSymbol = c.newSymbol(ast.SymbolFlagsProperty, "require")
@@ -2549,6 +2559,9 @@ func (c *Checker) checkDeferredNode(node *ast.Node) {
 	c.instantiationCount = 0
 	switch node.Kind {
 	case ast.KindCallExpression, ast.KindNewExpression, ast.KindTaggedTemplateExpression, ast.KindDecorator, ast.KindJsxOpeningElement:
+		if signature := c.getResolvedSignature(node, nil, CheckModeNormal); signature.flags&SignatureFlagsDeferredConstraints != 0 {
+			break
+		}
 		// These node kinds are deferred checked when overload resolution fails. To save on work,
 		// we ensure the arguments are checked just once in a deferred way.
 		c.resolveUntypedCall(node)
@@ -2556,6 +2569,8 @@ func (c *Checker) checkDeferredNode(node *ast.Node) {
 		c.checkFunctionExpressionOrObjectLiteralMethodDeferred(node)
 	case ast.KindGetAccessor, ast.KindSetAccessor:
 		c.checkAccessorDeclaration(node)
+	case ast.KindPropertyAssignment:
+		c.getTypeOfSymbol(c.getSymbolOfDeclaration(node))
 	case ast.KindClassExpression:
 		c.checkClassExpressionDeferred(node)
 	case ast.KindTypeParameter:
@@ -2570,10 +2585,17 @@ func (c *Checker) checkDeferredNode(node *ast.Node) {
 		c.checkExpression(node.Expression())
 	case ast.KindBinaryExpression:
 		if ast.IsInstanceOfExpression(node) {
-			c.resolveUntypedCall(node)
+			if signature := c.getResolvedSignature(node, nil, CheckModeNormal); signature.flags&SignatureFlagsDeferredConstraints == 0 {
+				c.resolveUntypedCall(node)
+			}
 		}
 	case ast.KindObjectLiteralExpression, ast.KindJsxAttributes:
 		c.checkContextualDeprecations(node)
+	}
+	if ast.IsCallLikeExpression(node) {
+		if signature := c.getResolvedSignature(node, nil, CheckModeNormal); signature.flags&SignatureFlagsDeferredConstraints != 0 {
+			c.checkDeferredTypeArgumentConstraints(node, signature)
+		}
 	}
 	c.currentNode = saveCurrentNode
 }
@@ -8614,7 +8636,30 @@ func (c *Checker) getResolvedSignature(node *ast.Node, candidatesOutArray *[]*Si
 			links.resolvedSignature = cached
 		}
 	}
+	if result.flags&SignatureFlagsDeferredConstraints != 0 {
+		c.checkNodeDeferred(node)
+	}
 	return result
+}
+
+func (c *Checker) checkDeferredTypeArgumentConstraints(node *ast.Node, signature *Signature) {
+	// Validate the complete constraints of the final selected call, not individual members or discarded candidates.
+	args := c.getEffectiveCallArguments(node)
+	for _, typeParameter := range signature.target.typeParameters {
+		if constraint := c.getConstraintOfTypeParameter(typeParameter); constraint != nil {
+			typeArgument := c.instantiateType(typeParameter, signature.mapper)
+			target := c.getTypeWithThisArgument(c.instantiateType(constraint, signature.mapper), typeArgument, false)
+			var argumentNode *ast.Node
+			for i, arg := range args {
+				if c.getTypeAtPosition(signature.target, i) == typeParameter {
+					argumentNode = arg
+					break
+				}
+			}
+			c.checkTypeAssignableToAndOptionallyElaborate(typeArgument, target, core.OrElse(argumentNode, node), argumentNode,
+				diagnostics.Type_0_does_not_satisfy_the_constraint_1, nil)
+		}
+	}
 }
 
 func (c *Checker) resolveSignature(node *ast.Node, candidatesOutArray *[]*Signature, checkMode CheckMode) *Signature {
@@ -9230,6 +9275,10 @@ func (c *Checker) chooseOverload(s *CallState, relation *Relation) *Signature {
 				}
 			} else {
 				inferenceContext = c.newInferenceContext(candidate.typeParameters, candidate, core.IfElse(ast.IsInJSFile(s.node), InferenceFlagsAnyDefault, InferenceFlagsNone) /*flags*/, nil)
+				if len(s.candidates) == 1 {
+					// Without an overload choice, constraint validation can wait until recursive declarations have types.
+					inferenceContext.flags |= InferenceFlagsAllowDeferredConstraints
+				}
 				typeArgumentTypes = c.inferTypeArguments(s.node, candidate, s.args, s.argCheckMode|CheckModeSkipGenericFunctions, inferenceContext)
 				if inferenceContext.flags&InferenceFlagsSkippedGenericFunction != 0 {
 					s.argCheckMode |= CheckModeSkipGenericFunctions
@@ -9274,6 +9323,13 @@ func (c *Checker) chooseOverload(s *CallState, relation *Relation) *Signature {
 				s.candidatesForArgumentError = append(s.candidatesForArgumentError, checkCandidate)
 				continue
 			}
+		}
+		if inferenceContext != nil && inferenceContext.flags&InferenceFlagsDeferredConstraints != 0 {
+			deferredCandidate := c.cloneSignature(checkCandidate)
+			deferredCandidate.resolvedReturnType = checkCandidate.resolvedReturnType
+			deferredCandidate.resolvedTypePredicate = checkCandidate.resolvedTypePredicate
+			deferredCandidate.flags |= SignatureFlagsDeferredConstraints
+			checkCandidate = deferredCandidate
 		}
 		s.candidates[candidateIndex] = checkCandidate
 		return checkCandidate
@@ -13410,7 +13466,14 @@ func (c *Checker) checkObjectLiteral(node *ast.Node, checkMode CheckMode) *Type 
 		if memberDecl.Name() != nil && memberDecl.Name().Kind == ast.KindComputedPropertyName {
 			computedNameType = c.checkComputedPropertyName(memberDecl.Name())
 		}
-		if ast.IsPropertyAssignment(memberDecl) || ast.IsShorthandPropertyAssignment(memberDecl) || ast.IsObjectLiteralMethod(memberDecl) {
+		if memberDecl.Kind == ast.KindPropertyAssignment && computedNameType == nil && !inDestructuringPattern && !inConstContext &&
+			(ast.IsCallExpression(memberDecl.Initializer()) || ast.IsNewExpression(memberDecl.Initializer())) &&
+			c.hasDeferredReferenceToResolvingSymbol(memberDecl.Initializer()) {
+			// The initializer names a declaration still being typed from inside a body that runs later.
+			// Type the property lazily through its own symbol, as for an accessor, so the declaration can finish first.
+			c.deferredPropertyAssignments.Add(memberDecl)
+			c.checkNodeDeferred(memberDecl)
+		} else if ast.IsPropertyAssignment(memberDecl) || ast.IsShorthandPropertyAssignment(memberDecl) || ast.IsObjectLiteralMethod(memberDecl) {
 			var t *Type
 			switch memberDecl.Kind {
 			case ast.KindPropertyAssignment:
@@ -13657,8 +13720,8 @@ func (c *Checker) getSpreadType(left *Type, right *Type, symbol *ast.Symbol, obj
 		}
 		if members[leftProp.Name] != nil {
 			rightProp := members[leftProp.Name]
-			rightType := c.getTypeOfSymbol(rightProp)
 			if rightProp.Flags&ast.SymbolFlagsOptional != 0 {
+				rightType := c.getTypeOfSymbol(rightProp)
 				declarations := core.Concatenate(leftProp.Declarations, rightProp.Declarations)
 				flags := ast.SymbolFlagsProperty | (leftProp.Flags & ast.SymbolFlagsOptional)
 				result := c.newSymbol(flags, leftProp.Name)
@@ -13786,18 +13849,41 @@ func (c *Checker) getSpreadSymbol(prop *ast.Symbol, readonly bool) *ast.Symbol {
 	if !isSetonlyAccessor && readonly == c.isReadonlySymbol(prop) {
 		return prop
 	}
+	// A getter's type may depend on the object literal being spread into (a recursive
+	// getter in a generic call argument), so its spread copy resolves lazily through the
+	// origin accessor and is shared by every check of the same literal.
+	isGetter := prop.Flags&ast.SymbolFlagsGetAccessor != 0
+	key := SpreadAccessorKey{origin: prop, readonly: readonly}
+	if isGetter {
+		if cached := c.spreadAccessorSymbols[key]; cached != nil {
+			return cached
+		}
+	}
 	flags := ast.SymbolFlagsProperty | (prop.Flags & ast.SymbolFlagsOptional)
 	result := c.newSymbolEx(flags, prop.Name, prop.CheckFlags&ast.CheckFlagsLate|core.IfElse(readonly, ast.CheckFlagsReadonly, 0))
 	links := c.valueSymbolLinks.Get(result)
 	if isSetonlyAccessor {
 		links.resolvedType = c.undefinedType
-	} else {
+	} else if !isGetter {
 		links.resolvedType = c.getTypeOfSymbol(prop)
 	}
 	result.Declarations = prop.Declarations
 	links.nameType = c.valueSymbolLinks.Get(prop).nameType
 	c.mappedSymbolLinks.Get(result).syntheticOrigin = prop
+	if isGetter {
+		c.spreadAccessorSymbols[key] = result
+	}
 	return result
+}
+
+// getSpreadAccessorOrigin returns the get accessor a spread property was copied from, or nil.
+func (c *Checker) getSpreadAccessorOrigin(prop *ast.Symbol) *ast.Symbol {
+	if prop.Flags&ast.SymbolFlagsProperty != 0 && prop.ValueDeclaration == nil && prop.CheckFlags&ast.CheckFlagsMapped == 0 {
+		if links := c.mappedSymbolLinks.TryGet(prop); links != nil && links.syntheticOrigin != nil && links.syntheticOrigin.Flags&ast.SymbolFlagsGetAccessor != 0 {
+			return links.syntheticOrigin
+		}
+	}
+	return nil
 }
 
 func (c *Checker) isEmptyObjectTypeOrSpreadsIntoEmptyObject(t *Type) bool {
@@ -16884,6 +16970,9 @@ func (c *Checker) getTypeOfVariableOrParameterOrPropertyWorker(symbol *ast.Symbo
 	if symbol == c.requireSymbol {
 		return c.anyType
 	}
+	if origin := c.getSpreadAccessorOrigin(symbol); origin != nil {
+		return c.getTypeOfSymbol(origin)
+	}
 	debug.Assert(symbol.ValueDeclaration != nil)
 	declaration := symbol.ValueDeclaration
 	if ast.IsSourceFile(declaration) && ast.IsJsonSourceFile(declaration.AsSourceFile()) {
@@ -18750,7 +18839,7 @@ func (c *Checker) getWidenedTypeOfObjectLiteral(t *Type, context *WideningContex
 }
 
 func (c *Checker) getWidenedProperty(prop *ast.Symbol, context *WideningContext) *ast.Symbol {
-	if prop.Flags&ast.SymbolFlagsProperty == 0 {
+	if prop.Flags&ast.SymbolFlagsProperty == 0 || c.getSpreadAccessorOrigin(prop) != nil || c.isDeferredPropertyAssignment(prop) {
 		// Since get accessors already widen their return value there is no need to
 		// widen accessor based properties here.
 		return prop
@@ -19415,12 +19504,44 @@ func (c *Checker) resolveClassOrInterfaceMembers(t *Type) {
 func (c *Checker) resolveTypeReferenceMembers(t *Type) {
 	source := t.Target()
 	typeParameters := source.AsInterfaceType().allTypeParameters
+	if t != source && source.objectFlags&ObjectFlagsInterface != 0 && c.hasComputedBaseTypeArguments(source) {
+		// Resolve inherited interface members before substituting type arguments, which can refer
+		// back to those members. Keep 'this' generic so it is substituted along with the other parameters.
+		template := c.getTypeWithThisArgument(source, source.AsInterfaceType().thisType, false)
+		if t != template {
+			resolved := c.resolveStructuredTypeMembers(template)
+			if template.objectFlags&ObjectFlagsUnresolvedMembers == 0 {
+				mapper := newDeferredTypeMapper(typeParameters, core.MapIndex(typeParameters, func(_ *Type, index int) func() *Type {
+					return func() *Type {
+						arguments := c.getTypeArguments(t)
+						if index < len(arguments) {
+							return arguments[index]
+						}
+						return t
+					}
+				}))
+				c.setStructuredTypeMembers(t, c.instantiateSymbolTable(resolved.members, mapper),
+					c.instantiateSignatures(resolved.CallSignatures(), mapper),
+					c.instantiateSignatures(resolved.ConstructSignatures(), mapper),
+					c.instantiateIndexInfos(resolved.indexInfos, mapper))
+				return
+			}
+		}
+	}
 	typeArguments := c.getTypeArguments(t)
 	paddedTypeArguments := typeArguments
 	if len(typeArguments) == len(typeParameters)-1 {
 		paddedTypeArguments = core.Concatenate(typeArguments, []*Type{t})
 	}
 	c.resolveObjectTypeMembers(t, source, typeParameters, paddedTypeArguments)
+}
+
+func (c *Checker) hasComputedBaseTypeArguments(t *Type) bool {
+	return core.Some(c.getBaseTypes(t), func(base *Type) bool {
+		return base.objectFlags&ObjectFlagsReference != 0 && core.Some(c.getTypeArguments(base), func(argument *Type) bool {
+			return argument.flags&TypeFlagsTypeParameter == 0 && c.couldContainTypeVariables(argument)
+		})
+	})
 }
 
 func (c *Checker) resolveObjectTypeMembers(t *Type, source *Type, typeParameters []*Type, typeArguments []*Type) {
@@ -23546,7 +23667,11 @@ func (c *Checker) getTypeFromClassOrInterfaceReference(node *ast.Node, symbol *a
 		// of the class or interface.
 		localTypeArguments := c.fillMissingTypeArguments(c.getTypeArgumentsFromNode(node), typeParameters, minTypeArgumentCount, isJs)
 		typeArguments := append(d.OuterTypeParameters(), localTypeArguments...)
-		return c.createTypeReferenceEx(t, typeArguments, ObjectFlagsFromTypeNode)
+		result := c.createTypeReferenceEx(t, typeArguments, ObjectFlagsFromTypeNode)
+		if node.Kind == ast.KindTypeReference {
+			result = c.prepareTypeReferenceInstantiation(result, node)
+		}
+		return result
 	}
 	if c.checkNoTypeArguments(node, symbol) {
 		return t
@@ -24486,9 +24611,38 @@ func (c *Checker) getTypeFromArrayOrTupleTypeNode(node *ast.Node) *Type {
 			} else {
 				links.resolvedType = c.createTypeReferenceEx(target, elementTypes, ObjectFlagsFromTypeNode)
 			}
+			links.resolvedType = c.prepareTypeReferenceInstantiation(links.resolvedType, node)
 		}
 	}
 	return links.resolvedType
+}
+
+func (c *Checker) prepareTypeReferenceInstantiation(t *Type, node *ast.Node) *Type {
+	// Tuple normalization can expand elements, so the original syntax may no
+	// longer describe the target's arguments, even when the target is fixed-length.
+	if node.Kind == ast.KindTupleType && core.Some(node.Elements(), func(element *ast.Node) bool {
+		return c.getTupleElementFlags(element)&ElementFlagsVariable != 0
+	}) {
+		return t
+	}
+	if t.objectFlags&ObjectFlagsReference != 0 &&
+		core.Some(t.AsTypeReference().resolvedTypeArguments, c.needsDeferredTypeArgumentInstantiation) {
+		// Preserve declaration-time checking, but keep the expressions available for
+		// later substitution. Evaluating an indexed argument while constructing its
+		// enclosing type can otherwise turn a guarded recursive type into a cycle.
+		result := c.createDeferredTypeReference(t.Target(), node, nil, nil)
+		result.objectFlags |= ObjectFlagsFromTypeNode | t.objectFlags&ObjectFlagsPropagatingFlags
+		result.AsTypeReference().resolvedTypeArguments = t.AsTypeReference().resolvedTypeArguments
+		return result
+	}
+	return t
+}
+
+func (c *Checker) needsDeferredTypeArgumentInstantiation(t *Type) bool {
+	if t.flags&(TypeFlagsInstantiable&^TypeFlagsTypeParameter) != 0 {
+		return c.couldContainTypeVariables(t)
+	}
+	return t.flags&TypeFlagsUnionOrIntersection != 0 && core.Some(t.Types(), c.needsDeferredTypeArgumentInstantiation)
 }
 
 func (c *Checker) isVariadicTupleElement(node *ast.Node) bool {
@@ -30988,6 +31142,10 @@ func (c *Checker) isExcludedMappedPropertyName(t *Type, propertyNameType *Type) 
 func (c *Checker) getTypeOfConcretePropertyOfContextualType(t *Type, name string) *Type {
 	prop := c.getPropertyOfType(t, name)
 	if prop == nil || c.isCircularMappedProperty(prop) {
+		return nil
+	}
+	// A lazily typed property cannot be contextually typed by itself, which is what the inferred literal type offers.
+	if c.isDeferredPropertyAssignment(prop) && c.valueSymbolLinks.Get(prop).resolvedType == nil {
 		return nil
 	}
 	return c.removeMissingType(c.getTypeOfSymbol(prop), prop.Flags&ast.SymbolFlagsOptional != 0)

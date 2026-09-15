@@ -1,0 +1,32 @@
+invalidFirst.ts(6,9): error TS2322: Type 'number' is not assignable to type 'Schema<any>'.
+recursiveFirst.ts(7,9): error TS2322: Type 'number' is not assignable to type 'Schema<any>'.
+
+
+==== recursiveFirst.ts (1 errors) ====
+    interface Schema<O> { readonly out: O; }
+    type Shape = Record<string, Schema<any>>;
+    declare function object<S extends Shape>(shape: S): Schema<{ [K in keyof S]: S[K]["out"] }> & { shape: S };
+    
+    const t = object({
+        get rec() { return t; },
+        get bad() { return 42; },
+            ~~~
+!!! error TS2322: Type 'number' is not assignable to type 'Schema<any>'.
+    });
+    
+    export {};
+    
+==== invalidFirst.ts (1 errors) ====
+    interface Schema<O> { readonly out: O; }
+    type Shape = Record<string, Schema<any>>;
+    declare function object<S extends Shape>(shape: S): Schema<{ [K in keyof S]: S[K]["out"] }> & { shape: S };
+    
+    const t = object({
+        get bad() { return 42; },
+            ~~~
+!!! error TS2322: Type 'number' is not assignable to type 'Schema<any>'.
+        get rec() { return t; },
+    });
+    
+    export {};
+    

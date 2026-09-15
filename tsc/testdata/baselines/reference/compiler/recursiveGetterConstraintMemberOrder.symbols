@@ -1,0 +1,84 @@
+//// [tests/cases/compiler/recursiveGetterConstraintMemberOrder.ts] ////
+
+=== recursiveFirst.ts ===
+interface Schema<O> { readonly out: O; }
+>Schema : Symbol(Schema, Decl(recursiveFirst.ts, 0, 0))
+>O : Symbol(O, Decl(recursiveFirst.ts, 0, 17))
+>out : Symbol(Schema.out, Decl(recursiveFirst.ts, 0, 21))
+>O : Symbol(O, Decl(recursiveFirst.ts, 0, 17))
+
+type Shape = Record<string, Schema<any>>;
+>Shape : Symbol(Shape, Decl(recursiveFirst.ts, 0, 40))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Schema : Symbol(Schema, Decl(recursiveFirst.ts, 0, 0))
+
+declare function object<S extends Shape>(shape: S): Schema<{ [K in keyof S]: S[K]["out"] }> & { shape: S };
+>object : Symbol(object, Decl(recursiveFirst.ts, 1, 41))
+>S : Symbol(S, Decl(recursiveFirst.ts, 2, 24))
+>Shape : Symbol(Shape, Decl(recursiveFirst.ts, 0, 40))
+>shape : Symbol(shape, Decl(recursiveFirst.ts, 2, 41))
+>S : Symbol(S, Decl(recursiveFirst.ts, 2, 24))
+>Schema : Symbol(Schema, Decl(recursiveFirst.ts, 0, 0))
+>K : Symbol(K, Decl(recursiveFirst.ts, 2, 62))
+>S : Symbol(S, Decl(recursiveFirst.ts, 2, 24))
+>S : Symbol(S, Decl(recursiveFirst.ts, 2, 24))
+>K : Symbol(K, Decl(recursiveFirst.ts, 2, 62))
+>shape : Symbol(shape, Decl(recursiveFirst.ts, 2, 95))
+>S : Symbol(S, Decl(recursiveFirst.ts, 2, 24))
+
+const t = object({
+>t : Symbol(t, Decl(recursiveFirst.ts, 4, 5))
+>object : Symbol(object, Decl(recursiveFirst.ts, 1, 41))
+
+    get rec() { return t; },
+>rec : Symbol(rec, Decl(recursiveFirst.ts, 4, 18))
+>t : Symbol(t, Decl(recursiveFirst.ts, 4, 5))
+
+    get bad() { return 42; },
+>bad : Symbol(bad, Decl(recursiveFirst.ts, 5, 28))
+
+});
+
+export {};
+
+=== invalidFirst.ts ===
+interface Schema<O> { readonly out: O; }
+>Schema : Symbol(Schema, Decl(invalidFirst.ts, 0, 0))
+>O : Symbol(O, Decl(invalidFirst.ts, 0, 17))
+>out : Symbol(Schema.out, Decl(invalidFirst.ts, 0, 21))
+>O : Symbol(O, Decl(invalidFirst.ts, 0, 17))
+
+type Shape = Record<string, Schema<any>>;
+>Shape : Symbol(Shape, Decl(invalidFirst.ts, 0, 40))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Schema : Symbol(Schema, Decl(invalidFirst.ts, 0, 0))
+
+declare function object<S extends Shape>(shape: S): Schema<{ [K in keyof S]: S[K]["out"] }> & { shape: S };
+>object : Symbol(object, Decl(invalidFirst.ts, 1, 41))
+>S : Symbol(S, Decl(invalidFirst.ts, 2, 24))
+>Shape : Symbol(Shape, Decl(invalidFirst.ts, 0, 40))
+>shape : Symbol(shape, Decl(invalidFirst.ts, 2, 41))
+>S : Symbol(S, Decl(invalidFirst.ts, 2, 24))
+>Schema : Symbol(Schema, Decl(invalidFirst.ts, 0, 0))
+>K : Symbol(K, Decl(invalidFirst.ts, 2, 62))
+>S : Symbol(S, Decl(invalidFirst.ts, 2, 24))
+>S : Symbol(S, Decl(invalidFirst.ts, 2, 24))
+>K : Symbol(K, Decl(invalidFirst.ts, 2, 62))
+>shape : Symbol(shape, Decl(invalidFirst.ts, 2, 95))
+>S : Symbol(S, Decl(invalidFirst.ts, 2, 24))
+
+const t = object({
+>t : Symbol(t, Decl(invalidFirst.ts, 4, 5))
+>object : Symbol(object, Decl(invalidFirst.ts, 1, 41))
+
+    get bad() { return 42; },
+>bad : Symbol(bad, Decl(invalidFirst.ts, 4, 18))
+
+    get rec() { return t; },
+>rec : Symbol(rec, Decl(invalidFirst.ts, 5, 29))
+>t : Symbol(t, Decl(invalidFirst.ts, 4, 5))
+
+});
+
+export {};
+

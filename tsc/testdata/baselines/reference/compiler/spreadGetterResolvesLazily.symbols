@@ -1,0 +1,77 @@
+//// [tests/cases/compiler/spreadGetterResolvesLazily.ts] ////
+
+=== spreadGetterResolvesLazily.ts ===
+// A spread copy of a getter takes its type from the getter on demand, so a getter
+// that refers back to the spread result is well-founded, as it already is without
+// the spread.
+const direct = {
+>direct : Symbol(direct, Decl(spreadGetterResolvesLazily.ts, 3, 5))
+
+    get self() {
+>self : Symbol(self, Decl(spreadGetterResolvesLazily.ts, 3, 16))
+
+        return direct;
+>direct : Symbol(direct, Decl(spreadGetterResolvesLazily.ts, 3, 5))
+
+    },
+};
+
+const source = {
+>source : Symbol(source, Decl(spreadGetterResolvesLazily.ts, 9, 5))
+
+    get self() {
+>self : Symbol(self, Decl(spreadGetterResolvesLazily.ts, 9, 16))
+
+        return spread;
+>spread : Symbol(spread, Decl(spreadGetterResolvesLazily.ts, 14, 5))
+
+    },
+};
+const spread = { ...source };
+>spread : Symbol(spread, Decl(spreadGetterResolvesLazily.ts, 14, 5))
+>source : Symbol(source, Decl(spreadGetterResolvesLazily.ts, 9, 5))
+
+const directSelf: typeof direct = direct.self.self;
+>directSelf : Symbol(directSelf, Decl(spreadGetterResolvesLazily.ts, 16, 5))
+>direct : Symbol(direct, Decl(spreadGetterResolvesLazily.ts, 3, 5))
+>direct.self.self : Symbol(self, Decl(spreadGetterResolvesLazily.ts, 3, 16))
+>direct.self : Symbol(self, Decl(spreadGetterResolvesLazily.ts, 3, 16))
+>direct : Symbol(direct, Decl(spreadGetterResolvesLazily.ts, 3, 5))
+>self : Symbol(self, Decl(spreadGetterResolvesLazily.ts, 3, 16))
+>self : Symbol(self, Decl(spreadGetterResolvesLazily.ts, 3, 16))
+
+const spreadSelf: typeof spread = spread.self.self;
+>spreadSelf : Symbol(spreadSelf, Decl(spreadGetterResolvesLazily.ts, 17, 5))
+>spread : Symbol(spread, Decl(spreadGetterResolvesLazily.ts, 14, 5))
+>spread.self.self : Symbol(self, Decl(spreadGetterResolvesLazily.ts, 9, 16))
+>spread.self : Symbol(self, Decl(spreadGetterResolvesLazily.ts, 9, 16))
+>spread : Symbol(spread, Decl(spreadGetterResolvesLazily.ts, 14, 5))
+>self : Symbol(self, Decl(spreadGetterResolvesLazily.ts, 9, 16))
+>self : Symbol(self, Decl(spreadGetterResolvesLazily.ts, 9, 16))
+
+const wrongDirect: number = direct.self;
+>wrongDirect : Symbol(wrongDirect, Decl(spreadGetterResolvesLazily.ts, 18, 5))
+>direct.self : Symbol(self, Decl(spreadGetterResolvesLazily.ts, 3, 16))
+>direct : Symbol(direct, Decl(spreadGetterResolvesLazily.ts, 3, 5))
+>self : Symbol(self, Decl(spreadGetterResolvesLazily.ts, 3, 16))
+
+const wrongSpread: number = spread.self;
+>wrongSpread : Symbol(wrongSpread, Decl(spreadGetterResolvesLazily.ts, 19, 5))
+>spread.self : Symbol(self, Decl(spreadGetterResolvesLazily.ts, 9, 16))
+>spread : Symbol(spread, Decl(spreadGetterResolvesLazily.ts, 14, 5))
+>self : Symbol(self, Decl(spreadGetterResolvesLazily.ts, 9, 16))
+
+spread.self = spread;
+>spread.self : Symbol(self, Decl(spreadGetterResolvesLazily.ts, 9, 16))
+>spread : Symbol(spread, Decl(spreadGetterResolvesLazily.ts, 14, 5))
+>self : Symbol(self, Decl(spreadGetterResolvesLazily.ts, 9, 16))
+>spread : Symbol(spread, Decl(spreadGetterResolvesLazily.ts, 14, 5))
+
+direct.self = direct;
+>direct.self : Symbol(self, Decl(spreadGetterResolvesLazily.ts, 3, 16))
+>direct : Symbol(direct, Decl(spreadGetterResolvesLazily.ts, 3, 5))
+>self : Symbol(self, Decl(spreadGetterResolvesLazily.ts, 3, 16))
+>direct : Symbol(direct, Decl(spreadGetterResolvesLazily.ts, 3, 5))
+
+export {};
+

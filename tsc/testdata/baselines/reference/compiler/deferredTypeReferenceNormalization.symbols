@@ -1,0 +1,156 @@
+//// [tests/cases/compiler/deferredTypeReferenceNormalization.ts] ////
+
+=== deferredTypeReferenceNormalization.ts ===
+interface Holder<T extends { value: unknown }> {
+>Holder : Symbol(Holder, Decl(deferredTypeReferenceNormalization.ts, 0, 0))
+>T : Symbol(T, Decl(deferredTypeReferenceNormalization.ts, 0, 17))
+>value : Symbol(value, Decl(deferredTypeReferenceNormalization.ts, 0, 28))
+
+    leading: [...[T["value"], T["value"]], boolean];
+>leading : Symbol(Holder.leading, Decl(deferredTypeReferenceNormalization.ts, 0, 48))
+>T : Symbol(T, Decl(deferredTypeReferenceNormalization.ts, 0, 17))
+>T : Symbol(T, Decl(deferredTypeReferenceNormalization.ts, 0, 17))
+
+    trailing: [boolean, ...[T["value"], T["value"]]];
+>trailing : Symbol(Holder.trailing, Decl(deferredTypeReferenceNormalization.ts, 1, 52))
+>T : Symbol(T, Decl(deferredTypeReferenceNormalization.ts, 0, 17))
+>T : Symbol(T, Decl(deferredTypeReferenceNormalization.ts, 0, 17))
+
+    singleton: [...[T["value"]]];
+>singleton : Symbol(Holder.singleton, Decl(deferredTypeReferenceNormalization.ts, 2, 53))
+>T : Symbol(T, Decl(deferredTypeReferenceNormalization.ts, 0, 17))
+
+    empty: [...[], T["value"]];
+>empty : Symbol(Holder.empty, Decl(deferredTypeReferenceNormalization.ts, 3, 33))
+>T : Symbol(T, Decl(deferredTypeReferenceNormalization.ts, 0, 17))
+
+    rest: [...T["value"][]];
+>rest : Symbol(Holder.rest, Decl(deferredTypeReferenceNormalization.ts, 4, 31))
+>T : Symbol(T, Decl(deferredTypeReferenceNormalization.ts, 0, 17))
+
+    readonly: readonly [...[T["value"], T["value"]]];
+>readonly : Symbol(Holder.readonly, Decl(deferredTypeReferenceNormalization.ts, 5, 28))
+>T : Symbol(T, Decl(deferredTypeReferenceNormalization.ts, 0, 17))
+>T : Symbol(T, Decl(deferredTypeReferenceNormalization.ts, 0, 17))
+
+    optional: [value?: T["value"]];
+>optional : Symbol(Holder.optional, Decl(deferredTypeReferenceNormalization.ts, 6, 53))
+>T : Symbol(T, Decl(deferredTypeReferenceNormalization.ts, 0, 17))
+
+    union: [...([T["value"]] | [T["value"], boolean])];
+>union : Symbol(Holder.union, Decl(deferredTypeReferenceNormalization.ts, 7, 35))
+>T : Symbol(T, Decl(deferredTypeReferenceNormalization.ts, 0, 17))
+>T : Symbol(T, Decl(deferredTypeReferenceNormalization.ts, 0, 17))
+}
+
+declare const holder: Holder<{ value: string }>;
+>holder : Symbol(holder, Decl(deferredTypeReferenceNormalization.ts, 11, 13))
+>Holder : Symbol(Holder, Decl(deferredTypeReferenceNormalization.ts, 0, 0))
+>value : Symbol(value, Decl(deferredTypeReferenceNormalization.ts, 11, 30))
+
+const leading: [string, string, boolean] = holder.leading;
+>leading : Symbol(leading, Decl(deferredTypeReferenceNormalization.ts, 12, 5))
+>holder.leading : Symbol(Holder.leading, Decl(deferredTypeReferenceNormalization.ts, 0, 48))
+>holder : Symbol(holder, Decl(deferredTypeReferenceNormalization.ts, 11, 13))
+>leading : Symbol(Holder.leading, Decl(deferredTypeReferenceNormalization.ts, 0, 48))
+
+const trailing: [boolean, string, string] = holder.trailing;
+>trailing : Symbol(trailing, Decl(deferredTypeReferenceNormalization.ts, 13, 5))
+>holder.trailing : Symbol(Holder.trailing, Decl(deferredTypeReferenceNormalization.ts, 1, 52))
+>holder : Symbol(holder, Decl(deferredTypeReferenceNormalization.ts, 11, 13))
+>trailing : Symbol(Holder.trailing, Decl(deferredTypeReferenceNormalization.ts, 1, 52))
+
+const singleton: [string] = holder.singleton;
+>singleton : Symbol(singleton, Decl(deferredTypeReferenceNormalization.ts, 14, 5))
+>holder.singleton : Symbol(Holder.singleton, Decl(deferredTypeReferenceNormalization.ts, 2, 53))
+>holder : Symbol(holder, Decl(deferredTypeReferenceNormalization.ts, 11, 13))
+>singleton : Symbol(Holder.singleton, Decl(deferredTypeReferenceNormalization.ts, 2, 53))
+
+const empty: [string] = holder.empty;
+>empty : Symbol(empty, Decl(deferredTypeReferenceNormalization.ts, 15, 5))
+>holder.empty : Symbol(Holder.empty, Decl(deferredTypeReferenceNormalization.ts, 3, 33))
+>holder : Symbol(holder, Decl(deferredTypeReferenceNormalization.ts, 11, 13))
+>empty : Symbol(Holder.empty, Decl(deferredTypeReferenceNormalization.ts, 3, 33))
+
+const rest: string[] = holder.rest;
+>rest : Symbol(rest, Decl(deferredTypeReferenceNormalization.ts, 16, 5))
+>holder.rest : Symbol(Holder.rest, Decl(deferredTypeReferenceNormalization.ts, 4, 31))
+>holder : Symbol(holder, Decl(deferredTypeReferenceNormalization.ts, 11, 13))
+>rest : Symbol(Holder.rest, Decl(deferredTypeReferenceNormalization.ts, 4, 31))
+
+const readonly: readonly [string, string] = holder.readonly;
+>readonly : Symbol(readonly, Decl(deferredTypeReferenceNormalization.ts, 17, 5))
+>holder.readonly : Symbol(Holder.readonly, Decl(deferredTypeReferenceNormalization.ts, 5, 28))
+>holder : Symbol(holder, Decl(deferredTypeReferenceNormalization.ts, 11, 13))
+>readonly : Symbol(Holder.readonly, Decl(deferredTypeReferenceNormalization.ts, 5, 28))
+
+const optional: [value?: string] = holder.optional;
+>optional : Symbol(optional, Decl(deferredTypeReferenceNormalization.ts, 18, 5))
+>holder.optional : Symbol(Holder.optional, Decl(deferredTypeReferenceNormalization.ts, 6, 53))
+>holder : Symbol(holder, Decl(deferredTypeReferenceNormalization.ts, 11, 13))
+>optional : Symbol(Holder.optional, Decl(deferredTypeReferenceNormalization.ts, 6, 53))
+
+const union: [string] | [string, boolean] = holder.union;
+>union : Symbol(union, Decl(deferredTypeReferenceNormalization.ts, 19, 5))
+>holder.union : Symbol(Holder.union, Decl(deferredTypeReferenceNormalization.ts, 7, 35))
+>holder : Symbol(holder, Decl(deferredTypeReferenceNormalization.ts, 11, 13))
+>union : Symbol(Holder.union, Decl(deferredTypeReferenceNormalization.ts, 7, 35))
+
+// @ts-expect-error
+const wrongLeading: number = holder.leading[0];
+>wrongLeading : Symbol(wrongLeading, Decl(deferredTypeReferenceNormalization.ts, 22, 5))
+>holder.leading : Symbol(Holder.leading, Decl(deferredTypeReferenceNormalization.ts, 0, 48))
+>holder : Symbol(holder, Decl(deferredTypeReferenceNormalization.ts, 11, 13))
+>leading : Symbol(Holder.leading, Decl(deferredTypeReferenceNormalization.ts, 0, 48))
+>0 : Symbol(0)
+
+// @ts-expect-error
+const wrongTrailing: number = holder.trailing[2];
+>wrongTrailing : Symbol(wrongTrailing, Decl(deferredTypeReferenceNormalization.ts, 24, 5))
+>holder.trailing : Symbol(Holder.trailing, Decl(deferredTypeReferenceNormalization.ts, 1, 52))
+>holder : Symbol(holder, Decl(deferredTypeReferenceNormalization.ts, 11, 13))
+>trailing : Symbol(Holder.trailing, Decl(deferredTypeReferenceNormalization.ts, 1, 52))
+>2 : Symbol(2)
+
+// @ts-expect-error
+holder.singleton[1];
+>holder.singleton : Symbol(Holder.singleton, Decl(deferredTypeReferenceNormalization.ts, 2, 53))
+>holder : Symbol(holder, Decl(deferredTypeReferenceNormalization.ts, 11, 13))
+>singleton : Symbol(Holder.singleton, Decl(deferredTypeReferenceNormalization.ts, 2, 53))
+
+// @ts-expect-error
+holder.empty[1];
+>holder.empty : Symbol(Holder.empty, Decl(deferredTypeReferenceNormalization.ts, 3, 33))
+>holder : Symbol(holder, Decl(deferredTypeReferenceNormalization.ts, 11, 13))
+>empty : Symbol(Holder.empty, Decl(deferredTypeReferenceNormalization.ts, 3, 33))
+
+// @ts-expect-error
+const wrongRest: number = holder.rest[0];
+>wrongRest : Symbol(wrongRest, Decl(deferredTypeReferenceNormalization.ts, 30, 5))
+>holder.rest : Symbol(Holder.rest, Decl(deferredTypeReferenceNormalization.ts, 4, 31))
+>holder : Symbol(holder, Decl(deferredTypeReferenceNormalization.ts, 11, 13))
+>rest : Symbol(Holder.rest, Decl(deferredTypeReferenceNormalization.ts, 4, 31))
+
+// @ts-expect-error
+holder.readonly[0] = "changed";
+>holder.readonly : Symbol(Holder.readonly, Decl(deferredTypeReferenceNormalization.ts, 5, 28))
+>holder : Symbol(holder, Decl(deferredTypeReferenceNormalization.ts, 11, 13))
+>readonly : Symbol(Holder.readonly, Decl(deferredTypeReferenceNormalization.ts, 5, 28))
+>0 : Symbol(0)
+
+// @ts-expect-error
+const wrongOptional: string = holder.optional[0];
+>wrongOptional : Symbol(wrongOptional, Decl(deferredTypeReferenceNormalization.ts, 34, 5))
+>holder.optional : Symbol(Holder.optional, Decl(deferredTypeReferenceNormalization.ts, 6, 53))
+>holder : Symbol(holder, Decl(deferredTypeReferenceNormalization.ts, 11, 13))
+>optional : Symbol(Holder.optional, Decl(deferredTypeReferenceNormalization.ts, 6, 53))
+>0 : Symbol(0)
+
+// @ts-expect-error
+const wrongUnion: number = holder.union[0];
+>wrongUnion : Symbol(wrongUnion, Decl(deferredTypeReferenceNormalization.ts, 36, 5))
+>holder.union : Symbol(Holder.union, Decl(deferredTypeReferenceNormalization.ts, 7, 35))
+>holder : Symbol(holder, Decl(deferredTypeReferenceNormalization.ts, 11, 13))
+>union : Symbol(Holder.union, Decl(deferredTypeReferenceNormalization.ts, 7, 35))
+>0 : Symbol(0)
+

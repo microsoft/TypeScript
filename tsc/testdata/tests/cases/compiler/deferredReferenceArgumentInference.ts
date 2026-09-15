@@ -1,0 +1,46 @@
+// @strict: true
+// @noEmit: true
+
+interface Box<T> {
+    value: T;
+}
+interface Transform<T> {
+    (value: T): T;
+    value: T;
+}
+type Wrapped<T> = Box<T>;
+type WrappedTransform<T> = Transform<T>;
+declare function unbox<T>(box: Wrapped<T>): T;
+declare function unwrapTransform<T>(transform: WrappedTransform<T>): T;
+
+function indexed<T extends { value: unknown }>(box: Box<T["value"]>, transform: Transform<T["value"]>) {
+    const value = unbox(box);
+    const transformed = unwrapTransform(transform);
+    const expectedValue: T["value"] = value;
+    const expectedTransform: T["value"] = transformed;
+    const wrongValue: number = value;
+    const wrongTransform: number = transformed;
+    return { value, transformed };
+}
+
+type Element<T> = T extends readonly (infer E)[] ? E : never;
+function conditional<T>(box: Box<Element<T>>, transform: Transform<Element<T>>) {
+    const value = unbox(box);
+    const transformed = unwrapTransform(transform);
+    const expectedValue: Element<T> = value;
+    const expectedTransform: Element<T> = transformed;
+    return { value, transformed };
+}
+
+declare const stringBox: Box<string>;
+declare const stringTransform: Transform<string>;
+const fromIndex = indexed<{ value: string }>(stringBox, stringTransform);
+const fromConditional = conditional<string[]>(stringBox, stringTransform);
+const indexedValue: string = fromIndex.value;
+const indexedTransform: string = fromIndex.transformed;
+const conditionalValue: string = fromConditional.value;
+const conditionalTransform: string = fromConditional.transformed;
+const wrongIndex: number = fromIndex.value;
+const wrongConditional: number = fromConditional.transformed;
+
+export {};

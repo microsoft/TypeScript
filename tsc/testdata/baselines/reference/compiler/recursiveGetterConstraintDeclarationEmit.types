@@ -1,0 +1,53 @@
+//// [tests/cases/compiler/recursiveGetterConstraintDeclarationEmit.ts] ////
+
+=== recursiveGetterConstraintDeclarationEmit.ts ===
+export interface Schema<O> { output: O; }
+>output : O
+
+export type Shape = Record<string, Schema<unknown>>;
+>Shape : Shape
+
+export interface ObjectSchema<S extends Shape> extends Schema<{ [K in keyof S]: S[K]["output"] }> {
+    shape: S;
+>shape : S
+}
+export declare function object<S extends Shape>(shape: S): ObjectSchema<S>;
+>object : <S extends Shape>(shape: S) => ObjectSchema<S>
+>shape : S
+
+export const node = object({
+>node : ObjectSchema<{ name: { output: string; }; readonly next: ObjectSchema<any>; }>
+>object({    name: { output: "" },    get next() { return node; },}) : ObjectSchema<{ name: { output: string; }; readonly next: ObjectSchema<any>; }>
+>object : <S extends Shape>(shape: S) => ObjectSchema<S>
+>{    name: { output: "" },    get next() { return node; },} : { name: { output: string; }; readonly next: ObjectSchema<{ name: { output: string; }; readonly next: ObjectSchema<any>; }>; }
+
+    name: { output: "" },
+>name : { output: string; }
+>{ output: "" } : { output: string; }
+>output : string
+>"" : ""
+
+    get next() { return node; },
+>next : ObjectSchema<{ name: { output: string; }; readonly next: ObjectSchema<any>; }>
+>node : ObjectSchema<{ name: { output: string; }; readonly next: ObjectSchema<any>; }>
+
+});
+
+export type Output = typeof node.output;
+>Output : { name: string; readonly next: any; }
+>node.output : { name: string; readonly next: any; }
+>node : ObjectSchema<{ name: { output: string; }; readonly next: ObjectSchema<any>; }>
+>output : { name: string; readonly next: any; }
+
+export const nestedName: string = node.output.next.next.name;
+>nestedName : string
+>node.output.next.next.name : string
+>node.output.next.next : { name: string; readonly next: any; }
+>node.output.next : { name: string; readonly next: any; }
+>node.output : { name: string; readonly next: any; }
+>node : ObjectSchema<{ name: { output: string; }; readonly next: ObjectSchema<any>; }>
+>output : { name: string; readonly next: any; }
+>next : { name: string; readonly next: any; }
+>next : { name: string; readonly next: any; }
+>name : string
+

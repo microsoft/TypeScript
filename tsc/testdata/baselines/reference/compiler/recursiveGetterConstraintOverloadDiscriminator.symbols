@@ -1,0 +1,48 @@
+//// [tests/cases/compiler/recursiveGetterConstraintOverloadDiscriminator.ts] ////
+
+=== recursiveGetterConstraintOverloadDiscriminator.ts ===
+// Deferring constraint validation during overload resolution is not safe when the
+// constraint is the only thing distinguishing the overloads. { bad: number } does not
+// satisfy Record<string, Schema<any>>, so the second signature must be selected and the
+// first must contribute no error.
+
+interface Schema<O> { readonly out: O; }
+>Schema : Symbol(Schema, Decl(recursiveGetterConstraintOverloadDiscriminator.ts, 0, 0))
+>O : Symbol(O, Decl(recursiveGetterConstraintOverloadDiscriminator.ts, 5, 17))
+>out : Symbol(Schema.out, Decl(recursiveGetterConstraintOverloadDiscriminator.ts, 5, 21))
+>O : Symbol(O, Decl(recursiveGetterConstraintOverloadDiscriminator.ts, 5, 17))
+
+declare function object<S extends Record<string, Schema<any>>>(shape: S): { tag: "strict" };
+>object : Symbol(object, Decl(recursiveGetterConstraintOverloadDiscriminator.ts, 5, 40), Decl(recursiveGetterConstraintOverloadDiscriminator.ts, 7, 92))
+>S : Symbol(S, Decl(recursiveGetterConstraintOverloadDiscriminator.ts, 7, 24))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Schema : Symbol(Schema, Decl(recursiveGetterConstraintOverloadDiscriminator.ts, 0, 0))
+>shape : Symbol(shape, Decl(recursiveGetterConstraintOverloadDiscriminator.ts, 7, 63))
+>S : Symbol(S, Decl(recursiveGetterConstraintOverloadDiscriminator.ts, 7, 24))
+>tag : Symbol(tag, Decl(recursiveGetterConstraintOverloadDiscriminator.ts, 7, 75))
+
+declare function object<S extends Record<string, unknown>>(shape: S): { tag: "loose" };
+>object : Symbol(object, Decl(recursiveGetterConstraintOverloadDiscriminator.ts, 5, 40), Decl(recursiveGetterConstraintOverloadDiscriminator.ts, 7, 92))
+>S : Symbol(S, Decl(recursiveGetterConstraintOverloadDiscriminator.ts, 8, 24))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>shape : Symbol(shape, Decl(recursiveGetterConstraintOverloadDiscriminator.ts, 8, 59))
+>S : Symbol(S, Decl(recursiveGetterConstraintOverloadDiscriminator.ts, 8, 24))
+>tag : Symbol(tag, Decl(recursiveGetterConstraintOverloadDiscriminator.ts, 8, 71))
+
+const tree = object({
+>tree : Symbol(tree, Decl(recursiveGetterConstraintOverloadDiscriminator.ts, 10, 5))
+>object : Symbol(object, Decl(recursiveGetterConstraintOverloadDiscriminator.ts, 5, 40), Decl(recursiveGetterConstraintOverloadDiscriminator.ts, 7, 92))
+
+    get bad() { return 42; },
+>bad : Symbol(bad, Decl(recursiveGetterConstraintOverloadDiscriminator.ts, 10, 21))
+
+});
+
+const which: "loose" = tree.tag;
+>which : Symbol(which, Decl(recursiveGetterConstraintOverloadDiscriminator.ts, 14, 5))
+>tree.tag : Symbol(tag, Decl(recursiveGetterConstraintOverloadDiscriminator.ts, 8, 71))
+>tree : Symbol(tree, Decl(recursiveGetterConstraintOverloadDiscriminator.ts, 10, 5))
+>tag : Symbol(tag, Decl(recursiveGetterConstraintOverloadDiscriminator.ts, 8, 71))
+
+export {};
+

@@ -1,0 +1,42 @@
+// === Syntax and Semantic Diagnostics ===
+/schema.ts(21,9): error TS2322: Type 'number' is not assignable to type 'Schema<any>'.
+
+
+==== /consumer.ts (0 errors) ====
+    import { valid, invalid } from "./schema.js";
+    type IsAny<T> = 0 extends 1 & T ? true : false;
+    type Assert<T extends true> = T;
+    export const good = valid.out.next.next.next.next;
+    type NotAny = Assert<IsAny<typeof good> extends false ? true : false>;
+    const recursive: typeof good = valid.out;
+    // @ts-expect-error Imported recursive objects have no missing property.
+    good.missing;
+    // @ts-expect-error Every next property must contain another recursive object.
+    const wrong: typeof good = { next: { next: 42 } };
+    export const bad = invalid.out;
+    
+==== /schema.ts (1 errors) ====
+    interface Schema<O> { readonly out: O; }
+    type Shape = Record<string, Schema<any>>;
+    declare function object<S extends Shape>(shape: S): Schema<{ [K in keyof S]: S[K]["out"] }>;
+    
+    export const valid = object({
+        get next() { return valid; },
+    });
+    
+    type IsAny<T> = 0 extends 1 & T ? true : false;
+    type Assert<T extends true> = T;
+    const deep = valid.out.next.next.next.next;
+    type NotAny = Assert<IsAny<typeof deep> extends false ? true : false>;
+    const recursive: typeof deep = valid.out;
+    // @ts-expect-error Recursive objects have no missing property.
+    deep.missing;
+    // @ts-expect-error Every next property must contain another recursive object.
+    const wrong: typeof deep = { next: { next: 42 } };
+    
+    export const invalid = object({
+        get next() { return invalid; },
+        get bad() { return 42; },
+            ~~~
+!!! error TS2322: Type 'number' is not assignable to type 'Schema<any>'.
+    });

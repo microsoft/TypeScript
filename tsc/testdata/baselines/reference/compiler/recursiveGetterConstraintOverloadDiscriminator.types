@@ -1,0 +1,41 @@
+//// [tests/cases/compiler/recursiveGetterConstraintOverloadDiscriminator.ts] ////
+
+=== recursiveGetterConstraintOverloadDiscriminator.ts ===
+// Deferring constraint validation during overload resolution is not safe when the
+// constraint is the only thing distinguishing the overloads. { bad: number } does not
+// satisfy Record<string, Schema<any>>, so the second signature must be selected and the
+// first must contribute no error.
+
+interface Schema<O> { readonly out: O; }
+>out : O
+
+declare function object<S extends Record<string, Schema<any>>>(shape: S): { tag: "strict" };
+>object : { <S extends Record<string, Schema<any>>>(shape: S): { tag: "strict"; }; <S_1 extends Record<string, unknown>>(shape: S_1): { tag: "loose"; }; }
+>shape : S
+>tag : "strict"
+
+declare function object<S extends Record<string, unknown>>(shape: S): { tag: "loose" };
+>object : { <S_1 extends Record<string, Schema<any>>>(shape: S_1): { tag: "strict"; }; <S extends Record<string, unknown>>(shape: S): { tag: "loose"; }; }
+>shape : S
+>tag : "loose"
+
+const tree = object({
+>tree : { tag: "loose"; }
+>object({    get bad() { return 42; },}) : { tag: "loose"; }
+>object : { <S extends Record<string, Schema<any>>>(shape: S): { tag: "strict"; }; <S extends Record<string, unknown>>(shape: S): { tag: "loose"; }; }
+>{    get bad() { return 42; },} : { readonly bad: number; }
+
+    get bad() { return 42; },
+>bad : number
+>42 : 42
+
+});
+
+const which: "loose" = tree.tag;
+>which : "loose"
+>tree.tag : "loose"
+>tree : { tag: "loose"; }
+>tag : "loose"
+
+export {};
+

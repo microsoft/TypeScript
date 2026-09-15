@@ -1,0 +1,66 @@
+//// [tests/cases/compiler/recursiveGetterConstraintRejectedOverload.ts] ////
+
+=== recursiveGetterConstraintRejectedOverload.ts ===
+// https://github.com/microsoft/TypeScript/pull/64172#issuecomment-5591499161
+
+interface Schema<O> { readonly out: O; }
+>out : O
+
+type Shape = Record<string, Schema<any>>;
+>Shape : Shape
+
+declare function object<S extends Shape>(shape: S, mode: "strict"): Schema<{ [K in keyof S]: S[K]["out"] }> & { shape: S };
+>object : { <S extends Shape>(shape: S, mode: "strict"): Schema<{ [K in keyof S]: S[K]["out"]; }> & { shape: S; }; (shape: object, mode: "loose"): { out: unknown; shape: object; }; }
+>shape : S
+>mode : "strict"
+>shape : S
+
+declare function object(shape: object, mode: "loose"): { out: unknown; shape: object };
+>object : { <S extends Shape>(shape: S, mode: "strict"): Schema<{ [K in keyof S]: S[K]["out"]; }> & { shape: S; }; (shape: object, mode: "loose"): { out: unknown; shape: object; }; }
+>shape : object
+>mode : "loose"
+>out : unknown
+>shape : object
+
+const tree = object({
+>tree : any
+>object({    get bad() { return [tree]; },}, "loose") : { out: unknown; shape: object; }
+>object : { <S extends Shape>(shape: S, mode: "strict"): Schema<{ [K in keyof S]: S[K]["out"]; }> & { shape: S; }; (shape: object, mode: "loose"): { out: unknown; shape: object; }; }
+>{    get bad() { return [tree]; },} : { readonly bad: any; }
+
+    get bad() { return [tree]; },
+>bad : any
+>[tree] : any[]
+>tree : any
+
+}, "loose");
+>"loose" : "loose"
+
+const wrongTree: number = tree;
+>wrongTree : number
+>tree : any
+
+declare const value: { out: unknown; shape: object }[];
+>value : { out: unknown; shape: object; }[]
+>out : unknown
+>shape : object
+
+const nonrecursive = object({
+>nonrecursive : { out: unknown; shape: object; }
+>object({    get bad() { return value; },}, "loose") : { out: unknown; shape: object; }
+>object : { <S extends Shape>(shape: S, mode: "strict"): Schema<{ [K in keyof S]: S[K]["out"]; }> & { shape: S; }; (shape: object, mode: "loose"): { out: unknown; shape: object; }; }
+>{    get bad() { return value; },} : { readonly bad: { out: unknown; shape: object; }[]; }
+
+    get bad() { return value; },
+>bad : { out: unknown; shape: object; }[]
+>value : { out: unknown; shape: object; }[]
+
+}, "loose");
+>"loose" : "loose"
+
+const wrongNonrecursive: number = nonrecursive;
+>wrongNonrecursive : number
+>nonrecursive : { out: unknown; shape: object; }
+
+export {};
+

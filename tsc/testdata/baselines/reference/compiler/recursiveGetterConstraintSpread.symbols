@@ -1,0 +1,274 @@
+//// [tests/cases/compiler/recursiveGetterConstraintSpread.ts] ////
+
+=== recursiveGetterConstraintSpread.ts ===
+interface Schema<T = unknown> {
+>Schema : Symbol(Schema, Decl(recursiveGetterConstraintSpread.ts, 0, 0))
+>T : Symbol(T, Decl(recursiveGetterConstraintSpread.ts, 0, 17))
+
+    output: T;
+>output : Symbol(Schema.output, Decl(recursiveGetterConstraintSpread.ts, 0, 31))
+>T : Symbol(T, Decl(recursiveGetterConstraintSpread.ts, 0, 17))
+}
+
+type Shape = Record<string, Schema>;
+>Shape : Symbol(Shape, Decl(recursiveGetterConstraintSpread.ts, 2, 1))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Schema : Symbol(Schema, Decl(recursiveGetterConstraintSpread.ts, 0, 0))
+
+type Output<S extends Shape> = { [K in keyof S]: S[K]["output"] };
+>Output : Symbol(Output, Decl(recursiveGetterConstraintSpread.ts, 4, 36))
+>S : Symbol(S, Decl(recursiveGetterConstraintSpread.ts, 5, 12))
+>Shape : Symbol(Shape, Decl(recursiveGetterConstraintSpread.ts, 2, 1))
+>K : Symbol(K, Decl(recursiveGetterConstraintSpread.ts, 5, 34))
+>S : Symbol(S, Decl(recursiveGetterConstraintSpread.ts, 5, 12))
+>S : Symbol(S, Decl(recursiveGetterConstraintSpread.ts, 5, 12))
+>K : Symbol(K, Decl(recursiveGetterConstraintSpread.ts, 5, 34))
+
+declare function object<S extends Shape>(shape: S): Schema<Output<S>>;
+>object : Symbol(object, Decl(recursiveGetterConstraintSpread.ts, 5, 66))
+>S : Symbol(S, Decl(recursiveGetterConstraintSpread.ts, 7, 24))
+>Shape : Symbol(Shape, Decl(recursiveGetterConstraintSpread.ts, 2, 1))
+>shape : Symbol(shape, Decl(recursiveGetterConstraintSpread.ts, 7, 41))
+>S : Symbol(S, Decl(recursiveGetterConstraintSpread.ts, 7, 24))
+>Schema : Symbol(Schema, Decl(recursiveGetterConstraintSpread.ts, 0, 0))
+>Output : Symbol(Output, Decl(recursiveGetterConstraintSpread.ts, 4, 36))
+>S : Symbol(S, Decl(recursiveGetterConstraintSpread.ts, 7, 24))
+
+declare function array<S extends Schema>(schema: S): Schema<S["output"][]>;
+>array : Symbol(array, Decl(recursiveGetterConstraintSpread.ts, 7, 70))
+>S : Symbol(S, Decl(recursiveGetterConstraintSpread.ts, 8, 23))
+>Schema : Symbol(Schema, Decl(recursiveGetterConstraintSpread.ts, 0, 0))
+>schema : Symbol(schema, Decl(recursiveGetterConstraintSpread.ts, 8, 41))
+>S : Symbol(S, Decl(recursiveGetterConstraintSpread.ts, 8, 23))
+>Schema : Symbol(Schema, Decl(recursiveGetterConstraintSpread.ts, 0, 0))
+>S : Symbol(S, Decl(recursiveGetterConstraintSpread.ts, 8, 23))
+
+declare function text(): Schema<string>;
+>text : Symbol(text, Decl(recursiveGetterConstraintSpread.ts, 8, 75))
+>Schema : Symbol(Schema, Decl(recursiveGetterConstraintSpread.ts, 0, 0))
+
+const base = { name: text() };
+>base : Symbol(base, Decl(recursiveGetterConstraintSpread.ts, 11, 5))
+>name : Symbol(name, Decl(recursiveGetterConstraintSpread.ts, 11, 14))
+>text : Symbol(text, Decl(recursiveGetterConstraintSpread.ts, 8, 75))
+
+const node = object({
+>node : Symbol(node, Decl(recursiveGetterConstraintSpread.ts, 13, 5))
+>object : Symbol(object, Decl(recursiveGetterConstraintSpread.ts, 5, 66))
+
+    ...base,
+>base : Symbol(base, Decl(recursiveGetterConstraintSpread.ts, 11, 5))
+
+    get children() {
+>children : Symbol(children, Decl(recursiveGetterConstraintSpread.ts, 14, 12))
+
+        return array(node);
+>array : Symbol(array, Decl(recursiveGetterConstraintSpread.ts, 7, 70))
+>node : Symbol(node, Decl(recursiveGetterConstraintSpread.ts, 13, 5))
+
+    },
+});
+
+const name: string = node.output.children[0].children[0].name;
+>name : Symbol(name, Decl(recursiveGetterConstraintSpread.ts, 20, 5))
+>node.output.children[0].children[0].name : Symbol(name, Decl(recursiveGetterConstraintSpread.ts, 11, 14))
+>node.output.children[0].children : Symbol(children, Decl(recursiveGetterConstraintSpread.ts, 14, 12))
+>node.output.children : Symbol(children, Decl(recursiveGetterConstraintSpread.ts, 14, 12))
+>node.output : Symbol(Schema.output, Decl(recursiveGetterConstraintSpread.ts, 0, 31))
+>node : Symbol(node, Decl(recursiveGetterConstraintSpread.ts, 13, 5))
+>output : Symbol(Schema.output, Decl(recursiveGetterConstraintSpread.ts, 0, 31))
+>children : Symbol(children, Decl(recursiveGetterConstraintSpread.ts, 14, 12))
+>children : Symbol(children, Decl(recursiveGetterConstraintSpread.ts, 14, 12))
+>name : Symbol(name, Decl(recursiveGetterConstraintSpread.ts, 11, 14))
+
+const wrong: number = node.output.children[0].name;
+>wrong : Symbol(wrong, Decl(recursiveGetterConstraintSpread.ts, 21, 5))
+>node.output.children[0].name : Symbol(name, Decl(recursiveGetterConstraintSpread.ts, 11, 14))
+>node.output.children : Symbol(children, Decl(recursiveGetterConstraintSpread.ts, 14, 12))
+>node.output : Symbol(Schema.output, Decl(recursiveGetterConstraintSpread.ts, 0, 31))
+>node : Symbol(node, Decl(recursiveGetterConstraintSpread.ts, 13, 5))
+>output : Symbol(Schema.output, Decl(recursiveGetterConstraintSpread.ts, 0, 31))
+>children : Symbol(children, Decl(recursiveGetterConstraintSpread.ts, 14, 12))
+>name : Symbol(name, Decl(recursiveGetterConstraintSpread.ts, 11, 14))
+
+node.output.children[0].missing;
+>node.output.children : Symbol(children, Decl(recursiveGetterConstraintSpread.ts, 14, 12))
+>node.output : Symbol(Schema.output, Decl(recursiveGetterConstraintSpread.ts, 0, 31))
+>node : Symbol(node, Decl(recursiveGetterConstraintSpread.ts, 13, 5))
+>output : Symbol(Schema.output, Decl(recursiveGetterConstraintSpread.ts, 0, 31))
+>children : Symbol(children, Decl(recursiveGetterConstraintSpread.ts, 14, 12))
+
+const leading = object({
+>leading : Symbol(leading, Decl(recursiveGetterConstraintSpread.ts, 24, 5))
+>object : Symbol(object, Decl(recursiveGetterConstraintSpread.ts, 5, 66))
+
+    get children() {
+>children : Symbol(children, Decl(recursiveGetterConstraintSpread.ts, 24, 24))
+
+        return array(leading);
+>array : Symbol(array, Decl(recursiveGetterConstraintSpread.ts, 7, 70))
+>leading : Symbol(leading, Decl(recursiveGetterConstraintSpread.ts, 24, 5))
+
+    },
+    ...base,
+>base : Symbol(base, Decl(recursiveGetterConstraintSpread.ts, 11, 5))
+
+});
+
+const leadingName: string = leading.output.children[0].name;
+>leadingName : Symbol(leadingName, Decl(recursiveGetterConstraintSpread.ts, 31, 5))
+>leading.output.children[0].name : Symbol(name, Decl(recursiveGetterConstraintSpread.ts, 11, 14))
+>leading.output.children : Symbol(children, Decl(recursiveGetterConstraintSpread.ts, 24, 24))
+>leading.output : Symbol(Schema.output, Decl(recursiveGetterConstraintSpread.ts, 0, 31))
+>leading : Symbol(leading, Decl(recursiveGetterConstraintSpread.ts, 24, 5))
+>output : Symbol(Schema.output, Decl(recursiveGetterConstraintSpread.ts, 0, 31))
+>children : Symbol(children, Decl(recursiveGetterConstraintSpread.ts, 24, 24))
+>name : Symbol(name, Decl(recursiveGetterConstraintSpread.ts, 11, 14))
+
+const withChildren = { name: text(), children: text() };
+>withChildren : Symbol(withChildren, Decl(recursiveGetterConstraintSpread.ts, 33, 5))
+>name : Symbol(name, Decl(recursiveGetterConstraintSpread.ts, 33, 22))
+>text : Symbol(text, Decl(recursiveGetterConstraintSpread.ts, 8, 75))
+>children : Symbol(children, Decl(recursiveGetterConstraintSpread.ts, 33, 36))
+>text : Symbol(text, Decl(recursiveGetterConstraintSpread.ts, 8, 75))
+
+const overridden = object({
+>overridden : Symbol(overridden, Decl(recursiveGetterConstraintSpread.ts, 34, 5))
+>object : Symbol(object, Decl(recursiveGetterConstraintSpread.ts, 5, 66))
+
+    ...withChildren,
+>withChildren : Symbol(withChildren, Decl(recursiveGetterConstraintSpread.ts, 33, 5))
+
+    get children() {
+>children : Symbol(children, Decl(recursiveGetterConstraintSpread.ts, 35, 20))
+
+        return array(overridden);
+>array : Symbol(array, Decl(recursiveGetterConstraintSpread.ts, 7, 70))
+>overridden : Symbol(overridden, Decl(recursiveGetterConstraintSpread.ts, 34, 5))
+
+    },
+});
+
+const overriddenName: string = overridden.output.children[0].children[0].name;
+>overriddenName : Symbol(overriddenName, Decl(recursiveGetterConstraintSpread.ts, 41, 5))
+>overridden.output.children[0].children[0].name : Symbol(name, Decl(recursiveGetterConstraintSpread.ts, 33, 22))
+>overridden.output.children[0].children : Symbol(children, Decl(recursiveGetterConstraintSpread.ts, 35, 20))
+>overridden.output.children : Symbol(children, Decl(recursiveGetterConstraintSpread.ts, 35, 20))
+>overridden.output : Symbol(Schema.output, Decl(recursiveGetterConstraintSpread.ts, 0, 31))
+>overridden : Symbol(overridden, Decl(recursiveGetterConstraintSpread.ts, 34, 5))
+>output : Symbol(Schema.output, Decl(recursiveGetterConstraintSpread.ts, 0, 31))
+>children : Symbol(children, Decl(recursiveGetterConstraintSpread.ts, 35, 20))
+>children : Symbol(children, Decl(recursiveGetterConstraintSpread.ts, 35, 20))
+>name : Symbol(name, Decl(recursiveGetterConstraintSpread.ts, 33, 22))
+
+const nested = object({
+>nested : Symbol(nested, Decl(recursiveGetterConstraintSpread.ts, 43, 5))
+>object : Symbol(object, Decl(recursiveGetterConstraintSpread.ts, 5, 66))
+
+    ...base,
+>base : Symbol(base, Decl(recursiveGetterConstraintSpread.ts, 11, 5))
+
+    ...{
+        get children() {
+>children : Symbol(children, Decl(recursiveGetterConstraintSpread.ts, 45, 8))
+
+            return array(nested);
+>array : Symbol(array, Decl(recursiveGetterConstraintSpread.ts, 7, 70))
+>nested : Symbol(nested, Decl(recursiveGetterConstraintSpread.ts, 43, 5))
+
+        },
+    },
+});
+
+const nestedName: string = nested.output.children[0].children[0].name;
+>nestedName : Symbol(nestedName, Decl(recursiveGetterConstraintSpread.ts, 52, 5))
+>nested.output.children[0].children[0].name : Symbol(name, Decl(recursiveGetterConstraintSpread.ts, 11, 14))
+>nested.output.children[0].children : Symbol(children, Decl(recursiveGetterConstraintSpread.ts, 45, 8))
+>nested.output.children : Symbol(children, Decl(recursiveGetterConstraintSpread.ts, 45, 8))
+>nested.output : Symbol(Schema.output, Decl(recursiveGetterConstraintSpread.ts, 0, 31))
+>nested : Symbol(nested, Decl(recursiveGetterConstraintSpread.ts, 43, 5))
+>output : Symbol(Schema.output, Decl(recursiveGetterConstraintSpread.ts, 0, 31))
+>children : Symbol(children, Decl(recursiveGetterConstraintSpread.ts, 45, 8))
+>children : Symbol(children, Decl(recursiveGetterConstraintSpread.ts, 45, 8))
+>name : Symbol(name, Decl(recursiveGetterConstraintSpread.ts, 11, 14))
+
+const user = object({
+>user : Symbol(user, Decl(recursiveGetterConstraintSpread.ts, 54, 5))
+>object : Symbol(object, Decl(recursiveGetterConstraintSpread.ts, 5, 66))
+
+    ...base,
+>base : Symbol(base, Decl(recursiveGetterConstraintSpread.ts, 11, 5))
+
+    get posts() {
+>posts : Symbol(posts, Decl(recursiveGetterConstraintSpread.ts, 55, 12))
+
+        return array(post);
+>array : Symbol(array, Decl(recursiveGetterConstraintSpread.ts, 7, 70))
+>post : Symbol(post, Decl(recursiveGetterConstraintSpread.ts, 60, 5))
+
+    },
+});
+const post = object({
+>post : Symbol(post, Decl(recursiveGetterConstraintSpread.ts, 60, 5))
+>object : Symbol(object, Decl(recursiveGetterConstraintSpread.ts, 5, 66))
+
+    ...base,
+>base : Symbol(base, Decl(recursiveGetterConstraintSpread.ts, 11, 5))
+
+    get author() {
+>author : Symbol(author, Decl(recursiveGetterConstraintSpread.ts, 61, 12))
+
+        return user;
+>user : Symbol(user, Decl(recursiveGetterConstraintSpread.ts, 54, 5))
+
+    },
+});
+
+const authorName: string = user.output.posts[0].author.name;
+>authorName : Symbol(authorName, Decl(recursiveGetterConstraintSpread.ts, 67, 5))
+>user.output.posts[0].author.name : Symbol(name, Decl(recursiveGetterConstraintSpread.ts, 11, 14))
+>user.output.posts[0].author : Symbol(author, Decl(recursiveGetterConstraintSpread.ts, 61, 12))
+>user.output.posts : Symbol(posts, Decl(recursiveGetterConstraintSpread.ts, 55, 12))
+>user.output : Symbol(Schema.output, Decl(recursiveGetterConstraintSpread.ts, 0, 31))
+>user : Symbol(user, Decl(recursiveGetterConstraintSpread.ts, 54, 5))
+>output : Symbol(Schema.output, Decl(recursiveGetterConstraintSpread.ts, 0, 31))
+>posts : Symbol(posts, Decl(recursiveGetterConstraintSpread.ts, 55, 12))
+>author : Symbol(author, Decl(recursiveGetterConstraintSpread.ts, 61, 12))
+>name : Symbol(name, Decl(recursiveGetterConstraintSpread.ts, 11, 14))
+
+const rejected = object({
+>rejected : Symbol(rejected, Decl(recursiveGetterConstraintSpread.ts, 69, 5))
+>object : Symbol(object, Decl(recursiveGetterConstraintSpread.ts, 5, 66))
+
+    ...base,
+>base : Symbol(base, Decl(recursiveGetterConstraintSpread.ts, 11, 5))
+
+    get count() {
+>count : Symbol(count, Decl(recursiveGetterConstraintSpread.ts, 70, 12))
+
+        return 1;
+    },
+});
+
+// An inline literal's overridden property is contextually typed by the inferred
+// shape, which needs the getter's type before the declaration has one.
+const inlineOverridden = object({
+>inlineOverridden : Symbol(inlineOverridden, Decl(recursiveGetterConstraintSpread.ts, 78, 5))
+>object : Symbol(object, Decl(recursiveGetterConstraintSpread.ts, 5, 66))
+
+    ...{ children: text() },
+>children : Symbol(children, Decl(recursiveGetterConstraintSpread.ts, 79, 8))
+>text : Symbol(text, Decl(recursiveGetterConstraintSpread.ts, 8, 75))
+
+    get children() {
+>children : Symbol(children, Decl(recursiveGetterConstraintSpread.ts, 79, 28))
+
+        return array(inlineOverridden);
+>array : Symbol(array, Decl(recursiveGetterConstraintSpread.ts, 7, 70))
+>inlineOverridden : Symbol(inlineOverridden, Decl(recursiveGetterConstraintSpread.ts, 78, 5))
+
+    },
+});
+
+export {};
+

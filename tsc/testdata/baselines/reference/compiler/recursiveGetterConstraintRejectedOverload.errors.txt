@@ -1,0 +1,35 @@
+recursiveGetterConstraintRejectedOverload.ts(9,7): error TS7022: 'tree' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+recursiveGetterConstraintRejectedOverload.ts(10,9): error TS7023: 'bad' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+recursiveGetterConstraintRejectedOverload.ts(20,7): error TS2322: Type '{ out: unknown; shape: object; }' is not assignable to type 'number'.
+
+
+==== recursiveGetterConstraintRejectedOverload.ts (3 errors) ====
+    // https://github.com/microsoft/TypeScript/pull/64172#issuecomment-5591499161
+    
+    interface Schema<O> { readonly out: O; }
+    type Shape = Record<string, Schema<any>>;
+    
+    declare function object<S extends Shape>(shape: S, mode: "strict"): Schema<{ [K in keyof S]: S[K]["out"] }> & { shape: S };
+    declare function object(shape: object, mode: "loose"): { out: unknown; shape: object };
+    
+    const tree = object({
+          ~~~~
+!!! error TS7022: 'tree' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+        get bad() { return [tree]; },
+            ~~~
+!!! error TS7023: 'bad' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+    }, "loose");
+    
+    const wrongTree: number = tree;
+    
+    declare const value: { out: unknown; shape: object }[];
+    const nonrecursive = object({
+        get bad() { return value; },
+    }, "loose");
+    
+    const wrongNonrecursive: number = nonrecursive;
+          ~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '{ out: unknown; shape: object; }' is not assignable to type 'number'.
+    
+    export {};
+    

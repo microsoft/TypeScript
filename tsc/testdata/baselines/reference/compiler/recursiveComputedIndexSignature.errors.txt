@@ -1,0 +1,34 @@
+recursiveComputedIndexSignature.ts(10,7): error TS2322: Type 'ComputedDictionary<Root>' is not assignable to type 'number'.
+recursiveComputedIndexSignature.ts(20,1): error TS2542: Index signature in type 'ComputedReadonly<ReadonlyRoot>' only permits reading.
+recursiveComputedIndexSignature.ts(21,7): error TS2322: Type 'ComputedReadonly<ReadonlyRoot>' is not assignable to type 'number'.
+
+
+==== recursiveComputedIndexSignature.ts (3 errors) ====
+    interface Value<T> { output: T; }
+    interface Dictionary<T> { [key: string]: T; }
+    interface ComputedDictionary<T extends Value<unknown>> extends Dictionary<T["output"]> {}
+    interface DictionarySchema<T extends Value<unknown>> extends Value<ComputedDictionary<T>> {}
+    interface Root extends DictionarySchema<Root> {}
+    
+    declare const root: Root["output"];
+    const childToRoot: typeof root = root.first.second.third;
+    const rootToChild: typeof root.first = root;
+    const wrong: number = root.first.second.third;
+          ~~~~~
+!!! error TS2322: Type 'ComputedDictionary<Root>' is not assignable to type 'number'.
+    
+    interface ReadonlyDictionary<T> { readonly [key: string]: T; }
+    interface ComputedReadonly<T extends Value<unknown>> extends ReadonlyDictionary<T["output"]> {}
+    interface ReadonlySchema<T extends Value<unknown>> extends Value<ComputedReadonly<T>> {}
+    interface ReadonlyRoot extends ReadonlySchema<ReadonlyRoot> {}
+    
+    declare const readonlyRoot: ReadonlyRoot["output"];
+    const readonlyChildToRoot: typeof readonlyRoot = readonlyRoot.first.second;
+    const readonlyRootToChild: typeof readonlyRoot.first = readonlyRoot;
+    readonlyRoot.first = readonlyRoot;
+    ~~~~~~~~~~~~~~~~~~
+!!! error TS2542: Index signature in type 'ComputedReadonly<ReadonlyRoot>' only permits reading.
+    const wrongReadonly: number = readonlyRoot.first.second;
+          ~~~~~~~~~~~~~
+!!! error TS2322: Type 'ComputedReadonly<ReadonlyRoot>' is not assignable to type 'number'.
+    

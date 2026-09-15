@@ -1,0 +1,199 @@
+//// [tests/cases/compiler/recursiveDeferredReferenceProof.ts] ////
+
+=== recursiveDeferredReferenceProof.ts ===
+type Step<T> = T extends string ? string : number;
+>Step : Symbol(Step, Decl(recursiveDeferredReferenceProof.ts, 0, 0))
+>T : Symbol(T, Decl(recursiveDeferredReferenceProof.ts, 0, 10))
+>T : Symbol(T, Decl(recursiveDeferredReferenceProof.ts, 0, 10))
+
+interface Left<T> {
+>Left : Symbol(Left, Decl(recursiveDeferredReferenceProof.ts, 0, 50))
+>T : Symbol(T, Decl(recursiveDeferredReferenceProof.ts, 2, 15))
+
+    next: Left<Step<T>>;
+>next : Symbol(Left.next, Decl(recursiveDeferredReferenceProof.ts, 2, 19))
+>Left : Symbol(Left, Decl(recursiveDeferredReferenceProof.ts, 0, 50))
+>Step : Symbol(Step, Decl(recursiveDeferredReferenceProof.ts, 0, 0))
+>T : Symbol(T, Decl(recursiveDeferredReferenceProof.ts, 2, 15))
+}
+interface Right<T> {
+>Right : Symbol(Right, Decl(recursiveDeferredReferenceProof.ts, 4, 1))
+>T : Symbol(T, Decl(recursiveDeferredReferenceProof.ts, 5, 16))
+
+    next: Right<Step<T>>;
+>next : Symbol(Right.next, Decl(recursiveDeferredReferenceProof.ts, 5, 20))
+>Right : Symbol(Right, Decl(recursiveDeferredReferenceProof.ts, 4, 1))
+>Step : Symbol(Step, Decl(recursiveDeferredReferenceProof.ts, 0, 0))
+>T : Symbol(T, Decl(recursiveDeferredReferenceProof.ts, 5, 16))
+}
+declare const left: Left<string>;
+>left : Symbol(left, Decl(recursiveDeferredReferenceProof.ts, 8, 13))
+>Left : Symbol(Left, Decl(recursiveDeferredReferenceProof.ts, 0, 50))
+
+const right: Right<string> = left;
+>right : Symbol(right, Decl(recursiveDeferredReferenceProof.ts, 9, 5))
+>Right : Symbol(Right, Decl(recursiveDeferredReferenceProof.ts, 4, 1))
+>left : Symbol(left, Decl(recursiveDeferredReferenceProof.ts, 8, 13))
+
+const back: Left<string> = right;
+>back : Symbol(back, Decl(recursiveDeferredReferenceProof.ts, 10, 5))
+>Left : Symbol(Left, Decl(recursiveDeferredReferenceProof.ts, 0, 50))
+>right : Symbol(right, Decl(recursiveDeferredReferenceProof.ts, 9, 5))
+
+interface LeftValue<T> {
+>LeftValue : Symbol(LeftValue, Decl(recursiveDeferredReferenceProof.ts, 10, 33))
+>T : Symbol(T, Decl(recursiveDeferredReferenceProof.ts, 12, 20))
+
+    next: LeftValue<Step<T>>;
+>next : Symbol(LeftValue.next, Decl(recursiveDeferredReferenceProof.ts, 12, 24))
+>LeftValue : Symbol(LeftValue, Decl(recursiveDeferredReferenceProof.ts, 10, 33))
+>Step : Symbol(Step, Decl(recursiveDeferredReferenceProof.ts, 0, 0))
+>T : Symbol(T, Decl(recursiveDeferredReferenceProof.ts, 12, 20))
+
+    value: T;
+>value : Symbol(LeftValue.value, Decl(recursiveDeferredReferenceProof.ts, 13, 29))
+>T : Symbol(T, Decl(recursiveDeferredReferenceProof.ts, 12, 20))
+}
+interface RightValue<T> {
+>RightValue : Symbol(RightValue, Decl(recursiveDeferredReferenceProof.ts, 15, 1))
+>T : Symbol(T, Decl(recursiveDeferredReferenceProof.ts, 16, 21))
+
+    next: RightValue<Step<T>>;
+>next : Symbol(RightValue.next, Decl(recursiveDeferredReferenceProof.ts, 16, 25))
+>RightValue : Symbol(RightValue, Decl(recursiveDeferredReferenceProof.ts, 15, 1))
+>Step : Symbol(Step, Decl(recursiveDeferredReferenceProof.ts, 0, 0))
+>T : Symbol(T, Decl(recursiveDeferredReferenceProof.ts, 16, 21))
+
+    value: T;
+>value : Symbol(RightValue.value, Decl(recursiveDeferredReferenceProof.ts, 17, 30))
+>T : Symbol(T, Decl(recursiveDeferredReferenceProof.ts, 16, 21))
+}
+interface NumericValue<T> {
+>NumericValue : Symbol(NumericValue, Decl(recursiveDeferredReferenceProof.ts, 19, 1))
+>T : Symbol(T, Decl(recursiveDeferredReferenceProof.ts, 20, 23))
+
+    next: NumericValue<Step<T>>;
+>next : Symbol(NumericValue.next, Decl(recursiveDeferredReferenceProof.ts, 20, 27))
+>NumericValue : Symbol(NumericValue, Decl(recursiveDeferredReferenceProof.ts, 19, 1))
+>Step : Symbol(Step, Decl(recursiveDeferredReferenceProof.ts, 0, 0))
+>T : Symbol(T, Decl(recursiveDeferredReferenceProof.ts, 20, 23))
+
+    value: number;
+>value : Symbol(NumericValue.value, Decl(recursiveDeferredReferenceProof.ts, 21, 32))
+}
+declare const text: LeftValue<string>;
+>text : Symbol(text, Decl(recursiveDeferredReferenceProof.ts, 24, 13))
+>LeftValue : Symbol(LeftValue, Decl(recursiveDeferredReferenceProof.ts, 10, 33))
+
+const same: RightValue<string> = text;
+>same : Symbol(same, Decl(recursiveDeferredReferenceProof.ts, 25, 5))
+>RightValue : Symbol(RightValue, Decl(recursiveDeferredReferenceProof.ts, 15, 1))
+>text : Symbol(text, Decl(recursiveDeferredReferenceProof.ts, 24, 13))
+
+const wrong: NumericValue<string> = text;
+>wrong : Symbol(wrong, Decl(recursiveDeferredReferenceProof.ts, 26, 5))
+>NumericValue : Symbol(NumericValue, Decl(recursiveDeferredReferenceProof.ts, 19, 1))
+>text : Symbol(text, Decl(recursiveDeferredReferenceProof.ts, 24, 13))
+
+const wrongAgain: NumericValue<string> = text;
+>wrongAgain : Symbol(wrongAgain, Decl(recursiveDeferredReferenceProof.ts, 27, 5))
+>NumericValue : Symbol(NumericValue, Decl(recursiveDeferredReferenceProof.ts, 19, 1))
+>text : Symbol(text, Decl(recursiveDeferredReferenceProof.ts, 24, 13))
+
+declare const numeric: LeftValue<number>;
+>numeric : Symbol(numeric, Decl(recursiveDeferredReferenceProof.ts, 29, 13))
+>LeftValue : Symbol(LeftValue, Decl(recursiveDeferredReferenceProof.ts, 10, 33))
+
+const specialized: NumericValue<number> = numeric;
+>specialized : Symbol(specialized, Decl(recursiveDeferredReferenceProof.ts, 30, 5))
+>NumericValue : Symbol(NumericValue, Decl(recursiveDeferredReferenceProof.ts, 19, 1))
+>numeric : Symbol(numeric, Decl(recursiveDeferredReferenceProof.ts, 29, 13))
+
+const specializedBack: LeftValue<number> = specialized;
+>specializedBack : Symbol(specializedBack, Decl(recursiveDeferredReferenceProof.ts, 31, 5))
+>LeftValue : Symbol(LeftValue, Decl(recursiveDeferredReferenceProof.ts, 10, 33))
+>specialized : Symbol(specialized, Decl(recursiveDeferredReferenceProof.ts, 30, 5))
+
+type Value<T> = T extends { value: infer V } ? V : never;
+>Value : Symbol(Value, Decl(recursiveDeferredReferenceProof.ts, 31, 55))
+>T : Symbol(T, Decl(recursiveDeferredReferenceProof.ts, 33, 11))
+>T : Symbol(T, Decl(recursiveDeferredReferenceProof.ts, 33, 11))
+>value : Symbol(value, Decl(recursiveDeferredReferenceProof.ts, 33, 27))
+>V : Symbol(V, Decl(recursiveDeferredReferenceProof.ts, 33, 40))
+>V : Symbol(V, Decl(recursiveDeferredReferenceProof.ts, 33, 40))
+
+type DeferredLeft<T> = LeftValue<Value<T>>;
+>DeferredLeft : Symbol(DeferredLeft, Decl(recursiveDeferredReferenceProof.ts, 33, 57))
+>T : Symbol(T, Decl(recursiveDeferredReferenceProof.ts, 34, 18))
+>LeftValue : Symbol(LeftValue, Decl(recursiveDeferredReferenceProof.ts, 10, 33))
+>Value : Symbol(Value, Decl(recursiveDeferredReferenceProof.ts, 31, 55))
+>T : Symbol(T, Decl(recursiveDeferredReferenceProof.ts, 34, 18))
+
+declare function deferred<T>(): DeferredLeft<T>;
+>deferred : Symbol(deferred, Decl(recursiveDeferredReferenceProof.ts, 34, 43))
+>T : Symbol(T, Decl(recursiveDeferredReferenceProof.ts, 35, 26))
+>DeferredLeft : Symbol(DeferredLeft, Decl(recursiveDeferredReferenceProof.ts, 33, 57))
+>T : Symbol(T, Decl(recursiveDeferredReferenceProof.ts, 35, 26))
+
+const incompatibleStep: RightValue<unknown> = deferred<{ value: string }>();
+>incompatibleStep : Symbol(incompatibleStep, Decl(recursiveDeferredReferenceProof.ts, 36, 5))
+>RightValue : Symbol(RightValue, Decl(recursiveDeferredReferenceProof.ts, 15, 1))
+>deferred : Symbol(deferred, Decl(recursiveDeferredReferenceProof.ts, 34, 43))
+>value : Symbol(value, Decl(recursiveDeferredReferenceProof.ts, 36, 56))
+
+const incompatible: NumericValue<unknown> = deferred<{ value: string }>();
+>incompatible : Symbol(incompatible, Decl(recursiveDeferredReferenceProof.ts, 37, 5))
+>NumericValue : Symbol(NumericValue, Decl(recursiveDeferredReferenceProof.ts, 19, 1))
+>deferred : Symbol(deferred, Decl(recursiveDeferredReferenceProof.ts, 34, 43))
+>value : Symbol(value, Decl(recursiveDeferredReferenceProof.ts, 37, 54))
+
+interface Producer<T> {
+>Producer : Symbol(Producer, Decl(recursiveDeferredReferenceProof.ts, 37, 74))
+>T : Symbol(T, Decl(recursiveDeferredReferenceProof.ts, 39, 19))
+
+    next: Producer<T>;
+>next : Symbol(Producer.next, Decl(recursiveDeferredReferenceProof.ts, 39, 23))
+>Producer : Symbol(Producer, Decl(recursiveDeferredReferenceProof.ts, 37, 74))
+>T : Symbol(T, Decl(recursiveDeferredReferenceProof.ts, 39, 19))
+
+    value: T;
+>value : Symbol(Producer.value, Decl(recursiveDeferredReferenceProof.ts, 40, 22))
+>T : Symbol(T, Decl(recursiveDeferredReferenceProof.ts, 39, 19))
+}
+interface OtherProducer<T> {
+>OtherProducer : Symbol(OtherProducer, Decl(recursiveDeferredReferenceProof.ts, 42, 1))
+>T : Symbol(T, Decl(recursiveDeferredReferenceProof.ts, 43, 24))
+
+    next: OtherProducer<T>;
+>next : Symbol(OtherProducer.next, Decl(recursiveDeferredReferenceProof.ts, 43, 28))
+>OtherProducer : Symbol(OtherProducer, Decl(recursiveDeferredReferenceProof.ts, 42, 1))
+>T : Symbol(T, Decl(recursiveDeferredReferenceProof.ts, 43, 24))
+
+    value: T;
+>value : Symbol(OtherProducer.value, Decl(recursiveDeferredReferenceProof.ts, 44, 27))
+>T : Symbol(T, Decl(recursiveDeferredReferenceProof.ts, 43, 24))
+}
+type DeferredProducer<T> = Producer<Value<T>>;
+>DeferredProducer : Symbol(DeferredProducer, Decl(recursiveDeferredReferenceProof.ts, 46, 1))
+>T : Symbol(T, Decl(recursiveDeferredReferenceProof.ts, 47, 22))
+>Producer : Symbol(Producer, Decl(recursiveDeferredReferenceProof.ts, 37, 74))
+>Value : Symbol(Value, Decl(recursiveDeferredReferenceProof.ts, 31, 55))
+>T : Symbol(T, Decl(recursiveDeferredReferenceProof.ts, 47, 22))
+
+declare function producer<T>(): DeferredProducer<T>;
+>producer : Symbol(producer, Decl(recursiveDeferredReferenceProof.ts, 47, 46))
+>T : Symbol(T, Decl(recursiveDeferredReferenceProof.ts, 48, 26))
+>DeferredProducer : Symbol(DeferredProducer, Decl(recursiveDeferredReferenceProof.ts, 46, 1))
+>T : Symbol(T, Decl(recursiveDeferredReferenceProof.ts, 48, 26))
+
+const covariant: OtherProducer<unknown> = producer<{ value: string }>();
+>covariant : Symbol(covariant, Decl(recursiveDeferredReferenceProof.ts, 49, 5))
+>OtherProducer : Symbol(OtherProducer, Decl(recursiveDeferredReferenceProof.ts, 42, 1))
+>producer : Symbol(producer, Decl(recursiveDeferredReferenceProof.ts, 47, 46))
+>value : Symbol(value, Decl(recursiveDeferredReferenceProof.ts, 49, 52))
+
+const covariantBack: Producer<unknown> = covariant;
+>covariantBack : Symbol(covariantBack, Decl(recursiveDeferredReferenceProof.ts, 50, 5))
+>Producer : Symbol(Producer, Decl(recursiveDeferredReferenceProof.ts, 37, 74))
+>covariant : Symbol(covariant, Decl(recursiveDeferredReferenceProof.ts, 49, 5))
+

@@ -1,0 +1,144 @@
+//// [tests/cases/compiler/recursiveGetterConstraintCallLike.tsx] ////
+
+=== recursiveGetterConstraintCallLike.tsx ===
+declare namespace JSX {
+    interface Element { element: true; }
+>element : true
+>true : true
+}
+
+declare function Component<T extends { value: string }>(props: { data: T }): JSX.Element;
+>Component : <T extends { value: string; }>(props: { data: T; }) => JSX.Element
+>value : string
+>props : { data: T; }
+>data : T
+>JSX : any
+
+const validSelfClosing = <Component data={{ get value() { return ""; } }} />;
+>validSelfClosing : JSX.Element
+><Component data={{ get value() { return ""; } }} /> : JSX.Element
+>Component : <T extends { value: string; }>(props: { data: T; }) => JSX.Element
+>data : { readonly value: string; }
+>{ get value() { return ""; } } : { readonly value: string; }
+>value : string
+>"" : ""
+
+const validPaired = <Component data={{ get value() { return ""; } }}></Component>;
+>validPaired : JSX.Element
+><Component data={{ get value() { return ""; } }}></Component> : JSX.Element
+>Component : <T extends { value: string; }>(props: { data: T; }) => JSX.Element
+>data : { readonly value: string; }
+>{ get value() { return ""; } } : { readonly value: string; }
+>value : string
+>"" : ""
+>Component : <T extends { value: string; }>(props: { data: T; }) => JSX.Element
+
+const invalidSelfClosing = <Component data={{ get value() { return 42; } }} />;
+>invalidSelfClosing : JSX.Element
+><Component data={{ get value() { return 42; } }} /> : JSX.Element
+>Component : <T extends { value: string; }>(props: { data: T; }) => JSX.Element
+>data : { readonly value: number; }
+>{ get value() { return 42; } } : { readonly value: number; }
+>value : number
+>42 : 42
+
+const invalidPaired = <Component data={{ get value() { return 42; } }}></Component>;
+>invalidPaired : JSX.Element
+><Component data={{ get value() { return 42; } }}></Component> : JSX.Element
+>Component : <T extends { value: string; }>(props: { data: T; }) => JSX.Element
+>data : { readonly value: number; }
+>{ get value() { return 42; } } : { readonly value: number; }
+>value : number
+>42 : 42
+>Component : <T extends { value: string; }>(props: { data: T; }) => JSX.Element
+
+declare function InvalidComponent<T extends { value: string }>(props: { data: T }): number;
+>InvalidComponent : <T extends { value: string; }>(props: { data: T; }) => number
+>value : string
+>props : { data: T; }
+>data : T
+
+const invalidElement = <InvalidComponent data={{ get value() { return 42; } }} />;
+>invalidElement : JSX.Element
+><InvalidComponent data={{ get value() { return 42; } }} /> : JSX.Element
+>InvalidComponent : <T extends { value: string; }>(props: { data: T; }) => number
+>data : { readonly value: number; }
+>{ get value() { return 42; } } : { readonly value: number; }
+>value : number
+>42 : 42
+
+declare function tag<T extends { value: string }>(strings: TemplateStringsArray, value: T): T;
+>tag : <T extends { value: string; }>(strings: TemplateStringsArray, value: T) => T
+>value : string
+>strings : TemplateStringsArray
+>value : T
+
+const validTagged = tag`${{ get value() { return ""; } }}`;
+>validTagged : { readonly value: string; }
+>tag`${{ get value() { return ""; } }}` : { readonly value: string; }
+>tag : <T extends { value: string; }>(strings: TemplateStringsArray, value: T) => T
+>`${{ get value() { return ""; } }}` : string
+>{ get value() { return ""; } } : { readonly value: string; }
+>value : string
+>"" : ""
+
+const invalidTagged = tag`${{ get value() { return 42; } }}`;
+>invalidTagged : { readonly value: number; }
+>tag`${{ get value() { return 42; } }}` : { readonly value: number; }
+>tag : <T extends { value: string; }>(strings: TemplateStringsArray, value: T) => T
+>`${{ get value() { return 42; } }}` : string
+>{ get value() { return 42; } } : { readonly value: number; }
+>value : number
+>42 : 42
+
+declare function rest<T extends { value: string }>(...values: T[]): T;
+>rest : <T extends { value: string; }>(...values: T[]) => T
+>value : string
+>values : T[]
+
+const validRest = rest({ get value() { return ""; } });
+>validRest : { readonly value: string; }
+>rest({ get value() { return ""; } }) : { readonly value: string; }
+>rest : <T extends { value: string; }>(...values: T[]) => T
+>{ get value() { return ""; } } : { readonly value: string; }
+>value : string
+>"" : ""
+
+const invalidRest = rest({ get value() { return 42; } });
+>invalidRest : { readonly value: number; }
+>rest({ get value() { return 42; } }) : { readonly value: number; }
+>rest : <T extends { value: string; }>(...values: T[]) => T
+>{ get value() { return 42; } } : { readonly value: number; }
+>value : number
+>42 : 42
+
+const matcher = {
+>matcher : { [Symbol.hasInstance]<T extends { value: string; }>(value: T): boolean; }
+>{    [Symbol.hasInstance]<T extends { value: string }>(value: T) { return true; },} : { [Symbol.hasInstance]<T extends { value: string; }>(value: T): boolean; }
+
+    [Symbol.hasInstance]<T extends { value: string }>(value: T) { return true; },
+>[Symbol.hasInstance] : <T extends { value: string; }>(value: T) => boolean
+>Symbol.hasInstance : unique symbol
+>Symbol : SymbolConstructor
+>hasInstance : unique symbol
+>value : string
+>value : T
+>true : true
+
+};
+const validInstance = { get value() { return ""; } } instanceof matcher;
+>validInstance : boolean
+>{ get value() { return ""; } } instanceof matcher : boolean
+>{ get value() { return ""; } } : { readonly value: string; }
+>value : string
+>"" : ""
+>matcher : { [Symbol.hasInstance]<T extends { value: string; }>(value: T): boolean; }
+
+const invalidInstance = { get value() { return 42; } } instanceof matcher;
+>invalidInstance : boolean
+>{ get value() { return 42; } } instanceof matcher : boolean
+>{ get value() { return 42; } } : { readonly value: number; }
+>value : number
+>42 : 42
+>matcher : { [Symbol.hasInstance]<T extends { value: string; }>(value: T): boolean; }
+

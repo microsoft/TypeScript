@@ -1,0 +1,338 @@
+//// [tests/cases/compiler/recursiveSchemaComputedHeritage.ts] ////
+
+=== recursiveSchemaComputedHeritage.ts ===
+interface Internals<O> { output: O; }
+>Internals : Symbol(Internals, Decl(recursiveSchemaComputedHeritage.ts, 0, 0))
+>O : Symbol(O, Decl(recursiveSchemaComputedHeritage.ts, 0, 20))
+>output : Symbol(Internals.output, Decl(recursiveSchemaComputedHeritage.ts, 0, 24))
+>O : Symbol(O, Decl(recursiveSchemaComputedHeritage.ts, 0, 20))
+
+interface Base<O = unknown, I extends Internals<O> = Internals<O>> { _zod: I; }
+>Base : Symbol(Base, Decl(recursiveSchemaComputedHeritage.ts, 0, 37))
+>O : Symbol(O, Decl(recursiveSchemaComputedHeritage.ts, 1, 15))
+>I : Symbol(I, Decl(recursiveSchemaComputedHeritage.ts, 1, 27))
+>Internals : Symbol(Internals, Decl(recursiveSchemaComputedHeritage.ts, 0, 0))
+>O : Symbol(O, Decl(recursiveSchemaComputedHeritage.ts, 1, 15))
+>Internals : Symbol(Internals, Decl(recursiveSchemaComputedHeritage.ts, 0, 0))
+>O : Symbol(O, Decl(recursiveSchemaComputedHeritage.ts, 1, 15))
+>_zod : Symbol(Base._zod, Decl(recursiveSchemaComputedHeritage.ts, 1, 68))
+>I : Symbol(I, Decl(recursiveSchemaComputedHeritage.ts, 1, 27))
+
+interface Derived<T extends Internals<unknown>> extends Base<T["output"], T> {}
+>Derived : Symbol(Derived, Decl(recursiveSchemaComputedHeritage.ts, 1, 79))
+>T : Symbol(T, Decl(recursiveSchemaComputedHeritage.ts, 2, 18))
+>Internals : Symbol(Internals, Decl(recursiveSchemaComputedHeritage.ts, 0, 0))
+>Base : Symbol(Base, Decl(recursiveSchemaComputedHeritage.ts, 0, 37))
+>T : Symbol(T, Decl(recursiveSchemaComputedHeritage.ts, 2, 18))
+>T : Symbol(T, Decl(recursiveSchemaComputedHeritage.ts, 2, 18))
+
+interface StringInternals extends Internals<string> {}
+>StringInternals : Symbol(StringInternals, Decl(recursiveSchemaComputedHeritage.ts, 2, 79))
+>Internals : Symbol(Internals, Decl(recursiveSchemaComputedHeritage.ts, 0, 0))
+
+interface StringSchema extends Derived<StringInternals> {}
+>StringSchema : Symbol(StringSchema, Decl(recursiveSchemaComputedHeritage.ts, 4, 54))
+>Derived : Symbol(Derived, Decl(recursiveSchemaComputedHeritage.ts, 1, 79))
+>StringInternals : Symbol(StringInternals, Decl(recursiveSchemaComputedHeritage.ts, 2, 79))
+
+interface ArrayInternals<T extends Base> extends Internals<T["_zod"]["output"][]> {}
+>ArrayInternals : Symbol(ArrayInternals, Decl(recursiveSchemaComputedHeritage.ts, 5, 58))
+>T : Symbol(T, Decl(recursiveSchemaComputedHeritage.ts, 6, 25))
+>Base : Symbol(Base, Decl(recursiveSchemaComputedHeritage.ts, 0, 37))
+>Internals : Symbol(Internals, Decl(recursiveSchemaComputedHeritage.ts, 0, 0))
+>T : Symbol(T, Decl(recursiveSchemaComputedHeritage.ts, 6, 25))
+
+interface UnionInternals<T extends readonly Base[]> extends Internals<T[number]["_zod"]["output"]> {}
+>UnionInternals : Symbol(UnionInternals, Decl(recursiveSchemaComputedHeritage.ts, 6, 84))
+>T : Symbol(T, Decl(recursiveSchemaComputedHeritage.ts, 7, 25))
+>Base : Symbol(Base, Decl(recursiveSchemaComputedHeritage.ts, 0, 37))
+>Internals : Symbol(Internals, Decl(recursiveSchemaComputedHeritage.ts, 0, 0))
+>T : Symbol(T, Decl(recursiveSchemaComputedHeritage.ts, 7, 25))
+
+interface LazyArray<T extends Base> extends Base<any, ArrayInternals<T>> {}
+>LazyArray : Symbol(LazyArray, Decl(recursiveSchemaComputedHeritage.ts, 7, 101))
+>T : Symbol(T, Decl(recursiveSchemaComputedHeritage.ts, 9, 20))
+>Base : Symbol(Base, Decl(recursiveSchemaComputedHeritage.ts, 0, 37))
+>Base : Symbol(Base, Decl(recursiveSchemaComputedHeritage.ts, 0, 37))
+>ArrayInternals : Symbol(ArrayInternals, Decl(recursiveSchemaComputedHeritage.ts, 5, 58))
+>T : Symbol(T, Decl(recursiveSchemaComputedHeritage.ts, 9, 20))
+
+interface LazyUnion<T extends readonly Base[]> extends Base<any, UnionInternals<T>> {}
+>LazyUnion : Symbol(LazyUnion, Decl(recursiveSchemaComputedHeritage.ts, 9, 75))
+>T : Symbol(T, Decl(recursiveSchemaComputedHeritage.ts, 10, 20))
+>Base : Symbol(Base, Decl(recursiveSchemaComputedHeritage.ts, 0, 37))
+>Base : Symbol(Base, Decl(recursiveSchemaComputedHeritage.ts, 0, 37))
+>UnionInternals : Symbol(UnionInternals, Decl(recursiveSchemaComputedHeritage.ts, 6, 84))
+>T : Symbol(T, Decl(recursiveSchemaComputedHeritage.ts, 10, 20))
+
+interface LazyJSON extends LazyUnion<[StringSchema, LazyArray<LazyJSON>]> {}
+>LazyJSON : Symbol(LazyJSON, Decl(recursiveSchemaComputedHeritage.ts, 10, 86))
+>LazyUnion : Symbol(LazyUnion, Decl(recursiveSchemaComputedHeritage.ts, 9, 75))
+>StringSchema : Symbol(StringSchema, Decl(recursiveSchemaComputedHeritage.ts, 4, 54))
+>LazyArray : Symbol(LazyArray, Decl(recursiveSchemaComputedHeritage.ts, 7, 101))
+>LazyJSON : Symbol(LazyJSON, Decl(recursiveSchemaComputedHeritage.ts, 10, 86))
+
+declare const a: LazyJSON["_zod"]["output"];
+>a : Symbol(a, Decl(recursiveSchemaComputedHeritage.ts, 12, 13))
+>LazyJSON : Symbol(LazyJSON, Decl(recursiveSchemaComputedHeritage.ts, 10, 86))
+
+interface DerivedArray<T extends Base> extends Derived<ArrayInternals<T>> {}
+>DerivedArray : Symbol(DerivedArray, Decl(recursiveSchemaComputedHeritage.ts, 12, 44))
+>T : Symbol(T, Decl(recursiveSchemaComputedHeritage.ts, 14, 23))
+>Base : Symbol(Base, Decl(recursiveSchemaComputedHeritage.ts, 0, 37))
+>Derived : Symbol(Derived, Decl(recursiveSchemaComputedHeritage.ts, 1, 79))
+>ArrayInternals : Symbol(ArrayInternals, Decl(recursiveSchemaComputedHeritage.ts, 5, 58))
+>T : Symbol(T, Decl(recursiveSchemaComputedHeritage.ts, 14, 23))
+
+interface DerivedUnion<T extends readonly Base[]> extends Derived<UnionInternals<T>> {}
+>DerivedUnion : Symbol(DerivedUnion, Decl(recursiveSchemaComputedHeritage.ts, 14, 76))
+>T : Symbol(T, Decl(recursiveSchemaComputedHeritage.ts, 15, 23))
+>Base : Symbol(Base, Decl(recursiveSchemaComputedHeritage.ts, 0, 37))
+>Derived : Symbol(Derived, Decl(recursiveSchemaComputedHeritage.ts, 1, 79))
+>UnionInternals : Symbol(UnionInternals, Decl(recursiveSchemaComputedHeritage.ts, 6, 84))
+>T : Symbol(T, Decl(recursiveSchemaComputedHeritage.ts, 15, 23))
+
+interface DerivedJSON extends DerivedUnion<[StringSchema, DerivedArray<DerivedJSON>]> {}
+>DerivedJSON : Symbol(DerivedJSON, Decl(recursiveSchemaComputedHeritage.ts, 15, 87))
+>DerivedUnion : Symbol(DerivedUnion, Decl(recursiveSchemaComputedHeritage.ts, 14, 76))
+>StringSchema : Symbol(StringSchema, Decl(recursiveSchemaComputedHeritage.ts, 4, 54))
+>DerivedArray : Symbol(DerivedArray, Decl(recursiveSchemaComputedHeritage.ts, 12, 44))
+>DerivedJSON : Symbol(DerivedJSON, Decl(recursiveSchemaComputedHeritage.ts, 15, 87))
+
+declare const b: DerivedJSON["_zod"]["output"];
+>b : Symbol(b, Decl(recursiveSchemaComputedHeritage.ts, 17, 13))
+>DerivedJSON : Symbol(DerivedJSON, Decl(recursiveSchemaComputedHeritage.ts, 15, 87))
+
+const lazy: typeof a = ["", [""]];
+>lazy : Symbol(lazy, Decl(recursiveSchemaComputedHeritage.ts, 19, 5))
+>a : Symbol(a, Decl(recursiveSchemaComputedHeritage.ts, 12, 13))
+
+const derived: typeof b = ["", [""]];
+>derived : Symbol(derived, Decl(recursiveSchemaComputedHeritage.ts, 20, 5))
+>b : Symbol(b, Decl(recursiveSchemaComputedHeritage.ts, 17, 13))
+
+const invalidLazy: typeof a = 42;
+>invalidLazy : Symbol(invalidLazy, Decl(recursiveSchemaComputedHeritage.ts, 21, 5))
+>a : Symbol(a, Decl(recursiveSchemaComputedHeritage.ts, 12, 13))
+
+const invalidDerived: typeof b = 42;
+>invalidDerived : Symbol(invalidDerived, Decl(recursiveSchemaComputedHeritage.ts, 22, 5))
+>b : Symbol(b, Decl(recursiveSchemaComputedHeritage.ts, 17, 13))
+
+const invalidNestedLazy: typeof a = [42];
+>invalidNestedLazy : Symbol(invalidNestedLazy, Decl(recursiveSchemaComputedHeritage.ts, 23, 5))
+>a : Symbol(a, Decl(recursiveSchemaComputedHeritage.ts, 12, 13))
+
+const invalidNestedDerived: typeof b = [42];
+>invalidNestedDerived : Symbol(invalidNestedDerived, Decl(recursiveSchemaComputedHeritage.ts, 24, 5))
+>b : Symbol(b, Decl(recursiveSchemaComputedHeritage.ts, 17, 13))
+
+declare const lazyElement: Extract<typeof a, unknown[]>[number];
+>lazyElement : Symbol(lazyElement, Decl(recursiveSchemaComputedHeritage.ts, 26, 13))
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(recursiveSchemaComputedHeritage.ts, 12, 13))
+
+declare const derivedElement: Extract<typeof b, unknown[]>[number];
+>derivedElement : Symbol(derivedElement, Decl(recursiveSchemaComputedHeritage.ts, 27, 13))
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>b : Symbol(b, Decl(recursiveSchemaComputedHeritage.ts, 17, 13))
+
+const lazyElementToValue: typeof a = lazyElement;
+>lazyElementToValue : Symbol(lazyElementToValue, Decl(recursiveSchemaComputedHeritage.ts, 28, 5))
+>a : Symbol(a, Decl(recursiveSchemaComputedHeritage.ts, 12, 13))
+>lazyElement : Symbol(lazyElement, Decl(recursiveSchemaComputedHeritage.ts, 26, 13))
+
+const lazyValueToElement: typeof lazyElement = a;
+>lazyValueToElement : Symbol(lazyValueToElement, Decl(recursiveSchemaComputedHeritage.ts, 29, 5))
+>lazyElement : Symbol(lazyElement, Decl(recursiveSchemaComputedHeritage.ts, 26, 13))
+>a : Symbol(a, Decl(recursiveSchemaComputedHeritage.ts, 12, 13))
+
+const derivedElementToValue: typeof b = derivedElement;
+>derivedElementToValue : Symbol(derivedElementToValue, Decl(recursiveSchemaComputedHeritage.ts, 30, 5))
+>b : Symbol(b, Decl(recursiveSchemaComputedHeritage.ts, 17, 13))
+>derivedElement : Symbol(derivedElement, Decl(recursiveSchemaComputedHeritage.ts, 27, 13))
+
+const derivedValueToElement: typeof derivedElement = b;
+>derivedValueToElement : Symbol(derivedValueToElement, Decl(recursiveSchemaComputedHeritage.ts, 31, 5))
+>derivedElement : Symbol(derivedElement, Decl(recursiveSchemaComputedHeritage.ts, 27, 13))
+>b : Symbol(b, Decl(recursiveSchemaComputedHeritage.ts, 17, 13))
+
+interface NamedArrayInternals<T extends Base> extends Internals<Array<T["_zod"]["output"]>> {}
+>NamedArrayInternals : Symbol(NamedArrayInternals, Decl(recursiveSchemaComputedHeritage.ts, 31, 55))
+>T : Symbol(T, Decl(recursiveSchemaComputedHeritage.ts, 33, 30))
+>Base : Symbol(Base, Decl(recursiveSchemaComputedHeritage.ts, 0, 37))
+>Internals : Symbol(Internals, Decl(recursiveSchemaComputedHeritage.ts, 0, 0))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>T : Symbol(T, Decl(recursiveSchemaComputedHeritage.ts, 33, 30))
+
+interface NamedArray<T extends Base> extends Derived<NamedArrayInternals<T>> {}
+>NamedArray : Symbol(NamedArray, Decl(recursiveSchemaComputedHeritage.ts, 33, 94))
+>T : Symbol(T, Decl(recursiveSchemaComputedHeritage.ts, 34, 21))
+>Base : Symbol(Base, Decl(recursiveSchemaComputedHeritage.ts, 0, 37))
+>Derived : Symbol(Derived, Decl(recursiveSchemaComputedHeritage.ts, 1, 79))
+>NamedArrayInternals : Symbol(NamedArrayInternals, Decl(recursiveSchemaComputedHeritage.ts, 31, 55))
+>T : Symbol(T, Decl(recursiveSchemaComputedHeritage.ts, 34, 21))
+
+interface NamedJSON extends LazyUnion<[StringSchema, NamedArray<NamedJSON>]> {}
+>NamedJSON : Symbol(NamedJSON, Decl(recursiveSchemaComputedHeritage.ts, 34, 79))
+>LazyUnion : Symbol(LazyUnion, Decl(recursiveSchemaComputedHeritage.ts, 9, 75))
+>StringSchema : Symbol(StringSchema, Decl(recursiveSchemaComputedHeritage.ts, 4, 54))
+>NamedArray : Symbol(NamedArray, Decl(recursiveSchemaComputedHeritage.ts, 33, 94))
+>NamedJSON : Symbol(NamedJSON, Decl(recursiveSchemaComputedHeritage.ts, 34, 79))
+
+declare const named: NamedJSON["_zod"]["output"];
+>named : Symbol(named, Decl(recursiveSchemaComputedHeritage.ts, 36, 13))
+>NamedJSON : Symbol(NamedJSON, Decl(recursiveSchemaComputedHeritage.ts, 34, 79))
+
+const validNamed: typeof named = ["", [""]];
+>validNamed : Symbol(validNamed, Decl(recursiveSchemaComputedHeritage.ts, 37, 5))
+>named : Symbol(named, Decl(recursiveSchemaComputedHeritage.ts, 36, 13))
+
+const invalidNamed: typeof named = [42];
+>invalidNamed : Symbol(invalidNamed, Decl(recursiveSchemaComputedHeritage.ts, 38, 5))
+>named : Symbol(named, Decl(recursiveSchemaComputedHeritage.ts, 36, 13))
+
+interface ReadonlyArrayInternals<T extends Base> extends Internals<ReadonlyArray<T["_zod"]["output"]>> {}
+>ReadonlyArrayInternals : Symbol(ReadonlyArrayInternals, Decl(recursiveSchemaComputedHeritage.ts, 38, 40))
+>T : Symbol(T, Decl(recursiveSchemaComputedHeritage.ts, 40, 33))
+>Base : Symbol(Base, Decl(recursiveSchemaComputedHeritage.ts, 0, 37))
+>Internals : Symbol(Internals, Decl(recursiveSchemaComputedHeritage.ts, 0, 0))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --) ... and 3 more)
+>T : Symbol(T, Decl(recursiveSchemaComputedHeritage.ts, 40, 33))
+
+interface ReadonlySchemaArray<T extends Base> extends Derived<ReadonlyArrayInternals<T>> {}
+>ReadonlySchemaArray : Symbol(ReadonlySchemaArray, Decl(recursiveSchemaComputedHeritage.ts, 40, 105))
+>T : Symbol(T, Decl(recursiveSchemaComputedHeritage.ts, 41, 30))
+>Base : Symbol(Base, Decl(recursiveSchemaComputedHeritage.ts, 0, 37))
+>Derived : Symbol(Derived, Decl(recursiveSchemaComputedHeritage.ts, 1, 79))
+>ReadonlyArrayInternals : Symbol(ReadonlyArrayInternals, Decl(recursiveSchemaComputedHeritage.ts, 38, 40))
+>T : Symbol(T, Decl(recursiveSchemaComputedHeritage.ts, 41, 30))
+
+interface ReadonlyJSON extends LazyUnion<[StringSchema, ReadonlySchemaArray<ReadonlyJSON>]> {}
+>ReadonlyJSON : Symbol(ReadonlyJSON, Decl(recursiveSchemaComputedHeritage.ts, 41, 91))
+>LazyUnion : Symbol(LazyUnion, Decl(recursiveSchemaComputedHeritage.ts, 9, 75))
+>StringSchema : Symbol(StringSchema, Decl(recursiveSchemaComputedHeritage.ts, 4, 54))
+>ReadonlySchemaArray : Symbol(ReadonlySchemaArray, Decl(recursiveSchemaComputedHeritage.ts, 40, 105))
+>ReadonlyJSON : Symbol(ReadonlyJSON, Decl(recursiveSchemaComputedHeritage.ts, 41, 91))
+
+declare const readonlyJSON: ReadonlyJSON["_zod"]["output"];
+>readonlyJSON : Symbol(readonlyJSON, Decl(recursiveSchemaComputedHeritage.ts, 43, 13))
+>ReadonlyJSON : Symbol(ReadonlyJSON, Decl(recursiveSchemaComputedHeritage.ts, 41, 91))
+
+const validReadonly: typeof readonlyJSON = ["", [""]];
+>validReadonly : Symbol(validReadonly, Decl(recursiveSchemaComputedHeritage.ts, 44, 5))
+>readonlyJSON : Symbol(readonlyJSON, Decl(recursiveSchemaComputedHeritage.ts, 43, 13))
+
+const invalidReadonly: typeof readonlyJSON = [42];
+>invalidReadonly : Symbol(invalidReadonly, Decl(recursiveSchemaComputedHeritage.ts, 45, 5))
+>readonlyJSON : Symbol(readonlyJSON, Decl(recursiveSchemaComputedHeritage.ts, 43, 13))
+
+interface NullableArrayInternals<T extends Base> extends Internals<(T["_zod"]["output"] | null)[]> {}
+>NullableArrayInternals : Symbol(NullableArrayInternals, Decl(recursiveSchemaComputedHeritage.ts, 45, 50))
+>T : Symbol(T, Decl(recursiveSchemaComputedHeritage.ts, 47, 33))
+>Base : Symbol(Base, Decl(recursiveSchemaComputedHeritage.ts, 0, 37))
+>Internals : Symbol(Internals, Decl(recursiveSchemaComputedHeritage.ts, 0, 0))
+>T : Symbol(T, Decl(recursiveSchemaComputedHeritage.ts, 47, 33))
+
+interface NullableArray<T extends Base> extends Derived<NullableArrayInternals<T>> {}
+>NullableArray : Symbol(NullableArray, Decl(recursiveSchemaComputedHeritage.ts, 47, 101))
+>T : Symbol(T, Decl(recursiveSchemaComputedHeritage.ts, 48, 24))
+>Base : Symbol(Base, Decl(recursiveSchemaComputedHeritage.ts, 0, 37))
+>Derived : Symbol(Derived, Decl(recursiveSchemaComputedHeritage.ts, 1, 79))
+>NullableArrayInternals : Symbol(NullableArrayInternals, Decl(recursiveSchemaComputedHeritage.ts, 45, 50))
+>T : Symbol(T, Decl(recursiveSchemaComputedHeritage.ts, 48, 24))
+
+interface NullableJSON extends LazyUnion<[StringSchema, NullableArray<NullableJSON>]> {}
+>NullableJSON : Symbol(NullableJSON, Decl(recursiveSchemaComputedHeritage.ts, 48, 85))
+>LazyUnion : Symbol(LazyUnion, Decl(recursiveSchemaComputedHeritage.ts, 9, 75))
+>StringSchema : Symbol(StringSchema, Decl(recursiveSchemaComputedHeritage.ts, 4, 54))
+>NullableArray : Symbol(NullableArray, Decl(recursiveSchemaComputedHeritage.ts, 47, 101))
+>NullableJSON : Symbol(NullableJSON, Decl(recursiveSchemaComputedHeritage.ts, 48, 85))
+
+declare const nullable: NullableJSON["_zod"]["output"];
+>nullable : Symbol(nullable, Decl(recursiveSchemaComputedHeritage.ts, 50, 13))
+>NullableJSON : Symbol(NullableJSON, Decl(recursiveSchemaComputedHeritage.ts, 48, 85))
+
+const validNullable: typeof nullable = [null, [""]];
+>validNullable : Symbol(validNullable, Decl(recursiveSchemaComputedHeritage.ts, 51, 5))
+>nullable : Symbol(nullable, Decl(recursiveSchemaComputedHeritage.ts, 50, 13))
+
+const invalidNullable: typeof nullable = [42];
+>invalidNullable : Symbol(invalidNullable, Decl(recursiveSchemaComputedHeritage.ts, 52, 5))
+>nullable : Symbol(nullable, Decl(recursiveSchemaComputedHeritage.ts, 50, 13))
+
+type Output<T extends Base> = T["_zod"]["output"];
+>Output : Symbol(Output, Decl(recursiveSchemaComputedHeritage.ts, 52, 46))
+>T : Symbol(T, Decl(recursiveSchemaComputedHeritage.ts, 54, 12))
+>Base : Symbol(Base, Decl(recursiveSchemaComputedHeritage.ts, 0, 37))
+>T : Symbol(T, Decl(recursiveSchemaComputedHeritage.ts, 54, 12))
+
+interface AliasedArrayInternals<T extends Base> extends Internals<Output<T>[]> {}
+>AliasedArrayInternals : Symbol(AliasedArrayInternals, Decl(recursiveSchemaComputedHeritage.ts, 54, 50))
+>T : Symbol(T, Decl(recursiveSchemaComputedHeritage.ts, 55, 32))
+>Base : Symbol(Base, Decl(recursiveSchemaComputedHeritage.ts, 0, 37))
+>Internals : Symbol(Internals, Decl(recursiveSchemaComputedHeritage.ts, 0, 0))
+>Output : Symbol(Output, Decl(recursiveSchemaComputedHeritage.ts, 52, 46))
+>T : Symbol(T, Decl(recursiveSchemaComputedHeritage.ts, 55, 32))
+
+interface AliasedArray<T extends Base> extends Derived<AliasedArrayInternals<T>> {}
+>AliasedArray : Symbol(AliasedArray, Decl(recursiveSchemaComputedHeritage.ts, 55, 81))
+>T : Symbol(T, Decl(recursiveSchemaComputedHeritage.ts, 56, 23))
+>Base : Symbol(Base, Decl(recursiveSchemaComputedHeritage.ts, 0, 37))
+>Derived : Symbol(Derived, Decl(recursiveSchemaComputedHeritage.ts, 1, 79))
+>AliasedArrayInternals : Symbol(AliasedArrayInternals, Decl(recursiveSchemaComputedHeritage.ts, 54, 50))
+>T : Symbol(T, Decl(recursiveSchemaComputedHeritage.ts, 56, 23))
+
+interface AliasedJSON extends LazyUnion<[StringSchema, AliasedArray<AliasedJSON>]> {}
+>AliasedJSON : Symbol(AliasedJSON, Decl(recursiveSchemaComputedHeritage.ts, 56, 83))
+>LazyUnion : Symbol(LazyUnion, Decl(recursiveSchemaComputedHeritage.ts, 9, 75))
+>StringSchema : Symbol(StringSchema, Decl(recursiveSchemaComputedHeritage.ts, 4, 54))
+>AliasedArray : Symbol(AliasedArray, Decl(recursiveSchemaComputedHeritage.ts, 55, 81))
+>AliasedJSON : Symbol(AliasedJSON, Decl(recursiveSchemaComputedHeritage.ts, 56, 83))
+
+declare const aliased: AliasedJSON["_zod"]["output"];
+>aliased : Symbol(aliased, Decl(recursiveSchemaComputedHeritage.ts, 58, 13))
+>AliasedJSON : Symbol(AliasedJSON, Decl(recursiveSchemaComputedHeritage.ts, 56, 83))
+
+const validAliased: typeof aliased = ["", [""]];
+>validAliased : Symbol(validAliased, Decl(recursiveSchemaComputedHeritage.ts, 59, 5))
+>aliased : Symbol(aliased, Decl(recursiveSchemaComputedHeritage.ts, 58, 13))
+
+const invalidAliased: typeof aliased = [42];
+>invalidAliased : Symbol(invalidAliased, Decl(recursiveSchemaComputedHeritage.ts, 60, 5))
+>aliased : Symbol(aliased, Decl(recursiveSchemaComputedHeritage.ts, 58, 13))
+
+interface TupleInternals<T extends Base> extends Internals<[value: T["_zod"]["output"]]> {}
+>TupleInternals : Symbol(TupleInternals, Decl(recursiveSchemaComputedHeritage.ts, 60, 44))
+>T : Symbol(T, Decl(recursiveSchemaComputedHeritage.ts, 62, 25))
+>Base : Symbol(Base, Decl(recursiveSchemaComputedHeritage.ts, 0, 37))
+>Internals : Symbol(Internals, Decl(recursiveSchemaComputedHeritage.ts, 0, 0))
+>T : Symbol(T, Decl(recursiveSchemaComputedHeritage.ts, 62, 25))
+
+interface SchemaTuple<T extends Base> extends Derived<TupleInternals<T>> {}
+>SchemaTuple : Symbol(SchemaTuple, Decl(recursiveSchemaComputedHeritage.ts, 62, 91))
+>T : Symbol(T, Decl(recursiveSchemaComputedHeritage.ts, 63, 22))
+>Base : Symbol(Base, Decl(recursiveSchemaComputedHeritage.ts, 0, 37))
+>Derived : Symbol(Derived, Decl(recursiveSchemaComputedHeritage.ts, 1, 79))
+>TupleInternals : Symbol(TupleInternals, Decl(recursiveSchemaComputedHeritage.ts, 60, 44))
+>T : Symbol(T, Decl(recursiveSchemaComputedHeritage.ts, 63, 22))
+
+interface TupleJSON extends LazyUnion<[StringSchema, SchemaTuple<TupleJSON>]> {}
+>TupleJSON : Symbol(TupleJSON, Decl(recursiveSchemaComputedHeritage.ts, 63, 75))
+>LazyUnion : Symbol(LazyUnion, Decl(recursiveSchemaComputedHeritage.ts, 9, 75))
+>StringSchema : Symbol(StringSchema, Decl(recursiveSchemaComputedHeritage.ts, 4, 54))
+>SchemaTuple : Symbol(SchemaTuple, Decl(recursiveSchemaComputedHeritage.ts, 62, 91))
+>TupleJSON : Symbol(TupleJSON, Decl(recursiveSchemaComputedHeritage.ts, 63, 75))
+
+declare const tuple: TupleJSON["_zod"]["output"];
+>tuple : Symbol(tuple, Decl(recursiveSchemaComputedHeritage.ts, 65, 13))
+>TupleJSON : Symbol(TupleJSON, Decl(recursiveSchemaComputedHeritage.ts, 63, 75))
+
+const validTuple: typeof tuple = [[[""]]];
+>validTuple : Symbol(validTuple, Decl(recursiveSchemaComputedHeritage.ts, 66, 5))
+>tuple : Symbol(tuple, Decl(recursiveSchemaComputedHeritage.ts, 65, 13))
+
+const invalidTuple: typeof tuple = [42];
+>invalidTuple : Symbol(invalidTuple, Decl(recursiveSchemaComputedHeritage.ts, 67, 5))
+>tuple : Symbol(tuple, Decl(recursiveSchemaComputedHeritage.ts, 65, 13))
+

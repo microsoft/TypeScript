@@ -1,0 +1,166 @@
+//// [tests/cases/compiler/deferredReferenceIdentity.ts] ////
+
+=== deferredReferenceIdentity.ts ===
+interface Box<T> { value: T; }
+>value : T
+
+interface DerivedBox<T> extends Box<T> { extra: true; }
+>extra : true
+>true : true
+
+interface WrongBox<T> { value: T; extra: false; }
+>value : T
+>extra : false
+>false : false
+
+type Value<T> = T extends { value: unknown } ? T["value"] : never;
+>Value : Value<T>
+>value : unknown
+
+type Wrapped<T> = Box<Value<T>>;
+>Wrapped : Wrapped<T>
+
+type Derived<T> = DerivedBox<Value<T>>;
+>Derived : Derived<T>
+
+type Wrong<T> = WrongBox<Value<T>>;
+>Wrong : Wrong<T>
+
+interface NumberValue { value: number; }
+>value : number
+
+interface StringValue { value: string; }
+>value : string
+
+declare function wrapped<T>(): Wrapped<T>;
+>wrapped : <T>() => Wrapped<T>
+
+declare function derived<T>(): Derived<T>;
+>derived : <T>() => Derived<T>
+
+declare function wrong<T>(): Wrong<T>;
+>wrong : <T>() => Wrong<T>
+
+const same: Wrapped<NumberValue> = wrapped<NumberValue>();
+>same : Wrapped<NumberValue>
+>wrapped<NumberValue>() : Wrapped<NumberValue>
+>wrapped : <T>() => Wrapped<T>
+
+const inherited: Wrapped<NumberValue> = derived<NumberValue>();
+>inherited : Wrapped<NumberValue>
+>derived<NumberValue>() : Derived<NumberValue>
+>derived : <T>() => Derived<T>
+
+const different: Wrapped<NumberValue> = wrapped<StringValue>();
+>different : Wrapped<NumberValue>
+>wrapped<StringValue>() : Wrapped<StringValue>
+>wrapped : <T>() => Wrapped<T>
+
+const differentInherited: Wrapped<NumberValue> = derived<StringValue>();
+>differentInherited : Wrapped<NumberValue>
+>derived<StringValue>() : Derived<StringValue>
+>derived : <T>() => Derived<T>
+
+const missing: Derived<NumberValue> = wrapped<NumberValue>();
+>missing : Derived<NumberValue>
+>wrapped<NumberValue>() : Wrapped<NumberValue>
+>wrapped : <T>() => Wrapped<T>
+
+const wrongMember: Derived<NumberValue> = wrong<NumberValue>();
+>wrongMember : Derived<NumberValue>
+>wrong<NumberValue>() : Wrong<NumberValue>
+>wrong : <T>() => Wrong<T>
+
+interface Pair { left: number; right: string; }
+>left : number
+>right : string
+
+type Left<T extends Pair> = Box<T["left"]>;
+>Left : Left<T>
+
+type Right<T extends Pair> = Box<T["right"]>;
+>Right : Right<T>
+
+declare function left<T extends Pair>(): Left<T>;
+>left : <T extends Pair>() => Left<T>
+
+declare function right<T extends Pair>(): Right<T>;
+>right : <T extends Pair>() => Right<T>
+
+const sameIndex: Left<Pair> = left<Pair>();
+>sameIndex : Left<Pair>
+>left<Pair>() : Left<Pair>
+>left : <T extends Pair>() => Left<T>
+
+const differentIndex: Left<Pair> = right<Pair>();
+>differentIndex : Left<Pair>
+>right<Pair>() : Right<Pair>
+>right : <T extends Pair>() => Right<T>
+
+interface FieldBox<T extends { field: unknown }> { value: T["field"]; }
+>field : unknown
+>value : T["field"]
+
+interface NumberBox<T> { value: number; tag?: T; }
+>value : number
+>tag : T | undefined
+
+interface StringField { field: string; }
+>field : string
+
+type Field<T extends { field: unknown }> = FieldBox<T>;
+>Field : Field<T>
+>field : unknown
+
+type NumberField<T> = NumberBox<T>;
+>NumberField : NumberField<T>
+
+declare function numberField<T>(): NumberField<T>;
+>numberField : <T>() => NumberField<T>
+
+const incompatibleConstraint: Field<StringField> = numberField<StringField>();
+>incompatibleConstraint : Field<StringField>
+>numberField<StringField>() : NumberField<StringField>
+>numberField : <T>() => NumberField<T>
+
+function outer<T>(value: T) {
+>outer : <T>(value: T) => Inner<number>
+>value : T
+
+    interface Inner<U> { outer: T; inner: U; }
+>outer : T
+>inner : U
+
+    type Deferred<U> = Inner<U>;
+>Deferred : Inner<U>
+
+    return null! as Deferred<number>;
+>null! as Deferred<number> : Inner<number>
+>null! : never
+}
+const differentOuter: ReturnType<typeof outer<string>> = outer(123);
+>differentOuter : outer.Inner<number>
+>outer : <T>(value: T) => Inner<number>
+>outer(123) : outer.Inner<number>
+>outer : <T>(value: T) => Inner<number>
+>123 : 123
+
+function annotationCycles<T extends { value: unknown }>() {
+>annotationCycles : <T extends { value: unknown; }>() => void
+>value : unknown
+
+    let direct: Array<typeof direct>;
+>direct : any
+>direct : any
+
+    let withIndex: Array<T["value"] | typeof withIndex>;
+>withIndex : any
+>withIndex : any
+
+    let tuple: [typeof tuple, T["value"]];
+>tuple : any
+>tuple : any
+}
+
+export {};
+

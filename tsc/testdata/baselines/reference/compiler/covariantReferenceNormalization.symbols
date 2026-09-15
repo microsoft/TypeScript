@@ -1,0 +1,267 @@
+//// [tests/cases/compiler/covariantReferenceNormalization.ts] ////
+
+=== covariantReferenceNormalization.ts ===
+interface Producer<out T> {
+>Producer : Symbol(Producer, Decl(covariantReferenceNormalization.ts, 0, 0))
+>T : Symbol(T, Decl(covariantReferenceNormalization.ts, 0, 19))
+
+    readonly value: T;
+>value : Symbol(Producer.value, Decl(covariantReferenceNormalization.ts, 0, 27))
+>T : Symbol(T, Decl(covariantReferenceNormalization.ts, 0, 19))
+}
+interface Consumer<in T> {
+>Consumer : Symbol(Consumer, Decl(covariantReferenceNormalization.ts, 2, 1))
+>T : Symbol(T, Decl(covariantReferenceNormalization.ts, 3, 19))
+
+    consume: (value: T) => void;
+>consume : Symbol(Consumer.consume, Decl(covariantReferenceNormalization.ts, 3, 26))
+>value : Symbol(value, Decl(covariantReferenceNormalization.ts, 4, 14))
+>T : Symbol(T, Decl(covariantReferenceNormalization.ts, 3, 19))
+}
+interface Invariant<in out T> {
+>Invariant : Symbol(Invariant, Decl(covariantReferenceNormalization.ts, 5, 1))
+>T : Symbol(T, Decl(covariantReferenceNormalization.ts, 6, 20))
+
+    value: T;
+>value : Symbol(Invariant.value, Decl(covariantReferenceNormalization.ts, 6, 31))
+>T : Symbol(T, Decl(covariantReferenceNormalization.ts, 6, 20))
+
+    consume: (value: T) => void;
+>consume : Symbol(Invariant.consume, Decl(covariantReferenceNormalization.ts, 7, 13))
+>value : Symbol(value, Decl(covariantReferenceNormalization.ts, 8, 14))
+>T : Symbol(T, Decl(covariantReferenceNormalization.ts, 6, 20))
+}
+interface Conditional<T> {
+>Conditional : Symbol(Conditional, Decl(covariantReferenceNormalization.ts, 9, 1))
+>T : Symbol(T, Decl(covariantReferenceNormalization.ts, 10, 22))
+
+    value: unknown extends T ? "top" : "other";
+>value : Symbol(Conditional.value, Decl(covariantReferenceNormalization.ts, 10, 26))
+>T : Symbol(T, Decl(covariantReferenceNormalization.ts, 10, 22))
+}
+interface OtherProducer<out T> {
+>OtherProducer : Symbol(OtherProducer, Decl(covariantReferenceNormalization.ts, 12, 1))
+>T : Symbol(T, Decl(covariantReferenceNormalization.ts, 13, 24))
+
+    readonly value: T;
+>value : Symbol(OtherProducer.value, Decl(covariantReferenceNormalization.ts, 13, 32))
+>T : Symbol(T, Decl(covariantReferenceNormalization.ts, 13, 24))
+
+    readonly other: true;
+>other : Symbol(OtherProducer.other, Decl(covariantReferenceNormalization.ts, 14, 22))
+}
+interface SelfProducer<out T> {
+>SelfProducer : Symbol(SelfProducer, Decl(covariantReferenceNormalization.ts, 16, 1))
+>T : Symbol(T, Decl(covariantReferenceNormalization.ts, 17, 23))
+
+    readonly value: T;
+>value : Symbol(SelfProducer.value, Decl(covariantReferenceNormalization.ts, 17, 31))
+>T : Symbol(T, Decl(covariantReferenceNormalization.ts, 17, 23))
+
+    readonly self: this;
+>self : Symbol(SelfProducer.self, Decl(covariantReferenceNormalization.ts, 18, 22))
+}
+
+declare function producer<T>(): Producer<T>;
+>producer : Symbol(producer, Decl(covariantReferenceNormalization.ts, 20, 1))
+>T : Symbol(T, Decl(covariantReferenceNormalization.ts, 22, 26))
+>Producer : Symbol(Producer, Decl(covariantReferenceNormalization.ts, 0, 0))
+>T : Symbol(T, Decl(covariantReferenceNormalization.ts, 22, 26))
+
+declare function consumer<T>(): Consumer<T>;
+>consumer : Symbol(consumer, Decl(covariantReferenceNormalization.ts, 22, 44))
+>T : Symbol(T, Decl(covariantReferenceNormalization.ts, 23, 26))
+>Consumer : Symbol(Consumer, Decl(covariantReferenceNormalization.ts, 2, 1))
+>T : Symbol(T, Decl(covariantReferenceNormalization.ts, 23, 26))
+
+declare function invariant<T>(): Invariant<T>;
+>invariant : Symbol(invariant, Decl(covariantReferenceNormalization.ts, 23, 44))
+>T : Symbol(T, Decl(covariantReferenceNormalization.ts, 24, 27))
+>Invariant : Symbol(Invariant, Decl(covariantReferenceNormalization.ts, 5, 1))
+>T : Symbol(T, Decl(covariantReferenceNormalization.ts, 24, 27))
+
+declare function conditional<T>(): Conditional<T>;
+>conditional : Symbol(conditional, Decl(covariantReferenceNormalization.ts, 24, 46))
+>T : Symbol(T, Decl(covariantReferenceNormalization.ts, 25, 29))
+>Conditional : Symbol(Conditional, Decl(covariantReferenceNormalization.ts, 9, 1))
+>T : Symbol(T, Decl(covariantReferenceNormalization.ts, 25, 29))
+
+declare function selfProducer<T>(): SelfProducer<T>;
+>selfProducer : Symbol(selfProducer, Decl(covariantReferenceNormalization.ts, 25, 50))
+>T : Symbol(T, Decl(covariantReferenceNormalization.ts, 26, 30))
+>SelfProducer : Symbol(SelfProducer, Decl(covariantReferenceNormalization.ts, 16, 1))
+>T : Symbol(T, Decl(covariantReferenceNormalization.ts, 26, 30))
+
+const numberProducer: Producer<unknown> = producer<number>();
+>numberProducer : Symbol(numberProducer, Decl(covariantReferenceNormalization.ts, 28, 5))
+>Producer : Symbol(Producer, Decl(covariantReferenceNormalization.ts, 0, 0))
+>producer : Symbol(producer, Decl(covariantReferenceNormalization.ts, 20, 1))
+
+const neverProducer: Producer<unknown> = producer<never>();
+>neverProducer : Symbol(neverProducer, Decl(covariantReferenceNormalization.ts, 29, 5))
+>Producer : Symbol(Producer, Decl(covariantReferenceNormalization.ts, 0, 0))
+>producer : Symbol(producer, Decl(covariantReferenceNormalization.ts, 20, 1))
+
+const anyProducer: Producer<unknown> = producer<any>();
+>anyProducer : Symbol(anyProducer, Decl(covariantReferenceNormalization.ts, 30, 5))
+>Producer : Symbol(Producer, Decl(covariantReferenceNormalization.ts, 0, 0))
+>producer : Symbol(producer, Decl(covariantReferenceNormalization.ts, 20, 1))
+
+const anyTarget: Producer<any> = producer<number>();
+>anyTarget : Symbol(anyTarget, Decl(covariantReferenceNormalization.ts, 31, 5))
+>Producer : Symbol(Producer, Decl(covariantReferenceNormalization.ts, 0, 0))
+>producer : Symbol(producer, Decl(covariantReferenceNormalization.ts, 20, 1))
+
+const self: SelfProducer<unknown> = selfProducer<number>();
+>self : Symbol(self, Decl(covariantReferenceNormalization.ts, 32, 5))
+>SelfProducer : Symbol(SelfProducer, Decl(covariantReferenceNormalization.ts, 16, 1))
+>selfProducer : Symbol(selfProducer, Decl(covariantReferenceNormalization.ts, 25, 50))
+
+const wrongConsumer: Consumer<unknown> = consumer<number>();
+>wrongConsumer : Symbol(wrongConsumer, Decl(covariantReferenceNormalization.ts, 34, 5))
+>Consumer : Symbol(Consumer, Decl(covariantReferenceNormalization.ts, 2, 1))
+>consumer : Symbol(consumer, Decl(covariantReferenceNormalization.ts, 22, 44))
+
+const wrongInvariant: Invariant<unknown> = invariant<number>();
+>wrongInvariant : Symbol(wrongInvariant, Decl(covariantReferenceNormalization.ts, 35, 5))
+>Invariant : Symbol(Invariant, Decl(covariantReferenceNormalization.ts, 5, 1))
+>invariant : Symbol(invariant, Decl(covariantReferenceNormalization.ts, 23, 44))
+
+const wrongConditional: Conditional<unknown> = conditional<number>();
+>wrongConditional : Symbol(wrongConditional, Decl(covariantReferenceNormalization.ts, 36, 5))
+>Conditional : Symbol(Conditional, Decl(covariantReferenceNormalization.ts, 9, 1))
+>conditional : Symbol(conditional, Decl(covariantReferenceNormalization.ts, 24, 46))
+
+const wrongProducer: Producer<string> = producer<number>();
+>wrongProducer : Symbol(wrongProducer, Decl(covariantReferenceNormalization.ts, 37, 5))
+>Producer : Symbol(Producer, Decl(covariantReferenceNormalization.ts, 0, 0))
+>producer : Symbol(producer, Decl(covariantReferenceNormalization.ts, 20, 1))
+
+const wrongTarget: OtherProducer<unknown> = producer<number>();
+>wrongTarget : Symbol(wrongTarget, Decl(covariantReferenceNormalization.ts, 38, 5))
+>OtherProducer : Symbol(OtherProducer, Decl(covariantReferenceNormalization.ts, 12, 1))
+>producer : Symbol(producer, Decl(covariantReferenceNormalization.ts, 20, 1))
+
+type Value<T> = T extends { value: infer V } ? V : never;
+>Value : Symbol(Value, Decl(covariantReferenceNormalization.ts, 38, 63))
+>T : Symbol(T, Decl(covariantReferenceNormalization.ts, 40, 11))
+>T : Symbol(T, Decl(covariantReferenceNormalization.ts, 40, 11))
+>value : Symbol(value, Decl(covariantReferenceNormalization.ts, 40, 27))
+>V : Symbol(V, Decl(covariantReferenceNormalization.ts, 40, 40))
+>V : Symbol(V, Decl(covariantReferenceNormalization.ts, 40, 40))
+
+type DeferredProducer<T> = Producer<Value<T>>;
+>DeferredProducer : Symbol(DeferredProducer, Decl(covariantReferenceNormalization.ts, 40, 57))
+>T : Symbol(T, Decl(covariantReferenceNormalization.ts, 41, 22))
+>Producer : Symbol(Producer, Decl(covariantReferenceNormalization.ts, 0, 0))
+>Value : Symbol(Value, Decl(covariantReferenceNormalization.ts, 38, 63))
+>T : Symbol(T, Decl(covariantReferenceNormalization.ts, 41, 22))
+
+type DeferredConsumer<T> = Consumer<Value<T>>;
+>DeferredConsumer : Symbol(DeferredConsumer, Decl(covariantReferenceNormalization.ts, 41, 46))
+>T : Symbol(T, Decl(covariantReferenceNormalization.ts, 42, 22))
+>Consumer : Symbol(Consumer, Decl(covariantReferenceNormalization.ts, 2, 1))
+>Value : Symbol(Value, Decl(covariantReferenceNormalization.ts, 38, 63))
+>T : Symbol(T, Decl(covariantReferenceNormalization.ts, 42, 22))
+
+type DeferredInvariant<T> = Invariant<Value<T>>;
+>DeferredInvariant : Symbol(DeferredInvariant, Decl(covariantReferenceNormalization.ts, 42, 46))
+>T : Symbol(T, Decl(covariantReferenceNormalization.ts, 43, 23))
+>Invariant : Symbol(Invariant, Decl(covariantReferenceNormalization.ts, 5, 1))
+>Value : Symbol(Value, Decl(covariantReferenceNormalization.ts, 38, 63))
+>T : Symbol(T, Decl(covariantReferenceNormalization.ts, 43, 23))
+
+type DeferredConditional<T> = Conditional<Value<T>>;
+>DeferredConditional : Symbol(DeferredConditional, Decl(covariantReferenceNormalization.ts, 43, 48))
+>T : Symbol(T, Decl(covariantReferenceNormalization.ts, 44, 25))
+>Conditional : Symbol(Conditional, Decl(covariantReferenceNormalization.ts, 9, 1))
+>Value : Symbol(Value, Decl(covariantReferenceNormalization.ts, 38, 63))
+>T : Symbol(T, Decl(covariantReferenceNormalization.ts, 44, 25))
+
+type DeferredOtherProducer<T> = OtherProducer<Value<T>>;
+>DeferredOtherProducer : Symbol(DeferredOtherProducer, Decl(covariantReferenceNormalization.ts, 44, 52))
+>T : Symbol(T, Decl(covariantReferenceNormalization.ts, 45, 27))
+>OtherProducer : Symbol(OtherProducer, Decl(covariantReferenceNormalization.ts, 12, 1))
+>Value : Symbol(Value, Decl(covariantReferenceNormalization.ts, 38, 63))
+>T : Symbol(T, Decl(covariantReferenceNormalization.ts, 45, 27))
+
+declare function deferredProducer<T>(): DeferredProducer<T>;
+>deferredProducer : Symbol(deferredProducer, Decl(covariantReferenceNormalization.ts, 45, 56))
+>T : Symbol(T, Decl(covariantReferenceNormalization.ts, 46, 34))
+>DeferredProducer : Symbol(DeferredProducer, Decl(covariantReferenceNormalization.ts, 40, 57))
+>T : Symbol(T, Decl(covariantReferenceNormalization.ts, 46, 34))
+
+declare function deferredConsumer<T>(): DeferredConsumer<T>;
+>deferredConsumer : Symbol(deferredConsumer, Decl(covariantReferenceNormalization.ts, 46, 60))
+>T : Symbol(T, Decl(covariantReferenceNormalization.ts, 47, 34))
+>DeferredConsumer : Symbol(DeferredConsumer, Decl(covariantReferenceNormalization.ts, 41, 46))
+>T : Symbol(T, Decl(covariantReferenceNormalization.ts, 47, 34))
+
+declare function deferredInvariant<T>(): DeferredInvariant<T>;
+>deferredInvariant : Symbol(deferredInvariant, Decl(covariantReferenceNormalization.ts, 47, 60))
+>T : Symbol(T, Decl(covariantReferenceNormalization.ts, 48, 35))
+>DeferredInvariant : Symbol(DeferredInvariant, Decl(covariantReferenceNormalization.ts, 42, 46))
+>T : Symbol(T, Decl(covariantReferenceNormalization.ts, 48, 35))
+
+declare function deferredConditional<T>(): DeferredConditional<T>;
+>deferredConditional : Symbol(deferredConditional, Decl(covariantReferenceNormalization.ts, 48, 62))
+>T : Symbol(T, Decl(covariantReferenceNormalization.ts, 49, 37))
+>DeferredConditional : Symbol(DeferredConditional, Decl(covariantReferenceNormalization.ts, 43, 48))
+>T : Symbol(T, Decl(covariantReferenceNormalization.ts, 49, 37))
+
+declare function deferredOtherProducer<T>(): DeferredOtherProducer<T>;
+>deferredOtherProducer : Symbol(deferredOtherProducer, Decl(covariantReferenceNormalization.ts, 49, 66))
+>T : Symbol(T, Decl(covariantReferenceNormalization.ts, 50, 39))
+>DeferredOtherProducer : Symbol(DeferredOtherProducer, Decl(covariantReferenceNormalization.ts, 44, 52))
+>T : Symbol(T, Decl(covariantReferenceNormalization.ts, 50, 39))
+
+const deferredTop: Producer<unknown> = deferredProducer<{ value: number }>();
+>deferredTop : Symbol(deferredTop, Decl(covariantReferenceNormalization.ts, 52, 5))
+>Producer : Symbol(Producer, Decl(covariantReferenceNormalization.ts, 0, 0))
+>deferredProducer : Symbol(deferredProducer, Decl(covariantReferenceNormalization.ts, 45, 56))
+>value : Symbol(value, Decl(covariantReferenceNormalization.ts, 52, 57))
+
+const deferredAny: Producer<any> = deferredProducer<{ value: number }>();
+>deferredAny : Symbol(deferredAny, Decl(covariantReferenceNormalization.ts, 53, 5))
+>Producer : Symbol(Producer, Decl(covariantReferenceNormalization.ts, 0, 0))
+>deferredProducer : Symbol(deferredProducer, Decl(covariantReferenceNormalization.ts, 45, 56))
+>value : Symbol(value, Decl(covariantReferenceNormalization.ts, 53, 53))
+
+const deferredDerived: Producer<unknown> = deferredOtherProducer<{ value: number }>();
+>deferredDerived : Symbol(deferredDerived, Decl(covariantReferenceNormalization.ts, 54, 5))
+>Producer : Symbol(Producer, Decl(covariantReferenceNormalization.ts, 0, 0))
+>deferredOtherProducer : Symbol(deferredOtherProducer, Decl(covariantReferenceNormalization.ts, 49, 66))
+>value : Symbol(value, Decl(covariantReferenceNormalization.ts, 54, 66))
+
+const wrongDeferredConsumer: Consumer<unknown> = deferredConsumer<{ value: number }>();
+>wrongDeferredConsumer : Symbol(wrongDeferredConsumer, Decl(covariantReferenceNormalization.ts, 55, 5))
+>Consumer : Symbol(Consumer, Decl(covariantReferenceNormalization.ts, 2, 1))
+>deferredConsumer : Symbol(deferredConsumer, Decl(covariantReferenceNormalization.ts, 46, 60))
+>value : Symbol(value, Decl(covariantReferenceNormalization.ts, 55, 67))
+
+const wrongDeferredInvariant: Invariant<unknown> = deferredInvariant<{ value: number }>();
+>wrongDeferredInvariant : Symbol(wrongDeferredInvariant, Decl(covariantReferenceNormalization.ts, 56, 5))
+>Invariant : Symbol(Invariant, Decl(covariantReferenceNormalization.ts, 5, 1))
+>deferredInvariant : Symbol(deferredInvariant, Decl(covariantReferenceNormalization.ts, 47, 60))
+>value : Symbol(value, Decl(covariantReferenceNormalization.ts, 56, 70))
+
+const wrongDeferredConditional: Conditional<unknown> = deferredConditional<{ value: number }>();
+>wrongDeferredConditional : Symbol(wrongDeferredConditional, Decl(covariantReferenceNormalization.ts, 57, 5))
+>Conditional : Symbol(Conditional, Decl(covariantReferenceNormalization.ts, 9, 1))
+>deferredConditional : Symbol(deferredConditional, Decl(covariantReferenceNormalization.ts, 48, 62))
+>value : Symbol(value, Decl(covariantReferenceNormalization.ts, 57, 76))
+
+const wrongDeferredArgument: Producer<string> = deferredProducer<{ value: number }>();
+>wrongDeferredArgument : Symbol(wrongDeferredArgument, Decl(covariantReferenceNormalization.ts, 58, 5))
+>Producer : Symbol(Producer, Decl(covariantReferenceNormalization.ts, 0, 0))
+>deferredProducer : Symbol(deferredProducer, Decl(covariantReferenceNormalization.ts, 45, 56))
+>value : Symbol(value, Decl(covariantReferenceNormalization.ts, 58, 66))
+
+const wrongDeferredMember: OtherProducer<unknown> = deferredProducer<{ value: number }>();
+>wrongDeferredMember : Symbol(wrongDeferredMember, Decl(covariantReferenceNormalization.ts, 59, 5))
+>OtherProducer : Symbol(OtherProducer, Decl(covariantReferenceNormalization.ts, 12, 1))
+>deferredProducer : Symbol(deferredProducer, Decl(covariantReferenceNormalization.ts, 45, 56))
+>value : Symbol(value, Decl(covariantReferenceNormalization.ts, 59, 70))
+
+export {};
+
