@@ -445,17 +445,22 @@ func (w *Watcher) emitSyntheticCreates(directory string, kind lsproto.WatchKind,
 	}
 	paths := []string{directory}
 	if recursive {
-		_ = w.fs.WalkDir(directory, func(path string, entry vfs.DirEntry, err error) error {
-			if err != nil {
-				return nil
+		directories := []string{directory}
+		for len(directories) != 0 {
+			current := directories[len(directories)-1]
+			directories = directories[:len(directories)-1]
+			entries := w.fs.GetAccessibleEntries(current)
+			for _, name := range entries.Files {
+				paths = append(paths, tspath.CombinePaths(current, name))
 			}
-			normalizedPath := tspath.NormalizeSlashes(path)
-			if normalizedPath == directory {
-				return nil
+			for _, name := range entries.Directories {
+				path := tspath.CombinePaths(current, name)
+				paths = append(paths, path)
+				if _, isSymlink := entries.Symlinks[name]; !isSymlink {
+					directories = append(directories, path)
+				}
 			}
-			paths = append(paths, normalizedPath)
-			return nil
-		})
+		}
 	} else {
 		entries := w.fs.GetAccessibleEntries(directory)
 		for _, name := range entries.Files {

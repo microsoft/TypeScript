@@ -1,9 +1,7 @@
 package requestfilesystem
 
 import (
-	"errors"
 	"fmt"
-	"io/fs"
 	"slices"
 	"strings"
 	"time"
@@ -648,63 +646,6 @@ func statFileSystem(fileSystem vfs.FS, path string) vfs.FileInfo {
 	}
 	if fileSystem.FileExists(path) {
 		return &requestFile{fileName: path}
-	}
-	return nil
-}
-
-func (s requestFileSystem) WalkDir(root string, walkFn vfs.WalkDirFunc) error {
-	originalRoot := s.toAbsolutePath(root)
-	resolved := s.resolvePath(originalRoot)
-	if !resolved.ok {
-		return walkFn(originalRoot, nil, vfs.ErrNotExist)
-	}
-	info := s.Stat(originalRoot)
-	if info == nil {
-		return walkFn(originalRoot, nil, vfs.ErrNotExist)
-	}
-	visited := map[string]struct{}{}
-	if err := s.walkDir(originalRoot, info, walkFn, visited); errors.Is(err, fs.SkipAll) {
-		return nil
-	} else {
-		return err
-	}
-}
-
-func (s requestFileSystem) walkDir(path string, info vfs.FileInfo, walkFn vfs.WalkDirFunc, visited map[string]struct{}) error {
-	realpath := s.Realpath(path)
-	if _, ok := visited[realpath]; ok {
-		return nil
-	}
-	visited[realpath] = struct{}{}
-	entry, ok := info.(vfs.DirEntry)
-	if !ok {
-		entry = fs.FileInfoToDirEntry(info)
-	}
-	err := walkFn(path, entry, nil)
-	if err != nil {
-		if errors.Is(err, fs.SkipDir) && entry.IsDir() {
-			return nil
-		}
-		return err
-	}
-	if !entry.IsDir() {
-		return nil
-	}
-	entries := s.GetAccessibleEntries(path)
-	names := append(slices.Clone(entries.Directories), entries.Files...)
-	slices.Sort(names)
-	for _, name := range names {
-		childPath := tspath.CombinePaths(path, name)
-		childInfo := s.Stat(childPath)
-		if childInfo == nil {
-			continue
-		}
-		if err := s.walkDir(childPath, childInfo, walkFn, visited); err != nil {
-			if errors.Is(err, fs.SkipDir) {
-				return nil
-			}
-			return err
-		}
 	}
 	return nil
 }

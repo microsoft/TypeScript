@@ -2,14 +2,13 @@ package fourslash
 
 import (
 	"cmp"
-	"errors"
 	"fmt"
-	"io/fs"
 	"regexp"
 	"slices"
 	"strings"
 	"testing"
 
+	"github.com/microsoft/TypeScript/tsc/internal/bundled"
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/debug"
@@ -18,6 +17,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/spanmap"
 	"github.com/microsoft/TypeScript/tsc/internal/stringutil"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/baseline"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 )
 
@@ -188,32 +188,16 @@ func (f *FourslashTest) getBaselineForGroupedSpansWithFileContents(groupedRanges
 
 		baselineEntries = append(baselineEntries, f.getBaselineContentForFile(path, content, ranges, spanToContextId, options))
 	}
-	walkDirFn := func(path string, d vfs.DirEntry, e error) error {
-		if e != nil {
-			return e
-		}
-
-		if !d.Type().IsRegular() {
-			return nil
-		}
-
-		addFileEntry(path)
-		return nil
-	}
-
 	if options.preserveResultOrder {
 		for _, uri := range options.orderedFiles {
 			addFileEntry(uri.FileName())
 		}
 	} else {
-		err := f.vfs.WalkDir("/", walkDirFn)
-		if err != nil && !errors.Is(err, fs.ErrNotExist) {
-			panic("walkdir error during fourslash baseline: " + err.Error())
+		for _, path := range getAccessibleFilePaths(f.vfs, "/") {
+			addFileEntry(path)
 		}
-
-		err = f.vfs.WalkDir("bundled:///", walkDirFn)
-		if err != nil && !errors.Is(err, fs.ErrNotExist) {
-			panic("walkdir error during fourslash baseline: " + err.Error())
+		for _, path := range getAccessibleFilePaths(f.vfs, bundled.LibPath()) {
+			addFileEntry(path)
 		}
 	}
 
@@ -243,6 +227,42 @@ func (f *FourslashTest) getBaselineForGroupedSpansWithFileContents(groupedRanges
 	// !!! skipDocumentContainingOnlyMarker
 
 	return strings.Join(baselineEntries, "\n\n")
+}
+
+func getAccessibleFilePaths(fileSystem vfs.FS, root string) []string {
+	if !fileSystem.DirectoryExists(root) {
+		return nil
+	}
+	rootPrefix := root[:tspath.GetRootLength(root)]
+	sameRoot := func(path string) bool {
+		pathRootLength := tspath.GetRootLength(path)
+		return pathRootLength == len(rootPrefix) && tspath.ComparePaths(
+			path[:pathRootLength],
+			rootPrefix,
+			tspath.ComparePathsOptions{UseCaseSensitiveFileNames: fileSystem.UseCaseSensitiveFileNames()},
+		) == 0
+	}
+	var files []string
+	directories := []string{root}
+	for len(directories) != 0 {
+		directory := directories[len(directories)-1]
+		directories = directories[:len(directories)-1]
+		entries := fileSystem.GetAccessibleEntries(directory)
+		for _, name := range entries.Files {
+			path := tspath.CombinePaths(directory, name)
+			if sameRoot(path) {
+				files = append(files, path)
+			}
+		}
+		for _, name := range entries.Directories {
+			path := tspath.CombinePaths(directory, name)
+			if _, isSymlink := entries.Symlinks[name]; !isSymlink && sameRoot(path) {
+				directories = append(directories, path)
+			}
+		}
+	}
+	slices.Sort(files)
+	return files
 }
 
 func uniqueFilesInSpanOrder(spans []documentSpan) []lsproto.DocumentUri {
