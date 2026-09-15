@@ -63,13 +63,14 @@ func newLayeredRequestFileSystem(params *RequestFileSystem, base any, currentDir
 	return &requestFileSystemTestView{
 		requestFileSystem: layer,
 		snapshot: &SnapshotFS{
-			fs:                 host,
-			toPath:             layer.toPath,
-			overlays:           map[tspath.Path]*Overlay{},
-			overlayDirectories: map[tspath.Path]map[tspath.Path]string{},
-			diskFiles:          map[tspath.Path]*diskFile{},
-			diskDirectories:    map[tspath.Path]dirty.CloneableMap[tspath.Path, string]{},
-			upperLayer:         layer,
+			snapshotFSBase: snapshotFSBase{
+				fs:                 host,
+				toPath:             layer.toPath,
+				overlays:           map[tspath.Path]*Overlay{},
+				overlayDirectories: map[tspath.Path]map[tspath.Path]string{},
+				diskFiles:          map[tspath.Path]*diskFile{},
+				diskDirectories:    map[tspath.Path]dirty.CloneableMap[tspath.Path, string]{},
+			}, upperLayer: layer,
 		},
 	}, nil
 }

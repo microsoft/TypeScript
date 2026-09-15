@@ -142,9 +142,11 @@ func (s *SnapshotHost) CloneSnapshotWithAutoImports(ctx context.Context, baseSna
 
 func (s *SnapshotHost) newRootSnapshot(id uint64, relativePatternSupport bool) *Snapshot {
 	rootFS := &SnapshotFS{
-		fs:       s.fs,
-		toPath:   s.toPath,
-		overlays: make(map[tspath.Path]*Overlay),
+		snapshotFSBase: snapshotFSBase{
+			fs:       s.fs,
+			toPath:   s.toPath,
+			overlays: make(map[tspath.Path]*Overlay),
+		},
 	}
 	return s.newSnapshot(
 		id,

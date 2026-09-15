@@ -49,15 +49,16 @@ func baseFileSource(layer *requestFileSystem, host vfs.FS) FileSource {
 		return hostFileSource{fs: host}
 	}
 	return &SnapshotFS{
-		upperLayer: layer,
-		fs:         host,
-		toPath: func(fileName string) tspath.Path {
-			return tspath.ToPath(fileName, "/", host.UseCaseSensitiveFileNames())
-		},
-		overlays:           map[tspath.Path]*Overlay{},
-		diskFiles:          map[tspath.Path]*diskFile{},
-		diskDirectories:    map[tspath.Path]dirty.CloneableMap[tspath.Path, string]{},
-		overlayDirectories: map[tspath.Path]map[tspath.Path]string{},
+		snapshotFSBase: snapshotFSBase{
+			fs: host,
+			toPath: func(fileName string) tspath.Path {
+				return tspath.ToPath(fileName, "/", host.UseCaseSensitiveFileNames())
+			},
+			overlays:           map[tspath.Path]*Overlay{},
+			diskFiles:          map[tspath.Path]*diskFile{},
+			diskDirectories:    map[tspath.Path]dirty.CloneableMap[tspath.Path, string]{},
+			overlayDirectories: map[tspath.Path]map[tspath.Path]string{},
+		}, upperLayer: layer,
 	}
 }
 
