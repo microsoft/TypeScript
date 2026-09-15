@@ -564,6 +564,7 @@ func (s *Snapshot) Clone(
 	// it and only an API request that asks to change it does otherwise.
 	layer := s.fs.upperLayer
 	var fileSystemError error
+	var requestFileChanges FileChangeSummary
 	if change.apiRequest != nil {
 		if change.apiRequest.ResetFileSystem {
 			layer = nil
@@ -575,7 +576,10 @@ func (s *Snapshot) Clone(
 			} else if request.Kind == RequestFileSystemKindFull || change.apiRequest.ResetFileSystem {
 				change.fileChanges.InvalidateAll = true
 			} else {
-				addFileChanges(&change.fileChanges, request, s.fs, s.fs.upperLayer, store.options.CurrentDirectory)
+				addFileChanges(&requestFileChanges, request, s.fs, s.fs.upperLayer, store.options.CurrentDirectory)
+				if requestFileChanges.HasExcessiveWatchEvents() {
+					requestFileChanges = FileChangeSummary{InvalidateAll: true}
+				}
 			}
 		}
 	}
@@ -586,6 +590,8 @@ func (s *Snapshot) Clone(
 	}
 	fs := newSnapshotFSBuilder(store.fs, layer, s.fs.upperLayer, s.fs.overlays, overlays, s.fs.diskFiles, s.fs.diskDirectories, s.fs.nodeModulesRealpathAliases, store.options.PositionEncoding, store.toPath)
 	change.fileChanges = s.processFileChanges(fs, change.fileChanges, logger, change.contentMapperContributions)
+	requestFileChanges = s.processFileChanges(fs, requestFileChanges, logger, change.contentMapperContributions)
+	mergeFileChangeSummary(&change.fileChanges, requestFileChanges)
 
 	compilerOptionsForInferredProjects := s.compilerOptionsForInferredProjects
 	if change.compilerOptionsForInferredProjects != nil {

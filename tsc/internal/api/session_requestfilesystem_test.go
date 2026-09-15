@@ -396,6 +396,51 @@ func TestRequestFileComparedWithPreviousSymlinkTarget(t *testing.T) {
 	assert.Equal(t, program.GetSourceFile("/alias.ts").Text(), "new")
 }
 
+func TestLargeRequestLayerUpdateRetainsChanges(t *testing.T) {
+	t.Parallel()
+
+	const fillerCount = 1000
+	baseFiles := make(map[string]string, fillerCount)
+	updatedFiles := make(map[string]string, fillerCount+1)
+	for i := range fillerCount {
+		fileName := fmt.Sprintf("/unused/file%d.ts", i)
+		baseFiles[fileName] = "old"
+		updatedFiles[fileName] = "new"
+	}
+	updatedFiles["/index.ts"] = "new"
+
+	ctx := context.Background()
+	projectSession, _ := projecttestutil.Setup(map[string]any{
+		"/tsconfig.json": `{ "compilerOptions": { "noLib": true }, "files": ["index.ts"] }`,
+	})
+	defer projectSession.Close()
+	projectSession.DidOpenFile(ctx, "file:///index.ts", 1, "old", lsproto.LanguageKindTypeScript)
+	session := NewLSPSession(projectSession, nil)
+	defer session.Close()
+
+	base, err := session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{
+		OpenProjects: []DocumentIdentifier{{FileName: "/tsconfig.json"}},
+		FileSystem: &project.RequestFileSystem{
+			Kind:  project.RequestFileSystemKindLayer,
+			Files: baseFiles,
+		},
+	})
+	assert.NilError(t, err)
+	baseProgram := session.snapshots[base.Snapshot].snapshot.ProjectCollection.GetProjectByPath("/tsconfig.json").GetProgram()
+	assert.Equal(t, baseProgram.GetSourceFile("/index.ts").Text(), "old")
+
+	updated, err := session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{
+		Snapshot: base.Snapshot,
+		FileSystem: &project.RequestFileSystem{
+			Kind:  project.RequestFileSystemKindLayer,
+			Files: updatedFiles,
+		},
+	})
+	assert.NilError(t, err)
+	program := session.snapshots[updated.Snapshot].snapshot.ProjectCollection.GetProjectByPath("/tsconfig.json").GetProgram()
+	assert.Equal(t, program.GetSourceFile("/index.ts").Text(), "new")
+}
+
 func TestRequestSymlinkFallsBackToEditorOverlayDirectory(t *testing.T) {
 	t.Parallel()
 
