@@ -2,6 +2,11 @@ import * as fs from "fs";
 import * as path from "path";
 import * as vscode from "vscode";
 import { resolvePackageExecutable } from "./tsdkPackage";
+import {
+    shouldUseWorkspaceTsdk,
+    suppressPromptWorkspaceTsdkStorageKey,
+    useWorkspaceTsdkStorageKey,
+} from "./workspaceTsdk";
 
 export const aiConnectionString = "0c6ae279ed8443289764825290e4f9e2-1a736e7c-1324-4338-be46-fc2a58ae4d14-7255";
 
@@ -140,20 +145,6 @@ function workspaceResolve(relativePath: string): vscode.Uri {
     return vscode.Uri.file(relativePath);
 }
 
-/**
- * Memento used to control whether the user has opted into using a tsdk location defined
- * in workspace settings. This is *not* a trust boundary - workspace trust is required
- * before the extension will prompt to set this memento to true. This setting is here to
- * provide users a way to opt out of using the workspace-provided tsdk without changing
- * committed workspace settings, e.g. when the workspace tsdk is very outdated or the user
- * is trialing a nightly TS version. Since the stored value is only a boolean, it does not
- * protect against executing a different tsdk than the one the user originally opted into
- * if the workspace settings or node_modules content changes - that's why workspace trust
- * is always required, and why the prompts that set this value should not be interpreted
- * as indicating trust for a specific tsdk installation.
- */
-export const useWorkspaceTsdkStorageKey = "typescript.native-preview.useWorkspaceTsdk";
-
 export async function getExe(context: vscode.ExtensionContext): Promise<ExeInfo> {
     for (const candidate of getTrustedTsdkCandidates(context, await getTsdkCandidates())) {
         const exe = await resolveTsdkPathToExe(candidate.value);
@@ -192,11 +183,10 @@ async function classifyTsdk(tsdkPath: string): Promise<"lsp" | "tsserver" | unde
 }
 
 function getTrustedTsdkCandidates(context: vscode.ExtensionContext, tsdkCandidates: ExplicitConfigValue<string>[]): ExplicitConfigValue<string>[] {
-    // If tsdk is set at the workspace level, require both workspace trust and
-    // explicit user opt-in. Workspace trust can be revoked after the memento is
-    // set, so we must always check both.
     if (tsdkCandidates.some(candidate => candidate.target !== vscode.ConfigurationTarget.Global)) {
-        if (!vscode.workspace.isTrusted || !context.workspaceState.get<boolean>(useWorkspaceTsdkStorageKey, false)) {
+        const preference = context.workspaceState.get<boolean>(useWorkspaceTsdkStorageKey);
+        const promptSuppressed = context.workspaceState.get<boolean>(suppressPromptWorkspaceTsdkStorageKey, false);
+        if (!shouldUseWorkspaceTsdk(vscode.workspace.isTrusted, preference, promptSuppressed)) {
             return tsdkCandidates.filter(candidate => candidate.target === vscode.ConfigurationTarget.Global);
         }
     }
