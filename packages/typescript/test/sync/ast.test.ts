@@ -1319,6 +1319,7 @@ describe("RemoteNode + child/token getters", () => {
         { name: "JS with reparsed types on exported and nested functions", source: "/** @param {number} a */\nexport function outer(a) {\n    /** @returns {number} */\n    function inner() { return a; }\n    return inner();\n}\n", js: true },
         { name: "JSX component with reparsed @param props type", source: '/**\n * @param {{ name: string }} props\n * @returns {object}\n */\nexport function Greeting(props) {\n    return <div className="greeting">hello {props.name}<br /></div>;\n}\n', js: true, jsx: true },
         { name: "JSX with @type cast and @typedef around elements", source: '/**\n * @typedef {Object} Item\n * @property {string} label\n */\nconst item = /** @type {Item} */ ({ label: "x" });\nconst el = <span title={item.label}>{item.label}</span>;\n', js: true, jsx: true },
+        { name: "type argument lists with contiguous opening angles", source: "type Bar = ReturnType<<T>(x: T) => number>; const foo = bar<<T>(x: T) => number>();" },
     ];
 
     for (const entry of corpus) {
