@@ -1479,6 +1479,45 @@ func TestCheckerPoolWholeProgramCheckYieldsBetweenFiles(t *testing.T) {
 	})
 }
 
+// Building the incremental view of a program resolves every file's imports, which needs a checker.
+// It has to be one of the checkers the caller is about to check with: a sweep only hands back the
+// diagnostics checkers, so anything it leaves in the query slots holds a program's worth of types
+// until it idles out, and survives into the next program's generation.
+func TestCheckerPoolIncrementalViewUsesDiagnosticsCheckers(t *testing.T) {
+	t.Parallel()
+	session, pool := setupCheckerPoolSessionWithFiles(t, CheckerPoolOptions{MaxCheckers: 4, IdleTimeout: 10 * time.Second}, map[string]any{
+		"/src/tsconfig.json": `{ "compilerOptions": { "noLib": true } }`,
+		"/src/index.ts":      "import { a } from \"./a.js\";\nexport const x: number = a;\n",
+		"/src/a.ts":          "import { b } from \"./b.js\";\nexport const a = b;\n",
+		"/src/b.ts":          "export const b = 1;\n",
+	})
+
+	snapshot := session.Snapshot()
+	project := snapshot.ProjectCollection.ConfiguredProject("/src/tsconfig.json")
+	assert.Assert(t, project != nil)
+
+	ctx := core.WithRequestID(t.Context(), "sweep")
+	ctx = core.WithCheckerLifetime(ctx, core.CheckerLifetimeDiagnostics)
+	assert.Assert(t, snapshot.IncrementalProgram(ctx, project) != nil)
+
+	diagnostics := 0
+	for index := range pool.diagnosticsCount {
+		if pool.checkers[index] != nil {
+			diagnostics++
+		}
+	}
+	assert.Assert(t, diagnostics > 0, "resolving the imports must have used the diagnostics checkers")
+	for index := pool.diagnosticsCount; index < len(pool.checkers); index++ {
+		assert.Assert(t, pool.checkers[index] == nil, "query checker %d must not hold what a sweep will not hand back", index)
+	}
+
+	// And the sweep hands them all back.
+	assert.Assert(t, snapshot.ReleaseDiagnosticsCheckers(project))
+	for index := range pool.diagnosticsCount {
+		assert.Assert(t, pool.checkers[index] == nil)
+	}
+}
+
 // A whole-program check must run on the diagnostics checkers, of which there are as many as a build
 // would use, with the program's files split across them the way a build splits them.
 func TestCheckerPoolChecksWholeProgramAcrossDiagnosticsCheckers(t *testing.T) {

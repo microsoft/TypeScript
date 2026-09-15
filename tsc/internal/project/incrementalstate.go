@@ -1,6 +1,7 @@
 package project
 
 import (
+	"context"
 	"sync"
 
 	"github.com/microsoft/TypeScript/tsc/internal/compiler"
@@ -21,16 +22,19 @@ type incrementalState struct {
 }
 
 // get returns the incremental view of the program, building it from the previous program's
-// bookkeeping the first time it is asked for.
-func (s *incrementalState) get(program *compiler.Program) *incremental.Program {
+// bookkeeping the first time it is asked for. Building it resolves every file's imports, which
+// needs a checker: the context decides which of the program's checkers that is, so a caller about
+// to check the program gets the same ones rather than filling its query slots with a program's
+// worth of types that nothing hands back.
+func (s *incrementalState) get(ctx context.Context, program *compiler.Program) *incremental.Program {
 	if s == nil {
 		// A project built before it had any state to carry; nothing to chain from.
-		return incremental.NewProgramFromPriorState(program, nil, nil)
+		return incremental.NewProgramFromPriorState(ctx, program, nil, nil)
 	}
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	if s.current == nil {
-		s.current = incremental.NewProgramFromPriorState(program, s.previous, nil)
+		s.current = incremental.NewProgramFromPriorState(ctx, program, s.previous, nil)
 		// The new view has taken what it needs; holding the old one keeps a program alive.
 		s.previous = nil
 	}

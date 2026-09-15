@@ -319,8 +319,8 @@ func (s *Snapshot) ReleaseDiagnosticsCheckers(project *Project) bool {
 // IncrementalProgram returns a project's program together with the record of which files a change
 // since the previous program reached, so a caller checking the project can skip the files it did
 // not. Built on first use, and shared by every snapshot holding the same program.
-func (s *Snapshot) IncrementalProgram(project *Project) *incremental.Program {
-	return project.incremental.get(project.Program)
+func (s *Snapshot) IncrementalProgram(ctx context.Context, project *Project) *incremental.Program {
+	return project.incremental.get(ctx, project.Program)
 }
 
 func (s *Snapshot) OpenProjects() []*Project {

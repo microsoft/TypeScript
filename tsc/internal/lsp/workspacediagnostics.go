@@ -251,7 +251,7 @@ func (r *workspaceDiagnosticsRun) checkProject(snapshot *project.Snapshot, pf wo
 	}
 	// Ask through the incremental view, so a change is re-checked where it landed rather than
 	// across the whole project.
-	program := snapshot.IncrementalProgram(pf.project)
+	program := snapshot.IncrementalProgram(r.ctx, pf.project)
 	reports := pf.languageService.WorkspaceDiagnosticsForProject(r.ctx, program, files)
 	if r.ctx.Err() != nil {
 		return false

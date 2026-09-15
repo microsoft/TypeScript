@@ -47,7 +47,9 @@ var _ compiler.ProgramLike = (*Program)(nil)
 
 func NewProgram(program *compiler.Program, oldProgram *Program, host Host, nestedEmitNow func() time.Time, testing bool) *Program {
 	incrementalProgram := &Program{
-		snapshot:      programToSnapshot(program, oldProgram, testing),
+		// The command line's own checker pool does not distinguish what a caller wants a checker
+		// for, so there is no lifetime to carry here.
+		snapshot:      programToSnapshot(context.TODO(), program, oldProgram, testing),
 		program:       program,
 		host:          host,
 		nestedEmitNow: nestedEmitNow,
@@ -90,13 +92,13 @@ func (p *Program) PriorState() *PriorState {
 
 // NewProgramFromPriorState is NewProgram for a caller that kept only what the previous program
 // worked out, rather than the program itself.
-func NewProgramFromPriorState(program *compiler.Program, prior *PriorState, host Host) *Program {
+func NewProgramFromPriorState(ctx context.Context, program *compiler.Program, prior *PriorState, host Host) *Program {
 	var oldSnapshot *snapshot
 	if prior != nil {
 		oldSnapshot = prior.snapshot
 	}
 	return &Program{
-		snapshot: buildSnapshot(program, oldSnapshot, false /*hashWithText*/),
+		snapshot: buildSnapshot(ctx, program, oldSnapshot, false /*hashWithText*/),
 		program:  program,
 		host:     host,
 	}

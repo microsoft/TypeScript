@@ -13,7 +13,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 )
 
-func programToSnapshot(program *compiler.Program, oldProgram *Program, hashWithText bool) *snapshot {
+func programToSnapshot(ctx context.Context, program *compiler.Program, oldProgram *Program, hashWithText bool) *snapshot {
 	if oldProgram != nil && oldProgram.program == program {
 		return oldProgram.snapshot
 	}
@@ -21,11 +21,13 @@ func programToSnapshot(program *compiler.Program, oldProgram *Program, hashWithT
 	if oldProgram != nil {
 		oldSnapshot = oldProgram.snapshot
 	}
-	return buildSnapshot(program, oldSnapshot, hashWithText)
+	return buildSnapshot(ctx, program, oldSnapshot, hashWithText)
 }
 
-// buildSnapshot works out what a program changed against what the one before it left behind.
-func buildSnapshot(program *compiler.Program, oldSnapshot *snapshot, hashWithText bool) *snapshot {
+// buildSnapshot works out what a program changed against what the one before it left behind. The
+// context decides which of the program's checkers the work runs on, so a caller that is about to
+// check the program builds this on the same checkers rather than a set of its own.
+func buildSnapshot(ctx context.Context, program *compiler.Program, oldSnapshot *snapshot, hashWithText bool) *snapshot {
 	snapshot := &snapshot{
 		options:      program.Options(),
 		hashWithText: hashWithText,
@@ -39,7 +41,7 @@ func buildSnapshot(program *compiler.Program, oldSnapshot *snapshot, hashWithTex
 
 	if to.snapshot.canUseIncrementalState() {
 		to.reuseFromOldProgram()
-		to.computeProgramFileChanges()
+		to.computeProgramFileChanges(ctx)
 		to.handleFileDelete()
 		to.handleGlobalScopeChange()
 		to.handlePendingEmit()
@@ -79,7 +81,7 @@ func (t *toProgramSnapshot) reuseFromOldProgram() {
 	}
 }
 
-func (t *toProgramSnapshot) computeProgramFileChanges() {
+func (t *toProgramSnapshot) computeProgramFileChanges(ctx context.Context) {
 	canCopySemanticDiagnostics := t.oldSnapshot != nil &&
 		!tsoptions.CompilerOptionsAffectSemanticDiagnostics(t.oldSnapshot.options, t.program.Options())
 	// We can only reuse emit signatures (i.e. .d.ts signatures) if the .d.ts file is unchanged,
@@ -108,7 +110,7 @@ func (t *toProgramSnapshot) computeProgramFileChanges() {
 			impliedNodeFormat := t.program.GetSourceFileMetaData(file.Path()).ImpliedNodeFormat
 			affectsGlobalScope := fileAffectsGlobalScope(file)
 			var signature string
-			newReferences := getReferencedFiles(t.program, file)
+			newReferences := getReferencedFiles(ctx, t.program, file)
 			if newReferences != nil {
 				t.snapshot.referencedMap.storeReferences(file.Path(), newReferences)
 			}
@@ -297,13 +299,13 @@ func addReferencedFileFromFileName(program *compiler.Program, fileName string, r
 }
 
 // Gets the referenced files for a file from the program with values for the keys as referenced file's path to be true
-func getReferencedFiles(program *compiler.Program, file *ast.SourceFile) *collections.Set[tspath.Path] {
+func getReferencedFiles(ctx context.Context, program *compiler.Program, file *ast.SourceFile) *collections.Set[tspath.Path] {
 	referencedFiles := collections.Set[tspath.Path]{}
 
 	// We need to use a set here since the code can contain the same import twice,
 	// but that will only be one dependency.
 	// To avoid invernal conversion, the key of the referencedFiles map must be of type Path
-	checker, done := program.GetTypeCheckerForFileExclusive(context.TODO(), file)
+	checker, done := program.GetTypeCheckerForFileExclusive(ctx, file)
 	defer done()
 	for _, importName := range file.Imports() {
 		addReferencedFilesFromImportLiteral(file, &referencedFiles, checker, importName)
