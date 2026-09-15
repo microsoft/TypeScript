@@ -6638,10 +6638,14 @@ func (l *LanguageService) getExhaustiveCaseSnippets(
 					elements = append(elements, bigInt)
 				case jsnum.Number:
 					var number *ast.Node
+					text := v.Abs().String()
+					if v.IsInf() {
+						text = jsnum.InfinityLiteralText
+					}
 					if v < 0 {
-						number = factory.NewPrefixUnaryExpression(ast.KindMinusToken, factory.NewNumericLiteral(v.Abs().String(), ast.TokenFlagsNone))
+						number = factory.NewPrefixUnaryExpression(ast.KindMinusToken, factory.NewNumericLiteral(text, ast.TokenFlagsNone))
 					} else {
-						number = factory.NewNumericLiteral(v.String(), ast.TokenFlagsNone)
+						number = factory.NewNumericLiteral(text, ast.TokenFlagsNone)
 					}
 					elements = append(elements, number)
 				case string:
