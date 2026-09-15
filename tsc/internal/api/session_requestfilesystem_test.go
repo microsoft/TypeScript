@@ -684,7 +684,10 @@ func TestSnapshotFileSystemLayerWithoutBaseUpdatesHostState(t *testing.T) {
 	snapshot := session.snapshots[updated.Snapshot].snapshot
 	updatedProject := snapshot.ProjectCollection.GetProjectByPath("/tsconfig.json")
 	assert.Equal(t, updatedProject.GetProgram().GetSourceFile("/index.ts").Text(), updatedText)
-	assert.Equal(t, updatedProject.ProgramUpdateKind, project.ProgramUpdateKindCloned)
+	// Naming no base snapshot replaces the filesystem outright, and nothing can be
+	// diffed against what it replaced, so the update invalidates rather than cloning
+	// incrementally. Temporary: #64204 removes this path.
+	assert.Equal(t, updatedProject.ProgramUpdateKind, project.ProgramUpdateKindSameFileNames)
 }
 
 func TestEmitFromLayerOverFullFileSystemReturnsFileContents(t *testing.T) {
@@ -1174,4 +1177,42 @@ func TestRequestFileReplacingEditorOverlayDirectoryIsStructural(t *testing.T) {
 	snapshot := session.snapshots[updated.Snapshot].snapshot
 	assert.Assert(t, snapshot.GetFile("/dir/file.ts") == nil)
 	assert.Assert(t, snapshot.ProjectCollection.GetProjectByPath("/tsconfig.json").GetProgram().GetSourceFile("/dir/file.ts") == nil)
+}
+
+func TestRequestFileChangeComparedAgainstOverlayOverCachedHostFile(t *testing.T) {
+	t.Parallel()
+
+	ctx := context.Background()
+	projectSession, _ := projecttestutil.Setup(map[string]any{
+		"/tsconfig.json": `{ "compilerOptions": { "noLib": true }, "files": ["value.ts"] }`,
+		"/value.ts":      "host",
+	})
+	defer projectSession.Close()
+	session := NewLSPSession(projectSession, nil)
+	defer session.Close()
+
+	// Load the project first so the host contents land in the snapshot's disk cache,
+	// then open an overlay on top of them.
+	_, err := session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{
+		OpenProjects: []DocumentIdentifier{{FileName: "/tsconfig.json"}},
+	})
+	assert.NilError(t, err)
+	projectSession.DidOpenFile(ctx, "file:///value.ts", 1, "overlay", lsproto.LanguageKindTypeScript)
+	base, err := session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{})
+	assert.NilError(t, err)
+	baseProgram := session.snapshots[base.Snapshot].snapshot.ProjectCollection.GetProjectByPath("/tsconfig.json").GetProgram()
+	assert.Equal(t, baseProgram.GetSourceFile("/value.ts").Text(), "overlay")
+
+	// The layer supplies what the disk cache holds, but what the program is actually
+	// using is the overlay, so this is a change and must not be filtered out.
+	updated, err := session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{
+		Snapshot: base.Snapshot,
+		FileSystem: &requestfilesystem.RequestFileSystem{
+			Kind:  requestfilesystem.KindLayer,
+			Files: map[string]string{"/value.ts": "host"},
+		},
+	})
+	assert.NilError(t, err)
+	program := session.snapshots[updated.Snapshot].snapshot.ProjectCollection.GetProjectByPath("/tsconfig.json").GetProgram()
+	assert.Equal(t, program.GetSourceFile("/value.ts").Text(), "host")
 }

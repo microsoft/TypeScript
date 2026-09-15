@@ -505,16 +505,6 @@ func (s *Session) useCaseSensitiveFileNames() bool {
 	return s.snapshotHost.FS().UseCaseSensitiveFileNames()
 }
 
-// baseSnapshot returns the snapshot an update without an explicit base will build on.
-func (s *Session) baseSnapshot() *project.Snapshot {
-	if s.projectSession != nil {
-		return s.projectSession.Snapshot()
-	}
-	s.compatibilityMu.Lock()
-	defer s.compatibilityMu.Unlock()
-	return s.compatibilitySnapshot
-}
-
 func (s *Session) apiUpdate(
 	ctx context.Context,
 	fileChanges project.FileChangeSummary,
@@ -1213,25 +1203,32 @@ func (s *Session) handleUpdateSnapshot(ctx context.Context, params *UpdateSnapsh
 	fileChanges := s.toFileChangeSummary(params.FileChanges)
 
 	apiRequest := &project.APISnapshotRequest{}
-	// Without an explicit base snapshot the update still applies to the session's
-	// current snapshot, but inherits no layer from it: the legacy updateSnapshot
-	// API starts its filesystem over from the host. Removed by the snapshot state
-	// redesign in #64154.
+	// An update that names no base snapshot still applies to the session's current
+	// snapshot, but starts its filesystem over from the host rather than inheriting
+	// that snapshot's layer. There is nothing to diff the new layer against, so
+	// everything the replaced layer contributed has to be dropped wholesale.
+	//
+	// This is a kludge for the legacy updateSnapshot API, and temporary: #64204
+	// makes snapshot state explicit and removes the case entirely. Until then it
+	// also avoids reading the session's current snapshot here, which this call
+	// cannot retain against a concurrent update.
 	var inherited project.FileSystemLayer
-	base := s.baseSnapshot()
+	var baseSource project.FileSource
 	if baseSD != nil {
 		inherited = baseSD.snapshot.FileSystemLayer()
-		base = baseSD.snapshot
-	}
-	var baseSource project.FileSource
-	if base != nil {
-		baseSource = base.FileSource()
+		baseSource = baseSD.snapshot.FileSource()
+	} else if params.FileSystem != nil {
+		fileChanges.InvalidateAll = true
 	}
 	sd := newSnapshotData()
-	var err error
-	apiRequest.FileSystem, err = requestfilesystem.NewForUpdate(params.FileSystem, inherited, baseSource, s.fileSystem(), s.currentDirectory(), &fileChanges)
+	layer, err := requestfilesystem.NewForUpdate(params.FileSystem, inherited, baseSource, s.fileSystem(), s.currentDirectory(), &fileChanges)
 	if err != nil {
 		return nil, fmt.Errorf("%w: %w", ErrClientError, err)
+	}
+	if layer != nil {
+		apiRequest.FileSystem = project.FileSystemChange{Layer: layer}
+	} else {
+		apiRequest.FileSystem = project.FileSystemChange{Kind: project.FileSystemChangeKindRemove}
 	}
 
 	// Open projects: only take a new ref for projects we aren't already holding open.

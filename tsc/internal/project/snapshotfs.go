@@ -269,14 +269,18 @@ type snapshotFSBuilder struct {
 	FileSource
 	// upperLayer is a filesystem supplied by an API request, layered above everything
 	// else here. It is nil when the snapshot reads the session host directly.
-	upperLayer   FileSystemLayer
-	lower        builderLowerLayers
-	prevOverlays map[tspath.Path]*Overlay
+	upperLayer FileSystemLayer
+	lower      builderLowerLayers
+	// prevUpperLayer and prevOverlays are what the previous snapshot had, used to
+	// tell whether a path a change was reported for really changed.
+	prevUpperLayer FileSystemLayer
+	prevOverlays   map[tspath.Path]*Overlay
 }
 
 func newSnapshotFSBuilder(
 	fs vfs.FS,
 	layer FileSystemLayer,
+	prevLayer FileSystemLayer,
 	prevOverlays map[tspath.Path]*Overlay,
 	overlays map[tspath.Path]*Overlay,
 	diskFiles map[tspath.Path]*diskFile,
@@ -312,8 +316,9 @@ func newSnapshotFSBuilder(
 	}
 
 	builder := &snapshotFSBuilder{
-		upperLayer:   layer,
-		prevOverlays: prevOverlays,
+		upperLayer:     layer,
+		prevUpperLayer: prevLayer,
+		prevOverlays:   prevOverlays,
 		lower: builderLowerLayers{
 			host:                       cachedFS,
 			toPath:                     toPath,
@@ -655,7 +660,7 @@ func (s *snapshotFSBuilder) markDirtyFiles(change FileChangeSummary) FileChangeS
 			// A path the layer decides has nothing on disk worth re-reading, so
 			// compare what it now supplies against what the snapshot already had.
 			if s.upperLayer != nil && s.upperLayer.Shadows(fileName) {
-				if !s.upperLayerFileMatchesCache(fileName, path) {
+				if !s.upperLayerMatchesPrevious(fileName, path) {
 					filteredChanged.Add(uri)
 				}
 				continue
@@ -691,12 +696,23 @@ func (s *snapshotFSBuilder) markDirtyFiles(change FileChangeSummary) FileChangeS
 	return change
 }
 
-// upperLayerFileMatchesCache reports whether the layer now supplies exactly what the
-// snapshot already had at path, in which case nothing downstream needs rebuilding.
-func (s *snapshotFSBuilder) upperLayerFileMatchesCache(fileName string, path tspath.Path) bool {
+// upperLayerMatchesPrevious reports whether the upper layer now supplies exactly
+// what the previous snapshot showed at path, in which case nothing downstream needs
+// rebuilding. Overlays and cached files carry a precomputed hash, so those compare
+// hashes; a layer only hands back content, which is cheaper to compare directly
+// than to hash first.
+func (s *snapshotFSBuilder) upperLayerMatchesPrevious(fileName string, path tspath.Path) bool {
 	file := s.GetFileByPath(fileName, path)
 	if file == nil {
 		return false
+	}
+	if s.prevUpperLayer != nil && s.prevUpperLayer.Shadows(fileName) {
+		// Shadowed paths are supplied by the layer itself, so this reads no further.
+		content, ok := s.prevUpperLayer.ReadFile(fileName)
+		return ok && content == file.Content()
+	}
+	if overlay, ok := s.prevOverlays[path]; ok {
+		return overlay.Hash() == file.Hash()
 	}
 	entry, ok := s.lower.diskFiles.Load(path)
 	if !ok {

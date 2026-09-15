@@ -67,6 +67,7 @@ func TestAutoImportHostReadsThroughRequestLayer(t *testing.T) {
 	builder := newSnapshotFSBuilder(
 		vfstest.FromMap(map[string]string{"/pkg/index.d.ts": "export declare const fromHost: number;"}, true),
 		layer,
+		layer,
 		make(map[tspath.Path]*Overlay),
 		make(map[tspath.Path]*Overlay),
 		make(map[tspath.Path]*diskFile),

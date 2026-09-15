@@ -13,6 +13,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/contentmapper"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/debug"
 	"github.com/microsoft/TypeScript/tsc/internal/ls"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/autoimport"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/lsconv"
@@ -127,7 +128,7 @@ func (s *Snapshot) cloneForProgram(
 	}
 
 	start := time.Now()
-	fs := newSnapshotFSBuilder(store.fs, s.fs.upperLayer, s.fs.overlays(), s.fs.overlays(), s.fs.diskFiles(), s.fs.diskDirectories(), s.fs.nodeModulesRealpathAliases(), store.options.PositionEncoding, store.toPath)
+	fs := newSnapshotFSBuilder(store.fs, s.fs.upperLayer, s.fs.upperLayer, s.fs.overlays(), s.fs.overlays(), s.fs.diskFiles(), s.fs.diskDirectories(), s.fs.nodeModulesRealpathAliases(), store.options.PositionEncoding, store.toPath)
 	fileChanges = s.processFileChanges(fs, fileChanges, logger, nil)
 
 	newSnapshotID := store.nextSnapshotID()
@@ -424,10 +425,40 @@ type APISnapshotRequest struct {
 	CloseProjects *collections.Set[tspath.Path]
 	OpenFiles     *collections.Set[lsproto.DocumentUri]
 	CloseFiles    *collections.Set[tspath.Path]
-	// FileSystem is the layer to stack above the new snapshot's overlays, replacing
-	// whatever the base snapshot had. A nil layer returns to the session host
-	// filesystem, so an update must always set this to the layer it resolved to.
-	FileSystem FileSystemLayer
+	FileSystem    FileSystemChange
+}
+
+type FileSystemChangeKind int
+
+const (
+	// FileSystemChangeKindAdd puts Layer above the snapshot's overlays, or, with no
+	// layer, inherits the one the snapshot already has. It is the zero value, so a
+	// request that only opens or closes references says nothing about the filesystem
+	// and keeps it.
+	FileSystemChangeKindAdd FileSystemChangeKind = iota
+	// FileSystemChangeKindRemove returns the snapshot to the session host filesystem.
+	FileSystemChangeKindRemove
+)
+
+// FileSystemChange says what an API request does to the snapshot's filesystem
+// layer. Removing one is a kind rather than a nil Layer, because inheriting the
+// current layer and returning to the host are different requests that would
+// otherwise look identical.
+type FileSystemChange struct {
+	Kind  FileSystemChangeKind
+	Layer FileSystemLayer
+}
+
+// resolve returns the layer a snapshot should use, given the one it currently has.
+func (c FileSystemChange) resolve(current FileSystemLayer) FileSystemLayer {
+	if c.Kind == FileSystemChangeKindRemove {
+		debug.Assert(c.Layer == nil, "FileSystemChange cannot both remove and supply a layer")
+		return nil
+	}
+	if c.Layer == nil {
+		return current
+	}
+	return c.Layer
 }
 
 type ProjectTreeRequest struct {
@@ -572,17 +603,17 @@ func (s *Snapshot) Clone(
 		inferredContentMapperExtensions = change.contentMapperContributions.Extensions
 	}
 	// The filesystem layer is part of a snapshot's state, so an ordinary clone keeps
-	// it and only an API request replaces it.
+	// it and only an API request that asks to change it does otherwise.
 	layer := s.fs.upperLayer
 	if change.apiRequest != nil {
-		layer = change.apiRequest.FileSystem
+		layer = change.apiRequest.FileSystem.resolve(layer)
 	}
 	// Returning to the session host must not retain files from the layer. Replacing
 	// one layer with another invalidates only its per-path changes.
 	if s.fs.upperLayer != nil && layer == nil {
 		change.fileChanges.InvalidateAll = true
 	}
-	fs := newSnapshotFSBuilder(store.fs, layer, s.fs.overlays(), overlays, s.fs.diskFiles(), s.fs.diskDirectories(), s.fs.nodeModulesRealpathAliases(), store.options.PositionEncoding, store.toPath)
+	fs := newSnapshotFSBuilder(store.fs, layer, s.fs.upperLayer, s.fs.overlays(), overlays, s.fs.diskFiles(), s.fs.diskDirectories(), s.fs.nodeModulesRealpathAliases(), store.options.PositionEncoding, store.toPath)
 	change.fileChanges = s.processFileChanges(fs, change.fileChanges, logger, change.contentMapperContributions)
 
 	compilerOptionsForInferredProjects := s.compilerOptionsForInferredProjects
