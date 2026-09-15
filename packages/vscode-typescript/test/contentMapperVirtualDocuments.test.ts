@@ -76,10 +76,10 @@ test("evicts cached outputs after the last virtual document closes", async t => 
     const disposable = registerProvider(backend);
     t.after(() => disposable.dispose());
     const document = { uri: virtualUri };
-    vscode.workspace.textDocuments = [document as vscode.TextDocument];
+    mockVscode.setTextDocuments(document);
     await mockVscode.fileSystemProvider.readFile(virtualUri);
 
-    vscode.workspace.textDocuments = [];
+    mockVscode.setTextDocuments();
     mockVscode.fireClose(document);
     await tick();
 

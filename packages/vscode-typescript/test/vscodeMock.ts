@@ -161,9 +161,12 @@ export const mockVscode = {
     reset(): void {
         this.fileSystemProvider = undefined;
         this.fileChanges = [];
-        workspace.textDocuments = [];
+        this.setTextDocuments();
         window.activeTextEditor = undefined;
         window.visibleTextEditors = [];
+    },
+    setTextDocuments(...documents: any[]): void {
+        workspace.textDocuments.splice(0, workspace.textDocuments.length, ...documents);
     },
     fireActiveEditor(editor: any): void {
         window.activeTextEditor = editor;
