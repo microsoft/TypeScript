@@ -1478,9 +1478,11 @@ function emitNodeGeneratedImports(w: CodeWriter) {
     w.write(`    getFirstToken,`);
     w.write(`    getLastToken,`);
     w.write(`    getTokenPosOfNode,`);
+    w.write(`    type JSDoc,`);
     w.write(`    ModifierFlags,`);
     w.write(`    type Node,`);
     w.write(`    type NodeArray,`);
+    w.write(`    type NodeBase,`);
     w.write(`    type SourceFile,`);
     w.write(`    SyntaxKind,`);
     w.write(`} from "../../ast/index.ts";`);
@@ -1591,13 +1593,13 @@ function emitRemoteNodeList(w: CodeWriter) {
     w.write(`        }`);
     w.write(`    }`);
     w.write(``);
-    w.write(`    forEachNode<T>(visitNode: (node: RemoteNode) => T | undefined): T | undefined {`);
+    w.write(`    forEachNode<T>(visitNode: (node: Node) => T | undefined): T | undefined {`);
     w.write(`        if (!this.length) return;`);
     w.write(`        let next = this.index + 1;`);
     w.write(`        while (next) {`);
     w.write(`            const child = this.getOrCreateChildAtNodeIndex(next);`);
     w.write(`            next = child.next;`);
-    w.write(`            const result = visitNode(child as RemoteNode);`);
+    w.write(`            const result = visitNode(child as Node);`);
     w.write(`            if (result) return result;`);
     w.write(`        }`);
     w.write(`    }`);
@@ -1662,7 +1664,7 @@ function emitRemoteNodeList(w: CodeWriter) {
 }
 
 function emitRemoteNodeClassOpen(w: CodeWriter) {
-    w.write(`export class RemoteNode extends RemoteNodeBase implements Node {`);
+    w.write(`export class RemoteNode extends RemoteNodeBase implements NodeBase {`);
     w.write(`    protected static NODE_LEN: number = NODE_LEN;`);
     w.write(`    protected override get sourceFile(): SourceFileInfo {`);
     w.write(`        return this._sourceFile;`);
@@ -1684,7 +1686,7 @@ function emitRemoteNodeClassOpen(w: CodeWriter) {
     w.write(`                const child = this.getOrCreateChildAtNodeIndex(next);`);
     w.write(`                if (child instanceof RemoteNodeList) {`);
     w.write(`                    if (visitList) {`);
-    w.write(`                        const result = visitList(child);`);
+    w.write(`                        const result = visitList(child as NodeArray<Node>);`);
     w.write(`                        if (result) {`);
     w.write(`                            return result;`);
     w.write(`                        }`);
@@ -1697,7 +1699,7 @@ function emitRemoteNodeClassOpen(w: CodeWriter) {
     w.write(`                    }`);
     w.write(`                }`);
     w.write(`                else if (child.kind !== SyntaxKind.JSDoc) {`);
-    w.write(`                    const result = visitNode(child);`);
+    w.write(`                    const result = visitNode(child as Node);`);
     w.write(`                    if (result) {`);
     w.write(`                        return result;`);
     w.write(`                    }`);
@@ -1708,16 +1710,16 @@ function emitRemoteNodeClassOpen(w: CodeWriter) {
     w.write(`        }`);
     w.write(`    }`);
     w.write(``);
-    w.write(`    get jsDoc(): readonly Node[] | undefined {`);
+    w.write(`    get jsDoc(): readonly JSDoc[] | undefined {`);
     w.write(`        if (!this.hasChildren()) {`);
     w.write(`            return undefined;`);
     w.write(`        }`);
-    w.write(`        let result: Node[] | undefined;`);
+    w.write(`        let result: JSDoc[] | undefined;`);
     w.write(`        let next = this.index + 1;`);
     w.write(`        do {`);
     w.write(`            const child = this.getOrCreateChildAtNodeIndex(next);`);
     w.write(`            if (!(child instanceof RemoteNodeList) && child.kind === SyntaxKind.JSDoc) {`);
-    w.write(`                (result ??= []).push(child);`);
+    w.write(`                (result ??= []).push(child as unknown as JSDoc);`);
     w.write(`            }`);
     w.write(`            next = child.next;`);
     w.write(`        }`);
