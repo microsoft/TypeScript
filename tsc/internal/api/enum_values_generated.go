@@ -243,6 +243,7 @@ func main() {
 			"IsGenericObjectType":               toInt32(checker.ObjectFlagsIsGenericObjectType),
 			"IsGenericIndexType":                toInt32(checker.ObjectFlagsIsGenericIndexType),
 			"IsGenericType":                     toInt32(checker.ObjectFlagsIsGenericType),
+			"IsNarrowingType":                   toInt32(checker.ObjectFlagsIsNarrowingType),
 			"ContainsIntersections":             toInt32(checker.ObjectFlagsContainsIntersections),
 			"IsUnknownLikeUnionComputed":        toInt32(checker.ObjectFlagsIsUnknownLikeUnionComputed),
 			"IsUnknownLikeUnion":                toInt32(checker.ObjectFlagsIsUnknownLikeUnion),

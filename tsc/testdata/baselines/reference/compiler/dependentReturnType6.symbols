@@ -1,0 +1,367 @@
+//// [tests/cases/compiler/dependentReturnType6.ts] ////
+
+=== file.ts ===
+// Type parameter in outer scope
+function outer<T extends boolean>(x: T): number {
+>outer : Symbol(outer, Decl(file.ts, 0, 0))
+>T : Symbol(T, Decl(file.ts, 1, 15))
+>x : Symbol(x, Decl(file.ts, 1, 34))
+>T : Symbol(T, Decl(file.ts, 1, 15))
+
+    return inner();
+>inner : Symbol(inner, Decl(file.ts, 2, 19))
+
+    function inner(): T extends true ? 1 : T extends false ? 2 : never {
+>inner : Symbol(inner, Decl(file.ts, 2, 19))
+>T : Symbol(T, Decl(file.ts, 1, 15))
+>T : Symbol(T, Decl(file.ts, 1, 15))
+
+        return x ? 1 : 2;
+>x : Symbol(x, Decl(file.ts, 1, 34))
+    }
+}
+
+// Overloads
+function fun6<T extends boolean>(x: T, y: string): T extends true ? string : T extends false ? 2 : never;
+>fun6 : Symbol(fun6, Decl(file.ts, 7, 1), Decl(file.ts, 10, 105), Decl(file.ts, 11, 103), Decl(file.ts, 12, 42))
+>T : Symbol(T, Decl(file.ts, 10, 14))
+>x : Symbol(x, Decl(file.ts, 10, 33))
+>T : Symbol(T, Decl(file.ts, 10, 14))
+>y : Symbol(y, Decl(file.ts, 10, 38))
+>T : Symbol(T, Decl(file.ts, 10, 14))
+>T : Symbol(T, Decl(file.ts, 10, 14))
+
+function fun6<T extends boolean>(x: T, y: undefined): T extends true ? 1 : T extends false ? 2 : never;
+>fun6 : Symbol(fun6, Decl(file.ts, 7, 1), Decl(file.ts, 10, 105), Decl(file.ts, 11, 103), Decl(file.ts, 12, 42))
+>T : Symbol(T, Decl(file.ts, 11, 14))
+>x : Symbol(x, Decl(file.ts, 11, 33))
+>T : Symbol(T, Decl(file.ts, 11, 14))
+>y : Symbol(y, Decl(file.ts, 11, 38))
+>T : Symbol(T, Decl(file.ts, 11, 14))
+>T : Symbol(T, Decl(file.ts, 11, 14))
+
+function fun6(x: boolean): 1 | 2 | string;
+>fun6 : Symbol(fun6, Decl(file.ts, 7, 1), Decl(file.ts, 10, 105), Decl(file.ts, 11, 103), Decl(file.ts, 12, 42))
+>x : Symbol(x, Decl(file.ts, 12, 14))
+
+function fun6<T extends boolean>(x: T, y?: string): T extends true ? 1 | string : T extends false ? 2 : never {
+>fun6 : Symbol(fun6, Decl(file.ts, 7, 1), Decl(file.ts, 10, 105), Decl(file.ts, 11, 103), Decl(file.ts, 12, 42))
+>T : Symbol(T, Decl(file.ts, 13, 14))
+>x : Symbol(x, Decl(file.ts, 13, 33))
+>T : Symbol(T, Decl(file.ts, 13, 14))
+>y : Symbol(y, Decl(file.ts, 13, 38))
+>T : Symbol(T, Decl(file.ts, 13, 14))
+>T : Symbol(T, Decl(file.ts, 13, 14))
+
+    return x ? y !== undefined ? y : 1 : 2;
+>x : Symbol(x, Decl(file.ts, 13, 33))
+>y : Symbol(y, Decl(file.ts, 13, 38))
+>undefined : Symbol(undefined)
+>y : Symbol(y, Decl(file.ts, 13, 38))
+}
+
+// Indexed access with conditional inside
+
+// DOESN'T NARROW the nested conditional type of wrong shape
+interface SomeInterfaceBad<T> {
+>SomeInterfaceBad : Symbol(SomeInterfaceBad, Decl(file.ts, 15, 1))
+>T : Symbol(T, Decl(file.ts, 20, 27))
+
+    prop1: T extends 1 ? true : T extends 2 ? false : never;
+>prop1 : Symbol(SomeInterfaceBad.prop1, Decl(file.ts, 20, 31))
+>T : Symbol(T, Decl(file.ts, 20, 27))
+>T : Symbol(T, Decl(file.ts, 20, 27))
+
+    prop2: T extends true ? 1 : T extends false ? 2 : never;
+>prop2 : Symbol(SomeInterfaceBad.prop2, Decl(file.ts, 21, 60))
+>T : Symbol(T, Decl(file.ts, 20, 27))
+>T : Symbol(T, Decl(file.ts, 20, 27))
+}
+
+function fun4bad<T, U extends keyof SomeInterfaceBad<unknown>>(x: T, y: U): SomeInterfaceBad<T>[U] {
+>fun4bad : Symbol(fun4bad, Decl(file.ts, 23, 1))
+>T : Symbol(T, Decl(file.ts, 25, 17))
+>U : Symbol(U, Decl(file.ts, 25, 19))
+>SomeInterfaceBad : Symbol(SomeInterfaceBad, Decl(file.ts, 15, 1))
+>x : Symbol(x, Decl(file.ts, 25, 63))
+>T : Symbol(T, Decl(file.ts, 25, 17))
+>y : Symbol(y, Decl(file.ts, 25, 68))
+>U : Symbol(U, Decl(file.ts, 25, 19))
+>SomeInterfaceBad : Symbol(SomeInterfaceBad, Decl(file.ts, 15, 1))
+>T : Symbol(T, Decl(file.ts, 25, 17))
+>U : Symbol(U, Decl(file.ts, 25, 19))
+
+    if (y === "prop1") {
+>y : Symbol(y, Decl(file.ts, 25, 68))
+
+        return x === 1 ? true : false;
+>x : Symbol(x, Decl(file.ts, 25, 63))
+    }
+    return x ? 1 : 2;
+>x : Symbol(x, Decl(file.ts, 25, 63))
+}
+
+// Narrows nested conditional type of right shape
+interface SomeInterfaceGood<T> {
+>SomeInterfaceGood : Symbol(SomeInterfaceGood, Decl(file.ts, 30, 1))
+>T : Symbol(T, Decl(file.ts, 33, 28))
+
+    prop1: T extends true ? 2 : T extends false ? 1 : never;
+>prop1 : Symbol(SomeInterfaceGood.prop1, Decl(file.ts, 33, 32))
+>T : Symbol(T, Decl(file.ts, 33, 28))
+>T : Symbol(T, Decl(file.ts, 33, 28))
+
+    prop2: T extends true ? 1 : T extends false ? 2 : never;
+>prop2 : Symbol(SomeInterfaceGood.prop2, Decl(file.ts, 34, 60))
+>T : Symbol(T, Decl(file.ts, 33, 28))
+>T : Symbol(T, Decl(file.ts, 33, 28))
+}
+
+function fun4good<T extends boolean, U extends keyof SomeInterfaceGood<unknown>>(x: T, y: U): SomeInterfaceGood<T>[U] {
+>fun4good : Symbol(fun4good, Decl(file.ts, 36, 1))
+>T : Symbol(T, Decl(file.ts, 38, 18))
+>U : Symbol(U, Decl(file.ts, 38, 36))
+>SomeInterfaceGood : Symbol(SomeInterfaceGood, Decl(file.ts, 30, 1))
+>x : Symbol(x, Decl(file.ts, 38, 81))
+>T : Symbol(T, Decl(file.ts, 38, 18))
+>y : Symbol(y, Decl(file.ts, 38, 86))
+>U : Symbol(U, Decl(file.ts, 38, 36))
+>SomeInterfaceGood : Symbol(SomeInterfaceGood, Decl(file.ts, 30, 1))
+>T : Symbol(T, Decl(file.ts, 38, 18))
+>U : Symbol(U, Decl(file.ts, 38, 36))
+
+    if (y === "prop1") {
+>y : Symbol(y, Decl(file.ts, 38, 86))
+
+        return x ? 2 : 1;
+>x : Symbol(x, Decl(file.ts, 38, 81))
+    }
+    return x ? 1 : 2;
+>x : Symbol(x, Decl(file.ts, 38, 81))
+}
+
+// Indexed access with indexed access inside - OK, narrows
+interface BB {
+>BB : Symbol(BB, Decl(file.ts, 43, 1))
+
+    "a": number;
+>"a" : Symbol(BB["a"], Decl(file.ts, 46, 14))
+
+    "b": string;
+>"b" : Symbol(BB["b"], Decl(file.ts, 47, 16))
+}
+
+interface AA<T extends keyof BB> {
+>AA : Symbol(AA, Decl(file.ts, 49, 1))
+>T : Symbol(T, Decl(file.ts, 51, 13))
+>BB : Symbol(BB, Decl(file.ts, 43, 1))
+
+    "c": BB[T];
+>"c" : Symbol(AA["c"], Decl(file.ts, 51, 34))
+>BB : Symbol(BB, Decl(file.ts, 43, 1))
+>T : Symbol(T, Decl(file.ts, 51, 13))
+
+    "d": boolean,
+>"d" : Symbol(AA["d"], Decl(file.ts, 52, 15))
+}
+
+function reduction<T extends keyof BB, U extends keyof AA<any>>(x: T, y: U): AA<T>[U] {
+>reduction : Symbol(reduction, Decl(file.ts, 54, 1))
+>T : Symbol(T, Decl(file.ts, 56, 19))
+>BB : Symbol(BB, Decl(file.ts, 43, 1))
+>U : Symbol(U, Decl(file.ts, 56, 38))
+>AA : Symbol(AA, Decl(file.ts, 49, 1))
+>x : Symbol(x, Decl(file.ts, 56, 64))
+>T : Symbol(T, Decl(file.ts, 56, 19))
+>y : Symbol(y, Decl(file.ts, 56, 69))
+>U : Symbol(U, Decl(file.ts, 56, 38))
+>AA : Symbol(AA, Decl(file.ts, 49, 1))
+>T : Symbol(T, Decl(file.ts, 56, 19))
+>U : Symbol(U, Decl(file.ts, 56, 38))
+
+    if (x === "a" && y === "c") {
+>x : Symbol(x, Decl(file.ts, 56, 64))
+>y : Symbol(y, Decl(file.ts, 56, 69))
+
+        return 0; // Ok
+    }
+
+    return undefined as never;
+>undefined : Symbol(undefined)
+}
+
+// Conditional with indexed access inside - OK, narrows
+function fun5<T extends 1 | 2, U extends keyof BB>(x: T, y: U): T extends 1 ? BB[U] : T extends 2 ? boolean : never {
+>fun5 : Symbol(fun5, Decl(file.ts, 62, 1))
+>T : Symbol(T, Decl(file.ts, 65, 14))
+>U : Symbol(U, Decl(file.ts, 65, 30))
+>BB : Symbol(BB, Decl(file.ts, 43, 1))
+>x : Symbol(x, Decl(file.ts, 65, 51))
+>T : Symbol(T, Decl(file.ts, 65, 14))
+>y : Symbol(y, Decl(file.ts, 65, 56))
+>U : Symbol(U, Decl(file.ts, 65, 30))
+>T : Symbol(T, Decl(file.ts, 65, 14))
+>BB : Symbol(BB, Decl(file.ts, 43, 1))
+>U : Symbol(U, Decl(file.ts, 65, 30))
+>T : Symbol(T, Decl(file.ts, 65, 14))
+
+    if (x === 1) {
+>x : Symbol(x, Decl(file.ts, 65, 51))
+
+        if (y === "a") {
+>y : Symbol(y, Decl(file.ts, 65, 56))
+
+            return 0;
+        }
+        return "";
+    }
+    return true;
+}
+
+// `this` type parameter - Doesn't narrow
+abstract class SomeClass {
+>SomeClass : Symbol(SomeClass, Decl(file.ts, 73, 1))
+
+    fun3(this: Sub1 | Sub2): this extends Sub1 ? 1 : this extends Sub2 ? 2 : never {
+>fun3 : Symbol(SomeClass.fun3, Decl(file.ts, 76, 26))
+>this : Symbol(this, Decl(file.ts, 77, 9))
+>Sub1 : Symbol(Sub1, Decl(file.ts, 83, 1))
+>Sub2 : Symbol(Sub2, Decl(file.ts, 86, 2))
+>Sub1 : Symbol(Sub1, Decl(file.ts, 83, 1))
+>Sub2 : Symbol(Sub2, Decl(file.ts, 86, 2))
+
+        if (this instanceof Sub1) {
+>this : Symbol(this, Decl(file.ts, 77, 9))
+>Sub1 : Symbol(Sub1, Decl(file.ts, 83, 1))
+
+            return 1;
+        }
+        return 2;
+    }
+}
+class Sub1 extends SomeClass {
+>Sub1 : Symbol(Sub1, Decl(file.ts, 83, 1))
+>SomeClass : Symbol(SomeClass, Decl(file.ts, 73, 1))
+
+    #sub1!: symbol;
+>#sub1 : Symbol(Sub1.#sub1, Decl(file.ts, 84, 30))
+
+};
+class Sub2 extends SomeClass {
+>Sub2 : Symbol(Sub2, Decl(file.ts, 86, 2))
+>SomeClass : Symbol(SomeClass, Decl(file.ts, 73, 1))
+
+    #sub2!: symbol;
+>#sub2 : Symbol(Sub2.#sub2, Decl(file.ts, 87, 30))
+
+};
+
+// Detection of type parameter reference in presence of typeof
+function fun2<T extends boolean>(x: T, y: typeof x): T extends true ? 1 : T extends false ? 2 : never {
+>fun2 : Symbol(fun2, Decl(file.ts, 89, 2))
+>T : Symbol(T, Decl(file.ts, 92, 14))
+>x : Symbol(x, Decl(file.ts, 92, 33))
+>T : Symbol(T, Decl(file.ts, 92, 14))
+>y : Symbol(y, Decl(file.ts, 92, 38))
+>x : Symbol(x, Decl(file.ts, 92, 33))
+>T : Symbol(T, Decl(file.ts, 92, 14))
+>T : Symbol(T, Decl(file.ts, 92, 14))
+
+    return x ? 1 : 2;
+>x : Symbol(x, Decl(file.ts, 92, 33))
+}
+
+// Contextually-typed lambdas
+const fun1: <T extends boolean>(x: T) => T extends true ? 1 : T extends false ? 2 : never = (x) => x ? 1 : 2;
+>fun1 : Symbol(fun1, Decl(file.ts, 97, 5))
+>T : Symbol(T, Decl(file.ts, 97, 13))
+>x : Symbol(x, Decl(file.ts, 97, 32))
+>T : Symbol(T, Decl(file.ts, 97, 13))
+>T : Symbol(T, Decl(file.ts, 97, 13))
+>T : Symbol(T, Decl(file.ts, 97, 13))
+>x : Symbol(x, Decl(file.ts, 97, 93))
+>x : Symbol(x, Decl(file.ts, 97, 93))
+
+
+// Circular conditionals
+type SomeCond<T> = T extends true ? 1 : T extends false ? SomeCond<T> : never;
+>SomeCond : Symbol(SomeCond, Decl(file.ts, 97, 109))
+>T : Symbol(T, Decl(file.ts, 101, 14))
+>T : Symbol(T, Decl(file.ts, 101, 14))
+>T : Symbol(T, Decl(file.ts, 101, 14))
+>SomeCond : Symbol(SomeCond, Decl(file.ts, 97, 109))
+>T : Symbol(T, Decl(file.ts, 101, 14))
+
+function f7<T extends boolean>(x: T): SomeCond<T> {
+>f7 : Symbol(f7, Decl(file.ts, 101, 78))
+>T : Symbol(T, Decl(file.ts, 103, 12))
+>x : Symbol(x, Decl(file.ts, 103, 31))
+>T : Symbol(T, Decl(file.ts, 103, 12))
+>SomeCond : Symbol(SomeCond, Decl(file.ts, 97, 109))
+>T : Symbol(T, Decl(file.ts, 103, 12))
+
+    if (x) {
+>x : Symbol(x, Decl(file.ts, 103, 31))
+
+        return 1;
+    }
+    return 2;
+}
+
+// Composite instantiation of conditional type
+type OtherCond<T> = T extends 1 ? "one" : T extends 2 ? "two" : T extends 3 ? "three" : T extends 4 ? "four" : never;
+>OtherCond : Symbol(OtherCond, Decl(file.ts, 108, 1))
+>T : Symbol(T, Decl(file.ts, 111, 15))
+>T : Symbol(T, Decl(file.ts, 111, 15))
+>T : Symbol(T, Decl(file.ts, 111, 15))
+>T : Symbol(T, Decl(file.ts, 111, 15))
+>T : Symbol(T, Decl(file.ts, 111, 15))
+
+function f8<U extends 1 | 2, V extends 3 | 4>(x: U, y: V): OtherCond<U | V> {
+>f8 : Symbol(f8, Decl(file.ts, 111, 117))
+>U : Symbol(U, Decl(file.ts, 113, 12))
+>V : Symbol(V, Decl(file.ts, 113, 28))
+>x : Symbol(x, Decl(file.ts, 113, 46))
+>U : Symbol(U, Decl(file.ts, 113, 12))
+>y : Symbol(y, Decl(file.ts, 113, 51))
+>V : Symbol(V, Decl(file.ts, 113, 28))
+>OtherCond : Symbol(OtherCond, Decl(file.ts, 108, 1))
+>U : Symbol(U, Decl(file.ts, 113, 12))
+>V : Symbol(V, Decl(file.ts, 113, 28))
+
+    if (x === 1 && y === 3)  {
+>x : Symbol(x, Decl(file.ts, 113, 46))
+>y : Symbol(y, Decl(file.ts, 113, 51))
+
+        return "one";
+    }
+}
+
+// Conditionals with `infer` - will not narrow, it is not safe to infer from the narrowed type into an `infer` type parameter
+function f9<T extends "a"[] | "b"[] | number>(x: T): T extends Array<infer P> ? P : T extends number ? undefined : never {
+>f9 : Symbol(f9, Decl(file.ts, 117, 1))
+>T : Symbol(T, Decl(file.ts, 120, 12))
+>x : Symbol(x, Decl(file.ts, 120, 46))
+>T : Symbol(T, Decl(file.ts, 120, 12))
+>T : Symbol(T, Decl(file.ts, 120, 12))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>P : Symbol(P, Decl(file.ts, 120, 74))
+>P : Symbol(P, Decl(file.ts, 120, 74))
+>T : Symbol(T, Decl(file.ts, 120, 12))
+
+    if (Array.isArray(x)) {
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(file.ts, 120, 46))
+
+        // If we allowed narrowing of the conditional return type, when resolving the conditional `T & ("a"[] | "b"[]) extends Array<infer P> ? P : ...`,
+        // we could infer `"a" | "b"` for `P`, and allow "a" to be returned. However, when calling `f10`, `T` could be instantiated with `"b"[]`, and the return type would be `"b"`,
+        // so allowing an `"a"` return would be unsound.
+        return "a";
+    }
+    return undefined;
+>undefined : Symbol(undefined)
+}
+
+
