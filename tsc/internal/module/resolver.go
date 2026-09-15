@@ -2310,25 +2310,34 @@ func (r *resolutionState) loadEntrypointsFromExportMap(
 					continue
 				}
 
-				conditionAlwaysMatches := condition == "default" || condition == "types" || IsApplicableVersionedTypesKey(condition)
+				isTypesCondition := condition == "types" || IsApplicableVersionedTypesKey(condition)
+				conditionAlwaysMatches := condition == "default" || isTypesCondition
 				newIncludeConditions := includeConditions
 				if !conditionAlwaysMatches {
 					newIncludeConditions = includeConditions.Clone()
-					excludeConditions = excludeConditions.Clone()
 					if newIncludeConditions == nil {
 						newIncludeConditions = &collections.Set[string]{}
 					}
 					newIncludeConditions.Add(condition)
+				}
+				// A resolver commits to the first of the preceding conditions it has, so this target is only
+				// reachable by a resolver that has none of them. That applies to "default" as much as to any
+				// named condition. The "types" conditions don't exist at runtime, so a resolver that has an
+				// earlier condition still falls through to a "types" target when the earlier one yields no
+				// declaration file.
+				newExcludeConditions := excludeConditions
+				if !isTypesCondition && len(prevConditions) > 0 {
+					newExcludeConditions = excludeConditions.Clone()
+					if newExcludeConditions == nil {
+						newExcludeConditions = &collections.Set[string]{}
+					}
 					for _, prevCondition := range prevConditions {
-						if excludeConditions == nil {
-							excludeConditions = &collections.Set[string]{}
-						}
-						excludeConditions.Add(prevCondition)
+						newExcludeConditions.Add(prevCondition)
 					}
 				}
 
 				prevConditions = append(prevConditions, condition)
-				loadEntrypointsFromTargetExports(subpath, newIncludeConditions, excludeConditions, export)
+				loadEntrypointsFromTargetExports(subpath, newIncludeConditions, newExcludeConditions, export)
 				if conditionAlwaysMatches {
 					break
 				}

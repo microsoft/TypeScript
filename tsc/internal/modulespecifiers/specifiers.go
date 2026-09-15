@@ -1306,22 +1306,107 @@ func tryGetModuleNameFromExportsOrImports(
 			if len(result) > 0 {
 				return result
 			}
+			// Node's algorithm commits to the first array element that captures resolution
+			// (a valid target string, null, or a nested object/array with an active branch),
+			// whether or not the file it names exists. Stop here so we don't fall through
+			// to a later element that would never be reached at runtime.
+			if targetCapturesResolution(e, conditions, isImports) {
+				break
+			}
 		}
 	case packagejson.JSONValueTypeObject:
-		// conditional mapping
+		// Conditional mapping. A runtime resolver walks the keys in order and commits to the first one
+		// whose condition is active: once that key names a usable target, resolution never falls through
+		// to a later condition, even when the file the target names doesn't exist. A specifier produced
+		// from a later runtime condition would therefore only resolve under a condition that can never be
+		// selected, so once a runtime condition has captured resolution, skip the runtime conditions after
+		// it. Type-only conditions ("types", "types@>=x") are invisible to a runtime resolver: they are
+		// never shadowed, and never shadow anything themselves.
 		obj := exports.AsObject()
+		runtimeCaptured := false
 		for key, value := range obj.Entries() {
-			if key == "default" || slices.Contains(conditions, key) || slices.Contains(conditions, "types") && module.IsApplicableVersionedTypesKey(key) {
-				result := tryGetModuleNameFromExportsOrImports(options, host, targetFilePath, packageDirectory, packageName, value, conditions, mode, isImports, preferTsExtension)
-				if len(result) > 0 {
-					return result
-				}
+			if !conditionMatches(key, conditions) {
+				continue
+			}
+			isRuntime := isRuntimeCondition(key)
+			if isRuntime && runtimeCaptured {
+				continue
+			}
+			result := tryGetModuleNameFromExportsOrImports(options, host, targetFilePath, packageDirectory, packageName, value, conditions, mode, isImports, preferTsExtension)
+			if len(result) > 0 {
+				return result
+			}
+			if isRuntime && targetCapturesResolution(value, conditions, isImports) {
+				runtimeCaptured = true
 			}
 		}
 	case packagejson.JSONValueTypeNull:
 		return ""
 	}
 	return ""
+}
+
+// conditionMatches mirrors the resolver's condition matching: "default" always applies, and versioned
+// "types@..." keys only apply when the "types" condition itself is in play.
+func conditionMatches(key string, conditions []string) bool {
+	return key == "default" ||
+		slices.Contains(conditions, key) ||
+		slices.Contains(conditions, "types") && module.IsApplicableVersionedTypesKey(key)
+}
+
+// isRuntimeCondition reports whether a condition key is one a runtime resolver can see. The "types"
+// conditions are TypeScript-only, so a runtime resolver walks straight past them.
+func isRuntimeCondition(key string) bool {
+	return key != "types" && !module.IsApplicableVersionedTypesKey(key)
+}
+
+// targetCapturesResolution reports whether a runtime resolver that reached `target` would commit to it
+// rather than continue on to the next condition or array element. Any syntactically valid target string
+// captures resolution, whether or not the file it names exists, and so does a `null` target, which
+// blocks the specifier outright; only invalid target strings, empty arrays, and objects with no usable
+// condition let the search continue.
+func targetCapturesResolution(target packagejson.ExportsOrImports, conditions []string, isImports bool) bool {
+	switch target.Type {
+	case packagejson.JSONValueTypeString:
+		str, _ := target.Value.(string)
+		return isValidRuntimeTarget(str, isImports)
+	case packagejson.JSONValueTypeNull:
+		return true
+	case packagejson.JSONValueTypeArray:
+		return core.Some(target.AsArray(), func(elem packagejson.ExportsOrImports) bool {
+			return targetCapturesResolution(elem, conditions, isImports)
+		})
+	case packagejson.JSONValueTypeObject:
+		for key, value := range target.AsObject().Entries() {
+			if isRuntimeCondition(key) && conditionMatches(key, conditions) && targetCapturesResolution(value, conditions, isImports) {
+				return true
+			}
+		}
+	}
+	return false
+}
+
+// isValidRuntimeTarget mirrors the target validation in the resolver: an invalid target is skipped
+// rather than committed to, so it can't shadow a later condition.
+func isValidRuntimeTarget(target string, isImports bool) bool {
+	if strings.HasPrefix(target, "./") {
+		// The resolver rejects targets whose components after the first equal "..", ".", or
+		// "node_modules" (resolver.go:789). Such strings are skipped rather than committed
+		// to, so they must NOT be treated as capturing resolution.
+		parts := tspath.GetPathComponents(target, "")[1:]
+		if len(parts) > 1 {
+			partsAfterFirst := parts[1:]
+			if slices.Contains(partsAfterFirst, "..") || slices.Contains(partsAfterFirst, ".") || slices.Contains(partsAfterFirst, "node_modules") {
+				return false
+			}
+		}
+		return true
+	}
+	// An "imports" target may also be a bare specifier, which resolves like any other module name.
+	return isImports &&
+		!strings.HasPrefix(target, "../") &&
+		!strings.HasPrefix(target, "/") &&
+		!tspath.IsRootedDiskPath(target)
 }
 
 // `importingSourceFile` and `importingSourceFileName`? Why not just use `importingSourceFile.path`?

@@ -5,6 +5,7 @@ import (
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/json"
 	"github.com/microsoft/TypeScript/tsc/internal/module"
 	"github.com/microsoft/TypeScript/tsc/internal/packagejson"
 	"github.com/microsoft/TypeScript/tsc/internal/symlinks"
@@ -344,4 +345,117 @@ func TestTryGetModuleNameFromExportsOrImports(t *testing.T) {
 			})
 		}
 	})
+}
+
+func TestTargetCapturesResolution(t *testing.T) {
+	t.Parallel()
+	conditions := []string{"import", "types", "node"}
+	tests := []struct {
+		name      string
+		target    string
+		isImports bool
+		want      bool
+	}{
+		{name: "relative string", target: `"./dist/index.js"`, want: true},
+		{name: "null blocks the specifier", target: `null`, want: true},
+		{name: "bare specifier is invalid in exports", target: `"other-pkg"`, want: false},
+		{name: "bare specifier is valid in imports", target: `"other-pkg"`, isImports: true, want: true},
+		{name: "parent-relative path is invalid in imports", target: `"../other.js"`, isImports: true, want: false},
+		{name: "empty array", target: `[]`, want: false},
+		{name: "array with a usable element", target: `["other-pkg", "./a.js"]`, want: true},
+		{name: "array with only invalid elements", target: `["other-pkg"]`, want: false},
+		{name: "object with an active runtime condition", target: `{"node": "./a.js"}`, want: true},
+		{name: "object with default", target: `{"browser": "./a.js", "default": "./b.js"}`, want: true},
+		{name: "object with only inactive conditions", target: `{"require": "./a.js", "browser": "./b.js"}`, want: false},
+		{name: "object with only a types condition", target: `{"types": "./a.d.ts"}`, want: false},
+		{name: "nested object with an active branch", target: `{"node": {"import": "./a.mjs"}}`, want: true},
+		{name: "nested object without an active branch", target: `{"node": {"require": "./a.cjs"}}`, want: false},
+		// Forbidden path segments: the resolver rejects these, so they must NOT capture resolution.
+		{name: "dotdot segment in ./ target", target: `"./dist/../other.js"`, want: false},
+		{name: "dot segment in ./ target", target: `"./dist/./other.js"`, want: false},
+		{name: "node_modules segment in ./ target", target: `"./node_modules/pkg/index.js"`, want: false},
+		// A null element inside an array still captures resolution (stops further search).
+		{name: "array where first element is null", target: `[null, "./src/index.js"]`, want: true},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			var parsed struct {
+				Exports packagejson.ExportsOrImports `json:"exports"`
+			}
+			if err := json.Unmarshal([]byte(`{"exports": `+tt.target+`}`), &parsed); err != nil {
+				t.Fatal(err)
+			}
+			if got := targetCapturesResolution(parsed.Exports, conditions, tt.isImports); got != tt.want {
+				t.Errorf("targetCapturesResolution(%s, isImports=%v) = %v, want %v", tt.target, tt.isImports, got, tt.want)
+			}
+		})
+	}
+}
+
+// TestArrayEarlyExitOnCapture verifies that tryGetModuleNameFromExportsOrImports stops
+// traversing an array once an element captures resolution, even if a later element
+// would have matched the target file. This mirrors Node's algorithm where the first
+// capturing element commits resolution.
+func TestArrayEarlyExitOnCapture(t *testing.T) {
+	t.Parallel()
+
+	tests := []struct {
+		name           string
+		exports        string // JSON for the array target
+		targetFilePath string
+		wantEmpty      bool   // true = no specifier should be produced
+	}{
+		{
+			// null first element captures resolution; "./src/index.ts" must NOT be returned.
+			name:           "null before valid target blocks specifier",
+			exports:        `[null, "./src/index.js"]`,
+			targetFilePath: "/pkg/src/index.ts",
+			wantEmpty:      true,
+		},
+		{
+			// Valid first element captures; even if it doesn't match our file, second is blocked.
+			name:           "valid non-matching target before valid matching target",
+			exports:        `["./other.js", "./src/index.js"]`,
+			targetFilePath: "/pkg/src/index.ts",
+			wantEmpty:      true,
+		},
+		{
+			// Invalid first element does NOT capture; second element should match.
+			name:           "invalid target before valid matching target allows fallthrough",
+			exports:        `["../outside.js", "./src/index.js"]`,
+			targetFilePath: "/pkg/src/index.ts",
+			wantEmpty:      false,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			var parsed struct {
+				Exports packagejson.ExportsOrImports `json:"exports"`
+			}
+			if err := json.Unmarshal([]byte(`{"exports": `+tt.exports+`}`), &parsed); err != nil {
+				t.Fatal(err)
+			}
+			result := tryGetModuleNameFromExportsOrImports(
+				&core.CompilerOptions{},
+				&mockModuleSpecifierGenerationHost{},
+				tt.targetFilePath,
+				"/pkg",
+				"pkg",
+				parsed.Exports,
+				[]string{"import", "node"},
+				MatchingModeExact,
+				false,
+				false,
+			)
+			if tt.wantEmpty && result != "" {
+				t.Errorf("expected no specifier (array early-exit), got %q", result)
+			}
+			if !tt.wantEmpty && result == "" {
+				t.Errorf("expected a specifier (fallthrough after non-capturing element), got empty")
+			}
+		})
+	}
 }
