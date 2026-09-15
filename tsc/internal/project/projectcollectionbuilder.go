@@ -81,6 +81,7 @@ func newProjectCollectionBuilder(
 	contentMapperHost contentmapper.Host,
 	client Client,
 ) *ProjectCollectionBuilder {
+	openFiles := openFilePaths(overlays)
 	return &ProjectCollectionBuilder{
 		ctx:                                ctx,
 		fs:                                 fs,
@@ -97,6 +98,7 @@ func newProjectCollectionBuilder(
 		base:                               oldProjectCollection,
 		configFileRegistryBuilder:          newConfigFileRegistryBuilder(lsproto.GetClientCapabilities(ctx).Workspace.DidChangeWatchedFiles.RelativePatternSupport, fs, func(path tspath.Path) bool { _, ok := overlays[path]; return ok }, oldConfigFileRegistry, extendedConfigCache, newSnapshotID, sessionOptions, customConfigFileName, nil),
 		newSnapshotID:                      newSnapshotID,
+		openFilesChanged:                   !openFiles.Equals(&oldProjectCollection.openFiles),
 		configuredProjects:                 dirty.NewSyncMap(oldProjectCollection.configuredProjects),
 		inferredProject:                    dirty.NewBox(oldProjectCollection.inferredProject),
 		apiState:                           oldAPIState.clone(),
@@ -795,7 +797,11 @@ func (b *ProjectCollectionBuilder) markProjectsAffectedByConfigChanges(
 	// Recompute default projects for open files that now have different config file presence.
 	var hasChanges bool
 	for path := range configChangeResult.affectedFiles {
-		fileName := b.overlays[path].FileName()
+		overlay, ok := b.overlays[path]
+		if !ok {
+			continue
+		}
+		fileName := overlay.FileName()
 		_ = b.ensureConfiguredProjectAndAncestorsForFile(fileName, path, logger)
 		hasChanges = true
 	}

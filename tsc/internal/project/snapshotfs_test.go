@@ -66,6 +66,7 @@ func TestSnapshotFSBuilderCachesReturnedSourceHandle(t *testing.T) {
 	file := builder.GetFile("/src/index.ts")
 	assert.Assert(t, file != nil)
 	assert.Equal(t, file.Content(), fileSystem.content)
+	assert.Assert(t, builder.GetFile("/src/index.ts") == file)
 	assert.Equal(t, fileSystem.getFileByPathCalls, 1)
 	assert.Equal(t, fileSystem.readFileCalls, 0)
 }
