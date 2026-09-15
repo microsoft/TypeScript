@@ -129,6 +129,12 @@ export async function runBenchmarks(options?: { filter?: string; singleIteration
             }
             // @generators-skip-block-end
         }, { async: isAsync, beforeAll: all(spawnAPI, loadSnapshot, createChecker, getProgramTS) })
+        // @sync-skip-block-start
+        .add(`getSymbolAtPosition - ${programIdentifierCount} identifiers (concurrent)`, async () => {
+            const positions = collectIdentifiers(file).map(node => node.pos);
+            await Promise.all(positions.map(position => project.checker.getSymbolAtPosition("program.ts", position)));
+        }, { async: isAsync, beforeAll: all(spawnAPI, loadSnapshot, createChecker, getProgramTS) })
+        // @sync-skip-block-end
         .add(`getSymbolAtPosition - ${programIdentifierCount} identifiers (batched)`, async () => {
             const positions = collectIdentifiers(file).map(node => node.pos);
             await project.checker.getSymbolAtPosition("program.ts", positions); // @generators: api.batch(project.checker.getSymbolAtPosition.gen("program.ts", positions));

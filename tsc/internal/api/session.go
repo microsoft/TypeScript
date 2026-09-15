@@ -449,8 +449,16 @@ type batchCheckerKey struct {
 }
 
 type batchCheckerCache struct {
-	setups map[batchCheckerKey]checkerSetup
-	leases map[*compiler.Program]batchCheckerLease
+	setups         map[batchCheckerKey]checkerSetup
+	leases         map[*compiler.Program]batchCheckerLease
+	positionLookup batchPositionLookup
+}
+
+type batchPositionLookup struct {
+	program     *compiler.Program
+	file        DocumentIdentifier
+	sourceFile  *ast.SourceFile
+	positionMap *ast.PositionMap
 }
 
 type batchCheckerLease struct {
@@ -517,6 +525,7 @@ func (c *batchCheckerCache) release() {
 		delete(c.leases, program)
 	}
 	clear(c.setups)
+	c.positionLookup = batchPositionLookup{}
 }
 
 // Ensure Session implements Handler
@@ -746,6 +755,31 @@ func (setup checkerSetup) resolveLocation(handle NodeHandle, file *DocumentIdent
 		return astnav.GetTouchingPropertyName(sourceFile, sourceFile.GetPositionMap().UTF16ToUTF8(int(*position))), nil
 	}
 	return nil, nil
+}
+
+func (setup checkerSetup) resolvePosition(ctx context.Context, file DocumentIdentifier, position uint32) (*ast.Node, error) {
+	cache, _ := ctx.Value(batchCheckerCacheContextKey{}).(*batchCheckerCache)
+	var sourceFile *ast.SourceFile
+	var positionMap *ast.PositionMap
+	if cache != nil && cache.positionLookup.program == setup.program && cache.positionLookup.file == file {
+		sourceFile = cache.positionLookup.sourceFile
+		positionMap = cache.positionLookup.positionMap
+	} else {
+		sourceFile = setup.program.GetSourceFile(file.ToFileName())
+		if sourceFile == nil {
+			return nil, fmt.Errorf("%w: source file not found: %v", ErrClientError, file)
+		}
+		positionMap = sourceFile.GetPositionMap()
+		if cache != nil {
+			cache.positionLookup = batchPositionLookup{
+				program:     setup.program,
+				file:        file,
+				sourceFile:  sourceFile,
+				positionMap: positionMap,
+			}
+		}
+	}
+	return astnav.GetTouchingPropertyName(sourceFile, positionMap.UTF16ToUTF8(int(position))), nil
 }
 
 // setupChecker resolves snapshot, program, and type checker for a project.
@@ -1169,7 +1203,8 @@ func (s *Session) handleBatchRequests(ctx context.Context, params *BatchRequests
 }
 
 func (s *Session) handleBatchRequestGroups(ctx context.Context, groups []BatchRequestGroup, order []uint32) ([]BatchResponse, error) {
-	if len(order) == 0 {
+	implicitSingleGroupOrder := len(order) == 0 && len(groups) == 1
+	if len(order) == 0 && !implicitSingleGroupOrder {
 		return nil, errors.New("api: invalid request: grouped batch requires groupOrder")
 	}
 	states := core.Map(groups, func(group BatchRequestGroup) *batchGroupState {
@@ -1178,7 +1213,6 @@ func (s *Session) handleBatchRequestGroups(ctx context.Context, groups []BatchRe
 	for _, state := range states {
 		defer state.checkerCache.release()
 	}
-	cursors := make([]int, len(groups))
 	decoders := make([]batchRequestDecoder, len(groups))
 	for i, group := range groups {
 		if group.Count < 0 {
@@ -1203,10 +1237,19 @@ func (s *Session) handleBatchRequestGroups(ctx context.Context, groups []BatchRe
 			decoders[i] = decoder
 		}
 	}
-	responses := make([]BatchResponse, len(order))
+	responseCount := len(order)
+	if implicitSingleGroupOrder {
+		responseCount = groups[0].Count
+	}
+	responses := make([]BatchResponse, responseCount)
+
+	cursors := make([]int, len(groups))
 	previousGroupIndex := -1
-	for i, rawGroupIndex := range order {
-		groupIndex := int(rawGroupIndex)
+	for i := range responseCount {
+		groupIndex := 0
+		if !implicitSingleGroupOrder {
+			groupIndex = int(order[i])
+		}
 		if groupIndex >= len(groups) {
 			return nil, fmt.Errorf("%w: invalid group index %d", ErrInvalidRequest, groupIndex)
 		}
@@ -2197,13 +2240,10 @@ func (s *Session) handleGetSymbolAtPosition(ctx context.Context, params *GetSymb
 	}
 	defer setup.done()
 
-	sourceFile := setup.program.GetSourceFile(params.File.ToFileName())
-	if sourceFile == nil {
-		return nil, fmt.Errorf("%w: source file not found: %v", ErrClientError, params.File)
+	node, err := setup.resolvePosition(ctx, params.File, params.Position)
+	if err != nil {
+		return nil, err
 	}
-
-	positionMap := sourceFile.GetPositionMap()
-	node := astnav.GetTouchingPropertyName(sourceFile, positionMap.UTF16ToUTF8(int(params.Position)))
 	if node == nil {
 		return nil, nil
 	}
@@ -2422,13 +2462,10 @@ func (s *Session) handleGetTypeAtPosition(ctx context.Context, params *GetTypeAt
 	}
 	defer setup.done()
 
-	sourceFile := setup.program.GetSourceFile(params.File.ToFileName())
-	if sourceFile == nil {
-		return nil, fmt.Errorf("%w: source file not found: %v", ErrClientError, params.File)
+	node, err := setup.resolvePosition(ctx, params.File, params.Position)
+	if err != nil {
+		return nil, err
 	}
-
-	positionMap := sourceFile.GetPositionMap()
-	node := astnav.GetTouchingPropertyName(sourceFile, positionMap.UTF16ToUTF8(int(params.Position)))
 	if node == nil {
 		return nil, nil
 	}

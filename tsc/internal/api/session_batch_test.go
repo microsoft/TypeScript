@@ -49,6 +49,55 @@ func TestHandleGroupedBatchRequests(t *testing.T) {
 	assert.Equal(t, string(encoded), `{"results":[{"group":"a","value":1},{"group":"b","value":2},{"group":"a","value":3}]}`)
 }
 
+func TestHandleSingleGroupedBatchRequestsInfersOrder(t *testing.T) {
+	t.Parallel()
+
+	response, err := (&Session{}).HandleRequest(context.Background(), string(MethodBatchRequests), json.Value(`{
+		"groups":[
+			{"method":"echo","base":{"group":"a"},"count":3,"requests":[{"value":1},{"value":2},{"value":3}]}
+		]
+	}`))
+	assert.NilError(t, err)
+	encoded, err := json.Marshal(response)
+	assert.NilError(t, err)
+	assert.Equal(t, string(encoded), `{"results":[{"group":"a","value":1},{"group":"a","value":2},{"group":"a","value":3}]}`)
+}
+
+func TestHandleGroupedBatchRequestsReacquiresCheckerAfterInterleaving(t *testing.T) {
+	t.Parallel()
+
+	projectSession, _ := projecttestutil.Setup(map[string]any{
+		"/tsconfig.json": `{ "compilerOptions": { "noLib": true }, "files": ["index.ts"] }`,
+		"/index.ts":      `export const value = true;`,
+	})
+	defer projectSession.Close()
+	session := NewLSPSession(projectSession, nil)
+	defer session.Close()
+
+	snapshot, err := session.handleUpdateSnapshot(t.Context(), &UpdateSnapshotParams{
+		OpenProjects: []DocumentIdentifier{{FileName: "/tsconfig.json"}},
+	})
+	assert.NilError(t, err)
+	base, err := json.Marshal(map[string]any{
+		"snapshot": snapshot.Snapshot,
+		"project":  snapshot.Projects[0].Id,
+		"file":     "/index.ts",
+	})
+	assert.NilError(t, err)
+
+	responses, err := session.handleBatchRequestGroups(t.Context(), []BatchRequestGroup{
+		{Method: MethodGetSymbolAtPosition, Base: base, Count: 2, Fields: json.Value(`{"position":[13,13]}`)},
+		{Method: "echo", Count: 1, Requests: []json.Value{json.Value(`{"value":1}`)}},
+	}, []uint32{0, 1, 0})
+	assert.NilError(t, err)
+	assert.Equal(t, responses[0].Error, "")
+	assert.Equal(t, responses[1].Error, "")
+	assert.Equal(t, responses[2].Error, "")
+	first := responses[0].Result.(*SymbolResponse)
+	last := responses[2].Result.(*SymbolResponse)
+	assert.Equal(t, first.Id, last.Id)
+}
+
 func TestBatchCheckerCacheReusesProgramAcrossSnapshots(t *testing.T) {
 	t.Parallel()
 

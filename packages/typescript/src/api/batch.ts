@@ -23,8 +23,7 @@ export function createGroupedBatchRequest(
         };
     }
     return {
-        groups: [{ method, base, count, fields: Object.fromEntries(entries.map(([key, values]) => [key, [...values]])) }],
-        groupOrder: Array<number>(count).fill(0),
+        groups: [{ method, base, count, fields: Object.fromEntries(entries) }],
     };
 }
 

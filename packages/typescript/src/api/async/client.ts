@@ -49,11 +49,12 @@ interface GroupedBatchRequest {
 
 function groupBatchRequests<T extends { method: APIRequest["method"]; params: APIRequest["params"]; }>(requests: readonly T[]): {
     groups: GroupedBatchRequest[];
-    groupOrder: number[];
+    groupOrder?: number[];
 } | undefined {
     const groupIndexes = new Map<APIRequest["method"], number>();
     const requestsByMethod: T[][] = [];
     const groupOrder: number[] = [];
+    let hasBatchableGroup = false;
     for (const request of requests) {
         let groupIndex = groupIndexes.get(request.method);
         if (groupIndex === undefined) {
@@ -62,9 +63,10 @@ function groupBatchRequests<T extends { method: APIRequest["method"]; params: AP
             requestsByMethod.push([]);
         }
         requestsByMethod[groupIndex].push(request);
+        if (requestsByMethod[groupIndex].length === 4) hasBatchableGroup = true;
         groupOrder.push(groupIndex);
     }
-    if (!requestsByMethod.some(group => group.length >= 4)) return undefined;
+    if (!hasBatchableGroup) return undefined;
 
     const groups: GroupedBatchRequest[] = [];
     for (const [method, groupIndex] of groupIndexes) {
@@ -86,7 +88,7 @@ function groupBatchRequests<T extends { method: APIRequest["method"]; params: AP
             groups.push({ method, count: params.length, requests: params });
         }
     }
-    return { groups, groupOrder };
+    return groups.length === 1 ? { groups } : { groups, groupOrder };
 }
 
 function parameterColumns(params: readonly Record<string, unknown>[]): Record<string, unknown[]> | undefined {
@@ -295,7 +297,7 @@ export class Client {
 
             // Paired benchmarks show grouping pays for its construction cost at four requests.
             const grouped = requests.length >= 4 ? groupBatchRequests(requests) : undefined;
-            const params: BatchRequestsParams | { groups: GroupedBatchRequest[]; groupOrder: number[]; maxResponseBytesPerPage?: number | undefined; } = grouped
+            const params: BatchRequestsParams | { groups: GroupedBatchRequest[]; groupOrder?: number[]; maxResponseBytesPerPage?: number | undefined; } = grouped
                 ? { groups: grouped.groups, groupOrder: grouped.groupOrder, maxResponseBytesPerPage: this.options.maxResponseBytesPerPage }
                 : { requests: requests.map(request => ({ method: request.method, params: request.params })), maxResponseBytesPerPage: this.options.maxResponseBytesPerPage };
             const response = await this.batchRequest(params as BatchRequestsParams);
