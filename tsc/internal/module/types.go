@@ -18,7 +18,12 @@ type ResolutionHost interface {
 
 type ResolutionProvider interface {
 	Identity() uint64
-	GetModuleResolution(moduleName string, containingDirectory string, resolutionMode core.ResolutionMode) (resolution *ResolvedModule, found bool)
+	ResolveModuleName(
+		moduleName string,
+		containingDirectory string,
+		resolutionMode core.ResolutionMode,
+		fallback func() *ResolvedModule,
+	) (*ResolvedModule, error)
 }
 
 type ModeAwareCacheKey struct {

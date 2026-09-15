@@ -490,9 +490,11 @@ import "missing";`,
     test("module resolver and provided resolution sets", async () => {
         await using api = spawnAPI({
             "/src/main.ts": `import { value } from "pkg"; export { value };`,
+            "/src/callback-main.ts": `import { value as provided } from "pkg"; import { value as callback } from "callback"; export { provided, callback };`,
             "/src/extension.ts": `import { value } from "./dep.ts"; value;`,
             "/src/dep.ts": `export const value = 1;`,
             "/provided.d.ts": `export declare const value: string;`,
+            "/callback.d.ts": `export declare const value: boolean;`,
             "/node_modules/pkg/package.json": `{"name":"pkg","version":"1.0.0","types":"index.d.ts"}`,
             "/node_modules/pkg/index.d.ts": `export declare const value: number;`,
         });
@@ -528,6 +530,76 @@ import "missing";`,
         );
         assert.equal((await overriddenResolver.resolveModuleName("missing", "/src")).resolvedModule, undefined);
 
+        const callbackCalls: unknown[][] = [];
+        const callbackResolver = await snapshot.createModuleResolver(compilerOptions, {
+            moduleResolutions: {
+                fallback: "resolve",
+                entries: [{
+                    moduleName: "pkg",
+                    result: { resolvedFileName: "/provided.d.ts" },
+                }],
+            },
+            resolveModuleName: (moduleName, containingDirectory, resolutionMode) => {
+                callbackCalls.push([moduleName, containingDirectory, resolutionMode]);
+                return moduleName === "callback" ? { resolvedFileName: "/callback.d.ts" } : undefined;
+            },
+        });
+        assert.equal(
+            (await callbackResolver.resolveModuleName("pkg", "/src", ModuleKind.ESNext)).resolvedModule?.resolvedFileName,
+            "/provided.d.ts",
+        );
+        assert.deepEqual(callbackCalls, []);
+        assert.equal(
+            (await callbackResolver.resolveModuleName("callback", "/src", ModuleKind.ESNext)).resolvedModule?.resolvedFileName,
+            "/callback.d.ts",
+        );
+        assert.deepEqual(callbackCalls, [["callback", "/src", ModuleKind.ESNext]]);
+        assert.equal((await callbackResolver.resolveModuleName("missing", "/src")).resolvedModule, undefined);
+        assert.deepEqual(callbackCalls.at(-1), ["missing", "/src", undefined]);
+
+        const noSpecCallbackResolver = await snapshot.createModuleResolver(compilerOptions, {
+            resolveModuleName: moduleName => moduleName === "callback" ? { resolvedFileName: "/callback.d.ts" } : undefined,
+        });
+        assert.equal(
+            (await noSpecCallbackResolver.resolveModuleName("callback", "/src")).resolvedModule?.resolvedFileName,
+            "/callback.d.ts",
+        );
+
+        let authoritativeCallbackCalled = false;
+        const authoritativeResolver = await snapshot.createModuleResolver(compilerOptions, {
+            moduleResolutions: { fallback: "unresolved", entries: [] },
+            resolveModuleName: () => {
+                authoritativeCallbackCalled = true;
+                return { resolvedFileName: "/callback.d.ts" };
+            },
+        });
+        assert.equal((await authoritativeResolver.resolveModuleName("callback", "/src")).resolvedModule, undefined);
+        assert.equal(authoritativeCallbackCalled, false);
+
+        const programCallbackCalls: string[] = [];
+        const callbackProgram = await api.createProgram(
+            ["/src/callback-main.ts"],
+            {
+                compilerOptions: { ...compilerOptions, noLib: true },
+                moduleResolutions: {
+                    fallback: "resolve",
+                    entries: [{
+                        moduleName: "pkg",
+                        result: { resolvedFileName: "/provided.d.ts" },
+                    }],
+                },
+                resolveModuleName: moduleName => {
+                    programCallbackCalls.push(moduleName);
+                    return moduleName === "callback" ? { resolvedFileName: "/callback.d.ts" } : undefined;
+                },
+            },
+        );
+        assert.deepEqual(
+            [...await callbackProgram.getSourceFileNames()].sort(),
+            ["/callback.d.ts", "/provided.d.ts", "/src/callback-main.ts"],
+        );
+        assert.deepEqual(programCallbackCalls, ["callback"]);
+
         const program = await api.createProgram(
             ["/src/main.ts"],
             { compilerOptions: { ...compilerOptions, noLib: true }, moduleResolutions: set },
@@ -559,6 +631,7 @@ import "missing";`,
         await assert.rejects(createFromDisposedSet, /ModuleResolutionSet is disposed/); // @sync: assert.throws(createFromDisposedSet, /ModuleResolutionSet is disposed/);
 
         await program.dispose();
+        await callbackProgram.dispose();
         await extensionProgram.dispose();
         await snapshot.dispose();
         const resolveAfterSnapshotDisposal = () => overriddenResolver.resolveModuleName("pkg", "/src");

@@ -413,6 +413,7 @@ type CreateProgramOptions struct {
 	ProjectReferences            []*core.ProjectReference `json:"projectReferences,omitempty"`
 	ConfigFileParsingDiagnostics []*DiagnosticResponse    `json:"configFileParsingDiagnostics,omitempty"`
 	ModuleResolutions            *ModuleResolutionSource  `json:"moduleResolutions,omitempty"`
+	ResolveModuleNameCallback    string                   `json:"resolveModuleNameCallback,omitempty"`
 }
 
 type (
@@ -457,9 +458,10 @@ type ReleaseModuleResolutionSetParams struct {
 }
 
 type CreateModuleResolverParams struct {
-	Snapshot          SnapshotID              `json:"snapshot"`
-	CompilerOptions   core.CompilerOptions    `json:"compilerOptions"`
-	ModuleResolutions *ModuleResolutionSource `json:"moduleResolutions,omitempty"`
+	Snapshot                  SnapshotID              `json:"snapshot"`
+	CompilerOptions           core.CompilerOptions    `json:"compilerOptions"`
+	ModuleResolutions         *ModuleResolutionSource `json:"moduleResolutions,omitempty"`
+	ResolveModuleNameCallback string                  `json:"resolveModuleNameCallback,omitempty"`
 }
 
 type ResolveModuleNameParams struct {
@@ -468,6 +470,12 @@ type ResolveModuleNameParams struct {
 	ModuleName          string             `json:"moduleName"`
 	ContainingDirectory DocumentIdentifier `json:"containingDirectory"`
 	ResolutionMode      *ResolutionMode    `json:"resolutionMode,omitempty"`
+}
+
+type ResolveModuleNameCallbackParams struct {
+	ModuleName          string          `json:"moduleName"`
+	ContainingDirectory string          `json:"containingDirectory"`
+	ResolutionMode      *ResolutionMode `json:"resolutionMode,omitempty"`
 }
 
 type ResolveModuleNameResult struct {
@@ -1191,11 +1199,11 @@ type GetSourceFileNamesParams struct {
 }
 
 type GetResolvedModuleParams struct {
-	Snapshot   SnapshotID          `json:"snapshot"`
-	Project    ProjectID           `json:"project"`
-	File       DocumentIdentifier  `json:"file"`
-	ModuleName string              `json:"moduleName"`
-	Mode       core.ResolutionMode `json:"mode"`
+	Snapshot   SnapshotID         `json:"snapshot"`
+	Project    ProjectID          `json:"project"`
+	File       DocumentIdentifier `json:"file"`
+	ModuleName string             `json:"moduleName"`
+	Mode       ResolutionMode     `json:"mode"`
 }
 
 type GetResolvedModuleFromModuleSpecifierParams struct {
@@ -1206,11 +1214,11 @@ type GetResolvedModuleFromModuleSpecifierParams struct {
 }
 
 type GetResolvedTypeReferenceDirectiveParams struct {
-	Snapshot          SnapshotID          `json:"snapshot"`
-	Project           ProjectID           `json:"project"`
-	File              DocumentIdentifier  `json:"file"`
-	TypeDirectiveName string              `json:"typeDirectiveName"`
-	Mode              core.ResolutionMode `json:"mode"`
+	Snapshot          SnapshotID         `json:"snapshot"`
+	Project           ProjectID          `json:"project"`
+	File              DocumentIdentifier `json:"file"`
+	TypeDirectiveName string             `json:"typeDirectiveName"`
+	Mode              ResolutionMode     `json:"mode"`
 }
 
 type GetResolvedTypeReferenceDirectiveFromReferenceParams struct {

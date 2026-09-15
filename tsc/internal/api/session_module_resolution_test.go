@@ -2,12 +2,31 @@ package api
 
 import (
 	"context"
+	"errors"
 	"testing"
 
 	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/json"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/projecttestutil"
 	"gotest.tools/v3/assert"
 )
+
+type failingModuleResolutionConn struct {
+	calls int
+}
+
+func (c *failingModuleResolutionConn) Run(context.Context) error {
+	return nil
+}
+
+func (c *failingModuleResolutionConn) Call(context.Context, string, any) (json.Value, error) {
+	c.calls++
+	return nil, errors.New("callback error")
+}
+
+func (c *failingModuleResolutionConn) Notify(context.Context, string, any) error {
+	return nil
+}
 
 func TestModuleResolverUsesSnapshotFileSystem(t *testing.T) {
 	t.Parallel()
@@ -32,7 +51,7 @@ func TestModuleResolverUsesSnapshotFileSystem(t *testing.T) {
 		},
 	})
 	assert.NilError(t, err)
-	result, resolutionErr := session.handleResolveModuleName(&ResolveModuleNameParams{
+	result, resolutionErr := session.handleResolveModuleName(context.Background(), &ResolveModuleNameParams{
 		Snapshot:            snapshot.Snapshot,
 		Resolver:            resolver,
 		ModuleName:          "pkg",
@@ -82,7 +101,7 @@ func TestProvidedModuleResolutionSpecificityAndLifetime(t *testing.T) {
 	assertResolution := func(directory string, mode core.ModuleKind, expected string) {
 		t.Helper()
 		resolutionMode := ResolutionMode(mode)
-		result, resolutionErr := session.handleResolveModuleName(&ResolveModuleNameParams{
+		result, resolutionErr := session.handleResolveModuleName(context.Background(), &ResolveModuleNameParams{
 			Snapshot:            snapshot.Snapshot,
 			Resolver:            resolverID,
 			ModuleName:          "pkg",
@@ -98,7 +117,7 @@ func TestProvidedModuleResolutionSpecificityAndLifetime(t *testing.T) {
 	assertResolution("/home/projects/p/other", core.ModuleKindESNext, "/home/projects/p/mode.d.ts")
 	assertResolution("/home/projects/p/other", core.ModuleKindCommonJS, "/home/projects/p/global.d.ts")
 
-	unresolved, err := session.handleResolveModuleName(&ResolveModuleNameParams{
+	unresolved, err := session.handleResolveModuleName(context.Background(), &ResolveModuleNameParams{
 		Snapshot:            snapshot.Snapshot,
 		Resolver:            resolverID,
 		ModuleName:          "other",
@@ -188,7 +207,7 @@ func TestProvidedModuleResolutionPreservesStaticIdentity(t *testing.T) {
 		}},
 	})
 	assert.NilError(t, err)
-	result, err := session.handleResolveModuleName(&ResolveModuleNameParams{
+	result, err := session.handleResolveModuleName(context.Background(), &ResolveModuleNameParams{
 		Snapshot:            snapshot.Snapshot,
 		Resolver:            resolver,
 		ModuleName:          "pkg",
@@ -199,6 +218,24 @@ func TestProvidedModuleResolutionPreservesStaticIdentity(t *testing.T) {
 	assert.Equal(t, result.ResolvedModule.PackageId.Name, "pkg")
 	assert.Equal(t, result.ResolvedModule.PackageId.Version, "1.2.3")
 	assert.Equal(t, result.ResolvedModule.IsExternalLibraryImport, true)
+}
+
+func TestModuleResolutionCallbackErrorsAreReturned(t *testing.T) {
+	t.Parallel()
+
+	conn := &failingModuleResolutionConn{}
+	provider := &callbackModuleResolutionProvider{
+		identity:         1,
+		conn:             conn,
+		ctx:              context.Background(),
+		callback:         "resolveModuleName/1",
+		currentDirectory: "/",
+	}
+	for range 2 {
+		_, err := provider.ResolveModuleName("pkg", "/src", core.ResolutionModeESM, nil)
+		assert.ErrorContains(t, err, "callback error")
+	}
+	assert.Equal(t, conn.calls, 2)
 }
 
 func providedResolutionEntry(moduleName string, directory string, mode *core.ModuleKind, fileName string) *ModuleResolutionEntry {

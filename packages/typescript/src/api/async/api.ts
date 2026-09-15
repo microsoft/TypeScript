@@ -242,9 +242,21 @@ export interface TranspileOutput {
 
 export interface ModuleResolverOptions {
     moduleResolutions?: ModuleResolutionSpec | ModuleResolutionSet;
+    /**
+     * Resolves module names not matched by `moduleResolutions`.
+     * Returning `undefined` marks the module unresolved.
+     */
+    resolveModuleName?: ResolveModuleNameCallback;
 }
 
-export type CreateProgramOptions = Omit<ProtocolCreateProgramOptions, "moduleResolutions"> & ModuleResolverOptions;
+/**
+ * Resolves a module name from a directory.
+ */
+export type ResolutionMode = ModuleKind.None | ModuleKind.CommonJS | ModuleKind.ESNext;
+
+export type ResolveModuleNameCallback = (moduleName: string, containingDirectory: string, resolutionMode: ResolutionMode | undefined) => ProvidedModuleResolution | undefined | Promise<ProvidedModuleResolution | undefined>; // @sync: export type ResolveModuleNameCallback = (moduleName: string, containingDirectory: string, resolutionMode: ResolutionMode | undefined) => ProvidedModuleResolution | undefined;
+
+export type CreateProgramOptions = Omit<ProtocolCreateProgramOptions, "moduleResolutions" | "resolveModuleNameCallback"> & ModuleResolverOptions;
 
 function toModuleResolutionSource(input: ModuleResolutionSpec | ModuleResolutionSet | undefined): ModuleResolutionSource | undefined {
     if (input === undefined) return undefined;
@@ -267,6 +279,7 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
     private currentDirectory: string | undefined;
     private getCanonicalFileNameWorker: ((fileName: string) => string) | undefined;
     private initialized: boolean = false;
+    private nextModuleResolutionCallbackId = 0;
     private initializing: Promise<void> | undefined;
     private activeSnapshots: Set<Snapshot> = new Set();
     private latestSnapshot: Snapshot | undefined;
@@ -533,6 +546,22 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         return new ModuleResolutionSet(id, this.client);
     }
 
+    /** @internal */
+    registerModuleResolutionCallback(callback: ResolveModuleNameCallback): { name: string; dispose: () => void; } {
+        const name = `resolveModuleName/${++this.nextModuleResolutionCallbackId}`;
+        return {
+            name,
+            dispose: this.client.registerCallback(name, params => {
+                const { moduleName, containingDirectory, resolutionMode } = params as {
+                    moduleName: string;
+                    containingDirectory: string;
+                    resolutionMode?: ResolutionMode;
+                };
+                return callback(moduleName, containingDirectory, resolutionMode);
+            }),
+        };
+    }
+
     /**
      * Creates a program from current filesystem state, or derives one from oldProgram after applying fileChanges.
      */
@@ -551,18 +580,28 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
             throw new Error("oldProgram must belong to this API instance and reference an active snapshot");
         }
 
-        const { moduleResolutions, ...wireCreateProgramOptions } = createProgramOptions;
+        const { moduleResolutions, resolveModuleName, ...wireCreateProgramOptions } = createProgramOptions;
         const moduleResolutionSource = toModuleResolutionSource(moduleResolutions);
-        const data: CreateProgramResponse = await this.client.apiRequest("createProgram", {
-            rootFiles,
-            createProgramOptions: {
-                ...wireCreateProgramOptions,
-                ...(moduleResolutionSource ? { moduleResolutions: moduleResolutionSource } : {}),
-            },
-            oldProgram: oldProgram ? { snapshot: oldProgram.snapshotId, project: oldProgram.getProject().id } : undefined,
-            fileChanges,
-        });
+        const callback = resolveModuleName ? this.registerModuleResolutionCallback(resolveModuleName) : undefined;
+        let data: CreateProgramResponse;
+        try {
+            data = await this.client.apiRequest("createProgram", {
+                rootFiles,
+                createProgramOptions: {
+                    ...wireCreateProgramOptions,
+                    ...(moduleResolutionSource ? { moduleResolutions: moduleResolutionSource } : {}),
+                    ...(callback ? { resolveModuleNameCallback: callback.name } : {}),
+                },
+                oldProgram: oldProgram ? { snapshot: oldProgram.snapshotId, project: oldProgram.getProject().id } : undefined,
+                fileChanges,
+            });
+        }
+        catch (error) {
+            callback?.dispose();
+            throw error;
+        }
         if (!data.project) {
+            callback?.dispose();
             throw new Error("createProgram did not return a project");
         }
         const snapshot = new Snapshot(
@@ -576,6 +615,7 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
                 this.sourceFileCache.releaseSnapshot(snapshot.id);
             },
         );
+        if (callback) snapshot.addModuleResolutionCallbackDisposer(callback.dispose);
         const program = snapshot.getProjects()[0].program;
         program.setOwnedSnapshot(snapshot);
         this.activeSnapshots.add(snapshot);
@@ -615,6 +655,7 @@ type EnsureInitialized = () => Promise<void>; // @sync: type EnsureInitialized =
 
 interface SnapshotOwner extends FormatDiagnosticsHost {
     updateSnapshotFrom(baseSnapshot: Snapshot, params?: UpdateSnapshotParams): Promise<Snapshot>;
+    registerModuleResolutionCallback(callback: ResolveModuleNameCallback): { name: string; dispose: () => void; };
 }
 
 export class InternalAPI {
@@ -655,6 +696,7 @@ export class Snapshot {
     private onDispose: () => void;
     private api: SnapshotOwner;
     private snapshotRegistry: SnapshotObjectRegistry;
+    private resolverCallbackDisposers: (() => void)[] = [];
     readonly internal: SnapshotInternalAPI;
 
     constructor(
@@ -713,12 +755,26 @@ export class Snapshot {
     async createModuleResolver(compilerOptions: CompilerOptions, options?: ModuleResolverOptions): Promise<ModuleResolver> {
         this.ensureNotDisposed();
         const moduleResolutionSource = toModuleResolutionSource(options?.moduleResolutions);
-        const id = await this.client.apiRequest("createModuleResolver", {
-            snapshot: this.id,
-            compilerOptions,
-            ...(moduleResolutionSource ? { moduleResolutions: moduleResolutionSource } : {}),
-        });
-        return new ModuleResolver(id, this.id, this.client, () => this.ensureNotDisposed());
+        const callback = options?.resolveModuleName ? this.api.registerModuleResolutionCallback(options.resolveModuleName) : undefined;
+        try {
+            const id = await this.client.apiRequest("createModuleResolver", {
+                snapshot: this.id,
+                compilerOptions,
+                ...(moduleResolutionSource ? { moduleResolutions: moduleResolutionSource } : {}),
+                ...(callback ? { resolveModuleNameCallback: callback.name } : {}),
+            });
+            if (callback) this.addModuleResolutionCallbackDisposer(callback.dispose);
+            return new ModuleResolver(id, this.id, this.client, () => this.ensureNotDisposed());
+        }
+        catch (error) {
+            callback?.dispose();
+            throw error;
+        }
+    }
+
+    /** @internal */
+    addModuleResolutionCallbackDisposer(dispose: () => void): void {
+        this.resolverCallbackDisposers.push(dispose);
     }
 
     [globalThis.Symbol.dispose](): void {
@@ -736,6 +792,8 @@ export class Snapshot {
         }
         this.projectMap.clear();
         this.snapshotRegistry.clear();
+        for (const dispose of this.resolverCallbackDisposers) dispose();
+        this.resolverCallbackDisposers = [];
         try {
             await this.client.apiRequest("release", { snapshot: this.id });
         }
@@ -771,7 +829,7 @@ export class ModuleResolver {
     async resolveModuleName(
         moduleName: string,
         containingDirectory: DocumentIdentifier,
-        resolutionMode?: ModuleKind.CommonJS | ModuleKind.ESNext,
+        resolutionMode?: ResolutionMode,
     ): Promise<ResolveModuleNameResult> {
         this.ensureSnapshotActive();
         return this.client.apiRequest("resolveModuleName", {
@@ -1338,7 +1396,7 @@ export class Program implements FormatDiagnosticsHost {
     async getResolvedModule(
         file: DocumentIdentifier,
         moduleName: string,
-        mode: ModuleKind,
+        mode: ResolutionMode,
     ): Promise<ResolvedModule | undefined> {
         const result = await this.client.apiRequest("getResolvedModule", {
             snapshot: this.snapshotId,
@@ -1366,7 +1424,7 @@ export class Program implements FormatDiagnosticsHost {
     async getResolvedTypeReferenceDirective(
         file: DocumentIdentifier,
         typeDirectiveName: string,
-        mode: ModuleKind,
+        mode: ResolutionMode,
     ): Promise<ResolvedTypeReferenceDirective | undefined> {
         const result = await this.client.apiRequest("getResolvedTypeReferenceDirective", {
             snapshot: this.snapshotId,

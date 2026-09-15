@@ -636,6 +636,10 @@ func (p *Program) GetResolvedModules() map[tspath.Path]module.ModeAwareCache[*mo
 	return p.resolvedModules
 }
 
+func (p *Program) ModuleResolutionError() error {
+	return p.moduleResolutionError
+}
+
 // GetPackagesMap returns a lazily-cached map of package names to whether they bundle types.
 // This is used by incremental diagnostic repopulation.
 func (p *Program) GetPackagesMap() map[string]bool {

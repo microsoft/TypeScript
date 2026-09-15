@@ -73,8 +73,9 @@ type snapshotData struct {
 }
 
 type moduleResolverData struct {
-	resolver *module.Resolver
-	provider module.ResolutionProvider
+	resolver                  *module.Resolver
+	provider                  *providedModuleResolutions
+	resolveModuleNameCallback string
 }
 
 // projectRegistryData holds per-project type and signature registries.
@@ -447,6 +448,7 @@ type Session struct {
 	nextModuleResolutionSetID    atomic.Uint64
 	nextModuleResolutionIdentity atomic.Uint64
 	nextModuleResolverID         atomic.Uint64
+	conn                         ipc.Conn
 
 	cpuProfiler pprof.CPUProfiler
 }
@@ -504,6 +506,10 @@ func newSession(snapshotHost *project.SnapshotHost, withLocale func(context.Cont
 // ID returns the unique identifier for this session.
 func (s *Session) ID() string {
 	return s.id
+}
+
+func (s *Session) SetConnection(conn ipc.Conn) {
+	s.conn = conn
 }
 
 func (s *Session) currentDirectory() string {
@@ -791,7 +797,7 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 	case string(MethodCreateModuleResolver):
 		return s.handleCreateModuleResolver(parsed.(*CreateModuleResolverParams))
 	case string(MethodResolveModuleName):
-		return s.handleResolveModuleName(parsed.(*ResolveModuleNameParams))
+		return s.handleResolveModuleName(ctx, parsed.(*ResolveModuleNameParams))
 	case string(MethodParseConfigFile):
 		return s.handleParseConfigFile(ctx, parsed.(*ParseConfigFileParams))
 	case string(MethodTranspileModule):
@@ -1430,9 +1436,26 @@ func (s *Session) handleCreateProgram(ctx context.Context, params *CreateProgram
 	if params.FileChanges != nil && params.OldProgram == nil {
 		return nil, fmt.Errorf("%w: fileChanges requires an oldProgram", ErrClientError)
 	}
-	moduleResolutionProvider, err := s.resolveModuleResolutionSource(params.CreateProgramOptions.ModuleResolutions)
+	providedModuleResolutions, err := s.resolveModuleResolutionSource(params.CreateProgramOptions.ModuleResolutions)
 	if err != nil {
 		return nil, err
+	}
+	var moduleResolutionProvider module.ResolutionProvider
+	if providedModuleResolutions != nil {
+		moduleResolutionProvider = providedModuleResolutions
+	}
+	if callback := params.CreateProgramOptions.ResolveModuleNameCallback; callback != "" {
+		if s.conn == nil {
+			return nil, fmt.Errorf("%w: API connection is not initialized", ErrClientError)
+		}
+		moduleResolutionProvider = &callbackModuleResolutionProvider{
+			identity:         s.nextModuleResolutionIdentity.Add(1),
+			base:             providedModuleResolutions,
+			conn:             s.conn,
+			ctx:              ctx,
+			callback:         callback,
+			currentDirectory: s.currentDirectory(),
+		}
 	}
 
 	rootFileNames := make([]string, len(params.RootFiles))
@@ -1489,6 +1512,10 @@ func (s *Session) handleCreateProgram(ctx context.Context, params *CreateProgram
 	if project == nil {
 		snapshot.Deref()
 		return nil, fmt.Errorf("%w: failed to create synthetic project", ErrClientError)
+	}
+	if err := project.Program.ModuleResolutionError(); err != nil {
+		snapshot.Deref()
+		return nil, err
 	}
 	sd.snapshot = snapshot
 
@@ -1851,7 +1878,7 @@ func (s *Session) handleGetResolvedModule(ctx context.Context, params *GetResolv
 	if err != nil {
 		return nil, err
 	}
-	return newResolvedModuleResponse(program.GetResolvedModule(sourceFile, params.ModuleName, params.Mode)), nil
+	return newResolvedModuleResponse(program.GetResolvedModule(sourceFile, params.ModuleName, core.ResolutionMode(params.Mode))), nil
 }
 
 // @gen-proto-nullable
@@ -1899,7 +1926,7 @@ func (s *Session) handleGetResolvedTypeReferenceDirective(ctx context.Context, p
 	if err != nil {
 		return nil, err
 	}
-	return newResolvedTypeReferenceDirectiveResponse(program.GetResolvedTypeReferenceDirective(sourceFile, params.TypeDirectiveName, params.Mode)), nil
+	return newResolvedTypeReferenceDirectiveResponse(program.GetResolvedTypeReferenceDirective(sourceFile, params.TypeDirectiveName, core.ResolutionMode(params.Mode))), nil
 }
 
 // @gen-proto-nullable

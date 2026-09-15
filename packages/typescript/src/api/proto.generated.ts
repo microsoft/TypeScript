@@ -296,6 +296,7 @@ export interface CreateModuleResolverParams {
     snapshot: number;
     compilerOptions: CompilerOptions;
     moduleResolutions?: ModuleResolutionSource | undefined;
+    resolveModuleNameCallback?: string | undefined;
 }
 
 export interface ResolveModuleNameParams {
@@ -303,7 +304,7 @@ export interface ResolveModuleNameParams {
     resolver: number;
     moduleName: string;
     containingDirectory: DocumentIdentifier;
-    resolutionMode?: ModuleKind.CommonJS | ModuleKind.ESNext | undefined;
+    resolutionMode?: ResolutionMode | undefined;
 }
 
 export interface ResolveModuleNameResult {
@@ -525,7 +526,7 @@ export interface GetResolvedModuleParams {
     project: string;
     file: DocumentIdentifier;
     moduleName: string;
-    mode: ModuleKind;
+    mode: ResolutionMode;
 }
 
 export interface ResolvedModule {
@@ -551,7 +552,7 @@ export interface GetResolvedTypeReferenceDirectiveParams {
     project: string;
     file: DocumentIdentifier;
     typeDirectiveName: string;
-    mode: ModuleKind;
+    mode: ResolutionMode;
 }
 
 export interface ResolvedTypeReferenceDirective {
@@ -1407,6 +1408,7 @@ export interface CreateProgramOptions {
     projectReferences?: ProjectReference[] | undefined;
     configFileParsingDiagnostics?: DiagnosticResponse[] | undefined;
     moduleResolutions?: ModuleResolutionSource | undefined;
+    resolveModuleNameCallback?: string | undefined;
 }
 
 export interface CreateProgramOldProgramParams {
@@ -1627,7 +1629,7 @@ export interface ProjectFileChanges {
 export interface ModuleResolutionEntry {
     moduleName: string;
     containingDirectory?: DocumentIdentifier | undefined;
-    resolutionMode?: ModuleKind.CommonJS | ModuleKind.ESNext | undefined;
+    resolutionMode?: ResolutionMode | undefined;
     result: ProvidedModuleResolution;
 }
 
@@ -1642,3 +1644,5 @@ export interface ProvidedModuleResolution {
     originalPath?: DocumentIdentifier | undefined;
     packageId?: PackageId | undefined;
 }
+
+export type ResolutionMode = ModuleKind.None | ModuleKind.CommonJS | ModuleKind.ESNext;

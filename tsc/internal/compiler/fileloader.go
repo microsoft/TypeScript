@@ -70,10 +70,12 @@ type fileLoader struct {
 
 	// contentMapperMu guards the content-mapper bookkeeping below, which is written concurrently as
 	// content-mapped files are parsed across worker goroutines.
-	contentMapperMu          sync.Mutex
-	contentMapperFailures    map[*contentmapper.Mapper]int
-	contentMapperInitFailed  collections.Set[*contentmapper.Mapper]
-	contentMapperDiagnostics []*ast.Diagnostic
+	contentMapperMu           sync.Mutex
+	contentMapperFailures     map[*contentmapper.Mapper]int
+	contentMapperInitFailed   collections.Set[*contentmapper.Mapper]
+	contentMapperDiagnostics  []*ast.Diagnostic
+	moduleResolutionErrorOnce sync.Once
+	moduleResolutionError     error
 }
 
 type redirectsFile struct {
@@ -138,6 +140,7 @@ type processedFiles struct {
 	redirectFilesByPath map[tspath.Path]*redirectsFile
 	// Program-level diagnostics reported when a content mapper fails fatally (reported once per mapper).
 	contentMapperDiagnostics []*ast.Diagnostic
+	moduleResolutionError    error
 	finishedProcessing       bool
 }
 
@@ -875,13 +878,23 @@ func (p *fileLoader) resolveImportsAndModuleAugmentations(t *parseTask) {
 			var resolvedModule *module.ResolvedModule
 			var trace []module.DiagAndArgs
 			if p.opts.ModuleResolutionProvider != nil {
-				var provided bool
-				resolvedModule, provided = p.opts.ModuleResolutionProvider.GetModuleResolution(moduleName, tspath.GetDirectoryPath(fileName), mode)
-				if provided && resolvedModule == nil {
-					resolvedModule = &module.ResolvedModule{}
+				var err error
+				resolvedModule, err = p.opts.ModuleResolutionProvider.ResolveModuleName(
+					moduleName,
+					tspath.GetDirectoryPath(fileName),
+					mode,
+					func() *module.ResolvedModule {
+						resolvedModule, trace = p.resolver.ResolveModuleName(moduleName, fileName, mode, redirect)
+						return resolvedModule
+					},
+				)
+				if err != nil {
+					p.moduleResolutionErrorOnce.Do(func() {
+						p.moduleResolutionError = err
+					})
 				}
-				if !provided {
-					resolvedModule, trace = p.resolver.ResolveModuleName(moduleName, fileName, mode, redirect)
+				if resolvedModule == nil {
+					resolvedModule = &module.ResolvedModule{}
 				}
 			} else {
 				resolvedModule, trace = p.resolver.ResolveModuleName(moduleName, fileName, mode, redirect)

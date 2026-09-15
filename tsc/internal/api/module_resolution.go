@@ -1,10 +1,13 @@
 package api
 
 import (
+	"context"
 	"fmt"
 	"strings"
 
 	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/ipc"
+	"github.com/microsoft/TypeScript/tsc/internal/json"
 	"github.com/microsoft/TypeScript/tsc/internal/locale"
 	"github.com/microsoft/TypeScript/tsc/internal/module"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
@@ -26,11 +29,58 @@ type providedModuleResolutions struct {
 	useCaseSensitive     bool
 }
 
+type callbackModuleResolutionProvider struct {
+	identity         uint64
+	base             *providedModuleResolutions
+	conn             ipc.Conn
+	ctx              context.Context
+	callback         string
+	currentDirectory string
+}
+
+func (p *callbackModuleResolutionProvider) Identity() uint64 {
+	return p.identity
+}
+
+func (p *callbackModuleResolutionProvider) ResolveModuleName(
+	moduleName string,
+	containingDirectory string,
+	resolutionMode core.ResolutionMode,
+	_ func() *module.ResolvedModule,
+) (*module.ResolvedModule, error) {
+	if p.base != nil {
+		if result, found := p.base.lookup(moduleName, containingDirectory, resolutionMode); found {
+			return result, nil
+		}
+		if !p.base.fallbackToResolution {
+			return nil, nil
+		}
+	}
+	params := &ResolveModuleNameCallbackParams{
+		ModuleName:          moduleName,
+		ContainingDirectory: containingDirectory,
+	}
+	mode := ResolutionMode(resolutionMode)
+	params.ResolutionMode = &mode
+	callbackResult, err := p.conn.Call(p.ctx, p.callback, params)
+	if err != nil {
+		return nil, fmt.Errorf("resolveModuleName callback failed: %w", err)
+	}
+	if len(callbackResult) == 0 || string(callbackResult) == "null" {
+		return nil, nil
+	}
+	var providedResolution ProvidedModuleResolution
+	if err := json.Unmarshal(callbackResult, &providedResolution); err != nil {
+		return nil, fmt.Errorf("invalid resolveModuleName callback result: %w", err)
+	}
+	return providedModuleResolutionToResolvedModule(moduleName, &providedResolution, p.currentDirectory), nil
+}
+
 func (p *providedModuleResolutions) Identity() uint64 {
 	return p.identity
 }
 
-func (p *providedModuleResolutions) GetModuleResolution(moduleName string, containingDirectory string, resolutionMode core.ResolutionMode) (*module.ResolvedModule, bool) {
+func (p *providedModuleResolutions) lookup(moduleName string, containingDirectory string, resolutionMode core.ResolutionMode) (*module.ResolvedModule, bool) {
 	directory := tspath.ToPath(containingDirectory, p.currentDirectory, p.useCaseSensitive)
 	keys := [...]moduleResolutionMatchKey{
 		{moduleName: moduleName, directory: directory, mode: resolutionMode, hasDirectory: true, hasMode: true},
@@ -43,10 +93,22 @@ func (p *providedModuleResolutions) GetModuleResolution(moduleName string, conta
 			return result, true
 		}
 	}
-	if p.fallbackToResolution {
-		return nil, false
+	return nil, false
+}
+
+func (p *providedModuleResolutions) ResolveModuleName(
+	moduleName string,
+	containingDirectory string,
+	resolutionMode core.ResolutionMode,
+	fallback func() *module.ResolvedModule,
+) (*module.ResolvedModule, error) {
+	if result, found := p.lookup(moduleName, containingDirectory, resolutionMode); found {
+		return result, nil
 	}
-	return nil, true
+	if p.fallbackToResolution {
+		return fallback(), nil
+	}
+	return nil, nil
 }
 
 func compileModuleResolutionSpec(spec *ModuleResolutionSpec, identity uint64, currentDirectory string, useCaseSensitive bool) (*providedModuleResolutions, error) {
@@ -89,7 +151,7 @@ func compileModuleResolutionSpec(spec *ModuleResolutionSpec, identity uint64, cu
 		}
 		if entry.ResolutionMode != nil {
 			mode := core.ModuleKind(*entry.ResolutionMode)
-			if mode != core.ModuleKindCommonJS && mode != core.ModuleKindESNext {
+			if mode != core.ModuleKindNone && mode != core.ModuleKindCommonJS && mode != core.ModuleKindESNext {
 				return nil, fmt.Errorf("%w: module resolution entry %d has invalid resolutionMode %s", ErrClientError, i, mode.String())
 			}
 			key.mode = mode
@@ -99,37 +161,42 @@ func compileModuleResolutionSpec(spec *ModuleResolutionSpec, identity uint64, cu
 			return nil, fmt.Errorf("%w: duplicate module resolution entry for %q", ErrClientError, entry.ModuleName)
 		}
 
-		var provided *module.ResolvedModule
-		if entry.Result.ResolvedFileName != nil {
-			provided = &module.ResolvedModule{
-				ResolvedFileName: tspath.GetNormalizedAbsolutePath(entry.Result.ResolvedFileName.ToAbsoluteFileName(currentDirectory), currentDirectory),
-			}
-			if entry.Result.OriginalPath != nil {
-				provided.OriginalPath = tspath.GetNormalizedAbsolutePath(entry.Result.OriginalPath.ToAbsoluteFileName(currentDirectory), currentDirectory)
-			}
-			if entry.Result.PackageID != nil {
-				provided.PackageId = module.PackageId{
-					Name:             entry.Result.PackageID.Name,
-					SubModuleName:    entry.Result.PackageID.SubModuleName,
-					Version:          entry.Result.PackageID.Version,
-					PeerDependencies: entry.Result.PackageID.PeerDependencies,
-				}
-			}
-			externalPath := provided.ResolvedFileName
-			if provided.OriginalPath != "" {
-				externalPath = provided.OriginalPath
-			}
-			provided.Extension = tspath.TryGetExtensionFromPath(provided.ResolvedFileName)
-			provided.ResolvedUsingTsExtension = tspath.IsExternalModuleNameRelative(entry.ModuleName) &&
-				tspath.TryExtractTSExtension(entry.ModuleName) != ""
-			provided.ResolvedUsingExtraExtensions = !tspath.FileExtensionIsOneOf(provided.ResolvedFileName, tspath.SupportedTSExtensionsWithJsonFlat) &&
-				!tspath.FileExtensionIsOneOf(provided.ResolvedFileName, tspath.SupportedJSExtensionsFlat)
-			provided.IsExternalLibraryImport = strings.Contains(externalPath, "/node_modules/")
-		}
+		provided := providedModuleResolutionToResolvedModule(entry.ModuleName, entry.Result, currentDirectory)
 		provider.entries[key] = provided
 	}
 
 	return provider, nil
+}
+
+func providedModuleResolutionToResolvedModule(moduleName string, provided *ProvidedModuleResolution, currentDirectory string) *module.ResolvedModule {
+	if provided == nil || provided.ResolvedFileName == nil {
+		return nil
+	}
+	result := &module.ResolvedModule{
+		ResolvedFileName: tspath.GetNormalizedAbsolutePath(provided.ResolvedFileName.ToAbsoluteFileName(currentDirectory), currentDirectory),
+	}
+	if provided.OriginalPath != nil {
+		result.OriginalPath = tspath.GetNormalizedAbsolutePath(provided.OriginalPath.ToAbsoluteFileName(currentDirectory), currentDirectory)
+	}
+	if provided.PackageID != nil {
+		result.PackageId = module.PackageId{
+			Name:             provided.PackageID.Name,
+			SubModuleName:    provided.PackageID.SubModuleName,
+			Version:          provided.PackageID.Version,
+			PeerDependencies: provided.PackageID.PeerDependencies,
+		}
+	}
+	externalPath := result.ResolvedFileName
+	if result.OriginalPath != "" {
+		externalPath = result.OriginalPath
+	}
+	result.Extension = tspath.TryGetExtensionFromPath(result.ResolvedFileName)
+	result.ResolvedUsingTsExtension = tspath.IsExternalModuleNameRelative(moduleName) &&
+		tspath.TryExtractTSExtension(moduleName) != ""
+	result.ResolvedUsingExtraExtensions = !tspath.FileExtensionIsOneOf(result.ResolvedFileName, tspath.SupportedTSExtensionsWithJsonFlat) &&
+		!tspath.FileExtensionIsOneOf(result.ResolvedFileName, tspath.SupportedJSExtensionsFlat)
+	result.IsExternalLibraryImport = strings.Contains(externalPath, "/node_modules/")
+	return result
 }
 
 func moduleResolutionTraceToStrings(trace []module.DiagAndArgs) []string {
@@ -138,7 +205,7 @@ func moduleResolutionTraceToStrings(trace []module.DiagAndArgs) []string {
 	})
 }
 
-func (s *Session) resolveModuleResolutionSource(source *ModuleResolutionSource) (module.ResolutionProvider, error) {
+func (s *Session) resolveModuleResolutionSource(source *ModuleResolutionSource) (*providedModuleResolutions, error) {
 	if source == nil {
 		return nil, nil
 	}
@@ -209,8 +276,9 @@ func (s *Session) handleCreateModuleResolver(params *CreateModuleResolverParams)
 	}
 	id := ModuleResolverID(s.nextModuleResolverID.Add(1))
 	data := &moduleResolverData{
-		resolver: module.NewResolver(sd.snapshot, &params.CompilerOptions, "", "", sd.snapshot.ContentMapperExtensions()),
-		provider: provider,
+		resolver:                  module.NewResolver(sd.snapshot, &params.CompilerOptions, "", "", sd.snapshot.ContentMapperExtensions()),
+		provider:                  provider,
+		resolveModuleNameCallback: params.ResolveModuleNameCallback,
 	}
 	sd.moduleResolversMu.Lock()
 	if sd.moduleResolvers == nil {
@@ -221,7 +289,7 @@ func (s *Session) handleCreateModuleResolver(params *CreateModuleResolverParams)
 	return id, nil
 }
 
-func (s *Session) handleResolveModuleName(params *ResolveModuleNameParams) (*ResolveModuleNameResult, error) {
+func (s *Session) handleResolveModuleName(ctx context.Context, params *ResolveModuleNameParams) (*ResolveModuleNameResult, error) {
 	if params.ModuleName == "" {
 		return nil, fmt.Errorf("%w: moduleName is empty", ErrClientError)
 	}
@@ -239,7 +307,7 @@ func (s *Session) handleResolveModuleName(params *ResolveModuleNameParams) (*Res
 	mode := core.ResolutionModeNone
 	if params.ResolutionMode != nil {
 		mode = core.ModuleKind(*params.ResolutionMode)
-		if mode != core.ResolutionModeCommonJS && mode != core.ResolutionModeESM {
+		if mode != core.ResolutionModeNone && mode != core.ResolutionModeCommonJS && mode != core.ResolutionModeESM {
 			return nil, fmt.Errorf("%w: invalid resolutionMode %s", ErrClientError, mode.String())
 		}
 	}
@@ -249,10 +317,34 @@ func (s *Session) handleResolveModuleName(params *ResolveModuleNameParams) (*Res
 	var trace []module.DiagAndArgs
 	var provided bool
 	if data.provider != nil {
-		result, provided = data.provider.GetModuleResolution(params.ModuleName, containingDirectory, mode)
+		result, provided = data.provider.lookup(params.ModuleName, containingDirectory, mode)
 	}
-	if !provided {
-		result, trace = data.resolver.ResolveModuleNameFromDirectory(params.ModuleName, containingDirectory, mode)
+	if !provided && (data.provider == nil || data.provider.fallbackToResolution) {
+		if data.resolveModuleNameCallback != "" {
+			if s.conn == nil {
+				return nil, fmt.Errorf("%w: API connection is not initialized", ErrClientError)
+			}
+			callbackParams := &ResolveModuleNameCallbackParams{
+				ModuleName:          params.ModuleName,
+				ContainingDirectory: containingDirectory,
+			}
+			if params.ResolutionMode != nil {
+				callbackParams.ResolutionMode = params.ResolutionMode
+			}
+			callbackResult, err := s.conn.Call(ctx, data.resolveModuleNameCallback, callbackParams)
+			if err != nil {
+				return nil, fmt.Errorf("resolveModuleName callback failed: %w", err)
+			}
+			if len(callbackResult) != 0 && string(callbackResult) != "null" {
+				var providedResolution ProvidedModuleResolution
+				if err := json.Unmarshal(callbackResult, &providedResolution); err != nil {
+					return nil, fmt.Errorf("invalid resolveModuleName callback result: %w", err)
+				}
+				result = providedModuleResolutionToResolvedModule(params.ModuleName, &providedResolution, s.currentDirectory())
+			}
+		} else {
+			result, trace = data.resolver.ResolveModuleNameFromDirectory(params.ModuleName, containingDirectory, mode)
+		}
 	}
 	return &ResolveModuleNameResult{
 		ResolvedModule: newResolvedModuleResponse(result),

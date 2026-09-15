@@ -126,6 +126,7 @@ func (s *StdioServer) Run(ctx context.Context) error {
 	if callbackFS != nil {
 		callbackFS.SetConnection(ctx, conn)
 	}
+	session.SetConnection(conn)
 
 	return conn.Run(ctx)
 }

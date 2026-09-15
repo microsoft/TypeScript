@@ -353,6 +353,7 @@ type typeRenderer struct {
 	docs               map[types.Object]string
 	packages           map[string]*packages.Package
 	documentIdentifier *types.TypeName
+	resolutionMode     bool
 }
 
 func newTypeRenderer(apiPackage *packages.Package) *typeRenderer {
@@ -493,8 +494,9 @@ func (r *typeRenderer) namedType(named *types.Named) string {
 		r.documentIdentifier = obj
 		return "DocumentIdentifier"
 	case r.apiPackagePath + ".ResolutionMode":
+		r.resolutionMode = true
 		r.importType("ModuleKind", "#enums/moduleKind")
-		return "ModuleKind.CommonJS | ModuleKind.ESNext"
+		return "ResolutionMode"
 	case "github.com/microsoft/TypeScript/tsc/internal/packagejson.JSONValue":
 		return "unknown"
 	case "github.com/microsoft/TypeScript/tsc/internal/json.Value":
@@ -626,6 +628,9 @@ func (r *typeRenderer) declarations() (string, error) {
 			fmt.Fprintf(&out, "    %s%s: %s;\n", propertyName(field), optionalMarker(optional), fieldType)
 		}
 		out.WriteString("}\n\n")
+	}
+	if r.resolutionMode {
+		out.WriteString("export type ResolutionMode = ModuleKind.None | ModuleKind.CommonJS | ModuleKind.ESNext;\n\n")
 	}
 	return strings.TrimRight(out.String(), "\n") + "\n", nil
 }
