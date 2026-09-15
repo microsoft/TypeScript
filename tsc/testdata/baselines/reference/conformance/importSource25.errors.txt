@@ -1,0 +1,53 @@
+g.ts(2,1): error TS2308: Module "./b.js" has already exported a member named 'value'. Consider explicitly re-exporting to resolve the ambiguity.
+k.ts(2,1): error TS2308: Module "./i.js" has already exported a member named 'value'. Consider explicitly re-exporting to resolve the ambiguity.
+
+
+==== a.d.ts (0 errors) ====
+    declare module "*.txt";
+    declare module "*.asset" with { type: "css" } {}
+    declare module "*.asset" with { type: "text" } {}
+    
+==== b.ts (0 errors) ====
+    import source a from "./a.txt";
+    export { a as value };
+    
+==== c.ts (0 errors) ====
+    import source a from "././a.txt";
+    export { a as value };
+    
+==== d.ts (0 errors) ====
+    export * from "./b.js";
+    export * from "./c.js";
+    
+==== e.ts (0 errors) ====
+    import { value } from "./d.js";
+    value;
+    
+==== f.ts (0 errors) ====
+    import source a from "./b.txt";
+    export { a as value };
+    
+==== g.ts (1 errors) ====
+    export * from "./b.js";
+    export * from "./f.js";
+    ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2308: Module "./b.js" has already exported a member named 'value'. Consider explicitly re-exporting to resolve the ambiguity.
+    
+==== h.ts (0 errors) ====
+    import { value } from "./g.js";
+    value;
+    
+==== i.ts (0 errors) ====
+    import source a from "./file.asset" with { type: "css" };
+    export { a as value };
+    
+==== j.ts (0 errors) ====
+    import source a from "./file.asset" with { type: "text" };
+    export { a as value };
+    
+==== k.ts (1 errors) ====
+    export * from "./i.js";
+    export * from "./j.js";
+    ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2308: Module "./i.js" has already exported a member named 'value'. Consider explicitly re-exporting to resolve the ambiguity.
+    

@@ -1,0 +1,11 @@
+//// [tests/cases/conformance/importSource/importSource24.ts] ////
+
+=== a.ts ===
+
+export {};
+
+=== b.cts ===
+export const a = import.source("./a.ts");
+>a : Symbol(a, Decl(b.cts, 0, 12))
+>"./a.ts" : Symbol("./a", Decl(a.ts, 0, 0))
+

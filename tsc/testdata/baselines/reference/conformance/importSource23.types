@@ -1,0 +1,18 @@
+//// [tests/cases/conformance/importSource/importSource23.ts] ////
+
+=== a.d.wasm.ts ===
+
+export {};
+
+=== b.ts ===
+import source a from "./a.d.wasm.ts";
+>a : any
+
+a;
+>a : any
+
+import.source("./a.d.wasm.ts");
+>import.source("./a.d.wasm.ts") : Promise<any>
+>source : any
+>"./a.d.wasm.ts" : "./a.d.wasm.ts"
+

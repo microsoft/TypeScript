@@ -418,6 +418,14 @@ func (moduleKind ModuleKind) SupportsImportAttributes() bool {
 		moduleKind == ModuleKindESNext
 }
 
+func (moduleKind ModuleKind) SupportsDeferredImports() bool {
+	return moduleKind == ModuleKindESNext || moduleKind == ModuleKindPreserve
+}
+
+func (moduleKind ModuleKind) SupportsSourcePhaseImports() bool {
+	return moduleKind == ModuleKindESNext || moduleKind == ModuleKindNodeNext || moduleKind == ModuleKindPreserve
+}
+
 type ResolutionMode = ModuleKind // ModuleKindNone | ModuleKindCommonJS | ModuleKindESNext
 
 const (

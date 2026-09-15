@@ -1,0 +1,28 @@
+//// [tests/cases/conformance/importSource/importSource31.ts] ////
+
+=== index.ts ===
+/// <reference path="globals.d.ts" preserve="true" />
+import source a from "./a.wasm";
+>a : WebAssembly.Module
+
+export const value = a.value;
+>value : string
+>a.value : string
+>a : WebAssembly.Module
+>value : string
+
+export const promise = import.source("./a.wasm");
+>promise : Promise<WebAssembly.Module>
+>import.source("./a.wasm") : Promise<WebAssembly.Module>
+>source : any
+>"./a.wasm" : "./a.wasm"
+
+=== globals.d.ts ===
+declare namespace WebAssembly {
+>WebAssembly : typeof WebAssembly
+
+    class Module { value: string; }
+>Module : Module
+>value : string
+}
+
