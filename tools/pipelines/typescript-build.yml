@@ -11,16 +11,6 @@ schedules:
 name: $(date:yyyyMMdd)$(rev:.r)
 appendCommitMessageToRunName: false
 
-parameters:
-  - name: signType
-    displayName: Sign type
-    type: string
-    default: auto
-    values:
-      - auto
-      - real
-      - test
-
 variables:
   # For MicroBuild telemetry
   - name: TeamName
@@ -102,18 +92,11 @@ extends:
               - task: MicroBuildSigningPlugin@4
                 displayName: '🔩 Install Signing Plugin'
                 inputs:
-                  ${{ if eq(parameters.signType, 'auto') }}:
-                    ${{ if or(eq(variables['Build.Reason'], 'Schedule'), startsWith(variables['Build.SourceBranch'], 'refs/heads/release-'), and(startsWith(variables['Build.SourceBranch'], 'refs/heads/ts'), endsWith(variables['Build.SourceBranch'], '-release'))) }}:
-                      signType: real
-                    ${{ else }}:
-                      signType: test
-                  ${{ else }}:
-                    signType: ${{ parameters.signType }}
+                  signType: real
                   # azureSubscription AKA ConnectedServiceName
                   azureSubscription: 'MicroBuild Signing Task (DevDiv)'
-                  ${{ if or(and(eq(parameters.signType, 'auto'), or(eq(variables['Build.Reason'], 'Schedule'), startsWith(variables['Build.SourceBranch'], 'refs/heads/release-'), and(startsWith(variables['Build.SourceBranch'], 'refs/heads/ts'), endsWith(variables['Build.SourceBranch'], '-release')))), eq(parameters.signType, 'real')) }}:
-                    # From "nonwindowspmeservicename" in https://dev.azure.com/devdiv/1ESPipelineTemplates/_git/MicroBuildTemplate?path=/azure-pipelines/Stages/Stage.yml
-                    ConnectedPMEServiceName: beb8cb23-b303-4c95-ab26-9e44bc958d39
+                  # From "nonwindowspmeservicename" in https://dev.azure.com/devdiv/1ESPipelineTemplates/_git/MicroBuildTemplate?path=/azure-pipelines/Stages/Stage.yml
+                  ConnectedPMEServiceName: beb8cb23-b303-4c95-ab26-9e44bc958d39
                   # We do this ourselves.
                   zipSources: false
                 env:
@@ -147,22 +130,6 @@ extends:
                 env:
                   # Needed for ESRP
                   SYSTEM_ACCESSTOKEN: $(System.AccessToken)
-
-              - bash: |
-                  set -euo pipefail
-                  manifest="built/npm/publish-manifest.json"
-                  mainPackage="$(jq -r 'if .stages[1] | length == 1 then .stages[1][0].filename else empty end' "$manifest")"
-                  if [ -z "$mainPackage" ]; then
-                    echo "Expected exactly one main npm package." >&2
-                    exit 1
-                  fi
-                  version="$(tar -xOf "built/npm/$mainPackage" package/package.json | jq -r '.version')"
-                  if [ -z "$version" ] || [ "$version" = "null" ]; then
-                    echo "Unable to read the TypeScript package version." >&2
-                    exit 1
-                  fi
-                  echo "##vso[build.updatebuildnumber]TypeScript-Build-$version"
-                displayName: 'Set versioned build name'
 
               - bash: |
                   set -euo pipefail

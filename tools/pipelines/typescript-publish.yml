@@ -133,7 +133,6 @@ extends:
                     fi
                   done < <(jq -r '.stages[][] | .filename' "$manifest")
 
-                  echo "##vso[build.updatebuildnumber]TypeScript-Publish-$version"
                   echo "##vso[task.setvariable variable=packageVersion;isOutput=true]$version"
                   echo "##vso[task.setvariable variable=npmTag;isOutput=true]$npmTag"
 
