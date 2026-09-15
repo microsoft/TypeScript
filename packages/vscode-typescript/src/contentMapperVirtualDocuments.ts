@@ -107,6 +107,16 @@ class ContentMapperVirtualDocumentProvider implements vscode.FileSystemProvider,
                     this.scheduleSourceEviction(document.uri);
                 }
             }),
+            vscode.workspace.onDidDeleteFiles(event => {
+                for (const uri of event.files) {
+                    this.purgeAffectedSources(uri);
+                }
+            }),
+            vscode.workspace.onDidRenameFiles(event => {
+                for (const { oldUri } of event.files) {
+                    this.purgeAffectedSources(oldUri);
+                }
+            }),
             vscode.languages.onDidChangeDiagnostics(event => {
                 for (const uri of event.uris) {
                     this.scheduleRefresh(uri);
@@ -421,13 +431,35 @@ class ContentMapperVirtualDocumentProvider implements vscode.FileSystemProvider,
         if (hasOpenVirtualDocument) {
             return;
         }
+        this.purgeCachedSource(sourceUri);
+    }
+
+    private purgeAffectedSources(deletedUri: vscode.Uri): void {
+        const sourceUris = [...this.sourceToVirtualUris.keys()]
+            .map(source => vscode.Uri.parse(source))
+            .filter(sourceUri => uriIsEqualOrChild(sourceUri, deletedUri));
+        for (const sourceUri of sourceUris) {
+            this.purgeCachedSource(sourceUri);
+        }
+    }
+
+    private purgeCachedSource(sourceUri: vscode.Uri): void {
+        const sourceKey = sourceUri.toString();
         const refreshTimer = this.refreshTimers.get(sourceKey);
         if (refreshTimer) {
             clearTimeout(refreshTimer);
             this.refreshTimers.delete(sourceKey);
         }
-        this.deleteCachedSource(sourceUri);
+        const evictionTimer = this.evictionTimers.get(sourceKey);
+        if (evictionTimer) {
+            clearTimeout(evictionTimer);
+            this.evictionTimers.delete(sourceKey);
+        }
+        const virtualUris = this.deleteCachedSource(sourceUri);
         this.diagnosticDirectivesView.clear(sourceUri);
+        if (virtualUris.length !== 0) {
+            this.changeEmitter.fire(virtualUris.map(uri => ({ type: vscode.FileChangeType.Deleted, uri })));
+        }
         this.scheduleInspection();
     }
 
@@ -486,11 +518,7 @@ class ContentMapperVirtualDocumentProvider implements vscode.FileSystemProvider,
             return;
         }
         if (outputs.length === 0) {
-            this.diagnosticDirectivesView.refresh(sourceUri, undefined);
-            const changes = this.deleteCachedSource(sourceUri)
-                .map(uri => ({ type: vscode.FileChangeType.Deleted, uri }));
-            this.changeEmitter.fire(changes);
-            this.scheduleInspection();
+            this.purgeCachedSource(sourceUri);
             return;
         }
 
@@ -719,6 +747,12 @@ function rangeFromOffsets(document: vscode.TextDocument, start: number, length: 
 
 function rangeFromTextRange(document: vscode.TextDocument, range: ContentMapperTextRange): vscode.Range {
     return new vscode.Range(document.positionAt(range.pos), document.positionAt(range.end));
+}
+
+function uriIsEqualOrChild(uri: vscode.Uri, parent: vscode.Uri): boolean {
+    return uri.scheme === parent.scheme
+        && uri.authority === parent.authority
+        && (uri.path === parent.path || uri.path.startsWith(parent.path.endsWith("/") ? parent.path : parent.path + "/"));
 }
 
 function mappingDecorationRanges(
