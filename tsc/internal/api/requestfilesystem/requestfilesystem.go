@@ -97,9 +97,6 @@ func NewForUpdate(params *RequestFileSystem, base vfs.FS, currentDirectory strin
 			baseFileSystem = requestBase.base
 		}
 	}
-	if params.Kind == KindLayer {
-		addFileChanges(fileChanges, params, baseFileSystem, currentDirectory)
-	}
 	fileSystem, err := newRequestFileSystemWorker(params, baseFileSystem, currentDirectory)
 	if err != nil {
 		return nil, err
@@ -107,7 +104,10 @@ func NewForUpdate(params *RequestFileSystem, base vfs.FS, currentDirectory strin
 	baseRequestFileSystem := getRequestFileSystem(baseFileSystem)
 	if baseRequestFileSystem != nil {
 		compacted := fileSystem.applyTo(*baseRequestFileSystem)
-		return &compacted, nil
+		fileSystem = &compacted
+	}
+	if params.Kind == KindLayer {
+		addFileChanges(fileChanges, params, baseFileSystem, fileSystem, currentDirectory)
 	}
 	return fileSystem, nil
 }
