@@ -2,6 +2,7 @@ package lsp
 
 import (
 	"context"
+	"fmt"
 	"sync/atomic"
 	"time"
 
@@ -186,6 +187,9 @@ type workspaceDiagnosticsRun struct {
 
 	partialResultToken *lsproto.IntegerOrString
 	workDoneToken      *lsproto.IntegerOrString
+	// The token progress is reported against: the client's if it sent one, otherwise one the
+	// server created. Nil until a sweep with something to report begins.
+	progressToken *lsproto.IntegerOrString
 	// Result ids the client already holds.
 	previous map[lsproto.DocumentUri]string
 	// Documents already covered, so a file in several projects is reported once.
@@ -417,14 +421,42 @@ func (r *workspaceDiagnosticsRun) finish() lsproto.WorkspaceDiagnosticResponse {
 	return &lsproto.WorkspaceDiagnosticReport{Items: items}
 }
 
+// beginProgress starts reporting how far through the workspace the sweep is. A sweep of a large
+// workspace runs for minutes, so the client needs something to show for it.
+//
+// The token is the client's when it sent one. Clients that pull the workspace generally do not:
+// they send a partial result token to stream the reports and nothing else, which leaves the server
+// to create a progress token of its own. Both are the same notification once a token exists; only
+// who creates it differs.
 func (r *workspaceDiagnosticsRun) beginProgress() {
-	if r.workDoneToken == nil || r.filesTotal == 0 {
+	if r.filesTotal == 0 {
+		// Everything was answered from the cache, so there is nothing to watch.
 		return
 	}
+	switch {
+	case r.workDoneToken != nil:
+		r.progressToken = r.workDoneToken
+	case r.server.clientCapabilities.Window.WorkDoneProgress:
+		// Named after the request so two pulls cannot report against one token.
+		token := lsproto.IntegerOrString{String: new("tsgo-workspace-diagnostics-" + core.GetRequestID(r.ctx))}
+		r.progressToken = &token
+		// Not waited on: the client answers with null, and a slow one would hold up the sweep. The
+		// notifications below leave on the same queue behind it, so they cannot overtake it.
+		if err := sendClientRequestFireAndForget(r.server, lsproto.WindowWorkDoneProgressCreateInfo, &lsproto.WorkDoneProgressCreateParams{
+			Token: token,
+		}); err != nil {
+			r.progressToken = nil
+			return
+		}
+	default:
+		return
+	}
+
 	r.begun = true
 	r.sendProgress(lsproto.WorkDoneProgressBeginOrReportOrEnd{
 		Begin: &lsproto.WorkDoneProgressBegin{
 			Title:      diagnostics.Checking_workspace.Localize(r.server.GetLocale()),
+			Message:    new(r.progressMessage()),
 			Percentage: new(uint32(0)),
 		},
 	})
@@ -436,9 +468,16 @@ func (r *workspaceDiagnosticsRun) reportProgress() {
 	}
 	r.sendProgress(lsproto.WorkDoneProgressBeginOrReportOrEnd{
 		Report: &lsproto.WorkDoneProgressReport{
+			Message:    new(r.progressMessage()),
 			Percentage: new(uint32(r.filesDone * 100 / r.filesTotal)),
 		},
 	})
+}
+
+// progressMessage says how much is left in files rather than percent alone, since a sweep of a big
+// workspace sits on the same percentage for a while.
+func (r *workspaceDiagnosticsRun) progressMessage() string {
+	return fmt.Sprintf("%d/%d", r.filesDone, r.filesTotal)
 }
 
 func (r *workspaceDiagnosticsRun) endProgress() {
@@ -451,7 +490,7 @@ func (r *workspaceDiagnosticsRun) endProgress() {
 
 func (r *workspaceDiagnosticsRun) sendProgress(value lsproto.WorkDoneProgressBeginOrReportOrEnd) {
 	_ = sendNotification(r.server, lsproto.ProgressInfo, &lsproto.ProgressParams{
-		Token: *r.workDoneToken,
+		Token: *r.progressToken,
 		Value: value,
 	})
 }
