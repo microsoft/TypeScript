@@ -8,10 +8,12 @@ schedules:
       include:
         - main
 
-name: $(date:yyyyMMdd)$(rev:.r)
+name: $(Date:yyyyMMdd).$(runRevision)
 appendCommitMessageToRunName: false
 
 variables:
+  - name: runRevision
+    value: $[counter(format('{0:yyyyMMdd}', pipeline.startTime), 1)]
   # For MicroBuild telemetry
   - name: TeamName
     value: TypeScript
@@ -133,6 +135,51 @@ extends:
                 env:
                   # Needed for ESRP
                   SYSTEM_ACCESSTOKEN: $(System.AccessToken)
+
+              - bash: |
+                  set -euo pipefail
+
+                  if ! [[ "$INITIAL_BUILD_NUMBER" =~ ^[0-9]{8}\.[1-9][0-9]*$ ]]; then
+                    echo "Unexpected initial build number: $INITIAL_BUILD_NUMBER" >&2
+                    exit 1
+                  fi
+
+                  manifest="built/npm/publish-manifest.json"
+                  mainPackage="$(jq -r 'if .stages[1] | length == 1 then .stages[1][0].filename else empty end' "$manifest")"
+                  if [ -z "$mainPackage" ]; then
+                    echo "Expected exactly one main npm package." >&2
+                    exit 1
+                  fi
+
+                  mainPackageJson="$(tar -xOf "built/npm/$mainPackage" package/package.json)"
+                  version="$(jq -r '.version' <<< "$mainPackageJson")"
+                  npmTag="$(jq -r '.publishConfig.tag' <<< "$mainPackageJson")"
+                  if [ -z "$version" ] || [ "$version" = "null" ]; then
+                    echo "Unable to read the TypeScript package version." >&2
+                    exit 1
+                  fi
+
+                  case "$npmTag" in
+                    next)
+                      if [[ "$version" != *"-dev.$INITIAL_BUILD_NUMBER" ]]; then
+                        echo "Nightly package version $version does not contain build number $INITIAL_BUILD_NUMBER." >&2
+                        exit 1
+                      fi
+                      finalBuildNumber="$version"
+                      ;;
+                    latest | beta | rc)
+                      finalBuildNumber="${version}_${INITIAL_BUILD_NUMBER}"
+                      ;;
+                    *)
+                      echo "Unexpected npm publish tag: $npmTag" >&2
+                      exit 1
+                      ;;
+                  esac
+
+                  echo "##vso[build.updatebuildnumber]$finalBuildNumber"
+                displayName: 'Set versioned build name'
+                env:
+                  INITIAL_BUILD_NUMBER: $(Build.BuildNumber)
 
               - bash: |
                   set -euo pipefail
