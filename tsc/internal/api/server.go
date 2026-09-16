@@ -2,7 +2,6 @@ package api
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"io"
 
@@ -132,7 +131,7 @@ func (s *StdioServer) Run(ctx context.Context) error {
 }
 
 func serverRunError(ctx context.Context, err error) error {
-	if ctxErr := ctx.Err(); ctxErr != nil && errors.Is(err, ctxErr) {
+	if ctx.Err() != nil {
 		return nil
 	}
 	return err
