@@ -1,10 +1,31 @@
 import assert from "node:assert";
 import { test } from "node:test";
+import { createVirtualFileSystem } from "../src/api/fs.ts";
 import {
     documentURIToFileName,
     fileNameToDocumentURI,
     getRootLength,
 } from "../src/api/path.ts";
+
+test("createVirtualFileSystem supports object prototype path components", () => {
+    const fs = createVirtualFileSystem({
+        "/toString/file.ts": "toString",
+        "/__proto__/constructor.ts": "constructor",
+    });
+    assert.strictEqual(fs.readFile!("/toString/file.ts"), "toString");
+    assert.strictEqual(fs.readFile!("/__proto__/constructor.ts"), "constructor");
+});
+
+test("createVirtualFileSystem respects case sensitivity", () => {
+    const fs = createVirtualFileSystem({
+        "/Workspace/Foo.ts": "content",
+    }, { useCaseSensitiveFileNames: false });
+    assert.strictEqual(fs.readFile!("/workspace/foo.ts"), "content");
+    assert.deepStrictEqual(fs.getAccessibleEntries!("/workspace"), {
+        files: ["Foo.ts"],
+        directories: [],
+    });
+});
 
 test("non-file document URIs preserve structured identity", () => {
     const uris = [
