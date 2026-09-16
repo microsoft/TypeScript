@@ -68,6 +68,7 @@ const { values: rawOptions } = parseArgs({
 
         setPrerelease: { type: "string" },
         forRelease: { type: "boolean" },
+        respectGoEnv: { type: "boolean" },
 
         race: { type: "boolean", default: parseEnvBoolean("RACE") },
         noembed: { type: "boolean", default: parseEnvBoolean("NOEMBED") },
@@ -97,6 +98,12 @@ const publishAsTypescript = nativePreviewReleaseProfile === "typescript";
 
 if (options.forRelease && !options.setPrerelease && (!nativePreviewReleaseVersion || produceAnyVsix)) {
     throw new Error("forRelease requires setPrerelease unless nativePreviewReleaseVersion is hardcoded and VSIX production is disabled");
+}
+if (options.respectGoEnv && options.forRelease) {
+    throw new Error("respectGoEnv cannot be combined with forRelease");
+}
+if (options.respectGoEnv && options.setPrerelease) {
+    throw new Error("respectGoEnv requires the version declared in the source");
 }
 if (usePublishedPlatformPackagesForVsix && !publishAsTypescript) {
     throw new Error("usePublishedPlatformPackagesForVsix requires nativePreviewReleaseProfile to be 'typescript'");
@@ -200,7 +207,7 @@ function getReleaseBuildFlags(versionOverride) {
 function buildTsc(opts) {
     opts ||= {};
     const out = opts.out ?? path.resolve("./built/local/tsc" + (process.platform === "win32" ? ".exe" : ""));
-    const env = { ...goBuildEnv, ...opts.env };
+    const env = { ...(options.respectGoEnv ? {} : goBuildEnv), ...opts.env };
     return $({ cancelSignal: opts.abortSignal, env, cwd: "./tsc" })`go build ${goBuildFlags} ${opts.extraFlags ?? []} ${goBuildTags("noembed")} -o ${out} ./cmd/tsc`;
 }
 
@@ -1772,7 +1779,7 @@ function stripConditionsFromValue(value) {
 
 export const buildNativePreviewPackages = task({
     name: "typescript:build",
-    hiddenFromTaskList: true,
+    description: "Builds TypeScript npm packages for the current platform. Pass --respectGoEnv to preserve caller-provided Go build settings.",
     run: runBuildNativePreviewPackages,
 });
 
@@ -1819,8 +1826,10 @@ async function runBuildNativePreviewPackages() {
     }
     stripSourceConditions(inputPackageJson);
 
-    const { stdout: gitHead } = await $pipe`git rev-parse HEAD`;
-    inputPackageJson.gitHead = gitHead;
+    if (fs.existsSync(".git")) {
+        const { stdout: gitHead } = await $pipe`git rev-parse HEAD`;
+        inputPackageJson.gitHead = gitHead;
+    }
     inputPackageJson.publishConfig = {
         access: "public",
         tag: getPublishTag(),
@@ -1877,7 +1886,9 @@ async function runBuildNativePreviewPackages() {
         throw new Error(`Found external imports in .d.ts files:\n${importErrors.map(e => "  " + e).join("\n")}`);
     }
 
-    const extraFlags = getReleaseBuildFlags(options.setPrerelease || nativePreviewReleaseVersion ? getVersion() : undefined);
+    const extraFlags = options.respectGoEnv
+        ? []
+        : getReleaseBuildFlags(options.setPrerelease || nativePreviewReleaseVersion ? getVersion() : undefined);
 
     const platformBuilders = platforms.map(({ npmDir, npmPackageName, nodeOs, nodeArch, goos, goarch }) => async () => {
         const packageJson = {
@@ -1913,7 +1924,11 @@ async function runBuildNativePreviewPackages() {
         const exeName = nativePreviewExeName(nodeOs);
         await buildTsc({
             out: publishAsTypescript ? path.join(out, exeName) : out,
-            env: { GOOS: goos, GOARCH: goarch, GOARM: "6", CGO_ENABLED: "0" },
+            env: {
+                GOOS: goos,
+                GOARCH: goarch,
+                ...(options.respectGoEnv ? {} : { GOARM: "6", CGO_ENABLED: "0" }),
+            },
             extraFlags,
         });
     });
@@ -1931,6 +1946,51 @@ async function runBuildNativePreviewPackages() {
         await Promise.all(platformBuilders.map(f => buildLimit(f)));
     }
 }
+
+/**
+ * @param {ReturnType<typeof getPlatforms>} platforms
+ */
+async function testNativePreviewPackage(platforms) {
+    const hostPlatform = platforms.find(({ nodeOs, nodeArch }) => nodeOs === process.platform && nodeArch === process.arch);
+    assert(hostPlatform, `No package was built for the host platform ${process.platform}-${process.arch}`);
+
+    const testRoot = path.resolve("built/package-test");
+    const nodeModules = path.join(testRoot, "node_modules");
+    const mainPackageDir = path.join(nodeModules, ...mainNativePreviewPackage.npmPackageName.split("/"));
+    const platformPackageDir = path.join(nodeModules, ...hostPlatform.npmPackageName.split("/"));
+    const sourceFile = path.join(testRoot, "index.ts");
+
+    await rimraf(testRoot);
+    try {
+        await cpRecursive(mainNativePreviewPackage.npmDir, mainPackageDir);
+        await cpRecursive(hostPlatform.npmDir, platformPackageDir);
+        await fs.promises.writeFile(sourceFile, 'export const value: string = "value";\n');
+
+        const binName = publishAsTypescript ? "tsc" : "tsgo";
+        const binPath = path.join(mainPackageDir, "bin", binName);
+        const { stdout: versionOutput } = await $pipe`${process.execPath} ${binPath} --version`;
+        assert(versionOutput.includes(getVersion()), `Expected version output to contain ${getVersion()}, got ${versionOutput.trim()}`);
+
+        const { stdout: listFilesOutput } = await $pipe`${process.execPath} ${binPath} --noEmit --listFiles ${sourceFile}`;
+        assert(!listFilesOutput.includes("bundled:///"), "Packaged compiler listed an embedded library path");
+
+        const expectedLib = path.resolve(platformPackageDir, "lib", "lib.es5.d.ts");
+        const listedFiles = listFilesOutput
+            .split(/\r?\n/)
+            .filter(Boolean)
+            .map(file => path.resolve(file));
+        assert(listedFiles.includes(expectedLib), `Expected packaged compiler to list ${expectedLib}`);
+    }
+    finally {
+        await rimraf(testRoot);
+    }
+}
+
+export const testNativePreviewPackageTask = task({
+    name: "typescript:test-package",
+    description: "Tests the TypeScript npm package for the current platform.",
+    run: () => testNativePreviewPackage(getPlatforms()),
+});
 
 export const signNativePreviewPackages = task({
     name: "typescript:sign",
