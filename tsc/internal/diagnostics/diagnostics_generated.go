@@ -3906,6 +3906,8 @@ var This_initializer_has_a_Symbol_asyncDispose_method_Did_you_mean_to_use_await_
 
 var A_deferred_import_must_specify_a_namespace_binding = &Message{code: 18117, category: CategoryError, key: "A_deferred_import_must_specify_a_namespace_binding_18117", text: "A deferred import must specify a namespace binding."}
 
+var The_content_mapper_package_0_is_outside_the_open_workspace_and_will_not_be_loaded = &Message{code: 18118, category: CategoryError, key: "The_content_mapper_package_0_is_outside_the_open_workspace_and_will_not_be_loaded_18118", text: "The content mapper package '{0}' is outside the open workspace and will not be loaded."}
+
 var X_nodenext_if_module_is_nodenext_node16_if_module_is_node16_or_node18_otherwise_bundler = &Message{code: 69010, category: CategoryMessage, key: "nodenext_if_module_is_nodenext_node16_if_module_is_node16_or_node18_otherwise_bundler_69010", text: "`nodenext` if `module` is `nodenext`; `node16` if `module` is `node16` or `node18`; otherwise, `bundler`."}
 
 var File_is_a_CommonJS_module_it_may_be_converted_to_an_ES_module = &Message{code: 80001, category: CategorySuggestion, key: "File_is_a_CommonJS_module_it_may_be_converted_to_an_ES_module_80001", text: "File is a CommonJS module; it may be converted to an ES module."}
@@ -6399,6 +6401,7 @@ var allMessages = [...]**Message{
 	&Source_phase_imports_are_not_allowed_on_statements_that_compile_to_CommonJS_require_calls,
 	&This_initializer_has_a_Symbol_asyncDispose_method_Did_you_mean_to_use_await_using,
 	&A_deferred_import_must_specify_a_namespace_binding,
+	&The_content_mapper_package_0_is_outside_the_open_workspace_and_will_not_be_loaded,
 	&X_nodenext_if_module_is_nodenext_node16_if_module_is_node16_or_node18_otherwise_bundler,
 	&File_is_a_CommonJS_module_it_may_be_converted_to_an_ES_module,
 	&This_constructor_function_may_be_converted_to_a_class_declaration,

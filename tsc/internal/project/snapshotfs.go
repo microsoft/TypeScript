@@ -773,11 +773,12 @@ func (s *snapshotFSBuilder) convertOpenAndCloseToChanges(change FileChangeSummar
 
 // sourceFS is a vfs.FS that sources files from a FileSource and tracks seen files.
 type sourceFS struct {
-	tracking           bool
-	missingDirectories *collections.SyncSet[tspath.PathKey]
-	seenFiles          *collections.SyncMap[tspath.PathKey, tspath.RootedFilePath]
-	source             FileSource
-	caseSensitivity    tspath.CaseSensitivity
+	tracking                    bool
+	missingDirectories          *collections.SyncSet[tspath.PathKey]
+	seenFiles                   *collections.SyncMap[tspath.PathKey, tspath.RootedFilePath]
+	source                      FileSource
+	caseSensitivity             tspath.CaseSensitivity
+	contentMapperWorkspaceRoots []tspath.RootedDirectoryPath
 }
 
 func newSourceFS(tracking bool, source FileSource) *sourceFS {
@@ -812,6 +813,21 @@ func (fs *sourceFS) SeenFile(path tspath.PathKey) bool {
 	}
 	_, ok := fs.seenFiles.Load(path)
 	return ok
+}
+
+func (fs *sourceFS) IsContentMapperPackageAllowed(packageDirectory tspath.RootedDirectoryPath) bool {
+	if fs.contentMapperWorkspaceRoots == nil {
+		return true
+	}
+	nodeModulesIndex := strings.LastIndex(packageDirectory.AsString(), "/node_modules/")
+	if nodeModulesIndex < 0 {
+		return false
+	}
+	nodeModulesDirectory := packageDirectory.AsString()[:nodeModulesIndex+len("/node_modules")]
+	nodeModulesPath := tspath.RootedDirectoryPath(tspath.RootedPath(nodeModulesDirectory))
+	return slices.ContainsFunc(fs.contentMapperWorkspaceRoots, func(root tspath.RootedDirectoryPath) bool {
+		return fs.caseSensitivity.ContainsPath(root, nodeModulesPath.AsPath())
+	})
 }
 
 func (fs *sourceFS) SeenFileOrMissingParentDirectory(path tspath.PathKey) bool {

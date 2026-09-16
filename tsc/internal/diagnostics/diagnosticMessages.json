@@ -8728,6 +8728,10 @@
         "category": "Error",
         "code": 18068
     },
+    "The content mapper package '{0}' is outside the open workspace and will not be loaded.": {
+        "category": "Error",
+        "code": 18118
+    },
     "The content mapper '{0}' failed to transform this file.": {
         "category": "Error",
         "code": 18069

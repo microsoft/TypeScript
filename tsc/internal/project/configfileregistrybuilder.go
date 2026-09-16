@@ -48,9 +48,11 @@ func newConfigFileRegistryBuilder(
 	customConfigFileName string,
 	logger *logging.LogTree,
 ) *configFileRegistryBuilder {
+	sourceFS := newSourceFS(false, fs)
+	sourceFS.contentMapperWorkspaceRoots = sessionOptions.InitialWorkspaceRoots
 	return &configFileRegistryBuilder{
 		hasRelativePatternCapability: hasRelativePatternCapability,
-		fs:                           newSourceFS(false, fs),
+		fs:                           sourceFS,
 		isOpenFile:                   isOpenFile,
 		base:                         oldConfigFileRegistry,
 		sessionOptions:               sessionOptions,
