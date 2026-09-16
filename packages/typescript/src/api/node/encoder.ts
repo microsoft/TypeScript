@@ -1,4 +1,3 @@
-import { TextEncoder } from "node:util";
 import type {
     FileReference,
     LiteralLikeNode,

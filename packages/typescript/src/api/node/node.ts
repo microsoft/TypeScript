@@ -6,7 +6,6 @@ import {
     type Node,
     NodeFlags,
     type Path,
-    ScriptKind,
     SpanMap,
     SpanMapFeature,
     SpanMapKind,

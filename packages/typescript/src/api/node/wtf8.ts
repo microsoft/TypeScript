@@ -5,6 +5,7 @@ const surrogateSecondByteMin = 0xA0;
 const surrogateSecondByteMax = 0xBF;
 const continuationByteMin = 0x80;
 const continuationByteMax = 0xBF;
+const textEncoder = new TextEncoder();
 type DecodeInput = ArrayBufferView | ArrayBufferLike | null;
 interface DecodeOptions {
     stream?: boolean;
@@ -58,7 +59,7 @@ function hasLoneSurrogate(text: string): boolean {
 
 export function encodeWtf8(text: string): Uint8Array {
     if (!hasLoneSurrogate(text)) {
-        return new TextEncoder().encode(text);
+        return textEncoder.encode(text);
     }
 
     let byteLength = 0;
