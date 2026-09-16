@@ -482,6 +482,15 @@ var optionsForCompiler = []*CommandLineOption{
 		DefaultValueDescription: false,
 	},
 	{
+		Name:                       "importJsonAsConst",
+		Kind:                       CommandLineOptionTypeBoolean,
+		AffectsSemanticDiagnostics: true,
+		AffectsBuildInfo:           true,
+		Category:                   diagnostics.Language_and_Environment,
+		Description:                diagnostics.Import_JSON_files_as_const_assertions,
+		DefaultValueDescription:    false,
+	},
+	{
 		Name:                    "downlevelIteration",
 		Kind:                    CommandLineOptionTypeBoolean,
 		AffectsEmit:             true,

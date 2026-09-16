@@ -48,6 +48,7 @@ type CompilerOptions struct {
 	IgnoreConfig                              Tristate                                  `json:"ignoreConfig,omitzero"`
 	IgnoreDeprecations                        string                                    `json:"ignoreDeprecations,omitzero"`
 	ImportHelpers                             Tristate                                  `json:"importHelpers,omitzero"`
+	ImportJsonAsConst                         Tristate                                  `json:"importJsonAsConst,omitzero"`
 	InlineSourceMap                           Tristate                                  `json:"inlineSourceMap,omitzero"`
 	InlineSources                             Tristate                                  `json:"inlineSources,omitzero"`
 	Init                                      Tristate                                  `json:"init,omitzero"`

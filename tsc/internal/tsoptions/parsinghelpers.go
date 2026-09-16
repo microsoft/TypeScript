@@ -364,6 +364,8 @@ func parseCompilerOptions(key string, value any, allOptions *core.CompilerOption
 		allOptions.IgnoreDeprecations = ParseString(value)
 	case "importHelpers":
 		allOptions.ImportHelpers = ParseTristate(value)
+	case "importJsonAsConst":
+		allOptions.ImportJsonAsConst = ParseTristate(value)
 	case "incremental":
 		allOptions.Incremental = ParseTristate(value)
 	case "init":
