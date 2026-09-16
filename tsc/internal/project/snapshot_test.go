@@ -842,7 +842,8 @@ func benchmarkSnapshotWatchAliases(b *testing.B, symlink bool) {
 	if directoryErr != nil {
 		b.Fatal(directoryErr)
 	}
-	directory = filepath.ToSlash(directory)
+	volume, rest, _ := tspath.SplitVolumePath(filepath.ToSlash(directory))
+	directory = volume + rest
 	for _, size := range []int{1000, 10000, 50000} {
 		for _, spelling := range []string{"ASCII", "Unicode"} {
 			for _, mode := range []string{"native", "mock", "disabled"} {
@@ -922,6 +923,7 @@ func benchmarkSnapshotWatchAliases(b *testing.B, symlink bool) {
 								b.Fatal(err)
 							}
 							uri := lsconv.FileNameToDocumentURI(names[0])
+							assert.Equal(b, uri.FileName(), names[0], "benchmark paths must round-trip through document URIs")
 							if edit == "edit" {
 								opened, err := host.CloneSnapshotWithTemporaryFile(context.Background(), snapshot, nil, uri, "export const value = 1;")
 								snapshot.Deref()
