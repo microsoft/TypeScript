@@ -110,31 +110,6 @@ extends:
                 fetchDepth: 1
                 fetchTags: false
               - template: /tools/pipelines/steps/setup-node-npm-ci.yml@self
-              - template: /tools/pipelines/steps/setup-go.yml@self
-
-              - bash: npx hereby typescript:build --forRelease --setPrerelease dev.$(Build.BuildNumber)
-                displayName: 'Build packages'
-
-              - bash: npx hereby typescript:test-package --forRelease --setPrerelease dev.$(Build.BuildNumber)
-                displayName: 'Test packages'
-
-              - bash: npx hereby typescript:sign --forRelease --setPrerelease dev.$(Build.BuildNumber)
-                displayName: 'Sign packages'
-                env:
-                  # Needed for ESRP
-                  SYSTEM_ACCESSTOKEN: $(System.AccessToken)
-
-              - bash: npx hereby typescript:pack --forRelease --setPrerelease dev.$(Build.BuildNumber)
-                displayName: 'Pack packages'
-
-              - bash: npx hereby vscode-typescript:pack --forRelease --setPrerelease dev.$(Build.BuildNumber)
-                displayName: 'Pack extensions'
-
-              - bash: npx hereby vscode-typescript:sign --forRelease --setPrerelease dev.$(Build.BuildNumber)
-                displayName: 'Sign extensions'
-                env:
-                  # Needed for ESRP
-                  SYSTEM_ACCESSTOKEN: $(System.AccessToken)
 
               - bash: |
                   set -euo pipefail
@@ -144,18 +119,15 @@ extends:
                     exit 1
                   fi
 
-                  manifest="built/npm/publish-manifest.json"
-                  mainPackage="$(jq -r 'if .stages[1] | length == 1 then .stages[1][0].filename else empty end' "$manifest")"
-                  if [ -z "$mainPackage" ]; then
-                    echo "Expected exactly one main npm package." >&2
-                    exit 1
-                  fi
+                  echo "##vso[task.setvariable variable=initialBuildNumber]$INITIAL_BUILD_NUMBER"
 
-                  mainPackageJson="$(tar -xOf "built/npm/$mainPackage" package/package.json)"
-                  version="$(jq -r '.version' <<< "$mainPackageJson")"
-                  npmTag="$(jq -r '.publishConfig.tag' <<< "$mainPackageJson")"
+                  npx hereby typescript:release-info --forRelease --setPrerelease "dev.$INITIAL_BUILD_NUMBER"
+
+                  releaseInfo="built/typescript-release-info.json"
+                  version="$(jq -r '.version' "$releaseInfo")"
+                  npmTag="$(jq -r '.npmTag' "$releaseInfo")"
                   if [ -z "$version" ] || [ "$version" = "null" ]; then
-                    echo "Unable to read the TypeScript package version." >&2
+                    echo "Unable to determine the TypeScript package version." >&2
                     exit 1
                   fi
 
@@ -180,6 +152,32 @@ extends:
                 displayName: 'Set versioned build name'
                 env:
                   INITIAL_BUILD_NUMBER: $(Build.BuildNumber)
+
+              - template: /tools/pipelines/steps/setup-go.yml@self
+
+              - bash: npx hereby typescript:build --forRelease --setPrerelease dev.$(initialBuildNumber)
+                displayName: 'Build packages'
+
+              - bash: npx hereby typescript:test-package --forRelease --setPrerelease dev.$(initialBuildNumber)
+                displayName: 'Test packages'
+
+              - bash: npx hereby typescript:sign --forRelease --setPrerelease dev.$(initialBuildNumber)
+                displayName: 'Sign packages'
+                env:
+                  # Needed for ESRP
+                  SYSTEM_ACCESSTOKEN: $(System.AccessToken)
+
+              - bash: npx hereby typescript:pack --forRelease --setPrerelease dev.$(initialBuildNumber)
+                displayName: 'Pack packages'
+
+              - bash: npx hereby vscode-typescript:pack --forRelease --setPrerelease dev.$(initialBuildNumber)
+                displayName: 'Pack extensions'
+
+              - bash: npx hereby vscode-typescript:sign --forRelease --setPrerelease dev.$(initialBuildNumber)
+                displayName: 'Sign extensions'
+                env:
+                  # Needed for ESRP
+                  SYSTEM_ACCESSTOKEN: $(System.AccessToken)
 
               - bash: |
                   set -euo pipefail

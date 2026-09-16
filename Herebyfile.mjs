@@ -1220,6 +1220,7 @@ const extensionDir = path.resolve("./packages/vscode-typescript");
 const nightlyExtensionDir = path.resolve("./packages/vscode-typescript-nightly");
 const builtNpm = path.resolve("./built/npm");
 const builtVsix = path.resolve("./built/vsix");
+const typeScriptReleaseInfoPath = path.resolve("./built/typescript-release-info.json");
 const builtPublishedPlatformPackages = path.resolve("./built/published-platform-packages");
 const builtSignTmp = path.resolve("./built/sign-tmp");
 const publishedTypeScriptAliasPackageName = "@typescript/bundled-typescript";
@@ -1782,6 +1783,18 @@ export const buildNativePreviewPackages = task({
     name: "typescript:build",
     description: "Builds TypeScript npm packages for the current platform. Pass --respectGoEnv to preserve caller-provided Go build settings.",
     run: runBuildNativePreviewPackages,
+});
+
+export const writeTypeScriptReleaseInfo = task({
+    name: "typescript:release-info",
+    hiddenFromTaskList: true,
+    run: async () => {
+        await fs.promises.mkdir(path.dirname(typeScriptReleaseInfoPath), { recursive: true });
+        await fs.promises.writeFile(
+            typeScriptReleaseInfoPath,
+            JSON.stringify({ version: getVersion(), npmTag: getPublishTag() }, undefined, 4) + "\n",
+        );
+    },
 });
 
 async function runBuildNativePreviewPackages() {
