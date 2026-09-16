@@ -51,6 +51,10 @@ type checkerPool struct {
 	// query checkers are not disposed until the pool is GC'd.
 	discarded bool
 
+	// interactive is the session's count of work a user is waiting on. A whole-program check
+	// stands aside while any of it is outstanding, and an interactive check adds to it.
+	interactive *interactiveWork
+
 	// diagnosticsCount is how many checkers a build of this program would check it with.
 	diagnosticsCount int
 	// diagnosticsAssociations maps each of the program's files to the diagnostics checker that owns
@@ -93,7 +97,7 @@ type checkerPool struct {
 
 var _ compiler.CheckerPool = (*checkerPool)(nil)
 
-func newCheckerPool(opts CheckerPoolOptions, program *compiler.Program, log func(msg string)) *checkerPool {
+func newCheckerPool(opts CheckerPoolOptions, program *compiler.Program, interactive *interactiveWork, log func(msg string)) *checkerPool {
 	if opts.MaxCheckers <= 0 {
 		opts.MaxCheckers = 4
 	} else if opts.MaxCheckers < 2 {
@@ -112,6 +116,7 @@ func newCheckerPool(opts CheckerPoolOptions, program *compiler.Program, log func
 	pool := &checkerPool{
 		program:                program,
 		opts:                   opts,
+		interactive:            interactive,
 		diagnosticsCount:       diagnosticsCount,
 		checkers:               make([]*checker.Checker, slots),
 		heldBy:                 make([]string, slots),
@@ -153,7 +158,7 @@ func (p *checkerPool) GetChecker(ctx context.Context, file *ast.SourceFile) (*ch
 
 	switch lifetime {
 	case core.CheckerLifetimeDiagnostics:
-		return p.getDiagnosticsChecker(requestID, file)
+		return p.getDiagnosticsChecker(requestID, file, core.IsInteractiveRequest(ctx))
 	case core.CheckerLifetimeAPI:
 		return p.getPersistentChecker()
 	default:
@@ -250,11 +255,24 @@ func (p *checkerPool) diagnosticsIndexFor(file *ast.SourceFile) int {
 // already did on a file is on the checker it will be handed again. A caller must not hold one
 // diagnostics checker while asking for another; nothing does, and the two would deadlock against a
 // caller doing the reverse.
-func (p *checkerPool) getDiagnosticsChecker(requestID string, file *ast.SourceFile) (*checker.Checker, func()) {
+func (p *checkerPool) getDiagnosticsChecker(requestID string, file *ast.SourceFile, interactive bool) (*checker.Checker, func()) {
+	// Counted from before the wait for the checker rather than from when it is handed over, so a
+	// whole-program check stands aside for this rather than taking the checker out from under it.
+	var interactiveDone func()
+	if interactive {
+		interactiveDone = p.interactive.begin()
+	}
+
 	index := p.diagnosticsIndexFor(file)
 	c, release := p.acquireDiagnosticsChecker(index, requestID)
 	p.log(fmt.Sprintf("checkerpool: Acquired diagnostics checker %d for request %s", index, holdTag(requestID)))
-	return c, release
+	if interactiveDone == nil {
+		return c, release
+	}
+	return c, sync.OnceFunc(func() {
+		release()
+		interactiveDone()
+	})
 }
 
 // acquireDiagnosticsChecker takes the numbered diagnostics checker, creating it on first use and
@@ -288,6 +306,10 @@ func (p *checkerPool) acquireDiagnosticsChecker(index int, requestID string) (*c
 // checkers, which are handed out by request rather than by file, take no part in it.
 func (p *checkerPool) ForEachCheckerGroupDo(ctx context.Context, files []*ast.SourceFile, singleThreaded bool, cb func(c *checker.Checker, fileIndex int, file *ast.SourceFile)) {
 	associations := p.getDiagnosticsAssociations()
+	// A caller the user is waiting on does not stand aside; it is what everything else stands
+	// aside for. Waiting here would be waiting on itself, and the checkers of one group would
+	// take turns rather than run together.
+	standAside := !core.IsInteractiveRequest(ctx)
 	wg := core.NewWorkGroup(singleThreaded)
 	for index := range p.diagnosticsCount {
 		wg.Queue(func() {
@@ -306,9 +328,15 @@ func (p *checkerPool) ForEachCheckerGroupDo(ctx context.Context, files []*ast.So
 			requestID := core.GetRequestID(ctx)
 			p.log(fmt.Sprintf("checkerpool: Checking %d files on diagnostics checker %d for request %s", len(group), index, holdTag(requestID)))
 			for _, i := range group {
-				// Taken a file at a time rather than for the whole group. A check of the whole
-				// project runs for as long as the project is big, and a pull on an open file this
-				// checker owns would otherwise wait out all of it.
+				// Stand aside between files for anything the user is waiting on. Nothing is held
+				// while waiting, so the work being waited for can take this checker if it needs it.
+				if standAside {
+					p.interactive.waitForIdle(ctx)
+				}
+				// Taken a file at a time rather than for the whole group, so that standing aside
+				// is possible at all: a check of the whole project runs for as long as the project
+				// is big, and a pull on an open file this checker owns would otherwise wait out
+				// all of it.
 				c, release := p.acquireDiagnosticsChecker(index, requestID)
 				cb(c, i, files[i])
 				release()

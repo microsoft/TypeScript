@@ -160,6 +160,8 @@ func newWorkspaceDiagnosticsRun(server *Server, ctx context.Context, params *lsp
 // take the machine.
 func (r *workspaceDiagnosticsRun) collect(snapshot *project.Snapshot, scope lsutil.WorkspaceDiagnosticsScope) {
 	r.collected = true
+	// Enumerating the files walks every one of them, which is worth standing aside for too.
+	snapshot.WaitForInteractiveIdle(r.ctx)
 	work := r.assignFilesToProjects(snapshot, projectsInScope(snapshot, scope))
 	// Only files that still need checking count towards progress.
 	r.filesTotal = 0

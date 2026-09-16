@@ -60,7 +60,7 @@ func setupCheckerPoolSessionWithFiles(t *testing.T, opts CheckerPoolOptions, fil
 // newTestCheckerPool creates a checker pool inside the current goroutine context
 // (suitable for use inside synctest.Test) using the given program.
 func newTestCheckerPool(program *compiler.Program, opts CheckerPoolOptions) *checkerPool {
-	return newCheckerPool(opts, program, func(string) {})
+	return newCheckerPool(opts, program, nil /*interactive*/, func(string) {})
 }
 
 // manyCheckerPoolFiles is a program with more files than a build would give it checkers, so at
@@ -1518,6 +1518,104 @@ func TestCheckerPoolIncrementalViewUsesDiagnosticsCheckers(t *testing.T) {
 	}
 }
 
+// A whole-program check stands aside between files for anything the user is waiting on, so a pull
+// on the file in front of them is not queued behind the rest of the workspace.
+func TestCheckerPoolWholeProgramCheckStandsAsideForInteractiveWork(t *testing.T) {
+	t.Parallel()
+	session, _ := setupCheckerPoolSessionWithFiles(t, CheckerPoolOptions{MaxCheckers: 4, IdleTimeout: 10 * time.Second}, manyCheckerPoolFiles())
+	ls, err := session.GetLanguageService(context.Background(), "file:///src/index.ts")
+	assert.NilError(t, err)
+	program := ls.GetProgram()
+	files := program.SourceFiles()
+
+	synctest.Test(t, func(t *testing.T) {
+		interactive := newInteractiveWork()
+		pool := newCheckerPool(CheckerPoolOptions{MaxCheckers: 4, IdleTimeout: 30 * time.Second}, program, interactive, func(string) {})
+
+		// Something the user is waiting on is outstanding before the check starts.
+		interactiveDone := interactive.begin()
+
+		var checked atomic.Int32
+		var finished atomic.Bool
+		go func() {
+			pool.ForEachCheckerGroupDo(context.Background(), files, false /*singleThreaded*/, func(_ *checker.Checker, _ int, _ *ast.SourceFile) {
+				checked.Add(1)
+			})
+			finished.Store(true)
+		}()
+		synctest.Wait()
+		assert.Equal(t, checked.Load(), int32(0), "no file may be checked while the user is waiting on something")
+
+		interactiveDone()
+		synctest.Wait()
+		assert.Assert(t, finished.Load(), "the check resumes once the interactive work is done")
+		assert.Assert(t, checked.Load() > 0)
+	})
+}
+
+// An interactive pull counts as work the user is waiting on from before it waits for a checker, so
+// a check of the whole program stands aside rather than taking the checker out from under it.
+func TestCheckerPoolInteractivePullCountsAsInteractiveWork(t *testing.T) {
+	t.Parallel()
+	session, _ := setupCheckerPoolSessionWithFiles(t, CheckerPoolOptions{MaxCheckers: 4, IdleTimeout: 10 * time.Second}, manyCheckerPoolFiles())
+	ls, err := session.GetLanguageService(context.Background(), "file:///src/index.ts")
+	assert.NilError(t, err)
+	program := ls.GetProgram()
+
+	synctest.Test(t, func(t *testing.T) {
+		interactive := newInteractiveWork()
+		pool := newCheckerPool(CheckerPoolOptions{MaxCheckers: 4, IdleTimeout: 30 * time.Second}, program, interactive, func(string) {})
+
+		ctx := core.WithRequestID(context.Background(), "doc-pull")
+		ctx = core.WithCheckerLifetime(ctx, core.CheckerLifetimeDiagnostics)
+		ctx = core.WithInteractiveRequest(ctx)
+
+		c, release := pool.GetChecker(ctx, program.SourceFiles()[0])
+		assert.Assert(t, c != nil)
+
+		var idle atomic.Bool
+		go func() {
+			interactive.waitForIdle(context.Background())
+			idle.Store(true)
+		}()
+		synctest.Wait()
+		assert.Assert(t, !idle.Load(), "a held interactive checker is work the user is waiting on")
+
+		release()
+		synctest.Wait()
+		assert.Assert(t, idle.Load(), "releasing it clears the way for a workspace pass")
+	})
+}
+
+// A pull that is not interactive - the workspace pass's own per-file acquisitions - must not count,
+// or the pass would stand aside for itself and never finish.
+func TestCheckerPoolSweepAcquisitionIsNotInteractive(t *testing.T) {
+	t.Parallel()
+	session, _ := setupCheckerPoolSessionWithFiles(t, CheckerPoolOptions{MaxCheckers: 4, IdleTimeout: 10 * time.Second}, manyCheckerPoolFiles())
+	ls, err := session.GetLanguageService(context.Background(), "file:///src/index.ts")
+	assert.NilError(t, err)
+	program := ls.GetProgram()
+
+	synctest.Test(t, func(t *testing.T) {
+		interactive := newInteractiveWork()
+		pool := newCheckerPool(CheckerPoolOptions{MaxCheckers: 4, IdleTimeout: 30 * time.Second}, program, interactive, func(string) {})
+
+		ctx := core.WithRequestID(context.Background(), "sweep")
+		ctx = core.WithCheckerLifetime(ctx, core.CheckerLifetimeDiagnostics)
+
+		_, release := pool.GetChecker(ctx, program.SourceFiles()[0])
+		defer release()
+
+		var idle atomic.Bool
+		go func() {
+			interactive.waitForIdle(context.Background())
+			idle.Store(true)
+		}()
+		synctest.Wait()
+		assert.Assert(t, idle.Load(), "a checker held by the pass itself is not work the user is waiting on")
+	})
+}
+
 // A whole-program check must run on the diagnostics checkers, of which there are as many as a build
 // would use, with the program's files split across them the way a build splits them.
 func TestCheckerPoolChecksWholeProgramAcrossDiagnosticsCheckers(t *testing.T) {
@@ -1602,4 +1700,35 @@ func TestCheckerPoolReleasesCheckersAfterAWholeProgramCheck(t *testing.T) {
 	assert.Assert(t, anyDiagnosticsChecker(), "a later check builds them again")
 	pool.Discard()
 	assert.Assert(t, !anyDiagnosticsChecker(), "a discarded pool must let go of its checkers")
+}
+
+// A whole-program check reached from a request the user is waiting on must not stand aside: it
+// would be waiting on itself, and the checkers of one group would take turns rather than run
+// together. Nothing does this today, but it is a cheap thing to leave armed.
+func TestCheckerPoolInteractiveWholeProgramCheckDoesNotStandAside(t *testing.T) {
+	t.Parallel()
+	session, _ := setupCheckerPoolSessionWithFiles(t, CheckerPoolOptions{MaxCheckers: 4, IdleTimeout: 10 * time.Second}, manyCheckerPoolFiles())
+	ls, err := session.GetLanguageService(context.Background(), "file:///src/index.ts")
+	assert.NilError(t, err)
+	program := ls.GetProgram()
+	files := program.SourceFiles()
+
+	synctest.Test(t, func(t *testing.T) {
+		interactive := newInteractiveWork()
+		pool := newCheckerPool(CheckerPoolOptions{MaxCheckers: 4, IdleTimeout: 30 * time.Second}, program, interactive, func(string) {})
+
+		// Something else the user is waiting on never finishes.
+		defer interactive.begin()()
+
+		ctx := core.WithCheckerLifetime(context.Background(), core.CheckerLifetimeDiagnostics)
+		ctx = core.WithInteractiveRequest(ctx)
+
+		var finished atomic.Bool
+		go func() {
+			pool.ForEachCheckerGroupDo(ctx, files, false /*singleThreaded*/, func(*checker.Checker, int, *ast.SourceFile) {})
+			finished.Store(true)
+		}()
+		synctest.Wait()
+		assert.Assert(t, finished.Load(), "an interactive check must not wait for the work it is part of")
+	})
 }

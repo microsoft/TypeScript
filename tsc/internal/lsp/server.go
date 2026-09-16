@@ -1866,6 +1866,9 @@ func (s *Server) handleSetLogVerbosity(_ context.Context, params *lsproto.SetLog
 
 func (s *Server) handleDocumentDiagnostic(ctx context.Context, languageService *ls.LanguageService, params *lsproto.DocumentDiagnosticParams) (lsproto.DocumentDiagnosticResponse, error) {
 	ctx = core.WithCheckerLifetime(ctx, core.CheckerLifetimeDiagnostics)
+	// The client asked for this file, and is showing the result where the user is looking. A pass
+	// over the whole workspace stands aside for it.
+	ctx = core.WithInteractiveRequest(ctx)
 	if s.flakeLogging == lsproto.DiagnosticFlakeLogLevelOff {
 		return languageService.ProvideDiagnostics(ctx, params.TextDocument.Uri)
 	}

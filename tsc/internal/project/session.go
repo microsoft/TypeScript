@@ -79,6 +79,10 @@ type SessionOptions struct {
 	RunExternalCode    bool
 	DebounceDelay      time.Duration
 	CheckerPoolOptions CheckerPoolOptions
+
+	// interactiveWork is shared by every checker pool in the session. Set by NewSession; see
+	// interactiveWork for what it is for.
+	interactiveWork *interactiveWork
 }
 
 type SessionInit struct {
@@ -247,6 +251,10 @@ func NewSession(init *SessionInit) *Session {
 	sessionLogger := init.Logger
 	if sessionLogger == nil {
 		sessionLogger = logging.NewNopLogger()
+	}
+	// Shared through the options because that is what a project's checker pool can reach.
+	if init.Options.interactiveWork == nil {
+		init.Options.interactiveWork = newInteractiveWork()
 	}
 	session := &Session{
 		backgroundCtx:           init.BackgroundCtx,
@@ -1440,6 +1448,10 @@ func (s *Session) updateSnapshotRef(ctx context.Context, overlays map[tspath.Pat
 }
 
 func (s *Session) updateSnapshot(ctx context.Context, overlays map[tspath.Path]*Overlay, change SnapshotChange, callerRef bool) *Snapshot {
+	// Rebuilding a program holds the snapshot write lock, so every request in the session waits on
+	// it. A workspace pass must not be competing for the machine while it runs.
+	defer s.options.interactiveWork.begin()()
+
 	s.snapshotMu.Lock()
 	oldSnapshot := s.snapshot
 	newSnapshot := oldSnapshot.Clone(ctx, change, overlays, s)

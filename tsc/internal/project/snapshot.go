@@ -316,6 +316,13 @@ func (s *Snapshot) ReleaseDiagnosticsCheckers(project *Project) bool {
 	return project.checkerPool.releaseDiagnosticsCheckers()
 }
 
+// WaitForInteractiveIdle blocks until nothing a user is waiting on is outstanding, or ctx is done.
+// A caller about to spend minutes on work nobody asked for uses this to let the work they did ask
+// for go first.
+func (s *Snapshot) WaitForInteractiveIdle(ctx context.Context) {
+	s.sessionOptions.interactiveWork.waitForIdle(ctx)
+}
+
 // IncrementalProgram returns a project's program together with the record of which files a change
 // since the previous program reached, so a caller checking the project can skip the files it did
 // not. Built on first use, and shared by every snapshot holding the same program.
