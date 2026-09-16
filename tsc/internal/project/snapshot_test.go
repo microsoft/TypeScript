@@ -113,6 +113,60 @@ func TestSnapshot(t *testing.T) {
 		assert.Equal(t, len(removedSnapshot.ProjectCollection.SyntheticProjects()), 1)
 	})
 
+	t.Run("failed API update is not adopted", func(t *testing.T) {
+		t.Parallel()
+		session := setup(map[string]any{
+			"/a.ts": "export const a = 1;",
+		})
+		defer session.Close()
+
+		baseSnapshot := session.Snapshot()
+		failedSnapshot, err := session.CloneSnapshot(
+			context.Background(),
+			baseSnapshot,
+			FileChangeSummary{},
+			&APISnapshotRequest{RemovePrograms: collections.NewSetFromItems(1)},
+		)
+		defer failedSnapshot.Deref()
+
+		assert.ErrorContains(t, err, "synthetic program not found for removal")
+		assert.Equal(t, session.Snapshot(), baseSnapshot)
+		assert.Assert(t, func() (panicked bool) {
+			defer func() {
+				if recover() != nil {
+					panicked = true
+				}
+			}()
+			_, _ = session.CloneSnapshot(context.Background(), failedSnapshot, FileChangeSummary{}, nil)
+			return false
+		}())
+	})
+
+	t.Run("failed API update preserves flushed host changes", func(t *testing.T) {
+		t.Parallel()
+		session := setup(map[string]any{
+			"/a.ts": "export const a = 1;",
+		})
+		defer session.Close()
+
+		baseSnapshot := session.Snapshot()
+		session.pendingFileChangesMu.Lock()
+		session.pendingFileChanges = append(session.pendingFileChanges, FileChange{
+			Kind: FileChangeKindWatchChange,
+			URI:  lsproto.DocumentUri("file:///a.ts"),
+		})
+		session.pendingFileChangesMu.Unlock()
+		failedSnapshot, err := session.APIUpdate(
+			context.Background(),
+			FileChangeSummary{},
+			&APISnapshotRequest{RemovePrograms: collections.NewSetFromItems(1)},
+		)
+
+		assert.ErrorContains(t, err, "synthetic program not found for removal")
+		assert.Assert(t, failedSnapshot == nil)
+		assert.Assert(t, session.Snapshot() != baseSnapshot)
+	})
+
 	t.Run("compilerHost gets frozen with snapshot's FS only once", func(t *testing.T) {
 		t.Parallel()
 		files := map[string]any{

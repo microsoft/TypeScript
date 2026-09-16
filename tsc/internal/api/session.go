@@ -1459,7 +1459,6 @@ func (s *Session) handleGetCurrentLanguageServerSnapshot(ctx context.Context, pa
 
 	snapshot, err := s.projectSession.APIUpdate(ctx, project.FileChangeSummary{}, update.request)
 	if err != nil {
-		snapshot.Deref()
 		return nil, fmt.Errorf("%w: failed to update language server snapshot: %w", ErrClientError, err)
 	}
 
@@ -4358,12 +4357,13 @@ func (s *Session) releaseLanguageServerRefs() {
 		}
 	}
 	snapshot, err := s.projectSession.APIUpdate(s.withLocale(context.Background()), project.FileChangeSummary{}, apiRequest)
-	snapshot.Deref()
-	if err == nil {
-		s.openProjects.Clear()
-		s.openFiles.Clear()
-		s.createdPrograms.Clear()
+	if err != nil {
+		return
 	}
+	snapshot.Deref()
+	s.openProjects.Clear()
+	s.openFiles.Clear()
+	s.createdPrograms.Clear()
 }
 
 func formatSessionID(id uint64) string {

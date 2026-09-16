@@ -416,6 +416,9 @@ func (s *Snapshot) Clone(
 	sessionLogger logging.Logger,
 	client Client,
 ) *Snapshot {
+	if s.apiError != nil {
+		panic(fmt.Sprintf("cannot clone snapshot with API error: %v", s.apiError))
+	}
 	store := s.host
 	var logger *logging.LogTree
 

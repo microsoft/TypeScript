@@ -1084,13 +1084,14 @@ export class Snapshot {
         this.onDispose = onDispose;
         this.updateSnapshot = updateSnapshot;
         this.projectMap = new Map();
-        this.projectDataMap = new Map(baseSnapshot?.projectDataMap);
+        const projectDataMap = new Map(baseSnapshot?.projectDataMap);
         for (const projectId of data.changes?.removedProjects ?? []) {
-            this.projectDataMap.delete(projectId);
+            projectDataMap.delete(projectId);
         }
         for (const projectData of data.projects) {
-            this.projectDataMap.set(projectData.id, projectData);
+            projectDataMap.set(projectData.id, projectData);
         }
+        this.projectDataMap = new Map([...projectDataMap].sort(([a], [b]) => a < b ? -1 : a > b ? 1 : 0));
         this.snapshotRegistry = new SnapshotObjectRegistry(client, this.id, projectId => this.projectMap.get(projectId));
 
         for (const projData of this.projectDataMap.values()) {

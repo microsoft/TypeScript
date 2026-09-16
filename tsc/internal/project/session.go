@@ -1360,6 +1360,17 @@ func (s *Session) updateSnapshot(ctx context.Context, overlays map[tspath.Path]*
 		ctx = s.WithCurrentLocale(ctx)
 	}
 	newSnapshot := oldSnapshot.Clone(ctx, change, overlays, s.logger, s.client)
+	// A failed API request may have mutated only a prefix of its clone. Such a
+	// snapshot is returned to the caller for inspection and cleanup, but must
+	// never become canonical session state or trigger adoption side effects.
+	if newSnapshot.apiError != nil {
+		s.snapshotMu.Unlock()
+		if callerRef {
+			return newSnapshot
+		}
+		newSnapshot.Deref()
+		return nil
+	}
 	s.snapshot = newSnapshot
 	if callerRef {
 		newSnapshot.ref()

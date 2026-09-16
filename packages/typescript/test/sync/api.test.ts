@@ -1539,6 +1539,19 @@ describe("Multiple snapshots", () => {
         assert.equal(baseFirst!.text, `export const first = 1;`);
     });
 
+    test("snapshot.update preserves stable project ordering", () => {
+        using api = spawnAPI({
+            "/a/tsconfig.json": `{}`,
+            "/a/index.ts": `export const a = 1;`,
+            "/z/tsconfig.json": `{}`,
+            "/z/index.ts": `export const z = 1;`,
+        });
+        const base = api.createSnapshot({ openProjects: ["/z/tsconfig.json"] });
+        const updated = base.update({ openProjects: ["/a/tsconfig.json"] });
+
+        assert.deepEqual(updated.getProjects().map(project => project.id), ["/a/tsconfig.json", "/z/tsconfig.json"]);
+    });
+
     test("snapshot.update ensures all dirty programs", () => {
         const { api: disposableAPI, fs } = spawnAPIWithFS({
             "/configured/tsconfig.json": `{}`,
