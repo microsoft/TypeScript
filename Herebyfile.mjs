@@ -1268,10 +1268,6 @@ export const testAll = task({
     },
 });
 
-const customLinterPath = `./tools/custom-gcl${process.platform === "win32" ? ".exe" : ""}`;
-const gotestsumPath = `./tools/gotestsum${process.platform === "win32" ? ".exe" : ""}`;
-const gotestsumPackage = "gotest.tools/gotestsum";
-
 /**
  * @param {{
  *   toolPath: string;
@@ -1316,10 +1312,10 @@ function createCachedTool({ toolPath, globs, build, exclude }) {
 }
 
 const gotestsumTool = createCachedTool({
-    toolPath: gotestsumPath,
+    toolPath: `./tools/gotestsum${process.platform === "win32" ? ".exe" : ""}`,
     globs: ["./tools/go.mod", "./tools/go.sum"],
     build: async () => {
-        await run("go", ["install", gotestsumPackage], {
+        await run("go", ["install", "gotest.tools/gotestsum"], {
             cwd: "./tools",
             env: { GOBIN: path.resolve("./tools") },
         });
@@ -1341,7 +1337,7 @@ const golangciLintPackage = memoize(() => {
 });
 
 const customLinterTool = createCachedTool({
-    toolPath: customLinterPath,
+    toolPath: `./tools/custom-gcl${process.platform === "win32" ? ".exe" : ""}`,
     globs: [
         "./tools/go.mod",
         "./tools/customlint/**/*",
