@@ -73,14 +73,14 @@ func (f *fileBase) ECMALineInfo() *sourcemap.ECMALineInfo {
 	return f.lineInfo
 }
 
-type diskFile struct {
+type cachedFile struct {
 	fileBase
 	needsReload  bool
 	realpathPath tspath.Path
 }
 
-func newDiskFile(fileName string, content string) *diskFile {
-	return &diskFile{
+func newCachedFile(fileName string, content string) *cachedFile {
+	return &cachedFile{
 		fileBase: fileBase{
 			fileName: fileName,
 			content:  content,
@@ -89,30 +89,30 @@ func newDiskFile(fileName string, content string) *diskFile {
 	}
 }
 
-func NewDiskFileHandle(fileName string, content string) FileHandle {
-	return newDiskFile(fileName, content)
+func NewCachedFileHandle(fileName string, content string) FileHandle {
+	return newCachedFile(fileName, content)
 }
 
-var _ FileHandle = (*diskFile)(nil)
+var _ FileHandle = (*cachedFile)(nil)
 
-func (f *diskFile) Version() int32 {
+func (f *cachedFile) Version() int32 {
 	return 0
 }
 
-func (f *diskFile) MatchesDiskText() bool {
+func (f *cachedFile) MatchesDiskText() bool {
 	return !f.needsReload
 }
 
-func (f *diskFile) IsOverlay() bool {
+func (f *cachedFile) IsOverlay() bool {
 	return false
 }
 
-func (f *diskFile) Kind() core.ScriptKind {
+func (f *cachedFile) Kind() core.ScriptKind {
 	return core.GetScriptKindFromFileName(f.fileName)
 }
 
-func (f *diskFile) Clone() *diskFile {
-	return &diskFile{
+func (f *cachedFile) Clone() *cachedFile {
+	return &cachedFile{
 		realpathPath: f.realpathPath,
 		fileBase: fileBase{
 			fileName: f.fileName,
@@ -269,7 +269,7 @@ func (fs *overlayFS) GetFileByPath(fileName string, path tspath.Path) FileHandle
 	if !ok {
 		return nil
 	}
-	return newDiskFile(fileName, content)
+	return newCachedFile(fileName, content)
 }
 
 func (fs *overlayFS) UseCaseSensitiveFileNames() bool { return fs.host.UseCaseSensitiveFileNames() }

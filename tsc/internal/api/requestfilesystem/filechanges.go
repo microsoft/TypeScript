@@ -1,11 +1,31 @@
 package requestfilesystem
 
 import (
+	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/lsconv"
+	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/project"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 )
+
+func (s *requestFileSystem) ExpandFileChanges(summary project.FileChangeSummary) project.FileChangeSummary {
+	expand := func(uris *collections.Set[lsproto.DocumentUri]) {
+		var additional collections.Set[lsproto.DocumentUri]
+		for uri := range uris.Keys() {
+			for _, alias := range s.aliasesForPath(uri.FileName()) {
+				additional.Add(lsconv.FileNameToDocumentURI(alias))
+			}
+		}
+		for uri := range additional.Keys() {
+			uris.Add(uri)
+		}
+	}
+	expand(&summary.Changed)
+	expand(&summary.Created)
+	expand(&summary.Deleted)
+	return summary
+}
 
 func addFileChanges(summary *project.FileChangeSummary, request *RequestFileSystem, baseFS vfs.FS, fileSystem *requestFileSystem, currentDirectory string) {
 	toPath := func(fileName string) tspath.Path {

@@ -435,12 +435,12 @@ func (s requestFileSystem) GetFileByPath(fileName string, _ tspath.Path) project
 			return source.GetFile(lookup.path)
 		}
 		if content, ok := lookup.fileSystem.ReadFile(lookup.path); ok {
-			return project.NewDiskFileHandle(fileName, content)
+			return project.NewCachedFileHandle(fileName, content)
 		}
 		return nil
 	}
 	if file, ok := lookup.info.(*requestFile); ok {
-		return project.NewDiskFileHandle(fileName, file.content)
+		return project.NewCachedFileHandle(fileName, file.content)
 	}
 	return nil
 }

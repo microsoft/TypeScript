@@ -464,7 +464,7 @@ func (s *Session) DidChangeWatchedFiles(ctx context.Context, changes []*lsproto.
 					s.snapshotMu.RLock()
 					snapshot := s.snapshot
 					s.snapshotMu.RUnlock()
-					if _, ok := snapshot.fs.diskDirectories[path]; ok || snapshot.hasOverlayWithin(path) || isNodeModulesPath(path) {
+					if _, ok := snapshot.fs.cacheDirectories[path]; ok || snapshot.hasOverlayWithin(path) || isNodeModulesPath(path) {
 						hasRelevantChange = true
 					}
 				}
@@ -684,7 +684,7 @@ func (s *Session) scheduleIdleCacheClean() {
 			fileChanges:    fileChanges,
 			ataChanges:     ataChanges,
 			newConfig:      newConfig,
-			cleanDiskCache: true,
+			cleanFileCache: true,
 		})
 
 		go func() { runtime.GC() }()
@@ -784,7 +784,7 @@ func (s *Session) sendPerformanceTelemetry(ctx context.Context) {
 		UptimeSeconds:       time.Since(s.startTime).Seconds(),
 		ProjectCount:        float64(len(snapshot.ProjectCollection.Projects())),
 		ConfigCount:         float64(len(snapshot.ConfigFileRegistry.configs)),
-		CachedDiskFileCount: float64(len(snapshot.fs.diskFiles)),
+		CachedDiskFileCount: float64(len(snapshot.fs.cacheFiles)),
 	}
 
 	readUint64 := func(s gometrics.Sample) float64 {
@@ -1767,7 +1767,7 @@ func (s *Session) logCacheStats(snapshot *Snapshot) {
 	}
 	s.logger.Log("\n======== Cache Statistics ========")
 	s.logger.Logf("Open file count:   %6d", len(snapshot.overlays()))
-	s.logger.Logf("Cached disk files: %6d", len(snapshot.fs.diskFiles))
+	s.logger.Logf("Cached disk files: %6d", len(snapshot.fs.cacheFiles))
 	s.logger.Logf("Realpath aliases:  %6d", len(snapshot.fs.nodeModulesRealpathAliases))
 	s.logger.Logf("Project count:     %6d", len(snapshot.ProjectCollection.Projects()))
 	s.logger.Logf("Config count:      %6d", len(snapshot.ConfigFileRegistry.configs))

@@ -146,7 +146,7 @@ func (s *Snapshot) cloneForProgram(
 	previousOverlays := s.overlays()
 	layeredFS := layerOverlayFileSystem(fileSystem, previousOverlays, store.options.PositionEncoding, store.toPath)
 	overlays := layeredFS.Overlays()
-	fs := newSnapshotFSBuilderFromSource(layeredFS, s.fs.diskFiles, s.fs.diskDirectories, s.fs.nodeModulesRealpathAliases, store.toPath)
+	fs := newSnapshotFSBuilderFromSource(layeredFS, s.fs.cacheFiles, s.fs.cacheDirectories, s.fs.nodeModulesRealpathAliases, store.toPath)
 	fileChanges = s.processFileChanges(fs, fileChanges, logger, nil, previousOverlays, overlays)
 
 	newSnapshotID := store.nextSnapshotID()
@@ -202,7 +202,7 @@ func (s *Snapshot) cloneForProgram(
 
 	cleanFilesStart := time.Now()
 	removedFiles := 0
-	fs.diskFiles.Range(func(entry *dirty.SyncMapEntry[tspath.Path, *diskFile]) bool {
+	fs.cacheFiles.Range(func(entry *dirty.SyncMapEntry[tspath.Path, *cachedFile]) bool {
 		for _, project := range newProjectCollection.Projects() {
 			if project.host != nil && project.host.sourceFS.SeenFile(entry.Key()) {
 				return true
@@ -307,6 +307,9 @@ func (s *Snapshot) processFileChanges(
 	previousOverlays map[tspath.Path]*Overlay,
 	overlays map[tspath.Path]*Overlay,
 ) FileChangeSummary {
+	if expander, ok := fs.fs.(FileChangeExpander); ok {
+		fileChanges = expander.ExpandFileChanges(fileChanges)
+	}
 	previousOpenFiles := overlayFileHandles(previousOverlays)
 	openFiles := overlayFileHandles(overlays)
 	if fileChanges.HasExcessiveWatchEvents() {
@@ -316,7 +319,7 @@ func (s *Snapshot) processFileChanges(
 			if logger != nil {
 				logger.Logf("InvalidateAll: invalidated file cache in %v", time.Since(invalidateStart))
 			}
-		} else if !fs.watchChangesOverlapCache(fileChanges) {
+		} else if !fs.watchChangesOverlapCache(fileChanges, previousOpenFiles, openFiles) {
 			// All watch changes/deletes are files we haven't seen; should be irrelevant to us (probably an external tool's build or something)
 			fileChanges.Changed = collections.Set[lsproto.DocumentUri]{}
 			fileChanges.Deleted = collections.Set[lsproto.DocumentUri]{}
@@ -346,6 +349,11 @@ func (s *Snapshot) processFileChanges(
 		fileChanges = s.fs.expandRealpathAliases(fileChanges)
 		fileChanges = fs.markDirtyFiles(fileChanges)
 		fileChanges = fs.convertOpenAndCloseToChanges(fileChanges, previousOpenFiles, openFiles)
+	}
+	for path := range openFiles {
+		if entry, ok := fs.cacheFiles.Load(path); ok {
+			fs.deleteCacheEntry(entry)
+		}
 	}
 	return fileChanges
 }
@@ -535,8 +543,8 @@ type SnapshotChange struct {
 	ataChanges map[tspath.Path]*ATAStateChange
 	apiRequest *APISnapshotRequest
 	client     Client
-	// cleanDiskCache triggers cleaning of cached disk files not referenced by any open project.
-	cleanDiskCache bool
+	// cleanFileCache triggers cleaning of cached files not referenced by any open project.
+	cleanFileCache bool
 }
 
 // ATAStateChange represents a change to a project's ATA state.
@@ -633,7 +641,7 @@ func (s *Snapshot) Clone(
 	}
 	layeredFS := layerOverlayFileSystem(baseFS, overlays, store.options.PositionEncoding, store.toPath)
 	overlays = layeredFS.Overlays()
-	fs := newSnapshotFSBuilderFromSource(layeredFS, s.fs.diskFiles, s.fs.diskDirectories, s.fs.nodeModulesRealpathAliases, store.toPath)
+	fs := newSnapshotFSBuilderFromSource(layeredFS, s.fs.cacheFiles, s.fs.cacheDirectories, s.fs.nodeModulesRealpathAliases, store.toPath)
 	change.fileChanges = s.processFileChanges(fs, change.fileChanges, logger, change.contentMapperContributions, s.overlays(), overlays)
 
 	compilerOptionsForInferredProjects := s.compilerOptionsForInferredProjects
@@ -724,20 +732,20 @@ func (s *Snapshot) Clone(
 		}
 	}
 
-	// Clean cached disk files not touched by any open project on file open, close, delete,
+	// Clean cached files not touched by any open project on file open, close, delete,
 	// or when explicitly requested (e.g. by an idle timer).
-	shouldCleanDiskCache := change.cleanDiskCache ||
+	shouldCleanFileCache := change.cleanFileCache ||
 		change.fileChanges.Opened != "" ||
 		change.fileChanges.Reopened != "" ||
 		change.fileChanges.Closed.Len() > 0 ||
 		change.fileChanges.Deleted.Len() > 0
-	if shouldCleanDiskCache {
+	if shouldCleanFileCache {
 		// The set of seen files can change only if a program was constructed (not cloned) during this snapshot.
-		// When cleanDiskCache is explicitly set, always attempt cleaning.
-		if len(projectsWithNewProgramStructure) > 0 || change.cleanDiskCache {
+		// When cleanFileCache is explicitly set, always attempt cleaning.
+		if len(projectsWithNewProgramStructure) > 0 || change.cleanFileCache {
 			cleanFilesStart := time.Now()
 			removedFiles := 0
-			fs.diskFiles.Range(func(entry *dirty.SyncMapEntry[tspath.Path, *diskFile]) bool {
+			fs.cacheFiles.Range(func(entry *dirty.SyncMapEntry[tspath.Path, *cachedFile]) bool {
 				for _, project := range projectCollection.Projects() {
 					if project.host != nil && project.host.sourceFS.SeenFile(entry.Key()) {
 						return true

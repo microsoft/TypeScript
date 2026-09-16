@@ -139,7 +139,9 @@ func (s *SnapshotHost) CloneSnapshotForProgram(
 // adopting the clone in the background.
 func (s *SnapshotHost) CloneSnapshotWithAutoImports(ctx context.Context, baseSnapshot *Snapshot, uri lsproto.DocumentUri, logger logging.Logger) *Snapshot {
 	change := SnapshotChange{
-		reason: UpdateReasonRequestedLanguageServiceWithAutoImports,
+		reason:             UpdateReasonRequestedLanguageServiceWithAutoImports,
+		fs:                 baseSnapshot.fs.fs,
+		fileSystemOverride: baseSnapshot.fileSystemOverride,
 		ResourceRequest: ResourceRequest{
 			Documents:   []lsproto.DocumentUri{uri},
 			AutoImports: uri,
