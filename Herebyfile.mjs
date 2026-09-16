@@ -1015,15 +1015,14 @@ const ensureCoverageDirExists = memoize(() => {
 
 /**
  * @param {string} taskName
- * @param {string} packagePattern
  */
-function goTestFlags(taskName, packagePattern = "./...") {
+function goTestFlags(taskName) {
     ensureCoverageDirExists();
     return [
         ...goBuildFlags,
         ...goBuildTags(),
         ...(options.tests ? [`-run=${options.tests}`] : []),
-        ...(options.coverage ? [`-coverprofile=${path.join(coverageDir, "coverage." + taskName + ".out")}`, `-coverpkg=${packagePattern}`] : []),
+        ...(options.coverage ? [`-coverprofile=${path.join(coverageDir, "coverage." + taskName + ".out")}`, "-coverpkg=./..."] : []),
     ];
 }
 
@@ -1105,19 +1104,13 @@ async function checkUnusedBaselines(trackingDir) {
 
 /**
  * @param {string} taskName
- * @param {string} packagePattern
- * @param {string} [toolModfile]
  */
-function gotestsum(taskName, packagePattern, toolModfile) {
+function gotestsum(taskName) {
     return [
-        "go",
-        "tool",
-        ...(toolModfile ? [`-modfile=${toolModfile}`] : []),
-        "gotestsum",
+        path.resolve(gotestsumPath),
         ...goTestSumFlags,
         "--",
-        ...goTestFlags(taskName, packagePattern),
-        packagePattern,
+        ...goTestFlags(taskName),
     ];
 }
 
@@ -1149,11 +1142,11 @@ async function runTests() {
     try {
         const testEnv = {
             ...goTestEnv,
-            GOWORK: "off",
             ...(trackingDir ? { TSGO_BASELINE_TRACKING_DIR: trackingDir } : {}),
         };
-        const command = gotestsum("tests", "./...", "../tools/go.mod");
-        await run(command[0], [...command.slice(1), ...(isCI ? ["--timeout=45m"] : [])], {
+        await ensureGotestsum();
+        const command = gotestsum("tests");
+        await run(command[0], [...command.slice(1), "./...", ...(isCI ? ["--timeout=45m"] : [])], {
             env: testEnv,
             cwd: "./tsc",
         });
@@ -1224,8 +1217,9 @@ export const testBenchmarks = task({
 });
 
 async function runTestTools() {
-    const command = gotestsum("tools", "./...");
-    await run(command[0], command.slice(1), { env: goTestEnv, cwd: path.join(__dirname, "tools") });
+    await ensureGotestsum();
+    const command = gotestsum("tools");
+    await run(command[0], [...command.slice(1), "./..."], { env: goTestEnv, cwd: path.join(__dirname, "tools") });
 }
 
 async function runTestAPI() {
@@ -1281,6 +1275,35 @@ export const testAll = task({
 
 const customLinterPath = `./tools/custom-gcl${process.platform === "win32" ? ".exe" : ""}`;
 const customLinterHashPath = customLinterPath + ".hash";
+const gotestsumPath = `./tools/gotestsum${process.platform === "win32" ? ".exe" : ""}`;
+const gotestsumHashPath = gotestsumPath + ".hash";
+const gotestsumPackage = "gotest.tools/gotestsum";
+
+const gotestsumHash = memoize(() => {
+    const hash = crypto.createHash("sha256");
+    for (const file of ["./tools/go.mod", "./tools/go.sum"]) {
+        hash.update(file);
+        hash.update(fs.readFileSync(file));
+    }
+    return hash.digest("hex") + "\n";
+});
+
+const ensureGotestsum = memoize(async () => {
+    const hash = gotestsumHash();
+    if (
+        fs.existsSync(gotestsumPath)
+        && fs.existsSync(gotestsumHashPath)
+        && fs.readFileSync(gotestsumHashPath, "utf8") === hash
+    ) {
+        return;
+    }
+
+    await run("go", ["install", gotestsumPackage], {
+        cwd: "./tools",
+        env: { GOBIN: path.resolve("./tools") },
+    });
+    fs.writeFileSync(gotestsumHashPath, hash);
+});
 
 const golangciLintPackage = memoize(() => {
     const golangciLintYml = fs.readFileSync(".custom-gcl.yml", "utf8");
@@ -1358,7 +1381,12 @@ async function runLint() {
 export const installTools = task({
     name: "install-tools",
     description: "Installs optional tools for developing within the repo.",
-    run: buildCustomLinter,
+    run: async () => {
+        await Promise.all([
+            ensureGotestsum(),
+            buildCustomLinter(),
+        ]);
+    },
 });
 
 export const format = task({
