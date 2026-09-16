@@ -125,7 +125,8 @@ type processedFiles struct {
 	sourceFileMetaDatas           map[tspath.Path]ast.SourceFileMetaData
 	jsxRuntimeImportSpecifiers    map[tspath.Path]*jsxRuntimeImportSpecifier
 	importHelpersImportSpecifiers map[tspath.Path]*ast.StringLiteralNode
-	libFiles                      map[tspath.Path]*LibFile
+	libFiles                      map[string]*ast.SourceFile
+	libFilesByPath                map[tspath.Path]*LibFile
 	// List of present unsupported extensions
 	sourceFilesFoundSearchingNodeModules collections.Set[tspath.Path]
 	includeProcessor                     *includeProcessor

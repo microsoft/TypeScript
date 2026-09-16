@@ -1710,7 +1710,7 @@ func (p *Program) GetDefaultResolutionModeForFile(sourceFile ast.HasFileName) co
 }
 
 func (p *Program) IsSourceFileDefaultLibrary(path tspath.Path) bool {
-	_, ok := p.libFiles[path]
+	_, ok := p.libFilesByPath[path]
 	return ok
 }
 
@@ -1722,7 +1722,7 @@ func (p *Program) IsGlobalTypingsFile(fileName string) bool {
 }
 
 func (p *Program) GetDefaultLibFile(path tspath.Path) *LibFile {
-	if libFile, ok := p.libFiles[path]; ok {
+	if libFile, ok := p.libFilesByPath[path]; ok {
 		return libFile
 	}
 	return nil
@@ -2091,12 +2091,7 @@ func (p *Program) GetLibFileFromReference(ref *ast.FileReference) *ast.SourceFil
 	if !ok {
 		return nil
 	}
-	for path, libFile := range p.libFiles {
-		if libFile.Name == name {
-			return p.filesByPath[path]
-		}
-	}
-	return nil
+	return p.libFiles[name]
 }
 
 func (p *Program) GetResolvedTypeReferenceDirectiveFromTypeReferenceDirective(typeRef *ast.FileReference, sourceFile *ast.SourceFile) *module.ResolvedTypeReferenceDirective {
@@ -2208,7 +2203,7 @@ func (p *Program) collectPackageNames() *packageNamesInfo {
 }
 
 func (p *Program) IsLibFile(sourceFile *ast.SourceFile) bool {
-	_, ok := p.libFiles[sourceFile.Path()]
+	_, ok := p.libFilesByPath[sourceFile.Path()]
 	return ok
 }
 
