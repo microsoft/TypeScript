@@ -225,7 +225,7 @@ func match(elems []element, input string) (ok bool) {
 			if len(input) == 0 || input[0] != '/' {
 				return false
 			}
-			for input[0] == '/' {
+			for len(input) > 0 && input[0] == '/' {
 				input = input[1:]
 			}
 
