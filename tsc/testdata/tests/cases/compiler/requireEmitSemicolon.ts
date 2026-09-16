@@ -1,5 +1,5 @@
 // @target: es2015
-//@module: amd
+//@module: commonjs
 // @Filename: requireEmitSemicolon_0.ts
 export namespace Models {
 	export class Person {

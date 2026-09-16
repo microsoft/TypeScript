@@ -41,6 +41,7 @@ type ProjectCollectionBuilder struct {
 
 	ctx                                context.Context
 	fs                                 *snapshotFSBuilder
+	overlays                           map[tspath.Path]*Overlay
 	base                               *ProjectCollection
 	compilerOptionsForInferredProjects *core.CompilerOptions
 	inferredContentMappers             []*contentmapper.Mapper
@@ -67,6 +68,7 @@ func newProjectCollectionBuilder(
 	ctx context.Context,
 	newSnapshotID uint64,
 	fs *snapshotFSBuilder,
+	overlays map[tspath.Path]*Overlay,
 	oldProjectCollection *ProjectCollection,
 	oldConfigFileRegistry *ConfigFileRegistry,
 	oldAPIState APIState,
@@ -81,9 +83,11 @@ func newProjectCollectionBuilder(
 	contentMapperHost contentmapper.Host,
 	client Client,
 ) *ProjectCollectionBuilder {
+	openFiles := openFilePaths(overlays)
 	return &ProjectCollectionBuilder{
 		ctx:                                ctx,
 		fs:                                 fs,
+		overlays:                           overlays,
 		toPath:                             fs.toPath,
 		compilerOptionsForInferredProjects: compilerOptionsForInferredProjects,
 		inferredContentMappers:             inferredContentMappers,
@@ -94,14 +98,20 @@ func newProjectCollectionBuilder(
 		extendedConfigCache:                extendedConfigCache,
 		contentMapperHost:                  contentMapperHost,
 		base:                               oldProjectCollection,
-		configFileRegistryBuilder:          newConfigFileRegistryBuilder(lsproto.GetClientCapabilities(ctx).Workspace.DidChangeWatchedFiles.RelativePatternSupport, fs, oldConfigFileRegistry, extendedConfigCache, newSnapshotID, sessionOptions, customConfigFileName, nil),
+		configFileRegistryBuilder:          newConfigFileRegistryBuilder(lsproto.GetClientCapabilities(ctx).Workspace.DidChangeWatchedFiles.RelativePatternSupport, fs, func(path tspath.Path) bool { _, ok := overlays[path]; return ok }, oldConfigFileRegistry, extendedConfigCache, newSnapshotID, sessionOptions, customConfigFileName, nil),
 		newSnapshotID:                      newSnapshotID,
 		loadedProjectTrees:                 oldProjectCollection.loadedProjectTrees,
+		openFilesChanged:                   !openFiles.Equals(&oldProjectCollection.openFiles),
 		configuredProjects:                 dirty.NewSyncMap(oldProjectCollection.configuredProjects),
 		inferredProject:                    dirty.NewBox(oldProjectCollection.inferredProject),
 		apiState:                           oldAPIState.clone(),
 		client:                             client,
 	}
+}
+
+func (b *ProjectCollectionBuilder) isOpenFile(path tspath.Path) bool {
+	_, ok := b.overlays[path]
+	return ok
 }
 
 func (b *ProjectCollectionBuilder) Finalize(logger *logging.LogTree) (*ProjectCollection, *ConfigFileRegistry) {
@@ -126,7 +136,7 @@ func (b *ProjectCollectionBuilder) Finalize(logger *logging.LogTree) (*ProjectCo
 
 	if b.openFilesChanged {
 		ensureCloned()
-		newProjectCollection.openFiles = openFilePaths(b.fs.overlays)
+		newProjectCollection.openFiles = openFilePaths(b.overlays)
 	}
 
 	if !maps.Equal(b.fileDefaultProjects, b.base.fileDefaultProjects) {
@@ -237,7 +247,7 @@ func (b *ProjectCollectionBuilder) HandleAPIRequest(apiRequest *APISnapshotReque
 		}
 	}
 
-	for _, overlay := range b.fs.overlays {
+	for _, overlay := range b.overlays {
 		if entry := b.findDefaultConfiguredProject(overlay.FileName(), b.toPath(overlay.FileName())); entry != nil {
 			delete(projectsToClose, entry.Value().configFilePath)
 		}
@@ -258,7 +268,7 @@ func (b *ProjectCollectionBuilder) HandleAPIRequest(apiRequest *APISnapshotReque
 	if apiRequest.OpenFiles != nil || apiRequest.CloseFiles != nil {
 		var retain collections.Set[tspath.Path]
 		for path, file := range b.apiState.openFiles {
-			if b.fs.isOpenFile(path) {
+			if b.isOpenFile(path) {
 				// Already an LSP overlay; its project membership is handled by the
 				// overlay pass in cleanupConfiguredProjects.
 				continue
@@ -420,7 +430,7 @@ func (b *ProjectCollectionBuilder) cleanupConfiguredProjects(retain *collections
 	}
 
 	var inferredProjectFiles []string
-	for _, overlay := range b.fs.overlays {
+	for _, overlay := range b.overlays {
 		openFile := overlay.FileName()
 		openFilePath := b.toPath(openFile)
 		if p := b.findDefaultConfiguredProject(openFile, openFilePath); p != nil {
@@ -432,7 +442,7 @@ func (b *ProjectCollectionBuilder) cleanupConfiguredProjects(retain *collections
 	// Treat API-opened files like open files: retain their configured project (so
 	// an LSP-driven open doesn't close it), or keep them as inferred project roots.
 	for path, file := range b.apiState.openFiles {
-		if b.fs.isOpenFile(path) {
+		if b.isOpenFile(path) {
 			continue
 		}
 		if p := b.findDefaultConfiguredProject(file.fileName, path); p != nil {
@@ -479,7 +489,7 @@ func logChangeFileResult(result changeFileResult, logger *logging.LogTree) {
 
 func (b *ProjectCollectionBuilder) collectInferredProjectRoots() []string {
 	var inferredProjectFiles []string
-	for path, overlay := range b.fs.overlays {
+	for path, overlay := range b.overlays {
 		if b.findDefaultConfiguredProject(overlay.FileName(), path) == nil {
 			inferredProjectFiles = append(inferredProjectFiles, overlay.FileName())
 		}
@@ -492,7 +502,7 @@ func (b *ProjectCollectionBuilder) collectInferredProjectRoots() []string {
 // roots and persist across snapshots.
 func (b *ProjectCollectionBuilder) appendAPIOpenedInferredRoots(inferredProjectFiles []string) []string {
 	for path, file := range b.apiState.openFiles {
-		if b.fs.isOpenFile(path) {
+		if b.isOpenFile(path) {
 			continue
 		}
 		if b.findDefaultConfiguredProject(file.fileName, path) == nil {
@@ -532,11 +542,11 @@ func (b *ProjectCollectionBuilder) DidRequestFile(uri lsproto.DocumentUri, confi
 	path := b.toPath(fileName)
 	if b.defaultProjectsInvalidated {
 		b.ensureConfiguredProjectAndAncestorsForFile(fileName, path, logger)
-		if !b.fs.isOpenFile(path) {
+		if !b.isOpenFile(path) {
 			return
 		}
 	}
-	if b.fs.isOpenFile(path) {
+	if b.isOpenFile(path) {
 		hasChanges := b.programStructureChanged
 
 		// See if we can find a default project without updating a bunch of stuff.
@@ -800,7 +810,11 @@ func (b *ProjectCollectionBuilder) markProjectsAffectedByConfigChanges(
 	// Recompute default projects for open files that now have different config file presence.
 	var hasChanges bool
 	for path := range configChangeResult.affectedFiles {
-		fileName := b.fs.overlays[path].FileName()
+		overlay, ok := b.overlays[path]
+		if !ok {
+			continue
+		}
+		fileName := overlay.FileName()
 		_ = b.ensureConfiguredProjectAndAncestorsForFile(fileName, path, logger)
 		hasChanges = true
 	}
@@ -856,7 +870,7 @@ func (b *ProjectCollectionBuilder) findDefaultConfiguredProject(fileName string,
 
 func (b *ProjectCollectionBuilder) ensureConfiguredProjectAndAncestorsForFile(fileName string, path tspath.Path, logger *logging.LogTree) searchResult {
 	result := b.findOrCreateDefaultConfiguredProjectForFile(fileName, path, projectLoadKindCreate, logger)
-	if result.project != nil && b.fs.isOpenFile(path) {
+	if result.project != nil && b.isOpenFile(path) {
 		b.createAncestorTree(fileName, path, &result, logger)
 	}
 	return result
@@ -1311,12 +1325,10 @@ func (b *ProjectCollectionBuilder) updateProgram(entry dirty.Value[*Project], lo
 				if slices.ContainsFunc(result.Program.SourceFiles(), func(file *ast.SourceFile) bool {
 					return file.ContentMapper() != ""
 				}) {
-					project.host.ensureContentMapperProject()
-				}
-				contentMapperProject := project.host.ContentMapperProject()
-				if contentMapperProject != nil {
-					dynamicWatchedFiles, _ := contentMapperProject.WatchedFiles()
-					watchedFiles = append(watchedFiles, dynamicWatchedFiles...)
+					if contentMapperProject := project.host.ContentMapperProject(); contentMapperProject != nil {
+						dynamicWatchedFiles, _ := contentMapperProject.WatchedFiles()
+						watchedFiles = append(watchedFiles, dynamicWatchedFiles...)
+					}
 				}
 				slices.Sort(watchedFiles)
 				watchedFiles = slices.Compact(watchedFiles)

@@ -1,0 +1,280 @@
+//// [tests/cases/compiler/extendPrivateConstructorClass2.ts] ////
+
+=== extendPrivateConstructorClass2.ts ===
+class A1 {
+>A1 : Symbol(A1, Decl(extendPrivateConstructorClass2.ts, 0, 0))
+
+  private constructor(arg: string) {}
+>arg : Symbol(arg, Decl(extendPrivateConstructorClass2.ts, 1, 22))
+}
+class B1 {
+>B1 : Symbol(B1, Decl(extendPrivateConstructorClass2.ts, 2, 1))
+
+  constructor(arg: number) {}
+>arg : Symbol(arg, Decl(extendPrivateConstructorClass2.ts, 4, 14))
+}
+
+declare const Cls1: typeof A1 & typeof B1;
+>Cls1 : Symbol(Cls1, Decl(extendPrivateConstructorClass2.ts, 7, 13))
+>A1 : Symbol(A1, Decl(extendPrivateConstructorClass2.ts, 0, 0))
+>B1 : Symbol(B1, Decl(extendPrivateConstructorClass2.ts, 2, 1))
+
+new Cls1(42); // error
+>Cls1 : Symbol(Cls1, Decl(extendPrivateConstructorClass2.ts, 7, 13))
+
+class Derived1 extends Cls1 {} // error
+>Derived1 : Symbol(Derived1, Decl(extendPrivateConstructorClass2.ts, 9, 13))
+>Cls1 : Symbol(Cls1, Decl(extendPrivateConstructorClass2.ts, 7, 13))
+
+class A2 {
+>A2 : Symbol(A2, Decl(extendPrivateConstructorClass2.ts, 10, 30))
+
+  constructor(arg: string) {}
+>arg : Symbol(arg, Decl(extendPrivateConstructorClass2.ts, 13, 14))
+}
+class B2 {
+>B2 : Symbol(B2, Decl(extendPrivateConstructorClass2.ts, 14, 1))
+
+  private constructor(arg: number) {}
+>arg : Symbol(arg, Decl(extendPrivateConstructorClass2.ts, 16, 22))
+}
+
+declare const Cls2: typeof A2 & typeof B2;
+>Cls2 : Symbol(Cls2, Decl(extendPrivateConstructorClass2.ts, 19, 13))
+>A2 : Symbol(A2, Decl(extendPrivateConstructorClass2.ts, 10, 30))
+>B2 : Symbol(B2, Decl(extendPrivateConstructorClass2.ts, 14, 1))
+
+new Cls2(42); // error
+>Cls2 : Symbol(Cls2, Decl(extendPrivateConstructorClass2.ts, 19, 13))
+
+class Derived2 extends Cls2 {} // error
+>Derived2 : Symbol(Derived2, Decl(extendPrivateConstructorClass2.ts, 21, 13))
+>Cls2 : Symbol(Cls2, Decl(extendPrivateConstructorClass2.ts, 19, 13))
+
+// https://github.com/microsoft/TypeScript/issues/62614
+declare abstract class j1 {
+>j1 : Symbol(j1, Decl(extendPrivateConstructorClass2.ts, 22, 30))
+
+  private constructor(...args: any[]);
+>args : Symbol(args, Decl(extendPrivateConstructorClass2.ts, 26, 22))
+}
+declare abstract class j2 {
+>j2 : Symbol(j2, Decl(extendPrivateConstructorClass2.ts, 27, 1))
+
+  private constructor(...args: any[]);
+>args : Symbol(args, Decl(extendPrivateConstructorClass2.ts, 29, 22))
+}
+declare const jS: typeof j1 & typeof j2;
+>jS : Symbol(jS, Decl(extendPrivateConstructorClass2.ts, 31, 13))
+>j1 : Symbol(j1, Decl(extendPrivateConstructorClass2.ts, 22, 30))
+>j2 : Symbol(j2, Decl(extendPrivateConstructorClass2.ts, 27, 1))
+
+declare class j0 extends jS {} // error
+>j0 : Symbol(j0, Decl(extendPrivateConstructorClass2.ts, 31, 40))
+>jS : Symbol(jS, Decl(extendPrivateConstructorClass2.ts, 31, 13))
+
+abstract class j3 {
+>j3 : Symbol(j3, Decl(extendPrivateConstructorClass2.ts, 32, 30))
+
+  private constructor(...args: any[]) {}
+>args : Symbol(args, Decl(extendPrivateConstructorClass2.ts, 35, 22))
+
+  method1() {
+>method1 : Symbol(j3.method1, Decl(extendPrivateConstructorClass2.ts, 35, 40))
+
+    abstract class j4 {
+>j4 : Symbol(j4, Decl(extendPrivateConstructorClass2.ts, 36, 13))
+
+      private constructor(...args: any[]) {}
+>args : Symbol(args, Decl(extendPrivateConstructorClass2.ts, 38, 26))
+
+      method2() {
+>method2 : Symbol(j4.method2, Decl(extendPrivateConstructorClass2.ts, 38, 44))
+
+        const jS: typeof j3 & typeof j4 = null!;
+>jS : Symbol(jS, Decl(extendPrivateConstructorClass2.ts, 40, 13))
+>j3 : Symbol(j3, Decl(extendPrivateConstructorClass2.ts, 32, 30))
+>j4 : Symbol(j4, Decl(extendPrivateConstructorClass2.ts, 36, 13))
+
+        // bizarre but ok
+        class j0 extends jS {
+>j0 : Symbol(j0, Decl(extendPrivateConstructorClass2.ts, 40, 48))
+>jS : Symbol(jS, Decl(extendPrivateConstructorClass2.ts, 40, 13))
+
+          method1() {}
+>method1 : Symbol(j0.method1, Decl(extendPrivateConstructorClass2.ts, 43, 29))
+
+          method2() {}
+>method2 : Symbol(j0.method2, Decl(extendPrivateConstructorClass2.ts, 44, 22))
+        }
+      }
+    }
+  }
+}
+
+abstract class j5 {
+>j5 : Symbol(j5, Decl(extendPrivateConstructorClass2.ts, 50, 1))
+
+  private constructor(...args: any[]) {}
+>args : Symbol(args, Decl(extendPrivateConstructorClass2.ts, 53, 22))
+
+  method1() {
+>method1 : Symbol(j5.method1, Decl(extendPrivateConstructorClass2.ts, 53, 40))
+
+    abstract class j6 {
+>j6 : Symbol(j6, Decl(extendPrivateConstructorClass2.ts, 54, 13))
+
+      private constructor(...args: any[]) {}
+>args : Symbol(args, Decl(extendPrivateConstructorClass2.ts, 56, 26))
+
+      method2() {}
+>method2 : Symbol(j6.method2, Decl(extendPrivateConstructorClass2.ts, 56, 44))
+    }
+    const jS: typeof j5 & typeof j6 = null!;
+>jS : Symbol(jS, Decl(extendPrivateConstructorClass2.ts, 59, 9))
+>j5 : Symbol(j5, Decl(extendPrivateConstructorClass2.ts, 50, 1))
+>j6 : Symbol(j6, Decl(extendPrivateConstructorClass2.ts, 54, 13))
+
+    // bizarre but ok too given the base is a result of a mixin
+    class j0 extends jS {
+>j0 : Symbol(j0, Decl(extendPrivateConstructorClass2.ts, 59, 44))
+>jS : Symbol(jS, Decl(extendPrivateConstructorClass2.ts, 59, 9))
+
+      method1() {}
+>method1 : Symbol(j0.method1, Decl(extendPrivateConstructorClass2.ts, 62, 25))
+
+      method2() {}
+>method2 : Symbol(j0.method2, Decl(extendPrivateConstructorClass2.ts, 63, 18))
+    }
+  }
+}
+
+abstract class j7 {
+>j7 : Symbol(j7, Decl(extendPrivateConstructorClass2.ts, 67, 1))
+
+  private constructor(arg: string) {}
+>arg : Symbol(arg, Decl(extendPrivateConstructorClass2.ts, 70, 22))
+
+  method1() {
+>method1 : Symbol(j7.method1, Decl(extendPrivateConstructorClass2.ts, 70, 37))
+
+    abstract class j8 {
+>j8 : Symbol(j8, Decl(extendPrivateConstructorClass2.ts, 71, 13))
+
+      private constructor(arg: number) {}
+>arg : Symbol(arg, Decl(extendPrivateConstructorClass2.ts, 73, 26))
+
+      method2() {
+>method2 : Symbol(j8.method2, Decl(extendPrivateConstructorClass2.ts, 73, 41))
+
+        const jS: typeof j7 & typeof j8 = null!;
+>jS : Symbol(jS, Decl(extendPrivateConstructorClass2.ts, 75, 13))
+>j7 : Symbol(j7, Decl(extendPrivateConstructorClass2.ts, 67, 1))
+>j8 : Symbol(j8, Decl(extendPrivateConstructorClass2.ts, 71, 13))
+
+        // error
+        class j0 extends jS {
+>j0 : Symbol(j0, Decl(extendPrivateConstructorClass2.ts, 75, 48))
+>jS : Symbol(jS, Decl(extendPrivateConstructorClass2.ts, 75, 13))
+
+          method1() {}
+>method1 : Symbol(j0.method1, Decl(extendPrivateConstructorClass2.ts, 78, 29))
+
+          method2() {}
+>method2 : Symbol(j0.method2, Decl(extendPrivateConstructorClass2.ts, 79, 22))
+        }
+      }
+    }
+  }
+}
+
+abstract class j9 {
+>j9 : Symbol(j9, Decl(extendPrivateConstructorClass2.ts, 85, 1))
+
+  private constructor(arg: string) {}
+>arg : Symbol(arg, Decl(extendPrivateConstructorClass2.ts, 88, 22))
+
+  method1() {
+>method1 : Symbol(j9.method1, Decl(extendPrivateConstructorClass2.ts, 88, 37))
+
+    abstract class j10 {
+>j10 : Symbol(j10, Decl(extendPrivateConstructorClass2.ts, 89, 13))
+
+      private constructor(arg: number) {}
+>arg : Symbol(arg, Decl(extendPrivateConstructorClass2.ts, 91, 26))
+
+      method2() {}
+>method2 : Symbol(j10.method2, Decl(extendPrivateConstructorClass2.ts, 91, 41))
+    }
+    const jS: typeof j9 & typeof j10 = null!;
+>jS : Symbol(jS, Decl(extendPrivateConstructorClass2.ts, 94, 9))
+>j9 : Symbol(j9, Decl(extendPrivateConstructorClass2.ts, 85, 1))
+>j10 : Symbol(j10, Decl(extendPrivateConstructorClass2.ts, 89, 13))
+
+    // error
+    class j0 extends jS {
+>j0 : Symbol(j0, Decl(extendPrivateConstructorClass2.ts, 94, 45))
+>jS : Symbol(jS, Decl(extendPrivateConstructorClass2.ts, 94, 9))
+
+      method1() {}
+>method1 : Symbol(j0.method1, Decl(extendPrivateConstructorClass2.ts, 97, 25))
+
+      method2() {}
+>method2 : Symbol(j0.method2, Decl(extendPrivateConstructorClass2.ts, 98, 18))
+    }
+  }
+}
+
+abstract class j11 {
+>j11 : Symbol(j11, Decl(extendPrivateConstructorClass2.ts, 102, 1))
+
+  private constructor(arg: string) {}
+>arg : Symbol(arg, Decl(extendPrivateConstructorClass2.ts, 105, 22))
+
+  static {
+    abstract class j12 {
+>j12 : Symbol(j12, Decl(extendPrivateConstructorClass2.ts, 106, 10))
+
+      private constructor(arg: number) {}
+>arg : Symbol(arg, Decl(extendPrivateConstructorClass2.ts, 108, 26))
+
+      static {
+        const jS: typeof j11 & typeof j12 = null!;
+>jS : Symbol(jS, Decl(extendPrivateConstructorClass2.ts, 110, 13))
+>j11 : Symbol(j11, Decl(extendPrivateConstructorClass2.ts, 102, 1))
+>j12 : Symbol(j12, Decl(extendPrivateConstructorClass2.ts, 106, 10))
+
+        // ok
+        class j0 extends jS {}
+>j0 : Symbol(j0, Decl(extendPrivateConstructorClass2.ts, 110, 50))
+>jS : Symbol(jS, Decl(extendPrivateConstructorClass2.ts, 110, 13))
+      }
+    }
+  }
+}
+
+abstract class j13 {
+>j13 : Symbol(j13, Decl(extendPrivateConstructorClass2.ts, 117, 1))
+
+  private constructor(arg: string) {}
+>arg : Symbol(arg, Decl(extendPrivateConstructorClass2.ts, 120, 22))
+
+  static {
+    abstract class j14 {
+>j14 : Symbol(j14, Decl(extendPrivateConstructorClass2.ts, 121, 10))
+
+      private constructor(arg: number) {}
+>arg : Symbol(arg, Decl(extendPrivateConstructorClass2.ts, 123, 26))
+    }
+    const jS: typeof j13 & typeof j14 = null!;
+>jS : Symbol(jS, Decl(extendPrivateConstructorClass2.ts, 125, 9))
+>j13 : Symbol(j13, Decl(extendPrivateConstructorClass2.ts, 117, 1))
+>j14 : Symbol(j14, Decl(extendPrivateConstructorClass2.ts, 121, 10))
+
+    // error
+    class j0 extends jS {}
+>j0 : Symbol(j0, Decl(extendPrivateConstructorClass2.ts, 125, 46))
+>jS : Symbol(jS, Decl(extendPrivateConstructorClass2.ts, 125, 9))
+  }
+}
+

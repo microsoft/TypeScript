@@ -1,5 +1,5 @@
 // @target: es2015
-// @module: amd
+// @module: commonjs
 // @traceResolution: true
 
 // paths is defined in tsconfig.json

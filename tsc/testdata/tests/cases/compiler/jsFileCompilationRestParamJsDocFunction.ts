@@ -1,7 +1,7 @@
 // @target: es2015
 // @allowJs: true
-// @outFile: apply.js
-// @module: amd
+// @outDir: out
+// @module: commonjs
 
 // @filename: _apply.js
 /**

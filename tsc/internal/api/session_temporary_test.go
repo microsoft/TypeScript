@@ -30,7 +30,7 @@ func TestUpdateTemporarySnapshot(t *testing.T) {
 	}
 	projectSession, _ := projecttestutil.Setup(files)
 	defer projectSession.Close()
-	session := NewSession(projectSession, nil)
+	session := NewLSPSession(projectSession, nil)
 	defer session.Close()
 
 	ctx := context.Background()
@@ -114,7 +114,7 @@ func TestUpdateTemporarySnapshotAddsUnopenedFile(t *testing.T) {
 	}
 	projectSession, _ := projecttestutil.Setup(files)
 	defer projectSession.Close()
-	session := NewSession(projectSession, nil)
+	session := NewLSPSession(projectSession, nil)
 	defer session.Close()
 
 	ctx := context.Background()
@@ -147,7 +147,7 @@ func TestUpdateTemporarySnapshotRejectsUnsupportedExtension(t *testing.T) {
 
 	projectSession, _ := projecttestutil.Setup(map[string]any{})
 	defer projectSession.Close()
-	session := NewSession(projectSession, nil)
+	session := NewLSPSession(projectSession, nil)
 	defer session.Close()
 
 	ctx := context.Background()
@@ -176,7 +176,7 @@ func TestUpdateTemporarySnapshotUsesClientSnapshotAsBase(t *testing.T) {
 	}
 	projectSession, _ := projecttestutil.Setup(files)
 	defer projectSession.Close()
-	session := NewSession(projectSession, nil)
+	session := NewLSPSession(projectSession, nil)
 	defer session.Close()
 
 	ctx := context.Background()

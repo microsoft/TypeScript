@@ -944,6 +944,8 @@ var An_import_attributes_property_cannot_be_optional = &Message{code: 1556, cate
 
 var X_0_is_not_a_valid_key_for_an_import_attributes_type = &Message{code: 1557, category: CategoryError, key: "_0_is_not_a_valid_key_for_an_import_attributes_type_1557", text: "'{0}' is not a valid key for an import attributes type."}
 
+var An_import_attributes_property_cannot_have_a_readonly_modifier = &Message{code: 1558, category: CategoryError, key: "An_import_attributes_property_cannot_have_a_readonly_modifier_1558", text: "An import attributes property cannot have a 'readonly' modifier."}
+
 var The_types_of_0_are_incompatible_between_these_types = &Message{code: 2200, category: CategoryError, key: "The_types_of_0_are_incompatible_between_these_types_2200", text: "The types of '{0}' are incompatible between these types."}
 
 var The_types_returned_by_0_are_incompatible_between_these_types = &Message{code: 2201, category: CategoryError, key: "The_types_returned_by_0_are_incompatible_between_these_types_2201", text: "The types returned by '{0}' are incompatible between these types."}
@@ -2383,6 +2385,8 @@ var Option_module_must_be_set_to_0_when_option_moduleResolution_is_set_to_1 = &M
 var Visit_https_Colon_Slash_Slashaka_ms_Slashts6_for_migration_information = &Message{code: 5111, category: CategoryMessage, key: "Visit_https_Colon_Slash_Slashaka_ms_Slashts6_for_migration_information_5111", text: "Visit https://aka.ms/ts6 for migration information."}
 
 var X_tsconfig_json_is_present_but_will_not_be_loaded_if_files_are_specified_on_commandline_Use_ignoreConfig_to_skip_this_error = &Message{code: 5112, category: CategoryError, key: "tsconfig_json_is_present_but_will_not_be_loaded_if_files_are_specified_on_commandline_Use_ignoreConf_5112", text: "tsconfig.json is present but will not be loaded if files are specified on commandline. Use '--ignoreConfig' to skip this error."}
+
+var X_0_is_only_assignable_to_the_non_distributed_1_but_1_has_been_distributed_here = &Message{code: 5113, category: CategoryError, key: "_0_is_only_assignable_to_the_non_distributed_1_but_1_has_been_distributed_here_5113", text: "'{0}' is only assignable to the non-distributed '{1}', but '{1}' has been distributed here."}
 
 var Generates_a_sourcemap_for_each_corresponding_d_ts_file = &Message{code: 6000, category: CategoryMessage, key: "Generates_a_sourcemap_for_each_corresponding_d_ts_file_6000", text: "Generates a sourcemap for each corresponding '.d.ts' file."}
 
@@ -5372,6 +5376,8 @@ func keyToMessage(key Key) *Message {
 		return An_import_attributes_property_cannot_be_optional
 	case "_0_is_not_a_valid_key_for_an_import_attributes_type_1557":
 		return X_0_is_not_a_valid_key_for_an_import_attributes_type
+	case "An_import_attributes_property_cannot_have_a_readonly_modifier_1558":
+		return An_import_attributes_property_cannot_have_a_readonly_modifier
 	case "The_types_of_0_are_incompatible_between_these_types_2200":
 		return The_types_of_0_are_incompatible_between_these_types
 	case "The_types_returned_by_0_are_incompatible_between_these_types_2201":
@@ -6812,6 +6818,8 @@ func keyToMessage(key Key) *Message {
 		return Visit_https_Colon_Slash_Slashaka_ms_Slashts6_for_migration_information
 	case "tsconfig_json_is_present_but_will_not_be_loaded_if_files_are_specified_on_commandline_Use_ignoreConf_5112":
 		return X_tsconfig_json_is_present_but_will_not_be_loaded_if_files_are_specified_on_commandline_Use_ignoreConfig_to_skip_this_error
+	case "_0_is_only_assignable_to_the_non_distributed_1_but_1_has_been_distributed_here_5113":
+		return X_0_is_only_assignable_to_the_non_distributed_1_but_1_has_been_distributed_here
 	case "Generates_a_sourcemap_for_each_corresponding_d_ts_file_6000":
 		return Generates_a_sourcemap_for_each_corresponding_d_ts_file
 	case "Concatenate_and_emit_output_to_single_file_6001":

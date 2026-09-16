@@ -70,7 +70,9 @@ func (c *SyncConn) Run(ctx context.Context) error {
 		}
 
 		if msg.IsRequest() {
-			c.handleRequest(ctx, msg)
+			if err := c.handleRequest(ctx, msg); err != nil {
+				return err
+			}
 		} else if msg.IsNotification() {
 			c.handleNotification(ctx, msg)
 		} else {
@@ -81,7 +83,7 @@ func (c *SyncConn) Run(ctx context.Context) error {
 }
 
 // handleRequest processes an incoming request.
-func (c *SyncConn) handleRequest(ctx context.Context, msg *Message) {
+func (c *SyncConn) handleRequest(ctx context.Context, msg *Message) (retErr error) {
 	// Intercept the meta-requests for collected server timing before dispatching
 	// to the handler, so they are answered directly and not themselves recorded.
 	switch msg.Method {
@@ -90,9 +92,9 @@ func (c *SyncConn) handleRequest(ctx context.Context, msg *Message) {
 		writeErr := c.protocol.WriteResponse(msg.ID, serverTimingSnapshot(c.timing))
 		c.mu.Unlock()
 		if writeErr != nil {
-			panic(fmt.Sprintf("ipc: failed to write server timing response: %v", writeErr))
+			return fmt.Errorf("ipc: failed to write server timing response: %w", writeErr)
 		}
-		return
+		return nil
 	case string(MethodResetServerTiming):
 		if c.timing != nil {
 			c.timing.reset()
@@ -101,9 +103,9 @@ func (c *SyncConn) handleRequest(ctx context.Context, msg *Message) {
 		writeErr := c.protocol.WriteResponse(msg.ID, nil)
 		c.mu.Unlock()
 		if writeErr != nil {
-			panic(fmt.Sprintf("ipc: failed to write reset server timing response: %v", writeErr))
+			return fmt.Errorf("ipc: failed to write reset server timing response: %w", writeErr)
 		}
-		return
+		return nil
 	}
 
 	var result any
@@ -128,7 +130,7 @@ func (c *SyncConn) handleRequest(ctx context.Context, msg *Message) {
 			c.mu.Unlock()
 
 			if writeErr != nil {
-				panic(fmt.Sprintf("ipc: failed to write panic error response: %v (original panic: %v)", writeErr, r))
+				retErr = fmt.Errorf("ipc: failed to write panic error response: %w (original panic: %v)", writeErr, r)
 			}
 		}
 	}()
@@ -153,8 +155,9 @@ func (c *SyncConn) handleRequest(ctx context.Context, msg *Message) {
 	}
 
 	if writeErr != nil {
-		panic(fmt.Sprintf("ipc: failed to write response: %v", writeErr))
+		return fmt.Errorf("ipc: failed to write response: %w", writeErr)
 	}
+	return nil
 }
 
 // handleNotification processes an incoming notification.

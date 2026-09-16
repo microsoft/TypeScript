@@ -1988,8 +1988,8 @@ func (s *Server) handleRename(ctx context.Context, params *lsproto.RenameParams,
 		}
 		renameFilesParams := &lsproto.RenameFilesParams{
 			Files: []*lsproto.FileRename{{
-				OldUri: string(lsconv.FileNameToDocumentURI(info.FileToRename)),
-				NewUri: string(lsconv.FileNameToDocumentURI(info.NewFileName)),
+				OldUri: lsconv.FileNameToDocumentURI(info.FileToRename),
+				NewUri: lsconv.FileNameToDocumentURI(info.NewFileName),
 			}},
 		}
 		return s.handleWillRenameFilesWorker(ctx, renameFilesParams, req, true /*sendRenameFile*/)
@@ -2012,7 +2012,7 @@ func (s *Server) handleWillRenameFilesWorker(ctx context.Context, params *lsprot
 
 	uris := make([]lsproto.DocumentUri, 0, len(params.Files))
 	for _, file := range params.Files {
-		uris = append(uris, lsproto.DocumentUri(file.OldUri))
+		uris = append(uris, file.OldUri)
 	}
 
 	if len(uris) == 0 {
@@ -2031,7 +2031,7 @@ func (s *Server) handleWillRenameFilesWorker(ctx context.Context, params *lsprot
 
 	for _, languageService := range services {
 		for _, file := range params.Files {
-			changes := languageService.GetEditsForFileRename(ctx, lsproto.DocumentUri(file.OldUri), lsproto.DocumentUri(file.NewUri))
+			changes := languageService.GetEditsForFileRename(ctx, file.OldUri, file.NewUri)
 			for _, change := range changes {
 				if change.RenameFile != nil {
 					if !seenRenames[change.RenameFile.OldUri] {
@@ -2069,8 +2069,8 @@ func (s *Server) handleWillRenameFilesWorker(ctx context.Context, params *lsprot
 			documentChanges = append(documentChanges, lsproto.TextDocumentEditOrCreateFileOrRenameFileOrDeleteFile{
 				RenameFile: &lsproto.RenameFile{
 					Kind:   lsproto.StringLiteralRename{},
-					OldUri: lsproto.DocumentUri(file.OldUri),
-					NewUri: lsproto.DocumentUri(file.NewUri),
+					OldUri: file.OldUri,
+					NewUri: file.NewUri,
 				},
 			})
 		}
@@ -2326,7 +2326,7 @@ func (s *Server) handleInitializeAPISession(ctx context.Context, params *lsproto
 	}
 
 	var apiSession *api.Session
-	apiSession = api.NewSession(s.session, nil)
+	apiSession = api.NewLSPSession(s.session, nil)
 
 	// Use provided pipe path or generate a unique one
 	var pipePath string
