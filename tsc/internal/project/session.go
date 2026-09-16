@@ -79,6 +79,10 @@ type SessionOptions struct {
 	RunExternalCode    bool
 	DebounceDelay      time.Duration
 	CheckerPoolOptions CheckerPoolOptions
+
+	// interactiveWork is shared by every checker pool in the session. Set by NewSession; see
+	// interactiveWork for what it is for.
+	interactiveWork *interactiveWork
 }
 
 type SessionInit struct {
@@ -1053,7 +1057,8 @@ func (s *Session) getSnapshot(
 	var updateReason UpdateReason
 	if len(request.Projects) > 0 {
 		updateReason = UpdateReasonRequestedLanguageServiceProjectDirty
-	} else if request.ProjectTree != nil {
+	} else if request.ProjectTree != nil && !snapshot.ProjectCollection.loadedProjectTrees.covers(request.ProjectTree) {
+		// Only worth a new snapshot if there is something the loaded trees do not already cover.
 		updateReason = UpdateReasonRequestedLoadProjectTree
 	} else if request.AutoImports != "" {
 		updateReason = UpdateReasonRequestedLanguageServiceWithAutoImports
@@ -1354,6 +1359,10 @@ func (s *Session) updateSnapshotRef(ctx context.Context, overlays map[tspath.Pat
 }
 
 func (s *Session) updateSnapshot(ctx context.Context, overlays map[tspath.Path]*Overlay, change SnapshotChange, callerRef bool) *Snapshot {
+	// Rebuilding a program holds the snapshot write lock, so every request in the session waits on
+	// it. A workspace pass must not be competing for the machine while it runs.
+	defer s.options.interactiveWork.begin()()
+
 	s.snapshotMu.Lock()
 	oldSnapshot := s.snapshot
 	if !locale.HasLocale(ctx) {
@@ -1837,7 +1846,8 @@ func (s *Session) refreshCodeLensIfNeeded(oldPrefs lsutil.UserPreferences, newPr
 func (s *Session) refreshDiagnosticsIfNeeded(oldPrefs lsutil.UserPreferences, newPrefs lsutil.UserPreferences) {
 	if oldPrefs.CustomConfigFileName != newPrefs.CustomConfigFileName ||
 		oldPrefs.ReportStyleChecksAsWarnings != newPrefs.ReportStyleChecksAsWarnings ||
-		oldPrefs.EnableValidation != newPrefs.EnableValidation {
+		oldPrefs.EnableValidation != newPrefs.EnableValidation ||
+		oldPrefs.WorkspaceDiagnosticsScope != newPrefs.WorkspaceDiagnosticsScope {
 		s.ScheduleDiagnosticsRefresh()
 	}
 }

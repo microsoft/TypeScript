@@ -9,6 +9,7 @@ type key int
 const (
 	requestIDKey key = iota
 	checkerLifetimeKey
+	interactiveRequestKey
 )
 
 func WithRequestID(ctx context.Context, id string) context.Context {
@@ -20,6 +21,17 @@ func GetRequestID(ctx context.Context) string {
 		return id
 	}
 	return ""
+}
+
+// WithInteractiveRequest marks work a user is waiting on directly, as against work done ahead of
+// being asked for it. Whole-workspace passes stand aside while any of it is outstanding.
+func WithInteractiveRequest(ctx context.Context) context.Context {
+	return context.WithValue(ctx, interactiveRequestKey, true)
+}
+
+func IsInteractiveRequest(ctx context.Context) bool {
+	interactive, _ := ctx.Value(interactiveRequestKey).(bool)
+	return interactive
 }
 
 type CheckerLifetime int

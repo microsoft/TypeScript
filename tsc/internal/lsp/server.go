@@ -80,6 +80,7 @@ func NewServer(opts *ServerOptions) *Server {
 		startWatchdog:         opts.SetParentProcessID,
 		initComplete:          make(chan struct{}),
 		progressDelay:         opts.ProgressDelay,
+		workspaceDiagnostics:  newWorkspaceDiagnosticsCache(),
 	}
 	s.logger = newLogger(s)
 
@@ -250,6 +251,18 @@ type Server struct {
 	startWatchdog func(parentPID int)
 
 	flakeLogging lsproto.DiagnosticFlakeLogLevel
+
+	// workspaceDiagnostics remembers, across `workspace/diagnostic` pulls, which program version
+	// produced the result id a client holds for each file.
+	workspaceDiagnostics *workspaceDiagnosticsCache
+
+	workspaceDiagnosticsRegistrationMu sync.Mutex
+	workspaceDiagnosticsRegistered     bool
+
+	// workspaceDiagnosticsPull is the `workspace/diagnostic` request currently running, if any. A
+	// newer pull supersedes it; see supersedeWorkspaceDiagnostics.
+	workspaceDiagnosticsMu   sync.Mutex
+	workspaceDiagnosticsPull *workspaceDiagnosticsPull
 }
 
 func (s *Server) Session() *project.Session { return s.session }
@@ -515,6 +528,10 @@ func (s *Server) RegisterContentMapperExtensions(ctx context.Context, extensions
 		{
 			Id: contentMapperDiagnosticRegistrationID,
 			RegisterOptions: &lsproto.RegisterOptions{
+				// Must not set WorkspaceDiagnostics: the client runs one workspace pull per provider
+				// that asks for it, into that provider's own collection, so a second one would report
+				// every problem twice. workspaceDiagnosticsRegistrationID is the only provider that
+				// carries it, and it covers content-mapped files too.
 				TextDocumentDiagnostic: &lsproto.DiagnosticRegistrationOptions{
 					DocumentSelector:      selector,
 					Identifier:            new("typescript"),
@@ -1100,6 +1117,16 @@ func (s *Server) sendResult(id *jsonrpc.ID, result any) error {
 	})
 }
 
+// errorWithData is an error response whose `data` the client reads to decide what to do next, as
+// the diagnostic requests do: without it a server-cancelled pull looks like a failure.
+type errorWithData struct {
+	code lsproto.ErrorCode
+	data any
+}
+
+func (e errorWithData) Error() string { return e.code.Error() }
+func (e errorWithData) Unwrap() error { return e.code }
+
 type userFacingRequestFailedError string
 
 func (e userFacingRequestFailedError) Error() string { return string(e) }
@@ -1116,12 +1143,16 @@ func (s *Server) sendError(id *jsonrpc.ID, err error) error {
 	if errCode, ok := errors.AsType[lsproto.ErrorCode](err); ok {
 		code = errCode
 	}
-	// TODO(jakebailey): error data
+	var data any
+	if withData, ok := errors.AsType[errorWithData](err); ok {
+		data = withData.data
+	}
 	return s.sendResponse(&lsproto.ResponseMessage{
 		ID: id,
 		Error: &jsonrpc.ResponseError{
 			Code:    int32(code),
 			Message: err.Error(),
+			Data:    data,
 		},
 	})
 }
@@ -1146,11 +1177,11 @@ func (s *Server) handleRequestOrNotification(ctx context.Context, req *lsproto.R
 
 	if handler := handlers()[req.Method]; handler != nil {
 		start := time.Now()
-		doAsyncWork, err := handler(s, ctx, req)
 		idStr := ""
 		if req.ID != nil {
 			idStr = " (" + req.ID.String() + ")"
 		}
+		doAsyncWork, err := handler(s, ctx, req)
 		if err != nil {
 			if resp, ok := contentMapperFallbackResponse(req.Method, err); ok {
 				if !s.logger.IsTracing() {
@@ -1278,6 +1309,7 @@ var handlers = sync.OnceValue(func() handlerMap {
 	registerRequestHandler(handlers, lsproto.CallHierarchyIncomingCallsInfo, (*Server).handleCallHierarchyIncomingCalls)
 	registerRequestHandler(handlers, lsproto.CallHierarchyOutgoingCallsInfo, (*Server).handleCallHierarchyOutgoingCalls)
 
+	registerWorkspaceDiagnosticHandler(handlers)
 	registerRequestHandler(handlers, lsproto.WorkspaceSymbolInfo, (*Server).handleWorkspaceSymbol)
 	registerRequestHandler(handlers, lsproto.CompletionItemResolveInfo, (*Server).handleCompletionItemResolve)
 	registerRequestHandler(handlers, lsproto.CodeLensResolveInfo, (*Server).handleCodeLensResolve)
@@ -1755,6 +1787,7 @@ func (s *Server) handleInitialized(ctx context.Context, params *lsproto.Initiali
 		return err
 	}
 	s.session.InitializeWithUserConfig(userPreferences)
+	s.syncWorkspaceDiagnosticsRegistration(ctx, userPreferences)
 
 	_, err = sendClientRequest(ctx, s, lsproto.ClientRegisterCapabilityInfo, &lsproto.RegistrationParams{
 		Registrations: []*lsproto.Registration{
@@ -1803,7 +1836,9 @@ func (s *Server) handleDidChangeWorkspaceConfiguration(ctx context.Context, para
 	if params.Settings == nil {
 		return nil
 	} else if settings, ok := params.Settings.(map[string]any); ok {
-		s.session.Configure(lsutil.ParseUserPreferences(settings))
+		preferences := lsutil.ParseUserPreferences(settings)
+		s.session.Configure(preferences)
+		s.syncWorkspaceDiagnosticsRegistration(ctx, preferences)
 	}
 	return nil
 }
@@ -1850,6 +1885,9 @@ func (s *Server) handleSetLogVerbosity(_ context.Context, params *lsproto.SetLog
 
 func (s *Server) handleDocumentDiagnostic(ctx context.Context, languageService *ls.LanguageService, params *lsproto.DocumentDiagnosticParams) (lsproto.DocumentDiagnosticResponse, error) {
 	ctx = core.WithCheckerLifetime(ctx, core.CheckerLifetimeDiagnostics)
+	// The client asked for this file, and is showing the result where the user is looking. A pass
+	// over the whole workspace stands aside for it.
+	ctx = core.WithInteractiveRequest(ctx)
 	if s.flakeLogging == lsproto.DiagnosticFlakeLogLevelOff {
 		return languageService.ProvideDiagnostics(ctx, params.TextDocument.Uri)
 	}

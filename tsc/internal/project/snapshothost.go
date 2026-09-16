@@ -48,6 +48,11 @@ func NewSnapshotHost(init *SessionInit) *SnapshotHost {
 	if contentMappedParseCache == nil {
 		contentMappedParseCache = NewContentMappedParseCache(RefCountCacheOptions{})
 	}
+	// Shared through the options because that is what a project's checker pool can reach. Set
+	// here rather than in NewSession so that every host has one, however it was built.
+	if init.Options.interactiveWork == nil {
+		init.Options.interactiveWork = newInteractiveWork()
+	}
 
 	return &SnapshotHost{
 		options:                 init.Options,

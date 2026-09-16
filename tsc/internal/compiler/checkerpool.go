@@ -19,8 +19,16 @@ import (
 // The returned checker must not be accessed concurrently; each acquisition is exclusive.
 // If file is non-nil, the pool may use it as an affinity hint to return the same
 // checker for the same file across calls.
+// CheckerPool owns the checkers a program is checked with: one per the program's `checkers` option,
+// with the program's files partitioned across them. Which checker sees a file is part of how a
+// program is checked, so anything wanting to check one the way the command line does has to check
+// it through this.
 type CheckerPool interface {
 	GetChecker(ctx context.Context, file *ast.SourceFile) (*checker.Checker, func())
+	// ForEachCheckerGroupDo runs one task per checker rather than one per file, so each checker is
+	// taken once for the whole group of files assigned to it.
+	ForEachCheckerGroupDo(ctx context.Context, files []*ast.SourceFile, singleThreaded bool, cb func(c *checker.Checker, fileIndex int, file *ast.SourceFile))
+	GetGlobalDiagnostics() []*ast.Diagnostic
 }
 
 type checkerPool struct {
@@ -298,19 +306,20 @@ func getCheckerAssociationWeights(baseWeights []int, importCounts []int) []int {
 	return fileWeights
 }
 
-func newCheckerPool(program *Program) *checkerPool {
-	return newCheckerPoolWithTracing(program, nil)
-}
-
-func newCheckerPoolWithTracing(program *Program, tr *tracing.Tracing) *checkerPool {
+// GetCheckerCount returns how many checkers a build of this program would check it with. A caller
+// holding checkers of its own needs this to hold as many as a build does.
+func GetCheckerCount(program *Program) int {
 	checkerCount := 4
 	if program.SingleThreaded() {
 		checkerCount = 1
 	} else if c := program.Options().Checkers; c != nil {
 		checkerCount = *c
 	}
+	return max(min(checkerCount, len(program.files), 256), 1)
+}
 
-	checkerCount = max(min(checkerCount, len(program.files), 256), 1)
+func newCheckerPoolWithTracing(program *Program, tr *tracing.Tracing) *checkerPool {
+	checkerCount := GetCheckerCount(program)
 
 	pool := &checkerPool{
 		program:  program,
@@ -376,38 +385,7 @@ func (p *checkerPool) createCheckers() {
 
 		wg.RunAndWait()
 
-		associations := make([]int, len(p.program.files))
-		if checkerCount > 1 {
-			baseWeights := make([]int, len(p.program.files))
-			importCounts := make([]int, len(p.program.files))
-			isDeclarationFile := make([]bool, len(p.program.files))
-			totalBaseWeight := 0
-			declarationBaseWeight := 0
-			for i, file := range p.program.files {
-				baseWeight := getCheckerAssociationBaseWeight(file.NodeCount, len(file.Text()))
-				totalBaseWeight += baseWeight
-				if file.IsDeclarationFile {
-					declarationBaseWeight += baseWeight
-				}
-				baseWeights[i] = baseWeight
-				importCounts[i] = len(file.Imports())
-				isDeclarationFile[i] = file.IsDeclarationFile
-			}
-			policy := getCheckerAssociationPolicy(totalBaseWeight, declarationBaseWeight, checkerCount)
-			if policy.sourceFileWeightMultiplier != 1 {
-				// Apply this before import normalization. The policy intentionally
-				// increases both source-file work and the normalized import unit.
-				for i, declaration := range isDeclarationFile {
-					if !declaration {
-						baseWeights[i] *= policy.sourceFileWeightMultiplier
-					}
-				}
-			}
-			fileWeights := getCheckerAssociationWeights(baseWeights, importCounts)
-			adjacentFiles := p.getImportAdjacency()
-			fileOrder := getCheckerAssociationOrder(fileWeights, isDeclarationFile, policy.prioritizeSourceFiles)
-			associations = getCheckerAssociationsInOrder(fileWeights, adjacentFiles, fileOrder, checkerCount, policy.balancePenaltyMultiplier)
-		}
+		associations := GetFileCheckerAssociations(p.program, checkerCount)
 		p.fileAssociations = make(map[*ast.SourceFile]*checker.Checker, len(p.program.files))
 		for i, file := range p.program.files {
 			p.fileAssociations[file] = p.checkers[associations[i]]
@@ -415,22 +393,62 @@ func (p *checkerPool) createCheckers() {
 	})
 }
 
+// GetFileCheckerAssociations splits a program's files across checkerCount checkers, returning the
+// index of the checker that owns each file in program order. Which checker sees a file decides
+// what its caches end up holding, so a caller checking a program with its own checkers has to
+// split its files this way to check them the way a build does.
+func GetFileCheckerAssociations(program *Program, checkerCount int) []int {
+	associations := make([]int, len(program.files))
+	if checkerCount <= 1 {
+		return associations
+	}
+	baseWeights := make([]int, len(program.files))
+	importCounts := make([]int, len(program.files))
+	isDeclarationFile := make([]bool, len(program.files))
+	totalBaseWeight := 0
+	declarationBaseWeight := 0
+	for i, file := range program.files {
+		baseWeight := getCheckerAssociationBaseWeight(file.NodeCount, len(file.Text()))
+		totalBaseWeight += baseWeight
+		if file.IsDeclarationFile {
+			declarationBaseWeight += baseWeight
+		}
+		baseWeights[i] = baseWeight
+		importCounts[i] = len(file.Imports())
+		isDeclarationFile[i] = file.IsDeclarationFile
+	}
+	policy := getCheckerAssociationPolicy(totalBaseWeight, declarationBaseWeight, checkerCount)
+	if policy.sourceFileWeightMultiplier != 1 {
+		// Apply this before import normalization. The policy intentionally
+		// increases both source-file work and the normalized import unit.
+		for i, declaration := range isDeclarationFile {
+			if !declaration {
+				baseWeights[i] *= policy.sourceFileWeightMultiplier
+			}
+		}
+	}
+	fileWeights := getCheckerAssociationWeights(baseWeights, importCounts)
+	adjacentFiles := getImportAdjacency(program)
+	fileOrder := getCheckerAssociationOrder(fileWeights, isDeclarationFile, policy.prioritizeSourceFiles)
+	return getCheckerAssociationsInOrder(fileWeights, adjacentFiles, fileOrder, checkerCount, policy.balancePenaltyMultiplier)
+}
+
 // getImportAdjacency returns an undirected import graph represented by file
 // index. A directed import from A to B makes both files adjacent because either
 // file can benefit from sharing checker caches with the other.
-func (p *checkerPool) getImportAdjacency() [][]int {
-	fileIndices := make(map[*ast.SourceFile]int, len(p.program.files))
-	for i, file := range p.program.files {
+func getImportAdjacency(program *Program) [][]int {
+	fileIndices := make(map[*ast.SourceFile]int, len(program.files))
+	for i, file := range program.files {
 		fileIndices[file] = i
 	}
-	adjacentFiles := make([][]int, len(p.program.files))
-	for fileIndex, file := range p.program.files {
-		resolvedModules := p.program.resolvedModules[file.Path()]
+	adjacentFiles := make([][]int, len(program.files))
+	for fileIndex, file := range program.files {
+		resolvedModules := program.resolvedModules[file.Path()]
 		for _, resolved := range resolvedModules {
 			if resolved == nil || !resolved.IsResolved() {
 				continue
 			}
-			importedFile := p.program.GetSourceFileForResolvedModule(resolved.ResolvedFileName)
+			importedFile := program.GetSourceFileForResolvedModule(resolved.ResolvedFileName)
 			importedIndex, ok := fileIndices[importedFile]
 			if !ok || importedIndex == fileIndex {
 				continue
@@ -466,10 +484,10 @@ func (p *checkerPool) GetGlobalDiagnostics() []*ast.Diagnostic {
 	return SortAndDeduplicateDiagnostics(slices.Concat(globalDiagnostics...))
 }
 
-// forEachCheckerGroupDo runs one task per checker in parallel. Each task iterates
+// ForEachCheckerGroupDo runs one task per checker in parallel. Each task iterates
 // the provided files, processing only those assigned to its checker. Within each
 // checker's set, files are visited in their original order.
-func (p *checkerPool) forEachCheckerGroupDo(ctx context.Context, files []*ast.SourceFile, singleThreaded bool, cb func(c *checker.Checker, fileIndex int, file *ast.SourceFile)) {
+func (p *checkerPool) ForEachCheckerGroupDo(ctx context.Context, files []*ast.SourceFile, singleThreaded bool, cb func(c *checker.Checker, fileIndex int, file *ast.SourceFile)) {
 	p.createCheckers()
 
 	checkerCount := len(p.checkers)

@@ -348,6 +348,11 @@ Disable preferring source files instead of declaration files when referencing co
 type: boolean
 default: false
 
+[94m--experimentalWorkspaceDiagnosticsExclude[39m
+Paths that workspace-wide diagnostics in the editor should not report on.
+one or more: string
+default: **/node_modules/**
+
 [94m--incremental, -i[39m
 Save .tsbuildinfo files to allow for incremental compilation of projects.
 type: boolean
