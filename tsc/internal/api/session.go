@@ -1281,13 +1281,11 @@ func (s *Session) toAPISnapshotRequest(changes *SnapshotRequestChangesParams) (*
 			rootFileNames[j] = rootFile.ToAbsoluteFileName(s.currentDirectory())
 		}
 		apiRequest.ReconfigurePrograms[i] = &project.APIReconfigureProgramRequest{
-			ProgramID: programID,
-			APICreateProgramRequest: project.APICreateProgramRequest{
-				RootFileNames:                rootFileNames,
-				CompilerOptions:              &programParams.Options.CompilerOptions,
-				ProjectReferences:            programParams.Options.ProjectReferences,
-				ConfigFileParsingDiagnostics: core.Map(programParams.Options.ConfigFileParsingDiagnostics, func(d *DiagnosticResponse) *ast.Diagnostic { return d.ToDiagnostic() }),
-			},
+			ProgramID:                    programID,
+			RootFileNames:                rootFileNames,
+			CompilerOptions:              &programParams.Options.CompilerOptions,
+			ProjectReferences:            programParams.Options.ProjectReferences,
+			ConfigFileParsingDiagnostics: core.Map(programParams.Options.ConfigFileParsingDiagnostics, func(d *DiagnosticResponse) *ast.Diagnostic { return d.ToDiagnostic() }),
 		}
 	}
 	if len(changes.RemovePrograms) > 0 {

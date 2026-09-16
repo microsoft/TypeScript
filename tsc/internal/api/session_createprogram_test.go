@@ -25,14 +25,12 @@ func TestCreateSnapshotUsesIndependentRoots(t *testing.T) {
 	defer session.Close()
 
 	firstResponse, err := session.handleCreateSnapshot(context.Background(), &CreateSnapshotParams{
-		SnapshotRequestChangesParams: SnapshotRequestChangesParams{
-			CreatePrograms: []*CreateSnapshotProgramParams{{
-				RootFiles: []DocumentIdentifier{{FileName: "/home/projects/p/src/index.ts"}},
-				Options: CreateProgramOptions{
-					CompilerOptions: core.CompilerOptions{NoLib: core.TSTrue},
-				},
-			}},
-		},
+		CreatePrograms: []*CreateSnapshotProgramParams{{
+			RootFiles: []DocumentIdentifier{{FileName: "/home/projects/p/src/index.ts"}},
+			Options: CreateProgramOptions{
+				CompilerOptions: core.CompilerOptions{NoLib: core.TSTrue},
+			},
+		}},
 	})
 	assert.NilError(t, err)
 	assert.Equal(t, firstResponse.Snapshot, SnapshotID(1))
@@ -62,19 +60,17 @@ func TestCreateSnapshotCreatesPrograms(t *testing.T) {
 	defer session.Close()
 
 	response, err := session.handleCreateSnapshot(context.Background(), &CreateSnapshotParams{
-		SnapshotRequestChangesParams: SnapshotRequestChangesParams{
-			CreatePrograms: []*CreateSnapshotProgramParams{
-				{
-					RootFiles: []DocumentIdentifier{{FileName: fileA}, {FileName: fileB}},
-					Options: CreateProgramOptions{
-						CompilerOptions: core.CompilerOptions{NoLib: core.TSTrue, Strict: core.TSTrue},
-					},
+		CreatePrograms: []*CreateSnapshotProgramParams{
+			{
+				RootFiles: []DocumentIdentifier{{FileName: fileA}, {FileName: fileB}},
+				Options: CreateProgramOptions{
+					CompilerOptions: core.CompilerOptions{NoLib: core.TSTrue, Strict: core.TSTrue},
 				},
-				{
-					RootFiles: []DocumentIdentifier{{FileName: fileB}},
-					Options: CreateProgramOptions{
-						CompilerOptions: core.CompilerOptions{NoLib: core.TSTrue},
-					},
+			},
+			{
+				RootFiles: []DocumentIdentifier{{FileName: fileB}},
+				Options: CreateProgramOptions{
+					CompilerOptions: core.CompilerOptions{NoLib: core.TSTrue},
 				},
 			},
 		},
@@ -109,11 +105,9 @@ func TestSnapshotOperationResponseOmitsUnrequestedFields(t *testing.T) {
 	assert.Equal(t, string(encoded), `{}`)
 
 	response, err = session.handleCreateSnapshot(context.Background(), &CreateSnapshotParams{
-		SnapshotRequestChangesParams: SnapshotRequestChangesParams{
-			CreatePrograms:      []*CreateSnapshotProgramParams{},
-			ReconfigurePrograms: []*ReconfigureSnapshotProgramParams{},
-			OpenFiles:           []DocumentIdentifier{},
-		},
+		CreatePrograms:      []*CreateSnapshotProgramParams{},
+		ReconfigurePrograms: []*ReconfigureSnapshotProgramParams{},
+		OpenFiles:           []DocumentIdentifier{},
 	})
 	assert.NilError(t, err)
 	encoded, err = json.Marshal(response.Operation)
@@ -133,23 +127,23 @@ func TestUpdateSnapshotReconfiguresSyntheticProgram(t *testing.T) {
 	defer session.Close()
 
 	created, err := session.handleCreateSnapshot(context.Background(), &CreateSnapshotParams{
-		SnapshotRequestChangesParams: SnapshotRequestChangesParams{CreatePrograms: []*CreateSnapshotProgramParams{{
+		CreatePrograms: []*CreateSnapshotProgramParams{{
 			RootFiles: []DocumentIdentifier{{FileName: "/home/projects/p/a.ts"}},
 			Options:   CreateProgramOptions{CompilerOptions: core.CompilerOptions{NoLib: core.TSTrue}},
-		}}},
+		}},
 	})
 	assert.NilError(t, err)
 	programID := (*created.Operation.CreatedPrograms)[0]
 
 	reconfigured, err := session.handleUpdateSnapshot(context.Background(), &UpdateSnapshotParams{
 		Snapshot: created.Snapshot,
-		Changes: &CreateSnapshotParams{SnapshotRequestChangesParams: SnapshotRequestChangesParams{
+		Changes: &CreateSnapshotParams{
 			ReconfigurePrograms: []*ReconfigureSnapshotProgramParams{{
 				Id:        programID,
 				RootFiles: []DocumentIdentifier{{FileName: "/home/projects/p/b.ts"}},
 				Options:   CreateProgramOptions{CompilerOptions: core.CompilerOptions{NoLib: core.TSTrue, Strict: core.TSTrue}},
 			}},
-		}},
+		},
 	})
 	assert.NilError(t, err)
 	assert.Equal(t, reconfigured.Projects[0].Id, ProjectID(programID))
@@ -183,10 +177,8 @@ func TestReconfigureSyntheticProgramValidation(t *testing.T) {
 	assert.ErrorContains(t, err, "cannot be reconfigured and removed")
 
 	_, err = session.handleCreateSnapshot(context.Background(), &CreateSnapshotParams{
-		SnapshotRequestChangesParams: SnapshotRequestChangesParams{
-			CreatePrograms:      []*CreateSnapshotProgramParams{{}},
-			ReconfigurePrograms: []*ReconfigureSnapshotProgramParams{program},
-		},
+		CreatePrograms:      []*CreateSnapshotProgramParams{{}},
+		ReconfigurePrograms: []*ReconfigureSnapshotProgramParams{program},
 	})
 	assert.ErrorContains(t, err, "not found for reconfiguration")
 }
@@ -201,9 +193,7 @@ func TestCreateSnapshotRejectsRemovingProgramFromIndependentRoot(t *testing.T) {
 	defer session.Close()
 
 	_, err := session.handleCreateSnapshot(context.Background(), &CreateSnapshotParams{
-		SnapshotRequestChangesParams: SnapshotRequestChangesParams{
-			RemovePrograms: []SyntheticProjectID{"/dev/null/synthetic/1"},
-		},
+		RemovePrograms: []SyntheticProjectID{"/dev/null/synthetic/1"},
 	})
 	assert.ErrorContains(t, err, "synthetic program not found for removal: 1")
 }
@@ -218,12 +208,10 @@ func TestUpdateSnapshotEnsuresSyntheticProgram(t *testing.T) {
 	defer session.Close()
 
 	created, err := session.handleCreateSnapshot(context.Background(), &CreateSnapshotParams{
-		SnapshotRequestChangesParams: SnapshotRequestChangesParams{
-			CreatePrograms: []*CreateSnapshotProgramParams{{
-				RootFiles: []DocumentIdentifier{{FileName: fileName}},
-				Options:   CreateProgramOptions{CompilerOptions: core.CompilerOptions{NoLib: core.TSTrue}},
-			}},
-		},
+		CreatePrograms: []*CreateSnapshotProgramParams{{
+			RootFiles: []DocumentIdentifier{{FileName: fileName}},
+			Options:   CreateProgramOptions{CompilerOptions: core.CompilerOptions{NoLib: core.TSTrue}},
+		}},
 	})
 	assert.NilError(t, err)
 	assert.Equal(t, created.Projects[0].Dirty, false)
@@ -242,9 +230,7 @@ func TestUpdateSnapshotEnsuresSyntheticProgram(t *testing.T) {
 	ensured, err := session.handleUpdateSnapshot(context.Background(), &UpdateSnapshotParams{
 		Snapshot: dirty.Snapshot,
 		Changes: &CreateSnapshotParams{
-			SnapshotRequestChangesParams: SnapshotRequestChangesParams{
-				EnsurePrograms: &EnsurePrograms{Projects: []ProjectID{projectID}},
-			},
+			EnsurePrograms: &EnsurePrograms{Projects: []ProjectID{projectID}},
 		},
 	})
 	assert.NilError(t, err)

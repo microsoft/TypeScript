@@ -29,9 +29,7 @@ func TestGetCurrentLanguageServerSnapshotAdoptsChanges(t *testing.T) {
 	session := NewLSPSession(projectSession, nil)
 	response, err := session.handleGetCurrentLanguageServerSnapshot(context.Background(), &GetCurrentLanguageServerSnapshotParams{
 		Changes: &LanguageServerSnapshotChanges{
-			SnapshotRequestChangesParams: SnapshotRequestChangesParams{
-				OpenProjects: []DocumentIdentifier{{FileName: configFileName}},
-			},
+			OpenProjects: []DocumentIdentifier{{FileName: configFileName}},
 		},
 	})
 	assert.NilError(t, err)
@@ -50,9 +48,7 @@ func TestGetCurrentLanguageServerSnapshotAdoptsChanges(t *testing.T) {
 	unchanged, err := session.handleGetCurrentLanguageServerSnapshot(context.Background(), &GetCurrentLanguageServerSnapshotParams{
 		BaseSnapshot: dirty.Snapshot,
 		Changes: &LanguageServerSnapshotChanges{
-			SnapshotRequestChangesParams: SnapshotRequestChangesParams{
-				OpenProjects: []DocumentIdentifier{{FileName: configFileName}},
-			},
+			OpenProjects: []DocumentIdentifier{{FileName: configFileName}},
 		},
 	})
 	assert.NilError(t, err)
@@ -62,9 +58,7 @@ func TestGetCurrentLanguageServerSnapshotAdoptsChanges(t *testing.T) {
 	removed, err := session.handleGetCurrentLanguageServerSnapshot(context.Background(), &GetCurrentLanguageServerSnapshotParams{
 		BaseSnapshot: unchanged.Snapshot,
 		Changes: &LanguageServerSnapshotChanges{
-			SnapshotRequestChangesParams: SnapshotRequestChangesParams{
-				CloseProjects: []DocumentIdentifier{{FileName: configFileName}},
-			},
+			CloseProjects: []DocumentIdentifier{{FileName: configFileName}},
 		},
 	})
 	assert.NilError(t, err)
@@ -102,22 +96,20 @@ func TestGetCurrentLanguageServerSnapshotCloseAndReopenProject(t *testing.T) {
 	defer session.Close()
 	open := DocumentIdentifier{FileName: configFileName}
 	_, err := session.handleGetCurrentLanguageServerSnapshot(ctx, &GetCurrentLanguageServerSnapshotParams{Changes: &LanguageServerSnapshotChanges{
-		SnapshotRequestChangesParams: SnapshotRequestChangesParams{OpenProjects: []DocumentIdentifier{open}},
+		OpenProjects: []DocumentIdentifier{open},
 	}})
 	assert.NilError(t, err)
 
 	_, err = session.handleGetCurrentLanguageServerSnapshot(ctx, &GetCurrentLanguageServerSnapshotParams{Changes: &LanguageServerSnapshotChanges{
-		SnapshotRequestChangesParams: SnapshotRequestChangesParams{
-			CloseProjects: []DocumentIdentifier{open},
-			OpenProjects:  []DocumentIdentifier{open},
-		},
+		CloseProjects: []DocumentIdentifier{open},
+		OpenProjects:  []DocumentIdentifier{open},
 	}})
 	assert.NilError(t, err)
 	assert.Equal(t, session.openProjects.Len(), 1)
 	assert.Assert(t, projectSession.Snapshot().ProjectCollection.ConfiguredProject(tspath.Path(configFileName)) != nil)
 
 	_, err = session.handleGetCurrentLanguageServerSnapshot(ctx, &GetCurrentLanguageServerSnapshotParams{Changes: &LanguageServerSnapshotChanges{
-		SnapshotRequestChangesParams: SnapshotRequestChangesParams{CloseProjects: []DocumentIdentifier{open}},
+		CloseProjects: []DocumentIdentifier{open},
 	}})
 	assert.NilError(t, err)
 	assert.Equal(t, session.openProjects.Len(), 0)
@@ -137,22 +129,20 @@ func TestGetCurrentLanguageServerSnapshotCloseAndReopenFile(t *testing.T) {
 	defer session.Close()
 	open := DocumentIdentifier{FileName: fileName}
 	_, err := session.handleGetCurrentLanguageServerSnapshot(ctx, &GetCurrentLanguageServerSnapshotParams{Changes: &LanguageServerSnapshotChanges{
-		SnapshotRequestChangesParams: SnapshotRequestChangesParams{OpenFiles: []DocumentIdentifier{open}},
+		OpenFiles: []DocumentIdentifier{open},
 	}})
 	assert.NilError(t, err)
 
 	_, err = session.handleGetCurrentLanguageServerSnapshot(ctx, &GetCurrentLanguageServerSnapshotParams{Changes: &LanguageServerSnapshotChanges{
-		SnapshotRequestChangesParams: SnapshotRequestChangesParams{
-			CloseFiles: []DocumentIdentifier{open},
-			OpenFiles:  []DocumentIdentifier{open},
-		},
+		CloseFiles: []DocumentIdentifier{open},
+		OpenFiles:  []DocumentIdentifier{open},
 	}})
 	assert.NilError(t, err)
 	assert.Equal(t, session.openFiles.Len(), 1)
 	assert.Assert(t, projectSession.Snapshot().GetDefaultProject(open.ToURI(projectSession.GetCurrentDirectory())) != nil)
 
 	_, err = session.handleGetCurrentLanguageServerSnapshot(ctx, &GetCurrentLanguageServerSnapshotParams{Changes: &LanguageServerSnapshotChanges{
-		SnapshotRequestChangesParams: SnapshotRequestChangesParams{CloseFiles: []DocumentIdentifier{open}},
+		CloseFiles: []DocumentIdentifier{open},
 	}})
 	assert.NilError(t, err)
 	assert.Equal(t, session.openFiles.Len(), 0)
@@ -200,9 +190,9 @@ func TestGetCurrentLanguageServerSnapshotReportsOpenedFilesInRequestOrder(t *tes
 	session := NewLSPSession(projectSession, nil)
 	defer session.Close()
 
-	changes := &LanguageServerSnapshotChanges{SnapshotRequestChangesParams: SnapshotRequestChangesParams{
+	changes := &LanguageServerSnapshotChanges{
 		OpenFiles: []DocumentIdentifier{{FileName: inferredFile}, {FileName: configuredFile}},
-	}}
+	}
 	first, err := session.handleGetCurrentLanguageServerSnapshot(context.Background(), &GetCurrentLanguageServerSnapshotParams{Changes: changes})
 	assert.NilError(t, err)
 	assert.Equal(t, len(*first.Operation.OpenedFiles), 2)
@@ -238,14 +228,12 @@ func TestGetCurrentLanguageServerSnapshotCreatesAndRemovesPrograms(t *testing.T)
 	defer session.Close()
 	created, err := session.handleGetCurrentLanguageServerSnapshot(context.Background(), &GetCurrentLanguageServerSnapshotParams{
 		Changes: &LanguageServerSnapshotChanges{
-			SnapshotRequestChangesParams: SnapshotRequestChangesParams{
-				CreatePrograms: []*CreateSnapshotProgramParams{{
-					RootFiles: []DocumentIdentifier{{FileName: fileName}},
-					Options: CreateProgramOptions{
-						CompilerOptions: core.CompilerOptions{NoLib: core.TSTrue},
-					},
-				}},
-			},
+			CreatePrograms: []*CreateSnapshotProgramParams{{
+				RootFiles: []DocumentIdentifier{{FileName: fileName}},
+				Options: CreateProgramOptions{
+					CompilerOptions: core.CompilerOptions{NoLib: core.TSTrue},
+				},
+			}},
 		},
 	})
 	assert.NilError(t, err)
@@ -254,7 +242,7 @@ func TestGetCurrentLanguageServerSnapshotCreatesAndRemovesPrograms(t *testing.T)
 
 	removed, err := session.handleGetCurrentLanguageServerSnapshot(context.Background(), &GetCurrentLanguageServerSnapshotParams{
 		Changes: &LanguageServerSnapshotChanges{
-			SnapshotRequestChangesParams: SnapshotRequestChangesParams{RemovePrograms: []SyntheticProjectID{SyntheticProjectID(created.Projects[0].Id), SyntheticProjectID(created.Projects[0].Id)}},
+			RemovePrograms: []SyntheticProjectID{SyntheticProjectID(created.Projects[0].Id), SyntheticProjectID(created.Projects[0].Id)},
 		},
 	})
 	assert.NilError(t, err)
@@ -272,14 +260,12 @@ func TestClosingAPISessionRemovesCreatedLanguageServerPrograms(t *testing.T) {
 	session := NewLSPSession(projectSession, nil)
 	_, err := session.handleGetCurrentLanguageServerSnapshot(context.Background(), &GetCurrentLanguageServerSnapshotParams{
 		Changes: &LanguageServerSnapshotChanges{
-			SnapshotRequestChangesParams: SnapshotRequestChangesParams{
-				CreatePrograms: []*CreateSnapshotProgramParams{{
-					RootFiles: []DocumentIdentifier{{FileName: fileName}},
-					Options: CreateProgramOptions{
-						CompilerOptions: core.CompilerOptions{NoLib: core.TSTrue},
-					},
-				}},
-			},
+			CreatePrograms: []*CreateSnapshotProgramParams{{
+				RootFiles: []DocumentIdentifier{{FileName: fileName}},
+				Options: CreateProgramOptions{
+					CompilerOptions: core.CompilerOptions{NoLib: core.TSTrue},
+				},
+			}},
 		},
 	})
 	assert.NilError(t, err)
@@ -299,14 +285,12 @@ func TestLanguageServerProgramOwnershipIsIsolatedByAPISession(t *testing.T) {
 	owner := NewLSPSession(projectSession, nil)
 	created, err := owner.handleGetCurrentLanguageServerSnapshot(context.Background(), &GetCurrentLanguageServerSnapshotParams{
 		Changes: &LanguageServerSnapshotChanges{
-			SnapshotRequestChangesParams: SnapshotRequestChangesParams{
-				CreatePrograms: []*CreateSnapshotProgramParams{{
-					RootFiles: []DocumentIdentifier{{FileName: fileName}},
-					Options: CreateProgramOptions{
-						CompilerOptions: core.CompilerOptions{NoLib: core.TSTrue},
-					},
-				}},
-			},
+			CreatePrograms: []*CreateSnapshotProgramParams{{
+				RootFiles: []DocumentIdentifier{{FileName: fileName}},
+				Options: CreateProgramOptions{
+					CompilerOptions: core.CompilerOptions{NoLib: core.TSTrue},
+				},
+			}},
 		},
 	})
 	assert.NilError(t, err)
@@ -314,7 +298,7 @@ func TestLanguageServerProgramOwnershipIsIsolatedByAPISession(t *testing.T) {
 	other := NewLSPSession(projectSession, nil)
 	_, err = other.handleGetCurrentLanguageServerSnapshot(context.Background(), &GetCurrentLanguageServerSnapshotParams{
 		Changes: &LanguageServerSnapshotChanges{
-			SnapshotRequestChangesParams: SnapshotRequestChangesParams{RemovePrograms: []SyntheticProjectID{SyntheticProjectID(created.Projects[0].Id)}},
+			RemovePrograms: []SyntheticProjectID{SyntheticProjectID(created.Projects[0].Id)},
 		},
 	})
 	assert.NilError(t, err)
@@ -336,12 +320,12 @@ func TestLanguageServerProgramReconfigurationIsIsolatedByAPISession(t *testing.T
 	owner := NewLSPSession(projectSession, nil)
 	defer owner.Close()
 	created, err := owner.handleGetCurrentLanguageServerSnapshot(context.Background(), &GetCurrentLanguageServerSnapshotParams{
-		Changes: &LanguageServerSnapshotChanges{SnapshotRequestChangesParams: SnapshotRequestChangesParams{
+		Changes: &LanguageServerSnapshotChanges{
 			CreatePrograms: []*CreateSnapshotProgramParams{{
 				RootFiles: []DocumentIdentifier{{FileName: fileName}},
 				Options:   CreateProgramOptions{CompilerOptions: core.CompilerOptions{NoLib: core.TSTrue}},
 			}},
-		}},
+		},
 	})
 	assert.NilError(t, err)
 	programID := SyntheticProjectID(created.Projects[0].Id)
@@ -349,13 +333,13 @@ func TestLanguageServerProgramReconfigurationIsIsolatedByAPISession(t *testing.T
 	other := NewLSPSession(projectSession, nil)
 	defer other.Close()
 	_, err = other.handleGetCurrentLanguageServerSnapshot(context.Background(), &GetCurrentLanguageServerSnapshotParams{
-		Changes: &LanguageServerSnapshotChanges{SnapshotRequestChangesParams: SnapshotRequestChangesParams{
+		Changes: &LanguageServerSnapshotChanges{
 			ReconfigurePrograms: []*ReconfigureSnapshotProgramParams{{
 				Id:        programID,
 				RootFiles: []DocumentIdentifier{{FileName: fileName}},
 				Options:   CreateProgramOptions{CompilerOptions: core.CompilerOptions{NoLib: core.TSTrue, Strict: core.TSTrue}},
 			}},
-		}},
+		},
 	})
 	assert.ErrorContains(t, err, "not owned by this API session")
 }
@@ -370,9 +354,9 @@ func TestOpeningProjectOwnedByAnotherAPISessionEnsuresProgram(t *testing.T) {
 		fileName:       `export const value = 1;`,
 	})
 	defer projectSession.Close()
-	openProject := &LanguageServerSnapshotChanges{SnapshotRequestChangesParams: SnapshotRequestChangesParams{
+	openProject := &LanguageServerSnapshotChanges{
 		OpenProjects: []DocumentIdentifier{{FileName: configFileName}},
-	}}
+	}
 
 	owner := NewLSPSession(projectSession, nil)
 	_, err := owner.handleGetCurrentLanguageServerSnapshot(context.Background(), &GetCurrentLanguageServerSnapshotParams{Changes: openProject})
@@ -428,9 +412,7 @@ func TestGetCurrentLanguageServerSnapshotOpeningLSPFileEnsuresConfiguredProgram(
 	ensured, err := session.handleGetCurrentLanguageServerSnapshot(context.Background(), &GetCurrentLanguageServerSnapshotParams{
 		BaseSnapshot: dirty.Snapshot,
 		Changes: &LanguageServerSnapshotChanges{
-			SnapshotRequestChangesParams: SnapshotRequestChangesParams{
-				OpenFiles: []DocumentIdentifier{{FileName: fileName}},
-			},
+			OpenFiles: []DocumentIdentifier{{FileName: fileName}},
 		},
 	})
 	assert.NilError(t, err)

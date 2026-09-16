@@ -48,7 +48,7 @@ func TestEditorChangeInvalidatesRequestSymlinkAlias(t *testing.T) {
 	defer session.Close()
 
 	base, err := updateCurrentLanguageServerSnapshot(ctx, session, &CreateSnapshotParams{
-		SnapshotRequestChangesParams: SnapshotRequestChangesParams{OpenProjects: []DocumentIdentifier{{FileName: "/tsconfig.json"}}},
+		OpenProjects: []DocumentIdentifier{{FileName: "/tsconfig.json"}},
 		FileSystem: &requestfilesystem.RequestFileSystem{
 			Kind: requestfilesystem.KindLayer,
 			Symlinks: map[string]requestfilesystem.RequestSymlink{
@@ -63,7 +63,7 @@ func TestEditorChangeInvalidatesRequestSymlinkAlias(t *testing.T) {
 		WholeDocument: &lsproto.TextDocumentContentChangeWholeDocument{Text: "new"},
 	}})
 	updated, err := updateCurrentLanguageServerSnapshot(ctx, session, &CreateSnapshotParams{
-		SnapshotRequestChangesParams: SnapshotRequestChangesParams{OpenProjects: []DocumentIdentifier{{FileName: "/tsconfig.json"}}},
+		OpenProjects: []DocumentIdentifier{{FileName: "/tsconfig.json"}},
 		FileSystem: &requestfilesystem.RequestFileSystem{
 			Kind: requestfilesystem.KindLayer,
 			Symlinks: map[string]requestfilesystem.RequestSymlink{
@@ -98,16 +98,16 @@ func TestLargeRequestLayerUpdateRetainsChanges(t *testing.T) {
 	defer session.Close()
 
 	base, err := updateCurrentLanguageServerSnapshot(ctx, session, &CreateSnapshotParams{
-		SnapshotRequestChangesParams: SnapshotRequestChangesParams{OpenProjects: []DocumentIdentifier{{FileName: "/tsconfig.json"}}},
-		FileSystem:                   &requestfilesystem.RequestFileSystem{Kind: requestfilesystem.KindLayer, Files: baseFiles},
+		OpenProjects: []DocumentIdentifier{{FileName: "/tsconfig.json"}},
+		FileSystem:   &requestfilesystem.RequestFileSystem{Kind: requestfilesystem.KindLayer, Files: baseFiles},
 	})
 	assert.NilError(t, err)
 
 	updated, err := session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{
 		Snapshot: base.Snapshot,
 		Changes: &CreateSnapshotParams{
-			SnapshotRequestChangesParams: SnapshotRequestChangesParams{EnsurePrograms: &EnsurePrograms{All: true}},
-			FileSystem:                   &requestfilesystem.RequestFileSystem{Kind: requestfilesystem.KindLayer, Files: updatedFiles},
+			EnsurePrograms: &EnsurePrograms{All: true},
+			FileSystem:     &requestfilesystem.RequestFileSystem{Kind: requestfilesystem.KindLayer, Files: updatedFiles},
 		},
 	})
 	assert.NilError(t, err)
@@ -158,7 +158,7 @@ func TestUnmaskedOverlayContinuesUpdating(t *testing.T) {
 	defer session.Close()
 
 	masked, err := updateCurrentLanguageServerSnapshot(ctx, session, &CreateSnapshotParams{
-		SnapshotRequestChangesParams: SnapshotRequestChangesParams{OpenProjects: []DocumentIdentifier{{FileName: "/tsconfig.json"}}},
+		OpenProjects: []DocumentIdentifier{{FileName: "/tsconfig.json"}},
 		FileSystem: &requestfilesystem.RequestFileSystem{
 			Kind:  requestfilesystem.KindLayer,
 			Files: map[string]string{"/index.ts": "request"},
@@ -168,7 +168,7 @@ func TestUnmaskedOverlayContinuesUpdating(t *testing.T) {
 	assert.Equal(t, session.snapshots[masked.Snapshot].snapshot.ProjectCollection.GetProjectByPath("/tsconfig.json").GetProgram().GetSourceFile("/index.ts").Text(), "request")
 
 	unmasked, err := updateCurrentLanguageServerSnapshot(ctx, session, &CreateSnapshotParams{
-		SnapshotRequestChangesParams: SnapshotRequestChangesParams{OpenProjects: []DocumentIdentifier{{FileName: "/tsconfig.json"}}},
+		OpenProjects: []DocumentIdentifier{{FileName: "/tsconfig.json"}},
 	})
 	assert.NilError(t, err)
 	assert.Equal(t, session.snapshots[unmasked.Snapshot].snapshot.ProjectCollection.GetProjectByPath("/tsconfig.json").GetProgram().GetSourceFile("/index.ts").Text(), "overlay1")
@@ -177,7 +177,7 @@ func TestUnmaskedOverlayContinuesUpdating(t *testing.T) {
 		WholeDocument: &lsproto.TextDocumentContentChangeWholeDocument{Text: "overlay2"},
 	}})
 	updated, err := updateCurrentLanguageServerSnapshot(ctx, session, &CreateSnapshotParams{
-		SnapshotRequestChangesParams: SnapshotRequestChangesParams{OpenProjects: []DocumentIdentifier{{FileName: "/tsconfig.json"}}},
+		OpenProjects: []DocumentIdentifier{{FileName: "/tsconfig.json"}},
 	})
 	assert.NilError(t, err)
 	assert.Equal(t, session.snapshots[updated.Snapshot].snapshot.ProjectCollection.GetProjectByPath("/tsconfig.json").GetProgram().GetSourceFile("/index.ts").Text(), "overlay2")
@@ -235,7 +235,7 @@ func TestCreateSnapshotUsesFullFileSystem(t *testing.T) {
 	defer session.Close()
 
 	response, err := session.handleCreateSnapshot(context.Background(), &CreateSnapshotParams{
-		SnapshotRequestChangesParams: SnapshotRequestChangesParams{OpenProjects: []DocumentIdentifier{{FileName: "/tsconfig.json"}}},
+		OpenProjects: []DocumentIdentifier{{FileName: "/tsconfig.json"}},
 		FileSystem: &requestfilesystem.RequestFileSystem{
 			Kind: requestfilesystem.KindFull,
 			Files: map[string]string{
@@ -270,7 +270,7 @@ func TestCreateSnapshotUsesFullFileSystem(t *testing.T) {
 	response, err = session.handleUpdateSnapshot(context.Background(), &UpdateSnapshotParams{
 		Snapshot: response.Snapshot,
 		Changes: &CreateSnapshotParams{
-			SnapshotRequestChangesParams: SnapshotRequestChangesParams{EnsurePrograms: &EnsurePrograms{All: true}},
+			EnsurePrograms: &EnsurePrograms{All: true},
 			FileSystem: &requestfilesystem.RequestFileSystem{
 				Kind: requestfilesystem.KindFull,
 				Files: map[string]string{
@@ -422,9 +422,9 @@ func TestUpdateSnapshotRequestMaskUpdatesOpenConfiguredProjects(t *testing.T) {
 	session := NewLSPSession(projectSession, nil)
 	defer session.Close()
 	base, err := session.handleGetCurrentLanguageServerSnapshot(context.Background(), &GetCurrentLanguageServerSnapshotParams{
-		Changes: &LanguageServerSnapshotChanges{SnapshotRequestChangesParams: SnapshotRequestChangesParams{
+		Changes: &LanguageServerSnapshotChanges{
 			OpenProjects: []DocumentIdentifier{{FileName: "/tsconfig.json"}},
-		}},
+		},
 	})
 	assert.NilError(t, err)
 	baseSnapshot := session.snapshots[base.Snapshot].snapshot
@@ -446,9 +446,9 @@ func TestUpdateSnapshotRequestMaskUpdatesOpenConfiguredProjects(t *testing.T) {
 	assert.Assert(t, !maskedSnapshot.ProjectCollection.GetOpenConfiguredProjects().Has("/tsconfig.json"))
 
 	unmasked, err := session.handleGetCurrentLanguageServerSnapshot(context.Background(), &GetCurrentLanguageServerSnapshotParams{
-		Changes: &LanguageServerSnapshotChanges{SnapshotRequestChangesParams: SnapshotRequestChangesParams{
+		Changes: &LanguageServerSnapshotChanges{
 			OpenProjects: []DocumentIdentifier{{FileName: "/tsconfig.json"}},
-		}},
+		},
 	})
 	assert.NilError(t, err)
 	unmaskedSnapshot := session.snapshots[unmasked.Snapshot].snapshot
@@ -498,7 +498,7 @@ func TestCreateProgramRetainsFullFileSystem(t *testing.T) {
 
 	ctx := context.Background()
 	base, err := session.handleCreateSnapshot(ctx, &CreateSnapshotParams{
-		SnapshotRequestChangesParams: SnapshotRequestChangesParams{OpenFiles: []DocumentIdentifier{{FileName: "/old.ts"}}},
+		OpenFiles: []DocumentIdentifier{{FileName: "/old.ts"}},
 		FileSystem: &requestfilesystem.RequestFileSystem{
 			Kind: requestfilesystem.KindFull,
 			Files: map[string]string{
@@ -512,12 +512,12 @@ func TestCreateProgramRetainsFullFileSystem(t *testing.T) {
 
 	created, err := session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{
 		Snapshot: base.Snapshot,
-		Changes: &CreateSnapshotParams{SnapshotRequestChangesParams: SnapshotRequestChangesParams{
+		Changes: &CreateSnapshotParams{
 			CreatePrograms: []*CreateSnapshotProgramParams{{
 				RootFiles: []DocumentIdentifier{{FileName: "/new.ts"}},
 				Options:   CreateProgramOptions{CompilerOptions: core.CompilerOptions{NoLib: core.TSTrue}},
 			}},
-		}},
+		},
 	})
 	assert.NilError(t, err)
 
@@ -571,7 +571,7 @@ func TestSnapshotUpdateCarriesHostFileSystemWithoutOverride(t *testing.T) {
 	defer session.Close()
 
 	base, err := session.handleCreateSnapshot(context.Background(), &CreateSnapshotParams{
-		SnapshotRequestChangesParams: SnapshotRequestChangesParams{OpenProjects: []DocumentIdentifier{{FileName: "/tsconfig.json"}}},
+		OpenProjects: []DocumentIdentifier{{FileName: "/tsconfig.json"}},
 	})
 	assert.NilError(t, err)
 	baseSnapshot := session.snapshots[base.Snapshot].snapshot
@@ -607,7 +607,7 @@ func TestSnapshotFileSystemLayersPreserveIncrementalState(t *testing.T) {
 			defer session.Close()
 			ctx := context.Background()
 			params := &CreateSnapshotParams{
-				SnapshotRequestChangesParams: SnapshotRequestChangesParams{OpenProjects: []DocumentIdentifier{{FileName: "/a/tsconfig.json"}, {FileName: "/b/tsconfig.json"}}},
+				OpenProjects: []DocumentIdentifier{{FileName: "/a/tsconfig.json"}, {FileName: "/b/tsconfig.json"}},
 			}
 			if baseKind != "host" {
 				params.FileSystem = &requestfilesystem.RequestFileSystem{Kind: baseKind, Files: files}
@@ -622,7 +622,7 @@ func TestSnapshotFileSystemLayersPreserveIncrementalState(t *testing.T) {
 			unchanged, err := session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{
 				Snapshot: base.Snapshot,
 				Changes: &CreateSnapshotParams{
-					SnapshotRequestChangesParams: SnapshotRequestChangesParams{EnsurePrograms: &EnsurePrograms{All: true}},
+					EnsurePrograms: &EnsurePrograms{All: true},
 					FileSystem: &requestfilesystem.RequestFileSystem{
 						Kind:  requestfilesystem.KindLayer,
 						Files: map[string]string{"/a/index.ts": files["/a/index.ts"]},
@@ -639,7 +639,7 @@ func TestSnapshotFileSystemLayersPreserveIncrementalState(t *testing.T) {
 			updated, err := session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{
 				Snapshot: unchanged.Snapshot,
 				Changes: &CreateSnapshotParams{
-					SnapshotRequestChangesParams: SnapshotRequestChangesParams{EnsurePrograms: &EnsurePrograms{All: true}},
+					EnsurePrograms: &EnsurePrograms{All: true},
 					FileSystem: &requestfilesystem.RequestFileSystem{
 						Kind:  requestfilesystem.KindLayer,
 						Files: map[string]string{"/a/index.ts": updatedText},
@@ -658,7 +658,7 @@ func TestSnapshotFileSystemLayersPreserveIncrementalState(t *testing.T) {
 			removed, err := session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{
 				Snapshot: updated.Snapshot,
 				Changes: &CreateSnapshotParams{
-					SnapshotRequestChangesParams: SnapshotRequestChangesParams{EnsurePrograms: &EnsurePrograms{All: true}},
+					EnsurePrograms: &EnsurePrograms{All: true},
 					FileSystem: &requestfilesystem.RequestFileSystem{
 						Kind:         requestfilesystem.KindLayer,
 						RemovedPaths: []string{"/a/removed"},
@@ -701,13 +701,13 @@ func TestSnapshotFileSystemLayerWithoutBaseUpdatesHostState(t *testing.T) {
 	defer session.Close()
 	ctx := context.Background()
 	_, err := session.handleCreateSnapshot(ctx, &CreateSnapshotParams{
-		SnapshotRequestChangesParams: SnapshotRequestChangesParams{OpenProjects: []DocumentIdentifier{{FileName: "/tsconfig.json"}}},
+		OpenProjects: []DocumentIdentifier{{FileName: "/tsconfig.json"}},
 	})
 	assert.NilError(t, err)
 
 	const updatedText = `export const value = 2;`
 	updated, err := session.handleCreateSnapshot(ctx, &CreateSnapshotParams{
-		SnapshotRequestChangesParams: SnapshotRequestChangesParams{OpenProjects: []DocumentIdentifier{{FileName: "/tsconfig.json"}}},
+		OpenProjects: []DocumentIdentifier{{FileName: "/tsconfig.json"}},
 		FileSystem: &requestfilesystem.RequestFileSystem{
 			Kind:  requestfilesystem.KindLayer,
 			Files: map[string]string{"/index.ts": updatedText},
@@ -730,7 +730,7 @@ func TestEmitFromLayerOverFullFileSystemReturnsFileContents(t *testing.T) {
 	ctx := context.Background()
 
 	base, err := session.handleCreateSnapshot(ctx, &CreateSnapshotParams{
-		SnapshotRequestChangesParams: SnapshotRequestChangesParams{OpenProjects: []DocumentIdentifier{{FileName: "/tsconfig.json"}}},
+		OpenProjects: []DocumentIdentifier{{FileName: "/tsconfig.json"}},
 		FileSystem: &requestfilesystem.RequestFileSystem{
 			Kind: requestfilesystem.KindFull,
 			Files: map[string]string{

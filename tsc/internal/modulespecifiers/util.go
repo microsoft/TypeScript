@@ -357,12 +357,11 @@ func allKeysStartWithDot(obj *collections.OrderedMap[string, packagejson.Exports
 }
 
 func GetPackageNameFromDirectory(fileOrDirectoryPath string) string {
-	idx := strings.LastIndex(fileOrDirectoryPath, "/node_modules/")
-	if idx == -1 {
+	_, basename, found := strings.CutLast(fileOrDirectoryPath, "/node_modules/")
+	if !found {
 		return ""
 	}
 
-	basename := fileOrDirectoryPath[idx+len("/node_modules/"):]
 	if basename[0] == '.' {
 		return ""
 	}
