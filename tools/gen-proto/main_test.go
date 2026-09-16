@@ -79,8 +79,6 @@ export interface CompilerOptions`,
 		`outputFiles: EmitOutputFile[];`,
 		`/** Path is a normalized path on disk. */
     path: string;`,
-		`/** Snapshot is the current client snapshot on which to layer the temporary update. */
-    snapshot: number;`,
 		`kind: "importSymbol";`,
 	} {
 		if !strings.Contains(generated, expected) {

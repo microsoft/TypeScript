@@ -2015,6 +2015,26 @@ describe("Checker - symbol identity across projects", () => {
 
         assert.strictEqual(symbolA, symbolB, "Same source symbol queried from two projects should be the same object");
     });
+
+    test("overlapping synthetic programs share Symbol instances", async () => {
+        await using api = spawnAPI({
+            "/src/shared.ts": `export const sharedVar = 42;`,
+        });
+        const snapshot = await api.createSnapshot({
+            createPrograms: [
+                { rootFiles: ["/src/shared.ts"], options: { compilerOptions: { noLib: true } } },
+                { rootFiles: ["/src/shared.ts"], options: { compilerOptions: { noLib: true } } },
+            ],
+        });
+        const [programA, programB] = snapshot.operation.createdPrograms;
+        const position = `export const sharedVar = 42;`.indexOf("sharedVar");
+
+        const symbolA = await programA.getProject().checker.getSymbolAtPosition("/src/shared.ts", position);
+        const symbolB = await programB.getProject().checker.getSymbolAtPosition("/src/shared.ts", position);
+
+        assert.ok(symbolA);
+        assert.strictEqual(symbolA, symbolB);
+    });
 });
 
 describe("Checker - types and signatures", () => {
