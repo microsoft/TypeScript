@@ -166,10 +166,6 @@ func (fsys *FS) WatchPathComparisonEnabled() bool {
 	return watchalias.Enabled(fsys.fs)
 }
 
-func (fsys *FS) WalkDir(root string, walkFn vfs.WalkDirFunc) error {
-	return fsys.fs.WalkDir(root, walkFn)
-}
-
 func (fsys *FS) WriteFile(path string, data string) error {
 	return fsys.fs.WriteFile(path, data)
 }

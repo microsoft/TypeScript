@@ -17,7 +17,7 @@ import (
 )
 
 func (s *Snapshot) nativeWatchAliasesEnabled() bool {
-	return s.host.options.WatchEnabled && watchalias.Enabled(s.host.fs)
+	return s.host.options.WatchEnabled && watchalias.Enabled(s.fs.fs)
 }
 
 // Build after finalizing files and projects. Physical correspondence is also
@@ -27,9 +27,9 @@ func (s *Snapshot) initializeWatchAliases(logger logging.Logger) {
 	if !native && s.fs.realpathFiles == 0 {
 		return
 	}
-	index := watchalias.NewExact(s.host.fs)
+	index := watchalias.NewExact(s.fs.fs)
 	if native {
-		index = watchalias.New(s.host.fs)
+		index = watchalias.New(s.fs.fs)
 	}
 	directories := make(map[string]struct{})
 	register := func(registration watchalias.Registration) bool {
@@ -57,7 +57,7 @@ func (s *Snapshot) initializeWatchAliases(logger logging.Logger) {
 				break
 			}
 			directories[directory] = struct{}{}
-			if !register(watchalias.Registration{Name: directory, Realpath: s.host.fs.Realpath(directory), Directory: true}) {
+			if !register(watchalias.Registration{Name: directory, Realpath: s.fs.fs.Realpath(directory), Directory: true}) {
 				break
 			}
 			parent := tspath.GetDirectoryPath(directory)

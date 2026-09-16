@@ -13,6 +13,7 @@ import (
 	"sync/atomic"
 
 	"github.com/microsoft/TypeScript/tsc/internal/api/encoder"
+	"github.com/microsoft/TypeScript/tsc/internal/api/requestfilesystem"
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/astnav"
 	"github.com/microsoft/TypeScript/tsc/internal/checker"
@@ -27,6 +28,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/ls/autoimport"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/lsconv"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
+	"github.com/microsoft/TypeScript/tsc/internal/module"
 	"github.com/microsoft/TypeScript/tsc/internal/nodebuilder"
 	"github.com/microsoft/TypeScript/tsc/internal/pprof"
 	"github.com/microsoft/TypeScript/tsc/internal/printer"
@@ -34,6 +36,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/transpile"
 	"github.com/microsoft/TypeScript/tsc/internal/tsoptions"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
+	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 )
 
 var sessionIDCounter atomic.Uint64
@@ -43,8 +46,9 @@ var sessionIDCounter atomic.Uint64
 // Multiple clients may hold references to the same snapshot via ref counting;
 // the registries are cleaned up when refCount reaches zero.
 type snapshotData struct {
-	snapshot *project.Snapshot
-	refCount int
+	snapshot   *project.Snapshot
+	fileSystem vfs.FS
+	refCount   int
 
 	// Symbol IDs come from ast.GetSymbolId, a global atomic counter, so the same
 	// *ast.Symbol pointer always has the same unique ID across all projects in the
@@ -491,6 +495,13 @@ func (s *Session) currentDirectory() string {
 	return s.snapshotHost.GetCurrentDirectory()
 }
 
+func (s *Session) fileSystem() vfs.FS {
+	if s.projectSession != nil {
+		return s.projectSession.FS()
+	}
+	return s.snapshotHost.FS()
+}
+
 func (s *Session) useCaseSensitiveFileNames() bool {
 	return s.snapshotHost.FS().UseCaseSensitiveFileNames()
 }
@@ -542,6 +553,23 @@ func (s *Session) retainSnapshotData(handle SnapshotID) (*snapshotData, error) {
 	return sd, nil
 }
 
+// retainLatestSnapshotData atomically verifies that handle identifies the latest
+// active snapshot and takes a temporary reference that pins it for an update.
+// The caller must pair a successful call with releaseSnapshot, including on errors.
+func (s *Session) retainLatestSnapshotData(handle SnapshotID) (*snapshotData, error) {
+	s.snapshotsMu.Lock()
+	defer s.snapshotsMu.Unlock()
+	if handle != s.latestSnapshot {
+		return nil, fmt.Errorf("%w: snapshot %d is not the latest snapshot", ErrClientError, handle)
+	}
+	sd := s.snapshots[handle]
+	if sd == nil {
+		return nil, fmt.Errorf("%w: snapshot %d not found", ErrClientError, handle)
+	}
+	sd.refCount++
+	return sd, nil
+}
+
 func (s *Session) releaseSnapshot(handle SnapshotID) error {
 	s.snapshotsMu.Lock()
 	sd := s.snapshots[handle]
@@ -550,12 +578,47 @@ func (s *Session) releaseSnapshot(handle SnapshotID) error {
 		return fmt.Errorf("%w: snapshot %d not found", ErrClientError, handle)
 	}
 	sd.refCount--
-	if sd.refCount <= 0 {
-		delete(s.snapshots, handle)
-		sd.snapshot.Deref()
+	if sd.refCount > 0 {
+		s.snapshotsMu.Unlock()
+		return nil
+	}
+	delete(s.snapshots, snapshotHandle(sd.snapshot))
+	s.snapshotsMu.Unlock()
+
+	sd.snapshot.Deref()
+	return nil
+}
+
+func newSnapshotData() *snapshotData {
+	sd := &snapshotData{
+		refCount:                1,
+		symbolRegistry:          make(map[SymbolID]*ast.Symbol),
+		symbolCanonicalProjects: make(map[SymbolID]ProjectID),
+		projectRegistries:       make(map[ProjectID]*projectRegistryData),
+	}
+	return sd
+}
+
+func (s *Session) registerSnapshotData(sd *snapshotData, updateLatest bool) (SnapshotID, *snapshotData) {
+	handle := snapshotHandle(sd.snapshot)
+	s.snapshotsMu.Lock()
+	existingSD := s.snapshots[handle]
+	if existingSD != nil {
+		existingSD.refCount++
+	} else {
+		s.snapshots[handle] = sd
+	}
+	var previous *snapshotData
+	if updateLatest {
+		previous = s.snapshots[s.latestSnapshot]
+		s.latestSnapshot = handle
 	}
 	s.snapshotsMu.Unlock()
-	return nil
+
+	if existingSD != nil {
+		sd.snapshot.Deref()
+	}
+	return handle, previous
 }
 
 // checkerSetup holds the common context needed by handlers that require a type checker.
@@ -577,6 +640,21 @@ func (setup checkerSetup) newSymbolResponse(sym *ast.Symbol) *SymbolResponse {
 
 func (setup checkerSetup) newSignatureResponse(sig *checker.Signature) *SignatureResponse {
 	return setup.sd.newSignatureResponse(setup.projectID, sig)
+}
+
+func (setup checkerSetup) newIndexInfoResponse(info *checker.IndexInfo) *IndexInfoResponse {
+	if info == nil {
+		return nil
+	}
+	result := &IndexInfoResponse{
+		KeyType:    *setup.newTypeResponse(info.KeyType()),
+		ValueType:  *setup.newTypeResponse(info.ValueType()),
+		IsReadonly: info.IsReadonly(),
+	}
+	if info.Declaration() != nil {
+		result.Declaration = setup.sd.nodeHandleFrom(info.Declaration())
+	}
+	return result
 }
 
 func (setup checkerSetup) resolveTypeHandle(id TypeID) (*checker.Type, error) {
@@ -709,6 +787,14 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleGetSourceFileNames(ctx, parsed.(*GetSourceFileNamesParams))
 	case string(MethodGetSourceFileMetadata):
 		return s.handleGetSourceFileMetadata(ctx, parsed.(*GetSourceFileParams))
+	case string(MethodGetResolvedModule):
+		return s.handleGetResolvedModule(ctx, parsed.(*GetResolvedModuleParams))
+	case string(MethodGetResolvedModuleFromModuleSpecifier):
+		return s.handleGetResolvedModuleFromModuleSpecifier(ctx, parsed.(*GetResolvedModuleFromModuleSpecifierParams))
+	case string(MethodGetResolvedTypeReferenceDirective):
+		return s.handleGetResolvedTypeReferenceDirective(ctx, parsed.(*GetResolvedTypeReferenceDirectiveParams))
+	case string(MethodGetResolvedTypeReferenceDirectiveFromReference):
+		return s.handleGetResolvedTypeReferenceDirectiveFromReference(ctx, parsed.(*GetResolvedTypeReferenceDirectiveFromReferenceParams))
 	case string(MethodGetConfigFileNames):
 		return s.handleGetConfigFileNames(ctx, parsed.(*GetProjectDiagnosticsParams))
 	case string(MethodGetConfigSourceFile):
@@ -773,6 +859,8 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleGetOuterTypeParametersOfType(ctx, parsed.(*GetTypePropertyParams))
 	case string(MethodGetLocalTypeParametersOfType):
 		return s.handleGetLocalTypeParametersOfType(ctx, parsed.(*GetTypePropertyParams))
+	case string(MethodGetThisTypeOfType):
+		return s.handleGetThisTypeOfType(ctx, parsed.(*GetTypePropertyParams))
 	case string(MethodGetAliasTypeArgumentsOfType):
 		return s.handleGetAliasTypeArgumentsOfType(ctx, parsed.(*GetTypePropertyParams))
 	case string(MethodGetAliasSymbolOfType):
@@ -803,6 +891,10 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleGetTargetOfSignature(ctx, parsed.(*GetSignaturePropertyParams))
 	case string(MethodGetContextualType):
 		return s.handleGetContextualType(ctx, parsed.(*GetContextualTypeParams))
+	case string(MethodGetContextualTypeForArgument):
+		return s.handleGetContextualTypeForArgument(ctx, parsed.(*GetContextualTypeForArgumentParams))
+	case string(MethodGetAwaitedType):
+		return s.handleGetAwaitedType(ctx, parsed.(*CheckerTypeParams))
 	case string(MethodGetBaseTypeOfLiteralType):
 		return s.handleGetBaseTypeOfLiteralType(ctx, parsed.(*GetBaseTypeOfLiteralTypeParams))
 	case string(MethodGetNonNullableType):
@@ -861,6 +953,12 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleGetReducedType(ctx, parsed.(*GetTypePropertyParams))
 	case string(MethodGetPropertyOfType):
 		return s.handleGetPropertyOfType(ctx, parsed.(*GetPropertyOfTypeParams))
+	case string(MethodGetTypeOfPropertyOfType):
+		return s.handleGetTypeOfPropertyOfType(ctx, parsed.(*GetPropertyOfTypeParams))
+	case string(MethodGetIndexInfoOfType):
+		return s.handleGetIndexInfoOfType(ctx, parsed.(*GetIndexInfoOfTypeParams))
+	case string(MethodGetIndexTypeOfTypeByKind):
+		return s.handleGetIndexTypeOfTypeByKind(ctx, parsed.(*GetIndexInfoOfTypeParams))
 	case string(MethodGetIndexInfosOfType):
 		return s.handleGetIndexInfosOfType(ctx, parsed.(*CheckerTypeParams))
 	case string(MethodGetConstraintOfTypeParameter):
@@ -885,6 +983,8 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleGetImmediateAliasedSymbol(ctx, parsed.(*CheckerSymbolParams))
 	case string(MethodGetTargetSymbol):
 		return s.handleMethodGetTargetSymbol(ctx, parsed.(*CheckerSymbolParams))
+	case string(MethodGetExportSymbolOfSymbolForChecker):
+		return s.handleGetExportSymbolOfSymbolForChecker(ctx, parsed.(*CheckerSymbolParams))
 	case string(MethodGetFullyQualifiedName):
 		return s.handleGetFullyQualifiedName(ctx, parsed.(*CheckerSymbolParams))
 	case string(MethodGetExportsOfModule):
@@ -1118,9 +1218,36 @@ func (s *Session) handleUpdateSnapshot(ctx context.Context, params *UpdateSnapsh
 	s.updateMu.Lock()
 	defer s.updateMu.Unlock()
 
+	var baseSD *snapshotData
+	if params.Snapshot != 0 {
+		var err error
+		baseSD, err = s.retainLatestSnapshotData(params.Snapshot)
+		if err != nil {
+			return nil, err
+		}
+		// Release only the temporary pin acquired above; the client's Snapshot
+		// continues to own its existing reference even if this update fails.
+		defer func() { _ = s.releaseSnapshot(params.Snapshot) }()
+	}
+
 	fileChanges := s.toFileChangeSummary(params.FileChanges)
 
 	apiRequest := &project.APISnapshotRequest{}
+	var baseRequestFileSystem vfs.FS
+	if baseSD != nil {
+		baseRequestFileSystem = baseSD.fileSystem
+	}
+	if baseRequestFileSystem == nil && params.FileSystem != nil {
+		baseRequestFileSystem = s.fileSystem()
+	}
+	sd := newSnapshotData()
+	var err error
+	sd.fileSystem, err = requestfilesystem.NewForUpdate(params.FileSystem, baseRequestFileSystem, s.currentDirectory(), &fileChanges)
+	if err != nil {
+		return nil, fmt.Errorf("%w: %w", ErrClientError, err)
+	}
+	apiRequest.FileSystem = sd.fileSystem
+	apiRequest.ReplaceFileSystem = params.FileSystem != nil && params.FileSystem.Kind == requestfilesystem.KindFull
 
 	// Open projects: only take a new ref for projects we aren't already holding open.
 	var openedProjects []tspath.Path
@@ -1191,6 +1318,7 @@ func (s *Session) handleUpdateSnapshot(ctx context.Context, params *UpdateSnapsh
 		snapshot.Deref()
 		return nil, fmt.Errorf("%w: failed to update snapshot: %w", ErrClientError, err)
 	}
+	sd.snapshot = snapshot
 
 	// Commit ref tracking now that the update succeeded.
 	for _, configPath := range openedProjects {
@@ -1206,31 +1334,8 @@ func (s *Session) handleUpdateSnapshot(ctx context.Context, params *UpdateSnapsh
 		s.openFiles.Delete(path)
 	}
 
-	// Create or ref-count snapshot data, then atomically read the previous latest
-	// snapshot (the diff base) and advance latestSnapshot to the new handle.
-	// If the same snapshot ID is returned (no changes), we increment the ref count
-	// so each client-side Snapshot can be disposed independently.
-	handle := snapshotHandle(snapshot)
-	s.snapshotsMu.Lock()
-	sd, exists := s.snapshots[handle]
-	if exists {
-		// Same snapshot already stored — release the caller's ref since
-		// the stored snapshot already has one, and bump the API refcount.
-		snapshot.Deref()
-		sd.refCount++
-	} else {
-		sd = &snapshotData{
-			snapshot:                snapshot,
-			refCount:                1,
-			symbolRegistry:          make(map[SymbolID]*ast.Symbol),
-			symbolCanonicalProjects: make(map[SymbolID]ProjectID),
-			projectRegistries:       make(map[ProjectID]*projectRegistryData),
-		}
-		s.snapshots[handle] = sd
-	}
-	prevSD := s.snapshots[s.latestSnapshot]
-	s.latestSnapshot = handle
-	s.snapshotsMu.Unlock()
+	// Atomically advance latestSnapshot and retain duplicate handles independently.
+	handle, prevSD := s.registerSnapshotData(sd, true)
 
 	// Build projects list
 	projects := snapshot.ProjectCollection.Projects()
@@ -1266,29 +1371,16 @@ func (s *Session) handleUpdateTemporarySnapshot(ctx context.Context, params *Upd
 	defer func() { _ = s.releaseSnapshot(params.Snapshot) }()
 
 	uri := params.File.ToURI(s.currentDirectory())
+	sd := newSnapshotData()
+	sd.fileSystem = baseSD.fileSystem
 
-	snapshot, err := s.snapshotHost.CloneSnapshotWithTemporaryFile(ctx, baseSD.snapshot, uri, params.NewText)
+	snapshot, err := s.snapshotHost.CloneSnapshotWithTemporaryFile(ctx, baseSD.snapshot, sd.fileSystem, uri, params.NewText)
 	if err != nil {
 		return nil, fmt.Errorf("%w: failed to update temporary snapshot: %w", ErrClientError, err)
 	}
+	sd.snapshot = snapshot
 
-	handle := snapshotHandle(snapshot)
-	s.snapshotsMu.Lock()
-	sd, exists := s.snapshots[handle]
-	if exists {
-		snapshot.Deref()
-		sd.refCount++
-	} else {
-		sd = &snapshotData{
-			snapshot:                snapshot,
-			refCount:                1,
-			symbolRegistry:          make(map[SymbolID]*ast.Symbol),
-			symbolCanonicalProjects: make(map[SymbolID]ProjectID),
-			projectRegistries:       make(map[ProjectID]*projectRegistryData),
-		}
-		s.snapshots[handle] = sd
-	}
-	s.snapshotsMu.Unlock()
+	handle, _ := s.registerSnapshotData(sd, false)
 
 	// Build projects list
 	projects := snapshot.ProjectCollection.Projects()
@@ -1323,6 +1415,7 @@ func (s *Session) handleCreateProgram(ctx context.Context, params *CreateProgram
 
 	var oldSnapshot *project.Snapshot
 	var oldProject *project.Project
+	var oldFileSystem vfs.FS
 	if params.OldProgram != nil {
 		oldSnapshotID := params.OldProgram.Snapshot
 		oldSD, err := s.retainSnapshotData(oldSnapshotID)
@@ -1332,11 +1425,14 @@ func (s *Session) handleCreateProgram(ctx context.Context, params *CreateProgram
 		defer func() { _ = s.releaseSnapshot(oldSnapshotID) }()
 
 		oldSnapshot = oldSD.snapshot
+		oldFileSystem = oldSD.fileSystem
 		oldProject, err = oldSD.getProject(params.OldProgram.Project)
 		if err != nil {
 			return nil, err
 		}
 	}
+	sd := newSnapshotData()
+	sd.fileSystem = oldFileSystem
 
 	baseSnapshot := oldSnapshot
 	fileChanges := s.toFileChangeSummary(params.FileChanges)
@@ -1353,6 +1449,7 @@ func (s *Session) handleCreateProgram(ctx context.Context, params *CreateProgram
 	snapshot := s.snapshotHost.CloneSnapshotForProgram(
 		ctx,
 		baseSnapshot,
+		sd.fileSystem,
 		rootFileNames,
 		&params.CreateProgramOptions.CompilerOptions,
 		params.CreateProgramOptions.ProjectReferences,
@@ -1365,24 +1462,9 @@ func (s *Session) handleCreateProgram(ctx context.Context, params *CreateProgram
 		snapshot.Deref()
 		return nil, fmt.Errorf("%w: failed to create synthetic project", ErrClientError)
 	}
+	sd.snapshot = snapshot
 
-	handle := snapshotHandle(snapshot)
-	s.snapshotsMu.Lock()
-	if sd, exists := s.snapshots[handle]; exists {
-		// Same snapshot already stored: use the existing retained ref and only bump API refcount.
-		snapshot.Deref()
-		sd.refCount++
-	} else {
-		sd = &snapshotData{
-			snapshot:                snapshot,
-			refCount:                1,
-			symbolRegistry:          make(map[SymbolID]*ast.Symbol),
-			symbolCanonicalProjects: make(map[SymbolID]ProjectID),
-			projectRegistries:       make(map[ProjectID]*projectRegistryData),
-		}
-		s.snapshots[handle] = sd
-	}
-	s.snapshotsMu.Unlock()
+	handle, _ := s.registerSnapshotData(sd, false)
 
 	return &CreateProgramResponse{
 		Snapshot: handle,
@@ -1696,6 +1778,121 @@ func (s *Session) handleGetSourceFileMetadata(ctx context.Context, params *GetSo
 		PackageJsonDirectory:  metaData.PackageJsonDirectory,
 		ImpliedNodeFormat:     metaData.ImpliedNodeFormat,
 	}, nil
+}
+
+func newResolvedModuleResponse(resolution *module.ResolvedModule) *ResolvedModule {
+	if !resolution.IsResolved() {
+		return nil
+	}
+	return &ResolvedModule{
+		ResolvedFileName:             resolution.ResolvedFileName,
+		OriginalPath:                 resolution.OriginalPath,
+		Extension:                    resolution.Extension,
+		ResolvedUsingTsExtension:     resolution.ResolvedUsingTsExtension,
+		ResolvedUsingExtraExtensions: resolution.ResolvedUsingExtraExtensions,
+		PackageId:                    NewPackageId(resolution.PackageId),
+		IsExternalLibraryImport:      resolution.IsExternalLibraryImport,
+		AlternateResult:              resolution.AlternateResult,
+	}
+}
+
+func newResolvedTypeReferenceDirectiveResponse(resolution *module.ResolvedTypeReferenceDirective) *ResolvedTypeReferenceDirective {
+	if resolution == nil || !resolution.IsResolved() {
+		return nil
+	}
+	return &ResolvedTypeReferenceDirective{
+		Primary:                 resolution.Primary,
+		ResolvedFileName:        resolution.ResolvedFileName,
+		OriginalPath:            resolution.OriginalPath,
+		PackageId:               NewPackageId(resolution.PackageId),
+		IsExternalLibraryImport: resolution.IsExternalLibraryImport,
+	}
+}
+
+// @gen-proto-nullable
+func (s *Session) handleGetResolvedModule(ctx context.Context, params *GetResolvedModuleParams) (*ResolvedModule, error) {
+	sd, err := s.getSnapshotData(params.Snapshot)
+	if err != nil {
+		return nil, err
+	}
+	program, err := sd.getProgram(params.Project)
+	if err != nil {
+		return nil, err
+	}
+	sourceFile, err := s.resolveOptionalSourceFile(program, &params.File)
+	if err != nil {
+		return nil, err
+	}
+	return newResolvedModuleResponse(program.GetResolvedModule(sourceFile, params.ModuleName, params.Mode)), nil
+}
+
+// @gen-proto-nullable
+func (s *Session) handleGetResolvedModuleFromModuleSpecifier(ctx context.Context, params *GetResolvedModuleFromModuleSpecifierParams) (*ResolvedModule, error) {
+	sd, err := s.getSnapshotData(params.Snapshot)
+	if err != nil {
+		return nil, err
+	}
+	program, err := sd.getProgram(params.Project)
+	if err != nil {
+		return nil, err
+	}
+	node, err := sd.resolveNodeHandle(program, params.ModuleSpecifier)
+	if err != nil {
+		return nil, err
+	}
+	if !ast.IsStringLiteralLike(node) {
+		return nil, fmt.Errorf("%w: moduleSpecifier must be a StringLiteralLike node", ErrClientError)
+	}
+	sourceFile := ast.GetSourceFileOfNode(node)
+	if params.SourceFile != nil {
+		sourceFile, err = s.resolveOptionalSourceFile(program, params.SourceFile)
+		if err != nil {
+			return nil, err
+		}
+	}
+	if sourceFile == nil {
+		return nil, fmt.Errorf("%w: moduleSpecifier must have a SourceFile ancestor or sourceFile must be provided", ErrClientError)
+	}
+	mode := program.GetModeForUsageLocation(sourceFile, node)
+	return newResolvedModuleResponse(program.GetResolvedModule(sourceFile, node.Text(), mode)), nil
+}
+
+// @gen-proto-nullable
+func (s *Session) handleGetResolvedTypeReferenceDirective(ctx context.Context, params *GetResolvedTypeReferenceDirectiveParams) (*ResolvedTypeReferenceDirective, error) {
+	sd, err := s.getSnapshotData(params.Snapshot)
+	if err != nil {
+		return nil, err
+	}
+	program, err := sd.getProgram(params.Project)
+	if err != nil {
+		return nil, err
+	}
+	sourceFile, err := s.resolveOptionalSourceFile(program, &params.File)
+	if err != nil {
+		return nil, err
+	}
+	return newResolvedTypeReferenceDirectiveResponse(program.GetResolvedTypeReferenceDirective(sourceFile, params.TypeDirectiveName, params.Mode)), nil
+}
+
+// @gen-proto-nullable
+func (s *Session) handleGetResolvedTypeReferenceDirectiveFromReference(ctx context.Context, params *GetResolvedTypeReferenceDirectiveFromReferenceParams) (*ResolvedTypeReferenceDirective, error) {
+	sd, err := s.getSnapshotData(params.Snapshot)
+	if err != nil {
+		return nil, err
+	}
+	program, err := sd.getProgram(params.Project)
+	if err != nil {
+		return nil, err
+	}
+	sourceFile, err := s.resolveOptionalSourceFile(program, &params.SourceFile)
+	if err != nil {
+		return nil, err
+	}
+	mode := params.ResolutionMode
+	if mode == core.ResolutionModeNone {
+		mode = program.GetDefaultResolutionModeForFile(sourceFile)
+	}
+	return newResolvedTypeReferenceDirectiveResponse(program.GetResolvedTypeReferenceDirective(sourceFile, params.TypeDirectiveName, mode)), nil
 }
 
 // handleGetSymbolAtPosition returns the symbol at a position in a file.
@@ -2165,6 +2362,11 @@ func (s *Session) handleGetLocalTypeParametersOfType(_ context.Context, params *
 }
 
 // @gen-proto-nullable
+func (s *Session) handleGetThisTypeOfType(_ context.Context, params *GetTypePropertyParams) (*TypeResponse, error) {
+	return s.resolveTypePropertyOfType(params, func(t *checker.Type) *checker.Type { return t.AsInterfaceType().ThisType() })
+}
+
+// @gen-proto-nullable
 func (s *Session) handleGetAliasTypeArgumentsOfType(_ context.Context, params *GetTypePropertyParams) ([]*TypeResponse, error) {
 	return s.resolveTypeArrayPropertyOfType(params, func(t *checker.Type) []*checker.Type {
 		if t.Alias() == nil {
@@ -2285,6 +2487,7 @@ func (s *Session) handleGetImportAdderEdits(ctx context.Context, params *GetImpo
 		sourceFile,
 		projectPath,
 		program,
+		ch,
 		userPreferences.ModuleSpecifierPreferences(),
 	)
 	importAdder := autoimport.NewImportAdder(
@@ -2592,6 +2795,36 @@ func (s *Session) handleGetContextualType(ctx context.Context, params *GetContex
 	}
 
 	return setup.newTypeResponse(t), nil
+}
+
+// @gen-proto-nullable
+func (s *Session) handleGetContextualTypeForArgument(ctx context.Context, params *GetContextualTypeForArgumentParams) (*TypeResponse, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	node, err := setup.sd.resolveNodeHandle(setup.program, params.Location)
+	if err != nil {
+		return nil, err
+	}
+	return setup.newTypeResponse(setup.checker.GetContextualTypeForArgumentAtIndex(node, int(params.Index))), nil
+}
+
+// @gen-proto-nullable
+func (s *Session) handleGetAwaitedType(ctx context.Context, params *CheckerTypeParams) (*TypeResponse, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	t, err := setup.resolveTypeHandle(params.Type)
+	if err != nil {
+		return nil, err
+	}
+	return setup.newTypeResponse(setup.checker.GetAwaitedType(t)), nil
 }
 
 // handleGetBaseTypeOfLiteralType returns the base type of a literal type (e.g. number for 42).
@@ -2910,8 +3143,24 @@ func (s *Session) handleEmit(ctx context.Context, params *EmitParams) (*EmitResp
 	if err != nil {
 		return nil, err
 	}
-	options.WriteFile = func(fileName string, text string, _ *compiler.WriteFileData) error {
-		return s.snapshotHost.FS().WriteFile(fileName, text)
+	var outputFiles map[string]string
+	sd, err := s.getSnapshotData(params.Snapshot)
+	if err != nil {
+		return nil, err
+	}
+	if requestfilesystem.HasFullFileSystem(sd.fileSystem) {
+		outputFiles = make(map[string]string)
+		var outputMu sync.Mutex
+		options.WriteFile = func(fileName string, text string, _ *compiler.WriteFileData) error {
+			outputMu.Lock()
+			outputFiles[fileName] = text
+			outputMu.Unlock()
+			return nil
+		}
+	} else {
+		options.WriteFile = func(fileName string, text string, _ *compiler.WriteFileData) error {
+			return s.snapshotHost.FS().WriteFile(fileName, text)
+		}
 	}
 	result, err := emitProgram(ctx, program, options)
 	if err != nil {
@@ -2921,10 +3170,18 @@ func (s *Session) handleEmit(ctx context.Context, params *EmitParams) (*EmitResp
 	if emittedFiles == nil {
 		emittedFiles = []string{}
 	}
+	emittedFilesContents := []string{}
+	if outputFiles != nil {
+		emittedFilesContents = make([]string, len(emittedFiles))
+		for i, fileName := range emittedFiles {
+			emittedFilesContents[i] = outputFiles[fileName]
+		}
+	}
 	return &EmitResponse{
-		EmitSkipped:  result.EmitSkipped,
-		Diagnostics:  nonNilDiagnostics(result.Diagnostics),
-		EmittedFiles: emittedFiles,
+		EmitSkipped:          result.EmitSkipped,
+		Diagnostics:          nonNilDiagnostics(result.Diagnostics),
+		EmittedFiles:         emittedFiles,
+		EmittedFilesContents: emittedFilesContents,
 	}, nil
 }
 
@@ -3382,17 +3639,55 @@ func (s *Session) handleGetIndexInfosOfType(ctx context.Context, params *Checker
 
 	results := make([]*IndexInfoResponse, len(infos))
 	for i, info := range infos {
-		results[i] = &IndexInfoResponse{
-			KeyType:    *setup.newTypeResponse(info.KeyType()),
-			ValueType:  *setup.newTypeResponse(info.ValueType()),
-			IsReadonly: info.IsReadonly(),
-		}
-		if info.Declaration() != nil {
-			results[i].Declaration = setup.sd.nodeHandleFrom(info.Declaration())
-		}
+		results[i] = setup.newIndexInfoResponse(info)
 	}
 
 	return results, nil
+}
+
+func (s *Session) resolveIndexInfoRequest(ctx context.Context, params *GetIndexInfoOfTypeParams) (checkerSetup, *checker.Type, *checker.Type, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return checkerSetup{}, nil, nil, err
+	}
+
+	t, err := setup.resolveTypeHandle(params.Type)
+	if err != nil {
+		setup.done()
+		return checkerSetup{}, nil, nil, err
+	}
+
+	var keyType *checker.Type
+	switch checker.IndexKind(params.Kind) {
+	case checker.IndexKindString:
+		keyType = setup.checker.GetStringType()
+	case checker.IndexKindNumber:
+		keyType = setup.checker.GetNumberType()
+	default:
+		setup.done()
+		return checkerSetup{}, nil, nil, fmt.Errorf("%w: invalid index kind %d", ErrClientError, params.Kind)
+	}
+	return setup, t, keyType, nil
+}
+
+// @gen-proto-nullable
+func (s *Session) handleGetIndexInfoOfType(ctx context.Context, params *GetIndexInfoOfTypeParams) (*IndexInfoResponse, error) {
+	setup, t, keyType, err := s.resolveIndexInfoRequest(ctx, params)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+	return setup.newIndexInfoResponse(setup.checker.GetIndexInfoOfType(t, keyType)), nil
+}
+
+// @gen-proto-nullable
+func (s *Session) handleGetIndexTypeOfTypeByKind(ctx context.Context, params *GetIndexInfoOfTypeParams) (*TypeResponse, error) {
+	setup, t, keyType, err := s.resolveIndexInfoRequest(ctx, params)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+	return setup.newTypeResponse(setup.checker.GetIndexTypeOfType(t, keyType)), nil
 }
 
 // handleGetConstraintOfTypeParameter returns the constraint of a type parameter.
@@ -3476,6 +3771,22 @@ func (s *Session) handleGetPropertyOfType(ctx context.Context, params *GetProper
 	}
 
 	return setup.newSymbolResponse(prop), nil
+}
+
+// @gen-proto-nullable
+func (s *Session) handleGetTypeOfPropertyOfType(ctx context.Context, params *GetPropertyOfTypeParams) (*TypeResponse, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	t, err := setup.resolveTypeHandle(params.Type)
+	if err != nil {
+		return nil, err
+	}
+
+	return setup.newTypeResponse(setup.checker.GetTypeOfPropertyOfType(t, params.Name)), nil
 }
 
 // handleGetConstantValue returns the constant value of an enum member or const enum access.
@@ -3615,6 +3926,20 @@ func (s *Session) handleMethodGetTargetSymbol(ctx context.Context, params *Check
 	}
 
 	return setup.newSymbolResponse(setup.checker.GetTargetSymbol(symbol)), nil
+}
+
+func (s *Session) handleGetExportSymbolOfSymbolForChecker(ctx context.Context, params *CheckerSymbolParams) (*SymbolResponse, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	symbol, err := setup.resolveSymbolHandle(params.Symbol)
+	if err != nil {
+		return nil, err
+	}
+	return setup.newSymbolResponse(setup.checker.GetExportSymbolOfSymbol(symbol)), nil
 }
 
 // handleGetExportsOfModule returns the resolved exports of a module symbol,

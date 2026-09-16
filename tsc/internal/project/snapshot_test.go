@@ -55,7 +55,7 @@ func TestSnapshot(t *testing.T) {
 
 		baseSnapshot := session.Snapshot()
 		uri := lsproto.DocumentUri("file:///temporary.ts")
-		snapshot, err := session.CloneSnapshotWithTemporaryFile(context.Background(), baseSnapshot, uri, "export const value = 1;")
+		snapshot, err := session.CloneSnapshotWithTemporaryFile(context.Background(), baseSnapshot, nil, uri, "export const value = 1;")
 		assert.NilError(t, err)
 		defer snapshot.Deref()
 
@@ -418,7 +418,7 @@ func TestWatchAliasSnapshotReuse(t *testing.T) {
 		t.Fatal(err)
 	}
 	defer func() { snapshot.Deref() }()
-	opened, err := host.CloneSnapshotWithTemporaryFile(context.Background(), snapshot, "file:///src/main.ts", "export const value = 1;")
+	opened, err := host.CloneSnapshotWithTemporaryFile(context.Background(), snapshot, nil, "file:///src/main.ts", "export const value = 1;")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -426,7 +426,7 @@ func TestWatchAliasSnapshotReuse(t *testing.T) {
 	snapshot = opened
 	for range 3 {
 		calls, aliases := fs.calls, snapshot.watchAliases
-		next, cloneErr := host.CloneSnapshotWithTemporaryFile(context.Background(), snapshot, "file:///src/main.ts", "export const value = 2;")
+		next, cloneErr := host.CloneSnapshotWithTemporaryFile(context.Background(), snapshot, nil, "file:///src/main.ts", "export const value = 2;")
 		if cloneErr != nil {
 			t.Fatal(cloneErr)
 		}
@@ -451,7 +451,7 @@ func TestWatchAliasSnapshotReuse(t *testing.T) {
 		}
 	}
 	calls, aliases := fs.calls, snapshot.watchAliases
-	next, err := host.CloneSnapshotWithTemporaryFile(context.Background(), snapshot, "file:///src/main.ts", `import "./other"; export const value = 3;`)
+	next, err := host.CloneSnapshotWithTemporaryFile(context.Background(), snapshot, nil, "file:///src/main.ts", `import "./other"; export const value = 3;`)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -464,7 +464,7 @@ func TestWatchAliasSnapshotReuse(t *testing.T) {
 		t.Fatal("new import was not loaded")
 	}
 	calls, aliases = fs.calls, snapshot.watchAliases
-	next, err = host.CloneSnapshotWithTemporaryFile(context.Background(), snapshot, "file:///src/main.ts", "export const value = 4;")
+	next, err = host.CloneSnapshotWithTemporaryFile(context.Background(), snapshot, nil, "file:///src/main.ts", "export const value = 4;")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -511,6 +511,55 @@ func TestWatchAliasSnapshotReuse(t *testing.T) {
 	}
 }
 
+func TestWatchAliasesSnapshotFilesystem(t *testing.T) {
+	t.Parallel()
+	for _, program := range []bool{false, true} {
+		for _, target := range []string{"/host", "/override"} {
+			t.Run(fmt.Sprintf("program=%v/target=%s", program, target), func(t *testing.T) {
+				t.Parallel()
+				makeFS := func(target string) *failingWatchComparerFS {
+					return &failingWatchComparerFS{FS: vfstest.FromMap(map[string]any{
+						"/src":                                  vfstest.Symlink(target),
+						target + "/tsconfig.json":               `{"compilerOptions":{"noLib":true,"types":[],"preserveSymlinks":true},"files":["main.ts"]}`,
+						target + "/main.ts":                     `import { value } from "pkg"; export { value };`,
+						target + "/node_modules/pkg/index.d.ts": "export const value: 1;",
+					}, true)}
+				}
+				hostFS, overrideFS := makeFS("/host"), makeFS(target)
+				host := NewSnapshotHost(&SessionInit{FS: hostFS, Options: &SessionOptions{CurrentDirectory: "/src", WatchEnabled: true}})
+				defer host.Close()
+				root := host.NewStandaloneRootSnapshot()
+				defer root.Deref()
+				options := &core.CompilerOptions{NoLib: core.TSTrue, Types: []string{}, PreserveSymlinks: core.TSTrue}
+				clone := func(base *Snapshot, fs vfs.FS) *Snapshot {
+					if program {
+						return host.CloneSnapshotForProgram(context.Background(), base, fs, []string{"/src/main.ts"}, options, nil, nil, nil, FileChangeSummary{InvalidateAll: fs != nil})
+					}
+					snapshot, err := host.CloneSnapshot(context.Background(), base, FileChangeSummary{}, &APISnapshotRequest{
+						OpenProjects: collections.NewSetFromItems("/src/tsconfig.json"),
+						FileSystem:   fs, ReplaceFileSystem: fs != nil,
+					})
+					assert.NilError(t, err)
+					return snapshot
+				}
+				initial := clone(root, nil)
+				defer initial.Deref()
+				calls := hostFS.calls
+				replaced := clone(initial, overrideFS)
+				defer replaced.Deref()
+				assert.NilError(t, replaced.apiError)
+				assert.Equal(t, hostFS.calls, calls, "override must not query the host comparer")
+				assert.Assert(t, overrideFS.calls > 0, "override must construct its own watch index")
+				assert.Assert(t, replaced.watchAliases != initial.watchAliases)
+				assert.Assert(t, slices.Contains(replaced.watchNames("/src"), target))
+				if target != "/host" {
+					assert.Assert(t, !slices.Contains(replaced.watchNames("/src"), "/host"))
+				}
+			})
+		}
+	}
+}
+
 func TestWatchAliasProgramCloneReuse(t *testing.T) {
 	t.Parallel()
 	fs := &failingWatchComparerFS{FS: vfstest.FromMap(map[string]string{
@@ -522,15 +571,15 @@ func TestWatchAliasProgramCloneReuse(t *testing.T) {
 	root := host.NewStandaloneRootSnapshot()
 	defer root.Deref()
 	options := &core.CompilerOptions{NoLib: core.TSTrue, Types: []string{}}
-	snapshot := host.CloneSnapshotForProgram(context.Background(), root, []string{"/src/s.ts"}, options, nil, nil, nil, FileChangeSummary{})
+	snapshot := host.CloneSnapshotForProgram(context.Background(), root, nil, []string{"/src/s.ts"}, options, nil, nil, nil, FileChangeSummary{})
 	defer snapshot.Deref()
 	calls := fs.calls
-	next := host.CloneSnapshotForProgram(context.Background(), snapshot, []string{"/src/s.ts"}, options, nil, nil, snapshot.ProjectCollection.inferredProject, FileChangeSummary{})
+	next := host.CloneSnapshotForProgram(context.Background(), snapshot, nil, []string{"/src/s.ts"}, options, nil, nil, snapshot.ProjectCollection.inferredProject, FileChangeSummary{})
 	defer next.Deref()
 	if snapshot.watchAliases != next.watchAliases || calls != fs.calls {
 		t.Fatal("unchanged createProgram rebuilt alias inputs")
 	}
-	last := host.CloneSnapshotForProgram(context.Background(), next, []string{"/src/s.ts", "/src/ſ.ts"}, options, nil, nil, next.ProjectCollection.inferredProject, FileChangeSummary{})
+	last := host.CloneSnapshotForProgram(context.Background(), next, nil, []string{"/src/s.ts", "/src/ſ.ts"}, options, nil, nil, next.ProjectCollection.inferredProject, FileChangeSummary{})
 	defer last.Deref()
 	if last.watchAliases == next.watchAliases || calls == fs.calls {
 		t.Fatal("new original root name reused aliases")
@@ -630,13 +679,13 @@ func TestWatchAliasRealpathStateReuseAndRefresh(t *testing.T) {
 	if !slices.Contains(snapshot.watchNames("/var/project"), "/private/project") {
 		t.Fatal("disabled native comparison lost requested realpath root")
 	}
-	opened, err := host.CloneSnapshotWithTemporaryFile(context.Background(), snapshot, "file:///var/project/main.ts", `import { value } from "pkg"; export { value };`)
+	opened, err := host.CloneSnapshotWithTemporaryFile(context.Background(), snapshot, nil, "file:///var/project/main.ts", `import { value } from "pkg"; export { value };`)
 	if err != nil {
 		t.Fatal(err)
 	}
 	defer opened.Deref()
 	calls := fs.realpaths.Load()
-	edited, err := host.CloneSnapshotWithTemporaryFile(context.Background(), opened, "file:///var/project/main.ts", `import { value } from "pkg"; export { value }; // edited`)
+	edited, err := host.CloneSnapshotWithTemporaryFile(context.Background(), opened, nil, "file:///var/project/main.ts", `import { value } from "pkg"; export { value }; // edited`)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -865,7 +914,7 @@ func benchmarkSnapshotWatchAliases(b *testing.B, symlink bool) {
 							b.Fatal(err)
 						}
 						uri := lsconv.FileNameToDocumentURI(names[0])
-						opened, err := host.CloneSnapshotWithTemporaryFile(context.Background(), snapshot, uri, "export const value = 1;")
+						opened, err := host.CloneSnapshotWithTemporaryFile(context.Background(), snapshot, nil, uri, "export const value = 1;")
 						snapshot.Deref()
 						if err != nil {
 							b.Fatal(err)
@@ -881,7 +930,7 @@ func benchmarkSnapshotWatchAliases(b *testing.B, symlink bool) {
 						b.ReportAllocs()
 						b.ResetTimer()
 						for b.Loop() {
-							next, err := host.CloneSnapshotWithTemporaryFile(context.Background(), snapshot, uri, fmt.Sprintf("export const value = %d;", snapshot.id))
+							next, err := host.CloneSnapshotWithTemporaryFile(context.Background(), snapshot, nil, uri, fmt.Sprintf("export const value = %d;", snapshot.id))
 							if err != nil {
 								b.Fatal(err)
 							}

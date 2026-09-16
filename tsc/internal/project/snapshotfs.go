@@ -758,11 +758,6 @@ func (fs *sourceFS) UseCaseSensitiveFileNames() bool {
 	return fs.source.FS().UseCaseSensitiveFileNames()
 }
 
-// WalkDir implements vfs.FS.
-func (fs *sourceFS) WalkDir(root string, walkFn vfs.WalkDirFunc) error {
-	return fs.source.FS().WalkDir(root, walkFn)
-}
-
 // WriteFile implements vfs.FS.
 func (fs *sourceFS) WriteFile(path string, data string) error {
 	panic("unimplemented")

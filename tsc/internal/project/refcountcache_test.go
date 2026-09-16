@@ -524,6 +524,7 @@ func TestRefCountingCaches(t *testing.T) {
 			programSnapshot := session.CloneSnapshotForProgram(
 				ctx,
 				baseSnapshot,
+				nil,
 				appProject.CommandLine.FileNames(),
 				appProject.CommandLine.CompilerOptions(),
 				appProject.CommandLine.ProjectReferences(),
@@ -553,6 +554,7 @@ func TestRefCountingCaches(t *testing.T) {
 			updatedProgramSnapshot := session.CloneSnapshotForProgram(
 				ctx,
 				programSnapshot,
+				nil,
 				programProject.CommandLine.FileNames(),
 				programProject.CommandLine.CompilerOptions(),
 				programProject.CommandLine.ProjectReferences(),

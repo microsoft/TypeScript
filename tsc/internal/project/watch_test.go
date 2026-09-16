@@ -88,6 +88,7 @@ func TestWatchAliasesMockFilesystem(t *testing.T) {
 		fs := vfstest.FromMap(map[string]string{"/src/ſ.ts": "original"}, sensitive)
 		host := NewSnapshotHost(&SessionInit{FS: fs, Options: &SessionOptions{CurrentDirectory: "/src", WatchEnabled: true}})
 		snapshot := host.newSnapshot(1, &SnapshotFS{
+			fs:        fs,
 			diskFiles: map[tspath.Path]*diskFile{host.toPath("/src/ſ.ts"): newDiskFile("/src/ſ.ts", "original")},
 		}, &ConfigFileRegistry{}, nil, host.newRootSnapshot(0, false).userPreferences, nil, nil)
 		snapshot.initializeWatchAliases(nil)
@@ -251,7 +252,7 @@ func TestWatchAliasesStandaloneErrors(t *testing.T) {
 			var err error
 			if program {
 				snapshot = host.CloneSnapshotForProgram(
-					context.Background(), root, []string{"/src/main.ts"},
+					context.Background(), root, nil, []string{"/src/main.ts"},
 					&core.CompilerOptions{NoLib: core.TSTrue}, nil, nil, nil, FileChangeSummary{},
 				)
 				err = snapshot.apiError
@@ -269,7 +270,7 @@ func TestWatchAliasesStandaloneErrors(t *testing.T) {
 			}
 			snapshot.Deref()
 			if watchEnabled && !program {
-				overlaySnapshot, err := host.CloneSnapshotWithTemporaryFile(context.Background(), root, "file:///src/main.ts", "export const value = 2;")
+				overlaySnapshot, err := host.CloneSnapshotWithTemporaryFile(context.Background(), root, nil, "file:///src/main.ts", "export const value = 2;")
 				overlaySnapshot.Deref()
 				if !errors.Is(err, syscall.EACCES) {
 					t.Fatalf("temporary-file clone lost filesystem comparison lookup error: %v", err)
@@ -296,7 +297,7 @@ func TestWatchAliasesRegularFileAncestor(t *testing.T) {
 	root.compilerOptionsForInferredProjects = &core.CompilerOptions{NoLib: core.TSTrue}
 	// Keep the source in an overlay; watchalias.go is an existing regular file,
 	// so this unresolved import makes native comparer queries encounter ENOTDIR.
-	snapshot, err := host.CloneSnapshotWithTemporaryFile(context.Background(), root,
+	snapshot, err := host.CloneSnapshotWithTemporaryFile(context.Background(), root, nil,
 		lsconv.FileNameToDocumentURI(filepath.ToSlash(filepath.Join(directory, "watch-alias-malformed-import.ts"))),
 		`import "./watchalias.go/missing";`,
 	)
