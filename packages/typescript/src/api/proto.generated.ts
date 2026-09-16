@@ -45,6 +45,8 @@ export interface APIMethodInfo {
     getSourceFile: APIMethod<GetSourceFileParams, SourceFileResponse | null>;
     getSourceFileNames: APIMethod<GetSourceFileNamesParams, string[]>;
     getSourceFileMetadata: APIMethod<GetSourceFileParams, SourceFileMetadata | null>;
+    getModeForUsageLocation: APIMethod<GetModeForUsageLocationParams, ModuleKind>;
+    getModeForResolutionAtIndex: APIMethod<GetModeForResolutionAtIndexParams, ModuleKind>;
     getResolvedModule: APIMethod<GetResolvedModuleParams, ResolvedModule | null>;
     getResolvedModuleFromModuleSpecifier: APIMethod<GetResolvedModuleFromModuleSpecifierParams, ResolvedModule | null>;
     getResolvedTypeReferenceDirective: APIMethod<GetResolvedTypeReferenceDirectiveParams, ResolvedTypeReferenceDirective | null>;
@@ -71,6 +73,7 @@ export interface APIMethodInfo {
     getTypeParametersOfType: APIMethod<GetTypePropertyParams, TypeResponse[] | null>;
     getOuterTypeParametersOfType: APIMethod<GetTypePropertyParams, TypeResponse[] | null>;
     getLocalTypeParametersOfType: APIMethod<GetTypePropertyParams, TypeResponse[] | null>;
+    getThisTypeOfType: APIMethod<GetTypePropertyParams, TypeResponse | null>;
     getAliasTypeArgumentsOfType: APIMethod<GetTypePropertyParams, TypeResponse[] | null>;
     getAliasSymbolOfType: APIMethod<GetTypePropertyParams, SymbolResponse | null>;
     getObjectTypeOfType: APIMethod<GetTypePropertyParams, TypeResponse>;
@@ -84,6 +87,8 @@ export interface APIMethodInfo {
     getThisParameterOfSignature: APIMethod<GetSignaturePropertyParams, SymbolResponse | null>;
     getTargetOfSignature: APIMethod<GetSignaturePropertyParams, SignatureResponse | null>;
     getContextualType: APIMethod<GetContextualTypeParams, TypeResponse | null>;
+    getContextualTypeForArgument: APIMethod<GetContextualTypeForArgumentParams, TypeResponse | null>;
+    getAwaitedType: APIMethod<CheckerTypeParams, TypeResponse | null>;
     getBaseTypeOfLiteralType: APIMethod<GetBaseTypeOfLiteralTypeParams, TypeResponse>;
     getNonNullableType: APIMethod<GetTypePropertyParams, TypeResponse>;
     getTypeFromTypeNode: APIMethod<GetTypeFromTypeNodeParams, TypeResponse>;
@@ -108,6 +113,9 @@ export interface APIMethodInfo {
     getReducedType: APIMethod<GetTypePropertyParams, TypeResponse>;
     getNegatedType: APIMethod<GetTypePropertyParams, TypeResponse>;
     getPropertyOfType: APIMethod<GetPropertyOfTypeParams, SymbolResponse | null>;
+    getTypeOfPropertyOfType: APIMethod<GetPropertyOfTypeParams, TypeResponse | null>;
+    getIndexInfoOfType: APIMethod<GetIndexInfoOfTypeParams, IndexInfoResponse | null>;
+    getIndexTypeOfTypeByKind: APIMethod<GetIndexInfoOfTypeParams, TypeResponse | null>;
     getIndexInfosOfType: APIMethod<CheckerTypeParams, IndexInfoResponse[] | null>;
     getConstraintOfTypeParameter: APIMethod<GetTypePropertyParams, TypeResponse | null>;
     getDefaultFromTypeParameter: APIMethod<GetTypePropertyParams, TypeResponse | null>;
@@ -116,12 +124,13 @@ export interface APIMethodInfo {
     getImportAdderEdits: APIMethod<GetImportAdderEditsParams, TextEdit[]>;
     getTrueTypeOfConditionalType: APIMethod<GetTypePropertyParams, TypeResponse>;
     getFalseTypeOfConditionalType: APIMethod<GetTypePropertyParams, TypeResponse>;
-    getConstantValue: APIMethod<CheckerNodeParams, unknown | null>;
+    getConstantValue: APIMethod<CheckerNodeParams, ConstantValueResponse | null>;
     getSignatureFromDeclaration: APIMethod<CheckerNodeParams, SignatureResponse>;
     getExportSpecifierLocalTargetSymbol: APIMethod<CheckerNodeParams, SymbolResponse | null>;
     getAliasedSymbol: APIMethod<CheckerSymbolParams, SymbolResponse>;
     getImmediateAliasedSymbol: APIMethod<CheckerSymbolParams, SymbolResponse | null>;
     getTargetSymbol: APIMethod<CheckerSymbolParams, SymbolResponse>;
+    getExportSymbolOfSymbolForChecker: APIMethod<CheckerSymbolParams, SymbolResponse>;
     getFullyQualifiedName: APIMethod<CheckerSymbolParams, string>;
     getExportsOfModule: APIMethod<CheckerSymbolParams, SymbolResponse[] | null>;
     getMemberInModuleExports: APIMethod<GetMemberInModuleExportsParams, SymbolResponse | null>;
@@ -436,6 +445,8 @@ export interface TypeResponse {
     regularType?: number | undefined;
     /** TypeParameter data */
     isThisType?: boolean | undefined;
+    /** InterfaceType data */
+    thisType?: number | undefined;
     /** IntrinsicType data */
     intrinsicName?: string | undefined;
     /** TypeAlias data */
@@ -478,6 +489,20 @@ export interface SourceFileMetadata {
     packageJsonType: string;
     packageJsonDirectory: string;
     impliedNodeFormat: ModuleKind;
+}
+
+export interface GetModeForUsageLocationParams {
+    snapshot: number;
+    project: string;
+    file: DocumentIdentifier;
+    usage: string;
+}
+
+export interface GetModeForResolutionAtIndexParams {
+    snapshot: number;
+    project: string;
+    file: DocumentIdentifier;
+    index: number;
 }
 
 export interface GetResolvedModuleParams {
@@ -646,6 +671,20 @@ export interface GetContextualTypeParams {
     location: string;
 }
 
+export interface GetContextualTypeForArgumentParams {
+    snapshot: number;
+    project: string;
+    location: string;
+    index: number;
+}
+
+/** CheckerTypeParams are parameters for checker methods that operate on a type. */
+export interface CheckerTypeParams {
+    snapshot: number;
+    project: string;
+    type: number;
+}
+
 /** GetBaseTypeOfLiteralTypeParams returns the base type of a literal type. */
 export interface GetBaseTypeOfLiteralTypeParams {
     snapshot: number;
@@ -732,19 +771,19 @@ export interface TypePredicateResponse {
     type?: TypeResponse | undefined;
 }
 
-/** CheckerTypeParams are parameters for checker methods that operate on a type. */
-export interface CheckerTypeParams {
-    snapshot: number;
-    project: string;
-    type: number;
-}
-
 /** GetPropertyOfTypeParams are parameters for getPropertyOfType (a named property of a type). */
 export interface GetPropertyOfTypeParams {
     snapshot: number;
     project: string;
     type: number;
     name: string;
+}
+
+export interface GetIndexInfoOfTypeParams {
+    snapshot: number;
+    project: string;
+    type: number;
+    kind: number;
 }
 
 /** IndexInfoResponse represents a single index signature. */
@@ -773,6 +812,11 @@ export interface CheckerNodeParams {
     snapshot: number;
     project: string;
     location: string;
+}
+
+export interface ConstantValueResponse {
+    isNumber: boolean;
+    value: unknown;
 }
 
 /** CheckerSymbolParams are parameters for checker methods that operate on a symbol. */
@@ -987,6 +1031,7 @@ export interface BatchRequest {
         | "getAnyType"
         | "getApparentPropertiesOfType"
         | "getApparentType"
+        | "getAwaitedType"
         | "getBaseConstraintOfType"
         | "getBaseTypeOfLiteralType"
         | "getBaseTypeOfType"
@@ -1003,6 +1048,7 @@ export interface BatchRequest {
         | "getConstraintOfType"
         | "getConstraintOfTypeParameter"
         | "getContextualType"
+        | "getContextualTypeForArgument"
         | "getDeclarationDiagnostics"
         | "getDeclarationEmit"
         | "getDeclaredTypeOfSymbol"
@@ -1012,6 +1058,7 @@ export interface BatchRequest {
         | "getESSymbolType"
         | "getExportSpecifierLocalTargetSymbol"
         | "getExportSymbolOfSymbol"
+        | "getExportSymbolOfSymbolForChecker"
         | "getExportsOfModule"
         | "getExportsOfSymbol"
         | "getExtendsTypeOfType"
@@ -1021,13 +1068,17 @@ export interface BatchRequest {
         | "getGlobalDiagnostics"
         | "getImmediateAliasedSymbol"
         | "getImportAdderEdits"
+        | "getIndexInfoOfType"
         | "getIndexInfosOfType"
         | "getIndexTypeOfType"
+        | "getIndexTypeOfTypeByKind"
         | "getJavaScriptEmit"
         | "getJsDocTags"
         | "getLocalTypeParametersOfType"
         | "getMemberInModuleExports"
         | "getMembersOfSymbol"
+        | "getModeForResolutionAtIndex"
+        | "getModeForUsageLocation"
         | "getNegatedType"
         | "getNeverType"
         | "getNonMissingTypeOfSymbol"
@@ -1077,12 +1128,14 @@ export interface BatchRequest {
         | "getTargetOfType"
         | "getTargetSymbol"
         | "getThisParameterOfSignature"
+        | "getThisTypeOfType"
         | "getTrueTypeOfConditionalType"
         | "getTypeArguments"
         | "getTypeAtLocation"
         | "getTypeAtLocations"
         | "getTypeAtPosition"
         | "getTypeFromTypeNode"
+        | "getTypeOfPropertyOfType"
         | "getTypeOfSymbol"
         | "getTypeOfSymbolAtLocation"
         | "getTypeParameterAtPosition"
@@ -1139,6 +1192,7 @@ export interface BatchResponse {
         | "getAnyType"
         | "getApparentPropertiesOfType"
         | "getApparentType"
+        | "getAwaitedType"
         | "getBaseConstraintOfType"
         | "getBaseTypeOfLiteralType"
         | "getBaseTypeOfType"
@@ -1155,6 +1209,7 @@ export interface BatchResponse {
         | "getConstraintOfType"
         | "getConstraintOfTypeParameter"
         | "getContextualType"
+        | "getContextualTypeForArgument"
         | "getDeclarationDiagnostics"
         | "getDeclarationEmit"
         | "getDeclaredTypeOfSymbol"
@@ -1164,6 +1219,7 @@ export interface BatchResponse {
         | "getESSymbolType"
         | "getExportSpecifierLocalTargetSymbol"
         | "getExportSymbolOfSymbol"
+        | "getExportSymbolOfSymbolForChecker"
         | "getExportsOfModule"
         | "getExportsOfSymbol"
         | "getExtendsTypeOfType"
@@ -1173,13 +1229,17 @@ export interface BatchResponse {
         | "getGlobalDiagnostics"
         | "getImmediateAliasedSymbol"
         | "getImportAdderEdits"
+        | "getIndexInfoOfType"
         | "getIndexInfosOfType"
         | "getIndexTypeOfType"
+        | "getIndexTypeOfTypeByKind"
         | "getJavaScriptEmit"
         | "getJsDocTags"
         | "getLocalTypeParametersOfType"
         | "getMemberInModuleExports"
         | "getMembersOfSymbol"
+        | "getModeForResolutionAtIndex"
+        | "getModeForUsageLocation"
         | "getNegatedType"
         | "getNeverType"
         | "getNonMissingTypeOfSymbol"
@@ -1229,12 +1289,14 @@ export interface BatchResponse {
         | "getTargetOfType"
         | "getTargetSymbol"
         | "getThisParameterOfSignature"
+        | "getThisTypeOfType"
         | "getTrueTypeOfConditionalType"
         | "getTypeArguments"
         | "getTypeAtLocation"
         | "getTypeAtLocations"
         | "getTypeAtPosition"
         | "getTypeFromTypeNode"
+        | "getTypeOfPropertyOfType"
         | "getTypeOfSymbol"
         | "getTypeOfSymbolAtLocation"
         | "getTypeParameterAtPosition"

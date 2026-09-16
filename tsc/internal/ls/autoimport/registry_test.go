@@ -338,7 +338,7 @@ export const bar = 2;`,
 
 		// Delete just the package directory, leaving node_modules itself in place. The
 		// package's files are read transiently by the registry, so they are never tracked
-		// in diskFiles/diskDirectories; only the directory deletion event is reported, and
+		// in cacheFiles/cacheDirectories; only the directory deletion event is reported, and
 		// it must survive snapshotfs filtering to invalidate the bucket.
 		assert.NilError(t, sessionUtils.FS().Remove(nodePackage.Directory))
 		session.DidChangeWatchedFiles(ctx, []*lsproto.FileEvent{

@@ -74,14 +74,17 @@ import {
     type FreshableType,
     type ImportAdderAction,
     type IndexedAccessType,
+    IndexKind,
     type IndexType,
     type InterfaceType,
     type IntrinsicType,
     isErrorType,
+    JsxEmit,
     type LiteralType,
     ModifierFlags,
     ModuleKind,
     ModuleResolutionKind,
+    type NumberLiteralType,
     ObjectFlags,
     type Signature,
     SignatureKind,
@@ -321,7 +324,8 @@ describe("API", () => {
         using api = spawnAPI({
             "/src/index.ts": `/// <reference types="pkg-types" />
 import "pkg";
-import "missing";`,
+import "missing";
+declare module "augmentation" {}`,
             "/node_modules/pkg/package.json": JSON.stringify({ name: "pkg", version: "1.0.0", types: "index.d.ts" }),
             "/node_modules/pkg/index.d.ts": `export {};`,
             "/node_modules/@types/pkg-types/package.json": JSON.stringify({ name: "@types/pkg-types", version: "1.0.0", types: "index.d.ts" }),
@@ -334,6 +338,10 @@ import "missing";`,
         const sourceFile = program.getSourceFile("/src/index.ts");
         assert.ok(sourceFile);
         const pkgSpecifier = cast(cast(sourceFile.statements[0], isImportDeclaration).moduleSpecifier, isStringLiteral);
+
+        assert.equal(program.getModeForUsageLocation("/src/index.ts", pkgSpecifier), ModuleKind.ESNext);
+        assert.equal(program.getModeForResolutionAtIndex("/src/index.ts", 0), ModuleKind.ESNext);
+        assert.equal(program.getModeForResolutionAtIndex("/src/index.ts", 2), ModuleKind.ESNext);
 
         const resolvedModule = program.getResolvedModule("/src/index.ts", "pkg", ModuleKind.ESNext);
         assert.ok(resolvedModule);
@@ -4649,6 +4657,95 @@ export declare const m: ReadonlyMap;
     });
 });
 
+describe("Checker - TypeScript API parity", () => {
+    const files = {
+        "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+        "/src/main.ts": `
+export interface Box<T> {
+    value: T;
+    chain(): this;
+    [key: string]: T | ((...args: never[]) => unknown);
+    [index: number]: T;
+}
+
+/** Returns the input value.
+ * @deprecated Use identity instead.
+ */
+export function legacy<T>(value: T): Promise<T> {
+    return Promise.resolve(value);
+}
+
+declare function consume(value: string | number): void;
+consume(1);
+
+export type Exported = number;
+`,
+    };
+
+    test("exposes interface this types and checker operations", () => {
+        using api = spawnAPI(files);
+        const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const sourceFile = project.program.getSourceFile("/src/main.ts");
+        assert.ok(sourceFile);
+
+        const boxSymbol = project.checker.getSymbolAtPosition("/src/main.ts", sourceFile.text.indexOf("Box<T>"));
+        assert.ok(boxSymbol);
+        const boxType = project.checker.getDeclaredTypeOfSymbol(boxSymbol) as InterfaceType;
+        assert.ok(boxType.isClassOrInterface());
+        const thisType = boxType.getThisType();
+        assert.ok(thisType);
+        assert.equal(thisType.isThisType, true);
+        assert.equal(project.checker.typeToString(thisType), "this");
+
+        const stringInfo = project.checker.getIndexInfoOfType(boxType, IndexKind.String);
+        assert.ok(stringInfo);
+        assert.ok(stringInfo.keyType.flags & TypeFlags.String);
+        const numberInfo = project.checker.getIndexInfoOfType(boxType, IndexKind.Number);
+        assert.ok(numberInfo);
+        assert.ok(numberInfo.keyType.flags & TypeFlags.Number);
+        assert.strictEqual(project.checker.getIndexTypeOfType(boxType, IndexKind.String), stringInfo.valueType);
+        assert.strictEqual(project.checker.getIndexTypeOfType(boxType, IndexKind.Number), numberInfo.valueType);
+        const valueType = project.checker.getTypeOfPropertyOfType(boxType, "value");
+        assert.ok(valueType);
+        assert.equal(project.checker.typeToString(valueType), "T");
+        assert.equal(project.checker.getTypeOfPropertyOfType(boxType, "missing"), undefined);
+
+        const legacySymbol = project.checker.getSymbolAtPosition("/src/main.ts", sourceFile.text.indexOf("legacy<T>"));
+        assert.ok(legacySymbol);
+        const legacyType = project.checker.getTypeOfSymbol(legacySymbol);
+        const signature = (project.checker.getSignaturesOfType(legacyType, SignatureKind.Call))[0];
+        assert.ok(signature);
+        const awaitedType = project.checker.getAwaitedType(signature.getReturnType());
+        assert.ok(awaitedType);
+        assert.equal(project.checker.typeToString(awaitedType), "Awaited<T>");
+
+        const exportedSymbol = project.checker.getSymbolAtPosition("/src/main.ts", sourceFile.text.indexOf("Exported ="));
+        assert.ok(exportedSymbol);
+        const localSymbol = (project.checker.getSymbolsInScope(sourceFile, SymbolFlags.TypeAlias)).find(symbol => symbol.name === "Exported");
+        assert.ok(localSymbol);
+        assert.notEqual(localSymbol.id, exportedSymbol.id);
+        assert.strictEqual(project.checker.getExportSymbolOfSymbol(localSymbol), exportedSymbol);
+
+        let call: import("@typescript/typescript/unstable/ast").CallExpression | undefined;
+        sourceFile.forEachChild(function visit(node) {
+            if (isCallExpression(node) && sourceFile.text.slice(node.expression.pos, node.expression.end).trim() === "consume") {
+                call = node;
+            }
+            node.forEachChild(visit);
+        });
+        assert.ok(call);
+        const contextualType = project.checker.getContextualTypeForArgumentAtIndex(call, 0);
+        assert.ok(contextualType);
+        assert.equal(project.checker.typeToString(contextualType), "string | number");
+    });
+
+    test("uses Strada-compatible JsxEmit values", () => {
+        assert.equal(JsxEmit.React, 2);
+        assert.equal(JsxEmit.ReactNative, 3);
+    });
+});
+
 describe("Checker - getConstraintOfTypeParameter", () => {
     test("returns constraint of a type parameter", () => {
         using api = spawnAPI({
@@ -4870,6 +4967,40 @@ describe("Checker - getConstantValue", () => {
         assert.ok(memberB, "Should find enum member B");
         const value = project.checker.getConstantValue(memberB);
         assert.equal(value, 2);
+    });
+
+    test("returns infinite numeric enum values without changing equivalent strings", () => {
+        using api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/main.ts": `export enum E {
+                Positive = 1e999,
+                Negative = -1e999,
+                PositiveNaN = NaN,
+                NegativeNaN = -NaN,
+                PositiveString = "+Infinity",
+                NegativeString = "-Infinity",
+                NaNString = "NaN",
+            }`,
+        });
+
+        const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const sourceFile = project.program.getSourceFile("/src/main.ts");
+        assert.ok(sourceFile);
+        const members: Node[] = [];
+        sourceFile.forEachChild(function visit(node) {
+            if (node.kind === SyntaxKind.EnumMember) members.push(node);
+            node.forEachChild(visit);
+        });
+        assert.equal(members.length, 7);
+
+        assert.equal(project.checker.getConstantValue(members[0]), Infinity);
+        assert.equal(project.checker.getConstantValue(members[1]), -Infinity);
+        assert.equal(project.checker.getConstantValue(members[2]), NaN);
+        assert.equal(project.checker.getConstantValue(members[3]), NaN);
+        assert.equal(project.checker.getConstantValue(members[4]), "+Infinity");
+        assert.equal(project.checker.getConstantValue(members[5]), "-Infinity");
+        assert.equal(project.checker.getConstantValue(members[6]), "NaN");
     });
 
     test("returns string value of a string-initialized enum member", () => {
@@ -5374,6 +5505,35 @@ describe("FreshableType - getFreshType and getRegularType", () => {
         const negLiteral = negType as BigIntLiteralType;
         assert.equal(typeof negLiteral.value, "bigint");
         assert.equal(negLiteral.value, -123n);
+    });
+
+    test("NumberLiteralType.value is infinity (positive and negative)", () => {
+        const src = `\nexport const pos = 1e999;\nexport const neg = -1e999;\n`;
+        using api = spawnAPI({
+            "/tsconfig.json": "{}",
+            "/src/main.ts": src,
+        });
+
+        const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+
+        const posSymbol = project.checker.getSymbolAtPosition("/src/main.ts", src.indexOf("pos ="));
+        assert.ok(posSymbol);
+        const posType = project.checker.getTypeOfSymbol(posSymbol);
+        assert.ok(posType);
+        assert.ok(posType.flags & TypeFlags.NumberLiteral, "Expected NumberLiteral");
+        const posLiteral = posType as NumberLiteralType;
+        assert.equal(typeof posLiteral.value, "number");
+        assert.equal(posLiteral.value, Infinity);
+
+        const negSymbol = project.checker.getSymbolAtPosition("/src/main.ts", src.indexOf("neg ="));
+        assert.ok(negSymbol);
+        const negType = project.checker.getTypeOfSymbol(negSymbol);
+        assert.ok(negType);
+        assert.ok(negType.flags & TypeFlags.NumberLiteral, "Expected NumberLiteral");
+        const negLiteral = negType as NumberLiteralType;
+        assert.equal(typeof negLiteral.value, "number");
+        assert.equal(negLiteral.value, -Infinity);
     });
 
     test("getFreshType() returns a fresh twin with matching value", () => {

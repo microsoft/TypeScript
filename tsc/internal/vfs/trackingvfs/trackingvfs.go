@@ -62,14 +62,6 @@ func (fs *FS) Stat(path string) vfs.FileInfo {
 	return fs.Inner.Stat(path)
 }
 
-func (fs *FS) WalkDir(root string, walkFn vfs.WalkDirFunc) error {
-	fs.SeenFiles.Add(root)
-	return fs.Inner.WalkDir(root, func(path string, d vfs.DirEntry, err error) error {
-		fs.SeenFiles.Add(path)
-		return walkFn(path, d, err)
-	})
-}
-
 func (fs *FS) Realpath(path string) string {
 	fs.SeenFiles.Add(path)
 	return fs.Inner.Realpath(path)

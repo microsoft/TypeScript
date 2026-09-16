@@ -1,6 +1,7 @@
 negatedPromiseRepr.ts(10,39): error TS2344: Type 'T extends MyPromiseLike<any, any> ? AwaitValue<T, any> : T' does not satisfy the constraint 'not AnyPromiseLikeObject'.
-  Type 'T | AwaitValue<T, any>' is not assignable to type 'not AnyPromiseLikeObject'.
-    Type 'T' is not assignable to type 'not AnyPromiseLikeObject'.
+  Type 'T extends MyPromiseLike<any, any> ? AwaitValue<T, any> : T' is not assignable to type 'not AnyPromiseLikeObject'.
+    Type 'T | AwaitValue<T, any>' is not assignable to type 'not AnyPromiseLikeObject'.
+      Type 'T' is not assignable to type 'not AnyPromiseLikeObject'.
 negatedPromiseRepr.ts(16,56): error TS2344: Type 'AwaitValue<T, any>' does not satisfy the constraint 'not AnyPromiseLikeObject'.
   Type 'T | not AnyPromiseLikeObject' is not assignable to type 'not AnyPromiseLikeObject'.
     Type 'T' is not assignable to type 'not AnyPromiseLikeObject'.
@@ -33,8 +34,9 @@ negatedPromiseRepr.ts(37,18): error TS2344: Type 'T | AwaitValue<U, F>' does not
     type CoercePromiseLike<T> = MyPromise<T extends MyPromiseLike<any, any> ? AwaitValue<T> : T, never>;
                                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2344: Type 'T extends MyPromiseLike<any, any> ? AwaitValue<T, any> : T' does not satisfy the constraint 'not AnyPromiseLikeObject'.
-!!! error TS2344:   Type 'T | AwaitValue<T, any>' is not assignable to type 'not AnyPromiseLikeObject'.
-!!! error TS2344:     Type 'T' is not assignable to type 'not AnyPromiseLikeObject'.
+!!! error TS2344:   Type 'T extends MyPromiseLike<any, any> ? AwaitValue<T, any> : T' is not assignable to type 'not AnyPromiseLikeObject'.
+!!! error TS2344:     Type 'T | AwaitValue<T, any>' is not assignable to type 'not AnyPromiseLikeObject'.
+!!! error TS2344:       Type 'T' is not assignable to type 'not AnyPromiseLikeObject'.
 !!! related TS2208 negatedPromiseRepr.ts:10:24: This type parameter might need an `extends not AnyPromiseLikeObject` constraint.
     
     interface MyPromiseConstructor {

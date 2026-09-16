@@ -95,7 +95,7 @@ func (s *SnapshotHost) CloneSnapshot(
 // update derives a snapshot from baseSnapshot without adopting it as any
 // canonical session state or performing session side effects.
 func (s *SnapshotHost) update(ctx context.Context, baseSnapshot *Snapshot, change SnapshotChange) *Snapshot {
-	return baseSnapshot.Clone(ctx, change, baseSnapshot.fs.overlays, nil)
+	return baseSnapshot.Clone(ctx, change, baseSnapshot.overlays(), nil)
 }
 
 // CloneSnapshotWithTemporaryFile derives a snapshot with a temporary file content override.
@@ -139,22 +139,24 @@ func (s *SnapshotHost) CloneSnapshotForProgram(
 // adopting the clone in the background.
 func (s *SnapshotHost) CloneSnapshotWithAutoImports(ctx context.Context, baseSnapshot *Snapshot, uri lsproto.DocumentUri, logger logging.Logger) *Snapshot {
 	change := SnapshotChange{
-		reason: UpdateReasonRequestedLanguageServiceWithAutoImports,
+		reason:             UpdateReasonRequestedLanguageServiceWithAutoImports,
+		fs:                 baseSnapshot.fs.fs,
+		fileSystemOverride: baseSnapshot.fileSystemOverride,
 		ResourceRequest: ResourceRequest{
 			Documents:   []lsproto.DocumentUri{uri},
 			AutoImports: uri,
 		},
 	}
-	return baseSnapshot.Clone(ctx, change, baseSnapshot.fs.overlays, logger)
+	return baseSnapshot.Clone(ctx, change, baseSnapshot.overlays(), logger)
 }
 
 func (s *SnapshotHost) newRootSnapshot(id uint64, relativePatternSupport bool) *Snapshot {
+	fileSystem := newOverlayFS(s.fs, nil, s.options.PositionEncoding, s.toPath)
 	return s.newSnapshot(
 		id,
 		&SnapshotFS{
-			toPath:   s.toPath,
-			fs:       s.fs,
-			overlays: make(map[tspath.Path]*Overlay),
+			toPath: s.toPath,
+			fs:     fileSystem,
 		},
 		&ConfigFileRegistry{},
 		nil,
