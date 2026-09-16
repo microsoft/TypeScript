@@ -1705,6 +1705,23 @@ func (p *Program) GetModeForUsageLocation(sourceFile ast.HasFileName, location *
 	return getModeForUsageLocation(sourceFile.FileName(), p.sourceFileMetaDatas[sourceFile.Path()], location, p.projectReferenceFileMapper.getCompilerOptionsForFile(sourceFile))
 }
 
+func (p *Program) GetModeForResolutionAtIndex(sourceFile *ast.SourceFile, index int) core.ResolutionMode {
+	imports := sourceFile.Imports()
+	if index < len(imports) {
+		return p.GetModeForUsageLocation(sourceFile, imports[index])
+	}
+	index -= len(imports)
+	for _, augmentation := range sourceFile.ModuleAugmentations {
+		if augmentation.Kind == ast.KindStringLiteral {
+			if index == 0 {
+				return p.GetModeForUsageLocation(sourceFile, augmentation)
+			}
+			index--
+		}
+	}
+	panic("resolution index out of range")
+}
+
 func (p *Program) GetDefaultResolutionModeForFile(sourceFile ast.HasFileName) core.ResolutionMode {
 	return getDefaultResolutionModeForFile(sourceFile.FileName(), p.sourceFileMetaDatas[sourceFile.Path()], p.projectReferenceFileMapper.getCompilerOptionsForFile(sourceFile))
 }

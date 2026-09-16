@@ -1331,6 +1331,24 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
         return result ?? undefined;
     }
 
+    async getModeForUsageLocation(file: DocumentIdentifier, usage: StringLiteralLikeNode): Promise<ModuleKind> {
+        return this.client.apiRequest("getModeForUsageLocation", {
+            snapshot: this.snapshotId,
+            project: this.project.id,
+            file,
+            usage: getNodeId(usage),
+        });
+    }
+
+    async getModeForResolutionAtIndex(file: DocumentIdentifier, index: number): Promise<ModuleKind> {
+        return this.client.apiRequest("getModeForResolutionAtIndex", {
+            snapshot: this.snapshotId,
+            project: this.project.id,
+            file,
+            index,
+        });
+    }
+
     async getResolvedModuleFromModuleSpecifier(
         moduleSpecifier: StringLiteralLikeNode,
         sourceFile?: DocumentIdentifier,

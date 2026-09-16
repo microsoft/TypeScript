@@ -47,6 +47,8 @@ export interface APIMethodInfo {
     getSourceFile: APIMethod<GetSourceFileParams, SourceFileResponse | null>;
     getSourceFileNames: APIMethod<GetSourceFileNamesParams, string[]>;
     getSourceFileMetadata: APIMethod<GetSourceFileParams, SourceFileMetadata | null>;
+    getModeForUsageLocation: APIMethod<GetModeForUsageLocationParams, ModuleKind>;
+    getModeForResolutionAtIndex: APIMethod<GetModeForResolutionAtIndexParams, ModuleKind>;
     getResolvedModule: APIMethod<GetResolvedModuleParams, ResolvedModule | null>;
     getResolvedModuleFromModuleSpecifier: APIMethod<GetResolvedModuleFromModuleSpecifierParams, ResolvedModule | null>;
     getResolvedTypeReferenceDirective: APIMethod<GetResolvedTypeReferenceDirectiveParams, ResolvedTypeReferenceDirective | null>;
@@ -464,6 +466,20 @@ export interface SourceFileMetadata {
     packageJsonType: string;
     packageJsonDirectory: string;
     impliedNodeFormat: ModuleKind;
+}
+
+export interface GetModeForUsageLocationParams {
+    snapshot: number;
+    project: string;
+    file: DocumentIdentifier;
+    usage: string;
+}
+
+export interface GetModeForResolutionAtIndexParams {
+    snapshot: number;
+    project: string;
+    file: DocumentIdentifier;
+    index: number;
 }
 
 export interface GetResolvedModuleParams {
@@ -1039,6 +1055,8 @@ export interface BatchRequest {
         | "getLocalTypeParametersOfType"
         | "getMemberInModuleExports"
         | "getMembersOfSymbol"
+        | "getModeForResolutionAtIndex"
+        | "getModeForUsageLocation"
         | "getNeverType"
         | "getNonMissingTypeOfSymbol"
         | "getNonNullableType"
@@ -1198,6 +1216,8 @@ export interface BatchResponse {
         | "getLocalTypeParametersOfType"
         | "getMemberInModuleExports"
         | "getMembersOfSymbol"
+        | "getModeForResolutionAtIndex"
+        | "getModeForUsageLocation"
         | "getNeverType"
         | "getNonMissingTypeOfSymbol"
         | "getNonNullableType"

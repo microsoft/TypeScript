@@ -2415,6 +2415,60 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
         );
     }
 
+    get getModeForUsageLocation(): {
+        (file: DocumentIdentifier, usage: StringLiteralLikeNode): ModuleKind;
+        gen(file: DocumentIdentifier, usage: StringLiteralLikeNode): Generator<ProtocolRequest, ModuleKind, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getModeForUsageLocation",
+            function (file: DocumentIdentifier, usage: StringLiteralLikeNode): ModuleKind {
+                return owner.client.apiRequest("getModeForUsageLocation", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.id,
+                    file,
+                    usage: getNodeId(usage),
+                });
+            },
+            function* (file: DocumentIdentifier, usage: StringLiteralLikeNode): Generator<ProtocolRequest, ModuleKind, ProtocolResponse["result"]> {
+                return yield* apiRequest("getModeForUsageLocation", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.id,
+                    file,
+                    usage: getNodeId(usage),
+                });
+            },
+        );
+    }
+
+    get getModeForResolutionAtIndex(): {
+        (file: DocumentIdentifier, index: number): ModuleKind;
+        gen(file: DocumentIdentifier, index: number): Generator<ProtocolRequest, ModuleKind, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getModeForResolutionAtIndex",
+            function (file: DocumentIdentifier, index: number): ModuleKind {
+                return owner.client.apiRequest("getModeForResolutionAtIndex", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.id,
+                    file,
+                    index,
+                });
+            },
+            function* (file: DocumentIdentifier, index: number): Generator<ProtocolRequest, ModuleKind, ProtocolResponse["result"]> {
+                return yield* apiRequest("getModeForResolutionAtIndex", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.id,
+                    file,
+                    index,
+                });
+            },
+        );
+    }
+
     get getResolvedModuleFromModuleSpecifier(): {
         (moduleSpecifier: StringLiteralLikeNode, sourceFile?: DocumentIdentifier): ResolvedModule | undefined;
         gen(moduleSpecifier: StringLiteralLikeNode, sourceFile?: DocumentIdentifier): Generator<ProtocolRequest, ResolvedModule | undefined, ProtocolResponse["result"]>;

@@ -99,6 +99,8 @@ const (
 	MethodGetSourceFile                                  Method = "getSourceFile"
 	MethodGetSourceFileNames                             Method = "getSourceFileNames"
 	MethodGetSourceFileMetadata                          Method = "getSourceFileMetadata"
+	MethodGetModeForUsageLocation                        Method = "getModeForUsageLocation"
+	MethodGetModeForResolutionAtIndex                    Method = "getModeForResolutionAtIndex"
 	MethodGetResolvedModule                              Method = "getResolvedModule"
 	MethodGetResolvedModuleFromModuleSpecifier           Method = "getResolvedModuleFromModuleSpecifier"
 	MethodGetResolvedTypeReferenceDirective              Method = "getResolvedTypeReferenceDirective"
@@ -519,6 +521,8 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodGetSourceFile:                                  unmarshallerFor[GetSourceFileParams],
 	MethodGetSourceFileNames:                             unmarshallerFor[GetSourceFileNamesParams],
 	MethodGetSourceFileMetadata:                          unmarshallerFor[GetSourceFileParams],
+	MethodGetModeForUsageLocation:                        unmarshallerFor[GetModeForUsageLocationParams],
+	MethodGetModeForResolutionAtIndex:                    unmarshallerFor[GetModeForResolutionAtIndexParams],
 	MethodGetResolvedModule:                              unmarshallerFor[GetResolvedModuleParams],
 	MethodGetResolvedModuleFromModuleSpecifier:           unmarshallerFor[GetResolvedModuleFromModuleSpecifierParams],
 	MethodGetResolvedTypeReferenceDirective:              unmarshallerFor[GetResolvedTypeReferenceDirectiveParams],
@@ -1183,6 +1187,20 @@ type GetSourceFileParams struct {
 type GetSourceFileNamesParams struct {
 	Snapshot SnapshotID `json:"snapshot"`
 	Project  ProjectID  `json:"project"`
+}
+
+type GetModeForUsageLocationParams struct {
+	Snapshot SnapshotID         `json:"snapshot"`
+	Project  ProjectID          `json:"project"`
+	File     DocumentIdentifier `json:"file"`
+	Usage    NodeHandle         `json:"usage"`
+}
+
+type GetModeForResolutionAtIndexParams struct {
+	Snapshot SnapshotID         `json:"snapshot"`
+	Project  ProjectID          `json:"project"`
+	File     DocumentIdentifier `json:"file"`
+	Index    int                `json:"index"`
 }
 
 type GetResolvedModuleParams struct {
