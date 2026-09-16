@@ -6,6 +6,28 @@ import {
     getRootLength,
     toPath,
 } from "../src/api/path.ts";
+import { createVirtualFileSystem } from "./testUtils.ts";
+
+test("createVirtualFileSystem supports object prototype path components", () => {
+    const fs = createVirtualFileSystem({
+        "/toString/file.ts": "toString",
+        "/__proto__/constructor.ts": "constructor",
+    });
+    assert.strictEqual(fs.readFile!("/toString/file.ts"), "toString");
+    assert.strictEqual(fs.readFile!("/__proto__/constructor.ts"), "constructor");
+});
+
+test("createVirtualFileSystem respects case sensitivity", () => {
+    const fs = createVirtualFileSystem({
+        "/Workspace/Foo.ts": "content",
+    }, { useCaseSensitiveFileNames: false });
+    assert.strictEqual(fs.readFile!("/workspace/foo.ts"), "content");
+    assert.deepStrictEqual(fs.getAccessibleEntries!("/workspace"), {
+        files: ["Foo.ts"],
+        directories: [],
+        symlinks: undefined,
+    });
+});
 
 test("non-file document URIs preserve structured identity", () => {
     const uris = [
