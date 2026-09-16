@@ -909,52 +909,71 @@ func benchmarkSnapshotWatchAliases(b *testing.B, symlink bool) {
 						b.ReportMetric(float64(fs.comparerQueries.Load())/float64(b.N), "comparer-queries/op")
 						b.ReportMetric(float64(fs.realpaths.Load())/float64(b.N), "realpath/op")
 					})
-					b.Run("clone-edit", func(b *testing.B) {
-						setupStart := time.Now()
-						fs.comparerQueries.Store(0)
-						fs.realpaths.Store(0)
-						root := host.NewStandaloneRootSnapshot()
-						defer root.Deref()
-						projects := collections.NewSetFromItems(configName)
-						snapshot, err := host.CloneSnapshot(context.Background(), root, FileChangeSummary{}, &APISnapshotRequest{OpenProjects: projects})
-						if err != nil {
-							b.Fatal(err)
-						}
-						uri := lsconv.FileNameToDocumentURI(names[0])
-						opened, err := host.CloneSnapshotWithTemporaryFile(context.Background(), snapshot, nil, uri, "export const value = 1;")
-						snapshot.Deref()
-						if err != nil {
-							b.Fatal(err)
-						}
-						snapshot = opened
-						if project := snapshot.ProjectCollection.ConfiguredProject(host.toPath(configName)); project == nil || len(project.Program.GetSourceFiles()) != size {
-							b.Fatal("benchmark lost its configured project files")
-						}
-						setupTime := time.Since(setupStart)
-						setupComparerQueries, setupRealpaths := fs.comparerQueries.Load(), fs.realpaths.Load()
-						fs.comparerQueries.Store(0)
-						fs.realpaths.Store(0)
-						b.ReportAllocs()
-						b.ResetTimer()
-						for b.Loop() {
-							next, err := host.CloneSnapshotWithTemporaryFile(context.Background(), snapshot, nil, uri, fmt.Sprintf("export const value = %d;", snapshot.id))
+					for _, edit := range []string{"edit", "disk"} {
+						b.Run("clone-"+edit, func(b *testing.B) {
+							setupStart := time.Now()
+							fs.comparerQueries.Store(0)
+							fs.realpaths.Store(0)
+							root := host.NewStandaloneRootSnapshot()
+							defer root.Deref()
+							projects := collections.NewSetFromItems(configName)
+							snapshot, err := host.CloneSnapshot(context.Background(), root, FileChangeSummary{}, &APISnapshotRequest{OpenProjects: projects})
 							if err != nil {
 								b.Fatal(err)
 							}
-							snapshot.Deref()
-							snapshot = next
-							if len(snapshot.ProjectCollection.ConfiguredProject(host.toPath(configName)).Program.GetSourceFiles()) != size {
-								b.Fatal("clone lost its configured project files")
+							uri := lsconv.FileNameToDocumentURI(names[0])
+							if edit == "edit" {
+								opened, err := host.CloneSnapshotWithTemporaryFile(context.Background(), snapshot, nil, uri, "export const value = 1;")
+								snapshot.Deref()
+								if err != nil {
+									b.Fatal(err)
+								}
+								snapshot = opened
 							}
-						}
-						b.StopTimer()
-						b.ReportMetric(float64(fs.comparerQueries.Load())/float64(b.N), "comparer-queries/op")
-						b.ReportMetric(float64(fs.realpaths.Load())/float64(b.N), "realpath/op")
-						b.ReportMetric(float64(setupComparerQueries), "setup-comparer-queries")
-						b.ReportMetric(float64(setupRealpaths), "setup-realpath")
-						b.ReportMetric(float64(setupTime.Nanoseconds()), "setup-ns")
-						snapshot.Deref()
-					})
+							if project := snapshot.ProjectCollection.ConfiguredProject(host.toPath(configName)); project == nil || len(project.Program.GetSourceFiles()) != size {
+								b.Fatal("benchmark lost its configured project files")
+							}
+							setupTime := time.Since(setupStart)
+							setupComparerQueries, setupRealpaths := fs.comparerQueries.Load(), fs.realpaths.Load()
+							fs.comparerQueries.Store(0)
+							fs.realpaths.Store(0)
+							b.ReportAllocs()
+							b.ResetTimer()
+							for b.Loop() {
+								text := fmt.Sprintf("export const value = %d;", snapshot.id)
+								var next *Snapshot
+								var err error
+								if edit == "edit" {
+									next, err = host.CloneSnapshotWithTemporaryFile(context.Background(), snapshot, nil, uri, text)
+								} else {
+									b.StopTimer()
+									assert.NilError(b, fs.WriteFile(physicalRoot+strings.TrimPrefix(names[0], logicalRoot), text))
+									b.StartTimer()
+									var changes FileChangeSummary
+									changes.Changed.Add(uri)
+									next, err = host.CloneSnapshot(context.Background(), snapshot, changes, &APISnapshotRequest{})
+								}
+								if err != nil {
+									b.Fatal(err)
+								}
+								snapshot.Deref()
+								snapshot = next
+								if len(snapshot.ProjectCollection.ConfiguredProject(host.toPath(configName)).Program.GetSourceFiles()) != size {
+									b.Fatal("clone lost its configured project files")
+								}
+								if snapshot.ProjectCollection.ConfiguredProject(host.toPath(configName)).Program.GetSourceFile(names[0]).Text() != text {
+									b.Fatal("clone retained stale source text")
+								}
+							}
+							b.StopTimer()
+							b.ReportMetric(float64(fs.comparerQueries.Load())/float64(b.N), "comparer-queries/op")
+							b.ReportMetric(float64(fs.realpaths.Load())/float64(b.N), "realpath/op")
+							b.ReportMetric(float64(setupComparerQueries), "setup-comparer-queries")
+							b.ReportMetric(float64(setupRealpaths), "setup-realpath")
+							b.ReportMetric(float64(setupTime.Nanoseconds()), "setup-ns")
+							snapshot.Deref()
+						})
+					}
 				})
 			}
 		}
