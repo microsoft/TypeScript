@@ -470,14 +470,14 @@ export interface SourceFileMetadata {
 
 export interface GetModeForUsageLocationParams {
     snapshot: number;
-    project: string;
+    project: ProjectId;
     file: DocumentIdentifier;
     usage: string;
 }
 
 export interface GetModeForResolutionAtIndexParams {
     snapshot: number;
-    project: string;
+    project: ProjectId;
     file: DocumentIdentifier;
     index: number;
 }
