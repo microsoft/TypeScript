@@ -64,9 +64,14 @@ import {
 } from "@typescript/typescript/unstable/fs";
 import type { FileSystem } from "@typescript/typescript/unstable/fs";
 import {
+    toRootedDirectoryPath,
+    toRootedFilePath,
+} from "@typescript/typescript/unstable/path";
+import {
     API,
     type BigIntLiteralType,
     CheckFlags,
+    type CompilerOptions,
     type ConditionalType,
     DiagnosticCategory,
     type DocumentIdentifier,
@@ -85,6 +90,7 @@ import {
     ModuleKind,
     ModuleResolutionKind,
     ObjectFlags,
+    type RawCompilerOptions,
     type Signature,
     SignatureKind,
     type Snapshot,
@@ -370,6 +376,50 @@ import "missing";`,
         program.dispose();
     });
 
+    test("createProgram resolves raw compiler option paths", () => {
+        using api = spawnAPI({
+            "/src/index.ts": `import { value } from "ba"; export { value };`,
+            "/src/first.ts": `export const value = 1;`,
+            "/src/fallback.ts": `export const value = 2;`,
+            "/src/component.vue": `export const component = 1;`,
+        });
+        const rawOptions: RawCompilerOptions = {
+            noLib: true,
+            allowNonTsExtensions: true,
+            outDir: "dist",
+            paths: { "*a": ["/src/first.ts"], "*": ["/src/fallback.ts"] },
+            rootDirs: ["src", "generated"],
+            suppressOutputPathCheck: true,
+            tsBuildInfoFile: "cache/build.tsbuildinfo",
+        };
+        // @ts-expect-error raw path strings are not finalized compiler options
+        const _finalizedOptions: CompilerOptions = rawOptions;
+
+        const program = api.createProgram(["/src/index.ts", "/src/component.vue"], { compilerOptions: rawOptions });
+        const compilerOptions: CompilerOptions = program.getCompilerOptions();
+        const serverCurrentDirectory = resolve("../..");
+        assert.deepEqual(
+            compilerOptions,
+            {
+                noLib: true,
+                allowNonTsExtensions: true,
+                outDir: toRootedDirectoryPath(resolve(serverCurrentDirectory, "dist"), undefined),
+                paths: { "*a": ["/src/first.ts"], "*": ["/src/fallback.ts"] },
+                rootDirs: [
+                    toRootedDirectoryPath(resolve(serverCurrentDirectory, "src"), undefined),
+                    toRootedDirectoryPath(resolve(serverCurrentDirectory, "generated"), undefined),
+                ],
+                suppressOutputPathCheck: true,
+                tsBuildInfoFile: toRootedFilePath(resolve(serverCurrentDirectory, "cache/build.tsbuildinfo"), undefined),
+            } satisfies CompilerOptions,
+        );
+        assert.equal((program.getSemanticDiagnostics("/src/index.ts")).length, 0);
+        assert(program.getSourceFile("/src/first.ts"));
+        assert.equal(program.getSourceFile("/src/fallback.ts"), undefined);
+        assert(program.getSourceFile("/src/component.vue"));
+        program.dispose();
+    });
+
     test("createProgram ignores an on-disk tsconfig", () => {
         using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({
@@ -393,7 +443,7 @@ import "missing";`,
     });
 
     test("createProgram includes project references", () => {
-        const reference = { path: "/lib/tsconfig.json", originalPath: "/lib/tsconfig.json", circular: false };
+        const reference = { path: toRootedFilePath("/lib/tsconfig.json", undefined), originalPath: "/lib/tsconfig.json", circular: false };
         using api = spawnAPI({
             "/src/index.ts": `export const value = 1;`,
             "/lib/tsconfig.json": JSON.stringify({ compilerOptions: { composite: true, noLib: true }, files: ["index.ts"] }),
@@ -488,7 +538,7 @@ import "missing";`,
         const oldProgram = api.createProgram([fileName], options);
         assert.equal((oldProgram.getSemanticDiagnostics(fileName)).length, 1);
 
-        fs.writeFile!(fileName, `export const value: string = "valid";`);
+        fs.writeFile!(toRootedFilePath(fileName, undefined), `export const value: string = "valid";`);
         const newProgram = api.createProgram(
             [fileName],
             options,
@@ -514,7 +564,7 @@ import "missing";`,
         const oldProgram = api.createProgram([fileName], options);
         assert.equal((oldProgram.getSemanticDiagnostics(fileName)).length, 1);
 
-        fs.writeFile!(fileName, `export const value: string = "valid";`);
+        fs.writeFile!(toRootedFilePath(fileName, undefined), `export const value: string = "valid";`);
         const newProgram = api.createProgram(
             [fileName],
             options,
@@ -541,7 +591,7 @@ import "missing";`,
         const project = snapshot.getProject("/tsconfig.json")!;
         assert.equal((project.program.getSemanticDiagnostics(fileName)).length, 1);
 
-        fs.writeFile!(fileName, `export const value: string = "valid";`);
+        fs.writeFile!(toRootedFilePath(fileName, undefined), `export const value: string = "valid";`);
         const newProgram = api.createProgram(
             project.parsedCommandLine.fileNames,
             {
@@ -695,6 +745,7 @@ describe("Snapshot", () => {
         assert.ok(snapshot.id);
         assert.ok(snapshot.getProjects().length > 0);
         assert.ok(snapshot.getProject("/tsconfig.json"));
+        assert.ok(snapshot.getProject({ uri: "file:///tsconfig.json" }));
     });
 
     test("project exposes parsedCommandLine", () => {
@@ -880,6 +931,30 @@ describe("LanguageService - imports", () => {
         ]);
 
         assert.equal(applyTextEdits(source, edits), `import { bar, foo } from "./foo";\n\nconst value = foo + bar;\n`);
+    });
+
+    test("getImportAdderEdits roots relative files at the project directory", () => {
+        const source = `const value = foo;\n`;
+        const api = spawnAPI({
+            "/outside/tsconfig.json": "{}",
+            "/outside/src/index.ts": source,
+            "/outside/src/foo.ts": `export const foo = 1;\n`,
+        });
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/outside/tsconfig.json" });
+            const project = snapshot.getProject("/outside/tsconfig.json")!;
+            const foo = project.checker.getSymbolAtPosition("/outside/src/foo.ts", "export const ".length);
+            assert.ok(foo);
+
+            const edits = project.languageService.getImportAdderEdits("src/index.ts", [
+                { kind: "importSymbol", symbol: foo.getExportSymbol() },
+            ]);
+
+            assert.equal(applyTextEdits(source, edits), `import { foo } from "./foo";\n\nconst value = foo;\n`);
+        }
+        finally {
+            api.close();
+        }
     });
 
     test("getImportAdderEdits adds to an existing import", () => {
@@ -1132,6 +1207,25 @@ describe("Checker - getMemberInModuleExports", () => {
 });
 
 describe("SourceFile", () => {
+    test("relative and absolute identifiers share the project source file cache", () => {
+        const api = spawnAPI({
+            "/outside/tsconfig.json": "{}",
+            "/outside/src/index.ts": "export const value = 1;",
+        });
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/outside/tsconfig.json" });
+            const program = snapshot.getProject("/outside/tsconfig.json")!.program;
+            const absolute = program.getSourceFile("/outside/src/index.ts");
+            const relative = program.getSourceFile("src/index.ts");
+
+            assert.ok(absolute);
+            assert.strictEqual(relative, absolute);
+        }
+        finally {
+            api.close();
+        }
+    });
+
     test("getSourceFile rejects invalid document identifiers", () => {
         using api = spawnAPI();
 
@@ -1467,7 +1561,7 @@ describe("Multiple snapshots", () => {
         assert.equal(sf1.text, `export const foo = 42;`);
 
         // Mutate the file and create a new snapshot with the change
-        fs.writeFile!("/src/foo.ts", `export const foo = "changed";`);
+        fs.writeFile!(toRootedFilePath("/src/foo.ts", undefined), `export const foo = "changed";`);
         const snap2 = api.updateSnapshot({
             fileChanges: { changed: ["/src/foo.ts"] },
         });
@@ -1502,7 +1596,7 @@ describe("Multiple snapshots", () => {
         const snap1 = api.updateSnapshot({ openProject: "/tsconfig.json" });
 
         // Add a brand new file
-        fs.writeFile!("/src/bar.ts", `export const bar = true;`);
+        fs.writeFile!(toRootedFilePath("/src/bar.ts", undefined), `export const bar = true;`);
         const snap2 = api.updateSnapshot({
             fileChanges: { created: ["/src/bar.ts"] },
         });
@@ -1529,7 +1623,7 @@ describe("Multiple snapshots", () => {
         ];
 
         for (const version of versions) {
-            fs.writeFile!("/src/foo.ts", version);
+            fs.writeFile!(toRootedFilePath("/src/foo.ts", undefined), version);
             const snap = api.updateSnapshot({
                 fileChanges: { changed: ["/src/foo.ts"] },
             });
@@ -1576,7 +1670,7 @@ describe("Source file caching", () => {
         assert.equal(sf1.text, `export const foo = 42;`);
 
         // Mutate the file in the VFS
-        fs.writeFile!("/src/foo.ts", `export const foo = 100;`);
+        fs.writeFile!(toRootedFilePath("/src/foo.ts", undefined), `export const foo = 100;`);
 
         // Notify the server about the change
         const snap2 = api.updateSnapshot({
@@ -1599,7 +1693,7 @@ describe("Source file caching", () => {
         assert.ok(sf1);
 
         // Mutate a different file
-        fs.writeFile!("/src/foo.ts", `export const foo = 999;`);
+        fs.writeFile!(toRootedFilePath("/src/foo.ts", undefined), `export const foo = 999;`);
 
         // Notify the server about the change to foo.ts only
         const snap2 = api.updateSnapshot({
@@ -1642,7 +1736,7 @@ describe("Source file caching", () => {
         assert.equal(sf1.text, `export const foo = 42;`);
 
         // Mutate the file
-        fs.writeFile!("/src/foo.ts", `export const foo = "hello";`);
+        fs.writeFile!(toRootedFilePath("/src/foo.ts", undefined), `export const foo = "hello";`);
 
         // Use invalidateAll to force re-fetch
         const snap2 = api.updateSnapshot({
@@ -1681,7 +1775,7 @@ describe("Source file caching", () => {
         assert.ok(type1.flags & TypeFlags.Number);
 
         // Snapshot 2: change a different file
-        fs.writeFile!("/src/other.ts", `export const x = 2;`);
+        fs.writeFile!(toRootedFilePath("/src/other.ts", undefined), `export const x = 2;`);
         const snap2 = api.updateSnapshot({
             fileChanges: { changed: ["/src/other.ts"] },
         });
@@ -3095,7 +3189,7 @@ describe("readFile callback semantics", () => {
 
         const fs: FileSystem = {
             ...vfs,
-            readFile: (fileName: string) => {
+            readFile: fileName => {
                 if (fileName === blockedPath) {
                     // null = file not found, don't fall back to real FS
                     return null;
@@ -3651,7 +3745,7 @@ describe("updateSnapshot file systems", () => {
         const program = snapshot.getProject("/tsconfig.json")!.program;
         const result = program.emit();
         assert.equal(result.fileSystem, undefined);
-        assert.equal(host.readFile!("/out/main.js"), `export const value = 1;\n`);
+        assert.equal(host.readFile!(toRootedFilePath("/out/main.js", undefined)), `export const value = 1;\n`);
     });
 
     test("full file system can link node_modules from the host", () => {
@@ -3697,11 +3791,11 @@ describe("updateSnapshot file systems", () => {
         const project = snapshot.getProject("/project/tsconfig.json")!;
         const sourceFileNames = project.program.getSourceFileNames();
         assert.ok(
-            sourceFileNames.includes("/host/node_modules/pkg/index.d.ts"),
+            sourceFileNames.includes(toRootedFilePath("/host/node_modules/pkg/index.d.ts", undefined)),
             JSON.stringify({ sourceFileNames, readFileCalls, directoryExistsCalls, fileExistsCalls }),
         );
         assert.equal(
-            (project.program.getSourceFile("/host/node_modules/pkg/index.d.ts"))?.text,
+            (project.program.getSourceFile(toRootedFilePath("/host/node_modules/pkg/index.d.ts", undefined)))?.text,
             `export declare const value: string;`,
         );
         assert.ok(readFileCalls.includes("/host/node_modules/pkg/index.d.ts"));
@@ -5866,9 +5960,10 @@ describe("Program - selected file emit", () => {
             "/src/b.js",
             "/src/b.js.map",
         ]);
-        assert.equal(result.outputFiles.get("/src/a.js")?.sourceFileName, "/src/a.ts");
-        assert.match(result.outputFiles.get("/src/a.js")!.text, /export const a = 1/);
-        assert.equal(fs.readFile?.("/src/a.js"), undefined);
+        const outputFileName = toRootedFilePath("/src/a.js", undefined);
+        assert.equal(result.outputFiles.get(outputFileName)?.sourceFileName, "/src/a.ts");
+        assert.match(result.outputFiles.get(outputFileName)!.text, /export const a = 1/);
+        assert.equal(fs.readFile?.(toRootedFilePath("/src/a.js", undefined)), undefined);
     });
 
     test("getDeclarationEmit forces declarations and declaration maps", () => {
@@ -5885,8 +5980,8 @@ describe("Program - selected file emit", () => {
             "/src/b.d.ts",
             "/src/b.d.ts.map",
         ]);
-        assert.equal(result.outputFiles.get("/src/a.d.ts")?.sourceFileName, "/src/a.ts");
-        assert.equal(fs.readFile?.("/src/a.d.ts"), undefined);
+        assert.equal(result.outputFiles.get(toRootedFilePath("/src/a.d.ts", undefined))?.sourceFileName, "/src/a.ts");
+        assert.equal(fs.readFile?.(toRootedFilePath("/src/a.d.ts", undefined)), undefined);
     });
 
     test("selected file emit accepts empty arrays", () => {
@@ -6377,7 +6472,7 @@ describe("Program - diagnostics", () => {
         assert.equal(rootConfig.fileName, "/tsconfig.json");
         assert.equal(project.program.getSourceFile("/tsconfig.json"), undefined);
 
-        fs.writeFile!("/tsconfig.base.json", `{ "compilerOptions": { "strict": false } }`);
+        fs.writeFile!(toRootedFilePath("/tsconfig.base.json", undefined), `{ "compilerOptions": { "strict": false } }`);
         const extendedConfig = project.program.getConfigSourceFile("/tsconfig.base.json");
         assert.ok(extendedConfig);
         assert.equal(extendedConfig.fileName, "/tsconfig.base.json");
@@ -6629,7 +6724,7 @@ describe("getDefaultProjectForFile", () => {
         assert.equal(sf1.text, `export const foo = 1;`);
 
         // Mutate the file and notify only via fileChanges — no follow-up openFiles/closeFiles.
-        fs.writeFile!("/loose.ts", `export const foo = 2;`);
+        fs.writeFile!(toRootedFilePath("/loose.ts", undefined), `export const foo = 2;`);
         const snapshot2 = api.updateSnapshot({
             fileChanges: { changed: ["/loose.ts"] },
         });
@@ -6760,10 +6855,10 @@ describe("Program - emit", () => {
             ],
         });
 
-        const js = fs.readFile?.("/dist/src/index.js");
-        const dts = fs.readFile?.("/dist/src/index.d.ts");
-        const js2 = fs.readFile?.("/dist/src/testing.js");
-        const dts2 = fs.readFile?.("/dist/src/testing.d.ts");
+        const js = fs.readFile?.(toRootedFilePath("/dist/src/index.js", undefined));
+        const dts = fs.readFile?.(toRootedFilePath("/dist/src/index.d.ts", undefined));
+        const js2 = fs.readFile?.(toRootedFilePath("/dist/src/testing.js", undefined));
+        const dts2 = fs.readFile?.(toRootedFilePath("/dist/src/testing.d.ts", undefined));
         assert.strictEqual(js, `export const x = 1;\n`);
         assert.strictEqual(dts, `export declare const x: number;\n`);
         assert.strictEqual(js2, `export const y = 'typescript';\n`);
@@ -6790,10 +6885,10 @@ describe("Program - emit", () => {
             ],
         });
 
-        const js = fs.readFile?.("/dist/src/index.js");
-        const dts = fs.readFile?.("/dist/src/index.d.ts");
-        const js2 = fs.readFile?.("/dist/src/testing.js");
-        const dts2 = fs.readFile?.("/dist/src/testing.d.ts");
+        const js = fs.readFile?.(toRootedFilePath("/dist/src/index.js", undefined));
+        const dts = fs.readFile?.(toRootedFilePath("/dist/src/index.d.ts", undefined));
+        const js2 = fs.readFile?.(toRootedFilePath("/dist/src/testing.js", undefined));
+        const dts2 = fs.readFile?.(toRootedFilePath("/dist/src/testing.d.ts", undefined));
         assert.strictEqual(js, undefined);
         assert.strictEqual(dts, `export declare const x: number;\n`);
         assert.strictEqual(js2, undefined);
@@ -6820,10 +6915,10 @@ describe("Program - emit", () => {
             ],
         });
 
-        const js = fs.readFile?.("/dist/src/index.js");
-        const dts = fs.readFile?.("/dist/src/index.d.ts");
-        const js2 = fs.readFile?.("/dist/src/testing.js");
-        const dts2 = fs.readFile?.("/dist/src/testing.d.ts");
+        const js = fs.readFile?.(toRootedFilePath("/dist/src/index.js", undefined));
+        const dts = fs.readFile?.(toRootedFilePath("/dist/src/index.d.ts", undefined));
+        const js2 = fs.readFile?.(toRootedFilePath("/dist/src/testing.js", undefined));
+        const dts2 = fs.readFile?.(toRootedFilePath("/dist/src/testing.d.ts", undefined));
         assert.strictEqual(js, `export const x = 1;\n`);
         assert.strictEqual(dts, undefined);
         assert.strictEqual(js2, `export const y = 'typescript';\n`);
@@ -6841,7 +6936,7 @@ describe("Program - emit", () => {
             "/dist/src/index.d.ts",
             "/dist/src/testing.d.ts",
         ]);
-        assert.equal(fs.readFile?.("/dist/src/index.js"), undefined);
+        assert.equal(fs.readFile?.(toRootedFilePath("/dist/src/index.js", undefined)), undefined);
     });
 
     test("whole-program emit includes option-controlled maps", () => {
@@ -6871,8 +6966,8 @@ describe("Program - emit", () => {
                 "/dist/src/index.d.ts.map",
             ]),
         );
-        assert.ok(fs.fileExists?.("/dist/src/index.js.map"));
-        assert.ok(fs.fileExists?.("/dist/src/index.d.ts.map"));
+        assert.ok(fs.fileExists?.(toRootedFilePath("/dist/src/index.js.map", undefined)));
+        assert.ok(fs.fileExists?.(toRootedFilePath("/dist/src/index.d.ts.map", undefined)));
 
         const js = project.program.emitToString(EmitOnly.OnlyJs);
         assert.deepEqual([...js.outputFiles.keys()], [
@@ -6906,8 +7001,8 @@ describe("Program - emit", () => {
         assert.equal(result.emitSkipped, true);
         assert.ok(result.diagnostics.some(d => d.code === 1109));
         assert.deepEqual(result.emittedFiles, []);
-        assert.equal(fs.readFile?.("/dist/src/bad.js"), undefined);
-        assert.equal(fs.readFile?.("/dist/src/good.js"), undefined);
+        assert.equal(fs.readFile?.(toRootedFilePath("/dist/src/bad.js", undefined)), undefined);
+        assert.equal(fs.readFile?.(toRootedFilePath("/dist/src/good.js", undefined)), undefined);
 
         const stringResult = project.program.emitToString();
         assert.equal(stringResult.emitSkipped, true);
@@ -6934,7 +7029,7 @@ describe("Program - emit", () => {
             emitSkipped: false,
             outputFiles: new Map(),
         });
-        assert.equal(fs.readFile?.("/src/index.js"), undefined);
+        assert.equal(fs.readFile?.(toRootedFilePath("/src/index.js", undefined)), undefined);
     });
 
     test("emit rejects unknown files and invalid emitOnly values", () => {
@@ -7142,7 +7237,7 @@ describe("runWithTemporaryFileUpdate", () => {
     });
 });
 
-function spawnAPIWithFS(files: Record<string, string> = { ...defaultFiles }): { api: API; fs: FileSystem; } {
+function spawnAPIWithFS(files: Record<string, string> = { ...defaultFiles }): { api: API; fs: ReturnType<typeof createVirtualFileSystem>; } {
     const fs = createVirtualFileSystem(files);
     const api = new API({
         cwd: fileURLToPath(new URL("../../../../", import.meta.url).toString()),

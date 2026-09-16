@@ -1,6 +1,7 @@
 package ls
 
 import (
+	"cmp"
 	"context"
 	"slices"
 	"strings"
@@ -18,6 +19,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/printer"
 	"github.com/microsoft/TypeScript/tsc/internal/scanner"
 	"github.com/microsoft/TypeScript/tsc/internal/spanmap"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 )
 
 type CallHierarchyDeclaration = *ast.Node
@@ -161,7 +163,7 @@ func getSymbolOfCallHierarchyDeclaration(c *checker.Checker, node *ast.Node) *as
 func getCallHierarchyItemName(program *compiler.Program, node *ast.Node) (text string, pos int, end int) {
 	if ast.IsSourceFile(node) {
 		sourceFile := node.AsSourceFile()
-		return sourceFile.FileName(), 0, 0
+		return sourceFile.FileName().AsString(), 0, 0
 	}
 
 	if (ast.IsFunctionDeclaration(node) || ast.IsClassDeclaration(node)) && node.Name() == nil {
@@ -345,7 +347,7 @@ func findAllInitialDeclarations(c *checker.Checker, node *ast.Node) []*ast.Node 
 	}
 
 	type declKey struct {
-		file string
+		file tspath.RootedFilePath
 		pos  int
 	}
 
@@ -363,7 +365,7 @@ func findAllInitialDeclarations(c *checker.Checker, node *ast.Node) []*ast.Node 
 
 	slices.SortFunc(indices, func(a, b int) int {
 		if keys[a].file != keys[b].file {
-			return strings.Compare(keys[a].file, keys[b].file)
+			return cmp.Compare(keys[a].file, keys[b].file)
 		}
 		return keys[a].pos - keys[b].pos
 	})

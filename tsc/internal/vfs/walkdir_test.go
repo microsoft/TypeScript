@@ -5,6 +5,7 @@ import (
 	"slices"
 	"testing"
 
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfstest"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/wrapvfs"
@@ -19,17 +20,18 @@ func TestWalkDir(t *testing.T) {
 		"/root/dir/b.ts":       "",
 		"/root/link/hidden.ts": "",
 		"/target/hidden.ts":    "",
-	}, true)
+	}, tspath.CaseSensitive)
+
 	fileSystem := wrapvfs.Wrap(base, wrapvfs.Replacements{
-		GetAccessibleEntries: func(path string) vfs.Entries {
+		GetAccessibleEntries: func(path tspath.RootedDirectoryPath) vfs.Entries {
 			entries := base.GetAccessibleEntries(path)
 			entries.Symlinks = nil
-			if path == "/root" {
+			if path.AsString() == "/root" {
 				entries.Files = append(entries.Files, "C:/foreign.ts")
 			}
 			return entries
 		},
-		Realpath: func(path string) string {
+		Realpath: func(path tspath.RootedPath) tspath.RootedPath {
 			switch path {
 			case "/root/link":
 				return "/target"
@@ -43,9 +45,9 @@ func TestWalkDir(t *testing.T) {
 
 	var paths []string
 	var modes []fs.FileMode
-	err := vfs.WalkDir(fileSystem, "/root", func(path string, entry fs.DirEntry, err error) error {
+	err := vfs.WalkDir(fileSystem, "/root", func(path tspath.RootedPath, entry fs.DirEntry, err error) error {
 		assert.NilError(t, err)
-		paths = append(paths, path)
+		paths = append(paths, path.AsString())
 		modes = append(modes, entry.Type())
 		if entry.Type()&fs.ModeSymlink != 0 {
 			info, err := entry.Info()
@@ -66,14 +68,15 @@ func TestWalkDirDoesNotFollowRootSymlink(t *testing.T) {
 	base := vfstest.FromMap(map[string]string{
 		"/root/link/hidden.ts": "",
 		"/target/hidden.ts":    "",
-	}, true)
+	}, tspath.CaseSensitive)
+
 	fileSystem := wrapvfs.Wrap(base, wrapvfs.Replacements{
-		GetAccessibleEntries: func(path string) vfs.Entries {
+		GetAccessibleEntries: func(path tspath.RootedDirectoryPath) vfs.Entries {
 			entries := base.GetAccessibleEntries(path)
 			entries.Symlinks = nil
 			return entries
 		},
-		Realpath: func(path string) string {
+		Realpath: func(path tspath.RootedPath) tspath.RootedPath {
 			if path == "/root/link" {
 				return "/target"
 			}
@@ -82,9 +85,9 @@ func TestWalkDirDoesNotFollowRootSymlink(t *testing.T) {
 	})
 
 	var paths []string
-	err := vfs.WalkDir(fileSystem, "/root/link", func(path string, entry fs.DirEntry, err error) error {
+	err := vfs.WalkDir(fileSystem, "/root/link", func(path tspath.RootedPath, entry fs.DirEntry, err error) error {
 		assert.NilError(t, err)
-		paths = append(paths, path)
+		paths = append(paths, path.AsString())
 		assert.Equal(t, entry.Type(), fs.ModeSymlink)
 		return nil
 	})
@@ -97,15 +100,16 @@ func TestWalkDirReportsRootFileSymlink(t *testing.T) {
 
 	base := vfstest.FromMap(map[string]string{
 		"/target/file.ts": "",
-	}, true)
+	}, tspath.CaseSensitive)
+
 	fileSystem := wrapvfs.Wrap(base, wrapvfs.Replacements{
-		Stat: func(path string) vfs.FileInfo {
+		Stat: func(path tspath.RootedPath) vfs.FileInfo {
 			if path == "/root/link.ts" {
 				return base.Stat("/target/file.ts")
 			}
 			return base.Stat(path)
 		},
-		Realpath: func(path string) string {
+		Realpath: func(path tspath.RootedPath) tspath.RootedPath {
 			if path == "/root/link.ts" {
 				return "/target/file.ts"
 			}
@@ -113,9 +117,9 @@ func TestWalkDirReportsRootFileSymlink(t *testing.T) {
 		},
 	})
 
-	err := vfs.WalkDir(fileSystem, "/root/link.ts", func(path string, entry fs.DirEntry, err error) error {
+	err := vfs.WalkDir(fileSystem, "/root/link.ts", func(path tspath.RootedPath, entry fs.DirEntry, err error) error {
 		assert.NilError(t, err)
-		assert.Equal(t, path, "/root/link.ts")
+		assert.Equal(t, path.AsString(), "/root/link.ts")
 		assert.Equal(t, entry.Name(), "link.ts")
 		assert.Equal(t, entry.Type(), fs.ModeSymlink)
 		return nil
@@ -129,11 +133,12 @@ func TestWalkDirSkipDir(t *testing.T) {
 	fileSystem := vfstest.FromMap(map[string]string{
 		"/root/a/hidden.ts": "",
 		"/root/b.ts":        "",
-	}, true)
+	}, tspath.CaseSensitive)
+
 	var paths []string
-	err := vfs.WalkDir(fileSystem, "/root", func(path string, entry fs.DirEntry, err error) error {
+	err := vfs.WalkDir(fileSystem, "/root", func(path tspath.RootedPath, entry fs.DirEntry, err error) error {
 		assert.NilError(t, err)
-		paths = append(paths, path)
+		paths = append(paths, path.AsString())
 		if path == "/root/a" {
 			return fs.SkipDir
 		}
@@ -149,11 +154,12 @@ func TestWalkDirSkipAll(t *testing.T) {
 	fileSystem := vfstest.FromMap(map[string]string{
 		"/root/a.ts": "",
 		"/root/b.ts": "",
-	}, true)
+	}, tspath.CaseSensitive)
+
 	var paths []string
-	err := vfs.WalkDir(fileSystem, "/root", func(path string, entry fs.DirEntry, err error) error {
+	err := vfs.WalkDir(fileSystem, "/root", func(path tspath.RootedPath, entry fs.DirEntry, err error) error {
 		assert.NilError(t, err)
-		paths = append(paths, path)
+		paths = append(paths, path.AsString())
 		if path == "/root/a.ts" {
 			return fs.SkipAll
 		}
@@ -166,8 +172,8 @@ func TestWalkDirSkipAll(t *testing.T) {
 func TestWalkDirConsumesSkipDirForRootFile(t *testing.T) {
 	t.Parallel()
 
-	fileSystem := vfstest.FromMap(map[string]string{"/root.ts": ""}, true)
-	err := vfs.WalkDir(fileSystem, "/root.ts", func(path string, entry fs.DirEntry, err error) error {
+	fileSystem := vfstest.FromMap(map[string]string{"/root.ts": ""}, tspath.CaseSensitive)
+	err := vfs.WalkDir(fileSystem, "/root.ts", func(path tspath.RootedPath, entry fs.DirEntry, err error) error {
 		assert.NilError(t, err)
 		return fs.SkipDir
 	})
@@ -177,9 +183,9 @@ func TestWalkDirConsumesSkipDirForRootFile(t *testing.T) {
 func TestWalkDirConsumesSkipForMissingRoot(t *testing.T) {
 	t.Parallel()
 
-	fileSystem := vfstest.FromMap(map[string]string{}, true)
+	fileSystem := vfstest.FromMap(map[string]string{}, tspath.CaseSensitive)
 	for _, sentinel := range []error{fs.SkipDir, fs.SkipAll} {
-		err := vfs.WalkDir(fileSystem, "/missing", func(path string, entry fs.DirEntry, err error) error {
+		err := vfs.WalkDir(fileSystem, "/missing", func(path tspath.RootedPath, entry fs.DirEntry, err error) error {
 			assert.ErrorIs(t, err, fs.ErrNotExist)
 			return sentinel
 		})
@@ -192,16 +198,17 @@ func TestWalkDirUsesSymlinkMetadataWithoutRealpathCalls(t *testing.T) {
 
 	base := vfstest.FromMap(map[string]string{
 		"/root/dir/file.ts": "",
-	}, true)
+	}, tspath.CaseSensitive)
+
 	var realpathCalls []string
 	fileSystem := wrapvfs.Wrap(base, wrapvfs.Replacements{
-		Realpath: func(path string) string {
-			realpathCalls = append(realpathCalls, path)
+		Realpath: func(path tspath.RootedPath) tspath.RootedPath {
+			realpathCalls = append(realpathCalls, path.AsString())
 			return path
 		},
 	})
 
-	err := vfs.WalkDir(fileSystem, "/root", func(path string, entry fs.DirEntry, err error) error {
+	err := vfs.WalkDir(fileSystem, "/root", func(path tspath.RootedPath, entry fs.DirEntry, err error) error {
 		return err
 	})
 	assert.NilError(t, err)

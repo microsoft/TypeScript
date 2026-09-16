@@ -1,4 +1,4 @@
-UseCaseSensitiveFileNames: true
+CaseSensitivity: true
 //// [/solution/api/src/server.ts] *new* 
 import * as shared from "../../shared/dist"
 shared.foo.bar();

@@ -18,14 +18,11 @@ func TestProcessChanges(t *testing.T) {
 			"/test1.ts": "// existing content",
 			"/test2.ts": "// existing content",
 			"/script":   "// extensionless content",
-		}, false /* useCaseSensitiveFileNames */)
+		}, tspath.CaseInsensitive /* caseSensitivity */)
 		return newOverlayFS(
 			testFS,
-			make(map[tspath.Path]*Overlay),
+			make(map[tspath.PathKey]*Overlay),
 			lsproto.PositionEncodingKindUTF16,
-			func(fileName string) tspath.Path {
-				return tspath.Path(fileName)
-			},
 		)
 	}
 

@@ -1,6 +1,7 @@
 package ls
 
 import (
+	"cmp"
 	"context"
 	"slices"
 	"strings"
@@ -552,12 +553,12 @@ func ProvideWorkspaceSymbols(
 ) (lsproto.WorkspaceSymbolResponse, error) {
 	excludeLibrarySymbols := preferences.ExcludeLibrarySymbolsInNavTo.IsTrue()
 	// Obtain set of non-declaration source files from all active programs.
-	sourceFiles := map[tspath.Path]*ast.SourceFile{}
+	sourceFiles := map[tspath.PathKey]*ast.SourceFile{}
 	for _, program := range programs {
 		for _, sourceFile := range program.SourceFiles() {
 			if (program.HasTSFile() || !sourceFile.IsDeclarationFile) &&
 				!shouldExcludeFile(sourceFile, program, excludeLibrarySymbols) {
-				sourceFiles[sourceFile.Path()] = sourceFile
+				sourceFiles[sourceFile.PathKey()] = sourceFile
 			}
 		}
 	}
@@ -616,8 +617,8 @@ func shouldExcludeFile(file *ast.SourceFile, program *compiler.Program, excludeL
 	return excludeLibrarySymbols && (isInsideNodeModules(file.FileName()) || program.IsLibFile(file))
 }
 
-func isInsideNodeModules(fileName string) bool {
-	return strings.Contains(fileName, "/node_modules/")
+func isInsideNodeModules(fileName tspath.RootedFilePath) bool {
+	return fileName.ContainsLowercaseDirectorySequence("/node_modules/")
 }
 
 // Return a score for matching `s` against `pattern`. In order to match, `s` must contain each of the characters in
@@ -659,7 +660,7 @@ func compareDeclarationInfos(d1, d2 DeclarationInfo) int {
 	s1 := ast.GetSourceFileOfNode(d1.declaration)
 	s2 := ast.GetSourceFileOfNode(d2.declaration)
 	if s1 != s2 {
-		return strings.Compare(string(s1.Path()), string(s2.Path()))
+		return cmp.Compare(s1.PathKey(), s2.PathKey())
 	}
 	return d1.declaration.Pos() - d2.declaration.Pos()
 }

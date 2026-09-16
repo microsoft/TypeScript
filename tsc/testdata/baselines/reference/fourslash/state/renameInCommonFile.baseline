@@ -1,4 +1,4 @@
-UseCaseSensitiveFileNames: true
+CaseSensitivity: true
 //// [/projects/a/a.ts] *new* 
 import {C} from "./c/fc";
 console.log(C)

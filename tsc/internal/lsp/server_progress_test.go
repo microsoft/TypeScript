@@ -10,6 +10,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/lsp"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/lsptestutil"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfstest"
 	"gotest.tools/v3/assert"
 )
@@ -24,7 +25,7 @@ func TestProgressNotificationsEndToEnd(t *testing.T) {
 	fs := bundled.WrapFS(vfstest.FromMap(map[string]string{
 		"/home/projects/tsconfig.json": `{}`,
 		"/home/projects/index.ts":      "export const x = 1;",
-	}, false))
+	}, tspath.CaseInsensitive))
 
 	// Collect $/progress notifications. Signal when "end" arrives.
 	var mu sync.Mutex

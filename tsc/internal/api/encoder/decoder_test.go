@@ -1,6 +1,7 @@
 package encoder_test
 
 import (
+	"bytes"
 	"os"
 	"path/filepath"
 	"testing"
@@ -16,7 +17,7 @@ import (
 func parseSourceFile(code string) *ast.SourceFile {
 	return parser.ParseSourceFile(ast.SourceFileParseOptions{
 		FileName: "/test.ts",
-		Path:     "/test.ts",
+		PathKey:  "/test.ts",
 	}, code, core.ScriptKindTS)
 }
 
@@ -29,10 +30,28 @@ func TestDecodeSourceFile_Basic(t *testing.T) {
 	decoded, err := encoder.DecodeSourceFile(buf)
 	assert.NilError(t, err)
 	assert.Equal(t, decoded.AsNode().Kind, ast.KindSourceFile)
-	assert.Equal(t, decoded.FileName(), "/test.ts")
+	assert.Equal(t, decoded.FileName().AsString(), "/test.ts")
 	assert.Equal(t, decoded.Text(), "let x = 1;")
 	assert.Assert(t, decoded.Statements != nil)
 	assert.Assert(t, decoded.EndOfFileToken != nil)
+}
+
+func TestDecodeSourceFileRejectsInvalidFileName(t *testing.T) {
+	t.Parallel()
+	sf := parser.ParseSourceFile(ast.SourceFileParseOptions{
+		FileName: "/Test.ts",
+		PathKey:  "/test.ts",
+	}, "", core.ScriptKindTS)
+	buf, _, err := encoder.EncodeSourceFile(sf)
+	assert.NilError(t, err)
+
+	invalidFileName := []byte("Test/.ts")
+	index := bytes.Index(buf, []byte("/Test.ts"))
+	assert.Assert(t, index >= 0)
+	copy(buf[index:index+len(invalidFileName)], invalidFileName)
+
+	_, err = encoder.DecodeSourceFile(buf)
+	assert.ErrorContains(t, err, `invalid source file name "Test/.ts"`)
 }
 
 func TestDecodeSourceFile_Statements(t *testing.T) {
@@ -425,7 +444,7 @@ func BenchmarkDecodeSourceFile(b *testing.B) {
 	code := string(fileContent)
 	sourceFile := parser.ParseSourceFile(ast.SourceFileParseOptions{
 		FileName: "/checker.ts",
-		Path:     "/checker.ts",
+		PathKey:  "/checker.ts",
 	}, code, core.ScriptKindTS)
 
 	buf, _, err := encoder.EncodeSourceFile(sourceFile)
@@ -435,7 +454,7 @@ func BenchmarkDecodeSourceFile(b *testing.B) {
 		for b.Loop() {
 			parser.ParseSourceFile(ast.SourceFileParseOptions{
 				FileName: "/checker.ts",
-				Path:     "/checker.ts",
+				PathKey:  "/checker.ts",
 			}, code, core.ScriptKindTS)
 		}
 	})

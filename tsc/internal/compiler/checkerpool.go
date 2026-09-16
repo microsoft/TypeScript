@@ -425,12 +425,12 @@ func (p *checkerPool) getImportAdjacency() [][]int {
 	}
 	adjacentFiles := make([][]int, len(p.program.files))
 	for fileIndex, file := range p.program.files {
-		resolvedModules := p.program.resolvedModules[file.Path()]
+		resolvedModules := p.program.resolvedModules[file.PathKey()]
 		for _, resolved := range resolvedModules {
 			if resolved == nil || !resolved.IsResolved() {
 				continue
 			}
-			importedFile := p.program.GetSourceFileForResolvedModule(resolved.ResolvedFileName)
+			importedFile := p.program.GetSourceFileForResolvedModule(resolved)
 			importedIndex, ok := fileIndices[importedFile]
 			if !ok || importedIndex == fileIndex {
 				continue

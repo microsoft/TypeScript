@@ -9,17 +9,15 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/execute/incremental"
 	"github.com/microsoft/TypeScript/tsc/internal/tsoptions"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfstest"
 	"gotest.tools/v3/assert"
 )
 
 func configWithMappers(mappers ...*contentmapper.Mapper) *tsoptions.ParsedCommandLine {
-	return &tsoptions.ParsedCommandLine{
-		ParsedConfig: &tsoptions.ParsedOptions{
-			CompilerOptions: &core.CompilerOptions{},
-			ContentMappers:  mappers,
-		},
-	}
+	config := tsoptions.NewParsedCommandLine(&core.CompilerOptions{}, nil, nil, "/", tspath.CaseSensitive)
+	config.ParsedConfig.ContentMappers = mappers
+	return config
 }
 
 func TestStaticContentMapperTransformIdentity(t *testing.T) {
@@ -63,7 +61,7 @@ type fakeContentMapperProject struct {
 func (p fakeContentMapperProject) Refresh() error                                 { return nil }
 func (p fakeContentMapperProject) Identities() ([]string, error)                  { return p.identities, p.err }
 func (p fakeContentMapperProject) Identity(*contentmapper.Mapper) (string, error) { return "", nil }
-func (p fakeContentMapperProject) WatchedFiles() ([]string, error)                { return nil, nil }
+func (p fakeContentMapperProject) WatchedFiles() ([]tspath.RootedFilePath, error) { return nil, nil }
 
 func (p fakeContentMapperProject) Diagnostics() []contentmapper.OptionDiagnostic {
 	return nil
@@ -88,10 +86,10 @@ func TestDynamicContentMapperIdentities(t *testing.T) {
 
 	buildInfo := &incremental.BuildInfo{
 		Version:                 core.Version(),
-		FileNames:               []string{"/src/a.ts"},
+		FileNames:               []incremental.BuildInfoPath{"/src/a.ts"},
 		ContentMapperIdentities: []string{"dynamic@1.0.0:old"},
 	}
-	host := compiler.NewCompilerHost("/", vfstest.FromMap[any](nil, true), "", nil, nil, project)
+	host := compiler.NewCompilerHost(vfstest.FromMap[any](nil, tspath.CaseSensitive), "", nil, nil, project)
 	program := incremental.ReadBuildInfoProgram(config, fakeBuildInfoReader{buildInfo}, host)
 	assert.Assert(t, program == nil, "expected opaque mapper identity changes to discard the old program")
 }
@@ -111,12 +109,12 @@ func TestReadBuildInfoProgramContentMapperIdentityMismatch(t *testing.T) {
 	// project cannot be reused: the old program is discarded (nil) so the project is rebuilt.
 	buildInfo := &incremental.BuildInfo{
 		Version:                 core.Version(),
-		FileNames:               []string{"/src/a.ts"},
+		FileNames:               []incremental.BuildInfoPath{"/src/a.ts"},
 		ContentMapperIdentities: []string{"vue@1.0.0"},
 	}
 	config := configWithMappers(&contentmapper.Mapper{Definition: contentmapper.Definition{Package: "vue", Extensions: []string{".vue"}}, Manifest: contentmapper.Manifest{Name: "vue", Version: "2.0.0"}})
 	project := fakeContentMapperProject{identities: []string{"vue@2.0.0:current"}}
-	host := compiler.NewCompilerHost("/", vfstest.FromMap[any](nil, true), "", nil, nil, project)
+	host := compiler.NewCompilerHost(vfstest.FromMap[any](nil, tspath.CaseSensitive), "", nil, nil, project)
 
 	program := incremental.ReadBuildInfoProgram(config, fakeBuildInfoReader{buildInfo}, host)
 	assert.Assert(t, program == nil, "expected the old program to be discarded when the mapper identity changed")
