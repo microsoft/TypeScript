@@ -3,7 +3,6 @@ package tsoptions_test
 import (
 	"fmt"
 	"io"
-	"io/fs"
 	"maps"
 	"path/filepath"
 	"slices"
@@ -1655,17 +1654,15 @@ func TestParseTypeAcquisition(t *testing.T) {
 }
 
 func printFS(output io.Writer, files vfs.FS, root string) error {
-	return files.WalkDir(root, func(path string, d fs.DirEntry, err error) error {
+	return vfs.WalkDir(files, root, func(path string, entry vfs.DirEntry, err error) error {
 		if err != nil {
 			return err
 		}
-		if d.Type().IsRegular() {
+		if entry.Type().IsRegular() {
 			if content, ok := files.ReadFile(path); !ok {
 				return fmt.Errorf("failed to read file %s", path)
-			} else {
-				if _, err := fmt.Fprintf(output, "//// [%s]\r\n%s\r\n\r\n", path, content); err != nil {
-					return err
-				}
+			} else if _, err := fmt.Fprintf(output, "//// [%s]\r\n%s\r\n\r\n", path, content); err != nil {
+				return err
 			}
 		}
 		return nil

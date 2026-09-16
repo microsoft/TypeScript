@@ -81,10 +81,6 @@ func (vfs *wrappedFS) GetAccessibleEntries(path string) (result vfs.Entries) {
 	return vfs.fs.GetAccessibleEntries(path)
 }
 
-var rootEntries = []fs.DirEntry{
-	fs.FileInfoToDirEntry(&fileInfo{name: "libs", mode: fs.ModeDir}),
-}
-
 func (vfs *wrappedFS) Stat(path string) vfs.FileInfo {
 	if rest, ok := splitPath(path); ok {
 		if rest == "" || rest == "libs" {
@@ -97,52 +93,6 @@ func (vfs *wrappedFS) Stat(path string) vfs.FileInfo {
 		return nil
 	}
 	return vfs.fs.Stat(path)
-}
-
-func (vfs *wrappedFS) WalkDir(root string, walkFn vfs.WalkDirFunc) error {
-	if rest, ok := splitPath(root); ok {
-		if err := vfs.walkDir(rest, walkFn); err != nil {
-			if err == fs.SkipAll { //nolint:errorlint
-				return nil
-			}
-			return err
-		}
-		return nil
-	}
-	return vfs.fs.WalkDir(root, walkFn)
-}
-
-func (vfs *wrappedFS) walkDir(rest string, walkFn vfs.WalkDirFunc) error {
-	var entries []fs.DirEntry
-	switch rest {
-	case "":
-		entries = rootEntries
-	case "libs":
-		entries = libsEntries
-	default:
-		return nil
-	}
-
-	for _, entry := range entries {
-		name := rest + "/" + entry.Name()
-
-		if err := walkFn(scheme+name, entry, nil); err != nil {
-			if err == fs.SkipAll { //nolint:errorlint
-				return fs.SkipAll
-			}
-			if err == fs.SkipDir { //nolint:errorlint
-				continue
-			}
-			return err
-		}
-		if entry.IsDir() {
-			if err := vfs.walkDir(strings.TrimPrefix(name, "/"), walkFn); err != nil {
-				return err
-			}
-		}
-	}
-
-	return nil
 }
 
 func (vfs *wrappedFS) Realpath(path string) string {

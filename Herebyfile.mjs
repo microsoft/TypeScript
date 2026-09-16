@@ -376,20 +376,24 @@ export const cleanBuilt = task({
     run: () => rimraf("built"),
 });
 
+async function runGenerate() {
+    return await run("go", ["generate", "-v", "./..."], { cwd: "./tsc" });
+}
+
 export const generate = task({
     name: "generate",
     description: "Runs go generate on the project.",
-    run: async () => {
-        await run("go", ["generate", "-v", "./..."], { cwd: "./tsc" });
-    },
+    run: runGenerate,
 });
+
+async function runGenerateExtension() {
+    return await run("npm", ["run", "-w", "native-preview", "generateLocBundle"]);
+}
 
 export const generateExtension = task({
     name: "generate:extension",
     description: "Generates files in the extension",
-    run: async () => {
-        await run("npm", ["run", "-w", "native-preview", "generateLocBundle"]);
-    },
+    run: runGenerateExtension,
 });
 
 // ── Enum generation from Go source ──────────────────────────────
@@ -414,6 +418,7 @@ const enumDefs = [
     { name: "ObjectFlags", goPrefix: "ObjectFlags", goFile: "tsc/internal/checker/types.go", outDir: "packages/typescript/src/enums" },
     { name: "SignatureFlags", goPrefix: "SignatureFlags", goFile: "tsc/internal/checker/types.go", outDir: "packages/typescript/src/enums" },
     { name: "SignatureKind", goPrefix: "SignatureKind", goFile: "tsc/internal/checker/types.go", outDir: "packages/typescript/src/enums" },
+    { name: "IndexKind", goPrefix: "IndexKind", goFile: "tsc/internal/checker/types.go", outDir: "packages/typescript/src/enums" },
     { name: "ElementFlags", goPrefix: "ElementFlags", goFile: "tsc/internal/checker/types.go", outDir: "packages/typescript/src/enums" },
     { name: "TypePredicateKind", goPrefix: "TypePredicateKind", goFile: "tsc/internal/checker/types.go", outDir: "packages/typescript/src/enums" },
     { name: "TypeFormatFlags", goPrefix: "TypeFormatFlags", goFile: "tsc/internal/checker/types.go", outDir: "packages/typescript/src/enums" },
@@ -1392,6 +1397,7 @@ export const validate = task({
             }
         };
 
+        await runGenerate();
         await runValidation("test:tsc", runTests);
         await runValidation("test:extension", runTestExtension);
         if (options.api || options.all) {
@@ -1401,6 +1407,8 @@ export const validate = task({
             await runValidation("test:api", runTestAPI);
         }
         if (options.all) {
+            await runGenerateExtension();
+            await runGenerateVendor();
             await runValidation("test:benchmarks", runTestBenchmarks);
             await runValidation("test:tools", runTestTools);
             await runValidation("test:smoke", runSmokeTest); // in CI this is run with `--race`

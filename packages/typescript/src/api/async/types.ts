@@ -200,6 +200,8 @@ export interface InterfaceType extends TypeReference {
     getOuterTypeParameters(): Promise<readonly TypeParameter[]>;
     /** Get local type parameters declared on this interface/class */
     getLocalTypeParameters(): Promise<readonly TypeParameter[]>;
+    /** Get the synthetic `this` type of this interface/class */
+    getThisType(): Promise<TypeParameter | undefined>;
 }
 
 /** Generic types */

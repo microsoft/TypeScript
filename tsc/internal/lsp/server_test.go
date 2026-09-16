@@ -2,9 +2,9 @@ package lsp
 
 import (
 	"context"
+	"errors"
 	"io"
 	"testing"
-	"time"
 
 	"github.com/microsoft/TypeScript/tsc/internal/bundled"
 	"github.com/microsoft/TypeScript/tsc/internal/jsonrpc"
@@ -20,6 +20,23 @@ func (shutdownTestReader) Read() (*lsproto.Message, error) { return nil, io.EOF 
 type shutdownTestWriter struct{}
 
 func (shutdownTestWriter) Write(*lsproto.Message) error { return nil }
+
+type cancelingTestWriter struct {
+	writer   Writer
+	cancel   context.CancelFunc
+	messages []*lsproto.Message
+}
+
+func (w *cancelingTestWriter) Write(msg *lsproto.Message) error {
+	if err := w.writer.Write(msg); err != nil {
+		return err
+	}
+	w.messages = append(w.messages, msg)
+	if len(w.messages) == 2 {
+		w.cancel()
+	}
+	return nil
+}
 
 // TestServerShutdownNoDeadlock verifies that operations after shutdown
 // don't block.
@@ -133,20 +150,20 @@ func TestServerOutgoingQueueDoesNotBlockWithoutWriter(t *testing.T) {
 func TestWriteLoopRecoversFromUnserializableResponse(t *testing.T) {
 	t.Parallel()
 
-	pr, pw := io.Pipe()
+	ctx, cancel := context.WithCancel(t.Context())
+	writer := &cancelingTestWriter{
+		writer: ToWriter(io.Discard),
+		cancel: cancel,
+	}
 	server := NewServer(&ServerOptions{
 		In:  shutdownTestReader{},
-		Out: ToWriter(pw),
+		Out: writer,
 		Err: io.Discard,
 		Cwd: "/test",
 	})
 
-	ctx, cancel := context.WithCancel(t.Context())
 	defer cancel()
 	server.backgroundCtx = ctx
-
-	writeLoopErr := make(chan error, 1)
-	go func() { writeLoopErr <- server.writeLoop(ctx) }()
 
 	// A selection range whose parent chain is far deeper than the JSON encoder's nesting limit.
 	var deep *lsproto.SelectionRange
@@ -165,11 +182,13 @@ func TestWriteLoopRecoversFromUnserializableResponse(t *testing.T) {
 		t.Fatalf("failed to enqueue good response: %v", err)
 	}
 
-	reader := lsproto.NewBaseReader(pr)
+	if err := server.writeLoop(ctx); !errors.Is(err, context.Canceled) {
+		t.Fatalf("write loop exited unexpectedly: %v", err)
+	}
+
 	sawError := false
 	sawGood := false
-	for range 2 {
-		msg := readMessageWithTimeout(t, reader)
+	for _, msg := range writer.messages {
 		resp := msg.AsResponse()
 		switch {
 		case resp.ID != nil && *resp.ID == *badID:
@@ -194,41 +213,5 @@ func TestWriteLoopRecoversFromUnserializableResponse(t *testing.T) {
 	}
 	if !sawGood {
 		t.Errorf("did not receive the subsequent well-formed response (write loop likely died)")
-	}
-
-	// The write loop must still be running.
-	select {
-	case err := <-writeLoopErr:
-		t.Fatalf("write loop exited unexpectedly: %v", err)
-	default:
-		return
-	}
-}
-
-func readMessageWithTimeout(t *testing.T, reader *lsproto.BaseReader) *lsproto.Message {
-	t.Helper()
-	type result struct {
-		msg *lsproto.Message
-		err error
-	}
-	ch := make(chan result, 1)
-	go func() {
-		data, err := reader.Read()
-		if err != nil {
-			ch <- result{err: err}
-			return
-		}
-		msg := &lsproto.Message{}
-		ch <- result{msg: msg, err: msg.UnmarshalJSON(data)}
-	}()
-	select {
-	case r := <-ch:
-		if r.err != nil {
-			t.Fatalf("failed to read message: %v", r.err)
-		}
-		return r.msg
-	case <-time.After(2 * time.Second):
-		t.Fatal("timed out waiting for a message (write loop may have died)")
-		return nil
 	}
 }

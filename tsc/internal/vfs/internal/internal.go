@@ -128,19 +128,6 @@ func (vfs *Common) getEntries(path string) []vfs.DirEntry {
 	return entries
 }
 
-func (vfs *Common) WalkDir(root string, walkFn fs.WalkDirFunc) error {
-	fsys, rootName, rest := vfs.RootAndPath(root)
-	if fsys == nil {
-		return nil
-	}
-	return fs.WalkDir(fsys, rest, func(path string, d fs.DirEntry, err error) error {
-		if path == "." {
-			path = ""
-		}
-		return walkFn(rootName+path, d, err)
-	})
-}
-
 func (vfs *Common) ReadFile(path string) (contents string, ok bool) {
 	fsys, _, rest := vfs.RootAndPath(path)
 	if fsys == nil {
