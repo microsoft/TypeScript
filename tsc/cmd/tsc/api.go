@@ -30,7 +30,7 @@ func parseAPIFlags(args []string) (apiFlags, error) {
 	flags := flag.NewFlagSet("api", flag.ContinueOnError)
 	result := apiFlags{}
 	flags.StringVar(&result.cwd, "cwd", core.Must(os.Getwd()), "current working directory")
-	flags.StringVar(&result.pipePath, "pipe", "", "use named pipe or Unix domain socket for communication instead of stdio")
+	flags.StringVar(&result.pipePath, "pipe", "", "use a named pipe (Windows) or create a private Unix socket at <path>/socket, where <path> must not exist")
 	flags.StringVar(&result.callbacks, "callbacks", "", "comma-separated list of FS callbacks and defaults to enable")
 	flags.BoolVar(&result.caseSensitive, "useCaseSensitiveFileNames", osvfs.FS().CaseSensitivity().IsCaseSensitive(), "treat filesystem paths as case-sensitive")
 	flags.BoolVar(&result.async, "async", false, "use JSON-RPC protocol instead of MessagePack (for async API)")

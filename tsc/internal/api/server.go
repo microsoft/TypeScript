@@ -21,8 +21,8 @@ type StdioServerOptions struct {
 	Err                io.Writer
 	Cwd                tspath.RootedDirectoryPath
 	DefaultLibraryPath tspath.RootedDirectoryPath
-	// PipePath, if set, listens on a named pipe (Windows) or Unix domain
-	// socket instead of using In/Out for communication.
+	// PipePath, if set, is the named pipe path on Windows. On Unix, it must
+	// not exist and is created as a private directory containing "socket".
 	PipePath string
 	// Callbacks specifies which filesystem operations should be delegated
 	// to the client (e.g., "readFile", "fileExists"). Empty means no callbacks.

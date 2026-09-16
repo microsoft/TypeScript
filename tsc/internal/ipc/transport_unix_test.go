@@ -3,6 +3,7 @@
 package ipc
 
 import (
+	"fmt"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -12,22 +13,22 @@ import (
 
 const privatePipeHelperEnv = "TSGO_PRIVATE_PIPE_HELPER"
 
-func TestPrivatePipeTransportPermissions(t *testing.T) {
+func TestPipeTransportPermissions(t *testing.T) {
 	t.Parallel()
 
 	if os.Getenv(privatePipeHelperEnv) == "1" {
-		testPrivatePipeTransportPermissions(t)
+		testPipeTransportPermissions(t)
 		return
 	}
 
-	cmd := exec.Command(os.Args[0], "-test.run=^TestPrivatePipeTransportPermissions$")
+	cmd := exec.Command(os.Args[0], "-test.run=^TestPipeTransportPermissions$")
 	cmd.Env = append(os.Environ(), privatePipeHelperEnv+"=1")
 	if output, err := cmd.CombinedOutput(); err != nil {
 		t.Fatalf("helper process failed: %v\n%s", err, output)
 	}
 }
 
-func testPrivatePipeTransportPermissions(t *testing.T) {
+func testPipeTransportPermissions(t *testing.T) {
 	syscall.Umask(0o002)
 
 	transport, err := NewPrivatePipeTransport("tsgo-api-test")
@@ -39,6 +40,24 @@ func testPrivatePipeTransportPermissions(t *testing.T) {
 	socketPath := transport.Path()
 	assertMode(t, filepath.Dir(socketPath), 0o700)
 	assertMode(t, socketPath, 0o600)
+
+	explicitDir := filepath.Join(os.TempDir(), fmt.Sprintf("tsgo-api-%d", os.Getpid()))
+	explicitTransport, err := NewPipeTransport(explicitDir)
+	if err != nil {
+		t.Fatal(err)
+	}
+	assertMode(t, explicitDir, 0o700)
+	assertMode(t, filepath.Join(explicitDir, "socket"), 0o600)
+
+	if _, err := NewPipeTransport(explicitDir); err == nil {
+		t.Fatal("NewPipeTransport succeeded with an existing directory")
+	}
+	if err := explicitTransport.Close(); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := os.Stat(explicitDir); !os.IsNotExist(err) {
+		t.Fatalf("socket directory still exists after close: %v", err)
+	}
 }
 
 func assertMode(t *testing.T, path string, want os.FileMode) {
