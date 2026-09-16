@@ -113,6 +113,9 @@ extends:
               - bash: npx hereby typescript:build --forRelease --setPrerelease dev.$(Build.BuildNumber)
                 displayName: 'Build packages'
 
+              - bash: npx hereby typescript:test-package --forRelease --setPrerelease dev.$(Build.BuildNumber)
+                displayName: 'Test packages'
+
               - bash: npx hereby typescript:sign --forRelease --setPrerelease dev.$(Build.BuildNumber)
                 displayName: 'Sign packages'
                 env:
