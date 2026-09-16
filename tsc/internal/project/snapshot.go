@@ -23,6 +23,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/project/logging"
 	"github.com/microsoft/TypeScript/tsc/internal/sourcemap"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
+	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfsmatch"
 )
 
@@ -50,6 +51,9 @@ type Snapshot struct {
 
 	builderLogs *logging.LogTree
 	apiError    error
+	// fileSystemOverride indicates that this snapshot was built from a filesystem
+	// supplied by an API update rather than the session host filesystem.
+	fileSystemOverride bool
 }
 
 func (s *Snapshot) contentMapperWatchState() ([]string, *collections.Set[tspath.Path]) {
@@ -83,13 +87,14 @@ func (host *SnapshotHost) newSnapshot(
 	autoImports *autoimport.Registry,
 	autoImportsWatch *WatchedFiles[map[tspath.Path]string],
 ) *Snapshot {
+	overlays := snapshotOverlays(fs)
 	s := &Snapshot{
 		host: host,
 		id:   id,
 
 		fs:                                 fs,
 		ConfigFileRegistry:                 configFileRegistry,
-		ProjectCollection:                  &ProjectCollection{toPath: host.toPath, openFiles: openFilePaths(fs.overlays)},
+		ProjectCollection:                  &ProjectCollection{toPath: host.toPath, openFiles: openFilePaths(overlays)},
 		compilerOptionsForInferredProjects: compilerOptionsForInferredProjects,
 		userPreferences:                    userPreferences,
 		AutoImports:                        autoImports,
@@ -100,10 +105,19 @@ func (host *SnapshotHost) newSnapshot(
 	return s
 }
 
+func snapshotOverlays(fs *SnapshotFS) map[tspath.Path]*Overlay {
+	return fs.fs.Overlays()
+}
+
+func (s *Snapshot) overlays() map[tspath.Path]*Overlay {
+	return snapshotOverlays(s.fs)
+}
+
 // cloneForProgram clones a snapshot and creates a single synthetic inferred
 // project representing createProgram input.
 func (s *Snapshot) cloneForProgram(
 	ctx context.Context,
+	fileSystem vfs.FS,
 	rootFileNames []string,
 	compilerOptions *core.CompilerOptions,
 	projectReferences []*core.ProjectReference,
@@ -126,14 +140,21 @@ func (s *Snapshot) cloneForProgram(
 	}
 
 	start := time.Now()
-	fs := newSnapshotFSBuilder(store.fs, s.fs.overlays, s.fs.overlays, s.fs.diskFiles, s.fs.diskDirectories, s.fs.nodeModulesRealpathAliases, store.options.PositionEncoding, store.toPath)
-	fileChanges = s.processFileChanges(fs, fileChanges, logger, nil)
+	if fileSystem == nil {
+		fileSystem = store.fs
+	}
+	previousOverlays := s.overlays()
+	layeredFS := layerOverlayFileSystem(fileSystem, previousOverlays, store.options.PositionEncoding, store.toPath)
+	overlays := layeredFS.Overlays()
+	fs := newSnapshotFSBuilderFromSource(layeredFS, s.fs.cacheFiles, s.fs.cacheDirectories, s.fs.nodeModulesRealpathAliases, store.toPath)
+	fileChanges = s.processFileChanges(fs, fileChanges, logger, nil, previousOverlays, overlays)
 
 	newSnapshotID := store.nextSnapshotID()
 	projectCollectionBuilder := newProjectCollectionBuilder(
 		ctx,
 		newSnapshotID,
 		fs,
+		overlays,
 		s.ProjectCollection,
 		s.ConfigFileRegistry,
 		APIState{},
@@ -181,7 +202,7 @@ func (s *Snapshot) cloneForProgram(
 
 	cleanFilesStart := time.Now()
 	removedFiles := 0
-	fs.diskFiles.Range(func(entry *dirty.SyncMapEntry[tspath.Path, *diskFile]) bool {
+	fs.cacheFiles.Range(func(entry *dirty.SyncMapEntry[tspath.Path, *cachedFile]) bool {
 		for _, project := range newProjectCollection.Projects() {
 			if project.host != nil && project.host.sourceFS.SeenFile(entry.Key()) {
 				return true
@@ -237,12 +258,16 @@ func (s *Snapshot) cloneForProgram(
 
 func (s *Snapshot) cloneWithTemporaryFile(
 	ctx context.Context,
+	fileSystem vfs.FS,
 	uri lsproto.DocumentUri,
 	newText string,
 ) (*Snapshot, error) {
 	path := uri.Path(s.UseCaseSensitiveFileNames())
 
-	overlays := maps.Clone(s.fs.overlays)
+	overlays := maps.Clone(s.overlays())
+	if overlays == nil {
+		overlays = make(map[tspath.Path]*Overlay)
+	}
 	version := int32(0)
 	var fileChanges FileChangeSummary
 	existing := overlays[path]
@@ -259,9 +284,15 @@ func (s *Snapshot) cloneWithTemporaryFile(
 		fileChanges.Opened = uri
 	}
 	overlays[path] = newOverlay(uri.FileName(), newText, version, scriptKind)
+	if fileSystem == nil {
+		fileSystem = s.fs.fs
+	}
+	fileSystem = newOverlayFS(fileSystem, overlays, s.host.options.PositionEncoding, s.host.toPath)
 
 	return s.Clone(ctx, SnapshotChange{
-		fileChanges: fileChanges,
+		fs:                 fileSystem,
+		fileSystemOverride: s.fileSystemOverride,
+		fileChanges:        fileChanges,
 		ResourceRequest: ResourceRequest{
 			Documents: []lsproto.DocumentUri{uri},
 		},
@@ -273,7 +304,14 @@ func (s *Snapshot) processFileChanges(
 	fileChanges FileChangeSummary,
 	logger *logging.LogTree,
 	contentMapperContributions *ContentMapperContributions,
+	previousOverlays map[tspath.Path]*Overlay,
+	overlays map[tspath.Path]*Overlay,
 ) FileChangeSummary {
+	if expander, ok := fs.fs.(FileChangeExpander); ok {
+		fileChanges = expander.ExpandFileChanges(fileChanges)
+	}
+	previousOpenFiles := overlayFileHandles(previousOverlays)
+	openFiles := overlayFileHandles(overlays)
 	if fileChanges.HasExcessiveWatchEvents() {
 		invalidateStart := time.Now()
 		if fileChanges.InvalidateAll {
@@ -281,7 +319,7 @@ func (s *Snapshot) processFileChanges(
 			if logger != nil {
 				logger.Logf("InvalidateAll: invalidated file cache in %v", time.Since(invalidateStart))
 			}
-		} else if !fs.watchChangesOverlapCache(fileChanges) {
+		} else if !fs.watchChangesOverlapCache(fileChanges, previousOpenFiles, openFiles) {
 			// All watch changes/deletes are files we haven't seen; should be irrelevant to us (probably an external tool's build or something)
 			fileChanges.Changed = collections.Set[lsproto.DocumentUri]{}
 			fileChanges.Deleted = collections.Set[lsproto.DocumentUri]{}
@@ -307,12 +345,25 @@ func (s *Snapshot) processFileChanges(
 			contentMapperExtensions = append(contentMapperExtensions, contentMapperContributions.Extensions...)
 		}
 		_, contentMapperWatchedFiles := s.contentMapperWatchState()
-		fileChanges = fs.expandAndFilterWatchEvents(fileChanges, contentMapperExtensions, contentMapperWatchedFiles)
+		fileChanges = fs.expandAndFilterWatchEvents(fileChanges, contentMapperExtensions, contentMapperWatchedFiles, previousOpenFiles, openFiles)
 		fileChanges = s.fs.expandRealpathAliases(fileChanges)
 		fileChanges = fs.markDirtyFiles(fileChanges)
-		fileChanges = fs.convertOpenAndCloseToChanges(fileChanges)
+		fileChanges = fs.convertOpenAndCloseToChanges(fileChanges, previousOpenFiles, openFiles)
+	}
+	for path := range openFiles {
+		if entry, ok := fs.cacheFiles.Load(path); ok {
+			fs.deleteCacheEntry(entry)
+		}
 	}
 	return fileChanges
+}
+
+func overlayFileHandles(overlays map[tspath.Path]*Overlay) map[tspath.Path]FileHandle {
+	files := make(map[tspath.Path]FileHandle, len(overlays))
+	for path, overlay := range overlays {
+		files[path] = overlay
+	}
+	return files
 }
 
 func (s *Snapshot) GetDefaultProject(uri lsproto.DocumentUri) *Project {
@@ -368,8 +419,33 @@ func (s *Snapshot) toPath(fileName string) tspath.Path {
 	return s.host.toPath(fileName)
 }
 
+func (s *Snapshot) isOpenFile(fileName string) bool {
+	_, ok := s.overlays()[s.toPath(fileName)]
+	return ok
+}
+
+func (s *Snapshot) hasOverlayWithin(path tspath.Path) bool {
+	for overlayPath := range s.overlays() {
+		if path.ContainsPath(overlayPath) {
+			return true
+		}
+	}
+	return false
+}
+
 func (s *Snapshot) UseCaseSensitiveFileNames() bool {
 	return s.fs.fs.UseCaseSensitiveFileNames()
+}
+
+// FileSystem returns the filesystem backing this snapshot.
+func (s *Snapshot) FileSystem() vfs.FS {
+	return s.fs.fs
+}
+
+// HasFileSystemOverride reports whether this snapshot uses an API-supplied
+// filesystem instead of the session host filesystem.
+func (s *Snapshot) HasFileSystemOverride() bool {
+	return s.fileSystemOverride
 }
 
 func (s *Snapshot) ReadFile(fileName string) (string, bool) {
@@ -401,6 +477,10 @@ type APISnapshotRequest struct {
 	CloseProjects *collections.Set[tspath.Path]
 	OpenFiles     *collections.Set[lsproto.DocumentUri]
 	CloseFiles    *collections.Set[tspath.Path]
+	FileSystem    vfs.FS
+	// ReplaceFileSystem indicates a total filesystem replacement. Layers use
+	// per-path file changes instead of invalidating all inherited state.
+	ReplaceFileSystem bool
 }
 
 type ProjectTreeRequest struct {
@@ -446,6 +526,11 @@ type ResourceRequest struct {
 type SnapshotChange struct {
 	ResourceRequest
 	reason UpdateReason
+	// fs overrides the session filesystem for this snapshot. It is used by API
+	// snapshots that supply their own memory or cache filesystem.
+	fs                 vfs.FS
+	fileSystemOverride bool
+	replaceFileSystem  bool
 	// fileChanges are the changes that have occurred since the last snapshot.
 	fileChanges FileChangeSummary
 	// compilerOptionsForInferredProjects is the compiler options to use for inferred projects.
@@ -458,8 +543,8 @@ type SnapshotChange struct {
 	ataChanges map[tspath.Path]*ATAStateChange
 	apiRequest *APISnapshotRequest
 	client     Client
-	// cleanDiskCache triggers cleaning of cached disk files not referenced by any open project.
-	cleanDiskCache bool
+	// cleanFileCache triggers cleaning of cached files not referenced by any open project.
+	cleanFileCache bool
 }
 
 // ATAStateChange represents a change to a project's ATA state.
@@ -544,8 +629,20 @@ func (s *Snapshot) Clone(
 		inferredContentMappers = change.contentMapperContributions.Mappers
 		inferredContentMapperExtensions = change.contentMapperContributions.Extensions
 	}
-	fs := newSnapshotFSBuilder(store.fs, s.fs.overlays, overlays, s.fs.diskFiles, s.fs.diskDirectories, s.fs.nodeModulesRealpathAliases, store.options.PositionEncoding, store.toPath)
-	change.fileChanges = s.processFileChanges(fs, change.fileChanges, logger, change.contentMapperContributions)
+	baseFS := store.fs
+	if change.fs != nil {
+		baseFS = change.fs
+	}
+	// Total replacements and returning to the session host must not retain files
+	// from the previous filesystem. Layers invalidate only their per-path changes,
+	// including the first layer over a host-backed snapshot.
+	if change.replaceFileSystem || s.fileSystemOverride && !change.fileSystemOverride {
+		change.fileChanges.InvalidateAll = true
+	}
+	layeredFS := layerOverlayFileSystem(baseFS, overlays, store.options.PositionEncoding, store.toPath)
+	overlays = layeredFS.Overlays()
+	fs := newSnapshotFSBuilderFromSource(layeredFS, s.fs.cacheFiles, s.fs.cacheDirectories, s.fs.nodeModulesRealpathAliases, store.toPath)
+	change.fileChanges = s.processFileChanges(fs, change.fileChanges, logger, change.contentMapperContributions, s.overlays(), overlays)
 
 	compilerOptionsForInferredProjects := s.compilerOptionsForInferredProjects
 	if change.compilerOptionsForInferredProjects != nil {
@@ -563,6 +660,7 @@ func (s *Snapshot) Clone(
 		ctx,
 		newSnapshotID,
 		fs,
+		overlays,
 		s.ProjectCollection,
 		s.ConfigFileRegistry,
 		s.ProjectCollection.apiState,
@@ -634,20 +732,20 @@ func (s *Snapshot) Clone(
 		}
 	}
 
-	// Clean cached disk files not touched by any open project on file open, close, delete,
+	// Clean cached files not touched by any open project on file open, close, delete,
 	// or when explicitly requested (e.g. by an idle timer).
-	shouldCleanDiskCache := change.cleanDiskCache ||
+	shouldCleanFileCache := change.cleanFileCache ||
 		change.fileChanges.Opened != "" ||
 		change.fileChanges.Reopened != "" ||
 		change.fileChanges.Closed.Len() > 0 ||
 		change.fileChanges.Deleted.Len() > 0
-	if shouldCleanDiskCache {
+	if shouldCleanFileCache {
 		// The set of seen files can change only if a program was constructed (not cloned) during this snapshot.
-		// When cleanDiskCache is explicitly set, always attempt cleaning.
-		if len(projectsWithNewProgramStructure) > 0 || change.cleanDiskCache {
+		// When cleanFileCache is explicitly set, always attempt cleaning.
+		if len(projectsWithNewProgramStructure) > 0 || change.cleanFileCache {
 			cleanFilesStart := time.Now()
 			removedFiles := 0
-			fs.diskFiles.Range(func(entry *dirty.SyncMapEntry[tspath.Path, *diskFile]) bool {
+			fs.cacheFiles.Range(func(entry *dirty.SyncMapEntry[tspath.Path, *cachedFile]) bool {
 				for _, project := range projectCollection.Projects() {
 					if project.host != nil && project.host.sourceFS.SeenFile(entry.Key()) {
 						return true
@@ -718,6 +816,7 @@ func (s *Snapshot) Clone(
 	newSnapshot.inferredProjectContentMapperExtensions = inferredContentMapperExtensions
 	newSnapshot.builderLogs = logger
 	newSnapshot.apiError = apiError
+	newSnapshot.fileSystemOverride = change.fileSystemOverride
 
 	for _, project := range newSnapshot.ProjectCollection.Projects() {
 		if project.Program != nil {

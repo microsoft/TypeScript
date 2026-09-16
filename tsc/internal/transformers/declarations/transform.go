@@ -1111,13 +1111,24 @@ func (tx *DeclarationTransformer) omitPrivateMethodType(input *ast.Node) *ast.No
 	if input.Symbol() != nil && len(input.Symbol().Declarations) > 0 && input.Symbol().Declarations[0] != input {
 		return nil
 	}
-	result := tx.Factory().NewPropertyDeclaration(
-		tx.ensureModifiers(input),
-		input.Name(),
-		nil,
-		nil,
-		nil,
-	)
+	var result *ast.Node
+	if ast.IsMethodSignatureDeclaration(input) {
+		result = tx.Factory().NewPropertySignatureDeclaration(
+			tx.ensureModifiers(input),
+			input.Name(),
+			nil, /*postfixToken*/
+			nil, /*typeNode*/
+			nil, /*initializer*/
+		)
+	} else {
+		result = tx.Factory().NewPropertyDeclaration(
+			tx.ensureModifiers(input),
+			input.Name(),
+			nil, /*postfixToken*/
+			nil, /*typeNode*/
+			nil, /*initializer*/
+		)
+	}
 	tx.suppressJsDoc(result)
 	return result
 }

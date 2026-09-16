@@ -8,7 +8,6 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/astnav"
 	"github.com/microsoft/TypeScript/tsc/internal/checker"
-	"github.com/microsoft/TypeScript/tsc/internal/compiler"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/internal/locale"
@@ -111,16 +110,16 @@ func getAllImportCodeActions(ctx context.Context, fixContext *CodeFixContext) (*
 		return nil, nil
 	}
 
-	view, err := fixContext.LS.getPreparedAutoImportView(fixContext.SourceFile)
+	ch, done := fixContext.Program.GetTypeChecker(ctx)
+	defer done()
+
+	view, err := fixContext.LS.getPreparedAutoImportView(fixContext.SourceFile, ch)
 	if err != nil {
 		return nil, err
 	}
 	if view == nil {
-		view = fixContext.LS.getCurrentAutoImportView(fixContext.SourceFile)
+		view = fixContext.LS.getCurrentAutoImportView(fixContext.SourceFile, ch)
 	}
-
-	ch, done := fixContext.Program.GetTypeChecker(ctx)
-	defer done()
 
 	importAdder := autoimport.NewImportAdder(
 		ctx,
@@ -176,18 +175,20 @@ func getFixInfos(ctx context.Context, fixContext *CodeFixContext, errorCode int3
 	}
 
 	symbolToken := astnav.GetTokenAtPosition(fixContext.SourceFile, pos)
+	if errorCode != diagnostics.X_0_refers_to_a_UMD_global_but_the_current_file_is_a_module_Consider_adding_an_import_instead.Code() && !ast.IsIdentifier(symbolToken) {
+		return nil, nil
+	}
+
+	ch, done := fixContext.Program.GetTypeChecker(ctx)
+	defer done()
 
 	var view *autoimport.View
 	var info []*fixInfo
 
 	if errorCode == diagnostics.X_0_refers_to_a_UMD_global_but_the_current_file_is_a_module_Consider_adding_an_import_instead.Code() {
-		view = fixContext.LS.getCurrentAutoImportView(fixContext.SourceFile)
-		info = getFixesInfoForUMDImport(ctx, fixContext, symbolToken, view)
-	} else if !ast.IsIdentifier(symbolToken) {
-		return nil, nil
+		view = fixContext.LS.getCurrentAutoImportView(fixContext.SourceFile, ch)
+		info = getFixesInfoForUMDImport(symbolToken, view, ch)
 	} else if errorCode == diagnostics.X_0_cannot_be_used_as_a_value_because_it_was_imported_using_import_type.Code() {
-		ch, done := fixContext.Program.GetTypeChecker(ctx)
-		defer done()
 		compilerOptions := fixContext.Program.Options()
 		symbolNames := getSymbolNamesToImport(fixContext.SourceFile, ch, symbolToken, compilerOptions)
 
@@ -196,7 +197,7 @@ func getFixInfos(ctx context.Context, fixContext *CodeFixContext, errorCode int3
 			if !sn.isTypeOnly {
 				continue
 			}
-			fix := getTypeOnlyPromotionFix(ctx, fixContext.SourceFile, symbolToken, sn.name, fixContext.Program)
+			fix := getTypeOnlyPromotionFix(fixContext.SourceFile, symbolToken, sn.name, ch)
 			if fix != nil {
 				allTypeOnlyFixes = append(allTypeOnlyFixes, &fixInfo{fix: fix, symbolName: sn.name, errorIdentifierText: symbolToken.Text()})
 			}
@@ -224,26 +225,23 @@ func getFixInfos(ctx context.Context, fixContext *CodeFixContext, errorCode int3
 		return info, nil
 	} else {
 		var err error
-		view, err = fixContext.LS.getPreparedAutoImportView(fixContext.SourceFile)
+		view, err = fixContext.LS.getPreparedAutoImportView(fixContext.SourceFile, ch)
 		if err != nil {
 			return nil, err
 		}
 		if view != nil {
-			info = getFixesInfoForNonUMDImport(ctx, fixContext, symbolToken, view)
+			info = getFixesInfoForNonUMDImport(fixContext, symbolToken, view, ch)
 		}
 	}
 
 	// Sort fixes by preference
 	if view == nil {
-		view = fixContext.LS.getCurrentAutoImportView(fixContext.SourceFile)
+		view = fixContext.LS.getCurrentAutoImportView(fixContext.SourceFile, ch)
 	}
 	return sortFixInfo(info, fixContext, view), nil
 }
 
-func getFixesInfoForUMDImport(ctx context.Context, fixContext *CodeFixContext, token *ast.Node, view *autoimport.View) []*fixInfo {
-	ch, done := fixContext.Program.GetTypeChecker(ctx)
-	defer done()
-
+func getFixesInfoForUMDImport(token *ast.Node, view *autoimport.View, ch *checker.Checker) []*fixInfo {
 	umdSymbol := getUmdSymbol(token, ch)
 	if umdSymbol == nil {
 		return nil
@@ -253,7 +251,7 @@ func getFixesInfoForUMDImport(ctx context.Context, fixContext *CodeFixContext, t
 	isValidTypeOnlyUseSite := ast.IsValidTypeOnlyAliasUseSite(token)
 
 	var result []*fixInfo
-	for _, fix := range view.GetFixes(ctx, export, false, isValidTypeOnlyUseSite, nil) {
+	for _, fix := range view.GetFixes(export, false, isValidTypeOnlyUseSite, nil) {
 		errorIdentifierText := ""
 		if ast.IsIdentifier(token) {
 			errorIdentifierText = token.Text()
@@ -302,9 +300,7 @@ func isUMDExportSymbol(symbol *ast.Symbol) bool {
 		ast.IsNamespaceExportDeclaration(symbol.Declarations[0])
 }
 
-func getFixesInfoForNonUMDImport(ctx context.Context, fixContext *CodeFixContext, symbolToken *ast.Node, view *autoimport.View) []*fixInfo {
-	ch, done := fixContext.Program.GetTypeChecker(ctx)
-	defer done()
+func getFixesInfoForNonUMDImport(fixContext *CodeFixContext, symbolToken *ast.Node, view *autoimport.View, ch *checker.Checker) []*fixInfo {
 	compilerOptions := fixContext.Program.Options()
 
 	isValidTypeOnlyUseSite := ast.IsValidTypeOnlyAliasUseSite(symbolToken)
@@ -341,7 +337,7 @@ func getFixesInfoForNonUMDImport(ctx context.Context, fixContext *CodeFixContext
 				continue
 			}
 
-			fixes := view.GetFixes(ctx, export, isJSXTagName, isValidTypeOnlyUseSite, &usagePosition)
+			fixes := view.GetFixes(export, isJSXTagName, isValidTypeOnlyUseSite, &usagePosition)
 			for _, fix := range fixes {
 				allInfo = append(allInfo, &fixInfo{
 					fix:               fix,
@@ -355,10 +351,7 @@ func getFixesInfoForNonUMDImport(ctx context.Context, fixContext *CodeFixContext
 	return allInfo
 }
 
-func getTypeOnlyPromotionFix(ctx context.Context, sourceFile *ast.SourceFile, symbolToken *ast.Node, symbolName string, program *compiler.Program) *autoimport.Fix {
-	ch, done := program.GetTypeChecker(ctx)
-	defer done()
-
+func getTypeOnlyPromotionFix(sourceFile *ast.SourceFile, symbolToken *ast.Node, symbolName string, ch *checker.Checker) *autoimport.Fix {
 	// Get the symbol at the token location
 	symbol := ch.ResolveName(symbolName, symbolToken, ast.SymbolFlagsValue, true /* excludeGlobals */)
 	if symbol == nil {

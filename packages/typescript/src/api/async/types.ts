@@ -8,7 +8,10 @@ import type {
     NamedTupleMember,
     ParameterDeclaration,
 } from "../../ast/ast.ts";
-import type { Diagnostic } from "../proto.ts";
+import type {
+    Diagnostic,
+    RequestFileSystem,
+} from "../proto.ts";
 import type {
     NodeHandle,
     Signature,
@@ -180,7 +183,7 @@ export interface ObjectType extends Type {
 /** Type references (ObjectFlags.Reference) — e.g. Array<string>, Map<K, V> */
 export interface TypeReference extends ObjectType {
     /** Get the generic target type (e.g. Array for Array<string>) */
-    getTarget(): Promise<Type>;
+    getTarget(): Promise<GenericType>;
 }
 
 /** References to tuple types */
@@ -197,10 +200,16 @@ export interface InterfaceType extends TypeReference {
     getOuterTypeParameters(): Promise<readonly TypeParameter[]>;
     /** Get local type parameters declared on this interface/class */
     getLocalTypeParameters(): Promise<readonly TypeParameter[]>;
+    /** Get the synthetic `this` type of this interface/class */
+    getThisType(): Promise<TypeParameter | undefined>;
+}
+
+/** Generic types */
+export interface GenericType extends InterfaceType, TypeReference {
 }
 
 /** Tuple type targets (ObjectFlags.Tuple) */
-export interface TupleType extends InterfaceType {
+export interface TupleType extends GenericType {
     /** Get this tuple target */
     getTarget(): Promise<TupleType>;
     /** Per-element flags (Required, Optional, Rest, Variadic) */
@@ -401,6 +410,8 @@ export interface EmitResult {
     readonly emitSkipped: boolean;
     readonly diagnostics: readonly Diagnostic[];
     readonly emittedFiles: readonly string[];
+    /** Emitted files captured as a filesystem layer suitable for {@link Snapshot.update}. */
+    readonly fileSystem?: RequestFileSystem | undefined;
 }
 
 export interface EmitOutput {

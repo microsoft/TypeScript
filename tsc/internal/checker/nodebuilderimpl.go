@@ -2843,7 +2843,8 @@ func getTypeAliasForTypeLiteral(c *Checker, t *Type) *ast.Symbol {
 }
 
 func (b *NodeBuilderImpl) shouldWriteTypeOfFunctionSymbol(symbol *ast.Symbol, typeId TypeId) (bool, *ast.Symbol) {
-	isStaticMethodSymbol := symbol.Flags&ast.SymbolFlagsMethod != 0 && core.Some(symbol.Declarations, func(declaration *ast.Node) bool {
+	// `typeof C.name` can only be written when the member name is a valid identifier
+	isStaticMethodSymbol := symbol.Flags&ast.SymbolFlagsMethod != 0 && scanner.IsIdentifierText(symbol.Name, core.LanguageVariantStandard) && core.Some(symbol.Declarations, func(declaration *ast.Node) bool {
 		return ast.IsStatic(declaration) && !b.ch.isLateBindableIndexSignature(ast.GetNameOfDeclaration(declaration))
 	})
 	isNonLocalFunctionSymbol := false
@@ -3289,14 +3290,6 @@ func (b *NodeBuilderImpl) visitAndTransformType(t *Type, transform func(b *NodeB
 }
 
 func (b *NodeBuilderImpl) typeToTypeNode(t *Type) *ast.TypeNode {
-	// Push type onto typeStack for expansion depth tracking
-	if b.ctx.maxExpansionDepth >= 0 && t != nil {
-		b.ctx.typeStack = append(b.ctx.typeStack, t)
-		defer func() {
-			b.ctx.typeStack = b.ctx.typeStack[:len(b.ctx.typeStack)-1]
-		}()
-	}
-
 	inTypeAlias := b.ctx.flags & nodebuilder.FlagsInTypeAlias
 	b.ctx.flags &^= nodebuilder.FlagsInTypeAlias
 
@@ -3308,6 +3301,16 @@ func (b *NodeBuilderImpl) typeToTypeNode(t *Type) *ast.TypeNode {
 		}
 		b.ctx.approximateLength += 3
 		return b.f.NewKeywordTypeNode(ast.KindAnyKeyword)
+	}
+
+	t = getNonDistributedTypeParameter(t)
+
+	// Push type onto typeStack for expansion depth tracking
+	if b.ctx.maxExpansionDepth >= 0 {
+		b.ctx.typeStack = append(b.ctx.typeStack, t)
+		defer func() {
+			b.ctx.typeStack = b.ctx.typeStack[:len(b.ctx.typeStack)-1]
+		}()
 	}
 
 	if b.ctx.flags&nodebuilder.FlagsNoTypeReduction == 0 {
