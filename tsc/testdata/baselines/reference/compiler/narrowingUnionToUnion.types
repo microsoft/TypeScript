@@ -466,7 +466,7 @@ function test3(x: unknown) {
 >0 : 0
 
 			x;  // 0 | "hello"
->x : string | 0
+>x : "hello" | 0
 		}
 	}
 	if (check1(x)) {

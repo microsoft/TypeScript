@@ -12536,7 +12536,12 @@ func (c *Checker) checkBinaryLikeExpression(left *ast.Node, operatorToken *ast.N
 	if operator == ast.KindEqualsToken && (left.Kind == ast.KindObjectLiteralExpression || left.Kind == ast.KindArrayLiteralExpression) {
 		return c.checkDestructuringAssignment(left, c.checkExpressionEx(right, checkMode), checkMode, right.Kind == ast.KindThisKeyword)
 	}
-	leftType := c.checkExpressionEx(left, checkMode)
+	var leftType *Type
+	if ast.IsCompoundAssignment(operator) && !ast.IsLogicalOrCoalescingAssignmentOperator(operator) {
+		leftType = c.checkExpressionForMutableLocation(left, checkMode)
+	} else {
+		leftType = c.checkExpressionEx(left, checkMode)
+	}
 	rightType := c.checkExpressionEx(right, checkMode)
 	if ast.IsLogicalOrCoalescingBinaryOperator(operator) {
 		parent := left.Parent.Parent

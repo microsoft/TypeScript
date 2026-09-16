@@ -217,6 +217,15 @@ func getBranchLabelAntecedents(flow *ast.FlowNode, reduceLabels []*ast.FlowReduc
 	return flow.Antecedents
 }
 
+// Compound assignments, updates, and compound-like assignments can change the value, so
+// their flow types must generalize literal types and discard fresh negations describing
+// the old value (e.g. 'number & not 0' before a decrement). This approximates the type
+// after the operation without checking its expression here; regular negated constraints
+// are preserved.
+func (c *Checker) getTypeForCompoundAssignment(typeToGeneralize *Type) *Type {
+	return c.getBaseTypeOfLiteralType(c.removeFreshNegatedTypes(typeToGeneralize))
+}
+
 func (c *Checker) getTypeAtFlowAssignment(f *FlowState, flow *ast.FlowNode) FlowType {
 	node := flow.Node
 	// Assignments only narrow the computed type if the declared type is a union type. Thus, we
@@ -227,7 +236,7 @@ func (c *Checker) getTypeAtFlowAssignment(f *FlowState, flow *ast.FlowNode) Flow
 		}
 		if getAssignmentTargetKind(node) == AssignmentKindCompound {
 			flowType := c.getTypeAtFlowNode(f, flow.Antecedent)
-			return c.newFlowType(c.getBaseTypeOfLiteralType(flowType.t), flowType.incomplete)
+			return c.newFlowType(c.getTypeForCompoundAssignment(flowType.t), flowType.incomplete)
 		}
 		if f.declaredType == c.autoType || f.declaredType == c.autoArrayType {
 			if c.isEmptyArrayAssignment(node) {
@@ -241,7 +250,7 @@ func (c *Checker) getTypeAtFlowAssignment(f *FlowState, flow *ast.FlowNode) Flow
 		}
 		t := f.declaredType
 		if isInCompoundLikeAssignment(node) {
-			t = c.getBaseTypeOfLiteralType(t)
+			t = c.getTypeForCompoundAssignment(t)
 		}
 		if t.flags&TypeFlagsUnion != 0 {
 			return FlowType{t: c.getAssignmentReducedType(t, c.getInitialOrAssignedType(f, flow))}
@@ -481,10 +490,10 @@ func (c *Checker) narrowTypeByBinaryExpression(f *FlowState, t *Type, expr *ast.
 			return c.narrowTypeByTypeof(f, t, right.AsTypeOfExpression(), operator, left, assumeTrue)
 		}
 		if c.isMatchingReference(f.reference, left) {
-			return c.narrowTypeByEquality(t, operator, right, assumeTrue, true /*introduceNegation*/)
+			return c.narrowTypeByEquality(t, operator, right, assumeTrue, !ast.IsAccessExpression(f.reference))
 		}
 		if c.isMatchingReference(f.reference, right) {
-			return c.narrowTypeByEquality(t, operator, left, assumeTrue, true /*introduceNegation*/)
+			return c.narrowTypeByEquality(t, operator, left, assumeTrue, !ast.IsAccessExpression(f.reference))
 		}
 		if c.strictNullChecks {
 			if c.optionalChainContainsReference(left, f.reference) {
@@ -739,6 +748,17 @@ func (c *Checker) narrowTypeByTypeName(t *Type, typeName string) *Type {
 
 func (c *Checker) narrowTypeByTypeFacts(t *Type, impliedType *Type, facts TypeFacts) *Type {
 	return c.mapType(t, func(t *Type) *Type {
+		if t.flags&TypeFlagsIntersection != 0 && containsFreshNegatedType(t) {
+			return c.getIntersectionType(core.Map(t.Types(), func(t *Type) *Type {
+				if isFreshNegatedType(t) {
+					if c.typesAreInDisjointDomainsIncludingObjects(impliedType, t.AsNegatedType().baseType) {
+						return c.unknownType
+					}
+					return t
+				}
+				return c.narrowTypeByTypeFacts(t, impliedType, facts)
+			}))
+		}
 		switch {
 		case c.isTypeRelatedTo(t, impliedType, c.strictSubtypeRelation):
 			if c.hasTypeFacts(t, facts) {
@@ -1997,6 +2017,10 @@ func (c *Checker) replacePrimitivesWithLiterals(typeWithPrimitives *Type, typeWi
 		c.maybeTypeOfKind(typeWithLiterals, TypeFlagsStringLiteral|TypeFlagsTemplateLiteral|TypeFlagsStringMapping|TypeFlagsNumberLiteral|TypeFlagsBigIntLiteral) {
 		return c.mapType(typeWithPrimitives, func(t *Type) *Type {
 			switch {
+			case t.flags&TypeFlagsIntersection != 0 && containsFreshNegatedType(t):
+				return c.getIntersectionType(core.Map(t.Types(), func(t *Type) *Type {
+					return c.replacePrimitivesWithLiterals(t, typeWithLiterals)
+				}))
 			case t.flags&TypeFlagsString != 0:
 				return c.extractTypesOfKind(typeWithLiterals, TypeFlagsString|TypeFlagsStringLiteral|TypeFlagsTemplateLiteral|TypeFlagsStringMapping)
 			case c.isPatternLiteralType(t) && !c.maybeTypeOfKind(typeWithLiterals, TypeFlagsString|TypeFlagsTemplateLiteral|TypeFlagsStringMapping):

@@ -259,7 +259,7 @@ function f5b() {
 >action(() => { x /* 1 | 2 */ }) : void
 >action : (f: Function) => void
 >() => { x /* 1 | 2 */ } : () => void
->x : number
+>x : 1 | 2
         }
     }
 }

@@ -32,7 +32,7 @@ const g = (arg: LiteralsAndWeakTypes) => {
 
     } else {
       arg;
->arg : ("B" | { optional?: true; } | { toLowerCase?(): string; } | { toUpperCase?(): string; otherOptionalProp?: number; }) & not "A"
+>arg : "B" | { optional?: true; } | { toLowerCase?(): string; } | { toUpperCase?(): string; otherOptionalProp?: number; }
     }
 }
 

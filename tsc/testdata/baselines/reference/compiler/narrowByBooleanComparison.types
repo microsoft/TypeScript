@@ -162,7 +162,7 @@ function test3(foo: unknown) {
 >'Not a string or an array' : "Not a string or an array"
     }
     foo;
->foo : string | (not string & any[])
+>foo : string | any[]
 }
 
 // https://github.com/microsoft/TypeScript/issues/55395

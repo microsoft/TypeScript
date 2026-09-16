@@ -4093,9 +4093,9 @@ namespace Harness {
                 }
                 else if (matchingIdentifiers.length > 1) {
 >matchingIdentifiers.length > 1 : boolean
->matchingIdentifiers.length : number & not 0
+>matchingIdentifiers.length : number
 >matchingIdentifiers : Type[]
->length : number & not 0
+>length : number
 >1 : 1
 
                     throw new Error("Found multiple matching identifiers for " + target);

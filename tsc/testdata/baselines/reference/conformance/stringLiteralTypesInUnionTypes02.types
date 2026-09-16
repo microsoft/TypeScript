@@ -34,8 +34,8 @@ else if (x !== "bar") {
 }
 else {
     let c = x;
->c : string
->x : string & not "foo"
+>c : "bar"
+>x : "bar"
 
     let d = y;
 >d : string
@@ -43,10 +43,10 @@ else {
 
     let e: (typeof x) | (typeof y) = c || d;
 >e : string
->x : string & not "foo"
+>x : "bar"
 >y : string
 >c || d : string
->c : string
+>c : "bar"
 >d : string
 }
 

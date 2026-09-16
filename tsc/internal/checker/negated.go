@@ -106,24 +106,27 @@ func (c *Checker) removeFreshNegatedTypes(t *Type) *Type {
 	if !containsFreshNegatedType(t) {
 		return t
 	}
-	return c.removeFreshNegatedTypesEx(t, false)
+	return c.removeFreshNegatedTypesEx(t, false, false)
 }
 
-func (c *Checker) removeFreshNegatedTypesEx(t *Type, intersectionMember bool) *Type {
-	return c.mapType(t, func(t *Type) *Type {
-		if isFreshNegatedType(t) {
-			if intersectionMember {
-				return c.unknownType
-			}
-			return c.neverType
+func (c *Checker) removeFreshNegatedTypesEx(t *Type, intersectionMember bool, unionMember bool) *Type {
+	if isFreshNegatedType(t) {
+		if intersectionMember || unionMember {
+			return c.unknownType
 		}
-		if t.flags&TypeFlagsIntersection != 0 {
-			return c.getIntersectionType(core.Map(t.Types(), func(t *Type) *Type {
-				return c.removeFreshNegatedTypesEx(t, true)
-			}))
-		}
-		return t
-	})
+		return c.neverType
+	}
+	if t.flags&TypeFlagsUnion != 0 {
+		return c.getUnionType(core.Map(t.Types(), func(t *Type) *Type {
+			return c.removeFreshNegatedTypesEx(t, false, true)
+		}))
+	}
+	if t.flags&TypeFlagsIntersection != 0 {
+		return c.getIntersectionType(core.Map(t.Types(), func(t *Type) *Type {
+			return c.removeFreshNegatedTypesEx(t, true, false)
+		}))
+	}
+	return t
 }
 
 func (c *Checker) getRegularNegatedTypes(t *Type) *Type {
@@ -275,7 +278,7 @@ func (c *Checker) removeNegatedSubtypes(types []*Type) []*Type {
 			continue
 		}
 		negatedBase := types[i].AsNegatedType().baseType
-		if c.isTypeSubtypeOf(nonNegativePart, types[i]) || c.objectTypesAreDisjointByProperties(nonNegativePart, negatedBase, false /*sourceIsClosed*/) {
+		if c.isTypeSubtypeOf(nonNegativePart, types[i]) || isFreshNegatedType(types[i]) && c.typesAreInDisjointDomainsIncludingObjects(nonNegativePart, negatedBase) || c.objectTypesAreDisjointByProperties(nonNegativePart, negatedBase, false /*sourceIsClosed*/) {
 			types = slices.Delete(types, i, i+1)
 		}
 	}
@@ -346,6 +349,41 @@ func typesAreInDisjointDomains(a *Type, b *Type) bool {
 	aDomains := a.flags & TypeFlagsDisjointDomains
 	bDomains := b.flags & TypeFlagsDisjointDomains
 	return aDomains != 0 && bDomains != 0 && aDomains&bDomains == 0
+}
+
+func (c *Checker) typesAreInDisjointDomainsIncludingObjects(a *Type, b *Type) bool {
+	aDomains := c.getTypeDomains(a)
+	bDomains := c.getTypeDomains(b)
+	return aDomains != 0 && bDomains != 0 && aDomains&bDomains == 0
+}
+
+func (c *Checker) getTypeDomains(t *Type) TypeFlags {
+	var domains TypeFlags
+	if t.flags&TypeFlagsStringLike != 0 {
+		domains |= TypeFlagsString
+	}
+	if t.flags&TypeFlagsNumberLike != 0 {
+		domains |= TypeFlagsNumber
+	}
+	if t.flags&TypeFlagsBigIntLike != 0 {
+		domains |= TypeFlagsBigInt
+	}
+	if t.flags&TypeFlagsBooleanLike != 0 {
+		domains |= TypeFlagsBoolean
+	}
+	if t.flags&TypeFlagsESSymbolLike != 0 {
+		domains |= TypeFlagsESSymbol
+	}
+	if t.flags&TypeFlagsVoidLike != 0 {
+		domains |= TypeFlagsVoid
+	}
+	if t.flags&TypeFlagsNull != 0 {
+		domains |= TypeFlagsNull
+	}
+	if t.flags&(TypeFlagsObject|TypeFlagsNonPrimitive) != 0 && !c.IsEmptyAnonymousObjectType(t) {
+		domains |= TypeFlagsNonPrimitive
+	}
+	return domains
 }
 
 func isRequiredProperty(prop *ast.Symbol) bool {

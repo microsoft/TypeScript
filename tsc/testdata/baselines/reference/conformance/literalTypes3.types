@@ -23,7 +23,7 @@ function f1(s: string) {
 >"bar" : "bar"
 
         s;  // "foo" | "bar"
->s : string
+>s : "bar" | "foo"
     }
 }
 
@@ -57,11 +57,11 @@ function f2(s: string) {
 }
 
 function f3(s: string) {
->f3 : (s: string) => string | undefined
+>f3 : (s: string) => "bar" | "foo" | undefined
 >s : string
 
     return s === "foo" || s === "bar" ? s : undefined;  // "foo" | "bar" | undefined
->s === "foo" || s === "bar" ? s : undefined : string | undefined
+>s === "foo" || s === "bar" ? s : undefined : "bar" | "foo" | undefined
 >s === "foo" || s === "bar" : boolean
 >s === "foo" : boolean
 >s : string
@@ -69,12 +69,12 @@ function f3(s: string) {
 >s === "bar" : boolean
 >s : string & not "foo"
 >"bar" : "bar"
->s : string
+>s : "bar" | "foo"
 >undefined : undefined
 }
 
 function f4(x: number) {
->f4 : (x: number) => number
+>f4 : (x: number) => 1 | 2
 >x : number
 
     if (x === 1 || x === 2) {
@@ -87,7 +87,7 @@ function f4(x: number) {
 >2 : 2
 
         return x;  // 1 | 2
->x : number
+>x : 1 | 2
     }
     throw new Error();
 >new Error() : Error
@@ -109,7 +109,7 @@ function f5(x: number, y: 1 | 2) {
 >y : 1 | 2
 
         x;  // 0 | 1 | 2
->x : number
+>x : 0 | 1 | 2
     }
 }
 

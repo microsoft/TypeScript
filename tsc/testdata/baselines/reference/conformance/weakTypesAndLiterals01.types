@@ -26,8 +26,8 @@ declare let aOrB: "A" | "B";
 >aOrB : "A" | "B"
 
 const f = (arg: LiteralsOrWeakTypes) => {
->f : (arg: LiteralsOrWeakTypes) => "B" | { optional?: true; } | { toLowerCase?(): string; } | { toUpperCase?(): string; otherOptionalProp?: number; }
->(arg: LiteralsOrWeakTypes) => {    if (arg === "A") {        return arg;    }    else {        return arg;    }} : (arg: LiteralsOrWeakTypes) => "B" | { optional?: true; } | { toLowerCase?(): string; } | { toUpperCase?(): string; otherOptionalProp?: number; }
+>f : (arg: LiteralsOrWeakTypes) => "A" | "B" | { optional?: true; } | { toLowerCase?(): string; } | { toUpperCase?(): string; otherOptionalProp?: number; }
+>(arg: LiteralsOrWeakTypes) => {    if (arg === "A") {        return arg;    }    else {        return arg;    }} : (arg: LiteralsOrWeakTypes) => "A" | "B" | { optional?: true; } | { toLowerCase?(): string; } | { toUpperCase?(): string; otherOptionalProp?: number; }
 >arg : LiteralsOrWeakTypes
 
     if (arg === "A") {
@@ -40,7 +40,7 @@ const f = (arg: LiteralsOrWeakTypes) => {
     }
     else {
         return arg;
->arg : ("B" | WeakTypes) & not "A"
+>arg : "B" | { optional?: true; } | { toLowerCase?(): string; } | { toUpperCase?(): string; otherOptionalProp?: number; }
     }
 }
 
@@ -59,7 +59,7 @@ const g = (arg: WeakTypes) => {
     }
     else {
         return arg;
->arg : WeakTypes & not "A"
+>arg : { optional?: true; } | { toLowerCase?(): string; } | { toUpperCase?(): string; otherOptionalProp?: number; }
     }
 }
 

@@ -63,7 +63,7 @@ type WeakTypes = {
 };
 type LiteralsOrWeakTypes = "A" | "B" | WeakTypes;
 declare let aOrB: "A" | "B";
-declare const f: (arg: LiteralsOrWeakTypes) => "B" | {
+declare const f: (arg: LiteralsOrWeakTypes) => "A" | "B" | {
     optional?: true;
 } | {
     toLowerCase?(): string;
