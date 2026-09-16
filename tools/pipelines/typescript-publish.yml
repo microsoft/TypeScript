@@ -73,6 +73,10 @@ extends:
                   targetPath: '$(Build.ArtifactStagingDirectory)/npm-main'
                   artifactName: 'npm-main'
                   displayName: 'Publish npm-main artifact'
+                - output: pipelineArtifact
+                  targetPath: '$(Build.ArtifactStagingDirectory)/npm-wasip1'
+                  artifactName: 'npm-wasip1'
+                  displayName: 'Publish npm-wasip1 artifact'
 
             steps:
               - checkout: none
@@ -83,22 +87,29 @@ extends:
                   src="$(Pipeline.Workspace)/npm"
                   platformDst="$(Build.ArtifactStagingDirectory)/npm-platform"
                   mainDst="$(Build.ArtifactStagingDirectory)/npm-main"
-                  mkdir -p "$platformDst" "$mainDst"
+                  wasmDst="$(Build.ArtifactStagingDirectory)/npm-wasip1"
+                  mkdir -p "$platformDst" "$mainDst" "$wasmDst"
 
                   manifest="$src/publish-manifest.json"
                   stageCount="$(jq '.stages | length' "$manifest")"
-                  if [ "$stageCount" -ne 2 ]; then
-                    echo "Expected exactly 2 npm publish stages, found $stageCount." >&2
+                  if [ "$stageCount" -ne 3 ]; then
+                    echo "Expected exactly 3 npm publish stages, found $stageCount." >&2
                     exit 1
                   fi
                   jq -r '.stages[0][].filename' "$manifest" | xargs -I {} cp -v "$src/{}" "$platformDst/"
                   jq -r '.stages[1][].filename' "$manifest" | xargs -I {} cp -v "$src/{}" "$mainDst/"
+                  jq -r '.stages[2][].filename' "$manifest" | xargs -I {} cp -v "$src/{}" "$wasmDst/"
 
                   platformCount="$(find "$platformDst" -maxdepth 1 -name '*.tgz' -type f | wc -l)"
                   mainCount="$(find "$mainDst" -maxdepth 1 -name '*.tgz' -type f | wc -l)"
-                  echo "##[section]Staged $platformCount platform package(s) and $mainCount main package(s)."
+                  wasmCount="$(find "$wasmDst" -maxdepth 1 -name '*.tgz' -type f | wc -l)"
+                  echo "##[section]Staged $platformCount platform package(s), $mainCount main package(s), and $wasmCount WASM package(s)."
                   if [ "$mainCount" -ne 1 ]; then
                     echo "Expected 1 main package, found $mainCount." >&2
+                    exit 1
+                  fi
+                  if [ "$wasmCount" -ne 1 ]; then
+                    echo "Expected 1 WASM package, found $wasmCount." >&2
                     exit 1
                   fi
                 displayName: 'Stage npm artifacts'
@@ -122,6 +133,9 @@ extends:
                 - input: pipelineArtifact
                   artifactName: 'npm-main'
                   targetPath: '$(Pipeline.Workspace)/npm-main'
+                - input: pipelineArtifact
+                  artifactName: 'npm-wasip1'
+                  targetPath: '$(Pipeline.Workspace)/npm-wasip1'
 
             steps:
               - checkout: none
@@ -142,6 +156,16 @@ extends:
                   contentType: 'npm'
                   contentSource: 'Folder'
                   folderLocation: '$(Pipeline.Workspace)/npm-main'
+                  waitForReleaseCompletion: true
+                  owners: 'jabaile@microsoft.com'
+                  approvers: 'alexchi@microsoft.com'
+
+              - template: MicroBuild.Publish.yml@MicroBuildTemplate
+                parameters:
+                  intent: 'PackageDistribution'
+                  contentType: 'npm'
+                  contentSource: 'Folder'
+                  folderLocation: '$(Pipeline.Workspace)/npm-wasip1'
                   waitForReleaseCompletion: true
                   owners: 'jabaile@microsoft.com'
                   approvers: 'alexchi@microsoft.com'
