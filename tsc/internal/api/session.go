@@ -23,6 +23,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/internal/format"
 	"github.com/microsoft/TypeScript/tsc/internal/ipc"
+	"github.com/microsoft/TypeScript/tsc/internal/jsnum"
 	"github.com/microsoft/TypeScript/tsc/internal/json"
 	"github.com/microsoft/TypeScript/tsc/internal/ls"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/autoimport"
@@ -787,6 +788,10 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleGetSourceFileNames(ctx, parsed.(*GetSourceFileNamesParams))
 	case string(MethodGetSourceFileMetadata):
 		return s.handleGetSourceFileMetadata(ctx, parsed.(*GetSourceFileParams))
+	case string(MethodGetModeForUsageLocation):
+		return s.handleGetModeForUsageLocation(ctx, parsed.(*GetModeForUsageLocationParams))
+	case string(MethodGetModeForResolutionAtIndex):
+		return s.handleGetModeForResolutionAtIndex(ctx, parsed.(*GetModeForResolutionAtIndexParams))
 	case string(MethodGetResolvedModule):
 		return s.handleGetResolvedModule(ctx, parsed.(*GetResolvedModuleParams))
 	case string(MethodGetResolvedModuleFromModuleSpecifier):
@@ -1248,6 +1253,9 @@ func (s *Session) handleUpdateSnapshot(ctx context.Context, params *UpdateSnapsh
 	}
 	apiRequest.FileSystem = sd.fileSystem
 	apiRequest.ReplaceFileSystem = params.FileSystem != nil && params.FileSystem.Kind == requestfilesystem.KindFull
+	if baseSD != nil && baseSD.fileSystem != nil {
+		apiRequest.FileSystemBase = baseSD.snapshot
+	}
 
 	// Open projects: only take a new ref for projects we aren't already holding open.
 	var openedProjects []tspath.Path
@@ -1807,6 +1815,54 @@ func newResolvedTypeReferenceDirectiveResponse(resolution *module.ResolvedTypeRe
 		PackageId:               NewPackageId(resolution.PackageId),
 		IsExternalLibraryImport: resolution.IsExternalLibraryImport,
 	}
+}
+
+func (s *Session) handleGetModeForUsageLocation(ctx context.Context, params *GetModeForUsageLocationParams) (core.ResolutionMode, error) {
+	sd, err := s.getSnapshotData(params.Snapshot)
+	if err != nil {
+		return core.ResolutionModeNone, err
+	}
+	program, err := sd.getProgram(params.Project)
+	if err != nil {
+		return core.ResolutionModeNone, err
+	}
+	sourceFile, err := s.resolveOptionalSourceFile(program, &params.File)
+	if err != nil {
+		return core.ResolutionModeNone, err
+	}
+	usage, err := sd.resolveNodeHandle(program, params.Usage)
+	if err != nil {
+		return core.ResolutionModeNone, err
+	}
+	if !ast.IsStringLiteralLike(usage) {
+		return core.ResolutionModeNone, fmt.Errorf("%w: usage must be a StringLiteralLike node", ErrClientError)
+	}
+	return program.GetModeForUsageLocation(sourceFile, usage), nil
+}
+
+func (s *Session) handleGetModeForResolutionAtIndex(ctx context.Context, params *GetModeForResolutionAtIndexParams) (core.ResolutionMode, error) {
+	sd, err := s.getSnapshotData(params.Snapshot)
+	if err != nil {
+		return core.ResolutionModeNone, err
+	}
+	program, err := sd.getProgram(params.Project)
+	if err != nil {
+		return core.ResolutionModeNone, err
+	}
+	sourceFile, err := s.resolveOptionalSourceFile(program, &params.File)
+	if err != nil {
+		return core.ResolutionModeNone, err
+	}
+	resolutionCount := len(sourceFile.Imports())
+	for _, augmentation := range sourceFile.ModuleAugmentations {
+		if augmentation.Kind == ast.KindStringLiteral {
+			resolutionCount++
+		}
+	}
+	if params.Index < 0 || params.Index >= resolutionCount {
+		return core.ResolutionModeNone, fmt.Errorf("%w: invalid resolution index", ErrClientError)
+	}
+	return program.GetModeForResolutionAtIndex(sourceFile, params.Index), nil
 }
 
 // @gen-proto-nullable
@@ -3791,7 +3847,7 @@ func (s *Session) handleGetTypeOfPropertyOfType(ctx context.Context, params *Get
 
 // handleGetConstantValue returns the constant value of an enum member or const enum access.
 // @gen-proto-nullable
-func (s *Session) handleGetConstantValue(ctx context.Context, params *CheckerNodeParams) (any, error) {
+func (s *Session) handleGetConstantValue(ctx context.Context, params *CheckerNodeParams) (*ConstantValueResponse, error) {
 	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
 	if err != nil {
 		return nil, err
@@ -3806,7 +3862,11 @@ func (s *Session) handleGetConstantValue(ctx context.Context, params *CheckerNod
 		return nil, nil
 	}
 
-	return literalValueToJSON(setup.checker.GetConstantValue(node)), nil
+	result := &ConstantValueResponse{}
+	value := setup.checker.GetConstantValue(node)
+	_, result.IsNumber = value.(jsnum.Number)
+	result.Value = literalValueToJSON(value)
+	return result, nil
 }
 
 // handleGetSignatureFromDeclaration returns the signature of a function-like declaration.

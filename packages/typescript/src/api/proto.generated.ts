@@ -45,6 +45,8 @@ export interface APIMethodInfo {
     getSourceFile: APIMethod<GetSourceFileParams, SourceFileResponse | null>;
     getSourceFileNames: APIMethod<GetSourceFileNamesParams, string[]>;
     getSourceFileMetadata: APIMethod<GetSourceFileParams, SourceFileMetadata | null>;
+    getModeForUsageLocation: APIMethod<GetModeForUsageLocationParams, ModuleKind>;
+    getModeForResolutionAtIndex: APIMethod<GetModeForResolutionAtIndexParams, ModuleKind>;
     getResolvedModule: APIMethod<GetResolvedModuleParams, ResolvedModule | null>;
     getResolvedModuleFromModuleSpecifier: APIMethod<GetResolvedModuleFromModuleSpecifierParams, ResolvedModule | null>;
     getResolvedTypeReferenceDirective: APIMethod<GetResolvedTypeReferenceDirectiveParams, ResolvedTypeReferenceDirective | null>;
@@ -121,7 +123,7 @@ export interface APIMethodInfo {
     getImportAdderEdits: APIMethod<GetImportAdderEditsParams, TextEdit[]>;
     getTrueTypeOfConditionalType: APIMethod<GetTypePropertyParams, TypeResponse>;
     getFalseTypeOfConditionalType: APIMethod<GetTypePropertyParams, TypeResponse>;
-    getConstantValue: APIMethod<CheckerNodeParams, unknown | null>;
+    getConstantValue: APIMethod<CheckerNodeParams, ConstantValueResponse | null>;
     getSignatureFromDeclaration: APIMethod<CheckerNodeParams, SignatureResponse>;
     getExportSpecifierLocalTargetSymbol: APIMethod<CheckerNodeParams, SymbolResponse | null>;
     getAliasedSymbol: APIMethod<CheckerSymbolParams, SymbolResponse>;
@@ -488,6 +490,20 @@ export interface SourceFileMetadata {
     impliedNodeFormat: ModuleKind;
 }
 
+export interface GetModeForUsageLocationParams {
+    snapshot: number;
+    project: string;
+    file: DocumentIdentifier;
+    usage: string;
+}
+
+export interface GetModeForResolutionAtIndexParams {
+    snapshot: number;
+    project: string;
+    file: DocumentIdentifier;
+    index: number;
+}
+
 export interface GetResolvedModuleParams {
     snapshot: number;
     project: string;
@@ -797,6 +813,11 @@ export interface CheckerNodeParams {
     location: string;
 }
 
+export interface ConstantValueResponse {
+    isNumber: boolean;
+    value: unknown;
+}
+
 /** CheckerSymbolParams are parameters for checker methods that operate on a symbol. */
 export interface CheckerSymbolParams {
     snapshot: number;
@@ -1055,6 +1076,8 @@ export interface BatchRequest {
         | "getLocalTypeParametersOfType"
         | "getMemberInModuleExports"
         | "getMembersOfSymbol"
+        | "getModeForResolutionAtIndex"
+        | "getModeForUsageLocation"
         | "getNeverType"
         | "getNonMissingTypeOfSymbol"
         | "getNonNullableType"
@@ -1213,6 +1236,8 @@ export interface BatchResponse {
         | "getLocalTypeParametersOfType"
         | "getMemberInModuleExports"
         | "getMembersOfSymbol"
+        | "getModeForResolutionAtIndex"
+        | "getModeForUsageLocation"
         | "getNeverType"
         | "getNonMissingTypeOfSymbol"
         | "getNonNullableType"

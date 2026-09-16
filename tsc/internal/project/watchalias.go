@@ -57,7 +57,7 @@ func (s *Snapshot) initializeWatchAliases(logger logging.Logger) {
 				break
 			}
 			directories[directory] = struct{}{}
-			if !register(watchalias.Registration{Name: directory, Realpath: s.fs.fs.Realpath(directory), Directory: true}) {
+			if !register(watchalias.Registration{Name: directory, Realpath: WatchRealpath(s.fs.fs, directory), Directory: true}) {
 				break
 			}
 			parent := tspath.GetDirectoryPath(directory)
@@ -97,7 +97,7 @@ func (s *Snapshot) normalizeWatchAliasName(name string) string {
 func (s *Snapshot) watchRegistrations(previous *Snapshot) iter.Seq[watchalias.Registration] {
 	return func(yield func(watchalias.Registration) bool) {
 		native := s.nativeWatchAliasesEnabled()
-		for _, file := range s.fs.diskFiles {
+		for _, file := range s.fs.cacheFiles {
 			if native || file.realpathName != "" {
 				if !yield(watchalias.Registration{Name: file.FileName(), Realpath: file.realpathName, Dependency: file.realpathName != ""}) {
 					return
@@ -108,7 +108,7 @@ func (s *Snapshot) watchRegistrations(previous *Snapshot) iter.Seq[watchalias.Re
 			return
 		}
 		name := func(name string) bool { return yield(watchalias.Registration{Name: name}) }
-		for _, file := range s.fs.overlays {
+		for _, file := range s.overlays() {
 			if !name(file.FileName()) {
 				return
 			}
@@ -187,7 +187,7 @@ func (s *Snapshot) watchAliasChangesAreContentOnly(change FileChangeSummary, ove
 	}
 	for uri := range change.Changed.Keys() {
 		path := s.host.toPath(uri.FileName())
-		previous, next := s.fs.overlays[path], overlays[path]
+		previous, next := s.overlays()[path], overlays[path]
 		if previous == nil || next == nil || previous == next {
 			return false
 		}
@@ -288,10 +288,7 @@ func (s *Snapshot) watchChangesOverlapProjectState(change FileChangeSummary) boo
 			if s.ConfigFileRegistry.isTracked(path) {
 				return true
 			}
-			if _, ok := s.fs.overlays[path]; ok {
-				return true
-			}
-			if _, ok := s.fs.overlayDirectories[path]; ok {
+			if s.hasOverlayWithin(path) {
 				return true
 			}
 			for _, project := range s.ProjectCollection.Projects() {

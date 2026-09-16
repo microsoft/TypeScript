@@ -113,8 +113,8 @@ func TestSnapshot(t *testing.T) {
 		snapshotBefore := session.Snapshot()
 
 		// a.ts and b.ts are cached
-		assert.Check(t, snapshotBefore.fs.diskFiles["/home/projects/ts/p1/a.ts"] != nil)
-		assert.Check(t, snapshotBefore.fs.diskFiles["/home/projects/ts/p2/b.ts"] != nil)
+		assert.Check(t, snapshotBefore.fs.cacheFiles["/home/projects/ts/p1/a.ts"] != nil)
+		assert.Check(t, snapshotBefore.fs.cacheFiles["/home/projects/ts/p2/b.ts"] != nil)
 
 		// Close p1's only open file
 		session.DidCloseFile(context.Background(), "file:///home/projects/TS/p1/index.ts")
@@ -123,8 +123,8 @@ func TestSnapshot(t *testing.T) {
 		snapshotAfter := session.Snapshot()
 
 		// a.ts is cleaned up, b.ts is still cached
-		assert.Check(t, snapshotAfter.fs.diskFiles["/home/projects/ts/p1/a.ts"] == nil)
-		assert.Check(t, snapshotAfter.fs.diskFiles["/home/projects/ts/p2/b.ts"] != nil)
+		assert.Check(t, snapshotAfter.fs.cacheFiles["/home/projects/ts/p1/a.ts"] == nil)
+		assert.Check(t, snapshotAfter.fs.cacheFiles["/home/projects/ts/p2/b.ts"] != nil)
 	})
 
 	t.Run("GetFile returns nil for non-existent files", func(t *testing.T) {
@@ -215,7 +215,7 @@ func TestSnapshot(t *testing.T) {
 		_, err := session.GetLanguageService(context.Background(), pkgURI)
 		assert.NilError(t, err)
 
-		err = session.fs.fs.WriteFile("/project/node_modules/pkg/package.json", `{ "type": "module" }`)
+		err = session.fs.WriteFile("/project/node_modules/pkg/package.json", `{ "type": "module" }`)
 		assert.NilError(t, err)
 		session.DidChangeFile(context.Background(), pkgURI, 2, []lsproto.TextDocumentContentChangePartialOrWholeDocument{
 			{
@@ -298,7 +298,7 @@ func TestSnapshot(t *testing.T) {
 
 		// A watch change that reflects an actual content change on disk must still
 		// rebuild the program.
-		err = session.fs.fs.WriteFile("/home/projects/TS/p1/a.ts", "export const a = 2;")
+		err = session.fs.WriteFile("/home/projects/TS/p1/a.ts", "export const a = 2;")
 		assert.NilError(t, err)
 		session.pendingFileChangesMu.Lock()
 		session.pendingFileChanges = append(session.pendingFileChanges, FileChange{
@@ -379,7 +379,7 @@ func BenchmarkSnapshotCloneRefCost(b *testing.B) {
 				} else {
 					tsconfigContent = `{"compilerOptions": {"strict": false}}`
 				}
-				err := session.fs.fs.WriteFile("/small/tsconfig.json", tsconfigContent)
+				err := session.fs.WriteFile("/small/tsconfig.json", tsconfigContent)
 				if err != nil {
 					b.Fatal(err)
 				}
@@ -555,6 +555,12 @@ func TestWatchAliasesSnapshotFilesystem(t *testing.T) {
 				if target != "/host" {
 					assert.Assert(t, !slices.Contains(replaced.watchNames("/src"), "/host"))
 				}
+				restored := clone(replaced, nil)
+				defer restored.Deref()
+				assert.Assert(t, !restored.HasFileSystemOverride())
+				file := restored.fs.cacheFiles[host.toPath("/src/node_modules/pkg/index.d.ts")]
+				assert.Assert(t, file != nil)
+				assert.Equal(t, file.realpathName, "/host/node_modules/pkg/index.d.ts")
 			})
 		}
 	}
@@ -596,9 +602,10 @@ func TestWatchAliasCoalescedFilesystemChanges(t *testing.T) {
 		host := NewSnapshotHost(&SessionInit{FS: fs, Options: &SessionOptions{CurrentDirectory: "/src", WatchEnabled: true}})
 		snapshot := host.NewStandaloneRootSnapshot()
 		overlays := newOverlayFS(fs, make(map[tspath.Path]*Overlay), lsproto.PositionEncodingKindUTF8, host.toPath)
-		_, snapshot.fs.overlays = overlays.processChanges([]FileChange{{
+		_, previousOverlays := overlays.processChanges([]FileChange{{
 			Kind: FileChangeKindOpen, URI: "file:///src/node_modules/main.ts", Content: "export {};",
 		}})
+		snapshot.fs.fs = newOverlayFS(fs, previousOverlays, lsproto.PositionEncodingKindUTF8, host.toPath)
 		change, nextOverlays := overlays.processChanges([]FileChange{
 			{Kind: kind, URI: "file:///src/node_modules/main.ts"},
 			{
@@ -883,14 +890,14 @@ func benchmarkSnapshotWatchAliases(b *testing.B, symlink bool) {
 					b.Run("cold", func(b *testing.B) {
 						snapshot := host.newRootSnapshot(0, false)
 						defer snapshot.Deref()
-						snapshot.fs.diskFiles = make(map[tspath.Path]*diskFile, size)
+						snapshot.fs.cacheFiles = make(map[tspath.Path]*cachedFile, size)
 						for _, name := range names {
-							file := newDiskFile(name, "export const value = 1;")
+							file := newCachedFile(name, "export const value = 1;")
 							if symlink {
 								file.realpathName = physicalRoot + strings.TrimPrefix(name, logicalRoot)
 								snapshot.fs.realpathFiles++
 							}
-							snapshot.fs.diskFiles[host.toPath(name)] = file
+							snapshot.fs.cacheFiles[host.toPath(name)] = file
 						}
 						fs.comparerQueries.Store(0)
 						fs.realpaths.Store(0)

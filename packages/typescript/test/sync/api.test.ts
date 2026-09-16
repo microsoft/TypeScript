@@ -84,6 +84,7 @@ import {
     ModifierFlags,
     ModuleKind,
     ModuleResolutionKind,
+    type NumberLiteralType,
     ObjectFlags,
     type Signature,
     SignatureKind,
@@ -323,7 +324,8 @@ describe("API", () => {
         using api = spawnAPI({
             "/src/index.ts": `/// <reference types="pkg-types" />
 import "pkg";
-import "missing";`,
+import "missing";
+declare module "augmentation" {}`,
             "/node_modules/pkg/package.json": JSON.stringify({ name: "pkg", version: "1.0.0", types: "index.d.ts" }),
             "/node_modules/pkg/index.d.ts": `export {};`,
             "/node_modules/@types/pkg-types/package.json": JSON.stringify({ name: "@types/pkg-types", version: "1.0.0", types: "index.d.ts" }),
@@ -336,6 +338,10 @@ import "missing";`,
         const sourceFile = program.getSourceFile("/src/index.ts");
         assert.ok(sourceFile);
         const pkgSpecifier = cast(cast(sourceFile.statements[0], isImportDeclaration).moduleSpecifier, isStringLiteral);
+
+        assert.equal(program.getModeForUsageLocation("/src/index.ts", pkgSpecifier), ModuleKind.ESNext);
+        assert.equal(program.getModeForResolutionAtIndex("/src/index.ts", 0), ModuleKind.ESNext);
+        assert.equal(program.getModeForResolutionAtIndex("/src/index.ts", 2), ModuleKind.ESNext);
 
         const resolvedModule = program.getResolvedModule("/src/index.ts", "pkg", ModuleKind.ESNext);
         assert.ok(resolvedModule);
@@ -4958,6 +4964,40 @@ describe("Checker - getConstantValue", () => {
         assert.equal(value, 2);
     });
 
+    test("returns infinite numeric enum values without changing equivalent strings", () => {
+        using api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/main.ts": `export enum E {
+                Positive = 1e999,
+                Negative = -1e999,
+                PositiveNaN = NaN,
+                NegativeNaN = -NaN,
+                PositiveString = "+Infinity",
+                NegativeString = "-Infinity",
+                NaNString = "NaN",
+            }`,
+        });
+
+        const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const sourceFile = project.program.getSourceFile("/src/main.ts");
+        assert.ok(sourceFile);
+        const members: Node[] = [];
+        sourceFile.forEachChild(function visit(node) {
+            if (node.kind === SyntaxKind.EnumMember) members.push(node);
+            node.forEachChild(visit);
+        });
+        assert.equal(members.length, 7);
+
+        assert.equal(project.checker.getConstantValue(members[0]), Infinity);
+        assert.equal(project.checker.getConstantValue(members[1]), -Infinity);
+        assert.equal(project.checker.getConstantValue(members[2]), NaN);
+        assert.equal(project.checker.getConstantValue(members[3]), NaN);
+        assert.equal(project.checker.getConstantValue(members[4]), "+Infinity");
+        assert.equal(project.checker.getConstantValue(members[5]), "-Infinity");
+        assert.equal(project.checker.getConstantValue(members[6]), "NaN");
+    });
+
     test("returns string value of a string-initialized enum member", () => {
         using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
@@ -5460,6 +5500,35 @@ describe("FreshableType - getFreshType and getRegularType", () => {
         const negLiteral = negType as BigIntLiteralType;
         assert.equal(typeof negLiteral.value, "bigint");
         assert.equal(negLiteral.value, -123n);
+    });
+
+    test("NumberLiteralType.value is infinity (positive and negative)", () => {
+        const src = `\nexport const pos = 1e999;\nexport const neg = -1e999;\n`;
+        using api = spawnAPI({
+            "/tsconfig.json": "{}",
+            "/src/main.ts": src,
+        });
+
+        const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+
+        const posSymbol = project.checker.getSymbolAtPosition("/src/main.ts", src.indexOf("pos ="));
+        assert.ok(posSymbol);
+        const posType = project.checker.getTypeOfSymbol(posSymbol);
+        assert.ok(posType);
+        assert.ok(posType.flags & TypeFlags.NumberLiteral, "Expected NumberLiteral");
+        const posLiteral = posType as NumberLiteralType;
+        assert.equal(typeof posLiteral.value, "number");
+        assert.equal(posLiteral.value, Infinity);
+
+        const negSymbol = project.checker.getSymbolAtPosition("/src/main.ts", src.indexOf("neg ="));
+        assert.ok(negSymbol);
+        const negType = project.checker.getTypeOfSymbol(negSymbol);
+        assert.ok(negType);
+        assert.ok(negType.flags & TypeFlags.NumberLiteral, "Expected NumberLiteral");
+        const negLiteral = negType as NumberLiteralType;
+        assert.equal(typeof negLiteral.value, "number");
+        assert.equal(negLiteral.value, -Infinity);
     });
 
     test("getFreshType() returns a fresh twin with matching value", () => {

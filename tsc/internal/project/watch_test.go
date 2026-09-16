@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"errors"
+	"fmt"
 	"os"
 	"path/filepath"
 	"slices"
@@ -88,8 +89,8 @@ func TestWatchAliasesMockFilesystem(t *testing.T) {
 		fs := vfstest.FromMap(map[string]string{"/src/ſ.ts": "original"}, sensitive)
 		host := NewSnapshotHost(&SessionInit{FS: fs, Options: &SessionOptions{CurrentDirectory: "/src", WatchEnabled: true}})
 		snapshot := host.newSnapshot(1, &SnapshotFS{
-			fs:        fs,
-			diskFiles: map[tspath.Path]*diskFile{host.toPath("/src/ſ.ts"): newDiskFile("/src/ſ.ts", "original")},
+			fs:         newTestLayeredFileSystem(fs, host.toPath),
+			cacheFiles: map[tspath.Path]*cachedFile{host.toPath("/src/ſ.ts"): newCachedFile("/src/ſ.ts", "original")},
 		}, &ConfigFileRegistry{}, nil, host.newRootSnapshot(0, false).userPreferences, nil, nil)
 		snapshot.initializeWatchAliases(nil)
 		if got := snapshot.watchNames("/src/s.ts"); !slices.Equal(got, []string{"/src/s.ts"}) {
@@ -225,7 +226,7 @@ func TestWatchAliasesDisabledDoesNotProbe(t *testing.T) {
 	host := NewSnapshotHost(&SessionInit{FS: fs, Options: &SessionOptions{CurrentDirectory: "/src"}})
 	snapshot := host.newRootSnapshot(0, false)
 	defer snapshot.Deref()
-	snapshot.fs.diskFiles = map[tspath.Path]*diskFile{"/src/main.ts": newDiskFile("/src/main.ts", "")}
+	snapshot.fs.cacheFiles = map[tspath.Path]*cachedFile{"/src/main.ts": newCachedFile("/src/main.ts", "")}
 	snapshot.initializeWatchAliases(nil)
 	if fs.calls != 0 {
 		t.Fatal("watch-disabled snapshot queried native watch comparer")
@@ -560,7 +561,7 @@ func checkWatchDirectoryRecreation(t *testing.T, fs vfs.FS, deleted, created str
 	assert.Equal(t, source.Text(), watchLifecycleInitial)
 	assert.Equal(t, old.GetDefaultProject(uri).Program.GetSourceFile(watchLifecycleLogical+"/index.d.ts").Text(), watchLifecycleInitial)
 	if len(editor) != 0 {
-		overlay := session.Snapshot().fs.overlays[session.toPath("/project/main.ts")]
+		overlay := session.Snapshot().overlays()[session.toPath("/project/main.ts")]
 		assert.Equal(t, overlay.Content(), watchLifecycleMain+"\n")
 		assert.Equal(t, overlay.Version(), int32(2))
 		assert.Equal(t, overlay.MatchesDiskText(), editor[len(editor)-1] == FileChangeKindSave)
@@ -624,6 +625,48 @@ func TestWatchDirectoryFinalDeletion(t *testing.T) {
 	assert.Assert(t, service.GetProgram().GetSourceFile(watchLifecycleLogical+"/index.d.ts") == nil)
 }
 
+func TestPhysicalDirectoryDeletionPreservesOverlay(t *testing.T) {
+	t.Parallel()
+	for _, api := range []bool{false, true} {
+		t.Run(fmt.Sprintf("api=%v", api), func(t *testing.T) {
+			t.Parallel()
+			ctx := context.Background()
+			fs := watchLifecycleFS(true)
+			assert.NilError(t, fs.WriteFile(watchLifecyclePhysical+"/other.d.ts", "export const value: 1;"))
+			session := NewSession(&SessionInit{
+				BackgroundCtx: ctx, FS: fs, Client: &noopClient{},
+				Options: &SessionOptions{CurrentDirectory: "/project", WatchEnabled: true},
+			})
+			defer session.Close()
+			session.DidOpenFile(ctx, "file:///project/main.ts", 1, watchLifecycleMain, lsproto.LanguageKindTypeScript)
+			uri := lsconv.FileNameToDocumentURI(watchLifecycleLogical + "/index.d.ts")
+			const overlayText = `export { value } from "./other";`
+			session.DidOpenFile(ctx, uri, 1, overlayText, lsproto.LanguageKindTypeScript)
+			session.WaitForBackgroundTasks()
+			assert.Assert(t, session.Snapshot().fs.realpathFiles > 0)
+			assert.NilError(t, fs.Remove(watchLifecyclePhysical+"/index.d.ts"))
+			assert.NilError(t, fs.Remove(watchLifecyclePhysical+"/other.d.ts"))
+			if api {
+				var changes FileChangeSummary
+				changes.Deleted.Add(lsconv.FileNameToDocumentURI(watchLifecyclePhysical))
+				next, err := session.APIUpdate(ctx, changes, nil)
+				assert.NilError(t, err)
+				next.Deref()
+			} else {
+				session.DidChangeWatchedFiles(ctx, []*lsproto.FileEvent{{
+					Uri: lsconv.FileNameToDocumentURI(watchLifecyclePhysical), Type: lsproto.FileChangeTypeDeleted,
+				}})
+			}
+			service, err := session.GetLanguageService(ctx, "file:///project/main.ts")
+			assert.NilError(t, err)
+			file := service.GetProgram().GetSourceFile(uri.FileName())
+			assert.Assert(t, file != nil)
+			assert.Equal(t, file.Text(), overlayText)
+			assert.Assert(t, service.GetProgram().GetSourceFile(watchLifecycleLogical+"/other.d.ts") == nil)
+		})
+	}
+}
+
 func TestWatchDirectoryCanceledEventsRefreshRealpath(t *testing.T) {
 	t.Parallel()
 	ctx := context.Background()
@@ -650,7 +693,7 @@ func TestWatchDirectoryCanceledEventsRefreshRealpath(t *testing.T) {
 	next, err := session.APIUpdate(ctx, FileChangeSummary{}, nil)
 	assert.NilError(t, err)
 	defer next.Deref()
-	file := next.fs.diskFiles[session.toPath(watchLifecycleLogical+"/index.d.ts")]
+	file := next.fs.cacheFiles[session.toPath(watchLifecycleLogical+"/index.d.ts")]
 	assert.Assert(t, file != nil)
 	assert.Equal(t, file.realpathName, target, "canceled notifications must still refresh physical observations")
 	assert.NilError(t, fs.WriteFile(target, `export const value: "retargeted";`))
