@@ -1265,6 +1265,31 @@ func (s *Session) toAPISnapshotRequest(changes *SnapshotRequestChangesParams) (*
 			ConfigFileParsingDiagnostics: core.Map(programParams.Options.ConfigFileParsingDiagnostics, func(d *DiagnosticResponse) *ast.Diagnostic { return d.ToDiagnostic() }),
 		}
 	}
+	apiRequest.ReconfigurePrograms = make([]*project.APIReconfigureProgramRequest, len(changes.ReconfigurePrograms))
+	reconfiguredProgramIDs := collections.Set[int]{}
+	for i, programParams := range changes.ReconfigurePrograms {
+		programID, ok := project.SyntheticProgramID(tspath.Path(programParams.Id))
+		if !ok {
+			return nil, fmt.Errorf("%w: invalid synthetic project handle: %s", ErrClientError, programParams.Id)
+		}
+		if reconfiguredProgramIDs.Has(programID) {
+			return nil, fmt.Errorf("%w: synthetic program reconfigured more than once: %d", ErrClientError, programID)
+		}
+		reconfiguredProgramIDs.Add(programID)
+		rootFileNames := make([]string, len(programParams.RootFiles))
+		for j, rootFile := range programParams.RootFiles {
+			rootFileNames[j] = rootFile.ToAbsoluteFileName(s.currentDirectory())
+		}
+		apiRequest.ReconfigurePrograms[i] = &project.APIReconfigureProgramRequest{
+			ProgramID: programID,
+			APICreateProgramRequest: project.APICreateProgramRequest{
+				RootFileNames:                rootFileNames,
+				CompilerOptions:              &programParams.Options.CompilerOptions,
+				ProjectReferences:            programParams.Options.ProjectReferences,
+				ConfigFileParsingDiagnostics: core.Map(programParams.Options.ConfigFileParsingDiagnostics, func(d *DiagnosticResponse) *ast.Diagnostic { return d.ToDiagnostic() }),
+			},
+		}
+	}
 	if len(changes.RemovePrograms) > 0 {
 		apiRequest.RemovePrograms = collections.NewSetWithSizeHint[int](len(changes.RemovePrograms))
 	}
@@ -1272,6 +1297,9 @@ func (s *Session) toAPISnapshotRequest(changes *SnapshotRequestChangesParams) (*
 		programID, ok := project.SyntheticProgramID(tspath.Path(program))
 		if !ok {
 			return nil, fmt.Errorf("%w: invalid synthetic project handle: %s", ErrClientError, program)
+		}
+		if reconfiguredProgramIDs.Has(programID) {
+			return nil, fmt.Errorf("%w: synthetic program cannot be reconfigured and removed: %d", ErrClientError, programID)
 		}
 		apiRequest.RemovePrograms.Add(programID)
 	}
@@ -1308,6 +1336,11 @@ func (s *Session) toLanguageServerSnapshotUpdate(changes *SnapshotRequestChanges
 	for programID := range apiRequest.RemovePrograms.Keys() {
 		if !s.createdPrograms.Has(programID) {
 			apiRequest.RemovePrograms.Delete(programID)
+		}
+	}
+	for _, reconfigure := range apiRequest.ReconfigurePrograms {
+		if !s.createdPrograms.Has(reconfigure.ProgramID) {
+			return nil, fmt.Errorf("%w: synthetic program is not owned by this API session: %d", ErrClientError, reconfigure.ProgramID)
 		}
 	}
 	return update, nil

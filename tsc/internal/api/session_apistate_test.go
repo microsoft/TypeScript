@@ -326,6 +326,40 @@ func TestLanguageServerProgramOwnershipIsIsolatedByAPISession(t *testing.T) {
 	assert.Equal(t, len(projectSession.Snapshot().ProjectCollection.SyntheticProjects()), 0)
 }
 
+func TestLanguageServerProgramReconfigurationIsIsolatedByAPISession(t *testing.T) {
+	t.Parallel()
+
+	const fileName = "/home/projects/p/index.ts"
+	projectSession, _ := projecttestutil.Setup(map[string]any{fileName: `export const value = 1;`})
+	defer projectSession.Close()
+
+	owner := NewLSPSession(projectSession, nil)
+	defer owner.Close()
+	created, err := owner.handleGetCurrentLanguageServerSnapshot(context.Background(), &GetCurrentLanguageServerSnapshotParams{
+		Changes: &LanguageServerSnapshotChanges{SnapshotRequestChangesParams: SnapshotRequestChangesParams{
+			CreatePrograms: []*CreateSnapshotProgramParams{{
+				RootFiles: []DocumentIdentifier{{FileName: fileName}},
+				Options:   CreateProgramOptions{CompilerOptions: core.CompilerOptions{NoLib: core.TSTrue}},
+			}},
+		}},
+	})
+	assert.NilError(t, err)
+	programID := SyntheticProjectID(created.Projects[0].Id)
+
+	other := NewLSPSession(projectSession, nil)
+	defer other.Close()
+	_, err = other.handleGetCurrentLanguageServerSnapshot(context.Background(), &GetCurrentLanguageServerSnapshotParams{
+		Changes: &LanguageServerSnapshotChanges{SnapshotRequestChangesParams: SnapshotRequestChangesParams{
+			ReconfigurePrograms: []*ReconfigureSnapshotProgramParams{{
+				Id:        programID,
+				RootFiles: []DocumentIdentifier{{FileName: fileName}},
+				Options:   CreateProgramOptions{CompilerOptions: core.CompilerOptions{NoLib: core.TSTrue, Strict: core.TSTrue}},
+			}},
+		}},
+	})
+	assert.ErrorContains(t, err, "not owned by this API session")
+}
+
 func TestOpeningProjectOwnedByAnotherAPISessionEnsuresProgram(t *testing.T) {
 	t.Parallel()
 

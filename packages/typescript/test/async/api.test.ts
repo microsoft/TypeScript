@@ -390,6 +390,35 @@ describe("API", () => {
         assert.equal("openedFiles" in empty.operation, false);
     });
 
+    test("snapshot.update reconfigures a synthetic program", async () => {
+        await using api = spawnAPI({
+            "/src/a.ts": `export const a = 1;`,
+            "/src/b.ts": `export const b = 2;`,
+        });
+        const snapshot = await api.createSnapshot({
+            createPrograms: [{
+                rootFiles: ["/src/a.ts"],
+                options: { compilerOptions: { noLib: true } },
+            }],
+        });
+        const originalProgram = snapshot.operation.createdPrograms[0];
+
+        const updated = await snapshot.update({
+            reconfigurePrograms: [{
+                id: originalProgram.id,
+                rootFiles: ["/src/b.ts"],
+                options: { compilerOptions: { noLib: true, strict: true } },
+            }],
+        });
+        const reconfiguredProgram = updated.getProgram(originalProgram.id);
+        assert.ok(reconfiguredProgram);
+
+        assert.equal(reconfiguredProgram.id, originalProgram.id);
+        assert.deepEqual(await reconfiguredProgram.getSourceFileNames(), ["/src/b.ts"]);
+        assert.deepEqual(reconfiguredProgram.getCompilerOptions(), { noLib: true, strict: true });
+        assert.deepEqual(await originalProgram.getSourceFileNames(), ["/src/a.ts"]);
+    });
+
     test("Program resolved modules and type reference directives", async () => {
         await using api = spawnAPI({
             "/src/index.ts": `/// <reference types="pkg-types" />

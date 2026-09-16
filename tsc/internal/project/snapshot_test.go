@@ -65,9 +65,10 @@ func TestSnapshot(t *testing.T) {
 		)
 		assert.NilError(t, err)
 		defer createdSnapshot.Deref()
-		assert.Equal(t, len(createdSnapshot.CreatedPrograms()), 2)
-		firstProject := createdSnapshot.CreatedPrograms()[0]
-		secondProject := createdSnapshot.CreatedPrograms()[1]
+		createdPrograms := createdSnapshot.CreatedPrograms()
+		assert.Equal(t, len(createdPrograms), 2)
+		firstProject := createdPrograms[0]
+		secondProject := createdPrograms[1]
 
 		firstProgramID, ok := SyntheticProgramID(firstProject.ID())
 		assert.Assert(t, ok)

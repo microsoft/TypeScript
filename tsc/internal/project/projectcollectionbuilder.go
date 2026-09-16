@@ -280,6 +280,19 @@ func (b *ProjectCollectionBuilder) HandleAPIRequest(apiRequest *APISnapshotReque
 	} else if apiRequest.CloseFiles != nil {
 		b.cleanupConfiguredProjects(nil, logger)
 	}
+	seenReconfiguredPrograms := collections.Set[int]{}
+	for _, request := range apiRequest.ReconfigurePrograms {
+		if seenReconfiguredPrograms.Has(request.ProgramID) {
+			return fmt.Errorf("synthetic program reconfigured more than once: %d", request.ProgramID)
+		}
+		seenReconfiguredPrograms.Add(request.ProgramID)
+		if apiRequest.RemovePrograms.Has(request.ProgramID) {
+			return fmt.Errorf("synthetic program cannot be reconfigured and removed: %d", request.ProgramID)
+		}
+		if _, ok := b.syntheticProjects.Load(b.toPath(syntheticProjectName(request.ProgramID))); !ok {
+			return fmt.Errorf("synthetic program not found for reconfiguration: %d", request.ProgramID)
+		}
+	}
 	for programID := range apiRequest.RemovePrograms.Keys() {
 		projectPath := b.toPath(syntheticProjectName(programID))
 		project, ok := b.syntheticProjects.Load(projectPath)
@@ -289,7 +302,7 @@ func (b *ProjectCollectionBuilder) HandleAPIRequest(apiRequest *APISnapshotReque
 		b.deleteProject(project, logger)
 	}
 	createdPrograms := make([]*Project, len(apiRequest.CreatePrograms))
-	entries := make([]*dirty.SyncMapEntry[tspath.Path, *Project], len(apiRequest.CreatePrograms))
+	createdEntries := make([]*dirty.SyncMapEntry[tspath.Path, *Project], len(apiRequest.CreatePrograms))
 	for i, request := range apiRequest.CreatePrograms {
 		entry := b.updateOrCreateSyntheticProject(
 			b.nextSyntheticProjectName(),
@@ -300,15 +313,35 @@ func (b *ProjectCollectionBuilder) HandleAPIRequest(apiRequest *APISnapshotReque
 			b.inferredContentMappers,
 			logger,
 		)
-		entries[i] = entry
+		createdEntries[i] = entry
+	}
+	reconfiguredEntries := make([]*dirty.SyncMapEntry[tspath.Path, *Project], len(apiRequest.ReconfigurePrograms))
+	for i, request := range apiRequest.ReconfigurePrograms {
+		projectName := syntheticProjectName(request.ProgramID)
+		reconfiguredEntries[i] = b.updateOrCreateSyntheticProject(
+			projectName,
+			slices.Clone(request.RootFileNames),
+			request.CompilerOptions,
+			request.ProjectReferences,
+			request.ConfigFileParsingDiagnostics,
+			b.inferredContentMappers,
+			logger,
+		)
 	}
 	var wg sync.WaitGroup
-	for i, entry := range entries {
+	for i, entry := range createdEntries {
 		wg.Go(func() {
 			if entry.Value().dirty {
 				b.updateProgram(entry, logger)
 			}
 			createdPrograms[i] = entry.Value()
+		})
+	}
+	for _, entry := range reconfiguredEntries {
+		wg.Go(func() {
+			if entry.Value().dirty {
+				b.updateProgram(entry, logger)
+			}
 		})
 	}
 	wg.Wait()

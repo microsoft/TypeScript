@@ -1329,6 +1329,8 @@ export interface SnapshotRequestChangesParams {
     closeFiles?: readonly DocumentIdentifier[] | undefined;
     /** CreatePrograms describes synthetic programs to create in the snapshot. */
     createPrograms?: readonly CreateSnapshotProgramParams[] | undefined;
+    /** ReconfigurePrograms replaces the configuration of existing synthetic programs. */
+    reconfigurePrograms?: readonly ReconfigureSnapshotProgramParams[] | undefined;
     /** RemovePrograms lists synthetic project handles to remove from the snapshot. */
     removePrograms?: readonly SyntheticProjectId[] | undefined;
     /**
@@ -1569,6 +1571,12 @@ export interface EmitOutputFile {
 }
 
 export interface CreateSnapshotProgramParams {
+    rootFiles: readonly DocumentIdentifier[] | null;
+    options: CreateProgramOptions;
+}
+
+export interface ReconfigureSnapshotProgramParams {
+    id: SyntheticProjectId;
     rootFiles: readonly DocumentIdentifier[] | null;
     options: CreateProgramOptions;
 }

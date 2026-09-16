@@ -40,6 +40,7 @@ func TestGenerate(t *testing.T) {
 		`export type SyntheticProjectId = string & { __syntheticProjectIdBrand: any; };`,
 		`export type ProjectId = InferredProjectId | ConfiguredProjectId | SyntheticProjectId;`,
 		`ensurePrograms?: EnsurePrograms | undefined;`,
+		`reconfigurePrograms?: readonly ReconfigureSnapshotProgramParams[] | undefined;`,
 		`snapshot: number;`,
 		`file: DocumentIdentifier;`,
 		`jsx?: JsxEmit | undefined;`,

@@ -312,17 +312,23 @@ type APICreateProgramRequest struct {
 	ConfigFileParsingDiagnostics []*ast.Diagnostic
 }
 
+type APIReconfigureProgramRequest struct {
+	ProgramID int
+	APICreateProgramRequest
+}
+
 type APISnapshotRequest struct {
-	OpenProjects      *collections.Set[string]
-	CloseProjects     *collections.Set[tspath.Path]
-	OpenFiles         *collections.Set[lsproto.DocumentUri]
-	CloseFiles        *collections.Set[tspath.Path]
-	CreatePrograms    []*APICreateProgramRequest
-	RemovePrograms    *collections.Set[int]
-	EnsurePrograms    *collections.Set[tspath.Path]
-	EnsureAllPrograms bool
-	EnsureFiles       *collections.Set[lsproto.DocumentUri]
-	FileSystem        vfs.FS
+	OpenProjects        *collections.Set[string]
+	CloseProjects       *collections.Set[tspath.Path]
+	OpenFiles           *collections.Set[lsproto.DocumentUri]
+	CloseFiles          *collections.Set[tspath.Path]
+	CreatePrograms      []*APICreateProgramRequest
+	ReconfigurePrograms []*APIReconfigureProgramRequest
+	RemovePrograms      *collections.Set[int]
+	EnsurePrograms      *collections.Set[tspath.Path]
+	EnsureAllPrograms   bool
+	EnsureFiles         *collections.Set[lsproto.DocumentUri]
+	FileSystem          vfs.FS
 	// ReplaceFileSystem indicates a total filesystem replacement. Layers use
 	// per-path file changes instead of invalidating all inherited state.
 	ReplaceFileSystem bool

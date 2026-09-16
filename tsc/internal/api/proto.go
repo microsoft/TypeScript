@@ -380,6 +380,8 @@ type SnapshotRequestChangesParams struct {
 	CloseFiles []DocumentIdentifier `json:"closeFiles,omitempty"`
 	// CreatePrograms describes synthetic programs to create in the snapshot.
 	CreatePrograms []*CreateSnapshotProgramParams `json:"createPrograms,omitempty"`
+	// ReconfigurePrograms replaces the configuration of existing synthetic programs.
+	ReconfigurePrograms []*ReconfigureSnapshotProgramParams `json:"reconfigurePrograms,omitempty"`
 	// RemovePrograms lists synthetic project handles to remove from the snapshot.
 	RemovePrograms []SyntheticProjectID `json:"removePrograms,omitempty"`
 	// EnsurePrograms identifies projects whose programs should be updated if dirty,
@@ -421,6 +423,12 @@ type CreateSnapshotParams struct {
 }
 
 type CreateSnapshotProgramParams struct {
+	RootFiles []DocumentIdentifier `json:"rootFiles"`
+	Options   CreateProgramOptions `json:"options"`
+}
+
+type ReconfigureSnapshotProgramParams struct {
+	Id        SyntheticProjectID   `json:"id"`
 	RootFiles []DocumentIdentifier `json:"rootFiles"`
 	Options   CreateProgramOptions `json:"options"`
 }
