@@ -26,6 +26,7 @@ const __filename = url.fileURLToPath(new URL(import.meta.url));
 const __dirname = path.dirname(__filename);
 
 const isCI = !!process.env.CI || !!process.env.TF_BUILD;
+const stableThreeComponentVersionPattern = /^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$/;
 
 const $pipe = _$({ verbose: "short" });
 const $ = _$({ verbose: "short", stdio: "inherit" });
@@ -1209,7 +1210,7 @@ function getPublishTag() {
         }
         const match = version.match(/-(dev|beta|rc)(?:[.-]|$)/);
         if (match?.[1]) return match[1] === "dev" ? "next" : match[1];
-        if (version === nativePreviewReleaseVersion) return "latest";
+        if (version === nativePreviewReleaseVersion && stableThreeComponentVersionPattern.test(version)) return "latest";
         throw new Error(`Refusing to publish 'typescript' with the latest tag from non-release version ${version}.`);
     }
     return "latest";
@@ -1969,7 +1970,7 @@ async function testNativePreviewPackage(platforms) {
         const binName = publishAsTypescript ? "tsc" : "tsgo";
         const binPath = path.join(mainPackageDir, "bin", binName);
         const { stdout: versionOutput } = await $pipe`${process.execPath} ${binPath} --version`;
-        assert(versionOutput.includes(getVersion()), `Expected version output to contain ${getVersion()}, got ${versionOutput.trim()}`);
+        assert.equal(versionOutput.trim(), `Version ${getVersion()}`);
 
         const { stdout: listFilesOutput } = await $pipe`${process.execPath} ${binPath} --noEmit --listFiles ${sourceFile}`;
         assert(!listFilesOutput.includes("bundled:///"), "Packaged compiler listed an embedded library path");
@@ -1989,6 +1990,7 @@ async function testNativePreviewPackage(platforms) {
 export const testNativePreviewPackageTask = task({
     name: "typescript:test-package",
     description: "Tests the TypeScript npm package for the current platform.",
+    dependencies: options.forRelease ? undefined : [buildNativePreviewPackages],
     run: () => testNativePreviewPackage(getPlatforms()),
 });
 
