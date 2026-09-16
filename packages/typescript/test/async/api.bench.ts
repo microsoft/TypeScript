@@ -34,7 +34,7 @@ export async function runBenchmarks(options?: { filter?: string; singleIteration
     const repoRoot = fileURLToPath(new URL("../../../../", import.meta.url).toString());
 
     const bench = new Bench({
-        name: "Async API", // @sync: name: "Sync API",
+        name: "Async API", // @sync: name: "Sync API", // @generators: name: "Generator API",
         teardown,
         // Reduce iterations from the default 64 to 10.  Slow tasks
         // are dominated by the iteration minimum, not the time limit.
@@ -111,7 +111,7 @@ export async function runBenchmarks(options?: { filter?: string; singleIteration
             });
         }, { async: isAsync, beforeAll: all(spawnAPI, loadSnapshot, getCheckerTS) })
         .add("getSymbolAtPosition - one location", async () => {
-            await project.checker.getSymbolAtPosition("program.ts", 8895);
+            await project.checker.getSymbolAtPosition("program.ts", 8895); // @generators: api.batch(project.checker.getSymbolAtPosition.gen("program.ts", 8895));
         }, { async: isAsync, beforeAll: all(spawnAPI, loadSnapshot, createChecker) })
         .add("TS - getSymbolAtPosition - one location", () => {
             tsProgram.getTypeChecker().getSymbolAtLocation(
@@ -120,22 +120,32 @@ export async function runBenchmarks(options?: { filter?: string; singleIteration
             );
         }, { async: isAsync, beforeAll: all(tsCreateProgram, tsCreateChecker, tsGetProgramTS) })
         .add(`getSymbolAtPosition - ${programIdentifierCount} identifiers`, async () => {
+            // @generators-only-start
+            // api.batch(...collectIdentifiers(file).map(node => project.checker.getSymbolAtPosition.gen("program.ts", node.pos)));
+            // @generators-only-end
+            // @generators-skip-block-start
             for (const node of collectIdentifiers(file)) {
                 await project.checker.getSymbolAtPosition("program.ts", node.pos);
             }
+            // @generators-skip-block-end
         }, { async: isAsync, beforeAll: all(spawnAPI, loadSnapshot, createChecker, getProgramTS) })
         .add(`getSymbolAtPosition - ${programIdentifierCount} identifiers (batched)`, async () => {
             const positions = collectIdentifiers(file).map(node => node.pos);
-            await project.checker.getSymbolAtPosition("program.ts", positions);
+            await project.checker.getSymbolAtPosition("program.ts", positions); // @generators: api.batch(project.checker.getSymbolAtPosition.gen("program.ts", positions));
         }, { async: isAsync, beforeAll: all(spawnAPI, loadSnapshot, createChecker, getProgramTS) })
         .add(`getSymbolAtLocation - ${programIdentifierCount} identifiers`, async () => {
+            // @generators-only-start
+            // api.batch(...collectIdentifiers(file).map(node => project.checker.getSymbolAtLocation.gen(node)));
+            // @generators-only-end
+            // @generators-skip-block-start
             for (const node of collectIdentifiers(file)) {
                 await project.checker.getSymbolAtLocation(node);
             }
+            // @generators-skip-block-end
         }, { async: isAsync, beforeAll: all(spawnAPI, loadSnapshot, createChecker, getProgramTS) })
         .add(`getSymbolAtLocation - ${programIdentifierCount} identifiers (batched)`, async () => {
             const nodes = collectIdentifiers(file);
-            await project.checker.getSymbolAtLocation(nodes);
+            await project.checker.getSymbolAtLocation(nodes); // @generators: api.batch(project.checker.getSymbolAtLocation.gen(nodes));
         }, { async: isAsync, beforeAll: all(spawnAPI, loadSnapshot, createChecker, getProgramTS) })
         .add(`TS - getSymbolAtLocation - ${programIdentifierCount} identifiers`, () => {
             const checker = tsProgram.getTypeChecker();
@@ -165,6 +175,7 @@ export async function runBenchmarks(options?: { filter?: string; singleIteration
     }
 
     await bench.run(); // @sync: bench.runSync();
+    await teardown(); // @sync: teardown();
 
     if (session) {
         session.post("Profiler.stop", (err, { profile }) => {
@@ -195,7 +206,7 @@ export async function runBenchmarks(options?: { filter?: string; singleIteration
     }
 
     async function loadSnapshot() {
-        snapshot = await api.updateSnapshot({ openProject: "tsc/testdata/fixtures/compiler/tsconfig.json" });
+        snapshot = await api.updateSnapshot({ openProject: "tsc/testdata/fixtures/compiler/tsconfig.json" }); // @generators: [snapshot] = api.batch(api.updateSnapshot.gen({ openProject: "tsc/testdata/fixtures/compiler/tsconfig.json" }));
         project = snapshot.getProjects()[0];
     }
 
@@ -214,7 +225,7 @@ export async function runBenchmarks(options?: { filter?: string; singleIteration
     async function createChecker() {
         // checker is created lazily, for measuring symbol time in a loop
         // we need to create it first.
-        await project.checker.getSymbolAtPosition("core.ts", 0);
+        await project.checker.getSymbolAtPosition("core.ts", 0); // @generators: api.batch(project.checker.getSymbolAtPosition.gen("core.ts", 0));
     }
 
     function tsCreateChecker() {
@@ -222,11 +233,11 @@ export async function runBenchmarks(options?: { filter?: string; singleIteration
     }
 
     async function getDebugTS() {
-        file = (await project.program.getSourceFile("debug.ts"))!;
+        file = (await project.program.getSourceFile("debug.ts"))!; // @generators: file = api.batch(project.program.getSourceFile.gen("debug.ts"))[0]!;
     }
 
     async function getProgramTS() {
-        file = (await project.program.getSourceFile("program.ts"))!;
+        file = (await project.program.getSourceFile("program.ts"))!; // @generators: file = api.batch(project.program.getSourceFile.gen("program.ts"))[0]!;
     }
 
     function tsGetProgramTS() {
@@ -234,7 +245,7 @@ export async function runBenchmarks(options?: { filter?: string; singleIteration
     }
 
     async function getCheckerTS() {
-        file = (await project.program.getSourceFile("checker.ts"))!;
+        file = (await project.program.getSourceFile("checker.ts"))!; // @generators: file = api.batch(project.program.getSourceFile.gen("checker.ts"))[0]!;
     }
 
     function clearSourceFileCache() {

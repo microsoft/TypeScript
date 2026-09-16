@@ -1,5 +1,5 @@
 // @target: es2015
-//@module: amd
+//@module: commonjs
 export interface ProgressCallback {
 	(progress:any):any;
 }	

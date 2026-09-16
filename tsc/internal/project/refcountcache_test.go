@@ -466,7 +466,7 @@ func TestRefCountingCaches(t *testing.T) {
 			clone := baseSnapshot.Clone(context.Background(), SnapshotChange{
 				reason:    UpdateReasonRequestedLanguageServiceProjectNotLoaded,
 				Documents: []lsproto.DocumentUri{uri},
-			}, baseSnapshot.fs.overlays, session)
+			}, baseSnapshot.overlays(), nil)
 
 			project := clone.GetDefaultProject(uri)
 			assert.Assert(t, project != nil)
@@ -482,7 +482,7 @@ func TestRefCountingCaches(t *testing.T) {
 			assert.Assert(t, ok)
 			assert.Equal(t, len(extendedConfigEntry.owners), 1)
 
-			clone.Deref(session)
+			clone.Deref()
 
 			_, ok = session.parseCache.entries.Load(mainKey)
 			assert.Assert(t, !ok)
@@ -515,21 +515,22 @@ func TestRefCountingCaches(t *testing.T) {
 				OpenProjects: collections.NewSetFromItems(appConfigPath),
 			})
 			assert.NilError(t, err)
-			defer baseSnapshot.Deref(session)
+			defer baseSnapshot.Deref()
 			appProject := baseSnapshot.ProjectCollection.GetProjectByPath(baseSnapshot.toPath(appConfigPath))
 			assert.Assert(t, appProject != nil)
 
-			programSnapshot := session.APICreateProgram(
+			programSnapshot := session.CloneSnapshotForProgram(
 				ctx,
+				baseSnapshot,
+				nil,
 				appProject.CommandLine.FileNames(),
 				appProject.CommandLine.CompilerOptions(),
 				appProject.CommandLine.ProjectReferences(),
 				appProject.CommandLine.Errors,
-				baseSnapshot,
 				appProject,
 				FileChangeSummary{},
 			)
-			defer programSnapshot.Deref(session)
+			defer programSnapshot.Deref()
 			programProject := programSnapshot.ProjectCollection.InferredProject()
 			assert.Assert(t, programProject != nil)
 			assert.Assert(t, programProject.Program == appProject.Program)
@@ -545,20 +546,21 @@ func TestRefCountingCaches(t *testing.T) {
 			assert.Assert(t, ownedByProgramSnapshot)
 			assert.Equal(t, ownerCount, 2)
 
-			assert.NilError(t, session.fs.fs.WriteFile(libBaseConfigPath, `{"compilerOptions":{"composite":true,"noLib":true,"strict":true}}`))
+			assert.NilError(t, session.fs.WriteFile(libBaseConfigPath, `{"compilerOptions":{"composite":true,"noLib":true,"strict":true}}`))
 			var fileChanges FileChangeSummary
 			fileChanges.Changed.Add(lsproto.DocumentUri("file://" + libBaseConfigPath))
-			updatedProgramSnapshot := session.APICreateProgram(
+			updatedProgramSnapshot := session.CloneSnapshotForProgram(
 				ctx,
+				programSnapshot,
+				nil,
 				programProject.CommandLine.FileNames(),
 				programProject.CommandLine.CompilerOptions(),
 				programProject.CommandLine.ProjectReferences(),
 				programProject.CommandLine.Errors,
-				programSnapshot,
 				programProject,
 				fileChanges,
 			)
-			defer updatedProgramSnapshot.Deref(session)
+			defer updatedProgramSnapshot.Deref()
 			updatedProgramProject := updatedProgramSnapshot.ProjectCollection.InferredProject()
 			assert.Assert(t, updatedProgramProject != nil)
 			assert.Assert(t, updatedProgramProject.Program != programProject.Program)

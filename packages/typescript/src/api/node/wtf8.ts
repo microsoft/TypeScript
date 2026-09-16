@@ -5,7 +5,10 @@ const surrogateSecondByteMin = 0xA0;
 const surrogateSecondByteMax = 0xBF;
 const continuationByteMin = 0x80;
 const continuationByteMax = 0xBF;
-type DecodeOptions = Parameters<TextDecoder["decode"]>[1];
+type DecodeInput = ArrayBufferView | ArrayBufferLike | null;
+interface DecodeOptions {
+    stream?: boolean;
+}
 
 function isWtf8Surrogate(bytes: Uint8Array, index: number): boolean {
     return index + 2 < bytes.length
@@ -24,7 +27,7 @@ function hasSurrogateLeadByte(bytes: Uint8Array): boolean {
     return Buffer.from(bytes.buffer, bytes.byteOffset, bytes.byteLength).indexOf(surrogateLeadByte) >= 0;
 }
 
-function toUint8Array(input: NodeJS.AllowSharedBufferSource): Uint8Array {
+function toUint8Array(input: Exclude<DecodeInput, null | undefined>): Uint8Array {
     if (input instanceof Uint8Array) {
         return input;
     }
@@ -35,9 +38,9 @@ function toUint8Array(input: NodeJS.AllowSharedBufferSource): Uint8Array {
 }
 
 export class Wtf8Decoder extends TextDecoder {
-    override decode(input?: NodeJS.AllowSharedBufferSource, options?: DecodeOptions): string {
-        if (input === undefined) {
-            return super.decode(input, options);
+    override decode(input?: DecodeInput, options?: DecodeOptions): string {
+        if (input == null) {
+            return super.decode(undefined, options);
         }
 
         const bytes = toUint8Array(input);

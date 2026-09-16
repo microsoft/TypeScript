@@ -1,0 +1,120 @@
+//// [tests/cases/compiler/importAttributeDynamicImports.ts] ////
+
+=== /types.d.ts ===
+declare module "*.resource" {
+>"*.resource" : typeof import("*.resource")
+
+    export const kind: "plain";
+>kind : "plain"
+}
+
+declare module "typed/*.resource" with { type: "text" } {
+>"typed/*.resource" : typeof import("typed/*.resource", { with: { type: "text" } })
+>type : "text"
+
+    export const kind: "text";
+>kind : "text"
+}
+
+=== /index.ts ===
+async function test() {
+>test : () => Promise<void>
+
+    const plain = await import("plain.resource");
+>plain : { kind: "plain"; default: typeof import("*.resource"); }
+>await import("plain.resource") : { kind: "plain"; default: typeof import("*.resource"); }
+>import("plain.resource") : Promise<{ kind: "plain"; default: typeof import("*.resource"); }>
+>"plain.resource" : "plain.resource"
+
+    const plainKind: "plain" = plain.kind;
+>plainKind : "plain"
+>plain.kind : "plain"
+>plain : { kind: "plain"; default: typeof import("*.resource"); }
+>kind : "plain"
+
+    const attributed = await import("typed/file.resource", { with: { type: "text" } });
+>attributed : { kind: "text"; default: typeof import("typed/*.resource", { with: { type: "text" } }); }
+>await import("typed/file.resource", { with: { type: "text" } }) : { kind: "text"; default: typeof import("typed/*.resource", { with: { type: "text" } }); }
+>import("typed/file.resource", { with: { type: "text" } }) : Promise<{ kind: "text"; default: typeof import("typed/*.resource", { with: { type: "text" } }); }>
+>"typed/file.resource" : "typed/file.resource"
+>{ with: { type: "text" } } : { with: { readonly type: "text"; }; }
+>with : { readonly type: "text"; }
+>{ type: "text" } : { readonly type: "text"; }
+>type : "text"
+>"text" : "text"
+
+    const attributedKind: "text" = attributed.kind;
+>attributedKind : "text"
+>attributed.kind : "text"
+>attributed : { kind: "text"; default: typeof import("typed/*.resource", { with: { type: "text" } }); }
+>kind : "text"
+
+    const parenthesized = await import("typed/parenthesized.resource", ({ with: { type: "text" } }));
+>parenthesized : { kind: "text"; default: typeof import("typed/*.resource", { with: { type: "text" } }); }
+>await import("typed/parenthesized.resource", ({ with: { type: "text" } })) : { kind: "text"; default: typeof import("typed/*.resource", { with: { type: "text" } }); }
+>import("typed/parenthesized.resource", ({ with: { type: "text" } })) : Promise<{ kind: "text"; default: typeof import("typed/*.resource", { with: { type: "text" } }); }>
+>"typed/parenthesized.resource" : "typed/parenthesized.resource"
+>({ with: { type: "text" } }) : { with: { readonly type: "text"; }; }
+>{ with: { type: "text" } } : { with: { readonly type: "text"; }; }
+>with : { readonly type: "text"; }
+>{ type: "text" } : { readonly type: "text"; }
+>type : "text"
+>"text" : "text"
+
+    const parenthesizedKind: "text" = parenthesized.kind;
+>parenthesizedKind : "text"
+>parenthesized.kind : "text"
+>parenthesized : { kind: "text"; default: typeof import("typed/*.resource", { with: { type: "text" } }); }
+>kind : "text"
+
+    const options = { with: { type: "text" as const } };
+>options : { with: { type: "text"; }; }
+>{ with: { type: "text" as const } } : { with: { type: "text"; }; }
+>with : { type: "text"; }
+>{ type: "text" as const } : { type: "text"; }
+>type : "text"
+>"text" as const : "text"
+>"text" : "text"
+
+    const attributedWithOptions = await import("typed/other.resource", options);
+>attributedWithOptions : { kind: "text"; default: typeof import("typed/*.resource", { with: { type: "text" } }); }
+>await import("typed/other.resource", options) : { kind: "text"; default: typeof import("typed/*.resource", { with: { type: "text" } }); }
+>import("typed/other.resource", options) : Promise<{ kind: "text"; default: typeof import("typed/*.resource", { with: { type: "text" } }); }>
+>"typed/other.resource" : "typed/other.resource"
+>options : { with: { type: "text"; }; }
+
+    const attributedWithOptionsKind: "text" = attributedWithOptions.kind;
+>attributedWithOptionsKind : "text"
+>attributedWithOptions.kind : "text"
+>attributedWithOptions : { kind: "text"; default: typeof import("typed/*.resource", { with: { type: "text" } }); }
+>kind : "text"
+
+    const withoutAttributes = await import("typed/unattributed.resource");
+>withoutAttributes : { kind: "plain"; default: typeof import("*.resource"); }
+>await import("typed/unattributed.resource") : { kind: "plain"; default: typeof import("*.resource"); }
+>import("typed/unattributed.resource") : Promise<{ kind: "plain"; default: typeof import("*.resource"); }>
+>"typed/unattributed.resource" : "typed/unattributed.resource"
+
+    const withoutAttributesKind: "plain" = withoutAttributes.kind;
+>withoutAttributesKind : "plain"
+>withoutAttributes.kind : "plain"
+>withoutAttributes : { kind: "plain"; default: typeof import("*.resource"); }
+>kind : "plain"
+
+    const unmatchedAttributes = await import("fallback.resource", { with: { type: "unknown" } });
+>unmatchedAttributes : { kind: "plain"; default: typeof import("*.resource"); }
+>await import("fallback.resource", { with: { type: "unknown" } }) : { kind: "plain"; default: typeof import("*.resource"); }
+>import("fallback.resource", { with: { type: "unknown" } }) : Promise<{ kind: "plain"; default: typeof import("*.resource"); }>
+>"fallback.resource" : "fallback.resource"
+>{ with: { type: "unknown" } } : { with: { readonly type: "unknown"; }; }
+>with : { readonly type: "unknown"; }
+>{ type: "unknown" } : { readonly type: "unknown"; }
+>type : "unknown"
+>"unknown" : "unknown"
+
+    const unmatchedAttributesKind: "plain" = unmatchedAttributes.kind;
+>unmatchedAttributesKind : "plain"
+>unmatchedAttributes.kind : "plain"
+>unmatchedAttributes : { kind: "plain"; default: typeof import("*.resource"); }
+>kind : "plain"
+}

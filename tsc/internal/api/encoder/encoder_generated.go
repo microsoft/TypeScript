@@ -496,7 +496,7 @@ func getChildrenPropertyMask(node *ast.Node) uint8 {
 		return (boolToByte(n.Name() != nil) << 0)
 	case ast.KindModuleDeclaration:
 		n := node.AsModuleDeclaration()
-		return (boolToByte(hasModifiers(n.Modifiers())) << 0) | (boolToByte(n.Name() != nil) << 1) | (boolToByte(n.Body != nil) << 2)
+		return (boolToByte(hasModifiers(n.Modifiers())) << 0) | (boolToByte(n.Name() != nil) << 1) | (boolToByte(n.Attributes != nil) << 2) | (boolToByte(n.Body != nil) << 3)
 	case ast.KindImportEqualsDeclaration:
 		n := node.AsImportEqualsDeclaration()
 		return (boolToByte(hasModifiers(n.Modifiers())) << 0) | (boolToByte(n.Name() != nil) << 1) | (boolToByte(n.ModuleReference != nil) << 2)

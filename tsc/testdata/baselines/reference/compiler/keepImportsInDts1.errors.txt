@@ -1,0 +1,9 @@
+c:/app/main.ts(1,8): error TS2882: Cannot find module or type declarations for side-effect import of 'test'.
+
+
+==== c:/test.d.ts (0 errors) ====
+    export {}; 
+==== c:/app/main.ts (1 errors) ====
+    import "test"
+           ~~~~~~
+!!! error TS2882: Cannot find module or type declarations for side-effect import of 'test'.

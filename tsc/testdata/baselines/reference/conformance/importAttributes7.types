@@ -29,14 +29,14 @@ export async function f() {
 >a : Promise<typeof import("./a")>
 >import("./a", {        with: { a: "a", "b": "b" },    }) : Promise<typeof import("./a")>
 >"./a" : "./a"
->{        with: { a: "a", "b": "b" },    } : { with: { a: string; b: string; }; }
+>{        with: { a: "a", "b": "b" },    } : { with: { readonly a: "a"; readonly b: "b"; }; }
 
         with: { a: "a", "b": "b" },
->with : { a: string; b: string; }
->{ a: "a", "b": "b" } : { a: string; b: string; }
->a : string
+>with : { readonly a: "a"; readonly b: "b"; }
+>{ a: "a", "b": "b" } : { readonly a: "a"; readonly b: "b"; }
+>a : "a"
 >"a" : "a"
->"b" : string
+>"b" : "b"
 >"b" : "b"
 
     });

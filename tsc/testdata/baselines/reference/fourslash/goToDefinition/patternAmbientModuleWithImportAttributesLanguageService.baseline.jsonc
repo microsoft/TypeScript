@@ -1,0 +1,73 @@
+// === goToDefinition ===
+// === /types.d.ts ===
+// <|declare module [|"*.asset"|] with { type: "css" } {
+//     export interface CssPayload { kind: "css" }
+//     export const shared: CssPayload;
+// }|>
+// declare module "*.asset" with { type: "text" } {
+//     export interface TextPayload { kind: "text" }
+//     export const shared: TextPayload;
+// }
+// 
+
+// === /index.ts ===
+// import * as css from /*GOTO DEF*/[|"./style.asset"|] with { type: "css" };
+// import * as text from "./copy.asset" with { type: "text" };
+// css.shared;
+// text.shared;
+
+
+
+// === goToDefinition ===
+// === /types.d.ts ===
+// declare module "*.asset" with { type: "css" } {
+//     export interface CssPayload { kind: "css" }
+//     export const shared: CssPayload;
+// }
+// <|declare module [|"*.asset"|] with { type: "text" } {
+//     export interface TextPayload { kind: "text" }
+//     export const shared: TextPayload;
+// }|>
+// 
+
+// === /index.ts ===
+// import * as css from "./style.asset" with { type: "css" };
+// import * as text from /*GOTO DEF*/[|"./copy.asset"|] with { type: "text" };
+// css.shared;
+// text.shared;
+
+
+
+// === goToDefinition ===
+// === /types.d.ts ===
+// declare module "*.asset" with { type: "css" } {
+//     export interface CssPayload { kind: "css" }
+//     <|export const [|shared|]: CssPayload;|>
+// }
+// declare module "*.asset" with { type: "text" } {
+//     export interface TextPayload { kind: "text" }
+// --- (line: 7) skipped ---
+
+// === /index.ts ===
+// import * as css from "./style.asset" with { type: "css" };
+// import * as text from "./copy.asset" with { type: "text" };
+// css./*GOTO DEF*/[|shared|];
+// text.shared;
+
+
+
+// === goToDefinition ===
+// === /types.d.ts ===
+// --- (line: 3) skipped ---
+// }
+// declare module "*.asset" with { type: "text" } {
+//     export interface TextPayload { kind: "text" }
+//     <|export const [|shared|]: TextPayload;|>
+// }
+// 
+
+// === /index.ts ===
+// import * as css from "./style.asset" with { type: "css" };
+// import * as text from "./copy.asset" with { type: "text" };
+// css.shared;
+// text./*GOTO DEF*/[|shared|];

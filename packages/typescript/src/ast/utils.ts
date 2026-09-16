@@ -49,6 +49,22 @@ export function escapeLeadingUnderscores(identifier: string): __String {
         : identifier) as __String;
 }
 
+/**
+ * Gets the module specifier represented by an ambient module symbol's escaped
+ * name, or `undefined` when the name does not identify an ambient module.
+ */
+export function tryGetAmbientModuleNameFromSymbolName(name: __String): string | undefined {
+    const text = name as string;
+    if (text.charCodeAt(0) === CharacterCodes.doubleQuote && text.charCodeAt(text.length - 1) === CharacterCodes.doubleQuote) {
+        return text.slice(1, -1);
+    }
+
+    const patternPrefix = '__"';
+    if (!text.startsWith(patternPrefix)) return undefined;
+    const markerIndex = text.lastIndexOf('"pattern@');
+    return markerIndex > patternPrefix.length ? text.slice(patternPrefix.length, markerIndex) : undefined;
+}
+
 export function tryCast<TOut extends TIn, TIn = any>(value: TIn | undefined, test: (value: TIn) => value is TOut): TOut | undefined {
     return value !== undefined && test(value) ? value : undefined;
 }

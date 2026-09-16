@@ -33,6 +33,12 @@ const (
 	ResultKindAmbient
 )
 
+type ModuleSpecifiersResult struct {
+	Specifiers          []string
+	Kind                ResultKind
+	AmbientModuleSymbol *ast.Symbol // used to construct an import attributes node, if one is needed
+}
+
 type ModulePath struct {
 	FileName        string
 	IsInNodeModules bool

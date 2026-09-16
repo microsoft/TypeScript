@@ -4956,8 +4956,8 @@ func (f *FourslashTest) RenameAtCaret(t *testing.T, newName string) lsproto.Rena
 		var fileRenames []*lsproto.FileRename
 		for _, renameFile := range renameFiles {
 			fileRenames = append(fileRenames, &lsproto.FileRename{
-				OldUri: string(renameFile.OldUri),
-				NewUri: string(renameFile.NewUri),
+				OldUri: renameFile.OldUri,
+				NewUri: renameFile.NewUri,
 			})
 		}
 		if f.capabilities != nil &&
@@ -4990,8 +4990,8 @@ func (f *FourslashTest) willRenameFilesWorker(t *testing.T, files ...*lsproto.Fi
 
 	if result.WorkspaceEdit == nil {
 		for _, file := range files {
-			oldPath := lsproto.DocumentUri(file.OldUri).FileName()
-			newPath := lsproto.DocumentUri(file.NewUri).FileName()
+			oldPath := file.OldUri.FileName()
+			newPath := file.NewUri.FileName()
 			f.renameFileOrDirectory(t, oldPath, newPath)
 		}
 		return
@@ -5034,15 +5034,15 @@ func (f *FourslashTest) willRenameFilesWorker(t *testing.T, files ...*lsproto.Fi
 	var fileRenames []*lsproto.FileRename
 	for _, renameFile := range renameFiles {
 		fileRenames = append(fileRenames, &lsproto.FileRename{
-			OldUri: string(renameFile.OldUri),
-			NewUri: string(renameFile.NewUri),
+			OldUri: renameFile.OldUri,
+			NewUri: renameFile.NewUri,
 		})
 	}
 	f.willRenameFilesWorker(t, fileRenames...)
 
 	for _, file := range files {
-		oldPath := lsproto.DocumentUri(file.OldUri).FileName()
-		newPath := lsproto.DocumentUri(file.NewUri).FileName()
+		oldPath := file.OldUri.FileName()
+		newPath := file.NewUri.FileName()
 		f.renameFileOrDirectory(t, oldPath, newPath)
 	}
 }
@@ -5067,8 +5067,8 @@ func (f *FourslashTest) VerifyWillRenameFilesEdits(t *testing.T, oldPath string,
 	}
 
 	f.willRenameFilesWorker(t, &lsproto.FileRename{
-		OldUri: string(lsconv.FileNameToDocumentURI(oldPath)),
-		NewUri: string(lsconv.FileNameToDocumentURI(newPath)),
+		OldUri: lsconv.FileNameToDocumentURI(oldPath),
+		NewUri: lsconv.FileNameToDocumentURI(newPath),
 	})
 
 	for fileName, expectedContent := range expectedFileContents {
@@ -5103,17 +5103,8 @@ func (f *FourslashTest) renameFileOrDirectory(t *testing.T, oldPath string, newP
 	if _, ok := f.vfs.ReadFile(oldPath); ok {
 		oldFileNames[oldPath] = struct{}{}
 	} else {
-		walkErr := f.vfs.WalkDir(oldPath, func(path string, d vfs.DirEntry, err error) error {
-			if err != nil {
-				return err
-			}
-			if !d.IsDir() {
-				oldFileNames[path] = struct{}{}
-			}
-			return nil
-		})
-		if walkErr != nil {
-			t.Fatalf("failed to collect files for rename %s -> %s: %v", oldPath, newPath, walkErr)
+		for _, path := range getAccessibleFilePaths(f.vfs, oldPath) {
+			oldFileNames[path] = struct{}{}
 		}
 	}
 	if len(oldFileNames) == 0 {

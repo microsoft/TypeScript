@@ -445,15 +445,10 @@ func (w *Watcher) emitSyntheticCreates(directory string, kind lsproto.WatchKind,
 	}
 	paths := []string{directory}
 	if recursive {
-		_ = w.fs.WalkDir(directory, func(path string, entry vfs.DirEntry, err error) error {
-			if err != nil {
-				return nil
+		_ = vfs.WalkDir(w.fs, directory, func(path string, entry vfs.DirEntry, err error) error {
+			if err == nil && path != directory {
+				paths = append(paths, path)
 			}
-			normalizedPath := tspath.NormalizeSlashes(path)
-			if normalizedPath == directory {
-				return nil
-			}
-			paths = append(paths, normalizedPath)
 			return nil
 		})
 	} else {

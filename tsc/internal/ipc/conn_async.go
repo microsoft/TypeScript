@@ -31,7 +31,9 @@ type AsyncConn struct {
 	pending   map[jsonrpc.ID]chan *Message
 	pendingMu sync.Mutex
 	terminal  error
+	hasCause  bool
 	writeMu   sync.Mutex
+	handlers  sync.WaitGroup
 }
 
 // NewAsyncConn creates a new async connection with the given transport and handler.
@@ -64,7 +66,19 @@ func (c *AsyncConn) SetCollectTiming(enabled bool) {
 // Run starts processing messages on the connection.
 // It blocks until the context is cancelled or an error occurs.
 func (c *AsyncConn) Run(ctx context.Context) (err error) {
-	defer func() { c.closePendingCalls(err) }()
+	handlerCtx, cancelHandlers := context.WithCancel(ctx)
+	requestErrors := make(chan error, 1)
+	defer func() {
+		c.closePendingCalls(err)
+		cancelHandlers()
+		c.handlers.Wait()
+		select {
+		case requestErr := <-requestErrors:
+			err = errors.Join(err, requestErr)
+		default:
+			// No request failed before the read loop exited.
+		}
+	}()
 	for {
 		if ctx.Err() != nil {
 			return ctx.Err()
@@ -81,9 +95,19 @@ func (c *AsyncConn) Run(ctx context.Context) (err error) {
 		if msg.IsResponse() {
 			c.handleResponse(msg)
 		} else if msg.IsRequest() {
-			go c.handleRequest(ctx, msg)
+			c.handlers.Go(func() {
+				if requestErr := c.handleRequest(handlerCtx, msg); requestErr != nil {
+					if c.recordRequestError(requestErr, requestErrors) {
+						if c.rwc != nil {
+							_ = c.rwc.Close()
+						}
+					}
+				}
+			})
 		} else if msg.IsNotification() {
-			go c.handleNotification(ctx, msg)
+			c.handlers.Go(func() {
+				c.handleNotification(handlerCtx, msg)
+			})
 		}
 	}
 }
@@ -92,12 +116,38 @@ func (c *AsyncConn) Run(ctx context.Context) (err error) {
 func (c *AsyncConn) closePendingCalls(runErr error) {
 	c.pendingMu.Lock()
 	defer c.pendingMu.Unlock()
+	c.recordTerminalErrorLocked(runErr)
+	c.closePendingCallsLocked()
+}
+
+func (c *AsyncConn) recordRequestError(requestErr error, requestErrors chan<- error) bool {
+	c.pendingMu.Lock()
+	defer c.pendingMu.Unlock()
+	if !c.recordTerminalErrorLocked(requestErr) {
+		return false
+	}
+	requestErrors <- requestErr
+	c.closePendingCallsLocked()
+	return true
+}
+
+func (c *AsyncConn) recordTerminalErrorLocked(terminalErr error) bool {
 	if c.terminal == nil {
 		c.terminal = ErrConnClosed
-		if runErr != nil {
-			c.terminal = errors.Join(c.terminal, runErr)
+		if terminalErr != nil {
+			c.terminal = errors.Join(c.terminal, terminalErr)
+			c.hasCause = true
+			return true
 		}
+	} else if !c.hasCause && terminalErr != nil {
+		c.terminal = errors.Join(c.terminal, terminalErr)
+		c.hasCause = true
+		return true
 	}
+	return false
+}
+
+func (c *AsyncConn) closePendingCallsLocked() {
 	for id, ch := range c.pending {
 		close(ch)
 		delete(c.pending, id)
@@ -120,7 +170,7 @@ func (c *AsyncConn) handleResponse(msg *Message) {
 }
 
 // handleRequest processes an incoming request.
-func (c *AsyncConn) handleRequest(ctx context.Context, msg *Message) {
+func (c *AsyncConn) handleRequest(ctx context.Context, msg *Message) (retErr error) {
 	// Intercept the meta-requests for collected server timing before dispatching
 	// to the handler, so they are answered directly and not themselves recorded.
 	switch msg.Method {
@@ -129,9 +179,9 @@ func (c *AsyncConn) handleRequest(ctx context.Context, msg *Message) {
 		writeErr := c.protocol.WriteResponse(msg.ID, serverTimingSnapshot(c.timing))
 		c.writeMu.Unlock()
 		if writeErr != nil {
-			panic(fmt.Sprintf("ipc: failed to write server timing response: %v", writeErr))
+			return fmt.Errorf("ipc: failed to write server timing response: %w", writeErr)
 		}
-		return
+		return nil
 	case string(MethodResetServerTiming):
 		if c.timing != nil {
 			c.timing.reset()
@@ -140,9 +190,9 @@ func (c *AsyncConn) handleRequest(ctx context.Context, msg *Message) {
 		writeErr := c.protocol.WriteResponse(msg.ID, nil)
 		c.writeMu.Unlock()
 		if writeErr != nil {
-			panic(fmt.Sprintf("ipc: failed to write reset server timing response: %v", writeErr))
+			return fmt.Errorf("ipc: failed to write reset server timing response: %w", writeErr)
 		}
-		return
+		return nil
 	}
 
 	var result any
@@ -167,7 +217,7 @@ func (c *AsyncConn) handleRequest(ctx context.Context, msg *Message) {
 			c.writeMu.Unlock()
 
 			if writeErr != nil {
-				panic(fmt.Sprintf("ipc: failed to write panic error response: %v (original panic: %v)", writeErr, r))
+				retErr = fmt.Errorf("ipc: failed to write panic error response: %w (original panic: %v)", writeErr, r)
 			}
 		}
 	}()
@@ -192,8 +242,9 @@ func (c *AsyncConn) handleRequest(ctx context.Context, msg *Message) {
 	}
 
 	if writeErr != nil {
-		panic(fmt.Sprintf("ipc: failed to write response: %v", writeErr))
+		return fmt.Errorf("ipc: failed to write response: %w", writeErr)
 	}
+	return nil
 }
 
 // handleNotification processes an incoming notification.

@@ -1,4 +1,4 @@
-#!/usr/bin/env -S node --experimental-strip-types --no-warnings
+#!/usr/bin/env node
 
 /**
  * Generates sync API from async API source files.
@@ -18,10 +18,9 @@
  *   - Unwrap `Promise<T>` → `T` in synchronous type references
  *
  * Usage:
- *   node --experimental-strip-types --no-warnings generateSync.ts
+ *   node generateSync.ts
  */
 
-import { execaSync } from "execa";
 import {
     mkdirSync,
     readFileSync,
@@ -32,6 +31,7 @@ import {
     join,
     relative,
 } from "node:path";
+import { xSync } from "tinyexec";
 import ts from "typescript";
 
 function generatedHeader(asyncSourceRelPath: string): string {
@@ -53,11 +53,13 @@ const SRC = join(ROOT, "src", "api");
 const TEST = join(ROOT, "test");
 
 type SourceTransform = (source: string, fileName: string) => string;
+type SyncVariant = "sync" | "generators";
 
 function generateSyncFile(
     srcPath: string,
     destPath: string,
     transform: SourceTransform,
+    variant: SyncVariant = "sync",
 ): string {
     const source = readFileSync(srcPath, "utf-8");
 
@@ -65,7 +67,7 @@ function generateSyncFile(
     const normalized = source.replace(/\r/g, "");
 
     // Phase 1: Process sync directives (text-based, operates on comments/lines)
-    const afterDirectives = processDirectives(normalized.split("\n")).join("\n");
+    const afterDirectives = processDirectives(normalized.split("\n"), variant).join("\n");
 
     // Phase 2: AST-based async→sync transforms
     const fileName = destPath.split("/").pop()!;
@@ -85,13 +87,23 @@ function generateSyncFile(
 
 // ── Directive processing ─────────────────────────────────────────
 
-function processDirectives(lines: string[]): string[] {
+function processDirectives(lines: string[], variant: SyncVariant): string[] {
     const output: string[] = [];
     let skipBlock = false;
     let syncOnlyBlock = false;
+    let generatorsOnlyBlock = false;
 
     for (const line of lines) {
         const trimmed = line.trim();
+
+        if (trimmed === "// @generators-skip-block-start") {
+            skipBlock = variant === "generators";
+            continue;
+        }
+        if (trimmed === "// @generators-skip-block-end") {
+            skipBlock = false;
+            continue;
+        }
 
         // Block-skip markers
         if (trimmed === "// @sync-skip-block-start") {
@@ -104,6 +116,20 @@ function processDirectives(lines: string[]): string[] {
         }
         if (skipBlock) continue;
 
+        if (trimmed === "// @generators-only-start") {
+            generatorsOnlyBlock = true;
+            continue;
+        }
+        if (trimmed === "// @generators-only-end") {
+            generatorsOnlyBlock = false;
+            continue;
+        }
+
+        if (generatorsOnlyBlock) {
+            if (variant === "generators") output.push(uncommentLine(line));
+            continue;
+        }
+
         // Sync-only markers (uncomment block)
         if (trimmed === "// @sync-only-start") {
             syncOnlyBlock = true;
@@ -115,17 +141,11 @@ function processDirectives(lines: string[]): string[] {
         }
 
         if (syncOnlyBlock) {
-            const indent = line.match(/^(\s*)/)![1];
-            const rest = line.slice(indent.length);
-            if (rest.startsWith("// ")) {
-                output.push(indent + rest.slice(3));
-            }
-            else if (rest === "//") {
-                output.push(indent);
-            }
-            else {
-                output.push(line);
-            }
+            output.push(uncommentLine(line));
+            continue;
+        }
+
+        if (variant === "generators" && line.includes("// @generators-skip")) {
             continue;
         }
 
@@ -135,17 +155,35 @@ function processDirectives(lines: string[]): string[] {
         }
 
         // Single-line replacement: // @sync: <replacement>
-        const syncReplaceMatch = line.match(/\/\/ @sync: (.+)$/);
-        if (syncReplaceMatch) {
+        const generatorsReplaceMatch = line.match(/\/\/ @generators: (.+)$/);
+        if (variant === "generators" && generatorsReplaceMatch) {
             const indent = line.match(/^(\s*)/)![1];
+            output.push(indent + generatorsReplaceMatch[1]);
+            continue;
+        }
+
+        const lineWithoutGeneratorsDirective = generatorsReplaceMatch
+            ? line.slice(0, generatorsReplaceMatch.index).trimEnd()
+            : line;
+        const syncReplaceMatch = lineWithoutGeneratorsDirective.match(/\/\/ @sync: (.+)$/);
+        if (syncReplaceMatch) {
+            const indent = lineWithoutGeneratorsDirective.match(/^(\s*)/)![1];
             output.push(indent + syncReplaceMatch[1]);
             continue;
         }
 
-        output.push(line);
+        output.push(lineWithoutGeneratorsDirective);
     }
 
     return output;
+}
+
+function uncommentLine(line: string): string {
+    const indent = line.match(/^(\s*)/)![1];
+    const rest = line.slice(indent.length);
+    if (rest.startsWith("// ")) return indent + rest.slice(3);
+    if (rest === "//") return indent;
+    return line;
 }
 
 // ── AST-based transforms ────────────────────────────────────────
@@ -454,6 +492,11 @@ function addSyncEdit(node: ts.Node, source: string, sourceFile: ts.SourceFile, e
             edits.push({ start: modifier.getStart(sourceFile) - offset, end: end - offset, newText: "" });
         }
     }
+    if (ts.isVariableDeclarationList(node) && (node.flags & ts.NodeFlags.AwaitUsing) === ts.NodeFlags.AwaitUsing) {
+        const awaitKeyword = node.getFirstToken(sourceFile);
+        if (awaitKeyword?.kind !== ts.SyntaxKind.AwaitKeyword) throw new Error("Expected await using declaration");
+        edits.push({ start: awaitKeyword.getStart(sourceFile) - offset, end: awaitKeyword.end - offset, newText: "" });
+    }
     if (ts.isAwaitExpression(node)) {
         edits.push({
             start: node.getStart(sourceFile) - offset,
@@ -579,7 +622,7 @@ function getIndent(source: string, position: number): string {
 // ── Formatting ───────────────────────────────────────────────────
 
 function formatFiles(paths: string[]): void {
-    execaSync("dprint", ["fmt", ...paths]);
+    xSync("dprint", ["fmt", ...paths], { throwOnError: true });
 }
 
 // ── Main ─────────────────────────────────────────────────────────
@@ -618,6 +661,13 @@ export function generateSync(): void {
             (source, fileName) => transformAsyncSource(source, fileName, false),
         ));
     }
+
+    generatedFiles.push(generateSyncFile(
+        join(TEST, "async", "api.bench.ts"),
+        join(TEST, "generators", "api.bench.ts"),
+        (source, fileName) => transformAsyncSource(source, fileName, false),
+        "generators",
+    ));
 
     console.log("Formatting...");
     formatFiles(generatedFiles);

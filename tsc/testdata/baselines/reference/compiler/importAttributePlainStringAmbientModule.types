@@ -1,0 +1,29 @@
+//// [tests/cases/compiler/importAttributePlainStringAmbientModule.ts] ////
+
+=== /types.d.ts ===
+declare module "plainstring" with { type: "css" } {
+>"plainstring" : typeof import("plainstring", { with: { type: "css" } })
+>type : "css"
+
+    export const value: "plain";
+>value : "plain"
+}
+
+=== /index.ts ===
+import { value as withoutAttributes } from "plainstring";
+>value : "plain"
+>withoutAttributes : "plain"
+
+import { value as withAttributes } from "plainstring" with { type: "ignored" };
+>value : "plain"
+>withAttributes : "plain"
+>type : any
+
+const first: "plain" = withoutAttributes;
+>first : "plain"
+>withoutAttributes : "plain"
+
+const second: "plain" = withAttributes;
+>second : "plain"
+>withAttributes : "plain"
+

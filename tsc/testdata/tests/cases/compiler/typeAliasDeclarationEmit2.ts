@@ -1,5 +1,5 @@
 // @target: ES5, ES2015
-// @module: AMD
+// @module: commonjs
 // @declaration: true
 
 export type A<a> = { value: a };

@@ -100,10 +100,6 @@ func (host *emitHost) SourceFileMayBeEmitted(file *ast.SourceFile, forceDtsEmit 
 	return sourceFileMayBeEmitted(file, host, forceDtsEmit, false)
 }
 
-func (host *emitHost) GetResolutionModeOverride(node *ast.Node) core.ResolutionMode {
-	return host.GetEmitResolver().GetResolutionModeOverride(node)
-}
-
 func (host *emitHost) GetSourceFileFromReference(origin *ast.SourceFile, ref *ast.FileReference) *ast.SourceFile {
 	return host.program.GetSourceFileFromReference(origin, ref)
 }

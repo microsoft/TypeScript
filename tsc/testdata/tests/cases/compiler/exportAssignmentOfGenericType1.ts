@@ -1,5 +1,5 @@
 // @target: es2015
-//@module: amd
+//@module: commonjs
 // @Filename: exportAssignmentOfGenericType1_0.ts
 export = T;
 class T<X> { foo: X; }

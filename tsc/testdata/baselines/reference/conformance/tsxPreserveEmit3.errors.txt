@@ -1,0 +1,20 @@
+test.d.ts(1,12): error TS7005: Variable 'React' implicitly has an 'any' type.
+
+
+==== file.tsx (0 errors) ====
+    declare namespace JSX {
+    	interface Element { }
+    	interface IntrinsicElements {
+    		[s: string]: any;
+    	}
+    }
+    
+==== test.d.ts (1 errors) ====
+    export var React;
+               ~~~~~
+!!! error TS7005: Variable 'React' implicitly has an 'any' type.
+    
+==== react-consumer.tsx (0 errors) ====
+    // This import should be elided
+    import {React} from "./test";
+    

@@ -16,8 +16,15 @@ import type { ElementFlags } from "#enums/elementFlags";
 import type { ObjectFlags } from "#enums/objectFlags";
 import type { TypeFlags } from "#enums/typeFlags";
 import type { TypePredicateKind } from "#enums/typePredicateKind";
-import type { IndexSignatureDeclaration } from "../../ast/ast.ts";
-import type { Diagnostic } from "../proto.ts";
+import type {
+    IndexSignatureDeclaration,
+    NamedTupleMember,
+    ParameterDeclaration,
+} from "../../ast/ast.ts";
+import type {
+    Diagnostic,
+    RequestFileSystem,
+} from "../proto.ts";
 import type {
     NodeHandle,
     Signature,
@@ -241,8 +248,8 @@ export interface ObjectType extends Type {
 export interface TypeReference extends ObjectType {
     /** Get the generic target type (e.g. Array for Array<string>) */
     getTarget: {
-        (): Type;
-        gen(): Generator<ProtocolRequest, Type, ProtocolResponse["result"]>;
+        (): GenericType;
+        gen(): Generator<ProtocolRequest, GenericType, ProtocolResponse["result"]>;
     };
 }
 
@@ -272,10 +279,19 @@ export interface InterfaceType extends TypeReference {
         (): readonly TypeParameter[];
         gen(): Generator<ProtocolRequest, readonly TypeParameter[], ProtocolResponse["result"]>;
     };
+    /** Get the synthetic `this` type of this interface/class */
+    getThisType: {
+        (): TypeParameter | undefined;
+        gen(): Generator<ProtocolRequest, TypeParameter | undefined, ProtocolResponse["result"]>;
+    };
+}
+
+/** Generic types */
+export interface GenericType extends InterfaceType, TypeReference {
 }
 
 /** Tuple type targets (ObjectFlags.Tuple) */
-export interface TupleType extends InterfaceType {
+export interface TupleType extends GenericType {
     /** Get this tuple target */
     getTarget: {
         (): TupleType;
@@ -287,6 +303,8 @@ export interface TupleType extends InterfaceType {
     readonly fixedLength: number;
     /** Whether the tuple is readonly */
     readonly readonly: boolean;
+    /** Declarations providing tuple element names */
+    readonly labeledElementDeclarations?: readonly (NodeHandle<NamedTupleMember | ParameterDeclaration> | undefined)[];
 }
 
 /** Union or intersection types (TypeFlags.Union | TypeFlags.Intersection) */
@@ -519,6 +537,8 @@ export interface EmitResult {
     readonly emitSkipped: boolean;
     readonly diagnostics: readonly Diagnostic[];
     readonly emittedFiles: readonly string[];
+    /** Emitted files captured as a filesystem layer suitable for {@link Snapshot.update}. */
+    readonly fileSystem?: RequestFileSystem | undefined;
 }
 
 export interface EmitOutput {

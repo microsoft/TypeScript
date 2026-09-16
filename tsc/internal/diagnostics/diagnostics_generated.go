@@ -768,10 +768,6 @@ var File_is_CommonJS_module_because_0_does_not_have_field_type = &Message{code: 
 
 var File_is_CommonJS_module_because_package_json_was_not_found = &Message{code: 1461, category: CategoryMessage, key: "File_is_CommonJS_module_because_package_json_was_not_found_1461", text: "File is CommonJS module because 'package.json' was not found"}
 
-var X_resolution_mode_is_the_only_valid_key_for_type_import_attributes = &Message{code: 1463, category: CategoryError, key: "resolution_mode_is_the_only_valid_key_for_type_import_attributes_1463", text: "'resolution-mode' is the only valid key for type import attributes."}
-
-var Type_import_attributes_should_have_exactly_one_key_resolution_mode_with_value_import_or_require = &Message{code: 1464, category: CategoryError, key: "Type_import_attributes_should_have_exactly_one_key_resolution_mode_with_value_import_or_require_1464", text: "Type import attributes should have exactly one key - 'resolution-mode' - with value 'import' or 'require'."}
-
 var The_import_meta_meta_property_is_not_allowed_in_files_which_will_build_into_CommonJS_output = &Message{code: 1470, category: CategoryError, key: "The_import_meta_meta_property_is_not_allowed_in_files_which_will_build_into_CommonJS_output_1470", text: "The 'import.meta' meta-property is not allowed in files which will build into CommonJS output."}
 
 var Module_0_cannot_be_imported_using_this_construct_The_specifier_only_resolves_to_an_ES_module_which_cannot_be_imported_with_require_Use_an_ECMAScript_import_instead = &Message{code: 1471, category: CategoryError, key: "Module_0_cannot_be_imported_using_this_construct_The_specifier_only_resolves_to_an_ES_module_which_c_1471", text: "Module '{0}' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead."}
@@ -931,6 +927,24 @@ var X_using_declarations_are_not_allowed_in_case_or_default_clauses_unless_conta
 var X_await_using_declarations_are_not_allowed_in_case_or_default_clauses_unless_contained_within_a_block = &Message{code: 1548, category: CategoryError, key: "await_using_declarations_are_not_allowed_in_case_or_default_clauses_unless_contained_within_a_block_1548", text: "'await using' declarations are not allowed in 'case' or 'default' clauses unless contained within a block."}
 
 var Ignore_the_tsconfig_found_and_build_with_commandline_options_and_files = &Message{code: 1549, category: CategoryMessage, key: "Ignore_the_tsconfig_found_and_build_with_commandline_options_and_files_1549", text: "Ignore the tsconfig found and build with commandline options and files."}
+
+var An_ambient_module_declaration_with_import_attributes_must_use_a_pattern_name_with_an_Asterisk_character = &Message{code: 1550, category: CategoryError, key: "An_ambient_module_declaration_with_import_attributes_must_use_a_pattern_name_with_an_Asterisk_charac_1550", text: "An ambient module declaration with import attributes must use a pattern name with an '*' character."}
+
+var Import_attributes_are_not_allowed_on_a_module_augmentation = &Message{code: 1551, category: CategoryError, key: "Import_attributes_are_not_allowed_on_a_module_augmentation_1551", text: "Import attributes are not allowed on a module augmentation."}
+
+var An_import_attributes_type_may_only_contain_property_signatures = &Message{code: 1552, category: CategoryError, key: "An_import_attributes_type_may_only_contain_property_signatures_1552", text: "An import attributes type may only contain property signatures."}
+
+var An_import_attributes_property_must_have_a_type_annotation = &Message{code: 1553, category: CategoryError, key: "An_import_attributes_property_must_have_a_type_annotation_1553", text: "An import attributes property must have a type annotation."}
+
+var An_import_attributes_property_must_have_a_string_literal_or_identifier_name = &Message{code: 1554, category: CategoryError, key: "An_import_attributes_property_must_have_a_string_literal_or_identifier_name_1554", text: "An import attributes property must have a string literal or identifier name."}
+
+var An_import_attributes_property_must_have_a_string_literal_type_annotation = &Message{code: 1555, category: CategoryError, key: "An_import_attributes_property_must_have_a_string_literal_type_annotation_1555", text: "An import attributes property must have a string literal type annotation."}
+
+var An_import_attributes_property_cannot_be_optional = &Message{code: 1556, category: CategoryError, key: "An_import_attributes_property_cannot_be_optional_1556", text: "An import attributes property cannot be optional."}
+
+var X_0_is_not_a_valid_key_for_an_import_attributes_type = &Message{code: 1557, category: CategoryError, key: "_0_is_not_a_valid_key_for_an_import_attributes_type_1557", text: "'{0}' is not a valid key for an import attributes type."}
+
+var An_import_attributes_property_cannot_have_a_readonly_modifier = &Message{code: 1558, category: CategoryError, key: "An_import_attributes_property_cannot_have_a_readonly_modifier_1558", text: "An import attributes property cannot have a 'readonly' modifier."}
 
 var The_types_of_0_are_incompatible_between_these_types = &Message{code: 2200, category: CategoryError, key: "The_types_of_0_are_incompatible_between_these_types_2200", text: "The types of '{0}' are incompatible between these types."}
 
@@ -2372,6 +2386,8 @@ var Visit_https_Colon_Slash_Slashaka_ms_Slashts6_for_migration_information = &Me
 
 var X_tsconfig_json_is_present_but_will_not_be_loaded_if_files_are_specified_on_commandline_Use_ignoreConfig_to_skip_this_error = &Message{code: 5112, category: CategoryError, key: "tsconfig_json_is_present_but_will_not_be_loaded_if_files_are_specified_on_commandline_Use_ignoreConf_5112", text: "tsconfig.json is present but will not be loaded if files are specified on commandline. Use '--ignoreConfig' to skip this error."}
 
+var X_0_is_only_assignable_to_the_non_distributed_1_but_1_has_been_distributed_here = &Message{code: 5113, category: CategoryError, key: "_0_is_only_assignable_to_the_non_distributed_1_but_1_has_been_distributed_here_5113", text: "'{0}' is only assignable to the non-distributed '{1}', but '{1}' has been distributed here."}
+
 var Generates_a_sourcemap_for_each_corresponding_d_ts_file = &Message{code: 6000, category: CategoryMessage, key: "Generates_a_sourcemap_for_each_corresponding_d_ts_file_6000", text: "Generates a sourcemap for each corresponding '.d.ts' file."}
 
 var Concatenate_and_emit_output_to_single_file = &Message{code: 6001, category: CategoryMessage, key: "Concatenate_and_emit_output_to_single_file_6001", text: "Concatenate and emit output to single file."}
@@ -3761,6 +3777,8 @@ var X_0_is_not_a_valid_meta_property_for_keyword_import_Did_you_mean_meta_or_def
 var Regular_expression_pattern_modifiers_are_only_available_when_targeting_0_or_later = &Message{code: 18062, category: CategoryError, key: "Regular_expression_pattern_modifiers_are_only_available_when_targeting_0_or_later_18062", text: "Regular expression pattern modifiers are only available when targeting '{0}' or later."}
 
 var Duplicate_named_capturing_groups_are_only_available_when_targeting_0_or_later = &Message{code: 18063, category: CategoryError, key: "Duplicate_named_capturing_groups_are_only_available_when_targeting_0_or_later_18063", text: "Duplicate named capturing groups are only available when targeting '{0}' or later."}
+
+var Private_identifiers_cannot_be_used_in_destructuring_patterns = &Message{code: 18064, category: CategoryError, key: "Private_identifiers_cannot_be_used_in_destructuring_patterns_18064", text: "Private identifiers cannot be used in destructuring patterns."}
 
 var X_nodenext_if_module_is_nodenext_node16_if_module_is_node16_or_node18_otherwise_bundler = &Message{code: 69010, category: CategoryMessage, key: "nodenext_if_module_is_nodenext_node16_if_module_is_node16_or_node18_otherwise_bundler_69010", text: "`nodenext` if `module` is `nodenext`; `node16` if `module` is `node16` or `node18`; otherwise, `bundler`."}
 
@@ -5178,10 +5196,6 @@ func keyToMessage(key Key) *Message {
 		return File_is_CommonJS_module_because_0_does_not_have_field_type
 	case "File_is_CommonJS_module_because_package_json_was_not_found_1461":
 		return File_is_CommonJS_module_because_package_json_was_not_found
-	case "resolution_mode_is_the_only_valid_key_for_type_import_attributes_1463":
-		return X_resolution_mode_is_the_only_valid_key_for_type_import_attributes
-	case "Type_import_attributes_should_have_exactly_one_key_resolution_mode_with_value_import_or_require_1464":
-		return Type_import_attributes_should_have_exactly_one_key_resolution_mode_with_value_import_or_require
 	case "The_import_meta_meta_property_is_not_allowed_in_files_which_will_build_into_CommonJS_output_1470":
 		return The_import_meta_meta_property_is_not_allowed_in_files_which_will_build_into_CommonJS_output
 	case "Module_0_cannot_be_imported_using_this_construct_The_specifier_only_resolves_to_an_ES_module_which_c_1471":
@@ -5342,6 +5356,24 @@ func keyToMessage(key Key) *Message {
 		return X_await_using_declarations_are_not_allowed_in_case_or_default_clauses_unless_contained_within_a_block
 	case "Ignore_the_tsconfig_found_and_build_with_commandline_options_and_files_1549":
 		return Ignore_the_tsconfig_found_and_build_with_commandline_options_and_files
+	case "An_ambient_module_declaration_with_import_attributes_must_use_a_pattern_name_with_an_Asterisk_charac_1550":
+		return An_ambient_module_declaration_with_import_attributes_must_use_a_pattern_name_with_an_Asterisk_character
+	case "Import_attributes_are_not_allowed_on_a_module_augmentation_1551":
+		return Import_attributes_are_not_allowed_on_a_module_augmentation
+	case "An_import_attributes_type_may_only_contain_property_signatures_1552":
+		return An_import_attributes_type_may_only_contain_property_signatures
+	case "An_import_attributes_property_must_have_a_type_annotation_1553":
+		return An_import_attributes_property_must_have_a_type_annotation
+	case "An_import_attributes_property_must_have_a_string_literal_or_identifier_name_1554":
+		return An_import_attributes_property_must_have_a_string_literal_or_identifier_name
+	case "An_import_attributes_property_must_have_a_string_literal_type_annotation_1555":
+		return An_import_attributes_property_must_have_a_string_literal_type_annotation
+	case "An_import_attributes_property_cannot_be_optional_1556":
+		return An_import_attributes_property_cannot_be_optional
+	case "_0_is_not_a_valid_key_for_an_import_attributes_type_1557":
+		return X_0_is_not_a_valid_key_for_an_import_attributes_type
+	case "An_import_attributes_property_cannot_have_a_readonly_modifier_1558":
+		return An_import_attributes_property_cannot_have_a_readonly_modifier
 	case "The_types_of_0_are_incompatible_between_these_types_2200":
 		return The_types_of_0_are_incompatible_between_these_types
 	case "The_types_returned_by_0_are_incompatible_between_these_types_2201":
@@ -6782,6 +6814,8 @@ func keyToMessage(key Key) *Message {
 		return Visit_https_Colon_Slash_Slashaka_ms_Slashts6_for_migration_information
 	case "tsconfig_json_is_present_but_will_not_be_loaded_if_files_are_specified_on_commandline_Use_ignoreConf_5112":
 		return X_tsconfig_json_is_present_but_will_not_be_loaded_if_files_are_specified_on_commandline_Use_ignoreConfig_to_skip_this_error
+	case "_0_is_only_assignable_to_the_non_distributed_1_but_1_has_been_distributed_here_5113":
+		return X_0_is_only_assignable_to_the_non_distributed_1_but_1_has_been_distributed_here
 	case "Generates_a_sourcemap_for_each_corresponding_d_ts_file_6000":
 		return Generates_a_sourcemap_for_each_corresponding_d_ts_file
 	case "Concatenate_and_emit_output_to_single_file_6001":
@@ -8172,6 +8206,8 @@ func keyToMessage(key Key) *Message {
 		return Regular_expression_pattern_modifiers_are_only_available_when_targeting_0_or_later
 	case "Duplicate_named_capturing_groups_are_only_available_when_targeting_0_or_later_18063":
 		return Duplicate_named_capturing_groups_are_only_available_when_targeting_0_or_later
+	case "Private_identifiers_cannot_be_used_in_destructuring_patterns_18064":
+		return Private_identifiers_cannot_be_used_in_destructuring_patterns
 	case "nodenext_if_module_is_nodenext_node16_if_module_is_node16_or_node18_otherwise_bundler_69010":
 		return X_nodenext_if_module_is_nodenext_node16_if_module_is_node16_or_node18_otherwise_bundler
 	case "File_is_a_CommonJS_module_it_may_be_converted_to_an_ES_module_80001":

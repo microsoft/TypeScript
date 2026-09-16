@@ -1,0 +1,15 @@
+// === documentHighlights ===
+// === /index.ts ===
+// import * as css from "./style.asset" with { type: "css" };
+// import * as text from "./copy.asset" with { type: "text" };
+// css./*HIGHLIGHTS*/[|shared|];
+// text.shared;
+
+
+
+// === documentHighlights ===
+// === /index.ts ===
+// import * as css from "./style.asset" with { type: "css" };
+// import * as text from "./copy.asset" with { type: "text" };
+// css.shared;
+// text./*HIGHLIGHTS*/[|shared|];

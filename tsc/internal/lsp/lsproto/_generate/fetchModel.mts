@@ -1,6 +1,6 @@
-#!/usr/bin/env -S node --experimental-strip-types
+#!/usr/bin/env node
 
-// Usage: node --experimental-strip-types fetchModel.mts
+// Usage: node fetchModel.mts
 
 import fs from "node:fs";
 import path from "node:path";
