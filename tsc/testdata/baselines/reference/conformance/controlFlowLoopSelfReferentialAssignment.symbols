@@ -604,3 +604,183 @@ function fifty() {
     }
 }
 
+// An inner loop between the self-assignment and the back edge. The inner loop junction is
+// reached while the outer one is still being computed and must not keep a cached type derived
+// from the outer junction's partial union.
+
+function innerLoopAfter(a: A1) {
+>innerLoopAfter : Symbol(innerLoopAfter, Decl(controlFlowLoopSelfReferentialAssignment.ts, 136, 1))
+>a : Symbol(a, Decl(controlFlowLoopSelfReferentialAssignment.ts, 142, 24))
+>A1 : Symbol(A1, Decl(controlFlowLoopSelfReferentialAssignment.ts, 14, 1))
+
+    let p: All | null = a;
+>p : Symbol(p, Decl(controlFlowLoopSelfReferentialAssignment.ts, 143, 7))
+>All : Symbol(All, Decl(controlFlowLoopSelfReferentialAssignment.ts, 21, 45))
+>a : Symbol(a, Decl(controlFlowLoopSelfReferentialAssignment.ts, 142, 24))
+
+    while (p) {
+>p : Symbol(p, Decl(controlFlowLoopSelfReferentialAssignment.ts, 143, 7))
+
+        p; // should be A1 | A2 | A3 | A4
+>p : Symbol(p, Decl(controlFlowLoopSelfReferentialAssignment.ts, 143, 7))
+
+        p = p.next();
+>p : Symbol(p, Decl(controlFlowLoopSelfReferentialAssignment.ts, 143, 7))
+>p.next : Symbol(next, Decl(controlFlowLoopSelfReferentialAssignment.ts, 18, 29), Decl(controlFlowLoopSelfReferentialAssignment.ts, 19, 29), Decl(controlFlowLoopSelfReferentialAssignment.ts, 20, 29), Decl(controlFlowLoopSelfReferentialAssignment.ts, 21, 29))
+>p : Symbol(p, Decl(controlFlowLoopSelfReferentialAssignment.ts, 143, 7))
+>next : Symbol(next, Decl(controlFlowLoopSelfReferentialAssignment.ts, 18, 29), Decl(controlFlowLoopSelfReferentialAssignment.ts, 19, 29), Decl(controlFlowLoopSelfReferentialAssignment.ts, 20, 29), Decl(controlFlowLoopSelfReferentialAssignment.ts, 21, 29))
+
+        for (let i = 0; i < 1; i++) {}
+>i : Symbol(i, Decl(controlFlowLoopSelfReferentialAssignment.ts, 147, 16))
+>i : Symbol(i, Decl(controlFlowLoopSelfReferentialAssignment.ts, 147, 16))
+>i : Symbol(i, Decl(controlFlowLoopSelfReferentialAssignment.ts, 147, 16))
+    }
+}
+
+function innerLoopReads(a: A1) {
+>innerLoopReads : Symbol(innerLoopReads, Decl(controlFlowLoopSelfReferentialAssignment.ts, 149, 1))
+>a : Symbol(a, Decl(controlFlowLoopSelfReferentialAssignment.ts, 151, 24))
+>A1 : Symbol(A1, Decl(controlFlowLoopSelfReferentialAssignment.ts, 14, 1))
+
+    let p: All | null = a;
+>p : Symbol(p, Decl(controlFlowLoopSelfReferentialAssignment.ts, 152, 7))
+>All : Symbol(All, Decl(controlFlowLoopSelfReferentialAssignment.ts, 21, 45))
+>a : Symbol(a, Decl(controlFlowLoopSelfReferentialAssignment.ts, 151, 24))
+
+    while (p) {
+>p : Symbol(p, Decl(controlFlowLoopSelfReferentialAssignment.ts, 152, 7))
+
+        p; // should be A1 | A2 | A3 | A4
+>p : Symbol(p, Decl(controlFlowLoopSelfReferentialAssignment.ts, 152, 7))
+
+        p = p.next();
+>p : Symbol(p, Decl(controlFlowLoopSelfReferentialAssignment.ts, 152, 7))
+>p.next : Symbol(next, Decl(controlFlowLoopSelfReferentialAssignment.ts, 18, 29), Decl(controlFlowLoopSelfReferentialAssignment.ts, 19, 29), Decl(controlFlowLoopSelfReferentialAssignment.ts, 20, 29), Decl(controlFlowLoopSelfReferentialAssignment.ts, 21, 29))
+>p : Symbol(p, Decl(controlFlowLoopSelfReferentialAssignment.ts, 152, 7))
+>next : Symbol(next, Decl(controlFlowLoopSelfReferentialAssignment.ts, 18, 29), Decl(controlFlowLoopSelfReferentialAssignment.ts, 19, 29), Decl(controlFlowLoopSelfReferentialAssignment.ts, 20, 29), Decl(controlFlowLoopSelfReferentialAssignment.ts, 21, 29))
+
+        for (let i = 0; i < 1; i++) {
+>i : Symbol(i, Decl(controlFlowLoopSelfReferentialAssignment.ts, 156, 16))
+>i : Symbol(i, Decl(controlFlowLoopSelfReferentialAssignment.ts, 156, 16))
+>i : Symbol(i, Decl(controlFlowLoopSelfReferentialAssignment.ts, 156, 16))
+
+            p; // should be A2 | A3 | A4 | null
+>p : Symbol(p, Decl(controlFlowLoopSelfReferentialAssignment.ts, 152, 7))
+        }
+    }
+}
+
+function innerWhileAfter(a: A1) {
+>innerWhileAfter : Symbol(innerWhileAfter, Decl(controlFlowLoopSelfReferentialAssignment.ts, 160, 1))
+>a : Symbol(a, Decl(controlFlowLoopSelfReferentialAssignment.ts, 162, 25))
+>A1 : Symbol(A1, Decl(controlFlowLoopSelfReferentialAssignment.ts, 14, 1))
+
+    let p: All | null = a;
+>p : Symbol(p, Decl(controlFlowLoopSelfReferentialAssignment.ts, 163, 7))
+>All : Symbol(All, Decl(controlFlowLoopSelfReferentialAssignment.ts, 21, 45))
+>a : Symbol(a, Decl(controlFlowLoopSelfReferentialAssignment.ts, 162, 25))
+
+    while (p) {
+>p : Symbol(p, Decl(controlFlowLoopSelfReferentialAssignment.ts, 163, 7))
+
+        p; // should be A1 | A2 | A3 | A4
+>p : Symbol(p, Decl(controlFlowLoopSelfReferentialAssignment.ts, 163, 7))
+
+        p = p.next();
+>p : Symbol(p, Decl(controlFlowLoopSelfReferentialAssignment.ts, 163, 7))
+>p.next : Symbol(next, Decl(controlFlowLoopSelfReferentialAssignment.ts, 18, 29), Decl(controlFlowLoopSelfReferentialAssignment.ts, 19, 29), Decl(controlFlowLoopSelfReferentialAssignment.ts, 20, 29), Decl(controlFlowLoopSelfReferentialAssignment.ts, 21, 29))
+>p : Symbol(p, Decl(controlFlowLoopSelfReferentialAssignment.ts, 163, 7))
+>next : Symbol(next, Decl(controlFlowLoopSelfReferentialAssignment.ts, 18, 29), Decl(controlFlowLoopSelfReferentialAssignment.ts, 19, 29), Decl(controlFlowLoopSelfReferentialAssignment.ts, 20, 29), Decl(controlFlowLoopSelfReferentialAssignment.ts, 21, 29))
+
+        while (Math.random()) {}
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2025.float16.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+    }
+}
+
+// Three loop levels. Cache entries for both inner junctions are created while the outer
+// junction is in progress and must be invalidated on the outer retry.
+
+function threeLevelsAfter(a: A1) {
+>threeLevelsAfter : Symbol(threeLevelsAfter, Decl(controlFlowLoopSelfReferentialAssignment.ts, 169, 1))
+>a : Symbol(a, Decl(controlFlowLoopSelfReferentialAssignment.ts, 174, 26))
+>A1 : Symbol(A1, Decl(controlFlowLoopSelfReferentialAssignment.ts, 14, 1))
+
+    let p: All | null = a;
+>p : Symbol(p, Decl(controlFlowLoopSelfReferentialAssignment.ts, 175, 7))
+>All : Symbol(All, Decl(controlFlowLoopSelfReferentialAssignment.ts, 21, 45))
+>a : Symbol(a, Decl(controlFlowLoopSelfReferentialAssignment.ts, 174, 26))
+
+    while (p) {
+>p : Symbol(p, Decl(controlFlowLoopSelfReferentialAssignment.ts, 175, 7))
+
+        p; // should be A1 | A2 | A3 | A4, alias All
+>p : Symbol(p, Decl(controlFlowLoopSelfReferentialAssignment.ts, 175, 7))
+
+        p = p.next();
+>p : Symbol(p, Decl(controlFlowLoopSelfReferentialAssignment.ts, 175, 7))
+>p.next : Symbol(next, Decl(controlFlowLoopSelfReferentialAssignment.ts, 18, 29), Decl(controlFlowLoopSelfReferentialAssignment.ts, 19, 29), Decl(controlFlowLoopSelfReferentialAssignment.ts, 20, 29), Decl(controlFlowLoopSelfReferentialAssignment.ts, 21, 29))
+>p : Symbol(p, Decl(controlFlowLoopSelfReferentialAssignment.ts, 175, 7))
+>next : Symbol(next, Decl(controlFlowLoopSelfReferentialAssignment.ts, 18, 29), Decl(controlFlowLoopSelfReferentialAssignment.ts, 19, 29), Decl(controlFlowLoopSelfReferentialAssignment.ts, 20, 29), Decl(controlFlowLoopSelfReferentialAssignment.ts, 21, 29))
+
+        for (let i = 0; i < 1; i++) {
+>i : Symbol(i, Decl(controlFlowLoopSelfReferentialAssignment.ts, 179, 16))
+>i : Symbol(i, Decl(controlFlowLoopSelfReferentialAssignment.ts, 179, 16))
+>i : Symbol(i, Decl(controlFlowLoopSelfReferentialAssignment.ts, 179, 16))
+
+            for (let j = 0; j < 1; j++) {
+>j : Symbol(j, Decl(controlFlowLoopSelfReferentialAssignment.ts, 180, 20))
+>j : Symbol(j, Decl(controlFlowLoopSelfReferentialAssignment.ts, 180, 20))
+>j : Symbol(j, Decl(controlFlowLoopSelfReferentialAssignment.ts, 180, 20))
+
+                p; // should be A2 | A3 | A4 | null
+>p : Symbol(p, Decl(controlFlowLoopSelfReferentialAssignment.ts, 175, 7))
+            }
+        }
+    }
+}
+
+function threeLevelsInnermostAssigns(a: A1) {
+>threeLevelsInnermostAssigns : Symbol(threeLevelsInnermostAssigns, Decl(controlFlowLoopSelfReferentialAssignment.ts, 185, 1))
+>a : Symbol(a, Decl(controlFlowLoopSelfReferentialAssignment.ts, 187, 37))
+>A1 : Symbol(A1, Decl(controlFlowLoopSelfReferentialAssignment.ts, 14, 1))
+
+    let p: All | null = a;
+>p : Symbol(p, Decl(controlFlowLoopSelfReferentialAssignment.ts, 188, 7))
+>All : Symbol(All, Decl(controlFlowLoopSelfReferentialAssignment.ts, 21, 45))
+>a : Symbol(a, Decl(controlFlowLoopSelfReferentialAssignment.ts, 187, 37))
+
+    while (p) {
+>p : Symbol(p, Decl(controlFlowLoopSelfReferentialAssignment.ts, 188, 7))
+
+        p; // should be A1 | A2 | A3 | A4, alias All
+>p : Symbol(p, Decl(controlFlowLoopSelfReferentialAssignment.ts, 188, 7))
+
+        for (let i = 0; i < 1; i++) {
+>i : Symbol(i, Decl(controlFlowLoopSelfReferentialAssignment.ts, 191, 16))
+>i : Symbol(i, Decl(controlFlowLoopSelfReferentialAssignment.ts, 191, 16))
+>i : Symbol(i, Decl(controlFlowLoopSelfReferentialAssignment.ts, 191, 16))
+
+            for (let j = 0; j < 1; j++) {
+>j : Symbol(j, Decl(controlFlowLoopSelfReferentialAssignment.ts, 192, 20))
+>j : Symbol(j, Decl(controlFlowLoopSelfReferentialAssignment.ts, 192, 20))
+>j : Symbol(j, Decl(controlFlowLoopSelfReferentialAssignment.ts, 192, 20))
+
+                if (p) { // p here is All | null: this loop's own back edge brings the null back
+>p : Symbol(p, Decl(controlFlowLoopSelfReferentialAssignment.ts, 188, 7))
+
+                    p = p.next(); // the target shows the declared All | null; the assigned value is A2 | A3 | A4 | null
+>p : Symbol(p, Decl(controlFlowLoopSelfReferentialAssignment.ts, 188, 7))
+>p.next : Symbol(next, Decl(controlFlowLoopSelfReferentialAssignment.ts, 18, 29), Decl(controlFlowLoopSelfReferentialAssignment.ts, 19, 29), Decl(controlFlowLoopSelfReferentialAssignment.ts, 20, 29), Decl(controlFlowLoopSelfReferentialAssignment.ts, 21, 29))
+>p : Symbol(p, Decl(controlFlowLoopSelfReferentialAssignment.ts, 188, 7))
+>next : Symbol(next, Decl(controlFlowLoopSelfReferentialAssignment.ts, 18, 29), Decl(controlFlowLoopSelfReferentialAssignment.ts, 19, 29), Decl(controlFlowLoopSelfReferentialAssignment.ts, 20, 29), Decl(controlFlowLoopSelfReferentialAssignment.ts, 21, 29))
+
+                    p; // should be A2 | A3 | A4 | null, the narrowed type after the assignment
+>p : Symbol(p, Decl(controlFlowLoopSelfReferentialAssignment.ts, 188, 7))
+                }
+            }
+        }
+    }
+}
+

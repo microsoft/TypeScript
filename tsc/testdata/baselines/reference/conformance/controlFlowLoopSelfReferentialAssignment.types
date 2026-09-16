@@ -496,3 +496,208 @@ function fifty() {
     }
 }
 
+// An inner loop between the self-assignment and the back edge. The inner loop junction is
+// reached while the outer one is still being computed and must not keep a cached type derived
+// from the outer junction's partial union.
+
+function innerLoopAfter(a: A1) {
+>innerLoopAfter : (a: A1) => void
+>a : A1
+
+    let p: All | null = a;
+>p : All | null
+>a : A1
+
+    while (p) {
+>p : All | null
+
+        p; // should be A1 | A2 | A3 | A4
+>p : All
+
+        p = p.next();
+>p = p.next() : A2 | A3 | A4 | null
+>p : All | null
+>p.next() : A2 | A3 | A4 | null
+>p.next : (() => A2 | null) | (() => A3 | null) | (() => A4 | null) | (() => null)
+>p : All
+>next : (() => A2 | null) | (() => A3 | null) | (() => A4 | null) | (() => null)
+
+        for (let i = 0; i < 1; i++) {}
+>i : number
+>0 : 0
+>i < 1 : boolean
+>i : number
+>1 : 1
+>i++ : number
+>i : number
+    }
+}
+
+function innerLoopReads(a: A1) {
+>innerLoopReads : (a: A1) => void
+>a : A1
+
+    let p: All | null = a;
+>p : All | null
+>a : A1
+
+    while (p) {
+>p : All | null
+
+        p; // should be A1 | A2 | A3 | A4
+>p : All
+
+        p = p.next();
+>p = p.next() : A2 | A3 | A4 | null
+>p : All | null
+>p.next() : A2 | A3 | A4 | null
+>p.next : (() => A2 | null) | (() => A3 | null) | (() => A4 | null) | (() => null)
+>p : All
+>next : (() => A2 | null) | (() => A3 | null) | (() => A4 | null) | (() => null)
+
+        for (let i = 0; i < 1; i++) {
+>i : number
+>0 : 0
+>i < 1 : boolean
+>i : number
+>1 : 1
+>i++ : number
+>i : number
+
+            p; // should be A2 | A3 | A4 | null
+>p : A2 | A3 | A4 | null
+        }
+    }
+}
+
+function innerWhileAfter(a: A1) {
+>innerWhileAfter : (a: A1) => void
+>a : A1
+
+    let p: All | null = a;
+>p : All | null
+>a : A1
+
+    while (p) {
+>p : All | null
+
+        p; // should be A1 | A2 | A3 | A4
+>p : All
+
+        p = p.next();
+>p = p.next() : A2 | A3 | A4 | null
+>p : All | null
+>p.next() : A2 | A3 | A4 | null
+>p.next : (() => A2 | null) | (() => A3 | null) | (() => A4 | null) | (() => null)
+>p : All
+>next : (() => A2 | null) | (() => A3 | null) | (() => A4 | null) | (() => null)
+
+        while (Math.random()) {}
+>Math.random() : number
+>Math.random : () => number
+>Math : Math
+>random : () => number
+    }
+}
+
+// Three loop levels. Cache entries for both inner junctions are created while the outer
+// junction is in progress and must be invalidated on the outer retry.
+
+function threeLevelsAfter(a: A1) {
+>threeLevelsAfter : (a: A1) => void
+>a : A1
+
+    let p: All | null = a;
+>p : All | null
+>a : A1
+
+    while (p) {
+>p : All | null
+
+        p; // should be A1 | A2 | A3 | A4, alias All
+>p : All
+
+        p = p.next();
+>p = p.next() : A2 | A3 | A4 | null
+>p : All | null
+>p.next() : A2 | A3 | A4 | null
+>p.next : (() => A2 | null) | (() => A3 | null) | (() => A4 | null) | (() => null)
+>p : All
+>next : (() => A2 | null) | (() => A3 | null) | (() => A4 | null) | (() => null)
+
+        for (let i = 0; i < 1; i++) {
+>i : number
+>0 : 0
+>i < 1 : boolean
+>i : number
+>1 : 1
+>i++ : number
+>i : number
+
+            for (let j = 0; j < 1; j++) {
+>j : number
+>0 : 0
+>j < 1 : boolean
+>j : number
+>1 : 1
+>j++ : number
+>j : number
+
+                p; // should be A2 | A3 | A4 | null
+>p : A2 | A3 | A4 | null
+            }
+        }
+    }
+}
+
+function threeLevelsInnermostAssigns(a: A1) {
+>threeLevelsInnermostAssigns : (a: A1) => void
+>a : A1
+
+    let p: All | null = a;
+>p : All | null
+>a : A1
+
+    while (p) {
+>p : All | null
+
+        p; // should be A1 | A2 | A3 | A4, alias All
+>p : All
+
+        for (let i = 0; i < 1; i++) {
+>i : number
+>0 : 0
+>i < 1 : boolean
+>i : number
+>1 : 1
+>i++ : number
+>i : number
+
+            for (let j = 0; j < 1; j++) {
+>j : number
+>0 : 0
+>j < 1 : boolean
+>j : number
+>1 : 1
+>j++ : number
+>j : number
+
+                if (p) { // p here is All | null: this loop's own back edge brings the null back
+>p : All | null
+
+                    p = p.next(); // the target shows the declared All | null; the assigned value is A2 | A3 | A4 | null
+>p = p.next() : A2 | A3 | A4 | null
+>p : All | null
+>p.next() : A2 | A3 | A4 | null
+>p.next : (() => A2 | null) | (() => A3 | null) | (() => A4 | null) | (() => null)
+>p : All
+>next : (() => A2 | null) | (() => A3 | null) | (() => A4 | null) | (() => null)
+
+                    p; // should be A2 | A3 | A4 | null, the narrowed type after the assignment
+>p : A2 | A3 | A4 | null
+                }
+            }
+        }
+    }
+}
+

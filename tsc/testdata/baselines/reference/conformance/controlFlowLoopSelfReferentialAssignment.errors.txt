@@ -144,3 +144,67 @@ controlFlowLoopSelfReferentialAssignment.ts(53,31): error TS2339: Property 'prop
         }
     }
     
+    // An inner loop between the self-assignment and the back edge. The inner loop junction is
+    // reached while the outer one is still being computed and must not keep a cached type derived
+    // from the outer junction's partial union.
+    
+    function innerLoopAfter(a: A1) {
+        let p: All | null = a;
+        while (p) {
+            p; // should be A1 | A2 | A3 | A4
+            p = p.next();
+            for (let i = 0; i < 1; i++) {}
+        }
+    }
+    
+    function innerLoopReads(a: A1) {
+        let p: All | null = a;
+        while (p) {
+            p; // should be A1 | A2 | A3 | A4
+            p = p.next();
+            for (let i = 0; i < 1; i++) {
+                p; // should be A2 | A3 | A4 | null
+            }
+        }
+    }
+    
+    function innerWhileAfter(a: A1) {
+        let p: All | null = a;
+        while (p) {
+            p; // should be A1 | A2 | A3 | A4
+            p = p.next();
+            while (Math.random()) {}
+        }
+    }
+    
+    // Three loop levels. Cache entries for both inner junctions are created while the outer
+    // junction is in progress and must be invalidated on the outer retry.
+    
+    function threeLevelsAfter(a: A1) {
+        let p: All | null = a;
+        while (p) {
+            p; // should be A1 | A2 | A3 | A4, alias All
+            p = p.next();
+            for (let i = 0; i < 1; i++) {
+                for (let j = 0; j < 1; j++) {
+                    p; // should be A2 | A3 | A4 | null
+                }
+            }
+        }
+    }
+    
+    function threeLevelsInnermostAssigns(a: A1) {
+        let p: All | null = a;
+        while (p) {
+            p; // should be A1 | A2 | A3 | A4, alias All
+            for (let i = 0; i < 1; i++) {
+                for (let j = 0; j < 1; j++) {
+                    if (p) { // p here is All | null: this loop's own back edge brings the null back
+                        p = p.next(); // the target shows the declared All | null; the assigned value is A2 | A3 | A4 | null
+                        p; // should be A2 | A3 | A4 | null, the narrowed type after the assignment
+                    }
+                }
+            }
+        }
+    }
+    

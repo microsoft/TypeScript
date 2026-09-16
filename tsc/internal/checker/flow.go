@@ -1372,6 +1372,7 @@ func (c *Checker) getTypeAtFlowLoopLabel(f *FlowState, flow *ast.FlowNode) FlowT
 		maxPasses = len(f.declaredType.Types()) + 1
 	}
 	sharedFlowsAtEntry := len(c.sharedFlows)
+	flowLoopStackDepthAtEntry := len(c.flowLoopStack)
 	antecedentTypes := make([]*Type, 0, 4)
 	subtypeReduction := false
 	var firstAntecedentType FlowType
@@ -1437,6 +1438,15 @@ func (c *Checker) getTypeAtFlowLoopLabel(f *FlowState, flow *ast.FlowNode) FlowT
 	// is incomplete.
 	if firstAntecedentType.incomplete {
 		return c.newFlowType(result, true /*incomplete*/)
+	}
+	// If an enclosing loop junction's in-process types were observed while this junction was
+	// being computed, the result may derive from a partial union whose incomplete marker was
+	// lost across an expression boundary. Don't cache it: the enclosing junction may retry,
+	// and once it completes a later query recomputes this junction from the final type.
+	for i := range c.flowLoopStack[:flowLoopStackDepthAtEntry] {
+		if c.flowLoopStack[i].reentered {
+			return FlowType{t: result}
+		}
 	}
 	c.flowLoopCache[key] = result
 	return FlowType{t: result}
