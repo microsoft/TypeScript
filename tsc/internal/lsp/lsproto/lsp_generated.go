@@ -9110,6 +9110,138 @@ func (s *ProjectInfoResult) UnmarshalJSONFrom(dec *json.Decoder) error {
 	return unmarshalStruct(s, dec)
 }
 
+// A UTF-16 code-unit range in a content-mapped document.
+type ContentMapperTextRange struct {
+	// The zero-based start offset in UTF-16 code units.
+	Pos int32 `json:"pos" lsp:"required"`
+
+	// The zero-based exclusive end offset in UTF-16 code units.
+	End int32 `json:"end" lsp:"required"`
+}
+
+var _ json.UnmarshalerFrom = (*ContentMapperTextRange)(nil)
+
+func (s *ContentMapperTextRange) UnmarshalJSONFrom(dec *json.Decoder) error {
+	return unmarshalStruct(s, dec)
+}
+
+// One span mapping between a generated output and its original source.
+type ContentMapperVirtualSpan struct {
+	// The zero-based start offset in generated text, in UTF-16 code units.
+	GeneratedStart int32 `json:"generatedStart" lsp:"required"`
+
+	// The generated span length in UTF-16 code units.
+	GeneratedLength int32 `json:"generatedLength" lsp:"required"`
+
+	// The zero-based start offset in original text, in UTF-16 code units.
+	OriginalStart int32 `json:"originalStart" lsp:"required"`
+
+	// The original span length in UTF-16 code units.
+	OriginalLength int32 `json:"originalLength" lsp:"required"`
+
+	Kind int32 `json:"kind" lsp:"required"`
+
+	Features int32 `json:"features" lsp:"required"`
+}
+
+var _ json.UnmarshalerFrom = (*ContentMapperVirtualSpan)(nil)
+
+func (s *ContentMapperVirtualSpan) UnmarshalJSONFrom(dec *json.Decoder) error {
+	return unmarshalStruct(s, dec)
+}
+
+// A diagnostic directive mapped between original and generated text.
+type ContentMapperDiagnosticDirective struct {
+	OriginalRange *ContentMapperTextRange `json:"originalRange" lsp:"required"`
+
+	VirtualRange *ContentMapperTextRange `json:"virtualRange" lsp:"required"`
+
+	Policy int32 `json:"policy" lsp:"required"`
+
+	UnusedCode int32 `json:"unusedCode" lsp:"required"`
+}
+
+var _ json.UnmarshalerFrom = (*ContentMapperDiagnosticDirective)(nil)
+
+func (s *ContentMapperDiagnosticDirective) UnmarshalJSONFrom(dec *json.Decoder) error {
+	return unmarshalStruct(s, dec)
+}
+
+// A generated content-mapper output and its mapping metadata.
+type ContentMapperVirtualFile struct {
+	FileName string `json:"fileName" lsp:"required"`
+
+	Hash string `json:"hash" lsp:"required"`
+
+	Text string `json:"text" lsp:"required"`
+
+	OriginalText string `json:"originalText" lsp:"required"`
+
+	ScriptKind int32 `json:"scriptKind" lsp:"required"`
+
+	Mappings []*ContentMapperVirtualSpan `json:"mappings" lsp:"required"`
+
+	DiagnosticDirectives []*ContentMapperDiagnosticDirective `json:"diagnosticDirectives" lsp:"required"`
+}
+
+var _ json.UnmarshalerFrom = (*ContentMapperVirtualFile)(nil)
+
+func (s *ContentMapperVirtualFile) UnmarshalJSONFrom(dec *json.Decoder) error {
+	return unmarshalStruct(s, dec)
+}
+
+// Parameters for the custom/contentMapperVirtualFiles request.
+type ContentMapperVirtualFilesParams struct {
+	TextDocument TextDocumentIdentifier `json:"textDocument" lsp:"required"`
+}
+
+func (s *ContentMapperVirtualFilesParams) TextDocumentURI() DocumentUri {
+	return s.TextDocument.Uri
+}
+
+var _ json.UnmarshalerFrom = (*ContentMapperVirtualFilesParams)(nil)
+
+func (s *ContentMapperVirtualFilesParams) UnmarshalJSONFrom(dec *json.Decoder) error {
+	return unmarshalStruct(s, dec)
+}
+
+// Generated outputs for a content-mapped source file, or an empty array for an ordinary file.
+type ContentMapperVirtualFilesResult struct {
+	Files []*ContentMapperVirtualFile `json:"files" lsp:"required"`
+}
+
+var _ json.UnmarshalerFrom = (*ContentMapperVirtualFilesResult)(nil)
+
+func (s *ContentMapperVirtualFilesResult) UnmarshalJSONFrom(dec *json.Decoder) error {
+	return unmarshalStruct(s, dec)
+}
+
+// Parameters for the custom/isContentMapped request.
+type IsContentMappedParams struct {
+	TextDocument TextDocumentIdentifier `json:"textDocument" lsp:"required"`
+}
+
+func (s *IsContentMappedParams) TextDocumentURI() DocumentUri {
+	return s.TextDocument.Uri
+}
+
+var _ json.UnmarshalerFrom = (*IsContentMappedParams)(nil)
+
+func (s *IsContentMappedParams) UnmarshalJSONFrom(dec *json.Decoder) error {
+	return unmarshalStruct(s, dec)
+}
+
+// Whether a source file is currently transformed by a content mapper.
+type IsContentMappedResult struct {
+	IsContentMapped bool `json:"isContentMapped" lsp:"required"`
+}
+
+var _ json.UnmarshalerFrom = (*IsContentMappedResult)(nil)
+
+func (s *IsContentMappedResult) UnmarshalJSONFrom(dec *json.Decoder) error {
+	return unmarshalStruct(s, dec)
+}
+
 // Inline content mapper manifest supplied by a contributing extension.
 type ContentMapperManifest struct {
 	// Human-readable mapper name.
@@ -11110,6 +11242,10 @@ const (
 	MethodCustomInitializeAPISession Method = "custom/initializeAPISession"
 	// Returns project information (e.g. the tsconfig.json path) for a given text document.
 	MethodCustomProjectInfo Method = "custom/projectInfo"
+	// Returns generated outputs and mapping metadata for a content-mapped source file.
+	MethodCustomContentMapperVirtualFiles Method = "custom/contentMapperVirtualFiles"
+	// Reports whether a source file is currently transformed by a content mapper.
+	MethodCustomIsContentMapped Method = "custom/isContentMapped"
 	// Replaces extension content mapper contributions and discovers configured mappers for matching open documents.
 	MethodCustomSetContentMapperContributions Method = "custom/setContentMapperContributions"
 	// Request to get source definitions for a position.
@@ -11660,6 +11796,18 @@ type CustomProjectInfoResponse = *ProjectInfoResult
 
 // Type mapping info for `custom/projectInfo`
 var CustomProjectInfoInfo = RequestInfo[*ProjectInfoParams, CustomProjectInfoResponse]{Method: MethodCustomProjectInfo}
+
+// Response type for `custom/contentMapperVirtualFiles`
+type CustomContentMapperVirtualFilesResponse = *ContentMapperVirtualFilesResult
+
+// Type mapping info for `custom/contentMapperVirtualFiles`
+var CustomContentMapperVirtualFilesInfo = RequestInfo[*ContentMapperVirtualFilesParams, CustomContentMapperVirtualFilesResponse]{Method: MethodCustomContentMapperVirtualFiles}
+
+// Response type for `custom/isContentMapped`
+type CustomIsContentMappedResponse = *IsContentMappedResult
+
+// Type mapping info for `custom/isContentMapped`
+var CustomIsContentMappedInfo = RequestInfo[*IsContentMappedParams, CustomIsContentMappedResponse]{Method: MethodCustomIsContentMapped}
 
 // Response type for `custom/setContentMapperContributions`
 type CustomSetContentMapperContributionsResponse = Null
