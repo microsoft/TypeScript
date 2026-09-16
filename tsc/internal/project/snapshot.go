@@ -119,47 +119,6 @@ func (s *Snapshot) CreatedPrograms() []*Project {
 	return s.createdPrograms
 }
 
-func (s *Snapshot) cloneWithTemporaryFile(
-	ctx context.Context,
-	fileSystem vfs.FS,
-	uri lsproto.DocumentUri,
-	newText string,
-) (*Snapshot, error) {
-	path := uri.Path(s.UseCaseSensitiveFileNames())
-
-	overlays := maps.Clone(s.overlays())
-	if overlays == nil {
-		overlays = make(map[tspath.Path]*Overlay)
-	}
-	version := int32(0)
-	var fileChanges FileChangeSummary
-	existing := overlays[path]
-	var scriptKind core.ScriptKind
-	if existing != nil {
-		version = existing.Version() + 1
-		scriptKind = existing.Kind()
-		fileChanges.Changed.Add(uri)
-	} else {
-		scriptKind = core.GetScriptKindFromFileName(uri.FileName())
-		if scriptKind == core.ScriptKindUnknown {
-			return nil, fmt.Errorf("unsupported file extension: %s", uri.FileName())
-		}
-		fileChanges.Opened = uri
-	}
-	overlays[path] = newOverlay(uri.FileName(), newText, version, scriptKind)
-	if fileSystem == nil {
-		fileSystem = s.fs.fs
-	}
-	fileSystem = newOverlayFS(fileSystem, overlays, s.host.options.PositionEncoding, s.host.toPath)
-
-	return s.Clone(ctx, SnapshotChange{
-		fs:                 fileSystem,
-		fileSystemOverride: s.fileSystemOverride,
-		fileChanges:        fileChanges,
-		ResourceRequest:    s.resourceRequestForDocument(uri),
-	}, overlays, nil, nil), nil
-}
-
 func (s *Snapshot) resourceRequestForDocument(uri lsproto.DocumentUri) ResourceRequest {
 	path := uri.Path(s.UseCaseSensitiveFileNames())
 	request := ResourceRequest{Documents: []lsproto.DocumentUri{uri}}

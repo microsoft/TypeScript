@@ -503,27 +503,13 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         if (!this.activeSnapshots.has(baseSnapshot) || baseSnapshot.isDisposed()) {
             throw new Error("Cannot run a temporary file update on an inactive snapshot");
         }
-        const data = await this.client.apiRequest("updateTemporarySnapshot", { snapshot: baseSnapshot.id, file, newText });
-
-        // Retain cached source files from the base snapshot for files unchanged by
-        // the temporary update. The temporary snapshot is not the latest snapshot, so
-        // we never release the latest snapshot's cache here.
-        this.sourceFileCache.retainForSnapshot(data.snapshot, baseSnapshot.id, data.changes);
-
-        const snapshot = new Snapshot(
-            data,
-            this.client,
-            this.sourceFileCache,
-            this.toPath!,
-            this,
-            () => {
-                this.activeSnapshots.delete(snapshot);
-                this.sourceFileCache.releaseSnapshot(snapshot.id);
+        const snapshot = await baseSnapshot.update({
+            fileSystem: {
+                kind: "layer",
+                files: { [resolveFileName(file)]: newText },
             },
-            this.createSnapshotUpdater(() => snapshot),
-            baseSnapshot,
-        );
-        this.activeSnapshots.add(snapshot);
+            ensurePrograms: true,
+        });
 
         try {
             await cb(snapshot);

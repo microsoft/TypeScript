@@ -96,17 +96,6 @@ func (s *SnapshotHost) update(ctx context.Context, baseSnapshot *Snapshot, chang
 	return baseSnapshot.Clone(ctx, change, baseSnapshot.overlays(), nil, nil)
 }
 
-// CloneSnapshotWithTemporaryFile derives a snapshot with a temporary file content override.
-func (s *SnapshotHost) CloneSnapshotWithTemporaryFile(
-	ctx context.Context,
-	baseSnapshot *Snapshot,
-	fileSystem vfs.FS,
-	uri lsproto.DocumentUri,
-	newText string,
-) (*Snapshot, error) {
-	return baseSnapshot.cloneWithTemporaryFile(ctx, fileSystem, uri, newText)
-}
-
 // CloneSnapshotWithAutoImports derives a snapshot with auto-import preparation without
 // adopting the clone in the background.
 func (s *SnapshotHost) CloneSnapshotWithAutoImports(ctx context.Context, baseSnapshot *Snapshot, uri lsproto.DocumentUri, logger logging.Logger) *Snapshot {

@@ -287,12 +287,16 @@ func TestCreateSnapshotUsesFullFileSystem(t *testing.T) {
 	assert.Assert(t, ok)
 	assert.Equal(t, contents, `export const value = "updated";`)
 
-	// Temporary snapshots retain the base snapshot's supplied filesystem for
-	// every file other than the temporary overlay.
-	temporary, err := session.handleUpdateTemporarySnapshot(context.Background(), &UpdateTemporarySnapshotParams{
+	// A new layer retains the base snapshot's supplied filesystem for every file
+	// other than its override.
+	temporary, err := session.handleUpdateSnapshot(context.Background(), &UpdateSnapshotParams{
 		Snapshot: response.Snapshot,
-		File:     DocumentIdentifier{FileName: "/src/index.ts"},
-		NewText:  `export const value = "temporary";`,
+		Changes: &CreateSnapshotParams{
+			FileSystem: &requestfilesystem.RequestFileSystem{
+				Kind:  requestfilesystem.KindLayer,
+				Files: map[string]string{"/src/index.ts": `export const value = "temporary";`},
+			},
+		},
 	})
 	assert.NilError(t, err)
 	temporarySnapshot := session.snapshots[temporary.Snapshot].snapshot
@@ -943,11 +947,12 @@ func TestTemporarySnapshotRetainsLayeredFileSystemHistory(t *testing.T) {
 		}},
 	})
 	assert.NilError(t, err)
-	layeredFileSystem := session.snapshots[layered.Snapshot].fileSystem
-	temporary, err := session.handleUpdateTemporarySnapshot(context.Background(), &UpdateTemporarySnapshotParams{
+	temporary, err := session.handleUpdateSnapshot(context.Background(), &UpdateSnapshotParams{
 		Snapshot: layered.Snapshot,
-		File:     DocumentIdentifier{FileName: "/pkg/index.ts"},
-		NewText:  "temporary",
+		Changes: &CreateSnapshotParams{FileSystem: &requestfilesystem.RequestFileSystem{
+			Kind:  requestfilesystem.KindLayer,
+			Files: map[string]string{"/pkg/index.ts": "temporary"},
+		}},
 	})
 	assert.NilError(t, err)
 
@@ -960,8 +965,10 @@ func TestTemporarySnapshotRetainsLayeredFileSystemHistory(t *testing.T) {
 	assert.Assert(t, current != nil)
 	fileSystem := current.fileSystem
 	assert.Assert(t, fileSystem != nil)
-	assert.Assert(t, fileSystem == layeredFileSystem)
 	assert.Assert(t, requestfilesystem.HasFullFileSystem(fileSystem))
+	contents, ok := current.snapshot.ReadFile("/pkg/index.ts")
+	assert.Assert(t, ok)
+	assert.Equal(t, contents, "temporary")
 }
 
 func TestSnapshotReleaseCompactionSupportsConcurrentReaders(t *testing.T) {

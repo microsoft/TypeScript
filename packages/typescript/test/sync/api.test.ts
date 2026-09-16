@@ -7257,6 +7257,27 @@ describe("runWithTemporaryFileUpdate", () => {
             assert.equal((secondProject.program.getSourceFileNames()).includes("/second/index.ts"), true);
         });
     });
+
+    test("updates synthetic programs with temporary contents", () => {
+        using api = spawnAPI({
+            "/src/index.ts": `export const value: number = 1;`,
+        });
+        const snapshot = api.createSnapshot({
+            createPrograms: [{
+                rootFiles: ["/src/index.ts"],
+                options: { compilerOptions: { noLib: true, strict: true } },
+            }],
+        });
+        const originalProgram = snapshot.operation.createdPrograms[0];
+
+        api.runWithTemporaryFileUpdate(snapshot, "/src/index.ts", `export const value: string = 1;`, temporarySnapshot => {
+            const temporaryProgram = temporarySnapshot.getProgram(originalProgram.id);
+            assert.ok(temporaryProgram);
+            assert.equal((temporaryProgram.getSemanticDiagnostics("/src/index.ts")).length, 1);
+        });
+
+        assert.equal((originalProgram.getSemanticDiagnostics("/src/index.ts")).length, 0);
+    });
 });
 
 function spawnAPIWithFS(files: Record<string, string> = { ...defaultFiles }): { api: API; fs: FileSystem; } {

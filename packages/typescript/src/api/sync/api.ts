@@ -832,27 +832,13 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
                 if (!owner.activeSnapshots.has(baseSnapshot) || baseSnapshot.isDisposed()) {
                     throw new Error("Cannot run a temporary file update on an inactive snapshot");
                 }
-                const data = owner.client.apiRequest("updateTemporarySnapshot", { snapshot: baseSnapshot.id, file, newText });
-
-                // Retain cached source files from the base snapshot for files unchanged by
-                // the temporary update. The temporary snapshot is not the latest snapshot, so
-                // we never release the latest snapshot's cache here.
-                owner.sourceFileCache.retainForSnapshot(data.snapshot, baseSnapshot.id, data.changes);
-
-                const snapshot = new Snapshot(
-                    data,
-                    owner.client,
-                    owner.sourceFileCache,
-                    owner.toPath!,
-                    owner,
-                    () => {
-                        owner.activeSnapshots.delete(snapshot);
-                        owner.sourceFileCache.releaseSnapshot(snapshot.id);
+                const snapshot = baseSnapshot.update({
+                    fileSystem: {
+                        kind: "layer",
+                        files: { [resolveFileName(file)]: newText },
                     },
-                    owner.createSnapshotUpdater(() => snapshot),
-                    baseSnapshot,
-                );
-                owner.activeSnapshots.add(snapshot);
+                    ensurePrograms: true,
+                });
 
                 try {
                     cb(snapshot);
@@ -867,27 +853,13 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
                 if (!owner.activeSnapshots.has(baseSnapshot) || baseSnapshot.isDisposed()) {
                     throw new Error("Cannot run a temporary file update on an inactive snapshot");
                 }
-                const data = yield* apiRequest("updateTemporarySnapshot", { snapshot: baseSnapshot.id, file, newText });
-
-                // Retain cached source files from the base snapshot for files unchanged by
-                // the temporary update. The temporary snapshot is not the latest snapshot, so
-                // we never release the latest snapshot's cache here.
-                owner.sourceFileCache.retainForSnapshot(data.snapshot, baseSnapshot.id, data.changes);
-
-                const snapshot = new Snapshot(
-                    data,
-                    owner.client,
-                    owner.sourceFileCache,
-                    owner.toPath!,
-                    owner,
-                    () => {
-                        owner.activeSnapshots.delete(snapshot);
-                        owner.sourceFileCache.releaseSnapshot(snapshot.id);
+                const snapshot = yield* baseSnapshot.update.gen({
+                    fileSystem: {
+                        kind: "layer",
+                        files: { [resolveFileName(file)]: newText },
                     },
-                    owner.createSnapshotUpdater(() => snapshot),
-                    baseSnapshot,
-                );
-                owner.activeSnapshots.add(snapshot);
+                    ensurePrograms: true,
+                });
 
                 try {
                     yield* (cb(snapshot) ?? []);

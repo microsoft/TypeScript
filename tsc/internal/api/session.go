@@ -679,8 +679,6 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleUpdateSnapshot(ctx, parsed.(*UpdateSnapshotParams))
 	case string(MethodGetCurrentLanguageServerSnapshot):
 		return s.handleGetCurrentLanguageServerSnapshot(ctx, parsed.(*GetCurrentLanguageServerSnapshotParams))
-	case string(MethodUpdateTemporarySnapshot):
-		return s.handleUpdateTemporarySnapshot(ctx, parsed.(*UpdateTemporarySnapshotParams))
 	case string(MethodParseCommandLine):
 		return s.handleParseCommandLine(ctx, parsed.(*ParseCommandLineParams))
 	case string(MethodReadConfigFile):
@@ -1439,32 +1437,6 @@ func (s *Session) handleGetCurrentLanguageServerSnapshot(ctx context.Context, pa
 		return nil, err
 	}
 	s.registerSnapshot(snapshot, snapshotOpenState{openProjects: s.openProjects, openFiles: s.openFiles}, nil)
-	return response, nil
-}
-
-// handleUpdateTemporarySnapshot creates a temporary snapshot that overrides the
-// content of a single file, without opening/closing any projects or files and
-// without advancing the session's latest snapshot.
-func (s *Session) handleUpdateTemporarySnapshot(ctx context.Context, params *UpdateTemporarySnapshotParams) (*CreateSnapshotResponse, error) {
-	baseSD, err := s.retainSnapshotData(params.Snapshot)
-	if err != nil {
-		return nil, err
-	}
-	defer func() { _ = s.releaseSnapshot(params.Snapshot) }()
-
-	uri := params.File.ToURI(s.currentDirectory())
-
-	snapshot, err := s.snapshotHost.CloneSnapshotWithTemporaryFile(ctx, baseSD.snapshot, baseSD.fileSystem, uri, params.NewText)
-	if err != nil {
-		return nil, fmt.Errorf("%w: failed to update temporary snapshot: %w", ErrClientError, err)
-	}
-
-	response, err := s.createSnapshotResponse(snapshot, baseSD.snapshot, nil)
-	if err != nil {
-		snapshot.Deref()
-		return nil, err
-	}
-	s.registerSnapshot(snapshot, snapshotOpenState{openProjects: baseSD.openProjects, openFiles: baseSD.openFiles}, baseSD.fileSystem)
 	return response, nil
 }
 

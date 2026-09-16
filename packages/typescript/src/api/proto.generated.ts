@@ -24,7 +24,6 @@ export interface APIMethodInfo {
     createSnapshot: APIMethod<CreateSnapshotParams, CreateSnapshotResponse>;
     updateSnapshot: APIMethod<UpdateSnapshotParams, CreateSnapshotResponse>;
     getCurrentLanguageServerSnapshot: APIMethod<GetCurrentLanguageServerSnapshotParams, CreateSnapshotResponse>;
-    updateTemporarySnapshot: APIMethod<UpdateTemporarySnapshotParams, CreateSnapshotResponse>;
     parseCommandLine: APIMethod<ParseCommandLineParams, ConfigFileResponse>;
     readConfigFile: APIMethod<ReadConfigFileParams, ReadConfigFileResponse>;
     parseJsonConfigFileContent: APIMethod<ParseJsonConfigFileContentParams, ConfigFileResponse>;
@@ -244,19 +243,6 @@ export interface UpdateSnapshotParams {
 export interface GetCurrentLanguageServerSnapshotParams {
     baseSnapshot?: number | undefined;
     changes?: LanguageServerSnapshotChanges | undefined;
-}
-
-/**
- * UpdateTemporarySnapshotParams are the parameters for creating a temporary
- * snapshot that overrides a single file's content.
- */
-export interface UpdateTemporarySnapshotParams {
-    /** Snapshot is the current client snapshot on which to layer the temporary update. */
-    snapshot: number;
-    /** File identifies the file whose content is temporarily overridden. */
-    file: DocumentIdentifier;
-    /** NewText is the temporary content for the file. */
-    newText: string;
 }
 
 export interface ParseCommandLineParams {
@@ -1151,8 +1137,7 @@ export interface BatchRequest {
         | "transpileModuleFromFile"
         | "typeToString"
         | "typeToTypeNode"
-        | "updateSnapshot"
-        | "updateTemporarySnapshot";
+        | "updateSnapshot";
     params?: unknown | undefined;
 }
 
@@ -1312,8 +1297,7 @@ export interface BatchResponse {
         | "transpileModuleFromFile"
         | "typeToString"
         | "typeToTypeNode"
-        | "updateSnapshot"
-        | "updateTemporarySnapshot";
+        | "updateSnapshot";
     result: unknown;
     error?: string | undefined;
 }

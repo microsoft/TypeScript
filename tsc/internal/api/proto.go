@@ -76,7 +76,6 @@ const (
 	MethodCreateSnapshot                                 Method = "createSnapshot"
 	MethodUpdateSnapshot                                 Method = "updateSnapshot"
 	MethodGetCurrentLanguageServerSnapshot               Method = "getCurrentLanguageServerSnapshot"
-	MethodUpdateTemporarySnapshot                        Method = "updateTemporarySnapshot"
 	MethodParseCommandLine                               Method = "parseCommandLine"
 	MethodReadConfigFile                                 Method = "readConfigFile"
 	MethodParseJsonConfigFile                            Method = "parseJsonConfigFileContent"
@@ -442,17 +441,6 @@ type LanguageServerSnapshotChanges struct {
 	SnapshotRequestChangesParams
 }
 
-// UpdateTemporarySnapshotParams are the parameters for creating a temporary
-// snapshot that overrides a single file's content.
-type UpdateTemporarySnapshotParams struct {
-	// Snapshot is the current client snapshot on which to layer the temporary update.
-	Snapshot SnapshotID `json:"snapshot"`
-	// File identifies the file whose content is temporarily overridden.
-	File DocumentIdentifier `json:"file"`
-	// NewText is the temporary content for the file.
-	NewText string `json:"newText"`
-}
-
 type CreateProgramOptions struct {
 	CompilerOptions              core.CompilerOptions     `json:"compilerOptions"`
 	ProjectReferences            []*core.ProjectReference `json:"projectReferences,omitempty"`
@@ -508,7 +496,6 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodCreateSnapshot:                                 unmarshallerFor[CreateSnapshotParams],
 	MethodUpdateSnapshot:                                 unmarshallerFor[UpdateSnapshotParams],
 	MethodGetCurrentLanguageServerSnapshot:               unmarshallerFor[GetCurrentLanguageServerSnapshotParams],
-	MethodUpdateTemporarySnapshot:                        unmarshallerFor[UpdateTemporarySnapshotParams],
 	MethodParseCommandLine:                               unmarshallerFor[ParseCommandLineParams],
 	MethodReadConfigFile:                                 unmarshallerFor[ReadConfigFileParams],
 	MethodParseJsonConfigFile:                            unmarshallerFor[ParseJsonConfigFileContentParams],
