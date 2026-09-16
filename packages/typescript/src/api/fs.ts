@@ -1,6 +1,7 @@
 import getExePath from "#getExePath";
 import { dirname } from "node:path";
 import {
+    createGetCanonicalFileName,
     getPathComponents,
     normalizePath,
 } from "./path.ts";
@@ -49,6 +50,10 @@ export interface CreateFileSystemOptions {
 export interface CreateFileSystemWithLibOptions extends CreateFileSystemOptions {
     /** Default library directory used by a custom or non-embedded compiler executable. */
     defaultLibraryPath?: string | undefined;
+}
+
+export interface CreateVirtualFileSystemOptions {
+    useCaseSensitiveFileNames?: boolean;
 }
 
 /**
@@ -174,24 +179,39 @@ function getBaseName(path: string): string {
 
 interface VDirectory {
     type: "directory";
+    name: string;
     children: Record<string, VNode>;
 }
 
 interface VFile {
     type: "file";
+    name: string;
 }
 
 type VNode = VDirectory | VFile;
 
-export function createVirtualFileSystem(files: Record<string, string>): FileSystem {
-    const root: VDirectory = {
+function createVDirectory(name: string): VDirectory {
+    return {
         type: "directory",
-        children: {},
+        name,
+        children: Object.create(null) as Record<string, VNode>,
     };
-    const content: Record<string, string> = {};
+}
 
-    for (const filePath of Object.keys(files)) {
-        content[filePath] = files[filePath];
+export function createVirtualFileSystem(
+    files: Record<string, string>,
+    options: CreateVirtualFileSystemOptions = {},
+): FileSystem {
+    const getCanonicalFileName = createGetCanonicalFileName(options.useCaseSensitiveFileNames !== false);
+    const root = createVDirectory("");
+    const content = new Map<string, string>();
+
+    for (const [filePath, data] of Object.entries(files)) {
+        const key = getCanonicalFileName(filePath);
+        if (content.has(key)) {
+            throw new Error(`Duplicate virtual filesystem path: ${filePath}`);
+        }
+        content.set(key, data);
         addToTree(filePath);
     }
 
@@ -205,6 +225,10 @@ export function createVirtualFileSystem(files: Record<string, string>): FileSyst
         removeFile,
     };
 
+    function getSegmentKey(segment: string): string {
+        return getCanonicalFileName(segment);
+    }
+
     function getNodeFromPath(path: string): VNode | undefined {
         if (!path || path === "/") {
             return root;
@@ -215,7 +239,7 @@ export function createVirtualFileSystem(files: Record<string, string>): FileSyst
             if (current.type !== "directory") {
                 return undefined;
             }
-            const child: VNode = current.children[segment];
+            const child: VNode = current.children[getSegmentKey(segment)];
             if (!child) {
                 return undefined;
             }
@@ -227,13 +251,14 @@ export function createVirtualFileSystem(files: Record<string, string>): FileSyst
     function ensureDirectory(segments: string[]): VDirectory {
         let current: VDirectory = root;
         for (const segment of segments) {
-            if (!current.children[segment]) {
-                current.children[segment] = { type: "directory", children: {} };
+            const key = getSegmentKey(segment);
+            if (!current.children[key]) {
+                current.children[key] = createVDirectory(segment);
             }
-            else if (current.children[segment].type !== "directory") {
+            else if (current.children[key].type !== "directory") {
                 throw new Error(`Cannot create directory: a file already exists at "/${segments.join("/")}"`);
             }
-            current = current.children[segment] as VDirectory;
+            current = current.children[key] as VDirectory;
         }
         return current;
     }
@@ -245,22 +270,24 @@ export function createVirtualFileSystem(files: Record<string, string>): FileSyst
         }
         const filename = segments.pop()!;
         const dirNode = ensureDirectory(segments);
-        dirNode.children[filename] = { type: "file" };
+        const key = getSegmentKey(filename);
+        const existing = dirNode.children[key];
+        dirNode.children[key] = { type: "file", name: existing?.name ?? filename };
     }
 
     function writeFile(path: string, data: string): void {
-        content[path] = data;
+        content.set(getCanonicalFileName(path), data);
         addToTree(path);
     }
 
     function removeFile(path: string): void {
-        delete content[path];
+        content.delete(getCanonicalFileName(path));
         const segments = getPathComponents(path).slice(1);
         if (segments.length === 0) return;
         const filename = segments.pop()!;
         const dirNode = getNodeFromPath("/" + segments.join("/"));
         if (dirNode && dirNode.type === "directory") {
-            delete dirNode.children[filename];
+            delete dirNode.children[getSegmentKey(filename)];
         }
     }
 
@@ -270,7 +297,7 @@ export function createVirtualFileSystem(files: Record<string, string>): FileSyst
     }
 
     function fileExists(fileName: string): boolean {
-        return fileName in content;
+        return content.has(getCanonicalFileName(fileName));
     }
 
     function getAccessibleEntries(directoryName: string): FileSystemEntries | undefined {
@@ -280,21 +307,18 @@ export function createVirtualFileSystem(files: Record<string, string>): FileSyst
         }
         const fileEntries: string[] = [];
         const directories: string[] = [];
-        for (const [name, child] of Object.entries(node.children)) {
+        for (const child of Object.values(node.children)) {
             if (child.type === "file") {
-                fileEntries.push(name);
+                fileEntries.push(child.name);
             }
             else {
-                directories.push(name);
+                directories.push(child.name);
             }
         }
         return { files: fileEntries, directories };
     }
 
     function readFile(fileName: string): string | undefined {
-        if (fileName in content) {
-            return content[fileName];
-        }
-        return undefined;
+        return content.get(getCanonicalFileName(fileName));
     }
 }
