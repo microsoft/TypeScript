@@ -679,6 +679,7 @@ function generateFactory(): string {
             if (members.filter(m => m.isChild()).length > 0) {
                 for (const kind of node.kindTypes()) {
                     handWrittenForEachChildImports.push(`forEachChildOf${kind.name}`);
+                    handWrittenForEachChildImports.push(`yieldEachChildOf${kind.name}`);
                 }
             }
         }
@@ -719,6 +720,12 @@ function generateFactory(): string {
     out.push(`    forEachChild<T>(visitor: (node: Node) => T, visitArray?: (nodes: NodeArray<Node>) => T): T | undefined {`);
     out.push(`        const fn = forEachChildTable[this.kind];`);
     out.push(`        return fn ? fn(this._data, visitor, visitArray) : undefined;`);
+    out.push(`    }`);
+    out.push(``);
+    out.push(`    *childrenIter<TNext = void>(): Generator<Node, TNext | undefined, TNext> {`);
+    out.push(`        const fn = yieldEachChildTable[this.kind];`);
+    out.push(`        if (!fn) return;`);
+    out.push(`        return yield* fn(this._data);`);
     out.push(`    }`);
     out.push(``);
     out.push(`    getSourceFile(): SourceFile {`);
@@ -898,6 +905,69 @@ function generateFactory(): string {
     out.push(`    [SyntaxKind.SourceFile]: (data, cbNode, cbNodes) =>`);
     out.push(`        visitNodes(cbNode, cbNodes, data.statements) ||`);
     out.push(`        visitNode(cbNode, data.endOfFileToken),`);
+    out.push(`};`);
+    out.push(``);
+
+    // ── yieldEachChildTable ──
+    out.push(`type YieldEachChildFunction = <T>(data: any) => Generator<Node, T | undefined, T>;`);
+    out.push(``);
+    out.push(`const yieldEachChildTable: Record<number, YieldEachChildFunction> = {`);
+    // Schema nodes
+    for (const node of api.nodes()) {
+        if (node.handWritten) continue;
+        if (isVariantNode(node)) continue;
+        const members = tsMembers(node);
+        const childMembers = members.filter(m => m.isChild());
+        if (childMembers.length === 0) continue;
+        const syntaxKinds = node.allKinds();
+        if (node.handWrittenVisitor) {
+            for (const sk of syntaxKinds) {
+                out.push(`    [${sk.formatTypeScript()}]: yieldEachChildOf${node.name},`);
+            }
+            continue;
+        }
+        const visits = childMembers.map(m => {
+            const propName = api.uncapitalize(m.name);
+            const listKind = m.listKind;
+            if (listKind) {
+                return `for (const n of data.${propName}) { const res = yield n; if (res) return res; }`;
+            }
+            return `if (data.${propName}) { const res = yield data.${propName}; if (res) return res; }`;
+        });
+        const body = visits.join("\n        ");
+        for (const sk of syntaxKinds) {
+            out.push(`    [${sk.formatTypeScript()}]: function* (data) {`);
+            out.push(`        ${body}`);
+            out.push(`    },`);
+        }
+    }
+    // Variant nodes
+    for (const v of tsVariants) {
+        if (!v.members) continue;
+        const childMembers = v.members.filter(m => m.type.baseKind() === "node" || m.type.baseKind() === "list");
+        if (childMembers.length === 0) continue;
+        if (v.handWrittenVisitor) {
+            out.push(`    [SyntaxKind.${v.syntaxKind}]: yieldEachChildOf${v.tsName},`);
+            continue;
+        }
+        const visits = childMembers.map(m => {
+            const propName = api.uncapitalize(m.name);
+            const listKind = m.listKind;
+            if (listKind) {
+                return `for (const n of data.${propName}) { const res = yield n; if (res) return res; }`;
+            }
+            return `if (data.${propName}) { const res = yield data.${propName}; if (res) return res; }`;
+        });
+        const body = visits.join("\n        ");
+        out.push(`    [SyntaxKind.${v.syntaxKind}]: function* (data) {`);
+        out.push(`        ${body}`);
+        out.push(`    },`);
+    }
+    // SourceFile is handWritten so we add its yieldEachChild entry manually
+    out.push(`    [SyntaxKind.SourceFile]: function* (data) {`);
+    out.push(`        for (const n of data.statements) { const res = yield n; if (res) return res; }`);
+    out.push(`        const res = yield data.endOfFileToken; if (res) return res;`);
+    out.push(`    },`);
     out.push(`};`);
     out.push(``);
 
