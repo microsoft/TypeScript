@@ -47,8 +47,8 @@ func CompareStringsCaseInsensitive(a string, b string) Comparison {
 		if sb == 0 {
 			return ComparisonGreaterThan
 		}
-		lca := unicode.ToLower(ca)
-		lcb := unicode.ToLower(cb)
+		lca := unicode.ToUpper(ca)
+		lcb := unicode.ToUpper(cb)
 		if lca != lcb {
 			if lca < lcb {
 				return ComparisonLessThan
