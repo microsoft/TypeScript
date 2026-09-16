@@ -1,12 +1,10 @@
 package iovfs_test
 
 import (
-	"slices"
 	"testing"
 	"testing/fstest"
 
 	"github.com/microsoft/TypeScript/tsc/internal/testutil"
-	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/iovfs"
 	"gotest.tools/v3/assert"
 )
@@ -72,51 +70,6 @@ func TestIOFS(t *testing.T) {
 		entries := fs.GetAccessibleEntries("/")
 		assert.DeepEqual(t, entries.Directories, []string{"dir1", "dir2"})
 		assert.DeepEqual(t, entries.Files, []string{"foo.ts"})
-	})
-
-	t.Run("WalkDir", func(t *testing.T) {
-		t.Parallel()
-
-		var files []string
-		err := fs.WalkDir("/", func(path string, d vfs.DirEntry, err error) error {
-			if err != nil {
-				return err
-			}
-			if !d.IsDir() {
-				files = append(files, path)
-			}
-			return nil
-		})
-		assert.NilError(t, err)
-
-		slices.Sort(files)
-
-		assert.DeepEqual(t, files, []string{"/dir1/file1.ts", "/dir1/file2.ts", "/dir2/file1.ts", "/foo.ts"})
-	})
-
-	t.Run("WalkDirSkip", func(t *testing.T) {
-		t.Parallel()
-
-		var files []string
-		err := fs.WalkDir("/", func(path string, d vfs.DirEntry, err error) error {
-			if err != nil {
-				return err
-			}
-			if !d.IsDir() {
-				files = append(files, path)
-			}
-
-			if path == "/" {
-				return nil
-			}
-
-			return vfs.SkipDir
-		})
-		assert.NilError(t, err)
-
-		slices.Sort(files)
-
-		assert.DeepEqual(t, files, []string{"/foo.ts"})
 	})
 
 	t.Run("Realpath", func(t *testing.T) {

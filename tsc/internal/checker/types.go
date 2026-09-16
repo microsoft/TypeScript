@@ -34,6 +34,13 @@ const (
 	SignatureKindConstruct
 )
 
+type IndexKind int32
+
+const (
+	IndexKindString IndexKind = iota
+	IndexKindNumber
+)
+
 type MemberOverrideStatus int32
 
 const (
@@ -1045,6 +1052,10 @@ func (t *InterfaceType) TypeParameters() []*Type {
 	return slices.Clip(t.allTypeParameters[:len(t.allTypeParameters)-1])
 }
 
+func (t *InterfaceType) ThisType() *Type {
+	return t.thisType
+}
+
 // TupleType
 
 type ElementFlags uint32
@@ -1170,7 +1181,9 @@ type TypeParameter struct {
 	target              *Type
 	mapper              *TypeMapper
 	isThisType          bool
+	isDistributed       bool
 	resolvedDefaultType *Type
+	distributedType     *Type
 }
 
 func (t *TypeParameter) IsThisType() bool { return t.isThisType }
