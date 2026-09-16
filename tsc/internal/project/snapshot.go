@@ -89,13 +89,14 @@ func (host *SnapshotHost) newSnapshot(
 	autoImports *autoimport.Registry,
 	autoImportsWatch *WatchedFiles[map[tspath.Path]string],
 ) *Snapshot {
+	overlays := snapshotOverlays(fs)
 	s := &Snapshot{
 		host: host,
 		id:   id,
 
 		fs:                                 fs,
 		ConfigFileRegistry:                 configFileRegistry,
-		ProjectCollection:                  &ProjectCollection{toPath: host.toPath, openFiles: openFilePaths(fs.overlays)},
+		ProjectCollection:                  &ProjectCollection{toPath: host.toPath, openFiles: openFilePaths(overlays)},
 		compilerOptionsForInferredProjects: compilerOptionsForInferredProjects,
 		userPreferences:                    userPreferences,
 		AutoImports:                        autoImports,
@@ -106,18 +107,30 @@ func (host *SnapshotHost) newSnapshot(
 	return s
 }
 
+func snapshotOverlays(fs *SnapshotFS) map[tspath.Path]*Overlay {
+	return fs.fs.Overlays()
+}
+
+func (s *Snapshot) overlays() map[tspath.Path]*Overlay {
+	return snapshotOverlays(s.fs)
+}
+
 func (s *Snapshot) CreatedPrograms() []*Project {
 	return s.createdPrograms
 }
 
 func (s *Snapshot) cloneWithTemporaryFile(
 	ctx context.Context,
+	fileSystem vfs.FS,
 	uri lsproto.DocumentUri,
 	newText string,
 ) (*Snapshot, error) {
 	path := uri.Path(s.UseCaseSensitiveFileNames())
 
-	overlays := maps.Clone(s.fs.overlays)
+	overlays := maps.Clone(s.overlays())
+	if overlays == nil {
+		overlays = make(map[tspath.Path]*Overlay)
+	}
 	version := int32(0)
 	var fileChanges FileChangeSummary
 	existing := overlays[path]
@@ -134,9 +147,13 @@ func (s *Snapshot) cloneWithTemporaryFile(
 		fileChanges.Opened = uri
 	}
 	overlays[path] = newOverlay(uri.FileName(), newText, version, scriptKind)
+	if fileSystem == nil {
+		fileSystem = s.fs.fs
+	}
+	fileSystem = newOverlayFS(fileSystem, overlays, s.host.options.PositionEncoding, s.host.toPath)
 
 	return s.Clone(ctx, SnapshotChange{
-		fs:                 s.fs.fs,
+		fs:                 fileSystem,
 		fileSystemOverride: s.fileSystemOverride,
 		fileChanges:        fileChanges,
 		ResourceRequest:    s.resourceRequestForDocument(uri),
@@ -159,7 +176,14 @@ func (s *Snapshot) processFileChanges(
 	fileChanges FileChangeSummary,
 	logger *logging.LogTree,
 	contentMapperContributions *ContentMapperContributions,
+	previousOverlays map[tspath.Path]*Overlay,
+	overlays map[tspath.Path]*Overlay,
 ) FileChangeSummary {
+	if expander, ok := fs.fs.(FileChangeExpander); ok {
+		fileChanges = expander.ExpandFileChanges(fileChanges)
+	}
+	previousOpenFiles := overlayFileHandles(previousOverlays)
+	openFiles := overlayFileHandles(overlays)
 	if fileChanges.HasExcessiveWatchEvents() {
 		invalidateStart := time.Now()
 		if fileChanges.InvalidateAll {
@@ -167,7 +191,7 @@ func (s *Snapshot) processFileChanges(
 			if logger != nil {
 				logger.Logf("InvalidateAll: invalidated file cache in %v", time.Since(invalidateStart))
 			}
-		} else if !fs.watchChangesOverlapCache(fileChanges) {
+		} else if !fs.watchChangesOverlapCache(fileChanges, previousOpenFiles, openFiles) {
 			// All watch changes/deletes are files we haven't seen; should be irrelevant to us (probably an external tool's build or something)
 			fileChanges.Changed = collections.Set[lsproto.DocumentUri]{}
 			fileChanges.Deleted = collections.Set[lsproto.DocumentUri]{}
@@ -193,12 +217,25 @@ func (s *Snapshot) processFileChanges(
 			contentMapperExtensions = append(contentMapperExtensions, contentMapperContributions.Extensions...)
 		}
 		_, contentMapperWatchedFiles := s.contentMapperWatchState()
-		fileChanges = fs.expandAndFilterWatchEvents(fileChanges, contentMapperExtensions, contentMapperWatchedFiles)
+		fileChanges = fs.expandAndFilterWatchEvents(fileChanges, contentMapperExtensions, contentMapperWatchedFiles, previousOpenFiles, openFiles)
 		fileChanges = s.fs.expandRealpathAliases(fileChanges)
 		fileChanges = fs.markDirtyFiles(fileChanges)
-		fileChanges = fs.convertOpenAndCloseToChanges(fileChanges)
+		fileChanges = fs.convertOpenAndCloseToChanges(fileChanges, previousOpenFiles, openFiles)
+	}
+	for path := range openFiles {
+		if entry, ok := fs.cacheFiles.Load(path); ok {
+			fs.deleteCacheEntry(entry)
+		}
 	}
 	return fileChanges
+}
+
+func overlayFileHandles(overlays map[tspath.Path]*Overlay) map[tspath.Path]FileHandle {
+	files := make(map[tspath.Path]FileHandle, len(overlays))
+	for path, overlay := range overlays {
+		files[path] = overlay
+	}
+	return files
 }
 
 func (s *Snapshot) GetDefaultProject(uri lsproto.DocumentUri) *Project {
@@ -206,7 +243,7 @@ func (s *Snapshot) GetDefaultProject(uri lsproto.DocumentUri) *Project {
 }
 
 // GetLanguageServiceProjectsContainingFile does not consider synthetic projects
-// (ones created by API via createProgram)
+// (ones created by API via createProgram).
 func (s *Snapshot) GetLanguageServiceProjectsContainingFile(uri lsproto.DocumentUri) []ls.Project {
 	fileName := uri.FileName()
 	path := s.host.toPath(fileName)
@@ -256,8 +293,27 @@ func (s *Snapshot) toPath(fileName string) tspath.Path {
 	return s.host.toPath(fileName)
 }
 
+func (s *Snapshot) isOpenFile(fileName string) bool {
+	_, ok := s.overlays()[s.toPath(fileName)]
+	return ok
+}
+
+func (s *Snapshot) hasOverlayWithin(path tspath.Path) bool {
+	for overlayPath := range s.overlays() {
+		if path.ContainsPath(overlayPath) {
+			return true
+		}
+	}
+	return false
+}
+
 func (s *Snapshot) UseCaseSensitiveFileNames() bool {
 	return s.fs.fs.UseCaseSensitiveFileNames()
+}
+
+// FileSystem returns the filesystem backing this snapshot.
+func (s *Snapshot) FileSystem() vfs.FS {
+	return s.fs.fs
 }
 
 // HasFileSystemOverride reports whether this snapshot uses an API-supplied
@@ -372,8 +428,8 @@ type SnapshotChange struct {
 	// ataChanges contains ATA-related changes to apply to projects in the new snapshot.
 	ataChanges map[tspath.Path]*ATAStateChange
 	apiRequest *APISnapshotRequest
-	// cleanDiskCache triggers cleaning of cached disk files not referenced by any open project.
-	cleanDiskCache bool
+	// cleanFileCache triggers cleaning of cached files not referenced by any open project.
+	cleanFileCache bool
 }
 
 // ATAStateChange represents a change to a project's ATA state.
@@ -469,8 +525,10 @@ func (s *Snapshot) Clone(
 	if change.replaceFileSystem || s.fileSystemOverride && !change.fileSystemOverride {
 		change.fileChanges.InvalidateAll = true
 	}
-	fs := newSnapshotFSBuilder(baseFS, s.fs.overlays, overlays, s.fs.diskFiles, s.fs.diskDirectories, s.fs.nodeModulesRealpathAliases, store.options.PositionEncoding, store.toPath)
-	change.fileChanges = s.processFileChanges(fs, change.fileChanges, logger, change.contentMapperContributions)
+	layeredFS := layerOverlayFileSystem(baseFS, overlays, store.options.PositionEncoding, store.toPath)
+	overlays = layeredFS.Overlays()
+	fs := newSnapshotFSBuilderFromSource(layeredFS, s.fs.cacheFiles, s.fs.cacheDirectories, s.fs.nodeModulesRealpathAliases, store.toPath)
+	change.fileChanges = s.processFileChanges(fs, change.fileChanges, logger, change.contentMapperContributions, s.overlays(), overlays)
 
 	compilerOptionsForInferredProjects := s.compilerOptionsForInferredProjects
 	if change.compilerOptionsForInferredProjects != nil {
@@ -488,6 +546,7 @@ func (s *Snapshot) Clone(
 		ctx,
 		newSnapshotID,
 		fs,
+		overlays,
 		s.ProjectCollection,
 		s.ConfigFileRegistry,
 		s.ProjectCollection.apiState,
@@ -559,20 +618,20 @@ func (s *Snapshot) Clone(
 		}
 	}
 
-	// Clean cached disk files not touched by any open project on file open, close, delete,
+	// Clean cached files not touched by any open project on file open, close, delete,
 	// or when explicitly requested (e.g. by an idle timer).
-	shouldCleanDiskCache := change.cleanDiskCache ||
+	shouldCleanFileCache := change.cleanFileCache ||
 		change.fileChanges.Opened != "" ||
 		change.fileChanges.Reopened != "" ||
 		change.fileChanges.Closed.Len() > 0 ||
 		change.fileChanges.Deleted.Len() > 0
-	if shouldCleanDiskCache {
+	if shouldCleanFileCache {
 		// The set of seen files can change only if a program was constructed (not cloned) during this snapshot.
-		// When cleanDiskCache is explicitly set, always attempt cleaning.
-		if len(projectsWithNewProgramStructure) > 0 || change.cleanDiskCache {
+		// When cleanFileCache is explicitly set, always attempt cleaning.
+		if len(projectsWithNewProgramStructure) > 0 || change.cleanFileCache {
 			cleanFilesStart := time.Now()
 			removedFiles := 0
-			fs.diskFiles.Range(func(entry *dirty.SyncMapEntry[tspath.Path, *diskFile]) bool {
+			fs.cacheFiles.Range(func(entry *dirty.SyncMapEntry[tspath.Path, *cachedFile]) bool {
 				for _, project := range projectCollection.Projects() {
 					if project.host != nil && project.host.sourceFS.SeenFile(entry.Key()) {
 						return true

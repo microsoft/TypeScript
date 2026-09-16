@@ -7,6 +7,10 @@ import (
 
 const excessiveChangeThreshold = 1000
 
+type FileChangeExpander interface {
+	ExpandFileChanges(summary FileChangeSummary) FileChangeSummary
+}
+
 type FileChangeKind int
 
 const (

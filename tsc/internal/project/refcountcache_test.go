@@ -468,7 +468,7 @@ func TestRefCountingCaches(t *testing.T) {
 				ResourceRequest: ResourceRequest{
 					Documents: []lsproto.DocumentUri{uri},
 				},
-			}, baseSnapshot.fs.overlays, nil, nil)
+			}, baseSnapshot.overlays(), nil, nil)
 
 			project := clone.GetDefaultProject(uri)
 			assert.Assert(t, project != nil)
@@ -550,7 +550,7 @@ func TestRefCountingCaches(t *testing.T) {
 			assert.Assert(t, ownedByProgramSnapshot)
 			assert.Equal(t, ownerCount, 2)
 
-			assert.NilError(t, session.fs.fs.WriteFile(libBaseConfigPath, `{"compilerOptions":{"composite":true,"noLib":true,"strict":true}}`))
+			assert.NilError(t, session.fs.WriteFile(libBaseConfigPath, `{"compilerOptions":{"composite":true,"noLib":true,"strict":true}}`))
 			var fileChanges FileChangeSummary
 			fileChanges.Changed.Add(lsproto.DocumentUri("file://" + libBaseConfigPath))
 			updateRequest := &APISnapshotRequest{EnsurePrograms: collections.NewSetFromItems(programProject.ID())}

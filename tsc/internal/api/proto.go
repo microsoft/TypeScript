@@ -1138,6 +1138,15 @@ func literalValueToJSON(value any) any {
 	case string:
 		return v
 	case jsnum.Number:
+		if v.IsInf() {
+			if v > 0 {
+				return "+Infinity"
+			}
+			return "-Infinity"
+		}
+		if v.IsNaN() {
+			return "NaN"
+		}
 		return float64(v)
 	case bool:
 		return v
@@ -1148,6 +1157,11 @@ func literalValueToJSON(value any) any {
 	default:
 		return nil
 	}
+}
+
+type ConstantValueResponse struct {
+	IsNumber bool `json:"isNumber"`
+	Value    any  `json:"value"`
 }
 
 type SignatureResponse struct {

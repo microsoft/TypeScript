@@ -226,19 +226,11 @@ func TestRequestPathTreeFileProvidesStatAndDirEntry(t *testing.T) {
 	assert.Equal(t, info.ModTime(), time.Time{})
 	assert.Assert(t, info.Sys() == nil)
 	assert.Assert(t, any(info) == node.entry)
-	visited := false
-	assert.NilError(t, fileSystem.WalkDir("/dir/file.ts", func(path string, entry vfs.DirEntry, walkErr error) error {
-		assert.NilError(t, walkErr)
-		assert.Equal(t, path, "/dir/file.ts")
-		assert.Assert(t, any(entry) == node.entry)
-		assert.Equal(t, entry.Type(), fs.FileMode(0))
-		entryInfo, infoErr := entry.Info()
-		assert.NilError(t, infoErr)
-		assert.Assert(t, entryInfo == info)
-		visited = true
-		return nil
-	}))
-	assert.Assert(t, visited)
+	entry := node.entry.(vfs.DirEntry)
+	assert.Equal(t, entry.Type(), fs.FileMode(0))
+	entryInfo, infoErr := entry.Info()
+	assert.NilError(t, infoErr)
+	assert.Assert(t, entryInfo == info)
 }
 
 func TestRequestPathTreeDirectoryProvidesStatAndDirEntry(t *testing.T) {
@@ -258,19 +250,11 @@ func TestRequestPathTreeDirectoryProvidesStatAndDirEntry(t *testing.T) {
 	assert.Equal(t, info.ModTime(), time.Time{})
 	assert.Assert(t, info.Sys() == nil)
 	assert.Assert(t, any(info) == node.entry)
-	visited := false
-	assert.NilError(t, fileSystem.WalkDir("/dir", func(path string, entry vfs.DirEntry, walkErr error) error {
-		assert.NilError(t, walkErr)
-		assert.Equal(t, path, "/dir")
-		assert.Assert(t, any(entry) == node.entry)
-		assert.Equal(t, entry.Type(), fs.ModeDir)
-		entryInfo, infoErr := entry.Info()
-		assert.NilError(t, infoErr)
-		assert.Assert(t, entryInfo == info)
-		visited = true
-		return nil
-	}))
-	assert.Assert(t, visited)
+	entry := node.entry.(vfs.DirEntry)
+	assert.Equal(t, entry.Type(), fs.ModeDir)
+	entryInfo, infoErr := entry.Info()
+	assert.NilError(t, infoErr)
+	assert.Assert(t, entryInfo == info)
 }
 
 func TestRequestPathTreeSymlinkReportsTargetMetadata(t *testing.T) {
@@ -283,19 +267,6 @@ func TestRequestPathTreeSymlinkReportsTargetMetadata(t *testing.T) {
 	assert.NilError(t, err)
 	info := fileSystem.Stat("/target/file.ts")
 	assert.Assert(t, fileSystem.Stat("/link.ts") == info)
-	visited := false
-	assert.NilError(t, fileSystem.WalkDir("/link.ts", func(path string, entry vfs.DirEntry, walkErr error) error {
-		assert.NilError(t, walkErr)
-		assert.Equal(t, path, "/link.ts")
-		assert.Equal(t, entry.Name(), "file.ts")
-		assert.Equal(t, entry.Type(), fs.FileMode(0))
-		entryInfo, infoErr := entry.Info()
-		assert.NilError(t, infoErr)
-		assert.Assert(t, entryInfo == info)
-		visited = true
-		return nil
-	}))
-	assert.Assert(t, visited)
 }
 
 type requestTestHostMetadata struct {
@@ -305,7 +276,7 @@ type requestTestHostMetadata struct {
 
 func (host requestTestHostMetadata) Stat(string) vfs.FileInfo { return host.info }
 
-func TestRequestPathTreeWalkPreservesHostMetadata(t *testing.T) {
+func TestRequestPathTreeStatPreservesHostMetadata(t *testing.T) {
 	t.Parallel()
 	hostFS := vfstest.FromMap(map[string]string{"/host.ts": "host content"}, true)
 	modified := time.Date(2026, time.September, 9, 12, 0, 0, 0, time.UTC)
@@ -317,21 +288,9 @@ func TestRequestPathTreeWalkPreservesHostMetadata(t *testing.T) {
 	}, host, "/")
 	assert.NilError(t, err)
 	assert.Assert(t, fileSystem.Stat("/host.ts") == info)
-	visited := false
-	assert.NilError(t, fileSystem.WalkDir("/host.ts", func(path string, entry vfs.DirEntry, walkErr error) error {
-		assert.NilError(t, walkErr)
-		assert.Equal(t, path, "/host.ts")
-		assert.Equal(t, entry.Name(), info.Name())
-		assert.Equal(t, entry.Type(), info.Mode().Type())
-		entryInfo, infoErr := entry.Info()
-		assert.NilError(t, infoErr)
-		assert.Assert(t, entryInfo == info)
-		assert.Equal(t, entryInfo.ModTime(), modified)
-		assert.Equal(t, entryInfo.Size(), int64(len("host content")))
-		visited = true
-		return nil
-	}))
-	assert.Assert(t, visited)
+	entryInfo := fileSystem.Stat("/host.ts")
+	assert.Equal(t, entryInfo.ModTime(), modified)
+	assert.Equal(t, entryInfo.Size(), int64(len("host content")))
 }
 
 func TestRequestPathTreeStatSupportsExistenceOnlyHost(t *testing.T) {

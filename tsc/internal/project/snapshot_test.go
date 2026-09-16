@@ -44,7 +44,7 @@ func TestSnapshot(t *testing.T) {
 
 		baseSnapshot := session.Snapshot()
 		uri := lsproto.DocumentUri("file:///temporary.ts")
-		snapshot, err := session.CloneSnapshotWithTemporaryFile(context.Background(), baseSnapshot, uri, "export const value = 1;")
+		snapshot, err := session.CloneSnapshotWithTemporaryFile(context.Background(), baseSnapshot, nil, uri, "export const value = 1;")
 		assert.NilError(t, err)
 		defer snapshot.Deref()
 
@@ -153,7 +153,7 @@ func TestSnapshot(t *testing.T) {
 		defer baseSnapshot.Deref()
 
 		temporaryText := "export const value = 2;"
-		temporarySnapshot, err := session.CloneSnapshotWithTemporaryFile(ctx, baseSnapshot, uri, temporaryText)
+		temporarySnapshot, err := session.CloneSnapshotWithTemporaryFile(ctx, baseSnapshot, nil, uri, temporaryText)
 		assert.NilError(t, err)
 		defer temporarySnapshot.Deref()
 
@@ -164,7 +164,7 @@ func TestSnapshot(t *testing.T) {
 		assert.Equal(t, syntheticProject.Program.GetSourceFile(fileName).Text(), temporaryText)
 
 		diskText := "export const value = 3;"
-		assert.NilError(t, session.fs.fs.WriteFile(fileName, diskText))
+		assert.NilError(t, session.fs.WriteFile(fileName, diskText))
 		var fileChanges FileChangeSummary
 		fileChanges.Changed.Add(uri)
 		dirtySnapshot, err := session.CloneSnapshot(ctx, baseSnapshot, fileChanges, nil)
@@ -232,8 +232,8 @@ func TestSnapshot(t *testing.T) {
 		snapshotBefore := session.Snapshot()
 
 		// a.ts and b.ts are cached
-		assert.Check(t, snapshotBefore.fs.diskFiles["/home/projects/ts/p1/a.ts"] != nil)
-		assert.Check(t, snapshotBefore.fs.diskFiles["/home/projects/ts/p2/b.ts"] != nil)
+		assert.Check(t, snapshotBefore.fs.cacheFiles["/home/projects/ts/p1/a.ts"] != nil)
+		assert.Check(t, snapshotBefore.fs.cacheFiles["/home/projects/ts/p2/b.ts"] != nil)
 
 		// Close p1's only open file
 		session.DidCloseFile(context.Background(), "file:///home/projects/TS/p1/index.ts")
@@ -242,8 +242,8 @@ func TestSnapshot(t *testing.T) {
 		snapshotAfter := session.Snapshot()
 
 		// a.ts is cleaned up, b.ts is still cached
-		assert.Check(t, snapshotAfter.fs.diskFiles["/home/projects/ts/p1/a.ts"] == nil)
-		assert.Check(t, snapshotAfter.fs.diskFiles["/home/projects/ts/p2/b.ts"] != nil)
+		assert.Check(t, snapshotAfter.fs.cacheFiles["/home/projects/ts/p1/a.ts"] == nil)
+		assert.Check(t, snapshotAfter.fs.cacheFiles["/home/projects/ts/p2/b.ts"] != nil)
 	})
 
 	t.Run("GetFile returns nil for non-existent files", func(t *testing.T) {
@@ -334,7 +334,7 @@ func TestSnapshot(t *testing.T) {
 		_, err := session.GetLanguageService(context.Background(), pkgURI)
 		assert.NilError(t, err)
 
-		err = session.fs.fs.WriteFile("/project/node_modules/pkg/package.json", `{ "type": "module" }`)
+		err = session.fs.WriteFile("/project/node_modules/pkg/package.json", `{ "type": "module" }`)
 		assert.NilError(t, err)
 		session.DidChangeFile(context.Background(), pkgURI, 2, []lsproto.TextDocumentContentChangePartialOrWholeDocument{
 			{
@@ -417,7 +417,7 @@ func TestSnapshot(t *testing.T) {
 
 		// A watch change that reflects an actual content change on disk must still
 		// rebuild the program.
-		err = session.fs.fs.WriteFile("/home/projects/TS/p1/a.ts", "export const a = 2;")
+		err = session.fs.WriteFile("/home/projects/TS/p1/a.ts", "export const a = 2;")
 		assert.NilError(t, err)
 		session.pendingFileChangesMu.Lock()
 		session.pendingFileChanges = append(session.pendingFileChanges, FileChange{
@@ -498,7 +498,7 @@ func BenchmarkSnapshotCloneRefCost(b *testing.B) {
 				} else {
 					tsconfigContent = `{"compilerOptions": {"strict": false}}`
 				}
-				err := session.fs.fs.WriteFile("/small/tsconfig.json", tsconfigContent)
+				err := session.fs.WriteFile("/small/tsconfig.json", tsconfigContent)
 				if err != nil {
 					b.Fatal(err)
 				}

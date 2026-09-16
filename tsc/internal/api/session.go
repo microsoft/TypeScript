@@ -23,6 +23,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/internal/format"
 	"github.com/microsoft/TypeScript/tsc/internal/ipc"
+	"github.com/microsoft/TypeScript/tsc/internal/jsnum"
 	"github.com/microsoft/TypeScript/tsc/internal/json"
 	"github.com/microsoft/TypeScript/tsc/internal/ls"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/autoimport"
@@ -1449,7 +1450,7 @@ func (s *Session) handleUpdateTemporarySnapshot(ctx context.Context, params *Upd
 
 	uri := params.File.ToURI(s.currentDirectory())
 
-	snapshot, err := s.snapshotHost.CloneSnapshotWithTemporaryFile(ctx, baseSD.snapshot, uri, params.NewText)
+	snapshot, err := s.snapshotHost.CloneSnapshotWithTemporaryFile(ctx, baseSD.snapshot, baseSD.fileSystem, uri, params.NewText)
 	if err != nil {
 		return nil, fmt.Errorf("%w: failed to update temporary snapshot: %w", ErrClientError, err)
 	}
@@ -3782,7 +3783,7 @@ func (s *Session) handleGetTypeOfPropertyOfType(ctx context.Context, params *Get
 
 // handleGetConstantValue returns the constant value of an enum member or const enum access.
 // @gen-proto-nullable
-func (s *Session) handleGetConstantValue(ctx context.Context, params *CheckerNodeParams) (any, error) {
+func (s *Session) handleGetConstantValue(ctx context.Context, params *CheckerNodeParams) (*ConstantValueResponse, error) {
 	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
 	if err != nil {
 		return nil, err
@@ -3797,7 +3798,11 @@ func (s *Session) handleGetConstantValue(ctx context.Context, params *CheckerNod
 		return nil, nil
 	}
 
-	return literalValueToJSON(setup.checker.GetConstantValue(node)), nil
+	result := &ConstantValueResponse{}
+	value := setup.checker.GetConstantValue(node)
+	_, result.IsNumber = value.(jsnum.Number)
+	result.Value = literalValueToJSON(value)
+	return result, nil
 }
 
 // handleGetSignatureFromDeclaration returns the signature of a function-like declaration.
