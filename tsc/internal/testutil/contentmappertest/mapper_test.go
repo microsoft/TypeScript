@@ -37,16 +37,12 @@ func (stdio) Close() error                { return nil }
 
 func testMapper() *contentmapper.Mapper {
 	return &contentmapper.Mapper{
-		Definition: contentmapper.Definition{
-			Package:    contentmappertest.PackageName,
-			Extensions: []string{".box"},
-		},
-		Manifest: contentmapper.Manifest{
-			Name:            contentmappertest.PackageName,
-			Version:         "1.0.0",
-			Exec:            []string{contentmappertest.TransformingMapper},
-			CompilerOptions: contentmappertest.DeclaredOptions,
-		},
+		Package:          contentmappertest.PackageName,
+		Extensions:       []string{".box"},
+		Name:             contentmappertest.PackageName,
+		Version:          "1.0.0",
+		Exec:             []string{contentmappertest.TransformingMapper},
+		CompilerOptions:  contentmappertest.DeclaredOptions,
 		PackageDirectory: "/node_modules/" + contentmappertest.PackageName,
 	}
 }

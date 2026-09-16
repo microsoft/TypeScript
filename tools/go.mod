@@ -1,6 +1,6 @@
 module github.com/microsoft/TypeScript/tools
 
-go 1.26.0
+go 1.27
 
 require (
 	github.com/anchore/quill v0.7.1
@@ -21,7 +21,7 @@ require (
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/scylladb/go-set v1.0.3-0.20200225121959-cc7b2070d91e // indirect
-	golang.org/x/crypto v0.53.0 // indirect
+	golang.org/x/crypto v0.55.0 // indirect
 	golang.org/x/sync v0.23.0 // indirect
 	golang.org/x/term v0.46.0 // indirect
 	software.sslmate.com/src/go-pkcs12 v0.7.2 // indirect

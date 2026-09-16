@@ -293,9 +293,7 @@ func (s *Snapshot) cloneWithTemporaryFile(
 		fs:                 fileSystem,
 		fileSystemOverride: s.fileSystemOverride,
 		fileChanges:        fileChanges,
-		ResourceRequest: ResourceRequest{
-			Documents: []lsproto.DocumentUri{uri},
-		},
+		Documents:          []lsproto.DocumentUri{uri},
 	}, overlays, nil), nil
 }
 

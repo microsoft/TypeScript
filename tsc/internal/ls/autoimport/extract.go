@@ -264,10 +264,8 @@ func (e *symbolExtractor) createExport(symbol *ast.Symbol, moduleID ModuleID, mo
 	}
 
 	export := &Export{
-		ExportID: ExportID{
-			ExportName: symbol.Name,
-			ModuleID:   moduleID,
-		},
+		ExportName:     symbol.Name,
+		ModuleID:       moduleID,
 		ModuleFileName: moduleFileName,
 		Syntax:         syntax,
 		Flags:          symbol.CombinedLocalAndExportSymbolFlags(),
