@@ -44,7 +44,11 @@ import {
     visitNodes,
 } from "@typescript/typescript/unstable/ast/visitor";
 import { createVirtualFileSystem } from "@typescript/typescript/unstable/fs";
-import { API, Checker, TypeFlags } from "@typescript/typescript/unstable/sync";
+import {
+    API,
+    Checker,
+    TypeFlags,
+} from "@typescript/typescript/unstable/sync";
 import assert from "node:assert";
 import {
     describe,
@@ -1097,18 +1101,23 @@ describe("RemoteNode + child/token getters", () => {
                 }
                 state = cGen.next(foundX);
             }
-            assert.strictEqual(state.value, stmt.forEachChild((n) => { return n }));
+            assert.strictEqual(
+                state.value,
+                stmt.forEachChild(n => {
+                    return n;
+                }),
+            );
         });
     });
 
     test("childrenIter works with async generators", async () => {
         await withFirstStatementAsync("class X { p: any }", async (stmt, sf, api, checker) => {
-            async function *visitNodeForFirstAnyChild(node: Node): AsyncGenerator<Node | undefined, Node | undefined, Node | undefined> {
+            async function* visitNodeForFirstAnyChild(node: Node): AsyncGenerator<Node | undefined, Node | undefined, Node | undefined> {
                 for (const n of node.childrenIter()) {
                     const t = await checker.getTypeAtLocation(n);
-                    if (t.flags & TypeFlags.Any) { return n; }
-                    const res = yield* visitNodeForFirstAnyChild(n)
-                    if (res) { return res; }
+                    if (t.flags & TypeFlags.Any) return n;
+                    const res = yield* visitNodeForFirstAnyChild(n);
+                    if (res) return res;
                 }
             }
             const res = (await visitNodeForFirstAnyChild(stmt).next()).value;
