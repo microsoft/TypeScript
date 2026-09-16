@@ -279,6 +279,11 @@ export interface InterfaceType extends TypeReference {
         (): readonly TypeParameter[];
         gen(): Generator<ProtocolRequest, readonly TypeParameter[], ProtocolResponse["result"]>;
     };
+    /** Get the synthetic `this` type of this interface/class */
+    getThisType: {
+        (): TypeParameter | undefined;
+        gen(): Generator<ProtocolRequest, TypeParameter | undefined, ProtocolResponse["result"]>;
+    };
 }
 
 /** Generic types */

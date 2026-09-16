@@ -1,0 +1,31 @@
+a.ts(2,23): error TS2304: Cannot find name 'x'.
+a.ts(2,23): error TS2503: Cannot find namespace 'x'.
+a.ts(13,5): error TS2440: Import declaration conflicts with local declaration of 'A'.
+
+
+==== a.ts (3 errors) ====
+    namespace a {
+        export import A = x.A;
+                          ~
+!!! error TS2304: Cannot find name 'x'.
+                          ~
+!!! error TS2503: Cannot find namespace 'x'.
+        export type A = number;
+    }
+    namespace b {
+        import A = a.A;
+    }
+    
+    declare namespace c {
+        export const enum A { B }
+    }
+    namespace d {
+        export import A = c.A;
+        ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2440: Import declaration conflicts with local declaration of 'A'.
+        export type A = number;
+    }
+    namespace e {
+        import A = d.A;
+    }
+    
