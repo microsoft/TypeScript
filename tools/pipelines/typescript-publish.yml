@@ -119,8 +119,27 @@ extends:
                     echo "Unable to read the TypeScript package version." >&2
                     exit 1
                   fi
+                  versionComponent='(0|[1-9][0-9]*)'
                   case "$npmTag" in
-                    latest | next | beta | rc) ;;
+                    next) ;;
+                    latest)
+                      if ! [[ "$version" =~ ^$versionComponent\.$versionComponent\.(2|[3-9]|[1-9][0-9]+)$ ]]; then
+                        echo "Stable package version must have patch version 2 or greater: $version" >&2
+                        exit 1
+                      fi
+                      ;;
+                    beta)
+                      if ! [[ "$version" =~ ^$versionComponent\.$versionComponent\.0-beta$ ]]; then
+                        echo "Beta package version must have the form major.minor.0-beta: $version" >&2
+                        exit 1
+                      fi
+                      ;;
+                    rc)
+                      if ! [[ "$version" =~ ^$versionComponent\.$versionComponent\.1-rc$ ]]; then
+                        echo "RC package version must have the form major.minor.1-rc: $version" >&2
+                        exit 1
+                      fi
+                      ;;
                     *)
                       echo "Unexpected npm publish tag: $npmTag" >&2
                       exit 1
@@ -319,25 +338,30 @@ extends:
 
                         case "$NPM_TAG" in
                           latest)
-                            if ! [[ "$PACKAGE_VERSION" =~ ^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$ ]]; then
-                              echo "Stable package version is not valid SemVer: $PACKAGE_VERSION" >&2
+                            if ! [[ "$PACKAGE_VERSION" =~ ^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(2|[3-9]|[1-9][0-9]+)$ ]]; then
+                              echo "Stable package version must have patch version 2 or greater: $PACKAGE_VERSION" >&2
                               exit 1
                             fi
                             tag="v$PACKAGE_VERSION"
                             title="TypeScript $PACKAGE_VERSION"
                             prerelease=false
                             ;;
-                          beta | rc)
-                            if ! [[ "$PACKAGE_VERSION" =~ ^((0|[1-9][0-9]*)\.(0|[1-9][0-9]*))\.(0|[1-9][0-9]*)-"$NPM_TAG"([.-].*)?$ ]]; then
-                              echo "Package version $PACKAGE_VERSION does not match npm tag $NPM_TAG." >&2
+                          beta)
+                            if ! [[ "$PACKAGE_VERSION" =~ ^((0|[1-9][0-9]*)\.(0|[1-9][0-9]*))\.0-beta$ ]]; then
+                              echo "Beta package version must have the form major.minor.0-beta: $PACKAGE_VERSION" >&2
                               exit 1
                             fi
                             tag="v${BASH_REMATCH[1]}-$NPM_TAG"
-                            if [ "$NPM_TAG" = "beta" ]; then
-                              title="TypeScript ${BASH_REMATCH[1]} Beta"
-                            else
-                              title="TypeScript ${BASH_REMATCH[1]}.${BASH_REMATCH[4]} RC"
+                            title="TypeScript ${BASH_REMATCH[1]} Beta"
+                            prerelease=true
+                            ;;
+                          rc)
+                            if ! [[ "$PACKAGE_VERSION" =~ ^((0|[1-9][0-9]*)\.(0|[1-9][0-9]*))\.1-rc$ ]]; then
+                              echo "RC package version must have the form major.minor.1-rc: $PACKAGE_VERSION" >&2
+                              exit 1
                             fi
+                            tag="v${BASH_REMATCH[1]}-$NPM_TAG"
+                            title="TypeScript ${BASH_REMATCH[1]}.1 RC"
                             prerelease=true
                             ;;
                           *)
