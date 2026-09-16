@@ -1,0 +1,498 @@
+//// [tests/cases/conformance/controlFlow/controlFlowLoopSelfReferentialAssignment.ts] ////
+
+=== controlFlowLoopSelfReferentialAssignment.ts ===
+// Repro from #59715
+
+declare class Child { parent: Parent | null; }
+>Child : Child
+>parent : Parent | null
+
+declare class Parent { parent: GrandParent | null; }
+>Parent : Parent
+>parent : GrandParent | null
+
+declare class GrandParent { parent: GreatGrandParent | null; }
+>GrandParent : GrandParent
+>parent : GreatGrandParent | null
+
+declare class GreatGrandParent { parent: null; }
+>GreatGrandParent : GreatGrandParent
+>parent : null
+
+declare const child: Child;
+>child : Child
+
+function three() {
+>three : () => void
+
+    let currentParent: GreatGrandParent | GrandParent | Parent | null = child.parent;
+>currentParent : GrandParent | GreatGrandParent | Parent | null
+>child.parent : Parent | null
+>child : Child
+>parent : Parent | null
+
+    while (currentParent) {
+>currentParent : GrandParent | GreatGrandParent | Parent | null
+
+        currentParent; // should be Parent | GrandParent | GreatGrandParent
+>currentParent : GrandParent | GreatGrandParent | Parent
+
+        currentParent = currentParent.parent;
+>currentParent = currentParent.parent : GrandParent | GreatGrandParent | null
+>currentParent : GrandParent | GreatGrandParent | Parent | null
+>currentParent.parent : GrandParent | GreatGrandParent | null
+>currentParent : GrandParent | GreatGrandParent | Parent
+>parent : GrandParent | GreatGrandParent | null
+    }
+}
+
+// Four levels: also wrong before #43183 (one transfer step short per nesting depth)
+
+declare class A1 { nom: "a1"; next(): A2 | null; }
+>A1 : A1
+>nom : "a1"
+>next : () => A2 | null
+
+declare class A2 { nom: "a2"; next(): A3 | null; }
+>A2 : A2
+>nom : "a2"
+>next : () => A3 | null
+
+declare class A3 { nom: "a3"; next(): A4 | null; }
+>A3 : A3
+>nom : "a3"
+>next : () => A4 | null
+
+declare class A4 { nom: "a4"; next(): null; }
+>A4 : A4
+>nom : "a4"
+>next : () => null
+
+type All = A1 | A2 | A3 | A4;
+>All : All
+
+function four(a: A1) {
+>four : (a: A1) => void
+>a : A1
+
+    let p: All | null = a;
+>p : All | null
+>a : A1
+
+    while (p) {
+>p : All | null
+
+        p; // should be A1 | A2 | A3 | A4
+>p : All
+
+        if (p.nom === "a4") {
+>p.nom === "a4" : boolean
+>p.nom : "a1" | "a2" | "a3" | "a4"
+>p : All
+>nom : "a1" | "a2" | "a3" | "a4"
+>"a4" : "a4"
+
+            p; // should be A4, not never
+>p : A4
+        }
+        p = p.next();
+>p = p.next() : A2 | A3 | A4 | null
+>p : All | null
+>p.next() : A2 | A3 | A4 | null
+>p.next : (() => A2 | null) | (() => A3 | null) | (() => A4 | null) | (() => null)
+>p : A1 | A2 | A3 | A4
+>next : (() => A2 | null) | (() => A3 | null) | (() => A4 | null) | (() => null)
+    }
+}
+
+// for-statement form from the issue thread
+
+function forLoop(a: A1) {
+>forLoop : (a: A1) => void
+>a : A1
+
+    for (let q: All | null = a; q !== null; q = q.next()) {
+>q : All | null
+>a : A1
+>q !== null : boolean
+>q : All | null
+>q = q.next() : A2 | A3 | A4 | null
+>q : All | null
+>q.next() : A2 | A3 | A4 | null
+>q.next : (() => A2 | null) | (() => A3 | null) | (() => A4 | null) | (() => null)
+>q : All
+>next : (() => A2 | null) | (() => A3 | null) | (() => A4 | null) | (() => null)
+
+        q; // should be A1 | A2 | A3 | A4
+>q : All
+    }
+}
+
+// Same chain via a property access reference, and soundness: this must be an error.
+
+declare class WithProp1 { parent: WithProp2 | null; prop: number; }
+>WithProp1 : WithProp1
+>parent : WithProp2 | null
+>prop : number
+
+declare class WithProp2 { parent: WithProp3 | null; prop: number; }
+>WithProp2 : WithProp2
+>parent : WithProp3 | null
+>prop : number
+
+declare class WithProp3 { parent: null; }
+>WithProp3 : WithProp3
+>parent : null
+
+function unsound(start: WithProp1 | null) {
+>unsound : (start: WithProp1 | null) => void
+>start : WithProp1 | null
+
+    let cur: WithProp1 | WithProp2 | WithProp3 | null = start;
+>cur : WithProp1 | WithProp2 | WithProp3 | null
+>start : WithProp1 | null
+
+    while (cur) {
+>cur : WithProp1 | WithProp2 | WithProp3 | null
+
+        const n: number = cur.prop; // should be an error: WithProp3 has no prop
+>n : number
+>cur.prop : any
+>cur : WithProp1 | WithProp2 | WithProp3
+>prop : any
+
+        cur = cur.parent;
+>cur = cur.parent : WithProp2 | WithProp3 | null
+>cur : WithProp1 | WithProp2 | WithProp3 | null
+>cur.parent : WithProp2 | WithProp3 | null
+>cur : WithProp1 | WithProp2 | WithProp3
+>parent : WithProp2 | WithProp3 | null
+    }
+}
+
+// Evolving array created in an outer loop and pushed in an inner loop. The fix must not
+// iterate for auto-typed variables: doing so finalizes the evolving array and degrades it to any[].
+
+declare const outer: number[][];
+>outer : number[][]
+
+function evolving() {
+>evolving : () => number[] | undefined
+
+    let result;
+>result : any
+
+    for (const list of outer) {
+>list : number[]
+>outer : number[][]
+
+        result ||= [];
+>result ||= [] : any
+>result : any
+>[] : never[]
+
+        for (const n of list) result.push(n);
+>n : number
+>list : number[]
+>result.push(n) : number
+>result.push : (...items: any[]) => number
+>result : any[]
+>push : (...items: any[]) => number
+>n : number
+    }
+    return result; // should be number[] | undefined
+>result : number[] | undefined
+}
+
+// Fifty levels deep. Each pass over the loop junction adds at least one constituent of the
+// declared union, so the number of passes scales linearly with the depth of the chain, and
+// the bound (union size + 1) guarantees convergence at any depth.
+
+declare class D1 { depth: 1; parent: D2 | null; }
+>D1 : D1
+>depth : 1
+>parent : D2 | null
+
+declare class D2 { depth: 2; parent: D3 | null; }
+>D2 : D2
+>depth : 2
+>parent : D3 | null
+
+declare class D3 { depth: 3; parent: D4 | null; }
+>D3 : D3
+>depth : 3
+>parent : D4 | null
+
+declare class D4 { depth: 4; parent: D5 | null; }
+>D4 : D4
+>depth : 4
+>parent : D5 | null
+
+declare class D5 { depth: 5; parent: D6 | null; }
+>D5 : D5
+>depth : 5
+>parent : D6 | null
+
+declare class D6 { depth: 6; parent: D7 | null; }
+>D6 : D6
+>depth : 6
+>parent : D7 | null
+
+declare class D7 { depth: 7; parent: D8 | null; }
+>D7 : D7
+>depth : 7
+>parent : D8 | null
+
+declare class D8 { depth: 8; parent: D9 | null; }
+>D8 : D8
+>depth : 8
+>parent : D9 | null
+
+declare class D9 { depth: 9; parent: D10 | null; }
+>D9 : D9
+>depth : 9
+>parent : D10 | null
+
+declare class D10 { depth: 10; parent: D11 | null; }
+>D10 : D10
+>depth : 10
+>parent : D11 | null
+
+declare class D11 { depth: 11; parent: D12 | null; }
+>D11 : D11
+>depth : 11
+>parent : D12 | null
+
+declare class D12 { depth: 12; parent: D13 | null; }
+>D12 : D12
+>depth : 12
+>parent : D13 | null
+
+declare class D13 { depth: 13; parent: D14 | null; }
+>D13 : D13
+>depth : 13
+>parent : D14 | null
+
+declare class D14 { depth: 14; parent: D15 | null; }
+>D14 : D14
+>depth : 14
+>parent : D15 | null
+
+declare class D15 { depth: 15; parent: D16 | null; }
+>D15 : D15
+>depth : 15
+>parent : D16 | null
+
+declare class D16 { depth: 16; parent: D17 | null; }
+>D16 : D16
+>depth : 16
+>parent : D17 | null
+
+declare class D17 { depth: 17; parent: D18 | null; }
+>D17 : D17
+>depth : 17
+>parent : D18 | null
+
+declare class D18 { depth: 18; parent: D19 | null; }
+>D18 : D18
+>depth : 18
+>parent : D19 | null
+
+declare class D19 { depth: 19; parent: D20 | null; }
+>D19 : D19
+>depth : 19
+>parent : D20 | null
+
+declare class D20 { depth: 20; parent: D21 | null; }
+>D20 : D20
+>depth : 20
+>parent : D21 | null
+
+declare class D21 { depth: 21; parent: D22 | null; }
+>D21 : D21
+>depth : 21
+>parent : D22 | null
+
+declare class D22 { depth: 22; parent: D23 | null; }
+>D22 : D22
+>depth : 22
+>parent : D23 | null
+
+declare class D23 { depth: 23; parent: D24 | null; }
+>D23 : D23
+>depth : 23
+>parent : D24 | null
+
+declare class D24 { depth: 24; parent: D25 | null; }
+>D24 : D24
+>depth : 24
+>parent : D25 | null
+
+declare class D25 { depth: 25; parent: D26 | null; }
+>D25 : D25
+>depth : 25
+>parent : D26 | null
+
+declare class D26 { depth: 26; parent: D27 | null; }
+>D26 : D26
+>depth : 26
+>parent : D27 | null
+
+declare class D27 { depth: 27; parent: D28 | null; }
+>D27 : D27
+>depth : 27
+>parent : D28 | null
+
+declare class D28 { depth: 28; parent: D29 | null; }
+>D28 : D28
+>depth : 28
+>parent : D29 | null
+
+declare class D29 { depth: 29; parent: D30 | null; }
+>D29 : D29
+>depth : 29
+>parent : D30 | null
+
+declare class D30 { depth: 30; parent: D31 | null; }
+>D30 : D30
+>depth : 30
+>parent : D31 | null
+
+declare class D31 { depth: 31; parent: D32 | null; }
+>D31 : D31
+>depth : 31
+>parent : D32 | null
+
+declare class D32 { depth: 32; parent: D33 | null; }
+>D32 : D32
+>depth : 32
+>parent : D33 | null
+
+declare class D33 { depth: 33; parent: D34 | null; }
+>D33 : D33
+>depth : 33
+>parent : D34 | null
+
+declare class D34 { depth: 34; parent: D35 | null; }
+>D34 : D34
+>depth : 34
+>parent : D35 | null
+
+declare class D35 { depth: 35; parent: D36 | null; }
+>D35 : D35
+>depth : 35
+>parent : D36 | null
+
+declare class D36 { depth: 36; parent: D37 | null; }
+>D36 : D36
+>depth : 36
+>parent : D37 | null
+
+declare class D37 { depth: 37; parent: D38 | null; }
+>D37 : D37
+>depth : 37
+>parent : D38 | null
+
+declare class D38 { depth: 38; parent: D39 | null; }
+>D38 : D38
+>depth : 38
+>parent : D39 | null
+
+declare class D39 { depth: 39; parent: D40 | null; }
+>D39 : D39
+>depth : 39
+>parent : D40 | null
+
+declare class D40 { depth: 40; parent: D41 | null; }
+>D40 : D40
+>depth : 40
+>parent : D41 | null
+
+declare class D41 { depth: 41; parent: D42 | null; }
+>D41 : D41
+>depth : 41
+>parent : D42 | null
+
+declare class D42 { depth: 42; parent: D43 | null; }
+>D42 : D42
+>depth : 42
+>parent : D43 | null
+
+declare class D43 { depth: 43; parent: D44 | null; }
+>D43 : D43
+>depth : 43
+>parent : D44 | null
+
+declare class D44 { depth: 44; parent: D45 | null; }
+>D44 : D44
+>depth : 44
+>parent : D45 | null
+
+declare class D45 { depth: 45; parent: D46 | null; }
+>D45 : D45
+>depth : 45
+>parent : D46 | null
+
+declare class D46 { depth: 46; parent: D47 | null; }
+>D46 : D46
+>depth : 46
+>parent : D47 | null
+
+declare class D47 { depth: 47; parent: D48 | null; }
+>D47 : D47
+>depth : 47
+>parent : D48 | null
+
+declare class D48 { depth: 48; parent: D49 | null; }
+>D48 : D48
+>depth : 48
+>parent : D49 | null
+
+declare class D49 { depth: 49; parent: D50 | null; }
+>D49 : D49
+>depth : 49
+>parent : D50 | null
+
+declare class D50 { depth: 50; parent: null; }
+>D50 : D50
+>depth : 50
+>parent : null
+
+type Deep = D1 | D2 | D3 | D4 | D5 | D6 | D7 | D8 | D9 | D10 | D11 | D12 | D13 | D14 | D15 | D16 | D17 | D18 | D19 | D20 | D21 | D22 | D23 | D24 | D25 | D26 | D27 | D28 | D29 | D30 | D31 | D32 | D33 | D34 | D35 | D36 | D37 | D38 | D39 | D40 | D41 | D42 | D43 | D44 | D45 | D46 | D47 | D48 | D49 | D50;
+>Deep : Deep
+
+declare const deepStart: D1 | null;
+>deepStart : D1 | null
+
+function fifty() {
+>fifty : () => void
+
+    let cur: Deep | null = deepStart;
+>cur : Deep | null
+>deepStart : D1 | null
+
+    while (cur) {
+>cur : Deep | null
+
+        cur; // should be all of D1 through D50
+>cur : Deep
+
+        if (cur.depth === 50) {
+>cur.depth === 50 : boolean
+>cur.depth : 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21 | 22 | 23 | 24 | 25 | 26 | 27 | 28 | 29 | 30 | 31 | 32 | 33 | 34 | 35 | 36 | 37 | 38 | 39 | 40 | 41 | 42 | 43 | 44 | 45 | 46 | 47 | 48 | 49 | 50
+>cur : Deep
+>depth : 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21 | 22 | 23 | 24 | 25 | 26 | 27 | 28 | 29 | 30 | 31 | 32 | 33 | 34 | 35 | 36 | 37 | 38 | 39 | 40 | 41 | 42 | 43 | 44 | 45 | 46 | 47 | 48 | 49 | 50
+>50 : 50
+
+            cur; // should be D50, not never
+>cur : D50
+        }
+        cur = cur.parent;
+>cur = cur.parent : D10 | D11 | D12 | D13 | D14 | D15 | D16 | D17 | D18 | D19 | D2 | D20 | D21 | D22 | D23 | D24 | D25 | D26 | D27 | D28 | D29 | D3 | D30 | D31 | D32 | D33 | D34 | D35 | D36 | D37 | D38 | D39 | D4 | D40 | D41 | D42 | D43 | D44 | D45 | D46 | D47 | D48 | D49 | D5 | D50 | D6 | D7 | D8 | D9 | null
+>cur : Deep | null
+>cur.parent : D10 | D11 | D12 | D13 | D14 | D15 | D16 | D17 | D18 | D19 | D2 | D20 | D21 | D22 | D23 | D24 | D25 | D26 | D27 | D28 | D29 | D3 | D30 | D31 | D32 | D33 | D34 | D35 | D36 | D37 | D38 | D39 | D4 | D40 | D41 | D42 | D43 | D44 | D45 | D46 | D47 | D48 | D49 | D5 | D50 | D6 | D7 | D8 | D9 | null
+>cur : D1 | D10 | D11 | D12 | D13 | D14 | D15 | D16 | D17 | D18 | D19 | D2 | D20 | D21 | D22 | D23 | D24 | D25 | D26 | D27 | D28 | D29 | D3 | D30 | D31 | D32 | D33 | D34 | D35 | D36 | D37 | D38 | D39 | D4 | D40 | D41 | D42 | D43 | D44 | D45 | D46 | D47 | D48 | D49 | D5 | D50 | D6 | D7 | D8 | D9
+>parent : D10 | D11 | D12 | D13 | D14 | D15 | D16 | D17 | D18 | D19 | D2 | D20 | D21 | D22 | D23 | D24 | D25 | D26 | D27 | D28 | D29 | D3 | D30 | D31 | D32 | D33 | D34 | D35 | D36 | D37 | D38 | D39 | D4 | D40 | D41 | D42 | D43 | D44 | D45 | D46 | D47 | D48 | D49 | D5 | D50 | D6 | D7 | D8 | D9 | null
+    }
+}
+

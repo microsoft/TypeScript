@@ -256,8 +256,9 @@ type FlowLoopKey struct {
 }
 
 type FlowLoopInfo struct {
-	key   FlowLoopKey
-	types []*Type
+	key       FlowLoopKey
+	types     []*Type
+	reentered bool // set when the in-process types were observed by a nested flow analysis of the same reference
 }
 
 // InferenceFlags
