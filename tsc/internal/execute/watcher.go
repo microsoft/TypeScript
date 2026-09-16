@@ -19,6 +19,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/fswatch"
 	"github.com/microsoft/TypeScript/tsc/internal/tsoptions"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
+	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/cachedvfs"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/trackingvfs"
 )
@@ -111,7 +112,7 @@ func createWatcher(
 	reportErrorSummary tsc.DiagnosticsReporter,
 	testing tsc.CommandLineTesting,
 ) *Watcher {
-	wm := watchmanager.NewWatchManager(sys.Writer(), sys.FS().DirectoryExists)
+	wm := watchmanager.NewWatchManager(sys.Writer(), sys.FS().DirectoryExists, sys.FS())
 	if t, ok := testing.(watchmanager.CommandLineTestingWithWatchBackend); ok {
 		wm.SetBackend(t.WatchBackend())
 	}
@@ -158,7 +159,7 @@ func (w *Watcher) start(ctx context.Context) {
 
 	w.reportWatchStatus(ast.NewCompilerDiagnostic(diagnostics.Starting_compilation_in_watch_mode))
 	w.watchSetDirty = true
-	if err := w.doBuild(); err != nil {
+	if err := w.doBuild(false); err != nil {
 		w.wm.ForceOverflow()
 	}
 	w.wm.Unlock()
@@ -204,28 +205,29 @@ func (w *Watcher) contentMapperWatchedFiles() []string {
 	return files
 }
 
-func (w *Watcher) computeDesiredWatches(seenFilePaths []string) map[string]bool {
+func (w *Watcher) computeDesiredWatches(seenFilePaths []string, filesystem vfs.FS) map[string]bool {
 	cwd := w.sys.GetCurrentDirectory()
+	realpath := func(name string) string { return w.wm.Realpath(name, filesystem) }
 
 	desiredDirs := make(map[string]bool) // dir → recursive
 
 	// Wildcard directories from tsconfig (recursive or non-recursive)
 	if w.config.ConfigFile != nil {
 		for dir, recursive := range w.config.WildcardDirectories() {
-			realDir := w.sys.FS().Realpath(dir)
+			realDir := realpath(dir)
 			desiredDirs[realDir] = recursive
 		}
 	}
 
 	// For no-config CLI mode, ensure CWD is watched
 	if w.config.ConfigFile == nil && len(desiredDirs) == 0 {
-		dir := w.sys.FS().Realpath(cwd)
+		dir := realpath(cwd)
 		desiredDirs[dir] = false
 	}
 
 	// Config file parent directories as non-recursive watches
 	for _, cfgPath := range w.configFilePaths {
-		realPath := w.sys.FS().Realpath(cfgPath)
+		realPath := realpath(cfgPath)
 		dir := tspath.GetDirectoryPath(realPath)
 		if _, has := desiredDirs[dir]; !has {
 			desiredDirs[dir] = false
@@ -236,7 +238,7 @@ func (w *Watcher) computeDesiredWatches(seenFilePaths []string) map[string]bool 
 	if w.config.ConfigFile == nil {
 		for _, fileName := range w.config.FileNames() {
 			absPath := tspath.GetNormalizedAbsolutePath(fileName, cwd)
-			realPath := w.sys.FS().Realpath(absPath)
+			realPath := realpath(absPath)
 			dir := tspath.GetDirectoryPath(realPath)
 			if _, has := desiredDirs[dir]; !has {
 				desiredDirs[dir] = false
@@ -253,7 +255,7 @@ func (w *Watcher) computeDesiredWatches(seenFilePaths []string) map[string]bool 
 		coverage.Set(dir, recursive)
 	}
 	for _, filePath := range seenFilePaths {
-		dir := tspath.GetDirectoryPath(filePath)
+		dir := tspath.GetDirectoryPath(realpath(filePath))
 		if !coverage.Covered(dir) && watchmanager.CanWatchDirectory(dir) {
 			coverage.Set(dir, false)
 		}
@@ -263,9 +265,19 @@ func (w *Watcher) computeDesiredWatches(seenFilePaths []string) map[string]bool 
 	return w.wm.ResolveDesiredDirs(coverage.Dirs())
 }
 
-func (w *Watcher) reconcileWatches(seenFilePaths []string) error {
-	desiredDirs := w.computeDesiredWatches(seenFilePaths)
-	return w.wm.ReconcileWatches(desiredDirs)
+func (w *Watcher) reconcileWatches(seenFilePaths []string, filesystem vfs.FS) error {
+	watchFiles := append(slices.Clone(seenFilePaths), w.configFilePaths...)
+	watchFiles = append(watchFiles, w.contentMapperWatchedFiles()...)
+	for _, file := range w.config.FileNames() {
+		watchFiles = append(watchFiles, tspath.GetNormalizedAbsolutePath(file, w.sys.GetCurrentDirectory()))
+	}
+	if w.config.ConfigFile != nil {
+		for dir := range w.config.WildcardDirectories() {
+			watchFiles = append(watchFiles, dir)
+		}
+	}
+	desiredDirs := w.computeDesiredWatches(seenFilePaths, filesystem)
+	return w.wm.ReconcileWatches(watchFiles, desiredDirs, filesystem)
 }
 
 func (w *Watcher) comparePathsOptions() tspath.ComparePathsOptions {
@@ -279,14 +291,28 @@ func (w *Watcher) DoCycle() {
 	w.wm.Lock()
 	defer w.wm.Unlock()
 
-	changedPaths, overflow := w.wm.DrainEvents()
+	changes := w.wm.DrainEvents()
+	realpathsChanged, err := w.wm.RefreshResolutions(changes)
+	changedPaths, overflow := changes.Changes, changes.Overflow
+	if err != nil {
+		fmt.Fprintf(w.sys.Writer(), "%v\n", err)
+		overflow = true
+	}
 	hasEvents := len(changedPaths) > 0 || overflow
 
-	if w.recheckTsConfig(w.contentMapperManifestChanged(changedPaths)) {
+	if w.recheckTsConfig(overflow || realpathsChanged || w.contentMapperManifestChanged(changedPaths)) {
+		if realpathsChanged || overflow {
+			// A malformed replacement config must still be watched at its new
+			// target so fixing it can recover without another logical-link event.
+			if err := w.reconcileWatches(w.wm.WatchFiles(), w.sys.FS()); err != nil {
+				fmt.Fprintf(w.sys.Writer(), "%v\n", err)
+				w.wm.ForceOverflow()
+			}
+		}
 		return
 	}
 
-	if hasEvents && !overflow && !w.configModified {
+	if hasEvents && !overflow && !w.configModified && !realpathsChanged {
 		// Filter fswatch events against known dependencies
 		if w.isRelevantChange(changedPaths) {
 			w.evictChangedSourceFiles(changedPaths)
@@ -297,7 +323,11 @@ func (w *Watcher) DoCycle() {
 				return tspath.ToPath(fileName, cwd, caseSensitive)
 			})...)
 			contentMapperConfigChanged := false
-			for eventPath := range changedPaths {
+			for eventPath, kind := range changedPaths {
+				if kind == fswatch.EventDelete {
+					w.watchSetDirty = true
+					w.forceFullRebuild = true
+				}
 				if w.sys.FS().DirectoryExists(eventPath) {
 					// A watched directory changed: the wildcard file set may have
 					// changed, so reload file names on the next build.
@@ -369,7 +399,7 @@ func (w *Watcher) DoCycle() {
 	}
 
 	w.reportWatchStatus(ast.NewCompilerDiagnostic(diagnostics.File_change_detected_Starting_incremental_compilation))
-	if err := w.doBuild(); err != nil {
+	if err := w.doBuild(realpathsChanged); err != nil {
 		// Mid-cycle watch failure; force a full rebuild on the next event
 		w.wm.ForceOverflow()
 	}
@@ -405,8 +435,11 @@ func (w *Watcher) isRelevantChange(changedPaths map[string]fswatch.EventKind) bo
 	return false
 }
 
-func (w *Watcher) doBuild() error {
-	if w.configModified {
+func (w *Watcher) doBuild(realpathsChanged bool) error {
+	if realpathsChanged {
+		w.forceFullRebuild = true
+	}
+	if w.configModified || realpathsChanged {
 		w.sourceFileCache = &collections.SyncMap[tspath.Path, *cachedSourceFile]{}
 		w.watchSetDirty = true
 	}
@@ -487,7 +520,7 @@ func (w *Watcher) doBuild() error {
 	w.fullBuilds++
 
 	result := w.compileAndEmit()
-	cached.DisableAndClearCache()
+	defer cached.DisableAndClearCache()
 
 	caseSensitive := w.sys.FS().UseCaseSensitiveFileNames()
 	cwd := w.sys.GetCurrentDirectory()
@@ -504,10 +537,11 @@ func (w *Watcher) doBuild() error {
 		}
 	}
 
-	if err := w.reconcileWatches(seenSlice); err != nil {
+	if err := w.reconcileWatches(seenSlice, cached); err != nil {
 		fmt.Fprintf(w.sys.Writer(), "%v\n", err)
 		return err
 	}
+	cached.DisableAndClearCache()
 	w.watchSetDirty = false
 	w.configModified = false
 	w.forceFullRebuild = false
@@ -619,11 +653,22 @@ func (w *Watcher) compileAndEmit() tsc.CompileAndEmitResult {
 }
 
 func (w *Watcher) contentMapperManifestChanged(changedPaths map[string]fswatch.EventKind) bool {
-	for _, mapper := range w.config.ContentMappers() {
+	mappers := w.config.ContentMappers()
+	if len(mappers) == 0 || len(changedPaths) == 0 {
+		return false
+	}
+	cwd := w.sys.GetCurrentDirectory()
+	caseSensitive := w.sys.FS().UseCaseSensitiveFileNames()
+	changed := collections.NewSetWithSizeHint[tspath.Path](len(changedPaths))
+	for fileName := range changedPaths {
+		changed.Add(tspath.ToPath(fileName, cwd, caseSensitive))
+	}
+	for _, mapper := range mappers {
 		if mapper.PackageDirectory == "" || mapper.ContributionID != "" {
 			continue
 		}
-		if _, changed := changedPaths[tspath.CombinePaths(mapper.PackageDirectory, "package.json")]; changed {
+		manifest := tspath.CombinePaths(mapper.PackageDirectory, "package.json")
+		if changed.Has(tspath.ToPath(manifest, cwd, caseSensitive)) {
 			return true
 		}
 	}

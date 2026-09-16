@@ -4,13 +4,34 @@ import (
 	"testing"
 	"testing/fstest"
 
+	"github.com/microsoft/TypeScript/tsc/internal/bundled"
 	"github.com/microsoft/TypeScript/tsc/internal/repo"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
+	"github.com/microsoft/TypeScript/tsc/internal/vfs/cachedvfs"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/osvfs"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfstest"
 	"gotest.tools/v3/assert"
 )
+
+func TestRealpathWithParentFallback(t *testing.T) {
+	t.Parallel()
+	for _, caseSensitive := range []bool{true, false} {
+		disk := vfstest.FromMap(map[string]any{
+			"/virtual-watch-only/target/file.ts": "",
+			"/virtual-watch-only/link":           vfstest.Symlink("/virtual-watch-only/target"),
+		}, caseSensitive)
+		for _, fs := range []vfs.FS{disk, cachedvfs.From(disk), bundled.WrapFS(cachedvfs.From(disk))} {
+			for _, name := range []string{"/virtual-watch-only/link/file.ts", "/virtual-watch-only/link/missing.ts"} {
+				got := vfs.RealpathWithParent(fs, name, func(string) string {
+					t.Fatal("a filesystem without the capability must use its own resolver")
+					return ""
+				})
+				assert.Equal(t, got, disk.Realpath(name))
+			}
+		}
+	}
+}
 
 func BenchmarkReadFile(b *testing.B) {
 	type bench struct {

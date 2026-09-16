@@ -8,17 +8,22 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/tsoptions"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
+	"github.com/microsoft/TypeScript/tsc/internal/vfs/trackingvfs"
 )
 
 type compilerHost struct {
 	host                 *host
 	trace                func(msg *diagnostics.Message, args ...any)
 	contentMapperProject contentmapper.Project
+	tracked              *trackingvfs.FS
 }
 
 var _ compiler.CompilerHost = (*compilerHost)(nil)
 
 func (h *compilerHost) FS() vfs.FS {
+	if h.tracked != nil {
+		return h.tracked
+	}
 	return h.host.FS()
 }
 
@@ -35,6 +40,9 @@ func (h *compilerHost) Trace(msg *diagnostics.Message, args ...any) {
 }
 
 func (h *compilerHost) GetSourceFile(opts ast.SourceFileParseOptions) *ast.SourceFile {
+	if h.tracked != nil {
+		h.tracked.SeenFiles.Add(opts.FileName)
+	}
 	return h.host.GetSourceFile(opts)
 }
 

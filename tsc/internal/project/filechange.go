@@ -1,6 +1,8 @@
 package project
 
 import (
+	"slices"
+
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 )
@@ -49,6 +51,11 @@ type FileChangeSummary struct {
 	IncludesWatchChangeOutsideNodeModules bool
 	// InvalidateAll indicates that all cached file state should be discarded.
 	InvalidateAll bool
+
+	// Preserve events hidden by overlay coalescing and content filtering. Alias
+	// directory comparers and realpaths must be refreshed even when file text is unchanged.
+	hasFileSystemChanges bool
+	preparedWatchChanges *preparedWatchChanges
 }
 
 func (f FileChangeSummary) IsEmpty() bool {
@@ -65,6 +72,20 @@ func (f FileChangeSummary) HasExcessiveNonCreateWatchEvents() bool {
 
 // mergeFileChangeSummary merges src into dst, combining their change sets.
 func mergeFileChangeSummary(dst *FileChangeSummary, src FileChangeSummary) {
+	dst.hasFileSystemChanges = dst.hasFileSystemChanges || src.hasFileSystemChanges
+	if prepared := src.preparedWatchChanges; prepared != nil {
+		if previous := dst.preparedWatchChanges; previous != nil {
+			if previous.snapshotID != prepared.snapshotID {
+				panic("cannot merge watch changes prepared for different snapshots")
+			}
+			dst.preparedWatchChanges = &preparedWatchChanges{
+				snapshotID: prepared.snapshotID,
+				affected:   slices.Concat(previous.affected, prepared.affected),
+			}
+		} else {
+			dst.preparedWatchChanges = prepared
+		}
+	}
 	if src.IsEmpty() {
 		return
 	}
