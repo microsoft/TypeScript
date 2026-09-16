@@ -79,27 +79,34 @@ func (s *SnapshotHost) CloneSnapshot(
 	fileChanges FileChangeSummary,
 	apiRequest *APISnapshotRequest,
 ) (*Snapshot, error) {
-	snapshot := s.update(ctx, baseSnapshot, SnapshotChange{
+	change := SnapshotChange{
 		apiRequest:  apiRequest,
 		fileChanges: fileChanges,
-	})
+	}
+	if apiRequest != nil {
+		change.fs = apiRequest.FileSystem
+		change.fileSystemOverride = apiRequest.FileSystem != nil
+		change.replaceFileSystem = apiRequest.ReplaceFileSystem
+	}
+	snapshot := s.update(ctx, baseSnapshot, change)
 	return snapshot, snapshot.apiError
 }
 
 // update derives a snapshot from baseSnapshot without adopting it as any
 // canonical session state or performing session side effects.
 func (s *SnapshotHost) update(ctx context.Context, baseSnapshot *Snapshot, change SnapshotChange) *Snapshot {
-	return baseSnapshot.Clone(ctx, change, baseSnapshot.fs.overlays, nil)
+	return baseSnapshot.Clone(ctx, change, baseSnapshot.overlays(), nil)
 }
 
 // CloneSnapshotWithTemporaryFile derives a snapshot with a temporary file content override.
 func (s *SnapshotHost) CloneSnapshotWithTemporaryFile(
 	ctx context.Context,
 	baseSnapshot *Snapshot,
+	fileSystem vfs.FS,
 	uri lsproto.DocumentUri,
 	newText string,
 ) (*Snapshot, error) {
-	return baseSnapshot.cloneWithTemporaryFile(ctx, uri, newText)
+	return baseSnapshot.cloneWithTemporaryFile(ctx, fileSystem, uri, newText)
 }
 
 // CloneSnapshotForProgram derives an isolated snapshot containing one synthetic
@@ -107,6 +114,7 @@ func (s *SnapshotHost) CloneSnapshotWithTemporaryFile(
 func (s *SnapshotHost) CloneSnapshotForProgram(
 	ctx context.Context,
 	baseSnapshot *Snapshot,
+	fileSystem vfs.FS,
 	rootFileNames []string,
 	options *core.CompilerOptions,
 	projectReferences []*core.ProjectReference,
@@ -116,6 +124,7 @@ func (s *SnapshotHost) CloneSnapshotForProgram(
 ) *Snapshot {
 	return baseSnapshot.cloneForProgram(
 		ctx,
+		fileSystem,
 		rootFileNames,
 		options,
 		projectReferences,
@@ -130,22 +139,24 @@ func (s *SnapshotHost) CloneSnapshotForProgram(
 // adopting the clone in the background.
 func (s *SnapshotHost) CloneSnapshotWithAutoImports(ctx context.Context, baseSnapshot *Snapshot, uri lsproto.DocumentUri, logger logging.Logger) *Snapshot {
 	change := SnapshotChange{
-		reason: UpdateReasonRequestedLanguageServiceWithAutoImports,
+		reason:             UpdateReasonRequestedLanguageServiceWithAutoImports,
+		fs:                 baseSnapshot.fs.fs,
+		fileSystemOverride: baseSnapshot.fileSystemOverride,
 		ResourceRequest: ResourceRequest{
 			Documents:   []lsproto.DocumentUri{uri},
 			AutoImports: uri,
 		},
 	}
-	return baseSnapshot.Clone(ctx, change, baseSnapshot.fs.overlays, logger)
+	return baseSnapshot.Clone(ctx, change, baseSnapshot.overlays(), logger)
 }
 
 func (s *SnapshotHost) newRootSnapshot(id uint64, relativePatternSupport bool) *Snapshot {
+	fileSystem := newOverlayFS(s.fs, nil, s.options.PositionEncoding, s.toPath)
 	return s.newSnapshot(
 		id,
 		&SnapshotFS{
-			toPath:   s.toPath,
-			fs:       s.fs,
-			overlays: make(map[tspath.Path]*Overlay),
+			toPath: s.toPath,
+			fs:     fileSystem,
 		},
 		&ConfigFileRegistry{},
 		nil,

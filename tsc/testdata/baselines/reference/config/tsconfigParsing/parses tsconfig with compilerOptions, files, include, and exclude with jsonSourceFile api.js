@@ -36,7 +36,7 @@ Fs::
 configFileName:: /apath/tsconfig.json
 CompilerOptions::
 {
-  "jsx": 3,
+  "jsx": 2,
   "module": 99,
   "moduleResolution": 100,
   "moduleDetection": 1,
