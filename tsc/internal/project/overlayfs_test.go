@@ -248,6 +248,39 @@ func TestProcessChanges(t *testing.T) {
 		assert.Assert(t, !fs.getFile(testURI1.FileName()).MatchesDiskText())
 	})
 
+	t.Run("watch create on open overlay updates matchesDiskText", func(t *testing.T) {
+		t.Parallel()
+		fs := createOverlayFS()
+
+		// Open overlay
+		fs.processChanges([]FileChange{
+			{
+				Kind:    FileChangeKindOpen,
+				URI:     testURI1,
+				Content: "overlay content",
+			},
+		})
+		assert.Assert(t, !fs.getFile(testURI1.FileName()).MatchesDiskText())
+
+		// Save overlay (matches disk)
+		fs.processChanges([]FileChange{
+			{
+				Kind: FileChangeKindSave,
+				URI:  testURI1,
+			},
+		})
+		assert.Assert(t, fs.getFile(testURI1.FileName()).MatchesDiskText())
+
+		// Watch create event on disk (e.g. external overwrite)
+		fs.processChanges([]FileChange{
+			{
+				Kind: FileChangeKindWatchCreate,
+				URI:  testURI1,
+			},
+		})
+		assert.Assert(t, !fs.getFile(testURI1.FileName()).MatchesDiskText())
+	})
+
 	t.Run("save without overlay should not panic", func(t *testing.T) {
 		t.Parallel()
 		fs := createOverlayFS()
