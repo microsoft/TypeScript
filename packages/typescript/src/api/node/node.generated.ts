@@ -271,6 +271,31 @@ export class RemoteNode extends RemoteNodeBase implements Node {
         }
     }
 
+    *childrenIter<TNext = void>(): Generator<Node, TNext | undefined, TNext> {
+        if (this.hasChildren()) {
+            let next = this.index + 1;
+            do {
+                const child = this.getOrCreateChildAtNodeIndex(next);
+                if (child instanceof RemoteNodeList) {
+                    for (const c of child) {
+                        const result = yield c;
+                        if (result) {
+                            return result;
+                        }
+                    }
+                }
+                else if (child.kind !== SyntaxKind.JSDoc) {
+                    const result = yield child;
+                    if (result) {
+                        return result;
+                    }
+                }
+                next = child.next;
+            }
+            while (next);
+        }
+    }
+
     get jsDoc(): readonly Node[] | undefined {
         if (!this.hasChildren()) {
             return undefined;

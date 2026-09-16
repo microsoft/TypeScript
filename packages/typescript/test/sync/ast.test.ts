@@ -44,7 +44,7 @@ import {
     visitNodes,
 } from "@typescript/typescript/unstable/ast/visitor";
 import { createVirtualFileSystem } from "@typescript/typescript/unstable/fs";
-import { API } from "@typescript/typescript/unstable/sync";
+import { API, Checker, TypeFlags } from "@typescript/typescript/unstable/sync";
 import assert from "node:assert";
 import {
     describe,
@@ -575,10 +575,14 @@ function spawnAPI(files: Record<string, string> = {
     });
 }
 
-function getRemoteSourceFile(api: API, configPath: string, filePath: string) {
+function getRemoteSourceFileAndChecker(api: API, configPath: string, filePath: string) {
     const snapshot = api.updateSnapshot({ openProject: configPath });
     const project = snapshot.getProject(configPath)!;
-    return project.program.getSourceFile(filePath)!;
+    return [project.program.getSourceFile(filePath)!, project.checker] as const;
+}
+
+function getRemoteSourceFile(api: API, configPath: string, filePath: string) {
+    return getRemoteSourceFileAndChecker(api, configPath, filePath)[0];
 }
 
 describe("RemoteNode + cloneNode", () => {
@@ -1051,6 +1055,17 @@ describe("RemoteNode + child/token getters", () => {
         }
     }
 
+    async function withFirstStatementAsync(source: string, fn: (stmt: Node, sf: SourceFile, api: API<false>, checker: Checker) => Promise<void>) {
+        const api = spawnAPI({ "/tsconfig.json": "{}", "/src/children.ts": source });
+        try {
+            const [sf, checker] = getRemoteSourceFileAndChecker(api, "/tsconfig.json", "/src/children.ts");
+            await fn(sf.statements[0], sf, api, checker);
+        }
+        finally {
+            api.close();
+        }
+    }
+
     function findFirstOfKind(node: Node, kind: SyntaxKind): Node | undefined {
         let found: Node | undefined;
         const walk = (n: Node): undefined => {
@@ -1064,6 +1079,42 @@ describe("RemoteNode + child/token getters", () => {
         walk(node);
         return found;
     }
+
+    test("childrenIter generates all node children and supports early return value passthru", () => {
+        withFirstStatement("if (x) {}", stmt => {
+            const texts: string[] = [];
+            for (const c of stmt.childrenIter()) {
+                texts.push(c.getText());
+            }
+            assert.deepStrictEqual(texts, ["x", "{}"]);
+            const cGen = stmt.childrenIter<Node | undefined>();
+            let state = cGen.next();
+            while (!state.done) {
+                const n = state.value;
+                let foundX: Node | undefined;
+                if (n.getText() === "x") {
+                    foundX = n;
+                }
+                state = cGen.next(foundX);
+            }
+            assert.strictEqual(state.value, stmt.forEachChild((n) => { return n }));
+        });
+    });
+
+    test("childrenIter works with async generators", async () => {
+        await withFirstStatementAsync("class X { p: any }", async (stmt, sf, api, checker) => {
+            async function *visitNodeForFirstAnyChild(node: Node): AsyncGenerator<Node | undefined, Node | undefined, Node | undefined> {
+                for (const n of node.childrenIter()) {
+                    const t = await checker.getTypeAtLocation(n);
+                    if (t.flags & TypeFlags.Any) { return n; }
+                    const res = yield* visitNodeForFirstAnyChild(n)
+                    if (res) { return res; }
+                }
+            }
+            const res = (await visitNodeForFirstAnyChild(stmt).next()).value;
+            assert.strictEqual(res!.getText(), "p: any");
+        });
+    });
 
     test("getChildren materializes the punctuation/keyword tokens the AST omits", () => {
         withFirstStatement("if (x) {}", stmt => {
