@@ -78,8 +78,6 @@ for (const [index, offset] of Object.values(sourceFileExtendedDataOffsets).entri
 const NO_STRUCTURED_DATA = 0xFFFFFFFF;
 
 export class RemoteSourceFile extends RemoteNode implements SourceFileInfo {
-    readonly contentHash: string;
-    readonly parseOptionsKey: string;
     readonly hasProgramIdentity: boolean;
     readonly nodes: (RemoteNode | RemoteNodeList)[];
     readonly _offsetNodes: number;
@@ -115,8 +113,6 @@ export class RemoteSourceFile extends RemoteNode implements SourceFileInfo {
         this._offsetStructuredData = view.getUint32(HEADER_OFFSET_STRUCTURED_DATA, true);
         this._decoder = decoder;
         this._timing = timing;
-        this.contentHash = readSourceFileHash(view);
-        this.parseOptionsKey = readParseOptionsKey(view);
         this.hasProgramIdentity = hasProgramIdentity;
         this.nodes = Array((view.byteLength - offsetNodes) / NODE_LEN);
         this.nodes[1] = this;
@@ -444,16 +440,12 @@ export function findDescendant(root: Node, pos: number, end: number, kind: Synta
 export interface ParsedNodeHandle {
     index: number;
     kind: SyntaxKind;
-    contentHash: string;
-    parseOptionsKey: string;
-    scriptKind: ScriptKind;
-    isDeclarationFile: boolean;
     path: Path;
 }
 
 /**
  * Parse a node handle string into its components.
- * Handle format: "index.kind.contentHash.parseOptionsKey.scriptKind.isDeclarationFile.path".
+ * Handle format: "index.kind.path" where path may contain dots.
  */
 export function parseNodeHandle(handle: string): ParsedNodeHandle {
     const firstDot = handle.indexOf(".");
@@ -464,44 +456,10 @@ export function parseNodeHandle(handle: string): ParsedNodeHandle {
     if (secondDot === -1) {
         throw new Error(`Invalid node handle: ${handle}`);
     }
-    const thirdDot = handle.indexOf(".", secondDot + 1);
-    if (thirdDot === -1) {
-        throw new Error(`Invalid node handle: ${handle}`);
-    }
-    const fourthDot = handle.indexOf(".", thirdDot + 1);
-    const fifthDot = handle.indexOf(".", fourthDot + 1);
-    const sixthDot = handle.indexOf(".", fifthDot + 1);
-    if (fourthDot === -1 || fifthDot === -1 || sixthDot === -1) {
-        throw new Error(`Invalid node handle: ${handle}`);
-    }
-
-    const index = Number(handle.slice(0, firstDot));
-    const kind = Number(handle.slice(firstDot + 1, secondDot));
-    const contentHash = handle.slice(secondDot + 1, thirdDot);
-    const parseOptionsKey = handle.slice(thirdDot + 1, fourthDot);
-    const scriptKind = Number(handle.slice(fourthDot + 1, fifthDot));
-    const isDeclarationFile = handle.slice(fifthDot + 1, sixthDot);
-    const path = handle.slice(sixthDot + 1);
-    if (
-        !Number.isSafeInteger(index) || index < 0
-        || !Number.isSafeInteger(kind) || kind < SyntaxKind.FirstToken || kind >= SyntaxKind.Count
-        || !/^[0-9a-f]{32}$/.test(contentHash)
-        || !/^\d+$/.test(parseOptionsKey)
-        || !Number.isSafeInteger(scriptKind) || scriptKind < ScriptKind.Unknown || scriptKind > ScriptKind.JSON
-        || (isDeclarationFile !== "0" && isDeclarationFile !== "1")
-        || path.length === 0
-    ) {
-        throw new Error(`Invalid node handle: ${handle}`);
-    }
-
     return {
-        index,
-        kind: kind as SyntaxKind,
-        contentHash,
-        parseOptionsKey,
-        scriptKind: scriptKind as ScriptKind,
-        isDeclarationFile: isDeclarationFile === "1",
-        path: path as Path,
+        index: parseInt(handle.slice(0, firstDot), 10),
+        kind: parseInt(handle.slice(firstDot + 1, secondDot), 10) as SyntaxKind,
+        path: handle.slice(secondDot + 1) as Path,
     };
 }
 

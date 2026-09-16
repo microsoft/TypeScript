@@ -3,7 +3,6 @@ package api
 import (
 	"context"
 	"encoding/base64"
-	"encoding/hex"
 	"errors"
 	"fmt"
 	"runtime/debug"
@@ -109,23 +108,14 @@ func (sd *snapshotData) getProject(projectHandle ProjectID) (*project.Project, e
 	return proj, nil
 }
 
-// nodeHandleFrom creates an index-based node handle
-// (index.kind.hash.parseOptionsKey.scriptKind.isDeclarationFile.path), building a node index table on demand.
+// nodeHandleFrom creates an index-based node handle (index.kind.path), building a node index table
+// for the file on-demand if needed.
 func (sd *snapshotData) nodeHandleFrom(node *ast.Node) NodeHandle {
 	sourceFile := ast.GetSourceFileOfNode(node)
 	path := sourceFile.Path()
 	table := encoder.GetNodeIndexTable(sourceFile)
 	idx := table.GetIndex(node)
-	return NodeHandle(fmt.Sprintf(
-		"%d.%d.%s.%d.%d.%d.%s",
-		idx,
-		node.Kind,
-		encoder.SourceFileHash(sourceFile),
-		encoder.SourceFileParseOptionsKey(sourceFile),
-		sourceFile.ScriptKind,
-		core.IfElse(sourceFile.IsDeclarationFile, 1, 0),
-		path,
-	))
+	return NodeHandle(fmt.Sprintf("%d.%d.%s", idx, node.Kind, path))
 }
 
 // getOrCreateProjectRegistry returns the registry for the given project, creating it if needed.
@@ -1632,28 +1622,20 @@ func (s *Session) handleTranspile(ctx context.Context, params *TranspileParams, 
 
 // @gen-proto-result: SourceFileResponse
 func (s *Session) handleCreateSourceFile(ctx context.Context, params *CreateSourceFileParams) (any, error) {
-	fileName, err := decodeWtf8Base64(params.FileNameBase64, "fileNameBase64")
-	if err != nil {
-		return nil, err
-	}
 	sourceText, err := decodeWtf8Base64(params.SourceTextBase64, "sourceTextBase64")
 	if err != nil {
 		return nil, err
 	}
-	sourceFile, err := s.createSourceFile(fileName, sourceText, params.Options)
+	sourceFile, err := s.createSourceFile(params.FileName, sourceText, params.Options)
 	if err != nil {
 		return nil, err
 	}
-	return s.encodeSourceFileResponseWithFileName(sourceFile, fileName)
+	return s.encodeSourceFileResponseWithFileName(sourceFile, params.FileName)
 }
 
 // @gen-proto-result: SourceFileResponse
 func (s *Session) handleCreateSourceFileFromFile(ctx context.Context, params *CreateSourceFileFromFileParams) (any, error) {
-	displayFileName, err := decodeWtf8Base64(params.FileNameBase64, "fileNameBase64")
-	if err != nil {
-		return nil, err
-	}
-	fileName := tspath.GetNormalizedAbsolutePath(displayFileName, s.currentDirectory())
+	fileName := tspath.GetNormalizedAbsolutePath(params.FileName, s.currentDirectory())
 	sourceText, ok := s.snapshotHost.FS().ReadFile(fileName)
 	if !ok {
 		return nil, fmt.Errorf("%w: could not read file %q", ErrClientError, fileName)
@@ -1662,7 +1644,7 @@ func (s *Session) handleCreateSourceFileFromFile(ctx context.Context, params *Cr
 	if err != nil {
 		return nil, err
 	}
-	return s.encodeSourceFileResponseWithFileName(sourceFile, displayFileName)
+	return s.encodeSourceFileResponseWithFileName(sourceFile, params.FileName)
 }
 
 func (s *Session) createSourceFile(fileName string, sourceText string, options CreateSourceFileOptions) (*ast.SourceFile, error) {
@@ -4279,62 +4261,32 @@ func (s *Session) handleGetFalseTypeOfConditionalType(ctx context.Context, param
 
 func (sd *snapshotData) resolveNodeHandle(program *compiler.Program, handle NodeHandle) (*ast.Node, error) {
 	s := string(handle)
-	// Format: "index.kind.hash.parseOptionsKey.scriptKind.isDeclarationFile.path".
-	parts := strings.SplitN(s, ".", 7)
-	if len(parts) != 7 {
+	// Format: "index.kind.path" — we need index and path, kind is informational only.
+	firstDot := strings.IndexByte(s, '.')
+	if firstDot == -1 {
 		return nil, fmt.Errorf("%w: invalid node handle %q", ErrClientError, handle)
 	}
+	secondDot := strings.IndexByte(s[firstDot+1:], '.')
+	if secondDot == -1 {
+		return nil, fmt.Errorf("%w: invalid node handle %q", ErrClientError, handle)
+	}
+	secondDot += firstDot + 1 // adjust to absolute index
 
-	idx, err := strconv.ParseUint(parts[0], 10, 32)
+	idx, err := strconv.ParseUint(s[:firstDot], 10, 32)
 	if err != nil {
 		return nil, fmt.Errorf("%w: invalid node handle %q: %w", ErrClientError, handle, err)
 	}
-	expectedKind, err := strconv.ParseInt(parts[1], 10, 32)
-	if err != nil {
-		return nil, fmt.Errorf("%w: invalid node handle %q: %w", ErrClientError, handle, err)
-	}
-	hash := parts[2]
-	if len(hash) != 32 {
-		return nil, fmt.Errorf("%w: invalid node handle %q", ErrClientError, handle)
-	}
-	if _, decodeHashErr := hex.DecodeString(hash); decodeHashErr != nil {
-		return nil, fmt.Errorf("%w: invalid node handle %q: %w", ErrClientError, handle, decodeHashErr)
-	}
-	parseOptionsKey, err := strconv.ParseUint(parts[3], 10, 32)
-	if err != nil {
-		return nil, fmt.Errorf("%w: invalid node handle %q: %w", ErrClientError, handle, err)
-	}
-	scriptKind, err := strconv.ParseInt(parts[4], 10, 32)
-	if err != nil {
-		return nil, fmt.Errorf("%w: invalid node handle %q: %w", ErrClientError, handle, err)
-	}
-	isDeclarationFile, err := strconv.ParseUint(parts[5], 10, 1)
-	if err != nil {
-		return nil, fmt.Errorf("%w: invalid node handle %q: %w", ErrClientError, handle, err)
-	}
-	path := tspath.Path(parts[6])
-	if path == "" {
-		return nil, fmt.Errorf("%w: invalid node handle %q", ErrClientError, handle)
-	}
+	path := tspath.Path(s[secondDot+1:])
 
 	sourceFile := program.GetSourceFileByPath(path)
 	if sourceFile == nil {
 		return nil, fmt.Errorf("%w: node handle %q could not be resolved (file may not be loaded or handle may be stale)", ErrClientError, handle)
 	}
-	if encoder.SourceFileHash(sourceFile) != hash {
-		return nil, fmt.Errorf("%w: node handle %q could not be resolved (file may have changed)", ErrClientError, handle)
-	}
-	if uint64(encoder.SourceFileParseOptionsKey(sourceFile)) != parseOptionsKey || int64(sourceFile.ScriptKind) != scriptKind {
-		return nil, fmt.Errorf("%w: node handle %q could not be resolved (file may have been reparsed)", ErrClientError, handle)
-	}
-	if sourceFile.IsDeclarationFile != (isDeclarationFile == 1) {
-		return nil, fmt.Errorf("%w: node handle %q could not be resolved (declaration mode changed)", ErrClientError, handle)
-	}
 	table := encoder.GetNodeIndexTable(sourceFile)
 
 	if table != nil && idx < uint64(len(table.Nodes)) {
 		node := table.Nodes[idx]
-		if node != nil && int64(node.Kind) == expectedKind {
+		if node != nil {
 			return node, nil
 		}
 	}

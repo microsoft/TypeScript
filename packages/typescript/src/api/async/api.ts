@@ -350,9 +350,8 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
 
     async createSourceFile(fileName: string, sourceText: string, options: CreateSourceFileOptions = {}): Promise<SourceFile> {
         await this.ensureInitialized();
-        const fileNameBase64 = uint8ArrayToBase64(encodeWtf8(fileName));
         const sourceTextBase64 = uint8ArrayToBase64(encodeWtf8(sourceText));
-        const data = await this.client.apiRequestBinary("createSourceFile", { fileNameBase64, sourceTextBase64, options });
+        const data = await this.client.apiRequestBinary("createSourceFile", { fileName, sourceTextBase64, options });
         if (!data) {
             throw new Error("createSourceFile returned no source file");
         }
@@ -361,8 +360,7 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
 
     async createSourceFileFromFile(file: DocumentIdentifier, options: CreateSourceFileOptions = {}): Promise<SourceFile> {
         await this.ensureInitialized();
-        const fileNameBase64 = uint8ArrayToBase64(encodeWtf8(resolveFileName(file)));
-        const data = await this.client.apiRequestBinary("createSourceFileFromFile", { fileNameBase64, options });
+        const data = await this.client.apiRequestBinary("createSourceFileFromFile", { fileName: resolveFileName(file), options });
         if (!data) {
             throw new Error("createSourceFileFromFile returned no source file");
         }
@@ -2541,20 +2539,12 @@ export class NodeHandle<out T extends Node = Node> {
     private readonly canonicalProject: Project;
     readonly index: number;
     readonly kind: SyntaxKind;
-    readonly contentHash: string;
-    readonly parseOptionsKey: string;
-    readonly scriptKind: ScriptKind;
-    readonly isDeclarationFile: boolean;
     readonly path: Path;
 
     constructor(handle: string, canonicalProject: Project) {
         const parsed = parseNodeHandle(handle);
         this.index = parsed.index;
         this.kind = parsed.kind;
-        this.contentHash = parsed.contentHash;
-        this.parseOptionsKey = parsed.parseOptionsKey;
-        this.scriptKind = parsed.scriptKind;
-        this.isDeclarationFile = parsed.isDeclarationFile;
         this.path = parsed.path;
         this.canonicalProject = canonicalProject;
     }
@@ -2569,20 +2559,7 @@ export class NodeHandle<out T extends Node = Node> {
         if (!sourceFile) {
             return undefined;
         }
-        const remote = sourceFile as unknown as RemoteSourceFile;
-        if (
-            remote.contentHash !== this.contentHash
-            || remote.parseOptionsKey !== this.parseOptionsKey
-            || remote.scriptKind !== this.scriptKind
-            || remote.isDeclarationFile !== this.isDeclarationFile
-        ) {
-            return undefined;
-        }
-        if (this.index >= remote.nodes.length) {
-            return undefined;
-        }
-        const node = remote.getOrCreateNodeAtIndex(this.index);
-        return node?.kind === this.kind ? node as T : undefined;
+        return (sourceFile as unknown as RemoteSourceFile).getOrCreateNodeAtIndex(this.index) as T | undefined;
     }
 }
 

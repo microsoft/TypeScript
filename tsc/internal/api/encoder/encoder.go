@@ -306,11 +306,6 @@ func SourceFileHash(sourceFile *ast.SourceFile) string {
 	return fmt.Sprintf("%016x%016x", h.Hi, h.Lo)
 }
 
-// SourceFileParseOptionsKey returns the encoded parse options used in the binary header.
-func SourceFileParseOptionsKey(sourceFile *ast.SourceFile) uint32 {
-	return encodeParseOptions(sourceFile.ParseOptions().ExternalModuleIndicatorOptions)
-}
-
 // encodeParseOptions encodes the per-file ExternalModuleIndicatorOptions as a uint32 bitmask.
 func encodeParseOptions(opts ast.ExternalModuleIndicatorOptions) uint32 {
 	var bits uint32

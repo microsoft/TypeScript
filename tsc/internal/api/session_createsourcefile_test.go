@@ -2,7 +2,6 @@ package api
 
 import (
 	"context"
-	"encoding/base64"
 	"testing"
 
 	"github.com/microsoft/TypeScript/tsc/internal/core"
@@ -67,7 +66,7 @@ func TestCreateSourceFile(t *testing.T) {
 	t.Run("from file", func(t *testing.T) {
 		t.Parallel()
 		result, err := session.handleCreateSourceFileFromFile(context.Background(), &CreateSourceFileFromFileParams{
-			FileNameBase64: base64.StdEncoding.EncodeToString([]byte("/src/input.ts")),
+			FileName: "/src/input.ts",
 		})
 
 		assert.NilError(t, err)
@@ -88,7 +87,7 @@ func TestCreateSourceFile(t *testing.T) {
 	t.Run("missing file", func(t *testing.T) {
 		t.Parallel()
 		_, err := session.handleCreateSourceFileFromFile(context.Background(), &CreateSourceFileFromFileParams{
-			FileNameBase64: base64.StdEncoding.EncodeToString([]byte("/src/missing.ts")),
+			FileName: "/src/missing.ts",
 		})
 
 		assert.ErrorContains(t, err, `could not read file "/src/missing.ts"`)

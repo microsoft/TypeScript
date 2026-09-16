@@ -320,7 +320,7 @@ export interface ParseConfigFileParams {
 }
 
 export interface CreateSourceFileParams {
-    fileNameBase64: string;
+    fileName: string;
     sourceTextBase64: string;
     options: CreateSourceFileOptions;
 }
@@ -335,7 +335,7 @@ export interface SourceFileResponse {
 }
 
 export interface CreateSourceFileFromFileParams {
-    fileNameBase64: string;
+    fileName: string;
     options: CreateSourceFileOptions;
 }
 

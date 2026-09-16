@@ -235,7 +235,7 @@ export class RemoteNode extends RemoteNodeBase implements Node {
         if (!this.sourceFile.hasProgramIdentity) {
             throw new Error("Cannot use a node without program identity with a program API");
         }
-        return `${this.index}.${this.kind}.${this.sourceFile.contentHash}.${this.sourceFile.parseOptionsKey}.${this.sourceFile.scriptKind}.${+this.sourceFile.isDeclarationFile}.${this.sourceFile.path}`;
+        return `${this.index}.${this.kind}.${this.sourceFile.path}`;
     }
 
     constructor(view: DataView, index: number, parent: RemoteNode, sourceFile: SourceFileInfo, offsetNodes: number) {

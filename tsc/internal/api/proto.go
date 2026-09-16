@@ -671,14 +671,14 @@ type CreateSourceFileOptions struct {
 }
 
 type CreateSourceFileParams struct {
-	FileNameBase64   string                  `json:"fileNameBase64"`
+	FileName         string                  `json:"fileName"`
 	SourceTextBase64 string                  `json:"sourceTextBase64"`
 	Options          CreateSourceFileOptions `json:"options"`
 }
 
 type CreateSourceFileFromFileParams struct {
-	FileNameBase64 string                  `json:"fileNameBase64"`
-	Options        CreateSourceFileOptions `json:"options"`
+	FileName string                  `json:"fileName"`
+	Options  CreateSourceFileOptions `json:"options"`
 }
 
 type TranspileParams struct {

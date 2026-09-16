@@ -712,20 +712,12 @@ func ToFileNameLowerCase(fileName string) string {
 		return unsafe.String(&b[0], len(b))
 	}
 
-	var result strings.Builder
-	result.Grow(fileNameLen)
-	for pos := 0; pos < fileNameLen; {
-		r, size := stringutil.DecodeJSStringRune(fileName[pos:])
-		if 0xD800 <= r && r <= 0xDFFF {
-			result.WriteString(fileName[pos : pos+size])
-		} else if r == IWithDot {
-			result.WriteRune(r)
-		} else {
-			result.WriteRune(unicode.ToLower(r))
+	return strings.Map(func(r rune) rune {
+		if r == IWithDot {
+			return r
 		}
-		pos += size
-	}
-	return result.String()
+		return unicode.ToLower(r)
+	}, fileName)
 }
 
 func ToPath(fileName string, basePath string, useCaseSensitiveFileNames bool) Path {

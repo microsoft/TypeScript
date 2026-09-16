@@ -284,10 +284,6 @@ function assertSignatureArraysEquivalent(actual: readonly Signature[], expected:
 function assertNodeHandlesEquivalent(actual: NodeHandle, expected: NodeHandle, message?: string): void {
     assert.equal(actual.index, expected.index, message);
     assert.equal(actual.kind, expected.kind, message);
-    assert.equal(actual.contentHash, expected.contentHash, message);
-    assert.equal(actual.parseOptionsKey, expected.parseOptionsKey, message);
-    assert.equal(actual.scriptKind, expected.scriptKind, message);
-    assert.equal(actual.isDeclarationFile, expected.isDeclarationFile, message);
     assert.equal(actual.path, expected.path, message);
 }
 

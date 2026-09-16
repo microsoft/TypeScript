@@ -495,9 +495,8 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
             "createSourceFile",
             function (fileName: string, sourceText: string, options: CreateSourceFileOptions = {}): SourceFile {
                 owner.ensureInitialized();
-                const fileNameBase64 = uint8ArrayToBase64(encodeWtf8(fileName));
                 const sourceTextBase64 = uint8ArrayToBase64(encodeWtf8(sourceText));
-                const data = owner.client.apiRequestBinary("createSourceFile", { fileNameBase64, sourceTextBase64, options });
+                const data = owner.client.apiRequestBinary("createSourceFile", { fileName, sourceTextBase64, options });
                 if (!data) {
                     throw new Error("createSourceFile returned no source file");
                 }
@@ -505,9 +504,8 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
             },
             function* (fileName: string, sourceText: string, options: CreateSourceFileOptions = {}): Generator<ProtocolRequest, SourceFile, ProtocolResponse["result"]> {
                 yield* owner.ensureInitialized.gen();
-                const fileNameBase64 = uint8ArrayToBase64(encodeWtf8(fileName));
                 const sourceTextBase64 = uint8ArrayToBase64(encodeWtf8(sourceText));
-                const data = sourceFileResponseToUint8Array(yield* apiRequest("createSourceFile", { fileNameBase64, sourceTextBase64, options }));
+                const data = sourceFileResponseToUint8Array(yield* apiRequest("createSourceFile", { fileName, sourceTextBase64, options }));
                 if (!data) {
                     throw new Error("createSourceFile returned no source file");
                 }
@@ -526,8 +524,7 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
             "createSourceFileFromFile",
             function (file: DocumentIdentifier, options: CreateSourceFileOptions = {}): SourceFile {
                 owner.ensureInitialized();
-                const fileNameBase64 = uint8ArrayToBase64(encodeWtf8(resolveFileName(file)));
-                const data = owner.client.apiRequestBinary("createSourceFileFromFile", { fileNameBase64, options });
+                const data = owner.client.apiRequestBinary("createSourceFileFromFile", { fileName: resolveFileName(file), options });
                 if (!data) {
                     throw new Error("createSourceFileFromFile returned no source file");
                 }
@@ -535,8 +532,7 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
             },
             function* (file: DocumentIdentifier, options: CreateSourceFileOptions = {}): Generator<ProtocolRequest, SourceFile, ProtocolResponse["result"]> {
                 yield* owner.ensureInitialized.gen();
-                const fileNameBase64 = uint8ArrayToBase64(encodeWtf8(resolveFileName(file)));
-                const data = sourceFileResponseToUint8Array(yield* apiRequest("createSourceFileFromFile", { fileNameBase64, options }));
+                const data = sourceFileResponseToUint8Array(yield* apiRequest("createSourceFileFromFile", { fileName: resolveFileName(file), options }));
                 if (!data) {
                     throw new Error("createSourceFileFromFile returned no source file");
                 }
@@ -5629,20 +5625,12 @@ export class NodeHandle<out T extends Node = Node> {
     private readonly canonicalProject: Project;
     readonly index: number;
     readonly kind: SyntaxKind;
-    readonly contentHash: string;
-    readonly parseOptionsKey: string;
-    readonly scriptKind: ScriptKind;
-    readonly isDeclarationFile: boolean;
     readonly path: Path;
 
     constructor(handle: string, canonicalProject: Project) {
         const parsed = parseNodeHandle(handle);
         this.index = parsed.index;
         this.kind = parsed.kind;
-        this.contentHash = parsed.contentHash;
-        this.parseOptionsKey = parsed.parseOptionsKey;
-        this.scriptKind = parsed.scriptKind;
-        this.isDeclarationFile = parsed.isDeclarationFile;
         this.path = parsed.path;
         this.canonicalProject = canonicalProject;
     }
@@ -5665,40 +5653,14 @@ export class NodeHandle<out T extends Node = Node> {
                 if (!sourceFile) {
                     return undefined;
                 }
-                const remote = sourceFile as unknown as RemoteSourceFile;
-                if (
-                    remote.contentHash !== owner.contentHash
-                    || remote.parseOptionsKey !== owner.parseOptionsKey
-                    || remote.scriptKind !== owner.scriptKind
-                    || remote.isDeclarationFile !== owner.isDeclarationFile
-                ) {
-                    return undefined;
-                }
-                if (owner.index >= remote.nodes.length) {
-                    return undefined;
-                }
-                const node = remote.getOrCreateNodeAtIndex(owner.index);
-                return node?.kind === owner.kind ? node as T : undefined;
+                return (sourceFile as unknown as RemoteSourceFile).getOrCreateNodeAtIndex(owner.index) as T | undefined;
             },
             function* (project: Project = owner.canonicalProject): Generator<ProtocolRequest, T | undefined, ProtocolResponse["result"]> {
                 const sourceFile = yield* project.program.getSourceFile.gen(owner.path);
                 if (!sourceFile) {
                     return undefined;
                 }
-                const remote = sourceFile as unknown as RemoteSourceFile;
-                if (
-                    remote.contentHash !== owner.contentHash
-                    || remote.parseOptionsKey !== owner.parseOptionsKey
-                    || remote.scriptKind !== owner.scriptKind
-                    || remote.isDeclarationFile !== owner.isDeclarationFile
-                ) {
-                    return undefined;
-                }
-                if (owner.index >= remote.nodes.length) {
-                    return undefined;
-                }
-                const node = remote.getOrCreateNodeAtIndex(owner.index);
-                return node?.kind === owner.kind ? node as T : undefined;
+                return (sourceFile as unknown as RemoteSourceFile).getOrCreateNodeAtIndex(owner.index) as T | undefined;
             },
         );
     }

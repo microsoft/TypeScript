@@ -2,7 +2,6 @@ package api
 
 import (
 	"context"
-	"encoding/base64"
 	"fmt"
 	"time"
 
@@ -94,14 +93,6 @@ func (fs *callbackFS) call(name string, arg any) ([]byte, error) {
 	return result, nil
 }
 
-func callbackPath(path string) struct {
-	PathBase64 string `json:"pathBase64"`
-} {
-	return struct {
-		PathBase64 string `json:"pathBase64"`
-	}{PathBase64: base64.StdEncoding.EncodeToString([]byte(path))}
-}
-
 // UseCaseSensitiveFileNames implements vfs.FS.
 func (fs *callbackFS) UseCaseSensitiveFileNames() bool {
 	return fs.base.UseCaseSensitiveFileNames()
@@ -111,29 +102,25 @@ func (fs *callbackFS) UseCaseSensitiveFileNames() bool {
 //
 // The readFile callback uses a wrapped response format to distinguish three states:
 //   - undefined (fall back to real FS): null or empty on wire
-//   - null (not found, no fallback): {"contentBase64": null}
-//   - string content: {"contentBase64": "<WTF-8 bytes>"}
+//   - null (not found, no fallback): {"content": null}
+//   - string content: {"content": "..."}
 func (fs *callbackFS) ReadFile(path string) (contents string, ok bool) {
 	if fs.isEnabled(callbackReadFile) {
-		result, err := fs.call(callbackReadFile, callbackPath(path))
+		result, err := fs.call(callbackReadFile, path)
 		if err != nil {
 			panic(err)
 		}
 		if len(result) > 0 && string(result) != "null" {
 			var wrapper struct {
-				ContentBase64 *string `json:"contentBase64"`
+				Content *string `json:"content"`
 			}
 			if err := json.Unmarshal(result, &wrapper); err != nil {
 				panic(err)
 			}
-			if wrapper.ContentBase64 == nil {
+			if wrapper.Content == nil {
 				return "", false
 			}
-			content, err := base64.StdEncoding.DecodeString(*wrapper.ContentBase64)
-			if err != nil {
-				panic(fmt.Errorf("invalid readFile contentBase64: %w", err))
-			}
-			return string(content), true
+			return *wrapper.Content, true
 		}
 	}
 	return fs.base.ReadFile(path)
@@ -142,7 +129,7 @@ func (fs *callbackFS) ReadFile(path string) (contents string, ok bool) {
 // FileExists implements vfs.FS.
 func (fs *callbackFS) FileExists(path string) bool {
 	if fs.isEnabled(callbackFileExists) {
-		result, err := fs.call(callbackFileExists, callbackPath(path))
+		result, err := fs.call(callbackFileExists, path)
 		if err != nil {
 			panic(err)
 		}
@@ -156,7 +143,7 @@ func (fs *callbackFS) FileExists(path string) bool {
 // DirectoryExists implements vfs.FS.
 func (fs *callbackFS) DirectoryExists(path string) bool {
 	if fs.isEnabled(callbackDirectoryExists) {
-		result, err := fs.call(callbackDirectoryExists, callbackPath(path))
+		result, err := fs.call(callbackDirectoryExists, path)
 		if err != nil {
 			panic(err)
 		}
@@ -170,22 +157,22 @@ func (fs *callbackFS) DirectoryExists(path string) bool {
 // GetAccessibleEntries implements vfs.FS.
 func (fs *callbackFS) GetAccessibleEntries(path string) vfs.Entries {
 	if fs.isEnabled(callbackGetAccessibleEntries) {
-		result, err := fs.call(callbackGetAccessibleEntries, callbackPath(path))
+		result, err := fs.call(callbackGetAccessibleEntries, path)
 		if err != nil {
 			panic(err)
 		}
 		if len(result) > 0 {
 			var rawEntries *struct {
-				FilesBase64       []string `json:"filesBase64"`
-				DirectoriesBase64 []string `json:"directoriesBase64"`
+				Files       []string `json:"files"`
+				Directories []string `json:"directories"`
 			}
 			if err := json.Unmarshal(result, &rawEntries); err != nil {
 				panic(err)
 			}
 			if rawEntries != nil {
 				return vfs.Entries{
-					Files:       decodeCallbackStrings(rawEntries.FilesBase64),
-					Directories: decodeCallbackStrings(rawEntries.DirectoriesBase64),
+					Files:       rawEntries.Files,
+					Directories: rawEntries.Directories,
 				}
 			}
 		}
@@ -196,22 +183,16 @@ func (fs *callbackFS) GetAccessibleEntries(path string) vfs.Entries {
 // Realpath implements vfs.FS.
 func (fs *callbackFS) Realpath(path string) string {
 	if fs.isEnabled(callbackRealpath) {
-		result, err := fs.call(callbackRealpath, callbackPath(path))
+		result, err := fs.call(callbackRealpath, path)
 		if err != nil {
 			panic(err)
 		}
 		if len(result) > 0 && string(result) != "null" {
-			var wrapper struct {
-				PathBase64 string `json:"pathBase64"`
-			}
-			if err := json.Unmarshal(result, &wrapper); err != nil {
+			var realpath string
+			if err := json.Unmarshal(result, &realpath); err != nil {
 				panic(err)
 			}
-			realpath, err := base64.StdEncoding.DecodeString(wrapper.PathBase64)
-			if err != nil {
-				panic(fmt.Errorf("invalid realpath pathBase64: %w", err))
-			}
-			return string(realpath)
+			return realpath
 		}
 	}
 	return fs.base.Realpath(path)
@@ -221,12 +202,9 @@ func (fs *callbackFS) Realpath(path string) string {
 func (fs *callbackFS) WriteFile(path string, data string) error {
 	if fs.isEnabled(callbackWriteFile) {
 		payload := struct {
-			PathBase64 string `json:"pathBase64"`
-			DataBase64 string `json:"dataBase64"`
-		}{
-			PathBase64: base64.StdEncoding.EncodeToString([]byte(path)),
-			DataBase64: base64.StdEncoding.EncodeToString([]byte(data)),
-		}
+			Path string `json:"path"`
+			Data string `json:"data"`
+		}{Path: path, Data: data}
 
 		_, err := fs.call(callbackWriteFile, payload)
 		if err != nil {
@@ -236,18 +214,6 @@ func (fs *callbackFS) WriteFile(path string, data string) error {
 	}
 
 	return fs.base.WriteFile(path, data)
-}
-
-func decodeCallbackStrings(values []string) []string {
-	result := make([]string, len(values))
-	for i, value := range values {
-		decoded, err := base64.StdEncoding.DecodeString(value)
-		if err != nil {
-			panic(fmt.Errorf("invalid callback base64 string: %w", err))
-		}
-		result[i] = string(decoded)
-	}
-	return result
 }
 
 // AppendFile implements vfs.FS - always delegates to base (no callback support).
