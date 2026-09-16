@@ -873,6 +873,11 @@ func getQuickInfoAndDeclarationAtLocation(c *checker.Checker, symbol *ast.Symbol
 			dpw.WritePunctuation("(")
 			dpw.Write("type parameter")
 			dpw.WritePunctuation(") ")
+			if ast.IsIdentifier(node) && ast.IsTypeReferenceNode(node.Parent) && checker.IsDistributedTypeParameter(c.GetTypeAtLocation(node.Parent)) {
+				dpw.WritePunctuation("(")
+				dpw.Write("distributed")
+				dpw.WritePunctuation(") ")
+			}
 			tp := c.GetDeclaredTypeOfSymbol(symbol)
 			writeSymbolClassified(symbol, container, ast.SymbolFlagsNone, symbolFormatFlags)
 			cons := c.GetConstraintOfTypeParameter(tp)
