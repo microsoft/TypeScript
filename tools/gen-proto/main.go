@@ -570,6 +570,9 @@ func (r *typeRenderer) inlineStruct(structType *types.Struct) string {
 			continue
 		}
 		fieldType := r.typeString(structType.Field(i).Type(), !optional && !nonnil)
+		if optional {
+			fieldType += " | undefined"
+		}
 		doc := r.docs[structType.Field(i)]
 		multiline = multiline || doc != ""
 		fields = append(fields, fmt.Sprintf("%s%s%s: %s", inlineDoc(doc), propertyName(field), optionalMarker(optional), fieldType))
@@ -612,6 +615,9 @@ func (r *typeRenderer) declarations() (string, error) {
 			fieldType := r.typeString(structType.Field(i).Type(), !optional && !nonnil)
 			if isParams && isArrayType(structType.Field(i).Type()) {
 				fieldType = "readonly " + fieldType
+			}
+			if optional {
+				fieldType += " | undefined"
 			}
 			writeDoc(&out, "    ", r.docs[structType.Field(i)])
 			fmt.Fprintf(&out, "    %s%s: %s;\n", propertyName(field), optionalMarker(optional), fieldType)

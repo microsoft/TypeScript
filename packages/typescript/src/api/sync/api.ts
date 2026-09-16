@@ -36,6 +36,7 @@ import {
     type __String,
     type Declaration,
     type Expression,
+    type FileReference,
     type Identifier,
     type IndexSignatureDeclaration,
     ModifierFlags,
@@ -44,6 +45,7 @@ import {
     type ParameterDeclaration,
     type Path,
     type SourceFile,
+    type StringLiteralLikeNode,
     type SyntaxKind,
     type TypeNode,
     unescapeLeadingUnderscores,
@@ -82,10 +84,13 @@ import type {
     ImportAdderAction,
     IntrinsicTypeMethod,
     LSPUpdateSnapshotParams,
+    PackageId,
     ParsedCommandLine,
     ProjectReference,
     ProjectResponse,
     ReadConfigFileResponse,
+    ResolvedModule,
+    ResolvedTypeReferenceDirective,
     SignaturePropertyMethod,
     SignatureResponse,
     SourceFileMetadata,
@@ -201,10 +206,13 @@ export type {
     LSPConnectionOptions,
     NumberLiteralType,
     ObjectType,
+    PackageId,
     ParsedCommandLine,
     ProjectReference,
     ReadConfigFileResponse,
     RequestTiming,
+    ResolvedModule,
+    ResolvedTypeReferenceDirective,
     SourceFileMetadata,
     StringLiteralType,
     StringMappingType,
@@ -235,8 +243,8 @@ export interface TranspileOptions {
 
 export interface TranspileOutput {
     outputText: string;
-    diagnostics?: readonly Diagnostic[];
-    sourceMapText?: string;
+    diagnostics?: readonly Diagnostic[] | undefined;
+    sourceMapText?: string | undefined;
 }
 
 export { all, type AllAPIRequestGenerator, type AnyAPIRequestGenerator, type APIRequestGenerator, defer, type DeferredAPIRequestGenerator, type ExecutedGeneratorsResults } from "./generatorSupport.ts";
@@ -552,9 +560,60 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
             owner,
             "updateSnapshot",
             function (params?: FromLSP extends true ? LSPUpdateSnapshotParams : UpdateSnapshotParams): Snapshot {
+                return owner.updateSnapshotWorker(params);
+            },
+            function* (params?: FromLSP extends true ? LSPUpdateSnapshotParams : UpdateSnapshotParams): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]> {
+                return yield* owner.updateSnapshotWorker.gen(params);
+            },
+        );
+    }
+
+    /** @internal */
+    get updateSnapshotFrom(): {
+        (baseSnapshot: Snapshot, params?: UpdateSnapshotParams): Snapshot;
+        gen(baseSnapshot: Snapshot, params?: UpdateSnapshotParams): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "updateSnapshotFrom",
+            function (baseSnapshot: Snapshot, params?: UpdateSnapshotParams): Snapshot {
+                if (!owner.activeSnapshots.has(baseSnapshot) || baseSnapshot.isDisposed()) {
+                    throw new Error("Cannot update an inactive snapshot");
+                }
+                if (baseSnapshot !== owner.latestSnapshot) {
+                    // TODO: Support forking active memory/cache snapshots once the server-side
+                    // ownership, project state, and cache semantics have been worked out.
+                    throw new Error("Snapshot.update can only update the latest snapshot");
+                }
+                return owner.updateSnapshotWorker(params, baseSnapshot);
+            },
+            function* (baseSnapshot: Snapshot, params?: UpdateSnapshotParams): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]> {
+                if (!owner.activeSnapshots.has(baseSnapshot) || baseSnapshot.isDisposed()) {
+                    throw new Error("Cannot update an inactive snapshot");
+                }
+                if (baseSnapshot !== owner.latestSnapshot) {
+                    // TODO: Support forking active memory/cache snapshots once the server-side
+                    // ownership, project state, and cache semantics have been worked out.
+                    throw new Error("Snapshot.update can only update the latest snapshot");
+                }
+                return yield* owner.updateSnapshotWorker.gen(params, baseSnapshot);
+            },
+        );
+    }
+
+    private get updateSnapshotWorker(): {
+        (params?: LSPUpdateSnapshotParams | UpdateSnapshotParams, baseSnapshot?: Snapshot): Snapshot;
+        gen(params?: LSPUpdateSnapshotParams | UpdateSnapshotParams, baseSnapshot?: Snapshot): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "updateSnapshotWorker",
+            function (params?: LSPUpdateSnapshotParams | UpdateSnapshotParams, baseSnapshot?: Snapshot): Snapshot {
                 owner.ensureInitialized();
 
-                const requestParams = toUpdateSnapshotRequest(params);
+                const requestParams = toUpdateSnapshotRequest(params, baseSnapshot?.id);
                 const data = owner.client.apiRequest("updateSnapshot", requestParams);
 
                 // Retain cached source files from previous snapshot for unchanged files
@@ -583,10 +642,10 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
 
                 return snapshot;
             },
-            function* (params?: FromLSP extends true ? LSPUpdateSnapshotParams : UpdateSnapshotParams): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]> {
+            function* (params?: LSPUpdateSnapshotParams | UpdateSnapshotParams, baseSnapshot?: Snapshot): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]> {
                 yield* owner.ensureInitialized.gen();
 
-                const requestParams = toUpdateSnapshotRequest(params);
+                const requestParams = toUpdateSnapshotRequest(params, baseSnapshot?.id);
                 const data = yield* apiRequest("updateSnapshot", requestParams);
 
                 // Retain cached source files from previous snapshot for unchanged files
@@ -828,8 +887,8 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
                 const data: CreateProgramResponse = owner.client.apiRequest("createProgram", {
                     rootFiles,
                     createProgramOptions,
-                    ...(oldProgram ? { oldProgram: { snapshot: oldProgram.snapshotId, project: oldProgram.getProject().id } } : {}),
-                    ...(fileChanges ? { fileChanges } : {}),
+                    oldProgram: oldProgram ? { snapshot: oldProgram.snapshotId, project: oldProgram.getProject().id } : undefined,
+                    fileChanges,
                 });
                 if (!data.project) {
                     throw new Error("createProgram did not return a project");
@@ -863,8 +922,8 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
                 const data: CreateProgramResponse = yield* apiRequest("createProgram", {
                     rootFiles,
                     createProgramOptions,
-                    ...(oldProgram ? { oldProgram: { snapshot: oldProgram.snapshotId, project: oldProgram.getProject().id } } : {}),
-                    ...(fileChanges ? { fileChanges } : {}),
+                    oldProgram: oldProgram ? { snapshot: oldProgram.snapshotId, project: oldProgram.getProject().id } : undefined,
+                    fileChanges,
                 });
                 if (!data.project) {
                     throw new Error("createProgram did not return a project");
@@ -890,6 +949,13 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
 }
 
 type EnsureInitialized = (() => void) & { gen(): Generator<ProtocolRequest, void, ProtocolResponse["result"]>; };
+
+interface SnapshotOwner extends FormatDiagnosticsHost {
+    updateSnapshotFrom: {
+        (baseSnapshot: Snapshot, params?: UpdateSnapshotParams): Snapshot;
+        gen(baseSnapshot: Snapshot, params?: UpdateSnapshotParams): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]>;
+    };
+}
 
 export class InternalAPI {
     private client: Client;
@@ -971,6 +1037,7 @@ export class Snapshot {
     private disposed: boolean = false;
     private disposePromise: void | undefined;
     private onDispose: () => void;
+    private api: SnapshotOwner;
     private snapshotRegistry: SnapshotObjectRegistry;
     readonly internal: SnapshotInternalAPI;
 
@@ -979,18 +1046,19 @@ export class Snapshot {
         client: Client,
         sourceFileCache: SourceFileCache,
         toPath: (fileName: string) => Path,
-        formatDiagnosticsHost: FormatDiagnosticsHost,
+        api: SnapshotOwner,
         onDispose: () => void,
     ) {
         this.id = data.snapshot;
         this.client = client;
         this.toPath = toPath;
+        this.api = api;
         this.onDispose = onDispose;
         this.projectMap = new Map();
         this.snapshotRegistry = new SnapshotObjectRegistry(client, this.id, projectId => this.projectMap.get(projectId));
 
         for (const projData of data.projects) {
-            const project = new Project(projData, this.id, client, sourceFileCache, toPath, formatDiagnosticsHost, this.snapshotRegistry);
+            const project = new Project(projData, this.id, client, sourceFileCache, toPath, api, this.snapshotRegistry);
             this.projectMap.set(toPath(projData.configFileName), project);
         }
 
@@ -1036,10 +1104,32 @@ export class Snapshot {
         );
     }
 
+    /**
+     * Creates the next snapshot, layering its filesystem over this snapshot's
+     * filesystem. This snapshot must still be active and be the latest snapshot.
+     */
+    get update(): {
+        (params?: UpdateSnapshotParams): Snapshot;
+        gen(params?: UpdateSnapshotParams): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "update",
+            function (params?: UpdateSnapshotParams): Snapshot {
+                owner.ensureNotDisposed();
+                return owner.api.updateSnapshotFrom(owner, params);
+            },
+            function* (params?: UpdateSnapshotParams): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]> {
+                owner.ensureNotDisposed();
+                return yield* owner.api.updateSnapshotFrom.gen(owner, params);
+            },
+        );
+    }
+
     [globalThis.Symbol.dispose](): void {
         void this.dispose();
     }
-
     get dispose(): {
         (): void;
         gen(): Generator<ProtocolRequest, void, ProtocolResponse["result"]>;
@@ -2006,8 +2096,8 @@ export class LanguageService {
                     project: owner.project.id,
                     file: document,
                     position,
-                    ...(options?.triggerCharacter !== undefined ? { triggerCharacter: options.triggerCharacter } : {}),
-                    ...(options?.includeSymbol !== undefined ? { includeSymbol: options.includeSymbol } : {}),
+                    triggerCharacter: options?.triggerCharacter,
+                    includeSymbol: options?.includeSymbol,
                 });
                 if (!data) return undefined;
                 return {
@@ -2024,8 +2114,8 @@ export class LanguageService {
                     project: owner.project.id,
                     file: document,
                     position,
-                    ...(options?.triggerCharacter !== undefined ? { triggerCharacter: options.triggerCharacter } : {}),
-                    ...(options?.includeSymbol !== undefined ? { includeSymbol: options.includeSymbol } : {}),
+                    triggerCharacter: options?.triggerCharacter,
+                    includeSymbol: options?.includeSymbol,
                 });
                 if (!data) return undefined;
                 return {
@@ -2195,6 +2285,128 @@ export class Program implements FormatDiagnosticsHost {
                 // Create a new RemoteSourceFile and cache it (set returns existing if hash matches)
                 const sourceFile = new RemoteSourceFile(binaryData, owner.decoder, owner.client.getTimingCollector()) as unknown as SourceFile;
                 return owner.sourceFileCache.set(path, sourceFile, parseOptionsKey, contentHash, owner.snapshotId, owner.project.id);
+            },
+        );
+    }
+
+    get getResolvedModule(): {
+        (file: DocumentIdentifier, moduleName: string, mode: ModuleKind): ResolvedModule | undefined;
+        gen(file: DocumentIdentifier, moduleName: string, mode: ModuleKind): Generator<ProtocolRequest, ResolvedModule | undefined, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getResolvedModule",
+            function (file: DocumentIdentifier, moduleName: string, mode: ModuleKind): ResolvedModule | undefined {
+                const result = owner.client.apiRequest("getResolvedModule", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.id,
+                    file,
+                    moduleName,
+                    mode,
+                });
+                return result ?? undefined;
+            },
+            function* (file: DocumentIdentifier, moduleName: string, mode: ModuleKind): Generator<ProtocolRequest, ResolvedModule | undefined, ProtocolResponse["result"]> {
+                const result = yield* apiRequest("getResolvedModule", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.id,
+                    file,
+                    moduleName,
+                    mode,
+                });
+                return result ?? undefined;
+            },
+        );
+    }
+
+    get getResolvedModuleFromModuleSpecifier(): {
+        (moduleSpecifier: StringLiteralLikeNode, sourceFile?: DocumentIdentifier): ResolvedModule | undefined;
+        gen(moduleSpecifier: StringLiteralLikeNode, sourceFile?: DocumentIdentifier): Generator<ProtocolRequest, ResolvedModule | undefined, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getResolvedModuleFromModuleSpecifier",
+            function (moduleSpecifier: StringLiteralLikeNode, sourceFile?: DocumentIdentifier): ResolvedModule | undefined {
+                const result = owner.client.apiRequest("getResolvedModuleFromModuleSpecifier", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.id,
+                    moduleSpecifier: getNodeId(moduleSpecifier),
+                    sourceFile,
+                });
+                return result ?? undefined;
+            },
+            function* (moduleSpecifier: StringLiteralLikeNode, sourceFile?: DocumentIdentifier): Generator<ProtocolRequest, ResolvedModule | undefined, ProtocolResponse["result"]> {
+                const result = yield* apiRequest("getResolvedModuleFromModuleSpecifier", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.id,
+                    moduleSpecifier: getNodeId(moduleSpecifier),
+                    sourceFile,
+                });
+                return result ?? undefined;
+            },
+        );
+    }
+
+    get getResolvedTypeReferenceDirective(): {
+        (file: DocumentIdentifier, typeDirectiveName: string, mode: ModuleKind): ResolvedTypeReferenceDirective | undefined;
+        gen(file: DocumentIdentifier, typeDirectiveName: string, mode: ModuleKind): Generator<ProtocolRequest, ResolvedTypeReferenceDirective | undefined, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getResolvedTypeReferenceDirective",
+            function (file: DocumentIdentifier, typeDirectiveName: string, mode: ModuleKind): ResolvedTypeReferenceDirective | undefined {
+                const result = owner.client.apiRequest("getResolvedTypeReferenceDirective", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.id,
+                    file,
+                    typeDirectiveName,
+                    mode,
+                });
+                return result ?? undefined;
+            },
+            function* (file: DocumentIdentifier, typeDirectiveName: string, mode: ModuleKind): Generator<ProtocolRequest, ResolvedTypeReferenceDirective | undefined, ProtocolResponse["result"]> {
+                const result = yield* apiRequest("getResolvedTypeReferenceDirective", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.id,
+                    file,
+                    typeDirectiveName,
+                    mode,
+                });
+                return result ?? undefined;
+            },
+        );
+    }
+
+    get getResolvedTypeReferenceDirectiveFromTypeReferenceDirective(): {
+        (typeReferenceDirective: FileReference, sourceFile: DocumentIdentifier): ResolvedTypeReferenceDirective | undefined;
+        gen(typeReferenceDirective: FileReference, sourceFile: DocumentIdentifier): Generator<ProtocolRequest, ResolvedTypeReferenceDirective | undefined, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getResolvedTypeReferenceDirectiveFromTypeReferenceDirective",
+            function (typeReferenceDirective: FileReference, sourceFile: DocumentIdentifier): ResolvedTypeReferenceDirective | undefined {
+                const result = owner.client.apiRequest("getResolvedTypeReferenceDirectiveFromTypeReferenceDirective", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.id,
+                    sourceFile,
+                    typeDirectiveName: typeReferenceDirective.fileName,
+                    resolutionMode: typeReferenceDirective.resolutionMode,
+                });
+                return result ?? undefined;
+            },
+            function* (typeReferenceDirective: FileReference, sourceFile: DocumentIdentifier): Generator<ProtocolRequest, ResolvedTypeReferenceDirective | undefined, ProtocolResponse["result"]> {
+                const result = yield* apiRequest("getResolvedTypeReferenceDirectiveFromTypeReferenceDirective", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.id,
+                    sourceFile,
+                    typeDirectiveName: typeReferenceDirective.fileName,
+                    resolutionMode: typeReferenceDirective.resolutionMode,
+                });
+                return result ?? undefined;
             },
         );
     }
@@ -2441,7 +2653,7 @@ export class Program implements FormatDiagnosticsHost {
                 const data = owner.client.apiRequest("getSyntacticDiagnostics", {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
-                    ...(files !== undefined ? { files } : {}),
+                    files,
                 });
                 return data ?? [];
             },
@@ -2452,7 +2664,7 @@ export class Program implements FormatDiagnosticsHost {
                 const data = yield* apiRequest("getSyntacticDiagnostics", {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
-                    ...(files !== undefined ? { files } : {}),
+                    files,
                 });
                 return data ?? [];
             },
@@ -2478,7 +2690,7 @@ export class Program implements FormatDiagnosticsHost {
                 const data = owner.client.apiRequest("getBindDiagnostics", {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
-                    ...(files !== undefined ? { files } : {}),
+                    files,
                 });
                 return data ?? [];
             },
@@ -2489,7 +2701,7 @@ export class Program implements FormatDiagnosticsHost {
                 const data = yield* apiRequest("getBindDiagnostics", {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
-                    ...(files !== undefined ? { files } : {}),
+                    files,
                 });
                 return data ?? [];
             },
@@ -2515,7 +2727,7 @@ export class Program implements FormatDiagnosticsHost {
                 const data = owner.client.apiRequest("getSemanticDiagnostics", {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
-                    ...(files !== undefined ? { files } : {}),
+                    files,
                 });
                 return data ?? [];
             },
@@ -2526,7 +2738,7 @@ export class Program implements FormatDiagnosticsHost {
                 const data = yield* apiRequest("getSemanticDiagnostics", {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
-                    ...(files !== undefined ? { files } : {}),
+                    files,
                 });
                 return data ?? [];
             },
@@ -2552,7 +2764,7 @@ export class Program implements FormatDiagnosticsHost {
                 const data = owner.client.apiRequest("getSuggestionDiagnostics", {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
-                    ...(files !== undefined ? { files } : {}),
+                    files,
                 });
                 return data ?? [];
             },
@@ -2563,7 +2775,7 @@ export class Program implements FormatDiagnosticsHost {
                 const data = yield* apiRequest("getSuggestionDiagnostics", {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
-                    ...(files !== undefined ? { files } : {}),
+                    files,
                 });
                 return data ?? [];
             },
@@ -2589,7 +2801,7 @@ export class Program implements FormatDiagnosticsHost {
                 const data = owner.client.apiRequest("getDeclarationDiagnostics", {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
-                    ...(files !== undefined ? { files } : {}),
+                    files,
                 });
                 return data ?? [];
             },
@@ -2600,7 +2812,7 @@ export class Program implements FormatDiagnosticsHost {
                 const data = yield* apiRequest("getDeclarationDiagnostics", {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
-                    ...(files !== undefined ? { files } : {}),
+                    files,
                 });
                 return data ?? [];
             },
@@ -2692,10 +2904,9 @@ export class Program implements FormatDiagnosticsHost {
     }
 
     /**
-     * Emits files to the configured filesystem.
-     *
-     * When the API has a virtual filesystem with a `writeFile` callback, output
-     * is written there. Otherwise, the server writes directly to the host filesystem.
+     * Emits files to the configured filesystem. Layer and host filesystems are
+     * written through; full filesystems remain immutable and return emitted
+     * files in {@link EmitResult.fileSystem}.
      */
     get emit(): {
         (emitOnly?: EmitOnly): EmitResult;
@@ -2709,24 +2920,38 @@ export class Program implements FormatDiagnosticsHost {
                 const response = owner.client.apiRequest("emit", {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
-                    ...(emitOnly !== undefined ? { emitOnly } : {}),
+                    emitOnly,
                 });
+                const fileSystem = response.emittedFilesContents.length
+                    ? {
+                        kind: "layer" as const,
+                        files: Object.fromEntries(response.emittedFiles.map((fileName, index) => [fileName, response.emittedFilesContents[index]])),
+                    }
+                    : undefined;
                 return {
                     emitSkipped: response.emitSkipped,
                     diagnostics: response.diagnostics,
                     emittedFiles: response.emittedFiles,
+                    ...(fileSystem ? { fileSystem } : {}),
                 };
             },
             function* (emitOnly?: EmitOnly): Generator<ProtocolRequest, EmitResult, ProtocolResponse["result"]> {
                 const response = yield* apiRequest("emit", {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
-                    ...(emitOnly !== undefined ? { emitOnly } : {}),
+                    emitOnly,
                 });
+                const fileSystem = response.emittedFilesContents.length
+                    ? {
+                        kind: "layer" as const,
+                        files: Object.fromEntries(response.emittedFiles.map((fileName, index) => [fileName, response.emittedFilesContents[index]])),
+                    }
+                    : undefined;
                 return {
                     emitSkipped: response.emitSkipped,
                     diagnostics: response.diagnostics,
                     emittedFiles: response.emittedFiles,
+                    ...(fileSystem ? { fileSystem } : {}),
                 };
             },
         );
@@ -2747,7 +2972,7 @@ export class Program implements FormatDiagnosticsHost {
                 const response = owner.client.apiRequest("emitToString", {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
-                    ...(emitOnly !== undefined ? { emitOnly } : {}),
+                    emitOnly,
                 });
                 return toEmitOutput(response);
             },
@@ -2755,7 +2980,7 @@ export class Program implements FormatDiagnosticsHost {
                 const response = yield* apiRequest("emitToString", {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
-                    ...(emitOnly !== undefined ? { emitOnly } : {}),
+                    emitOnly,
                 });
                 return toEmitOutput(response);
             },
@@ -3370,14 +3595,10 @@ export class Checker {
                     project: owner.project.id,
                     name,
                     meaning,
-                    ...(isNode ? { location: getNodeId(location as Node) } : {}),
-                    ...(!isNode && location
-                        ? {
-                            file: (location as DocumentPosition).document,
-                            position: (location as DocumentPosition).position,
-                        }
-                        : {}),
-                    ...(excludeGlobals !== undefined ? { excludeGlobals } : {}),
+                    location: isNode ? getNodeId(location as Node) : undefined,
+                    file: !isNode && location ? (location as DocumentPosition).document : undefined,
+                    position: !isNode && location ? (location as DocumentPosition).position : undefined,
+                    excludeGlobals,
                 });
                 return data ? owner.objectRegistry.getOrCreateSymbol(data) : undefined;
             },
@@ -3389,14 +3610,10 @@ export class Checker {
                     project: owner.project.id,
                     name,
                     meaning,
-                    ...(isNode ? { location: getNodeId(location as Node) } : {}),
-                    ...(!isNode && location
-                        ? {
-                            file: (location as DocumentPosition).document,
-                            position: (location as DocumentPosition).position,
-                        }
-                        : {}),
-                    ...(excludeGlobals !== undefined ? { excludeGlobals } : {}),
+                    location: isNode ? getNodeId(location as Node) : undefined,
+                    file: !isNode && location ? (location as DocumentPosition).document : undefined,
+                    position: !isNode && location ? (location as DocumentPosition).position : undefined,
+                    excludeGlobals,
                 });
                 return data ? owner.objectRegistry.getOrCreateSymbol(data) : undefined;
             },
@@ -3421,12 +3638,9 @@ export class Checker {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
                     meaning,
-                    ...(isNode
-                        ? { location: getNodeId(location as Node) }
-                        : {
-                            file: (location as DocumentPosition).document,
-                            position: (location as DocumentPosition).position,
-                        }),
+                    location: isNode ? getNodeId(location as Node) : undefined,
+                    file: isNode ? undefined : (location as DocumentPosition).document,
+                    position: isNode ? undefined : (location as DocumentPosition).position,
                 });
                 return data ? data.map(d => owner.objectRegistry.getOrCreateSymbol(d)) : [];
             },
@@ -3437,12 +3651,9 @@ export class Checker {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
                     meaning,
-                    ...(isNode
-                        ? { location: getNodeId(location as Node) }
-                        : {
-                            file: (location as DocumentPosition).document,
-                            position: (location as DocumentPosition).position,
-                        }),
+                    location: isNode ? getNodeId(location as Node) : undefined,
+                    file: isNode ? undefined : (location as DocumentPosition).document,
+                    position: isNode ? undefined : (location as DocumentPosition).position,
                 });
                 return data ? data.map(d => owner.objectRegistry.getOrCreateSymbol(d)) : [];
             },
@@ -3980,8 +4191,8 @@ export class Checker {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
                     type: type.id,
-                    ...(enclosingDeclaration ? { location: getNodeId(enclosingDeclaration) } : {}),
-                    ...(flags !== undefined ? { flags } : {}),
+                    location: enclosingDeclaration ? getNodeId(enclosingDeclaration) : undefined,
+                    flags,
                 });
                 if (!binaryData) return undefined;
                 return decodeNode(binaryData) as TypeNode;
@@ -3991,8 +4202,8 @@ export class Checker {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
                     type: type.id,
-                    ...(enclosingDeclaration ? { location: getNodeId(enclosingDeclaration) } : {}),
-                    ...(flags !== undefined ? { flags } : {}),
+                    location: enclosingDeclaration ? getNodeId(enclosingDeclaration) : undefined,
+                    flags,
                 });
                 if (!binaryData) return undefined;
                 return decodeNode(binaryData) as TypeNode;
@@ -4014,8 +4225,8 @@ export class Checker {
                     project: owner.project.id,
                     signature: signature.id,
                     kind,
-                    ...(enclosingDeclaration ? { location: getNodeId(enclosingDeclaration) } : {}),
-                    ...(flags !== undefined ? { flags } : {}),
+                    location: enclosingDeclaration ? getNodeId(enclosingDeclaration) : undefined,
+                    flags,
                 });
                 if (!binaryData) return undefined;
                 return decodeNode(binaryData) as Node;
@@ -4026,8 +4237,8 @@ export class Checker {
                     project: owner.project.id,
                     signature: signature.id,
                     kind,
-                    ...(enclosingDeclaration ? { location: getNodeId(enclosingDeclaration) } : {}),
-                    ...(flags !== undefined ? { flags } : {}),
+                    location: enclosingDeclaration ? getNodeId(enclosingDeclaration) : undefined,
+                    flags,
                 });
                 if (!binaryData) return undefined;
                 return decodeNode(binaryData) as Node;
@@ -4048,8 +4259,8 @@ export class Checker {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
                     type: type.id,
-                    ...(enclosingDeclaration ? { location: getNodeId(enclosingDeclaration) } : {}),
-                    ...(flags !== undefined ? { flags } : {}),
+                    location: enclosingDeclaration ? getNodeId(enclosingDeclaration) : undefined,
+                    flags,
                 });
                 if (typeof result !== "string") throw new TypeError("typeToString returned a non-string result");
                 return result;
@@ -4059,8 +4270,8 @@ export class Checker {
                     snapshot: owner.snapshotId,
                     project: owner.project.id,
                     type: type.id,
-                    ...(enclosingDeclaration ? { location: getNodeId(enclosingDeclaration) } : {}),
-                    ...(flags !== undefined ? { flags } : {}),
+                    location: enclosingDeclaration ? getNodeId(enclosingDeclaration) : undefined,
+                    flags,
                 });
                 if (typeof result !== "string") throw new TypeError("typeToString returned a non-string result");
                 return result;
@@ -4970,9 +5181,9 @@ export class Emitter {
                 const base64 = uint8ArrayToBase64(encoded);
                 return owner.client.apiRequest("printNode", {
                     data: base64,
-                    ...(options.preserveSourceNewlines !== undefined ? { preserveSourceNewlines: options.preserveSourceNewlines } : {}),
-                    ...(options.neverAsciiEscape !== undefined ? { neverAsciiEscape: options.neverAsciiEscape } : {}),
-                    ...(options.terminateUnterminatedLiterals !== undefined ? { terminateUnterminatedLiterals: options.terminateUnterminatedLiterals } : {}),
+                    preserveSourceNewlines: options.preserveSourceNewlines,
+                    neverAsciiEscape: options.neverAsciiEscape,
+                    terminateUnterminatedLiterals: options.terminateUnterminatedLiterals,
                 });
             },
             function* (node: Node, options: PrintNodeOptions = {}): Generator<ProtocolRequest, string, ProtocolResponse["result"]> {
@@ -4980,9 +5191,9 @@ export class Emitter {
                 const base64 = uint8ArrayToBase64(encoded);
                 return yield* apiRequest("printNode", {
                     data: base64,
-                    ...(options.preserveSourceNewlines !== undefined ? { preserveSourceNewlines: options.preserveSourceNewlines } : {}),
-                    ...(options.neverAsciiEscape !== undefined ? { neverAsciiEscape: options.neverAsciiEscape } : {}),
-                    ...(options.terminateUnterminatedLiterals !== undefined ? { terminateUnterminatedLiterals: options.terminateUnterminatedLiterals } : {}),
+                    preserveSourceNewlines: options.preserveSourceNewlines,
+                    neverAsciiEscape: options.neverAsciiEscape,
+                    terminateUnterminatedLiterals: options.terminateUnterminatedLiterals,
                 });
             },
         );

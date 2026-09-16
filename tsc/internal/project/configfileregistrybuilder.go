@@ -450,6 +450,9 @@ func (c *configFileRegistryBuilder) isConfigBaseName(baseName string) bool {
 }
 
 func (c *configFileRegistryBuilder) DidChangeFiles(summary FileChangeSummary, logger *logging.LogTree) changeFileResult {
+	if summary.InvalidateAll {
+		return c.invalidateCache(logger)
+	}
 	var affectedProjects map[tspath.Path]struct{}
 	var affectedFiles map[tspath.Path]struct{}
 	var shouldInvalidateCache bool
