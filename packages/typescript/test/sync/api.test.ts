@@ -309,8 +309,8 @@ describe("API", () => {
     test("createSourceFile", () => {
         using api = spawnAPI();
         const sourceText = "export const element = <div />;";
-        const sourceFile = api.createSourceFile("component.tsx", sourceText);
-        assert.equal(sourceFile.fileName, "component.tsx");
+        const sourceFile = api.createSourceFile("/component.tsx", sourceText);
+        assert.equal(sourceFile.fileName, "/component.tsx");
         assert.match(sourceFile.path, /\/component\.tsx$/);
         assert.equal(sourceFile.text, sourceText);
         assert.equal(sourceFile.scriptKind, ScriptKind.TSX);

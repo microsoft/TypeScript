@@ -1630,7 +1630,7 @@ func (s *Session) handleCreateSourceFile(ctx context.Context, params *CreateSour
 	if err != nil {
 		return nil, err
 	}
-	return s.encodeSourceFileResponseWithFileName(sourceFile, params.FileName)
+	return s.encodeSourceFileResponse(sourceFile)
 }
 
 // @gen-proto-result: SourceFileResponse
@@ -1644,7 +1644,7 @@ func (s *Session) handleCreateSourceFileFromFile(ctx context.Context, params *Cr
 	if err != nil {
 		return nil, err
 	}
-	return s.encodeSourceFileResponseWithFileName(sourceFile, params.FileName)
+	return s.encodeSourceFileResponse(sourceFile)
 }
 
 func (s *Session) createSourceFile(fileName string, sourceText string, options CreateSourceFileOptions) (*ast.SourceFile, error) {
@@ -1800,14 +1800,6 @@ func (s *Session) handleGetConfigSourceFile(ctx context.Context, params *GetSour
 }
 
 func (s *Session) encodeSourceFileResponse(sourceFile *ast.SourceFile) (any, error) {
-	return s.encodeSourceFileResponseWorker(sourceFile, nil)
-}
-
-func (s *Session) encodeSourceFileResponseWithFileName(sourceFile *ast.SourceFile, fileName string) (any, error) {
-	return s.encodeSourceFileResponseWorker(sourceFile, &fileName)
-}
-
-func (s *Session) encodeSourceFileResponseWorker(sourceFile *ast.SourceFile, fileName *string) (any, error) {
 	if sourceFile == nil {
 		if s.useBinaryResponses {
 			return RawBinary(nil), nil
@@ -1816,13 +1808,7 @@ func (s *Session) encodeSourceFileResponseWorker(sourceFile *ast.SourceFile, fil
 	}
 
 	// Encode the full source file.
-	var data []byte
-	var err error
-	if fileName == nil {
-		data, _, err = encoder.EncodeSourceFile(sourceFile)
-	} else {
-		data, _, err = encoder.EncodeSourceFileWithFileName(sourceFile, *fileName)
-	}
+	data, _, err := encoder.EncodeSourceFile(sourceFile)
 	if err != nil {
 		return nil, fmt.Errorf("failed to encode source file: %w", err)
 	}

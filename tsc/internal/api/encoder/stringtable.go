@@ -7,9 +7,8 @@ import (
 )
 
 type stringTable struct {
-	fileText               string
-	sourceFileNameOverride *string
-	otherStrings           *strings.Builder
+	fileText     string
+	otherStrings *strings.Builder
 	// offsets are pos/end pairs
 	offsets []uint32
 }
