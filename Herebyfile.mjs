@@ -235,21 +235,6 @@ async function runWithConcurrencyLimit(tasks, concurrency) {
     }
 }
 
-const tools = new Map([
-    ["gotest.tools/gotestsum", "latest"],
-]);
-
-const hasGotestsum = memoize(() => {
-    try {
-        return xSync("gotestsum", ["--version"], {
-            nodeOptions: { stdio: "ignore" },
-        }).exitCode === 0;
-    }
-    catch {
-        return false;
-    }
-});
-
 const builtLocal = "./built/local";
 
 const libsDir = "./tsc/internal/bundled/libs";
@@ -1120,9 +1105,12 @@ async function checkUnusedBaselines(trackingDir) {
 /**
  * @param {string} taskName
  */
-function gotestsum(taskName) {
-    const args = hasGotestsum() ? ["gotestsum", ...goTestSumFlags, "--"] : ["go", "test"];
-    return args.concat(goTestFlags(taskName));
+function gotestsumArgs(taskName) {
+    return [
+        ...goTestSumFlags,
+        "--",
+        ...goTestFlags(taskName),
+    ];
 }
 
 /**
@@ -1155,8 +1143,7 @@ async function runTests() {
             ...goTestEnv,
             ...(trackingDir ? { TSGO_BASELINE_TRACKING_DIR: trackingDir } : {}),
         };
-        const command = gotestsum("tests");
-        await run(command[0], [...command.slice(1), "./...", ...(isCI ? ["--timeout=45m"] : [])], {
+        await gotestsumTool.run([...gotestsumArgs("tests"), "./...", ...(isCI ? ["--timeout=45m"] : [])], {
             env: testEnv,
             cwd: "./tsc",
         });
@@ -1227,8 +1214,7 @@ export const testBenchmarks = task({
 });
 
 async function runTestTools() {
-    const command = gotestsum("tools");
-    await run(command[0], [...command.slice(1), "./..."], { env: goTestEnv, cwd: path.join(__dirname, "tools") });
+    await gotestsumTool.run([...gotestsumArgs("tools"), "./..."], { env: goTestEnv, cwd: path.join(__dirname, "tools") });
 }
 
 async function runTestAPI() {
@@ -1282,8 +1268,59 @@ export const testAll = task({
     },
 });
 
-const customLinterPath = `./tools/custom-gcl${process.platform === "win32" ? ".exe" : ""}`;
-const customLinterHashPath = customLinterPath + ".hash";
+/**
+ * @param {{
+ *   toolPath: string;
+ *   globs: string[];
+ *   build: (toolPath: string) => Promise<void>;
+ *   exclude?: string[];
+ * }} spec
+ */
+function createCachedTool({ toolPath, globs, build, exclude }) {
+    toolPath = path.resolve(toolPath);
+    const hashPath = toolPath + ".hash";
+    const files = fs.globSync(globs, { exclude }).filter(file => fs.statSync(file).isFile()).map(file => path.resolve(file));
+    files.sort();
+
+    const ensure = memoize(async () => {
+        const hash = crypto.createHash("sha256");
+        for (const file of files) {
+            hash.update(file);
+            hash.update(fs.readFileSync(file));
+        }
+        const digest = hash.digest("hex") + "\n";
+        if (
+            fs.existsSync(toolPath)
+            && fs.existsSync(hashPath)
+            && fs.readFileSync(hashPath, "utf8") === digest
+        ) {
+            return;
+        }
+
+        await build(toolPath);
+        fs.writeFileSync(hashPath, digest);
+    });
+
+    return {
+        ensure,
+        /** @param {string[]} args @param {RunOptions} [options] */
+        run: async (args, options) => {
+            await ensure();
+            return run(toolPath, args, options);
+        },
+    };
+}
+
+const gotestsumTool = createCachedTool({
+    toolPath: `./tools/gotestsum${process.platform === "win32" ? ".exe" : ""}`,
+    globs: ["./tools/go.mod", "./tools/go.sum"],
+    build: async () => {
+        await run("go", ["install", "gotest.tools/gotestsum"], {
+            cwd: "./tools",
+            env: { GOBIN: path.resolve("./tools") },
+        });
+    },
+});
 
 const golangciLintPackage = memoize(() => {
     const golangciLintYml = fs.readFileSync(".custom-gcl.yml", "utf8");
@@ -1299,40 +1336,18 @@ const golangciLintPackage = memoize(() => {
     return `github.com/golangci/golangci-lint${versionSuffix}/cmd/golangci-lint@${version}`;
 });
 
-const customlintHash = memoize(() => {
-    const files = fs.globSync([
+const customLinterTool = createCachedTool({
+    toolPath: `./tools/custom-gcl${process.platform === "win32" ? ".exe" : ""}`,
+    globs: [
         "./tools/go.mod",
         "./tools/customlint/**/*",
         "./.custom-gcl.yml",
-    ], {
-        exclude: ["**/testdata/**"],
-    }).filter(file => fs.statSync(file).isFile()).map(file => path.resolve(file));
-    files.sort();
-
-    const hash = crypto.createHash("sha256");
-
-    for (const file of files) {
-        hash.update(file);
-        hash.update(fs.readFileSync(file));
-    }
-
-    return hash.digest("hex") + "\n";
-});
-
-const buildCustomLinter = memoize(async () => {
-    const hash = customlintHash();
-    if (
-        fs.existsSync(customLinterPath)
-        && fs.existsSync(customLinterHashPath)
-        && fs.readFileSync(customLinterHashPath, "utf8") === hash
-    ) {
-        return;
-    }
-
-    await run("go", ["run", golangciLintPackage(), "custom"]);
-    await run(customLinterPath, ["cache", "clean"]);
-
-    fs.writeFileSync(customLinterHashPath, hash);
+    ],
+    exclude: ["**/testdata/**"],
+    build: async toolPath => {
+        await run("go", ["run", golangciLintPackage(), "custom"]);
+        await run(toolPath, ["cache", "clean"]);
+    },
 });
 
 export const lint = task({
@@ -1342,8 +1357,6 @@ export const lint = task({
 });
 
 async function runLint() {
-    await buildCustomLinter();
-
     const lintArgs = ["run"];
     if (defaultGoBuildTags.length) {
         lintArgs.push("--build-tags", defaultGoBuildTags.join(","));
@@ -1352,10 +1365,9 @@ async function runLint() {
         lintArgs.push("--fix");
     }
 
-    const resolvedCustomLinterPath = path.resolve(customLinterPath);
-    await run(resolvedCustomLinterPath, [...lintArgs, "--config", "../.golangci.yml"], { cwd: "./tsc" });
+    await customLinterTool.run([...lintArgs, "--config", "../.golangci.yml"], { cwd: "./tsc" });
     console.log("Linting tools");
-    await run(resolvedCustomLinterPath, [...lintArgs, "--config", "../.golangci.yml"], { cwd: "./tools" });
+    await customLinterTool.run([...lintArgs, "--config", "../.golangci.yml"], { cwd: "./tools" });
 }
 
 export const installTools = task({
@@ -1363,8 +1375,8 @@ export const installTools = task({
     description: "Installs optional tools for developing within the repo.",
     run: async () => {
         await Promise.all([
-            ...[...tools].map(([tool, version]) => run("go", ["install", tool + (version ? `@${version}` : "")])),
-            buildCustomLinter(),
+            gotestsumTool.ensure(),
+            customLinterTool.ensure(),
         ]);
     },
 });

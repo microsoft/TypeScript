@@ -142,8 +142,6 @@ jobs:
           echo "::remove-matcher owner=tsc::"
           echo "::remove-matcher owner=go::"
       - run: npm ci
-      - run: go install gotest.tools/gotestsum@latest
-        if: ${{ matrix.config.os != 'windows' && !matrix.config.race }}
       - name: Tests
         id: test
         run: npx hereby test:tsc
@@ -213,8 +211,6 @@ jobs:
           echo "::remove-matcher owner=tsc::"
           echo "::remove-matcher owner=go::"
       - run: npm ci
-      - run: go install gotest.tools/gotestsum@latest
-        if: ${{ matrix.config.os != 'windows' }}
       - run: npx hereby test:extension
       - run: npx hereby test:tools
       - run: npx hereby test:api
