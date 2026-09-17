@@ -562,13 +562,13 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
     }
 
     get createSnapshot(): {
-        <const Params extends CreateSnapshotParams>(params: Params): SnapshotForOperation<Params>;
+        <const CreatePrograms extends CreateSnapshotParams["createPrograms"] = undefined, const OpenFiles extends CreateSnapshotParams["openFiles"] = undefined>(params: SnapshotOperationParams<CreateSnapshotParams, CreatePrograms, OpenFiles>): SnapshotForOperationResults<CreatePrograms, OpenFiles>;
         (): Snapshot;
-        gen<const Params extends CreateSnapshotParams>(params: Params): Generator<ProtocolRequest, SnapshotForOperation<Params>, ProtocolResponse["result"]>;
+        gen<const CreatePrograms extends CreateSnapshotParams["createPrograms"] = undefined, const OpenFiles extends CreateSnapshotParams["openFiles"] = undefined>(params: SnapshotOperationParams<CreateSnapshotParams, CreatePrograms, OpenFiles>): Generator<ProtocolRequest, SnapshotForOperationResults<CreatePrograms, OpenFiles>, ProtocolResponse["result"]>;
         gen(): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]>;
     } {
         const owner = this;
-        function createSnapshot<const Params extends CreateSnapshotParams>(params: Params): SnapshotForOperation<Params>;
+        function createSnapshot<const CreatePrograms extends CreateSnapshotParams["createPrograms"] = undefined, const OpenFiles extends CreateSnapshotParams["openFiles"] = undefined>(params: SnapshotOperationParams<CreateSnapshotParams, CreatePrograms, OpenFiles>): SnapshotForOperationResults<CreatePrograms, OpenFiles>;
         function createSnapshot(): Snapshot;
         function createSnapshot(params?: CreateSnapshotParams): Snapshot {
             owner.ensureInitialized();
@@ -593,7 +593,7 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
 
             return snapshot;
         }
-        function gen<const Params extends CreateSnapshotParams>(params: Params): Generator<ProtocolRequest, SnapshotForOperation<Params>, ProtocolResponse["result"]>;
+        function gen<const CreatePrograms extends CreateSnapshotParams["createPrograms"] = undefined, const OpenFiles extends CreateSnapshotParams["openFiles"] = undefined>(params: SnapshotOperationParams<CreateSnapshotParams, CreatePrograms, OpenFiles>): Generator<ProtocolRequest, SnapshotForOperationResults<CreatePrograms, OpenFiles>, ProtocolResponse["result"]>;
         function gen(): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]>;
         function* gen(params?: CreateSnapshotParams): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]> {
             yield* owner.ensureInitialized.gen();
@@ -700,13 +700,22 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
      * adopting any supplied API-driven changes. Only available on LSP-connected APIs.
      */
     get getCurrentLanguageServerSnapshot(): {
-        <const Params extends LanguageServerSnapshotChanges>(...args: FromLSP extends true ? [changes: Params, baseSnapshot?: Snapshot] : [changes: never, baseSnapshot?: never]): SnapshotForOperation<Params>;
+        <const CreatePrograms extends LanguageServerSnapshotChanges["createPrograms"] = undefined, const OpenFiles extends LanguageServerSnapshotChanges["openFiles"] = undefined>(
+            ...args: FromLSP extends true ? [changes: SnapshotOperationParams<LanguageServerSnapshotChanges, CreatePrograms, OpenFiles>, baseSnapshot?: Snapshot]
+                : [changes: never, baseSnapshot?: never]
+        ): SnapshotForOperationResults<CreatePrograms, OpenFiles>;
         (...args: FromLSP extends true ? [changes?: LanguageServerSnapshotChanges, baseSnapshot?: Snapshot] : [changes: never, baseSnapshot?: never]): Snapshot;
-        gen<const Params extends LanguageServerSnapshotChanges>(...args: FromLSP extends true ? [changes: Params, baseSnapshot?: Snapshot] : [changes: never, baseSnapshot?: never]): Generator<ProtocolRequest, SnapshotForOperation<Params>, ProtocolResponse["result"]>;
+        gen<const CreatePrograms extends LanguageServerSnapshotChanges["createPrograms"] = undefined, const OpenFiles extends LanguageServerSnapshotChanges["openFiles"] = undefined>(
+            ...args: FromLSP extends true ? [changes: SnapshotOperationParams<LanguageServerSnapshotChanges, CreatePrograms, OpenFiles>, baseSnapshot?: Snapshot]
+                : [changes: never, baseSnapshot?: never]
+        ): Generator<ProtocolRequest, SnapshotForOperationResults<CreatePrograms, OpenFiles>, ProtocolResponse["result"]>;
         gen(...args: FromLSP extends true ? [changes?: LanguageServerSnapshotChanges, baseSnapshot?: Snapshot] : [changes: never, baseSnapshot?: never]): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]>;
     } {
         const owner = this;
-        function getCurrentLanguageServerSnapshot<const Params extends LanguageServerSnapshotChanges>(...args: FromLSP extends true ? [changes: Params, baseSnapshot?: Snapshot] : [changes: never, baseSnapshot?: never]): SnapshotForOperation<Params>;
+        function getCurrentLanguageServerSnapshot<const CreatePrograms extends LanguageServerSnapshotChanges["createPrograms"] = undefined, const OpenFiles extends LanguageServerSnapshotChanges["openFiles"] = undefined>(
+            ...args: FromLSP extends true ? [changes: SnapshotOperationParams<LanguageServerSnapshotChanges, CreatePrograms, OpenFiles>, baseSnapshot?: Snapshot]
+                : [changes: never, baseSnapshot?: never]
+        ): SnapshotForOperationResults<CreatePrograms, OpenFiles>;
         function getCurrentLanguageServerSnapshot(...args: FromLSP extends true ? [changes?: LanguageServerSnapshotChanges, baseSnapshot?: Snapshot] : [changes: never, baseSnapshot?: never]): Snapshot;
         function getCurrentLanguageServerSnapshot(...args: FromLSP extends true ? [changes?: LanguageServerSnapshotChanges, baseSnapshot?: Snapshot] : [changes: never, baseSnapshot?: never]): Snapshot {
             owner.ensureInitialized();
@@ -739,7 +748,10 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
             owner.activeSnapshots.add(snapshot);
             return snapshot;
         }
-        function gen<const Params extends LanguageServerSnapshotChanges>(...args: FromLSP extends true ? [changes: Params, baseSnapshot?: Snapshot] : [changes: never, baseSnapshot?: never]): Generator<ProtocolRequest, SnapshotForOperation<Params>, ProtocolResponse["result"]>;
+        function gen<const CreatePrograms extends LanguageServerSnapshotChanges["createPrograms"] = undefined, const OpenFiles extends LanguageServerSnapshotChanges["openFiles"] = undefined>(
+            ...args: FromLSP extends true ? [changes: SnapshotOperationParams<LanguageServerSnapshotChanges, CreatePrograms, OpenFiles>, baseSnapshot?: Snapshot]
+                : [changes: never, baseSnapshot?: never]
+        ): Generator<ProtocolRequest, SnapshotForOperationResults<CreatePrograms, OpenFiles>, ProtocolResponse["result"]>;
         function gen(...args: FromLSP extends true ? [changes?: LanguageServerSnapshotChanges, baseSnapshot?: Snapshot] : [changes: never, baseSnapshot?: never]): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]>;
         function* gen(...args: FromLSP extends true ? [changes?: LanguageServerSnapshotChanges, baseSnapshot?: Snapshot] : [changes: never, baseSnapshot?: never]): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]> {
             yield* owner.ensureInitialized.gen();
@@ -1047,12 +1059,29 @@ type MapTupleTo<Tuple extends readonly unknown[], Result> = {
     readonly [Index in keyof Tuple]: Result;
 };
 
-export type SnapshotForOperation<Params extends CreateSnapshotParams> = Snapshot & {
+type SnapshotOperationParams<
+    Params extends CreateSnapshotParams,
+    CreatePrograms extends Params["createPrograms"],
+    OpenFiles extends Params["openFiles"],
+> = Omit<Params, "createPrograms" | "openFiles"> & {
+    createPrograms?: CreatePrograms;
+    openFiles?: OpenFiles;
+};
+
+type SnapshotForOperationResults<
+    CreatePrograms extends CreateSnapshotParams["createPrograms"],
+    OpenFiles extends CreateSnapshotParams["openFiles"],
+> = Snapshot & {
     readonly operation:
         & SnapshotOperation
-        & (Params extends { createPrograms: infer Programs extends readonly unknown[]; } ? { readonly createdPrograms: MapTupleTo<Programs, Program<SyntheticProjectId>>; } : unknown)
-        & (Params extends { openFiles: infer Files extends readonly unknown[]; } ? { readonly openedFiles: MapTupleTo<Files, SnapshotOpenedFileOperation>; } : unknown);
+        & (CreatePrograms extends readonly unknown[] ? { readonly createdPrograms: MapTupleTo<CreatePrograms, Program<SyntheticProjectId>>; } : unknown)
+        & (OpenFiles extends readonly unknown[] ? { readonly openedFiles: MapTupleTo<OpenFiles, SnapshotOpenedFileOperation>; } : unknown);
 };
+
+export type SnapshotForOperation<Params extends CreateSnapshotParams> = SnapshotForOperationResults<
+    Params extends { createPrograms: infer CreatePrograms extends readonly unknown[]; } ? CreatePrograms : undefined,
+    Params extends { openFiles: infer OpenFiles extends readonly unknown[]; } ? OpenFiles : undefined
+>;
 
 export class Snapshot {
     readonly id: number;
@@ -1127,19 +1156,19 @@ export class Snapshot {
     }
 
     get update(): {
-        <const Params extends CreateSnapshotParams>(params: Params): SnapshotForOperation<Params>;
+        <const CreatePrograms extends CreateSnapshotParams["createPrograms"] = undefined, const OpenFiles extends CreateSnapshotParams["openFiles"] = undefined>(params: SnapshotOperationParams<CreateSnapshotParams, CreatePrograms, OpenFiles>): SnapshotForOperationResults<CreatePrograms, OpenFiles>;
         (): Snapshot;
-        gen<const Params extends CreateSnapshotParams>(params: Params): Generator<ProtocolRequest, SnapshotForOperation<Params>, ProtocolResponse["result"]>;
+        gen<const CreatePrograms extends CreateSnapshotParams["createPrograms"] = undefined, const OpenFiles extends CreateSnapshotParams["openFiles"] = undefined>(params: SnapshotOperationParams<CreateSnapshotParams, CreatePrograms, OpenFiles>): Generator<ProtocolRequest, SnapshotForOperationResults<CreatePrograms, OpenFiles>, ProtocolResponse["result"]>;
         gen(): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]>;
     } {
         const owner = this;
-        function update<const Params extends CreateSnapshotParams>(params: Params): SnapshotForOperation<Params>;
+        function update<const CreatePrograms extends CreateSnapshotParams["createPrograms"] = undefined, const OpenFiles extends CreateSnapshotParams["openFiles"] = undefined>(params: SnapshotOperationParams<CreateSnapshotParams, CreatePrograms, OpenFiles>): SnapshotForOperationResults<CreatePrograms, OpenFiles>;
         function update(): Snapshot;
         function update(params?: CreateSnapshotParams): Snapshot {
             owner.ensureNotDisposed();
             return owner.updateSnapshot(params);
         }
-        function gen<const Params extends CreateSnapshotParams>(params: Params): Generator<ProtocolRequest, SnapshotForOperation<Params>, ProtocolResponse["result"]>;
+        function gen<const CreatePrograms extends CreateSnapshotParams["createPrograms"] = undefined, const OpenFiles extends CreateSnapshotParams["openFiles"] = undefined>(params: SnapshotOperationParams<CreateSnapshotParams, CreatePrograms, OpenFiles>): Generator<ProtocolRequest, SnapshotForOperationResults<CreatePrograms, OpenFiles>, ProtocolResponse["result"]>;
         function gen(): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]>;
         function* gen(params?: CreateSnapshotParams): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]> {
             owner.ensureNotDisposed();

@@ -134,6 +134,14 @@ describe("API", () => {
             const baseSnapshot = undefined! as Snapshot;
             void lsp.getCurrentLanguageServerSnapshot(undefined, baseSnapshot);
 
+            const api = new API();
+            // @ts-expect-error Snapshot parameters are excess-property checked.
+            void api.createSnapshot({ fileChanges: { changed: ["/index.ts"] } });
+            // @ts-expect-error Snapshot update parameters are excess-property checked.
+            void baseSnapshot.update({ fileChanges: { changed: ["/index.ts"] } });
+            // @ts-expect-error Language server snapshot parameters are excess-property checked.
+            void lsp.getCurrentLanguageServerSnapshot({ fileChanges: { changed: ["/index.ts"] } });
+
             const configured = undefined! as ConfiguredProjectId;
             const inferred = undefined! as InferredProjectId;
             const synthetic = undefined! as SyntheticProjectId;
@@ -1440,7 +1448,7 @@ describe("Multiple snapshots", () => {
         fs.writeFile!("/src/foo.ts", `export const foo = "changed";`);
         const snap2 = api.createSnapshot({
             openProject: "/tsconfig.json",
-            fileChanges: { changed: ["/src/foo.ts"] },
+            fileNotifications: { changed: ["/src/foo.ts"] },
         });
 
         // snap2 should reflect the updated content
@@ -1476,7 +1484,7 @@ describe("Multiple snapshots", () => {
         fs.writeFile!("/src/bar.ts", `export const bar = true;`);
         const snap2 = api.createSnapshot({
             openProject: "/tsconfig.json",
-            fileChanges: { created: ["/src/bar.ts"] },
+            fileNotifications: { created: ["/src/bar.ts"] },
         });
 
         const sf = snap2.getConfiguredProject("/tsconfig.json")!.program.getSourceFile("/src/bar.ts");
@@ -1504,7 +1512,7 @@ describe("Multiple snapshots", () => {
             fs.writeFile!("/src/foo.ts", version);
             const snap = api.createSnapshot({
                 openProject: "/tsconfig.json",
-                fileChanges: { changed: ["/src/foo.ts"] },
+                fileNotifications: { changed: ["/src/foo.ts"] },
             });
             const sf = snap.getConfiguredProject("/tsconfig.json")!.program.getSourceFile("/src/foo.ts");
             assert.ok(sf);
@@ -1529,7 +1537,7 @@ describe("Multiple snapshots", () => {
 
         fs.writeFile!("/first/index.ts", `export const first = 2;`);
         const updated = base.update({
-            fileChanges: { changed: ["/first/index.ts"] },
+            fileNotifications: { changed: ["/first/index.ts"] },
             ensurePrograms: [base.getConfiguredProject("/first/tsconfig.json")!.id],
         });
 
@@ -1648,7 +1656,7 @@ describe("Source file caching", () => {
         // Notify the server about the change
         const snap2 = api.createSnapshot({
             openProject: "/tsconfig.json",
-            fileChanges: { changed: ["/src/foo.ts"] },
+            fileNotifications: { changed: ["/src/foo.ts"] },
         });
         const sf2 = snap2.getConfiguredProject("/tsconfig.json")!.program.getSourceFile("/src/foo.ts");
         assert.ok(sf2);
@@ -1672,7 +1680,7 @@ describe("Source file caching", () => {
         // Notify the server about the change to foo.ts only
         const snap2 = api.createSnapshot({
             openProject: "/tsconfig.json",
-            fileChanges: { changed: ["/src/foo.ts"] },
+            fileNotifications: { changed: ["/src/foo.ts"] },
         });
         const sf2 = snap2.getConfiguredProject("/tsconfig.json")!.program.getSourceFile("/src/index.ts");
         assert.ok(sf2);
@@ -1713,7 +1721,7 @@ describe("Source file caching", () => {
         // Use invalidateAll to force re-fetch
         const snap2 = api.createSnapshot({
             openProject: "/tsconfig.json",
-            fileChanges: { invalidateAll: true },
+            fileNotifications: { invalidateAll: true },
         });
         const sf2 = snap2.getConfiguredProject("/tsconfig.json")!.program.getSourceFile("/src/foo.ts");
         assert.ok(sf2);
@@ -1751,7 +1759,7 @@ describe("Source file caching", () => {
         fs.writeFile!("/src/other.ts", `export const x = 2;`);
         const snap2 = api.createSnapshot({
             openProject: "/tsconfig.json",
-            fileChanges: { changed: ["/src/other.ts"] },
+            fileNotifications: { changed: ["/src/other.ts"] },
         });
         const proj2 = snap2.getConfiguredProject("/tsconfig.json")!;
 
@@ -6789,7 +6797,7 @@ describe("getDefaultProjectForFile", () => {
         fs.writeFile!("/loose.ts", `export const foo = 2;`);
         const snapshot2 = api.createSnapshot({
             openFiles: ["/loose.ts"],
-            fileChanges: { changed: ["/loose.ts"] },
+            fileNotifications: { changed: ["/loose.ts"] },
         });
 
         const project2 = snapshot2.getDefaultProjectForFile("/loose.ts");

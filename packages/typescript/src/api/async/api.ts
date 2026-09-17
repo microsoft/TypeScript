@@ -368,7 +368,10 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         return this.client.apiRequest("transpileDeclarationFromFile", { fileName: resolveFileName(file), options });
     }
 
-    createSnapshot<const Params extends CreateSnapshotParams>(params: Params): Promise<SnapshotForOperation<Params>>;
+    createSnapshot<
+        const CreatePrograms extends CreateSnapshotParams["createPrograms"] = undefined,
+        const OpenFiles extends CreateSnapshotParams["openFiles"] = undefined,
+    >(params: SnapshotOperationParams<CreateSnapshotParams, CreatePrograms, OpenFiles>): Promise<SnapshotForOperationResults<CreatePrograms, OpenFiles>>;
     createSnapshot(): Promise<Snapshot>;
     async createSnapshot(params?: CreateSnapshotParams): Promise<Snapshot> {
         await this.ensureInitialized();
@@ -435,9 +438,14 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
      * Returns the language server's current canonical snapshot after atomically
      * adopting any supplied API-driven changes. Only available on LSP-connected APIs.
      */
-    getCurrentLanguageServerSnapshot<const Params extends LanguageServerSnapshotChanges>(
-        ...args: FromLSP extends true ? [changes: Params, baseSnapshot?: Snapshot] : [changes: never, baseSnapshot?: never]
-    ): Promise<SnapshotForOperation<Params>>;
+    getCurrentLanguageServerSnapshot<
+        const CreatePrograms extends LanguageServerSnapshotChanges["createPrograms"] = undefined,
+        const OpenFiles extends LanguageServerSnapshotChanges["openFiles"] = undefined,
+    >(
+        ...args: FromLSP extends true
+            ? [changes: SnapshotOperationParams<LanguageServerSnapshotChanges, CreatePrograms, OpenFiles>, baseSnapshot?: Snapshot]
+            : [changes: never, baseSnapshot?: never]
+    ): Promise<SnapshotForOperationResults<CreatePrograms, OpenFiles>>;
     getCurrentLanguageServerSnapshot(
         ...args: FromLSP extends true ? [changes?: LanguageServerSnapshotChanges, baseSnapshot?: Snapshot] : [changes: never, baseSnapshot?: never]
     ): Promise<Snapshot>;
@@ -604,12 +612,29 @@ type MapTupleTo<Tuple extends readonly unknown[], Result> = {
     readonly [Index in keyof Tuple]: Result;
 };
 
-export type SnapshotForOperation<Params extends CreateSnapshotParams> = Snapshot & {
+type SnapshotOperationParams<
+    Params extends CreateSnapshotParams,
+    CreatePrograms extends Params["createPrograms"],
+    OpenFiles extends Params["openFiles"],
+> = Omit<Params, "createPrograms" | "openFiles"> & {
+    createPrograms?: CreatePrograms;
+    openFiles?: OpenFiles;
+};
+
+type SnapshotForOperationResults<
+    CreatePrograms extends CreateSnapshotParams["createPrograms"],
+    OpenFiles extends CreateSnapshotParams["openFiles"],
+> = Snapshot & {
     readonly operation:
         & SnapshotOperation
-        & (Params extends { createPrograms: infer Programs extends readonly unknown[]; } ? { readonly createdPrograms: MapTupleTo<Programs, Program<SyntheticProjectId>>; } : unknown)
-        & (Params extends { openFiles: infer Files extends readonly unknown[]; } ? { readonly openedFiles: MapTupleTo<Files, SnapshotOpenedFileOperation>; } : unknown);
+        & (CreatePrograms extends readonly unknown[] ? { readonly createdPrograms: MapTupleTo<CreatePrograms, Program<SyntheticProjectId>>; } : unknown)
+        & (OpenFiles extends readonly unknown[] ? { readonly openedFiles: MapTupleTo<OpenFiles, SnapshotOpenedFileOperation>; } : unknown);
 };
+
+export type SnapshotForOperation<Params extends CreateSnapshotParams> = SnapshotForOperationResults<
+    Params extends { createPrograms: infer CreatePrograms extends readonly unknown[]; } ? CreatePrograms : undefined,
+    Params extends { openFiles: infer OpenFiles extends readonly unknown[]; } ? OpenFiles : undefined
+>;
 
 export class Snapshot {
     readonly id: number;
@@ -683,7 +708,10 @@ export class Snapshot {
         return this.getProject(projectId)?.program;
     }
 
-    update<const Params extends CreateSnapshotParams>(params: Params): Promise<SnapshotForOperation<Params>>;
+    update<
+        const CreatePrograms extends CreateSnapshotParams["createPrograms"] = undefined,
+        const OpenFiles extends CreateSnapshotParams["openFiles"] = undefined,
+    >(params: SnapshotOperationParams<CreateSnapshotParams, CreatePrograms, OpenFiles>): Promise<SnapshotForOperationResults<CreatePrograms, OpenFiles>>;
     update(): Promise<Snapshot>;
     update(params?: CreateSnapshotParams): Promise<Snapshot> {
         this.ensureNotDisposed();
