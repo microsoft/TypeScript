@@ -1400,3 +1400,35 @@ type Weird2 = (<U extends boolean>(a: U) => U) extends
 >T : Symbol(T, Decl(conditionalTypes1.ts, 359, 36))
 >T : Symbol(T, Decl(conditionalTypes1.ts, 359, 36))
 
+// Identical distributive conditional types with locally inferred type parameters
+// should remain mutually assignable.
+function conditionalRelations<T>(
+>conditionalRelations : Symbol(conditionalRelations, Decl(conditionalTypes1.ts, 359, 52))
+>T : Symbol(T, Decl(conditionalTypes1.ts, 363, 30))
+
+    x: T extends { value: infer U } ? [T, U] : never,
+>x : Symbol(x, Decl(conditionalTypes1.ts, 363, 33))
+>T : Symbol(T, Decl(conditionalTypes1.ts, 363, 30))
+>value : Symbol(value, Decl(conditionalTypes1.ts, 364, 18))
+>U : Symbol(U, Decl(conditionalTypes1.ts, 364, 31))
+>T : Symbol(T, Decl(conditionalTypes1.ts, 363, 30))
+>U : Symbol(U, Decl(conditionalTypes1.ts, 364, 31))
+
+    y: T extends { value: infer U } ? [T, U] : never,
+>y : Symbol(y, Decl(conditionalTypes1.ts, 364, 53))
+>T : Symbol(T, Decl(conditionalTypes1.ts, 363, 30))
+>value : Symbol(value, Decl(conditionalTypes1.ts, 365, 18))
+>U : Symbol(U, Decl(conditionalTypes1.ts, 365, 31))
+>T : Symbol(T, Decl(conditionalTypes1.ts, 363, 30))
+>U : Symbol(U, Decl(conditionalTypes1.ts, 365, 31))
+
+) {
+    x = y;
+>x : Symbol(x, Decl(conditionalTypes1.ts, 363, 33))
+>y : Symbol(y, Decl(conditionalTypes1.ts, 364, 53))
+
+    y = x;
+>y : Symbol(y, Decl(conditionalTypes1.ts, 364, 53))
+>x : Symbol(x, Decl(conditionalTypes1.ts, 363, 33))
+}
+

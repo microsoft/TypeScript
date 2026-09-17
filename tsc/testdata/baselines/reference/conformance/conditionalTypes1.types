@@ -1073,3 +1073,28 @@ type Weird2 = (<U extends boolean>(a: U) => U) extends
 >true : true
 >a : U
 
+// Identical distributive conditional types with locally inferred type parameters
+// should remain mutually assignable.
+function conditionalRelations<T>(
+>conditionalRelations : <T>(x: T extends { value: infer U; } ? [T, U] : never, y: T extends { value: infer U; } ? [T, U] : never) => void
+
+    x: T extends { value: infer U } ? [T, U] : never,
+>x : T extends { value: infer U; } ? [T, U] : never
+>value : U
+
+    y: T extends { value: infer U } ? [T, U] : never,
+>y : T extends { value: infer U; } ? [T, U] : never
+>value : U
+
+) {
+    x = y;
+>x = y : T extends { value: infer U; } ? [T, U] : never
+>x : T extends { value: infer U; } ? [T, U] : never
+>y : T extends { value: infer U; } ? [T, U] : never
+
+    y = x;
+>y = x : T extends { value: infer U; } ? [T, U] : never
+>y : T extends { value: infer U; } ? [T, U] : never
+>x : T extends { value: infer U; } ? [T, U] : never
+}
+

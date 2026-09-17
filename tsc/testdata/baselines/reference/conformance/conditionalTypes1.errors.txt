@@ -543,3 +543,13 @@ conditionalTypes1.ts(288,43): error TS2322: Type 'T95<U>' is not assignable to t
     type Weird2 = (<U extends boolean>(a: U) => U) extends 
         (<U extends true>(a: U) => infer T) ? T : never;
     
+    // Identical distributive conditional types with locally inferred type parameters
+    // should remain mutually assignable.
+    function conditionalRelations<T>(
+        x: T extends { value: infer U } ? [T, U] : never,
+        y: T extends { value: infer U } ? [T, U] : never,
+    ) {
+        x = y;
+        y = x;
+    }
+    
