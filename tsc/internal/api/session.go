@@ -1250,6 +1250,9 @@ func (s *Session) toAPISnapshotRequest(changes *SnapshotRequestChangesParams) (*
 
 	apiRequest.CreatePrograms = make([]*project.APICreateProgramRequest, len(changes.CreatePrograms))
 	for i, programParams := range changes.CreatePrograms {
+		if programParams == nil {
+			return nil, fmt.Errorf("%w: createPrograms[%d] must not be null", ErrClientError, i)
+		}
 		rootFileNames := make([]string, len(programParams.RootFiles))
 		for j, rootFile := range programParams.RootFiles {
 			rootFileNames[j] = rootFile.ToAbsoluteFileName(s.currentDirectory())

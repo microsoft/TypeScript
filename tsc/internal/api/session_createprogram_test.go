@@ -188,6 +188,21 @@ func TestReconfigureSyntheticProgramValidation(t *testing.T) {
 	assert.ErrorContains(t, err, "not found for reconfiguration")
 }
 
+func TestCreateSyntheticProgramValidation(t *testing.T) {
+	t.Parallel()
+
+	projectSession, _ := projecttestutil.Setup(map[string]any{})
+	defer projectSession.Close()
+	session := NewLSPSession(projectSession, nil)
+	defer session.Close()
+
+	var nullCreate SnapshotRequestChangesParams
+	assert.NilError(t, json.Unmarshal([]byte(`{"createPrograms":[null]}`), &nullCreate))
+	_, err := session.toAPISnapshotRequest(&nullCreate)
+	assert.ErrorContains(t, err, "createPrograms[0] must not be null")
+	assert.ErrorIs(t, err, ErrClientError)
+}
+
 func TestCreateSnapshotRejectsRemovingProgramFromIndependentRoot(t *testing.T) {
 	t.Parallel()
 
