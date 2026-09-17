@@ -653,7 +653,8 @@ type BuildOrchestratorHostOptions struct {
 }
 
 type CreateBuildOrchestratorResponse struct {
-	BuildOrchestratorID BuildOrchestratorID `json:"buildOrchestratorID"`
+	BuildOrchestratorID BuildOrchestratorID   `json:"buildOrchestratorID"`
+	Errors              []*DiagnosticResponse `json:"errors,omitempty"`
 }
 
 type BuildParams struct {
@@ -662,10 +663,9 @@ type BuildParams struct {
 }
 
 type BuildResponse struct {
-	Status        tsc.ExitStatus        `json:"status"`
-	Errors        []*DiagnosticResponse `json:"errors" nonnil:"true"`
-	Statistics    tsc.Statistics        `json:"statistics"`
-	FilesToDelete []string              `json:"filesToDelete" nonnil:"true"`
+	Status     tsc.ExitStatus        `json:"status"`
+	Errors     []*DiagnosticResponse `json:"errors,omitempty"`
+	Statistics tsc.Statistics        `json:"statistics"`
 }
 
 type CleanBuildParams struct {
@@ -674,16 +674,15 @@ type CleanBuildParams struct {
 }
 
 type CleanBuildResponse struct {
-	Status        tsc.ExitStatus        `json:"status"`
-	Errors        []*DiagnosticResponse `json:"errors" nonnil:"true"`
-	Statistics    tsc.Statistics        `json:"statistics"`
-	FilesToDelete []string              `json:"filesToDelete" nonnil:"true"`
+	Status       tsc.ExitStatus        `json:"status"`
+	Errors       []*DiagnosticResponse `json:"errors,omitempty"`
+	Statistics   tsc.Statistics        `json:"statistics"`
+	FilesDeleted []string              `json:"filesDeleted,omitempty"`
 }
 
 type BuildOrchestrator struct {
-	Build           func(project ProjectID) tsc.ExitStatus //, cancellationToken *CancellationToken, writeFile WriteFileCallback, getCustomTransformers func(project string) CustomTransformers)
-	BuildReferences func(project ProjectID) tsc.ExitStatus //, cancellationToken *CancellationToken, writeFile WriteFileCallback, getCustomTransformers func(project string) CustomTransformers)
-	Clean           func(project ProjectID) tsc.ExitStatus
+	Build           func(project ProjectID) tsc.ExitStatus
+	BuildReferences func(project ProjectID) tsc.ExitStatus
 	CleanReferences func(project ProjectID) tsc.ExitStatus
 }
 
@@ -737,8 +736,10 @@ func NewConfigFileResponse(parsedCommandLine *tsoptions.ParsedCommandLine) *Conf
 		errors = []*DiagnosticResponse{}
 	}
 	return &ConfigFileResponse{
-		FileNames:         parsedCommandLine.FileNames(),
-		Options:           compilerOptions,
+		FileNames: parsedCommandLine.FileNames(),
+		Options:   compilerOptions,
+		// BuildOptions:      parsedCommandLine.BuildOptions(),
+		// WatchOptions:      parsedCommandLine.WatchOptions(),
 		ProjectReferences: parsedCommandLine.ProjectReferences(),
 		TypeAcquisition:   parsedCommandLine.TypeAcquisition(),
 		CompileOnSave:     compileOnSave,

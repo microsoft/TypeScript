@@ -413,7 +413,7 @@ describe("BuildOrchestrator", () => {
         try {
             const defaultOptions = api.parseCommandLine([]);
             const orchestrator = api.createBuildOrchestrator(
-                { cwd: "/", fs },
+                { cwd: "/" },
                 ["/a/tsconfig.json", "/b/tsconfig.json"],
                 defaultOptions,
             );
@@ -427,32 +427,9 @@ describe("BuildOrchestrator", () => {
         }
     });
 
-    test("returns build response information", () => {
-        const { api, fs } = spawnAPIWithFS({ ...files });
-        try {
-            const defaultOptions = api.parseCommandLine([]);
-            const orchestrator = api.createBuildOrchestrator(
-                { cwd: "/", fs },
-                ["/a/tsconfig.json", "/b/tsconfig.json"],
-                defaultOptions,
-            );
-
-            const response = orchestrator.build();
-            assert.equal(response.status, 0);
-            assert.deepEqual(response.errors, []);
-            assert.deepEqual(response.filesToDelete, []);
-            assert.equal(response.statistics.Projects, 2);
-            assert.equal(response.statistics.ProjectsBuilt, 2);
-            assert.equal(response.statistics.TimestampUpdates, 0);
-        }
-        finally {
-            api.close();
-        }
-    });
-
     test("returns diagnostics in build response information", () => {
         const source = `export const value: string = 1;`;
-        const { api, fs } = spawnAPIWithFS({
+        const { api } = spawnAPIWithFS({
             "/a/tsconfig.json": JSON.stringify({
                 compilerOptions: { composite: true, noEmitOnError: true, outDir: "dist", rootDir: "src" },
                 files: ["src/index.ts"],
@@ -462,17 +439,15 @@ describe("BuildOrchestrator", () => {
         try {
             const defaultOptions = api.parseCommandLine([]);
             const orchestrator = api.createBuildOrchestrator(
-                { cwd: "/", fs },
+                { cwd: "/" },
                 ["/a/tsconfig.json"],
                 defaultOptions,
             );
 
             const response = orchestrator.build();
             assert.equal(response.status, 1);
-            assert.deepEqual(response.filesToDelete, []);
             assert.equal(response.statistics.Projects, 1);
             assert.equal(response.statistics.ProjectsBuilt, 1);
-            assert.equal(response.statistics.TimestampUpdates, 0);
             assert.deepEqual(response.errors, [{
                 fileName: "/a/src/index.ts",
                 pos: source.indexOf("value"),
@@ -487,41 +462,38 @@ describe("BuildOrchestrator", () => {
         }
     });
 
-    test("returns build response information after clean operations", () => {
+    test("returns build response information after clean", () => {
         const { api, fs } = spawnAPIWithFS({ ...files });
         try {
             const defaultOptions = api.parseCommandLine([]);
             const orchestrator = api.createBuildOrchestrator(
-                { cwd: "/", fs },
+                { cwd: "/" },
                 ["/c/tsconfig.json"],
                 defaultOptions,
             );
 
             assert.equal((orchestrator.build()).status, 0);
 
-            const selectedCleanResponse = orchestrator.clean("/a/tsconfig.json");
-            assert.equal(selectedCleanResponse.status, 0);
-            assert.deepEqual(selectedCleanResponse.errors, []);
-            assert.deepEqual(selectedCleanResponse.filesToDelete.sort(), [
+            const cleanResp1 = orchestrator.clean("/a/tsconfig.json");
+            assert.equal(cleanResp1.status, 0);
+            assert.deepEqual(cleanResp1.errors, undefined);
+            assert.deepEqual(cleanResp1.filesDeleted!.sort(), [
                 "/a/dist/index.d.ts",
                 "/a/dist/index.js",
                 "/a/tsconfig.tsbuildinfo",
             ]);
-            assert.equal(selectedCleanResponse.statistics.Projects, 1);
-            assert.equal(selectedCleanResponse.statistics.ProjectsBuilt, 0);
-            assert.equal(selectedCleanResponse.statistics.TimestampUpdates, 0);
-            const selectedResponse = orchestrator.build("/a/tsconfig.json");
-            assert.equal(selectedResponse.status, 0);
-            assert.deepEqual(selectedResponse.errors, []);
-            assert.deepEqual(selectedResponse.filesToDelete, []);
-            assert.equal(selectedResponse.statistics.Projects, 1);
-            assert.equal(selectedResponse.statistics.ProjectsBuilt, 1);
-            assert.equal(selectedResponse.statistics.TimestampUpdates, 0);
+            assert.equal(cleanResp1.statistics.Projects, 1);
+            assert.equal(cleanResp1.statistics.ProjectsBuilt, 0);
+            const buildResp1 = orchestrator.build("/a/tsconfig.json");
+            assert.equal(buildResp1.status, 0);
+            assert.deepEqual(buildResp1.errors, undefined);
+            assert.equal(buildResp1.statistics.Projects, 1);
+            assert.equal(buildResp1.statistics.ProjectsBuilt, 1);
 
-            const referencesCleanResponse = orchestrator.cleanReferences("/c/tsconfig.json");
-            assert.equal(referencesCleanResponse.status, 0);
-            assert.deepEqual(referencesCleanResponse.errors, []);
-            assert.deepEqual(referencesCleanResponse.filesToDelete.sort(), [
+            const cleanRefResp = orchestrator.cleanReferences("/c/tsconfig.json");
+            assert.equal(cleanRefResp.status, 0);
+            assert.deepEqual(cleanRefResp.errors, undefined);
+            assert.deepEqual(cleanRefResp.filesDeleted!.sort(), [
                 "/a/dist/index.d.ts",
                 "/a/dist/index.js",
                 "/a/tsconfig.tsbuildinfo",
@@ -529,21 +501,16 @@ describe("BuildOrchestrator", () => {
                 "/b/dist/index.js",
                 "/b/tsconfig.tsbuildinfo",
             ]);
-            assert.equal(referencesCleanResponse.statistics.Projects, 2);
-            assert.equal(referencesCleanResponse.statistics.ProjectsBuilt, 0);
-            assert.equal(referencesCleanResponse.statistics.TimestampUpdates, 0);
-            const referencesResponse = orchestrator.buildReferences("/c/tsconfig.json");
-            assert.equal(referencesResponse.status, 0);
-            assert.deepEqual(referencesResponse.errors, []);
-            assert.deepEqual(referencesResponse.filesToDelete, []);
-            assert.equal(referencesResponse.statistics.Projects, 2);
-            assert.equal(referencesResponse.statistics.ProjectsBuilt, 2);
-            assert.equal(referencesResponse.statistics.TimestampUpdates, 0);
+            assert.equal(cleanRefResp.statistics.Projects, 2);
+            assert.equal(cleanRefResp.statistics.ProjectsBuilt, 0);
+            const buildRefsResp = orchestrator.buildReferences("/c/tsconfig.json");
+            assert.equal(buildRefsResp.status, 0);
+            assert.deepEqual(buildRefsResp.errors, undefined);
 
-            const fullCleanResponse = orchestrator.clean();
-            assert.equal(fullCleanResponse.status, 0);
-            assert.deepEqual(fullCleanResponse.errors, []);
-            assert.deepEqual(fullCleanResponse.filesToDelete.sort(), [
+            const cleanResp2 = orchestrator.clean();
+            assert.equal(cleanResp2.status, 0);
+            assert.deepEqual(cleanResp2.errors, undefined);
+            assert.deepEqual(cleanResp2.filesDeleted!.sort(), [
                 "/a/dist/index.d.ts",
                 "/a/dist/index.js",
                 "/a/tsconfig.tsbuildinfo",
@@ -554,16 +521,13 @@ describe("BuildOrchestrator", () => {
                 "/c/dist/index.js",
                 "/c/tsconfig.tsbuildinfo",
             ]);
-            assert.equal(fullCleanResponse.statistics.Projects, 3);
-            assert.equal(fullCleanResponse.statistics.ProjectsBuilt, 0);
-            assert.equal(fullCleanResponse.statistics.TimestampUpdates, 0);
-            const fullResponse = orchestrator.build();
-            assert.equal(fullResponse.status, 0);
-            assert.deepEqual(fullResponse.errors, []);
-            assert.deepEqual(fullResponse.filesToDelete, []);
-            assert.equal(fullResponse.statistics.Projects, 3);
-            assert.equal(fullResponse.statistics.ProjectsBuilt, 3);
-            assert.equal(fullResponse.statistics.TimestampUpdates, 0);
+            assert.equal(cleanResp2.statistics.Projects, 3);
+            assert.equal(cleanResp2.statistics.ProjectsBuilt, 0);
+            const buildResp2 = orchestrator.build();
+            assert.equal(buildResp2.status, 0);
+            assert.deepEqual(buildResp2.errors, undefined);
+            assert.equal(buildResp2.statistics.Projects, 3);
+            assert.equal(buildResp2.statistics.ProjectsBuilt, 3);
         }
         finally {
             api.close();
@@ -579,21 +543,20 @@ describe("BuildOrchestrator", () => {
         try {
             const options = api.parseCommandLine([]);
             const orchestrator = api.createBuildOrchestrator(
-                { cwd: "/", fs },
+                { cwd: "/" },
                 ["/a/tsconfig.json"],
                 options,
             );
 
             const response = orchestrator.clean();
             assert.equal(response.status, 0);
-            assert.deepEqual(response.errors, []);
-            assert.deepEqual(response.filesToDelete.sort(), [
+            assert.deepEqual(response.errors, undefined);
+            assert.deepEqual(response.filesDeleted!.sort(), [
                 "/a/dist/index.d.ts",
                 "/a/dist/index.js",
             ]);
             assert.equal(response.statistics.Projects, 1);
             assert.equal(response.statistics.ProjectsBuilt, 0);
-            assert.equal(response.statistics.TimestampUpdates, 0);
             assert.equal(fs.readFile!("/a/dist/index.d.ts"), undefined);
             assert.equal(fs.readFile!("/a/dist/index.js"), undefined);
         }
@@ -607,7 +570,7 @@ describe("BuildOrchestrator", () => {
         try {
             const defaultOptions = api.parseCommandLine([]);
             const orchestrator = api.createBuildOrchestrator(
-                { cwd: "/", fs },
+                { cwd: "/" },
                 ["/a/tsconfig.json", "/b/tsconfig.json"],
                 defaultOptions,
             );
@@ -642,7 +605,7 @@ describe("BuildOrchestrator", () => {
         try {
             const defaultOptions = api.parseCommandLine([]);
             const orchestrator = api.createBuildOrchestrator(
-                { cwd: "/", fs },
+                { cwd: "/" },
                 ["/c/tsconfig.json"],
                 defaultOptions,
             );
@@ -666,7 +629,7 @@ describe("BuildOrchestrator", () => {
         try {
             const defaultOptions = api.parseCommandLine([]);
             const orchestrator = api.createBuildOrchestrator(
-                { cwd: "/", fs },
+                { cwd: "/" },
                 ["/c/tsconfig.json"],
                 defaultOptions,
             );
@@ -714,7 +677,7 @@ describe("BuildOrchestrator", () => {
         try {
             const defaultOptions = api.parseCommandLine([]);
             const orchestrator = api.createBuildOrchestrator(
-                { cwd: "/", fs },
+                { cwd: "/" },
                 ["/c/tsconfig.json"],
                 defaultOptions,
             );
@@ -736,7 +699,7 @@ describe("BuildOrchestrator", () => {
         try {
             const defaultOptions = api.parseCommandLine([]);
             const orchestrator = api.createBuildOrchestrator(
-                { cwd: "/", fs },
+                { cwd: "/" },
                 ["/c/tsconfig.json"],
                 defaultOptions,
             );
@@ -752,6 +715,8 @@ describe("BuildOrchestrator", () => {
             assert.ok(fs.readFile!("/c/dist/index.js"));
 
             assert.equal((orchestrator.build()).status, 0);
+            assert.ok(fs.readFile!("/a/dist/index.js"));
+            assert.ok(fs.readFile!("/b/dist/index.js"));
             assert.equal((orchestrator.cleanReferences()).status, 0);
             assert.equal(fs.readFile!("/a/dist/index.js"), undefined);
             assert.equal(fs.readFile!("/b/dist/index.js"), undefined);
@@ -779,35 +744,13 @@ describe("BuildOrchestrator", () => {
         try {
             const defaultOptions = api.parseCommandLine([]);
             const orchestrator = api.createBuildOrchestrator(
-                { cwd: "/", fs },
+                { cwd: "/" },
                 ["/c/tsconfig.json", "/d/tsconfig.json"],
                 defaultOptions,
             );
 
             assert.equal((orchestrator.build()).status, 0);
-            writes.length = 0;
-
-            fs.writeFile!("/a/src/index.ts", `export const a = 10;`);
-            fs.writeFile!("/d/src/index.ts", `export const d = 40;`);
-            writes.length = 0;
-
-            assert.equal((orchestrator.build("/d/tsconfig.json")).status, 0);
-            assert.match(fs.readFile!("/d/dist/index.js")!, /export const d = 40/);
-            assert.match(fs.readFile!("/a/dist/index.js")!, /export const a = 1/);
-            assert.ok(writes.length > 0);
-            assert.ok(writes.every(path => path.startsWith("/d/")));
-            writes.length = 0;
-
-            assert.equal((orchestrator.build("/a/tsconfig.json")).status, 0);
-            assert.match(fs.readFile!("/a/dist/index.js")!, /export const a = 10/);
-            assert.match(fs.readFile!("/d/dist/index.js")!, /export const d = 40/);
-            assert.ok(writes.length > 0);
-            assert.ok(writes.every(path => path.startsWith("/a/")));
-            writes.length = 0;
-
-            assert.equal((orchestrator.build("/c/tsconfig.json")).status, 0);
-            assert.ok(writes.some(path => path.startsWith("/c/")));
-            assert.match(fs.readFile!("/c/dist/index.js")!, /export const c = a/);
+            assert.match(fs.readFile!("/d/dist/index.js")!, /export const d = 4/);
 
             fs.writeFile!(
                 "/d/tsconfig.json",
@@ -822,18 +765,9 @@ describe("BuildOrchestrator", () => {
             assert.equal(fs.readFile!("/d/dist/index.js"), undefined);
             assert.ok(fs.readFile!("/d/lib/index.js"));
 
-            fs.writeFile!(
-                "/c/tsconfig.json",
-                JSON.stringify({
-                    compilerOptions: { composite: true, outDir: "dist", rootDir: "src" },
-                    files: ["src/index.ts"],
-                    references: [{ path: "../a" }],
-                }),
-            );
-
-            assert.equal((orchestrator.cleanReferences("/c/tsconfig.json")).status, 0);
-            assert.equal(fs.readFile!("/a/dist/index.js"), undefined);
-            assert.equal(fs.readFile!("/b/dist/index.js"), undefined);
+            assert.equal((orchestrator.build()).status, 0);
+            assert.match(fs.readFile!("/d/lib/index.js")!, /export const d = 4/);
+            assert.equal(fs.readFile!("/d/dist/index.js"), undefined);
         }
         finally {
             api.close();

@@ -932,6 +932,8 @@ var X_await_using_declarations_are_not_allowed_in_case_or_default_clauses_unless
 
 var Ignore_the_tsconfig_found_and_build_with_commandline_options_and_files = &Message{code: 1549, category: CategoryMessage, key: "Ignore_the_tsconfig_found_and_build_with_commandline_options_and_files_1549", text: "Ignore the tsconfig found and build with commandline options and files."}
 
+var Watch_mode_not_activated_in_build_orchestrator = &Message{code: 1550, category: CategoryMessage, key: "Watch_mode_not_activated_in_build_orchestrator_1550", text: "Watch mode not activated in build orchestrator"}
+
 var The_types_of_0_are_incompatible_between_these_types = &Message{code: 2200, category: CategoryError, key: "The_types_of_0_are_incompatible_between_these_types_2200", text: "The types of '{0}' are incompatible between these types."}
 
 var The_types_returned_by_0_are_incompatible_between_these_types = &Message{code: 2201, category: CategoryError, key: "The_types_returned_by_0_are_incompatible_between_these_types_2201", text: "The types returned by '{0}' are incompatible between these types."}
@@ -5342,6 +5344,8 @@ func keyToMessage(key Key) *Message {
 		return X_await_using_declarations_are_not_allowed_in_case_or_default_clauses_unless_contained_within_a_block
 	case "Ignore_the_tsconfig_found_and_build_with_commandline_options_and_files_1549":
 		return Ignore_the_tsconfig_found_and_build_with_commandline_options_and_files
+	case "Watch_mode_not_activated_in_build_orchestrator_1550":
+		return Watch_mode_not_activated_in_build_orchestrator
 	case "The_types_of_0_are_incompatible_between_these_types_2200":
 		return The_types_of_0_are_incompatible_between_these_types
 	case "The_types_returned_by_0_are_incompatible_between_these_types_2201":

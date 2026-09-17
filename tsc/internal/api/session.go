@@ -1179,7 +1179,9 @@ func (s *Session) handleGetDefaultProjectForFile(ctx context.Context, params *Ge
 }
 
 func (s *Session) handleCreateBuildOrchestrator(ctx context.Context, params *CreateBuildOrchestratorParams) (*CreateBuildOrchestratorResponse, error) {
-	command := tsoptions.ParseBuildCommandLine(params.RootNames, s.projectSession)
+	buildSys := s.getBuildSys(params)
+	command := tsoptions.ParseBuildCommandLine(params.RootNames, buildSys)
+	createdOrchestratorResponse := &CreateBuildOrchestratorResponse{}
 	if params.Options != nil {
 		command.CompilerOptions = params.Options
 	}
@@ -1187,19 +1189,17 @@ func (s *Session) handleCreateBuildOrchestrator(ctx context.Context, params *Cre
 		command.BuildOptions = params.BuildOptions
 	}
 	if params.WatchOptions != nil {
-		command.WatchOptions = params.WatchOptions
+		createdOrchestratorResponse.Errors = NewDiagnosticResponses([]*ast.Diagnostic{ast.NewCompilerDiagnostic(diagnostics.Watch_mode_not_activated_in_build_orchestrator)})
 	}
 	orchestrator := build.NewOrchestrator(build.Options{
-		Sys:     s.getBuildSys(params),
+		Sys:     buildSys,
 		Command: command,
 	})
-	orchestratorId := NewBuildOrchestratorID()
+	createdOrchestratorResponse.BuildOrchestratorID = NewBuildOrchestratorID()
 	s.buildMu.Lock()
-	s.buildOrchestrators[orchestratorId] = orchestrator
+	s.buildOrchestrators[createdOrchestratorResponse.BuildOrchestratorID] = orchestrator
 	s.buildMu.Unlock()
-	return &CreateBuildOrchestratorResponse{
-		BuildOrchestratorID: orchestratorId,
-	}, nil
+	return createdOrchestratorResponse, nil
 }
 
 func (s *Session) getBuildSys(params *CreateBuildOrchestratorParams) tsc.System {
@@ -1217,50 +1217,60 @@ func (s *Session) getBuildSys(params *CreateBuildOrchestratorParams) tsc.System 
 func (s *Session) handleBuild(ctx context.Context, params *BuildParams) (*BuildResponse, error) {
 	s.buildMu.Lock()
 	defer s.buildMu.Unlock()
+	if s.buildOrchestrators[params.BuildOrchestratorID] == nil {
+		return nil, fmt.Errorf("build orchestrator not found while building %s", params.Project)
+	}
 	result := s.buildOrchestrators[params.BuildOrchestratorID].Build(ctx, string(params.Project))
 
 	return &BuildResponse{
-		Status:        result.Result.Status,
-		Errors:        NewDiagnosticResponses(result.Errors),
-		Statistics:    result.Statistics,
-		FilesToDelete: result.FilesToDelete,
+		Status:     result.Result.Status,
+		Errors:     NewDiagnosticResponses(result.Errors),
+		Statistics: result.Statistics,
 	}, nil
 }
 
 func (s *Session) handleBuildReferences(ctx context.Context, params *BuildParams) (*BuildResponse, error) {
 	s.buildMu.Lock()
 	defer s.buildMu.Unlock()
+	if s.buildOrchestrators[params.BuildOrchestratorID] == nil {
+		return nil, fmt.Errorf("build orchestrator not found for building references for %s", params.Project)
+	}
 	result := s.buildOrchestrators[params.BuildOrchestratorID].BuildReferences(ctx, string(params.Project))
 
 	return &BuildResponse{
-		Status:        result.Result.Status,
-		Errors:        NewDiagnosticResponses(result.Errors),
-		Statistics:    result.Statistics,
-		FilesToDelete: result.FilesToDelete,
+		Status:     result.Result.Status,
+		Errors:     NewDiagnosticResponses(result.Errors),
+		Statistics: result.Statistics,
 	}, nil
 }
 
 func (s *Session) handleCleanBuild(params *CleanBuildParams) (*CleanBuildResponse, error) {
 	s.buildMu.Lock()
 	defer s.buildMu.Unlock()
+	if s.buildOrchestrators[params.BuildOrchestratorID] == nil {
+		return nil, fmt.Errorf("build orchestrator not found while cleaning %s", params.Project)
+	}
 	result := s.buildOrchestrators[params.BuildOrchestratorID].Clean(string(params.Project))
 	return &CleanBuildResponse{
-		Status:        result.Result.Status,
-		Errors:        NewDiagnosticResponses(result.Errors),
-		Statistics:    result.Statistics,
-		FilesToDelete: result.FilesToDelete,
+		Status:       result.Result.Status,
+		Errors:       NewDiagnosticResponses(result.Errors),
+		Statistics:   result.Statistics,
+		FilesDeleted: result.FilesToDelete,
 	}, nil
 }
 
 func (s *Session) handleCleanReferences(params *CleanBuildParams) (*CleanBuildResponse, error) {
 	s.buildMu.Lock()
 	defer s.buildMu.Unlock()
+	if s.buildOrchestrators[params.BuildOrchestratorID] == nil {
+		return nil, fmt.Errorf("build orchestrator not found while cleaning references for %s", params.Project)
+	}
 	result := s.buildOrchestrators[params.BuildOrchestratorID].CleanReferences(string(params.Project))
 	return &CleanBuildResponse{
-		Status:        result.Result.Status,
-		Errors:        NewDiagnosticResponses(result.Errors),
-		Statistics:    result.Statistics,
-		FilesToDelete: result.FilesToDelete,
+		Status:       result.Result.Status,
+		Errors:       NewDiagnosticResponses(result.Errors),
+		Statistics:   result.Statistics,
+		FilesDeleted: result.FilesToDelete,
 	}, nil
 }
 

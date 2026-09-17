@@ -237,6 +237,7 @@ export interface CreateBuildOrchestratorParams {
 
 export interface CreateBuildOrchestratorResponse {
     buildOrchestratorID: number;
+    errors?: DiagnosticResponse[];
 }
 
 export interface BuildParams {
@@ -246,9 +247,8 @@ export interface BuildParams {
 
 export interface BuildResponse {
     status: number;
-    errors: DiagnosticResponse[];
+    errors?: DiagnosticResponse[];
     statistics: Statistics;
-    filesToDelete: string[];
 }
 
 export interface CleanBuildParams {
@@ -258,9 +258,9 @@ export interface CleanBuildParams {
 
 export interface CleanBuildResponse {
     status: number;
-    errors: DiagnosticResponse[];
+    errors?: DiagnosticResponse[];
     statistics: Statistics;
-    filesToDelete: string[];
+    filesDeleted?: string[];
 }
 
 export interface ParseCommandLineParams {

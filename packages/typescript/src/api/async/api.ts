@@ -52,7 +52,9 @@ import type {
     BuildResponse,
     CleanBuildResponse,
     CompilerOptions,
+    CreateBuildOrchestratorResponse,
     Diagnostic,
+    DiagnosticResponse,
     DocumentIdentifier,
     DocumentPosition,
     EmitOutputResponse as ProtocolEmitOutputResponse,
@@ -246,7 +248,7 @@ export class API<FromLSP extends boolean = false> {
         await this.ensureInitialized();
         const orchestratorResponse = await this.client.apiRequest("createBuildOrchestrator", { hostOptions: host, rootNames, defaultOptions });
 
-        const orchestrator = new BuildOrchestrator(this.client, orchestratorResponse.buildOrchestratorID);
+        const orchestrator = new BuildOrchestrator(this.client, orchestratorResponse);
         return orchestrator;
     }
 
@@ -1274,12 +1276,19 @@ export class Program {
 export class BuildOrchestrator {
     private client: Client;
     private id: number;
+    private errors: DiagnosticResponse[] | undefined;
 
-    constructor(client: Client, id: number) {
+    constructor(client: Client, orchestratorResponse: CreateBuildOrchestratorResponse) {
         this.client = client;
-        this.id = id;
+        this.id = orchestratorResponse.buildOrchestratorID;
+        this.errors = orchestratorResponse.errors;
     }
-    async build(project?: string): Promise<BuildResponse> { 
+
+    getErrors(): DiagnosticResponse[] | undefined {
+        return this.errors;
+    }
+
+    async build(project?: string): Promise<BuildResponse> {
         const response = await this.client.apiRequest("build", {
             buildOrchestratorID: this.id,
             ...(project !== undefined ? { project } : {}),

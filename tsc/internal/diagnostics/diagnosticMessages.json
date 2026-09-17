@@ -1860,6 +1860,10 @@
         "category": "Message",
         "code": 1549
     },
+    "Watch mode not activated in build orchestrator": {
+        "category": "Message",
+        "code": 1550
+    },
 
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
