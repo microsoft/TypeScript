@@ -688,6 +688,57 @@ describe("API - automatic batching", () => {
         assert.equal(parseCommandLine.options.strict, true);
         assert.deepStrictEqual(readConfigFile.config, {});
     });
+
+    test("coalesces position requests with shared context", async () => {
+        await using api = spawnAPI({ ...defaultFiles }, { collectTiming: true });
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        await api.resetTimingInfo();
+
+        const symbols = await Promise.all([
+            project.checker.getSymbolAtPosition("/src/index.ts", 9),
+            project.checker.getSymbolAtPosition("/src/index.ts", 9),
+            project.checker.getSymbolAtPosition("/src/index.ts", 9),
+            project.checker.getSymbolAtPosition("/src/index.ts", 9),
+        ]);
+
+        assert.ok(symbols.every(symbol => symbol?.id === symbols[0]?.id));
+        const timing = await api.getTimingInfo();
+        assert.equal(timing.totals.requestCount, 1);
+        assert.equal(timing.recentRequests[0].method, "batchRequests");
+
+        await api.resetTimingInfo();
+        const types = await Promise.all([
+            project.checker.getTypeAtPosition("/src/index.ts", 9),
+            project.checker.getTypeAtPosition("/src/index.ts", 9),
+            project.checker.getTypeAtPosition("/src/index.ts", 9),
+            project.checker.getTypeAtPosition("/src/index.ts", 9),
+        ]);
+
+        assert.ok(types.every(type => type?.id === types[0]?.id));
+        const typeTiming = await api.getTimingInfo();
+        assert.equal(typeTiming.totals.requestCount, 1);
+        assert.equal(typeTiming.recentRequests[0].method, "batchRequests");
+
+        await api.resetTimingInfo();
+        await Promise.all([
+            project.checker.getSymbolAtPosition("/src/index.ts", 9),
+            project.checker.getSymbolAtPosition("/src/foo.ts", 13),
+            project.checker.getSymbolAtPosition("/src/index.ts", 9),
+            project.checker.getSymbolAtPosition("/src/foo.ts", 13),
+        ]);
+        const mixedTiming = await api.getTimingInfo();
+        assert.equal(mixedTiming.totals.requestCount, 1);
+        assert.equal(mixedTiming.recentRequests[0].method, "batchRequests");
+
+        const settled = await Promise.allSettled([
+            project.checker.getSymbolAtPosition("/src/index.ts", 9),
+            project.checker.getSymbolAtPosition("/src/missing.ts", 0),
+            project.checker.getSymbolAtPosition("/src/foo.ts", 13),
+            project.checker.getSymbolAtPosition("/src/index.ts", 9),
+        ]);
+        assert.deepEqual(settled.map(result => result.status), ["fulfilled", "rejected", "fulfilled", "fulfilled"]);
+    });
 });
 
 describe("API - batchContext", () => {
@@ -700,13 +751,15 @@ describe("API - batchContext", () => {
                     api.parseCommandLine(["--strict"]),
                     api.readConfigFile("/tsconfig.json"),
                     api.parseCommandLine(["--noImplicitAny"]),
+                    api.parseCommandLine(["--allowJs"]),
                 ] as const;
             })();
 
-            const [strict, config, noImplicitAny] = await Promise.all(requests);
+            const [strict, config, noImplicitAny, allowJs] = await Promise.all(requests);
             assert.equal(strict.options.strict, true);
             assert.deepEqual(config.config, {});
             assert.equal(noImplicitAny.options.noImplicitAny, true);
+            assert.equal(allowJs.options.allowJs, true);
         }
         finally {
             await api.close();

@@ -24,6 +24,7 @@ import {
 import type {
     APIRequest,
     APIResponse,
+    BatchRequestsParams,
 } from "@typescript/typescript/unstable/proto";
 import {
     all,
@@ -965,6 +966,43 @@ describe("API - generator batching", () => {
             assert.equal(strict.options.strict, true);
             assert.deepEqual(config.config, {});
             assert.equal(noImplicitAny.options.noImplicitAny, true);
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("groups singular generators like an array request", context => {
+        const source = `export const value = true; value; value; value;`;
+        const api = spawnAPI({
+            "/tsconfig.json": `{ "compilerOptions": { "noLib": true }, "files": ["index.ts"] }`,
+            "/index.ts": source,
+        }, { collectTiming: true });
+        try {
+            const batchParams: unknown[] = [];
+            const client = api["client"];
+            const batchRequest = client.batchRequest.bind(client);
+            context.mock.method(client, "batchRequest", (params: BatchRequestsParams) => {
+                batchParams.push(structuredClone(params));
+                return batchRequest(params);
+            });
+            const [snapshot] = api.batch(api.updateSnapshot.gen({ openProject: "/tsconfig.json" }));
+            const project = snapshot.getProjects()[0];
+            const positions = Array.from(source.matchAll(/value/g), match => match.index);
+            batchParams.length = 0;
+
+            api.resetTimingInfo();
+            const singular = api.batch(...positions.map(position => project.checker.getSymbolAtPosition.gen("/index.ts", position)));
+            const singularTiming = api.getTimingInfo();
+
+            api.resetTimingInfo();
+            const [array] = api.batch(project.checker.getSymbolAtPosition.gen("/index.ts", positions));
+            const arrayTiming = api.getTimingInfo();
+
+            assert.deepEqual(singular.map(symbol => symbol?.id), array.map(symbol => symbol?.id));
+            assert.equal(singularTiming.totals.requestCount, 1);
+            assert.equal(singularTiming.totals.requestCount, arrayTiming.totals.requestCount);
+            assert.deepEqual(batchParams[0], batchParams[1]);
         }
         finally {
             api.close();

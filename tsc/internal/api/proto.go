@@ -81,13 +81,9 @@ const (
 	MethodTranspileDeclarationFromFile                   Method = "transpileDeclarationFromFile"
 	MethodGetDefaultProjectForFile                       Method = "getDefaultProjectForFile"
 	MethodGetSymbolAtPosition                            Method = "getSymbolAtPosition"
-	MethodGetSymbolsAtPositions                          Method = "getSymbolsAtPositions"
 	MethodGetSymbolAtLocation                            Method = "getSymbolAtLocation"
-	MethodGetSymbolsAtLocations                          Method = "getSymbolsAtLocations"
 	MethodGetSymbolOfSourceFile                          Method = "getSymbolOfSourceFile"
-	MethodGetSymbolsOfSourceFiles                        Method = "getSymbolsOfSourceFiles"
 	MethodGetTypeOfSymbol                                Method = "getTypeOfSymbol"
-	MethodGetTypesOfSymbols                              Method = "getTypesOfSymbols"
 	MethodGetDeclaredTypeOfSymbol                        Method = "getDeclaredTypeOfSymbol"
 	MethodGetNonMissingTypeOfSymbol                      Method = "getNonMissingTypeOfSymbol"
 	MethodGetSourceFile                                  Method = "getSourceFile"
@@ -106,9 +102,7 @@ const (
 	MethodGetSignaturesOfType                            Method = "getSignaturesOfType"
 	MethodGetResolvedSignature                           Method = "getResolvedSignature"
 	MethodGetTypeAtLocation                              Method = "getTypeAtLocation"
-	MethodGetTypeAtLocations                             Method = "getTypeAtLocations"
 	MethodGetTypeAtPosition                              Method = "getTypeAtPosition"
-	MethodGetTypesAtPositions                            Method = "getTypesAtPositions"
 
 	// Symbol sub-property methods
 	MethodGetParentOfSymbol       Method = "getParentOfSymbol"
@@ -479,13 +473,9 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodGetConfigFileNames:                             unmarshallerFor[GetProjectDiagnosticsParams],
 	MethodGetConfigSourceFile:                            unmarshallerFor[GetSourceFileParams],
 	MethodGetSymbolAtPosition:                            unmarshallerFor[GetSymbolAtPositionParams],
-	MethodGetSymbolsAtPositions:                          unmarshallerFor[GetSymbolsAtPositionsParams],
 	MethodGetSymbolAtLocation:                            unmarshallerFor[GetSymbolAtLocationParams],
-	MethodGetSymbolsAtLocations:                          unmarshallerFor[GetSymbolsAtLocationsParams],
 	MethodGetSymbolOfSourceFile:                          unmarshallerFor[GetSymbolOfSourceFileParams],
-	MethodGetSymbolsOfSourceFiles:                        unmarshallerFor[GetSymbolsOfSourceFilesParams],
 	MethodGetTypeOfSymbol:                                unmarshallerFor[GetTypeOfSymbolParams],
-	MethodGetTypesOfSymbols:                              unmarshallerFor[GetTypesOfSymbolsParams],
 	MethodGetDeclaredTypeOfSymbol:                        unmarshallerFor[GetTypeOfSymbolParams],
 	MethodGetNonMissingTypeOfSymbol:                      unmarshallerFor[GetTypeOfSymbolParams],
 	MethodResolveName:                                    unmarshallerFor[ResolveNameParams],
@@ -493,9 +483,7 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodGetSignaturesOfType:                            unmarshallerFor[GetSignaturesOfTypeParams],
 	MethodGetResolvedSignature:                           unmarshallerFor[GetResolvedSignatureParams],
 	MethodGetTypeAtLocation:                              unmarshallerFor[GetTypeAtLocationParams],
-	MethodGetTypeAtLocations:                             unmarshallerFor[GetTypeAtLocationsParams],
 	MethodGetTypeAtPosition:                              unmarshallerFor[GetTypeAtPositionParams],
-	MethodGetTypesAtPositions:                            unmarshallerFor[GetTypesAtPositionsParams],
 
 	MethodGetParentOfSymbol:       unmarshallerFor[GetSymbolPropertyParams],
 	MethodGetMembersOfSymbol:      unmarshallerFor[GetSymbolPropertyParams],
@@ -679,9 +667,11 @@ type TranspileOutputResponse struct {
 }
 
 type BatchRequestsParams struct {
-	Requests                []BatchRequest `json:"requests"`
-	ContinuationToken       string         `json:"continuationToken,omitempty"`
-	MaxResponseBytesPerPage int            `json:"maxResponseBytesPerPage,omitempty"`
+	Requests                []BatchRequest      `json:"requests,omitempty"`
+	Groups                  []BatchRequestGroup `json:"groups,omitempty"`
+	GroupOrder              []uint32            `json:"groupOrder,omitempty"`
+	ContinuationToken       string              `json:"continuationToken,omitempty"`
+	MaxResponseBytesPerPage int                 `json:"maxResponseBytesPerPage,omitempty"`
 }
 
 type BatchRequest struct {
@@ -689,10 +679,20 @@ type BatchRequest struct {
 	Params json.Value `json:"params,omitempty"`
 }
 
+type BatchRequestGroup struct {
+	Method   Method       `json:"method"`
+	Base     json.Value   `json:"base,omitempty"`
+	Count    int          `json:"count"`
+	Fields   json.Value   `json:"fields,omitempty"`
+	Requests []json.Value `json:"requests,omitempty"`
+}
+
 type BatchRequestsResponse struct {
-	Responses         []BatchResponse `json:"responses" nonnil:"true"`
-	ContinuationToken string          `json:"continuationToken,omitempty"`
+	Results           []any          `json:"results" nonnil:"true"`
+	Errors            map[int]string `json:"errors,omitempty"`
+	ContinuationToken string         `json:"continuationToken,omitempty"`
 	encodedResponses  []json.Value
+	encodedArray      json.Value
 }
 
 var _ json.MarshalerTo = (*BatchRequestsResponse)(nil)
@@ -701,27 +701,33 @@ func (r *BatchRequestsResponse) MarshalJSONTo(enc *json.Encoder) error {
 	if err := enc.WriteToken(json.BeginObject); err != nil {
 		return err
 	}
-	if err := enc.WriteValue(json.Value(`"responses"`)); err != nil {
+	if err := enc.WriteValue(json.Value(`"results"`)); err != nil {
 		return err
 	}
-	if err := enc.WriteToken(json.BeginArray); err != nil {
-		return err
-	}
-	if r.encodedResponses != nil {
-		for _, response := range r.encodedResponses {
-			if err := enc.WriteValue(response); err != nil {
-				return err
-			}
+	if r.encodedArray != nil {
+		if err := enc.WriteValue(r.encodedArray); err != nil {
+			return err
 		}
 	} else {
-		for i := range r.Responses {
-			if err := json.MarshalEncode(enc, &r.Responses[i]); err != nil {
-				return err
+		if err := enc.WriteToken(json.BeginArray); err != nil {
+			return err
+		}
+		if r.encodedResponses != nil {
+			for _, response := range r.encodedResponses {
+				if err := enc.WriteValue(response); err != nil {
+					return err
+				}
+			}
+		} else {
+			for i := range r.Results {
+				if err := json.MarshalEncode(enc, &r.Results[i]); err != nil {
+					return err
+				}
 			}
 		}
-	}
-	if err := enc.WriteToken(json.EndArray); err != nil {
-		return err
+		if err := enc.WriteToken(json.EndArray); err != nil {
+			return err
+		}
 	}
 	if r.ContinuationToken != "" {
 		if err := enc.WriteValue(json.Value(`"continuationToken"`)); err != nil {
@@ -731,11 +737,18 @@ func (r *BatchRequestsResponse) MarshalJSONTo(enc *json.Encoder) error {
 			return err
 		}
 	}
+	if len(r.Errors) > 0 {
+		if err := enc.WriteValue(json.Value(`"errors"`)); err != nil {
+			return err
+		}
+		if err := json.MarshalEncode(enc, r.Errors); err != nil {
+			return err
+		}
+	}
 	return enc.WriteToken(json.EndObject)
 }
 
 type BatchResponse struct {
-	Method Method `json:"method"`
 	Result any    `json:"result"`
 	Error  string `json:"error,omitempty"`
 }
@@ -858,35 +871,16 @@ type GetSymbolAtPositionParams struct {
 	Position uint32             `json:"position"`
 }
 
-type GetSymbolsAtPositionsParams struct {
-	Snapshot  SnapshotID         `json:"snapshot"`
-	Project   ProjectID          `json:"project"`
-	File      DocumentIdentifier `json:"file"`
-	Positions []uint32           `json:"positions"`
-}
-
 type GetSymbolOfSourceFileParams struct {
 	Snapshot SnapshotID         `json:"snapshot"`
 	Project  ProjectID          `json:"project"`
 	File     DocumentIdentifier `json:"file"`
 }
 
-type GetSymbolsOfSourceFilesParams struct {
-	Snapshot SnapshotID           `json:"snapshot"`
-	Project  ProjectID            `json:"project"`
-	Files    []DocumentIdentifier `json:"files"`
-}
-
 type GetSymbolAtLocationParams struct {
 	Snapshot SnapshotID `json:"snapshot"`
 	Project  ProjectID  `json:"project"`
 	Location NodeHandle `json:"location"`
-}
-
-type GetSymbolsAtLocationsParams struct {
-	Snapshot  SnapshotID   `json:"snapshot"`
-	Project   ProjectID    `json:"project"`
-	Locations []NodeHandle `json:"locations"`
 }
 
 type SymbolResponse struct {
@@ -918,12 +912,6 @@ type GetTypeOfSymbolParams struct {
 	Snapshot SnapshotID `json:"snapshot"`
 	Project  ProjectID  `json:"project"`
 	Symbol   SymbolID   `json:"symbol"`
-}
-
-type GetTypesOfSymbolsParams struct {
-	Snapshot SnapshotID `json:"snapshot"`
-	Project  ProjectID  `json:"project"`
-	Symbols  []SymbolID `json:"symbols"`
 }
 
 type TypeResponse struct {
@@ -1455,24 +1443,11 @@ type GetTypeAtLocationParams struct {
 	Location NodeHandle `json:"location"`
 }
 
-type GetTypeAtLocationsParams struct {
-	Snapshot  SnapshotID   `json:"snapshot"`
-	Project   ProjectID    `json:"project"`
-	Locations []NodeHandle `json:"locations"`
-}
-
 type GetTypeAtPositionParams struct {
 	Snapshot SnapshotID         `json:"snapshot"`
 	Project  ProjectID          `json:"project"`
 	File     DocumentIdentifier `json:"file"`
 	Position uint32             `json:"position"`
-}
-
-type GetTypesAtPositionsParams struct {
-	Snapshot  SnapshotID         `json:"snapshot"`
-	Project   ProjectID          `json:"project"`
-	File      DocumentIdentifier `json:"file"`
-	Positions []uint32           `json:"positions"`
 }
 
 type ImportAdderActionKind string

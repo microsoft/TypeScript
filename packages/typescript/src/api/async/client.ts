@@ -9,6 +9,7 @@ import {
 } from "#vscode-jsonrpc/node";
 import type { ChildProcess } from "node:child_process";
 import type { Socket } from "node:net";
+import { groupBatchRequests } from "../batch.ts";
 import {
     type FileSystem,
     fsCallbackNames,
@@ -220,40 +221,53 @@ export class Client {
                 return;
             }
 
-            const requestType = new RequestType<unknown, BatchRequestsResponse, void>("batchRequests");
-            const params: BatchRequestsParams = { requests: requests.map(request => ({ method: request.method, params: request.params })) };
-            if (this.options.maxResponseBytesPerPage !== undefined) {
-                params.maxResponseBytesPerPage = this.options.maxResponseBytesPerPage;
-            }
-            const response = await this.sendRequestWithTiming(requestType, params);
-            let responses = response.responses;
-            let continuationToken = response.continuationToken;
-            while (continuationToken) {
-                const pageParams: BatchRequestsParams = {
-                    requests: [],
-                    continuationToken,
-                };
-                if (this.options.maxResponseBytesPerPage !== undefined) {
-                    pageParams.maxResponseBytesPerPage = this.options.maxResponseBytesPerPage;
-                }
-                const page = await this.sendRequestWithTiming(requestType, pageParams);
-                responses = responses.concat(page.responses);
-                continuationToken = page.continuationToken;
-            }
+            // Paired benchmarks show grouping pays for its construction cost at four requests.
+            const grouped = requests.length >= 4 ? groupBatchRequests(requests) : undefined;
+            const params: BatchRequestsParams = grouped
+                ? { groups: grouped.groups, groupOrder: grouped.groupOrder, maxResponseBytesPerPage: this.options.maxResponseBytesPerPage }
+                : { requests: requests.map(request => ({ method: request.method, params: request.params })), maxResponseBytesPerPage: this.options.maxResponseBytesPerPage };
+            const response = await this.batchRequest(params);
             for (let i = 0; i < requests.length; i++) {
                 const { resolve, reject } = requests[i];
-                const item = responses[i];
-                if (item.error !== undefined) {
-                    reject(new Error(item.error));
+                const error = response.errors?.[i];
+                if (error !== undefined) {
+                    reject(new Error(error));
                 }
                 else {
-                    resolve(item.result);
+                    resolve(response.results[i]);
                 }
             }
         }
         catch (error) {
             for (const { reject } of requests) reject(error);
         }
+    }
+
+    async batchRequest(params: BatchRequestsParams): Promise<BatchRequestsResponse> {
+        if (this.closed) throw new Error("Client is closed");
+        if (!this.connected) {
+            await this.connect();
+        }
+        const requestType = new RequestType<unknown, BatchRequestsResponse, void>("batchRequests");
+        const response = await this.sendRequestWithTiming(requestType, params);
+        let results = response.results;
+        let errors = response.errors;
+        let continuationToken = response.continuationToken;
+        while (continuationToken) {
+            const page = await this.sendRequestWithTiming(requestType, {
+                requests: [],
+                continuationToken,
+                maxResponseBytesPerPage: this.options.maxResponseBytesPerPage,
+            });
+            const offset = results.length;
+            results = results.concat(page.results);
+            if (page.errors) {
+                errors ??= {};
+                for (const [index, message] of Object.entries(page.errors)) errors[Number(index) + offset] = message;
+            }
+            continuationToken = page.continuationToken;
+        }
+        return errors ? { results, errors } : { results };
     }
 
     private scheduleImmediateBatch(): void {

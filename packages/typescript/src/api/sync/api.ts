@@ -54,6 +54,10 @@ import {
 } from "../../ast/index.ts";
 import { assertNever } from "../../internal/utils.ts";
 import {
+    createGroupedBatchRequest,
+    getBatchResults,
+} from "../batch.ts";
+import {
     encodeNode,
     uint8ArrayToBase64,
 } from "../node/encoder.ts";
@@ -300,7 +304,7 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
     }
 
     batch<T extends readonly AnyAPIRequestGenerator[]>(...requestGenerators: T): ExecutedGeneratorsResults<T> {
-        return executeRequestGenerators(requestGenerators, requests => this.client.batchRequests(requests).responses);
+        return executeRequestGenerators(requestGenerators, requests => this.client.batchRequests(requests));
     }
 
     private get ensureInitialized(): {
@@ -3155,12 +3159,12 @@ export class Checker {
         function getSymbolAtLocation(nodes: readonly Node[]): (Symbol | undefined)[];
         function getSymbolAtLocation(nodeOrNodes: Node | readonly Node[]): Symbol | (Symbol | undefined)[] | undefined {
             if (Array.isArray(nodeOrNodes)) {
-                const data = owner.client.apiRequest("getSymbolsAtLocations", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.id,
-                    locations: nodeOrNodes.map(node => getNodeId(node)),
-                });
-                return data.map(d => d ? owner.objectRegistry.getOrCreateSymbol(d) : undefined);
+                const response = owner.client.batchRequest(createGroupedBatchRequest(
+                    "getSymbolAtLocation",
+                    { snapshot: owner.snapshotId, project: owner.project.id },
+                    { location: nodeOrNodes.map(node => getNodeId(node)) },
+                ));
+                return getBatchResults<SymbolResponse | null>(response).map(data => data ? owner.objectRegistry.getOrCreateSymbol(data) : undefined);
             }
             const data = owner.client.apiRequest("getSymbolAtLocation", {
                 snapshot: owner.snapshotId,
@@ -3173,12 +3177,12 @@ export class Checker {
         function gen(nodes: readonly Node[]): Generator<ProtocolRequest, (Symbol | undefined)[], ProtocolResponse["result"]>;
         function* gen(nodeOrNodes: Node | readonly Node[]): Generator<ProtocolRequest, Symbol | (Symbol | undefined)[] | undefined, ProtocolResponse["result"]> {
             if (Array.isArray(nodeOrNodes)) {
-                const data = yield* apiRequest("getSymbolsAtLocations", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.id,
-                    locations: nodeOrNodes.map(node => getNodeId(node)),
-                });
-                return data.map(d => d ? owner.objectRegistry.getOrCreateSymbol(d) : undefined);
+                const response = owner.client.batchRequest(createGroupedBatchRequest(
+                    "getSymbolAtLocation",
+                    { snapshot: owner.snapshotId, project: owner.project.id },
+                    { location: nodeOrNodes.map(node => getNodeId(node)) },
+                ));
+                return getBatchResults<SymbolResponse | null>(response).map(data => data ? owner.objectRegistry.getOrCreateSymbol(data) : undefined);
             }
             const data = yield* apiRequest("getSymbolAtLocation", {
                 snapshot: owner.snapshotId,
@@ -3209,13 +3213,12 @@ export class Checker {
                 });
                 return data ? owner.objectRegistry.getOrCreateSymbol(data) : undefined;
             }
-            const data = owner.client.apiRequest("getSymbolsAtPositions", {
-                snapshot: owner.snapshotId,
-                project: owner.project.id,
-                file,
-                positions: positionOrPositions,
-            });
-            return data.map(d => d ? owner.objectRegistry.getOrCreateSymbol(d) : undefined);
+            const response = owner.client.batchRequest(createGroupedBatchRequest(
+                "getSymbolAtPosition",
+                { snapshot: owner.snapshotId, project: owner.project.id, file },
+                { position: positionOrPositions },
+            ));
+            return getBatchResults<SymbolResponse | null>(response).map(data => data ? owner.objectRegistry.getOrCreateSymbol(data) : undefined);
         }
         function gen(file: DocumentIdentifier, position: number): Generator<ProtocolRequest, Symbol | undefined, ProtocolResponse["result"]>;
         function gen(file: DocumentIdentifier, positions: readonly number[]): Generator<ProtocolRequest, (Symbol | undefined)[], ProtocolResponse["result"]>;
@@ -3229,13 +3232,12 @@ export class Checker {
                 });
                 return data ? owner.objectRegistry.getOrCreateSymbol(data) : undefined;
             }
-            const data = yield* apiRequest("getSymbolsAtPositions", {
-                snapshot: owner.snapshotId,
-                project: owner.project.id,
-                file,
-                positions: positionOrPositions,
-            });
-            return data.map(d => d ? owner.objectRegistry.getOrCreateSymbol(d) : undefined);
+            const response = owner.client.batchRequest(createGroupedBatchRequest(
+                "getSymbolAtPosition",
+                { snapshot: owner.snapshotId, project: owner.project.id, file },
+                { position: positionOrPositions },
+            ));
+            return getBatchResults<SymbolResponse | null>(response).map(data => data ? owner.objectRegistry.getOrCreateSymbol(data) : undefined);
         }
         return cacheGeneratorMethod(owner, "getSymbolAtPosition", getSymbolAtPosition, gen);
     }
@@ -3251,12 +3253,12 @@ export class Checker {
         function getSymbolOfSourceFile(files: readonly DocumentIdentifier[]): (Symbol | undefined)[];
         function getSymbolOfSourceFile(fileOrFiles: DocumentIdentifier | readonly DocumentIdentifier[]): Symbol | (Symbol | undefined)[] | undefined {
             if (Array.isArray(fileOrFiles)) {
-                const data = owner.client.apiRequest("getSymbolsOfSourceFiles", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.id,
-                    files: fileOrFiles,
-                });
-                return data.map(d => d ? owner.objectRegistry.getOrCreateSymbol(d) : undefined);
+                const response = owner.client.batchRequest(createGroupedBatchRequest(
+                    "getSymbolOfSourceFile",
+                    { snapshot: owner.snapshotId, project: owner.project.id },
+                    { file: fileOrFiles },
+                ));
+                return getBatchResults<SymbolResponse | null>(response).map(data => data ? owner.objectRegistry.getOrCreateSymbol(data) : undefined);
             }
             const data = owner.client.apiRequest("getSymbolOfSourceFile", {
                 snapshot: owner.snapshotId,
@@ -3269,12 +3271,12 @@ export class Checker {
         function gen(files: readonly DocumentIdentifier[]): Generator<ProtocolRequest, (Symbol | undefined)[], ProtocolResponse["result"]>;
         function* gen(fileOrFiles: DocumentIdentifier | readonly DocumentIdentifier[]): Generator<ProtocolRequest, Symbol | (Symbol | undefined)[] | undefined, ProtocolResponse["result"]> {
             if (Array.isArray(fileOrFiles)) {
-                const data = yield* apiRequest("getSymbolsOfSourceFiles", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.id,
-                    files: fileOrFiles,
-                });
-                return data.map(d => d ? owner.objectRegistry.getOrCreateSymbol(d) : undefined);
+                const response = owner.client.batchRequest(createGroupedBatchRequest(
+                    "getSymbolOfSourceFile",
+                    { snapshot: owner.snapshotId, project: owner.project.id },
+                    { file: fileOrFiles },
+                ));
+                return getBatchResults<SymbolResponse | null>(response).map(data => data ? owner.objectRegistry.getOrCreateSymbol(data) : undefined);
             }
             const data = yield* apiRequest("getSymbolOfSourceFile", {
                 snapshot: owner.snapshotId,
@@ -3302,12 +3304,12 @@ export class Checker {
         function getTypeOfSymbol(symbols: readonly Symbol[]): Type[];
         function getTypeOfSymbol(symbolOrSymbols: Symbol | readonly Symbol[]): Type | Type[] {
             if (Array.isArray(symbolOrSymbols)) {
-                const data = owner.client.apiRequest("getTypesOfSymbols", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.id,
-                    symbols: symbolOrSymbols.map(s => s.id),
-                });
-                return data.map(d => owner.objectRegistry.getOrCreateType(d));
+                const response = owner.client.batchRequest(createGroupedBatchRequest(
+                    "getTypeOfSymbol",
+                    { snapshot: owner.snapshotId, project: owner.project.id },
+                    { symbol: symbolOrSymbols.map(symbol => symbol.id) },
+                ));
+                return getBatchResults<TypeResponse>(response).map(data => owner.objectRegistry.getOrCreateType(data));
             }
             const data = owner.client.apiRequest("getTypeOfSymbol", {
                 snapshot: owner.snapshotId,
@@ -3320,12 +3322,12 @@ export class Checker {
         function gen(symbols: readonly Symbol[]): Generator<ProtocolRequest, Type[], ProtocolResponse["result"]>;
         function* gen(symbolOrSymbols: Symbol | readonly Symbol[]): Generator<ProtocolRequest, Type | Type[], ProtocolResponse["result"]> {
             if (Array.isArray(symbolOrSymbols)) {
-                const data = yield* apiRequest("getTypesOfSymbols", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.id,
-                    symbols: symbolOrSymbols.map(s => s.id),
-                });
-                return data.map(d => owner.objectRegistry.getOrCreateType(d));
+                const response = owner.client.batchRequest(createGroupedBatchRequest(
+                    "getTypeOfSymbol",
+                    { snapshot: owner.snapshotId, project: owner.project.id },
+                    { symbol: symbolOrSymbols.map(symbol => symbol.id) },
+                ));
+                return getBatchResults<TypeResponse>(response).map(data => owner.objectRegistry.getOrCreateType(data));
             }
             const data = yield* apiRequest("getTypeOfSymbol", {
                 snapshot: owner.snapshotId,
@@ -3501,12 +3503,12 @@ export class Checker {
         function getTypeAtLocation(nodes: readonly Node[]): Type[];
         function getTypeAtLocation(nodeOrNodes: Node | readonly Node[]): Type | Type[] {
             if (Array.isArray(nodeOrNodes)) {
-                const data = owner.client.apiRequest("getTypeAtLocations", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.id,
-                    locations: nodeOrNodes.map(node => getNodeId(node)),
-                });
-                return data.map(d => owner.objectRegistry.getOrCreateType(d));
+                const response = owner.client.batchRequest(createGroupedBatchRequest(
+                    "getTypeAtLocation",
+                    { snapshot: owner.snapshotId, project: owner.project.id },
+                    { location: nodeOrNodes.map(node => getNodeId(node)) },
+                ));
+                return getBatchResults<TypeResponse>(response).map(data => owner.objectRegistry.getOrCreateType(data));
             }
             const data = owner.client.apiRequest("getTypeAtLocation", {
                 snapshot: owner.snapshotId,
@@ -3519,12 +3521,12 @@ export class Checker {
         function gen(nodes: readonly Node[]): Generator<ProtocolRequest, Type[], ProtocolResponse["result"]>;
         function* gen(nodeOrNodes: Node | readonly Node[]): Generator<ProtocolRequest, Type | Type[], ProtocolResponse["result"]> {
             if (Array.isArray(nodeOrNodes)) {
-                const data = yield* apiRequest("getTypeAtLocations", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.id,
-                    locations: nodeOrNodes.map(node => getNodeId(node)),
-                });
-                return data.map(d => owner.objectRegistry.getOrCreateType(d));
+                const response = owner.client.batchRequest(createGroupedBatchRequest(
+                    "getTypeAtLocation",
+                    { snapshot: owner.snapshotId, project: owner.project.id },
+                    { location: nodeOrNodes.map(node => getNodeId(node)) },
+                ));
+                return getBatchResults<TypeResponse>(response).map(data => owner.objectRegistry.getOrCreateType(data));
             }
             const data = yield* apiRequest("getTypeAtLocation", {
                 snapshot: owner.snapshotId,
@@ -3604,13 +3606,12 @@ export class Checker {
                 });
                 return data ? owner.objectRegistry.getOrCreateType(data) : undefined;
             }
-            const data = owner.client.apiRequest("getTypesAtPositions", {
-                snapshot: owner.snapshotId,
-                project: owner.project.id,
-                file,
-                positions: positionOrPositions,
-            });
-            return data.map(d => d ? owner.objectRegistry.getOrCreateType(d) : undefined);
+            const response = owner.client.batchRequest(createGroupedBatchRequest(
+                "getTypeAtPosition",
+                { snapshot: owner.snapshotId, project: owner.project.id, file },
+                { position: positionOrPositions },
+            ));
+            return getBatchResults<TypeResponse | null>(response).map(data => data ? owner.objectRegistry.getOrCreateType(data) : undefined);
         }
         function gen(file: DocumentIdentifier, position: number): Generator<ProtocolRequest, Type | undefined, ProtocolResponse["result"]>;
         function gen(file: DocumentIdentifier, positions: readonly number[]): Generator<ProtocolRequest, (Type | undefined)[], ProtocolResponse["result"]>;
@@ -3624,13 +3625,12 @@ export class Checker {
                 });
                 return data ? owner.objectRegistry.getOrCreateType(data) : undefined;
             }
-            const data = yield* apiRequest("getTypesAtPositions", {
-                snapshot: owner.snapshotId,
-                project: owner.project.id,
-                file,
-                positions: positionOrPositions,
-            });
-            return data.map(d => d ? owner.objectRegistry.getOrCreateType(d) : undefined);
+            const response = owner.client.batchRequest(createGroupedBatchRequest(
+                "getTypeAtPosition",
+                { snapshot: owner.snapshotId, project: owner.project.id, file },
+                { position: positionOrPositions },
+            ));
+            return getBatchResults<TypeResponse | null>(response).map(data => data ? owner.objectRegistry.getOrCreateType(data) : undefined);
         }
         return cacheGeneratorMethod(owner, "getTypeAtPosition", getTypeAtPosition, gen);
     }
