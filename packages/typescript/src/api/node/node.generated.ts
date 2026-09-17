@@ -281,13 +281,15 @@ export class RemoteNode extends RemoteNodeBase implements Node {
             do {
                 const child = this.getOrCreateChildAtNodeIndex(next);
                 if (child instanceof RemoteNodeList) {
-                    let listNext = child.firstNodeIndex;
-                    while (listNext) {
-                        const node = child.getOrCreateChildAtNodeIndex(listNext) as RemoteNode;
-                        listNext = node.next;
-                        const result = yield node;
-                        if (result) {
-                            return result;
+                    if (child.length) {
+                        let listNext = child.firstNodeIndex;
+                        while (listNext) {
+                            const node = child.getOrCreateChildAtNodeIndex(listNext) as RemoteNode;
+                            listNext = node.next;
+                            const result = yield node;
+                            if (result) {
+                                return result;
+                            }
                         }
                     }
                 }

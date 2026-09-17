@@ -31,6 +31,7 @@ import {
     createExpressionStatement,
     createIdentifier,
     createIfStatement,
+    createMissingDeclaration,
     createNodeArray,
     createNumericLiteral,
     createSourceFile,
@@ -69,6 +70,13 @@ function collectKinds(node: Node): SyntaxKind[] {
     });
     return kinds;
 }
+
+describe("NodeObject + childrenIter", () => {
+    test("skips absent optional child lists", () => {
+        const node = createMissingDeclaration();
+        assert.deepStrictEqual([...node.childrenIter()], []);
+    });
+});
 
 test("Benchmarks", async () => {
     await runBenchmarks({ singleIteration: true });
@@ -1127,6 +1135,13 @@ describe("RemoteNode + child/token getters", () => {
             }
             const res = (await visitNodeForFirstAnyChild(stmt).next()).value;
             assert.strictEqual(res!.getText(), "p: any");
+        });
+    });
+
+    test("childrenIter skips empty NodeArrays", () => {
+        withFirstStatement("function f() {}", stmt => {
+            const body = findFirstOfKind(stmt, SyntaxKind.Block)!;
+            assert.deepStrictEqual([...body.childrenIter()], []);
         });
     });
 

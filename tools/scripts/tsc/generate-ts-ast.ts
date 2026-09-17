@@ -933,7 +933,8 @@ function generateFactory(): string {
             const propName = api.uncapitalize(m.name);
             const listKind = m.listKind;
             if (listKind) {
-                return `for (const n of data.${propName}) { const res = yield n; if (res) return res; }`;
+                const visit = `for (const n of data.${propName}) { const res = yield n; if (res) return res; }`;
+                return m.optional ? `if (data.${propName}) { ${visit} }` : visit;
             }
             return `if (data.${propName}) { const res = yield data.${propName}; if (res) return res; }`;
         });
@@ -957,7 +958,8 @@ function generateFactory(): string {
             const propName = api.uncapitalize(m.name);
             const listKind = m.listKind;
             if (listKind) {
-                return `for (const n of data.${propName}) { const res = yield n; if (res) return res; }`;
+                const visit = `for (const n of data.${propName}) { const res = yield n; if (res) return res; }`;
+                return m.optional ? `if (data.${propName}) { ${visit} }` : visit;
             }
             return `if (data.${propName}) { const res = yield data.${propName}; if (res) return res; }`;
         });

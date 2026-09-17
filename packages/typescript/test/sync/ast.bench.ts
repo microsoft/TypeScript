@@ -29,7 +29,8 @@ import { Bench } from "tinybench";
 
 const treeDepth = 5;
 const expressionsPerBlock = 6;
-const targetName = "targetIdentifier";
+const earlyTargetName = "earlyTargetIdentifier";
+const midpointTargetName = "midpointTargetIdentifier";
 
 const isMain = process.argv[1] === fileURLToPath(import.meta.url);
 if (isMain) {
@@ -51,8 +52,10 @@ function createTree(depth = treeDepth, path = "root"): Tree {
     const statements = [];
     const sourceStatements: string[] = [];
     for (let i = 0; i < expressionsPerBlock; i++) {
-        const name = depth === 0 && path === "root_1_1_1_1_1" && i === expressionsPerBlock - 1
-            ? targetName
+        const name = path === "root" && i === 0
+            ? earlyTargetName
+            : path === "root_1" && i === 0
+            ? midpointTargetName
             : `value_${path}_${i}`;
         statements.push(createExpressionStatement(createIdentifier(name)));
         sourceStatements.push(`${name};`);
@@ -109,17 +112,17 @@ function walkWithChildrenIter(node: Node): number {
     return count;
 }
 
-function findWithForEachChild(node: Node): Identifier | undefined {
+function findWithForEachChild(node: Node, targetName: string): Identifier | undefined {
     return node.forEachChild(child => {
         if (isIdentifier(child) && child.text === targetName) return child;
-        return findWithForEachChild(child);
+        return findWithForEachChild(child, targetName);
     });
 }
 
-function findWithChildrenIter(node: Node): Identifier | undefined {
+function findWithChildrenIter(node: Node, targetName: string): Identifier | undefined {
     for (const child of node.childrenIter()) {
         if (isIdentifier(child) && child.text === targetName) return child;
-        const result = findWithChildrenIter(child);
+        const result = findWithChildrenIter(child, targetName);
         if (result) return result;
     }
     return undefined;
@@ -153,8 +156,10 @@ export function runBenchmarks(options?: { filter?: string; singleIteration?: boo
     assert.strictEqual(walkWithChildrenIter(localTree.node), walkWithForEachChild(localTree.node));
     assert.strictEqual(walkWithChildrenIter(remoteTree), walkWithForEachChild(remoteTree));
     assert.strictEqual(walkWithChildrenIter(localTree.node), walkWithChildrenIter(remoteTree));
-    assert.strictEqual(findWithChildrenIter(localTree.node)?.text, targetName);
-    assert.strictEqual(findWithForEachChild(remoteTree)?.text, targetName);
+    for (const targetName of [earlyTargetName, midpointTargetName]) {
+        assert.strictEqual(findWithChildrenIter(localTree.node, targetName)?.text, targetName);
+        assert.strictEqual(findWithForEachChild(remoteTree, targetName)?.text, targetName);
+    }
 
     const bench = new Bench({
         name: "AST child traversal",
@@ -183,10 +188,16 @@ export function runBenchmarks(options?: { filter?: string; singleIteration?: boo
                 assert.ok(walkWithChildrenIter(node) > 1);
             }, { async: isAsync })
             .add(`${nodeType} recursive early exit - forEachChild`, () => {
-                assert.strictEqual(findWithForEachChild(node)?.text, targetName);
+                assert.strictEqual(findWithForEachChild(node, earlyTargetName)?.text, earlyTargetName);
             }, { async: isAsync })
             .add(`${nodeType} recursive early exit - childrenIter`, () => {
-                assert.strictEqual(findWithChildrenIter(node)?.text, targetName);
+                assert.strictEqual(findWithChildrenIter(node, earlyTargetName)?.text, earlyTargetName);
+            }, { async: isAsync })
+            .add(`${nodeType} recursive midpoint exit - forEachChild`, () => {
+                assert.strictEqual(findWithForEachChild(node, midpointTargetName)?.text, midpointTargetName);
+            }, { async: isAsync })
+            .add(`${nodeType} recursive midpoint exit - childrenIter`, () => {
+                assert.strictEqual(findWithChildrenIter(node, midpointTargetName)?.text, midpointTargetName);
             }, { async: isAsync });
     }
 

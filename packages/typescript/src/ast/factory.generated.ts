@@ -1875,9 +1875,11 @@ const yieldEachChildTable: Record<number, YieldEachChildFunction> = {
         }
     },
     [SyntaxKind.VariableStatement]: function* (data) {
-        for (const n of data.modifiers) {
-            const res = yield n;
-            if (res) return res;
+        if (data.modifiers) {
+            for (const n of data.modifiers) {
+                const res = yield n;
+                if (res) return res;
+            }
         }
         if (data.declarationList) {
             const res = yield data.declarationList;
@@ -1909,9 +1911,11 @@ const yieldEachChildTable: Record<number, YieldEachChildFunction> = {
         }
     },
     [SyntaxKind.Parameter]: function* (data) {
-        for (const n of data.modifiers) {
-            const res = yield n;
-            if (res) return res;
+        if (data.modifiers) {
+            for (const n of data.modifiers) {
+                const res = yield n;
+                if (res) return res;
+            }
         }
         if (data.dotDotDotToken) {
             const res = yield data.dotDotDotToken;
@@ -1953,15 +1957,19 @@ const yieldEachChildTable: Record<number, YieldEachChildFunction> = {
         }
     },
     [SyntaxKind.MissingDeclaration]: function* (data) {
-        for (const n of data.modifiers) {
-            const res = yield n;
-            if (res) return res;
+        if (data.modifiers) {
+            for (const n of data.modifiers) {
+                const res = yield n;
+                if (res) return res;
+            }
         }
     },
     [SyntaxKind.FunctionDeclaration]: function* (data) {
-        for (const n of data.modifiers) {
-            const res = yield n;
-            if (res) return res;
+        if (data.modifiers) {
+            for (const n of data.modifiers) {
+                const res = yield n;
+                if (res) return res;
+            }
         }
         if (data.asteriskToken) {
             const res = yield data.asteriskToken;
@@ -1971,9 +1979,11 @@ const yieldEachChildTable: Record<number, YieldEachChildFunction> = {
             const res = yield data.name;
             if (res) return res;
         }
-        for (const n of data.typeParameters) {
-            const res = yield n;
-            if (res) return res;
+        if (data.typeParameters) {
+            for (const n of data.typeParameters) {
+                const res = yield n;
+                if (res) return res;
+            }
         }
         for (const n of data.parameters) {
             const res = yield n;
@@ -1989,21 +1999,27 @@ const yieldEachChildTable: Record<number, YieldEachChildFunction> = {
         }
     },
     [SyntaxKind.ClassDeclaration]: function* (data) {
-        for (const n of data.modifiers) {
-            const res = yield n;
-            if (res) return res;
+        if (data.modifiers) {
+            for (const n of data.modifiers) {
+                const res = yield n;
+                if (res) return res;
+            }
         }
         if (data.name) {
             const res = yield data.name;
             if (res) return res;
         }
-        for (const n of data.typeParameters) {
-            const res = yield n;
-            if (res) return res;
+        if (data.typeParameters) {
+            for (const n of data.typeParameters) {
+                const res = yield n;
+                if (res) return res;
+            }
         }
-        for (const n of data.heritageClauses) {
-            const res = yield n;
-            if (res) return res;
+        if (data.heritageClauses) {
+            for (const n of data.heritageClauses) {
+                const res = yield n;
+                if (res) return res;
+            }
         }
         for (const n of data.members) {
             const res = yield n;
@@ -2011,21 +2027,27 @@ const yieldEachChildTable: Record<number, YieldEachChildFunction> = {
         }
     },
     [SyntaxKind.ClassExpression]: function* (data) {
-        for (const n of data.modifiers) {
-            const res = yield n;
-            if (res) return res;
+        if (data.modifiers) {
+            for (const n of data.modifiers) {
+                const res = yield n;
+                if (res) return res;
+            }
         }
         if (data.name) {
             const res = yield data.name;
             if (res) return res;
         }
-        for (const n of data.typeParameters) {
-            const res = yield n;
-            if (res) return res;
+        if (data.typeParameters) {
+            for (const n of data.typeParameters) {
+                const res = yield n;
+                if (res) return res;
+            }
         }
-        for (const n of data.heritageClauses) {
-            const res = yield n;
-            if (res) return res;
+        if (data.heritageClauses) {
+            for (const n of data.heritageClauses) {
+                const res = yield n;
+                if (res) return res;
+            }
         }
         for (const n of data.members) {
             const res = yield n;
@@ -2039,21 +2061,27 @@ const yieldEachChildTable: Record<number, YieldEachChildFunction> = {
         }
     },
     [SyntaxKind.InterfaceDeclaration]: function* (data) {
-        for (const n of data.modifiers) {
-            const res = yield n;
-            if (res) return res;
+        if (data.modifiers) {
+            for (const n of data.modifiers) {
+                const res = yield n;
+                if (res) return res;
+            }
         }
         if (data.name) {
             const res = yield data.name;
             if (res) return res;
         }
-        for (const n of data.typeParameters) {
-            const res = yield n;
-            if (res) return res;
+        if (data.typeParameters) {
+            for (const n of data.typeParameters) {
+                const res = yield n;
+                if (res) return res;
+            }
         }
-        for (const n of data.heritageClauses) {
-            const res = yield n;
-            if (res) return res;
+        if (data.heritageClauses) {
+            for (const n of data.heritageClauses) {
+                const res = yield n;
+                if (res) return res;
+            }
         }
         for (const n of data.members) {
             const res = yield n;
@@ -2061,17 +2089,21 @@ const yieldEachChildTable: Record<number, YieldEachChildFunction> = {
         }
     },
     [SyntaxKind.TypeAliasDeclaration]: function* (data) {
-        for (const n of data.modifiers) {
-            const res = yield n;
-            if (res) return res;
+        if (data.modifiers) {
+            for (const n of data.modifiers) {
+                const res = yield n;
+                if (res) return res;
+            }
         }
         if (data.name) {
             const res = yield data.name;
             if (res) return res;
         }
-        for (const n of data.typeParameters) {
-            const res = yield n;
-            if (res) return res;
+        if (data.typeParameters) {
+            for (const n of data.typeParameters) {
+                const res = yield n;
+                if (res) return res;
+            }
         }
         if (data.type) {
             const res = yield data.type;
@@ -2079,17 +2111,21 @@ const yieldEachChildTable: Record<number, YieldEachChildFunction> = {
         }
     },
     [SyntaxKind.JSTypeAliasDeclaration]: function* (data) {
-        for (const n of data.modifiers) {
-            const res = yield n;
-            if (res) return res;
+        if (data.modifiers) {
+            for (const n of data.modifiers) {
+                const res = yield n;
+                if (res) return res;
+            }
         }
         if (data.name) {
             const res = yield data.name;
             if (res) return res;
         }
-        for (const n of data.typeParameters) {
-            const res = yield n;
-            if (res) return res;
+        if (data.typeParameters) {
+            for (const n of data.typeParameters) {
+                const res = yield n;
+                if (res) return res;
+            }
         }
         if (data.type) {
             const res = yield data.type;
@@ -2107,9 +2143,11 @@ const yieldEachChildTable: Record<number, YieldEachChildFunction> = {
         }
     },
     [SyntaxKind.EnumDeclaration]: function* (data) {
-        for (const n of data.modifiers) {
-            const res = yield n;
-            if (res) return res;
+        if (data.modifiers) {
+            for (const n of data.modifiers) {
+                const res = yield n;
+                if (res) return res;
+            }
         }
         if (data.name) {
             const res = yield data.name;
@@ -2127,9 +2165,11 @@ const yieldEachChildTable: Record<number, YieldEachChildFunction> = {
         }
     },
     [SyntaxKind.ImportDeclaration]: function* (data) {
-        for (const n of data.modifiers) {
-            const res = yield n;
-            if (res) return res;
+        if (data.modifiers) {
+            for (const n of data.modifiers) {
+                const res = yield n;
+                if (res) return res;
+            }
         }
         if (data.importClause) {
             const res = yield data.importClause;
@@ -2145,9 +2185,11 @@ const yieldEachChildTable: Record<number, YieldEachChildFunction> = {
         }
     },
     [SyntaxKind.JSImportDeclaration]: function* (data) {
-        for (const n of data.modifiers) {
-            const res = yield n;
-            if (res) return res;
+        if (data.modifiers) {
+            for (const n of data.modifiers) {
+                const res = yield n;
+                if (res) return res;
+            }
         }
         if (data.importClause) {
             const res = yield data.importClause;
@@ -2181,9 +2223,11 @@ const yieldEachChildTable: Record<number, YieldEachChildFunction> = {
         }
     },
     [SyntaxKind.ExportAssignment]: function* (data) {
-        for (const n of data.modifiers) {
-            const res = yield n;
-            if (res) return res;
+        if (data.modifiers) {
+            for (const n of data.modifiers) {
+                const res = yield n;
+                if (res) return res;
+            }
         }
         if (data.type) {
             const res = yield data.type;
@@ -2195,9 +2239,11 @@ const yieldEachChildTable: Record<number, YieldEachChildFunction> = {
         }
     },
     [SyntaxKind.NamespaceExportDeclaration]: function* (data) {
-        for (const n of data.modifiers) {
-            const res = yield n;
-            if (res) return res;
+        if (data.modifiers) {
+            for (const n of data.modifiers) {
+                const res = yield n;
+                if (res) return res;
+            }
         }
         if (data.name) {
             const res = yield data.name;
@@ -2227,9 +2273,11 @@ const yieldEachChildTable: Record<number, YieldEachChildFunction> = {
         }
     },
     [SyntaxKind.CallSignature]: function* (data) {
-        for (const n of data.typeParameters) {
-            const res = yield n;
-            if (res) return res;
+        if (data.typeParameters) {
+            for (const n of data.typeParameters) {
+                const res = yield n;
+                if (res) return res;
+            }
         }
         for (const n of data.parameters) {
             const res = yield n;
@@ -2241,9 +2289,11 @@ const yieldEachChildTable: Record<number, YieldEachChildFunction> = {
         }
     },
     [SyntaxKind.ConstructSignature]: function* (data) {
-        for (const n of data.typeParameters) {
-            const res = yield n;
-            if (res) return res;
+        if (data.typeParameters) {
+            for (const n of data.typeParameters) {
+                const res = yield n;
+                if (res) return res;
+            }
         }
         for (const n of data.parameters) {
             const res = yield n;
@@ -2255,13 +2305,17 @@ const yieldEachChildTable: Record<number, YieldEachChildFunction> = {
         }
     },
     [SyntaxKind.Constructor]: function* (data) {
-        for (const n of data.modifiers) {
-            const res = yield n;
-            if (res) return res;
+        if (data.modifiers) {
+            for (const n of data.modifiers) {
+                const res = yield n;
+                if (res) return res;
+            }
         }
-        for (const n of data.typeParameters) {
-            const res = yield n;
-            if (res) return res;
+        if (data.typeParameters) {
+            for (const n of data.typeParameters) {
+                const res = yield n;
+                if (res) return res;
+            }
         }
         for (const n of data.parameters) {
             const res = yield n;
@@ -2277,17 +2331,21 @@ const yieldEachChildTable: Record<number, YieldEachChildFunction> = {
         }
     },
     [SyntaxKind.GetAccessor]: function* (data) {
-        for (const n of data.modifiers) {
-            const res = yield n;
-            if (res) return res;
+        if (data.modifiers) {
+            for (const n of data.modifiers) {
+                const res = yield n;
+                if (res) return res;
+            }
         }
         if (data.name) {
             const res = yield data.name;
             if (res) return res;
         }
-        for (const n of data.typeParameters) {
-            const res = yield n;
-            if (res) return res;
+        if (data.typeParameters) {
+            for (const n of data.typeParameters) {
+                const res = yield n;
+                if (res) return res;
+            }
         }
         for (const n of data.parameters) {
             const res = yield n;
@@ -2303,17 +2361,21 @@ const yieldEachChildTable: Record<number, YieldEachChildFunction> = {
         }
     },
     [SyntaxKind.SetAccessor]: function* (data) {
-        for (const n of data.modifiers) {
-            const res = yield n;
-            if (res) return res;
+        if (data.modifiers) {
+            for (const n of data.modifiers) {
+                const res = yield n;
+                if (res) return res;
+            }
         }
         if (data.name) {
             const res = yield data.name;
             if (res) return res;
         }
-        for (const n of data.typeParameters) {
-            const res = yield n;
-            if (res) return res;
+        if (data.typeParameters) {
+            for (const n of data.typeParameters) {
+                const res = yield n;
+                if (res) return res;
+            }
         }
         for (const n of data.parameters) {
             const res = yield n;
@@ -2329,9 +2391,11 @@ const yieldEachChildTable: Record<number, YieldEachChildFunction> = {
         }
     },
     [SyntaxKind.IndexSignature]: function* (data) {
-        for (const n of data.modifiers) {
-            const res = yield n;
-            if (res) return res;
+        if (data.modifiers) {
+            for (const n of data.modifiers) {
+                const res = yield n;
+                if (res) return res;
+            }
         }
         for (const n of data.parameters) {
             const res = yield n;
@@ -2343,9 +2407,11 @@ const yieldEachChildTable: Record<number, YieldEachChildFunction> = {
         }
     },
     [SyntaxKind.MethodSignature]: function* (data) {
-        for (const n of data.modifiers) {
-            const res = yield n;
-            if (res) return res;
+        if (data.modifiers) {
+            for (const n of data.modifiers) {
+                const res = yield n;
+                if (res) return res;
+            }
         }
         if (data.name) {
             const res = yield data.name;
@@ -2355,9 +2421,11 @@ const yieldEachChildTable: Record<number, YieldEachChildFunction> = {
             const res = yield data.postfixToken;
             if (res) return res;
         }
-        for (const n of data.typeParameters) {
-            const res = yield n;
-            if (res) return res;
+        if (data.typeParameters) {
+            for (const n of data.typeParameters) {
+                const res = yield n;
+                if (res) return res;
+            }
         }
         for (const n of data.parameters) {
             const res = yield n;
@@ -2369,9 +2437,11 @@ const yieldEachChildTable: Record<number, YieldEachChildFunction> = {
         }
     },
     [SyntaxKind.MethodDeclaration]: function* (data) {
-        for (const n of data.modifiers) {
-            const res = yield n;
-            if (res) return res;
+        if (data.modifiers) {
+            for (const n of data.modifiers) {
+                const res = yield n;
+                if (res) return res;
+            }
         }
         if (data.asteriskToken) {
             const res = yield data.asteriskToken;
@@ -2385,9 +2455,11 @@ const yieldEachChildTable: Record<number, YieldEachChildFunction> = {
             const res = yield data.postfixToken;
             if (res) return res;
         }
-        for (const n of data.typeParameters) {
-            const res = yield n;
-            if (res) return res;
+        if (data.typeParameters) {
+            for (const n of data.typeParameters) {
+                const res = yield n;
+                if (res) return res;
+            }
         }
         for (const n of data.parameters) {
             const res = yield n;
@@ -2403,9 +2475,11 @@ const yieldEachChildTable: Record<number, YieldEachChildFunction> = {
         }
     },
     [SyntaxKind.PropertySignature]: function* (data) {
-        for (const n of data.modifiers) {
-            const res = yield n;
-            if (res) return res;
+        if (data.modifiers) {
+            for (const n of data.modifiers) {
+                const res = yield n;
+                if (res) return res;
+            }
         }
         if (data.name) {
             const res = yield data.name;
@@ -2425,9 +2499,11 @@ const yieldEachChildTable: Record<number, YieldEachChildFunction> = {
         }
     },
     [SyntaxKind.PropertyDeclaration]: function* (data) {
-        for (const n of data.modifiers) {
-            const res = yield n;
-            if (res) return res;
+        if (data.modifiers) {
+            for (const n of data.modifiers) {
+                const res = yield n;
+                if (res) return res;
+            }
         }
         if (data.name) {
             const res = yield data.name;
@@ -2447,9 +2523,11 @@ const yieldEachChildTable: Record<number, YieldEachChildFunction> = {
         }
     },
     [SyntaxKind.ClassStaticBlockDeclaration]: function* (data) {
-        for (const n of data.modifiers) {
-            const res = yield n;
-            if (res) return res;
+        if (data.modifiers) {
+            for (const n of data.modifiers) {
+                const res = yield n;
+                if (res) return res;
+            }
         }
         if (data.body) {
             const res = yield data.body;
@@ -2457,9 +2535,11 @@ const yieldEachChildTable: Record<number, YieldEachChildFunction> = {
         }
     },
     [SyntaxKind.BinaryExpression]: function* (data) {
-        for (const n of data.modifiers) {
-            const res = yield n;
-            if (res) return res;
+        if (data.modifiers) {
+            for (const n of data.modifiers) {
+                const res = yield n;
+                if (res) return res;
+            }
         }
         if (data.left) {
             const res = yield data.left;
@@ -2501,13 +2581,17 @@ const yieldEachChildTable: Record<number, YieldEachChildFunction> = {
         }
     },
     [SyntaxKind.ArrowFunction]: function* (data) {
-        for (const n of data.modifiers) {
-            const res = yield n;
-            if (res) return res;
+        if (data.modifiers) {
+            for (const n of data.modifiers) {
+                const res = yield n;
+                if (res) return res;
+            }
         }
-        for (const n of data.typeParameters) {
-            const res = yield n;
-            if (res) return res;
+        if (data.typeParameters) {
+            for (const n of data.typeParameters) {
+                const res = yield n;
+                if (res) return res;
+            }
         }
         for (const n of data.parameters) {
             const res = yield n;
@@ -2527,9 +2611,11 @@ const yieldEachChildTable: Record<number, YieldEachChildFunction> = {
         }
     },
     [SyntaxKind.FunctionExpression]: function* (data) {
-        for (const n of data.modifiers) {
-            const res = yield n;
-            if (res) return res;
+        if (data.modifiers) {
+            for (const n of data.modifiers) {
+                const res = yield n;
+                if (res) return res;
+            }
         }
         if (data.asteriskToken) {
             const res = yield data.asteriskToken;
@@ -2539,9 +2625,11 @@ const yieldEachChildTable: Record<number, YieldEachChildFunction> = {
             const res = yield data.name;
             if (res) return res;
         }
-        for (const n of data.typeParameters) {
-            const res = yield n;
-            if (res) return res;
+        if (data.typeParameters) {
+            for (const n of data.typeParameters) {
+                const res = yield n;
+                if (res) return res;
+            }
         }
         for (const n of data.parameters) {
             const res = yield n;
@@ -2635,9 +2723,11 @@ const yieldEachChildTable: Record<number, YieldEachChildFunction> = {
             const res = yield data.questionDotToken;
             if (res) return res;
         }
-        for (const n of data.typeArguments) {
-            const res = yield n;
-            if (res) return res;
+        if (data.typeArguments) {
+            for (const n of data.typeArguments) {
+                const res = yield n;
+                if (res) return res;
+            }
         }
         for (const n of data.arguments) {
             const res = yield n;
@@ -2649,13 +2739,17 @@ const yieldEachChildTable: Record<number, YieldEachChildFunction> = {
             const res = yield data.expression;
             if (res) return res;
         }
-        for (const n of data.typeArguments) {
-            const res = yield n;
-            if (res) return res;
+        if (data.typeArguments) {
+            for (const n of data.typeArguments) {
+                const res = yield n;
+                if (res) return res;
+            }
         }
-        for (const n of data.arguments) {
-            const res = yield n;
-            if (res) return res;
+        if (data.arguments) {
+            for (const n of data.arguments) {
+                const res = yield n;
+                if (res) return res;
+            }
         }
     },
     [SyntaxKind.MetaProperty]: function* (data) {
@@ -2705,9 +2799,11 @@ const yieldEachChildTable: Record<number, YieldEachChildFunction> = {
             const res = yield data.questionDotToken;
             if (res) return res;
         }
-        for (const n of data.typeArguments) {
-            const res = yield n;
-            if (res) return res;
+        if (data.typeArguments) {
+            for (const n of data.typeArguments) {
+                const res = yield n;
+                if (res) return res;
+            }
         }
         if (data.template) {
             const res = yield data.template;
@@ -2739,9 +2835,11 @@ const yieldEachChildTable: Record<number, YieldEachChildFunction> = {
         }
     },
     [SyntaxKind.PropertyAssignment]: function* (data) {
-        for (const n of data.modifiers) {
-            const res = yield n;
-            if (res) return res;
+        if (data.modifiers) {
+            for (const n of data.modifiers) {
+                const res = yield n;
+                if (res) return res;
+            }
         }
         if (data.name) {
             const res = yield data.name;
@@ -2761,9 +2859,11 @@ const yieldEachChildTable: Record<number, YieldEachChildFunction> = {
         }
     },
     [SyntaxKind.ShorthandPropertyAssignment]: function* (data) {
-        for (const n of data.modifiers) {
-            const res = yield n;
-            if (res) return res;
+        if (data.modifiers) {
+            for (const n of data.modifiers) {
+                const res = yield n;
+                if (res) return res;
+            }
         }
         if (data.name) {
             const res = yield data.name;
@@ -2883,9 +2983,11 @@ const yieldEachChildTable: Record<number, YieldEachChildFunction> = {
             const res = yield data.typeName;
             if (res) return res;
         }
-        for (const n of data.typeArguments) {
-            const res = yield n;
-            if (res) return res;
+        if (data.typeArguments) {
+            for (const n of data.typeArguments) {
+                const res = yield n;
+                if (res) return res;
+            }
         }
     },
     [SyntaxKind.ExpressionWithTypeArguments]: function* (data) {
@@ -2893,9 +2995,11 @@ const yieldEachChildTable: Record<number, YieldEachChildFunction> = {
             const res = yield data.expression;
             if (res) return res;
         }
-        for (const n of data.typeArguments) {
-            const res = yield n;
-            if (res) return res;
+        if (data.typeArguments) {
+            for (const n of data.typeArguments) {
+                const res = yield n;
+                if (res) return res;
+            }
         }
     },
     [SyntaxKind.LiteralType]: function* (data) {
@@ -2939,9 +3043,11 @@ const yieldEachChildTable: Record<number, YieldEachChildFunction> = {
             const res = yield data.exprName;
             if (res) return res;
         }
-        for (const n of data.typeArguments) {
-            const res = yield n;
-            if (res) return res;
+        if (data.typeArguments) {
+            for (const n of data.typeArguments) {
+                const res = yield n;
+                if (res) return res;
+            }
         }
     },
     [SyntaxKind.MappedType]: function* (data) {
@@ -2965,9 +3071,11 @@ const yieldEachChildTable: Record<number, YieldEachChildFunction> = {
             const res = yield data.type;
             if (res) return res;
         }
-        for (const n of data.members) {
-            const res = yield n;
-            if (res) return res;
+        if (data.members) {
+            for (const n of data.members) {
+                const res = yield n;
+                if (res) return res;
+            }
         }
     },
     [SyntaxKind.TypeLiteral]: function* (data) {
@@ -3019,9 +3127,11 @@ const yieldEachChildTable: Record<number, YieldEachChildFunction> = {
         }
     },
     [SyntaxKind.FunctionType]: function* (data) {
-        for (const n of data.typeParameters) {
-            const res = yield n;
-            if (res) return res;
+        if (data.typeParameters) {
+            for (const n of data.typeParameters) {
+                const res = yield n;
+                if (res) return res;
+            }
         }
         for (const n of data.parameters) {
             const res = yield n;
@@ -3033,13 +3143,17 @@ const yieldEachChildTable: Record<number, YieldEachChildFunction> = {
         }
     },
     [SyntaxKind.ConstructorType]: function* (data) {
-        for (const n of data.modifiers) {
-            const res = yield n;
-            if (res) return res;
+        if (data.modifiers) {
+            for (const n of data.modifiers) {
+                const res = yield n;
+                if (res) return res;
+            }
         }
-        for (const n of data.typeParameters) {
-            const res = yield n;
-            if (res) return res;
+        if (data.typeParameters) {
+            for (const n of data.typeParameters) {
+                const res = yield n;
+                if (res) return res;
+            }
         }
         for (const n of data.parameters) {
             const res = yield n;
@@ -3117,9 +3231,11 @@ const yieldEachChildTable: Record<number, YieldEachChildFunction> = {
             const res = yield data.tagName;
             if (res) return res;
         }
-        for (const n of data.typeArguments) {
-            const res = yield n;
-            if (res) return res;
+        if (data.typeArguments) {
+            for (const n of data.typeArguments) {
+                const res = yield n;
+                if (res) return res;
+            }
         }
         if (data.attributes) {
             const res = yield data.attributes;
@@ -3131,9 +3247,11 @@ const yieldEachChildTable: Record<number, YieldEachChildFunction> = {
             const res = yield data.tagName;
             if (res) return res;
         }
-        for (const n of data.typeArguments) {
-            const res = yield n;
-            if (res) return res;
+        if (data.typeArguments) {
+            for (const n of data.typeArguments) {
+                const res = yield n;
+                if (res) return res;
+            }
         }
         if (data.attributes) {
             const res = yield data.attributes;
@@ -3197,9 +3315,11 @@ const yieldEachChildTable: Record<number, YieldEachChildFunction> = {
             const res = yield n;
             if (res) return res;
         }
-        for (const n of data.tags) {
-            const res = yield n;
-            if (res) return res;
+        if (data.tags) {
+            for (const n of data.tags) {
+                const res = yield n;
+                if (res) return res;
+            }
         }
     },
     [SyntaxKind.JSDocTypeExpression]: function* (data) {
@@ -3241,9 +3361,11 @@ const yieldEachChildTable: Record<number, YieldEachChildFunction> = {
             const res = yield data.typeExpression;
             if (res) return res;
         }
-        for (const n of data.comment) {
-            const res = yield n;
-            if (res) return res;
+        if (data.comment) {
+            for (const n of data.comment) {
+                const res = yield n;
+                if (res) return res;
+            }
         }
     },
     [SyntaxKind.JSDocUnknownTag]: function* (data) {
@@ -3251,9 +3373,11 @@ const yieldEachChildTable: Record<number, YieldEachChildFunction> = {
             const res = yield data.tagName;
             if (res) return res;
         }
-        for (const n of data.comment) {
-            const res = yield n;
-            if (res) return res;
+        if (data.comment) {
+            for (const n of data.comment) {
+                const res = yield n;
+                if (res) return res;
+            }
         }
     },
     [SyntaxKind.JSDocTemplateTag]: function* (data) {
@@ -3269,9 +3393,11 @@ const yieldEachChildTable: Record<number, YieldEachChildFunction> = {
             const res = yield n;
             if (res) return res;
         }
-        for (const n of data.comment) {
-            const res = yield n;
-            if (res) return res;
+        if (data.comment) {
+            for (const n of data.comment) {
+                const res = yield n;
+                if (res) return res;
+            }
         }
     },
     [SyntaxKind.JSDocReturnTag]: function* (data) {
@@ -3283,9 +3409,11 @@ const yieldEachChildTable: Record<number, YieldEachChildFunction> = {
             const res = yield data.typeExpression;
             if (res) return res;
         }
-        for (const n of data.comment) {
-            const res = yield n;
-            if (res) return res;
+        if (data.comment) {
+            for (const n of data.comment) {
+                const res = yield n;
+                if (res) return res;
+            }
         }
     },
     [SyntaxKind.JSDocPublicTag]: function* (data) {
@@ -3293,9 +3421,11 @@ const yieldEachChildTable: Record<number, YieldEachChildFunction> = {
             const res = yield data.tagName;
             if (res) return res;
         }
-        for (const n of data.comment) {
-            const res = yield n;
-            if (res) return res;
+        if (data.comment) {
+            for (const n of data.comment) {
+                const res = yield n;
+                if (res) return res;
+            }
         }
     },
     [SyntaxKind.JSDocPrivateTag]: function* (data) {
@@ -3303,9 +3433,11 @@ const yieldEachChildTable: Record<number, YieldEachChildFunction> = {
             const res = yield data.tagName;
             if (res) return res;
         }
-        for (const n of data.comment) {
-            const res = yield n;
-            if (res) return res;
+        if (data.comment) {
+            for (const n of data.comment) {
+                const res = yield n;
+                if (res) return res;
+            }
         }
     },
     [SyntaxKind.JSDocProtectedTag]: function* (data) {
@@ -3313,9 +3445,11 @@ const yieldEachChildTable: Record<number, YieldEachChildFunction> = {
             const res = yield data.tagName;
             if (res) return res;
         }
-        for (const n of data.comment) {
-            const res = yield n;
-            if (res) return res;
+        if (data.comment) {
+            for (const n of data.comment) {
+                const res = yield n;
+                if (res) return res;
+            }
         }
     },
     [SyntaxKind.JSDocReadonlyTag]: function* (data) {
@@ -3323,9 +3457,11 @@ const yieldEachChildTable: Record<number, YieldEachChildFunction> = {
             const res = yield data.tagName;
             if (res) return res;
         }
-        for (const n of data.comment) {
-            const res = yield n;
-            if (res) return res;
+        if (data.comment) {
+            for (const n of data.comment) {
+                const res = yield n;
+                if (res) return res;
+            }
         }
     },
     [SyntaxKind.JSDocOverrideTag]: function* (data) {
@@ -3333,9 +3469,11 @@ const yieldEachChildTable: Record<number, YieldEachChildFunction> = {
             const res = yield data.tagName;
             if (res) return res;
         }
-        for (const n of data.comment) {
-            const res = yield n;
-            if (res) return res;
+        if (data.comment) {
+            for (const n of data.comment) {
+                const res = yield n;
+                if (res) return res;
+            }
         }
     },
     [SyntaxKind.JSDocDeprecatedTag]: function* (data) {
@@ -3343,9 +3481,11 @@ const yieldEachChildTable: Record<number, YieldEachChildFunction> = {
             const res = yield data.tagName;
             if (res) return res;
         }
-        for (const n of data.comment) {
-            const res = yield n;
-            if (res) return res;
+        if (data.comment) {
+            for (const n of data.comment) {
+                const res = yield n;
+                if (res) return res;
+            }
         }
     },
     [SyntaxKind.JSDocSeeTag]: function* (data) {
@@ -3357,9 +3497,11 @@ const yieldEachChildTable: Record<number, YieldEachChildFunction> = {
             const res = yield data.nameExpression;
             if (res) return res;
         }
-        for (const n of data.comment) {
-            const res = yield n;
-            if (res) return res;
+        if (data.comment) {
+            for (const n of data.comment) {
+                const res = yield n;
+                if (res) return res;
+            }
         }
     },
     [SyntaxKind.JSDocImplementsTag]: function* (data) {
@@ -3371,9 +3513,11 @@ const yieldEachChildTable: Record<number, YieldEachChildFunction> = {
             const res = yield data.className;
             if (res) return res;
         }
-        for (const n of data.comment) {
-            const res = yield n;
-            if (res) return res;
+        if (data.comment) {
+            for (const n of data.comment) {
+                const res = yield n;
+                if (res) return res;
+            }
         }
     },
     [SyntaxKind.JSDocAugmentsTag]: function* (data) {
@@ -3385,9 +3529,11 @@ const yieldEachChildTable: Record<number, YieldEachChildFunction> = {
             const res = yield data.className;
             if (res) return res;
         }
-        for (const n of data.comment) {
-            const res = yield n;
-            if (res) return res;
+        if (data.comment) {
+            for (const n of data.comment) {
+                const res = yield n;
+                if (res) return res;
+            }
         }
     },
     [SyntaxKind.JSDocSatisfiesTag]: function* (data) {
@@ -3399,9 +3545,11 @@ const yieldEachChildTable: Record<number, YieldEachChildFunction> = {
             const res = yield data.typeExpression;
             if (res) return res;
         }
-        for (const n of data.comment) {
-            const res = yield n;
-            if (res) return res;
+        if (data.comment) {
+            for (const n of data.comment) {
+                const res = yield n;
+                if (res) return res;
+            }
         }
     },
     [SyntaxKind.JSDocThrowsTag]: function* (data) {
@@ -3413,9 +3561,11 @@ const yieldEachChildTable: Record<number, YieldEachChildFunction> = {
             const res = yield data.typeExpression;
             if (res) return res;
         }
-        for (const n of data.comment) {
-            const res = yield n;
-            if (res) return res;
+        if (data.comment) {
+            for (const n of data.comment) {
+                const res = yield n;
+                if (res) return res;
+            }
         }
     },
     [SyntaxKind.JSDocThisTag]: function* (data) {
@@ -3427,9 +3577,11 @@ const yieldEachChildTable: Record<number, YieldEachChildFunction> = {
             const res = yield data.typeExpression;
             if (res) return res;
         }
-        for (const n of data.comment) {
-            const res = yield n;
-            if (res) return res;
+        if (data.comment) {
+            for (const n of data.comment) {
+                const res = yield n;
+                if (res) return res;
+            }
         }
     },
     [SyntaxKind.JSDocImportTag]: function* (data) {
@@ -3449,9 +3601,11 @@ const yieldEachChildTable: Record<number, YieldEachChildFunction> = {
             const res = yield data.attributes;
             if (res) return res;
         }
-        for (const n of data.comment) {
-            const res = yield n;
-            if (res) return res;
+        if (data.comment) {
+            for (const n of data.comment) {
+                const res = yield n;
+                if (res) return res;
+            }
         }
     },
     [SyntaxKind.JSDocCallbackTag]: function* (data) {
@@ -3467,9 +3621,11 @@ const yieldEachChildTable: Record<number, YieldEachChildFunction> = {
             const res = yield data.name;
             if (res) return res;
         }
-        for (const n of data.comment) {
-            const res = yield n;
-            if (res) return res;
+        if (data.comment) {
+            for (const n of data.comment) {
+                const res = yield n;
+                if (res) return res;
+            }
         }
     },
     [SyntaxKind.JSDocOverloadTag]: function* (data) {
@@ -3481,9 +3637,11 @@ const yieldEachChildTable: Record<number, YieldEachChildFunction> = {
             const res = yield data.typeExpression;
             if (res) return res;
         }
-        for (const n of data.comment) {
-            const res = yield n;
-            if (res) return res;
+        if (data.comment) {
+            for (const n of data.comment) {
+                const res = yield n;
+                if (res) return res;
+            }
         }
     },
     [SyntaxKind.JSDocTypedefTag]: function* (data) {
@@ -3499,15 +3657,19 @@ const yieldEachChildTable: Record<number, YieldEachChildFunction> = {
             const res = yield data.name;
             if (res) return res;
         }
-        for (const n of data.comment) {
-            const res = yield n;
-            if (res) return res;
+        if (data.comment) {
+            for (const n of data.comment) {
+                const res = yield n;
+                if (res) return res;
+            }
         }
     },
     [SyntaxKind.JSDocSignature]: function* (data) {
-        for (const n of data.typeParameters) {
-            const res = yield n;
-            if (res) return res;
+        if (data.typeParameters) {
+            for (const n of data.typeParameters) {
+                const res = yield n;
+                if (res) return res;
+            }
         }
         for (const n of data.parameters) {
             const res = yield n;
@@ -3525,9 +3687,11 @@ const yieldEachChildTable: Record<number, YieldEachChildFunction> = {
         }
     },
     [SyntaxKind.ModuleDeclaration]: function* (data) {
-        for (const n of data.modifiers) {
-            const res = yield n;
-            if (res) return res;
+        if (data.modifiers) {
+            for (const n of data.modifiers) {
+                const res = yield n;
+                if (res) return res;
+            }
         }
         if (data.name) {
             const res = yield data.name;
@@ -3543,9 +3707,11 @@ const yieldEachChildTable: Record<number, YieldEachChildFunction> = {
         }
     },
     [SyntaxKind.ImportEqualsDeclaration]: function* (data) {
-        for (const n of data.modifiers) {
-            const res = yield n;
-            if (res) return res;
+        if (data.modifiers) {
+            for (const n of data.modifiers) {
+                const res = yield n;
+                if (res) return res;
+            }
         }
         if (data.name) {
             const res = yield data.name;
@@ -3557,9 +3723,11 @@ const yieldEachChildTable: Record<number, YieldEachChildFunction> = {
         }
     },
     [SyntaxKind.ExportDeclaration]: function* (data) {
-        for (const n of data.modifiers) {
-            const res = yield n;
-            if (res) return res;
+        if (data.modifiers) {
+            for (const n of data.modifiers) {
+                const res = yield n;
+                if (res) return res;
+            }
         }
         if (data.exportClause) {
             const res = yield data.exportClause;
@@ -3587,9 +3755,11 @@ const yieldEachChildTable: Record<number, YieldEachChildFunction> = {
             const res = yield data.qualifier;
             if (res) return res;
         }
-        for (const n of data.typeArguments) {
-            const res = yield n;
-            if (res) return res;
+        if (data.typeArguments) {
+            for (const n of data.typeArguments) {
+                const res = yield n;
+                if (res) return res;
+            }
         }
     },
     [SyntaxKind.ImportClause]: function* (data) {
@@ -3631,9 +3801,11 @@ const yieldEachChildTable: Record<number, YieldEachChildFunction> = {
         }
     },
     [SyntaxKind.TypeParameter]: function* (data) {
-        for (const n of data.modifiers) {
-            const res = yield n;
-            if (res) return res;
+        if (data.modifiers) {
+            for (const n of data.modifiers) {
+                const res = yield n;
+                if (res) return res;
+            }
         }
         if (data.name) {
             const res = yield data.name;
@@ -3663,9 +3835,11 @@ const yieldEachChildTable: Record<number, YieldEachChildFunction> = {
         }
     },
     [SyntaxKind.JSDocTypeLiteral]: function* (data) {
-        for (const n of data.jsdocPropertyTags) {
-            const res = yield n;
-            if (res) return res;
+        if (data.jsdocPropertyTags) {
+            for (const n of data.jsdocPropertyTags) {
+                const res = yield n;
+                if (res) return res;
+            }
         }
     },
     [SyntaxKind.ForInStatement]: function* (data) {
