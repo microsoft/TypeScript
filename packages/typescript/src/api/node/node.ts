@@ -451,6 +451,7 @@ export function parseNodeHandle(handle: string): ParsedNodeHandle {
     if (secondDot === -1) {
         throw new Error(`Invalid node handle: ${handle}`);
     }
+
     return {
         index: parseInt(handle.slice(0, firstDot), 10),
         kind: parseInt(handle.slice(firstDot + 1, secondDot), 10) as SyntaxKind,
