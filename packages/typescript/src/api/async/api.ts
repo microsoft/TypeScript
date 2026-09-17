@@ -58,7 +58,6 @@ import {
     toPath,
 } from "../path.ts";
 import type {
-    FileNotifications,
     CompilerOptions,
     ConfiguredProjectId,
     CreateProgramOptions,
@@ -68,6 +67,7 @@ import type {
     DocumentIdentifier,
     DocumentPosition,
     EmitOutputResponse as ProtocolEmitOutputResponse,
+    FileNotifications,
     ImportAdderAction,
     InferredProjectId,
     IntrinsicTypeMethod,
@@ -157,7 +157,6 @@ export { formatDiagnostics, formatDiagnosticsWithColorAndContext } from "../diag
 export { documentURIToFileName, fileNameToDocumentURI } from "../path.ts";
 export { CheckFlags, CompletionItemKind, DiagnosticCategory, ElementFlags, EmitOnly, IndexKind, JsxEmit, ModifierFlags, ModuleKind, ModuleResolutionKind, NodeBuilderFlags, ObjectFlags, SignatureFlags, SignatureKind, SymbolFlags, TypeFlags, TypeFormatFlags, TypePredicateKind };
 export type {
-    FileNotifications,
     APIImportAdderAction as ImportAdderAction,
     APIOptions,
     AssertsIdentifierTypePredicate,
@@ -180,6 +179,7 @@ export type {
     EmitOutput,
     EmitOutputFile,
     EmitResult,
+    FileNotifications,
     FormatDiagnosticsHost,
     FreshableType,
     GenericType,
@@ -442,8 +442,7 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         const CreatePrograms extends LanguageServerSnapshotChanges["createPrograms"] = undefined,
         const OpenFiles extends LanguageServerSnapshotChanges["openFiles"] = undefined,
     >(
-        ...args: FromLSP extends true
-            ? [changes: SnapshotOperationParams<LanguageServerSnapshotChanges, CreatePrograms, OpenFiles>, baseSnapshot?: Snapshot]
+        ...args: FromLSP extends true ? [changes: SnapshotOperationParams<LanguageServerSnapshotChanges, CreatePrograms, OpenFiles>, baseSnapshot?: Snapshot]
             : [changes: never, baseSnapshot?: never]
     ): Promise<SnapshotForOperationResults<CreatePrograms, OpenFiles>>;
     getCurrentLanguageServerSnapshot(
