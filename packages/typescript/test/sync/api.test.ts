@@ -92,6 +92,7 @@ import {
     type Program,
     type Project,
     type ProjectId,
+    ScriptKind,
     type Signature,
     SignatureKind,
     type Snapshot,
@@ -344,6 +345,53 @@ describe("API", () => {
 
         const declarationFileOutput = api.transpileDeclarationFromFile({ uri: "file:///input.ts" });
         assert.equal(declarationFileOutput.outputText, "export declare const x: number;\n");
+    });
+
+    test("createSourceFile", () => {
+        using api = spawnAPI();
+        const sourceText = "export const element = <div />;";
+        const sourceFile = api.createSourceFile("/component.tsx", sourceText);
+        assert.equal(sourceFile.fileName, "/component.tsx");
+        assert.match(sourceFile.path, /\/component\.tsx$/);
+        assert.equal(sourceFile.text, sourceText);
+        assert.equal(sourceFile.scriptKind, ScriptKind.TSX);
+        assert.equal(sourceFile.statements.length, 1);
+        assert.strictEqual(sourceFile.statements[0].parent, sourceFile);
+
+        assert.equal((api.createSourceFile("", "")).scriptKind, ScriptKind.TS);
+        assert.equal((api.createSourceFile(".", "")).scriptKind, ScriptKind.TS);
+
+        const overridden = api.createSourceFile("/component.txt", sourceText, { scriptKind: ScriptKind.TSX });
+        assert.equal(overridden.scriptKind, ScriptKind.TSX);
+        assert.equal(overridden.statements.length, 1);
+
+        assert.throws(() => api.createSourceFile("/invalid.ts", "", { scriptKind: 999 as ScriptKind }), /invalid scriptKind 999/);
+    });
+
+    test("createSourceFile can be used with a compatible program", () => {
+        const sourceText = "export const element = <div />;";
+        using api = spawnAPI({
+            "/component.tsx": sourceText,
+        });
+        const sourceFile = api.createSourceFile("/component.tsx", sourceText);
+        const snapshot = api.createSnapshot({ openFiles: ["/component.tsx"] });
+        const project = snapshot.getProjects()[0];
+        assert.equal(project.emitter.printNode(sourceFile).trimEnd(), sourceText);
+        assert.ok(project.checker.getTypeAtLocation(sourceFile.statements[0]));
+        assert.equal(project.program.isSourceFileDefaultLibrary(sourceFile), false);
+        snapshot.dispose();
+    });
+
+    test("createSourceFileFromFile", () => {
+        using api = spawnAPI({
+            "/input.ts": "export const fromFile = 1;",
+        });
+        const fromFile = api.createSourceFileFromFile({ uri: "file:///input.ts" });
+        assert.equal(fromFile.fileName, "/input.ts");
+        assert.equal(fromFile.text, "export const fromFile = 1;");
+        assert.equal(fromFile.scriptKind, ScriptKind.TS);
+
+        assert.throws(() => api.createSourceFileFromFile("/missing.ts"), /could not read file "\/missing\.ts"/);
     });
 
     test("createProgram", () => {

@@ -262,6 +262,9 @@ func (d *astDecoder) decodeExtendedData_SourceFile(data uint32, childIndices []i
 	text := d.getString(textIdx)
 	fileName := d.getString(fileNameIdx)
 	path := d.getString(pathIdx)
+	if tspath.GetEncodedRootLength(fileName) == 0 || fileName != tspath.NormalizePath(fileName) {
+		return nil, fmt.Errorf("invalid source file name %q", fileName)
+	}
 
 	// Recover parse options from header.
 	parseOpts := readLE32(d.raw, HeaderOffsetParseOptions)

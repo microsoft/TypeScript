@@ -50,6 +50,7 @@ func TestGenerate(t *testing.T) {
 		`newLine?: NewLineKind | undefined;`,
 		`paths?: Record<string, string[]> | undefined;`,
 		`target?: ScriptTarget | undefined;`,
+		`scriptKind?: ScriptKind | undefined;`,
 		`/** InitializeResponse is returned by the initialize method. */
 export interface InitializeResponse`,
 		`/** UseCaseSensitiveFileNames indicates whether the host file system is case-sensitive. */
@@ -64,6 +65,8 @@ export interface CompilerOptions`,
 		`getTypeParametersOfType: APIMethod<GetTypePropertyParams, TypeResponse[] | null>;`,
 		`getTypeOfSymbol: APIMethod<GetTypeOfSymbolParams, TypeResponse>;`,
 		`getSourceFile: APIMethod<GetSourceFileParams, SourceFileResponse | null>;`,
+		`createSourceFile: APIMethod<CreateSourceFileParams, SourceFileResponse>;`,
+		`createSourceFileFromFile: APIMethod<CreateSourceFileFromFileParams, SourceFileResponse>;`,
 		`getConfigSourceFile: APIMethod<GetSourceFileParams, SourceFileResponse | null>;`,
 		`typeToTypeNode: APIMethod<TypeToTypeNodeParams, SourceFileResponse | null>;`,
 		`signatureToSignatureDeclaration: APIMethod<SignatureToSignatureDeclarationParams, SourceFileResponse | null>;`,
