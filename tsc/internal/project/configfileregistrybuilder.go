@@ -44,6 +44,7 @@ type configFileRegistryBuilder struct {
 func newConfigFileRegistryBuilder(
 	hasRelativePatternCapability bool,
 	fs *snapshotFSBuilder,
+	isOpenFile func(tspath.Path) bool,
 	oldConfigFileRegistry *ConfigFileRegistry,
 	extendedConfigCache *ExtendedConfigCache,
 	snapshotID uint64,
@@ -54,7 +55,7 @@ func newConfigFileRegistryBuilder(
 	return &configFileRegistryBuilder{
 		hasRelativePatternCapability: hasRelativePatternCapability,
 		fs:                           newSourceFS(false, fs, fs.toPath),
-		isOpenFile:                   fs.isOpenFile,
+		isOpenFile:                   isOpenFile,
 		base:                         oldConfigFileRegistry,
 		sessionOptions:               sessionOptions,
 		extendedConfigCache:          extendedConfigCache,

@@ -10,6 +10,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/json"
 	"github.com/microsoft/TypeScript/tsc/internal/locale"
 	"github.com/microsoft/TypeScript/tsc/internal/module"
+	"github.com/microsoft/TypeScript/tsc/internal/project"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 )
 
@@ -209,6 +210,7 @@ func (s *Session) resolveModuleResolutionSource(source *ModuleResolutionSource) 
 	if source == nil {
 		return nil, nil
 	}
+
 	if source.Spec != nil && source.Set != 0 {
 		return nil, fmt.Errorf("%w: moduleResolutions cannot contain both spec and set", ErrClientError)
 	}
@@ -230,6 +232,41 @@ func (s *Session) resolveModuleResolutionSource(source *ModuleResolutionSource) 
 		return nil, fmt.Errorf("%w: module resolution set %d not found", ErrClientError, source.Set)
 	}
 	return provider, nil
+}
+
+func (s *Session) moduleResolutionProvider(ctx context.Context, options *CreateProgramOptions) (module.ResolutionProvider, error) {
+	provided, err := s.resolveModuleResolutionSource(options.ModuleResolutions)
+	if err != nil {
+		return nil, err
+	}
+	if options.ResolveModuleNameCallback == "" {
+		if provided == nil {
+			return nil, nil
+		}
+		return provided, nil
+	}
+	if s.conn == nil {
+		return nil, fmt.Errorf("%w: API connection is not initialized", ErrClientError)
+	}
+	return &callbackModuleResolutionProvider{
+		identity:         s.nextModuleResolutionIdentity.Add(1),
+		base:             provided,
+		conn:             s.conn,
+		ctx:              ctx,
+		callback:         options.ResolveModuleNameCallback,
+		currentDirectory: s.currentDirectory(),
+	}, nil
+}
+
+func moduleResolutionError(snapshot *project.Snapshot) error {
+	for _, project := range snapshot.ProjectCollection.Projects() {
+		if project.Program != nil {
+			if err := project.Program.ModuleResolutionError(); err != nil {
+				return err
+			}
+		}
+	}
+	return nil
 }
 
 func (s *Session) handleCreateModuleResolutionSet(params *CreateModuleResolutionSetParams) (ModuleResolutionSetID, error) {

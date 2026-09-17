@@ -1,0 +1,68 @@
+//// [tests/cases/compiler/comparisonReverseMappedTypes.ts] ////
+
+=== comparisonReverseMappedTypes.ts ===
+declare function unbox<T>(value: { [K in keyof T]: { value: T[K] } }): T;
+>unbox : <T>(value: { [K in keyof T]: { value: T[K]; }; }) => T
+>value : { [K in keyof T]: { value: T[K]; }; }
+>value : T[K]
+
+declare const strings: { value: { value: string } };
+>strings : { value: { value: string; }; }
+>value : { value: string; }
+>value : string
+
+declare const numbers: { value: { value: number } };
+>numbers : { value: { value: number; }; }
+>value : { value: number; }
+>value : number
+
+declare const booleans: { value: { value: boolean } };
+>booleans : { value: { value: boolean; }; }
+>value : { value: boolean; }
+>value : boolean
+
+export const values = [unbox(numbers), unbox(strings), unbox(booleans)];
+>values : ({ value: string; } | { value: number; } | { value: boolean; })[]
+>[unbox(numbers), unbox(strings), unbox(booleans)] : ({ value: string; } | { value: number; } | { value: boolean; })[]
+>unbox(numbers) : { value: number; }
+>unbox : <T>(value: { [K in keyof T]: { value: T[K]; }; }) => T
+>numbers : { value: { value: number; }; }
+>unbox(strings) : { value: string; }
+>unbox : <T>(value: { [K in keyof T]: { value: T[K]; }; }) => T
+>strings : { value: { value: string; }; }
+>unbox(booleans) : { value: boolean; }
+>unbox : <T>(value: { [K in keyof T]: { value: T[K]; }; }) => T
+>booleans : { value: { value: boolean; }; }
+
+export const reversed = [unbox(booleans), unbox(strings), unbox(numbers)];
+>reversed : ({ value: string; } | { value: number; } | { value: boolean; })[]
+>[unbox(booleans), unbox(strings), unbox(numbers)] : ({ value: string; } | { value: number; } | { value: boolean; })[]
+>unbox(booleans) : { value: boolean; }
+>unbox : <T>(value: { [K in keyof T]: { value: T[K]; }; }) => T
+>booleans : { value: { value: boolean; }; }
+>unbox(strings) : { value: string; }
+>unbox : <T>(value: { [K in keyof T]: { value: T[K]; }; }) => T
+>strings : { value: { value: string; }; }
+>unbox(numbers) : { value: number; }
+>unbox : <T>(value: { [K in keyof T]: { value: T[K]; }; }) => T
+>numbers : { value: { value: number; }; }
+
+declare function identity<T>(value: { [K in keyof T]: T[K] }): T;
+>identity : <T>(value: { [K in keyof T]: T[K]; }) => T
+>value : { [K in keyof T]: T[K]; }
+
+declare const nested: { value: { value: string } };
+>nested : { value: { value: string; }; }
+>value : { value: string; }
+>value : string
+
+export const sameSource = [identity(nested), unbox(nested)];
+>sameSource : ({ value: string; } | { value: { value: string; }; })[]
+>[identity(nested), unbox(nested)] : ({ value: string; } | { value: { value: string; }; })[]
+>identity(nested) : { value: { value: string; }; }
+>identity : <T>(value: { [K in keyof T]: T[K]; }) => T
+>nested : { value: { value: string; }; }
+>unbox(nested) : { value: string; }
+>unbox : <T>(value: { [K in keyof T]: { value: T[K]; }; }) => T
+>nested : { value: { value: string; }; }
+

@@ -40,7 +40,7 @@ func TestModuleResolverUsesSnapshotFileSystem(t *testing.T) {
 	session := NewLSPSession(projectSession, nil)
 	defer session.Close()
 
-	snapshot, err := session.handleUpdateSnapshot(context.Background(), &UpdateSnapshotParams{})
+	snapshot, err := session.handleCreateSnapshot(context.Background(), &CreateSnapshotParams{})
 	assert.NilError(t, err)
 	resolver, err := session.handleCreateModuleResolver(&CreateModuleResolverParams{
 		Snapshot: snapshot.Snapshot,
@@ -77,7 +77,7 @@ func TestProvidedModuleResolutionSpecificityAndLifetime(t *testing.T) {
 	session := NewLSPSession(projectSession, nil)
 	defer session.Close()
 
-	snapshot, err := session.handleUpdateSnapshot(context.Background(), &UpdateSnapshotParams{})
+	snapshot, err := session.handleCreateSnapshot(context.Background(), &CreateSnapshotParams{})
 	assert.NilError(t, err)
 	esm := core.ModuleKindESNext
 	spec := ModuleResolutionSpec{
@@ -150,28 +150,33 @@ func TestCreateProgramUsesProvidedModuleResolutions(t *testing.T) {
 	session := NewLSPSession(projectSession, nil)
 	defer session.Close()
 
-	response, err := session.handleCreateProgram(context.Background(), &CreateProgramParams{
-		RootFiles: []DocumentIdentifier{{FileName: root}},
-		CreateProgramOptions: CreateProgramOptions{
-			CompilerOptions: core.CompilerOptions{
-				NoLib:            core.TSTrue,
-				Module:           core.ModuleKindNodeNext,
-				ModuleResolution: core.ModuleResolutionKindNodeNext,
-			},
-			ModuleResolutions: &ModuleResolutionSource{
-				Spec: &ModuleResolutionSpec{
-					Fallback: ModuleResolutionFallbackUnresolved,
-					Entries: []*ModuleResolutionEntry{
-						providedResolutionEntry("pkg", "", nil, provided),
+	response, err := session.handleCreateSnapshot(context.Background(), &CreateSnapshotParams{
+		SnapshotRequestChangesParams: SnapshotRequestChangesParams{
+			CreatePrograms: []*CreateSnapshotProgramParams{{
+				RootFiles: []DocumentIdentifier{{FileName: root}},
+				Options: CreateProgramOptions{
+					CompilerOptions: core.CompilerOptions{
+						NoLib:            core.TSTrue,
+						Module:           core.ModuleKindNodeNext,
+						ModuleResolution: core.ModuleResolutionKindNodeNext,
+					},
+					ModuleResolutions: &ModuleResolutionSource{
+						Spec: &ModuleResolutionSpec{
+							Fallback: ModuleResolutionFallbackUnresolved,
+							Entries: []*ModuleResolutionEntry{
+								providedResolutionEntry("pkg", "", nil, provided),
+							},
+						},
 					},
 				},
-			},
+			}},
 		},
 	})
 	assert.NilError(t, err)
+	projectID := ProjectID((*response.Operation.CreatedPrograms)[0])
 	fileNames, err := session.handleGetSourceFileNames(context.Background(), &GetSourceFileNamesParams{
 		Snapshot: response.Snapshot,
-		Project:  response.Project.Id,
+		Project:  projectID,
 	})
 	assert.NilError(t, err)
 	assert.DeepEqual(t, fileNames, []string{provided, root})
@@ -185,7 +190,7 @@ func TestProvidedModuleResolutionPreservesStaticIdentity(t *testing.T) {
 	session := NewLSPSession(projectSession, nil)
 	defer session.Close()
 
-	snapshot, err := session.handleUpdateSnapshot(context.Background(), &UpdateSnapshotParams{})
+	snapshot, err := session.handleCreateSnapshot(context.Background(), &CreateSnapshotParams{})
 	assert.NilError(t, err)
 	resolver, err := session.handleCreateModuleResolver(&CreateModuleResolverParams{
 		Snapshot:        snapshot.Snapshot,

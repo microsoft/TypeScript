@@ -270,8 +270,8 @@ func (w *fallbackWatcher) WatchDirectories(requests []WatchDirectoryRequest) ([]
 
 	watches = make([]Watch, 0, len(requests))
 	rollback := func() {
-		for i := len(watches) - 1; i >= 0; i-- {
-			_ = watches[i].Close()
+		for _, watch := range slices.Backward(watches) {
+			_ = watch.Close()
 		}
 	}
 	for _, request := range requests {
@@ -491,8 +491,8 @@ func (w *watcher) WatchDirectories(requests []WatchDirectoryRequest) ([]Watch, e
 	uniqueDirWatches := make([]*dirWatch, 0, len(requests))
 	seenDirWatches := make(map[*dirWatch]struct{}, len(requests))
 	rollback := func() {
-		for i := len(prepared) - 1; i >= 0; i-- {
-			p := prepared[i]
+		for _, p := range slices.Backward(prepared) {
+
 			p.dw.unwatch(p.id)
 			p.dw.unref(w)
 		}

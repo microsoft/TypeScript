@@ -128,5 +128,12 @@ func (s *StdioServer) Run(ctx context.Context) error {
 	}
 	session.SetConnection(conn)
 
-	return conn.Run(ctx)
+	return serverRunError(ctx, conn.Run(ctx))
+}
+
+func serverRunError(ctx context.Context, err error) error {
+	if ctx.Err() != nil {
+		return nil
+	}
+	return err
 }
