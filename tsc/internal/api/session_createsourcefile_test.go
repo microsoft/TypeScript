@@ -92,4 +92,13 @@ func TestCreateSourceFile(t *testing.T) {
 
 		assert.ErrorContains(t, err, `could not read file "/src/missing.ts"`)
 	})
+
+	t.Run("empty file name", func(t *testing.T) {
+		t.Parallel()
+		_, err := session.handleCreateSourceFile(context.Background(), &CreateSourceFileParams{})
+		assert.ErrorContains(t, err, "fileName must not be empty")
+
+		_, err = session.handleCreateSourceFileFromFile(context.Background(), &CreateSourceFileFromFileParams{})
+		assert.ErrorContains(t, err, "fileName must not be empty")
+	})
 }

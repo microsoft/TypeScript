@@ -387,7 +387,7 @@ describe("API", { concurrency }, () => {
         assert.equal(sourceFile.statements.length, 1);
         assert.strictEqual(sourceFile.statements[0].parent, sourceFile);
 
-        assert.equal((await api.createSourceFile("", "")).scriptKind, ScriptKind.TS);
+        await assert.rejects(api.createSourceFile("", ""), /fileName must not be empty/); // @sync: assert.throws(() => api.createSourceFile("", ""), /fileName must not be empty/);
         assert.equal((await api.createSourceFile(".", "")).scriptKind, ScriptKind.TS);
 
         const overridden = await api.createSourceFile("/component.txt", sourceText, { scriptKind: ScriptKind.TSX });
