@@ -338,17 +338,17 @@ describe("API", () => {
         assert.equal(sourceFile.statements.length, 2);
     });
 
-    test("createSourceFile returns standalone source files", () => {
-        using api = spawnAPI({
-            "/input.ts": "export const input = 1;",
-        });
+    test("createSourceFile can be used with a compatible program", () => {
         const sourceText = "export const element = <div />;";
-        const sourceFile = api.createSourceFile("component.tsx", sourceText);
-        const snapshot = api.updateSnapshot({ openFiles: ["/input.ts"] });
+        using api = spawnAPI({
+            "/component.tsx": sourceText,
+        });
+        const sourceFile = api.createSourceFile("/component.tsx", sourceText);
+        const snapshot = api.updateSnapshot({ openFiles: ["/component.tsx"] });
         const project = snapshot.getProjects()[0];
         assert.equal(project.emitter.printNode(sourceFile).trimEnd(), sourceText);
-        assert.throws(() => project.checker.getTypeAtLocation(sourceFile.statements[0]), /without program identity/);
-        assert.throws(() => project.program.isSourceFileDefaultLibrary(sourceFile), /does not belong to this program/);
+        assert.ok(project.checker.getTypeAtLocation(sourceFile.statements[0]));
+        assert.equal(project.program.isSourceFileDefaultLibrary(sourceFile), false);
         snapshot.dispose();
     });
 

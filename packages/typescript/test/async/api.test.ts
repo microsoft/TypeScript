@@ -349,17 +349,17 @@ describe("API", () => {
         assert.equal(sourceFile.statements.length, 2);
     });
 
-    test("createSourceFile returns standalone source files", async () => {
-        await using api = spawnAPI({
-            "/input.ts": "export const input = 1;",
-        });
+    test("createSourceFile can be used with a compatible program", async () => {
         const sourceText = "export const element = <div />;";
-        const sourceFile = await api.createSourceFile("component.tsx", sourceText);
-        const snapshot = await api.updateSnapshot({ openFiles: ["/input.ts"] });
+        await using api = spawnAPI({
+            "/component.tsx": sourceText,
+        });
+        const sourceFile = await api.createSourceFile("/component.tsx", sourceText);
+        const snapshot = await api.updateSnapshot({ openFiles: ["/component.tsx"] });
         const project = snapshot.getProjects()[0];
         assert.equal((await project.emitter.printNode(sourceFile)).trimEnd(), sourceText); // @sync: assert.equal(project.emitter.printNode(sourceFile).trimEnd(), sourceText);
-        await assert.rejects(project.checker.getTypeAtLocation(sourceFile.statements[0]), /without program identity/); // @sync: assert.throws(() => project.checker.getTypeAtLocation(sourceFile.statements[0]), /without program identity/);
-        await assert.rejects(project.program.isSourceFileDefaultLibrary(sourceFile), /does not belong to this program/); // @sync: assert.throws(() => project.program.isSourceFileDefaultLibrary(sourceFile), /does not belong to this program/);
+        assert.ok(await project.checker.getTypeAtLocation(sourceFile.statements[0])); // @sync: assert.ok(project.checker.getTypeAtLocation(sourceFile.statements[0]));
+        assert.equal(await project.program.isSourceFileDefaultLibrary(sourceFile), false); // @sync: assert.equal(project.program.isSourceFileDefaultLibrary(sourceFile), false);
         await snapshot.dispose();
     });
 

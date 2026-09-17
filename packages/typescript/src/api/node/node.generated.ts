@@ -232,9 +232,6 @@ export class RemoteNode extends RemoteNodeBase implements Node {
     }
     protected _sourceFile: SourceFileInfo;
     get id(): string {
-        if (!this.sourceFile.hasProgramIdentity) {
-            throw new Error("Cannot use a node without program identity with a program API");
-        }
         return `${this.index}.${this.kind}.${this.sourceFile.path}`;
     }
 

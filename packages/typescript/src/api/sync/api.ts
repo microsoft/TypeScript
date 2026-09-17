@@ -2321,7 +2321,7 @@ export class Program implements FormatDiagnosticsHost {
                 const parseOptionsKey = readParseOptionsKey(view);
 
                 // Create a new RemoteSourceFile and cache it (set returns existing if hash matches)
-                const sourceFile = new RemoteSourceFile(binaryData, owner.decoder, owner.client.getTimingCollector(), true) as unknown as SourceFile;
+                const sourceFile = new RemoteSourceFile(binaryData, owner.decoder, owner.client.getTimingCollector()) as unknown as SourceFile;
                 return owner.sourceFileCache.set(path, sourceFile, parseOptionsKey, contentHash, owner.snapshotId, owner.project.id);
             },
             function* (file: DocumentIdentifier): Generator<ProtocolRequest, SourceFile | undefined, ProtocolResponse["result"]> {
@@ -2351,7 +2351,7 @@ export class Program implements FormatDiagnosticsHost {
                 const parseOptionsKey = readParseOptionsKey(view);
 
                 // Create a new RemoteSourceFile and cache it (set returns existing if hash matches)
-                const sourceFile = new RemoteSourceFile(binaryData, owner.decoder, owner.client.getTimingCollector(), true) as unknown as SourceFile;
+                const sourceFile = new RemoteSourceFile(binaryData, owner.decoder, owner.client.getTimingCollector()) as unknown as SourceFile;
                 return owner.sourceFileCache.set(path, sourceFile, parseOptionsKey, contentHash, owner.snapshotId, owner.project.id);
             },
         );
@@ -2654,18 +2654,10 @@ export class Program implements FormatDiagnosticsHost {
             owner,
             "isSourceFileFromExternalLibrary",
             function (file: SourceFile): boolean {
-                const remote = file as unknown as RemoteSourceFile;
-                if (!(remote instanceof RemoteSourceFile) || !remote.hasProgramIdentity || owner.getSourceFile(file.path) !== file) {
-                    throw new Error("Source file does not belong to this program");
-                }
                 const metadata = owner.getSourceFileMetadataByPath(file.path);
                 return metadata?.isFromExternalLibrary ?? false;
             },
             function* (file: SourceFile): Generator<ProtocolRequest, boolean, ProtocolResponse["result"]> {
-                const remote = file as unknown as RemoteSourceFile;
-                if (!(remote instanceof RemoteSourceFile) || !remote.hasProgramIdentity || (yield* owner.getSourceFile.gen(file.path)) !== file) {
-                    throw new Error("Source file does not belong to this program");
-                }
                 const metadata = yield* owner.getSourceFileMetadataByPath.gen(file.path);
                 return metadata?.isFromExternalLibrary ?? false;
             },
@@ -2686,18 +2678,10 @@ export class Program implements FormatDiagnosticsHost {
             owner,
             "isSourceFileDefaultLibrary",
             function (file: SourceFile): boolean {
-                const remote = file as unknown as RemoteSourceFile;
-                if (!(remote instanceof RemoteSourceFile) || !remote.hasProgramIdentity || owner.getSourceFile(file.path) !== file) {
-                    throw new Error("Source file does not belong to this program");
-                }
                 const metadata = owner.getSourceFileMetadataByPath(file.path);
                 return metadata?.isDefaultLibrary ?? false;
             },
             function* (file: SourceFile): Generator<ProtocolRequest, boolean, ProtocolResponse["result"]> {
-                const remote = file as unknown as RemoteSourceFile;
-                if (!(remote instanceof RemoteSourceFile) || !remote.hasProgramIdentity || (yield* owner.getSourceFile.gen(file.path)) !== file) {
-                    throw new Error("Source file does not belong to this program");
-                }
                 const metadata = yield* owner.getSourceFileMetadataByPath.gen(file.path);
                 return metadata?.isDefaultLibrary ?? false;
             },

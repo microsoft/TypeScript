@@ -77,7 +77,6 @@ for (const [index, offset] of Object.values(sourceFileExtendedDataOffsets).entri
 const NO_STRUCTURED_DATA = 0xFFFFFFFF;
 
 export class RemoteSourceFile extends RemoteNode implements SourceFileInfo {
-    readonly hasProgramIdentity: boolean;
     readonly nodes: (RemoteNode | RemoteNodeList)[];
     readonly _offsetNodes: number;
     readonly _offsetStringTableOffsets: number;
@@ -100,7 +99,7 @@ export class RemoteSourceFile extends RemoteNode implements SourceFileInfo {
     private _cachedDiagnosticDirectives: readonly MappedDiagnosticDirective[] | undefined;
     private _diagnosticDirectivesRead = false;
 
-    constructor(data: Uint8Array, decoder: TextDecoder, timing?: TimingCollector, hasProgramIdentity = false) {
+    constructor(data: Uint8Array, decoder: TextDecoder, timing?: TimingCollector) {
         const view = new DataView(data.buffer, data.byteOffset, data.byteLength);
         const offsetNodes = view.getUint32(HEADER_OFFSET_NODES, true);
         super(view, 1, undefined!, undefined!, offsetNodes);
@@ -112,7 +111,6 @@ export class RemoteSourceFile extends RemoteNode implements SourceFileInfo {
         this._offsetStructuredData = view.getUint32(HEADER_OFFSET_STRUCTURED_DATA, true);
         this._decoder = decoder;
         this._timing = timing;
-        this.hasProgramIdentity = hasProgramIdentity;
         this.nodes = Array((view.byteLength - offsetNodes) / NODE_LEN);
         this.nodes[1] = this;
         // Every node slot is materializable on demand except the nil sentinel at

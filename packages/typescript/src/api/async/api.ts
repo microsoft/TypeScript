@@ -1256,7 +1256,7 @@ export class Program implements FormatDiagnosticsHost {
         const parseOptionsKey = readParseOptionsKey(view);
 
         // Create a new RemoteSourceFile and cache it (set returns existing if hash matches)
-        const sourceFile = new RemoteSourceFile(binaryData, this.decoder, this.client.getTimingCollector(), true) as unknown as SourceFile;
+        const sourceFile = new RemoteSourceFile(binaryData, this.decoder, this.client.getTimingCollector()) as unknown as SourceFile;
         return this.sourceFileCache.set(path, sourceFile, parseOptionsKey, contentHash, this.snapshotId, this.project.id);
     }
 
@@ -1382,10 +1382,6 @@ export class Program implements FormatDiagnosticsHost {
      * fetched lazily per file and cached on this `Program` instance.
      */
     async isSourceFileFromExternalLibrary(file: SourceFile): Promise<boolean> {
-        const remote = file as unknown as RemoteSourceFile;
-        if (!(remote instanceof RemoteSourceFile) || !remote.hasProgramIdentity || await this.getSourceFile(file.path) !== file) {
-            throw new Error("Source file does not belong to this program");
-        }
         const metadata = await this.getSourceFileMetadataByPath(file.path);
         return metadata?.isFromExternalLibrary ?? false;
     }
@@ -1396,10 +1392,6 @@ export class Program implements FormatDiagnosticsHost {
      * `Program` instance.
      */
     async isSourceFileDefaultLibrary(file: SourceFile): Promise<boolean> {
-        const remote = file as unknown as RemoteSourceFile;
-        if (!(remote instanceof RemoteSourceFile) || !remote.hasProgramIdentity || await this.getSourceFile(file.path) !== file) {
-            throw new Error("Source file does not belong to this program");
-        }
         const metadata = await this.getSourceFileMetadataByPath(file.path);
         return metadata?.isDefaultLibrary ?? false;
     }

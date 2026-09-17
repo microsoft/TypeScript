@@ -45,7 +45,6 @@ export interface TextDecoder {
 }
 
 export interface SourceFileInfo {
-    readonly hasProgramIdentity: boolean;
     readonly _offsetNodes: number;
     readonly _offsetStringTableOffsets: number;
     readonly _offsetStringTable: number;
