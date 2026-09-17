@@ -7,6 +7,7 @@ import { ModuleResolutionKind } from "#enums/moduleResolutionKind";
 import { NewLineKind } from "#enums/newLineKind";
 import { ScriptKind } from "#enums/scriptKind";
 import { ScriptTarget } from "#enums/scriptTarget";
+import type { Path } from "../ast/index.ts";
 
 export { JsxEmit } from "#enums/jsxEmit";
 export { ModuleDetectionKind } from "#enums/moduleDetectionKind";
@@ -22,9 +23,9 @@ export interface APIMethodInfo {
     release: APIMethod<ReleaseParams, void>;
     batchRequests: APIMethod<BatchRequestsParams, BatchRequestsResponse>;
     initialize: APIMethod<null, InitializeResponse>;
-    updateSnapshot: APIMethod<UpdateSnapshotParams, UpdateSnapshotResponse>;
-    updateTemporarySnapshot: APIMethod<UpdateTemporarySnapshotParams, UpdateSnapshotResponse>;
-    createProgram: APIMethod<CreateProgramParams, CreateProgramResponse>;
+    createSnapshot: APIMethod<CreateSnapshotParams, CreateSnapshotResponse>;
+    updateSnapshot: APIMethod<UpdateSnapshotParams, CreateSnapshotResponse>;
+    getCurrentLanguageServerSnapshot: APIMethod<GetCurrentLanguageServerSnapshotParams, CreateSnapshotResponse>;
     parseCommandLine: APIMethod<ParseCommandLineParams, ConfigFileResponse>;
     readConfigFile: APIMethod<ReadConfigFileParams, ReadConfigFileResponse>;
     parseJsonConfigFileContent: APIMethod<ParseJsonConfigFileContentParams, ConfigFileResponse>;
@@ -180,6 +181,13 @@ export interface APIMethodInfo {
 
 export type DocumentIdentifier = string | { uri: string; };
 
+export type EnsurePrograms = true | readonly ProjectId[];
+
+export type InferredProjectId = string & { __inferredProjectIdBrand: any; };
+export type ConfiguredProjectId = Path & { __configuredProjectIdBrand: any; };
+export type SyntheticProjectId = string & { __syntheticProjectIdBrand: any; };
+export type ProjectId = InferredProjectId | ConfiguredProjectId | SyntheticProjectId;
+
 /** ReleaseParams are the parameters for the release method. */
 export interface ReleaseParams {
     snapshot: number;
@@ -204,86 +212,41 @@ export interface InitializeResponse {
     currentDirectory: string;
 }
 
-/**
- * UpdateSnapshotParams are the parameters for creating a new snapshot.
- * All fields are optional. With no fields set, the server adopts the latest LSP state.
- */
-export interface UpdateSnapshotParams {
-    /**
-     * Snapshot, when set, requires this to be the latest active snapshot and layers
-     * FileSystem over that snapshot's filesystem. Used by Snapshot.update.
-     */
-    snapshot?: number | undefined;
-    /**
-     * OpenProjects lists tsconfig.json files to open/load in the new snapshot.
-     * Opens are ref-counted and persist across snapshots until closed.
-     */
-    openProjects?: readonly DocumentIdentifier[] | undefined;
-    /**
-     * CloseProjects lists tsconfig.json files to release in the new snapshot.
-     * A project is only unloaded once every API client that opened it closes it.
-     */
-    closeProjects?: readonly DocumentIdentifier[] | undefined;
-    /** FileChanges describes file system changes since the last snapshot. */
-    fileChanges?: APIFileChanges | undefined;
+/** CreateSnapshotParams are the parameters for creating a new independent snapshot. */
+export interface CreateSnapshotParams extends SnapshotRequestChangesParams {
+    /** FileNotifications describes host file system changes to invalidate while creating the snapshot. */
+    fileNotifications?: FileNotifications | undefined;
     /**
      * FileSystem supplies file contents and directory listings for the new snapshot.
      * A full filesystem is canonical and total. A filesystem layer is checked
-     * before falling back to the host filesystem.
+     * before falling back to the base snapshot or host filesystem.
      */
     fileSystem?: RequestFileSystem | undefined;
-    /**
-     * OpenFiles lists files to keep open for the API client, mirroring LSP's
-     * textDocument/didOpen. For each file, ancestor directories are searched for a
-     * tsconfig that contains it; if found, that configured project is loaded and
-     * becomes the file's default project. Otherwise the file is loaded into the
-     * inferred project (e.g. a node_modules d.ts not in any project's import graph).
-     * Opens persist across snapshots until the file is closed.
-     */
-    openFiles?: readonly DocumentIdentifier[] | undefined;
-    /**
-     * CloseFiles lists files to release in the new snapshot. A file is only fully
-     * closed once every API client that opened it closes it.
-     */
-    closeFiles?: readonly DocumentIdentifier[] | undefined;
 }
 
-/** UpdateSnapshotResponse is returned by updateSnapshot. */
-export interface UpdateSnapshotResponse {
+/** CreateSnapshotResponse is returned by createSnapshot. */
+export interface CreateSnapshotResponse {
     /** Snapshot is the handle for the newly created snapshot. */
     snapshot: number;
-    /** Projects is the list of projects in the snapshot. */
-    projects: ProjectResponse[];
     /**
-     * Changes describes source file differences from the previous snapshot.
-     * Nil for the first snapshot in a session.
+     * Projects contains all projects when no response base was supplied, or only
+     * projects added or replaced relative to that base.
      */
+    projects: ProjectResponse[];
+    /** Changes describes source file differences from the response base. */
     changes?: SnapshotChanges | undefined;
+    /** Operation describes results correlated with the request that produced the snapshot. */
+    operation: SnapshotOperationResponse;
 }
 
-/**
- * UpdateTemporarySnapshotParams are the parameters for creating a temporary
- * snapshot that overrides a single file's content.
- */
-export interface UpdateTemporarySnapshotParams {
-    /** Snapshot is the current client snapshot on which to layer the temporary update. */
+export interface UpdateSnapshotParams {
     snapshot: number;
-    /** File identifies the file whose content is temporarily overridden. */
-    file: DocumentIdentifier;
-    /** NewText is the temporary content for the file. */
-    newText: string;
+    changes?: CreateSnapshotParams | undefined;
 }
 
-export interface CreateProgramParams {
-    rootFiles: readonly DocumentIdentifier[] | null;
-    createProgramOptions: CreateProgramOptions;
-    oldProgram?: CreateProgramOldProgramParams | undefined;
-    fileChanges?: APIFileChanges | undefined;
-}
-
-export interface CreateProgramResponse {
-    snapshot: number;
-    project: ProjectResponse | null;
+export interface GetCurrentLanguageServerSnapshotParams {
+    baseSnapshot?: number | undefined;
+    changes?: LanguageServerSnapshotChanges | undefined;
 }
 
 export interface ParseCommandLineParams {
@@ -361,9 +324,10 @@ export interface GetDefaultProjectForFileParams {
 }
 
 export interface ProjectResponse {
-    id: string;
+    id: ProjectId;
     configFileName: string;
     currentDirectory: string;
+    dirty: boolean;
     parsedCommandLine: ConfigFileResponse;
     /** @deprecated Use parsedCommandLine.fileNames. */
     rootFiles: string[];
@@ -373,7 +337,7 @@ export interface ProjectResponse {
 
 export interface GetSymbolAtPositionParams {
     snapshot: number;
-    project: string;
+    project: ProjectId;
     file: DocumentIdentifier;
     position: number;
 }
@@ -384,7 +348,7 @@ export interface SymbolResponse {
      * Project is the project in which the symbol was first observed. It is the
      * default project for follow-up lookups whose results can vary by project.
      */
-    project: string;
+    project: ProjectId;
     name: string;
     flags: number;
     checkFlags: number;
@@ -396,38 +360,38 @@ export interface SymbolResponse {
 
 export interface GetSymbolsAtPositionsParams {
     snapshot: number;
-    project: string;
+    project: ProjectId;
     file: DocumentIdentifier;
     positions: readonly number[] | null;
 }
 
 export interface GetSymbolAtLocationParams {
     snapshot: number;
-    project: string;
+    project: ProjectId;
     location: string;
 }
 
 export interface GetSymbolsAtLocationsParams {
     snapshot: number;
-    project: string;
+    project: ProjectId;
     locations: readonly string[] | null;
 }
 
 export interface GetSymbolOfSourceFileParams {
     snapshot: number;
-    project: string;
+    project: ProjectId;
     file: DocumentIdentifier;
 }
 
 export interface GetSymbolsOfSourceFilesParams {
     snapshot: number;
-    project: string;
+    project: ProjectId;
     files: readonly DocumentIdentifier[] | null;
 }
 
 export interface GetTypeOfSymbolParams {
     snapshot: number;
-    project: string;
+    project: ProjectId;
     symbol: number;
 }
 
@@ -481,19 +445,19 @@ export interface TypeResponse {
 
 export interface GetTypesOfSymbolsParams {
     snapshot: number;
-    project: string;
+    project: ProjectId;
     symbols: readonly number[] | null;
 }
 
 export interface GetSourceFileParams {
     snapshot: number;
-    project: string;
+    project: ProjectId;
     file: DocumentIdentifier;
 }
 
 export interface GetSourceFileNamesParams {
     snapshot: number;
-    project: string;
+    project: ProjectId;
 }
 
 /** SourceFileMetadata carries program-stored metadata about a single source file. */
@@ -507,21 +471,21 @@ export interface SourceFileMetadata {
 
 export interface GetModeForUsageLocationParams {
     snapshot: number;
-    project: string;
+    project: ProjectId;
     file: DocumentIdentifier;
     usage: string;
 }
 
 export interface GetModeForResolutionAtIndexParams {
     snapshot: number;
-    project: string;
+    project: ProjectId;
     file: DocumentIdentifier;
     index: number;
 }
 
 export interface GetResolvedModuleParams {
     snapshot: number;
-    project: string;
+    project: ProjectId;
     file: DocumentIdentifier;
     moduleName: string;
     mode: ModuleKind;
@@ -540,14 +504,14 @@ export interface ResolvedModule {
 
 export interface GetResolvedModuleFromModuleSpecifierParams {
     snapshot: number;
-    project: string;
+    project: ProjectId;
     moduleSpecifier: string;
     sourceFile?: DocumentIdentifier | undefined;
 }
 
 export interface GetResolvedTypeReferenceDirectiveParams {
     snapshot: number;
-    project: string;
+    project: ProjectId;
     file: DocumentIdentifier;
     typeDirectiveName: string;
     mode: ModuleKind;
@@ -563,7 +527,7 @@ export interface ResolvedTypeReferenceDirective {
 
 export interface GetResolvedTypeReferenceDirectiveFromReferenceParams {
     snapshot: number;
-    project: string;
+    project: ProjectId;
     sourceFile: DocumentIdentifier;
     typeDirectiveName: string;
     resolutionMode: ModuleKind;
@@ -572,12 +536,12 @@ export interface GetResolvedTypeReferenceDirectiveFromReferenceParams {
 /** GetProjectDiagnosticsParams are parameters for project-wide diagnostic methods. */
 export interface GetProjectDiagnosticsParams {
     snapshot: number;
-    project: string;
+    project: ProjectId;
 }
 
 export interface ResolveNameParams {
     snapshot: number;
-    project: string;
+    project: ProjectId;
     name: string;
     /** Optional: node handle for location context */
     location?: string | undefined;
@@ -597,7 +561,7 @@ export interface ResolveNameParams {
  */
 export interface GetSymbolsInScopeParams {
     snapshot: number;
-    project: string;
+    project: ProjectId;
     /** Optional: node handle for location context */
     location?: string | undefined;
     /** Optional: file for location context (alternative to Location) */
@@ -610,7 +574,7 @@ export interface GetSymbolsInScopeParams {
 
 export interface GetSignaturesOfTypeParams {
     snapshot: number;
-    project: string;
+    project: ProjectId;
     type: number;
     kind: number;
 }
@@ -627,32 +591,32 @@ export interface SignatureResponse {
 
 export interface GetResolvedSignatureParams {
     snapshot: number;
-    project: string;
+    project: ProjectId;
     location: string;
 }
 
 export interface GetTypeAtLocationParams {
     snapshot: number;
-    project: string;
+    project: ProjectId;
     location: string;
 }
 
 export interface GetTypeAtLocationsParams {
     snapshot: number;
-    project: string;
+    project: ProjectId;
     locations: readonly string[] | null;
 }
 
 export interface GetTypeAtPositionParams {
     snapshot: number;
-    project: string;
+    project: ProjectId;
     file: DocumentIdentifier;
     position: number;
 }
 
 export interface GetTypesAtPositionsParams {
     snapshot: number;
-    project: string;
+    project: ProjectId;
     file: DocumentIdentifier;
     positions: readonly number[] | null;
 }
@@ -660,34 +624,34 @@ export interface GetTypesAtPositionsParams {
 /** GetSymbolPropertyParams is used for all symbol sub-property endpoints. */
 export interface GetSymbolPropertyParams {
     snapshot: number;
-    project: string;
+    project: ProjectId;
     objectId: number;
 }
 
 /** GetTypePropertyParams is used for all type sub-property endpoints. */
 export interface GetTypePropertyParams {
     snapshot: number;
-    project: string;
+    project: ProjectId;
     objectId: number;
 }
 
 /** GetSignaturePropertyParams is used for all signature sub-property endpoints. */
 export interface GetSignaturePropertyParams {
     snapshot: number;
-    project: string;
+    project: ProjectId;
     objectId: number;
 }
 
 /** GetContextualTypeParams returns the contextual type for a node. */
 export interface GetContextualTypeParams {
     snapshot: number;
-    project: string;
+    project: ProjectId;
     location: string;
 }
 
 export interface GetContextualTypeForArgumentParams {
     snapshot: number;
-    project: string;
+    project: ProjectId;
     location: string;
     index: number;
 }
@@ -695,35 +659,35 @@ export interface GetContextualTypeForArgumentParams {
 /** CheckerTypeParams are parameters for checker methods that operate on a type. */
 export interface CheckerTypeParams {
     snapshot: number;
-    project: string;
+    project: ProjectId;
     type: number;
 }
 
 /** GetBaseTypeOfLiteralTypeParams returns the base type of a literal type. */
 export interface GetBaseTypeOfLiteralTypeParams {
     snapshot: number;
-    project: string;
+    project: ProjectId;
     type: number;
 }
 
 /** GetTypeFromTypeNodeParams are the parameters for the getTypeFromTypeNode method. */
 export interface GetTypeFromTypeNodeParams {
     snapshot: number;
-    project: string;
+    project: ProjectId;
     location: string;
 }
 
 /** GetWidenedTypeParams are the parameters for the getWidenedType method. */
 export interface GetWidenedTypeParams {
     snapshot: number;
-    project: string;
+    project: ProjectId;
     type: number;
 }
 
 /** GetParameterTypeParams are the parameters for the getParameterType method. */
 export interface GetParameterTypeParams {
     snapshot: number;
-    project: string;
+    project: ProjectId;
     signature: number;
     index: number;
 }
@@ -731,14 +695,14 @@ export interface GetParameterTypeParams {
 /** IsArrayLikeTypeParams checks whether a type is array-like. */
 export interface IsArrayLikeTypeParams {
     snapshot: number;
-    project: string;
+    project: ProjectId;
     type: number;
 }
 
 /** IsTypeAssignableToParams checks assignability between two types. */
 export interface IsTypeAssignableToParams {
     snapshot: number;
-    project: string;
+    project: ProjectId;
     source: number;
     target: number;
 }
@@ -746,7 +710,7 @@ export interface IsTypeAssignableToParams {
 /** GetTypeOfSymbolAtLocationParams returns the narrowed type of a symbol at a specific location. */
 export interface GetTypeOfSymbolAtLocationParams {
     snapshot: number;
-    project: string;
+    project: ProjectId;
     symbol: number;
     location: string;
 }
@@ -754,7 +718,7 @@ export interface GetTypeOfSymbolAtLocationParams {
 /** TypeToTypeNodeParams are the parameters for the typeToTypeNode method. */
 export interface TypeToTypeNodeParams {
     snapshot: number;
-    project: string;
+    project: ProjectId;
     type: number;
     location?: string | undefined;
     flags?: number | undefined;
@@ -763,7 +727,7 @@ export interface TypeToTypeNodeParams {
 /** SignatureToSignatureDeclarationParams are the parameters for the signatureToSignatureDeclaration method. */
 export interface SignatureToSignatureDeclarationParams {
     snapshot: number;
-    project: string;
+    project: ProjectId;
     signature: number;
     kind: number;
     location?: string | undefined;
@@ -773,7 +737,7 @@ export interface SignatureToSignatureDeclarationParams {
 /** CheckerSignatureParams are parameters for checker methods that operate on a signature. */
 export interface CheckerSignatureParams {
     snapshot: number;
-    project: string;
+    project: ProjectId;
     signature: number;
 }
 
@@ -788,14 +752,14 @@ export interface TypePredicateResponse {
 /** GetPropertyOfTypeParams are parameters for getPropertyOfType (a named property of a type). */
 export interface GetPropertyOfTypeParams {
     snapshot: number;
-    project: string;
+    project: ProjectId;
     type: number;
     name: string;
 }
 
 export interface GetIndexInfoOfTypeParams {
     snapshot: number;
-    project: string;
+    project: ProjectId;
     type: number;
     kind: number;
 }
@@ -810,7 +774,7 @@ export interface IndexInfoResponse {
 
 export interface GetImportAdderEditsParams {
     snapshot: number;
-    project: string;
+    project: ProjectId;
     file: DocumentIdentifier;
     actions: readonly ImportAdderAction[] | null;
 }
@@ -824,7 +788,7 @@ export interface TextEdit {
 /** CheckerNodeParams are parameters for checker methods that operate on a node location. */
 export interface CheckerNodeParams {
     snapshot: number;
-    project: string;
+    project: ProjectId;
     location: string;
 }
 
@@ -836,14 +800,14 @@ export interface ConstantValueResponse {
 /** CheckerSymbolParams are parameters for checker methods that operate on a symbol. */
 export interface CheckerSymbolParams {
     snapshot: number;
-    project: string;
+    project: ProjectId;
     symbol: number;
 }
 
 /** GetMemberInModuleExportsParams are parameters for getMemberInModuleExports. */
 export interface GetMemberInModuleExportsParams {
     snapshot: number;
-    project: string;
+    project: ProjectId;
     symbol: number;
     name: string;
 }
@@ -860,7 +824,7 @@ export interface JSDocTagInfo {
 /** GetReferencesToSymbolInFileParams are the parameters for the getReferencesToSymbolInFile method. */
 export interface GetReferencesToSymbolInFileParams {
     snapshot: number;
-    project: string;
+    project: ProjectId;
     file: DocumentIdentifier;
     symbol: number;
 }
@@ -868,7 +832,7 @@ export interface GetReferencesToSymbolInFileParams {
 /** GetReferencedSymbolsForNodeParams are the parameters for the getReferencedSymbolsForNode method. */
 export interface GetReferencedSymbolsForNodeParams {
     snapshot: number;
-    project: string;
+    project: ProjectId;
     node: string;
     position: number;
 }
@@ -883,7 +847,7 @@ export interface ReferencedSymbolEntry {
 /** GetSignatureUsagesParams are the parameters for the getSignatureUsages method. */
 export interface GetSignatureUsagesParams {
     snapshot: number;
-    project: string;
+    project: ProjectId;
     signatureDecl: string;
 }
 
@@ -896,7 +860,7 @@ export interface SignatureUsageResponse {
 /** GetCompletionsAtPositionParams are the parameters for the getCompletionsAtPosition method. */
 export interface GetCompletionsAtPositionParams {
     snapshot: number;
-    project: string;
+    project: ProjectId;
     file: DocumentIdentifier;
     position: number;
     triggerCharacter?: string | undefined;
@@ -912,7 +876,7 @@ export interface CompletionInfoResponse {
 /** GetDiagnosticsParams are parameters for per-file diagnostic methods. */
 export interface GetDiagnosticsParams {
     snapshot: number;
-    project: string;
+    project: ProjectId;
     files?: readonly DocumentIdentifier[] | undefined;
 }
 
@@ -960,7 +924,7 @@ export interface PrintNodeParams {
 /** FormatNodeForInsertionParams are the parameters for the formatNodeForInsertion method. */
 export interface FormatNodeForInsertionParams {
     snapshot: number;
-    project: string;
+    project: ProjectId;
     /** target file where the node will be inserted */
     file: DocumentIdentifier;
     /** UTF-16 code-unit offset of the insertion position in the target file */
@@ -971,7 +935,7 @@ export interface FormatNodeForInsertionParams {
 
 export interface EmitParams {
     snapshot: number;
-    project: string;
+    project: ProjectId;
     emitOnly?: number | undefined;
 }
 
@@ -994,14 +958,14 @@ export interface EmitOutputResponse {
 
 export interface SelectedFilesEmitParams {
     snapshot: number;
-    project: string;
+    project: ProjectId;
     files: readonly DocumentIdentifier[] | null;
 }
 
 /** GetIntrinsicTypeParams is used for intrinsic type getters (anyType, stringType, etc.). */
 export interface GetIntrinsicTypeParams {
     snapshot: number;
-    project: string;
+    project: ProjectId;
 }
 
 /**
@@ -1035,7 +999,7 @@ export interface ProfileResult {
 export interface BatchRequest {
     method:
         | "batchRequests"
-        | "createProgram"
+        | "createSnapshot"
         | "createSourceFile"
         | "createSourceFileFromFile"
         | "emit"
@@ -1065,6 +1029,7 @@ export interface BatchRequest {
         | "getConstraintOfTypeParameter"
         | "getContextualType"
         | "getContextualTypeForArgument"
+        | "getCurrentLanguageServerSnapshot"
         | "getDeclarationDiagnostics"
         | "getDeclarationEmit"
         | "getDeclaredTypeOfSymbol"
@@ -1189,15 +1154,14 @@ export interface BatchRequest {
         | "transpileModuleFromFile"
         | "typeToString"
         | "typeToTypeNode"
-        | "updateSnapshot"
-        | "updateTemporarySnapshot";
+        | "updateSnapshot";
     params?: unknown | undefined;
 }
 
 export interface BatchResponse {
     method:
         | "batchRequests"
-        | "createProgram"
+        | "createSnapshot"
         | "createSourceFile"
         | "createSourceFileFromFile"
         | "emit"
@@ -1227,6 +1191,7 @@ export interface BatchResponse {
         | "getConstraintOfTypeParameter"
         | "getContextualType"
         | "getContextualTypeForArgument"
+        | "getCurrentLanguageServerSnapshot"
         | "getDeclarationDiagnostics"
         | "getDeclarationEmit"
         | "getDeclaredTypeOfSymbol"
@@ -1351,18 +1316,56 @@ export interface BatchResponse {
         | "transpileModuleFromFile"
         | "typeToString"
         | "typeToTypeNode"
-        | "updateSnapshot"
-        | "updateTemporarySnapshot";
+        | "updateSnapshot";
     result: unknown;
     error?: string | undefined;
 }
 
 /**
- * APIFileChanges describes file changes to apply when updating a snapshot.
- * Either InvalidateAll is true (discard all caches) or Changed/Created/Deleted
- * list individual documents.
+ * SnapshotRequestChangesParams describes project, file, and program changes to apply
+ * while creating or updating a snapshot.
  */
-export interface APIFileChanges {
+export interface SnapshotRequestChangesParams {
+    /** OpenProjects lists tsconfig.json files to open/load in the new snapshot. */
+    openProjects?: readonly DocumentIdentifier[] | undefined;
+    /**
+     * CloseProjects lists tsconfig.json files to release in the new snapshot.
+     * A project is only unloaded once every API client that opened it closes it.
+     */
+    closeProjects?: readonly DocumentIdentifier[] | undefined;
+    /**
+     * OpenFiles lists files to open in the new snapshot, mirroring LSP's
+     * textDocument/didOpen. For each file, ancestor directories are searched for a
+     * tsconfig that contains it; if found, that configured project is loaded and
+     * becomes the file's default project. Otherwise the file is loaded into the
+     * inferred project (e.g. a node_modules d.ts not in any project's import graph).
+     */
+    openFiles?: readonly DocumentIdentifier[] | undefined;
+    /**
+     * CloseFiles lists files to release in the new snapshot. A file is only fully
+     * closed once every API client that opened it closes it.
+     */
+    closeFiles?: readonly DocumentIdentifier[] | undefined;
+    /** CreatePrograms describes synthetic programs to create in the snapshot. */
+    createPrograms?: readonly CreateSnapshotProgramParams[] | undefined;
+    /** ReconfigurePrograms replaces the configuration of existing synthetic programs. */
+    reconfigurePrograms?: readonly ReconfigureSnapshotProgramParams[] | undefined;
+    /** RemovePrograms lists synthetic project handles to remove from the snapshot. */
+    removePrograms?: readonly SyntheticProjectId[] | undefined;
+    /**
+     * EnsurePrograms identifies projects whose programs should be updated if dirty,
+     * or all contained projects when true.
+     */
+    ensurePrograms?: EnsurePrograms | undefined;
+}
+
+/**
+ * FileNotifications describes changes to files that have occurred on the host
+ * file system, used to notify the session to reload cached files and reevaluate
+ * tsconfig.json `include` globs. Either InvalidateAll is true (discard all caches)
+ * or Changed/Created/Deleted list individual documents.
+ */
+export interface FileNotifications {
     invalidateAll?: boolean | undefined;
     changed?: DocumentIdentifier[] | undefined;
     created?: DocumentIdentifier[] | undefined;
@@ -1389,8 +1392,8 @@ export interface RequestFileSystem {
 }
 
 /**
- * SnapshotChanges describes what changed between the previous latest snapshot
- * and the newly created snapshot. Changes are reported per-project so clients
+ * SnapshotChanges describes what changed between a response base and a new
+ * snapshot. Changes are reported per-project so clients
  * can track cache refs at the (snapshot, project) level.
  */
 export interface SnapshotChanges {
@@ -1403,18 +1406,19 @@ export interface SnapshotChanges {
      * RemovedProjects lists project handles that were present in the previous
      * snapshot but absent from the new one.
      */
-    removedProjects?: string[] | undefined;
+    removedProjects?: ProjectId[] | undefined;
 }
 
-export interface CreateProgramOptions {
-    compilerOptions: CompilerOptions;
-    projectReferences?: ProjectReference[] | undefined;
-    configFileParsingDiagnostics?: DiagnosticResponse[] | undefined;
+export interface SnapshotOperationResponse {
+    createdPrograms?: SyntheticProjectId[] | undefined;
+    openedFiles?: OpenedFileOperationResult[] | undefined;
 }
 
-export interface CreateProgramOldProgramParams {
-    snapshot?: number | undefined;
-    project?: string | undefined;
+/**
+ * LanguageServerSnapshotChanges describes API-driven changes to adopt into the
+ * language server's canonical state.
+ */
+export interface LanguageServerSnapshotChanges extends SnapshotRequestChangesParams {
 }
 
 /** CompilerOptions contains the compiler options exposed by the API. */
@@ -1590,6 +1594,17 @@ export interface EmitOutputFile {
     sourceFileName?: string | undefined;
 }
 
+export interface CreateSnapshotProgramParams {
+    rootFiles: readonly DocumentIdentifier[] | null;
+    options: CreateProgramOptions;
+}
+
+export interface ReconfigureSnapshotProgramParams {
+    id: SyntheticProjectId;
+    rootFiles: readonly DocumentIdentifier[] | null;
+    options: CreateProgramOptions;
+}
+
 /**
  * RequestDirectoryEntries is a cached directory listing. Entry names are
  * relative to the directory, matching vfs.GetAccessibleEntries.
@@ -1621,8 +1636,18 @@ export interface ProjectFileChanges {
     deletedFiles?: string[] | undefined;
 }
 
+export interface OpenedFileOperationResult {
+    project: ProjectId;
+}
+
 /** CompletionEntryLabelDetailsResponse holds additional label display text for a completion entry. */
 export interface CompletionEntryLabelDetailsResponse {
     detail?: string | undefined;
     description?: string | undefined;
+}
+
+export interface CreateProgramOptions {
+    compilerOptions: CompilerOptions;
+    projectReferences?: ProjectReference[] | undefined;
+    configFileParsingDiagnostics?: DiagnosticResponse[] | undefined;
 }

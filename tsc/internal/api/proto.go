@@ -34,16 +34,21 @@ var (
 type Method string
 
 type (
-	SnapshotID  uint64
-	ProjectID   string
-	SymbolID    uint64
-	TypeID      uint32
-	SignatureID uint64
-	NodeHandle  string
+	SnapshotID         uint64
+	ProjectID          string
+	SyntheticProjectID string
+	SymbolID           uint64
+	TypeID             uint32
+	SignatureID        uint64
+	NodeHandle         string
 )
 
 func ProjectHandle(p *project.Project) ProjectID {
 	return ProjectID(p.ID())
+}
+
+func SyntheticProjectHandle(p *project.Project) SyntheticProjectID {
+	return SyntheticProjectID(p.ID())
 }
 
 func SymbolHandle(symbol *ast.Symbol) SymbolID {
@@ -68,9 +73,9 @@ const (
 	MethodBatchRequests Method = "batchRequests"
 
 	MethodInitialize                                     Method = "initialize"
+	MethodCreateSnapshot                                 Method = "createSnapshot"
 	MethodUpdateSnapshot                                 Method = "updateSnapshot"
-	MethodUpdateTemporarySnapshot                        Method = "updateTemporarySnapshot"
-	MethodCreateProgram                                  Method = "createProgram"
+	MethodGetCurrentLanguageServerSnapshot               Method = "getCurrentLanguageServerSnapshot"
 	MethodParseCommandLine                               Method = "parseCommandLine"
 	MethodReadConfigFile                                 Method = "readConfigFile"
 	MethodParseJsonConfigFile                            Method = "parseJsonConfigFileContent"
@@ -341,85 +346,109 @@ func (d DocumentIdentifier) String() string {
 	return d.FileName
 }
 
-// APIFileChangeSummary lists documents that have been changed, created, or deleted.
-type APIFileChangeSummary struct {
-	Changed []DocumentIdentifier `json:"changed,omitempty"`
-	Created []DocumentIdentifier `json:"created,omitempty"`
-	Deleted []DocumentIdentifier `json:"deleted,omitempty"`
-}
-
-// APIFileChanges describes file changes to apply when updating a snapshot.
-// Either InvalidateAll is true (discard all caches) or Changed/Created/Deleted
-// list individual documents.
-type APIFileChanges struct {
+// FileNotifications describes changes to files that have occurred on the host
+// file system, used to notify the session to reload cached files and reevaluate
+// tsconfig.json `include` globs. Either InvalidateAll is true (discard all caches)
+// or Changed/Created/Deleted list individual documents.
+type FileNotifications struct {
 	InvalidateAll bool                 `json:"invalidateAll,omitempty"`
 	Changed       []DocumentIdentifier `json:"changed,omitempty"`
 	Created       []DocumentIdentifier `json:"created,omitempty"`
 	Deleted       []DocumentIdentifier `json:"deleted,omitempty"`
 }
 
-// UpdateSnapshotParams are the parameters for creating a new snapshot.
-// All fields are optional. With no fields set, the server adopts the latest LSP state.
-type UpdateSnapshotParams struct {
-	// Snapshot, when set, requires this to be the latest active snapshot and layers
-	// FileSystem over that snapshot's filesystem. Used by Snapshot.update.
-	Snapshot SnapshotID `json:"snapshot,omitempty"`
+// SnapshotRequestChangesParams describes project, file, and program changes to apply
+// while creating or updating a snapshot.
+type SnapshotRequestChangesParams struct {
 	// OpenProjects lists tsconfig.json files to open/load in the new snapshot.
-	// Opens are ref-counted and persist across snapshots until closed.
 	OpenProjects []DocumentIdentifier `json:"openProjects,omitempty"`
 	// CloseProjects lists tsconfig.json files to release in the new snapshot.
 	// A project is only unloaded once every API client that opened it closes it.
 	CloseProjects []DocumentIdentifier `json:"closeProjects,omitempty"`
-	// FileChanges describes file system changes since the last snapshot.
-	FileChanges *APIFileChanges `json:"fileChanges,omitempty"`
-	// FileSystem supplies file contents and directory listings for the new snapshot.
-	// A full filesystem is canonical and total. A filesystem layer is checked
-	// before falling back to the host filesystem.
-	FileSystem *requestfilesystem.RequestFileSystem `json:"fileSystem,omitempty"`
-	// OpenFiles lists files to keep open for the API client, mirroring LSP's
+	// OpenFiles lists files to open in the new snapshot, mirroring LSP's
 	// textDocument/didOpen. For each file, ancestor directories are searched for a
 	// tsconfig that contains it; if found, that configured project is loaded and
 	// becomes the file's default project. Otherwise the file is loaded into the
 	// inferred project (e.g. a node_modules d.ts not in any project's import graph).
-	// Opens persist across snapshots until the file is closed.
 	OpenFiles []DocumentIdentifier `json:"openFiles,omitempty"`
 	// CloseFiles lists files to release in the new snapshot. A file is only fully
 	// closed once every API client that opened it closes it.
 	CloseFiles []DocumentIdentifier `json:"closeFiles,omitempty"`
+	// CreatePrograms describes synthetic programs to create in the snapshot.
+	CreatePrograms []*CreateSnapshotProgramParams `json:"createPrograms,omitempty"`
+	// ReconfigurePrograms replaces the configuration of existing synthetic programs.
+	ReconfigurePrograms []*ReconfigureSnapshotProgramParams `json:"reconfigurePrograms,omitempty"`
+	// RemovePrograms lists synthetic project handles to remove from the snapshot.
+	RemovePrograms []SyntheticProjectID `json:"removePrograms,omitempty"`
+	// EnsurePrograms identifies projects whose programs should be updated if dirty,
+	// or all contained projects when true.
+	EnsurePrograms *EnsurePrograms `json:"ensurePrograms,omitempty"`
 }
 
-// UpdateTemporarySnapshotParams are the parameters for creating a temporary
-// snapshot that overrides a single file's content.
-type UpdateTemporarySnapshotParams struct {
-	// Snapshot is the current client snapshot on which to layer the temporary update.
-	Snapshot SnapshotID `json:"snapshot"`
-	// File identifies the file whose content is temporarily overridden.
-	File DocumentIdentifier `json:"file"`
-	// NewText is the temporary content for the file.
-	NewText string `json:"newText"`
+type EnsurePrograms struct {
+	All      bool
+	Projects []ProjectID
 }
 
-type CreateProgramParams struct {
-	RootFiles            []DocumentIdentifier           `json:"rootFiles"`
-	CreateProgramOptions CreateProgramOptions           `json:"createProgramOptions"`
-	OldProgram           *CreateProgramOldProgramParams `json:"oldProgram,omitempty"`
-	FileChanges          *APIFileChanges                `json:"fileChanges,omitempty"`
+var _ json.UnmarshalerFrom = (*EnsurePrograms)(nil)
+
+func (e *EnsurePrograms) UnmarshalJSONFrom(dec *json.Decoder) error {
+	value, err := dec.ReadValue()
+	if err != nil {
+		return err
+	}
+	if string(value) == "true" {
+		e.All = true
+		return nil
+	}
+	if value.Kind() != '[' {
+		return errors.New("ensurePrograms must be true or an array of project IDs")
+	}
+	return json.Unmarshal(value, &e.Projects)
+}
+
+// CreateSnapshotParams are the parameters for creating a new independent snapshot.
+type CreateSnapshotParams struct {
+	SnapshotRequestChangesParams
+	// FileNotifications describes host file system changes to invalidate while creating the snapshot.
+	FileNotifications *FileNotifications `json:"fileNotifications,omitempty"`
+	// FileSystem supplies file contents and directory listings for the new snapshot.
+	// A full filesystem is canonical and total. A filesystem layer is checked
+	// before falling back to the base snapshot or host filesystem.
+	FileSystem *requestfilesystem.RequestFileSystem `json:"fileSystem,omitempty"`
+}
+
+type CreateSnapshotProgramParams struct {
+	RootFiles []DocumentIdentifier `json:"rootFiles"`
+	Options   CreateProgramOptions `json:"options"`
+}
+
+type ReconfigureSnapshotProgramParams struct {
+	Id        SyntheticProjectID   `json:"id"`
+	RootFiles []DocumentIdentifier `json:"rootFiles"`
+	Options   CreateProgramOptions `json:"options"`
+}
+
+type UpdateSnapshotParams struct {
+	Snapshot SnapshotID            `json:"snapshot"`
+	Changes  *CreateSnapshotParams `json:"changes,omitempty"`
+}
+
+type GetCurrentLanguageServerSnapshotParams struct {
+	BaseSnapshot SnapshotID                     `json:"baseSnapshot,omitempty"`
+	Changes      *LanguageServerSnapshotChanges `json:"changes,omitempty"`
+}
+
+// LanguageServerSnapshotChanges describes API-driven changes to adopt into the
+// language server's canonical state.
+type LanguageServerSnapshotChanges struct {
+	SnapshotRequestChangesParams
 }
 
 type CreateProgramOptions struct {
 	CompilerOptions              core.CompilerOptions     `json:"compilerOptions"`
 	ProjectReferences            []*core.ProjectReference `json:"projectReferences,omitempty"`
 	ConfigFileParsingDiagnostics []*DiagnosticResponse    `json:"configFileParsingDiagnostics,omitempty"`
-}
-
-type CreateProgramOldProgramParams struct {
-	Snapshot SnapshotID `json:"snapshot,omitempty"`
-	Project  ProjectID  `json:"project,omitempty"`
-}
-
-type CreateProgramResponse struct {
-	Snapshot SnapshotID       `json:"snapshot"`
-	Project  *ProjectResponse `json:"project"`
 }
 
 // ProjectFileChanges describes what source files changed within a single project.
@@ -430,8 +459,8 @@ type ProjectFileChanges struct {
 	DeletedFiles []tspath.Path `json:"deletedFiles,omitempty"`
 }
 
-// SnapshotChanges describes what changed between the previous latest snapshot
-// and the newly created snapshot. Changes are reported per-project so clients
+// SnapshotChanges describes what changed between a response base and a new
+// snapshot. Changes are reported per-project so clients
 // can track cache refs at the (snapshot, project) level.
 type SnapshotChanges struct {
 	// ChangedProjects maps project handles to the file changes within that project.
@@ -442,24 +471,35 @@ type SnapshotChanges struct {
 	RemovedProjects []ProjectID `json:"removedProjects,omitempty"`
 }
 
-// UpdateSnapshotResponse is returned by updateSnapshot.
-type UpdateSnapshotResponse struct {
+// CreateSnapshotResponse is returned by createSnapshot.
+type CreateSnapshotResponse struct {
 	// Snapshot is the handle for the newly created snapshot.
 	Snapshot SnapshotID `json:"snapshot"`
-	// Projects is the list of projects in the snapshot.
+	// Projects contains all projects when no response base was supplied, or only
+	// projects added or replaced relative to that base.
 	Projects []*ProjectResponse `json:"projects" nonnil:"true"`
-	// Changes describes source file differences from the previous snapshot.
-	// Nil for the first snapshot in a session.
+	// Changes describes source file differences from the response base.
 	Changes *SnapshotChanges `json:"changes,omitempty"`
+	// Operation describes results correlated with the request that produced the snapshot.
+	Operation *SnapshotOperationResponse `json:"operation" nonnil:"true"`
+}
+
+type SnapshotOperationResponse struct {
+	CreatedPrograms *[]SyntheticProjectID         `json:"createdPrograms,omitzero"`
+	OpenedFiles     *[]*OpenedFileOperationResult `json:"openedFiles,omitzero"`
+}
+
+type OpenedFileOperationResult struct {
+	Project ProjectID `json:"project"`
 }
 
 var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodBatchRequests:                                  unmarshallerFor[BatchRequestsParams],
 	MethodRelease:                                        unmarshallerFor[ReleaseParams],
 	MethodInitialize:                                     noParams,
+	MethodCreateSnapshot:                                 unmarshallerFor[CreateSnapshotParams],
 	MethodUpdateSnapshot:                                 unmarshallerFor[UpdateSnapshotParams],
-	MethodUpdateTemporarySnapshot:                        unmarshallerFor[UpdateTemporarySnapshotParams],
-	MethodCreateProgram:                                  unmarshallerFor[CreateProgramParams],
+	MethodGetCurrentLanguageServerSnapshot:               unmarshallerFor[GetCurrentLanguageServerSnapshotParams],
 	MethodParseCommandLine:                               unmarshallerFor[ParseCommandLineParams],
 	MethodReadConfigFile:                                 unmarshallerFor[ReadConfigFileParams],
 	MethodParseJsonConfigFile:                            unmarshallerFor[ParseJsonConfigFileContentParams],
@@ -796,6 +836,7 @@ type ProjectResponse struct {
 	Id                ProjectID           `json:"id"`
 	ConfigFileName    string              `json:"configFileName"`
 	CurrentDirectory  string              `json:"currentDirectory"`
+	Dirty             bool                `json:"dirty"`
 	ParsedCommandLine *ConfigFileResponse `json:"parsedCommandLine" nonnil:"true"`
 	// Deprecated: Use parsedCommandLine.fileNames.
 	RootFiles []string `json:"rootFiles" nonnil:"true"`
@@ -864,6 +905,7 @@ func NewProjectResponse(p *project.Project) *ProjectResponse {
 		Id:                ProjectHandle(p),
 		ConfigFileName:    p.Name(),
 		CurrentDirectory:  p.CurrentDirectory(),
+		Dirty:             p.IsDirty(),
 		ParsedCommandLine: NewConfigFileResponse(p.CommandLine),
 		RootFiles:         p.CommandLine.FileNames(),
 		CompilerOptions:   p.CommandLine.CompilerOptions(),

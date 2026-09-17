@@ -141,7 +141,7 @@ func TestConvertersSourceFileProjectionExpansion(t *testing.T) {
 	lineMap := lsconv.ComputeLSPLineStarts(original)
 	converters := lsconv.NewConverters(lsproto.PositionEncodingKindUTF16, func(_ string) *lsconv.LSPLineMap { return lineMap })
 
-	positions := lsconv.FromLSPPositionForSourceFile(converters, canonical, lsproto.Position{}, spanmap.FeatureHover)
+	positions := converters.FromLSPPositionForSourceFile(canonical, lsproto.Position{}, spanmap.FeatureHover)
 	assert.Equal(t, len(positions), 2)
 	var projectedFile *ast.SourceFile = positions[0].Script
 	assert.Assert(t, projectedFile == canonical)
@@ -180,7 +180,7 @@ func TestConvertersInvalidUTF8(t *testing.T) {
 	}
 	for _, m := range mappings {
 		lc := lsproto.Position{Line: m.line, Character: m.char}
-		positions := lsconv.FromLSPPosition(conv, script, lc, spanmap.FeatureAll)
+		positions := conv.FromLSPPosition(script, lc, spanmap.FeatureAll)
 		assert.Equal(t, len(positions), 1)
 		assert.Equal(t, positions[0].Position, m.bytePos,
 			fmt.Sprintf("LineAndCharacterToPosition(%d,%d)", m.line, m.char))
@@ -192,7 +192,7 @@ func TestConvertersInvalidUTF8(t *testing.T) {
 	// Byte-by-byte round-trip across the entire text.
 	for bytePos := core.TextPos(0); bytePos <= core.TextPos(len(text)); bytePos++ {
 		lc, _ := conv.ToLSPPosition(script, bytePos)
-		positions := lsconv.FromLSPPosition(conv, script, lc, spanmap.FeatureAll)
+		positions := conv.FromLSPPosition(script, lc, spanmap.FeatureAll)
 		assert.Equal(t, len(positions), 1)
 		assert.Equal(t, positions[0].Position, bytePos, fmt.Sprintf("round-trip byte %d", bytePos))
 	}
@@ -370,7 +370,7 @@ func TestConvertersAgainstJSReference(t *testing.T) {
 				assert.Equal(t, gotLC, expectedLC,
 					fmt.Sprintf("PositionToLineAndCharacter(%d) mismatch in %q", bytePos, c.text))
 
-				positions := lsconv.FromLSPPosition(conv, script, expectedLC, spanmap.FeatureAll)
+				positions := conv.FromLSPPosition(script, expectedLC, spanmap.FeatureAll)
 				assert.Equal(t, len(positions), 1)
 				assert.Equal(t, positions[0].Position, bytePos,
 					fmt.Sprintf("LineAndCharacterToPosition(%d,%d) mismatch in %q", tup.Line, tup.Char, c.text))

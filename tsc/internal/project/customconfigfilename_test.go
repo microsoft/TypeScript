@@ -211,7 +211,7 @@ func TestCustomConfigFileName(t *testing.T) {
 		// Without any config, the file should be in the inferred project only.
 		snapshot := session.Snapshot()
 		assert.Equal(t, snapshot.GetDefaultProject(uriLocal).Name(), "/dev/null/inferred")
-		projects := snapshot.GetProjectsContainingFile(uriLocal)
+		projects := snapshot.GetLanguageServiceProjectsContainingFile(uriLocal)
 		assert.Equal(t, len(projects), 1, "expected file to be in exactly 1 project before config change, got %d", len(projects))
 
 		// Now set custom config to pick up tsconfig.all.json
@@ -225,7 +225,7 @@ func TestCustomConfigFileName(t *testing.T) {
 		// File should now be in the configured project only, not duplicated in inferred.
 		snapshot = session.Snapshot()
 		assert.Equal(t, snapshot.GetDefaultProject(uriLocal).Name(), "/src/tsconfig.all.json")
-		projects = snapshot.GetProjectsContainingFile(uriLocal)
+		projects = snapshot.GetLanguageServiceProjectsContainingFile(uriLocal)
 		assert.Equal(t, len(projects), 1, "expected file to be in exactly 1 project after config change, got %d", len(projects))
 	})
 }

@@ -17,7 +17,6 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/project"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/fsbaselineutil"
-	"github.com/microsoft/TypeScript/tsc/internal/testutil/lsptestutil"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/iovfs"
 	"gotest.tools/v3/assert"
@@ -70,7 +69,7 @@ func (f *FourslashTest) baselineProjectsAfterNotification(t *testing.T, fileName
 		return
 	}
 	// Do hover so we have snapshot to check things on!!
-	_, _, resultOk := lsptestutil.SendRequest(t, f.client, lsproto.TextDocumentHoverInfo, &lsproto.HoverParams{
+	_, _, resultOk := f.client.SendRequest(t, lsproto.TextDocumentHoverInfo, &lsproto.HoverParams{
 		TextDocument: lsproto.TextDocumentIdentifier{
 			Uri: lsconv.FileNameToDocumentURI(fileName),
 		},

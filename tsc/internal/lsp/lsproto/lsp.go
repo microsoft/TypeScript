@@ -232,13 +232,13 @@ func (info NotificationInfo[Params]) NewNotificationMessage(params Params) *Requ
 //
 // A [NoParams] method must be given no params; every other method must be given
 // params as an object or array. A violation returns [ErrorCodeInvalidParams].
-func UnmarshalParams[T any](req *RequestMessage) (T, error) {
+func (r *RequestMessage) UnmarshalParams[T any]() (T, error) {
 	var params T
 	var raw json.Value
-	if req.Params != nil {
-		v, ok := req.Params.(json.Value)
+	if r.Params != nil {
+		v, ok := r.Params.(json.Value)
 		if !ok {
-			return params, fmt.Errorf("%w: unexpected params type %T", ErrorCodeInvalidParams, req.Params)
+			return params, fmt.Errorf("%w: unexpected params type %T", ErrorCodeInvalidParams, r.Params)
 		}
 		raw = v
 	}

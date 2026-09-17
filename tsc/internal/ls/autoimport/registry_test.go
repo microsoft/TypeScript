@@ -189,14 +189,12 @@ export const bar = 2;`,
 	t.Run("node_modules buckets get deleted when no open files can reference them", func(t *testing.T) {
 		t.Parallel()
 		fixture := autoimporttestutil.SetupMonorepoLifecycleSession(t, autoimporttestutil.MonorepoSetupConfig{
-			Root: monorepoProjectRoot,
-			MonorepoPackageTemplate: autoimporttestutil.MonorepoPackageTemplate{
-				Name:            "monorepo",
-				NodeModuleNames: []string{"pkg-root"},
-			},
+			Root:            monorepoProjectRoot,
+			Name:            "monorepo",
+			NodeModuleNames: []string{"pkg-root"},
 			Packages: []autoimporttestutil.MonorepoPackageConfig{
-				{FileCount: 1, MonorepoPackageTemplate: autoimporttestutil.MonorepoPackageTemplate{Name: "package-a", NodeModuleNames: []string{"pkg-a"}}},
-				{FileCount: 1, MonorepoPackageTemplate: autoimporttestutil.MonorepoPackageTemplate{Name: "package-b", NodeModuleNames: []string{"pkg-b"}}},
+				{FileCount: 1, Name: "package-a", NodeModuleNames: []string{"pkg-a"}},
+				{FileCount: 1, Name: "package-b", NodeModuleNames: []string{"pkg-b"}},
 			},
 		})
 		session := fixture.Session()
@@ -358,19 +356,15 @@ export const bar = 2;`,
 		packageAIndex := tspath.CombinePaths(packageADir, "index.js")
 
 		fixture := autoimporttestutil.SetupMonorepoLifecycleSession(t, autoimporttestutil.MonorepoSetupConfig{
-			Root: monorepoRoot,
-			MonorepoPackageTemplate: autoimporttestutil.MonorepoPackageTemplate{
-				Name:            "monorepo",
-				NodeModuleNames: []string{"pkg1", "pkg2", "pkg3"},
-				DependencyNames: []string{"pkg1"},
-			},
+			Root:            monorepoRoot,
+			Name:            "monorepo",
+			NodeModuleNames: []string{"pkg1", "pkg2", "pkg3"},
+			DependencyNames: []string{"pkg1"},
 			Packages: []autoimporttestutil.MonorepoPackageConfig{
 				{
-					FileCount: 0,
-					MonorepoPackageTemplate: autoimporttestutil.MonorepoPackageTemplate{
-						Name:            "a",
-						DependencyNames: []string{"pkg1", "pkg2"},
-					},
+					FileCount:       0,
+					Name:            "a",
+					DependencyNames: []string{"pkg1", "pkg2"},
 				},
 			},
 			ExtraFiles: []autoimporttestutil.TextFileSpec{
@@ -434,29 +428,23 @@ export const bar = 2;`,
 
 		fixture := autoimporttestutil.SetupMonorepoLifecycleSession(t, autoimporttestutil.MonorepoSetupConfig{
 			Root: monorepoRoot,
-			MonorepoPackageTemplate: autoimporttestutil.MonorepoPackageTemplate{
-				Name: "monorepo",
-				// Both pkg-listed and pkg-unlisted exist in node_modules
-				NodeModuleNames: []string{"pkg-listed", "pkg-unlisted"},
-				// But only pkg-listed is in the root package.json dependencies
-				DependencyNames: []string{"pkg-listed"},
-			},
+			Name: "monorepo",
+			// Both pkg-listed and pkg-unlisted exist in node_modules
+			NodeModuleNames: []string{"pkg-listed", "pkg-unlisted"},
+			// But only pkg-listed is in the root package.json dependencies
+			DependencyNames: []string{"pkg-listed"},
 			Packages: []autoimporttestutil.MonorepoPackageConfig{
 				{
 					FileCount: 0,
-					MonorepoPackageTemplate: autoimporttestutil.MonorepoPackageTemplate{
-						Name: "a",
-						// package-a only lists pkg-listed in its package.json
-						DependencyNames: []string{"pkg-listed"},
-					},
+					Name:      "a",
+					// package-a only lists pkg-listed in its package.json
+					DependencyNames: []string{"pkg-listed"},
 				},
 				{
 					FileCount: 0,
-					MonorepoPackageTemplate: autoimporttestutil.MonorepoPackageTemplate{
-						Name: "b",
-						// package-b also only lists pkg-listed in its package.json
-						DependencyNames: []string{"pkg-listed"},
-					},
+					Name:      "b",
+					// package-b also only lists pkg-listed in its package.json
+					DependencyNames: []string{"pkg-listed"},
 				},
 			},
 			ExtraFiles: []autoimporttestutil.TextFileSpec{
