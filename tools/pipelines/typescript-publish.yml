@@ -24,9 +24,9 @@ resources:
       name: 1ESPipelineTemplates/MicroBuildTemplate
       ref: refs/tags/release
   pipelines:
-    - pipeline: 'TypeScript_7_Signed_Build'
+    - pipeline: 'TypeScript_Release_Build'
       project: 'DevDiv'
-      source: 'TypeScript 7 Signed Build'
+      source: 'TypeScript Release Build'
       trigger:
         tags:
           - Build.Reason.Schedule
@@ -61,7 +61,7 @@ extends:
                   enabled: false
               inputs:
                 - input: pipelineArtifact
-                  pipeline: 'TypeScript_7_Signed_Build'
+                  pipeline: 'TypeScript_Release_Build'
                   artifactName: 'npm'
                   targetPath: '$(Pipeline.Workspace)/npm'
               outputs:
@@ -79,6 +79,17 @@ extends:
 
               - bash: |
                   set -euo pipefail
+                  if [ -z "$RELEASE_BUILD_RUN_NAME" ]; then
+                    echo "Unable to read the source build run name." >&2
+                    exit 1
+                  fi
+                  echo "##vso[build.updatebuildnumber]$RELEASE_BUILD_RUN_NAME-publish"
+                displayName: 'Set publisher run name'
+                env:
+                  RELEASE_BUILD_RUN_NAME: $(resources.pipeline.TypeScript_Release_Build.runName)
+
+              - bash: |
+                  set -euo pipefail
 
                   src="$(Pipeline.Workspace)/npm"
                   platformDst="$(Build.ArtifactStagingDirectory)/npm-platform"
@@ -91,6 +102,55 @@ extends:
                     echo "Expected exactly 2 npm publish stages, found $stageCount." >&2
                     exit 1
                   fi
+
+                  mainPackage="$(jq -r 'if .stages[1] | length == 1 then .stages[1][0].filename else empty end' "$manifest")"
+                  if [ -z "$mainPackage" ]; then
+                    echo "Expected exactly one main npm package." >&2
+                    exit 1
+                  fi
+                  mainPackageJson="$(tar -xOf "$src/$mainPackage" package/package.json)"
+                  version="$(jq -r '.version' <<< "$mainPackageJson")"
+                  npmTag="$(jq -r '.publishConfig.tag' <<< "$mainPackageJson")"
+                  if [ -z "$version" ] || [ "$version" = "null" ]; then
+                    echo "Unable to read the TypeScript package version." >&2
+                    exit 1
+                  fi
+
+                  versionComponent='(0|[1-9][0-9]*)'
+                  case "$npmTag" in
+                    next) ;;
+                    latest)
+                      if ! [[ "$version" =~ ^$versionComponent\.$versionComponent\.(2|[3-9]|[1-9][0-9]+)$ ]]; then
+                        echo "Stable package version must have patch version 2 or greater: $version" >&2
+                        exit 1
+                      fi
+                      ;;
+                    beta)
+                      if ! [[ "$version" =~ ^$versionComponent\.$versionComponent\.0-beta$ ]]; then
+                        echo "Beta package version must have the form major.minor.0-beta: $version" >&2
+                        exit 1
+                      fi
+                      ;;
+                    rc)
+                      if ! [[ "$version" =~ ^$versionComponent\.$versionComponent\.1-rc$ ]]; then
+                        echo "RC package version must have the form major.minor.1-rc: $version" >&2
+                        exit 1
+                      fi
+                      ;;
+                    *)
+                      echo "Unexpected npm publish tag: $npmTag" >&2
+                      exit 1
+                      ;;
+                  esac
+
+                  while IFS= read -r filename; do
+                    packageVersion="$(tar -xOf "$src/$filename" package/package.json | jq -r '.version')"
+                    if [ "$packageVersion" != "$version" ]; then
+                      echo "Package $filename has version $packageVersion, expected $version." >&2
+                      exit 1
+                    fi
+                  done < <(jq -r '.stages[][] | .filename' "$manifest")
+
                   jq -r '.stages[0][].filename' "$manifest" | xargs -I {} cp -v "$src/{}" "$platformDst/"
                   jq -r '.stages[1][].filename' "$manifest" | xargs -I {} cp -v "$src/{}" "$mainDst/"
 
@@ -160,7 +220,7 @@ extends:
               isProduction: true
               inputs:
                 - input: pipelineArtifact
-                  pipeline: 'TypeScript_7_Signed_Build'
+                  pipeline: 'TypeScript_Release_Build'
                   artifactName: 'vsix'
                   targetPath: '$(Pipeline.Workspace)/vsix'
 
@@ -181,29 +241,9 @@ extends:
                   fi
                 displayName: 'Check VSIX artifacts'
 
-              - task: NodeTool@0
-                condition: and(succeeded(), eq(variables['HasVsix'], 'true'))
-                inputs:
-                  versionSpec: 24.x
-                displayName: 'Install Node'
-
-              - bash: |
-                  cat > .npmrc << 'EOF'
-                  registry=https://pkgs.dev.azure.com/devdiv/devdiv/_packaging/devdiv_PublicPackages/npm/registry/
-                  EOF
-                  npm init -y
-                displayName: 'Set up .npmrc'
-                condition: and(succeeded(), eq(variables['HasVsix'], 'true'))
-
-              - task: npmAuthenticate@0
-                condition: and(succeeded(), eq(variables['HasVsix'], 'true'))
-                inputs:
-                  workingFile: .npmrc
-                displayName: 'Authenticate npm'
-
-              - bash: npm install @vscode/vsce@latest
-                displayName: 'Install vsce'
-                condition: and(succeeded(), eq(variables['HasVsix'], 'true'))
+              - template: /tools/pipelines/steps/setup-vsce.yml@self
+                parameters:
+                  condition: and(succeeded(), eq(variables['HasVsix'], 'true'))
 
               - task: AzureCLI@2
                 displayName: 'Check Marketplace Auth'
