@@ -22,7 +22,7 @@ import (
 func TestContentMappedParseCacheBundleLifetime(t *testing.T) {
 	t.Parallel()
 	cache := NewContentMappedParseCache(RefCountCacheOptions{})
-	key := ContentMappedParseCacheKey{SourceFileParseOptions: ast.SourceFileParseOptions{FileName: "/component.vue", Path: "/component.vue"}}
+	key := ContentMappedParseCacheKey{FileName: "/component.vue", Path: "/component.vue"}
 	canonical := &ast.SourceFile{}
 	supplemental := &ast.SourceFile{}
 	produced := contentmapper.SourceFiles{Canonical: canonical, Supplemental: []*ast.SourceFile{supplemental}}
@@ -464,11 +464,9 @@ func TestRefCountingCaches(t *testing.T) {
 			baseSnapshot := session.Snapshot()
 			extendedConfigPath := tspath.Path("/user/username/projects/myproject/tsconfig.base.json")
 			clone := baseSnapshot.Clone(context.Background(), SnapshotChange{
-				reason: UpdateReasonRequestedLanguageServiceProjectNotLoaded,
-				ResourceRequest: ResourceRequest{
-					Documents: []lsproto.DocumentUri{uri},
-				},
-			}, baseSnapshot.fs.overlays, nil)
+				reason:    UpdateReasonRequestedLanguageServiceProjectNotLoaded,
+				Documents: []lsproto.DocumentUri{uri},
+			}, baseSnapshot.overlays(), nil)
 
 			project := clone.GetDefaultProject(uri)
 			assert.Assert(t, project != nil)
@@ -548,7 +546,7 @@ func TestRefCountingCaches(t *testing.T) {
 			assert.Assert(t, ownedByProgramSnapshot)
 			assert.Equal(t, ownerCount, 2)
 
-			assert.NilError(t, session.fs.fs.WriteFile(libBaseConfigPath, `{"compilerOptions":{"composite":true,"noLib":true,"strict":true}}`))
+			assert.NilError(t, session.fs.WriteFile(libBaseConfigPath, `{"compilerOptions":{"composite":true,"noLib":true,"strict":true}}`))
 			var fileChanges FileChangeSummary
 			fileChanges.Changed.Add(lsproto.DocumentUri("file://" + libBaseConfigPath))
 			updatedProgramSnapshot := session.CloneSnapshotForProgram(

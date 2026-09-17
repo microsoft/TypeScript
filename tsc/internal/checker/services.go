@@ -326,12 +326,12 @@ func (c *Checker) shouldTreatPropertiesOfExternalModuleAsExports(resolvedExterna
 
 func (c *Checker) GetContextualType(node *ast.Expression, contextFlags ContextFlags) *Type {
 	if contextFlags&ContextFlagsIgnoreNodeInferences != 0 {
-		return runWithInferenceBlockedFromSourceNode(c, node, func() *Type { return c.getContextualType(node, contextFlags) })
+		return c.runWithInferenceBlockedFromSourceNode(node, func() *Type { return c.getContextualType(node, contextFlags) })
 	}
 	return c.getContextualType(node, contextFlags)
 }
 
-func runWithInferenceBlockedFromSourceNode[T any](c *Checker, node *ast.Node, fn func() T) T {
+func (c *Checker) runWithInferenceBlockedFromSourceNode[T any](node *ast.Node, fn func() T) T {
 	containingCall := ast.FindAncestor(node, ast.IsCallLikeExpression)
 	if containingCall != nil {
 		toMarkSkip := node
@@ -345,7 +345,7 @@ func runWithInferenceBlockedFromSourceNode[T any](c *Checker, node *ast.Node, fn
 	}
 
 	c.isInferencePartiallyBlocked = true
-	result := runWithoutResolvedSignatureCaching(c, node, fn)
+	result := c.runWithoutResolvedSignatureCaching(node, fn)
 	c.isInferencePartiallyBlocked = false
 
 	c.skipDirectInferenceNodes.Clear()
@@ -357,14 +357,14 @@ func GetResolvedSignatureForSignatureHelp(node *ast.Node, argumentCount int, c *
 		signature  *Signature
 		candidates []*Signature
 	}
-	res := runWithoutResolvedSignatureCaching(c, node, func() result {
+	res := c.runWithoutResolvedSignatureCaching(node, func() result {
 		signature, candidates := c.getResolvedSignatureWorker(node, CheckModeIsForSignatureHelp, argumentCount)
 		return result{signature, candidates}
 	})
 	return res.signature, res.candidates
 }
 
-func runWithoutResolvedSignatureCaching[T any](c *Checker, node *ast.Node, fn func() T) T {
+func (c *Checker) runWithoutResolvedSignatureCaching[T any](node *ast.Node, fn func() T) T {
 	ancestorNode := ast.FindAncestor(node, ast.IsCallLikeOrFunctionLikeExpression)
 	if ancestorNode != nil {
 		cachedResolvedSignatures := make(map[*SignatureLinks]*Signature)
@@ -910,14 +910,14 @@ func (c *Checker) getResolvedSignatureWorker(node *ast.Node, checkMode CheckMode
 
 func (c *Checker) GetCandidateSignaturesForStringLiteralCompletions(call *ast.CallLikeExpression, editingArgument *ast.Node) []*Signature {
 	// first, get candidates when inference is blocked from the source node.
-	candidates := runWithInferenceBlockedFromSourceNode(c, editingArgument, func() []*Signature {
+	candidates := c.runWithInferenceBlockedFromSourceNode(editingArgument, func() []*Signature {
 		_, blockedInferenceCandidates := c.getResolvedSignatureWorker(call, CheckModeNormal, 0)
 		return blockedInferenceCandidates
 	})
 	candidatesSet := collections.NewSetFromItems(candidates...)
 
 	// next, get candidates where the source node is considered for inference.
-	otherCandidates := runWithoutResolvedSignatureCaching(c, editingArgument, func() []*Signature {
+	otherCandidates := c.runWithoutResolvedSignatureCaching(editingArgument, func() []*Signature {
 		_, inferenceCandidates := c.getResolvedSignatureWorker(call, CheckModeNormal, 0)
 		return inferenceCandidates
 	})

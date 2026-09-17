@@ -37,6 +37,10 @@ type TypeMapperData interface {
 
 // Factory functions
 
+func getMappedType(t *Type, mapper *TypeMapper) *Type {
+	return mapper.Map(getNonDistributedTypeParameter(t))
+}
+
 func newTypeMapper(sources []*Type, targets []*Type) *TypeMapper {
 	if len(sources) == 1 {
 		return newSimpleTypeMapper(sources[0], targets[0])
@@ -53,13 +57,13 @@ func (c *Checker) combineTypeMappers(m1 *TypeMapper, m2 *TypeMapper) *TypeMapper
 
 func (c *Checker) mapTypeWithCompositeMapper(t *Type, m1 *TypeMapper, m2 *TypeMapper) *Type {
 	if m1 == nil {
-		return m2.Map(t)
+		return getMappedType(t, m2)
 	}
-	t1 := m1.Map(t)
+	t1 := getMappedType(t, m1)
 	if t1 != t {
 		return c.instantiateType(t1, m2)
 	}
-	return m2.Map(t)
+	return getMappedType(t, m2)
 }
 
 func mergeTypeMappers(m1 *TypeMapper, m2 *TypeMapper) *TypeMapper {
@@ -71,16 +75,16 @@ func mergeTypeMappers(m1 *TypeMapper, m2 *TypeMapper) *TypeMapper {
 
 func prependTypeMapping(source *Type, target *Type, mapper *TypeMapper) *TypeMapper {
 	if mapper == nil {
-		return newSimpleTypeMapper(source, target)
+		return newSimpleTypeMapper(getNonDistributedTypeParameter(source), target)
 	}
-	return newMergedTypeMapper(newSimpleTypeMapper(source, target), mapper)
+	return newMergedTypeMapper(newSimpleTypeMapper(getNonDistributedTypeParameter(source), target), mapper)
 }
 
 func appendTypeMapping(mapper *TypeMapper, source *Type, target *Type) *TypeMapper {
 	if mapper == nil {
-		return newSimpleTypeMapper(source, target)
+		return newSimpleTypeMapper(getNonDistributedTypeParameter(source), target)
 	}
-	return newMergedTypeMapper(mapper, newSimpleTypeMapper(source, target))
+	return newMergedTypeMapper(mapper, newSimpleTypeMapper(getNonDistributedTypeParameter(source), target))
 }
 
 // Maps forward-references to later types parameters to the empty object type.

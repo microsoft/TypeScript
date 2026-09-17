@@ -249,7 +249,7 @@ func NewSession(init *SessionInit) *Session {
 
 // FS implements module.ResolutionHost
 func (s *Session) FS() vfs.FS {
-	return s.fs.fs
+	return s.fs
 }
 
 // GetCurrentDirectory implements module.ResolutionHost
@@ -331,9 +331,7 @@ func (s *Session) DidOpenFile(ctx context.Context, uri lsproto.DocumentUri, vers
 	s.UpdateSnapshot(ctx, overlays, SnapshotChange{
 		reason:      UpdateReasonDidOpenFile,
 		fileChanges: changes,
-		ResourceRequest: ResourceRequest{
-			Documents: []lsproto.DocumentUri{uri},
-		},
+		Documents:   []lsproto.DocumentUri{uri},
 	})
 }
 
@@ -353,9 +351,7 @@ func (s *Session) SetContentMapperContributions(ctx context.Context, contributio
 		reason:                     UpdateReasonDidChangeContentMapperContributions,
 		fileChanges:                changes,
 		contentMapperContributions: &contributions,
-		ResourceRequest: ResourceRequest{
-			ConfiguredProjectDocuments: documentURIs,
-		},
+		ConfiguredProjectDocuments: documentURIs,
 	})
 	_ = s.updateContentMapperRegistrations(ctx, s.Snapshot())
 }
@@ -459,12 +455,12 @@ func (s *Session) DidChangeWatchedFiles(ctx context.Context, changes []*lsproto.
 				// For creations/changes, we can check the file system.
 				// For deletions, consult the current snapshot cache to avoid treating extensionless file deletions as relevant.
 				if kind != FileChangeKindWatchDelete {
-					hasRelevantChange = s.fs.fs.DirectoryExists(fileName)
+					hasRelevantChange = s.fs.DirectoryExists(fileName)
 				} else {
 					s.snapshotMu.RLock()
 					snapshot := s.snapshot
 					s.snapshotMu.RUnlock()
-					if _, ok := snapshot.fs.diskDirectories[path]; ok || isNodeModulesPath(path) {
+					if _, ok := snapshot.fs.cacheDirectories[path]; ok || snapshot.hasOverlayWithin(path) || isNodeModulesPath(path) {
 						hasRelevantChange = true
 					}
 				}
@@ -684,7 +680,7 @@ func (s *Session) scheduleIdleCacheClean() {
 			fileChanges:    fileChanges,
 			ataChanges:     ataChanges,
 			newConfig:      newConfig,
-			cleanDiskCache: true,
+			cleanFileCache: true,
 		})
 
 		go func() { runtime.GC() }()
@@ -780,11 +776,11 @@ func (s *Session) sendPerformanceTelemetry(ctx context.Context) {
 	gometrics.Read(samples)
 
 	measurements := &lsproto.PerformanceStatsTelemetryMeasurements{
-		OpenFileCount:       float64(len(snapshot.fs.overlays)),
+		OpenFileCount:       float64(len(snapshot.overlays())),
 		UptimeSeconds:       time.Since(s.startTime).Seconds(),
 		ProjectCount:        float64(len(snapshot.ProjectCollection.Projects())),
 		ConfigCount:         float64(len(snapshot.ConfigFileRegistry.configs)),
-		CachedDiskFileCount: float64(len(snapshot.fs.diskFiles)),
+		CachedDiskFileCount: float64(len(snapshot.fs.cacheFiles)),
 	}
 
 	readUint64 := func(s gometrics.Sample) float64 {
@@ -1068,7 +1064,7 @@ func (s *Session) getSnapshot(
 		}
 		if updateReason == UpdateReasonUnknown {
 			for _, document := range request.ConfiguredProjectDocuments {
-				if snapshot.fs.isOpenFile(document.FileName()) {
+				if snapshot.isOpenFile(document.FileName()) {
 					project := snapshot.GetDefaultProject(document)
 					if project == nil {
 						updateReason = UpdateReasonRequestedLanguageServiceProjectNotLoaded
@@ -1468,7 +1464,7 @@ func (s *Session) WaitForBackgroundTasks() {
 	s.backgroundQueue.Wait()
 }
 
-func updateWatch[T any](ctx context.Context, session *Session, logger logging.Logger, oldWatcher, newWatcher *WatchedFiles[T]) []error {
+func (s *Session) updateWatch[T any](ctx context.Context, oldWatcher, newWatcher *WatchedFiles[T]) []error {
 	var errors []error
 	if newWatcher != nil {
 		w := newWatcher.Watchers()
@@ -1477,7 +1473,7 @@ func updateWatch[T any](ctx context.Context, session *Session, logger logging.Lo
 			var newWatchers collections.OrderedMap[WatcherID, *lsproto.FileSystemWatcher]
 			for i, watcher := range watchers {
 				globId := WatcherID(fmt.Sprintf("%s.%d", w.WatcherID, i))
-				if session.watches.Acquire(watcher, globId) {
+				if s.watches.Acquire(watcher, globId) {
 					newWatchers.Set(globId, watcher)
 				}
 			}
@@ -1486,18 +1482,18 @@ func updateWatch[T any](ctx context.Context, session *Session, logger logging.Lo
 				// Create a fresh timeout per client call so earlier calls
 				// don't consume the deadline for later ones.
 				callCtx, callCancel := context.WithTimeout(ctx, watchRequestTimeout)
-				err := session.client.WatchFiles(callCtx, id, []*lsproto.FileSystemWatcher{watcher})
+				err := s.client.WatchFiles(callCtx, id, []*lsproto.FileSystemWatcher{watcher})
 				callCancel()
 				if err != nil {
 					watchErrors = append(watchErrors, err)
-				} else if logger != nil {
+				} else if s.logger != nil {
 					if oldWatcher == nil {
-						logger.Log(fmt.Sprintf("Added new watch: %s", id))
+						s.logger.Log(fmt.Sprintf("Added new watch: %s", id))
 					} else {
-						logger.Log(fmt.Sprintf("Updated watch: %s", id))
+						s.logger.Log(fmt.Sprintf("Updated watch: %s", id))
 					}
-					logger.Log("\t" + fileSystemWatcherGlobString(watcher))
-					logger.Log("")
+					s.logger.Log("\t" + fileSystemWatcherGlobString(watcher))
+					s.logger.Log("")
 				}
 			}
 			if len(watchErrors) > 0 {
@@ -1506,18 +1502,18 @@ func updateWatch[T any](ctx context.Context, session *Session, logger logging.Lo
 				// Re-registering an already-registered watcher with the client
 				// is harmless (registerCapability with the same ID replaces it).
 				for _, watcher := range newWatchers.Entries() {
-					session.watches.Release(watcher)
+					s.watches.Release(watcher)
 				}
-				session.watches.MarkPending(w.WatcherID)
+				s.watches.MarkPending(w.WatcherID)
 				errors = append(errors, watchErrors...)
 			} else {
-				session.watches.ClearPending(w.WatcherID)
+				s.watches.ClearPending(w.WatcherID)
 			}
 			if len(w.IgnoredPaths) > 0 {
-				logger.Logf("%d paths ineligible for watching", len(w.IgnoredPaths))
-				if logger.IsVerbose() {
+				s.logger.Logf("%d paths ineligible for watching", len(w.IgnoredPaths))
+				if s.logger.IsVerbose() {
 					for path := range w.IgnoredPaths {
-						logger.Log("\t" + path)
+						s.logger.Log("\t" + path)
 					}
 				}
 			}
@@ -1529,18 +1525,18 @@ func updateWatch[T any](ctx context.Context, session *Session, logger logging.Lo
 		if len(watchers) > 0 {
 			var removedIDs []WatcherID
 			for _, watcher := range watchers {
-				if id, removed := session.watches.Release(watcher); removed {
+				if id, removed := s.watches.Release(watcher); removed {
 					removedIDs = append(removedIDs, id)
 				}
 			}
 			for _, id := range removedIDs {
 				callCtx, callCancel := context.WithTimeout(ctx, watchRequestTimeout)
-				err := session.client.UnwatchFiles(callCtx, id)
+				err := s.client.UnwatchFiles(callCtx, id)
 				callCancel()
 				if err != nil {
 					errors = append(errors, err)
-				} else if logger != nil && newWatcher == nil {
-					logger.Log(fmt.Sprintf("Removed watch: %s", id))
+				} else if s.logger != nil && newWatcher == nil {
+					s.logger.Log(fmt.Sprintf("Removed watch: %s", id))
 				}
 			}
 		}
@@ -1598,13 +1594,13 @@ func (s *Session) updateWatches(oldSnapshot *Snapshot, newSnapshot *Snapshot) er
 			return a.rootFilesWatch.ID() == b.rootFilesWatch.ID()
 		},
 		func(_ tspath.Path, addedEntry *configFileEntry) {
-			errors = append(errors, updateWatch(ctx, s, s.logger, nil, addedEntry.rootFilesWatch)...)
+			errors = append(errors, s.updateWatch(ctx, nil, addedEntry.rootFilesWatch)...)
 		},
 		func(_ tspath.Path, removedEntry *configFileEntry) {
-			errors = append(errors, updateWatch(ctx, s, s.logger, removedEntry.rootFilesWatch, nil)...)
+			errors = append(errors, s.updateWatch(ctx, removedEntry.rootFilesWatch, nil)...)
 		},
 		func(_ tspath.Path, oldEntry, newEntry *configFileEntry) {
-			errors = append(errors, updateWatch(ctx, s, s.logger, oldEntry.rootFilesWatch, newEntry.rootFilesWatch)...)
+			errors = append(errors, s.updateWatch(ctx, oldEntry.rootFilesWatch, newEntry.rootFilesWatch)...)
 		},
 	)
 	// Retry config watchers whose IDs didn't change but whose previous registration failed.
@@ -1612,7 +1608,7 @@ func (s *Session) updateWatches(oldSnapshot *Snapshot, newSnapshot *Snapshot) er
 		if oldEntry, ok := oldSnapshot.ConfigFileRegistry.configs[path]; ok {
 			if oldEntry.rootFilesWatch.ID() == newEntry.rootFilesWatch.ID() {
 				if s.watches.IsPending(newEntry.rootFilesWatch.ID()) {
-					errors = append(errors, updateWatch(ctx, s, s.logger, nil, newEntry.rootFilesWatch)...)
+					errors = append(errors, s.updateWatch(ctx, nil, newEntry.rootFilesWatch)...)
 				}
 			}
 		}
@@ -1622,43 +1618,43 @@ func (s *Session) updateWatches(oldSnapshot *Snapshot, newSnapshot *Snapshot) er
 		oldSnapshot.ProjectCollection.ProjectsByPath(),
 		newSnapshot.ProjectCollection.ProjectsByPath(),
 		func(_ tspath.Path, addedProject *Project) {
-			errors = append(errors, updateWatch(ctx, s, s.logger, nil, addedProject.programFilesWatch)...)
-			errors = append(errors, updateWatch(ctx, s, s.logger, nil, addedProject.typingsWatch)...)
-			errors = append(errors, updateWatch(ctx, s, s.logger, nil, addedProject.contentMapperWatch)...)
+			errors = append(errors, s.updateWatch(ctx, nil, addedProject.programFilesWatch)...)
+			errors = append(errors, s.updateWatch(ctx, nil, addedProject.typingsWatch)...)
+			errors = append(errors, s.updateWatch(ctx, nil, addedProject.contentMapperWatch)...)
 		},
 		func(_ tspath.Path, removedProject *Project) {
-			errors = append(errors, updateWatch(ctx, s, s.logger, removedProject.programFilesWatch, nil)...)
-			errors = append(errors, updateWatch(ctx, s, s.logger, removedProject.typingsWatch, nil)...)
-			errors = append(errors, updateWatch(ctx, s, s.logger, removedProject.contentMapperWatch, nil)...)
+			errors = append(errors, s.updateWatch(ctx, removedProject.programFilesWatch, nil)...)
+			errors = append(errors, s.updateWatch(ctx, removedProject.typingsWatch, nil)...)
+			errors = append(errors, s.updateWatch(ctx, removedProject.contentMapperWatch, nil)...)
 		},
 		func(_ tspath.Path, oldProject, newProject *Project) {
 			if oldProject.programFilesWatch.ID() != newProject.programFilesWatch.ID() {
-				errors = append(errors, updateWatch(ctx, s, s.logger, oldProject.programFilesWatch, newProject.programFilesWatch)...)
+				errors = append(errors, s.updateWatch(ctx, oldProject.programFilesWatch, newProject.programFilesWatch)...)
 			} else {
 				if s.watches.IsPending(newProject.programFilesWatch.ID()) {
-					errors = append(errors, updateWatch(ctx, s, s.logger, nil, newProject.programFilesWatch)...)
+					errors = append(errors, s.updateWatch(ctx, nil, newProject.programFilesWatch)...)
 				}
 			}
 			if oldProject.typingsWatch.ID() != newProject.typingsWatch.ID() {
-				errors = append(errors, updateWatch(ctx, s, s.logger, oldProject.typingsWatch, newProject.typingsWatch)...)
+				errors = append(errors, s.updateWatch(ctx, oldProject.typingsWatch, newProject.typingsWatch)...)
 			} else {
 				if s.watches.IsPending(newProject.typingsWatch.ID()) {
-					errors = append(errors, updateWatch(ctx, s, s.logger, nil, newProject.typingsWatch)...)
+					errors = append(errors, s.updateWatch(ctx, nil, newProject.typingsWatch)...)
 				}
 			}
 			if oldProject.contentMapperWatch.ID() != newProject.contentMapperWatch.ID() {
-				errors = append(errors, updateWatch(ctx, s, s.logger, oldProject.contentMapperWatch, newProject.contentMapperWatch)...)
+				errors = append(errors, s.updateWatch(ctx, oldProject.contentMapperWatch, newProject.contentMapperWatch)...)
 			} else if s.watches.IsPending(newProject.contentMapperWatch.ID()) {
-				errors = append(errors, updateWatch(ctx, s, s.logger, nil, newProject.contentMapperWatch)...)
+				errors = append(errors, s.updateWatch(ctx, nil, newProject.contentMapperWatch)...)
 			}
 		},
 	)
 
 	if oldSnapshot.autoImportsWatch.ID() != newSnapshot.autoImportsWatch.ID() {
-		errors = append(errors, updateWatch(ctx, s, s.logger, oldSnapshot.autoImportsWatch, newSnapshot.autoImportsWatch)...)
+		errors = append(errors, s.updateWatch(ctx, oldSnapshot.autoImportsWatch, newSnapshot.autoImportsWatch)...)
 	} else {
 		if s.watches.IsPending(newSnapshot.autoImportsWatch.ID()) {
-			errors = append(errors, updateWatch(ctx, s, s.logger, nil, newSnapshot.autoImportsWatch)...)
+			errors = append(errors, s.updateWatch(ctx, nil, newSnapshot.autoImportsWatch)...)
 		}
 	}
 
@@ -1766,8 +1762,8 @@ func (s *Session) logCacheStats(snapshot *Snapshot) {
 		})
 	}
 	s.logger.Log("\n======== Cache Statistics ========")
-	s.logger.Logf("Open file count:   %6d", len(snapshot.fs.overlays))
-	s.logger.Logf("Cached disk files: %6d", len(snapshot.fs.diskFiles))
+	s.logger.Logf("Open file count:   %6d", len(snapshot.overlays()))
+	s.logger.Logf("Cached disk files: %6d", len(snapshot.fs.cacheFiles))
 	s.logger.Logf("Realpath aliases:  %6d", len(snapshot.fs.nodeModulesRealpathAliases))
 	s.logger.Logf("Project count:     %6d", len(snapshot.ProjectCollection.Projects()))
 	s.logger.Logf("Config count:      %6d", len(snapshot.ConfigFileRegistry.configs))
@@ -1989,7 +1985,7 @@ func (s *Session) triggerATAForUpdatedProjects(newSnapshot *Snapshot) {
 					CompilerOptions:  project.CommandLine.CompilerOptions(),
 					CurrentDirectory: s.options.CurrentDirectory,
 					GetScriptKind:    core.GetScriptKindFromFileName,
-					FS:               s.fs.fs,
+					FS:               s.fs,
 					Logger:           logTree,
 				}
 
@@ -2030,7 +2026,7 @@ func (s *Session) warmAutoImportCache(ctx context.Context, change SnapshotChange
 		for uri := range change.fileChanges.Changed.Keys() {
 			changedFile = uri
 		}
-		if !newSnapshot.fs.isOpenFile(changedFile.FileName()) {
+		if !newSnapshot.isOpenFile(changedFile.FileName()) {
 			return
 		}
 		prefs := newSnapshot.UserPreferences()
@@ -2082,14 +2078,12 @@ func (s *Session) warmAutoImportCache(ctx context.Context, change SnapshotChange
 		defer newSnapshot.Deref()
 
 		warmChange := SnapshotChange{
-			reason: UpdateReasonRequestedLanguageServiceWithAutoImports,
-			client: s.client,
-			ResourceRequest: ResourceRequest{
-				Documents:   []lsproto.DocumentUri{changedFile},
-				AutoImports: changedFile,
-			},
+			reason:      UpdateReasonRequestedLanguageServiceWithAutoImports,
+			Documents:   []lsproto.DocumentUri{changedFile},
+			AutoImports: changedFile,
+			client:      s.client,
 		}
-		clonedSnapshot := newSnapshot.Clone(warmCtx, warmChange, newSnapshot.fs.overlays, s.logger)
+		clonedSnapshot := newSnapshot.Clone(warmCtx, warmChange, newSnapshot.overlays(), s.logger)
 
 		// If cancelled during clone, discard the incomplete result.
 		if warmCtx.Err() != nil {
