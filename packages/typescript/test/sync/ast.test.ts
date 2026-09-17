@@ -55,6 +55,7 @@ import {
     test,
 } from "node:test";
 import { fileURLToPath } from "node:url";
+import { runBenchmarks } from "./ast.bench.ts";
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -68,6 +69,10 @@ function collectKinds(node: Node): SyntaxKind[] {
     });
     return kinds;
 }
+
+test("Benchmarks", async () => {
+    await runBenchmarks({ singleIteration: true });
+});
 
 // ---------------------------------------------------------------------------
 // cloneNode
