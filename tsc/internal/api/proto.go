@@ -671,9 +671,9 @@ type CreateSourceFileOptions struct {
 }
 
 type CreateSourceFileParams struct {
-	FileName         string                  `json:"fileName"`
-	SourceTextBase64 string                  `json:"sourceTextBase64"`
-	Options          CreateSourceFileOptions `json:"options"`
+	FileName   string                  `json:"fileName"`
+	SourceText string                  `json:"sourceText"`
+	Options    CreateSourceFileOptions `json:"options"`
 }
 
 type CreateSourceFileFromFileParams struct {

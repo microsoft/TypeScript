@@ -49,10 +49,7 @@ import {
     readSourceFileHash,
     RemoteSourceFile,
 } from "../node/node.ts";
-import {
-    encodeWtf8,
-    Wtf8Decoder,
-} from "../node/wtf8.ts";
+import { Wtf8Decoder } from "../node/wtf8.ts";
 import type {
     APIOptions,
     LSPConnectionOptions,
@@ -350,8 +347,7 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
 
     async createSourceFile(fileName: string, sourceText: string, options: CreateSourceFileOptions = {}): Promise<SourceFile> {
         await this.ensureInitialized();
-        const sourceTextBase64 = uint8ArrayToBase64(encodeWtf8(sourceText));
-        const data = await this.client.apiRequestBinary("createSourceFile", { fileName, sourceTextBase64, options });
+        const data = await this.client.apiRequestBinary("createSourceFile", { fileName, sourceText, options });
         if (!data) {
             throw new Error("createSourceFile returned no source file");
         }

@@ -321,7 +321,7 @@ export interface ParseConfigFileParams {
 
 export interface CreateSourceFileParams {
     fileName: string;
-    sourceTextBase64: string;
+    sourceText: string;
     options: CreateSourceFileOptions;
 }
 

@@ -1622,11 +1622,7 @@ func (s *Session) handleTranspile(ctx context.Context, params *TranspileParams, 
 
 // @gen-proto-result: SourceFileResponse
 func (s *Session) handleCreateSourceFile(ctx context.Context, params *CreateSourceFileParams) (any, error) {
-	sourceText, err := decodeWtf8Base64(params.SourceTextBase64, "sourceTextBase64")
-	if err != nil {
-		return nil, err
-	}
-	sourceFile, err := s.createSourceFile(params.FileName, sourceText, params.Options)
+	sourceFile, err := s.createSourceFile(params.FileName, params.SourceText, params.Options)
 	if err != nil {
 		return nil, err
 	}
@@ -1660,14 +1656,6 @@ func (s *Session) createSourceFile(fileName string, sourceText string, options C
 		FileName: fileName,
 		Path:     s.toPath(fileName),
 	}, sourceText, scriptKind), nil
-}
-
-func decodeWtf8Base64(value string, name string) (string, error) {
-	decoded, err := base64.StdEncoding.DecodeString(value)
-	if err != nil {
-		return "", fmt.Errorf("%w: invalid %s: %w", ErrClientError, name, err)
-	}
-	return string(decoded), nil
 }
 
 func isValidCreateSourceFileScriptKind(scriptKind core.ScriptKind) bool {

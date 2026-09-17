@@ -66,10 +66,7 @@ import {
     readSourceFileHash,
     RemoteSourceFile,
 } from "../node/node.ts";
-import {
-    encodeWtf8,
-    Wtf8Decoder,
-} from "../node/wtf8.ts";
+import { Wtf8Decoder } from "../node/wtf8.ts";
 import type {
     APIOptions,
     LSPConnectionOptions,
@@ -495,8 +492,7 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
             "createSourceFile",
             function (fileName: string, sourceText: string, options: CreateSourceFileOptions = {}): SourceFile {
                 owner.ensureInitialized();
-                const sourceTextBase64 = uint8ArrayToBase64(encodeWtf8(sourceText));
-                const data = owner.client.apiRequestBinary("createSourceFile", { fileName, sourceTextBase64, options });
+                const data = owner.client.apiRequestBinary("createSourceFile", { fileName, sourceText, options });
                 if (!data) {
                     throw new Error("createSourceFile returned no source file");
                 }
@@ -504,8 +500,7 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
             },
             function* (fileName: string, sourceText: string, options: CreateSourceFileOptions = {}): Generator<ProtocolRequest, SourceFile, ProtocolResponse["result"]> {
                 yield* owner.ensureInitialized.gen();
-                const sourceTextBase64 = uint8ArrayToBase64(encodeWtf8(sourceText));
-                const data = sourceFileResponseToUint8Array(yield* apiRequest("createSourceFile", { fileName, sourceTextBase64, options }));
+                const data = sourceFileResponseToUint8Array(yield* apiRequest("createSourceFile", { fileName, sourceText, options }));
                 if (!data) {
                     throw new Error("createSourceFile returned no source file");
                 }
