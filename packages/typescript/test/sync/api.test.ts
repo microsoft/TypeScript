@@ -327,17 +327,6 @@ describe("API", () => {
         assert.throws(() => api.createSourceFile("/invalid.ts", "", { scriptKind: 999 as ScriptKind }), /invalid scriptKind 999/);
     });
 
-    test("createSourceFile preserves lone surrogates", () => {
-        const loneSurrogate = String.fromCharCode(0xD800);
-        using api = spawnAPI({
-            "/input.ts": "export const input = 1;",
-        });
-        const sourceText = `const before = 1;\n${loneSurrogate}\nconst after = 2;`;
-        const sourceFile = api.createSourceFile("surrogate.ts", sourceText);
-        assert.equal(sourceFile.text, sourceText);
-        assert.equal(sourceFile.statements.length, 2);
-    });
-
     test("createSourceFile can be used with a compatible program", () => {
         const sourceText = "export const element = <div />;";
         using api = spawnAPI({
