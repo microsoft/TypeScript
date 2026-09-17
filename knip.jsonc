@@ -36,6 +36,9 @@
                 "scripts/generateSync.ts",
                 "test/**/*.bench.ts"
             ],
+            "paths": {
+                "#enums/*": ["src/enums/*.ts"]
+            },
             "project": [
                 "scripts/**/*.ts",
                 "src/**/*.ts",
