@@ -1,0 +1,90 @@
+//// [tests/cases/compiler/jsdocTypeTagFunctionTypePredicate.ts] ////
+
+=== types.d.mts ===
+export type Foo = Error & { code: "X" };
+>Foo : Foo
+>code : "X"
+
+export type Bar = Error & { code: "Y" };
+>Bar : Bar
+>code : "Y"
+
+=== isFoo.mjs ===
+/** @import { Foo, Bar } from "./types.d.mts" */
+
+/** @type {(e: unknown) => e is Foo} */
+export function isFoo(e) {
+>isFoo : (e: unknown) => e is Foo
+>e : unknown
+
+    return e instanceof Error && "code" in e && e.code === "X";
+>e instanceof Error && "code" in e && e.code === "X" : boolean
+>e instanceof Error && "code" in e : boolean
+>e instanceof Error : boolean
+>e : unknown
+>Error : ErrorConstructor
+>"code" in e : boolean
+>"code" : "code"
+>e : Error
+>e.code === "X" : boolean
+>e.code : unknown
+>e : Error & Record<"code", unknown>
+>code : unknown
+>"X" : "X"
+}
+
+export default /** @type {(e: unknown) => e is Bar} */ (e) => {
+>(e) => {    return e instanceof Error && "code" in e && e.code === "Y";} : (e: unknown) => e is Bar
+>e : unknown
+
+    return e instanceof Error && "code" in e && e.code === "Y";
+>e instanceof Error && "code" in e && e.code === "Y" : boolean
+>e instanceof Error && "code" in e : boolean
+>e instanceof Error : boolean
+>e : unknown
+>Error : ErrorConstructor
+>"code" in e : boolean
+>"code" : "code"
+>e : Error
+>e.code === "Y" : boolean
+>e.code : unknown
+>e : Error & Record<"code", unknown>
+>code : unknown
+>"Y" : "Y"
+
+};
+
+/** @type {(e: unknown) => e is Missing} */
+export function isMissing(e) {
+>isMissing : (e: unknown) => e is Missing
+>e : unknown
+
+    return !!e;
+>!!e : boolean
+>!e : boolean
+>e : unknown
+}
+
+/** @type {(e: unknown) => asserts e is MissingAsserted} */
+export function assertMissing(e) {
+>assertMissing : (e: unknown) => asserts e is MissingAsserted
+>e : unknown
+
+    if (!e) {
+>!e : boolean
+>e : unknown
+
+        throw new TypeError();
+>new TypeError() : TypeError
+>TypeError : TypeErrorConstructor
+    }
+}
+
+=== missingExpression.mjs ===
+export default /** @type {(e: unknown) => e is MissingExpression} */ (e) => !!e;
+>(e) => !!e : (e: unknown) => e is MissingExpression
+>e : unknown
+>!!e : boolean
+>!e : boolean
+>e : unknown
+
