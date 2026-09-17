@@ -1363,6 +1363,25 @@ export const lint = task({
     run: runLint,
 });
 
+export const knip = task({
+    name: "knip",
+    description: "Runs knip.",
+    run: runKnip,
+});
+
+async function runKnip() {
+    const fixArgs = options.fix ? ["--fix"] : [];
+    await run(process.execPath, ["node_modules/knip/bin/knip.js", ...fixArgs]);
+    await run(process.execPath, [
+        "node_modules/knip/bin/knip.js",
+        "--include-entry-exports",
+        "--tags=+internal",
+        "--tags=-knipignore",
+        "--include=exports,types",
+        ...fixArgs,
+    ]);
+}
+
 async function runLint() {
     const lintArgs = ["run"];
     if (defaultGoBuildTags.length) {
@@ -1432,6 +1451,7 @@ export const validate = task({
             await runValidation("test:tools", runTestTools);
             await runValidation("test:smoke", runSmokeTest); // in CI this is run with `--race`
         }
+        await runValidation("knip", runKnip);
         await runValidation("lint", runLint);
         await runValidation("format", runFormat);
 
