@@ -8,20 +8,12 @@ schedules:
       include:
         - main
 
-name: $(date:yyyyMMdd)$(rev:.r)
+name: $(Date:yyyyMMdd).$(runRevision)
 appendCommitMessageToRunName: false
 
-parameters:
-  - name: signType
-    displayName: Sign type
-    type: string
-    default: auto
-    values:
-      - auto
-      - real
-      - test
-
 variables:
+  - name: runRevision
+    value: $[counter(format('{0:yyyyMMdd}', pipeline.startTime), 1)]
   # For MicroBuild telemetry
   - name: TeamName
     value: TypeScript
@@ -102,18 +94,11 @@ extends:
               - task: MicroBuildSigningPlugin@4
                 displayName: '🔩 Install Signing Plugin'
                 inputs:
-                  ${{ if eq(parameters.signType, 'auto') }}:
-                    ${{ if eq(variables['Build.Reason'], 'Schedule') }}:
-                      signType: real
-                    ${{ else }}:
-                      signType: test
-                  ${{ else }}:
-                    signType: ${{ parameters.signType }}
+                  signType: real
                   # azureSubscription AKA ConnectedServiceName
                   azureSubscription: 'MicroBuild Signing Task (DevDiv)'
-                  ${{ if or(and(eq(parameters.signType, 'auto'), eq(variables['Build.Reason'], 'Schedule')), eq(parameters.signType, 'real')) }}:
-                    # From "nonwindowspmeservicename" in https://dev.azure.com/devdiv/1ESPipelineTemplates/_git/MicroBuildTemplate?path=/azure-pipelines/Stages/Stage.yml
-                    ConnectedPMEServiceName: beb8cb23-b303-4c95-ab26-9e44bc958d39
+                  # From "nonwindowspmeservicename" in https://dev.azure.com/devdiv/1ESPipelineTemplates/_git/MicroBuildTemplate?path=/azure-pipelines/Stages/Stage.yml
+                  ConnectedPMEServiceName: beb8cb23-b303-4c95-ab26-9e44bc958d39
                   # We do this ourselves.
                   zipSources: false
                 env:
@@ -125,24 +110,70 @@ extends:
                 fetchDepth: 1
                 fetchTags: false
               - template: /tools/pipelines/steps/setup-node-npm-ci.yml@self
+
+              - bash: |
+                  set -euo pipefail
+
+                  if ! [[ "$INITIAL_BUILD_NUMBER" =~ ^[0-9]{8}\.[1-9][0-9]*$ ]]; then
+                    echo "Unexpected initial build number: $INITIAL_BUILD_NUMBER" >&2
+                    exit 1
+                  fi
+
+                  echo "##vso[task.setvariable variable=initialBuildNumber]$INITIAL_BUILD_NUMBER"
+
+                  npx hereby typescript:release-info --forRelease --setPrerelease "dev.$INITIAL_BUILD_NUMBER"
+
+                  releaseInfo="built/typescript-release-info.json"
+                  version="$(jq -r '.version' "$releaseInfo")"
+                  npmTag="$(jq -r '.npmTag' "$releaseInfo")"
+                  if [ -z "$version" ] || [ "$version" = "null" ]; then
+                    echo "Unable to determine the TypeScript package version." >&2
+                    exit 1
+                  fi
+
+                  case "$npmTag" in
+                    next)
+                      if [[ "$version" != *"-dev.$INITIAL_BUILD_NUMBER" ]]; then
+                        echo "Nightly package version $version does not contain build number $INITIAL_BUILD_NUMBER." >&2
+                        exit 1
+                      fi
+                      finalBuildNumber="$version"
+                      ;;
+                    latest | beta | rc)
+                      finalBuildNumber="${version}_${INITIAL_BUILD_NUMBER}"
+                      ;;
+                    *)
+                      echo "Unexpected npm publish tag: $npmTag" >&2
+                      exit 1
+                      ;;
+                  esac
+
+                  echo "##vso[build.updatebuildnumber]$finalBuildNumber"
+                displayName: 'Set versioned build name'
+                env:
+                  INITIAL_BUILD_NUMBER: $(Build.BuildNumber)
+
               - template: /tools/pipelines/steps/setup-go.yml@self
 
-              - bash: npx hereby typescript:build --forRelease --setPrerelease dev.$(Build.BuildNumber)
+              - bash: npx hereby typescript:build --forRelease --setPrerelease dev.$(initialBuildNumber)
                 displayName: 'Build packages'
 
-              - bash: npx hereby typescript:sign --forRelease --setPrerelease dev.$(Build.BuildNumber)
+              - bash: npx hereby typescript:test-package --forRelease --setPrerelease dev.$(initialBuildNumber)
+                displayName: 'Test packages'
+
+              - bash: npx hereby typescript:sign --forRelease --setPrerelease dev.$(initialBuildNumber)
                 displayName: 'Sign packages'
                 env:
                   # Needed for ESRP
                   SYSTEM_ACCESSTOKEN: $(System.AccessToken)
 
-              - bash: npx hereby typescript:pack --forRelease --setPrerelease dev.$(Build.BuildNumber)
+              - bash: npx hereby typescript:pack --forRelease --setPrerelease dev.$(initialBuildNumber)
                 displayName: 'Pack packages'
 
-              - bash: npx hereby vscode-typescript:pack --forRelease --setPrerelease dev.$(Build.BuildNumber)
+              - bash: npx hereby vscode-typescript:pack --forRelease --setPrerelease dev.$(initialBuildNumber)
                 displayName: 'Pack extensions'
 
-              - bash: npx hereby vscode-typescript:sign --forRelease --setPrerelease dev.$(Build.BuildNumber)
+              - bash: npx hereby vscode-typescript:sign --forRelease --setPrerelease dev.$(initialBuildNumber)
                 displayName: 'Sign extensions'
                 env:
                   # Needed for ESRP

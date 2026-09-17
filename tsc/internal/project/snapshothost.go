@@ -142,10 +142,8 @@ func (s *SnapshotHost) CloneSnapshotWithAutoImports(ctx context.Context, baseSna
 		reason:             UpdateReasonRequestedLanguageServiceWithAutoImports,
 		fs:                 baseSnapshot.fs.fs,
 		fileSystemOverride: baseSnapshot.fileSystemOverride,
-		ResourceRequest: ResourceRequest{
-			Documents:   []lsproto.DocumentUri{uri},
-			AutoImports: uri,
-		},
+		Documents:          []lsproto.DocumentUri{uri},
+		AutoImports:        uri,
 	}
 	return baseSnapshot.Clone(ctx, change, baseSnapshot.overlays(), logger)
 }
