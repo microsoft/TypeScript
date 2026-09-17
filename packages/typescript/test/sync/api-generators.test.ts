@@ -39,6 +39,7 @@ import {
     type InterfaceType,
     type LiteralType,
     ModuleKind,
+    ModuleResolutionKind,
     type NodeHandle,
     type Program,
     type Project,
@@ -1501,6 +1502,18 @@ describe("API - generator batching", () => {
             assert.equal(checker.isArgumentsSymbol(argumentsSymbol), true);
             assert.equal(checker.isUnknownSignature(unknownSignature), true);
 
+            const moduleResolutionSpec = {
+                fallback: "unresolved" as const,
+                entries: [{ moduleName: "models", result: { resolvedFileName: "/src/models.ts" } }],
+            };
+            const moduleResolutionSet = api.batch(api.createModuleResolutionSet.gen(moduleResolutionSpec))[0];
+            exercisedMethods.add("API.createModuleResolutionSet");
+            const moduleResolver = api.batch(snapshot.createModuleResolver.gen(
+                { moduleResolution: ModuleResolutionKind.NodeNext },
+                { moduleResolutions: moduleResolutionSet },
+            ))[0];
+            exercisedMethods.add("Snapshot.createModuleResolver");
+
             const cases: ParityCase[] = [
                 parityCase("API", "parseConfigFile", api.parseConfigFile, assertDeepEquivalent, "/tsconfig.json"),
                 parityCase("API", "parseCommandLine", api.parseCommandLine, assertDeepEquivalent, ["--strict", "--noEmit"]),
@@ -1517,6 +1530,7 @@ describe("API - generator batching", () => {
                     temporaryProjects.push(temporarySnapshot.getProjects()[0].configFileName);
                 }),
                 parityCase("Snapshot", "getDefaultProjectForFile", snapshot.getDefaultProjectForFile, assertOptionalProjectsEquivalent, "/src/index.ts"),
+                parityCase("ModuleResolver", "resolveModuleName", moduleResolver.resolveModuleName, assertDeepEquivalent, "models", "/src"),
                 parityCase("Snapshot", "update", snapshot.update, assertSnapshotsEquivalent, {}),
 
                 parityCase("Project", "getImportAdderEdits", project.getImportAdderEdits, assertDeepEquivalent, "/src/index.ts", [{ kind: "importSymbol", symbol: unimportedSymbol }]),
@@ -1740,6 +1754,7 @@ describe("API - generator batching", () => {
                 { name: "API", value: api.constructor as object, own: true },
                 { name: "InternalAPI", value: api.internal },
                 { name: "Snapshot", value: snapshot },
+                { name: "ModuleResolver", value: moduleResolver },
                 { name: "Project", value: project },
                 { name: "LanguageService", value: languageService },
                 { name: "Program", value: program },
