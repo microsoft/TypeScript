@@ -25010,10 +25010,11 @@ func (c *Checker) getTypeFromConditionalTypeNode(node *ast.Node) *Type {
 			outerTypeParameters = core.Filter(allOuterTypeParameters, func(tp *Type) bool { return c.isTypeParameterPossiblyReferenced(tp, node) })
 		}
 		root := &ConditionalRoot{
-			node:                node.AsConditionalTypeNode(),
+			node:                node,
 			checkType:           checkType,
 			extendsType:         c.getTypeFromTypeNode(node.AsConditionalTypeNode().ExtendsType),
 			isDistributive:      checkType.flags&TypeFlagsTypeParameter != 0,
+			checkTuples:         c.checkTuplesInConditionalType(node.AsConditionalTypeNode()),
 			inferTypeParameters: c.getInferTypeParameters(node),
 			outerTypeParameters: outerTypeParameters,
 			instantiations:      nil,
@@ -25054,13 +25055,10 @@ func (c *Checker) getConditionalType(root *ConditionalRoot, mapper *TypeMapper, 
 		if forNarrowing && isNarrowingSubstitutionType(checkType) {
 			effectiveCheckType = checkType.AsSubstitutionType().constraint
 		}
-		checkTypeNode := ast.SkipTypeParentheses(root.node.CheckType)
-		extendsTypeNode := ast.SkipTypeParentheses(root.node.ExtendsType)
 		// When the check and extends types are simple tuple types of the same arity, we defer resolution of the
 		// conditional type when any tuple elements are generic. This is such that non-distributable conditional
 		// types can be written `[X] extends [Y] ? ...` and be deferred similarly to `X extends Y ? ...`.
-		checkTuples := c.isSimpleTupleType(checkTypeNode) && c.isSimpleTupleType(extendsTypeNode) && len(checkTypeNode.Elements()) == len(extendsTypeNode.Elements())
-		checkTypeDeferred := c.isDeferredType(effectiveCheckType, checkTuples)
+		checkTypeDeferred := c.isDeferredType(effectiveCheckType, root.checkTuples)
 		var combinedMapper *TypeMapper
 		if len(root.inferTypeParameters) != 0 {
 			// When we're looking at making an inference for an infer type, when we get its constraint, it'll automagically be
@@ -25104,7 +25102,7 @@ func (c *Checker) getConditionalType(root *ConditionalRoot, mapper *TypeMapper, 
 			inferredExtendsType = extendsType
 		}
 		// We attempt to resolve the conditional type only when the check and extends types are non-generic
-		if !checkTypeDeferred && !c.isDeferredType(inferredExtendsType, checkTuples) {
+		if !checkTypeDeferred && !c.isDeferredType(inferredExtendsType, root.checkTuples) {
 			// Return falseType for a definitely false extends check. We check an instantiation of the two
 			// types with type parameters mapped to the wildcard type, the most permissive instantiations
 			// possible (the wildcard type is assignable to and from all types). If those are not related,
@@ -25118,11 +25116,11 @@ func (c *Checker) getConditionalType(root *ConditionalRoot, mapper *TypeMapper, 
 				if effectiveCheckType.flags&TypeFlagsAny != 0 || forConstraint && inferredExtendsType.flags&TypeFlagsNever == 0 && someType(c.getPermissiveInstantiation(inferredExtendsType), func(t *Type) bool {
 					return c.isTypeAssignableTo(t, c.getPermissiveInstantiation(effectiveCheckType))
 				}) {
-					extraTypes = append(extraTypes, c.instantiateType(c.getTypeFromTypeNode(root.node.TrueType), core.OrElse(combinedMapper, mapper)))
+					extraTypes = append(extraTypes, c.instantiateType(c.getRootTrueType(root), core.OrElse(combinedMapper, mapper)))
 				}
 				// If falseType is an immediately nested conditional type that isn't distributive or has an
 				// identical checkType, switch to that type and loop.
-				falseType := c.getTypeFromTypeNode(root.node.FalseType)
+				falseType := c.getRootFalseType(root)
 				if falseType.flags&TypeFlagsConditional != 0 {
 					newRoot := falseType.AsConditionalType().root
 					if newRoot.node.Parent == root.node.AsNode() && (!newRoot.isDistributive || newRoot.checkType == root.checkType) {
@@ -25148,7 +25146,7 @@ func (c *Checker) getConditionalType(root *ConditionalRoot, mapper *TypeMapper, 
 			//   type Foo<T extends { x: any }> = T extends { x: string } ? string : number
 			// doesn't immediately resolve to 'string' instead of being deferred.
 			if inferredExtendsType.flags&TypeFlagsAnyOrUnknown != 0 || c.isTypeAssignableTo(c.getRestrictiveInstantiation(effectiveCheckType), c.getRestrictiveInstantiation(inferredExtendsType)) {
-				trueType := c.getTypeFromTypeNode(root.node.TrueType)
+				trueType := c.getRootTrueType(root)
 				trueMapper := core.OrElse(combinedMapper, mapper)
 				if newRoot, newRootMapper := c.getTailRecursionRoot(trueType, trueMapper); newRoot != nil {
 					root = newRoot
@@ -25274,7 +25272,7 @@ func (c *Checker) permissiveMapperWorker(t *Type) *Type {
 func (c *Checker) getTrueTypeFromConditionalType(t *Type) *Type {
 	d := t.AsConditionalType()
 	if d.resolvedTrueType == nil {
-		d.resolvedTrueType = c.instantiateType(c.getTypeFromTypeNode(d.root.node.TrueType), d.mapper)
+		d.resolvedTrueType = c.instantiateType(c.getRootTrueType(d.root), d.mapper)
 	}
 	return d.resolvedTrueType
 }
@@ -25282,9 +25280,29 @@ func (c *Checker) getTrueTypeFromConditionalType(t *Type) *Type {
 func (c *Checker) getFalseTypeFromConditionalType(t *Type) *Type {
 	d := t.AsConditionalType()
 	if d.resolvedFalseType == nil {
-		d.resolvedFalseType = c.instantiateType(c.getTypeFromTypeNode(d.root.node.FalseType), d.mapper)
+		d.resolvedFalseType = c.instantiateType(c.getRootFalseType(d.root), d.mapper)
 	}
 	return d.resolvedFalseType
+}
+
+func (c *Checker) getRootTrueType(root *ConditionalRoot) *Type {
+	if root.trueType == nil {
+		root.trueType = c.getTypeFromTypeNode(root.node.AsConditionalTypeNode().TrueType)
+	}
+	return root.trueType
+}
+
+func (c *Checker) getRootFalseType(root *ConditionalRoot) *Type {
+	if root.falseType == nil {
+		root.falseType = c.getTypeFromTypeNode(root.node.AsConditionalTypeNode().FalseType)
+	}
+	return root.falseType
+}
+
+func (c *Checker) checkTuplesInConditionalType(node *ast.ConditionalTypeNode) bool {
+	checkTypeNode := ast.SkipTypeParentheses(node.CheckType)
+	extendsTypeNode := ast.SkipTypeParentheses(node.ExtendsType)
+	return c.isSimpleTupleType(checkTypeNode) && c.isSimpleTupleType(extendsTypeNode) && len(checkTypeNode.Elements()) == len(extendsTypeNode.Elements())
 }
 
 func (c *Checker) isNarrowableReturnType(t *Type) bool {
@@ -25384,7 +25402,7 @@ func (c *Checker) getInferredTrueTypeFromConditionalType(t *Type) *Type {
 	d := t.AsConditionalType()
 	if d.resolvedInferredTrueType == nil {
 		if d.combinedMapper != nil {
-			d.resolvedInferredTrueType = c.instantiateType(c.getTypeFromTypeNode(d.root.node.TrueType), d.combinedMapper)
+			d.resolvedInferredTrueType = c.instantiateType(c.getRootTrueType(d.root), d.combinedMapper)
 		} else {
 			d.resolvedInferredTrueType = c.getTrueTypeFromConditionalType(t)
 		}

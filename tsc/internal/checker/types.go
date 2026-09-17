@@ -1250,10 +1250,13 @@ func (t *SubstitutionType) BaseType() *Type        { return t.baseType }
 func (t *SubstitutionType) SubstConstraint() *Type { return t.constraint }
 
 type ConditionalRoot struct {
-	node                *ast.ConditionalTypeNode
+	node                *ast.Node
+	trueType            *Type
+	falseType           *Type
 	checkType           *Type
 	extendsType         *Type
 	isDistributive      bool
+	checkTuples         bool
 	inferTypeParameters []*Type
 	outerTypeParameters []*Type
 	instantiations      map[CacheHashKey]*Type

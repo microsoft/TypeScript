@@ -3017,8 +3017,8 @@ func (b *NodeBuilderImpl) conditionalTypeToTypeNode(_t *Type) *ast.TypeNode {
 		b.ctx.inferTypeParameters = t.root.inferTypeParameters
 		extendsTypeNode := b.typeToTypeNode(b.ch.instantiateType(t.root.extendsType, newMapper))
 		b.ctx.inferTypeParameters = saveInferTypeParameters
-		trueTypeNode := b.typeToTypeNodeOrCircularityElision(b.ch.instantiateType(b.getTypeFromTypeNode(t.root.node.TrueType, false), newMapper))
-		falseTypeNode := b.typeToTypeNodeOrCircularityElision(b.ch.instantiateType(b.getTypeFromTypeNode(t.root.node.FalseType, false), newMapper))
+		trueTypeNode := b.typeToTypeNodeOrCircularityElision(b.ch.instantiateType(b.ch.getRootTrueType(t.root), newMapper))
+		falseTypeNode := b.typeToTypeNodeOrCircularityElision(b.ch.instantiateType(b.ch.getRootFalseType(t.root), newMapper))
 
 		// outermost conditional makes `T` a type parameter, allowing the inner conditionals to be distributive
 		// second conditional makes `T` have `T & checkType` substitution, so it is correctly usable as the checkType

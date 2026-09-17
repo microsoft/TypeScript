@@ -5022,7 +5022,12 @@ func (c *Checker) isTypeDerivedFrom(source *Type, target *Type) bool {
 }
 
 func (c *Checker) isDistributionDependent(root *ConditionalRoot) bool {
-	return root.isDistributive && (c.isTypeParameterPossiblyReferenced(root.checkType, root.node.TrueType) || c.isTypeParameterPossiblyReferenced(root.checkType, root.node.FalseType))
+	if ast.IsConditionalTypeNode(root.node) {
+		return root.isDistributive &&
+			(c.isTypeParameterPossiblyReferenced(root.checkType, root.node.AsConditionalTypeNode().TrueType) || c.isTypeParameterPossiblyReferenced(root.checkType, root.node.AsConditionalTypeNode().FalseType))
+	}
+	// If the root is synthetic, conservatively assume the check type is possibly referenced.
+	return root.isDistributive
 }
 
 func (r *Relater) traceUnionsOrIntersectionsTooLarge(source *Type, target *Type) {
