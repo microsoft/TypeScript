@@ -21052,7 +21052,7 @@ func (c *Checker) createInstantiatedSymbolTable(symbols []*ast.Symbol, m *TypeMa
 	if len(symbols) == 0 {
 		return nil
 	}
-	result := make(ast.SymbolTable)
+	result := make(ast.SymbolTable, len(symbols))
 	for _, symbol := range symbols {
 		result[symbol.Name] = c.instantiateSymbol(symbol, m)
 	}
