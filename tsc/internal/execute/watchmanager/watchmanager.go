@@ -122,7 +122,7 @@ func (wm *WatchManager) DrainEvents() Changes {
 	if wm.aliases != nil && len(changed) != 0 {
 		return Changes{Matches: wm.aliases.Match(changed), Overflow: overflow}
 	}
-	return Changes{Matches: watchalias.Matches{Changes: changed}, Overflow: overflow || wm.aliases == nil && wm.registrations != nil}
+	return Changes{Changes: changed, Overflow: overflow || wm.aliases == nil && wm.registrations != nil}
 }
 
 // Realpath shares watch resolution between computing subscription directories

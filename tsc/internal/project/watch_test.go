@@ -248,15 +248,15 @@ func TestWatchAliasesStandaloneErrors(t *testing.T) {
 			host := NewSnapshotHost(&SessionInit{
 				FS: fs, Options: &SessionOptions{CurrentDirectory: "/src", WatchEnabled: watchEnabled},
 			})
-			root := host.NewStandaloneRootSnapshot()
+			root := host.NewRootSnapshot()
 			var snapshot *Snapshot
 			var err error
 			if program {
-				snapshot = host.CloneSnapshotForProgram(
-					context.Background(), root, nil, []string{"/src/main.ts"},
-					&core.CompilerOptions{NoLib: core.TSTrue}, nil, nil, nil, FileChangeSummary{},
-				)
-				err = snapshot.apiError
+				snapshot, err = host.CloneSnapshot(context.Background(), root, FileChangeSummary{}, &APISnapshotRequest{
+					CreatePrograms: []*APICreateProgramRequest{{
+						RootFileNames: []string{"/src/main.ts"}, CompilerOptions: &core.CompilerOptions{NoLib: core.TSTrue},
+					}},
+				})
 			} else {
 				var projects collections.Set[string]
 				projects.Add("/src/tsconfig.json")
@@ -271,7 +271,7 @@ func TestWatchAliasesStandaloneErrors(t *testing.T) {
 			}
 			snapshot.Deref()
 			if watchEnabled && !program {
-				overlaySnapshot, err := host.CloneSnapshotWithTemporaryFile(context.Background(), root, nil, "file:///src/main.ts", "export const value = 2;")
+				overlaySnapshot, err := cloneSnapshotWithOverlay(root, "file:///src/main.ts", "export const value = 2;")
 				overlaySnapshot.Deref()
 				if !errors.Is(err, syscall.EACCES) {
 					t.Fatalf("temporary-file clone lost filesystem comparison lookup error: %v", err)
@@ -293,12 +293,12 @@ func TestWatchAliasesRegularFileAncestor(t *testing.T) {
 		FS: osvfs.FS(), Options: &SessionOptions{CurrentDirectory: filepath.ToSlash(directory), WatchEnabled: true},
 	})
 	defer host.Close()
-	root := host.NewStandaloneRootSnapshot()
+	root := host.NewRootSnapshot()
 	defer root.Deref()
 	root.compilerOptionsForInferredProjects = &core.CompilerOptions{NoLib: core.TSTrue}
 	// Keep the source in an overlay; watchalias.go is an existing regular file,
 	// so this unresolved import makes native comparer queries encounter ENOTDIR.
-	snapshot, err := host.CloneSnapshotWithTemporaryFile(context.Background(), root, nil,
+	snapshot, err := cloneSnapshotWithOverlay(root,
 		lsconv.FileNameToDocumentURI(filepath.ToSlash(filepath.Join(directory, "watch-alias-malformed-import.ts"))),
 		`import "./watchalias.go/missing";`,
 	)
@@ -748,7 +748,7 @@ func TestWatchNotificationsUsePublishedGeneration(t *testing.T) {
 		}},
 	}})
 	session.UpdateSnapshot(ctx, overlays, SnapshotChange{
-		fileChanges: edits, ResourceRequest: ResourceRequest{Documents: []lsproto.DocumentUri{"file:///project/main.ts"}},
+		fileChanges: edits, Documents: []lsproto.DocumentUri{"file:///project/main.ts"},
 	})
 	assert.Assert(t, session.Snapshot() != old)
 
@@ -757,7 +757,7 @@ func TestWatchNotificationsUsePublishedGeneration(t *testing.T) {
 	session.pendingFileChangesMu.Unlock()
 	assert.Assert(t, changes.Changed.Has("file:///project/node_modules/two/index.d.ts"), "preparation must use the newly published registration")
 	session.UpdateSnapshot(ctx, overlays, SnapshotChange{
-		fileChanges: changes, ResourceRequest: ResourceRequest{Documents: []lsproto.DocumentUri{"file:///project/main.ts"}},
+		fileChanges: changes, Documents: []lsproto.DocumentUri{"file:///project/main.ts"},
 	})
 	source := session.Snapshot().GetDefaultProject("file:///project/main.ts").Program.GetSourceFile("/project/node_modules/two/index.d.ts")
 	assert.Assert(t, source != nil)

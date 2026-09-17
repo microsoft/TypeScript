@@ -64,6 +64,21 @@ func TestDocumentIdentifierUnmarshalJSON(t *testing.T) {
 	}
 }
 
+func TestEnsureProgramsUnmarshalJSON(t *testing.T) {
+	t.Parallel()
+
+	var all api.EnsurePrograms
+	assert.NilError(t, json.Unmarshal([]byte(`true`), &all))
+	assert.Equal(t, all.All, true)
+
+	var projects api.EnsurePrograms
+	assert.NilError(t, json.Unmarshal([]byte(`["/tsconfig.json","/dev/null/synthetic/1"]`), &projects))
+	assert.DeepEqual(t, projects.Projects, []api.ProjectID{"/tsconfig.json", "/dev/null/synthetic/1"})
+
+	var invalid api.EnsurePrograms
+	assert.ErrorContains(t, json.Unmarshal([]byte(`false`), &invalid), "must be true or an array")
+}
+
 func TestNewDiagnosticResponseIncludesFormattingContext(t *testing.T) {
 	t.Parallel()
 

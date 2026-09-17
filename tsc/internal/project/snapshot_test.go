@@ -3,6 +3,7 @@ package project
 import (
 	"context"
 	"fmt"
+	"maps"
 	"os"
 	"path/filepath"
 	"slices"
@@ -48,18 +49,134 @@ func TestSnapshot(t *testing.T) {
 		return session
 	}
 
-	t.Run("temporary file can be added to an empty root snapshot", func(t *testing.T) {
+	t.Run("creates and removes synthetic programs", func(t *testing.T) {
 		t.Parallel()
-		session := setup(map[string]any{})
+		session := setup(map[string]any{
+			"/a.ts": "export const a = 1;",
+			"/b.ts": "export const b = 1;",
+		})
+		defer session.Close()
+
+		ctx := context.Background()
+		options := &core.CompilerOptions{NoLib: core.TSTrue}
+		createRequest := &APISnapshotRequest{CreatePrograms: []*APICreateProgramRequest{
+			{
+				RootFileNames:   []string{"/a.ts"},
+				CompilerOptions: options,
+			},
+			{
+				RootFileNames:   []string{"/b.ts"},
+				CompilerOptions: options,
+			},
+		}}
+		createdSnapshot, err := session.CloneSnapshot(
+			ctx,
+			session.Snapshot(),
+			FileChangeSummary{},
+			createRequest,
+		)
+		assert.NilError(t, err)
+		defer createdSnapshot.Deref()
+		createdPrograms := createdSnapshot.CreatedPrograms()
+		assert.Equal(t, len(createdPrograms), 2)
+		firstProject := createdPrograms[0]
+		secondProject := createdPrograms[1]
+
+		firstProgramID, ok := SyntheticProgramID(firstProject.ID())
+		assert.Assert(t, ok)
+		removeRequest := &APISnapshotRequest{RemovePrograms: collections.NewSetFromItems(firstProgramID)}
+		removedSnapshot, err := session.CloneSnapshot(
+			ctx,
+			createdSnapshot,
+			FileChangeSummary{},
+			removeRequest,
+		)
+		assert.NilError(t, err)
+		defer removedSnapshot.Deref()
+
+		assert.Assert(t, firstProject != nil)
+		assert.Assert(t, secondProject != nil)
+		assert.Assert(t, firstProject.ID() != secondProject.ID())
+		assert.DeepEqual(t, firstProject.CommandLine.FileNames(), []string{"/a.ts"})
+		assert.DeepEqual(t, secondProject.CommandLine.FileNames(), []string{"/b.ts"})
+		assert.Assert(t, createdSnapshot.ProjectCollection.InferredProject() == nil)
+		assert.Equal(t, len(createdSnapshot.ProjectCollection.SyntheticProjects()), 2)
+		assert.Equal(t, len(createdSnapshot.ProjectCollection.LanguageServiceProjects()), 0)
+		assert.Equal(t, len(createdSnapshot.GetLanguageServiceProjectsContainingFile(lsproto.DocumentUri("file:///a.ts"))), 0)
+		assert.Assert(t, createdSnapshot.ProjectCollection.GetDefaultProject(createdSnapshot.toPath("/a.ts")) == nil)
+		assert.Equal(t, createdSnapshot.ProjectCollection.GetProjectByPath(firstProject.ID()), firstProject)
+
+		openedSnapshot, err := session.CloneSnapshot(
+			ctx,
+			createdSnapshot,
+			FileChangeSummary{},
+			&APISnapshotRequest{OpenFiles: collections.NewSetFromItems(lsproto.DocumentUri("file:///a.ts"))},
+		)
+		assert.NilError(t, err)
+		defer openedSnapshot.Deref()
+		assert.Assert(t, openedSnapshot.ProjectCollection.InferredProject() != nil)
+		assert.Equal(t, len(openedSnapshot.ProjectCollection.LanguageServiceProjects()), 1)
+		assert.Equal(t, len(openedSnapshot.GetLanguageServiceProjectsContainingFile(lsproto.DocumentUri("file:///a.ts"))), 1)
+		assert.Equal(t, openedSnapshot.ProjectCollection.GetDefaultProject(openedSnapshot.toPath("/a.ts")), openedSnapshot.ProjectCollection.InferredProject())
+		assert.Equal(t, openedSnapshot.ProjectCollection.GetProjectByPath(firstProject.ID()), firstProject)
+
+		assert.Assert(t, removedSnapshot.ProjectCollection.GetProjectByPath(firstProject.ID()) == nil)
+		assert.Equal(t, removedSnapshot.ProjectCollection.GetProjectByPath(secondProject.ID()), secondProject)
+		assert.Equal(t, len(removedSnapshot.ProjectCollection.SyntheticProjects()), 1)
+	})
+
+	t.Run("failed API update is not adopted", func(t *testing.T) {
+		t.Parallel()
+		session := setup(map[string]any{
+			"/a.ts": "export const a = 1;",
+		})
 		defer session.Close()
 
 		baseSnapshot := session.Snapshot()
-		uri := lsproto.DocumentUri("file:///temporary.ts")
-		snapshot, err := session.CloneSnapshotWithTemporaryFile(context.Background(), baseSnapshot, nil, uri, "export const value = 1;")
-		assert.NilError(t, err)
-		defer snapshot.Deref()
+		failedSnapshot, err := session.CloneSnapshot(
+			context.Background(),
+			baseSnapshot,
+			FileChangeSummary{},
+			&APISnapshotRequest{RemovePrograms: collections.NewSetFromItems(1)},
+		)
+		defer failedSnapshot.Deref()
 
-		assert.Equal(t, snapshot.GetFile(uri.FileName()).Content(), "export const value = 1;")
+		assert.ErrorContains(t, err, "synthetic program not found for removal")
+		assert.Equal(t, session.Snapshot(), baseSnapshot)
+		assert.Assert(t, func() (panicked bool) {
+			defer func() {
+				if recover() != nil {
+					panicked = true
+				}
+			}()
+			_, _ = session.CloneSnapshot(context.Background(), failedSnapshot, FileChangeSummary{}, nil)
+			return false
+		}())
+	})
+
+	t.Run("failed API update preserves flushed host changes", func(t *testing.T) {
+		t.Parallel()
+		session := setup(map[string]any{
+			"/a.ts": "export const a = 1;",
+		})
+		defer session.Close()
+
+		baseSnapshot := session.Snapshot()
+		session.pendingFileChangesMu.Lock()
+		session.pendingFileChanges = append(session.pendingFileChanges, FileChange{
+			Kind: FileChangeKindWatchChange,
+			URI:  lsproto.DocumentUri("file:///a.ts"),
+		})
+		session.pendingFileChangesMu.Unlock()
+		failedSnapshot, err := session.APIUpdate(
+			context.Background(),
+			FileChangeSummary{},
+			&APISnapshotRequest{RemovePrograms: collections.NewSetFromItems(1)},
+		)
+
+		assert.ErrorContains(t, err, "synthetic program not found for removal")
+		assert.Assert(t, failedSnapshot == nil)
+		assert.Assert(t, session.Snapshot() != baseSnapshot)
 	})
 
 	t.Run("compilerHost gets frozen with snapshot's FS only once", func(t *testing.T) {
@@ -399,6 +516,29 @@ func BenchmarkSnapshotCloneRefCost(b *testing.B) {
 	}
 }
 
+func cloneSnapshotWithOverlay(base *Snapshot, uri lsproto.DocumentUri, text string) (*Snapshot, error) {
+	host := base.host
+	overlays := maps.Clone(base.overlays())
+	if overlays == nil {
+		overlays = make(map[tspath.Path]*Overlay)
+	}
+	overlay := newOverlayFS(base.fs.fs, overlays, host.options.PositionEncoding, host.toPath)
+	change := FileChange{Kind: FileChangeKindOpen, URI: uri, Version: 1, Content: text, LanguageKind: lsproto.LanguageKindTypeScript}
+	if previous := base.overlays()[host.toPath(uri.FileName())]; previous != nil {
+		change.Kind = FileChangeKindChange
+		change.Version = previous.Version() + 1
+		change.Changes = []lsproto.TextDocumentContentChangePartialOrWholeDocument{{WholeDocument: &lsproto.TextDocumentContentChangeWholeDocument{Text: text}}}
+	}
+	changes, overlays := overlay.processChanges([]FileChange{change})
+	snapshot := base.Clone(context.Background(), SnapshotChange{
+		fs:                 base.fs.fs,
+		fileSystemOverride: base.fileSystemOverride,
+		fileChanges:        changes,
+		ResourceRequest:    base.resourceRequestForDocument(uri),
+	}, overlays, nil, nil)
+	return snapshot, snapshot.apiError
+}
+
 func TestWatchAliasSnapshotReuse(t *testing.T) {
 	t.Parallel()
 	disk := vfstest.FromMap(map[string]string{
@@ -409,7 +549,7 @@ func TestWatchAliasSnapshotReuse(t *testing.T) {
 	fs := &failingWatchComparerFS{FS: disk}
 	host := NewSnapshotHost(&SessionInit{FS: fs, Options: &SessionOptions{CurrentDirectory: "/src", WatchEnabled: true}})
 	defer host.Close()
-	root := host.NewStandaloneRootSnapshot()
+	root := host.NewRootSnapshot()
 	defer root.Deref()
 	snapshot, err := host.CloneSnapshot(context.Background(), root, FileChangeSummary{}, &APISnapshotRequest{
 		OpenProjects: collections.NewSetFromItems("/src/tsconfig.json"),
@@ -418,7 +558,7 @@ func TestWatchAliasSnapshotReuse(t *testing.T) {
 		t.Fatal(err)
 	}
 	defer func() { snapshot.Deref() }()
-	opened, err := host.CloneSnapshotWithTemporaryFile(context.Background(), snapshot, nil, "file:///src/main.ts", "export const value = 1;")
+	opened, err := cloneSnapshotWithOverlay(snapshot, "file:///src/main.ts", "export const value = 1;")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -426,7 +566,7 @@ func TestWatchAliasSnapshotReuse(t *testing.T) {
 	snapshot = opened
 	for range 3 {
 		calls, aliases := fs.calls, snapshot.watchAliases
-		next, cloneErr := host.CloneSnapshotWithTemporaryFile(context.Background(), snapshot, nil, "file:///src/main.ts", "export const value = 2;")
+		next, cloneErr := cloneSnapshotWithOverlay(snapshot, "file:///src/main.ts", "export const value = 2;")
 		if cloneErr != nil {
 			t.Fatal(cloneErr)
 		}
@@ -451,7 +591,7 @@ func TestWatchAliasSnapshotReuse(t *testing.T) {
 		}
 	}
 	calls, aliases := fs.calls, snapshot.watchAliases
-	next, err := host.CloneSnapshotWithTemporaryFile(context.Background(), snapshot, nil, "file:///src/main.ts", `import "./other"; export const value = 3;`)
+	next, err := cloneSnapshotWithOverlay(snapshot, "file:///src/main.ts", `import "./other"; export const value = 3;`)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -464,7 +604,7 @@ func TestWatchAliasSnapshotReuse(t *testing.T) {
 		t.Fatal("new import was not loaded")
 	}
 	calls, aliases = fs.calls, snapshot.watchAliases
-	next, err = host.CloneSnapshotWithTemporaryFile(context.Background(), snapshot, nil, "file:///src/main.ts", "export const value = 4;")
+	next, err = cloneSnapshotWithOverlay(snapshot, "file:///src/main.ts", "export const value = 4;")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -481,7 +621,7 @@ func TestWatchAliasSnapshotReuse(t *testing.T) {
 	}
 	var removedDependencyChange FileChangeSummary
 	removedDependencyChange.Changed.Add("file:///src/other.ts")
-	next, err = host.CloneSnapshot(context.Background(), snapshot, removedDependencyChange, nil)
+	next, err = host.CloneSnapshot(context.Background(), snapshot, removedDependencyChange, &APISnapshotRequest{EnsureAllPrograms: true})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -500,7 +640,7 @@ func TestWatchAliasSnapshotReuse(t *testing.T) {
 	}
 	var configChange FileChangeSummary
 	configChange.Changed.Add("file:///src/tsconfig.json")
-	next, err = host.CloneSnapshot(context.Background(), snapshot, configChange, nil)
+	next, err = host.CloneSnapshot(context.Background(), snapshot, configChange, &APISnapshotRequest{EnsureAllPrograms: true})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -528,17 +668,21 @@ func TestWatchAliasesSnapshotFilesystem(t *testing.T) {
 				hostFS, overrideFS := makeFS("/host"), makeFS(target)
 				host := NewSnapshotHost(&SessionInit{FS: hostFS, Options: &SessionOptions{CurrentDirectory: "/src", WatchEnabled: true}})
 				defer host.Close()
-				root := host.NewStandaloneRootSnapshot()
+				root := host.NewRootSnapshot()
 				defer root.Deref()
 				options := &core.CompilerOptions{NoLib: core.TSTrue, Types: []string{}, PreserveSymlinks: core.TSTrue}
 				clone := func(base *Snapshot, fs vfs.FS) *Snapshot {
-					if program {
-						return host.CloneSnapshotForProgram(context.Background(), base, fs, []string{"/src/main.ts"}, options, nil, nil, nil, FileChangeSummary{InvalidateAll: fs != nil})
+					request := &APISnapshotRequest{
+						FileSystem: fs, ReplaceFileSystem: fs != nil, EnsureAllPrograms: true,
 					}
-					snapshot, err := host.CloneSnapshot(context.Background(), base, FileChangeSummary{}, &APISnapshotRequest{
-						OpenProjects: collections.NewSetFromItems("/src/tsconfig.json"),
-						FileSystem:   fs, ReplaceFileSystem: fs != nil,
-					})
+					if program {
+						if len(base.ProjectCollection.SyntheticProjects()) == 0 {
+							request.CreatePrograms = []*APICreateProgramRequest{{RootFileNames: []string{"/src/main.ts"}, CompilerOptions: options}}
+						}
+					} else {
+						request.OpenProjects = collections.NewSetFromItems("/src/tsconfig.json")
+					}
+					snapshot, err := host.CloneSnapshot(context.Background(), base, FileChangeSummary{}, request)
 					assert.NilError(t, err)
 					return snapshot
 				}
@@ -574,23 +718,38 @@ func TestWatchAliasProgramCloneReuse(t *testing.T) {
 	}, true)}
 	host := NewSnapshotHost(&SessionInit{FS: fs, Options: &SessionOptions{CurrentDirectory: "/src", WatchEnabled: true}})
 	defer host.Close()
-	root := host.NewStandaloneRootSnapshot()
+	root := host.NewRootSnapshot()
 	defer root.Deref()
 	options := &core.CompilerOptions{NoLib: core.TSTrue, Types: []string{}}
-	snapshot := host.CloneSnapshotForProgram(context.Background(), root, nil, []string{"/src/s.ts"}, options, nil, nil, nil, FileChangeSummary{})
+	snapshot, err := host.CloneSnapshot(context.Background(), root, FileChangeSummary{}, &APISnapshotRequest{
+		CreatePrograms: []*APICreateProgramRequest{{RootFileNames: []string{"/src/s.ts"}, CompilerOptions: options}},
+	})
+	assert.NilError(t, err)
 	defer snapshot.Deref()
+	programID, ok := SyntheticProgramID(snapshot.CreatedPrograms()[0].ID())
+	assert.Assert(t, ok)
 	calls := fs.calls
-	next := host.CloneSnapshotForProgram(context.Background(), snapshot, nil, []string{"/src/s.ts"}, options, nil, nil, snapshot.ProjectCollection.inferredProject, FileChangeSummary{})
+	next, err := host.CloneSnapshot(context.Background(), snapshot, FileChangeSummary{}, &APISnapshotRequest{
+		ReconfigurePrograms: []*APIReconfigureProgramRequest{{
+			ProgramID: programID, RootFileNames: []string{"/src/s.ts"}, CompilerOptions: options,
+		}},
+	})
+	assert.NilError(t, err)
 	defer next.Deref()
 	if snapshot.watchAliases != next.watchAliases || calls != fs.calls {
 		t.Fatal("unchanged createProgram rebuilt alias inputs")
 	}
-	last := host.CloneSnapshotForProgram(context.Background(), next, nil, []string{"/src/s.ts", "/src/ſ.ts"}, options, nil, nil, next.ProjectCollection.inferredProject, FileChangeSummary{})
+	last, err := host.CloneSnapshot(context.Background(), next, FileChangeSummary{}, &APISnapshotRequest{
+		ReconfigurePrograms: []*APIReconfigureProgramRequest{{
+			ProgramID: programID, RootFileNames: []string{"/src/s.ts", "/src/ſ.ts"}, CompilerOptions: options,
+		}},
+	})
+	assert.NilError(t, err)
 	defer last.Deref()
 	if last.watchAliases == next.watchAliases || calls == fs.calls {
 		t.Fatal("new original root name reused aliases")
 	}
-	if len(last.ProjectCollection.inferredProject.Program.GetSourceFiles()) != 2 {
+	if len(last.ProjectCollection.SyntheticProjects()[0].Program.GetSourceFiles()) != 2 {
 		t.Fatal("distinct s and long-s root identities collapsed")
 	}
 }
@@ -600,7 +759,7 @@ func TestWatchAliasCoalescedFilesystemChanges(t *testing.T) {
 	for _, kind := range []FileChangeKind{FileChangeKindWatchCreate, FileChangeKindWatchChange, FileChangeKindWatchDelete, FileChangeKindSave} {
 		fs := vfstest.FromMap(map[string]string{"/src/node_modules/main.ts": "export {};"}, true)
 		host := NewSnapshotHost(&SessionInit{FS: fs, Options: &SessionOptions{CurrentDirectory: "/src", WatchEnabled: true}})
-		snapshot := host.NewStandaloneRootSnapshot()
+		snapshot := host.NewRootSnapshot()
 		overlays := newOverlayFS(fs, make(map[tspath.Path]*Overlay), lsproto.PositionEncodingKindUTF8, host.toPath)
 		_, previousOverlays := overlays.processChanges([]FileChange{{
 			Kind: FileChangeKindOpen, URI: "file:///src/node_modules/main.ts", Content: "export {};",
@@ -625,31 +784,43 @@ func TestWatchAliasCoalescedFilesystemChanges(t *testing.T) {
 
 func TestWatchAliasSessionRefreshesFilteredEvents(t *testing.T) {
 	t.Parallel()
-	fs := &failingWatchComparerFS{FS: vfstest.FromMap(map[string]string{
-		"/src/tsconfig.json": `{"compilerOptions":{"noLib":true,"types":[]},"files":["main.ts"]}`,
-		"/src/main.ts":       "export const value = 1;",
-	}, true)}
-	session := NewSession(&SessionInit{
-		BackgroundCtx: context.Background(),
-		FS:            fs, Client: &noopClient{},
-		Options: &SessionOptions{CurrentDirectory: "/src", WatchEnabled: true},
-	})
-	defer session.Close()
-	session.DidOpenFile(context.Background(), "file:///src/main.ts", 1, "export const value = 1;", lsproto.LanguageKindTypeScript)
-	session.WaitForBackgroundTasks()
-	previous, calls := session.Snapshot(), fs.calls
-	session.pendingFileChangesMu.Lock()
-	session.pendingFileChanges = append(session.pendingFileChanges,
-		FileChange{Kind: FileChangeKindWatchCreate, URI: "file:///src/node_modules/ignored.ts"},
-		FileChange{Kind: FileChangeKindWatchDelete, URI: "file:///src/node_modules/ignored.ts"},
-	)
-	session.pendingFileChangesMu.Unlock()
-	if _, err := session.GetLanguageService(context.Background(), "file:///src/main.ts"); err != nil {
-		t.Fatal(err)
-	}
-	session.WaitForBackgroundTasks()
-	if next := session.Snapshot(); next == previous || next.watchAliases == previous.watchAliases || fs.calls == calls {
-		t.Fatal("coalesced namespace events failed to refresh the session alias generation")
+	for _, failedAPI := range []bool{false, true} {
+		t.Run(fmt.Sprintf("failedAPI=%v", failedAPI), func(t *testing.T) {
+			t.Parallel()
+			fs := &failingWatchComparerFS{FS: vfstest.FromMap(map[string]string{
+				"/src/tsconfig.json": `{"compilerOptions":{"noLib":true,"types":[]},"files":["main.ts"]}`,
+				"/src/main.ts":       "export const value = 1;",
+			}, true)}
+			session := NewSession(&SessionInit{
+				BackgroundCtx: context.Background(),
+				FS:            fs, Client: &noopClient{},
+				Options: &SessionOptions{CurrentDirectory: "/src", WatchEnabled: true},
+			})
+			defer session.Close()
+			session.DidOpenFile(context.Background(), "file:///src/main.ts", 1, "export const value = 1;", lsproto.LanguageKindTypeScript)
+			session.WaitForBackgroundTasks()
+			previous, calls := session.Snapshot(), fs.calls
+			session.pendingFileChangesMu.Lock()
+			session.pendingFileChanges = append(session.pendingFileChanges,
+				FileChange{Kind: FileChangeKindWatchCreate, URI: "file:///src/node_modules/ignored.ts"},
+				FileChange{Kind: FileChangeKindWatchDelete, URI: "file:///src/node_modules/ignored.ts"},
+			)
+			session.pendingFileChangesMu.Unlock()
+			if failedAPI {
+				rejected, err := session.APIUpdate(context.Background(), FileChangeSummary{}, &APISnapshotRequest{
+					RemovePrograms: collections.NewSetFromItems(1),
+				})
+				assert.ErrorContains(t, err, "synthetic program not found for removal")
+				assert.Assert(t, rejected == nil)
+			} else {
+				_, err := session.GetLanguageService(context.Background(), "file:///src/main.ts")
+				assert.NilError(t, err)
+			}
+			session.WaitForBackgroundTasks()
+			if next := session.Snapshot(); next == previous || next.watchAliases == previous.watchAliases || fs.calls == calls {
+				t.Fatal("coalesced namespace events failed to refresh the session alias generation")
+			}
+		})
 	}
 }
 
@@ -671,7 +842,7 @@ func TestWatchAliasRealpathStateReuseAndRefresh(t *testing.T) {
 	fs := &countedWatchAliasFS{FS: vfstest.FromMap(files("one"), true)}
 	host := NewSnapshotHost(&SessionInit{FS: fs, Options: &SessionOptions{CurrentDirectory: "/var/project", WatchEnabled: true}})
 	defer host.Close()
-	root := host.NewStandaloneRootSnapshot()
+	root := host.NewRootSnapshot()
 	defer root.Deref()
 	snapshot, err := host.CloneSnapshot(context.Background(), root, FileChangeSummary{}, &APISnapshotRequest{
 		OpenProjects: collections.NewSetFromItems("/var/project/tsconfig.json"),
@@ -686,13 +857,13 @@ func TestWatchAliasRealpathStateReuseAndRefresh(t *testing.T) {
 	if !slices.Contains(snapshot.watchNames("/var/project"), "/private/project") {
 		t.Fatal("disabled native comparison lost requested realpath root")
 	}
-	opened, err := host.CloneSnapshotWithTemporaryFile(context.Background(), snapshot, nil, "file:///var/project/main.ts", `import { value } from "pkg"; export { value };`)
+	opened, err := cloneSnapshotWithOverlay(snapshot, "file:///var/project/main.ts", `import { value } from "pkg"; export { value };`)
 	if err != nil {
 		t.Fatal(err)
 	}
 	defer opened.Deref()
 	calls := fs.realpaths.Load()
-	edited, err := host.CloneSnapshotWithTemporaryFile(context.Background(), opened, nil, "file:///var/project/main.ts", `import { value } from "pkg"; export { value }; // edited`)
+	edited, err := cloneSnapshotWithOverlay(opened, "file:///var/project/main.ts", `import { value } from "pkg"; export { value }; // edited`)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -710,7 +881,7 @@ func TestWatchAliasRealpathStateReuseAndRefresh(t *testing.T) {
 	var changes FileChangeSummary
 	changes.Deleted.Add("file:///var/project/node_modules/pkg")
 	removed := host.update(context.Background(), edited, SnapshotChange{
-		fileChanges: changes, ResourceRequest: ResourceRequest{Projects: []tspath.Path{"/var/project/tsconfig.json"}},
+		fileChanges: changes, Projects: []tspath.Path{"/var/project/tsconfig.json"},
 	})
 	defer removed.Deref()
 	if slices.Contains(removed.watchNames("/var/project/node_modules/pkg"), "/packages/one") {
@@ -720,7 +891,7 @@ func TestWatchAliasRealpathStateReuseAndRefresh(t *testing.T) {
 	changes = FileChangeSummary{}
 	changes.Created.Add("file:///var/project/node_modules/pkg")
 	retargeted := host.update(context.Background(), removed, SnapshotChange{
-		fileChanges: changes, ResourceRequest: ResourceRequest{Projects: []tspath.Path{"/var/project/tsconfig.json"}},
+		fileChanges: changes, Projects: []tspath.Path{"/var/project/tsconfig.json"},
 	})
 	if retargeted.apiError != nil {
 		t.Fatal(retargeted.apiError)
@@ -741,7 +912,7 @@ func TestWatchAliasRealpathStateReuseAndRefresh(t *testing.T) {
 	changes = FileChangeSummary{}
 	changes.Deleted.Add("file:///var/project/node_modules/pkg")
 	deleted := host.update(context.Background(), retargeted, SnapshotChange{
-		fileChanges: changes, ResourceRequest: ResourceRequest{Projects: []tspath.Path{"/var/project/tsconfig.json"}},
+		fileChanges: changes, Projects: []tspath.Path{"/var/project/tsconfig.json"},
 	})
 	if deleted.apiError != nil {
 		t.Fatal(deleted.apiError)
@@ -771,7 +942,7 @@ func TestWatchRealpathRetargetIdenticalText(t *testing.T) {
 		}
 		fs := &countedWatchAliasFS{FS: vfstest.FromMap(files("one", `export const value: "two";`), true)}
 		host := NewSnapshotHost(&SessionInit{FS: fs, Options: &SessionOptions{CurrentDirectory: "/project", WatchEnabled: watchEnabled}})
-		root := host.NewStandaloneRootSnapshot()
+		root := host.NewRootSnapshot()
 		snapshot, err := host.CloneSnapshot(context.Background(), root, FileChangeSummary{}, &APISnapshotRequest{
 			OpenProjects: collections.NewSetFromItems("/project/tsconfig.json"),
 		})
@@ -780,7 +951,7 @@ func TestWatchRealpathRetargetIdenticalText(t *testing.T) {
 		var changes FileChangeSummary
 		changes.Changed.Add("file:///project/node_modules/pkg")
 		next := host.update(context.Background(), snapshot, SnapshotChange{
-			fileChanges: changes, ResourceRequest: ResourceRequest{Projects: []tspath.Path{"/project/tsconfig.json"}},
+			fileChanges: changes, Projects: []tspath.Path{"/project/tsconfig.json"},
 		})
 		assert.NilError(t, next.apiError)
 		file := next.ProjectCollection.ConfiguredProject("/project/tsconfig.json").Program.GetSourceFile("/project/node_modules/pkg/dep.d.ts")
@@ -791,7 +962,7 @@ func TestWatchRealpathRetargetIdenticalText(t *testing.T) {
 		changes = FileChangeSummary{}
 		changes.Changed.Add("file:///packages/two/dep.d.ts")
 		last := host.update(context.Background(), next, SnapshotChange{
-			fileChanges: changes, ResourceRequest: ResourceRequest{Projects: []tspath.Path{"/project/tsconfig.json"}},
+			fileChanges: changes, Projects: []tspath.Path{"/project/tsconfig.json"},
 		})
 		assert.NilError(t, last.apiError)
 		assert.Equal(t, last.ProjectCollection.ConfiguredProject("/project/tsconfig.json").Program.GetSourceFile("/project/node_modules/pkg/dep.d.ts").Text(), `export const value: "updated";`)
@@ -915,7 +1086,7 @@ func benchmarkSnapshotWatchAliases(b *testing.B, symlink bool) {
 							setupStart := time.Now()
 							fs.comparerQueries.Store(0)
 							fs.realpaths.Store(0)
-							root := host.NewStandaloneRootSnapshot()
+							root := host.NewRootSnapshot()
 							defer root.Deref()
 							projects := collections.NewSetFromItems(configName)
 							snapshot, err := host.CloneSnapshot(context.Background(), root, FileChangeSummary{}, &APISnapshotRequest{OpenProjects: projects})
@@ -925,7 +1096,7 @@ func benchmarkSnapshotWatchAliases(b *testing.B, symlink bool) {
 							uri := lsconv.FileNameToDocumentURI(names[0])
 							assert.Equal(b, uri.FileName(), names[0], "benchmark paths must round-trip through document URIs")
 							if edit == "edit" {
-								opened, err := host.CloneSnapshotWithTemporaryFile(context.Background(), snapshot, nil, uri, "export const value = 1;")
+								opened, err := cloneSnapshotWithOverlay(snapshot, uri, "export const value = 1;")
 								snapshot.Deref()
 								if err != nil {
 									b.Fatal(err)
@@ -946,14 +1117,14 @@ func benchmarkSnapshotWatchAliases(b *testing.B, symlink bool) {
 								var next *Snapshot
 								var err error
 								if edit == "edit" {
-									next, err = host.CloneSnapshotWithTemporaryFile(context.Background(), snapshot, nil, uri, text)
+									next, err = cloneSnapshotWithOverlay(snapshot, uri, text)
 								} else {
 									b.StopTimer()
 									assert.NilError(b, fs.WriteFile(physicalRoot+strings.TrimPrefix(names[0], logicalRoot), text))
 									b.StartTimer()
 									var changes FileChangeSummary
 									changes.Changed.Add(uri)
-									next, err = host.CloneSnapshot(context.Background(), snapshot, changes, &APISnapshotRequest{})
+									next, err = host.CloneSnapshot(context.Background(), snapshot, changes, &APISnapshotRequest{EnsureAllPrograms: true})
 								}
 								if err != nil {
 									b.Fatal(err)

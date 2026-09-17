@@ -74,7 +74,6 @@ jobs:
       - name: Tests without Node.js
         run: |
           export PATH="$RUNNER_TEMP/go-test-bin"
-          export GOEXPERIMENT=ms_nocgo_opensslcrypto
           export CGO_ENABLED=0
           ! command -v node
           cd "$RUNNER_TEMP/tsc"
@@ -143,15 +142,13 @@ jobs:
           echo "::remove-matcher owner=tsc::"
           echo "::remove-matcher owner=go::"
       - run: npm ci
-      - run: go install gotest.tools/gotestsum@latest
-        if: ${{ matrix.config.os != 'windows' && !matrix.config.race }}
       - name: Tests
         id: test
         run: npx hereby test:tsc
       - name: Benchmarks
         run: npx hereby test:benchmarks
       - run: git add .
-      - uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
+      - uses: codecov/codecov-action@0b35c9ecc4f0529d0eb674914510c22f85b196b4 # v7.1.0
         if: ${{ always() && matrix.config.coverage && github.event_name != 'merge_group' }}
         with:
           use_oidc: ${{ !(github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork) }}
@@ -214,13 +211,11 @@ jobs:
           echo "::remove-matcher owner=tsc::"
           echo "::remove-matcher owner=go::"
       - run: npm ci
-      - run: go install gotest.tools/gotestsum@latest
-        if: ${{ matrix.config.os != 'windows' }}
       - run: npx hereby test:extension
       - run: npx hereby test:tools
       - run: npx hereby test:api
       - run: git add .
-      - uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
+      - uses: codecov/codecov-action@0b35c9ecc4f0529d0eb674914510c22f85b196b4 # v7.1.0
         if: ${{ always() && matrix.config.coverage && github.event_name != 'merge_group' }}
         with:
           use_oidc: ${{ !(github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork) }}
