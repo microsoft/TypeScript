@@ -70,9 +70,9 @@ if (working.thing!.name !== "Correct") {
 >log : (...data: any[]) => void
 >working.thing!.message : string
 >working.thing! : { name: 'Error1'; message: string; } | { name: 'Error2'; message: string; } | { name: 'Error3'; message: string; } | { name: 'Error4'; message: string; } | { name: 'Error5'; message: string; } | { name: 'Error6'; message: string; } | { name: 'Error7'; message: string; } | { name: 'Error8'; message: string; } | { name: 'Error9'; message: string; }
->working.thing : { name: 'Error1'; message: string; } | { name: 'Error2'; message: string; } | { name: 'Error3'; message: string; } | { name: 'Error4'; message: string; } | { name: 'Error5'; message: string; } | { name: 'Error6'; message: string; } | { name: 'Error7'; message: string; } | { name: 'Error8'; message: string; } | { name: 'Error9'; message: string; }
+>working.thing : { name: 'Error1'; message: string; } | { name: 'Error2'; message: string; } | { name: 'Error3'; message: string; } | { name: 'Error4'; message: string; } | { name: 'Error5'; message: string; } | { name: 'Error6'; message: string; } | { name: 'Error7'; message: string; } | { name: 'Error8'; message: string; } | { name: 'Error9'; message: string; } | undefined
 >working : WorkingType
->thing : { name: 'Error1'; message: string; } | { name: 'Error2'; message: string; } | { name: 'Error3'; message: string; } | { name: 'Error4'; message: string; } | { name: 'Error5'; message: string; } | { name: 'Error6'; message: string; } | { name: 'Error7'; message: string; } | { name: 'Error8'; message: string; } | { name: 'Error9'; message: string; }
+>thing : { name: 'Error1'; message: string; } | { name: 'Error2'; message: string; } | { name: 'Error3'; message: string; } | { name: 'Error4'; message: string; } | { name: 'Error5'; message: string; } | { name: 'Error6'; message: string; } | { name: 'Error7'; message: string; } | { name: 'Error8'; message: string; } | { name: 'Error9'; message: string; } | undefined
 >message : string
 
 } else {
@@ -83,9 +83,9 @@ if (working.thing!.name !== "Correct") {
 >log : (...data: any[]) => void
 >working.thing!.id : string
 >working.thing! : { name: 'Correct'; id: string; }
->working.thing : { name: 'Correct'; id: string; }
+>working.thing : { name: 'Correct'; id: string; } | undefined
 >working : WorkingType
->thing : { name: 'Correct'; id: string; }
+>thing : { name: 'Correct'; id: string; } | undefined
 >id : string
 }
 
@@ -154,9 +154,9 @@ if (borked.thing!.name !== "Correct") {
 >log : (...data: any[]) => void
 >borked.thing!.message : string
 >borked.thing! : { name: 'Error1'; message: string; } | { name: 'Error2'; message: string; } | { name: 'Error3'; message: string; } | { name: 'Error4'; message: string; } | { name: 'Error5'; message: string; } | { name: 'Error6'; message: string; } | { name: 'Error7'; message: string; } | { name: 'Error8'; message: string; }
->borked.thing : { name: 'Error1'; message: string; } | { name: 'Error2'; message: string; } | { name: 'Error3'; message: string; } | { name: 'Error4'; message: string; } | { name: 'Error5'; message: string; } | { name: 'Error6'; message: string; } | { name: 'Error7'; message: string; } | { name: 'Error8'; message: string; }
+>borked.thing : { name: 'Error1'; message: string; } | { name: 'Error2'; message: string; } | { name: 'Error3'; message: string; } | { name: 'Error4'; message: string; } | { name: 'Error5'; message: string; } | { name: 'Error6'; message: string; } | { name: 'Error7'; message: string; } | { name: 'Error8'; message: string; } | undefined
 >borked : BorkedType
->thing : { name: 'Error1'; message: string; } | { name: 'Error2'; message: string; } | { name: 'Error3'; message: string; } | { name: 'Error4'; message: string; } | { name: 'Error5'; message: string; } | { name: 'Error6'; message: string; } | { name: 'Error7'; message: string; } | { name: 'Error8'; message: string; }
+>thing : { name: 'Error1'; message: string; } | { name: 'Error2'; message: string; } | { name: 'Error3'; message: string; } | { name: 'Error4'; message: string; } | { name: 'Error5'; message: string; } | { name: 'Error6'; message: string; } | { name: 'Error7'; message: string; } | { name: 'Error8'; message: string; } | undefined
 >message : string
 
 } else {
@@ -167,9 +167,9 @@ if (borked.thing!.name !== "Correct") {
 >log : (...data: any[]) => void
 >borked.thing!.id : string
 >borked.thing! : { name: 'Correct'; id: string; }
->borked.thing : { name: 'Correct'; id: string; }
+>borked.thing : { name: 'Correct'; id: string; } | undefined
 >borked : BorkedType
->thing : { name: 'Correct'; id: string; }
+>thing : { name: 'Correct'; id: string; } | undefined
 >id : string
 }
 

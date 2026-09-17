@@ -2,6 +2,13 @@
 // @noEmit: true
 // @noTypesAndSymbols: true
 
+// A non-null assertion narrows only the asserted expression itself; it does not establish a
+// persistent non-null flow fact for the underlying reference. This must hold identically for
+// unions small enough to use the fallback discriminant narrowing path and unions large enough
+// to use the optimized key-property path, so that a `!` assertion behaves consistently
+// regardless of union size (#62511). Optional chaining remains the idiomatic way to narrow the
+// reference itself and continues to do so unchanged.
+
 type Small =
     | { type: "1" }
     | { type: "2" }
@@ -20,165 +27,67 @@ type Large =
     | { type: "10" }
     | undefined;
 
-// Small union: fallback discriminant narrowing path.
+// Strict equality, both branches.
 
 declare let smallEqual: Small;
 if (smallEqual!.type === "1") {
+    // @ts-expect-error
     smallEqual.type;
 } else {
+    // @ts-expect-error
     smallEqual.type;
 }
-
-declare let smallEqualRight: Small;
-if ("1" === smallEqualRight!.type) {
-    smallEqualRight.type;
-}
-
-declare const one: "1";
-declare let smallEqualIdentifier: Small;
-if (smallEqualIdentifier!.type === one) {
-    smallEqualIdentifier.type;
-}
-
-declare let signedEqual: { type: -1 } | { type: 1 } | undefined;
-if (signedEqual!.type === -1) {
-    signedEqual.type;
-}
-
-declare let smallNotEqual: Small;
-if (smallNotEqual!.type !== "1") {
-    smallNotEqual.type;
-}
-
-declare let smallSwitch: Small;
-switch (smallSwitch!.type) {
-    case "1":
-        smallSwitch.type;
-        break;
-}
-
-// Large union: optimized discriminant narrowing path.
 
 declare let largeEqual: Large;
 if (largeEqual!.type === "1") {
+    // @ts-expect-error
     largeEqual.type;
 } else {
+    // @ts-expect-error
     largeEqual.type;
+}
+
+// Strict inequality.
+
+declare let smallNotEqual: Small;
+if (smallNotEqual!.type !== "1") {
+    // @ts-expect-error
+    smallNotEqual.type;
 }
 
 declare let largeNotEqual: Large;
 if (largeNotEqual!.type !== "1") {
+    // @ts-expect-error
     largeNotEqual.type;
+}
+
+// Switch.
+
+declare let smallSwitch: Small;
+switch (smallSwitch!.type) {
+    case "1":
+        // @ts-expect-error
+        smallSwitch.type;
+        break;
 }
 
 declare let largeSwitch: Large;
 switch (largeSwitch!.type) {
     case "1":
+        // @ts-expect-error
         largeSwitch.type;
         break;
 }
 
-// Ordinary optional chaining still narrows a nullable large union through the fallback path.
+// Control: optional chaining is unaffected and remains the idiomatic way to narrow the
+// reference itself, for both union sizes.
+
+declare let smallOptional: Small;
+if (smallOptional?.type === "1") {
+    smallOptional.type;
+}
 
 declare let largeOptional: Large;
 if (largeOptional?.type === "1") {
     largeOptional.type;
-}
-
-// Optional chaining through a non-null assertion preserves nullable non-matching branches.
-
-declare let optionalBangLeft: Small;
-if (optionalBangLeft!?.type === "1") {
-    optionalBangLeft.type;
-} else {
-    // @ts-expect-error
-    optionalBangLeft.type;
-}
-
-declare let optionalBangRight: Small;
-if ("1" === optionalBangRight!?.type) {
-    optionalBangRight.type;
-} else {
-    // @ts-expect-error
-    optionalBangRight.type;
-}
-
-declare let optionalBangSwitch: Small;
-switch (optionalBangSwitch!?.type) {
-    case "1":
-        optionalBangSwitch.type;
-        break;
-    default:
-        // @ts-expect-error
-        optionalBangSwitch.type;
-        break;
-}
-
-// A non-null assertion captured by an alias does not apply after the source is reassigned.
-
-declare let maybeUndefined: Small;
-declare let largeAliasedValue: Large;
-declare let maybeLargeUndefined: Large;
-const largeAliasedTag = largeAliasedValue!.type;
-
-largeAliasedValue = maybeLargeUndefined;
-
-if (largeAliasedTag === "1") {
-    // @ts-expect-error
-    largeAliasedValue.type;
-}
-
-// Later-evaluated expressions with possible side effects do not carry the non-null fact.
-
-declare let assignmentInRight: Large;
-if (assignmentInRight!.type === (assignmentInRight = maybeLargeUndefined, "1")) {
-    // @ts-expect-error
-    assignmentInRight.type;
-}
-
-declare let assignmentWrappedAccessLeft: Small;
-if ((assignmentWrappedAccessLeft!.type = (assignmentWrappedAccessLeft = maybeUndefined, "1")) === "1") {
-    // @ts-expect-error
-    assignmentWrappedAccessLeft.type;
-}
-
-declare let assignmentWrappedAccessRight: Small;
-if ("1" === (assignmentWrappedAccessRight!.type = (assignmentWrappedAccessRight = maybeUndefined, "1"))) {
-    // @ts-expect-error
-    assignmentWrappedAccessRight.type;
-}
-
-declare let looseEquality: Small;
-const coercibleValue: any = {
-    valueOf() {
-        looseEquality = maybeUndefined;
-        return "1";
-    },
-};
-if (looseEquality!.type == coercibleValue) {
-    // @ts-expect-error
-    looseEquality.type;
-}
-
-declare let computedKeyLeft: Small;
-enum ComputedKeyLeft {
-    type = "type",
-}
-Object.defineProperty(ComputedKeyLeft, "type", {
-    get() {
-        computedKeyLeft = maybeUndefined;
-        return "type" as const;
-    },
-});
-if (computedKeyLeft![ComputedKeyLeft.type] === "1") {
-    // @ts-expect-error
-    computedKeyLeft.type;
-}
-
-declare let assignmentInCase: Large;
-switch (assignmentInCase!.type) {
-    case (assignmentInCase = maybeLargeUndefined, "1"):
-        // @ts-expect-error
-        assignmentInCase.type;
-        break;
 }
