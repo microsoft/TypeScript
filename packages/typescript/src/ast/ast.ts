@@ -25,11 +25,13 @@ import type {
     ForStatement,
     Identifier,
     IfStatement,
+    JSDoc,
     JsxAttribute,
     JsxExpression,
     JsxSpreadAttribute,
     KeywordSyntaxKind,
     ModifierSyntaxKind,
+    Node,
     ParameterDeclaration,
     PropertyAccessExpression,
     PropertyAssignment,
@@ -80,16 +82,16 @@ export interface ReadonlyTextRange {
     readonly end: number;
 }
 
-export interface NodeArray<T extends Node> extends ReadonlyArray<T>, ReadonlyTextRange {
+export interface NodeArray<T extends NodeBase> extends ReadonlyArray<T>, ReadonlyTextRange {
     hasTrailingComma?: boolean;
     transformFlags: number;
 }
 
-export interface Node extends ReadonlyTextRange {
+export interface NodeBase extends ReadonlyTextRange {
     readonly kind: SyntaxKind;
     readonly flags: NodeFlags;
     readonly parent: Node;
-    readonly jsDoc?: readonly Node[] | undefined;
+    readonly jsDoc?: readonly JSDoc[] | undefined;
     forEachChild<T>(visitor: (node: Node) => T, visitArray?: (nodes: NodeArray<Node>) => T): T | undefined;
     getSourceFile(): SourceFile;
     getStart(sourceFile?: SourceFile, includeJsDocComment?: boolean): number;
@@ -127,7 +129,7 @@ export interface MappedDiagnosticDirective {
     readonly unusedCode: number;
 }
 
-export interface SourceFile extends Node {
+export interface SourceFile extends NodeBase {
     readonly kind: SyntaxKind.SourceFile;
     readonly statements: NodeArray<Statement>;
     readonly endOfFileToken: EndOfFile;

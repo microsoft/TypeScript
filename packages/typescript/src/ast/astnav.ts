@@ -168,7 +168,7 @@ function getTokenAtPositionImpl(
 
     while (true) {
         // Visit each child of current to find the one containing the position.
-        state.next = undefined;
+        state.next = undefined as Node | undefined;
         nodeAfterLeft = undefined as Node | undefined;
 
         // In Strada, JSDoc nodes with a single comment represent that comment as a string
