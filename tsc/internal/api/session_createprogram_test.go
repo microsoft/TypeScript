@@ -221,7 +221,7 @@ func TestUpdateSnapshotEnsuresSyntheticProgram(t *testing.T) {
 	dirty, err := session.handleUpdateSnapshot(context.Background(), &UpdateSnapshotParams{
 		Snapshot: created.Snapshot,
 		Changes: &CreateSnapshotParams{
-			FileChanges: &APIFileChanges{Changed: []DocumentIdentifier{{FileName: fileName}}},
+			FileNotifications: &FileNotifications{Changed: []DocumentIdentifier{{FileName: fileName}}},
 		},
 	})
 	assert.NilError(t, err)

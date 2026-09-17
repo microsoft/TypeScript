@@ -210,8 +210,8 @@ export interface InitializeResponse {
 
 /** CreateSnapshotParams are the parameters for creating a new independent snapshot. */
 export interface CreateSnapshotParams extends SnapshotRequestChangesParams {
-    /** FileChanges describes host file system changes to invalidate while creating the snapshot. */
-    fileChanges?: APIFileChanges | undefined;
+    /** FileNotifications describes host file system changes to invalidate while creating the snapshot. */
+    fileNotifications?: FileNotifications | undefined;
     /**
      * FileSystem supplies file contents and directory listings for the new snapshot.
      * A full filesystem is canonical and total. A filesystem layer is checked
@@ -1341,11 +1341,12 @@ export interface SnapshotRequestChangesParams {
 }
 
 /**
- * APIFileChanges describes file changes to apply when updating a snapshot.
- * Either InvalidateAll is true (discard all caches) or Changed/Created/Deleted
- * list individual documents.
+ * FileNotifications describes changes to files that have occurred on the host
+ * file system, used to notify the session to reload cached files and reevaluate
+ * tsconfig.json `include` globs. Either InvalidateAll is true (discard all caches)
+ * or Changed/Created/Deleted list individual documents.
  */
-export interface APIFileChanges {
+export interface FileNotifications {
     invalidateAll?: boolean | undefined;
     changed?: DocumentIdentifier[] | undefined;
     created?: DocumentIdentifier[] | undefined;

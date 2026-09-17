@@ -1582,7 +1582,7 @@ describe("Multiple snapshots", () => {
         fs.writeFile!("/inferred.ts", `export const inferred = 2;`);
         fs.writeFile!("/synthetic.ts", `export const synthetic = 2;`);
         const dirty = created.update({
-            fileChanges: { changed: ["/configured/index.ts", "/inferred.ts", "/synthetic.ts"] },
+            fileNotifications: { changed: ["/configured/index.ts", "/inferred.ts", "/synthetic.ts"] },
         });
         assert.deepEqual(dirty.getProjects().map(project => project.dirty), [true, true, true]);
 

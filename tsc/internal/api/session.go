@@ -1137,7 +1137,7 @@ func (s *Session) handleCreateSnapshot(ctx context.Context, params *CreateSnapsh
 	}
 
 	openState := s.reconcileSnapshotOpens(apiRequest, snapshotOpenState{})
-	fileChanges := s.toFileChangeSummary(params.FileChanges)
+	fileChanges := s.toFileChangeSummary(params.FileNotifications)
 	var snapshotFileSystem vfs.FS
 	if params.FileSystem != nil {
 		fileSystem, fileSystemErr := requestfilesystem.NewForUpdate(params.FileSystem, s.fileSystem(), s.currentDirectory(), &fileChanges)
@@ -1177,7 +1177,7 @@ func (s *Session) handleUpdateSnapshot(ctx context.Context, params *UpdateSnapsh
 		return nil, err
 	}
 	openState := s.reconcileSnapshotOpens(apiRequest, snapshotOpenState{openProjects: baseSD.openProjects, openFiles: baseSD.openFiles})
-	fileChanges := s.toFileChangeSummary(changes.FileChanges)
+	fileChanges := s.toFileChangeSummary(changes.FileNotifications)
 	snapshotFileSystem := baseSD.fileSystem
 	if changes.FileSystem != nil {
 		baseFileSystem := snapshotFileSystem
@@ -4364,7 +4364,7 @@ func (s *Session) toPath(fileName string) tspath.Path {
 }
 
 // toFileChangeSummary converts API file changes to a project.FileChangeSummary.
-func (s *Session) toFileChangeSummary(changes *APIFileChanges) project.FileChangeSummary {
+func (s *Session) toFileChangeSummary(changes *FileNotifications) project.FileChangeSummary {
 	if changes == nil {
 		return project.FileChangeSummary{}
 	}

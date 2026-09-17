@@ -344,17 +344,11 @@ func (d DocumentIdentifier) String() string {
 	return d.FileName
 }
 
-// APIFileChangeSummary lists documents that have been changed, created, or deleted.
-type APIFileChangeSummary struct {
-	Changed []DocumentIdentifier `json:"changed,omitempty"`
-	Created []DocumentIdentifier `json:"created,omitempty"`
-	Deleted []DocumentIdentifier `json:"deleted,omitempty"`
-}
-
-// APIFileChanges describes file changes to apply when updating a snapshot.
-// Either InvalidateAll is true (discard all caches) or Changed/Created/Deleted
-// list individual documents.
-type APIFileChanges struct {
+// FileNotifications describes changes to files that have occurred on the host
+// file system, used to notify the session to reload cached files and reevaluate
+// tsconfig.json `include` globs. Either InvalidateAll is true (discard all caches)
+// or Changed/Created/Deleted list individual documents.
+type FileNotifications struct {
 	InvalidateAll bool                 `json:"invalidateAll,omitempty"`
 	Changed       []DocumentIdentifier `json:"changed,omitempty"`
 	Created       []DocumentIdentifier `json:"created,omitempty"`
@@ -414,8 +408,8 @@ func (e *EnsurePrograms) UnmarshalJSONFrom(dec *json.Decoder) error {
 // CreateSnapshotParams are the parameters for creating a new independent snapshot.
 type CreateSnapshotParams struct {
 	SnapshotRequestChangesParams
-	// FileChanges describes host file system changes to invalidate while creating the snapshot.
-	FileChanges *APIFileChanges `json:"fileChanges,omitempty"`
+	// FileNotifications describes host file system changes to invalidate while creating the snapshot.
+	FileNotifications *FileNotifications `json:"fileNotifications,omitempty"`
 	// FileSystem supplies file contents and directory listings for the new snapshot.
 	// A full filesystem is canonical and total. A filesystem layer is checked
 	// before falling back to the base snapshot or host filesystem.

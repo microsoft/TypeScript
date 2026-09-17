@@ -58,7 +58,7 @@ import {
     toPath,
 } from "../path.ts";
 import type {
-    APIFileChanges,
+    FileNotifications,
     CompilerOptions,
     ConfiguredProjectId,
     CreateProgramOptions,
@@ -157,7 +157,7 @@ export { formatDiagnostics, formatDiagnosticsWithColorAndContext } from "../diag
 export { documentURIToFileName, fileNameToDocumentURI } from "../path.ts";
 export { CheckFlags, CompletionItemKind, DiagnosticCategory, ElementFlags, EmitOnly, IndexKind, JsxEmit, ModifierFlags, ModuleKind, ModuleResolutionKind, NodeBuilderFlags, ObjectFlags, SignatureFlags, SignatureKind, SymbolFlags, TypeFlags, TypeFormatFlags, TypePredicateKind };
 export type {
-    APIFileChanges,
+    FileNotifications,
     APIImportAdderAction as ImportAdderAction,
     APIOptions,
     AssertsIdentifierTypePredicate,
