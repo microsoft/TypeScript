@@ -1,6 +1,9 @@
 import * as vscode from "vscode";
 
-import type { ConfigurationMiddleware, MessageSignature } from "vscode-languageclient/node";
+import type {
+    ConfigurationMiddleware,
+    MessageSignature,
+} from "vscode-languageclient/node";
 
 /**
  * Configuration middleware for the TypeScript language server.
