@@ -20,8 +20,6 @@ import {
 } from "./node.generated.ts";
 import {
     NODE_EXTENDED_DATA_MASK,
-    readParseOptionsKey,
-    readSourceFileHash,
     type SourceFileInfo,
     type TextDecoder,
 } from "./node.infrastructure.ts";
