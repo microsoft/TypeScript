@@ -1125,7 +1125,7 @@ func (s *Session) GetLanguageServiceAndProjectsForFile(ctx context.Context, uri 
 		return nil, nil, nil, err
 	}
 	// !!! TODO: sheetal:  Get other projects that contain the file with symlink
-	allProjects := snapshot.GetProjectsContainingFile(uri)
+	allProjects := snapshot.GetLanguageServiceProjectsContainingFile(uri)
 	return project, defaultLs, allProjects, nil
 }
 
@@ -1137,7 +1137,7 @@ func (s *Session) GetProjectsForFile(ctx context.Context, uri lsproto.DocumentUr
 	)
 
 	// !!! TODO: sheetal:  Get other projects that contain the file with symlink
-	allProjects := snapshot.GetProjectsContainingFile(uri)
+	allProjects := snapshot.GetLanguageServiceProjectsContainingFile(uri)
 	return allProjects, nil
 }
 
@@ -1161,7 +1161,7 @@ func (s *Session) GetLanguageServicesForDocumentsLoadingProjectTree(ctx context.
 		activeFile = uris[0].FileName()
 	}
 
-	projects := snapshot.ProjectCollection.Projects()
+	projects := snapshot.ProjectCollection.LanguageServiceProjects()
 	services := make([]*ls.LanguageService, 0, len(projects))
 	for _, project := range projects {
 		program := project.GetProgram()
@@ -1355,8 +1355,18 @@ func (s *Session) updateSnapshot(ctx context.Context, overlays map[tspath.Path]*
 	if !locale.HasLocale(ctx) {
 		ctx = s.WithCurrentLocale(ctx)
 	}
-	change.client = s.client
-	newSnapshot := oldSnapshot.Clone(ctx, change, overlays, s.logger)
+	newSnapshot := oldSnapshot.Clone(ctx, change, overlays, s.logger, s.client)
+	// A failed API request may have mutated only a prefix of its clone. Such a
+	// snapshot is returned to the caller for inspection and cleanup, but must
+	// never become canonical session state or trigger adoption side effects.
+	if newSnapshot.apiError != nil {
+		s.snapshotMu.Unlock()
+		if callerRef {
+			return newSnapshot
+		}
+		newSnapshot.Deref()
+		return nil
+	}
 	s.snapshot = newSnapshot
 	if callerRef {
 		newSnapshot.ref()
@@ -2081,9 +2091,8 @@ func (s *Session) warmAutoImportCache(ctx context.Context, change SnapshotChange
 			reason:      UpdateReasonRequestedLanguageServiceWithAutoImports,
 			Documents:   []lsproto.DocumentUri{changedFile},
 			AutoImports: changedFile,
-			client:      s.client,
 		}
-		clonedSnapshot := newSnapshot.Clone(warmCtx, warmChange, newSnapshot.overlays(), s.logger)
+		clonedSnapshot := newSnapshot.Clone(warmCtx, warmChange, newSnapshot.overlays(), s.logger, s.client)
 
 		// If cancelled during clone, discard the incomplete result.
 		if warmCtx.Err() != nil {
