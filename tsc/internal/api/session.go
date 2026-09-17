@@ -852,6 +852,8 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleTypeToString(ctx, parsed.(*TypeToTypeNodeParams))
 	case string(MethodPrintNode):
 		return s.handlePrintNode(ctx, parsed.(*PrintNodeParams))
+	case string(MethodPrintFile):
+		return s.handlePrintFile(ctx, parsed.(*PrintNodeParams))
 	case string(MethodFormatNodeForInsertion):
 		return s.handleFormatNodeForInsertion(ctx, parsed.(*FormatNodeForInsertionParams))
 	case string(MethodEmit):
@@ -3237,22 +3239,45 @@ func (s *Session) handleTypeToString(ctx context.Context, params *TypeToTypeNode
 
 // handlePrintNode decodes a binary-encoded AST node and prints it to text.
 func (s *Session) handlePrintNode(_ context.Context, params *PrintNodeParams) (string, error) {
-	data, err := base64.StdEncoding.DecodeString(params.Data)
+	node, err := decodePrintNode(params.Data)
 	if err != nil {
-		return "", fmt.Errorf("%w: invalid base64 data: %w", ErrClientError, err)
+		return "", err
+	}
+
+	return newPrinter(params).Emit(node, nil), nil
+}
+
+func (s *Session) handlePrintFile(_ context.Context, params *PrintNodeParams) (string, error) {
+	node, err := decodePrintNode(params.Data)
+	if err != nil {
+		return "", err
+	}
+	if !ast.IsSourceFile(node) {
+		return "", fmt.Errorf("%w: expected a source file", ErrClientError)
+	}
+
+	return newPrinter(params).EmitSourceFile(node.AsSourceFile()), nil
+}
+
+func decodePrintNode(encoded string) (*ast.Node, error) {
+	data, err := base64.StdEncoding.DecodeString(encoded)
+	if err != nil {
+		return nil, fmt.Errorf("%w: invalid base64 data: %w", ErrClientError, err)
 	}
 
 	node, err := encoder.DecodeNodes(data)
 	if err != nil {
-		return "", fmt.Errorf("%w: failed to decode AST: %w", ErrClientError, err)
+		return nil, fmt.Errorf("%w: failed to decode AST: %w", ErrClientError, err)
 	}
+	return node, nil
+}
 
-	p := printer.NewPrinter(printer.PrinterOptions{
+func newPrinter(params *PrintNodeParams) *printer.Printer {
+	return printer.NewPrinter(printer.PrinterOptions{
 		PreserveSourceNewlines:        params.PreserveSourceNewlines,
 		NeverAsciiEscape:              params.NeverAsciiEscape,
 		TerminateUnterminatedLiterals: params.TerminateUnterminatedLiterals,
 	}, printer.PrintHandlers{}, nil)
-	return p.Emit(node, nil), nil
 }
 
 func (s *Session) handleEmit(ctx context.Context, params *EmitParams) (*EmitResponse, error) {

@@ -5974,7 +5974,7 @@ describe("Checker - isTypeAssignableTo", () => {
     });
 });
 
-describe("Emitter - printNode", () => {
+describe("Printer", () => {
     const emitterFiles = {
         "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
         "/src/main.ts": `
@@ -5988,11 +5988,29 @@ export const obj = { m: 1, s: "hi", b: true };
     test("printNode with factory-created keyword type", async () => {
         await using api = spawnAPI(emitterFiles);
 
-        const snapshot = await api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const node = createKeywordTypeNode(SyntaxKind.StringKeyword);
-        const text = await project.emitter.printNode(node);
+        const text = await api.printer.printNode(node);
         assert.strictEqual(text, "string");
+    });
+
+    test("printFile", async () => {
+        await using api = spawnAPI(emitterFiles);
+
+        const snapshot = await api.createSnapshot({ openProject: "/tsconfig.json" });
+        const sourceFile = await snapshot.getConfiguredProject("/tsconfig.json")!.program.getSourceFile("/src/main.ts");
+        assert(sourceFile);
+        const text = await api.printer.printFile(sourceFile);
+        assert.strictEqual(
+            text,
+            `export const x = 42;
+export function greet(name: string): string { return name; }
+export type Pair = [
+    string,
+    number
+];
+export const obj = { m: 1, s: "hi", b: true };
+`,
+        );
     });
 
     test("printNode with factory-created union type", async () => {
@@ -6004,7 +6022,7 @@ export const obj = { m: 1, s: "hi", b: true };
             createKeywordTypeNode(SyntaxKind.StringKeyword),
             createKeywordTypeNode(SyntaxKind.NumberKeyword),
         ]);
-        const text = await project.emitter.printNode(node);
+        const text = await api.printer.printNode(node);
         assert.strictEqual(text, "string | number");
     });
 
@@ -6026,7 +6044,7 @@ export const obj = { m: 1, s: "hi", b: true };
             [param],
             createKeywordTypeNode(SyntaxKind.NumberKeyword),
         );
-        const text = await project.emitter.printNode(node);
+        const text = await api.printer.printNode(node);
         assert.strictEqual(text, "(x: string) => number");
     });
 
@@ -6038,7 +6056,7 @@ export const obj = { m: 1, s: "hi", b: true };
         const node = createTypeReferenceNode(createIdentifier("Array"), [
             createKeywordTypeNode(SyntaxKind.StringKeyword),
         ]);
-        const text = await project.emitter.printNode(node);
+        const text = await api.printer.printNode(node);
         assert.strictEqual(text, "Array<string>");
     });
 
@@ -6048,7 +6066,7 @@ export const obj = { m: 1, s: "hi", b: true };
         const snapshot = await api.createSnapshot({ openProject: "/tsconfig.json" });
         const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const node = createArrayTypeNode(createKeywordTypeNode(SyntaxKind.NumberKeyword));
-        const text = await project.emitter.printNode(node);
+        const text = await api.printer.printNode(node);
         assert.strictEqual(text, "number[]");
     });
 
@@ -6056,7 +6074,7 @@ export const obj = { m: 1, s: "hi", b: true };
         await using api = spawnAPI(emitterFiles);
 
         const snapshot = await api.createSnapshot({ openProject: "/tsconfig.json" });
-        const { checker, emitter } = snapshot.getConfiguredProject("/tsconfig.json")!;
+        const { checker } = snapshot.getConfiguredProject("/tsconfig.json")!;
         const src = emitterFiles["/src/main.ts"];
 
         const greetPos = src.indexOf("greet(");
@@ -6066,7 +6084,7 @@ export const obj = { m: 1, s: "hi", b: true };
         assert.ok(type);
         const typeNode = await checker.typeToTypeNode(type);
         assert.ok(typeNode);
-        const text = await emitter.printNode(typeNode);
+        const text = await api.printer.printNode(typeNode);
         assert.ok(text);
         assert.strictEqual(text, "(name: string) => string");
     });
@@ -6175,11 +6193,11 @@ export const obj = { m: 1, s: "hi", b: true };
         assert.ok(regexNode, "Should find a regex literal");
 
         // Without the option, regex is printed as-is
-        const textWithout = await project.emitter.printNode(regexNode);
+        const textWithout = await api.printer.printNode(regexNode);
         assert.strictEqual(textWithout, "/asdfasf");
 
         // With the option, the closing slash is added
-        const textWith = await project.emitter.printNode(regexNode, { terminateUnterminatedLiterals: true });
+        const textWith = await api.printer.printNode(regexNode, { terminateUnterminatedLiterals: true });
         assert.strictEqual(textWith, "/asdfasf/");
     });
 });
@@ -6463,7 +6481,7 @@ test("TypeOperator operator kind", async () => {
     assert(type);
     assert.equal(type.kind, SyntaxKind.TypeOperator);
     assert.equal(type.operator, SyntaxKind.ReadonlyKeyword);
-    const printed = await project.emitter.printNode(sourceFile);
+    const printed = await api.printer.printFile(sourceFile);
     assert.equal(sourceFile.text, printed);
 });
 
@@ -6485,7 +6503,7 @@ test("SpreadAssignment roundtrip", async () => {
     const expr = assignment.expression;
     assert(expr);
     assert.equal(expr.kind, SyntaxKind.Identifier);
-    const printed = await project.emitter.printNode(sourceFile);
+    const printed = await api.printer.printFile(sourceFile);
     assert.equal(sourceFile.text, printed);
 });
 
@@ -6510,7 +6528,7 @@ test("VariableDeclarationList const flag clone", async () => {
         const list = stmt.declarationList;
         assert(list.flags & NodeFlags.Const);
     }
-    const printed = await project.emitter.printNode(cloned);
+    const printed = await api.printer.printFile(cloned);
     assert.equal(sourceFile.text, printed);
 });
 
@@ -6529,7 +6547,7 @@ doThing();
     const project = snapshot.getConfiguredProject("/tsconfig.json")!;
     const sourceFile = await project.program.getSourceFile("/src/index.ts");
     assert(sourceFile);
-    const printed = await project.emitter.printNode(sourceFile);
+    const printed = await api.printer.printFile(sourceFile);
     assert.equal(sourceFile.text.trim(), printed.trim());
 });
 
@@ -6545,10 +6563,10 @@ test("Factory ModifierList auto-conversion", async () => {
         createKeywordTypeNode(SyntaxKind.AnyKeyword),
     );
 
-    assert.equal(await project.emitter.printNode(node), "export type Test = any;");
+    assert.equal(await api.printer.printNode(node), "export type Test = any;");
 
     const cloned = getSynthesizedDeepClone(node);
-    assert.equal(await project.emitter.printNode(cloned), "export type Test = any;");
+    assert.equal(await api.printer.printNode(cloned), "export type Test = any;");
 });
 
 test("Parse-clone-emit roundtrip", async () => {
@@ -6573,7 +6591,7 @@ test("Parse-clone-emit roundtrip", async () => {
             let clone: typeof source;
 
             try {
-                await project.emitter.printNode(source);
+                await api.printer.printNode(source);
             }
             catch {
                 errors.printCrashed++;
@@ -6589,7 +6607,7 @@ test("Parse-clone-emit roundtrip", async () => {
             }
 
             try {
-                await project.emitter.printNode(clone);
+                await api.printer.printNode(clone);
             }
             catch {
                 errors.clonePrintCrashed++;

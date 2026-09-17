@@ -155,6 +155,7 @@ export interface APIMethodInfo {
     getGlobalDiagnostics: APIMethod<GetProjectDiagnosticsParams, DiagnosticResponse[] | null>;
     getConfigFileParsingDiagnostics: APIMethod<GetProjectDiagnosticsParams, DiagnosticResponse[] | null>;
     printNode: APIMethod<PrintNodeParams, string>;
+    printFile: APIMethod<PrintNodeParams, string>;
     formatNodeForInsertion: APIMethod<FormatNodeForInsertionParams, string>;
     emit: APIMethod<EmitParams, EmitResponse>;
     emitToString: APIMethod<EmitParams, EmitOutputResponse>;
@@ -1140,6 +1141,7 @@ export interface BatchRequest {
         | "parseCommandLine"
         | "parseConfigFile"
         | "parseJsonConfigFileContent"
+        | "printFile"
         | "printNode"
         | "readConfigFile"
         | "release"
@@ -1302,6 +1304,7 @@ export interface BatchResponse {
         | "parseCommandLine"
         | "parseConfigFile"
         | "parseJsonConfigFileContent"
+        | "printFile"
         | "printNode"
         | "readConfigFile"
         | "release"
