@@ -9,8 +9,8 @@ import (
 // APIUpdate creates a new snapshot incorporating the given file changes and the
 // supplied API open/close request. The apiRequest may open or close projects and
 // files; opens are tracked in the snapshot (ref-counted) so they persist across
-// future updates, and closes release a previously taken ref. Even an empty
-// apiRequest ensures all API-opened projects and files are kept up to date.
+// future updates, and closes release a previously taken ref. Programs are updated
+// only when explicitly requested by an open or ensure operation.
 // On success, returns a ref'd snapshot which the caller must Deref when done.
 // On failure, releases the rejected snapshot and returns nil and the error.
 // A snapshot with an API error is never adopted as canonical session state;

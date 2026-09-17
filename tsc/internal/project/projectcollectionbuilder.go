@@ -265,11 +265,17 @@ func (b *ProjectCollectionBuilder) HandleAPIRequest(apiRequest *APISnapshotReque
 			fileName := uri.FileName()
 			path := b.toPath(fileName)
 			if b.isOpenFile(path) {
+				if b.findDefaultConfiguredProject(fileName, path) == nil && !b.isSupportedInInferredProject(fileName) {
+					return fmt.Errorf("no project found for opened file: %s", fileName)
+				}
 				continue
 			}
 			result := b.ensureConfiguredProjectAndAncestorsForFile(fileName, path, logger)
 			retain.Union(&result.retain)
 			if result.project == nil {
+				if !b.isSupportedInInferredProject(fileName) {
+					return fmt.Errorf("no project found for opened file: %s", fileName)
+				}
 				ensureInferredProject = true
 			}
 		}

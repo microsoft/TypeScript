@@ -531,9 +531,13 @@ func (s *Session) releaseSnapshot(handle SnapshotID) error {
 	sd.refCount--
 	if sd.refCount <= 0 {
 		delete(s.snapshots, handle)
-		sd.snapshot.Deref()
+	} else {
+		sd = nil
 	}
 	s.snapshotsMu.Unlock()
+	if sd != nil {
+		sd.snapshot.Deref()
+	}
 	return nil
 }
 
@@ -1152,11 +1156,7 @@ func (s *Session) handleCreateSnapshot(ctx context.Context, params *CreateSnapsh
 		return nil, fmt.Errorf("%w: failed to create snapshot: %w", ErrClientError, err)
 	}
 
-	response, err := s.createSnapshotResponse(snapshot, nil, &params.SnapshotRequestChangesParams)
-	if err != nil {
-		snapshot.Deref()
-		return nil, err
-	}
+	response := s.createSnapshotResponse(snapshot, nil, &params.SnapshotRequestChangesParams)
 	s.registerSnapshot(snapshot, openState, snapshotFileSystem)
 	return response, nil
 }
@@ -1200,11 +1200,7 @@ func (s *Session) handleUpdateSnapshot(ctx context.Context, params *UpdateSnapsh
 		return nil, fmt.Errorf("%w: failed to update snapshot: %w", ErrClientError, err)
 	}
 
-	response, err := s.createSnapshotResponse(snapshot, baseSD.snapshot, &changes.SnapshotRequestChangesParams)
-	if err != nil {
-		snapshot.Deref()
-		return nil, err
-	}
+	response := s.createSnapshotResponse(snapshot, baseSD.snapshot, &changes.SnapshotRequestChangesParams)
 	s.registerSnapshot(snapshot, openState, snapshotFileSystem)
 	return response, nil
 }
@@ -1461,11 +1457,7 @@ func (s *Session) handleGetCurrentLanguageServerSnapshot(ctx context.Context, pa
 	}
 
 	update.commit(s, snapshot)
-	response, err := s.createSnapshotResponse(snapshot, baseSnapshot, &changes.SnapshotRequestChangesParams)
-	if err != nil {
-		snapshot.Deref()
-		return nil, err
-	}
+	response := s.createSnapshotResponse(snapshot, baseSnapshot, &changes.SnapshotRequestChangesParams)
 	s.registerSnapshot(snapshot, snapshotOpenState{openProjects: s.openProjects, openFiles: s.openFiles}, nil)
 	return response, nil
 }
@@ -4239,11 +4231,8 @@ func computeSnapshotChanges(prev *project.Snapshot, next *project.Snapshot) *Sna
 	return &changes
 }
 
-func (s *Session) createSnapshotResponse(snapshot *project.Snapshot, base *project.Snapshot, request *SnapshotRequestChangesParams) (*CreateSnapshotResponse, error) {
-	operation, err := s.createSnapshotOperationResponse(snapshot, request)
-	if err != nil {
-		return nil, err
-	}
+func (s *Session) createSnapshotResponse(snapshot *project.Snapshot, base *project.Snapshot, request *SnapshotRequestChangesParams) *CreateSnapshotResponse {
+	operation := s.createSnapshotOperationResponse(snapshot, request)
 	if base == nil {
 		projects := snapshot.ProjectCollection.Projects()
 		projectResponses := make([]*ProjectResponse, 0, len(projects))
@@ -4252,7 +4241,7 @@ func (s *Session) createSnapshotResponse(snapshot *project.Snapshot, base *proje
 				projectResponses = append(projectResponses, NewProjectResponse(proj))
 			}
 		}
-		return &CreateSnapshotResponse{Snapshot: snapshotHandle(snapshot), Projects: projectResponses, Operation: operation}, nil
+		return &CreateSnapshotResponse{Snapshot: snapshotHandle(snapshot), Projects: projectResponses, Operation: operation}
 	}
 
 	projectResponses := make([]*ProjectResponse, 0)
@@ -4275,20 +4264,17 @@ func (s *Session) createSnapshotResponse(snapshot *project.Snapshot, base *proje
 		Projects:  projectResponses,
 		Changes:   computeSnapshotChanges(base, snapshot),
 		Operation: operation,
-	}, nil
+	}
 }
 
-func (s *Session) createSnapshotOperationResponse(snapshot *project.Snapshot, request *SnapshotRequestChangesParams) (*SnapshotOperationResponse, error) {
+func (s *Session) createSnapshotOperationResponse(snapshot *project.Snapshot, request *SnapshotRequestChangesParams) *SnapshotOperationResponse {
 	operation := &SnapshotOperationResponse{}
 	if request == nil {
-		return operation, nil
+		return operation
 	}
 
 	if request.CreatePrograms != nil {
 		createdPrograms := snapshot.CreatedPrograms()
-		if len(createdPrograms) != len(request.CreatePrograms) {
-			return nil, fmt.Errorf("%w: created program result count does not match request", ErrClientError)
-		}
 		results := make([]SyntheticProjectID, len(createdPrograms))
 		for i, createdProgram := range createdPrograms {
 			results[i] = SyntheticProjectHandle(createdProgram)
@@ -4301,13 +4287,13 @@ func (s *Session) createSnapshotOperationResponse(snapshot *project.Snapshot, re
 		for i, file := range request.OpenFiles {
 			project := snapshot.GetDefaultProject(file.ToURI(s.currentDirectory()))
 			if project == nil {
-				return nil, fmt.Errorf("%w: no project found for opened file %s", ErrClientError, file.ToAbsoluteFileName(s.currentDirectory()))
+				panic("no project found for opened file " + file.ToAbsoluteFileName(s.currentDirectory()))
 			}
 			results[i] = &OpenedFileOperationResult{Project: ProjectHandle(project)}
 		}
 		operation.OpenedFiles = &results
 	}
-	return operation, nil
+	return operation
 }
 
 // Close closes the session and releases all active snapshots,
@@ -4317,11 +4303,15 @@ func (s *Session) Close() {
 		s.releaseLanguageServerRefs()
 
 		s.snapshotsMu.Lock()
-		for handle, sd := range s.snapshots {
-			sd.snapshot.Deref()
-			delete(s.snapshots, handle)
+		snapshots := make([]*project.Snapshot, 0, len(s.snapshots))
+		for _, sd := range s.snapshots {
+			snapshots = append(snapshots, sd.snapshot)
 		}
+		clear(s.snapshots)
 		s.snapshotsMu.Unlock()
+		for _, snapshot := range snapshots {
+			snapshot.Deref()
+		}
 
 		if s.ownsSnapshotHost {
 			s.snapshotHost.Close()

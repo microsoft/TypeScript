@@ -382,6 +382,29 @@ func TestOpeningProjectOwnedByAnotherAPISessionEnsuresProgram(t *testing.T) {
 	assert.Assert(t, projectSession.Snapshot().ProjectCollection.ConfiguredProject(tspath.Path(configFileName)) == nil)
 }
 
+func TestFailedLanguageServerSnapshotOpenIsNotAdopted(t *testing.T) {
+	t.Parallel()
+
+	projectSession, _ := projecttestutil.Setup(map[string]any{
+		"/notes.txt": `text`,
+	})
+	defer projectSession.Close()
+	session := NewLSPSession(projectSession, nil)
+	defer session.Close()
+
+	baseSnapshot := projectSession.Snapshot()
+	response, err := session.handleGetCurrentLanguageServerSnapshot(context.Background(), &GetCurrentLanguageServerSnapshotParams{
+		Changes: &LanguageServerSnapshotChanges{
+			OpenFiles: []DocumentIdentifier{{FileName: "/notes.txt"}},
+		},
+	})
+
+	assert.Assert(t, response == nil)
+	assert.ErrorContains(t, err, "no project found for opened file")
+	assert.Equal(t, projectSession.Snapshot(), baseSnapshot)
+	assert.Equal(t, session.openFiles.Len(), 0)
+}
+
 func TestGetCurrentLanguageServerSnapshotOpeningLSPFileEnsuresConfiguredProgram(t *testing.T) {
 	t.Parallel()
 
