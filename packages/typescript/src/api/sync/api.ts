@@ -5632,7 +5632,7 @@ export class Printer {
             function (sourceFile: SourceFile, options: PrintNodeOptions = {}): string {
                 const encoded = encodeNode(sourceFile);
                 const base64 = uint8ArrayToBase64(encoded);
-                return owner.client.apiRequest("printFile", {
+                return owner.client.apiRequest("printNode", {
                     data: base64,
                     preserveSourceNewlines: options.preserveSourceNewlines,
                     neverAsciiEscape: options.neverAsciiEscape,
@@ -5642,7 +5642,7 @@ export class Printer {
             function* (sourceFile: SourceFile, options: PrintNodeOptions = {}): Generator<ProtocolRequest, string, ProtocolResponse["result"]> {
                 const encoded = encodeNode(sourceFile);
                 const base64 = uint8ArrayToBase64(encoded);
-                return yield* apiRequest("printFile", {
+                return yield* apiRequest("printNode", {
                     data: base64,
                     preserveSourceNewlines: options.preserveSourceNewlines,
                     neverAsciiEscape: options.neverAsciiEscape,

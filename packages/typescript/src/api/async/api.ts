@@ -2578,7 +2578,7 @@ export class Printer {
     async printFile(sourceFile: SourceFile, options: PrintNodeOptions = {}): Promise<string> {
         const encoded = encodeNode(sourceFile);
         const base64 = uint8ArrayToBase64(encoded);
-        return this.client.apiRequest("printFile", {
+        return this.client.apiRequest("printNode", {
             data: base64,
             preserveSourceNewlines: options.preserveSourceNewlines,
             neverAsciiEscape: options.neverAsciiEscape,

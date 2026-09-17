@@ -220,7 +220,6 @@ const (
 	MethodGetConfigFileParsingDiagnostics Method = "getConfigFileParsingDiagnostics"
 	// Printer methods
 	MethodPrintNode              Method = "printNode"
-	MethodPrintFile              Method = "printFile"
 	MethodFormatNodeForInsertion Method = "formatNodeForInsertion"
 	MethodEmit                   Method = "emit"
 	MethodEmitToString           Method = "emitToString"
@@ -626,7 +625,6 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodGetSignatureUsages:                unmarshallerFor[GetSignatureUsagesParams],
 	MethodGetCompletionsAtPosition:          unmarshallerFor[GetCompletionsAtPositionParams],
 	MethodPrintNode:                         unmarshallerFor[PrintNodeParams],
-	MethodPrintFile:                         unmarshallerFor[PrintNodeParams],
 	MethodFormatNodeForInsertion:            unmarshallerFor[FormatNodeForInsertionParams],
 	MethodEmit:                              unmarshallerFor[EmitParams],
 	MethodEmitToString:                      unmarshallerFor[EmitParams],

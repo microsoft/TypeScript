@@ -852,8 +852,6 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleTypeToString(ctx, parsed.(*TypeToTypeNodeParams))
 	case string(MethodPrintNode):
 		return s.handlePrintNode(ctx, parsed.(*PrintNodeParams))
-	case string(MethodPrintFile):
-		return s.handlePrintFile(ctx, parsed.(*PrintNodeParams))
 	case string(MethodFormatNodeForInsertion):
 		return s.handleFormatNodeForInsertion(ctx, parsed.(*FormatNodeForInsertionParams))
 	case string(MethodEmit):
@@ -3244,19 +3242,11 @@ func (s *Session) handlePrintNode(_ context.Context, params *PrintNodeParams) (s
 		return "", err
 	}
 
-	return newPrinter(params).Emit(node, nil), nil
-}
-
-func (s *Session) handlePrintFile(_ context.Context, params *PrintNodeParams) (string, error) {
-	node, err := decodePrintNode(params.Data)
-	if err != nil {
-		return "", err
+	var sourceFile *ast.SourceFile
+	if ast.IsSourceFile(node) {
+		sourceFile = node.AsSourceFile()
 	}
-	if !ast.IsSourceFile(node) {
-		return "", fmt.Errorf("%w: expected a source file", ErrClientError)
-	}
-
-	return newPrinter(params).EmitSourceFile(node.AsSourceFile()), nil
+	return newPrinter(params).Emit(node, sourceFile), nil
 }
 
 func decodePrintNode(encoded string) (*ast.Node, error) {
