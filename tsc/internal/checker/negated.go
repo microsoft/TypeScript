@@ -106,25 +106,14 @@ func (c *Checker) removeFreshNegatedTypes(t *Type) *Type {
 	if !containsFreshNegatedType(t) {
 		return t
 	}
-	return c.removeFreshNegatedTypesEx(t, false, false)
-}
-
-func (c *Checker) removeFreshNegatedTypesEx(t *Type, intersectionMember bool, unionMember bool) *Type {
 	if isFreshNegatedType(t) {
-		if intersectionMember || unionMember {
-			return c.unknownType
-		}
-		return c.neverType
+		return c.unknownType
 	}
 	if t.flags&TypeFlagsUnion != 0 {
-		return c.getUnionType(core.Map(t.Types(), func(t *Type) *Type {
-			return c.removeFreshNegatedTypesEx(t, false, true)
-		}))
+		return c.getUnionType(core.Map(t.Types(), c.removeFreshNegatedTypes))
 	}
 	if t.flags&TypeFlagsIntersection != 0 {
-		return c.getIntersectionType(core.Map(t.Types(), func(t *Type) *Type {
-			return c.removeFreshNegatedTypesEx(t, true, false)
-		}))
+		return c.getIntersectionType(core.Map(t.Types(), c.removeFreshNegatedTypes))
 	}
 	return t
 }
@@ -273,7 +262,7 @@ func (c *Checker) removeNegatedSubtypes(types []*Type) []*Type {
 		return types
 	}
 	nonNegativePart := c.getIntersectionType(nonNegatedBounds)
-	for i := len(types) - 1; i >= 0; i-- {
+	for i := range slices.Backward(types) {
 		if types[i].flags&TypeFlagsNegated == 0 {
 			continue
 		}

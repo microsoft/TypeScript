@@ -565,7 +565,10 @@ func (c *Checker) narrowTypeByBinaryExpression(f *FlowState, t *Type, expr *ast.
 // Returns true if the type includes the "top" of the type hierarchy, or close enough to it - `unknown`, `{}`, and negated types and intersections thereof
 // Used to determine if we should narrow to a literal type in `===` comparisons
 func (c *Checker) typeIsTopInclusive(t *Type) bool {
-	if t.flags&TypeFlagsUnknown != 0 || someType(t, c.IsEmptyAnonymousObjectType) {
+	if t.flags&TypeFlagsUnion != 0 {
+		return core.Some(t.Types(), c.typeIsTopInclusive)
+	}
+	if t.flags&TypeFlagsUnknown != 0 || c.IsEmptyAnonymousObjectType(t) {
 		return true
 	}
 	if t.flags&TypeFlagsNegated != 0 {
@@ -749,7 +752,7 @@ func (c *Checker) narrowTypeByTypeName(t *Type, typeName string) *Type {
 func (c *Checker) narrowTypeByTypeFacts(t *Type, impliedType *Type, facts TypeFacts) *Type {
 	return c.mapType(t, func(t *Type) *Type {
 		if t.flags&TypeFlagsIntersection != 0 && containsFreshNegatedType(t) {
-			return c.getIntersectionType(core.Map(t.Types(), func(t *Type) *Type {
+			return c.getIntersectionType(append(core.Map(t.Types(), func(t *Type) *Type {
 				if isFreshNegatedType(t) {
 					if c.typesAreInDisjointDomainsIncludingObjects(impliedType, t.AsNegatedType().baseType) {
 						return c.unknownType
@@ -757,7 +760,7 @@ func (c *Checker) narrowTypeByTypeFacts(t *Type, impliedType *Type, facts TypeFa
 					return t
 				}
 				return c.narrowTypeByTypeFacts(t, impliedType, facts)
-			}))
+			}), impliedType))
 		}
 		switch {
 		case c.isTypeRelatedTo(t, impliedType, c.strictSubtypeRelation):
@@ -2018,9 +2021,17 @@ func (c *Checker) replacePrimitivesWithLiterals(typeWithPrimitives *Type, typeWi
 		return c.mapType(typeWithPrimitives, func(t *Type) *Type {
 			switch {
 			case t.flags&TypeFlagsIntersection != 0 && containsFreshNegatedType(t):
-				return c.getIntersectionType(core.Map(t.Types(), func(t *Type) *Type {
+				result := c.getIntersectionType(core.Map(t.Types(), func(t *Type) *Type {
 					return c.replacePrimitivesWithLiterals(t, typeWithLiterals)
 				}))
+				return c.mapType(result, func(reduced *Type) *Type {
+					if someType(typeWithLiterals, func(literal *Type) bool {
+						return isFreshLiteralType(literal) && c.getRegularTypeOfLiteralType(literal) == reduced
+					}) {
+						return c.getFreshTypeOfLiteralType(reduced)
+					}
+					return reduced
+				})
 			case t.flags&TypeFlagsString != 0:
 				return c.extractTypesOfKind(typeWithLiterals, TypeFlagsString|TypeFlagsStringLiteral|TypeFlagsTemplateLiteral|TypeFlagsStringMapping)
 			case c.isPatternLiteralType(t) && !c.maybeTypeOfKind(typeWithLiterals, TypeFlagsString|TypeFlagsTemplateLiteral|TypeFlagsStringMapping):

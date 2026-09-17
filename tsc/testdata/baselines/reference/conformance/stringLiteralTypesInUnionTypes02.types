@@ -34,7 +34,7 @@ else if (x !== "bar") {
 }
 else {
     let c = x;
->c : "bar"
+>c : string
 >x : "bar"
 
     let d = y;
@@ -46,7 +46,7 @@ else {
 >x : "bar"
 >y : string
 >c || d : string
->c : "bar"
+>c : string
 >d : string
 }
 

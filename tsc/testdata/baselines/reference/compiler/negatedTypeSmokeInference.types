@@ -1,0 +1,125 @@
+//// [tests/cases/compiler/negatedTypeSmokeInference.ts] ////
+
+=== negatedTypeSmokeInference.ts ===
+declare function identity<Value>(value: Value): Value;
+>identity : <Value>(value: Value) => Value
+>value : Value
+
+declare function consumePrimitive(value: { value: string | number }): void;
+>consumePrimitive : (value: { value: string | number; }) => void
+>value : { value: string | number; }
+>value : string | number
+
+export function nonString(value: unknown) {
+>nonString : (value: unknown) => unknown
+>value : unknown
+
+    if (typeof value === "string") return undefined;
+>typeof value === "string" : boolean
+>typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>value : unknown
+>"string" : "string"
+>undefined : undefined
+
+    Boolean(value);
+>Boolean(value) : boolean
+>Boolean : BooleanConstructor
+>value : not string
+
+    Object.prototype.toString.call(value);
+>Object.prototype.toString.call(value) : string
+>Object.prototype.toString.call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
+>Object.prototype.toString : () => string
+>Object.prototype : Object
+>Object : ObjectConstructor
+>prototype : Object
+>toString : () => string
+>call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
+>value : not string
+
+    return identity(value);
+>identity(value) : unknown
+>identity : <Value>(value: Value) => Value
+>value : not string
+}
+
+export function excludedLiteral(value: unknown) {
+>excludedLiteral : (value: unknown) => unknown
+>value : unknown
+
+    if (value === "missing") return undefined;
+>value === "missing" : boolean
+>value : unknown
+>"missing" : "missing"
+>undefined : undefined
+
+    consumePrimitive({ value });
+>consumePrimitive({ value }) : void
+>consumePrimitive : (value: { value: string | number; }) => void
+>{ value } : { value: unknown; }
+>value : unknown
+
+    const copy = value;
+>copy : unknown
+>value : not "missing"
+
+    const invalid: string = copy;
+>invalid : string
+>copy : unknown
+
+    return copy;
+>copy : unknown
+}
+
+export function operatorToken(char: string, prefix: string) {
+>operatorToken : (char: string, prefix: string) => string
+>char : string
+>prefix : string
+
+    if (char === "&") return char;
+>char === "&" : boolean
+>char : string
+>"&" : "&"
+>char : "&"
+
+    if (char === "<" || char === ">") {
+>char === "<" || char === ">" : boolean
+>char === "<" : boolean
+>char : string & not "&"
+>"<" : "<"
+>char === ">" : boolean
+>char : string & not "&" & not "<"
+>">" : ">"
+
+        let operator = char;
+>operator : string
+>char : "<" | ">"
+
+        operator = `${prefix}${operator}`;
+>operator = `${prefix}${operator}` : string
+>operator : string
+>`${prefix}${operator}` : string
+>prefix : string
+>operator : string
+
+        operator = "other";
+>operator = "other" : "other"
+>operator : string
+>"other" : "other"
+
+        return operator;
+>operator : string
+    }
+    return "";
+>"" : ""
+}
+
+export function explicitNegation(value: not string) {
+>explicitNegation : (value: not string) => not string
+>value : not string
+
+    return identity(value);
+>identity(value) : not string
+>identity : <Value>(value: Value) => Value
+>value : not string
+}

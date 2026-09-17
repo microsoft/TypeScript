@@ -106,7 +106,7 @@ if (!(u === 42)) {
 >42 : 42
 
     type A = isTrue<isUnknown<typeof u>>
->A : false
+>A : true
 >u : not 42
 }
 
@@ -116,7 +116,7 @@ if (u !== 42) {
 >42 : 42
 
     type B = isTrue<isUnknown<typeof u>>
->B : false
+>B : true
 >u : not 42
 }
 

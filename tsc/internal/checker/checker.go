@@ -31686,6 +31686,22 @@ func (c *Checker) getAdjustedTypeWithFacts(t *Type, facts TypeFacts) *Type {
 	reduced := c.recombineUnknownType(c.getTypeWithFacts(core.IfElse(c.strictNullChecks && t.flags&TypeFlagsUnknown != 0, c.unknownUnionType, t), facts))
 	if c.strictNullChecks {
 		switch facts {
+		case TypeFactsEQUndefined, TypeFactsEQNull, TypeFactsEQUndefinedOrNull:
+			return c.mapType(reduced, func(t *Type) *Type {
+				if containsNegatedType(t) {
+					var nullableType *Type
+					switch facts {
+					case TypeFactsEQUndefined:
+						nullableType = c.undefinedType
+					case TypeFactsEQNull:
+						nullableType = c.nullType
+					default:
+						nullableType = c.getUnionType([]*Type{c.undefinedType, c.nullType})
+					}
+					return c.getIntersectionType([]*Type{t, nullableType})
+				}
+				return t
+			})
 		case TypeFactsNEUndefined:
 			return c.removeNullableByIntersection(reduced, TypeFactsEQUndefined, TypeFactsEQNull, TypeFactsIsNull, c.nullType)
 		case TypeFactsNENull:
