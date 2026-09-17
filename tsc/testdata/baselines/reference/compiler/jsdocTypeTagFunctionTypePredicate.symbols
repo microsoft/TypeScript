@@ -68,3 +68,28 @@ export default /** @type {(e: unknown) => e is MissingExpression} */ (e) => !!e;
 >e : Symbol(e, Decl(missingExpression.mjs, 0, 70))
 >e : Symbol(e, Decl(missingExpression.mjs, 0, 70))
 
+=== inferredArrow.mjs ===
+/** @import { Foo } from "./types.d.mts" */
+
+const arr = /** @type {unknown[]} */ ([]);
+>arr : Symbol(arr, Decl(inferredArrow.mjs, 2, 5))
+
+// Passed as an argument to a generic, overloaded function, so this arrow is
+// checked once with CheckModeSkipContextSensitive during overload resolution.
+export const foos = arr.filter(/** @type {(e: unknown) => e is Foo} */ (e) => e instanceof Error);
+>foos : Symbol(foos, Decl(inferredArrow.mjs, 6, 12))
+>arr.filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>arr : Symbol(arr, Decl(inferredArrow.mjs, 2, 5))
+>filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>e : Symbol(e, Decl(inferredArrow.mjs, 6, 72))
+>e : Symbol(e, Decl(inferredArrow.mjs, 6, 72))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+
+export const missings = arr.filter(/** @type {(e: unknown) => e is InferredMissing} */ (e) => !!e);
+>missings : Symbol(missings, Decl(inferredArrow.mjs, 7, 12))
+>arr.filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>arr : Symbol(arr, Decl(inferredArrow.mjs, 2, 5))
+>filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>e : Symbol(e, Decl(inferredArrow.mjs, 7, 88))
+>e : Symbol(e, Decl(inferredArrow.mjs, 7, 88))
+

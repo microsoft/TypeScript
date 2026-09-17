@@ -88,3 +88,37 @@ export default /** @type {(e: unknown) => e is MissingExpression} */ (e) => !!e;
 >!e : boolean
 >e : unknown
 
+=== inferredArrow.mjs ===
+/** @import { Foo } from "./types.d.mts" */
+
+const arr = /** @type {unknown[]} */ ([]);
+>arr : unknown[]
+>([]) : unknown[]
+>[] : never[]
+
+// Passed as an argument to a generic, overloaded function, so this arrow is
+// checked once with CheckModeSkipContextSensitive during overload resolution.
+export const foos = arr.filter(/** @type {(e: unknown) => e is Foo} */ (e) => e instanceof Error);
+>foos : Foo[]
+>arr.filter(/** @type {(e: unknown) => e is Foo} */ (e) => e instanceof Error) : Foo[]
+>arr.filter : { <S extends unknown>(predicate: (value: unknown, index: number, array: unknown[]) => value is S, thisArg?: any): S[]; (predicate: (value: unknown, index: number, array: unknown[]) => unknown, thisArg?: any): unknown[]; }
+>arr : unknown[]
+>filter : { <S extends unknown>(predicate: (value: unknown, index: number, array: unknown[]) => value is S, thisArg?: any): S[]; (predicate: (value: unknown, index: number, array: unknown[]) => unknown, thisArg?: any): unknown[]; }
+>(e) => e instanceof Error : (e: unknown) => e is Foo
+>e : unknown
+>e instanceof Error : boolean
+>e : unknown
+>Error : ErrorConstructor
+
+export const missings = arr.filter(/** @type {(e: unknown) => e is InferredMissing} */ (e) => !!e);
+>missings : InferredMissing[]
+>arr.filter(/** @type {(e: unknown) => e is InferredMissing} */ (e) => !!e) : InferredMissing[]
+>arr.filter : { <S extends unknown>(predicate: (value: unknown, index: number, array: unknown[]) => value is S, thisArg?: any): S[]; (predicate: (value: unknown, index: number, array: unknown[]) => unknown, thisArg?: any): unknown[]; }
+>arr : unknown[]
+>filter : { <S extends unknown>(predicate: (value: unknown, index: number, array: unknown[]) => value is S, thisArg?: any): S[]; (predicate: (value: unknown, index: number, array: unknown[]) => unknown, thisArg?: any): unknown[]; }
+>(e) => !!e : (e: unknown) => e is InferredMissing
+>e : unknown
+>!!e : boolean
+>!e : boolean
+>e : unknown
+

@@ -34,3 +34,13 @@ export function assertMissing(e) {
 
 // @filename: missingExpression.mjs
 export default /** @type {(e: unknown) => e is MissingExpression} */ (e) => !!e;
+
+// @filename: inferredArrow.mjs
+/** @import { Foo } from "./types.d.mts" */
+
+const arr = /** @type {unknown[]} */ ([]);
+
+// Passed as an argument to a generic, overloaded function, so this arrow is
+// checked once with CheckModeSkipContextSensitive during overload resolution.
+export const foos = arr.filter(/** @type {(e: unknown) => e is Foo} */ (e) => e instanceof Error);
+export const missings = arr.filter(/** @type {(e: unknown) => e is InferredMissing} */ (e) => !!e);
