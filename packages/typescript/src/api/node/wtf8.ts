@@ -6,6 +6,9 @@ const surrogateSecondByteMax = 0xBF;
 const continuationByteMin = 0x80;
 const continuationByteMax = 0xBF;
 const textEncoder = new TextEncoder();
+const replacementCharacterUtf8 = Buffer.from([0xEF, 0xBF, 0xBD]);
+const loneSurrogateRegExp = /[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?:^|[^\uD800-\uDBFF])[\uDC00-\uDFFF]/;
+const shortStringLength = 64;
 type DecodeInput = ArrayBufferView | ArrayBufferLike | null;
 interface DecodeOptions {
     stream?: boolean;
@@ -38,28 +41,15 @@ function toUint8Array(input: Exclude<DecodeInput, null | undefined>): Uint8Array
     return new Uint8Array(input);
 }
 
-function hasLoneSurrogate(text: string): boolean {
-    for (let i = 0; i < text.length; i++) {
-        const codeUnit = text.charCodeAt(i);
-        if (codeUnit >= 0xD800 && codeUnit <= 0xDBFF) {
-            const low = text.charCodeAt(i + 1);
-            if (low >= 0xDC00 && low <= 0xDFFF) {
-                i++;
-            }
-            else {
-                return true;
-            }
-        }
-        else if (codeUnit >= 0xDC00 && codeUnit <= 0xDFFF) {
-            return true;
-        }
-    }
-    return false;
-}
-
 export function encodeWtf8(text: string): Uint8Array {
-    if (!hasLoneSurrogate(text)) {
-        return textEncoder.encode(text);
+    if (text.length > shortStringLength) {
+        const utf8 = textEncoder.encode(text);
+        if (
+            Buffer.from(utf8.buffer, utf8.byteOffset, utf8.byteLength).indexOf(replacementCharacterUtf8) < 0
+            || !loneSurrogateRegExp.test(text)
+        ) {
+            return utf8;
+        }
     }
 
     let byteLength = 0;

@@ -22,6 +22,24 @@ describe("encodeWtf8", () => {
         assert.equal(new Wtf8Decoder().decode(encodeWtf8(text)), text);
     });
 
+    test("preserves surrogate sequence boundaries", () => {
+        const high = String.fromCharCode(0xD800);
+        const low = String.fromCharCode(0xDC00);
+        const cases: readonly [string, string, readonly number[]][] = [
+            ["lone high", high, [0xED, 0xA0, 0x80]],
+            ["lone low", low, [0xED, 0xB0, 0x80]],
+            ["pair", high + low, [0xF0, 0x90, 0x80, 0x80]],
+            ["high before pair", high + high + low, [0xED, 0xA0, 0x80, 0xF0, 0x90, 0x80, 0x80]],
+            ["low after pair", high + low + low, [0xF0, 0x90, 0x80, 0x80, 0xED, 0xB0, 0x80]],
+            ["replacement character", "\uFFFD", [0xEF, 0xBF, 0xBD]],
+            ["replacement before lone high", "\uFFFD" + high, [0xEF, 0xBF, 0xBD, 0xED, 0xA0, 0x80]],
+        ];
+
+        for (const [name, text, expected] of cases) {
+            assert.deepEqual([...encodeWtf8(text)], expected, name);
+        }
+    });
+
     test("encodes large exceptional input into compact byte storage", () => {
         const text = "a".repeat(100_000) + String.fromCharCode(0xD800);
         const encoded = encodeWtf8(text);
