@@ -1264,6 +1264,9 @@ func (s *Session) toAPISnapshotRequest(changes *SnapshotRequestChangesParams) (*
 	apiRequest.ReconfigurePrograms = make([]*project.APIReconfigureProgramRequest, len(changes.ReconfigurePrograms))
 	reconfiguredProgramIDs := collections.Set[int]{}
 	for i, programParams := range changes.ReconfigurePrograms {
+		if programParams == nil {
+			return nil, fmt.Errorf("%w: reconfigurePrograms[%d] must not be null", ErrClientError, i)
+		}
 		programID, ok := project.SyntheticProgramID(tspath.Path(programParams.Id))
 		if !ok {
 			return nil, fmt.Errorf("%w: invalid synthetic project handle: %s", ErrClientError, programParams.Id)

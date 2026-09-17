@@ -1517,7 +1517,7 @@ describe("API - generator batching", () => {
                     temporaryProjects.push(temporarySnapshot.getProjects()[0].configFileName);
                 }),
                 parityCase("Snapshot", "getDefaultProjectForFile", snapshot.getDefaultProjectForFile, assertOptionalProjectsEquivalent, "/src/index.ts"),
-                parityCase("Snapshot", "update", snapshot.update, assertSnapshotsEquivalent),
+                parityCase("Snapshot", "update", snapshot.update, assertSnapshotsEquivalent, {}),
 
                 parityCase("Project", "getImportAdderEdits", project.getImportAdderEdits, assertDeepEquivalent, "/src/index.ts", [{ kind: "importSymbol", symbol: unimportedSymbol }]),
                 parityCase("Project", "getImportEditsForSymbols", project.getImportEditsForSymbols, assertDeepEquivalent, "/src/index.ts", [unimportedSymbol]),
@@ -1710,8 +1710,8 @@ describe("API - generator batching", () => {
             try {
                 const generatorBase = snapshotGeneratorAPI.batch(snapshotGeneratorAPI.createSnapshot.gen({ openProject: "/tsconfig.json" }))[0];
                 const syncBase = snapshotSyncAPI.createSnapshot({ openProject: "/tsconfig.json" });
-                const generatorUpdated = snapshotGeneratorAPI.batch(generatorBase.update.gen())[0];
-                const syncUpdated = syncBase.update();
+                const generatorUpdated = snapshotGeneratorAPI.batch(generatorBase.update.gen({}))[0];
+                const syncUpdated = syncBase.update({});
                 assertSnapshotsEquivalent(generatorUpdated, syncUpdated, "Snapshot.update");
                 exercisedMethods.add("Snapshot.update");
             }

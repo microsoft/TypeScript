@@ -131,6 +131,8 @@ describe("API", () => {
             void api.createSnapshot({ fileChanges: { changed: ["/index.ts"] } });
             // @ts-expect-error Snapshot update parameters are excess-property checked.
             void baseSnapshot.update({ fileChanges: { changed: ["/index.ts"] } });
+            // @ts-expect-error Snapshot updates require an explicit changes object.
+            void baseSnapshot.update(undefined);
             // @ts-expect-error Language server snapshot parameters are excess-property checked.
             void lsp.getCurrentLanguageServerSnapshot({ fileChanges: { changed: ["/index.ts"] } });
 

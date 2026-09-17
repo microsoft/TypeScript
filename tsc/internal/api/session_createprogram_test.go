@@ -160,7 +160,12 @@ func TestReconfigureSyntheticProgramValidation(t *testing.T) {
 	defer session.Close()
 
 	program := &ReconfigureSnapshotProgramParams{Id: "/dev/null/synthetic/1"}
-	_, err := session.toAPISnapshotRequest(&SnapshotRequestChangesParams{
+	var nullReconfigure SnapshotRequestChangesParams
+	assert.NilError(t, json.Unmarshal([]byte(`{"reconfigurePrograms":[null]}`), &nullReconfigure))
+	_, err := session.toAPISnapshotRequest(&nullReconfigure)
+	assert.ErrorContains(t, err, "reconfigurePrograms[0] must not be null")
+
+	_, err = session.toAPISnapshotRequest(&SnapshotRequestChangesParams{
 		ReconfigurePrograms: []*ReconfigureSnapshotProgramParams{{Id: "/tsconfig.json"}},
 	})
 	assert.ErrorContains(t, err, "invalid synthetic project handle")

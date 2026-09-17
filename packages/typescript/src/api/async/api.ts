@@ -397,7 +397,7 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         return snapshot;
     }
 
-    private async updateSnapshot(baseSnapshot: Snapshot, params?: CreateSnapshotParams): Promise<Snapshot> {
+    private async updateSnapshot(baseSnapshot: Snapshot, params: CreateSnapshotParams): Promise<Snapshot> {
         await this.ensureInitialized();
         if (!this.activeSnapshots.has(baseSnapshot) || baseSnapshot.isDisposed()) {
             throw new Error("Cannot update an inactive snapshot");
@@ -426,10 +426,10 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
     }
 
     private createSnapshotUpdater(getSnapshot: () => Snapshot): SnapshotUpdater {
-        const update: SnapshotUpdater = params => this.updateSnapshot(getSnapshot(), params); // @sync: const update = ((params?: CreateSnapshotParams) => this.updateSnapshot(getSnapshot(), params)) as SnapshotUpdater;
+        const update: SnapshotUpdater = params => this.updateSnapshot(getSnapshot(), params); // @sync: const update = ((params: CreateSnapshotParams) => this.updateSnapshot(getSnapshot(), params)) as SnapshotUpdater;
         // @sync-only-start
         // const owner = this;
-        // update.gen = function* (params?: CreateSnapshotParams) { return yield* owner.updateSnapshot.gen(getSnapshot(), params); };
+        // update.gen = function* (params: CreateSnapshotParams) { return yield* owner.updateSnapshot.gen(getSnapshot(), params); };
         // @sync-only-end
         return update;
     }
@@ -596,7 +596,7 @@ export class InternalAPI {
     }
 }
 
-type SnapshotUpdater = (params?: CreateSnapshotParams) => Promise<Snapshot>; // @sync: type SnapshotUpdater = ((params?: CreateSnapshotParams) => Snapshot) & { gen(params?: CreateSnapshotParams): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]>; };
+type SnapshotUpdater = (params: CreateSnapshotParams) => Promise<Snapshot>; // @sync: type SnapshotUpdater = ((params: CreateSnapshotParams) => Snapshot) & { gen(params: CreateSnapshotParams): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]>; };
 
 export interface SnapshotOperation {
     readonly createdPrograms?: readonly Program<SyntheticProjectId>[];
@@ -711,8 +711,8 @@ export class Snapshot {
         const CreatePrograms extends CreateSnapshotParams["createPrograms"] = undefined,
         const OpenFiles extends CreateSnapshotParams["openFiles"] = undefined,
     >(params: SnapshotOperationParams<CreateSnapshotParams, CreatePrograms, OpenFiles>): Promise<SnapshotForOperationResults<CreatePrograms, OpenFiles>>;
-    update(): Promise<Snapshot>;
-    update(params?: CreateSnapshotParams): Promise<Snapshot> {
+    update(params: CreateSnapshotParams): Promise<Snapshot>;
+    update(params: CreateSnapshotParams): Promise<Snapshot> {
         this.ensureNotDisposed();
         return this.updateSnapshot(params);
     }

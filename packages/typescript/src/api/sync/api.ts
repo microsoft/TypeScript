@@ -622,14 +622,14 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
     }
 
     private get updateSnapshot(): {
-        (baseSnapshot: Snapshot, params?: CreateSnapshotParams): Snapshot;
-        gen(baseSnapshot: Snapshot, params?: CreateSnapshotParams): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]>;
+        (baseSnapshot: Snapshot, params: CreateSnapshotParams): Snapshot;
+        gen(baseSnapshot: Snapshot, params: CreateSnapshotParams): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]>;
     } {
         const owner = this;
         return cacheGeneratorMethod(
             owner,
             "updateSnapshot",
-            function (baseSnapshot: Snapshot, params?: CreateSnapshotParams): Snapshot {
+            function (baseSnapshot: Snapshot, params: CreateSnapshotParams): Snapshot {
                 owner.ensureInitialized();
                 if (!owner.activeSnapshots.has(baseSnapshot) || baseSnapshot.isDisposed()) {
                     throw new Error("Cannot update an inactive snapshot");
@@ -656,7 +656,7 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
                 owner.activeSnapshots.add(snapshot);
                 return snapshot;
             },
-            function* (baseSnapshot: Snapshot, params?: CreateSnapshotParams): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]> {
+            function* (baseSnapshot: Snapshot, params: CreateSnapshotParams): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]> {
                 yield* owner.ensureInitialized.gen();
                 if (!owner.activeSnapshots.has(baseSnapshot) || baseSnapshot.isDisposed()) {
                     throw new Error("Cannot update an inactive snapshot");
@@ -687,9 +687,9 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
     }
 
     private createSnapshotUpdater(getSnapshot: () => Snapshot): SnapshotUpdater {
-        const update = ((params?: CreateSnapshotParams) => this.updateSnapshot(getSnapshot(), params)) as SnapshotUpdater;
+        const update = ((params: CreateSnapshotParams) => this.updateSnapshot(getSnapshot(), params)) as SnapshotUpdater;
         const owner = this;
-        update.gen = function* (params?: CreateSnapshotParams) {
+        update.gen = function* (params: CreateSnapshotParams) {
             return yield* owner.updateSnapshot.gen(getSnapshot(), params);
         };
         return update;
@@ -1044,7 +1044,7 @@ export class InternalAPI {
     }
 }
 
-type SnapshotUpdater = ((params?: CreateSnapshotParams) => Snapshot) & { gen(params?: CreateSnapshotParams): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]>; };
+type SnapshotUpdater = ((params: CreateSnapshotParams) => Snapshot) & { gen(params: CreateSnapshotParams): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]>; };
 
 export interface SnapshotOperation {
     readonly createdPrograms?: readonly Program<SyntheticProjectId>[];
@@ -1157,20 +1157,20 @@ export class Snapshot {
 
     get update(): {
         <const CreatePrograms extends CreateSnapshotParams["createPrograms"] = undefined, const OpenFiles extends CreateSnapshotParams["openFiles"] = undefined>(params: SnapshotOperationParams<CreateSnapshotParams, CreatePrograms, OpenFiles>): SnapshotForOperationResults<CreatePrograms, OpenFiles>;
-        (): Snapshot;
+        (params: CreateSnapshotParams): Snapshot;
         gen<const CreatePrograms extends CreateSnapshotParams["createPrograms"] = undefined, const OpenFiles extends CreateSnapshotParams["openFiles"] = undefined>(params: SnapshotOperationParams<CreateSnapshotParams, CreatePrograms, OpenFiles>): Generator<ProtocolRequest, SnapshotForOperationResults<CreatePrograms, OpenFiles>, ProtocolResponse["result"]>;
-        gen(): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]>;
+        gen(params: CreateSnapshotParams): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]>;
     } {
         const owner = this;
         function update<const CreatePrograms extends CreateSnapshotParams["createPrograms"] = undefined, const OpenFiles extends CreateSnapshotParams["openFiles"] = undefined>(params: SnapshotOperationParams<CreateSnapshotParams, CreatePrograms, OpenFiles>): SnapshotForOperationResults<CreatePrograms, OpenFiles>;
-        function update(): Snapshot;
-        function update(params?: CreateSnapshotParams): Snapshot {
+        function update(params: CreateSnapshotParams): Snapshot;
+        function update(params: CreateSnapshotParams): Snapshot {
             owner.ensureNotDisposed();
             return owner.updateSnapshot(params);
         }
         function gen<const CreatePrograms extends CreateSnapshotParams["createPrograms"] = undefined, const OpenFiles extends CreateSnapshotParams["openFiles"] = undefined>(params: SnapshotOperationParams<CreateSnapshotParams, CreatePrograms, OpenFiles>): Generator<ProtocolRequest, SnapshotForOperationResults<CreatePrograms, OpenFiles>, ProtocolResponse["result"]>;
-        function gen(): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]>;
-        function* gen(params?: CreateSnapshotParams): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]> {
+        function gen(params: CreateSnapshotParams): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]>;
+        function* gen(params: CreateSnapshotParams): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]> {
             owner.ensureNotDisposed();
             return yield* owner.updateSnapshot.gen(params);
         }
