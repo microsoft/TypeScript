@@ -1,0 +1,26 @@
+//// [tests/cases/compiler/superAccessProtectedInstanceProperty.ts] ////
+
+=== superAccessProtectedInstanceProperty.ts ===
+// https://github.com/microsoft/TypeScript/issues/55883
+
+export abstract class YaddaBase {
+>YaddaBase : Symbol(YaddaBase, Decl(superAccessProtectedInstanceProperty.ts, 0, 0))
+
+    protected roots = "hi";
+>roots : Symbol(YaddaBase.roots, Decl(superAccessProtectedInstanceProperty.ts, 2, 33))
+}
+
+export class DerivedYadda extends YaddaBase {
+>DerivedYadda : Symbol(DerivedYadda, Decl(superAccessProtectedInstanceProperty.ts, 4, 1))
+>YaddaBase : Symbol(YaddaBase, Decl(superAccessProtectedInstanceProperty.ts, 0, 0))
+
+    public get rootTests() {
+>rootTests : Symbol(DerivedYadda.rootTests, Decl(superAccessProtectedInstanceProperty.ts, 6, 45))
+
+        return super.roots;
+>super.roots : Symbol(YaddaBase.roots, Decl(superAccessProtectedInstanceProperty.ts, 2, 33))
+>super : Symbol(YaddaBase, Decl(superAccessProtectedInstanceProperty.ts, 0, 0))
+>roots : Symbol(YaddaBase.roots, Decl(superAccessProtectedInstanceProperty.ts, 2, 33))
+    }
+}
+

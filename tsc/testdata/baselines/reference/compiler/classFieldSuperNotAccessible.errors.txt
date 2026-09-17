@@ -1,4 +1,4 @@
-classFieldSuperNotAccessible.ts(6,15): error TS2855: Class field 'field' defined by the parent class is not accessible in the child class via super.
+classFieldSuperNotAccessible.ts(6,15): error TS2855: Instance property 'field' is defined by the superclass and must be accessed through 'this', not 'super'.
 
 
 ==== classFieldSuperNotAccessible.ts (1 errors) ====
@@ -9,7 +9,7 @@ classFieldSuperNotAccessible.ts(6,15): error TS2855: Class field 'field' defined
         f() {
             super.field() // error
                   ~~~~~
-!!! error TS2855: Class field 'field' defined by the parent class is not accessible in the child class via super.
+!!! error TS2855: Instance property 'field' is defined by the superclass and must be accessed through 'this', not 'super'.
         }
     }
     

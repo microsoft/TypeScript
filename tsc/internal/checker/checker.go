@@ -11992,7 +11992,7 @@ func (c *Checker) checkPropertyAccessibilityAtLocation(location *ast.Node, isSup
 		// This is true for both [[Set]] (old) and [[Define]] (ES spec) semantics.
 		if flags&ast.ModifierFlagsStatic == 0 && core.Some(prop.Declarations, isClassInstanceProperty) {
 			if errorNode != nil {
-				c.error(errorNode, diagnostics.Class_field_0_defined_by_the_parent_class_is_not_accessible_in_the_child_class_via_super, c.symbolToString(prop))
+				c.error(errorNode, diagnostics.Instance_property_0_is_defined_by_the_superclass_and_must_be_accessed_through_this_not_super, c.symbolToString(prop))
 			}
 			return false
 		}
