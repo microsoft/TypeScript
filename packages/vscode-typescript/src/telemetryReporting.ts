@@ -90,14 +90,6 @@ export type LSErrorResponse = {
     stack: string;
 };
 
-export type EnableNativePreview = {};
-
-export type DisableNativePreview = {};
-
-export type RestartLanguageServer = {};
-
-export type ReportIssue = {};
-
 export type UnexpectedTelemetryPurpose = {
     telemetryPurpose: string;
 };
