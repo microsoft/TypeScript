@@ -466,9 +466,7 @@ describe("API", { concurrency }, () => {
 
         using retainedAgain = api.createSourceFile("/component.tsx", sourceText);
         assert.strictEqual(retainedAgain.sourceFile, sourceFile);
-
-        using empty = api.createSourceFile("", "");
-        assert.equal(empty.sourceFile.scriptKind, ScriptKind.TS);
+        assert.throws(() => api.createSourceFile("", ""), /fileName must not be empty/);
         using dot = api.createSourceFile(".", "");
         assert.equal(dot.sourceFile.scriptKind, ScriptKind.TS);
 

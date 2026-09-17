@@ -2043,7 +2043,11 @@ func (s *Session) handleTranspile(ctx context.Context, params *TranspileParams, 
 
 // @gen-proto-result: SourceFileResponse
 func (s *Session) handleCreateSourceFile(ctx context.Context, params *CreateSourceFileParams) (any, error) {
-	lease, err := s.createSourceFile(params.FileName, params.SourceText, params.Options)
+	fileName, err := s.resolveCreateSourceFileName(params.FileName)
+	if err != nil {
+		return nil, err
+	}
+	lease, err := s.createSourceFile(fileName, params.SourceText, params.Options)
 	if err != nil {
 		return nil, err
 	}
@@ -2052,7 +2056,10 @@ func (s *Session) handleCreateSourceFile(ctx context.Context, params *CreateSour
 
 // @gen-proto-result: SourceFileResponse
 func (s *Session) handleCreateSourceFileFromFile(ctx context.Context, params *CreateSourceFileFromFileParams) (any, error) {
-	fileName := tspath.GetNormalizedAbsolutePath(params.FileName, s.GetCurrentDirectory())
+	fileName, err := s.resolveCreateSourceFileName(params.FileName)
+	if err != nil {
+		return nil, err
+	}
 	sourceText, ok := s.snapshotHost.FS().ReadFile(fileName)
 	if !ok {
 		return nil, fmt.Errorf("%w: could not read file %q", ErrClientError, fileName)
@@ -2062,6 +2069,13 @@ func (s *Session) handleCreateSourceFileFromFile(ctx context.Context, params *Cr
 		return nil, err
 	}
 	return s.encodeLeasedSourceFile(lease)
+}
+
+func (s *Session) resolveCreateSourceFileName(fileName string) (string, error) {
+	if fileName == "" {
+		return "", fmt.Errorf("%w: fileName must not be empty", ErrClientError)
+	}
+	return tspath.GetNormalizedAbsolutePath(fileName, s.GetCurrentDirectory()), nil
 }
 
 func (s *Session) createSourceFile(fileName string, sourceText string, options CreateSourceFileOptions) (*project.SourceFileLease, error) {

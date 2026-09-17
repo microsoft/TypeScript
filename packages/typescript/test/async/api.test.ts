@@ -477,9 +477,7 @@ describe("API", { concurrency }, () => {
 
         await using retainedAgain = await api.createSourceFile("/component.tsx", sourceText);
         assert.strictEqual(retainedAgain.sourceFile, sourceFile);
-
-        await using empty = await api.createSourceFile("", "");
-        assert.equal(empty.sourceFile.scriptKind, ScriptKind.TS);
+        await assert.rejects(api.createSourceFile("", ""), /fileName must not be empty/); // @sync: assert.throws(() => api.createSourceFile("", ""), /fileName must not be empty/);
         await using dot = await api.createSourceFile(".", "");
         assert.equal(dot.sourceFile.scriptKind, ScriptKind.TS);
 
