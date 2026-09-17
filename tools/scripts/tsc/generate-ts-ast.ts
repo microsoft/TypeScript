@@ -722,10 +722,9 @@ function generateFactory(): string {
     out.push(`        return fn ? fn(this._data, visitor, visitArray) : undefined;`);
     out.push(`    }`);
     out.push(``);
-    out.push(`    *childrenIter<TNext = void>(): Generator<Node, TNext | undefined, TNext> {`);
+    out.push(`    childrenIter<TNext = void>(): Generator<Node, TNext | undefined, TNext> {`);
     out.push(`        const fn = yieldEachChildTable[this.kind];`);
-    out.push(`        if (!fn) return;`);
-    out.push(`        return yield* fn(this._data);`);
+    out.push(`        return fn ? fn(this._data) : emptyChildrenIter();`);
     out.push(`    }`);
     out.push(``);
     out.push(`    getSourceFile(): SourceFile {`);
@@ -910,6 +909,10 @@ function generateFactory(): string {
 
     // ── yieldEachChildTable ──
     out.push(`type YieldEachChildFunction = <T>(data: any) => Generator<Node, T | undefined, T>;`);
+    out.push(``);
+    out.push(`function* emptyChildrenIter<T>(): Generator<Node, T | undefined, T> {`);
+    out.push(`    return undefined;`);
+    out.push(`}`);
     out.push(``);
     out.push(`const yieldEachChildTable: Record<number, YieldEachChildFunction> = {`);
     // Schema nodes

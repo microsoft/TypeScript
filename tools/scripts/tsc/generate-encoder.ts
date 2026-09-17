@@ -1544,6 +1544,10 @@ function emitRemoteNodeList(w: CodeWriter) {
     w.write(`        return this.view.getUint32(this._byteIndex + NODE_OFFSET_NEXT, true);`);
     w.write(`    }`);
     w.write(``);
+    w.write(`    get firstNodeIndex(): number {`);
+    w.write(`        return this.index + 1;`);
+    w.write(`    }`);
+    w.write(``);
     w.write(`    private get data(): number {`);
     w.write(`        return this.view.getUint32(this._byteIndex + NODE_OFFSET_DATA, true);`);
     w.write(`    }`);
@@ -1635,7 +1639,7 @@ function emitRemoteNodeList(w: CodeWriter) {
     w.write(`        return this.getOrCreateChildAtNodeIndex(next) as RemoteNode;`);
     w.write(`    }`);
     w.write(``);
-    w.write(`    private getOrCreateChildAtNodeIndex(index: number): RemoteNode | RemoteNodeList {`);
+    w.write(`    getOrCreateChildAtNodeIndex(index: number): RemoteNode | RemoteNodeList {`);
     w.write(`        let child = this.sourceFile.nodes[index];`);
     w.write(`        if (!child) {`);
     w.write(`            const kind = this.view.getUint32(this.sourceFile._offsetNodes + index * NODE_LEN + NODE_OFFSET_KIND, true);`);
@@ -1714,11 +1718,14 @@ function emitRemoteNodeClassOpen(w: CodeWriter) {
     w.write(`            do {`);
     w.write(`                const child = this.getOrCreateChildAtNodeIndex(next);`);
     w.write(`                if (child instanceof RemoteNodeList) {`);
-    w.write(`                    for (const c of child) {`); // no yield* because the iterator doesn't have the early return passthru
-    w.write(`                       const result = yield c;`);
-    w.write(`                       if (result) {`);
-    w.write(`                           return result;`);
-    w.write(`                       }`);
+    w.write(`                    let listNext = child.firstNodeIndex;`);
+    w.write(`                    while (listNext) {`);
+    w.write(`                        const node = child.getOrCreateChildAtNodeIndex(listNext) as RemoteNode;`);
+    w.write(`                        listNext = node.next;`);
+    w.write(`                        const result = yield node;`);
+    w.write(`                        if (result) {`);
+    w.write(`                            return result;`);
+    w.write(`                        }`);
     w.write(`                    }`);
     w.write(`                }`);
     w.write(`                else if (child.kind !== SyntaxKind.JSDoc) {`);

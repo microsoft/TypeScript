@@ -693,10 +693,9 @@ export class NodeObject {
         return fn ? fn(this._data, visitor, visitArray) : undefined;
     }
 
-    *childrenIter<TNext = void>(): Generator<Node, TNext | undefined, TNext> {
+    childrenIter<TNext = void>(): Generator<Node, TNext | undefined, TNext> {
         const fn = yieldEachChildTable[this.kind];
-        if (!fn) return;
-        return yield* fn(this._data);
+        return fn ? fn(this._data) : emptyChildrenIter();
     }
 
     getSourceFile(): SourceFile {
@@ -1699,6 +1698,10 @@ const forEachChildTable: Record<number, ForEachChildFunction> = {
 };
 
 type YieldEachChildFunction = <T>(data: any) => Generator<Node, T | undefined, T>;
+
+function* emptyChildrenIter<T>(): Generator<Node, T | undefined, T> {
+    return undefined;
+}
 
 const yieldEachChildTable: Record<number, YieldEachChildFunction> = {
     [SyntaxKind.QualifiedName]: function* (data) {
