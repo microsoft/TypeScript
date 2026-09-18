@@ -1,19 +1,10 @@
-parameters:
-  - name: createPullRequest
-    displayName: Create pull request
-    type: boolean
-    default: true
-
 trigger: none
 pr: none
 
-# OneLocBuild onboarding:
-# - Create this pipeline in DevDiv/DevDiv.
-# - Authorize devdiv-onelocbuild-ceapex and TypeScript-DevDiv-KeyVault.
-# - Ask the localization team to enable packaged LCL handbacks and configure
-#   OneLocLclPackageId with the package ID they provide.
-# - Run manually with createPullRequest=false to verify the Loc handoff artifact
-#   without writing to GitHub.
+# OneLocBuild materializes packaged LCL handbacks under the artifact directory.
+# Its manifests map those files to their native repository paths. After applying
+# them, the diagnostics generator produces deterministic runtime gzip files.
+# The resulting changes update a stable GitHub branch and pull request.
 schedules:
   - cron: '0 7 * * *'
     displayName: Daily localization update
@@ -123,65 +114,64 @@ jobs:
           targetPath: $(Build.ArtifactStagingDirectory)/loc
           artifact: Loc
 
-      - ${{ if eq(parameters.createPullRequest, true) }}:
-          - template: /tools/pipelines/steps/create-github-app-token.yml
-            parameters:
-              azureSubscription: TypeScript-DevDiv-KeyVault
-              repositories: TypeScript
-              permissions: contents:write,pull_requests:write
-              insertSteps:
-                - pwsh: |
-                    $ErrorActionPreference = "Stop"
-                    $PSNativeCommandUseErrorActionPreference = $true
+      - template: /tools/pipelines/steps/create-github-app-token.yml
+        parameters:
+          azureSubscription: TypeScript-DevDiv-KeyVault
+          repositories: TypeScript
+          permissions: contents:write,pull_requests:write
+          insertSteps:
+            - pwsh: |
+                $ErrorActionPreference = "Stop"
+                $PSNativeCommandUseErrorActionPreference = $true
 
-                    git add --all
-                    $changes = @(git diff --cached --name-only)
-                    if ($changes.Count -eq 0) {
-                        Write-Host "Localization files are already up to date."
-                        exit 0
+                git add --all
+                $changes = @(git diff --cached --name-only)
+                if ($changes.Count -eq 0) {
+                    Write-Host "Localization files are already up to date."
+                    exit 0
+                }
+
+                $branch = "localization-update"
+                git switch -c $branch
+                git config user.email "290192711+typescript-automation[bot]@users.noreply.github.com"
+                git config user.name "typescript-automation[bot]"
+                $hooksPath = Join-Path $env:AGENT_TEMPDIRECTORY "empty-git-hooks"
+                New-Item -Path $hooksPath -ItemType Directory -Force | Out-Null
+                git config core.hooksPath $hooksPath
+                git commit -m "Update localization files"
+
+                $basicAuth = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes("x-access-token:$env:GH_TOKEN"))
+                Write-Host "##vso[task.setsecret]$basicAuth"
+                git config --local http.https://github.com/.extraheader "AUTHORIZATION: basic $basicAuth"
+                git remote set-url origin https://github.com/microsoft/TypeScript.git
+
+                $remoteBranch = git ls-remote --heads origin $branch
+                $branchExists = [bool] $remoteBranch
+                if ($branchExists) {
+                    git fetch origin "refs/heads/${branch}:refs/remotes/origin/${branch}"
+                }
+
+                $shouldPush = $true
+                if ($branchExists) {
+                    $localTree = git rev-parse 'HEAD^{tree}'
+                    $remoteTree = git rev-parse "origin/${branch}^{tree}"
+                    if ($localTree -eq $remoteTree) {
+                        Write-Host "Remote branch already contains the same files."
+                        $shouldPush = $false
                     }
+                }
 
-                    $branch = "localization-update"
-                    git switch -c $branch
-                    git config user.email "290192711+typescript-automation[bot]@users.noreply.github.com"
-                    git config user.name "typescript-automation[bot]"
-                    $hooksPath = Join-Path $env:AGENT_TEMPDIRECTORY "empty-git-hooks"
-                    New-Item -Path $hooksPath -ItemType Directory -Force | Out-Null
-                    git config core.hooksPath $hooksPath
-                    git commit -m "Update localization files"
+                if ($shouldPush) {
+                    git push --force-with-lease --set-upstream origin $branch
+                }
 
-                    $basicAuth = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes("x-access-token:$env:GH_TOKEN"))
-                    Write-Host "##vso[task.setsecret]$basicAuth"
-                    git config --local http.https://github.com/.extraheader "AUTHORIZATION: basic $basicAuth"
-                    git remote set-url origin https://github.com/microsoft/TypeScript.git
-
-                    $remoteBranch = git ls-remote --heads origin $branch
-                    $branchExists = [bool] $remoteBranch
-                    if ($branchExists) {
-                        git fetch origin "refs/heads/${branch}:refs/remotes/origin/${branch}"
-                    }
-
-                    $shouldPush = $true
-                    if ($branchExists) {
-                        $localTree = git rev-parse 'HEAD^{tree}'
-                        $remoteTree = git rev-parse "origin/${branch}^{tree}"
-                        if ($localTree -eq $remoteTree) {
-                            Write-Host "Remote branch already contains the same files."
-                            $shouldPush = $false
-                        }
-                    }
-
-                    if ($shouldPush) {
-                        git push --force-with-lease --set-upstream origin $branch
-                    }
-
-                    $existingPr = gh pr list --repo microsoft/TypeScript --base main --head $branch --state open --json url --jq '.[0].url // empty'
-                    if ($existingPr) {
-                        Write-Host "Updated existing pull request: $existingPr"
-                    }
-                    else {
-                        gh pr create --repo microsoft/TypeScript --base main --head $branch --title "Update localization files" --body "Updates localization handbacks and their generated runtime artifacts."
-                    }
-                  displayName: Create or update localization pull request
-                  env:
-                    GH_TOKEN: $(GH_TOKEN)
+                $existingPr = gh pr list --repo microsoft/TypeScript --base main --head $branch --state open --json url --jq '.[0].url // empty'
+                if ($existingPr) {
+                    Write-Host "Updated existing pull request: $existingPr"
+                }
+                else {
+                    gh pr create --repo microsoft/TypeScript --base main --head $branch --title "Update localization files" --body "Updates localization handbacks and their generated runtime artifacts."
+                }
+              displayName: Create or update localization pull request
+              env:
+                GH_TOKEN: $(GH_TOKEN)
