@@ -7,7 +7,13 @@ parameters:
 trigger: none
 pr: none
 
-# Configure OneLocLclPackageId when the localization project is onboarded.
+# OneLocBuild onboarding:
+# - Create this pipeline in DevDiv/DevDiv.
+# - Authorize devdiv-onelocbuild-ceapex and TypeScript-DevDiv-KeyVault.
+# - Ask the localization team to enable packaged LCL handbacks and configure
+#   OneLocLclPackageId with the package ID they provide.
+# - Run manually with createPullRequest=false to verify the Loc handoff artifact
+#   without writing to GitHub.
 schedules:
   - cron: '0 7 * * *'
     displayName: Daily localization update
@@ -71,6 +77,9 @@ jobs:
 
       - pwsh: |
           $ErrorActionPreference = "Stop"
+          # OneLoc leaves native files in the artifact directory. Its manifests
+          # pair each generated path with the repository path selected by the
+          # LocProject CopyOption and OutputPath.
           $locRoot = Join-Path "$(Build.ArtifactStagingDirectory)" "loc"
           $generatedFiles = @(Get-Content -LiteralPath (Join-Path $locRoot "XLocFileList.txt"))
           $destinationFiles = @(Get-Content -LiteralPath (Join-Path $locRoot "AllFileList.txt"))
