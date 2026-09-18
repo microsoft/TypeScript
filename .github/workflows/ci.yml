@@ -99,7 +99,7 @@ jobs:
             coverage: true
             skip: ${{ github.event_name == 'merge_group' }}
           - runner: windows-11-arm
-            name: 'windows am64'
+            name: 'windows arm64'
             os: windows
             coverage: true
             skip: ${{ github.event_name == 'merge_group' }}
