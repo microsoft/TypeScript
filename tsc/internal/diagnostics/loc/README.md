@@ -1,18 +1,12 @@
 # Localized diagnostics
 
-The `*.generated.json` files are readable localization handbacks produced by
-OneLocBuild. They are checked in so translation changes can be reviewed and so
-the runtime files can be reproduced without access to the localization service.
+Files in this directory are generated. Do not edit them directly.
 
-The `*.json.gz` files are derived runtime artifacts. Do not edit them directly.
-The diagnostics generator:
+To add or change an English diagnostic, edit `../diagnosticMessages.json` and
+run the diagnostics generator. Translation updates are produced by the
+localization pipeline and will overwrite manual changes to the localized JSON.
 
-1. Reads the checked-in JSON handbacks.
-2. Discards translations for diagnostics no longer in the English catalog.
-3. Sorts the remaining keys and writes canonical compact JSON.
-4. Compresses that JSON deterministically.
-
-`tools/pipelines/localization-update.yml` downloads the latest LCL handback
-package, asks OneLocBuild to produce native JSON, regenerates the gzip files,
-and opens or updates a localization pull request. LCL files are localization
-service interchange data and are not checked into this repository.
+The readable `*.generated.json` files are the localized inputs used to produce
+the corresponding `*.json.gz` runtime files. The generator removes stale
+diagnostic translations, sorts the active keys, and compresses the normalized
+JSON deterministically.
