@@ -506,7 +506,9 @@ func (p *Project) CreateProgram() CreateProgramResult {
 	// the same project never share a captured variable through a stale closure
 	// stored in the old program's options.
 	createCheckerPool := func(program *compiler.Program) compiler.CheckerPool {
-		return newCheckerPool(p.host.sessionOptions.CheckerPoolOptions, program, p.log)
+		opts := p.host.sessionOptions.CheckerPoolOptions
+		opts.MatchBuildCheckerCount = p.host.sessionOptions.workspaceDiagnosticsEnabled.Load()
+		return newCheckerPool(opts, program, p.log)
 	}
 	var cleanupModuleResolver func()
 	createModuleResolver := func(options module.ResolverOptions) module.Resolver {

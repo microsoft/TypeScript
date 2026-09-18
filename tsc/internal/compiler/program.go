@@ -716,12 +716,31 @@ func filterAndSortDiagnostics(diags []*ast.Diagnostic) []*ast.Diagnostic {
 	}))
 }
 
+// wholeProgramCheckerPool is a CheckerPool that runs a check of many files itself, so that the pool,
+// rather than the program, decides which checker takes each file.
+type wholeProgramCheckerPool interface {
+	ForEachCheckerGroupDo(ctx context.Context, files []*ast.SourceFile, singleThreaded bool, cb func(c *checker.Checker, fileIndex int, file *ast.SourceFile))
+}
+
 // collectCheckerDiagnosticsFromFiles collects checker diagnostics for a list of files.
 func (p *Program) collectCheckerDiagnosticsFromFiles(ctx context.Context, sourceFiles []*ast.SourceFile, collect func(context.Context, *checker.Checker, *ast.SourceFile) []*ast.Diagnostic) [][]*ast.Diagnostic {
 	diagnostics := make([][]*ast.Diagnostic, len(sourceFiles))
 	if p.compilerCheckerPool != nil {
 		p.compilerCheckerPool.forEachCheckerGroupDo(ctx, sourceFiles, p.SingleThreaded(), func(c *checker.Checker, fileIndex int, file *ast.SourceFile) {
 			diagnostics[fileIndex] = collect(ctx, c, file)
+		})
+	} else if pool, ok := p.checkerPool.(wholeProgramCheckerPool); ok {
+		files := make([]*ast.SourceFile, 0, len(sourceFiles))
+		indices := make([]int, 0, len(sourceFiles))
+		for i, file := range sourceFiles {
+			if p.SkipTypeChecking(file, false) {
+				continue
+			}
+			files = append(files, file)
+			indices = append(indices, i)
+		}
+		pool.ForEachCheckerGroupDo(ctx, files, p.SingleThreaded(), func(c *checker.Checker, fileIndex int, file *ast.SourceFile) {
+			diagnostics[indices[fileIndex]] = collect(ctx, c, file)
 		})
 	} else {
 		wg := core.NewWorkGroup(p.SingleThreaded())
