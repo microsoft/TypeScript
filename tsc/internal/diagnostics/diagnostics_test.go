@@ -160,8 +160,8 @@ func TestLocaleFiles(t *testing.T) {
 		t.Run(localeName, func(t *testing.T) {
 			t.Parallel()
 
-			file, err := os.Open(path)
-			assert.NilError(t, err)
+			file, openErr := os.Open(path)
+			assert.NilError(t, openErr)
 			defer file.Close()
 
 			var handback map[Key]string
