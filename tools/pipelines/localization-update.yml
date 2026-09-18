@@ -13,6 +13,12 @@ schedules:
       include:
         - main
 
+variables:
+  - name: TYPESCRIPT_AUTOMATION_GITHUB_APP_CLIENT_ID
+    value: Iv23li4GolzJSEp1mzHI
+  - name: TYPESCRIPT_AUTOMATION_GITHUB_APP_KEY_ID
+    value: https://jststeam-passwords.vault.azure.net/keys/typescript-automation
+
 jobs:
   - job: Generate
     displayName: Generate localization update
