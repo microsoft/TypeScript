@@ -1474,14 +1474,14 @@ export class ModuleResolver {
     }
 
     get resolveModuleName(): {
-        (moduleName: string, containingDirectory: DocumentIdentifier, options?: { resolutionMode?: ResolutionMode; snapshot?: Snapshot; }): ResolveModuleNameResult;
-        gen(moduleName: string, containingDirectory: DocumentIdentifier, options?: { resolutionMode?: ResolutionMode; snapshot?: Snapshot; }): Generator<ProtocolRequest, ResolveModuleNameResult, ProtocolResponse["result"]>;
+        (moduleName: string, containingDirectory: DocumentIdentifier, resolutionMode?: ResolutionMode, options?: { snapshot?: Snapshot; }): ResolveModuleNameResult;
+        gen(moduleName: string, containingDirectory: DocumentIdentifier, resolutionMode?: ResolutionMode, options?: { snapshot?: Snapshot; }): Generator<ProtocolRequest, ResolveModuleNameResult, ProtocolResponse["result"]>;
     } {
         const owner = this;
         return cacheGeneratorMethod(
             owner,
             "resolveModuleName",
-            function (moduleName: string, containingDirectory: DocumentIdentifier, options?: { resolutionMode?: ResolutionMode; snapshot?: Snapshot; }): ResolveModuleNameResult {
+            function (moduleName: string, containingDirectory: DocumentIdentifier, resolutionMode?: ResolutionMode, options?: { snapshot?: Snapshot; }): ResolveModuleNameResult {
                 owner.ensureNotDisposed();
                 if (options?.snapshot?.isDisposed()) {
                     throw new Error("Snapshot is disposed");
@@ -1491,10 +1491,10 @@ export class ModuleResolver {
                     resolver: owner.id,
                     moduleName,
                     containingDirectory,
-                    resolutionMode: options?.resolutionMode,
+                    resolutionMode,
                 });
             },
-            function* (moduleName: string, containingDirectory: DocumentIdentifier, options?: { resolutionMode?: ResolutionMode; snapshot?: Snapshot; }): Generator<ProtocolRequest, ResolveModuleNameResult, ProtocolResponse["result"]> {
+            function* (moduleName: string, containingDirectory: DocumentIdentifier, resolutionMode?: ResolutionMode, options?: { snapshot?: Snapshot; }): Generator<ProtocolRequest, ResolveModuleNameResult, ProtocolResponse["result"]> {
                 owner.ensureNotDisposed();
                 if (options?.snapshot?.isDisposed()) {
                     throw new Error("Snapshot is disposed");
@@ -1504,7 +1504,7 @@ export class ModuleResolver {
                     resolver: owner.id,
                     moduleName,
                     containingDirectory,
-                    resolutionMode: options?.resolutionMode,
+                    resolutionMode,
                 });
             },
         );

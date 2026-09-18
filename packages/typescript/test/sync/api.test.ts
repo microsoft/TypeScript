@@ -512,7 +512,7 @@ describe("API", () => {
         const programId = initial.operation.createdPrograms[0].id;
         assert.deepEqual([...initial.getProgram(programId)!.getSourceFileNames()].sort(), [providedA, root]);
         assert.equal(
-            (resolverA.resolveModuleName("pkg", "/src", { snapshot: initial })).resolvedModule?.resolvedFileName,
+            (resolverA.resolveModuleName("pkg", "/src", undefined, { snapshot: initial })).resolvedModule?.resolvedFileName,
             providedA,
         );
         assert.equal((resolverA.resolveModuleName("pkg", "/src")).resolvedModule?.resolvedFileName, providedA);
@@ -578,7 +578,7 @@ describe("API", () => {
         });
         const firstSnapshot = api.createSnapshot();
         assert.equal(
-            (resolver.resolveModuleName("pkg", "/src", { snapshot: firstSnapshot })).resolvedModule?.resolvedFileName,
+            (resolver.resolveModuleName("pkg", "/src", undefined, { snapshot: firstSnapshot })).resolvedModule?.resolvedFileName,
             "/node_modules/pkg/a.d.ts",
         );
 
@@ -592,11 +592,11 @@ describe("API", () => {
         });
 
         assert.equal(
-            (resolver.resolveModuleName("pkg", "/src", { snapshot: firstSnapshot })).resolvedModule?.resolvedFileName,
+            (resolver.resolveModuleName("pkg", "/src", undefined, { snapshot: firstSnapshot })).resolvedModule?.resolvedFileName,
             "/node_modules/pkg/a.d.ts",
         );
         assert.equal(
-            (resolver.resolveModuleName("pkg", "/src", { snapshot: secondSnapshot })).resolvedModule?.resolvedFileName,
+            (resolver.resolveModuleName("pkg", "/src", undefined, { snapshot: secondSnapshot })).resolvedModule?.resolvedFileName,
             "/node_modules/pkg/b.d.ts",
         );
         assert.equal(
@@ -624,7 +624,7 @@ describe("API", () => {
                 return (defaultResolver.resolveModuleName(
                     moduleName,
                     containingDirectory,
-                    resolutionMode === undefined ? undefined : { resolutionMode },
+                    resolutionMode,
                 )).resolvedModule;
             },
         });

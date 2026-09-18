@@ -897,7 +897,8 @@ export class ModuleResolver {
     async resolveModuleName(
         moduleName: string,
         containingDirectory: DocumentIdentifier,
-        options?: { resolutionMode?: ResolutionMode; snapshot?: Snapshot; },
+        resolutionMode?: ResolutionMode,
+        options?: { snapshot?: Snapshot; },
     ): Promise<ResolveModuleNameResult> {
         this.ensureNotDisposed();
         if (options?.snapshot?.isDisposed()) {
@@ -908,7 +909,7 @@ export class ModuleResolver {
             resolver: this.id,
             moduleName,
             containingDirectory,
-            resolutionMode: options?.resolutionMode,
+            resolutionMode,
         });
     }
 

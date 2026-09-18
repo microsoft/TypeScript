@@ -523,7 +523,7 @@ describe("API", () => {
         const programId = initial.operation.createdPrograms[0].id;
         assert.deepEqual([...await initial.getProgram(programId)!.getSourceFileNames()].sort(), [providedA, root]);
         assert.equal(
-            (await resolverA.resolveModuleName("pkg", "/src", { snapshot: initial })).resolvedModule?.resolvedFileName,
+            (await resolverA.resolveModuleName("pkg", "/src", undefined, { snapshot: initial })).resolvedModule?.resolvedFileName,
             providedA,
         );
         assert.equal((await resolverA.resolveModuleName("pkg", "/src")).resolvedModule?.resolvedFileName, providedA);
@@ -589,7 +589,7 @@ describe("API", () => {
         });
         const firstSnapshot = await api.createSnapshot();
         assert.equal(
-            (await resolver.resolveModuleName("pkg", "/src", { snapshot: firstSnapshot })).resolvedModule?.resolvedFileName,
+            (await resolver.resolveModuleName("pkg", "/src", undefined, { snapshot: firstSnapshot })).resolvedModule?.resolvedFileName,
             "/node_modules/pkg/a.d.ts",
         );
 
@@ -603,11 +603,11 @@ describe("API", () => {
         });
 
         assert.equal(
-            (await resolver.resolveModuleName("pkg", "/src", { snapshot: firstSnapshot })).resolvedModule?.resolvedFileName,
+            (await resolver.resolveModuleName("pkg", "/src", undefined, { snapshot: firstSnapshot })).resolvedModule?.resolvedFileName,
             "/node_modules/pkg/a.d.ts",
         );
         assert.equal(
-            (await resolver.resolveModuleName("pkg", "/src", { snapshot: secondSnapshot })).resolvedModule?.resolvedFileName,
+            (await resolver.resolveModuleName("pkg", "/src", undefined, { snapshot: secondSnapshot })).resolvedModule?.resolvedFileName,
             "/node_modules/pkg/b.d.ts",
         );
         assert.equal(
@@ -635,7 +635,7 @@ describe("API", () => {
                 return (await defaultResolver.resolveModuleName(
                     moduleName,
                     containingDirectory,
-                    resolutionMode === undefined ? undefined : { resolutionMode },
+                    resolutionMode,
                 )).resolvedModule;
             },
         });
