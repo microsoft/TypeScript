@@ -24,6 +24,29 @@ func (s *requestFileSystem) ExpandFileChanges(summary project.FileChangeSummary)
 	expand(&summary.Changed)
 	expand(&summary.Created)
 	expand(&summary.Deleted)
+	// Opening or closing the target changes aliases too, even though the alias
+	// itself is not an open document.
+	expandOverlayChange := func(uri lsproto.DocumentUri) {
+		if uri == "" {
+			return
+		}
+		for _, alias := range s.aliasesForPath(uri.FileName()) {
+			aliasURI := lsconv.FileNameToDocumentURI(alias)
+			if aliasURI == uri {
+				continue
+			}
+			if s.FileExists(alias) {
+				summary.Changed.Add(aliasURI)
+			} else {
+				summary.Deleted.Add(aliasURI)
+			}
+		}
+	}
+	expandOverlayChange(summary.Opened)
+	expandOverlayChange(summary.Reopened)
+	for uri := range summary.Closed.Keys() {
+		expandOverlayChange(uri)
+	}
 	return summary
 }
 

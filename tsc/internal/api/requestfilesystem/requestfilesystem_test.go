@@ -14,6 +14,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/trackingvfs"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfstest"
+	"github.com/microsoft/TypeScript/tsc/internal/watchalias"
 	"gotest.tools/v3/assert"
 )
 
@@ -43,6 +44,31 @@ func newLayeredRequestFileSystem(params *RequestFileSystem, base vfs.FS, current
 		return nil, err
 	}
 	return fileSystem.(*requestFileSystem), nil
+}
+
+func TestRequestFileSystemWatchRealpath(t *testing.T) {
+	t.Parallel()
+	session, _ := projecttestutil.Setup(map[string]any{
+		"/disk":               vfstest.Symlink("/physical"),
+		"/physical/closed.ts": "disk",
+		"/physical/open.ts":   "disk",
+	})
+	defer session.Close()
+	session.DidOpenFile(context.Background(), "file:///disk/open.ts", 1, "overlay", lsproto.LanguageKindTypeScript)
+	fileSystem, err := newRequestFileSystem(&RequestFileSystem{
+		Kind:  KindLayer,
+		Files: map[string]string{"/virtual/index.ts": "virtual"},
+		Symlinks: map[string]RequestSymlink{
+			"/node_modules/virtual": {Target: "/virtual"},
+			"/node_modules/host":    {Target: "/disk", Host: true},
+		},
+	}, session.FS(), "/")
+	assert.NilError(t, err)
+	assert.Equal(t, fileSystem.Realpath("/node_modules/virtual/index.ts"), "/virtual/index.ts")
+	assert.Equal(t, project.WatchRealpath(fileSystem, "/node_modules/virtual/index.ts"), "")
+	assert.Equal(t, project.WatchRealpath(fileSystem, "/node_modules/host/open.ts"), "")
+	assert.Equal(t, project.WatchRealpath(fileSystem, "/node_modules/host/closed.ts"), "/physical/closed.ts")
+	assert.Assert(t, !watchalias.Enabled(fileSystem), "request paths must not inherit native comparison")
 }
 
 func verifyCompactionWithoutHostReads(t *testing.T, layer *requestFileSystem, host *trackingvfs.FS, paths []string) {

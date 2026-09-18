@@ -21,6 +21,9 @@ func (s *Session) APIUpdate(ctx context.Context, apiFileChanges FileChangeSummar
 	s.cancelScheduledSnapshotUpdate()
 
 	hostFileChanges, overlays, ataChanges, _ := s.flushChanges(ctx)
+	snapshot := s.Snapshot()
+	hostFileChanges = snapshot.prepareWatchSummary(hostFileChanges)
+	apiFileChanges = snapshot.prepareWatchSummary(apiFileChanges)
 	fileChanges := hostFileChanges.Clone()
 	mergeFileChangeSummary(&fileChanges, apiFileChanges)
 	var fs vfs.FS
@@ -41,7 +44,7 @@ func (s *Session) APIUpdate(ctx context.Context, apiFileChanges FileChangeSummar
 	if newSnapshot.apiError != nil {
 		apiError := newSnapshot.apiError
 		newSnapshot.Deref()
-		if !hostFileChanges.IsEmpty() || len(ataChanges) != 0 {
+		if !hostFileChanges.IsEmpty() || s.watchAliasesNeedRefresh(hostFileChanges) || len(ataChanges) != 0 {
 			// The API request is rejected as a unit, but host changes were already
 			// flushed and must still advance the canonical session snapshot.
 			s.UpdateSnapshot(ctx, overlays, SnapshotChange{

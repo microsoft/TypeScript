@@ -647,6 +647,14 @@ func (s requestFileSystem) Realpath(path string) string {
 	return path
 }
 
+func (s requestFileSystem) WatchRealpath(path string) string {
+	lookup := s.lookupPath(path)
+	if !lookup.ok || lookup.fileSystem == nil {
+		return ""
+	}
+	return project.WatchRealpath(lookup.fileSystem, lookup.path)
+}
+
 func (s requestFileSystem) WriteFile(fileName string, data string) error {
 	host, path, ok := s.mutationPath(fileName)
 	if !ok {

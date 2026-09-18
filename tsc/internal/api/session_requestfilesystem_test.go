@@ -75,6 +75,77 @@ func TestEditorChangeInvalidatesRequestSymlinkAlias(t *testing.T) {
 	assert.Equal(t, session.snapshots[updated.Snapshot].snapshot.ProjectCollection.GetProjectByPath("/tsconfig.json").GetProgram().GetSourceFile("/alias.ts").Text(), "new")
 }
 
+func TestOpeningOverlayReplacesCachedRequestSymlinkAlias(t *testing.T) {
+	t.Parallel()
+
+	ctx := context.Background()
+	init, _ := projecttestutil.GetSessionInitOptions(map[string]any{
+		"/tsconfig.json": `{ "compilerOptions": { "noLib": true, "preserveSymlinks": true }, "files": ["node_modules/pkg/index.ts"] }`,
+		"/target.ts":     "disk",
+	}, nil, nil)
+	var fileChanges project.FileChangeSummary
+	var err error
+	init.FS, err = requestfilesystem.NewForUpdate(&requestfilesystem.RequestFileSystem{
+		Kind: requestfilesystem.KindLayer,
+		Symlinks: map[string]requestfilesystem.RequestSymlink{
+			"/node_modules/pkg/index.ts": {Target: "/target.ts"},
+		},
+	}, init.FS, "/", &fileChanges)
+	assert.NilError(t, err)
+	projectSession := project.NewSession(init)
+	defer projectSession.Close()
+	session := NewLSPSession(projectSession, nil)
+	defer session.Close()
+	changes := &GetCurrentLanguageServerSnapshotParams{
+		Changes: &LanguageServerSnapshotChanges{
+			OpenProjects: []DocumentIdentifier{{FileName: "/tsconfig.json"}},
+		},
+	}
+	base, err := session.handleGetCurrentLanguageServerSnapshot(ctx, changes)
+	assert.NilError(t, err)
+	baseSnapshot := session.snapshots[base.Snapshot].snapshot
+	assert.Equal(t, baseSnapshot.ProjectCollection.GetProjectByPath("/tsconfig.json").GetProgram().GetSourceFile("/node_modules/pkg/index.ts").Text(), "disk")
+
+	projectSession.DidOpenFile(ctx, "file:///target.ts", 1, "overlay", lsproto.LanguageKindTypeScript)
+	updated, err := session.handleGetCurrentLanguageServerSnapshot(ctx, changes)
+	assert.NilError(t, err)
+	updatedSnapshot := session.snapshots[updated.Snapshot].snapshot
+	file := updatedSnapshot.ProjectCollection.GetProjectByPath("/tsconfig.json").GetProgram().GetSourceFile("/node_modules/pkg/index.ts")
+	assert.Assert(t, file != nil)
+	assert.Equal(t, file.Text(), "overlay")
+	assert.Assert(t, updatedSnapshot.GetFile("/node_modules/pkg/index.ts").IsOverlay())
+	assert.Equal(t, baseSnapshot.GetFile("/node_modules/pkg/index.ts").Content(), "disk")
+
+	projectSession.DidCloseFile(ctx, "file:///target.ts")
+	closed, err := session.handleGetCurrentLanguageServerSnapshot(ctx, changes)
+	assert.NilError(t, err)
+	closedSnapshot := session.snapshots[closed.Snapshot].snapshot
+	closedFile := closedSnapshot.ProjectCollection.GetProjectByPath("/tsconfig.json").GetProgram().GetSourceFile("/node_modules/pkg/index.ts")
+	assert.Assert(t, closedFile != nil)
+	assert.Equal(t, closedFile.Text(), "disk")
+	assert.Assert(t, !closedSnapshot.GetFile("/node_modules/pkg/index.ts").IsOverlay())
+
+	projectSession.DidOpenFile(ctx, "file:///target.ts", 1, "reopened", lsproto.LanguageKindTypeScript)
+	reopened, err := updateCurrentLanguageServerSnapshot(ctx, session, &CreateSnapshotParams{
+		SnapshotRequestChangesParams: changes.Changes.SnapshotRequestChangesParams,
+		FileSystem: &requestfilesystem.RequestFileSystem{
+			Kind:  requestfilesystem.KindLayer,
+			Files: map[string]string{"/unrelated.ts": "unrelated"},
+			Symlinks: map[string]requestfilesystem.RequestSymlink{
+				"/node_modules/pkg/index.ts": {Target: "/target.ts"},
+			},
+		},
+	})
+	assert.NilError(t, err)
+	reopenedSnapshot := session.snapshots[reopened.Snapshot].snapshot
+	reopenedFile := reopenedSnapshot.ProjectCollection.GetProjectByPath("/tsconfig.json").GetProgram().GetSourceFile("/node_modules/pkg/index.ts")
+	assert.Assert(t, reopenedFile != nil)
+	assert.Equal(t, reopenedFile.Text(), "reopened")
+	assert.Assert(t, reopenedSnapshot.GetFile("/node_modules/pkg/index.ts").IsOverlay())
+	assert.Equal(t, updatedSnapshot.GetFile("/node_modules/pkg/index.ts").Content(), "overlay")
+	assert.Equal(t, closedSnapshot.GetFile("/node_modules/pkg/index.ts").Content(), "disk")
+}
+
 func TestLargeRequestLayerUpdateRetainsChanges(t *testing.T) {
 	t.Parallel()
 

@@ -224,6 +224,7 @@ func (c *ConfigFileRegistry) GetTestConfigFileNamesEntry(path tspath.Path) *Test
 }
 
 type configFileNames struct {
+	fileName string
 	// nearestConfigFileName is the file name of the nearest ancestor config file.
 	nearestConfigFileName string
 	// ancestors is a map from one ancestor config file path to the next.
@@ -238,6 +239,7 @@ type configFileNames struct {
 
 func (c *configFileNames) Clone() *configFileNames {
 	return &configFileNames{
+		fileName:              c.fileName,
 		nearestConfigFileName: c.nearestConfigFileName,
 		ancestors:             maps.Clone(c.ancestors),
 	}

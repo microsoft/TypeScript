@@ -10,12 +10,14 @@ import (
 
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/debug"
+	"github.com/microsoft/TypeScript/tsc/internal/fswatch"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/lsconv"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/sourcemap"
 	"github.com/microsoft/TypeScript/tsc/internal/spanmap"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
+	"github.com/microsoft/TypeScript/tsc/internal/watchalias"
 	"github.com/zeebo/xxh3"
 )
 
@@ -76,7 +78,7 @@ func (f *fileBase) ECMALineInfo() *sourcemap.ECMALineInfo {
 type cachedFile struct {
 	fileBase
 	needsReload  bool
-	realpathPath tspath.Path
+	realpathName string
 }
 
 func newCachedFile(fileName string, content string) *cachedFile {
@@ -111,7 +113,7 @@ func (f *cachedFile) Kind() core.ScriptKind {
 
 func (f *cachedFile) Clone() *cachedFile {
 	return &cachedFile{
-		realpathPath: f.realpathPath,
+		realpathName: f.realpathName,
 		fileName:     f.fileName,
 		content:      f.content,
 		hash:         f.hash,
@@ -201,6 +203,16 @@ type RebasableFileSystem interface {
 	WithBaseFileSystem(base vfs.FS) LayeredFileSystem
 }
 
+// WatchRealpath resolves physical watch observations, excluding files supplied
+// by overlays or virtual layers. Layers can implement WatchRealpath to describe
+// which paths still come from their underlying filesystem.
+func WatchRealpath(fs vfs.FS, fileName string) string {
+	if source, ok := fs.(interface{ WatchRealpath(fileName string) string }); ok {
+		return source.WatchRealpath(fileName)
+	}
+	return fs.Realpath(fileName)
+}
+
 func newOverlayFS(fs vfs.FS, overlays map[tspath.Path]*Overlay, positionEncoding lsproto.PositionEncodingKind, toPath func(string) tspath.Path) *overlayFS {
 	return &overlayFS{
 		host:               fs,
@@ -221,6 +233,25 @@ func (fs *overlayFS) Overlays() map[tspath.Path]*Overlay {
 	fs.mu.RLock()
 	defer fs.mu.RUnlock()
 	return fs.overlays
+}
+
+func (fs *overlayFS) ExpandFileChanges(change FileChangeSummary) FileChangeSummary {
+	if expander, ok := fs.host.(FileChangeExpander); ok {
+		return expander.ExpandFileChanges(change)
+	}
+	return change
+}
+
+func (fs *overlayFS) WatchRealpath(fileName string) string {
+	fs.mu.RLock()
+	path := fs.toPath(fileName)
+	_, file := fs.overlays[path]
+	_, directory := fs.overlayDirectories[path]
+	fs.mu.RUnlock()
+	if file || directory && !fs.host.DirectoryExists(fileName) {
+		return ""
+	}
+	return WatchRealpath(fs.host, fileName)
 }
 
 func layerOverlayFileSystem(fileSystem vfs.FS, overlays map[tspath.Path]*Overlay, positionEncoding lsproto.PositionEncodingKind, toPath func(string) tspath.Path) LayeredFileSystem {
@@ -267,6 +298,19 @@ func (fs *overlayFS) GetFileByPath(fileName string, path tspath.Path) FileHandle
 }
 
 func (fs *overlayFS) UseCaseSensitiveFileNames() bool { return fs.host.UseCaseSensitiveFileNames() }
+
+func (fs *overlayFS) WatchPathComparer(directory string) (fswatch.PathComparer, error) {
+	if provider, ok := fs.host.(interface {
+		WatchPathComparer(directory string) (fswatch.PathComparer, error)
+	}); ok {
+		return provider.WatchPathComparer(directory)
+	}
+	return fswatch.PathComparer{}, nil
+}
+
+func (fs *overlayFS) WatchPathComparisonEnabled() bool {
+	return watchalias.Enabled(fs.host)
+}
 
 func (fs *overlayFS) FileExists(fileName string) bool {
 	fs.mu.RLock()
@@ -413,6 +457,7 @@ func (fs *overlayFS) processChanges(changes []FileChange) (FileChangeSummary, ma
 
 	// Reduced collection of changes that occurred on a single file
 	type fileEvents struct {
+		uri          lsproto.DocumentUri
 		openChange   *FileChange
 		closeChange  *FileChange
 		watchChanged bool
@@ -422,19 +467,25 @@ func (fs *overlayFS) processChanges(changes []FileChange) (FileChangeSummary, ma
 		deleted      bool
 	}
 
-	fileEventMap := make(map[lsproto.DocumentUri]*fileEvents)
+	fileEventMap := make(map[tspath.Path]*fileEvents)
 
 	for _, change := range changes {
+		if change.Kind.IsWatchKind() || change.Kind == FileChangeKindSave {
+			result.hasFileSystemChanges = true
+		}
 		uri := change.URI
-		events, exists := fileEventMap[uri]
+		path := uri.Path(fs.host.UseCaseSensitiveFileNames())
+		events, exists := fileEventMap[path]
 		if exists {
 			if events.openChange != nil {
 				panic("should see no changes after open")
 			}
 		} else {
 			events = &fileEvents{}
-			fileEventMap[uri] = events
+			fileEventMap[path] = events
 		}
+		// Coalesce compiler-equivalent paths while retaining notification spelling.
+		events.uri = uri
 
 		if !result.IncludesWatchChangeOutsideNodeModules && change.Kind.IsWatchKind() && !strings.Contains(string(uri), "/node_modules/") {
 			result.IncludesWatchChangeOutsideNodeModules = true
@@ -491,8 +542,8 @@ func (fs *overlayFS) processChanges(changes []FileChange) (FileChangeSummary, ma
 	}
 
 	// Process deduplicated events per file
-	for uri, events := range fileEventMap {
-		path := uri.Path(fs.host.UseCaseSensitiveFileNames())
+	for path, events := range fileEventMap {
+		uri := events.uri
 		o := newOverlays[path]
 
 		if events.openChange != nil {
