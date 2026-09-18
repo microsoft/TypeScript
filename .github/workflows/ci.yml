@@ -97,7 +97,6 @@ jobs:
             os: linux
             arch: arm64
             coverage: true
-            main: true
             skip: ${{ github.event_name == 'merge_group' }}
           - runner: windows-latest
             os: windows
