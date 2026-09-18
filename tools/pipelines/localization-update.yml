@@ -23,10 +23,19 @@ jobs:
         fetchTags: false
         submodules: false
 
+      - pwsh: |
+          $ErrorActionPreference = "Stop"
+          $match = Select-String -Path tsc/go.mod -Pattern '^go ([0-9]+\.[0-9]+)$'
+          if (!$match) {
+              throw "Unable to determine the Go version from tsc/go.mod"
+          }
+          Write-Host "##vso[task.setvariable variable=GoVersion]$($match.Matches[0].Groups[1].Value)"
+        displayName: Determine Go version
+
       - task: GoTool@0
         displayName: Install Go
         inputs:
-          version: '1.27'
+          version: $(GoVersion)
           goDownloadUrl: https://aka.ms/golang/release/latest
 
       - task: OneLocBuild@3
