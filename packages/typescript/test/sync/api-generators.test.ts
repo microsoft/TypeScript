@@ -1523,13 +1523,11 @@ describe("API - generator batching", () => {
                 fallback: "unresolved" as const,
                 entries: [{ moduleName: "models", result: { resolvedFileName: "/src/models.ts" } }],
             };
-            const moduleResolutionSet = api.batch(api.createModuleResolutionSet.gen(moduleResolutionSpec))[0];
-            exercisedMethods.add("API.createModuleResolutionSet");
-            const moduleResolver = api.batch(snapshot.createModuleResolver.gen(
+            const moduleResolver = api.batch(api.createModuleResolver.gen(
                 { moduleResolution: ModuleResolutionKind.NodeNext },
-                { moduleResolutions: moduleResolutionSet },
+                { moduleResolutions: moduleResolutionSpec },
             ))[0];
-            exercisedMethods.add("Snapshot.createModuleResolver");
+            exercisedMethods.add("API.createModuleResolver");
 
             const cases: ParityCase[] = [
                 parityCase("API", "parseConfigFile", api.parseConfigFile, assertDeepEquivalent, "/tsconfig.json"),
@@ -1764,6 +1762,10 @@ describe("API - generator batching", () => {
             assert.throws(() => disposableProgram.getSourceFileNames(), /snapshot .* not found/);
             assert.equal(disposableProgram.dispose(), undefined);
             exercisedMethods.add("Program.dispose");
+            const disposableResolver = destructiveAPI.batch(destructiveAPI.createModuleResolver.gen({}))[0];
+            destructiveAPI.batch(disposableResolver.dispose.gen());
+            assert.equal(disposableResolver.dispose(), undefined);
+            exercisedMethods.add("ModuleResolver.dispose");
             destructiveAPI.batch(destructiveAPI.close.gen());
             assert.equal(destructiveAPI.close(), undefined);
             exercisedMethods.add("API.close");

@@ -43,7 +43,6 @@ func TestModuleResolverUsesSnapshotFileSystem(t *testing.T) {
 	snapshot, err := session.handleCreateSnapshot(context.Background(), &CreateSnapshotParams{})
 	assert.NilError(t, err)
 	resolver, err := session.handleCreateModuleResolver(&CreateModuleResolverParams{
-		Snapshot: snapshot.Snapshot,
 		CompilerOptions: core.CompilerOptions{
 			Module:           core.ModuleKindNodeNext,
 			ModuleResolution: core.ModuleResolutionKindNodeNext,
@@ -89,12 +88,9 @@ func TestProvidedModuleResolutionSpecificityAndLifetime(t *testing.T) {
 			providedResolutionEntry("pkg", "/home/projects/p/src", &esm, "/home/projects/p/exact.d.ts"),
 		},
 	}
-	setID, err := session.handleCreateModuleResolutionSet(&CreateModuleResolutionSetParams{Spec: spec})
-	assert.NilError(t, err)
 	resolverID, err := session.handleCreateModuleResolver(&CreateModuleResolverParams{
-		Snapshot:          snapshot.Snapshot,
 		CompilerOptions:   core.CompilerOptions{ModuleResolution: core.ModuleResolutionKindNodeNext},
-		ModuleResolutions: &ModuleResolutionSource{Set: setID},
+		ModuleResolutions: &spec,
 	})
 	assert.NilError(t, err)
 
@@ -126,15 +122,7 @@ func TestProvidedModuleResolutionSpecificityAndLifetime(t *testing.T) {
 	assert.NilError(t, err)
 	assert.Assert(t, unresolved.ResolvedModule == nil)
 
-	_, err = session.handleReleaseModuleResolutionSet(&ReleaseModuleResolutionSetParams{Set: setID})
-	assert.NilError(t, err)
 	assertResolution("/home/projects/p/src", core.ModuleKindESNext, "/home/projects/p/exact.d.ts")
-	_, err = session.handleCreateModuleResolver(&CreateModuleResolverParams{
-		Snapshot:          snapshot.Snapshot,
-		CompilerOptions:   core.CompilerOptions{ModuleResolution: core.ModuleResolutionKindNodeNext},
-		ModuleResolutions: &ModuleResolutionSource{Set: setID},
-	})
-	assert.ErrorContains(t, err, "not found")
 }
 
 func TestCreateProgramUsesProvidedModuleResolutions(t *testing.T) {
@@ -149,6 +137,20 @@ func TestCreateProgramUsesProvidedModuleResolutions(t *testing.T) {
 	defer projectSession.Close()
 	session := NewLSPSession(projectSession, nil)
 	defer session.Close()
+	resolver, err := session.handleCreateModuleResolver(&CreateModuleResolverParams{
+		CompilerOptions: core.CompilerOptions{
+			NoLib:            core.TSTrue,
+			Module:           core.ModuleKindNodeNext,
+			ModuleResolution: core.ModuleResolutionKindNodeNext,
+		},
+		ModuleResolutions: &ModuleResolutionSpec{
+			Fallback: ModuleResolutionFallbackUnresolved,
+			Entries: []*ModuleResolutionEntry{
+				providedResolutionEntry("pkg", "", nil, provided),
+			},
+		},
+	})
+	assert.NilError(t, err)
 
 	response, err := session.handleCreateSnapshot(context.Background(), &CreateSnapshotParams{
 		SnapshotRequestChangesParams: SnapshotRequestChangesParams{ //nolint:modernize
@@ -160,14 +162,7 @@ func TestCreateProgramUsesProvidedModuleResolutions(t *testing.T) {
 						Module:           core.ModuleKindNodeNext,
 						ModuleResolution: core.ModuleResolutionKindNodeNext,
 					},
-					ModuleResolutions: &ModuleResolutionSource{
-						Spec: &ModuleResolutionSpec{
-							Fallback: ModuleResolutionFallbackUnresolved,
-							Entries: []*ModuleResolutionEntry{
-								providedResolutionEntry("pkg", "", nil, provided),
-							},
-						},
-					},
+					ModuleResolver: resolver,
 				},
 			}},
 		},
@@ -193,23 +188,24 @@ func TestProvidedModuleResolutionPreservesStaticIdentity(t *testing.T) {
 	snapshot, err := session.handleCreateSnapshot(context.Background(), &CreateSnapshotParams{})
 	assert.NilError(t, err)
 	resolver, err := session.handleCreateModuleResolver(&CreateModuleResolverParams{
-		Snapshot:        snapshot.Snapshot,
 		CompilerOptions: core.CompilerOptions{ModuleResolution: core.ModuleResolutionKindNodeNext},
-		ModuleResolutions: &ModuleResolutionSource{Spec: &ModuleResolutionSpec{
+		ModuleResolutions: &ModuleResolutionSpec{
 			Fallback: ModuleResolutionFallbackUnresolved,
-			Entries: []*ModuleResolutionEntry{{
-				ModuleName: "pkg",
-				Result: &ProvidedModuleResolution{
-					ResolvedFileName: &DocumentIdentifier{FileName: "/store/pkg/index.d.ts"},
-					OriginalPath:     &DocumentIdentifier{FileName: "/node_modules/pkg/index.d.ts"},
-					PackageID: &PackageId{
-						Name:          "pkg",
-						SubModuleName: "",
-						Version:       "1.2.3",
+			Entries: []*ModuleResolutionEntry{
+				{
+					ModuleName: "pkg",
+					Result: &ProvidedModuleResolution{
+						ResolvedFileName: &DocumentIdentifier{FileName: "/store/pkg/index.d.ts"},
+						OriginalPath:     &DocumentIdentifier{FileName: "/node_modules/pkg/index.d.ts"},
+						PackageID: &PackageId{
+							Name:          "pkg",
+							SubModuleName: "",
+							Version:       "1.2.3",
+						},
 					},
 				},
-			}},
-		}},
+			},
+		},
 	})
 	assert.NilError(t, err)
 	result, err := session.handleResolveModuleName(context.Background(), &ResolveModuleNameParams{

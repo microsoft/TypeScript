@@ -72,8 +72,7 @@ import {
     ModifierFlags,
     ModuleKind,
     ModuleResolutionKind,
-    type ModuleResolutionSet,
-    type ModuleResolverOptions,
+    type ModuleResolver,
     type NumberLiteralType,
     ObjectFlags,
     type Program,
@@ -126,14 +125,13 @@ describe("API", () => {
 
             const lsp = undefined! as API<true>;
             void lsp.getCurrentLanguageServerSnapshot({ openProjects: ["/tsconfig.json"] });
-            const resolutionSet = undefined! as ModuleResolutionSet;
+            const moduleResolver = undefined! as ModuleResolver;
             void lsp.getCurrentLanguageServerSnapshot({
                 createPrograms: [{
                     rootFiles: ["/index.ts"],
                     options: {
                         compilerOptions: {},
-                        moduleResolutions: resolutionSet,
-                        resolveModuleName: () => ({ resolvedFileName: "/resolved.ts" }),
+                        moduleResolver,
                     },
                 }],
             });
@@ -509,34 +507,41 @@ describe("API", () => {
             fallback: "unresolved" as const,
             entries: [{ moduleName: "pkg", result: { resolvedFileName } }],
         });
-        const setA = await api.createModuleResolutionSet(spec(providedA));
-        const setB = await api.createModuleResolutionSet(spec(providedB));
-        const createProgram = (moduleResolutions: ModuleResolverOptions["moduleResolutions"]) => ({
+        const resolverA = await api.createModuleResolver(compilerOptions, { moduleResolutions: spec(providedA) });
+        const resolverB = await api.createModuleResolver(compilerOptions, { moduleResolutions: spec(providedB) });
+        const inlineResolverA = await api.createModuleResolver(compilerOptions, { moduleResolutions: spec(providedA) });
+        const inlineResolverB = await api.createModuleResolver(compilerOptions, { moduleResolutions: spec(providedA) });
+        const createProgram = (moduleResolver?: ModuleResolver) => ({
             rootFiles: [root],
             options: {
                 compilerOptions,
-                ...(moduleResolutions ? { moduleResolutions } : {}),
+                ...(moduleResolver ? { moduleResolver } : {}),
             },
         });
 
-        const initial = await api.createSnapshot({ createPrograms: [createProgram(setA)] });
+        const initial = await api.createSnapshot({ createPrograms: [createProgram(resolverA)] });
         const programId = initial.operation.createdPrograms[0].id;
         assert.deepEqual([...await initial.getProgram(programId)!.getSourceFileNames()].sort(), [providedA, root]);
+        assert.equal(
+            (await resolverA.resolveModuleName("pkg", "/src", { snapshot: initial })).resolvedModule?.resolvedFileName,
+            providedA,
+        );
+        assert.equal((await resolverA.resolveModuleName("pkg", "/src")).resolvedModule?.resolvedFileName, providedA);
 
         const sameSet = await initial.update({
-            reconfigurePrograms: [{ id: programId, ...createProgram(setA) }],
+            reconfigurePrograms: [{ id: programId, ...createProgram(resolverA) }],
         });
         assert.deepEqual([...await sameSet.getProgram(programId)!.getSourceFileNames()].sort(), [providedA, root]);
 
         fs.writeFile!(root, `import { value } from "pkg"; export const updated = value;`);
         const sameSetAfterEdit = await sameSet.update({
-            reconfigurePrograms: [{ id: programId, ...createProgram(setA) }],
+            reconfigurePrograms: [{ id: programId, ...createProgram(resolverA) }],
             fileNotifications: { changed: [root] },
         });
         assert.deepEqual([...await sameSetAfterEdit.getProgram(programId)!.getSourceFileNames()].sort(), [providedA, root]);
 
         const changedSet = await sameSetAfterEdit.update({
-            reconfigurePrograms: [{ id: programId, ...createProgram(setB) }],
+            reconfigurePrograms: [{ id: programId, ...createProgram(resolverB) }],
         });
         assert.deepEqual([...await changedSet.getProgram(programId)!.getSourceFileNames()].sort(), [providedB, root]);
 
@@ -546,30 +551,69 @@ describe("API", () => {
         assert.deepEqual(await removedSet.getProgram(programId)!.getSourceFileNames(), [root]);
 
         const inline = await sameSetAfterEdit.update({
-            reconfigurePrograms: [{ id: programId, ...createProgram(spec(providedA)) }],
+            reconfigurePrograms: [{ id: programId, ...createProgram(inlineResolverA) }],
         });
         const repeatedInline = await inline.update({
-            reconfigurePrograms: [{ id: programId, ...createProgram(spec(providedA)) }],
+            reconfigurePrograms: [{ id: programId, ...createProgram(inlineResolverB) }],
         });
         assert.deepEqual([...await repeatedInline.getProgram(programId)!.getSourceFileNames()].sort(), [providedA, root]);
 
         let callbackCalls = 0;
-        const callbackOptions = {
-            compilerOptions,
+        const callbackResolver = await api.createModuleResolver(compilerOptions, {
             resolveModuleName: (moduleName: string) => {
                 callbackCalls++;
                 return moduleName === "pkg" ? { resolvedFileName: providedA } : undefined;
             },
-        };
+        });
         const callbackSnapshot = await api.createSnapshot({
-            createPrograms: [{ rootFiles: [root], options: callbackOptions }],
+            createPrograms: [createProgram(callbackResolver)],
         });
         const callbackProgramId = callbackSnapshot.operation.createdPrograms[0].id;
         const repeatedCallback = await callbackSnapshot.update({
-            reconfigurePrograms: [{ id: callbackProgramId, rootFiles: [root], options: callbackOptions }],
+            reconfigurePrograms: [{ id: callbackProgramId, ...createProgram(callbackResolver) }],
         });
         assert.deepEqual([...await repeatedCallback.getProgram(callbackProgramId)!.getSourceFileNames()].sort(), [providedA, root]);
-        assert.equal(callbackCalls, 2);
+        assert.equal(callbackCalls, 1);
+    });
+
+    test("module resolver runs against snapshots or the host filesystem", async () => {
+        const packageJson = "/node_modules/pkg/package.json";
+        const { api: disposableAPI, fs } = spawnAPIWithFS({
+            [packageJson]: JSON.stringify({ name: "pkg", version: "1.0.0", types: "a.d.ts" }),
+            "/node_modules/pkg/a.d.ts": `export declare const value: "a";`,
+        });
+        await using api = disposableAPI;
+        const resolver = await api.createModuleResolver({
+            module: ModuleKind.NodeNext,
+            moduleResolution: ModuleResolutionKind.NodeNext,
+        });
+        const firstSnapshot = await api.createSnapshot();
+        assert.equal(
+            (await resolver.resolveModuleName("pkg", "/src", { snapshot: firstSnapshot })).resolvedModule?.resolvedFileName,
+            "/node_modules/pkg/a.d.ts",
+        );
+
+        fs.writeFile!(packageJson, JSON.stringify({ name: "pkg", version: "1.0.0", types: "b.d.ts" }));
+        fs.writeFile!("/node_modules/pkg/b.d.ts", `export declare const value: "b";`);
+        const secondSnapshot = await firstSnapshot.update({
+            fileNotifications: {
+                changed: [packageJson],
+                created: ["/node_modules/pkg/b.d.ts"],
+            },
+        });
+
+        assert.equal(
+            (await resolver.resolveModuleName("pkg", "/src", { snapshot: firstSnapshot })).resolvedModule?.resolvedFileName,
+            "/node_modules/pkg/a.d.ts",
+        );
+        assert.equal(
+            (await resolver.resolveModuleName("pkg", "/src", { snapshot: secondSnapshot })).resolvedModule?.resolvedFileName,
+            "/node_modules/pkg/b.d.ts",
+        );
+        assert.equal(
+            (await resolver.resolveModuleName("pkg", "/src")).resolvedModule?.resolvedFileName,
+            "/node_modules/pkg/b.d.ts",
+        );
     });
 
     test("provided resolutions do not report native resolution provenance diagnostics", async () => {
@@ -577,6 +621,24 @@ describe("API", () => {
             "/src/index.ts": `import { value } from "./value.ts"; export { value };`,
             "/value.ts": `export const value = 1;`,
         });
+        const resolver = await api.createModuleResolver(
+            {
+                noLib: true,
+                module: ModuleKind.NodeNext,
+                moduleResolution: ModuleResolutionKind.NodeNext,
+            },
+            {
+                moduleResolutions: {
+                    fallback: "unresolved",
+                    entries: [{
+                        moduleName: "./value.ts",
+                        result: {
+                            resolvedFileName: "/value.ts",
+                        },
+                    }],
+                },
+            },
+        );
         const snapshot = await api.createSnapshot({
             createPrograms: [{
                 rootFiles: ["/src/index.ts"],
@@ -586,15 +648,7 @@ describe("API", () => {
                         module: ModuleKind.NodeNext,
                         moduleResolution: ModuleResolutionKind.NodeNext,
                     },
-                    moduleResolutions: {
-                        fallback: "unresolved",
-                        entries: [{
-                            moduleName: "./value.ts",
-                            result: {
-                                resolvedFileName: "/value.ts",
-                            },
-                        }],
-                    },
+                    moduleResolver: resolver,
                 },
             }],
         });

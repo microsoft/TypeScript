@@ -55,9 +55,6 @@ type snapshotData struct {
 	openProjects collections.Set[tspath.Path]
 	openFiles    collections.Set[tspath.Path]
 
-	moduleResolvers   map[ModuleResolverID]*moduleResolverData
-	moduleResolversMu sync.RWMutex
-
 	// Symbol IDs come from ast.GetSymbolId, a global atomic counter, so the same
 	// *ast.Symbol pointer always has the same unique ID across all projects in the
 	// snapshot. Symbols are registered snapshot-wide to ensure identity semantics:
@@ -78,7 +75,7 @@ type snapshotData struct {
 }
 
 type moduleResolverData struct {
-	resolver                  *module.Resolver
+	compilerOptions           *core.CompilerOptions
 	provider                  *providedModuleResolutions
 	resolveModuleNameCallback string
 }
@@ -431,11 +428,10 @@ type Session struct {
 
 	languageServerUpdateMu sync.Mutex
 
-	moduleResolutionSets         map[ModuleResolutionSetID]*providedModuleResolutions
-	moduleResolutionSetsMu       sync.RWMutex
-	nextModuleResolutionSetID    atomic.Uint64
 	nextModuleResolutionIdentity atomic.Uint64
 	nextModuleResolverID         atomic.Uint64
+	moduleResolvers              map[ModuleResolverID]*moduleResolverData
+	moduleResolversMu            sync.RWMutex
 	conn                         ipc.Conn
 
 	cpuProfiler pprof.CPUProfiler
@@ -479,11 +475,11 @@ func newSession(snapshotHost *project.SnapshotHost, withLocale func(context.Cont
 		withLocale = func(ctx context.Context) context.Context { return ctx }
 	}
 	s := &Session{
-		id:                   formatSessionID(id),
-		snapshotHost:         snapshotHost,
-		withLocale:           withLocale,
-		snapshots:            make(map[SnapshotID]*snapshotData),
-		moduleResolutionSets: make(map[ModuleResolutionSetID]*providedModuleResolutions),
+		id:              formatSessionID(id),
+		snapshotHost:    snapshotHost,
+		withLocale:      withLocale,
+		snapshots:       make(map[SnapshotID]*snapshotData),
+		moduleResolvers: make(map[ModuleResolverID]*moduleResolverData),
 	}
 	if options != nil {
 		s.useBinaryResponses = options.UseBinaryResponses
@@ -705,12 +701,10 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleUpdateSnapshot(ctx, parsed.(*UpdateSnapshotParams))
 	case string(MethodGetCurrentLanguageServerSnapshot):
 		return s.handleGetCurrentLanguageServerSnapshot(ctx, parsed.(*GetCurrentLanguageServerSnapshotParams))
-	case string(MethodCreateModuleResolutionSet):
-		return s.handleCreateModuleResolutionSet(parsed.(*CreateModuleResolutionSetParams))
-	case string(MethodReleaseModuleResolutionSet):
-		return s.handleReleaseModuleResolutionSet(parsed.(*ReleaseModuleResolutionSetParams))
 	case string(MethodCreateModuleResolver):
 		return s.handleCreateModuleResolver(parsed.(*CreateModuleResolverParams))
+	case string(MethodReleaseModuleResolver):
+		return s.handleReleaseModuleResolver(parsed.(*ReleaseModuleResolverParams))
 	case string(MethodResolveModuleName):
 		return s.handleResolveModuleName(ctx, parsed.(*ResolveModuleNameParams))
 	case string(MethodParseCommandLine):

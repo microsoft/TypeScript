@@ -26,9 +26,8 @@ export interface APIMethodInfo {
     createSnapshot: APIMethod<CreateSnapshotParams, CreateSnapshotResponse>;
     updateSnapshot: APIMethod<UpdateSnapshotParams, CreateSnapshotResponse>;
     getCurrentLanguageServerSnapshot: APIMethod<GetCurrentLanguageServerSnapshotParams, CreateSnapshotResponse>;
-    createModuleResolutionSet: APIMethod<CreateModuleResolutionSetParams, number>;
-    releaseModuleResolutionSet: APIMethod<ReleaseModuleResolutionSetParams, unknown>;
     createModuleResolver: APIMethod<CreateModuleResolverParams, number>;
+    releaseModuleResolver: APIMethod<ReleaseModuleResolverParams, unknown>;
     resolveModuleName: APIMethod<ResolveModuleNameParams, ResolveModuleNameResult>;
     parseCommandLine: APIMethod<ParseCommandLineParams, ConfigFileResponse>;
     readConfigFile: APIMethod<ReadConfigFileParams, ReadConfigFileResponse>;
@@ -255,23 +254,18 @@ export interface GetCurrentLanguageServerSnapshotParams {
     changes?: LanguageServerSnapshotChanges | undefined;
 }
 
-export interface CreateModuleResolutionSetParams {
-    spec: ModuleResolutionSpec;
-}
-
-export interface ReleaseModuleResolutionSetParams {
-    set: number;
-}
-
 export interface CreateModuleResolverParams {
-    snapshot: number;
     compilerOptions: CompilerOptions;
-    moduleResolutions?: ModuleResolutionSource | undefined;
+    moduleResolutions?: ModuleResolutionSpec | undefined;
     resolveModuleNameCallback?: string | undefined;
 }
 
+export interface ReleaseModuleResolverParams {
+    resolver: number;
+}
+
 export interface ResolveModuleNameParams {
-    snapshot: number;
+    snapshot?: number | undefined;
     resolver: number;
     moduleName: string;
     containingDirectory: DocumentIdentifier;
@@ -1034,7 +1028,6 @@ export interface ProfileResult {
 export interface BatchRequest {
     method:
         | "batchRequests"
-        | "createModuleResolutionSet"
         | "createModuleResolver"
         | "createSnapshot"
         | "createSourceFile"
@@ -1180,7 +1173,7 @@ export interface BatchRequest {
         | "printNode"
         | "readConfigFile"
         | "release"
-        | "releaseModuleResolutionSet"
+        | "releaseModuleResolver"
         | "resolveModuleName"
         | "resolveName"
         | "saveHeapProfile"
@@ -1200,7 +1193,6 @@ export interface BatchRequest {
 export interface BatchResponse {
     method:
         | "batchRequests"
-        | "createModuleResolutionSet"
         | "createModuleResolver"
         | "createSnapshot"
         | "createSourceFile"
@@ -1346,7 +1338,7 @@ export interface BatchResponse {
         | "printNode"
         | "readConfigFile"
         | "release"
-        | "releaseModuleResolutionSet"
+        | "releaseModuleResolver"
         | "resolveModuleName"
         | "resolveName"
         | "saveHeapProfile"
@@ -1464,11 +1456,6 @@ export interface SnapshotOperationResponse {
 export interface LanguageServerSnapshotChanges extends SnapshotRequestChangesParams {
 }
 
-export interface ModuleResolutionSpec {
-    fallback: "resolve" | "unresolved";
-    entries: ModuleResolutionEntry[];
-}
-
 /** CompilerOptions contains the compiler options exposed by the API. */
 export interface CompilerOptions {
     allowJs?: boolean | undefined;
@@ -1575,9 +1562,9 @@ export interface CompilerOptions {
     configFilePath?: string | undefined;
 }
 
-export interface ModuleResolutionSource {
-    spec?: ModuleResolutionSpec | undefined;
-    set?: number | undefined;
+export interface ModuleResolutionSpec {
+    fallback: "resolve" | "unresolved";
+    entries: ModuleResolutionEntry[];
 }
 
 export interface ProjectReference {
@@ -1710,8 +1697,7 @@ export interface CreateProgramOptions {
     compilerOptions: CompilerOptions;
     projectReferences?: ProjectReference[] | undefined;
     configFileParsingDiagnostics?: DiagnosticResponse[] | undefined;
-    moduleResolutions?: ModuleResolutionSource | undefined;
-    resolveModuleNameCallback?: string | undefined;
+    moduleResolver?: number | undefined;
 }
 
 export interface ProvidedModuleResolution {

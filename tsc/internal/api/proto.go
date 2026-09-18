@@ -34,15 +34,14 @@ var (
 type Method string
 
 type (
-	SnapshotID            uint64
-	ProjectID             string
-	SyntheticProjectID    string
-	ModuleResolutionSetID uint64
-	ModuleResolverID      uint64
-	SymbolID              uint64
-	TypeID                uint32
-	SignatureID           uint64
-	NodeHandle            string
+	SnapshotID         uint64
+	ProjectID          string
+	SyntheticProjectID string
+	ModuleResolverID   uint64
+	SymbolID           uint64
+	TypeID             uint32
+	SignatureID        uint64
+	NodeHandle         string
 )
 
 func ProjectHandle(p *project.Project) ProjectID {
@@ -78,9 +77,8 @@ const (
 	MethodCreateSnapshot                                 Method = "createSnapshot"
 	MethodUpdateSnapshot                                 Method = "updateSnapshot"
 	MethodGetCurrentLanguageServerSnapshot               Method = "getCurrentLanguageServerSnapshot"
-	MethodCreateModuleResolutionSet                      Method = "createModuleResolutionSet"
-	MethodReleaseModuleResolutionSet                     Method = "releaseModuleResolutionSet"
 	MethodCreateModuleResolver                           Method = "createModuleResolver"
+	MethodReleaseModuleResolver                          Method = "releaseModuleResolver"
 	MethodResolveModuleName                              Method = "resolveModuleName"
 	MethodParseCommandLine                               Method = "parseCommandLine"
 	MethodReadConfigFile                                 Method = "readConfigFile"
@@ -455,8 +453,7 @@ type CreateProgramOptions struct {
 	CompilerOptions              core.CompilerOptions     `json:"compilerOptions"`
 	ProjectReferences            []*core.ProjectReference `json:"projectReferences,omitempty"`
 	ConfigFileParsingDiagnostics []*DiagnosticResponse    `json:"configFileParsingDiagnostics,omitempty"`
-	ModuleResolutions            *ModuleResolutionSource  `json:"moduleResolutions,omitempty"`
-	ResolveModuleNameCallback    string                   `json:"resolveModuleNameCallback,omitempty"`
+	ModuleResolver               ModuleResolverID         `json:"moduleResolver,omitempty"`
 }
 
 type (
@@ -487,28 +484,18 @@ type ProvidedModuleResolution struct {
 	PackageID        *PackageId          `json:"packageId,omitempty"`
 }
 
-type ModuleResolutionSource struct {
-	Spec *ModuleResolutionSpec `json:"spec,omitempty"`
-	Set  ModuleResolutionSetID `json:"set,omitempty"`
-}
-
-type CreateModuleResolutionSetParams struct {
-	Spec ModuleResolutionSpec `json:"spec"`
-}
-
-type ReleaseModuleResolutionSetParams struct {
-	Set ModuleResolutionSetID `json:"set"`
-}
-
 type CreateModuleResolverParams struct {
-	Snapshot                  SnapshotID              `json:"snapshot"`
-	CompilerOptions           core.CompilerOptions    `json:"compilerOptions"`
-	ModuleResolutions         *ModuleResolutionSource `json:"moduleResolutions,omitempty"`
-	ResolveModuleNameCallback string                  `json:"resolveModuleNameCallback,omitempty"`
+	CompilerOptions           core.CompilerOptions  `json:"compilerOptions"`
+	ModuleResolutions         *ModuleResolutionSpec `json:"moduleResolutions,omitempty"`
+	ResolveModuleNameCallback string                `json:"resolveModuleNameCallback,omitempty"`
+}
+
+type ReleaseModuleResolverParams struct {
+	Resolver ModuleResolverID `json:"resolver"`
 }
 
 type ResolveModuleNameParams struct {
-	Snapshot            SnapshotID         `json:"snapshot"`
+	Snapshot            SnapshotID         `json:"snapshot,omitempty"`
 	Resolver            ModuleResolverID   `json:"resolver"`
 	ModuleName          string             `json:"moduleName"`
 	ContainingDirectory DocumentIdentifier `json:"containingDirectory"`
@@ -576,9 +563,8 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodCreateSnapshot:                                 unmarshallerFor[CreateSnapshotParams],
 	MethodUpdateSnapshot:                                 unmarshallerFor[UpdateSnapshotParams],
 	MethodGetCurrentLanguageServerSnapshot:               unmarshallerFor[GetCurrentLanguageServerSnapshotParams],
-	MethodCreateModuleResolutionSet:                      unmarshallerFor[CreateModuleResolutionSetParams],
-	MethodReleaseModuleResolutionSet:                     unmarshallerFor[ReleaseModuleResolutionSetParams],
 	MethodCreateModuleResolver:                           unmarshallerFor[CreateModuleResolverParams],
+	MethodReleaseModuleResolver:                          unmarshallerFor[ReleaseModuleResolverParams],
 	MethodResolveModuleName:                              unmarshallerFor[ResolveModuleNameParams],
 	MethodParseCommandLine:                               unmarshallerFor[ParseCommandLineParams],
 	MethodReadConfigFile:                                 unmarshallerFor[ReadConfigFileParams],

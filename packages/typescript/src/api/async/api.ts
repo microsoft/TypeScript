@@ -76,7 +76,6 @@ import type {
     IntrinsicTypeMethod,
     LanguageServerSnapshotChanges as ProtocolLanguageServerSnapshotChanges,
     ModuleResolutionEntry,
-    ModuleResolutionSource,
     ModuleResolutionSpec,
     PackageId,
     ParsedCommandLine,
@@ -243,13 +242,15 @@ export type {
 };
 
 export interface ModuleResolverOptions {
-    moduleResolutions?: ModuleResolutionSpec | ModuleResolutionSet;
+    moduleResolutions?: ModuleResolutionSpec;
     resolveModuleName?: ResolveModuleNameCallback;
 }
 
 export type ResolveModuleNameCallback = (moduleName: string, containingDirectory: string, resolutionMode: ResolutionMode | undefined) => ProvidedModuleResolution | undefined | Promise<ProvidedModuleResolution | undefined>; // @sync: export type ResolveModuleNameCallback = (moduleName: string, containingDirectory: string, resolutionMode: ResolutionMode | undefined) => ProvidedModuleResolution | undefined;
 
-export type CreateProgramOptions = Omit<ProtocolCreateProgramOptions, "moduleResolutions" | "resolveModuleNameCallback"> & ModuleResolverOptions;
+export type CreateProgramOptions = Omit<ProtocolCreateProgramOptions, "moduleResolver"> & {
+    moduleResolver?: ModuleResolver;
+};
 export type CreateSnapshotProgramParams = Omit<ProtocolCreateSnapshotProgramParams, "options"> & { options: CreateProgramOptions; };
 export type ReconfigureSnapshotProgramParams = Omit<ProtocolReconfigureSnapshotProgramParams, "options"> & { options: CreateProgramOptions; };
 export type CreateSnapshotParams = Omit<ProtocolCreateSnapshotParams, "createPrograms" | "reconfigurePrograms"> & {
@@ -261,19 +262,10 @@ export type LanguageServerSnapshotChanges = Omit<ProtocolLanguageServerSnapshotC
     reconfigurePrograms?: readonly ReconfigureSnapshotProgramParams[] | undefined;
 };
 
-function toModuleResolutionSource(input: ModuleResolutionSpec | ModuleResolutionSet | undefined): ModuleResolutionSource | undefined {
-    if (input === undefined) return undefined;
-    if (input instanceof ModuleResolutionSet) {
-        input.ensureNotDisposed();
-        return { set: input.id };
-    }
-    return { spec: input };
-}
-
 let nextModuleResolutionCallbackId = 0;
-function registerModuleResolutionCallback(client: Client, callback: ResolveModuleNameCallback): string {
+function registerModuleResolutionCallback(client: Client, callback: ResolveModuleNameCallback): { name: string; dispose: () => void; } {
     const name = `resolveModuleName/${++nextModuleResolutionCallbackId}`;
-    client.registerCallback(name, params => {
+    const dispose = client.registerCallback(name, params => {
         const { moduleName, containingDirectory, resolutionMode } = params as {
             moduleName: string;
             containingDirectory: string;
@@ -281,7 +273,7 @@ function registerModuleResolutionCallback(client: Client, callback: ResolveModul
         };
         return callback(moduleName, containingDirectory, resolutionMode);
     });
-    return name;
+    return { name, dispose };
 }
 
 export interface TranspileOptions {
@@ -503,11 +495,11 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
     private prepareCreateSnapshotParams(params: CreateSnapshotParams | undefined): ProtocolCreateSnapshotParams | undefined {
         if (!params) return undefined;
         const prepareOptions = (options: CreateProgramOptions): ProtocolCreateProgramOptions => {
-            const { moduleResolutions, resolveModuleName, ...rest } = options;
+            const { moduleResolver, ...rest } = options;
+            moduleResolver?.ensureNotDisposed();
             return {
                 ...rest,
-                moduleResolutions: toModuleResolutionSource(moduleResolutions),
-                resolveModuleNameCallback: resolveModuleName ? registerModuleResolutionCallback(this.client, resolveModuleName) : undefined,
+                moduleResolver: moduleResolver?.id,
             };
         };
         return {
@@ -598,10 +590,21 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         }
     }
 
-    async createModuleResolutionSet(spec: ModuleResolutionSpec): Promise<ModuleResolutionSet> {
+    async createModuleResolver(compilerOptions: CompilerOptions, options?: ModuleResolverOptions): Promise<ModuleResolver> {
         await this.ensureInitialized();
-        const id = await this.client.apiRequest("createModuleResolutionSet", { spec });
-        return new ModuleResolutionSet(id, this.client);
+        const callback = options?.resolveModuleName ? registerModuleResolutionCallback(this.client, options.resolveModuleName) : undefined;
+        try {
+            const id = await this.client.apiRequest("createModuleResolver", {
+                compilerOptions,
+                moduleResolutions: options?.moduleResolutions,
+                resolveModuleNameCallback: callback?.name,
+            });
+            return new ModuleResolver(id, this.client, callback?.dispose);
+        }
+        catch (error) {
+            callback?.dispose();
+            throw error;
+        }
     }
 
     clearSourceFileCache(): void {
@@ -837,19 +840,6 @@ export class Snapshot {
         return this.projectMap.get(data.id);
     }
 
-    async createModuleResolver(compilerOptions: CompilerOptions, options?: ModuleResolverOptions): Promise<ModuleResolver> {
-        this.ensureNotDisposed();
-        const id = await this.client.apiRequest("createModuleResolver", {
-            snapshot: this.id,
-            compilerOptions,
-            moduleResolutions: toModuleResolutionSource(options?.moduleResolutions),
-            resolveModuleNameCallback: options?.resolveModuleName
-                ? registerModuleResolutionCallback(this.client, options.resolveModuleName)
-                : undefined,
-        });
-        return new ModuleResolver(id, this.id, this.client, () => this.ensureNotDisposed());
-    }
-
     [globalThis.Symbol.dispose](): void {
         void this.dispose();
     }
@@ -892,14 +882,34 @@ export class Snapshot {
     }
 }
 
-export class ModuleResolutionSet {
+export class ModuleResolver {
     readonly id: number;
     private readonly client: Client;
+    private readonly disposeCallback: (() => void) | undefined;
     private disposed = false;
 
-    constructor(id: number, client: Client) {
+    constructor(id: number, client: Client, disposeCallback: (() => void) | undefined) {
         this.id = id;
         this.client = client;
+        this.disposeCallback = disposeCallback;
+    }
+
+    async resolveModuleName(
+        moduleName: string,
+        containingDirectory: DocumentIdentifier,
+        options?: { resolutionMode?: ResolutionMode; snapshot?: Snapshot; },
+    ): Promise<ResolveModuleNameResult> {
+        this.ensureNotDisposed();
+        if (options?.snapshot?.isDisposed()) {
+            throw new Error("Snapshot is disposed");
+        }
+        return this.client.apiRequest("resolveModuleName", {
+            snapshot: options?.snapshot?.id,
+            resolver: this.id,
+            moduleName,
+            containingDirectory,
+            resolutionMode: options?.resolutionMode,
+        });
     }
 
     [globalThis.Symbol.asyncDispose](): Promise<void> { // @sync: [globalThis.Symbol.dispose](): void {
@@ -908,42 +918,14 @@ export class ModuleResolutionSet {
 
     async dispose(): Promise<void> {
         if (this.disposed) return;
-        await this.client.apiRequest("releaseModuleResolutionSet", { set: this.id });
+        await this.client.apiRequest("releaseModuleResolver", { resolver: this.id });
         this.disposed = true;
+        this.disposeCallback?.();
     }
 
     /** @internal */
     ensureNotDisposed(): void {
-        if (this.disposed) throw new Error("ModuleResolutionSet is disposed");
-    }
-}
-
-export class ModuleResolver {
-    private readonly id: number;
-    private readonly snapshotId: number;
-    private readonly client: Client;
-    private readonly ensureSnapshotActive: () => void;
-
-    constructor(id: number, snapshotId: number, client: Client, ensureSnapshotActive: () => void) {
-        this.id = id;
-        this.snapshotId = snapshotId;
-        this.client = client;
-        this.ensureSnapshotActive = ensureSnapshotActive;
-    }
-
-    async resolveModuleName(
-        moduleName: string,
-        containingDirectory: DocumentIdentifier,
-        resolutionMode?: ResolutionMode,
-    ): Promise<ResolveModuleNameResult> {
-        this.ensureSnapshotActive();
-        return this.client.apiRequest("resolveModuleName", {
-            snapshot: this.snapshotId,
-            resolver: this.id,
-            moduleName,
-            containingDirectory,
-            resolutionMode,
-        });
+        if (this.disposed) throw new Error("ModuleResolver is disposed");
     }
 }
 

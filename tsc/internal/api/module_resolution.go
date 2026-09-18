@@ -12,6 +12,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/module"
 	"github.com/microsoft/TypeScript/tsc/internal/project"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
+	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 )
 
 type moduleResolutionMatchKey struct {
@@ -47,7 +48,7 @@ func (p *callbackModuleResolutionProvider) ResolveModuleName(
 	moduleName string,
 	containingDirectory string,
 	resolutionMode core.ResolutionMode,
-	_ func() *module.ResolvedModule,
+	fallback func() *module.ResolvedModule,
 ) (*module.ResolvedModule, error) {
 	if p.base != nil {
 		if result, found := p.base.lookup(moduleName, containingDirectory, resolutionMode); found {
@@ -56,6 +57,9 @@ func (p *callbackModuleResolutionProvider) ResolveModuleName(
 		if !p.base.fallbackToResolution {
 			return nil, nil
 		}
+	}
+	if p.callback == "" {
+		return fallback(), nil
 	}
 	params := &ResolveModuleNameCallbackParams{
 		ModuleName:          moduleName,
@@ -202,54 +206,25 @@ func moduleResolutionTraceToStrings(trace []module.DiagAndArgs) []string {
 	})
 }
 
-func (s *Session) resolveModuleResolutionSource(source *ModuleResolutionSource) (*providedModuleResolutions, error) {
-	if source == nil {
+func (s *Session) moduleResolutionProvider(ctx context.Context, options *CreateProgramOptions) (module.ResolutionProvider, error) {
+	if options.ModuleResolver == 0 {
 		return nil, nil
 	}
-
-	if source.Spec != nil && source.Set != 0 {
-		return nil, fmt.Errorf("%w: moduleResolutions cannot contain both spec and set", ErrClientError)
+	s.moduleResolversMu.RLock()
+	data := s.moduleResolvers[options.ModuleResolver]
+	s.moduleResolversMu.RUnlock()
+	if data == nil {
+		return nil, fmt.Errorf("%w: module resolver %d not found", ErrClientError, options.ModuleResolver)
 	}
-	if source.Spec != nil {
-		return compileModuleResolutionSpec(
-			source.Spec,
-			s.nextModuleResolutionIdentity.Add(1),
-			s.currentDirectory(),
-			s.fileSystem().UseCaseSensitiveFileNames(),
-		)
-	}
-	if source.Set == 0 {
-		return nil, fmt.Errorf("%w: moduleResolutions must contain spec or set", ErrClientError)
-	}
-	s.moduleResolutionSetsMu.RLock()
-	provider := s.moduleResolutionSets[source.Set]
-	s.moduleResolutionSetsMu.RUnlock()
-	if provider == nil {
-		return nil, fmt.Errorf("%w: module resolution set %d not found", ErrClientError, source.Set)
-	}
-	return provider, nil
-}
-
-func (s *Session) moduleResolutionProvider(ctx context.Context, options *CreateProgramOptions) (module.ResolutionProvider, error) {
-	provided, err := s.resolveModuleResolutionSource(options.ModuleResolutions)
-	if err != nil {
-		return nil, err
-	}
-	if options.ResolveModuleNameCallback == "" {
-		if provided == nil {
-			return nil, nil
-		}
-		return provided, nil
-	}
-	if s.conn == nil {
+	if data.resolveModuleNameCallback != "" && s.conn == nil {
 		return nil, fmt.Errorf("%w: API connection is not initialized", ErrClientError)
 	}
 	return &callbackModuleResolutionProvider{
-		identity:         s.nextModuleResolutionIdentity.Add(1),
-		base:             provided,
+		identity:         uint64(options.ModuleResolver),
+		base:             data.provider,
 		conn:             s.conn,
 		ctx:              ctx,
-		callback:         options.ResolveModuleNameCallback,
+		callback:         data.resolveModuleNameCallback,
 		currentDirectory: s.currentDirectory(),
 	}, nil
 }
@@ -265,9 +240,9 @@ func moduleResolutionError(snapshot *project.Snapshot) error {
 	return nil
 }
 
-func (s *Session) handleCreateModuleResolutionSet(params *CreateModuleResolutionSetParams) (ModuleResolutionSetID, error) {
+func (s *Session) handleCreateModuleResolver(params *CreateModuleResolverParams) (ModuleResolverID, error) {
 	provider, err := compileModuleResolutionSpec(
-		&params.Spec,
+		params.ModuleResolutions,
 		s.nextModuleResolutionIdentity.Add(1),
 		s.currentDirectory(),
 		s.fileSystem().UseCaseSensitiveFileNames(),
@@ -275,66 +250,53 @@ func (s *Session) handleCreateModuleResolutionSet(params *CreateModuleResolution
 	if err != nil {
 		return 0, err
 	}
-	id := ModuleResolutionSetID(s.nextModuleResolutionSetID.Add(1))
-	s.moduleResolutionSetsMu.Lock()
-	s.moduleResolutionSets[id] = provider
-	s.moduleResolutionSetsMu.Unlock()
+	id := ModuleResolverID(s.nextModuleResolverID.Add(1))
+	data := &moduleResolverData{
+		compilerOptions:           &params.CompilerOptions,
+		provider:                  provider,
+		resolveModuleNameCallback: params.ResolveModuleNameCallback,
+	}
+	s.moduleResolversMu.Lock()
+	s.moduleResolvers[id] = data
+	s.moduleResolversMu.Unlock()
 	return id, nil
 }
 
-func (s *Session) handleReleaseModuleResolutionSet(params *ReleaseModuleResolutionSetParams) (any, error) {
-	if params.Set == 0 {
-		return nil, fmt.Errorf("%w: empty module resolution set handle", ErrClientError)
-	}
-	s.moduleResolutionSetsMu.Lock()
-	_, ok := s.moduleResolutionSets[params.Set]
+func (s *Session) handleReleaseModuleResolver(params *ReleaseModuleResolverParams) (any, error) {
+	s.moduleResolversMu.Lock()
+	_, ok := s.moduleResolvers[params.Resolver]
 	if ok {
-		delete(s.moduleResolutionSets, params.Set)
+		delete(s.moduleResolvers, params.Resolver)
 	}
-	s.moduleResolutionSetsMu.Unlock()
+	s.moduleResolversMu.Unlock()
 	if !ok {
-		return nil, fmt.Errorf("%w: module resolution set %d not found", ErrClientError, params.Set)
+		return nil, fmt.Errorf("%w: module resolver %d not found", ErrClientError, params.Resolver)
 	}
 	return nil, nil
 }
 
-func (s *Session) handleCreateModuleResolver(params *CreateModuleResolverParams) (ModuleResolverID, error) {
-	sd, err := s.getSnapshotData(params.Snapshot)
-	if err != nil {
-		return 0, err
-	}
-	provider, err := s.resolveModuleResolutionSource(params.ModuleResolutions)
-	if err != nil {
-		return 0, err
-	}
-	id := ModuleResolverID(s.nextModuleResolverID.Add(1))
-	data := &moduleResolverData{
-		resolver:                  module.NewResolver(sd.snapshot, &params.CompilerOptions, "", "", sd.snapshot.ContentMapperExtensions()),
-		provider:                  provider,
-		resolveModuleNameCallback: params.ResolveModuleNameCallback,
-	}
-	sd.moduleResolversMu.Lock()
-	if sd.moduleResolvers == nil {
-		sd.moduleResolvers = make(map[ModuleResolverID]*moduleResolverData)
-	}
-	sd.moduleResolvers[id] = data
-	sd.moduleResolversMu.Unlock()
-	return id, nil
+type liveModuleResolutionHost struct {
+	fs  vfs.FS
+	cwd string
+}
+
+func (h *liveModuleResolutionHost) FS() vfs.FS {
+	return h.fs
+}
+
+func (h *liveModuleResolutionHost) GetCurrentDirectory() string {
+	return h.cwd
 }
 
 func (s *Session) handleResolveModuleName(ctx context.Context, params *ResolveModuleNameParams) (*ResolveModuleNameResult, error) {
 	if params.ModuleName == "" {
 		return nil, fmt.Errorf("%w: moduleName is empty", ErrClientError)
 	}
-	sd, err := s.getSnapshotData(params.Snapshot)
-	if err != nil {
-		return nil, err
-	}
-	sd.moduleResolversMu.RLock()
-	data := sd.moduleResolvers[params.Resolver]
-	sd.moduleResolversMu.RUnlock()
+	s.moduleResolversMu.RLock()
+	data := s.moduleResolvers[params.Resolver]
+	s.moduleResolversMu.RUnlock()
 	if data == nil {
-		return nil, fmt.Errorf("%w: module resolver %d not found in snapshot %d", ErrClientError, params.Resolver, params.Snapshot)
+		return nil, fmt.Errorf("%w: module resolver %d not found", ErrClientError, params.Resolver)
 	}
 
 	mode := core.ResolutionModeNone
@@ -346,38 +308,35 @@ func (s *Session) handleResolveModuleName(ctx context.Context, params *ResolveMo
 	}
 	containingDirectory := tspath.GetNormalizedAbsolutePath(params.ContainingDirectory.ToAbsoluteFileName(s.currentDirectory()), s.currentDirectory())
 
-	var result *module.ResolvedModule
-	var trace []module.DiagAndArgs
-	var provided bool
-	if data.provider != nil {
-		result, provided = data.provider.lookup(params.ModuleName, containingDirectory, mode)
-	}
-	if !provided && (data.provider == nil || data.provider.fallbackToResolution) {
-		if data.resolveModuleNameCallback != "" {
-			if s.conn == nil {
-				return nil, fmt.Errorf("%w: API connection is not initialized", ErrClientError)
-			}
-			callbackParams := &ResolveModuleNameCallbackParams{
-				ModuleName:          params.ModuleName,
-				ContainingDirectory: containingDirectory,
-			}
-			if params.ResolutionMode != nil {
-				callbackParams.ResolutionMode = params.ResolutionMode
-			}
-			callbackResult, err := s.conn.Call(ctx, data.resolveModuleNameCallback, callbackParams)
-			if err != nil {
-				return nil, fmt.Errorf("resolveModuleName callback failed: %w", err)
-			}
-			if len(callbackResult) != 0 && string(callbackResult) != "null" {
-				var providedResolution ProvidedModuleResolution
-				if err := json.Unmarshal(callbackResult, &providedResolution); err != nil {
-					return nil, fmt.Errorf("invalid resolveModuleName callback result: %w", err)
-				}
-				result = providedModuleResolutionToResolvedModule(params.ModuleName, &providedResolution, s.currentDirectory())
-			}
-		} else {
-			result, trace = data.resolver.ResolveModuleNameFromDirectory(params.ModuleName, containingDirectory, mode)
+	var host module.ResolutionHost
+	var extraExtensions []string
+	if params.Snapshot != 0 {
+		sd, err := s.getSnapshotData(params.Snapshot)
+		if err != nil {
+			return nil, err
 		}
+		host = sd.snapshot
+		extraExtensions = sd.snapshot.ContentMapperExtensions()
+	} else {
+		host = &liveModuleResolutionHost{fs: s.fileSystem(), cwd: s.currentDirectory()}
+	}
+	resolver := module.NewResolver(host, data.compilerOptions, "", "", extraExtensions)
+	var trace []module.DiagAndArgs
+	behavior := &callbackModuleResolutionProvider{
+		identity:         uint64(params.Resolver),
+		base:             data.provider,
+		conn:             s.conn,
+		ctx:              ctx,
+		callback:         data.resolveModuleNameCallback,
+		currentDirectory: s.currentDirectory(),
+	}
+	result, err := behavior.ResolveModuleName(params.ModuleName, containingDirectory, mode, func() *module.ResolvedModule {
+		result, resolutionTrace := resolver.ResolveModuleNameFromDirectory(params.ModuleName, containingDirectory, mode)
+		trace = resolutionTrace
+		return result
+	})
+	if err != nil {
+		return nil, err
 	}
 	return &ResolveModuleNameResult{
 		ResolvedModule: newResolvedModuleResponse(result),
