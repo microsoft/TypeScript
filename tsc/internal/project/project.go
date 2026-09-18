@@ -82,6 +82,8 @@ type Project struct {
 	contentMapperWatchedFiles *collections.Set[tspath.Path]
 
 	checkerPool *checkerPool
+	// incremental carries what a change reaches from one program to the next; see incrementalState.
+	incremental *incrementalState
 
 	// installedTypingsInfo is the value of `project.ComputeTypingsInfo()` that was
 	// used during the most recently completed typings installation.
@@ -184,6 +186,7 @@ func NewProject(
 		Kind:             kind,
 		currentDirectory: currentDirectory,
 		dirty:            true,
+		incremental:      &incrementalState{},
 	}
 
 	project.configFilePath = tspath.ToPath(configFileName, currentDirectory, builder.fs.fs.UseCaseSensitiveFileNames())
@@ -312,6 +315,7 @@ func (p *Project) Clone() *Project {
 		contentMapperWatchedFiles: p.contentMapperWatchedFiles,
 
 		checkerPool: p.checkerPool,
+		incremental: p.incremental,
 
 		installedTypingsInfo: p.installedTypingsInfo,
 		typingsFiles:         p.typingsFiles,
