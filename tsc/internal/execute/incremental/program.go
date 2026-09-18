@@ -72,6 +72,43 @@ type TestingData struct {
 	UpdatedSignatureKinds                map[tspath.Path]SignatureUpdateKind
 }
 
+// PriorState is what one program leaves for the next to work out what a change reached: the file
+// hashes, references and cached diagnostics it built, and none of the program they came from. A
+// caller that keeps a whole Program for this keeps its program too, and every type reachable from
+// it, for as long as it holds on.
+type PriorState struct {
+	snapshot *snapshot
+}
+
+// PriorState returns what this program has worked out, without the program itself.
+func (p *Program) PriorState() *PriorState {
+	if p == nil {
+		return nil
+	}
+	return &PriorState{snapshot: p.snapshot}
+}
+
+// NewProgramFromPriorState is NewProgram for a caller that kept only what the previous program
+// worked out, rather than the program itself.
+//
+// reuseReferences says the program is a clone of the one prior came from. Working out what a file
+// references means resolving each of its imports through a type checker, for every file in the
+// program, which is the most expensive thing building this state does. A clone is only made when
+// the replaced file's imports, module augmentations, ambient module names and reference directives
+// are all unchanged, and no other file moves, so every file resolves to what it did before and the
+// whole map can be carried over instead.
+func NewProgramFromPriorState(program *compiler.Program, prior *PriorState, host Host, reuseReferences bool) *Program {
+	var oldSnapshot *snapshot
+	if prior != nil {
+		oldSnapshot = prior.snapshot
+	}
+	return &Program{
+		snapshot: buildSnapshot(program, oldSnapshot, false /*hashWithText*/, reuseReferences && oldSnapshot != nil),
+		program:  program,
+		host:     host,
+	}
+}
+
 func (p *Program) GetTestingData() *TestingData {
 	return p.testingData
 }

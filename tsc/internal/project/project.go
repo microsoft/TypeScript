@@ -164,6 +164,8 @@ type Project struct {
 	contentMapperWatchedFiles *collections.Set[tspath.Path]
 
 	checkerPool *checkerPool
+	// incremental carries what a change reaches from one program to the next; see incrementalState.
+	incremental *incrementalState
 
 	moduleResolverFactory ModuleResolverFactory
 	moduleResolverID      uint64
@@ -282,6 +284,7 @@ func NewProject(
 		id:               id,
 		currentDirectory: currentDirectory,
 		dirty:            true,
+		incremental:      &incrementalState{},
 	}
 
 	project.programFilesWatch = NewWatchedFiles(
@@ -414,6 +417,7 @@ func (p *Project) Clone() *Project {
 		contentMapperWatchedFiles: p.contentMapperWatchedFiles,
 
 		checkerPool: p.checkerPool,
+		incremental: p.incremental,
 
 		moduleResolverFactory: p.moduleResolverFactory,
 		moduleResolverID:      p.moduleResolverID,
