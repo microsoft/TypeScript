@@ -82,10 +82,10 @@ func (c *Checker) GetUnionType(types []*Type) *Type {
 }
 
 func (c *Checker) GetNameTypeOfSymbol(symbol *ast.Symbol) *Type {
-	if !c.valueSymbolLinks.Has(symbol) {
-		return nil
+	if links := c.valueSymbolLinks.TryGet(symbol); links != nil {
+		return links.nameType
 	}
-	return c.valueSymbolLinks.TryGet(symbol).nameType
+	return nil
 }
 
 func IsTypeUsableAsPropertyName(t *Type) bool {
@@ -393,4 +393,8 @@ func (c *Checker) GetWidenedType(t *Type) *Type {
 
 func (c *Checker) CompareSymbols(s1, s2 *ast.Symbol) int {
 	return c.compareSymbols(s1, s2)
+}
+
+func IsDistributedTypeParameter(t *Type) bool {
+	return t.flags&TypeFlagsTypeParameter != 0 && t.AsTypeParameter().isDistributed
 }
