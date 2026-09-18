@@ -61,79 +61,54 @@ jobs:
           insertSteps:
             - pwsh: |
                 $ErrorActionPreference = "Stop"
-
-                function Assert-LastExitCode([string] $operation) {
-                    if ($LASTEXITCODE -ne 0) {
-                        throw "$operation failed with exit code $LASTEXITCODE"
-                    }
-                }
+                $PSNativeCommandUseErrorActionPreference = $true
 
                 git add --all
-                Assert-LastExitCode "git add"
-
-                git diff --cached --quiet
-                $diffExitCode = $LASTEXITCODE
-                if ($diffExitCode -eq 0) {
+                $changes = @(git diff --cached --name-only)
+                if ($changes.Count -eq 0) {
                     Write-Host "Localization files are already up to date."
                     exit 0
-                }
-                if ($diffExitCode -ne 1) {
-                    throw "git diff failed with exit code $diffExitCode"
                 }
 
                 $branch = "localization-update"
                 git switch -c $branch
-                Assert-LastExitCode "git switch"
                 git config user.email "290192711+typescript-automation[bot]@users.noreply.github.com"
-                Assert-LastExitCode "git config user.email"
                 git config user.name "typescript-automation[bot]"
-                Assert-LastExitCode "git config user.name"
                 $hooksPath = Join-Path $env:AGENT_TEMPDIRECTORY "empty-git-hooks"
                 New-Item -Path $hooksPath -ItemType Directory -Force | Out-Null
                 git config core.hooksPath $hooksPath
-                Assert-LastExitCode "git config core.hooksPath"
                 git commit -m "Update localization files"
-                Assert-LastExitCode "git commit"
 
                 $basicAuth = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes("x-access-token:$env:GH_TOKEN"))
                 Write-Host "##vso[task.setsecret]$basicAuth"
                 git config --local http.https://github.com/.extraheader "AUTHORIZATION: basic $basicAuth"
-                Assert-LastExitCode "git config authentication"
 
                 $remoteBranch = git ls-remote --heads origin $branch
-                Assert-LastExitCode "git ls-remote"
                 $branchExists = [bool] $remoteBranch
                 if ($branchExists) {
                     git fetch origin "refs/heads/${branch}:refs/remotes/origin/${branch}"
-                    Assert-LastExitCode "git fetch"
                 }
 
                 $shouldPush = $true
                 if ($branchExists) {
-                    git diff --quiet "origin/$branch" HEAD
-                    $remoteDiffExitCode = $LASTEXITCODE
-                    if ($remoteDiffExitCode -eq 0) {
+                    $localTree = git rev-parse 'HEAD^{tree}'
+                    $remoteTree = git rev-parse "origin/${branch}^{tree}"
+                    if ($localTree -eq $remoteTree) {
                         Write-Host "Remote branch already contains the same files."
                         $shouldPush = $false
-                    }
-                    elseif ($remoteDiffExitCode -ne 1) {
-                        throw "git diff against remote branch failed with exit code $remoteDiffExitCode"
                     }
                 }
 
                 if ($shouldPush) {
                     git push --force-with-lease --set-upstream origin $branch
-                    Assert-LastExitCode "git push"
                 }
 
                 $existingPr = gh pr list --repo microsoft/TypeScript --base main --head $branch --state open --json url --jq '.[0].url // empty'
-                Assert-LastExitCode "gh pr list"
                 if ($existingPr) {
                     Write-Host "Updated existing pull request: $existingPr"
                 }
                 else {
                     gh pr create --repo microsoft/TypeScript --base main --head $branch --title "Update localization files" --body "Updates localization handbacks and their generated runtime artifacts."
-                    Assert-LastExitCode "gh pr create"
                 }
               displayName: Create or update localization pull request
               env:
