@@ -172,6 +172,32 @@ type Project struct {
 	typingsFiles []string
 }
 
+type inferredProjectATAState struct {
+	installedTypingsInfo *ata.TypingsInfo
+	typingsFiles         []string
+	typingsWatch         *WatchedFiles[PatternsAndIgnored]
+}
+
+func (p *Project) inferredProjectATAState() *inferredProjectATAState {
+	if p.installedTypingsInfo == nil {
+		return nil
+	}
+	return &inferredProjectATAState{
+		installedTypingsInfo: p.installedTypingsInfo,
+		typingsFiles:         slices.Clone(p.typingsFiles),
+		typingsWatch:         p.typingsWatch,
+	}
+}
+
+func (s *inferredProjectATAState) apply(project *Project) {
+	if s == nil {
+		return
+	}
+	project.installedTypingsInfo = s.installedTypingsInfo
+	project.typingsFiles = slices.Clone(s.typingsFiles)
+	project.typingsWatch = s.typingsWatch
+}
+
 var _ ls.Project = (*Project)(nil)
 
 func NewConfiguredProject(

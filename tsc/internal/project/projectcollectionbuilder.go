@@ -56,11 +56,12 @@ type ProjectCollectionBuilder struct {
 	defaultProjectsInvalidated bool
 	openFilesChanged           bool
 
-	fileDefaultProjects map[tspath.Path]ID
-	configuredProjects  *dirty.SyncMap[ConfiguredProjectID, *Project]
-	syntheticProjects   *dirty.SyncMap[SyntheticProjectID, *Project]
-	inferredProject     *dirty.Box[*Project]
-	createdPrograms     []*Project
+	fileDefaultProjects     map[tspath.Path]ID
+	configuredProjects      *dirty.SyncMap[ConfiguredProjectID, *Project]
+	syntheticProjects       *dirty.SyncMap[SyntheticProjectID, *Project]
+	inferredProject         *dirty.Box[*Project]
+	inferredProjectATAState *inferredProjectATAState
+	createdPrograms         []*Project
 
 	apiState APIState
 }
@@ -105,6 +106,7 @@ func newProjectCollectionBuilder(
 		configuredProjects:                 dirty.NewSyncMap(oldProjectCollection.configuredProjects),
 		syntheticProjects:                  dirty.NewSyncMap(oldProjectCollection.syntheticProjects),
 		inferredProject:                    dirty.NewBox(oldProjectCollection.inferredProject),
+		inferredProjectATAState:            oldProjectCollection.inferredProjectATAState,
 		apiState:                           oldAPIState.clone(),
 		client:                             client,
 	}
@@ -147,6 +149,10 @@ func (b *ProjectCollectionBuilder) Finalize(logger *logging.LogTree) (*ProjectCo
 	if newInferredProject, inferredProjectChanged := b.inferredProject.Finalize(); inferredProjectChanged {
 		ensureCloned()
 		newProjectCollection.inferredProject = newInferredProject
+	}
+	if b.inferredProjectATAState != b.base.inferredProjectATAState {
+		ensureCloned()
+		newProjectCollection.inferredProjectATAState = b.inferredProjectATAState
 	}
 
 	configFileRegistry := b.configFileRegistryBuilder.Finalize()
@@ -1343,6 +1349,7 @@ func (b *ProjectCollectionBuilder) deleteInferredProject(logger *logging.LogTree
 			return true
 		})
 	}
+	b.inferredProjectATAState = project.inferredProjectATAState()
 	b.inferredProject.Delete()
 	return true
 }
@@ -1360,6 +1367,7 @@ func (b *ProjectCollectionBuilder) updateOrCreateInferredProject(
 	project := b.inferredProject.Value()
 	if project == nil {
 		project = NewInferredProject(b.sessionOptions.CurrentDirectory, compilerOptions, rootFileNames, projectReferences, contentMappers, b, logger)
+		b.inferredProjectATAState.apply(project)
 		project.CommandLine.Errors = configFileParsingDiagnostics
 		b.inferredProject.Set(project)
 		return true

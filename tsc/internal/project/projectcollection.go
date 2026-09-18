@@ -31,6 +31,9 @@ type ProjectCollection struct {
 	// inferredProject is a fallback project that is used when no configured
 	// project can be found for an open file.
 	inferredProject *Project
+	// inferredProjectATAState preserves acquired typings while there is no active
+	// inferred project, so reopening a loose file does not wait for ATA again.
+	inferredProjectATAState *inferredProjectATAState
 	// apiState tracks the projects and files that API clients have explicitly
 	// opened so they are kept loaded across snapshots.
 	apiState APIState
@@ -328,14 +331,15 @@ func (c *ProjectCollection) findDefaultConfiguredProjectWorker(path tspath.Path,
 // clone creates a shallow copy of the project collection.
 func (c *ProjectCollection) clone() *ProjectCollection {
 	return &ProjectCollection{
-		toPath:              c.toPath,
-		configFileRegistry:  c.configFileRegistry,
-		configuredProjects:  c.configuredProjects,
-		syntheticProjects:   c.syntheticProjects,
-		openFiles:           c.openFiles,
-		inferredProject:     c.inferredProject,
-		fileDefaultProjects: c.fileDefaultProjects,
-		apiState:            c.apiState,
+		toPath:                  c.toPath,
+		configFileRegistry:      c.configFileRegistry,
+		configuredProjects:      c.configuredProjects,
+		syntheticProjects:       c.syntheticProjects,
+		openFiles:               c.openFiles,
+		inferredProject:         c.inferredProject,
+		inferredProjectATAState: c.inferredProjectATAState,
+		fileDefaultProjects:     c.fileDefaultProjects,
+		apiState:                c.apiState,
 	}
 }
 
