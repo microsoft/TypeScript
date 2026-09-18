@@ -387,9 +387,9 @@ describe("API", () => {
         const sourceFile = await api.createSourceFile("/component.tsx", sourceText);
         const snapshot = await api.createSnapshot({ openFiles: ["/component.tsx"] });
         const project = snapshot.getProjects()[0];
-        assert.equal((await project.emitter.printNode(sourceFile)).trimEnd(), sourceText); // @sync: assert.equal(project.emitter.printNode(sourceFile).trimEnd(), sourceText);
-        assert.ok(await project.checker.getTypeAtLocation(sourceFile.statements[0])); // @sync: assert.ok(project.checker.getTypeAtLocation(sourceFile.statements[0]));
-        assert.equal(await project.program.isSourceFileDefaultLibrary(sourceFile), false); // @sync: assert.equal(project.program.isSourceFileDefaultLibrary(sourceFile), false);
+        assert.equal((await api.printer.printNode(sourceFile)).trimEnd(), sourceText);
+        assert.ok(await project.checker.getTypeAtLocation(sourceFile.statements[0]));
+        assert.equal(await project.program.isSourceFileDefaultLibrary(sourceFile), false);
         await snapshot.dispose();
     });
 

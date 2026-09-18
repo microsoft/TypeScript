@@ -376,7 +376,7 @@ describe("API", () => {
         const sourceFile = api.createSourceFile("/component.tsx", sourceText);
         const snapshot = api.createSnapshot({ openFiles: ["/component.tsx"] });
         const project = snapshot.getProjects()[0];
-        assert.equal(project.emitter.printNode(sourceFile).trimEnd(), sourceText);
+        assert.equal((api.printer.printNode(sourceFile)).trimEnd(), sourceText);
         assert.ok(project.checker.getTypeAtLocation(sourceFile.statements[0]));
         assert.equal(project.program.isSourceFileDefaultLibrary(sourceFile), false);
         snapshot.dispose();
