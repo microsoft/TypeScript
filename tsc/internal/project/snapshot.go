@@ -211,6 +211,13 @@ func (s *Snapshot) GetLanguageServiceProjectsContainingFile(uri lsproto.Document
 	return s.ProjectCollection.GetLanguageServiceProjectsContainingFile(path)
 }
 
+// WaitForInteractiveIdle blocks until nothing a user is waiting on is outstanding, or ctx is done.
+// A caller about to spend minutes on work nobody asked for uses this to let the work they did ask
+// for go first.
+func (s *Snapshot) WaitForInteractiveIdle(ctx context.Context) {
+	s.host.options.interactiveWork.waitForIdle(ctx)
+}
+
 // ReleaseDiagnosticsCheckers drops the checkers a sweep used on a project. They hold the types of
 // every file in it, which is the largest thing a pull creates, and keeping them buys nothing: a
 // pull that finds the project unchanged answers from the result ids the client already holds

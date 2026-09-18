@@ -54,6 +54,16 @@ type checkerPool struct {
 	// query checkers are not disposed until the pool is GC'd.
 	discarded bool
 
+	// interactive is the session's count of work a user is waiting on. A whole-program check
+	// stands aside while any of it is outstanding, and an interactive check adds to it.
+	interactive *interactiveWork
+
+	// sweeps counts the whole-program checks running on this pool, and diagInUse every hold of a
+	// diagnostics checker, whichever path took it. Both take their checker a file at a time, so a
+	// discarded pool must keep them until the work that is still asking has finished.
+	sweeps    int
+	diagInUse int
+
 	// diagnosticsCount is how many checkers a build of this program would check it with.
 	diagnosticsCount int
 	// diagnosticsAffinity is the diagnostics checker that last checked each file, so the next check
@@ -94,7 +104,7 @@ type checkerPool struct {
 
 var _ compiler.CheckerPool = (*checkerPool)(nil)
 
-func newCheckerPool(opts CheckerPoolOptions, program *compiler.Program, log func(msg string)) *checkerPool {
+func newCheckerPool(opts CheckerPoolOptions, program *compiler.Program, interactive *interactiveWork, log func(msg string)) *checkerPool {
 	if opts.MaxCheckers <= 0 {
 		opts.MaxCheckers = 4
 	} else if opts.MaxCheckers < 2 {
@@ -117,6 +127,7 @@ func newCheckerPool(opts CheckerPoolOptions, program *compiler.Program, log func
 	pool := &checkerPool{
 		program:                program,
 		opts:                   opts,
+		interactive:            interactive,
 		diagnosticsCount:       diagnosticsCount,
 		checkers:               make([]*checker.Checker, slots),
 		heldBy:                 make([]string, slots),
@@ -159,7 +170,7 @@ func (p *checkerPool) GetChecker(ctx context.Context, file *ast.SourceFile) (*ch
 
 	switch lifetime {
 	case core.CheckerLifetimeDiagnostics:
-		return p.getDiagnosticsChecker(requestID, file)
+		return p.getDiagnosticsChecker(requestID, file, core.IsInteractiveRequest(ctx))
 	case core.CheckerLifetimeAPI:
 		return p.getPersistentChecker()
 	default:
@@ -264,23 +275,61 @@ func (p *checkerPool) noteDiagnosticsAffinity(file *ast.SourceFile, index int) {
 // checker it is not reacquired by request: the file decides which one a caller gets, so a request
 // is handed back the checker that already holds that file's types. A caller must not hold one
 // diagnostics checker while asking for another, or two doing it in opposite orders would deadlock.
-func (p *checkerPool) getDiagnosticsChecker(requestID string, file *ast.SourceFile) (*checker.Checker, func()) {
+func (p *checkerPool) getDiagnosticsChecker(requestID string, file *ast.SourceFile, interactive bool) (*checker.Checker, func()) {
+	// Counted from before the wait for the checker rather than from when it is handed over, so a
+	// whole-program check stands aside for this rather than taking the checker out from under it.
+	var interactiveDone func()
+	if interactive {
+		interactiveDone = p.interactive.begin()
+	}
+
 	index := p.diagnosticsIndexFor(file)
 	c, release := p.acquireDiagnosticsChecker(index, requestID)
 	p.noteDiagnosticsAffinity(file, index)
 	p.log(fmt.Sprintf("checkerpool: Acquired diagnostics checker %d for request %s", index, holdTag(requestID)))
-	return c, release
+	if interactiveDone == nil {
+		return c, release
+	}
+	return c, sync.OnceFunc(func() {
+		release()
+		interactiveDone()
+	})
 }
 
 // acquireDiagnosticsChecker takes the numbered diagnostics checker, creating it on first use and
 // blocking while another caller holds it.
 func (p *checkerPool) acquireDiagnosticsChecker(index int, requestID string) (*checker.Checker, func()) {
 	p.diagSems[index] <- struct{}{}
+	return p.fillDiagnosticsSlot(index, requestID)
+}
 
+// tryAcquireDiagnosticsChecker is acquireDiagnosticsChecker for a caller that can give up. A
+// cancelled whole-program check must not wait out a slot, still less build a checker to throw
+// away: building one merges the globals of every file in the program, and the pull that cancelled
+// it is waiting for that same slot.
+func (p *checkerPool) tryAcquireDiagnosticsChecker(ctx context.Context, index int, requestID string) (*checker.Checker, func(), bool) {
+	select {
+	case p.diagSems[index] <- struct{}{}:
+	case <-ctx.Done():
+		return nil, nil, false
+	}
+	// Cancelled while waiting for the slot: hand it straight back rather than build into it.
+	if ctx.Err() != nil {
+		<-p.diagSems[index]
+		return nil, nil, false
+	}
+	c, release := p.fillDiagnosticsSlot(index, requestID)
+	return c, release, true
+}
+
+// fillDiagnosticsSlot takes the numbered slot, whose semaphore the caller already holds, and
+// creates the checker if this is its first use.
+func (p *checkerPool) fillDiagnosticsSlot(index int, requestID string) (*checker.Checker, func()) {
 	p.mu.Lock()
 	// Marking the slot held before letting go of the lock keeps idle cleanup and Discard off it
 	// while there is nothing in it to see.
 	p.heldBy[index] = holdTag(requestID)
+	p.diagInUse++
 	c := p.checkers[index]
 	p.mu.Unlock()
 
@@ -302,6 +351,13 @@ func (p *checkerPool) acquireDiagnosticsChecker(index int, requestID string) (*c
 // backlog, and a file is remembered against the checker that checked it. Query checkers, handed
 // out by request rather than by file, take no part in it.
 func (p *checkerPool) ForEachCheckerGroupDo(ctx context.Context, files []*ast.SourceFile, singleThreaded bool, cb func(c *checker.Checker, fileIndex int, file *ast.SourceFile)) {
+	// A caller the user is waiting on is what everything else stands aside for; waiting here would
+	// be waiting on itself, and the checkers would take turns rather than run together.
+	standAside := !core.IsInteractiveRequest(ctx)
+	// A snapshot update part way through discards this pool. The check is still going to ask for
+	// its checkers, so they have to outlast the discard; see endSweep.
+	p.beginSweep()
+	defer p.endSweep()
 	var next atomic.Int64
 	// Single threaded, one checker takes the whole queue anyway; make it the first, which is where a
 	// file no checker has seen goes too.
@@ -319,15 +375,27 @@ func (p *checkerPool) ForEachCheckerGroupDo(ctx context.Context, files []*ast.So
 					// Nothing left, so don't build a checker to do it with.
 					return
 				}
-				// A cancelled caller discards what comes back anyway. Bailing leaves the rest of the
-				// files' diagnostics zero, so a caller must test for cancellation before reading them.
+				// A cancelled caller discards what comes back anyway. Checked here rather than
+				// left to waitForIdle, which returns without looking at the context when nothing
+				// is outstanding. Bailing leaves the rest of the files' diagnostics zero, so a
+				// caller must test for cancellation before reading them.
 				if ctx.Err() != nil {
 					return
 				}
-				// Taken a file at a time rather than for the whole check: a check of the whole
-				// project runs for as long as the project is big, and a pull on an open file
-				// would otherwise wait out all of it.
-				c, release := p.acquireDiagnosticsChecker(index, requestID)
+				// Stand aside between files for anything the user is waiting on. Nothing is held
+				// while waiting, so the work being waited for can take this checker if it needs it.
+				if standAside {
+					if err := p.interactive.waitForIdle(ctx); err != nil {
+						return
+					}
+				}
+				// A file at a time rather than for the whole check, so that standing aside is
+				// possible at all: a pull on an open file would otherwise wait out the entire
+				// project.
+				c, release, ok := p.tryAcquireDiagnosticsChecker(ctx, index, requestID)
+				if !ok {
+					return
+				}
 				cb(c, i, files[i])
 				release()
 				p.noteDiagnosticsAffinity(files[i], index)
@@ -337,6 +405,40 @@ func (p *checkerPool) ForEachCheckerGroupDo(ctx context.Context, files []*ast.So
 	wg.RunAndWait()
 }
 
+// beginSweep records a whole-program check as running on this pool.
+func (p *checkerPool) beginSweep() {
+	p.mu.Lock()
+	defer p.mu.Unlock()
+	p.sweeps++
+}
+
+// endSweep records one as finished, and on a pool discarded while it ran does the letting go that
+// its releases deferred.
+func (p *checkerPool) endSweep() {
+	p.mu.Lock()
+	defer p.mu.Unlock()
+	p.sweeps--
+	if p.discarded && p.sweeps == 0 {
+		p.disposeIdleDiagnosticsCheckersLocked()
+	}
+}
+
+// disposeIdleDiagnosticsCheckersLocked lets go of every diagnostics checker no one is holding.
+// Must be called with p.mu held.
+func (p *checkerPool) disposeIdleDiagnosticsCheckersLocked() bool {
+	released := false
+	for index := range p.diagnosticsCount {
+		c := p.checkers[index]
+		if c == nil || p.heldBy[index] != "" {
+			continue
+		}
+		p.mergeGlobalDiagnosticsFromCheckerLocked(index, c)
+		p.disposeCheckerLocked(index, c)
+		released = true
+	}
+	return released
+}
+
 // releaseDiagnosticsCheckers drops the checkers a whole-program check used. They hold the types of
 // every file it reached, which is worth keeping only while something is likely to ask again. One
 // another caller is holding is left to the idle timer. The global diagnostics they found are kept,
@@ -344,18 +446,8 @@ func (p *checkerPool) ForEachCheckerGroupDo(ctx context.Context, files []*ast.So
 func (p *checkerPool) releaseDiagnosticsCheckers() bool {
 	p.mu.Lock()
 	defer p.mu.Unlock()
-	released := false
-	for index := range p.diagnosticsCount {
-		c := p.checkers[index]
-		if c == nil || p.heldBy[index] != "" {
-			continue
-		}
-		p.log(fmt.Sprintf("checkerpool: Releasing diagnostics checker %d on request", index))
-		p.mergeGlobalDiagnosticsFromCheckerLocked(index, c)
-		p.disposeCheckerLocked(index, c)
-		released = true
-	}
-	if released && !p.discarded {
+	released := p.disposeIdleDiagnosticsCheckersLocked()
+	if released {
 		p.scheduleCleanupLocked()
 	}
 	return released
@@ -466,11 +558,6 @@ func (p *checkerPool) createRelease(requestID string, index int, c *checker.Chec
 			// Canceled checkers must be disposed.
 			p.log(fmt.Sprintf("checkerpool: Checker %d for request %s was canceled, disposing", index, holdTag(requestID)))
 			p.disposeCheckerLocked(index, c)
-		case p.discarded && index < p.diagnosticsCount:
-			// The program this checked has been replaced, so nothing will ask it for diagnostics
-			// again. Let go of it rather than holding a whole program's types until the pool is.
-			p.mergeGlobalDiagnosticsFromCheckerLocked(index, c)
-			p.disposeCheckerLocked(index, c)
 		default:
 			// Query checkers can produce incidental errors while serializing types.
 			if index < p.diagnosticsCount {
@@ -478,12 +565,13 @@ func (p *checkerPool) createRelease(requestID string, index int, c *checker.Chec
 			}
 			p.heldBy[index] = ""
 			p.lastReleased[index] = time.Now()
-			if !p.discarded {
-				p.scheduleCleanupLocked()
-			}
-			// If discarded, skip scheduling cleanup — query checkers stay alive
-			// until the pool is garbage collected so that API clients can
-			// continue resolving type/symbol handles.
+			// Scheduled on a discarded pool too: a checker is worth letting go of once nothing
+			// has come back for it, but not the moment it is handed back.
+			p.scheduleCleanupLocked()
+		}
+
+		if index < p.diagnosticsCount {
+			p.diagInUse--
 		}
 
 		// Unlock before releasing the semaphore slot. If we received from
@@ -516,11 +604,16 @@ func (p *checkerPool) registerRequestCleanup(ctx context.Context, requestID stri
 // scheduleCleanupLocked resets (or starts) the cleanup timer so it fires at
 // the earliest pending checker-expiration deadline among all currently idle,
 // unheld checkers.
-// Must be called with p.mu held. Must NOT be called on discarded pools.
+// Must be called with p.mu held.
 func (p *checkerPool) scheduleCleanupLocked() {
 	var earliestDeadline time.Time
 	for i := range p.checkers {
 		if p.checkers[i] == nil || p.heldBy[i] != "" || p.lastReleased[i].IsZero() {
+			continue
+		}
+		// Nothing collects a discarded pool's query checkers, so counting them here would keep
+		// resetting a timer that holds the pool, and the program it checked, alive for good.
+		if p.discarded && i >= p.diagnosticsCount {
 			continue
 		}
 		deadline := p.lastReleased[i].Add(p.opts.IdleTimeout)
@@ -552,16 +645,27 @@ func (p *checkerPool) scheduleCleanupLocked() {
 func (p *checkerPool) cleanupIdleCheckers() {
 	p.mu.Lock()
 	defer p.mu.Unlock()
-	// The timer callback may already have been in flight when Discard() called
-	// Stop() (which does not guarantee the callback won't run). Bail out without
-	// rescheduling so a discarded pool doesn't keep itself alive via a new timer.
-	if p.discarded {
+	// A check splits the files unevenly, so a checker given a small share goes untouched for
+	// longer than the timeout while the rest are still going. Collecting it would have the next
+	// file that lands on it rebuild one, part way through the check that is using it.
+	if p.sweeps > 0 || p.diagInUse > 0 {
+		// A whole timeout later, rather than at a deadline already passed, which would spin.
+		if p.cleanupTimer != nil {
+			p.cleanupTimer.Reset(p.opts.IdleTimeout)
+		} else {
+			p.cleanupTimer = time.AfterFunc(p.opts.IdleTimeout, p.cleanupIdleCheckers)
+		}
 		return
 	}
 	now := time.Now()
 	for i := range p.checkers {
 		c := p.checkers[i]
 		if c == nil || p.heldBy[i] != "" {
+			continue
+		}
+		// A discarded pool collects only its diagnostics checkers. Query checkers stay until it
+		// is, so an API client can go on resolving the handles they gave out.
+		if p.discarded && i >= p.diagnosticsCount {
 			continue
 		}
 		if p.lastReleased[i].IsZero() {
@@ -646,21 +750,14 @@ func (p *checkerPool) Discard() {
 	if p.discarded {
 		return // already discarded
 	}
-	p.log("checkerpool: Discarding pool, stopping idle cleanup")
+	p.log("checkerpool: Discarding pool")
 	p.discarded = true
-	// A discarded pool belongs to a program that has been replaced, so let go of the checkers a
-	// sweep left behind rather than holding a whole program's types for the life of the snapshot.
-	// Query checkers stay: an API client may still be resolving handles they handed out.
-	for index := range p.diagnosticsCount {
-		if c := p.checkers[index]; c != nil && p.heldBy[index] == "" {
-			p.mergeGlobalDiagnosticsFromCheckerLocked(index, c)
-			p.disposeCheckerLocked(index, c)
-		}
+	// Only once nothing is using it. Work in flight asks for its checker again a file at a time,
+	// and the idle timer collects whatever it leaves behind.
+	if p.sweeps == 0 && p.diagInUse == 0 {
+		p.disposeIdleDiagnosticsCheckersLocked()
 	}
-	if p.cleanupTimer != nil {
-		p.cleanupTimer.Stop()
-		p.cleanupTimer = nil
-	}
+	p.scheduleCleanupLocked()
 }
 
 func noop() {}

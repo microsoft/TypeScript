@@ -508,7 +508,7 @@ func (p *Project) CreateProgram() CreateProgramResult {
 	createCheckerPool := func(program *compiler.Program) compiler.CheckerPool {
 		opts := p.host.sessionOptions.CheckerPoolOptions
 		opts.MatchBuildCheckerCount = p.host.sessionOptions.workspaceDiagnosticsEnabled.Load()
-		return newCheckerPool(opts, program, p.log)
+		return newCheckerPool(opts, program, p.host.sessionOptions.interactiveWork, p.log)
 	}
 	var cleanupModuleResolver func()
 	createModuleResolver := func(options module.ResolverOptions) module.Resolver {

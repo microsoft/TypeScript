@@ -73,7 +73,7 @@ func setupCheckerPoolSessionWithScope(t *testing.T, opts CheckerPoolOptions, fil
 // (suitable for use inside synctest.Test) using the given program.
 func newTestCheckerPool(program *compiler.Program, opts CheckerPoolOptions) *checkerPool {
 	opts.MatchBuildCheckerCount = true
-	return newCheckerPool(opts, program, func(string) {})
+	return newCheckerPool(opts, program, nil /*interactive*/, func(string) {})
 }
 
 // manyCheckerPoolFiles is a program with more files than a build would give it checkers, so at
@@ -821,7 +821,9 @@ func TestCheckerPoolDiagnosticsCheckersDroppedOnDiscard(t *testing.T) {
 		assert.Assert(t, pool.checkers[0] == nil, "diagnostics checker should be dropped on Discard")
 		pool.mu.Unlock()
 
-		// The pool stays usable; it just builds a new one.
+		// The pool stays usable; it just builds a new one. Work that started before the discard
+		// goes on asking, a file at a time, so what it takes is not thrown away the moment it
+		// hands it back — rebuilding one merges the globals of every file in the program.
 		ctx2 := core.WithRequestID(context.Background(), "diag-discard-2")
 		ctx2 = core.WithCheckerLifetime(ctx2, core.CheckerLifetimeDiagnostics)
 		c2, release2 := pool.GetChecker(ctx2, nil)
@@ -829,7 +831,20 @@ func TestCheckerPoolDiagnosticsCheckersDroppedOnDiscard(t *testing.T) {
 		release2()
 
 		pool.mu.Lock()
-		assert.Assert(t, pool.checkers[0] == nil, "a diagnostics checker released on a discarded pool goes too")
+		assert.Assert(t, pool.checkers[0] == c2, "a checker handed back on a discarded pool is kept for whoever asks next")
+		pool.mu.Unlock()
+
+		// Asking again gets the same one rather than paying to build another.
+		c3, release3 := pool.GetChecker(ctx2, nil)
+		assert.Equal(t, c3, c2, "the next caller is given the checker that is already there")
+		release3()
+
+		// Once nothing has come back for it, the idle timer collects it, so a discarded pool does
+		// not hold a whole program's types for the life of the snapshot.
+		time.Sleep(31 * time.Second)
+		synctest.Wait()
+		pool.mu.Lock()
+		assert.Assert(t, pool.checkers[0] == nil, "an idle diagnostics checker on a discarded pool is collected")
 		pool.mu.Unlock()
 	})
 }
@@ -1572,4 +1587,306 @@ func TestCheckerPoolKeepsOneDiagnosticsCheckerWithoutTheWorkspacePull(t *testing
 	for _, file := range pool.program.SourceFiles() {
 		assert.Equal(t, pool.diagnosticsIndexFor(file), 0)
 	}
+}
+
+// A whole-program check stands aside between files for anything the user is waiting on, so a pull
+// on the file in front of them is not queued behind the rest of the workspace.
+func TestCheckerPoolWholeProgramCheckStandsAsideForInteractiveWork(t *testing.T) {
+	t.Parallel()
+	session, _ := setupCheckerPoolSessionWithFiles(t, CheckerPoolOptions{MaxCheckers: 4, IdleTimeout: 10 * time.Second}, manyCheckerPoolFiles())
+	ls, err := session.GetLanguageService(context.Background(), "file:///src/index.ts")
+	assert.NilError(t, err)
+	program := ls.GetProgram()
+	files := program.SourceFiles()
+
+	synctest.Test(t, func(t *testing.T) {
+		interactive := newInteractiveWork()
+		pool := newCheckerPool(CheckerPoolOptions{MaxCheckers: 4, IdleTimeout: 30 * time.Second}, program, interactive, func(string) {})
+
+		// Something the user is waiting on is outstanding before the check starts.
+		interactiveDone := interactive.begin()
+
+		var checked atomic.Int32
+		var finished atomic.Bool
+		go func() {
+			pool.ForEachCheckerGroupDo(context.Background(), files, false /*singleThreaded*/, func(_ *checker.Checker, _ int, _ *ast.SourceFile) {
+				checked.Add(1)
+			})
+			finished.Store(true)
+		}()
+		synctest.Wait()
+		assert.Equal(t, checked.Load(), int32(0), "no file may be checked while the user is waiting on something")
+
+		interactiveDone()
+		synctest.Wait()
+		assert.Assert(t, finished.Load(), "the check resumes once the interactive work is done")
+		assert.Assert(t, checked.Load() > 0)
+	})
+}
+
+// An interactive pull counts as work the user is waiting on from before it waits for a checker, so
+// a check of the whole program stands aside rather than taking the checker out from under it.
+func TestCheckerPoolInteractivePullCountsAsInteractiveWork(t *testing.T) {
+	t.Parallel()
+	session, _ := setupCheckerPoolSessionWithFiles(t, CheckerPoolOptions{MaxCheckers: 4, IdleTimeout: 10 * time.Second}, manyCheckerPoolFiles())
+	ls, err := session.GetLanguageService(context.Background(), "file:///src/index.ts")
+	assert.NilError(t, err)
+	program := ls.GetProgram()
+
+	synctest.Test(t, func(t *testing.T) {
+		interactive := newInteractiveWork()
+		pool := newCheckerPool(CheckerPoolOptions{MaxCheckers: 4, IdleTimeout: 30 * time.Second}, program, interactive, func(string) {})
+
+		ctx := core.WithRequestID(context.Background(), "doc-pull")
+		ctx = core.WithCheckerLifetime(ctx, core.CheckerLifetimeDiagnostics)
+		ctx = core.WithInteractiveRequest(ctx)
+
+		c, release := pool.GetChecker(ctx, program.SourceFiles()[0])
+		assert.Assert(t, c != nil)
+
+		var idle atomic.Bool
+		go func() {
+			interactive.waitForIdle(context.Background())
+			idle.Store(true)
+		}()
+		synctest.Wait()
+		assert.Assert(t, !idle.Load(), "a held interactive checker is work the user is waiting on")
+
+		release()
+		synctest.Wait()
+		assert.Assert(t, idle.Load(), "releasing it clears the way for a workspace pass")
+	})
+}
+
+// A pull that is not interactive - the workspace pass's own per-file acquisitions - must not count,
+// or the pass would stand aside for itself and never finish.
+func TestCheckerPoolSweepAcquisitionIsNotInteractive(t *testing.T) {
+	t.Parallel()
+	session, _ := setupCheckerPoolSessionWithFiles(t, CheckerPoolOptions{MaxCheckers: 4, IdleTimeout: 10 * time.Second}, manyCheckerPoolFiles())
+	ls, err := session.GetLanguageService(context.Background(), "file:///src/index.ts")
+	assert.NilError(t, err)
+	program := ls.GetProgram()
+
+	synctest.Test(t, func(t *testing.T) {
+		interactive := newInteractiveWork()
+		pool := newCheckerPool(CheckerPoolOptions{MaxCheckers: 4, IdleTimeout: 30 * time.Second}, program, interactive, func(string) {})
+
+		ctx := core.WithRequestID(context.Background(), "sweep")
+		ctx = core.WithCheckerLifetime(ctx, core.CheckerLifetimeDiagnostics)
+
+		_, release := pool.GetChecker(ctx, program.SourceFiles()[0])
+		defer release()
+
+		var idle atomic.Bool
+		go func() {
+			interactive.waitForIdle(context.Background())
+			idle.Store(true)
+		}()
+		synctest.Wait()
+		assert.Assert(t, idle.Load(), "a checker held by the pass itself is not work the user is waiting on")
+	})
+}
+
+// A whole-program check reached from a request the user is waiting on must not stand aside: it
+// would be waiting on itself, and the checkers of one group would take turns rather than run
+// together. Nothing does this today, but it is a cheap thing to leave armed.
+func TestCheckerPoolInteractiveWholeProgramCheckDoesNotStandAside(t *testing.T) {
+	t.Parallel()
+	session, _ := setupCheckerPoolSessionWithFiles(t, CheckerPoolOptions{MaxCheckers: 4, IdleTimeout: 10 * time.Second}, manyCheckerPoolFiles())
+	ls, err := session.GetLanguageService(context.Background(), "file:///src/index.ts")
+	assert.NilError(t, err)
+	program := ls.GetProgram()
+	files := program.SourceFiles()
+
+	synctest.Test(t, func(t *testing.T) {
+		interactive := newInteractiveWork()
+		pool := newCheckerPool(CheckerPoolOptions{MaxCheckers: 4, IdleTimeout: 30 * time.Second}, program, interactive, func(string) {})
+
+		// Something else the user is waiting on never finishes.
+		defer interactive.begin()()
+
+		ctx := core.WithCheckerLifetime(context.Background(), core.CheckerLifetimeDiagnostics)
+		ctx = core.WithInteractiveRequest(ctx)
+
+		var finished atomic.Bool
+		go func() {
+			pool.ForEachCheckerGroupDo(ctx, files, false /*singleThreaded*/, func(*checker.Checker, int, *ast.SourceFile) {})
+			finished.Store(true)
+		}()
+		synctest.Wait()
+		assert.Assert(t, finished.Load(), "an interactive check must not wait for the work it is part of")
+	})
+}
+
+// A snapshot update during a whole-program check discards the pool the check is running on. The
+// check is still using it, one file at a time, so a pool that lets go of a diagnostics checker the
+// moment it is handed back makes the next file build a fresh one — and building one merges the
+// globals of every file in the program. On a large project that is minutes per file.
+func TestCheckerPoolDiscardDoesNotRebuildPerFile(t *testing.T) {
+	t.Parallel()
+
+	session, pool := setupCheckerPoolSessionWithFiles(t, CheckerPoolOptions{}, manyCheckerPoolFiles())
+	t.Cleanup(session.Close)
+
+	files := pool.program.SourceFiles()
+	ctx := core.WithCheckerLifetime(context.Background(), core.CheckerLifetimeDiagnostics)
+
+	// Discard lands partway through, as a snapshot update would.
+	const discardAfter = 2
+	seen := 0
+	var checkers []*checker.Checker
+	pool.ForEachCheckerGroupDo(ctx, files, true /*singleThreaded*/, func(c *checker.Checker, _ int, _ *ast.SourceFile) {
+		checkers = append(checkers, c)
+		seen++
+		if seen == discardAfter {
+			pool.Discard()
+		}
+	})
+
+	assert.Assert(t, len(checkers) == len(files), "every file is checked, got %d of %d", len(checkers), len(files))
+	distinct := map[*checker.Checker]bool{}
+	for _, c := range checkers {
+		distinct[c] = true
+	}
+	assert.Assert(t, len(distinct) <= pool.diagnosticsCount,
+		"a discarded pool must not rebuild a checker per file: %d files were checked by %d distinct checkers, with only %d in the pool",
+		len(files), len(distinct), pool.diagnosticsCount)
+}
+
+// Building a checker merges the globals of every file in the program, which on a large project is
+// the slowest thing a pull does. A check that has been cancelled while waiting for a slot must
+// give up rather than take the slot and build into it: the pull that cancelled it is waiting for
+// that same slot.
+func TestCheckerPoolCancelledSweepGivesUpTheSlot(t *testing.T) {
+	t.Parallel()
+	session, _ := setupCheckerPoolSessionWithFiles(t, CheckerPoolOptions{}, manyCheckerPoolFiles())
+	t.Cleanup(session.Close)
+	ls, err := session.GetLanguageService(context.Background(), "file:///src/index.ts")
+	assert.NilError(t, err)
+	program := ls.GetProgram()
+
+	synctest.Test(t, func(t *testing.T) {
+		pool := newTestCheckerPool(program, CheckerPoolOptions{})
+		// Single threaded, so the check runs on the first checker only.
+		const owner = 0
+		group := program.SourceFiles()
+
+		// Something else holds the checker the group needs, so the check cannot start.
+		held, releaseHeld := pool.acquireDiagnosticsChecker(owner, "holder")
+		assert.Assert(t, held != nil)
+
+		ctx, cancel := context.WithCancel(core.WithCheckerLifetime(context.Background(), core.CheckerLifetimeDiagnostics))
+		var checked atomic.Int64
+		var returned atomic.Bool
+		go func() {
+			pool.ForEachCheckerGroupDo(ctx, group, true /*singleThreaded*/, func(*checker.Checker, int, *ast.SourceFile) {
+				checked.Add(1)
+			})
+			returned.Store(true)
+		}()
+
+		synctest.Wait()
+		assert.Assert(t, !returned.Load(), "the check is waiting for the checker the holder has")
+
+		cancel()
+		synctest.Wait()
+		assert.Assert(t, returned.Load(), "a cancelled check must stop waiting for a slot it no longer needs")
+		assert.Equal(t, checked.Load(), int64(0), "it checked nothing")
+
+		// The slot is the holder's to give back, not the abandoned check's.
+		releaseHeld()
+		synctest.Wait()
+		c, release := pool.acquireDiagnosticsChecker(owner, "after")
+		assert.Assert(t, c != nil, "the slot is free once the holder releases it")
+		release()
+	})
+}
+
+// The reference graph a pull needs resolves every file's imports through a type checker, taking
+// one from the pool per file rather than through ForEachCheckerGroupDo. A snapshot update part
+// way through discards the pool underneath it, and it goes on asking, so the discard must not
+// make each of those calls build a checker of its own.
+func TestCheckerPoolDiscardDoesNotRebuildPerAcquisition(t *testing.T) {
+	t.Parallel()
+
+	session, pool := setupCheckerPoolSessionWithFiles(t, CheckerPoolOptions{}, manyCheckerPoolFiles())
+	t.Cleanup(session.Close)
+
+	files := pool.program.SourceFiles()
+	ctx := core.WithCheckerLifetime(context.Background(), core.CheckerLifetimeDiagnostics)
+
+	// Discarding lets go of what nothing is holding, so the count that matters is how many
+	// checkers the calls after it are served by, not how many the whole run built.
+	const discardAfter = 2
+	discarded := false
+	after := map[*checker.Checker]bool{}
+	for i, file := range files {
+		c, release := pool.GetChecker(ctx, file)
+		if discarded {
+			after[c] = true
+		}
+		release()
+		if i == discardAfter {
+			pool.Discard()
+			discarded = true
+		}
+	}
+
+	served := len(files) - discardAfter - 1
+	assert.Assert(t, len(after) <= pool.diagnosticsCount,
+		"a discarded pool must not rebuild a checker per acquisition: %d calls after the discard were served by %d distinct checkers, with only %d in the pool",
+		served, len(after), pool.diagnosticsCount)
+}
+
+// A check of the whole program splits the files unevenly, so a checker given a small share goes
+// untouched for longer than the idle timeout while the rest are still going. Collecting it would
+// have the next file that lands on it rebuild a checker part way through the check using it.
+func TestCheckerPoolIdleCleanupWaitsForARunningCheck(t *testing.T) {
+	t.Parallel()
+	session, _ := setupCheckerPoolSessionWithFiles(t, CheckerPoolOptions{}, manyCheckerPoolFiles())
+	t.Cleanup(session.Close)
+	ls, err := session.GetLanguageService(context.Background(), "file:///src/index.ts")
+	assert.NilError(t, err)
+	program := ls.GetProgram()
+
+	synctest.Test(t, func(t *testing.T) {
+		pool := newTestCheckerPool(program, CheckerPoolOptions{IdleTimeout: 30 * time.Second})
+		// Single threaded, so the check runs on the first checker only.
+		const owner = 0
+		group := program.SourceFiles()
+
+		// A checker the check is not on right now is built and handed back, as one given a small
+		// share of the files would be early on, while the rest of the check runs for minutes.
+		other := (owner + 1) % pool.diagnosticsCount
+		idle, releaseIdle := pool.acquireDiagnosticsChecker(other, "early")
+		assert.Assert(t, idle != nil)
+		releaseIdle()
+
+		// Meanwhile the check is still running.
+		ctx, cancel := context.WithCancel(core.WithCheckerLifetime(context.Background(), core.CheckerLifetimeDiagnostics))
+		defer cancel()
+		started := make(chan struct{})
+		blocked := make(chan struct{})
+		go func() {
+			pool.ForEachCheckerGroupDo(ctx, group, true /*singleThreaded*/, func(*checker.Checker, int, *ast.SourceFile) {
+				select {
+				case <-started:
+				default:
+					close(started)
+				}
+				<-blocked
+			})
+		}()
+		<-started
+
+		time.Sleep(2 * pool.opts.IdleTimeout)
+		synctest.Wait()
+		pool.mu.Lock()
+		kept := pool.checkers[other]
+		pool.mu.Unlock()
+		assert.Assert(t, kept == idle, "an idle checker must not be collected while a check is still running")
+
+		close(blocked)
+		synctest.Wait()
+	})
 }

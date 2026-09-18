@@ -54,6 +54,14 @@ const (
 	UpdateReasonDidChangeContentMapperContributions
 )
 
+// someoneIsWaiting reports whether a request is held up behind an update made for this reason.
+// Every reason but the idle clean comes from something the user did or something a request asked
+// for; the idle clean is housekeeping on a timer, and a pass over the workspace that stood down
+// for it would be standing down for nobody.
+func (r UpdateReason) someoneIsWaiting() bool {
+	return r != UpdateReasonIdleCleanDiskCache
+}
+
 type ContentMapperContributions struct {
 	Mappers    []*contentmapper.Mapper
 	Extensions []string
@@ -79,6 +87,10 @@ type SessionOptions struct {
 	RunExternalCode    bool
 	DebounceDelay      time.Duration
 	CheckerPoolOptions CheckerPoolOptions
+
+	// interactiveWork is shared by every checker pool in the session. Set by NewSnapshotHost; see
+	// interactiveWork for what it is for.
+	interactiveWork *interactiveWork
 
 	// workspaceDiagnosticsEnabled tracks whether the workspace pull is switched on, so that a
 	// project only pays for a build's worth of checkers when something is going to check it that
@@ -1361,6 +1373,12 @@ func (s *Session) updateSnapshotRef(ctx context.Context, overlays map[tspath.Pat
 }
 
 func (s *Session) updateSnapshot(ctx context.Context, overlays map[tspath.Path]*Overlay, change SnapshotChange, callerRef bool) *Snapshot {
+	// Rebuilding a program holds the snapshot write lock, so every request in the session waits on
+	// it. A workspace pass must not be competing for the machine while it runs.
+	if change.reason.someoneIsWaiting() {
+		defer s.options.interactiveWork.begin()()
+	}
+
 	s.snapshotMu.Lock()
 	oldSnapshot := s.snapshot
 	if !locale.HasLocale(ctx) {
