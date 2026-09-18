@@ -57,6 +57,34 @@ func goodConversionToNamed(x, y, z float64) namedFloat64 {
 	return namedFloat64(x*y) + namedFloat64(z)
 }
 
+func goodDelayedRounding(x, y, z float64) float64 {
+	product := x * y
+	product = float64(product)
+	return product + z
+}
+
+func goodSignedRounding(x, y, z float64) float64 {
+	return float64(-(x * y)) + z
+}
+
+func goodRoundingOnAllPaths(x, y, z float64, chooseLeft bool) float64 {
+	product := x * y
+	if chooseLeft {
+		product = float64(product)
+	} else {
+		product = float64(product)
+	}
+	return product + z
+}
+
+func badRoundingOnOnePath(x, y, z float64, round bool) float64 {
+	product := x * y
+	if round {
+		product = float64(product)
+	}
+	return product + z
+}
+
 func goodConstant() float64 {
 	return 1.5 * 2.5
 }
