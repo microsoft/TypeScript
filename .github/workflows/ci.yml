@@ -95,12 +95,10 @@ jobs:
             skip: ${{ github.event_name == 'merge_group' }}
           - runner: ubuntu-24.04-arm
             os: linux
-            arch: arm64
             coverage: true
             skip: ${{ github.event_name == 'merge_group' }}
           - runner: windows-11-arm
             os: windows
-            arch: arm64
             coverage: true
             skip: ${{ github.event_name == 'merge_group' }}
           - runner: macos-latest
@@ -126,7 +124,7 @@ jobs:
           - config:
               skip: true
 
-    name: test (${{ matrix.config.name || matrix.config.runner || matrix.config.arch }})
+    name: test (${{ matrix.config.name || matrix.config.runner }})
     runs-on: ${{ matrix.config.runner }}
     permissions:
       id-token: write
