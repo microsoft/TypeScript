@@ -31,58 +31,76 @@ type providedModuleResolutions struct {
 	useCaseSensitive     bool
 }
 
-type callbackModuleResolutionProvider struct {
+type moduleResolutionProviderFactory struct {
 	identity         uint64
 	base             *providedModuleResolutions
+	session          *Session
 	conn             ipc.Conn
 	ctx              context.Context
 	callback         string
 	currentDirectory string
 }
 
-func (p *callbackModuleResolutionProvider) Identity() uint64 {
-	return p.identity
+func (f *moduleResolutionProviderFactory) Identity() uint64 {
+	return f.identity
 }
 
-func (p *callbackModuleResolutionProvider) ResolveModuleName(
+type moduleResolutionProvider struct {
+	factory            *moduleResolutionProviderFactory
+	inProgressSnapshot uint64
+	fallbackResolver   *module.Resolver
+}
+
+func (f *moduleResolutionProviderFactory) NewProvider(fallback *module.Resolver) (module.ResolutionProvider, func()) {
+	inProgressSnapshot := f.session.registerInProgressSnapshot(fallback)
+	provider := &moduleResolutionProvider{
+		factory:            f,
+		inProgressSnapshot: inProgressSnapshot,
+		fallbackResolver:   fallback,
+	}
+	return provider, func() {
+		f.session.releaseInProgressSnapshot(inProgressSnapshot)
+	}
+}
+
+func (p *moduleResolutionProvider) ResolveModuleName(
 	moduleName string,
 	containingDirectory string,
 	resolutionMode core.ResolutionMode,
-	fallback func() *module.ResolvedModule,
-) (*module.ResolvedModule, error) {
-	if p.base != nil {
-		if result, found := p.base.lookup(moduleName, containingDirectory, resolutionMode); found {
-			return result, nil
+) (*module.ResolvedModule, []module.DiagAndArgs, error) {
+	f := p.factory
+	if f.base != nil {
+		if result, found := f.base.lookup(moduleName, containingDirectory, resolutionMode); found {
+			return result, nil, nil
 		}
-		if !p.base.fallbackToResolution {
-			return nil, nil
+		if !f.base.fallbackToResolution {
+			return nil, nil, nil
 		}
 	}
-	if p.callback == "" {
-		return fallback(), nil
+	if f.callback == "" {
+		result, trace := p.fallbackResolver.ResolveModuleNameFromDirectory(moduleName, containingDirectory, resolutionMode)
+		return result, trace, nil
 	}
 	params := &ResolveModuleNameCallbackParams{
 		ModuleName:          moduleName,
 		ContainingDirectory: containingDirectory,
 	}
+	params.InProgressSnapshot = p.inProgressSnapshot
 	mode := ResolutionMode(resolutionMode)
 	params.ResolutionMode = &mode
-	callbackResult, err := p.conn.Call(p.ctx, p.callback, params)
+	callbackResult, err := f.conn.Call(f.ctx, f.callback, params)
 	if err != nil {
-		return nil, fmt.Errorf("resolveModuleName callback failed: %w", err)
+		return nil, nil, fmt.Errorf("resolveModuleName callback failed: %w", err)
 	}
+
 	if len(callbackResult) == 0 || string(callbackResult) == "null" {
-		return nil, nil
+		return nil, nil, nil
 	}
 	var providedResolution ProvidedModuleResolution
 	if err := json.Unmarshal(callbackResult, &providedResolution); err != nil {
-		return nil, fmt.Errorf("invalid resolveModuleName callback result: %w", err)
+		return nil, nil, fmt.Errorf("invalid resolveModuleName callback result: %w", err)
 	}
-	return providedModuleResolutionToResolvedModule(moduleName, &providedResolution, p.currentDirectory), nil
-}
-
-func (p *providedModuleResolutions) Identity() uint64 {
-	return p.identity
+	return providedModuleResolutionToResolvedModule(&providedResolution, f.currentDirectory), nil, nil
 }
 
 func (p *providedModuleResolutions) lookup(moduleName string, containingDirectory string, resolutionMode core.ResolutionMode) (*module.ResolvedModule, bool) {
@@ -99,21 +117,6 @@ func (p *providedModuleResolutions) lookup(moduleName string, containingDirector
 		}
 	}
 	return nil, false
-}
-
-func (p *providedModuleResolutions) ResolveModuleName(
-	moduleName string,
-	containingDirectory string,
-	resolutionMode core.ResolutionMode,
-	fallback func() *module.ResolvedModule,
-) (*module.ResolvedModule, error) {
-	if result, found := p.lookup(moduleName, containingDirectory, resolutionMode); found {
-		return result, nil
-	}
-	if p.fallbackToResolution {
-		return fallback(), nil
-	}
-	return nil, nil
 }
 
 func compileModuleResolutionSpec(spec *ModuleResolutionSpec, identity uint64, currentDirectory string, useCaseSensitive bool) (*providedModuleResolutions, error) {
@@ -166,14 +169,14 @@ func compileModuleResolutionSpec(spec *ModuleResolutionSpec, identity uint64, cu
 			return nil, fmt.Errorf("%w: duplicate module resolution entry for %q", ErrClientError, entry.ModuleName)
 		}
 
-		provided := providedModuleResolutionToResolvedModule(entry.ModuleName, entry.Result, currentDirectory)
+		provided := providedModuleResolutionToResolvedModule(entry.Result, currentDirectory)
 		provider.entries[key] = provided
 	}
 
 	return provider, nil
 }
 
-func providedModuleResolutionToResolvedModule(moduleName string, provided *ProvidedModuleResolution, currentDirectory string) *module.ResolvedModule {
+func providedModuleResolutionToResolvedModule(provided *ProvidedModuleResolution, currentDirectory string) *module.ResolvedModule {
 	if provided == nil || provided.ResolvedFileName == nil {
 		return nil
 	}
@@ -206,7 +209,7 @@ func moduleResolutionTraceToStrings(trace []module.DiagAndArgs) []string {
 	})
 }
 
-func (s *Session) moduleResolutionProvider(ctx context.Context, options *CreateProgramOptions) (module.ResolutionProvider, error) {
+func (s *Session) moduleResolutionProviderFactory(ctx context.Context, options *CreateProgramOptions) (module.ResolutionProviderFactory, error) {
 	if options.ModuleResolver == 0 {
 		return nil, nil
 	}
@@ -219,14 +222,29 @@ func (s *Session) moduleResolutionProvider(ctx context.Context, options *CreateP
 	if data.resolveModuleNameCallback != "" && s.conn == nil {
 		return nil, fmt.Errorf("%w: API connection is not initialized", ErrClientError)
 	}
-	return &callbackModuleResolutionProvider{
+	return &moduleResolutionProviderFactory{
 		identity:         uint64(options.ModuleResolver),
 		base:             data.provider,
+		session:          s,
 		conn:             s.conn,
 		ctx:              ctx,
 		callback:         data.resolveModuleNameCallback,
 		currentDirectory: s.currentDirectory(),
 	}, nil
+}
+
+func (s *Session) registerInProgressSnapshot(resolver *module.Resolver) uint64 {
+	id := s.nextInProgressSnapshotHandle.Add(1)
+	s.inProgressSnapshotsMu.Lock()
+	s.inProgressSnapshots[id] = resolver
+	s.inProgressSnapshotsMu.Unlock()
+	return id
+}
+
+func (s *Session) releaseInProgressSnapshot(id uint64) {
+	s.inProgressSnapshotsMu.Lock()
+	delete(s.inProgressSnapshots, id)
+	s.inProgressSnapshotsMu.Unlock()
 }
 
 func moduleResolutionError(snapshot *project.Snapshot) error {
@@ -308,33 +326,39 @@ func (s *Session) handleResolveModuleName(ctx context.Context, params *ResolveMo
 	}
 	containingDirectory := tspath.GetNormalizedAbsolutePath(params.ContainingDirectory.ToAbsoluteFileName(s.currentDirectory()), s.currentDirectory())
 
-	var host module.ResolutionHost
-	var extraExtensions []string
-	if params.Snapshot != 0 {
+	var resolver *module.Resolver
+	if params.Snapshot != 0 && params.InProgressSnapshot != 0 {
+		return nil, fmt.Errorf("%w: snapshot and inProgressSnapshot are mutually exclusive", ErrClientError)
+	}
+	if params.InProgressSnapshot != 0 {
+		s.inProgressSnapshotsMu.RLock()
+		inProgressResolver := s.inProgressSnapshots[params.InProgressSnapshot]
+		s.inProgressSnapshotsMu.RUnlock()
+		if inProgressResolver == nil {
+			return nil, fmt.Errorf("%w: in-progress snapshot %d not found", ErrClientError, params.InProgressSnapshot)
+		}
+		resolver = inProgressResolver.NewResolverForCompilerOptions(data.compilerOptions)
+	} else if params.Snapshot != 0 {
 		sd, err := s.getSnapshotData(params.Snapshot)
 		if err != nil {
 			return nil, err
 		}
-		host = sd.snapshot
-		extraExtensions = sd.snapshot.ContentMapperExtensions()
+		resolver = module.NewResolver(sd.snapshot, data.compilerOptions, "", "", sd.snapshot.ContentMapperExtensions())
 	} else {
-		host = &liveModuleResolutionHost{fs: s.fileSystem(), cwd: s.currentDirectory()}
+		resolver = module.NewResolver(&liveModuleResolutionHost{fs: s.fileSystem(), cwd: s.currentDirectory()}, data.compilerOptions, "", "", nil)
 	}
-	resolver := module.NewResolver(host, data.compilerOptions, "", "", extraExtensions)
-	var trace []module.DiagAndArgs
-	behavior := &callbackModuleResolutionProvider{
+	factory := &moduleResolutionProviderFactory{
 		identity:         uint64(params.Resolver),
 		base:             data.provider,
+		session:          s,
 		conn:             s.conn,
 		ctx:              ctx,
 		callback:         data.resolveModuleNameCallback,
 		currentDirectory: s.currentDirectory(),
 	}
-	result, err := behavior.ResolveModuleName(params.ModuleName, containingDirectory, mode, func() *module.ResolvedModule {
-		result, resolutionTrace := resolver.ResolveModuleNameFromDirectory(params.ModuleName, containingDirectory, mode)
-		trace = resolutionTrace
-		return result
-	})
+	provider, cleanup := factory.NewProvider(resolver)
+	defer cleanup()
+	result, trace, err := provider.ResolveModuleName(params.ModuleName, containingDirectory, mode)
 	if err != nil {
 		return nil, err
 	}

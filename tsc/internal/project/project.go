@@ -100,7 +100,7 @@ type Project struct {
 
 	checkerPool *checkerPool
 
-	moduleResolutionProvider module.ResolutionProvider
+	resolutionProviderFactory module.ResolutionProviderFactory
 
 	// installedTypingsInfo is the value of `project.ComputeTypingsInfo()` that was
 	// used during the most recently completed typings installation.
@@ -111,11 +111,11 @@ type Project struct {
 
 var _ ls.Project = (*Project)(nil)
 
-func resolutionProviderIdentity(provider module.ResolutionProvider) uint64 {
-	if provider == nil {
+func resolutionProviderFactoryIdentity(factory module.ResolutionProviderFactory) uint64 {
+	if factory == nil {
 		return 0
 	}
-	return provider.Identity()
+	return factory.Identity()
 }
 
 func NewConfiguredProject(
@@ -349,7 +349,7 @@ func (p *Project) Clone() *Project {
 
 		checkerPool: p.checkerPool,
 
-		moduleResolutionProvider: p.moduleResolutionProvider,
+		resolutionProviderFactory: p.resolutionProviderFactory,
 
 		installedTypingsInfo: p.installedTypingsInfo,
 		typingsFiles:         p.typingsFiles,
@@ -492,7 +492,7 @@ func (p *Project) CreateProgram() CreateProgramResult {
 				UseSourceOfProjectReference: true,
 				TypingsLocation:             typingsLocation,
 				CreateCheckerPool:           createCheckerPool,
-				ModuleResolutionProvider:    p.moduleResolutionProvider,
+				ResolutionProviderFactory:   p.resolutionProviderFactory,
 			},
 		)
 	}

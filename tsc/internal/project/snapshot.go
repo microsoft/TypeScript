@@ -324,7 +324,7 @@ type APICreateProgramRequest struct {
 	CompilerOptions              *core.CompilerOptions
 	ProjectReferences            []*core.ProjectReference
 	ConfigFileParsingDiagnostics []*ast.Diagnostic
-	ModuleResolutionProvider     module.ResolutionProvider
+	ResolutionProviderFactory    module.ResolutionProviderFactory
 }
 
 type APIReconfigureProgramRequest struct {

@@ -263,7 +263,11 @@ export interface ModuleResolverOptions {
     resolveModuleName?: ResolveModuleNameCallback;
 }
 
-export type ResolveModuleNameCallback = (moduleName: string, containingDirectory: string, resolutionMode: ResolutionMode | undefined) => ProvidedModuleResolution | undefined;
+export interface ResolveModuleNameCallbackOptions {
+    snapshot: InProgressSnapshot;
+}
+
+export type ResolveModuleNameCallback = (moduleName: string, containingDirectory: string, resolutionMode: ResolutionMode | undefined, options: ResolveModuleNameCallbackOptions) => ProvidedModuleResolution | undefined;
 
 export type CreateProgramOptions = Omit<ProtocolCreateProgramOptions, "moduleResolver"> & {
     moduleResolver?: ModuleResolver;
@@ -282,13 +286,25 @@ export type LanguageServerSnapshotChanges = Omit<ProtocolLanguageServerSnapshotC
 let nextModuleResolutionCallbackId = 0;
 function registerModuleResolutionCallback(client: Client, callback: ResolveModuleNameCallback): { name: string; dispose: () => void; } {
     const name = `resolveModuleName/${++nextModuleResolutionCallbackId}`;
+    const inProgressSnapshots = new Map<number, InProgressSnapshot>();
     const dispose = client.registerCallback(name, params => {
-        const { moduleName, containingDirectory, resolutionMode } = params as {
+        const { moduleName, containingDirectory, resolutionMode, inProgressSnapshot } = params as {
             moduleName: string;
             containingDirectory: string;
             resolutionMode?: ResolutionMode;
+            inProgressSnapshot: number;
         };
-        return callback(moduleName, containingDirectory, resolutionMode);
+        let snapshot = inProgressSnapshots.get(inProgressSnapshot);
+        if (snapshot === undefined) {
+            snapshot = new InProgressSnapshot(inProgressSnapshot);
+            inProgressSnapshots.set(inProgressSnapshot, snapshot);
+        }
+        return callback(
+            moduleName,
+            containingDirectory,
+            resolutionMode,
+            { snapshot },
+        );
     });
     return { name, dispose };
 }
@@ -1474,33 +1490,35 @@ export class ModuleResolver {
     }
 
     get resolveModuleName(): {
-        (moduleName: string, containingDirectory: DocumentIdentifier, resolutionMode?: ResolutionMode, options?: { snapshot?: Snapshot; }): ResolveModuleNameResult;
-        gen(moduleName: string, containingDirectory: DocumentIdentifier, resolutionMode?: ResolutionMode, options?: { snapshot?: Snapshot; }): Generator<ProtocolRequest, ResolveModuleNameResult, ProtocolResponse["result"]>;
+        (moduleName: string, containingDirectory: DocumentIdentifier, resolutionMode?: ResolutionMode, options?: { snapshot?: Snapshot | InProgressSnapshot; }): ResolveModuleNameResult;
+        gen(moduleName: string, containingDirectory: DocumentIdentifier, resolutionMode?: ResolutionMode, options?: { snapshot?: Snapshot | InProgressSnapshot; }): Generator<ProtocolRequest, ResolveModuleNameResult, ProtocolResponse["result"]>;
     } {
         const owner = this;
         return cacheGeneratorMethod(
             owner,
             "resolveModuleName",
-            function (moduleName: string, containingDirectory: DocumentIdentifier, resolutionMode?: ResolutionMode, options?: { snapshot?: Snapshot; }): ResolveModuleNameResult {
+            function (moduleName: string, containingDirectory: DocumentIdentifier, resolutionMode?: ResolutionMode, options?: { snapshot?: Snapshot | InProgressSnapshot; }): ResolveModuleNameResult {
                 owner.ensureNotDisposed();
-                if (options?.snapshot?.isDisposed()) {
+                if (options?.snapshot instanceof Snapshot && options.snapshot.isDisposed()) {
                     throw new Error("Snapshot is disposed");
                 }
                 return owner.client.apiRequest("resolveModuleName", {
-                    snapshot: options?.snapshot?.id,
+                    snapshot: options?.snapshot instanceof Snapshot ? options.snapshot.id : undefined,
+                    inProgressSnapshot: options?.snapshot instanceof InProgressSnapshot ? options.snapshot.id : undefined,
                     resolver: owner.id,
                     moduleName,
                     containingDirectory,
                     resolutionMode,
                 });
             },
-            function* (moduleName: string, containingDirectory: DocumentIdentifier, resolutionMode?: ResolutionMode, options?: { snapshot?: Snapshot; }): Generator<ProtocolRequest, ResolveModuleNameResult, ProtocolResponse["result"]> {
+            function* (moduleName: string, containingDirectory: DocumentIdentifier, resolutionMode?: ResolutionMode, options?: { snapshot?: Snapshot | InProgressSnapshot; }): Generator<ProtocolRequest, ResolveModuleNameResult, ProtocolResponse["result"]> {
                 owner.ensureNotDisposed();
-                if (options?.snapshot?.isDisposed()) {
+                if (options?.snapshot instanceof Snapshot && options.snapshot.isDisposed()) {
                     throw new Error("Snapshot is disposed");
                 }
                 return yield* apiRequest("resolveModuleName", {
-                    snapshot: options?.snapshot?.id,
+                    snapshot: options?.snapshot instanceof Snapshot ? options.snapshot.id : undefined,
+                    inProgressSnapshot: options?.snapshot instanceof InProgressSnapshot ? options.snapshot.id : undefined,
                     resolver: owner.id,
                     moduleName,
                     containingDirectory,
@@ -1540,6 +1558,18 @@ export class ModuleResolver {
     /** @internal */
     ensureNotDisposed(): void {
         if (this.disposed) throw new Error("ModuleResolver is disposed");
+    }
+}
+
+export class InProgressSnapshot {
+    private readonly _inProgressSnapshotBrand = undefined;
+
+    /** @internal */
+    readonly id: number;
+
+    /** @internal */
+    constructor(id: number) {
+        this.id = id;
     }
 }
 

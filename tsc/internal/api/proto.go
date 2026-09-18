@@ -496,6 +496,7 @@ type ReleaseModuleResolverParams struct {
 
 type ResolveModuleNameParams struct {
 	Snapshot            SnapshotID         `json:"snapshot,omitempty"`
+	InProgressSnapshot  uint64             `json:"inProgressSnapshot,omitempty"`
 	Resolver            ModuleResolverID   `json:"resolver"`
 	ModuleName          string             `json:"moduleName"`
 	ContainingDirectory DocumentIdentifier `json:"containingDirectory"`
@@ -506,6 +507,7 @@ type ResolveModuleNameCallbackParams struct {
 	ModuleName          string          `json:"moduleName"`
 	ContainingDirectory string          `json:"containingDirectory"`
 	ResolutionMode      *ResolutionMode `json:"resolutionMode,omitempty"`
+	InProgressSnapshot  uint64          `json:"inProgressSnapshot"`
 }
 
 type ResolveModuleNameResult struct {

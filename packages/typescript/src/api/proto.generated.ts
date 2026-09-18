@@ -266,6 +266,7 @@ export interface ReleaseModuleResolverParams {
 
 export interface ResolveModuleNameParams {
     snapshot?: number | undefined;
+    inProgressSnapshot?: number | undefined;
     resolver: number;
     moduleName: string;
     containingDirectory: DocumentIdentifier;

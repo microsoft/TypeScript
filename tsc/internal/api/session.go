@@ -432,6 +432,9 @@ type Session struct {
 	nextModuleResolverID         atomic.Uint64
 	moduleResolvers              map[ModuleResolverID]*moduleResolverData
 	moduleResolversMu            sync.RWMutex
+	nextInProgressSnapshotHandle atomic.Uint64
+	inProgressSnapshots          map[uint64]*module.Resolver
+	inProgressSnapshotsMu        sync.RWMutex
 	conn                         ipc.Conn
 
 	cpuProfiler pprof.CPUProfiler
@@ -475,11 +478,12 @@ func newSession(snapshotHost *project.SnapshotHost, withLocale func(context.Cont
 		withLocale = func(ctx context.Context) context.Context { return ctx }
 	}
 	s := &Session{
-		id:              formatSessionID(id),
-		snapshotHost:    snapshotHost,
-		withLocale:      withLocale,
-		snapshots:       make(map[SnapshotID]*snapshotData),
-		moduleResolvers: make(map[ModuleResolverID]*moduleResolverData),
+		id:                  formatSessionID(id),
+		snapshotHost:        snapshotHost,
+		withLocale:          withLocale,
+		snapshots:           make(map[SnapshotID]*snapshotData),
+		moduleResolvers:     make(map[ModuleResolverID]*moduleResolverData),
+		inProgressSnapshots: make(map[uint64]*module.Resolver),
 	}
 	if options != nil {
 		s.useBinaryResponses = options.UseBinaryResponses
@@ -1320,11 +1324,11 @@ func (s *Session) toAPISnapshotRequest(ctx context.Context, changes *SnapshotReq
 			ProjectReferences:            programParams.Options.ProjectReferences,
 			ConfigFileParsingDiagnostics: core.Map(programParams.Options.ConfigFileParsingDiagnostics, func(d *DiagnosticResponse) *ast.Diagnostic { return d.ToDiagnostic() }),
 		}
-		provider, err := s.moduleResolutionProvider(ctx, &programParams.Options)
+		factory, err := s.moduleResolutionProviderFactory(ctx, &programParams.Options)
 		if err != nil {
 			return nil, err
 		}
-		apiRequest.CreatePrograms[i].ModuleResolutionProvider = provider
+		apiRequest.CreatePrograms[i].ResolutionProviderFactory = factory
 	}
 	apiRequest.ReconfigurePrograms = make([]*project.APIReconfigureProgramRequest, len(changes.ReconfigurePrograms))
 	reconfiguredProgramIDs := collections.Set[int]{}
@@ -1351,11 +1355,11 @@ func (s *Session) toAPISnapshotRequest(ctx context.Context, changes *SnapshotReq
 			ProjectReferences:            programParams.Options.ProjectReferences,
 			ConfigFileParsingDiagnostics: core.Map(programParams.Options.ConfigFileParsingDiagnostics, func(d *DiagnosticResponse) *ast.Diagnostic { return d.ToDiagnostic() }),
 		}
-		provider, err := s.moduleResolutionProvider(ctx, &programParams.Options)
+		factory, err := s.moduleResolutionProviderFactory(ctx, &programParams.Options)
 		if err != nil {
 			return nil, err
 		}
-		apiRequest.ReconfigurePrograms[i].ModuleResolutionProvider = provider
+		apiRequest.ReconfigurePrograms[i].ResolutionProviderFactory = factory
 	}
 	if len(changes.RemovePrograms) > 0 {
 		apiRequest.RemovePrograms = collections.NewSetWithSizeHint[int](len(changes.RemovePrograms))

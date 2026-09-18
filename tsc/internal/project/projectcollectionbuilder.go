@@ -317,7 +317,7 @@ func (b *ProjectCollectionBuilder) HandleAPIRequest(apiRequest *APISnapshotReque
 			request.CompilerOptions,
 			request.ProjectReferences,
 			request.ConfigFileParsingDiagnostics,
-			request.ModuleResolutionProvider,
+			request.ResolutionProviderFactory,
 			b.inferredContentMappers,
 			logger,
 		)
@@ -332,7 +332,7 @@ func (b *ProjectCollectionBuilder) HandleAPIRequest(apiRequest *APISnapshotReque
 			request.CompilerOptions,
 			request.ProjectReferences,
 			request.ConfigFileParsingDiagnostics,
-			request.ModuleResolutionProvider,
+			request.ResolutionProviderFactory,
 			b.inferredContentMappers,
 			logger,
 		)
@@ -1259,7 +1259,7 @@ func (b *ProjectCollectionBuilder) updateOrCreateSyntheticProject(
 	compilerOptions *core.CompilerOptions,
 	projectReferences []*core.ProjectReference,
 	configFileParsingDiagnostics []*ast.Diagnostic,
-	moduleResolutionProvider module.ResolutionProvider,
+	resolutionProviderFactory module.ResolutionProviderFactory,
 	contentMappers []*contentmapper.Mapper,
 	logger *logging.LogTree,
 ) *dirty.SyncMapEntry[tspath.Path, *Project] {
@@ -1268,7 +1268,7 @@ func (b *ProjectCollectionBuilder) updateOrCreateSyntheticProject(
 	if !loaded {
 		syntheticProject := newSyntheticProject(name, b.sessionOptions.CurrentDirectory, compilerOptions, rootFileNames, projectReferences, contentMappers, b, logger)
 		syntheticProject.CommandLine.Errors = configFileParsingDiagnostics
-		syntheticProject.moduleResolutionProvider = moduleResolutionProvider
+		syntheticProject.resolutionProviderFactory = resolutionProviderFactory
 		project, _ = b.syntheticProjects.LoadOrStore(projectPath, syntheticProject)
 		return project
 	}
@@ -1289,14 +1289,14 @@ func (b *ProjectCollectionBuilder) updateOrCreateSyntheticProject(
 				!projectReferencesEqual(p.CommandLine.ProjectReferences(), projectReferences) ||
 				!reflect.DeepEqual(p.CommandLine.Errors, configFileParsingDiagnostics) ||
 				!slices.Equal(p.CommandLine.ContentMappers(), newCommandLine.ContentMappers()) ||
-				resolutionProviderIdentity(p.moduleResolutionProvider) != resolutionProviderIdentity(moduleResolutionProvider)
+				resolutionProviderFactoryIdentity(p.resolutionProviderFactory) != resolutionProviderFactoryIdentity(resolutionProviderFactory)
 		},
 		func(p *Project) {
 			if logger != nil {
 				logger.Log(fmt.Sprintf("Updating synthetic project config with %d root files", len(rootFileNames)))
 			}
 			p.SetCommandLine(newCommandLine)
-			p.moduleResolutionProvider = moduleResolutionProvider
+			p.resolutionProviderFactory = resolutionProviderFactory
 		},
 	)
 	return project

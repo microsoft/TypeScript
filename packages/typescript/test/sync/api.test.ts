@@ -618,13 +618,16 @@ describe("API", () => {
             moduleResolution: ModuleResolutionKind.NodeNext,
         };
         const defaultResolver = api.createModuleResolver(compilerOptions);
+        const callbackSnapshots: object[] = [];
         const customResolver = api.createModuleResolver(compilerOptions, {
-            resolveModuleName: (moduleName, containingDirectory, resolutionMode) => {
+            resolveModuleName: (moduleName, containingDirectory, resolutionMode, { snapshot }) => {
+                callbackSnapshots.push(snapshot);
                 if (moduleName === "custom") return { resolvedFileName: "/custom.d.ts" };
                 return (defaultResolver.resolveModuleName(
                     moduleName,
                     containingDirectory,
                     resolutionMode,
+                    { snapshot },
                 )).resolvedModule;
             },
         });
@@ -637,6 +640,44 @@ describe("API", () => {
         assert.deepEqual(
             [...snapshot.operation.createdPrograms[0].getSourceFileNames()].sort(),
             ["/custom.d.ts", "/node_modules/native/index.d.ts", "/src/index.ts"],
+        );
+        assert.equal(callbackSnapshots.length, 2);
+        assert.equal(callbackSnapshots[0], callbackSnapshots[1]);
+    });
+
+    test("module resolver callbacks can resolve against the in-progress snapshot filesystem", () => {
+        using api = spawnAPI({
+            "/src/index.ts": `import "layered";`,
+        });
+        const compilerOptions = {
+            noLib: true,
+            module: ModuleKind.NodeNext,
+            moduleResolution: ModuleResolutionKind.NodeNext,
+        };
+        const defaultResolver = api.createModuleResolver(compilerOptions);
+        const customResolver = api.createModuleResolver(compilerOptions, {
+            resolveModuleName: (moduleName, containingDirectory, resolutionMode, { snapshot }) => {
+                return (defaultResolver.resolveModuleName(
+                    moduleName,
+                    containingDirectory,
+                    resolutionMode,
+                    { snapshot },
+                )).resolvedModule;
+            },
+        });
+        const snapshot = api.createSnapshot({
+            fileSystem: createFileSystemLayer([
+                ["/node_modules/layered/package.json", JSON.stringify({ name: "layered", version: "1.0.0", types: "index.d.ts" })],
+                ["/node_modules/layered/index.d.ts", `export {};`],
+            ]),
+            createPrograms: [{
+                rootFiles: ["/src/index.ts"],
+                options: { compilerOptions, moduleResolver: customResolver },
+            }],
+        });
+        assert.deepEqual(
+            [...snapshot.operation.createdPrograms[0].getSourceFileNames()].sort(),
+            ["/node_modules/layered/index.d.ts", "/src/index.ts"],
         );
     });
 

@@ -43,7 +43,7 @@ type ProgramOptions struct {
 	TypingsLocation             string
 	ProjectName                 string
 	Tracing                     *tracing.Tracing
-	ModuleResolutionProvider    module.ResolutionProvider
+	ResolutionProviderFactory   module.ResolutionProviderFactory
 	// SkipModuleResolution avoids all module and type reference resolution while
 	// still collecting import metadata needed for emit.
 	SkipModuleResolution bool
@@ -327,7 +327,7 @@ func (p *Program) ReuseProgram(changedFilePath tspath.Path, newHost CompilerHost
 	if createCheckerPool != nil {
 		newOpts.CreateCheckerPool = createCheckerPool
 	}
-	if resolutionProviderIdentity(p.opts.ModuleResolutionProvider) != resolutionProviderIdentity(newOpts.ModuleResolutionProvider) {
+	if resolutionProviderFactoryIdentity(p.opts.ResolutionProviderFactory) != resolutionProviderFactoryIdentity(newOpts.ResolutionProviderFactory) {
 		return nil, nil, false
 	}
 
@@ -420,11 +420,11 @@ func (p *Program) ReuseProgram(changedFilePath tspath.Path, newHost CompilerHost
 	return result, newFile, true
 }
 
-func resolutionProviderIdentity(provider module.ResolutionProvider) uint64 {
-	if provider == nil {
+func resolutionProviderFactoryIdentity(factory module.ResolutionProviderFactory) uint64 {
+	if factory == nil {
 		return 0
 	}
-	return provider.Identity()
+	return factory.Identity()
 }
 
 func (p *Program) initCheckerPool() {

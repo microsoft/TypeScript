@@ -177,6 +177,10 @@ func NewResolver(
 	}
 }
 
+func (r *Resolver) NewResolverForCompilerOptions(options *core.CompilerOptions) *Resolver {
+	return NewResolver(r.host, options, "", "", r.extraExtensions)
+}
+
 func NewResolverWithOptions(
 	host ResolutionHost,
 	compilerOptions *core.CompilerOptions,

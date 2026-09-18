@@ -47,6 +47,7 @@ type sourceFileFromReferenceDiagnostic struct {
 type fileLoader struct {
 	opts                                           ProgramOptions
 	resolver                                       *module.Resolver
+	resolutionProvider                             module.ResolutionProvider
 	defaultLibraryPath                             string
 	comparePathsOptions                            tspath.ComparePathsOptions
 	supportedExtensions                            [][]string
@@ -179,6 +180,11 @@ func processAllProgramFiles(
 	}
 	loader.addProjectReferenceTasks(singleThreaded)
 	loader.resolver = module.NewResolver(loader.projectReferenceFileMapper.host, compilerOptions, opts.TypingsLocation, opts.ProjectName, opts.Config.ContentMapperExtensions())
+	if opts.ResolutionProviderFactory != nil {
+		var cleanup func()
+		loader.resolutionProvider, cleanup = opts.ResolutionProviderFactory.NewProvider(loader.resolver)
+		defer cleanup()
+	}
 	if opts.Tracing != nil {
 		defer opts.Tracing.Push(tracing.PhaseProgram, "processRootFiles", map[string]any{"count": len(rootFiles)}, false)()
 	}
@@ -877,16 +883,12 @@ func (p *fileLoader) resolveImportsAndModuleAugmentations(t *parseTask) {
 			mode := getModeForUsageLocation(file.FileName(), meta, entry, optionsForFile)
 			var resolvedModule *module.ResolvedModule
 			var trace []module.DiagAndArgs
-			if p.opts.ModuleResolutionProvider != nil {
+			if p.resolutionProvider != nil {
 				var err error
-				resolvedModule, err = p.opts.ModuleResolutionProvider.ResolveModuleName(
+				resolvedModule, trace, err = p.resolutionProvider.ResolveModuleName(
 					moduleName,
 					tspath.GetDirectoryPath(fileName),
 					mode,
-					func() *module.ResolvedModule {
-						resolvedModule, trace = p.resolver.ResolveModuleName(moduleName, fileName, mode, redirect)
-						return resolvedModule
-					},
 				)
 				if err != nil {
 					p.moduleResolutionErrorOnce.Do(func() {

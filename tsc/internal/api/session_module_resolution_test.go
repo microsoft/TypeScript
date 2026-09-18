@@ -7,6 +7,7 @@ import (
 
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/json"
+	"github.com/microsoft/TypeScript/tsc/internal/module"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/projecttestutil"
 	"gotest.tools/v3/assert"
 )
@@ -224,19 +225,29 @@ func TestProvidedModuleResolutionPreservesStaticIdentity(t *testing.T) {
 func TestModuleResolutionCallbackErrorsAreReturned(t *testing.T) {
 	t.Parallel()
 
+	projectSession, _ := projecttestutil.Setup(map[string]any{})
+	defer projectSession.Close()
+	session := NewLSPSession(projectSession, nil)
+	defer session.Close()
 	conn := &failingModuleResolutionConn{}
-	provider := &callbackModuleResolutionProvider{
+	factory := &moduleResolutionProviderFactory{
 		identity:         1,
+		session:          session,
 		conn:             conn,
 		ctx:              context.Background(),
 		callback:         "resolveModuleName/1",
 		currentDirectory: "/",
 	}
+	host := &liveModuleResolutionHost{fs: projectSession.FS(), cwd: "/"}
+	provider, cleanup := factory.NewProvider(module.NewResolver(host, core.EmptyCompilerOptions, "", "", nil))
 	for range 2 {
-		_, err := provider.ResolveModuleName("pkg", "/src", core.ResolutionModeESM, nil)
+		_, _, err := provider.ResolveModuleName("pkg", "/src", core.ResolutionModeESM)
 		assert.ErrorContains(t, err, "callback error")
 	}
 	assert.Equal(t, conn.calls, 2)
+	assert.Equal(t, len(session.inProgressSnapshots), 1)
+	cleanup()
+	assert.Equal(t, len(session.inProgressSnapshots), 0)
 }
 
 func providedResolutionEntry(moduleName string, directory string, mode *core.ModuleKind, fileName string) *ModuleResolutionEntry {
