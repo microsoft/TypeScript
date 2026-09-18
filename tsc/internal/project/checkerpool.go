@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"slices"
 	"sync"
+	"sync/atomic"
 	"time"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
@@ -315,6 +316,10 @@ func (p *checkerPool) ForEachCheckerGroupDo(ctx context.Context, files []*ast.So
 	// A caller the user is waiting on is what everything else stands aside for; waiting here would
 	// be waiting on itself, and one group's checkers would take turns rather than run together.
 	standAside := !core.IsInteractiveRequest(ctx)
+	// Counted across the groups rather than per group, so a caller sees one number for the check
+	// rather than one per checker.
+	reportProgress := checkProgressFrom(ctx)
+	var checked atomic.Int64
 	wg := core.NewWorkGroup(singleThreaded)
 	for index := range p.diagnosticsCount {
 		wg.Queue(func() {
@@ -354,6 +359,9 @@ func (p *checkerPool) ForEachCheckerGroupDo(ctx context.Context, files []*ast.So
 				c, release := p.acquireDiagnosticsChecker(index, requestID)
 				cb(c, i, files[i])
 				release()
+				if reportProgress != nil {
+					reportProgress(int(checked.Add(1)), len(files))
+				}
 			}
 		})
 	}
