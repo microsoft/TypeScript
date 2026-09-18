@@ -93,7 +93,7 @@ jobs:
             os: windows
             coverage: true
             skip: ${{ github.event_name == 'merge_group' }}
-          - runner: ubuntu-24.04-arm
+          - runner: ubuntu-26.04-arm
             os: linux
             coverage: true
             skip: ${{ github.event_name == 'merge_group' }}
