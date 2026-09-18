@@ -605,6 +605,41 @@ describe("API", () => {
         );
     });
 
+    test("module resolver callbacks can delegate to another resolver", () => {
+        using api = spawnAPI({
+            "/src/index.ts": `import "custom"; import "native";`,
+            "/custom.d.ts": `export {};`,
+            "/node_modules/native/package.json": JSON.stringify({ name: "native", version: "1.0.0", types: "index.d.ts" }),
+            "/node_modules/native/index.d.ts": `export {};`,
+        });
+        const compilerOptions = {
+            noLib: true,
+            module: ModuleKind.NodeNext,
+            moduleResolution: ModuleResolutionKind.NodeNext,
+        };
+        const defaultResolver = api.createModuleResolver(compilerOptions);
+        const customResolver = api.createModuleResolver(compilerOptions, {
+            resolveModuleName: (moduleName, containingDirectory, resolutionMode) => {
+                if (moduleName === "custom") return { resolvedFileName: "/custom.d.ts" };
+                return (defaultResolver.resolveModuleName(
+                    moduleName,
+                    containingDirectory,
+                    resolutionMode === undefined ? undefined : { resolutionMode },
+                )).resolvedModule;
+            },
+        });
+        const snapshot = api.createSnapshot({
+            createPrograms: [{
+                rootFiles: ["/src/index.ts"],
+                options: { compilerOptions, moduleResolver: customResolver },
+            }],
+        });
+        assert.deepEqual(
+            [...snapshot.operation.createdPrograms[0].getSourceFileNames()].sort(),
+            ["/custom.d.ts", "/node_modules/native/index.d.ts", "/src/index.ts"],
+        );
+    });
+
     test("provided resolutions do not report native resolution provenance diagnostics", () => {
         using api = spawnAPI({
             "/src/index.ts": `import { value } from "./value.ts"; export { value };`,
