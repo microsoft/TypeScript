@@ -142,11 +142,11 @@ func jsonObjectRawField(data []byte, field string) json.Value {
 			return nil
 		}
 		if jsonKeyCheck(name, field) {
-			val, err := dec.ReadValue()
+			value, err := dec.ReadValue()
 			if err != nil {
 				return nil
 			}
-			return val
+			return value
 		}
 		if err := dec.SkipValue(); err != nil {
 			return nil
