@@ -126,7 +126,7 @@ jobs:
           - config:
               skip: true
 
-    name: test (${{ matrix.config.name || matrix.config.runner }})
+    name: test (${{ matrix.config.name || matrix.config.runner || matrix.config.arch }})
     runs-on: ${{ matrix.config.runner }}
     permissions:
       id-token: write
