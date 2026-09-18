@@ -87,6 +87,7 @@ import {
     ModifierFlags,
     ModuleKind,
     ModuleResolutionKind,
+    type ModuleResolutionSet,
     type ModuleResolverOptions,
     type NumberLiteralType,
     ObjectFlags,
@@ -133,6 +134,17 @@ describe("API", () => {
 
             const lsp = undefined! as API<true>;
             void lsp.getCurrentLanguageServerSnapshot({ openProjects: ["/tsconfig.json"] });
+            const resolutionSet = undefined! as ModuleResolutionSet;
+            void lsp.getCurrentLanguageServerSnapshot({
+                createPrograms: [{
+                    rootFiles: ["/index.ts"],
+                    options: {
+                        compilerOptions: {},
+                        moduleResolutions: resolutionSet,
+                        resolveModuleName: () => ({ resolvedFileName: "/resolved.ts" }),
+                    },
+                }],
+            });
             const baseSnapshot = undefined! as Snapshot;
             void lsp.getCurrentLanguageServerSnapshot(undefined, baseSnapshot);
 
@@ -547,6 +559,36 @@ describe("API", () => {
         });
         assert.deepEqual([...repeatedCallback.getProgram(callbackProgramId)!.getSourceFileNames()].sort(), [providedA, root]);
         assert.equal(callbackCalls, 2);
+    });
+
+    test("provided resolutions do not report native resolution provenance diagnostics", () => {
+        using api = spawnAPI({
+            "/src/index.ts": `import { value } from "./value.ts"; export { value };`,
+            "/value.ts": `export const value = 1;`,
+        });
+        const snapshot = api.createSnapshot({
+            createPrograms: [{
+                rootFiles: ["/src/index.ts"],
+                options: {
+                    compilerOptions: {
+                        noLib: true,
+                        module: ModuleKind.NodeNext,
+                        moduleResolution: ModuleResolutionKind.NodeNext,
+                    },
+                    moduleResolutions: {
+                        fallback: "unresolved",
+                        entries: [{
+                            moduleName: "./value.ts",
+                            result: {
+                                resolvedFileName: "/value.ts",
+                            },
+                        }],
+                    },
+                },
+            }],
+        });
+        const program = snapshot.operation.createdPrograms[0];
+        assert.deepEqual(program.getSemanticDiagnostics("/src/index.ts"), []);
     });
 
     test("Program resolved modules and type reference directives", () => {

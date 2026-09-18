@@ -187,16 +187,12 @@ func providedModuleResolutionToResolvedModule(moduleName string, provided *Provi
 			PeerDependencies: provided.PackageID.PeerDependencies,
 		}
 	}
-	externalPath := result.ResolvedFileName
+	originalPath := result.ResolvedFileName
 	if result.OriginalPath != "" {
-		externalPath = result.OriginalPath
+		originalPath = result.OriginalPath
 	}
 	result.Extension = tspath.TryGetExtensionFromPath(result.ResolvedFileName)
-	result.ResolvedUsingTsExtension = tspath.IsExternalModuleNameRelative(moduleName) &&
-		tspath.TryExtractTSExtension(moduleName) != ""
-	result.ResolvedUsingExtraExtensions = !tspath.FileExtensionIsOneOf(result.ResolvedFileName, tspath.SupportedTSExtensionsWithJsonFlat) &&
-		!tspath.FileExtensionIsOneOf(result.ResolvedFileName, tspath.SupportedJSExtensionsFlat)
-	result.IsExternalLibraryImport = strings.Contains(externalPath, "/node_modules/")
+	result.IsExternalLibraryImport = strings.Contains(originalPath, "/node_modules/")
 	return result
 }
 

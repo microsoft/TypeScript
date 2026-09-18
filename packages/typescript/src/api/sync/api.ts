@@ -91,7 +91,7 @@ import type {
     ImportAdderAction,
     InferredProjectId,
     IntrinsicTypeMethod,
-    LanguageServerSnapshotChanges,
+    LanguageServerSnapshotChanges as ProtocolLanguageServerSnapshotChanges,
     ModuleResolutionEntry,
     ModuleResolutionSource,
     ModuleResolutionSpec,
@@ -219,7 +219,6 @@ export type {
     IntersectionType,
     IntrinsicType,
     JSDocTagInfo,
-    LanguageServerSnapshotChanges,
     LiteralType,
     LSPConnectionOptions,
     ModuleResolutionEntry,
@@ -271,6 +270,10 @@ export type CreateProgramOptions = Omit<ProtocolCreateProgramOptions, "moduleRes
 export type CreateSnapshotProgramParams = Omit<ProtocolCreateSnapshotProgramParams, "options"> & { options: CreateProgramOptions; };
 export type ReconfigureSnapshotProgramParams = Omit<ProtocolReconfigureSnapshotProgramParams, "options"> & { options: CreateProgramOptions; };
 export type CreateSnapshotParams = Omit<ProtocolCreateSnapshotParams, "createPrograms" | "reconfigurePrograms"> & {
+    createPrograms?: readonly CreateSnapshotProgramParams[] | undefined;
+    reconfigurePrograms?: readonly ReconfigureSnapshotProgramParams[] | undefined;
+};
+export type LanguageServerSnapshotChanges = Omit<ProtocolLanguageServerSnapshotChanges, "createPrograms" | "reconfigurePrograms"> & {
     createPrograms?: readonly CreateSnapshotProgramParams[] | undefined;
     reconfigurePrograms?: readonly ReconfigureSnapshotProgramParams[] | undefined;
 };
@@ -811,6 +814,12 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         };
     }
 
+    private prepareLanguageServerSnapshotChanges(changes: LanguageServerSnapshotChanges | undefined): ProtocolLanguageServerSnapshotChanges | undefined {
+        if (!changes) return undefined;
+        const prepared = this.prepareCreateSnapshotParams(changes);
+        return prepared;
+    }
+
     private createSnapshotUpdater(getSnapshot: () => Snapshot): SnapshotUpdater {
         const update = ((params: CreateSnapshotParams) => this.updateSnapshot(getSnapshot(), params)) as SnapshotUpdater;
         const owner = this;
@@ -852,7 +861,7 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
             }
             const data = owner.client.apiRequest("getCurrentLanguageServerSnapshot", {
                 ...(baseSnapshot ? { baseSnapshot: baseSnapshot.id } : {}),
-                ...(changes ? { changes } : {}),
+                ...(changes ? { changes: owner.prepareLanguageServerSnapshotChanges(changes) } : {}),
             });
             if (baseSnapshot) {
                 owner.sourceFileCache.retainForSnapshot(data.snapshot, baseSnapshot.id, data.changes);
@@ -888,7 +897,7 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
             }
             const data = yield* apiRequest("getCurrentLanguageServerSnapshot", {
                 ...(baseSnapshot ? { baseSnapshot: baseSnapshot.id } : {}),
-                ...(changes ? { changes } : {}),
+                ...(changes ? { changes: owner.prepareLanguageServerSnapshotChanges(changes) } : {}),
             });
             if (baseSnapshot) {
                 owner.sourceFileCache.retainForSnapshot(data.snapshot, baseSnapshot.id, data.changes);
