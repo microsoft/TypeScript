@@ -272,8 +272,8 @@ export type ResolveModuleNameCallback = (moduleName: string, containingDirectory
 export type CreateProgramOptions = Omit<ProtocolCreateProgramOptions, "moduleResolver"> & {
     moduleResolver?: ModuleResolver;
 };
-export type CreateSnapshotProgramParams = Omit<ProtocolCreateSnapshotProgramParams, "options"> & { options: CreateProgramOptions; };
-export type ReconfigureSnapshotProgramParams = Omit<ProtocolReconfigureSnapshotProgramParams, "options"> & { options: CreateProgramOptions; };
+export type CreateSnapshotProgramParams = Omit<ProtocolCreateSnapshotProgramParams, "options"> & { options?: CreateProgramOptions | undefined; };
+export type ReconfigureSnapshotProgramParams = Omit<ProtocolReconfigureSnapshotProgramParams, "options"> & { options?: CreateProgramOptions | undefined; };
 export type CreateSnapshotParams = Omit<ProtocolCreateSnapshotParams, "createPrograms" | "reconfigurePrograms"> & {
     createPrograms?: readonly CreateSnapshotProgramParams[] | undefined;
     reconfigurePrograms?: readonly ReconfigureSnapshotProgramParams[] | undefined;
@@ -310,9 +310,9 @@ function registerModuleResolutionCallback(client: Client, callback: ResolveModul
 }
 
 export interface TranspileOptions {
-    compilerOptions?: CompilerOptions;
-    fileName?: string;
-    reportDiagnostics?: boolean;
+    compilerOptions?: CompilerOptions | undefined;
+    fileName?: string | undefined;
+    reportDiagnostics?: boolean | undefined;
 }
 
 export interface TranspileOutput {
@@ -339,11 +339,13 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
     private initialized: boolean = false;
     private initializing: void | undefined;
     private activeSnapshots: Set<Snapshot> = new Set();
+    readonly printer: Printer;
     readonly internal: InternalAPI;
 
     constructor(options: APIOptions | LSPConnectionOptions = {}) {
         this.client = new Client(options);
         this.sourceFileCache = new SourceFileCache();
+        this.printer = new Printer(this.client);
         this.internal = new InternalAPI(this.client, this.ensureInitialized);
     }
 
@@ -807,7 +809,8 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
 
     private prepareCreateSnapshotParams(params: CreateSnapshotParams | undefined): ProtocolCreateSnapshotParams | undefined {
         if (!params) return undefined;
-        const prepareOptions = (options: CreateProgramOptions): ProtocolCreateProgramOptions => {
+        const prepareOptions = (options: CreateProgramOptions | undefined): ProtocolCreateProgramOptions | undefined => {
+            if (!options) return undefined;
             const { moduleResolver, ...rest } = options;
             moduleResolver?.ensureNotDisposed();
             return {
@@ -868,8 +871,8 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
                 throw new Error("Cannot use an inactive snapshot as a response base");
             }
             const data = owner.client.apiRequest("getCurrentLanguageServerSnapshot", {
-                ...(baseSnapshot ? { baseSnapshot: baseSnapshot.id } : {}),
-                ...(changes ? { changes: owner.prepareLanguageServerSnapshotChanges(changes) } : {}),
+                baseSnapshot: baseSnapshot?.id,
+                changes: owner.prepareLanguageServerSnapshotChanges(changes),
             });
             if (baseSnapshot) {
                 owner.sourceFileCache.retainForSnapshot(data.snapshot, baseSnapshot.id, data.changes);
@@ -904,8 +907,8 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
                 throw new Error("Cannot use an inactive snapshot as a response base");
             }
             const data = yield* apiRequest("getCurrentLanguageServerSnapshot", {
-                ...(baseSnapshot ? { baseSnapshot: baseSnapshot.id } : {}),
-                ...(changes ? { changes: owner.prepareLanguageServerSnapshotChanges(changes) } : {}),
+                baseSnapshot: baseSnapshot?.id,
+                changes: owner.prepareLanguageServerSnapshotChanges(changes),
             });
             if (baseSnapshot) {
                 owner.sourceFileCache.retainForSnapshot(data.snapshot, baseSnapshot.id, data.changes);
@@ -1116,20 +1119,20 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
 
     /** Creates a program from current filesystem state. */
     get createProgram(): {
-        (rootFiles: readonly DocumentIdentifier[], createProgramOptions: CreateProgramOptions): Program;
-        gen(rootFiles: readonly DocumentIdentifier[], createProgramOptions: CreateProgramOptions): Generator<ProtocolRequest, Program, ProtocolResponse["result"]>;
+        (rootFiles: readonly DocumentIdentifier[], compilerOptions: CompilerOptions, createProgramOptions?: CreateProgramOptions): Program;
+        gen(rootFiles: readonly DocumentIdentifier[], compilerOptions: CompilerOptions, createProgramOptions?: CreateProgramOptions): Generator<ProtocolRequest, Program, ProtocolResponse["result"]>;
     } {
         const owner = this;
         return cacheGeneratorMethod(
             owner,
             "createProgram",
-            function (rootFiles: readonly DocumentIdentifier[], createProgramOptions: CreateProgramOptions): Program {
+            function (rootFiles: readonly DocumentIdentifier[], compilerOptions: CompilerOptions, createProgramOptions?: CreateProgramOptions): Program {
                 owner.ensureInitialized();
 
                 const snapshot = owner.createSnapshot({
-                    createPrograms: [{ rootFiles, options: createProgramOptions }],
+                    createPrograms: [{ rootFiles, compilerOptions, options: createProgramOptions }],
                 });
-                const program = snapshot.operation.createdPrograms[0];
+                const program = snapshot.operation.createdPrograms![0];
                 if (!program) {
                     snapshot.dispose();
                     throw new Error("createProgram did not return a project");
@@ -1137,13 +1140,13 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
                 program.setOwnedSnapshot(snapshot);
                 return program;
             },
-            function* (rootFiles: readonly DocumentIdentifier[], createProgramOptions: CreateProgramOptions): Generator<ProtocolRequest, Program, ProtocolResponse["result"]> {
+            function* (rootFiles: readonly DocumentIdentifier[], compilerOptions: CompilerOptions, createProgramOptions?: CreateProgramOptions): Generator<ProtocolRequest, Program, ProtocolResponse["result"]> {
                 yield* owner.ensureInitialized.gen();
 
                 const snapshot = yield* owner.createSnapshot.gen({
-                    createPrograms: [{ rootFiles, options: createProgramOptions }],
+                    createPrograms: [{ rootFiles, compilerOptions, options: createProgramOptions }],
                 });
-                const program = snapshot.operation.createdPrograms[0];
+                const program = snapshot.operation.createdPrograms![0];
                 if (!program) {
                     yield* snapshot.dispose.gen();
                     throw new Error("createProgram did not return a project");
@@ -1232,27 +1235,47 @@ export class InternalAPI {
 type SnapshotUpdater = ((params: CreateSnapshotParams) => Snapshot) & { gen(params: CreateSnapshotParams): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]>; };
 
 export interface SnapshotOperation {
-    readonly createdPrograms?: readonly Program<SyntheticProjectId>[];
-    readonly openedFiles?: readonly SnapshotOpenedFileOperation[];
+    readonly createdPrograms?: readonly Program<SyntheticProjectId>[] | undefined;
+    readonly openedFiles?: readonly SnapshotOpenedFileOperation[] | undefined;
 }
 
 export interface SnapshotOpenedFileOperation {
     readonly project: Project;
 }
 
+/** Replaces every element of a tuple while preserving its length and index structure. */
 type MapTupleTo<Tuple extends readonly unknown[], Result> = {
     readonly [Index in keyof Tuple]: Result;
 };
 
+/**
+ * Keeps `Tuple` as an inference target while contextually typing each element from
+ * `Elements`. The mapped intersection supplies nested completions and excess-property
+ * checks without widening an inferred tuple to an array.
+ */
+type ContextualizeTuple<
+    Tuple extends readonly unknown[] | undefined,
+    Elements extends readonly unknown[] | undefined,
+> =
+    & Tuple
+    & {
+        readonly [Index in keyof Tuple]: NonNullable<Elements>[number];
+    };
+
+/** Substitutes the operation arrays with contextually typed, tuple-preserving versions. */
 type SnapshotOperationParams<
     Params extends { createPrograms?: readonly unknown[] | undefined; openFiles?: readonly unknown[] | undefined; },
     CreatePrograms extends Params["createPrograms"],
     OpenFiles extends Params["openFiles"],
 > = Omit<Params, "createPrograms" | "openFiles"> & {
-    createPrograms?: CreatePrograms;
-    openFiles?: OpenFiles;
+    createPrograms?: ContextualizeTuple<CreatePrograms, Params["createPrograms"]> | undefined;
+    openFiles?: ContextualizeTuple<OpenFiles, Params["openFiles"]> | undefined;
 };
 
+/**
+ * Refines a snapshot's operation results to required tuples when the corresponding
+ * operation arrays were supplied, preserving their lengths for indexed access.
+ */
 type SnapshotForOperationResults<
     CreatePrograms extends readonly unknown[] | undefined,
     OpenFiles extends readonly unknown[] | undefined,
@@ -1263,6 +1286,7 @@ type SnapshotForOperationResults<
         & (OpenFiles extends readonly unknown[] ? { readonly openedFiles: MapTupleTo<OpenFiles, SnapshotOpenedFileOperation>; } : unknown);
 };
 
+/** Derives the refined snapshot result type from a complete operation parameter type. */
 export type SnapshotForOperation<Params extends CreateSnapshotParams> = SnapshotForOperationResults<
     Params extends { createPrograms: infer CreatePrograms extends readonly unknown[]; } ? CreatePrograms : undefined,
     Params extends { openFiles: infer OpenFiles extends readonly unknown[]; } ? OpenFiles : undefined
@@ -1314,8 +1338,8 @@ export class Snapshot {
         }
 
         this.operation = {
-            ...(data.operation.createdPrograms ? { createdPrograms: data.operation.createdPrograms.map(projectId => this.requireProject(projectId).program) } : {}),
-            ...(data.operation.openedFiles ? { openedFiles: data.operation.openedFiles.map(result => ({ project: this.requireProject(result.project) })) } : {}),
+            createdPrograms: data.operation.createdPrograms?.map(projectId => this.requireProject(projectId).program),
+            openedFiles: data.operation.openedFiles?.map(result => ({ project: this.requireProject(result.project) })),
         };
 
         this.internal = new SnapshotInternalAPI(this.id, client);
@@ -2176,7 +2200,6 @@ export class Project<Id extends ProjectId = ProjectId> {
 
     readonly program: Program<Id>;
     readonly checker: Checker;
-    readonly emitter: Emitter;
     readonly languageService: LanguageService;
     private client: Client;
     private snapshotId: number;
@@ -2217,7 +2240,6 @@ export class Project<Id extends ProjectId = ProjectId> {
             client,
             objectRegistry,
         );
-        this.emitter = new Emitter(client);
         this.languageService = new LanguageService(snapshotId, this, client, objectRegistry);
     }
 
@@ -3368,7 +3390,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
                     emitSkipped: response.emitSkipped,
                     diagnostics: response.diagnostics,
                     emittedFiles: response.emittedFiles,
-                    ...(fileSystem ? { fileSystem } : {}),
+                    fileSystem,
                 };
             },
             function* (emitOnly?: EmitOnly): Generator<ProtocolRequest, EmitResult, ProtocolResponse["result"]> {
@@ -3387,7 +3409,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
                     emitSkipped: response.emitSkipped,
                     diagnostics: response.diagnostics,
                     emittedFiles: response.emittedFiles,
-                    ...(fileSystem ? { fileSystem } : {}),
+                    fileSystem,
                 };
             },
         );
@@ -5805,7 +5827,7 @@ export interface PrintNodeOptions {
     terminateUnterminatedLiterals?: boolean | undefined;
 }
 
-export class Emitter {
+export class Printer {
     private client: Client;
 
     constructor(client: Client) {
@@ -5832,6 +5854,37 @@ export class Emitter {
             },
             function* (node: Node, options: PrintNodeOptions = {}): Generator<ProtocolRequest, string, ProtocolResponse["result"]> {
                 const encoded = encodeNode(node);
+                const base64 = uint8ArrayToBase64(encoded);
+                return yield* apiRequest("printNode", {
+                    data: base64,
+                    preserveSourceNewlines: options.preserveSourceNewlines,
+                    neverAsciiEscape: options.neverAsciiEscape,
+                    terminateUnterminatedLiterals: options.terminateUnterminatedLiterals,
+                });
+            },
+        );
+    }
+
+    get printFile(): {
+        (sourceFile: SourceFile, options?: PrintNodeOptions): string;
+        gen(sourceFile: SourceFile, options?: PrintNodeOptions): Generator<ProtocolRequest, string, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "printFile",
+            function (sourceFile: SourceFile, options: PrintNodeOptions = {}): string {
+                const encoded = encodeNode(sourceFile);
+                const base64 = uint8ArrayToBase64(encoded);
+                return owner.client.apiRequest("printNode", {
+                    data: base64,
+                    preserveSourceNewlines: options.preserveSourceNewlines,
+                    neverAsciiEscape: options.neverAsciiEscape,
+                    terminateUnterminatedLiterals: options.terminateUnterminatedLiterals,
+                });
+            },
+            function* (sourceFile: SourceFile, options: PrintNodeOptions = {}): Generator<ProtocolRequest, string, ProtocolResponse["result"]> {
+                const encoded = encodeNode(sourceFile);
                 const base64 = uint8ArrayToBase64(encoded);
                 return yield* apiRequest("printNode", {
                     data: base64,

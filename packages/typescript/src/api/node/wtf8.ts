@@ -11,7 +11,7 @@ const loneSurrogateRegExp = /[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?:^|[^\uD800-\u
 const shortStringLength = 64;
 type DecodeInput = ArrayBufferView | ArrayBufferLike | null;
 interface DecodeOptions {
-    stream?: boolean;
+    stream?: boolean | undefined;
 }
 
 function isWtf8Surrogate(bytes: Uint8Array, index: number): boolean {

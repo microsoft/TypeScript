@@ -27,7 +27,7 @@ import type {
 
 interface StdioHandle {
     fd: number;
-    setBlocking?: (value: boolean) => void;
+    setBlocking?: ((value: boolean) => void) | undefined;
 }
 
 interface StdoutWithHandle extends Readable {

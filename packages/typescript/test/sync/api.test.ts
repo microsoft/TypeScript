@@ -137,18 +137,19 @@ describe("API", () => {
             void lsp.getCurrentLanguageServerSnapshot({
                 createPrograms: [{
                     rootFiles: ["/index.ts"],
-                    options: {
-                        compilerOptions: {},
-                        moduleResolver,
-                    },
+                    compilerOptions: {},
+                    options: { moduleResolver },
                 }],
             });
             const baseSnapshot = undefined! as Snapshot;
             void lsp.getCurrentLanguageServerSnapshot(undefined, baseSnapshot);
 
-            const api = new API();
             // @ts-expect-error Snapshot parameters are excess-property checked.
-            void api.createSnapshot({ fileChanges: { changed: ["/index.ts"] } });
+            void standalone.createSnapshot({ fileChanges: { changed: ["/index.ts"] } });
+            // @ts-expect-error Synthetic program parameters are contextually typed and excess-property checked.
+            void standalone.createSnapshot({ createPrograms: [{ rootFiles: [], compilerOptions: {}, unexpected: true }] });
+            // @ts-expect-error Compiler options in synthetic program parameters are contextually typed and excess-property checked.
+            void standalone.createSnapshot({ createPrograms: [{ rootFiles: [], compilerOptions: { unexpected: true } }] });
             // @ts-expect-error Snapshot update parameters are excess-property checked.
             void baseSnapshot.update({ fileChanges: { changed: ["/index.ts"] } });
             // @ts-expect-error Snapshot updates require an explicit changes object.
@@ -387,7 +388,7 @@ describe("API", () => {
         const sourceFile = api.createSourceFile("/component.tsx", sourceText);
         const snapshot = api.createSnapshot({ openFiles: ["/component.tsx"] });
         const project = snapshot.getProjects()[0];
-        assert.equal(project.emitter.printNode(sourceFile).trimEnd(), sourceText);
+        assert.equal((api.printer.printNode(sourceFile)).trimEnd(), sourceText);
         assert.ok(project.checker.getTypeAtLocation(sourceFile.statements[0]));
         assert.equal(project.program.isSourceFileDefaultLibrary(sourceFile), false);
         snapshot.dispose();
@@ -410,7 +411,7 @@ describe("API", () => {
             "/src/index.ts": `export const value: string = 1;`,
         });
 
-        const program = api.createProgram(["/src/index.ts"], { compilerOptions: { noLib: true, strict: true } });
+        const program = api.createProgram(["/src/index.ts"], { noLib: true, strict: true });
 
         assert.deepEqual(program.getCompilerOptions(), { noLib: true, strict: true });
         assert.deepEqual(program.getSourceFileNames(), ["/src/index.ts"]);
@@ -428,8 +429,8 @@ describe("API", () => {
 
         const snapshot = api.createSnapshot({
             createPrograms: [
-                { rootFiles: ["/src/a.ts"], options: { compilerOptions: { noLib: true } } },
-                { rootFiles: ["/src/b.ts"], options: { compilerOptions: { noLib: true, strict: true } } },
+                { rootFiles: ["/src/a.ts"], compilerOptions: { noLib: true } },
+                { rootFiles: ["/src/b.ts"], compilerOptions: { noLib: true, strict: true } },
             ],
         });
         assert.equal(snapshot.getProjects().length, 2);
@@ -444,8 +445,8 @@ describe("API", () => {
 
         const empty = api.createSnapshot();
         assert.deepEqual(empty.getProjects(), []);
-        assert.equal("createdPrograms" in empty.operation, false);
-        assert.equal("openedFiles" in empty.operation, false);
+        assert.equal(empty.operation.createdPrograms, undefined);
+        assert.equal(empty.operation.openedFiles, undefined);
     });
 
     test("snapshot.update reconfigures a synthetic program", () => {
@@ -456,7 +457,7 @@ describe("API", () => {
         const snapshot = api.createSnapshot({
             createPrograms: [{
                 rootFiles: ["/src/a.ts"],
-                options: { compilerOptions: { noLib: true } },
+                compilerOptions: { noLib: true },
             }],
         });
         const originalProgram = snapshot.operation.createdPrograms[0];
@@ -465,7 +466,7 @@ describe("API", () => {
             reconfigurePrograms: [{
                 id: originalProgram.id,
                 rootFiles: ["/src/b.ts"],
-                options: { compilerOptions: { noLib: true, strict: true } },
+                compilerOptions: { noLib: true, strict: true },
             }],
         });
         const reconfiguredProgram = updated.getProgram(originalProgram.id);
@@ -502,14 +503,12 @@ describe("API", () => {
         const inlineResolverB = api.createModuleResolver(compilerOptions, { moduleResolutions: spec(providedA) });
         const createProgram = (moduleResolver?: ModuleResolver) => ({
             rootFiles: [root],
-            options: {
-                compilerOptions,
-                ...(moduleResolver ? { moduleResolver } : {}),
-            },
+            compilerOptions,
+            ...(moduleResolver ? { options: { moduleResolver } } : {}),
         });
 
         const initial = api.createSnapshot({ createPrograms: [createProgram(resolverA)] });
-        const programId = initial.operation.createdPrograms[0].id;
+        const programId = initial.operation.createdPrograms![0].id;
         assert.deepEqual([...initial.getProgram(programId)!.getSourceFileNames()].sort(), [providedA, root]);
         assert.equal(
             (resolverA.resolveModuleName("pkg", "/src", undefined, { snapshot: initial })).resolvedModule?.resolvedFileName,
@@ -557,7 +556,7 @@ describe("API", () => {
         const callbackSnapshot = api.createSnapshot({
             createPrograms: [createProgram(callbackResolver)],
         });
-        const callbackProgramId = callbackSnapshot.operation.createdPrograms[0].id;
+        const callbackProgramId = callbackSnapshot.operation.createdPrograms![0].id;
         const repeatedCallback = callbackSnapshot.update({
             reconfigurePrograms: [{ id: callbackProgramId, ...createProgram(callbackResolver) }],
         });
@@ -634,7 +633,8 @@ describe("API", () => {
         const snapshot = api.createSnapshot({
             createPrograms: [{
                 rootFiles: ["/src/index.ts"],
-                options: { compilerOptions, moduleResolver: customResolver },
+                compilerOptions,
+                options: { moduleResolver: customResolver },
             }],
         });
         assert.deepEqual(
@@ -672,7 +672,8 @@ describe("API", () => {
             ]),
             createPrograms: [{
                 rootFiles: ["/src/index.ts"],
-                options: { compilerOptions, moduleResolver: customResolver },
+                compilerOptions,
+                options: { moduleResolver: customResolver },
             }],
         });
         assert.deepEqual(
@@ -707,12 +708,12 @@ describe("API", () => {
         const snapshot = api.createSnapshot({
             createPrograms: [{
                 rootFiles: ["/src/index.ts"],
+                compilerOptions: {
+                    noLib: true,
+                    module: ModuleKind.NodeNext,
+                    moduleResolution: ModuleResolutionKind.NodeNext,
+                },
                 options: {
-                    compilerOptions: {
-                        noLib: true,
-                        module: ModuleKind.NodeNext,
-                        moduleResolution: ModuleResolutionKind.NodeNext,
-                    },
                     moduleResolver: resolver,
                 },
             }],
@@ -733,9 +734,10 @@ declare module "augmentation" {}`,
             "/node_modules/@types/pkg-types/index.d.ts": `export {};`,
         });
 
-        const program = api.createProgram(["/src/index.ts"], {
-            compilerOptions: { module: ModuleKind.ESNext, moduleResolution: ModuleResolutionKind.Bundler, noLib: true },
-        });
+        const program = api.createProgram(
+            ["/src/index.ts"],
+            { module: ModuleKind.ESNext, moduleResolution: ModuleResolutionKind.Bundler, noLib: true },
+        );
         const sourceFile = program.getSourceFile("/src/index.ts");
         assert.ok(sourceFile);
         const pkgSpecifier = cast(cast(sourceFile.statements[0], isImportDeclaration).moduleSpecifier, isStringLiteral);
@@ -789,7 +791,7 @@ declare module "augmentation" {}`,
 
         const program = api.createProgram(
             ["/src/index.ts"],
-            { compilerOptions: { noLib: true, strict: true } },
+            { noLib: true, strict: true },
         );
 
         assert.deepEqual(program.getCompilerOptions(), { noLib: true, strict: true });
@@ -809,7 +811,8 @@ declare module "augmentation" {}`,
 
         const program = api.createProgram(
             ["/src/index.ts"],
-            { compilerOptions: { noLib: true }, projectReferences: [reference] },
+            { noLib: true },
+            { projectReferences: [reference] },
         );
         assert.deepEqual(program.getProject().parsedCommandLine.projectReferences, [reference]);
         program.dispose();
@@ -827,8 +830,8 @@ declare module "augmentation" {}`,
 
         const program = api.createProgram(
             ["/src/index.ts"],
+            { noLib: true },
             {
-                compilerOptions: { noLib: true },
                 configFileParsingDiagnostics: [diagnostic],
             },
         );
@@ -843,7 +846,7 @@ declare module "augmentation" {}`,
             "/src/dependency.ts": `export const dependency = 1;`,
         });
 
-        const program = api.createProgram(["/src/main.ts"], { compilerOptions: { noLib: true } });
+        const program = api.createProgram(["/src/main.ts"], { noLib: true });
         assert.deepEqual([...program.getSourceFileNames()].sort(), ["/src/dependency.ts", "/src/main.ts"]);
 
         program.dispose();
@@ -1879,7 +1882,7 @@ describe("Multiple snapshots", () => {
             openFiles: ["/inferred.ts", "/configured/index.ts"],
             createPrograms: [{
                 rootFiles: ["/synthetic.ts"],
-                options: { compilerOptions: { noLib: true } },
+                compilerOptions: { noLib: true },
             }],
         });
         assert.equal(created.getProjects().length, 3);
@@ -1906,7 +1909,7 @@ describe("Multiple snapshots", () => {
             openFiles: ["/inferred.ts"],
             createPrograms: [{
                 rootFiles: ["/synthetic.ts"],
-                options: { compilerOptions: { noLib: true } },
+                compilerOptions: { noLib: true },
             }],
         });
         const openedProject: Project = withOperationResults.operation.openedFiles[0].project;
@@ -2245,8 +2248,8 @@ describe("Checker - symbol identity across projects", () => {
         });
         const snapshot = api.createSnapshot({
             createPrograms: [
-                { rootFiles: ["/src/shared.ts"], options: { compilerOptions: { noLib: true } } },
-                { rootFiles: ["/src/shared.ts"], options: { compilerOptions: { noLib: true } } },
+                { rootFiles: ["/src/shared.ts"], compilerOptions: { noLib: true } },
+                { rootFiles: ["/src/shared.ts"], compilerOptions: { noLib: true } },
             ],
         });
         const [programA, programB] = snapshot.operation.createdPrograms;
@@ -3586,6 +3589,8 @@ describe("updateSnapshot file systems", () => {
                 "vscode-notebook-cell://authority/workspace": { files: [], directories: ["notebook.ipynb"] },
                 "vscode-notebook-cell://authority/": { files: [], directories: ["workspace"] },
             },
+            symlinks: undefined,
+            removedPaths: undefined,
         });
 
         const directories = { "/explicit": { files: ["provided.ts"], directories: [] } };
@@ -6097,7 +6102,7 @@ describe("Checker - isTypeAssignableTo", () => {
     });
 });
 
-describe("Emitter - printNode", () => {
+describe("Printer", () => {
     const emitterFiles = {
         "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
         "/src/main.ts": `
@@ -6111,11 +6116,44 @@ export const obj = { m: 1, s: "hi", b: true };
     test("printNode with factory-created keyword type", () => {
         using api = spawnAPI(emitterFiles);
 
-        const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const node = createKeywordTypeNode(SyntaxKind.StringKeyword);
-        const text = project.emitter.printNode(node);
+        const text = api.printer.printNode(node);
         assert.strictEqual(text, "string");
+    });
+
+    test("printFile", () => {
+        using api = spawnAPI(emitterFiles);
+
+        const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
+        const sourceFile = snapshot.getConfiguredProject("/tsconfig.json")!.program.getSourceFile("/src/main.ts");
+        assert(sourceFile);
+        const text = api.printer.printFile(sourceFile);
+        assert.strictEqual(
+            text,
+            `export const x = 42;
+export function greet(name: string): string { return name; }
+export type Pair = [
+    string,
+    number
+];
+export const obj = { m: 1, s: "hi", b: true };
+`,
+        );
+    });
+
+    test("printFile preserves JSON source file semantics", () => {
+        using api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({
+                compilerOptions: { resolveJsonModule: true },
+                files: ["/src/data.json"],
+            }),
+            "/src/data.json": `{"x": 1}`,
+        });
+
+        const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
+        const sourceFile = snapshot.getConfiguredProject("/tsconfig.json")!.program.getSourceFile("/src/data.json");
+        assert(sourceFile);
+        assert.strictEqual(api.printer.printFile(sourceFile), `{ "x": 1 }\n`);
     });
 
     test("printNode with factory-created union type", () => {
@@ -6127,7 +6165,7 @@ export const obj = { m: 1, s: "hi", b: true };
             createKeywordTypeNode(SyntaxKind.StringKeyword),
             createKeywordTypeNode(SyntaxKind.NumberKeyword),
         ]);
-        const text = project.emitter.printNode(node);
+        const text = api.printer.printNode(node);
         assert.strictEqual(text, "string | number");
     });
 
@@ -6149,7 +6187,7 @@ export const obj = { m: 1, s: "hi", b: true };
             [param],
             createKeywordTypeNode(SyntaxKind.NumberKeyword),
         );
-        const text = project.emitter.printNode(node);
+        const text = api.printer.printNode(node);
         assert.strictEqual(text, "(x: string) => number");
     });
 
@@ -6161,7 +6199,7 @@ export const obj = { m: 1, s: "hi", b: true };
         const node = createTypeReferenceNode(createIdentifier("Array"), [
             createKeywordTypeNode(SyntaxKind.StringKeyword),
         ]);
-        const text = project.emitter.printNode(node);
+        const text = api.printer.printNode(node);
         assert.strictEqual(text, "Array<string>");
     });
 
@@ -6171,7 +6209,7 @@ export const obj = { m: 1, s: "hi", b: true };
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
         const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const node = createArrayTypeNode(createKeywordTypeNode(SyntaxKind.NumberKeyword));
-        const text = project.emitter.printNode(node);
+        const text = api.printer.printNode(node);
         assert.strictEqual(text, "number[]");
     });
 
@@ -6179,7 +6217,7 @@ export const obj = { m: 1, s: "hi", b: true };
         using api = spawnAPI(emitterFiles);
 
         const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
-        const { checker, emitter } = snapshot.getConfiguredProject("/tsconfig.json")!;
+        const { checker } = snapshot.getConfiguredProject("/tsconfig.json")!;
         const src = emitterFiles["/src/main.ts"];
 
         const greetPos = src.indexOf("greet(");
@@ -6189,7 +6227,7 @@ export const obj = { m: 1, s: "hi", b: true };
         assert.ok(type);
         const typeNode = checker.typeToTypeNode(type);
         assert.ok(typeNode);
-        const text = emitter.printNode(typeNode);
+        const text = api.printer.printNode(typeNode);
         assert.ok(text);
         assert.strictEqual(text, "(name: string) => string");
     });
@@ -6298,11 +6336,11 @@ export const obj = { m: 1, s: "hi", b: true };
         assert.ok(regexNode, "Should find a regex literal");
 
         // Without the option, regex is printed as-is
-        const textWithout = project.emitter.printNode(regexNode);
+        const textWithout = api.printer.printNode(regexNode);
         assert.strictEqual(textWithout, "/asdfasf");
 
         // With the option, the closing slash is added
-        const textWith = project.emitter.printNode(regexNode, { terminateUnterminatedLiterals: true });
+        const textWith = api.printer.printNode(regexNode, { terminateUnterminatedLiterals: true });
         assert.strictEqual(textWith, "/asdfasf/");
     });
 });
@@ -6586,7 +6624,7 @@ test("TypeOperator operator kind", () => {
     assert(type);
     assert.equal(type.kind, SyntaxKind.TypeOperator);
     assert.equal(type.operator, SyntaxKind.ReadonlyKeyword);
-    const printed = project.emitter.printNode(sourceFile);
+    const printed = api.printer.printFile(sourceFile);
     assert.equal(sourceFile.text, printed);
 });
 
@@ -6608,7 +6646,7 @@ test("SpreadAssignment roundtrip", () => {
     const expr = assignment.expression;
     assert(expr);
     assert.equal(expr.kind, SyntaxKind.Identifier);
-    const printed = project.emitter.printNode(sourceFile);
+    const printed = api.printer.printFile(sourceFile);
     assert.equal(sourceFile.text, printed);
 });
 
@@ -6633,7 +6671,7 @@ test("VariableDeclarationList const flag clone", () => {
         const list = stmt.declarationList;
         assert(list.flags & NodeFlags.Const);
     }
-    const printed = project.emitter.printNode(cloned);
+    const printed = api.printer.printFile(cloned);
     assert.equal(sourceFile.text, printed);
 });
 
@@ -6652,7 +6690,7 @@ doThing();
     const project = snapshot.getConfiguredProject("/tsconfig.json")!;
     const sourceFile = project.program.getSourceFile("/src/index.ts");
     assert(sourceFile);
-    const printed = project.emitter.printNode(sourceFile);
+    const printed = api.printer.printFile(sourceFile);
     assert.equal(sourceFile.text.trim(), printed.trim());
 });
 
@@ -6668,10 +6706,10 @@ test("Factory ModifierList auto-conversion", () => {
         createKeywordTypeNode(SyntaxKind.AnyKeyword),
     );
 
-    assert.equal(project.emitter.printNode(node), "export type Test = any;");
+    assert.equal(api.printer.printNode(node), "export type Test = any;");
 
     const cloned = getSynthesizedDeepClone(node);
-    assert.equal(project.emitter.printNode(cloned), "export type Test = any;");
+    assert.equal(api.printer.printNode(cloned), "export type Test = any;");
 });
 
 test("Parse-clone-emit roundtrip", () => {
@@ -6696,7 +6734,7 @@ test("Parse-clone-emit roundtrip", () => {
             let clone: typeof source;
 
             try {
-                project.emitter.printNode(source);
+                api.printer.printNode(source);
             }
             catch {
                 errors.printCrashed++;
@@ -6712,7 +6750,7 @@ test("Parse-clone-emit roundtrip", () => {
             }
 
             try {
-                project.emitter.printNode(clone);
+                api.printer.printNode(clone);
             }
             catch {
                 errors.clonePrintCrashed++;
@@ -7227,6 +7265,7 @@ describe("Program - emit", () => {
                 "/dist/src/testing.js",
                 "/dist/src/testing.d.ts",
             ],
+            fileSystem: undefined,
         });
 
         const js = fs.readFile?.("/dist/src/index.js");
@@ -7257,6 +7296,7 @@ describe("Program - emit", () => {
                 "/dist/src/index.d.ts",
                 "/dist/src/testing.d.ts",
             ],
+            fileSystem: undefined,
         });
 
         const js = fs.readFile?.("/dist/src/index.js");
@@ -7287,6 +7327,7 @@ describe("Program - emit", () => {
                 "/dist/src/index.js",
                 "/dist/src/testing.js",
             ],
+            fileSystem: undefined,
         });
 
         const js = fs.readFile?.("/dist/src/index.js");
@@ -7397,6 +7438,7 @@ describe("Program - emit", () => {
             diagnostics: [],
             emitSkipped: false,
             emittedFiles: [],
+            fileSystem: undefined,
         });
         assert.deepEqual(project.program.emitToString(), {
             diagnostics: [],
@@ -7640,7 +7682,7 @@ describe("runWithTemporaryFileUpdate", () => {
         const snapshot = api.createSnapshot({
             createPrograms: [{
                 rootFiles: ["/src/index.ts"],
-                options: { compilerOptions: { noLib: true, strict: true } },
+                compilerOptions: { noLib: true, strict: true },
             }],
         });
         const originalProgram = snapshot.operation.createdPrograms[0];

@@ -328,7 +328,7 @@ type APICreateProgramRequest struct {
 }
 
 type APIReconfigureProgramRequest struct {
-	ProgramID int
+	ProgramID SyntheticProjectID
 	APICreateProgramRequest
 }
 
@@ -339,8 +339,8 @@ type APISnapshotRequest struct {
 	CloseFiles          *collections.Set[tspath.Path]
 	CreatePrograms      []*APICreateProgramRequest
 	ReconfigurePrograms []*APIReconfigureProgramRequest
-	RemovePrograms      *collections.Set[int]
-	EnsurePrograms      *collections.Set[tspath.Path]
+	RemovePrograms      *collections.Set[SyntheticProjectID]
+	EnsurePrograms      *collections.Set[ID]
 	EnsureAllPrograms   bool
 	EnsureFiles         *collections.Set[lsproto.DocumentUri]
 	FileSystem          vfs.FS
@@ -380,7 +380,7 @@ type ResourceRequest struct {
 	ConfiguredProjectDocuments []lsproto.DocumentUri
 	// Update requested Projects.
 	// this is used when we want to get LS and from all the Projects the file can be part of
-	Projects []tspath.Path
+	Projects []ID
 	// Update and ensure project trees that reference the projects
 	// This is used to compute the solution and project tree so that
 	// we can find references across all the projects in the solution irrespective of which project is open
@@ -406,7 +406,7 @@ type SnapshotChange struct {
 	contentMapperContributions         *ContentMapperContributions
 	newConfig                          *lsutil.UserPreferences
 	// ataChanges contains ATA-related changes to apply to projects in the new snapshot.
-	ataChanges map[tspath.Path]*ATAStateChange
+	ataChanges map[ID]*ATAStateChange
 	apiRequest *APISnapshotRequest
 	// cleanFileCache triggers cleaning of cached files not referenced by any open project.
 	cleanFileCache bool
@@ -414,7 +414,6 @@ type SnapshotChange struct {
 
 // ATAStateChange represents a change to a project's ATA state.
 type ATAStateChange struct {
-	ProjectID tspath.Path
 	// TypingsInfo is the new typings info for the project.
 	TypingsInfo *ata.TypingsInfo
 	// TypingsFiles is the new list of typing files for the project.
@@ -594,10 +593,10 @@ func (s *Snapshot) Clone(
 
 	projectCollection, configFileRegistry := projectCollectionBuilder.Finalize(logger)
 
-	projectsWithNewProgramStructure := make(map[tspath.Path]bool)
+	projectsWithNewProgramStructure := make(map[autoimport.ProjectID]bool)
 	for _, project := range projectCollection.Projects() {
 		if project.ProgramLastUpdate == newSnapshotID && project.ProgramUpdateKind != ProgramUpdateKindCloned {
-			projectsWithNewProgramStructure[project.configFilePath] = project.ProgramUpdateKind == ProgramUpdateKindNewFiles
+			projectsWithNewProgramStructure[project.ID()] = project.ProgramUpdateKind == ProgramUpdateKindNewFiles
 		}
 	}
 

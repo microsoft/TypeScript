@@ -34,23 +34,13 @@ var (
 type Method string
 
 type (
-	SnapshotID         uint64
-	ProjectID          string
-	SyntheticProjectID string
-	ModuleResolverID   uint64
-	SymbolID           uint64
-	TypeID             uint32
-	SignatureID        uint64
-	NodeHandle         string
+	SnapshotID       uint64
+	ModuleResolverID uint64
+	SymbolID         uint64
+	TypeID           uint32
+	SignatureID      uint64
+	NodeHandle       string
 )
-
-func ProjectHandle(p *project.Project) ProjectID {
-	return ProjectID(p.ID())
-}
-
-func SyntheticProjectHandle(p *project.Project) SyntheticProjectID {
-	return SyntheticProjectID(p.ID())
-}
 
 func SymbolHandle(symbol *ast.Symbol) SymbolID {
 	return SymbolID(ast.GetSymbolId(symbol))
@@ -62,10 +52,6 @@ func TypeHandle(t *checker.Type) TypeID {
 
 func SignatureHandle(sig *checker.Signature) SignatureID {
 	return SignatureID(sig.Id())
-}
-
-func parseProjectHandle(handle ProjectID) tspath.Path {
-	return tspath.Path(handle)
 }
 
 const (
@@ -222,7 +208,7 @@ const (
 	MethodGetProgramDiagnostics           Method = "getProgramDiagnostics"
 	MethodGetGlobalDiagnostics            Method = "getGlobalDiagnostics"
 	MethodGetConfigFileParsingDiagnostics Method = "getConfigFileParsingDiagnostics"
-	// Emitter methods
+	// Printer methods
 	MethodPrintNode              Method = "printNode"
 	MethodFormatNodeForInsertion Method = "formatNodeForInsertion"
 	MethodEmit                   Method = "emit"
@@ -383,7 +369,7 @@ type SnapshotRequestChangesParams struct {
 	// ReconfigurePrograms replaces the configuration of existing synthetic programs.
 	ReconfigurePrograms []*ReconfigureSnapshotProgramParams `json:"reconfigurePrograms,omitempty"`
 	// RemovePrograms lists synthetic project handles to remove from the snapshot.
-	RemovePrograms []SyntheticProjectID `json:"removePrograms,omitempty"`
+	RemovePrograms []project.SyntheticProjectID `json:"removePrograms,omitempty"`
 	// EnsurePrograms identifies projects whose programs should be updated if dirty,
 	// or all contained projects when true.
 	EnsurePrograms *EnsurePrograms `json:"ensurePrograms,omitempty"`
@@ -391,7 +377,7 @@ type SnapshotRequestChangesParams struct {
 
 type EnsurePrograms struct {
 	All      bool
-	Projects []ProjectID
+	Projects []project.ID
 }
 
 var _ json.UnmarshalerFrom = (*EnsurePrograms)(nil)
@@ -423,14 +409,16 @@ type CreateSnapshotParams struct {
 }
 
 type CreateSnapshotProgramParams struct {
-	RootFiles []DocumentIdentifier `json:"rootFiles"`
-	Options   CreateProgramOptions `json:"options"`
+	RootFiles       []DocumentIdentifier  `json:"rootFiles"`
+	CompilerOptions core.CompilerOptions  `json:"compilerOptions"`
+	Options         *CreateProgramOptions `json:"options,omitempty"`
 }
 
 type ReconfigureSnapshotProgramParams struct {
-	Id        SyntheticProjectID   `json:"id"`
-	RootFiles []DocumentIdentifier `json:"rootFiles"`
-	Options   CreateProgramOptions `json:"options"`
+	Id              project.SyntheticProjectID `json:"id"`
+	RootFiles       []DocumentIdentifier       `json:"rootFiles"`
+	CompilerOptions core.CompilerOptions       `json:"compilerOptions"`
+	Options         *CreateProgramOptions      `json:"options,omitempty"`
 }
 
 type UpdateSnapshotParams struct {
@@ -450,7 +438,6 @@ type LanguageServerSnapshotChanges struct {
 }
 
 type CreateProgramOptions struct {
-	CompilerOptions              core.CompilerOptions     `json:"compilerOptions"`
 	ProjectReferences            []*core.ProjectReference `json:"projectReferences,omitempty"`
 	ConfigFileParsingDiagnostics []*DiagnosticResponse    `json:"configFileParsingDiagnostics,omitempty"`
 	ModuleResolver               ModuleResolverID         `json:"moduleResolver,omitempty"`
@@ -530,10 +517,10 @@ type ProjectFileChanges struct {
 type SnapshotChanges struct {
 	// ChangedProjects maps project handles to the file changes within that project.
 	// Projects not listed here (and not in RemovedProjects) are unchanged.
-	ChangedProjects map[ProjectID]*ProjectFileChanges `json:"changedProjects,omitempty"`
+	ChangedProjects map[project.ID]*ProjectFileChanges `json:"changedProjects,omitempty"`
 	// RemovedProjects lists project handles that were present in the previous
 	// snapshot but absent from the new one.
-	RemovedProjects []ProjectID `json:"removedProjects,omitempty"`
+	RemovedProjects []project.ID `json:"removedProjects,omitempty"`
 }
 
 // CreateSnapshotResponse is returned by createSnapshot.
@@ -550,12 +537,12 @@ type CreateSnapshotResponse struct {
 }
 
 type SnapshotOperationResponse struct {
-	CreatedPrograms *[]SyntheticProjectID         `json:"createdPrograms,omitzero"`
+	CreatedPrograms *[]project.SyntheticProjectID `json:"createdPrograms,omitzero"`
 	OpenedFiles     *[]*OpenedFileOperationResult `json:"openedFiles,omitzero"`
 }
 
 type OpenedFileOperationResult struct {
-	Project ProjectID `json:"project"`
+	Project project.ID `json:"project"`
 }
 
 var unmarshalers = map[Method]func([]byte) (any, error){
@@ -901,7 +888,7 @@ type GetDefaultProjectForFileParams struct {
 }
 
 type ProjectResponse struct {
-	Id                ProjectID           `json:"id"`
+	Id                project.ID          `json:"id"`
 	ConfigFileName    string              `json:"configFileName"`
 	CurrentDirectory  string              `json:"currentDirectory"`
 	Dirty             bool                `json:"dirty"`
@@ -969,9 +956,13 @@ func NewProjectResponse(p *project.Project) *ProjectResponse {
 	if p == nil || p.CommandLine == nil {
 		panic("NewProjectResponse called with unloaded project")
 	}
+	configFileName := ""
+	if p.Kind == project.KindConfigured {
+		configFileName = p.ConfigFileName()
+	}
 	return &ProjectResponse{
-		Id:                ProjectHandle(p),
-		ConfigFileName:    p.Name(),
+		Id:                p.ID(),
+		ConfigFileName:    configFileName,
 		CurrentDirectory:  p.CurrentDirectory(),
 		Dirty:             p.IsDirty(),
 		ParsedCommandLine: NewConfigFileResponse(p.CommandLine),
@@ -982,39 +973,39 @@ func NewProjectResponse(p *project.Project) *ProjectResponse {
 
 type GetSymbolAtPositionParams struct {
 	Snapshot SnapshotID         `json:"snapshot"`
-	Project  ProjectID          `json:"project"`
+	Project  project.ID         `json:"project"`
 	File     DocumentIdentifier `json:"file"`
 	Position uint32             `json:"position"`
 }
 
 type GetSymbolsAtPositionsParams struct {
 	Snapshot  SnapshotID         `json:"snapshot"`
-	Project   ProjectID          `json:"project"`
+	Project   project.ID         `json:"project"`
 	File      DocumentIdentifier `json:"file"`
 	Positions []uint32           `json:"positions"`
 }
 
 type GetSymbolOfSourceFileParams struct {
 	Snapshot SnapshotID         `json:"snapshot"`
-	Project  ProjectID          `json:"project"`
+	Project  project.ID         `json:"project"`
 	File     DocumentIdentifier `json:"file"`
 }
 
 type GetSymbolsOfSourceFilesParams struct {
 	Snapshot SnapshotID           `json:"snapshot"`
-	Project  ProjectID            `json:"project"`
+	Project  project.ID           `json:"project"`
 	Files    []DocumentIdentifier `json:"files"`
 }
 
 type GetSymbolAtLocationParams struct {
 	Snapshot SnapshotID `json:"snapshot"`
-	Project  ProjectID  `json:"project"`
+	Project  project.ID `json:"project"`
 	Location NodeHandle `json:"location"`
 }
 
 type GetSymbolsAtLocationsParams struct {
 	Snapshot  SnapshotID   `json:"snapshot"`
-	Project   ProjectID    `json:"project"`
+	Project   project.ID   `json:"project"`
 	Locations []NodeHandle `json:"locations"`
 }
 
@@ -1022,7 +1013,7 @@ type SymbolResponse struct {
 	Id SymbolID `json:"id"`
 	// Project is the project in which the symbol was first observed. It is the
 	// default project for follow-up lookups whose results can vary by project.
-	Project          ProjectID    `json:"project"`
+	Project          project.ID   `json:"project"`
 	Name             string       `json:"name"`
 	Flags            uint32       `json:"flags"`
 	CheckFlags       uint32       `json:"checkFlags"`
@@ -1045,13 +1036,13 @@ func symbolHandles(symbols []*ast.Symbol) []SymbolID {
 
 type GetTypeOfSymbolParams struct {
 	Snapshot SnapshotID `json:"snapshot"`
-	Project  ProjectID  `json:"project"`
+	Project  project.ID `json:"project"`
 	Symbol   SymbolID   `json:"symbol"`
 }
 
 type GetTypesOfSymbolsParams struct {
 	Snapshot SnapshotID `json:"snapshot"`
-	Project  ProjectID  `json:"project"`
+	Project  project.ID `json:"project"`
 	Symbols  []SymbolID `json:"symbols"`
 }
 
@@ -1256,32 +1247,32 @@ type SignatureResponse struct {
 
 type GetSourceFileParams struct {
 	Snapshot SnapshotID         `json:"snapshot"`
-	Project  ProjectID          `json:"project"`
+	Project  project.ID         `json:"project"`
 	File     DocumentIdentifier `json:"file"`
 }
 
 type GetSourceFileNamesParams struct {
 	Snapshot SnapshotID `json:"snapshot"`
-	Project  ProjectID  `json:"project"`
+	Project  project.ID `json:"project"`
 }
 
 type GetModeForUsageLocationParams struct {
 	Snapshot SnapshotID         `json:"snapshot"`
-	Project  ProjectID          `json:"project"`
+	Project  project.ID         `json:"project"`
 	File     DocumentIdentifier `json:"file"`
 	Usage    NodeHandle         `json:"usage"`
 }
 
 type GetModeForResolutionAtIndexParams struct {
 	Snapshot SnapshotID         `json:"snapshot"`
-	Project  ProjectID          `json:"project"`
+	Project  project.ID         `json:"project"`
 	File     DocumentIdentifier `json:"file"`
 	Index    int                `json:"index"`
 }
 
 type GetResolvedModuleParams struct {
 	Snapshot   SnapshotID          `json:"snapshot"`
-	Project    ProjectID           `json:"project"`
+	Project    project.ID          `json:"project"`
 	File       DocumentIdentifier  `json:"file"`
 	ModuleName string              `json:"moduleName"`
 	Mode       core.ResolutionMode `json:"mode"`
@@ -1289,14 +1280,14 @@ type GetResolvedModuleParams struct {
 
 type GetResolvedModuleFromModuleSpecifierParams struct {
 	Snapshot        SnapshotID          `json:"snapshot"`
-	Project         ProjectID           `json:"project"`
+	Project         project.ID          `json:"project"`
 	ModuleSpecifier NodeHandle          `json:"moduleSpecifier"`
 	SourceFile      *DocumentIdentifier `json:"sourceFile,omitempty"`
 }
 
 type GetResolvedTypeReferenceDirectiveParams struct {
 	Snapshot          SnapshotID          `json:"snapshot"`
-	Project           ProjectID           `json:"project"`
+	Project           project.ID          `json:"project"`
 	File              DocumentIdentifier  `json:"file"`
 	TypeDirectiveName string              `json:"typeDirectiveName"`
 	Mode              core.ResolutionMode `json:"mode"`
@@ -1304,7 +1295,7 @@ type GetResolvedTypeReferenceDirectiveParams struct {
 
 type GetResolvedTypeReferenceDirectiveFromReferenceParams struct {
 	Snapshot          SnapshotID          `json:"snapshot"`
-	Project           ProjectID           `json:"project"`
+	Project           project.ID          `json:"project"`
 	SourceFile        DocumentIdentifier  `json:"sourceFile"`
 	TypeDirectiveName string              `json:"typeDirectiveName"`
 	ResolutionMode    core.ResolutionMode `json:"resolutionMode"`
@@ -1359,7 +1350,7 @@ type SourceFileMetadata struct {
 
 type ResolveNameParams struct {
 	Snapshot       SnapshotID          `json:"snapshot"`
-	Project        ProjectID           `json:"project"`
+	Project        project.ID          `json:"project"`
 	Name           string              `json:"name"`
 	Location       NodeHandle          `json:"location,omitempty"`       // Optional: node handle for location context
 	File           *DocumentIdentifier `json:"file,omitempty"`           // Optional: file for location context (alternative to Location)
@@ -1372,7 +1363,7 @@ type ResolveNameParams struct {
 // all symbols visible at a given location.
 type GetSymbolsInScopeParams struct {
 	Snapshot SnapshotID          `json:"snapshot"`
-	Project  ProjectID           `json:"project"`
+	Project  project.ID          `json:"project"`
 	Location NodeHandle          `json:"location,omitempty"` // Optional: node handle for location context
 	File     *DocumentIdentifier `json:"file,omitempty"`     // Optional: file for location context (alternative to Location)
 	Position *uint32             `json:"position,omitempty"` // Optional: position in file for location context (with File)
@@ -1382,34 +1373,34 @@ type GetSymbolsInScopeParams struct {
 // GetTypePropertyParams is used for all type sub-property endpoints.
 type GetTypePropertyParams struct {
 	Snapshot SnapshotID `json:"snapshot"`
-	Project  ProjectID  `json:"project"`
+	Project  project.ID `json:"project"`
 	Type     TypeID     `json:"objectId"`
 }
 
 // GetSymbolPropertyParams is used for all symbol sub-property endpoints.
 type GetSymbolPropertyParams struct {
 	Snapshot SnapshotID `json:"snapshot"`
-	Project  ProjectID  `json:"project"`
+	Project  project.ID `json:"project"`
 	Symbol   SymbolID   `json:"objectId"`
 }
 
 // GetSignaturePropertyParams is used for all signature sub-property endpoints.
 type GetSignaturePropertyParams struct {
 	Snapshot  SnapshotID  `json:"snapshot"`
-	Project   ProjectID   `json:"project"`
+	Project   project.ID  `json:"project"`
 	Signature SignatureID `json:"objectId"`
 }
 
 // GetContextualTypeParams returns the contextual type for a node.
 type GetContextualTypeParams struct {
 	Snapshot SnapshotID `json:"snapshot"`
-	Project  ProjectID  `json:"project"`
+	Project  project.ID `json:"project"`
 	Location NodeHandle `json:"location"`
 }
 
 type GetContextualTypeForArgumentParams struct {
 	Snapshot SnapshotID `json:"snapshot"`
-	Project  ProjectID  `json:"project"`
+	Project  project.ID `json:"project"`
 	Location NodeHandle `json:"location"`
 	Index    int32      `json:"index"`
 }
@@ -1417,7 +1408,7 @@ type GetContextualTypeForArgumentParams struct {
 // GetTypeOfSymbolAtLocationParams returns the narrowed type of a symbol at a specific location.
 type GetTypeOfSymbolAtLocationParams struct {
 	Snapshot SnapshotID `json:"snapshot"`
-	Project  ProjectID  `json:"project"`
+	Project  project.ID `json:"project"`
 	Symbol   SymbolID   `json:"symbol"`
 	Location NodeHandle `json:"location"`
 }
@@ -1425,7 +1416,7 @@ type GetTypeOfSymbolAtLocationParams struct {
 // GetReferencesToSymbolInFileParams are the parameters for the getReferencesToSymbolInFile method.
 type GetReferencesToSymbolInFileParams struct {
 	Snapshot SnapshotID         `json:"snapshot"`
-	Project  ProjectID          `json:"project"`
+	Project  project.ID         `json:"project"`
 	File     DocumentIdentifier `json:"file"`
 	Symbol   SymbolID           `json:"symbol"`
 }
@@ -1433,7 +1424,7 @@ type GetReferencesToSymbolInFileParams struct {
 // GetReferencedSymbolsForNodeParams are the parameters for the getReferencedSymbolsForNode method.
 type GetReferencedSymbolsForNodeParams struct {
 	Snapshot SnapshotID `json:"snapshot"`
-	Project  ProjectID  `json:"project"`
+	Project  project.ID `json:"project"`
 	Node     NodeHandle `json:"node"`
 	Position int        `json:"position"`
 }
@@ -1448,7 +1439,7 @@ type ReferencedSymbolEntry struct {
 // GetSignatureUsagesParams are the parameters for the getSignatureUsages method.
 type GetSignatureUsagesParams struct {
 	Snapshot      SnapshotID `json:"snapshot"`
-	Project       ProjectID  `json:"project"`
+	Project       project.ID `json:"project"`
 	SignatureDecl NodeHandle `json:"signatureDecl"`
 }
 
@@ -1461,7 +1452,7 @@ type SignatureUsageResponse struct {
 // GetCompletionsAtPositionParams are the parameters for the getCompletionsAtPosition method.
 type GetCompletionsAtPositionParams struct {
 	Snapshot         SnapshotID         `json:"snapshot"`
-	Project          ProjectID          `json:"project"`
+	Project          project.ID         `json:"project"`
 	File             DocumentIdentifier `json:"file"`
 	Position         uint32             `json:"position"`
 	TriggerCharacter *string            `json:"triggerCharacter,omitempty"`
@@ -1495,7 +1486,7 @@ type CompletionInfoResponse struct {
 // GetIntrinsicTypeParams is used for intrinsic type getters (anyType, stringType, etc.).
 type GetIntrinsicTypeParams struct {
 	Snapshot SnapshotID `json:"snapshot"`
-	Project  ProjectID  `json:"project"`
+	Project  project.ID `json:"project"`
 }
 
 // WellKnownSymbolsResponse carries the handle ids of the per-checker singleton
@@ -1517,35 +1508,35 @@ type WellKnownSignaturesResponse struct {
 // GetBaseTypeOfLiteralTypeParams returns the base type of a literal type.
 type GetBaseTypeOfLiteralTypeParams struct {
 	Snapshot SnapshotID `json:"snapshot"`
-	Project  ProjectID  `json:"project"`
+	Project  project.ID `json:"project"`
 	Type     TypeID     `json:"type"`
 }
 
 // GetNonNullableTypeParams are the parameters for the getNonNullableType method.
 type GetNonNullableTypeParams struct {
 	Snapshot SnapshotID `json:"snapshot"`
-	Project  ProjectID  `json:"project"`
+	Project  project.ID `json:"project"`
 	Type     TypeID     `json:"type"`
 }
 
 // GetTypeFromTypeNodeParams are the parameters for the getTypeFromTypeNode method.
 type GetTypeFromTypeNodeParams struct {
 	Snapshot SnapshotID `json:"snapshot"`
-	Project  ProjectID  `json:"project"`
+	Project  project.ID `json:"project"`
 	Location NodeHandle `json:"location"`
 }
 
 // GetWidenedTypeParams are the parameters for the getWidenedType method.
 type GetWidenedTypeParams struct {
 	Snapshot SnapshotID `json:"snapshot"`
-	Project  ProjectID  `json:"project"`
+	Project  project.ID `json:"project"`
 	Type     TypeID     `json:"type"`
 }
 
 // GetParameterTypeParams are the parameters for the getParameterType method.
 type GetParameterTypeParams struct {
 	Snapshot  SnapshotID  `json:"snapshot"`
-	Project   ProjectID   `json:"project"`
+	Project   project.ID  `json:"project"`
 	Signature SignatureID `json:"signature"`
 	Index     int32       `json:"index"`
 }
@@ -1553,53 +1544,53 @@ type GetParameterTypeParams struct {
 // IsArrayLikeTypeParams checks whether a type is array-like.
 type IsArrayLikeTypeParams struct {
 	Snapshot SnapshotID `json:"snapshot"`
-	Project  ProjectID  `json:"project"`
+	Project  project.ID `json:"project"`
 	Type     TypeID     `json:"type"`
 }
 
 // IsTypeAssignableToParams checks assignability between two types.
 type IsTypeAssignableToParams struct {
 	Snapshot SnapshotID `json:"snapshot"`
-	Project  ProjectID  `json:"project"`
+	Project  project.ID `json:"project"`
 	Source   TypeID     `json:"source"`
 	Target   TypeID     `json:"target"`
 }
 
 type GetSignaturesOfTypeParams struct {
 	Snapshot SnapshotID `json:"snapshot"`
-	Project  ProjectID  `json:"project"`
+	Project  project.ID `json:"project"`
 	Type     TypeID     `json:"type"`
 	Kind     int32      `json:"kind"`
 }
 
 type GetResolvedSignatureParams struct {
 	Snapshot SnapshotID `json:"snapshot"`
-	Project  ProjectID  `json:"project"`
+	Project  project.ID `json:"project"`
 	Location NodeHandle `json:"location"`
 }
 
 type GetTypeAtLocationParams struct {
 	Snapshot SnapshotID `json:"snapshot"`
-	Project  ProjectID  `json:"project"`
+	Project  project.ID `json:"project"`
 	Location NodeHandle `json:"location"`
 }
 
 type GetTypeAtLocationsParams struct {
 	Snapshot  SnapshotID   `json:"snapshot"`
-	Project   ProjectID    `json:"project"`
+	Project   project.ID   `json:"project"`
 	Locations []NodeHandle `json:"locations"`
 }
 
 type GetTypeAtPositionParams struct {
 	Snapshot SnapshotID         `json:"snapshot"`
-	Project  ProjectID          `json:"project"`
+	Project  project.ID         `json:"project"`
 	File     DocumentIdentifier `json:"file"`
 	Position uint32             `json:"position"`
 }
 
 type GetTypesAtPositionsParams struct {
 	Snapshot  SnapshotID         `json:"snapshot"`
-	Project   ProjectID          `json:"project"`
+	Project   project.ID         `json:"project"`
 	File      DocumentIdentifier `json:"file"`
 	Positions []uint32           `json:"positions"`
 }
@@ -1618,7 +1609,7 @@ type ImportAdderAction struct {
 
 type GetImportAdderEditsParams struct {
 	Snapshot SnapshotID          `json:"snapshot"`
-	Project  ProjectID           `json:"project"`
+	Project  project.ID          `json:"project"`
 	File     DocumentIdentifier  `json:"file"`
 	Actions  []ImportAdderAction `json:"actions"`
 }
@@ -1632,7 +1623,7 @@ type TextEdit struct {
 // TypeToTypeNodeParams are the parameters for the typeToTypeNode method.
 type TypeToTypeNodeParams struct {
 	Snapshot SnapshotID `json:"snapshot"`
-	Project  ProjectID  `json:"project"`
+	Project  project.ID `json:"project"`
 	Type     TypeID     `json:"type"`
 	Location NodeHandle `json:"location,omitempty"`
 	Flags    int32      `json:"flags,omitempty"`
@@ -1641,7 +1632,7 @@ type TypeToTypeNodeParams struct {
 // SignatureToSignatureDeclarationParams are the parameters for the signatureToSignatureDeclaration method.
 type SignatureToSignatureDeclarationParams struct {
 	Snapshot  SnapshotID  `json:"snapshot"`
-	Project   ProjectID   `json:"project"`
+	Project   project.ID  `json:"project"`
 	Signature SignatureID `json:"signature"`
 	Kind      int32       `json:"kind"`
 	Location  NodeHandle  `json:"location,omitempty"`
@@ -1658,13 +1649,13 @@ type PrintNodeParams struct {
 
 type EmitParams struct {
 	Snapshot SnapshotID `json:"snapshot"`
-	Project  ProjectID  `json:"project"`
+	Project  project.ID `json:"project"`
 	EmitOnly *uint32    `json:"emitOnly,omitempty"`
 }
 
 type SelectedFilesEmitParams struct {
 	Snapshot SnapshotID           `json:"snapshot"`
-	Project  ProjectID            `json:"project"`
+	Project  project.ID           `json:"project"`
 	Files    []DocumentIdentifier `json:"files"`
 }
 
@@ -1692,7 +1683,7 @@ type EmitOutputResponse struct {
 // FormatNodeForInsertionParams are the parameters for the formatNodeForInsertion method.
 type FormatNodeForInsertionParams struct {
 	Snapshot SnapshotID         `json:"snapshot"`
-	Project  ProjectID          `json:"project"`
+	Project  project.ID         `json:"project"`
 	File     DocumentIdentifier `json:"file"`     // target file where the node will be inserted
 	Position uint32             `json:"position"` // UTF-16 code-unit offset of the insertion position in the target file
 	Data     string             `json:"data"`     // base64-encoded binary AST data for the synthesized node
@@ -1701,21 +1692,21 @@ type FormatNodeForInsertionParams struct {
 // CheckerTypeParams are parameters for checker methods that operate on a type.
 type CheckerTypeParams struct {
 	Snapshot SnapshotID `json:"snapshot"`
-	Project  ProjectID  `json:"project"`
+	Project  project.ID `json:"project"`
 	Type     TypeID     `json:"type"`
 }
 
 // GetPropertyOfTypeParams are parameters for getPropertyOfType (a named property of a type).
 type GetPropertyOfTypeParams struct {
 	Snapshot SnapshotID `json:"snapshot"`
-	Project  ProjectID  `json:"project"`
+	Project  project.ID `json:"project"`
 	Type     TypeID     `json:"type"`
 	Name     string     `json:"name"`
 }
 
 type GetIndexInfoOfTypeParams struct {
 	Snapshot SnapshotID `json:"snapshot"`
-	Project  ProjectID  `json:"project"`
+	Project  project.ID `json:"project"`
 	Type     TypeID     `json:"type"`
 	Kind     int32      `json:"kind"`
 }
@@ -1723,7 +1714,7 @@ type GetIndexInfoOfTypeParams struct {
 // GetMemberInModuleExportsParams are parameters for getMemberInModuleExports.
 type GetMemberInModuleExportsParams struct {
 	Snapshot SnapshotID `json:"snapshot"`
-	Project  ProjectID  `json:"project"`
+	Project  project.ID `json:"project"`
 	Symbol   SymbolID   `json:"symbol"`
 	Name     string     `json:"name"`
 }
@@ -1731,14 +1722,14 @@ type GetMemberInModuleExportsParams struct {
 // CheckerNodeParams are parameters for checker methods that operate on a node location.
 type CheckerNodeParams struct {
 	Snapshot SnapshotID `json:"snapshot"`
-	Project  ProjectID  `json:"project"`
+	Project  project.ID `json:"project"`
 	Location NodeHandle `json:"location"`
 }
 
 // CheckerSymbolParams are parameters for checker methods that operate on a symbol.
 type CheckerSymbolParams struct {
 	Snapshot SnapshotID `json:"snapshot"`
-	Project  ProjectID  `json:"project"`
+	Project  project.ID `json:"project"`
 	Symbol   SymbolID   `json:"symbol"`
 }
 
@@ -1752,7 +1743,7 @@ type JSDocTagInfo struct {
 // CheckerSignatureParams are parameters for checker methods that operate on a signature.
 type CheckerSignatureParams struct {
 	Snapshot  SnapshotID  `json:"snapshot"`
-	Project   ProjectID   `json:"project"`
+	Project   project.ID  `json:"project"`
 	Signature SignatureID `json:"signature"`
 }
 
@@ -1782,14 +1773,14 @@ type SourceFileResponse struct {
 // GetDiagnosticsParams are parameters for per-file diagnostic methods.
 type GetDiagnosticsParams struct {
 	Snapshot SnapshotID           `json:"snapshot"`
-	Project  ProjectID            `json:"project"`
+	Project  project.ID           `json:"project"`
 	Files    []DocumentIdentifier `json:"files,omitempty"`
 }
 
 // GetProjectDiagnosticsParams are parameters for project-wide diagnostic methods.
 type GetProjectDiagnosticsParams struct {
 	Snapshot SnapshotID `json:"snapshot"`
-	Project  ProjectID  `json:"project"`
+	Project  project.ID `json:"project"`
 }
 
 // DiagnosticResponse is the API response for a single diagnostic.

@@ -1385,7 +1385,8 @@ describe("API - generator batching", () => {
         try {
             using snapshot = api.batch(api.createSnapshot.gen({ openProject: "/tsconfig.json" }))[0];
             const project = snapshot.getConfiguredProject("/tsconfig.json")!;
-            const { checker, emitter, languageService, program } = project;
+            const { checker, languageService, program } = project;
+            const { printer } = api;
             const indexFile = program.getSourceFile("/src/index.ts")!;
             const modelsFile = program.getSourceFile("/src/models.ts")!;
 
@@ -1542,7 +1543,7 @@ describe("API - generator batching", () => {
                 parityCase("API", "transpileDeclaration", api.transpileDeclaration, assertDeepEquivalent, "export function declared(value: string): number { return value.length; }"),
                 parityCase("API", "transpileDeclarationFromFile", api.transpileDeclarationFromFile, assertDeepEquivalent, "/src/index.ts"),
                 parityCase("API", "createSnapshot", api.createSnapshot as GeneratorMethod<[params: { openProject: string; }], Snapshot>, assertSnapshotsEquivalent, { openProject: "/tsconfig.json" }),
-                parityCase("API", "createProgram", api.createProgram, assertProgramsEquivalent, ["/src/index.ts"], { compilerOptions: { noLib: true } }),
+                parityCase("API", "createProgram", api.createProgram, assertProgramsEquivalent, ["/src/index.ts"], { noLib: true }),
                 parityCase("API", "runWithTemporaryFileUpdate", api.runWithTemporaryFileUpdate, assertDeepEquivalent, snapshot, "/src/index.ts", parityFiles["/src/index.ts"].replace("123", '"fixed"'), (temporarySnapshot: Snapshot) => {
                     temporaryProjects.push(temporarySnapshot.getProjects()[0].configFileName);
                 }),
@@ -1680,7 +1681,8 @@ describe("API - generator batching", () => {
                 parityCase("Checker", "getTargetSymbol", checker.getTargetSymbol, assertOptionalSymbolsEquivalent, boxedOptSymbol),
                 parityCase("Checker", "getExportSymbolOfSymbol", checker.getExportSymbolOfSymbol, assertSymbolsEquivalent, localCombineSymbol),
 
-                parityCase("Emitter", "printNode", emitter.printNode, assertDeepEquivalent, combineDeclaration, { preserveSourceNewlines: true }),
+                parityCase("Printer", "printNode", printer.printNode, assertDeepEquivalent, combineDeclaration, { preserveSourceNewlines: true }),
+                parityCase("Printer", "printFile", printer.printFile, assertDeepEquivalent, indexFile, { preserveSourceNewlines: true }),
                 parityCase("SnapshotInternalAPI", "formatNodeForInsertion", snapshot.internal.formatNodeForInsertion, assertDeepEquivalent, combineDeclaration, "/src/index.ts", combineDeclaration.pos),
                 parityCase("NodeHandle", "resolve", nodeHandle.resolve, assertOptionalNodesEquivalent),
                 parityCase("NodeHandle", "resolve", nodeHandle.resolve, assertOptionalNodesEquivalent, project),
@@ -1757,7 +1759,7 @@ describe("API - generator batching", () => {
             assert.equal(disposableSnapshot.isDisposed(), true);
             assert.equal(disposableSnapshot.dispose(), undefined);
             exercisedMethods.add("Snapshot.dispose");
-            const disposableProgram = destructiveAPI.batch(destructiveAPI.createProgram.gen(["/src/index.ts"], { compilerOptions: { noLib: true } }))[0];
+            const disposableProgram = destructiveAPI.batch(destructiveAPI.createProgram.gen(["/src/index.ts"], { noLib: true }))[0];
             destructiveAPI.batch(disposableProgram.dispose.gen());
             assert.throws(() => disposableProgram.getSourceFileNames(), /snapshot .* not found/);
             assert.equal(disposableProgram.dispose(), undefined);
@@ -1780,7 +1782,7 @@ describe("API - generator batching", () => {
                 { name: "LanguageService", value: languageService },
                 { name: "Program", value: program },
                 { name: "Checker", value: checker },
-                { name: "Emitter", value: emitter },
+                { name: "Printer", value: printer },
                 { name: "SnapshotInternalAPI", value: snapshot.internal },
                 { name: "NodeHandle", value: nodeHandle },
                 { name: "Symbol", value: combineSymbol },

@@ -157,19 +157,19 @@ func TestCreateProgramUsesProvidedModuleResolutions(t *testing.T) {
 		SnapshotRequestChangesParams: SnapshotRequestChangesParams{ //nolint:modernize
 			CreatePrograms: []*CreateSnapshotProgramParams{{
 				RootFiles: []DocumentIdentifier{{FileName: root}},
-				Options: CreateProgramOptions{
-					CompilerOptions: core.CompilerOptions{
-						NoLib:            core.TSTrue,
-						Module:           core.ModuleKindNodeNext,
-						ModuleResolution: core.ModuleResolutionKindNodeNext,
-					},
+				CompilerOptions: core.CompilerOptions{
+					NoLib:            core.TSTrue,
+					Module:           core.ModuleKindNodeNext,
+					ModuleResolution: core.ModuleResolutionKindNodeNext,
+				},
+				Options: &CreateProgramOptions{
 					ModuleResolver: resolver,
 				},
 			}},
 		},
 	})
 	assert.NilError(t, err)
-	projectID := ProjectID((*response.Operation.CreatedPrograms)[0])
+	projectID := (*response.Operation.CreatedPrograms)[0].AsID()
 	fileNames, err := session.handleGetSourceFileNames(context.Background(), &GetSourceFileNamesParams{
 		Snapshot: response.Snapshot,
 		Project:  projectID,

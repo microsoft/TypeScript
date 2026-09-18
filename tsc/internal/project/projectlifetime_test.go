@@ -408,7 +408,7 @@ func TestProjectLifetime(t *testing.T) {
 		snapshot = session.Snapshot()
 		assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 2)
 		assert.Assert(t, snapshot.ProjectCollection.InferredProject() != nil)
-		assert.Equal(t, snapshot.GetDefaultProject(indexUri).Name(), "/home/projects/TS/p1/tsconfig.json")
+		assert.Equal(t, snapshot.GetDefaultProject(indexUri).ConfigFileName(), "/home/projects/TS/p1/tsconfig.json")
 
 		otherUri := lsproto.DocumentUri("file:///home/projects/TS/p1/src/other.ts")
 		session.DidOpenFile(context.Background(), otherUri, 1, files["/home/projects/TS/p1/src/other.ts"].(string), lsproto.LanguageKindTypeScript)

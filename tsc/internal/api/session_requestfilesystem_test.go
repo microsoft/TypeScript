@@ -13,7 +13,6 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/project"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/projecttestutil"
-	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"gotest.tools/v3/assert"
 )
 
@@ -57,7 +56,7 @@ func TestEditorChangeInvalidatesRequestSymlinkAlias(t *testing.T) {
 		},
 	})
 	assert.NilError(t, err)
-	assert.Equal(t, session.snapshots[base.Snapshot].snapshot.ProjectCollection.GetProjectByPath("/tsconfig.json").GetProgram().GetSourceFile("/alias.ts").Text(), "old")
+	assert.Equal(t, session.snapshots[base.Snapshot].snapshot.ProjectCollection.GetProject(project.ID("/tsconfig.json")).GetProgram().GetSourceFile("/alias.ts").Text(), "old")
 
 	projectSession.DidChangeFile(ctx, "file:///target.ts", 2, []lsproto.TextDocumentContentChangePartialOrWholeDocument{{
 		WholeDocument: &lsproto.TextDocumentContentChangeWholeDocument{Text: "new"},
@@ -72,7 +71,7 @@ func TestEditorChangeInvalidatesRequestSymlinkAlias(t *testing.T) {
 		},
 	})
 	assert.NilError(t, err)
-	assert.Equal(t, session.snapshots[updated.Snapshot].snapshot.ProjectCollection.GetProjectByPath("/tsconfig.json").GetProgram().GetSourceFile("/alias.ts").Text(), "new")
+	assert.Equal(t, session.snapshots[updated.Snapshot].snapshot.ProjectCollection.GetProject(project.ID("/tsconfig.json")).GetProgram().GetSourceFile("/alias.ts").Text(), "new")
 }
 
 func TestLargeRequestLayerUpdateRetainsChanges(t *testing.T) {
@@ -114,7 +113,7 @@ func TestLargeRequestLayerUpdateRetainsChanges(t *testing.T) {
 	contents, ok := session.snapshots[updated.Snapshot].snapshot.ReadFile("/index.ts")
 	assert.Assert(t, ok)
 	assert.Equal(t, contents, "new")
-	assert.Equal(t, session.snapshots[updated.Snapshot].snapshot.ProjectCollection.GetProjectByPath("/tsconfig.json").GetProgram().GetSourceFile("/index.ts").Text(), "new")
+	assert.Equal(t, session.snapshots[updated.Snapshot].snapshot.ProjectCollection.GetProject(project.ID("/tsconfig.json")).GetProgram().GetSourceFile("/index.ts").Text(), "new")
 }
 
 func TestAutoImportCloneRetainsRequestFileSystem(t *testing.T) {
@@ -165,13 +164,13 @@ func TestUnmaskedOverlayContinuesUpdating(t *testing.T) {
 		},
 	})
 	assert.NilError(t, err)
-	assert.Equal(t, session.snapshots[masked.Snapshot].snapshot.ProjectCollection.GetProjectByPath("/tsconfig.json").GetProgram().GetSourceFile("/index.ts").Text(), "request")
+	assert.Equal(t, session.snapshots[masked.Snapshot].snapshot.ProjectCollection.GetProject(project.ID("/tsconfig.json")).GetProgram().GetSourceFile("/index.ts").Text(), "request")
 
 	unmasked, err := updateCurrentLanguageServerSnapshot(ctx, session, &CreateSnapshotParams{
 		OpenProjects: []DocumentIdentifier{{FileName: "/tsconfig.json"}},
 	})
 	assert.NilError(t, err)
-	assert.Equal(t, session.snapshots[unmasked.Snapshot].snapshot.ProjectCollection.GetProjectByPath("/tsconfig.json").GetProgram().GetSourceFile("/index.ts").Text(), "overlay1")
+	assert.Equal(t, session.snapshots[unmasked.Snapshot].snapshot.ProjectCollection.GetProject(project.ID("/tsconfig.json")).GetProgram().GetSourceFile("/index.ts").Text(), "overlay1")
 
 	projectSession.DidChangeFile(ctx, "file:///index.ts", 2, []lsproto.TextDocumentContentChangePartialOrWholeDocument{{
 		WholeDocument: &lsproto.TextDocumentContentChangeWholeDocument{Text: "overlay2"},
@@ -180,7 +179,7 @@ func TestUnmaskedOverlayContinuesUpdating(t *testing.T) {
 		OpenProjects: []DocumentIdentifier{{FileName: "/tsconfig.json"}},
 	})
 	assert.NilError(t, err)
-	assert.Equal(t, session.snapshots[updated.Snapshot].snapshot.ProjectCollection.GetProjectByPath("/tsconfig.json").GetProgram().GetSourceFile("/index.ts").Text(), "overlay2")
+	assert.Equal(t, session.snapshots[updated.Snapshot].snapshot.ProjectCollection.GetProject(project.ID("/tsconfig.json")).GetProgram().GetSourceFile("/index.ts").Text(), "overlay2")
 }
 
 func TestRequestHostMountReadsEditorOverlays(t *testing.T) {
@@ -258,11 +257,11 @@ func TestCreateSnapshotUsesFullFileSystem(t *testing.T) {
 
 	// Carrying the same filesystem forward without a delta must preserve
 	// incremental state instead of forcing a full program rebuild.
-	program := snapshot.ProjectCollection.GetProjectByPath(tspath.Path("/tsconfig.json")).GetProgram()
+	program := snapshot.ProjectCollection.GetProject(project.ID("/tsconfig.json")).GetProgram()
 	unchanged, err := session.handleUpdateSnapshot(context.Background(), &UpdateSnapshotParams{Snapshot: response.Snapshot})
 	assert.NilError(t, err)
 	unchangedSnapshot := session.snapshots[unchanged.Snapshot].snapshot
-	assert.Assert(t, unchangedSnapshot.ProjectCollection.GetProjectByPath(tspath.Path("/tsconfig.json")).GetProgram() == program)
+	assert.Assert(t, unchangedSnapshot.ProjectCollection.GetProject(project.ID("/tsconfig.json")).GetProgram() == program)
 	response = unchanged
 
 	// Supplying a new filesystem replaces inherited snapshot file caches even
@@ -514,8 +513,8 @@ func TestCreateProgramRetainsFullFileSystem(t *testing.T) {
 		Snapshot: base.Snapshot,
 		Changes: &CreateSnapshotParams{
 			CreatePrograms: []*CreateSnapshotProgramParams{{
-				RootFiles: []DocumentIdentifier{{FileName: "/new.ts"}},
-				Options:   CreateProgramOptions{CompilerOptions: core.CompilerOptions{NoLib: core.TSTrue}},
+				RootFiles:       []DocumentIdentifier{{FileName: "/new.ts"}},
+				CompilerOptions: core.CompilerOptions{NoLib: core.TSTrue},
 			}},
 		},
 	})
@@ -523,7 +522,7 @@ func TestCreateProgramRetainsFullFileSystem(t *testing.T) {
 
 	snapshot, err := session.getSnapshotData(created.Snapshot)
 	assert.NilError(t, err)
-	program, err := snapshot.getProgram(ProjectID((*created.Operation.CreatedPrograms)[0]))
+	program, err := snapshot.getProgram(project.ID((*created.Operation.CreatedPrograms)[0]))
 	assert.NilError(t, err)
 	assert.Assert(t, program.GetSourceFile("/new.ts") != nil)
 }
@@ -575,12 +574,12 @@ func TestSnapshotUpdateCarriesHostFileSystemWithoutOverride(t *testing.T) {
 	})
 	assert.NilError(t, err)
 	baseSnapshot := session.snapshots[base.Snapshot].snapshot
-	program := baseSnapshot.ProjectCollection.GetProjectByPath(tspath.Path("/tsconfig.json")).GetProgram()
+	program := baseSnapshot.ProjectCollection.GetProject(project.ID("/tsconfig.json")).GetProgram()
 
 	updated, err := session.handleUpdateSnapshot(context.Background(), &UpdateSnapshotParams{Snapshot: base.Snapshot})
 	assert.NilError(t, err)
 	updatedSnapshot := session.snapshots[updated.Snapshot].snapshot
-	assert.Assert(t, updatedSnapshot.ProjectCollection.GetProjectByPath(tspath.Path("/tsconfig.json")).GetProgram() == program)
+	assert.Assert(t, updatedSnapshot.ProjectCollection.GetProject(project.ID("/tsconfig.json")).GetProgram() == program)
 }
 
 func TestSnapshotFileSystemLayersPreserveIncrementalState(t *testing.T) {
@@ -615,8 +614,8 @@ func TestSnapshotFileSystemLayersPreserveIncrementalState(t *testing.T) {
 			base, err := session.handleCreateSnapshot(ctx, params)
 			assert.NilError(t, err)
 			baseSnapshot := session.snapshots[base.Snapshot].snapshot
-			baseProgram := baseSnapshot.ProjectCollection.GetProjectByPath("/a/tsconfig.json").GetProgram()
-			unrelatedProgram := baseSnapshot.ProjectCollection.GetProjectByPath("/b/tsconfig.json").GetProgram()
+			baseProgram := baseSnapshot.ProjectCollection.GetProject(project.ID("/a/tsconfig.json")).GetProgram()
+			unrelatedProgram := baseSnapshot.ProjectCollection.GetProject(project.ID("/b/tsconfig.json")).GetProgram()
 			unrelatedFile := baseSnapshot.GetFile("/b/index.ts")
 
 			unchanged, err := session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{
@@ -631,8 +630,8 @@ func TestSnapshotFileSystemLayersPreserveIncrementalState(t *testing.T) {
 			})
 			assert.NilError(t, err)
 			unchangedSnapshot := session.snapshots[unchanged.Snapshot].snapshot
-			assert.Assert(t, unchangedSnapshot.ProjectCollection.GetProjectByPath("/a/tsconfig.json").GetProgram() == baseProgram)
-			assert.Assert(t, unchangedSnapshot.ProjectCollection.GetProjectByPath("/b/tsconfig.json").GetProgram() == unrelatedProgram)
+			assert.Assert(t, unchangedSnapshot.ProjectCollection.GetProject(project.ID("/a/tsconfig.json")).GetProgram() == baseProgram)
+			assert.Assert(t, unchangedSnapshot.ProjectCollection.GetProject(project.ID("/b/tsconfig.json")).GetProgram() == unrelatedProgram)
 			assert.Assert(t, unchangedSnapshot.GetFile("/b/index.ts") == unrelatedFile)
 
 			const updatedText = `export const value = 2;`
@@ -648,11 +647,11 @@ func TestSnapshotFileSystemLayersPreserveIncrementalState(t *testing.T) {
 			})
 			assert.NilError(t, err)
 			updatedSnapshot := session.snapshots[updated.Snapshot].snapshot
-			updatedProject := updatedSnapshot.ProjectCollection.GetProjectByPath("/a/tsconfig.json")
+			updatedProject := updatedSnapshot.ProjectCollection.GetProject(project.ID("/a/tsconfig.json"))
 			assert.Assert(t, updatedProject.GetProgram() != baseProgram)
 			assert.Equal(t, updatedProject.ProgramUpdateKind, project.ProgramUpdateKindCloned)
 			assert.Equal(t, updatedProject.GetProgram().GetSourceFile("/a/index.ts").Text(), updatedText)
-			assert.Assert(t, updatedSnapshot.ProjectCollection.GetProjectByPath("/b/tsconfig.json").GetProgram() == unrelatedProgram)
+			assert.Assert(t, updatedSnapshot.ProjectCollection.GetProject(project.ID("/b/tsconfig.json")).GetProgram() == unrelatedProgram)
 			assert.Assert(t, updatedSnapshot.GetFile("/b/index.ts") == unrelatedFile)
 
 			removed, err := session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{
@@ -667,13 +666,13 @@ func TestSnapshotFileSystemLayersPreserveIncrementalState(t *testing.T) {
 			})
 			assert.NilError(t, err)
 			removedSnapshot := session.snapshots[removed.Snapshot].snapshot
-			removedProgram := removedSnapshot.ProjectCollection.GetProjectByPath("/a/tsconfig.json").GetProgram()
+			removedProgram := removedSnapshot.ProjectCollection.GetProject(project.ID("/a/tsconfig.json")).GetProgram()
 			for _, path := range []string{"/a/removed/nested.ts", "/a/removed/deep/file.ts"} {
 				assert.Assert(t, removedProgram.GetSourceFile(path) == nil, path)
 				assert.Assert(t, removedSnapshot.GetFile(path) == nil, path)
 				assert.Assert(t, baseProgram.GetSourceFile(path) != nil, path)
 			}
-			assert.Assert(t, removedSnapshot.ProjectCollection.GetProjectByPath("/b/tsconfig.json").GetProgram() == unrelatedProgram)
+			assert.Assert(t, removedSnapshot.ProjectCollection.GetProject(project.ID("/b/tsconfig.json")).GetProgram() == unrelatedProgram)
 			assert.Assert(t, removedSnapshot.GetFile("/b/index.ts") == unrelatedFile)
 
 			// A request without a base snapshot returns to the host, so the old
@@ -682,7 +681,7 @@ func TestSnapshotFileSystemLayersPreserveIncrementalState(t *testing.T) {
 			assert.NilError(t, err)
 			restoredSnapshot := session.snapshots[restored.Snapshot].snapshot
 			assert.Assert(t, !restoredSnapshot.HasFileSystemOverride())
-			restoredProgram := restoredSnapshot.ProjectCollection.GetProjectByPath("/a/tsconfig.json").GetProgram()
+			restoredProgram := restoredSnapshot.ProjectCollection.GetProject(project.ID("/a/tsconfig.json")).GetProgram()
 			assert.Equal(t, restoredProgram.GetSourceFile("/a/index.ts").Text(), files["/a/index.ts"])
 			assert.Assert(t, restoredProgram.GetSourceFile("/a/removed/deep/file.ts") != nil)
 		})
@@ -715,7 +714,7 @@ func TestSnapshotFileSystemLayerWithoutBaseUpdatesHostState(t *testing.T) {
 	})
 	assert.NilError(t, err)
 	snapshot := session.snapshots[updated.Snapshot].snapshot
-	updatedProject := snapshot.ProjectCollection.GetProjectByPath("/tsconfig.json")
+	updatedProject := snapshot.ProjectCollection.GetProject(project.ID("/tsconfig.json"))
 	assert.Equal(t, updatedProject.GetProgram().GetSourceFile("/index.ts").Text(), updatedText)
 	assert.Equal(t, updatedProject.ProgramUpdateKind, project.ProgramUpdateKindNewFiles)
 }
