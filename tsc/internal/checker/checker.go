@@ -64,6 +64,7 @@ const (
 	TypeSystemPropertyNameWriteType
 	TypeSystemPropertyNameInitializerIsUndefined
 	TypeSystemPropertyNameAliasTarget
+	TypeSystemPropertyNameMembers
 )
 
 type TypeResolution struct {
@@ -237,7 +238,6 @@ type PropertiesTypesKey struct {
 	typeId            TypeId
 	include           TypeFlags
 	includeOrigin     bool
-	unresolvedMembers bool
 }
 
 // NonExistentPropertyKey
@@ -19147,6 +19147,8 @@ func (c *Checker) typeResolutionHasProperty(r *TypeResolution) bool {
 		return c.valueSymbolLinks.Get(r.target.(*ast.Symbol)).writeType != nil
 	case TypeSystemPropertyNameAliasTarget:
 		return c.aliasSymbolLinks.Get(r.target.(*ast.Symbol)).aliasTarget != nil
+	case TypeSystemPropertyNameMembers:
+		return r.target.(*Type).objectFlags&ObjectFlagsMembersResolved != 0
 	}
 	panic("Unhandled case in typeResolutionHasProperty")
 }
@@ -19461,9 +19463,11 @@ func (c *Checker) resolveObjectTypeMembers(t *Type, source *Type, typeParameters
 		if !instantiated {
 			members = maps.Clone(members)
 		}
-		c.setStructuredTypeMembers(t, members, callSignatures, constructSignatures, indexInfos)
+		if !c.pushTypeResolution(t, TypeSystemPropertyNameMembers) {
+			c.setStructuredTypeMembers(t, members, callSignatures, constructSignatures, indexInfos)
+			return
+		}
 		thisArgument := core.LastOrNil(typeArguments)
-		t.objectFlags |= ObjectFlagsUnresolvedMembers
 		for _, baseType := range baseTypes {
 			instantiatedBaseType := baseType
 			if thisArgument != nil {
@@ -19482,7 +19486,10 @@ func (c *Checker) resolveObjectTypeMembers(t *Type, source *Type, typeParameters
 				return findIndexInfo(indexInfos, info.keyType) == nil
 			}))
 		}
-		t.objectFlags &^= ObjectFlagsUnresolvedMembers
+		if !c.popTypeResolution() {
+			c.error(c.currentNode, diagnostics.A_base_type_of_0_has_type_arguments_that_circularly_reference_members_of_the_type, c.TypeToString(t))
+			return
+		}
 	}
 	c.setStructuredTypeMembers(t, members, callSignatures, constructSignatures, indexInfos)
 }
@@ -27113,7 +27120,7 @@ func (c *Checker) getExtractStringType(t *Type) *Type {
 }
 
 func (c *Checker) getLiteralTypeFromProperties(t *Type, include TypeFlags, includeOrigin bool) *Type {
-	key := PropertiesTypesKey{typeId: t.id, include: include, includeOrigin: includeOrigin, unresolvedMembers: t.objectFlags&ObjectFlagsUnresolvedMembers != 0}
+	key := PropertiesTypesKey{typeId: t.id, include: include, includeOrigin: includeOrigin}
 	if cached, ok := c.propertiesTypes[key]; ok {
 		return cached
 	}
