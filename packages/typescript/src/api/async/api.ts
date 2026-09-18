@@ -574,12 +574,13 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
     /** Creates a program from current filesystem state. */
     async createProgram(
         rootFiles: readonly DocumentIdentifier[],
-        createProgramOptions: CreateProgramOptions,
+        compilerOptions: CompilerOptions,
+        createProgramOptions?: CreateProgramOptions,
     ): Promise<Program> {
         await this.ensureInitialized();
 
         const snapshot = await this.createSnapshot({
-            createPrograms: [{ rootFiles, options: createProgramOptions }],
+            createPrograms: [{ rootFiles, compilerOptions, ...(createProgramOptions ? { options: createProgramOptions } : {}) }],
         });
         const program = snapshot.operation.createdPrograms[0];
         if (!program) {
@@ -632,19 +633,39 @@ export interface SnapshotOpenedFileOperation {
     readonly project: Project;
 }
 
+/** Replaces every element of a tuple while preserving its length and index structure. */
 type MapTupleTo<Tuple extends readonly unknown[], Result> = {
     readonly [Index in keyof Tuple]: Result;
 };
 
+/**
+ * Keeps `Tuple` as an inference target while contextually typing each element from
+ * `Elements`. The mapped intersection supplies nested completions and excess-property
+ * checks without widening an inferred tuple to an array.
+ */
+type ContextualizeTuple<
+    Tuple extends readonly unknown[] | undefined,
+    Elements extends readonly unknown[] | undefined,
+> =
+    & Tuple
+    & {
+        readonly [Index in keyof Tuple]: NonNullable<Elements>[number];
+    };
+
+/** Substitutes the operation arrays with contextually typed, tuple-preserving versions. */
 type SnapshotOperationParams<
     Params extends CreateSnapshotParams,
     CreatePrograms extends Params["createPrograms"],
     OpenFiles extends Params["openFiles"],
 > = Omit<Params, "createPrograms" | "openFiles"> & {
-    createPrograms?: CreatePrograms;
-    openFiles?: OpenFiles;
+    createPrograms?: ContextualizeTuple<CreatePrograms, Params["createPrograms"]>;
+    openFiles?: ContextualizeTuple<OpenFiles, Params["openFiles"]>;
 };
 
+/**
+ * Refines a snapshot's operation results to required tuples when the corresponding
+ * operation arrays were supplied, preserving their lengths for indexed access.
+ */
 type SnapshotForOperationResults<
     CreatePrograms extends CreateSnapshotParams["createPrograms"],
     OpenFiles extends CreateSnapshotParams["openFiles"],
@@ -655,6 +676,7 @@ type SnapshotForOperationResults<
         & (OpenFiles extends readonly unknown[] ? { readonly openedFiles: MapTupleTo<OpenFiles, SnapshotOpenedFileOperation>; } : unknown);
 };
 
+/** Derives the refined snapshot result type from a complete operation parameter type. */
 export type SnapshotForOperation<Params extends CreateSnapshotParams> = SnapshotForOperationResults<
     Params extends { createPrograms: infer CreatePrograms extends readonly unknown[]; } ? CreatePrograms : undefined,
     Params extends { openFiles: infer OpenFiles extends readonly unknown[]; } ? OpenFiles : undefined

@@ -992,18 +992,18 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
 
     /** Creates a program from current filesystem state. */
     get createProgram(): {
-        (rootFiles: readonly DocumentIdentifier[], createProgramOptions: CreateProgramOptions): Program;
-        gen(rootFiles: readonly DocumentIdentifier[], createProgramOptions: CreateProgramOptions): Generator<ProtocolRequest, Program, ProtocolResponse["result"]>;
+        (rootFiles: readonly DocumentIdentifier[], compilerOptions: CompilerOptions, createProgramOptions?: CreateProgramOptions): Program;
+        gen(rootFiles: readonly DocumentIdentifier[], compilerOptions: CompilerOptions, createProgramOptions?: CreateProgramOptions): Generator<ProtocolRequest, Program, ProtocolResponse["result"]>;
     } {
         const owner = this;
         return cacheGeneratorMethod(
             owner,
             "createProgram",
-            function (rootFiles: readonly DocumentIdentifier[], createProgramOptions: CreateProgramOptions): Program {
+            function (rootFiles: readonly DocumentIdentifier[], compilerOptions: CompilerOptions, createProgramOptions?: CreateProgramOptions): Program {
                 owner.ensureInitialized();
 
                 const snapshot = owner.createSnapshot({
-                    createPrograms: [{ rootFiles, options: createProgramOptions }],
+                    createPrograms: [{ rootFiles, compilerOptions, ...(createProgramOptions ? { options: createProgramOptions } : {}) }],
                 });
                 const program = snapshot.operation.createdPrograms[0];
                 if (!program) {
@@ -1013,11 +1013,11 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
                 program.setOwnedSnapshot(snapshot);
                 return program;
             },
-            function* (rootFiles: readonly DocumentIdentifier[], createProgramOptions: CreateProgramOptions): Generator<ProtocolRequest, Program, ProtocolResponse["result"]> {
+            function* (rootFiles: readonly DocumentIdentifier[], compilerOptions: CompilerOptions, createProgramOptions?: CreateProgramOptions): Generator<ProtocolRequest, Program, ProtocolResponse["result"]> {
                 yield* owner.ensureInitialized.gen();
 
                 const snapshot = yield* owner.createSnapshot.gen({
-                    createPrograms: [{ rootFiles, options: createProgramOptions }],
+                    createPrograms: [{ rootFiles, compilerOptions, ...(createProgramOptions ? { options: createProgramOptions } : {}) }],
                 });
                 const program = snapshot.operation.createdPrograms[0];
                 if (!program) {
@@ -1116,19 +1116,39 @@ export interface SnapshotOpenedFileOperation {
     readonly project: Project;
 }
 
+/** Replaces every element of a tuple while preserving its length and index structure. */
 type MapTupleTo<Tuple extends readonly unknown[], Result> = {
     readonly [Index in keyof Tuple]: Result;
 };
 
+/**
+ * Keeps `Tuple` as an inference target while contextually typing each element from
+ * `Elements`. The mapped intersection supplies nested completions and excess-property
+ * checks without widening an inferred tuple to an array.
+ */
+type ContextualizeTuple<
+    Tuple extends readonly unknown[] | undefined,
+    Elements extends readonly unknown[] | undefined,
+> =
+    & Tuple
+    & {
+        readonly [Index in keyof Tuple]: NonNullable<Elements>[number];
+    };
+
+/** Substitutes the operation arrays with contextually typed, tuple-preserving versions. */
 type SnapshotOperationParams<
     Params extends CreateSnapshotParams,
     CreatePrograms extends Params["createPrograms"],
     OpenFiles extends Params["openFiles"],
 > = Omit<Params, "createPrograms" | "openFiles"> & {
-    createPrograms?: CreatePrograms;
-    openFiles?: OpenFiles;
+    createPrograms?: ContextualizeTuple<CreatePrograms, Params["createPrograms"]>;
+    openFiles?: ContextualizeTuple<OpenFiles, Params["openFiles"]>;
 };
 
+/**
+ * Refines a snapshot's operation results to required tuples when the corresponding
+ * operation arrays were supplied, preserving their lengths for indexed access.
+ */
 type SnapshotForOperationResults<
     CreatePrograms extends CreateSnapshotParams["createPrograms"],
     OpenFiles extends CreateSnapshotParams["openFiles"],
@@ -1139,6 +1159,7 @@ type SnapshotForOperationResults<
         & (OpenFiles extends readonly unknown[] ? { readonly openedFiles: MapTupleTo<OpenFiles, SnapshotOpenedFileOperation>; } : unknown);
 };
 
+/** Derives the refined snapshot result type from a complete operation parameter type. */
 export type SnapshotForOperation<Params extends CreateSnapshotParams> = SnapshotForOperationResults<
     Params extends { createPrograms: infer CreatePrograms extends readonly unknown[]; } ? CreatePrograms : undefined,
     Params extends { openFiles: infer OpenFiles extends readonly unknown[]; } ? OpenFiles : undefined

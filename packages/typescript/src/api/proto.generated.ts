@@ -1596,13 +1596,15 @@ export interface EmitOutputFile {
 
 export interface CreateSnapshotProgramParams {
     rootFiles: readonly DocumentIdentifier[] | null;
-    options: CreateProgramOptions;
+    compilerOptions: CompilerOptions;
+    options?: CreateProgramOptions | undefined;
 }
 
 export interface ReconfigureSnapshotProgramParams {
     id: SyntheticProjectId;
     rootFiles: readonly DocumentIdentifier[] | null;
-    options: CreateProgramOptions;
+    compilerOptions: CompilerOptions;
+    options?: CreateProgramOptions | undefined;
 }
 
 /**
@@ -1647,7 +1649,6 @@ export interface CompletionEntryLabelDetailsResponse {
 }
 
 export interface CreateProgramOptions {
-    compilerOptions: CompilerOptions;
     projectReferences?: ProjectReference[] | undefined;
     configFileParsingDiagnostics?: DiagnosticResponse[] | undefined;
 }

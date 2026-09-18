@@ -135,9 +135,12 @@ describe("API", () => {
             const baseSnapshot = undefined! as Snapshot;
             void lsp.getCurrentLanguageServerSnapshot(undefined, baseSnapshot);
 
-            const api = new API();
             // @ts-expect-error Snapshot parameters are excess-property checked.
-            void api.createSnapshot({ fileChanges: { changed: ["/index.ts"] } });
+            void standalone.createSnapshot({ fileChanges: { changed: ["/index.ts"] } });
+            // @ts-expect-error Synthetic program parameters are contextually typed and excess-property checked.
+            void standalone.createSnapshot({ createPrograms: [{ rootFiles: [], compilerOptions: {}, unexpected: true }] });
+            // @ts-expect-error Compiler options in synthetic program parameters are contextually typed and excess-property checked.
+            void standalone.createSnapshot({ createPrograms: [{ rootFiles: [], compilerOptions: { unexpected: true } }] });
             // @ts-expect-error Snapshot update parameters are excess-property checked.
             void baseSnapshot.update({ fileChanges: { changed: ["/index.ts"] } });
             // @ts-expect-error Snapshot updates require an explicit changes object.
@@ -399,7 +402,7 @@ describe("API", () => {
             "/src/index.ts": `export const value: string = 1;`,
         });
 
-        const program = api.createProgram(["/src/index.ts"], { compilerOptions: { noLib: true, strict: true } });
+        const program = api.createProgram(["/src/index.ts"], { noLib: true, strict: true });
 
         assert.deepEqual(program.getCompilerOptions(), { noLib: true, strict: true });
         assert.deepEqual(program.getSourceFileNames(), ["/src/index.ts"]);
@@ -417,8 +420,8 @@ describe("API", () => {
 
         const snapshot = api.createSnapshot({
             createPrograms: [
-                { rootFiles: ["/src/a.ts"], options: { compilerOptions: { noLib: true } } },
-                { rootFiles: ["/src/b.ts"], options: { compilerOptions: { noLib: true, strict: true } } },
+                { rootFiles: ["/src/a.ts"], compilerOptions: { noLib: true } },
+                { rootFiles: ["/src/b.ts"], compilerOptions: { noLib: true, strict: true } },
             ],
         });
         assert.equal(snapshot.getProjects().length, 2);
@@ -445,7 +448,7 @@ describe("API", () => {
         const snapshot = api.createSnapshot({
             createPrograms: [{
                 rootFiles: ["/src/a.ts"],
-                options: { compilerOptions: { noLib: true } },
+                compilerOptions: { noLib: true },
             }],
         });
         const originalProgram = snapshot.operation.createdPrograms[0];
@@ -454,7 +457,7 @@ describe("API", () => {
             reconfigurePrograms: [{
                 id: originalProgram.id,
                 rootFiles: ["/src/b.ts"],
-                options: { compilerOptions: { noLib: true, strict: true } },
+                compilerOptions: { noLib: true, strict: true },
             }],
         });
         const reconfiguredProgram = updated.getProgram(originalProgram.id);
@@ -478,9 +481,10 @@ declare module "augmentation" {}`,
             "/node_modules/@types/pkg-types/index.d.ts": `export {};`,
         });
 
-        const program = api.createProgram(["/src/index.ts"], {
-            compilerOptions: { module: ModuleKind.ESNext, moduleResolution: ModuleResolutionKind.Bundler, noLib: true },
-        });
+        const program = api.createProgram(
+            ["/src/index.ts"],
+            { module: ModuleKind.ESNext, moduleResolution: ModuleResolutionKind.Bundler, noLib: true },
+        );
         const sourceFile = program.getSourceFile("/src/index.ts");
         assert.ok(sourceFile);
         const pkgSpecifier = cast(cast(sourceFile.statements[0], isImportDeclaration).moduleSpecifier, isStringLiteral);
@@ -534,7 +538,7 @@ declare module "augmentation" {}`,
 
         const program = api.createProgram(
             ["/src/index.ts"],
-            { compilerOptions: { noLib: true, strict: true } },
+            { noLib: true, strict: true },
         );
 
         assert.deepEqual(program.getCompilerOptions(), { noLib: true, strict: true });
@@ -554,7 +558,8 @@ declare module "augmentation" {}`,
 
         const program = api.createProgram(
             ["/src/index.ts"],
-            { compilerOptions: { noLib: true }, projectReferences: [reference] },
+            { noLib: true },
+            { projectReferences: [reference] },
         );
         assert.deepEqual(program.getProject().parsedCommandLine.projectReferences, [reference]);
         program.dispose();
@@ -572,8 +577,8 @@ declare module "augmentation" {}`,
 
         const program = api.createProgram(
             ["/src/index.ts"],
+            { noLib: true },
             {
-                compilerOptions: { noLib: true },
                 configFileParsingDiagnostics: [diagnostic],
             },
         );
@@ -588,7 +593,7 @@ declare module "augmentation" {}`,
             "/src/dependency.ts": `export const dependency = 1;`,
         });
 
-        const program = api.createProgram(["/src/main.ts"], { compilerOptions: { noLib: true } });
+        const program = api.createProgram(["/src/main.ts"], { noLib: true });
         assert.deepEqual([...program.getSourceFileNames()].sort(), ["/src/dependency.ts", "/src/main.ts"]);
 
         program.dispose();
@@ -1624,7 +1629,7 @@ describe("Multiple snapshots", () => {
             openFiles: ["/inferred.ts", "/configured/index.ts"],
             createPrograms: [{
                 rootFiles: ["/synthetic.ts"],
-                options: { compilerOptions: { noLib: true } },
+                compilerOptions: { noLib: true },
             }],
         });
         assert.equal(created.getProjects().length, 3);
@@ -1651,7 +1656,7 @@ describe("Multiple snapshots", () => {
             openFiles: ["/inferred.ts"],
             createPrograms: [{
                 rootFiles: ["/synthetic.ts"],
-                options: { compilerOptions: { noLib: true } },
+                compilerOptions: { noLib: true },
             }],
         });
         const openedProject: Project = withOperationResults.operation.openedFiles[0].project;
@@ -1990,8 +1995,8 @@ describe("Checker - symbol identity across projects", () => {
         });
         const snapshot = api.createSnapshot({
             createPrograms: [
-                { rootFiles: ["/src/shared.ts"], options: { compilerOptions: { noLib: true } } },
-                { rootFiles: ["/src/shared.ts"], options: { compilerOptions: { noLib: true } } },
+                { rootFiles: ["/src/shared.ts"], compilerOptions: { noLib: true } },
+                { rootFiles: ["/src/shared.ts"], compilerOptions: { noLib: true } },
             ],
         });
         const [programA, programB] = snapshot.operation.createdPrograms;
@@ -7418,7 +7423,7 @@ describe("runWithTemporaryFileUpdate", () => {
         const snapshot = api.createSnapshot({
             createPrograms: [{
                 rootFiles: ["/src/index.ts"],
-                options: { compilerOptions: { noLib: true, strict: true } },
+                compilerOptions: { noLib: true, strict: true },
             }],
         });
         const originalProgram = snapshot.operation.createdPrograms[0];
