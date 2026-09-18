@@ -1,6 +1,28 @@
 	package implicitfma
 	
+	import "testdata/implicitfma/otherpkg"
+	
 	type namedFloat64 float64
+	
+	type storage struct {
+		product float64
+		other   float64
+	}
+	
+	type methodFloat float64
+	
+	var (
+		packageX       float64
+		packageY       float64
+		packageZ       float64
+		badPackageFMA  = packageX*packageY + packageZ
+		                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! implicitfma: explicitly round the floating-point multiplication result to prevent implicit FMA
+		packageProduct = packageX * packageY
+		badPackageFlow = packageProduct + packageZ
+		                 ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! implicitfma: explicitly round the floating-point multiplication result to prevent implicit FMA
+	)
 	
 	func badFloat64(x, y, z float64) float64 {
 		return x*y + z
@@ -95,6 +117,160 @@
 		return product + z
 		       ~~~~~~~~~~~
 !!! implicitfma: explicitly round the floating-point multiplication result to prevent implicit FMA
+	}
+	
+	func badAssignmentTarget(values []int, x, y, z float64) {
+		values[int(x*y+z)] = 0
+		           ~~~~~
+!!! implicitfma: explicitly round the floating-point multiplication result to prevent implicit FMA
+	}
+	
+	func badCallTarget(functions []func(), x, y, z float64) {
+		functions[int(x*y+z)]()
+		              ~~~~~
+!!! implicitfma: explicitly round the floating-point multiplication result to prevent implicit FMA
+	}
+	
+	func goodRangeOverwrite(values []float64, x, y, z float64) float64 {
+		product := x * y
+		for _, product = range values {
+			return product + z
+		}
+		return 0
+	}
+	
+	func badRangeMayNotRun(values []float64, x, y, z float64) float64 {
+		product := x * y
+		for _, product = range values {
+		}
+		return product + z
+		       ~~~~~~~~~~~
+!!! implicitfma: explicitly round the floating-point multiplication result to prevent implicit FMA
+	}
+	
+	func goodSelectedReceive(ch <-chan float64, x, y, z float64) float64 {
+		product := x * y
+		select {
+		case product = <-ch:
+		~~~~~~~~~~~~~~~~~~~~
+!!! emptycase: this case block is empty and will do nothing
+		}
+		return product + z
+	}
+	
+	func badUnselectedReceive(ch <-chan float64, x, y, z float64) float64 {
+		product := x * y
+		select {
+		case product = <-ch:
+		~~~~~~~~~~~~~~~~~~~~
+!!! emptycase: this case block is empty and will do nothing
+		default:
+		~~~~~~~~
+!!! emptycase: this case block is empty and will do nothing
+		}
+		return product + z
+		       ~~~~~~~~~~~
+!!! implicitfma: explicitly round the floating-point multiplication result to prevent implicit FMA
+	}
+	
+	func badPointerStorage(pointer *float64, x, y, z float64) float64 {
+		*pointer = x * y
+		return *pointer + z
+		       ~~~~~~~~~~~~
+!!! implicitfma: explicitly round the floating-point multiplication result to prevent implicit FMA
+	}
+	
+	func badFieldStorage(value *storage, x, y, z float64) float64 {
+		value.product = x * y
+		return value.product + z
+		       ~~~~~~~~~~~~~~~~~
+!!! implicitfma: explicitly round the floating-point multiplication result to prevent implicit FMA
+	}
+	
+	func badIndexStorage(values []float64, x, y, z float64) float64 {
+		values[0] = x * y
+		return values[0] + z
+		       ~~~~~~~~~~~~~
+!!! implicitfma: explicitly round the floating-point multiplication result to prevent implicit FMA
+	}
+	
+	func badCompositeStorage(x, y, z float64) float64 {
+		value := storage{product: x * y}
+		return value.product + z
+		       ~~~~~~~~~~~~~~~~~
+!!! implicitfma: explicitly round the floating-point multiplication result to prevent implicit FMA
+	}
+	
+	func goodOtherField(value *storage, x, y, z float64) float64 {
+		value.product = x * y
+		return value.other + z
+	}
+	
+	func multiply(x, y float64) float64 {
+		return x * y
+	}
+	
+	func badInlinedCall(x, y, z float64) float64 {
+		return multiply(x, y) + z
+		       ~~~~~~~~~~~~~~~~~~
+!!! implicitfma: explicitly round the floating-point multiplication result to prevent implicit FMA
+	}
+	
+	func identity(value float64) float64 {
+		return value
+	}
+	
+	func badIdentityCall(x, y, z float64) float64 {
+		return identity(x*y) + z
+		       ~~~~~~~~~~~~~~~~~
+!!! implicitfma: explicitly round the floating-point multiplication result to prevent implicit FMA
+	}
+	
+	func add(value, z float64) float64 {
+		return value + z
+	}
+	
+	func badInlinedArgument(x, y, z float64) float64 {
+		return add(x*y, z)
+		       ~~~~~~~~~~~
+!!! implicitfma: explicitly round the floating-point multiplication result to prevent implicit FMA
+	}
+	
+	func badImportedMultiply(x, y, z float64) float64 {
+		return otherpkg.Multiply(x, y) + z
+		       ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! implicitfma: explicitly round the floating-point multiplication result to prevent implicit FMA
+	}
+	
+	func badImportedIdentity(x, y, z float64) float64 {
+		return otherpkg.Identity(x*y) + z
+		       ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! implicitfma: explicitly round the floating-point multiplication result to prevent implicit FMA
+	}
+	
+	func badImportedArgument(x, y, z float64) float64 {
+		return otherpkg.Add(x*y, z)
+		       ~~~~~~~~~~~~~~~~~~~~
+!!! implicitfma: explicitly round the floating-point multiplication result to prevent implicit FMA
+	}
+	
+	func (value methodFloat) identity() methodFloat {
+		return value
+	}
+	
+	func badMethodReceiver(x, y, z methodFloat) methodFloat {
+		return (x * y).identity() + z
+		       ~~~~~~~~~~~~~~~~~~~~~~
+!!! implicitfma: explicitly round the floating-point multiplication result to prevent implicit FMA
+	}
+	
+	func badImmediateClosure(x, y, z float64) float64 {
+		product := x * y
+		return func() float64 {
+			return product + z
+			       ~~~~~~~~~~~
+!!! implicitfma: explicitly round the floating-point multiplication result to prevent implicit FMA
+		}()
 	}
 	
 	func goodConstant() float64 {

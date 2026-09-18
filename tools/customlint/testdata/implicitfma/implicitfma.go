@@ -1,6 +1,24 @@
 package implicitfma
 
+import "testdata/implicitfma/otherpkg"
+
 type namedFloat64 float64
+
+type storage struct {
+	product float64
+	other   float64
+}
+
+type methodFloat float64
+
+var (
+	packageX       float64
+	packageY       float64
+	packageZ       float64
+	badPackageFMA  = packageX*packageY + packageZ
+	packageProduct = packageX * packageY
+	badPackageFlow = packageProduct + packageZ
+)
 
 func badFloat64(x, y, z float64) float64 {
 	return x*y + z
@@ -83,6 +101,122 @@ func badRoundingOnOnePath(x, y, z float64, round bool) float64 {
 		product = float64(product)
 	}
 	return product + z
+}
+
+func badAssignmentTarget(values []int, x, y, z float64) {
+	values[int(x*y+z)] = 0
+}
+
+func badCallTarget(functions []func(), x, y, z float64) {
+	functions[int(x*y+z)]()
+}
+
+func goodRangeOverwrite(values []float64, x, y, z float64) float64 {
+	product := x * y
+	for _, product = range values {
+		return product + z
+	}
+	return 0
+}
+
+func badRangeMayNotRun(values []float64, x, y, z float64) float64 {
+	product := x * y
+	for _, product = range values {
+	}
+	return product + z
+}
+
+func goodSelectedReceive(ch <-chan float64, x, y, z float64) float64 {
+	product := x * y
+	select {
+	case product = <-ch:
+	}
+	return product + z
+}
+
+func badUnselectedReceive(ch <-chan float64, x, y, z float64) float64 {
+	product := x * y
+	select {
+	case product = <-ch:
+	default:
+	}
+	return product + z
+}
+
+func badPointerStorage(pointer *float64, x, y, z float64) float64 {
+	*pointer = x * y
+	return *pointer + z
+}
+
+func badFieldStorage(value *storage, x, y, z float64) float64 {
+	value.product = x * y
+	return value.product + z
+}
+
+func badIndexStorage(values []float64, x, y, z float64) float64 {
+	values[0] = x * y
+	return values[0] + z
+}
+
+func badCompositeStorage(x, y, z float64) float64 {
+	value := storage{product: x * y}
+	return value.product + z
+}
+
+func goodOtherField(value *storage, x, y, z float64) float64 {
+	value.product = x * y
+	return value.other + z
+}
+
+func multiply(x, y float64) float64 {
+	return x * y
+}
+
+func badInlinedCall(x, y, z float64) float64 {
+	return multiply(x, y) + z
+}
+
+func identity(value float64) float64 {
+	return value
+}
+
+func badIdentityCall(x, y, z float64) float64 {
+	return identity(x*y) + z
+}
+
+func add(value, z float64) float64 {
+	return value + z
+}
+
+func badInlinedArgument(x, y, z float64) float64 {
+	return add(x*y, z)
+}
+
+func badImportedMultiply(x, y, z float64) float64 {
+	return otherpkg.Multiply(x, y) + z
+}
+
+func badImportedIdentity(x, y, z float64) float64 {
+	return otherpkg.Identity(x*y) + z
+}
+
+func badImportedArgument(x, y, z float64) float64 {
+	return otherpkg.Add(x*y, z)
+}
+
+func (value methodFloat) identity() methodFloat {
+	return value
+}
+
+func badMethodReceiver(x, y, z methodFloat) methodFloat {
+	return (x * y).identity() + z
+}
+
+func badImmediateClosure(x, y, z float64) float64 {
+	product := x * y
+	return func() float64 {
+		return product + z
+	}()
 }
 
 func goodConstant() float64 {
