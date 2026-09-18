@@ -2,15 +2,19 @@ package project
 
 import (
 	"context"
+	"fmt"
 	"sync/atomic"
 	"testing"
 	"testing/synctest"
 	"time"
 
+	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/bundled"
 	"github.com/microsoft/TypeScript/tsc/internal/checker"
+	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/compiler"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/ls/lsutil"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/project/logging"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfstest"
@@ -19,27 +23,42 @@ import (
 
 func setupCheckerPoolSession(t *testing.T, opts CheckerPoolOptions) (*Session, *checkerPool) {
 	t.Helper()
+	return setupCheckerPoolSessionWithFiles(t, opts, map[string]any{
+		"/src/tsconfig.json": `{ "compilerOptions": { "noLib": true } }`,
+		"/src/index.ts":      "export const x: number = 1;",
+	})
+}
+
+func setupCheckerPoolSessionWithFiles(t *testing.T, opts CheckerPoolOptions, files map[string]any) (*Session, *checkerPool) {
+	t.Helper()
+	// A project only takes a build's worth of diagnostics checkers when the workspace pull is on,
+	// which is what these tests are about. See setupCheckerPoolSessionWithScope for the other way.
+	return setupCheckerPoolSessionWithScope(t, opts, files, lsutil.WorkspaceDiagnosticsScopeAllProjects)
+}
+
+func setupCheckerPoolSessionWithScope(t *testing.T, opts CheckerPoolOptions, files map[string]any, scope lsutil.WorkspaceDiagnosticsScope) (*Session, *checkerPool) {
+	t.Helper()
 	if !bundled.Embedded {
 		t.Skip("bundled files are not embedded")
 	}
 
-	files := map[string]any{
-		"/src/tsconfig.json": `{ "compilerOptions": { "noLib": true } }`,
-		"/src/index.ts":      "export const x: number = 1;",
-	}
 	fs := bundled.WrapFS(vfstest.FromMap(files, false))
+	options := &SessionOptions{
+		CurrentDirectory:   "/",
+		DefaultLibraryPath: bundled.LibPath(),
+		PositionEncoding:   lsproto.PositionEncodingKindUTF8,
+		WatchEnabled:       false,
+		LoggingEnabled:     true,
+		CheckerPoolOptions: opts,
+	}
+	// Set directly rather than through Configure, which tells the client to refresh and there is
+	// no client here. The path from a preference to this is covered by the server's own tests.
+	options.workspaceDiagnosticsEnabled.Store(scope.Enabled())
 	session := NewSession(&SessionInit{
 		BackgroundCtx: context.Background(),
-		Options: &SessionOptions{
-			CurrentDirectory:   "/",
-			DefaultLibraryPath: bundled.LibPath(),
-			PositionEncoding:   lsproto.PositionEncodingKindUTF8,
-			WatchEnabled:       false,
-			LoggingEnabled:     true,
-			CheckerPoolOptions: opts,
-		},
-		FS:     fs,
-		Logger: logging.NewTestLogger(),
+		Options:       options,
+		FS:            fs,
+		Logger:        logging.NewTestLogger(),
 	})
 	session.DidOpenFile(context.Background(), "file:///src/index.ts", 1, "export const x: number = 1;", lsproto.LanguageKindTypeScript)
 
@@ -53,7 +72,36 @@ func setupCheckerPoolSession(t *testing.T, opts CheckerPoolOptions) (*Session, *
 // newTestCheckerPool creates a checker pool inside the current goroutine context
 // (suitable for use inside synctest.Test) using the given program.
 func newTestCheckerPool(program *compiler.Program, opts CheckerPoolOptions) *checkerPool {
+	opts.MatchBuildCheckerCount = true
 	return newCheckerPool(opts, program, func(string) {})
+}
+
+// manyCheckerPoolFiles is a program with more files than a build would give it checkers, so at
+// least one checker owns several of them.
+func manyCheckerPoolFiles() map[string]any {
+	files := map[string]any{"/src/tsconfig.json": `{ "compilerOptions": { "noLib": true } }`}
+	files["/src/index.ts"] = "export const x: number = 1;\n"
+	for i := range 11 {
+		files[fmt.Sprintf("/src/f%d.ts", i)] = fmt.Sprintf("export const v%d = %d;\n", i, i)
+	}
+	return files
+}
+
+// largestCheckerGroup returns the checker a build gives the most files, and those files.
+func largestCheckerGroup(t *testing.T, program *compiler.Program, checkerCount int) (int, []*ast.SourceFile) {
+	t.Helper()
+	associations := compiler.GetFileCheckerAssociations(program, checkerCount)
+	groups := make([][]*ast.SourceFile, checkerCount)
+	for i, file := range program.SourceFiles() {
+		groups[associations[i]] = append(groups[associations[i]], file)
+	}
+	largest := 0
+	for owner, group := range groups {
+		if len(group) > len(groups[largest]) {
+			largest = owner
+		}
+	}
+	return largest, groups[largest]
 }
 
 func TestCheckerPoolDiagnosticsRouting(t *testing.T) {
@@ -616,14 +664,13 @@ func TestCheckerPoolDiscardKeepsIdleCheckers(t *testing.T) {
 		assert.Assert(t, pool.checkers[0] != nil, "diagnostics checker should exist")
 		pool.mu.Unlock()
 
-		// Discard should keep idle checkers alive (they may be referenced by
+		// Discard should keep idle query checkers alive (they may be referenced by
 		// API type handles) and just stop the cleanup timer.
 		pool.Discard()
 
 		pool.mu.Lock()
-		assert.Assert(t, pool.checkers[0] == c1, "diagnostics checker should survive Discard")
 		hasQuery := false
-		for i := 1; i < len(pool.checkers); i++ {
+		for i := pool.diagnosticsCount; i < len(pool.checkers); i++ {
 			if pool.checkers[i] == c2 {
 				hasQuery = true
 				break
@@ -638,7 +685,7 @@ func TestCheckerPoolDiscardKeepsIdleCheckers(t *testing.T) {
 		synctest.Wait()
 
 		pool.mu.Lock()
-		assert.Assert(t, pool.checkers[0] == c1, "diagnostics checker should persist indefinitely on discarded pool")
+		assert.Assert(t, pool.checkers[pool.diagnosticsCount] == c2, "query checker should persist indefinitely on discarded pool")
 		pool.mu.Unlock()
 	})
 }
@@ -769,7 +816,10 @@ func TestCheckerPoolDiagnosticsCheckerStableIdentity(t *testing.T) {
 	})
 }
 
-func TestCheckerPoolDiagnosticsCheckerSurvivesDiscard(t *testing.T) {
+// A discarded pool's program has been replaced, so its diagnostics checkers hold a whole program's
+// worth of types that nothing will ask for again. They go, unlike the query checkers, which an API
+// client may still be resolving handles against.
+func TestCheckerPoolDiagnosticsCheckersDroppedOnDiscard(t *testing.T) {
 	t.Parallel()
 	session, _ := setupCheckerPoolSession(t, CheckerPoolOptions{MaxCheckers: 4, IdleTimeout: 10 * time.Second})
 	ls, err := session.GetLanguageService(context.Background(), "file:///src/index.ts")
@@ -789,17 +839,20 @@ func TestCheckerPoolDiagnosticsCheckerSurvivesDiscard(t *testing.T) {
 
 		pool.Discard()
 
-		// Diagnostics checker should survive Discard.
 		pool.mu.Lock()
-		assert.Assert(t, pool.checkers[0] == c, "diagnostics checker should survive Discard")
+		assert.Assert(t, pool.checkers[0] == nil, "diagnostics checker should be dropped on Discard")
 		pool.mu.Unlock()
 
-		// Should still be acquirable and be the same instance.
+		// The pool stays usable; it just builds a new one.
 		ctx2 := core.WithRequestID(context.Background(), "diag-discard-2")
 		ctx2 = core.WithCheckerLifetime(ctx2, core.CheckerLifetimeDiagnostics)
 		c2, release2 := pool.GetChecker(ctx2, nil)
-		assert.Assert(t, c2 == c, "diagnostics checker identity should be stable after Discard")
+		assert.Assert(t, c2 != nil)
 		release2()
+
+		pool.mu.Lock()
+		assert.Assert(t, pool.checkers[0] == nil, "a diagnostics checker released on a discarded pool goes too")
+		pool.mu.Unlock()
 	})
 }
 
@@ -1292,4 +1345,253 @@ func TestCheckerPoolCleanupAfterDiscardIsNoop(t *testing.T) {
 		assert.Assert(t, hasChecker, "idle checkers must survive cleanup on a discarded pool")
 		pool.mu.Unlock()
 	})
+}
+
+// A file is checked by the checker a build would check it with, so a pull in the editor and a build
+// agree on which checker's caches hold what.
+func TestCheckerPoolDiagnosticsRoutesFilesTheWayABuildDoes(t *testing.T) {
+	t.Parallel()
+	_, pool := setupCheckerPoolSessionWithFiles(t, CheckerPoolOptions{MaxCheckers: 4, IdleTimeout: 10 * time.Second}, map[string]any{
+		"/src/tsconfig.json": `{ "compilerOptions": { "noLib": true } }`,
+		"/src/index.ts":      "export const x: number = 1;",
+		"/src/a.ts":          "export const a = 1;",
+		"/src/b.ts":          "export const b = 1;",
+	})
+
+	associations := compiler.GetFileCheckerAssociations(pool.program, pool.diagnosticsCount)
+	distinct := collections.Set[*checker.Checker]{}
+	for i, file := range pool.program.SourceFiles() {
+		ctx := core.WithRequestID(t.Context(), fmt.Sprintf("diag-%d", i))
+		ctx = core.WithCheckerLifetime(ctx, core.CheckerLifetimeDiagnostics)
+		c, release := pool.GetChecker(ctx, file)
+		assert.Assert(t, c != nil)
+		assert.Assert(t, pool.checkers[associations[i]] == c, "a file must go to the checker a build assigns it")
+		distinct.Add(c)
+		release()
+	}
+	assert.Assert(t, distinct.Len() > 1, "the program's files must be spread over more than one checker")
+}
+
+// Files a build gives different checkers are checked at the same time; files that share one wait for
+// each other, as they do in a build.
+func TestCheckerPoolDiagnosticsCheckersAreHeldIndependently(t *testing.T) {
+	t.Parallel()
+	session, pool := setupCheckerPoolSessionWithFiles(t, CheckerPoolOptions{MaxCheckers: 4, IdleTimeout: 10 * time.Second}, map[string]any{
+		"/src/tsconfig.json": `{ "compilerOptions": { "noLib": true } }`,
+		"/src/index.ts":      "export const x: number = 1;",
+		"/src/a.ts":          "export const a = 1;",
+		"/src/b.ts":          "export const b = 1;",
+		"/src/c.ts":          "export const c = 1;",
+		"/src/d.ts":          "export const d = 1;",
+		"/src/e.ts":          "export const e = 1;",
+	})
+	ls, err := session.GetLanguageService(context.Background(), "file:///src/index.ts")
+	assert.NilError(t, err)
+	program := ls.GetProgram()
+
+	// Two files on the same checker, and one on another.
+	associations := compiler.GetFileCheckerAssociations(program, pool.diagnosticsCount)
+	files := program.SourceFiles()
+	var shared []*ast.SourceFile
+	var separate *ast.SourceFile
+	for owner := range pool.diagnosticsCount {
+		var group []*ast.SourceFile
+		for i, file := range files {
+			if associations[i] == owner {
+				group = append(group, file)
+			}
+		}
+		if len(group) >= 2 && shared == nil {
+			shared = group[:2]
+		} else if len(group) >= 1 && separate == nil {
+			separate = group[0]
+		}
+	}
+	assert.Assert(t, shared != nil && separate != nil, "expected one checker with two files and another with one")
+
+	synctest.Test(t, func(t *testing.T) {
+		pool := newTestCheckerPool(program, CheckerPoolOptions{MaxCheckers: 4, IdleTimeout: 30 * time.Second})
+
+		diagCtx := func(id string) context.Context {
+			return core.WithCheckerLifetime(core.WithRequestID(context.Background(), id), core.CheckerLifetimeDiagnostics)
+		}
+
+		held, releaseHeld := pool.GetChecker(diagCtx("diag-held"), shared[0])
+		assert.Assert(t, held != nil)
+
+		// The other file on the same checker has to wait for it.
+		var sameGot atomic.Bool
+		go func() {
+			c, release := pool.GetChecker(diagCtx("diag-same"), shared[1])
+			sameGot.Store(c != nil)
+			release()
+		}()
+		synctest.Wait()
+		assert.Assert(t, !sameGot.Load(), "a file sharing a checker must wait for it")
+
+		// A file on another checker does not.
+		other, releaseOther := pool.GetChecker(diagCtx("diag-other"), separate)
+		assert.Assert(t, other != nil && other != held, "a file on another checker gets another checker")
+		releaseOther()
+
+		releaseHeld()
+		synctest.Wait()
+		assert.Assert(t, sameGot.Load(), "the waiting file gets the checker once it is released")
+	})
+}
+
+// A check of the whole project takes each checker a file at a time, so a pull on a file that
+// checker owns gets in between files rather than waiting out the whole project.
+func TestCheckerPoolWholeProgramCheckYieldsBetweenFiles(t *testing.T) {
+	t.Parallel()
+	session, pool := setupCheckerPoolSessionWithFiles(t, CheckerPoolOptions{MaxCheckers: 4, IdleTimeout: 10 * time.Second}, manyCheckerPoolFiles())
+	ls, err := session.GetLanguageService(context.Background(), "file:///src/index.ts")
+	assert.NilError(t, err)
+	program := ls.GetProgram()
+
+	files := program.SourceFiles()
+	owner, owned := largestCheckerGroup(t, program, pool.diagnosticsCount)
+	assert.Assert(t, len(owned) >= 3, "need a checker with enough files to interleave against")
+
+	synctest.Test(t, func(t *testing.T) {
+		pool := newTestCheckerPool(program, CheckerPoolOptions{MaxCheckers: 4, IdleTimeout: 30 * time.Second})
+
+		inFirstFile := make(chan struct{})
+		finishFirstFile := make(chan struct{})
+		var checked atomic.Int32
+		go func() {
+			pool.ForEachCheckerGroupDo(context.Background(), files, false /*singleThreaded*/, func(c *checker.Checker, _ int, file *ast.SourceFile) {
+				if pool.diagnosticsIndexFor(file) != owner {
+					return
+				}
+				if checked.Add(1) == 1 {
+					close(inFirstFile)
+					<-finishFirstFile
+				}
+			})
+		}()
+		<-inFirstFile
+
+		// A pull on another file the busy checker owns.
+		var checkedWhenPulled atomic.Int32
+		checkedWhenPulled.Store(-1)
+		go func() {
+			ctx := core.WithRequestID(context.Background(), "diag-during-check")
+			ctx = core.WithCheckerLifetime(ctx, core.CheckerLifetimeDiagnostics)
+			_, release := pool.GetChecker(ctx, owned[1])
+			checkedWhenPulled.Store(checked.Load())
+			release()
+		}()
+		synctest.Wait()
+		assert.Equal(t, checkedWhenPulled.Load(), int32(-1), "the pull waits while the checker is on a file")
+
+		close(finishFirstFile)
+		synctest.Wait()
+		assert.Assert(t, checkedWhenPulled.Load() > 0 && int(checkedWhenPulled.Load()) < len(owned),
+			"the pull must get the checker between files, not after the whole project")
+	})
+}
+
+// A whole-program check must run on the diagnostics checkers, of which there are as many as a build
+// would use, with the program's files split across them the way a build splits them.
+func TestCheckerPoolChecksWholeProgramAcrossDiagnosticsCheckers(t *testing.T) {
+	t.Parallel()
+	_, pool := setupCheckerPoolSessionWithFiles(t, CheckerPoolOptions{IdleTimeout: 10 * time.Second}, map[string]any{
+		"/src/tsconfig.json": `{ "compilerOptions": { "noLib": true } }`,
+		"/src/index.ts":      "export const x: number = 1;",
+		"/src/a.ts":          "export const a: string = 1;",
+		"/src/b.ts":          "export const b = 1;",
+	})
+	assert.Equal(t, pool.diagnosticsCount, compiler.GetCheckerCount(pool.program))
+	assert.Assert(t, pool.diagnosticsCount > 1, "a three-file program should be split over more than one checker")
+	for index := range pool.diagnosticsCount {
+		assert.Assert(t, pool.checkers[index] == nil, "nothing built before a check is asked for")
+	}
+
+	diagnostics := pool.program.GetSemanticDiagnostics(context.Background(), nil)
+	assert.Assert(t, len(diagnostics) > 0, "expected the seeded error")
+
+	// Every file is checked by the checker a build would have given it, and by no other.
+	associations := pool.getDiagnosticsAssociations()
+	assert.Equal(t, len(associations), len(pool.program.SourceFiles()))
+	used := 0
+	for index := range pool.diagnosticsCount {
+		if pool.checkers[index] != nil {
+			used++
+		}
+	}
+	assert.Assert(t, used > 1, "a whole-program check must spread over the checkers a build would use")
+}
+
+// Query checkers sit after the diagnostics ones, so a query never lands on a checker a whole-program
+// check is partway through.
+func TestCheckerPoolQueryCheckersSitAfterDiagnosticsCheckers(t *testing.T) {
+	t.Parallel()
+	_, pool := setupCheckerPoolSessionWithFiles(t, CheckerPoolOptions{MaxCheckers: 4, IdleTimeout: 10 * time.Second}, map[string]any{
+		"/src/tsconfig.json": `{ "compilerOptions": { "noLib": true } }`,
+		"/src/index.ts":      "export const x: number = 1;",
+		"/src/a.ts":          "export const a: string = 1;",
+		"/src/b.ts":          "export const b = 1;",
+	})
+	assert.Equal(t, len(pool.checkers), pool.diagnosticsCount+3, "MaxCheckers-1 query checkers on top of the diagnostics ones")
+
+	ctx := core.WithCheckerLifetime(core.WithRequestID(t.Context(), "query-after-diag"), core.CheckerLifetimeTemporary)
+	c, release := pool.GetChecker(ctx, nil)
+	defer release()
+	for index := range pool.diagnosticsCount {
+		assert.Assert(t, pool.checkers[index] != c, "a query must not use a diagnostics checker")
+	}
+}
+
+// The checkers a sweep uses are handed back when it is done with them: they hold the types of every
+// file in the program, and a later pull either finds the project unchanged, and answers from result
+// ids without checking, or finds it changed and needs new ones anyway.
+func TestCheckerPoolReleasesCheckersAfterAWholeProgramCheck(t *testing.T) {
+	t.Parallel()
+	_, pool := setupCheckerPoolSessionWithFiles(t, CheckerPoolOptions{IdleTimeout: 10 * time.Second}, map[string]any{
+		"/src/tsconfig.json": `{ "compilerOptions": { "noLib": true } }`,
+		"/src/index.ts":      "export const x: number = 1;",
+		"/src/a.ts":          "export const a: string = 1;",
+	})
+
+	anyDiagnosticsChecker := func() bool {
+		for index := range pool.diagnosticsCount {
+			if pool.checkers[index] != nil {
+				return true
+			}
+		}
+		return false
+	}
+
+	pool.program.GetSemanticDiagnostics(context.Background(), nil)
+	assert.Assert(t, anyDiagnosticsChecker())
+
+	assert.Assert(t, pool.releaseDiagnosticsCheckers(), "releasing reports that it dropped the checkers")
+	assert.Assert(t, !anyDiagnosticsChecker())
+	assert.Assert(t, !pool.releaseDiagnosticsCheckers(), "nothing left to release")
+
+	// Discarding is what the project system does once a program is replaced, and it has to happen
+	// before the next program's checkers are built or both generations are held at once.
+	pool.program.GetSemanticDiagnostics(context.Background(), nil)
+	assert.Assert(t, anyDiagnosticsChecker(), "a later check builds them again")
+	pool.Discard()
+	assert.Assert(t, !anyDiagnosticsChecker(), "a discarded pool must let go of its checkers")
+}
+
+// A build's worth of diagnostics checkers is what a workspace pull needs. A session without the
+// pull switched on keeps the single diagnostics checker it has always had, and does not pay for
+// the memory of the rest.
+func TestCheckerPoolKeepsOneDiagnosticsCheckerWithoutTheWorkspacePull(t *testing.T) {
+	t.Parallel()
+	_, pool := setupCheckerPoolSessionWithScope(t, CheckerPoolOptions{MaxCheckers: 4, IdleTimeout: 10 * time.Second},
+		manyCheckerPoolFiles(), lsutil.WorkspaceDiagnosticsScopeOff)
+
+	assert.Assert(t, compiler.GetCheckerCount(pool.program) > 1, "the program is big enough for a build to split it")
+	assert.Equal(t, pool.diagnosticsCount, 1, "without the pull, diagnostics stay on one checker")
+	assert.Equal(t, len(pool.checkers), 1+3, "one diagnostics checker plus MaxCheckers-1 query checkers")
+
+	// Every file goes to that one checker, as it did before the partition existed.
+	for _, file := range pool.program.SourceFiles() {
+		assert.Equal(t, pool.diagnosticsIndexFor(file), 0)
+	}
 }

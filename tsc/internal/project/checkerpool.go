@@ -20,20 +20,25 @@ import (
 const checkerHeldAnonymous = "<anonymous>"
 
 type CheckerPoolOptions struct {
-	// MaxCheckers controls the total number of checker slots per project
-	// (1 dedicated diagnostics checker + N-1 query checkers). Minimum 2.
-	// Zero uses the default (4).
+	// MaxCheckers bounds the query checkers a project keeps, at MaxCheckers-1 of them. Minimum 2.
+	// Zero uses the default (4). Diagnostics checkers are counted separately; see
+	// MatchBuildCheckerCount.
 	MaxCheckers int
 	// IdleTimeout controls how long an idle checker is kept
 	// before being disposed. Zero uses the default (30s).
 	IdleTimeout time.Duration
+	// MatchBuildCheckerCount makes diagnostics run on as many checkers as a build would use, over
+	// the same partition of files. Only a workspace pull checks a project that way; without it a
+	// project keeps one diagnostics checker and does not pay for the rest.
+	MatchBuildCheckerCount bool
 }
 
 // checkerPool manages three categories of type checkers for a project:
 //
-//   - Diagnostics (index 0): A single checker for LSP diagnostics, providing
-//     consistent walk order. Idle-cleaned.
-//   - Temporary (indices 1+): Ephemeral query checkers for LSP operations.
+//   - Diagnostics (indices 0 to diagnosticsCount-1): the checkers a build of this program would
+//     use, over the same partition of its files, so a file is checked in the editor by the checker
+//     the command line would check it with. Idle-cleaned.
+//   - Temporary (indices diagnosticsCount+): Ephemeral query checkers for LSP operations.
 //     Idle-cleaned after a configurable timeout.
 //   - API: A single checker for API operations, providing stable
 //     instance identity for reference equality on type/symbol handles.
@@ -49,13 +54,21 @@ type checkerPool struct {
 	// query checkers are not disposed until the pool is GC'd.
 	discarded bool
 
-	// checkers[0] is the diagnostics checker.
-	// checkers[1:] are ephemeral query checkers.
+	// diagnosticsCount is how many checkers a build of this program would check it with.
+	diagnosticsCount int
+	// diagnosticsAssociations maps each of the program's files to the diagnostics checker that owns
+	// it. Built on first use, because working it out walks every file in the program and most
+	// programs are never asked for diagnostics.
+	diagnosticsAssociations     map[*ast.SourceFile]int
+	diagnosticsAssociationsOnce sync.Once
+
+	// checkers[:diagnosticsCount] are the diagnostics checkers.
+	// checkers[diagnosticsCount:] are ephemeral query checkers.
 	// All are idle-cleaned.
 	checkers            []*checker.Checker
 	heldBy              []string                // heldBy[i] is the requestID holding checker i, checkerHeldAnonymous, or "" if not held
-	fileAssociations    map[*ast.SourceFile]int // file → query checker index (1+)
-	requestAssociations map[string]int          // requestID → checker index
+	fileAssociations    map[*ast.SourceFile]int // file → query checker index
+	requestAssociations map[string]int          // requestID → query checker index
 
 	// lastReleased tracks when each checker was last released.
 	lastReleased []time.Time
@@ -69,7 +82,9 @@ type checkerPool struct {
 	persistentChecker *checker.Checker
 	persistentHeld    bool
 
-	diagSem       chan struct{}
+	// Which diagnostics checker serves a request is decided by the file, so they get a slot each
+	// rather than sharing a counting semaphore the way the interchangeable query checkers do.
+	diagSems      []chan struct{}
 	querySem      chan struct{}
 	persistentSem chan struct{}
 
@@ -85,25 +100,36 @@ func newCheckerPool(opts CheckerPoolOptions, program *compiler.Program, log func
 	if opts.MaxCheckers <= 0 {
 		opts.MaxCheckers = 4
 	} else if opts.MaxCheckers < 2 {
-		opts.MaxCheckers = 2 // at least 1 diagnostics + 1 query checker
+		opts.MaxCheckers = 2 // at least the diagnostics slot + 1 query checker
 	}
 	if opts.IdleTimeout <= 0 {
 		opts.IdleTimeout = 30 * time.Second
 	}
 	querySlots := opts.MaxCheckers - 1
+	// The partition only pays for itself when whole projects are checked the way a build does.
+	diagnosticsCount := 1
+	if opts.MatchBuildCheckerCount {
+		diagnosticsCount = compiler.GetCheckerCount(program)
+	}
+	diagSems := make([]chan struct{}, diagnosticsCount)
+	for i := range diagSems {
+		diagSems[i] = make(chan struct{}, 1)
+	}
+	slots := diagnosticsCount + querySlots
 	pool := &checkerPool{
 		program:                program,
 		opts:                   opts,
-		checkers:               make([]*checker.Checker, opts.MaxCheckers),
-		heldBy:                 make([]string, opts.MaxCheckers),
+		diagnosticsCount:       diagnosticsCount,
+		checkers:               make([]*checker.Checker, slots),
+		heldBy:                 make([]string, slots),
 		fileAssociations:       make(map[*ast.SourceFile]int),
 		requestAssociations:    make(map[string]int),
-		lastReleased:           make([]time.Time, opts.MaxCheckers),
-		diagSem:                make(chan struct{}, 1),
+		lastReleased:           make([]time.Time, slots),
+		diagSems:               diagSems,
 		querySem:               make(chan struct{}, querySlots),
 		persistentSem:          make(chan struct{}, 1),
 		log:                    log,
-		globalDiagCheckerCount: make([]int, opts.MaxCheckers),
+		globalDiagCheckerCount: make([]int, slots),
 	}
 
 	if pool.log == nil {
@@ -134,7 +160,7 @@ func (p *checkerPool) GetChecker(ctx context.Context, file *ast.SourceFile) (*ch
 
 	switch lifetime {
 	case core.CheckerLifetimeDiagnostics:
-		return p.getDiagnosticsChecker(ctx, requestID)
+		return p.getDiagnosticsChecker(requestID, file)
 	case core.CheckerLifetimeAPI:
 		return p.getPersistentChecker()
 	default:
@@ -143,18 +169,14 @@ func (p *checkerPool) GetChecker(ctx context.Context, file *ast.SourceFile) (*ch
 }
 
 // tryReacquireForRequest checks whether the given request already has an
-// associated checker. If so, it either returns the checker directly (still held)
-// or reacquires it by claiming a semaphore slot. The caller must provide the
-// appropriate semaphore channel and indicate whether this is a diagnostics
-// request (isDiag). If the associated checker is in the wrong category
-// (e.g. a diagnostics index for a query request), the association is deleted
-// and normal acquisition proceeds.
+// associated query checker. If so, it either returns the checker directly (still
+// held) or reacquires it by claiming a semaphore slot.
 //
 // Returns (checker, release, true) if the request was served (either still held
 // or reclaimed). Returns (nil, nil, false) if the caller must proceed with
 // normal acquisition — in this case, a semaphore slot has already been claimed.
 // Must NOT be called with p.mu held.
-func (p *checkerPool) tryReacquireForRequest(requestID string, sem chan<- struct{}, isDiag bool) (*checker.Checker, func(), bool) {
+func (p *checkerPool) tryReacquireForRequest(requestID string, sem chan<- struct{}) (*checker.Checker, func(), bool) {
 	if requestID == "" {
 		sem <- struct{}{}
 		return nil, nil, false
@@ -163,15 +185,6 @@ func (p *checkerPool) tryReacquireForRequest(requestID string, sem chan<- struct
 	p.mu.Lock()
 	index, ok := p.requestAssociations[requestID]
 	if !ok {
-		p.mu.Unlock()
-		sem <- struct{}{}
-		return nil, nil, false
-	}
-
-	// Validate that the associated index matches the expected category.
-	// Index 0 is for diagnostics; indices 1+ are for queries.
-	if (isDiag && index != 0) || (!isDiag && index == 0) {
-		delete(p.requestAssociations, requestID)
 		p.mu.Unlock()
 		sem <- struct{}{}
 		return nil, nil, false
@@ -215,42 +228,138 @@ func (p *checkerPool) tryReacquireForRequest(requestID string, sem chan<- struct
 	return nil, nil, false
 }
 
-// getDiagnosticsChecker returns the dedicated diagnostics checker (index 0).
-// Creates it on first use. Blocks on diagSem if it's currently in use.
-func (p *checkerPool) getDiagnosticsChecker(ctx context.Context, requestID string) (*checker.Checker, func()) {
-	const diagIndex = 0
-
-	if c, release, ok := p.tryReacquireForRequest(requestID, p.diagSem, true); ok {
-		return c, release
-	}
-
-	// Token consumed — proceed with normal acquisition.
-	p.mu.Lock()
-	defer p.mu.Unlock()
-
-	if p.checkers[diagIndex] == nil {
-		p.log("checkerpool: Creating diagnostics checker")
-		c, _ := checker.NewChecker(p.program, nil)
-		p.checkers[diagIndex] = c
-	}
-
-	c := p.checkers[diagIndex]
-	p.heldBy[diagIndex] = holdTag(requestID)
-	p.log("checkerpool: Acquired diagnostics checker for request " + holdTag(requestID))
-	if requestID != "" {
-		if _, alreadyRegistered := p.requestAssociations[requestID]; !alreadyRegistered {
-			p.requestAssociations[requestID] = diagIndex
-			p.registerRequestCleanup(ctx, requestID)
+// getDiagnosticsAssociations returns which diagnostics checker owns each of the program's files,
+// split the way a build splits them.
+func (p *checkerPool) getDiagnosticsAssociations() map[*ast.SourceFile]int {
+	p.diagnosticsAssociationsOnce.Do(func() {
+		files := p.program.SourceFiles()
+		associations := compiler.GetFileCheckerAssociations(p.program, p.diagnosticsCount)
+		byFile := make(map[*ast.SourceFile]int, len(files))
+		for i, file := range files {
+			byFile[file] = associations[i]
 		}
-	}
-	return c, p.createRelease(requestID, diagIndex, c)
+		p.diagnosticsAssociations = byFile
+	})
+	return p.diagnosticsAssociations
 }
 
-// getQueryChecker returns an ephemeral query checker from indices 1+.
+// diagnosticsIndexFor returns the diagnostics checker that owns a file. A caller that named no
+// file, or one the program does not have, gets the first checker, as it would from a build.
+func (p *checkerPool) diagnosticsIndexFor(file *ast.SourceFile) int {
+	if file == nil || p.diagnosticsCount == 1 {
+		return 0
+	}
+	return p.getDiagnosticsAssociations()[file]
+}
+
+// getDiagnosticsChecker returns the diagnostics checker that owns the file. Unlike a query checker
+// it is not reacquired by request: the file decides which one a caller gets, so a request is handed
+// back the checker that already holds that file's types. A caller must not hold one diagnostics
+// checker while asking for another, or two doing it in opposite orders would deadlock.
+func (p *checkerPool) getDiagnosticsChecker(requestID string, file *ast.SourceFile) (*checker.Checker, func()) {
+	index := p.diagnosticsIndexFor(file)
+	c, release := p.acquireDiagnosticsChecker(index, requestID)
+	p.log(fmt.Sprintf("checkerpool: Acquired diagnostics checker %d for request %s", index, holdTag(requestID)))
+	return c, release
+}
+
+// acquireDiagnosticsChecker takes the numbered diagnostics checker, creating it on first use and
+// blocking while another caller holds it.
+func (p *checkerPool) acquireDiagnosticsChecker(index int, requestID string) (*checker.Checker, func()) {
+	p.diagSems[index] <- struct{}{}
+
+	p.mu.Lock()
+	// Marking the slot held before letting go of the lock keeps idle cleanup and Discard off it
+	// while there is nothing in it to see.
+	p.heldBy[index] = holdTag(requestID)
+	c := p.checkers[index]
+	p.mu.Unlock()
+
+	if c == nil {
+		// Built without the pool's lock: building a checker merges the globals of every file in
+		// the program, and a whole-program check builds one per checker at once.
+		p.log(fmt.Sprintf("checkerpool: Creating diagnostics checker %d", index))
+		c, _ = checker.NewChecker(p.program, nil)
+		p.mu.Lock()
+		p.checkers[index] = c
+		p.mu.Unlock()
+	}
+
+	return c, p.createRelease(requestID, index, c)
+}
+
+// ForEachCheckerGroupDo implements compiler.CheckerPool. A whole-program check runs on the
+// diagnostics checkers, over the partition a build uses, so the editor and the command line check
+// each file with the same checker. Query checkers, handed out by request rather than by file, take
+// no part in it.
+func (p *checkerPool) ForEachCheckerGroupDo(ctx context.Context, files []*ast.SourceFile, singleThreaded bool, cb func(c *checker.Checker, fileIndex int, file *ast.SourceFile)) {
+	associations := p.getDiagnosticsAssociations()
+	wg := core.NewWorkGroup(singleThreaded)
+	for index := range p.diagnosticsCount {
+		wg.Queue(func() {
+			// Files this checker owns, in the order they were given. A file the program does not
+			// have belongs to no checker and is left alone.
+			var group []int
+			for i, file := range files {
+				if owner, ok := associations[file]; ok && owner == index {
+					group = append(group, i)
+				}
+			}
+			if len(group) == 0 {
+				// Nothing to do, so don't build a checker to do it with.
+				return
+			}
+			requestID := core.GetRequestID(ctx)
+			p.log(fmt.Sprintf("checkerpool: Checking %d files on diagnostics checker %d for request %s", len(group), index, holdTag(requestID)))
+			for _, i := range group {
+				// A cancelled caller discards what comes back anyway. Checked here rather than
+				// left to waitForIdle, which returns without looking at the context when nothing
+				// is outstanding. Bailing leaves the rest of the group's diagnostics zero, so a
+				// caller must test for cancellation before reading them.
+				if ctx.Err() != nil {
+					return
+				}
+				// Taken a file at a time rather than for the whole group: a check of the whole
+				// project runs for as long as the project is big, and a pull on an open file
+				// this checker owns would otherwise wait out all of it.
+				c, release := p.acquireDiagnosticsChecker(index, requestID)
+				cb(c, i, files[i])
+				release()
+			}
+		})
+	}
+	wg.RunAndWait()
+}
+
+// releaseDiagnosticsCheckers drops the checkers a whole-program check used. They hold the types of
+// every file it reached, which is worth keeping only while something is likely to ask again. One
+// another caller is holding is left to the idle timer. The global diagnostics they found are kept,
+// since nothing else collects them.
+func (p *checkerPool) releaseDiagnosticsCheckers() bool {
+	p.mu.Lock()
+	defer p.mu.Unlock()
+	released := false
+	for index := range p.diagnosticsCount {
+		c := p.checkers[index]
+		if c == nil || p.heldBy[index] != "" {
+			continue
+		}
+		p.log(fmt.Sprintf("checkerpool: Releasing diagnostics checker %d on request", index))
+		p.mergeGlobalDiagnosticsFromCheckerLocked(index, c)
+		p.disposeCheckerLocked(index, c)
+		released = true
+	}
+	if released && !p.discarded {
+		p.scheduleCleanupLocked()
+	}
+	return released
+}
+
+// getQueryChecker returns an ephemeral query checker from the slots after the diagnostics ones.
 // Uses request affinity, then file affinity, then finds/creates.
 // Blocks on querySem if all query slots are in use.
 func (p *checkerPool) getQueryChecker(ctx context.Context, requestID string, file *ast.SourceFile) (*checker.Checker, func()) {
-	if c, release, ok := p.tryReacquireForRequest(requestID, p.querySem, false); ok {
+	if c, release, ok := p.tryReacquireForRequest(requestID, p.querySem); ok {
 		return c, release
 	}
 
@@ -260,7 +369,7 @@ func (p *checkerPool) getQueryChecker(ctx context.Context, requestID string, fil
 
 	// Try file affinity.
 	if file != nil {
-		if index, ok := p.fileAssociations[file]; ok && index > 0 {
+		if index, ok := p.fileAssociations[file]; ok && index >= p.diagnosticsCount {
 			if c := p.checkers[index]; c != nil && p.heldBy[index] == "" {
 				p.heldBy[index] = holdTag(requestID)
 				if requestID != "" {
@@ -295,13 +404,13 @@ func (p *checkerPool) getQueryChecker(ctx context.Context, requestID string, fil
 // available. Must be called with p.mu held.
 func (p *checkerPool) findOrCreateQueryCheckerLocked() (*checker.Checker, int) {
 	// Prefer an existing idle checker.
-	for i := 1; i < len(p.checkers); i++ {
+	for i := p.diagnosticsCount; i < len(p.checkers); i++ {
 		if c := p.checkers[i]; c != nil && p.heldBy[i] == "" {
 			return c, i
 		}
 	}
 	// Create in the first empty slot.
-	for i := 1; i < len(p.checkers); i++ {
+	for i := p.diagnosticsCount; i < len(p.checkers); i++ {
 		if p.checkers[i] == nil {
 			p.log(fmt.Sprintf("checkerpool: Creating query checker %d", i))
 			c, _ := checker.NewChecker(p.program, nil)
@@ -346,18 +455,24 @@ func (p *checkerPool) createRelease(requestID string, index int, c *checker.Chec
 	return sync.OnceFunc(func() {
 		p.mu.Lock()
 
-		if c.WasCanceled() {
+		switch {
+		case c.WasCanceled():
 			// Canceled checkers must be disposed.
 			p.log(fmt.Sprintf("checkerpool: Checker %d for request %s was canceled, disposing", index, holdTag(requestID)))
 			p.disposeCheckerLocked(index, c)
-		} else {
+		case p.discarded && index < p.diagnosticsCount:
+			// The program this checked has been replaced, so nothing will ask it for diagnostics
+			// again. Let go of it rather than holding a whole program's types until the pool is.
+			p.mergeGlobalDiagnosticsFromCheckerLocked(index, c)
+			p.disposeCheckerLocked(index, c)
+		default:
 			p.mergeGlobalDiagnosticsFromCheckerLocked(index, c)
 			p.heldBy[index] = ""
 			p.lastReleased[index] = time.Now()
 			if !p.discarded {
 				p.scheduleCleanupLocked()
 			}
-			// If discarded, skip scheduling cleanup — checkers stay alive
+			// If discarded, skip scheduling cleanup — query checkers stay alive
 			// until the pool is garbage collected so that API clients can
 			// continue resolving type/symbol handles.
 		}
@@ -369,8 +484,8 @@ func (p *checkerPool) createRelease(requestID string, index int, c *checker.Chec
 		p.mu.Unlock()
 
 		// Release the semaphore slot.
-		if index == 0 {
-			<-p.diagSem
+		if index < p.diagnosticsCount {
+			<-p.diagSems[index]
 		} else {
 			<-p.querySem
 		}
@@ -484,6 +599,9 @@ func (p *checkerPool) mergeGlobalDiagnosticsFromCheckerLocked(index int, c *chec
 		return
 	}
 	p.globalDiagCheckerCount[index] = len(globals)
+	if len(globals) == 0 {
+		return
+	}
 	before := len(p.globalDiagAccumulated)
 	p.globalDiagAccumulated = compiler.SortAndDeduplicateDiagnostics(append(p.globalDiagAccumulated, globals...))
 	if len(p.globalDiagAccumulated) != before {
@@ -510,7 +628,7 @@ func (p *checkerPool) TakeNewGlobalDiagnostics() bool {
 }
 
 // Discard signals that this pool's program has been replaced. The pool
-// remains functional but stops its idle-cleanup timer so that checkers
+// remains functional but stops its idle-cleanup timer so that query checkers
 // are not disposed until the pool is GC'd. The API checker is unaffected
 // since it is never idle-cleaned.
 func (p *checkerPool) Discard() {
@@ -521,6 +639,15 @@ func (p *checkerPool) Discard() {
 	}
 	p.log("checkerpool: Discarding pool, stopping idle cleanup")
 	p.discarded = true
+	// A discarded pool belongs to a program that has been replaced, so let go of the checkers a
+	// sweep left behind rather than holding a whole program's types for the life of the snapshot.
+	// Query checkers stay: an API client may still be resolving handles they handed out.
+	for index := range p.diagnosticsCount {
+		if c := p.checkers[index]; c != nil && p.heldBy[index] == "" {
+			p.mergeGlobalDiagnosticsFromCheckerLocked(index, c)
+			p.disposeCheckerLocked(index, c)
+		}
+	}
 	if p.cleanupTimer != nil {
 		p.cleanupTimer.Stop()
 		p.cleanupTimer = nil

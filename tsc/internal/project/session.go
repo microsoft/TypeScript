@@ -79,6 +79,12 @@ type SessionOptions struct {
 	RunExternalCode    bool
 	DebounceDelay      time.Duration
 	CheckerPoolOptions CheckerPoolOptions
+
+	// workspaceDiagnosticsEnabled tracks whether the workspace pull is switched on, so that a
+	// project only pays for a build's worth of checkers when something is going to check it that
+	// way. Written whenever the user's preferences change and read when a program's pool is built,
+	// so a session that turns the pull on picks it up as programs are rebuilt.
+	workspaceDiagnosticsEnabled atomic.Bool
 }
 
 type SessionInit struct {
@@ -288,6 +294,7 @@ func (s *Session) Configure(config lsutil.UserPreferences) {
 	oldConfig := s.workspaceUserPreferences
 	s.workspaceUserPreferences = config
 	s.userConfigRWMu.Unlock()
+	s.options.workspaceDiagnosticsEnabled.Store(config.WorkspaceDiagnosticsScope.Enabled())
 
 	if config.Locale != "" {
 		oldLocale := s.client.GetLocale()
