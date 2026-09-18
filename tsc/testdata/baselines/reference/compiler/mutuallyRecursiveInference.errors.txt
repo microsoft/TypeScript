@@ -1,9 +1,11 @@
 mutuallyRecursiveInference.ts(2,5): error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
 mutuallyRecursiveInference.ts(9,5): error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
 mutuallyRecursiveInference.ts(10,5): error TS2564: Property 'b' has no initializer and is not definitely assigned in the constructor.
+mutuallyRecursiveInference.ts(12,9): error TS5114: A base type of 'L<X>' has type arguments that circularly reference members of the type.
+mutuallyRecursiveInference.ts(12,9): error TS5114: A base type of 'X' has type arguments that circularly reference members of the type.
 
 
-==== mutuallyRecursiveInference.ts (3 errors) ====
+==== mutuallyRecursiveInference.ts (5 errors) ====
     class T<A> {
         a: A;
         ~
@@ -22,6 +24,10 @@ mutuallyRecursiveInference.ts(10,5): error TS2564: Property 'b' has no initializ
 !!! error TS2564: Property 'b' has no initializer and is not definitely assigned in the constructor.
         m2() {
             this.a
+            ~~~~~~
+!!! error TS5114: A base type of 'L<X>' has type arguments that circularly reference members of the type.
+            ~~~~~~
+!!! error TS5114: A base type of 'X' has type arguments that circularly reference members of the type.
         }
     }
     
