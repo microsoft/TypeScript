@@ -6013,6 +6013,21 @@ export const obj = { m: 1, s: "hi", b: true };
         );
     });
 
+    test("printFile preserves JSON source file semantics", async () => {
+        await using api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({
+                compilerOptions: { resolveJsonModule: true },
+                files: ["/src/data.json"],
+            }),
+            "/src/data.json": `{"x": 1}`,
+        });
+
+        const snapshot = await api.createSnapshot({ openProject: "/tsconfig.json" });
+        const sourceFile = await snapshot.getConfiguredProject("/tsconfig.json")!.program.getSourceFile("/src/data.json");
+        assert(sourceFile);
+        assert.strictEqual(await api.printer.printFile(sourceFile), `{ "x": 1 }\n`);
+    });
+
     test("printNode with factory-created union type", async () => {
         await using api = spawnAPI(emitterFiles);
 

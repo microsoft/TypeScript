@@ -5881,6 +5881,21 @@ export const obj = { m: 1, s: "hi", b: true };
         );
     });
 
+    test("printFile preserves JSON source file semantics", () => {
+        using api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({
+                compilerOptions: { resolveJsonModule: true },
+                files: ["/src/data.json"],
+            }),
+            "/src/data.json": `{"x": 1}`,
+        });
+
+        const snapshot = api.createSnapshot({ openProject: "/tsconfig.json" });
+        const sourceFile = snapshot.getConfiguredProject("/tsconfig.json")!.program.getSourceFile("/src/data.json");
+        assert(sourceFile);
+        assert.strictEqual(api.printer.printFile(sourceFile), `{ "x": 1 }\n`);
+    });
+
     test("printNode with factory-created union type", () => {
         using api = spawnAPI(emitterFiles);
 
