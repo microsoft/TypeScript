@@ -447,8 +447,8 @@ describe("API", () => {
 
         const empty = await api.createSnapshot();
         assert.deepEqual(empty.getProjects(), []);
-        assert.equal("createdPrograms" in empty.operation, false);
-        assert.equal("openedFiles" in empty.operation, false);
+        assert.equal(empty.operation.createdPrograms, undefined);
+        assert.equal(empty.operation.openedFiles, undefined);
     });
 
     test("snapshot.update reconfigures a synthetic program", async () => {
@@ -3468,6 +3468,8 @@ describe("updateSnapshot file systems", () => {
                 "vscode-notebook-cell://authority/workspace": { files: [], directories: ["notebook.ipynb"] },
                 "vscode-notebook-cell://authority/": { files: [], directories: ["workspace"] },
             },
+            symlinks: undefined,
+            removedPaths: undefined,
         });
 
         const directories = { "/explicit": { files: ["provided.ts"], directories: [] } };
@@ -7142,6 +7144,7 @@ describe("Program - emit", () => {
                 "/dist/src/testing.js",
                 "/dist/src/testing.d.ts",
             ],
+            fileSystem: undefined,
         });
 
         const js = fs.readFile?.("/dist/src/index.js");
@@ -7172,6 +7175,7 @@ describe("Program - emit", () => {
                 "/dist/src/index.d.ts",
                 "/dist/src/testing.d.ts",
             ],
+            fileSystem: undefined,
         });
 
         const js = fs.readFile?.("/dist/src/index.js");
@@ -7202,6 +7206,7 @@ describe("Program - emit", () => {
                 "/dist/src/index.js",
                 "/dist/src/testing.js",
             ],
+            fileSystem: undefined,
         });
 
         const js = fs.readFile?.("/dist/src/index.js");
@@ -7312,6 +7317,7 @@ describe("Program - emit", () => {
             diagnostics: [],
             emitSkipped: false,
             emittedFiles: [],
+            fileSystem: undefined,
         });
         assert.deepEqual(await project.program.emitToString(), {
             diagnostics: [],
