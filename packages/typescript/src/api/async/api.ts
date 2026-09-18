@@ -260,11 +260,13 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
     private initialized: boolean = false;
     private initializing: Promise<void> | undefined;
     private activeSnapshots: Set<Snapshot> = new Set();
+    readonly printer: Printer;
     readonly internal: InternalAPI;
 
     constructor(options: APIOptions | LSPConnectionOptions = {}) {
         this.client = new Client(options);
         this.sourceFileCache = new SourceFileCache();
+        this.printer = new Printer(this.client);
         this.internal = new InternalAPI(this.client, () => this.ensureInitialized()); // @sync: this.internal = new InternalAPI(this.client, this.ensureInitialized);
     }
 
@@ -1089,7 +1091,6 @@ export class Project<Id extends ProjectId = ProjectId> {
 
     readonly program: Program<Id>;
     readonly checker: Checker;
-    readonly emitter: Emitter;
     readonly languageService: LanguageService;
     private client: Client;
     private snapshotId: number;
@@ -1130,7 +1131,6 @@ export class Project<Id extends ProjectId = ProjectId> {
             client,
             objectRegistry,
         );
-        this.emitter = new Emitter(client);
         this.languageService = new LanguageService(snapshotId, this, client, objectRegistry);
     }
 
@@ -2557,7 +2557,7 @@ export interface PrintNodeOptions {
     terminateUnterminatedLiterals?: boolean | undefined;
 }
 
-export class Emitter {
+export class Printer {
     private client: Client;
 
     constructor(client: Client) {
@@ -2566,6 +2566,17 @@ export class Emitter {
 
     async printNode(node: Node, options: PrintNodeOptions = {}): Promise<string> {
         const encoded = encodeNode(node);
+        const base64 = uint8ArrayToBase64(encoded);
+        return this.client.apiRequest("printNode", {
+            data: base64,
+            preserveSourceNewlines: options.preserveSourceNewlines,
+            neverAsciiEscape: options.neverAsciiEscape,
+            terminateUnterminatedLiterals: options.terminateUnterminatedLiterals,
+        });
+    }
+
+    async printFile(sourceFile: SourceFile, options: PrintNodeOptions = {}): Promise<string> {
+        const encoded = encodeNode(sourceFile);
         const base64 = uint8ArrayToBase64(encoded);
         return this.client.apiRequest("printNode", {
             data: base64,

@@ -1244,6 +1244,7 @@ export const buildAPI = task({
 });
 
 async function runBuildAPITests() {
+    await run("npm", ["run", "-w", "@typescript/typescript", "generate:sync"]);
     await run("npm", ["run", "-w", "@typescript/typescript", "build:test"]);
 }
 

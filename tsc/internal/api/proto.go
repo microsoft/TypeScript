@@ -218,7 +218,7 @@ const (
 	MethodGetProgramDiagnostics           Method = "getProgramDiagnostics"
 	MethodGetGlobalDiagnostics            Method = "getGlobalDiagnostics"
 	MethodGetConfigFileParsingDiagnostics Method = "getConfigFileParsingDiagnostics"
-	// Emitter methods
+	// Printer methods
 	MethodPrintNode              Method = "printNode"
 	MethodFormatNodeForInsertion Method = "formatNodeForInsertion"
 	MethodEmit                   Method = "emit"

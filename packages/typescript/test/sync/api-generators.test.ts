@@ -1384,7 +1384,8 @@ describe("API - generator batching", () => {
         try {
             using snapshot = api.batch(api.createSnapshot.gen({ openProject: "/tsconfig.json" }))[0];
             const project = snapshot.getConfiguredProject("/tsconfig.json")!;
-            const { checker, emitter, languageService, program } = project;
+            const { checker, languageService, program } = project;
+            const { printer } = api;
             const indexFile = program.getSourceFile("/src/index.ts")!;
             const modelsFile = program.getSourceFile("/src/models.ts")!;
 
@@ -1668,7 +1669,8 @@ describe("API - generator batching", () => {
                 parityCase("Checker", "getTargetSymbol", checker.getTargetSymbol, assertOptionalSymbolsEquivalent, boxedOptSymbol),
                 parityCase("Checker", "getExportSymbolOfSymbol", checker.getExportSymbolOfSymbol, assertSymbolsEquivalent, localCombineSymbol),
 
-                parityCase("Emitter", "printNode", emitter.printNode, assertDeepEquivalent, combineDeclaration, { preserveSourceNewlines: true }),
+                parityCase("Printer", "printNode", printer.printNode, assertDeepEquivalent, combineDeclaration, { preserveSourceNewlines: true }),
+                parityCase("Printer", "printFile", printer.printFile, assertDeepEquivalent, indexFile, { preserveSourceNewlines: true }),
                 parityCase("SnapshotInternalAPI", "formatNodeForInsertion", snapshot.internal.formatNodeForInsertion, assertDeepEquivalent, combineDeclaration, "/src/index.ts", combineDeclaration.pos),
                 parityCase("NodeHandle", "resolve", nodeHandle.resolve, assertOptionalNodesEquivalent),
                 parityCase("NodeHandle", "resolve", nodeHandle.resolve, assertOptionalNodesEquivalent, project),
@@ -1763,7 +1765,7 @@ describe("API - generator batching", () => {
                 { name: "LanguageService", value: languageService },
                 { name: "Program", value: program },
                 { name: "Checker", value: checker },
-                { name: "Emitter", value: emitter },
+                { name: "Printer", value: printer },
                 { name: "SnapshotInternalAPI", value: snapshot.internal },
                 { name: "NodeHandle", value: nodeHandle },
                 { name: "Symbol", value: combineSymbol },
