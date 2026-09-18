@@ -354,11 +354,14 @@ func (p *checkerPool) ForEachCheckerGroupDo(ctx context.Context, files []*ast.So
 	// A caller the user is waiting on is what everything else stands aside for; waiting here would
 	// be waiting on itself, and the checkers would take turns rather than run together.
 	standAside := !core.IsInteractiveRequest(ctx)
+	// Counted across the checkers rather than per checker, so a caller sees one number for the
+	// check rather than one per checker.
+	reportProgress := checkProgressFrom(ctx)
 	// A snapshot update part way through discards this pool. The check is still going to ask for
 	// its checkers, so they have to outlast the discard; see endSweep.
 	p.beginSweep()
 	defer p.endSweep()
-	var next atomic.Int64
+	var next, checked atomic.Int64
 	// Single threaded, one checker takes the whole queue anyway; make it the first, which is where a
 	// file no checker has seen goes too.
 	workers := p.diagnosticsCount
@@ -399,10 +402,18 @@ func (p *checkerPool) ForEachCheckerGroupDo(ctx context.Context, files []*ast.So
 				cb(c, i, files[i])
 				release()
 				p.noteDiagnosticsAffinity(files[i], index)
+				if done := checked.Add(1); reportProgress != nil && done%checkProgressBatchFiles == 0 {
+					reportProgress(int(done), len(files))
+				}
 			}
 		})
 	}
 	wg.RunAndWait()
+	// The last batch is rarely a whole one, so the final count is reported here rather than left
+	// short of where the check actually got to.
+	if reportProgress != nil {
+		reportProgress(int(checked.Load()), len(files))
+	}
 }
 
 // beginSweep records a whole-program check as running on this pool.

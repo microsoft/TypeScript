@@ -1890,3 +1890,38 @@ func TestCheckerPoolIdleCleanupWaitsForARunningCheck(t *testing.T) {
 		synctest.Wait()
 	})
 }
+
+// A bar has a hundred positions however big the sweep, so a report per file is work no one can
+// see. The final count is still reported, or the bar stops short of where the check got to.
+func TestCheckerPoolBatchesProgressReports(t *testing.T) {
+	t.Parallel()
+
+	session, pool := setupCheckerPoolSessionWithFiles(t, CheckerPoolOptions{}, manyCheckerPoolFiles())
+	t.Cleanup(session.Close)
+
+	files := pool.program.SourceFiles()
+	var mu sync.Mutex
+	var reports [][2]int
+	ctx := WithCheckProgress(
+		core.WithCheckerLifetime(context.Background(), core.CheckerLifetimeDiagnostics),
+		func(checked, total int) {
+			mu.Lock()
+			defer mu.Unlock()
+			reports = append(reports, [2]int{checked, total})
+		})
+
+	checked := 0
+	pool.ForEachCheckerGroupDo(ctx, files, true /*singleThreaded*/, func(*checker.Checker, int, *ast.SourceFile) {
+		checked++
+	})
+
+	assert.Equal(t, checked, len(files), "every file is checked")
+	assert.Equal(t, len(reports), checked/checkProgressBatchFiles+1,
+		"one report per %d files plus a final one, for %d files: %v", checkProgressBatchFiles, checked, reports)
+	last := reports[len(reports)-1]
+	assert.Equal(t, last[0], checked, "the last report is the final count")
+	assert.Equal(t, last[1], len(files), "the total is the files it was given")
+	for _, report := range reports[:len(reports)-1] {
+		assert.Equal(t, report[0]%checkProgressBatchFiles, 0, "batched reports land on a batch boundary: %v", reports)
+	}
+}
