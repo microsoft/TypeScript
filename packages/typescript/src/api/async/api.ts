@@ -576,10 +576,10 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         return this.getOwnedCreatedProgram(snapshot, "createIncrementalProgram");
     }
 
-    private async getOwnedCreatedProgram(snapshot: SnapshotForOperationResults<readonly [CreateSnapshotProgramParams], undefined>, method: "createProgram" | "createIncrementalProgram"): Promise<Program> {
+    private getOwnedCreatedProgram(snapshot: SnapshotForOperationResults<readonly [CreateSnapshotProgramParams], undefined>, method: "createProgram" | "createIncrementalProgram"): Program {
         const program = snapshot.operation.createdPrograms[0];
         if (!program) {
-            await snapshot.dispose();
+            void snapshot.dispose();
             throw new Error(`${method} did not return a project`);
         }
         program.setOwnedSnapshot(snapshot);

@@ -168,19 +168,21 @@ func TestIncrementalProgramComposesWithSnapshotUpdates(t *testing.T) {
 	session := NewLSPSession(projectSession, nil)
 	defer session.Close()
 	ctx := context.Background()
-	options := CreateProgramOptions{CompilerOptions: core.CompilerOptions{
-		Declaration:     core.TSTrue,
-		Incremental:     core.TSTrue,
-		NoLib:           core.TSTrue,
-		OutDir:          "/home/projects/p/out",
-		RootDir:         "/home/projects/p",
-		TsBuildInfoFile: buildInfoFile,
-	}}
+	options := func() CreateProgramOptions {
+		return CreateProgramOptions{CompilerOptions: core.CompilerOptions{
+			Declaration:     core.TSTrue,
+			Incremental:     core.TSTrue,
+			NoLib:           core.TSTrue,
+			OutDir:          "/home/projects/p/out",
+			RootDir:         "/home/projects/p",
+			TsBuildInfoFile: buildInfoFile,
+		}}
+	}
 
 	created, err := session.handleCreateSnapshot(ctx, &CreateSnapshotParams{
 		CreatePrograms: []*CreateSnapshotProgramParams{{
 			RootFiles:   []DocumentIdentifier{{FileName: mainFile}},
-			Options:     options,
+			Options:     options(),
 			Incremental: true,
 		}},
 	})
@@ -223,7 +225,7 @@ func TestIncrementalProgramComposesWithSnapshotUpdates(t *testing.T) {
 			ReconfigurePrograms: []*ReconfigureSnapshotProgramParams{{
 				Id:        programID,
 				RootFiles: []DocumentIdentifier{{FileName: mainFile}},
-				Options:   options,
+				Options:   options(),
 			}},
 		},
 	})
