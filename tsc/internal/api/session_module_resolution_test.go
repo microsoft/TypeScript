@@ -230,16 +230,18 @@ func TestModuleResolutionCallbackErrorsAreReturned(t *testing.T) {
 	session := NewLSPSession(projectSession, nil)
 	defer session.Close()
 	conn := &failingModuleResolutionConn{}
+	registration := &moduleResolverRegistration{
+		id:                        1,
+		resolveModuleNameCallback: "resolveModuleName/1",
+	}
 	factory := &moduleResolutionProviderFactory{
-		identity:         1,
+		registration:     registration,
 		session:          session,
 		conn:             conn,
 		ctx:              context.Background(),
-		callback:         "resolveModuleName/1",
 		currentDirectory: "/",
 	}
-	host := &liveModuleResolutionHost{fs: projectSession.FS(), cwd: "/"}
-	provider, cleanup := factory.NewProvider(module.NewResolver(host, core.EmptyCompilerOptions, "", "", nil))
+	provider, cleanup := factory.NewProvider(module.NewResolver(session, core.EmptyCompilerOptions, "", "", nil))
 	for range 2 {
 		_, _, err := provider.ResolveModuleName("pkg", "/src", core.ResolutionModeESM)
 		assert.ErrorContains(t, err, "callback error")

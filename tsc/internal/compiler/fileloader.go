@@ -179,7 +179,11 @@ func processAllProgramFiles(
 		contentMapperExtensions:                        opts.Config.ContentMapperExtensions(),
 	}
 	loader.addProjectReferenceTasks(singleThreaded)
-	loader.resolver = module.NewResolver(loader.projectReferenceFileMapper.host, compilerOptions, opts.TypingsLocation, opts.ProjectName, opts.Config.ContentMapperExtensions())
+	resolverCompilerOptions := compilerOptions
+	if opts.ResolutionProviderFactory != nil {
+		resolverCompilerOptions = opts.ResolutionProviderFactory.CompilerOptions()
+	}
+	loader.resolver = module.NewResolver(loader.projectReferenceFileMapper.host, resolverCompilerOptions, opts.TypingsLocation, opts.ProjectName, opts.Config.ContentMapperExtensions())
 	if opts.ResolutionProviderFactory != nil {
 		var cleanup func()
 		loader.resolutionProvider, cleanup = opts.ResolutionProviderFactory.NewProvider(loader.resolver)

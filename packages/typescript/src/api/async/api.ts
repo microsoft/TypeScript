@@ -247,7 +247,7 @@ export interface ModuleResolverOptions {
 }
 
 export interface ResolveModuleNameCallbackOptions {
-    snapshot: InProgressSnapshot;
+    snapshot: Snapshot | InProgressSnapshot | undefined;
 }
 
 export type ResolveModuleNameCallback = (moduleName: string, containingDirectory: string, resolutionMode: ResolutionMode | undefined, options: ResolveModuleNameCallbackOptions) => ProvidedModuleResolution | undefined | Promise<ProvidedModuleResolution | undefined>; // @sync: export type ResolveModuleNameCallback = (moduleName: string, containingDirectory: string, resolutionMode: ResolutionMode | undefined, options: ResolveModuleNameCallbackOptions) => ProvidedModuleResolution | undefined;
@@ -267,20 +267,27 @@ export type LanguageServerSnapshotChanges = Omit<ProtocolLanguageServerSnapshotC
 };
 
 let nextModuleResolutionCallbackId = 0;
-function registerModuleResolutionCallback(client: Client, callback: ResolveModuleNameCallback): { name: string; dispose: () => void; } {
+function registerModuleResolutionCallback(client: Client, callback: ResolveModuleNameCallback, getSnapshot: (id: number) => Snapshot | undefined): { name: string; dispose: () => void; } {
     const name = `resolveModuleName/${++nextModuleResolutionCallbackId}`;
     const inProgressSnapshots = new Map<number, InProgressSnapshot>();
     const dispose = client.registerCallback(name, params => {
-        const { moduleName, containingDirectory, resolutionMode, inProgressSnapshot } = params as {
+        const { moduleName, containingDirectory, resolutionMode, snapshot: snapshotId, inProgressSnapshot } = params as {
             moduleName: string;
             containingDirectory: string;
             resolutionMode?: ResolutionMode;
-            inProgressSnapshot: number;
+            snapshot?: number;
+            inProgressSnapshot?: number;
         };
-        let snapshot = inProgressSnapshots.get(inProgressSnapshot);
-        if (snapshot === undefined) {
-            snapshot = new InProgressSnapshot(inProgressSnapshot);
-            inProgressSnapshots.set(inProgressSnapshot, snapshot);
+        let snapshot: Snapshot | InProgressSnapshot | undefined = snapshotId === undefined ? undefined : getSnapshot(snapshotId);
+        if (snapshotId !== undefined && snapshot === undefined) {
+            throw new Error(`Snapshot ${snapshotId} is inactive`);
+        }
+        if (inProgressSnapshot !== undefined) {
+            snapshot = inProgressSnapshots.get(inProgressSnapshot);
+            if (snapshot === undefined) {
+                snapshot = new InProgressSnapshot(inProgressSnapshot);
+                inProgressSnapshots.set(inProgressSnapshot, snapshot);
+            }
         }
         return callback(
             moduleName,
@@ -319,7 +326,7 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
     private getCanonicalFileNameWorker: ((fileName: string) => string) | undefined;
     private initialized: boolean = false;
     private initializing: Promise<void> | undefined;
-    private activeSnapshots: Set<Snapshot> = new Set();
+    private activeSnapshots: Map<number, Snapshot> = new Map();
     readonly printer: Printer;
     readonly internal: InternalAPI;
 
@@ -471,20 +478,20 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
             this.toPath!,
             this,
             () => {
-                this.activeSnapshots.delete(snapshot);
+                this.activeSnapshots.delete(snapshot.id);
                 this.sourceFileCache.releaseSnapshot(snapshot.id);
             },
             this.createSnapshotUpdater(() => snapshot),
             undefined,
         );
-        this.activeSnapshots.add(snapshot);
+        this.activeSnapshots.set(snapshot.id, snapshot);
 
         return snapshot;
     }
 
     private async updateSnapshot(baseSnapshot: Snapshot, params: CreateSnapshotParams): Promise<Snapshot> {
         await this.ensureInitialized();
-        if (!this.activeSnapshots.has(baseSnapshot) || baseSnapshot.isDisposed()) {
+        if (this.activeSnapshots.get(baseSnapshot.id) !== baseSnapshot || baseSnapshot.isDisposed()) {
             throw new Error("Cannot update an inactive snapshot");
         }
 
@@ -500,13 +507,13 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
             this.toPath!,
             this,
             () => {
-                this.activeSnapshots.delete(snapshot);
+                this.activeSnapshots.delete(snapshot.id);
                 this.sourceFileCache.releaseSnapshot(snapshot.id);
             },
             this.createSnapshotUpdater(() => snapshot),
             baseSnapshot,
         );
-        this.activeSnapshots.add(snapshot);
+        this.activeSnapshots.set(snapshot.id, snapshot);
         return snapshot;
     }
 
@@ -564,7 +571,7 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
 
         const changes = args[0] as LanguageServerSnapshotChanges | undefined;
         const baseSnapshot = args[1] as Snapshot | undefined;
-        if (baseSnapshot && (!this.activeSnapshots.has(baseSnapshot) || baseSnapshot.isDisposed())) {
+        if (baseSnapshot && (this.activeSnapshots.get(baseSnapshot.id) !== baseSnapshot || baseSnapshot.isDisposed())) {
             throw new Error("Cannot use an inactive snapshot as a response base");
         }
         const data = await this.client.apiRequest("getCurrentLanguageServerSnapshot", {
@@ -581,13 +588,13 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
             this.toPath!,
             this,
             () => {
-                this.activeSnapshots.delete(snapshot);
+                this.activeSnapshots.delete(snapshot.id);
                 this.sourceFileCache.releaseSnapshot(snapshot.id);
             },
             this.createSnapshotUpdater(() => snapshot),
             baseSnapshot,
         );
-        this.activeSnapshots.add(snapshot);
+        this.activeSnapshots.set(snapshot.id, snapshot);
         return snapshot;
     }
 
@@ -599,7 +606,7 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         await this.initializing?.catch(() => {}); // @sync-skip
         // Dispose all active snapshots
         try {
-            for (const snapshot of [...this.activeSnapshots]) {
+            for (const snapshot of [...this.activeSnapshots.values()]) {
                 await snapshot.dispose();
             }
             this.sourceFileCache.clear();
@@ -611,7 +618,9 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
 
     async createModuleResolver(compilerOptions: CompilerOptions, options?: ModuleResolverOptions): Promise<ModuleResolver> {
         await this.ensureInitialized();
-        const callback = options?.resolveModuleName ? registerModuleResolutionCallback(this.client, options.resolveModuleName) : undefined;
+        const callback = options?.resolveModuleName
+            ? registerModuleResolutionCallback(this.client, options.resolveModuleName, id => this.activeSnapshots.get(id))
+            : undefined;
         try {
             const id = await this.client.apiRequest("createModuleResolver", {
                 compilerOptions,
@@ -633,7 +642,7 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
     async runWithTemporaryFileUpdate(baseSnapshot: Snapshot, file: DocumentIdentifier, newText: string, cb: (newSnapshot: Snapshot) => void | Promise<void>): Promise<void> {
         await this.ensureInitialized();
 
-        if (!this.activeSnapshots.has(baseSnapshot) || baseSnapshot.isDisposed()) {
+        if (this.activeSnapshots.get(baseSnapshot.id) !== baseSnapshot || baseSnapshot.isDisposed()) {
             throw new Error("Cannot run a temporary file update on an inactive snapshot");
         }
         const snapshot = await baseSnapshot.update({

@@ -18,6 +18,7 @@ type ResolutionHost interface {
 
 type ResolutionProviderFactory interface {
 	Identity() uint64
+	CompilerOptions() *core.CompilerOptions
 	NewProvider(fallback *Resolver) (ResolutionProvider, func())
 }
 

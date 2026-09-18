@@ -264,7 +264,7 @@ export interface ModuleResolverOptions {
 }
 
 export interface ResolveModuleNameCallbackOptions {
-    snapshot: InProgressSnapshot;
+    snapshot: Snapshot | InProgressSnapshot | undefined;
 }
 
 export type ResolveModuleNameCallback = (moduleName: string, containingDirectory: string, resolutionMode: ResolutionMode | undefined, options: ResolveModuleNameCallbackOptions) => ProvidedModuleResolution | undefined;
@@ -284,20 +284,27 @@ export type LanguageServerSnapshotChanges = Omit<ProtocolLanguageServerSnapshotC
 };
 
 let nextModuleResolutionCallbackId = 0;
-function registerModuleResolutionCallback(client: Client, callback: ResolveModuleNameCallback): { name: string; dispose: () => void; } {
+function registerModuleResolutionCallback(client: Client, callback: ResolveModuleNameCallback, getSnapshot: (id: number) => Snapshot | undefined): { name: string; dispose: () => void; } {
     const name = `resolveModuleName/${++nextModuleResolutionCallbackId}`;
     const inProgressSnapshots = new Map<number, InProgressSnapshot>();
     const dispose = client.registerCallback(name, params => {
-        const { moduleName, containingDirectory, resolutionMode, inProgressSnapshot } = params as {
+        const { moduleName, containingDirectory, resolutionMode, snapshot: snapshotId, inProgressSnapshot } = params as {
             moduleName: string;
             containingDirectory: string;
             resolutionMode?: ResolutionMode;
-            inProgressSnapshot: number;
+            snapshot?: number;
+            inProgressSnapshot?: number;
         };
-        let snapshot = inProgressSnapshots.get(inProgressSnapshot);
-        if (snapshot === undefined) {
-            snapshot = new InProgressSnapshot(inProgressSnapshot);
-            inProgressSnapshots.set(inProgressSnapshot, snapshot);
+        let snapshot: Snapshot | InProgressSnapshot | undefined = snapshotId === undefined ? undefined : getSnapshot(snapshotId);
+        if (snapshotId !== undefined && snapshot === undefined) {
+            throw new Error(`Snapshot ${snapshotId} is inactive`);
+        }
+        if (inProgressSnapshot !== undefined) {
+            snapshot = inProgressSnapshots.get(inProgressSnapshot);
+            if (snapshot === undefined) {
+                snapshot = new InProgressSnapshot(inProgressSnapshot);
+                inProgressSnapshots.set(inProgressSnapshot, snapshot);
+            }
         }
         return callback(
             moduleName,
@@ -338,7 +345,7 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
     private getCanonicalFileNameWorker: ((fileName: string) => string) | undefined;
     private initialized: boolean = false;
     private initializing: void | undefined;
-    private activeSnapshots: Set<Snapshot> = new Set();
+    private activeSnapshots: Map<number, Snapshot> = new Map();
     readonly printer: Printer;
     readonly internal: InternalAPI;
 
@@ -704,13 +711,13 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
                 owner.toPath!,
                 owner,
                 () => {
-                    owner.activeSnapshots.delete(snapshot);
+                    owner.activeSnapshots.delete(snapshot.id);
                     owner.sourceFileCache.releaseSnapshot(snapshot.id);
                 },
                 owner.createSnapshotUpdater(() => snapshot),
                 undefined,
             );
-            owner.activeSnapshots.add(snapshot);
+            owner.activeSnapshots.set(snapshot.id, snapshot);
 
             return snapshot;
         }
@@ -729,13 +736,13 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
                 owner.toPath!,
                 owner,
                 () => {
-                    owner.activeSnapshots.delete(snapshot);
+                    owner.activeSnapshots.delete(snapshot.id);
                     owner.sourceFileCache.releaseSnapshot(snapshot.id);
                 },
                 owner.createSnapshotUpdater(() => snapshot),
                 undefined,
             );
-            owner.activeSnapshots.add(snapshot);
+            owner.activeSnapshots.set(snapshot.id, snapshot);
 
             return snapshot;
         }
@@ -752,7 +759,7 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
             "updateSnapshot",
             function (baseSnapshot: Snapshot, params: CreateSnapshotParams): Snapshot {
                 owner.ensureInitialized();
-                if (!owner.activeSnapshots.has(baseSnapshot) || baseSnapshot.isDisposed()) {
+                if (owner.activeSnapshots.get(baseSnapshot.id) !== baseSnapshot || baseSnapshot.isDisposed()) {
                     throw new Error("Cannot update an inactive snapshot");
                 }
 
@@ -768,18 +775,18 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
                     owner.toPath!,
                     owner,
                     () => {
-                        owner.activeSnapshots.delete(snapshot);
+                        owner.activeSnapshots.delete(snapshot.id);
                         owner.sourceFileCache.releaseSnapshot(snapshot.id);
                     },
                     owner.createSnapshotUpdater(() => snapshot),
                     baseSnapshot,
                 );
-                owner.activeSnapshots.add(snapshot);
+                owner.activeSnapshots.set(snapshot.id, snapshot);
                 return snapshot;
             },
             function* (baseSnapshot: Snapshot, params: CreateSnapshotParams): Generator<ProtocolRequest, Snapshot, ProtocolResponse["result"]> {
                 yield* owner.ensureInitialized.gen();
-                if (!owner.activeSnapshots.has(baseSnapshot) || baseSnapshot.isDisposed()) {
+                if (owner.activeSnapshots.get(baseSnapshot.id) !== baseSnapshot || baseSnapshot.isDisposed()) {
                     throw new Error("Cannot update an inactive snapshot");
                 }
 
@@ -795,13 +802,13 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
                     owner.toPath!,
                     owner,
                     () => {
-                        owner.activeSnapshots.delete(snapshot);
+                        owner.activeSnapshots.delete(snapshot.id);
                         owner.sourceFileCache.releaseSnapshot(snapshot.id);
                     },
                     owner.createSnapshotUpdater(() => snapshot),
                     baseSnapshot,
                 );
-                owner.activeSnapshots.add(snapshot);
+                owner.activeSnapshots.set(snapshot.id, snapshot);
                 return snapshot;
             },
         );
@@ -867,7 +874,7 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
 
             const changes = args[0] as LanguageServerSnapshotChanges | undefined;
             const baseSnapshot = args[1] as Snapshot | undefined;
-            if (baseSnapshot && (!owner.activeSnapshots.has(baseSnapshot) || baseSnapshot.isDisposed())) {
+            if (baseSnapshot && (owner.activeSnapshots.get(baseSnapshot.id) !== baseSnapshot || baseSnapshot.isDisposed())) {
                 throw new Error("Cannot use an inactive snapshot as a response base");
             }
             const data = owner.client.apiRequest("getCurrentLanguageServerSnapshot", {
@@ -884,13 +891,13 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
                 owner.toPath!,
                 owner,
                 () => {
-                    owner.activeSnapshots.delete(snapshot);
+                    owner.activeSnapshots.delete(snapshot.id);
                     owner.sourceFileCache.releaseSnapshot(snapshot.id);
                 },
                 owner.createSnapshotUpdater(() => snapshot),
                 baseSnapshot,
             );
-            owner.activeSnapshots.add(snapshot);
+            owner.activeSnapshots.set(snapshot.id, snapshot);
             return snapshot;
         }
         function gen<const CreatePrograms extends LanguageServerSnapshotChanges["createPrograms"] = undefined, const OpenFiles extends LanguageServerSnapshotChanges["openFiles"] = undefined>(
@@ -903,7 +910,7 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
 
             const changes = args[0] as LanguageServerSnapshotChanges | undefined;
             const baseSnapshot = args[1] as Snapshot | undefined;
-            if (baseSnapshot && (!owner.activeSnapshots.has(baseSnapshot) || baseSnapshot.isDisposed())) {
+            if (baseSnapshot && (owner.activeSnapshots.get(baseSnapshot.id) !== baseSnapshot || baseSnapshot.isDisposed())) {
                 throw new Error("Cannot use an inactive snapshot as a response base");
             }
             const data = yield* apiRequest("getCurrentLanguageServerSnapshot", {
@@ -920,13 +927,13 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
                 owner.toPath!,
                 owner,
                 () => {
-                    owner.activeSnapshots.delete(snapshot);
+                    owner.activeSnapshots.delete(snapshot.id);
                     owner.sourceFileCache.releaseSnapshot(snapshot.id);
                 },
                 owner.createSnapshotUpdater(() => snapshot),
                 baseSnapshot,
             );
-            owner.activeSnapshots.add(snapshot);
+            owner.activeSnapshots.set(snapshot.id, snapshot);
             return snapshot;
         }
         return cacheGeneratorMethod(owner, "getCurrentLanguageServerSnapshot", getCurrentLanguageServerSnapshot, gen);
@@ -947,7 +954,7 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
             function (): void {
                 // Dispose all active snapshots
                 try {
-                    for (const snapshot of [...owner.activeSnapshots]) {
+                    for (const snapshot of [...owner.activeSnapshots.values()]) {
                         snapshot.dispose();
                     }
                     owner.sourceFileCache.clear();
@@ -959,7 +966,7 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
             function* (): Generator<ProtocolRequest, void, ProtocolResponse["result"]> {
                 // Dispose all active snapshots
                 try {
-                    for (const snapshot of [...owner.activeSnapshots]) {
+                    for (const snapshot of [...owner.activeSnapshots.values()]) {
                         yield* snapshot.dispose.gen();
                     }
                     owner.sourceFileCache.clear();
@@ -981,7 +988,9 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
             "createModuleResolver",
             function (compilerOptions: CompilerOptions, options?: ModuleResolverOptions): ModuleResolver {
                 owner.ensureInitialized();
-                const callback = options?.resolveModuleName ? registerModuleResolutionCallback(owner.client, options.resolveModuleName) : undefined;
+                const callback = options?.resolveModuleName
+                    ? registerModuleResolutionCallback(owner.client, options.resolveModuleName, id => owner.activeSnapshots.get(id))
+                    : undefined;
                 try {
                     const id = owner.client.apiRequest("createModuleResolver", {
                         compilerOptions,
@@ -997,7 +1006,9 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
             },
             function* (compilerOptions: CompilerOptions, options?: ModuleResolverOptions): Generator<ProtocolRequest, ModuleResolver, ProtocolResponse["result"]> {
                 yield* owner.ensureInitialized.gen();
-                const callback = options?.resolveModuleName ? registerModuleResolutionCallback(owner.client, options.resolveModuleName) : undefined;
+                const callback = options?.resolveModuleName
+                    ? registerModuleResolutionCallback(owner.client, options.resolveModuleName, id => owner.activeSnapshots.get(id))
+                    : undefined;
                 try {
                     const id = yield* apiRequest("createModuleResolver", {
                         compilerOptions,
@@ -1029,7 +1040,7 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
             function (baseSnapshot: Snapshot, file: DocumentIdentifier, newText: string, cb: (newSnapshot: Snapshot) => void): void {
                 owner.ensureInitialized();
 
-                if (!owner.activeSnapshots.has(baseSnapshot) || baseSnapshot.isDisposed()) {
+                if (owner.activeSnapshots.get(baseSnapshot.id) !== baseSnapshot || baseSnapshot.isDisposed()) {
                     throw new Error("Cannot run a temporary file update on an inactive snapshot");
                 }
                 const snapshot = baseSnapshot.update({
@@ -1050,7 +1061,7 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
             function* (baseSnapshot: Snapshot, file: DocumentIdentifier, newText: string, cb: (newSnapshot: Snapshot) => void | Generator<ProtocolRequest, void, ProtocolResponse["result"]>): Generator<ProtocolRequest, void, ProtocolResponse["result"]> {
                 yield* owner.ensureInitialized.gen();
 
-                if (!owner.activeSnapshots.has(baseSnapshot) || baseSnapshot.isDisposed()) {
+                if (owner.activeSnapshots.get(baseSnapshot.id) !== baseSnapshot || baseSnapshot.isDisposed()) {
                     throw new Error("Cannot run a temporary file update on an inactive snapshot");
                 }
                 const snapshot = yield* baseSnapshot.update.gen({

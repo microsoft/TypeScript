@@ -12,7 +12,6 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/module"
 	"github.com/microsoft/TypeScript/tsc/internal/project"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
-	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 )
 
 type moduleResolutionMatchKey struct {
@@ -24,29 +23,34 @@ type moduleResolutionMatchKey struct {
 }
 
 type providedModuleResolutions struct {
-	identity             uint64
-	fallbackToResolution bool
-	entries              map[moduleResolutionMatchKey]*module.ResolvedModule
-	currentDirectory     string
-	useCaseSensitive     bool
+	useCaseSensitiveFileNames bool
+	fallbackToResolution      bool
+	entries                   map[moduleResolutionMatchKey]*module.ResolvedModule
+	currentDirectory          string
 }
 
 type moduleResolutionProviderFactory struct {
-	identity         uint64
-	base             *providedModuleResolutions
+	registration     *moduleResolverRegistration
 	session          *Session
 	conn             ipc.Conn
 	ctx              context.Context
-	callback         string
 	currentDirectory string
 }
 
 func (f *moduleResolutionProviderFactory) Identity() uint64 {
-	return f.identity
+	return uint64(f.registration.id)
+}
+
+func (f *moduleResolutionProviderFactory) CompilerOptions() *core.CompilerOptions {
+	return f.registration.compilerOptions
 }
 
 type moduleResolutionProvider struct {
-	factory            *moduleResolutionProviderFactory
+	registration       *moduleResolverRegistration
+	conn               ipc.Conn
+	ctx                context.Context
+	currentDirectory   string
+	snapshot           SnapshotID
 	inProgressSnapshot uint64
 	fallbackResolver   *module.Resolver
 }
@@ -54,7 +58,10 @@ type moduleResolutionProvider struct {
 func (f *moduleResolutionProviderFactory) NewProvider(fallback *module.Resolver) (module.ResolutionProvider, func()) {
 	inProgressSnapshot := f.session.registerInProgressSnapshot(fallback)
 	provider := &moduleResolutionProvider{
-		factory:            f,
+		registration:       f.registration,
+		conn:               f.conn,
+		ctx:                f.ctx,
+		currentDirectory:   f.currentDirectory,
 		inProgressSnapshot: inProgressSnapshot,
 		fallbackResolver:   fallback,
 	}
@@ -68,16 +75,16 @@ func (p *moduleResolutionProvider) ResolveModuleName(
 	containingDirectory string,
 	resolutionMode core.ResolutionMode,
 ) (*module.ResolvedModule, []module.DiagAndArgs, error) {
-	f := p.factory
-	if f.base != nil {
-		if result, found := f.base.lookup(moduleName, containingDirectory, resolutionMode); found {
+	registration := p.registration
+	if registration.resolutions != nil {
+		if result, found := registration.resolutions.lookup(moduleName, containingDirectory, resolutionMode); found {
 			return result, nil, nil
 		}
-		if !f.base.fallbackToResolution {
+		if !registration.resolutions.fallbackToResolution {
 			return nil, nil, nil
 		}
 	}
-	if f.callback == "" {
+	if registration.resolveModuleNameCallback == "" {
 		result, trace := p.fallbackResolver.ResolveModuleNameFromDirectory(moduleName, containingDirectory, resolutionMode)
 		return result, trace, nil
 	}
@@ -85,10 +92,15 @@ func (p *moduleResolutionProvider) ResolveModuleName(
 		ModuleName:          moduleName,
 		ContainingDirectory: containingDirectory,
 	}
-	params.InProgressSnapshot = p.inProgressSnapshot
+	if p.snapshot != 0 {
+		params.Snapshot = &p.snapshot
+	}
+	if p.inProgressSnapshot != 0 {
+		params.InProgressSnapshot = &p.inProgressSnapshot
+	}
 	mode := ResolutionMode(resolutionMode)
 	params.ResolutionMode = &mode
-	callbackResult, err := f.conn.Call(f.ctx, f.callback, params)
+	callbackResult, err := p.conn.Call(p.ctx, registration.resolveModuleNameCallback, params)
 	if err != nil {
 		return nil, nil, fmt.Errorf("resolveModuleName callback failed: %w", err)
 	}
@@ -100,11 +112,11 @@ func (p *moduleResolutionProvider) ResolveModuleName(
 	if err := json.Unmarshal(callbackResult, &providedResolution); err != nil {
 		return nil, nil, fmt.Errorf("invalid resolveModuleName callback result: %w", err)
 	}
-	return providedModuleResolutionToResolvedModule(&providedResolution, f.currentDirectory), nil, nil
+	return providedModuleResolutionToResolvedModule(&providedResolution, p.currentDirectory), nil, nil
 }
 
 func (p *providedModuleResolutions) lookup(moduleName string, containingDirectory string, resolutionMode core.ResolutionMode) (*module.ResolvedModule, bool) {
-	directory := tspath.ToPath(containingDirectory, p.currentDirectory, p.useCaseSensitive)
+	directory := tspath.ToPath(containingDirectory, p.currentDirectory, p.useCaseSensitiveFileNames)
 	keys := [...]moduleResolutionMatchKey{
 		{moduleName: moduleName, directory: directory, mode: resolutionMode, hasDirectory: true, hasMode: true},
 		{moduleName: moduleName, directory: directory, hasDirectory: true},
@@ -119,7 +131,7 @@ func (p *providedModuleResolutions) lookup(moduleName string, containingDirector
 	return nil, false
 }
 
-func compileModuleResolutionSpec(spec *ModuleResolutionSpec, identity uint64, currentDirectory string, useCaseSensitive bool) (*providedModuleResolutions, error) {
+func compileModuleResolutionSpec(spec *ModuleResolutionSpec, currentDirectory string, useCaseSensitive bool) (*providedModuleResolutions, error) {
 	if spec == nil {
 		return nil, nil
 	}
@@ -134,11 +146,10 @@ func compileModuleResolutionSpec(spec *ModuleResolutionSpec, identity uint64, cu
 	}
 
 	provider := &providedModuleResolutions{
-		identity:             identity,
-		fallbackToResolution: fallbackToResolution,
-		entries:              make(map[moduleResolutionMatchKey]*module.ResolvedModule, len(spec.Entries)),
-		currentDirectory:     currentDirectory,
-		useCaseSensitive:     useCaseSensitive,
+		fallbackToResolution:      fallbackToResolution,
+		entries:                   make(map[moduleResolutionMatchKey]*module.ResolvedModule, len(spec.Entries)),
+		currentDirectory:          currentDirectory,
+		useCaseSensitiveFileNames: useCaseSensitive,
 	}
 	for i, entry := range spec.Entries {
 		if entry == nil {
@@ -223,13 +234,11 @@ func (s *Session) moduleResolutionProviderFactory(ctx context.Context, options *
 		return nil, fmt.Errorf("%w: API connection is not initialized", ErrClientError)
 	}
 	return &moduleResolutionProviderFactory{
-		identity:         uint64(options.ModuleResolver),
-		base:             data.provider,
+		registration:     data,
 		session:          s,
 		conn:             s.conn,
 		ctx:              ctx,
-		callback:         data.resolveModuleNameCallback,
-		currentDirectory: s.currentDirectory(),
+		currentDirectory: s.GetCurrentDirectory(),
 	}, nil
 }
 
@@ -261,17 +270,17 @@ func moduleResolutionError(snapshot *project.Snapshot) error {
 func (s *Session) handleCreateModuleResolver(params *CreateModuleResolverParams) (ModuleResolverID, error) {
 	provider, err := compileModuleResolutionSpec(
 		params.ModuleResolutions,
-		s.nextModuleResolutionIdentity.Add(1),
-		s.currentDirectory(),
-		s.fileSystem().UseCaseSensitiveFileNames(),
+		s.GetCurrentDirectory(),
+		s.FS().UseCaseSensitiveFileNames(),
 	)
 	if err != nil {
 		return 0, err
 	}
 	id := ModuleResolverID(s.nextModuleResolverID.Add(1))
-	data := &moduleResolverData{
+	data := &moduleResolverRegistration{
+		id:                        id,
 		compilerOptions:           &params.CompilerOptions,
-		provider:                  provider,
+		resolutions:               provider,
 		resolveModuleNameCallback: params.ResolveModuleNameCallback,
 	}
 	s.moduleResolversMu.Lock()
@@ -293,19 +302,6 @@ func (s *Session) handleReleaseModuleResolver(params *ReleaseModuleResolverParam
 	return nil, nil
 }
 
-type liveModuleResolutionHost struct {
-	fs  vfs.FS
-	cwd string
-}
-
-func (h *liveModuleResolutionHost) FS() vfs.FS {
-	return h.fs
-}
-
-func (h *liveModuleResolutionHost) GetCurrentDirectory() string {
-	return h.cwd
-}
-
 func (s *Session) handleResolveModuleName(ctx context.Context, params *ResolveModuleNameParams) (*ResolveModuleNameResult, error) {
 	if params.ModuleName == "" {
 		return nil, fmt.Errorf("%w: moduleName is empty", ErrClientError)
@@ -324,7 +320,7 @@ func (s *Session) handleResolveModuleName(ctx context.Context, params *ResolveMo
 			return nil, fmt.Errorf("%w: invalid resolutionMode %s", ErrClientError, mode.String())
 		}
 	}
-	containingDirectory := tspath.GetNormalizedAbsolutePath(params.ContainingDirectory.ToAbsoluteFileName(s.currentDirectory()), s.currentDirectory())
+	containingDirectory := tspath.GetNormalizedAbsolutePath(params.ContainingDirectory.ToAbsoluteFileName(s.GetCurrentDirectory()), s.GetCurrentDirectory())
 
 	var resolver *module.Resolver
 	if params.Snapshot != 0 && params.InProgressSnapshot != 0 {
@@ -337,7 +333,7 @@ func (s *Session) handleResolveModuleName(ctx context.Context, params *ResolveMo
 		if inProgressResolver == nil {
 			return nil, fmt.Errorf("%w: in-progress snapshot %d not found", ErrClientError, params.InProgressSnapshot)
 		}
-		resolver = inProgressResolver.NewResolverForCompilerOptions(data.compilerOptions)
+		resolver = inProgressResolver
 	} else if params.Snapshot != 0 {
 		sd, err := s.getSnapshotData(params.Snapshot)
 		if err != nil {
@@ -345,19 +341,17 @@ func (s *Session) handleResolveModuleName(ctx context.Context, params *ResolveMo
 		}
 		resolver = module.NewResolver(sd.snapshot, data.compilerOptions, "", "", sd.snapshot.ContentMapperExtensions())
 	} else {
-		resolver = module.NewResolver(&liveModuleResolutionHost{fs: s.fileSystem(), cwd: s.currentDirectory()}, data.compilerOptions, "", "", nil)
+		resolver = module.NewResolver(s, data.compilerOptions, "", "", nil)
 	}
-	factory := &moduleResolutionProviderFactory{
-		identity:         uint64(params.Resolver),
-		base:             data.provider,
-		session:          s,
-		conn:             s.conn,
-		ctx:              ctx,
-		callback:         data.resolveModuleNameCallback,
-		currentDirectory: s.currentDirectory(),
+	provider := &moduleResolutionProvider{
+		registration:       data,
+		conn:               s.conn,
+		ctx:                ctx,
+		currentDirectory:   s.GetCurrentDirectory(),
+		snapshot:           params.Snapshot,
+		inProgressSnapshot: params.InProgressSnapshot,
+		fallbackResolver:   resolver,
 	}
-	provider, cleanup := factory.NewProvider(resolver)
-	defer cleanup()
 	result, trace, err := provider.ResolveModuleName(params.ModuleName, containingDirectory, mode)
 	if err != nil {
 		return nil, err

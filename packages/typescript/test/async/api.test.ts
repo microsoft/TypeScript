@@ -64,6 +64,7 @@ import {
     IndexKind,
     type IndexType,
     type InferredProjectId,
+    type InProgressSnapshot,
     type InterfaceType,
     type IntrinsicType,
     isErrorType,
@@ -628,11 +629,12 @@ describe("API", () => {
             moduleResolution: ModuleResolutionKind.NodeNext,
         };
         const defaultResolver = await api.createModuleResolver(compilerOptions);
-        const callbackSnapshots: object[] = [];
+        const callbackSnapshots: (Snapshot | InProgressSnapshot | undefined)[] = [];
         const customResolver = await api.createModuleResolver(compilerOptions, {
             resolveModuleName: async (moduleName, containingDirectory, resolutionMode, { snapshot }) => {
                 callbackSnapshots.push(snapshot);
                 if (moduleName === "custom") return { resolvedFileName: "/custom.d.ts" };
+                assert.ok(snapshot);
                 return (await defaultResolver.resolveModuleName(
                     moduleName,
                     containingDirectory,
@@ -668,6 +670,7 @@ describe("API", () => {
         const defaultResolver = await api.createModuleResolver(compilerOptions);
         const customResolver = await api.createModuleResolver(compilerOptions, {
             resolveModuleName: async (moduleName, containingDirectory, resolutionMode, { snapshot }) => {
+                assert.ok(snapshot);
                 return (await defaultResolver.resolveModuleName(
                     moduleName,
                     containingDirectory,
@@ -691,6 +694,77 @@ describe("API", () => {
             [...await snapshot.operation.createdPrograms[0].getSourceFileNames()].sort(),
             ["/node_modules/layered/index.d.ts", "/src/index.ts"],
         );
+    });
+
+    test("program module resolution uses the resolver compiler options", async () => {
+        await using api = spawnAPI({
+            "/src/index.ts": `import "pkg/feature";`,
+            "/node_modules/pkg/package.json": JSON.stringify({
+                name: "pkg",
+                version: "1.0.0",
+                exports: { "./feature": { resolver: "./dist/feature.d.ts" } },
+            }),
+            "/node_modules/pkg/dist/feature.d.ts": `export {};`,
+        });
+        const resolver = await api.createModuleResolver({
+            module: ModuleKind.ESNext,
+            moduleResolution: ModuleResolutionKind.Bundler,
+            customConditions: ["resolver"],
+        });
+        const snapshot = await api.createSnapshot({
+            createPrograms: [{
+                rootFiles: ["/src/index.ts"],
+                compilerOptions: {
+                    noLib: true,
+                    module: ModuleKind.Node16,
+                    moduleResolution: ModuleResolutionKind.Node16,
+                },
+                options: { moduleResolver: resolver },
+            }],
+        });
+
+        assert.deepEqual(
+            [...await snapshot.operation.createdPrograms![0].getSourceFileNames()].sort(),
+            ["/node_modules/pkg/dist/feature.d.ts", "/src/index.ts"],
+        );
+    });
+
+    test("module resolver callbacks preserve retained and live filesystem context", async () => {
+        await using api = spawnAPI({
+            "/src/index.ts": `export {};`,
+            "/node_modules/pkg/package.json": JSON.stringify({ name: "pkg", version: "1.0.0", types: "index.d.ts" }),
+            "/node_modules/pkg/index.d.ts": `export {};`,
+        });
+        const compilerOptions = {
+            module: ModuleKind.NodeNext,
+            moduleResolution: ModuleResolutionKind.NodeNext,
+        };
+        const defaultResolver = await api.createModuleResolver(compilerOptions);
+        const callbackSnapshots: (Snapshot | InProgressSnapshot | undefined)[] = [];
+        const passthroughResolver = await api.createModuleResolver(compilerOptions, {
+            resolveModuleName: async (moduleName, containingDirectory, resolutionMode, { snapshot }) => {
+                callbackSnapshots.push(snapshot);
+                return (await defaultResolver.resolveModuleName(
+                    moduleName,
+                    containingDirectory,
+                    resolutionMode,
+                    snapshot === undefined ? undefined : { snapshot },
+                )).resolvedModule;
+            },
+        });
+        const snapshot = await api.createSnapshot();
+
+        assert.equal(
+            (await passthroughResolver.resolveModuleName("pkg", "/src", ModuleKind.ESNext, { snapshot })).resolvedModule?.resolvedFileName,
+            "/node_modules/pkg/index.d.ts",
+        );
+        assert.equal(callbackSnapshots[0], snapshot);
+
+        assert.equal(
+            (await passthroughResolver.resolveModuleName("pkg", "/src", ModuleKind.ESNext)).resolvedModule?.resolvedFileName,
+            "/node_modules/pkg/index.d.ts",
+        );
+        assert.equal(callbackSnapshots[1], undefined);
     });
 
     test("provided resolutions do not report native resolution provenance diagnostics", async () => {
