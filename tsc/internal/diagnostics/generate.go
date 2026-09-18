@@ -405,14 +405,14 @@ func readRawMessages(p string) map[int]*diagnosticMessage {
 func readLocalizedMessages(p string) map[string]string {
 	file, err := os.Open(p)
 	if err != nil {
-		log.Printf("failed to open locale file %s: %v", p, err)
+		log.Fatalf("failed to open locale file %s: %v", p, err)
 		return nil
 	}
 	defer file.Close()
 
 	var messages map[string]string
 	if err := json.UnmarshalRead(file, &messages); err != nil {
-		log.Printf("failed to decode locale file %s: %v", p, err)
+		log.Fatalf("failed to decode locale file %s: %v", p, err)
 		return nil
 	}
 

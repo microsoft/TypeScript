@@ -82,6 +82,7 @@ jobs:
           }
 
           $sourceRoot = [IO.Path]::GetFullPath("$(Build.SourcesDirectory)") + [IO.Path]::DirectorySeparatorChar
+          $manifestDestinations = [Collections.Generic.HashSet[string]]::new([StringComparer]::OrdinalIgnoreCase)
           for ($i = 0; $i -lt $generatedFiles.Count; $i++) {
               $source = [IO.Path]::GetFullPath($generatedFiles[$i])
               $destination = [IO.Path]::GetFullPath($destinationFiles[$i])
@@ -91,6 +92,27 @@ jobs:
               if (!(Test-Path -LiteralPath $source -PathType Leaf)) {
                   throw "OneLocBuild did not produce $source"
               }
+              $null = $manifestDestinations.Add($destination)
+          }
+
+          $generatedOutputPatterns = @(
+              @("tsc/internal/diagnostics/loc", "*.generated.json"),
+              @("packages/vscode-typescript", "package.nls.*.json"),
+              @("packages/vscode-typescript-nightly", "package.nls.*.json"),
+              @("packages/vscode-typescript/l10n", "bundle.l10n.*.json")
+          )
+          foreach ($pattern in $generatedOutputPatterns) {
+              $directory = Join-Path $sourceRoot $pattern[0]
+              Get-ChildItem -LiteralPath $directory -Filter $pattern[1] -File |
+                  Where-Object { $_.Name -notmatch '\.qps-[^.]+\.json$' -and !$manifestDestinations.Contains($_.FullName) } |
+                  Remove-Item -Force
+          }
+          Get-ChildItem -LiteralPath (Join-Path $sourceRoot "tsc/internal/diagnostics/loc") -Filter "*.json.gz" -File |
+              Remove-Item -Force
+
+          for ($i = 0; $i -lt $generatedFiles.Count; $i++) {
+              $source = [IO.Path]::GetFullPath($generatedFiles[$i])
+              $destination = [IO.Path]::GetFullPath($destinationFiles[$i])
               New-Item -Path (Split-Path -Parent $destination) -ItemType Directory -Force | Out-Null
               Copy-Item -LiteralPath $source -Destination $destination -Force
           }
