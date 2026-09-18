@@ -40,8 +40,7 @@ func SyntheticProgramID(path tspath.Path) (int, bool) {
 	return id, err == nil && id > 0
 }
 
-//go:generate go tool golang.org/x/tools/cmd/stringer -type=Kind -trimprefix=Kind -output=project_stringer_generated.go
-//go:generate npx dprint fmt project_stringer_generated.go
+//go:generate node ../../../tools/scripts/gen/generateStringer.mts -type=Kind -trimprefix=Kind -output=project_stringer_generated.go
 
 type Kind int
 

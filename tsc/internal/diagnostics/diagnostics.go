@@ -13,9 +13,8 @@ import (
 	"golang.org/x/text/language"
 )
 
-//go:generate go run generate.go -diagnostics ./diagnostics_generated.go -loc ./loc_generated.go -locdir ./loc
-//go:generate go tool golang.org/x/tools/cmd/stringer -type=Category -output=stringer_generated.go
-//go:generate npx dprint fmt diagnostics_generated.go loc_generated.go stringer_generated.go
+//go:generate node ../../../tools/scripts/gen/generateDiagnostics.mts
+//go:generate node ../../../tools/scripts/gen/generateStringer.mts -type=Category -output=stringer_generated.go
 
 type Category int32
 
