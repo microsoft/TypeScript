@@ -255,10 +255,8 @@ func TestGetCurrentLanguageServerSnapshotCreatesAndRemovesPrograms(t *testing.T)
 	created, err := session.handleGetCurrentLanguageServerSnapshot(context.Background(), &GetCurrentLanguageServerSnapshotParams{
 		Changes: &LanguageServerSnapshotChanges{
 			CreatePrograms: []*CreateSnapshotProgramParams{{
-				RootFiles: []DocumentIdentifier{{FileName: fileName}},
-				Options: CreateProgramOptions{
-					CompilerOptions: core.CompilerOptions{NoLib: core.TSTrue},
-				},
+				RootFiles:       []DocumentIdentifier{{FileName: fileName}},
+				CompilerOptions: core.CompilerOptions{NoLib: core.TSTrue},
 			}},
 		},
 	})
@@ -287,10 +285,8 @@ func TestClosingAPISessionRemovesCreatedLanguageServerPrograms(t *testing.T) {
 	_, err := session.handleGetCurrentLanguageServerSnapshot(context.Background(), &GetCurrentLanguageServerSnapshotParams{
 		Changes: &LanguageServerSnapshotChanges{
 			CreatePrograms: []*CreateSnapshotProgramParams{{
-				RootFiles: []DocumentIdentifier{{FileName: fileName}},
-				Options: CreateProgramOptions{
-					CompilerOptions: core.CompilerOptions{NoLib: core.TSTrue},
-				},
+				RootFiles:       []DocumentIdentifier{{FileName: fileName}},
+				CompilerOptions: core.CompilerOptions{NoLib: core.TSTrue},
 			}},
 		},
 	})
@@ -312,10 +308,8 @@ func TestLanguageServerProgramOwnershipIsIsolatedByAPISession(t *testing.T) {
 	_, err := owner.handleGetCurrentLanguageServerSnapshot(context.Background(), &GetCurrentLanguageServerSnapshotParams{
 		Changes: &LanguageServerSnapshotChanges{
 			CreatePrograms: []*CreateSnapshotProgramParams{{
-				RootFiles: []DocumentIdentifier{{FileName: fileName}},
-				Options: CreateProgramOptions{
-					CompilerOptions: core.CompilerOptions{NoLib: core.TSTrue},
-				},
+				RootFiles:       []DocumentIdentifier{{FileName: fileName}},
+				CompilerOptions: core.CompilerOptions{NoLib: core.TSTrue},
 			}},
 		},
 	})
@@ -348,8 +342,8 @@ func TestLanguageServerProgramReconfigurationIsIsolatedByAPISession(t *testing.T
 	created, err := owner.handleGetCurrentLanguageServerSnapshot(context.Background(), &GetCurrentLanguageServerSnapshotParams{
 		Changes: &LanguageServerSnapshotChanges{
 			CreatePrograms: []*CreateSnapshotProgramParams{{
-				RootFiles: []DocumentIdentifier{{FileName: fileName}},
-				Options:   CreateProgramOptions{CompilerOptions: core.CompilerOptions{NoLib: core.TSTrue}},
+				RootFiles:       []DocumentIdentifier{{FileName: fileName}},
+				CompilerOptions: core.CompilerOptions{NoLib: core.TSTrue},
 			}},
 		},
 	})
@@ -361,9 +355,9 @@ func TestLanguageServerProgramReconfigurationIsIsolatedByAPISession(t *testing.T
 	_, err = other.handleGetCurrentLanguageServerSnapshot(context.Background(), &GetCurrentLanguageServerSnapshotParams{
 		Changes: &LanguageServerSnapshotChanges{
 			ReconfigurePrograms: []*ReconfigureSnapshotProgramParams{{
-				Id:        programID,
-				RootFiles: []DocumentIdentifier{{FileName: fileName}},
-				Options:   CreateProgramOptions{CompilerOptions: core.CompilerOptions{NoLib: core.TSTrue, Strict: core.TSTrue}},
+				Id:              programID,
+				RootFiles:       []DocumentIdentifier{{FileName: fileName}},
+				CompilerOptions: core.CompilerOptions{NoLib: core.TSTrue, Strict: core.TSTrue},
 			}},
 		},
 	})

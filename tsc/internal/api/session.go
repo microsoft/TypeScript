@@ -1285,12 +1285,15 @@ func (s *Session) toAPISnapshotRequest(changes *SnapshotRequestChangesParams) (*
 		for j, rootFile := range programParams.RootFiles {
 			rootFileNames[j] = rootFile.ToAbsoluteFileName(s.currentDirectory())
 		}
-		apiRequest.CreatePrograms[i] = &project.APICreateProgramRequest{
-			RootFileNames:                rootFileNames,
-			CompilerOptions:              &programParams.Options.CompilerOptions,
-			ProjectReferences:            programParams.Options.ProjectReferences,
-			ConfigFileParsingDiagnostics: core.Map(programParams.Options.ConfigFileParsingDiagnostics, func(d *DiagnosticResponse) *ast.Diagnostic { return d.ToDiagnostic() }),
+		request := &project.APICreateProgramRequest{
+			RootFileNames:   rootFileNames,
+			CompilerOptions: &programParams.CompilerOptions,
 		}
+		if programParams.Options != nil {
+			request.ProjectReferences = programParams.Options.ProjectReferences
+			request.ConfigFileParsingDiagnostics = core.Map(programParams.Options.ConfigFileParsingDiagnostics, func(d *DiagnosticResponse) *ast.Diagnostic { return d.ToDiagnostic() })
+		}
+		apiRequest.CreatePrograms[i] = request
 	}
 	apiRequest.ReconfigurePrograms = make([]*project.APIReconfigureProgramRequest, len(changes.ReconfigurePrograms))
 	reconfiguredProgramIDs := collections.Set[project.SyntheticProjectID]{}
@@ -1310,13 +1313,16 @@ func (s *Session) toAPISnapshotRequest(changes *SnapshotRequestChangesParams) (*
 		for j, rootFile := range programParams.RootFiles {
 			rootFileNames[j] = rootFile.ToAbsoluteFileName(s.currentDirectory())
 		}
-		apiRequest.ReconfigurePrograms[i] = &project.APIReconfigureProgramRequest{
-			ProgramID:                    programID,
-			RootFileNames:                rootFileNames,
-			CompilerOptions:              &programParams.Options.CompilerOptions,
-			ProjectReferences:            programParams.Options.ProjectReferences,
-			ConfigFileParsingDiagnostics: core.Map(programParams.Options.ConfigFileParsingDiagnostics, func(d *DiagnosticResponse) *ast.Diagnostic { return d.ToDiagnostic() }),
+		request := &project.APIReconfigureProgramRequest{
+			ProgramID:       programID,
+			RootFileNames:   rootFileNames,
+			CompilerOptions: &programParams.CompilerOptions,
 		}
+		if programParams.Options != nil {
+			request.ProjectReferences = programParams.Options.ProjectReferences
+			request.ConfigFileParsingDiagnostics = core.Map(programParams.Options.ConfigFileParsingDiagnostics, func(d *DiagnosticResponse) *ast.Diagnostic { return d.ToDiagnostic() })
+		}
+		apiRequest.ReconfigurePrograms[i] = request
 	}
 	if len(changes.RemovePrograms) > 0 {
 		apiRequest.RemovePrograms = collections.NewSetWithSizeHint[project.SyntheticProjectID](len(changes.RemovePrograms))

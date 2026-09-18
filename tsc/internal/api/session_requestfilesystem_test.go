@@ -513,8 +513,8 @@ func TestCreateProgramRetainsFullFileSystem(t *testing.T) {
 		Snapshot: base.Snapshot,
 		Changes: &CreateSnapshotParams{
 			CreatePrograms: []*CreateSnapshotProgramParams{{
-				RootFiles: []DocumentIdentifier{{FileName: "/new.ts"}},
-				Options:   CreateProgramOptions{CompilerOptions: core.CompilerOptions{NoLib: core.TSTrue}},
+				RootFiles:       []DocumentIdentifier{{FileName: "/new.ts"}},
+				CompilerOptions: core.CompilerOptions{NoLib: core.TSTrue},
 			}},
 		},
 	})

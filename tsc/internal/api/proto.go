@@ -405,14 +405,16 @@ type CreateSnapshotParams struct {
 }
 
 type CreateSnapshotProgramParams struct {
-	RootFiles []DocumentIdentifier `json:"rootFiles"`
-	Options   CreateProgramOptions `json:"options"`
+	RootFiles       []DocumentIdentifier  `json:"rootFiles"`
+	CompilerOptions core.CompilerOptions  `json:"compilerOptions"`
+	Options         *CreateProgramOptions `json:"options,omitempty"`
 }
 
 type ReconfigureSnapshotProgramParams struct {
-	Id        project.SyntheticProjectID `json:"id"`
-	RootFiles []DocumentIdentifier       `json:"rootFiles"`
-	Options   CreateProgramOptions       `json:"options"`
+	Id              project.SyntheticProjectID `json:"id"`
+	RootFiles       []DocumentIdentifier       `json:"rootFiles"`
+	CompilerOptions core.CompilerOptions       `json:"compilerOptions"`
+	Options         *CreateProgramOptions      `json:"options,omitempty"`
 }
 
 type UpdateSnapshotParams struct {
@@ -432,7 +434,6 @@ type LanguageServerSnapshotChanges struct {
 }
 
 type CreateProgramOptions struct {
-	CompilerOptions              core.CompilerOptions     `json:"compilerOptions"`
 	ProjectReferences            []*core.ProjectReference `json:"projectReferences,omitempty"`
 	ConfigFileParsingDiagnostics []*DiagnosticResponse    `json:"configFileParsingDiagnostics,omitempty"`
 }

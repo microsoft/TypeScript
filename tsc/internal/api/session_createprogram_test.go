@@ -26,10 +26,8 @@ func TestCreateSnapshotUsesIndependentRoots(t *testing.T) {
 
 	firstResponse, err := session.handleCreateSnapshot(context.Background(), &CreateSnapshotParams{
 		CreatePrograms: []*CreateSnapshotProgramParams{{
-			RootFiles: []DocumentIdentifier{{FileName: "/home/projects/p/src/index.ts"}},
-			Options: CreateProgramOptions{
-				CompilerOptions: core.CompilerOptions{NoLib: core.TSTrue},
-			},
+			RootFiles:       []DocumentIdentifier{{FileName: "/home/projects/p/src/index.ts"}},
+			CompilerOptions: core.CompilerOptions{NoLib: core.TSTrue},
 		}},
 	})
 	assert.NilError(t, err)
@@ -62,16 +60,12 @@ func TestCreateSnapshotCreatesPrograms(t *testing.T) {
 	response, err := session.handleCreateSnapshot(context.Background(), &CreateSnapshotParams{
 		CreatePrograms: []*CreateSnapshotProgramParams{
 			{
-				RootFiles: []DocumentIdentifier{{FileName: fileA}, {FileName: fileB}},
-				Options: CreateProgramOptions{
-					CompilerOptions: core.CompilerOptions{NoLib: core.TSTrue, Strict: core.TSTrue},
-				},
+				RootFiles:       []DocumentIdentifier{{FileName: fileA}, {FileName: fileB}},
+				CompilerOptions: core.CompilerOptions{NoLib: core.TSTrue, Strict: core.TSTrue},
 			},
 			{
-				RootFiles: []DocumentIdentifier{{FileName: fileB}},
-				Options: CreateProgramOptions{
-					CompilerOptions: core.CompilerOptions{NoLib: core.TSTrue},
-				},
+				RootFiles:       []DocumentIdentifier{{FileName: fileB}},
+				CompilerOptions: core.CompilerOptions{NoLib: core.TSTrue},
 			},
 		},
 	})
@@ -130,8 +124,8 @@ func TestUpdateSnapshotReconfiguresSyntheticProgram(t *testing.T) {
 
 	created, err := session.handleCreateSnapshot(context.Background(), &CreateSnapshotParams{
 		CreatePrograms: []*CreateSnapshotProgramParams{{
-			RootFiles: []DocumentIdentifier{{FileName: "/home/projects/p/a.ts"}},
-			Options:   CreateProgramOptions{CompilerOptions: core.CompilerOptions{NoLib: core.TSTrue}},
+			RootFiles:       []DocumentIdentifier{{FileName: "/home/projects/p/a.ts"}},
+			CompilerOptions: core.CompilerOptions{NoLib: core.TSTrue},
 		}},
 	})
 	assert.NilError(t, err)
@@ -141,9 +135,9 @@ func TestUpdateSnapshotReconfiguresSyntheticProgram(t *testing.T) {
 		Snapshot: created.Snapshot,
 		Changes: &CreateSnapshotParams{
 			ReconfigurePrograms: []*ReconfigureSnapshotProgramParams{{
-				Id:        programID,
-				RootFiles: []DocumentIdentifier{{FileName: "/home/projects/p/b.ts"}},
-				Options:   CreateProgramOptions{CompilerOptions: core.CompilerOptions{NoLib: core.TSTrue, Strict: core.TSTrue}},
+				Id:              programID,
+				RootFiles:       []DocumentIdentifier{{FileName: "/home/projects/p/b.ts"}},
+				CompilerOptions: core.CompilerOptions{NoLib: core.TSTrue, Strict: core.TSTrue},
 			}},
 		},
 	})
@@ -231,8 +225,8 @@ func TestUpdateSnapshotEnsuresSyntheticProgram(t *testing.T) {
 
 	created, err := session.handleCreateSnapshot(context.Background(), &CreateSnapshotParams{
 		CreatePrograms: []*CreateSnapshotProgramParams{{
-			RootFiles: []DocumentIdentifier{{FileName: fileName}},
-			Options:   CreateProgramOptions{CompilerOptions: core.CompilerOptions{NoLib: core.TSTrue}},
+			RootFiles:       []DocumentIdentifier{{FileName: fileName}},
+			CompilerOptions: core.CompilerOptions{NoLib: core.TSTrue},
 		}},
 	})
 	assert.NilError(t, err)
