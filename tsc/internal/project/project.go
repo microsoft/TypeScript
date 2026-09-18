@@ -32,6 +32,10 @@ type ID string
 
 type ConfiguredProjectID tspath.Path
 
+func (id ConfiguredProjectID) Path() tspath.Path {
+	return tspath.Path(id)
+}
+
 type InferredProjectID string
 
 const inferredProjectID InferredProjectID = inferredProjectName
@@ -45,23 +49,31 @@ func NewSyntheticProjectID(id int) SyntheticProjectID {
 	return SyntheticProjectID(fmt.Sprintf("%s%d", syntheticProjectPrefix, id))
 }
 
-func (id ID) String() string { return string(id) }
+func (id ID) String() string            { return string(id) }
+func (id ConfiguredProjectID) AsID() ID { return ID(id) }
+func (id InferredProjectID) AsID() ID   { return ID(id) }
+func (id SyntheticProjectID) AsID() ID  { return ID(id) }
 
 func (id ID) Configured() (ConfiguredProjectID, bool) {
+	return ParseConfiguredProjectID(tspath.Path(id))
+}
+
+func ParseConfiguredProjectID(value tspath.Path) (ConfiguredProjectID, bool) {
+	id := ID(value)
 	if id == "" {
 		return "", false
 	}
 	if _, ok := id.Inferred(); ok {
 		return "", false
 	}
-	if strings.HasPrefix(string(id), syntheticProjectPrefix) {
+	if _, ok := id.Synthetic(); ok {
 		return "", false
 	}
-	return ConfiguredProjectID(id), true
+	return ConfiguredProjectID(value), true
 }
 
 func (id ID) Inferred() (InferredProjectID, bool) {
-	return inferredProjectID, id == ID(inferredProjectID)
+	return inferredProjectID, id == inferredProjectID.AsID()
 }
 
 func (id ID) Synthetic() (SyntheticProjectID, bool) {
@@ -87,7 +99,10 @@ func ParseSyntheticProjectID(value string) (SyntheticProjectID, bool) {
 		return "", false
 	}
 	id, err := strconv.Atoi(suffix)
-	return SyntheticProjectID(value), err == nil && id > 0
+	if err != nil || id <= 0 {
+		return "", false
+	}
+	return NewSyntheticProjectID(id), true
 }
 
 //go:generate go tool golang.org/x/tools/cmd/stringer -type=Kind -trimprefix=Kind -output=project_stringer_generated.go
@@ -165,7 +180,11 @@ func NewConfiguredProject(
 	builder *ProjectCollectionBuilder,
 	logger *logging.LogTree,
 ) *Project {
-	project := NewProject(ID(configFilePath), KindConfigured, tspath.GetDirectoryPath(configFileName), builder, logger)
+	configuredProjectID, ok := ParseConfiguredProjectID(configFilePath)
+	if !ok {
+		panic(fmt.Sprintf("invalid configured project ID: %s", configFilePath))
+	}
+	project := NewProject(configuredProjectID.AsID(), KindConfigured, tspath.GetDirectoryPath(configFileName), builder, logger)
 	project.configFileName = configFileName
 	project.configFilePath = configFilePath
 	return project
@@ -180,7 +199,7 @@ func NewInferredProject(
 	builder *ProjectCollectionBuilder,
 	logger *logging.LogTree,
 ) *Project {
-	p := NewProject(ID(inferredProjectID), KindInferred, currentDirectory, builder, logger)
+	p := NewProject(inferredProjectID.AsID(), KindInferred, currentDirectory, builder, logger)
 	if compilerOptions == nil {
 		compilerOptions = &core.CompilerOptions{
 			AllowJs:                    core.TSTrue,
@@ -219,7 +238,7 @@ func newSyntheticProject(
 	builder *ProjectCollectionBuilder,
 	logger *logging.LogTree,
 ) *Project {
-	project := NewProject(ID(id), KindSynthetic, currentDirectory, builder, logger)
+	project := NewProject(id.AsID(), KindSynthetic, currentDirectory, builder, logger)
 	project.CommandLine = newInferredProjectCommandLine(
 		compilerOptions,
 		rootFileNames,
@@ -299,7 +318,11 @@ func (p *Project) DisplayName(cwd string) string {
 	if p.Kind == KindInferred {
 		return tspath.GetBaseFileName(p.currentDirectory)
 	}
-	return tspath.ConvertToRelativePath(string(p.ID()), tspath.ComparePathsOptions{
+	name := string(p.ID())
+	if p.Kind == KindConfigured {
+		name = p.ConfigFileName()
+	}
+	return tspath.ConvertToRelativePath(name, tspath.ComparePathsOptions{
 		CurrentDirectory: cwd,
 	})
 }

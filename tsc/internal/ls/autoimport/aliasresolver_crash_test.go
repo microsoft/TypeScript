@@ -27,7 +27,9 @@ func (h *fakeCloneHost) GetDefaultProject(path tspath.Path) (ProjectID, *compile
 	return nil, nil
 }
 
-func (h *fakeCloneHost) GetProgramForProject(projectID ProjectID) *compiler.Program { return nil }
+func (h *fakeCloneHost) GetProgramForProject(projectID ProjectID) *compiler.Program {
+	return nil
+}
 
 func (h *fakeCloneHost) GetPackageJson(fileName string) *packagejson.InfoCacheEntry { return nil }
 

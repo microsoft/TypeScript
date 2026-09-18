@@ -939,7 +939,7 @@ func (b *ProjectCollectionBuilder) findDefaultProject(fileName string, path tspa
 		if b.fileDefaultProjects == nil {
 			b.fileDefaultProjects = make(map[tspath.Path]ID)
 		}
-		b.fileDefaultProjects[path] = ID(inferredProjectID)
+		b.fileDefaultProjects[path] = inferredProjectID.AsID()
 		return b.inferredProject
 	}
 	return nil

@@ -1788,7 +1788,7 @@ func (s *Session) logCacheStats(snapshot *Snapshot) {
 		if len(autoImportStats.ProjectBuckets) > 0 {
 			s.logger.Log("\tProject buckets:")
 			for _, bucket := range autoImportStats.ProjectBuckets {
-				s.logger.Logf("\t\t%s%s:", bucket.Path, core.IfElse(bucket.State.Dirty(), " (dirty)", ""))
+				s.logger.Logf("\t\t%s%s:", bucket.Name, core.IfElse(bucket.State.Dirty(), " (dirty)", ""))
 				s.logger.Logf("\t\t\tFiles: %d", bucket.FileCount)
 				s.logger.Logf("\t\t\tExports: %d", bucket.ExportCount)
 			}
@@ -1796,7 +1796,7 @@ func (s *Session) logCacheStats(snapshot *Snapshot) {
 		if len(autoImportStats.NodeModulesBuckets) > 0 {
 			s.logger.Log("\tnode_modules buckets:")
 			for _, bucket := range autoImportStats.NodeModulesBuckets {
-				s.logger.Logf("\t\t%s%s:", bucket.Path, core.IfElse(bucket.State.Dirty(), " (dirty)", ""))
+				s.logger.Logf("\t\t%s%s:", bucket.Name, core.IfElse(bucket.State.Dirty(), " (dirty)", ""))
 				for packageName := range bucket.State.DirtyPackages().Keys() {
 					s.logger.Logf("\t\t\tNeeds granular update: %s", packageName)
 				}

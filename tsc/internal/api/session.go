@@ -1208,10 +1208,14 @@ func (s *Session) toAPISnapshotRequest(changes *SnapshotRequestChangesParams) (*
 
 	for _, p := range changes.OpenProjects {
 		configFileName := p.ToAbsoluteFileName(s.currentDirectory())
+		configuredProjectID, ok := project.ParseConfiguredProjectID(s.toPath(configFileName))
+		if !ok {
+			return nil, fmt.Errorf("%w: invalid configured project ID: %s", ErrClientError, configFileName)
+		}
 		if apiRequest.EnsurePrograms == nil {
 			apiRequest.EnsurePrograms = collections.NewSetWithSizeHint[project.ID](len(changes.OpenProjects))
 		}
-		apiRequest.EnsurePrograms.Add(project.ID(project.ConfiguredProjectID(s.toPath(configFileName))))
+		apiRequest.EnsurePrograms.Add(configuredProjectID.AsID())
 		if apiRequest.OpenProjects == nil {
 			apiRequest.OpenProjects = collections.NewSetWithSizeHint[string](len(changes.OpenProjects))
 		}
@@ -4280,7 +4284,11 @@ func (s *Session) createSnapshotOperationResponse(snapshot *project.Snapshot, re
 		}
 		results := make([]project.SyntheticProjectID, len(createdPrograms))
 		for i, createdProgram := range createdPrograms {
-			results[i] = project.SyntheticProjectID(createdProgram.ID())
+			programID, ok := createdProgram.ID().Synthetic()
+			if !ok {
+				panic("created program has non-synthetic project ID")
+			}
+			results[i] = programID
 		}
 		operation.CreatedPrograms = &results
 	}

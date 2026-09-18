@@ -14,7 +14,7 @@ import (
 )
 
 func configuredProjectID(path string) project.ID {
-	return project.ID(project.ConfiguredProjectID(tspath.Path(path)))
+	return project.ConfiguredProjectID(tspath.Path(path)).AsID()
 }
 
 func inferredProjectID() project.ID {
@@ -93,6 +93,19 @@ func TestGetCurrentLanguageServerSnapshotRejectsStandaloneSession(t *testing.T) 
 
 	_, err := session.handleGetCurrentLanguageServerSnapshot(context.Background(), &GetCurrentLanguageServerSnapshotParams{})
 	assert.ErrorContains(t, err, "requires an LSP-connected API session")
+}
+
+func TestOpenProjectRejectsReservedProjectID(t *testing.T) {
+	t.Parallel()
+
+	init, _ := projecttestutil.GetSessionInitOptions(map[string]any{}, nil, &projecttestutil.TypingsInstallerOptions{})
+	session := NewStandaloneSession(init, nil)
+	defer session.Close()
+
+	_, err := session.toAPISnapshotRequest(&SnapshotRequestChangesParams{
+		OpenProjects: []DocumentIdentifier{{FileName: "/dev/null/inferred"}},
+	})
+	assert.ErrorContains(t, err, "invalid configured project ID")
 }
 
 func TestGetCurrentLanguageServerSnapshotCloseAndReopenProject(t *testing.T) {

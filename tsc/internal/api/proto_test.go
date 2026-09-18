@@ -76,8 +76,8 @@ func TestEnsureProgramsUnmarshalJSON(t *testing.T) {
 	var projects api.EnsurePrograms
 	assert.NilError(t, json.Unmarshal([]byte(`["/tsconfig.json","/dev/null/synthetic/1"]`), &projects))
 	assert.DeepEqual(t, projects.Projects, []project.ID{
-		project.ID(project.ConfiguredProjectID(tspath.Path("/tsconfig.json"))),
-		project.ID(project.NewSyntheticProjectID(1)),
+		project.ConfiguredProjectID(tspath.Path("/tsconfig.json")).AsID(),
+		project.NewSyntheticProjectID(1).AsID(),
 	})
 
 	var invalid api.EnsurePrograms

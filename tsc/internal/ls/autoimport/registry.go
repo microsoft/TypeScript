@@ -415,7 +415,7 @@ func (r *Registry) Clone(ctx context.Context, change RegistryChange, host Regist
 }
 
 type BucketStats struct {
-	Path            tspath.Path
+	Name            string
 	ExportCount     int
 	FileCount       int
 	State           BucketState
@@ -434,13 +434,13 @@ func (r *Registry) GetCacheStats() *CacheStats {
 		UniquePackageCount: r.uniquePackageCount,
 	}
 
-	for path, bucket := range r.projects {
+	for projectID, bucket := range r.projects {
 		exportCount := 0
 		if bucket.Index != nil {
 			exportCount = len(bucket.Index.entries)
 		}
 		stats.ProjectBuckets = append(stats.ProjectBuckets, BucketStats{
-			Path:            tspath.Path(path.String()),
+			Name:            projectID.String(),
 			ExportCount:     exportCount,
 			FileCount:       len(bucket.Paths),
 			State:           bucket.state,
@@ -465,7 +465,7 @@ func (r *Registry) GetCacheStats() *CacheStats {
 			}
 		}
 		stats.NodeModulesBuckets = append(stats.NodeModulesBuckets, BucketStats{
-			Path:            path,
+			Name:            string(path),
 			ExportCount:     exportCount,
 			FileCount:       fileCount,
 			State:           bucket.state,
@@ -475,10 +475,10 @@ func (r *Registry) GetCacheStats() *CacheStats {
 	}
 
 	slices.SortFunc(stats.ProjectBuckets, func(a, b BucketStats) int {
-		return cmp.Compare(a.Path, b.Path)
+		return cmp.Compare(a.Name, b.Name)
 	})
 	slices.SortFunc(stats.NodeModulesBuckets, func(a, b BucketStats) int {
-		return cmp.Compare(a.Path, b.Path)
+		return cmp.Compare(a.Name, b.Name)
 	})
 
 	return stats

@@ -739,6 +739,22 @@ func TestDisplayName(t *testing.T) {
 		assert.Equal(t, configured.DisplayName("/home/projects"), "sub/tsconfig.json")
 	})
 
+	t.Run("configured project preserves config path casing", func(t *testing.T) {
+		t.Parallel()
+		files := map[string]any{
+			"/home/projects/Project/tsconfig.json": `{}`,
+			"/home/projects/Project/index.ts":      "export const x = 1;",
+		}
+		session, _ := projecttestutil.Setup(files)
+		session.DidOpenFile(context.Background(), "file:///home/projects/Project/index.ts", 1, "export const x = 1;", lsproto.LanguageKindTypeScript)
+		_, err := session.GetLanguageService(context.Background(), lsproto.DocumentUri("file:///home/projects/Project/index.ts"))
+		assert.NilError(t, err)
+
+		configured := session.Snapshot().ProjectCollection.ConfiguredProject(tspath.Path("/home/projects/project/tsconfig.json"))
+		assert.Assert(t, configured != nil)
+		assert.Equal(t, configured.DisplayName("/home/projects"), "Project/tsconfig.json")
+	})
+
 	t.Run("inferred project returns directory base name", func(t *testing.T) {
 		t.Parallel()
 		files := map[string]any{

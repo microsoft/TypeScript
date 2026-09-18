@@ -438,21 +438,30 @@ func TestProjectIDNarrowing(t *testing.T) {
 	_, ok = configured.Synthetic()
 	assert.Assert(t, !ok)
 
-	inferred := ID(inferredProjectID)
+	inferred := inferredProjectID.AsID()
 	inferredID, ok := inferred.Inferred()
 	assert.Assert(t, ok)
 	assert.Equal(t, inferredID, inferredProjectID)
 	_, ok = inferred.Configured()
 	assert.Assert(t, !ok)
 
-	synthetic := ID(NewSyntheticProjectID(1))
+	synthetic := NewSyntheticProjectID(1).AsID()
 	syntheticID, ok := synthetic.Synthetic()
 	assert.Assert(t, ok)
 	assert.Equal(t, syntheticID, NewSyntheticProjectID(1))
 	_, ok = synthetic.Configured()
 	assert.Assert(t, !ok)
 
+	canonicalSyntheticID, ok := ID("/dev/null/synthetic/01").Synthetic()
+	assert.Assert(t, ok)
+	assert.Equal(t, canonicalSyntheticID, NewSyntheticProjectID(1))
+
 	_, ok = ID("/dev/null/synthetic/invalid").Configured()
+	assert.Assert(t, ok)
+
+	_, ok = ParseConfiguredProjectID(inferredProjectName)
+	assert.Assert(t, !ok)
+	_, ok = ParseConfiguredProjectID(tspath.Path(NewSyntheticProjectID(1)))
 	assert.Assert(t, !ok)
 }
 
