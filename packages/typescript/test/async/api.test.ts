@@ -72,6 +72,7 @@ import {
     ModifierFlags,
     ModuleKind,
     ModuleResolutionKind,
+    type ModuleResolverOptions,
     type NumberLiteralType,
     ObjectFlags,
     type Program,
@@ -427,6 +428,88 @@ describe("API", () => {
         assert.deepEqual(await reconfiguredProgram.getSourceFileNames(), ["/src/b.ts"]);
         assert.deepEqual(reconfiguredProgram.getCompilerOptions(), { noLib: true, strict: true });
         assert.deepEqual(await originalProgram.getSourceFileNames(), ["/src/a.ts"]);
+    });
+
+    test("snapshot.update reconfigures module resolution providers", async () => {
+        const root = "/src/index.ts";
+        const providedA = "/a.d.ts";
+        const providedB = "/b.d.ts";
+        const { api: disposableAPI, fs } = spawnAPIWithFS({
+            [root]: `import { value } from "pkg"; export { value };`,
+            [providedA]: `export declare const value: "a";`,
+            [providedB]: `export declare const value: "b";`,
+        });
+        await using api = disposableAPI;
+        const compilerOptions = {
+            noLib: true,
+            module: ModuleKind.NodeNext,
+            moduleResolution: ModuleResolutionKind.NodeNext,
+        };
+        const spec = (resolvedFileName: string) => ({
+            fallback: "unresolved" as const,
+            entries: [{ moduleName: "pkg", result: { resolvedFileName } }],
+        });
+        const setA = await api.createModuleResolutionSet(spec(providedA));
+        const setB = await api.createModuleResolutionSet(spec(providedB));
+        const createProgram = (moduleResolutions: ModuleResolverOptions["moduleResolutions"]) => ({
+            rootFiles: [root],
+            options: {
+                compilerOptions,
+                ...(moduleResolutions ? { moduleResolutions } : {}),
+            },
+        });
+
+        const initial = await api.createSnapshot({ createPrograms: [createProgram(setA)] });
+        const programId = initial.operation.createdPrograms[0].id;
+        assert.deepEqual([...await initial.getProgram(programId)!.getSourceFileNames()].sort(), [providedA, root]);
+
+        const sameSet = await initial.update({
+            reconfigurePrograms: [{ id: programId, ...createProgram(setA) }],
+        });
+        assert.deepEqual([...await sameSet.getProgram(programId)!.getSourceFileNames()].sort(), [providedA, root]);
+
+        fs.writeFile!(root, `import { value } from "pkg"; export const updated = value;`);
+        const sameSetAfterEdit = await sameSet.update({
+            reconfigurePrograms: [{ id: programId, ...createProgram(setA) }],
+            fileNotifications: { changed: [root] },
+        });
+        assert.deepEqual([...await sameSetAfterEdit.getProgram(programId)!.getSourceFileNames()].sort(), [providedA, root]);
+
+        const changedSet = await sameSetAfterEdit.update({
+            reconfigurePrograms: [{ id: programId, ...createProgram(setB) }],
+        });
+        assert.deepEqual([...await changedSet.getProgram(programId)!.getSourceFileNames()].sort(), [providedB, root]);
+
+        const removedSet = await sameSetAfterEdit.update({
+            reconfigurePrograms: [{ id: programId, ...createProgram(undefined) }],
+        });
+        assert.deepEqual(await removedSet.getProgram(programId)!.getSourceFileNames(), [root]);
+
+        const inline = await sameSetAfterEdit.update({
+            reconfigurePrograms: [{ id: programId, ...createProgram(spec(providedA)) }],
+        });
+        const repeatedInline = await inline.update({
+            reconfigurePrograms: [{ id: programId, ...createProgram(spec(providedA)) }],
+        });
+        assert.deepEqual([...await repeatedInline.getProgram(programId)!.getSourceFileNames()].sort(), [providedA, root]);
+
+        let callbackCalls = 0;
+        const callbackOptions = {
+            compilerOptions,
+            resolveModuleName: (moduleName: string) => {
+                callbackCalls++;
+                return moduleName === "pkg" ? { resolvedFileName: providedA } : undefined;
+            },
+        };
+        const callbackSnapshot = await api.createSnapshot({
+            createPrograms: [{ rootFiles: [root], options: callbackOptions }],
+        });
+        const callbackProgramId = callbackSnapshot.operation.createdPrograms[0].id;
+        const repeatedCallback = await callbackSnapshot.update({
+            reconfigurePrograms: [{ id: callbackProgramId, rootFiles: [root], options: callbackOptions }],
+        });
+        assert.deepEqual([...await repeatedCallback.getProgram(callbackProgramId)!.getSourceFileNames()].sort(), [providedA, root]);
+        assert.equal(callbackCalls, 2);
     });
 
     test("Program resolved modules and type reference directives", async () => {
