@@ -8887,5 +8887,9 @@
     "Diagnostic directive {0} returned by the content mapper has an invalid 'unusedExpectDirectiveIndex'.": {
         "category": "Message",
         "code": 18110
+    },
+    "Checking workspace": {
+        "category": "Message",
+        "code": 18111
     }
 }
