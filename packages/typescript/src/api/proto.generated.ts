@@ -1574,6 +1574,8 @@ export interface EmitOutputFile {
 export interface CreateSnapshotProgramParams {
     rootFiles: readonly DocumentIdentifier[] | null;
     options: CreateProgramOptions;
+    /** Incremental restores persistent diagnostic and emit state from the configured build info file. */
+    incremental?: boolean | undefined;
 }
 
 export interface ReconfigureSnapshotProgramParams {

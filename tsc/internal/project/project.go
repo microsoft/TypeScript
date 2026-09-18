@@ -283,6 +283,11 @@ func (p *Project) GetProgram() *compiler.Program {
 	return p.Program
 }
 
+// CompilerHost returns the frozen host associated with the current program.
+func (p *Project) CompilerHost() compiler.CompilerHost {
+	return p.host
+}
+
 func (p *Project) IsDirty() bool {
 	return p.dirty
 }

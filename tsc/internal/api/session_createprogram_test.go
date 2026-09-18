@@ -2,6 +2,7 @@ package api
 
 import (
 	"context"
+	"slices"
 	"testing"
 
 	"github.com/microsoft/TypeScript/tsc/internal/bundled"
@@ -149,6 +150,87 @@ func TestUpdateSnapshotReconfiguresSyntheticProgram(t *testing.T) {
 	assert.Equal(t, reconfigured.Projects[0].Id, ProjectID(programID))
 	assert.DeepEqual(t, reconfigured.Projects[0].RootFiles, []string{"/home/projects/p/b.ts"})
 	assert.Equal(t, reconfigured.Projects[0].CompilerOptions.Strict, core.TSTrue)
+}
+
+func TestIncrementalProgramComposesWithSnapshotUpdates(t *testing.T) {
+	t.Parallel()
+
+	const (
+		mainFile       = "/home/projects/p/main.ts"
+		dependencyFile = "/home/projects/p/dependency.ts"
+		buildInfoFile  = "/home/projects/p/out/build.tsbuildinfo"
+	)
+	projectSession, sessionUtils := projecttestutil.Setup(map[string]any{
+		mainFile:       `import { value } from "./dependency"; export const result = value();`,
+		dependencyFile: `export function value() { return 1; }`,
+	})
+	defer projectSession.Close()
+	session := NewLSPSession(projectSession, nil)
+	defer session.Close()
+	ctx := context.Background()
+	options := CreateProgramOptions{CompilerOptions: core.CompilerOptions{
+		Declaration:     core.TSTrue,
+		Incremental:     core.TSTrue,
+		NoLib:           core.TSTrue,
+		OutDir:          "/home/projects/p/out",
+		RootDir:         "/home/projects/p",
+		TsBuildInfoFile: buildInfoFile,
+	}}
+
+	created, err := session.handleCreateSnapshot(ctx, &CreateSnapshotParams{
+		CreatePrograms: []*CreateSnapshotProgramParams{{
+			RootFiles:   []DocumentIdentifier{{FileName: mainFile}},
+			Options:     options,
+			Incremental: true,
+		}},
+	})
+	assert.NilError(t, err)
+	programID := (*created.Operation.CreatedPrograms)[0]
+	firstEmit, err := session.handleEmit(ctx, &EmitParams{Snapshot: created.Snapshot, Project: ProjectID(programID)})
+	assert.NilError(t, err)
+	assert.Assert(t, slices.Contains(firstEmit.EmittedFiles, buildInfoFile))
+
+	assert.NilError(t, sessionUtils.FS().WriteFile(dependencyFile, `export function value() { return 2; }`))
+	dirty, err := session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{
+		Snapshot: created.Snapshot,
+		Changes: &CreateSnapshotParams{
+			FileNotifications: &FileNotifications{Changed: []DocumentIdentifier{{FileName: dependencyFile}}},
+		},
+	})
+	assert.NilError(t, err)
+	dirtySnapshot, err := session.getSnapshotData(dirty.Snapshot)
+	assert.NilError(t, err)
+	assert.Assert(t, dirtySnapshot.incrementalPrograms[ProjectID(programID)] != nil)
+	dirtyProject, err := dirtySnapshot.getProject(ProjectID(programID))
+	assert.NilError(t, err)
+	assert.Assert(t, dirtyProject.IsDirty())
+
+	ensured, err := session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{
+		Snapshot: dirty.Snapshot,
+		Changes: &CreateSnapshotParams{
+			EnsurePrograms: &EnsurePrograms{Projects: []ProjectID{ProjectID(programID)}},
+		},
+	})
+	assert.NilError(t, err)
+	emitted, err := session.handleEmit(ctx, &EmitParams{Snapshot: ensured.Snapshot, Project: ProjectID(programID)})
+	assert.NilError(t, err)
+	assert.Assert(t, !slices.Contains(emitted.EmittedFiles, "/home/projects/p/out/main.js"), "unexpected emitted files: %v", emitted.EmittedFiles)
+	assert.Assert(t, slices.Contains(emitted.EmittedFiles, "/home/projects/p/out/dependency.js"))
+
+	reconfigured, err := session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{
+		Snapshot: ensured.Snapshot,
+		Changes: &CreateSnapshotParams{
+			ReconfigurePrograms: []*ReconfigureSnapshotProgramParams{{
+				Id:        programID,
+				RootFiles: []DocumentIdentifier{{FileName: mainFile}},
+				Options:   options,
+			}},
+		},
+	})
+	assert.NilError(t, err)
+	reconfiguredSnapshot, err := session.getSnapshotData(reconfigured.Snapshot)
+	assert.NilError(t, err)
+	assert.Assert(t, reconfiguredSnapshot.incrementalPrograms[ProjectID(programID)] != nil)
 }
 
 func TestReconfigureSyntheticProgramValidation(t *testing.T) {

@@ -496,6 +496,43 @@ declare module "augmentation" {}`,
         program.dispose();
     });
 
+    test("createIncrementalProgram restores build info and emits only affected files", () => {
+        const fs = createVirtualFileSystem({
+            "/src/main.ts": `import { value } from "./dependency"; export const result = value();`,
+            "/src/dependency.ts": `export function value() { return 1; }`,
+        });
+        using api = new API({
+            cwd: "/",
+            fs,
+        });
+        const options = {
+            compilerOptions: {
+                declaration: true,
+                incremental: true,
+                noLib: true,
+                outDir: "/out",
+                rootDir: "/src",
+                tsBuildInfoFile: "/out/build.tsbuildinfo",
+            },
+        };
+
+        const firstProgram = api.createIncrementalProgram(["/src/main.ts"], options);
+        const firstEmit = firstProgram.emit();
+        assert.ok(firstEmit.emittedFiles.includes("/out/main.js"));
+        assert.ok(firstEmit.emittedFiles.includes("/out/dependency.js"));
+        assert.ok(firstEmit.emittedFiles.includes("/out/build.tsbuildinfo"));
+        assert.ok(fs.readFile!("/out/build.tsbuildinfo"));
+        firstProgram.dispose();
+
+        fs.writeFile!("/src/dependency.ts", `export function value() { return 2; }`);
+        const secondProgram = api.createIncrementalProgram(["/src/main.ts"], options);
+        const secondEmit = secondProgram.emit();
+        assert.ok(!secondEmit.emittedFiles.includes("/out/main.js"), JSON.stringify(secondEmit.emittedFiles));
+        assert.ok(secondEmit.emittedFiles.includes("/out/dependency.js"));
+        assert.ok(secondEmit.emittedFiles.includes("/out/build.tsbuildinfo"));
+        secondProgram.dispose();
+    });
+
     test("createProgram includes project references", () => {
         const reference = { path: "/lib/tsconfig.json", originalPath: "/lib/tsconfig.json", circular: false };
         using api = spawnAPI({

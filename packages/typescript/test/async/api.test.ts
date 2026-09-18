@@ -507,6 +507,43 @@ declare module "augmentation" {}`,
         await program.dispose();
     });
 
+    test("createIncrementalProgram restores build info and emits only affected files", async () => {
+        const fs = createVirtualFileSystem({
+            "/src/main.ts": `import { value } from "./dependency"; export const result = value();`,
+            "/src/dependency.ts": `export function value() { return 1; }`,
+        });
+        await using api = new API({
+            cwd: "/",
+            fs,
+        });
+        const options = {
+            compilerOptions: {
+                declaration: true,
+                incremental: true,
+                noLib: true,
+                outDir: "/out",
+                rootDir: "/src",
+                tsBuildInfoFile: "/out/build.tsbuildinfo",
+            },
+        };
+
+        const firstProgram = await api.createIncrementalProgram(["/src/main.ts"], options);
+        const firstEmit = await firstProgram.emit();
+        assert.ok(firstEmit.emittedFiles.includes("/out/main.js"));
+        assert.ok(firstEmit.emittedFiles.includes("/out/dependency.js"));
+        assert.ok(firstEmit.emittedFiles.includes("/out/build.tsbuildinfo"));
+        assert.ok(fs.readFile!("/out/build.tsbuildinfo"));
+        await firstProgram.dispose();
+
+        fs.writeFile!("/src/dependency.ts", `export function value() { return 2; }`);
+        const secondProgram = await api.createIncrementalProgram(["/src/main.ts"], options);
+        const secondEmit = await secondProgram.emit();
+        assert.ok(!secondEmit.emittedFiles.includes("/out/main.js"), JSON.stringify(secondEmit.emittedFiles));
+        assert.ok(secondEmit.emittedFiles.includes("/out/dependency.js"));
+        assert.ok(secondEmit.emittedFiles.includes("/out/build.tsbuildinfo"));
+        await secondProgram.dispose();
+    });
+
     test("createProgram includes project references", async () => {
         const reference = { path: "/lib/tsconfig.json", originalPath: "/lib/tsconfig.json", circular: false };
         await using api = spawnAPI({

@@ -21,6 +21,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/compiler"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
+	"github.com/microsoft/TypeScript/tsc/internal/execute/incremental"
 	"github.com/microsoft/TypeScript/tsc/internal/format"
 	"github.com/microsoft/TypeScript/tsc/internal/ipc"
 	"github.com/microsoft/TypeScript/tsc/internal/jsnum"
@@ -47,9 +48,10 @@ var sessionIDCounter atomic.Uint64
 // Multiple clients may hold references to the same snapshot via ref counting;
 // the registries are cleaned up when refCount reaches zero.
 type snapshotData struct {
-	snapshot   *project.Snapshot
-	fileSystem vfs.FS
-	refCount   int
+	snapshot            *project.Snapshot
+	fileSystem          vfs.FS
+	incrementalPrograms map[ProjectID]*incremental.Program
+	refCount            int
 
 	openProjects collections.Set[tspath.Path]
 	openFiles    collections.Set[tspath.Path]
@@ -98,6 +100,13 @@ func (sd *snapshotData) getProgram(projectHandle ProjectID) (*compiler.Program, 
 	}
 
 	return program, nil
+}
+
+func (sd *snapshotData) getProgramLike(projectHandle ProjectID) (compiler.ProgramLike, error) {
+	if program := sd.incrementalPrograms[projectHandle]; program != nil {
+		return program, nil
+	}
+	return sd.getProgram(projectHandle)
 }
 
 // getProject looks up a project from a project handle within this snapshot.
@@ -1157,7 +1166,7 @@ func (s *Session) handleCreateSnapshot(ctx context.Context, params *CreateSnapsh
 	}
 
 	response := s.createSnapshotResponse(snapshot, nil, &params.SnapshotRequestChangesParams)
-	s.registerSnapshot(snapshot, openState, snapshotFileSystem)
+	s.registerSnapshot(snapshot, openState, snapshotFileSystem, nil, &params.SnapshotRequestChangesParams)
 	return response, nil
 }
 
@@ -1201,7 +1210,7 @@ func (s *Session) handleUpdateSnapshot(ctx context.Context, params *UpdateSnapsh
 	}
 
 	response := s.createSnapshotResponse(snapshot, baseSD.snapshot, &changes.SnapshotRequestChangesParams)
-	s.registerSnapshot(snapshot, openState, snapshotFileSystem)
+	s.registerSnapshot(snapshot, openState, snapshotFileSystem, baseSD, &changes.SnapshotRequestChangesParams)
 	return response, nil
 }
 
@@ -1404,7 +1413,13 @@ func (s *Session) reconcileSnapshotOpens(apiRequest *project.APISnapshotRequest,
 	return state
 }
 
-func (s *Session) registerSnapshot(snapshot *project.Snapshot, openState snapshotOpenState, fileSystem vfs.FS) {
+func (s *Session) registerSnapshot(
+	snapshot *project.Snapshot,
+	openState snapshotOpenState,
+	fileSystem vfs.FS,
+	baseSD *snapshotData,
+	request *SnapshotRequestChangesParams,
+) {
 	// If the same snapshot ID is returned (no changes), we increment the ref count
 	// so each client-side Snapshot can be disposed independently.
 	handle := snapshotHandle(snapshot)
@@ -1419,6 +1434,7 @@ func (s *Session) registerSnapshot(snapshot *project.Snapshot, openState snapsho
 		sd = &snapshotData{
 			snapshot:                snapshot,
 			fileSystem:              fileSystem,
+			incrementalPrograms:     s.createIncrementalPrograms(snapshot, baseSD, request),
 			refCount:                1,
 			openProjects:            *openState.openProjects.Clone(),
 			openFiles:               *openState.openFiles.Clone(),
@@ -1431,13 +1447,45 @@ func (s *Session) registerSnapshot(snapshot *project.Snapshot, openState snapsho
 	s.snapshotsMu.Unlock()
 }
 
+func (s *Session) createIncrementalPrograms(
+	snapshot *project.Snapshot,
+	baseSD *snapshotData,
+	request *SnapshotRequestChangesParams,
+) map[ProjectID]*incremental.Program {
+	programs := make(map[ProjectID]*incremental.Program)
+	if baseSD != nil {
+		for id, oldProgram := range baseSD.incrementalPrograms {
+			proj := snapshot.ProjectCollection.GetProjectByPath(parseProjectHandle(id))
+			if proj != nil && proj.Program != nil {
+				host := proj.CompilerHost()
+				programs[id] = incremental.NewProgram(proj.Program, oldProgram, incremental.CreateHost(host), nil, false)
+			}
+		}
+	}
+	if request != nil {
+		createdPrograms := snapshot.CreatedPrograms()
+		for i, create := range request.CreatePrograms {
+			if !create.Incremental {
+				continue
+			}
+			proj := createdPrograms[i]
+			host := proj.CompilerHost()
+			oldProgram := incremental.ReadBuildInfoProgram(proj.CommandLine, incremental.NewBuildInfoReader(host), host)
+			programs[ProjectHandle(proj)] = incremental.NewProgram(proj.Program, oldProgram, incremental.CreateHost(host), nil, false)
+		}
+	}
+	return programs
+}
+
 func (s *Session) handleGetCurrentLanguageServerSnapshot(ctx context.Context, params *GetCurrentLanguageServerSnapshotParams) (*CreateSnapshotResponse, error) {
 	if s.projectSession == nil {
 		return nil, fmt.Errorf("%w: getCurrentLanguageServerSnapshot requires an LSP-connected API session", ErrClientError)
 	}
 	var baseSnapshot *project.Snapshot
+	var baseSD *snapshotData
 	if params.BaseSnapshot != 0 {
-		baseSD, err := s.retainSnapshotData(params.BaseSnapshot)
+		var err error
+		baseSD, err = s.retainSnapshotData(params.BaseSnapshot)
 		if err != nil {
 			return nil, err
 		}
@@ -1464,7 +1512,7 @@ func (s *Session) handleGetCurrentLanguageServerSnapshot(ctx context.Context, pa
 
 	update.commit(s, snapshot)
 	response := s.createSnapshotResponse(snapshot, baseSnapshot, &changes.SnapshotRequestChangesParams)
-	s.registerSnapshot(snapshot, snapshotOpenState{openProjects: s.openProjects, openFiles: s.openFiles}, nil)
+	s.registerSnapshot(snapshot, snapshotOpenState{openProjects: s.openProjects, openFiles: s.openFiles}, nil, baseSD, &changes.SnapshotRequestChangesParams)
 	return response, nil
 }
 
@@ -3260,7 +3308,7 @@ func (s *Session) handleSelectedFilesEmit(ctx context.Context, params *SelectedF
 	})
 }
 
-func emitToOutput(ctx context.Context, program *compiler.Program, options compiler.EmitOptions) (*EmitOutputResponse, error) {
+func emitToOutput(ctx context.Context, program compiler.ProgramLike, options compiler.EmitOptions) (*EmitOutputResponse, error) {
 	var mu sync.Mutex
 	outputFiles := make([]*EmitOutputFile, 0)
 	options.WriteFile = func(fileName string, text string, data *compiler.WriteFileData) error {
@@ -3289,8 +3337,8 @@ func emitToOutput(ctx context.Context, program *compiler.Program, options compil
 	}, nil
 }
 
-func (s *Session) getEmitOptions(params *EmitParams) (*compiler.Program, compiler.EmitOptions, error) {
-	program, err := s.getEmitProgram(params.Snapshot, params.Project)
+func (s *Session) getEmitOptions(params *EmitParams) (compiler.ProgramLike, compiler.EmitOptions, error) {
+	program, err := s.getEmitProgramLike(params.Snapshot, params.Project)
 	if err != nil {
 		return nil, compiler.EmitOptions{}, err
 	}
@@ -3311,6 +3359,14 @@ func (s *Session) getEmitProgram(snapshot SnapshotID, projectID ProjectID) (*com
 	return sd.getProgram(projectID)
 }
 
+func (s *Session) getEmitProgramLike(snapshot SnapshotID, projectID ProjectID) (compiler.ProgramLike, error) {
+	sd, err := s.getSnapshotData(snapshot)
+	if err != nil {
+		return nil, err
+	}
+	return sd.getProgramLike(projectID)
+}
+
 func getEmitOnly(value *uint32) (compiler.EmitOnly, error) {
 	if value == nil {
 		return compiler.EmitAll, nil
@@ -3322,7 +3378,7 @@ func getEmitOnly(value *uint32) (compiler.EmitOnly, error) {
 	return emitOnly, nil
 }
 
-func emitProgram(ctx context.Context, program *compiler.Program, options compiler.EmitOptions) (*compiler.EmitResult, error) {
+func emitProgram(ctx context.Context, program compiler.ProgramLike, options compiler.EmitOptions) (*compiler.EmitResult, error) {
 	result := program.Emit(ctx, options)
 	if result != nil {
 		return result, nil
@@ -4399,13 +4455,13 @@ func (s *Session) toFileChangeSummary(changes *FileNotifications) project.FileCh
 	return summary
 }
 
-func (s *Session) getDiagnostics(ctx context.Context, params *GetDiagnosticsParams, getter func(*compiler.Program, context.Context, *ast.SourceFile) []*ast.Diagnostic) ([]*DiagnosticResponse, error) {
+func (s *Session) getDiagnostics(ctx context.Context, params *GetDiagnosticsParams, getter func(compiler.ProgramLike, context.Context, *ast.SourceFile) []*ast.Diagnostic) ([]*DiagnosticResponse, error) {
 	sd, err := s.getSnapshotData(params.Snapshot)
 	if err != nil {
 		return nil, err
 	}
 
-	program, err := sd.getProgram(params.Project)
+	program, err := sd.getProgramLike(params.Project)
 	if err != nil {
 		return nil, err
 	}
@@ -4413,7 +4469,7 @@ func (s *Session) getDiagnostics(ctx context.Context, params *GetDiagnosticsPara
 	if params.Files != nil {
 		var allDiags []*ast.Diagnostic
 		for _, file := range params.Files {
-			sourceFile, err := s.resolveOptionalSourceFile(program, &file)
+			sourceFile, err := s.resolveOptionalSourceFile(program.Program(), &file)
 			if err != nil {
 				return nil, err
 			}
@@ -4428,31 +4484,31 @@ func (s *Session) getDiagnostics(ctx context.Context, params *GetDiagnosticsPara
 // @gen-proto-nullable
 func (s *Session) handleGetSyntacticDiagnostics(ctx context.Context, params *GetDiagnosticsParams) ([]*DiagnosticResponse, error) {
 	ctx = core.WithCheckerLifetime(ctx, core.CheckerLifetimeDiagnostics)
-	return s.getDiagnostics(ctx, params, (*compiler.Program).GetSyntacticDiagnostics)
+	return s.getDiagnostics(ctx, params, compiler.ProgramLike.GetSyntacticDiagnostics)
 }
 
 // @gen-proto-nullable
 func (s *Session) handleGetBindDiagnostics(ctx context.Context, params *GetDiagnosticsParams) ([]*DiagnosticResponse, error) {
 	ctx = core.WithCheckerLifetime(ctx, core.CheckerLifetimeDiagnostics)
-	return s.getDiagnostics(ctx, params, (*compiler.Program).GetBindDiagnostics)
+	return s.getDiagnostics(ctx, params, compiler.ProgramLike.GetBindDiagnostics)
 }
 
 // @gen-proto-nullable
 func (s *Session) handleGetSemanticDiagnostics(ctx context.Context, params *GetDiagnosticsParams) ([]*DiagnosticResponse, error) {
 	ctx = core.WithCheckerLifetime(ctx, core.CheckerLifetimeDiagnostics)
-	return s.getDiagnostics(ctx, params, (*compiler.Program).GetSemanticDiagnostics)
+	return s.getDiagnostics(ctx, params, compiler.ProgramLike.GetSemanticDiagnostics)
 }
 
 // @gen-proto-nullable
 func (s *Session) handleGetSuggestionDiagnostics(ctx context.Context, params *GetDiagnosticsParams) ([]*DiagnosticResponse, error) {
 	ctx = core.WithCheckerLifetime(ctx, core.CheckerLifetimeDiagnostics)
-	return s.getDiagnostics(ctx, params, (*compiler.Program).GetSuggestionDiagnostics)
+	return s.getDiagnostics(ctx, params, compiler.ProgramLike.GetSuggestionDiagnostics)
 }
 
 // @gen-proto-nullable
 func (s *Session) handleGetDeclarationDiagnostics(ctx context.Context, params *GetDiagnosticsParams) ([]*DiagnosticResponse, error) {
 	ctx = core.WithCheckerLifetime(ctx, core.CheckerLifetimeDiagnostics)
-	return s.getDiagnostics(ctx, params, (*compiler.Program).GetDeclarationDiagnostics)
+	return s.getDiagnostics(ctx, params, compiler.ProgramLike.GetDeclarationDiagnostics)
 }
 
 // handleGetConfigFileParsingDiagnostics returns config file parsing diagnostics.
@@ -4463,7 +4519,7 @@ func (s *Session) handleGetConfigFileParsingDiagnostics(ctx context.Context, par
 		return nil, err
 	}
 
-	program, err := sd.getProgram(params.Project)
+	program, err := sd.getProgramLike(params.Project)
 	if err != nil {
 		return nil, err
 	}
@@ -4480,7 +4536,7 @@ func (s *Session) handleGetProgramDiagnostics(ctx context.Context, params *GetPr
 		return nil, err
 	}
 
-	program, err := sd.getProgram(params.Project)
+	program, err := sd.getProgramLike(params.Project)
 	if err != nil {
 		return nil, err
 	}
@@ -4503,8 +4559,11 @@ func (s *Session) handleGetGlobalDiagnostics(ctx context.Context, params *GetPro
 		return nil, err
 	}
 
-	program := proj.GetProgram()
-	if program == nil {
+	program, err := sd.getProgramLike(params.Project)
+	if err != nil {
+		return nil, err
+	}
+	if program.Program() == nil {
 		return nil, fmt.Errorf("%w: project has no program", ErrClientError)
 	}
 

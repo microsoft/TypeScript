@@ -79,6 +79,7 @@ import type {
     ConfiguredProjectId,
     CreateProgramOptions,
     CreateSnapshotParams,
+    CreateSnapshotProgramParams,
     CreateSnapshotResponse,
     Diagnostic,
     DocumentIdentifier,
@@ -944,13 +945,7 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
                 const snapshot = owner.createSnapshot({
                     createPrograms: [{ rootFiles, options: createProgramOptions }],
                 });
-                const program = snapshot.operation.createdPrograms[0];
-                if (!program) {
-                    snapshot.dispose();
-                    throw new Error("createProgram did not return a project");
-                }
-                program.setOwnedSnapshot(snapshot);
-                return program;
+                return owner.getOwnedCreatedProgram(snapshot, "createProgram");
             },
             function* (rootFiles: readonly DocumentIdentifier[], createProgramOptions: CreateProgramOptions): Generator<ProtocolRequest, Program, ProtocolResponse["result"]> {
                 yield* owner.ensureInitialized.gen();
@@ -958,10 +953,64 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
                 const snapshot = yield* owner.createSnapshot.gen({
                     createPrograms: [{ rootFiles, options: createProgramOptions }],
                 });
+                return yield* owner.getOwnedCreatedProgram.gen(snapshot, "createProgram");
+            },
+        );
+    }
+
+    /**
+     * Creates a program that restores persistent diagnostic and emit state from
+     * the build info file configured by `tsBuildInfoFile`.
+     */
+    get createIncrementalProgram(): {
+        (rootFiles: readonly DocumentIdentifier[], createProgramOptions: CreateProgramOptions): Program;
+        gen(rootFiles: readonly DocumentIdentifier[], createProgramOptions: CreateProgramOptions): Generator<ProtocolRequest, Program, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "createIncrementalProgram",
+            function (rootFiles: readonly DocumentIdentifier[], createProgramOptions: CreateProgramOptions): Program {
+                owner.ensureInitialized();
+
+                const snapshot = owner.createSnapshot({
+                    createPrograms: [{ rootFiles, options: createProgramOptions, incremental: true }],
+                });
+                return owner.getOwnedCreatedProgram(snapshot, "createIncrementalProgram");
+            },
+            function* (rootFiles: readonly DocumentIdentifier[], createProgramOptions: CreateProgramOptions): Generator<ProtocolRequest, Program, ProtocolResponse["result"]> {
+                yield* owner.ensureInitialized.gen();
+
+                const snapshot = yield* owner.createSnapshot.gen({
+                    createPrograms: [{ rootFiles, options: createProgramOptions, incremental: true }],
+                });
+                return yield* owner.getOwnedCreatedProgram.gen(snapshot, "createIncrementalProgram");
+            },
+        );
+    }
+
+    private get getOwnedCreatedProgram(): {
+        (snapshot: SnapshotForOperationResults<readonly [CreateSnapshotProgramParams], undefined>, method: "createProgram" | "createIncrementalProgram"): Program;
+        gen(snapshot: SnapshotForOperationResults<readonly [CreateSnapshotProgramParams], undefined>, method: "createProgram" | "createIncrementalProgram"): Generator<ProtocolRequest, Program, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getOwnedCreatedProgram",
+            function (snapshot: SnapshotForOperationResults<readonly [CreateSnapshotProgramParams], undefined>, method: "createProgram" | "createIncrementalProgram"): Program {
+                const program = snapshot.operation.createdPrograms[0];
+                if (!program) {
+                    snapshot.dispose();
+                    throw new Error(`${method} did not return a project`);
+                }
+                program.setOwnedSnapshot(snapshot);
+                return program;
+            },
+            function* (snapshot: SnapshotForOperationResults<readonly [CreateSnapshotProgramParams], undefined>, method: "createProgram" | "createIncrementalProgram"): Generator<ProtocolRequest, Program, ProtocolResponse["result"]> {
                 const program = snapshot.operation.createdPrograms[0];
                 if (!program) {
                     yield* snapshot.dispose.gen();
-                    throw new Error("createProgram did not return a project");
+                    throw new Error(`${method} did not return a project`);
                 }
                 program.setOwnedSnapshot(snapshot);
                 return program;

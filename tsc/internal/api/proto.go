@@ -419,6 +419,8 @@ type CreateSnapshotParams struct {
 type CreateSnapshotProgramParams struct {
 	RootFiles []DocumentIdentifier `json:"rootFiles"`
 	Options   CreateProgramOptions `json:"options"`
+	// Incremental restores persistent diagnostic and emit state from the configured build info file.
+	Incremental bool `json:"incremental,omitempty"`
 }
 
 type ReconfigureSnapshotProgramParams struct {

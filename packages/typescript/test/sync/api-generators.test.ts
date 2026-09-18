@@ -1513,6 +1513,7 @@ describe("API - generator batching", () => {
                 parityCase("API", "transpileDeclarationFromFile", api.transpileDeclarationFromFile, assertDeepEquivalent, "/src/index.ts"),
                 parityCase("API", "createSnapshot", api.createSnapshot as GeneratorMethod<[params: { openProject: string; }], Snapshot>, assertSnapshotsEquivalent, { openProject: "/tsconfig.json" }),
                 parityCase("API", "createProgram", api.createProgram, assertProgramsEquivalent, ["/src/index.ts"], { compilerOptions: { noLib: true } }),
+                parityCase("API", "createIncrementalProgram", api.createIncrementalProgram, assertProgramsEquivalent, [], { compilerOptions: { incremental: true, noLib: true, tsBuildInfoFile: "/build.tsbuildinfo" } }),
                 parityCase("API", "runWithTemporaryFileUpdate", api.runWithTemporaryFileUpdate, assertDeepEquivalent, snapshot, "/src/index.ts", parityFiles["/src/index.ts"].replace("123", '"fixed"'), (temporarySnapshot: Snapshot) => {
                     temporaryProjects.push(temporarySnapshot.getProjects()[0].configFileName);
                 }),

@@ -62,6 +62,7 @@ import type {
     ConfiguredProjectId,
     CreateProgramOptions,
     CreateSnapshotParams,
+    CreateSnapshotProgramParams,
     CreateSnapshotResponse,
     Diagnostic,
     DocumentIdentifier,
@@ -556,10 +557,30 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         const snapshot = await this.createSnapshot({
             createPrograms: [{ rootFiles, options: createProgramOptions }],
         });
+        return this.getOwnedCreatedProgram(snapshot, "createProgram");
+    }
+
+    /**
+     * Creates a program that restores persistent diagnostic and emit state from
+     * the build info file configured by `tsBuildInfoFile`.
+     */
+    async createIncrementalProgram(
+        rootFiles: readonly DocumentIdentifier[],
+        createProgramOptions: CreateProgramOptions,
+    ): Promise<Program> {
+        await this.ensureInitialized();
+
+        const snapshot = await this.createSnapshot({
+            createPrograms: [{ rootFiles, options: createProgramOptions, incremental: true }],
+        });
+        return this.getOwnedCreatedProgram(snapshot, "createIncrementalProgram");
+    }
+
+    private async getOwnedCreatedProgram(snapshot: SnapshotForOperationResults<readonly [CreateSnapshotProgramParams], undefined>, method: "createProgram" | "createIncrementalProgram"): Promise<Program> {
         const program = snapshot.operation.createdPrograms[0];
         if (!program) {
             await snapshot.dispose();
-            throw new Error("createProgram did not return a project");
+            throw new Error(`${method} did not return a project`);
         }
         program.setOwnedSnapshot(snapshot);
         return program;
