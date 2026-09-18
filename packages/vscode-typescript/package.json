@@ -364,8 +364,8 @@
         "LICENSE",
         "NOTICE.txt",
         "logo.png",
-        "l10n/bundle.l10n.json",
-        "package.nls.json"
+        "l10n/bundle.l10n*.json",
+        "package.nls*.json"
     ],
     "scripts": {
         "build": "tsc && npm run bundle",
