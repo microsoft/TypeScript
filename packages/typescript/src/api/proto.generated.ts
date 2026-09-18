@@ -5,6 +5,7 @@ import { ModuleDetectionKind } from "#enums/moduleDetectionKind";
 import { ModuleKind } from "#enums/moduleKind";
 import { ModuleResolutionKind } from "#enums/moduleResolutionKind";
 import { NewLineKind } from "#enums/newLineKind";
+import { ScriptKind } from "#enums/scriptKind";
 import { ScriptTarget } from "#enums/scriptTarget";
 import type { Path } from "../ast/index.ts";
 
@@ -13,6 +14,7 @@ export { ModuleDetectionKind } from "#enums/moduleDetectionKind";
 export { ModuleKind } from "#enums/moduleKind";
 export { ModuleResolutionKind } from "#enums/moduleResolutionKind";
 export { NewLineKind } from "#enums/newLineKind";
+export { ScriptKind } from "#enums/scriptKind";
 export { ScriptTarget } from "#enums/scriptTarget";
 
 export type APIMethod<TParams, TResult> = { params: TParams; result: TResult; };
@@ -32,6 +34,8 @@ export interface APIMethodInfo {
     readConfigFile: APIMethod<ReadConfigFileParams, ReadConfigFileResponse>;
     parseJsonConfigFileContent: APIMethod<ParseJsonConfigFileContentParams, ConfigFileResponse>;
     parseConfigFile: APIMethod<ParseConfigFileParams, ConfigFileResponse>;
+    createSourceFile: APIMethod<CreateSourceFileParams, SourceFileResponse>;
+    createSourceFileFromFile: APIMethod<CreateSourceFileFromFileParams, SourceFileResponse>;
     transpileModule: APIMethod<TranspileParams, TranspileOutputResponse>;
     transpileModuleFromFile: APIMethod<TranspileFromFileParams, TranspileOutputResponse>;
     transpileDeclaration: APIMethod<TranspileParams, TranspileOutputResponse>;
@@ -313,6 +317,26 @@ export interface ParseConfigFileParams {
     file: DocumentIdentifier;
 }
 
+export interface CreateSourceFileParams {
+    fileName: string;
+    sourceText: string;
+    options: CreateSourceFileOptions;
+}
+
+/**
+ * SourceFileResponse contains the binary-encoded AST data for a source file.
+ * The Data field is base64-encoded binary data in the encoder's format.
+ */
+export interface SourceFileResponse {
+    /** Data is the base64-encoded binary AST data in the encoder's format. */
+    data: string;
+}
+
+export interface CreateSourceFileFromFileParams {
+    fileName: string;
+    options: CreateSourceFileOptions;
+}
+
 export interface TranspileParams {
     input: string;
     options: TranspileOptions;
@@ -464,15 +488,6 @@ export interface GetSourceFileParams {
     snapshot: number;
     project: ProjectId;
     file: DocumentIdentifier;
-}
-
-/**
- * SourceFileResponse contains the binary-encoded AST data for a source file.
- * The Data field is base64-encoded binary data in the encoder's format.
- */
-export interface SourceFileResponse {
-    /** Data is the base64-encoded binary AST data in the encoder's format. */
-    data: string;
 }
 
 export interface GetSourceFileNamesParams {
@@ -1022,6 +1037,8 @@ export interface BatchRequest {
         | "createModuleResolutionSet"
         | "createModuleResolver"
         | "createSnapshot"
+        | "createSourceFile"
+        | "createSourceFileFromFile"
         | "emit"
         | "emitToString"
         | "formatNodeForInsertion"
@@ -1186,6 +1203,8 @@ export interface BatchResponse {
         | "createModuleResolutionSet"
         | "createModuleResolver"
         | "createSnapshot"
+        | "createSourceFile"
+        | "createSourceFileFromFile"
         | "emit"
         | "emitToString"
         | "formatNodeForInsertion"
@@ -1575,6 +1594,10 @@ export interface TypeAcquisition {
     include?: string[] | undefined;
     exclude?: string[] | undefined;
     disableFilenameBasedTypeAcquisition?: boolean | undefined;
+}
+
+export interface CreateSourceFileOptions {
+    scriptKind?: ScriptKind | undefined;
 }
 
 export interface TranspileOptions {

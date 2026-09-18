@@ -31,6 +31,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/module"
 	"github.com/microsoft/TypeScript/tsc/internal/nodebuilder"
+	"github.com/microsoft/TypeScript/tsc/internal/parser"
 	"github.com/microsoft/TypeScript/tsc/internal/pprof"
 	"github.com/microsoft/TypeScript/tsc/internal/printer"
 	"github.com/microsoft/TypeScript/tsc/internal/project"
@@ -720,6 +721,10 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleParseJsonConfigFileContent(ctx, parsed.(*ParseJsonConfigFileContentParams))
 	case string(MethodParseConfigFile):
 		return s.handleParseConfigFile(ctx, parsed.(*ParseConfigFileParams))
+	case string(MethodCreateSourceFile):
+		return s.handleCreateSourceFile(ctx, parsed.(*CreateSourceFileParams))
+	case string(MethodCreateSourceFileFromFile):
+		return s.handleCreateSourceFileFromFile(ctx, parsed.(*CreateSourceFileFromFileParams))
 	case string(MethodTranspileModule):
 		return s.handleTranspile(ctx, parsed.(*TranspileParams), false)
 	case string(MethodTranspileModuleFromFile):
@@ -1113,7 +1118,28 @@ func (s *Session) handleBatchRequest(ctx context.Context, request BatchRequest) 
 	if err != nil {
 		response.Error = err.Error()
 	}
+	if data, ok := response.Result.(RawBinary); ok && isSourceFileResponseMethod(request.Method) {
+		if data == nil {
+			response.Result = nil
+		} else {
+			response.Result = &SourceFileResponse{Data: base64.StdEncoding.EncodeToString(data)}
+		}
+	}
 	return response
+}
+
+func isSourceFileResponseMethod(method Method) bool {
+	switch method {
+	case MethodCreateSourceFile,
+		MethodCreateSourceFileFromFile,
+		MethodGetSourceFile,
+		MethodGetConfigSourceFile,
+		MethodTypeToTypeNode,
+		MethodSignatureToSignatureDeclaration:
+		return true
+	default:
+		return false
+	}
 }
 
 func (s *Session) handleStartCPUProfile(_ context.Context, params *ProfileParams) (any, error) {
@@ -1630,6 +1656,53 @@ func (s *Session) handleParseConfigFile(ctx context.Context, params *ParseConfig
 
 func (s *Session) handleTranspile(ctx context.Context, params *TranspileParams, declaration bool) (*TranspileOutputResponse, error) {
 	return transpileOutput(ctx, params.Input, params.Options, declaration)
+}
+
+// @gen-proto-result: SourceFileResponse
+func (s *Session) handleCreateSourceFile(ctx context.Context, params *CreateSourceFileParams) (any, error) {
+	sourceFile, err := s.createSourceFile(params.FileName, params.SourceText, params.Options)
+	if err != nil {
+		return nil, err
+	}
+	return s.encodeSourceFileResponse(sourceFile)
+}
+
+// @gen-proto-result: SourceFileResponse
+func (s *Session) handleCreateSourceFileFromFile(ctx context.Context, params *CreateSourceFileFromFileParams) (any, error) {
+	fileName := tspath.GetNormalizedAbsolutePath(params.FileName, s.currentDirectory())
+	sourceText, ok := s.snapshotHost.FS().ReadFile(fileName)
+	if !ok {
+		return nil, fmt.Errorf("%w: could not read file %q", ErrClientError, fileName)
+	}
+	sourceFile, err := s.createSourceFile(fileName, sourceText, params.Options)
+	if err != nil {
+		return nil, err
+	}
+	return s.encodeSourceFileResponse(sourceFile)
+}
+
+func (s *Session) createSourceFile(fileName string, sourceText string, options CreateSourceFileOptions) (*ast.SourceFile, error) {
+	scriptKind := options.ScriptKind
+	if scriptKind == core.ScriptKindUnknown {
+		scriptKind = core.EnsureScriptKindFromFileName(fileName)
+	}
+	if !isValidCreateSourceFileScriptKind(scriptKind) {
+		return nil, fmt.Errorf("%w: invalid scriptKind %d", ErrClientError, scriptKind)
+	}
+	fileName = tspath.GetNormalizedAbsolutePath(fileName, s.currentDirectory())
+	return parser.ParseSourceFile(ast.SourceFileParseOptions{
+		FileName: fileName,
+		Path:     s.toPath(fileName),
+	}, sourceText, scriptKind), nil
+}
+
+func isValidCreateSourceFileScriptKind(scriptKind core.ScriptKind) bool {
+	switch scriptKind {
+	case core.ScriptKindJS, core.ScriptKindJSX, core.ScriptKindTS, core.ScriptKindTSX, core.ScriptKindJSON:
+		return true
+	default:
+		return false
+	}
 }
 
 func (s *Session) handleTranspileFromFile(ctx context.Context, params *TranspileFromFileParams, declaration bool) (*TranspileOutputResponse, error) {

@@ -86,6 +86,8 @@ const (
 	MethodReadConfigFile                                 Method = "readConfigFile"
 	MethodParseJsonConfigFile                            Method = "parseJsonConfigFileContent"
 	MethodParseConfigFile                                Method = "parseConfigFile"
+	MethodCreateSourceFile                               Method = "createSourceFile"
+	MethodCreateSourceFileFromFile                       Method = "createSourceFileFromFile"
 	MethodTranspileModule                                Method = "transpileModule"
 	MethodTranspileModuleFromFile                        Method = "transpileModuleFromFile"
 	MethodTranspileDeclaration                           Method = "transpileDeclaration"
@@ -582,6 +584,8 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodReadConfigFile:                                 unmarshallerFor[ReadConfigFileParams],
 	MethodParseJsonConfigFile:                            unmarshallerFor[ParseJsonConfigFileContentParams],
 	MethodParseConfigFile:                                unmarshallerFor[ParseConfigFileParams],
+	MethodCreateSourceFile:                               unmarshallerFor[CreateSourceFileParams],
+	MethodCreateSourceFileFromFile:                       unmarshallerFor[CreateSourceFileFromFileParams],
 	MethodTranspileModule:                                unmarshallerFor[TranspileParams],
 	MethodTranspileModuleFromFile:                        unmarshallerFor[TranspileFromFileParams],
 	MethodTranspileDeclaration:                           unmarshallerFor[TranspileParams],
@@ -780,6 +784,21 @@ type TranspileOptions struct {
 	CompilerOptions   *core.CompilerOptions `json:"compilerOptions,omitempty"`
 	FileName          string                `json:"fileName,omitempty"`
 	ReportDiagnostics bool                  `json:"reportDiagnostics,omitempty"`
+}
+
+type CreateSourceFileOptions struct {
+	ScriptKind core.ScriptKind `json:"scriptKind,omitempty"`
+}
+
+type CreateSourceFileParams struct {
+	FileName   string                  `json:"fileName"`
+	SourceText string                  `json:"sourceText"`
+	Options    CreateSourceFileOptions `json:"options"`
+}
+
+type CreateSourceFileFromFileParams struct {
+	FileName string                  `json:"fileName"`
+	Options  CreateSourceFileOptions `json:"options"`
 }
 
 type TranspileParams struct {

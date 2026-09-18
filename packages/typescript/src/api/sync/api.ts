@@ -27,6 +27,7 @@ import { ModuleResolutionKind } from "#enums/moduleResolutionKind";
 import { NewLineKind } from "#enums/newLineKind";
 import { NodeBuilderFlags } from "#enums/nodeBuilderFlags";
 import { ObjectFlags } from "#enums/objectFlags";
+import { ScriptKind } from "#enums/scriptKind";
 import { SignatureFlags } from "#enums/signatureFlags";
 import { SignatureKind } from "#enums/signatureKind";
 import { SymbolFlags } from "#enums/symbolFlags";
@@ -81,6 +82,7 @@ import type {
     CreateSnapshotParams as ProtocolCreateSnapshotParams,
     CreateSnapshotProgramParams as ProtocolCreateSnapshotProgramParams,
     CreateSnapshotResponse,
+    CreateSourceFileOptions,
     Diagnostic,
     DocumentIdentifier,
     DocumentPosition,
@@ -180,7 +182,7 @@ import type {
 
 export { formatDiagnostics, formatDiagnosticsWithColorAndContext } from "../diagnosticFormatter.ts";
 export { documentURIToFileName, fileNameToDocumentURI } from "../path.ts";
-export { CheckFlags, CompletionItemKind, DiagnosticCategory, ElementFlags, EmitOnly, IndexKind, JsxEmit, ModifierFlags, ModuleKind, ModuleResolutionKind, NodeBuilderFlags, ObjectFlags, SignatureFlags, SignatureKind, SymbolFlags, TypeFlags, TypeFormatFlags, TypePredicateKind };
+export { CheckFlags, CompletionItemKind, DiagnosticCategory, ElementFlags, EmitOnly, IndexKind, JsxEmit, ModifierFlags, ModuleKind, ModuleResolutionKind, NodeBuilderFlags, ObjectFlags, ScriptKind, SignatureFlags, SignatureKind, SymbolFlags, TypeFlags, TypeFormatFlags, TypePredicateKind };
 export type {
     APIImportAdderAction as ImportAdderAction,
     APIOptions,
@@ -196,6 +198,7 @@ export type {
     CompletionOptions,
     ConditionalType,
     ConfiguredProjectId,
+    CreateSourceFileOptions,
     Diagnostic,
     DocumentIdentifier,
     DocumentPosition,
@@ -308,6 +311,7 @@ export interface TranspileOutput {
 }
 
 export { all, type AllAPIRequestGenerator, type AnyAPIRequestGenerator, type APIRequestGenerator, defer, type DeferredAPIRequestGenerator, type ExecutedGeneratorsResults } from "./generatorSupport.ts";
+import { sourceFileResponseToUint8Array } from "../node/encoder.ts";
 import {
     type AnyAPIRequestGenerator,
     type ExecutedGeneratorsResults,
@@ -319,6 +323,7 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
     private sourceFileCache: SourceFileCache;
     private toPath: ((fileName: string) => Path) | undefined;
     private currentDirectory: string | undefined;
+    private readonly decoder = new Wtf8Decoder();
     private getCanonicalFileNameWorker: ((fileName: string) => string) | undefined;
     private initialized: boolean = false;
     private initializing: void | undefined;
@@ -530,6 +535,60 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
             ): Generator<ProtocolRequest, ParsedCommandLine, ProtocolResponse["result"]> {
                 yield* owner.ensureInitialized.gen();
                 return yield* apiRequest("parseJsonConfigFileContent", { json, ...options });
+            },
+        );
+    }
+
+    get createSourceFile(): {
+        (fileName: string, sourceText: string, options?: CreateSourceFileOptions): SourceFile;
+        gen(fileName: string, sourceText: string, options?: CreateSourceFileOptions): Generator<ProtocolRequest, SourceFile, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "createSourceFile",
+            function (fileName: string, sourceText: string, options: CreateSourceFileOptions = {}): SourceFile {
+                owner.ensureInitialized();
+                const data = owner.client.apiRequestBinary("createSourceFile", { fileName, sourceText, options });
+                if (!data) {
+                    throw new Error("createSourceFile returned no source file");
+                }
+                return new RemoteSourceFile(data, owner.decoder, owner.client.getTimingCollector()) as unknown as SourceFile;
+            },
+            function* (fileName: string, sourceText: string, options: CreateSourceFileOptions = {}): Generator<ProtocolRequest, SourceFile, ProtocolResponse["result"]> {
+                yield* owner.ensureInitialized.gen();
+                const data = sourceFileResponseToUint8Array(yield* apiRequest("createSourceFile", { fileName, sourceText, options }));
+                if (!data) {
+                    throw new Error("createSourceFile returned no source file");
+                }
+                return new RemoteSourceFile(data, owner.decoder, owner.client.getTimingCollector()) as unknown as SourceFile;
+            },
+        );
+    }
+
+    get createSourceFileFromFile(): {
+        (file: DocumentIdentifier, options?: CreateSourceFileOptions): SourceFile;
+        gen(file: DocumentIdentifier, options?: CreateSourceFileOptions): Generator<ProtocolRequest, SourceFile, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "createSourceFileFromFile",
+            function (file: DocumentIdentifier, options: CreateSourceFileOptions = {}): SourceFile {
+                owner.ensureInitialized();
+                const data = owner.client.apiRequestBinary("createSourceFileFromFile", { fileName: resolveFileName(file), options });
+                if (!data) {
+                    throw new Error("createSourceFileFromFile returned no source file");
+                }
+                return new RemoteSourceFile(data, owner.decoder, owner.client.getTimingCollector()) as unknown as SourceFile;
+            },
+            function* (file: DocumentIdentifier, options: CreateSourceFileOptions = {}): Generator<ProtocolRequest, SourceFile, ProtocolResponse["result"]> {
+                yield* owner.ensureInitialized.gen();
+                const data = sourceFileResponseToUint8Array(yield* apiRequest("createSourceFileFromFile", { fileName: resolveFileName(file), options }));
+                if (!data) {
+                    throw new Error("createSourceFileFromFile returned no source file");
+                }
+                return new RemoteSourceFile(data, owner.decoder, owner.client.getTimingCollector()) as unknown as SourceFile;
             },
         );
     }
@@ -2574,11 +2633,13 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
                 }
 
                 // Fetch from server
-                const binaryData = owner.client.apiRequestBinary("getSourceFile", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.id,
-                    file,
-                });
+                const binaryData = sourceFileResponseToUint8Array(
+                    yield* apiRequest("getSourceFile", {
+                        snapshot: owner.snapshotId,
+                        project: owner.project.id,
+                        file,
+                    }),
+                );
                 if (!binaryData) {
                     return undefined;
                 }
@@ -2979,11 +3040,13 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
                 return new RemoteSourceFile(binaryData, owner.decoder) as unknown as SourceFile;
             },
             function* (file: DocumentIdentifier): Generator<ProtocolRequest, SourceFile | undefined, ProtocolResponse["result"]> {
-                const binaryData = owner.client.apiRequestBinary("getConfigSourceFile", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.id,
-                    file,
-                });
+                const binaryData = sourceFileResponseToUint8Array(
+                    yield* apiRequest("getConfigSourceFile", {
+                        snapshot: owner.snapshotId,
+                        project: owner.project.id,
+                        file,
+                    }),
+                );
                 if (!binaryData) {
                     return undefined;
                 }
@@ -4613,13 +4676,15 @@ export class Checker {
                 return decodeNode(binaryData) as TypeNode;
             },
             function* (type: Type, enclosingDeclaration?: Node, flags?: number): Generator<ProtocolRequest, TypeNode | undefined, ProtocolResponse["result"]> {
-                const binaryData = owner.client.apiRequestBinary("typeToTypeNode", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.id,
-                    type: type.id,
-                    location: enclosingDeclaration ? getNodeId(enclosingDeclaration) : undefined,
-                    flags,
-                });
+                const binaryData = sourceFileResponseToUint8Array(
+                    yield* apiRequest("typeToTypeNode", {
+                        snapshot: owner.snapshotId,
+                        project: owner.project.id,
+                        type: type.id,
+                        location: enclosingDeclaration ? getNodeId(enclosingDeclaration) : undefined,
+                        flags,
+                    }),
+                );
                 if (!binaryData) return undefined;
                 return decodeNode(binaryData) as TypeNode;
             },
@@ -4647,14 +4712,16 @@ export class Checker {
                 return decodeNode(binaryData) as Node;
             },
             function* (signature: Signature, kind: SyntaxKind, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): Generator<ProtocolRequest, Node | undefined, ProtocolResponse["result"]> {
-                const binaryData = owner.client.apiRequestBinary("signatureToSignatureDeclaration", {
-                    snapshot: owner.snapshotId,
-                    project: owner.project.id,
-                    signature: signature.id,
-                    kind,
-                    location: enclosingDeclaration ? getNodeId(enclosingDeclaration) : undefined,
-                    flags,
-                });
+                const binaryData = sourceFileResponseToUint8Array(
+                    yield* apiRequest("signatureToSignatureDeclaration", {
+                        snapshot: owner.snapshotId,
+                        project: owner.project.id,
+                        signature: signature.id,
+                        kind,
+                        location: enclosingDeclaration ? getNodeId(enclosingDeclaration) : undefined,
+                        flags,
+                    }),
+                );
                 if (!binaryData) return undefined;
                 return decodeNode(binaryData) as Node;
             },
