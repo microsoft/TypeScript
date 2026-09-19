@@ -1,0 +1,74 @@
+//// [tests/cases/compiler/integerTypedArray.ts] ////
+
+=== integerTypedArray.ts ===
+crypto.getRandomValues(new Uint8Array(1));
+>crypto.getRandomValues(new Uint8Array(1)) : Uint8Array<ArrayBuffer>
+>crypto.getRandomValues : <T extends IntegerTypedArray>(array: T) => T
+>crypto : Crypto
+>getRandomValues : <T extends IntegerTypedArray>(array: T) => T
+>new Uint8Array(1) : Uint8Array<ArrayBuffer>
+>Uint8Array : Uint8ArrayConstructor
+>1 : 1
+
+crypto.getRandomValues(new BigInt64Array(1));
+>crypto.getRandomValues(new BigInt64Array(1)) : BigInt64Array<ArrayBuffer>
+>crypto.getRandomValues : <T extends IntegerTypedArray>(array: T) => T
+>crypto : Crypto
+>getRandomValues : <T extends IntegerTypedArray>(array: T) => T
+>new BigInt64Array(1) : BigInt64Array<ArrayBuffer>
+>BigInt64Array : BigInt64ArrayConstructor
+>1 : 1
+
+crypto.getRandomValues(new Float64Array(1));
+>crypto.getRandomValues(new Float64Array(1)) : IntegerTypedArray
+>crypto.getRandomValues : <T extends IntegerTypedArray>(array: T) => T
+>crypto : Crypto
+>getRandomValues : <T extends IntegerTypedArray>(array: T) => T
+>new Float64Array(1) : Float64Array<ArrayBuffer>
+>Float64Array : Float64ArrayConstructor
+>1 : 1
+
+crypto.getRandomValues(null);
+>crypto.getRandomValues(null) : IntegerTypedArray
+>crypto.getRandomValues : <T extends IntegerTypedArray>(array: T) => T
+>crypto : Crypto
+>getRandomValues : <T extends IntegerTypedArray>(array: T) => T
+
+declare const buffer: Uint8Array<ArrayBufferLike>;
+>buffer : Uint8Array<ArrayBufferLike>
+
+crypto.getRandomValues(buffer);
+>crypto.getRandomValues(buffer) : Uint8Array<ArrayBufferLike>
+>crypto.getRandomValues : <T extends IntegerTypedArray>(array: T) => T
+>crypto : Crypto
+>getRandomValues : <T extends IntegerTypedArray>(array: T) => T
+>buffer : Uint8Array<ArrayBufferLike>
+
+declare const array: Parameters<typeof crypto.getRandomValues>[0];
+>array : IntegerTypedArray
+>crypto.getRandomValues : <T extends IntegerTypedArray>(array: T) => T
+>crypto : Crypto
+>getRandomValues : <T extends IntegerTypedArray>(array: T) => T
+
+const values = crypto.getRandomValues(array);
+>values : IntegerTypedArray
+>crypto.getRandomValues(array) : IntegerTypedArray
+>crypto.getRandomValues : <T extends IntegerTypedArray>(array: T) => T
+>crypto : Crypto
+>getRandomValues : <T extends IntegerTypedArray>(array: T) => T
+>array : IntegerTypedArray
+
+values.BYTES_PER_ELEMENT;
+>values.BYTES_PER_ELEMENT : number
+>values : IntegerTypedArray
+>BYTES_PER_ELEMENT : number
+
+declare const integers: IntegerTypedArray;
+>integers : IntegerTypedArray
+
+const ints: IntegerTypedArrayTypes["Int32Array"] = new Int32Array(1);
+>ints : Int32Array<ArrayBufferLike>
+>new Int32Array(1) : Int32Array<ArrayBuffer>
+>Int32Array : Int32ArrayConstructor
+>1 : 1
+
