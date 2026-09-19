@@ -1,0 +1,79 @@
+//// [tests/cases/compiler/mediaTrackPanTiltZoom.ts] ////
+
+=== mediaTrackPanTiltZoom.ts ===
+declare const capabilities: MediaTrackCapabilities;
+>capabilities : Symbol(capabilities, Decl(mediaTrackPanTiltZoom.ts, 0, 13))
+>MediaTrackCapabilities : Symbol(MediaTrackCapabilities, Decl(lib.dom.d.ts, --, --))
+
+declare const constraints: MediaTrackConstraintSet;
+>constraints : Symbol(constraints, Decl(mediaTrackPanTiltZoom.ts, 1, 13))
+>MediaTrackConstraintSet : Symbol(MediaTrackConstraintSet, Decl(lib.dom.d.ts, --, --))
+
+declare const settings: MediaTrackSettings;
+>settings : Symbol(settings, Decl(mediaTrackPanTiltZoom.ts, 2, 13))
+>MediaTrackSettings : Symbol(MediaTrackSettings, Decl(lib.dom.d.ts, --, --))
+
+declare const supported: MediaTrackSupportedConstraints;
+>supported : Symbol(supported, Decl(mediaTrackPanTiltZoom.ts, 3, 13))
+>MediaTrackSupportedConstraints : Symbol(MediaTrackSupportedConstraints, Decl(lib.dom.d.ts, --, --))
+
+capabilities.pan;
+>capabilities.pan : Symbol(MediaTrackCapabilities.pan, Decl(lib.dom.d.ts, --, --))
+>capabilities : Symbol(capabilities, Decl(mediaTrackPanTiltZoom.ts, 0, 13))
+>pan : Symbol(MediaTrackCapabilities.pan, Decl(lib.dom.d.ts, --, --))
+
+capabilities.tilt;
+>capabilities.tilt : Symbol(MediaTrackCapabilities.tilt, Decl(lib.dom.d.ts, --, --))
+>capabilities : Symbol(capabilities, Decl(mediaTrackPanTiltZoom.ts, 0, 13))
+>tilt : Symbol(MediaTrackCapabilities.tilt, Decl(lib.dom.d.ts, --, --))
+
+capabilities.zoom;
+>capabilities.zoom : Symbol(MediaTrackCapabilities.zoom, Decl(lib.dom.d.ts, --, --))
+>capabilities : Symbol(capabilities, Decl(mediaTrackPanTiltZoom.ts, 0, 13))
+>zoom : Symbol(MediaTrackCapabilities.zoom, Decl(lib.dom.d.ts, --, --))
+
+constraints.pan;
+>constraints.pan : Symbol(MediaTrackConstraintSet.pan, Decl(lib.dom.d.ts, --, --))
+>constraints : Symbol(constraints, Decl(mediaTrackPanTiltZoom.ts, 1, 13))
+>pan : Symbol(MediaTrackConstraintSet.pan, Decl(lib.dom.d.ts, --, --))
+
+constraints.tilt;
+>constraints.tilt : Symbol(MediaTrackConstraintSet.tilt, Decl(lib.dom.d.ts, --, --))
+>constraints : Symbol(constraints, Decl(mediaTrackPanTiltZoom.ts, 1, 13))
+>tilt : Symbol(MediaTrackConstraintSet.tilt, Decl(lib.dom.d.ts, --, --))
+
+constraints.zoom;
+>constraints.zoom : Symbol(MediaTrackConstraintSet.zoom, Decl(lib.dom.d.ts, --, --))
+>constraints : Symbol(constraints, Decl(mediaTrackPanTiltZoom.ts, 1, 13))
+>zoom : Symbol(MediaTrackConstraintSet.zoom, Decl(lib.dom.d.ts, --, --))
+
+settings.pan;
+>settings.pan : Symbol(MediaTrackSettings.pan, Decl(lib.dom.d.ts, --, --))
+>settings : Symbol(settings, Decl(mediaTrackPanTiltZoom.ts, 2, 13))
+>pan : Symbol(MediaTrackSettings.pan, Decl(lib.dom.d.ts, --, --))
+
+settings.tilt;
+>settings.tilt : Symbol(MediaTrackSettings.tilt, Decl(lib.dom.d.ts, --, --))
+>settings : Symbol(settings, Decl(mediaTrackPanTiltZoom.ts, 2, 13))
+>tilt : Symbol(MediaTrackSettings.tilt, Decl(lib.dom.d.ts, --, --))
+
+settings.zoom;
+>settings.zoom : Symbol(MediaTrackSettings.zoom, Decl(lib.dom.d.ts, --, --))
+>settings : Symbol(settings, Decl(mediaTrackPanTiltZoom.ts, 2, 13))
+>zoom : Symbol(MediaTrackSettings.zoom, Decl(lib.dom.d.ts, --, --))
+
+supported.pan;
+>supported.pan : Symbol(MediaTrackSupportedConstraints.pan, Decl(lib.dom.d.ts, --, --))
+>supported : Symbol(supported, Decl(mediaTrackPanTiltZoom.ts, 3, 13))
+>pan : Symbol(MediaTrackSupportedConstraints.pan, Decl(lib.dom.d.ts, --, --))
+
+supported.tilt;
+>supported.tilt : Symbol(MediaTrackSupportedConstraints.tilt, Decl(lib.dom.d.ts, --, --))
+>supported : Symbol(supported, Decl(mediaTrackPanTiltZoom.ts, 3, 13))
+>tilt : Symbol(MediaTrackSupportedConstraints.tilt, Decl(lib.dom.d.ts, --, --))
+
+supported.zoom;
+>supported.zoom : Symbol(MediaTrackSupportedConstraints.zoom, Decl(lib.dom.d.ts, --, --))
+>supported : Symbol(supported, Decl(mediaTrackPanTiltZoom.ts, 3, 13))
+>zoom : Symbol(MediaTrackSupportedConstraints.zoom, Decl(lib.dom.d.ts, --, --))
+
