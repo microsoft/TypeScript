@@ -4455,6 +4455,16 @@ declare namespace Intl {
 
     type NumberFormatOptionsStyle = keyof NumberFormatOptionsStyleRegistry;
 
+    interface NumberFormatOptionsStyleRequiredOptionsRegistry {
+        decimal: {};
+        percent: {};
+        currency: { currency: string };
+    }
+
+    type NumberFormatOptionsStyleRequiredOptions<Style> = Style extends keyof NumberFormatOptionsStyleRequiredOptionsRegistry
+        ? NumberFormatOptionsStyleRequiredOptionsRegistry[Style]
+        : {};
+
     interface NumberFormatOptionsCurrencyDisplayRegistry {
         code: never;
         symbol: never;
@@ -4501,8 +4511,8 @@ declare namespace Intl {
     }
 
     interface NumberFormatConstructor {
-        new (locales?: string | string[], options?: NumberFormatOptions): NumberFormat;
-        (locales?: string | string[], options?: NumberFormatOptions): NumberFormat;
+        new <T extends NumberFormatOptions = NumberFormatOptions>(locales?: string | string[], options?: T & NumberFormatOptionsStyleRequiredOptions<T["style"]>): NumberFormat;
+        <T extends NumberFormatOptions = NumberFormatOptions>(locales?: string | string[], options?: T & NumberFormatOptionsStyleRequiredOptions<T["style"]>): NumberFormat;
         supportedLocalesOf(locales: string | string[], options?: NumberFormatOptions): string[];
         readonly prototype: NumberFormat;
     }
