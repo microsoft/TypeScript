@@ -181,6 +181,8 @@ var (
 	libs_lib_es2025_intl_d_ts string
 	//go:embed libs/lib.es2025.iterator.d.ts
 	libs_lib_es2025_iterator_d_ts string
+	//go:embed libs/lib.es2025.json.d.ts
+	libs_lib_es2025_json_d_ts string
 	//go:embed libs/lib.es2025.promise.d.ts
 	libs_lib_es2025_promise_d_ts string
 	//go:embed libs/lib.es2025.regexp.d.ts
@@ -313,6 +315,7 @@ var embeddedContents = map[string]string{
 	"libs/lib.es2025.full.d.ts":             libs_lib_es2025_full_d_ts,
 	"libs/lib.es2025.intl.d.ts":             libs_lib_es2025_intl_d_ts,
 	"libs/lib.es2025.iterator.d.ts":         libs_lib_es2025_iterator_d_ts,
+	"libs/lib.es2025.json.d.ts":             libs_lib_es2025_json_d_ts,
 	"libs/lib.es2025.promise.d.ts":          libs_lib_es2025_promise_d_ts,
 	"libs/lib.es2025.regexp.d.ts":           libs_lib_es2025_regexp_d_ts,
 	"libs/lib.es5.d.ts":                     libs_lib_es5_d_ts,
@@ -335,3 +338,4 @@ var embeddedContents = map[string]string{
 	"libs/lib.webworker.importscripts.d.ts": libs_lib_webworker_importscripts_d_ts,
 	"libs/lib.webworker.iterable.d.ts":      libs_lib_webworker_iterable_d_ts,
 }
+
