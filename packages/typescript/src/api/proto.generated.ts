@@ -1531,9 +1531,9 @@ export interface ProjectReference {
     /** Path is a normalized path on disk. */
     path: string;
     /** OriginalPath is the path as it was originally written. */
-    originalPath: string;
+    originalPath?: string | undefined;
     /** Circular indicates that this reference is intended to form a circularity. */
-    circular: boolean;
+    circular?: boolean | undefined;
 }
 
 export interface TypeAcquisition {
