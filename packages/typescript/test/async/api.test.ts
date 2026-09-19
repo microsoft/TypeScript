@@ -109,7 +109,6 @@ import {
 } from "node:test";
 import { fileURLToPath } from "node:url";
 import { isSignatureDeclaration } from "../../src/ast/is.ts";
-import { runBenchmarks } from "./api.bench.ts";
 import {
     defaultFiles,
     spawnAPI,
@@ -7370,10 +7369,6 @@ describe("Program - emit", () => {
         assert.ok(result.diagnostics.some(d => d.text.includes("write failed")));
     });
     // @sync-skip-block-end
-});
-
-test("Benchmarks", async () => {
-    await runBenchmarks({ singleIteration: true });
 });
 
 describe("Timing", () => {
