@@ -1,0 +1,59 @@
+//// [tests/cases/conformance/importSource/importSource21.ts] ////
+
+=== i.ts ===
+import { a } from "./d.js";
+>a : Symbol(a, Decl(i.ts, 0, 8))
+
+import { e } from "./h.js";
+>e : Symbol(e, Decl(i.ts, 1, 8))
+
+const b: WebAssembly.Module = a;
+>b : Symbol(b, Decl(i.ts, 2, 5))
+>WebAssembly : Symbol(WebAssembly, Decl(lib.dom.d.ts, --, --))
+>Module : Symbol(WebAssembly.Module, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>a : Symbol(a, Decl(i.ts, 0, 8))
+
+const c: WebAssembly.Module = e;
+>c : Symbol(c, Decl(i.ts, 3, 5))
+>WebAssembly : Symbol(WebAssembly, Decl(lib.dom.d.ts, --, --))
+>Module : Symbol(WebAssembly.Module, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>e : Symbol(e, Decl(i.ts, 1, 8))
+
+=== b.ts ===
+import source a from "./a.wasm";
+>a : Symbol(a, Decl(b.ts, 0, 6))
+
+export { a };
+>a : Symbol(a, Decl(b.ts, 1, 8))
+
+=== c.ts ===
+import source a from "././a.wasm";
+>a : Symbol(a, Decl(c.ts, 0, 6))
+
+export { a };
+>a : Symbol(a, Decl(c.ts, 1, 8))
+
+=== d.ts ===
+
+export * from "./b.js";
+export * from "./c.js";
+
+=== f.ts ===
+import source e from "./e.wasm";
+>e : Symbol(e, Decl(f.ts, 0, 6))
+
+export { e };
+>e : Symbol(e, Decl(f.ts, 1, 8))
+
+=== g.ts ===
+import source e from "././e.wasm";
+>e : Symbol(e, Decl(g.ts, 0, 6))
+
+export { e };
+>e : Symbol(e, Decl(g.ts, 1, 8))
+
+=== h.ts ===
+
+export * from "./f.js";
+export * from "./g.js";
+

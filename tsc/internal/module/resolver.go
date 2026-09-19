@@ -78,6 +78,7 @@ type resolutionState struct {
 	conditions                  []string
 	extensions                  extensions
 	compilerOptions             *core.CompilerOptions
+	importPhase                 ImportPhase
 	resolvePackageDirectoryOnly bool
 
 	// state fields
@@ -95,6 +96,7 @@ func newResolutionState(
 	containingDirectory string,
 	isTypeReferenceDirective bool,
 	resolutionMode core.ResolutionMode,
+	importPhase ImportPhase,
 	compilerOptions *core.CompilerOptions,
 	redirectedReference ResolvedProjectReference,
 	resolver *Resolver,
@@ -104,6 +106,7 @@ func newResolutionState(
 		name:                name,
 		containingDirectory: containingDirectory,
 		compilerOptions:     GetCompilerOptionsWithRedirect(compilerOptions, redirectedReference),
+		importPhase:         importPhase,
 		resolver:            resolver,
 		tracer:              traceBuilder,
 	}
@@ -124,14 +127,14 @@ func newResolutionState(
 	case core.ModuleResolutionKindNode16:
 		state.features = NodeResolutionFeaturesNode16Default
 		state.esmMode = resolutionMode == core.ModuleKindESNext
-		state.conditions = GetConditions(compilerOptions, resolutionMode)
+		state.conditions = GetConditionsForImportPhase(compilerOptions, resolutionMode, importPhase)
 	case core.ModuleResolutionKindNodeNext:
 		state.features = NodeResolutionFeaturesNodeNextDefault
 		state.esmMode = resolutionMode == core.ModuleKindESNext
-		state.conditions = GetConditions(compilerOptions, resolutionMode)
+		state.conditions = GetConditionsForImportPhase(compilerOptions, resolutionMode, importPhase)
 	case core.ModuleResolutionKindBundler:
 		state.features = getNodeResolutionFeatures(compilerOptions)
-		state.conditions = GetConditions(compilerOptions, resolutionMode)
+		state.conditions = GetConditionsForImportPhase(compilerOptions, resolutionMode, importPhase)
 	}
 	return state
 }
@@ -252,7 +255,7 @@ func (r *Resolver) ResolveTypeReferenceDirective(
 		traceBuilder.traceResolutionUsingProjectReference(redirectedReference)
 	}
 
-	state := newResolutionState(typeReferenceDirectiveName, containingDirectory, true /*isTypeReferenceDirective*/, resolutionMode, compilerOptions, redirectedReference, r, traceBuilder)
+	state := newResolutionState(typeReferenceDirectiveName, containingDirectory, true /*isTypeReferenceDirective*/, resolutionMode, ImportPhaseEvaluation, compilerOptions, redirectedReference, r, traceBuilder)
 	result := state.resolveTypeReferenceDirective(typeRoots, fromConfig, fromInferredTypesContainingFile)
 
 	if traceBuilder != nil {
@@ -265,6 +268,10 @@ func (r *Resolver) ResolveTypeReferenceDirective(
 }
 
 func (r *Resolver) ResolveModuleName(moduleName string, containingFile string, resolutionMode core.ResolutionMode, redirectedReference ResolvedProjectReference) (*ResolvedModule, []DiagAndArgs) {
+	return r.ResolveModuleNameWithPhase(moduleName, containingFile, resolutionMode, ImportPhaseEvaluation, redirectedReference)
+}
+
+func (r *Resolver) ResolveModuleNameWithPhase(moduleName string, containingFile string, resolutionMode core.ResolutionMode, importPhase ImportPhase, redirectedReference ResolvedProjectReference) (*ResolvedModule, []DiagAndArgs) {
 	containingDirectory := tspath.GetDirectoryPath(containingFile)
 	traceBuilder := r.newTraceBuilder()
 
@@ -272,6 +279,7 @@ func (r *Resolver) ResolveModuleName(moduleName string, containingFile string, r
 		containingDirectory: containingDirectory,
 		moduleName:          moduleName,
 		resolutionMode:      resolutionMode,
+		importPhase:         importPhase,
 		redirectConfigName:  getRedirectConfigName(redirectedReference),
 	}
 
@@ -301,7 +309,7 @@ func (r *Resolver) ResolveModuleName(moduleName string, containingFile string, r
 	var result *ResolvedModule
 	switch moduleResolution {
 	case core.ModuleResolutionKindNode16, core.ModuleResolutionKindNodeNext, core.ModuleResolutionKindBundler:
-		state := newResolutionState(moduleName, containingDirectory, false /*isTypeReferenceDirective*/, resolutionMode, compilerOptions, redirectedReference, r, traceBuilder)
+		state := newResolutionState(moduleName, containingDirectory, false /*isTypeReferenceDirective*/, resolutionMode, importPhase, compilerOptions, redirectedReference, r, traceBuilder)
 		result = state.resolveNodeLike()
 	default:
 		panic(fmt.Sprintf("Unexpected moduleResolution: %d", moduleResolution))
@@ -319,7 +327,12 @@ func (r *Resolver) ResolveModuleName(moduleName string, containingFile string, r
 		}
 	}
 
-	finalResult := r.tryResolveFromTypingsLocation(moduleName, containingDirectory, result, traceBuilder)
+	var finalResult *ResolvedModule
+	if importPhase == ImportPhaseSource {
+		finalResult = result
+	} else {
+		finalResult = r.tryResolveFromTypingsLocation(moduleName, containingDirectory, result, traceBuilder)
+	}
 	r.moduleResolutionCache.Set(cacheKey, finalResult)
 
 	return finalResult, traceBuilder.getTraces()
@@ -328,7 +341,7 @@ func (r *Resolver) ResolveModuleName(moduleName string, containingFile string, r
 func (r *Resolver) ResolvePackageDirectory(moduleName string, containingFile string, resolutionMode core.ResolutionMode, redirectedReference ResolvedProjectReference) *ResolvedModule {
 	compilerOptions := GetCompilerOptionsWithRedirect(r.compilerOptions, redirectedReference)
 	containingDirectory := tspath.GetDirectoryPath(containingFile)
-	state := newResolutionState(moduleName, containingDirectory, false /*isTypeReferenceDirective*/, resolutionMode, compilerOptions, redirectedReference, r, nil)
+	state := newResolutionState(moduleName, containingDirectory, false /*isTypeReferenceDirective*/, resolutionMode, ImportPhaseEvaluation, compilerOptions, redirectedReference, r, nil /*traceBuilder*/)
 	state.resolvePackageDirectoryOnly = true
 	if result := state.loadModuleFromNearestNodeModulesDirectory(false /*typesScopeOnly*/); result != nil && result.path != "" {
 		return state.createResolvedModuleHandlingSymlink(result)
@@ -348,6 +361,7 @@ func (r *Resolver) tryResolveFromTypingsLocation(moduleName string, containingDi
 		containingDirectory,
 		false,               /*isTypeReferenceDirective*/
 		core.ModuleKindNone, // resolutionMode,
+		ImportPhaseEvaluation,
 		r.compilerOptions,
 		nil, // redirectedReference,
 		r,
@@ -367,7 +381,7 @@ func (r *Resolver) tryResolveFromTypingsLocation(moduleName string, containingDi
 
 func (r *Resolver) resolveConfig(moduleName string, containingFile string) *ResolvedModule {
 	containingDirectory := tspath.GetDirectoryPath(containingFile)
-	state := newResolutionState(moduleName, containingDirectory, false /*isTypeReferenceDirective*/, core.ModuleKindCommonJS, r.compilerOptions, nil, r, nil)
+	state := newResolutionState(moduleName, containingDirectory, false /*isTypeReferenceDirective*/, core.ModuleKindCommonJS, ImportPhaseEvaluation, r.compilerOptions, nil /*redirectedReference*/, r, nil /*traceBuilder*/)
 	state.isConfigLookup = true
 	state.extensions = extensionsJson
 	return state.resolveNodeLike()
@@ -515,6 +529,9 @@ func (r *resolutionState) resolveNodeLike() *ResolvedModule {
 		}
 	}
 	result := r.resolveNodeLikeWorker()
+	if r.importPhase == ImportPhaseSource {
+		return result
+	}
 	if r.resolvedPackageDirectory &&
 		!r.isConfigLookup &&
 		r.features&NodeResolutionFeaturesExports != 0 &&
@@ -566,7 +583,7 @@ func (r *resolutionState) resolveNodeLikeWorker() *ResolvedModule {
 		if resolved := r.loadModuleFromNearestNodeModulesDirectory(false /*typesScopeOnly*/); !resolved.shouldContinueSearching() {
 			return r.createResolvedModuleHandlingSymlink(resolved)
 		}
-		if r.extensions&extensionsDeclaration != 0 {
+		if r.importPhase == ImportPhaseEvaluation && r.extensions&extensionsDeclaration != 0 {
 			if resolved := r.resolveFromTypeRoot(); !resolved.shouldContinueSearching() {
 				return r.createResolvedModuleHandlingSymlink(resolved)
 			}
@@ -621,8 +638,7 @@ func (r *resolutionState) loadModuleFromSelfNameReference() *resolved {
 	if r.compilerOptions.GetAllowJS() && !strings.Contains(r.containingDirectory, "/node_modules/") {
 		return r.loadModuleFromExports(scope, r.extensions, subpath)
 	}
-	priorityExtensions := r.extensions & (extensionsTypeScript | extensionsDeclaration)
-	secondaryExtensions := r.extensions & ^(extensionsTypeScript | extensionsDeclaration)
+	priorityExtensions, secondaryExtensions := r.getExtensionPriority()
 	if resolved := r.loadModuleFromExports(scope, priorityExtensions, subpath); !resolved.shouldContinueSearching() {
 		return resolved
 	}
@@ -986,8 +1002,7 @@ func (r *resolutionState) loadModuleFromNearestNodeModulesDirectory(typesScopeOn
 	//      ii. DTS files in the @types package
 	//   2. For each ancestor node_modules directory, try to find:
 	//      i.  JS files in the implementation package
-	priorityExtensions := r.extensions & (extensionsTypeScript | extensionsDeclaration)
-	secondaryExtensions := r.extensions & ^(extensionsTypeScript | extensionsDeclaration)
+	priorityExtensions, secondaryExtensions := r.getExtensionPriority()
 	// (1)
 	if priorityExtensions != 0 {
 		if r.tracer != nil {
@@ -1037,7 +1052,7 @@ func (r *resolutionState) loadModuleFromImmediateNodeModulesDirectory(extensions
 		}
 	}
 
-	if extensions&extensionsDeclaration != 0 {
+	if r.importPhase == ImportPhaseEvaluation && extensions&extensionsDeclaration != 0 {
 		nodeModulesAtTypes := tspath.CombinePaths(nodeModulesFolder, "@types")
 		if !r.resolver.host.FS().DirectoryExists(nodeModulesAtTypes) {
 			if r.tracer != nil {
@@ -1135,7 +1150,7 @@ func (r *resolutionState) loadModuleFromSpecificNodeModulesDirectory(ext extensi
 			// https://github.com/microsoft/TypeScript/pull/49327
 			return r.loadModuleFromExports(packageInfo, ext, tspath.CombinePaths(".", rest))
 		}
-		if rest != "" && packageInfo.Exists() {
+		if r.importPhase == ImportPhaseEvaluation && rest != "" && packageInfo.Exists() {
 			versionPaths := packageInfo.Contents.GetVersionPaths(r.getTraceFunc())
 			if versionPaths.Exists() {
 				if r.tracer != nil {
@@ -1443,7 +1458,20 @@ func (r *resolutionState) loadModuleFromFileNoImplicitExtensions(extensions exte
 	if r.tracer != nil {
 		r.tracer.write(diagnostics.File_name_0_has_a_1_extension_stripping_it, candidate, extension)
 	}
+	if r.importPhase == ImportPhaseSource && extensions&extensionsDeclaration != 0 {
+		if resolved := r.tryAddingExtensions(extensionless, extensions&^extensionsDeclaration, extension); !resolved.shouldContinueSearching() {
+			return resolved
+		}
+		extensions &= extensionsDeclaration
+	}
 	return r.tryAddingExtensions(extensionless, extensions, extension)
+}
+
+func (r *resolutionState) getExtensionPriority() (priority extensions, secondary extensions) {
+	if r.importPhase == ImportPhaseSource {
+		return r.extensions &^ extensionsDeclaration, r.extensions & extensionsDeclaration
+	}
+	return r.extensions & (extensionsTypeScript | extensionsDeclaration), r.extensions & ^(extensionsTypeScript | extensionsDeclaration)
 }
 
 func (r *resolutionState) tryAddingExtensions(extensionless string, extensions extensions, originalExtension string) *resolved {
@@ -1554,6 +1582,11 @@ func (r *resolutionState) tryAddingExtensions(extensionless string, extensions e
 		}
 		return continueSearching()
 	default:
+		if r.importPhase == ImportPhaseSource && originalExtension == tspath.ExtensionWasm {
+			if resolved := r.tryExtension(tspath.ExtensionWasm, extensionless, false); !resolved.shouldContinueSearching() {
+				return resolved
+			}
+		}
 		if slices.Contains(r.resolver.extraExtensions, originalExtension) {
 			// A fully specified import of an extraExtension resolves directly to the file.
 			if resolved := r.tryExtension(originalExtension, extensionless, false); !resolved.shouldContinueSearching() {
@@ -1588,6 +1621,9 @@ func (r *resolutionState) tryFile(fileName string) (string, bool) {
 	}
 
 	ext := tspath.TryGetExtensionFromPath(fileName)
+	if ext == "" && r.importPhase == ImportPhaseSource && tspath.FileExtensionIs(fileName, tspath.ExtensionWasm) {
+		ext = tspath.ExtensionWasm
+	}
 	fileNameNoExtension := tspath.RemoveExtension(fileName, ext)
 	for _, suffix := range r.compilerOptions.ModuleSuffixes {
 		path := fileNameNoExtension + suffix + ext
@@ -1625,7 +1661,9 @@ func (r *resolutionState) loadNodeModuleFromDirectoryWorker(ext extensions, cand
 		versionPaths packagejson.VersionPaths
 	)
 	if packageInfo.Exists() {
-		versionPaths = packageInfo.Contents.GetVersionPaths(r.getTraceFunc())
+		if r.importPhase == ImportPhaseEvaluation {
+			versionPaths = packageInfo.Contents.GetVersionPaths(r.getTraceFunc())
+		}
 		if tspath.ComparePaths(candidate, packageInfo.PackageDirectory, tspath.ComparePathsOptions{UseCaseSensitiveFileNames: r.resolver.host.FS().UseCaseSensitiveFileNames()}) == 0 {
 			if file, ok := r.getPackageFile(ext, packageInfo); ok {
 				packageFile = file
@@ -1747,7 +1785,7 @@ func (r *resolutionState) getPackageFile(extensions extensions, packageInfo *pac
 	if r.isConfigLookup {
 		return r.getPackageJSONPathField("tsconfig", &packageInfo.Contents.TSConfig, packageInfo.PackageDirectory)
 	}
-	if extensions&extensionsDeclaration != 0 {
+	if r.importPhase == ImportPhaseEvaluation && extensions&extensionsDeclaration != 0 {
 		if packageFile, ok := r.getPackageJSONPathField("typings", &packageInfo.Contents.Typings, packageInfo.PackageDirectory); ok {
 			return packageFile, ok
 		}
@@ -1941,6 +1979,21 @@ func GetConditions(options *core.CompilerOptions, resolutionMode core.Resolution
 		conditions = append(conditions, "node")
 	}
 	conditions = core.Concatenate(conditions, options.CustomConditions)
+	return conditions
+}
+
+func GetConditionsForImportPhase(options *core.CompilerOptions, resolutionMode core.ResolutionMode, importPhase ImportPhase) []string {
+	conditions := GetConditions(options, resolutionMode)
+	if importPhase == ImportPhaseSource {
+		filtered := conditions[:0]
+		for _, condition := range conditions {
+			if condition == "types" {
+				continue
+			}
+			filtered = append(filtered, condition)
+		}
+		return filtered
+	}
 	return conditions
 }
 

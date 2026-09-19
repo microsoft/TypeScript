@@ -221,7 +221,7 @@ func prepareDeclarationCompilationContext(
 	}
 
 	addDtsFile := func(file *harnessutil.TestFile, dtsFiles []*harnessutil.TestFile) []*harnessutil.TestFile {
-		if tspath.IsDeclarationFileName(file.UnitName) || tspath.HasJSONFileExtension(file.UnitName) {
+		if tspath.IsDeclarationFileName(file.UnitName) || tspath.HasJSONFileExtension(file.UnitName) || tspath.FileExtensionIs(file.UnitName, tspath.ExtensionWasm) {
 			dtsFiles = append(dtsFiles, file)
 		} else if sourceFile := result.Program.GetSourceFile(file.UnitName); sourceFile != nil &&
 			(tspath.HasTSFileExtension(file.UnitName) || (tspath.HasJSFileExtension(file.UnitName) && options.GetAllowJS()) || sourceFile.ContentMapper() != "") {

@@ -1,0 +1,35 @@
+//// [tests/cases/conformance/importSource/importSource10.ts] ////
+
+=== a.d.wasm.ts ===
+
+export {};
+
+=== b.ts ===
+import source a from "./a.wasm";
+>a : Symbol(a, Decl(b.ts, 0, 6))
+
+export { a };
+>a : Symbol(a, Decl(b.ts, 1, 8))
+
+=== c.ts ===
+import { a } from "./b.js";
+>a : Symbol(a, Decl(c.ts, 0, 8))
+
+const b: WebAssembly.Module = a;
+>b : Symbol(b, Decl(c.ts, 1, 5))
+>WebAssembly : Symbol(WebAssembly, Decl(lib.dom.d.ts, --, --))
+>Module : Symbol(WebAssembly.Module, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>a : Symbol(a, Decl(c.ts, 0, 8))
+
+=== d.ts ===
+import * as a from "./b.js";
+>a : Symbol(a, Decl(d.ts, 0, 6))
+
+const b: WebAssembly.Module = a.a;
+>b : Symbol(b, Decl(d.ts, 1, 5))
+>WebAssembly : Symbol(WebAssembly, Decl(lib.dom.d.ts, --, --))
+>Module : Symbol(WebAssembly.Module, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>a.a : Symbol(a.a, Decl(b.ts, 1, 8))
+>a : Symbol(a, Decl(d.ts, 0, 6))
+>a : Symbol(a.a, Decl(b.ts, 1, 8))
+

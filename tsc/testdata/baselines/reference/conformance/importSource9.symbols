@@ -1,0 +1,18 @@
+//// [tests/cases/conformance/importSource/importSource9.ts] ////
+
+=== a.d.wasm.ts ===
+
+export {};
+
+=== b.ts ===
+/*comment a*/ import /*comment b*/ source /*comment c*/ a /*comment d*/ from /*comment e*/ "./a.wasm" /*comment f*/ with /*comment g*/ { type: "webassembly" } /*comment h*/;
+>a : Symbol(a, Decl(b.ts, 0, 20))
+
+const b = a;
+>b : Symbol(b, Decl(b.ts, 1, 5))
+>a : Symbol(a, Decl(b.ts, 0, 20))
+
+const c = import /*comment i*/ . /*comment j*/ source /*comment k*/ ("./a.wasm");
+>c : Symbol(c, Decl(b.ts, 2, 5))
+>"./a.wasm" : Symbol("./a.wasm", Decl(a.d.wasm.ts, 0, 0))
+

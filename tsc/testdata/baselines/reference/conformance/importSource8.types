@@ -1,0 +1,29 @@
+//// [tests/cases/conformance/importSource/importSource8.ts] ////
+
+=== a.d.wasm.ts ===
+export const a: number;
+>a : number
+
+=== b.ts ===
+import { a } from "./a.wasm";
+>a : number
+
+import source b from "./a.wasm";
+>b : WebAssembly.Module
+
+const c: number = a;
+>c : number
+>a : number
+
+const d: WebAssembly.Module = b;
+>d : WebAssembly.Module
+>WebAssembly : any
+>b : WebAssembly.Module
+
+const e: Promise<WebAssembly.Module> = import.source("./a.wasm");
+>e : Promise<WebAssembly.Module>
+>WebAssembly : any
+>import.source("./a.wasm") : Promise<WebAssembly.Module>
+>source : any
+>"./a.wasm" : "./a.wasm"
+

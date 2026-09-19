@@ -114,12 +114,17 @@ func (r *aliasResolver) GetModeForUsageLocation(file ast.HasFileName, moduleSpec
 
 // GetResolvedModule implements checker.Program.
 func (r *aliasResolver) GetResolvedModule(currentSourceFile ast.HasFileName, moduleReference string, mode core.ResolutionMode) *module.ResolvedModule {
+	return r.getResolvedModule(currentSourceFile, moduleReference, mode, module.ImportPhaseEvaluation)
+}
+
+func (r *aliasResolver) getResolvedModule(currentSourceFile ast.HasFileName, moduleReference string, mode core.ResolutionMode, phase module.ImportPhase) *module.ResolvedModule {
 	cache, _ := r.resolvedModules.LoadOrStore(currentSourceFile.Path(), &collections.SyncMap[module.ModeAwareCacheKey, *module.ResolvedModule]{})
-	if resolved, ok := cache.Load(module.ModeAwareCacheKey{Name: moduleReference, Mode: mode}); ok {
+	key := module.ModeAwareCacheKey{Name: moduleReference, Mode: mode, Phase: phase}
+	if resolved, ok := cache.Load(key); ok {
 		return resolved
 	}
-	resolved, _ := r.moduleResolver.ResolveModuleName(moduleReference, currentSourceFile.FileName(), mode, nil)
-	resolved, _ = cache.LoadOrStore(module.ModeAwareCacheKey{Name: moduleReference, Mode: mode}, resolved)
+	resolved, _ := r.moduleResolver.ResolveModuleNameWithPhase(moduleReference, currentSourceFile.FileName(), mode, phase, nil /*redirectedReference*/)
+	resolved, _ = cache.LoadOrStore(key, resolved)
 	if !resolved.IsResolved() && !tspath.PathIsRelative(moduleReference) {
 		r.onFailedAmbientModuleLookup(currentSourceFile, moduleReference)
 	}
@@ -211,7 +216,8 @@ func (r *aliasResolver) GetRedirectTargets(path tspath.Path) []string {
 
 // GetResolvedModuleFromModuleSpecifier implements checker.Program.
 func (r *aliasResolver) GetResolvedModuleFromModuleSpecifier(file ast.HasFileName, moduleSpecifier *ast.StringLiteralLike) *module.ResolvedModule {
-	panic("unimplemented")
+	phase := module.GetImportPhaseForUsage(moduleSpecifier)
+	return r.getResolvedModule(file, moduleSpecifier.Text(), r.GetModeForUsageLocation(file, moduleSpecifier), phase)
 }
 
 // GetSourceOfProjectReferenceIfOutputIncluded implements checker.Program.

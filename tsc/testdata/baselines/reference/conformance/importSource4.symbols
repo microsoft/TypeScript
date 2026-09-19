@@ -1,0 +1,29 @@
+//// [tests/cases/conformance/importSource/importSource4.ts] ////
+
+=== a.ts ===
+export default 1;
+export const a = 2;
+>a : Symbol(a, Decl(a.ts, 1, 12))
+
+=== b.ts ===
+import source * as a from "./a.js";
+>a : Symbol(a, Decl(b.ts, 0, 13))
+
+=== c.ts ===
+import source { a } from "./a.js";
+>a : Symbol(a, Decl(c.ts, 0, 15))
+
+=== d.ts ===
+import source a, { a as b } from "./a.js";
+>a : Symbol(a, Decl(d.ts, 0, 6))
+>a : Symbol(b, Decl(a.ts, 1, 12))
+>b : Symbol(b, Decl(d.ts, 0, 18))
+
+=== e.ts ===
+
+import source "./a.js";
+
+=== f.ts ===
+import source type a from "./a.js";
+>type : Symbol(type, Decl(f.ts, 0, 6))
+
