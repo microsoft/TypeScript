@@ -252,6 +252,45 @@ func TestModuleResolutionCallbackErrorsAreReturned(t *testing.T) {
 	assert.Equal(t, len(session.inProgressSnapshots), 0)
 }
 
+func TestModuleResolutionCallbackErrorRejectsLanguageServerUpdate(t *testing.T) {
+	t.Parallel()
+
+	projectSession, _ := projecttestutil.Setup(map[string]any{
+		"/src/index.ts": `import "pkg";`,
+	})
+	defer projectSession.Close()
+	session := NewLSPSession(projectSession, nil)
+	defer session.Close()
+	session.conn = &failingModuleResolutionConn{}
+	resolver, err := session.handleCreateModuleResolver(&CreateModuleResolverParams{
+		CompilerOptions: core.CompilerOptions{
+			NoLib:            core.TSTrue,
+			Module:           core.ModuleKindNodeNext,
+			ModuleResolution: core.ModuleResolutionKindNodeNext,
+		},
+		ResolveModuleNameCallback: "resolveModuleName/1",
+	})
+	assert.NilError(t, err)
+	baseSnapshot := projectSession.Snapshot()
+
+	_, err = session.handleGetCurrentLanguageServerSnapshot(context.Background(), &GetCurrentLanguageServerSnapshotParams{
+		Changes: &LanguageServerSnapshotChanges{SnapshotRequestChangesParams{
+			CreatePrograms: []*CreateSnapshotProgramParams{{
+				RootFiles: []DocumentIdentifier{{FileName: "/src/index.ts"}},
+				CompilerOptions: core.CompilerOptions{
+					NoLib:            core.TSTrue,
+					Module:           core.ModuleKindNodeNext,
+					ModuleResolution: core.ModuleResolutionKindNodeNext,
+				},
+				Options: &CreateProgramOptions{ModuleResolver: resolver},
+			}},
+		}},
+	})
+	assert.ErrorContains(t, err, "callback error")
+	assert.Assert(t, projectSession.Snapshot() == baseSnapshot)
+	assert.Equal(t, len(projectSession.Snapshot().ProjectCollection.SyntheticProjects()), 0)
+}
+
 func providedResolutionEntry(moduleName string, directory string, mode *core.ModuleKind, fileName string) *ModuleResolutionEntry {
 	entry := &ModuleResolutionEntry{
 		ModuleName: moduleName,
