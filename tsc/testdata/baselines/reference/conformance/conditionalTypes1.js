@@ -372,6 +372,44 @@ function conditionalRelations<T>(
     y = x;
 }
 
+// The same should hold when the distributed type parameter is nested in an
+// inline object literal, a function type, or a nested conditional type.
+function conditionalRelations2<T>(
+    x: T extends { value: infer U } ? { t: T, u: U } : never,
+    y: T extends { value: infer U } ? { t: T, u: U } : never,
+) {
+    x = y;
+    y = x;
+}
+
+function conditionalRelations3<T>(
+    x: T extends { value: infer U } ? (t: T) => U : never,
+    y: T extends { value: infer U } ? (t: T) => U : never,
+) {
+    x = y;
+    y = x;
+}
+
+function conditionalRelations4<T>(
+    x: T extends { value: infer U } ? (U extends string ? { t: T, u: U } : { t: T }) : never,
+    y: T extends { value: infer U } ? (U extends string ? { t: T, u: U } : { t: T }) : never,
+) {
+    x = y;
+    y = x;
+}
+
+// The same should hold when one side is an instantiation that doesn't touch the
+// distributed type parameter, including in the extends and false types.
+function conditionalRelations5<T>(x: T extends { value: infer U } ? never : { t: T }) {
+    const make = <V>(v: V): T extends { value: infer U } ? never : { t: T, v: V } => null!;
+    x = make(1);
+}
+
+function conditionalRelations6<T>(x: T extends { self: T } ? { t: T } : never) {
+    const make = <V>(v: V): T extends { self: T } ? { t: T, v: V } : never => null!;
+    x = make(1);
+}
+
 
 //// [conditionalTypes1.js]
 "use strict";
@@ -474,6 +512,30 @@ assign(a, { o: 2, c: { 0: { a: 2, c: '213123' } } });
 function conditionalRelations(x, y) {
     x = y;
     y = x;
+}
+// The same should hold when the distributed type parameter is nested in an
+// inline object literal, a function type, or a nested conditional type.
+function conditionalRelations2(x, y) {
+    x = y;
+    y = x;
+}
+function conditionalRelations3(x, y) {
+    x = y;
+    y = x;
+}
+function conditionalRelations4(x, y) {
+    x = y;
+    y = x;
+}
+// The same should hold when one side is an instantiation that doesn't touch the
+// distributed type parameter, including in the extends and false types.
+function conditionalRelations5(x) {
+    const make = (v) => null;
+    x = make(1);
+}
+function conditionalRelations6(x) {
+    const make = (v) => null;
+    x = make(1);
 }
 
 
@@ -748,3 +810,44 @@ declare function conditionalRelations<T>(x: T extends {
 } ? [T, U] : never, y: T extends {
     value: infer U;
 } ? [T, U] : never): void;
+declare function conditionalRelations2<T>(x: T extends {
+    value: infer U;
+} ? {
+    t: T;
+    u: U;
+} : never, y: T extends {
+    value: infer U;
+} ? {
+    t: T;
+    u: U;
+} : never): void;
+declare function conditionalRelations3<T>(x: T extends {
+    value: infer U;
+} ? (t: T) => U : never, y: T extends {
+    value: infer U;
+} ? (t: T) => U : never): void;
+declare function conditionalRelations4<T>(x: T extends {
+    value: infer U;
+} ? (U extends string ? {
+    t: T;
+    u: U;
+} : {
+    t: T;
+}) : never, y: T extends {
+    value: infer U;
+} ? (U extends string ? {
+    t: T;
+    u: U;
+} : {
+    t: T;
+}) : never): void;
+declare function conditionalRelations5<T>(x: T extends {
+    value: infer U;
+} ? never : {
+    t: T;
+}): void;
+declare function conditionalRelations6<T>(x: T extends {
+    self: T;
+} ? {
+    t: T;
+} : never): void;
