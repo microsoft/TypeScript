@@ -1378,7 +1378,15 @@ func (c *Checker) getInferredType(n *InferenceContext, index int) *Type {
 		constraint := c.getConstraintOfTypeParameter(inference.typeParameter)
 		if constraint != nil {
 			instantiatedConstraint := c.instantiateType(constraint, n.nonFixingMapper)
-			if inferredType != nil && n.flags&InferenceFlagsNoConstraintChecks == 0 {
+			if inferredType != nil && n.flags&InferenceFlagsNoConstraintChecks == 0 && c.shouldDeferConstraintCheck(inferredType) {
+				// The inferred type mentions an object literal with an accessor whose type comes from its body. Comparing
+				// it against the constraint now would resolve the accessor while the enclosing declaration may still be
+				// unresolved, which is a circularity for self-referential literals (#64192). The check runs after the
+				// deferred nodes of the file, by which time the accessor has been checked.
+				if !slices.Contains(n.deferredConstraintChecks, index) {
+					n.deferredConstraintChecks = append(n.deferredConstraintChecks, index)
+				}
+			} else if inferredType != nil && n.flags&InferenceFlagsNoConstraintChecks == 0 {
 				constraintWithThis := c.getTypeWithThisArgument(instantiatedConstraint, inferredType, false)
 				if n.compareTypes(inferredType, constraintWithThis, false) == TernaryFalse {
 					var filteredByConstraint *Type

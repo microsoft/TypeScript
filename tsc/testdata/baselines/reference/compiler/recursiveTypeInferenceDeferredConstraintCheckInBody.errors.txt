@@ -1,0 +1,97 @@
+recursiveTypeInferenceDeferredConstraintCheckInBody.ts(54,75): error TS2322: Type 'number' is not assignable to type 'string'.
+recursiveTypeInferenceDeferredConstraintCheckInBody.ts(59,14): error TS2322: Type 'number' is not assignable to type 'string'.
+recursiveTypeInferenceDeferredConstraintCheckInBody.ts(64,70): error TS2322: Type 'number' is not assignable to type 'string'.
+recursiveTypeInferenceDeferredConstraintCheckInBody.ts(67,60): error TS2345: Argument of type '[ZodObject<Writeable<{ name: ZodString; readonly pair: ZodTuple<[ZodObject<Writeable<any>>, number]>; }>>, number]' is not assignable to parameter of type 'readonly [$ZodType<unknown, unknown, $ZodTypeInternals<unknown, unknown>>, ...$ZodType<unknown, unknown, $ZodTypeInternals<unknown, unknown>>[]]'.
+  Type at position 1 in source is not compatible with type at position 1 in target.
+    Type 'number' is not assignable to type '$ZodType<unknown, unknown, $ZodTypeInternals<unknown, unknown>>'.
+recursiveTypeInferenceDeferredConstraintCheckInBody.ts(72,14): error TS2322: Type 'number' is not assignable to type 'string'.
+
+
+==== recursiveTypeInferenceDeferredConstraintCheckInBody.ts (5 errors) ====
+    // A generic call inside an un-annotated accessor whose inferred type argument mentions the enclosing object literal.
+    // The constraint check of that argument would instantiate the literal's inferred output type while the accessor is
+    // still unresolved, so it is deferred until the accessors of the file have been checked. The declarations mirror
+    // how zod exposes a schema's output: only through a property of the internals object, never through a base type
+    // argument.
+    
+    type output<T> = T extends { _zod: { output: any } } ? T["_zod"]["output"] : unknown;
+    type input<T> = T extends { _zod: { input: any } } ? T["_zod"]["input"] : unknown;
+    type NoUndefined<T> = T extends undefined ? never : T;
+    type Writeable<T> = { -readonly [P in keyof T]: T[P] };
+    type Prettify<T> = { [K in keyof T]: T[K] } & {};
+    interface $ZodTypeInternals<out O = unknown, out I = unknown> { def: unknown; output: O; input: I; optin?: "optional" | undefined; optout?: "optional" | undefined }
+    interface StandardProps<I, O> { readonly types?: { readonly input: I; readonly output: O } | undefined }
+    interface $ZodType<O = unknown, I = unknown, Internals extends $ZodTypeInternals<O, I> = $ZodTypeInternals<O, I>> {
+      _zod: Internals;
+      "~standard": StandardProps<input<this>, output<this>>;
+    }
+    interface ZodType<out Internals extends $ZodTypeInternals = $ZodTypeInternals> extends $ZodType<any, any, Internals> {
+      default(def: NoUndefined<output<this>>): ZodDefault<this>;
+      default(def: () => NoUndefined<output<this>>): ZodDefault<this>;
+    }
+    type Shape = Readonly<{ [k: string]: $ZodType }>;
+    type OptionalOut = { _zod: { optout: "optional" } };
+    type OptionalIn = { _zod: { optin: "optional" } };
+    type $InferObjectOutput<T extends Shape> = Prettify<
+      { -readonly [k in keyof T as T[k] extends OptionalOut ? never : k]: T[k]["_zod"]["output"] } &
+      { -readonly [k in keyof T as T[k] extends OptionalOut ? k : never]?: T[k]["_zod"]["output"] }
+    >;
+    type $InferObjectInput<T extends Shape> = Prettify<
+      { -readonly [k in keyof T as T[k] extends OptionalIn ? never : k]: T[k]["_zod"]["input"] } &
+      { -readonly [k in keyof T as T[k] extends OptionalIn ? k : never]?: T[k]["_zod"]["input"] }
+    >;
+    interface $ZodStringInternals extends $ZodTypeInternals { def: { type: "string" }; output: string; input: string }
+    interface ZodString extends ZodType<$ZodStringInternals> {}
+    declare function string(): ZodString;
+    interface $ZodObjectInternals<S extends Shape> extends $ZodTypeInternals { def: { type: "object"; shape: S }; output: $InferObjectOutput<S>; input: $InferObjectInput<S> }
+    interface ZodObject<S extends Shape> extends ZodType<$ZodObjectInternals<S>> { shape: S }
+    declare function object<T extends Shape>(shape: T): ZodObject<Writeable<T>>;
+    interface $ZodArrayInternals<T extends $ZodType> extends $ZodTypeInternals { def: { type: "array"; element: T }; output: output<T>[]; input: input<T>[] }
+    interface ZodArray<T extends $ZodType> extends ZodType<$ZodArrayInternals<T>> { element: T }
+    declare function array<T extends $ZodType>(element: T): ZodArray<T>;
+    interface $ZodDefaultInternals<T extends $ZodType> extends $ZodTypeInternals { def: { type: "default"; inner: T }; output: NoUndefined<output<T>>; input: input<T> | undefined; optin: "optional" }
+    interface ZodDefault<T extends $ZodType> extends ZodType<$ZodDefaultInternals<T>> {}
+    type TupleOut<T extends readonly $ZodType[]> = T extends readonly [infer H extends $ZodType, ...infer R extends $ZodType[]] ? [output<H>, ...TupleOut<R>] : [];
+    interface $ZodTupleInternals<T extends readonly $ZodType[]> extends $ZodTypeInternals { def: { type: "tuple"; items: T }; output: TupleOut<T>; input: TupleOut<T> }
+    interface ZodTuple<T extends readonly $ZodType[]> extends ZodType<$ZodTupleInternals<T>> { items: T }
+    declare function tuple<T extends readonly [$ZodType, ...$ZodType[]]>(items: T): ZodTuple<T>;
+    declare function tuple(items: []): ZodTuple<[]>;
+    
+    // (1) The constraint check of `array`'s type argument mentions `Category` through `Writeable`, whose mapped
+    // property for the accessor is what cycles.
+    const Category = object({ name: string(), get subcategories() { return array(Category); } });
+    export const c1: output<typeof Category> = { name: "a", subcategories: [{ name: "b", subcategories: [] }] };
+    export const c2: output<typeof Category> = { name: "a", subcategories: [{ name: 1, subcategories: [] }] }; // error
+                                                                              ~~~~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+!!! related TS6500 recursiveTypeInferenceDeferredConstraintCheckInBody.ts:52:27: The expected type comes from property 'name' which is declared here on type '{ name: string; subcategories: any[]; }'
+    
+    // (2) An overloaded call inside the accessor: a re-entered call with several overloads cannot skip its check.
+    const Pair = object({ name: string(), get pair() { return tuple([Pair, Pair]); } });
+    export const p1: output<typeof Pair>["pair"][1]["pair"][0]["name"] = "x";
+    export const p2: output<typeof Pair>["pair"][1]["pair"][0]["name"] = 1; // error
+                 ~~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+    
+    // (3) A method whose parameter type is the output of `this`, chained onto the recursive reference.
+    const Tree = object({ name: string(), get children() { return array(Tree).default([]); } });
+    export const t1: output<typeof Tree>["children"][0]["children"] = [{ name: "b", children: [] }];
+    export const t2: output<typeof Tree>["children"][0]["children"] = [{ name: 1, children: [] }]; // error
+                                                                         ~~~~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+!!! related TS6500 recursiveTypeInferenceDeferredConstraintCheckInBody.ts:62:23: The expected type comes from property 'name' which is declared here on type '{ name: string; children: any[]; }'
+    
+    // (4) A violated constraint inside the accessor body is still reported, after the accessor has been checked.
+    const Wrong = object({ name: string(), get pair() { return tuple([Wrong, 42]); } });
+                                                               ~~~~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type '[ZodObject<Writeable<{ name: ZodString; readonly pair: ZodTuple<[ZodObject<Writeable<any>>, number]>; }>>, number]' is not assignable to parameter of type 'readonly [$ZodType<unknown, unknown, $ZodTypeInternals<unknown, unknown>>, ...$ZodType<unknown, unknown, $ZodTypeInternals<unknown, unknown>>[]]'.
+!!! error TS2345:   Type at position 1 in source is not compatible with type at position 1 in target.
+!!! error TS2345:     Type 'number' is not assignable to type '$ZodType<unknown, unknown, $ZodTypeInternals<unknown, unknown>>'.
+    
+    // (5) The literal is mentioned through a property of another literal.
+    const Nested = object({ name: string(), get child() { return object({ inner: Nested, get deep() { return tuple([Nested, string()]); } }); } });
+    export const n1: output<typeof Nested>["child"]["inner"]["child"]["deep"][1] = "x";
+    export const n2: output<typeof Nested>["child"]["inner"]["child"]["deep"][1] = 1; // error
+                 ~~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+    

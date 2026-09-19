@@ -1,0 +1,201 @@
+//// [tests/cases/compiler/recursiveTypeInferenceDeferredConstraintCheck.ts] ////
+
+=== recursiveTypeInferenceDeferredConstraintCheck.ts ===
+// When an inferred type argument is an object literal with un-annotated accessors, its constraint check is deferred
+// until the accessors have been checked. The accessor bodies are therefore never resolved while the enclosing
+// declaration is unresolved, so no re-entrant call resolution takes place for this pattern.
+
+interface Schema<O> { readonly out: O }
+>out : O
+
+type Shape = Record<string, Schema<any>>;
+>Shape : Shape
+
+type Infer<S extends Shape> = { [K in keyof S]: S[K]["out"] };
+>Infer : Infer<S>
+
+declare const str: Schema<string>;
+>str : Schema<string>
+
+declare function array<T extends Schema<any>>(element: T): Schema<T["out"][]>;
+>array : <T extends Schema<any>>(element: T) => Schema<T["out"][]>
+>element : T
+
+// (1) An overloaded builder: previously only a single-candidate re-entered call could skip its constraint check.
+declare function object<S extends Shape>(shape: S): Schema<Infer<S>>;
+>object : { <S extends Shape>(shape: S): Schema<Infer<S>>; <S_1 extends Shape>(name: string, shape: S_1): Schema<Infer<S_1>>; }
+>shape : S
+
+declare function object<S extends Shape>(name: string, shape: S): Schema<Infer<S>>;
+>object : { <S_1 extends Shape>(shape: S_1): Schema<Infer<S_1>>; <S extends Shape>(name: string, shape: S): Schema<Infer<S>>; }
+>name : string
+>shape : S
+
+const Category = object({
+>Category : Schema<Infer<{ name: Schema<string>; readonly subcategories: Schema<Infer<any>[]>; }>>
+>object({  name: str,  get subcategories() { return array(Category); },}) : Schema<Infer<{ name: Schema<string>; readonly subcategories: Schema<Infer<any>[]>; }>>
+>object : { <S extends Shape>(shape: S): Schema<Infer<S>>; <S extends Shape>(name: string, shape: S): Schema<Infer<S>>; }
+>{  name: str,  get subcategories() { return array(Category); },} : { name: Schema<string>; readonly subcategories: Schema<Infer<{ name: Schema<string>; readonly subcategories: Schema<Infer<any>[]>; }>[]>; }
+
+  name: str,
+>name : Schema<string>
+>str : Schema<string>
+
+  get subcategories() { return array(Category); },
+>subcategories : Schema<Infer<{ name: Schema<string>; readonly subcategories: Schema<Infer<any>[]>; }>[]>
+>array(Category) : Schema<Infer<{ name: Schema<string>; readonly subcategories: Schema<Infer<any>[]>; }>[]>
+>array : <T extends Schema<any>>(element: T) => Schema<T["out"][]>
+>Category : Schema<Infer<{ name: Schema<string>; readonly subcategories: Schema<Infer<any>[]>; }>>
+
+});
+const c: Category["out"]["subcategories"][0]["subcategories"][0]["name"] = "x";
+>c : string
+>"x" : "x"
+
+type Category = typeof Category;
+>Category : Schema<Infer<{ name: Schema<string>; readonly subcategories: Schema<Infer<any>[]>; }>>
+>Category : Schema<Infer<{ name: Schema<string>; readonly subcategories: Schema<Infer<any>[]>; }>>
+
+// (2) A constraint violation inside the literal is still reported.
+const Bad = object({
+>Bad : Schema<Infer<{ name: number; readonly subcategories: Schema<Infer<any>[]>; }>>
+>object({  name: 42,  get subcategories() { return array(Bad); },}) : Schema<Infer<{ name: number; readonly subcategories: Schema<Infer<any>[]>; }>>
+>object : { <S extends Shape>(shape: S): Schema<Infer<S>>; <S extends Shape>(name: string, shape: S): Schema<Infer<S>>; }
+>{  name: 42,  get subcategories() { return array(Bad); },} : { name: number; readonly subcategories: Schema<Infer<{ name: number; readonly subcategories: Schema<Infer<any>[]>; }>[]>; }
+
+  name: 42,
+>name : number
+>42 : 42
+
+  get subcategories() { return array(Bad); },
+>subcategories : Schema<Infer<{ name: number; readonly subcategories: Schema<Infer<any>[]>; }>[]>
+>array(Bad) : Schema<Infer<{ name: number; readonly subcategories: Schema<Infer<any>[]>; }>[]>
+>array : <T extends Schema<any>>(element: T) => Schema<T["out"][]>
+>Bad : Schema<Infer<{ name: number; readonly subcategories: Schema<Infer<any>[]>; }>>
+
+});
+
+// (3) A pure return type inference stays filtered by its constraint: with no re-entrant resolution, the leaked
+// unfiltered inference reported in the review of #64311 no longer occurs.
+type Lookup = { x: 1; dflt: 2 };
+>Lookup : Lookup
+>x : 1
+>dflt : 2
+
+declare function make<S extends Shape, P extends keyof Lookup>(shape: S): Schema<Infer<S>> & { p: P; f: (x: P) => void };
+>make : <S extends Shape, P extends keyof Lookup>(shape: S) => Schema<Infer<S>> & { p: P; f: (x: P) => void; }
+>shape : S
+>p : P
+>f : (x: P) => void
+>x : P
+
+const u = make({ name: str }) satisfies { p: number | "x" };
+>u : Schema<Infer<{ name: Schema<string>; }>> & { p: "x"; f: (x: "x") => void; }
+>make({ name: str }) satisfies { p: number | "x" } : Schema<Infer<{ name: Schema<string>; }>> & { p: "x"; f: (x: "x") => void; }
+>make({ name: str }) : Schema<Infer<{ name: Schema<string>; }>> & { p: "x"; f: (x: "x") => void; }
+>make : <S extends Shape, P extends keyof Lookup>(shape: S) => Schema<Infer<S>> & { p: P; f: (x: P) => void; }
+>{ name: str } : { name: Schema<string>; }
+>name : Schema<string>
+>str : Schema<string>
+>p : number | "x"
+
+u.f(42); // error
+>u.f(42) : void
+>u.f : (x: "x") => void
+>u : Schema<Infer<{ name: Schema<string>; }>> & { p: "x"; f: (x: "x") => void; }
+>f : (x: "x") => void
+>42 : 42
+
+const t = make({ name: str, get rec() { return make({ inner: t }); } }) satisfies { p: number | "x" };
+>t : Schema<Infer<{ name: Schema<string>; readonly rec: Schema<Infer<{ inner: Schema<Infer<any>> & { p: "x"; f: (x: "x") => void; }; }>> & { p: keyof Lookup; f: (x: keyof Lookup) => void; }; }>> & { p: "x"; f: (x: "x") => void; }
+>make({ name: str, get rec() { return make({ inner: t }); } }) satisfies { p: number | "x" } : Schema<Infer<{ name: Schema<string>; readonly rec: Schema<Infer<{ inner: Schema<Infer<any>> & { p: "x"; f: (x: "x") => void; }; }>> & { p: keyof Lookup; f: (x: keyof Lookup) => void; }; }>> & { p: "x"; f: (x: "x") => void; }
+>make({ name: str, get rec() { return make({ inner: t }); } }) : Schema<Infer<{ name: Schema<string>; readonly rec: Schema<Infer<{ inner: Schema<Infer<any>> & { p: "x"; f: (x: "x") => void; }; }>> & { p: keyof Lookup; f: (x: keyof Lookup) => void; }; }>> & { p: "x"; f: (x: "x") => void; }
+>make : <S extends Shape, P extends keyof Lookup>(shape: S) => Schema<Infer<S>> & { p: P; f: (x: P) => void; }
+>{ name: str, get rec() { return make({ inner: t }); } } : { name: Schema<string>; readonly rec: Schema<Infer<{ inner: Schema<Infer<{ name: Schema<string>; readonly rec: Schema<Infer<any>> & { p: keyof Lookup; f: (x: keyof Lookup) => void; }; }>> & { p: "x"; f: (x: "x") => void; }; }>> & { p: keyof Lookup; f: (x: keyof Lookup) => void; }; }
+>name : Schema<string>
+>str : Schema<string>
+>rec : Schema<Infer<{ inner: Schema<Infer<{ name: Schema<string>; readonly rec: Schema<Infer<any>> & { p: keyof Lookup; f: (x: keyof Lookup) => void; }; }>> & { p: "x"; f: (x: "x") => void; }; }>> & { p: keyof Lookup; f: (x: keyof Lookup) => void; }
+>make({ inner: t }) : Schema<Infer<{ inner: Schema<Infer<{ name: Schema<string>; readonly rec: Schema<Infer<any>> & { p: keyof Lookup; f: (x: keyof Lookup) => void; }; }>> & { p: "x"; f: (x: "x") => void; }; }>> & { p: keyof Lookup; f: (x: keyof Lookup) => void; }
+>make : <S extends Shape, P extends keyof Lookup>(shape: S) => Schema<Infer<S>> & { p: P; f: (x: P) => void; }
+>{ inner: t } : { inner: Schema<Infer<{ name: Schema<string>; readonly rec: Schema<Infer<{ inner: Schema<Infer<any>> & { p: "x"; f: (x: "x") => void; }; }>> & { p: keyof Lookup; f: (x: keyof Lookup) => void; }; }>> & { p: "x"; f: (x: "x") => void; }; }
+>inner : Schema<Infer<{ name: Schema<string>; readonly rec: Schema<Infer<{ inner: Schema<Infer<any>> & { p: "x"; f: (x: "x") => void; }; }>> & { p: keyof Lookup; f: (x: keyof Lookup) => void; }; }>> & { p: "x"; f: (x: "x") => void; }
+>t : Schema<Infer<{ name: Schema<string>; readonly rec: Schema<Infer<{ inner: Schema<Infer<any>> & { p: "x"; f: (x: "x") => void; }; }>> & { p: keyof Lookup; f: (x: keyof Lookup) => void; }; }>> & { p: "x"; f: (x: "x") => void; }
+>p : number | "x"
+
+t.f(42); // error
+>t.f(42) : void
+>t.f : (x: "x") => void
+>t : Schema<Infer<{ name: Schema<string>; readonly rec: Schema<Infer<{ inner: Schema<Infer<any>> & { p: "x"; f: (x: "x") => void; }; }>> & { p: keyof Lookup; f: (x: keyof Lookup) => void; }; }>> & { p: "x"; f: (x: "x") => void; }
+>f : (x: "x") => void
+>42 : 42
+
+// (4) An annotated accessor takes the ordinary path.
+interface AnnotatedOut { name: string; subcategories: AnnotatedOut[] }
+>name : string
+>subcategories : AnnotatedOut[]
+
+const Annotated = object({
+>Annotated : Schema<Infer<{ name: Schema<string>; readonly subcategories: Schema<AnnotatedOut[]>; }>>
+>object({  name: str,  get subcategories(): Schema<AnnotatedOut[]> { return array(Annotated); },}) : Schema<Infer<{ name: Schema<string>; readonly subcategories: Schema<AnnotatedOut[]>; }>>
+>object : { <S extends Shape>(shape: S): Schema<Infer<S>>; <S extends Shape>(name: string, shape: S): Schema<Infer<S>>; }
+>{  name: str,  get subcategories(): Schema<AnnotatedOut[]> { return array(Annotated); },} : { name: Schema<string>; readonly subcategories: Schema<AnnotatedOut[]>; }
+
+  name: str,
+>name : Schema<string>
+>str : Schema<string>
+
+  get subcategories(): Schema<AnnotatedOut[]> { return array(Annotated); },
+>subcategories : Schema<AnnotatedOut[]>
+>array(Annotated) : Schema<Infer<{ name: Schema<string>; readonly subcategories: Schema<AnnotatedOut[]>; }>[]>
+>array : <T extends Schema<any>>(element: T) => Schema<T["out"][]>
+>Annotated : Schema<Infer<{ name: Schema<string>; readonly subcategories: Schema<AnnotatedOut[]>; }>>
+
+});
+const a: AnnotatedOut = Annotated.out;
+>a : AnnotatedOut
+>Annotated.out : Infer<{ name: Schema<string>; readonly subcategories: Schema<AnnotatedOut[]>; }>
+>Annotated : Schema<Infer<{ name: Schema<string>; readonly subcategories: Schema<AnnotatedOut[]>; }>>
+>out : Infer<{ name: Schema<string>; readonly subcategories: Schema<AnnotatedOut[]>; }>
+
+// (5) A call inside the accessor body whose inferred type argument mentions the literal: its constraint check would
+// instantiate the literal's mapped output type while the accessor is unresolved, so it is deferred as well.
+type Output<S extends Shape> = { [K in keyof S as S[K] extends { opt: true } ? never : K]: S[K]["out"] } & { [K in keyof S as S[K] extends { opt: true } ? K : never]?: S[K]["out"] };
+>Output : Output<S>
+>opt : true
+>true : true
+>opt : true
+>true : true
+
+interface Obj<S extends Shape> extends Schema<{ [K in keyof Output<S>]: Output<S>[K] }> { shape: S }
+>shape : S
+
+declare function obj<S extends Shape>(shape: S): Obj<S>;
+>obj : <S extends Shape>(shape: S) => Obj<S>
+>shape : S
+
+declare function withDefault<T extends Schema<any>>(schema: T, value: T["out"]): T;
+>withDefault : <T extends Schema<any>>(schema: T, value: T["out"]) => T
+>schema : T
+>value : T["out"]
+
+export const Tree = obj({
+>Tree : Obj<{ name: Schema<string>; readonly children: Schema<unknown[]>; }>
+>obj({  name: str,  get children() { return withDefault(array(Tree), []); },}) : Obj<{ name: Schema<string>; readonly children: Schema<unknown[]>; }>
+>obj : <S extends Shape>(shape: S) => Obj<S>
+>{  name: str,  get children() { return withDefault(array(Tree), []); },} : { name: Schema<string>; readonly children: Schema<unknown[]>; }
+
+  name: str,
+>name : Schema<string>
+>str : Schema<string>
+
+  get children() { return withDefault(array(Tree), []); },
+>children : Schema<unknown[]>
+>withDefault(array(Tree), []) : Schema<unknown[]>
+>withDefault : <T extends Schema<any>>(schema: T, value: T["out"]) => T
+>array(Tree) : Schema<unknown[]>
+>array : <T extends Schema<any>>(element: T) => Schema<T["out"][]>
+>Tree : Obj<{ name: Schema<string>; readonly children: Schema<unknown[]>; }>
+>[] : never[]
+
+});
+

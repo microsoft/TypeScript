@@ -413,6 +413,7 @@ type SourceFileLinks struct {
 	externalHelpersModule        *ast.Symbol
 	requestedExternalEmitHelpers ExternalEmitHelpers
 	deferredNodes                collections.OrderedSet[*ast.Node]
+	deferredConstraintChecks     []deferredConstraintCheck
 	identifierCheckNodes         []*ast.Node
 	localJsxNamespace            string
 	localJsxFragmentNamespace    string

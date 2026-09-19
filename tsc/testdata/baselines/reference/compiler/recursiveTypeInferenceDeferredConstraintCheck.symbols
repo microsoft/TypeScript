@@ -1,0 +1,253 @@
+//// [tests/cases/compiler/recursiveTypeInferenceDeferredConstraintCheck.ts] ////
+
+=== recursiveTypeInferenceDeferredConstraintCheck.ts ===
+// When an inferred type argument is an object literal with un-annotated accessors, its constraint check is deferred
+// until the accessors have been checked. The accessor bodies are therefore never resolved while the enclosing
+// declaration is unresolved, so no re-entrant call resolution takes place for this pattern.
+
+interface Schema<O> { readonly out: O }
+>Schema : Symbol(Schema, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 0, 0))
+>O : Symbol(O, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 4, 17))
+>out : Symbol(Schema.out, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 4, 21))
+>O : Symbol(O, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 4, 17))
+
+type Shape = Record<string, Schema<any>>;
+>Shape : Symbol(Shape, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 4, 39))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Schema : Symbol(Schema, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 0, 0))
+
+type Infer<S extends Shape> = { [K in keyof S]: S[K]["out"] };
+>Infer : Symbol(Infer, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 5, 41))
+>S : Symbol(S, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 6, 11))
+>Shape : Symbol(Shape, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 4, 39))
+>K : Symbol(K, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 6, 33))
+>S : Symbol(S, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 6, 11))
+>S : Symbol(S, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 6, 11))
+>K : Symbol(K, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 6, 33))
+
+declare const str: Schema<string>;
+>str : Symbol(str, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 7, 13))
+>Schema : Symbol(Schema, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 0, 0))
+
+declare function array<T extends Schema<any>>(element: T): Schema<T["out"][]>;
+>array : Symbol(array, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 7, 34))
+>T : Symbol(T, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 8, 23))
+>Schema : Symbol(Schema, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 0, 0))
+>element : Symbol(element, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 8, 46))
+>T : Symbol(T, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 8, 23))
+>Schema : Symbol(Schema, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 0, 0))
+>T : Symbol(T, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 8, 23))
+
+// (1) An overloaded builder: previously only a single-candidate re-entered call could skip its constraint check.
+declare function object<S extends Shape>(shape: S): Schema<Infer<S>>;
+>object : Symbol(object, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 8, 78), Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 11, 69))
+>S : Symbol(S, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 11, 24))
+>Shape : Symbol(Shape, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 4, 39))
+>shape : Symbol(shape, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 11, 41))
+>S : Symbol(S, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 11, 24))
+>Schema : Symbol(Schema, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 0, 0))
+>Infer : Symbol(Infer, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 5, 41))
+>S : Symbol(S, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 11, 24))
+
+declare function object<S extends Shape>(name: string, shape: S): Schema<Infer<S>>;
+>object : Symbol(object, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 8, 78), Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 11, 69))
+>S : Symbol(S, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 12, 24))
+>Shape : Symbol(Shape, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 4, 39))
+>name : Symbol(name, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 12, 41))
+>shape : Symbol(shape, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 12, 54))
+>S : Symbol(S, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 12, 24))
+>Schema : Symbol(Schema, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 0, 0))
+>Infer : Symbol(Infer, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 5, 41))
+>S : Symbol(S, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 12, 24))
+
+const Category = object({
+>Category : Symbol(Category, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 13, 5), Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 17, 79))
+>object : Symbol(object, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 8, 78), Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 11, 69))
+
+  name: str,
+>name : Symbol(name, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 13, 25))
+>str : Symbol(str, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 7, 13))
+
+  get subcategories() { return array(Category); },
+>subcategories : Symbol(subcategories, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 14, 12))
+>array : Symbol(array, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 7, 34))
+>Category : Symbol(Category, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 13, 5), Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 17, 79))
+
+});
+const c: Category["out"]["subcategories"][0]["subcategories"][0]["name"] = "x";
+>c : Symbol(c, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 17, 5))
+>Category : Symbol(Category, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 13, 5), Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 17, 79))
+
+type Category = typeof Category;
+>Category : Symbol(Category, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 13, 5), Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 17, 79))
+>Category : Symbol(Category, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 13, 5), Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 17, 79))
+
+// (2) A constraint violation inside the literal is still reported.
+const Bad = object({
+>Bad : Symbol(Bad, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 21, 5))
+>object : Symbol(object, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 8, 78), Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 11, 69))
+
+  name: 42,
+>name : Symbol(name, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 21, 20))
+
+  get subcategories() { return array(Bad); },
+>subcategories : Symbol(subcategories, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 22, 11))
+>array : Symbol(array, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 7, 34))
+>Bad : Symbol(Bad, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 21, 5))
+
+});
+
+// (3) A pure return type inference stays filtered by its constraint: with no re-entrant resolution, the leaked
+// unfiltered inference reported in the review of #64311 no longer occurs.
+type Lookup = { x: 1; dflt: 2 };
+>Lookup : Symbol(Lookup, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 24, 3))
+>x : Symbol(x, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 28, 15))
+>dflt : Symbol(dflt, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 28, 21))
+
+declare function make<S extends Shape, P extends keyof Lookup>(shape: S): Schema<Infer<S>> & { p: P; f: (x: P) => void };
+>make : Symbol(make, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 28, 32))
+>S : Symbol(S, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 29, 22))
+>Shape : Symbol(Shape, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 4, 39))
+>P : Symbol(P, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 29, 38))
+>Lookup : Symbol(Lookup, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 24, 3))
+>shape : Symbol(shape, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 29, 63))
+>S : Symbol(S, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 29, 22))
+>Schema : Symbol(Schema, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 0, 0))
+>Infer : Symbol(Infer, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 5, 41))
+>S : Symbol(S, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 29, 22))
+>p : Symbol(p, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 29, 94))
+>P : Symbol(P, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 29, 38))
+>f : Symbol(f, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 29, 100))
+>x : Symbol(x, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 29, 105))
+>P : Symbol(P, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 29, 38))
+
+const u = make({ name: str }) satisfies { p: number | "x" };
+>u : Symbol(u, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 30, 5))
+>make : Symbol(make, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 28, 32))
+>name : Symbol(name, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 30, 16))
+>str : Symbol(str, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 7, 13))
+>p : Symbol(p, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 30, 41))
+
+u.f(42); // error
+>u.f : Symbol(f, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 29, 100))
+>u : Symbol(u, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 30, 5))
+>f : Symbol(f, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 29, 100))
+
+const t = make({ name: str, get rec() { return make({ inner: t }); } }) satisfies { p: number | "x" };
+>t : Symbol(t, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 32, 5))
+>make : Symbol(make, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 28, 32))
+>name : Symbol(name, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 32, 16))
+>str : Symbol(str, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 7, 13))
+>rec : Symbol(rec, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 32, 27))
+>make : Symbol(make, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 28, 32))
+>inner : Symbol(inner, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 32, 53))
+>t : Symbol(t, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 32, 5))
+>p : Symbol(p, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 32, 83))
+
+t.f(42); // error
+>t.f : Symbol(f, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 29, 100))
+>t : Symbol(t, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 32, 5))
+>f : Symbol(f, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 29, 100))
+
+// (4) An annotated accessor takes the ordinary path.
+interface AnnotatedOut { name: string; subcategories: AnnotatedOut[] }
+>AnnotatedOut : Symbol(AnnotatedOut, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 33, 8))
+>name : Symbol(AnnotatedOut.name, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 36, 24))
+>subcategories : Symbol(AnnotatedOut.subcategories, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 36, 38))
+>AnnotatedOut : Symbol(AnnotatedOut, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 33, 8))
+
+const Annotated = object({
+>Annotated : Symbol(Annotated, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 37, 5))
+>object : Symbol(object, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 8, 78), Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 11, 69))
+
+  name: str,
+>name : Symbol(name, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 37, 26))
+>str : Symbol(str, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 7, 13))
+
+  get subcategories(): Schema<AnnotatedOut[]> { return array(Annotated); },
+>subcategories : Symbol(subcategories, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 38, 12))
+>Schema : Symbol(Schema, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 0, 0))
+>AnnotatedOut : Symbol(AnnotatedOut, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 33, 8))
+>array : Symbol(array, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 7, 34))
+>Annotated : Symbol(Annotated, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 37, 5))
+
+});
+const a: AnnotatedOut = Annotated.out;
+>a : Symbol(a, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 41, 5))
+>AnnotatedOut : Symbol(AnnotatedOut, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 33, 8))
+>Annotated.out : Symbol(Schema.out, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 4, 21))
+>Annotated : Symbol(Annotated, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 37, 5))
+>out : Symbol(Schema.out, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 4, 21))
+
+// (5) A call inside the accessor body whose inferred type argument mentions the literal: its constraint check would
+// instantiate the literal's mapped output type while the accessor is unresolved, so it is deferred as well.
+type Output<S extends Shape> = { [K in keyof S as S[K] extends { opt: true } ? never : K]: S[K]["out"] } & { [K in keyof S as S[K] extends { opt: true } ? K : never]?: S[K]["out"] };
+>Output : Symbol(Output, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 41, 38))
+>S : Symbol(S, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 45, 12))
+>Shape : Symbol(Shape, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 4, 39))
+>K : Symbol(K, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 45, 34))
+>S : Symbol(S, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 45, 12))
+>S : Symbol(S, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 45, 12))
+>K : Symbol(K, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 45, 34))
+>opt : Symbol(opt, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 45, 64))
+>K : Symbol(K, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 45, 34))
+>S : Symbol(S, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 45, 12))
+>K : Symbol(K, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 45, 34))
+>K : Symbol(K, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 45, 110))
+>S : Symbol(S, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 45, 12))
+>S : Symbol(S, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 45, 12))
+>K : Symbol(K, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 45, 110))
+>opt : Symbol(opt, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 45, 140))
+>K : Symbol(K, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 45, 110))
+>S : Symbol(S, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 45, 12))
+>K : Symbol(K, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 45, 110))
+
+interface Obj<S extends Shape> extends Schema<{ [K in keyof Output<S>]: Output<S>[K] }> { shape: S }
+>Obj : Symbol(Obj, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 45, 182))
+>S : Symbol(S, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 46, 14))
+>Shape : Symbol(Shape, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 4, 39))
+>Schema : Symbol(Schema, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 0, 0))
+>K : Symbol(K, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 46, 49))
+>Output : Symbol(Output, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 41, 38))
+>S : Symbol(S, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 46, 14))
+>Output : Symbol(Output, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 41, 38))
+>S : Symbol(S, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 46, 14))
+>K : Symbol(K, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 46, 49))
+>shape : Symbol(Obj.shape, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 46, 89))
+>S : Symbol(S, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 46, 14))
+
+declare function obj<S extends Shape>(shape: S): Obj<S>;
+>obj : Symbol(obj, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 46, 100))
+>S : Symbol(S, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 47, 21))
+>Shape : Symbol(Shape, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 4, 39))
+>shape : Symbol(shape, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 47, 38))
+>S : Symbol(S, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 47, 21))
+>Obj : Symbol(Obj, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 45, 182))
+>S : Symbol(S, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 47, 21))
+
+declare function withDefault<T extends Schema<any>>(schema: T, value: T["out"]): T;
+>withDefault : Symbol(withDefault, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 47, 56))
+>T : Symbol(T, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 48, 29))
+>Schema : Symbol(Schema, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 0, 0))
+>schema : Symbol(schema, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 48, 52))
+>T : Symbol(T, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 48, 29))
+>value : Symbol(value, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 48, 62))
+>T : Symbol(T, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 48, 29))
+>T : Symbol(T, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 48, 29))
+
+export const Tree = obj({
+>Tree : Symbol(Tree, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 49, 12))
+>obj : Symbol(obj, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 46, 100))
+
+  name: str,
+>name : Symbol(name, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 49, 25))
+>str : Symbol(str, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 7, 13))
+
+  get children() { return withDefault(array(Tree), []); },
+>children : Symbol(children, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 50, 12))
+>withDefault : Symbol(withDefault, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 47, 56))
+>array : Symbol(array, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 7, 34))
+>Tree : Symbol(Tree, Decl(recursiveTypeInferenceDeferredConstraintCheck.ts, 49, 12))
+
+});
+

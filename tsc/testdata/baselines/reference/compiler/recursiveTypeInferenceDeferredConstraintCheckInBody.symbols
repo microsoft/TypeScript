@@ -1,0 +1,463 @@
+//// [tests/cases/compiler/recursiveTypeInferenceDeferredConstraintCheckInBody.ts] ////
+
+=== recursiveTypeInferenceDeferredConstraintCheckInBody.ts ===
+// A generic call inside an un-annotated accessor whose inferred type argument mentions the enclosing object literal.
+// The constraint check of that argument would instantiate the literal's inferred output type while the accessor is
+// still unresolved, so it is deferred until the accessors of the file have been checked. The declarations mirror
+// how zod exposes a schema's output: only through a property of the internals object, never through a base type
+// argument.
+
+type output<T> = T extends { _zod: { output: any } } ? T["_zod"]["output"] : unknown;
+>output : Symbol(output, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 0, 0))
+>T : Symbol(T, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 6, 12))
+>T : Symbol(T, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 6, 12))
+>_zod : Symbol(_zod, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 6, 28))
+>output : Symbol(output, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 6, 36))
+>T : Symbol(T, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 6, 12))
+
+type input<T> = T extends { _zod: { input: any } } ? T["_zod"]["input"] : unknown;
+>input : Symbol(input, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 6, 85))
+>T : Symbol(T, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 7, 11))
+>T : Symbol(T, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 7, 11))
+>_zod : Symbol(_zod, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 7, 27))
+>input : Symbol(input, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 7, 35))
+>T : Symbol(T, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 7, 11))
+
+type NoUndefined<T> = T extends undefined ? never : T;
+>NoUndefined : Symbol(NoUndefined, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 7, 82))
+>T : Symbol(T, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 8, 17))
+>T : Symbol(T, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 8, 17))
+>T : Symbol(T, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 8, 17))
+
+type Writeable<T> = { -readonly [P in keyof T]: T[P] };
+>Writeable : Symbol(Writeable, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 8, 54))
+>T : Symbol(T, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 9, 15))
+>P : Symbol(P, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 9, 33))
+>T : Symbol(T, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 9, 15))
+>T : Symbol(T, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 9, 15))
+>P : Symbol(P, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 9, 33))
+
+type Prettify<T> = { [K in keyof T]: T[K] } & {};
+>Prettify : Symbol(Prettify, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 9, 55))
+>T : Symbol(T, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 10, 14))
+>K : Symbol(K, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 10, 22))
+>T : Symbol(T, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 10, 14))
+>T : Symbol(T, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 10, 14))
+>K : Symbol(K, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 10, 22))
+
+interface $ZodTypeInternals<out O = unknown, out I = unknown> { def: unknown; output: O; input: I; optin?: "optional" | undefined; optout?: "optional" | undefined }
+>$ZodTypeInternals : Symbol($ZodTypeInternals, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 10, 49))
+>O : Symbol(O, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 11, 28))
+>I : Symbol(I, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 11, 44))
+>def : Symbol($ZodTypeInternals.def, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 11, 63))
+>output : Symbol($ZodTypeInternals.output, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 11, 77))
+>O : Symbol(O, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 11, 28))
+>input : Symbol($ZodTypeInternals.input, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 11, 88))
+>I : Symbol(I, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 11, 44))
+>optin : Symbol($ZodTypeInternals.optin, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 11, 98))
+>optout : Symbol($ZodTypeInternals.optout, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 11, 130))
+
+interface StandardProps<I, O> { readonly types?: { readonly input: I; readonly output: O } | undefined }
+>StandardProps : Symbol(StandardProps, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 11, 164))
+>I : Symbol(I, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 12, 24))
+>O : Symbol(O, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 12, 26))
+>types : Symbol(StandardProps.types, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 12, 31))
+>input : Symbol(input, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 12, 50))
+>I : Symbol(I, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 12, 24))
+>output : Symbol(output, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 12, 69))
+>O : Symbol(O, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 12, 26))
+
+interface $ZodType<O = unknown, I = unknown, Internals extends $ZodTypeInternals<O, I> = $ZodTypeInternals<O, I>> {
+>$ZodType : Symbol($ZodType, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 12, 104))
+>O : Symbol(O, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 13, 19))
+>I : Symbol(I, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 13, 31))
+>Internals : Symbol(Internals, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 13, 44))
+>$ZodTypeInternals : Symbol($ZodTypeInternals, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 10, 49))
+>O : Symbol(O, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 13, 19))
+>I : Symbol(I, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 13, 31))
+>$ZodTypeInternals : Symbol($ZodTypeInternals, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 10, 49))
+>O : Symbol(O, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 13, 19))
+>I : Symbol(I, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 13, 31))
+
+  _zod: Internals;
+>_zod : Symbol($ZodType._zod, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 13, 115))
+>Internals : Symbol(Internals, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 13, 44))
+
+  "~standard": StandardProps<input<this>, output<this>>;
+>"~standard" : Symbol($ZodType["~standard"], Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 14, 18))
+>StandardProps : Symbol(StandardProps, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 11, 164))
+>input : Symbol(input, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 6, 85))
+>output : Symbol(output, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 0, 0))
+}
+interface ZodType<out Internals extends $ZodTypeInternals = $ZodTypeInternals> extends $ZodType<any, any, Internals> {
+>ZodType : Symbol(ZodType, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 16, 1))
+>Internals : Symbol(Internals, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 17, 18))
+>$ZodTypeInternals : Symbol($ZodTypeInternals, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 10, 49))
+>$ZodTypeInternals : Symbol($ZodTypeInternals, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 10, 49))
+>$ZodType : Symbol($ZodType, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 12, 104))
+>Internals : Symbol(Internals, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 17, 18))
+
+  default(def: NoUndefined<output<this>>): ZodDefault<this>;
+>default : Symbol(ZodType.default, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 17, 118), Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 18, 60))
+>def : Symbol(def, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 18, 10))
+>NoUndefined : Symbol(NoUndefined, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 7, 82))
+>output : Symbol(output, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 0, 0))
+>ZodDefault : Symbol(ZodDefault, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 41, 195))
+
+  default(def: () => NoUndefined<output<this>>): ZodDefault<this>;
+>default : Symbol(ZodType.default, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 17, 118), Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 18, 60))
+>def : Symbol(def, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 19, 10))
+>NoUndefined : Symbol(NoUndefined, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 7, 82))
+>output : Symbol(output, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 0, 0))
+>ZodDefault : Symbol(ZodDefault, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 41, 195))
+}
+type Shape = Readonly<{ [k: string]: $ZodType }>;
+>Shape : Symbol(Shape, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 20, 1))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>k : Symbol(k, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 21, 25))
+>$ZodType : Symbol($ZodType, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 12, 104))
+
+type OptionalOut = { _zod: { optout: "optional" } };
+>OptionalOut : Symbol(OptionalOut, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 21, 49))
+>_zod : Symbol(_zod, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 22, 20))
+>optout : Symbol(optout, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 22, 28))
+
+type OptionalIn = { _zod: { optin: "optional" } };
+>OptionalIn : Symbol(OptionalIn, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 22, 52))
+>_zod : Symbol(_zod, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 23, 19))
+>optin : Symbol(optin, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 23, 27))
+
+type $InferObjectOutput<T extends Shape> = Prettify<
+>$InferObjectOutput : Symbol($InferObjectOutput, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 23, 50))
+>T : Symbol(T, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 24, 24))
+>Shape : Symbol(Shape, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 20, 1))
+>Prettify : Symbol(Prettify, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 9, 55))
+
+  { -readonly [k in keyof T as T[k] extends OptionalOut ? never : k]: T[k]["_zod"]["output"] } &
+>k : Symbol(k, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 25, 15))
+>T : Symbol(T, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 24, 24))
+>T : Symbol(T, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 24, 24))
+>k : Symbol(k, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 25, 15))
+>OptionalOut : Symbol(OptionalOut, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 21, 49))
+>k : Symbol(k, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 25, 15))
+>T : Symbol(T, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 24, 24))
+>k : Symbol(k, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 25, 15))
+
+  { -readonly [k in keyof T as T[k] extends OptionalOut ? k : never]?: T[k]["_zod"]["output"] }
+>k : Symbol(k, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 26, 15))
+>T : Symbol(T, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 24, 24))
+>T : Symbol(T, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 24, 24))
+>k : Symbol(k, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 26, 15))
+>OptionalOut : Symbol(OptionalOut, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 21, 49))
+>k : Symbol(k, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 26, 15))
+>T : Symbol(T, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 24, 24))
+>k : Symbol(k, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 26, 15))
+
+>;
+type $InferObjectInput<T extends Shape> = Prettify<
+>$InferObjectInput : Symbol($InferObjectInput, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 27, 2))
+>T : Symbol(T, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 28, 23))
+>Shape : Symbol(Shape, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 20, 1))
+>Prettify : Symbol(Prettify, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 9, 55))
+
+  { -readonly [k in keyof T as T[k] extends OptionalIn ? never : k]: T[k]["_zod"]["input"] } &
+>k : Symbol(k, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 29, 15))
+>T : Symbol(T, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 28, 23))
+>T : Symbol(T, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 28, 23))
+>k : Symbol(k, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 29, 15))
+>OptionalIn : Symbol(OptionalIn, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 22, 52))
+>k : Symbol(k, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 29, 15))
+>T : Symbol(T, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 28, 23))
+>k : Symbol(k, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 29, 15))
+
+  { -readonly [k in keyof T as T[k] extends OptionalIn ? k : never]?: T[k]["_zod"]["input"] }
+>k : Symbol(k, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 30, 15))
+>T : Symbol(T, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 28, 23))
+>T : Symbol(T, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 28, 23))
+>k : Symbol(k, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 30, 15))
+>OptionalIn : Symbol(OptionalIn, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 22, 52))
+>k : Symbol(k, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 30, 15))
+>T : Symbol(T, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 28, 23))
+>k : Symbol(k, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 30, 15))
+
+>;
+interface $ZodStringInternals extends $ZodTypeInternals { def: { type: "string" }; output: string; input: string }
+>$ZodStringInternals : Symbol($ZodStringInternals, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 31, 2))
+>$ZodTypeInternals : Symbol($ZodTypeInternals, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 10, 49))
+>def : Symbol($ZodStringInternals.def, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 32, 57))
+>type : Symbol(type, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 32, 64))
+>output : Symbol($ZodStringInternals.output, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 32, 82))
+>input : Symbol($ZodStringInternals.input, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 32, 98))
+
+interface ZodString extends ZodType<$ZodStringInternals> {}
+>ZodString : Symbol(ZodString, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 32, 114))
+>ZodType : Symbol(ZodType, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 16, 1))
+>$ZodStringInternals : Symbol($ZodStringInternals, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 31, 2))
+
+declare function string(): ZodString;
+>string : Symbol(string, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 33, 59))
+>ZodString : Symbol(ZodString, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 32, 114))
+
+interface $ZodObjectInternals<S extends Shape> extends $ZodTypeInternals { def: { type: "object"; shape: S }; output: $InferObjectOutput<S>; input: $InferObjectInput<S> }
+>$ZodObjectInternals : Symbol($ZodObjectInternals, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 34, 37))
+>S : Symbol(S, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 35, 30))
+>Shape : Symbol(Shape, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 20, 1))
+>$ZodTypeInternals : Symbol($ZodTypeInternals, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 10, 49))
+>def : Symbol($ZodObjectInternals.def, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 35, 74))
+>type : Symbol(type, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 35, 81))
+>shape : Symbol(shape, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 35, 97))
+>S : Symbol(S, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 35, 30))
+>output : Symbol($ZodObjectInternals.output, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 35, 109))
+>$InferObjectOutput : Symbol($InferObjectOutput, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 23, 50))
+>S : Symbol(S, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 35, 30))
+>input : Symbol($ZodObjectInternals.input, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 35, 140))
+>$InferObjectInput : Symbol($InferObjectInput, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 27, 2))
+>S : Symbol(S, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 35, 30))
+
+interface ZodObject<S extends Shape> extends ZodType<$ZodObjectInternals<S>> { shape: S }
+>ZodObject : Symbol(ZodObject, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 35, 170))
+>S : Symbol(S, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 36, 20))
+>Shape : Symbol(Shape, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 20, 1))
+>ZodType : Symbol(ZodType, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 16, 1))
+>$ZodObjectInternals : Symbol($ZodObjectInternals, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 34, 37))
+>S : Symbol(S, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 36, 20))
+>shape : Symbol(ZodObject.shape, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 36, 78))
+>S : Symbol(S, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 36, 20))
+
+declare function object<T extends Shape>(shape: T): ZodObject<Writeable<T>>;
+>object : Symbol(object, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 36, 89))
+>T : Symbol(T, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 37, 24))
+>Shape : Symbol(Shape, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 20, 1))
+>shape : Symbol(shape, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 37, 41))
+>T : Symbol(T, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 37, 24))
+>ZodObject : Symbol(ZodObject, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 35, 170))
+>Writeable : Symbol(Writeable, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 8, 54))
+>T : Symbol(T, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 37, 24))
+
+interface $ZodArrayInternals<T extends $ZodType> extends $ZodTypeInternals { def: { type: "array"; element: T }; output: output<T>[]; input: input<T>[] }
+>$ZodArrayInternals : Symbol($ZodArrayInternals, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 37, 76))
+>T : Symbol(T, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 38, 29))
+>$ZodType : Symbol($ZodType, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 12, 104))
+>$ZodTypeInternals : Symbol($ZodTypeInternals, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 10, 49))
+>def : Symbol($ZodArrayInternals.def, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 38, 76))
+>type : Symbol(type, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 38, 83))
+>element : Symbol(element, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 38, 98))
+>T : Symbol(T, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 38, 29))
+>output : Symbol($ZodArrayInternals.output, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 38, 112))
+>output : Symbol(output, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 0, 0))
+>T : Symbol(T, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 38, 29))
+>input : Symbol($ZodArrayInternals.input, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 38, 133))
+>input : Symbol(input, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 6, 85))
+>T : Symbol(T, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 38, 29))
+
+interface ZodArray<T extends $ZodType> extends ZodType<$ZodArrayInternals<T>> { element: T }
+>ZodArray : Symbol(ZodArray, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 38, 153))
+>T : Symbol(T, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 39, 19))
+>$ZodType : Symbol($ZodType, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 12, 104))
+>ZodType : Symbol(ZodType, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 16, 1))
+>$ZodArrayInternals : Symbol($ZodArrayInternals, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 37, 76))
+>T : Symbol(T, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 39, 19))
+>element : Symbol(ZodArray.element, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 39, 79))
+>T : Symbol(T, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 39, 19))
+
+declare function array<T extends $ZodType>(element: T): ZodArray<T>;
+>array : Symbol(array, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 39, 92))
+>T : Symbol(T, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 40, 23))
+>$ZodType : Symbol($ZodType, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 12, 104))
+>element : Symbol(element, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 40, 43))
+>T : Symbol(T, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 40, 23))
+>ZodArray : Symbol(ZodArray, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 38, 153))
+>T : Symbol(T, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 40, 23))
+
+interface $ZodDefaultInternals<T extends $ZodType> extends $ZodTypeInternals { def: { type: "default"; inner: T }; output: NoUndefined<output<T>>; input: input<T> | undefined; optin: "optional" }
+>$ZodDefaultInternals : Symbol($ZodDefaultInternals, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 40, 68))
+>T : Symbol(T, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 41, 31))
+>$ZodType : Symbol($ZodType, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 12, 104))
+>$ZodTypeInternals : Symbol($ZodTypeInternals, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 10, 49))
+>def : Symbol($ZodDefaultInternals.def, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 41, 78))
+>type : Symbol(type, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 41, 85))
+>inner : Symbol(inner, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 41, 102))
+>T : Symbol(T, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 41, 31))
+>output : Symbol($ZodDefaultInternals.output, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 41, 114))
+>NoUndefined : Symbol(NoUndefined, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 7, 82))
+>output : Symbol(output, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 0, 0))
+>T : Symbol(T, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 41, 31))
+>input : Symbol($ZodDefaultInternals.input, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 41, 146))
+>input : Symbol(input, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 6, 85))
+>T : Symbol(T, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 41, 31))
+>optin : Symbol($ZodDefaultInternals.optin, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 41, 175))
+
+interface ZodDefault<T extends $ZodType> extends ZodType<$ZodDefaultInternals<T>> {}
+>ZodDefault : Symbol(ZodDefault, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 41, 195))
+>T : Symbol(T, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 42, 21))
+>$ZodType : Symbol($ZodType, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 12, 104))
+>ZodType : Symbol(ZodType, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 16, 1))
+>$ZodDefaultInternals : Symbol($ZodDefaultInternals, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 40, 68))
+>T : Symbol(T, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 42, 21))
+
+type TupleOut<T extends readonly $ZodType[]> = T extends readonly [infer H extends $ZodType, ...infer R extends $ZodType[]] ? [output<H>, ...TupleOut<R>] : [];
+>TupleOut : Symbol(TupleOut, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 42, 84))
+>T : Symbol(T, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 43, 14))
+>$ZodType : Symbol($ZodType, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 12, 104))
+>T : Symbol(T, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 43, 14))
+>H : Symbol(H, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 43, 72))
+>$ZodType : Symbol($ZodType, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 12, 104))
+>R : Symbol(R, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 43, 101))
+>$ZodType : Symbol($ZodType, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 12, 104))
+>output : Symbol(output, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 0, 0))
+>H : Symbol(H, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 43, 72))
+>TupleOut : Symbol(TupleOut, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 42, 84))
+>R : Symbol(R, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 43, 101))
+
+interface $ZodTupleInternals<T extends readonly $ZodType[]> extends $ZodTypeInternals { def: { type: "tuple"; items: T }; output: TupleOut<T>; input: TupleOut<T> }
+>$ZodTupleInternals : Symbol($ZodTupleInternals, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 43, 159))
+>T : Symbol(T, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 44, 29))
+>$ZodType : Symbol($ZodType, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 12, 104))
+>$ZodTypeInternals : Symbol($ZodTypeInternals, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 10, 49))
+>def : Symbol($ZodTupleInternals.def, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 44, 87))
+>type : Symbol(type, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 44, 94))
+>items : Symbol(items, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 44, 109))
+>T : Symbol(T, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 44, 29))
+>output : Symbol($ZodTupleInternals.output, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 44, 121))
+>TupleOut : Symbol(TupleOut, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 42, 84))
+>T : Symbol(T, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 44, 29))
+>input : Symbol($ZodTupleInternals.input, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 44, 142))
+>TupleOut : Symbol(TupleOut, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 42, 84))
+>T : Symbol(T, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 44, 29))
+
+interface ZodTuple<T extends readonly $ZodType[]> extends ZodType<$ZodTupleInternals<T>> { items: T }
+>ZodTuple : Symbol(ZodTuple, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 44, 163))
+>T : Symbol(T, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 45, 19))
+>$ZodType : Symbol($ZodType, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 12, 104))
+>ZodType : Symbol(ZodType, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 16, 1))
+>$ZodTupleInternals : Symbol($ZodTupleInternals, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 43, 159))
+>T : Symbol(T, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 45, 19))
+>items : Symbol(ZodTuple.items, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 45, 90))
+>T : Symbol(T, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 45, 19))
+
+declare function tuple<T extends readonly [$ZodType, ...$ZodType[]]>(items: T): ZodTuple<T>;
+>tuple : Symbol(tuple, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 45, 101), Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 46, 92))
+>T : Symbol(T, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 46, 23))
+>$ZodType : Symbol($ZodType, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 12, 104))
+>$ZodType : Symbol($ZodType, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 12, 104))
+>items : Symbol(items, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 46, 69))
+>T : Symbol(T, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 46, 23))
+>ZodTuple : Symbol(ZodTuple, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 44, 163))
+>T : Symbol(T, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 46, 23))
+
+declare function tuple(items: []): ZodTuple<[]>;
+>tuple : Symbol(tuple, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 45, 101), Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 46, 92))
+>items : Symbol(items, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 47, 23))
+>ZodTuple : Symbol(ZodTuple, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 44, 163))
+
+// (1) The constraint check of `array`'s type argument mentions `Category` through `Writeable`, whose mapped
+// property for the accessor is what cycles.
+const Category = object({ name: string(), get subcategories() { return array(Category); } });
+>Category : Symbol(Category, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 51, 5))
+>object : Symbol(object, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 36, 89))
+>name : Symbol(name, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 51, 25))
+>string : Symbol(string, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 33, 59))
+>subcategories : Symbol(subcategories, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 51, 41))
+>array : Symbol(array, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 39, 92))
+>Category : Symbol(Category, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 51, 5))
+
+export const c1: output<typeof Category> = { name: "a", subcategories: [{ name: "b", subcategories: [] }] };
+>c1 : Symbol(c1, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 52, 12))
+>output : Symbol(output, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 0, 0))
+>Category : Symbol(Category, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 51, 5))
+>name : Symbol(name, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 52, 44))
+>subcategories : Symbol(subcategories, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 52, 55))
+>name : Symbol(name, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 52, 73))
+>subcategories : Symbol(subcategories, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 52, 84))
+
+export const c2: output<typeof Category> = { name: "a", subcategories: [{ name: 1, subcategories: [] }] }; // error
+>c2 : Symbol(c2, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 53, 12))
+>output : Symbol(output, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 0, 0))
+>Category : Symbol(Category, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 51, 5))
+>name : Symbol(name, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 53, 44))
+>subcategories : Symbol(subcategories, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 53, 55))
+>name : Symbol(name, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 53, 73))
+>subcategories : Symbol(subcategories, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 53, 82))
+
+// (2) An overloaded call inside the accessor: a re-entered call with several overloads cannot skip its check.
+const Pair = object({ name: string(), get pair() { return tuple([Pair, Pair]); } });
+>Pair : Symbol(Pair, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 56, 5))
+>object : Symbol(object, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 36, 89))
+>name : Symbol(name, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 56, 21))
+>string : Symbol(string, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 33, 59))
+>pair : Symbol(pair, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 56, 37))
+>tuple : Symbol(tuple, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 45, 101), Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 46, 92))
+>Pair : Symbol(Pair, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 56, 5))
+>Pair : Symbol(Pair, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 56, 5))
+
+export const p1: output<typeof Pair>["pair"][1]["pair"][0]["name"] = "x";
+>p1 : Symbol(p1, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 57, 12))
+>output : Symbol(output, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 0, 0))
+>Pair : Symbol(Pair, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 56, 5))
+
+export const p2: output<typeof Pair>["pair"][1]["pair"][0]["name"] = 1; // error
+>p2 : Symbol(p2, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 58, 12))
+>output : Symbol(output, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 0, 0))
+>Pair : Symbol(Pair, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 56, 5))
+
+// (3) A method whose parameter type is the output of `this`, chained onto the recursive reference.
+const Tree = object({ name: string(), get children() { return array(Tree).default([]); } });
+>Tree : Symbol(Tree, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 61, 5))
+>object : Symbol(object, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 36, 89))
+>name : Symbol(name, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 61, 21))
+>string : Symbol(string, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 33, 59))
+>children : Symbol(children, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 61, 37))
+>array(Tree).default : Symbol(ZodType.default, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 17, 118), Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 18, 60))
+>array : Symbol(array, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 39, 92))
+>Tree : Symbol(Tree, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 61, 5))
+>default : Symbol(ZodType.default, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 17, 118), Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 18, 60))
+
+export const t1: output<typeof Tree>["children"][0]["children"] = [{ name: "b", children: [] }];
+>t1 : Symbol(t1, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 62, 12))
+>output : Symbol(output, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 0, 0))
+>Tree : Symbol(Tree, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 61, 5))
+>name : Symbol(name, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 62, 68))
+>children : Symbol(children, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 62, 79))
+
+export const t2: output<typeof Tree>["children"][0]["children"] = [{ name: 1, children: [] }]; // error
+>t2 : Symbol(t2, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 63, 12))
+>output : Symbol(output, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 0, 0))
+>Tree : Symbol(Tree, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 61, 5))
+>name : Symbol(name, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 63, 68))
+>children : Symbol(children, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 63, 77))
+
+// (4) A violated constraint inside the accessor body is still reported, after the accessor has been checked.
+const Wrong = object({ name: string(), get pair() { return tuple([Wrong, 42]); } });
+>Wrong : Symbol(Wrong, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 66, 5))
+>object : Symbol(object, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 36, 89))
+>name : Symbol(name, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 66, 22))
+>string : Symbol(string, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 33, 59))
+>pair : Symbol(pair, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 66, 38))
+>tuple : Symbol(tuple, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 45, 101), Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 46, 92))
+>Wrong : Symbol(Wrong, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 66, 5))
+
+// (5) The literal is mentioned through a property of another literal.
+const Nested = object({ name: string(), get child() { return object({ inner: Nested, get deep() { return tuple([Nested, string()]); } }); } });
+>Nested : Symbol(Nested, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 69, 5))
+>object : Symbol(object, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 36, 89))
+>name : Symbol(name, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 69, 23))
+>string : Symbol(string, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 33, 59))
+>child : Symbol(child, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 69, 39))
+>object : Symbol(object, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 36, 89))
+>inner : Symbol(inner, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 69, 69))
+>Nested : Symbol(Nested, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 69, 5))
+>deep : Symbol(deep, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 69, 84))
+>tuple : Symbol(tuple, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 45, 101), Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 46, 92))
+>Nested : Symbol(Nested, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 69, 5))
+>string : Symbol(string, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 33, 59))
+
+export const n1: output<typeof Nested>["child"]["inner"]["child"]["deep"][1] = "x";
+>n1 : Symbol(n1, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 70, 12))
+>output : Symbol(output, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 0, 0))
+>Nested : Symbol(Nested, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 69, 5))
+
+export const n2: output<typeof Nested>["child"]["inner"]["child"]["deep"][1] = 1; // error
+>n2 : Symbol(n2, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 71, 12))
+>output : Symbol(output, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 0, 0))
+>Nested : Symbol(Nested, Decl(recursiveTypeInferenceDeferredConstraintCheckInBody.ts, 69, 5))
+
