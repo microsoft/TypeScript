@@ -1,0 +1,122 @@
+//// [tests/cases/conformance/es2020/intlNumberFormatRequiredStyleOptions.ts] ////
+
+=== intlNumberFormatRequiredStyleOptions.ts ===
+// Currency style requires a currency to be specified.
+new Intl.NumberFormat('en-NZ', { style: 'currency', currency: 'NZD' });
+>new Intl.NumberFormat('en-NZ', { style: 'currency', currency: 'NZD' }) : Intl.NumberFormat
+>Intl.NumberFormat : Intl.NumberFormatConstructor
+>Intl : typeof Intl
+>NumberFormat : Intl.NumberFormatConstructor
+>'en-NZ' : "en-NZ"
+>{ style: 'currency', currency: 'NZD' } : { style: "currency"; currency: string; }
+>style : "currency"
+>'currency' : "currency"
+>currency : string
+>'NZD' : "NZD"
+
+new Intl.NumberFormat('en-NZ', { style: 'currency' });
+>new Intl.NumberFormat('en-NZ', { style: 'currency' }) : Intl.NumberFormat
+>Intl.NumberFormat : Intl.NumberFormatConstructor
+>Intl : typeof Intl
+>NumberFormat : Intl.NumberFormatConstructor
+>'en-NZ' : "en-NZ"
+>{ style: 'currency' } : { style: "currency"; }
+>style : "currency"
+>'currency' : "currency"
+
+new Intl.NumberFormat('en-NZ', { style: 'currency', currency: undefined });
+>new Intl.NumberFormat('en-NZ', { style: 'currency', currency: undefined }) : Intl.NumberFormat
+>Intl.NumberFormat : Intl.NumberFormatConstructor
+>Intl : typeof Intl
+>NumberFormat : Intl.NumberFormatConstructor
+>'en-NZ' : "en-NZ"
+>{ style: 'currency', currency: undefined } : { style: "currency"; currency: undefined; }
+>style : "currency"
+>'currency' : "currency"
+>currency : undefined
+>undefined : undefined
+
+// Unit style requires a unit to be specified.
+new Intl.NumberFormat('en-NZ', { style: 'unit', unit: 'kilogram' });
+>new Intl.NumberFormat('en-NZ', { style: 'unit', unit: 'kilogram' }) : Intl.NumberFormat
+>Intl.NumberFormat : Intl.NumberFormatConstructor
+>Intl : typeof Intl
+>NumberFormat : Intl.NumberFormatConstructor
+>'en-NZ' : "en-NZ"
+>{ style: 'unit', unit: 'kilogram' } : { style: "unit"; unit: string; }
+>style : "unit"
+>'unit' : "unit"
+>unit : string
+>'kilogram' : "kilogram"
+
+new Intl.NumberFormat('en-NZ', { style: 'unit' });
+>new Intl.NumberFormat('en-NZ', { style: 'unit' }) : Intl.NumberFormat
+>Intl.NumberFormat : Intl.NumberFormatConstructor
+>Intl : typeof Intl
+>NumberFormat : Intl.NumberFormatConstructor
+>'en-NZ' : "en-NZ"
+>{ style: 'unit' } : { style: "unit"; }
+>style : "unit"
+>'unit' : "unit"
+
+new Intl.NumberFormat('en-NZ', { style: 'unit', unit: undefined });
+>new Intl.NumberFormat('en-NZ', { style: 'unit', unit: undefined }) : Intl.NumberFormat
+>Intl.NumberFormat : Intl.NumberFormatConstructor
+>Intl : typeof Intl
+>NumberFormat : Intl.NumberFormatConstructor
+>'en-NZ' : "en-NZ"
+>{ style: 'unit', unit: undefined } : { style: "unit"; unit: undefined; }
+>style : "unit"
+>'unit' : "unit"
+>unit : undefined
+>undefined : undefined
+
+// Other styles do not require currency/unit.
+new Intl.NumberFormat('en-NZ', { style: 'decimal' });
+>new Intl.NumberFormat('en-NZ', { style: 'decimal' }) : Intl.NumberFormat
+>Intl.NumberFormat : Intl.NumberFormatConstructor
+>Intl : typeof Intl
+>NumberFormat : Intl.NumberFormatConstructor
+>'en-NZ' : "en-NZ"
+>{ style: 'decimal' } : { style: "decimal"; }
+>style : "decimal"
+>'decimal' : "decimal"
+
+new Intl.NumberFormat('en-NZ', { style: 'percent' });
+>new Intl.NumberFormat('en-NZ', { style: 'percent' }) : Intl.NumberFormat
+>Intl.NumberFormat : Intl.NumberFormatConstructor
+>Intl : typeof Intl
+>NumberFormat : Intl.NumberFormatConstructor
+>'en-NZ' : "en-NZ"
+>{ style: 'percent' } : { style: "percent"; }
+>style : "percent"
+>'percent' : "percent"
+
+new Intl.NumberFormat('en-NZ');
+>new Intl.NumberFormat('en-NZ') : Intl.NumberFormat
+>Intl.NumberFormat : Intl.NumberFormatConstructor
+>Intl : typeof Intl
+>NumberFormat : Intl.NumberFormatConstructor
+>'en-NZ' : "en-NZ"
+
+new Intl.NumberFormat('en-NZ', {});
+>new Intl.NumberFormat('en-NZ', {}) : Intl.NumberFormat
+>Intl.NumberFormat : Intl.NumberFormatConstructor
+>Intl : typeof Intl
+>NumberFormat : Intl.NumberFormatConstructor
+>'en-NZ' : "en-NZ"
+>{} : {}
+
+// Widened option bags are not checked for the required relationship.
+declare const currencyOptions: Intl.NumberFormatOptions;
+>currencyOptions : Intl.NumberFormatOptions
+>Intl : any
+
+new Intl.NumberFormat('en-NZ', currencyOptions);
+>new Intl.NumberFormat('en-NZ', currencyOptions) : Intl.NumberFormat
+>Intl.NumberFormat : Intl.NumberFormatConstructor
+>Intl : typeof Intl
+>NumberFormat : Intl.NumberFormatConstructor
+>'en-NZ' : "en-NZ"
+>currencyOptions : Intl.NumberFormatOptions
+

@@ -1,0 +1,61 @@
+intlNumberFormatRequiredStyleOptions.ts(3,32): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type '{ style: "currency"; }' is not assignable to parameter of type '{ style: "currency"; } & { currency: string; }'.
+      Property 'currency' is missing in type '{ style: "currency"; }' but required in type '{ currency: string; }'.
+intlNumberFormatRequiredStyleOptions.ts(4,32): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type '{ style: "currency"; currency: undefined; }' is not assignable to parameter of type 'undefined'.
+intlNumberFormatRequiredStyleOptions.ts(8,32): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type '{ style: "unit"; }' is not assignable to parameter of type '{ style: "unit"; } & { unit: string; }'.
+      Property 'unit' is missing in type '{ style: "unit"; }' but required in type '{ unit: string; }'.
+intlNumberFormatRequiredStyleOptions.ts(9,32): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type '{ style: "unit"; unit: undefined; }' is not assignable to parameter of type 'undefined'.
+
+
+==== intlNumberFormatRequiredStyleOptions.ts (4 errors) ====
+    // Currency style requires a currency to be specified.
+    new Intl.NumberFormat('en-NZ', { style: 'currency', currency: 'NZD' });
+    new Intl.NumberFormat('en-NZ', { style: 'currency' });
+                                   ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   The last overload gave the following error.
+!!! error TS2769:     Argument of type '{ style: "currency"; }' is not assignable to parameter of type '{ style: "currency"; } & { currency: string; }'.
+!!! error TS2769:       Property 'currency' is missing in type '{ style: "currency"; }' but required in type '{ currency: string; }'.
+!!! related TS2728 lib.es5.d.ts:--:--: 'currency' is declared here.
+!!! related TS2771 lib.es5.d.ts:--:--: The last overload is declared here.
+    new Intl.NumberFormat('en-NZ', { style: 'currency', currency: undefined });
+                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   The last overload gave the following error.
+!!! error TS2769:     Argument of type '{ style: "currency"; currency: undefined; }' is not assignable to parameter of type 'undefined'.
+!!! related TS2771 lib.es5.d.ts:--:--: The last overload is declared here.
+    
+    // Unit style requires a unit to be specified.
+    new Intl.NumberFormat('en-NZ', { style: 'unit', unit: 'kilogram' });
+    new Intl.NumberFormat('en-NZ', { style: 'unit' });
+                                   ~~~~~~~~~~~~~~~~~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   The last overload gave the following error.
+!!! error TS2769:     Argument of type '{ style: "unit"; }' is not assignable to parameter of type '{ style: "unit"; } & { unit: string; }'.
+!!! error TS2769:       Property 'unit' is missing in type '{ style: "unit"; }' but required in type '{ unit: string; }'.
+!!! related TS2728 lib.es2020.intl.d.ts:--:--: 'unit' is declared here.
+!!! related TS2771 lib.es5.d.ts:--:--: The last overload is declared here.
+    new Intl.NumberFormat('en-NZ', { style: 'unit', unit: undefined });
+                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   The last overload gave the following error.
+!!! error TS2769:     Argument of type '{ style: "unit"; unit: undefined; }' is not assignable to parameter of type 'undefined'.
+!!! related TS2771 lib.es5.d.ts:--:--: The last overload is declared here.
+    
+    // Other styles do not require currency/unit.
+    new Intl.NumberFormat('en-NZ', { style: 'decimal' });
+    new Intl.NumberFormat('en-NZ', { style: 'percent' });
+    new Intl.NumberFormat('en-NZ');
+    new Intl.NumberFormat('en-NZ', {});
+    
+    // Widened option bags are not checked for the required relationship.
+    declare const currencyOptions: Intl.NumberFormatOptions;
+    new Intl.NumberFormat('en-NZ', currencyOptions);
+    

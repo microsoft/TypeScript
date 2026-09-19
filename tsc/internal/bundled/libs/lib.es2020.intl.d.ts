@@ -243,6 +243,10 @@ declare namespace Intl {
         unit: never;
     }
 
+    interface NumberFormatOptionsStyleRequiredOptionsRegistry {
+        unit: { unit: string };
+    }
+
     interface NumberFormatOptionsCurrencyDisplayRegistry {
         narrowSymbol: never;
     }
@@ -458,8 +462,8 @@ declare namespace Intl {
     }
 
     interface NumberFormatConstructor {
-        new (locales?: LocalesArgument, options?: NumberFormatOptions): NumberFormat;
-        (locales?: LocalesArgument, options?: NumberFormatOptions): NumberFormat;
+        new <T extends NumberFormatOptions = NumberFormatOptions>(locales?: LocalesArgument, options?: T & NumberFormatOptionsStyleRequiredOptions<T["style"]>): NumberFormat;
+        <T extends NumberFormatOptions = NumberFormatOptions>(locales?: LocalesArgument, options?: T & NumberFormatOptionsStyleRequiredOptions<T["style"]>): NumberFormat;
         supportedLocalesOf(locales: LocalesArgument, options?: NumberFormatOptions): string[];
     }
 
