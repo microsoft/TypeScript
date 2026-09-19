@@ -42,6 +42,7 @@ export var ObjectFlags: any;
     ObjectFlags[ObjectFlags["IsGenericObjectType"] = 8388608] = "IsGenericObjectType";
     ObjectFlags[ObjectFlags["IsGenericIndexType"] = 16777216] = "IsGenericIndexType";
     ObjectFlags[ObjectFlags["IsGenericType"] = 25165824] = "IsGenericType";
+    ObjectFlags[ObjectFlags["IsNarrowingType"] = -2147483648] = "IsNarrowingType";
     ObjectFlags[ObjectFlags["ContainsIntersections"] = 33554432] = "ContainsIntersections";
     ObjectFlags[ObjectFlags["IsUnknownLikeUnionComputed"] = 67108864] = "IsUnknownLikeUnionComputed";
     ObjectFlags[ObjectFlags["IsUnknownLikeUnion"] = 134217728] = "IsUnknownLikeUnion";

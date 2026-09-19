@@ -1,0 +1,679 @@
+//// [tests/cases/compiler/dependentReturnType3.ts] ////
+
+=== dependentReturnType3.ts ===
+// Adapted from ts-error-deltas repos
+
+type HelperCond<T, A, R1, B, R2> =
+>HelperCond : Symbol(HelperCond, Decl(dependentReturnType3.ts, 0, 0))
+>T : Symbol(T, Decl(dependentReturnType3.ts, 2, 16))
+>A : Symbol(A, Decl(dependentReturnType3.ts, 2, 18))
+>R1 : Symbol(R1, Decl(dependentReturnType3.ts, 2, 21))
+>B : Symbol(B, Decl(dependentReturnType3.ts, 2, 25))
+>R2 : Symbol(R2, Decl(dependentReturnType3.ts, 2, 28))
+
+    T extends A
+>T : Symbol(T, Decl(dependentReturnType3.ts, 2, 16))
+>A : Symbol(A, Decl(dependentReturnType3.ts, 2, 18))
+
+        ? R1
+>R1 : Symbol(R1, Decl(dependentReturnType3.ts, 2, 21))
+
+        : T extends B
+>T : Symbol(T, Decl(dependentReturnType3.ts, 2, 16))
+>B : Symbol(B, Decl(dependentReturnType3.ts, 2, 25))
+
+            ? R2
+>R2 : Symbol(R2, Decl(dependentReturnType3.ts, 2, 28))
+
+            : never;
+
+
+// File: Rocket.Chat/apps/meteor/app/katex/client/index.ts
+interface IMessage {
+>IMessage : Symbol(IMessage, Decl(dependentReturnType3.ts, 7, 20))
+
+    html?: string;
+>html : Symbol(IMessage.html, Decl(dependentReturnType3.ts, 11, 20))
+
+    tokens?: {}[];
+>tokens : Symbol(IMessage.tokens, Decl(dependentReturnType3.ts, 12, 18))
+}
+
+class NewKatex {
+>NewKatex : Symbol(NewKatex, Decl(dependentReturnType3.ts, 14, 1))
+
+    render(s: string): string {
+>render : Symbol(NewKatex.render, Decl(dependentReturnType3.ts, 16, 16))
+>s : Symbol(s, Decl(dependentReturnType3.ts, 17, 11))
+
+        return "";
+    }
+
+    renderMessage<T extends string | IMessage>(message: T):
+>renderMessage : Symbol(NewKatex.renderMessage, Decl(dependentReturnType3.ts, 19, 5))
+>T : Symbol(T, Decl(dependentReturnType3.ts, 21, 18))
+>IMessage : Symbol(IMessage, Decl(dependentReturnType3.ts, 7, 20))
+>message : Symbol(message, Decl(dependentReturnType3.ts, 21, 47))
+>T : Symbol(T, Decl(dependentReturnType3.ts, 21, 18))
+
+        T extends string
+>T : Symbol(T, Decl(dependentReturnType3.ts, 21, 18))
+
+        ? string
+        : T extends IMessage
+>T : Symbol(T, Decl(dependentReturnType3.ts, 21, 18))
+>IMessage : Symbol(IMessage, Decl(dependentReturnType3.ts, 7, 20))
+
+          ? IMessage
+>IMessage : Symbol(IMessage, Decl(dependentReturnType3.ts, 7, 20))
+
+          : never {
+        if (typeof message === 'string') {
+>message : Symbol(message, Decl(dependentReturnType3.ts, 21, 47))
+
+            return this.render(message); // Ok
+>this.render : Symbol(NewKatex.render, Decl(dependentReturnType3.ts, 16, 16))
+>this : Symbol(NewKatex, Decl(dependentReturnType3.ts, 14, 1))
+>render : Symbol(NewKatex.render, Decl(dependentReturnType3.ts, 16, 16))
+>message : Symbol(message, Decl(dependentReturnType3.ts, 21, 47))
+        }
+
+        if (!message.html?.trim()) {
+>message.html?.trim : Symbol(String.trim, Decl(lib.es5.d.ts, --, --))
+>message.html : Symbol(IMessage.html, Decl(dependentReturnType3.ts, 11, 20))
+>message : Symbol(message, Decl(dependentReturnType3.ts, 21, 47))
+>html : Symbol(IMessage.html, Decl(dependentReturnType3.ts, 11, 20))
+>trim : Symbol(String.trim, Decl(lib.es5.d.ts, --, --))
+
+            return message; // Ok
+>message : Symbol(message, Decl(dependentReturnType3.ts, 21, 47))
+        }
+
+        if (!message.tokens) {
+>message.tokens : Symbol(IMessage.tokens, Decl(dependentReturnType3.ts, 12, 18))
+>message : Symbol(message, Decl(dependentReturnType3.ts, 21, 47))
+>tokens : Symbol(IMessage.tokens, Decl(dependentReturnType3.ts, 12, 18))
+
+            message.tokens = [];
+>message.tokens : Symbol(IMessage.tokens, Decl(dependentReturnType3.ts, 12, 18))
+>message : Symbol(message, Decl(dependentReturnType3.ts, 21, 47))
+>tokens : Symbol(IMessage.tokens, Decl(dependentReturnType3.ts, 12, 18))
+        }
+
+        message.html = this.render(message.html);
+>message.html : Symbol(IMessage.html, Decl(dependentReturnType3.ts, 11, 20))
+>message : Symbol(message, Decl(dependentReturnType3.ts, 21, 47))
+>html : Symbol(IMessage.html, Decl(dependentReturnType3.ts, 11, 20))
+>this.render : Symbol(NewKatex.render, Decl(dependentReturnType3.ts, 16, 16))
+>this : Symbol(NewKatex, Decl(dependentReturnType3.ts, 14, 1))
+>render : Symbol(NewKatex.render, Decl(dependentReturnType3.ts, 16, 16))
+>message.html : Symbol(IMessage.html, Decl(dependentReturnType3.ts, 11, 20))
+>message : Symbol(message, Decl(dependentReturnType3.ts, 21, 47))
+>html : Symbol(IMessage.html, Decl(dependentReturnType3.ts, 11, 20))
+
+        return message; // Ok
+>message : Symbol(message, Decl(dependentReturnType3.ts, 21, 47))
+    }
+}
+
+export function createKatexMessageRendering<T extends true | false>(
+>createKatexMessageRendering : Symbol(createKatexMessageRendering, Decl(dependentReturnType3.ts, 42, 1))
+>T : Symbol(T, Decl(dependentReturnType3.ts, 44, 44))
+
+    options: {
+>options : Symbol(options, Decl(dependentReturnType3.ts, 44, 68))
+
+        dollarSyntax: boolean;
+>dollarSyntax : Symbol(dollarSyntax, Decl(dependentReturnType3.ts, 45, 14))
+
+        parenthesisSyntax: boolean;
+>parenthesisSyntax : Symbol(parenthesisSyntax, Decl(dependentReturnType3.ts, 46, 30))
+
+    },
+    _isMessage: T,
+>_isMessage : Symbol(_isMessage, Decl(dependentReturnType3.ts, 48, 6))
+>T : Symbol(T, Decl(dependentReturnType3.ts, 44, 44))
+
+): T extends true
+>T : Symbol(T, Decl(dependentReturnType3.ts, 44, 44))
+
+    ? (message: IMessage) => IMessage
+>message : Symbol(message, Decl(dependentReturnType3.ts, 51, 7))
+>IMessage : Symbol(IMessage, Decl(dependentReturnType3.ts, 7, 20))
+>IMessage : Symbol(IMessage, Decl(dependentReturnType3.ts, 7, 20))
+
+    : T extends false
+>T : Symbol(T, Decl(dependentReturnType3.ts, 44, 44))
+
+      ? (message: string) => string
+>message : Symbol(message, Decl(dependentReturnType3.ts, 53, 9))
+
+      : never {
+    const instance = new NewKatex();
+>instance : Symbol(instance, Decl(dependentReturnType3.ts, 55, 9))
+>NewKatex : Symbol(NewKatex, Decl(dependentReturnType3.ts, 14, 1))
+
+    if (_isMessage) {
+>_isMessage : Symbol(_isMessage, Decl(dependentReturnType3.ts, 48, 6))
+
+        return (message: IMessage): IMessage => instance.renderMessage(message); // Ok
+>message : Symbol(message, Decl(dependentReturnType3.ts, 57, 16))
+>IMessage : Symbol(IMessage, Decl(dependentReturnType3.ts, 7, 20))
+>IMessage : Symbol(IMessage, Decl(dependentReturnType3.ts, 7, 20))
+>instance.renderMessage : Symbol(NewKatex.renderMessage, Decl(dependentReturnType3.ts, 19, 5))
+>instance : Symbol(instance, Decl(dependentReturnType3.ts, 55, 9))
+>renderMessage : Symbol(NewKatex.renderMessage, Decl(dependentReturnType3.ts, 19, 5))
+>message : Symbol(message, Decl(dependentReturnType3.ts, 57, 16))
+    }
+    return (message: string): string => instance.renderMessage(message); // Ok
+>message : Symbol(message, Decl(dependentReturnType3.ts, 59, 12))
+>instance.renderMessage : Symbol(NewKatex.renderMessage, Decl(dependentReturnType3.ts, 19, 5))
+>instance : Symbol(instance, Decl(dependentReturnType3.ts, 55, 9))
+>renderMessage : Symbol(NewKatex.renderMessage, Decl(dependentReturnType3.ts, 19, 5))
+>message : Symbol(message, Decl(dependentReturnType3.ts, 59, 12))
+}
+
+// File: Rocket.Chat/apps/meteor/app/settings/lib/settings.ts
+type SettingComposedValue<T extends SettingValue = SettingValue> = { key: string; value: T };
+>SettingComposedValue : Symbol(SettingComposedValue, Decl(dependentReturnType3.ts, 60, 1))
+>T : Symbol(T, Decl(dependentReturnType3.ts, 63, 26))
+>SettingValue : Symbol(SettingValue, Decl(dependentReturnType3.ts, 64, 89))
+>SettingValue : Symbol(SettingValue, Decl(dependentReturnType3.ts, 64, 89))
+>key : Symbol(key, Decl(dependentReturnType3.ts, 63, 68))
+>value : Symbol(value, Decl(dependentReturnType3.ts, 63, 81))
+>T : Symbol(T, Decl(dependentReturnType3.ts, 63, 26))
+
+type SettingCallback = (key: string, value: SettingValue, initialLoad?: boolean) => void;
+>SettingCallback : Symbol(SettingCallback, Decl(dependentReturnType3.ts, 63, 93))
+>key : Symbol(key, Decl(dependentReturnType3.ts, 64, 24))
+>value : Symbol(value, Decl(dependentReturnType3.ts, 64, 36))
+>SettingValue : Symbol(SettingValue, Decl(dependentReturnType3.ts, 64, 89))
+>initialLoad : Symbol(initialLoad, Decl(dependentReturnType3.ts, 64, 57))
+
+type SettingValue = object;
+>SettingValue : Symbol(SettingValue, Decl(dependentReturnType3.ts, 64, 89))
+
+declare const Meteor: { settings: { [s: string]: any } };
+>Meteor : Symbol(Meteor, Decl(dependentReturnType3.ts, 67, 13))
+>settings : Symbol(settings, Decl(dependentReturnType3.ts, 67, 23))
+>s : Symbol(s, Decl(dependentReturnType3.ts, 67, 37))
+
+declare const _: { isRegExp(x: unknown): x is RegExp; };
+>_ : Symbol(_, Decl(dependentReturnType3.ts, 68, 13))
+>isRegExp : Symbol(isRegExp, Decl(dependentReturnType3.ts, 68, 18))
+>x : Symbol(x, Decl(dependentReturnType3.ts, 68, 28))
+>x : Symbol(x, Decl(dependentReturnType3.ts, 68, 28))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+declare function takesRegExp(x: RegExp): void;
+>takesRegExp : Symbol(takesRegExp, Decl(dependentReturnType3.ts, 68, 56))
+>x : Symbol(x, Decl(dependentReturnType3.ts, 69, 29))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+declare function takesString(x: string): void;
+>takesString : Symbol(takesString, Decl(dependentReturnType3.ts, 69, 46))
+>x : Symbol(x, Decl(dependentReturnType3.ts, 70, 29))
+
+class NewSettingsBase {
+>NewSettingsBase : Symbol(NewSettingsBase, Decl(dependentReturnType3.ts, 70, 46))
+
+    public newGet<C extends SettingCallback | undefined, I extends string | RegExp, T extends SettingValue = SettingValue>(
+>newGet : Symbol(NewSettingsBase.newGet, Decl(dependentReturnType3.ts, 72, 23))
+>C : Symbol(C, Decl(dependentReturnType3.ts, 73, 18))
+>SettingCallback : Symbol(SettingCallback, Decl(dependentReturnType3.ts, 63, 93))
+>I : Symbol(I, Decl(dependentReturnType3.ts, 73, 56))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>T : Symbol(T, Decl(dependentReturnType3.ts, 73, 83))
+>SettingValue : Symbol(SettingValue, Decl(dependentReturnType3.ts, 64, 89))
+>SettingValue : Symbol(SettingValue, Decl(dependentReturnType3.ts, 64, 89))
+
+        _id: I,
+>_id : Symbol(_id, Decl(dependentReturnType3.ts, 73, 123))
+>I : Symbol(I, Decl(dependentReturnType3.ts, 73, 56))
+
+        callback?: C,
+>callback : Symbol(callback, Decl(dependentReturnType3.ts, 74, 15))
+>C : Symbol(C, Decl(dependentReturnType3.ts, 73, 18))
+
+    ): HelperCond<C,
+>HelperCond : Symbol(HelperCond, Decl(dependentReturnType3.ts, 0, 0))
+>C : Symbol(C, Decl(dependentReturnType3.ts, 73, 18))
+
+        SettingCallback, void,
+>SettingCallback : Symbol(SettingCallback, Decl(dependentReturnType3.ts, 63, 93))
+
+        undefined, HelperCond<I,
+>HelperCond : Symbol(HelperCond, Decl(dependentReturnType3.ts, 0, 0))
+>I : Symbol(I, Decl(dependentReturnType3.ts, 73, 56))
+
+            string, T | undefined,
+>T : Symbol(T, Decl(dependentReturnType3.ts, 73, 83))
+
+            RegExp, SettingComposedValue<T>[]>> {
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>SettingComposedValue : Symbol(SettingComposedValue, Decl(dependentReturnType3.ts, 60, 1))
+>T : Symbol(T, Decl(dependentReturnType3.ts, 73, 83))
+
+        if (callback !== undefined) {
+>callback : Symbol(callback, Decl(dependentReturnType3.ts, 74, 15))
+>undefined : Symbol(undefined)
+
+            if (!Meteor.settings) {
+>Meteor.settings : Symbol(settings, Decl(dependentReturnType3.ts, 67, 23))
+>Meteor : Symbol(Meteor, Decl(dependentReturnType3.ts, 67, 13))
+>settings : Symbol(settings, Decl(dependentReturnType3.ts, 67, 23))
+
+                return; // Ok
+            }
+            if (_id === '*') {
+>_id : Symbol(_id, Decl(dependentReturnType3.ts, 73, 123))
+
+                return Object.keys(Meteor.settings).forEach((key) => { // Ok
+>Object.keys(Meteor.settings).forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>Object.keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Meteor.settings : Symbol(settings, Decl(dependentReturnType3.ts, 67, 23))
+>Meteor : Symbol(Meteor, Decl(dependentReturnType3.ts, 67, 13))
+>settings : Symbol(settings, Decl(dependentReturnType3.ts, 67, 23))
+>forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>key : Symbol(key, Decl(dependentReturnType3.ts, 86, 61))
+
+                    const value = Meteor.settings[key];
+>value : Symbol(value, Decl(dependentReturnType3.ts, 87, 25))
+>Meteor.settings : Symbol(settings, Decl(dependentReturnType3.ts, 67, 23))
+>Meteor : Symbol(Meteor, Decl(dependentReturnType3.ts, 67, 13))
+>settings : Symbol(settings, Decl(dependentReturnType3.ts, 67, 23))
+>key : Symbol(key, Decl(dependentReturnType3.ts, 86, 61))
+
+                    callback(key, value);
+>callback : Symbol(callback, Decl(dependentReturnType3.ts, 74, 15))
+>key : Symbol(key, Decl(dependentReturnType3.ts, 86, 61))
+>value : Symbol(value, Decl(dependentReturnType3.ts, 87, 25))
+
+                });
+            }
+            if (_.isRegExp(_id) && Meteor.settings) {
+>_.isRegExp : Symbol(isRegExp, Decl(dependentReturnType3.ts, 68, 18))
+>_ : Symbol(_, Decl(dependentReturnType3.ts, 68, 13))
+>isRegExp : Symbol(isRegExp, Decl(dependentReturnType3.ts, 68, 18))
+>_id : Symbol(_id, Decl(dependentReturnType3.ts, 73, 123))
+>Meteor.settings : Symbol(settings, Decl(dependentReturnType3.ts, 67, 23))
+>Meteor : Symbol(Meteor, Decl(dependentReturnType3.ts, 67, 13))
+>settings : Symbol(settings, Decl(dependentReturnType3.ts, 67, 23))
+
+                return Object.keys(Meteor.settings).forEach((key) => { // Ok
+>Object.keys(Meteor.settings).forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>Object.keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Meteor.settings : Symbol(settings, Decl(dependentReturnType3.ts, 67, 23))
+>Meteor : Symbol(Meteor, Decl(dependentReturnType3.ts, 67, 13))
+>settings : Symbol(settings, Decl(dependentReturnType3.ts, 67, 23))
+>forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>key : Symbol(key, Decl(dependentReturnType3.ts, 92, 61))
+
+                    if (!_id.test(key)) {
+>_id.test : Symbol(RegExp.test, Decl(lib.es5.d.ts, --, --))
+>_id : Symbol(_id, Decl(dependentReturnType3.ts, 73, 123))
+>test : Symbol(RegExp.test, Decl(lib.es5.d.ts, --, --))
+>key : Symbol(key, Decl(dependentReturnType3.ts, 92, 61))
+
+                        return;
+                    }
+                    const value = Meteor.settings[key];
+>value : Symbol(value, Decl(dependentReturnType3.ts, 96, 25))
+>Meteor.settings : Symbol(settings, Decl(dependentReturnType3.ts, 67, 23))
+>Meteor : Symbol(Meteor, Decl(dependentReturnType3.ts, 67, 13))
+>settings : Symbol(settings, Decl(dependentReturnType3.ts, 67, 23))
+>key : Symbol(key, Decl(dependentReturnType3.ts, 92, 61))
+
+                    callback(key, value);
+>callback : Symbol(callback, Decl(dependentReturnType3.ts, 74, 15))
+>key : Symbol(key, Decl(dependentReturnType3.ts, 92, 61))
+>value : Symbol(value, Decl(dependentReturnType3.ts, 96, 25))
+
+                });
+            }
+
+            if (typeof _id === 'string') {
+>_id : Symbol(_id, Decl(dependentReturnType3.ts, 73, 123))
+
+                const value = Meteor.settings[_id];
+>value : Symbol(value, Decl(dependentReturnType3.ts, 102, 21))
+>Meteor.settings : Symbol(settings, Decl(dependentReturnType3.ts, 67, 23))
+>Meteor : Symbol(Meteor, Decl(dependentReturnType3.ts, 67, 13))
+>settings : Symbol(settings, Decl(dependentReturnType3.ts, 67, 23))
+>_id : Symbol(_id, Decl(dependentReturnType3.ts, 73, 123))
+
+                if (value != null) {
+>value : Symbol(value, Decl(dependentReturnType3.ts, 102, 21))
+
+                    callback(_id, Meteor.settings[_id]);
+>callback : Symbol(callback, Decl(dependentReturnType3.ts, 74, 15))
+>_id : Symbol(_id, Decl(dependentReturnType3.ts, 73, 123))
+>Meteor.settings : Symbol(settings, Decl(dependentReturnType3.ts, 67, 23))
+>Meteor : Symbol(Meteor, Decl(dependentReturnType3.ts, 67, 13))
+>settings : Symbol(settings, Decl(dependentReturnType3.ts, 67, 23))
+>_id : Symbol(_id, Decl(dependentReturnType3.ts, 73, 123))
+                }
+                return; // Ok
+            }
+
+            return; // Ok, needed for exhaustiveness check
+        }
+
+        if (!Meteor.settings) { // Wrong: we don't know that _id is string here, cannot return undefined
+>Meteor.settings : Symbol(settings, Decl(dependentReturnType3.ts, 67, 23))
+>Meteor : Symbol(Meteor, Decl(dependentReturnType3.ts, 67, 13))
+>settings : Symbol(settings, Decl(dependentReturnType3.ts, 67, 23))
+
+            return undefined; // Error
+>undefined : Symbol(undefined)
+        }
+
+        if (_.isRegExp(_id)) {
+>_.isRegExp : Symbol(isRegExp, Decl(dependentReturnType3.ts, 68, 18))
+>_ : Symbol(_, Decl(dependentReturnType3.ts, 68, 13))
+>isRegExp : Symbol(isRegExp, Decl(dependentReturnType3.ts, 68, 18))
+>_id : Symbol(_id, Decl(dependentReturnType3.ts, 73, 123))
+
+            return Object.keys(Meteor.settings).reduce((items: SettingComposedValue<T>[], key) => {
+>Object.keys(Meteor.settings).reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Object.keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Meteor.settings : Symbol(settings, Decl(dependentReturnType3.ts, 67, 23))
+>Meteor : Symbol(Meteor, Decl(dependentReturnType3.ts, 67, 13))
+>settings : Symbol(settings, Decl(dependentReturnType3.ts, 67, 23))
+>reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>items : Symbol(items, Decl(dependentReturnType3.ts, 117, 56))
+>SettingComposedValue : Symbol(SettingComposedValue, Decl(dependentReturnType3.ts, 60, 1))
+>T : Symbol(T, Decl(dependentReturnType3.ts, 73, 83))
+>key : Symbol(key, Decl(dependentReturnType3.ts, 117, 89))
+
+				const value = Meteor.settings[key];
+>value : Symbol(value, Decl(dependentReturnType3.ts, 118, 9))
+>Meteor.settings : Symbol(settings, Decl(dependentReturnType3.ts, 67, 23))
+>Meteor : Symbol(Meteor, Decl(dependentReturnType3.ts, 67, 13))
+>settings : Symbol(settings, Decl(dependentReturnType3.ts, 67, 23))
+>key : Symbol(key, Decl(dependentReturnType3.ts, 117, 89))
+
+				if (_id.test(key)) {
+>_id.test : Symbol(RegExp.test, Decl(lib.es5.d.ts, --, --))
+>_id : Symbol(_id, Decl(dependentReturnType3.ts, 73, 123))
+>test : Symbol(RegExp.test, Decl(lib.es5.d.ts, --, --))
+>key : Symbol(key, Decl(dependentReturnType3.ts, 117, 89))
+
+					items.push({
+>items.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>items : Symbol(items, Decl(dependentReturnType3.ts, 117, 56))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+
+						key,
+>key : Symbol(key, Decl(dependentReturnType3.ts, 120, 17))
+
+						value,
+>value : Symbol(value, Decl(dependentReturnType3.ts, 121, 10))
+
+					});
+				}
+				return items;
+>items : Symbol(items, Decl(dependentReturnType3.ts, 117, 56))
+
+			}, []); // Ok
+        }
+
+        return Meteor.settings?.[_id]; // Error
+>Meteor.settings : Symbol(settings, Decl(dependentReturnType3.ts, 67, 23))
+>Meteor : Symbol(Meteor, Decl(dependentReturnType3.ts, 67, 13))
+>settings : Symbol(settings, Decl(dependentReturnType3.ts, 67, 23))
+>_id : Symbol(_id, Decl(dependentReturnType3.ts, 73, 123))
+
+        // The indexing currently doesn't work because it doesn't use the narrowed type of `_id`.
+    }
+}
+
+// File: Rocket.Chat/apps/meteor/app/ui-utils/client/lib/messageBox.ts
+type MessageBoxAction = object;
+>MessageBoxAction : Symbol(MessageBoxAction, Decl(dependentReturnType3.ts, 132, 1))
+
+function getWithBug<T extends string | undefined>(group: T):
+>getWithBug : Symbol(getWithBug, Decl(dependentReturnType3.ts, 135, 31))
+>T : Symbol(T, Decl(dependentReturnType3.ts, 137, 20))
+>group : Symbol(group, Decl(dependentReturnType3.ts, 137, 50))
+>T : Symbol(T, Decl(dependentReturnType3.ts, 137, 20))
+
+HelperCond<T, string, MessageBoxAction[], undefined, Record<string, MessageBoxAction[]>> {
+>HelperCond : Symbol(HelperCond, Decl(dependentReturnType3.ts, 0, 0))
+>T : Symbol(T, Decl(dependentReturnType3.ts, 137, 20))
+>MessageBoxAction : Symbol(MessageBoxAction, Decl(dependentReturnType3.ts, 132, 1))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>MessageBoxAction : Symbol(MessageBoxAction, Decl(dependentReturnType3.ts, 132, 1))
+
+    if (!group) {
+>group : Symbol(group, Decl(dependentReturnType3.ts, 137, 50))
+
+        return {} as Record<string, MessageBoxAction[]>; // Error, could fall into this branch when group is empty string
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>MessageBoxAction : Symbol(MessageBoxAction, Decl(dependentReturnType3.ts, 132, 1))
+    }
+
+    return [] as MessageBoxAction[]; // Ok
+>MessageBoxAction : Symbol(MessageBoxAction, Decl(dependentReturnType3.ts, 132, 1))
+}
+
+function getWithoutBug<T extends string | undefined>(group: T):
+>getWithoutBug : Symbol(getWithoutBug, Decl(dependentReturnType3.ts, 144, 1))
+>T : Symbol(T, Decl(dependentReturnType3.ts, 146, 23))
+>group : Symbol(group, Decl(dependentReturnType3.ts, 146, 53))
+>T : Symbol(T, Decl(dependentReturnType3.ts, 146, 23))
+
+HelperCond<T, string, MessageBoxAction[], undefined, Record<string, MessageBoxAction[]>> {
+>HelperCond : Symbol(HelperCond, Decl(dependentReturnType3.ts, 0, 0))
+>T : Symbol(T, Decl(dependentReturnType3.ts, 146, 23))
+>MessageBoxAction : Symbol(MessageBoxAction, Decl(dependentReturnType3.ts, 132, 1))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>MessageBoxAction : Symbol(MessageBoxAction, Decl(dependentReturnType3.ts, 132, 1))
+
+    if (group === undefined) {
+>group : Symbol(group, Decl(dependentReturnType3.ts, 146, 53))
+>undefined : Symbol(undefined)
+
+        return {} as Record<string, MessageBoxAction[]>; // Ok
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>MessageBoxAction : Symbol(MessageBoxAction, Decl(dependentReturnType3.ts, 132, 1))
+    }
+
+    return [] as MessageBoxAction[]; // Ok
+>MessageBoxAction : Symbol(MessageBoxAction, Decl(dependentReturnType3.ts, 132, 1))
+}
+
+// File: Rocket.Chat/apps/meteor/ee/server/lib/engagementDashboard/date.ts
+declare function mapDateForAPI(x: string): Date;
+>mapDateForAPI : Symbol(mapDateForAPI, Decl(dependentReturnType3.ts, 153, 1))
+>x : Symbol(x, Decl(dependentReturnType3.ts, 156, 31))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+export function transformDatesForAPI<T extends string | undefined>(
+>transformDatesForAPI : Symbol(transformDatesForAPI, Decl(dependentReturnType3.ts, 156, 48))
+>T : Symbol(T, Decl(dependentReturnType3.ts, 157, 37))
+
+    start: string,
+>start : Symbol(start, Decl(dependentReturnType3.ts, 157, 67))
+
+    end?: T
+>end : Symbol(end, Decl(dependentReturnType3.ts, 158, 18))
+>T : Symbol(T, Decl(dependentReturnType3.ts, 157, 37))
+
+): HelperCond<T, string, { start: Date, end: Date }, undefined, { start: Date, end: undefined }> {
+>HelperCond : Symbol(HelperCond, Decl(dependentReturnType3.ts, 0, 0))
+>T : Symbol(T, Decl(dependentReturnType3.ts, 157, 37))
+>start : Symbol(start, Decl(dependentReturnType3.ts, 160, 26))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>end : Symbol(end, Decl(dependentReturnType3.ts, 160, 39))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>start : Symbol(start, Decl(dependentReturnType3.ts, 160, 65))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>end : Symbol(end, Decl(dependentReturnType3.ts, 160, 78))
+
+    return end !== undefined ? // Ok
+>end : Symbol(end, Decl(dependentReturnType3.ts, 158, 18))
+>undefined : Symbol(undefined)
+        {
+            start: mapDateForAPI(start),
+>start : Symbol(start, Decl(dependentReturnType3.ts, 162, 9))
+>mapDateForAPI : Symbol(mapDateForAPI, Decl(dependentReturnType3.ts, 153, 1))
+>start : Symbol(start, Decl(dependentReturnType3.ts, 157, 67))
+
+            end: mapDateForAPI(end),
+>end : Symbol(end, Decl(dependentReturnType3.ts, 163, 40))
+>mapDateForAPI : Symbol(mapDateForAPI, Decl(dependentReturnType3.ts, 153, 1))
+>end : Symbol(end, Decl(dependentReturnType3.ts, 158, 18))
+
+        } :
+        {
+            start: mapDateForAPI(start),
+>start : Symbol(start, Decl(dependentReturnType3.ts, 166, 9))
+>mapDateForAPI : Symbol(mapDateForAPI, Decl(dependentReturnType3.ts, 153, 1))
+>start : Symbol(start, Decl(dependentReturnType3.ts, 157, 67))
+
+            end: undefined
+>end : Symbol(end, Decl(dependentReturnType3.ts, 167, 40))
+>undefined : Symbol(undefined)
+
+        };
+}
+
+// File: Rocket.Chat/packages/agenda/src/Agenda.ts
+type RepeatOptions = object;
+>RepeatOptions : Symbol(RepeatOptions, Decl(dependentReturnType3.ts, 170, 1))
+
+type Job = object;
+>Job : Symbol(Job, Decl(dependentReturnType3.ts, 173, 28))
+
+type IJob = { data: object };
+>IJob : Symbol(IJob, Decl(dependentReturnType3.ts, 174, 18))
+>data : Symbol(data, Decl(dependentReturnType3.ts, 175, 13))
+
+class NewAgenda {
+>NewAgenda : Symbol(NewAgenda, Decl(dependentReturnType3.ts, 175, 29))
+
+    public async _createIntervalJob(interval: string | number, name: string, data: IJob['data'], options: RepeatOptions): Promise<Job> { return undefined as any; }
+>_createIntervalJob : Symbol(NewAgenda._createIntervalJob, Decl(dependentReturnType3.ts, 176, 17))
+>interval : Symbol(interval, Decl(dependentReturnType3.ts, 177, 36))
+>name : Symbol(name, Decl(dependentReturnType3.ts, 177, 62))
+>data : Symbol(data, Decl(dependentReturnType3.ts, 177, 76))
+>IJob : Symbol(IJob, Decl(dependentReturnType3.ts, 174, 18))
+>options : Symbol(options, Decl(dependentReturnType3.ts, 177, 96))
+>RepeatOptions : Symbol(RepeatOptions, Decl(dependentReturnType3.ts, 170, 1))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Job : Symbol(Job, Decl(dependentReturnType3.ts, 173, 28))
+>undefined : Symbol(undefined)
+
+    private _createIntervalJobs(
+>_createIntervalJobs : Symbol(NewAgenda._createIntervalJobs, Decl(dependentReturnType3.ts, 177, 163))
+
+        interval: string | number,
+>interval : Symbol(interval, Decl(dependentReturnType3.ts, 178, 32))
+
+        names: string[],
+>names : Symbol(names, Decl(dependentReturnType3.ts, 179, 34))
+
+        data: IJob['data'],
+>data : Symbol(data, Decl(dependentReturnType3.ts, 180, 24))
+>IJob : Symbol(IJob, Decl(dependentReturnType3.ts, 174, 18))
+
+        options: RepeatOptions,
+>options : Symbol(options, Decl(dependentReturnType3.ts, 181, 27))
+>RepeatOptions : Symbol(RepeatOptions, Decl(dependentReturnType3.ts, 170, 1))
+
+    ): Promise<Job[]> | undefined { return undefined as any; }
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Job : Symbol(Job, Decl(dependentReturnType3.ts, 173, 28))
+>undefined : Symbol(undefined)
+
+    public async newEvery<T extends string | string[]>(
+>newEvery : Symbol(NewAgenda.newEvery, Decl(dependentReturnType3.ts, 183, 62))
+>T : Symbol(T, Decl(dependentReturnType3.ts, 185, 26))
+
+        interval: string | number,
+>interval : Symbol(interval, Decl(dependentReturnType3.ts, 185, 55))
+
+        name: T,
+>name : Symbol(name, Decl(dependentReturnType3.ts, 186, 34))
+>T : Symbol(T, Decl(dependentReturnType3.ts, 185, 26))
+
+        data: IJob['data'],
+>data : Symbol(data, Decl(dependentReturnType3.ts, 187, 16))
+>IJob : Symbol(IJob, Decl(dependentReturnType3.ts, 174, 18))
+
+        options: RepeatOptions): Promise<HelperCond<T, string, Job, string[], Job[] | undefined>> {
+>options : Symbol(options, Decl(dependentReturnType3.ts, 188, 27))
+>RepeatOptions : Symbol(RepeatOptions, Decl(dependentReturnType3.ts, 170, 1))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>HelperCond : Symbol(HelperCond, Decl(dependentReturnType3.ts, 0, 0))
+>T : Symbol(T, Decl(dependentReturnType3.ts, 185, 26))
+>Job : Symbol(Job, Decl(dependentReturnType3.ts, 173, 28))
+>Job : Symbol(Job, Decl(dependentReturnType3.ts, 173, 28))
+
+        if (typeof name === 'string') {
+>name : Symbol(name, Decl(dependentReturnType3.ts, 186, 34))
+
+            return this._createIntervalJob(interval, name, data, options); // Ok
+>this._createIntervalJob : Symbol(NewAgenda._createIntervalJob, Decl(dependentReturnType3.ts, 176, 17))
+>this : Symbol(NewAgenda, Decl(dependentReturnType3.ts, 175, 29))
+>_createIntervalJob : Symbol(NewAgenda._createIntervalJob, Decl(dependentReturnType3.ts, 176, 17))
+>interval : Symbol(interval, Decl(dependentReturnType3.ts, 185, 55))
+>name : Symbol(name, Decl(dependentReturnType3.ts, 186, 34))
+>data : Symbol(data, Decl(dependentReturnType3.ts, 187, 16))
+>options : Symbol(options, Decl(dependentReturnType3.ts, 188, 27))
+        }
+
+        if (Array.isArray(name)) {
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>name : Symbol(name, Decl(dependentReturnType3.ts, 186, 34))
+
+            return this._createIntervalJobs(interval, name, data, options); // Ok
+>this._createIntervalJobs : Symbol(NewAgenda._createIntervalJobs, Decl(dependentReturnType3.ts, 177, 163))
+>this : Symbol(NewAgenda, Decl(dependentReturnType3.ts, 175, 29))
+>_createIntervalJobs : Symbol(NewAgenda._createIntervalJobs, Decl(dependentReturnType3.ts, 177, 163))
+>interval : Symbol(interval, Decl(dependentReturnType3.ts, 185, 55))
+>name : Symbol(name, Decl(dependentReturnType3.ts, 186, 34))
+>data : Symbol(data, Decl(dependentReturnType3.ts, 187, 16))
+>options : Symbol(options, Decl(dependentReturnType3.ts, 188, 27))
+
+            // Possible bug in original: createIntervalJobs can return undefined, but the original overload did not acount for that.
+        }
+
+        throw new Error('Unexpected error: Invalid job name(s)');
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+    }
+}
+
+// File: angular/packages/common/src/pipes/case_conversion_pipes.ts
+
+function transform1<T extends string | null | undefined>(value: T): HelperCond<T, string, string, null | undefined, null> {
+>transform1 : Symbol(transform1, Decl(dependentReturnType3.ts, 201, 1))
+>T : Symbol(T, Decl(dependentReturnType3.ts, 205, 20))
+>value : Symbol(value, Decl(dependentReturnType3.ts, 205, 57))
+>T : Symbol(T, Decl(dependentReturnType3.ts, 205, 20))
+>HelperCond : Symbol(HelperCond, Decl(dependentReturnType3.ts, 0, 0))
+>T : Symbol(T, Decl(dependentReturnType3.ts, 205, 20))
+
+    if (value == null) return null; // Ok
+>value : Symbol(value, Decl(dependentReturnType3.ts, 205, 57))
+
+    if (typeof value !== 'string') {
+>value : Symbol(value, Decl(dependentReturnType3.ts, 205, 57))
+
+        throw new Error();
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+    }
+    return value.toLowerCase(); // Ok
+>value.toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+>value : Symbol(value, Decl(dependentReturnType3.ts, 205, 57))
+>toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+}
