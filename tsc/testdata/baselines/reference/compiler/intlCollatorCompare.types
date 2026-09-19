@@ -1,0 +1,62 @@
+//// [tests/cases/compiler/intlCollatorCompare.ts] ////
+
+=== intlCollatorCompare.ts ===
+const collator = new Intl.Collator("en");
+>collator : Intl.Collator
+>new Intl.Collator("en") : Intl.Collator
+>Intl.Collator : Intl.CollatorConstructor
+>Intl : typeof Intl
+>Collator : Intl.CollatorConstructor
+>"en" : "en"
+
+const compare = collator.compare;
+>compare : (this: void, x: string, y: string) => number
+>collator.compare : (this: void, x: string, y: string) => number
+>collator : Intl.Collator
+>compare : (this: void, x: string, y: string) => number
+
+compare("a", "b");
+>compare("a", "b") : number
+>compare : (this: void, x: string, y: string) => number
+>"a" : "a"
+>"b" : "b"
+
+["b", "a"].sort(collator.compare);
+>["b", "a"].sort(collator.compare) : string[]
+>["b", "a"].sort : (compareFn?: ((a: string, b: string) => number) | undefined) => string[]
+>["b", "a"] : string[]
+>"b" : "b"
+>"a" : "a"
+>sort : (compareFn?: ((a: string, b: string) => number) | undefined) => string[]
+>collator.compare : (this: void, x: string, y: string) => number
+>collator : Intl.Collator
+>compare : (this: void, x: string, y: string) => number
+
+["b", "a"].sort(compare);
+>["b", "a"].sort(compare) : string[]
+>["b", "a"].sort : (compareFn?: ((a: string, b: string) => number) | undefined) => string[]
+>["b", "a"] : string[]
+>"b" : "b"
+>"a" : "a"
+>sort : (compareFn?: ((a: string, b: string) => number) | undefined) => string[]
+>compare : (this: void, x: string, y: string) => number
+
+collator.compare("a", "b");
+>collator.compare("a", "b") : number
+>collator.compare : (this: void, x: string, y: string) => number
+>collator : Intl.Collator
+>compare : (this: void, x: string, y: string) => number
+>"a" : "a"
+>"b" : "b"
+
+// error: compare is readonly
+collator.compare = (x: string, y: string) => 0;
+>collator.compare = (x: string, y: string) => 0 : (x: string, y: string) => number
+>collator.compare : any
+>collator : Intl.Collator
+>compare : any
+>(x: string, y: string) => 0 : (x: string, y: string) => number
+>x : string
+>y : string
+>0 : 0
+

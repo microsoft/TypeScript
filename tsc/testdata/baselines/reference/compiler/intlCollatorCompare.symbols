@@ -1,0 +1,43 @@
+//// [tests/cases/compiler/intlCollatorCompare.ts] ////
+
+=== intlCollatorCompare.ts ===
+const collator = new Intl.Collator("en");
+>collator : Symbol(collator, Decl(intlCollatorCompare.ts, 0, 5))
+>Intl.Collator : Symbol(Intl.Collator, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --))
+>Collator : Symbol(Intl.Collator, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+const compare = collator.compare;
+>compare : Symbol(compare, Decl(intlCollatorCompare.ts, 2, 5))
+>collator.compare : Symbol(Intl.Collator.compare, Decl(lib.es5.d.ts, --, --))
+>collator : Symbol(collator, Decl(intlCollatorCompare.ts, 0, 5))
+>compare : Symbol(Intl.Collator.compare, Decl(lib.es5.d.ts, --, --))
+
+compare("a", "b");
+>compare : Symbol(compare, Decl(intlCollatorCompare.ts, 2, 5))
+
+["b", "a"].sort(collator.compare);
+>["b", "a"].sort : Symbol(Array.sort, Decl(lib.es5.d.ts, --, --))
+>sort : Symbol(Array.sort, Decl(lib.es5.d.ts, --, --))
+>collator.compare : Symbol(Intl.Collator.compare, Decl(lib.es5.d.ts, --, --))
+>collator : Symbol(collator, Decl(intlCollatorCompare.ts, 0, 5))
+>compare : Symbol(Intl.Collator.compare, Decl(lib.es5.d.ts, --, --))
+
+["b", "a"].sort(compare);
+>["b", "a"].sort : Symbol(Array.sort, Decl(lib.es5.d.ts, --, --))
+>sort : Symbol(Array.sort, Decl(lib.es5.d.ts, --, --))
+>compare : Symbol(compare, Decl(intlCollatorCompare.ts, 2, 5))
+
+collator.compare("a", "b");
+>collator.compare : Symbol(Intl.Collator.compare, Decl(lib.es5.d.ts, --, --))
+>collator : Symbol(collator, Decl(intlCollatorCompare.ts, 0, 5))
+>compare : Symbol(Intl.Collator.compare, Decl(lib.es5.d.ts, --, --))
+
+// error: compare is readonly
+collator.compare = (x: string, y: string) => 0;
+>collator.compare : Symbol(Intl.Collator.compare, Decl(lib.es5.d.ts, --, --))
+>collator : Symbol(collator, Decl(intlCollatorCompare.ts, 0, 5))
+>compare : Symbol(Intl.Collator.compare, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(intlCollatorCompare.ts, 11, 20))
+>y : Symbol(y, Decl(intlCollatorCompare.ts, 11, 30))
+
