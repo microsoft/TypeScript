@@ -20,19 +20,19 @@ export interface FileSystemEntries {
 }
 
 export interface FileSystem {
-    directoryExists?: (directoryName: string) => boolean | undefined;
-    fileExists?: (fileName: string) => boolean | undefined;
-    getAccessibleEntries?: (directoryName: string) => FileSystemEntries | undefined;
+    directoryExists?: ((directoryName: string) => boolean | undefined) | undefined;
+    fileExists?: ((fileName: string) => boolean | undefined) | undefined;
+    getAccessibleEntries?: ((directoryName: string) => FileSystemEntries | undefined) | undefined;
     /**
      * Read a file's content.
      * - Return the file content as a `string` (including `""` for empty files).
      * - Return `null` to indicate the file does not exist (without falling back to the real FS).
      * - Return `undefined` to fall back to the real filesystem.
      */
-    readFile?: (fileName: string) => string | null | undefined;
-    realpath?: (path: string) => string | undefined;
-    writeFile?: (path: string, content: string) => void;
-    removeFile?: (path: string) => void;
+    readFile?: ((fileName: string) => string | null | undefined) | undefined;
+    realpath?: ((path: string) => string | undefined) | undefined;
+    writeFile?: ((path: string, content: string) => void) | undefined;
+    removeFile?: ((path: string) => void) | undefined;
 }
 
 /** The callback names supported by the Go server for virtual FS delegation. */
@@ -40,15 +40,15 @@ export const fsCallbackNames = ["readFile", "fileExists", "directoryExists", "ge
 
 export interface CreateFileSystemOptions {
     /** Complete directory listings. Full filesystems derive these from `files` when omitted. */
-    directories?: Record<string, RequestDirectoryEntries>;
-    symlinks?: Record<string, RequestSymlink>;
+    directories?: Record<string, RequestDirectoryEntries> | undefined;
+    symlinks?: Record<string, RequestSymlink> | undefined;
     /** Files or directory trees hidden from an underlying snapshot or host filesystem. */
-    removedPaths?: readonly string[];
+    removedPaths?: readonly string[] | undefined;
 }
 
 export interface CreateFileSystemWithLibOptions extends CreateFileSystemOptions {
     /** Default library directory used by a custom or non-embedded compiler executable. */
-    defaultLibraryPath?: string;
+    defaultLibraryPath?: string | undefined;
 }
 
 /**
@@ -91,8 +91,8 @@ export function createFileSystemWithLib(
     }
     return createRequestFileSystem("full", files, {
         symlinks,
-        ...(options.directories ? { directories: options.directories } : {}),
-        ...(options.removedPaths?.length ? { removedPaths: options.removedPaths } : {}),
+        directories: options.directories,
+        removedPaths: options.removedPaths?.length ? options.removedPaths : undefined,
     });
 }
 
@@ -122,9 +122,9 @@ function createRequestFileSystem(
     return {
         kind,
         files: fileRecord,
-        ...(directories ? { directories } : {}),
-        ...(options.symlinks ? { symlinks: options.symlinks } : {}),
-        ...(options.removedPaths?.length ? { removedPaths: [...options.removedPaths] } : {}),
+        directories,
+        symlinks: options.symlinks,
+        removedPaths: options.removedPaths?.length ? [...options.removedPaths] : undefined,
     };
 }
 

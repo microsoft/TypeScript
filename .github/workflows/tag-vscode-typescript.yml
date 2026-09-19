@@ -74,7 +74,7 @@ jobs:
           echo "changed=true" >> "$GITHUB_OUTPUT"
           echo "version=$version" >> "$GITHUB_OUTPUT"
 
-      - uses: azure/login@532459ea530d8321f2fb9bb10d1e0bcf23869a43 # v3.0.0
+      - uses: azure/login@a641126d1b8aa4d1fa005f4f92df94a3a4c4c906 # v3.1.0
         if: steps.version.outputs.changed == 'true'
         with:
           client-id: ${{ vars.AZURE_CLIENT_ID }}
