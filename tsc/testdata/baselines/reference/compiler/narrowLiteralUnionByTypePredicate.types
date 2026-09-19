@@ -1,0 +1,56 @@
+//// [tests/cases/compiler/narrowLiteralUnionByTypePredicate.ts] ////
+
+=== narrowLiteralUnionByTypePredicate.ts ===
+type Source = "a" | "b" | "c" | "d" | 1 | 2 | 3 | 4;
+>Source : Source
+
+type Candidate = "b" | "d" | 1 | 3;
+>Candidate : Candidate
+
+declare const source: Source;
+>source : Source
+
+declare function isCandidate(value: Source): value is Candidate;
+>isCandidate : (value: Source) => value is Candidate
+>value : Source
+
+if (isCandidate(source)) {
+>isCandidate(source) : boolean
+>isCandidate : (value: Source) => value is Candidate
+>source : Source
+
+    source;
+>source : "b" | "d" | 1 | 3
+}
+
+enum E {
+>E : E
+
+    A = "a",
+>A : E.A
+>"a" : "a"
+
+    B = "b",
+>B : E.B
+>"b" : "b"
+}
+
+declare const enumSource: "a" | "b";
+>enumSource : "a" | "b"
+
+declare function isEnumA(value: "a" | "b"): value is E.A;
+>isEnumA : (value: "a" | "b") => value is E.A
+>value : "a" | "b"
+>E : any
+
+if (isEnumA(enumSource)) {
+>isEnumA(enumSource) : boolean
+>isEnumA : (value: "a" | "b") => value is E.A
+>enumSource : "a" | "b"
+
+    const enumA: E.A = enumSource;
+>enumA : E.A
+>E : any
+>enumSource : E.A
+}
+
