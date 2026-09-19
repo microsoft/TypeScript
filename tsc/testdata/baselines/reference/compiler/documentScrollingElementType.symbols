@@ -1,0 +1,17 @@
+//// [tests/cases/compiler/documentScrollingElementType.ts] ////
+
+=== documentScrollingElementType.ts ===
+const scrollingElement: HTMLElement | null = document.scrollingElement;
+>scrollingElement : Symbol(scrollingElement, Decl(documentScrollingElementType.ts, 0, 5))
+>HTMLElement : Symbol(HTMLElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>document.scrollingElement : Symbol(Document.scrollingElement, Decl(lib.dom.d.ts, --, --))
+>document : Symbol(document, Decl(lib.dom.d.ts, --, --))
+>scrollingElement : Symbol(Document.scrollingElement, Decl(lib.dom.d.ts, --, --))
+
+const documentElement: HTMLElement = document.documentElement;
+>documentElement : Symbol(documentElement, Decl(documentScrollingElementType.ts, 1, 5))
+>HTMLElement : Symbol(HTMLElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>document.documentElement : Symbol(Document.documentElement, Decl(lib.dom.d.ts, --, --))
+>document : Symbol(document, Decl(lib.dom.d.ts, --, --))
+>documentElement : Symbol(Document.documentElement, Decl(lib.dom.d.ts, --, --))
+

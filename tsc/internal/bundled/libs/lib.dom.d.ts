@@ -12833,7 +12833,7 @@ interface Document extends Node, DocumentOrShadowRoot, FontFaceSource, GlobalEve
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Document/scrollingElement)
      */
-    readonly scrollingElement: Element | null;
+    readonly scrollingElement: HTMLElement | null;
     /**
      * The **`timeline`** readonly property of the Document interface represents the default timeline of the current document. This timeline is a special instance of DocumentTimeline.
      *
