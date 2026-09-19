@@ -110,7 +110,7 @@ func GetOutputDeclarationFileNameWorker(inputFileName string, options *core.Comp
 	if len(dir) == 0 {
 		dir = options.OutDir
 	}
-	return ChangeToDeclarationExtension(getOutputPathWithoutChangingExtension(inputFileName, dir, host), host)
+	return ChangeToDeclarationExtension(getOutputPathWithoutChangingExtension(inputFileName, dir, host), options, host)
 }
 
 func GetOutputExtension(fileName string, jsx core.JsxEmit) string {
@@ -142,11 +142,14 @@ func GetDeclarationEmitOutputFilePath(file string, options *core.CompilerOptions
 	} else {
 		path = file
 	}
-	return ChangeToDeclarationExtension(path, host)
+	return ChangeToDeclarationExtension(path, options, host)
 }
 
-func ChangeToDeclarationExtension(path string, host OutputPathsHost) string {
+func ChangeToDeclarationExtension(path string, options *core.CompilerOptions, host OutputPathsHost) string {
 	if extension := tspath.GetLongestExtensionFromPath(path, host.ContentMapperExtensions(), false); extension != "" {
+		if options.OutputExtension != "" {
+			return tspath.RemoveExtension(path, extension) + DeclarationExtensionForOutput(options.OutputExtension)
+		}
 		return tspath.RemoveExtension(path, extension) + ".d" + extension + ".ts"
 	}
 	pathWithoutExtension := tspath.RemoveFileExtension(path)
@@ -155,7 +158,23 @@ func ChangeToDeclarationExtension(path string, host OutputPathsHost) string {
 			pathWithoutExtension = tspath.RemoveExtension(path, extension)
 		}
 	}
+	if options.OutputExtension != "" {
+		return pathWithoutExtension + DeclarationExtensionForOutput(options.OutputExtension)
+	}
 	return pathWithoutExtension + tspath.GetDeclarationEmitExtensionForPath(path)
+}
+
+// DeclarationExtensionForOutput returns the declaration extension that sits next to a JavaScript file
+// with the given extension, for the values that outputExtension accepts.
+func DeclarationExtensionForOutput(outputExtension string) string {
+	switch outputExtension {
+	case tspath.ExtensionMjs:
+		return tspath.ExtensionDmts
+	case tspath.ExtensionCjs:
+		return tspath.ExtensionDcts
+	default:
+		return tspath.ExtensionDts
+	}
 }
 
 func GetSourceFilePathInNewDir(fileName string, newDirPath string, currentDirectory string, commonSourceDirectory string, useCaseSensitiveFileNames bool) string {

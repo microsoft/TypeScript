@@ -1268,6 +1268,11 @@ func (p *Program) verifyCompilerOptions() {
 		}
 	}
 
+	// outputExtension describes what an external build emits, so tsc must not emit JavaScript itself.
+	if options.OutputExtension != "" && !options.NoEmit.IsTrue() && !options.EmitDeclarationOnly.IsTrue() {
+		createDiagnosticForOptionName(diagnostics.Option_0_cannot_be_specified_without_specifying_option_1_or_option_2, "outputExtension", "noEmit", "emitDeclarationOnly")
+	}
+
 	moduleKind := options.GetEmitModuleKind()
 
 	if options.AllowImportingTsExtensions.IsTrue() && !(options.NoEmit.IsTrue() || options.EmitDeclarationOnly.IsTrue() || options.RewriteRelativeImportExtensions.IsTrue()) {

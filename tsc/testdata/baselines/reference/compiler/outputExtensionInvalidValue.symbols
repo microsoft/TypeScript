@@ -1,0 +1,6 @@
+//// [tests/cases/compiler/outputExtensionInvalidValue.ts] ////
+
+=== /main.ts ===
+export declare const main: string;
+>main : Symbol(main, Decl(main.ts, 0, 20))
+

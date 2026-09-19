@@ -444,6 +444,8 @@ func parseCompilerOptions(key string, value any, allOptions *core.CompilerOption
 		allOptions.NoUncheckedSideEffectImports = ParseTristate(value)
 	case "outFile":
 		allOptions.OutFile = ParseString(value)
+	case "outputExtension":
+		allOptions.OutputExtension = ParseString(value)
 	case "noResolve":
 		allOptions.NoResolve = ParseTristate(value)
 	case "paths":
