@@ -170,6 +170,65 @@ type Project struct {
 	installedTypingsInfo *ata.TypingsInfo
 	// typingsFiles are the root files added by the typings installer.
 	typingsFiles []string
+	// installedTypingsFileNames are the JavaScript files used during the most
+	// recently completed typings installation.
+	installedTypingsFileNames []string
+	// installedTypingsFilesToWatch are the manifest and package directories
+	// whose changes require typings discovery to run again.
+	installedTypingsFilesToWatch []string
+}
+
+type inferredProjectATAState struct {
+	installedTypingsInfo         *ata.TypingsInfo
+	installedTypingsFileNames    []string
+	installedTypingsFilesToWatch []string
+	typingsFiles                 []string
+	typingsWatch                 *WatchedFiles[PatternsAndIgnored]
+}
+
+func (p *Project) inferredProjectATAState() *inferredProjectATAState {
+	if p.installedTypingsInfo == nil {
+		return nil
+	}
+	return &inferredProjectATAState{
+		installedTypingsInfo:         p.installedTypingsInfo,
+		installedTypingsFileNames:    slices.Clone(p.installedTypingsFileNames),
+		installedTypingsFilesToWatch: slices.Clone(p.installedTypingsFilesToWatch),
+		typingsFiles:                 slices.Clone(p.typingsFiles),
+		typingsWatch:                 p.typingsWatch,
+	}
+}
+
+func (s *inferredProjectATAState) canApply(project *Project, fs *snapshotFSBuilder, watchEnabled bool) bool {
+	if s == nil {
+		return false
+	}
+	if !watchEnabled && len(s.installedTypingsFilesToWatch) > 0 {
+		return false
+	}
+	if !s.installedTypingsInfo.Equals(project.ComputeTypingsInfo()) ||
+		!slices.Equal(s.installedTypingsFileNames, project.ComputeTypingsFileNames()) {
+		return false
+	}
+	for _, fileName := range s.typingsFiles {
+		if !fs.FileExists(fileName, fs.toPath(fileName)) {
+			return false
+		}
+	}
+	return true
+}
+
+func (s *inferredProjectATAState) apply(project *Project) {
+	typingsFilesChanged := !slices.Equal(project.typingsFiles, s.typingsFiles)
+	project.installedTypingsInfo = s.installedTypingsInfo
+	project.installedTypingsFileNames = slices.Clone(s.installedTypingsFileNames)
+	project.installedTypingsFilesToWatch = slices.Clone(s.installedTypingsFilesToWatch)
+	project.typingsFiles = slices.Clone(s.typingsFiles)
+	project.typingsWatch = s.typingsWatch
+	if typingsFilesChanged {
+		project.dirty = true
+		project.dirtyFilePath = ""
+	}
 }
 
 var _ ls.Project = (*Project)(nil)
@@ -288,12 +347,7 @@ func NewProject(
 		createResolutionLookupGlobMapper(builder.sessionOptions.CurrentDirectory, builder.sessionOptions.DefaultLibraryPath, project.currentDirectory, builder.fs.fs.UseCaseSensitiveFileNames()),
 	)
 	if builder.sessionOptions.TypingsLocation != "" {
-		project.typingsWatch = NewWatchedFiles(
-			"typings installer files",
-			lsproto.WatchKindCreate|lsproto.WatchKindChange|lsproto.WatchKindDelete,
-			lsproto.GetClientCapabilities(builder.ctx).Workspace.DidChangeWatchedFiles.RelativePatternSupport,
-			core.Identity,
-		)
+		project.typingsWatch = newTypingsWatch(builder)
 	}
 	project.contentMapperWatch = NewWatchedFilesForPaths(
 		"content mapper configuration files for "+string(id),
@@ -304,6 +358,15 @@ func NewProject(
 		builder.fs.fs.UseCaseSensitiveFileNames(),
 	)
 	return project
+}
+
+func newTypingsWatch(builder *ProjectCollectionBuilder) *WatchedFiles[PatternsAndIgnored] {
+	return NewWatchedFiles(
+		"typings installer files",
+		lsproto.WatchKindCreate|lsproto.WatchKindChange|lsproto.WatchKindDelete,
+		lsproto.GetClientCapabilities(builder.ctx).Workspace.DidChangeWatchedFiles.RelativePatternSupport,
+		core.Identity,
+	)
 }
 
 func (p *Project) CurrentDirectory() string {
@@ -412,8 +475,10 @@ func (p *Project) Clone() *Project {
 
 		checkerPool: p.checkerPool,
 
-		installedTypingsInfo: p.installedTypingsInfo,
-		typingsFiles:         p.typingsFiles,
+		installedTypingsInfo:         p.installedTypingsInfo,
+		installedTypingsFileNames:    p.installedTypingsFileNames,
+		installedTypingsFilesToWatch: p.installedTypingsFilesToWatch,
+		typingsFiles:                 p.typingsFiles,
 	}
 }
 
@@ -645,7 +710,8 @@ func (p *Project) ShouldTriggerATA(snapshotID uint64) bool {
 		return true
 	}
 
-	return !p.installedTypingsInfo.Equals(p.ComputeTypingsInfo())
+	return !p.installedTypingsInfo.Equals(p.ComputeTypingsInfo()) ||
+		!slices.Equal(p.installedTypingsFileNames, p.ComputeTypingsFileNames())
 }
 
 func (p *Project) ComputeTypingsInfo() ata.TypingsInfo {
@@ -654,4 +720,18 @@ func (p *Project) ComputeTypingsInfo() ata.TypingsInfo {
 		TypeAcquisition:   p.GetTypeAcquisition(),
 		UnresolvedImports: p.GetUnresolvedImports(),
 	}
+}
+
+func (p *Project) ComputeTypingsFileNames() []string {
+	if p.Program == nil {
+		return nil
+	}
+	var fileNames []string
+	for _, file := range p.Program.GetSourceFiles() {
+		if tspath.HasJSFileExtension(file.FileName()) && !p.Program.IsSourceFileFromExternalLibrary(file) {
+			fileNames = append(fileNames, file.FileName())
+		}
+	}
+	slices.Sort(fileNames)
+	return fileNames
 }
