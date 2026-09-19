@@ -1,0 +1,55 @@
+//// [tests/cases/compiler/autocapitalize.ts] ////
+
+=== autocapitalize.ts ===
+declare const element: HTMLElement;
+>element : HTMLElement
+
+element.autocapitalize = "off";
+>element.autocapitalize = "off" : "off"
+>element.autocapitalize : "characters" | "none" | "off" | "on" | "sentences" | "words"
+>element : HTMLElement
+>autocapitalize : "characters" | "none" | "off" | "on" | "sentences" | "words"
+>"off" : "off"
+
+element.autocapitalize = "none";
+>element.autocapitalize = "none" : "none"
+>element.autocapitalize : "characters" | "none" | "off" | "on" | "sentences" | "words"
+>element : HTMLElement
+>autocapitalize : "characters" | "none" | "off" | "on" | "sentences" | "words"
+>"none" : "none"
+
+element.autocapitalize = "on";
+>element.autocapitalize = "on" : "on"
+>element.autocapitalize : "characters" | "none" | "off" | "on" | "sentences" | "words"
+>element : HTMLElement
+>autocapitalize : "characters" | "none" | "off" | "on" | "sentences" | "words"
+>"on" : "on"
+
+element.autocapitalize = "sentences";
+>element.autocapitalize = "sentences" : "sentences"
+>element.autocapitalize : "characters" | "none" | "off" | "on" | "sentences" | "words"
+>element : HTMLElement
+>autocapitalize : "characters" | "none" | "off" | "on" | "sentences" | "words"
+>"sentences" : "sentences"
+
+element.autocapitalize = "words";
+>element.autocapitalize = "words" : "words"
+>element.autocapitalize : "characters" | "none" | "off" | "on" | "sentences" | "words"
+>element : HTMLElement
+>autocapitalize : "characters" | "none" | "off" | "on" | "sentences" | "words"
+>"words" : "words"
+
+element.autocapitalize = "characters";
+>element.autocapitalize = "characters" : "characters"
+>element.autocapitalize : "characters" | "none" | "off" | "on" | "sentences" | "words"
+>element : HTMLElement
+>autocapitalize : "characters" | "none" | "off" | "on" | "sentences" | "words"
+>"characters" : "characters"
+
+element.autocapitalize = "character";
+>element.autocapitalize = "character" : "character"
+>element.autocapitalize : "characters" | "none" | "off" | "on" | "sentences" | "words"
+>element : HTMLElement
+>autocapitalize : "characters" | "none" | "off" | "on" | "sentences" | "words"
+>"character" : "character"
+

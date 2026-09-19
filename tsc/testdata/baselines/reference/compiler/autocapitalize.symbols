@@ -1,0 +1,42 @@
+//// [tests/cases/compiler/autocapitalize.ts] ////
+
+=== autocapitalize.ts ===
+declare const element: HTMLElement;
+>element : Symbol(element, Decl(autocapitalize.ts, 0, 13))
+>HTMLElement : Symbol(HTMLElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+element.autocapitalize = "off";
+>element.autocapitalize : Symbol(HTMLElement.autocapitalize, Decl(lib.dom.d.ts, --, --))
+>element : Symbol(element, Decl(autocapitalize.ts, 0, 13))
+>autocapitalize : Symbol(HTMLElement.autocapitalize, Decl(lib.dom.d.ts, --, --))
+
+element.autocapitalize = "none";
+>element.autocapitalize : Symbol(HTMLElement.autocapitalize, Decl(lib.dom.d.ts, --, --))
+>element : Symbol(element, Decl(autocapitalize.ts, 0, 13))
+>autocapitalize : Symbol(HTMLElement.autocapitalize, Decl(lib.dom.d.ts, --, --))
+
+element.autocapitalize = "on";
+>element.autocapitalize : Symbol(HTMLElement.autocapitalize, Decl(lib.dom.d.ts, --, --))
+>element : Symbol(element, Decl(autocapitalize.ts, 0, 13))
+>autocapitalize : Symbol(HTMLElement.autocapitalize, Decl(lib.dom.d.ts, --, --))
+
+element.autocapitalize = "sentences";
+>element.autocapitalize : Symbol(HTMLElement.autocapitalize, Decl(lib.dom.d.ts, --, --))
+>element : Symbol(element, Decl(autocapitalize.ts, 0, 13))
+>autocapitalize : Symbol(HTMLElement.autocapitalize, Decl(lib.dom.d.ts, --, --))
+
+element.autocapitalize = "words";
+>element.autocapitalize : Symbol(HTMLElement.autocapitalize, Decl(lib.dom.d.ts, --, --))
+>element : Symbol(element, Decl(autocapitalize.ts, 0, 13))
+>autocapitalize : Symbol(HTMLElement.autocapitalize, Decl(lib.dom.d.ts, --, --))
+
+element.autocapitalize = "characters";
+>element.autocapitalize : Symbol(HTMLElement.autocapitalize, Decl(lib.dom.d.ts, --, --))
+>element : Symbol(element, Decl(autocapitalize.ts, 0, 13))
+>autocapitalize : Symbol(HTMLElement.autocapitalize, Decl(lib.dom.d.ts, --, --))
+
+element.autocapitalize = "character";
+>element.autocapitalize : Symbol(HTMLElement.autocapitalize, Decl(lib.dom.d.ts, --, --))
+>element : Symbol(element, Decl(autocapitalize.ts, 0, 13))
+>autocapitalize : Symbol(HTMLElement.autocapitalize, Decl(lib.dom.d.ts, --, --))
+

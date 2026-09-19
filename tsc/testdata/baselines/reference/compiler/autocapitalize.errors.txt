@@ -1,0 +1,16 @@
+autocapitalize.ts(9,1): error TS2820: Type '"character"' is not assignable to type '"characters" | "none" | "off" | "on" | "sentences" | "words"'. Did you mean '"characters"'?
+
+
+==== autocapitalize.ts (1 errors) ====
+    declare const element: HTMLElement;
+    
+    element.autocapitalize = "off";
+    element.autocapitalize = "none";
+    element.autocapitalize = "on";
+    element.autocapitalize = "sentences";
+    element.autocapitalize = "words";
+    element.autocapitalize = "characters";
+    element.autocapitalize = "character";
+    ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2820: Type '"character"' is not assignable to type '"characters" | "none" | "off" | "on" | "sentences" | "words"'. Did you mean '"characters"'?
+    
