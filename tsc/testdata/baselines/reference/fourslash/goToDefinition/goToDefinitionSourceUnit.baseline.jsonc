@@ -11,11 +11,14 @@
 
 
 // === goToDefinition ===
+// === /b.ts ===
+// [||]
+
 // === /a.ts ===
 // //MyFile Comments
 // //more comments
 // /// <reference path="somePath.ts" />
-// /// <reference path="b/*GOTO DEF*/.ts" />
+// /// <reference path="[|b/*GOTO DEF*/.ts|]" />
 // 
 // class clsInOverload {
 //     static fnOverload();
