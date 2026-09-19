@@ -86,4 +86,9 @@ narrowByEquality.ts(55,9): error TS2322: Type 'string | number' is not assignabl
         xUnknown;
     }
     
+    declare let option: { type: string } | undefined;
+    
+    if ((option satisfies { type: string } | undefined) !== undefined) {
+        option.type;
+    }
     
