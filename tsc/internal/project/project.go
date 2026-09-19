@@ -20,6 +20,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/project/logging"
 	"github.com/microsoft/TypeScript/tsc/internal/tsoptions"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
+	"github.com/zeebo/xxh3"
 )
 
 const (
@@ -176,26 +177,55 @@ type inferredProjectATAState struct {
 	installedTypingsInfo *ata.TypingsInfo
 	typingsFiles         []string
 	typingsWatch         *WatchedFiles[PatternsAndIgnored]
+	rootFileHashes       map[tspath.Path]xxh3.Uint128
 }
 
 func (p *Project) inferredProjectATAState() *inferredProjectATAState {
-	if p.installedTypingsInfo == nil {
+	if p.installedTypingsInfo == nil ||
+		p.Program == nil ||
+		p.dirty ||
+		!p.installedTypingsInfo.Equals(p.ComputeTypingsInfo()) {
 		return nil
+	}
+	rootFileHashes := make(map[tspath.Path]xxh3.Uint128, len(p.CommandLine.FileNames()))
+	for path := range p.CommandLine.FileNamesByPath() {
+		file := p.Program.GetSourceFileByPath(path)
+		if file == nil {
+			return nil
+		}
+		rootFileHashes[path] = file.Hash
 	}
 	return &inferredProjectATAState{
 		installedTypingsInfo: p.installedTypingsInfo,
 		typingsFiles:         slices.Clone(p.typingsFiles),
 		typingsWatch:         p.typingsWatch,
+		rootFileHashes:       rootFileHashes,
 	}
 }
 
-func (s *inferredProjectATAState) apply(project *Project) {
+func (s *inferredProjectATAState) apply(project *Project, fs *snapshotFSBuilder) bool {
 	if s == nil {
-		return
+		return false
+	}
+	rootFileNames := project.CommandLine.FileNames()
+	if len(rootFileNames) != len(s.rootFileHashes) {
+		return false
+	}
+	for _, fileName := range rootFileNames {
+		path := fs.toPath(fileName)
+		hash, ok := s.rootFileHashes[path]
+		if !ok {
+			return false
+		}
+		file := fs.GetFileByPath(fileName, path)
+		if file == nil || file.Hash() != hash {
+			return false
+		}
 	}
 	project.installedTypingsInfo = s.installedTypingsInfo
 	project.typingsFiles = slices.Clone(s.typingsFiles)
 	project.typingsWatch = s.typingsWatch
+	return true
 }
 
 var _ ls.Project = (*Project)(nil)

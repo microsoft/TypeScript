@@ -1629,12 +1629,16 @@ func (s *Session) updateWatches(oldSnapshot *Snapshot, newSnapshot *Snapshot) er
 		newSnapshot.ProjectCollection.ProjectsByID(),
 		func(_ ID, addedProject *Project) {
 			errors = append(errors, s.updateWatch(ctx, nil, addedProject.programFilesWatch)...)
-			errors = append(errors, s.updateWatch(ctx, nil, addedProject.typingsWatch)...)
+			if addedProject.Kind != KindInferred {
+				errors = append(errors, s.updateWatch(ctx, nil, addedProject.typingsWatch)...)
+			}
 			errors = append(errors, s.updateWatch(ctx, nil, addedProject.contentMapperWatch)...)
 		},
 		func(_ ID, removedProject *Project) {
 			errors = append(errors, s.updateWatch(ctx, removedProject.programFilesWatch, nil)...)
-			errors = append(errors, s.updateWatch(ctx, removedProject.typingsWatch, nil)...)
+			if removedProject.Kind != KindInferred {
+				errors = append(errors, s.updateWatch(ctx, removedProject.typingsWatch, nil)...)
+			}
 			errors = append(errors, s.updateWatch(ctx, removedProject.contentMapperWatch, nil)...)
 		},
 		func(_ ID, oldProject, newProject *Project) {
@@ -1645,11 +1649,13 @@ func (s *Session) updateWatches(oldSnapshot *Snapshot, newSnapshot *Snapshot) er
 					errors = append(errors, s.updateWatch(ctx, nil, newProject.programFilesWatch)...)
 				}
 			}
-			if oldProject.typingsWatch.ID() != newProject.typingsWatch.ID() {
-				errors = append(errors, s.updateWatch(ctx, oldProject.typingsWatch, newProject.typingsWatch)...)
-			} else {
-				if s.watches.IsPending(newProject.typingsWatch.ID()) {
-					errors = append(errors, s.updateWatch(ctx, nil, newProject.typingsWatch)...)
+			if newProject.Kind != KindInferred {
+				if oldProject.typingsWatch.ID() != newProject.typingsWatch.ID() {
+					errors = append(errors, s.updateWatch(ctx, oldProject.typingsWatch, newProject.typingsWatch)...)
+				} else {
+					if s.watches.IsPending(newProject.typingsWatch.ID()) {
+						errors = append(errors, s.updateWatch(ctx, nil, newProject.typingsWatch)...)
+					}
 				}
 			}
 			if oldProject.contentMapperWatch.ID() != newProject.contentMapperWatch.ID() {
@@ -1659,6 +1665,13 @@ func (s *Session) updateWatches(oldSnapshot *Snapshot, newSnapshot *Snapshot) er
 			}
 		},
 	)
+	oldInferredTypingsWatch := oldSnapshot.ProjectCollection.inferredProjectTypingsWatch()
+	newInferredTypingsWatch := newSnapshot.ProjectCollection.inferredProjectTypingsWatch()
+	if oldInferredTypingsWatch.ID() != newInferredTypingsWatch.ID() {
+		errors = append(errors, s.updateWatch(ctx, oldInferredTypingsWatch, newInferredTypingsWatch)...)
+	} else if newInferredTypingsWatch != nil && s.watches.IsPending(newInferredTypingsWatch.ID()) {
+		errors = append(errors, s.updateWatch(ctx, nil, newInferredTypingsWatch)...)
+	}
 
 	if oldSnapshot.autoImportsWatch.ID() != newSnapshot.autoImportsWatch.ID() {
 		errors = append(errors, s.updateWatch(ctx, oldSnapshot.autoImportsWatch, newSnapshot.autoImportsWatch)...)

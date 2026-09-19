@@ -448,6 +448,15 @@ func (b *ProjectCollectionBuilder) DidChangeFiles(summary FileChangeSummary, log
 		return true
 	})
 
+	if b.inferredProject.Value() == nil &&
+		b.inferredProjectATAState != nil &&
+		(summary.Changed.Len() > 0 || summary.Created.Len() > 0 || summary.Deleted.Len() > 0) {
+		b.inferredProjectATAState = nil
+		if logger != nil {
+			logger.Log("Invalidating cached inferred project ATA state due to file changes")
+		}
+	}
+
 	// Handle opened file
 	if summary.Opened != "" || summary.Reopened != "" {
 		fileName := core.FirstNonZero(summary.Opened, summary.Reopened).FileName()
@@ -1367,7 +1376,10 @@ func (b *ProjectCollectionBuilder) updateOrCreateInferredProject(
 	project := b.inferredProject.Value()
 	if project == nil {
 		project = NewInferredProject(b.sessionOptions.CurrentDirectory, compilerOptions, rootFileNames, projectReferences, contentMappers, b, logger)
-		b.inferredProjectATAState.apply(project)
+		if b.inferredProjectATAState.apply(project, b.fs) && logger != nil {
+			logger.Log("Reusing cached inferred project ATA state")
+		}
+		b.inferredProjectATAState = nil
 		project.CommandLine.Errors = configFileParsingDiagnostics
 		b.inferredProject.Set(project)
 		return true

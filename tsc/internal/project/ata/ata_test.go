@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/microsoft/TypeScript/tsc/internal/bundled"
+	"github.com/microsoft/TypeScript/tsc/internal/glob"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/lsutil"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/project"
@@ -222,9 +223,33 @@ func TestATA(t *testing.T) {
 		session.WaitForBackgroundTasks()
 		_, err := session.GetLanguageService(context.Background(), uri)
 		assert.NilError(t, err)
+		session.WaitForBackgroundTasks()
+		var typingsWatcherID project.WatcherID
+		for _, call := range utils.Client().WatchFilesCalls() {
+			for _, watcher := range call.Watchers {
+				if watcher.GlobPattern.Pattern != nil {
+					g, parseErr := glob.Parse(*watcher.GlobPattern.Pattern)
+					if parseErr == nil && g.Match("/user/username/projects/project/package.json") {
+						typingsWatcherID = call.ID
+						break
+					}
+				}
+			}
+			if typingsWatcherID != "" {
+				break
+			}
+		}
+		assert.Assert(t, typingsWatcherID != "", "expected typings watcher to be registered")
 
 		session.DidCloseFile(context.Background(), uri)
 		session.WaitForBackgroundTasks()
+		assert.Assert(t, !slices.ContainsFunc(utils.Client().UnwatchFilesCalls(), func(call struct {
+			Ctx context.Context
+			ID  project.WatcherID
+		},
+		) bool {
+			return call.ID == typingsWatcherID
+		}), "typings watcher should remain registered while the inferred project is inactive")
 		err = utils.FS().WriteFile("/user/username/projects/project/package.json", `{"name":"test"}`)
 		assert.NilError(t, err)
 		session.DidChangeWatchedFiles(context.Background(), []*lsproto.FileEvent{{
