@@ -19932,7 +19932,7 @@ func (c *Checker) addInheritedMembers(symbols ast.SymbolTable, baseSymbols []*as
 		if !isStaticPrivateIdentifierProperty(base) {
 			if s, ok := symbols[base.Name]; !ok || s.Flags&ast.SymbolFlagsValue == 0 {
 				if symbols == nil {
-					symbols = make(ast.SymbolTable)
+					symbols = make(ast.SymbolTable, len(baseSymbols))
 				}
 				symbols[base.Name] = base
 			}
