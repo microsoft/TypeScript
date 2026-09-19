@@ -650,8 +650,7 @@ func (l *LanguageService) getIncomingCalls(ctx context.Context, program *compile
 		node: location,
 	}
 
-	result, err := handleCrossProject(
-		l,
+	result, err := l.handleCrossProject(
 		ctx,
 		incomingEntry,
 		orchestrator,
@@ -1104,7 +1103,7 @@ func (l *LanguageService) ProvideCallHierarchyOutgoingCalls(
 }
 
 func (l *LanguageService) callHierarchyDeclarations(file *ast.SourceFile, position lsproto.Position, program *compiler.Program, allowSourceFile bool) []*ast.Node {
-	positions := lsconv.FromLSPPositionForSourceFile(l.converters, file, position, spanmap.FeatureCallHierarchy)
+	positions := l.converters.FromLSPPositionForSourceFile(file, position, spanmap.FeatureCallHierarchy)
 	var declarations []*ast.Node
 	var seen collections.Set[*ast.Node]
 	for _, mapped := range positions {

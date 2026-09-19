@@ -48,14 +48,14 @@ func initCompletionClient(t *testing.T, files map[string]string, prefs *lsutil.U
 	}, onServerRequest)
 	t.Cleanup(func() { _ = closeClient() })
 
-	initMsg, _, ok := lsptestutil.SendRequest(t, client, lsproto.InitializeInfo, &lsproto.InitializeParams{
+	initMsg, _, ok := client.SendRequest(t, lsproto.InitializeInfo, &lsproto.InitializeParams{
 		Capabilities: &lsproto.ClientCapabilities{},
 	})
 	assert.Assert(t, ok && initMsg.AsResponse().Error == nil, "Initialize failed")
-	lsptestutil.SendNotification(t, client, lsproto.InitializedInfo, &lsproto.InitializedParams{})
+	client.SendNotification(t, lsproto.InitializedInfo, &lsproto.InitializedParams{})
 	<-client.Server.InitComplete()
 
-	lsptestutil.SendNotification(t, client, lsproto.WorkspaceDidChangeConfigurationInfo, &lsproto.DidChangeConfigurationParams{
+	client.SendNotification(t, lsproto.WorkspaceDidChangeConfigurationInfo, &lsproto.DidChangeConfigurationParams{
 		Settings: map[string]any{"typescript": prefs},
 	})
 
@@ -102,18 +102,18 @@ func TestCompletionAfterFileClose(t *testing.T) {
 
 	aURI := lsconv.FileNameToDocumentURI("/home/projects/a.ts")
 	bURI := lsconv.FileNameToDocumentURI("/home/projects/b.ts")
-	lsptestutil.SendNotification(t, client, lsproto.TextDocumentDidOpenInfo, &lsproto.DidOpenTextDocumentParams{
+	client.SendNotification(t, lsproto.TextDocumentDidOpenInfo, &lsproto.DidOpenTextDocumentParams{
 		TextDocument: &lsproto.TextDocumentItem{Uri: aURI, LanguageId: "typescript", Text: "export const someVar = 10;"},
 	})
-	lsptestutil.SendNotification(t, client, lsproto.TextDocumentDidOpenInfo, &lsproto.DidOpenTextDocumentParams{
+	client.SendNotification(t, lsproto.TextDocumentDidOpenInfo, &lsproto.DidOpenTextDocumentParams{
 		TextDocument: &lsproto.TextDocumentItem{Uri: bURI, LanguageId: "typescript", Text: "s"},
 	})
 
-	lsptestutil.SendNotification(t, client, lsproto.TextDocumentDidCloseInfo, &lsproto.DidCloseTextDocumentParams{
+	client.SendNotification(t, lsproto.TextDocumentDidCloseInfo, &lsproto.DidCloseTextDocumentParams{
 		TextDocument: lsproto.TextDocumentIdentifier{Uri: bURI},
 	})
 
-	msg, resp, ok := lsptestutil.SendRequest(t, client, lsproto.TextDocumentCompletionInfo, &lsproto.CompletionParams{
+	msg, resp, ok := client.SendRequest(t, lsproto.TextDocumentCompletionInfo, &lsproto.CompletionParams{
 		TextDocument: lsproto.TextDocumentIdentifier{Uri: bURI},
 		Position:     lsproto.Position{Line: 0, Character: 1},
 		Context:      &lsproto.CompletionContext{},
@@ -147,20 +147,20 @@ func TestCompletionWithConcurrentFileClose(t *testing.T) {
 
 	aURI := lsconv.FileNameToDocumentURI("/home/projects/a.ts")
 	bURI := lsconv.FileNameToDocumentURI("/home/projects/b.ts")
-	lsptestutil.SendNotification(t, client, lsproto.TextDocumentDidOpenInfo, &lsproto.DidOpenTextDocumentParams{
+	client.SendNotification(t, lsproto.TextDocumentDidOpenInfo, &lsproto.DidOpenTextDocumentParams{
 		TextDocument: &lsproto.TextDocumentItem{Uri: aURI, LanguageId: "typescript", Text: "export const someVar = 10;"},
 	})
-	lsptestutil.SendNotification(t, client, lsproto.TextDocumentDidOpenInfo, &lsproto.DidOpenTextDocumentParams{
+	client.SendNotification(t, lsproto.TextDocumentDidOpenInfo, &lsproto.DidOpenTextDocumentParams{
 		TextDocument: &lsproto.TextDocumentItem{Uri: bURI, LanguageId: "typescript", Text: "s"},
 	})
 
-	waitForCompletion := lsptestutil.SendRequestAsync(t, client, lsproto.TextDocumentCompletionInfo, &lsproto.CompletionParams{
+	waitForCompletion := client.SendRequestAsync(t, lsproto.TextDocumentCompletionInfo, &lsproto.CompletionParams{
 		TextDocument: lsproto.TextDocumentIdentifier{Uri: bURI},
 		Position:     lsproto.Position{Line: 0, Character: 1},
 		Context:      &lsproto.CompletionContext{},
 	})
 
-	lsptestutil.SendNotification(t, client, lsproto.TextDocumentDidCloseInfo, &lsproto.DidCloseTextDocumentParams{
+	client.SendNotification(t, lsproto.TextDocumentDidCloseInfo, &lsproto.DidCloseTextDocumentParams{
 		TextDocument: lsproto.TextDocumentIdentifier{Uri: bURI},
 	})
 
@@ -187,7 +187,7 @@ func TestCompletionForUnopenedFile(t *testing.T) {
 	}, prefs)
 
 	cURI := lsconv.FileNameToDocumentURI("/home/projects/c.ts")
-	msg, resp, ok := lsptestutil.SendRequest(t, client, lsproto.TextDocumentCompletionInfo, &lsproto.CompletionParams{
+	msg, resp, ok := client.SendRequest(t, lsproto.TextDocumentCompletionInfo, &lsproto.CompletionParams{
 		TextDocument: lsproto.TextDocumentIdentifier{Uri: cURI},
 		Position:     lsproto.Position{Line: 1, Character: 2},
 		Context:      &lsproto.CompletionContext{},
@@ -215,7 +215,7 @@ func TestAutoImportCompletionForUnopenedFile(t *testing.T) {
 	}, prefs)
 
 	cURI := lsconv.FileNameToDocumentURI("/home/projects/c.ts")
-	msg, resp, ok := lsptestutil.SendRequest(t, client, lsproto.TextDocumentCompletionInfo, &lsproto.CompletionParams{
+	msg, resp, ok := client.SendRequest(t, lsproto.TextDocumentCompletionInfo, &lsproto.CompletionParams{
 		TextDocument: lsproto.TextDocumentIdentifier{Uri: cURI},
 		Position:     lsproto.Position{Line: 0, Character: 1},
 		Context:      &lsproto.CompletionContext{},
@@ -251,20 +251,20 @@ func TestCompletionSnapshotFreezing(t *testing.T) {
 
 	aURI := lsconv.FileNameToDocumentURI("/home/projects/a.ts")
 	bURI := lsconv.FileNameToDocumentURI("/home/projects/b.ts")
-	lsptestutil.SendNotification(t, client, lsproto.TextDocumentDidOpenInfo, &lsproto.DidOpenTextDocumentParams{
+	client.SendNotification(t, lsproto.TextDocumentDidOpenInfo, &lsproto.DidOpenTextDocumentParams{
 		TextDocument: &lsproto.TextDocumentItem{Uri: aURI, LanguageId: "typescript", Text: "export const someVar = 10;"},
 	})
-	lsptestutil.SendNotification(t, client, lsproto.TextDocumentDidOpenInfo, &lsproto.DidOpenTextDocumentParams{
+	client.SendNotification(t, lsproto.TextDocumentDidOpenInfo, &lsproto.DidOpenTextDocumentParams{
 		TextDocument: &lsproto.TextDocumentItem{Uri: bURI, LanguageId: "typescript", Text: "someV"},
 	})
 
-	waitForCompletion := lsptestutil.SendRequestAsync(t, client, lsproto.TextDocumentCompletionInfo, &lsproto.CompletionParams{
+	waitForCompletion := client.SendRequestAsync(t, lsproto.TextDocumentCompletionInfo, &lsproto.CompletionParams{
 		TextDocument: lsproto.TextDocumentIdentifier{Uri: bURI},
 		Position:     lsproto.Position{Line: 0, Character: 5},
 		Context:      &lsproto.CompletionContext{},
 	})
 
-	lsptestutil.SendNotification(t, client, lsproto.TextDocumentDidChangeInfo, &lsproto.DidChangeTextDocumentParams{
+	client.SendNotification(t, lsproto.TextDocumentDidChangeInfo, &lsproto.DidChangeTextDocumentParams{
 		TextDocument: lsproto.VersionedTextDocumentIdentifier{Uri: bURI, Version: 2},
 		ContentChanges: []lsproto.TextDocumentContentChangePartialOrWholeDocument{
 			{WholeDocument: &lsproto.TextDocumentContentChangeWholeDocument{Text: "notMatching"}},
