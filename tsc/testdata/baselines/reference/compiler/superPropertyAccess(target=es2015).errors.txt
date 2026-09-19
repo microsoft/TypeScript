@@ -1,7 +1,7 @@
-superPropertyAccess.ts(21,15): error TS2855: Class field 'm2' defined by the parent class is not accessible in the child class via super.
+superPropertyAccess.ts(21,15): error TS2855: Instance property 'm2' is defined by the superclass and must be accessed through 'this', not 'super'.
 superPropertyAccess.ts(23,15): error TS2341: Property 'p1' is private and only accessible within class 'MyBase'.
-superPropertyAccess.ts(25,24): error TS2855: Class field 'd1' defined by the parent class is not accessible in the child class via super.
-superPropertyAccess.ts(27,24): error TS2855: Class field 'd2' defined by the parent class is not accessible in the child class via super.
+superPropertyAccess.ts(25,24): error TS2855: Instance property 'd1' is defined by the superclass and must be accessed through 'this', not 'super'.
+superPropertyAccess.ts(27,24): error TS2855: Instance property 'd2' is defined by the superclass and must be accessed through 'this', not 'super'.
 
 
 ==== superPropertyAccess.ts (4 errors) ====
@@ -27,7 +27,7 @@ superPropertyAccess.ts(27,24): error TS2855: Class field 'd2' defined by the par
     
             super.m2.bind(this);                                // Should error, instance property, not a public instance member function
                   ~~
-!!! error TS2855: Class field 'm2' defined by the parent class is not accessible in the child class via super.
+!!! error TS2855: Instance property 'm2' is defined by the superclass and must be accessed through 'this', not 'super'.
     
             super.p1();                                         // Should error, private not public instance member function
                   ~~
@@ -35,11 +35,11 @@ superPropertyAccess.ts(27,24): error TS2855: Class field 'd2' defined by the par
     
             var l1 = super.d1;                                  // Should error, instance data property not a public instance member function
                            ~~
-!!! error TS2855: Class field 'd1' defined by the parent class is not accessible in the child class via super.
+!!! error TS2855: Instance property 'd1' is defined by the superclass and must be accessed through 'this', not 'super'.
     
             var l1 = super.d2;                                  // Should error, instance data property not a public instance member function
                            ~~
-!!! error TS2855: Class field 'd2' defined by the parent class is not accessible in the child class via super.
+!!! error TS2855: Instance property 'd2' is defined by the superclass and must be accessed through 'this', not 'super'.
     
             super.m1 = function (a: string) { return ""; };     // Should be allowed, we will not restrict assignment
     

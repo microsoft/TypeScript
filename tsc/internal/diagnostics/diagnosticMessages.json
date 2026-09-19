@@ -3930,7 +3930,7 @@
         "category": "Error",
         "code": 2854
     },
-    "Class field '{0}' defined by the parent class is not accessible in the child class via super.": {
+    "Instance property '{0}' is defined by the superclass and must be accessed through 'this', not 'super'.": {
         "category": "Error",
         "code": 2855
     },

@@ -1966,7 +1966,7 @@ var X_await_using_statements_are_only_allowed_at_the_top_level_of_a_file_when_th
 
 var Top_level_await_using_statements_are_only_allowed_when_the_module_option_is_set_to_es2022_esnext_system_node16_node18_node20_nodenext_or_preserve_and_the_target_option_is_set_to_es2017_or_higher = &Message{code: 2854, category: CategoryError, key: "Top_level_await_using_statements_are_only_allowed_when_the_module_option_is_set_to_es2022_esnext_sys_2854", text: "Top-level 'await using' statements are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'node18', 'node20', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher."}
 
-var Class_field_0_defined_by_the_parent_class_is_not_accessible_in_the_child_class_via_super = &Message{code: 2855, category: CategoryError, key: "Class_field_0_defined_by_the_parent_class_is_not_accessible_in_the_child_class_via_super_2855", text: "Class field '{0}' defined by the parent class is not accessible in the child class via super."}
+var Instance_property_0_is_defined_by_the_superclass_and_must_be_accessed_through_this_not_super = &Message{code: 2855, category: CategoryError, key: "Instance_property_0_is_defined_by_the_superclass_and_must_be_accessed_through_this_not_super_2855", text: "Instance property '{0}' is defined by the superclass and must be accessed through 'this', not 'super'."}
 
 var Import_attributes_are_not_allowed_on_statements_that_compile_to_CommonJS_require_calls = &Message{code: 2856, category: CategoryError, key: "Import_attributes_are_not_allowed_on_statements_that_compile_to_CommonJS_require_calls_2856", text: "Import attributes are not allowed on statements that compile to CommonJS 'require' calls."}
 
@@ -6394,8 +6394,8 @@ func keyToMessage(key Key) *Message {
 		return X_await_using_statements_are_only_allowed_at_the_top_level_of_a_file_when_that_file_is_a_module_but_this_file_has_no_imports_or_exports_Consider_adding_an_empty_export_to_make_this_file_a_module
 	case "Top_level_await_using_statements_are_only_allowed_when_the_module_option_is_set_to_es2022_esnext_sys_2854":
 		return Top_level_await_using_statements_are_only_allowed_when_the_module_option_is_set_to_es2022_esnext_system_node16_node18_node20_nodenext_or_preserve_and_the_target_option_is_set_to_es2017_or_higher
-	case "Class_field_0_defined_by_the_parent_class_is_not_accessible_in_the_child_class_via_super_2855":
-		return Class_field_0_defined_by_the_parent_class_is_not_accessible_in_the_child_class_via_super
+	case "Instance_property_0_is_defined_by_the_superclass_and_must_be_accessed_through_this_not_super_2855":
+		return Instance_property_0_is_defined_by_the_superclass_and_must_be_accessed_through_this_not_super
 	case "Import_attributes_are_not_allowed_on_statements_that_compile_to_CommonJS_require_calls_2856":
 		return Import_attributes_are_not_allowed_on_statements_that_compile_to_CommonJS_require_calls
 	case "Import_attributes_cannot_be_used_with_type_only_imports_or_exports_2857":
