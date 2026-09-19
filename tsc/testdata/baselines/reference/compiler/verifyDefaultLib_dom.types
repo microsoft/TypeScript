@@ -4,3 +4,9 @@
 var x: HTMLElement;
 >x : HTMLElement
 
+var connection = navigator.connection;
+>connection : NetworkInformation
+>navigator.connection : NetworkInformation
+>navigator : Navigator
+>connection : NetworkInformation
+

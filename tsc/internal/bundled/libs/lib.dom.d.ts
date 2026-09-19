@@ -25777,7 +25777,7 @@ declare var NavigationTransition: {
  *
  * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Navigator)
  */
-interface Navigator extends NavigatorAutomationInformation, NavigatorBadge, NavigatorConcurrentHardware, NavigatorContentUtils, NavigatorCookies, NavigatorGPU, NavigatorID, NavigatorLanguage, NavigatorLocks, NavigatorOnLine, NavigatorPlugins, NavigatorStorage {
+interface Navigator extends NavigatorAutomationInformation, NavigatorBadge, NavigatorConcurrentHardware, NavigatorContentUtils, NavigatorCookies, NavigatorGPU, NavigatorID, NavigatorLanguage, NavigatorNetworkInformation, NavigatorLocks, NavigatorOnLine, NavigatorPlugins, NavigatorStorage {
     /**
      * The **`clipboard`** read-only property of the Navigator interface returns a Clipboard object used to read and write the clipboard's contents.
      * Available only in secure contexts.
@@ -26005,6 +26005,11 @@ declare var NavigatorLogin: {
     new(): NavigatorLogin;
 };
 
+interface NavigatorNetworkInformation {
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Navigator/connection) */
+    readonly connection: NetworkInformation;
+}
+
 interface NavigatorOnLine {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Navigator/onLine) */
     readonly onLine: boolean;
@@ -26026,6 +26031,16 @@ interface NavigatorStorage {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Navigator/storage) */
     readonly storage: StorageManager;
 }
+
+interface NetworkInformation extends EventTarget {
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/NetworkInformation/type) */
+    readonly type: ConnectionType;
+}
+
+declare var NetworkInformation: {
+    prototype: NetworkInformation;
+    new(): NetworkInformation;
+};
 
 /**
  * The DOM **`Node`** interface is an abstract base class upon which many other DOM API objects are based, thus letting those object types be used similarly and often interchangeably. As an abstract class, there is no such thing as a plain Node object. All objects that implement Node functionality are based on one of its subclasses. Most notable are Document, Element, and DocumentFragment.
@@ -44282,6 +44297,7 @@ type ColorGamut = "p3" | "rec2020" | "srgb";
 type ColorSpaceConversion = "default" | "none";
 type CompositeOperation = "accumulate" | "add" | "replace";
 type CompositeOperationOrAuto = "accumulate" | "add" | "auto" | "replace";
+type ConnectionType = "bluetooth" | "cellular" | "ethernet" | "mixed" | "none" | "other" | "unknown" | "wifi";
 type CompressionFormat = "deflate" | "deflate-raw" | "gzip";
 type CookieSameSite = "lax" | "none" | "strict";
 type CredentialMediationRequirement = "conditional" | "optional" | "required" | "silent";
