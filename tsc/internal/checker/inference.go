@@ -553,10 +553,20 @@ func (c *Checker) inferToMultipleTypesWithPriority(n *InferenceState, source *Ty
 
 func (c *Checker) inferToConditionalType(n *InferenceState, source *Type, target *Type) {
 	if source.flags&TypeFlagsConditional != 0 {
-		c.inferFromTypes(n, getNonDistributedTypeParameter(source.AsConditionalType().checkType), target.AsConditionalType().checkType)
-		c.inferFromTypes(n, getNonDistributedTypeParameter(source.AsConditionalType().extendsType), target.AsConditionalType().extendsType)
-		c.inferFromTypes(n, getNonDistributedTypeParameter(c.getTrueTypeFromConditionalType(source)), c.getTrueTypeFromConditionalType(target))
-		c.inferFromTypes(n, getNonDistributedTypeParameter(c.getFalseTypeFromConditionalType(source)), c.getFalseTypeFromConditionalType(target))
+		sourceCheckType := source.AsConditionalType().checkType
+		nonDistributedTypeParameter := getNonDistributedTypeParameter(sourceCheckType)
+		var mapper *TypeMapper
+		if nonDistributedTypeParameter != sourceCheckType {
+			// getNonDistributedTypeParameter only unwraps a top-level occurrence, but the
+			// distributed parameter can be nested in a source (for example, Box<T>).
+			// An identity mapper makes instantiateType traverse that source so getMappedType can
+			// unwrap each distributed occurrence without otherwise changing the type.
+			mapper = newSimpleTypeMapper(nonDistributedTypeParameter, nonDistributedTypeParameter)
+		}
+		c.inferFromTypes(n, c.instantiateType(sourceCheckType, mapper), target.AsConditionalType().checkType)
+		c.inferFromTypes(n, c.instantiateType(source.AsConditionalType().extendsType, mapper), target.AsConditionalType().extendsType)
+		c.inferFromTypes(n, c.instantiateType(c.getTrueTypeFromConditionalType(source), mapper), c.getTrueTypeFromConditionalType(target))
+		c.inferFromTypes(n, c.instantiateType(c.getFalseTypeFromConditionalType(source), mapper), c.getFalseTypeFromConditionalType(target))
 	} else {
 		targetTypes := []*Type{c.getTrueTypeFromConditionalType(target), c.getFalseTypeFromConditionalType(target)}
 		c.inferToMultipleTypesWithPriority(n, source, targetTypes, target.flags, core.IfElse(n.contravariant, InferencePriorityContravariantConditional, 0))
