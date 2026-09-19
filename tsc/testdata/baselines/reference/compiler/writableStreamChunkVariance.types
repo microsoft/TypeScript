@@ -1,0 +1,59 @@
+//// [tests/cases/compiler/writableStreamChunkVariance.ts] ////
+
+=== writableStreamChunkVariance.ts ===
+const stream: WritableStream<{ a: string }> = new WritableStream<{ a: string; b: string }>();
+>stream : WritableStream<{ a: string; }>
+>a : string
+>new WritableStream<{ a: string; b: string }>() : WritableStream<{ a: string; b: string; }>
+>WritableStream : { new <W = any>(underlyingSink?: UnderlyingSink<W>, strategy?: QueuingStrategy<W>): WritableStream<W>; prototype: WritableStream; }
+>a : string
+>b : string
+
+stream.getWriter().write({ a: "string" });
+>stream.getWriter().write({ a: "string" }) : Promise<void>
+>stream.getWriter().write : (chunk?: { a: string; } | undefined) => Promise<void>
+>stream.getWriter() : WritableStreamDefaultWriter<{ a: string; }>
+>stream.getWriter : () => WritableStreamDefaultWriter<{ a: string; }>
+>stream : WritableStream<{ a: string; }>
+>getWriter : () => WritableStreamDefaultWriter<{ a: string; }>
+>write : (chunk?: { a: string; } | undefined) => Promise<void>
+>{ a: "string" } : { a: string; }
+>a : string
+>"string" : "string"
+
+const writable = new WritableStream<{ a: string; b: string }>();
+>writable : WritableStream<{ a: string; b: string; }>
+>new WritableStream<{ a: string; b: string }>() : WritableStream<{ a: string; b: string; }>
+>WritableStream : { new <W = any>(underlyingSink?: UnderlyingSink<W>, strategy?: QueuingStrategy<W>): WritableStream<W>; prototype: WritableStream; }
+>a : string
+>b : string
+
+new ReadableStream<{ a: string }>().pipeTo(writable);
+>new ReadableStream<{ a: string }>().pipeTo(writable) : Promise<void>
+>new ReadableStream<{ a: string }>().pipeTo : (destination: WritableStream<{ a: string; }>, options?: StreamPipeOptions) => Promise<void>
+>new ReadableStream<{ a: string }>() : ReadableStream<{ a: string; }>
+>ReadableStream : { new (underlyingSource: UnderlyingByteSource, strategy?: { highWaterMark?: number; }): ReadableStream<Uint8Array<ArrayBuffer>>; new <R = any>(underlyingSource: UnderlyingDefaultSource<R>, strategy?: QueuingStrategy<R>): ReadableStream<R>; new <R = any>(underlyingSource?: UnderlyingSource<R>, strategy?: QueuingStrategy<R>): ReadableStream<R>; prototype: ReadableStream; }
+>a : string
+>pipeTo : (destination: WritableStream<{ a: string; }>, options?: StreamPipeOptions) => Promise<void>
+>writable : WritableStream<{ a: string; b: string; }>
+
+const widened: WritableStream<{ a: string; b: string }> = new WritableStream<{ a: string }>();
+>widened : WritableStream<{ a: string; b: string; }>
+>a : string
+>b : string
+>new WritableStream<{ a: string }>() : WritableStream<{ a: string; }>
+>WritableStream : { new <W = any>(underlyingSink?: UnderlyingSink<W>, strategy?: QueuingStrategy<W>): WritableStream<W>; prototype: WritableStream; }
+>a : string
+
+new ReadableStream<{ a: string; b: string }>().pipeTo(new WritableStream<{ a: string }>());
+>new ReadableStream<{ a: string; b: string }>().pipeTo(new WritableStream<{ a: string }>()) : Promise<void>
+>new ReadableStream<{ a: string; b: string }>().pipeTo : (destination: WritableStream<{ a: string; b: string; }>, options?: StreamPipeOptions) => Promise<void>
+>new ReadableStream<{ a: string; b: string }>() : ReadableStream<{ a: string; b: string; }>
+>ReadableStream : { new (underlyingSource: UnderlyingByteSource, strategy?: { highWaterMark?: number; }): ReadableStream<Uint8Array<ArrayBuffer>>; new <R = any>(underlyingSource: UnderlyingDefaultSource<R>, strategy?: QueuingStrategy<R>): ReadableStream<R>; new <R = any>(underlyingSource?: UnderlyingSource<R>, strategy?: QueuingStrategy<R>): ReadableStream<R>; prototype: ReadableStream; }
+>a : string
+>b : string
+>pipeTo : (destination: WritableStream<{ a: string; b: string; }>, options?: StreamPipeOptions) => Promise<void>
+>new WritableStream<{ a: string }>() : WritableStream<{ a: string; }>
+>WritableStream : { new <W = any>(underlyingSink?: UnderlyingSink<W>, strategy?: QueuingStrategy<W>): WritableStream<W>; prototype: WritableStream; }
+>a : string
+
