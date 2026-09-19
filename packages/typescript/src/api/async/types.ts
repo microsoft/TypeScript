@@ -423,11 +423,11 @@ export interface EmitOutput {
 export interface ImportSymbolAction {
     readonly kind: "importSymbol";
     readonly symbol: Symbol;
-    readonly isValidTypeOnlyUseSite?: boolean;
+    readonly isValidTypeOnlyUseSite?: boolean | undefined;
 }
 
 export type ImportAdderAction = ImportSymbolAction;
 
 export interface GetImportEditsForSymbolsOptions {
-    readonly isValidTypeOnlyUseSite?: boolean;
+    readonly isValidTypeOnlyUseSite?: boolean | undefined;
 }

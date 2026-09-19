@@ -54,6 +54,8 @@ type Snapshot struct {
 	// fileSystemOverride indicates that this snapshot was built from a filesystem
 	// supplied by an API update rather than the session host filesystem.
 	fileSystemOverride bool
+
+	createdPrograms []*Project
 }
 
 func (s *Snapshot) contentMapperWatchState() ([]string, *collections.Set[tspath.Path]) {
@@ -113,190 +115,19 @@ func (s *Snapshot) overlays() map[tspath.Path]*Overlay {
 	return snapshotOverlays(s.fs)
 }
 
-// cloneForProgram clones a snapshot and creates a single synthetic inferred
-// project representing createProgram input.
-func (s *Snapshot) cloneForProgram(
-	ctx context.Context,
-	fileSystem vfs.FS,
-	rootFileNames []string,
-	compilerOptions *core.CompilerOptions,
-	projectReferences []*core.ProjectReference,
-	configFileParsingDiagnostics []*ast.Diagnostic,
-	oldProject *Project,
-	fileChanges FileChangeSummary,
-	sessionLogger logging.Logger,
-) *Snapshot {
-	store := s.host
-	var logger *logging.LogTree
-
-	if store.options.LoggingEnabled && sessionLogger != nil {
-		defer func() {
-			if r := recover(); r != nil {
-				sessionLogger.Log(logger.String())
-				panic(r)
-			}
-		}()
-		logger = logging.NewLogTree(fmt.Sprintf("Cloning snapshot %d for program", s.id))
-	}
-
-	start := time.Now()
-	if fileSystem == nil {
-		fileSystem = store.fs
-	}
-	previousOverlays := s.overlays()
-	layeredFS := layerOverlayFileSystem(fileSystem, previousOverlays, store.options.PositionEncoding, store.toPath)
-	overlays := layeredFS.Overlays()
-	fs := newSnapshotFSBuilderFromSource(layeredFS, s.fs.cacheFiles, s.fs.cacheDirectories, s.fs.nodeModulesRealpathAliases, store.toPath)
-	fileChanges = s.processFileChanges(fs, fileChanges, logger, nil, previousOverlays, overlays)
-
-	newSnapshotID := store.nextSnapshotID()
-	projectCollectionBuilder := newProjectCollectionBuilder(
-		ctx,
-		newSnapshotID,
-		fs,
-		overlays,
-		s.ProjectCollection,
-		s.ConfigFileRegistry,
-		APIState{},
-		compilerOptions,
-		s.inferredProjectContentMappers,
-		s.inferredProjectContentMapperExtensions,
-		store.options,
-		s.ConfigFileRegistry.customConfigFileName,
-		store.parseCache,
-		store.contentMappedParseCache,
-		store.extendedConfigCache,
-		store.contentMapperHost,
-		nil,
-	)
-
-	projectCollectionBuilder.seedInferredProjectForProgram(oldProject, logger)
-	if !fileChanges.IsEmpty() {
-		changeLogger := logger
-		if changeLogger != nil {
-			changeLogger = logger.Fork("DidChangeFiles")
-		}
-		projectCollectionBuilder.DidChangeFiles(fileChanges, changeLogger)
-	}
-	updateLogger := logger
-	if updateLogger != nil {
-		updateLogger = logger.Fork("UpdateProgramConfig")
-	}
-	projectCollectionBuilder.updateOrCreateInferredProject(
-		slices.Clone(rootFileNames),
-		compilerOptions,
-		projectReferences,
-		configFileParsingDiagnostics,
-		s.inferredProjectContentMappers,
-		updateLogger,
-	)
-	if projectCollectionBuilder.inferredProject.Value().dirty {
-		createLogger := logger
-		if createLogger != nil {
-			createLogger = logger.Fork("CreateProgram")
-		}
-		projectCollectionBuilder.updateProgram(projectCollectionBuilder.inferredProject, createLogger)
-	}
-	projectCollectionBuilder.cleanupAllConfiguredProjects(logger.Fork("cleanupAllConfiguredProjects"))
-	newProjectCollection, newConfigFileRegistry := projectCollectionBuilder.Finalize(logger)
-
-	cleanFilesStart := time.Now()
-	removedFiles := 0
-	fs.cacheFiles.Range(func(entry *dirty.SyncMapEntry[tspath.Path, *cachedFile]) bool {
-		for _, project := range newProjectCollection.Projects() {
-			if project.host != nil && project.host.sourceFS.SeenFile(entry.Key()) {
-				return true
-			}
-		}
-		entry.Delete()
-		removedFiles++
-		return true
-	})
-	if logger != nil {
-		logger.Logf("Removed %d cached file(s) in %v", removedFiles, time.Since(cleanFilesStart))
-	}
-
-	snapshotFS, _ := fs.Finalize()
-	newSnapshot := store.newSnapshot(
-		newSnapshotID,
-		snapshotFS,
-		newConfigFileRegistry,
-		compilerOptions,
-		s.userPreferences,
-		nil,
-		nil,
-	)
-	newSnapshot.parentId = s.id
-	newSnapshot.ProjectCollection = newProjectCollection
-	newSnapshot.ConfigFileRegistry = newConfigFileRegistry
-	newSnapshot.inferredProjectContentMappers = s.inferredProjectContentMappers
-	newSnapshot.inferredProjectContentMapperExtensions = s.inferredProjectContentMapperExtensions
-	newSnapshot.builderLogs = logger
-
-	for _, project := range newSnapshot.ProjectCollection.Projects() {
-		if project.Program != nil {
-			store.programCounter.Ref(project.Program)
-			if project.ProgramLastUpdate == newSnapshotID {
-				project.host.freeze(snapshotFS, newConfigFileRegistry)
-			}
-		}
-	}
-
-	for _, config := range newSnapshot.ConfigFileRegistry.configs {
-		if config.commandLine != nil && config.commandLine.ConfigFile != nil {
-			for _, file := range config.commandLine.ConfigFile.ExtendedSourceFiles {
-				store.extendedConfigCache.AddOwner(store.toPath(file), newSnapshot.id)
-			}
-		}
-	}
-
-	if logger != nil {
-		logger.Logf("Finished cloning snapshot %d into snapshot %d for program in %v", s.id, newSnapshot.id, time.Since(start))
-	}
-	return newSnapshot
+func (s *Snapshot) CreatedPrograms() []*Project {
+	return s.createdPrograms
 }
 
-func (s *Snapshot) cloneWithTemporaryFile(
-	ctx context.Context,
-	fileSystem vfs.FS,
-	uri lsproto.DocumentUri,
-	newText string,
-) (*Snapshot, error) {
+func (s *Snapshot) resourceRequestForDocument(uri lsproto.DocumentUri) ResourceRequest {
 	path := uri.Path(s.UseCaseSensitiveFileNames())
-
-	overlays := maps.Clone(s.overlays())
-	if overlays == nil {
-		overlays = make(map[tspath.Path]*Overlay)
-	}
-	version := int32(0)
-	var fileChanges FileChangeSummary
-	existing := overlays[path]
-	var scriptKind core.ScriptKind
-	if existing != nil {
-		version = existing.Version() + 1
-		scriptKind = existing.Kind()
-		fileChanges.Changed.Add(uri)
-	} else {
-		scriptKind = core.GetScriptKindFromFileName(uri.FileName())
-		if scriptKind == core.ScriptKindUnknown {
-			return nil, fmt.Errorf("unsupported file extension: %s", uri.FileName())
+	request := ResourceRequest{Documents: []lsproto.DocumentUri{uri}}
+	for _, project := range s.ProjectCollection.SyntheticProjects() {
+		if project.containsFile(path) || project.host != nil && project.host.sourceFS.SeenFileOrMissingParentDirectory(path) {
+			request.Projects = append(request.Projects, project.ID())
 		}
-		fileChanges.Opened = uri
 	}
-	overlays[path] = newOverlay(uri.FileName(), newText, version, scriptKind)
-	if fileSystem == nil {
-		fileSystem = s.fs.fs
-	}
-	fileSystem = newOverlayFS(fileSystem, overlays, s.host.options.PositionEncoding, s.host.toPath)
-
-	return s.Clone(ctx, SnapshotChange{
-		fs:                 fileSystem,
-		fileSystemOverride: s.fileSystemOverride,
-		fileChanges:        fileChanges,
-		ResourceRequest: ResourceRequest{
-			Documents: []lsproto.DocumentUri{uri},
-		},
-	}, overlays, nil), nil
+	return request
 }
 
 func (s *Snapshot) processFileChanges(
@@ -370,11 +201,13 @@ func (s *Snapshot) GetDefaultProject(uri lsproto.DocumentUri) *Project {
 	return s.ProjectCollection.GetDefaultProject(uri.Path(s.UseCaseSensitiveFileNames()))
 }
 
-func (s *Snapshot) GetProjectsContainingFile(uri lsproto.DocumentUri) []ls.Project {
+// GetLanguageServiceProjectsContainingFile does not consider synthetic projects
+// (ones created by API via createProgram).
+func (s *Snapshot) GetLanguageServiceProjectsContainingFile(uri lsproto.DocumentUri) []ls.Project {
 	fileName := uri.FileName()
 	path := s.host.toPath(fileName)
 	// TODO!! sheetal may be change this to handle symlinks!!
-	return s.ProjectCollection.GetProjectsContainingFile(path)
+	return s.ProjectCollection.GetLanguageServiceProjectsContainingFile(path)
 }
 
 func (s *Snapshot) GetFile(fileName string) FileHandle {
@@ -472,12 +305,30 @@ func (s *Snapshot) ReadDirectory(currentDir string, path string, extensions []st
 	return vfsmatch.ReadDirectory(s.fs.fs, currentDir, path, extensions, excludes, includes, depth)
 }
 
+type APICreateProgramRequest struct {
+	RootFileNames                []string
+	CompilerOptions              *core.CompilerOptions
+	ProjectReferences            []*core.ProjectReference
+	ConfigFileParsingDiagnostics []*ast.Diagnostic
+}
+
+type APIReconfigureProgramRequest struct {
+	ProgramID SyntheticProjectID
+	APICreateProgramRequest
+}
+
 type APISnapshotRequest struct {
-	OpenProjects  *collections.Set[string]
-	CloseProjects *collections.Set[tspath.Path]
-	OpenFiles     *collections.Set[lsproto.DocumentUri]
-	CloseFiles    *collections.Set[tspath.Path]
-	FileSystem    vfs.FS
+	OpenProjects        *collections.Set[string]
+	CloseProjects       *collections.Set[tspath.Path]
+	OpenFiles           *collections.Set[lsproto.DocumentUri]
+	CloseFiles          *collections.Set[tspath.Path]
+	CreatePrograms      []*APICreateProgramRequest
+	ReconfigurePrograms []*APIReconfigureProgramRequest
+	RemovePrograms      *collections.Set[SyntheticProjectID]
+	EnsurePrograms      *collections.Set[ID]
+	EnsureAllPrograms   bool
+	EnsureFiles         *collections.Set[lsproto.DocumentUri]
+	FileSystem          vfs.FS
 	// ReplaceFileSystem indicates a total filesystem replacement. Layers use
 	// per-path file changes instead of invalidating all inherited state.
 	ReplaceFileSystem bool
@@ -514,7 +365,7 @@ type ResourceRequest struct {
 	ConfiguredProjectDocuments []lsproto.DocumentUri
 	// Update requested Projects.
 	// this is used when we want to get LS and from all the Projects the file can be part of
-	Projects []tspath.Path
+	Projects []ID
 	// Update and ensure project trees that reference the projects
 	// This is used to compute the solution and project tree so that
 	// we can find references across all the projects in the solution irrespective of which project is open
@@ -540,16 +391,14 @@ type SnapshotChange struct {
 	contentMapperContributions         *ContentMapperContributions
 	newConfig                          *lsutil.UserPreferences
 	// ataChanges contains ATA-related changes to apply to projects in the new snapshot.
-	ataChanges map[tspath.Path]*ATAStateChange
+	ataChanges map[ID]*ATAStateChange
 	apiRequest *APISnapshotRequest
-	client     Client
 	// cleanFileCache triggers cleaning of cached files not referenced by any open project.
 	cleanFileCache bool
 }
 
 // ATAStateChange represents a change to a project's ATA state.
 type ATAStateChange struct {
-	ProjectID tspath.Path
 	// TypingsInfo is the new typings info for the project.
 	TypingsInfo *ata.TypingsInfo
 	// TypingsFiles is the new list of typing files for the project.
@@ -564,7 +413,11 @@ func (s *Snapshot) Clone(
 	change SnapshotChange,
 	overlays map[tspath.Path]*Overlay,
 	sessionLogger logging.Logger,
+	client Client,
 ) *Snapshot {
+	if s.apiError != nil {
+		panic(fmt.Sprintf("cannot clone snapshot with API error: %v", s.apiError))
+	}
 	store := s.host
 	var logger *logging.LogTree
 
@@ -673,7 +526,7 @@ func (s *Snapshot) Clone(
 		store.contentMappedParseCache,
 		store.extendedConfigCache,
 		store.contentMapperHost,
-		change.client,
+		client,
 	)
 
 	if len(change.ataChanges) != 0 {
@@ -725,10 +578,10 @@ func (s *Snapshot) Clone(
 
 	projectCollection, configFileRegistry := projectCollectionBuilder.Finalize(logger)
 
-	projectsWithNewProgramStructure := make(map[tspath.Path]bool)
+	projectsWithNewProgramStructure := make(map[autoimport.ProjectID]bool)
 	for _, project := range projectCollection.Projects() {
 		if project.ProgramLastUpdate == newSnapshotID && project.ProgramUpdateKind != ProgramUpdateKindCloned {
-			projectsWithNewProgramStructure[project.configFilePath] = project.ProgramUpdateKind == ProgramUpdateKindNewFiles
+			projectsWithNewProgramStructure[project.ID()] = project.ProgramUpdateKind == ProgramUpdateKindNewFiles
 		}
 	}
 
@@ -817,6 +670,7 @@ func (s *Snapshot) Clone(
 	newSnapshot.builderLogs = logger
 	newSnapshot.apiError = apiError
 	newSnapshot.fileSystemOverride = change.fileSystemOverride
+	newSnapshot.createdPrograms = projectCollectionBuilder.createdPrograms
 
 	for _, project := range newSnapshot.ProjectCollection.Projects() {
 		if project.Program != nil {

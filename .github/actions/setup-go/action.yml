@@ -4,7 +4,7 @@ description: Setup Go
 inputs:
   go-version:
     description: Go version to set up
-    default: '1.26'
+    default: '1.27'
 
 runs:
   using: composite
