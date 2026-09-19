@@ -1,0 +1,56 @@
+//// [tests/cases/compiler/domHTMLElementOnError.ts] ////
+
+=== domHTMLElementOnError.ts ===
+declare const htmlElement: HTMLElement;
+>htmlElement : Symbol(htmlElement, Decl(domHTMLElementOnError.ts, 0, 13))
+>HTMLElement : Symbol(HTMLElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+htmlElement.onerror = (event: Event) => {};
+>htmlElement.onerror : Symbol(GlobalEventHandlers.onerror, Decl(lib.dom.d.ts, --, --))
+>htmlElement : Symbol(htmlElement, Decl(domHTMLElementOnError.ts, 0, 13))
+>onerror : Symbol(GlobalEventHandlers.onerror, Decl(lib.dom.d.ts, --, --))
+>event : Symbol(event, Decl(domHTMLElementOnError.ts, 2, 23))
+>Event : Symbol(Event, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+htmlElement.onerror = (event: UIEvent) => {};
+>htmlElement.onerror : Symbol(GlobalEventHandlers.onerror, Decl(lib.dom.d.ts, --, --))
+>htmlElement : Symbol(htmlElement, Decl(domHTMLElementOnError.ts, 0, 13))
+>onerror : Symbol(GlobalEventHandlers.onerror, Decl(lib.dom.d.ts, --, --))
+>event : Symbol(event, Decl(domHTMLElementOnError.ts, 3, 23))
+>UIEvent : Symbol(UIEvent, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+htmlElement.addEventListener("error", (event: Event) => {});
+>htmlElement.addEventListener : Symbol(HTMLElement.addEventListener, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>htmlElement : Symbol(htmlElement, Decl(domHTMLElementOnError.ts, 0, 13))
+>addEventListener : Symbol(HTMLElement.addEventListener, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>event : Symbol(event, Decl(domHTMLElementOnError.ts, 4, 39))
+>Event : Symbol(Event, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+htmlElement.addEventListener("error", (event: UIEvent) => {});
+>htmlElement.addEventListener : Symbol(HTMLElement.addEventListener, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>htmlElement : Symbol(htmlElement, Decl(domHTMLElementOnError.ts, 0, 13))
+>addEventListener : Symbol(HTMLElement.addEventListener, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>event : Symbol(event, Decl(domHTMLElementOnError.ts, 5, 39))
+>UIEvent : Symbol(UIEvent, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+declare const win: Window;
+>win : Symbol(win, Decl(domHTMLElementOnError.ts, 7, 13))
+>Window : Symbol(Window, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+win.onerror = (event, source, lineno, colno, error) => {};
+>win.onerror : Symbol(Window.onerror, Decl(lib.dom.d.ts, --, --))
+>win : Symbol(win, Decl(domHTMLElementOnError.ts, 7, 13))
+>onerror : Symbol(Window.onerror, Decl(lib.dom.d.ts, --, --))
+>event : Symbol(event, Decl(domHTMLElementOnError.ts, 9, 15))
+>source : Symbol(source, Decl(domHTMLElementOnError.ts, 9, 21))
+>lineno : Symbol(lineno, Decl(domHTMLElementOnError.ts, 9, 29))
+>colno : Symbol(colno, Decl(domHTMLElementOnError.ts, 9, 37))
+>error : Symbol(error, Decl(domHTMLElementOnError.ts, 9, 44))
+
+win.addEventListener("error", (event: ErrorEvent) => {});
+>win.addEventListener : Symbol(Window.addEventListener, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>win : Symbol(win, Decl(domHTMLElementOnError.ts, 7, 13))
+>addEventListener : Symbol(Window.addEventListener, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>event : Symbol(event, Decl(domHTMLElementOnError.ts, 10, 31))
+>ErrorEvent : Symbol(ErrorEvent, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
