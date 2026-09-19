@@ -23600,7 +23600,7 @@ interface MIDIMessageEvent extends Event {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/MIDIMessageEvent/data)
      */
-    readonly data: Uint8Array<ArrayBuffer> | null;
+    readonly data: Uint8Array<ArrayBuffer>;
 }
 
 declare var MIDIMessageEvent: {

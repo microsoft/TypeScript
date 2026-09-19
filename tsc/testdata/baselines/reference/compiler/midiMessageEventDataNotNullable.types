@@ -1,0 +1,24 @@
+//// [tests/cases/compiler/midiMessageEventDataNotNullable.ts] ////
+
+=== midiMessageEventDataNotNullable.ts ===
+declare const input: MIDIInput;
+>input : MIDIInput
+
+input.onmidimessage = (event) => {
+>input.onmidimessage = (event) => {    // `data` should not be nullable, so this should not error.    event.data[0];} : (this: MIDIInput, event: MIDIMessageEvent) => void
+>input.onmidimessage : ((this: MIDIInput, ev: MIDIMessageEvent) => any) | null
+>input : MIDIInput
+>onmidimessage : ((this: MIDIInput, ev: MIDIMessageEvent) => any) | null
+>(event) => {    // `data` should not be nullable, so this should not error.    event.data[0];} : (this: MIDIInput, event: MIDIMessageEvent) => void
+>event : MIDIMessageEvent
+
+    // `data` should not be nullable, so this should not error.
+    event.data[0];
+>event.data[0] : number
+>event.data : Uint8Array<ArrayBuffer>
+>event : MIDIMessageEvent
+>data : Uint8Array<ArrayBuffer>
+>0 : 0
+
+};
+
