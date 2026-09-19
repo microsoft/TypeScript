@@ -269,6 +269,7 @@ const (
 	InferenceFlagsNoDefault              InferenceFlags = 1 << 0 // Infer silentNeverType for no inferences (otherwise anyType or unknownType)
 	InferenceFlagsAnyDefault             InferenceFlags = 1 << 1 // Infer anyType (in JS files) for no inferences (otherwise unknownType)
 	InferenceFlagsSkippedGenericFunction InferenceFlags = 1 << 2 // A generic function was skipped during inference
+	InferenceFlagsNoConstraintChecks     InferenceFlags = 1 << 3
 )
 
 // InferenceContext
@@ -795,6 +796,7 @@ type Checker struct {
 	typeResolutions                             []TypeResolution
 	resolutionStart                             int
 	varianceStack                               []VarianceStackEntry
+	callResolutionStack                         []*ast.Node
 	apparentArgumentCount                       *int
 	lastGetCombinedNodeFlagsNode                *ast.Node
 	lastGetCombinedNodeFlagsResult              ast.NodeFlags
@@ -9014,6 +9016,7 @@ type CallState struct {
 	argCheckMode                   CheckMode
 	isSingleNonGenericCandidate    bool
 	signatureHelpTrailingComma     bool
+	recursiveResolution            bool
 	candidatesForArgumentError     []*Signature
 	candidateForArgumentArityError *Signature
 	candidateForTypeArgumentError  *Signature
@@ -9099,12 +9102,15 @@ func (c *Checker) resolveCall(node *ast.Node, signatures []*Signature, candidate
 	// is just important for choosing the best signature. So in the case where there is only one
 	// signature, the subtype pass is useless. So skipping it is an optimization.
 	var result *Signature
+	s.recursiveResolution = slices.Contains(c.callResolutionStack, s.node)
+	c.callResolutionStack = append(c.callResolutionStack, s.node)
 	if len(s.candidates) > 1 {
 		result = c.chooseOverload(&s, c.subtypeRelation)
 	}
 	if result == nil {
 		result = c.chooseOverload(&s, c.assignableRelation)
 	}
+	c.callResolutionStack = c.callResolutionStack[:len(c.callResolutionStack)-1]
 	if result != nil {
 		return result
 	}
@@ -9231,7 +9237,11 @@ func (c *Checker) chooseOverload(s *CallState, relation *Relation) *Signature {
 					continue
 				}
 			} else {
-				inferenceContext = c.newInferenceContext(candidate.typeParameters, candidate, core.IfElse(ast.IsInJSFile(s.node), InferenceFlagsAnyDefault, InferenceFlagsNone) /*flags*/, nil)
+				// When we are recursively resolving a call with a single candidate, we skip constraints checks during
+				// type inference to avoid circularity errors. For example, see #64192.
+				inferenceFlags := core.IfElse(s.recursiveResolution && len(s.candidates) == 1, InferenceFlagsNoConstraintChecks, InferenceFlagsNone) |
+					core.IfElse(ast.IsInJSFile(s.node), InferenceFlagsAnyDefault, InferenceFlagsNone)
+				inferenceContext = c.newInferenceContext(candidate.typeParameters, candidate, inferenceFlags /*flags*/, nil)
 				typeArgumentTypes = c.inferTypeArguments(s.node, candidate, s.args, s.argCheckMode|CheckModeSkipGenericFunctions, inferenceContext)
 				if inferenceContext.flags&InferenceFlagsSkippedGenericFunction != 0 {
 					s.argCheckMode |= CheckModeSkipGenericFunctions
@@ -21052,7 +21062,7 @@ func (c *Checker) createInstantiatedSymbolTable(symbols []*ast.Symbol, m *TypeMa
 	if len(symbols) == 0 {
 		return nil
 	}
-	result := make(ast.SymbolTable)
+	result := make(ast.SymbolTable, len(symbols))
 	for _, symbol := range symbols {
 		result[symbol.Name] = c.instantiateSymbol(symbol, m)
 	}
@@ -23108,22 +23118,22 @@ func (c *Checker) instantiateTypeAlias(alias *TypeAlias, m *TypeMapper) *TypeAli
 }
 
 func (c *Checker) instantiateTypes(types []*Type, m *TypeMapper) []*Type {
-	return instantiateList(c, types, m, (*Checker).instantiateType)
+	return c.instantiateList(types, m, (*Checker).instantiateType)
 }
 
 func (c *Checker) instantiateSymbols(symbols []*ast.Symbol, m *TypeMapper) []*ast.Symbol {
-	return instantiateList(c, symbols, m, (*Checker).instantiateSymbol)
+	return c.instantiateList(symbols, m, (*Checker).instantiateSymbol)
 }
 
 func (c *Checker) instantiateSignatures(signatures []*Signature, m *TypeMapper) []*Signature {
-	return instantiateList(c, signatures, m, (*Checker).instantiateSignature)
+	return c.instantiateList(signatures, m, (*Checker).instantiateSignature)
 }
 
 func (c *Checker) instantiateIndexInfos(indexInfos []*IndexInfo, m *TypeMapper) []*IndexInfo {
-	return instantiateList(c, indexInfos, m, (*Checker).instantiateIndexInfo)
+	return c.instantiateList(indexInfos, m, (*Checker).instantiateIndexInfo)
 }
 
-func instantiateList[T comparable](c *Checker, values []T, m *TypeMapper, instantiator func(c *Checker, value T, m *TypeMapper) T) []T {
+func (c *Checker) instantiateList[T comparable](values []T, m *TypeMapper, instantiator func(c *Checker, value T, m *TypeMapper) T) []T {
 	for i, value := range values {
 		mapped := instantiator(c, value, m)
 		if mapped != value {
@@ -31351,9 +31361,9 @@ func (c *Checker) popInferenceContext() {
 }
 
 func (c *Checker) getInferenceContext(node *ast.Node) *InferenceContext {
-	for i := len(c.inferenceContextInfos) - 1; i >= 0; i-- {
-		if isNodeDescendantOf(node, c.inferenceContextInfos[i].node) {
-			return c.inferenceContextInfos[i].context
+	for _, v := range slices.Backward(c.inferenceContextInfos) {
+		if isNodeDescendantOf(node, v.node) {
+			return v.context
 		}
 	}
 	return nil

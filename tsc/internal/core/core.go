@@ -226,8 +226,7 @@ func Find[T any](slice []T, f func(T) bool) T {
 }
 
 func FindLast[T any](slice []T, f func(T) bool) T {
-	for i := len(slice) - 1; i >= 0; i-- {
-		value := slice[i]
+	for _, value := range slices.Backward(slice) {
 		if f(value) {
 			return value
 		}
@@ -245,8 +244,7 @@ func FindIndex[T any](slice []T, f func(T) bool) int {
 }
 
 func FindLastIndex[T any](slice []T, f func(T) bool) int {
-	for i := len(slice) - 1; i >= 0; i-- {
-		value := slice[i]
+	for i, value := range slices.Backward(slice) {
 		if f(value) {
 			return i
 		}

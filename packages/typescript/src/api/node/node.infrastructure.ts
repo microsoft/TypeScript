@@ -52,7 +52,7 @@ export interface SourceFileInfo {
     readonly _offsetStructuredData: number;
     readonly _decoder: TextDecoder;
     nodes: any[];
-    readonly path?: string;
+    readonly path?: string | undefined;
     /**
      * The timing collector that per-node materialization is reported into, and
      * that this source file registered itself with when fetched. Present only

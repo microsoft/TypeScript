@@ -23,11 +23,13 @@ type fakeCloneHost struct {
 
 func (h *fakeCloneHost) FS() vfs.FS                  { return h.fs }
 func (h *fakeCloneHost) GetCurrentDirectory() string { return "/" }
-func (h *fakeCloneHost) GetDefaultProject(path tspath.Path) (tspath.Path, *compiler.Program) {
-	return "", nil
+func (h *fakeCloneHost) GetDefaultProject(path tspath.Path) (ProjectID, *compiler.Program) {
+	return nil, nil
 }
 
-func (h *fakeCloneHost) GetProgramForProject(projectPath tspath.Path) *compiler.Program { return nil }
+func (h *fakeCloneHost) GetProgramForProject(projectID ProjectID) *compiler.Program {
+	return nil
+}
 
 func (h *fakeCloneHost) GetPackageJson(fileName string) *packagejson.InfoCacheEntry { return nil }
 
