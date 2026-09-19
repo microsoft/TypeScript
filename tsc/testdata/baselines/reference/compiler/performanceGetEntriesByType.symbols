@@ -1,0 +1,99 @@
+//// [tests/cases/compiler/performanceGetEntriesByType.ts] ////
+
+=== performanceGetEntriesByType.ts ===
+function pageWasReloaded(): boolean {
+>pageWasReloaded : Symbol(pageWasReloaded, Decl(performanceGetEntriesByType.ts, 0, 0))
+
+    return performance
+>performance        .getEntriesByType("navigation")        .some : Symbol(Array.some, Decl(lib.es5.d.ts, --, --))
+>performance        .getEntriesByType : Symbol(Performance.getEntriesByType, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --) ... and 3 more)
+>performance : Symbol(performance, Decl(lib.dom.d.ts, --, --))
+
+        .getEntriesByType("navigation")
+>getEntriesByType : Symbol(Performance.getEntriesByType, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --) ... and 3 more)
+
+        .some(entry => entry.type === "reload");
+>some : Symbol(Array.some, Decl(lib.es5.d.ts, --, --))
+>entry : Symbol(entry, Decl(performanceGetEntriesByType.ts, 3, 14))
+>entry.type : Symbol(PerformanceNavigationTiming.type, Decl(lib.dom.d.ts, --, --))
+>entry : Symbol(entry, Decl(performanceGetEntriesByType.ts, 3, 14))
+>type : Symbol(PerformanceNavigationTiming.type, Decl(lib.dom.d.ts, --, --))
+}
+
+const marks = performance.getEntriesByType("mark");
+>marks : Symbol(marks, Decl(performanceGetEntriesByType.ts, 6, 5))
+>performance.getEntriesByType : Symbol(Performance.getEntriesByType, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --) ... and 3 more)
+>performance : Symbol(performance, Decl(lib.dom.d.ts, --, --))
+>getEntriesByType : Symbol(Performance.getEntriesByType, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --) ... and 3 more)
+
+marks[0].detail;
+>marks[0].detail : Symbol(PerformanceMark.detail, Decl(lib.dom.d.ts, --, --))
+>marks : Symbol(marks, Decl(performanceGetEntriesByType.ts, 6, 5))
+>detail : Symbol(PerformanceMark.detail, Decl(lib.dom.d.ts, --, --))
+
+const measures = performance.getEntriesByType("measure");
+>measures : Symbol(measures, Decl(performanceGetEntriesByType.ts, 9, 5))
+>performance.getEntriesByType : Symbol(Performance.getEntriesByType, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --) ... and 3 more)
+>performance : Symbol(performance, Decl(lib.dom.d.ts, --, --))
+>getEntriesByType : Symbol(Performance.getEntriesByType, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --) ... and 3 more)
+
+measures[0].detail;
+>measures[0].detail : Symbol(PerformanceMeasure.detail, Decl(lib.dom.d.ts, --, --))
+>measures : Symbol(measures, Decl(performanceGetEntriesByType.ts, 9, 5))
+>detail : Symbol(PerformanceMeasure.detail, Decl(lib.dom.d.ts, --, --))
+
+const paints = performance.getEntriesByType("paint");
+>paints : Symbol(paints, Decl(performanceGetEntriesByType.ts, 12, 5))
+>performance.getEntriesByType : Symbol(Performance.getEntriesByType, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --) ... and 3 more)
+>performance : Symbol(performance, Decl(lib.dom.d.ts, --, --))
+>getEntriesByType : Symbol(Performance.getEntriesByType, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --) ... and 3 more)
+
+paints[0].startTime;
+>paints[0].startTime : Symbol(PerformanceEntry.startTime, Decl(lib.dom.d.ts, --, --))
+>paints : Symbol(paints, Decl(performanceGetEntriesByType.ts, 12, 5))
+>startTime : Symbol(PerformanceEntry.startTime, Decl(lib.dom.d.ts, --, --))
+
+const resources = performance.getEntriesByType("resource");
+>resources : Symbol(resources, Decl(performanceGetEntriesByType.ts, 15, 5))
+>performance.getEntriesByType : Symbol(Performance.getEntriesByType, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --) ... and 3 more)
+>performance : Symbol(performance, Decl(lib.dom.d.ts, --, --))
+>getEntriesByType : Symbol(Performance.getEntriesByType, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --) ... and 3 more)
+
+resources[0].initiatorType;
+>resources[0].initiatorType : Symbol(PerformanceResourceTiming.initiatorType, Decl(lib.dom.d.ts, --, --))
+>resources : Symbol(resources, Decl(performanceGetEntriesByType.ts, 15, 5))
+>initiatorType : Symbol(PerformanceResourceTiming.initiatorType, Decl(lib.dom.d.ts, --, --))
+
+const events = performance.getEntriesByType("event");
+>events : Symbol(events, Decl(performanceGetEntriesByType.ts, 18, 5))
+>performance.getEntriesByType : Symbol(Performance.getEntriesByType, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --) ... and 3 more)
+>performance : Symbol(performance, Decl(lib.dom.d.ts, --, --))
+>getEntriesByType : Symbol(Performance.getEntriesByType, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --) ... and 3 more)
+
+events[0].processingStart;
+>events[0].processingStart : Symbol(PerformanceEventTiming.processingStart, Decl(lib.dom.d.ts, --, --))
+>events : Symbol(events, Decl(performanceGetEntriesByType.ts, 18, 5))
+>processingStart : Symbol(PerformanceEventTiming.processingStart, Decl(lib.dom.d.ts, --, --))
+
+const lcp = performance.getEntriesByType("largest-contentful-paint");
+>lcp : Symbol(lcp, Decl(performanceGetEntriesByType.ts, 21, 5))
+>performance.getEntriesByType : Symbol(Performance.getEntriesByType, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --) ... and 3 more)
+>performance : Symbol(performance, Decl(lib.dom.d.ts, --, --))
+>getEntriesByType : Symbol(Performance.getEntriesByType, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --) ... and 3 more)
+
+lcp[0].renderTime;
+>lcp[0].renderTime : Symbol(LargestContentfulPaint.renderTime, Decl(lib.dom.d.ts, --, --))
+>lcp : Symbol(lcp, Decl(performanceGetEntriesByType.ts, 21, 5))
+>renderTime : Symbol(LargestContentfulPaint.renderTime, Decl(lib.dom.d.ts, --, --))
+
+const generic = performance.getEntriesByType("something-unknown");
+>generic : Symbol(generic, Decl(performanceGetEntriesByType.ts, 24, 5))
+>performance.getEntriesByType : Symbol(Performance.getEntriesByType, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --) ... and 3 more)
+>performance : Symbol(performance, Decl(lib.dom.d.ts, --, --))
+>getEntriesByType : Symbol(Performance.getEntriesByType, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --) ... and 3 more)
+
+generic[0].entryType;
+>generic[0].entryType : Symbol(PerformanceEntry.entryType, Decl(lib.dom.d.ts, --, --))
+>generic : Symbol(generic, Decl(performanceGetEntriesByType.ts, 24, 5))
+>entryType : Symbol(PerformanceEntry.entryType, Decl(lib.dom.d.ts, --, --))
+
