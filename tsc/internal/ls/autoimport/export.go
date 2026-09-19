@@ -8,7 +8,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 )
 
-//go:generate node ../../../../tools/scripts/gen/generateStringer.mts -type=ExportSyntax -output=export_stringer_generated.go
+//go:generate npm run --silent cache -- --input $GOFILE --output export_stringer_generated.go --command go tool golang.org/x/tools/cmd/stringer -type=ExportSyntax -output=export_stringer_generated.go --command dprint fmt export_stringer_generated.go
 
 // ModuleID uniquely identifies a module across multiple declarations.
 // If the export is from an ambient module declaration, this is the module name.

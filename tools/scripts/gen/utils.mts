@@ -19,32 +19,17 @@ export function goInputs(): string[] {
     return [import.meta.filename, ...globInputs(["go.work", "go.work.sum", "{tsc,tools}/go.{mod,sum}"])];
 }
 
-export function goEnvironment(): Record<string, string | undefined> {
-    return Object.fromEntries(["GOOS", "GOARCH", "GOFLAGS", "GOTOOLCHAIN", "GOEXPERIMENT", "CGO_ENABLED", "GOWORK"].map(name => [name, process.env[name]]));
-}
-
 export function resolveForce(force?: boolean, environment = process.env.TSGO_HEREBY_FORCE): boolean {
     return force ?? /^(1|true|yes|on)$/i.test(environment ?? "");
 }
 
-export function parseGeneratorArgs<const Options extends ParseArgsOptionsConfig>(options: Options, args = process.argv.slice(2), goStyle = false) {
-    const { values, positionals, tokens } = parseArgs({
-        args: goStyle ? args.map(arg => arg.replace(/^-(?=[a-z])/, "--")) : args,
+export function parseGeneratorArgs<const Options extends ParseArgsOptionsConfig>(options: Options, args = process.argv.slice(2)) {
+    const { values } = parseArgs({
+        args,
         options: { ...options, force: { type: "boolean" as const } },
-        allowPositionals: goStyle,
         allowNegative: true,
-        tokens: true,
     });
-    const toolArgs = tokens.flatMap(token => {
-        if (token.kind === "positional") return [token.value];
-        if (token.kind !== "option" || ["force", "no-force", "input"].includes(token.name)) return [];
-        return args.slice(token.index, token.index + (token.value !== undefined && !token.inlineValue ? 2 : 1));
-    });
-    return { values, positionals, toolArgs, force: resolveForce((values as { force?: boolean; }).force) };
-}
-
-export async function runGo(args: string[], cwd = repoRoot): Promise<void> {
-    await x("go", args, { throwOnError: true, nodeOptions: { cwd, stdio: "inherit" } });
+    return { values, force: resolveForce((values as { force?: boolean; }).force) };
 }
 
 export async function formatFiles(files: string[]): Promise<void> {

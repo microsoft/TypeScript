@@ -1,6 +1,6 @@
 package core
 
-//go:generate node ../../../tools/scripts/gen/generateStringer.mts -type=ScriptKind -output=scriptkind_stringer_generated.go
+//go:generate npm run --silent cache -- --input $GOFILE --output scriptkind_stringer_generated.go --command go tool golang.org/x/tools/cmd/stringer -type=ScriptKind -output=scriptkind_stringer_generated.go --command dprint fmt scriptkind_stringer_generated.go
 
 type ScriptKind int32
 

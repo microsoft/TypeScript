@@ -11,7 +11,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/evaluator"
 )
 
-//go:generate node ../../../tools/scripts/gen/generateStringer.mts -type=SignatureKind -output=stringer_generated.go
+//go:generate npm run --silent cache -- --input $GOFILE --output stringer_generated.go --command go tool golang.org/x/tools/cmd/stringer -type=SignatureKind -output=stringer_generated.go --command dprint fmt stringer_generated.go
 
 // ParseFlags
 

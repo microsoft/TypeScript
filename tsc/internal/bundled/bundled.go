@@ -11,7 +11,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 )
 
-//go:generate node ../../../tools/scripts/gen/generateBundled.mts
+//go:generate npm run --silent cache -- --input generate.go --input CopyrightNotice.txt --input "libs/*" --output libs_generated.go --output embed_generated.go --command go run generate.go
 
 // Define the below here to consolidate documentation.
 

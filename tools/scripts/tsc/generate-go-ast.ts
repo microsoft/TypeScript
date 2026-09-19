@@ -986,7 +986,7 @@ function generateKind(): string {
     w.write("");
     w.write("package ast");
     w.write("");
-    w.write("//go:generate node ../../../tools/scripts/gen/generateStringer.mts -type=Kind -output=kind_stringer_generated.go");
+    w.write("//go:generate npm run --silent cache -- --input $GOFILE --output kind_stringer_generated.go --command go tool golang.org/x/tools/cmd/stringer -type=Kind -output=kind_stringer_generated.go --command dprint fmt kind_stringer_generated.go");
     w.write("");
     w.write("type Kind int16");
     w.write("");

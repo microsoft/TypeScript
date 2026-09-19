@@ -5,17 +5,29 @@ import os from "node:os";
 import path from "node:path";
 import { test } from "node:test";
 import { x } from "tinyexec";
+import type { CacheOptions } from "./cache.mts";
 import { GeneratedFile } from "./generatedFile.mts";
 
-test("generator options preserve tool arguments and force overrides", async () => {
+function generatorArgs(options: CacheOptions, flags: string[] = []): string[] {
+    return [
+        path.join(import.meta.dirname, "cache.mts"),
+        ...(options.cwd ? ["--cwd", options.cwd] : []),
+        ...options.inputs.flatMap(file => ["--input", file]),
+        ...options.outputs.flatMap(file => ["--output", file]),
+        ...(options.exclude ?? []).flatMap(pattern => ["--exclude", pattern]),
+        ...(options.envInputs ?? []).flatMap(name => ["--env", name]),
+        ...flags,
+        ...options.commands.flatMap(command => ["--command", ...command]),
+    ];
+}
+
+test("generator options preserve repeated inputs and force overrides", async () => {
     const { parseGeneratorArgs, resolveForce } = await import("./utils.mts");
     const options = { type: { type: "string" }, input: { type: "string", multiple: true } } as const;
-    const args = ["-type", "Kind", "--input=kind.go", "--input", "extra.go", "--force", ".", "Kind:Mock"];
-    const parsed = parseGeneratorArgs(options, args, true);
+    const args = ["--type", "Kind", "--input=kind.go", "--input", "extra.go", "--force"];
+    const parsed = parseGeneratorArgs(options, args);
     assert.equal(parsed.values.type, "Kind");
     assert.deepEqual(parsed.values.input, ["kind.go", "extra.go"]);
-    assert.deepEqual(parsed.positionals, [".", "Kind:Mock"]);
-    assert.deepEqual(parsed.toolArgs, ["-type", "Kind", ".", "Kind:Mock"]);
     assert.equal(parsed.force, true);
     assert.equal(resolveForce(undefined, "ON"), true);
     assert.equal(resolveForce(undefined, "0"), false);
@@ -141,7 +153,7 @@ test("bundled generation skips unchanged library outputs", async () => {
     await generate();
     const files = ["libs_generated.go", "embed_generated.go"].map(file => path.join(root, "tsc/internal/bundled", file));
     const timestamps = files.map(file => fs.statSync(file).mtimeMs);
-    assert.match((await generate()).stdout, /Bundled libraries are up to date\./);
+    assert.match((await generate()).stdout, /Codegen outputs are up to date\./);
     assert.deepEqual(files.map(file => fs.statSync(file).mtimeMs), timestamps);
 });
 
@@ -156,61 +168,67 @@ test("bundled generation tracks libraries, validates inputs, and supports force"
     const library = path.join(libs, "lib.first.d.ts");
     const content = "Fixture notice\n\n\ndeclare const first: string;\n";
     fs.writeFileSync(library, content);
-    const command = [path.join(root, "tools/scripts/gen/generateBundled.mts"), "--directory", directory];
-    const generate = (...args: string[]) => x(process.execPath, [...command, ...args], { throwOnError: true, nodeOptions: { cwd: root } });
+    const options = {
+        cwd: directory,
+        inputs: [path.join(root, "tsc/internal/bundled/generate.go"), "CopyrightNotice.txt", "libs/*"],
+        outputs: ["libs_generated.go", "embed_generated.go"],
+        commands: [["go", "run", path.join(root, "tsc/internal/bundled/generate.go")]],
+    };
+    const command = generatorArgs(options);
+    const generate = (...args: string[]) => x(process.execPath, generatorArgs(options, args), { throwOnError: true, nodeOptions: { cwd: root } });
     await generate();
     const files = ["libs_generated.go", "embed_generated.go"].map(file => path.join(directory, file));
     const originals = files.map(file => fs.readFileSync(file));
-    assert.match((await generate()).stdout, /Bundled libraries are up to date\./);
+    assert.match((await generate()).stdout, /Codegen outputs are up to date\./);
     const added = path.join(libs, "lib.second.d.ts");
     fs.writeFileSync(added, content);
-    assert.match((await generate()).stdout, /Generated bundled libraries\./);
+    assert.match((await generate()).stdout, /Generated codegen outputs\./);
     for (const file of files) assert.match(fs.readFileSync(file, "utf8"), /lib\.second\.d\.ts/);
     fs.rmSync(added);
-    assert.match((await generate()).stdout, /Generated bundled libraries\./);
+    assert.match((await generate()).stdout, /Generated codegen outputs\./);
     for (const [index, file] of files.entries()) {
         assert.deepEqual(fs.readFileSync(file), originals[index]);
         fs.writeFileSync(file, "modified");
-        assert.match((await generate()).stdout, /Generated bundled libraries\./);
+        assert.match((await generate()).stdout, /Generated codegen outputs\./);
         assert.deepEqual(fs.readFileSync(file), originals[index]);
         fs.rmSync(file, { recursive: true, maxRetries: 10 });
-        assert.match((await generate()).stdout, /Generated bundled libraries\./);
+        assert.match((await generate()).stdout, /Generated codegen outputs\./);
         assert.deepEqual(fs.readFileSync(file), originals[index]);
     }
     fs.writeFileSync(library, content.replace("string", "number"));
-    assert.match((await generate()).stdout, /Generated bundled libraries\./);
+    assert.match((await generate()).stdout, /Generated codegen outputs\./);
     fs.writeFileSync(library, content.replaceAll("\n", "\r\n"));
     await assert.rejects(async () => await generate(), error => {
         assert.match((error as { output: { stderr: string; }; }).output.stderr, /must use LF line endings/);
         return true;
     });
     fs.writeFileSync(library, content);
-    assert.match((await generate()).stdout, /Generated bundled libraries\./);
+    assert.match((await generate()).stdout, /Generated codegen outputs\./);
     fs.mkdirSync(path.join(libs, "unexpected"));
     await assert.rejects(async () => await generate(), error => {
         assert.match((error as { output: { stderr: string; }; }).output.stderr, /unexpected entry/);
         return true;
     });
     fs.rmdirSync(path.join(libs, "unexpected"));
-    assert.match((await generate()).stdout, /Generated bundled libraries\./);
+    assert.match((await generate()).stdout, /Generated codegen outputs\./);
     fs.writeFileSync(notice, "Changed fixture notice\n\n");
     await assert.rejects(async () => await generate(), error => {
         assert.match((error as { output: { stderr: string; }; }).output.stderr, /must start with/);
         return true;
     });
     fs.writeFileSync(notice, "Fixture notice\n\n");
-    assert.match((await generate()).stdout, /Generated bundled libraries\./);
-    assert.match((await generate("--force")).stdout, /Generated bundled libraries\./);
-    assert.match((await generate()).stdout, /Bundled libraries are up to date\./);
+    assert.match((await generate()).stdout, /Generated codegen outputs\./);
+    assert.match((await generate("--force")).stdout, /Generated codegen outputs\./);
+    assert.match((await generate()).stdout, /Codegen outputs are up to date\./);
     const forced = await x(process.execPath, command, {
         throwOnError: true,
         nodeOptions: { cwd: root, env: { ...process.env, TSGO_HEREBY_FORCE: "1" } },
     });
-    assert.match(forced.stdout, /Generated bundled libraries\./);
-    assert.match((await generate()).stdout, /Bundled libraries are up to date\./);
+    assert.match(forced.stdout, /Generated codegen outputs\./);
+    assert.match((await generate()).stdout, /Codegen outputs are up to date\./);
 });
 
-test("stringer generation tracks GOFILE, options, output, and force", async context => {
+test("stringer generation tracks declared inputs, options, output, and force", async context => {
     const root = path.resolve(import.meta.dirname, "../../..");
     const directory = fs.mkdtempSync(path.join(root, "tsc/internal/_stringer-probe-"));
     context.after(() => fs.rmSync(directory, { recursive: true, force: true }));
@@ -218,51 +236,60 @@ test("stringer generation tracks GOFILE, options, output, and force", async cont
     const extra = path.join(directory, "extra.go");
     const output = path.join(directory, "kind_stringer_generated.go");
     fs.writeFileSync(source, "package probe\n\ntype Kind int\n\nconst KindFirst Kind = 0\n");
+    const command = (...args: string[]) =>
+        generatorArgs({
+            cwd: directory,
+            inputs: ["kind.go"],
+            outputs: ["kind_stringer_generated.go"],
+            commands: [
+                ["go", "tool", "golang.org/x/tools/cmd/stringer", "-type=Kind", "-output=kind_stringer_generated.go", ...args.filter(arg => arg !== "--force")],
+                ["dprint", "fmt", "kind_stringer_generated.go"],
+            ],
+        }, args.filter(arg => arg === "--force"));
     const generate = (...args: string[]) =>
-        x(process.execPath, [path.join(root, "tools/scripts/gen/generateStringer.mts"), "-type=Kind", "-output=kind_stringer_generated.go", ...args], {
+        x(process.execPath, command(...args), {
             throwOnError: true,
             nodeOptions: { cwd: directory, env: { ...process.env, GOFILE: "kind.go" } },
         });
     await generate();
     const timestamp = fs.statSync(output).mtimeMs;
-    assert.match((await generate()).stdout, /Stringer output is up to date\./);
+    assert.match((await generate()).stdout, /Codegen outputs are up to date\./);
     assert.equal(fs.statSync(output).mtimeMs, timestamp);
     fs.writeFileSync(extra, "package probe\n\nconst Unrelated = 1\n");
-    assert.match((await generate()).stdout, /Stringer output is up to date\./);
+    assert.match((await generate()).stdout, /Codegen outputs are up to date\./);
     fs.appendFileSync(source, "\nconst KindSecond Kind = 1\n");
-    assert.match((await generate()).stdout, /Generated stringer output\./);
+    assert.match((await generate()).stdout, /Generated codegen outputs\./);
     assert.match(fs.readFileSync(output, "utf8"), /KindSecond/);
     fs.rmSync(extra);
-    assert.match((await generate()).stdout, /Stringer output is up to date\./);
+    assert.match((await generate()).stdout, /Codegen outputs are up to date\./);
     fs.writeFileSync(source, "package probe\n\ntype Kind int\n\nconst KindFirst Kind = 0\n");
-    assert.match((await generate()).stdout, /Generated stringer output\./);
+    assert.match((await generate()).stdout, /Generated codegen outputs\./);
     assert.doesNotMatch(fs.readFileSync(output, "utf8"), /KindSecond/);
-    assert.match((await generate("-trimprefix=Kind")).stdout, /Generated stringer output\./);
+    assert.match((await generate("-trimprefix=Kind")).stdout, /Generated codegen outputs\./);
     assert.match(fs.readFileSync(output, "utf8"), /_Kind_name = "First"/);
-    assert.match((await generate("-trimprefix=Kind")).stdout, /Stringer output is up to date\./);
+    assert.match((await generate("-trimprefix=Kind")).stdout, /Codegen outputs are up to date\./);
     fs.appendFileSync(output, "\n");
-    assert.match((await generate("-trimprefix=Kind")).stdout, /Generated stringer output\./);
+    assert.match((await generate("-trimprefix=Kind")).stdout, /Generated codegen outputs\./);
     fs.rmSync(output);
-    assert.match((await generate("-trimprefix=Kind")).stdout, /Generated stringer output\./);
-    assert.match((await generate("-trimprefix=Kind", "--force")).stdout, /Generated stringer output\./);
-    assert.match((await generate("-trimprefix=Kind")).stdout, /Stringer output is up to date\./);
-    const command = [path.join(root, "tools/scripts/gen/generateStringer.mts"), "-type=Kind", "-output=kind_stringer_generated.go", "-trimprefix=Kind"];
-    const explicit = await x(process.execPath, [...command, "--input", "kind.go"], {
+    assert.match((await generate("-trimprefix=Kind")).stdout, /Generated codegen outputs\./);
+    assert.match((await generate("-trimprefix=Kind", "--force")).stdout, /Generated codegen outputs\./);
+    assert.match((await generate("-trimprefix=Kind")).stdout, /Codegen outputs are up to date\./);
+    const explicit = await x(process.execPath, command("-trimprefix=Kind"), {
         throwOnError: true,
         nodeOptions: { cwd: directory, env: { ...process.env, GOFILE: "" } },
     });
-    assert.match(explicit.stdout, /Stringer output is up to date\./);
-    const forced = await x(process.execPath, command, {
+    assert.match(explicit.stdout, /Codegen outputs are up to date\./);
+    const forced = await x(process.execPath, command("-trimprefix=Kind"), {
         throwOnError: true,
         nodeOptions: { cwd: directory, env: { ...process.env, GOFILE: "kind.go", TSGO_HEREBY_FORCE: "1" } },
     });
-    assert.match(forced.stdout, /Generated stringer output\./);
-    assert.match((await generate("-trimprefix=Kind")).stdout, /Stringer output is up to date\./);
+    assert.match(forced.stdout, /Generated codegen outputs\./);
+    assert.match((await generate("-trimprefix=Kind")).stdout, /Codegen outputs are up to date\./);
     fs.appendFileSync(source, "\nconst KindInvalid Kind = missing\n");
     await assert.rejects(async () => await generate("-trimprefix=Kind"));
     fs.writeFileSync(source, "package probe\n\ntype Kind int\n\nconst KindFirst Kind = 0\n");
-    assert.match((await generate("-trimprefix=Kind")).stdout, /Generated stringer output\./);
-    assert.match((await generate("-trimprefix=Kind")).stdout, /Stringer output is up to date\./);
+    assert.match((await generate("-trimprefix=Kind")).stdout, /Generated codegen outputs\./);
+    assert.match((await generate("-trimprefix=Kind")).stdout, /Codegen outputs are up to date\./);
 });
 
 test("moq generation tracks interface inputs, output, and force", async context => {
@@ -275,73 +302,91 @@ test("moq generation tracks interface inputs, output, and force", async context 
     const output = path.join(directory, "mock/mock_generated.go");
     fs.writeFileSync(base, "package probe\n\ntype Base interface { Read() string }\n");
     fs.writeFileSync(source, "package probe\n\ntype Client interface { Base }\n");
-    const command = [path.join(root, "tools/scripts/gen/generateMoq.mts"), "--input=client.go", "--input=base.go", "-stub", "-fmt=goimports", "-pkg=mock", "-out=mock/mock_generated.go"];
+    const options = {
+        cwd: directory,
+        inputs: ["client.go", "base.go"],
+        outputs: ["mock/mock_generated.go"],
+        commands: [
+            ["go", "tool", "github.com/matryer/moq", "-stub", "-fmt=goimports", "-pkg=mock", "-out=mock/mock_generated.go", ".", "Client"],
+            ["dprint", "fmt", "mock/mock_generated.go"],
+        ],
+    };
     const generate = (...args: string[]) =>
-        x(process.execPath, [...command, ...args, ".", "Client"], {
+        x(process.execPath, generatorArgs(options, args), {
             throwOnError: true,
             nodeOptions: { cwd: directory },
         });
     await generate();
     const timestamp = fs.statSync(output).mtimeMs;
-    assert.match((await generate()).stdout, /Moq output is up to date\./);
+    assert.match((await generate()).stdout, /Codegen outputs are up to date\./);
     assert.equal(fs.statSync(output).mtimeMs, timestamp);
     fs.writeFileSync(base, "package probe\n\ntype Base interface { Read() string; Close() error }\n");
-    assert.match((await generate()).stdout, /Generated moq output\./);
+    assert.match((await generate()).stdout, /Generated codegen outputs\./);
     assert.match(fs.readFileSync(output, "utf8"), /CloseFunc/);
     fs.rmSync(output);
-    assert.match((await generate()).stdout, /Generated moq output\./);
-    assert.match((await generate("--force")).stdout, /Generated moq output\./);
-    assert.match((await generate()).stdout, /Moq output is up to date\./);
-    const forced = await x(process.execPath, [...command, ".", "Client"], {
+    assert.match((await generate()).stdout, /Generated codegen outputs\./);
+    assert.match((await generate("--force")).stdout, /Generated codegen outputs\./);
+    assert.match((await generate()).stdout, /Codegen outputs are up to date\./);
+    const forced = await x(process.execPath, generatorArgs(options), {
         throwOnError: true,
         nodeOptions: { cwd: directory, env: { ...process.env, TSGO_HEREBY_FORCE: "1" } },
     });
-    assert.match(forced.stdout, /Generated moq output\./);
-    assert.match((await generate()).stdout, /Moq output is up to date\./);
+    assert.match(forced.stdout, /Generated codegen outputs\./);
+    assert.match((await generate()).stdout, /Codegen outputs are up to date\./);
 });
 
 test("diagnostic generation tracks Go and locale outputs and supports force", async context => {
     const root = path.resolve(import.meta.dirname, "../../..");
     const directory = fs.mkdtempSync(path.join(root, "tsc/internal/_diagnostics-probe-"));
     context.after(() => fs.rmSync(directory, { recursive: true, force: true }));
+    const output = path.join(directory, "diagnostics_generated.go");
+    const localized = path.join(directory, "loc_generated.go");
+    const options = {
+        cwd: path.join(root, "tsc/internal/diagnostics"),
+        inputs: ["generate.go", "diagnosticMessages.json", "extraDiagnosticMessages.json", "../{collections,json}/*.go", "../locale/lcl/*/diagnosticMessages/diagnosticMessages.generated.json.lcl"],
+        exclude: ["**/*_test.go"],
+        outputs: [output, localized, path.join(directory, "loc/*.json.gz")],
+        commands: [
+            ["go", "run", "generate.go", "-diagnostics", output, "-loc", localized, "-locdir", path.join(directory, "loc")],
+            ["dprint", "fmt", output, localized],
+        ],
+    };
     const generate = (...args: string[]) =>
-        x(process.execPath, [path.join(root, "tools/scripts/gen/generateDiagnostics.mts"), "--outDir", directory, ...args], {
+        x(process.execPath, generatorArgs(options, args), {
             throwOnError: true,
             nodeOptions: { cwd: root },
         });
     await generate();
-    const output = path.join(directory, "diagnostics_generated.go");
-    const localized = path.join(directory, "loc_generated.go");
     const locales = fs.globSync("loc/*.json.gz", { cwd: directory }).map(file => path.join(directory, file));
     assert.ok(locales.length > 0);
     const files = [output, localized, ...locales];
     const timestamps = files.map(file => fs.statSync(file).mtimeMs);
-    assert.match((await generate()).stdout, /Diagnostics are up to date\./);
+    assert.match((await generate()).stdout, /Codegen outputs are up to date\./);
     assert.deepEqual(files.map(file => fs.statSync(file).mtimeMs), timestamps);
     const archive = fs.readFileSync(locales[0]);
     fs.rmSync(locales[0]);
-    assert.match((await generate()).stdout, /Generated diagnostics\./);
+    assert.match((await generate()).stdout, /Generated codegen outputs\./);
     assert.deepEqual(fs.readFileSync(locales[0]), archive);
     fs.writeFileSync(locales[0], "modified");
-    assert.match((await generate()).stdout, /Generated diagnostics\./);
+    assert.match((await generate()).stdout, /Generated codegen outputs\./);
     assert.deepEqual(fs.readFileSync(locales[0]), archive);
     const unexpected = path.join(directory, "loc/unexpected.json.gz");
     fs.writeFileSync(unexpected, "unexpected");
-    assert.match((await generate()).stdout, /Generated diagnostics\./);
+    assert.match((await generate()).stdout, /Generated codegen outputs\./);
     assert.equal(fs.existsSync(unexpected), false);
     fs.rmSync(path.join(directory, "loc"), { recursive: true });
-    assert.match((await generate()).stdout, /Generated diagnostics\./);
+    assert.match((await generate()).stdout, /Generated codegen outputs\./);
     assert.deepEqual(fs.readFileSync(locales[0]), archive);
     fs.rmSync(localized);
-    assert.match((await generate()).stdout, /Generated diagnostics\./);
-    assert.match((await generate("--force")).stdout, /Generated diagnostics\./);
-    assert.match((await generate()).stdout, /Diagnostics are up to date\./);
-    const forced = await x(process.execPath, [path.join(root, "tools/scripts/gen/generateDiagnostics.mts"), "--outDir", directory], {
+    assert.match((await generate()).stdout, /Generated codegen outputs\./);
+    assert.match((await generate("--force")).stdout, /Generated codegen outputs\./);
+    assert.match((await generate()).stdout, /Codegen outputs are up to date\./);
+    const forced = await x(process.execPath, generatorArgs(options), {
         throwOnError: true,
         nodeOptions: { cwd: root, env: { ...process.env, TSGO_HEREBY_FORCE: "1" } },
     });
-    assert.match(forced.stdout, /Generated diagnostics\./);
-    assert.match((await generate()).stdout, /Diagnostics are up to date\./);
+    assert.match(forced.stdout, /Generated codegen outputs\./);
+    assert.match((await generate()).stdout, /Codegen outputs are up to date\./);
 });
 
 test("Unicode generation skips unchanged tables and formatting", async () => {
@@ -451,14 +496,14 @@ test("API protocol generation caches formatted output and supports force", async
     await generate();
     const timestamp = fs.statSync(output).mtimeMs;
     const current = await generate();
-    assert.match(current.stdout, /API protocol is up to date\./);
-    assert.doesNotMatch(current.stdout, /\$ node .*generateAPI\.mts/);
+    assert.match(current.stdout, /Codegen outputs are up to date\./);
+    assert.doesNotMatch(current.stdout, /\$ node .*cache\.mts/);
     assert.equal(fs.statSync(output).mtimeMs, timestamp);
     const unrelated = path.join(root, "tsc/internal/parser/codegen_cache_probe.go");
     assert.equal(fs.existsSync(unrelated), false);
     context.after(() => fs.rmSync(unrelated, { force: true }));
     fs.writeFileSync(unrelated, "package parser\n");
-    assert.match((await generate()).stdout, /API protocol is up to date\./);
+    assert.match((await generate()).stdout, /Codegen outputs are up to date\./);
     fs.rmSync(unrelated);
     const schema = path.join(root, "tsc/internal/api/requestfilesystem/codegen_cache_probe.go");
     assert.equal(fs.existsSync(schema), false);
@@ -470,19 +515,17 @@ test("API protocol generation caches formatted output and supports force", async
         }
     });
     fs.writeFileSync(schema, 'package requestfilesystem\n\nconst KindCodegenCacheProbe Kind = "codegen-cache-probe"\n');
-    assert.match((await generate()).stdout, /Generated API protocol\./);
+    assert.match((await generate()).stdout, /Generated codegen outputs\./);
     assert.match(fs.readFileSync(output, "utf8"), /"codegen-cache-probe"/);
     fs.rmSync(schema);
-    assert.match((await generate()).stdout, /Generated API protocol\./);
+    assert.match((await generate()).stdout, /Generated codegen outputs\./);
     assert.equal(fs.readFileSync(output, "utf8"), original);
-    assert.match((await generate(true)).stdout, /Generated API protocol\./);
-    assert.match((await generate()).stdout, /API protocol is up to date\./);
-    const direct = await x("node", ["./tools/scripts/gen/generateAPI.mts"], { throwOnError: true, nodeOptions: { cwd: root } });
-    assert.match(direct.stdout, /API protocol is up to date\./);
+    assert.match((await generate(true)).stdout, /Generated codegen outputs\./);
+    assert.match((await generate()).stdout, /Codegen outputs are up to date\./);
     const nested = await x("go", ["-C", "./tsc", "generate", "./internal/api"], {
         throwOnError: true,
         nodeOptions: { cwd: root, env: { ...process.env, TSGO_HEREBY_FORCE: "1" } },
     });
-    assert.match(nested.stdout, /Generated API protocol\./);
-    assert.match((await generate()).stdout, /API protocol is up to date\./);
+    assert.match(nested.stdout, /Generated codegen outputs\./);
+    assert.match((await generate()).stdout, /Codegen outputs are up to date\./);
 });

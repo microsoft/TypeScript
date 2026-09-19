@@ -998,8 +998,28 @@ export const generateAST = task({
 });
 
 async function runGenerateAPI() {
-    const { default: generate } = await import("./tools/scripts/gen/generateAPI.mts");
-    await generate(!!options.force);
+    const { default: cache } = await import("./tools/scripts/gen/cache.mts");
+    await cache({
+        cwd: __dirname,
+        inputs: [
+            __filename,
+            "tsc/internal/api/*.go",
+            "tsc/internal/api/requestfilesystem/*.go",
+            "tsc/internal/core/*.go",
+            "tsc/internal/checker/types.go",
+            "tsc/internal/diagnostics/diagnostics.go",
+            "tsc/internal/tspath/path.go",
+            "tools/gen-proto/*.go",
+        ],
+        exclude: ["**/*_test.go", "**/*_generated.go"],
+        envInputs: [],
+        outputs: ["packages/typescript/src/api/proto.generated.ts"],
+        commands: [
+            ["go", "-C", "./tools", "run", "./gen-proto", "../tsc/internal/api/proto.go", "../packages/typescript/src/api/proto.generated.ts"],
+            ["dprint", "fmt", "packages/typescript/src/api/proto.generated.ts"],
+        ],
+        force: !!options.force,
+    });
 }
 
 export const generateAPI = task({

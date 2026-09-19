@@ -1,6 +1,6 @@
 package core
 
-//go:generate node ../../../tools/scripts/gen/generateStringer.mts -type=Tristate -output=tristate_stringer_generated.go
+//go:generate npm run --silent cache -- --input $GOFILE --output tristate_stringer_generated.go --command go tool golang.org/x/tools/cmd/stringer -type=Tristate -output=tristate_stringer_generated.go --command dprint fmt tristate_stringer_generated.go
 
 // Tristate
 
