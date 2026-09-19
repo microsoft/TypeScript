@@ -33,7 +33,7 @@ func (duplicateHandler) HandleRequest(ctx context.Context, method string, params
 			if err != nil {
 				return nil, err
 			}
-			return contentmapper.TransformResult{MappedOutput: contentmapper.MappedOutput{Text: virtual, Extension: ".ts", Mappings: json.Value(mappings)}}, nil
+			return contentmapper.TransformResult{Text: virtual, Extension: ".ts", Mappings: json.Value(mappings)}, nil
 		}
 		if strings.Contains(p.FileName, "hover-concat") {
 			virtual := "namespace A { export const " + p.Content + " = 1; }\nnamespace B { export const " + p.Content + " = \"text\"; }\n"
@@ -46,7 +46,7 @@ func (duplicateHandler) HandleRequest(ctx context.Context, method string, params
 			if err != nil {
 				return nil, err
 			}
-			return contentmapper.TransformResult{MappedOutput: contentmapper.MappedOutput{Text: virtual, Extension: ".ts", Mappings: json.Value(mappings)}}, nil
+			return contentmapper.TransformResult{Text: virtual, Extension: ".ts", Mappings: json.Value(mappings)}, nil
 		}
 		if strings.Contains(p.FileName, "signature-fallback") {
 			virtual := "// " + p.Content + "\nfunction use(value: number): void {}\n" + p.Content + ";\n"
@@ -59,7 +59,7 @@ func (duplicateHandler) HandleRequest(ctx context.Context, method string, params
 			if err != nil {
 				return nil, err
 			}
-			return contentmapper.TransformResult{MappedOutput: contentmapper.MappedOutput{Text: virtual, Extension: ".ts", Mappings: json.Value(mappings)}}, nil
+			return contentmapper.TransformResult{Text: virtual, Extension: ".ts", Mappings: json.Value(mappings)}, nil
 		}
 		if strings.Contains(p.FileName, "rename-conflict") {
 			virtual := "export const " + p.Content + " = 1;\nconst object = { " + p.Content + " };\n" + p.Content + ";\n"
@@ -74,7 +74,7 @@ func (duplicateHandler) HandleRequest(ctx context.Context, method string, params
 			if err != nil {
 				return nil, err
 			}
-			return contentmapper.TransformResult{MappedOutput: contentmapper.MappedOutput{Text: virtual, Extension: ".ts", Mappings: json.Value(mappings)}}, nil
+			return contentmapper.TransformResult{Text: virtual, Extension: ".ts", Mappings: json.Value(mappings)}, nil
 		}
 		virtual := "export const " + p.Content + " = 1;\n" + p.Content + ";\n"
 		first := len("export const ")
@@ -93,7 +93,7 @@ func (duplicateHandler) HandleRequest(ctx context.Context, method string, params
 		if err != nil {
 			return nil, err
 		}
-		return contentmapper.TransformResult{MappedOutput: contentmapper.MappedOutput{Text: virtual, Extension: ".ts", Mappings: json.Value(mappings)}}, nil
+		return contentmapper.TransformResult{Text: virtual, Extension: ".ts", Mappings: json.Value(mappings)}, nil
 	default:
 		return nil, fmt.Errorf("contentmappertest: unexpected method %q", method)
 	}
