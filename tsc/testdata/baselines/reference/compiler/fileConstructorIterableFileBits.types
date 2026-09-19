@@ -1,0 +1,17 @@
+//// [tests/cases/compiler/fileConstructorIterableFileBits.ts] ////
+
+=== fileConstructorIterableFileBits.ts ===
+new File((function* () {
+>new File((function* () {    yield "a";})(), "name") : File
+>File : { new (fileBits: Iterable<BlobPart>, fileName: string, options?: FilePropertyBag): File; prototype: File; }
+>(function* () {    yield "a";})() : Generator<string, void, any>
+>(function* () {    yield "a";}) : () => Generator<string, void, any>
+>function* () {    yield "a";} : () => Generator<string, void, any>
+
+    yield "a";
+>yield "a" : any
+>"a" : "a"
+
+})(), "name");
+>"name" : "name"
+

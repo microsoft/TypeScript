@@ -1,0 +1,9 @@
+//// [tests/cases/compiler/fileConstructorIterableFileBits.ts] ////
+
+=== fileConstructorIterableFileBits.ts ===
+new File((function* () {
+>File : Symbol(File, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+    yield "a";
+})(), "name");
+
