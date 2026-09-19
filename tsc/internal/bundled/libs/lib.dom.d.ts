@@ -1671,7 +1671,7 @@ interface MultiCacheQueryOptions extends CacheQueryOptions {
 
 interface MutationObserverInit {
     /** Set to a list of attribute local names (without namespace) if not all attribute mutations need to be observed and attributes is true or omitted. */
-    attributeFilter?: string[];
+    attributeFilter?: string[] | Iterable<string>;
     /** Set to true if attributes is true or omitted and target's attribute value before the mutation needs to be recorded. */
     attributeOldValue?: boolean;
     /** Set to true if mutations to target's attributes are to be observed. Can be omitted if attributeOldValue or attributeFilter is specified. */

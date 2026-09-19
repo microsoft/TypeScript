@@ -1,0 +1,31 @@
+//// [tests/cases/compiler/mutationObserverInitAttributeFilterIterable.ts] ////
+
+=== mutationObserverInitAttributeFilterIterable.ts ===
+const names = new Set<string>();
+>names : Set<string>
+>new Set<string>() : Set<string>
+>Set : SetConstructor
+
+const options1: MutationObserverInit = { attributeFilter: names.keys() };
+>options1 : MutationObserverInit
+>{ attributeFilter: names.keys() } : { attributeFilter: SetIterator<string>; }
+>attributeFilter : SetIterator<string>
+>names.keys() : SetIterator<string>
+>names.keys : () => SetIterator<string>
+>names : Set<string>
+>keys : () => SetIterator<string>
+
+const options2: MutationObserverInit = { attributeFilter: ["foo", "bar"] };
+>options2 : MutationObserverInit
+>{ attributeFilter: ["foo", "bar"] } : { attributeFilter: string[]; }
+>attributeFilter : string[]
+>["foo", "bar"] : string[]
+>"foo" : "foo"
+>"bar" : "bar"
+
+const options3: MutationObserverInit = { attributeFilter: names };
+>options3 : MutationObserverInit
+>{ attributeFilter: names } : { attributeFilter: Set<string>; }
+>attributeFilter : Set<string>
+>names : Set<string>
+
