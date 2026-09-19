@@ -1,6 +1,7 @@
 package tspath
 
 import (
+	"bytes"
 	"cmp"
 	"slices"
 	"strings"
@@ -391,6 +392,18 @@ func GetNormalizedAbsolutePathWithoutRoot(fileName string, currentDirectory stri
 	return absolutePath[rootLength:]
 }
 
+// startNormalized allocates the normalization buffer for fileName, seeded with
+// its already-normalized prefix. Pre-sizing to len(fileName) avoids the append
+// growth chain (the normalized result never needs more than the input length).
+func startNormalized(fileName string, upTo int) []byte {
+	return append(make([]byte, 0, len(fileName)), fileName[:upTo]...)
+}
+
+// isDotDotBytes reports whether b is exactly "..".
+func isDotDotBytes(b []byte) bool {
+	return len(b) == 2 && b[0] == '.' && b[1] == '.'
+}
+
 func GetNormalizedAbsolutePath(fileName string, currentDirectory string) string {
 	rootLength := GetRootLength(fileName)
 	if rootLength == 0 && currentDirectory != "" {
@@ -415,9 +428,11 @@ func GetNormalizedAbsolutePath(fileName string, currentDirectory string) string 
 	length := len(fileName)
 	root := fileName[:rootLength]
 	// `normalized` is only initialized once `fileName` is determined to be non-normalized.
-	// `changed` is set at the same time.
+	// `changed` is set at the same time. It accumulates via append (not string concatenation)
+	// so that paths with many segments after the first change don't pay for repeated
+	// full-string copies.
 	var changed bool
-	var normalized string
+	var normalized []byte
 	var segmentStart int
 	index := rootLength
 	normalizedUpTo := index
@@ -437,7 +452,7 @@ func GetNormalizedAbsolutePath(fileName string, currentDirectory string) string 
 		if index > segmentStart {
 			// Seen superfluous separator
 			if !changed {
-				normalized = fileName[:max(rootLength, segmentStart-1)]
+				normalized = startNormalized(fileName, max(rootLength, segmentStart-1))
 				changed = true
 			}
 			if index == length {
@@ -456,7 +471,7 @@ func GetNormalizedAbsolutePath(fileName string, currentDirectory string) string 
 		if segmentLength == 1 && fileName[index] == '.' {
 			// "." segment (skip)
 			if !changed {
-				normalized = fileName[:normalizedUpTo]
+				normalized = startNormalized(fileName, normalizedUpTo)
 				changed = true
 			}
 		} else if segmentLength == 2 && fileName[index] == '.' && fileName[index+1] == '.' {
@@ -464,36 +479,36 @@ func GetNormalizedAbsolutePath(fileName string, currentDirectory string) string 
 			if !seenNonDotDotSegment {
 				if changed {
 					if len(normalized) == rootLength {
-						normalized += ".."
+						normalized = append(normalized, ".."...)
 					} else {
-						normalized += "/.."
+						normalized = append(normalized, "/.."...)
 					}
 				} else {
 					normalizedUpTo = index + 2
 				}
 			} else if !changed {
 				if normalizedUpTo-1 >= 0 {
-					normalized = fileName[:max(rootLength, strings.LastIndexByte(fileName[:normalizedUpTo-1], '/'))]
+					normalized = startNormalized(fileName, max(rootLength, strings.LastIndexByte(fileName[:normalizedUpTo-1], '/')))
 				} else {
-					normalized = fileName[:normalizedUpTo]
+					normalized = startNormalized(fileName, normalizedUpTo)
 				}
 				changed = true
-				seenNonDotDotSegment = (len(normalized) != rootLength || rootLength != 0) && normalized != ".." && !strings.HasSuffix(normalized, "/..")
+				seenNonDotDotSegment = (len(normalized) != rootLength || rootLength != 0) && !isDotDotBytes(normalized) && !bytes.HasSuffix(normalized, []byte("/.."))
 			} else {
-				lastSlash := strings.LastIndexByte(normalized, '/')
+				lastSlash := bytes.LastIndexByte(normalized, '/')
 				if lastSlash != -1 {
 					normalized = normalized[:max(rootLength, lastSlash)]
 				} else {
-					normalized = root
+					normalized = append(normalized[:0], root...)
 				}
-				seenNonDotDotSegment = (len(normalized) != rootLength || rootLength != 0) && normalized != ".." && !strings.HasSuffix(normalized, "/..")
+				seenNonDotDotSegment = (len(normalized) != rootLength || rootLength != 0) && !isDotDotBytes(normalized) && !bytes.HasSuffix(normalized, []byte("/.."))
 			}
 		} else if changed {
 			if len(normalized) != rootLength {
-				normalized += "/"
+				normalized = append(normalized, '/')
 			}
 			seenNonDotDotSegment = true
-			normalized += fileName[segmentStart:segmentEnd]
+			normalized = append(normalized, fileName[segmentStart:segmentEnd]...)
 		} else {
 			seenNonDotDotSegment = true
 			normalizedUpTo = segmentEnd
@@ -501,7 +516,7 @@ func GetNormalizedAbsolutePath(fileName string, currentDirectory string) string 
 		index = segmentEnd + 1
 	}
 	if changed {
-		return normalized
+		return string(normalized)
 	}
 	if length > rootLength {
 		return RemoveTrailingDirectorySeparators(fileName)
