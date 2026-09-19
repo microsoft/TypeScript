@@ -17,6 +17,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/lsutil"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
+	"github.com/microsoft/TypeScript/tsc/internal/module"
 	"github.com/microsoft/TypeScript/tsc/internal/project/dirty"
 	"github.com/microsoft/TypeScript/tsc/internal/project/logging"
 	"github.com/microsoft/TypeScript/tsc/internal/tsoptions"
@@ -315,6 +316,7 @@ func (b *ProjectCollectionBuilder) HandleAPIRequest(apiRequest *APISnapshotReque
 			request.CompilerOptions,
 			request.ProjectReferences,
 			request.ConfigFileParsingDiagnostics,
+			request.ResolutionProviderFactory,
 			b.inferredContentMappers,
 			logger,
 		)
@@ -328,6 +330,7 @@ func (b *ProjectCollectionBuilder) HandleAPIRequest(apiRequest *APISnapshotReque
 			request.CompilerOptions,
 			request.ProjectReferences,
 			request.ConfigFileParsingDiagnostics,
+			request.ResolutionProviderFactory,
 			b.inferredContentMappers,
 			logger,
 		)
@@ -362,7 +365,15 @@ func (b *ProjectCollectionBuilder) HandleAPIRequest(apiRequest *APISnapshotReque
 			return true
 		})
 	}
-	return nil
+	var moduleResolutionError error
+	b.forEachProject(func(entry dirty.Value[*Project]) bool {
+		project := entry.Value()
+		if project.Program != nil {
+			moduleResolutionError = project.Program.ModuleResolutionError()
+		}
+		return moduleResolutionError == nil
+	})
+	return moduleResolutionError
 }
 
 func (b *ProjectCollectionBuilder) nextSyntheticProjectID() SyntheticProjectID {
@@ -1274,6 +1285,7 @@ func (b *ProjectCollectionBuilder) updateOrCreateSyntheticProject(
 	compilerOptions *core.CompilerOptions,
 	projectReferences []*core.ProjectReference,
 	configFileParsingDiagnostics []*ast.Diagnostic,
+	resolutionProviderFactory module.ResolutionProviderFactory,
 	contentMappers []*contentmapper.Mapper,
 	logger *logging.LogTree,
 ) *dirty.SyncMapEntry[SyntheticProjectID, *Project] {
@@ -1281,6 +1293,7 @@ func (b *ProjectCollectionBuilder) updateOrCreateSyntheticProject(
 	if !loaded {
 		syntheticProject := newSyntheticProject(projectID, b.sessionOptions.CurrentDirectory, compilerOptions, rootFileNames, projectReferences, contentMappers, b, logger)
 		syntheticProject.CommandLine.Errors = configFileParsingDiagnostics
+		syntheticProject.resolutionProviderFactory = resolutionProviderFactory
 		project, _ = b.syntheticProjects.LoadOrStore(projectID, syntheticProject)
 		return project
 	}
@@ -1300,13 +1313,15 @@ func (b *ProjectCollectionBuilder) updateOrCreateSyntheticProject(
 				!reflect.DeepEqual(p.CommandLine.CompilerOptions(), compilerOptions) ||
 				!projectReferencesEqual(p.CommandLine.ProjectReferences(), projectReferences) ||
 				!reflect.DeepEqual(p.CommandLine.Errors, configFileParsingDiagnostics) ||
-				!slices.Equal(p.CommandLine.ContentMappers(), newCommandLine.ContentMappers())
+				!slices.Equal(p.CommandLine.ContentMappers(), newCommandLine.ContentMappers()) ||
+				resolutionProviderFactoryIdentity(p.resolutionProviderFactory) != resolutionProviderFactoryIdentity(resolutionProviderFactory)
 		},
 		func(p *Project) {
 			if logger != nil {
 				logger.Log(fmt.Sprintf("Updating synthetic project config with %d root files", len(rootFileNames)))
 			}
 			p.SetCommandLine(newCommandLine)
+			p.resolutionProviderFactory = resolutionProviderFactory
 		},
 	)
 	return project

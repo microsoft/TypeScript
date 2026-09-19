@@ -102,7 +102,7 @@ func TestOpenProjectRejectsReservedProjectID(t *testing.T) {
 	session := NewStandaloneSession(init, nil)
 	defer session.Close()
 
-	_, err := session.toAPISnapshotRequest(&SnapshotRequestChangesParams{
+	_, err := session.toAPISnapshotRequest(context.Background(), &SnapshotRequestChangesParams{
 		OpenProjects: []DocumentIdentifier{{FileName: "/dev/null/inferred"}},
 	})
 	assert.ErrorContains(t, err, "invalid configured project ID")

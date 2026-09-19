@@ -16,6 +16,20 @@ type ResolutionHost interface {
 	GetCurrentDirectory() string
 }
 
+type ResolutionProviderFactory interface {
+	Identity() uint64
+	CompilerOptions() *core.CompilerOptions
+	NewProvider(fallback *Resolver) (ResolutionProvider, func())
+}
+
+type ResolutionProvider interface {
+	ResolveModuleName(
+		moduleName string,
+		containingDirectory string,
+		resolutionMode core.ResolutionMode,
+	) (*ResolvedModule, []DiagAndArgs, error)
+}
+
 type ModeAwareCacheKey struct {
 	Name string
 	Mode core.ResolutionMode

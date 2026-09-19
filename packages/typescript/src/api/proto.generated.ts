@@ -26,6 +26,9 @@ export interface APIMethodInfo {
     createSnapshot: APIMethod<CreateSnapshotParams, CreateSnapshotResponse>;
     updateSnapshot: APIMethod<UpdateSnapshotParams, CreateSnapshotResponse>;
     getCurrentLanguageServerSnapshot: APIMethod<GetCurrentLanguageServerSnapshotParams, CreateSnapshotResponse>;
+    createModuleResolver: APIMethod<CreateModuleResolverParams, number>;
+    releaseModuleResolver: APIMethod<ReleaseModuleResolverParams, unknown>;
+    resolveModuleName: APIMethod<ResolveModuleNameParams, ResolveModuleNameResult>;
     parseCommandLine: APIMethod<ParseCommandLineParams, ConfigFileResponse>;
     readConfigFile: APIMethod<ReadConfigFileParams, ReadConfigFileResponse>;
     parseJsonConfigFileContent: APIMethod<ParseJsonConfigFileContentParams, ConfigFileResponse>;
@@ -181,6 +184,8 @@ export interface APIMethodInfo {
 
 export type DocumentIdentifier = string | { uri: string; };
 
+export type ResolutionMode = ModuleKind.None | ModuleKind.CommonJS | ModuleKind.ESNext;
+
 export type EnsurePrograms = true | readonly ProjectId[];
 
 export type InferredProjectId = string & { __inferredProjectIdBrand: any; };
@@ -247,6 +252,31 @@ export interface UpdateSnapshotParams {
 export interface GetCurrentLanguageServerSnapshotParams {
     baseSnapshot?: number | undefined;
     changes?: LanguageServerSnapshotChanges | undefined;
+}
+
+export interface CreateModuleResolverParams {
+    compilerOptions: CompilerOptions;
+    moduleResolutions?: ModuleResolutionSpec | undefined;
+    resolveModuleNameCallback?: string | undefined;
+}
+
+export interface ReleaseModuleResolverParams {
+    resolver: number;
+}
+
+export interface ResolveModuleNameParams {
+    snapshot?: number | undefined;
+    inProgressSnapshot?: number | undefined;
+    resolver: number;
+    moduleName: string;
+    containingDirectory: DocumentIdentifier;
+    resolutionMode?: ResolutionMode | undefined;
+}
+
+export interface ResolveModuleNameResult {
+    resolvedModule?: ResolvedModule | undefined;
+    /** Trace is provided when compilerOptions.traceResolution is true. */
+    trace?: string[] | undefined;
 }
 
 export interface ParseCommandLineParams {
@@ -999,6 +1029,7 @@ export interface ProfileResult {
 export interface BatchRequest {
     method:
         | "batchRequests"
+        | "createModuleResolver"
         | "createSnapshot"
         | "createSourceFile"
         | "createSourceFileFromFile"
@@ -1143,6 +1174,8 @@ export interface BatchRequest {
         | "printNode"
         | "readConfigFile"
         | "release"
+        | "releaseModuleResolver"
+        | "resolveModuleName"
         | "resolveName"
         | "saveHeapProfile"
         | "signatureToSignatureDeclaration"
@@ -1161,6 +1194,7 @@ export interface BatchRequest {
 export interface BatchResponse {
     method:
         | "batchRequests"
+        | "createModuleResolver"
         | "createSnapshot"
         | "createSourceFile"
         | "createSourceFileFromFile"
@@ -1305,6 +1339,8 @@ export interface BatchResponse {
         | "printNode"
         | "readConfigFile"
         | "release"
+        | "releaseModuleResolver"
+        | "resolveModuleName"
         | "resolveName"
         | "saveHeapProfile"
         | "signatureToSignatureDeclaration"
@@ -1527,6 +1563,11 @@ export interface CompilerOptions {
     configFilePath?: string | undefined;
 }
 
+export interface ModuleResolutionSpec {
+    fallback: "resolve" | "unresolved";
+    entries: ModuleResolutionEntry[];
+}
+
 export interface ProjectReference {
     /** Path is a normalized path on disk. */
     path: string;
@@ -1642,6 +1683,13 @@ export interface OpenedFileOperationResult {
     project: ProjectId;
 }
 
+export interface ModuleResolutionEntry {
+    moduleName: string;
+    containingDirectory?: DocumentIdentifier | undefined;
+    resolutionMode?: ResolutionMode | undefined;
+    result: ProvidedModuleResolution;
+}
+
 /** CompletionEntryLabelDetailsResponse holds additional label display text for a completion entry. */
 export interface CompletionEntryLabelDetailsResponse {
     detail?: string | undefined;
@@ -1651,4 +1699,11 @@ export interface CompletionEntryLabelDetailsResponse {
 export interface CreateProgramOptions {
     projectReferences?: ProjectReference[] | undefined;
     configFileParsingDiagnostics?: DiagnosticResponse[] | undefined;
+    moduleResolver?: number | undefined;
+}
+
+export interface ProvidedModuleResolution {
+    resolvedFileName?: DocumentIdentifier | undefined;
+    originalPath?: DocumentIdentifier | undefined;
+    packageId?: PackageId | undefined;
 }

@@ -43,6 +43,7 @@ type ProgramOptions struct {
 	TypingsLocation             string
 	ProjectName                 string
 	Tracing                     *tracing.Tracing
+	ResolutionProviderFactory   module.ResolutionProviderFactory
 	// SkipModuleResolution avoids all module and type reference resolution while
 	// still collecting import metadata needed for emit.
 	SkipModuleResolution bool
@@ -326,6 +327,9 @@ func (p *Program) ReuseProgram(changedFilePath tspath.Path, newHost CompilerHost
 	if createCheckerPool != nil {
 		newOpts.CreateCheckerPool = createCheckerPool
 	}
+	if resolutionProviderFactoryIdentity(p.opts.ResolutionProviderFactory) != resolutionProviderFactoryIdentity(newOpts.ResolutionProviderFactory) {
+		return nil, nil, false
+	}
 
 	oldFile := p.filesByPath[changedFilePath]
 	var newFile *ast.SourceFile
@@ -342,6 +346,7 @@ func (p *Program) ReuseProgram(changedFilePath tspath.Path, newHost CompilerHost
 		if err != nil {
 			return nil, nil, false
 		}
+
 		oldSupplementalFiles = oldFile.SupplementalSourceFiles()
 		newSupplementalFiles = files.Supplemental
 	} else {
@@ -413,6 +418,13 @@ func (p *Program) ReuseProgram(changedFilePath tspath.Path, newHost CompilerHost
 	}
 	updateFileIncludeProcessor(result)
 	return result, newFile, true
+}
+
+func resolutionProviderFactoryIdentity(factory module.ResolutionProviderFactory) uint64 {
+	if factory == nil {
+		return 0
+	}
+	return factory.Identity()
 }
 
 func (p *Program) initCheckerPool() {
@@ -622,6 +634,10 @@ func (p *Program) GetResolvedModuleFromModuleSpecifier(file ast.HasFileName, mod
 
 func (p *Program) GetResolvedModules() map[tspath.Path]module.ModeAwareCache[*module.ResolvedModule] {
 	return p.resolvedModules
+}
+
+func (p *Program) ModuleResolutionError() error {
+	return p.moduleResolutionError
 }
 
 // GetPackagesMap returns a lazily-cached map of package names to whether they bundle types.

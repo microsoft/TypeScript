@@ -16,6 +16,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/json"
 	"github.com/microsoft/TypeScript/tsc/internal/ls"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
+	"github.com/microsoft/TypeScript/tsc/internal/module"
 	"github.com/microsoft/TypeScript/tsc/internal/project/ata"
 	"github.com/microsoft/TypeScript/tsc/internal/project/logging"
 	"github.com/microsoft/TypeScript/tsc/internal/tsoptions"
@@ -165,6 +166,8 @@ type Project struct {
 
 	checkerPool *checkerPool
 
+	resolutionProviderFactory module.ResolutionProviderFactory
+
 	// installedTypingsInfo is the value of `project.ComputeTypingsInfo()` that was
 	// used during the most recently completed typings installation.
 	installedTypingsInfo *ata.TypingsInfo
@@ -173,6 +176,13 @@ type Project struct {
 }
 
 var _ ls.Project = (*Project)(nil)
+
+func resolutionProviderFactoryIdentity(factory module.ResolutionProviderFactory) uint64 {
+	if factory == nil {
+		return 0
+	}
+	return factory.Identity()
+}
 
 func NewConfiguredProject(
 	configFileName string,
@@ -412,6 +422,8 @@ func (p *Project) Clone() *Project {
 
 		checkerPool: p.checkerPool,
 
+		resolutionProviderFactory: p.resolutionProviderFactory,
+
 		installedTypingsInfo: p.installedTypingsInfo,
 		typingsFiles:         p.typingsFiles,
 	}
@@ -553,6 +565,7 @@ func (p *Project) CreateProgram() CreateProgramResult {
 				UseSourceOfProjectReference: true,
 				TypingsLocation:             typingsLocation,
 				CreateCheckerPool:           createCheckerPool,
+				ResolutionProviderFactory:   p.resolutionProviderFactory,
 			},
 		)
 	}

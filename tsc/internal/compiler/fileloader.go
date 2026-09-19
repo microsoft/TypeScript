@@ -47,6 +47,7 @@ type sourceFileFromReferenceDiagnostic struct {
 type fileLoader struct {
 	opts                                           ProgramOptions
 	resolver                                       *module.Resolver
+	resolutionProvider                             module.ResolutionProvider
 	defaultLibraryPath                             string
 	comparePathsOptions                            tspath.ComparePathsOptions
 	supportedExtensions                            [][]string
@@ -70,10 +71,12 @@ type fileLoader struct {
 
 	// contentMapperMu guards the content-mapper bookkeeping below, which is written concurrently as
 	// content-mapped files are parsed across worker goroutines.
-	contentMapperMu          sync.Mutex
-	contentMapperFailures    map[*contentmapper.Mapper]int
-	contentMapperInitFailed  collections.Set[*contentmapper.Mapper]
-	contentMapperDiagnostics []*ast.Diagnostic
+	contentMapperMu           sync.Mutex
+	contentMapperFailures     map[*contentmapper.Mapper]int
+	contentMapperInitFailed   collections.Set[*contentmapper.Mapper]
+	contentMapperDiagnostics  []*ast.Diagnostic
+	moduleResolutionErrorOnce sync.Once
+	moduleResolutionError     error
 }
 
 type redirectsFile struct {
@@ -138,6 +141,7 @@ type processedFiles struct {
 	redirectFilesByPath map[tspath.Path]*redirectsFile
 	// Program-level diagnostics reported when a content mapper fails fatally (reported once per mapper).
 	contentMapperDiagnostics []*ast.Diagnostic
+	moduleResolutionError    error
 	finishedProcessing       bool
 }
 
@@ -175,7 +179,16 @@ func processAllProgramFiles(
 		contentMapperExtensions:                        opts.Config.ContentMapperExtensions(),
 	}
 	loader.addProjectReferenceTasks(singleThreaded)
-	loader.resolver = module.NewResolver(loader.projectReferenceFileMapper.host, compilerOptions, opts.TypingsLocation, opts.ProjectName, opts.Config.ContentMapperExtensions())
+	resolverCompilerOptions := compilerOptions
+	if opts.ResolutionProviderFactory != nil {
+		resolverCompilerOptions = opts.ResolutionProviderFactory.CompilerOptions()
+	}
+	loader.resolver = module.NewResolver(loader.projectReferenceFileMapper.host, resolverCompilerOptions, opts.TypingsLocation, opts.ProjectName, opts.Config.ContentMapperExtensions())
+	if opts.ResolutionProviderFactory != nil {
+		var cleanup func()
+		loader.resolutionProvider, cleanup = opts.ResolutionProviderFactory.NewProvider(loader.resolver)
+		defer cleanup()
+	}
 	if opts.Tracing != nil {
 		defer opts.Tracing.Push(tracing.PhaseProgram, "processRootFiles", map[string]any{"count": len(rootFiles)}, false)()
 	}
@@ -872,7 +885,26 @@ func (p *fileLoader) resolveImportsAndModuleAugmentations(t *parseTask) {
 			}
 
 			mode := getModeForUsageLocation(file.FileName(), meta, entry, optionsForFile)
-			resolvedModule, trace := p.resolver.ResolveModuleName(moduleName, fileName, mode, redirect)
+			var resolvedModule *module.ResolvedModule
+			var trace []module.DiagAndArgs
+			if p.resolutionProvider != nil {
+				var err error
+				resolvedModule, trace, err = p.resolutionProvider.ResolveModuleName(
+					moduleName,
+					tspath.GetDirectoryPath(fileName),
+					mode,
+				)
+				if err != nil {
+					p.moduleResolutionErrorOnce.Do(func() {
+						p.moduleResolutionError = err
+					})
+				}
+				if resolvedModule == nil {
+					resolvedModule = &module.ResolvedModule{}
+				}
+			} else {
+				resolvedModule, trace = p.resolver.ResolveModuleName(moduleName, fileName, mode, redirect)
+			}
 			resolutionsInFile[module.ModeAwareCacheKey{Name: moduleName, Mode: mode}] = resolvedModule
 			resolutionsTrace = append(resolutionsTrace, trace...)
 

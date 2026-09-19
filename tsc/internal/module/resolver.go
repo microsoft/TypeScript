@@ -265,7 +265,14 @@ func (r *Resolver) ResolveTypeReferenceDirective(
 }
 
 func (r *Resolver) ResolveModuleName(moduleName string, containingFile string, resolutionMode core.ResolutionMode, redirectedReference ResolvedProjectReference) (*ResolvedModule, []DiagAndArgs) {
-	containingDirectory := tspath.GetDirectoryPath(containingFile)
+	return r.resolveModuleName(moduleName, containingFile, tspath.GetDirectoryPath(containingFile), resolutionMode, redirectedReference)
+}
+
+func (r *Resolver) ResolveModuleNameFromDirectory(moduleName string, containingDirectory string, resolutionMode core.ResolutionMode) (*ResolvedModule, []DiagAndArgs) {
+	return r.resolveModuleName(moduleName, containingDirectory, containingDirectory, resolutionMode, nil)
+}
+
+func (r *Resolver) resolveModuleName(moduleName string, containingFile string, containingDirectory string, resolutionMode core.ResolutionMode, redirectedReference ResolvedProjectReference) (*ResolvedModule, []DiagAndArgs) {
 	traceBuilder := r.newTraceBuilder()
 
 	cacheKey := moduleResolutionCacheKey{
