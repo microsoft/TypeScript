@@ -1,0 +1,65 @@
+//// [tests/cases/compiler/integerTypedArray.ts] ////
+
+=== integerTypedArray.ts ===
+crypto.getRandomValues(new Uint8Array(1));
+>crypto.getRandomValues : Symbol(Crypto.getRandomValues, Decl(lib.dom.d.ts, --, --))
+>crypto : Symbol(crypto, Decl(lib.dom.d.ts, --, --))
+>getRandomValues : Symbol(Crypto.getRandomValues, Decl(lib.dom.d.ts, --, --))
+>Uint8Array : Symbol(Uint8Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+
+crypto.getRandomValues(new BigInt64Array(1));
+>crypto.getRandomValues : Symbol(Crypto.getRandomValues, Decl(lib.dom.d.ts, --, --))
+>crypto : Symbol(crypto, Decl(lib.dom.d.ts, --, --))
+>getRandomValues : Symbol(Crypto.getRandomValues, Decl(lib.dom.d.ts, --, --))
+>BigInt64Array : Symbol(BigInt64Array, Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2022.array.d.ts, --, --), Decl(lib.es2023.array.d.ts, --, --))
+
+crypto.getRandomValues(new Float64Array(1));
+>crypto.getRandomValues : Symbol(Crypto.getRandomValues, Decl(lib.dom.d.ts, --, --))
+>crypto : Symbol(crypto, Decl(lib.dom.d.ts, --, --))
+>getRandomValues : Symbol(Crypto.getRandomValues, Decl(lib.dom.d.ts, --, --))
+>Float64Array : Symbol(Float64Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 3 more)
+
+crypto.getRandomValues(null);
+>crypto.getRandomValues : Symbol(Crypto.getRandomValues, Decl(lib.dom.d.ts, --, --))
+>crypto : Symbol(crypto, Decl(lib.dom.d.ts, --, --))
+>getRandomValues : Symbol(Crypto.getRandomValues, Decl(lib.dom.d.ts, --, --))
+
+declare const buffer: Uint8Array<ArrayBufferLike>;
+>buffer : Symbol(buffer, Decl(integerTypedArray.ts, 5, 13))
+>Uint8Array : Symbol(Uint8Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>ArrayBufferLike : Symbol(ArrayBufferLike, Decl(lib.es5.d.ts, --, --))
+
+crypto.getRandomValues(buffer);
+>crypto.getRandomValues : Symbol(Crypto.getRandomValues, Decl(lib.dom.d.ts, --, --))
+>crypto : Symbol(crypto, Decl(lib.dom.d.ts, --, --))
+>getRandomValues : Symbol(Crypto.getRandomValues, Decl(lib.dom.d.ts, --, --))
+>buffer : Symbol(buffer, Decl(integerTypedArray.ts, 5, 13))
+
+declare const array: Parameters<typeof crypto.getRandomValues>[0];
+>array : Symbol(array, Decl(integerTypedArray.ts, 8, 13))
+>Parameters : Symbol(Parameters, Decl(lib.es5.d.ts, --, --))
+>crypto.getRandomValues : Symbol(Crypto.getRandomValues, Decl(lib.dom.d.ts, --, --))
+>crypto : Symbol(crypto, Decl(lib.dom.d.ts, --, --))
+>getRandomValues : Symbol(Crypto.getRandomValues, Decl(lib.dom.d.ts, --, --))
+
+const values = crypto.getRandomValues(array);
+>values : Symbol(values, Decl(integerTypedArray.ts, 9, 5))
+>crypto.getRandomValues : Symbol(Crypto.getRandomValues, Decl(lib.dom.d.ts, --, --))
+>crypto : Symbol(crypto, Decl(lib.dom.d.ts, --, --))
+>getRandomValues : Symbol(Crypto.getRandomValues, Decl(lib.dom.d.ts, --, --))
+>array : Symbol(array, Decl(integerTypedArray.ts, 8, 13))
+
+values.BYTES_PER_ELEMENT;
+>values.BYTES_PER_ELEMENT : Symbol(BYTES_PER_ELEMENT, Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --) ... and 4 more)
+>values : Symbol(values, Decl(integerTypedArray.ts, 9, 5))
+>BYTES_PER_ELEMENT : Symbol(BYTES_PER_ELEMENT, Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --) ... and 4 more)
+
+declare const integers: IntegerTypedArray;
+>integers : Symbol(integers, Decl(integerTypedArray.ts, 12, 13))
+>IntegerTypedArray : Symbol(IntegerTypedArray, Decl(lib.es5.d.ts, --, --))
+
+const ints: IntegerTypedArrayTypes["Int32Array"] = new Int32Array(1);
+>ints : Symbol(ints, Decl(integerTypedArray.ts, 13, 5))
+>IntegerTypedArrayTypes : Symbol(IntegerTypedArrayTypes, Decl(lib.es5.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
+>Int32Array : Symbol(Int32Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 3 more)
+

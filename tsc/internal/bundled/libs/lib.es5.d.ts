@@ -4409,6 +4409,21 @@ interface Float64ArrayConstructor {
 }
 declare var Float64Array: Float64ArrayConstructor;
 
+/**
+ * Stores the typed array types that hold integers, such as those accepted by `crypto.getRandomValues`.
+ */
+interface IntegerTypedArrayTypes {
+    Int8Array: Int8Array<ArrayBufferLike>;
+    Int16Array: Int16Array<ArrayBufferLike>;
+    Int32Array: Int32Array<ArrayBufferLike>;
+    Uint8Array: Uint8Array<ArrayBufferLike>;
+    Uint16Array: Uint16Array<ArrayBufferLike>;
+    Uint32Array: Uint32Array<ArrayBufferLike>;
+    Uint8ClampedArray: Uint8ClampedArray<ArrayBufferLike>;
+}
+
+type IntegerTypedArray = IntegerTypedArrayTypes[keyof IntegerTypedArrayTypes];
+
 /////////////////////////////
 /// ECMAScript Internationalization API
 /////////////////////////////

@@ -1,0 +1,30 @@
+integerTypedArray.ts(3,24): error TS2345: Argument of type 'Float64Array<ArrayBuffer>' is not assignable to parameter of type 'IntegerTypedArray'.
+  Type 'Float64Array<ArrayBuffer>' is not assignable to type 'Uint8ClampedArray<ArrayBufferLike>'.
+    The types returned by 'filter(...)[Symbol.toStringTag]' are incompatible between these types.
+      Type '"Float64Array"' is not assignable to type '"Uint8ClampedArray"'.
+integerTypedArray.ts(4,24): error TS2345: Argument of type 'null' is not assignable to parameter of type 'IntegerTypedArray'.
+
+
+==== integerTypedArray.ts (2 errors) ====
+    crypto.getRandomValues(new Uint8Array(1));
+    crypto.getRandomValues(new BigInt64Array(1));
+    crypto.getRandomValues(new Float64Array(1));
+                           ~~~~~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type 'Float64Array<ArrayBuffer>' is not assignable to parameter of type 'IntegerTypedArray'.
+!!! error TS2345:   Type 'Float64Array<ArrayBuffer>' is not assignable to type 'Uint8ClampedArray<ArrayBufferLike>'.
+!!! error TS2345:     The types returned by 'filter(...)[Symbol.toStringTag]' are incompatible between these types.
+!!! error TS2345:       Type '"Float64Array"' is not assignable to type '"Uint8ClampedArray"'.
+    crypto.getRandomValues(null);
+                           ~~~~
+!!! error TS2345: Argument of type 'null' is not assignable to parameter of type 'IntegerTypedArray'.
+    
+    declare const buffer: Uint8Array<ArrayBufferLike>;
+    crypto.getRandomValues(buffer);
+    
+    declare const array: Parameters<typeof crypto.getRandomValues>[0];
+    const values = crypto.getRandomValues(array);
+    values.BYTES_PER_ELEMENT;
+    
+    declare const integers: IntegerTypedArray;
+    const ints: IntegerTypedArrayTypes["Int32Array"] = new Int32Array(1);
+    

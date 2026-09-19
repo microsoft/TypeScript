@@ -1163,6 +1163,16 @@ var CompletionGlobalTypeDecls = []fourslash.CompletionsExpectedItem{
 		SortText: new(string(ls.SortTextGlobalsOrKeywords)),
 	},
 	&lsproto.CompletionItem{
+		Label:    "IntegerTypedArray",
+		Kind:     new(lsproto.CompletionItemKindClass),
+		SortText: new(string(ls.SortTextGlobalsOrKeywords)),
+	},
+	&lsproto.CompletionItem{
+		Label:    "IntegerTypedArrayTypes",
+		Kind:     new(lsproto.CompletionItemKindInterface),
+		SortText: new(string(ls.SortTextGlobalsOrKeywords)),
+	},
+	&lsproto.CompletionItem{
 		Label:    "Intl",
 		Kind:     new(lsproto.CompletionItemKindModule),
 		SortText: new(string(ls.SortTextGlobalsOrKeywords)),

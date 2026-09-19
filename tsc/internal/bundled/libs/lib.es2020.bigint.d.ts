@@ -722,6 +722,11 @@ interface BigUint64ArrayConstructor {
 }
 declare var BigUint64Array: BigUint64ArrayConstructor;
 
+interface IntegerTypedArrayTypes {
+    BigInt64Array: BigInt64Array<ArrayBufferLike>;
+    BigUint64Array: BigUint64Array<ArrayBufferLike>;
+}
+
 interface DataView<TArrayBuffer extends ArrayBufferLike> {
     /**
      * Gets the BigInt64 value at the specified byte offset from the start of the view. There is

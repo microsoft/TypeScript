@@ -11170,7 +11170,7 @@ interface Crypto {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Crypto/getRandomValues)
      */
-    getRandomValues<T extends Exclude<BufferSource, ArrayBuffer>>(array: T): T;
+    getRandomValues<T extends IntegerTypedArray>(array: T): T;
     /**
      * The **`randomUUID()`** method of the Crypto interface is used to generate a v4 UUID using a cryptographically secure random number generator.
      * Available only in secure contexts.
