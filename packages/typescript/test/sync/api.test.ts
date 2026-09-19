@@ -645,6 +645,8 @@ describe("API", () => {
         );
         assert.equal(callbackSnapshots.length, 2);
         assert.equal(callbackSnapshots[0], callbackSnapshots[1]);
+        assert.ok(typeof callbackSnapshots[0] === "number");
+        assert.ok(callbackSnapshots[0] < 0);
     });
 
     test("module resolver callbacks can resolve against the in-progress snapshot filesystem", () => {

@@ -250,6 +250,9 @@ export interface ResolveModuleNameCallbackOptions {
     snapshot: Snapshot | InProgressSnapshot | undefined;
 }
 
+declare const inProgressSnapshotBrand: unique symbol;
+export type InProgressSnapshot = number & { readonly [inProgressSnapshotBrand]: never; };
+
 export type ResolveModuleNameCallback = (moduleName: string, containingDirectory: string, resolutionMode: ResolutionMode | undefined, options: ResolveModuleNameCallbackOptions) => ProvidedModuleResolution | undefined | Promise<ProvidedModuleResolution | undefined>; // @sync: export type ResolveModuleNameCallback = (moduleName: string, containingDirectory: string, resolutionMode: ResolutionMode | undefined, options: ResolveModuleNameCallbackOptions) => ProvidedModuleResolution | undefined;
 
 export type CreateProgramOptions = Omit<ProtocolCreateProgramOptions, "moduleResolver"> & {
@@ -269,7 +272,6 @@ export type LanguageServerSnapshotChanges = Omit<ProtocolLanguageServerSnapshotC
 let nextModuleResolutionCallbackId = 0;
 function registerModuleResolutionCallback(client: Client, callback: ResolveModuleNameCallback, getSnapshot: (id: number) => Snapshot | undefined): { name: string; dispose: () => void; } {
     const name = `resolveModuleName/${++nextModuleResolutionCallbackId}`;
-    const inProgressSnapshots = new Map<number, InProgressSnapshot>();
     const dispose = client.registerCallback(name, params => {
         const { moduleName, containingDirectory, resolutionMode, snapshot: snapshotId, inProgressSnapshot } = params as {
             moduleName: string;
@@ -283,11 +285,7 @@ function registerModuleResolutionCallback(client: Client, callback: ResolveModul
             throw new Error(`Snapshot ${snapshotId} is inactive`);
         }
         if (inProgressSnapshot !== undefined) {
-            snapshot = inProgressSnapshots.get(inProgressSnapshot);
-            if (snapshot === undefined) {
-                snapshot = new InProgressSnapshot(inProgressSnapshot);
-                inProgressSnapshots.set(inProgressSnapshot, snapshot);
-            }
+            snapshot = -inProgressSnapshot as InProgressSnapshot;
         }
         return callback(
             moduleName,
@@ -956,7 +954,7 @@ export class ModuleResolver {
         }
         return this.client.apiRequest("resolveModuleName", {
             snapshot: options?.snapshot instanceof Snapshot ? options.snapshot.id : undefined,
-            inProgressSnapshot: options?.snapshot instanceof InProgressSnapshot ? options.snapshot.id : undefined,
+            inProgressSnapshot: typeof options?.snapshot === "number" ? -options.snapshot : undefined,
             resolver: this.id,
             moduleName,
             containingDirectory,
@@ -978,18 +976,6 @@ export class ModuleResolver {
     /** @internal */
     ensureNotDisposed(): void {
         if (this.disposed) throw new Error("ModuleResolver is disposed");
-    }
-}
-
-export class InProgressSnapshot {
-    private readonly _inProgressSnapshotBrand = undefined;
-
-    /** @internal */
-    readonly id: number;
-
-    /** @internal */
-    constructor(id: number) {
-        this.id = id;
     }
 }
 
