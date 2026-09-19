@@ -12,8 +12,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 )
 
-//go:generate go tool golang.org/x/tools/cmd/stringer -type=Usage -trimprefix=Usage -output=stringer_generated.go
-//go:generate npx dprint fmt stringer_generated.go
+//go:generate npm run --silent cache -- --input $GOFILE --output stringer_generated.go --command go tool golang.org/x/tools/cmd/stringer -type=Usage -trimprefix=Usage -output=stringer_generated.go --command dprint fmt stringer_generated.go
 
 // This file implements the glob matching algorithm specified in MATCHING_ALGORITHM.md.
 

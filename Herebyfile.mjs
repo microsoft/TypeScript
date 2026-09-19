@@ -105,6 +105,7 @@ const { values: rawOptions } = parseArgs({
     options: {
         tests: { type: "string", short: "t" },
         fix: { type: "boolean" },
+        force: { type: "boolean", default: parseEnvBoolean("FORCE") },
         api: { type: "boolean" },
         all: { type: "boolean" },
         debug: { type: "boolean" },
@@ -369,7 +370,10 @@ export const cleanBuilt = task({
 });
 
 async function runGenerate() {
-    return await run("go", ["generate", "-v", "./..."], { cwd: "./tsc" });
+    return await run("go", ["generate", "-v", "./..."], {
+        cwd: "./tsc",
+        env: { TSGO_HEREBY_FORCE: options.force ? "1" : "0" },
+    });
 }
 
 export const generate = task({
@@ -775,9 +779,10 @@ const enumValuesGeneratedGoPath = "tsc/internal/api/enum_values_generated.go";
  * because it already imports (nearly) every package enums are sourced from.
  *
  * @param {GeneratedEnum[]} generatedEnums
+ * @param {import("./tools/scripts/gen/generatedFile.mts").GeneratedFile} generatedGoFile
  * @returns {Promise<Record<string, Record<string, number>>>} enum def name -> (memberName -> Go value)
  */
-async function computeGoGroundTruth(generatedEnums) {
+async function computeGoGroundTruth(generatedEnums, generatedGoFile) {
     /** @type {Map<string, {importPath: string, pkgName: string}>} */
     const packagesByDir = new Map();
     /**
@@ -849,7 +854,7 @@ func toInt32[T ~int8 | ~int16 | ~int32 | ~int | ~uint8 | ~uint16 | ~uint32](v T)
 
 `;
 
-    fs.writeFileSync(enumValuesGeneratedGoPath, goSource);
+    generatedGoFile.write(goSource);
     await run("dprint", ["fmt", enumValuesGeneratedGoPath]);
 
     const { stdout } = await runOutput("go", ["run", enumValuesGeneratedGoPath]);
@@ -873,6 +878,26 @@ async function evaluateEnumMembers(enumSource, enumName) {
 }
 
 async function runGenerateEnums() {
+    const { GeneratedFile } = await import("./tools/scripts/gen/generatedFile.mts");
+    const inputs = [
+        __filename,
+        ...fs.globSync(["go.work", "go.work.sum", "{tsc,tools}/go.{mod,sum}"]),
+    ];
+    const enumFiles = enumDefs.map(def => {
+        const camelName = def.name.charAt(0).toLowerCase() + def.name.slice(1);
+        return {
+            def,
+            camelName,
+            typeFile: new GeneratedFile(path.join(def.outDir, `${camelName}.enum.ts`), [...inputs, def.goFile]),
+            runtimeFile: new GeneratedFile(path.join(def.outDir, `${camelName}.ts`), [...inputs, def.goFile]),
+        };
+    });
+    const generatedGoFile = new GeneratedFile(enumValuesGeneratedGoPath, [...inputs, ...enumDefs.map(def => def.goFile)]);
+    const generatedFiles = [generatedGoFile, ...enumFiles.flatMap(({ typeFile, runtimeFile }) => [typeFile, runtimeFile])];
+    if (generatedFiles.every(file => file.isCurrent(!!options.force))) {
+        console.log("Enums are up to date.");
+        return;
+    }
     const ts = /** @type {typeof import("typescript")} */ (await import("typescript"));
 
     /**
@@ -903,34 +928,29 @@ async function runGenerateEnums() {
     console.log("Generating enums from Go source...");
     /** @type {Array<GeneratedEnum>} */
     const generatedEnums = [];
-    for (const def of enumDefs) {
+    for (const { def, camelName, typeFile, runtimeFile } of enumFiles) {
         const members = parseGoEnum(def);
-        const camelName = def.name.charAt(0).toLowerCase() + def.name.slice(1);
-
-        fs.mkdirSync(def.outDir, { recursive: true });
 
         // Generate .enum.ts (TypeScript enum — used for types)
         const enumTS = renderEnumTS(def, members);
-        const enumPath = path.join(def.outDir, `${camelName}.enum.ts`);
-        fs.writeFileSync(enumPath, enumTS);
+        typeFile.write(enumTS);
 
         // Generate .ts (IIFE — used at runtime)
         const enumJsCode = transpile(enumTS, def.name);
         const iifeSource = convertEnumToTs(enumJsCode, def.name);
-        const iifePath = path.join(def.outDir, `${camelName}.ts`);
-        fs.writeFileSync(iifePath, iifeSource);
+        runtimeFile.write(iifeSource);
         generatedEnums.push({
             code: enumJsCode,
             def,
             members,
-            fileNames: [enumPath, iifePath],
+            fileNames: [typeFile.fileName, runtimeFile.fileName],
         });
 
         console.log(`  ${def.name}: ${members.length} members → ${camelName}.enum.ts, ${camelName}.ts`);
     }
 
     console.log("Getting values from go");
-    const goValuesByEnum = await computeGoGroundTruth(generatedEnums);
+    const goValuesByEnum = await computeGoGroundTruth(generatedEnums, generatedGoFile);
     /** @type {string[]} */
     const mismatches = [];
     for (const { def, members, code } of generatedEnums) {
@@ -958,29 +978,53 @@ async function runGenerateEnums() {
     console.log("All generated values match Go.");
 
     await run("dprint", ["fmt", ...generatedEnums.flatMap(e => e.fileNames)]);
+    for (const file of generatedFiles) file.markCurrent();
     console.log("Done.");
 }
 
 export const generateEnums = task({
     name: "generate:enums",
-    description: "Generates TypeScript enum files from Go source.",
+    description: "Generates TypeScript enum files from Go source. Pass --force to regenerate unchanged files.",
     run: runGenerateEnums,
 });
 
 export const generateAST = task({
     name: "generate:ast",
-    description: "Generates AST and encoder files from ast.json.",
-    run: () => run("node", ["./tools/scripts/tsc/generate.ts"]),
+    description: "Generates AST and encoder files from ast.json. Pass --force to regenerate unchanged files.",
+    run: async () => {
+        const { default: generate } = await import("./tools/scripts/tsc/generate.ts");
+        generate(!!options.force);
+    },
 });
 
 async function runGenerateAPI() {
-    await run("go", ["-C", "./tools", "run", "./gen-proto", "../tsc/internal/api/proto.go", "../packages/typescript/src/api/proto.generated.ts"]);
-    await run("npx", ["dprint", "fmt", "packages/typescript/src/api/proto.generated.ts"]);
+    const { default: cache } = await import("./tools/scripts/gen/cache.mts");
+    await cache({
+        cwd: __dirname,
+        inputs: [
+            __filename,
+            "tsc/internal/api/*.go",
+            "tsc/internal/api/requestfilesystem/*.go",
+            "tsc/internal/core/*.go",
+            "tsc/internal/checker/types.go",
+            "tsc/internal/diagnostics/diagnostics.go",
+            "tsc/internal/tspath/path.go",
+            "tools/gen-proto/*.go",
+        ],
+        exclude: ["**/*_test.go", "**/*_generated.go"],
+        envInputs: [],
+        outputs: ["packages/typescript/src/api/proto.generated.ts"],
+        commands: [
+            ["go", "-C", "./tools", "run", "./gen-proto", "../tsc/internal/api/proto.go", "../packages/typescript/src/api/proto.generated.ts"],
+            ["dprint", "fmt", "packages/typescript/src/api/proto.generated.ts"],
+        ],
+        force: !!options.force,
+    });
 }
 
 export const generateAPI = task({
     name: "generate:api",
-    description: "Generates API files from internal/api/proto.go and internal/api/session.go.",
+    description: "Generates API files from internal/api/proto.go and internal/api/session.go. Pass --force to regenerate unchanged files.",
     run: runGenerateAPI,
 });
 
@@ -1235,6 +1279,12 @@ export const testTools = task({
     run: runTestTools,
 });
 
+export const testCodegen = task({
+    name: "test:codegen",
+    description: "Runs opt-in incremental codegen tests; excluded from validate and test:all. Because this runs asserts on build codegen, it takes awhile and is somewhat redundant.",
+    run: () => run("node", ["--test", "./tools/scripts/gen/*.test.mts"]),
+});
+
 export const buildAPI = task({
     name: "build:api",
     description: "Builds @typescript/typescript JS API.",
@@ -1244,7 +1294,8 @@ export const buildAPI = task({
 });
 
 async function runBuildAPITests() {
-    await run("npm", ["run", "-w", "@typescript/typescript", "generate:sync"]);
+    const { generateSync } = await import("./packages/typescript/scripts/generateSync.ts");
+    generateSync(!!options.force);
     await run("npm", ["run", "-w", "@typescript/typescript", "build:test"]);
 }
 
@@ -1264,7 +1315,7 @@ export const testAPI = task({
 
 export const testAll = task({
     name: "test:all",
-    description: "Runs ALL tests in the repo, including benchmarks, tools, and the API tests.",
+    description: "Runs compiler, extension, benchmark, tools, and API tests. Codegen tests are opt-in via test:codegen.",
     dependencies: [tsgo, buildAPITests],
     run: async () => {
         // Prevent interleaving by running these directly instead of in parallel.
@@ -1473,6 +1524,7 @@ export const checkHerebyfile = task({
             "./node_modules/typescript/bin/tsc",
             "--noEmit",
             "--allowJs",
+            "--allowImportingTsExtensions",
             "--checkJs",
             "--target",
             "es2022",
@@ -1527,6 +1579,7 @@ export const checkVsceVersion = task({
 });
 
 const scriptTsconfigs = [
+    "./tools/scripts/gen/tsconfig.json",
     "./tools/scripts/tsc/tsconfig.json",
     "./tsc/internal/lsp/lsproto/_generate/tsconfig.json",
 ];

@@ -13,9 +13,8 @@ import (
 	"golang.org/x/text/language"
 )
 
-//go:generate go run generate.go -diagnostics ./diagnostics_generated.go -loc ./loc_generated.go -locdir ./loc
-//go:generate go tool golang.org/x/tools/cmd/stringer -type=Category -output=stringer_generated.go
-//go:generate npx dprint fmt diagnostics_generated.go loc_generated.go stringer_generated.go
+//go:generate npm run --silent cache -- --input generate.go --input diagnosticMessages.json --input extraDiagnosticMessages.json --input "../{collections,json}/*.go" --input "../locale/lcl/*/diagnosticMessages/diagnosticMessages.generated.json.lcl" --exclude "**/*_test.go" --output diagnostics_generated.go --output loc_generated.go --output "loc/*.json.gz" --command go run generate.go -diagnostics diagnostics_generated.go -loc loc_generated.go -locdir loc --command dprint fmt diagnostics_generated.go loc_generated.go
+//go:generate npm run --silent cache -- --input $GOFILE --output stringer_generated.go --command go tool golang.org/x/tools/cmd/stringer -type=Category -output=stringer_generated.go --command dprint fmt stringer_generated.go
 
 type Category int32
 
