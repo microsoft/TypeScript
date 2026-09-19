@@ -2009,10 +2009,11 @@ func (s *Session) triggerATAForUpdatedProjects(newSnapshot *Snapshot) {
 				}
 
 				typingsInfo := project.ComputeTypingsInfo()
+				fileNames := project.ComputeTypingsFileNames()
 				request := &ata.TypingsInstallRequest{
 					ProjectID:        project.ID(),
 					TypingsInfo:      &typingsInfo,
-					FileNames:        core.Map(project.Program.GetSourceFiles(), func(file *ast.SourceFile) string { return file.FileName() }),
+					FileNames:        fileNames,
 					ProjectRootPath:  project.currentDirectory,
 					CompilerOptions:  project.CommandLine.CompilerOptions(),
 					CurrentDirectory: s.options.CurrentDirectory,
@@ -2035,11 +2036,17 @@ func (s *Session) triggerATAForUpdatedProjects(newSnapshot *Snapshot) {
 						s.logger.Log(logTree.String())
 					}
 				} else {
-					if !slices.Equal(result.TypingsFiles, project.typingsFiles) {
+					if !slices.Equal(result.TypingsFiles, project.typingsFiles) ||
+						project.installedTypingsInfo == nil ||
+						!typingsInfo.Equals(*project.installedTypingsInfo) ||
+						!slices.Equal(fileNames, project.installedTypingsFileNames) ||
+						!slices.Equal(result.FilesToWatch, project.installedTypingsFilesToWatch) {
 						s.pendingATAChangesMu.Lock()
 						defer s.pendingATAChangesMu.Unlock()
 						s.pendingATAChanges[project.ID()] = &ATAStateChange{
+							SnapshotID:          newSnapshot.ID(),
 							TypingsInfo:         &typingsInfo,
+							FileNames:           fileNames,
 							TypingsFiles:        result.TypingsFiles,
 							TypingsFilesToWatch: result.FilesToWatch,
 							Logs:                logTree,

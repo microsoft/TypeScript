@@ -164,6 +164,45 @@ func TestATA(t *testing.T) {
 		assert.Assert(t, typingsFile != nil, "jquery types should be available immediately after reopening")
 	})
 
+	t.Run("inferred project retains typings after closing changed file", func(t *testing.T) {
+		t.Parallel()
+
+		files := map[string]any{
+			"/user/username/projects/project/app.js": ``,
+			"/user/username/projects/project/package.json": `{
+				"name": "test",
+				"dependencies": {
+					"jquery": "^3.1.0"
+				}
+			}`,
+		}
+
+		session, _ := projecttestutil.SetupWithTypingsInstaller(files, &projecttestutil.TypingsInstallerOptions{
+			PackageToFile: map[string]string{
+				"jquery": `declare const $: { x: number }`,
+			},
+		})
+
+		uri := lsproto.DocumentUri("file:///user/username/projects/project/app.js")
+		session.DidOpenFile(context.Background(), uri, 1, files["/user/username/projects/project/app.js"].(string), lsproto.LanguageKindJavaScript)
+		session.WaitForBackgroundTasks()
+		_, err := session.GetLanguageService(context.Background(), uri)
+		assert.NilError(t, err)
+
+		const changedContent = "// changed"
+		session.DidChangeFile(context.Background(), uri, 2, []lsproto.TextDocumentContentChangePartialOrWholeDocument{{
+			WholeDocument: &lsproto.TextDocumentContentChangeWholeDocument{Text: changedContent},
+		}})
+		session.DidCloseFile(context.Background(), uri)
+		session.WaitForBackgroundTasks()
+		session.DidOpenFile(context.Background(), uri, 1, changedContent, lsproto.LanguageKindJavaScript)
+
+		ls, err := session.GetLanguageService(context.Background(), uri)
+		assert.NilError(t, err)
+		typingsFile := ls.GetProgram().GetSourceFile(projecttestutil.TestTypingsLocation + "/node_modules/@types/jquery/index.d.ts")
+		assert.Assert(t, typingsFile != nil, "jquery types should be available immediately after reopening a changed file")
+	})
+
 	t.Run("inferred project does not reuse typings for unrelated roots", func(t *testing.T) {
 		t.Parallel()
 
@@ -651,6 +690,15 @@ func TestATA(t *testing.T) {
 		// Types file present
 		assert.Assert(t, program.GetSourceFile(projecttestutil.TestTypingsLocation+"/node_modules/@types/commander/index.d.ts") != nil)
 		// JS resolution should be dropped
+		assert.Assert(t, program.GetSourceFile("/user/username/projects/node_modules/commander/index.js") == nil)
+
+		session.DidCloseFile(context.Background(), uri)
+		session.WaitForBackgroundTasks()
+		session.DidOpenFile(context.Background(), uri, 1, files["/user/username/projects/project/app.js"].(string), lsproto.LanguageKindJavaScript)
+		ls, err = session.GetLanguageService(context.Background(), uri)
+		assert.NilError(t, err)
+		program = ls.GetProgram()
+		assert.Assert(t, program.GetSourceFile(projecttestutil.TestTypingsLocation+"/node_modules/@types/commander/index.d.ts") != nil)
 		assert.Assert(t, program.GetSourceFile("/user/username/projects/node_modules/commander/index.js") == nil)
 	})
 

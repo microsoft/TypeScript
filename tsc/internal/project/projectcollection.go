@@ -34,6 +34,9 @@ type ProjectCollection struct {
 	// inferredProjectATAState preserves acquired typings while there is no active
 	// inferred project, so reopening a loose file does not wait for ATA again.
 	inferredProjectATAState *inferredProjectATAState
+	// inferredProjectATAInvalidationSnapshotID is the latest snapshot that
+	// invalidated inferred-project ATA discovery inputs.
+	inferredProjectATAInvalidationSnapshotID uint64
 	// apiState tracks the projects and files that API clients have explicitly
 	// opened so they are kept loaded across snapshots.
 	apiState APIState
@@ -341,15 +344,16 @@ func (c *ProjectCollection) findDefaultConfiguredProjectWorker(path tspath.Path,
 // clone creates a shallow copy of the project collection.
 func (c *ProjectCollection) clone() *ProjectCollection {
 	return &ProjectCollection{
-		toPath:                  c.toPath,
-		configFileRegistry:      c.configFileRegistry,
-		configuredProjects:      c.configuredProjects,
-		syntheticProjects:       c.syntheticProjects,
-		openFiles:               c.openFiles,
-		inferredProject:         c.inferredProject,
-		inferredProjectATAState: c.inferredProjectATAState,
-		fileDefaultProjects:     c.fileDefaultProjects,
-		apiState:                c.apiState,
+		toPath:                                   c.toPath,
+		configFileRegistry:                       c.configFileRegistry,
+		configuredProjects:                       c.configuredProjects,
+		syntheticProjects:                        c.syntheticProjects,
+		openFiles:                                c.openFiles,
+		inferredProject:                          c.inferredProject,
+		inferredProjectATAState:                  c.inferredProjectATAState,
+		inferredProjectATAInvalidationSnapshotID: c.inferredProjectATAInvalidationSnapshotID,
+		fileDefaultProjects:                      c.fileDefaultProjects,
+		apiState:                                 c.apiState,
 	}
 }
 
