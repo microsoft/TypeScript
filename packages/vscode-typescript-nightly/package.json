@@ -25,6 +25,6 @@
         "LICENSE",
         "NOTICE.txt",
         "README.md",
-        "package.nls.json"
+        "package.nls*.json"
     ]
 }
