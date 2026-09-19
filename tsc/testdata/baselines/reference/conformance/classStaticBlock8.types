@@ -56,7 +56,7 @@ function foo (v: number) {
         }
         if (v === 6) {
 >v === 6 : boolean
->v : number
+>v : number & not 5
 >6 : 6
 
             continue label;
@@ -64,14 +64,14 @@ function foo (v: number) {
         }
         if (v === 7) {
 >v === 7 : boolean
->v : number
+>v : number & not 5 & not 6
 >7 : 7
 
             break;
         }
         if (v === 8) {
 >v === 8 : boolean
->v : number
+>v : number & not 5 & not 6 & not 7
 >8 : 8
 
             continue;
@@ -98,18 +98,18 @@ function foo (v: number) {
 
                 if (v === 2) continue loop; // valid
 >v === 2 : boolean
->v : number
+>v : number & not 1
 >2 : 2
 >loop : any
 
                 if (v === 3) break; // valid
 >v === 3 : boolean
->v : number
+>v : number & not 1 & not 2
 >3 : 3
 
                 if (v === 4) continue; // valid
 >v === 4 : boolean
->v : number
+>v : number & not 1 & not 2 & not 3
 >4 : 4
             }
             switch (v) {

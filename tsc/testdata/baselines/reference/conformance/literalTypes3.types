@@ -19,7 +19,7 @@ function f1(s: string) {
 >s : string
 >"foo" : "foo"
 >s === "bar" : boolean
->s : string
+>s : string & not "foo"
 >"bar" : "bar"
 
         s;  // "foo" | "bar"
@@ -67,7 +67,7 @@ function f3(s: string) {
 >s : string
 >"foo" : "foo"
 >s === "bar" : boolean
->s : string
+>s : string & not "foo"
 >"bar" : "bar"
 >s : "bar" | "foo"
 >undefined : undefined
@@ -83,7 +83,7 @@ function f4(x: number) {
 >x : number
 >1 : 1
 >x === 2 : boolean
->x : number
+>x : number & not 1
 >2 : 2
 
         return x;  // 1 | 2
@@ -105,7 +105,7 @@ function f5(x: number, y: 1 | 2) {
 >x : number
 >0 : 0
 >x === y : boolean
->x : number
+>x : number & not 0
 >y : 1 | 2
 
         x;  // 0 | 1 | 2

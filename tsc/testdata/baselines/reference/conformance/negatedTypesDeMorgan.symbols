@@ -1,0 +1,91 @@
+//// [tests/cases/conformance/types/negated/negatedTypesDeMorgan.ts] ////
+
+=== negatedTypesDeMorgan.ts ===
+// De Morgan behavior and union/intersection interaction for negated types.
+
+type A = { a: number };
+>A : Symbol(A, Decl(negatedTypesDeMorgan.ts, 0, 0))
+>a : Symbol(a, Decl(negatedTypesDeMorgan.ts, 2, 10))
+
+type B = { b: number };
+>B : Symbol(B, Decl(negatedTypesDeMorgan.ts, 2, 23))
+>b : Symbol(b, Decl(negatedTypesDeMorgan.ts, 3, 10))
+
+// not (A | B) is distributed to not A & not B.
+type NotAorB = not (A | B);
+>NotAorB : Symbol(NotAorB, Decl(negatedTypesDeMorgan.ts, 3, 23))
+>A : Symbol(A, Decl(negatedTypesDeMorgan.ts, 0, 0))
+>B : Symbol(B, Decl(negatedTypesDeMorgan.ts, 2, 23))
+
+// not (A & B) stays as a single negation of the intersection.
+type NotAandB = not (A & B);
+>NotAandB : Symbol(NotAandB, Decl(negatedTypesDeMorgan.ts, 6, 27))
+>A : Symbol(A, Decl(negatedTypesDeMorgan.ts, 0, 0))
+>B : Symbol(B, Decl(negatedTypesDeMorgan.ts, 2, 23))
+
+// A union of negations (not simplified by De Morgan in this direction).
+type NotAorNotB = not A | not B;
+>NotAorNotB : Symbol(NotAorNotB, Decl(negatedTypesDeMorgan.ts, 9, 28))
+>A : Symbol(A, Decl(negatedTypesDeMorgan.ts, 0, 0))
+>B : Symbol(B, Decl(negatedTypesDeMorgan.ts, 2, 23))
+
+// An intersection of negations equals the negation of the union.
+type NotAandNotB = not A & not B;
+>NotAandNotB : Symbol(NotAandNotB, Decl(negatedTypesDeMorgan.ts, 12, 32))
+>A : Symbol(A, Decl(negatedTypesDeMorgan.ts, 0, 0))
+>B : Symbol(B, Decl(negatedTypesDeMorgan.ts, 2, 23))
+
+// Primitive forms.
+type NotStringOrNumber = not (string | number); // not string & not number
+>NotStringOrNumber : Symbol(NotStringOrNumber, Decl(negatedTypesDeMorgan.ts, 15, 33))
+
+type NotStringAndNever = not string | not never; // not never => unknown, so union widens
+>NotStringAndNever : Symbol(NotStringAndNever, Decl(negatedTypesDeMorgan.ts, 18, 47))
+
+// Assignability relationships between the forms.
+declare let notAorB: NotAorB;       // not A & not B
+>notAorB : Symbol(notAorB, Decl(negatedTypesDeMorgan.ts, 22, 11))
+>NotAorB : Symbol(NotAorB, Decl(negatedTypesDeMorgan.ts, 3, 23))
+
+declare let notAandNotB: NotAandNotB; // not A & not B
+>notAandNotB : Symbol(notAandNotB, Decl(negatedTypesDeMorgan.ts, 23, 11))
+>NotAandNotB : Symbol(NotAandNotB, Decl(negatedTypesDeMorgan.ts, 12, 32))
+
+notAorB = notAandNotB; // should be ok (same type)
+>notAorB : Symbol(notAorB, Decl(negatedTypesDeMorgan.ts, 22, 11))
+>notAandNotB : Symbol(notAandNotB, Decl(negatedTypesDeMorgan.ts, 23, 11))
+
+notAandNotB = notAorB; // should be ok (same type)
+>notAandNotB : Symbol(notAandNotB, Decl(negatedTypesDeMorgan.ts, 23, 11))
+>notAorB : Symbol(notAorB, Decl(negatedTypesDeMorgan.ts, 22, 11))
+
+declare let notAorNotB: NotAorNotB; // not A | not B
+>notAorNotB : Symbol(notAorNotB, Decl(negatedTypesDeMorgan.ts, 28, 11))
+>NotAorNotB : Symbol(NotAorNotB, Decl(negatedTypesDeMorgan.ts, 9, 28))
+
+notAorB = notAorNotB; // relationship probe
+>notAorB : Symbol(notAorB, Decl(negatedTypesDeMorgan.ts, 22, 11))
+>notAorNotB : Symbol(notAorNotB, Decl(negatedTypesDeMorgan.ts, 28, 11))
+
+notAorNotB = notAorB; // relationship probe
+>notAorNotB : Symbol(notAorNotB, Decl(negatedTypesDeMorgan.ts, 28, 11))
+>notAorB : Symbol(notAorB, Decl(negatedTypesDeMorgan.ts, 22, 11))
+
+// Concrete values against the distributed intersection.
+declare let ab: A & B;
+>ab : Symbol(ab, Decl(negatedTypesDeMorgan.ts, 33, 11))
+>A : Symbol(A, Decl(negatedTypesDeMorgan.ts, 0, 0))
+>B : Symbol(B, Decl(negatedTypesDeMorgan.ts, 2, 23))
+
+declare let aOnly: A;
+>aOnly : Symbol(aOnly, Decl(negatedTypesDeMorgan.ts, 34, 11))
+>A : Symbol(A, Decl(negatedTypesDeMorgan.ts, 0, 0))
+
+notAorB = ab;    // probe: A & B excluded by both negations?
+>notAorB : Symbol(notAorB, Decl(negatedTypesDeMorgan.ts, 22, 11))
+>ab : Symbol(ab, Decl(negatedTypesDeMorgan.ts, 33, 11))
+
+notAorB = aOnly; // probe: A excluded by not A
+>notAorB : Symbol(notAorB, Decl(negatedTypesDeMorgan.ts, 22, 11))
+>aOnly : Symbol(aOnly, Decl(negatedTypesDeMorgan.ts, 34, 11))
+

@@ -1,0 +1,229 @@
+//// [tests/cases/compiler/negatedCompoundAssignmentFlow.ts] ////
+
+=== negatedCompoundAssignmentFlow.ts ===
+function compoundFlow(value: number | string) {
+>compoundFlow : (value: number | string) => void
+>value : string | number
+
+    if (typeof value === "number" && value !== 0) {
+>typeof value === "number" && value !== 0 : boolean
+>typeof value === "number" : boolean
+>typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>value : string | number
+>"number" : "number"
+>value !== 0 : boolean
+>value : number
+>0 : 0
+
+        value -= 1;
+>value -= 1 : number
+>value : number & not 0
+>1 : 1
+
+        value;
+>value : number
+
+        if (value === 0) {
+>value === 0 : boolean
+>value : number
+>0 : 0
+
+            value;
+>value : 0
+        }
+    }
+}
+
+function compoundLikeFlow(value: number | string) {
+>compoundLikeFlow : (value: number | string) => void
+>value : string | number
+
+    if (typeof value === "number" && value !== 0) {
+>typeof value === "number" && value !== 0 : boolean
+>typeof value === "number" : boolean
+>typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>value : string | number
+>"number" : "number"
+>value !== 0 : boolean
+>value : number
+>0 : 0
+
+        value = value - 1;
+>value = value - 1 : number
+>value : string | number
+>value - 1 : number
+>value : number & not 0
+>1 : 1
+
+        value;
+>value : number
+
+        if (value === 0) {
+>value === 0 : boolean
+>value : number
+>0 : 0
+
+            value;
+>value : 0
+        }
+    }
+}
+
+function constrainedCompoundLikeFlow(value: number & not 0) {
+>constrainedCompoundLikeFlow : (value: number & not 0) => void
+>value : number & not 0
+
+    value = value - 1;
+>value = value - 1 : number
+>value : number & not 0
+>value - 1 : number
+>value : number & not 0
+>1 : 1
+
+    value;
+>value : number & not 0
+}
+
+function parenthesizedCompound(value: number | undefined) {
+>parenthesizedCompound : (value: number | undefined) => void
+>value : number | undefined
+
+    if (value !== undefined && value !== 0) {
+>value !== undefined && value !== 0 : boolean
+>value !== undefined : boolean
+>value : number | undefined
+>undefined : undefined
+>value !== 0 : boolean
+>value : number
+>0 : 0
+
+        (value) -= 1;
+>(value) -= 1 : number
+>(value) : number & not 0
+>value : number & not 0
+>1 : 1
+
+        value! *= 2;
+>value! *= 2 : number
+>value! : number
+>value : number
+>2 : 2
+    }
+}
+
+function stringCompound(value: string, holder: { value: string }) {
+>stringCompound : (value: string, holder: { value: string; }) => void
+>value : string
+>holder : { value: string; }
+>value : string
+
+    if (value !== "") {
+>value !== "" : boolean
+>value : string
+>"" : ""
+
+        value += "suffix";
+>value += "suffix" : string
+>value : string & not ""
+>"suffix" : "suffix"
+    }
+    if (holder.value !== "") {
+>holder.value !== "" : boolean
+>holder.value : string
+>holder : { value: string; }
+>value : string
+>"" : ""
+
+        holder.value += "suffix";
+>holder.value += "suffix" : string
+>holder.value : string
+>holder : { value: string; }
+>value : string
+>"suffix" : "suffix"
+
+        holder["value"] += "suffix";
+>holder["value"] += "suffix" : string
+>holder["value"] : string
+>holder : { value: string; }
+>"value" : "value"
+>"suffix" : "suffix"
+    }
+}
+
+function accessorCompound(holder: { get value(): number & not 0; set value(value: number) }) {
+>accessorCompound : (holder: { get value(): number & not 0; set value(value: number); }) => void
+>holder : { get value(): number & not 0; set value(value: number); }
+>value : number & not 0
+>value : number & not 0
+>value : number
+
+    holder.value -= 1;
+>holder.value -= 1 : number
+>holder.value : number & not 0
+>holder : { get value(): number & not 0; set value(value: number); }
+>value : number & not 0
+>1 : 1
+}
+
+function constrainedCompound(holder: { value: number & not 0 }, value: number & not 0) {
+>constrainedCompound : (holder: { value: number & not 0; }, value: number & not 0) => void
+>holder : { value: number & not 0; }
+>value : number & not 0
+>value : number & not 0
+
+    holder.value -= 1;
+>holder.value -= 1 : number
+>holder.value : number & not 0
+>holder : { value: number & not 0; }
+>value : number & not 0
+>1 : 1
+
+    holder["value"] -= 1;
+>holder["value"] -= 1 : number
+>holder["value"] : number & not 0
+>holder : { value: number & not 0; }
+>"value" : "value"
+>1 : 1
+
+    (value) -= 1;
+>(value) -= 1 : number
+>(value) : number & not 0
+>value : number & not 0
+>1 : 1
+}
+
+function logicalAssignments(value: number | undefined) {
+>logicalAssignments : (value: number | undefined) => void
+>value : number | undefined
+
+    if (value !== 0) {
+>value !== 0 : boolean
+>value : number | undefined
+>0 : 0
+
+        value ??= 0;
+>value ??= 0 : number
+>value : number | undefined
+>0 : 0
+
+        value ||= 1;
+>value ||= 1 : number
+>value : number | undefined
+>1 : 1
+
+        value &&= 0;
+>value &&= 0 : 0 | undefined
+>value : number | undefined
+>0 : 0
+    }
+}
+
+function constrainedLogicalAssignment(value: number & not 0) {
+>constrainedLogicalAssignment : (value: number & not 0) => void
+>value : number & not 0
+
+    value &&= 0;
+>value &&= 0 : 0
+>value : number & not 0
+>0 : 0
+}

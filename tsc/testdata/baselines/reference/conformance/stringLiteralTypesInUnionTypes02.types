@@ -23,13 +23,13 @@ if (x === "foo") {
 }
 else if (x !== "bar") {
 >x !== "bar" : boolean
->x : string
+>x : string & not "foo"
 >"bar" : "bar"
 
     let b = x || y;
 >b : string
 >x || y : string
->x : string
+>x : string & not "foo" & not "bar"
 >y : string
 }
 else {

@@ -1,0 +1,151 @@
+//// [tests/cases/conformance/types/negated/negatedNarrowingInstanceof.ts] ////
+
+=== negatedNarrowingInstanceof.ts ===
+// `instanceof` narrowing is nominal (prototype-based), so it deliberately does NOT introduce a
+// structural `not C` in the false branch. Class types frequently lack nominal tags and are structural
+// subtypes of one another, so a structural negation would unsoundly reduce nominally-distinct
+// constituents to `never`. This file guards that instanceof narrows by filtering only.
+
+class Animal {
+>Animal : Symbol(Animal, Decl(negatedNarrowingInstanceof.ts, 0, 0))
+
+    move(): void {}
+>move : Symbol(Animal.move, Decl(negatedNarrowingInstanceof.ts, 5, 14))
+}
+class Dog extends Animal {
+>Dog : Symbol(Dog, Decl(negatedNarrowingInstanceof.ts, 7, 1))
+>Animal : Symbol(Animal, Decl(negatedNarrowingInstanceof.ts, 0, 0))
+
+    bark(): void {}
+>bark : Symbol(Dog.bark, Decl(negatedNarrowingInstanceof.ts, 8, 26))
+}
+
+// A broad base is narrowed on the true branch but left intact (no `not Dog`) on the false branch.
+declare const a: object;
+>a : Symbol(a, Decl(negatedNarrowingInstanceof.ts, 13, 13))
+
+if (a instanceof Dog) {
+>a : Symbol(a, Decl(negatedNarrowingInstanceof.ts, 13, 13))
+>Dog : Symbol(Dog, Decl(negatedNarrowingInstanceof.ts, 7, 1))
+
+    a; // Dog
+>a : Symbol(a, Decl(negatedNarrowingInstanceof.ts, 13, 13))
+
+} else {
+    a; // object
+>a : Symbol(a, Decl(negatedNarrowingInstanceof.ts, 13, 13))
+}
+
+declare const b: {};
+>b : Symbol(b, Decl(negatedNarrowingInstanceof.ts, 20, 13))
+
+if (b instanceof Dog) {
+>b : Symbol(b, Decl(negatedNarrowingInstanceof.ts, 20, 13))
+>Dog : Symbol(Dog, Decl(negatedNarrowingInstanceof.ts, 7, 1))
+
+    b; // Dog
+>b : Symbol(b, Decl(negatedNarrowingInstanceof.ts, 20, 13))
+
+} else {
+    b; // {}
+>b : Symbol(b, Decl(negatedNarrowingInstanceof.ts, 20, 13))
+}
+
+// A supertype base keeps the whole supertype (no `not Dog`).
+declare const c: Animal;
+>c : Symbol(c, Decl(negatedNarrowingInstanceof.ts, 28, 13))
+>Animal : Symbol(Animal, Decl(negatedNarrowingInstanceof.ts, 0, 0))
+
+if (c instanceof Dog) {
+>c : Symbol(c, Decl(negatedNarrowingInstanceof.ts, 28, 13))
+>Dog : Symbol(Dog, Decl(negatedNarrowingInstanceof.ts, 7, 1))
+
+    c; // Dog
+>c : Symbol(c, Decl(negatedNarrowingInstanceof.ts, 28, 13))
+
+} else {
+    c; // Animal
+>c : Symbol(c, Decl(negatedNarrowingInstanceof.ts, 28, 13))
+}
+
+// A bare type parameter: true branch intersects, false branch is unchanged.
+function generic<T>(x: T) {
+>generic : Symbol(generic, Decl(negatedNarrowingInstanceof.ts, 33, 1))
+>T : Symbol(T, Decl(negatedNarrowingInstanceof.ts, 36, 17))
+>x : Symbol(x, Decl(negatedNarrowingInstanceof.ts, 36, 20))
+>T : Symbol(T, Decl(negatedNarrowingInstanceof.ts, 36, 17))
+
+    if (x instanceof Dog) {
+>x : Symbol(x, Decl(negatedNarrowingInstanceof.ts, 36, 20))
+>Dog : Symbol(Dog, Decl(negatedNarrowingInstanceof.ts, 7, 1))
+
+        x; // T & Dog
+>x : Symbol(x, Decl(negatedNarrowingInstanceof.ts, 36, 20))
+
+    } else {
+        x; // T
+>x : Symbol(x, Decl(negatedNarrowingInstanceof.ts, 36, 20))
+    }
+}
+
+// Structurally-related but nominally-distinct classes must both survive: `Derived2` structurally
+// extends `Derived1`, but a `Derived2` instance is not `instanceof Derived1`, so the else branch
+// must keep `Derived2` (it must NOT collapse to `never`).
+class Base {
+>Base : Symbol(Base, Decl(negatedNarrowingInstanceof.ts, 42, 1))
+
+    basey = "";
+>basey : Symbol(Base.basey, Decl(negatedNarrowingInstanceof.ts, 47, 12))
+}
+class Derived1 extends Base {
+>Derived1 : Symbol(Derived1, Decl(negatedNarrowingInstanceof.ts, 49, 1))
+>Base : Symbol(Base, Decl(negatedNarrowingInstanceof.ts, 42, 1))
+
+    d = "";
+>d : Symbol(Derived1.d, Decl(negatedNarrowingInstanceof.ts, 50, 29))
+}
+class Derived2 extends Base {
+>Derived2 : Symbol(Derived2, Decl(negatedNarrowingInstanceof.ts, 52, 1))
+>Base : Symbol(Base, Decl(negatedNarrowingInstanceof.ts, 42, 1))
+
+    d = "";
+>d : Symbol(Derived2.d, Decl(negatedNarrowingInstanceof.ts, 53, 29))
+
+    other = "";
+>other : Symbol(Derived2.other, Decl(negatedNarrowingInstanceof.ts, 54, 11))
+}
+declare const e: Derived1 | Derived2;
+>e : Symbol(e, Decl(negatedNarrowingInstanceof.ts, 57, 13))
+>Derived1 : Symbol(Derived1, Decl(negatedNarrowingInstanceof.ts, 49, 1))
+>Derived2 : Symbol(Derived2, Decl(negatedNarrowingInstanceof.ts, 52, 1))
+
+if (e instanceof Derived1) {
+>e : Symbol(e, Decl(negatedNarrowingInstanceof.ts, 57, 13))
+>Derived1 : Symbol(Derived1, Decl(negatedNarrowingInstanceof.ts, 49, 1))
+
+    e; // Derived1
+>e : Symbol(e, Decl(negatedNarrowingInstanceof.ts, 57, 13))
+
+} else {
+    e; // Derived2
+>e : Symbol(e, Decl(negatedNarrowingInstanceof.ts, 57, 13))
+}
+
+// A disjoint object constituent is dropped on the true branch and kept on the false branch.
+declare const d: Dog | { kind: "other" };
+>d : Symbol(d, Decl(negatedNarrowingInstanceof.ts, 65, 13))
+>Dog : Symbol(Dog, Decl(negatedNarrowingInstanceof.ts, 7, 1))
+>kind : Symbol(kind, Decl(negatedNarrowingInstanceof.ts, 65, 24))
+
+if (d instanceof Dog) {
+>d : Symbol(d, Decl(negatedNarrowingInstanceof.ts, 65, 13))
+>Dog : Symbol(Dog, Decl(negatedNarrowingInstanceof.ts, 7, 1))
+
+    d; // Dog
+>d : Symbol(d, Decl(negatedNarrowingInstanceof.ts, 65, 13))
+
+} else {
+    d; // { kind: "other"; }
+>d : Symbol(d, Decl(negatedNarrowingInstanceof.ts, 65, 13))
+}
+

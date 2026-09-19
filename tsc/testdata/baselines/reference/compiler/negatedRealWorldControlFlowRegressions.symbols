@@ -1,0 +1,146 @@
+//// [tests/cases/compiler/negatedRealWorldControlFlowRegressions.ts] ////
+
+=== negatedRealWorldControlFlowRegressions.ts ===
+function parseCommand(command: string): "start" | "stop" {
+>parseCommand : Symbol(parseCommand, Decl(negatedRealWorldControlFlowRegressions.ts, 0, 0))
+>command : Symbol(command, Decl(negatedRealWorldControlFlowRegressions.ts, 0, 22))
+
+    if (command !== "start" && command !== "stop") {
+>command : Symbol(command, Decl(negatedRealWorldControlFlowRegressions.ts, 0, 22))
+>command : Symbol(command, Decl(negatedRealWorldControlFlowRegressions.ts, 0, 22))
+
+        throw new Error("Invalid command");
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+    }
+    return command;
+>command : Symbol(command, Decl(negatedRealWorldControlFlowRegressions.ts, 0, 22))
+}
+
+interface HandlerOptions {
+>HandlerOptions : Symbol(HandlerOptions, Decl(negatedRealWorldControlFlowRegressions.ts, 5, 1))
+
+    message?: string;
+>message : Symbol(HandlerOptions.message, Decl(negatedRealWorldControlFlowRegressions.ts, 7, 26))
+}
+
+declare const handler: string | HandlerOptions | ((value: number) => void) | undefined;
+>handler : Symbol(handler, Decl(negatedRealWorldControlFlowRegressions.ts, 11, 13))
+>HandlerOptions : Symbol(HandlerOptions, Decl(negatedRealWorldControlFlowRegressions.ts, 5, 1))
+>value : Symbol(value, Decl(negatedRealWorldControlFlowRegressions.ts, 11, 51))
+
+if (typeof handler !== "string" && handler !== undefined && typeof handler === "function") {
+>handler : Symbol(handler, Decl(negatedRealWorldControlFlowRegressions.ts, 11, 13))
+>handler : Symbol(handler, Decl(negatedRealWorldControlFlowRegressions.ts, 11, 13))
+>undefined : Symbol(undefined)
+>handler : Symbol(handler, Decl(negatedRealWorldControlFlowRegressions.ts, 11, 13))
+
+    handler(0);
+>handler : Symbol(handler, Decl(negatedRealWorldControlFlowRegressions.ts, 11, 13))
+}
+
+let count = 1 as number;
+>count : Symbol(count, Decl(negatedRealWorldControlFlowRegressions.ts, 16, 3))
+
+if (count !== 0) {
+>count : Symbol(count, Decl(negatedRealWorldControlFlowRegressions.ts, 16, 3))
+
+    count--;
+>count : Symbol(count, Decl(negatedRealWorldControlFlowRegressions.ts, 16, 3))
+
+    if (count === 0) {
+>count : Symbol(count, Decl(negatedRealWorldControlFlowRegressions.ts, 16, 3))
+
+        count;
+>count : Symbol(count, Decl(negatedRealWorldControlFlowRegressions.ts, 16, 3))
+    }
+}
+
+let offset = 1 as number;
+>offset : Symbol(offset, Decl(negatedRealWorldControlFlowRegressions.ts, 24, 3))
+
+if (offset !== 0) {
+>offset : Symbol(offset, Decl(negatedRealWorldControlFlowRegressions.ts, 24, 3))
+
+    offset = 0;
+>offset : Symbol(offset, Decl(negatedRealWorldControlFlowRegressions.ts, 24, 3))
+}
+
+let total = 1 as number;
+>total : Symbol(total, Decl(negatedRealWorldControlFlowRegressions.ts, 29, 3))
+
+if (total !== 0) {
+>total : Symbol(total, Decl(negatedRealWorldControlFlowRegressions.ts, 29, 3))
+
+    total -= 1;
+>total : Symbol(total, Decl(negatedRealWorldControlFlowRegressions.ts, 29, 3))
+}
+
+declare let constrainedTotal: number & not 0;
+>constrainedTotal : Symbol(constrainedTotal, Decl(negatedRealWorldControlFlowRegressions.ts, 34, 11))
+
+constrainedTotal -= 1;
+>constrainedTotal : Symbol(constrainedTotal, Decl(negatedRealWorldControlFlowRegressions.ts, 34, 11))
+
+declare const values: Map<string, string>;
+>values : Symbol(values, Decl(negatedRealWorldControlFlowRegressions.ts, 37, 13))
+>Map : Symbol(Map, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+if (values.size !== 0) {
+>values.size : Symbol(Map.size, Decl(lib.es2015.collection.d.ts, --, --))
+>values : Symbol(values, Decl(negatedRealWorldControlFlowRegressions.ts, 37, 13))
+>size : Symbol(Map.size, Decl(lib.es2015.collection.d.ts, --, --))
+
+    values.delete("key");
+>values.delete : Symbol(Map.delete, Decl(lib.es2015.collection.d.ts, --, --))
+>values : Symbol(values, Decl(negatedRealWorldControlFlowRegressions.ts, 37, 13))
+>delete : Symbol(Map.delete, Decl(lib.es2015.collection.d.ts, --, --))
+
+    if (values.size === 0) {
+>values.size : Symbol(Map.size, Decl(lib.es2015.collection.d.ts, --, --))
+>values : Symbol(values, Decl(negatedRealWorldControlFlowRegressions.ts, 37, 13))
+>size : Symbol(Map.size, Decl(lib.es2015.collection.d.ts, --, --))
+
+        values;
+>values : Symbol(values, Decl(negatedRealWorldControlFlowRegressions.ts, 37, 13))
+    }
+}
+
+interface Options {
+>Options : Symbol(Options, Decl(negatedRealWorldControlFlowRegressions.ts, 43, 1))
+
+    enabled?: boolean;
+>enabled : Symbol(Options.enabled, Decl(negatedRealWorldControlFlowRegressions.ts, 45, 19))
+
+    threshold?: number;
+>threshold : Symbol(Options.threshold, Decl(negatedRealWorldControlFlowRegressions.ts, 46, 22))
+}
+
+declare const rawOptions: boolean | Options;
+>rawOptions : Symbol(rawOptions, Decl(negatedRealWorldControlFlowRegressions.ts, 50, 13))
+>Options : Symbol(Options, Decl(negatedRealWorldControlFlowRegressions.ts, 43, 1))
+
+const options = typeof rawOptions === "boolean" ? { enabled: rawOptions } : rawOptions;
+>options : Symbol(options, Decl(negatedRealWorldControlFlowRegressions.ts, 51, 5))
+>rawOptions : Symbol(rawOptions, Decl(negatedRealWorldControlFlowRegressions.ts, 50, 13))
+>enabled : Symbol(enabled, Decl(negatedRealWorldControlFlowRegressions.ts, 51, 51))
+>rawOptions : Symbol(rawOptions, Decl(negatedRealWorldControlFlowRegressions.ts, 50, 13))
+>rawOptions : Symbol(rawOptions, Decl(negatedRealWorldControlFlowRegressions.ts, 50, 13))
+
+options.threshold;
+>options.threshold : Symbol(Options.threshold, Decl(negatedRealWorldControlFlowRegressions.ts, 46, 22))
+>options : Symbol(options, Decl(negatedRealWorldControlFlowRegressions.ts, 51, 5))
+>threshold : Symbol(Options.threshold, Decl(negatedRealWorldControlFlowRegressions.ts, 46, 22))
+
+declare const input: unknown;
+>input : Symbol(input, Decl(negatedRealWorldControlFlowRegressions.ts, 54, 13))
+
+const normalized = typeof input === "bigint" ? Number(input) : input;
+>normalized : Symbol(normalized, Decl(negatedRealWorldControlFlowRegressions.ts, 55, 5))
+>input : Symbol(input, Decl(negatedRealWorldControlFlowRegressions.ts, 54, 13))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2020.number.d.ts, --, --))
+>input : Symbol(input, Decl(negatedRealWorldControlFlowRegressions.ts, 54, 13))
+>input : Symbol(input, Decl(negatedRealWorldControlFlowRegressions.ts, 54, 13))
+
+normalized;
+>normalized : Symbol(normalized, Decl(negatedRealWorldControlFlowRegressions.ts, 55, 5))
+
