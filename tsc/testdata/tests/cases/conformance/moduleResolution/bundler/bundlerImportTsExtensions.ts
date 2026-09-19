@@ -1,7 +1,6 @@
 // @target: es2015
 // @moduleResolution: bundler
 // @module: esnext
-// @outDir: dist
 // @allowJs: true
 // @checkJs: true
 // @outDir: out
