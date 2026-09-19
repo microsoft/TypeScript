@@ -1,0 +1,14 @@
+constEnumInfinityShadow.ts(4,13): error TS2477: 'const' enum member initializer was evaluated to a non-finite value.
+
+
+==== constEnumInfinityShadow.ts (1 errors) ====
+    const Infinity = 0;
+    
+    const enum E {
+        value = 1e999,
+                ~~~~~
+!!! error TS2477: 'const' enum member initializer was evaluated to a non-finite value.
+    }
+    
+    export const value = E.value;
+    

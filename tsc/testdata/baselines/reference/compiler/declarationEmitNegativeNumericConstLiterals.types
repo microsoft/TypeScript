@@ -1,0 +1,67 @@
+//// [tests/cases/compiler/declarationEmitNegativeNumericConstLiterals.ts] ////
+
+=== declarationEmitNegativeNumericConstLiterals.ts ===
+declare function id<const T>(value: T): T;
+>id : <const T>(value: T) => T
+>value : T
+
+export const a = -1e500 as const;
+>a : -1e999
+>-1e500 as const : -1e999
+>-1e500 : -1e999
+>1e500 : 1e999
+
+export const b = -123456789012345678901234567890 as const;
+>b : -1.2345678901234568e+29
+>-123456789012345678901234567890 as const : -1.2345678901234568e+29
+>-123456789012345678901234567890 : -1.2345678901234568e+29
+>123456789012345678901234567890 : 1.2345678901234568e+29
+
+export const c = ((-1e500)) as const;
+>c : -1e999
+>((-1e500)) as const : -1e999
+>((-1e500)) : -1e999
+>(-1e500) : -1e999
+>-1e500 : -1e999
+>1e500 : 1e999
+
+export const d = { value: -1e500 } as const;
+>d : { readonly value: -1e999; }
+>{ value: -1e500 } as const : { readonly value: -1e999; }
+>{ value: -1e500 } : { readonly value: -1e999; }
+>value : -1e999
+>-1e500 : -1e999
+>1e500 : 1e999
+
+export const e = [-1e500] as const;
+>e : readonly [-1e999]
+>[-1e500] as const : readonly [-1e999]
+>[-1e500] : readonly [-1e999]
+>-1e500 : -1e999
+>1e500 : 1e999
+
+export const f = id(-1e500);
+>f : -1e999
+>id(-1e500) : -1e999
+>id : <const T>(value: T) => T
+>-1e500 : -1e999
+>1e500 : 1e999
+
+export const g = -1e500;
+>g : -1e999
+>-1e500 : -1e999
+>1e500 : 1e999
+
+export const h = 1e500;
+>h : 1e999
+>1e500 : 1e999
+
+export const i = { [-1e500]: 1 } as const;
+>i : { readonly [-Infinity]: 1; }
+>{ [-1e500]: 1 } as const : { readonly [-Infinity]: 1; }
+>{ [-1e500]: 1 } : { readonly [-Infinity]: 1; }
+>[-1e500] : 1
+>-1e500 : -1e999
+>1e500 : 1e999
+>1 : 1
+
