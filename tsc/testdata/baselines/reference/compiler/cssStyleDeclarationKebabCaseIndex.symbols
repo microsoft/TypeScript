@@ -1,0 +1,17 @@
+//// [tests/cases/compiler/cssStyleDeclarationKebabCaseIndex.ts] ////
+
+=== cssStyleDeclarationKebabCaseIndex.ts ===
+declare const el: HTMLElement;
+>el : Symbol(el, Decl(cssStyleDeclarationKebabCaseIndex.ts, 0, 13))
+>HTMLElement : Symbol(HTMLElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+const value = getComputedStyle(el)["background-color"];
+>value : Symbol(value, Decl(cssStyleDeclarationKebabCaseIndex.ts, 2, 5))
+>getComputedStyle : Symbol(getComputedStyle, Decl(lib.dom.d.ts, --, --))
+>el : Symbol(el, Decl(cssStyleDeclarationKebabCaseIndex.ts, 0, 13))
+
+el.style["background-color"] = "red";
+>el.style : Symbol(ElementCSSInlineStyle.style, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>el : Symbol(el, Decl(cssStyleDeclarationKebabCaseIndex.ts, 0, 13))
+>style : Symbol(ElementCSSInlineStyle.style, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+

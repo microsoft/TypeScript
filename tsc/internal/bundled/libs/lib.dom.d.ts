@@ -6587,6 +6587,10 @@ interface CSSStyleDeclarationBase {
      */
     setProperty(property: string, value: string | null, priority?: string): void;
     [index: number]: string;
+    /**
+     * CSS properties can also be accessed using their kebab-case (dashed) names, e.g. `style['background-color']`.
+     */
+    [index: string]: any;
 }
 
 interface CSSStyleDeclaration extends CSSStyleProperties {
