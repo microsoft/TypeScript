@@ -242,8 +242,8 @@ export type {
 };
 
 export interface ModuleResolverOptions {
-    moduleResolutions?: ModuleResolutionSpec;
-    resolveModuleName?: ResolveModuleNameCallback;
+    moduleResolutions?: ModuleResolutionSpec | undefined;
+    resolveModuleName?: ResolveModuleNameCallback | undefined;
 }
 
 export interface ResolveModuleNameCallbackOptions {
@@ -256,7 +256,7 @@ export type InProgressSnapshot = number & { readonly [inProgressSnapshotBrand]: 
 export type ResolveModuleNameCallback = (moduleName: string, containingDirectory: string, resolutionMode: ResolutionMode | undefined, options: ResolveModuleNameCallbackOptions) => ProvidedModuleResolution | undefined | Promise<ProvidedModuleResolution | undefined>; // @sync: export type ResolveModuleNameCallback = (moduleName: string, containingDirectory: string, resolutionMode: ResolutionMode | undefined, options: ResolveModuleNameCallbackOptions) => ProvidedModuleResolution | undefined;
 
 export type CreateProgramOptions = Omit<ProtocolCreateProgramOptions, "moduleResolver"> & {
-    moduleResolver?: ModuleResolver;
+    moduleResolver?: ModuleResolver | undefined;
 };
 export type CreateSnapshotProgramParams = Omit<ProtocolCreateSnapshotProgramParams, "options"> & { options?: CreateProgramOptions | undefined; };
 export type ReconfigureSnapshotProgramParams = Omit<ProtocolReconfigureSnapshotProgramParams, "options"> & { options?: CreateProgramOptions | undefined; };
@@ -946,7 +946,7 @@ export class ModuleResolver {
         moduleName: string,
         containingDirectory: DocumentIdentifier,
         resolutionMode?: ResolutionMode,
-        options?: { snapshot?: Snapshot | InProgressSnapshot; },
+        options?: { snapshot?: Snapshot | InProgressSnapshot | undefined; },
     ): Promise<ResolveModuleNameResult> {
         this.ensureNotDisposed();
         if (options?.snapshot instanceof Snapshot && options.snapshot.isDisposed()) {
