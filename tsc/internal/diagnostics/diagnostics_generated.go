@@ -2388,8 +2388,6 @@ var X_tsconfig_json_is_present_but_will_not_be_loaded_if_files_are_specified_on_
 
 var X_0_is_only_assignable_to_the_non_distributed_1_but_1_has_been_distributed_here = &Message{code: 5113, category: CategoryError, key: "_0_is_only_assignable_to_the_non_distributed_1_but_1_has_been_distributed_here_5113", text: "'{0}' is only assignable to the non-distributed '{1}', but '{1}' has been distributed here."}
 
-var A_base_type_of_0_has_type_arguments_that_circularly_reference_members_of_the_type = &Message{code: 5114, category: CategoryError, key: "A_base_type_of_0_has_type_arguments_that_circularly_reference_members_of_the_type_5114", text: "A base type of '{0}' has type arguments that circularly reference members of the type."}
-
 var Generates_a_sourcemap_for_each_corresponding_d_ts_file = &Message{code: 6000, category: CategoryMessage, key: "Generates_a_sourcemap_for_each_corresponding_d_ts_file_6000", text: "Generates a sourcemap for each corresponding '.d.ts' file."}
 
 var Concatenate_and_emit_output_to_single_file = &Message{code: 6001, category: CategoryMessage, key: "Concatenate_and_emit_output_to_single_file_6001", text: "Concatenate and emit output to single file."}
@@ -6818,8 +6816,6 @@ func keyToMessage(key Key) *Message {
 		return X_tsconfig_json_is_present_but_will_not_be_loaded_if_files_are_specified_on_commandline_Use_ignoreConfig_to_skip_this_error
 	case "_0_is_only_assignable_to_the_non_distributed_1_but_1_has_been_distributed_here_5113":
 		return X_0_is_only_assignable_to_the_non_distributed_1_but_1_has_been_distributed_here
-	case "A_base_type_of_0_has_type_arguments_that_circularly_reference_members_of_the_type_5114":
-		return A_base_type_of_0_has_type_arguments_that_circularly_reference_members_of_the_type
 	case "Generates_a_sourcemap_for_each_corresponding_d_ts_file_6000":
 		return Generates_a_sourcemap_for_each_corresponding_d_ts_file
 	case "Concatenate_and_emit_output_to_single_file_6001":

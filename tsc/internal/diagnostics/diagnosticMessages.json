@@ -4772,10 +4772,6 @@
         "category": "Error",
         "code": 5113
     },
-    "A base type of '{0}' has type arguments that circularly reference members of the type.": {
-        "category": "Error",
-        "code": 5114
-    },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
         "category": "Message",

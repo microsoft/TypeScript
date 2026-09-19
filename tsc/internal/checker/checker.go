@@ -19463,10 +19463,6 @@ func (c *Checker) resolveObjectTypeMembers(t *Type, source *Type, typeParameters
 		if !instantiated {
 			members = maps.Clone(members)
 		}
-		if !c.pushTypeResolution(t, TypeSystemPropertyNameMembers) {
-			c.setStructuredTypeMembers(t, members, callSignatures, constructSignatures, indexInfos)
-			return
-		}
 		thisArgument := core.LastOrNil(typeArguments)
 		for _, baseType := range baseTypes {
 			instantiatedBaseType := baseType
@@ -19485,10 +19481,6 @@ func (c *Checker) resolveObjectTypeMembers(t *Type, source *Type, typeParameters
 			indexInfos = core.Concatenate(indexInfos, core.Filter(inheritedIndexInfos, func(info *IndexInfo) bool {
 				return findIndexInfo(indexInfos, info.keyType) == nil
 			}))
-		}
-		if !c.popTypeResolution() {
-			c.error(c.currentNode, diagnostics.A_base_type_of_0_has_type_arguments_that_circularly_reference_members_of_the_type, c.TypeToString(t))
-			return
 		}
 	}
 	c.setStructuredTypeMembers(t, members, callSignatures, constructSignatures, indexInfos)
