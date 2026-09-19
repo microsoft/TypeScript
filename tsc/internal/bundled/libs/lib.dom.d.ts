@@ -17744,7 +17744,7 @@ interface HTMLElement extends Element, ElementCSSInlineStyle, ElementContentEdit
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLElement/autocapitalize)
      */
-    autocapitalize: string;
+    autocapitalize: "off" | "none" | "on" | "sentences" | "words" | "characters";
     /**
      * The **`autocorrect`** property of the HTMLElement interface controls whether or not autocorrection of editable text is enabled for spelling and/or punctuation errors.
      *
