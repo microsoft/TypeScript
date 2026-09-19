@@ -1,0 +1,126 @@
+iteratorZip.ts(62,23): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Type '"invalid"' is not assignable to type '"longest" | "shortest" | "strict" | undefined'.
+iteratorZip.ts(64,56): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Type 'true[]' is not assignable to type 'Iterable<"a" | 1>'.
+      The types returned by '[Symbol.iterator]().next(...)' are incompatible between these types.
+        Type 'IteratorResult<true, undefined>' is not assignable to type 'IteratorResult<"a" | 1, any>'.
+          Type 'IteratorYieldResult<true>' is not assignable to type 'IteratorResult<"a" | 1, any>'.
+            Type 'IteratorYieldResult<true>' is not assignable to type 'IteratorYieldResult<"a" | 1>'.
+              Type 'true' is not assignable to type '"a" | 1'.
+iteratorZip.ts(66,41): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Object literal may only specify known properties, and 'padding' does not exist in type 'IteratorZipShortestOptions'.
+iteratorZip.ts(68,14): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type 'number' is not assignable to parameter of type 'Iterable<IteratorInput<unknown>>'.
+iteratorZip.ts(70,21): error TS2322: Type 'number' is not assignable to type 'number & IteratorInput<unknown>'.
+
+
+==== iteratorZip.ts (5 errors) ====
+    declare const key: unique symbol;
+    
+    const tuples: [number, string][] = Iterator.zip([
+        [1, 2],
+        new Set(["a", "b"]),
+    ] as const).toArray();
+    
+    tuples[0][0] = 2;
+    
+    const shortestTuples: [number, string][] = Iterator.zip([[1], ["a"]] as const, { mode: "shortest" }).toArray();
+    const strictTuples: [number, string][] = Iterator.zip([[1], ["a"]] as const, { mode: "strict" }).toArray();
+    const longestTuplesWithPadding: [number, string][] = Iterator.zip([[1], ["a"]] as const, { mode: "longest", padding: [1, "a"] }).toArray();
+    const longestTuplesWithoutPadding: [number | undefined, string | undefined][] = Iterator.zip([[1], ["a"]] as const, { mode: "longest" }).toArray();
+    const longestTuplesWithPartialPadding: [number | undefined, string | undefined][] = Iterator.zip([[1], ["a"]] as const, { mode: "longest", padding: [1] }).toArray();
+    
+    declare const maybeLongestOptions: { mode: "shortest"; } | { mode: "longest"; };
+    const maybeLongestTuples: [number | undefined, string | undefined][] = Iterator.zip([[1], ["a"]] as const, maybeLongestOptions).toArray();
+    
+    const empty: never[] = Iterator.zip([]).toArray();
+    const emptyLongest: never[] = Iterator.zip([], { mode: "longest" }).toArray();
+    
+    declare const iterables: Iterable<Iterable<number>>;
+    const arrays: number[][] = Iterator.zip(iterables).toArray();
+    const longestArrays: (number | undefined)[][] = Iterator.zip(iterables, { mode: "longest" }).toArray();
+    const maybeLongestArrays: (number | undefined)[][] = Iterator.zip(iterables, maybeLongestOptions).toArray();
+    
+    declare const iterableArray: Iterable<number>[];
+    const longestArrayWithPadding: (number | undefined)[][] = Iterator.zip(iterableArray, { mode: "longest", padding: [] }).toArray();
+    
+    const objects: { a: number; b: string; [key]: boolean; }[] = Iterator.zipKeyed({
+        a: [1, 2],
+        b: new Set(["a", "b"]),
+        [key]: [true, false],
+    } as const).toArray();
+    
+    objects[0].a = 2;
+    
+    const longestObjectsWithPadding: { a: number; b: string; }[] = Iterator.zipKeyed({ a: [1], b: ["a"] } as const, {
+        mode: "longest",
+        padding: { a: 1, b: "a" },
+    }).toArray();
+    
+    const longestObjectsWithoutPadding: { a: number | undefined; b: string | undefined; }[] = Iterator.zipKeyed({ a: [1], b: ["a"] } as const, {
+        mode: "longest",
+    }).toArray();
+    
+    const longestObjectsWithPartialPadding: { a: number | undefined; b: string | undefined; }[] = Iterator.zipKeyed({ a: [1], b: ["a"] } as const, {
+        mode: "longest",
+        padding: { b: "a" },
+    }).toArray();
+    
+    const maybeLongestObjects: { a: number | undefined; b: string | undefined; }[] = Iterator.zipKeyed({ a: [1], b: ["a"] } as const, maybeLongestOptions).toArray();
+    
+    interface Inputs {
+        a: Iterable<number>;
+        b: Iterator<string>;
+    }
+    
+    declare const inputs: Inputs;
+    const rows: { a: number; b: string; }[] = Iterator.zipKeyed(inputs).toArray();
+    
+    Iterator.zip([[1]], { mode: "invalid" });
+                          ~~~~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   The last overload gave the following error.
+!!! error TS2769:     Type '"invalid"' is not assignable to type '"longest" | "shortest" | "strict" | undefined'.
+!!! related TS2771 lib.esnext.iterator.d.ts:--:--: The last overload is declared here.
+    
+    Iterator.zip([[1], ["a"]] as const, { mode: "longest", padding: [true] });
+                                                           ~~~~~~~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   The last overload gave the following error.
+!!! error TS2769:     Type 'true[]' is not assignable to type 'Iterable<"a" | 1>'.
+!!! error TS2769:       The types returned by '[Symbol.iterator]().next(...)' are incompatible between these types.
+!!! error TS2769:         Type 'IteratorResult<true, undefined>' is not assignable to type 'IteratorResult<"a" | 1, any>'.
+!!! error TS2769:           Type 'IteratorYieldResult<true>' is not assignable to type 'IteratorResult<"a" | 1, any>'.
+!!! error TS2769:             Type 'IteratorYieldResult<true>' is not assignable to type 'IteratorYieldResult<"a" | 1>'.
+!!! error TS2769:               Type 'true' is not assignable to type '"a" | 1'.
+!!! related TS2771 lib.esnext.iterator.d.ts:--:--: The last overload is declared here.
+    
+    Iterator.zip([[1]], { mode: "shortest", padding: [1] });
+                                            ~~~~~~~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   The last overload gave the following error.
+!!! error TS2769:     Object literal may only specify known properties, and 'padding' does not exist in type 'IteratorZipShortestOptions'.
+!!! related TS2771 lib.esnext.iterator.d.ts:--:--: The last overload is declared here.
+    
+    Iterator.zip(0);
+                 ~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   The last overload gave the following error.
+!!! error TS2769:     Argument of type 'number' is not assignable to parameter of type 'Iterable<IteratorInput<unknown>>'.
+!!! related TS2771 lib.esnext.iterator.d.ts:--:--: The last overload is declared here.
+    
+    Iterator.zipKeyed({ a: 0 });
+                        ~
+!!! error TS2322: Type 'number' is not assignable to type 'number & IteratorInput<unknown>'.
+!!! related TS6500 iteratorZip.ts:70:21: The expected type comes from property 'a' which is declared here on type '{ a: number; } & Record<"a", IteratorInput<unknown>>'
+    
+    const emptyKeyed: never[] = Iterator.zipKeyed({}).toArray();
+    const emptyKeyedLongest: never[] = Iterator.zipKeyed({}, { mode: "longest", padding: {} }).toArray();
+    
+    declare const unionInputs: { a: Iterable<number>; } | { b: Iterator<string>; };
+    const unionRows: ({ a: number; } | { b: string; })[] = Iterator.zipKeyed(unionInputs).toArray();
+    
