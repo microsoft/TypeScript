@@ -1,0 +1,21 @@
+//// [tests/cases/compiler/midiMessageEventDataNotNullable.ts] ////
+
+=== midiMessageEventDataNotNullable.ts ===
+declare const input: MIDIInput;
+>input : Symbol(input, Decl(midiMessageEventDataNotNullable.ts, 0, 13))
+>MIDIInput : Symbol(MIDIInput, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+input.onmidimessage = (event) => {
+>input.onmidimessage : Symbol(MIDIInput.onmidimessage, Decl(lib.dom.d.ts, --, --))
+>input : Symbol(input, Decl(midiMessageEventDataNotNullable.ts, 0, 13))
+>onmidimessage : Symbol(MIDIInput.onmidimessage, Decl(lib.dom.d.ts, --, --))
+>event : Symbol(event, Decl(midiMessageEventDataNotNullable.ts, 2, 23))
+
+    // `data` should not be nullable, so this should not error.
+    event.data[0];
+>event.data : Symbol(MIDIMessageEvent.data, Decl(lib.dom.d.ts, --, --))
+>event : Symbol(event, Decl(midiMessageEventDataNotNullable.ts, 2, 23))
+>data : Symbol(MIDIMessageEvent.data, Decl(lib.dom.d.ts, --, --))
+
+};
+
