@@ -1,0 +1,20 @@
+/a.js(10,12): error TS8030: A JSDoc '@type' tag on a function must have a signature with the correct number of arguments.
+
+
+==== /a.js (1 errors) ====
+    /** @typedef {{ method?: (s: string) => number }} Example */
+    
+    const example = {
+      /** @type {Example['method']} */
+      method(s) {
+        return s.length;
+      }
+    };
+    
+    /** @type {Example['method']} */
+               ~~~~~~~~~~~~~~~~~
+!!! error TS8030: A JSDoc '@type' tag on a function must have a signature with the correct number of arguments.
+    function tooManyParams(s, extra) {
+      return 0;
+    }
+    
