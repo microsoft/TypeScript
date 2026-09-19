@@ -1,0 +1,64 @@
+//// [tests/cases/compiler/domHTMLElementOnError.ts] ////
+
+=== domHTMLElementOnError.ts ===
+declare const htmlElement: HTMLElement;
+>htmlElement : HTMLElement
+
+htmlElement.onerror = (event: Event) => {};
+>htmlElement.onerror = (event: Event) => {} : (event: Event) => void
+>htmlElement.onerror : ((this: GlobalEventHandlers, ev: UIEvent) => any) | null
+>htmlElement : HTMLElement
+>onerror : ((this: GlobalEventHandlers, ev: UIEvent) => any) | null
+>(event: Event) => {} : (event: Event) => void
+>event : Event
+
+htmlElement.onerror = (event: UIEvent) => {};
+>htmlElement.onerror = (event: UIEvent) => {} : (event: UIEvent) => void
+>htmlElement.onerror : ((this: GlobalEventHandlers, ev: UIEvent) => any) | null
+>htmlElement : HTMLElement
+>onerror : ((this: GlobalEventHandlers, ev: UIEvent) => any) | null
+>(event: UIEvent) => {} : (event: UIEvent) => void
+>event : UIEvent
+
+htmlElement.addEventListener("error", (event: Event) => {});
+>htmlElement.addEventListener("error", (event: Event) => {}) : void
+>htmlElement.addEventListener : { <K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void; (type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void; }
+>htmlElement : HTMLElement
+>addEventListener : { <K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void; (type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void; }
+>"error" : "error"
+>(event: Event) => {} : (event: Event) => void
+>event : Event
+
+htmlElement.addEventListener("error", (event: UIEvent) => {});
+>htmlElement.addEventListener("error", (event: UIEvent) => {}) : void
+>htmlElement.addEventListener : { <K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void; (type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void; }
+>htmlElement : HTMLElement
+>addEventListener : { <K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void; (type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void; }
+>"error" : "error"
+>(event: UIEvent) => {} : (event: UIEvent) => void
+>event : UIEvent
+
+declare const win: Window;
+>win : Window
+
+win.onerror = (event, source, lineno, colno, error) => {};
+>win.onerror = (event, source, lineno, colno, error) => {} : (event: string | Event, source: string | undefined, lineno: number | undefined, colno: number | undefined, error: Error | undefined) => void
+>win.onerror : OnErrorEventHandler
+>win : Window
+>onerror : OnErrorEventHandler
+>(event, source, lineno, colno, error) => {} : (event: string | Event, source: string | undefined, lineno: number | undefined, colno: number | undefined, error: Error | undefined) => void
+>event : string | Event
+>source : string | undefined
+>lineno : number | undefined
+>colno : number | undefined
+>error : Error | undefined
+
+win.addEventListener("error", (event: ErrorEvent) => {});
+>win.addEventListener("error", (event: ErrorEvent) => {}) : void
+>win.addEventListener : { <K extends keyof WindowEventMap>(type: K, listener: (this: Window, ev: WindowEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void; (type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void; }
+>win : Window
+>addEventListener : { <K extends keyof WindowEventMap>(type: K, listener: (this: Window, ev: WindowEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void; (type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void; }
+>"error" : "error"
+>(event: ErrorEvent) => {} : (event: ErrorEvent) => void
+>event : ErrorEvent
+

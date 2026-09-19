@@ -12522,6 +12522,7 @@ declare var DigitalCredential: {
 
 interface DocumentEventMap extends GlobalEventHandlersEventMap {
     "DOMContentLoaded": Event;
+    "error": UIEvent;
     "fullscreenchange": Event;
     "fullscreenerror": Event;
     "pointerlockchange": Event;
@@ -16672,7 +16673,7 @@ interface GlobalEventHandlersEventMap {
     "durationchange": Event;
     "emptied": Event;
     "ended": Event;
-    "error": ErrorEvent;
+    "error": Event;
     "focus": FocusEvent;
     "focusin": FocusEvent;
     "focusout": FocusEvent;
@@ -16813,7 +16814,7 @@ interface GlobalEventHandlers {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLMediaElement/ended_event) */
     onended: ((this: GlobalEventHandlers, ev: Event) => any) | null;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLElement/error_event) */
-    onerror: OnErrorEventHandler;
+    onerror: ((this: GlobalEventHandlers, ev: UIEvent) => any) | null;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Element/focus_event) */
     onfocus: ((this: GlobalEventHandlers, ev: FocusEvent) => any) | null;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLFormElement/formdata_event) */
@@ -17703,6 +17704,7 @@ declare var HTMLDocument: {
 };
 
 interface HTMLElementEventMap extends ElementEventMap, GlobalEventHandlersEventMap {
+    "error": UIEvent;
 }
 
 /**
@@ -23726,6 +23728,7 @@ declare var MIDIPort: {
 };
 
 interface MathMLElementEventMap extends ElementEventMap, GlobalEventHandlersEventMap {
+    "error": UIEvent;
 }
 
 /**
@@ -31468,6 +31471,7 @@ declare var SVGDescElement: {
 };
 
 interface SVGElementEventMap extends ElementEventMap, GlobalEventHandlersEventMap {
+    "error": UIEvent;
 }
 
 /**
@@ -41143,6 +41147,7 @@ interface WindowEventMap extends GlobalEventHandlersEventMap, WindowEventHandler
     "devicemotion": DeviceMotionEvent;
     "deviceorientation": DeviceOrientationEvent;
     "deviceorientationabsolute": DeviceOrientationEvent;
+    "error": ErrorEvent;
     "gamepadconnected": GamepadEvent;
     "gamepaddisconnected": GamepadEvent;
     "orientationchange": Event;
@@ -41596,6 +41601,8 @@ interface Window extends EventTarget, AnimationFrameProvider, GlobalEventHandler
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/stop)
      */
     stop(): void;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/error_event) */
+    onerror: OnErrorEventHandler;
     addEventListener<K extends keyof WindowEventMap>(type: K, listener: (this: Window, ev: WindowEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
     removeEventListener<K extends keyof WindowEventMap>(type: K, listener: (this: Window, ev: WindowEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
