@@ -1,0 +1,49 @@
+//// [tests/cases/compiler/writableStreamChunkVariance.ts] ////
+
+=== writableStreamChunkVariance.ts ===
+const stream: WritableStream<{ a: string }> = new WritableStream<{ a: string; b: string }>();
+>stream : Symbol(stream, Decl(writableStreamChunkVariance.ts, 0, 5))
+>WritableStream : Symbol(WritableStream, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>a : Symbol(a, Decl(writableStreamChunkVariance.ts, 0, 30))
+>WritableStream : Symbol(WritableStream, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>a : Symbol(a, Decl(writableStreamChunkVariance.ts, 0, 66))
+>b : Symbol(b, Decl(writableStreamChunkVariance.ts, 0, 77))
+
+stream.getWriter().write({ a: "string" });
+>stream.getWriter().write : Symbol(WritableStreamDefaultWriter.write, Decl(lib.dom.d.ts, --, --))
+>stream.getWriter : Symbol(WritableStream.getWriter, Decl(lib.dom.d.ts, --, --))
+>stream : Symbol(stream, Decl(writableStreamChunkVariance.ts, 0, 5))
+>getWriter : Symbol(WritableStream.getWriter, Decl(lib.dom.d.ts, --, --))
+>write : Symbol(WritableStreamDefaultWriter.write, Decl(lib.dom.d.ts, --, --))
+>a : Symbol(a, Decl(writableStreamChunkVariance.ts, 1, 26))
+
+const writable = new WritableStream<{ a: string; b: string }>();
+>writable : Symbol(writable, Decl(writableStreamChunkVariance.ts, 3, 5))
+>WritableStream : Symbol(WritableStream, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>a : Symbol(a, Decl(writableStreamChunkVariance.ts, 3, 37))
+>b : Symbol(b, Decl(writableStreamChunkVariance.ts, 3, 48))
+
+new ReadableStream<{ a: string }>().pipeTo(writable);
+>new ReadableStream<{ a: string }>().pipeTo : Symbol(ReadableStream.pipeTo, Decl(lib.dom.d.ts, --, --))
+>ReadableStream : Symbol(ReadableStream, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>a : Symbol(a, Decl(writableStreamChunkVariance.ts, 4, 20))
+>pipeTo : Symbol(ReadableStream.pipeTo, Decl(lib.dom.d.ts, --, --))
+>writable : Symbol(writable, Decl(writableStreamChunkVariance.ts, 3, 5))
+
+const widened: WritableStream<{ a: string; b: string }> = new WritableStream<{ a: string }>();
+>widened : Symbol(widened, Decl(writableStreamChunkVariance.ts, 6, 5))
+>WritableStream : Symbol(WritableStream, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>a : Symbol(a, Decl(writableStreamChunkVariance.ts, 6, 31))
+>b : Symbol(b, Decl(writableStreamChunkVariance.ts, 6, 42))
+>WritableStream : Symbol(WritableStream, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>a : Symbol(a, Decl(writableStreamChunkVariance.ts, 6, 78))
+
+new ReadableStream<{ a: string; b: string }>().pipeTo(new WritableStream<{ a: string }>());
+>new ReadableStream<{ a: string; b: string }>().pipeTo : Symbol(ReadableStream.pipeTo, Decl(lib.dom.d.ts, --, --))
+>ReadableStream : Symbol(ReadableStream, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>a : Symbol(a, Decl(writableStreamChunkVariance.ts, 7, 20))
+>b : Symbol(b, Decl(writableStreamChunkVariance.ts, 7, 31))
+>pipeTo : Symbol(ReadableStream.pipeTo, Decl(lib.dom.d.ts, --, --))
+>WritableStream : Symbol(WritableStream, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>a : Symbol(a, Decl(writableStreamChunkVariance.ts, 7, 74))
+

@@ -1,0 +1,24 @@
+writableStreamChunkVariance.ts(1,7): error TS2322: Type 'WritableStream<{ a: string; b: string; }>' is not assignable to type 'WritableStream<{ a: string; }>'.
+  Property 'b' is missing in type '{ a: string; }' but required in type '{ a: string; b: string; }'.
+writableStreamChunkVariance.ts(5,44): error TS2345: Argument of type 'WritableStream<{ a: string; b: string; }>' is not assignable to parameter of type 'WritableStream<{ a: string; }>'.
+  Property 'b' is missing in type '{ a: string; }' but required in type '{ a: string; b: string; }'.
+
+
+==== writableStreamChunkVariance.ts (2 errors) ====
+    const stream: WritableStream<{ a: string }> = new WritableStream<{ a: string; b: string }>();
+          ~~~~~~
+!!! error TS2322: Type 'WritableStream<{ a: string; b: string; }>' is not assignable to type 'WritableStream<{ a: string; }>'.
+!!! error TS2322:   Property 'b' is missing in type '{ a: string; }' but required in type '{ a: string; b: string; }'.
+!!! related TS2728 writableStreamChunkVariance.ts:1:79: 'b' is declared here.
+    stream.getWriter().write({ a: "string" });
+    
+    const writable = new WritableStream<{ a: string; b: string }>();
+    new ReadableStream<{ a: string }>().pipeTo(writable);
+                                               ~~~~~~~~
+!!! error TS2345: Argument of type 'WritableStream<{ a: string; b: string; }>' is not assignable to parameter of type 'WritableStream<{ a: string; }>'.
+!!! error TS2345:   Property 'b' is missing in type '{ a: string; }' but required in type '{ a: string; b: string; }'.
+!!! related TS2728 writableStreamChunkVariance.ts:4:50: 'b' is declared here.
+    
+    const widened: WritableStream<{ a: string; b: string }> = new WritableStream<{ a: string }>();
+    new ReadableStream<{ a: string; b: string }>().pipeTo(new WritableStream<{ a: string }>());
+    
