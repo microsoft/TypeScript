@@ -1,0 +1,22 @@
+//// [tests/cases/conformance/es2026/jsonParseWithSource.ts] ////
+
+=== jsonParseWithSource.ts ===
+JSON.parse('{"value": 1}', function (key, parsedValue, context) {
+>JSON.parse : Symbol(JSON.parse, Decl(lib.es5.d.ts, --, --), Decl(lib.es2026.json.d.ts, --, --))
+>JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2026.json.d.ts, --, --))
+>parse : Symbol(JSON.parse, Decl(lib.es5.d.ts, --, --), Decl(lib.es2026.json.d.ts, --, --))
+>key : Symbol(key, Decl(jsonParseWithSource.ts, 0, 37))
+>parsedValue : Symbol(parsedValue, Decl(jsonParseWithSource.ts, 0, 41))
+>context : Symbol(context, Decl(jsonParseWithSource.ts, 0, 54))
+
+    const source: string | undefined = context.source;
+>source : Symbol(source, Decl(jsonParseWithSource.ts, 1, 9))
+>context.source : Symbol(source, Decl(lib.es2026.json.d.ts, --, --))
+>context : Symbol(context, Decl(jsonParseWithSource.ts, 0, 54))
+>source : Symbol(source, Decl(lib.es2026.json.d.ts, --, --))
+
+    return parsedValue;
+>parsedValue : Symbol(parsedValue, Decl(jsonParseWithSource.ts, 0, 41))
+
+});
+

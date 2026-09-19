@@ -1345,6 +1345,15 @@ var getFeatureMap = sync.OnceValue(func() map[string][]FeatureMapEntry {
 		"Iterator": {
 			{lib: "es2015", props: []string{}},
 		},
+		"IteratorConstructor": {
+			{lib: "es2026", props: []string{"concat"}},
+		},
+		"RawJSON": {
+			{lib: "es2026", props: []string{}},
+		},
+		"JSON": {
+			{lib: "es2026", props: []string{"isRawJSON", "rawJSON"}},
+		},
 		"AsyncIterator": {
 			{lib: "es2015", props: []string{}},
 		},
@@ -1413,7 +1422,7 @@ var getFeatureMap = sync.OnceValue(func() map[string][]FeatureMapEntry {
 		},
 		"ArrayConstructor": {
 			{lib: "es2015", props: []string{"from", "of"}},
-			{lib: "esnext", props: []string{"fromAsync"}},
+			{lib: "es2026", props: []string{"fromAsync"}},
 		},
 		"ObjectConstructor": {
 			{lib: "es2015", props: []string{"assign", "getOwnPropertySymbols", "keys", "is", "setPrototypeOf"}},
@@ -1428,10 +1437,11 @@ var getFeatureMap = sync.OnceValue(func() map[string][]FeatureMapEntry {
 		"Math": {
 			{lib: "es2015", props: []string{"clz32", "imul", "sign", "log10", "log2", "log1p", "expm1", "cosh", "sinh", "tanh", "acosh", "asinh", "atanh", "hypot", "trunc", "fround", "cbrt"}},
 			{lib: "es2025", props: []string{"f16round"}},
+			{lib: "es2026", props: []string{"sumPrecise"}},
 		},
 		"Map": {
 			{lib: "es2015", props: []string{"entries", "keys", "values"}},
-			{lib: "esnext", props: []string{
+			{lib: "es2026", props: []string{
 				"getOrInsert",
 				"getOrInsertComputed",
 			}},
@@ -1464,7 +1474,7 @@ var getFeatureMap = sync.OnceValue(func() map[string][]FeatureMapEntry {
 		},
 		"WeakMap": {
 			{lib: "es2015", props: []string{}},
-			{lib: "esnext", props: []string{
+			{lib: "es2026", props: []string{
 				"getOrInsert",
 				"getOrInsertComputed",
 			}},
@@ -1532,6 +1542,7 @@ var getFeatureMap = sync.OnceValue(func() map[string][]FeatureMapEntry {
 		"Uint8Array": {
 			{lib: "es2022", props: []string{"at"}},
 			{lib: "es2023", props: []string{"findLastIndex", "findLast", "toReversed", "toSorted", "toSpliced", "with"}},
+			{lib: "es2026", props: []string{"toBase64", "setFromBase64", "toHex", "setFromHex"}},
 		},
 		"Uint8ClampedArray": {
 			{lib: "es2022", props: []string{"at"}},
@@ -1578,10 +1589,10 @@ var getFeatureMap = sync.OnceValue(func() map[string][]FeatureMapEntry {
 			{lib: "es2022", props: []string{"cause"}},
 		},
 		"ErrorConstructor": {
-			{lib: "esnext", props: []string{"isError"}},
+			{lib: "es2026", props: []string{"isError"}},
 		},
 		"Uint8ArrayConstructor": {
-			{lib: "esnext", props: []string{"fromBase64", "fromHex"}},
+			{lib: "es2026", props: []string{"fromBase64", "fromHex"}},
 		},
 		"DisposableStack": {
 			{lib: "esnext", props: []string{}},

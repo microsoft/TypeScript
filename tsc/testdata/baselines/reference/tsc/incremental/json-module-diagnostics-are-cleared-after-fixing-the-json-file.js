@@ -24,7 +24,7 @@ export type Check = Covers<typeof data>;
 tsgo 
 ExitStatus:: Success
 Output::
-//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2026.full.d.ts] *Lib*
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -48,7 +48,7 @@ interface Symbol {
 }
 declare const console: { log(msg: any): void; };
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":[3],"fileNames":["lib.es2025.full.d.ts","./data.json","./check.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"c770d6bc113c67c24136745dc262fd43-{ \"title\": \"hello\" }"},"87d7b1214f92d2704171976612b58fb3-import type data from \"./data.json\";\n\ntype Shape = { title: string };\ntype Covers<T extends Shape> = T;\n\nexport type Check = Covers<typeof data>;"],"fileIdsList":[[2]],"options":{"strict":true,"esModuleInterop":true},"referencedMap":[[3,1]],"affectedFilesPendingEmit":[3]}
+{"version":"FakeTSVersion","root":[3],"fileNames":["lib.es2026.full.d.ts","./data.json","./check.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"c770d6bc113c67c24136745dc262fd43-{ \"title\": \"hello\" }"},"87d7b1214f92d2704171976612b58fb3-import type data from \"./data.json\";\n\ntype Shape = { title: string };\ntype Covers<T extends Shape> = T;\n\nexport type Check = Covers<typeof data>;"],"fileIdsList":[[2]],"options":{"strict":true,"esModuleInterop":true},"referencedMap":[[3,1]],"affectedFilesPendingEmit":[3]}
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -61,13 +61,13 @@ declare const console: { log(msg: any): void; };
     }
   ],
   "fileNames": [
-    "lib.es2025.full.d.ts",
+    "lib.es2026.full.d.ts",
     "./data.json",
     "./check.ts"
   ],
   "fileInfos": [
     {
-      "fileName": "lib.es2025.full.d.ts",
+      "fileName": "lib.es2026.full.d.ts",
       "version": "8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };",
       "signature": "8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };",
       "affectsGlobalScope": true,
@@ -120,7 +120,7 @@ declare const console: { log(msg: any): void; };
 
 tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts
 *refresh*    /home/src/workspaces/project/data.json
 *refresh*    /home/src/workspaces/project/check.ts
 Signatures::
@@ -146,7 +146,7 @@ Output::
 Found 1 error in check.ts[90m:6[0m
 
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":[3],"fileNames":["lib.es2025.full.d.ts","./data.json","./check.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"dc7048f8f8747f561349cde127705c16-{}"},{"version":"87d7b1214f92d2704171976612b58fb3-import type data from \"./data.json\";\n\ntype Shape = { title: string };\ntype Covers<T extends Shape> = T;\n\nexport type Check = Covers<typeof data>;","signature":"f171e5fef0d977f93110bee26e539dc9-import type data from \"./data.json\";\ntype Shape = {\n    title: string;\n};\ntype Covers<T extends Shape> = T;\nexport type Check = Covers<typeof data>;\nexport {};\n","impliedNodeFormat":1}],"fileIdsList":[[2]],"options":{"strict":true,"esModuleInterop":true},"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[[3,[{"pos":132,"end":143,"code":2741,"category":1,"messageKey":"Property_0_is_missing_in_type_1_but_required_in_type_2_2741","messageArgs":["title","{}","Shape"],"relatedInformation":[{"pos":53,"end":58,"code":2728,"category":3,"messageKey":"_0_is_declared_here_2728","messageArgs":["title"]}]}]]],"affectedFilesPendingEmit":[3]}
+{"version":"FakeTSVersion","root":[3],"fileNames":["lib.es2026.full.d.ts","./data.json","./check.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"dc7048f8f8747f561349cde127705c16-{}"},{"version":"87d7b1214f92d2704171976612b58fb3-import type data from \"./data.json\";\n\ntype Shape = { title: string };\ntype Covers<T extends Shape> = T;\n\nexport type Check = Covers<typeof data>;","signature":"f171e5fef0d977f93110bee26e539dc9-import type data from \"./data.json\";\ntype Shape = {\n    title: string;\n};\ntype Covers<T extends Shape> = T;\nexport type Check = Covers<typeof data>;\nexport {};\n","impliedNodeFormat":1}],"fileIdsList":[[2]],"options":{"strict":true,"esModuleInterop":true},"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[[3,[{"pos":132,"end":143,"code":2741,"category":1,"messageKey":"Property_0_is_missing_in_type_1_but_required_in_type_2_2741","messageArgs":["title","{}","Shape"],"relatedInformation":[{"pos":53,"end":58,"code":2728,"category":3,"messageKey":"_0_is_declared_here_2728","messageArgs":["title"]}]}]]],"affectedFilesPendingEmit":[3]}
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -159,13 +159,13 @@ Found 1 error in check.ts[90m:6[0m
     }
   ],
   "fileNames": [
-    "lib.es2025.full.d.ts",
+    "lib.es2026.full.d.ts",
     "./data.json",
     "./check.ts"
   ],
   "fileInfos": [
     {
-      "fileName": "lib.es2025.full.d.ts",
+      "fileName": "lib.es2026.full.d.ts",
       "version": "8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };",
       "signature": "8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };",
       "affectsGlobalScope": true,
@@ -269,7 +269,7 @@ tsgo
 ExitStatus:: Success
 Output::
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":[3],"fileNames":["lib.es2025.full.d.ts","./data.json","./check.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"f985880635a046d0ccc31aa189849b95-{ \"title\": \"fixed\" }"},{"version":"87d7b1214f92d2704171976612b58fb3-import type data from \"./data.json\";\n\ntype Shape = { title: string };\ntype Covers<T extends Shape> = T;\n\nexport type Check = Covers<typeof data>;","signature":"f171e5fef0d977f93110bee26e539dc9-import type data from \"./data.json\";\ntype Shape = {\n    title: string;\n};\ntype Covers<T extends Shape> = T;\nexport type Check = Covers<typeof data>;\nexport {};\n","impliedNodeFormat":1}],"fileIdsList":[[2]],"options":{"strict":true,"esModuleInterop":true},"referencedMap":[[3,1]],"affectedFilesPendingEmit":[3]}
+{"version":"FakeTSVersion","root":[3],"fileNames":["lib.es2026.full.d.ts","./data.json","./check.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"f985880635a046d0ccc31aa189849b95-{ \"title\": \"fixed\" }"},{"version":"87d7b1214f92d2704171976612b58fb3-import type data from \"./data.json\";\n\ntype Shape = { title: string };\ntype Covers<T extends Shape> = T;\n\nexport type Check = Covers<typeof data>;","signature":"f171e5fef0d977f93110bee26e539dc9-import type data from \"./data.json\";\ntype Shape = {\n    title: string;\n};\ntype Covers<T extends Shape> = T;\nexport type Check = Covers<typeof data>;\nexport {};\n","impliedNodeFormat":1}],"fileIdsList":[[2]],"options":{"strict":true,"esModuleInterop":true},"referencedMap":[[3,1]],"affectedFilesPendingEmit":[3]}
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -282,13 +282,13 @@ Output::
     }
   ],
   "fileNames": [
-    "lib.es2025.full.d.ts",
+    "lib.es2026.full.d.ts",
     "./data.json",
     "./check.ts"
   ],
   "fileInfos": [
     {
-      "fileName": "lib.es2025.full.d.ts",
+      "fileName": "lib.es2026.full.d.ts",
       "version": "8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };",
       "signature": "8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };",
       "affectsGlobalScope": true,

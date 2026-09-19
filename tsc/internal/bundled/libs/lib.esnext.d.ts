@@ -14,14 +14,10 @@ and limitations under the License.
 ***************************************************************************** */
 
 
-/// <reference lib="es2025" />
+/// <reference lib="es2026" />
 /// <reference lib="esnext.intl" />
-/// <reference lib="esnext.collection" />
 /// <reference lib="esnext.decorators" />
 /// <reference lib="esnext.disposable" />
-/// <reference lib="esnext.array" />
-/// <reference lib="esnext.error" />
 /// <reference lib="esnext.sharedmemory" />
-/// <reference lib="esnext.typedarrays" />
 /// <reference lib="esnext.temporal" />
 /// <reference lib="esnext.date" />
