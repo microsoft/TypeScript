@@ -62,9 +62,15 @@ export { myTypes };
  */
 declare const myTypes: Record<string, any>;
 export declare namespace myTypes {
+    /** @typedef {string|RegExp|Array<string|RegExp>} myTypes.typeA */
     export type typeA = string | RegExp | Array<string | RegExp>;
 }
 export declare namespace myTypes {
+    /**
+     * @typedef myTypes.typeB
+     * @property {myTypes.typeA}    prop1 - Prop 1.
+     * @property {string}           prop2 - Prop 2.
+     */
     export type typeB = {
         /**
          * - Prop 1.
@@ -77,6 +83,7 @@ export declare namespace myTypes {
     };
 }
 export declare namespace myTypes {
+    /** @typedef {myTypes.typeB|Function} myTypes.typeC */
     export type typeC = myTypes.typeB | Function;
 }
 //// [file2.d.ts]
@@ -93,9 +100,9 @@ import { myTypes } from './file.js';
  */
 declare const testFnTypes: Record<string, any>;
 export declare namespace testFnTypes {
+    /** @typedef {boolean|myTypes.typeC} testFnTypes.input */
     export type input = boolean | myTypes.typeC;
 }
-/** @typedef {boolean|myTypes.typeC} testFnTypes.input */
 /**
  * @function testFn
  * @description A test function.

@@ -32,13 +32,13 @@ var ooscope2 = s => s.length > 0;
 
 
 //// [callbackOnConstructor.d.ts]
+/**
+ * @callback ValueGetter_2
+ * @param {string} name
+ * @returns {boolean|number|string|undefined}
+ */
 export type ValueGetter_2 = (name: string) => boolean | number | string | undefined;
 export declare class Preferences {
     assignability: string;
-    /**
-     * @callback ValueGetter_2
-     * @param {string} name
-     * @returns {boolean|number|string|undefined}
-     */
     constructor();
 }
