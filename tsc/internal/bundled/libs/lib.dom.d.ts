@@ -41916,7 +41916,7 @@ interface WritableStreamDefaultWriter<W = any> {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/WritableStreamDefaultWriter/write)
      */
-    write(chunk?: W): Promise<void>;
+    write: (chunk?: W) => Promise<void>;
 }
 
 declare var WritableStreamDefaultWriter: {
