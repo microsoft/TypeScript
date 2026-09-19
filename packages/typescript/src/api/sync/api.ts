@@ -259,8 +259,8 @@ export type {
 };
 
 export interface ModuleResolverOptions {
-    moduleResolutions?: ModuleResolutionSpec;
-    resolveModuleName?: ResolveModuleNameCallback;
+    moduleResolutions?: ModuleResolutionSpec | undefined;
+    resolveModuleName?: ResolveModuleNameCallback | undefined;
 }
 
 export interface ResolveModuleNameCallbackOptions {
@@ -273,7 +273,7 @@ export type InProgressSnapshot = number & { readonly [inProgressSnapshotBrand]: 
 export type ResolveModuleNameCallback = (moduleName: string, containingDirectory: string, resolutionMode: ResolutionMode | undefined, options: ResolveModuleNameCallbackOptions) => ProvidedModuleResolution | undefined;
 
 export type CreateProgramOptions = Omit<ProtocolCreateProgramOptions, "moduleResolver"> & {
-    moduleResolver?: ModuleResolver;
+    moduleResolver?: ModuleResolver | undefined;
 };
 export type CreateSnapshotProgramParams = Omit<ProtocolCreateSnapshotProgramParams, "options"> & { options?: CreateProgramOptions | undefined; };
 export type ReconfigureSnapshotProgramParams = Omit<ProtocolReconfigureSnapshotProgramParams, "options"> & { options?: CreateProgramOptions | undefined; };
@@ -1523,14 +1523,14 @@ export class ModuleResolver {
     }
 
     get resolveModuleName(): {
-        (moduleName: string, containingDirectory: DocumentIdentifier, resolutionMode?: ResolutionMode, options?: { snapshot?: Snapshot | InProgressSnapshot; }): ResolveModuleNameResult;
-        gen(moduleName: string, containingDirectory: DocumentIdentifier, resolutionMode?: ResolutionMode, options?: { snapshot?: Snapshot | InProgressSnapshot; }): Generator<ProtocolRequest, ResolveModuleNameResult, ProtocolResponse["result"]>;
+        (moduleName: string, containingDirectory: DocumentIdentifier, resolutionMode?: ResolutionMode, options?: { snapshot?: Snapshot | InProgressSnapshot | undefined; }): ResolveModuleNameResult;
+        gen(moduleName: string, containingDirectory: DocumentIdentifier, resolutionMode?: ResolutionMode, options?: { snapshot?: Snapshot | InProgressSnapshot | undefined; }): Generator<ProtocolRequest, ResolveModuleNameResult, ProtocolResponse["result"]>;
     } {
         const owner = this;
         return cacheGeneratorMethod(
             owner,
             "resolveModuleName",
-            function (moduleName: string, containingDirectory: DocumentIdentifier, resolutionMode?: ResolutionMode, options?: { snapshot?: Snapshot | InProgressSnapshot; }): ResolveModuleNameResult {
+            function (moduleName: string, containingDirectory: DocumentIdentifier, resolutionMode?: ResolutionMode, options?: { snapshot?: Snapshot | InProgressSnapshot | undefined; }): ResolveModuleNameResult {
                 owner.ensureNotDisposed();
                 if (options?.snapshot instanceof Snapshot && options.snapshot.isDisposed()) {
                     throw new Error("Snapshot is disposed");
@@ -1544,7 +1544,7 @@ export class ModuleResolver {
                     resolutionMode,
                 });
             },
-            function* (moduleName: string, containingDirectory: DocumentIdentifier, resolutionMode?: ResolutionMode, options?: { snapshot?: Snapshot | InProgressSnapshot; }): Generator<ProtocolRequest, ResolveModuleNameResult, ProtocolResponse["result"]> {
+            function* (moduleName: string, containingDirectory: DocumentIdentifier, resolutionMode?: ResolutionMode, options?: { snapshot?: Snapshot | InProgressSnapshot | undefined; }): Generator<ProtocolRequest, ResolveModuleNameResult, ProtocolResponse["result"]> {
                 owner.ensureNotDisposed();
                 if (options?.snapshot instanceof Snapshot && options.snapshot.isDisposed()) {
                     throw new Error("Snapshot is disposed");
