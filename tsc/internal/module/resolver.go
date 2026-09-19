@@ -124,14 +124,14 @@ func newResolutionState(
 	case core.ModuleResolutionKindNode16:
 		state.features = NodeResolutionFeaturesNode16Default
 		state.esmMode = resolutionMode == core.ModuleKindESNext
-		state.conditions = GetConditions(compilerOptions, resolutionMode)
+		state.conditions = resolver.getConditions(compilerOptions, resolutionMode)
 	case core.ModuleResolutionKindNodeNext:
 		state.features = NodeResolutionFeaturesNodeNextDefault
 		state.esmMode = resolutionMode == core.ModuleKindESNext
-		state.conditions = GetConditions(compilerOptions, resolutionMode)
+		state.conditions = resolver.getConditions(compilerOptions, resolutionMode)
 	case core.ModuleResolutionKindBundler:
 		state.features = getNodeResolutionFeatures(compilerOptions)
-		state.conditions = GetConditions(compilerOptions, resolutionMode)
+		state.conditions = resolver.getConditions(compilerOptions, resolutionMode)
 	}
 	return state
 }
@@ -154,6 +154,29 @@ type Resolver struct {
 	projectName     string
 	extraExtensions []string
 	// reportDiagnostic: DiagnosticReporter
+
+	// Conditions depend only on (options, import/require), so they are computed
+	// once for the resolver's own options; project reference redirects (rare)
+	// fall back to GetConditions. These slices are shared across all resolutions
+	// of this resolver and must be treated as read-only.
+	esmConditions []string
+	cjsConditions []string
+}
+
+func (r *Resolver) initConditionCaches() {
+	// Clip so that an accidental append by a consumer cannot overwrite the shared backing array.
+	r.esmConditions = slices.Clip(GetConditions(r.compilerOptions, core.ModuleKindESNext))
+	r.cjsConditions = slices.Clip(GetConditions(r.compilerOptions, core.ModuleKindCommonJS))
+}
+
+func (r *Resolver) getConditions(options *core.CompilerOptions, resolutionMode core.ResolutionMode) []string {
+	if options != r.compilerOptions {
+		return GetConditions(options, resolutionMode)
+	}
+	if conditionsUseImport(options, resolutionMode) {
+		return r.esmConditions
+	}
+	return r.cjsConditions
 }
 
 type ResolverOptions struct {
@@ -167,7 +190,7 @@ func NewResolver(
 	projectName string,
 	extraExtensions []string,
 ) *Resolver {
-	return &Resolver{
+	r := &Resolver{
 		host:            host,
 		caches:          newCaches(host.GetCurrentDirectory(), host.FS().UseCaseSensitiveFileNames(), options),
 		compilerOptions: options,
@@ -175,6 +198,8 @@ func NewResolver(
 		projectName:     projectName,
 		extraExtensions: extraExtensions,
 	}
+	r.initConditionCaches()
+	return r
 }
 
 func NewResolverWithOptions(
@@ -190,6 +215,7 @@ func NewResolverWithOptions(
 		typingsLocation: typingsLocation,
 		projectName:     projectName,
 	}
+	r.initConditionCaches()
 	if opts.PackageJsonCache != nil {
 		r.packageJsonInfoCache = opts.PackageJsonCache
 	} else {
@@ -1922,13 +1948,17 @@ func (r *resolutionState) getTraceFunc() func(m *diagnostics.Message, args ...an
 	return nil
 }
 
+// conditionsUseImport reports whether GetConditions yields the "import" condition
+// (as opposed to "require") for this options/mode pair. Single source of truth for
+// the mode classification, shared with Resolver.getConditions.
+func conditionsUseImport(options *core.CompilerOptions, resolutionMode core.ResolutionMode) bool {
+	return resolutionMode == core.ModuleKindESNext ||
+		(resolutionMode == core.ModuleKindNone && options.GetModuleResolutionKind() == core.ModuleResolutionKindBundler)
+}
+
 func GetConditions(options *core.CompilerOptions, resolutionMode core.ResolutionMode) []string {
-	moduleResolution := options.GetModuleResolutionKind()
-	if resolutionMode == core.ModuleKindNone && moduleResolution == core.ModuleResolutionKindBundler {
-		resolutionMode = core.ModuleKindESNext
-	}
 	conditions := make([]string, 0, 3+len(options.CustomConditions))
-	if resolutionMode == core.ModuleKindESNext {
+	if conditionsUseImport(options, resolutionMode) {
 		conditions = append(conditions, "import")
 	} else {
 		conditions = append(conditions, "require")
@@ -1937,7 +1967,7 @@ func GetConditions(options *core.CompilerOptions, resolutionMode core.Resolution
 	if options.NoDtsResolution != core.TSTrue {
 		conditions = append(conditions, "types")
 	}
-	if moduleResolution != core.ModuleResolutionKindBundler {
+	if options.GetModuleResolutionKind() != core.ModuleResolutionKindBundler {
 		conditions = append(conditions, "node")
 	}
 	conditions = core.Concatenate(conditions, options.CustomConditions)
