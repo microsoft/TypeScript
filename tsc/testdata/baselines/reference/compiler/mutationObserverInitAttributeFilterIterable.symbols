@@ -1,0 +1,26 @@
+//// [tests/cases/compiler/mutationObserverInitAttributeFilterIterable.ts] ////
+
+=== mutationObserverInitAttributeFilterIterable.ts ===
+const names = new Set<string>();
+>names : Symbol(names, Decl(mutationObserverInitAttributeFilterIterable.ts, 0, 5))
+>Set : Symbol(Set, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2025.collection.d.ts, --, --))
+
+const options1: MutationObserverInit = { attributeFilter: names.keys() };
+>options1 : Symbol(options1, Decl(mutationObserverInitAttributeFilterIterable.ts, 2, 5))
+>MutationObserverInit : Symbol(MutationObserverInit, Decl(lib.dom.d.ts, --, --))
+>attributeFilter : Symbol(attributeFilter, Decl(mutationObserverInitAttributeFilterIterable.ts, 2, 40))
+>names.keys : Symbol(Set.keys, Decl(lib.es2015.iterable.d.ts, --, --))
+>names : Symbol(names, Decl(mutationObserverInitAttributeFilterIterable.ts, 0, 5))
+>keys : Symbol(Set.keys, Decl(lib.es2015.iterable.d.ts, --, --))
+
+const options2: MutationObserverInit = { attributeFilter: ["foo", "bar"] };
+>options2 : Symbol(options2, Decl(mutationObserverInitAttributeFilterIterable.ts, 3, 5))
+>MutationObserverInit : Symbol(MutationObserverInit, Decl(lib.dom.d.ts, --, --))
+>attributeFilter : Symbol(attributeFilter, Decl(mutationObserverInitAttributeFilterIterable.ts, 3, 40))
+
+const options3: MutationObserverInit = { attributeFilter: names };
+>options3 : Symbol(options3, Decl(mutationObserverInitAttributeFilterIterable.ts, 4, 5))
+>MutationObserverInit : Symbol(MutationObserverInit, Decl(lib.dom.d.ts, --, --))
+>attributeFilter : Symbol(attributeFilter, Decl(mutationObserverInitAttributeFilterIterable.ts, 4, 40))
+>names : Symbol(names, Decl(mutationObserverInitAttributeFilterIterable.ts, 0, 5))
+
