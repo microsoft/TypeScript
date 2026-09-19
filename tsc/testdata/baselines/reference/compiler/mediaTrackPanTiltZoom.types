@@ -1,0 +1,75 @@
+//// [tests/cases/compiler/mediaTrackPanTiltZoom.ts] ////
+
+=== mediaTrackPanTiltZoom.ts ===
+declare const capabilities: MediaTrackCapabilities;
+>capabilities : MediaTrackCapabilities
+
+declare const constraints: MediaTrackConstraintSet;
+>constraints : MediaTrackConstraintSet
+
+declare const settings: MediaTrackSettings;
+>settings : MediaTrackSettings
+
+declare const supported: MediaTrackSupportedConstraints;
+>supported : MediaTrackSupportedConstraints
+
+capabilities.pan;
+>capabilities.pan : DoubleRange | undefined
+>capabilities : MediaTrackCapabilities
+>pan : DoubleRange | undefined
+
+capabilities.tilt;
+>capabilities.tilt : DoubleRange | undefined
+>capabilities : MediaTrackCapabilities
+>tilt : DoubleRange | undefined
+
+capabilities.zoom;
+>capabilities.zoom : DoubleRange | undefined
+>capabilities : MediaTrackCapabilities
+>zoom : DoubleRange | undefined
+
+constraints.pan;
+>constraints.pan : ConstrainDouble | undefined
+>constraints : MediaTrackConstraintSet
+>pan : ConstrainDouble | undefined
+
+constraints.tilt;
+>constraints.tilt : ConstrainDouble | undefined
+>constraints : MediaTrackConstraintSet
+>tilt : ConstrainDouble | undefined
+
+constraints.zoom;
+>constraints.zoom : ConstrainDouble | undefined
+>constraints : MediaTrackConstraintSet
+>zoom : ConstrainDouble | undefined
+
+settings.pan;
+>settings.pan : number | undefined
+>settings : MediaTrackSettings
+>pan : number | undefined
+
+settings.tilt;
+>settings.tilt : number | undefined
+>settings : MediaTrackSettings
+>tilt : number | undefined
+
+settings.zoom;
+>settings.zoom : number | undefined
+>settings : MediaTrackSettings
+>zoom : number | undefined
+
+supported.pan;
+>supported.pan : boolean | undefined
+>supported : MediaTrackSupportedConstraints
+>pan : boolean | undefined
+
+supported.tilt;
+>supported.tilt : boolean | undefined
+>supported : MediaTrackSupportedConstraints
+>tilt : boolean | undefined
+
+supported.zoom;
+>supported.zoom : boolean | undefined
+>supported : MediaTrackSupportedConstraints
+>zoom : boolean | undefined
+

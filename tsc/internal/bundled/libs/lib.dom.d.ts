@@ -1579,9 +1579,14 @@ interface MediaTrackCapabilities {
     groupId?: string;
     height?: ULongRange;
     noiseSuppression?: boolean[];
+    pan?: DoubleRange;
     sampleRate?: ULongRange;
     sampleSize?: ULongRange;
+    tilt?: DoubleRange;
+    torch?: boolean[];
+    whiteBalanceMode?: string[];
     width?: ULongRange;
+    zoom?: DoubleRange;
 }
 
 interface MediaTrackConstraintSet {
@@ -1597,9 +1602,14 @@ interface MediaTrackConstraintSet {
     groupId?: ConstrainDOMString;
     height?: ConstrainULong;
     noiseSuppression?: ConstrainBoolean;
+    pan?: ConstrainDouble;
     sampleRate?: ConstrainULong;
     sampleSize?: ConstrainULong;
+    tilt?: ConstrainDouble;
+    torch?: ConstrainBoolean;
+    whiteBalanceMode?: ConstrainDOMString;
     width?: ConstrainULong;
+    zoom?: ConstrainDouble;
 }
 
 interface MediaTrackConstraints extends MediaTrackConstraintSet {
@@ -1619,8 +1629,10 @@ interface MediaTrackSettings {
     groupId?: string;
     height?: number;
     noiseSuppression?: boolean;
+    pan?: number;
     sampleRate?: number;
     sampleSize?: number;
+    tilt?: number;
     torch?: boolean;
     whiteBalanceMode?: string;
     width?: number;
@@ -1640,9 +1652,14 @@ interface MediaTrackSupportedConstraints {
     groupId?: boolean;
     height?: boolean;
     noiseSuppression?: boolean;
+    pan?: boolean;
     sampleRate?: boolean;
     sampleSize?: boolean;
+    tilt?: boolean;
+    torch?: boolean;
+    whiteBalanceMode?: boolean;
     width?: boolean;
+    zoom?: boolean;
 }
 
 interface MessageEventInit<T = any> extends EventInit {
