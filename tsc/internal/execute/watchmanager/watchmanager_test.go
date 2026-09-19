@@ -1,6 +1,8 @@
 package watchmanager
 
 import (
+	"io"
+	"strings"
 	"testing"
 
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
@@ -8,8 +10,8 @@ import (
 )
 
 var (
-	caseSensitiveOpts   = tspath.ComparePathsOptions{UseCaseSensitiveFileNames: true, CurrentDirectory: "/repo"}
-	caseInsensitiveOpts = tspath.ComparePathsOptions{UseCaseSensitiveFileNames: false, CurrentDirectory: "/repo"}
+	caseSensitiveOpts   = tspath.CaseSensitive
+	caseInsensitiveOpts = tspath.CaseInsensitive
 )
 
 // TestDirWatchSetCoverage checks the core coverage rules: a recursive watch
@@ -24,7 +26,7 @@ func TestDirWatchSetCoverage(t *testing.T) {
 	set.Set("/repo/node_modules/a", false) // non-recursive
 
 	tests := []struct {
-		dir  string
+		dir  tspath.RootedDirectoryPath
 		want bool
 	}{
 		{"/repo/src", true},             // exact recursive
@@ -72,8 +74,9 @@ func TestDirWatchSetCaseInsensitive(t *testing.T) {
 }
 
 // TestDirWatchSetCanonicalDedup verifies that on a case-insensitive filesystem
-// directories that differ only by casing collapse to a single canonical entry,
-// while a case-sensitive filesystem keeps them distinct.
+// directories that differ only by casing collapse to a single entry while
+// retaining the spelling used for the actual watch request. A case-sensitive
+// filesystem keeps them distinct.
 func TestDirWatchSetCanonicalDedup(t *testing.T) {
 	t.Parallel()
 
@@ -83,8 +86,8 @@ func TestDirWatchSetCanonicalDedup(t *testing.T) {
 
 	dirs := insensitive.Dirs()
 	assert.Equal(t, len(dirs), 1, "differently-cased dirs must collapse to one entry")
-	_, canonical := dirs["/repo/node_modules/pkgname"]
-	assert.Assert(t, canonical, "Dirs must be keyed by the canonicalized path")
+	_, retained := dirs["/repo/Node_Modules/PkgName"]
+	assert.Assert(t, retained, "Dirs must retain the first requested spelling")
 
 	sensitive := NewDirWatchSet(caseSensitiveOpts)
 	sensitive.Set("/repo/Node_Modules/PkgName", false)
@@ -134,4 +137,49 @@ func TestDirWatchSetDirs(t *testing.T) {
 	assert.Equal(t, len(dirs), 2)
 	assert.Equal(t, dirs["/repo/a"], false)
 	assert.Equal(t, dirs["/repo/b"], true)
+}
+
+func TestResolveDesiredDirsDeduplicatesCaseInsensitiveAncestors(t *testing.T) {
+	t.Parallel()
+
+	manager := NewWatchManager(io.Discard, func(dir tspath.RootedDirectoryPath) bool {
+		return strings.EqualFold(dir.AsString(), "/home/repo/project/src")
+	}, caseInsensitiveOpts)
+	resolved := manager.ResolveDesiredDirs(map[tspath.RootedDirectoryPath]bool{
+		"/home/Repo/Project/Src/missing/a": false,
+		"/home/repo/project/src/missing/b": true,
+	})
+
+	assert.Equal(t, len(resolved), 1)
+	for dir, recursive := range resolved {
+		assert.Assert(t, strings.EqualFold(dir.AsString(), "/home/repo/project/src"))
+		assert.Equal(t, recursive, false)
+	}
+}
+
+type recordingWatchBackend struct {
+	requests []WatchDirectoryRequest
+}
+
+func (b *recordingWatchBackend) WatchDirectories(requests []WatchDirectoryRequest) ([]io.Closer, error) {
+	b.requests = append(b.requests, requests...)
+	closers := make([]io.Closer, len(requests))
+	for i := range closers {
+		closers[i] = io.NopCloser(strings.NewReader(""))
+	}
+	return closers, nil
+}
+
+func TestReconcileWatchesIgnoresCaseOnlySpellingChanges(t *testing.T) {
+	t.Parallel()
+
+	manager := NewWatchManager(io.Discard, func(tspath.RootedDirectoryPath) bool { return true }, caseInsensitiveOpts)
+	backend := &recordingWatchBackend{}
+	manager.SetBackend(backend)
+
+	assert.NilError(t, manager.ReconcileWatches(map[tspath.RootedDirectoryPath]bool{"/Repo": false}))
+	assert.NilError(t, manager.ReconcileWatches(map[tspath.RootedDirectoryPath]bool{"/repo": false}))
+
+	assert.Equal(t, len(backend.requests), 1)
+	assert.Equal(t, backend.requests[0].Dir.AsString(), "/Repo")
 }

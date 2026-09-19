@@ -9,6 +9,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/json"
 	"github.com/microsoft/TypeScript/tsc/internal/project"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/projecttestutil"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"gotest.tools/v3/assert"
 )
 
@@ -72,11 +73,11 @@ func TestCreateSnapshotCreatesPrograms(t *testing.T) {
 	assert.NilError(t, err)
 	assert.Equal(t, len(response.Projects), 2)
 	assert.DeepEqual(t, *response.Operation.CreatedPrograms, []project.SyntheticProjectID{syntheticProjectID(1), syntheticProjectID(2)})
-	assert.Equal(t, response.Projects[0].ConfigFileName, "")
-	assert.Equal(t, response.Projects[1].ConfigFileName, "")
-	assert.DeepEqual(t, response.Projects[0].RootFiles, []string{fileA, fileB})
+	assert.Assert(t, response.Projects[0].ConfigFileName == nil)
+	assert.Assert(t, response.Projects[1].ConfigFileName == nil)
+	assert.DeepEqual(t, response.Projects[0].RootFiles, []tspath.RootedFilePath{fileA, fileB})
 	assert.Equal(t, response.Projects[0].CompilerOptions.Strict, core.TSTrue)
-	assert.DeepEqual(t, response.Projects[1].RootFiles, []string{fileB})
+	assert.DeepEqual(t, response.Projects[1].RootFiles, []tspath.RootedFilePath{fileB})
 
 	snapshot, err := session.getSnapshotData(response.Snapshot)
 	assert.NilError(t, err)
@@ -143,7 +144,7 @@ func TestUpdateSnapshotReconfiguresSyntheticProgram(t *testing.T) {
 	})
 	assert.NilError(t, err)
 	assert.Equal(t, reconfigured.Projects[0].Id, project.ID(programID))
-	assert.DeepEqual(t, reconfigured.Projects[0].RootFiles, []string{"/home/projects/p/b.ts"})
+	assert.DeepEqual(t, reconfigured.Projects[0].RootFiles, []tspath.RootedFilePath{"/home/projects/p/b.ts"})
 	assert.Equal(t, reconfigured.Projects[0].CompilerOptions.Strict, core.TSTrue)
 }
 

@@ -13,7 +13,7 @@ import (
 
 func TestExternalDiagnosticBuildInfoRoundTrip(t *testing.T) {
 	t.Parallel()
-	file := parser.ParseSourceFile(ast.SourceFileParseOptions{FileName: "/app.vue", Path: "/app.vue"}, "", core.ScriptKindTS)
+	file := parser.ParseSourceFile(ast.SourceFileParseOptions{FileName: "/app.vue", PathKey: "/app.vue"}, "", core.ScriptKindTS)
 	diagnostic := ast.NewExternalDiagnostic(file, core.NewTextRange(1, 2), "vue", diagnostics.CategoryWarning, 1001, "mapper warning")
 
 	serialized := astDiagToBuildInfoDiag(diagnostic)

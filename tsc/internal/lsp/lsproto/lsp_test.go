@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/microsoft/TypeScript/tsc/internal/json"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"gotest.tools/v3/assert"
 )
 
@@ -81,4 +82,25 @@ func TestUnmarshalCompletionItem(t *testing.T) {
 		SortText:         new("15"),
 		CommitCharacters: new([]string{".", ",", ";"}),
 	})
+}
+
+func TestTryDynamicFileNameToDocumentUri(t *testing.T) {
+	t.Parallel()
+
+	uri := DocumentUri("untitled://wsl+ubuntu/home/user/file.ts?version=1")
+	path := uri.Path()
+	roundTrip, ok := TryDynamicFileNameToDocumentUri(path)
+	assert.Assert(t, ok)
+	assert.Equal(t, roundTrip, uri)
+
+	for _, malformed := range []tspath.RootedPath{
+		"^/invalid",
+		"^/~ts-uri~//authority/path",
+		"^/~ts-uri~/scheme/~ts-uri-escape~zz~/path",
+		"^/~ts-uri~/scheme/authority/~ts-uri-escape~zz~",
+		"^/~ts-uri~/scheme/authority/~ts-uri-no-path~zz~",
+	} {
+		_, ok := TryDynamicFileNameToDocumentUri(malformed)
+		assert.Assert(t, !ok, "expected %q to be rejected", malformed)
+	}
 }

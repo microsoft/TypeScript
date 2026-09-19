@@ -126,7 +126,7 @@ func ensureItemData(file *ast.SourceFile, pos int, list *lsproto.CompletionList)
 	for _, item := range list.Items {
 		if item.Data == nil {
 			item.Data = &lsproto.CompletionItemData{
-				FileName:              file.OriginalFileName(),
+				FileName:              file.OriginalFileName().AsString(),
 				Position:              int32(pos),
 				SupplementalFileIndex: supplementalFileIndex(file),
 				Name:                  item.Label,
@@ -309,7 +309,6 @@ type symbolOriginInfo struct {
 	kind              symbolOriginInfoKind
 	isDefaultExport   bool
 	isFromPackageJson bool
-	fileName          string
 	data              any
 }
 
@@ -1200,7 +1199,7 @@ func (l *LanguageService) getCompletionData(
 	}
 
 	shouldOfferImportCompletions := func() bool {
-		if tspath.IsDynamicFileName(file.FileName()) {
+		if file.FileName().IsDynamic() {
 			return false
 		}
 		// If already typing an import statement, provide completions for it.
@@ -2849,7 +2848,7 @@ func createSnippetTabStopBody(factory *ast.NodeFactory, emitContext *printer.Emi
 }
 
 func (l *LanguageService) createImportAdder(ctx context.Context, typeChecker *checker.Checker, file *ast.SourceFile) (autoimport.ImportAdder, error) {
-	if tspath.IsDynamicFileName(file.FileName()) {
+	if file.FileName().IsDynamic() {
 		return nil, nil
 	}
 	view, err := l.getPreparedAutoImportView(file, typeChecker)
@@ -5039,7 +5038,7 @@ func (l *LanguageService) createLSPCompletionItem(
 ) *lsproto.CompletionItem {
 	kind := getCompletionsSymbolKind(elementKind)
 	data := &lsproto.CompletionItemData{
-		FileName:              file.OriginalFileName(),
+		FileName:              file.OriginalFileName().AsString(),
 		Position:              int32(position),
 		SupplementalFileIndex: supplementalFileIndex(file),
 		Source:                source,
@@ -5485,12 +5484,13 @@ func (l *LanguageService) ResolveCompletionItem(
 	ctx context.Context,
 	item *lsproto.CompletionItem,
 	data *lsproto.CompletionItemData,
+	fileName tspath.RootedFilePath,
 ) (*lsproto.CompletionItem, error) {
 	if data == nil {
 		return nil, errors.New("completion item data is nil")
 	}
 
-	program, file := l.tryGetProgramAndFile(data.FileName)
+	program, file := l.tryGetProgramAndFile(fileName)
 	if file == nil {
 		return nil, fmt.Errorf("file not found: %s", data.FileName)
 	}
@@ -6578,7 +6578,7 @@ func (l *LanguageService) getExhaustiveCaseSnippets(
 		quotePreference := lsutil.GetQuotePreference(file, l.UserPreferences())
 		// Tolerate a nil import adder in untitled files.
 		var importAdder autoimport.ImportAdder
-		if !tspath.IsDynamicFileName(file.FileName()) {
+		if !file.FileName().IsDynamic() {
 			view, err := l.getPreparedAutoImportView(file, c)
 			if err != nil {
 				return nil, err
@@ -6687,7 +6687,7 @@ func (l *LanguageService) getExhaustiveCaseSnippets(
 			AdditionalTextEdits: additionalTextEdits,
 			InsertTextFormat:    core.IfElse(clientSupportsItemSnippet(ctx), new(lsproto.InsertTextFormatSnippet), nil),
 			Data: &lsproto.CompletionItemData{
-				FileName:              file.OriginalFileName(),
+				FileName:              file.OriginalFileName().AsString(),
 				Position:              int32(position),
 				SupplementalFileIndex: supplementalFileIndex(file),
 				Name:                  name,

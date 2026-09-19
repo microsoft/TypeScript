@@ -15,36 +15,29 @@ import (
 // does not return errors. The FileInfo returned by DirEntry.Info for a symbolic
 // link contains only its name and mode because [FS] does not provide lstat.
 // Using DirEntry.Info() requires the FS to implement Stat().
-func WalkDir(fileSystem FS, root string, walkFn fs.WalkDirFunc) error {
-	rootInfo := fileSystem.Stat(root)
+func WalkDir(fileSystem FS, root tspath.RootedPath, walkFn WalkDirFunc) error {
+	rootPath := root
+	rootInfo := fileSystem.Stat(rootPath)
 	if rootInfo == nil {
-		return normalizeWalkDirError(walkFn(root, nil, ErrNotExist))
+		return normalizeWalkDirError(walkFn(rootPath, nil, ErrNotExist))
 	}
 
-	useCaseSensitiveFileNames := fileSystem.UseCaseSensitiveFileNames()
-	rootPrefix := root[:tspath.GetRootLength(root)]
-	sameRoot := func(path string) bool {
-		pathRootLength := tspath.GetRootLength(path)
-		return pathRootLength == len(rootPrefix) && tspath.ComparePaths(
-			path[:pathRootLength],
-			rootPrefix,
-			tspath.ComparePathsOptions{UseCaseSensitiveFileNames: useCaseSensitiveFileNames},
-		) == 0
+	caseSensitivity := fileSystem.CaseSensitivity()
+	rootPrefix, _ := rootPath.RootAndRelativePath()
+	sameRoot := func(path tspath.RootedPath) bool {
+		pathRoot, _ := path.RootAndRelativePath()
+		return caseSensitivity.ComparePaths(pathRoot.AsPath(), rootPrefix.AsPath()) == 0
 	}
-	equivalent := func(left string, right string) bool {
-		return tspath.ComparePaths(
-			left,
-			right,
-			tspath.ComparePathsOptions{UseCaseSensitiveFileNames: useCaseSensitiveFileNames},
-		) == 0
+	equivalent := func(left tspath.RootedPath, right tspath.RootedPath) bool {
+		return caseSensitivity.ComparePaths(left, right) == 0
 	}
-	canonicalize := func(path string) string {
-		return tspath.GetCanonicalFileName(tspath.NormalizePath(path), useCaseSensitiveFileNames)
+	canonicalize := func(path tspath.RootedPath) tspath.PathKey {
+		return caseSensitivity.PathKey(path)
 	}
 
-	visited := map[string]struct{}{}
-	var visit func(path string, entry fs.DirEntry, realpath string) error
-	visit = func(path string, entry fs.DirEntry, realpath string) error {
+	visited := map[tspath.PathKey]struct{}{}
+	var visit func(path tspath.RootedPath, entry fs.DirEntry, realpath tspath.RootedPath) error
+	visit = func(path tspath.RootedPath, entry fs.DirEntry, realpath tspath.RootedPath) error {
 		if entry.IsDir() {
 			canonicalRealpath := canonicalize(realpath)
 			if _, ok := visited[canonicalRealpath]; ok {
@@ -63,7 +56,8 @@ func WalkDir(fileSystem FS, root string, walkFn fs.WalkDirFunc) error {
 			return nil
 		}
 
-		entries := fileSystem.GetAccessibleEntries(path)
+		directory := tspath.RootedDirectoryPathFromPath(path)
+		entries := fileSystem.GetAccessibleEntries(directory)
 		directories := make(map[string]struct{}, len(entries.Directories))
 		for _, name := range entries.Directories {
 			directories[name] = struct{}{}
@@ -71,25 +65,35 @@ func WalkDir(fileSystem FS, root string, walkFn fs.WalkDirFunc) error {
 		names := append(slices.Clone(entries.Directories), entries.Files...)
 		slices.Sort(names)
 		for _, name := range names {
-			childPath := tspath.CombinePaths(path, name)
-			if !sameRoot(childPath) {
-				continue
-			}
-
 			mode := fs.FileMode(0)
 			if _, ok := directories[name]; ok {
 				mode = fs.ModeDir
 			}
-			childRealpath := ""
+			var childPath tspath.RootedPath
+			if mode.IsDir() {
+				childPath = directory.ResolveDirectory(name).AsPath()
+			} else {
+				childPath = directory.ResolveFile(name).AsPath()
+			}
+			if !sameRoot(childPath) {
+				continue
+			}
+
+			var childRealpath tspath.RootedPath
 			isSymlink := false
 			if entries.Symlinks != nil {
 				_, isSymlink = entries.Symlinks[name]
 				if !isSymlink && mode.IsDir() {
-					childRealpath = tspath.CombinePaths(realpath, name)
+					childRealpath = tspath.RootedDirectoryPathFromPath(realpath).ResolveDirectory(name).AsPath()
 				}
 			} else {
 				childRealpath = fileSystem.Realpath(childPath)
-				isSymlink = !equivalent(childRealpath, tspath.CombinePaths(realpath, name))
+				realDirectory := tspath.RootedDirectoryPathFromPath(realpath)
+				expectedRealpath := realDirectory.ResolveFile(name).AsPath()
+				if mode.IsDir() {
+					expectedRealpath = realDirectory.ResolveDirectory(name).AsPath()
+				}
+				isSymlink = !equivalent(childRealpath, expectedRealpath)
 			}
 			if isSymlink {
 				mode = fs.ModeSymlink
@@ -124,20 +128,20 @@ func WalkDir(fileSystem FS, root string, walkFn fs.WalkDirFunc) error {
 	}
 
 	rootEntry := fs.FileInfoToDirEntry(rootInfo)
-	rootRealpath := fileSystem.Realpath(root)
-	if tspath.GetRootLength(root) != len(root) {
-		parent := tspath.GetDirectoryPath(root)
-		expectedRealpath := tspath.CombinePaths(fileSystem.Realpath(parent), tspath.GetBaseFileName(root))
+	rootRealpath := fileSystem.Realpath(rootPath)
+	if rootPath != rootPrefix.AsPath() {
+		parent := rootPath.Directory()
+		expectedRealpath := tspath.RootedDirectoryPathFromPath(fileSystem.Realpath(parent.AsPath())).ResolveDirectory(rootPath.BaseName()).AsPath()
 		if !equivalent(rootRealpath, expectedRealpath) {
 			rootEntry = &walkDirEntry{
 				fileSystem: fileSystem,
-				path:       root,
-				name:       tspath.GetBaseFileName(root),
+				path:       rootPath,
+				name:       rootPath.BaseName(),
 				mode:       fs.ModeSymlink,
 			}
 		}
 	}
-	return normalizeWalkDirError(visit(root, rootEntry, rootRealpath))
+	return normalizeWalkDirError(visit(rootPath, rootEntry, rootRealpath))
 }
 
 func normalizeWalkDirError(err error) error {
@@ -149,7 +153,7 @@ func normalizeWalkDirError(err error) error {
 
 type walkDirEntry struct {
 	fileSystem FS
-	path       string
+	path       tspath.RootedPath
 	name       string
 	mode       fs.FileMode
 }

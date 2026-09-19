@@ -118,7 +118,7 @@ export declare const main = 23;
 export const main = 23;
 
 //// [/home/src/workspaces/solution/src/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":[3],"fileNames":["lib.es2025.full.d.ts","../include/include.d.ts","./main.ts","../include/include.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},"2a0dff0e1bbd6db3f4d58fc79a892ff5-export declare const include = 1;\n",{"version":"7aa654f7776b0488d5e129f89e8878fa-/// <reference path=\"../include/include.ts\" preserve=\"true\" />\nexport const main = 23;","signature":"c0efabe26d066f427c370b23e0a62be4-/// <reference path=\"../include/include.d.ts\" preserve=\"true\" />\nexport declare const main = 23;\n","impliedNodeFormat":1}],"fileIdsList":[[4]],"options":{"composite":true,"declaration":true},"referencedMap":[[3,1]],"latestChangedDtsFile":"./main.d.ts"}
+{"version":"FakeTSVersion","root":[3],"fileNames":["lib.es2025.full.d.ts","../include/include.d.ts","./main.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},"2a0dff0e1bbd6db3f4d58fc79a892ff5-export declare const include = 1;\n",{"version":"7aa654f7776b0488d5e129f89e8878fa-/// <reference path=\"../include/include.ts\" preserve=\"true\" />\nexport const main = 23;","signature":"c0efabe26d066f427c370b23e0a62be4-/// <reference path=\"../include/include.d.ts\" preserve=\"true\" />\nexport declare const main = 23;\n","impliedNodeFormat":1}],"fileIdsList":[[2]],"options":{"composite":true,"declaration":true},"referencedMap":[[3,1]],"latestChangedDtsFile":"./main.d.ts"}
 //// [/home/src/workspaces/solution/src/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -133,8 +133,7 @@ export const main = 23;
   "fileNames": [
     "lib.es2025.full.d.ts",
     "../include/include.d.ts",
-    "./main.ts",
-    "../include/include.ts"
+    "./main.ts"
   ],
   "fileInfos": [
     {
@@ -169,7 +168,7 @@ export const main = 23;
   ],
   "fileIdsList": [
     [
-      "../include/include.ts"
+      "../include/include.d.ts"
     ]
   ],
   "options": {
@@ -178,11 +177,11 @@ export const main = 23;
   },
   "referencedMap": {
     "./main.ts": [
-      "../include/include.ts"
+      "../include/include.d.ts"
     ]
   },
   "latestChangedDtsFile": "./main.d.ts",
-  "size": 1433
+  "size": 1409
 }
 
 include/tsconfig.json::

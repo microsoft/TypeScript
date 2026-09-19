@@ -11,8 +11,8 @@ import (
 )
 
 type SourceFileForSpecifierGeneration interface {
-	Path() tspath.Path
-	FileName() string
+	PathKey() tspath.PathKey
+	FileName() tspath.RootedFilePath
 	Imports() []*ast.StringLiteralLike
 	IsJS() bool
 }
@@ -34,13 +34,13 @@ const (
 )
 
 type ModuleSpecifiersResult struct {
-	Specifiers          []string
+	Specifiers          []tspath.ModuleSpecifier
 	Kind                ResultKind
 	AmbientModuleSymbol *ast.Symbol // used to construct an import attributes node, if one is needed
 }
 
 type ModulePath struct {
-	FileName        string
+	FileName        tspath.RootedFilePath
 	IsInNodeModules bool
 	IsRedirect      bool
 }
@@ -49,20 +49,20 @@ type ModuleSpecifierGenerationHost interface {
 	// GetModuleResolutionCache() any // !!! TODO: adapt new resolution cache model
 	GetSymlinkCache() *symlinks.KnownSymlinks
 	// GetFileIncludeReasons() any // !!! TODO: adapt new resolution cache model
-	CommonSourceDirectory() string
+	CommonSourceDirectory() tspath.RootedDirectoryPath
 	ContentMapperExtensions() []string
-	GetGlobalTypingsCacheLocation() string
-	UseCaseSensitiveFileNames() bool
-	GetCurrentDirectory() string
+	GetGlobalTypingsCacheLocation() tspath.RootedDirectoryPath
+	CaseSensitivity() tspath.CaseSensitivity
+	BaseDirectory() tspath.RootedDirectoryPath
 
-	GetProjectReferenceFromSource(path tspath.Path) *tsoptions.SourceOutputAndProjectReference
-	GetRedirectTargets(path tspath.Path) []string
-	GetSourceOfProjectReferenceIfOutputIncluded(file ast.HasFileName) string
+	GetProjectReferenceFromSource(path tspath.PathKey) *tsoptions.SourceOutputAndProjectReference
+	GetRedirectTargets(path tspath.PathKey) []tspath.RootedFilePath
+	GetSourceOfProjectReferenceIfOutputIncluded(file ast.HasFileName) tspath.RootedFilePath
 
-	FileExists(path string) bool
+	FileExists(path tspath.RootedFilePath) bool
 
-	GetNearestAncestorDirectoryWithPackageJson(dirname string) string
-	GetPackageJsonInfo(pkgJsonPath string) *packagejson.InfoCacheEntry
+	GetNearestAncestorDirectoryWithPackageJson(dirname tspath.RootedDirectoryPath) tspath.RootedDirectoryPath
+	GetPackageJsonInfo(pkgJsonPath tspath.RootedFilePath) *packagejson.InfoCacheEntry
 	GetDefaultResolutionModeForFile(file ast.HasFileName) core.ResolutionMode
 	GetResolvedModuleFromModuleSpecifier(file ast.HasFileName, moduleSpecifier *ast.StringLiteralLike) *module.ResolvedModule
 	GetModeForUsageLocation(file ast.HasFileName, moduleSpecifier *ast.StringLiteralLike) core.ResolutionMode

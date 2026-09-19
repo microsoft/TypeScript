@@ -33,28 +33,30 @@ type commandLineParser struct {
 	workerDiagnostics *ParseCommandLineWorkerDiagnostics
 	optionsMap        *NameMap
 	fs                vfs.FS
-	currentDirectory  string
+	currentDirectory  tspath.RootedDirectoryPath
 	options           *collections.OrderedMap[string, any]
 	fileNames         []string
 	errors            []*ast.Diagnostic
-	responseFileStack collections.Set[tspath.Path]
+	responseFileStack collections.Set[tspath.PathKey]
 }
 
 func ParseCommandLine(
 	commandLine []string,
-	host ParseConfigHost,
+	fs vfs.FS,
+	currentDirectory tspath.RootedDirectoryPath,
 ) *ParsedCommandLine {
 	if commandLine == nil {
 		commandLine = []string{}
 	}
-	parser := parseCommandLineWorker(CompilerOptionsDidYouMeanDiagnostics, commandLine, host.FS(), host.GetCurrentDirectory())
-	options := convertToOptionsWithAbsolutePaths(parser.options.Clone(), CommandLineCompilerOptionsMap, host.GetCurrentDirectory())
-	compilerOptions := convertMapToOptions(options, &compilerOptionsParser{&core.CompilerOptions{}}).CompilerOptions
+	parser := parseCommandLineWorker(CompilerOptionsDidYouMeanDiagnostics, commandLine, fs, currentDirectory)
+	options := convertToOptionsWithAbsolutePaths(parser.options.Clone(), CommandLineCompilerOptionsMap, currentDirectory)
+	compilerOptions := convertMapToOptions(options, &compilerOptionsParser{CompilerOptions: &core.CompilerOptions{}}).CompilerOptions
 	watchOptions := convertMapToOptions(options, &watchOptionsParser{&core.WatchOptions{}}).WatchOptions
-	result := NewParsedCommandLine(compilerOptions, parser.fileNames, nil, tspath.ComparePathsOptions{
-		UseCaseSensitiveFileNames: host.FS().UseCaseSensitiveFileNames(),
-		CurrentDirectory:          host.GetCurrentDirectory(),
-	})
+	caseSensitivity := fs.CaseSensitivity()
+	result := NewParsedCommandLine(compilerOptions, core.Map(parser.fileNames, func(fileName string) tspath.RootedFilePath {
+		return tspath.ToRootedFilePath(fileName, currentDirectory)
+	}), nil, currentDirectory, caseSensitivity)
+	result.rootFileNamesForDiagnostics = parser.fileNames
 	result.ParsedConfig.WatchOptions = watchOptions
 	result.Errors = parser.errors
 	result.Raw = parser.options
@@ -63,12 +65,13 @@ func ParseCommandLine(
 
 func ParseBuildCommandLine(
 	commandLine []string,
-	host ParseConfigHost,
+	fs vfs.FS,
+	currentDirectory tspath.RootedDirectoryPath,
 ) *ParsedBuildCommandLine {
 	if commandLine == nil {
 		commandLine = []string{}
 	}
-	parser := parseCommandLineWorker(buildOptionsDidYouMeanDiagnostics, commandLine, host.FS(), host.GetCurrentDirectory())
+	parser := parseCommandLineWorker(buildOptionsDidYouMeanDiagnostics, commandLine, fs, currentDirectory)
 	compilerOptions := &core.CompilerOptions{}
 	for key, value := range parser.options.Entries() {
 		buildOption := BuildNameMap.Get(key)
@@ -84,10 +87,7 @@ func ParseBuildCommandLine(
 		Errors:          parser.errors,
 		Raw:             parser.options,
 
-		comparePathsOptions: tspath.ComparePathsOptions{
-			UseCaseSensitiveFileNames: host.FS().UseCaseSensitiveFileNames(),
-			CurrentDirectory:          host.GetCurrentDirectory(),
-		},
+		currentDirectory: currentDirectory,
 	}
 
 	if len(result.Projects) == 0 {
@@ -116,7 +116,7 @@ func parseCommandLineWorker(
 	parseCommandLineWithDiagnostics *ParseCommandLineWorkerDiagnostics,
 	commandLine []string,
 	fs vfs.FS,
-	currentDirectory string,
+	currentDirectory tspath.RootedDirectoryPath,
 ) *commandLineParser {
 	parser := &commandLineParser{
 		fs:                fs,
@@ -167,15 +167,18 @@ func getInputOptionName(input string) string {
 }
 
 func (p *commandLineParser) parseResponseFile(fileName string) {
-	fileName = tspath.GetNormalizedAbsolutePath(fileName, p.currentDirectory)
-	path := tspath.ToPath(fileName, p.currentDirectory, p.fs.UseCaseSensitiveFileNames())
+	typedFileName := tspath.RootedFilePathFromPath(p.currentDirectory.AsPath())
+	if fileName != "" {
+		typedFileName = tspath.ToRootedFilePath(fileName, p.currentDirectory)
+	}
+	path := p.fs.CaseSensitivity().PathKey(typedFileName.AsPath())
 	if p.responseFileStack.Has(path) {
 		return
 	}
 	p.responseFileStack.Add(path)
 	defer p.responseFileStack.Delete(path)
 
-	fileContents, errors := tryReadFile(fileName, func(fileName string) (string, bool) {
+	fileContents, errors := tryReadFile(typedFileName, func(fileName tspath.RootedFilePath) (string, bool) {
 		if p.fs == nil {
 			return "", false
 		}
@@ -221,7 +224,7 @@ func (p *commandLineParser) parseResponseFile(fileName string) {
 	p.parseStrings(args)
 }
 
-func tryReadFile(fileName string, readFile func(string) (string, bool), errors []*ast.Diagnostic) (string, []*ast.Diagnostic) {
+func tryReadFile(fileName tspath.RootedFilePath, readFile func(tspath.RootedFilePath) (string, bool), errors []*ast.Diagnostic) (string, []*ast.Diagnostic) {
 	// this function adds a compiler diagnostic if the file cannot be read
 	text, e := readFile(fileName)
 
@@ -229,7 +232,7 @@ func tryReadFile(fileName string, readFile func(string) (string, bool), errors [
 		// !!! Divergence: the returned error will not give a useful message
 		// errors = append(errors, ast.NewCompilerDiagnostic(diagnostics.Cannot_read_file_0_Colon_1, *e));
 		text = ""
-		errors = append(errors, ast.NewCompilerDiagnostic(diagnostics.Cannot_read_file_0, fileName))
+		errors = append(errors, ast.NewCompilerDiagnostic(diagnostics.Cannot_read_file_0, fileName.AsString()))
 	}
 	return text, errors
 }

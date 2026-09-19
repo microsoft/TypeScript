@@ -69,6 +69,55 @@ func TestCompilerOptionsDeclaration(t *testing.T) {
 	}
 }
 
+func TestCommandLineOptionPathKinds(t *testing.T) {
+	t.Parallel()
+
+	expected := map[string]tsoptions.CommandLineOptionPathKind{
+		"baseUrl":            tsoptions.CommandLineOptionPathKindDirectory,
+		"declarationDir":     tsoptions.CommandLineOptionPathKindDirectory,
+		"generateCpuProfile": tsoptions.CommandLineOptionPathKindFile,
+		"generateTrace":      tsoptions.CommandLineOptionPathKindDirectory,
+		"mapRoot":            tsoptions.CommandLineOptionPathKindSourceMapLocation,
+		"outDir":             tsoptions.CommandLineOptionPathKindDirectory,
+		"outFile":            tsoptions.CommandLineOptionPathKindFile,
+		"pprofDir":           tsoptions.CommandLineOptionPathKindDirectory,
+		"project":            tsoptions.CommandLineOptionPathKindFileOrDirectory,
+		"rootDir":            tsoptions.CommandLineOptionPathKindDirectory,
+		"sourceRoot":         tsoptions.CommandLineOptionPathKindSourceMapLocation,
+		"tsBuildInfoFile":    tsoptions.CommandLineOptionPathKindFile,
+	}
+
+	for _, option := range tsoptions.OptionsDeclarations {
+		pathKind, ok := expected[option.Name]
+		if !ok {
+			if option.PathKind != tsoptions.CommandLineOptionPathKindNone {
+				t.Errorf("%s has unexpected path kind %d", option.Name, option.PathKind)
+			}
+			continue
+		}
+		if option.PathKind != pathKind {
+			t.Errorf("%s has path kind %d, want %d", option.Name, option.PathKind, pathKind)
+		}
+		delete(expected, option.Name)
+	}
+	for optionName := range expected {
+		t.Errorf("%s was not found in option declarations", optionName)
+	}
+
+	for _, optionName := range []string{"rootDirs", "typeRoots"} {
+		option := tsoptions.CompilerNameMap.GetOptionDeclarationFromName(optionName, false)
+		if option == nil || option.Elements().PathKind != tsoptions.CommandLineOptionPathKindDirectory {
+			t.Errorf("%s element is not classified as a directory", optionName)
+		}
+	}
+	for _, optionName := range []string{"excludeDirectories", "excludeFiles"} {
+		option := tsoptions.WatchNameMap.GetOptionDeclarationFromName(optionName, false)
+		if option == nil || option.Elements().PathKind != tsoptions.CommandLineOptionPathKindResolvedPathPattern {
+			t.Errorf("%s element is not classified as a resolved path pattern", optionName)
+		}
+	}
+}
+
 func checkCompilerOptionJsonTagName(t *testing.T, field reflect.StructField, name string) {
 	t.Helper()
 	want := name + ",omitzero"
