@@ -2401,15 +2401,15 @@ func NewSourceFileDataKey[T any]() *SourceFileDataKey[T] {
 	return &SourceFileDataKey[T]{key: sourceFileDataKey(sourceFileDataKeyCounter.Add(1))}
 }
 
-func GetOrComputeSourceFileData[T any](file *SourceFile, key *SourceFileDataKey[T], compute func(*SourceFile) T) T {
-	cell := getSourceFileDataCell(file, key)
+func (file *SourceFile) GetOrComputeData[T any](key *SourceFileDataKey[T], compute func(*SourceFile) T) T {
+	cell := file.getDataCell(key)
 	cell.once.Do(func() {
 		cell.value = compute(file)
 	})
 	return cell.value
 }
 
-func getSourceFileDataCell[T any](file *SourceFile, key *SourceFileDataKey[T]) *sourceFileDataCell[T] {
+func (file *SourceFile) getDataCell[T any](key *SourceFileDataKey[T]) *sourceFileDataCell[T] {
 	if key == nil || key.key == 0 {
 		panic("invalid SourceFileDataKey; use NewSourceFileDataKey")
 	}

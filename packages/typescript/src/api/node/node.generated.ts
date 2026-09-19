@@ -69,6 +69,10 @@ export class RemoteNodeList extends Array<RemoteNode> implements NodeArray<Remot
         return this.view.getUint32(this._byteIndex + NODE_OFFSET_NEXT, true);
     }
 
+    get firstNodeIndex(): number {
+        return this.index + 1;
+    }
+
     private get data(): number {
         return this.view.getUint32(this._byteIndex + NODE_OFFSET_DATA, true);
     }
@@ -200,7 +204,7 @@ export class RemoteNodeList extends Array<RemoteNode> implements NodeArray<Remot
         return this.getOrCreateChildAtNodeIndex(next) as RemoteNode;
     }
 
-    private getOrCreateChildAtNodeIndex(index: number): RemoteNode | RemoteNodeList {
+    getOrCreateChildAtNodeIndex(index: number): RemoteNode | RemoteNodeList {
         let child = this.sourceFile.nodes[index];
         if (!child) {
             const kind = this.view.getUint32(this.sourceFile._offsetNodes + index * NODE_LEN + NODE_OFFSET_KIND, true);
@@ -261,6 +265,36 @@ export class RemoteNode extends RemoteNodeBase implements Node {
                 }
                 else if (child.kind !== SyntaxKind.JSDoc) {
                     const result = visitNode(child);
+                    if (result) {
+                        return result;
+                    }
+                }
+                next = child.next;
+            }
+            while (next);
+        }
+    }
+
+    *childrenIter<TNext = void>(): Generator<Node, TNext | undefined, TNext> {
+        if (this.hasChildren()) {
+            let next = this.index + 1;
+            do {
+                const child = this.getOrCreateChildAtNodeIndex(next);
+                if (child instanceof RemoteNodeList) {
+                    if (child.length) {
+                        let listNext = child.firstNodeIndex;
+                        while (listNext) {
+                            const node = child.getOrCreateChildAtNodeIndex(listNext) as RemoteNode;
+                            listNext = node.next;
+                            const result = yield node;
+                            if (result) {
+                                return result;
+                            }
+                        }
+                    }
+                }
+                else if (child.kind !== SyntaxKind.JSDoc) {
+                    const result = yield child;
                     if (result) {
                         return result;
                     }

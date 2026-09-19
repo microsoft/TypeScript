@@ -359,7 +359,7 @@ func (s *snapshotFSBuilder) cacheSourceFile(fileName string, path tspath.Path, s
 }
 
 func (s *snapshotFSBuilder) getCachedFile(fileName string, path tspath.Path, forceReload bool) FileHandle {
-	entry, loaded := s.cacheFiles.LoadOrStore(path, &cachedFile{fileBase: fileBase{fileName: fileName}, needsReload: true})
+	entry, loaded := s.cacheFiles.LoadOrStore(path, &cachedFile{fileName: fileName, needsReload: true})
 	if entry != nil {
 		if !loaded && strings.Contains(string(path), "/node_modules/") {
 			s.recordRealpathAlias(entry, fileName, path)

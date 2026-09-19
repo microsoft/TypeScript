@@ -25,7 +25,7 @@ type View struct {
 	program           *compiler.Program
 	checker           *checker.Checker
 	preferences       modulespecifiers.UserPreferences
-	projectKey        tspath.Path
+	projectID         ProjectID
 
 	allowedEndings                   []modulespecifiers.ModuleSpecifierEnding
 	conditions                       *collections.Set[string]
@@ -34,7 +34,7 @@ type View struct {
 	shouldUseRequireForFixes         *bool
 }
 
-func NewView(registry *Registry, importingFile *ast.SourceFile, projectKey tspath.Path, program *compiler.Program, typeChecker *checker.Checker, preferences modulespecifiers.UserPreferences) *View {
+func NewView(registry *Registry, importingFile *ast.SourceFile, projectID ProjectID, program *compiler.Program, typeChecker *checker.Checker, preferences modulespecifiers.UserPreferences) *View {
 	importingFilePath := importingFile.Path()
 	if canonical := importingFile.CanonicalSourceFile(); canonical != nil {
 		importingFilePath = canonical.Path()
@@ -45,7 +45,7 @@ func NewView(registry *Registry, importingFile *ast.SourceFile, projectKey tspat
 		importingFilePath: importingFilePath,
 		program:           program,
 		checker:           typeChecker,
-		projectKey:        projectKey,
+		projectID:         projectID,
 		preferences:       preferences,
 		conditions: collections.NewSetFromItems(
 			module.GetConditions(program.Options(),
@@ -108,7 +108,7 @@ func (v *View) SearchByExportID(id ExportID) []*Export {
 func (v *View) search(searchFn func(*RegistryBucket) []*Export) []*Export {
 	var results []*Export
 
-	if bucket, ok := v.registry.projects[v.projectKey]; ok {
+	if bucket, ok := v.registry.projects[v.projectID]; ok {
 		exports := searchFn(bucket)
 		results = slices.Grow(results, len(exports))
 		for _, e := range exports {
@@ -125,7 +125,7 @@ func (v *View) search(searchFn func(*RegistryBucket) []*Export) []*Export {
 	// plus packages that are directly imported by the project's program files.
 	// If no package.json is found, allowedPackages remains nil and all packages are allowed.
 	var allowedPackages *collections.Set[string]
-	tspath.ForEachAncestorDirectoryPath(v.importingFile.Path().GetDirectoryPath(), func(dirPath tspath.Path) (result any, stop bool) {
+	v.importingFile.Path().GetDirectoryPath().ForEachAncestorDirectory(func(dirPath tspath.Path) (result any, stop bool) {
 		if dir, ok := v.registry.directories[dirPath]; ok {
 			if pj := dir.packageJson; pj.Exists() && pj.Contents.Parseable {
 				// Initialize to empty set if this is the first package.json we've seen
@@ -139,13 +139,13 @@ func (v *View) search(searchFn func(*RegistryBucket) []*Export) []*Export {
 	})
 	// If we found at least one package.json, also include packages directly imported by the project
 	if allowedPackages != nil {
-		if bucket, ok := v.registry.projects[v.projectKey]; ok {
+		if bucket, ok := v.registry.projects[v.projectID]; ok {
 			allowedPackages = allowedPackages.UnionedWith(bucket.ResolvedPackageNames)
 		}
 	}
 
 	excludePackages := &collections.Set[string]{}
-	tspath.ForEachAncestorDirectoryPath(v.importingFile.Path().GetDirectoryPath(), func(dirPath tspath.Path) (result any, stop bool) {
+	v.importingFile.Path().GetDirectoryPath().ForEachAncestorDirectory(func(dirPath tspath.Path) (result any, stop bool) {
 		if nodeModulesBucket, ok := v.registry.nodeModules[dirPath]; ok {
 			exports := searchFn(nodeModulesBucket)
 			results = slices.Grow(results, len(exports))
