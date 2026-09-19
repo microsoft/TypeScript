@@ -1,0 +1,23 @@
+//// [tests/cases/compiler/cssStyleDeclarationKebabCaseIndex.ts] ////
+
+=== cssStyleDeclarationKebabCaseIndex.ts ===
+declare const el: HTMLElement;
+>el : HTMLElement
+
+const value = getComputedStyle(el)["background-color"];
+>value : any
+>getComputedStyle(el)["background-color"] : any
+>getComputedStyle(el) : CSSStyleDeclaration
+>getComputedStyle : (elt: Element, pseudoElt?: string | null) => CSSStyleDeclaration
+>el : HTMLElement
+>"background-color" : "background-color"
+
+el.style["background-color"] = "red";
+>el.style["background-color"] = "red" : "red"
+>el.style["background-color"] : any
+>el.style : CSSStyleDeclaration
+>el : HTMLElement
+>style : CSSStyleDeclaration
+>"background-color" : "background-color"
+>"red" : "red"
+
