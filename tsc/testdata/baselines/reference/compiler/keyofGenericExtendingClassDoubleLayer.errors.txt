@@ -1,12 +1,9 @@
 keyofGenericExtendingClassDoubleLayer.ts(2,12): error TS2564: Property 'createdAt' has no initializer and is not definitely assigned in the constructor.
-keyofGenericExtendingClassDoubleLayer.ts(9,7): error TS5114: A base type of 'AutoModel<PersonModel>' has type arguments that circularly reference members of the type.
-keyofGenericExtendingClassDoubleLayer.ts(9,7): error TS5114: A base type of 'PersonModel' has type arguments that circularly reference members of the type.
+keyofGenericExtendingClassDoubleLayer.ts(9,7): error TS2589: Type instantiation is excessively deep and possibly infinite.
 keyofGenericExtendingClassDoubleLayer.ts(10,12): error TS2564: Property 'age' has no initializer and is not definitely assigned in the constructor.
-keyofGenericExtendingClassDoubleLayer.ts(13,13): error TS2322: Type 'string' is not assignable to type 'keyof this'.
-  Type '"createdAt"' is not assignable to type '"age" | "toJson"'.
 
 
-==== keyofGenericExtendingClassDoubleLayer.ts (5 errors) ====
+==== keyofGenericExtendingClassDoubleLayer.ts (3 errors) ====
     class Model<Attributes = any> {
         public createdAt: Date;
                ~~~~~~~~~
@@ -19,18 +16,13 @@ keyofGenericExtendingClassDoubleLayer.ts(13,13): error TS2322: Type 'string' is 
     
     class PersonModel extends AutoModel<PersonModel> {
           ~~~~~~~~~~~
-!!! error TS5114: A base type of 'AutoModel<PersonModel>' has type arguments that circularly reference members of the type.
-          ~~~~~~~~~~~
-!!! error TS5114: A base type of 'PersonModel' has type arguments that circularly reference members of the type.
+!!! error TS2589: Type instantiation is excessively deep and possibly infinite.
         public age: number;
                ~~~
 !!! error TS2564: Property 'age' has no initializer and is not definitely assigned in the constructor.
     
         toJson() {
             let x: keyof this = 'createdAt';
-                ~
-!!! error TS2322: Type 'string' is not assignable to type 'keyof this'.
-!!! error TS2322:   Type '"createdAt"' is not assignable to type '"age" | "toJson"'.
         }
     }
     

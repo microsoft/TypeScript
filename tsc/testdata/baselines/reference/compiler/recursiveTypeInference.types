@@ -168,7 +168,7 @@ export const z = { string, array, object, optional, nullable };
 // (1) plain self reference through array
 const Category = z.object({
 >Category : $ZodObject<{ name: $ZodString; readonly subcategories: $ZodArray<$ZodObject<any>>; }>
->z.object({  name: z.string(),  get subcategories() {    return z.array(Category);  },}) : $ZodObject<Readonly<{ [k: string]: $ZodType<unknown, unknown, $ZodTypeInternals<unknown, unknown>>; }>>
+>z.object({  name: z.string(),  get subcategories() {    return z.array(Category);  },}) : $ZodObject<{ name: $ZodString; readonly subcategories: $ZodArray<$ZodObject<any>>; }>
 >z.object : <T extends $ZodShape>(shape: T) => $ZodObject<T>
 >z : { string: () => $ZodString; array: <T extends $ZodType>(element: T) => $ZodArray<T>; object: <T extends $ZodShape>(shape: T) => $ZodObject<T>; optional: <T extends $ZodType>(inner: T) => $ZodOptional<T>; nullable: <T extends $ZodType>(inner: T) => $ZodNullable<T>; }
 >object : <T extends $ZodShape>(shape: T) => $ZodObject<T>
@@ -194,11 +194,11 @@ const Category = z.object({
   },
 });
 type Category = output<typeof Category>;
->Category : { name: string; subcategories: unknown; }
+>Category : { name: string; subcategories: any[]; }
 >Category : $ZodObject<{ name: $ZodString; readonly subcategories: $ZodArray<$ZodObject<any>>; }>
 
 export const _c: Category = { name: "a", subcategories: [{ name: "b", subcategories: [] }] };
->_c : { name: string; subcategories: unknown; }
+>_c : { name: string; subcategories: any[]; }
 >{ name: "a", subcategories: [{ name: "b", subcategories: [] }] } : { name: string; subcategories: { name: string; subcategories: never[]; }[]; }
 >name : string
 >"a" : "a"
@@ -302,7 +302,7 @@ const Activity = z.object({
 >subactivities : $ZodNullable<$ZodArray<$ZodObject<{ name: $ZodString; readonly subactivities: $ZodNullable<$ZodArray<$ZodObject<any>>>; }>>>
 
     return z.nullable(z.array(Activity));
->z.nullable(z.array(Activity)) : $ZodNullable<$ZodType<unknown, unknown, $ZodTypeInternals<unknown, unknown>>>
+>z.nullable(z.array(Activity)) : $ZodNullable<$ZodArray<$ZodObject<{ name: $ZodString; readonly subactivities: $ZodNullable<$ZodArray<$ZodObject<any>>>; }>>>
 >z.nullable : <T extends $ZodType>(inner: T) => $ZodNullable<T>
 >z : { string: () => $ZodString; array: <T extends $ZodType>(element: T) => $ZodArray<T>; object: <T extends $ZodShape>(shape: T) => $ZodObject<T>; optional: <T extends $ZodType>(inner: T) => $ZodOptional<T>; nullable: <T extends $ZodType>(inner: T) => $ZodNullable<T>; }
 >nullable : <T extends $ZodType>(inner: T) => $ZodNullable<T>
@@ -315,7 +315,7 @@ const Activity = z.object({
   },
 });
 export type ActivityT = output<typeof Activity>;
->ActivityT : { name: string; subactivities: unknown; }
+>ActivityT : { name: string; subactivities: { name: string; subactivities: any[] | null; }[] | null; }
 >Activity : $ZodObject<{ name: $ZodString; readonly subactivities: $ZodNullable<$ZodArray<$ZodObject<any>>>; }>
 
 // (4) reference through a separately-declared const
@@ -338,7 +338,7 @@ const Node1 = z.object({
 >children : $ZodOptional<$ZodArray<$ZodObject<{ name: $ZodString; readonly children: $ZodOptional<$ZodArray<$ZodObject<any>>>; }>>>
 
     return z.optional(NodeArray);
->z.optional(NodeArray) : $ZodOptional<$ZodType<unknown, unknown, $ZodTypeInternals<unknown, unknown>>>
+>z.optional(NodeArray) : $ZodOptional<$ZodArray<$ZodObject<{ name: $ZodString; readonly children: $ZodOptional<$ZodArray<$ZodObject<any>>>; }>>>
 >z.optional : <T extends $ZodType>(inner: T) => $ZodOptional<T>
 >z : { string: () => $ZodString; array: <T extends $ZodType>(element: T) => $ZodArray<T>; object: <T extends $ZodShape>(shape: T) => $ZodObject<T>; optional: <T extends $ZodType>(inner: T) => $ZodOptional<T>; nullable: <T extends $ZodType>(inner: T) => $ZodNullable<T>; }
 >optional : <T extends $ZodType>(inner: T) => $ZodOptional<T>
@@ -355,6 +355,6 @@ const NodeArray = z.array(Node1);
 >Node1 : $ZodObject<{ name: $ZodString; readonly children: $ZodOptional<$ZodArray<$ZodObject<any>>>; }>
 
 export type Node1T = output<typeof Node1>;
->Node1T : { name: string; children: unknown; }
+>Node1T : { name: string; children?: { name: string; children?: any[] | undefined; }[] | undefined; }
 >Node1 : $ZodObject<{ name: $ZodString; readonly children: $ZodOptional<$ZodArray<$ZodObject<any>>>; }>
 
