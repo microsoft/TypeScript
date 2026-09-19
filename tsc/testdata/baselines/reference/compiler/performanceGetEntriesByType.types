@@ -1,0 +1,133 @@
+//// [tests/cases/compiler/performanceGetEntriesByType.ts] ////
+
+=== performanceGetEntriesByType.ts ===
+function pageWasReloaded(): boolean {
+>pageWasReloaded : () => boolean
+
+    return performance
+>performance        .getEntriesByType("navigation")        .some(entry => entry.type === "reload") : boolean
+>performance        .getEntriesByType("navigation")        .some : (predicate: (value: PerformanceNavigationTiming, index: number, array: PerformanceNavigationTiming[]) => unknown, thisArg?: any) => boolean
+>performance        .getEntriesByType("navigation") : PerformanceNavigationTiming[]
+>performance        .getEntriesByType : { (type: "event"): PerformanceEventTiming[]; (type: "largest-contentful-paint"): LargestContentfulPaint[]; (type: "mark"): PerformanceMark[]; (type: "measure"): PerformanceMeasure[]; (type: "navigation"): PerformanceNavigationTiming[]; (type: "paint"): PerformancePaintTiming[]; (type: "resource"): PerformanceResourceTiming[]; (type: string): PerformanceEntryList; }
+>performance : Performance
+
+        .getEntriesByType("navigation")
+>getEntriesByType : { (type: "event"): PerformanceEventTiming[]; (type: "largest-contentful-paint"): LargestContentfulPaint[]; (type: "mark"): PerformanceMark[]; (type: "measure"): PerformanceMeasure[]; (type: "navigation"): PerformanceNavigationTiming[]; (type: "paint"): PerformancePaintTiming[]; (type: "resource"): PerformanceResourceTiming[]; (type: string): PerformanceEntryList; }
+>"navigation" : "navigation"
+
+        .some(entry => entry.type === "reload");
+>some : (predicate: (value: PerformanceNavigationTiming, index: number, array: PerformanceNavigationTiming[]) => unknown, thisArg?: any) => boolean
+>entry => entry.type === "reload" : (entry: PerformanceNavigationTiming) => boolean
+>entry : PerformanceNavigationTiming
+>entry.type === "reload" : boolean
+>entry.type : NavigationTimingType
+>entry : PerformanceNavigationTiming
+>type : NavigationTimingType
+>"reload" : "reload"
+}
+
+const marks = performance.getEntriesByType("mark");
+>marks : PerformanceMark[]
+>performance.getEntriesByType("mark") : PerformanceMark[]
+>performance.getEntriesByType : { (type: "event"): PerformanceEventTiming[]; (type: "largest-contentful-paint"): LargestContentfulPaint[]; (type: "mark"): PerformanceMark[]; (type: "measure"): PerformanceMeasure[]; (type: "navigation"): PerformanceNavigationTiming[]; (type: "paint"): PerformancePaintTiming[]; (type: "resource"): PerformanceResourceTiming[]; (type: string): PerformanceEntryList; }
+>performance : Performance
+>getEntriesByType : { (type: "event"): PerformanceEventTiming[]; (type: "largest-contentful-paint"): LargestContentfulPaint[]; (type: "mark"): PerformanceMark[]; (type: "measure"): PerformanceMeasure[]; (type: "navigation"): PerformanceNavigationTiming[]; (type: "paint"): PerformancePaintTiming[]; (type: "resource"): PerformanceResourceTiming[]; (type: string): PerformanceEntryList; }
+>"mark" : "mark"
+
+marks[0].detail;
+>marks[0].detail : any
+>marks[0] : PerformanceMark
+>marks : PerformanceMark[]
+>0 : 0
+>detail : any
+
+const measures = performance.getEntriesByType("measure");
+>measures : PerformanceMeasure[]
+>performance.getEntriesByType("measure") : PerformanceMeasure[]
+>performance.getEntriesByType : { (type: "event"): PerformanceEventTiming[]; (type: "largest-contentful-paint"): LargestContentfulPaint[]; (type: "mark"): PerformanceMark[]; (type: "measure"): PerformanceMeasure[]; (type: "navigation"): PerformanceNavigationTiming[]; (type: "paint"): PerformancePaintTiming[]; (type: "resource"): PerformanceResourceTiming[]; (type: string): PerformanceEntryList; }
+>performance : Performance
+>getEntriesByType : { (type: "event"): PerformanceEventTiming[]; (type: "largest-contentful-paint"): LargestContentfulPaint[]; (type: "mark"): PerformanceMark[]; (type: "measure"): PerformanceMeasure[]; (type: "navigation"): PerformanceNavigationTiming[]; (type: "paint"): PerformancePaintTiming[]; (type: "resource"): PerformanceResourceTiming[]; (type: string): PerformanceEntryList; }
+>"measure" : "measure"
+
+measures[0].detail;
+>measures[0].detail : any
+>measures[0] : PerformanceMeasure
+>measures : PerformanceMeasure[]
+>0 : 0
+>detail : any
+
+const paints = performance.getEntriesByType("paint");
+>paints : PerformancePaintTiming[]
+>performance.getEntriesByType("paint") : PerformancePaintTiming[]
+>performance.getEntriesByType : { (type: "event"): PerformanceEventTiming[]; (type: "largest-contentful-paint"): LargestContentfulPaint[]; (type: "mark"): PerformanceMark[]; (type: "measure"): PerformanceMeasure[]; (type: "navigation"): PerformanceNavigationTiming[]; (type: "paint"): PerformancePaintTiming[]; (type: "resource"): PerformanceResourceTiming[]; (type: string): PerformanceEntryList; }
+>performance : Performance
+>getEntriesByType : { (type: "event"): PerformanceEventTiming[]; (type: "largest-contentful-paint"): LargestContentfulPaint[]; (type: "mark"): PerformanceMark[]; (type: "measure"): PerformanceMeasure[]; (type: "navigation"): PerformanceNavigationTiming[]; (type: "paint"): PerformancePaintTiming[]; (type: "resource"): PerformanceResourceTiming[]; (type: string): PerformanceEntryList; }
+>"paint" : "paint"
+
+paints[0].startTime;
+>paints[0].startTime : number
+>paints[0] : PerformancePaintTiming
+>paints : PerformancePaintTiming[]
+>0 : 0
+>startTime : number
+
+const resources = performance.getEntriesByType("resource");
+>resources : PerformanceResourceTiming[]
+>performance.getEntriesByType("resource") : PerformanceResourceTiming[]
+>performance.getEntriesByType : { (type: "event"): PerformanceEventTiming[]; (type: "largest-contentful-paint"): LargestContentfulPaint[]; (type: "mark"): PerformanceMark[]; (type: "measure"): PerformanceMeasure[]; (type: "navigation"): PerformanceNavigationTiming[]; (type: "paint"): PerformancePaintTiming[]; (type: "resource"): PerformanceResourceTiming[]; (type: string): PerformanceEntryList; }
+>performance : Performance
+>getEntriesByType : { (type: "event"): PerformanceEventTiming[]; (type: "largest-contentful-paint"): LargestContentfulPaint[]; (type: "mark"): PerformanceMark[]; (type: "measure"): PerformanceMeasure[]; (type: "navigation"): PerformanceNavigationTiming[]; (type: "paint"): PerformancePaintTiming[]; (type: "resource"): PerformanceResourceTiming[]; (type: string): PerformanceEntryList; }
+>"resource" : "resource"
+
+resources[0].initiatorType;
+>resources[0].initiatorType : string
+>resources[0] : PerformanceResourceTiming
+>resources : PerformanceResourceTiming[]
+>0 : 0
+>initiatorType : string
+
+const events = performance.getEntriesByType("event");
+>events : PerformanceEventTiming[]
+>performance.getEntriesByType("event") : PerformanceEventTiming[]
+>performance.getEntriesByType : { (type: "event"): PerformanceEventTiming[]; (type: "largest-contentful-paint"): LargestContentfulPaint[]; (type: "mark"): PerformanceMark[]; (type: "measure"): PerformanceMeasure[]; (type: "navigation"): PerformanceNavigationTiming[]; (type: "paint"): PerformancePaintTiming[]; (type: "resource"): PerformanceResourceTiming[]; (type: string): PerformanceEntryList; }
+>performance : Performance
+>getEntriesByType : { (type: "event"): PerformanceEventTiming[]; (type: "largest-contentful-paint"): LargestContentfulPaint[]; (type: "mark"): PerformanceMark[]; (type: "measure"): PerformanceMeasure[]; (type: "navigation"): PerformanceNavigationTiming[]; (type: "paint"): PerformancePaintTiming[]; (type: "resource"): PerformanceResourceTiming[]; (type: string): PerformanceEntryList; }
+>"event" : "event"
+
+events[0].processingStart;
+>events[0].processingStart : number
+>events[0] : PerformanceEventTiming
+>events : PerformanceEventTiming[]
+>0 : 0
+>processingStart : number
+
+const lcp = performance.getEntriesByType("largest-contentful-paint");
+>lcp : LargestContentfulPaint[]
+>performance.getEntriesByType("largest-contentful-paint") : LargestContentfulPaint[]
+>performance.getEntriesByType : { (type: "event"): PerformanceEventTiming[]; (type: "largest-contentful-paint"): LargestContentfulPaint[]; (type: "mark"): PerformanceMark[]; (type: "measure"): PerformanceMeasure[]; (type: "navigation"): PerformanceNavigationTiming[]; (type: "paint"): PerformancePaintTiming[]; (type: "resource"): PerformanceResourceTiming[]; (type: string): PerformanceEntryList; }
+>performance : Performance
+>getEntriesByType : { (type: "event"): PerformanceEventTiming[]; (type: "largest-contentful-paint"): LargestContentfulPaint[]; (type: "mark"): PerformanceMark[]; (type: "measure"): PerformanceMeasure[]; (type: "navigation"): PerformanceNavigationTiming[]; (type: "paint"): PerformancePaintTiming[]; (type: "resource"): PerformanceResourceTiming[]; (type: string): PerformanceEntryList; }
+>"largest-contentful-paint" : "largest-contentful-paint"
+
+lcp[0].renderTime;
+>lcp[0].renderTime : number
+>lcp[0] : LargestContentfulPaint
+>lcp : LargestContentfulPaint[]
+>0 : 0
+>renderTime : number
+
+const generic = performance.getEntriesByType("something-unknown");
+>generic : PerformanceEntryList
+>performance.getEntriesByType("something-unknown") : PerformanceEntryList
+>performance.getEntriesByType : { (type: "event"): PerformanceEventTiming[]; (type: "largest-contentful-paint"): LargestContentfulPaint[]; (type: "mark"): PerformanceMark[]; (type: "measure"): PerformanceMeasure[]; (type: "navigation"): PerformanceNavigationTiming[]; (type: "paint"): PerformancePaintTiming[]; (type: "resource"): PerformanceResourceTiming[]; (type: string): PerformanceEntryList; }
+>performance : Performance
+>getEntriesByType : { (type: "event"): PerformanceEventTiming[]; (type: "largest-contentful-paint"): LargestContentfulPaint[]; (type: "mark"): PerformanceMark[]; (type: "measure"): PerformanceMeasure[]; (type: "navigation"): PerformanceNavigationTiming[]; (type: "paint"): PerformancePaintTiming[]; (type: "resource"): PerformanceResourceTiming[]; (type: string): PerformanceEntryList; }
+>"something-unknown" : "something-unknown"
+
+generic[0].entryType;
+>generic[0].entryType : string
+>generic[0] : PerformanceEntry
+>generic : PerformanceEntryList
+>0 : 0
+>entryType : string
+

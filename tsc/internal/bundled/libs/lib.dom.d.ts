@@ -27506,6 +27506,13 @@ interface Performance extends EventTarget {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Performance/getEntriesByType)
      */
+    getEntriesByType(type: "event"): PerformanceEventTiming[];
+    getEntriesByType(type: "largest-contentful-paint"): LargestContentfulPaint[];
+    getEntriesByType(type: "mark"): PerformanceMark[];
+    getEntriesByType(type: "measure"): PerformanceMeasure[];
+    getEntriesByType(type: "navigation"): PerformanceNavigationTiming[];
+    getEntriesByType(type: "paint"): PerformancePaintTiming[];
+    getEntriesByType(type: "resource"): PerformanceResourceTiming[];
     getEntriesByType(type: string): PerformanceEntryList;
     /**
      * The **`mark()`** method creates a named PerformanceMark object representing a high resolution timestamp marker in the browser's performance timeline.
@@ -27861,6 +27868,13 @@ interface PerformanceObserverEntryList {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/PerformanceObserverEntryList/getEntriesByType)
      */
+    getEntriesByType(type: "event"): PerformanceEventTiming[];
+    getEntriesByType(type: "largest-contentful-paint"): LargestContentfulPaint[];
+    getEntriesByType(type: "mark"): PerformanceMark[];
+    getEntriesByType(type: "measure"): PerformanceMeasure[];
+    getEntriesByType(type: "navigation"): PerformanceNavigationTiming[];
+    getEntriesByType(type: "paint"): PerformancePaintTiming[];
+    getEntriesByType(type: "resource"): PerformanceResourceTiming[];
     getEntriesByType(type: string): PerformanceEntryList;
 }
 
