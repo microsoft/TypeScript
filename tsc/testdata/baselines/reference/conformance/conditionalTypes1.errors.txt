@@ -77,51 +77,9 @@ conditionalTypes1.ts(288,43): error TS2322: Type 'T95<U>' is not assignable to t
   Type 'number | boolean' is not assignable to type 'T94<U>'.
     Type 'number' is not assignable to type 'T94<U>'.
       Type 'boolean' is not assignable to type 'true'.
-conditionalTypes1.ts(378,5): error TS2719: Type 'T extends { value: infer U; } ? { t: T; u: U; } : never' is not assignable to type 'T extends { value: infer U; } ? { t: T; u: U; } : never'. Two different types with this name exist, but they are unrelated.
-  Type '{ t: T; u: unknown; }' is not assignable to type 'T extends { value: infer U; } ? { t: T; u: U; } : never'.
-    Type '{ t: T; u: U; }' is not assignable to type '{ t: T; u: U; }'. Two different types with this name exist, but they are unrelated.
-      Types of property 't' are incompatible.
-        Type '{ value: U; } & T' is not assignable to type 'T'.
-          '{ value: U; } & T' is only assignable to the non-distributed 'T', but 'T' has been distributed here.
-conditionalTypes1.ts(379,5): error TS2719: Type 'T extends { value: infer U; } ? { t: T; u: U; } : never' is not assignable to type 'T extends { value: infer U; } ? { t: T; u: U; } : never'. Two different types with this name exist, but they are unrelated.
-  Type '{ t: T; u: unknown; }' is not assignable to type 'T extends { value: infer U; } ? { t: T; u: U; } : never'.
-    Type '{ t: T; u: U; }' is not assignable to type '{ t: T; u: U; }'. Two different types with this name exist, but they are unrelated.
-      Types of property 't' are incompatible.
-        Type '{ value: U; } & T' is not assignable to type 'T'.
-          '{ value: U; } & T' is only assignable to the non-distributed 'T', but 'T' has been distributed here.
-conditionalTypes1.ts(394,5): error TS2719: Type 'T extends { value: infer U; } ? U extends string ? { t: T; u: U; } : { t: T; } : never' is not assignable to type 'T extends { value: infer U; } ? U extends string ? { t: T; u: U; } : { t: T; } : never'. Two different types with this name exist, but they are unrelated.
-  Type '{ t: T; }' is not assignable to type 'T extends { value: infer U; } ? U extends string ? { t: T; u: U; } : { t: T; } : never'.
-    Type 'U extends string ? { t: T; u: U; } : { t: T; }' is not assignable to type 'U extends string ? { t: T; u: U; } : { t: T; }'. Two different types with this name exist, but they are unrelated.
-      Type '{ t: T; u: U; } | { t: T; }' is not assignable to type 'U extends string ? { t: T; u: U; } : { t: T; }'.
-        Type '{ t: T; u: U; }' is not assignable to type 'U extends string ? { t: T; u: U; } : { t: T; }'.
-          Type '{ t: T; u: U; }' is not assignable to type '{ t: T; u: U; }'. Two different types with this name exist, but they are unrelated.
-            Types of property 't' are incompatible.
-              Type '{ value: U; } & T' is not assignable to type 'T'.
-                '{ value: U; } & T' is only assignable to the non-distributed 'T', but 'T' has been distributed here.
-conditionalTypes1.ts(395,5): error TS2719: Type 'T extends { value: infer U; } ? U extends string ? { t: T; u: U; } : { t: T; } : never' is not assignable to type 'T extends { value: infer U; } ? U extends string ? { t: T; u: U; } : { t: T; } : never'. Two different types with this name exist, but they are unrelated.
-  Type '{ t: T; }' is not assignable to type 'T extends { value: infer U; } ? U extends string ? { t: T; u: U; } : { t: T; } : never'.
-    Type 'U extends string ? { t: T; u: U; } : { t: T; }' is not assignable to type 'U extends string ? { t: T; u: U; } : { t: T; }'. Two different types with this name exist, but they are unrelated.
-      Type '{ t: T; u: U; } | { t: T; }' is not assignable to type 'U extends string ? { t: T; u: U; } : { t: T; }'.
-        Type '{ t: T; u: U; }' is not assignable to type 'U extends string ? { t: T; u: U; } : { t: T; }'.
-          Type '{ t: T; u: U; }' is not assignable to type '{ t: T; u: U; }'. Two different types with this name exist, but they are unrelated.
-            Types of property 't' are incompatible.
-              Type '{ value: U; } & T' is not assignable to type 'T'.
-                '{ value: U; } & T' is only assignable to the non-distributed 'T', but 'T' has been distributed here.
-conditionalTypes1.ts(402,5): error TS2322: Type 'T extends { value: infer U; } ? never : { t: T; v: number; }' is not assignable to type 'T extends { value: infer U; } ? never : { t: T; }'.
-  Type '{ t: T; v: number; }' is not assignable to type 'T extends { value: infer U; } ? never : { t: T; }'.
-    Type '{ t: T; v: number; }' is not assignable to type '{ t: T; }'.
-      Types of property 't' are incompatible.
-        Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
-          'T' is only assignable to the non-distributed 'T', but 'T' has been distributed here.
-conditionalTypes1.ts(407,5): error TS2322: Type 'T extends { self: T; } ? { t: T; v: number; } : never' is not assignable to type 'T extends { self: T; } ? { t: T; } : never'.
-  Type '{ t: T; v: number; }' is not assignable to type 'T extends { self: T; } ? { t: T; } : never'.
-    Type '{ t: T; v: number; }' is not assignable to type '{ t: T; }'.
-      Types of property 't' are incompatible.
-        Type '{ self: T; } & T' is not assignable to type 'T'.
-          '{ self: T; } & T' is only assignable to the non-distributed 'T', but 'T' has been distributed here.
 
 
-==== conditionalTypes1.ts (26 errors) ====
+==== conditionalTypes1.ts (20 errors) ====
     type T00 = Exclude<"a" | "b" | "c" | "d", "a" | "c" | "f">;  // "b" | "d"
     type T01 = Extract<"a" | "b" | "c" | "d", "a" | "c" | "f">;  // "a" | "c"
     
@@ -602,21 +560,7 @@ conditionalTypes1.ts(407,5): error TS2322: Type 'T extends { self: T; } ? { t: T
         y: T extends { value: infer U } ? { t: T, u: U } : never,
     ) {
         x = y;
-        ~
-!!! error TS2719: Type 'T extends { value: infer U; } ? { t: T; u: U; } : never' is not assignable to type 'T extends { value: infer U; } ? { t: T; u: U; } : never'. Two different types with this name exist, but they are unrelated.
-!!! error TS2719:   Type '{ t: T; u: unknown; }' is not assignable to type 'T extends { value: infer U; } ? { t: T; u: U; } : never'.
-!!! error TS2719:     Type '{ t: T; u: U; }' is not assignable to type '{ t: T; u: U; }'. Two different types with this name exist, but they are unrelated.
-!!! error TS2719:       Types of property 't' are incompatible.
-!!! error TS2719:         Type '{ value: U; } & T' is not assignable to type 'T'.
-!!! error TS2719:           '{ value: U; } & T' is only assignable to the non-distributed 'T', but 'T' has been distributed here.
         y = x;
-        ~
-!!! error TS2719: Type 'T extends { value: infer U; } ? { t: T; u: U; } : never' is not assignable to type 'T extends { value: infer U; } ? { t: T; u: U; } : never'. Two different types with this name exist, but they are unrelated.
-!!! error TS2719:   Type '{ t: T; u: unknown; }' is not assignable to type 'T extends { value: infer U; } ? { t: T; u: U; } : never'.
-!!! error TS2719:     Type '{ t: T; u: U; }' is not assignable to type '{ t: T; u: U; }'. Two different types with this name exist, but they are unrelated.
-!!! error TS2719:       Types of property 't' are incompatible.
-!!! error TS2719:         Type '{ value: U; } & T' is not assignable to type 'T'.
-!!! error TS2719:           '{ value: U; } & T' is only assignable to the non-distributed 'T', but 'T' has been distributed here.
     }
     
     function conditionalRelations3<T>(
@@ -632,27 +576,7 @@ conditionalTypes1.ts(407,5): error TS2322: Type 'T extends { self: T; } ? { t: T
         y: T extends { value: infer U } ? (U extends string ? { t: T, u: U } : { t: T }) : never,
     ) {
         x = y;
-        ~
-!!! error TS2719: Type 'T extends { value: infer U; } ? U extends string ? { t: T; u: U; } : { t: T; } : never' is not assignable to type 'T extends { value: infer U; } ? U extends string ? { t: T; u: U; } : { t: T; } : never'. Two different types with this name exist, but they are unrelated.
-!!! error TS2719:   Type '{ t: T; }' is not assignable to type 'T extends { value: infer U; } ? U extends string ? { t: T; u: U; } : { t: T; } : never'.
-!!! error TS2719:     Type 'U extends string ? { t: T; u: U; } : { t: T; }' is not assignable to type 'U extends string ? { t: T; u: U; } : { t: T; }'. Two different types with this name exist, but they are unrelated.
-!!! error TS2719:       Type '{ t: T; u: U; } | { t: T; }' is not assignable to type 'U extends string ? { t: T; u: U; } : { t: T; }'.
-!!! error TS2719:         Type '{ t: T; u: U; }' is not assignable to type 'U extends string ? { t: T; u: U; } : { t: T; }'.
-!!! error TS2719:           Type '{ t: T; u: U; }' is not assignable to type '{ t: T; u: U; }'. Two different types with this name exist, but they are unrelated.
-!!! error TS2719:             Types of property 't' are incompatible.
-!!! error TS2719:               Type '{ value: U; } & T' is not assignable to type 'T'.
-!!! error TS2719:                 '{ value: U; } & T' is only assignable to the non-distributed 'T', but 'T' has been distributed here.
         y = x;
-        ~
-!!! error TS2719: Type 'T extends { value: infer U; } ? U extends string ? { t: T; u: U; } : { t: T; } : never' is not assignable to type 'T extends { value: infer U; } ? U extends string ? { t: T; u: U; } : { t: T; } : never'. Two different types with this name exist, but they are unrelated.
-!!! error TS2719:   Type '{ t: T; }' is not assignable to type 'T extends { value: infer U; } ? U extends string ? { t: T; u: U; } : { t: T; } : never'.
-!!! error TS2719:     Type 'U extends string ? { t: T; u: U; } : { t: T; }' is not assignable to type 'U extends string ? { t: T; u: U; } : { t: T; }'. Two different types with this name exist, but they are unrelated.
-!!! error TS2719:       Type '{ t: T; u: U; } | { t: T; }' is not assignable to type 'U extends string ? { t: T; u: U; } : { t: T; }'.
-!!! error TS2719:         Type '{ t: T; u: U; }' is not assignable to type 'U extends string ? { t: T; u: U; } : { t: T; }'.
-!!! error TS2719:           Type '{ t: T; u: U; }' is not assignable to type '{ t: T; u: U; }'. Two different types with this name exist, but they are unrelated.
-!!! error TS2719:             Types of property 't' are incompatible.
-!!! error TS2719:               Type '{ value: U; } & T' is not assignable to type 'T'.
-!!! error TS2719:                 '{ value: U; } & T' is only assignable to the non-distributed 'T', but 'T' has been distributed here.
     }
     
     // The same should hold when one side is an instantiation that doesn't touch the
@@ -660,24 +584,10 @@ conditionalTypes1.ts(407,5): error TS2322: Type 'T extends { self: T; } ? { t: T
     function conditionalRelations5<T>(x: T extends { value: infer U } ? never : { t: T }) {
         const make = <V>(v: V): T extends { value: infer U } ? never : { t: T, v: V } => null!;
         x = make(1);
-        ~
-!!! error TS2322: Type 'T extends { value: infer U; } ? never : { t: T; v: number; }' is not assignable to type 'T extends { value: infer U; } ? never : { t: T; }'.
-!!! error TS2322:   Type '{ t: T; v: number; }' is not assignable to type 'T extends { value: infer U; } ? never : { t: T; }'.
-!!! error TS2322:     Type '{ t: T; v: number; }' is not assignable to type '{ t: T; }'.
-!!! error TS2322:       Types of property 't' are incompatible.
-!!! error TS2322:         Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
-!!! error TS2322:           'T' is only assignable to the non-distributed 'T', but 'T' has been distributed here.
     }
     
     function conditionalRelations6<T>(x: T extends { self: T } ? { t: T } : never) {
         const make = <V>(v: V): T extends { self: T } ? { t: T, v: V } : never => null!;
         x = make(1);
-        ~
-!!! error TS2322: Type 'T extends { self: T; } ? { t: T; v: number; } : never' is not assignable to type 'T extends { self: T; } ? { t: T; } : never'.
-!!! error TS2322:   Type '{ t: T; v: number; }' is not assignable to type 'T extends { self: T; } ? { t: T; } : never'.
-!!! error TS2322:     Type '{ t: T; v: number; }' is not assignable to type '{ t: T; }'.
-!!! error TS2322:       Types of property 't' are incompatible.
-!!! error TS2322:         Type '{ self: T; } & T' is not assignable to type 'T'.
-!!! error TS2322:           '{ self: T; } & T' is only assignable to the non-distributed 'T', but 'T' has been distributed here.
     }
     

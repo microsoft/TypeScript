@@ -22708,7 +22708,12 @@ func (c *Checker) getObjectTypeInstantiation(t *Type, m *TypeMapper, alias *Type
 	key := getTypeInstantiationKey(typeArguments, newAlias, t.objectFlags&ObjectFlagsSingleSignatureType != 0)
 	if data.instantiations == nil {
 		data.instantiations = make(map[CacheHashKey]*Type)
-		data.instantiations[getTypeInstantiationKey(typeParameters, target.alias, false)] = target
+		// The identity instantiation isn't the declared type itself when the type is declared in a
+		// distributive context, as instantiation maps distributed type parameters back to their
+		// non-distributed form.
+		if !c.isInDistributiveContext(declaration, nil /*symbol*/) {
+			data.instantiations[getTypeInstantiationKey(typeParameters, target.alias, false)] = target
+		}
 	}
 	result := data.instantiations[key]
 	if result == nil {
@@ -23361,18 +23366,29 @@ func (c *Checker) getTypeFromTypeReference(node *ast.Node) *Type {
 }
 
 func (c *Checker) getDistributedTypeParameter(node *ast.Node, t *Type) *Type {
-	if t.flags&TypeFlagsTypeParameter != 0 && !t.AsTypeParameter().isDistributed {
-		for n := node.Parent; n != nil && !ast.IsStatement(n); n = n.Parent {
-			if ast.IsConditionalTypeNode(n) {
-				if checkTypeNode := n.AsConditionalTypeNode().CheckType; isSimpleIdentifierTypeReference(checkTypeNode) && c.getSymbolFromTypeReference(checkTypeNode) == t.symbol {
-					// If node is contained in a distributive conditional type for the given type parameter,
-					// return the distributed form of the type parameter.
-					return c.getDistributedTypeFromTypeParameter(t)
+	if t.flags&TypeFlagsTypeParameter != 0 && !t.AsTypeParameter().isDistributed && c.isInDistributiveContext(node, t.symbol) {
+		// If node is contained in a distributive conditional type for the given type parameter,
+		// return the distributed form of the type parameter.
+		return c.getDistributedTypeFromTypeParameter(t)
+	}
+	return t
+}
+
+// Returns true if the node is, or is contained in, a distributive conditional type for the given type
+// parameter symbol, or for any type parameter when symbol is nil. Types declared in such a context may
+// reference distributed type parameters, so their identity instantiation isn't the declared type itself
+// (instantiation maps distributed type parameters back to their non-distributed form).
+func (c *Checker) isInDistributiveContext(node *ast.Node, symbol *ast.Symbol) bool {
+	for n := node; n != nil && !ast.IsStatement(n); n = n.Parent {
+		if ast.IsConditionalTypeNode(n) {
+			if checkTypeNode := n.AsConditionalTypeNode().CheckType; isSimpleIdentifierTypeReference(checkTypeNode) {
+				if s := c.getSymbolFromTypeReference(checkTypeNode); s != nil && s.Flags&ast.SymbolFlagsTypeParameter != 0 && (symbol == nil || s == symbol) {
+					return true
 				}
 			}
 		}
 	}
-	return t
+	return false
 }
 
 func (c *Checker) getDistributedTypeFromTypeParameter(t *Type) *Type {
@@ -23383,6 +23399,16 @@ func (c *Checker) getDistributedTypeFromTypeParameter(t *Type) *Type {
 		tp.distributedType.AsTypeParameter().constraint = t
 	}
 	return tp.distributedType
+}
+
+// Returns an identity mapper for the non-distributed form of the given type if it is a distributed type
+// parameter. Instantiating with this mapper maps all occurrences of the distributed type parameter back
+// to the non-distributed form.
+func getNonDistributingMapper(t *Type) *TypeMapper {
+	if typeParameter := getNonDistributedTypeParameter(t); typeParameter != t {
+		return newSimpleTypeMapper(typeParameter, typeParameter)
+	}
+	return nil
 }
 
 func getNonDistributedTypeParameter(t *Type) *Type {
@@ -24679,7 +24705,12 @@ func (c *Checker) getTypeFromConditionalTypeNode(node *ast.Node) *Type {
 		links.resolvedType = c.getConditionalType(root, nil /*mapper*/, false /*forConstraint*/, nil)
 		if outerTypeParameters != nil {
 			root.instantiations = make(map[CacheHashKey]*Type)
-			root.instantiations[getConditionalTypeKey(outerTypeParameters, nil /*alias*/, false /*forConstraint*/)] = links.resolvedType
+			// The identity instantiation isn't the declared type itself when the type is declared in a
+			// distributive context, as instantiation maps distributed type parameters back to their
+			// non-distributed form.
+			if !c.isInDistributiveContext(node, nil /*symbol*/) {
+				root.instantiations[getConditionalTypeKey(outerTypeParameters, nil /*alias*/, false /*forConstraint*/)] = links.resolvedType
+			}
 		}
 	}
 	return links.resolvedType
