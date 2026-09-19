@@ -142,11 +142,9 @@ func TestParseConfigFileTextToJson(t *testing.T) {
 				baselineContent.WriteString("\n")
 				baselineContent.WriteString("Errors::\n")
 				diagnosticwriter.FormatDiagnosticsWithColorAndContext(&baselineContent, diagnosticwriter.FromASTDiagnostics(errors), &diagnosticwriter.FormattingOptions{
-					NewLine: "\n",
-					ComparePathsOptions: tspath.ComparePathsOptions{
-						CurrentDirectory:          "/",
-						UseCaseSensitiveFileNames: true,
-					},
+					NewLine:                   "\n",
+					CurrentDirectory:          "/",
+					UseCaseSensitiveFileNames: true,
 				})
 				baselineContent.WriteString("\n")
 				if i != len(rec.input)-1 {
@@ -1539,11 +1537,9 @@ func baselineParseConfigWith(t *testing.T, baselineFileName string, includeCompi
 		baselineContent.WriteString("\n")
 		baselineContent.WriteString("Errors::\n")
 		diagnosticwriter.FormatDiagnosticsWithColorAndContext(&baselineContent, diagnosticwriter.FromASTDiagnostics(parsedConfigFileContent.Errors), &diagnosticwriter.FormattingOptions{
-			NewLine: "\r\n",
-			ComparePathsOptions: tspath.ComparePathsOptions{
-				CurrentDirectory:          basePath,
-				UseCaseSensitiveFileNames: true,
-			},
+			NewLine:                   "\r\n",
+			CurrentDirectory:          basePath,
+			UseCaseSensitiveFileNames: true,
 		})
 		baselineContent.WriteString("\n")
 		if i != len(input)-1 {

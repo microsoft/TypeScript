@@ -659,8 +659,8 @@ func (w *formatSpanWorker) processPair(currentItem TextRangeWithKind, currentSta
 	if len(w.currentRules) > 0 {
 		// Apply rules in reverse order so that higher priority rules (which are first in the array)
 		// win in a conflict with lower priority rules.
-		for i := len(w.currentRules) - 1; i >= 0; i-- {
-			rule := w.currentRules[i]
+		for _, rule := range slices.Backward(w.currentRules) {
+
 			lineAction = w.applyRuleEdits(rule, previousItem, previousStartLine, currentItem, currentStartLine)
 			if dynamicIndentation != nil {
 				switch lineAction {
