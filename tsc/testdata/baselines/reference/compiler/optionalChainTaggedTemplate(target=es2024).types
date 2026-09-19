@@ -1,0 +1,35 @@
+//// [tests/cases/compiler/optionalChainTaggedTemplate.ts] ////
+
+=== repro.ts ===
+e?.``(
+>e?.``( : any
+>e?.`` : any
+>e : any
+>`` : ""
+
+=== siblings.ts ===
+declare var a: any;
+>a : any
+
+a?.b`c`;
+>a?.b`c` : any
+>a?.b : any
+>a : any
+>b : any
+>`c` : "c"
+
+a?.b`c`();
+>a?.b`c`() : any
+>a?.b`c` : any
+>a?.b : any
+>a : any
+>b : any
+>`c` : "c"
+
+a?.``.x;
+>a?.``.x : any
+>a?.`` : any
+>a : any
+>`` : ""
+>x : any
+
