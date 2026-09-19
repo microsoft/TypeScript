@@ -38,7 +38,7 @@ import { Wtf8Decoder } from "./wtf8.ts";
 
 // Re-export everything consumers need from the other two files.
 export { RemoteNode, RemoteNodeList } from "./node.generated.ts";
-export { readParseOptionsKey, readSourceFileHash, RemoteNodeBase } from "./node.infrastructure.ts";
+export { readParseOptionsKey, readSourceFileHash } from "./node.infrastructure.ts";
 
 const sourceFileExtendedDataOffsets = {
     Text: 0,
@@ -405,28 +405,6 @@ function computeLineOfPosition(lineStarts: readonly number[], position: number):
         }
     }
     return low - 1;
-}
-
-/**
- * Find a descendant node at a specific position with matching kind and end position.
- */
-export function findDescendant(root: Node, pos: number, end: number, kind: SyntaxKind): Node | undefined {
-    if (root.pos === pos && root.end === end && root.kind === kind) {
-        return root;
-    }
-
-    // Search children
-    let result: Node | undefined;
-    root.forEachChild(child => {
-        if (result) return result; // Already found
-        // Only search in children that could contain our target
-        if (child.pos <= pos && child.end >= end) {
-            result = findDescendant(child, pos, end, kind);
-        }
-        return undefined;
-    });
-
-    return result;
 }
 
 /**
